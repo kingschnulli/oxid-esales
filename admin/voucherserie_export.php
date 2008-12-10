@@ -26,7 +26,7 @@
  * Admin Menu: Shop Settings -> Vouchers -> Export.
  * @package admin
  */
-class Voucherserie_export extends oxAdminDetails
+class VoucherSerie_Export extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render() and returns name of template

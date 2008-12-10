@@ -24,13 +24,17 @@ function EditThis( sID)
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.oxid.value=sID;
     oTransfer.cl.value='article_main';
-    oTransfer.submit();
-
+    
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
+            
     var oSearch = parent.list.document.getElementById("search");
     oSearch.actedit.value = 0;
     oSearch.oxid.value=sID;
     oSearch.submit();
 }
+
+window.onLoad = top.reloadEditFrame();
 
 //-->
 </script>

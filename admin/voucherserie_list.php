@@ -27,7 +27,7 @@
  * Admin Menu: Shop Settings -> Vouchers.
  * @package admin
  */
-class VoucherSerie_list extends oxAdminList
+class VoucherSerie_List extends oxAdminList
 {
     /**
      * Name of chosen object class (default null).

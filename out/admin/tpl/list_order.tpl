@@ -4,6 +4,38 @@
 <!--
 function EditThis( sID)
 {
+    [{assign var="shMen" value=1}]
+
+    [{foreach from=$menustructure item=menuholder }]
+      [{if $shMen && $menuholder->nodeType == XML_ELEMENT_NODE && $menuholder->childNodes->length }]
+
+        [{assign var="shMen" value=0}]
+        [{assign var="mn" value=1}]
+
+        [{foreach from=$menuholder->childNodes item=menuitem }]
+          [{if $menuitem->nodeType == XML_ELEMENT_NODE && $menuitem->childNodes->length }]
+            [{ if $menuitem->getAttribute('id') == 'mxorders' }]
+
+              [{foreach from=$menuitem->childNodes item=submenuitem }]
+                [{if $submenuitem->nodeType == XML_ELEMENT_NODE && $submenuitem->getAttribute('cl') == 'admin_order' }]
+
+                    if ( top && top.navigation && top.navigation.adminnav ) {
+                        var _sbli = top.navigation.adminnav.document.getElementById( 'nav-1-[{$mn}]-1' );
+                        var _sba = _sbli.getElementsByTagName( 'a' );
+                        top.navigation.adminnav._navAct( _sba[0] );
+                    }
+
+                [{/if}]
+              [{/foreach}]
+
+            [{ /if }]
+            [{assign var="mn" value=$mn+1}]
+
+          [{/if}]
+        [{/foreach}]
+      [{/if}]
+    [{/foreach}]
+
     var oTransfer = document.getElementById("transfer");
     oTransfer.oxid.value=sID;
     oTransfer.cl.value='admin_order';
@@ -87,7 +119,7 @@ function ChangeLanguage()
     <td class="listitem[{ $blWhite }]"><a href="Javascript:EditThis( '[{ $oOrder->oxorder__oxorderid->value }]');" class="listitem[{ $blWhite }]">[{ $oOrder->oxorder__oxorderdate|oxformdate }]</a></td>
     <td class="listitem[{ $blWhite }]"><a href="Javascript:EditThis( '[{ $oOrder->oxorder__oxorderid->value }]');" class="listitem[{ $blWhite }]">[{ $oOrder->oxorder__oxartnum->value }]</a></td>
     <td class="listitem[{ $blWhite }]"><a href="Javascript:EditThis( '[{ $oOrder->oxorder__oxorderid->value }]');" class="listitem[{ $blWhite }]">[{ $oOrder->oxorder__oxorderamount->value }]</a></td>
-    <td class="listitem[{ $blWhite }]"><a href="Javascript:EditThis( '[{ $oOrder->oxorder__oxorderid->value }]');" class="listitem[{ $blWhite }]">[{ $oOrder->oxorder__oxtitle->value }]</a></td>
+    <td class="listitem[{ $blWhite }]"><a href="Javascript:EditThis( '[{ $oOrder->oxorder__oxorderid->value }]');" class="listitem[{ $blWhite }]">[{ $oOrder->oxorder__oxtitle->getRawValue() }]</a></td>
     <td class="listitem[{ $blWhite }]"><a href="Javascript:EditThis( '[{ $oOrder->oxorder__oxorderid->value }]');" class="listitem[{ $blWhite }]">[{ $oOrder->oxorder__oxprice->value }]</a></td>
 </tr>
 [{if $blWhite == "2"}]

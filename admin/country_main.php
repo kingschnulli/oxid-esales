@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: country_main.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: country_main.php 14019 2008-11-06 13:35:04Z arvydas $
  */
 
 /**
@@ -26,7 +26,7 @@
  * Performs collection and updatind (on user submit) main item information.
  * @package admin
  */
-class Country_main extends oxAdminDetails
+class Country_Main extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(), creates oxCategoryList object,

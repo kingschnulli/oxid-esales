@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: news_main.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: news_main.php 14025 2008-11-06 13:42:31Z arvydas $
  */
 
 
@@ -31,7 +31,7 @@
  * Admin Menu: Customer News -> News -> Main.
  * @package admin
  */
-class News_main extends oxAdminDetails
+class News_Main extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(), creates oxlist object and

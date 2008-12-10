@@ -2,14 +2,19 @@
 <script type="text/javascript">
 var oTransfer = parent.edit.document.getElementById("transfer");
 oTransfer.cl.value="pricealarm_mail";
-oTransfer.submit();
+
+//forcing edit frame to reload after submit
+top.forceReloadingEditFrame();
+
 <!--
 function EditThis( sID)
 {
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.oxid.value=sID;
     oTransfer.cl.value='[{if $actlocation}][{$actlocation}][{else}][{ $default_edit }][{/if}]';
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 
     var oSearch = document.getElementById("search");
     oSearch.oxid.value=sID;
@@ -30,7 +35,9 @@ function DeleteThis( sID)
         var oTransfer = parent.edit.document.getElementById("transfer");
         oTransfer.oxid.value='-1';
         oTransfer.cl.value='[{ $default_edit }]';
-        oTransfer.submit();
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
     }
 }
 
@@ -42,7 +49,9 @@ function ChangeEditBar( sLocation, sPos)
 
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.cl.value=sLocation;
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 }
 
 function ChangeLanguage()
@@ -55,8 +64,12 @@ function ChangeLanguage()
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.innerHTML += '<input type="hidden" name="language" value="'+oSearch.changelang.value+'">';
     oTransfer.innerHTML += '<input type="hidden" name="editlanguage" value="'+oSearch.changelang.value+'">';
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 }
+
+window.onLoad = top.reloadEditFrame();
 
 //-->
 </script>

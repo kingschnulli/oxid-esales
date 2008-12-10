@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2008
- * $Id: lang.php 13902 2008-10-30 08:18:34Z arvydas $
+ * $Id: lang.php 14248 2008-11-18 09:48:07Z philipp.grashoff $
  */
 
 $sLangName  = 'English';
@@ -71,7 +71,7 @@ $aLang = array(
 'GENERAL_AJAX_SORT_OXID'                        => 'Id',
 'GENERAL_AJAX_SORT_OXDESC'                      => 'Description',
 'GENERAL_AJAX_SORT_OXARTNUM'                    => 'Art.Nr',
-'GENERAL_AJAX_SORT_OXTITLE'                     => 'Titel',
+'GENERAL_AJAX_SORT_OXTITLE'                     => 'Title',
 'GENERAL_AJAX_SORT_OXEAN'                       => 'EAN',
 'GENERAL_AJAX_SORT_OXPRICE'                     => 'Price',
 'GENERAL_AJAX_SORT_OXSTOCK'                     => 'Stock',
@@ -483,7 +483,7 @@ $aLang = array(
 'CATEGORY_MAIN_ASC'                             => 'asc',
 'CATEGORY_MAIN_DEFSORT'                         => 'Quick Sort',
 'CATEGORY_MAIN_DESC'                            => 'desc',
-'CATEGORY_MAIN_EXTLINK'                         => 'External Link',
+'CATEGORY_MAIN_EXTLINK'                         => 'External Link (e.g.<br>http://www.example.com)',
 'CATEGORY_MAIN_HIDDEN'                          => 'Hidden',
 'CATEGORY_MAIN_ICONUPLOAD'                      => 'Icon upload<br>(large files should be uploaded via ftp)',
 'CATEGORY_MAIN_ITEMSINGROUP'                    => 'Product in this Group',
@@ -589,7 +589,6 @@ $aLang = array(
 'DYN_ECONDA_ATTENTION'                          => 'Please note: ',
 'DYN_ECONDA_FILETO'                             => 'You have to copy the file "emos2.js" which you receive from Econda into the directory ',
 'DYN_ECONDA_COPY'                               => '',
-'DYN_ETRACKER_SECURECODE'                       => 'eTracker secure code',
 'DYN_IPAYMENT_USER'                             => 'IPayment User',
 'DYN_IPAYMENT_ACCOUNTNUM'                       => 'IPayment Account No.',
 'DYN_IPAYMENT_PASSWORD'                         => 'IPayment Password',
@@ -726,6 +725,7 @@ $aLang = array(
 'GUI_GROUP_ACCOUNT'                             => 'Account',
 'GUI_GROUP_BASKET_POPUP'                        => 'Basket popup',
 'GUI_GROUP_MSG_BOXES'                           => 'Message boxes',
+'GUI_GROUP_ZOOM_POPUP'                          => 'Zoom popup',
 'GUI_ACTIONS'                                   => 'Actions',
 'GUI_ACTIONS_TEXT'                              => 'Actions text',
 'GUI_ACTIVE'                                    => 'Active',
@@ -1216,7 +1216,6 @@ $aLang = array(
 'SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE_POPUP'    => 'Open Popup',
 'SHOP_SYSTEM_SHOWFINALSTEP'                     => 'Show 5th step of order',
 'SHOP_SYSTEM_UTILMODULE'                        => 'Additional Utilitly Modules',
-'SHOP_SYSTEM_USEDIFFERENTDYNDIRS'               => 'Use different dynamic directories per language for Product Pictures',
 'SHOP_SYSTEM_VARIANTSSELECTION'                 => 'Variants: Display variants for product assignment in Admin',
 'SHOP_SYSTEM_VARIANTPARENTBUYABLE'              => 'Variants: Parent articles are purchasable',
 'SHOP_SYSTEM_VARIANTINHERITAMOUNTPRICE'         => 'Variants: Variants inherit parent article amount price',

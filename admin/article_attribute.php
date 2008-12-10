@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: article_attribute.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: article_attribute.php 14018 2008-11-06 13:33:39Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Manage Products -> Articles -> Selection.
  * @package admin
  */
-class Article_attribute extends oxAdminDetails
+class Article_Attribute extends oxAdminDetails
 {
     /**
      * Collects article attributes and selection lists, passes them to Smarty engine,

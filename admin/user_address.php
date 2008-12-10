@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: user_address.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: user_address.php 14015 2008-11-06 13:30:18Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: User Administration -> Users -> Addresses.
  * @package admin
  */
-class User_address extends oxAdminDetails
+class User_Address extends oxAdminDetails
 {
     /**
      * @var bool

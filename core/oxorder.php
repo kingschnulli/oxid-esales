@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxorder.php 13664 2008-10-24 14:49:00Z rimvydas.paskevicius $
+ * $Id: oxorder.php 14224 2008-11-17 08:41:31Z vilma $
  */
 
 /**
@@ -132,6 +132,12 @@ class oxOrder extends oxBase
      */
     protected $_blSeparateNumbering = null;
 
+    /**
+     * Order language id
+     *
+     * @var int
+     */
+    protected $_iOrderLang = null;
 
     /**
      * Class constructor, initiates parent constructor (parent::oxBase()).
@@ -422,7 +428,7 @@ class oxOrder extends oxBase
             $this->oxorder__oxip = new oxField(oxUtilsServer::getInstance()->getRemoteAddress(), oxField::T_RAW);
 
         // copying main price info
-        $this->oxorder__oxtotalnetsum   = new oxField($oBasket->getProductsPrice()->getNettoSum(), oxField::T_RAW);
+        $this->oxorder__oxtotalnetsum   = new oxField(oxUtils::getInstance()->fRound($oBasket->getProductsPrice()->getNettoSum()), oxField::T_RAW);
         $this->oxorder__oxtotalbrutsum  = new oxField($oBasket->getProductsPrice()->getBruttoSum(), oxField::T_RAW);
         $this->oxorder__oxtotalordersum = new oxField($oBasket->getPrice()->getBruttoPrice(), oxField::T_RAW);
 
@@ -435,7 +441,8 @@ class oxOrder extends oxBase
         // delivery info
         if ( ( $oDeliveryCost = $oBasket->getCosts( 'oxdelivery' ) ) ) {
             $this->oxorder__oxdelcost = new oxField($oDeliveryCost->getBruttoPrice(), oxField::T_RAW);
-            $this->oxorder__oxdelvat  = new oxField($oDeliveryCost->getVAT() / 100, oxField::T_RAW);
+            //V #M382: Save VAT, not VAT value for delivery costs
+            $this->oxorder__oxdelvat  = new oxField($oDeliveryCost->getVAT(), oxField::T_RAW); //V #M382
             $this->oxorder__oxdeltype = new oxField($oBasket->getShippingId(), oxField::T_RAW);
         }
 
@@ -458,7 +465,7 @@ class oxOrder extends oxBase
         }
 
         //order language
-        $this->oxorder__oxlang = new oxField(oxLang::getInstance()->getBaseLanguage());
+        $this->oxorder__oxlang = new oxField( $this->getOrderLanguage() );
 
 
         // initial status - 'ERROR'
@@ -469,6 +476,24 @@ class oxOrder extends oxBase
 
         // copies wrapping info
         $this->_setWrapping( $oBasket );
+    }
+
+    /**
+     * Returns language id of current order object. If order allready has
+     * language defined - checks if this language is defined in shops config
+     *
+     * @return int
+     */
+    public function getOrderLanguage()
+    {
+        if ( $this->_iOrderLang === null ) {
+            if ( isset( $this->oxorder__oxlang->value ) ) {
+                $this->_iOrderLang = oxLang::getInstance()->validateLanguage( $this->oxorder__oxlang->value );
+            } else {
+                $this->_iOrderLang = oxLang::getInstance()->getBaseLanguage();
+            }
+        }
+        return $this->_iOrderLang;
     }
 
     /**
@@ -558,12 +583,18 @@ class oxOrder extends oxBase
     {
         // reset articles list
         $this->_oArticles = null;
+        $iCurrLang = $this->getOrderLanguage();
 
         // add all the products we have on basket to the order
         foreach ( $aArticleList as $oContent ) {
 
             //$oContent->oProduct = $oContent->getArticle();
             $oProduct = $oContent->getArticle();
+
+            // if order language doe not match product language - article must be reloaded in order language
+            if ( $iCurrLang != $oProduct->getLanguage() ) {
+                $oProduct->loadInLang( $iCurrLang, $oProduct->getId() );
+            }
 
             // set chosen selectlist
             $sSelList = '';
@@ -1180,8 +1211,6 @@ class oxOrder extends oxBase
     {
         $myConfig = $this->getConfig();
 
-        $blExclNonMaterial    = $myConfig->getConfigParam( 'blExclNonMaterialFromDelivery' );
-
         // in which country we deliver
         $sShipID = $this->oxorder__oxdelcountryid->value;
 
@@ -1199,7 +1228,7 @@ class oxOrder extends oxBase
         // load fitting deliveries list
         $oDleliveryList = oxNew( "oxDeliveryList", "core");
         $oDleliveryList->setCollectFittingDeliveriesSets( true );
-        $aOrderDelSetList = $oDleliveryList->getDeliveryList( $oBasket, $oUser, $sShipID, null, $blExclNonMaterial );
+        $aOrderDelSetList = $oDleliveryList->getDeliveryList( $oBasket, $oUser, $sShipID, null );
 
         return $aOrderDelSetList;
     }
@@ -1499,9 +1528,6 @@ class oxOrder extends oxBase
     {
         $myConfig = $this->getConfig();
 
-        $blAllowUnevenAmounts = $myConfig->getConfigParam( 'blAllowUnevenAmounts' );
-        $blExclNonMaterial    = $myConfig->getConfigParam( 'blExclNonMaterialFromDelivery' );
-
         $oBasket = oxNew( "oxbasket" );
 
         // setting virtual basket user
@@ -1535,7 +1561,7 @@ class oxOrder extends oxBase
 
             $aSel = $this->_makeSelListArray( $sArtId, $sSelVariant );
 
-            $oBasketItem = $oBasket->addToBasket( $sArtId, $dAmount, $blAllowUnevenAmounts, $aSel, $aPersParam );
+            $oBasketItem = $oBasket->addToBasket( $sArtId, $dAmount, $aSel, $aPersParam );
             if ( $oBasketItem ) {
                 $oBasketItem->setWrapping( $oOrderArticle->oxorderarticles__oxwrapid->value );
             }
@@ -1562,7 +1588,7 @@ class oxOrder extends oxBase
         $oBasket->setPayment( $this->oxorder__oxpaymenttype->value );
 
         // recalculating basket
-        $oBasket->calculateBasket( $blAllowUnevenAmounts, true, $blExclNonMaterial );
+        $oBasket->calculateBasket( true );
 
         return $oBasket;
     }

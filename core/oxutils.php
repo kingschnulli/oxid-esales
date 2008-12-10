@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxutils.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxutils.php 14124 2008-11-11 12:38:52Z vilma $
  */
 
 /**
@@ -790,7 +790,8 @@ class oxUtils extends oxSuperCfg
     /**
      * redirect user to the specified URL
      *
-     * @param string $sUrl URL to be redirected
+     * @param string $sUrl               URL to be redirected
+     * @param bool   $blAddRedirectParam add "redirect" param
      *
      * @return null or exit
      */

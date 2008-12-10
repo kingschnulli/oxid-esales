@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxbasketitem.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxbasketitem.php 14226 2008-11-17 08:46:23Z arvydas $
  */
 
 /**
@@ -198,7 +198,6 @@ class oxBasketItem extends oxSuperCfg
      *
      * @param string $sProductID           product id
      * @param double $dAmount              amount
-     * @param bool   $blAllowUnevenAmounts allow uneven amounts
      * @param array  $aSel                 selection
      * @param array  $aPersParam           persistent params
      * @param bool   $blBundle             bundle
@@ -207,10 +206,10 @@ class oxBasketItem extends oxSuperCfg
      *
      * @return null
      */
-    public function init( $sProductID, $dAmount, $blAllowUnevenAmounts, $aSel = null, $aPersParam = null, $blBundle = null )
+    public function init( $sProductID, $dAmount, $aSel = null, $aPersParam = null, $blBundle = null )
     {
         $this->_setArticle( $sProductID );
-        $this->setAmount( $dAmount, $blAllowUnevenAmounts );
+        $this->setAmount( $dAmount );
         $this->_setSelectList( $aSel );
         $this->setPersParams( $aPersParam );
         $this->setBundle( $blBundle );
@@ -233,20 +232,19 @@ class oxBasketItem extends oxSuperCfg
      * ( oxbasketitem::dAmount, oxbasketitem::dWeight )
      *
      * @param double $dAmount              amount
-     * @param bool   $blAllowUnevenAmounts allow uneven amounts
      * @param bool   $blOverride           overide
      *
      * @throws oxOutOfStockException, oxArticleInputException
      *
      * @return null
      */
-    public function setAmount( $dAmount, $blAllowUnevenAmounts, $blOverride = true )
+    public function setAmount( $dAmount, $blOverride = true )
     {
         //validating amount
         $oValidator = oxNew( 'oxinputvalidator' );
 
         try {
-            $dAmount = $oValidator->validateBasketAmount( $dAmount, $blAllowUnevenAmounts );
+            $dAmount = $oValidator->validateBasketAmount( $dAmount );
         } catch( oxArticleInputException $oEx ) {
             $oEx->setArticleNr( $this->getProductId() );
             // setting additional information for excp and then rethrowing
@@ -269,10 +267,11 @@ class oxBasketItem extends oxSuperCfg
             }
         }
 
-        if ( $blOverride )
+        if ( $blOverride ) {
             $this->_dAmount  = $dAmount;
-        else
+        } else {
             $this->_dAmount += $dAmount;
+        }
 
         // calculating general weight
         $this->_dWeight = $oArticle->oxarticles__oxweight->value * $this->_dAmount;
@@ -865,8 +864,8 @@ class oxBasketItem extends oxSuperCfg
      * @return string
      */
     public function getVatPercent()
-    {
-        return $this->getPrice()->getVAT();
+    {        
+        return oxLang::getInstance()->formatVat( $this->getPrice()->getVat() );
     }
 
     /**

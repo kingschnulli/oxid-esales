@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: tools_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: tools_list.php 14015 2008-11-06 13:30:18Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * and "tools_main.tpl") to frame.
  * @package admin
  */
-class Tools_list extends oxAdminList
+class Tools_List extends oxAdminList
 {
     /**
      * Current class template name.

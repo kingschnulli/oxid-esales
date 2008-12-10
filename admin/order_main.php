@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: order_main.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: order_main.php 14024 2008-11-06 13:41:48Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Orders -> Display Orders -> Main.
  * @package admin
  */
-class Order_main extends oxAdminDetails
+class Order_Main extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(), creates oxorder and

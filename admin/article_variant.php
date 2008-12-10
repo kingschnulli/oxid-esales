@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: article_variant.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: article_variant.php 14018 2008-11-06 13:33:39Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Manage Products -> Articles -> Variants.
  * @package admin
  */
-class Article_variant extends oxAdminDetails
+class Article_Variant extends oxAdminDetails
 {
     /**
      * Loads article variants data, passes it to Smarty engine and returns name of

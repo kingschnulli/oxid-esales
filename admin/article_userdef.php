@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: article_userdef.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: article_userdef.php 14018 2008-11-06 13:33:39Z arvydas $
  */
 
 /**
  * Class reserved for extending (for customization - you can add you own fields, etc.).
  * @package admin
  */
-class Article_userdef extends oxAdminDetails
+class Article_Userdef extends oxAdminDetails
 {
     /**
      * Loads article data from DB, passes it to Smarty engine, returns name

@@ -14,7 +14,9 @@ function EditThis( sID)
     oTransfer.oxid.value = sID;
     oTransfer.cl.value='[{if $actlocation}][{$actlocation}][{else}][{ $default_edit }][{/if}]';
     oTransfer.fnc.value = 'chshp';
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 
     var oSearch = document.getElementById("search");
     oSearch.oxid.value = sID;
@@ -39,21 +41,25 @@ function DeleteThis( sID)
         oTransfer.oxid.value = newshop;
         oTransfer.actshop.value = newshop;
         oTransfer.cl.value='[{ $default_edit }]';
-        oTransfer.submit();
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
     }
 }
 
 function ChangeEditBar( sLocation, sPos)
 {
+    [{include file="autosave.script.tpl"}]
+
     var oSearch = document.getElementById("search");
     oSearch.actedit.value=sPos;
     oSearch.submit();
 
-    [{include file="autosave.script.tpl"}]
-
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.cl.value=sLocation;
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 }
 
 [{ if $updatemain }]
@@ -65,8 +71,14 @@ function UpdateMain( sID)
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.oxid.value=sID;
     oTransfer.cl.value='[{ $default_edit }]';
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 }
+
+
+window.onLoad = top.reloadEditFrame();
+
 //-->
 </script>
 

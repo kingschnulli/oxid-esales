@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: newsletter_send.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: newsletter_send.php 14025 2008-11-06 13:42:31Z arvydas $
  */
 
 /**
@@ -26,7 +26,7 @@
  * Performs sending of newsletter to selected user groups.
  * @package admin
  */
-class Newsletter_send extends oxAdminList
+class Newsletter_Send extends oxAdminList
 {
     /**
      * Executes parent method parent::render(), creates oxnewsletter object,
@@ -153,7 +153,7 @@ class Newsletter_send extends oxAdminList
 
         return $sPage;
     }
-    
+
     /*
      * Overrides parent method to pass referred id
      *

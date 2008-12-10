@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: shop_seo.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: shop_seo.php 14016 2008-11-06 13:31:20Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Main Menu -> Core Settings -> System.
  * @package admin
  */
-class Shop_seo extends Shop_config
+class Shop_Seo extends Shop_Config
 {
     /**
      * Active seo url id

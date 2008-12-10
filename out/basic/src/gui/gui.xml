@@ -394,6 +394,12 @@
                 <color const="oxMsgBoxErrCl" color="6" title="GUI_ERROR_TEXT" />
             </group>
 
+            <group title="GUI_GROUP_ZOOM_POPUP">
+                <color const="oxZoomPopupHeaderBg" color="0" title="GUI_HEAD_BACKGROUND" />
+                <color const="oxZoomPopupBtnBg" color="0" title="GUI_BUTTON_BACKGROUND" />
+                <color const="oxZoomPopupBtnBr" color="7" title="GUI_BUTTON_BORDER" />
+                <color const="oxZoomPopupBtnCl" color="7" title="GUI_BUTTON_TEXT" />
+            </group>
 		</group>
 	</css>
 </gui>

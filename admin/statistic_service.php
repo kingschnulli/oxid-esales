@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: statistic_service.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: statistic_service.php 14015 2008-11-06 13:30:18Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Statistics -> Show -> Clear Log.
  * @package admin
  */
-class Statistic_service extends oxAdminDetails
+class Statistic_Service extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render() and returns name of template

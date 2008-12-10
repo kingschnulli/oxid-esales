@@ -417,7 +417,7 @@ function _groupExp(el) {
 
             <dl>
                 <dt>
-                    <input type=text class="txtfield" style="width:70" name=confstrs[dDefaultVAT] value="[{$confstrs.dDefaultVAT}]" [{ $readonly}]>
+                    <input type=text class="txt" style="width:70" name=confstrs[dDefaultVAT] value="[{$confstrs.dDefaultVAT}]" [{ $readonly}]>
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_DEFAULTVAT" }]

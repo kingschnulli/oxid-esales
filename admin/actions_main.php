@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: actions_main.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: actions_main.php 14017 2008-11-06 13:32:23Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Manage Products -> actions -> Main.
  * @package admin
  */
-class Actions_main extends oxAdminDetails
+class Actions_Main extends oxAdminDetails
 {
     /**
      * Loads article actionss info, passes it to Smarty engine and

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: order_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: order_list.php 14024 2008-11-06 13:41:48Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Orders -> Display Orders.
  * @package admin
  */
-class Order_list extends oxAdminList
+class Order_List extends oxAdminList
 {
     /**
      * Name of chosen object class (default null).
@@ -137,7 +137,7 @@ class Order_list extends oxAdminList
 
         return $sSql;
     }
-    
+
     /**
      *
      * @return null
@@ -168,7 +168,7 @@ class Order_list extends oxAdminList
         //we call init() here to loads list items after sorno()
         $this->init();
     }
-    
+
     /**
      * Adds order by to SQL query string.
      *
@@ -179,7 +179,7 @@ class Order_list extends oxAdminList
     protected function _prepareOrderByQuery( $sSql = null )
     {
         $sSortParam = oxConfig::getParameter( 'sort' );
-        
+
         //setting sort order as ASC for oxbilllname column
         if ( $sSortParam && $sSortParam == 'oxorder.oxbilllname' )
            $this->_blDesc = false;

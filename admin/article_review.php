@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: article_review.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: article_review.php 14018 2008-11-06 13:33:39Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Manage Products -> Articles -> Review.
  * @package admin
  */
-class Article_review extends oxAdminDetails
+class Article_Review extends oxAdminDetails
 {
     /**
      * Loads selected article review information, returns name of template
@@ -48,7 +48,7 @@ class Article_review extends oxAdminDetails
         $sRevoxId = oxConfig::getParameter( 'rev_oxid' );
         if ( $soxId != "-1" && isset( $soxId)) {
 
-        	// load object
+            // load object
             $oArticle->load( $soxId);
 
 

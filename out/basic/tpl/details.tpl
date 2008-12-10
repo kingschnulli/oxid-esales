@@ -40,7 +40,7 @@
     [{/if}]
 
     [{if $product->oxarticles__oxfile->value}]
-        <a href="[{$oViewConf->getPictureUrl()}]/0/[{ $product->oxarticles__oxfile->value }]"><b>[>] [{ $product->oxarticles__oxfile->value }]</b></a>
+        <a href="[{$product->getPictureUrl()}]/0/[{ $product->oxarticles__oxfile->value }]"><b>[>] [{ $product->oxarticles__oxfile->value }]</b></a>
     [{/if}]
 
     [{if $product->oxarticles__oxexturl->value}]
@@ -81,7 +81,7 @@
         [{ assign var="oVendor" value=$oView->getVendor()}]
         [{if ($oVendor && $oView->getListType()!='vendor') }]
             [{if $oVendor->oxvendor__oxicon->value}]
-                <img src="[{$oViewConf->getPictureUrl()}]/icon/[{ $oVendor->oxvendor__oxicon->value}]" alt="[{ $oVendor->oxvendor__oxtitle->value}]">
+                <img src="[{$oVendor->getIconUrl()}]" alt="[{ $oVendor->oxvendor__oxtitle->value}]">
             [{/if}]
             <b>[{ oxmultilang ident="DETAILS_PERSPARAM_MANUFACTURER" }]</b>
             [{if !$oVendor->blReadOnly}]
@@ -461,4 +461,5 @@
 <!-- article locator -->
 [{include file="inc/details_locator.tpl" where="Bottom"}]
 
+[{ insert name="oxid_tracker" title="DETAILS_PERSPARAM_TITLE"|oxmultilangassign product=$product cpath=$oView->getCatTreePath() }]
 [{include file="_footer.tpl" popup="inc/popup_zoom.tpl" }]

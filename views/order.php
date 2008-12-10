@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: order.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: order.php 14012 2008-11-06 13:23:45Z arvydas $
  */
 
 /**
  * Order manager. Arranges user ordering data, checks/validates
  * it, on success stores ordering data to DB.
  */
-class order extends oxUBase
+class Order extends oxUBase
 {
     /**
      * Payment object

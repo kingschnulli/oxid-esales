@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: shop_main.php 13794 2008-10-27 15:11:30Z arvydas $
+ * $Id: shop_main.php 14016 2008-11-06 13:31:20Z arvydas $
  */
 
 
@@ -28,7 +28,7 @@
  * Admin Menu: Main Menu -> Core Settings -> Main.
  * @package admin
  */
-class Shop_main extends oxAdminDetails
+class Shop_Main extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(), creates oxCategoryList and

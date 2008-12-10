@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: genexport_do.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: genexport_do.php 14021 2008-11-06 13:38:05Z arvydas $
  */
 
 /**
  * General export class.
  * @package admin
  */
-class genExport_do extends DynExportBase
+class GenExport_Do extends DynExportBase
 {
     public $sClass_do       = "genExport_do";
     public $sClass_main     = "genExport_main";

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: account_recommlist.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: account_recommlist.php 14012 2008-11-06 13:23:45Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * own recommlists status - remove articles from list or store
  * them to shopping basket, view detail information.
  */
-class account_recommlist extends account
+class Account_Recommlist extends Account
 {
     /**
      * Current class template name.

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: vendorlist.php 13770 2008-10-27 13:10:37Z arvydas $
+ * $Id: vendorlist.php 14141 2008-11-11 14:09:46Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * metatags (for search engines). Result - "vendorlist.tpl" template.
  * OXID eShop -> (Any selected shop product category).
  */
-class vendorlist extends aList
+class VendorList extends aList
 {
     /**
      * List type
@@ -72,13 +72,6 @@ class vendorlist extends aList
      * @var string
      */
     protected $_sCatTitle = null;
-
-    /**
-     * Template location
-     *
-     * @var string
-     */
-    protected $_sActCatPath= null;
 
     /**
      * Page navigation
@@ -143,7 +136,7 @@ class vendorlist extends aList
         $this->_aViewData['title']             = $this->getTitle();
         $this->_aViewData['template_location'] = $this->getTemplateLocation();
         $this->_aViewData['actCategory']       = $this->getActiveCategory();
-        $this->_aViewData['actCatpath']        = $this->getTreeCatPath();
+        $this->_aViewData['actCatpath']        = $this->getCatTreePath();
 
         $this->_aViewData['pageNavigation'] = $this->getPageNavigation();
 
@@ -424,15 +417,15 @@ class vendorlist extends aList
      *
      * @return string
      */
-    public function getTreeCatPath()
+    public function getCatTreePath()
     {
-        if ( $this->_sActCatPath === null ) {
-            $this->_sActCatPath = false;
+        if ( $this->_sCatTreePath === null ) {
+            $this->_sCatTreePath = false;
             if ( ( $oVendorTree = $this->getVendorTree() ) ) {
-                $this->_sActCatPath  = $oVendorTree->getPath();
+                $this->_sCatTreePath  = $oVendorTree->getPath();
             }
         }
-        return $this->_sActCatPath;
+        return $this->_sCatTreePath;
     }
 
     /**

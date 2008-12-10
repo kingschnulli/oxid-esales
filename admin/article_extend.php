@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: article_extend.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: article_extend.php 14018 2008-11-06 13:33:39Z arvydas $
  */
 
 /**
@@ -29,7 +29,7 @@
  * Admin Menu: Manage Products -> Articles -> Extended.
  * @package admin
  */
-class Article_extend extends oxAdminDetails
+class Article_Extend extends oxAdminDetails
 {
     /**
      * Collects available article axtended parameters, passes them to

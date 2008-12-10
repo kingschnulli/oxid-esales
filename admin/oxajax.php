@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxajax.php 13657 2008-10-24 14:35:25Z arvydas $
+ * $Id: oxajax.php 14029 2008-11-06 13:46:09Z arvydas $
  */
 
 // shop path for includes
@@ -52,7 +52,7 @@ include_once getShopBasePath() . 'core/oxsupercfg.php';
 /**
  * AJAX call processor class
  */
-class ajaxlistcomponent extends oxSuperCfg
+class ajaxListComponent extends oxSuperCfg
 {
     /**
      * Possible sort keys
@@ -311,10 +311,19 @@ class ajaxlistcomponent extends oxSuperCfg
             $aCols = $this->_getVisibleColNames();
             $blSep = false;
             foreach ( $aFilter as $sCol => $sValue ) {
+
+                // skipping empty filters
+                if ( !$sValue ) {
+                    continue;
+                }
+
                 $iCol = (int) str_replace( '_', '', $sCol );
                 if ( isset( $aCols[ $iCol ] ) ) {
                     if ( $sQ )
                         $sQ .= ' and ';
+
+                    // escaping special characters
+                    $sValue = str_replace( array( '%', '_' ), array( '\%', '\_' ), $sValue );
 
                     // possibility to search in the middle ..
                     $sValue = preg_replace( '/^\*/', '%', $sValue );

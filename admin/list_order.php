@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: list_order.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: list_order.php 14022 2008-11-06 13:40:14Z arvydas $
  */
 
 /**
@@ -60,6 +60,8 @@ class List_Order extends oxAdminList
                 $this->_aViewData["where"]->{str_replace( '.', '__', $sField )} = $sValue;
             }
         }
+
+        $this->_aViewData["menustructure"] =  $this->getNavigation()->getDomXml()->documentElement->childNodes;
 
         return "list_order.tpl";
     }

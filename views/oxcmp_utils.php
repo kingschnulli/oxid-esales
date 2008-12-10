@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxcmp_utils.php 13885 2008-10-29 19:04:39Z tomas $
+ * $Id: oxcmp_utils.php 13958 2008-11-04 11:00:00Z vilma $
  */
 
 /**
@@ -264,8 +264,6 @@ class oxcmp_utils extends oxView
         if ( is_array( $aItems ) && count( $aItems ) ) {
 
             $oArticle = oxNew( 'oxarticle' );
-            $oArticle->setForceCoreTableUsage( true );
-
             // counts how many pages
             $sAddSql  = implode( "','", array_keys( $aItems ) );
             $sSelect  = "select count(oxid) from oxarticles where oxarticles.oxid in ( '".$sAddSql."' ) ";

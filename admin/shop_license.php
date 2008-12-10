@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: shop_license.php 13883 2008-10-29 19:04:05Z tomas $
+ * $Id: shop_license.php 14016 2008-11-06 13:31:20Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Main Menu -> Core Settings -> License.
  * @package admin
  */
-class Shop_license extends Shop_Config
+class Shop_License extends Shop_Config
 {
 
     /**

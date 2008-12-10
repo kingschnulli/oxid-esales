@@ -13,7 +13,9 @@ function EditThis( sID)
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.oxid.value=sID;
     oTransfer.cl.value='[{if $actlocation}][{$actlocation}][{else}][{ $default_edit }][{/if}]';
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 
     var oSearch = document.getElementById("search");
     oSearch.oxid.value=sID;
@@ -25,16 +27,18 @@ function DeleteThis( sID)
     blCheck = confirm("[{ oxmultilang ident="GENERAL_YOUWANTTODELETE" }]");
     if( blCheck == true)
     {
+        var oTransfer = parent.edit.document.getElementById("transfer");
+        oTransfer.oxid.value='-1';
+        oTransfer.cl.value='[{ $default_edit }]';
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
+
         var oSearch = document.getElementById("search");
         oSearch.oxid.value=sID;
         oSearch.fnc.value='deleteentry';
         oSearch.actedit.value=0;
         oSearch.submit();
-
-        var oTransfer = parent.edit.document.getElementById("transfer");
-        oTransfer.oxid.value='-1';
-        oTransfer.cl.value='[{ $default_edit }]';
-        oTransfer.submit();
     }
 }
 
@@ -52,37 +56,31 @@ function StornoThisArticle( sID)
         oTransfer.cl.value='[{ $default_edit }]';
 
        //forcing edit frame to reload after submit
-       parent.edit.document.reloadFrame = true;
-       
+       top.forceReloadingEditFrame();
+
        oSearch.submit();
     }
 }
 
 function ChangeEditBar( sLocation, sPos)
 {
+    [{include file="autosave.script.tpl"}]
+
     var oSearch = document.getElementById("search");
     oSearch.actedit.value=sPos;
     oSearch.submit();
-
-    [{include file="autosave.script.tpl"}]
 
     var oTransfer = parent.edit.document.getElementById("transfer");
     if ( oTransfer!= null)
     {
         oTransfer.cl.value=sLocation;
-        oTransfer.submit();
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
     }
 }
 
-function reloadEditFrame()
-{
-    if (parent.edit.document.reloadFrame) {
-        var oTransfer = parent.edit.document.getElementById("transfer");
-        oTransfer.submit();
-    }
-}
-
-window.onLoad = reloadEditFrame();
+window.onLoad = top.reloadEditFrame();
 
 //-->
 </script>
@@ -98,7 +96,7 @@ window.onLoad = reloadEditFrame();
     <input type="hidden" name="actedit" value="[{ $actedit }]">
     <input type="hidden" name="oxid" value="[{ $oxid }]">
     <input type="hidden" name="fnc" value="">
-    
+
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
     <colgroup><col width="25%"><col width="25%"><col width="10%"><col width="38%"><col width="1%"><col width="1%"></colgroup>
     <tr class="listitem">
@@ -150,7 +148,7 @@ window.onLoad = reloadEditFrame();
 [{foreach from=$mylist item=listitem}]
     [{assign var="_cnt" value=$_cnt+1}]
     <tr id="row.[{$_cnt}]">
-    
+
     [{ if $listitem->oxorder__oxstorno->value == 1 }]
         [{assign var="listclass" value=listitem3 }]
     [{else}]

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: attribute_category.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: attribute_category.php 14018 2008-11-06 13:33:39Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Manage Products -> Attributes -> Gruppen.
  * @package admin
  */
-class Attribute_category extends oxAdminDetails
+class Attribute_Category extends oxAdminDetails
 {
     /**
      * Loads Attribute categories info, passes it to Smarty engine and

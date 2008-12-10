@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxdeliverylist.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxdeliverylist.php 13976 2008-11-04 16:15:50Z vilma $
  */
 
 /**
@@ -264,11 +264,10 @@ class oxDeliveryList extends oxList
      * @param oxuser $oUser             session user
      * @param string $sDelCountry       user country id
      * @param string $sDelSet           delivery set id
-     * @param bool   $blExclNonMaterial exclude non material articles
      *
      * @return array
      */
-    public function getDeliveryList( $oBasket, $oUser = null, $sDelCountry = null, $sDelSet = null, $blExclNonMaterial = false )
+    public function getDeliveryList( $oBasket, $oUser = null, $sDelCountry = null, $sDelSet = null )
     {
         // ids of deliveries that doesnt fit for us to skip double check
         $aSkipDeliveries = array();
@@ -289,7 +288,7 @@ class oxDeliveryList extends oxList
 
                 $aSkipDeliveries[] = $sDeliveryId;
 
-                if ( $oDelivery->isForBasket( $oBasket, $blExclNonMaterial ) ) {
+                if ( $oDelivery->isForBasket( $oBasket ) ) {
 
                     // delivery fits conditions
                     $this->_aDeliveries[$sDeliveryId] = $aDeliveries[$sDeliveryId];
@@ -342,11 +341,10 @@ class oxDeliveryList extends oxList
      * @param oxuser   $oUser             session user
      * @param string   $sDelCountry       delivery country
      * @param string   $sDeliverySetId    delivery set id to check its relation to delivery list
-     * @param bool     $blExclNonMaterial = false
      *
      * @return bool
      */
-    public function hasDeliveries( $oBasket, $oUser, $sDelCountry, $sDeliverySetId, $blExclNonMaterial = false )
+    public function hasDeliveries( $oBasket, $oUser, $sDelCountry, $sDeliverySetId )
     {
         $blHas = false;
 
@@ -354,7 +352,7 @@ class oxDeliveryList extends oxList
         $this->_getList( $oUser, $sDelCountry, $sDeliverySetId );
         foreach ( $this as $oDelivery ) {
 
-            if ( $oDelivery->isForBasket( $oBasket, $blExclNonMaterial ) ) {
+            if ( $oDelivery->isForBasket( $oBasket ) ) {
                 $blHas = true;
                 break;
             }

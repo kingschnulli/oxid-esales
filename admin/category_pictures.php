@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: category_pictures.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: category_pictures.php 14019 2008-11-06 13:35:04Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Manage Products -> Categories -> Thumbnail.
  * @package admin
  */
-class Category_pictures extends oxAdminDetails
+class Category_Pictures extends oxAdminDetails
 {
     /**
      * Loads category object, passes it to Smarty engine and returns name

@@ -1,5 +1,5 @@
 [{ if $oxid != "-1"}]
-    <table cellspacing="2" cellpadding="2" border="0" bgcolor="#D3DFEC">
+    <table cellspacing="2" cellpadding="2" border="0">
     <tr>
     <td align="left" class="saveinnewlangtext">
         [{ oxmultilang ident="GENERAL_LANGUAGE" }]

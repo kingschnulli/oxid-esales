@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: adminlinks_main.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: adminlinks_main.php 14017 2008-11-06 13:32:23Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Customer News -> Links.
  * @package admin
  */
-class Adminlinks_main extends oxAdminDetails
+class Adminlinks_Main extends oxAdminDetails
 {
     /**
      * Sets link information data (or leaves empty), returns name of template

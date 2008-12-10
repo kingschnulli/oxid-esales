@@ -18,13 +18,13 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: wishlist.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: wishlist.php 14012 2008-11-06 13:23:45Z arvydas $
  */
 
 /**
  * The wishlist of someone else is displayed.
  */
-class wishlist extends oxUBase
+class Wishlist extends oxUBase
 {
 
     /**

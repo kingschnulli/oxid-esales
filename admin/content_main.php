@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: content_main.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: content_main.php 14019 2008-11-06 13:35:04Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Customerinformations -> Content.
  * @package admin
  */
-class Content_main extends oxAdminDetails
+class Content_Main extends oxAdminDetails
 {
     /**
      * Loads contents info, passes it to Smarty engine and

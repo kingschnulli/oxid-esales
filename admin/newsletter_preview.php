@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: newsletter_preview.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: newsletter_preview.php 14025 2008-11-06 13:42:31Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Customer News -> Newsletter -> Preview.
  * @package admin
  */
-class Newsletter_preview extends oxAdminDetails
+class Newsletter_Preview extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(), creates oxnewsletter object

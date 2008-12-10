@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxvendor.php 13901 2008-10-30 08:17:41Z vilma $
+ * $Id: oxvendor.php 13998 2008-11-06 12:00:26Z vilma $
  */
 
 /**
@@ -288,6 +288,16 @@ class oxVendor extends oxI18n
     public function setHasVisibleSubCats( $blHasVisibleSubcats )
     {
         $this->_blHasVisibleSubCats = $blHasVisibleSubcats;
+    }
+
+    /**
+     * Returns article picture
+     *
+     * @return strin
+     */
+    public function getIconUrl()
+    {
+        return $this->getConfig()->getPictureUrl( 'icon/'.$this->oxvendor__oxicon->value );
     }
 
 }

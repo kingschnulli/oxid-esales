@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: usergroup.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: usergroup.php 14014 2008-11-06 13:26:22Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: User Administration -> User Groups.
  * @package admin
  */
-class Usergroup extends oxAdminView
+class UserGroup extends oxAdminView
 {
     /**
      * Current class template name.

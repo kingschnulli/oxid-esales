@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: article_stock.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: article_stock.php 14018 2008-11-06 13:33:39Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Manage Products -> Articles -> Inventory.
  * @package admin
  */
-class Article_stock extends oxAdminDetails
+class Article_Stock extends oxAdminDetails
 {
     /**
      * Loads article Inventory information, passes it to Smarty engine and
@@ -55,14 +55,14 @@ class Article_stock extends oxAdminDetails
                 // echo "language entry doesn't exist! using: ".key($oOtherLang);
                 $oArticle->loadInLang( key($oOtherLang), $soxId );
             }
-            
+
             foreach ( $oOtherLang as $id => $language) {
                 $oLang= new oxStdClass();
                 $oLang->sLangDesc = $language;
                 $oLang->selected = ($id == $this->_iEditLang);
                 $this->_aViewData["otherlang"][$id] =  clone $oLang;
             }
-            
+
 
             // variant handling
             if ( $oArticle->oxarticles__oxparentid->value) {

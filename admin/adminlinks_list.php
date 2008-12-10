@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: adminlinks_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: adminlinks_list.php 14017 2008-11-06 13:32:23Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Customer News -> Links.
  * @package admin
  */
-class Adminlinks_list extends oxAdminList
+class Adminlinks_List extends oxAdminList
 {
     /**
      * Current class template name.
@@ -52,12 +52,12 @@ class Adminlinks_list extends oxAdminList
     {
         $this->_sDefSort = "oxinsert";
         $sSortCol = oxConfig::getParameter( 'sort' );
-        
+
         if ( !$sSortCol || $sSortCol == $this->_sDefSort ) {
             $this->_blDesc = true;
         }
-        
+
         parent::Init();
-        
+
     }
 }

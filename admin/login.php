@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: login.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: login.php 14228 2008-11-17 09:46:57Z vilma $
  */
 
 /**
@@ -69,7 +69,7 @@ class Login extends oxAdminView
 
         // #656 add admin languages
         $aLanguages = array();
-        $sSourceDir = $myConfig->getConfigParam('sShopDir') . $myConfig->formatOutDir("", null, true);
+        $sSourceDir = $myConfig->getConfigParam('sShopDir') . $myConfig->getTemplateBase( true );
 
         $iDefLangCache = oxUtilsServer::getInstance()->getOxCookie('oxidadminlanguage');
         if ( !isset( $iDefLangCache))

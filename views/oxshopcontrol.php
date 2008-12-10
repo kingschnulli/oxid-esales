@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxshopcontrol.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxshopcontrol.php 14119 2008-11-11 12:14:09Z sarunas $
  */
 
 /**
@@ -350,8 +350,10 @@ class oxShopControl extends oxSuperCfg
 
             // perform stuff - check if setup is still there
             if ( file_exists( $myConfig->getConfigParam( 'sShopDir' ) . '/setup/index.php' ) ) {
+                $oActView = oxNew( 'oxubase' );
                 $oSmarty = oxUtilsView::getInstance()->getSmarty();
-                $oSmarty->assign( 'shop', oxNew( 'oxview' )->addGlobalParams() );
+                $oSmarty->assign('oView', $oActView);
+                $oSmarty->assign('oViewConf', $oActView->getViewConfig());
                 oxUtils::getInstance()->showMessageAndExit( $oSmarty->fetch( 'err_setup.tpl' ) );
             }
 

@@ -161,16 +161,6 @@ function _groupExp(el) {
     <div class="groupExp">
         <div>
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_PICTURES" }]</b></a>
-            <dl>
-                <dt>
-                    <input type=hidden name=confbools[blUseDifferentDynDirs] value=false>
-                    <input type=checkbox name=confbools[blUseDifferentDynDirs] value=true  [{if ($confbools.blUseDifferentDynDirs)}]checked[{/if}] [{ $readonly }]>
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_SYSTEM_USEDIFFERENTDYNDIRS" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
 
             <dl>
                 <dt>

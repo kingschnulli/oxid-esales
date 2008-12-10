@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxpricelist.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxpricelist.php 14226 2008-11-17 08:46:23Z arvydas $
  */
 
 /**
@@ -73,11 +73,14 @@ class oxPriceList
      */
     public function getVatInfo()
     {
+        $oLang = oxLang::getInstance();
         $aVatValues = array();
-        foreach ( $this->_aList as $oPrice ) {
-            if ( !isset( $aVatValues[$oPrice->getVat()] ))
-                $aVatValues[$oPrice->getVat()] = 0;
-            $aVatValues[$oPrice->getVat()] += $oPrice->getVATValue();
+        foreach ( $this->_aList as $oPrice ) {            
+            $sVatKey = $oLang->formatVat( $oPrice->getVat() );            
+            if ( !isset( $aVatValues[$sVatKey] )) {
+                $aVatValues[$sVatKey] = 0;
+            }
+            $aVatValues[$sVatKey] += $oPrice->getVATValue();
         }
 
         return $aVatValues;

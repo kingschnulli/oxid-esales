@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: moredetails.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: moredetails.php 14012 2008-11-06 13:23:45Z arvydas $
  */
 
 /**
@@ -26,7 +26,7 @@
  * If chosen article has more pictures there is ability to create
  * gallery of pictures.
  */
-class moreDetails extends oxUBase
+class MoreDetails extends oxUBase
 {
     /**
      * Current class template name.

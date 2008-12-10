@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: compare.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: compare.php 13958 2008-11-04 11:00:00Z vilma $
  */
 
 /**
@@ -274,7 +274,6 @@ class Compare extends oxUBase
             if ( $aItems = $this->getCompareItems()) {
                 // counts how many pages
                 $oList = oxNew( 'oxarticlelist' );
-                $oList->getBaseObject()->setForceCoreTableUsage( true );
                 $oList->loadIds( array_keys( $aItems ) );
                 $this->_iCntPages = round( $oList->count() / $this->_iArticlesPerPage + 0.49 );
 

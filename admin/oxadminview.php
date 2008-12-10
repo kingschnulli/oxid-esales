@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxadminview.php 13663 2008-10-24 14:46:38Z rimvydas.paskevicius $
+ * $Id: oxadminview.php 14197 2008-11-13 14:33:19Z rimvydas.paskevicius $
  */
 
 /**
@@ -198,7 +198,8 @@ class oxAdminView extends oxView
         $myConfig = $this->getConfig();
         
         
-            $sUrl = 'http://admin.oxid-esales.com/PE/';
+        
+            $sUrl = 'http://admin.oxid-esales.com/CE/';
         
         $sShopVersionNr = $this->_getShopVersionNr();
         $sCountry = $this->_getCountryByCode( $myConfig->getConfigParam( 'sShopCountry' ) );

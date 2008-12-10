@@ -87,10 +87,11 @@ class oxEfiDownloader extends oxSuperCfg
     {
         $this->_oClient = new SoapClient( EFIRE_WSDL_URL . 'eshopconnector/?wsdl',
                                           array(
-                                                 'trace'    => 1,
-                                                 'style'    => SOAP_DOCUMENT,
-                                                 'login'    => $sUsername,
-                                                 'password' => $sPassword,
+                                                 'trace'      => 1,
+                                                 'style'      => SOAP_DOCUMENT,
+                                                 'login'      => $sUsername,
+                                                 'password'   => $sPassword,
+                                                 'cache_wsdl' => WSDL_CACHE_NONE
                                                )
                                         );
 
@@ -105,7 +106,7 @@ class oxEfiDownloader extends oxSuperCfg
      */
     protected function _getConnectorClassName($sShopVersion)
     {
-        $oResponse = $this->_oClient->getConnectorFileName($sShopVersion);
+        $oResponse = $this->_oClient->getConnectorClassName($sShopVersion);
 
         if (!$oResponse->blResult)
             throw new Exception($oResponse->sMessage);

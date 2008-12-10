@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxexceptionhandler.php 13887 2008-10-29 19:15:58Z tomas $
+ * $Id: oxexceptionhandler.php 14069 2008-11-10 09:42:56Z vilma $
  */
 
 /**
@@ -96,7 +96,7 @@ class oxExceptionHandler
     {
         // split between php or shop exception
         if ( !$oEx instanceof oxException ) {
-            $this->_dealWithNoOxException( $oEx, false );
+            $this->_dealWithNoOxException( $oEx );
             return;    // Return straight away ! (in case of unit testing)
         }
 
@@ -150,7 +150,7 @@ class oxExceptionHandler
             fclose( $f );
 
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                echo( $sOut );
+                return;
             } elseif ( 0 != $this->_iDebug ) {
                 exit( $sOut );
             }

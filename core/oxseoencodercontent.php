@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxseoencodercontent.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxseoencodercontent.php 14164 2008-11-12 11:50:43Z arvydas $
  */
 
 /**
@@ -62,10 +62,8 @@ class oxSeoEncoderContent extends oxSeoEncoder
         //load details link from DB
         if ( !( $sSeoUrl = $this->_loadFromDb( 'oxcontent', $oCont->getId(), $iLang ) ) ) {
 
-            if ($iLang != $oCont->getLanguage()) {
-                $sId = $oCont->getId();
-                $oCont = oxNew('oxcontent');
-                $oCont->loadInLang($iLang, $sId);
+            if ( $iLang != $oCont->getLanguage() ) {
+                $oCont->loadInLang( $iLang, $oCont->getId() );
             }
 
             $sSeoUrl = '';

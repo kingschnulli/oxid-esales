@@ -225,4 +225,5 @@
     </div>
 </form>
 
+[{ insert name="oxid_tracker" title=$template_title }]
 [{include file="_footer.tpl" }]

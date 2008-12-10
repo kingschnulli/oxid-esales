@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: shop_config.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: shop_config.php 14154 2008-11-11 15:48:34Z arvydas $
  */
 
 /**
@@ -27,10 +27,10 @@
  * Admin Menu: Main Menu -> Core Settings -> General.
  * @package admin
  */
-class Shop_config extends oxAdminDetails
+class Shop_Config extends oxAdminDetails
 {
     protected $_sThisTemplate = 'shop_config.tpl';
-    protected $_aSkipMultiline = array('aRssSelected', 'aHomeCountry');
+    protected $_aSkipMultiline = array('aRssSelected', 'aHomeCountry', 'iShopID_TrustedShops');
 
     /**
      * Executes parent method parent::render(), passes shop configuration parameters
@@ -103,20 +103,24 @@ class Shop_config extends oxAdminDetails
 
                 if ($sVarType == "bool")
                     $aConfBools[$sVarName] = ($sVarVal == "true" || $sVarVal == "1");
-                if ($sVarType == "str" || $sVarType == "int")
+                if ($sVarType == "str" || $sVarType == "int") {
                     $aConfStrs[$sVarName] = $sVarVal;
+                    if ( $aConfStrs[$sVarName] ) {
+                        $aConfStrs[$sVarName] = htmlentities( $aConfStrs[$sVarName] );
+                    }
+                }
                 if ($sVarType == "arr") {
                     if (in_array($sVarName, $this->_aSkipMultiline)) {
-                        $aConfArrs[$sVarName] = unserialize($sVarVal);
+                        $aConfArrs[$sVarName] = unserialize( $sVarVal );
                     } else {
-                        $aConfArrs[$sVarName] = $this->_arrayToMultiline(unserialize($sVarVal));
+                        $aConfArrs[$sVarName] = htmlentities( $this->_arrayToMultiline( unserialize( $sVarVal ) ) );
                     }
                 }
                 if ($sVarType == "aarr") {
                     if (in_array($sVarName, $this->_aSkipMultiline)) {
-                        $aConfAarrs[$sVarName] = unserialize($sVarVal);
+                        $aConfAarrs[$sVarName] = unserialize( $sVarVal );
                     } else {
-                        $aConfAarrs[$sVarName] = $this->_aarrayToMultiline(unserialize($sVarVal));
+                        $aConfAarrs[$sVarName] = htmlentities( $this->_aarrayToMultiline( unserialize( $sVarVal ) ) );
                     }
                 }
                 $rs->moveNext();

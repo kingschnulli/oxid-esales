@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: pricealarm_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: pricealarm_list.php 14023 2008-11-06 13:40:55Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Customer News -> pricealarm.
  * @package admin
  */
-class pricealarm_list extends oxAdminList
+class PriceAlarm_List extends oxAdminList
 {
     /**
      * Name of chosen object class (default null).
@@ -52,12 +52,12 @@ class pricealarm_list extends oxAdminList
      */
     protected function _buildSelectString( $oListObject = null )
     {
-        $sSql  = "select oxpricealarm.*, oxarticles.oxtitle AS articletitle, "; 
-		$sSql .= "oxuser.oxlname as userlname, oxuser.oxfname as userfname ";
+        $sSql  = "select oxpricealarm.*, oxarticles.oxtitle AS articletitle, ";
+        $sSql .= "oxuser.oxlname as userlname, oxuser.oxfname as userfname ";
         $sSql .= "from oxpricealarm ";
         $sSql .= "left join oxarticles on oxarticles.oxid = oxpricealarm.oxartid ";
         $sSql .= "left join oxuser on oxuser.oxid = oxpricealarm.oxuserid WHERE 1 ";
-        
+
         return $sSql;
     }
 
@@ -75,9 +75,9 @@ class pricealarm_list extends oxAdminList
 
 
         $oDefCurr = $myConfig->getActShopCurrencyObject();
-        
+
         foreach ( $this->_aViewData["mylist"] as $oListItem ) {
-            
+
             $oArticle = oxNew( "oxarticle" );
             $oArticle->load($oListItem->oxpricealarm__oxartid->value);
 
@@ -90,12 +90,12 @@ class pricealarm_list extends oxAdminList
                 $oThisCurr = $myConfig->getCurrencyObject( $oDefCurr->name );
                 $oListItem->oxpricealarm__oxcurrency->setValue($oDefCurr->name);
             }
-            
+
             // #889C - Netto prices in Admin
             // (we have to call $oArticle->getPrice() to get price with VAT)
             $dArtPrice = $oArticle->getPrice()->getBruttoPrice() * $oThisCurr->rate;
             $dArtPrice = oxUtils::getInstance()->fRound( $dArtPrice );
-            
+
             $oListItem->fprice = oxLang::getInstance()->formatCurrency( $dArtPrice, $oThisCurr );
 
             if ( $oArticle->oxarticles__oxparentid->value && !$oArticle->oxarticles__oxtitle->value) {
@@ -138,7 +138,7 @@ class pricealarm_list extends oxAdminList
             $sPriceParam = (double) str_replace(array('%',','), array('', '.'), $this->_aWhere['oxpricealarm.oxprice']);
             $this->_aWhere['oxpricealarm.oxprice'] = '%'. $sPriceParam. '%';
         }
-        
+
         if ( $this->_aWhere['oxarticles.oxprice'] ) {
             $sPriceParam = (double) str_replace(array('%',','), array('', '.'), $this->_aWhere['oxarticles.oxprice']);
             $this->_aWhere['oxarticles.oxprice'] = '%'. $sPriceParam. '%';

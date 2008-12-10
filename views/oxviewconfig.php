@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxviewconfig.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxviewconfig.php 14225 2008-11-17 08:42:15Z vilma $
  */
 
 /**
@@ -441,6 +441,7 @@ class oxViewConfig extends oxSuperCfg
 
     /**
      * Returns dynamic (language related) image url
+     * Left for compatibility reasons for a while. Will be removed in future
      *
      * @return string
      */

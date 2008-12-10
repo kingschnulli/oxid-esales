@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxcategory.php 13878 2008-10-29 19:03:08Z tomas $
+ * $Id: oxcategory.php 13998 2008-11-06 12:00:26Z vilma $
  */
 
 /**
@@ -495,7 +495,7 @@ class oxCategory extends oxI18n
      */
     public function getSqlActiveSnippet( $blForceCoreTable = false )
     {
-        $sTable = ( $this->_blForceCoreTableUsage || $blForceCoreTable )?$this->getCoreTableName():$this->getViewName();
+            $sTable = $this->getCoreTableName();
 
         $sQ  = parent::getSqlActiveSnippet( $blForceCoreTable );
         $sQ .= ( strlen( $sQ )? ' and ' : '' ) . " $sTable.oxhidden = '0' ";
@@ -922,5 +922,15 @@ class oxCategory extends oxI18n
         return parent::_setFieldData($sFieldName, $sValue, $iDataType);
     }
 
+
+    /**
+     * Returns category icon picture
+     *
+     * @return string
+     */
+    public function getIconUrl()
+    {
+        return $this->getConfig()->getPictureUrl( 'icon/'.$this->oxcategories__oxicon->value );
+    }
 
 }

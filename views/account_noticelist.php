@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: account_noticelist.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: account_noticelist.php 14012 2008-11-06 13:23:45Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * store them to shopping basket, view detail information.
  * OXID eShop -> MY ACCOUNT -> Newsletter.
  */
-class account_noticelist extends account
+class Account_Noticelist extends Account
 {
     /**
      * Current class template name.

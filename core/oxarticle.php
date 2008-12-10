@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxarticle.php 13793 2008-10-27 15:11:29Z sarunas $
+ * $Id: oxarticle.php 14200 2008-11-13 14:58:45Z vilma $
  */
 
 /**
@@ -497,7 +497,7 @@ class oxArticle extends oxI18n
     public function getSqlActiveSnippet( $blForceCoreTable = false )
     {
         $myConfig = $this->getConfig();
-        $sTable   = ( $this->_blForceCoreTableUsage || $blForceCoreTable )?$this->getCoreTableName():$this->getViewName();
+            $sTable = $this->getCoreTableName();
 
         // check if article is still active
         $sQ = " $sTable.oxactive = 1 ";
@@ -1219,8 +1219,6 @@ class oxArticle extends oxI18n
             $oVendor = oxNew( 'oxvendor' );
         } elseif ( !$blShopCheck && $this->oxarticles__oxvendorid->value) {
             $oVendor = oxNew( 'oxI18n' );
-            $oVendor->setForceCoreTableUsage( true);
-            //$oVendor->blDisableShopCheck  = true;
             $oVendor->init('oxvendor');
             //#T2008-04-22 ?
             //$oVendor->blReadOnly = true;
@@ -1603,29 +1601,27 @@ class oxArticle extends oxI18n
         $aArtPics  = array();
         $aArtIcons = array();
         $iActPicId = 1;
-        $sActPic = $this->oxarticles__oxpic1->value;
+        $sActPic = $this->getPictureUrl( $iActPicId );
 
         if ( oxConfig::getParameter( 'actpicid' ) ) {
-            $iActPicId= oxConfig::getParameter('actpicid');
+            $iActPicId = oxConfig::getParameter('actpicid');
         }
+
         $iCntr = 0;
         $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
         for ( $i = 1; $i <= $iPicCount; $i++) {
-            $sPicField = 'oxarticles__oxpic' . $i;
-            $sIcoField = 'oxarticles__oxpic' . $i . '_ico';
-
-            $sPicVal   = $this->getPictureUrl( $i );//$this->$sPicField->value;
-            $sIcoVal   = $this->getIconUrl( $i ); //$this->$sIcoField->value;
+            $sPicVal = $this->getPictureUrl( $i );
+            $sIcoVal = $this->getIconUrl( $i );
             if ( !strstr($sIcoVal, 'nopic_ico.jpg')) {
                 if ($iCntr) {
                     $blMorePic = true;
                 }
                 $aArtIcons[$i]= $sIcoVal;
                 $aArtPics[$i]= $sPicVal;
-                if ($iActPicId == $i) {
-                   $sActPic = $sPicVal;
-                }
                 $iCntr++;
+            }
+            if ($iActPicId == $i) {
+               $sActPic = $sPicVal;
             }
         }
 
@@ -1635,7 +1631,7 @@ class oxArticle extends oxI18n
         for ( $j = 1,$c = 1; $j <= $iZoomPicCount; $j++) {
             $sVal = $this->getZoomPictureUrl($j);
             if ( !strstr($sVal, 'nopic.jpg')) {
-                if ($this->getConfig()->blFormerTplSupport) {
+                if ($this->getConfig()->getConfigParam('blFormerTplSupport')) {
                     $sVal = $this->_sDynImageDir."/".$sVal;
                 }
                 $blZoomPic = true;
@@ -1872,12 +1868,15 @@ class oxArticle extends oxI18n
                 if ( preg_match('/^oxlongdesc(_(\d{1,2}))?$/', $sKey) ) {
                     $iLang = $oArtExt->_getFieldLang($sKey);
                     $sField = $this->_getFieldLongName($sKey);
+                    $sLongDesc = null;
                     if ($this->$sField instanceof oxField) {
                         $sLongDesc = $this->$sField->getRawValue();
-                    } else {
+                    } elseif (is_object($this->$sField)) {
                         $sLongDesc = $this->$sField->value;
                     }
-                    $this->_saveArtLongDesc($iLang, $sLongDesc);
+                    if (isset($sLongDesc)) {
+                        $this->_saveArtLongDesc($iLang, $sLongDesc);
+                    }
                 }
             }
         }
@@ -2788,7 +2787,6 @@ class oxArticle extends oxI18n
         //collecting assigned to article amount-price list
         $oAmPriceList = oxNew( 'oxlist');
         $oAmPriceList->init('oxbase', 'oxprice2article');
-        $oAmPriceList->blDisableShopCheck = true;
 
         $sShopID = $myConfig->getShopID();
         if ( $myConfig->getConfigParam( 'blMallInterchangeArticles' ) ) {
@@ -3069,8 +3067,8 @@ class oxArticle extends oxI18n
 
         $oCur = $myConfig->getActShopCurrencyObject();
         //price per unit handling
-        if ($this->oxarticles__oxunitquantity->value && $this->oxarticles__oxunitname->value) {
-            $this->_fPricePerUnit = oxLang::getInstance()->formatCurrency($dPrice / $this->oxarticles__oxunitquantity->value, $oCur);
+        if ((double)$this->oxarticles__oxunitquantity->value && $this->oxarticles__oxunitname->value) {
+            $this->_fPricePerUnit = oxLang::getInstance()->formatCurrency($dPrice / (double)$this->oxarticles__oxunitquantity->value, $oCur);
         }
 
 
@@ -3449,7 +3447,11 @@ class oxArticle extends oxI18n
      */
     protected function _onChangeUpdateMinVarPrice( $sParentID )
     {
-        $sQ = 'select min(oxprice) as varminprice from oxarticles where oxparentid = "'.$sParentID.'" or oxid = "'.$sParentID.'"';
+        $sQ = 'select min(oxprice) as varminprice from oxarticles where oxparentid = "'.$sParentID.'"';
+        //V #M378: Quicksorting after price in articlelist does not work correctly when parent article is not buyable 
+        if ( $this->isParentNotBuyable() ) {
+            $sQ .= ' or oxid = "'.$sParentID.'"';
+        }
         $dVarMinPrice = oxDb::getDb()->getOne($sQ);
 
         if ( $dVarMinPrice ) {

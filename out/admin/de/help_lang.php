@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2008
- * $Id: help_lang.php 13616 2008-10-24 09:38:15Z sarunas $
+ * $Id: help_lang.php 14249 2008-11-18 09:48:58Z philipp.grashoff $
  */
 
 /**
@@ -36,6 +36,10 @@
  */
 
 $aLang =  array(
+
+/*
+ * Additional Information
+ */
 'HELP_SHOP_SYSTEM_BLOTHERCOUNTRYORDER'		=> 	"Diese Einstellung beeinflusst das Verhalten des OXID eShops, wenn für ein Land, in das Benutzer bestellen wollen, keine Versandkosten definiert sind:<br>" .
                                                 "<ul><li>Wenn die Einstellung aktiv ist, erhalten diese Benutzer im Bestellprozess eine Meldung: Die Versandkosten werden ihnen nachträglich mitgeteilt, wenn Sie damit einverstanden ist. Sie können mit der Bestellung fortfahren.</li>" .
                                                 "<li>Wenn die Option ausgeschaltet ist, können Benutzer aus Ländern, für die keine Versandkosten definiert sind, nicht bestellen.</li></ul>",
@@ -152,7 +156,5 @@ $aLang =  array(
                                                 "<b>Wenn alle zugeordneten Artikel angezeigt werden sollen, dann geben Sie in Preis von/bis nichts ein!</b>",
 'HELP_CATEGORY_MAIN_OXPRICETO'				=>	"Mit Preis von/bis können Aie einstellen, dass in der Kategorie nur die zugeordneten Artikel angezeigt werden, die einen bestimmten Preis haben. Im ersten Eingabefeld wird die Untergrenze eingegeben, in das zweite Eingabefeld die Obergrenze.<br>" .
                                                 "<b>Wenn alle zugeordneten Artikel angezeigt werden sollen, dann geben Sie in Preis von/bis nichts ein!</b>",
-
-
 );
 

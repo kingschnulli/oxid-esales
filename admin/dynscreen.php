@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: dynscreen.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: dynscreen.php 14020 2008-11-06 13:36:42Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * @package admin
  * @subpackage dyn
  */
-class dynscreen extends oxAdminList
+class Dynscreen extends oxAdminList
 {
     /**
      * Current class template name.

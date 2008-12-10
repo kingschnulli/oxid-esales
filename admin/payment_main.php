@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: payment_main.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: payment_main.php 14023 2008-11-06 13:40:55Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Shop Settings -> Payment Methods -> Main.
  * @package admin
  */
-class Payment_main extends oxAdminDetails
+class Payment_Main extends oxAdminDetails
 {
     /**
      * Keeps all act. fields to store

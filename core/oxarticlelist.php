@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxarticlelist.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxarticlelist.php 14204 2008-11-13 15:47:17Z vilma $
  */
 
 /**
@@ -231,9 +231,13 @@ class oxArticleList extends oxList
         $sArticleTable  = $this->getBaseObject()->getViewName();
         $sArticleFields = $this->getBaseObject()->getSelectFields();
 
+        $oBase = oxNew("oxactions");
+        $sActiveSql = $oBase->getSqlActiveSnippet();
+
         $sSelect = "select $sArticleFields from oxactions2article
                               left join $sArticleTable on $sArticleTable.oxid = oxactions2article.oxartid
-                              where oxactions2article.oxshopid = '$sShopID' and oxactions2article.oxactionid = '$sActionID'
+                              left join oxactions on oxactions.oxid = oxactions2article.oxactionid
+                              where oxactions2article.oxshopid = '$sShopID' and oxactions2article.oxactionid = '$sActionID' and $sActiveSql  
                               and $sArticleTable.oxid is not null and " .$this->getBaseObject()->getSqlActiveSnippet(). "
                               order by oxactions2article.oxsort";
 
@@ -423,17 +427,6 @@ class oxArticleList extends oxList
         $sSearchVendor = $sSearchVendor?$oDb->quote( $sSearchVendor ):null;
 
         $sWhere = null;
-        /*
-        if( isset( $sSearchCat) && $sSearchCat) {
-            // security and performance:
-            // lets try to load this category - is no such category - skip all other code
-            $oSearchCat = oxNew( 'oxcategory', 'core');
-            if ( !$oSearchCat->exists($sSearchCat)) {
-                $this->aArticleList = null;
-                $this->iAllArtCnt = 0;
-                return;
-            }
-        }*/
 
         if( $sSearchStr )
             $sWhere = $this->_getSearchSelect( $sSearchStr );
@@ -729,10 +722,10 @@ class oxArticleList extends oxList
         if ( $sFilter ) {
             $sFilter = "and ( $sFilter ) ";
         }
-        $sFilterSelect = "select oc.oxobjectid as oxobjectid, count(*) as cnt from $sO2CView as oc
-                          INNER JOIN oxobject2attribute as oa ON ( oa.oxobjectid = oc.oxobjectid )
-                          WHERE oc.oxcatnid = '$sCatId' $sFilter
-                          GROUP BY oa.oxobjectid HAVING cnt = $iCnt ";
+        $sFilterSelect = "select oc.oxobjectid as oxobjectid, count(*) as cnt from $sO2CView as oc ";
+        $sFilterSelect.= "INNER JOIN oxobject2attribute as oa ON ( oa.oxobjectid = oc.oxobjectid ) ";
+        $sFilterSelect.= "WHERE oc.oxcatnid = '$sCatId' $sFilter ";
+        $sFilterSelect.= "GROUP BY oa.oxobjectid HAVING cnt = $iCnt ";
 
         $aIds = oxDb::getDb( true )->getAll( $sFilterSelect );
         $sIds = '';

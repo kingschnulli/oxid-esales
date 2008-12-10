@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: order_remark.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: order_remark.php 14024 2008-11-06 13:41:48Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Orders -> Display Orders -> History.
  * @package admin
  */
-class Order_remark extends oxAdminDetails
+class Order_Remark extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(), creates oxorder and

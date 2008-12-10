@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: news_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: news_list.php 14025 2008-11-06 13:42:31Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Customer News -> News.
  * @package admin
  */
-class News_list extends oxAdminList
+class News_List extends oxAdminList
 {
     /**
      * Current class template name.
@@ -59,11 +59,11 @@ class News_list extends oxAdminList
     {
         $this->_sDefSort = "oxdate";
         $sSortCol = oxConfig::getParameter( 'sort' );
-        
+
         if ( !$sSortCol || $sSortCol == $this->_sDefSort ) {
             $this->_blDesc = true;
         }
-        
+
         parent::Init();
     }
 }

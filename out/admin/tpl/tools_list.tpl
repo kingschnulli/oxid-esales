@@ -11,8 +11,12 @@ function ChangeEditBar( sLocation, sPos)
 
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.cl.value=sLocation;
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 }
+
+window.onLoad = top.reloadEditFrame();
 
 //-->
 </script>

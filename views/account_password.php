@@ -18,8 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: account_password.php 13614 2008-10-24 09:36:52Z sarunas $
- *  
+ * $Id: account_password.php 14012 2008-11-06 13:23:45Z arvydas $
  */
 
 
@@ -31,7 +30,7 @@
  * etc. Some fields must be entered. OXID eShop -> MY ACCOUNT
  * -> Update your billing and delivery settings.
  */
-class account_password extends account
+class Account_Password extends Account
 {
 
     /**

@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: user_overview.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: user_overview.php 14014 2008-11-06 13:26:22Z arvydas $
  */
 
 /**
  * Class for extending
  * @package admin
  */
-class User_overview extends oxAdminDetails
+class User_Overview extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(), passes data to Smarty engine and

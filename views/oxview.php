@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxview.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxview.php 14088 2008-11-10 16:51:19Z tomas $
  */
 
 /**
@@ -219,12 +219,6 @@ class oxView extends oxSuperCfg
      * @var string
      */
     protected $_sTrustedShopId = null;
-
-    /**
-     * etracker shop id
-     * @var string
-     */
-    protected $_sEtrackerShopId = null;
 
     /**
      * Load language option
@@ -486,7 +480,7 @@ class oxView extends oxSuperCfg
      * <b>isdemoversion</b>, <b>shop</b>, <b>isdemoversion</b>,
      * <b>version</b>,
      * <b>iShopID_TrustedShops</b>,
-     * <b>iShopID_etracker</b>, <b>urlsign</b>
+     * <b>urlsign</b>
      *
      * @param oxShop $oShop current shop object
      *
@@ -553,8 +547,6 @@ class oxView extends oxSuperCfg
         $this->_setAdditionalParams();
         $this->_aViewData["additionalparams"] = $this->getAdditionalParams();
 
-        // etracker
-        $this->_aViewData['iShopID_etracker']    = $this->getEtrackerShopId();
         $this->_aViewData['bl_perfLoadLanguage'] = $this->isLanguageLoaded();
 
         // new navigation ?
@@ -1774,23 +1766,6 @@ class oxView extends oxSuperCfg
             $this->_sTrustedShopId = $aTrustedShopIds[$iLangId];
         }
         return $this->_sTrustedShopId;
-    }
-
-    /**
-     * Returns shop id in etracker
-     *
-     * @return string
-     */
-    public function getEtrackerShopId()
-    {
-        if ( $this->_sEtrackerShopId == null ) {
-            $this->_sEtrackerShopId = false;
-            $sEtrackerId = $this->getConfig()->getConfigParam( 'iShopID_etracker' );
-            if ( $sEtrackerId && strtolower( $sEtrackerId ) != 'xxx') {
-                $this->_sEtrackerShopId = 1;
-            }
-        }
-        return $this->_sEtrackerShopId;
     }
 
     /**

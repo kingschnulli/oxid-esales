@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxbasket.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxbasket.php 14158 2008-11-12 08:47:46Z vilma $
  */
 
 /**
@@ -245,7 +245,6 @@ class oxBasket extends oxSuperCfg
      *
      * @param string $sProductID           id of product
      * @param double $dAmount              product amount
-     * @param bool   $blAllowUnevenAmounts uneven amounts availability
      * @param array  $aSel                 product select lists (default null)
      * @param array  $aPersParam           product persistent parameters (default null)
      * @param bool   $blOverride           marker to acumulate passed amount or renew (default false)
@@ -256,7 +255,7 @@ class oxBasket extends oxSuperCfg
      *
      * @return object
      */
-    public function addToBasket( $sProductID, $dAmount, $blAllowUnevenAmounts, $aSel = null, $aPersParam = null, $blOverride = false, $blBundle = false, $sOldBasketItemId = null )
+    public function addToBasket( $sProductID, $dAmount, $aSel = null, $aPersParam = null, $blOverride = false, $blBundle = false, $sOldBasketItemId = null )
     {
         // enabled ?
         if ( !$this->isEnabled() )
@@ -285,7 +284,7 @@ class oxBasket extends oxSuperCfg
 
             //updating existing
             try {
-                $this->_aBasketContents[$sItemId]->setAmount( $dAmount, $blAllowUnevenAmounts, $blOverride );
+                $this->_aBasketContents[$sItemId]->setAmount( $dAmount, $blOverride );
             } catch( oxOutOfStockException $oEx ) {
                 // rethrow later
             }
@@ -294,7 +293,7 @@ class oxBasket extends oxSuperCfg
             //inserting new
             $oBasketItem = oxNew( 'oxbasketitem' );
             try {
-                $oBasketItem->init( $sProductID, $dAmount, $blAllowUnevenAmounts, $aSel, $aPersParam, $blBundle );
+                $oBasketItem->init( $sProductID, $dAmount, $aSel, $aPersParam, $blBundle );
             } catch( oxNoArticleException $oEx ) {
                 // in this case that the article does not exist remove the item from the basket by setting its amount to 0
                 //$oBasketItem->dAmount = 0;
@@ -467,33 +466,32 @@ class oxBasket extends oxSuperCfg
      * Iterates through basket contents and adds bundles to items + adds
      * global basket bundles
      *
-     * @param bool $blAllowUnevenAmounts uneven amounts are either allowed or not
-     *
      * @return null
      */
-    protected function _addBundles( $blAllowUnevenAmounts )
+    protected function _addBundles()
     {
           // iterating through articles and binding bundles
         foreach ( $this->_aBasketContents as $key => $oBasketItem ) {
 
             // adding discount type bundles
-            if ( !$oBasketItem->isDiscountArticle() && !$oBasketItem->isBundle() )
+            if ( !$oBasketItem->isDiscountArticle() && !$oBasketItem->isBundle() ) {
                 $aBundles = $this->_getItemBundles( $oBasketItem );
-            else
+            } else {
                 continue;
+            }
 
-            $this->_addBundlesToBasket( $blAllowUnevenAmounts, $aBundles );
+            $this->_addBundlesToBasket( $aBundles );
 
                 // adding item type bundles
                 $aBundles = $this->_getArticleBundles( $oBasketItem );
 
                 // adding bundles to basket
-                $this->_addBundlesToBasket( $blAllowUnevenAmounts, $aBundles );
+                $this->_addBundlesToBasket( $aBundles );
         }
 
         // adding global basket bundles
         if ( $aBundles = $this->_getBasketBundles() ) {
-            $this->_addBundlesToBasket( $blAllowUnevenAmounts, $aBundles );
+            $this->_addBundlesToBasket( $aBundles );
         }
 
     }
@@ -501,16 +499,15 @@ class oxBasket extends oxSuperCfg
     /**
      * Adds bundles to basket
      *
-     * @param bool  $blAllowUnevenAmounts uneven amounts are either allowed or not
      * @param array $aBundles added bundle articles
      *
      * @return null
      */
-    protected function _addBundlesToBasket( $blAllowUnevenAmounts, $aBundles )
+    protected function _addBundlesToBasket( $aBundles )
     {
         foreach ( $aBundles as $sBundleId => $dAmount ) {
             try {
-                if ( $oBundleItem = $this->addToBasket( $sBundleId, $dAmount, $blAllowUnevenAmounts, null, null, true, true ) ) {
+                if ( $oBundleItem = $this->addToBasket( $sBundleId, $dAmount, null, null, true, true ) ) {
                     $oBundleItem->setAsDiscountArticle( true );
                 }
             } catch(oxArticleException $oEx) {
@@ -605,11 +602,9 @@ class oxBasket extends oxSuperCfg
     /**
      * Iterates through basket items and calculates its delivery costs
      *
-     * @param bool $blExclNonMaterial  Exclude non material products while calculating
-     *
      * @return oxPrice
      */
-    protected function _calcDeliveryCost( $blExclNonMaterial = false )
+    protected function _calcDeliveryCost()
     {
         $myConfig  = $this->getConfig();
         $oDeliveryPrice = oxNew( 'oxprice' );
@@ -634,8 +629,7 @@ class oxBasket extends oxSuperCfg
             $aDeliveryList = oxDeliveryList::getInstance()->getDeliveryList( $this,
                                         $oUser,
                                         $this->_findDelivCountry(),
-                                        oxConfig::getParameter( 'sShipSet' ),
-                                        $blExclNonMaterial
+                                        oxConfig::getParameter( 'sShipSet' )
                                     );
 
             if ( count( $aDeliveryList ) > 0 ) {
@@ -958,13 +952,11 @@ class oxBasket extends oxSuperCfg
      * Executes all needed functions to calculate basket price and other needed
      * info
      *
-     * @param bool $blAllowUnevenAmounts uneven amounts are either allowed or not
      * @param bool $blForceUpdate        set this parameter to TRUE to force basket recalculation
-     * @param bool $blExclNonMaterial    exclude non material products from delivery calculation
      *
      * @return null
      */
-    public function calculateBasket( $blAllowUnevenAmounts, $blForceUpdate = false, $blExclNonMaterial = false )
+    public function calculateBasket( $blForceUpdate = false )
     {
         if ( !$this->isEnabled() )
             return;
@@ -979,14 +971,14 @@ class oxBasket extends oxSuperCfg
 
             // 0. merging basket history
             if ( !$this->getConfig()->getConfigParam( 'blPerfNoBasketSaving' ) ) {
-                $this->_mergeSavedBasket( $blAllowUnevenAmounts );
+                $this->_mergeSavedBasket();
             }
 
         //  0. remove all bundles
         $this->_clearBundles();
 
         //  1. generate bundle items
-        $this->_addBundles( $blAllowUnevenAmounts );
+        $this->_addBundles();
 
         //  2. calculating item prices
         $this->_calcItemsPrice();
@@ -1005,7 +997,7 @@ class oxBasket extends oxSuperCfg
 
         //  7. calculating additional costs:
         //  7.1: delivery
-        $this->setCost( 'oxdelivery', $this->_calcDeliveryCost( $blExclNonMaterial ) );
+        $this->setCost( 'oxdelivery', $this->_calcDeliveryCost() );
 
         //  7.2: adding wrapping costs
         $this->setCost( 'oxwrapping', $this->_calcBasketWrapping() );
@@ -1065,7 +1057,7 @@ class oxBasket extends oxSuperCfg
 
         $myConfig = $this->getConfig();
         foreach ( $this->_aBasketContents as $oBasketItem ) {
-            if ( !$oBasketItem->isBundle() && !isset( $this->_aBasketSummary->aArticles[$oBasketItem->getProductId()] ) ) {
+            if ( !$oBasketItem->isBundle() ) {
                 if ( ( $oArticle = $oBasketItem->getArticle() ) ) {
 
                     $aCatIds = $oArticle->getCategoryIds();
@@ -1283,11 +1275,9 @@ class oxBasket extends oxSuperCfg
      * Populates current basket from the saved one.
      * Saves current basket items to SaveBasket
      *
-     * @param bool $blAllowUnevenAmounts describes if uneven amounts are allowed
-     *
      * @return null
      */
-    protected function _mergeSavedBasket( $blAllowUnevenAmounts )
+    protected function _mergeSavedBasket()
     {
         if ( $this->_blBasketMerged )
             return;
@@ -1304,7 +1294,7 @@ class oxBasket extends oxSuperCfg
         $aSavedItems = $oBasket->getItems();
         foreach ( $aSavedItems as $oItem ) {
             try {
-                $this->addToBasket( $oItem->getId(), $oItem->dAmount, $blAllowUnevenAmounts, $oItem->aSelList, null, true );
+                $this->addToBasket( $oItem->getId(), $oItem->dAmount, $oItem->aSelList, null, true );
             } catch( oxArticleException $oEx ) {
                 // caught and ignored
             }

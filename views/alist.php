@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: alist.php 13770 2008-10-27 13:10:37Z arvydas $
+ * $Id: alist.php 14135 2008-11-11 13:54:45Z arvydas $
  */
 
 /**
@@ -76,12 +76,6 @@ class aList extends oxUBase
      * @var array
      */
     protected $_aCatArtList = null;
-
-    /**
-     * Category tree path
-     * @var string
-     */
-    protected $_sCatTreePath = null;
 
     /**
      * Category tree html path

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: delivery_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: delivery_list.php 14020 2008-11-06 13:36:42Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Shop Settings -> Shipping & Handling.
  * @package admin
  */
-class Delivery_list extends oxAdminList
+class Delivery_List extends oxAdminList
 {
     /**
      * Name of chosen object class (default null).

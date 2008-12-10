@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxnewssubscribed.php 13895 2008-10-29 20:18:31Z tomas $
+ * $Id: oxnewssubscribed.php 13958 2008-11-04 11:00:00Z vilma $
  */
 
 /**
@@ -55,17 +55,6 @@ class oxNewsSubscribed extends oxBase
         $this->init( 'oxnewssubscribed' );
     }
 
-    /**
-     * Mall user status setter
-     *
-     * @param bool $blMallUsers Is mall user
-     *
-     * @return null
-     */
-    public function setMallUsers( $blMallUsers )
-    {
-        $this->_blMallUsers = $blMallUsers;
-    }
 
     /**
      * Loads object (newssubscription) details from DB. Returns true on success.

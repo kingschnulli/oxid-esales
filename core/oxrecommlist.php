@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxrecommlist.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxrecommlist.php 14175 2008-11-12 15:12:41Z arvydas $
  */
 
 /**
@@ -198,16 +198,17 @@ class oxRecommList extends oxBase
      */
     public function addArticle( $sOXID, $sDesc )
     {
-        if ( !$sOXID )
-            return false;
-        $oDB   = oxDb::getDb();
-        if (!$oDB->getOne("select oxid from oxobject2list where oxobjectid='$sOXID' and oxlistid='".$this->getId()."'")) {
-            $sUid  = oxUtilsObject::getInstance()->generateUID();
-            $sDesc = $oDB->quote( $sDesc);
-            $sQ    = "insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( '$sUid', '$sOXID', '".$this->getId()."', $sDesc)";
-            return $oDB->execute( $sQ );
+        $blAdd = false;
+        if ( $sOXID ) {
+            $oDB = oxDb::getDb();
+            if ( !$oDB->getOne( "select oxid from oxobject2list where oxobjectid='$sOXID' and oxlistid='".$this->getId()."'" ) ) {
+                $sUid  = oxUtilsObject::getInstance()->generateUID();
+                $sDesc = $oDB->quote( $sDesc );
+                $sQ    = "insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( '$sUid', '$sOXID', '".$this->getId()."', $sDesc )";
+                $blAdd = $oDB->execute( $sQ );
+            }
         }
-        return false;
+        return $blAdd;
     }
 
     /**
@@ -222,56 +223,57 @@ class oxRecommList extends oxBase
      */
     public function getRecommListsByIds( $aArticleIds )
     {
-        if (!count($aArticleIds)) {
-            return null;
+        if ( count( $aArticleIds ) ) {
+            startProfile(__FUNCTION__);
+
+            $aIds = array();
+            foreach ( $aArticleIds as $iKey => $sVal ) {
+                $aIds[$sVal] = mysql_real_escape_string($sVal);
+            }
+
+            $sIds = implode("','", $aIds);
+
+            $oRecommList = oxNew( 'oxlist' );
+            $oRecommList->init( 'oxrecommlist' );
+
+            $iShopId = $this->getConfig()->getShopId();
+            $iCnt = $this->getConfig()->getConfigParam( 'iNrofCrossellArticles' );
+
+            $oRecommList->setSqlLimit( 0, $iCnt );
+
+            $sSelect = "SELECT distinct lists.*
+                    FROM oxobject2list AS o2l_lists
+                    LEFT JOIN oxobject2list AS o2l_count
+                        ON o2l_lists.oxlistid = o2l_count.oxlistid
+                    LEFT JOIN oxrecommlists as lists
+                        ON o2l_lists.oxlistid = lists.oxid
+                    WHERE o2l_lists.oxobjectid
+                        IN (
+                        '$sIds'
+                        ) and lists.oxshopid ='$iShopId'
+                    GROUP BY lists.oxid
+                    order by (
+                            SELECT count( order1.oxobjectid )
+                            FROM oxobject2list AS order1
+                            WHERE order1.oxobjectid IN ('$sIds')
+                                AND o2l_lists.oxlistid = order1.oxlistid
+                        ) DESC,
+                        count( lists.oxid ) DESC";
+
+            $oRecommList->selectString( $sSelect );
+
+            stopProfile(__FUNCTION__);
+
+            if ( $oRecommList->count() ) {
+                startProfile('_loadFirstArticles');
+
+                $this->_loadFirstArticles( $oRecommList, $aIds );
+
+                stopProfile('_loadFirstArticles');
+
+                return $oRecommList;
+            }
         }
-
-        startProfile(__FUNCTION__);
-        $aIds = array();
-        foreach ($aArticleIds as $iKey => $sVal)
-            $aIds[$sVal] = mysql_real_escape_string($sVal);
-
-        $sIds = implode("','", $aIds);
-
-        $oRecommList = oxNew( 'oxlist' );
-        $oRecommList->init( 'oxrecommlist' );
-
-        $iShopId = $this->getConfig()->getShopId();
-        $iCnt = $this->getConfig()->getConfigParam( 'iNrofCrossellArticles' );
-
-        $oRecommList->setSqlLimit( 0, $iCnt );
-
-        $sSelect = "SELECT distinct lists.*
-                FROM oxobject2list AS o2l_lists
-                LEFT JOIN oxobject2list AS o2l_count
-                    ON o2l_lists.oxlistid = o2l_count.oxlistid
-                LEFT JOIN oxrecommlists as lists
-                    ON o2l_lists.oxlistid = lists.oxid
-                WHERE o2l_lists.oxobjectid
-                    IN (
-                    '$sIds'
-                    ) and lists.oxshopid ='$iShopId'
-                GROUP BY lists.oxid
-                order by (
-                        SELECT count( order1.oxobjectid )
-                        FROM oxobject2list AS order1
-                        WHERE order1.oxobjectid IN ('$sIds')
-                            AND o2l_lists.oxlistid = order1.oxlistid
-                    ) DESC,
-                    count( lists.oxid ) DESC";
-
-        $oRecommList->selectString( $sSelect );
-
-        stopProfile(__FUNCTION__);
-
-        if (!$oRecommList->count())
-            return null;
-
-        startProfile('_loadFirstArticles');
-        $this->_loadFirstArticles($oRecommList, $aIds);
-        stopProfile('_loadFirstArticles');
-
-        return $oRecommList;
     }
 
     /**
@@ -321,26 +323,23 @@ class oxRecommList extends oxBase
      */
     public function getSearchRecommLists( $sSearchStr )
     {
-        $sSearchStr = mysql_real_escape_string($sSearchStr);
-        if (!$sSearchStr) {
-            return;
+        if ( $sSearchStr ) {
+            // sets active page
+            $iActPage = (int) oxConfig::getParameter( 'pgNr' );
+            $iActPage = ($iActPage < 0) ? 0 : $iActPage;
+
+            // load only lists which we show on screen
+            $iNrofCatArticles = $this->getConfig()->getConfigParam( 'iNrofCatArticles' );
+            $iNrofCatArticles = $iNrofCatArticles ? $iNrofCatArticles : 10;
+
+            $oRecommList = oxNew( 'oxlist' );
+            $oRecommList->init( 'oxrecommlist' );
+            $sSelect = $this->_getSearchSelect( $sSearchStr );
+            $oRecommList->setSqlLimit( $iNrofCatArticles * $iActPage, $iNrofCatArticles );
+            $oRecommList->selectString( $sSelect );
+
+            return $oRecommList;
         }
-
-        // sets active page
-        $iActPage = (int) oxConfig::getParameter( 'pgNr' );
-        $iActPage = ($iActPage < 0) ? 0 : $iActPage;
-
-        // load only lists which we show on screen
-        $iNrofCatArticles = $this->getConfig()->getConfigParam( 'iNrofCatArticles' );
-        $iNrofCatArticles = $iNrofCatArticles ? $iNrofCatArticles : 10;
-
-        $oRecommList = oxNew( 'oxlist' );
-        $oRecommList->init( 'oxrecommlist' );
-        $sSelect = $this->_getSearchSelect( $sSearchStr );
-        $oRecommList->setSqlLimit( $iNrofCatArticles * $iActPage, $iNrofCatArticles );
-        $oRecommList->selectString( $sSelect );
-
-        return $oRecommList;
     }
 
     /**
@@ -372,11 +371,13 @@ class oxRecommList extends oxBase
      */
     protected function _getSearchSelect( $sSearchStr )
     {
-        $iShopId = $this->getConfig()->getShopId();
-        $sSelect  = "select distinct rl.* from oxrecommlists as rl ";
-        $sSelect .= "inner join oxobject2list as o2l on o2l.oxlistid = rl.oxid ";
-        $sSelect .= "where ( rl.oxtitle like '%$sSearchStr%' or rl.oxdesc like '%$sSearchStr%' ";
-        $sSelect .= "or o2l.oxdesc like '%$sSearchStr%') and rl.oxshopid = '$iShopId'";
+        $iShopId    = $this->getConfig()->getShopId();
+        $sSearchStr = oxDb::getDb()->quote( "%$sSearchStr%" );
+
+        $sSelect = "select distinct rl.* from oxrecommlists as rl
+                    inner join oxobject2list as o2l on o2l.oxlistid = rl.oxid
+                    where ( rl.oxtitle like $sSearchStr or rl.oxdesc like $sSearchStr
+                    or o2l.oxdesc like $sSearchStr ) and rl.oxshopid = '$iShopId'";
 
         return $sSelect;
     }
@@ -414,7 +415,7 @@ class oxRecommList extends oxBase
 
     /**
      * return url to this recomm list page
-     * 
+     *
      * @return string
      */
     public function getLink()
@@ -422,15 +423,15 @@ class oxRecommList extends oxBase
         $sUrl = oxConfig::getInstance()->getShopHomeURL().'cl=recommlist';
         if ( oxUtils::getInstance()->seoIsActive() ) {
             $oEncoder = oxSeoEncoder::getInstance();
-            if ( ( $sStaticUrl = $oEncoder->getStaticUrl( $sUrl ) ) ) { 
+            if ( ( $sStaticUrl = $oEncoder->getStaticUrl( $sUrl ) ) ) {
                 $sUrl = $sStaticUrl;
             }
         }
         $sUrl .= ( ( strpos( $sUrl, '?' ) !== false ) ? "&amp;":"?" ) . "recommid=".$this->getId();
-        
+
         return $sUrl;
     }
-    
+
     /**
      * set sql filter for article loading
      *

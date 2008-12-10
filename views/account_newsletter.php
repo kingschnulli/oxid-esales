@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: account_newsletter.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: account_newsletter.php 14012 2008-11-06 13:23:45Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * his newletter subscription status - simply register or
  * unregister from newsletter. OXID eShop -> MY ACCOUNT -> Newsletter.
  */
-class account_newsletter extends account
+class Account_Newsletter extends Account
 {
     /**
      * Current class template name.

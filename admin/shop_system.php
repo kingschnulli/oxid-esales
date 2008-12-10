@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: shop_system.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: shop_system.php 14015 2008-11-06 13:30:18Z arvydas $
  */
 
 /**
@@ -27,14 +27,14 @@
  * Admin Menu: Main Menu -> Core Settings -> System.
  * @package admin
  */
-class Shop_system extends Shop_config
+class Shop_System extends Shop_Config
 {
     /**
      * Current class template name.
      * @var string
      */
     protected $_sThisTemplate = 'shop_system.tpl';
-    
+
     /**
      * Executes parent method parent::render(), passes shop configuration parameters
      * to Smarty and returns name of template file "shop_system.tpl".
@@ -45,21 +45,21 @@ class Shop_system extends Shop_config
     {
         $myConfig  = $this->getConfig();
         parent::render();
-        
+
         $aConfArrs = array();
-        
+
         $iLang = oxLang::getInstance()->getTplLanguage();
-        
+
         $aLanguages = oxLang::getInstance()->getLanguageArray();
         $sLangAbbr = $aLanguages[$iLang]->abbr;
-        
+
         // loading shop location countries list (defines in which country shop exists)
         require "shop_countries.php";
-        
+
         $soxId = oxConfig::getParameter( "oxid");
         if ( !$soxId)
             $soxId = $myConfig->getShopId();
-        
+
         $sShopCountry = oxDb::getDb()->getOne("select DECODE( oxvarvalue, '".$myConfig->getConfigParam( 'sConfigKey' )."') as oxvarvalue from oxconfig where oxshopid = '$soxId' and oxvarname = 'sShopCountry'");
 
         $this->_aViewData["shop_countries"] = $aCountries[$sLangAbbr];

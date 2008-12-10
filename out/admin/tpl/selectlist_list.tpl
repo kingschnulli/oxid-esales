@@ -13,7 +13,9 @@ function EditThis( sID)
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.oxid.value=sID;
     oTransfer.cl.value='[{if $actlocation}][{$actlocation}][{else}][{ $default_edit }][{/if}]';
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 
     var oSearch = document.getElementById("search");
     oSearch.oxid.value=sID;
@@ -34,7 +36,9 @@ function DeleteThis( sID)
         var oTransfer = parent.edit.document.getElementById("transfer");
         oTransfer.oxid.value='-1';
         oTransfer.cl.value='[{ $default_edit }]';
-        oTransfer.submit();
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
     }
 }
 
@@ -52,21 +56,25 @@ function UnassignThis( sID)
         var oTransfer = parent.edit.document.getElementById("transfer");
         oTransfer.oxid.value='-1';
         oTransfer.cl.value='[{if $actlocation}][{$actlocation}][{else}][{ $default_edit }][{/if}]';
-        oTransfer.submit();
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
     }
 }
 
 function ChangeEditBar( sLocation, sPos)
 {
+    [{include file="autosave.script.tpl"}]
+
     var oSearch = document.getElementById("search");
     oSearch.actedit.value=sPos;
     oSearch.submit();
 
-    [{include file="autosave.script.tpl"}]
-
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.cl.value=sLocation;
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 }
 
 function ChangeLanguage()
@@ -79,8 +87,12 @@ function ChangeLanguage()
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.innerHTML += '<input type="hidden" name="language" value="'+oSearch.changelang.value+'">';
     oTransfer.innerHTML += '<input type="hidden" name="editlanguage" value="'+oSearch.changelang.value+'">';
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 }
+
+window.onLoad = top.reloadEditFrame();
 
 //-->
 </script>
@@ -122,7 +134,7 @@ function ChangeLanguage()
     </td>
 </tr>
 <tr>
-    <td class="listheader first" height="15">&nbsp;<a href="Javascript:document.search.sort.value='oxtitle';document.search.submit();" class="listheader">[{ oxmultilang ident="GENERAL_DESCRIPTION" }]</a></td>
+    <td class="listheader first" height="15">&nbsp;<a href="Javascript:document.search.sort.value='oxtitle';document.search.submit();" class="listheader">[{ oxmultilang ident="GENERAL_TITLE" }]</a></td>
     <td class="listheader" height="15" colspan="2"><a href="Javascript:document.search.sort.value='oxident';document.search.submit();" class="listheader">[{ oxmultilang ident="GENERAL_TITLEIDENT" }]</a></td>
 </tr>
 

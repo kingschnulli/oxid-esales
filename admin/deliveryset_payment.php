@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: deliveryset_payment.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: deliveryset_payment.php 14020 2008-11-06 13:36:42Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Shop settings -> Shipping & Handling Set -> Payment
  * @package admin
  */
-class Deliveryset_payment extends oxAdminDetails
+class DeliverySet_Payment extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render()

@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: selectlist_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: selectlist_list.php 14016 2008-11-06 13:31:20Z arvydas $
  */
 
 /**
  * Admin selectlist list manager.
  * @package admin
  */
-class Selectlist_list extends oxAdminList
+class SelectList_List extends oxAdminList
 {
     /**
      * Name of chosen object class (default null).

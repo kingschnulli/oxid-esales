@@ -28,6 +28,26 @@ function setTitle()
         document.title += " - " + sWorkArea;
 }
 
+function forceReloadingEditFrame()
+{
+    //forcing edit frame to reload after submit
+    top.basefrm.edit.document.reloadFrame = true;
+}
+
+function reloadEditFrame()
+{
+    if (top.basefrm.edit.document.reloadFrame) {
+        var oTransfer = top.basefrm.edit.document.getElementById("transfer");
+        oTransfer.submit();
+    }
+}
+
+function loadEditFrame(sUrl)
+{
+    top.basefrm.edit.document.location = sUrl;
+}
+
+
 [{*
 function focusPopup()
 {

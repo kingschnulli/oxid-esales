@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxcontent.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxcontent.php 14174 2008-11-12 15:10:59Z vilma $
  */
 
 /**
@@ -55,9 +55,8 @@ class oxContent extends oxI18n
      * noparamlink link to this content
      *
      * @var string
-     * @access public
      */
-    public $noparamlink = null;
+    protected $_sNoparamlink = null;
 
     /**
      * expanded state of a content category
@@ -157,21 +156,21 @@ class oxContent extends oxI18n
                 $iLang = null;
             }
         }
-        if ( $this->noparamlink === null || isset($iLang) ) {
+        if ( $this->_sNoparamlink === null || isset($iLang) ) {
             if ( oxUtils::getInstance()->seoIsActive() ) {
-                $noparamlink = oxSeoEncoderContent::getInstance()->getContentUrl( $this, $iLang );
+                $sNoparamlink = oxSeoEncoderContent::getInstance()->getContentUrl( $this, $iLang );
             } else {
-                $noparamlink = $this->getStdLink($iLang);
+                $sNoparamlink = $this->getStdLink($iLang);
             }
 
             if (isset($iLang)) {
-                return $noparamlink;
+                return $sNoparamlink;
             } else {
-                $this->noparamlink = $noparamlink;
+                $this->_sNoparamlink = $sNoparamlink;
             }
         }
 
-        return $this->noparamlink;
+        return $this->_sNoparamlink;
     }
 
     /**

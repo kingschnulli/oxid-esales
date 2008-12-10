@@ -27,12 +27,11 @@
  * Admin Menu: Main Menu -> Core Settings -> System.
  * @package admin
  */
-class dynscreen_local extends oxAdminView
+class Dynscreen_Local extends oxAdminView
 {
     /**
      * Current class template name.
      * @var string
      */
     protected $_sThisTemplate = 'dynscreen_local.tpl';
-    
 }

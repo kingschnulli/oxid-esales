@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: vendor_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: vendor_list.php 14014 2008-11-06 13:26:22Z arvydas $
  */
 
 /**
  * Admin vendor list manager.
  * @package admin
  */
-class Vendor_list extends oxAdminList
+class Vendor_List extends oxAdminList
 {
     /**
      * Current class template name.

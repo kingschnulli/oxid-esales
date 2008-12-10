@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxutilsview.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxutilsview.php 14152 2008-11-11 15:32:36Z vilma $
  */
 
 /**
@@ -100,7 +100,7 @@ class oxUtilsView extends oxSuperCfg
         $iDebug  = $this->getConfig()->getConfigParam( 'iDebug' );
 
         // assign
-        $aViewData = & $oObject->getViewData();
+        $aViewData = $oObject->getViewData();
         if ( is_array( $aViewData ) ) {
             foreach ( array_keys( $aViewData ) as $sViewName ) {
                 // show debbuging information

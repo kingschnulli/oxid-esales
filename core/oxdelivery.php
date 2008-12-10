@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxdelivery.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxdelivery.php 13976 2008-11-04 16:15:50Z vilma $
  */
 
 /**
@@ -197,14 +197,14 @@ class oxDelivery extends oxI18n
      * Returns amount (total net price/weight/volume/Amount) on which delivery price is applied
      *
      * @param object $oBasketItem       basket item object
-     * @param bool   $blExclNonMaterial exlude or not non material
      *
      * @return double
      */
-    public function getDeliveryAmount( $oBasketItem, $blExclNonMaterial = false )
+    public function getDeliveryAmount( $oBasketItem )
     {
         $dAmount = 0 ;
 
+        $blExclNonMaterial = $this->getConfig()->getConfigParam( 'blExclNonMaterialFromDelivery' );
         // calculating only the price which is for non free shipping products
         if ( !$oBasketItem->getArticle()->oxarticles__oxfreeshipping->value &&
               !( $oBasketItem->getArticle()->oxarticles__oxnonmaterial->value && $blExclNonMaterial ) ) {
@@ -318,12 +318,11 @@ class oxDelivery extends oxI18n
     /**
      * Checks if delivery fits for current basket
      *
-     * @param oxbasket $oBasket           shop basket
-     * @param bool     $blExclNonMaterial marker if product is virtual
+     * @param oxbasket $oBasket shop basket
      *
      * @return bool
      */
-    public function isForBasket( $oBasket, $blExclNonMaterial )
+    public function isForBasket( $oBasket )
     {
         // amount for conditional check
         $blHasArticles   = $this->hasArtices();
@@ -347,7 +346,7 @@ class oxDelivery extends oxI18n
 
                 if ( $blHasArticles && (in_array( $sProductId, $aDeliveryArticles ) || ( $sParentId && in_array( $sParentId, $aDeliveryArticles ) ) ) ) {
                     $blUse = true;
-                    $iAmount += $this->getDeliveryAmount( $oContent, $blExclNonMaterial );
+                    $iAmount += $this->getDeliveryAmount( $oContent );
 
                 } elseif ( $blHasCategories ) {
 
@@ -370,7 +369,7 @@ class oxDelivery extends oxI18n
                         if ( $oProduct->inCategory( $sCatId ) ) {
                             $blUse = true;
 
-                            $iAmount += $this->getDeliveryAmount( $oContent, $blExclNonMaterial );
+                            $iAmount += $this->getDeliveryAmount( $oContent );
 
                             break;
                         }
@@ -381,7 +380,7 @@ class oxDelivery extends oxI18n
         } else { // regular amounts check
 
             foreach ( $oBasket->getContents() as $oContent ) {
-                $iAmount += $this->getDeliveryAmount( $oContent, $blExclNonMaterial );
+                $iAmount += $this->getDeliveryAmount( $oContent );
             }
         }
 

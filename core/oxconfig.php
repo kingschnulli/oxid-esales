@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxconfig.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxconfig.php 14228 2008-11-17 09:46:57Z vilma $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -226,7 +226,7 @@ class oxConfig extends oxSuperCfg
      * @var int
      */
     protected $_iShopId = null;
-
+    
 
     /**
      * Out dir name
@@ -412,7 +412,7 @@ class oxConfig extends oxSuperCfg
         } catch ( oxConnectionException $oEx ) {
             $oEx->debugOut( $this->iDebug);
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                echo( $oEx->getString() );
+                return false;
             } elseif ( 0 != $this->iDebug ) {
                 exit( $oEx->getString() );
             } else {
@@ -467,8 +467,9 @@ class oxConfig extends oxSuperCfg
             $blSep = false;
             $sIn  = '';
             foreach ( $aOnlyVars as $sField ) {
-                if ( $blSep )
+                if ( $blSep ) {
                     $sIn .= ', ';
+                }
                 $sIn .= '"'.$sField.'"';
                 $blSep = true;
             }
@@ -604,10 +605,11 @@ class oxConfig extends oxSuperCfg
      */
     public function getGlobalParameter( $sName )
     {
-        if ( isset( $this->_aGlobalParams[$sName] ) )
+        if ( isset( $this->_aGlobalParams[$sName] ) ) {
             return $this->_aGlobalParams[$sName];
-        else
+        } else {
             return null;
+        }
     }
 
     /**
@@ -621,8 +623,9 @@ class oxConfig extends oxSuperCfg
      */
     public static function checkSpecialChars( & $sValue, $aRaw = null )
     {
-        if ( is_object( $sValue ) )
+        if ( is_object( $sValue ) ) {
             return $sValue;
+        }
 
         if ( is_array( $sValue ) ) {
             foreach ( $sValue as $sKey => $sVal ) {
@@ -693,12 +696,10 @@ class oxConfig extends oxSuperCfg
 
         //additional special handling for profihost customers
         if ( isset( $aServerVars['HTTP_X_FORWARDED_SERVER'] ) &&
-             (
-               strpos( $aServerVars['HTTP_X_FORWARDED_SERVER'], 'ssl' ) !== false ||
-               strpos( $aServerVars['HTTP_X_FORWARDED_SERVER'], 'secure-online-shopping.de' ) !== false
-             )
-           )
+             ( strpos( $aServerVars['HTTP_X_FORWARDED_SERVER'], 'ssl' ) !== false || 
+             strpos( $aServerVars['HTTP_X_FORWARDED_SERVER'], 'secure-online-shopping.de' ) !== false ) ) {
             $blIsssl = true;
+        }
 
         //oxUtils::getInstance()->toStaticCache($sCacheName, $blIsSsl);
         $this->_blIsSsl = $blIsSsl;
@@ -740,19 +741,22 @@ class oxConfig extends oxSuperCfg
      */
     public function getShopUrl( $iLang = null )
     {
-        if ( $this->isAdmin() )
+        if ( $this->isAdmin() ) {
             return $this->getConfigParam( 'sShopURL' );
+        }
 
         // #680 per language another URL
         $iLang = isset( $iLang ) ? $iLang : oxLang::getInstance()->getBaseLanguage();
         $aLanguageURLs = $this->getConfigParam( 'aLanguageURLs' );
-        if ( isset( $iLang ) && isset( $aLanguageURLs[$iLang] ) )
+        if ( isset( $iLang ) && isset( $aLanguageURLs[$iLang] ) ) {
             return $aLanguageURLs[$iLang];
+        }
 
         //normal section
         $sMallShopURL = $this->getConfigParam( 'sMallShopURL' );
-        if ( $sMallShopURL )
+        if ( $sMallShopURL ) {
             return $sMallShopURL;
+        }
 
         return $this->getConfigParam( 'sShopURL' );
     }
@@ -806,8 +810,9 @@ class oxConfig extends oxSuperCfg
      */
     public function getCurrentShopUrl()
     {
-        if ( $this->isSsl() )
+        if ( $this->isSsl() ) {
             return $this->getSslShopUrl();
+        }
         return $this->getShopUrl();
     }
 
@@ -820,10 +825,11 @@ class oxConfig extends oxSuperCfg
      */
     public function getShopCurrentUrl( $iLang = null )
     {
-        if ( $this->isSsl() )
+        if ( $this->isSsl() ) {
             $sURL = $this->getSSLShopURL( $iLang );
-        else
+        } else {
             $sURL = $this->getShopURL( $iLang );
+        }
 
         return $this->getSession()->url( $sURL.'index.php' );
     }
@@ -942,6 +948,7 @@ class oxConfig extends oxSuperCfg
      *
      * @return string
      */
+    /* is not used
     public function formatOutDir($sFile, $iLang = null, $blAdmin = false, $blNoThemes = false, $iShop = null)
     {
         //resolving theme and shop dir
@@ -992,15 +999,15 @@ class oxConfig extends oxSuperCfg
             if (file_exists($this->getConfigParam('sShopDir'). $sOut))
                 return $sOut;
         }
-    }
+    }*/
 
-	/**
+    /**
      * Returns path to out dir
      *
      * @param bool $blAbsolute mode - absolute/relative path
      *
      * @return string
-	 */
+     */
     public function getOutDir( $blAbsolute = true){
 
         if($blAbsolute) {
@@ -1010,7 +1017,7 @@ class oxConfig extends oxSuperCfg
         }
     }
 
-	/**
+    /**
      * Returns url to out dir
      *
      * @param bool   $blSSL       Whether to force ssl
@@ -1018,22 +1025,22 @@ class oxConfig extends oxSuperCfg
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
-    public function getOutUrl( $blSSL = null , $blNativeImg = false, $blAdmin = null ){
-
+     */
+    public function getOutUrl( $blSSL = null , $blNativeImg = false, $blAdmin = null )
+    {
         $blSSL    = is_null($blSSL)?$this->isSsl():$blSSL;
         $blAdmin  = is_null($blAdmin)?$this->isAdmin():$blAdmin;
 
-        if ( $this->isSsl() ) {
-            $sUrl = ($blNativeImg && !$blAdmin )?$this->getSSLShopURL():$this->getConfigParam( 'sSSLShopURL');
+        if ( $blSSL ) {
+            $sUrl = ($blNativeImg && !$blAdmin )?$this->getSslShopUrl():$this->getConfigParam( 'sSSLShopURL');
         } else {
-            $sUrl = ($blNativeImg && !$blAdmin )?$this->getShopURL():$this->getConfigParam( 'sShopURL' );
+            $sUrl = ($blNativeImg && !$blAdmin )?$this->getShopUrl():$this->getConfigParam( 'sShopURL' );
         }
 
         return $sUrl.$this->_sOutDir.'/';
     }
 
-	/**
+    /**
      * Finds and returns files or folders path in out dir
      *
      * @param string $sFile       File name
@@ -1045,7 +1052,7 @@ class oxConfig extends oxSuperCfg
      * @param bool   $blAbsolute  mode - absolute/relative path
      *
      * @return string
-	 */
+     */
     public function getDir($sFile, $sDir, $blAdmin, $iLang = null, $iShop = null, $sTheme = null, $blAbsolute = true )
     {
         $sBase    = $this->getOutDir( $blAbsolute );
@@ -1053,81 +1060,81 @@ class oxConfig extends oxSuperCfg
 
         $oLang = oxLang::getInstance(); //getTplLanguage
 
-        if(is_null($iLang)){
-            $iLang = $oLang->getTplLanguage();
+        if ( is_null($iLang) ){
+            $iLang = $oLang->getEditLanguage();
         }
 
         $sLang = $oLang->getLanguageAbbr( $iLang );
 
-        if(is_null($iShop)){
-            $iShop = $this->getBaseShopId();
+        if ( is_null($iShop) ) {
+            $iShop = $this->getShopId();
         }
 
-        if(is_null($sTheme)){
+        if( is_null($sTheme) ) {
             $sTheme = $this->getConfigParam( 'sTheme' );
         }
 
-        if($blAdmin) {
+        if ( $blAdmin ) {
             $sTheme = 'admin';
         }
 
         //Load from
         $sPath = "$sTheme/$iShop/$sLang/$sDir/$sFile";
-        $sCacheKey = $sPath."_$blAbsolute";
+        $sCacheKey = $sPath . "_$blAbsolute";
 
-        if (($sReturn = oxutils::getInstance()->fromStaticCache($sCacheKey)) !== null) {
+        if ( ( $sReturn = oxutils::getInstance()->fromStaticCache( $sCacheKey ) ) !== null ) {
             return $sReturn;
         }
 
         $sReturn = false;
 
         //test lang level ..
-        if( !$sReturn && is_readable($sAbsBase.$sPath) || is_dir(realpath($sAbsBase.$sPath))){
-            $sReturn = $sBase.$sPath;
+        if( !$sReturn && !$blAdmin && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath ) ) ) ) {
+            $sReturn = $sBase . $sPath;
         }
 
         //test shop level ..
         $sPath = "$sTheme/$iShop/$sDir/$sFile";
-        if( !$sReturn && is_readable($sAbsBase.$sPath) || is_dir(realpath($sAbsBase.$sPath))){
-            $sReturn = $sBase.$sPath;
+        if( !$sReturn && !$blAdmin && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath ) ) ) ) {
+            $sReturn = $sBase . $sPath;
         }
+
 
         //test theme language level ..
         $sPath = "$sTheme/$sLang/$sDir/$sFile";
-        if( !$sReturn && is_readable($sAbsBase.$sPath) || is_dir(realpath($sAbsBase.$sPath))){
-            $sReturn = $sBase.$sPath;
+        if( !$sReturn && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath )) ) ) {
+            $sReturn = $sBase . $sPath;
         }
-
 
         //test theme level ..
         $sPath = "$sTheme/$sDir/$sFile";
-        if( !$sReturn && is_readable($sAbsBase.$sPath) || is_dir(realpath($sAbsBase.$sPath))){
-            $sReturn = $sBase.$sPath;
+        if( !$sReturn && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath )) ) ) {
+            $sReturn = $sBase . $sPath;
         }
 
         //test out language level ..
         $sPath = "$sLang/$sDir/$sFile";
-        if( !$sReturn && is_readable($sAbsBase.$sPath) || is_dir(realpath($sAbsBase.$sPath))){
-            $sReturn = $sBase.$sPath;
+        if( !$sReturn && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath )) ) ) {
+            $sReturn = $sBase . $sPath;
         }
 
         //test out level ..
         $sPath = "$sDir/$sFile";
-        if( !$sReturn && is_readable($sAbsBase.$sPath) || is_dir(realpath($sAbsBase.$sPath))){
-            $sReturn = $sBase.$sPath;
+        if( !$sReturn && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath )) ) ) {
+            $sReturn = $sBase . $sPath;
         }
 
-        if(!$sReturn){
+        if( !$sReturn ) {
             // TODO: log missing paths...
         }
 
         // to cache
-        oxutils::getInstance()->toStaticCache($sCacheKey, $sReturn);
+        oxutils::getInstance()->toStaticCache( $sCacheKey, $sReturn );
 
         return $sReturn;
     }
 
-	/**
+    /**
      * Finds and returns file or folder url in out dir
      *
      * @param string $sFile       File name
@@ -1141,7 +1148,7 @@ class oxConfig extends oxSuperCfg
      * @param bool   $blAbsolute  mode - absolute/relative path
      *
      * @return string
-	 */
+     */
     public function getUrl($sFile, $sDir , $blAdmin = null, $blSSL = null, $blNativeImg = false, $iLang = null , $iShop = null , $sTheme = null )
     {
         $sUrl = str_replace(
@@ -1152,20 +1159,20 @@ class oxConfig extends oxSuperCfg
         return $sUrl;
     }
 
-	/**
+    /**
      * Finds and returns image files or folders path
      *
      * @param string $sFile       File name
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
+     */
     public function getImagePath( $sFile, $blAdmin = false )
     {
         return $this->getDir( $sFile, $this->_sImageDir , $blAdmin );
     }
 
-	/**
+    /**
      * Finds and returns image folder url
      *
      * @param bool   $blAdmin     Whether to force admin
@@ -1173,38 +1180,38 @@ class oxConfig extends oxSuperCfg
      * @param bool   $blNativeImg Whether to force native image dirs
      *
      * @return string
-	 */
+     */
     public function getImageUrl( $blAdmin = false, $blSSL = null, $blNativeImg = null )
     {
         $blNativeImg = is_null($blNativeImg)?$this->getConfigParam( 'blNativeImages' ):$blNativeImg;
         return $this->getUrl( null , $this->_sImageDir , $blAdmin, $blSSL , $blNativeImg );
     }
 
-	/**
+    /**
      * Finds and returns image folders path
      *
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
+     */
     public function getImageDir( $blAdmin = false )
     {
         return $this->getDir( null, $this->_sImageDir , $blAdmin );
     }
 
-	/**
+    /**
      * Finds and returns product pictures files or folders path
      *
      * @param string $sFile       File name
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
+     */
     public function getPicturePath($sFile, $blAdmin = false ){
         return $this->getDir( $sFile, $this->_sPictureDir , $blAdmin );
     }
 
-	/**
+    /**
      * Finds and returns product picture file or folder url
      *
      * @param string $sFile       File name
@@ -1213,7 +1220,7 @@ class oxConfig extends oxSuperCfg
      * @param bool   $blNativeImg Whether to force native image dirs
      *
      * @return string
-	 */
+     */
     public function getPictureUrl( $sFile, $blAdmin = false , $blSSL = null , $iLang = null, $iShopId = null )
     {
         if ( $sAltUrl = $this->getConfigParam( 'sAltImageDir' ) ) {
@@ -1222,61 +1229,57 @@ class oxConfig extends oxSuperCfg
                 $sAltUrl = str_replace( 'http://', 'https://', $sAltUrl );
             }
 
-            if(!is_null($sFile)){
-                $sAltUrl.=$sFile;
+            if ( !is_null( $sFile ) ) {
+                $sAltUrl .= $sFile;
             }
 
             return $sAltUrl;
         }
         $sUrl = $this->getUrl( $sFile, $this->_sPictureDir , $blAdmin, $blSSL, null, $iLang , $iShopId );
-        if ( $sFile && $this->blFormerTplSupport ) {
-            $sUrl = str_replace(
-                            $this->getPictureUrl( null, $blAdmin , $blSSL , $iLang, $iShopId ),
-                            '',
-                            $sUrl
-                        );
+        if ( $sFile && $this->getConfigParam('blFormerTplSupport') ) {
+            $sUrl = str_replace( $this->getPictureUrl( null, $blAdmin , $blSSL , $iLang, $iShopId ), '', $sUrl );
         }
         return $sUrl;
     }
 
-	/**
+    /**
      * Finds and returns product pictures folders path
      *
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
+     */
     public function getPictureDir( $blAdmin )
     {
         return $this->getDir( null, $this->_sPictureDir , $blAdmin );
     }
 
-	/**
+    /**
      * Finds and returns templates files or folders path
      *
      * @param string $sFile       File name
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
+     */
     public function getTemplatePath( $sFile, $blAdmin )
     {
         return $this->getDir( $sFile, $this->_sTemplateDir, $blAdmin );
     }
 
-	/**
+    /**
      * Finds and returns templates folders path
      *
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
+     */
     public function getTemplateDir( $blAdmin = false )
     {
         return $this->getDir( null, $this->_sTemplateDir , $blAdmin );
     }
 
-	/**
+    /**
      * Finds and returns template file or folder url
      *
      * @param string $sFile       File name
@@ -1285,39 +1288,39 @@ class oxConfig extends oxSuperCfg
      * @param int    $iLang       Language id
      *
      * @return string
-	 */
+     */
     public function getTemplateUrl( $sFile = null, $blAdmin = false, $blSSL = null , $iLang = null )
     {
         return $this->getUrl( $sFile, $this->_sTemplateDir , $blAdmin, $blSSL, false, $iLang );
     }
 
-	/**
+    /**
      * Finds and returns base template folder url
      *
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
+     */
     public function getTemplateBase( $blAdmin = false )
     {
         // Base template dir is the parent dir of template dir
         return str_replace( $this->_sTemplateDir.'/', '' , $this->getDir( null, $this->_sTemplateDir , $blAdmin , null, null, null, false ));
     }
 
-	/**
+    /**
      * Finds and returns resouce (css, js, etc..) files or folders path
      *
      * @param string $sFile       File name
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
+     */
     public function getResourcePath($sFile, $blAdmin = false )
     {
         return $this->getDir( $sFile, $this->_sResourceDir , $blAdmin );
     }
 
-	/**
+    /**
      * Finds and returns resouce (css, js, etc..) file or folder url
      *
      * @param string $sFile       File name
@@ -1326,26 +1329,26 @@ class oxConfig extends oxSuperCfg
      * @param int    $iLang       Language id
      *
      * @return string
-	 */
+     */
     public function getResourceUrl( $sFile, $blAdmin = false , $blSSL = null , $iLang = null )
     {
         return $this->getUrl( $sFile, $this->_sResourceDir , $blAdmin, $blSSL, false, $iLang );
     }
 
-	/**
+    /**
      * Finds and returns resouce (css, js, etc..) folders path
      *
      * @param string $sFile       File name
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
+     */
     public function getResourceDir( $blAdmin )
     {
         return $this->getDir( null, $this->_sResourceDir , $blAdmin );
     }
 
-	/**
+    /**
      * Finds and returns language files or folders path
      *
      * @param string $sFile       File name
@@ -1353,19 +1356,19 @@ class oxConfig extends oxSuperCfg
      * @param int    $iLang       Language id
      *
      * @return string
-	 */
+     */
     public function getLanguagePath( $sFile, $blAdmin, $iLang = null )
     {
         return $this->getDir( $sFile, oxLang::getInstance()->getLanguageAbbr( $iLang )  , $blAdmin , $iLang );
     }
 
-	/**
+    /**
      * Finds and returns language folders path
      *
      * @param bool   $blAdmin     Whether to force admin
      *
      * @return string
-	 */
+     */
     public function getLanguageDir( $blAdmin )
     {
         return $this->getDir( null, null , $blAdmin );
@@ -1646,6 +1649,26 @@ class oxConfig extends oxSuperCfg
     {
         $sVersion = $this->getActiveShop()->oxshops__oxversion->value;
         return $sVersion;
+    }
+
+    /**
+     * Returns build revision number or false on read error.
+     *
+     * @return int
+     */
+    public function getRevision()
+    {
+        try {
+            $sFileName = getShopBasePath() . "/pkg.rev";
+            $iRev = (int) trim(@file_get_contents($sFileName));
+        } catch (Exception $e) {
+            return false;
+        }
+
+        if (!$iRev)
+            return false;
+
+        return $iRev;
     }
 
 

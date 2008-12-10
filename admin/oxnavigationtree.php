@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxnavigationtree.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxnavigationtree.php 14197 2008-11-13 14:33:19Z rimvydas.paskevicius $
  */
 
 /**
@@ -419,14 +419,18 @@ class OxNavigationTree extends oxSuperCfg
 
         $blLoadDynContents = $myConfig->getConfigParam( 'blLoadDynContents' );
         $sShopCountry      = $myConfig->getConfigParam( 'sShopCountry' );
-        
+
         // including dyn menu file
         $sDynPath = null;
-        
+
         if ( $blLoadDynContents ) {
             if ( $sShopCountry ) {
                 $sRemoteDynUrl = $this->_getDynMenuUrl( $sDynLang, $blLoadDynContents );
-                $sDynPath      = $myOxUtlis->getRemoteCachePath( $sRemoteDynUrl, $sLocalDynPath );
+
+                // very basic check if its valid xml file
+                if ( ( $sDynPath = $myOxUtlis->getRemoteCachePath( $sRemoteDynUrl, $sLocalDynPath ) ) ) {
+                    $sDynPath = $this->_checkDynFile( $sDynPath );
+                }
             }
         } else {
             if ( $sShopCountry ) {
@@ -439,6 +443,37 @@ class OxNavigationTree extends oxSuperCfg
             $aFilesToLoad[] = $sDynPath;
         }
         return $aFilesToLoad;
+    }
+
+    /**
+     * Checks if dyn file is valid for inclusion
+     *
+     * @param string $sDynFilePath dyn file path
+     *
+     * @return bool
+     */
+    protected function _checkDynFile( $sDynFilePath )
+    {
+        $sDynFile = null;
+        if ( file_exists( $sDynFilePath ) ) {
+            $sLine = null;
+            if ( ( $rHandle = @fopen($sDynFilePath, 'r' ) ) ) {
+                $sLine = stream_get_line( $rHandle, 100, "?>");
+                fclose( $rHandle );
+
+                // checking xml file header
+                if ( $sLine && stripos( $sLine, '<?xml' ) !== false ) {
+                    $sDynFile = $sDynFilePath;
+                }
+            }
+
+            // cleanup ..
+            if ( !$sDynFile ) {
+                @unlink( $sDynFilePath );
+            }
+        }
+
+        return $sDynFile;
     }
 
     /**
@@ -463,11 +498,12 @@ class OxNavigationTree extends oxSuperCfg
                 $sVersionPrefix = '';
 
 
-                    $sVersionPrefix = 'pe';
 
+                    $sVersionPrefix = 'ce';
+                
                 $sDynLang = $this->_getDynMenuLang();
                 $sCacheFile = $this->getConfig()->getConfigParam( 'sCompileDir' ) . "/ox{$sVersionPrefix}"."c_menu_{$sDynLang}_xml.txt";
-                
+
                 $sCacheContents = $myOxUtlis->fromFileCache( 'menu_xml' );
 
                 if ( $sCacheContents && file_exists( $sCacheFile ) && ( $iCacheModTime = filemtime( $sCacheFile ) ) ) {
@@ -658,20 +694,20 @@ class OxNavigationTree extends oxSuperCfg
 
         return trim( $sVersion );
     }
-    
-    
+
+
     /*
      * Get dynamic pages url or local path
-     * 
+     *
      * @param int    $iLang              language id
      * @param string $$blLoadDynContents get local or remote content path
-     * 
+     *
      * @return string
      */
     protected function _getDynMenuUrl( $iLang, $blLoadDynContents )
     {
         $myConfig = $this->getConfig();
-        
+
         if ( !$blLoadDynContents) {
             // getting dyn info from oxid server is off, so getting local menu path
             $sFullAdminDir = getShopBasePath() . $myConfig->getConfigParam( 'sAdminDir' );
@@ -681,25 +717,25 @@ class OxNavigationTree extends oxSuperCfg
             $this->_sDynIncludeUrl = $oAdminView->getServiceUrl( $iLang );
             $sUrl .= $this->_sDynIncludeUrl . "menue/dynscreen.xml";
         }
-        
+
         return $sUrl;
     }
-    
+
     /*
      * Get dynamic pages language code
-     * 
+     *
      * @return string
      */
     protected function _getDynMenuLang()
     {
         $myConfig = $this->getConfig();
-        
+
         $iDynLang = $myConfig->getConfigParam( 'iDynInterfaceLanguage' );
         $iDynLang = isset( $iDynLang )?$iDynLang:( oxLang::getInstance()->getTplLanguage() );
-        
+
         $aLanguages = oxLang::getInstance()->getLanguageArray();
         $sLangAbr = $aLanguages[$iDynLang]->abbr;
-                
+
         return $sLangAbr;
     }
 }

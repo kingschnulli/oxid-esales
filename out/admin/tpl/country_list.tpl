@@ -13,7 +13,9 @@ function EditThis( sID)
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.oxid.value=sID;
     oTransfer.cl.value='[{if $actlocation}][{$actlocation}][{else}][{ $default_edit }][{/if}]';
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 
     var oSearch = document.getElementById("search");
     oSearch.oxid.value=sID;
@@ -34,21 +36,25 @@ function DeleteThis( sID)
         var oTransfer = parent.edit.document.getElementById("transfer");
         oTransfer.oxid.value='-1';
         oTransfer.cl.value='[{ $default_edit }]';
-        oTransfer.submit();
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
     }
 }
 
 function ChangeEditBar( sLocation, sPos)
 {
+    [{include file="autosave.script.tpl"}]
+
     var oSearch = document.getElementById("search");
     oSearch.actedit.value=sPos;
     oSearch.submit();
 
-    [{include file="autosave.script.tpl"}]
-
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.cl.value=sLocation;
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 }
 
 function ChangeLanguage()
@@ -61,8 +67,12 @@ function ChangeLanguage()
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.innerHTML += '<input type="hidden" name="language" value="'+oSearch.changelang.value+'">';
     oTransfer.innerHTML += '<input type="hidden" name="editlanguage" value="'+oSearch.changelang.value+'">';
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 }
+
+window.onLoad = top.reloadEditFrame();
 
 //-->
 </script>
@@ -80,15 +90,15 @@ function ChangeLanguage()
     <input type="hidden" name="fnc" value="">
     <input type="hidden" name="language" value="[{ $actlang }]">
     <input type="hidden" name="editlanguage" value="[{ $actlang }]">
-    
+
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <colgroup>
     <col width="4%">
     <col width="40%">
-    
+
     <col width="35%">
     <col width="20%">
-    
+
     <col width="1%">
 </colgroup>
 <tr class="listitem">
@@ -109,7 +119,7 @@ function ChangeLanguage()
     </td>
     <td valign="top" class="listfilter" colspan="2">
         <div class="r1"><div class="b1">
-        
+
         <div class="find">
             <select name="changelang" class="editinput" onChange="Javascript:ChangeLanguage();">
             [{foreach from=$languages item=lang}]
@@ -118,7 +128,7 @@ function ChangeLanguage()
             </select>
             <input class="listedit" type="submit" name="submitit" value="[{ oxmultilang ident="GENERAL_SEARCH" }]">
         </div>
-        
+
         <input class="listedit" type="text" size="5" maxlength="128" name="where[oxcountry.oxisoalpha3]" value="[{ $where->oxcountry__oxisoalpha3 }]">
         </div></div>
     </td>

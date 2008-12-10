@@ -6,9 +6,9 @@
 </head>
 
 <!-- frames -->
-<frameset  rows="40%,*" border="0">
+<frameset  rows="40%,*" border="0" onLoad="top.loadEditFrame('[{$shop->selflink}]?[{ $editurl }][{ if $oxid }]&oxid=[{$oxid}][{/if}]');">
     <frame src="[{$shop->selflink}]?[{ $listurl }][{ if $oxid }]&oxid=[{$oxid}][{/if}]" name="list" id="list" frameborder="0" scrolling="auto" noresize marginwidth="0" marginheight="0">
-    <frame src="[{$shop->selflink}]?[{ $editurl }][{ if $oxid }]&oxid=[{$oxid}][{/if}]" name="edit" id="edit" frameborder="0" scrolling="Auto" noresize marginwidth="0" marginheight="0">
+    <frame src="" name="edit" id="edit" frameborder="0" scrolling="Auto" noresize marginwidth="0" marginheight="0">
 </frameset>
 
 

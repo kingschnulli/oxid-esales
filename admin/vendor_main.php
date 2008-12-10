@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: vendor_main.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: vendor_main.php 14014 2008-11-06 13:26:22Z arvydas $
  */
 
 /**
@@ -26,7 +26,7 @@
  * Performs collection and updating (on user submit) main item information.
  * @package admin
  */
-class Vendor_main extends oxAdminDetails
+class Vendor_Main extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(),

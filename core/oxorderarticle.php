@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxorderarticle.php 13916 2008-10-30 11:16:56Z arvydas $
+ * $Id: oxorderarticle.php 14033 2008-11-06 14:14:51Z arvydas $
  */
 
 /**
@@ -252,8 +252,15 @@ class oxOrderArticle extends oxBase
     protected function _setFieldData( $sFieldName, $sValue, $iDataType = oxField::T_TEXT)
     {
         $sFieldName = strtolower($sFieldName);
-        if ('oxpersparam' === $sFieldName || 'oxerpstatus' === $sFieldName || 'oxorderarticles__oxpersparam' === strtolower($sFieldName) || 'oxorderarticles__oxerpstatus' === strtolower($sFieldName)) {
-            $iDataType = oxField::T_RAW;
+        switch ( $sFieldName ) {
+            case 'oxpersparam':
+            case 'oxorderarticles__oxpersparam':
+            case 'oxerpstatus':
+            case 'oxorderarticles__oxerpstatus':
+            case 'oxtitle':
+            case 'oxorderarticles__oxtitle':
+                $iDataType = oxField::T_RAW;
+                break;
         }
         return parent::_setFieldData($sFieldName, $sValue, $iDataType);
     }

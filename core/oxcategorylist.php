@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxcategorylist.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxcategorylist.php 14055 2008-11-07 14:20:50Z vilma $
  */
 
 
@@ -154,18 +154,6 @@ class oxCategoryList extends oxList
         return $sDepthSnippet;
     }
 
-    /**
-     * constructs the sql snippet responsible for RR engine:
-     *
-     * @return string
-     */
-    protected function _getRRSqlSnippet()
-    {
-        $sRRSnippet = ' 1 ';
-
-
-        return $sRRSnippet;
-    }
 
     /**
      * Fetches reversed raw categories and does all necesarry postprocessing for
@@ -278,7 +266,6 @@ class oxCategoryList extends oxList
      */
     public function getClickCat()
     {
-
         if (count($this->_aPath)) {
             return end($this->_aPath);
         }

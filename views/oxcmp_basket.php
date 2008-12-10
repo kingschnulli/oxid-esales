@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxcmp_basket.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: oxcmp_basket.php 14146 2008-11-11 14:21:16Z arvydas $
  */
 
 /**
@@ -63,9 +63,7 @@ class oxcmp_basket extends oxView
         $myConfig = $this->getConfig();
         // recalculating
         if ( $oBasket = $this->getSession()->getBasket() ) {
-            $oBasket->calculateBasket( $myConfig->getConfigParam( 'blAllowUnevenAmounts' ),
-                                       false,
-                                       $myConfig->getConfigParam( 'blExclNonMaterialFromDelivery' ) );
+            $oBasket->calculateBasket( false );
         }
 
         parent::render();
@@ -98,9 +96,10 @@ class oxcmp_basket extends oxView
 
         // adding articles
         if ( $aProducts = $this->_getItems( $sProductId, $dAmount, $aSel, $aPersParam, $blOverride ) ) {
+
+            $this->_setLastCall( 'tobasket', $aProducts, $this->getSession()->getBasket()->getBasketSummary() );
             $oBasketItem = $this->_addItems( $aProducts );
-            // information that last call was tobasket
-            oxSession::setVar( 'sLastcall', 'tobasket&'.$dAmount.'&'.$sProductId );
+
             // new basket item marker
             if ( $oBasketItem && $myConfig->getConfigParam( 'iNewBasketItemMessage' ) != 0 ) {
                 $oNewItem = new OxstdClass();
@@ -161,9 +160,10 @@ class oxcmp_basket extends oxView
 
         // adding articles
         if ( $aProducts = $this->_getItems( $sProductId, $dAmount, $aSel, $aPersParam, $blOverride ) ) {
-            $oBasketItem = $this->_addItems( $aProducts );
+
             // information that last call was changebasket
-            oxSession::setVar( 'sLastcall', 'changebasket&'.$oBasketItem->dAmount );
+            $this->_setLastCall( 'changebasket', $aProducts, $this->getSession()->getBasket()->getBasketSummary() );
+            $oBasketItem = $this->_addItems( $aProducts );
         }
 
     }
@@ -203,7 +203,7 @@ class oxcmp_basket extends oxView
             $oBasketItem->setWishArticleId( oxConfig::getParameter( 'anid' ) );
 
             // information that last call was tobasket
-            oxSession::setVar( 'sLastcall', 'tobasket&'.$dAmount.'&'.$sProductId );
+            $this->_setLastCall( 'tobasket', $aProducts, $this->getSession()->getBasket()->getBasketSummary() );
 
             // fetching user info
             $oUser = $this->getUser();
@@ -335,7 +335,7 @@ class oxcmp_basket extends oxView
             $sOldBasketItemId = isset( $aProductInfo['basketitemid'] )?$aProductInfo['basketitemid']:null;
 
             try {
-                $oBasketItem = $oBasket->addToBasket( $sProductId, $dAmount, $this->getConfig()->getConfigParam( 'blAllowUnevenAmounts' ), $aSelList, $aPersParam, $blOverride, false, $sOldBasketItemId );
+                $oBasketItem = $oBasket->addToBasket( $sProductId, $dAmount, $aSelList, $aPersParam, $blOverride, false, $sOldBasketItemId );
             } catch( oxOutOfStockException $oEx ) {
                 //add to display at specific position
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true, 'basket');
@@ -348,5 +348,26 @@ class oxcmp_basket extends oxView
         }
 
         return $oBasketItem;
+    }
+
+    /**
+     * Setting last call data to session (data used by econda)
+     *
+     * @param string $sCallName    name of action ('tobasket', 'changebasket')
+     * @param array  $aProductInfo data which comes from request when you press button "to basket"
+     * @param array  $aBasketInfo  array returned by oxbasket::getBasketSummary()
+     */
+    protected function _setLastCall( $sCallName, $aProductInfo, $aBasketInfo )
+    {
+        $aProducts = array();
+
+        // collecting amounts info
+        foreach ( $aProductInfo as $sProdId => $aProdData ) {
+            $aProducts[$sProdId] = $aProdData;
+            // setting previous amount
+            $aProducts[$sProdId]['oldam'] = isset( $aBasketInfo->aArticles[$sProdId] ) ? $aBasketInfo->aArticles[$sProdId] : 0;
+        }
+
+        oxSession::setVar( 'aLastcall', array( $sCallName => $aProducts ) );
     }
 }

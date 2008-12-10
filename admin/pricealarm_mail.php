@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: pricealarm_mail.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: pricealarm_mail.php 14016 2008-11-06 13:31:20Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Customer News -> pricealarm -> Main.
  * @package admin
  */
-class pricealarm_mail extends oxAdminDetails
+class PriceAlarm_Mail extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(), creates oxpricealarm object

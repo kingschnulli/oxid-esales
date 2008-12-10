@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxreview.php 13916 2008-10-30 11:16:56Z arvydas $
+ * $Id: oxreview.php 14171 2008-11-12 14:45:59Z arvydas $
  */
 
 /**
@@ -111,48 +111,40 @@ class oxReview extends oxBase
      */
     public function loadList($sType, $aIds, $blLoadEmpty = false, $iLoadInLang = null)
     {
-        $myConfig  = $this->getConfig();
         $oDb = oxDb::getDb();
 
         $oRevs = oxNew( 'oxlist' );
         $oRevs->init( 'oxreview' );
 
         $sObjectIdWhere = '';
-        if (is_array($aIds) && count($aIds)) {
-            $sObjectIdWhere = "oxreviews.oxobjectid in (";
-            $blFirst = true;
-            foreach ($aIds as $sId) {
-                if ($blFirst) {
-                    $blFirst = false;
-                } else {
-                    $sObjectIdWhere .= ',';
+        if ( is_array( $aIds ) && count( $aIds ) ) {
+            foreach ( $aIds as $sId ) {
+                if ( $sObjectIdWhere ) {
+                    $sObjectIdWhere .= ', ';
                 }
-                $sObjectIdWhere .= $oDb->quote($sId);
+                $sObjectIdWhere .= $oDb->quote( $sId );
             }
-            $sObjectIdWhere .= ')';
-        } elseif (is_string($aIds) && $aIds) {
-            $sObjectIdWhere = "oxreviews.oxobjectid = ".$oDb->quote($aIds);
+            $sObjectIdWhere = "oxreviews.oxobjectid in ( $sObjectIdWhere )";
+        } elseif ( is_string( $aIds ) && $aIds ) {
+            $sObjectIdWhere = "oxreviews.oxobjectid = ".$oDb->quote( $aIds );
         } else {
             return $oRevs;
         }
 
-        if (is_null($iLoadInLang)) {
-            $iLoadInLang = (int) oxLang::getInstance()->getBaseLanguage();
-        } else {
-            $iLoadInLang = (int) $iLoadInLang;
-        }
+        $iLoadInLang = is_null( $iLoadInLang ) ? (int) oxLang::getInstance()->getBaseLanguage() : (int) $iLoadInLang;
 
-        $sType = $oDb->quote($sType);
+        $sType = $oDb->quote( $sType );
         $sSelect = "select oxreviews.* from oxreviews where oxreviews.oxtype = $sType and $sObjectIdWhere and oxreviews.oxlang = '$iLoadInLang'";
 
-        if (!$blLoadEmpty) {
+        if ( !$blLoadEmpty ) {
             $sSelect .= ' and oxreviews.oxtext != "" ';
         }
 
-        if ( $myConfig->getConfigParam( 'blGBModerate' ) ) {
+        if ( $this->getConfig()->getConfigParam( 'blGBModerate' ) ) {
             $sSelect .= ' and ( oxreviews.oxactive = "1" ';
             $sSelect .= ( $oUser = $this->getUser() ) ? 'or  oxreviews.oxuserid = "' . $oUser->getId() . '" )' :  ')';
         }
+
         $sSelect .= ' order by oxreviews.oxcreate desc ';
 
         $oRevs->selectString( $sSelect );
@@ -165,5 +157,4 @@ class oxReview extends oxBase
 
         return $oRevs;
     }
-
 }

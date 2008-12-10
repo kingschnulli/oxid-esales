@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2008
- * $Id: lang.php 13615 2008-10-24 09:37:42Z sarunas $
+ * $Id: lang.php 14004 2008-11-06 12:05:22Z vilma $
  */
 
 $sLangName  = "Deutsch";
@@ -893,7 +893,7 @@ $aLang = array(
 'REGISTER_ERRCOMPLETEBILLINGADDRESS'              => "Fehler: Bitte füllen Sie auch Ihre Rechnungs Adresse aus!",
 'REGISTER_ERRINVALIDEMAIL'                        => "Fehler: Keine gültige E-Mail Adresse!",
 'REGISTER_ERRALREADYREGISTERED'                   => "Fehler: Sie sind bereits registriert!",
-'REGISTER_FORGOTPWD'                              => "Forgot Password ?",
+'REGISTER_FORGOTPWD'                              => "Passwort vergessen?",
 'REGISTER_CLICKHERE'                              => "KLICKEN SIE HIER!",
 'REGISTER_ERRADDRESSUNKNOWN'                      => "Fehler: Adresse unbekannt!",
 'REGISTER_ERRMINLENGTH'                           => "Fehler: Passwort zu kurz! ( Mind. 6 Zeichen )",

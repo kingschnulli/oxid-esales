@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: article_crossselling.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: article_crossselling.php 14018 2008-11-06 13:33:39Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Manage Products -> Articles -> Crosssell.
  * @package admin
  */
-class Article_crossselling extends oxAdminDetails
+class Article_Crossselling extends oxAdminDetails
 {
 
     /**

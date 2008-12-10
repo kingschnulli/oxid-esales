@@ -56,7 +56,7 @@
             <tr>
                 <td valign="top" class="edittext">[{ $listitem->oxorderarticles__oxamount->value }] * </td>
                 <td valign="top" class="edittext">&nbsp;[{ $listitem->oxorderarticles__oxartnum->value }]</td>
-                <td valign="top" class="edittext">&nbsp;[{ $listitem->oxorderarticles__oxtitle->value|string_format:"%.20s"|strip_tags }][{if $listitem->oxwrapping__oxname->value}]&nbsp;([{$listitem->oxwrapping__oxname->value}])&nbsp;[{/if}]</td>
+                <td valign="top" class="edittext">&nbsp;[{ $listitem->oxorderarticles__oxtitle->getRawValue()|string_format:"%.20s"|strip_tags }][{if $listitem->oxwrapping__oxname->value}]&nbsp;([{$listitem->oxwrapping__oxname->value}])&nbsp;[{/if}]</td>
                 <td valign="top" class="edittext">&nbsp;[{ $listitem->oxorderarticles__oxselvariant->value }]</td>
                 <td valign="top" class="edittext">&nbsp;&nbsp;[{ $listitem->ftotbrutprice }] [{ $edit->oxorder__oxcurrency->value }]</td>
                 [{ if $listitem->aPersParam }]

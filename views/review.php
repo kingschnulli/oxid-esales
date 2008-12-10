@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: review.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: review.php 14147 2008-11-11 14:21:30Z arvydas $
  */
 
 /**
@@ -259,7 +259,6 @@ class Review extends oxUBase
     protected function _checkDirectReview($sReviewUserId) {
         $oUser = $this->getUser();
         $blAllow = false;
-        echo $oUser->getId();
         if ($oUser && ($sReviewUserId == $oUser->getId())) {
             $blAllow = true;
         } else {

@@ -53,4 +53,5 @@
 
 [{include file="inc/tags.tpl"}]
 
+[{ insert name="oxid_tracker" title=$template_title }]
 [{include file="_footer.tpl" }]

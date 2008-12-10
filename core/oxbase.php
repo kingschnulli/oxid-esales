@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxbase.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxbase.php 14117 2008-11-11 11:57:46Z sarunas $
  */
 
 /**
@@ -344,9 +344,6 @@ class oxBase extends oxSuperCfg
         $this->_sViewTable = getViewName( $this->_sCoreTable );
 
         //do not use views?
-        if ( $this->_blForceCoreTableUsage ) {
-            $this->_sViewTable = $this->_sCoreTable;
-        }
 
         if ( count( $this->_aFieldNames ) <= 1 ) {
             $this->_initDataStructure( $blForceAllFields );
@@ -495,36 +492,6 @@ class oxBase extends oxSuperCfg
         $this->_initDataStructure(true);
     }
 
-    /**
-     * Sets $this->_blForceCoreTableUsage property.
-     * Set it to true if you want to disable db view usage and select object records from core table (from all shops).
-     *
-     * @param bool $blForceCoreTableUsage New value
-     *
-     * @return null
-     */
-    public function setForceCoreTableUsage($blForceCoreTableUsage)
-    {
-        $this->_blForceCoreTableUsage = $blForceCoreTableUsage;
-
-        if ( $this->_blForceCoreTableUsage ) {
-            $this->_sViewTable = $this->_sCoreTable;
-        } else {
-            $this->_sViewTable = getViewName( $this->_sCoreTable );
-        }
-    }
-
-    /**
-     * Set $this->_blDisableShopCheck class variable.
-     *
-     * @param bool $blDisableShopCheck New value
-     *
-     * @return null
-     */
-    public function setDisableShopCheck($blDisableShopCheck)
-    {
-        $this->_blDisableShopCheck = $blDisableShopCheck;
-    }
 
     /**
      * Returns true in case the item represented by this object is derived from parent shop
@@ -798,7 +765,7 @@ class oxBase extends oxSuperCfg
     public function getSqlActiveSnippet( $blForceCoreTable = false )
     {
         $sQ = '';
-        $sTable = ( $this->_blForceCoreTableUsage || $blForceCoreTable )?$this->getCoreTableName():$this->getViewName();
+            $sTable = $this->getCoreTableName();
 
         // has 'active' field ?
         if ( isset( $this->_aFieldNames['oxactive'] ) ) {
@@ -954,8 +921,9 @@ class oxBase extends oxSuperCfg
         $sCacheKey   = $this->_sCoreTable . "_allfields_" . $blReturnSimple;
         $aMetaFields = $myUtils->fromFileCache( $sCacheKey );
 
-        if ($aMetaFields)
+        if ($aMetaFields) {
             return $aMetaFields;
+        }
 
         $aMetaFields = oxDb::getInstance()->getTableDescription( $this->_sCoreTable );
 
@@ -988,6 +956,7 @@ class oxBase extends oxSuperCfg
         $myUtils = oxUtils::getInstance();
 
         //get field names from cache
+        $aFieldNames = null;
         $sFullCacheKey = 'fieldnames_' .$this->_sCoreTable . "_" . $this->_sCacheKey;
         if ($this->_sCacheKey && !$this->_isDisabledFieldCache()) {
             $aFieldNames = $myUtils->fromFileCache($sFullCacheKey);

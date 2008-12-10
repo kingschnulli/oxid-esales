@@ -18,9 +18,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © oxid eSales GmbH 2003-2007
- * @version EE 2.7
- * $Id: oxinputvalidator.php 13617 2008-10-24 09:38:46Z sarunas $
+ * @copyright © OXID eSales AG 2003-2008
+ * $Id: oxinputvalidator.php 14225 2008-11-17 08:42:15Z vilma $
  */
 
 /**
@@ -78,13 +77,12 @@ class oxInputValidator
      * Validates basket amount
      *
      * @param float $dAmount              amount of article
-     * @param bool  $blAllowUnevenAmounts true if uneven amounts are allowed
      *
      * @throws oxArticleInputException if amount is not numeric or smaller 0
      *
      * @return float
      */
-    public function validateBasketAmount($dAmount, $blAllowUnevenAmounts )
+    public function validateBasketAmount( $dAmount )
     {
         $dAmount = str_replace( ',', '.', $dAmount );
 
@@ -94,7 +92,7 @@ class oxInputValidator
             throw $oEx;
         }
 
-        if ( !$blAllowUnevenAmounts ) {
+        if ( !oxConfig::getInstance()->getConfigParam( 'blAllowUnevenAmounts' ) ) {
             $dAmount = round( ( string ) $dAmount );
         }
 

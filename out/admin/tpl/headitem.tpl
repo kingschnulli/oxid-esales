@@ -15,7 +15,7 @@
     var ajaxpopup = null;
     function showDialog( sParams )
     {
-        ajaxpopup = window.open('[{ $shop->selflink }]'+sParams, 'ajaxpopup', 'width=600,height=600,scrollbars=yes,resizable=yes');
+        ajaxpopup = window.open('[{ $shop->selflink }]'+sParams, 'ajaxpopup', 'width=600,height=680,scrollbars=yes,resizable=yes');
     }
 
     function focusPopup()

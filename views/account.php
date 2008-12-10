@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: account.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: account.php 14012 2008-11-06 13:23:45Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * is a link for logging out. Template includes Topoffer , bargain
  * boxes. OXID eShop -> MY ACCOUNT.
  */
-class account extends oxUBase
+class Account extends oxUBase
 {
     /**
      * Number of user's orders.

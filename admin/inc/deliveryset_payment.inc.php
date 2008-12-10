@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package inc
  * @copyright © OXID eSales AG 2003-2008
- * $Id: deliveryset_payment.inc.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: deliveryset_payment.inc.php 14035 2008-11-06 14:48:53Z arvydas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -37,7 +37,7 @@ $aColumns = array( 'container1' => array(    // field , table,         visible, 
 /**
  * Class manages deliveryset payment
  */
-class ajaxcomponent extends ajaxlistcomponent
+class ajaxComponent extends ajaxListComponent
 {
     /**
      * Returns SQL query for data to fetc

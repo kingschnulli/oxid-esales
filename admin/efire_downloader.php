@@ -21,7 +21,7 @@
  * $Id: efire_downloader.php 12555 2008-09-29 13:07:20Z tomas $
  */
 
-class efire_downloader extends oxAdminView
+class EFire_Downloader extends oxAdminView
 {
     /**
      * Template name
@@ -52,8 +52,7 @@ class efire_downloader extends oxAdminView
 
         $oConnector = oxNew("oxefidownloader");
 
-        //$sShopVersion = $this->getConfig()->getEdition() . " " . $this->getConfig()->getVersion();
-        $sShopVersion = $this->getConfig()->getActiveShop()->oxshops__oxversion->value;
+        $sShopVersion = $this->getConfig()->getEdition() . " " . $this->getConfig()->getVersion();
 
         $blSaveCredentials = $this->getConfig()->getParameter('blSaveCredentials');
 

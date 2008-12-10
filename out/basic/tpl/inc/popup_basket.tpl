@@ -29,7 +29,7 @@
          <td>[{ $oxcmp_basket->getItemsCount()}]</td>
       </tr>
       [{if $oxcmp_basket->getFDeliveryCosts()}]
-      <tr class="sep">
+      <tr>
          <th>[{ oxmultilang ident="INC_CMP_BASKET_SHIPPING" }]</th>
          <td>[{ $oxcmp_basket->getFDeliveryCosts() }] [{ $currency->sign}]</td>
       </tr>

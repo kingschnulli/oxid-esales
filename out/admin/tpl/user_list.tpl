@@ -13,7 +13,9 @@ function EditThis( sID)
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.oxid.value=sID;
     oTransfer.cl.value='[{if $actlocation}][{$actlocation}][{else}][{ $default_edit }][{/if}]';
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 
     var oSearch = document.getElementById("search");
     oSearch.oxid.value=sID;
@@ -34,22 +36,28 @@ function DeleteThis( sID)
         var oTransfer = parent.edit.document.getElementById("transfer");
         oTransfer.oxid.value='-1';
         oTransfer.cl.value='[{ $default_edit }]';
-        oTransfer.submit();
+
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
     }
 }
 
 function ChangeEditBar( sLocation, sPos)
 {
+    [{include file="autosave.script.tpl"}]
+
     var oSearch = document.getElementById("search");
     oSearch.actedit.value=sPos;
     oSearch.submit();
 
-    [{include file="autosave.script.tpl"}]
-
     var oTransfer = parent.edit.document.getElementById("transfer");
     oTransfer.cl.value=sLocation;
-    oTransfer.submit();
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 }
+
+window.onLoad = top.reloadEditFrame();
 
 //-->
 </script>
@@ -65,7 +73,7 @@ function ChangeEditBar( sLocation, sPos)
     <input type="hidden" name="actedit" value="[{ $actedit }]">
     <input type="hidden" name="oxid" value="[{ $oxid }]">
     <input type="hidden" name="fnc" value="">
-    
+
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <colgroup>
     <col width="20%">
@@ -110,7 +118,7 @@ function ChangeEditBar( sLocation, sPos)
     </td>
     <td valign="top" class="listfilter" colspan="2" nowrap>
         <div class="r1"><div class="b1">
-        <div class="find"><input class="listedit" type="submit" name="submitit" value="[{ oxmultilang ident="GENERAL_SEARCH" }]"></div>        
+        <div class="find"><input class="listedit" type="submit" name="submitit" value="[{ oxmultilang ident="GENERAL_SEARCH" }]"></div>
         <input class="listedit" type="text" size="5" maxlength="128" name="where[oxuser.oxcustnr]" value="[{ $where->oxuser__oxcustnr }]">
         </div>
         </div></div>
@@ -131,7 +139,7 @@ function ChangeEditBar( sLocation, sPos)
 [{foreach from=$mylist item=listitem}]
     [{assign var="_cnt" value=$_cnt+1}]
     <tr id="row.[{$_cnt}]">
-    
+
     [{ if $listitem->blacklist == 1}]
         [{assign var="listclass" value=listitem3 }]
     [{ else}]
@@ -147,7 +155,7 @@ function ChangeEditBar( sLocation, sPos)
     <td valign="top" class="[{ $listclass}]"><div class="listitemfloating"><a href="Javascript:EditThis('[{ $listitem->oxuser__oxid->value }]');" class="[{ $listclass}]">[{ $listitem->oxuser__oxcity->value }]</a></div></td>
     <td valign="top" class="[{ $listclass}]"><div class="listitemfloating"><a href="Javascript:EditThis('[{ $listitem->oxuser__oxid->value }]');" class="[{ $listclass}]">[{ $listitem->oxuser__oxfon->value }]</a></div></td>
     <td valign="top" class="[{ $listclass}]"><div class="listitemfloating"><a href="Javascript:EditThis('[{ $listitem->oxuser__oxid->value }]');" class="[{ $listclass}]">[{ $listitem->oxuser__oxcustnr->value }]</a></div></td>
-    
+
     <td class="[{ $listclass}]">
         [{ if !$listitem->isinternal && !$readonly  && !$listitem->blPreventDelete}]
         <a href="Javascript:DeleteThis('[{ $listitem->oxuser__oxid->value }]');" class="delete" id="del.[{$_cnt}]" [{include file="help.tpl" helpid=item_delete}]></a>

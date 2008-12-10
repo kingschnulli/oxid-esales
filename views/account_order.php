@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: account_order.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: account_order.php 14012 2008-11-06 13:23:45Z arvydas $
  */
 
 /**
@@ -29,7 +29,7 @@
  * ordered articles information, button to add article to basket.
  * OXID eShop -> MY ACCOUNT -> Newsletter.
  */
-class account_order extends account
+class Account_Order extends Account
 {
 
     /**

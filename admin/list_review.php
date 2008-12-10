@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: list_review.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: list_review.php 14022 2008-11-06 13:40:14Z arvydas $
  */
 
 /**
@@ -57,30 +57,32 @@ class List_Review extends oxAdminList
             }
         }
 
+        $this->_aViewData["menustructure"] =  $this->getNavigation()->getDomXml()->documentElement->childNodes;
+
         return "list_review.tpl";
     }
 
     /**
-     * Builds and returns array of SQL WHERE conditions. 
+     * Builds and returns array of SQL WHERE conditions.
      *
      * @return array
      */
     public function buildWhere()
     {
         parent::buildWhere();
-        
+
         $sLangTag = oxLang::getInstance()->getLanguageTag($this->_iEditLang);
         $sArtTitleField = 'oxarticles.oxtitle';
-        
+
         // if searching in article title and in lang id > 0, adding lang tag to article title field name
         if ( $sLangTag && $this->_aWhere[$sArtTitleField] ) {
             $this->_aWhere[$sArtTitleField.$sLangTag] = $this->_aWhere[$sArtTitleField];
             unset( $this->_aWhere[$sArtTitleField] );
         }
 
-		return $this->_aWhere;
+        return $this->_aWhere;
     }
-    
+
     /**
      * Returns select query string
      *
@@ -94,7 +96,7 @@ class List_Review extends oxAdminList
         $sSql  = "select oxreviews.oxid, oxreviews.oxcreate, oxreviews.oxtext, oxreviews.oxobjectid, oxarticles.oxtitle".oxLang::getInstance()->getLanguageTag($this->_iEditLang)." as oxtitle from oxreviews left join $sArtTable as oxarticles on oxarticles.oxid=oxreviews.oxobjectid and 'oxarticle'=oxreviews.oxtype where 1";
         $sSql .= " and oxreviews.oxlang = '" . $this->_iEditLang . " ' ";
 
-		return $sSql;
+        return $sSql;
     }
 
     /**

@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: category_update.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: category_update.php 14019 2008-11-06 13:35:04Z arvydas $
  */
 
 /**
  * Class for updating category tree structure in DB.
  * @package admin
  */
-class Category_update extends oxAdminView
+class Category_Update extends oxAdminView
 {
     /**
      * Loads category tree object, executes update and returns name of template

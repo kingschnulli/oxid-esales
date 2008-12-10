@@ -91,12 +91,5 @@
   </div>
 </div>
 
-[{assign var="trackercategory" value=""}]
-[{if $oView->getEtrackerShopId()}]
-  [{foreach from=$oView->getCatTreePath() item=oCatPath}]
-      [{assign var="trackercategory" value=$trackercategory|cat:" / "|cat:$oCatPath->oxcategories__oxtitle->value }]
-  [{/foreach}]
-[{/if}]
-
-[{insert name="oxid_tracker" title="LIST_CATEGORY"|oxmultilangassign|cat:" - "|cat:$trackercategory product=""}]
+[{insert name="oxid_tracker" title="LIST_CATEGORY"|oxmultilangassign product=""}]
 [{include file="_footer.tpl"}]

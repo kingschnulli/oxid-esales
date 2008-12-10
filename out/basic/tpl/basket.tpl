@@ -211,7 +211,7 @@
      [{foreach from=$oxcmp_basket->getProductVats() item=VATitem key=key }]
      <tr class="sumrow">
        <td class="brd"></td>
-       <td colspan="5" class="sumdesc">[{ oxmultilang ident="BASKET_TAX1" }][{ $key }][{ oxmultilang ident="BASKET_TAX2" }]</td>
+       <td colspan="5" class="sumdesc">[{ oxmultilang ident="BASKET_TAX1" }]&nbsp;[{ $key }][{ oxmultilang ident="BASKET_TAX2" }]</td>
        <td id="test_basketVAT_[{$key}]" align="right">[{ $VATitem }]&nbsp;[{ $currency->sign }]</td>
        <td></td>
      </tr>

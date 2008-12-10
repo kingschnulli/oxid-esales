@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxubase.php 13676 2008-10-25 13:12:52Z vilma $
+ * $Id: oxubase.php 14135 2008-11-11 13:54:45Z arvydas $
  */
 
 /**
@@ -181,6 +181,12 @@ class oxUBase extends oxView
      * @var object
      */
     protected $_oDelAddress = null;
+
+    /**
+     * Category tree path
+     * @var string
+     */
+    protected $_sCatTreePath = null;
 
     /**
      * In non admin mode checks if request was NOT processed by seo handler.
@@ -965,4 +971,13 @@ class oxUBase extends oxView
         $this->_oDelAddress = $oDelAddress;
     }
 
+    /**
+     * Template variable getter. Returns category path
+     *
+     * @return string
+     */
+    public function getCatTreePath()
+    {
+        return $this->_sCatTreePath;
+    }
 }

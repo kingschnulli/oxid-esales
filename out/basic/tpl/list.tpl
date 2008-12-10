@@ -19,7 +19,7 @@
 
         [{if $oView->getAttributes() }]
             <form method="post" action="[{ $oViewConf->getSelfActionLink() }]" name="_filterlist" id="_filterlist">
-            <div>
+            <div class="catfilter">
                 [{ $oViewConf->getHiddenSid() }]
                 <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
                 <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
@@ -49,7 +49,7 @@
                 [{if $category->getIsVisible()}]
                     [{if $category->oxcategories__oxicon->value }]
                         <a id="test_MoreSubCatIco_[{$smarty.foreach.MoreSubCat.iteration}]" href="[{ $category->getLink() }]">
-                            <img src="[{ $oViewConf->getPictureUrl() }]/icon/[{$category->oxcategories__oxicon->value }]" alt="[{ $category->oxcategories__oxtitle->value }]">
+                            <img src="[{$category->getIconUrl() }]" alt="[{ $category->oxcategories__oxtitle->value }]">
                         </a>
                     [{else}]
                         <li><a id="test_MoreSubCat_[{$smarty.foreach.MoreSubCat.iteration}]" href="[{ $category->getLink() }]">[{ $category->oxcategories__oxtitle->value }][{ if $category->getNrOfArticles() > 0 }] ([{ $category->getNrOfArticles() }])[{/if}]</a></li>
@@ -82,4 +82,5 @@
         [{include file="inc/list_locator.tpl" PageLoc="Bottom"}]
     [{/if}]
 
+[{insert name="oxid_tracker" title="LIST_CATEGORY"|oxmultilangassign product=""}]
 [{include file="_footer.tpl" }]

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxseoencoder.php 13770 2008-10-27 13:10:37Z arvydas $
+ * $Id: oxseoencoder.php 14166 2008-11-12 14:00:44Z arvydas $
  */
 
 /**
@@ -206,7 +206,7 @@ class oxSeoEncoder extends oxSuperCfg
      *
      * @return string
      */
-    protected function _getLanguageParam( $iObjectLang )
+    public function getLanguageParam( $iObjectLang )
     {
         $iDefLang = (int) $this->getConfig()->getConfigParam( 'iDefSeoLang' );
         $aLangIds = oxLang::getInstance()->getLanguageIds();
@@ -229,7 +229,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _getFullUrl( $sSeoUrl, $iLang )
     {
-        return $this->getConfig()->getShopURL() . $this->_getLanguageParam( (int) $iLang ) . $sSeoUrl . $this->_getAddParams();
+        return $this->getConfig()->getShopURL() . $this->getLanguageParam( (int) $iLang ) . $sSeoUrl . $this->_getAddParams();
     }
 
     /**
@@ -244,7 +244,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _getSeoIdent( $sSeoUrl, $iLang )
     {
-        return md5( strtolower( $this->_getLanguageParam( $iLang ) . $sSeoUrl ) );
+        return md5( strtolower( $this->getLanguageParam( $iLang ) . $sSeoUrl ) );
     }
 
     /**
@@ -287,10 +287,10 @@ class oxSeoEncoder extends oxSuperCfg
                 $sConstEnd = '/';
             }
         }
+
+        $sBaseSeoUrl = $sSeoUrl;
         if ( $sConstEnd && substr( $sSeoUrl, 0 - strlen( $sConstEnd ) ) == $sConstEnd ) {
             $sBaseSeoUrl = substr( $sSeoUrl, 0, strlen( $sSeoUrl ) - strlen( $sConstEnd ) );
-        } else {
-            $sBaseSeoUrl = $sSeoUrl;
         }
 
         $oDb = oxDb::getDb();
@@ -511,7 +511,7 @@ class oxSeoEncoder extends oxSuperCfg
     {
         $sUrl = str_replace( $this->getConfig()->getShopURL(), '', $sUrl );
 
-        if ( ( $sLangParam = $this->_getLanguageParam( $iLang ) ) ) {
+        if ( ( $sLangParam = $this->getLanguageParam( $iLang ) ) ) {
             $sUrl = preg_replace( "'^".preg_quote( $sLangParam , "'")."'", '', $sUrl );
         }
 
@@ -736,7 +736,7 @@ class oxSeoEncoder extends oxSuperCfg
         if ( $iShopId != $iBaseShopId ) {
             foreach (array_keys(oxLang::getInstance()->getLanguageIds()) as $iLang) {
                 $iLang = (int)$iLang;
-                $sPrfx = $this->_getLanguageParam($iLang);
+                $sPrfx = $this->getLanguageParam($iLang);
                 $sQ = "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype )
                        select MD5( LOWER( CONCAT( '{$iShopId}', oxstdurl ) ) ), MD5( LOWER(  CONCAT( '{$sPrfx}', oxseourl ) ) ),
                        '$iShopId', oxlang, oxstdurl, oxseourl, oxtype from oxseo where oxshopid = '{$iBaseShopId}' and oxtype = 'static' and oxlang='$iLang' ";
@@ -763,10 +763,11 @@ class oxSeoEncoder extends oxSuperCfg
             $iLang   = oxLang::getInstance()->getEditLanguage();
         }
 
+        $sFullUrl = '';
         if ( ( $sSeoUrl = $this->_getStaticUri( $sStdUrl, $iShopId, $iLang ) ) ) {
-            return $this->_getFullUrl( $sSeoUrl, $iLang );
+            $sFullUrl = $this->_getFullUrl( $sSeoUrl, $iLang );
         }
-        return '';
+        return $sFullUrl;
     }
 
     /**

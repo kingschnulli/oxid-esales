@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: adminguestbook_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: adminguestbook_list.php 14017 2008-11-06 13:32:23Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: User information -> Guestbook.
  * @package admin
  */
-class AdminGuestbook_list extends oxAdminList
+class AdminGuestbook_List extends oxAdminList
 {
     /**
      * Current class template name.

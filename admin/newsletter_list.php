@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: newsletter_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: newsletter_list.php 14025 2008-11-06 13:42:31Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Customer News -> Newsletter.
  * @package admin
  */
-class Newsletter_list extends oxAdminList
+class Newsletter_List extends oxAdminList
 {
     /**
      * Current class template name.

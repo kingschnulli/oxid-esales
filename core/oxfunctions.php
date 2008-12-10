@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxfunctions.php 13630 2008-10-24 11:35:16Z arvydas $
+ * $Id: oxfunctions.php 14097 2008-11-11 08:39:26Z sarunas $
  */
 
 /**
@@ -202,6 +202,12 @@ function startProfile( $sProfileName )
 {
     global $aStartTimes;
     global $aExecutionCounts;
+    if (!isset($aExecutionCounts[$sProfileName])) {
+        $aExecutionCounts[$sProfileName] = 0;
+    }
+    if (!isset($aStartTimes[$sProfileName])) {
+        $aStartTimes[$sProfileName] = 0;
+    }
     $aExecutionCounts[$sProfileName]++;
     $aStartTimes[$sProfileName] = microtime(true);
 }
@@ -217,6 +223,9 @@ function stopProfile( $sProfileName )
 {
     global $aProfileTimes;
     global $aStartTimes;
+    if (!isset($aProfileTimes[$sProfileName])) {
+        $aProfileTimes[$sProfileName] = 0;
+    }
     $aProfileTimes[$sProfileName] += microtime( true ) - $aStartTimes[$sProfileName];
 }
 

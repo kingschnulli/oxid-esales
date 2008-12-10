@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package inc
  * @copyright © OXID eSales AG 2003-2008
- * $Id: article_extend.inc.php 13910 2008-10-30 09:19:07Z arvydas $
+ * $Id: article_extend.inc.php 14035 2008-11-06 14:48:53Z arvydas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -37,7 +37,7 @@ $aColumns = array( 'container1' => array(    // field , table,         visible, 
 /**
  * Class controls article assignment to category
  */
-class ajaxcomponent extends ajaxlistcomponent
+class ajaxComponent extends ajaxListComponent
 {
     /**
      * Returns SQL query for data to fetc

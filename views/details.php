@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: details.php 13690 2008-10-26 08:53:25Z vilma $
+ * $Id: details.php 14135 2008-11-11 13:54:45Z arvydas $
  */
 
 /**
@@ -197,12 +197,6 @@ class Details extends oxUBase
     protected $_sSearchTitle = null;
 
     /**
-     * Category tree path
-     * @var string
-     */
-    protected $_sCatTreePath = null;
-
-    /**
      * Returns current product parent article object if it is available
      *
      * @param string $sParentId parent product id
@@ -369,7 +363,7 @@ class Details extends oxUBase
     {
         $myConfig = $this->getConfig();
 
-        //laoding amount price list
+        //loading amount price list
         $this->_oProduct->loadAmountPriceInfo();
 
         // Passing to view. Left for compatibility reasons for a while. Will be removed in future
@@ -1076,16 +1070,6 @@ class Details extends oxUBase
     public function setSearchTitle( $sTitle )
     {
         $this->_sSearchTitle = $sTitle;
-    }
-
-    /**
-     * Template variable getter. Returns category path
-     *
-     * @return string
-     */
-    public function getCatTreePath()
-    {
-        return $this->_sCatTreePath;
     }
 
     /**

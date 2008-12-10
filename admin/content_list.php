@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: content_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: content_list.php 14019 2008-11-06 13:35:04Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Customerinformations -> Content.
  * @package admin
  */
-class Content_list extends oxAdminList
+class Content_List extends oxAdminList
 {
     /**
      * Name of chosen object class (default null).

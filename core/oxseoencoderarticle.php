@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxseoencoderarticle.php 13672 2008-10-25 08:56:58Z arvydas $
+ * $Id: oxseoencoderarticle.php 14165 2008-11-12 12:22:26Z arvydas $
  */
 
 /**
@@ -63,12 +63,15 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         $sActCatId = '';
         $oView = $this->getConfig()->getActiveView();
         $oActCat = null;
-        if ($oView instanceof oxUBase) {
+
+        if ( $oView instanceof oxUBase ) {
             $oActCat = $oView->getActCategory();
         }
-        if ($oActCat) {
+
+        if ( $oActCat ) {
             $sActCatId = $oActCat->oxcategories__oxrootid->value;
         }
+
         //load details link from DB
         if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, $iShopId, $sActCatId, false ) ) ) {
 
@@ -79,20 +82,13 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             }
 
             // create title part for uri
-            if ( !( $sTitle = $oArticle->oxarticles__oxtitle->value ) ) {
-                $sTitle = $oArticle->oxarticles__oxartnum->value;
-            }
-            // variant has varselect value
-            if ( $oArticle->oxarticles__oxvarselect->value ) {
-                $sTitle .= ' ' . $oArticle->oxarticles__oxvarselect->value;
-            }
-            $sTitle = $this->_prepareTitle( $sTitle . '.html' );
+            $sTitle = $this->_prepareArticleTitle( $oArticle );
 
             // create uri for all categories
             $oCategorys = $this->getSeoCategories( $oArticle, $iLang );
             if (!$oCategorys->count()) {
-                    $sSeoUrl = $this->_getUniqueSeoUrl( $sTitle, '.html', $oArticle->getId() );
-                    $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang );
+                $sSeoUrl = $this->_getUniqueSeoUrl( $sTitle, '.html', $oArticle->getId() );
+                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang );
             } else {
                 $sTmpSeoUrl = '';
                 foreach ($oCategorys as $oCategory) {
@@ -117,10 +113,40 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         return $sSeoUrl;
     }
 
-    protected function _getArticleVendorUri( $oArticle, $iLang = null)
+    /**
+     * Returns seo title for current article (if oxtitle field is empty, oxartnum is used).
+     * Additionally - if oxvarselect is set - title is appended with its value
+     *
+     * @param oxarticle $oArticle article object
+     *
+     * @return string
+     */
+    protected function _prepareArticleTitle( $oArticle )
+    {
+        // create title part for uri
+        if ( !( $sTitle = $oArticle->oxarticles__oxtitle->value ) ) {
+            $sTitle = $oArticle->oxarticles__oxartnum->value;
+        }
+
+        // variant has varselect value
+        if ( $oArticle->oxarticles__oxvarselect->value ) {
+            $sTitle .= ' ' . $oArticle->oxarticles__oxvarselect->value;
+        }
+        return $this->_prepareTitle( $sTitle . '.html' );
+    }
+
+    /**
+     * Returns vendor seo uri for current article
+     *
+     * @param oxarticle $oArticle article object
+     * @param int       $iLang    language id (optional)
+     *
+     * @return string
+     */
+    protected function _getArticleVendorUri( $oArticle, $iLang = null )
     {
         startProfile(__FUNCTION__);
-        if (!isset($iLang)) {
+        if ( !isset( $iLang ) ) {
             $iLang = $oArticle->getLanguage();
         }
 
@@ -133,26 +159,19 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         //load details link from DB
         if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, $iShopId, $sActVendorId, true ) ) ) {
 
-            if ($iLang != $oArticle->getLanguage()) {
+            if ( $iLang != $oArticle->getLanguage() ) {
                 $sId = $oArticle->getId();
                 $oArticle = oxNew('oxarticle');
-                $oArticle->loadInLang($iLang, $sId);
+                $oArticle->loadInLang( $iLang, $sId );
             }
 
             // create title part for uri
-            if ( !( $sTitle = $oArticle->oxarticles__oxtitle->value ) ) {
-                $sTitle = $oArticle->oxarticles__oxartnum->value;
-            }
-            // variant has varselect value
-            if ( $oArticle->oxarticles__oxvarselect->value ) {
-                $sTitle .= ' ' . $oArticle->oxarticles__oxvarselect->value;
-            }
-            $sTitle = $this->_prepareTitle( $sTitle . '.html' );
+            $sTitle = $this->_prepareArticleTitle( $oArticle );
 
             // create uri for all categories
             if ( !$sActVendorId || !$oVendor ) {
-                    $sSeoUrl = $this->_getUniqueSeoUrl( $sTitle, '.html', $oArticle->getId() );
-                    $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang );
+                $sSeoUrl = $this->_getUniqueSeoUrl( $sTitle, '.html', $oArticle->getId() );
+                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang );
             } else {
                 $sSeoUrl = oxSeoEncoderVendor::getInstance()->getVendorUri( $oVendor, $iLang );
                 $sSeoUrl = $this->_getUniqueSeoUrl( $sSeoUrl . $sTitle, '.html', $oArticle->getId() );

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: voucherserie_groups.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: voucherserie_groups.php 14014 2008-11-06 13:26:22Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Shop Settings -> Vouchers -> Groups.
  * @package admin
  */
-class Voucherserie_groups extends oxAdminDetails
+class VoucherSerie_Groups extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(), creates oxlist and oxvoucherserie

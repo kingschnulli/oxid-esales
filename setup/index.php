@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package setup
  * @copyright © OXID eSales AG 2003-2008
- * $Id: index.php 13803 2008-10-27 15:59:04Z rimvydas.paskevicius $
+ * $Id: index.php 13991 2008-11-05 10:20:23Z birute $
  */
 
 
@@ -357,19 +357,19 @@ if ( $istep == 1) {
             window.open(url, "_blank", _cfg);
         }
     }
-    
+
     function update_dynpages_checkbox() {
         sValue = document.forms[0].country_lang.value;
         if ( sValue == '' ) {
            document.getElementById('use_dynamic_pages_ckbox').style.display = 'none';;
            document.getElementById('use_dynamic_pages_desc').style.display = 'none';;
-           
+
         } else {
            document.getElementById('use_dynamic_pages_ckbox').style.display = '';;
            document.getElementById('use_dynamic_pages_desc').style.display = '';;
         }
     }
-    
+
 
 </script>
 
@@ -396,10 +396,10 @@ if ( $istep == 1) {
             <table cellpadding="0" cellspacing="0" border="0" height="29">
               <tr>
                 <td style="padding-right: 3px;">
-                    <select name="country_lang" style="font-size: 11px;" 
+                    <select name="country_lang" style="font-size: 11px;"
                     onChange="update_dynpages_checkbox();"
                     >
-                    
+
                         <?php
                         foreach ( $aCountries[$sSetupLang] as $sKey => $sValue ) {
                             $sSelected =  $aPersistentData['country_lang'] == $sKey ? 'selected' : '';

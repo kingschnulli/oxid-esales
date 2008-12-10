@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2008
- * $Id: lang.php 13870 2008-10-29 17:56:41Z tomas $
+ * $Id: lang.php 14249 2008-11-18 09:48:58Z philipp.grashoff $
  */
 
 $sLangName  = 'Deutsch';
@@ -122,7 +122,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXWEIGHT'                      => 'Gewicht',
 'GENERAL_ARTICLE_OXSTOCK'                       => 'Lagerbestand',
 'GENERAL_ARTICLE_OXSTOCKACTIVE'                 => 'Lagerverwaltung aktiv',
-'GENERAL_ARTICLE_OXSTOCKFLAG'                   => 'LagerFlag',
+'GENERAL_ARTICLE_OXSTOCKFLAG'                   => 'Lieferstatus',
 'GENERAL_ARTICLE_OXDELIVERY'                    => 'Ausgeliefert am',
 'GENERAL_ARTICLE_OXINSERT'                      => 'Angelegt am',
 'GENERAL_ARTICLE_OXTIMESTAMP'                   => 'Letzte Änderung',
@@ -289,7 +289,7 @@ $aLang = array(
 'GENERAL_TELEPHONE'                             => 'Telefon',
 'GENERAL_TILL'                                  => 'bis',
 'GENERAL_TITLE'                                 => 'Titel',
-'GENERAL_TITLEIDENT'                            => 'Arbeitstitel - Identifikation',
+'GENERAL_TITLEIDENT'                            => 'Arbeitstitel',
 'GENERAL_THUMB'                                 => 'Thumbnail',
 'GENERAL_TYPE'                                  => 'Typ',
 'GENERAL_URL'                                   => 'URL',
@@ -432,7 +432,7 @@ $aLang = array(
 'ARTICLE_RIGHTS_ASSIGNVISIBLE'                  => 'Benutzergruppen zuordnen ( Ausschließlich sichtbar)',
 'ARTICLE_RIGHTS_ASSIGNBUYABLE'                  => 'Benutzergruppen zuordnen ( Ausschließlich kaufbar)',
 'ARTICLE_STOCK_AMOUNTPRICE_ABS'                 => 'abs',
-'ARTICLE_STOCK_AMOUNTPRICE_DISCOUNT'            => '% rabatt',
+'ARTICLE_STOCK_AMOUNTPRICE_DISCOUNT'            => '% Rabatt',
 'ARTICLE_STOCK_AMOUNTPRICE_PRICE'               => 'Preis',
 'ARTICLE_STOCK_AMOUNTPRICE_AMOUNTFROM'          => 'Menge von',
 'ARTICLE_STOCK_AMOUNTPRICE_AMOUNTTO'            => 'bis',
@@ -464,7 +464,7 @@ $aLang = array(
 'ATTRIBUTE_CATEGORY_ATRCATEGORY'                => 'Kategorien mit diesem Attribut',
 'ATTRIBUTE_CATEGORY_ATRLIST'                    => 'Kategorien attribute listen',
 'ATTRIBUTE_LIST_MENUSUBITEM'                    => 'Attribute',
-'ATTRIBUTE_MAIN_SORTING'                        => 'Sorting',
+'ATTRIBUTE_MAIN_SORTING'                        => 'Sortierung',
 'ATTRIBUTE_MAIN_ALLITEMS'                       => 'Alle verfügbaren Artikel',
 'ATTRIBUTE_MAIN_ITEMSWITHATTR'                  => 'Artikel mit diesem Attribut',
 'AUCTMASTER_DO_TITLE'                           => 'Import/Export',
@@ -483,7 +483,7 @@ $aLang = array(
 'CATEGORY_MAIN_ASC'                             => 'asc',
 'CATEGORY_MAIN_DEFSORT'                         => 'Schnellsortierung',
 'CATEGORY_MAIN_DESC'                            => 'desc',
-'CATEGORY_MAIN_EXTLINK'                         => 'Externer Link',
+'CATEGORY_MAIN_EXTLINK'                         => 'Externer Link (z. B. <br>http://www.example.com)',
 'CATEGORY_MAIN_HIDDEN'                          => 'Versteckt',
 'CATEGORY_MAIN_ICONUPLOAD'                      => 'Icon hochladen<br>(große Dateien sollten per FTP hochgeladen werden)',
 'CATEGORY_MAIN_ITEMSINGROUP'                    => 'Artikel in dieser Kategorie',
@@ -503,7 +503,7 @@ $aLang = array(
 'CATEGORY_MAIN_SKIPDISCOUNTS'                   => 'Alle neg. Nachlässe ignorieren.<br>(Rabatte, Gutscheine, Zahlungsarten ...)',
 'CATEGORY_ORDER_ACTSORT'                        => 'Aktuelle Sortierung',
 'CATEGORY_ORDER_NEWSORT'                        => 'Neue Sortierung',
-'CATEGORY_ORDER_NEWSORTSAVE'                    => 'Neue Sortierung abspeichern',
+'CATEGORY_ORDER_NEWSORTSAVE'                    => 'Neue Sortierung speichern',
 'CATEGORY_ORDER_DELETESORT'                     => 'Sortierung löschen',
 'CATEGORY_ORDER_SORTCATEGORIES'                 => 'Artikel sortieren',
 'CATEGORY_TEXT_SAVE'                            => 'Speichern',
@@ -572,7 +572,7 @@ $aLang = array(
 'DISCOUNT_MAIN_AFROM'                           => '(von)',
 'DISCOUNT_MAIN_ATILL'                           => '(bis)',
 'DISCOUNT_MAIN_AMOUNT'                          => 'Einkaufsmenge',
-'DISCOUNT_MAIN_PRICE'                           => 'Einkaufspreis',
+'DISCOUNT_MAIN_PRICE'                           => 'Einkaufswert',
 'DISCOUNT_MAIN_REBATE'                          => 'Rabatt',
 'DISCOUNT_MAIN_EXTRA'                           => 'Drein/Zugabe',
 'DISCOUNT_MAIN_MULTIPLY_DISCOUNT_ARTICLES'      => 'Multiplizieren',
@@ -588,7 +588,6 @@ $aLang = array(
 'DYN_ECONDA_ATTENTION'                          => 'Bitte beachten Sie: ',
 'DYN_ECONDA_FILETO'                             => 'Sie müssen dazu die Datei "emos2.js", die Sie von ECONDA erhalten, in das Verzeichnis ',
 'DYN_ECONDA_COPY'                               => 'kopieren',
-'DYN_ETRACKER_SECURECODE'                       => 'eTracker secure code',
 'DYN_IPAYMENT_USER'                             => 'IPayment-User',
 'DYN_IPAYMENT_ACCOUNTNUM'                       => 'IPayment-Accountnr.',
 'DYN_IPAYMENT_PASSWORD'                         => 'IPayment-Passwort',
@@ -725,7 +724,7 @@ $aLang = array(
 'GUI_GROUP_ACCOUNT'                             => 'Konto',
 'GUI_GROUP_BASKET_POPUP'                        => 'Warenkorb Popup',
 'GUI_GROUP_MSG_BOXES'                           => 'Meldungsfelder',
-
+'GUI_GROUP_ZOOM_POPUP'                          => 'Zoom Popup',
 'GUI_ACTIONS'                                   => 'Aktionen',
 'GUI_ACTIONS_TEXT'                              => 'Aktionen Text',
 'GUI_ACTIVE'                                    => 'Aktiv',
@@ -1215,7 +1214,6 @@ $aLang = array(
 'SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE_POPUP'    => 'Popup öffnen',
 'SHOP_SYSTEM_SHOWFINALSTEP'                     => 'Bestellbestätigung anzeigen, wenn die Bestellung abgeschlossen ist (5ter Bestellschritt)',
 'SHOP_SYSTEM_UTILMODULE'                        => 'Zusätzliches Util-Modul',
-'SHOP_SYSTEM_USEDIFFERENTDYNDIRS'               => 'Versch. Dyndirs pro Sprache für Artikelbilder nutzen',
 'SHOP_SYSTEM_VARIANTSSELECTION'                 => 'Varianten: Varianten im Administrationsbereich für Zuweisungen einblenden',
 'SHOP_SYSTEM_VARIANTPARENTBUYABLE'              => 'Varianten: Varianten-"Vater" ist kaufbar',
 'SHOP_SYSTEM_VARIANTINHERITAMOUNTPRICE'         => 'Varianten: Varianten können Staffelpreise vom "Vater" erben',

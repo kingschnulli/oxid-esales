@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: search.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: search.php 14012 2008-11-06 13:23:45Z arvydas $
  */
 
 /**
  * Articles searching class.
  * Performs searching through articles in database.
  */
-class search extends oxUBase
+class Search extends oxUBase
 {
     /**
      * Count of all found articles.

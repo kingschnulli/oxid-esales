@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: statistic_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: statistic_list.php 14015 2008-11-06 13:30:18Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: Statistics -> Show.
  * @package admin
  */
-class Statistic_list extends oxAdminList
+class Statistic_List extends oxAdminList
 {
     /**
      * Current class template name.

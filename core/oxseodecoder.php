@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxseodecoder.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxseodecoder.php 14150 2008-11-11 15:14:37Z arvydas $
  */
 
 /**
@@ -247,10 +247,18 @@ class oxSeoDecoder extends oxSuperCfg
      */
     public function fetchSeoUrl( $sStdUrl, $iLanguage = null )
     {
-        $oDb = oxDb::getDb();
+        $oDb = oxDb::getDb( true );
         $sStdUrl = $oDb->quote( $sStdUrl );
         $iLanguage = isset( $iLanguage ) ? $iLanguage : oxLang::getInstance()->getBaseLanguage();
 
-        return $oDb->getOne( "select oxseourl from oxseo where oxstdurl = $sStdUrl and oxlang = '$iLanguage' " );
+        $sSeoUrl = false;
+
+        $sQ = "select oxseourl, oxlang from oxseo where oxstdurl = $sStdUrl and oxlang = '$iLanguage' limit 1";
+        $oRs = $oDb->Execute( $sQ );
+        if ( !$oRs->EOF ) {
+            $sSeoUrl = oxSeoEncoder::getInstance()->getLanguageParam( $oRs->fields['oxlang'] ).$oRs->fields['oxseourl'];
+        }
+
+        return $sSeoUrl;
     }
 }

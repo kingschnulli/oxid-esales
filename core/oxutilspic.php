@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxutilspic.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxutilspic.php 14058 2008-11-07 14:44:25Z arvydas $
  */
 
 /**
@@ -86,7 +86,7 @@ class oxUtilsPic extends oxSuperCfg
                function_exists( 'imagecreate' ) && file_exists( $sSrc ) &&
               ( $aImageInfo = @getimagesize( $sSrc ) ) ) {
 
-            // #1837/1177M - do not resioxadze smaller pictures
+            // #1837/1177M - do not resize smaller pictures
             if ( $iDesiredWidth < $aImageInfo[0] || $iDesiredHeight < $aImageInfo[1] ) {
                 if ( $aImageInfo[0] >= $aImageInfo[1]*( (float) ( $iDesiredWidth / $iDesiredHeight ) ) ) {
                     $iNewHeight = round( ( $aImageInfo[1] * (float) ( $iDesiredWidth / $aImageInfo[0] ) ), 0 );

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: attribute_list.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: attribute_list.php 14018 2008-11-06 13:33:39Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  * Admin Menu: Manage Products -> Attributes.
  * @package admin
  */
-class Attribute_list extends oxAdminList
+class Attribute_List extends oxAdminList
 {
     /**
      * Current class template name.

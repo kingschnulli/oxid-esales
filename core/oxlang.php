@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxlang.php 13914 2008-10-30 11:12:55Z arvydas $
+ * $Id: oxlang.php 14239 2008-11-17 18:36:34Z tomas $
  */
 
 /**
@@ -261,7 +261,7 @@ class oxLang extends oxSuperCfg
         return $aLanguages;
     }
 
-   /**
+    /**
      * getLanguageNames returns array of language names e.g. array('Deutch', 'English')
      *
      * @param int    $iLang  language number
@@ -348,9 +348,28 @@ class oxLang extends oxSuperCfg
         if ( !$oActCur ) {
             $oActCur = $this->getConfig()->getActShopCurrencyObject();
         }
-        $sFormated = number_format( $dValue, $oActCur->decimal, $oActCur->dec, $oActCur->thousand );
+        return number_format( $dValue, $oActCur->decimal, $oActCur->dec, $oActCur->thousand );
+    }
 
-        return $sFormated;
+    /**
+     * Returns formatted vat value, according to formatting standards.
+     *
+     * @param double $dValue  Plain price
+     * @param object $oActCur Object of active currency
+     *
+     * @return string
+     */
+    public function formatVat( $dValue, $oActCur = null )
+    {   
+        $iDecPos = 0;
+        $sValue  = ( string ) $dValue;
+        if ( ( $iDotPos = strpos( $sValue, '.' ) ) !== false ) {
+        	$iDecPos = strlen( substr( $sValue, $iDotPos + 1 ) );
+        }
+
+        $oActCur = $oActCur ? $oActCur : $this->getConfig()->getActShopCurrencyObject();
+        $iDecPos = ( $iDecPos < $oActCur->decimal ) ? $iDecPos : $oActCur->decimal;          
+        return number_format( $dValue, $iDecPos, $oActCur->dec, $oActCur->thousand );
     }
 
     /**
@@ -379,8 +398,9 @@ class oxLang extends oxSuperCfg
      *
      * @return array
      */
-    protected function &_getLangTranslationArray( $iLang = null, $blAdminMode = null )
+    protected function _getLangTranslationArray( $iLang = null, $blAdminMode = null )
     {
+        startProfile("_getLangTranslationArray");
         $myConfig = $this->getConfig();
         $sFileName = '';
         $sCustFileName = '';
@@ -395,18 +415,40 @@ class oxLang extends oxSuperCfg
         }
 
         if ( $blAdminMode ) {
-            $aLangCache = &$this->_aAdminLangCache;
+            $aLangCache = $this->_aAdminLangCache;
         } else {
-            $aLangCache = &$this->_aLangCache;
+            $aLangCache = $this->_aLangCache;
         }
 
         // casting for security reasons
         $iLang = (int) $iLang;
         if ( !$aLangCache[$iLang] ) {
 
+            /*
             $sFileName     = $myConfig->getLanguagePath('lang.php', $blAdminMode,$iLang);
             $sCustFileName = $myConfig->getLanguagePath('cust_lang.php', $blAdminMode,$iLang);
+            */
+            $sCacheName = "languagefiles_".$blAdminMode."_".$iLang."_".$this->getConfig()->getShopId();
+            $aLangFiles = oxUtils::getInstance()->fromFileCache($sCacheName);
+            if (!$aLangFiles) {
+                $sDir = dirname($myConfig->getLanguagePath('lang.php', $blAdminMode, $iLang));
 
+                //get all lang files
+                $aLangFiles = glob($sDir."/*lang.php");
+
+                //save to cache
+                oxUtils::getInstance()->toFileCache($sCacheName, $aLangFiles);
+            }
+
+            $aLangCache[$iLang] = array();
+            foreach($aLangFiles as $sLangFile) {
+                require($sLangFile);
+                $aLangCache[$iLang] = array_merge( $aLangCache[$iLang], $aLang);
+            }
+
+
+            //build lang array
+            /*
             if ( is_file( $sFileName ) ) {
                 require $sFileName;
                 $aLangCache[$iLang] = $aLang;
@@ -415,8 +457,17 @@ class oxLang extends oxSuperCfg
             if ( is_file( $sCustFileName ) ) {
                 require $sCustFileName;
                 $aLangCache[$iLang] = array_merge( $aLangCache[$iLang], $aLang);
+            }*/
+
+            if ( $blAdminMode ) {
+                $this->_aAdminLangCache = $aLangCache;
+            } else {
+                $this->_aLangCache = $aLangCache;
             }
         }
+
+
+        stopProfile("_getLangTranslationArray");
 
         // if language array exists ..
         if ( isset( $aLangCache[$iLang] ) )

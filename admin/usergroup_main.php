@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: usergroup_main.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: usergroup_main.php 14014 2008-11-06 13:26:22Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * Admin Menu: User Administration -> User Groups -> Main.
  * @package admin
  */
-class Usergroup_main extends oxAdminDetails
+class UserGroup_Main extends oxAdminDetails
 {
     /**
      * Executes parent method parent::render(), creates oxgroups object,
