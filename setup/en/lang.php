@@ -18,13 +18,13 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2008
- * $Id: lang.php 13765 2008-10-27 12:14:58Z ralf $
+ * $Id: lang.php 13913 2008-10-30 11:09:11Z philipp.grashoff $
  */
 
 $aLang = array(
 
 'charset'                                         => 'iso-8859-1',
-'HEADER_META_MAIN_TITLE'                          => "OXID eShop installation wizzard",
+'HEADER_META_MAIN_TITLE'                          => "OXID eShop installation wizard",
 'HEADER_TEXT_SETUP_NOT_RUNS_AUTOMATICLY'          => "If setup does not continue in a few seconds, please click ",
 'FOOTER_OXID_ESALES'                              => "&copy; OXID eSales AG 2008",
 
@@ -35,7 +35,7 @@ $aLang = array(
 'TAB_5_TITLE'                                     => "License",
 'TAB_6_TITLE'                                     => "Finish",
 
-'TAB_1_DESC'                                      => "Welcome to OXID eShop installation wizzard",
+'TAB_1_DESC'                                      => "Welcome to OXID eShop installation wizard",
 'TAB_2_DESC'                                      => "Confirm license conditions",
 'TAB_3_DESC'                                      => "Test database connection, building tables",
 'TAB_4_DESC'                                      => "Configuring your shop and writing configuration file",
@@ -60,7 +60,7 @@ $aLang = array(
 'ERROR_COULD_NOT_OPEN_CONFIG_FILE'                => "Could not open %s for reading! Please consult our FAQ, forum or contact OXID Support staff!",
 
 'STEP_1_TITLE'                                    => "Welcome",
-'STEP_1_DESC'                                     => "Welcome to installation wizzard of OXID eShop",
+'STEP_1_DESC'                                     => "Welcome to installation wizard of OXID eShop",
 'STEP_1_TEXT'                                     => "Please read carefully the following instructions to guarantee a smooth installation.
                                                       Wishes for best success in using your OXID eShop by",
 'STEP_1_ADDRESS'                                  => "OXID eSales AG<br>

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxviewconfig.php 13884 2008-10-29 19:04:19Z tomas $
+ * $Id: oxviewconfig.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
@@ -26,7 +26,7 @@
  * of getters needed for formatting various urls,
  * config parameters, session information etc.
  */
-class oxViewConfig extends oxsupercfg
+class oxViewConfig extends oxSuperCfg
 {
     /**
      * Active shop object. Can only be accessed when it is assigned

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxlist.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxlist.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
@@ -26,7 +26,7 @@
  * Collects list data (eg. from DB), performs list changes updating (to DB), etc.
  * @package core
  */
-class oxList extends oxsupercfg implements ArrayAccess, Iterator, Countable
+class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
 {
     /**
      * Array of objects (some object list).

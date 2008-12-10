@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxshopcontrol.php 13727 2008-10-26 23:06:52Z alfonsas $
+ * $Id: oxshopcontrol.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
@@ -26,7 +26,7 @@
  * them (if needed), controlls output, redirects according to
  * processed methods logic. This class is initalized from index.php
  */
-class oxShopControl extends oxsupercfg
+class oxShopControl extends oxSuperCfg
 {
     /**
      * Main shop manager, that sets shop status, executes configuration methods.

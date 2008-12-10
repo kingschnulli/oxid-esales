@@ -54,7 +54,7 @@
   </script>
 
 </head>
-<body [{if $oxajax}]onload="oxajax_load();"[{/if}]>
+<body [{if $sOnLoadFnc}]onload="[{ $sOnLoadFnc }]();"[{/if}]>
 <div id="oxajax_data"></div>
 <div class="[{$box|default:'box'}]">
 [{include file="inc_error.tpl" Errorlist=$Errors.default}]

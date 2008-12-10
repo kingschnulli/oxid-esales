@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: list_user.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: list_user.php 13900 2008-10-30 08:17:40Z arvydas $
  */
 
 /**
@@ -55,6 +55,8 @@ class List_User extends oxAdminList
                 $this->_aViewData["where"]->{str_replace( '.', '__', $sField )} = $sValue;
             }
         }
+
+        $this->_aViewData["menustructure"] =  $this->getNavigation()->getDomXml()->documentElement->childNodes;
 
         return "list_user.tpl";
     }

@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxoutput.php 13817 2008-10-27 19:27:42Z tomas $
+ * $Id: oxoutput.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * class for output processing
  * @package core
  */
-class oxOutput extends oxsupercfg
+class oxOutput extends oxSuperCfg
 {
     /**
      * Keels search engine status

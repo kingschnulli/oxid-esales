@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package inc
  * @copyright © OXID eSales AG 2003-2008
- * $Id: article_extend.inc.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: article_extend.inc.php 13910 2008-10-30 09:19:07Z arvydas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -63,6 +63,47 @@ class ajaxcomponent extends ajaxlistcomponent
         }
 
         return $sQAdd;
+    }
+
+    /**
+     * Returns array with DB records
+     *
+     * @param string $sQ SQL query
+     *
+     * @return array
+     */
+    protected function _getDataFields( $sQ )
+    {
+        $aDataFields = parent::_getDataFields( $sQ );
+        if ( oxConfig::getParameter( 'oxid' ) && is_array( $aDataFields ) && count( $aDataFields ) ) {
+
+            // looking for smallest time value to mark record as main category ..
+            $iMinPos = null;
+            $iMinVal = null;
+            reset( $aDataFields );
+            while ( list( $iPos, $aField ) = each( $aDataFields ) ) {
+
+                // allready set ?
+                if ( $aField['_3'] == '0' ) {
+                    $iMinPos = null;
+                    break;
+                }
+
+                if ( !$iMinVal ) {
+                    $iMinVal = $aField['_3'];
+                    $iMinPos = $iPos;
+                } elseif ( $iMinVal > $aField['_3'] ) {
+                    $iMinPos = $iPos;
+                }
+            }
+
+            // setting primary category
+            if ( isset( $iMinPos ) ) {
+                $aDataFields[$iMinPos]['_3'] = '0';
+            }
+        }
+
+        return $aDataFields;
     }
 
     /**

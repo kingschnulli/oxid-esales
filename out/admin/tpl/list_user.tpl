@@ -4,6 +4,40 @@
 <!--
 function EditThis( sID)
 {
+    [{assign var="shMen" value=1}]
+
+    [{foreach from=$menustructure item=menuholder }]
+      [{if $shMen && $menuholder->nodeType == XML_ELEMENT_NODE && $menuholder->childNodes->length }]
+
+        [{assign var="shMen" value=0}]
+        [{assign var="mn" value=1}]
+
+        [{foreach from=$menuholder->childNodes item=menuitem }]
+          [{if $menuitem->nodeType == XML_ELEMENT_NODE && $menuitem->childNodes->length }]
+            [{ if $menuitem->getAttribute('id') == 'mxuadmin' }]
+
+              [{foreach from=$menuitem->childNodes item=submenuitem }]
+                [{if $submenuitem->nodeType == XML_ELEMENT_NODE && $submenuitem->getAttribute('cl') == 'admin_user' }]
+
+                    if ( top && top.navigation && top.navigation.adminnav ) {
+                        var _sbli = top.navigation.adminnav.document.getElementById( 'nav-1-[{$mn}]-1' );
+                        var _sba = _sbli.getElementsByTagName( 'a' );
+                        top.navigation.adminnav._navAct( _sba[0] );
+                    }
+
+                [{/if}]
+              [{/foreach}]
+
+            [{ /if }]
+            [{assign var="mn" value=$mn+1}]
+
+          [{/if}]
+        [{/foreach}]
+      [{/if}]
+    [{/foreach}]
+
+
+
     var oTransfer = document.getElementById( "transfer" );
     oTransfer.oxid.value = sID;
     oTransfer.cl.value = 'admin_user';
@@ -80,7 +114,7 @@ function ChangeLanguage()
 [{foreach from=$mylist item=oUser}]
     [{assign var="_cnt" value=$_cnt+1}]
     <tr id="row.[{$_cnt}]">
-    
+
     <td class="listitem[{ $blWhite }]"><a href="Javascript:EditThis( '[{$oUser->oxuser__oxid->value}]');" class="listitem[{ $blWhite }]">[{ $oUser->oxuser__oxfname->value }]</a></td>
     <td class="listitem[{ $blWhite }]"><a href="Javascript:EditThis( '[{$oUser->oxuser__oxid->value}]');" class="listitem[{ $blWhite }]">[{ $oUser->oxuser__oxlname->value }]</a></td>
     <td class="listitem[{ $blWhite }]"><a href="Javascript:EditThis( '[{$oUser->oxuser__oxid->value}]');" class="listitem[{ $blWhite }]">[{ $oUser->oxuser__oxusername->value }]</a></td>

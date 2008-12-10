@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxrating.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxrating.php 13916 2008-10-30 11:16:56Z arvydas $
  */
 
 /**
@@ -26,7 +26,7 @@
  * Performs loading, updating, inserting of article rates.
  * @package core
  */
-class oxRating extends oxbase
+class oxRating extends oxBase
 {
     /**
      * Shop control variable

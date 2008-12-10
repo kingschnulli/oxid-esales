@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxbasketitem.php 13739 2008-10-27 00:34:09Z alfonsas $
+ * $Id: oxbasketitem.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * UserBasketItem class, responsible for storing most important fields
  * @package core
  */
-class oxBasketItem extends oxsupercfg
+class oxBasketItem extends oxSuperCfg
 {
     /**
      * Product ID

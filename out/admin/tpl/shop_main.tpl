@@ -1,4 +1,4 @@
-[{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
+[{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign sOnLoadFnc='setSmtpField' }]
 
 <script type="text/javascript">
 <!--
@@ -31,6 +31,31 @@ function UnlockSave(obj)
             saveButton.disabled = true;
     }
 }
+
+function setSmtpField()
+{
+    var sPass = '';
+    for ( var i = 0; i < [{ $edit->oxshops__oxsmtppwd->value|count_characters }]; i++ ) {
+        sPass += ' ';
+    }
+    document.getElementsByName( 'oxsmtppwd' )[0].value = sPass;
+    document.getElementsByName( 'oxsmtppwd' )[0].userValueSet = false;
+}
+function unsetSmtpField()
+{
+    if ( !document.getElementsByName( 'oxsmtppwd' )[0].userValueSet ) {
+        document.getElementsByName( 'oxsmtppwd' )[0].value = '';
+    }
+}
+
+function modSmtpField()
+{
+    if ( !document.getElementsByName( 'oxsmtppwd' )[0].userValueSet ) {
+        document.getElementsByName( 'oxsmtppwd' )[0].value = '';
+        document.getElementsByName( 'oxsmtppwd' )[0].userValueSet = true;
+    }
+}
+
 //-->
 </script>
 
@@ -53,7 +78,7 @@ function UnlockSave(obj)
 
 
 
-<form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post">
+<form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post" onSubmit="unsetSmtpField()">
 [{ $shop->hiddensid }]
 <input type="hidden" name="cl" value="shop_main">
 <input type="hidden" name="fnc" value="">
@@ -257,7 +282,7 @@ function UnlockSave(obj)
                         [{ oxmultilang ident="SHOP_MAIN_SMTPPASSWORD" }]
             </td>
             <td class="edittext">
-            <input type="password" name="oxsmtppwd" size="35" maxlength="50" class="editinput" [{ $readonly}]>
+            <input type="password" name="oxsmtppwd" size="35" maxlength="50" class="editinput" [{ $readonly}] onfocus="modSmtpField()" onChange="modSmtpField()">
             [{ oxmultilang ident="SHOP_MAIN_SMTPPWUNSET" }]
             </td>
         </tr>

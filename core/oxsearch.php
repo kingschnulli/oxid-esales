@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxsearch.php 13617 2008-10-24 09:38:46Z sarunas $l
+ * $Id: oxsearch.php 13914 2008-10-30 11:12:55Z arvydas $l
  */
 
 /**
  * Implements search
  * @package core
  */
-class oxSearch extends oxsupercfg
+class oxSearch extends oxSuperCfg
 {
     /**
      * Active language id

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxconfig.php 13877 2008-10-29 19:02:59Z tomas $
+ * $Id: oxconfig.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -28,7 +28,7 @@ define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
  *
  * @package core
  */
-class oxConfig extends oxsupercfg
+class oxConfig extends oxSuperCfg
 {
     // this column of params are defined in config.inc.php file,
     // so for backwards compat. names starts without underscore

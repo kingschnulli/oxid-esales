@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: guestbookentry.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: guestbookentry.php 13917 2008-10-30 11:17:45Z arvydas $
  */
 
 /**
  * Guest book entry manager class.
  * Manages guestbook entries, denies them, etc.
  */
-class GuestbookEntry extends guestbook
+class GuestbookEntry extends GuestBook
 {
     /**
      * Current class template name.

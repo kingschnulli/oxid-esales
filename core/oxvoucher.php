@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxvoucher.php 13889 2008-10-29 19:36:27Z tomas $
+ * $Id: oxvoucher.php 13901 2008-10-30 08:17:41Z vilma $
  */
 
 /**
@@ -30,7 +30,7 @@
 class oxVoucher extends oxBase
 {
 
-    private $_oSerie = null;
+    protected $_oSerie = null;
 
     /**
      * Vouchers doesnt need shop id check as this couses problems with
@@ -476,11 +476,11 @@ class oxVoucher extends oxBase
      */
     public function getSerie()
     {
-        if ($this->_oSerie) {
+        if ($this->_oSerie !== null) {
             return $this->_oSerie;
         }
         $oSerie = oxNew('oxvoucherserie');
-        if (!$oSerie->Load($this->oxvouchers__oxvoucherserieid->value)) {
+        if (!$oSerie->load($this->oxvouchers__oxvoucherserieid->value)) {
             throw new oxObjectException();
         }
         $this->_oSerie = $oSerie;

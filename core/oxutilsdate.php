@@ -18,13 +18,13 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxutilsdate.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxutilsdate.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * Date manipulation utility class
  */
-class oxUtilsDate extends oxsupercfg
+class oxUtilsDate extends oxSuperCfg
 {
     /**
      * oxUtils class instance.

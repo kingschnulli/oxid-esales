@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxutils.php 13674 2008-10-25 11:29:14Z vilma $
+ * $Id: oxutils.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
@@ -30,7 +30,7 @@ require_once getShopBasePath()."core/smarty/Smarty.class.php";
  * general utils class, used as a singelton
  *
  */
-class oxUtils extends oxsupercfg
+class oxUtils extends oxSuperCfg
 {
 
     /**

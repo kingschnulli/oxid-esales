@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxstatistic.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxstatistic.php 13901 2008-10-30 08:17:41Z vilma $
  */
 
 /**
@@ -50,7 +50,7 @@ class oxStatistic extends oxBase
      */
     public function setReports( $aVal )
     {
-        $this->oxstatistics__oxvalue->setValue(serialize( $aVal ) );
+        $this->oxstatistics__oxvalue = new oxField( serialize( $aVal ), oxField::T_RAW );
     }
 
     /**

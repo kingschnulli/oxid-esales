@@ -18,13 +18,13 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxutilspic.php 13701 2008-10-26 12:37:37Z sarunas $
+ * $Id: oxutilspic.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * Image manipulation class
  */
-class oxUtilsPic extends oxsupercfg
+class oxUtilsPic extends oxSuperCfg
 {
     /**
      * Image types 'enum'

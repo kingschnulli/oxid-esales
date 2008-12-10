@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxpaymentgateway.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxpaymentgateway.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  * @package core
  */
 
-class oxPaymentGateway extends oxsupercfg
+class oxPaymentGateway extends oxSuperCfg
 {
     /**
      * Payment status (active - true/not active - false) (default false).

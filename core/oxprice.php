@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxprice.php 13617 2008-10-24 09:38:46Z sarunas $
+ * $Id: oxprice.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * Price calculation class. Responsible for simple price calculations. Basically contains Brutto, Netto prices and VAT values.
  * @package core
  */
-class oxPrice extends oxsupercfg
+class oxPrice extends oxSuperCfg
 {
     /**
      * Brutto price

@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxview.php 13676 2008-10-25 13:12:52Z vilma $
+ * $Id: oxview.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * Base view class. Collects and passes data to template engine, sets some global
  * configuration parameters.
  */
-class oxView extends oxsupercfg
+class oxView extends oxSuperCfg
 {
     /**
      * Array of component objects.

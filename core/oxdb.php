@@ -18,13 +18,13 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxdb.php 13746 2008-10-27 09:28:11Z arvydas $
+ * $Id: oxdb.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * Database connection class
  */
-class oxDb extends oxsupercfg
+class oxDb extends oxSuperCfg
 {
     /**
      * oxDb instance.

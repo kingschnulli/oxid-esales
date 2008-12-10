@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxrssfeed.php 13838 2008-10-29 10:44:33Z alfonsas $
+ * $Id: oxrssfeed.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
@@ -27,7 +27,7 @@
  *
  * @package core
  */
-class oxRssFeed extends oxsupercfg
+class oxRssFeed extends oxSuperCfg
 {
     /**
      * timeout in seconds for regenerating data (3h)

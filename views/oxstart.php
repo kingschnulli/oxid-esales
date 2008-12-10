@@ -18,15 +18,13 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxstart.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: oxstart.php 13926 2008-10-30 15:42:19Z tomas $
  */
 
 /**
  * Define class constants
  */
-//an url used exclusively for checking if the shop is unlicensed
-DEFINE( 'LICENSE_CHECK_URL', 'http://www.oxid-esales.com/checklicense.php' );
-DEFINE( 'SHOP_ERROR_EMAIL', 'info@oxid-esales.com' );
+
 
 /**
  * Encapsulates methods for application initialization.
@@ -77,65 +75,7 @@ class oxStart extends oxView
           return 'start.tpl';
     }
 
-    //this function should be called from outside
-    /**
-     * Shop check
-     *
-     * @return null
-     */
-    public function shopNotLicensed()
-    {
-        $myConfig  = $this->getConfig();
-        $sResponse = oxUtilsFile::getInstance()->readRemoteFileAsString( LICENSE_CHECK_URL.'?selfurl='.rawurlencode( $myConfig->getShopURL() ) );
 
-        $sMsg = '';
-        if ( strpos( ' '.$sResponse, 'UNLICENSED' ) === 1 ) {
-            //unlicensed shop
-            $sMsg = 'Unlicensed';
-            $myConfig->saveShopConfVar( 'str', 'sShopVar', 'unlc' );
-        } else {
-            //hack attempt?
-            $sBody  = 'This is automated shop operation error report.'."\r\n\r\n";
-            $sBody .= 'Error code: 0010 (Possible hack attempt).'."\r\n";
-            $sBody .= 'Shop URL: '.$myConfig->getShopURL()."\r\n";
-            $sBody .= 'Visitor IP: '.$_SERVER["REMOTE_ADDR"]."\r\n\r\n";
-            $sBody .= 'Contact OXID-eSales for more information.'."\r\n";
-            $sSubject = 'Shop error report';
-            $oxEMail = oxNew( 'oxemail');
-            $oxEMail->sendEmail( SHOP_ERROR_EMAIL, $sSubject, $sBody );
-        }
-        oxUtils::getInstance()->showMessageAndExit( $sMsg );
-    }
-
-    //this function should be called from outside
-    /**
-     * Shop check
-     *
-     * @return null
-     */
-    public function shopLicensed()
-    {
-        $myConfig  = $this->getConfig();
-        $sResponse = oxUtilsFile::getInstance()->readRemoteFileAsString( LICENSE_CHECK_URL.'?selfurl='.rawurlencode( $myConfig->getShopURL() ) );
-
-        $sMsg = '';
-        if ( strpos( ' '.$sResponse, 'LICENSED' ) === 1 ) {
-            //already licensed shop
-            $sMsg = 'Licensed';
-            $myConfig->saveShopConfVar( 'str', 'sShopVar', 'licns' );
-        } else {
-            //hack attempt?
-            $sBody  = 'This is automated shop operation error report.'."\r\n\r\n";
-            $sBody .= 'Error code: 0011 (Possible hack attempt).'."\r\n";
-            $sBody .= 'Shop URL: '.$myConfig->getShopURL()."\r\n";
-            $sBody .= 'Visitor IP: '.$_SERVER["REMOTE_ADDR"]."\r\n\r\n";
-            $sBody .= 'Contact OXID-eSales for more information'."\r\n";
-            $sSubject = 'Shop error report';
-            $oxEMail = oxNew( 'oxemail');
-            $oxEMail->sendEmail( SHOP_ERROR_EMAIL, $sSubject, $sBody );
-        }
-        oxUtils::getInstance()->showMessageAndExit( $sMsg );
-    }
 
     /**
      * Creates and starts session object, sets default session language and currency.

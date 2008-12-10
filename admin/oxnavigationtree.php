@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxnavigationtree.php 13663 2008-10-24 14:46:38Z rimvydas.paskevicius $
+ * $Id: oxnavigationtree.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * Navigation tree control class
  * @package admin
  */
-class OxNavigationTree extends oxsupercfg
+class OxNavigationTree extends oxSuperCfg
 {
     /**
      * stores DOM object for all navigation tree

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxvendor.php 13675 2008-10-25 12:18:27Z arvydas $
+ * $Id: oxvendor.php 13901 2008-10-30 08:17:41Z vilma $
  */
 
 /**
@@ -226,7 +226,7 @@ class oxVendor extends oxI18n
      */
     public function getNrOfArticles()
     {
-        if ( !$this->_blShowArticleCnt && $this->isAdmin() ) {
+        if ( !$this->_blShowArticleCnt || $this->isAdmin() ) {
             return -1;
         }
 

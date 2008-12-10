@@ -18,13 +18,13 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxbasket.php 13893 2008-10-29 20:02:08Z tomas $
+ * $Id: oxbasket.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * @package core
  */
-class oxBasket extends oxsupercfg
+class oxBasket extends oxSuperCfg
 {
     /**
      * Array or oxbasketitem objects

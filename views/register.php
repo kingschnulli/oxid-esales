@@ -18,14 +18,14 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2008
- * $Id: register.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: register.php 13915 2008-10-30 11:14:36Z arvydas $
  */
 
 /**
  * User registration window.
  * Collects and arranges user object data (information, like shipping address, etc.).
  */
-class Register extends user
+class Register extends User
 {
     /**
      * Current class template.

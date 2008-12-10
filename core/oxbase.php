@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxbase.php 13894 2008-10-29 20:15:57Z tomas $
+ * $Id: oxbase.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
@@ -35,7 +35,7 @@ DEFINE('ACTION_UPDATE_STOCK', 4);
  *
  * @package core
  */
-class oxBase extends oxsupercfg
+class oxBase extends oxSuperCfg
 {
     /**
      * Unique object ID. Normally representing record oxid field value

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2008
- * $Id: lang.php 13869 2008-10-29 17:56:30Z tomas $
+ * $Id: lang.php 13902 2008-10-30 08:18:34Z arvydas $
  */
 
 $sLangName  = 'English';
@@ -1102,7 +1102,7 @@ $aLang = array(
 'SHOP_MAIN_SHOPNAME'                            => 'Shop Name',
 'SHOP_MAIN_SMTPSERVER'                          => 'SMTP Server',
 'SHOP_MAIN_SMTPUSER'                            => 'SMTP User',
-'SHOP_MAIN_SMTPPASSWORD'                        => 'New SMTP Password',
+'SHOP_MAIN_SMTPPASSWORD'                        => 'SMTP Password',
 'SHOP_MAIN_SMTPPWUNSET'                         => 'Enter "-" to unset',
 'SHOP_EXTEND_BANKNAME'                          => 'Bank Name',
 'SHOP_EXTEND_BANKCODE'                          => 'Routing No.',

@@ -18,13 +18,13 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxutilsfile.php 13795 2008-10-27 15:15:03Z arvydas $
+ * $Id: oxutilsfile.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * File manipulation utility class
  */
-class oxUtilsFile extends oxsupercfg
+class oxUtilsFile extends oxSuperCfg
 {
     /**
      * oxUtils class instance.

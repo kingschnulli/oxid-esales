@@ -18,13 +18,13 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxlang.php 13722 2008-10-26 22:59:04Z alfonsas $
+ * $Id: oxlang.php 13914 2008-10-30 11:12:55Z arvydas $
  */
 
 /**
  * Language related utility class
  */
-class oxLang extends oxsupercfg
+class oxLang extends oxSuperCfg
 {
     /**
      * oxUtilsCount instance.
@@ -270,21 +270,21 @@ class oxLang extends oxsupercfg
      * @return string
      */
     public function getLanguageAbbr( $iLanguage = null){
-    	$myConfig = oxConfig::getInstance();
+        $myConfig = oxConfig::getInstance();
 
         if ( !isset($iLanguage) ) {
             $iLanguage = $this->_iBaseLanguageId;
         }
 
         $aLangAbbr = $this->getLanguageIds();
-        	
+
         if( isset($iLanguage,$aLangAbbr[$iLanguage]) ) {
-        	return $aLangAbbr[$iLanguage];
+            return $aLangAbbr[$iLanguage];
         }
-        
+
         return $iLanguage;
     }
-    
+
     /**
      * getLanguageNames returns array of language names e.g. array('Deutch', 'English')
      *
@@ -404,8 +404,8 @@ class oxLang extends oxsupercfg
         $iLang = (int) $iLang;
         if ( !$aLangCache[$iLang] ) {
 
-            $sFileName     = $myConfig->getLanguagePath('lang.php',$this->isAdmin(),$iLang);
-            $sCustFileName = $myConfig->getLanguagePath('cust_lang.php',$this->isAdmin(),$iLang);
+            $sFileName     = $myConfig->getLanguagePath('lang.php', $blAdminMode,$iLang);
+            $sCustFileName = $myConfig->getLanguagePath('cust_lang.php', $blAdminMode,$iLang);
 
             if ( is_file( $sFileName ) ) {
                 require $sFileName;
@@ -442,7 +442,7 @@ class oxLang extends oxsupercfg
             if ( !isset( $iLang ) )
                 $iLang = 0;
         }
-        
+
         $blIsAdmin = isset( $blIsAdmin ) ? $blIsAdmin : $this->isAdmin();
         $sFileName = $this->getConfig()->getLanguagePath('lang.txt',$blIsAdmin,$iLang);
 

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxorderarticle.php 13882 2008-10-29 19:03:49Z tomas $
+ * $Id: oxorderarticle.php 13916 2008-10-30 11:16:56Z arvydas $
  */
 
 /**
@@ -26,7 +26,7 @@
  * Performs copying of article.
  * @package core
  */
-class oxOrderArticle extends oxbase
+class oxOrderArticle extends oxBase
 {
     /**
      * Current class name
