@@ -59,6 +59,33 @@ class EmosOxidCode extends oxSuperCfg
     protected $_sEmosCatPath = null;
 
     /**
+     * Emos object storage
+     *
+     * @var emos
+     */
+    protected $_oEmos = null;
+
+    /**
+     * EmosOxidCode class instance.
+     *
+     * @var EmosOxidCode instance
+     */
+    private static $_instance = null;
+
+    /**
+     * resturns a single instance of this class
+     *
+     * @return oxUtils
+     */
+    public static function getInstance()
+    {
+        if ( !self::$_instance instanceof EmosOxidCode ) {
+            self::$_instance = new EmosOxidCode();
+        }
+        return self::$_instance;
+    }
+
+    /**
      * Returns path to econda script files
      *
      * @return string
@@ -108,15 +135,17 @@ class EmosOxidCode extends oxSuperCfg
      *
      * @return
      */
-    protected function _getNewEmos()
+    public function getEmos()
     {
-        $oEmos = new EMOS( $this->_getScriptPath() );
+        if ( $this->_oEmos === null ) {
+            $this->_oEmos = new EMOS( $this->_getScriptPath() );
 
-        // make output more readable
-        $oEmos->prettyPrint();
-        $oEmos->setSid( $this->getSession()->getId() );
+            // make output more readable
+            $this->_oEmos->prettyPrint();
+            $this->_oEmos->setSid( $this->getSession()->getId() );
+        }
 
-        return $oEmos;
+        return $this->_oEmos;
     }
 
     /**
@@ -211,10 +240,13 @@ class EmosOxidCode extends oxSuperCfg
         $oProduct = ( isset( $aParams['product'] ) && $aParams['product'] ) ? $aParams['product'] : null;
 
         // session user
-        $oUser = oxUser::getActiveUser();
+        $oUser = oxNew( 'oxuser' );
+        if ( !$oUser->loadActiveUser() ) {
+            $oUser = false;
+        }
 
         // make a new emos instance for this call
-        $oEmos = $this->_getNewEmos();
+        $oEmos = $this->getEmos();
 
         // treat the different PageTypes
         $oCur = $myConfig->getActShopCurrencyObject();

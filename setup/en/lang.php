@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2008
- * $Id: lang.php 13913 2008-10-30 11:09:11Z philipp.grashoff $
+ * $Id: lang.php 14726 2008-12-15 08:55:06Z philipp.grashoff $
  */
 
 $aLang = array(
@@ -28,6 +28,7 @@ $aLang = array(
 'HEADER_TEXT_SETUP_NOT_RUNS_AUTOMATICLY'          => "If setup does not continue in a few seconds, please click ",
 'FOOTER_OXID_ESALES'                              => "&copy; OXID eSales AG 2008",
 
+'TAB_0_TITLE'                                     => "System Requirements",
 'TAB_1_TITLE'                                     => "Welcome",
 'TAB_2_TITLE'                                     => "License conditions",
 'TAB_3_TITLE'                                     => "Database",
@@ -35,6 +36,7 @@ $aLang = array(
 'TAB_5_TITLE'                                     => "License",
 'TAB_6_TITLE'                                     => "Finish",
 
+'TAB_0_DESC'                                      => "Checking if your system fits the requirements",
 'TAB_1_DESC'                                      => "Welcome to OXID eShop installation wizard",
 'TAB_2_DESC'                                      => "Confirm license conditions",
 'TAB_3_DESC'                                      => "Test database connection, building tables",
@@ -59,6 +61,38 @@ $aLang = array(
 'ERROR_BAD_SERIAL_NUMBER'                         => "ERROR: Wrong license key!",
 'ERROR_COULD_NOT_OPEN_CONFIG_FILE'                => "Could not open %s for reading! Please consult our FAQ, forum or contact OXID Support staff!",
 
+'MOD_PHP_EXTENNSIONS'                             => 'PHP extensions',
+'MOD_PHP_CONFIG'                                  => 'PHP configuration',
+'MOD_SERVER_CONFIG'                               => 'Server configutation',
+
+'MOD_MOD_REWRITE'                                 => 'apache mod_rewrite module',
+'MOD_ALLOW_URL_FOPEN'                             => 'Allow url fopen directive',
+'MOD_PHP4_COMPAT'                                 => 'Zend compatibility mode off',
+'MOD_PHPVERSION'                                  => 'PHP version at least 5.2.0',
+'MOD_REQUEST_URI'                                 => 'REQUEST_URI set',
+'MOD_LIBXML2'                                     => 'LIB XML2',
+'MOD_PHP-XML'                                     => 'PHP XML',
+'MOD_JSON'                                        => 'JSON',
+'MOD_ICONV'                                       => 'ICONV',
+'MOD_TOKENIZER'                                   => 'Tokenizer',
+'MOD_BCMATH'                                      => 'BCMath',
+'MOD_MYSQL_CONNECT'                               => 'MySQL module for MySQL 5',
+'MOD_GD_INFO'                                     => 'GDlib v2 [v1] incl. JPEG support',
+'MOD_INI_SET'                                     => 'ini_set allowed',
+'MOD_REGISTER_GLOBALS'                            => 'register_globals off',
+'MOD_ZEND_OPTIMIZER'                              => 'Zend Optimizer installed',
+'MOD_ZEND_PLATFORM'                               => 'Zend Platform installed',
+
+'STEP_0_ERROR_TEXT'                               => 'Your system does not fit system requirements',
+'STEP_0_TEXT'                                     => '<ul class="req">'.
+                                                     '<li class="pass"> - Your system fits the requirement.</li>'.
+                                                     '<li class="pmin"> - The requirement is not or only partly fit, but eShop will work anyway.</li>'.
+                                                     '<li class="fail"> - Your system doesn\'t fit the requirement. The eShop will not work without it.</li>'.
+                                                     '<li class="null"> - The requirement could  not be checked.'.
+                                                     '</ul>',
+'STEP_0_DESC'                                     => 'In this step we check if your system fits the requirements:',
+'STEP_0_TITLE'                                    => 'System requirements check',
+
 'STEP_1_TITLE'                                    => "Welcome",
 'STEP_1_DESC'                                     => "Welcome to installation wizard of OXID eShop",
 'STEP_1_TEXT'                                     => "Please read carefully the following instructions to guarantee a smooth installation.
@@ -68,6 +102,7 @@ $aLang = array(
                                                       79098 Freiburg<br>
                                                       Deutschland<br>",
 'BUTTON_BEGIN_INSTALL'                            => "Start installation",
+'BUTTON_PROCEED_INSTALL'                          => "Proceed with setup",
 
 'STEP_2_TITLE'                                    => "License conditions",
 'BUTTON_RADIO_LICENCE_ACCEPT'                     => "I acceppt license conditions.",
@@ -136,4 +171,4 @@ $aLang = array(
 
 );
 
-?>
+$aLang['MOD_MEMORY_LIMIT']                        = 'PHP Memory limit (min. 14MB, 30MB recommended)';

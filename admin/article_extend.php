@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: article_extend.php 14018 2008-11-06 13:33:39Z arvydas $
+ * $Id: article_extend.php 14695 2008-12-12 14:51:49Z vilma $
  */
 
 /**
@@ -159,10 +159,12 @@ class Article_Extend extends oxAdminDetails
         $soxId      = oxConfig::getParameter( "oxid");
         $aParams    = oxConfig::getParameter( "editval");
         // checkbox handling
-        if ( !isset( $aParams['oxarticles__oxissearch']))
+        if ( !isset( $aParams['oxarticles__oxissearch'])) {
             $aParams['oxarticles__oxissearch'] = 0;
-        if ( !isset( $aParams['oxarticles__oxblfixedprice']))
+        }
+        if ( !isset( $aParams['oxarticles__oxblfixedprice'])) {
             $aParams['oxarticles__oxblfixedprice'] = 0;
+        }
 
         // new way of handling bundled articles
         //#1517C - remove posibility to add Bundled Product
@@ -173,6 +175,11 @@ class Article_Extend extends oxAdminDetails
 
         $oArticle = oxNew( "oxarticle" );
         $oArticle->loadInLang( $this->_iEditLang, $soxId);
+
+        if ( $aParams['oxarticles__oxtprice'] < $oArticle->oxarticles__oxprice->value) {
+            $aParams['oxarticles__oxtprice'] = $oArticle->oxarticles__oxtprice->value;
+            $this->_aViewData["errorsavingtprice"] = 1;
+        }
 
         //$aParams = $oArticle->ConvertNameArray2Idx( $aParams);
         $oArticle->setLanguage(0);

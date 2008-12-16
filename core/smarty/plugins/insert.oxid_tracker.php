@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package smartyPlugins
  * @copyright © OXID eSales AG 2003-2008
- * $Id: insert.oxid_tracker.php 14258 2008-11-18 14:07:26Z arvydas $
+ * $Id: insert.oxid_tracker.php 14487 2008-12-05 08:39:31Z arvydas $
  */
 
 /*
@@ -36,10 +36,9 @@ function smarty_insert_oxid_tracker( $params, &$smarty )
     $myConfig = oxConfig::getInstance();
     // econda is on ?
     if( $myConfig->getConfigParam( 'blEcondaActive' ) ) {
-        include $myConfig->getConfigParam( 'sCoreDir' ).'smarty/plugins/oxide_emos_adapter.php';
+        include_once $myConfig->getConfigParam( 'sCoreDir' ).'smarty/plugins/oxide_emos_adapter.php';
 
-        $oEmos   = new EmosOxidCode();
-        $sOutput = $oEmos->getCode( $params, $smarty );
+        $sOutput = EmosOxidCode::getInstance()->getCode( $params, $smarty );
 
         // returning JS code to output
         if ( strlen( trim( $sOutput ) ) ) {

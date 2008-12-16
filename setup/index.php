@@ -18,13 +18,27 @@
  * @link http://www.oxid-esales.com
  * @package setup
  * @copyright © OXID eSales AG 2003-2008
- * $Id: index.php 13991 2008-11-05 10:20:23Z birute $
+ * $Id: index.php 14749 2008-12-15 16:23:50Z rimvydas.paskevicius $
  */
 
+
+define('STEP_SYSTEMREQ', 100);
+define('STEP_LANG',      150);
+define('STEP_WELCOME',   200);
+define('STEP_LICENSE',   300);
+define('STEP_DB',        400);
+define('STEP_DIRS',      500);
+define('STEP_FINISH',    600);
+
+
+ob_start();
 
 $sVerPrefix = '';
 
     $sVerPrefix = '_ce';
+
+
+    $sBaseShopId = 'oxbaseshop';
 
 // Session Handling
 $sSID = @$_GET['sid'];
@@ -63,7 +77,7 @@ $istep = @$_GET['istep'];
 if ( !isset( $istep))
     $istep = @$_POST['istep'];
 if ( !isset( $istep))
-    $istep = "1";
+    $istep = "0";
 
 // store eula to session
 $iEula = @$_POST['iEula'];
@@ -334,12 +348,295 @@ class Conf
 {
     function Conf()
     {
-        require_once("../core/oxconfk.php");
+        require("../core/oxconfk.php");
+    }
+}
+
+/**
+ * Translates module name
+ *
+ * @param string $sModuleName name of module
+ *
+ * @return string
+ */
+function getModuleName( $sModuleName )
+{
+    global $aLang;
+    return $aLang['MOD_'.strtoupper( $sModuleName ) ];
+}
+
+/**
+ * Parses and calculates given string form byte syze value
+ *
+ * @param string $sBytes string form byte value (64M, 32K etc)
+ *
+ * @return int
+ */
+function getBytes( $sBytes )
+{
+    $sBytes = trim( $sBytes );
+    $sLast = strtolower($sBytes[strlen($sBytes)-1]);
+    switch( $sLast ) {
+        // The 'G' modifier is available since PHP 5.1.0
+        case 'g':
+            $sBytes *= 1024;
+        case 'm':
+            $sBytes *= 1024;
+        case 'k':
+            $sBytes *= 1024;
+    }
+
+    return $sBytes;
+}
+
+/**
+ * Runs through modules array and checks if current system fits requirements.
+ * Returns array with module info:
+ *   array( $sModuleName, $sModuleState ):
+ *     $sModuleName  - name of checked module
+ *     $sModuleState - module state:
+ *       -1 - unable to datect, should not block
+ *        0 - missing, blocks setup
+ *        1 - fits min requirements
+ *        2 - exists required or better
+ *
+ * @return array
+ */
+function getNextModuleInfo()
+{
+    static $aRequiredModules;
+    static $aLoadedExtensions;
+    if ( $aRequiredModules == null ) {
+        $aRequiredPHPExtensions = array(
+            'phpversion',
+            'libxml2',
+            'php-xml',
+            'json',
+            'iconv',
+            'tokenizer',
+            'mysql_connect',
+            'gd_info'
+            );
+
+            $aRequiredPHPExtensions[] = 'bcmath';
+
+         $aRequiredPHPConfigs = array(
+            'allow_url_fopen',
+            'php4_compat',
+            'request_uri',
+            'ini_set',
+            'register_globals',
+            'memory_limit'
+         );
+
+         $aRequiredServerConfigs = array(
+            'mod_rewrite'
+         );
+
+
+        $aRequiredModules = array_fill_keys($aRequiredPHPExtensions,'php_extennsions') +
+                            array_fill_keys($aRequiredPHPConfigs,'php_config') +
+                            array_fill_keys($aRequiredServerConfigs,'server_config');
+
+        // array of loaded extensions for nicer check
+        $aLoadedExtensions = array_merge(get_loaded_extensions(false),get_loaded_extensions(true));
+    }
+
+    if ( (  $sModule = key( $aRequiredModules ) ) ) {
+        $sGroup = current( $aRequiredModules );
+        $iModStat = null;
+        switch ( $sModule ) {
+            case 'mod_rewrite':
+                // mod_rewrite extension
+                if ( function_exists( 'apache_get_modules' ) ) {
+                    $iModStat = in_array( 'mod_rewrite', apache_get_modules() ) ? 2 : 0;
+                } else {
+                    $iModStat = -1;
+                }
+                break;
+            case 'allow_url_fopen':
+                // Activated allow_url_fopen or fsockopen on port 80 possible
+                $iModStat = @ini_get('allow_url_fopen');
+                $iModStat = ( $iModStat && strcasecmp( '1', $iModStat ) ) ? 2 : 0;
+                if ( !$iModStat ) {
+                    if ( $oRes = @fsockopen( 'www.oxid-esales.com', 80 ) ) {
+                        $iModStat = 2;
+                        fclose( $oRes );
+                    }
+                }
+                $iModStat = ( !$iModStat ) ? 1 : $iModStat;
+                break;
+            case 'php4_compat':
+                // PHP4 compatibility mode must be set off. (zend.ze1_compatibility_mode = Off)
+                $iModStat = @ini_get( 'zend.ze1_compatibility_mode' );
+                $iModStat = ( $iModStat == '' ) ? 2 : ( ( (int) ( strcasecmp( 'off', $iModStat ) || strcasecmp( '0', $iModStat ) ) ) ? 2 : 0 );
+                break;
+            case 'phpversion':
+                // PHP 5.2.0 or higher. Due to performance matters, PHP 5.2.6 recommended.
+                $iModStat = ( version_compare( PHP_VERSION, '5.1', '>' ) > 0 ) ? 1 : 0;
+                $iModStat = ( $iModStat == 0 ) ? $iModStat : ( version_compare( PHP_VERSION, '5.2', '>=' ) >= 0 ? 2 : 1 );
+                break;
+            case 'request_uri':
+                // Apache server variables REQUEST_URI or SCRIPT_URI must be set
+                $iModStat = ( isset( $_SERVER['REQUEST_URI'] ) || isset( $_SERVER['SCRIPT_URI'] ) ) ? 2 : 0;
+                break;
+            case 'libxml2':
+                // libxml2
+                $iModStat = class_exists( 'DOMDocument' ) ? 2 : 0;
+                break;
+            case 'php-xml':
+                // php-xml
+                $iModStat = class_exists( 'DOMDocument' ) ? 2 : 0;
+                break;
+            case 'json':
+                // JSON
+                $iModStat = in_array( 'json', $aLoadedExtensions ) ? 2 : 0;
+                break;
+            case 'iconv':
+                // iconv-extension
+                $iModStat = in_array( 'iconv', $aLoadedExtensions ) ? 2 : 0;
+                break;
+            case 'tokenizer':
+                // tokenizer
+                $iModStat = in_array( 'tokenizer', $aLoadedExtensions ) ? 2 : 0;
+                break;
+            case 'bcmath':
+                // bcmath
+                $iModStat = in_array( 'bcmath', $aLoadedExtensions ) ? 2 : 1;
+                break;
+            case 'mysql_connect':
+                // MySQL module for MySQL5
+                $iModStat = in_array( 'mysql', $aLoadedExtensions ) ? 2 : 0;
+                break;
+            case 'gd_info':
+                // GDlib version
+                $iModStat = in_array( 'gd', $aLoadedExtensions ) ? 1 : 0;
+                $iModStat = function_exists( 'imagecreatetruecolor' ) ? 2 : $iModStat;
+                $iModStat = function_exists( 'imagecreatefromjpeg' ) ? $iModStat : 0;
+                break;
+            case 'ini_set':
+                // ini set allowed
+                $iModStat = ( @ini_set('session.name', 'sid' ) !== false ) ? 2 : 0;
+                break;
+            case 'register_globals':
+                // register_globals off
+                $iModStat = strcasecmp( 'off', @ini_get('register_globals') ) ? 2 : 0;
+                break;
+            case 'memory_limit':
+                if ( $sMemLimit = @ini_get('memory_limit') ) {
+
+                        // CE - PE at least to 14 MB. We recomend a memory_limit of 30MB.
+                        $sDefLimit = '14M';
+                        $sRecLimit = '30M';
+
+
+                    $iMemLimit = getBytes( $sMemLimit );
+                    $iModStat = ( $iMemLimit >= getBytes( $sDefLimit ) ) ? 1 : 0;
+                    $iModStat = $iModStat ? ( ( $iMemLimit >= getBytes( $sRecLimit ) ) ? 2 : $iModStat ) : $iModStat;
+
+                } else {
+                    $iModStat = -1;
+                }
+
+                break;
+        }
+
+
+        next( $aRequiredModules );
+        return array( $sGroup, $sModule, $iModStat );
     }
 }
 
 // startpage, licence
-if ( $istep == 1) {
+if ( $istep == 0) {
+
+    // ---------------------------------------------------------
+    // WELCOME
+    // ---------------------------------------------------------
+    $title = $aLang['STEP_0_TITLE'];
+    include "headitem.php";
+?>
+<strong><?php echo( $aLang['STEP_0_DESC'] ) ?></strong><br><br>
+
+<table cellpadding="1" cellspacing="0">
+    <tr>
+        <td nowrap><?php echo($aLang['SELECT_SETUP_LANG']) ?>: </td>
+        <td>
+            <form action="index.php" id="langSelectionForm" method="post">
+            <select name="setup_lang" onChange="document.getElementById('langSelectionForm').submit();" style="font-size: 11px;">
+                <option value="en">English</option>
+                <option value="de" <?php if ($aPersistentData['setup_lang'] == 'de') echo 'selected'; ?>>Deutsch</option>
+            </select>
+            <noscript>
+            <input type="submit" name="setup_lang_submit" value="<?php echo($aLang['SELECT_SETUP_LANG_SUBMIT']) ?>" style="font-size: 11px;">
+            </noscript>
+            <input type="hidden" name="sid" value="<?php echo( getSID()); ?>">
+            <input type="hidden" name="istep" value="0">
+            </form>
+        </td>
+    </tr>
+</table>
+<br>
+
+    <ul class="req">
+    <?php
+    $blContinue = true;
+    $sPrevGroup = null;
+    while ( list( $sGroup, $sModule, $iModuleState ) = getNextModuleInfo() ) {
+        // translating
+        $sModuleName = getModuleName( $sModule );
+        $sGroupName  = getModuleName( $sGroup );
+        if($sPrevGroup != $sGroup){
+            if(!is_null($sPrevGroup)){
+                echo "</ul></li>";
+            }
+            echo "<li class='group'>{$sGroupName}<ul>";
+            $sPrevGroup = $sGroup;
+        }
+
+        /**
+         * $iModuleState - module status:
+         * -1 - unable to datect, should not block
+         *  0 - missing, blocks setup
+         *  1 - fits min requirements
+         *  2 - exists required or better
+         */
+        switch ( $iModuleState ) {
+            case 2:
+                $sClass = 'pass';
+                break;
+            case 1:
+                $sClass = 'pmin';
+                break;
+            case -1:
+                $sClass = 'null';
+                break;
+            default:
+                $sClass = 'fail';
+                break;
+        }
+
+        $blContinue = $blContinue && ( bool ) abs( $iModuleState );
+        echo "<li id=\"$sModule\" class=\"{$sClass}\">{$sModuleName}</li>\n";
+    }
+    ?>
+    </li></ul></li><li class="clear"></li></ul>
+
+    <?php echo( $aLang['STEP_0_TEXT'] ) ?>
+    <br><br>
+
+    <?php if ( $blContinue ) { ?>
+    <form action="index.php" method="post">
+    <input type="hidden" name="sid" value="<?php echo( getSID()); ?>">
+    <input type="hidden" name="istep" value="1">
+    <input type="submit" id="step0Submit" class="edittext" value="<?php echo( $aLang['BUTTON_PROCEED_INSTALL'] ) ?>">
+    </form>
+    <?php } else {
+              echo '<b>',$aLang['STEP_0_ERROR_TEXT'],'</b>';
+          }
+// startpage, licence
+} elseif( $istep == 1) {
+//if ( $istep == 1) {
     // ---------------------------------------------------------
     // WELCOME
     // ---------------------------------------------------------
@@ -377,19 +674,6 @@ if ( $istep == 1) {
 <br>
 <form action="index.php" method="post">
 <table cellpadding="1" cellspacing="0">
-    <tr>
-        <td nowrap><?php echo($aLang['SELECT_SETUP_LANG']) ?>: </td>
-        <td>
-            <select name="setup_lang" onChange="this.form.setup_lang_submit.value='1'; this.form.submit();" style="font-size: 11px;">
-                <option value="en">English</option>
-                <option value="de" <?php if ($aPersistentData['setup_lang'] == 'de') echo 'selected'; ?>>Deutsch</option>
-            </select>
-            <input type="hidden" name="setup_lang_submit" value="">
-            <noscript>
-            <input type="submit" name="setup_lang_submit" value="<?php echo($aLang['SELECT_SETUP_LANG_SUBMIT']) ?>" style="font-size: 11px;">
-            </noscript>
-        </td>
-    </tr>
     <tr>
         <td style="padding-top: 5px;"><?php echo($aLang['SELECT_COUNTRY_LANG']) ?>: </td>
         <td>
@@ -449,7 +733,7 @@ if ( $istep == 1) {
     $title = $aLang['STEP_2_TITLE'];
     include "headitem.php";
 ?>
-<textarea cols="180" rows="20" class="edittext" style="width: 858px; padding: 7px;">
+<textarea cols="180" rows="20" class="edittext" style="width: 98%; padding: 7px;">
 <?php
     $sLicenseFile = "lizenz.txt";
 
@@ -611,6 +895,23 @@ if ( $istep == 1) {
             exit();
         }
     }
+
+    // generating password salt
+    $sPassSalt = generateUID();
+    $sPassKey  = generateUID();
+    $oConfk = new Conf();
+
+
+        $sShopId = 'oxbaseshop';
+
+    // inserting password salt
+    $sQ = "insert into oxconfig ( oxid, oxshopid, oxvarname, oxvartype, oxvarvalue )
+           values( '{$sPassKey}', '{$sShopId}', 'sPasswdSalt', 'str', ENCODE( '{$sPassSalt}', '{$oConfk->sConfigKey}' ) )";
+    mysql_query( $sQ );
+
+    // encoding demo passwords ..
+    $sQ = "update oxuser set oxpassword = MD5( CONCAT( oxpassword, '{$sPassSalt}' ) )";
+    mysql_query( $sQ );
 
     //update dyn pages / shop country config options (from first step)
     saveDynPagesSettings();
@@ -803,7 +1104,14 @@ if ( $istep == 1) {
 
 } elseif ( $istep == 5) {
 
+
+
+
+
 } elseif ( $istep == 51) {
+
+
+
 
 } elseif ( $istep == 6) {
     // ---------------------------------------------------------
@@ -862,3 +1170,5 @@ if ( $istep == 1) {
 }
 
 include "bottomitem.php";
+
+ob_end_flush();

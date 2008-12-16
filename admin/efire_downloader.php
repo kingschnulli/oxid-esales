@@ -39,6 +39,23 @@ class EFire_Downloader extends oxAdminView
     }
 
     /**
+     * Returns list of admin users
+     *
+     * @return oxuserlist
+     */
+    public function getAdminList()
+    {
+        $oUserList = oxNew( "oxUserList" );
+        $oUser = $oUserList->getBaseObject();
+
+        $sQ  = "select ".$oUser->getSelectFields()." from oxuser ";
+        $sQ .= "where oxuser.oxrights != 'user' ";
+
+        $oUserList->selectString( $sQ );
+        return $oUserList;
+    }
+
+    /**
      * Downloads connector, displays message on  success, error on failure.
      *
      * @return null
