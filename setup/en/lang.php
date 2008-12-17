@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2008
- * $Id: lang.php 14726 2008-12-15 08:55:06Z philipp.grashoff $
+ * $Id: lang.php 14778 2008-12-16 15:50:34Z vilma $
  */
 
 $aLang = array(
@@ -66,7 +66,7 @@ $aLang = array(
 'MOD_SERVER_CONFIG'                               => 'Server configutation',
 
 'MOD_MOD_REWRITE'                                 => 'apache mod_rewrite module',
-'MOD_ALLOW_URL_FOPEN'                             => 'Allow url fopen directive',
+'MOD_ALLOW_URL_FOPEN'                             => 'allow_url_fopen or fsockopen to port 80',
 'MOD_PHP4_COMPAT'                                 => 'Zend compatibility mode off',
 'MOD_PHPVERSION'                                  => 'PHP version at least 5.2.0',
 'MOD_REQUEST_URI'                                 => 'REQUEST_URI set',
@@ -86,8 +86,8 @@ $aLang = array(
 'STEP_0_ERROR_TEXT'                               => 'Your system does not fit system requirements',
 'STEP_0_TEXT'                                     => '<ul class="req">'.
                                                      '<li class="pass"> - Your system fits the requirement.</li>'.
-                                                     '<li class="pmin"> - The requirement is not or only partly fit, but eShop will work anyway.</li>'.
-                                                     '<li class="fail"> - Your system doesn\'t fit the requirement. The eShop will not work without it.</li>'.
+                                                     '<li class="pmin"> - The requirement is not or only partly fit. The OXID eShop will work anyway and can be installed..</li>'.
+                                                     '<li class="fail"> - Your system doesn\'t fit the requirement. The OXID eShop will not work without it and cannot be installed.</li>'.
                                                      '<li class="null"> - The requirement could  not be checked.'.
                                                      '</ul>',
 'STEP_0_DESC'                                     => 'In this step we check if your system fits the requirements:',
@@ -156,6 +156,7 @@ $aLang = array(
 'STEP_6_LINK_TO_SHOP_ADMIN_AREA'                  => "Continue to your OXID eShop admin interface",
 'STEP_6_TO_SHOP'                                  => "To Shop",
 'STEP_6_TO_SHOP_ADMIN'                            => "To admin interface",
+'STEP_6_ADDITIONAL_LOGIN_INFO'                    => 'Use login "admin" and password "admin" to login.',
 
 'ATTENTION'                                       => "Attention, important",
 'SETUP_DIR_DELETE_NOTICE'                         => "Due to security reasons remove setup directory if not yet done during installation.",

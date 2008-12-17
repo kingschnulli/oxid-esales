@@ -143,6 +143,15 @@ class EmosOxidCode extends oxSuperCfg
             // make output more readable
             $this->_oEmos->prettyPrint();
             $this->_oEmos->setSid( $this->getSession()->getId() );
+
+            // set page id
+            $oEmos->addPageID( $this->_getEmosPageId( $this->_getTplName() ) );
+
+            // language id
+            $oEmos->addLangID( oxLang::getInstance()->getBaseLanguage() );
+
+            // set site ID
+            $oEmos->addSiteID( $myConfig->getShopId() );
         }
 
         return $this->_oEmos;
@@ -218,6 +227,39 @@ class EmosOxidCode extends oxSuperCfg
     }
 
     /**
+     * generates a unique id for the current page
+     *
+     * @param string $sTplName current view template name
+     *
+     * @return string
+     */
+    protected function _getEmosPageId( $sTplName )
+    {
+        $sPageId = $this->getConfig()->getShopId() .
+                   $this->_getEmosCl() .
+                   $sTplName .
+                   oxConfig::getParameter( 'cnid' ) .
+                   oxConfig::getParameter( 'anid' ) .
+                   oxConfig::getParameter( 'option' );
+
+        return md5( $sPageId );
+    }
+
+    /**
+     * Returns active view template name
+     *
+     * @return string
+     */
+    protected function _getTplName()
+    {
+        if ( !( $sCurrTpl = basename( ( string ) oxConfig::getParameter( 'tpl' ) ) ) ) {
+            // in case template was not defined in request
+            $sCurrTpl = $this->getConfig()->getActiveView()->getTemplateName();
+        }
+        return $sCurrTpl;
+    }
+
+    /**
      * Builds JS code for current view tracking functionality
      *
      * @param array  $params  plugin parameters
@@ -248,8 +290,13 @@ class EmosOxidCode extends oxSuperCfg
         // make a new emos instance for this call
         $oEmos = $this->getEmos();
 
-        // treat the different PageTypes
+        // current name of tmeplate
+        $sTplName = $this->_getTplName();
+
+        // current currency
         $oCur = $myConfig->getActShopCurrencyObject();
+
+        // treat the different PageTypes
         switch ( $this->_getEmosCl() ) {
             case 'start':
                 $oEmos->addContent( 'Start' );
@@ -361,7 +408,7 @@ class EmosOxidCode extends oxSuperCfg
                 $oEmos->addContent( 'Service/Links' );
                 break;
             case 'info':
-                switch ( oxConfig::getParameter( 'tpl' ) ) {
+                switch ( $sTplName ) {
                     case 'impressum.tpl':
                         $oEmos->addContent( 'Info/Impressum' );
                         break;
@@ -376,6 +423,9 @@ class EmosOxidCode extends oxSuperCfg
                         break;
                     case 'security_info.tpl':
                         $oEmos->addContent( 'Info/Sicherheit' );
+                        break;
+                    default:
+                        $oEmos->addContent( 'Content/'.preg_replace( '/\.tpl$/', '', $sTplName ) );
                         break;
                 }
                 break;
@@ -428,6 +478,7 @@ class EmosOxidCode extends oxSuperCfg
 
                 break;
             default:
+                $oEmos->addContent( 'Content/'.preg_replace( '/\.tpl$/', '', $sTplName ) );
                 break;
         }
 

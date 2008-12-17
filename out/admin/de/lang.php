@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2008
- * $Id: lang.php 14695 2008-12-12 14:51:49Z vilma $
+ * $Id: lang.php 14758 2008-12-16 09:01:19Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -641,6 +641,8 @@ $aLang = array(
 'EFIRE_GETCONNECTOR'                            => 'Sofern Sie sich bei OXID eFire registriert haben, laden Sie hier Ihren pers&ouml;nlichen Shop-Connector.',
 'EFIRE_CONNECTORINSTRUCTION'                    => 'Geben Sie dazu Ihren Externen Transaktions Login und Externes Transaktions Passwort ein, den Sie in OXID eFire unter &quot;Einstellungen&quot; eingegeben haben.',
 'EFIRE_SAVECREDENTIALS'                         => 'Einstellungen für zukünftige Verbindungen zu OXID eFire speichern',
+'EFIRE_USERDETAILS'                             => 'Benutzer',
+'EFIRE_USERPASSHASH'                            => 'Passwort Prüfsumme (Hash)',
 'EMAIL_PRICEALARM_CUSTOMER_PRICEALARMIN'        => 'Preisalarm im ',
 'EMAIL_PRICEALARM_CUSTOMER_HY'                  => 'Hallo,',
 'EMAIL_PRICEALARM_CUSTOMER_HAVEPRICEALARM'      => 'wir haben einen Preisalarm im',

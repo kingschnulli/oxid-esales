@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxuser.php 14750 2008-12-15 17:15:23Z arvydas $
+ * $Id: oxuser.php 14766 2008-12-16 12:06:11Z arvydas $
  */
 
 /**
@@ -1110,7 +1110,7 @@ class oxUser extends oxBase
             $sShopID = $myConfig->getShopId();
 
             $sUserSelect = is_numeric( $sUser ) ? "oxuser.oxcustnr = {$sUser} " : "oxuser.oxusername = " . oxDb::getDb()->Quote( $sUser );
-            $sPassSelect = " oxuser.oxpassword = '".$this->_encodePassword( $sPassword )."' ";
+            $sPassSelect = " oxuser.oxpassword = '".$this->encodePassword( $sPassword )."' ";
             $sShopSelect = "";
 
 
@@ -1826,6 +1826,51 @@ class oxUser extends oxBase
         return false;
     }
 
+    /**
+     * Sets user info into cookie
+     *
+     * @deprecated should be used oxUtilsServer::setUserCookie()
+     *
+     * @param string  $sUser     user ID
+     * @param string  $sPassword password
+     * @param string  $sShopId   shop ID (default null)
+     * @param integer $iTimeout  timeout value (default 31536000)
+     *
+     * @return null
+     */
+    protected function _setUserCookie( $sUser, $sPassword,  $sShopId = null, $iTimeout = 31536000 )
+    {
+        oxUtilsServer::getInstance()->setUserCookie( $sUser, $sPassword, $sShopId, $iTimeout );
+    }
+
+    /**
+     * Deletes user cookie data
+     *
+     * @deprecated should be used oxUtilsServer::deleteUserCookie()
+     *
+     * @param string $sShopId shop ID (default null)
+     *
+     * @return null
+     */
+    protected function _deleteUserCookie( $sShopId = null )
+    {
+        oxUtilsServer::getInstance()->deleteUserCookie( $sShopId );
+    }
+
+    /**
+     * Returns cookie stored used login data
+     *
+     * @deprecated should be used oxUtilsServer::getUserCookie()
+     *
+     * @param string $sShopId shop ID (default null)
+     *
+     * @return string
+     */
+    protected static function _getUserCookie( $sShopId = null )
+    {
+        return oxUtilsServer::getInstance()->getUserCookie( $sShopId );
+    }
+
 
     /**
      * Tries to load user object by passed update id. Update id is
@@ -1911,7 +1956,7 @@ class oxUser extends oxBase
      *
      * @return string
      */
-    protected function _encodePassword( $sPassword )
+    public function encodePassword( $sPassword )
     {
         $oDb = oxDb::getDb();
         $myConfig = $this->getConfig();
@@ -1934,7 +1979,7 @@ class oxUser extends oxBase
     public function setPassword( $sPassword = null )
     {
         // encoding only if password was not empty (e.g. user registration without pass)
-        $sPassword = $sPassword ? $this->_encodePassword( $sPassword ) : '';
+        $sPassword = $sPassword ? $this->encodePassword( $sPassword ) : '';
         $this->oxuser__oxpassword = new oxField( $sPassword, oxField::T_RAW );
     }
 
@@ -1947,7 +1992,7 @@ class oxUser extends oxBase
       */
     public function isSamePassword( $sNewPass )
     {
-        return $this->_encodePassword( $sNewPass ) == $this->oxuser__oxpassword->value;
+        return $this->encodePassword( $sNewPass ) == $this->oxuser__oxpassword->value;
     }
 
      /**
@@ -1973,12 +2018,44 @@ class oxUser extends oxBase
             $sHash = $this->oxuser__oxpassword->value;
             if ( strpos( $this->oxuser__oxpassword->value, 'ox_' ) === 0 ) {
                 // decodable pass ?
-                $sHash = $this->_encodePassword( oxUtils::getInstance()->strRem( $this->oxuser__oxpassword->value ) );
+                $sHash = $this->encodePassword( oxUtils::getInstance()->strRem( $this->oxuser__oxpassword->value ) );
             } elseif ( strlen( $this->oxuser__oxpassword->value ) < 32 ) {
                 // plain pass ?
-                $sHash = $this->_encodePassword( $this->oxuser__oxpassword->value );
+                $sHash = $this->encodePassword( $this->oxuser__oxpassword->value );
             }
     	}
         return $sHash;
+    }
+
+    /**
+     * Loads active admin user object (if possible). If
+     * user is not available - returns false.
+     *
+     * @deprecated use non static method loadAdminUser
+     *
+     * @return bool
+     */
+    public static function getAdminUser()
+    {
+        return self::getActiveUser( true );
+    }
+
+    /**
+     * Loads active user object. If
+     * user is not available - returns false.
+     *
+     * @param bool $blForceAdmin (default false)
+     * @deprecated use non static method loadActiveUser
+     *
+     * @return bool
+     */
+    public static function getActiveUser( $blForceAdmin = false )
+    {
+        $oUser = oxNew( 'oxuser' );
+        if ( $oUser->loadActiveUser( $blForceAdmin ) ) {
+            return $oUser;
+        } else {
+            return false;
+        }
     }
 }

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxbasket.php 14542 2008-12-08 14:24:48Z vilma $
+ * $Id: oxbasket.php 14775 2008-12-16 14:36:44Z vilma $
  */
 
 /**
@@ -646,7 +646,7 @@ class oxBasket extends oxSuperCfg
             $aDeliveryList = oxDeliveryList::getInstance()->getDeliveryList( $this,
                                         $oUser,
                                         $this->_findDelivCountry(),
-                                        $this->getShippingId()
+                                        oxConfig::getParameter( 'sShipSet' )
                                     );
 
             if ( count( $aDeliveryList ) > 0 ) {
@@ -1454,6 +1454,7 @@ class oxBasket extends oxSuperCfg
     public function setShipping( $sShippingSetId = null )
     {
         $this->_sShippingSetId = $sShippingSetId;
+        oxSession::setVar( 'sShipSet', $sShippingSetId );
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /*******************************************************************************
  * EMOS PHP Bib 2
- * $Id: emos.php 14487 2008-12-05 08:39:31Z arvydas $
+ * $Id: emos.php 14782 2008-12-16 16:08:16Z arvydas $
  *
  * Copyright (c) 2004 - 2007 ECONDA GmbH Karlsruhe
  * All rights reserved.
@@ -474,8 +474,7 @@ class EMOS{
 	public function getEmosECPageArray( $item, $event )
     {
 		$item = $this->emos_ItemFormat( $item );
-		$out = "";
-		$out .= "<script type=\"text/javascript\">$this->br" .
+		$out = "<script type=\"text/javascript\">$this->br" .
 		"<!--$this->br" .
 		"$this->tab var emosECPageArray = new Array();$this->br" .
 		"$this->tab emosECPageArray['event'] = '$event';$this->br" .
@@ -648,6 +647,109 @@ class EMOS{
     {
 		$this->appendPreScript( $this->getEmosECPageArray( $item, "c_add" ) );
 	}
+
+    /**
+     * constructs a generic EmosCustomPageArray from a PHP Array
+     *
+     * @param array $aListOfValues list of custom values to assign to emos tracker
+     *
+     * @return string
+     */
+    public function getEmosCustomPageArray( $aListOfValues)
+    {
+        $out = "<script type=\"text/javascript\">$this->br" .
+        "<!--$this->br" .
+        "$this->tab var emosCustomPageArray = new Array();$this->br";
+
+        $iCounter = 0;
+        foreach ( $aListOfValues as $sValue ) {
+            $sValue = $this->emos_DataFormat( $sValue );
+            $out .= "$this->tab emosCustomPageArray[$iCounter] = '$sValue';$this->br";
+            $iCounter ++;
+        }
+
+        return $out . "// -->$this->br" ."</script>$this->br";
+    }
+
+    /**
+     * constructs a emosCustomPageArray with 8 Variables and shortcut
+     *
+     * @param string $cType Type of this event - shortcut in config
+     * @param string  $cVar1 first variable of this custom event (optional)
+     * @param string  $cVar2 second variable of this custom event (optional)
+     * @param string  $cVar3 third variable of this custom event (optional)
+     * @param string  $cVar4 fourth variable of this custom event (optional)
+     * @param string  $cVar5 fifth variable of this custom event (optional)
+     * @param string  $cVar6 sixth variable of this custom event (optional)
+     * @param string  $cVar7 seventh variable of this custom event (optional)
+     * @param string  $cVar8 eighth variable of this custom event (optional)
+     * @param string  $cVar9 nineth variable of this custom event (optional)
+     * @param string  $cVar10 tenth variable of this custom event (optional)
+     * @param string  $cVar11 eleventh variable of this custom event (optional)
+     * @param string  $cVar12 twelveth variable of this custom event (optional)
+     * @param string  $cVar13 thirteenth variable of this custom event (optional)
+     *
+     * @return null
+     */
+    public function addEmosCustomPageArray( $cType = 0, $cVar1 = 0, $cVar2 = 0, $cVar3 = 0, $cVar4 = 0,
+                                            $cVar5 = 0, $cVar6 = 0, $cVar7 = 0, $cVar8 = 0, $cVar9 = 0,
+                                            $cVar10 = 0, $cVar11 = 0, $cVar12 = 0, $cVar13 = 0 )
+    {
+        $aValues[0] = $cType;
+        if ( $cVar1 ) {
+            $aValues[1] = $cVar1;
+        }
+
+        if ( $cVar2 ) {
+            $aValues[2] = $cVar2;
+        }
+
+        if ( $cVar3 ) {
+            $aValues[3] = $cVar3;
+        }
+
+        if ( $cVar4 ) {
+        	$aValues[4] = $cVar4;
+        }
+
+        if ( $cVar5 ) {
+            $aValues[5] = $cVar5;
+        }
+
+        if ( $cVar6 ) {
+            $aValues[6] = $cVar6;
+        }
+
+        if ( $cVar7 ) {
+            $aValues[7] = $cVar7;
+        }
+
+        if ( $cVar8 ) {
+            $aValues[8] = $cVar8;
+        }
+
+        if ( $cVar9 ) {
+            $aValues[9] = $cVar9;
+        }
+
+        if ( $cVar10 ) {
+            $aValues[10] = $cVar10;
+        }
+
+        if ( $cVar11 ) {
+            $aValues[11] = $cVar11;
+        }
+
+        if ( $cVar12 ) {
+        	$aValues[12] = $cVar12;
+        }
+
+        if ( $cVar13 ) {
+            $aValues[13] = $cVar13;
+        }
+
+        $this->appendPreScript( $this->getEmosCustomPageArray( $aValues ) );
+    }
 
     /**
      *

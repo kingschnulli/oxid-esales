@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package setup
  * @copyright © OXID eSales AG 2003-2008
- * $Id: index.php 14749 2008-12-15 16:23:50Z rimvydas.paskevicius $
+ * $Id: index.php 14778 2008-12-16 15:50:34Z vilma $
  */
 
 
@@ -457,9 +457,11 @@ function getNextModuleInfo()
             case 'allow_url_fopen':
                 // Activated allow_url_fopen or fsockopen on port 80 possible
                 $iModStat = @ini_get('allow_url_fopen');
-                $iModStat = ( $iModStat && strcasecmp( '1', $iModStat ) ) ? 2 : 0;
-                if ( !$iModStat ) {
-                    if ( $oRes = @fsockopen( 'www.oxid-esales.com', 80 ) ) {
+                $iModStat = ( $iModStat && strcasecmp( '1', $iModStat ) ) ? 2 : 1;
+                if ( $iModStat == 1 ) {
+                    $iErrNo  = 0;
+                    $sErrStr = '';
+                    if ( $oRes = @fsockopen( 'www.oxid-esales.com', 80, $iErrNo, $sErrStr, 10 ) ) {
                         $iModStat = 2;
                         fclose( $oRes );
                     }
@@ -468,8 +470,8 @@ function getNextModuleInfo()
                 break;
             case 'php4_compat':
                 // PHP4 compatibility mode must be set off. (zend.ze1_compatibility_mode = Off)
-                $iModStat = @ini_get( 'zend.ze1_compatibility_mode' );
-                $iModStat = ( $iModStat == '' ) ? 2 : ( ( (int) ( strcasecmp( 'off', $iModStat ) || strcasecmp( '0', $iModStat ) ) ) ? 2 : 0 );
+                $sZendStatus = ( strtolower( (string) @ini_get( 'zend.ze1_compatibility_mode' ) ) );
+                $iModStat = in_array( $sZendStatus, array( 'on', '1' ) ) ? 0 : 2;
                 break;
             case 'phpversion':
                 // PHP 5.2.0 or higher. Due to performance matters, PHP 5.2.6 recommended.
@@ -520,7 +522,8 @@ function getNextModuleInfo()
                 break;
             case 'register_globals':
                 // register_globals off
-                $iModStat = strcasecmp( 'off', @ini_get('register_globals') ) ? 2 : 0;
+                $sGlobStatus = ( strtolower( (string) @ini_get( 'register_globals' ) ) );
+                $iModStat = in_array( $sGlobStatus, array( 'on', '1' ) ) ? 0 : 2;
                 break;
             case 'memory_limit':
                 if ( $sMemLimit = @ini_get('memory_limit') ) {
@@ -1133,7 +1136,9 @@ if ( $istep == 0) {
 </tr>
 <tr>
     <td><?php echo( $aLang['STEP_6_LINK_TO_SHOP_ADMIN_AREA'] ) ?>: </td>
-    <td><a href="<?php echo( $aPath['sURL']); ?>/admin/" target="_new" id="linkToAdmin" style="text-decoration: underline"><strong><?php echo( $aLang['STEP_6_TO_SHOP_ADMIN'] ) ?></strong></a></td>
+    <td><a href="<?php echo( $aPath['sURL']); ?>/admin/" target="_new" id="linkToAdmin" style="text-decoration: underline"><strong><?php echo( $aLang['STEP_6_TO_SHOP_ADMIN'] ) ?></strong></a>
+    ( <?php echo( $aLang['STEP_6_ADDITIONAL_LOGIN_INFO'] ) ?> )
+    </td>
 </tr>
 </table>
 <br>

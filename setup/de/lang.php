@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package setup
  * @copyright © OXID eSales AG 2003-2008
- * $Id: lang.php 14727 2008-12-15 08:56:08Z philipp.grashoff $
+ * $Id: lang.php 14778 2008-12-16 15:50:34Z vilma $
  */
 
 $aLang = array(
@@ -66,7 +66,7 @@ $aLang = array(
 'MOD_SERVER_CONFIG'                               => 'Server-Konfiguration',
 
 'MOD_MOD_REWRITE'                                 => 'Apache mod_rewrite Modul',
-'MOD_ALLOW_URL_FOPEN'                             => 'URL fopen erlaubt',
+'MOD_ALLOW_URL_FOPEN'                             => 'allow_url_fopen oder fsockopen auf Port 80',
 'MOD_PHP4_COMPAT'                                 => 'Zend Kompatibilit&auml;tsmodus ausgeschaltet',
 'MOD_PHPVERSION'                                  => 'PHP mindestens Version 5.2.0',
 'MOD_REQUEST_URI'                                 => 'REQUEST_URI vorhanden',
@@ -86,8 +86,8 @@ $aLang = array(
 'STEP_0_ERROR_TEXT'                               => 'Ihr System erf&uuml;llt nicht alle n&ouml;tigen Systemvoraussetzungen',
 'STEP_0_TEXT'                                     => '<ul class="req">'.
                                                      '<li class="pass"> - Die Voraussetzung ist erf&uuml;llt.</li>'.
-                                                     '<li class="pmin"> - Die Voraussetzung ist nicht oder nur teilweise erf&uuml;llt, aber der eShop funktioniert trotzdem.</li>'.
-                                                     '<li class="fail"> - Die Voraussetzung ist nicht erf&uuml;llt. Der eShop funktioniert nicht ohne diese Voraussetzung.</li>'.
+                                                     '<li class="pmin"> - Die Voraussetzung ist nicht oder nur teilweise erf&uuml;llt. Der OXID eShop funktioniert trotzdem und kann installiert werden.</li>'.
+                                                     '<li class="fail"> - Die Voraussetzung ist nicht erf&uuml;llt. Der OXID eShop funktioniert nicht ohne diese Voraussetzung und kann nicht installiert werden.</li>'.
                                                      '<li class="null"> - Die Voraussetzung konnte nicht &uuml;berpr&uuml;ft werden.'.
                                                      '</ul>',
 'STEP_0_DESC'                                     => 'In diesem Schritt wird &uuml;berpr&uuml;ft, ob Ihr System die Voraussetzungen erf&uuml;llt:',
@@ -156,6 +156,7 @@ $aLang = array(
 'STEP_6_LINK_TO_SHOP_ADMIN_AREA'                  => "Zugang zu Ihrer Shop Administration",
 'STEP_6_TO_SHOP'                                  => "Zum Shop",
 'STEP_6_TO_SHOP_ADMIN'                            => "Zur Shop Administration",
+'STEP_6_ADDITIONAL_LOGIN_INFO'                    => 'Nutzen Sie "admin" als Benutzer und Passwort',
 
 'ATTENTION'                                       => "Bitte beachten Sie",
 'SETUP_DIR_DELETE_NOTICE'                         => "WICHTIG: Bitte l&ouml;schen Sie Ihr Setup Verzeichnis falls dieses nicht bereits automatisch entfernt wurde!",
