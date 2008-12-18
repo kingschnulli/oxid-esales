@@ -69,7 +69,7 @@ function EditThis( sID)
     <td class="listitem[{ $blWhite }]">&nbsp;[{ $oUser->oxuser__oxusername->value }]</td>
     <td class="listitem[{ $blWhite }]">&nbsp;[{ $oUser->oxuser__oxfname->value }]</td>
     <td class="listitem[{ $blWhite }]">&nbsp;[{ $oUser->oxuser__oxlname->value }]</td>
-    <td class="listitem[{ $blWhite }]">&nbsp;[{ $oUser->getHashedPassword() }]</td>
+    <td class="listitem[{ $blWhite }]">&nbsp;[{ $oUser->getPasswordHash() }]</td>
   </tr>
 [{if $blWhite == "2"}]
 [{assign var="blWhite" value=""}]

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package setup
  * @copyright © OXID eSales AG 2003-2008
- * $Id: index.php 14778 2008-12-16 15:50:34Z vilma $
+ * $Id: index.php 14800 2008-12-17 12:35:20Z arvydas $
  */
 
 
@@ -898,23 +898,6 @@ if ( $istep == 0) {
             exit();
         }
     }
-
-    // generating password salt
-    $sPassSalt = generateUID();
-    $sPassKey  = generateUID();
-    $oConfk = new Conf();
-
-
-        $sShopId = 'oxbaseshop';
-
-    // inserting password salt
-    $sQ = "insert into oxconfig ( oxid, oxshopid, oxvarname, oxvartype, oxvarvalue )
-           values( '{$sPassKey}', '{$sShopId}', 'sPasswdSalt', 'str', ENCODE( '{$sPassSalt}', '{$oConfk->sConfigKey}' ) )";
-    mysql_query( $sQ );
-
-    // encoding demo passwords ..
-    $sQ = "update oxuser set oxpassword = MD5( CONCAT( oxpassword, '{$sPassSalt}' ) )";
-    mysql_query( $sQ );
 
     //update dyn pages / shop country config options (from first step)
     saveDynPagesSettings();

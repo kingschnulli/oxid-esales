@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2008
- * $Id: oxuser.php 14766 2008-12-16 12:06:11Z arvydas $
+ * $Id: oxuser.php 14801 2008-12-17 12:57:24Z arvydas $
  */
 
 /**
@@ -1108,9 +1108,10 @@ class oxUser extends oxBase
         if ( $sPassword ) {
 
             $sShopID = $myConfig->getShopId();
+            $oDb = oxDb::getDb();
 
-            $sUserSelect = is_numeric( $sUser ) ? "oxuser.oxcustnr = {$sUser} " : "oxuser.oxusername = " . oxDb::getDb()->Quote( $sUser );
-            $sPassSelect = " oxuser.oxpassword = '".$this->encodePassword( $sPassword )."' ";
+            $sUserSelect = is_numeric( $sUser ) ? "oxuser.oxcustnr = {$sUser} " : "oxuser.oxusername = " . $oDb->quote( $sUser );
+            $sPassSelect = " oxuser.oxpassword = MD5( CONCAT( ".$oDb->quote( $sPassword ).", UNHEX( oxuser.oxpasssalt ) ) ) ";
             $sShopSelect = "";
 
 
@@ -1133,7 +1134,7 @@ class oxUser extends oxBase
             }
 
             // load from DB
-            $aData = oxDb::getDb()->getAll( $sSelect );
+            $aData = $oDb->getAll( $sSelect );
             $sOXID = @$aData[0][0];
             if ( isset( $sOXID ) && $sOXID && !@$aData[0][1] ) {
 
@@ -1956,17 +1957,34 @@ class oxUser extends oxBase
      *
      * @return string
      */
-    public function encodePassword( $sPassword )
+    public function encodePassword( $sPassword, $sSalt )
     {
         $oDb = oxDb::getDb();
-        $myConfig = $this->getConfig();
-        $sShopId = $myConfig->getShopId();
+        return $oDb->getOne( "select MD5( CONCAT( ".$oDb->quote( $sPassword ).", UNHEX( '{$sSalt}' ) ) )" );
+    }
 
-        $sQ = "select MD5( CONCAT( ".$oDb->quote( $sPassword ).", (
-                      select DECODE( oxvarvalue, '".$myConfig->getConfigParam( "sConfigKey" )."') from oxconfig where oxshopid = '{$sShopId}' and oxvarname = 'sPasswdSalt'
-                ) ) )";
+    /**
+     * Returns safe salt value (heximal representation)
+     *
+     * @param string $sSalt any unique string value
+     *
+     * @return string
+     */
+    public function prepareSalt( $sSalt )
+    {
+        return ( $sSalt ? oxDb::getDb()->getOne( "select HEX( '{$sSalt}' )" ) : '' );
+    }
 
-        return $oDb->getOne( $sQ );
+    /**
+     * Returns plains password salt representation
+     *
+     * @param string $sSaltHex heximal representation of password salt value
+     *
+     * @return string
+     */
+    public function decodeSalt( $sSaltHex )
+    {
+    	return ( $sSaltHex ? oxDb::getDb()->getOne( "select UNHEX( '{$sSaltHex}' )" ) : '' );
     }
 
     /**
@@ -1978,9 +1996,14 @@ class oxUser extends oxBase
      */
     public function setPassword( $sPassword = null )
     {
+        // setting salt if password is not empty
+        $sSalt = $sPassword ? $this->prepareSalt( oxUtilsObject::getInstance()->generateUID() ) : '';
+
         // encoding only if password was not empty (e.g. user registration without pass)
-        $sPassword = $sPassword ? $this->encodePassword( $sPassword ) : '';
+        $sPassword = $sPassword ? $this->encodePassword( $sPassword, $sSalt ) : '';
+
         $this->oxuser__oxpassword = new oxField( $sPassword, oxField::T_RAW );
+        $this->oxuser__oxpasssalt = new oxField( $sSalt, oxField::T_RAW );
     }
 
      /**
@@ -1992,7 +2015,7 @@ class oxUser extends oxBase
       */
     public function isSamePassword( $sNewPass )
     {
-        return $this->encodePassword( $sNewPass ) == $this->oxuser__oxpassword->value;
+        return $this->encodePassword( $sNewPass, $this->oxuser__oxpasssalt->value ) == $this->oxuser__oxpassword->value;
     }
 
      /**
@@ -2011,18 +2034,18 @@ class oxUser extends oxBase
      *
      * @return string
      */
-    public function getHashedPassword()
+    public function getPasswordHash()
     {
     	$sHash = null;
         if ( $this->oxuser__oxpassword->value ) {
-            $sHash = $this->oxuser__oxpassword->value;
             if ( strpos( $this->oxuser__oxpassword->value, 'ox_' ) === 0 ) {
                 // decodable pass ?
-                $sHash = $this->encodePassword( oxUtils::getInstance()->strRem( $this->oxuser__oxpassword->value ) );
+                $this->setPassword( oxUtils::getInstance()->strRem( $this->oxuser__oxpassword->value ) );
             } elseif ( strlen( $this->oxuser__oxpassword->value ) < 32 ) {
                 // plain pass ?
-                $sHash = $this->encodePassword( $this->oxuser__oxpassword->value );
+                $this->setPassword( $this->oxuser__oxpassword->value );
             }
+            $sHash = $this->oxuser__oxpassword->value;
     	}
         return $sHash;
     }

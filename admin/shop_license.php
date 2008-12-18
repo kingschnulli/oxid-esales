@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: shop_license.php 14786 2008-12-16 17:22:04Z tomas $
+ * $Id: shop_license.php 14807 2008-12-17 16:05:03Z tomas $
  */
 
 /**
@@ -75,6 +75,7 @@ class Shop_License extends Shop_Config
         }
 
         $this->_aViewData["version"]         = $myConfig->detectVersion();
+
 
 
 
