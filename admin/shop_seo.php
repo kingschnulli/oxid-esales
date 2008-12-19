@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2008
- * $Id: shop_seo.php 14648 2008-12-11 15:35:59Z arvydas $
+ * $Id: shop_seo.php 14839 2008-12-19 10:22:19Z arvydas $
  */
 
 /**
@@ -134,11 +134,7 @@ class Shop_Seo extends Shop_Config
         $iDefLang = $this->getConfig()->getConfigParam( 'iDefSeoLang' );
         $iUserLang = (int) ( ( isset( $aConfParams['iDefSeoLang'] ) )? $aConfParams['iDefSeoLang'] : 0 );
         if ( $iDefLang != $iUserLang ) {
-            $oEncoder->markAsExpired( null, $soxId, 2 );
-
-            // resetting tag cache
-            $oTagCloud = oxNew('oxtagcloud');
-            $oTagCloud->resetTagCache();
+            $this->resetSeoData( $soxId );
         }
 
         $oShop = oxNew( 'oxshop' );
