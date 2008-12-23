@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package setup
  * @copyright © OXID eSales AG 2003-2008
- * $Id: index.php 14800 2008-12-17 12:35:20Z arvydas $
+ * $Id: index.php 14878 2008-12-23 12:29:07Z vilma $
  */
 
 
@@ -405,7 +405,6 @@ function getBytes( $sBytes )
 function getNextModuleInfo()
 {
     static $aRequiredModules;
-    static $aLoadedExtensions;
     if ( $aRequiredModules == null ) {
         $aRequiredPHPExtensions = array(
             'phpversion',
@@ -437,9 +436,6 @@ function getNextModuleInfo()
         $aRequiredModules = array_fill_keys($aRequiredPHPExtensions,'php_extennsions') +
                             array_fill_keys($aRequiredPHPConfigs,'php_config') +
                             array_fill_keys($aRequiredServerConfigs,'server_config');
-
-        // array of loaded extensions for nicer check
-        $aLoadedExtensions = array_merge(get_loaded_extensions(false),get_loaded_extensions(true));
     }
 
     if ( (  $sModule = key( $aRequiredModules ) ) ) {
@@ -492,27 +488,27 @@ function getNextModuleInfo()
                 break;
             case 'json':
                 // JSON
-                $iModStat = in_array( 'json', $aLoadedExtensions ) ? 2 : 0;
+                $iModStat = extension_loaded( 'json' ) ? 2 : 0;
                 break;
             case 'iconv':
                 // iconv-extension
-                $iModStat = in_array( 'iconv', $aLoadedExtensions ) ? 2 : 0;
+                $iModStat = extension_loaded( 'iconv' ) ? 2 : 0;
                 break;
             case 'tokenizer':
                 // tokenizer
-                $iModStat = in_array( 'tokenizer', $aLoadedExtensions ) ? 2 : 0;
+                $iModStat = extension_loaded( 'tokenizer' ) ? 2 : 0;
                 break;
             case 'bcmath':
                 // bcmath
-                $iModStat = in_array( 'bcmath', $aLoadedExtensions ) ? 2 : 1;
+                $iModStat = extension_loaded( 'bcmath' ) ? 2 : 1;
                 break;
             case 'mysql_connect':
                 // MySQL module for MySQL5
-                $iModStat = in_array( 'mysql', $aLoadedExtensions ) ? 2 : 0;
+                $iModStat = extension_loaded( 'mysql' ) ? 2 : 0;
                 break;
             case 'gd_info':
                 // GDlib version
-                $iModStat = in_array( 'gd', $aLoadedExtensions ) ? 1 : 0;
+                $iModStat = extension_loaded( 'gd' ) ? 1 : 0;
                 $iModStat = function_exists( 'imagecreatetruecolor' ) ? 2 : $iModStat;
                 $iModStat = function_exists( 'imagecreatefromjpeg' ) ? $iModStat : 0;
                 break;
