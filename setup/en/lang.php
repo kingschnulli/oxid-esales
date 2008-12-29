@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2008
- * $Id: lang.php 14778 2008-12-16 15:50:34Z vilma $
+ * $Id: lang.php 14900 2008-12-29 15:36:27Z ralf $
  */
 
 $aLang = array(
@@ -164,10 +164,10 @@ $aLang = array(
 'SELECT_SETUP_LANG'                               => "Please choose your language",
 'SELECT_COUNTRY_LANG'                             => "Please choose your country",
 'SELECT_SETUP_LANG_SUBMIT'                        => "Select",
-'USE_DYNAMIC_PAGES'                               => "To improve your bussiness get additional information from OXID's server. <br>Learn about our ",
-'PRIVACY_POLICY'                                  => "privacy policy",
+'USE_DYNAMIC_PAGES'                               => "To increase your business success get additional information from OXID's server. You find more information in our ",
+'PRIVACY_POLICY'                                  => "privacy statements",
 
-'LOAD_DYN_CONTENT_NOTICE'                         => "<p>If checkbox &quot;more information&quot; is set, you will see an additonal menu in admin area of your OXID eShop.</p><p>In that menu you get further information about E-Commerce Services like Google productsearch.</p> <p>You can change this settings at any time.</p>",
+'LOAD_DYN_CONTENT_NOTICE'                         => "<p>If checkbox &quot;more information&quot; is set, you will see an additional menu in the admin area of your OXID eShop.</p><p>In that menu you get further information about e-commerce services like Google product search.</p> <p>You can change these settings at any time.</p>",
 
 
 );
