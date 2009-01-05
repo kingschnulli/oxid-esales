@@ -56,20 +56,26 @@
 <body>
 
 <div id="page">
-    <a href="index.php?istep=1&sid=<?php echo( getSID()); ?>"><img src="<?php echo $sImagDir; ?>/setup_logo.gif" alt="OXID eSales" hspace="5" vspace="5" border="0"></a>
+    <a href="index.php?istep=<?php echo STEP_WELCOME; ?>&sid=<?php echo( getSID()); ?>"><img src="<?php echo $sImagDir; ?>/setup_logo.gif" alt="OXID eSales" hspace="5" vspace="5" border="0"></a>
     <div id="header">
-        <?php for ($_tab = 0;$_tab <= 6;$_tab++):
+        <?php
+        $iCntr = 0;
+        foreach ( $aSetupSteps as $_tab ) {
 
-            $_sStepNr = $_tab;
+            // only "real" steps
+            if ( fmod( $_tab, 100 ) ) {
+                continue;
+            }
 
-                if ($_tab == 5) continue;
-                if ($_tab == 6) $_sStepNr = 5;
+            $blAct = ( floor( $istep / 100 ) == ( $_tab / 100 ) );
+            $iStepId = floor( $_tab / 100 ) - 1;
+            $iCntr++;
         ?>
-        <dl class="tab <?php if( $istep[0] == $_tab){ echo "act";} ?>">
-            <dt><?php if( $istep[0] == $_tab): ?><a href="index.php?istep=<?php echo $_tab; ?>&sid=<?php echo getSID();?>"><?php endif;?><?php echo ( $_sStepNr + 1 ),'. ',$aLang['TAB_'.$_tab.'_TITLE']; ?><?php if( $istep[0] == $_tab): ?></a><?php endif;?></dt>
-            <dd><?php if( $istep[0] == $_tab): ?><a href="index.php?istep=<?php echo $_tab; ?>&sid=<?php echo getSID();?>"><?php endif;?><?php echo $aLang['TAB_'.$_tab.'_DESC'] ?><?php if( $istep[0] == $_tab): ?></a><?php endif;?></dd>
+        <dl class="tab <?php if( $blAct ){ echo "act";} ?>">
+            <dt><?php if( $blAct ): ?><a href="index.php?istep=<?php echo $_tab; ?>&sid=<?php echo getSID();?>"><?php endif;?><?php echo $iCntr ,'. ',$aLang['TAB_'.$iStepId.'_TITLE']; ?><?php if( $blAct ): ?></a><?php endif;?></dt>
+            <dd><?php if( $blAct ): ?><a href="index.php?istep=<?php echo $_tab; ?>&sid=<?php echo getSID();?>"><?php endif;?><?php echo $aLang['TAB_'.$iStepId.'_DESC'] ?><?php if( $blAct ): ?></a><?php endif;?></dd>
         </dl>
-        <?php endfor; ?>
+        <?php } ?>
     </div>
 
     <div id="body">

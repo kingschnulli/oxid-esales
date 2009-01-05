@@ -17,7 +17,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2008
+ * @copyright © OXID eSales AG 2003-2009
  * $Id: oxsupercfg.php 14641 2008-12-11 14:11:43Z vilma $
  */
 class oxSuperCfg

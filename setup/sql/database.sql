@@ -1628,6 +1628,7 @@ CREATE TABLE `oxuser` (
   `OXSHOPID` char( 32 ) NOT NULL default '',
   `OXUSERNAME` varchar(255) NOT NULL default '',
   `OXPASSWORD` varchar(128) NOT NULL default '',
+  `OXPASSSALT` char(128) NOT NULL,
   `OXCUSTNR` int(11) NOT NULL default '0',
   `OXUSTID` VARCHAR( 255 ) NOT NULL default '',
   `OXCOMPANY` varchar(255) NOT NULL default '',
@@ -1651,8 +1652,7 @@ CREATE TABLE `oxuser` (
   `OXURL` varchar(255) NOT NULL default '',
   `OXDISABLEAUTOGRP` tinyint(1) NOT NULL default '0',
   `OXUPDATEKEY` CHAR( 32 ) NOT NULL default '',
-  `OXUPDATEEXP` int(11) NOT NULL default '0',
-  `OXPASSSALT` char(128) NOT NULL,
+  `OXUPDATEEXP` int(11) NOT NULL default '0',  
   PRIMARY KEY  (`OXID`),
   UNIQUE `OXUSERNAME` (`OXUSERNAME`, `OXSHOPID`),
   KEY `OXPASSWORD` (`OXPASSWORD`),
@@ -1663,7 +1663,7 @@ CREATE TABLE `oxuser` (
 # Daten für Tabelle `oxuser`
 #
 
-INSERT INTO `oxuser` VALUES ('oxdefaultadmin', '1', 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', 1, '', 'Ihr Firmenname', 'Hans', 'Mustermann', 'Musterstr.', '10', '', 'Musterstadt', 'a7c40f631fc920687.20179984', '79098', '0800 1234567', '0800 1234567', 'Herr', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', '0', '', '0', '61646D696E');
+INSERT INTO `oxuser` VALUES ('oxdefaultadmin', '1', 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Ihr Firmenname', 'Hans', 'Mustermann', 'Musterstr.', '10', '', 'Musterstadt', 'a7c40f631fc920687.20179984', '79098', '0800 1234567', '0800 1234567', 'Herr', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', '0', '', '0');
 
 #
 # Tabellenstruktur für Tabelle `oxuserpayments`

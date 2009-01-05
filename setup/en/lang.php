@@ -17,7 +17,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package lang
- * @copyright © OXID eSales AG 2003-2008
+ * @copyright © OXID eSales AG 2003-2009
  * $Id: lang.php 14900 2008-12-29 15:36:27Z ralf $
  */
 

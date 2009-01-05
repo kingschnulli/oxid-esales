@@ -145,13 +145,13 @@ class EmosOxidCode extends oxSuperCfg
             $this->_oEmos->setSid( $this->getSession()->getId() );
 
             // set page id
-            $oEmos->addPageID( $this->_getEmosPageId( $this->_getTplName() ) );
+            $this->_oEmos->addPageID( $this->_getEmosPageId( $this->_getTplName() ) );
 
             // language id
-            $oEmos->addLangID( oxLang::getInstance()->getBaseLanguage() );
+            $this->_oEmos->addLangID( oxLang::getInstance()->getBaseLanguage() );
 
             // set site ID
-            $oEmos->addSiteID( $myConfig->getShopId() );
+            $this->_oEmos->addSiteID( $this->getConfig()->getShopId() );
         }
 
         return $this->_oEmos;
