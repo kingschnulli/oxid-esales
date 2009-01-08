@@ -49,7 +49,7 @@ require_once oxConfig::getInstance()->getConfigParam( 'sCoreDir' ) . 'smarty/plu
  * The smarty tempaltes should include s tag like
  * [{insert name="oxid_tracker" title=$template_title }]
  */
-class EmosOxidCode extends oxSuperCfg
+class oxEmosAdapter extends oxSuperCfg
 {
     /**
      * Current view category path
@@ -66,9 +66,9 @@ class EmosOxidCode extends oxSuperCfg
     protected $_oEmos = null;
 
     /**
-     * EmosOxidCode class instance.
+     * oxEmosAdapter class instance.
      *
-     * @var EmosOxidCode instance
+     * @var oxEmosAdapter instance
      */
     private static $_instance = null;
 
@@ -79,8 +79,8 @@ class EmosOxidCode extends oxSuperCfg
      */
     public static function getInstance()
     {
-        if ( !self::$_instance instanceof EmosOxidCode ) {
-            self::$_instance = new EmosOxidCode();
+        if ( !self::$_instance instanceof oxEmosAdapter ) {
+            self::$_instance = new oxEmosAdapter();
         }
         return self::$_instance;
     }
@@ -213,7 +213,7 @@ class EmosOxidCode extends oxSuperCfg
     {
         if ( $this->_sEmosCatPath === null ) {
             $sCatPath = '';
-            if ( ( $oActCatPath = oxConfig::getInstance()->getActiveView()->getCatTreePath() ) ) {
+            if ( ( $oActCatPath = $this->getConfig()->getActiveView()->getCatTreePath() ) ) {
                 foreach( $oActCatPath as $oCat ) {
                     if ( $sCatPath ) {
                         $sCatPath .= '/';
