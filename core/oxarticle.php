@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxarticle.php 14744 2008-12-15 13:54:50Z vilma $
+ * $Id: oxarticle.php 14962 2009-01-07 09:44:46Z tomas $
  */
 
 /**
@@ -2316,7 +2316,11 @@ class oxArticle extends oxI18n
         }
 
         $sFile = str_replace('nopic.jpg', 'nopic_ico.jpg', $sFile);
-        return $this->getConfig()->getPictureUrl( 'icon/' ). basename($sFile);
+
+        //$sFile = $this->getConfig()->getPictureUrl( 'icon/' ). basename($sFile);
+        $sFile = $this->getConfig()->getPictureUrl( $sFile );
+
+        return $sFile;
     }
 
     /**
