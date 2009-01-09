@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxuser.php 14801 2008-12-17 12:57:24Z arvydas $
+ * $Id: oxuser.php 14979 2009-01-08 08:38:42Z arvydas $
  */
 
 /**
@@ -1714,10 +1714,33 @@ class oxUser extends oxBase
                 continue;
             }
 
-            if ( !isset( $aFields[$sMustField] ) || ! trim( $aFields[$sMustField] ) ) {
+            if ( isset( $aFields[$sMustField] ) && is_array( $aFields[$sMustField] ) ) {
+                $this->_checkRequiredArrayFields( $sMustField, $aFields[$sMustField] );
+            } elseif ( !isset( $aFields[$sMustField] ) || !trim( $aFields[$sMustField] ) ) {
                    $oEx = oxNew( 'oxInputException' );
                    $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS');
                    throw $oEx;
+            }
+        }
+    }
+
+    /**
+     * Checks if all values are filled up
+     *
+     * @param strinf $sFieldName   checking field name
+     * @param array  $aFieldValues field values
+     *
+     * @throws oxInputExcpetion exception
+     *
+     * @return null
+     */
+    protected function _checkRequiredArrayFields( $sFieldName, $aFieldValues )
+    {
+        foreach ( $aFieldValues as $sValue ) {
+            if ( !trim( $sValue ) ) {
+               $oEx = oxNew( 'oxInputException' );
+               $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS');
+               throw $oEx;
             }
         }
     }

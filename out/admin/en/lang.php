@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 14758 2008-12-16 09:01:19Z arvydas $
+ * $Id: lang.php 14989 2009-01-08 09:17:27Z arvydas $
  */
 
 $sLangName  = 'English';
@@ -427,8 +427,8 @@ $aLang = array(
 'ARTICLE_REVIEW_ACTIVE'                         => 'Active',
 'ARTICLE_REVIEW_POSTEDFROM'                     => 'Posted from: ',
 'ARTICLE_REVIEW_TEXT'                           => 'Text: ',
-'ARTICLE_RIGHTS_SETGROUPS'                      => 'Exclusively visible to User Group',
-'ARTICLE_RIGHTS_SETGROUPS2'                     => 'Exclusively buyable by User Group',
+'ARTICLE_RIGHTS_SETGROUPS_BUYABLE'              => 'Exclusively visible to User Group',
+'ARTICLE_RIGHTS_SETGROUPS_VISIBLE'              => 'Exclusively buyable by User Group',
 'ARTICLE_RIGHTS_ALLGROUPS'                      => 'All User Groups',
 'ARTICLE_RIGHTS_ASSIGNVISIBLE'                  => 'Assign User Groups ( Exclusively visible )',
 'ARTICLE_RIGHTS_ASSIGNBUYABLE'                  => 'Assign User Groups ( Exclusively buyable )',

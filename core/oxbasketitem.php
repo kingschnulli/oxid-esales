@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxbasketitem.php 14378 2008-11-26 13:59:41Z vilma $
+ * $Id: oxbasketitem.php 14978 2009-01-08 08:35:59Z arvydas $
  */
 
 /**
@@ -255,7 +255,7 @@ class oxBasketItem extends oxSuperCfg
 
 
         // checking for stock
-        $iOnStock = $oArticle->checkForStock( $dAmount );
+        $iOnStock = $oArticle->checkForStock( $dAmount + $this->_dAmount );
 
         if ( $iOnStock !== true ) {
             if ( $iOnStock === false ) {
@@ -264,6 +264,7 @@ class oxBasketItem extends oxSuperCfg
             } else {
                 // limited stock
                 $dAmount = $iOnStock;
+                $blOverride = true;
             }
         }
 
@@ -865,7 +866,7 @@ class oxBasketItem extends oxSuperCfg
      * @return string
      */
     public function getVatPercent()
-    {        
+    {
         return oxLang::getInstance()->formatVat( $this->getPrice()->getVat() );
     }
 

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: content_main.php 14410 2008-11-28 16:02:31Z arvydas $
+ * $Id: content_main.php 14987 2009-01-08 08:48:15Z arvydas $
  */
 
 /**
@@ -89,7 +89,7 @@ class Content_Main extends oxAdminDetails
         }
 
         $this->_aViewData["edit"] = $oContent;
-        $this->_aViewData["link"] = "[{ oxgetseourl oxid=&quot;".$oContent->getId()."&quot; type=&quot;oxcontent&quot; }]";
+        $this->_aViewData["link"] = "[{ oxgetseourl ident=&quot;".$oContent->oxcontents__oxloadid->value."&quot; type=&quot;oxcontent&quot; }]";
         $this->_aViewData["cattree"] = $oCatTree;
 
         // generate editor

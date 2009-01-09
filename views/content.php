@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: content.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: content.php 14985 2009-01-08 08:46:30Z arvydas $
  */
 
 /**
@@ -43,6 +43,18 @@ class Content extends oxUBase
      * @var string
      */
     protected $_sThisTemplate = 'content.tpl';
+
+    /**
+     * Current view plain template
+     * @var string
+     */
+    protected $_sThisPlainTemplate = 'content_plain.tpl';
+
+    /**
+     * Current view content category (if available)
+     * @var oxcontent
+     */
+     protected $_oContentCat = null;
 
     /**
      * Unsets SEO category and call parent::init();
@@ -93,7 +105,38 @@ class Content extends oxUBase
         $this->setMetaDescription( $this->getContent()->oxcontents__oxtitle->value, 200, true );
         $this->setMetaKeywords( $this->getContent()->oxcontents__oxtitle->value );
 
+        // sometimes you need to display plain templates (e.g. when showing popups)
+        if ( $this->showPlainTemplate() ) {
+            $this->_sThisTemplate = $this->_sThisPlainTemplate;
+        }
         return $this->_sThisTemplate;
+    }
+
+    /**
+     * If current content is assigned to category returns its object
+     *
+     * @return oxcontent
+     */
+    public function getContentCategory()
+    {
+    	if ( $this->_oContentCat === null ) {
+            // setting default status ..
+            $this->_oContentCat = false;
+            if ( ( $oContent = $this->getContent() ) && $oContent->oxcontents__oxtype->value == 2 ) {
+                $this->_oContentCat = $oContent;
+            }
+        }
+        return $this->_oContentCat;
+    }
+
+    /**
+     * Returns true if user forces to display plain template
+     *
+     * @return bool
+     */
+    public function showPlainTemplate()
+    {
+    	return (bool) oxConfig::getParameter( 'plain' );
     }
 
     /**
@@ -151,5 +194,4 @@ class Content extends oxUBase
     {
         return $this->getContent();
     }
-
 }

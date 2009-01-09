@@ -52,7 +52,7 @@
         </tr>
         <tr class="edittext">
             <td align="center"><b>[{ oxmultilang ident="ARTICLE_RIGHTS_ALLGROUPS" }]</b></td>
-            <td align="center"><b>[{ oxmultilang ident="ARTICLE_RIGHTS_SETGROUPS2" }]</b></td>
+            <td align="center"><b>[{ oxmultilang ident="ARTICLE_RIGHTS_SETGROUPS_VISIBLE" }]</b></td>
         </tr>
         <tr>
             <td valign="top" id="container1"></td>

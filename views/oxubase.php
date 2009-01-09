@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxubase.php 14135 2008-11-11 13:54:45Z arvydas $
+ * $Id: oxubase.php 14985 2009-01-08 08:46:30Z arvydas $
  */
 
 /**
@@ -187,6 +187,12 @@ class oxUBase extends oxView
      * @var string
      */
     protected $_sCatTreePath = null;
+
+    /**
+     * Loaded contents array (cache)
+     * @var array
+     */
+     protected $_aContents = array();
 
     /**
      * In non admin mode checks if request was NOT processed by seo handler.
@@ -979,5 +985,31 @@ class oxUBase extends oxView
     public function getCatTreePath()
     {
         return $this->_sCatTreePath;
+    }
+
+    /**
+     * Loads and returns oxcontent object requested by its ident
+     *
+     * @param string $sIdent content identifier
+     *
+     * @return oxcontent
+     */
+    public function getContentByIdent( $sIdent )
+    {
+    	if ( !isset( $this->_aContents[$sIdent] ) ) {
+            $this->_aContents[$sIdent] = oxNew( 'oxcontent' );
+            $this->_aContents[$sIdent]->loadByIdent( $sIdent );
+        }
+        return $this->_aContents[$sIdent];
+    }
+
+    /**
+     * Default content category getter, returns FALSE by default
+     *
+     * @return bool
+     */
+    public function getContentCategory()
+    {
+    	return false;
     }
 }

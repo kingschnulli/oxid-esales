@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package smartyPlugins
  * @copyright © OXID eSales AG 2003-2009
- * $Id: modifier.oxmultilangassign.php 13723 2008-10-26 22:59:58Z alfonsas $
+ * $Id: modifier.oxmultilangassign.php 14981 2009-01-08 08:43:05Z arvydas $
  */
 
 /*
@@ -28,40 +28,30 @@
 * add [{ oxmultilang ident="..." }] where you want to display content
 * -------------------------------------------------------------
 */
-function smarty_modifier_oxmultilangassign($sIdent)
-{    $myConfig = oxConfig::getInstance();
-
-    static $aLangCache = null;
+function smarty_modifier_oxmultilangassign( $sIdent )
+{
+    if ( !isset( $sIdent ) ) {
+        $sIdent = 'IDENT MISSING';
+    }
 
     $iLang = oxLang::getInstance()->getTplLanguage();
 
     if ( !isset( $iLang ) ) {
         $iLang = oxLang::getInstance()->getBaseLanguage();
-        if ( !isset( $iLang ) )
+        if ( !isset( $iLang ) ) {
             $iLang = 0;
-    }
-
-    if ( !isset( $sIdent ) )
-        $sIdent = "IDENT MISSING";
-
-    $sSourceFile  = $myConfig->getLanguagePath("lang.php",isAdmin(),$iLang);
-    $sSourceFile2 = $myConfig->getLanguagePath("cust_lang.php",isAdmin(),$iLang);
-
-    $sText = "<b>ERROR : Translation for $sIdent not found in $sSourceFile or $sSourceFile2!</b>";
-
-    if( !$aLangCache[$iLang])
-    {   require( $sSourceFile);
-        $aLangCache[$iLang] = $aLang;
-
-        if(is_file($sSourceFile2)){
-            require( $sSourceFile2);
-            $aLangCache[$iLang] = array_merge($aLangCache[$iLang], $aLang);
         }
     }
 
-    if( isset( $aLangCache[$iLang][$sIdent])){
-        $sText = $aLangCache[$iLang][$sIdent];
+    try {
+        $sTranslation = oxLang::getInstance()->translateString( $sIdent, $iLang, isAdmin() );
+    } catch ( oxLanguageException $oEx ) {
+        // is thrown in debug mode and has to be caught here, as smarty hangs otherwise!
     }
 
-    return $sText;
+    if ( $sTranslation == $sIdent ) {
+        $sTranslation = '<b>ERROR : Translation for '.$sIdent.' not found!</b>';
+    }
+
+    return $sTranslation;
 }

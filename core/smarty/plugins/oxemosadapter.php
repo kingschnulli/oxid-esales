@@ -459,7 +459,29 @@ class oxEmosAdapter extends oxSuperCfg
                 $oEmos->addContent( 'Login/PW vergessen' );
                 break;
             case 'content':
-                $oEmos->addContent( 'Content/'.$this->_getEmosPageTitle( $aParams ) );
+                // backwards compatibility
+                $oContent = ( $oCurrView instanceof content ) ? $oCurrView->getContent() : null;
+                $sContentId = $oContent ? $oContent->oxcontents__oxloadid->value : null;
+                switch ( $sContentId ) {
+                    case 'oximpressum':
+                        $oEmos->addContent( 'Info/Impressum' );
+                        break;
+                    case 'oxagb':
+                        $oEmos->addContent( 'Info/AGB' );
+                        break;
+                    case 'oxorderinfo':
+                        $oEmos->addContent( 'Info/Bestellinfo' );
+                        break;
+                    case 'oxdeliveryinfo':
+                        $oEmos->addContent( 'Info/Versandinfo' );
+                        break;
+                    case 'oxsecurityinfo':
+                        $oEmos->addContent( 'Info/Sicherheit' );
+                        break;
+                    default:
+                        $oEmos->addContent( 'Content/'.$this->_getEmosPageTitle( $aParams ) );
+                        break;
+                }
                 break;
             case 'register':
 

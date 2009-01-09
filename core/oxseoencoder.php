@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxseoencoder.php 14649 2008-12-11 15:36:13Z arvydas $
+ * $Id: oxseoencoder.php 14980 2009-01-08 08:41:19Z arvydas $
  */
 
 /**
@@ -830,7 +830,7 @@ class oxSeoEncoder extends oxSuperCfg
         $iShopId = ( !isset( $iShopId ) ) ? oxConfig::getInstance()->getShopId():$iShopId;
         $iLang   = ( !isset( $iLang ) ) ? oxLang::getInstance()->getTplLanguage():$iLang;
 
-        return oxDb::getDb()->getOne( "select {$sMetaType} from oxseo where oxobjectid = '{$sObjectId}' and oxshopid = '{$iShopId}' and oxlang = '{$iLang}'" );
+        return oxDb::getDb()->getOne( "select {$sMetaType} from oxseo where oxobjectid = '{$sObjectId}' and oxshopid = '{$iShopId}' and oxlang = '{$iLang}' order by oxparams" );
     }
 
     /**
