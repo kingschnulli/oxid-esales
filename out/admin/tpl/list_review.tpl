@@ -130,7 +130,7 @@ function ChangeLanguage()
 
 <script type="text/javascript">
 if (parent.parent)
-{   parent.parent.sShopTitle   = "[{$actshopobj->oxshops__oxname->value}]";
+{   parent.parent.sShopTitle   = "[{$actshopobj->oxshops__oxname->getRawValue()|oxaddslashes}]";
     parent.parent.sMenuItem    = "";
     parent.parent.sMenuSubItem = "[{ oxmultilang ident="snpreviewlistheader" }]";
     parent.parent.sWorkArea    = "[{$_act}]";

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: order_overview.php 14511 2008-12-05 12:55:44Z vilma $
+ * $Id: order_overview.php 15128 2009-01-09 11:07:41Z arvydas $
  */
 
     // DTAUS
@@ -161,8 +161,8 @@ class Order_Overview extends oxAdminDetails
             $oPayment->load( $oOrder->oxorder__oxpaymentid->value);
             $aDynValues = oxUtils::getInstance()->assignValuesFromText( $oPayment->oxuserpayments__oxvalue->value );
             // #630
-            //$dtaus->addTransaktion( $aDynValues[3]->value, str_replace( array(" ", "-"), "", $aDynValues[1]->value), str_replace( array(" ", "-"), "", $aDynValues[2]->value), str_replace( ",", ".",$oOrder->ftotalorder), $oShop->oxshops__oxname->value, oxLang::getInstance()->translateString("order")." ".$oOrder->oxorder__oxordernr->value,"");
-            $dtaus->addTransaktion( $aDynValues[3]->value, str_replace( " ", "", $aDynValues[1]->value), str_replace( " ", "", $aDynValues[2]->value), str_replace( ",", ".", $oOrder->ftotalorder), $oShop->oxshops__oxname->value, oxLang::getInstance()->translateString("order")." ".$oOrder->oxorder__oxordernr->value, "");
+            //$dtaus->addTransaktion( $aDynValues[3]->value, str_replace( array(" ", "-"), "", $aDynValues[1]->value), str_replace( array(" ", "-"), "", $aDynValues[2]->value), str_replace( ",", ".",$oOrder->ftotalorder), $oShop->oxshops__oxname->getRawValue(), oxLang::getInstance()->translateString("order")." ".$oOrder->oxorder__oxordernr->value,"");
+            $dtaus->addTransaktion( $aDynValues[3]->value, str_replace( " ", "", $aDynValues[1]->value), str_replace( " ", "", $aDynValues[2]->value), str_replace( ",", ".", $oOrder->ftotalorder), $oShop->oxshops__oxname->getRawValue(), oxLang::getInstance()->translateString("order")." ".$oOrder->oxorder__oxordernr->value, "");
 
         }
 

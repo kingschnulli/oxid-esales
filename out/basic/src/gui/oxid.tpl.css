@@ -407,12 +407,13 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .product.big .price sub.only {display:block;float:left;font-weight: bold;font-size: 11px;margin-right:.5em;height: 3em;}
 #body .product.big .price .desc {color:oxProductDescCl;font-size: 10px;}
 
-#body .product.small{width:123px;height:124px;padding-left:5px;padding-top:125px;}
-#body .product.small .variants {height: 1em;}
+#body .product.small{width:123px;height:147px;padding-left:5px;padding-top:125px;}
+#body .product.small .variants {height: 3em; margin-bottom:2px;}
 #body .product.small .picture {height: 118px;}
 #body .product.small .price {white-space:nowrap;}
 #body .product.small .tocart {width:121px;}
 #body .product.small .tocart input{width:121px;}
+#body .product.small .variants select{width: 124px;}
 
 #body .product.thin{width:433px;height:130px; border-color: oxProductFilledHdBr;}
 #body .product.head strong.h4{margin:0;background:oxProductBg; padding:8px 5px 1px 7px;height:20px; position:absolute;top:-30px;left:-1px;border-top:1px solid oxProductHdBr;border-left:8px solid oxProductHdBr;border-right:1px solid oxProductHdBr;width:259px;line-height:20px; font-size: 11px;font-weight: bold;color:oxProductHdCl;}
@@ -476,7 +477,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .product.details .price big{display:block;float:left;margin-right:8px;}
 #body .product.details .price .old {font-weight: bold;font-size: 11px;}
 #body .product.details .price sup.dinfo {font-size:10px;font-weight: normal;color:oxDetailsCl;vertical-align:top;/*width:120px;display:block;word-wrap:break-word;*/float:left;line-height: inherit;width:120px;}
-#body .product.details .price sup.dinfo a {font-size: 10px; font-weight: bold;}
+#body .product.details .price sup.dinfo a {font-size: 11px; font-weight: bold;}
 #body .product.details .price sub.only {display:block;float:left;font-weight: bold;font-size: 11px;margin-right:.5em;height: 3em;}
 #body .product.details .price .desc {color:oxDetailsCl;font-size: 10px;}
 

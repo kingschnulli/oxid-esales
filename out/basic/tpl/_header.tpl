@@ -77,8 +77,10 @@
             </div>
 
             <div class="right">
-                <a id="test_HeaderTerms" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=info&amp;tpl=agb.tpl" }]" rel="nofollow">[{ oxmultilang ident="INC_HEADER_TERMS" }]</a>
-                <a id="test_HeaderImpressum" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=info&amp;tpl=impressum.tpl" }]" rel="nofollow">[{ oxmultilang ident="INC_HEADER_IMPRESSUM" }]</a>
+                [{assign var="oCont" value=$oView->getContentByIdent("oxagb") }]
+                <a id="test_HeaderTerms" href="[{ $oCont->getLink() }]" rel="nofollow">[{ $oCont->oxcontents__oxtitle->value }]</a>
+                [{assign var="oCont" value=$oView->getContentByIdent("oximpressum") }]
+                <a id="test_HeaderImpressum" href="[{ $oCont->getLink() }]" rel="nofollow">[{ $oCont->oxcontents__oxtitle->value }]</a>
                 [{if $oView->getMenueList()}]
                   [{ foreach from=$oView->getMenueList() item=oMenueContent }]
                     <a href="[{ $oViewConf->getSelfLink() }]cl=content&amp;tpl=[{$oMenueContent->oxcontents__oxid->value}]">[{$oMenueContent->oxcontents__oxtitle->value}]</a>
@@ -115,7 +117,7 @@
                     [{foreach from=$ocat->getSubCats() item=osubcat key=subcatkey name=SubCat}]
                         [{if $osubcat->getContentCats()}]
                             [{foreach from=$osubcat->getContentCats() item=osubcont key=subcontkey name=subcont}]
-                            <li><a href="[{$osubcont->getLink()}]">[{$osubcont->oxcontents__oxtitle->value}] </a></li>
+                            <li><a id="test_Top_root[{ $iCatCnt }]_Cms_[{$smarty.foreach.SubCat.iteration}]_[{$smarty.foreach.subcont.iteration}]" href="[{$osubcont->getLink()}]">[{$osubcont->oxcontents__oxtitle->value}] </a></li>
                             [{/foreach}]
                         [{/if}]
                         [{if $osubcat->getIsVisible() }]
@@ -166,7 +168,10 @@
         <div id="left">[{ include file="_left.tpl" }]</div>
         <div id="path">
             [{ oxmultilang ident="INC_HEADER_YOUAREHERE" }] / [{ $location }]
-            [{if $isStart}]<a rel="nofollow" class="dinfo" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=info&amp;tpl=delivery_info.tpl" }]">[{ oxmultilang ident="INC_HEADER_INCLTAXPLUSSHIPPING" }]</a>[{/if}]
+            [{if $isStart}]
+                [{assign var="oCont" value=$oView->getContentByIdent("oxdeliveryinfo") }]
+                <a rel="nofollow" class="dinfo" href="[{ $oCont->getLink() }]">[{ oxmultilang ident="INC_HEADER_INCLTAXPLUSSHIPPING" }]</a>
+            [{/if}]
         </div>
         <div id="right">[{include file="_right.tpl" }]</div>
         <div id="body">

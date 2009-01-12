@@ -166,7 +166,8 @@
             [{if $product->getFPrice() }]
                 <big id="test_product_price">[{ $product->getFPrice() }] [{ $currency->sign}]</big>
             [{/if}]
-            <sup class="dinfo">[{ oxmultilang ident="DETAILS_PERSPARAM_PLUSSHIPPING" }]<a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=info&amp;tpl=delivery_info.tpl" }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_PLUSSHIPPING2" }]</a></sup>
+            [{assign var="oCont" value=$oView->getContentByIdent("oxdeliveryinfo") }]
+            <sup class="dinfo">[{ oxmultilang ident="DETAILS_PERSPARAM_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_PLUSSHIPPING2" }]</a></sup>
         </div>
     [{/oxhasrights}]
 

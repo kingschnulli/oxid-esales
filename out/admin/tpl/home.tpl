@@ -9,7 +9,7 @@
 <body>
 
 <script type="text/javascript">
-    parent.sShopTitle = "[{$actshop}]";
+    parent.sShopTitle = "[{$actshop|oxaddslashes}]";
     parent.setTitle();
 </script>
 

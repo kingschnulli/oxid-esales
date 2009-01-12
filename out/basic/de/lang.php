@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 14911 2008-12-30 13:37:54Z ralf $
+ * $Id: lang.php 15187 2009-01-12 13:10:24Z vilma $
  */
 
 $sLangName  = "Deutsch";
@@ -175,9 +175,6 @@ $aLang = array(
 'ADD_RECOMM_ADDTOLIST'                            => "In die Lieblingsliste",
 'ADD_RECOMM_ADDRECOMMLINK1'                       => "Es liegen zur Zeit keine Lieblingslisten vor. Um eine neue Lieblingsliste anzulegen, klicken Sie",
 'ADD_RECOMM_ADDRECOMMLINK2'                       => "hier",
-'AGB_POPUP_AGB'                                   => "AGB",
-'AGB_AGB'                                         => "AGB",
-'RIGHTOFWITHDRAWAL'                               => "Widerrufsbelehrung",
 'BASKET_BASKET'                                   => "Warenkorb",
 'BASKET_EMPTYSHIPPINGCART'                        => "Der Warenkorb ist leer.",
 'BASKET_NEXTSTEP'                                 => "Weiter zum nächsten Schritt",
@@ -272,9 +269,6 @@ $aLang = array(
 'CONTACT_SEND'                                    => "Nachricht abschicken",
 'CONTACT_THANKYOU1'                               => "Vielen Dank für Ihre Nachricht an",
 'CONTACT_THANKYOU2'                               => ".",
-'CUSTOMER_RIGHTOFWITHDRAWAL_TITLE'                => "Widerrufsbelehrung",
-'CUSTOMER_RIGHTOFWITHDRAWAL'                      => "Widerrufsbelehrung",
-'DELIVERY_INFO_TITLE'                             => "Versand",
 'DETAILS_PERSPARAM_PRODUCTDETAILS'                => "Produktdetails",
 'DETAILS_PERSPARAM_ZOOM'                          => "[+] zoom",
 'DETAILS_PERSPARAM_ARTNOMBER'                     => "ArtNr.:",
@@ -453,7 +447,7 @@ $aLang = array(
 'EXCEPTION_INPUT_PASSTOOSHORT'                    =>"Fehler: Ihr Passwort ist zu kurz.",
 'FORGOTPWD_TITLE'                                 =>"Passwort vergessen?",
 'FORGOTPWD_FORGOTPWD'                             =>"Sie haben Ihr Passwort vergessen?",
-'FORGOTPWD_WEWILLSENDITTOYOU'                     =>"Kein Problem, hier Sie ein neues Passwort einrichten.",
+'FORGOTPWD_WEWILLSENDITTOYOU'                     =>"Kein Problem, hier können Sie ein neues Passwort einrichten.",
 'FORGOTPWD_YOUREMAIL'                             =>"Ihre E-Mail Adresse:",
 'FORGOTPWD_PWDWASSEND'                            =>"Passwort wurde verschickt an:",
 'FORGOTPWD_REQUESTPWD'                            =>"Passwort anfordern",
@@ -577,8 +571,6 @@ $aLang = array(
 'INC_FOOTER_HELP'                                 =>"Hilfe",
 'INC_FOOTER_GUESTBOOK'                            =>"Gästebuch",
 'INC_FOOTER_LINKS'                                =>"Links",
-'INC_FOOTER_IMPRESSUM'                            =>"Impressum",
-'INC_FOOTER_TERMS'                                =>"AGB",
 'INC_FOOTER_CART'                                 =>"Warenkorb",
 'INC_FOOTER_MYACCOUNT'                            =>"Mein Konto",
 'INC_FOOTER_MYNOTICELIST'                         =>"Mein Merkzettel",
@@ -589,12 +581,10 @@ $aLang = array(
 'INC_GUESTBOOK_LOCATOR_ENTRIESPERPAGE'            =>"Entries per Page:",
 'INC_HEADER_CONTACT'                              =>"Kontakt",
 'INC_HEADER_GUESTBOOK'                            =>"Gästebuch",
-'INC_HEADER_TERMS'                                =>"AGB",
 'INC_HEADER_SERVICE'                              =>"Service",
 'INC_HEADER_NOTICELIST'                           =>"Mein Merkzettel",
 'INC_HEADER_HELP'                                 =>"Hilfe",
 'INC_HEADER_LINKS'                                =>"Links",
-'INC_HEADER_IMPRESSUM'                            =>"Impressum",
 'INC_HEADER_HOME'                                 =>"HOME",
 'INC_HEADER_WISHLIST'                             =>"Mein Wunschzettel",
 'INC_HEADER_PRIVATWISHLIST'                       =>"'s Wunschzettel",
@@ -605,10 +595,6 @@ $aLang = array(
 'INC_HEADER_YOUAREHERE'                           =>"Sie sind hier:",
 'INC_HEADER_INCLTAXPLUSSHIPPING'                  =>"Alle Preise inkl. MwSt., zzgl. Versandkosten.",
 'INC_HEADER_URLMORE'                              =>"mehr",
-'INC_INFOBOX_WITHDRAWAL'                          =>"Widerrufsrecht",
-'INC_INFOBOX_HOWTOORDER'                          =>"Wie bestellen?",
-'INC_INFOBOX_SHIPPINGANDCHARGES'                  =>"Versand und Kosten",
-'INC_INFOBOX_DATAPROTECTION'                      =>"Datenschutz",
 'INC_INFOBOX_NEWSLETTER'                          =>"Newsletter",
 'INC_LEFTITEM_PRODUCTSEARCH'                      =>"Artikelsuche",
 'INC_LEFTITEM_BASKET'                             =>"Warenkorb",
@@ -711,7 +697,10 @@ $aLang = array(
 'INC_STEPS_ITEM_SUBMITORDER'                      =>"Bestellung ausführen",
 'INC_STEPS_ITEM_LASTSTEP1'                        =>"Fertig",
 'INC_STEPS_ITEM_LASTSTEP2'                        =>"Bestellung ausgef&uuml;hrt",
-'INC_TRUSTEDSHOPS_ITEM_SEALOFAPPROVAL'            =>"Trusted Shops Gütesiegel - Bitte hier klicken.",
+'INC_TRUSTEDSHOPS_ITEM_IMGTITLE'                  =>"Klicken Sie auf das Gütesiegel, um die Gültigkeit zu prüfen!",
+'INC_TRUSTEDSHOPS_ITEM_ALTTEXT'                   =>"Mehr Informationen",
+'INC_TRUSTEDSHOPS_ITEM_SEALOFAPPROVAL'            =>" ist ein von Trusted Shops gepr&uuml;fter Onlineh&auml;ndler  mit G&uuml;tesiegel und K&auml;uferschutz. Mehr...",
+'INC_TRUSTEDSHOPS_ITEM_LINK'                      =>"http://www.trustedshops.de/shopbetreiber/mitgliedschaft_partner.html?shopsw=OXID&et_cid=14&et_lid=84",
 'INC_VENDORLEFTITEM_BYMARK'                       =>"Nach Marke/Hersteller",
 'LINKS_TITLE'                                     => "Links",
 'LINKS_LINKS'                                     => "Links",
@@ -720,7 +709,7 @@ $aLang = array(
 'LIST_SELECTOTHERCATS1'                           => "Weitere Kategorien auswählen - ",
 'LIST_SELECTOTHERCATS2'                           => "und:",
 'LIST_CATEGORY'                                   => "Kategorie",
-'LIST_MORE_TITLE'                                 => "Kategorie&uuml;bersicht",
+'LIST_MORE_TITLE'                                 => "Kategorieübersicht",
 'MALLSTART_TITLE'                                 => "Shopauswahl",
 'MALLSTART_LOCATION'                              => "Sie sind hier: / Shopauswahl",
 'MALLSTART_OXIDSOFTWARE'                          => "Shop Software von OXID eSales",
@@ -820,7 +809,6 @@ $aLang = array(
 'ORDER_IAGREETOTERMS2'                            => "AGB",
 'ORDER_IAGREETOTERMS3'                            => "gelesen und bin einverstanden",
 'ORDER_IAGREETORIGHTOFWITHDRAWAL1'                => "die",
-'ORDER_IAGREETORIGHTOFWITHDRAWAL2'                => "Widerrufsbelehrung",
 'ORDER_IAGREETORIGHTOFWITHDRAWAL3'                => "habe ich gelesen.",
 'ORDER_RIGHTOFWITHDRAWAL'                         => "Widerrufsrecht",
 'ORDER_RIGHTOFWITHDRAWAL_TEXT'                    => "Verbraucher k&ouml;nnen ihre Vertragserkl&auml;rung innerhalb von zwei Wochen ohne Angabe von
@@ -828,8 +816,7 @@ $aLang = array(
                                                       Die Frist beginnt fr&uuml;hestens mit Erhalt der Ware und einer ausf&uuml;hrlichen Belehrung in Textform.
                                                       Zur Wahrung der Widerrufsfrist gen&uuml;gt die rechtzeitige Absendung des Widerrufs oder der Sache.
                                                       Der Widerruf ist zu richten an: ",
-'ORDER_RIGHTOFWITHDRAWAL_MOREINFO1'               => "Hier finden Sie die",
-'ORDER_RIGHTOFWITHDRAWAL_MOREINFO2'               => "Einzelheiten zu Ihrem Widerrufsrecht",
+'ORDER_RIGHTOFWITHDRAWAL_MOREINFO1'               => "Hier finden Sie die Einzelheiten zu Ihrem ",
 'ORDER_SUBMITORDER'                               => "Bestellung absenden",
 'ORDER_NOTE'                                      => "Abschließende Informationen",
 'ORDER_OTHERINTRESTINGARTICLES'                   => "Weitere interessante Produkte für Sie:",

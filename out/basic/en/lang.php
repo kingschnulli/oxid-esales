@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 14911 2008-12-30 13:37:54Z ralf $
+ * $Id: lang.php 15187 2009-01-12 13:10:24Z vilma $
  */
 
 $sLangName  = "English";
@@ -175,9 +175,6 @@ $aLang = array(
 'ADD_RECOMM_ADDTOLIST'                            => "Add to List",
 'ADD_RECOMM_ADDRECOMMLINK1'                       => "There is no Listmania lists at the moment. To create new, click",
 'ADD_RECOMM_ADDRECOMMLINK2'                       => "here",
-'AGB_POPUP_AGB'                                   => "Terms",
-'AGB_AGB'                                         => "Terms",
-'RIGHTOFWITHDRAWAL'                               => "Rights of withdrawal",
 'BASKET_BASKET'                                   => "View Cart",
 'BASKET_EMPTYSHIPPINGCART'                        => "The Shopping Cart is empty.",
 'BASKET_NEXTSTEP'                                 => "Continue to Next Step",
@@ -272,9 +269,6 @@ $aLang = array(
 'CONTACT_SEND'                                    => "Send",
 'CONTACT_THANKYOU1'                               => "Thank you.",
 'CONTACT_THANKYOU2'                               => " appreciates your comments.",
-'CUSTOMER_RIGHTOFWITHDRAWAL_TITLE'                => "Right of withdrawal",
-'CUSTOMER_RIGHTOFWITHDRAWAL'                      => "Right of withdrawal",
-'DELIVERY_INFO_TITLE'                             => "Shipping",
 'DETAILS_PERSPARAM_PRODUCTDETAILS'                => "Product Details",
 'DETAILS_PERSPARAM_ZOOM'                          => "[+] zoom",
 'DETAILS_PERSPARAM_ARTNOMBER'                     => "Art.No.:",
@@ -577,8 +571,6 @@ $aLang = array(
 'INC_FOOTER_HELP'                                 =>"Help",
 'INC_FOOTER_GUESTBOOK'                            =>"Guestbook",
 'INC_FOOTER_LINKS'                                =>"Links",
-'INC_FOOTER_IMPRESSUM'                            =>"About Us",
-'INC_FOOTER_TERMS'                                =>"Terms",
 'INC_FOOTER_CART'                                 =>"Cart",
 'INC_FOOTER_MYACCOUNT'                            =>"My Account",
 'INC_FOOTER_MYNOTICELIST'                         =>"My Wish List",
@@ -589,12 +581,10 @@ $aLang = array(
 'INC_GUESTBOOK_LOCATOR_ENTRIESPERPAGE'            =>"Entries per Page:",
 'INC_HEADER_CONTACT'                              =>"Contact",
 'INC_HEADER_GUESTBOOK'                            =>"Guestbook",
-'INC_HEADER_TERMS'                                =>"Terms",
 'INC_HEADER_SERVICE'                              =>"Service",
 'INC_HEADER_NOTICELIST'                           =>"My Wish List",
 'INC_HEADER_HELP'                                 =>"Help",
 'INC_HEADER_LINKS'                                =>"Links",
-'INC_HEADER_IMPRESSUM'                            =>"About Us",
 'INC_HEADER_HOME'                                 =>"HOME",
 'INC_HEADER_WISHLIST'                             =>"My Gift Registry",
 'INC_HEADER_PRIVATWISHLIST'                       =>"'s Gift Registry",
@@ -605,10 +595,6 @@ $aLang = array(
 'INC_HEADER_YOUAREHERE'                           =>"You are here:",
 'INC_HEADER_INCLTAXPLUSSHIPPING'                  =>"All prices incl. tax, plus Shipping",
 'INC_HEADER_URLMORE'                              =>"more",
-'INC_INFOBOX_WITHDRAWAL'                          =>"Right of withdrawal",
-'INC_INFOBOX_HOWTOORDER'                          =>"How to order ?",
-'INC_INFOBOX_SHIPPINGANDCHARGES'                  =>"Shipping and Charges",
-'INC_INFOBOX_DATAPROTECTION'                      =>"Data Protection",
 'INC_INFOBOX_NEWSLETTER'                          =>"Newsletter",
 'INC_LEFTITEM_PRODUCTSEARCH'                      =>"Product Search",
 'INC_LEFTITEM_BASKET'                             =>"Cart    ",
@@ -711,7 +697,10 @@ $aLang = array(
 'INC_STEPS_ITEM_SUBMITORDER'                      =>"submit order",
 'INC_STEPS_ITEM_LASTSTEP1'                        =>"Ready",
 'INC_STEPS_ITEM_LASTSTEP2'                        =>"Order completed",
-'INC_TRUSTEDSHOPS_ITEM_SEALOFAPPROVAL'            =>"Trusted Shops Seal of Approval - please, click here.",
+'INC_TRUSTEDSHOPS_ITEM_IMGTITLE'                  =>"[tr] Klicken Sie auf das G&uuml;tesiegel, um die G&uuml;ltigkeit zu pr&uuml;fen!",
+'INC_TRUSTEDSHOPS_ITEM_ALTTEXT'                   =>"[tr] Mehr Informationen",
+'INC_TRUSTEDSHOPS_ITEM_SEALOFAPPROVAL'            =>"[tr] ist ein von Trusted Shops gepr&uuml;fter Onlineh&auml;ndler  mit G&uuml;tesiegel und K&auml;uferschutz. Mehr...",
+'INC_TRUSTEDSHOPS_ITEM_LINK'                      =>"http://www.trustedshops.com/merchants/membership.html?shopsw=OXID&et_cid=14&et_lid=84",
 'INC_VENDORLEFTITEM_BYMARK'                       =>"by brand/manufacturer",
 'LINKS_TITLE'                                     => "Links",
 'LINKS_LINKS'                                     => "Links",
@@ -820,7 +809,6 @@ $aLang = array(
 'ORDER_IAGREETOTERMS2'                            => "Terms and Conditions",
 'ORDER_IAGREETOTERMS3'                            => "",
 'ORDER_IAGREETORIGHTOFWITHDRAWAL1'                => "I've read",
-'ORDER_IAGREETORIGHTOFWITHDRAWAL2'                => "rights of withdrawal",
 'ORDER_IAGREETORIGHTOFWITHDRAWAL3'                => "",
 'ORDER_RIGHTOFWITHDRAWAL'                         => "Right of withdrawal",
 'ORDER_RIGHTOFWITHDRAWAL_TEXT'                    => "Each consumer is allowed to revoke his/her contractual declaration in written form
@@ -829,8 +817,7 @@ $aLang = array(
                                                       receipt of the goods and this policy in detail and in text form. The timely sending
                                                       of the revocation or the goods shall be sufficient to determine compliance with the
                                                       time limit for revocation. The revocation shall be addressed to: ",
-'ORDER_RIGHTOFWITHDRAWAL_MOREINFO1'               => "Click here for",
-'ORDER_RIGHTOFWITHDRAWAL_MOREINFO2'               => "details about your right of withdrawal",
+'ORDER_RIGHTOFWITHDRAWAL_MOREINFO1'               => "Click here for details about your ",
 'ORDER_SUBMITORDER'                               => "Submit Order",
 'ORDER_NOTE'                                      => "Note",
 'ORDER_OTHERINTRESTINGARTICLES'                   => "Other products that may interest you:",

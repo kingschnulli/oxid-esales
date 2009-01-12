@@ -46,6 +46,11 @@
             <hr size="1">
             <ul class="list">
             [{foreach from=$oView->getSubCatList() item=category name=MoreSubCat}]
+		        [{if $category->getContentCats() }]
+		            [{foreach from=$category->getContentCats() item=ocont name=MoreCms}]
+		            <li><a id="test_MoreSubCms_[{$smarty.foreach.MoreSubCat.iteration}]_[{$smarty.foreach.MoreCms.iteration}]" href="[{$ocont->getLink()}]">[{ $ocont->oxcontents__oxtitle->value }]</a></li>
+		            [{/foreach}]
+		        [{/if}]
                 [{if $category->getIsVisible()}]
                     [{if $category->oxcategories__oxicon->value }]
                         <a id="test_MoreSubCatIco_[{$smarty.foreach.MoreSubCat.iteration}]" href="[{ $category->getLink() }]">

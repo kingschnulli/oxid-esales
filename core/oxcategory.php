@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxcategory.php 14388 2008-11-26 15:43:17Z vilma $
+ * $Id: oxcategory.php 15196 2009-01-12 14:49:05Z arvydas $
  */
 
 /**
@@ -103,6 +103,13 @@ class oxCategory extends oxI18n
      * @var string
      */
     protected $_sDynImageDir = null;
+
+    /**
+     * Top category marker
+     *
+     * @var bool
+     */
+    protected $_blTopCategory = null;
 
     /**
      * Class constructor, initiates parent constructor (parent::oxI18n()).
@@ -938,4 +945,16 @@ class oxCategory extends oxI18n
         return $this->getConfig()->getPictureUrl( 'icon/'.$this->oxcategories__oxicon->value );
     }
 
+    /**
+     * Returns true is category parent id is 'oxrootid'
+     *
+     * @return bool
+     */
+    public function isTopCategory()
+    {
+    	if ( $this->_blTopCategory == null ) {
+    		$this->_blTopCategory = $this->oxcategories__oxparentid->value == 'oxrootid';
+    	}
+        return $this->_blTopCategory;
+    }
 }

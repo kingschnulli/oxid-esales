@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxcmp_categories.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: oxcmp_categories.php 15192 2009-01-12 13:56:17Z arvydas $
  */
 
 /**
@@ -61,10 +61,8 @@ class oxcmp_categories extends oxView
         }
 
         $sActProduct = oxConfig::getParameter( 'anid' );
-        $sActCat = oxConfig::getParameter( 'cnid' );
-
-        $sActCont = false;
-
+        $sActCat  = oxConfig::getParameter( 'cnid' );
+        $sActCont = oxConfig::getParameter( 'tpl' );
 
         $blArtLoaded = false;
         if ( $sActProduct ) {

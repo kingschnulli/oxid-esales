@@ -126,7 +126,7 @@
                     <input type="text" size="3" maxlength="2" name="invadr[oxuser__oxbirthdate][day]" value="[{if $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00"}][{$oxcmp_user->oxuser__oxbirthdate->value|date_format:"%d" }][{else}][{$invadr.oxuser__oxbirthdate.day }][{/if}]">&nbsp;&nbsp;
                     <input type="text" size="3" maxlength="2" name="invadr[oxuser__oxbirthdate][month]" value="[{if $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00" }][{$oxcmp_user->oxuser__oxbirthdate->value|date_format:"%m" }][{else}][{$invadr.oxuser__oxbirthdate.month }][{/if}]">&nbsp;&nbsp;
                     <input type="text" size="8" maxlength="4" name="invadr[oxuser__oxbirthdate][year]" value="[{if $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00" }][{$oxcmp_user->oxuser__oxbirthdate->value|date_format:"%Y" }][{else}][{$invadr.oxuser__oxbirthdate.year }][{/if}]">
-                [{if isset($aMustFillFields.oxuser__oxbirthdate) }]*[{/if}]
+                [{if isset($aMustFillFields.oxuser__oxbirthdate) }]<span class="req">*</span>[{/if}]
             </td>
             </tr>
             [{/if}]
@@ -151,7 +151,7 @@
             <tr>
                 <td><label>[{ oxmultilang ident="REGISTER_ADDRESSES" }]</label></td>
                 <td>
-                    <select name="oxaddressid" onchange="oxid.reload(this.value === '-1','order','user','');">
+                    <select name="oxaddressid" onchange="oxid.form.reload(this.value === '-1','order','user','');oxid.form.clear(this.value !== '-1','order',/oxaddress__/);">
                         <option value="-1" SELECTED>[{ oxmultilang ident="REGISTER_NEWADDRESSES" }]</option>
                         [{if $oxcmp_user }]
                             [{foreach from=$oxcmp_user->getUserAddresses() item=address}]

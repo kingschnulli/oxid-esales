@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxadminview.php 14839 2008-12-19 10:22:19Z arvydas $
+ * $Id: oxadminview.php 15128 2009-01-09 11:07:41Z arvydas $
  */
 
 /**
@@ -103,7 +103,7 @@ class oxAdminView extends oxView
             if ( $oShop->load( $sShopID ) ) {
 
                 // passing shop info
-                $this->_sShopTitle   = $oShop->oxshops__oxname->value;
+                $this->_sShopTitle   = $oShop->oxshops__oxname->getRawValue();
                 $this->_sShopVersion = $oShop->oxshops__oxversion->value;
 
             }

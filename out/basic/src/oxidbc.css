@@ -25,6 +25,7 @@ p {margin:0}
 #body .product .price sup.dinfo a{font-size: 16px;}
 #body .product.thinest .price sup.dinfo a{font-size: 11px;}
 #body .product.details .price sup.dinfo{font-size: 12px;}
+#body .product.details .price sup.dinfo a{font-size: 13px;}
 #body .product.details .price sub.only{font-size: 13px;}
 #body .product .flag {overflow: hidden;}
 

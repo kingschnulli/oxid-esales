@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: thankyou.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: thankyou.php 15103 2009-01-09 09:17:33Z vilma $
  */
 
 /**
@@ -319,6 +319,21 @@ class Thankyou extends oxUBase
             }
         }
         return $this->_oOrder;
+    }
+
+    /**
+     * Template variable getter. Returns country ISO 3
+     *
+     * @return string
+     */
+    public function getCountryISO3()
+    {
+        $oOrder = $this->getOrder();
+        if ( $oOrder ) {
+            $oCountry = oxNew( 'oxcountry' );
+            $oCountry->load( $oOrder->oxorder__oxbillcountryid->value );
+            return $oCountry->oxcountry__oxisoalpha3->value;
+        }
     }
 
 }

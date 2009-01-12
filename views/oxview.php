@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxview.php 14645 2008-12-11 14:52:57Z arvydas $
+ * $Id: oxview.php 15157 2009-01-09 14:57:07Z vilma $
  */
 
 /**
@@ -1765,8 +1765,14 @@ class oxView extends oxSuperCfg
     public function getTrustedShopId()
     {
         if ( $this->_sTrustedShopId == null && ( $aTrustedShopIds = $this->getConfig()->getConfigParam( 'iShopID_TrustedShops' ) ) ) {
-            $iLangId = oxLang::getInstance()->getBaseLanguage();
-            $this->_sTrustedShopId = $aTrustedShopIds[$iLangId];
+            $iLangId = (int) oxLang::getInstance()->getBaseLanguage();
+            // compatibility to old data
+            if ( !is_array( $aTrustedShopIds ) && $iLangId == 0 ) {
+            	$this->_sTrustedShopId = $aTrustedShopIds;
+            }
+            if ( is_array( $aTrustedShopIds ) ) {
+                $this->_sTrustedShopId = $aTrustedShopIds[$iLangId];
+            }
         }
         return $this->_sTrustedShopId;
     }

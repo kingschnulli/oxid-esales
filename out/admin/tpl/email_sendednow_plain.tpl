@@ -20,6 +20,6 @@
 [{ $oOrderArticle->oxorderarticles__oxamount->value }] [{ $oOrderArticle->oxorderarticles__oxtitle->value }] [{ $oOrderArticle->oxorderarticles__oxselvariant->value }]
 [{/foreach}] 
 
-[{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_TEAM1" }] [{ $shop->oxshops__oxname->value }] [{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_TEAM2" }]
+[{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_TEAM1" }] [{ $shop->oxshops__oxname->getRawValue() }] [{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_TEAM2" }]
 
 [{ oxcontent ident="oxemailfooterplain" }]

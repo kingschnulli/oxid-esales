@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: pricealarm_send.php 14667 2008-12-12 09:27:42Z vilma $
+ * $Id: pricealarm_send.php 15128 2009-01-09 11:07:41Z arvydas $
  */
 
 /**
@@ -155,7 +155,7 @@ class PriceAlarm_Send extends oxAdminList
 
         $oxEMail = oxNew( "oxemail" );
         $oxEMail->From     = $oShop->oxshops__oxorderemail->value;
-        $oxEMail->FromName = $oShop->oxshops__oxname->value;
+        $oxEMail->FromName = $oShop->oxshops__oxname->getRawValue();
         $oxEMail->Host     = $oShop->oxshops__oxsmtp->value;
         $oxEMail->SetSMTP( $oShop);
         $oxEMail->WordWrap = 100;
@@ -176,9 +176,9 @@ class PriceAlarm_Send extends oxAdminList
         oxLang::getInstance()->setTplLanguage( $iLang );
 
         $oxEMail->Body      = $smarty->fetch( "email_pricealarm_customer.tpl");
-        $oxEMail->Subject   = $oShop->oxshops__oxname->value;
+        $oxEMail->Subject   = $oShop->oxshops__oxname->getRawValue();
         $oxEMail->AddAddress( $sEMail, $sEMail );
-        $oxEMail->AddReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->value);
+        $oxEMail->AddReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue());
         $blSuccess = $oxEMail->send();
 
         oxLang::getInstance()->setTplLanguage( $old_iLang );

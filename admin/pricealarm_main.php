@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: pricealarm_main.php 14016 2008-11-06 13:31:20Z arvydas $
+ * $Id: pricealarm_main.php 15128 2009-01-09 11:07:41Z arvydas $
  */
 
 /**
@@ -174,16 +174,16 @@ class PriceAlarm_Main extends oxAdminDetails
         //arranging user email
         $oxEMail = oxNew( "oxemail" );
         $oxEMail->From     = $oShop->oxshops__oxorderemail->value;
-        $oxEMail->FromName = $oShop->oxshops__oxname->value;
+        $oxEMail->FromName = $oShop->oxshops__oxname->getRawValue();
         $oxEMail->Host     = $oShop->oxshops__oxsmtp->value;
         $oxEMail->SetSMTP( $oShop);
         $oxEMail->WordWrap = 100;
 
         $aParams = oxConfig::getParameter( "editval" );
         $oxEMail->Body      = stripslashes( isset( $aParams['oxpricealarm__oxlongdesc'] ) ? $aParams['oxpricealarm__oxlongdesc'] : '' );
-        $oxEMail->Subject   = $oShop->oxshops__oxname->value;
+        $oxEMail->Subject   = $oShop->oxshops__oxname->getRawValue();
         $oxEMail->AddAddress( $oPricealarm->oxpricealarm__oxemail->value, $oPricealarm->oxpricealarm__oxemail->value );
-        $oxEMail->AddReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->value);
+        $oxEMail->AddReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue());
         $blSuccess = $oxEMail->send();
 
         // setting result message
