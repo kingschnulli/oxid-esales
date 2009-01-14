@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxutilsdate.php 14378 2008-11-26 13:59:41Z vilma $
+ * $Id: oxutilsdate.php 15208 2009-01-13 09:30:14Z arvydas $
  */
 
 /**
@@ -60,7 +60,7 @@ class oxUtilsDate extends oxSuperCfg
      * Reformats date to user defined format.
      *
      * @param string $sDBDateIn         Date to reformat
-     * @param bool   $blForceEnglishRet Force to return primaty value(default false)
+     * @param bool   $blForceEnglishRet Force to return primary value(default false)
      *
      * @return string
      */
@@ -105,9 +105,9 @@ class oxUtilsDate extends oxSuperCfg
 
         // choosing format..
         if ( $sTime ) {
-            $sFormat = oxLang::getInstance()->translateString( 'fullDateFormat' );
+            $sFormat = $blForceEnglishRet ? 'Y-m-d H:i:s' : oxLang::getInstance()->translateString( 'fullDateFormat' );
         } else {
-            $sFormat = oxLang::getInstance()->translateString( 'simpleDateFormat' );
+            $sFormat = $blForceEnglishRet ? 'Y-m-d' : oxLang::getInstance()->translateString( 'simpleDateFormat' );
         }
 
         if ( count( $aDate ) != 3 ) {

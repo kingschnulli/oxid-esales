@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 15187 2009-01-12 13:10:24Z vilma $
+ * $Id: lang.php 15208 2009-01-13 09:30:14Z arvydas $
  */
 
 $sLangName  = "Deutsch";
@@ -1160,11 +1160,11 @@ $aLang = array(
 'WRAPPING_BACKTOORDER'                            => "Zurück zur Bestellung",
 'priceFrom'                                       => '<span style="font-size: 50%;">ab</span>',
 'charset'                                         => 'iso-8859-1',
-'fullDateFormat'                                  => 'Y-m-d H:i:s',
+'fullDateFormat'                                  => 'd.m.Y H:i:s',
 'byBrand'                                         => 'Nach Hersteller',
 'searchResult'                                    => 'Suchergebnis für "%s"',
 'usrRegistered'                                   => 'Der Benutzer wird nach der Eingabe seines Passwortes registriert',
-'simpleDateFormat'                                => 'Y-m-d',
+'simpleDateFormat'                                => 'd.m.Y',
 'EXCEPTION_COOKIE_NOCOOKIE'                       => 'Für diese Aktion werden Cookies benötigt. Bitte aktivieren Sie Cookies oder nutzen Sie einen anderen Browser.',
 'EXCEPTION_USER_NOVALIDLOGIN'                     => 'Falsche E-Mail oder Passwort!',
 'EXCEPTION_USER_USEREXISTS'                       => 'Dieser Benutzer existiert bereits!',

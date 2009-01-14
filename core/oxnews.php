@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxnews.php 14368 2008-11-26 07:36:13Z vilma $
+ * $Id: oxnews.php 15208 2009-01-13 09:30:14Z arvydas $
  */
 
 /**
@@ -69,7 +69,7 @@ class oxNews extends oxI18n
         parent::assign( $dbRecord );
 
         // convert date's to international format
-        $this->oxnews__oxdate->setValue(oxUtilsDate::getInstance()->formatDBDate( $this->oxnews__oxdate->value ));
+        $this->oxnews__oxdate->setValue( oxUtilsDate::getInstance()->formatDBDate( $this->oxnews__oxdate->value ) );
 
         // #1030C run through smarty
         if ( !$this->isAdmin() && $this->getConfig()->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
@@ -146,7 +146,7 @@ class oxNews extends oxI18n
      */
     protected function _update()
     {
-        $this->oxnews__oxdate->setValue(oxUtilsDate::getInstance()->formatDBDate( $this->oxnews__oxdate->value, true));
+        $this->oxnews__oxdate->setValue( oxUtilsDate::getInstance()->formatDBDate( $this->oxnews__oxdate->value, true ) );
 
         parent::_update();
     }
@@ -159,7 +159,7 @@ class oxNews extends oxI18n
     protected function _insert()
     {
         // setting insert time
-        $this->oxnews__oxdate = new oxField(date( 'Y-m-d' ));
+        $this->oxnews__oxdate = new oxField( date( 'Y-m-d' ) );
         return parent::_insert();
     }
     /**

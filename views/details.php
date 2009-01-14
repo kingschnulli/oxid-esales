@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: details.php 14135 2008-11-11 13:54:45Z arvydas $
+ * $Id: details.php 15221 2009-01-13 14:00:08Z arvydas $
  */
 
 /**
@@ -241,7 +241,7 @@ class Details extends oxUBase
             if ( $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
                 //#1104S if parent is buyable load selectlists too
                 $oParent->aSelectlist = $oParent->getSelectLists();
-                $this->_aVariantList = array_merge( array( $oParent ), $this->_aVariantList );
+                $this->_aVariantList = array_merge( array( $oParent ), $this->_aVariantList->getArray() );
             }
 
             //..and skip myself from the list

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package setup
  * @copyright © OXID eSales AG 2003-2009
- * $Id: index.php 14926 2009-01-05 09:27:56Z arvydas $
+ * $Id: index.php 15216 2009-01-13 13:15:48Z arvydas $
  */
 
 
@@ -454,10 +454,30 @@ function getNextModuleInfo()
         switch ( $sModule ) {
             case 'mod_rewrite':
                 // mod_rewrite extension
-                if ( function_exists( 'apache_get_modules' ) ) {
-                    $iModStat = in_array( 'mod_rewrite', apache_get_modules() ) ? 2 : 0;
+                $sHost = $_SERVER['HTTP_HOST'];
+                if ( $rFp = @fsockopen( $sHost, 80, $iErrNo, $sErrStr, 10 ) ) {
+                    $sReq  = "POST /setup/test/test.php HTTP/1.1\r\n";
+                    $sReq .= "Host: $sHost\r\n";
+                    $sReq .= "User-Agent: oxid setup\r\n";
+                    $sReq .= "Content-Type: application/x-www-form-urlencoded\r\n";
+                    $sReq .= "Content-Length: 0\r\n"; // empty post
+                    $sReq .= "Connection: close\r\n\r\n";
+
+                    $sOut = '';
+                    fwrite( $rFp, $sReq );
+                    while ( !feof( $rFp ) ) {
+                        $sOut .= fgets( $rFp, 100 );
+                    }
+                    fclose( $rFp );
+
+                    $iModStat = ( strpos( $sOut, 'mod_rewrite_on' ) !== false ) ? 2 : 0;
                 } else {
-                    $iModStat = -1;
+                    if ( function_exists( 'apache_get_modules' ) ) {
+                       // it does not assure that mod_rewrite is enabled on current host, so setting 1
+                        $iModStat = in_array( 'mod_rewrite', apache_get_modules() ) ? 1 : 0;
+                    } else {
+                        $iModStat = -1;
+                    }
                 }
                 break;
             case 'allow_url_fopen':
@@ -516,7 +536,14 @@ function getNextModuleInfo()
                 // MySQL module for MySQL5
                 $iModStat = extension_loaded( 'mysql' ) ? 2 : 0;
                 // client version must be >=5
-                $iModStat = ( $iModStat == 0 || !function_exists( 'mysql_get_client_info' ) ) ? $iModStat : ( version_compare( mysql_get_client_info(), '5', '>=' ) ? 2 : 0 );
+                if ( $iModStat ) {
+                    $sClientVersion = mysql_get_client_info();
+                    $iModStat = version_compare( mysql_get_client_info(), '5', '>=' ) ? $iModStat : 1;
+                    // notice if client version < 5
+                    if ( $iModStat == 1) {
+                        $iModStat = version_compare( mysql_get_client_info(), '4', '>=' ) ? $iModStat : 0;
+                    }
+                }
                 break;
             case 'gd_info':
                 // GDlib version
@@ -696,7 +723,7 @@ if ( $istep == $aSetupSteps['STEP_SYSTEMREQ'] ) {
 
                         <?php
                         foreach ( $aCountries[$sSetupLang] as $sKey => $sValue ) {
-                            $sSelected =  $aPersistentData['country_lang'] == $sKey ? 'selected' : '';
+                            $sSelected = ( isset( $aPersistentData['country_lang'] ) && $aPersistentData['country_lang'] == $sKey ) ? 'selected' : '';
                             echo "<option value=\"$sKey\" $sSelected>$sValue</option>\n";
                         }
                         ?>

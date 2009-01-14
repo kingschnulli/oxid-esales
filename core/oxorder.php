@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxorder.php 14542 2008-12-08 14:24:48Z vilma $
+ * $Id: oxorder.php 15206 2009-01-13 09:17:09Z vilma $
  */
 
 /**
@@ -1663,7 +1663,6 @@ class oxOrder extends oxBase
     public function getTotalOrderSum()
     {
         $oCur = $this->getConfig()->getActShopCurrencyObject();
-        return oxLang::getInstance()->formatCurrency( $this->oxorder__oxtotalordersum->value, $oCur );
+        return number_format( $this->oxorder__oxtotalordersum->value, $oCur->decimal, '.', '');
     }
-
 }

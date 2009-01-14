@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 15188 2009-01-12 13:17:45Z philipp.grashoff $
+ * $Id: lang.php 15208 2009-01-13 09:30:14Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -1614,8 +1614,8 @@ $aLang = array(
 'snporderlistoxtitle'                           => 'Beschreibung',
 
 'charset'                                       => 'iso-8859-1',
-'fullDateFormat'                                => 'Y-m-d H:i:s',
-'simpleDateFormat'                              => 'Y-m-d',
+'fullDateFormat'                                => 'd.m.Y H:i:s',
+'simpleDateFormat'                              => 'd.m.Y',
 'mainCategory'                                  => 'Hauptkat.',
 'none'                                          => 'keine',
 'viewAll'                                       => 'Alle anzeigen',

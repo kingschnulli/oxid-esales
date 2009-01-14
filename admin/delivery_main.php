@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: delivery_main.php 14020 2008-11-06 13:36:42Z arvydas $
+ * $Id: delivery_main.php 15227 2009-01-13 15:32:49Z arvydas $
  */
 
 /**
@@ -42,6 +42,8 @@ class Delivery_Main extends oxAdminDetails
 
         parent::render();
 
+        $iLang = oxLang::getInstance()->getTplLanguage();
+
         // remove itm from list
         unset( $this->_aViewData["sumtype"][2]);
 
@@ -49,19 +51,19 @@ class Delivery_Main extends oxAdminDetails
         $aDelTypes = array();
         $oType = new oxStdClass();
         $oType->typ     = "a";      // amount
-        $oType->Desc    = oxLang::getInstance()->translateString("amount");
+        $oType->Desc    = oxLang::getInstance()->translateString( "amount", $iLang );
         $aDelTypes['a'] = $oType;
         $oType = new oxStdClass();
         $oType->typ     = "s";      // Size
-        $oType->Desc    = oxLang::getInstance()->translateString("size");
+        $oType->Desc    = oxLang::getInstance()->translateString( "size", $iLang );
         $aDelTypes['s'] = $oType;
         $oType = new oxStdClass();
         $oType->typ     = "w";      // Weight
-        $oType->Desc    = oxLang::getInstance()->translateString("weight");
+        $oType->Desc    = oxLang::getInstance()->translateString( "weight", $iLang );
         $aDelTypes['w'] = $oType;
         $oType = new oxStdClass();
         $oType->typ     = "p";      // Price
-        $oType->Desc    = oxLang::getInstance()->translateString("price");
+        $oType->Desc    = oxLang::getInstance()->translateString( "price", $iLang );
         $aDelTypes['p'] = $oType;
 
         $soxId = oxConfig::getParameter( "oxid");

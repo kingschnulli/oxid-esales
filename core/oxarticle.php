@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxarticle.php 14962 2009-01-07 09:44:46Z tomas $
+ * $Id: oxarticle.php 15202 2009-01-12 20:03:30Z tomas $
  */
 
 /**
@@ -2731,8 +2731,8 @@ class oxArticle extends oxI18n
                 $sTargetFile = eregi_replace($sPattern, '_ico\\1', $sTargetFile);
             }
 
-            $sTarget = $myConfig->getAbsDynImageDir().'/icon/'. $sTargetFile;
-            $sSource = $myConfig->getAbsDynImageDir().'/0/'. $sSourceFile;
+            $sTarget = $myConfig->getAbsDynImageDir().'/icon/'. basename($sTargetFile);
+            $sSource = $myConfig->getAbsDynImageDir().'/0/'. basename($sSourceFile);
 
             if (!$myConfig->getConfigParam( 'sIconsize' ) ) {
                 $myConfig->setConfigParam( 'sIconsize', '56*42' );
@@ -3027,6 +3027,43 @@ class oxArticle extends oxI18n
     }
 
     /**
+     * Detects if field is empty.
+     *
+     * @param string $sFieldName Field name
+     * @param mixed  $mValue     Field value
+     *
+     * @return bool
+     */
+    protected function _isFieldEmpty($sFieldName)
+    {
+        $mValue = $this->$sFieldName->value;
+
+        if (is_null($mValue)) {
+            return true;
+        }
+
+        if ($mValue === '') {
+            return true;
+        }
+
+        if ($mValue == '0000-00-00 00:00:00' || $mValue == '0000-00-00') {
+            return true;
+        }
+
+        $sFieldName = strtolower($sFieldName);
+
+        if ($mValue == "nopic_ico.jpg" && $sFieldName == 'oxarticles__oxicon') {
+            return true;
+        }
+
+        if ($mValue == "nopic.jpg" && ($sFieldName == 'oxarticles__oxthumb' || substr($sFieldName, 0, 17) == 'oxarticles__oxpic' || substr($sFieldName, 0, 18) == 'oxarticles__oxzoom')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Assigns parent field values to article
      *
      * @param string $sFieldName field name
@@ -3051,16 +3088,34 @@ class oxArticle extends oxI18n
                                 'oxarticles__oxnid',
                                 'oxarticles__oxid',
                                 'oxarticles__oxparentid');
+
         $aDoubleCopyFields = array('oxarticles__oxprice',
                                    'oxarticles__oxvat');
+
+        $aCopyParentField = array('oxarticles__oxnonmaterial',
+                                  'oxarticles__oxfreeshipping',
+                                  'oxarticles__oxremindactiv');
+
         if (in_array($name, $aNonCopyFields)) {
             return;
         }
 
-        //do not copy parent data for icons
-        if ($name == 'oxarticles__oxicon' && $this->getConfig()->getConfigParam( 'blAutoIcons' ) && $this->oxarticles__oxthumb->value && $this->oxarticles__oxthumb->value != 'nopic.jpg') {
-            return;
+
+
+        //do not copy parent data for icons in case we have (need) own variant icon (in case variant thumbnail exists)
+        if ($sFieldName == "oxicon" && !$this->_isFieldEmpty("oxarticles__oxthumb") && $this->oxarticles__oxthumb->value != $oParentArticle->oxarticles__oxthumb->value && $this->getConfig()->getConfigParam( 'blAutoIcons' ) ) {
+            return ;
         }
+
+        //COPY THE VALUE
+        //replaced the code bellow with this two liner
+        //T2009-01-12
+        if ($this->_isFieldEmpty($name) || in_array($name, $aCopyParentField)) {
+            $this->$name = clone $oParentArticle->$name;
+        }
+
+
+        /*
         //#1101S empty image fields (without nopic.jpg, nopic_ico.jpg) should be copied from parent too
         if ( $this->$name->value == 'nopic.jpg' || $this->$name->value == 'nopic_ico.jpg' || ((stristr($name, '_oxthumb') || stristr($name, '_oxicon') || stristr($name, '_oxpic') || stristr($name, '_oxzoom') ) && $this->$name->value == '')) {
             // pictures
@@ -3068,7 +3123,7 @@ class oxArticle extends oxI18n
                 $this->$name = clone $oParentArticle->$name;
             } else {
                 $aFile = explode( '/', $oParentArticle->$name->value);
-                $this->$name->setValue(@$aFile[1]);
+                $this->$name->setValue(basename);
             }
         } elseif ( $this->$name->value == '' ||
                 $this->$name->value == '0000-00-00 00:00:00' ||
@@ -3084,7 +3139,7 @@ class oxArticle extends oxI18n
                                   'oxarticles__oxremindactiv');
         if (!$this->$name->value && in_array($name, $aCopyParentField)) {
             $this->$name = clone $oParentArticle->$name;
-        }
+        }*/
     }
 
     /**

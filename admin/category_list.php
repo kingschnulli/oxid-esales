@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: category_list.php 14019 2008-11-06 13:35:04Z arvydas $
+ * $Id: category_list.php 15227 2009-01-13 15:32:49Z arvydas $
  */
 
 /**
@@ -69,6 +69,8 @@ class Category_List extends oxAdminList
 
         parent::render();
 
+        $iLang = oxLang::getInstance()->getTplLanguage();
+
         // parent categorie tree
         $oCatTree = oxNew( "oxCategoryList" );
         $oCatTree->buildList($myConfig->getConfigParam( 'bl_perfLoadCatTree' ));
@@ -78,12 +80,12 @@ class Category_List extends oxAdminList
         $aNewList = array();
         $oRoot = new stdClass();
         $oRoot->oxcategories__oxid    = new oxField(null, oxField::T_RAW);
-        $oRoot->oxcategories__oxtitle = new oxField(oxLang::getInstance()->translateString("viewAll"), oxField::T_RAW);
+        $oRoot->oxcategories__oxtitle = new oxField(oxLang::getInstance()->translateString("viewAll", $iLang ), oxField::T_RAW);
 
         $aNewList[] = $oRoot;
         $oRoot = new stdClass();
         $oRoot->oxcategories__oxid    = new oxField("oxrootid", oxField::T_RAW);
-        $oRoot->oxcategories__oxtitle = new oxField("-- ".oxLang::getInstance()->translateString("mainCategory")." --", oxField::T_RAW);
+        $oRoot->oxcategories__oxtitle = new oxField("-- ".oxLang::getInstance()->translateString("mainCategory", $iLang )." --", oxField::T_RAW);
         $aNewList[] = $oRoot;
 
         foreach( $oCatTree as $oCategory )
