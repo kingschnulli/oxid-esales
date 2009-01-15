@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 15208 2009-01-13 09:30:14Z arvydas $
+ * $Id: lang.php 15233 2009-01-14 08:51:04Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -1030,6 +1030,10 @@ $aLang = array(
 'ORDER_PACKAGE_ORDERNR2'                        => 'Bestellt am',
 'ORDER_PACKAGE_MENUITEM'                        => 'Bestellungen',
 'ORDER_PACKAGE_MENUSUBITEM'                     => 'Packliste',
+'ORDER_REMARK_REMARK'                           => '[Bem.]',
+'ORDER_REMARK_ORDER'                            => '[Best.]',
+'ORDER_REMARK_USER'                             => '[Reg.]',
+'ORDER_REMARK_NEWS'                             => '[News]',
 'PAGENAVISNIPPET_FROM'                          => 'von',
 'PAYMENT_COUNTRY_ALLCOUNTRIES'                  => 'Alle Länder',
 'PAYMENT_COUNTRY_SELCOUNTRIES'                  => 'Zugeordnete Länder',
@@ -1377,6 +1381,10 @@ $aLang = array(
 'USER_PAYMENT_NEWPAYMENT'                       => 'Neue Zahlmethode',
 'USER_PAYMENT_PAYMENTTYPE'                      => 'Methodentyp',
 'USER_PAYMENT_VALUE'                            => 'Wert',
+'USER_REMARK_REMARK'                            => '[Bem.]',
+'USER_REMARK_ORDER'                             => '[Best.]',
+'USER_REMARK_USER'                              => '[Reg.]',
+'USER_REMARK_NEWS'                              => '[News]',
 'USERGROUP_LIST_MENUITEM'                       => 'Benutzer verwalten',
 'USERGROUP_LIST_MENUSUBITEM'                    => 'Benutzergruppen',
 'USERGROUP_MAIN_MEMBERINGROUP'                  => 'Mitglieder in Benutzergruppe',

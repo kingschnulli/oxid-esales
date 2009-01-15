@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package setup
  * @copyright © OXID eSales AG 2003-2009
- * $Id: index.php 15216 2009-01-13 13:15:48Z arvydas $
+ * $Id: index.php 15243 2009-01-14 10:50:16Z arvydas $
  */
 
 
@@ -454,9 +454,12 @@ function getNextModuleInfo()
         switch ( $sModule ) {
             case 'mod_rewrite':
                 // mod_rewrite extension
-                $sHost = $_SERVER['HTTP_HOST'];
-                if ( $rFp = @fsockopen( $sHost, 80, $iErrNo, $sErrStr, 10 ) ) {
-                    $sReq  = "POST /setup/test/test.php HTTP/1.1\r\n";
+                $sHost   = $_SERVER['HTTP_HOST'];
+                $sScript = $_SERVER['SCRIPT_NAME'];
+                if ( $sScript && $rFp = @fsockopen( $sHost, 80, $iErrNo, $sErrStr, 10 ) ) {
+                    $sScript = str_replace( basename($sScript), 'test/test.php', $sScript );
+
+                    $sReq  = "POST $sScript HTTP/1.1\r\n";
                     $sReq .= "Host: $sHost\r\n";
                     $sReq .= "User-Agent: oxid setup\r\n";
                     $sReq .= "Content-Type: application/x-www-form-urlencoded\r\n";

@@ -45,7 +45,7 @@ function EditThis( sID)
         <select name="rem_oxid" size="17" class="editinput" style="width:180px;" onChange="Javascript:document.myedit.submit();" [{ $readonly }]>
         [{foreach from=$allremark item=allitem}]
         <option value="[{ $allitem->oxremark__oxid->value }]" [{ if $allitem->selected}]SELECTED[{/if}]>[{ $allitem->oxremark__oxheader|oxformdate:"datetime" }]
-		[{ if $allitem->oxremark__oxtype->value == "r" }][Bem.][{elseif $allitem->oxremark__oxtype->value == "o" }][Best.][{elseif $allitem->oxremark__oxtype->value == "c" }][Reg.][{else}][News][{/if}]
+		[{ if $allitem->oxremark__oxtype->value == "r" }][{ oxmultilang ident="USER_REMARK_REMARK" }][{elseif $allitem->oxremark__oxtype->value == "o" }][{ oxmultilang ident="USER_REMARK_ORDER" }][{elseif $allitem->oxremark__oxtype->value == "c" }][{ oxmultilang ident="USER_REMARK_USER" }][{else}][{ oxmultilang ident="USER_REMARK_NEWS" }][{/if}]
 		</option>
         [{/foreach}]
         </select><br><br>

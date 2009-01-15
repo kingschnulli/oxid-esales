@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteRule test\.php$ test.php?mod_rewrite=1
+
+</IfModule>
+
+Options -Indexes

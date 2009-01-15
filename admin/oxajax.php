@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxajax.php 14029 2008-11-06 13:46:09Z arvydas $
+ * $Id: oxajax.php 15253 2009-01-14 14:00:36Z arvydas $
  */
 
 // shop path for includes
@@ -518,12 +518,10 @@ if ( $blAjaxCall ) {
     include_once $sBasePath . 'core/oxsupercfg.php';
 
 
-    // TODO: check this some day before release :)
     include_once $sBasePath . "core/oxutils.php";
 
     $myConfig = oxConfig::getInstance();
 
-    //TODO change this
     // Includes Utility module.
     $sUtilModule = $myConfig->getConfigParam( 'sUtilModule' );
     if ( $sUtilModule && file_exists( getShopBasePath()."modules/".$sUtilModule ) )
@@ -537,8 +535,6 @@ if ( $blAjaxCall ) {
         header( "location:index.php");
         exit();
     }
-
-    // must check if function "json_encode" exists !!!
 
     if ( $sContainer = oxConfig::getParameter( 'container' ) ) {
 

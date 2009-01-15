@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxvendor.php 14482 2008-12-05 08:34:48Z arvydas $
+ * $Id: oxvendor.php 15252 2009-01-14 13:57:13Z arvydas $
  */
 
 /**
@@ -307,5 +307,12 @@ class oxVendor extends oxI18n
         return $this->getConfig()->getPictureUrl( 'icon/'.$this->oxvendor__oxicon->value );
     }
 
+    /**
+     * Empty method, called in templates when vendor is used in same code like category
+     *
+     * @return null
+     */
+    public function getContentCats()
+    {
+    }
 }
-
