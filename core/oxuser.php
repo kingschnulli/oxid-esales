@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxuser.php 14979 2009-01-08 08:38:42Z arvydas $
+ * $Id: oxuser.php 15261 2009-01-14 15:27:07Z vilma $
  */
 
 /**
@@ -243,6 +243,23 @@ class oxUser extends oxBase
         $this->oxuser__oxcountry = new oxField( oxDb::getDb()->GetOne( $sQ ), oxField::T_RAW);
 
         return $this->oxuser__oxcountry;
+    }
+
+    /**
+     * Returns user country (object) according to passed parameters or they
+     * are taken from user object ( oxid, country id) and session (language)
+     *
+     * @param string $sCountryId country id (optional)
+     * @param int    $iLang      active language (optional)
+     *
+     * @return string
+     */
+    public function getUserCountryId( $sCountry = null )
+    {
+        $sQ = 'select oxid from oxcountry where oxactive = "1" and oxisoalpha2 = "' . $sCountry . '"';
+        $sCountryId = oxDb::getDb()->GetOne( $sQ );
+
+        return $sCountryId;
     }
 
     /**
@@ -1168,6 +1185,51 @@ class oxUser extends oxBase
     }
 
     /**
+     * Performs user login by username and password. Fetches user data from DB.
+     * Registers in session. Returns true on success, FALSE otherwise.
+     *
+     * @param string $sUser     User username
+     *
+     * @throws oxConnectionException, oxUserException
+     *
+     * @return bool
+     */
+    public function openIdLogin( $sUser )
+    {
+        $myConfig = $this->getConfig();
+        $sShopID = $myConfig->getShopId();
+        $oDb = oxDb::getDb();
+
+        $sUserSelect = "oxuser.oxusername = " . $oDb->quote( $sUser );
+        $sShopSelect = "";
+
+
+        $sSelect =  "select oxid from oxuser where oxuser.oxactive = 1 and {$sUserSelect} {$sShopSelect} ";
+
+        // load from DB
+        $aData = $oDb->getAll( $sSelect );
+        $sOXID = @$aData[0][0];
+        if ( isset( $sOXID ) && $sOXID && !@$aData[0][1] ) {
+
+            if ( !$this->load( $sOXID ) ) {
+                $oEx = oxNew( 'oxUserException' );
+                $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
+                throw $oEx;
+            }
+        }
+
+        //login successfull?
+        if ( $this->oxuser__oxid->value ) {   // yes, successful login
+            oxSession::setVar( 'usr', $this->oxuser__oxid->value );
+            return true;
+        } else {
+            $oEx = oxNew( 'oxUserException' );
+            $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
+            throw $oEx;
+        }
+    }
+
+    /**
      * Logs out session user. Returns true on success
      *
      * @return bool
@@ -2064,7 +2126,7 @@ class oxUser extends oxBase
             if ( strpos( $this->oxuser__oxpassword->value, 'ox_' ) === 0 ) {
                 // decodable pass ?
                 $this->setPassword( oxUtils::getInstance()->strRem( $this->oxuser__oxpassword->value ) );
-            } elseif ( strlen( $this->oxuser__oxpassword->value ) < 32 ) {
+            } elseif ( ( strlen( $this->oxuser__oxpassword->value ) < 32 ) && ( strpos( $this->oxuser__oxpassword->value, 'openid_' ) !== 0 ) ) {
                 // plain pass ?
                 $this->setPassword( $this->oxuser__oxpassword->value );
             }
@@ -2103,5 +2165,18 @@ class oxUser extends oxBase
         } else {
             return false;
         }
+    }
+
+    /**
+     * Generates random password for new openid users
+     *
+     * @param integer $iLength random password length
+     *
+     * @return string
+     */
+    public function getOpenIdPassword( $iLength = 25 )
+    {
+        $sPassword= "openid_".substr( oxUtilsObject::getInstance()->generateUId(), 0, $iLength);
+        return $sPassword;
     }
 }

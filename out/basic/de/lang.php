@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 15208 2009-01-13 09:30:14Z arvydas $
+ * $Id: lang.php 15347 2009-01-15 16:56:14Z ralf $
  */
 
 $sLangName  = "Deutsch";
@@ -85,6 +85,7 @@ $aLang = array(
 'ACCOUNT_PASSWORD_NEWPASSWORD'                    => "Neues Passwort:",
 'ACCOUNT_PASSWORD_CONFIRMPASSWORD'                => "Passwort wiederholen:",
 'ACCOUNT_PASSWORD_SAVE'                           => "Speichern",
+'ACCOUNT_PASSWORD_CHANGEPASSWORD'                 => "Passwort erstellen",
 'ACCOUNT_PASSWORD_BACKTOSHOP'                     => "Zurück zum Shop",
 'ACCOUNT_RECOMM_TITLE'                            => "Meine Lieblingslisten",
 'ACCOUNT_RECOMM_LOCATION'                         => "Mein Konto / ",
@@ -542,6 +543,7 @@ $aLang = array(
 'INC_CMP_LOGIN_RIGHT_MYPRODUCTCOMPARISON'         =>"Mein Produktvergleich",
 'INC_CMP_LOGIN_RIGHT_PRODUCT3'                    =>"Artikel:",
 'INC_CMP_LOGIN_RIGHT_DETAILS3'                    =>"Details",
+'INC_CMP_LOGIN_RIGHT_OPENID'                      =>"OpenId:",
 'INC_CMP_LOGIN_ERRINVALIDEMAILORPWD'              =>"<b>Fehler:</b> <br>Falsche E-Mail oder Passwort!",
 'INC_CMP_LOGIN_EMAIL'                             =>"E-Mail:",
 'INC_CMP_LOGIN_PWD'                               =>"Passwort:",
@@ -551,6 +553,8 @@ $aLang = array(
 'INC_CMP_LOGIN_FORGOTPWD'                         =>"Passwort vergessen",
 'INC_CMP_LOGIN_ALREADYCUSTOMER'                   =>"Falls Sie schon Kunde bei uns sind, melden Sie sich bitte hier mit Ihrer E-Mail Adresse und Ihrem Passwort an:",
 'INC_CMP_LOGIN_LOGIN2'                            =>"Anmeldung",
+'INC_CMP_LOGIN_FOROPENID'                         =>"Login &uuml;ber OpenId",
+'INC_CMP_LOGIN_OPENID'                            =>"OpenId:",
 'INC_CMP_MINI_BASKET_PRODUCT'                     =>"Artikel:",
 'INC_CMP_MINI_BASKET_QUANTITY'                    =>"Anzahl:",
 'INC_CMP_MINI_BASKET_SHIPPING'                    =>"Versand:",
@@ -673,6 +677,7 @@ $aLang = array(
 'INC_RIGHTLIST_REMOVEFROMCOMPARELIST'             =>"aus Vergl. entfernen",
 'INC_RIGHTLIST_COMPARE'                           =>"vergleichen",
 'INC_RIGHTLIST_ORDERNOW'                          =>"Jetzt bestellen!",
+'INC_RIGHTITEM_OPENID'                            =>"OpenId",
 'INC_SEARCHLEFTITEM_ALLCATEGORIES'                =>"- alle Kategorien -",
 'INC_SEARCHLEFTITEM_ALLMANUFACTURERS'             =>"- alle Hersteller -",
 'INC_SEARCH_PRODUCT_ITEM_ARTNOMBER'               =>"Art.Nr.:",
@@ -1126,6 +1131,7 @@ $aLang = array(
 'USER_PHONE2'                                     => "Telefon:",
 'USER_FAX2'                                       => "Telefax:",
 'USER_CONTINUENEXTSTEP'                           => "Weiter zum nächsten Schritt",
+'USER_OPENID'                                     => "OpenId",
 'USER_DISABLESHIPPINGADDRESS'                     => "Hier klicken, um die Lieferadresse auszublenden",
 'VAT_MESSAGE_ID_VALID'                            => "Die angegebene Umsatzsteuer-Identnummer ist gültig",
 'VAT_MESSAGE_ID_NOT_VALID'                        => "Fehler: Die angegebene Umsatzsteuer-Identnummer ist ungültig",
@@ -1171,6 +1177,9 @@ $aLang = array(
 'EXCEPTION_USER_USERCREATIONFAILED'               => 'Fehler beim anlegen des Nuzters!',
 'EXCEPTION_USER_PWDDONTMATCH'                     => 'Passwörter stimmen nicht überein!',
 'EXCEPTION_USER_NOVALUES'                         => 'E-Mail und Passwort müssen ausgefüllt sein!',
+'EXCEPTION_USER_NOVALIDOPENID'                    => 'Bitte eine g&uuml;ltige OpenID eingeben.',
+'EXCEPTION_USER_OPENIDCANCELED'                   => 'Authentifizierung abgebrochen',
+'EXCEPTION_USER_OPENIDVALIDFAILED'                => 'OpenID Authentifizierung fehlgeschlagen: %s',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                    => 'Keine gültige E-Mail Adresse!',
 'EXCEPTION_INPUT_NOTALLFIELDS'                    => 'Bitte füllen Sie alle Felder mit "*" aus!',
 'EXCEPTION_PAGE_TITLE'                            => 'Fehler',

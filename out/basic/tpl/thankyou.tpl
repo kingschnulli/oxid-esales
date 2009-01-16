@@ -43,7 +43,7 @@
           <div>
             <div class="etrustlogocol">
             <a href="https://www.trustedshops.com/shop/certificate.php?shop_id=[{$oView->getTrustedShopId()}]" target="_blank">
-                <img style="border:0px none;" src="http://www.trustedshops.de/shopbetreiber/siegelbox/images/trustedshops_m.gif" title="[{ oxmultilang ident="INC_TRUSTEDSHOPS_ITEM_IMGTITLE" }]">
+                <img style="border:0px none;" src="[{$oViewConf->getImageUrl()}]/trustedshops_m.gif" title="[{ oxmultilang ident="INC_TRUSTEDSHOPS_ITEM_IMGTITLE" }]">
             </a>
             </div>
             <div class="etrustdescocol">

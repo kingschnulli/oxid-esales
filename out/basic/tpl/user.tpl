@@ -47,8 +47,11 @@
                     <span class="fs11"><b>[{ oxmultilang ident="USER_PWD" }]</b></span><br>
                     <input id="test_UsrOpt2_pwd" type="password" name="lgn_pwd" value="" size="25"><br><br>
                     <span class="btn"><input id="test_UsrOpt2" type="submit" name="send" value="[{ oxmultilang ident="USER_LOGIN" }]" class="btn"></span><br><br>
-                    <a id="test_UsrOpt2_forgotPwd" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=forgotpwd" }]" class="link">[{ oxmultilang ident="USER_FORGOTPWD" }]</a>
-                </div>
+                    <a id="test_UsrOpt2_forgotPwd" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=forgotpwd" }]" class="link">[{ oxmultilang ident="USER_FORGOTPWD" }]</a><br><br>
+                    <span class="fs11"><b>[{ oxmultilang ident="USER_OPENID" }]</b></span><br>
+                    <input id="test_UsrOpt2_openid" type="text" name="lgn_openid" value="" class="openid" size="21"><br><br>
+                    <span class="btn"><input id="test_UsrOpt2OpenId" type="submit" name="send" value="[{ oxmultilang ident="USER_LOGIN" }]" class="btn"></span><br>
+                 </div>
               </form>
           </div>
       </div>

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxorder.php 15206 2009-01-13 09:17:09Z vilma $
+ * $Id: oxorder.php 15337 2009-01-15 15:38:14Z sarunas $
  */
 
 /**
@@ -179,8 +179,8 @@ class oxOrder extends oxBase
         parent::assign( $dbRecord );
 
         // convert date's to international format
-        $this->oxorder__oxorderdate = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxorderdate->value ), oxField::T_RAW);
-        $this->oxorder__oxsenddate  = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxsenddate->value ), oxField::T_RAW);
+        $this->oxorder__oxorderdate = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxorderdate->value));
+        $this->oxorder__oxsenddate  = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxsenddate->value));
 
 
         //get billing country name from billing country id
@@ -973,6 +973,7 @@ class oxOrder extends oxBase
         $this->oxorder__oxorderdate = new oxField(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ), oxField::T_RAW);
         $this->oxorder__oxshopid    = new oxField($myConfig->getShopId(), oxField::T_RAW);
         $this->oxorder__oxfolder    = new oxField(key( $myConfig->getShopConfVar(  'aOrderfolder', $myConfig->getShopId() ) ), oxField::T_RAW);
+        $this->oxorder__oxsenddate  = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxsenddate->value, true ));
 
         if ( ( $blInsert = parent::_insert() ) ) {
             // setting order number
@@ -995,7 +996,7 @@ class oxOrder extends oxBase
      */
     protected function _update()
     {
-        $this->oxorder__oxsenddate = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxsenddate->value, true ), oxField::T_RAW);
+        $this->oxorder__oxsenddate = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxsenddate->value, true ));
         return parent::_update();
     }
 
@@ -1094,7 +1095,7 @@ class oxOrder extends oxBase
                         //unset( $this->_oArticles[$sOrderArticleId] );
                         $this->_oArticles->offsetUnset( $sOrderArticleId );
                     } else {
-                  	    $this->_oArticles->next();
+                          $this->_oArticles->next();
                     }
                 }
             }
@@ -1607,8 +1608,8 @@ class oxOrder extends oxBase
 
         //set shipping
         $oBasket->setShipping( $this->oxorder__oxdeltype->value );
-        //V #M429: Shipping and total prices were not calculated correct 
-        //when user changed delivery costs in admin 
+        //V #M429: Shipping and total prices were not calculated correct
+        //when user changed delivery costs in admin
         if ( $blChangeDelivery ) {
             $oBasket->setDeliveryPrice( $this->getOrderDeliveryPrice() );
         }

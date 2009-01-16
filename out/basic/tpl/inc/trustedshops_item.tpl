@@ -1,10 +1,10 @@
 <!-- Trusted Shops Siegel -->
 [{if $oView->getTrustedShopId()}]
 <div id="tsBox" style="padding:0 10px;">
-    <div style="background-color:#FFFFFF;width:151px;font-family: Verdana, Arial, Helvetica, sans-serif;background-image: url(http://www.trustedshops.de/shopbetreiber/siegelbox/images/bg_yellow.jpg);background-repeat: repeat;background-position: left top;vertical-align:middle;margin-top:0px;border:0px solid #C0C0C0;padding:2px;" id="tsInnerBox">
+    <div style="background-color:#FFFFFF;width:151px;font-family: Verdana, Arial, Helvetica, sans-serif;background-image: url([{$oViewConf->getImageUrl()}]bg_yellow.jpg);background-repeat: repeat;background-position: left top;vertical-align:middle;margin-top:0px;border:0px solid #C0C0C0;padding:2px;" id="tsInnerBox">
         <div style="text-align:center;width:151px;float:left; border:0px solid; padding:2px;" id="tsSeal">
             <a id="ts.certificate" href="https://www.trustedshops.com/shop/certificate.php?shop_id=[{$oView->getTrustedShopId()}]">
-                <img style="border:0px none;" src="http://www.trustedshops.de/shopbetreiber/siegelbox/images/trustedshops_m.gif" title="[{ oxmultilang ident="INC_TRUSTEDSHOPS_ITEM_IMGTITLE" }]">
+                <img style="border:0px none;" src="[{$oViewConf->getImageUrl()}]trustedshops_m.gif" title="[{ oxmultilang ident="INC_TRUSTEDSHOPS_ITEM_IMGTITLE" }]">
             </a>
             [{oxscript add="oxid.blank('ts.certificate');"}]
         </div>

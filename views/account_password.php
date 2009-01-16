@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: account_password.php 14361 2008-11-25 15:40:16Z arvydas $
+ * $Id: account_password.php 15261 2009-01-14 15:27:07Z vilma $
  */
 
 
@@ -48,6 +48,13 @@ class Account_Password extends Account
     protected $_blPasswordChanged = false;
 
     /**
+     * If user has password (for openid).
+     *
+     * @var bool
+     */
+    protected $_blHasPassword = true;
+
+    /**
      * If user is not logged in - returns name of template account_user::_sThisLoginTemplate,
      * or if user is allready logged in additionally loads user delivery address
      * info and forms country list. Returns name of template account_user::_sThisTemplate
@@ -65,6 +72,9 @@ class Account_Password extends Account
         $oUser = $this->getUser();
         if ( !$oUser ) {
             return $this->_sThisTemplate = $this->_sThisLoginTemplate;
+        }
+        if ( $oUser->oxuser__oxisopenid->value == 1 && strpos( $oUser->oxuser__oxpassword->value, 'openid_' ) === 0 ) {
+        	$this->_blHasPassword = false;
         }
 
         return $this->_sThisTemplate;
@@ -122,5 +132,15 @@ class Account_Password extends Account
     public function isPasswordChanged()
     {
         return $this->_blPasswordChanged;
+    }
+
+    /**
+     * Template variable getter. Returns true if user has password.
+     *
+     * @return bool
+     */
+    public function hasPassword()
+    {
+        return $this->_blHasPassword;
     }
 }

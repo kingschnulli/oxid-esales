@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxcmp_user.php 14641 2008-12-11 14:11:43Z vilma $
+ * $Id: oxcmp_user.php 15330 2009-01-15 15:04:21Z vilma $
  */
 
 /**
@@ -173,11 +173,20 @@ class oxcmp_user extends oxView
         $sUser     = oxConfig::getParameter( 'lgn_usr' );
         $sPassword = oxConfig::getParameter( 'lgn_pwd' );
         $sCookie   = oxConfig::getParameter( 'lgn_cook' );
+        $sOpenId   = oxConfig::getParameter( 'lgn_openid' );
 
         // trying to login user
         try {
             $oUser = oxNew( 'oxuser' );
-            $oUser->login( $sUser, $sPassword, $sCookie );
+            if ( $sOpenId ) {
+                $iOldErrorReproting = error_reporting();
+                error_reporting($iOldErrorReproting & ~E_STRICT);
+                $oOpenId = oxNew( "oxOpenID" );
+                $oOpenId->authenticateOid( $sOpenId, $this->getParent()->getClassName() );
+                error_reporting($iOldErrorReproting);
+            } else {
+            	$oUser->login( $sUser, $sPassword, $sCookie );
+            }
         } catch ( oxUserException $oEx ) {
             // for login component send excpetion text to a custom component (if defined)
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
@@ -191,7 +200,6 @@ class oxcmp_user extends oxView
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
             return 'user';
         }
-
         // finalizing ..
         $this->_afterLogin( $oUser );
     }
@@ -593,4 +601,92 @@ class oxcmp_user extends oxView
 
         return $blSetup;
     }
+
+    /**
+     * Collects user information posted from openid server. If user do not exists creates
+     * new user and executes oxuser::openIdLogin().
+     *
+     * @return null
+     */
+    public function loginOid()
+    {
+        $iOldErrorReproting = error_reporting();
+        error_reporting($iOldErrorReproting & ~E_STRICT);
+        try {
+            $oOpenId = oxNew( "oxOpenID" );
+            $aData = $oOpenId->getOidResponse( $this->getParent()->getClassName() );
+        } catch ( oxUserException $oEx ) {
+                // for login component send excpetion text to a custom component (if defined)
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
+        }
+        error_reporting($iOldErrorReproting);
+        if ( $aData['email'] ) {
+            $oUser = oxNew( 'oxuser' );
+            $oUser->oxuser__oxusername = new oxField($aData['email'], oxField::T_RAW);
+
+            // if such user does not exist - creating it
+            if ( !$oUser->exists() ) {
+                $oUser->oxuser__oxpassword = new oxField($oUser->getOpenIdPassword(), oxField::T_RAW);
+                $oUser->oxuser__oxactive   = new oxField(1, oxField::T_RAW);
+                $oUser->oxuser__oxrights   = new oxField('user', oxField::T_RAW);
+                $oUser->oxuser__oxshopid   = new oxField($this->getConfig()->getShopId(), oxField::T_RAW);
+                list ($sFName, $sLName)    = split(' ', $aData['fullname']);
+                $oUser->oxuser__oxfname    = new oxField($sFName, oxField::T_RAW);
+                $oUser->oxuser__oxlname    = new oxField($sLName, oxField::T_RAW);
+                
+                $oUser->oxuser__oxsal      = new oxField($this->_getSal($aData['gender']), oxField::T_RAW);
+                $oUser->oxuser__oxisopenid = new oxField(1, oxField::T_RAW);
+                if ( $sCountryId = $oUser->getUserCountryId( $aData['country'] ) ) {
+                    $oUser->oxuser__oxcountryid = new oxField( $sCountryId, oxField::T_RAW );
+                }
+                if ( $aData['postcode'] ) {
+                    $oUser->oxuser__oxzip = new oxField( $aData['postcode'], oxField::T_RAW );
+                }
+                $oUser->save();
+            } else {
+            	$oUser->load( $oUser->getId() );
+                //if existing user loggins first time with openid
+                if ( $oUser->oxuser__oxisopenid->value == 0 ) {
+                	if ( !$oUser->oxuser__oxpassword->value ) {
+                        $oUser->oxuser__oxisopenid = new oxField(1, oxField::T_RAW);
+                        $oUser->oxuser__oxpassword = new oxField($oUser->getOpenIdPassword(), oxField::T_RAW);
+                    } else {
+                    	$oUser->oxuser__oxisopenid = new oxField(2, oxField::T_RAW);
+                    }
+                    $oUser->save();
+                }
+            }
+
+            try {
+                $oUser->openIdLogin( $oUser->oxuser__oxusername->value );
+            } catch ( oxUserException $oEx ) {
+                // for login component send excpetion text to a custom component (if defined)
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
+            } catch( oxConnectionException $oEx ) {
+                //connection to external resource broken, change message and pass to the view
+                $oEx->setMessage( 'EXCEPTION_ACTIONNOTPOSSIBLEATTHEMOMENT' );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
+            }
+
+            // finalizing ..
+            $this->_afterLogin( $oUser );
+        }
+    }
+
+    /**
+     * Returns gender for database
+     *
+     * @param string $sGender F(femail) or M(mail)
+     *
+     * @return string
+     */
+    protected function _getSal( $sGender )
+    {
+        if ( $sGender == "F" ) {
+        	return oxLang::getInstance()->translateString( "ACCOUNT_USER_MRS" );
+        } else {
+        	return oxLang::getInstance()->translateString( "ACCOUNT_USER_MR" );
+        }
+    }
+
 }

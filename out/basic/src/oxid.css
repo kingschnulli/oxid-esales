@@ -57,6 +57,7 @@ input.chbox {vertical-align:middle; margin-top: 0px;}
 input.chk {margin: 1px 5px 1px 0px;}
 input.fullsize {width: 100%;}
 textarea.fullsize {width: 100%;}
+input.openid {background: #FFFFFF url(bg/openid-icon-small.gif) no-repeat 0pt 50%; border:1px solid inactivecaptiontext; padding:1px 1px 1px 18px;}
 
 /* Tables .....*/
 table {border-collapse: collapse;}
@@ -276,6 +277,7 @@ ul.tree li a.exp.act{background-position: 0 -225px;}
 
 #right .recommlistsearch .btn {width: auto;}
 #right .recommlistsearch .search_input {width: 120px;}
+#right input.openid {width: 99px; background: #FFFFFF url(bg/openid-icon-small.gif) no-repeat 0pt 50%; border:1px solid inactivecaptiontext; padding:1px 1px 1px 18px;}
 
 /* RSS */
 #right .box  {position:relative;}

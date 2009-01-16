@@ -10,6 +10,13 @@
         [{oxid_include_dynamic file="dyn/cmp_login_links.tpl" type="login_links"}]
     </div>
 
+    [{if !$oxcmp_user->oxuser__oxpassword->value}]
+	    <strong class="h2"><a id="test_RightSideOpenIdHeader" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="openid=1"}]">[{ oxmultilang ident="INC_RIGHTITEM_OPENID" }]</a></strong>
+	    <div class="box">
+	        [{oxid_include_dynamic file="dyn/cmp_openidlogin_right.tpl" type="login" openid="1" searchtag=$searchtag searchrecomm=$searchrecommforhtml searchparam=$searchparamforhtml searchnid=$searchnid searchvendor=$searchvendor listtype=$sListType pgnr=$pageNavigation->actPage tpl=$tpl additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
+	    </div>
+    [{/if}]
+
     [{if $oView->showNewsletter()}]
         <strong class="h2"><a id="test_RightSideNewsLetterHeader" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=newsletter" }]">[{ oxmultilang ident="INC_RIGHTITEM_NEWSLETTER" }]</a></strong>
         <div class="box">[{include file="inc/cmp_newsletter.tpl" }]</div>

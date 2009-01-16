@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: account.php 14012 2008-11-06 13:23:45Z arvydas $
+ * $Id: account.php 15261 2009-01-14 15:27:07Z vilma $
  */
 
 /**
@@ -91,6 +91,12 @@ class Account extends oxUBase
      *     2 - no index / follow
      */
     protected $_iViewIndexState = 1;
+    
+    /**
+     * If openid
+     * @var int
+     */
+    protected $_sOpenId = null;
 
     /**
      * Loads action articles. If user is logged and returns name of
@@ -287,4 +293,21 @@ class Account extends oxUBase
         }
         return $this->_sListType;
     }
+
+    /**
+     * Return the if openid
+     * 
+     * @return string | bool
+     */
+    public function getOpenId()
+    {
+        if ( $this->_sOpenId === null) {
+            // passing wishlist information
+            if ( $sOpenId = oxConfig::getParameter('openid') ) {
+                $this->_sOpenId = $sOpenId;
+            }
+        }
+        return $this->_sOpenId;
+    }
+
 }

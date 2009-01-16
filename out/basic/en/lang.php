@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 15187 2009-01-12 13:10:24Z vilma $
+ * $Id: lang.php 15347 2009-01-15 16:56:14Z ralf $
  */
 
 $sLangName  = "English";
@@ -85,6 +85,7 @@ $aLang = array(
 'ACCOUNT_PASSWORD_NEWPASSWORD'                    => "New Password",
 'ACCOUNT_PASSWORD_CONFIRMPASSWORD'                => "Confirm Password:",
 'ACCOUNT_PASSWORD_SAVE'                           => "Save",
+'ACCOUNT_PASSWORD_CHANGEPASSWORD'                 => "Create Password",
 'ACCOUNT_PASSWORD_BACKTOSHOP'                     => "Back to Shop",
 'ACCOUNT_RECOMM_TITLE'                            => "My Listmania lists",
 'ACCOUNT_RECOMM_LOCATION'                         => "My Account / ",
@@ -542,6 +543,7 @@ $aLang = array(
 'INC_CMP_LOGIN_RIGHT_MYPRODUCTCOMPARISON'         =>"My Product Comparison",
 'INC_CMP_LOGIN_RIGHT_PRODUCT3'                    =>"Product:",
 'INC_CMP_LOGIN_RIGHT_DETAILS3'                    =>"Details",
+'INC_CMP_LOGIN_RIGHT_OPENID'                      =>"OpenId:",
 'INC_CMP_LOGIN_ERRINVALIDEMAILORPWD'              =>"<b>Error :</b> <br>Incorrect eMail address or password!",
 'INC_CMP_LOGIN_EMAIL'                             =>"eMail:",
 'INC_CMP_LOGIN_PWD'                               =>"Password:",
@@ -551,6 +553,8 @@ $aLang = array(
 'INC_CMP_LOGIN_FORGOTPWD'                         =>"Forgot Password",
 'INC_CMP_LOGIN_ALREADYCUSTOMER'                   =>"If you are already our customer, please login using your eMail address and password:",
 'INC_CMP_LOGIN_LOGIN2'                            =>"Login",
+'INC_CMP_LOGIN_FOROPENID'                         =>"Login with OpenId",
+'INC_CMP_LOGIN_OPENID'                            =>"OpenId:",
 'INC_CMP_MINI_BASKET_PRODUCT'                     =>"Product:",
 'INC_CMP_MINI_BASKET_QUANTITY'                    =>"Quantity:",
 'INC_CMP_MINI_BASKET_SHIPPING'                    =>"Shipping:",
@@ -673,6 +677,7 @@ $aLang = array(
 'INC_RIGHTLIST_REMOVEFROMCOMPARELIST'             =>"remove from compare list",
 'INC_RIGHTLIST_COMPARE'                           =>"compare",
 'INC_RIGHTLIST_ORDERNOW'                          =>"Order now!",
+'INC_RIGHTITEM_OPENID'                            =>"OpenId",
 'INC_SEARCHLEFTITEM_ALLCATEGORIES'                =>"- all Categories -",
 'INC_SEARCHLEFTITEM_ALLMANUFACTURERS'             =>"- all manufacturers -",
 'INC_SEARCH_PRODUCT_ITEM_ARTNOMBER'               =>"Art.No.:",
@@ -697,9 +702,9 @@ $aLang = array(
 'INC_STEPS_ITEM_SUBMITORDER'                      =>"submit order",
 'INC_STEPS_ITEM_LASTSTEP1'                        =>"Ready",
 'INC_STEPS_ITEM_LASTSTEP2'                        =>"Order completed",
-'INC_TRUSTEDSHOPS_ITEM_IMGTITLE'                  =>"[tr] Klicken Sie auf das G&uuml;tesiegel, um die G&uuml;ltigkeit zu pr&uuml;fen!",
-'INC_TRUSTEDSHOPS_ITEM_ALTTEXT'                   =>"[tr] Mehr Informationen",
-'INC_TRUSTEDSHOPS_ITEM_SEALOFAPPROVAL'            =>"[tr] ist ein von Trusted Shops gepr&uuml;fter Onlineh&auml;ndler  mit G&uuml;tesiegel und K&auml;uferschutz. Mehr...",
+'INC_TRUSTEDSHOPS_ITEM_IMGTITLE'                  =>"Klicken Sie auf das G&uuml;tesiegel, um die G&uuml;ltigkeit zu pr&uuml;fen",
+'INC_TRUSTEDSHOPS_ITEM_ALTTEXT'                   =>"Mehr Informationen",
+'INC_TRUSTEDSHOPS_ITEM_SEALOFAPPROVAL'            =>"ist ein von Trusted Shops gepr&uuml;fter Onlineh&auml;ndler mit G&uuml;tesiegel und K&auml;uferschutz. Mehr...",
 'INC_TRUSTEDSHOPS_ITEM_LINK'                      =>"http://www.trustedshops.com/merchants/membership.html?shopsw=OXID&et_cid=14&et_lid=84",
 'INC_VENDORLEFTITEM_BYMARK'                       =>"by brand/manufacturer",
 'LINKS_TITLE'                                     => "Links",
@@ -1127,6 +1132,7 @@ $aLang = array(
 'USER_PHONE2'                                     => "Phone",
 'USER_FAX2'                                       => "Fax:",
 'USER_CONTINUENEXTSTEP'                           => "Continue to Next Step",
+'USER_OPENID'                                     => "OpenId:",
 'USER_DISABLESHIPPINGADDRESS'                     => "Click here to hide different shipping address",
 'VAT_MESSAGE_ID_VALID'                            => "The VAT id is valid",
 'VAT_MESSAGE_ID_NOT_VALID'                        => "Error: The VAT id is not valid",
@@ -1172,6 +1178,9 @@ $aLang = array(
 'EXCEPTION_USER_USERCREATIONFAILED'               => 'Error while creating user!',
 'EXCEPTION_USER_PWDDONTMATCH'                     => "Passwords don't match!",
 'EXCEPTION_USER_NOVALUES'                         => 'e-mail and password have to be filled!',
+'EXCEPTION_USER_NOVALIDOPENID'                    => 'Please enter a valid OpenID',
+'EXCEPTION_USER_OPENIDCANCELED'                   => 'Verification Cancelled by user',
+'EXCEPTION_USER_OPENIDVALIDFAILED'                => 'OpenID authentication failed: %s',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                    => 'No valid e-mail!',
 'EXCEPTION_INPUT_NOTALLFIELDS'                    => 'Please complete all fields marked with a <span class="req">*</span>.',
 'EXCEPTION_PAGE_TITLE'                            => 'Error',
