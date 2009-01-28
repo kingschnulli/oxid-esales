@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oximex.php 14388 2008-11-26 15:43:17Z vilma $
+ * $Id: oximex.php 15735 2009-01-21 16:17:45Z tomas $
  */
 
 /**
@@ -539,7 +539,7 @@ class oxImex extends oxBase
             return null;
         }
 
-        $sExport  = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>$sNewLine";
+        $sExport  = "<?xml version=\"1.0\" encoding=\"ISO-8859-15\"?>$sNewLine";
         $sExport .= "<Bestellliste>$sNewLine";
         $sRet .= $sExport;
 

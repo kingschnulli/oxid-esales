@@ -27,13 +27,13 @@
         <col width="30%">
         <col width="70%">
       </colgroup>
-	      <tr>
-	        <td><label>[{ oxmultilang ident="INC_CMP_LOGIN_RIGHT_OPENID" }]</label></td>
-	        <td><input id="test_RightLogin_Email" type="text" name="lgn_openid" value="" class="fullsize openid"></td>
-	      </tr>
-	      <tr>
-	        <td></td>
-	        <td><span class="btn"><input id="test_RightLogin_OpenIdLogin" type="submit" name="send" value="[{ oxmultilang ident="INC_CMP_LOGIN_RIGHT_LOGIN" }]" class="btn"></span></td>
-	      </tr>
+        <tr>
+            <td><label>[{ oxmultilang ident="INC_CMP_LOGIN_RIGHT_OPENID" }]</label></td>
+            <td><input id="test_RightLogin_OpenId" type="text" name="lgn_openid" value="" class="fullsize openid"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><span class="btn"><input id="test_RightLogin_OpenIdLogin" type="submit" name="send" value="[{ oxmultilang ident="INC_CMP_LOGIN_RIGHT_LOGIN" }]" class="btn"></span></td>
+        </tr>
     </table>
   </form>

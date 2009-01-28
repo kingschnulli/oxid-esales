@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxemail.php 15128 2009-01-09 11:07:41Z arvydas $
+ * $Id: oxemail.php 15988 2009-01-28 10:12:56Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -144,6 +144,31 @@ class oxEmail extends phpmailer
 
         $this->isHtml( true );
         $this->setLanguage( "en", $myConfig->getConfigParam( 'sShopDir' )."/core/phpmailer/language/");
+    }
+
+    /**
+     * Only used for convenience in UNIT tests by doing so we avoid
+     * writing extended classes for testing protected or private methods
+     *
+     * @param string $sMethod Methods name
+     * @param array  $aArgs   Argument array
+     *
+     * @throws oxSystemComponentException Throws an exception if the called method does not exist or is not accessable in current class
+     *
+     * @return string
+     */
+    public function __call( $sMethod, $aArgs )
+    {
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            if ( substr( $sMethod, 0, 4) == "UNIT" ) {
+                $sMethod = str_replace( "UNIT", "_", $sMethod );
+            }
+            if ( method_exists( $this, $sMethod)) {
+                return call_user_func_array( array( & $this, $sMethod ), $aArgs );
+            }
+        }
+
+        throw new oxSystemComponentException( "Function '$sMethod' does not exist or is not accessible! (" . get_class($this) . ")".PHP_EOL);
     }
 
     /**
@@ -753,13 +778,11 @@ class oxEmail extends phpmailer
 
         // dodger #1469 - we need to patch security here as we do not use standard template dir, so smarty stops working
         $aStore['INCLUDE_ANY'] = $smarty->security_settings['INCLUDE_ANY'];
-        //P
-        //$aStore['blAdminTemplateLanguage'] = oxLang::getInstance()->getTplLanguage();
-        $aStore['tpllanguage'] = oxLang::getInstance()->getTplLanguage();
-        $aStore['lang'] = oxConfig::getParameter( 'lang' );
-        if ( !isset( $aStore['lang'] ) ) {
-            $aStore['lang'] = oxSession::getVar( 'lang' );
-        }
+        //V send email in order language
+        $iOldTplLang = oxLang::getInstance()->getTplLanguage();
+        $iOldBaseLang = oxLang::getInstance()->getTplLanguage();
+        oxLang::getInstance()->setTplLanguage( $iOrderLang );
+        oxLang::getInstance()->setBaseLanguage( $iOrderLang );
 
         $smarty->security_settings['INCLUDE_ANY'] = true;
 
@@ -768,7 +791,8 @@ class oxEmail extends phpmailer
 
         $this->setBody( $smarty->fetch( $sPathToTemplate."email_sendednow_html.tpl") );
         $this->setAltBody( $smarty->fetch( $sPathToTemplate."email_sendednow_plain.tpl") );
-
+        oxLang::getInstance()->setTplLanguage( $iOldTplLang );
+        oxLang::getInstance()->setBaseLanguage( $iOldBaseLang );
         // set it back
         $smarty->security_settings['INCLUDE_ANY'] = $aStore['INCLUDE_ANY'] ;
 
@@ -779,7 +803,6 @@ class oxEmail extends phpmailer
 
         $this->setRecipient( $oOrder->oxorder__oxbillemail->value, $sFullName );
         $this->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
-
         return $this->send();
     }
 
@@ -1035,9 +1058,17 @@ class oxEmail extends phpmailer
      */
     protected function _includeImages($sImageDir = null, $sImageDirNoSSL = null, $sDynImageDir = null, $sAbsImageDir = null, $sAbsDynImageDir = null)
     {
-        $myConfig = $this->getConfig();
+        $sBody = $this->getBody();
+        if (preg_match_all('/<\s*img\s+[^>]*?src[\s]*=[\s]*[\'"]?([^[\'">]]+|.*?)?[\'">]/i', $sBody, $matches, PREG_SET_ORDER)) {
 
-        if (preg_match_all('/<\s*img\s+[^>]*?src[\s]*=[\s]*[\'"]?([^[\'">]]+|.*?)?[\'">]/i', $this->getBody(), $matches, PREG_SET_ORDER)) {
+            $oFileUtils = oxUtilsFile::getInstance();
+            $blReSetBody = false;
+
+            // preparing imput
+            $sDynImageDir = $oFileUtils->normalizeDir( $sDynImageDir );
+            $sImageDir = $oFileUtils->normalizeDir( $sImageDir );
+            $sImageDirNoSSL = $oFileUtils->normalizeDir( $sImageDirNoSSL );
+
             if (is_array($matches) && count($matches)) {
                 $aImageCache = array();
 
@@ -1045,38 +1076,41 @@ class oxEmail extends phpmailer
 
                     $image = $aImage[1];
                     $sFileName = '';
-                    if (strpos($image, $sDynImageDir) === 0) {
-                        $sFileName = $sAbsDynImageDir.'/' . substr($image, strlen($sDynImageDir)+1);
-                    } elseif (strpos($image, $sImageDir) === 0) {
-                        $sFileName = $sAbsImageDir.'/' . substr($image, strlen($sImageDir)+1);
-                    } elseif (strpos($image, $sImageDirNoSSL) === 0) {
-                        $sFileName = $sAbsImageDir.'/' . substr($image, strlen($sImageDirNoSSL)+1);
+                    if ( strpos( $image, $sDynImageDir ) === 0 ) {
+                        $sFileName = $oFileUtils->normalizeDir( $sAbsDynImageDir ) . str_replace( $sDynImageDir, '', $image );
+                    } elseif ( strpos( $image, $sImageDir ) === 0 ) {
+                        $sFileName = $oFileUtils->normalizeDir( $sAbsImageDir ) . str_replace( $sImageDir, '', $image );
+                    } elseif ( strpos( $image, $sImageDirNoSSL ) === 0 ) {
+                        $sFileName = $oFileUtils->normalizeDir( $sAbsImageDir ) . str_replace( $sImageDirNoSSL, '', $image );
                     }
 
                     if ($sFileName && @is_file($sFileName)) {
-
                         $sCId = '';
-                        if (isset($aImageCache[$sFileName]) && $aImageCache[$sFileName]) {
+                        if ( isset( $aImageCache[$sFileName] ) && $aImageCache[$sFileName] ) {
                             $sCId = $aImageCache[$sFileName];
                         } else {
-                            $sCId = uniqid(time());
+                            $sCId = oxUtilsObject::getInstance()->generateUID();
                             $sMIME = oxUtils::getInstance()->oxMimeContentType($sFileName);
                             if ($sMIME == 'image/jpeg' || $sMIME == 'image/gif' || $sMIME == 'image/png') {
-                                if ($this->addEmbeddedImage($sFileName, $sCId, "image", "base64", $sMIME)) {
+                                if ( $this->addEmbeddedImage( $sFileName, $sCId, "image", "base64", $sMIME ) ) {
                                     $aImageCache[$sFileName] = $sCId;
                                 } else {
                                     $sCId = '';
                                 }
                             }
                         }
-                        if ($sCId && $sCId == $aImageCache[$sFileName]) {
-                            $sReplTag = str_replace($image, 'cid:'.$sCId, $aImage[0]);
-                            if ($sReplTag) {
-                                $this->setBody( str_replace($aImage[0], $sReplTag, $this->getBody()) );
+                        if ( $sCId && $sCId == $aImageCache[$sFileName] ) {
+                            if ( $sReplTag = str_replace( $image, 'cid:'.$sCId, $aImage[0] ) ) {
+                                $sBody = str_replace($aImage[0], $sReplTag, $sBody );
+                                $blReSetBody = true;
                             }
                         }
                     }
                 }
+            }
+
+            if ( $blReSetBody ) {
+            	$this->setBody( $sBody );
             }
         }
     }

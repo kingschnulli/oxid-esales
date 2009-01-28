@@ -149,7 +149,7 @@ function UpdateList( sID)
             <textarea class="confinput" style="width: 270; height: 42" name=confarrs[aSkipTags] [{ $readonly }]>[{$confarrs.aSkipTags}]</textarea><BR>
          </td>
          <td valign="top" width="100%">
-           [{ oxmultilang ident="SHOP_SYSTEM_SKIPTAGS" }]
+           [{ oxmultilang ident="SHOP_SEO_SKIPTAGS" }]
          </td>
         </tr>
 
@@ -169,7 +169,7 @@ function UpdateList( sID)
                  [{ assign var="oActItem" value=$oItem }]
                [{/if}]
 
-             <option value="[{$oItem->oxseo__oxobjectid->value}]" [{ if $oItem->oxseo__oxobjectid->value == $sActSeoObject }]selected[{/if}]>[{$oItem->oxseo__oxstdurl->value}]</option>
+             <option value="[{$oItem->oxseo__oxobjectid->value}]" [{ if $oItem->oxseo__oxobjectid->value == $sActSeoObject }]selected[{/if}]>[{$oItem->oxseo__oxstdurl->getRawValue()}]</option>
              [{/foreach}]
            </select>
          </td>
@@ -182,7 +182,7 @@ function UpdateList( sID)
 
         <tr class="conftext[{cycle}]">
          <td>
-          <input type=text class="confinput" style="width:270" name="aStaticUrl[oxseo__oxstdurl]" id="oxseo__oxstdurl" value="[{$oActItem->oxseo__oxstdurl->value}]" [{ $readonly }]>
+          <input type=text class="confinput" style="width:270" name="aStaticUrl[oxseo__oxstdurl]" id="oxseo__oxstdurl" value="[{if $oActItem->oxseo__oxstdurl}][{$oActItem->oxseo__oxstdurl->getRawValue()}][{/if}]" [{ $readonly }]>
          </td>
          <td>
            [{ oxmultilang ident="SHOP_SEO_STDURL" }]

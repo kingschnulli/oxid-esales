@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxajax.php 15253 2009-01-14 14:00:36Z arvydas $
+ * $Id: oxajax.php 15735 2009-01-21 16:17:45Z tomas $
  */
 
 // shop path for includes
@@ -443,7 +443,7 @@ class ajaxListComponent extends oxSuperCfg
             $iKeySize = count( $aKeys );
             for ( $i = 0; $i < $iRecSize; $i++ ) {
                 for ( $c = 0; $c < $iKeySize; $c++ ) {
-                    $aData['records'][$i][$aKeys[$c]] = iconv("ISO-8859-1", "UTF-8", $aData['records'][$i][$aKeys[$c]] );
+                    $aData['records'][$i][$aKeys[$c]] = iconv("ISO-8859-15", "UTF-8", $aData['records'][$i][$aKeys[$c]] );
                 }
             }
         }

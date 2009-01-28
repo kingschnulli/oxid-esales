@@ -51,7 +51,7 @@
 <div id="mask"></div>
 [{if $popup}][{include file=$popup}][{/if}]
 <script type="text/javascript" src="[{ $oViewConf->getResourceUrl() }]oxid.js"></script>
-[{oxid_include_dynamic file="dyn/newbasketitem.tpl" }]
+[{oxid_include_dynamic file="dyn/newbasketitem_popup.tpl"}]
 <script type="text/javascript">[{oxscript}][{oxid_include_dynamic file="dyn/oxscript.tpl" }]</script>
 <!--[if lt IE 7]><script type="text/javascript">oxid.popup.addShim();</script><![endif]-->
 </body>

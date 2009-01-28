@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxorder.php 15337 2009-01-15 15:38:14Z sarunas $
+ * $Id: oxorder.php 15988 2009-01-28 10:12:56Z vilma $
  */
 
 /**
@@ -970,7 +970,12 @@ class oxOrder extends oxBase
     {
         $myConfig = $this->getConfig();
 
-        $this->oxorder__oxorderdate = new oxField(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ), oxField::T_RAW);
+        //V #M525 orderdate must be the same as it was
+        if ( !$this->oxorder__oxorderdate->value ) {
+            $this->oxorder__oxorderdate = new oxField(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ), oxField::T_RAW);
+        } else {
+        	$this->oxorder__oxorderdate  = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxorderdate->value, true ));
+        }
         $this->oxorder__oxshopid    = new oxField($myConfig->getShopId(), oxField::T_RAW);
         $this->oxorder__oxfolder    = new oxField(key( $myConfig->getShopConfVar(  'aOrderfolder', $myConfig->getShopId() ) ), oxField::T_RAW);
         $this->oxorder__oxsenddate  = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxsenddate->value, true ));

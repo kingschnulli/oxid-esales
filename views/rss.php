@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: rss.php 14012 2008-11-06 13:23:45Z arvydas $
+ * $Id: rss.php 15905 2009-01-27 07:08:55Z arvydas $
  */
 
 /**
@@ -89,10 +89,22 @@ class Rss extends oxView
         header ("content-type: text/xml");
 
 
-        echo $oSmarty->fetch('rss.tpl', $this->getViewId()) ;
+        echo $this->_processOutput( $oSmarty->fetch('rss.tpl', $this->getViewId()) );
 
         // returned rss xml: no further processing
         exit (0);
+    }
+
+    /**
+     * Processes xml before outputting to user
+     *
+     * @param string $sInput input to process
+     *
+     * @return string
+     */
+    protected function _processOutput( $sInput )
+    {
+        return oxUtilsString::getInstance()->recodeEntities( $sInput );
     }
 
     /**

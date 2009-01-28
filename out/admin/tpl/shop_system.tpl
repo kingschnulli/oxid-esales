@@ -255,6 +255,7 @@ function _groupExp(el) {
                         <option value="0"  [{if ($confstrs.iNewBasketItemMessage==0)}]selected[{/if}]>[{ oxmultilang ident="SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE_NONE" }]</option>
                         <option value="1"  [{if ($confstrs.iNewBasketItemMessage==1)}]selected[{/if}]>[{ oxmultilang ident="SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE_MESSAGE" }]</option>
                         <option value="2"  [{if ($confstrs.iNewBasketItemMessage==2)}]selected[{/if}]>[{ oxmultilang ident="SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE_POPUP" }]</option>
+                        <option value="3"  [{if ($confstrs.iNewBasketItemMessage==3)}]selected[{/if}]>[{ oxmultilang ident="SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE_TOBASKET" }]</option>
                     </select>
                 </dt>
                 <dd>

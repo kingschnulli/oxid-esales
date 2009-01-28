@@ -326,21 +326,19 @@
             <col width="20%">
         </colgroup>
         <tr>
-          <th><label class="nobold">[{ oxmultilang ident="CONTACT_VERIFICATIONCODE" }]</label></th>
-          <th></th>
+          <th colspan="2"><label class="nobold">[{ oxmultilang ident="CONTACT_VERIFICATIONCODE" }]</label></th>
           <th><label>[{ oxmultilang ident="DETAILS_PERSPARAM_EMAIL" }]</label></th>
-          <th><label class="hl">[{ oxmultilang ident="DETAILS_PERSPARAM_YOURPRICE" }]</label></th>
+          <th colspan="3"><label class="hl">[{ oxmultilang ident="DETAILS_PERSPARAM_YOURPRICE" }]</label></th>
         </tr>
         <tr>
             <td>
              [{if $oCaptcha->isImageVisible()}]
-               <img src="[{$oCaptcha->getImageUrl()}]" alt="">
+               <img src="[{$oCaptcha->getImageUrl()}]" alt="[{ oxmultilang ident="CONTACT_VERIFICATIONCODE" }]" width="80" height="18">
              [{else}]
                <div class="verification_code">[{$oCaptcha->getText()}]</div>
              [{/if}]
-
             </td>
-            <td class="contact_highlight">&nbsp;<input type="text" name="c_mac" value="" size=5/></td>
+            <td><input type="text" name="c_mac" value="" size="5"></td>
             <td><input type="text" name="pa[email]" value="[{ if $oxcmp_user }][{ $oxcmp_user->oxuser__oxusername->value }][{/if}]" size="20" maxlength="128"></td>
             <td><input type="text" name="pa[price]" value="[{oxhasrights ident="SHOWARTICLEPRICE"}][{ if $product }][{ $product->getFPrice() }][{/if}][{/oxhasrights}]" size="20" maxlength="32"></td>
             <td><b class="hl">[{ $currency->sign}]</b></td>
@@ -348,7 +346,7 @@
                 <span class="btn">
                     <input id="test_PriceAlarmSubmit" type="submit" name="submit" value="[{ oxmultilang ident="DETAILS_PERSPARAM_SEND" }]" class="btn">
                 </span>
-            <td>
+            </td>
         </tr>
       </table>
 

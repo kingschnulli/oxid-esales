@@ -135,7 +135,7 @@ function ThisDate( sID)
     <td valign="top" class="edittext" align="left" width="50%">
         <table cellspacing="0" cellpadding="0" border="0">
     	<tr>
-	    	<td class="edittext">[{ oxmultilang ident="ORDER_OVERVIEW_DELTYPE" }]:</td>
+	    	<td class="edittext">[{ oxmultilang ident="ORDER_MAIN_DELTYPE" }]:</td>
 	    	<td class="edittext">
 				<select name="setDelSet" class="editinput" onChange="Javascript:document.myedit.fnc.value='changeDelSet'; document.myedit.submit();" style="width: 135px;">
 				<option value="">----</option>

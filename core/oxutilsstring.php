@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxutilsstring.php 14368 2008-11-26 07:36:13Z vilma $
+ * $Id: oxutilsstring.php 15904 2009-01-27 07:08:10Z arvydas $
  */
 
 /**
@@ -29,9 +29,22 @@ class oxUtilsString
     /**
      * oxUtils class instance.
      *
-     * @var oxutils* instance
+     * @var oxutils instance
      */
     private static $_instance = null;
+
+    /**
+     * Language specific characters (currently german; storen in octal form)
+     *
+     * @var array
+     */
+    protected $_aUmls = array( "\344", "\366", "\374", "\304", "\326", "\334", "\337" );
+
+    /**
+     * oxUtilsString::$_aUmls equivalent in entities form
+     * @var array
+     */
+    protected $_aUmlEntities = array('&auml;', '&ouml;', '&uuml;', '&Auml;', '&Ouml;', '&Uuml;', '&szlig;' );
 
     /**
      * Returns string manipulation utility instance
@@ -107,12 +120,31 @@ class oxUtilsString
      */
     public function prepareStrForSearch($sSearchStr)
     {
-        if ( preg_match( "/(ä|ö|ü|Ä|Ö|Ü|ß|(&amp;))/", $sSearchStr ) ) {
-            return str_replace( array('ä',      'ö',      'ü',      'Ä',      'Ö',      'Ü',      'ß',       '&amp;' ),
-                                array('&auml;', '&ouml;', '&uuml;', '&Auml;', '&Ouml;', '&Uuml;', '&szlig;', '&' ),
-                                $sSearchStr);
+        if ( preg_match( "/(".implode( "|", $this->_aUmls  )."|(&amp;))/", $sSearchStr ) ) {
+            return $this->recodeEntities( $sSearchStr, true,
+                                          $this->_aUmls + array( count( $this->_aUmls ) => '&amp;' ),
+                                          $this->_aUmlEntities + array( count( $this->_aUmlEntities ) => '&' ) );
         }
 
         return '';
+    }
+
+    /**
+     * Recodes and returns passed input:
+     *     if $blToHtmlEntities == true  ä -> &auml;
+     *     if $blToHtmlEntities == false &auml; -> ä
+     *
+     * @param string $sInput           text to recode
+     * @param bool   $blToHtmlEntities recode direction
+     * @param array  $aUmls            language specific characters
+     * @param array  $aUmlEntities     language specific characters equivalents in entities form
+     *
+     * @return string
+     */
+    public function recodeEntities( $sInput, $blToHtmlEntities = false, $aUmls = array(), $aUmlEntities = array() )
+    {
+        $aUmls = $aUmls ? $aUmls : $this->_aUmls;
+        $aUmlEntities = $aUmlEntities ? $aUmlEntities : $this->_aUmlEntities;
+        return $blToHtmlEntities ? str_replace( $aUmls, $aUmlEntities, $sInput ) : str_replace( $aUmlEntities, $aUmls, $sInput );
     }
 }

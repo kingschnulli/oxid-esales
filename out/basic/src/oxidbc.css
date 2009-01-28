@@ -68,4 +68,15 @@ div.popup.on { _position:absolute;_visibility:visible;display:block;_top:express
 /* IE fixing problem with collspan when <td> has colspan and nonbreakable content doesn't fit in it */
 .showHideShippAddr {width: 543px; overflow: hidden;}
 
+/* IE 6 fixing problems with add to cart button on article details page */ 
+#body .details .tocart {_display:inline;}
+
+/* IE fixing 1px height gap in right top column near path, where we can see right column background */
+div#path {height: 13px;}
+
+/* IE 6 fixing problem with rss icon position */
+a.rss{ right:13px; top:9px;}
+
+/* IE 6 left column categories menu 3-ird level background problem */
+ul.tree li a.last { _background-image: none; }
 

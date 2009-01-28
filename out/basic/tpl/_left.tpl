@@ -1,4 +1,4 @@
-[{if $oxcmp_categories }]
+[{if $oView->showSearch() }]
     <strong class="h2 search">[{ oxmultilang ident="INC_LEFTITEM_PRODUCTSEARCH" }]</strong>
     <form action="[{ $oViewConf->getBaseDir() }]index.php" method="get" class="search" id="f.search">
         <p>
@@ -25,7 +25,8 @@
             <span class="btn"><input id="test_searchGo" type="submit" class="btn" value="GO!"></span>
         </p>
     </form>
-
+[{/if}]
+[{if $oxcmp_categories }]
   [{if $oView->showTopCatNavigation()}]
     [{include file="inc/category_tree.tpl" tree=$oxcmp_categories->getClickRoot() act=$oxcmp_categories->getClickCat() class="tree"}]
   [{else}]

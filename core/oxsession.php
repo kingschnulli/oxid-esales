@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxsession.php 15285 2009-01-15 09:39:54Z vilma $
+ * $Id: oxsession.php 15710 2009-01-21 09:33:44Z vilma $
  */
 
 
@@ -79,6 +79,13 @@ class oxSession extends oxSuperCfg
      * @var string
      */
     protected $_sErrorMsg = null;
+
+    /**
+     * Basket session object
+     *
+     * @var object
+     */
+    protected $_oBasket = null;
 
     /**
      * Array of Classes => methods, which requires forced cookies support. Works together with blSessionEnforceCookies config option.

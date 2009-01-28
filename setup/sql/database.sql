@@ -1,5 +1,5 @@
 SET @@session.sql_mode = '';
-# ALTER SCHEMA CHARACTER SET latin1 COLLATE latin1_general_ci;
+ALTER SCHEMA CHARACTER SET latin1 COLLATE latin1_general_ci;
 
 #
 # Tabellenstruktur für Tabelle `oxaccessoire2article`
@@ -1597,7 +1597,7 @@ CREATE TABLE `oxshops` (
 # Daten für Tabelle `oxshops`
 #
 
-INSERT INTO `oxshops` VALUES ('oxbaseshop', 1, 1, 1, 1, 0, '', 0, 'OXID eShop 4', 'OXID Geschenke Shop', 'OXID Gift Shop', '', '', 'online kaufen', 'buy online', '', '', 'Originelle, witzige Geschenkideen - Lifestyle, Trends, Accessoires', 'Gift Ideas - Original, Funny Presents - Lifestyle, Trends, Accessories', '', '', 'Ihre Info e-Mail Adresse', 'Ihre Bestell Reply e-Mail Adresse', 'Ihre Bestell e-Mail Adresse', 'Ihre Bestellung bei OXID eSales', 'Vielen Dank für Ihre Registrierung im OXID eShop', 'Ihr Passwort im OXID eShop', 'Ihre OXID eSales Bestellung wurde versandt', 'Your order from OXID eShop', 'Thank you for your registration in OXID eShop', 'Your OXID eShop password', 'Your OXID eSales Order has been shipped', '', '', '', '', '', '', '', '', 'Tragen Sie bitte hier Ihren SMTP Server ein', '', '', 'Ihr Firmenname', 'Musterstr. 10', '79098', 'Musterstadt', 'Deutschland', 'Volksbank Musterstadt', '1234567890', '900 1234567', 'DE651234567', '', '', 'Hans', 'Mustermann', '0800 1234567', '0800 1234567', 'www.meineshopurl.com', '8a142c3e60a535f16.78077188', '', '', '', '', '', '', '', 'CE', '4.0.0.2', 1, 1, 0, 0);
+INSERT INTO `oxshops` VALUES ('oxbaseshop', 1, 1, 1, 1, 0, '', 0, 'OXID eShop 4', 'OXID Geschenke Shop', 'OXID Gift Shop', '', '', 'online kaufen', 'buy online', '', '', 'Originelle, witzige Geschenkideen - Lifestyle, Trends, Accessoires', 'Gift Ideas - Original, Funny Presents - Lifestyle, Trends, Accessories', '', '', 'Ihre Info e-Mail Adresse', 'Ihre Bestell Reply e-Mail Adresse', 'Ihre Bestell e-Mail Adresse', 'Ihre Bestellung bei OXID eSales', 'Vielen Dank für Ihre Registrierung im OXID eShop', 'Ihr Passwort im OXID eShop', 'Ihre OXID eSales Bestellung wurde versandt', 'Your order from OXID eShop', 'Thank you for your registration in OXID eShop', 'Your OXID eShop password', 'Your OXID eSales Order has been shipped', '', '', '', '', '', '', '', '', 'Tragen Sie bitte hier Ihren SMTP Server ein', '', '', 'Ihr Firmenname', 'Musterstr. 10', '79098', 'Musterstadt', 'Deutschland', 'Volksbank Musterstadt', '1234567890', '900 1234567', 'DE651234567', '', '', 'Hans', 'Mustermann', '0800 1234567', '0800 1234567', 'www.meineshopurl.com', '8a142c3e60a535f16.78077188', '', '', '', '', '', '', '', 'CE', '4.0.1.0', 1, 1, 0, 0);
 
 #
 # Tabellenstruktur für Tabelle `oxstatistics`
@@ -1652,7 +1652,7 @@ CREATE TABLE `oxuser` (
   `OXDISABLEAUTOGRP` tinyint(1) NOT NULL default '0',
   `OXUPDATEKEY` CHAR( 32 ) NOT NULL default '',
   `OXUPDATEEXP` int(11) NOT NULL default '0',
-  `OXISOPENID` tinyint(1) NOT NULL default '0',   
+  `OXISOPENID` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`OXID`),
   UNIQUE `OXUSERNAME` (`OXUSERNAME`, `OXSHOPID`),
   KEY `OXPASSWORD` (`OXPASSWORD`),

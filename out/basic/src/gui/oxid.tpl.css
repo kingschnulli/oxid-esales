@@ -2,7 +2,7 @@
 html,body {height: 100%;}
 
 body,table,input,select,textarea,tt {font:10px/130% Verdana,Geneva,Arial,Helvetica,sans-serif;}
-body {margin:0;padding:0;}
+body {margin:0;padding:0;background:oxPageBg; }
 h1   {font-size: 13px;}
 h2   {font-size: 11px;}
 h3   {font-size: 10px;}
@@ -92,7 +92,7 @@ ul.tree li {padding:0;margin:0;list-style: none;}
 ul.tree li a{line-height: 100%;}
 
 /* Layout     */
-div#page      { width:980px;margin:0px auto 0;padding:0;position: relative;}
+div#page      { width:980px;margin:0px auto 0;padding:0;position: relative;background:oxPageBg;}
   div#header  { clear:both; background:oxHeaderBg;}
   div#content { clear:both; background:url(oxFauxColBg) repeat-y;}
     div#path  { margin:0 0 0 195px;background:oxPathBg;padding:15px 0 0 0;border-bottom:1px solid oxPathBr;color:oxPathCl;}
@@ -114,7 +114,7 @@ div.bar.oxid dl.box {min-height: 98px;min-width:150px;margin:0 0 1px 2px;}
 
 dl.box           {background:oxHeaderBoxBdBg;width:150px;}
 dl.box dt        {background:oxHeaderBoxHdBg;color:oxHeaderBoxHdCl;}
-dl.box dt a      {color:oxHeaderBoxHdCl;padding:0 0 0 10px;background:transparent url(oxSprite) 0 -10px no-repeat;display:block;}        
+dl.box dt a      {color:oxHeaderBoxHdCl;padding:0 0 0 10px;background:transparent url(oxSprite) 0 -10px no-repeat;display:block;}
 dl.box dd        {color:oxHeaderBoxBdCl;}
 dl.box dd ul     {margin:0;}
 dl.box.open dt   {background:oxHeaderBoxHdOpenBg;}
@@ -144,7 +144,7 @@ dl.box.basket dd table {width:100%;}
 
 div.bar.links      {background:oxHeaderBarLinksBg;border-bottom:1px solid oxHeaderBr;}
 div.bar.links.single{background:oxHeaderBarLinksSingleBg;}
-div.bar.links a    {line-height:1;color:oxHeaderBarLinksCl; font-weight: bold; float:left;vertical-align: bottom;padding:7px .5em; border-left:1px solid oxHeaderBr;}
+div.bar.links a    {line-height: 11px;color:oxHeaderBarLinksCl; font-weight: bold; float:left;vertical-align: bottom;padding:7px .5em; border-left:1px solid oxHeaderBr;}
 div.bar.links a.language {margin:4px 3px 4px .8em;padding:0;border:none;}
 div.bar.links a.language img{margin:1px;}
 div.bar.links a.language.act img{opacity:.7;}
@@ -158,8 +158,9 @@ div.bar.categories   { background:oxHeaderBarCatsBg; border-bottom: 1px solid ox
 div.bar.categories a { min-width:50px;text-align:center;line-height:1;color:oxHeaderBarCatsCl; text-decoration: none; display:block; padding: 10px;font-weight: bold;font-size:11px;}
 div.bar.categories li a.more{ background: transparent url(oxSprite) no-repeat 5px -125px;text-indent: 10px;}
 div.bar.categories li.open a.more{ background-position: 5px -150px;}
-div.bar.categories a.fixed { padding: 10px 0; text-align: center;}
-div.bar.categories a.fixed:hover, div.bar.categories li.open a, div.bar.categories li a.exp{ background-color: oxHeaderBarCatsOpenBg;color:oxHeaderBarCatsOpenCl;text-decoration: none; }
+div.bar.categories a.fixed { padding: 10px 0; text-align: center; background-color: oxHeaderBarFixedBg;color:oxHeaderBarFixedCl;}
+div.bar.categories a.fixed:hover { background-color: oxHeaderBarFixedHlBg;color:oxHeaderBarFixedHlCl;text-decoration: none; }
+div.bar.categories li.open a, div.bar.categories li a.exp{ background-color: oxHeaderBarCatsOpenBg;color:oxHeaderBarCatsOpenCl;text-decoration: none; }
 
 div.bar.categories ul.menue.horizontall li {float:left; border-right : 1px solid oxHeaderBr;}
 div.bar.categories ul.menue.verticall   li {float:none; border-top   : 1px solid oxHeaderBr;}
@@ -235,6 +236,7 @@ ul.tree li a.exp.act{background-position: 0 -225px;}
 #right div.box a.arr:hover {text-decoration: underline;}
 
 #right div.forms strong.h2 {background-color: oxRightFormsHdBg;color:oxRightFormsHdCl;border-left-color:oxRightFormsBr;}
+#right div.forms strong.h2 a{color:oxRightFormsHdCl;}
 #right div.forms div.box{border-left-color:oxRightFormsBr;background-color:oxRightFormsBg;}
 
 #right .listitem {margin: 2px 0 7px; padding-left: 66px; position: relative; min-height: 45px; height:auto; color: oxRightProdCl; width: 114px;}
@@ -742,7 +744,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 /* Suggest */
 #body ul.suggest {margin: 0;}
 
-/* Mall shops start page */ 
+/* Mall shops start page */
 #body .mallbox {width: 980px; margin: 15px auto;}
 #body .mallbox .mallhead {position: relative; clear: both; height: 75px;}
 #body .mallbox .mallhead .mallmenu {position: absolute; right: 7px; top: 55px; margin: 0; padding: 0; list-style-type: none;}

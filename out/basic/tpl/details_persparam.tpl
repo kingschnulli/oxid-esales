@@ -244,19 +244,19 @@
         [{ if $oxcmp_user }]
             <a id="test_Recommlist" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=recommadd" params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]" class="details">[{ oxmultilang ident="DETAILS_PERSPARAM_ADDTORECOMMLIST" }]</a>
         [{ else}]
-            <a id="test_LoginToRecommlist" class="reqlogin" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account" params="aid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOACCESSRECOMMLIST" }]</a>
+            <a id="test_LoginToRecommlist" class="reqlogin" rel="nofollow" href="[{ $product->getLink()|oxaddparams:"fnc=showLogin"|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOACCESSRECOMMLIST" }]</a>
         [{ /if}]
 
         [{if $oxcmp_user }]
             <a id="slist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`&amp;fnc=tonoticelist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_ADDTONOTICELIST" }]</a>
         [{else}]
-            <a id="test_LoginToNotice" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account" params="aid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOACCESSNOTICELIST" }]</a>
+            <a id="test_LoginToNotice" class="reqlogin" href="[{ $product->getLink()|oxaddparams:"fnc=showLogin"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOACCESSNOTICELIST" }]</a>
         [{/if}]
 
         [{if $oxcmp_user }]
             <a id="wlist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&anid=`$product->oxarticles__oxnid->value`&amp;fnc=towishlist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_ADDTOWISHLIST" }]</a>
         [{else}]
-            <a id="test_LoginToWish" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account" params="aid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOACCESSWISHLIST" }]</a>
+            <a id="test_LoginToWish" class="reqlogin" href="[{ $product->getLink()|oxaddparams:"fnc=showLogin"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOACCESSWISHLIST" }]</a>
         [{/if}]
     </div>
 
@@ -330,21 +330,19 @@
             <col width="20%">
         </colgroup>
         <tr>
-          <th><label class="nobold">[{ oxmultilang ident="CONTACT_VERIFICATIONCODE" }]</label></th>
-          <th></th>
+          <th colspan="2"><label class="nobold">[{ oxmultilang ident="CONTACT_VERIFICATIONCODE" }]</label></th>
           <th><label>[{ oxmultilang ident="DETAILS_PERSPARAM_EMAIL" }]</label></th>
-          <th><label class="hl">[{ oxmultilang ident="DETAILS_PERSPARAM_YOURPRICE" }]</label></th>
+          <th colspan="3"><label class="hl">[{ oxmultilang ident="DETAILS_PERSPARAM_YOURPRICE" }]</label></th>
         </tr>
         <tr>
             <td>
              [{if $oCaptcha->isImageVisible()}]
-               <img src="[{$oCaptcha->getImageUrl()}]" alt="">
+               <img src="[{$oCaptcha->getImageUrl()}]" alt="[{ oxmultilang ident="CONTACT_VERIFICATIONCODE" }]" width="80" height="18">
              [{else}]
                <div class="verification_code">[{$oCaptcha->getText()}]</div>
              [{/if}]
-
             </td>
-            <td class="contact_highlight">&nbsp;<input type="text" name="c_mac" value="" size=5/></td>
+            <td><input type="text" name="c_mac" value="" size="5"></td>
             <td><input type="text" name="pa[email]" value="[{ if $oxcmp_user }][{ $oxcmp_user->oxuser__oxusername->value }][{/if}]" size="20" maxlength="128"></td>
             <td><input type="text" name="pa[price]" value="[{oxhasrights ident="SHOWARTICLEPRICE"}][{ if $product }][{ $product->getFPrice() }][{/if}][{/oxhasrights}]" size="20" maxlength="32"></td>
             <td><b class="hl">[{ $currency->sign}]</b></td>
@@ -352,7 +350,7 @@
                 <span class="btn">
                     <input id="test_PriceAlarmSubmit" type="submit" name="submit" value="[{ oxmultilang ident="DETAILS_PERSPARAM_SEND" }]" class="btn">
                 </span>
-            <td>
+            </td>
         </tr>
       </table>
 
@@ -431,7 +429,7 @@
     </form>
     <a id="write_new_review" rel="nofollow" class="fs10" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params="anid=`$product->oxarticles__oxnid->value`&amp;cnid="|cat:$oViewConf->getActCatId() }]" onclick="showReview();return false;"><b>[{ oxmultilang ident="DETAILS_PERSPARAM_WRITEREVIEW" }]</b></a>
   [{else}]
-    <a id="test_Reviews_login" rel="nofollow" href="[{ $product->getLink()|oxaddparams:"fnc=showLogin"|cat:$oViewConf->getNavUrlParams() }]" class="fs10"><b>[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOWRITEREVIEW" }]</b></a>
+    <a id="test_Reviews_login" rel="nofollow" href="[{ $product->getLink()|oxaddparams:"fnc=showLogin&anchor=review"|cat:$oViewConf->getNavUrlParams() }]" class="fs10"><b>[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOWRITEREVIEW" }]</b></a>
   [{/if}]
 
   [{if $oView->getReviews() }]

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: article_extend.php 14767 2008-12-16 12:14:11Z vilma $
+ * $Id: article_extend.php 15762 2009-01-23 10:16:23Z vilma $
  */
 
 /**
@@ -176,8 +176,8 @@ class Article_Extend extends oxAdminDetails
         $oArticle = oxNew( "oxarticle" );
         $oArticle->loadInLang( $this->_iEditLang, $soxId);
 
-        if ( $aParams['oxarticles__oxtprice'] != $oArticle->oxarticles__oxtprice->value && $aParams['oxarticles__oxtprice'] < $oArticle->oxarticles__oxprice->value) {
-            $aParams['oxarticles__oxtprice'] = $oArticle->oxarticles__oxtprice->value;
+        if ( $aParams['oxarticles__oxtprice'] != $oArticle->oxarticles__oxtprice->value &&  $aParams['oxarticles__oxtprice'] && $aParams['oxarticles__oxtprice'] < $oArticle->oxarticles__oxprice->value) {
+            //$aParams['oxarticles__oxtprice'] = $oArticle->oxarticles__oxtprice->value;
             $this->_aViewData["errorsavingtprice"] = 1;
         }
 
@@ -196,12 +196,12 @@ class Article_Extend extends oxAdminDetails
         if ($sMediaUrl || $aMediaFile['name'] || $sMediaDesc) {
 
             if ( !$sMediaDesc ) {
-                oxUtilsView::getInstance()->addErrorToDisplay(oxLang::getInstance()->translateString('EXCEPTION_NODESCRIPTIONADDED'));
+                oxUtilsView::getInstance()->addErrorToDisplay('EXCEPTION_NODESCRIPTIONADDED');
                 return;
             }
 
             if ( !$sMediaUrl && !$aMediaFile['name'] ) {
-                oxUtilsView::getInstance()->addErrorToDisplay(oxLang::getInstance()->translateString('EXCEPTION_NOMEDIAADDED'));
+                oxUtilsView::getInstance()->addErrorToDisplay('EXCEPTION_NOMEDIAADDED');
                 return;
             }
 
@@ -215,7 +215,7 @@ class Article_Extend extends oxAdminDetails
                     $sMediaUrl = oxUtilsFile::getInstance()->handleUploadedFile($aMediaFile, 'out/media/');
                     $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(1, oxField::T_RAW);
                 } catch (Exception $e) {
-                    oxUtilsView::getInstance()->addErrorToDisplay(oxLang::getInstance()->translateString($e->getMessage()));
+                    oxUtilsView::getInstance()->addErrorToDisplay($e->getMessage());
                     return;
                 }
             }

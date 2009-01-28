@@ -16,11 +16,11 @@
         </div>
         <div style="clear:both;"></div>
     </div>
-</div> 
+</div>
 [{else}]
 <div id="siegel">
     <a id="ts.membership" href="[{ oxmultilang ident="INC_TRUSTEDSHOPS_ITEM_LINK" }]">
-        <img style="border:0px none;" src="[{$oViewConf->getImageUrl()}]/trustedshops_[{$oViewConf->getActLanguageId()}].gif" >
+        <img style="border:0px none;" src="[{$oViewConf->getImageUrl()}]trustedshops_[{$oViewConf->getActLanguageId()}].gif" alt="[{ oxmultilang ident="INC_TRUSTEDSHOPS_ITEM_ALTTEXT" }]">
     </a>
     [{oxscript add="oxid.blank('ts.membership');"}]
 </div>

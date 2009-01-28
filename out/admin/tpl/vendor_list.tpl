@@ -1,4 +1,4 @@
-[{include file="headitem.tpl" title="VENDOR_MAIN_TITLE"|oxmultilangassign box="list"}]
+[{include file="headitem.tpl" title="VENDOR_LIST_TITLE"|oxmultilangassign box="list"}]
 
 [{if $readonly}]
     [{assign var="readonly" value="readonly disabled"}]

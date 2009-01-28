@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxview.php 15157 2009-01-09 14:57:07Z vilma $
+ * $Id: oxview.php 15875 2009-01-26 07:58:45Z vilma $
  */
 
 /**
@@ -1707,6 +1707,20 @@ class oxView extends oxSuperCfg
     public function setShowTopBasket( $blShowBasket )
     {
         $this->_blShowTopBasket = $blShowBasket;
+    }
+
+    /**
+     * Returns show category search
+     *
+     * @return bool
+     */
+    public function showSearch()
+    {
+        $myConfig = $this->getConfig();
+        if ( $myConfig->getConfigParam( 'blDisableNavBars' ) && $myConfig->getActiveView()->getIsOrderStep() ) {
+            return 0;
+        }
+        return 1;
     }
 
     /**

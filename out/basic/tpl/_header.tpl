@@ -175,5 +175,5 @@
         </div>
         <div id="right">[{include file="_right.tpl" }]</div>
         <div id="body">
-        [{ insert name="oxid_newbasketitem" tpl="inc/msg_basket.tpl" type="message"}]
+        [{oxid_include_dynamic file="dyn/newbasketitem_message.tpl"}]
         [{include file="inc/error.tpl" Errorlist=$Errors.default}]

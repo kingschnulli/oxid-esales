@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxseoencoder.php 14980 2009-01-08 08:41:19Z arvydas $
+ * $Id: oxseoencoder.php 15918 2009-01-27 10:23:55Z arvydas $
  */
 
 /**
@@ -518,7 +518,7 @@ class oxSeoEncoder extends oxSuperCfg
             $sUrl = preg_replace( "'^".preg_quote( $sLangParam, "'")."'", '', $sUrl );
         }
 
-        return preg_replace( '/sid=[a-z0-9\.]+&?(amp;)?/i', '', $sUrl );
+        return preg_replace( '/(force_)?sid=[a-z0-9\.]+&?(amp;)?/i', '', $sUrl );
     }
 
     /**
@@ -698,7 +698,7 @@ class oxSeoEncoder extends oxSuperCfg
             if ( $sOldObjectId ) {
                 // move changed records to history
                 if ( !$oDb->getOne( "select ('{$sSeoUrl}' like oxseourl) & ('{$sStdUrl}' like oxstdurl) from oxseo where oxobjectid = '{$sOldObjectId}' and oxshopid = '{$iShopId}' and oxlang = '{$iLang}' " ) ) {
-                    $this->_copyToHistory( $oDb->quote( $sOldObjectId ), $iShopId, $iLang, $oDb->quote( 'static' ), $sObjectId );
+                    $this->_copyToHistory( $oDb->quote( $sOldObjectId ), $oDb->quote( $iShopId ), $iLang, $oDb->quote( 'static' ), $sObjectId );
                 }
             }
 

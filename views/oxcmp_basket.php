@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxcmp_basket.php 14146 2008-11-11 14:21:16Z arvydas $
+ * $Id: oxcmp_basket.php 15381 2009-01-16 13:06:22Z vilma $
  */
 
 /**
@@ -248,6 +248,15 @@ class oxcmp_basket extends oxView
         $iPageNr    = (int) oxConfig::getParameter( 'pgNr' );
         $sPosition .= ( $iPageNr > 0 )?'pgNr='.$iPageNr.'&':'';
 
+        // reload and backbutton blocker
+        if ( $this->getConfig()->getConfigParam( 'iNewBasketItemMessage' ) == 3 ) {
+
+            // saving return to shop link to session
+            oxSession::setVar( '_backtoshop', $sClass.$sPosition );
+
+            // redirecting to basket
+            $sClass = 'basket?';
+        }
 
         return $sClass.$sPosition;
     }

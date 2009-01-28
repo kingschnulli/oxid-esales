@@ -1,4 +1,4 @@
-[{include file="headitem.tpl" title="TOOLS_LTITLE"|oxmultilangassign box="list"}]
+[{include file="headitem.tpl" title="TOOLS_LIST_TITLE"|oxmultilangassign box="list"}]
 
 <script type="text/javascript">
 <!--

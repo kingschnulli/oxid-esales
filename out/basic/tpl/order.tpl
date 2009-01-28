@@ -88,8 +88,8 @@
       </thead>
 
       <!-- basket items -->
-      [{foreach key=basketindex from=$oxcmp_basket->getContents() item=basketitem name=testArt}]
       [{assign var="basketitemlist" value=$oView->getBasketArticles() }]
+      [{foreach key=basketindex from=$oxcmp_basket->getContents() item=basketitem name=testArt}]      
       [{assign var="basketproduct" value=$basketitemlist.$basketindex }]
         <tr>
           <!-- product image -->

@@ -74,6 +74,10 @@ class oxEfiDownloader extends oxSuperCfg
         }
         fclose($fOut);
 
+        //remove possible old connector from the main shop dir
+        if (file_exists(getShopBasePath() . "/oxefi.php"))
+            unlink(getShopBasePath() . "/oxefi.php");
+
         return $sFileName;
     }
 

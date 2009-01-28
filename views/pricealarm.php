@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: pricealarm.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: pricealarm.php 15441 2009-01-19 15:34:40Z vilma $
  */
 
 /**
@@ -96,7 +96,7 @@ class Pricealarm extends oxUBase
         $sMacHash = oxConfig::getParameter( 'c_mach' );
         $oCaptcha = oxNew('oxCaptcha');
         if (!$oCaptcha->pass($sMac, $sMacHash)) {
-            $this->_iPriceAlarmStatus = '0';
+            $this->_iPriceAlarmStatus = 2;
             return;
         }
 
@@ -104,7 +104,7 @@ class Pricealarm extends oxUBase
 
         $aParams = oxConfig::getParameter( 'pa' );
         if ( !isset( $aParams['email'] ) || !oxUtils::getInstance()->isValidEmail( $aParams['email'] ) ) {
-            $this->_iPriceAlarmStatus = "0";
+            $this->_iPriceAlarmStatus = 0;
             return;
         }
 
@@ -126,7 +126,7 @@ class Pricealarm extends oxUBase
 
         // Send Email
         $oEmail = oxNew( 'oxemail' );
-        $this->_iPriceAlarmStatus = $oEmail->sendPricealarmNotification( $aParams, $oAlarm );
+        $this->_iPriceAlarmStatus = (int) $oEmail->sendPricealarmNotification( $aParams, $oAlarm );
     }
 
     /**

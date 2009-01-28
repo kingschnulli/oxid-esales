@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxcmp_user.php 15330 2009-01-15 15:04:21Z vilma $
+ * $Id: oxcmp_user.php 15981 2009-01-28 09:04:30Z vilma $
  */
 
 /**
@@ -182,7 +182,7 @@ class oxcmp_user extends oxView
                 $iOldErrorReproting = error_reporting();
                 error_reporting($iOldErrorReproting & ~E_STRICT);
                 $oOpenId = oxNew( "oxOpenID" );
-                $oOpenId->authenticateOid( $sOpenId, $this->getParent()->getClassName() );
+                $oOpenId->authenticateOid( $sOpenId, $this->_getReturnUrl() );
                 error_reporting($iOldErrorReproting);
             } else {
             	$oUser->login( $sUser, $sPassword, $sCookie );
@@ -614,7 +614,7 @@ class oxcmp_user extends oxView
         error_reporting($iOldErrorReproting & ~E_STRICT);
         try {
             $oOpenId = oxNew( "oxOpenID" );
-            $aData = $oOpenId->getOidResponse( $this->getParent()->getClassName() );
+            $aData = $oOpenId->getOidResponse( $this->_getReturnUrl() );
         } catch ( oxUserException $oEx ) {
                 // for login component send excpetion text to a custom component (if defined)
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
@@ -634,7 +634,7 @@ class oxcmp_user extends oxView
                 $oUser->oxuser__oxfname    = new oxField($sFName, oxField::T_RAW);
                 $oUser->oxuser__oxlname    = new oxField($sLName, oxField::T_RAW);
                 
-                $oUser->oxuser__oxsal      = new oxField($this->_getSal($aData['gender']), oxField::T_RAW);
+                $oUser->oxuser__oxsal      = new oxField($this->_getUserTitle($aData['gender']), oxField::T_RAW);
                 $oUser->oxuser__oxisopenid = new oxField(1, oxField::T_RAW);
                 if ( $sCountryId = $oUser->getUserCountryId( $aData['country'] ) ) {
                     $oUser->oxuser__oxcountryid = new oxField( $sCountryId, oxField::T_RAW );
@@ -670,6 +670,8 @@ class oxcmp_user extends oxView
 
             // finalizing ..
             $this->_afterLogin( $oUser );
+            $this->getParent()->setFncName( null );
+            oxUtils::getInstance()->redirect($this->getParent()->getLink());
         }
     }
 
@@ -680,13 +682,32 @@ class oxcmp_user extends oxView
      *
      * @return string
      */
-    protected function _getSal( $sGender )
+    protected function _getUserTitle( $sGender )
     {
         if ( $sGender == "F" ) {
         	return oxLang::getInstance()->translateString( "ACCOUNT_USER_MRS" );
         } else {
         	return oxLang::getInstance()->translateString( "ACCOUNT_USER_MR" );
         }
+    }
+
+    /**
+     * Returns return url for openid.
+     *
+     * @return string $sReturnUrl
+     */
+    protected function _getReturnUrl()
+    {
+        $this->getParent()->setFncName( 'loginOid' );
+        $sReturnUrl = str_replace( '&amp;', '&', $this->getParent()->getLink() );
+        if ( !strpos( $sReturnUrl, 'loginOid' ) ) {
+            if ( !strpos( $sReturnUrl, 'loginOid' ) ) {
+                $sReturnUrl = $sReturnUrl . "&fnc=loginOid";
+            } else {
+                $sReturnUrl = $sReturnUrl . "?fnc=loginOid";
+            }
+        }
+        return $sReturnUrl;
     }
 
 }

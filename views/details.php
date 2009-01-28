@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: details.php 15221 2009-01-13 14:00:08Z arvydas $
+ * $Id: details.php 15893 2009-01-26 15:10:28Z rimvydas.paskevicius $
  */
 
 /**
@@ -224,13 +224,13 @@ class Details extends oxUBase
     public function loadVariantInformation()
     {
         //loading full list of variants
-        $this->_aVariantList = $this->_oProduct->getVariants();
+        $this->_aVariantList = $this->_oProduct->getVariants( false );
 
         //if we are child and do not have any variants then please load all parent variants as ours
         if ( ( $oParent = $this->_getParentProduct( $this->_oProduct->oxarticles__oxparentid->value ) ) && count( $this->_aVariantList ) == 0 ) {
             $myConfig = $this->getConfig();
 
-            $this->_aVariantList = $oParent->getVariants();
+            $this->_aVariantList = $oParent->getVariants( false );
 
             //in variant list parent may be NOT buyable
             if ( $oParent->blNotBuyableParent ) {
@@ -323,6 +323,9 @@ class Details extends oxUBase
 
         }
 
+        if ( !$this->_oProduct->isVisible() ) {
+            $myUtils->redirect($myConfig->getShopHomeURL());
+        }
 
         // assign template name
         if ( $this->_oProduct->oxarticles__oxtemplate->value ) {

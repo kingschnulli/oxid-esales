@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxuser.php 15261 2009-01-14 15:27:07Z vilma $
+ * $Id: oxuser.php 15988 2009-01-28 10:12:56Z vilma $
  */
 
 /**
@@ -686,7 +686,8 @@ class oxUser extends oxBase
             $sQ = "select oxid from oxuser where oxusername = '{$this->oxuser__oxusername->value}' and oxusername != '' ";
             if ( $oDB->getOne( $sQ ) ) {
                 $oEx = oxNew( 'oxUserException' );
-                $oEx->setMessage('EXCEPTION_USER_USEREXISTS');
+                $oLang = oxLang::getInstance();
+                $oEx->setMessage( sprintf( $oLang->translateString( 'EXCEPTION_USER_USEREXISTS', $oLang->getTplLanguage() ), $this->oxuser__oxusername->value ) );
                 throw $oEx;
             }
         }
@@ -1559,10 +1560,11 @@ class oxUser extends oxBase
             }
         }
 
-        if ( $this->checkIfEmailExists( $sLogin)) {
+        if ( $this->checkIfEmailExists( $sLogin ) ) {
             //if exists then we do now allow to do that
             $oEx = oxNew( 'oxUserException' );
-            $oEx->setMessage('EXCEPTION_USER_USEREXISTS');
+            $oLang = oxLang::getInstance();
+            $oEx->setMessage( sprintf( $oLang->translateString( 'EXCEPTION_USER_USEREXISTS', $oLang->getTplLanguage() ), $sLogin ) );
             throw $oEx;
         }
     }
@@ -1712,6 +1714,13 @@ class oxUser extends oxBase
      */
     protected function _checkPassword( $sNewPass, $sConfPass, $blCheckLenght = false )
     {
+
+        //  no passwrod at all
+        if ( $blCheckLenght && strlen( $sNewPass ) == 0 ) {
+            $oEx = oxNew( 'oxInputException' );
+            $oEx->setMessage('EXCEPTION_INPUT_EMPTYPASS');
+            throw $oEx;
+        }
 
         //  password is too short ?
         if ( $blCheckLenght &&  strlen( $sNewPass ) < 6 ) {
@@ -1969,7 +1978,7 @@ class oxUser extends oxBase
     public function loadUserByUpdateId( $sUid )
     {
         $oDb = oxDb::getDb();
-        $sQ = "select oxid from ".$this->getViewName()." where oxupdateexp >= UNIX_TIMESTAMP() and MD5( CONCAT( oxid, oxshopid, oxupdatekey ) ) = ".$oDb->quote( $sUid );
+        $sQ = "select oxid from ".$this->getViewName()." where oxupdateexp >= ".time()." and MD5( CONCAT( oxid, oxshopid, oxupdatekey ) ) = ".$oDb->quote( $sUid );
         if ( $sUserId = $oDb->getOne( $sQ ) ) {
             return $this->load( $sUserId );
         }
@@ -2017,7 +2026,7 @@ class oxUser extends oxBase
     public function isExpiredUpdateId( $sKey )
     {
         $oDb = oxDb::getDb();
-        $sQ = "select 1 from ".$this->getViewName()." where oxupdateexp >= UNIX_TIMESTAMP() and MD5( CONCAT( oxid, oxshopid, oxupdatekey ) ) = ".$oDb->quote( $sKey );
+        $sQ = "select 1 from ".$this->getViewName()." where oxupdateexp >= ".time()." and MD5( CONCAT( oxid, oxshopid, oxupdatekey ) ) = ".$oDb->quote( $sKey );
         return !( (bool) $oDb->getOne( $sQ ) );
     }
 

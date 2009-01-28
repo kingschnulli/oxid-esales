@@ -6,7 +6,7 @@
         [{if $oView->getVendorId() }]
             <ul>
             [{foreach from=$tree item=ovnd key=vndkey name=test_vendor }]
-                <li><a rel="nofollow" id="test_BoxLeft_SubVend_[{$smarty.foreach.test_vendor.iteration}]" href="[{$ovnd->getLink()}]" class="[{if $oView->getVendorId()==$ovnd->getId()}]act[{/if}]">[{ $ovnd->oxvendor__oxtitle->value }][{ if $ovnd->getNrOfArticles() > 0 }] ([{$ovnd->getNrOfArticles()}])[{/if}]</a></li>
+                <li><a rel="nofollow" id="test_BoxLeft_SubVend_[{$smarty.foreach.test_vendor.iteration}]" href="[{$ovnd->getLink()}]" class="[{if $oView->getVendorId()==$ovnd->getId()}]act last[{/if}]">[{ $ovnd->oxvendor__oxtitle->value }][{ if $ovnd->getNrOfArticles() > 0 }] ([{$ovnd->getNrOfArticles()}])[{/if}]</a></li>
             [{/foreach}]
             </ul>
         [{/if}]

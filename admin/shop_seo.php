@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: shop_seo.php 14839 2008-12-19 10:22:19Z arvydas $
+ * $Id: shop_seo.php 15401 2009-01-19 08:28:08Z arvydas $
  */
 
 /**
@@ -149,10 +149,51 @@ class Shop_Seo extends Shop_Config
 
         // saving static url changes
         if ( is_array( $aStaticUrl = oxConfig::getParameter( 'aStaticUrl' ) ) ) {
-            $this->_sActSeoObject = $oEncoder->encodeStaticUrls( $aStaticUrl, $oShop->getId(), $this->_iEditLang );
+            $this->_sActSeoObject = $oEncoder->encodeStaticUrls( $this->_processUrls( $aStaticUrl ), $oShop->getId(), $this->_iEditLang );
         }
 
         return $this->autosave();
+    }
+
+    /**
+     * Goes through urls array and prepares them for saving to db
+     *
+     * @param array $aUrls urls to process
+     *
+     * @return array
+     */
+    protected function _processUrls( $aUrls )
+    {
+    	if ( isset( $aUrls['oxseo__oxstdurl'] ) && $aUrls['oxseo__oxstdurl'] ) {
+            $aUrls['oxseo__oxstdurl'] = $this->_cleanupUrl( $aUrls['oxseo__oxstdurl'] );
+    	}
+
+        if ( isset( $aUrls['oxseo__oxseourl'] ) && is_array( $aUrls['oxseo__oxseourl'] ) ) {
+            foreach ( $aUrls['oxseo__oxseourl'] as $iPos => $sUrl) {
+            	$aUrls['oxseo__oxseourl'][$iPos] = $this->_cleanupUrl( $sUrl );
+            }
+        }
+
+        return $aUrls;
+    }
+
+    /**
+     * processes urls by fixing "&amp;", "&"
+     *
+     * @param string $sUrl processable url
+     *
+     * @return string
+     */
+    protected function _cleanupUrl( $sUrl )
+    {
+        // replacing &amp; to & or removing double &&
+        while ( ( stripos( $sUrl, '&amp;' ) !== false ) || ( stripos( $sUrl, '&&' ) !== false ) ) {
+        	$sUrl = str_replace( '&amp;', '&', $sUrl );
+            $sUrl = str_replace( '&&', '&', $sUrl );
+        }
+
+        // converting & to &amp;
+        return str_replace( '&', '&amp;', $sUrl );
     }
 
     /**

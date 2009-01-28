@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxlang.php 14378 2008-11-26 13:59:41Z vilma $
+ * $Id: oxlang.php 15879 2009-01-26 09:17:14Z vilma $
  */
 
 /**
@@ -416,7 +416,7 @@ class oxLang extends oxSuperCfg
 
         $blAdminMode = isset( $blAdminMode ) ? $blAdminMode : $this->isAdmin();
 
-        $iLang  = ( $iLang === null )?oxSession::getVar( 'blAdminTemplateLanguage' ):$iLang;
+        $iLang  = ( $iLang === null && $blAdminMode)?$this->getTplLanguage():$iLang;
         if ( !isset( $iLang ) ) {
             $iLang = $this->getBaseLanguage();
             if ( !isset( $iLang ) ) {
@@ -498,7 +498,8 @@ class oxLang extends oxSuperCfg
      */
     protected function _readTranslateStrFromTextFile( $sStringToTranslate, $iLang = null, $blIsAdmin = null )
     {
-        $iLang  = ( $iLang === null )?oxSession::getVar( 'blAdminTemplateLanguage' ):$iLang;
+        $blIsAdmin = isset( $blIsAdmin ) ? $blIsAdmin : $this->isAdmin();
+        $iLang  = ( $iLang === null && $blIsAdmin)?$this->getTplLanguage():$iLang;
         if ( !isset( $iLang ) ) {
             $iLang = $this->getBaseLanguage();
             if ( !isset( $iLang ) ) {
@@ -506,7 +507,6 @@ class oxLang extends oxSuperCfg
             }
         }
 
-        $blIsAdmin = isset( $blIsAdmin ) ? $blIsAdmin : $this->isAdmin();
         $sFileName = $this->getConfig()->getLanguagePath('lang.txt', $blIsAdmin, $iLang);
 
         if ( is_file ( $sFileName ) ) {

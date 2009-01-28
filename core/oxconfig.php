@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxconfig.php 14627 2008-12-11 09:00:33Z tomas $
+ * $Id: oxconfig.php 15949 2009-01-27 15:48:51Z tomas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -234,7 +234,6 @@ class oxConfig extends oxSuperCfg
      * @var string
      */
     protected $_sOutDir = 'out';
-
 
     /**
      * Image dir name

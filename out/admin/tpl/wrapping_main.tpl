@@ -67,7 +67,7 @@ function DeletePic( sField )
             </td>
              <td class="edittext" colspan="2">
             <select name="editval[oxwrapping__oxtype]" class="editinput" [{ $readonly }]>
-                <option value="WRAP" [{ if $edit->oxwrapping__oxtype->value == "WRAP" }]SELECTED[{/if}]>[{ oxmultilang ident="WRAPPING_LIST_PRESENTPACKUNG" }]</option>
+                <option value="WRAP" [{ if $edit->oxwrapping__oxtype->value == "WRAP" }]SELECTED[{/if}]>[{ oxmultilang ident="WRAPPING_MAIN_PRESENTPACKUNG" }]</option>
                 <option value="CARD" [{ if $edit->oxwrapping__oxtype->value == "CARD" }]SELECTED[{/if}]>[{ oxmultilang ident="GENERAL_CARD" }]</option>
             </select>
             </td>
@@ -90,7 +90,7 @@ function DeletePic( sField )
         </tr>
         <tr>
             <td class="edittext">
-            [{ oxmultilang ident="WRAPPING_LIST_PICTURE" }]
+            [{ oxmultilang ident="WRAPPING_MAIN_PICTURE" }]
             </td>
             <td class="edittext">
             <input id="oxpic" type="text" class="editinput" size="42" maxlength="[{$edit->oxwrapping__oxpic->fldmax_length}]" name="editval[oxwrapping__oxpic]" value="[{$edit->oxwrapping__oxpic->value}]" [{ $readonly }]>
@@ -135,7 +135,7 @@ function DeletePic( sField )
     [{ if $oxid != "-1"}]
 
             [{if $edit->oxwrapping__oxpic->value }]
-            [{ oxmultilang ident="WRAPPING_LIST_PICTURE" }] <br>
+            [{ oxmultilang ident="WRAPPING_MAIN_PICTURE" }] <br>
             <img src="[{$edit->dimagedir}]/0/[{$edit->oxwrapping__oxpic->value }]" border="0" hspace="0" vspace="0">
             [{/if}]
 

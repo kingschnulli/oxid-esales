@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: pricealarm_main.php 15128 2009-01-09 11:07:41Z arvydas $
+ * $Id: pricealarm_main.php 15978 2009-01-28 08:44:56Z arvydas $
  */
 
 /**
@@ -165,32 +165,30 @@ class PriceAlarm_Main extends oxAdminDetails
 
         // Send Email
         $oShop = oxNew( "oxshop" );
-        $oShop->load( $oPricealarm->oxpricealarm__oxshopid->value);
-        $oShop = $this->addGlobalParams( $oShop);
+        $oShop->load( $oPricealarm->oxpricealarm__oxshopid->value );
 
         $oArticle = oxNew( "oxarticle" );
         $oArticle->load( $oPricealarm->oxpricealarm__oxartid->value);
 
         //arranging user email
-        $oxEMail = oxNew( "oxemail" );
-        $oxEMail->From     = $oShop->oxshops__oxorderemail->value;
-        $oxEMail->FromName = $oShop->oxshops__oxname->getRawValue();
-        $oxEMail->Host     = $oShop->oxshops__oxsmtp->value;
-        $oxEMail->SetSMTP( $oShop);
-        $oxEMail->WordWrap = 100;
+        $oEmail = oxNew( "oxemail" );
+        $oEmail->setFrom( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
+        $oEmail->setSmtp( $oShop );
 
         $aParams = oxConfig::getParameter( "editval" );
-        $oxEMail->Body      = stripslashes( isset( $aParams['oxpricealarm__oxlongdesc'] ) ? $aParams['oxpricealarm__oxlongdesc'] : '' );
-        $oxEMail->Subject   = $oShop->oxshops__oxname->getRawValue();
-        $oxEMail->AddAddress( $oPricealarm->oxpricealarm__oxemail->value, $oPricealarm->oxpricealarm__oxemail->value );
-        $oxEMail->AddReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue());
-        $blSuccess = $oxEMail->send();
+        $sContent = isset( $aParams['oxpricealarm__oxlongdesc'] ) ? stripslashes( $aParams['oxpricealarm__oxlongdesc'] ) : '';
+        if ( $sContent ) {
+            $sContent = oxUtilsView::getInstance()->parseThroughSmarty( $sContent, $oPricealarm->getId() );
+        }
+
+        $oEmail->setBody( $sContent );
+        $oEmail->setSubject( $oShop->oxshops__oxname->getRawValue() );
+        $oEmail->setRecipient( $oPricealarm->oxpricealarm__oxemail->value, $oPricealarm->oxpricealarm__oxemail->value );
+        $oEmail->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
 
         // setting result message
-        if ( $blSuccess) {
-            $timeout = time();
-            $now = date("Y-m-d H:i:s", $timeout);
-            $oPricealarm->oxpricealarm__oxsended->setValue($now);
+        if ( $oEmail->send() ) {
+            $oPricealarm->oxpricealarm__oxsended->setValue( date( "Y-m-d H:i:s" ) );
             $oPricealarm->save();
             $this->_aViewData["mail_succ"] = 1;
         } else {

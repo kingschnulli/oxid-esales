@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxutils.php 14378 2008-11-26 13:59:41Z vilma $
+ * $Id: oxutils.php 15915 2009-01-27 09:26:13Z arvydas $
  */
 
 /**
@@ -1022,7 +1022,7 @@ class oxUtils extends oxSuperCfg
             return $sUrl;
         }
 
-        $sUrl = preg_replace('/sid=[a-z0-9\._]*&?(amp;)?/i', '', $sUrl);
+        $sUrl = preg_replace('/(force_)?sid=[a-z0-9\._]*&?(amp;)?/i', '', $sUrl);
 
         if ($qpos = strpos($sUrl, '?')) {
             if ($qpos == strlen($sUrl)-1) {

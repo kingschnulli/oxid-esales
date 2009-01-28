@@ -140,7 +140,7 @@ window.onLoad = top.reloadEditFrame();
 if (parent.parent)
 {   parent.parent.sShopTitle   = "[{$actshopobj->oxshops__oxname->getRawValue()|oxaddslashes}]";
     parent.parent.sMenuItem    = "[{ oxmultilang ident="GENERAL_MENUITEM" }]";
-    parent.parent.sMenuSubItem = "[{ oxmultilang ident="ACTIONS_MAIN_MENUSUBITEM" }]";
+    parent.parent.sMenuSubItem = "[{ oxmultilang ident="ACTIONS_LIST_MENUSUBITEM" }]";
     parent.parent.sWorkArea    = "[{$_act}]";
     parent.parent.setTitle();
 }

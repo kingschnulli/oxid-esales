@@ -1,4 +1,4 @@
-[{include file="headitem.tpl" title="ADMINLINKS_TITLE"|oxmultilangassign box="list"}]
+[{include file="headitem.tpl" title="ADMINLINKS_LIST_TITLE"|oxmultilangassign box="list"}]
 
 [{if $readonly}]
     [{assign var="readonly" value="readonly disabled"}]

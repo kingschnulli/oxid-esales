@@ -605,7 +605,7 @@ function _groupExp(el) {
 
             <dl>
                 <dt>
-                    <input type=text class="txtfield" name=confstrs[sCntOfNewsLoaded] value="[{$confstrs.sCntOfNewsLoaded}]" [{ $readonly}]>
+                    <input type=text class="txt" name=confstrs[sCntOfNewsLoaded] value="[{$confstrs.sCntOfNewsLoaded}]" [{ $readonly}]>
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_CNTOFNEWS" }]

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package modules
  * @copyright © OXID eSales AG 2003-2009
- * $Id: myorder.php 14511 2008-12-05 12:55:44Z vilma $
+ * $Id: myorder.php 15989 2009-01-28 10:18:52Z vilma $
  */
 
 /**
@@ -26,7 +26,6 @@
  */
 class PdfBlock
 {
-
     /**
      * array of data to render
      * @var array
@@ -141,7 +140,6 @@ class PdfBlock
                 case 'Text':
                     $this->_aCache[$key]->aParams[1] += $iDelta;
                     break;
-                default:;
             }
         }
     }
@@ -905,7 +903,7 @@ class MyOrder extends MyOrder_parent
 
         // marking if order is canceled
         if ( $this->oxorder__oxstorno->value == 1 ) {
-            $this->oxorder__oxordernr->value .= '   '.$this->translate( 'ORDER_OVERVIEW_PDF_STORNO' );
+            $this->oxorder__oxordernr->setValue( $this->oxorder__oxordernr->getRawValue() . '   '.$this->translate( 'ORDER_OVERVIEW_PDF_STORNO' ), oxField::T_RAW );
         }
 
         // order number
@@ -915,7 +913,7 @@ class MyOrder extends MyOrder_parent
         // order date
         $oPdf->setFont( 'Arial', '', 10 );
         $aOrderDate = explode( ' ', $this->oxorder__oxorderdate->value );
-        $sOrderDate = $aOrderDate[0];
+        $sOrderDate = oxUtilsDate::getInstance()->formatDBDate( $aOrderDate[0]);
         $oPdf->text( 15, $iTop + 8, $this->translate( 'ORDER_OVERVIEW_PDF_ORDERSFROM' ).$sOrderDate.$this->translate( 'ORDER_OVERVIEW_PDF_ORDERSAT' ).$oShop->oxshops__oxurl->value );
         $iTop += 16;
 
@@ -1026,7 +1024,7 @@ class MyOrder extends MyOrder_parent
 
         // canceled order marker
         if ( $this->oxorder__oxstorno->value == 1 ) {
-            $this->oxorder__oxordernr->value .= '   '.$this->translate( 'ORDER_OVERVIEW_PDF_STORNO' );
+            $this->oxorder__oxordernr->setValue( $this->oxorder__oxordernr->getRawValue() . '   '.$this->translate( 'ORDER_OVERVIEW_PDF_STORNO' ), oxField::T_RAW );
         }
 
         // order number
@@ -1035,7 +1033,7 @@ class MyOrder extends MyOrder_parent
 
         // order date
         $aOrderDate = explode( ' ', $this->oxorder__oxorderdate->value );
-        $sOrderDate = $aOrderDate[0];
+        $sOrderDate = oxUtilsDate::getInstance()->formatDBDate( $aOrderDate[0]);
         $oPdf->setFont( 'Arial', '', 10 );
         $oPdf->text(15, 119, $this->translate( 'ORDER_OVERVIEW_PDF_ORDERSFROM' ).$sOrderDate.$this->translate( 'ORDER_OVERVIEW_PDF_ORDERSAT' ).$oShop->oxshops__oxurl->value );
 

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxbasket.php 14775 2008-12-16 14:36:44Z vilma $
+ * $Id: oxbasket.php 15872 2009-01-26 06:42:13Z vilma $
  */
 
 /**
@@ -1081,7 +1081,11 @@ class oxBasket extends oxSuperCfg
                 if ( ( $oArticle = $oBasketItem->getArticle() ) ) {
 
                     $aCatIds = $oArticle->getCategoryIds();
-                    $dPrice  = $oArticle->getPrice()->getBruttoPrice();
+                    //#M530 if price is not loaded for articles
+                    $dPrice = 0;
+                    if ( $oArticle->getPrice() != null ) {
+                        $dPrice  = $oArticle->getPrice()->getBruttoPrice();
+                    }
 
                     foreach ( $aCatIds as $sCatId ) {
                         if ( !isset( $this->_aBasketSummary->aCategories[$sCatId] ) ) {
@@ -2013,7 +2017,8 @@ class oxBasket extends oxSuperCfg
      */
     public function getFDeliveryCosts()
     {
-        if ( $oDeliveryCost = $this->getCosts( 'oxdelivery' ) ) {
+        $oDeliveryCost = $this->getCosts( 'oxdelivery' );
+        if ( $oDeliveryCost && $oDeliveryCost->getBruttoPrice()) {
             return oxLang::getInstance()->formatCurrency( $oDeliveryCost->getBruttoPrice(), $this->getBasketCurrency() );
         }
         return false;

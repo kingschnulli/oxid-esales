@@ -44,12 +44,12 @@ class oxOpenId extends oxBase
     /**
      * OpenID authentication process.
      * 
-     * @param string $sOpenId openid url
-     * @param string $sClass  class to return
+     * @param string $sOpenId    openid url
+     * @param string $sReturnUrl url to return
      * 
      * @return null
      */
-    public function authenticateOid( $sOpenId, $sClass )
+    public function authenticateOid( $sOpenId, $sReturnUrl )
     {
         $myConfig = $this->getConfig();
         // create OpenID consumer
@@ -69,7 +69,7 @@ class oxOpenId extends oxBase
         $oAuth->addExtension( Auth_OpenID_SRegRequest::build( array( 'email', 'fullname', 'gender', 'country' ), array( 'postcode' ) ) );
 
         // redirect to OpenID provider for authentication
-        $sUrl = $oAuth->redirectURL( $myConfig->getShopUrl(), $myConfig->getShopSecureHomeUrl().'&cl='.$sClass.'&fnc=loginOid');
+        $sUrl = $oAuth->redirectURL( $myConfig->getShopUrl(), $sReturnUrl);
         oxUtils::getInstance()->redirect( $sUrl, false );
         
     }
@@ -77,15 +77,15 @@ class oxOpenId extends oxBase
     /**
      * Complete the authentication using the server's response
      * 
-     * @param string $sClass class to return
+     * @param string $sReturnUrl url to return
      *
      * @return array $aData registration data
      */
-    public function getOidResponse( $sClass )
+    public function getOidResponse( $sReturnUrl )
     {
         // create OpenID consumer
         $oConsumer = $this->_getConsumer();
-        $oResponse = $oConsumer->complete( $this->getConfig()->getShopSecureHomeUrl().'&cl='.$sClass.'&fnc=loginOid' );
+        $oResponse = $oConsumer->complete( $sReturnUrl );
 
         // authentication results
         if ( $oResponse->status == Auth_OpenID_SUCCESS ) {
@@ -142,7 +142,6 @@ class oxOpenId extends oxBase
     {
         // create file storage area for OpenID data
         $oStore = new Auth_OpenID_FileStore( oxConfig::getInstance()->getConfigParam( 'sCompileDir' ) );
-
         return $oStore;
     }
 }

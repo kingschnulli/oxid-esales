@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: order_overview.php 15128 2009-01-09 11:07:41Z arvydas $
+ * $Id: order_overview.php 15947 2009-01-27 15:22:21Z vilma $
  */
 
     // DTAUS
@@ -229,10 +229,14 @@ class Order_Overview extends oxAdminDetails
      */
     public function canExport()
     {
-        $oDb = oxDb::getDb();
-        $sOrderId = oxConfig::getParameter( "oxid" );
-        $sTable = getViewName( "oxorderarticles" );
-        $sQ = "select count(oxid) from {$sTable} where oxorderid = ".$oDb->quote( $sOrderId )." and oxstorno = 0";
-        return (bool) $oDb->getOne( $sQ );
+        //V #529: check if PDF invoice modul is active
+        if ( oxUtilsObject::getInstance()->isModuleActive( 'oxorder', 'myorder' ) ) {
+            $oDb = oxDb::getDb();
+            $sOrderId = oxConfig::getParameter( "oxid" );
+            $sTable = getViewName( "oxorderarticles" );
+            $sQ = "select count(oxid) from {$sTable} where oxorderid = ".$oDb->quote( $sOrderId )." and oxstorno = 0";
+            return (bool) $oDb->getOne( $sQ );
+        }
+        return false;
     }
 }

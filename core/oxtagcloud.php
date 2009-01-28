@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxtagcloud.php 14771 2008-12-16 12:43:14Z rimvydas.paskevicius $
+ * $Id: oxtagcloud.php 15898 2009-01-26 17:07:37Z tomas $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -45,8 +45,8 @@ class oxTagCloud extends oxSuperCfg
     protected $_sCacheKey = "tagcloud_";
 
     /**
-     * This method generates test tags data and probably should be deleted for the release. 
-     * Or if you need tags you can generate them by: oxTagCloud::generateTagsFromLongDescription(); 
+     * This method generates test tags data and probably should be deleted for the release.
+     * Or if you need tags you can generate them by: oxTagCloud::generateTagsFromLongDescription();
      * We used this method for demo data only
      *
      * @param int $iLang language
@@ -65,7 +65,7 @@ class oxTagCloud extends oxSuperCfg
                 $sLD = str_replace(array("!","?",".",":","*", "«", "»", ",", "'", '"',"(",")", "&nbsp;", "\n", "\r"), "", $sLD);
                 $sLD = trim(strtolower($sLD));
                 $aLD = explode(" ", $sLD);
-        
+
                 $sLD = '';
                 $aStopWords = array("die", "das", "die", "dieses", "aus", "in", "das", "den", "und", "mit", "ist", "so", "dem", "de", "die", "el","für"
                 ,"das","is","im","hat","nur","du","sie","ihr","diese","als","da","kann","wenn","ein","eine","dein","der","nicht","viel","jede","zum","sich","ja","bis"
@@ -180,7 +180,7 @@ class oxTagCloud extends oxSuperCfg
         foreach ($aTags as $sTag => $sRelevance) {
             $sLink = $sUrl."index.php?cl=tag&amp;searchtag=".rawurlencode($sTag)."&amp;lang=".$iLang;
             if ( $blSeoIsActive) {
-                $sLink = $oSeoEncoder->getDynamicUrl( "index.php?cl=tag&amp;searchtag=".rawurlencode($sTag), "tag/$sTag", $iLang );
+                $sLink = $oSeoEncoder->getDynamicUrl( "index.php?cl=tag&amp;searchtag=".rawurlencode($sTag), "tag/$sTag/", $iLang );
             }
             $sTagCloud .= "<a style='font-size:". $this->_getFontSize($sRelevance, $iMaxHit) ."%;' href='$sLink'>".htmlentities($sTag)."</a> ";
         }
@@ -244,7 +244,7 @@ class oxTagCloud extends oxSuperCfg
     }
 
     /**
-     * Takes tag string and makes shorter tags longer by adding underscore. 
+     * Takes tag string and makes shorter tags longer by adding underscore.
      * This is needed for FULLTEXT index
      *
      * @param string $sTags given tag

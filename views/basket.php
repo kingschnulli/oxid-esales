@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: basket.php 13614 2008-10-24 09:36:52Z sarunas $
+ * $Id: basket.php 15439 2009-01-19 15:07:20Z vilma $
  */
 
 /**
@@ -110,6 +110,7 @@ class Basket extends oxUBase
         $this->_aViewData['basketitemlist']    = $this->getBasketArticles();
         $this->_aViewData['basketsimilarlist'] = $this->getBasketSimilarList();
         $this->_aViewData['similarrecommlist'] = $this->getSimilarRecommLists();
+        $this->_aViewData['showbacktoshop']    = $this->showBackToShop();
 
 
         return $this->_sThisTemplate;
@@ -187,6 +188,15 @@ class Basket extends oxUBase
         return $this->_oRecommList;
     }
 
+    /**
+     * return the Link back to shop
+     *
+     * @return bool
+     */
+    public function showBackToShop()
+    {
+        return ( $this->getConfig()->getConfigParam( 'iNewBasketItemMessage' ) == 3 && oxSession::hasVar( '_backtoshop' ) );
+    }
 
     /**
      * Assigns voucher to current basket
@@ -210,4 +220,20 @@ class Basket extends oxUBase
         $oBasket->removeVoucher( oxConfig::getParameter( 'voucherId' ) );
     }
 
+    /**
+     * Redirects user back to previous part of shop (list, details, ...) from basket.
+     * Used with option "Display Message when Product is added to Cart" set to "Open Basket"
+     * ($myConfig->iNewBasketItemMessage == 3)
+     *
+     * @return string   $sBackLink  back link
+     */
+    public function backToShop()
+    {
+        if ( $this->getConfig()->getConfigParam( 'iNewBasketItemMessage' ) == 3 ) {
+            if ( $sBackLink = oxSession::getVar( '_backtoshop' ) ) {
+                oxSession::deleteVar( '_backtoshop' );
+                return $sBackLink;
+            }
+        }
+    }
 }

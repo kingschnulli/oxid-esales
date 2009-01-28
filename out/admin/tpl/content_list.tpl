@@ -95,7 +95,7 @@ window.onLoad = top.reloadEditFrame();
     <td valign="top" class="listfilter first" height="20">
         <div class="r1"><div class="b1">
         <select name="folder" class="folderselect" onChange="document.search.submit();" style="width: 75px;">
-            <option value="-1" style="color: #000000;">[{ oxmultilang ident="CMSFOLDER_ALL" }]</option>
+            <option value="-1" style="color: #000000;">[{ oxmultilang ident="CONTENT_LIST_ALL" }]</option>
             [{foreach from=$afolder key=field item=color}]
             <option value="[{ $field }]" [{ if $folder == $field }]SELECTED[{/if}] style="color: [{ $color }];">[{ oxmultilang ident=$field }]</option>
             [{/foreach}]

@@ -161,7 +161,7 @@ function StornoThisArticle( sID)
     </table>
     <br>
     [{if $edit->oxorder__oxstorno->value}]
-    <span class="orderstorno">[{ oxmultilang ident="ORDER_OVERVIEW_STORNO" }]</span><br><br>
+    <span class="orderstorno">[{ oxmultilang ident="ORDER_ARTICLE_STORNO" }]</span><br><br>
     [{/if}]
     <b>[{ oxmultilang ident="GENERAL_ATALL" }] : </b><br>
     <table border="0" cellspacing="0" cellpadding="0">

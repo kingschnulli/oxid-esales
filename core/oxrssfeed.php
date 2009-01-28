@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxrssfeed.php 14520 2008-12-05 16:06:26Z vilma $
+ * $Id: oxrssfeed.php 15445 2009-01-20 07:56:43Z sarunas $
  */
 
 /**
@@ -188,7 +188,12 @@ class oxRssFeed extends oxSuperCfg
             if (trim(str_replace('&nbsp;', '', (strip_tags($oItem->description)))) == '') {
                 $oItem->description             = $oArticle->oxarticles__oxshortdesc->value;
             }
-            $oItem->description = htmlspecialchars(trim($oItem->description));
+
+            $oItem->description = trim($oItem->description);
+            if ($sIcon = $oArticle->getIconUrl()) {
+                $oItem->description = "<img src='$sIcon' border=0 align='left' hspace=5>".$oItem->description;
+            }
+            $oItem->description = htmlspecialchars($oItem->description);
 
             $aItems[] = $oItem;
         }

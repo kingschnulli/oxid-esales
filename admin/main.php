@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: main.php 13619 2008-10-24 09:40:23Z sarunas $
+ * $Id: main.php 15735 2009-01-21 16:17:45Z tomas $
  */
 
 /**
@@ -125,7 +125,7 @@ class Main extends oxAdminView
             if ( $oParser) {
                 xml_parser_set_option($oParser, XML_OPTION_CASE_FOLDING, 0);
                 xml_parser_set_option($oParser, XML_OPTION_SKIP_WHITE, 1);
-                xml_parser_set_option($oParser, XML_OPTION_TARGET_ENCODING, "ISO-8859-1");
+                xml_parser_set_option($oParser, XML_OPTION_TARGET_ENCODING, "ISO-8859-15");
                 xml_parse_into_struct($oParser, $sData, $aValues, $aIndexes);
                 $iErr = xml_get_error_code( $oParser);
                 if ( $iErr != false) {

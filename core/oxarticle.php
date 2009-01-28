@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxarticle.php 15202 2009-01-12 20:03:30Z tomas $
+ * $Id: oxarticle.php 15892 2009-01-26 15:09:27Z rimvydas.paskevicius $
  */
 
 /**
@@ -513,6 +513,10 @@ class oxArticle extends oxI18n
         //do not check for variants
         if ( $myConfig->getConfigParam( 'blUseStock' ) ) {
             $sQ = " $sQ and ( $sTable.oxstockflag != 2 or ( $sTable.oxstock + $sTable.oxvarstock ) > 0  ) ";
+            //V #M513: When Parent article is not purchaseble, it's visibility should be displayed in shop only if any of Variants is available. 
+            if ( !$myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
+                $sQ = " $sQ and ( $sTable.oxvarcount=0 or ( select count(art.oxid) from $sTable as art where art.oxstockflag=2 and art.oxparentid=$sTable.oxid and art.oxstock=0 ) < $sTable.oxvarcount ) ";
+            }
         }
 
 
@@ -1015,8 +1019,11 @@ class oxArticle extends oxI18n
         $aRet = array();
 
         $iCnt = 0;
+        if ( $this->getPrice() != null ) {
+        	$sVat = $this->getPrice()->getVAT();
+        }
         foreach ( $oLists as $oSelectlist) {
-            $aRet[$iCnt] = oxUtils::getInstance()->assignValuesFromText( $oSelectlist->oxselectlist__oxvaldesc->value, $this->getPrice()->getVAT() );
+            $aRet[$iCnt] = oxUtils::getInstance()->assignValuesFromText( $oSelectlist->oxselectlist__oxvaldesc->value, $sVat );
             foreach ( $aRet[$iCnt] as $key => $oField) {
                 $aRet[$iCnt][$key]->name = htmlspecialchars(strip_tags($aRet[$iCnt][$key]->name));
             }
@@ -1032,9 +1039,11 @@ class oxArticle extends oxI18n
     /**
      * Collects and returns article variants.
      *
+     * @param bool $blRemoveNotOrderables if true, removes from list not orderable articles, which are out of stock
+     *
      * @return array
      */
-    public function getVariants()
+    public function getVariants( $blRemoveNotOrderables = true )
     {
         //return ;
         if (!$this->_blLoadVariants) {
@@ -1079,7 +1088,7 @@ class oxArticle extends oxI18n
         if (!$oVariants->count()) {
             return array();
         }
-        $oVariants = $this->_removeInactiveVariants($oVariants);
+        $oVariants = $this->_removeInactiveVariants( $oVariants, $blRemoveNotOrderables );
         //$this->calculateMinVarPrice($oVariants);
         //#1104S Load selectlists
         if ( $myConfig->getConfigParam( 'bl_perfLoadSelectLists' ) ) {
@@ -3180,6 +3189,10 @@ class oxArticle extends oxI18n
                 foreach ($this->_aFieldNames as $sFieldName => $sVal) {
                     $this->_assignParentFieldValue($sFieldName);
                 }
+
+                //assing long description
+                $oParentArticle = $this->_getParentAricle();
+                $this->oxarticles__oxlongdesc = $oParentArticle->oxarticles__oxlongdesc;
             }
         } elseif ( $this->oxarticles__oxid->value ) {
             // I am not a variant but I might have some

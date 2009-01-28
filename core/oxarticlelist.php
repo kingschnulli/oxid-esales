@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxarticlelist.php 14567 2008-12-09 12:17:14Z vilma $
+ * $Id: oxarticlelist.php 15740 2009-01-22 08:37:17Z vilma $
  */
 
 /**
@@ -340,13 +340,11 @@ class oxArticleList extends oxList
         $sSelect = $this->_getCategorySelect( $sArticleFields, $sCatId, $aSessionFilter );
 
         // calc count - we can not use count($this) here as we might have paging enabled
-        // $sSelect = str_replace( $sArticleFields, 'count(*) as cnt', $sSelect);
         // #1970C - if any filters are used, we can not use cached category article count
         $iArticleCount = null;
         if ( $aSessionFilter) {
-            $oDb = oxDb::getDb();
-            $sCountSelect = str_replace( "SELECT ".$sArticleFields, 'SELECT count(*) as cnt', $sSelect);
-            $iArticleCount = $oDb->getOne( $sCountSelect);
+            $oRet = oxDb::getDb()->Execute( $sSelect );
+            $iArticleCount = $oRet->recordCount();
         }
 
         if ($iLimit = (int) $iLimit) {
@@ -727,11 +725,13 @@ class oxArticleList extends oxList
             }
         }
         if ( $sFilter ) {
-            $sFilter = "and ( $sFilter ) ";
+            $sFilter = "WHERE $sFilter ";
         }
-        $sFilterSelect = "select oc.oxobjectid as oxobjectid, count(*) as cnt from $sO2CView as oc ";
+
+        $sFilterSelect = "select oc.oxobjectid as oxobjectid, count(*) as cnt from ";
+        $sFilterSelect.= "(SELECT * FROM $sO2CView WHERE $sO2CView.oxcatnid = '$sCatId' GROUP BY $sO2CView.oxobjectid, $sO2CView.oxcatnid) as oc ";
         $sFilterSelect.= "INNER JOIN oxobject2attribute as oa ON ( oa.oxobjectid = oc.oxobjectid ) ";
-        $sFilterSelect.= "WHERE oc.oxcatnid = '$sCatId' $sFilter ";
+        $sFilterSelect.= $sFilter;
         $sFilterSelect.= "GROUP BY oa.oxobjectid HAVING cnt = $iCnt ";
 
         $aIds = oxDb::getDb( true )->getAll( $sFilterSelect );
@@ -783,7 +783,7 @@ class oxArticleList extends oxList
         $sSelect = "SELECT $sFields FROM $sO2CView as oc left join $sArticleTable
                     ON $sArticleTable.oxid = oc.oxobjectid
                     WHERE ".$this->getBaseObject()->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''
-                    and oc.oxcatnid = '$sCatId' $sFilterSql ORDER BY $sSorting oc.oxpos, oc.oxobjectid ";
+                    and oc.oxcatnid = '$sCatId' $sFilterSql GROUP BY oc.oxcatnid, oc.oxobjectid ORDER BY $sSorting oc.oxpos, oc.oxobjectid ";
 
         return $sSelect;
     }

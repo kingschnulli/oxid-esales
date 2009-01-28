@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: start.php 14784 2008-12-16 16:44:30Z rimvydas.paskevicius $
+ * $Id: start.php 15752 2009-01-22 13:23:17Z tomas $
  */
 
 /**
@@ -134,7 +134,7 @@ class Start extends oxUBase
         if ( $myConfig->getConfigParam( 'bl_perfLoadAktion' ) ) {
             // loading actions
             $this->_loadActions();
-            
+
             $sMetaDescription = '';
             $sMetaKeywords = '';
             $blDescTag = false;
@@ -148,10 +148,10 @@ class Start extends oxUBase
                 $sMetaDescription = $oArt->oxarticles__oxtitle->value . ' - ' . $sMetaKeywords;
                 $blDescTag = true;
             }
-            
+
             $this->setMetaKeywords( $sMetaKeywords );
             $this->setMetaDescription( $sMetaDescription, 200, $blDescTag );
-            
+
             if ( $oArtList = $this->getCatOfferArticleList() ) {
                 foreach ( $oArtList as $oCatArticle ) {
                     $oCatArticle->oCategory = $oCatArticle->getCategory();

@@ -72,7 +72,7 @@ window.onLoad = top.reloadEditFrame();
             <tr>
               <td colspan="2">
                 [{ if $errorsavingtprice eq 1 }]
-                <div class="errorbox">[{ oxmultilang ident="ARTICLE_MAIN_ERRORSAVINGTPRICE" }]</div>
+                <div class="errorbox">[{ oxmultilang ident="ARTICLE_EXTEND_ERRORSAVINGTPRICE" }]</div>
                 [{/if}]
               </td>
             </tr>
