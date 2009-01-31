@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxuser.php 15988 2009-01-28 10:12:56Z vilma $
+ * $Id: oxuser.php 16050 2009-01-29 15:12:11Z arvydas $
  */
 
 /**

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxadminview.php 15128 2009-01-09 11:07:41Z arvydas $
+ * $Id: oxadminview.php 16045 2009-01-29 13:56:34Z arvydas $
  */
 
 /**
@@ -89,6 +89,13 @@ class oxAdminView extends oxView
      * @var string
      */
     protected $_sServiceUrl = null;
+
+    /**
+     * Session user rights
+     *
+     * @var string
+     */
+    protected static $_sAuthUserRights = null;
 
     /**
      * Creates oxshop object and loads shop data, sets title of shop

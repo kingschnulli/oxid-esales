@@ -141,7 +141,10 @@ class oxOpenId extends oxBase
     protected function _getStore()
     {
         // create file storage area for OpenID data
-        $oStore = new Auth_OpenID_FileStore( oxConfig::getInstance()->getConfigParam( 'sCompileDir' ) );
+        // $oStore = new Auth_OpenID_FileStore( oxConfig::getInstance()->getConfigParam( 'sCompileDir' ) );
+        // create db storage area for OpenID data
+        $oStore = new oxOpenIdDb();
+        $oStore->createTables();
         return $oStore;
     }
 }

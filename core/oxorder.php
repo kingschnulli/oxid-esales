@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxorder.php 15988 2009-01-28 10:12:56Z vilma $
+ * $Id: oxorder.php 16037 2009-01-29 06:35:30Z arvydas $
  */
 
 /**
@@ -1232,29 +1232,22 @@ class oxOrder extends oxBase
      */
     public function getShippingSetList()
     {
-        $myConfig = $this->getConfig();
-
         // in which country we deliver
-        $sShipID = $this->oxorder__oxdelcountryid->value;
-
-        if (!$sShipID) {
-            $sShipID = $this->oxorder__oxbillcountryid->value;
+        if ( !( $sShipId = $this->oxorder__oxdelcountryid->value ) ) {
+            $sShipId = $this->oxorder__oxbillcountryid->value;
         }
 
         $oUser = oxNew( "oxuser" );
         $oUser->load( $this->oxorder__oxuserid->value );
 
         // add this order articles to basket and recalculate basket
-        $oBasket = $this->_addOrderArticlesToBasket( $oUser, $this->getOrderArticles() );
-
-        $aOrderDelSetList = array();
+        $oBasket = $this->_addOrderArticlesToBasket( $oUser, $this->getOrderArticles(), false, false );
 
         // load fitting deliveries list
-        $oDleliveryList = oxNew( "oxDeliveryList", "core");
-        $oDleliveryList->setCollectFittingDeliveriesSets( true );
-        $aOrderDelSetList = $oDleliveryList->getDeliveryList( $oBasket, $oUser, $sShipID, null );
+        $oDeliveryList = oxNew( "oxDeliveryList", "core" );
+        $oDeliveryList->setCollectFittingDeliveriesSets( true );
 
-        return $aOrderDelSetList;
+        return $oDeliveryList->getDeliveryList( $oBasket, $oUser, $sShipId );
     }
 
     /**
@@ -1266,7 +1259,7 @@ class oxOrder extends oxBase
     {
         $oDB = oxDb::getDb( true );
         $aVouchers = array();
-        $sSelect =  "select oxvouchernr from oxvouchers where oxorderid = '".$this->oxorder__oxid->value."'";
+        $sSelect = "select oxvouchernr from oxvouchers where oxorderid = '".$this->oxorder__oxid->value."'";
         $rs = $oDB->execute( $sSelect);
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
@@ -1552,18 +1545,19 @@ class oxOrder extends oxBase
      *
      * @return oxBasket
      */
-    protected function _addOrderArticlesToBasket( $oUser = null, $aOrderArticles = null, $blChangeDelivery = false )
+    protected function _addOrderArticlesToBasket( $oUser = null, $aOrderArticles = null, $blChangeDelivery = false, $blStockCheck = true )
     {
-        $myConfig = $this->getConfig();
-
         $oBasket = oxNew( "oxbasket" );
+
+        // setting stock check mode
+        $oBasket->setStockCheckMode( $blStockCheck );
 
         // setting virtual basket user
         $oBasket->setBasketUser( $oUser );
 
         // setting basket currency order uses
-        $aCurrencies = $myConfig->getCurrencyArray();
-        foreach ($aCurrencies as $oCur) {
+        $aCurrencies = $this->getConfig()->getCurrencyArray();
+        foreach ( $aCurrencies as $oCur ) {
             if ($oCur->name == $this->oxorder__oxcurrency->value) {
                 $oBasketCur = $oCur;
                 break;
@@ -1573,25 +1567,23 @@ class oxOrder extends oxBase
         $oBasket->setBasketCurrency( $oBasketCur );
 
         // if no order articles, return empty basket
-        if (count($aOrderArticles) < 1) {
+        if ( count($aOrderArticles ) < 1 ) {
             return $oBasket;
         }
 
         //adding order articles to basket
         foreach ( $aOrderArticles as $oOrderArticle ) {
-            $sArtId      = $oOrderArticle->oxorderarticles__oxartid->value;
-            $dAmount     = $oOrderArticle->oxorderarticles__oxamount->value;
-            $sSelVariant = $oOrderArticle->oxorderarticles__oxselvariant->value;
 
+            $aPersParam = null;
             if ( $oOrderArticle->oxorderarticles__oxpersparam->value ) {
-                $aPersParam = unserialize($oOrderArticle->oxorderarticles__oxpersparam->value);
-            } else {
-                $aPersParam = null;
+                $aPersParam = unserialize( $oOrderArticle->oxorderarticles__oxpersparam->value );
             }
 
-            $aSel = $this->_makeSelListArray( $sArtId, $sSelVariant );
+            $aSel = $this->_makeSelListArray( $oOrderArticle->oxorderarticles__oxartid->value,
+                                              $oOrderArticle->oxorderarticles__oxselvariant->value );
 
-            $oBasketItem = $oBasket->addToBasket( $sArtId, $dAmount, $aSel, $aPersParam );
+            $oBasketItem = $oBasket->addToBasket( $oOrderArticle->oxorderarticles__oxartid->value,
+                                                  $oOrderArticle->oxorderarticles__oxamount->value, $aSel, $aPersParam );
             if ( $oBasketItem ) {
                 $oBasketItem->setWrapping( $oOrderArticle->oxorderarticles__oxwrapid->value );
             }

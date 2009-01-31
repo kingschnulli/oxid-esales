@@ -111,7 +111,7 @@ window.onLoad = top.reloadEditFrame();
     </td>
 </tr>
 <tr>
-    <td class="listheader first" height="15" colspan="2">&nbsp;<a href="Javascript:document.search.sort.value='oxdesc';document.search.submit();" class="listheader">[{ oxmultilang ident="GENERAL_DESCRIPTION" }]</a></td>
+    <td class="listheader first" height="15" colspan="2">&nbsp;<a href="Javascript:document.search.sort.value='oxdesc';document.search.submit();" class="listheader">[{ oxmultilang ident="GENERAL_NAME" }]</a></td>
 </tr>
 
 [{assign var="blWhite" value=""}]

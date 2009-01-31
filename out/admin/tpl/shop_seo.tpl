@@ -54,8 +54,8 @@ function UpdateList( sID)
             <FIELDSET id=fldLayout>
               <LEGEND id=lgdLayout>
                 <select name="editlanguage" id="test_editlanguage" class="saveinnewlanginput" onChange="Javascript:document.myedit.submit();" [{$readonly}]>
-                [{foreach from=$otherlang key=lang item=olang}]
-                <option value="[{ $lang }]"[{ if $olang->selected}]SELECTED[{/if}]>[{ $olang->sLangDesc }]</option>
+                [{foreach from=$languages key=lang item=olang}]
+                <option value="[{ $lang }]"[{ if $subjlang == $lang}]SELECTED[{/if}]>[{ $olang->name }]</option>
                 [{/foreach}]
                 </select>
               </LEGEND>
@@ -134,8 +134,8 @@ function UpdateList( sID)
         <tr class="conftext[{cycle}]">
          <td valign="top">
             <select class="saveinnewlanginput" name=confstrs[iDefSeoLang]>
-              [{foreach from=$otherlang key=lang item=olang}]
-              <option value="[{ $lang }]"[{ if $lang == $confstrs.iDefSeoLang }]SELECTED[{/if}]>[{ $olang->sLangDesc }]</option>
+              [{foreach from=$languages key=lang item=olang}]
+              <option value="[{ $lang }]"[{ if $lang == $confstrs.iDefSeoLang }]SELECTED[{/if}]>[{ $olang->name }]</option>
               [{/foreach}]
             </select>
          </td>
@@ -189,13 +189,13 @@ function UpdateList( sID)
          </td>
         </tr>
 
-        [{foreach from=$otherlang key=lang item=olang}]
+        [{foreach from=$languages key=lang item=olang}]
         <tr class="conftext[{cycle}]">
          <td>
           <input type=text class="confinput" style="width:270" name="aStaticUrl[oxseo__oxseourl][[{ $lang }]]" value="[{$aSeoUrls.$lang.1}]" [{ $readonly }]>
          </td>
          <td>
-          [{ $olang->sLangDesc }]
+          [{ $olang->name }]
          </td>
         </tr>
         [{/foreach}]

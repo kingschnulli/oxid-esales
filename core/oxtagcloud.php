@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxtagcloud.php 15898 2009-01-26 17:07:37Z tomas $
+ * $Id: oxtagcloud.php 16095 2009-01-30 14:55:42Z tomas $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -191,29 +191,6 @@ class oxTagCloud extends oxSuperCfg
 
         return $sTagCloud;
     }
-
-    /**
-     * Assigns article oxsearchkeys field value to article tags
-     *
-     * @return bool
-     */
-    /*
-    public function assignTagsFromSearchKeys()
-    {
-        $sArticleTable = getViewName('oxarticles');
-        $sQ = "select oxid, oxsearchkeys from $sArticleTable where oxsearchkeys <> '' " ;
-        $rs = oxDb::getDb(true)->execute($sQ);
-        while ($rs && $rs->RecordCount()>0 && !$rs->EOF)
-        {
-            $sOxid = $rs->fields['OXID'];
-            $sSearchkeys = $rs->fields['OXSEARCHKEYS'];
-            $sUpdate = "update oxartextends set oxtags = '$sSearchkeys' where not oxtags and oxid = '$sOxid'";
-            oxDb::getDb()->execute($sUpdate);
-            $rs->moveNext();
-        }
-
-        return true;
-    }*/
 
     /**
      * Returns font size value for current occurence depending on max occurence.

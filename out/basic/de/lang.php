@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 15989 2009-01-28 10:18:52Z vilma $
+ * $Id: lang.php 16044 2009-01-29 13:15:41Z arvydas $
  */
 
 $sLangName  = "Deutsch";
@@ -724,6 +724,7 @@ $aLang = array(
 'MALLSTART_OXIDSOFTWAREALT'                       => "Shop Software von OXID eSales",
 'MALLCATITEM_PLEASECHOOSE'                        => "Bitte wählen Sie:",
 'MEDIA'                                           => "Zusatzinformationen",
+'MOREDETAILS_POPUP_TITLE'                         => "[tr] moredetails title",
 'NEWS_TITLE'                                      => "Neuigkeiten bei uns",
 'NEWS_LATESTNEWSBY'                               => "Neuigkeiten bei",
 'NEWSLETTER_NEWSLWTTERTITLE'                      => "Neuigkeiten bei uns",

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxstart.php 14657 2008-12-11 19:28:36Z tomas $
+ * $Id: oxstart.php 16078 2009-01-30 11:48:20Z sarunas $
  */
 
 /**
@@ -43,7 +43,6 @@ class oxStart extends oxView
 
         if ( 'oxstart' == oxConfig::getParameter( 'cl' )  || $this->isAdmin() )
             return;
-
 
 
     }

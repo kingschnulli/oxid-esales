@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright © OXID eSales AG 2003-2009
- * $Id: shop_seo.php 15401 2009-01-19 08:28:08Z arvydas $
+ * $Id: shop_seo.php 16098 2009-01-30 15:24:33Z arvydas $
  */
 
 /**
@@ -44,27 +44,14 @@ class Shop_Seo extends Shop_Config
     {
         parent::render();
 
-        //
-        $oShop = $this->_aViewData["edit"];
+        $this->_aViewData['subjlang'] = $this->_iEditLang;
+        $oShop = $this->_aViewData['edit'];
 
-        $oShop->loadInLang( $this->_iEditLang, $oShop->oxshops__oxid->value );
-
-        // load object in other languages
-        $oOtherLang = $oShop->getAvailableInLangs();
-        if (!isset($oOtherLang[$this->_iEditLang])) {
-            // echo "language entry doesn't exist! using: ".key($oOtherLang);
-            $oShop->loadInLang( key($oOtherLang), $oShop->oxshops__oxid->value );
-        }
-
-        $aLang = array_diff ( oxLang::getInstance()->getLanguageNames(), $oOtherLang);
-        if ( count( $aLang))
-            $this->_aViewData["posslang"] = $aLang;
-
-        foreach ( $oOtherLang as $id => $language) {
-            $oLang = new oxStdClass();
-            $oLang->sLangDesc = $language;
-            $oLang->selected = ($id == $this->_iEditLang);
-            $this->_aViewData["otherlang"][$id] = clone $oLang;
+        // reloading if needed
+        if ( $this->_iEditLang != $oShop->getLanguage() ) {
+            $oShop = oxNew( 'oxshop' );
+            $oShop->loadInLang( $this->_iEditLang, $this->_aViewData['edit']->getId() );
+            $this->_aViewData['edit'] = $oShop;
         }
 
         // loading static seo urls

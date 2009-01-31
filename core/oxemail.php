@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxemail.php 15988 2009-01-28 10:12:56Z vilma $
+ * $Id: oxemail.php 16048 2009-01-29 14:58:13Z arvydas $
  */
 /**
  * Includes PHP mailer class.
@@ -1010,21 +1010,19 @@ class oxEmail extends phpmailer
      */
     public function sendPriceAlarmNotification( $aParams, $oAlarm )
     {
-        $myConfig = $this->getConfig();
-
         $this->_clearMailer();
         $oShop = $this->_getShop();
 
         //set mail params (from, fromName, smtp)
         $this->_setMailParams( $oShop );
 
+        $iAlarmLang = $oShop->getLanguage();
+
         $oArticle = oxNew( "oxarticle" );
         $oArticle->setSkipAbPrice( true );
-        $oArticle->load( $aParams['aid'] );
+        $oArticle->loadInLang( $iAlarmLang, $aParams['aid'] );
 
-        $oCur = $myConfig->getActShopCurrencyObject();
-
-        $iAlarmLang = $oShop->getLanguage();
+        $oCur = $this->getConfig()->getActShopCurrencyObject();
 
         // create messages
         $smarty = oxUtilsView::getInstance()->getSmarty();
@@ -1032,13 +1030,13 @@ class oxEmail extends phpmailer
         $smarty->assign( "oViewConf", $oShop );
         $smarty->assign( "product", $oArticle );
         $smarty->assign( "email", $aParams['email']);
-        $smarty->assign( "bidprice", oxLang::getInstance()->formatCurrency($oAlarm->oxpricealarm__oxprice->value, $oCur) );
+        $smarty->assign( "bidprice", oxLang::getInstance()->formatCurrency( $oAlarm->oxpricealarm__oxprice->value, $oCur ) );
         $smarty->assign( "currency", $oCur );
 
         $this->setRecipient( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
-        $sSubject = oxLang::getInstance()->translateString('EMAIL_PRICEALARM_OWNER_SUBJECT', $iAlarmLang ) . " " . $oArticle->oxarticles__oxtitle->value;
+        $sSubject = oxLang::getInstance()->translateString( 'EMAIL_PRICEALARM_OWNER_SUBJECT', $iAlarmLang ) . " " . $oArticle->oxarticles__oxtitle->value;
         $this->setSubject( $sSubject );
-        $this->setBody( $smarty->fetch($this->_sOwnerPricealarmTemplate) );
+        $this->setBody( $smarty->fetch( $this->_sOwnerPricealarmTemplate ) );
         $this->setFrom( $aParams['email'], "" );
         $this->setReplyTo( $aParams['email'], "" );
 

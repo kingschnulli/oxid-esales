@@ -53,7 +53,7 @@ function UpdateList( sID)
         </tr>
         <tr>
             <td class="edittext" width="100">
-            [{ oxmultilang ident="GENERAL_DESCRIPTION" }]
+            [{ oxmultilang ident="GENERAL_NAME" }]
             </td>
             <td class="edittext">
             <input type="text" class="editinput" size="25" maxlength="[{$edit->oxgroups__oxtitle->fldmax_length}]" name="editval[oxgroups__oxtitle]" value="[{$edit->oxgroups__oxtitle->value}]" [{ $readonly }] [{ $disableSharedEdit }]>

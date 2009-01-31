@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxbasket.php 15872 2009-01-26 06:42:13Z vilma $
+ * $Id: oxbasket.php 16037 2009-01-29 06:35:30Z arvydas $
  */
 
 /**
@@ -216,6 +216,13 @@ class oxBasket extends oxSuperCfg
     protected $_oDeliveryPrice = null;
 
     /**
+     * Basket product stock check (live db check) status
+     *
+     * @var bool
+     */
+     protected $_blCheckStock = true;
+
+    /**
      * Checks if configuration allows basket usage or if user agent is search engine
      *
      * @return bool
@@ -293,6 +300,8 @@ class oxBasket extends oxSuperCfg
 
             //updating existing
             try {
+                // setting stock check status
+                $this->_aBasketContents[$sItemId]->setStockCheckStatus( $this->getStockCheckMode() );
                 $this->_aBasketContents[$sItemId]->setAmount( $dAmount, $blOverride );
             } catch( oxOutOfStockException $oEx ) {
                 // rethrow later
@@ -302,6 +311,7 @@ class oxBasket extends oxSuperCfg
             //inserting new
             $oBasketItem = oxNew( 'oxbasketitem' );
             try {
+                $oBasketItem->setStockCheckStatus( $this->getStockCheckMode() );
                 $oBasketItem->init( $sProductID, $dAmount, $aSel, $aPersParam, $blBundle );
             } catch( oxNoArticleException $oEx ) {
                 // in this case that the article does not exist remove the item from the basket by setting its amount to 0
@@ -337,7 +347,27 @@ class oxBasket extends oxSuperCfg
         return $this->_aBasketContents[$sItemId];
     }
 
+    /**
+     * Sets stock control mode
+     *
+     * @param bool $blCheck stock control mode
+     *
+     * @return null
+     */
+    public function setStockCheckMode( $blCheck )
+    {
+    	$this->_blCheckStock = $blCheck;
+    }
 
+    /**
+     * Returns stock control mode
+     *
+     * @return bool
+     */
+    public function getStockCheckMode()
+    {
+    	return $this->_blCheckStock;
+    }
 
     /**
      * Returns unique basket item identifier which consist from product ID,

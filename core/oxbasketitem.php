@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxbasketitem.php 14978 2009-01-08 08:35:59Z arvydas $
+ * $Id: oxbasketitem.php 16037 2009-01-29 06:35:30Z arvydas $
  */
 
 /**
@@ -189,6 +189,13 @@ class oxBasketItem extends oxSuperCfg
     protected $_sWishArticleId = null;
 
     /**
+     * Article stock check (live db check) status
+     *
+     * @var bool
+     */
+    protected $_blCheckArticleStock = true;
+
+    /**
      * Assigns basic params to basket item
      *  - oxbasketitem::_setArticle();
      *  - oxbasketitem::setAmount();
@@ -228,11 +235,33 @@ class oxBasketItem extends oxSuperCfg
     }
 
     /**
+     * Sets stock control mode
+     *
+     * @param bool $blCheck stock control mode
+     *
+     * @return null
+     */
+    public function setStockCheckStatus( $blStatus )
+    {
+        $this->_blCheckArticleStock = $blStatus;
+    }
+
+    /**
+     * Returns stock control mode
+     *
+     * @return bool
+     */
+    public function getStockCheckStatus()
+    {
+        return $this->_blCheckArticleStock;
+    }
+
+    /**
      * Sets item amount and weight which depends on amount
      * ( oxbasketitem::dAmount, oxbasketitem::dWeight )
      *
      * @param double $dAmount    amount
-     * @param bool   $blOverride overide
+     * @param bool   $blOverride overide current amoutn or not
      *
      * @throws oxOutOfStockException, oxArticleInputException
      *
@@ -254,17 +283,21 @@ class oxBasketItem extends oxSuperCfg
         $oArticle = $this->getArticle();
 
 
-        // checking for stock
-        $iOnStock = $oArticle->checkForStock( $dAmount + $this->_dAmount );
+        // setting default
+        $iOnStock = true;
 
-        if ( $iOnStock !== true ) {
-            if ( $iOnStock === false ) {
-                // no stock !
-                $dAmount = 0;
-            } else {
-                // limited stock
-                $dAmount = $iOnStock;
-                $blOverride = true;
+        // checking for stock
+        if ( $this->getStockCheckStatus() == true ) {
+            $iOnStock = $oArticle->checkForStock( $dAmount + $this->_dAmount );
+            if ( $iOnStock !== true ) {
+                if ( $iOnStock === false ) {
+                    // no stock !
+                    $dAmount = 0;
+                } else {
+                    // limited stock
+                    $dAmount = $iOnStock;
+                    $blOverride = true;
+                }
             }
         }
 
