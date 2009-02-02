@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxview.php 15875 2009-01-26 07:58:45Z vilma $
+ * $Id: oxview.php 16106 2009-01-30 20:14:30Z tomas $
  */
 
 /**

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright © OXID eSales AG 2003-2009
- * $Id: order.php 14327 2008-11-24 12:08:04Z arvydas $
+ * $Id: order.php 16122 2009-02-02 09:48:19Z vilma $
  */
 
 /**
@@ -151,7 +151,7 @@ class Order extends oxUBase
      * Template variables:
      * <b>payment</b>, <b>execute_fnc</b>, <b>order_remark</b>,
      * <b>basketitemlist</b>, <b>iplog</b>,<b>oDelAdress</b>,
-     * <b>oShipSet</b>, <b>blConfirmAGB</b>, <b>blConfirmCustInfo</b>,
+     * <b>oShipSet</b>, <b>blConfirmAGB</b>
      *
      * @return string
      */
@@ -232,7 +232,7 @@ class Order extends oxUBase
         }
 
         // for compatibility reasons for a while. will be removed in future
-        if ( !oxConfig::getParameter( 'ord_custinfo' ) && $myConfig->getConfigParam( 'blConfirmCustInfo' ) ) {
+        if ( oxConfig::getParameter( 'ord_custinfo' ) !== null && !oxConfig::getParameter( 'ord_custinfo' ) && $this->isConfirmCustInfoActive() ) {
             $this->_blConfirmCustInfoError =  1;
             return;
         }
@@ -449,7 +449,10 @@ class Order extends oxUBase
     {
         if ( $this->_blConfirmCustInfo === null ) {
             $this->_blConfirmCustInfo = false;
-            $this->_blConfirmCustInfo = $this->getConfig()->getConfigParam( 'blConfirmCustInfo' );
+            $sConf = $this->getConfig()->getConfigParam( 'blConfirmCustInfo' );
+            if ( $sConf != null ) {
+                $this->_blConfirmCustInfo = $this->getConfig()->getConfigParam( 'blConfirmCustInfo' );
+            }
         }
         return $this->_blConfirmCustInfo;
     }

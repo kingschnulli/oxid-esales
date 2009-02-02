@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxrssfeed.php 15445 2009-01-20 07:56:43Z sarunas $
+ * $Id: oxrssfeed.php 16119 2009-02-02 09:35:19Z vilma $
  */
 
 /**
@@ -291,7 +291,7 @@ class oxRssFeed extends oxSuperCfg
             $this->_aChannel['lastBuildDate'] = $this->_getLastBuildDate($sTag, $this->_aChannel);
             $this->_saveToCache($sTag, $this->_aChannel);
         } else {
-            $this->_aChannel['lastBuildDate'] = date('D, d M Y H:i:s O');
+            $this->_aChannel['lastBuildDate'] = date( 'D, d M Y H:i:s O', oxUtilsDate::getInstance()->getTime() );
         }
     }
 

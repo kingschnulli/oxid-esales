@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright © OXID eSales AG 2003-2009
- * $Id: oxbase.php 15988 2009-01-28 10:12:56Z vilma $
+ * $Id: oxbase.php 16125 2009-02-02 12:50:22Z arvydas $
  */
 
 /**
@@ -685,18 +685,17 @@ class oxBase extends oxSuperCfg
             return false;
         }
 
-        $myConfig = $this->getConfig();
         $blRet = false;
 
         // #739A - should be executed here because of date/time formatting feature
-        if ( $this->isAdmin() && !$myConfig->getConfigParam( 'blSkipFormatConversion' ) ) {
+        if ( $this->isAdmin() && !$this->getConfig()->getConfigParam( 'blSkipFormatConversion' ) ) {
             foreach ($this->_aFieldNames as $sName => $sVal) {
                 $sLongName = $this->_getFieldLongName($sName);
-                if ( $this->$sLongName->fldtype == "datetime") {
+                if ( $this->$sLongName->fldtype == "datetime" ) {
                     oxDb::getInstance()->convertDBDateTime( $this->$sLongName, true );
-                } elseif ( $this->$sLongName->fldtype == "timestamp") {
+                } elseif ( $this->$sLongName->fldtype == "timestamp" ) {
                     oxDb::getInstance()->convertDBTimestamp( $this->$sLongName, true);
-                } elseif ( $this->$sLongName->fldtype == "date") {
+                } elseif ( $this->$sLongName->fldtype == "date" ) {
                     oxDb::getInstance()->convertDBDate( $this->$sLongName, true);
                 }
             }
