@@ -131,6 +131,7 @@ class oxAdminView extends oxView
         // authorization check
         if ( !$this->_authorize() ) {
             oxUtils::getInstance()->redirect( 'index.php' );
+            exit();
         }
 
         /*
