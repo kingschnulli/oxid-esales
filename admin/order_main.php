@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: order_main.php 14542 2008-12-08 14:24:48Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: order_main.php 16643 2009-02-20 14:15:02Z vilma $
  */
 
 /**
@@ -100,6 +100,7 @@ class Order_Main extends oxAdminDetails
         $aDynvalues = oxConfig::getParameter( "dynvalue");
 
         $blChangeDelivery = false;
+        $blChangeDiscount = false;
 
             // shopid
             $sShopID = oxSession::getVar( "actshop");
@@ -110,6 +111,9 @@ class Order_Main extends oxAdminDetails
             $oOrder->load( $soxId);
             if ( $oOrder->oxorder__oxdelcost->value != $aParams['oxorder__oxdelcost'] ) {
                 $blChangeDelivery = true;
+            }
+            if ( $oOrder->oxorder__oxdiscount->value != $aParams['oxorder__oxdiscount'] ) {
+                $blChangeDiscount = true;
             }
         } else {
             $aParams['oxorder__oxid'] = null;
@@ -127,7 +131,9 @@ class Order_Main extends oxAdminDetails
 
         $oOrder->save();
 
-        $oOrder->recalculateOrder( array(), $blChangeDelivery );
+        if ( $blChangeDelivery || $blChangeDiscount ) {
+            $oOrder->recalculateOrder( array(), $blChangeDelivery, $blChangeDiscount );
+        }
 
         // set oxid if inserted
         if ( $soxId == "-1")

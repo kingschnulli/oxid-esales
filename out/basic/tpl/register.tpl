@@ -1,15 +1,15 @@
 [{assign var="template_title" value="REGISTER_MYACCOUNT"|oxmultilangassign}]
 [{include file="_header.tpl" title=$template_title location=$template_title}]
 
-<form action="[{ $oViewConf->getSelfActionLink() }]" name="order" method="post">
+<form action="[{ $oViewConf->getSslSelfLink() }]" name="order" method="post">
 
     <strong id="test_openAccHeader" class="boxhead">[{ oxmultilang ident="REGISTER_OPENACCOUNT" }]</strong>
     [{assign var="aMustFillFields" value=$oView->getMustFillFields() }]
     <div class="box info">
         [{ $oViewConf->getHiddenSid() }]
+        [{ $oViewConf->getNavFormParams() }]
         <input type="hidden" name="fnc" value="registeruser">
         <input type="hidden" name="cl" value="register">
-        <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
         <input type="hidden" name="lgn_cook" value="0">
         <input type="hidden" name="option" value="3">
         <table class="form" width="100%">
@@ -136,13 +136,13 @@
             <tr>
                 <td colspan="2">
                     <div class="showHideShippAddr">
-	                    [{if !$oView->showShipAddress()}]
-	                    <span class="btn"><input type="submit" class="btn" name="blshowshipaddress" value="[{ oxmultilang ident="REGISTER_DIFFERENTSHIPPINGADDRESS" }]"></span>
-	                    [{else}]
-	                    <span class="btn"><input type="submit" class="btn" name="blhideshipaddress" value="[{ oxmultilang ident="REGISTER_DISABLESHIPPINGADDRESS" }]"></span>
-	                    [{/if}]
-	                    <br><br>
-	                    <span class="note">[{ oxmultilang ident="REGISTER_NOTE" }]</span> [{ oxmultilang ident="REGISTER_DIFFERENTDELIVERYADDRESS" }]
+                        [{if !$oView->showShipAddress()}]
+                        <span class="btn"><input type="submit" class="btn" name="blshowshipaddress" value="[{ oxmultilang ident="REGISTER_DIFFERENTSHIPPINGADDRESS" }]"></span>
+                        [{else}]
+                        <span class="btn"><input type="submit" class="btn" name="blhideshipaddress" value="[{ oxmultilang ident="REGISTER_DISABLESHIPPINGADDRESS" }]"></span>
+                        [{/if}]
+                        <br><br>
+                        <span class="note">[{ oxmultilang ident="REGISTER_NOTE" }]</span> [{ oxmultilang ident="REGISTER_DIFFERENTDELIVERYADDRESS" }]
                     </div>
                 </td>
             </tr>

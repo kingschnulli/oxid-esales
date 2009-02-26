@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oximex.php 15735 2009-01-21 16:17:45Z tomas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oximex.php 16552 2009-02-13 18:28:48Z tomas $
  */
 
 /**
@@ -32,6 +32,8 @@ class oxImex extends oxBase
      * @param integer $iStart    Start writing export data from
      * @param integer $iLines    Write number of lines
      * @param string  $sFilepath Path to export file
+     *
+     * @deprecated
      *
      * @return bool
      */
@@ -104,6 +106,8 @@ class oxImex extends oxBase
      * @param integer $iStart    Start writing export data from
      * @param integer $iLines    Write number of lines
      * @param string  $sFilepath Path to export file
+     *
+     * @deprecated
      *
      * @return bool
      */
@@ -183,13 +187,11 @@ class oxImex extends oxBase
                 }
                 $sLine .= "\r\n";
 
-                fputs( $fp, $sLine);
-
+                fputs( $fp, iconv( "UTF-8", "ISO-8859-15", $sLine ) );
                 $rs->moveNext();
             }
 
             fclose( $fp);
-
             return true;
         }
 
@@ -218,7 +220,7 @@ class oxImex extends oxBase
         if ( $iStart < $iSize) {
             $fp = fopen( $sFilepath, "ab");
             if ( !$iStart) {   // first time, write header
-                fwrite( $fp, "\"Artikelnummer\";\"Bezeichnung\";\"Einheit\";\"Gewicht\";\"Matchcode\";\"Preis pro Anzahl\";\"Warengruppe\";\"Warengr.-Kurzbez.\";\"Warengr.-Steuersatz\";\"Warengr.-Konto Inland\";\"Warengr.-Konto Ausland\";\"Warengr.-Konto EG\";\"Preis 1\";\"Preis 2\";\"Preis 3\";\"Preis I/1\";\"Preis I/2\";\"Preis I/3\";\"Preis II/1\";\"Preis II/2\";\"Preis II/3\";\"Preis III/1\";\"Preis III/2\";\"Preis III/3\";\"B/N\";\"Lagerartikel\";\"EK 1\";\"Währung EK1\";\"EK 2\";\"Währung EK2\";\"Staffelmenge 1\";\"Staffelmenge 2\";\"Staffelmenge 3\";\"Lieferantennummer 1\";\"Lieferantennummer 2\";\"Bestellmenge Lf.1\";\"Bestellmenge Lf.2\";\"Bestellnr. Lf.1\";\"Bestellnr. Lf.2\";\"Lieferzeit Lf.1\";\"Lieferzeit Lf.2\";\"Lagerbestand\";\"Mindestbestand\";\"Lagerort\";\"Bestellte Menge\";\"Stückliste\";\"Internet\";\"Text\"\r\n");
+                fwrite( $fp, iconv( "UTF-8", "ISO-8859-15", "\"Artikelnummer\";\"Bezeichnung\";\"Einheit\";\"Gewicht\";\"Matchcode\";\"Preis pro Anzahl\";\"Warengruppe\";\"Warengr.-Kurzbez.\";\"Warengr.-Steuersatz\";\"Warengr.-Konto Inland\";\"Warengr.-Konto Ausland\";\"Warengr.-Konto EG\";\"Preis 1\";\"Preis 2\";\"Preis 3\";\"Preis I/1\";\"Preis I/2\";\"Preis I/3\";\"Preis II/1\";\"Preis II/2\";\"Preis II/3\";\"Preis III/1\";\"Preis III/2\";\"Preis III/3\";\"B/N\";\"Lagerartikel\";\"EK 1\";\"Wï¿½hrung EK1\";\"EK 2\";\"Wï¿½hrung EK2\";\"Staffelmenge 1\";\"Staffelmenge 2\";\"Staffelmenge 3\";\"Lieferantennummer 1\";\"Lieferantennummer 2\";\"Bestellmenge Lf.1\";\"Bestellmenge Lf.2\";\"Bestellnr. Lf.1\";\"Bestellnr. Lf.2\";\"Lieferzeit Lf.1\";\"Lieferzeit Lf.2\";\"Lagerbestand\";\"Mindestbestand\";\"Lagerort\";\"Bestellte Menge\";\"Stï¿½ckliste\";\"Internet\";\"Text\"\r\n" ) );
             }
             $oldMode = $oDB->setFetchMode( ADODB_FETCH_ASSOC);
             $sSelect = "select * from $sArticleTable ";
@@ -235,7 +237,7 @@ class oxImex extends oxBase
 
                 $sSelect = "select oxtitle from oxarticles where oxid = '".$oArticle->oxarticles__oxparentid->value."'";
                 $oTitle = $oDB->getOne( $sSelect);
-                if($oTitle != false && strlen ($oTitle)) {
+                if ($oTitle != false && strlen ($oTitle)) {
                     $nTitle = $this->interForm($oTitle);
                 } else {
                     $nTitle = $this->interForm($oArticle->oxarticles__oxtitle->value);
@@ -272,9 +274,9 @@ class oxImex extends oxBase
                 //.";".number_format($oArticle->oxarticles__oxtprice->value, 2, '.', '')// EK 1
                 // #343 fix
                 .";".number_format($oArticle->oxarticles__oxbprice->value, 2, '.', '')// EK 1
-                .";"                           // Währung EK1
+                .";"                           // Wï¿½hrung EK1
                 .";"                           // EK 2
-                .";"                           // Währung EK2
+                .";"                           // Wï¿½hrung EK2
                 .";"                           // Staffelmenge 1
                 .";"                           // Staffelmenge 2
                 .";"                           // Staffelmenge 3
@@ -290,18 +292,17 @@ class oxImex extends oxBase
                 .";"                           // Mindestbestand
                 .";"                           // Lagerort
                 .";"                           // Bestellte Menge
-                .";"                           // Stückliste
+                .";"                           // Stï¿½ckliste
                 .";1"                              // Internet
                 .";".$this->interForm( $oArticle->oxarticles__oxshortdesc->value.$oArticle->oxarticles__oxlongdesc->value)// Text
                 .";";
                 $sToFile .= "\r\n";
 
-                fwrite( $fp, $sToFile);
+                fwrite( $fp, iconv( "UTF-8", "ISO-8859-15", $sToFile ) );
                 $rs->moveNext();
             }
 
-            fclose( $fp);
-
+            fclose( $fp );
             return true;
         }
 
@@ -316,11 +317,11 @@ class oxImex extends oxBase
      *
      * @return string
      */
-    function interFormSimple( $nValue)
+    function interFormSimple( $nValue )
     {
-        $nValue = str_replace( "\r", "", $nValue);
-        $nValue = str_replace( "\n", " ", $nValue);
-        $nValue = str_replace( '"', '""', $nValue);
+        $nValue = str_replace( "\r", "", $nValue );
+        $nValue = str_replace( "\n", " ", $nValue );
+        $nValue = str_replace( '"', '""', $nValue );
         return $nValue;
     }
 
@@ -334,7 +335,7 @@ class oxImex extends oxBase
      * @return string
      */
     function interForm( $nValue, $oObj = null)
-    {   // thnx to Volker Dörk for this function and his help here
+    {   // thnx to Volker Dï¿½rk for this function and his help here
 
         // #387A skipping conversion for fields where info must be passed in original format
         $aFieldTypesToSkip = array("text", "oxshortdesc", "oxlongdesc");
@@ -356,52 +357,24 @@ class oxImex extends oxBase
         //removing simple & (and not  &uuml; chars)
         //(not full just a simple check for existing customers for cases like Johnson&Johnson)
 
-        if (strpos($nValue, "&") !== false && strpos($nValue, ";") == false) {
+        if ( getStr()->strpos( $nValue, "&" ) !== false && getStr()->strpos($nValue, ";" ) == false ) {
             $nValue = str_replace("&", "&amp;", $nValue);
         }
 
-        if ( !$blSkipStripTags) {
-            $nValue = strip_tags( $nValue);
-        }
-
-
         $nValue = str_replace( "&nbsp;", " ", $nValue);
-        $nValue = str_replace( "&auml;", "ä", $nValue);
-        $nValue = str_replace( "&ouml;", "ö", $nValue);
-        $nValue = str_replace( "&uuml;", "ü", $nValue);
-        $nValue = str_replace( "&Auml;", "Ä", $nValue);
-        $nValue = str_replace( "&Ouml;", "Ö", $nValue);
-        $nValue = str_replace( "&Uuml;", "Ü", $nValue);
-        $nValue = str_replace( "&szlig;", "ß", $nValue);
+        $nValue = str_replace( "&auml;", "ï¿½", $nValue);
+        $nValue = str_replace( "&ouml;", "ï¿½", $nValue);
+        $nValue = str_replace( "&uuml;", "ï¿½", $nValue);
+        $nValue = str_replace( "&Auml;", "ï¿½", $nValue);
+        $nValue = str_replace( "&Ouml;", "ï¿½", $nValue);
+        $nValue = str_replace( "&Uuml;", "ï¿½", $nValue);
+        $nValue = str_replace( "&szlig;", "ï¿½", $nValue);
 
         // usually & symbol goes (or should go) like that:
         // "& text...", so we predict that this is a rule
         // and replace it with special HTML code
         $nValue = str_replace( "& ", "&amp; ", $nValue);
 
-        /*
-        $nValue = str_replace( "&nbsp;", " ", $nValue);
-        $nValue = str_replace( "&auml;", "ae", $nValue);
-        $nValue = str_replace( "&ouml;", "oe", $nValue);
-        $nValue = str_replace( "&uuml;", "ue", $nValue);
-        $nValue = str_replace( "&Auml;", "Ae", $nValue);
-        $nValue = str_replace( "&Ouml;", "Oe", $nValue);
-        $nValue = str_replace( "&Uuml;", "Ue", $nValue);
-        $nValue = str_replace( "&szlig;", "sz", $nValue);
-        $nValue = str_replace( "'", "", $nValue);
-        $nValue = str_replace( "<", "", $nValue);
-        $nValue = str_replace( ";", ",", $nValue);
-        $nValue = str_replace( ">", "", $nValue);
-        $nValue = str_replace( "&", "und", $nValue);
-
-
-        $nValue = str_replace( "ü", "ue", $nValue);
-        $nValue = str_replace( "ä", "ae", $nValue);
-        $nValue = str_replace( "ö", "oe", $nValue);
-        $nValue = str_replace( "Ü", "Ue", $nValue);
-        $nValue = str_replace( "Ä", "Ae", $nValue);
-        $nValue = str_replace( "Ö", "Oe", $nValue);
-        */
         $nValue = str_replace( "\"", "'", $nValue);
         $nValue = str_replace( "(", "'", $nValue);
         $nValue = str_replace( ")", "'", $nValue);
@@ -409,7 +382,7 @@ class oxImex extends oxBase
         $nValue = str_replace( "\n", "", $nValue);
 
         if ( !$blSkipStripTags) {
-            $nValue = strip_tags ( $nValue );
+            $nValue = strip_tags( $nValue );
         }
 
         return $nValue;
@@ -423,7 +396,7 @@ class oxImex extends oxBase
      * @return string
      */
     function internPrice( $nPrice)
-    {  // thnx to Volker Dörk for this function and his help here
+    {  // thnx to Volker Dï¿½rk for this function and his help here
         $nPrice = $this->interForm($nPrice);
         $nPrice = number_format($nPrice, 2, '.', '');
         return $nPrice;
@@ -435,6 +408,8 @@ class oxImex extends oxBase
      * @param integer $iStart    Start reading from
      * @param integer $iLines    Read number of lines
      * @param string  $sFilepath Path to file
+     *
+     * @deprecated
      *
      * @return bool
      */
@@ -514,7 +489,7 @@ class oxImex extends oxBase
      */
     function exportLexwareOrders( $iFromOrderNr = null, $iToOrderNr = null)
     {
-        // thnx to Volker Dörk for this function and his help here
+        // thnx to Volker Dï¿½rk for this function and his help here
         $myConfig = $this->getConfig();
 
         $sRet = "";
@@ -550,7 +525,7 @@ class oxImex extends oxBase
             $oUser = oxNew( "oxuser" );
             $oUser->load( $oOrder->oxorder__oxuserid->value);
 
-            $sExport  = "<Bestellung zurückgestellt=\"Nein\" bearbeitet=\"Nein\" übertragen=\"Nein\">$sNewLine";
+            $sExport  = "<Bestellung zurï¿½ckgestellt=\"Nein\" bearbeitet=\"Nein\" ï¿½bertragen=\"Nein\">$sNewLine";
             $sExport .= "<Standardwaehrung>978</Standardwaehrung>$sNewLine";
             $sExport .= "<Bestelldatum>$sNewLine";
             $sDBDate = $oOrder->oxorder__oxorderdate->value;
@@ -711,6 +686,8 @@ class oxImex extends oxBase
      * @param integer $iMaxLen Max file line length
      * @param string  $sSep    parameter/value separator
      *
+     * @deprecated
+     *
      * @return array
      */
     protected function _oxFGetCsv( $fp, $iMaxLen, $sSep )
@@ -748,12 +725,12 @@ class oxImex extends oxBase
                 $sField = trim($sField);
                 if ( $sField) {
                     if ( $sField[0] == "\"" || $sField[0] == "'") {
-                        $sField = substr( $sField, 1);
+                        $sField = getStr()->substr( $sField, 1);
                     }
 
-                    $iLen = strlen( $sField) - 1;
+                    $iLen = getStr()->strlen( $sField) - 1;
                     if ( $sField[$iLen] == "\"" || $sField[$iLen] == "'") {
-                        $sField = substr( $sField, 0, $iLen);
+                        $sField = getStr()->substr( $sField, 0, $iLen);
                     }
 
                     $aRet[$key] = $sField;
@@ -761,8 +738,7 @@ class oxImex extends oxBase
             }
             // process "" qoutes
             return str_replace('""', '"', $aRet);
-        }
-        else {
+        } else {
             return null;
         }
     }

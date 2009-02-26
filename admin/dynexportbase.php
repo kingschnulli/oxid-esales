@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: dynexportbase.php 13619 2008-10-24 09:40:23Z sarunas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: dynexportbase.php 16553 2009-02-13 18:29:53Z tomas $
  */
 
 /**
@@ -106,7 +106,7 @@ class DynExportBase extends oxAdminDetails
         //$oCountries = oxNew( "oxCountryList" );
         //$oCountries->select();
 
-        /*$aCountries = array("Deutschland", "Österreich", "Schweiz", "Liechtenstein", "Italien",
+        /*$aCountries = array("Deutschland", "ï¿½sterreich", "Schweiz", "Liechtenstein", "Italien",
                             "Luxemburg", "Frankreich", "Schweden", "Finnland", "Grossbritannien",
                             "Irland", "Holland", "Belgien", "Portugal", "Spanien", "Griechenland");
 
@@ -272,8 +272,8 @@ class DynExportBase extends oxAdminDetails
         // remove html entities, remove html tags
         $sOutput = $this->_unHTMLEntities( strip_tags( $sOutput));
 
-        if ( strlen( $sOutput) > $iMaxSize - 3) {
-            $sOutput = substr( $sOutput, 0, $iMaxSize - 5) . "...";
+        if ( getStr()->strlen( $sOutput) > $iMaxSize - 3) {
+            $sOutput = getStr()->substr( $sOutput, 0, $iMaxSize - 5) . "...";
         }
         return $sOutput;
     }
@@ -357,7 +357,7 @@ class DynExportBase extends oxAdminDetails
     {
         $sInput = oxUtilsString::getInstance()->prepareCSVField( $sInput);
         $sOutput = str_replace( "&nbsp;", " ", $sInput);
-        $sOutput = str_replace( "&euro;", "€", $sOutput);
+        $sOutput = str_replace( "&euro;", "ï¿½", $sOutput);
         $sOutput = str_replace( "|", "", $sOutput);
 
         return $sOutput;
@@ -469,11 +469,6 @@ class DynExportBase extends oxAdminDetails
             $blContinue = false;
             return null;
         }
-
-        //mall mode
-        // MALL OFF
-        /*if ($myConfig->isMall() && $sShopID != "oxbaseshop")
-            $oArticle->oxdetaillink .= "&actshop=$sShopID";*/
 
         $oArticle = $this->_setCampaignDetailLink($oArticle);
 
@@ -864,6 +859,8 @@ class DynExportBase extends oxAdminDetails
          //Saulius: variant title added
         $sTitle = $oArticle->oxarticles__oxvarselect->value?" ".$oArticle->oxarticles__oxvarselect->value:"";
         $oArticle->oxarticles__oxtitle->setValue($oArticle->oxarticles__oxtitle->value.$sTitle);
+
+
         // check for variant url - exporting direct variant links
         if ($oArticle->oxarticles__oxparentid->value) {
             $oArticle->oxdetaillink = str_replace($oArticle->oxarticles__oxparentid->value, $sOXID, $oArticle->oxdetaillink);

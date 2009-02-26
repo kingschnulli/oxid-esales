@@ -93,7 +93,7 @@ function ThisDate( sID)
             [{ oxmultilang ident="ORDER_MAIN_DISCOUNT" }]
             </td>
             <td class="edittext">
-            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxoxdiscount->fldmax_length}]" name="editval[oxorder__oxdiscount]" value="[{$edit->oxorder__oxdiscount->value }]" [{ $readonly }]>
+            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxdiscount->fldmax_length}]" name="editval[oxorder__oxdiscount]" value="[{$edit->oxorder__oxdiscount->value }]" [{ $readonly }]>
             </td>
         </tr>
 		<tr> 

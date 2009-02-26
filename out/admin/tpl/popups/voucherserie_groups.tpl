@@ -52,7 +52,7 @@
         </tr>
         <tr class="edittext">
             <td align="center"><b>[{ oxmultilang ident="GENERAL_ALLGROUPS2" }]</b></td>
-            <td align="center"><b>[{ oxmultilang ident="GENERAL_INGROUP" }]</b></td>
+            <td align="center"><b>[{ oxmultilang ident="VOUCHERSERIE_GROUPS_INGROUP" }]</b></td>
         </tr>
         <tr>
             <td valign="top" id="container1"></td>

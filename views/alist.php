@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: alist.php 14276 2008-11-19 13:57:45Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: alist.php 16658 2009-02-21 11:49:55Z vilma $
  */
 
 /**
@@ -325,7 +325,7 @@ class aList extends oxUBase
                     if ( $this->_sCatPathString ) {
                         $this->_sCatPathString .= ', ';
                     }
-                    $this->_sCatPathString .= strtolower( $oCat->oxcategories__oxtitle->value );
+                    $this->_sCatPathString .= getStr()->strtolower( $oCat->oxcategories__oxtitle->value );
                 }
             }
         }
@@ -349,12 +349,14 @@ class aList extends oxUBase
         $sDescription = oxLang::getInstance()->translateString( 'INC_HEADER_YOUAREHERE' );
 
         // appending parent title
-        if ( ( $oParent = $this->_oCategory->getParentCategory() ) ) {
-            $sDescription .= " {$oParent->oxcategories__oxtitle->value} -";
-        }
+        if ( $oCategory = $this->_getCategory() ) {
+            if ( ( $oParent = $oCategory->getParentCategory() ) ) {
+                $sDescription .= " {$oParent->oxcategories__oxtitle->value} -";
+            }
 
-        // adding cateogry title
-        $sDescription .= " {$this->_oCategory->oxcategories__oxtitle->value}.";
+            // adding cateogry title
+            $sDescription .= " {$oCategory->oxcategories__oxtitle->value}.";
+        }
 
         // and final component ..
         if ( ( $sSuffix = $this->getConfig()->getActiveShop()->oxshops__oxstarttitle->value ) ) {
@@ -365,7 +367,7 @@ class aList extends oxUBase
         $aRemoveChars = array( "\"", "'", "\n", "\r", "\t", "\x95", "\xA0" );
         $sDescription = str_replace( $aRemoveChars, ' ', $sDescription );
 
-        return strip_tags( html_entity_decode( $sDescription ) );
+        return strip_tags( html_entity_decode( $sDescription, ENT_QUOTES, 'UTF-8' ) );
     }
 
     /**
@@ -384,16 +386,20 @@ class aList extends oxUBase
     {
         //formatting description tag
         $sAddText = $this->_oActCategory?trim( $this->_oActCategory->oxcategories__oxlongdesc->value ):'';
-        if ( !$sAddText && count($this->_aArticleList)) {
-            foreach ( $this->_aArticleList as $oArticle ) {
+        $aArticleList = $this->getArticleList();
+        if ( !$sAddText && count($aArticleList)) {
+            foreach ( $aArticleList as $oArticle ) {
                 if ( $sAddText ) {
                     $sAddText .= ', ';
                 }
                 $sAddText .= $oArticle->oxarticles__oxtitle->value;
             }
         }
+        if ( $aCatPath == null ) {
+            $aCatPath = $this->_getCatPathString();
+        }
 
-        return parent::_prepareMetaDescription( $this->_getCatPathString().' - '.$sAddText, $iLength, $blDescTag );
+        return parent::_prepareMetaDescription( $aCatPath.' - '.$sAddText, $iLength, $blDescTag );
     }
 
     /**
@@ -406,30 +412,31 @@ class aList extends oxUBase
     protected function _prepareMetaKeyword( $aCatPath )
     {
         $sKeywords = '';
-        if ( ( $oParent = $this->_oCategory->getParentCategory() ) ) {
-            $sKeywords = $oParent->oxcategories__oxtitle->value;
-        }
+        if ( $oCategory = $this->_getCategory() ) {
+            if ( ( $oParent = $oCategory->getParentCategory() ) ) {
+                $sKeywords = $oParent->oxcategories__oxtitle->value;
+            }
 
-        $sKeywords = ( $sKeywords ? $sKeywords . ', ' : '' ) . $this->_oCategory->oxcategories__oxtitle->value;
-        $aSubCats  = $this->_oCategory->getSubCats();
-        if ( is_array( $aSubCats ) ) {
-            foreach ( $aSubCats as $oSubCat ) {
-                $sKeywords .= ', '.$oSubCat->oxcategories__oxtitle->value;
+            $sKeywords = ( $sKeywords ? $sKeywords . ', ' : '' ) . $oCategory->oxcategories__oxtitle->value;
+            $aSubCats  = $oCategory->getSubCats();
+            if ( is_array( $aSubCats ) ) {
+                foreach ( $aSubCats as $oSubCat ) {
+                    $sKeywords .= ', '.$oSubCat->oxcategories__oxtitle->value;
+                }
+            }
+
+            $sKeywords = parent::_prepareMetaDescription( $sKeywords, -1, true );
+            $sKeywords = $this->_removeDuplicatedWords( $sKeywords );
+
+            // removing in admin defined strings
+            $aSkipTags = $this->getConfig()->getConfigParam( 'aSkipTags' );
+            if ( is_array( $aSkipTags ) && $sKeywords ) {
+                foreach ( $aSkipTags as $sSkip ) {
+                    $aPattern = array( '/\W'.$sSkip.'\W/i', '/^'.$sSkip.'\W/i', '/\"'.$sSkip.'$/i' );
+                    $sKeywords  = preg_replace( $aPattern, '', $sKeywords );
+                }
             }
         }
-
-        $sKeywords = parent::_prepareMetaDescription( $sKeywords, -1, true );
-        $sKeywords = $this->_removeDuplicatedWords( $sKeywords );
-
-        // removing in admin defined strings
-        $aSkipTags = $this->getConfig()->getConfigParam( 'aSkipTags' );
-        if ( is_array( $aSkipTags ) && $sKeywords ) {
-            foreach ( $aSkipTags as $sSkip ) {
-                $aPattern = array( '/\W'.$sSkip.'\W/i', '/^'.$sSkip.'\W/i', '/\"'.$sSkip.'$/i' );
-                $sKeywords  = preg_replace( $aPattern, '', $sKeywords );
-            }
-        }
-
         return $sKeywords;
     }
 
@@ -446,16 +453,20 @@ class aList extends oxUBase
         $iMaxTextLenght = 60;
         $sText = '';
 
-        if (count($this->_aArticleList)) {
-            foreach ( $this->_aArticleList as $oProduct ) {
-                $sDesc = strip_tags( trim( strtolower( $oProduct->oxarticles__oxlongdesc->value ) ) );
-                if ( strlen( $sDesc ) > $iMaxTextLenght ) {
-                    $sMidText = substr( $sDesc, 0, $iMaxTextLenght );
-                    $sText   .= substr( $sMidText, 0, ( strlen( $sMidText ) - strpos( strrev( $sMidText ), ' ' ) ) );
+        $aArticleList = $this->getArticleList();
+        if ( is_array( $aArticleList ) && count( $aArticleList ) ) {
+            foreach ( $aArticleList as $oProduct ) {
+                $sDesc = strip_tags( trim( getStr()->strtolower( $oProduct->oxarticles__oxlongdesc->value ) ) );
+                if ( getStr()->strlen( $sDesc ) > $iMaxTextLenght ) {
+                    $sMidText = getStr()->substr( $sDesc, 0, $iMaxTextLenght );
+                    $sText   .= getStr()->substr( $sMidText, 0, ( getStr()->strlen( $sMidText ) - getStr()->strpos( strrev( $sMidText ), ' ' ) ) );
                 }
             }
         }
-        return parent::_prepareMetaKeyword( $this->_getCatPathString() . ', ' . $sText );
+        if ( $aCatPath == null ) {
+            $aCatPath = $this->_getCatPathString();
+        }
+        return parent::_prepareMetaKeyword( $aCatPath . ', ' . $sText );
     }
 
     /**

@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxcmp_user.php 15981 2009-01-28 09:04:30Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxcmp_user.php 16544 2009-02-13 13:11:49Z vilma $
  */
 
 /**
@@ -301,11 +301,8 @@ class oxcmp_user extends oxView
 
             // redirecting if user logs out in SSL mode
             if ( oxConfig::getParameter('redirect') && $myConfig->getConfigParam( 'sSSLShopURL' ) ) {
-                $sLogoutLink = $myConfig->getShopSecureHomeURL();
-                if ( $myConfig->isSsl() ) {
-                    $sLogoutLink = $myConfig->getShopHomeURL();
-                }
-                oxUtils::getInstance()->redirect( $sLogoutLink.'cl='.oxConfig::getParameter('cl').'&amp;cnid='.oxConfig::getParameter('cnid').'&amp;fnc=logout&amp;tpl='.oxConfig::getParameter('tpl') );
+
+                oxUtils::getInstance()->redirect( $this->_getLoggoutLink());
             }
         }
     }
@@ -563,6 +560,34 @@ class oxcmp_user extends oxView
             }
         }
         return $aDelAdress;
+    }
+
+    /**
+     * Returns logoutlink with additional params
+     *
+     * @return string $sLogoutLink
+     */
+    protected function _getLoggoutLink()
+    {
+        $myConfig = $this->getConfig();
+        $sLogoutLink = $myConfig->getShopSecureHomeURL();
+        if ( $myConfig->isSsl() ) {
+            $sLogoutLink = $myConfig->getShopHomeURL();
+        }
+        $sLogoutLink .= 'cl='.oxConfig::getParameter('cl').$this->getDynUrlParams();
+        if ( $sParam = oxConfig::getParameter('anid') ) {
+            $sLogoutLink .= '&amp;anid='.$sParam;
+        }
+        if ( $sParam = oxConfig::getParameter('cnid') ) {
+            $sLogoutLink .= '&amp;cnid='.$sParam;
+        }
+        if ( $sParam = oxConfig::getParameter('mnid') ) {
+            $sLogoutLink .= '&amp;mnid='.$sParam;
+        }
+        if ( $sParam = oxConfig::getParameter('tpl') ) {
+            $sLogoutLink .= '&amp;tpl='.$sParam;
+        }
+        return $sLogoutLink.'&amp;fnc=logout';
     }
 
     /**

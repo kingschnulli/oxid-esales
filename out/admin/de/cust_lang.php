@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package lang
- * @copyright © OXID eSales AG 2003-2009
- * $Id: cust_lang.php 13616 2008-10-24 09:38:15Z sarunas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: cust_lang.php 16305 2009-02-05 10:27:04Z rimvydas.paskevicius $
  */
 
 $sLangName  = "Deutsch";
@@ -30,8 +30,8 @@ $aLang = array(
 'EMAIL_PRICEALARM_CUSTOMER_HY'              => 'Hallo,',
 'EMAIL_PRICEALARM_CUSTOMER_HAVEPRICEALARM'  => 'wir haben einen Preisalarm im',
 'EMAIL_PRICEALARM_CUSTOMER_ITEM1'           => 'Der Artikel',
-'EMAIL_PRICEALARM_CUSTOMER_ITEM2'           => 'für den Sie sich interessieren und einen Preis von',
-'EMAIL_PRICEALARM_CUSTOMER_ITEM3'           => 'geboten haben ist jetzt für',
+'EMAIL_PRICEALARM_CUSTOMER_ITEM2'           => 'fÃ¼r den Sie sich interessieren und einen Preis von',
+'EMAIL_PRICEALARM_CUSTOMER_ITEM3'           => 'geboten haben ist jetzt fÃ¼r',
 'EMAIL_PRICEALARM_CUSTOMER_ITEM4'           => 'zu haben !',
 'EMAIL_PRICEALARM_CUSTOMER_CLICKHERE1'      => 'Um direkt zu dem Artikel zu gelangen klicken Sie bitte ',
 'EMAIL_PRICEALARM_CUSTOMER_CLICKHERE2'      => 'hier',
@@ -53,10 +53,6 @@ $aLang = array(
 'EMAIL_SENDEDNOW_HTML_RATE'                 => 'bewerten'
 );
 
-
 /*
-
 [{ oxmultilang ident="GENERAL_YOUWANTTODELETE" }]
-
-
 */

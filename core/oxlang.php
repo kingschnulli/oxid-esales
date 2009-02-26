@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxlang.php 15879 2009-01-26 09:17:14Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxlang.php 16552 2009-02-13 18:28:48Z tomas $
  */
 
 /**
@@ -369,15 +369,15 @@ class oxLang extends oxSuperCfg
      * @return string
      */
     public function formatVat( $dValue, $oActCur = null )
-    {   
+    {
         $iDecPos = 0;
         $sValue  = ( string ) $dValue;
-        if ( ( $iDotPos = strpos( $sValue, '.' ) ) !== false ) {
-            $iDecPos = strlen( substr( $sValue, $iDotPos + 1 ) );
+        if ( ( $iDotPos = getStr()->strpos( $sValue, '.' ) ) !== false ) {
+            $iDecPos = getStr()->strlen( getStr()->substr( $sValue, $iDotPos + 1 ) );
         }
 
         $oActCur = $oActCur ? $oActCur : $this->getConfig()->getActShopCurrencyObject();
-        $iDecPos = ( $iDecPos < $oActCur->decimal ) ? $iDecPos : $oActCur->decimal;          
+        $iDecPos = ( $iDecPos < $oActCur->decimal ) ? $iDecPos : $oActCur->decimal;
         return number_format( $dValue, $iDecPos, $oActCur->dec, $oActCur->thousand );
     }
 
@@ -527,9 +527,9 @@ class oxLang extends oxSuperCfg
 
                 while ( list( $nr,$line ) = each( $fileArray ) ) {
                     $line = ltrim( $line );
-                    if ( $line[0]!="#" and strpos( $line, "=" ) > 0 ) {
-                        $index = trim( substr( $line, 0, strpos($line, "=" ) ) );
-                        $value = trim( substr( $line, strpos( $line, "=" ) + 1, strlen( $line ) ) );
+                    if ( $line[0]!="#" && getStr()->strpos( $line, "=" ) > 0 ) {
+                        $index = trim( getStr()->substr( $line, 0, getStr()->strpos($line, "=" ) ) );
+                        $value = trim( getStr()->substr( $line, getStr()->strpos( $line, "=" ) + 1, getStr()->strlen( $line ) ) );
                         $aLang[trim($index)] = trim($value);
                     }
                 }

@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: tag.php 13614 2008-10-24 09:36:52Z sarunas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: tag.php 16619 2009-02-20 09:12:17Z arvydas $
  */
 
 /**
@@ -264,7 +264,7 @@ class Tag extends aList
             $this->_sTagTitle = false;
             if ( ( $sTag = $this->getTag() ) ) {
                 $sTitle = ucfirst( $sTag );
-                $this->_sTagTitle = htmlspecialchars($sTitle);
+                $this->_sTagTitle = htmlspecialchars( $sTitle, ENT_QUOTES, 'UTF-8' );
             }
         }
         return $this->_sTagTitle;
@@ -281,7 +281,7 @@ class Tag extends aList
             $this->_sTemplateLocation = false;
             if ( ( $sTag = $this->getTag() ) ) {
                 $sTitle = ucfirst( $sTag );
-                $this->_sTemplateLocation = oxLang::getInstance()->translateString('TAGS')." / ".htmlspecialchars($sTitle);
+                $this->_sTemplateLocation = oxLang::getInstance()->translateString('TAGS')." / ".htmlspecialchars( $sTitle, ENT_QUOTES, 'UTF-8' );
             }
         }
         return $this->_sTemplateLocation;

@@ -17,7 +17,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2009
  * $Id: oxopenid.php 15202 2009-01-13 20:03:30Z Vilma $
  */
 $iOldErrorReproting = error_reporting();
@@ -25,8 +25,16 @@ error_reporting($iOldErrorReproting & ~E_STRICT);
 
 $sPathExtra = getShopBasePath()."core/openid";
 $sPath = ini_get('include_path');
-$sPath = $sPathExtra . ':' . $sPath;
+$sPath = $sPath . PATH_SEPARATOR . $sPathExtra;
 ini_set('include_path', $sPath);
+
+if ( (PHP_OS == "WINNT") && !defined('Auth_OpenID_RAND_SOURCE') ) {
+    /**
+     * The OpenID suite from JanRain points to a randomness source specific 
+     * to Linux/Unix/Mac "/dev/urandom". Need to set Auth_OpenID_RAND_SOURCE to null.
+     */
+    define('Auth_OpenID_RAND_SOURCE', null);
+}
 
 require_once "openid/Auth/OpenID/Consumer.php";
 require_once "openid/Auth/OpenID/FileStore.php";

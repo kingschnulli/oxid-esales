@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package inc
- * @copyright © OXID eSales AG 2003-2009
- * $Id: article_crossselling.inc.php 14409 2008-11-28 16:01:58Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: article_crossselling.inc.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident

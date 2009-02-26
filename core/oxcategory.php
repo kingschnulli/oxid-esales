@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxcategory.php 15196 2009-01-12 14:49:05Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxcategory.php 16592 2009-02-18 11:48:55Z arvydas $
  */
 
 /**
@@ -110,6 +110,13 @@ class oxCategory extends oxI18n
      * @var bool
      */
     protected $_blTopCategory = null;
+
+    /**
+     * Category id's for sorting
+     *
+     * @var array
+     */
+    protected $_aIds = array();
 
     /**
      * Class constructor, initiates parent constructor (parent::oxI18n()).
@@ -318,7 +325,43 @@ class oxCategory extends oxI18n
      */
     public function sortSubCats()
     {
-        uasort( $this->_aSubCats, array( $this, "cmpCat" ) );
+        if ( count( $this->_aIds ) > 0 ) {
+            uasort($this->_aSubCats, array( $this, 'cmpCat' ) );
+        }
+    }
+
+    /**
+     * categry sorting callback function, $_aIds array will be set with function
+     * oxcategory::setSortingIds() and generated in oxcategorylist::sortCats()
+     *
+     * @param oxcategory $a first  category
+     * @param oxcategory $b second category
+     *
+     * @return integer
+     */
+    public function cmpCat( $a,$b )
+    {
+        if ( count( $this->_aIds ) == 0 ) {
+            return;
+        }
+        if ( $this->_aIds[$a->oxcategories__oxid->value] < $this->_aIds[$b->oxcategories__oxid->value] ) {
+            return -1;
+        } if ( $this->_aIds[$a->oxcategories__oxid->value] == $this->_aIds[$b->oxcategories__oxid->value] ) {
+            return 0;
+        }
+        return 1;
+    }
+
+    /**
+     * categry sorted array
+     *
+     * @param array $aSorIds sorted category array
+     *
+     * @return null
+     */
+    public function setSortingIds( $aSorIds )
+    {
+        $this->_aIds = $aSorIds;
     }
 
     /**
@@ -358,23 +401,6 @@ class oxCategory extends oxI18n
         } else {
             $this->_aContentCats[] = $oContent;
         }
-    }
-
-    /**
-     * categry sorting callback function
-     *
-     * @param oxcategory $a first  category
-     * @param oxcategory $b second category
-     *
-     * @return integer
-     */
-    public function cmpCat( $a,$b )
-    {
-        if ( $a->oxcategories__oxsort->value == $b->oxcategories__oxsort->value ) {
-            return strcasecmp( $a->oxcategories__oxtitle->value, $b->oxcategories__oxtitle->value );
-        }
-
-        return $a->oxcategories__oxsort->value - $b->oxcategories__oxsort->value;
     }
 
     /**
@@ -645,8 +671,8 @@ class oxCategory extends oxI18n
                         $aAttributes[$sAttId] = $oAttribute;
                     }
                     $oValue             = new stdClass();
-                    $oValue->id         = htmlspecialchars($sAttValue);
-                    $oValue->value      = htmlspecialchars($sAttValue);
+                    $oValue->id         = htmlspecialchars( $sAttValue, ENT_QUOTES, 'UTF-8' );
+                    $oValue->value      = htmlspecialchars( $sAttValue, ENT_QUOTES, 'UTF-8' );
                     $oValue->blSelected = isset($aSessionFilter[$sActCat][$sAttId]) && $aSessionFilter[$sActCat][$sAttId] == $sAttValue;
 
                     $blActiveFilter = $blActiveFilter || $oValue->blSelected;
@@ -952,9 +978,9 @@ class oxCategory extends oxI18n
      */
     public function isTopCategory()
     {
-    	if ( $this->_blTopCategory == null ) {
-    		$this->_blTopCategory = $this->oxcategories__oxparentid->value == 'oxrootid';
-    	}
+        if ( $this->_blTopCategory == null ) {
+            $this->_blTopCategory = $this->oxcategories__oxparentid->value == 'oxrootid';
+        }
         return $this->_blTopCategory;
     }
 }

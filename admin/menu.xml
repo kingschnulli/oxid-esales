@@ -21,6 +21,12 @@
                 <BTN id="vendor_new" />
                 <BTN id="vendor_resetnrofarticles" />
             </SUBMENU>
+            <SUBMENU id="mxmanufacturer" cl="manufacturer" list="manufacturer_list">
+                <TAB id="tbclmanufacturer_main" cl="manufacturer_main" />
+                <TAB id="tbclmanufacturer_seo" cl="manufacturer_seo" />
+                <BTN id="manufacturer_new" />
+                <BTN id="manufacturer_resetnrofarticles" />
+            </SUBMENU>
             <SUBMENU id="mxlooknfeel" cl="gui" />
         </MAINMENU>
         <MAINMENU id="mxshopsett">

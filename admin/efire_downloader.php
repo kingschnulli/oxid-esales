@@ -17,7 +17,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2009
  * $Id: efire_downloader.php 12555 2008-09-29 13:07:20Z tomas $
  */
 
@@ -32,8 +32,8 @@ class EFire_Downloader extends oxAdminView
 
     public function render()
     {
-        $this->_aViewData['sEfiUsername'] = htmlspecialchars($this->getConfig()->getConfigParam('sEfiUsername'));
-        $this->_aViewData['sEfiPassword'] = htmlspecialchars($this->getConfig()->getConfigParam('sEfiPassword'));
+        $this->_aViewData['sEfiUsername'] = htmlspecialchars($this->getConfig()->getConfigParam('sEfiUsername'), ENT_QUOTES, 'UTF-8' );
+        $this->_aViewData['sEfiPassword'] = htmlspecialchars($this->getConfig()->getConfigParam('sEfiPassword'), ENT_QUOTES, 'UTF-8' );
 
         return parent::render();
     }

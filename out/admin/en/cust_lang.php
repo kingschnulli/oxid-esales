@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package lang
- * @copyright © OXID eSales AG 2003-2009
- * $Id: cust_lang.php 13615 2008-10-24 09:37:42Z sarunas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: cust_lang.php 16305 2009-02-05 10:27:04Z rimvydas.paskevicius $
  */
 
 $sLangName  = "English";
@@ -49,10 +49,6 @@ $aLang = array(
 'EMAIL_SENDEDNOW_HTML_YUORTEAM2'            => "Team"
 );
 
-
 /*
-
 [{ oxmultilang ident="GENERAL_YOUWANTTODELETE" }]
-
-
 */

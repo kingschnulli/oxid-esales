@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxsearch.php 14378 2008-11-26 13:59:41Z vilma $l
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxsearch.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $l
  */
 
 /**
@@ -63,14 +63,15 @@ class oxSearch extends oxSuperCfg
     /**
      * Returns a list of articles according to search parameters. Returns matched
      *
-     * @param string $sSearchParamForQuery query parameter
-     * @param string $sInitialSearchCat    initial category to seearch in
-     * @param string $sInitialSearchVendor initial vendor to seearch for
-     * @param string $sSortBy              sort by
+     * @param string $sSearchParamForQuery       query parameter
+     * @param string $sInitialSearchCat          initial category to seearch in
+     * @param string $sInitialSearchVendor       initial vendor to seearch for
+     * @param string $sInitialSearchManufacturer initial Manufacturer to seearch for
+     * @param string $sSortBy                    sort by
      *
      * @return oxarticlelist
      */
-    public function getSearchArticles( $sSearchParamForQuery = false, $sInitialSearchCat = false, $sInitialSearchVendor = false, $sSortBy = false )
+    public function getSearchArticles( $sSearchParamForQuery = false, $sInitialSearchCat = false, $sInitialSearchVendor = false, $sInitialSearchManufacturer = false, $sSortBy = false )
     {
         // sets active page
         $this->iActPage = (int) oxConfig::getParameter( 'pgNr' );
@@ -84,7 +85,7 @@ class oxSearch extends oxSuperCfg
         $oArtList = oxNew( 'oxarticlelist' );
         $oArtList->setSqlLimit( $iNrofCatArticles * $this->iActPage, $iNrofCatArticles );
 
-        $sSelect = $this->_getSearchSelect( $sSearchParamForQuery, $sInitialSearchCat, $sInitialSearchVendor, $sSortBy );
+        $sSelect = $this->_getSearchSelect( $sSearchParamForQuery, $sInitialSearchCat, $sInitialSearchVendor, $sInitialSearchManufacturer, $sSortBy );
         if ( $sSelect ) {
             $oArtList->selectString( $sSelect );
         }
@@ -94,16 +95,17 @@ class oxSearch extends oxSuperCfg
     /**
      * Returns the amount of articles according to search parameters.
      *
-     * @param string $sSearchParamForQuery query parameter
-     * @param string $sInitialSearchCat    initial category to seearch in
-     * @param string $sInitialSearchVendor initial vendor to seearch for
+     * @param string $sSearchParamForQuery       query parameter
+     * @param string $sInitialSearchCat          initial category to seearch in
+     * @param string $sInitialSearchVendor       initial vendor to seearch for
+     * @param string $sInitialSearchManufacturer initial Manufacturer to seearch for
      *
      * @return int
      */
-    public function getSearchArticleCount( $sSearchParamForQuery = false, $sInitialSearchCat = false, $sInitialSearchVendor = false )
+    public function getSearchArticleCount( $sSearchParamForQuery = false, $sInitialSearchCat = false, $sInitialSearchVendor = false, $sInitialSearchManufacturer = false )
     {
         $iCnt = 0;
-        $sSelect = $this->_getSearchSelect( $sSearchParamForQuery, $sInitialSearchCat, $sInitialSearchVendor, false );
+        $sSelect = $this->_getSearchSelect( $sSearchParamForQuery, $sInitialSearchCat, $sInitialSearchVendor, $sInitialSearchManufacturer, false );
         if ( $sSelect ) {
 
             $sPartial = substr( $sSelect, strpos( $sSelect, ' from ' ) );
@@ -117,14 +119,15 @@ class oxSearch extends oxSuperCfg
     /**
      * Returns the appropriate SQL select for a search according to search parameters
      *
-     * @param string $sSearchParamForQuery query parameter
-     * @param string $sInitialSearchCat    initial category to seearch in
-     * @param string $sInitialSearchVendor initial vendor to seearch for
-     * @param string $sSortBy              sort by
+     * @param string $sSearchParamForQuery       query parameter
+     * @param string $sInitialSearchCat          initial category to search in
+     * @param string $sInitialSearchVendor       initial vendor to search for
+     * @param string $sInitialSearchManufacturer initial Manufacturer to search for
+     * @param string $sSortBy                    sort by
      *
      * @return string
      */
-    protected function _getSearchSelect( $sSearchParamForQuery = false, $sInitialSearchCat = false, $sInitialSearchVendor = false, $sSortBy = false)
+    protected function _getSearchSelect( $sSearchParamForQuery = false, $sInitialSearchCat = false, $sInitialSearchVendor = false, $sInitialSearchManufacturer = false, $sSortBy = false)
     {
         // performance
         if ( $sInitialSearchCat ) {
@@ -152,11 +155,24 @@ class oxSearch extends oxSuperCfg
             }
         }
 
+        // performance:
+        if ( $sInitialSearchManufacturer ) {
+            // lets search this Manufacturer - if no such Manufacturer - skip all other code
+            $oManufacturer   = oxNew( 'oxmanufacturer' );
+            $sManTable = $oManufacturer->getViewName();
+
+            $sQ  = "select 1 from $sManTable where $sManTable.oxid = ".oxDb::getDb()->quote( $sInitialSearchManufacturer )." ";
+            $sQ .= "and ".$oManufacturer->getSqlActiveSnippet();
+            if ( !oxDb::getDb()->getOne( $sQ ) ) {
+                return;
+            }
+        }
+
         $sWhere = null;
 
         if ( $sSearchParamForQuery ) {
             $sWhere = $this->_getWhere( $sSearchParamForQuery );
-        } elseif ( !$sInitialSearchCat && !$sInitialSearchVendor ) {
+        } elseif ( !$sInitialSearchCat && !$sInitialSearchVendor && !$sInitialSearchManufacturer ) {
             //no search string
             return null;
         }
@@ -193,6 +209,10 @@ class oxSearch extends oxSuperCfg
 
         if ( $sInitialSearchVendor ) {
             $sSelect .= " and {$sArticleTable}.oxvendorid = '{$sInitialSearchVendor}' ";
+        }
+
+        if ( $sInitialSearchManufacturer ) {
+            $sSelect .= " and {$sArticleTable}.oxmanufacturerid = '{$sInitialSearchManufacturer}' ";
         }
 
         $sSelect .= $sWhere;

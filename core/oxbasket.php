@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxbasket.php 16037 2009-01-29 06:35:30Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxbasket.php 16757 2009-02-24 13:45:45Z vilma $
  */
 
 /**
@@ -356,7 +356,7 @@ class oxBasket extends oxSuperCfg
      */
     public function setStockCheckMode( $blCheck )
     {
-    	$this->_blCheckStock = $blCheck;
+        $this->_blCheckStock = $blCheck;
     }
 
     /**
@@ -366,7 +366,7 @@ class oxBasket extends oxSuperCfg
      */
     public function getStockCheckMode()
     {
-    	return $this->_blCheckStock;
+        return $this->_blCheckStock;
     }
 
     /**
@@ -411,10 +411,11 @@ class oxBasket extends oxSuperCfg
     protected function _clearBundles()
     {
         reset( $this->_aBasketContents );
-        while ( list( $sItemKey, $oBasketItem ) = each( $this->_aBasketContents ) )
+        while ( list( $sItemKey, $oBasketItem ) = each( $this->_aBasketContents ) ) {
             if ( $oBasketItem->isBundle() ) {
                 $this->removeItem( $sItemKey );
             }
+        }
     }
 
     /**
@@ -905,6 +906,9 @@ class oxBasket extends oxSuperCfg
      */
     protected function _calcBasketTotalDiscount()
     {
+        if ( $this->_oTotalDiscount && $this->_oTotalDiscount->getBruttoPrice() != 0 ) {
+            return;
+        }
         $this->_oTotalDiscount = oxNew( 'oxPrice' );
         $this->_oTotalDiscount->setBruttoPriceMode();
 
@@ -1425,7 +1429,7 @@ class oxBasket extends oxSuperCfg
                 $oDelAdress = oxNew( 'oxbase' );
                 $oDelAdress->init( 'oxaddress' );
                 if ( $oDelAdress->load( $sAddressId ) ) {
-                   $sDelivCountry = $oDelAdress->oxaddress__oxcountryid->value;
+                    $sDelivCountry = $oDelAdress->oxaddress__oxcountryid->value;
                 }
             }
 
@@ -2065,6 +2069,20 @@ class oxBasket extends oxSuperCfg
             return $oDeliveryCost->getBruttoPrice();
         }
         return false;
+    }
+
+    /**
+     * Sets total discount value
+     *
+     * @param double $dDiscount new total discount value
+     *
+     * @return null
+     */
+    public function setTotalDiscount( $dDiscount )
+    {
+        $this->_oTotalDiscount = oxNew( 'oxPrice' );
+        $this->_oTotalDiscount->setBruttoPriceMode();
+        $this->_oTotalDiscount->add( $dDiscount );
     }
 
 }

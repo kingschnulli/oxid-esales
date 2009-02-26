@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxajax.php 15735 2009-01-21 16:17:45Z tomas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxajax.php 16607 2009-02-19 12:54:42Z arvydas $
  */
 
 // shop path for includes
@@ -326,7 +326,7 @@ class ajaxListComponent extends oxSuperCfg
                     $sValue = str_replace( array( '%', '_' ), array( '\%', '\_' ), $sValue );
 
                     // possibility to search in the middle ..
-                    $sValue = preg_replace( '/^\*/', '%', $sValue );
+                    $sValue = preg_replace( '/^\*/u', '%', $sValue );
 
                     $sCol = $aCols[ $iCol ][3]?$aCols[ $iCol ][0].oxLang::getInstance()->getLanguageTag():$aCols[ $iCol ][0];
                     $sQ .= getViewName( $aCols[ $iCol ][1] ) . '.' . $sCol;
@@ -437,6 +437,7 @@ class ajaxListComponent extends oxSuperCfg
      */
     protected function _outputResponse( $aData )
     {
+        /* as we now use UTF8, no need to reencode before outputting ..
         // TODO: improve this
         if ( is_array( $aData['records'] ) && $iRecSize = count( $aData['records'] ) ) {
             $aKeys = array_keys( current( $aData['records'] ) );
@@ -447,6 +448,7 @@ class ajaxListComponent extends oxSuperCfg
                 }
             }
         }
+        */
 
         echo json_encode( $aData );
     }

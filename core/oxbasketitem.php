@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxbasketitem.php 16037 2009-01-29 06:35:30Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxbasketitem.php 16608 2009-02-19 13:31:39Z vilma $
  */
 
 /**
@@ -237,7 +237,7 @@ class oxBasketItem extends oxSuperCfg
     /**
      * Sets stock control mode
      *
-     * @param bool $blCheck stock control mode
+     * @param bool $blStatus stock control mode
      *
      * @return null
      */
@@ -286,25 +286,25 @@ class oxBasketItem extends oxSuperCfg
         // setting default
         $iOnStock = true;
 
-        // checking for stock
-        if ( $this->getStockCheckStatus() == true ) {
-            $iOnStock = $oArticle->checkForStock( $dAmount + $this->_dAmount );
-            if ( $iOnStock !== true ) {
-                if ( $iOnStock === false ) {
-                    // no stock !
-                    $dAmount = 0;
-                } else {
-                    // limited stock
-                    $dAmount = $iOnStock;
-                    $blOverride = true;
-                }
-            }
-        }
-
         if ( $blOverride ) {
             $this->_dAmount  = $dAmount;
         } else {
             $this->_dAmount += $dAmount;
+        }
+
+        // checking for stock
+        if ( $this->getStockCheckStatus() == true ) {
+            $iOnStock = $oArticle->checkForStock( $this->_dAmount );
+            if ( $iOnStock !== true ) {
+                if ( $iOnStock === false ) {
+                    // no stock !
+                    $this->_dAmount = 0;
+                } else {
+                    // limited stock
+                    $this->_dAmount = $iOnStock;
+                    $blOverride = true;
+                }
+            }
         }
 
         // calculating general weight
@@ -314,7 +314,7 @@ class oxBasketItem extends oxSuperCfg
             $oEx = oxNew( 'oxOutOfStockException' );
             $oEx->setMessage( 'EXCEPTION_OUTOFSTOCK_OUTOFSTOCK' );
             $oEx->setArticleNr( $oArticle->oxarticles__oxartnum->value );
-            $oEx->setRemainingAmount( $dAmount );
+            $oEx->setRemainingAmount( $this->_dAmount );
             throw $oEx;
         }
     }

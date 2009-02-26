@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxutils.php 15915 2009-01-27 09:26:13Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxutils.php 16552 2009-02-13 18:28:48Z tomas $
  */
 
 /**
@@ -479,7 +479,7 @@ class oxUtils extends oxSuperCfg
 
             $hFile = fopen( $sFilePath, "w");
             if ( $hFile) {
-                fwrite( $hFile, $sInput, strlen( $sInput));
+                fwrite( $hFile, $sInput);
                 fclose( $hFile);
             }
         } else {   // read it
@@ -828,7 +828,7 @@ class oxUtils extends oxSuperCfg
             return;
         }
 
-        exit;
+        $this->showMessageAndExit( '' );
     }
 
     /**
@@ -841,6 +841,11 @@ class oxUtils extends oxSuperCfg
     public function showMessageAndExit( $sMsg )
     {
         $this->getSession()->freeze();
+
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            return;
+        }
+
         die( $sMsg );
     }
 
@@ -854,7 +859,7 @@ class oxUtils extends oxSuperCfg
      */
     protected function _addUrlParameters( $sUrl, $aParams )
     {
-        $sDelim = ( ( strpos( $sUrl, '?' ) !== false ) )?'&':'?';
+        $sDelim = ( ( getStr()->strpos( $sUrl, '?' ) !== false ) )?'&':'?';
         foreach ( $aParams as $sName => $sVal ) {
             $sUrl = $sUrl . $sDelim . $sName . '=' . $sVal;
             $sDelim = '&';
@@ -886,7 +891,7 @@ class oxUtils extends oxSuperCfg
             $oObject->price = $aPrice[1];
             $aName[0] = $aPrice[0];
 
-            $iPercPos = strpos( $oObject->price, '%' );
+            $iPercPos = getStr()->strpos( $oObject->price, '%' );
             if ( $iPercPos !== false ) {
                 $oObject->priceUnit = '%';
                 $oObject->fprice = $oObject->price;
@@ -1024,8 +1029,8 @@ class oxUtils extends oxSuperCfg
 
         $sUrl = preg_replace('/(force_)?sid=[a-z0-9\._]*&?(amp;)?/i', '', $sUrl);
 
-        if ($qpos = strpos($sUrl, '?')) {
-            if ($qpos == strlen($sUrl)-1) {
+        if ($qpos = getStr()->strpos($sUrl, '?')) {
+            if ($qpos == getStr()->strlen($sUrl)-1) {
                 $sSep = '';
             } else {
                 $sSep = '&amp;';
@@ -1049,5 +1054,4 @@ class oxUtils extends oxSuperCfg
 
         return $sUrl;
     }
-
 }

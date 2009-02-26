@@ -232,6 +232,16 @@ function UpdateList( sID)
 
             <tr>
              <td valign="top" class="conftext">
+                <input type=hidden name=confbools[bl_perfLoadManufacturerTree] value=false>
+                <input type=checkbox class="confinput" name=confbools[bl_perfLoadManufacturerTree] value=true  [{if ($confbools.bl_perfLoadManufacturerTree)}]checked[{/if}] [{ $readonly }]>
+             </td>
+             <td valign="top" class="conftext" width="100%" >
+               [{ oxmultilang ident="SHOP_PERF_LOADMANUFACTURERTREE" }]
+             </td>
+            </tr>
+            
+            <tr>
+             <td valign="top" class="conftext">
                 <input type=hidden name=confbools[bl_perfShowLeftBasket] value=false>
                 <input type=checkbox class="confinput" name=confbools[bl_perfShowLeftBasket] value=true  [{if ($confbools.bl_perfShowLeftBasket)}]checked[{/if}] [{ $readonly }]>
              </td>

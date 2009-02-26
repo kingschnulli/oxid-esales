@@ -17,21 +17,28 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxerpcompatability.php 16004 2009-01-28 15:33:50Z rimvydas.paskevicius $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxerpcompatability.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
+/**
+ * Class handeling ERP compatability checks based on shop revision number
+ * @package core
+ */
 class OXERPCompatability
 {
     /**
      * Returns build revision number or false on read error.
      *
+     * @param string $sBasePath base shop path
+     *
      * @return int
      */
-    public function getPkgRevision($sBasePath = null) {
+    public function getPkgRevision($sBasePath = null)
+    {
         $sFile = (!$sBasePath?getShopBasePath():$sBasePath).'/pkg.rev';
 
-        if(is_readable($sFile)) {
+        if (is_readable($sFile)) {
             return (int) trim(file_get_contents($sFile));
         }
         // TODO: return newest (HEAD)
@@ -47,7 +54,7 @@ class OXERPCompatability
     {
         $oConfig   = oxConfig::getInstance();
 
-        if (method_exists($oConfig,'getRevision')) {
+        if (method_exists( $oConfig, 'getRevision' )) {
             $sRevision = $oConfig->getRevision();
             if ($sRevision !== false) {
                 return $sRevision;
@@ -60,7 +67,7 @@ class OXERPCompatability
     /**
      * Returns true or false depending on shop's user password salt support
      *
-     * @param $iRev
+     * @param int $iRev shop revision number
      *
      * @return bool
      */
@@ -76,7 +83,7 @@ class OXERPCompatability
      * Returns true or false depending on shop's user password salt
      * is kept in oxuser table
      *
-     * @param $iRev
+     * @param int $iRev shop revision number
      *
      * @return bool
      */
@@ -91,7 +98,7 @@ class OXERPCompatability
     /**
      * checks orderarticle oxstock field type
      *
-     * @param $iRev
+     * @param int $iRev shop revision number
      *
      * @return bool
      */
@@ -106,7 +113,7 @@ class OXERPCompatability
     /**
      * checks if articles multilanguage longdescriptions are handled corecly
      *
-     * @param $iRev
+     * @param int $iRev shop revision number
      *
      * @return bool
      */
@@ -121,7 +128,7 @@ class OXERPCompatability
     /**
      * checks if min variant price is allways updated ( see bug #378 )
      *
-     * @param $iRev
+     * @param int $iRev shop revision number
      *
      * @return bool
      */

@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxseoencoderarticle.php 14388 2008-11-26 15:43:17Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxseoencoderarticle.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /**
@@ -187,6 +187,55 @@ class oxSeoEncoderArticle extends oxSeoEncoder
     }
 
     /**
+     * Returns manufacturer seo uri for current article
+     *
+     * @param oxarticle $oArticle article object
+     * @param int       $iLang    language id (optional)
+     *
+     * @return string
+     */
+    protected function _getArticleManufacturerUri( $oArticle, $iLang = null )
+    {
+        startProfile(__FUNCTION__);
+        if ( !isset( $iLang ) ) {
+            $iLang = $oArticle->getLanguage();
+        }
+
+        $sActManufacturerId = $oArticle->oxarticles__oxmanufacturerid->value;
+        $oManufacturer = oxNew( 'oxmanufacturer' );
+        if ( !$sActManufacturerId || !$oManufacturer->load( $sActManufacturerId ) ) {
+            $oManufacturer = null;
+        }
+
+        //load details link from DB
+        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, $iShopId, $sActManufacturerId, true ) ) ) {
+
+            if ( $iLang != $oArticle->getLanguage() ) {
+                $sId = $oArticle->getId();
+                $oArticle = oxNew('oxarticle');
+                $oArticle->loadInLang( $iLang, $sId );
+            }
+
+            // create title part for uri
+            $sTitle = $this->_prepareArticleTitle( $oArticle );
+
+            // create uri for all categories
+            if ( !$sActManufacturerId || !$oManufacturer ) {
+                $sSeoUrl = $this->_getUniqueSeoUrl( $sTitle, '.html', $oArticle->getId() );
+                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang );
+            } else {
+                $sSeoUrl = oxSeoEncoderManufacturer::getInstance()->getManufacturerUri( $oManufacturer, $iLang );
+                $sSeoUrl = $this->_getUniqueSeoUrl( $sSeoUrl . $sTitle, '.html', $oArticle->getId() );
+
+                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang, null, 0, '', '', $sActManufacturerId );
+            }
+        }
+
+        stopProfile(__FUNCTION__);
+
+        return $sSeoUrl;
+    }
+    /**
      * Encodes article URLs into SEO format
      *
      * @param oxArticle $oArticle Article object
@@ -205,9 +254,12 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             case 1 :
                 $sUri = $this->_getArticleVendorUri( $oArticle, $iLang );
                 break;
+            case 2 :
+                $sUri = $this->_getArticleManufacturerUri( $oArticle, $iLang );
+                break;
             default:
                 $sUri = $this->_getArticleUri( $oArticle, $iLang );
-            }
+        }
 
         return $this->_getFullUrl( $sUri, $iLang );
 

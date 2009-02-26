@@ -196,6 +196,20 @@ function UnlockSave(obj)
                     </select>
                 </td>
               </tr>
+              
+              <tr>
+                <td class="edittext">
+                    [{ oxmultilang ident="ARTICLE_MAIN_MANUFACTURERID" }]
+                </td>
+                <td class="edittext">
+                    <select class="editinput" name="editval[oxarticles__oxmanufacturerid]" [{ $readonly }]>
+                    <option value="" selected>---</option>
+                    [{foreach from=$oView->getManufacturerList() item=oManufacturer }]
+                    <option value="[{$oManufacturer->oxmanufacturers__oxid->value}]"[{if $edit->oxarticles__oxmanufacturerid->value == $oManufacturer->oxmanufacturers__oxid->value}] selected[{/if}]>[{ $oManufacturer->oxmanufacturers__oxtitle->value }]</option>
+                    [{/foreach}]
+                    </select>
+                </td>
+              </tr>
 
               [{if !$edit->blNotBuyableParent}]
 

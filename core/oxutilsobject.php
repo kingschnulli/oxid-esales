@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxutilsobject.php 15773 2009-01-23 13:16:09Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxutilsobject.php 16545 2009-02-13 14:24:57Z vilma $
  */
 
 /**
@@ -240,8 +240,8 @@ class oxUtilsObject extends oxSuperCfg
         if ( is_array( $aModules ) && array_key_exists( $sClassName, $aModules ) ) {
             $aClassChain = explode( "&", $aModules[$sClassName] );
             foreach ($aClassChain as $sModule) {
-                if ( basename($sModule) == $sModuleName ){
-                	return true;
+                if ( basename($sModule) == $sModuleName ) {
+                    return true;
                 }
             }
         }

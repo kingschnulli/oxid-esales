@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxemail.php 16048 2009-01-29 14:58:13Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxemail.php 16545 2009-02-13 14:24:57Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -330,7 +330,7 @@ class oxEmail extends phpmailer
         $smarty->assign( "iswishlist", true);
         $smarty->assign( "isreview", true);
 
-        if( $aVoucherList = $oOrder->getVoucherList() ) {
+        if ( $aVoucherList = $oOrder->getVoucherList() ) {
             $smarty->assign( "vouchers", $aVoucherList );
         }
 
@@ -448,7 +448,7 @@ class oxEmail extends phpmailer
         $oRemark->save();
 
 
-        if( $myConfig->getConfigParam( 'iDebug' ) == 6) {
+        if ( $myConfig->getConfigParam( 'iDebug' ) == 6) {
             exit();
         }
 
@@ -920,7 +920,7 @@ class oxEmail extends phpmailer
         foreach ( $aBasketContents as $oBasketItem ) {
             $oArticle = $oBasketItem->getArticle();
              // reminder not set
-            if ( !$oArticle->oxarticles__oxremindactiv->value || $oArticle->oxarticles__oxremindactiv->value > 1 ) {
+            if ( !$oArticle->oxarticles__oxremindactive->value || $oArticle->oxarticles__oxremindactive->value > 1 ) {
                 continue;
             }
 
@@ -1108,7 +1108,7 @@ class oxEmail extends phpmailer
             }
 
             if ( $blReSetBody ) {
-            	$this->setBody( $sBody );
+                $this->setBody( $sBody );
             }
         }
     }

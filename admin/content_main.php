@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: content_main.php 14987 2009-01-08 08:48:15Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: content_main.php 16589 2009-02-18 11:23:47Z arvydas $
  */
 
 /**
@@ -117,6 +117,10 @@ class Content_Main extends oxAdminDetails
         $soxId      = oxConfig::getParameter( "oxid");
         $aParams    = oxConfig::getParameter( "editval");
 
+        if ( isset( $aParams['oxcontents__oxloadid'] ) ) {
+            $aParams['oxcontents__oxloadid'] = $this->_prepareIdent( $aParams['oxcontents__oxloadid'] );
+        }
+
         // check if loadid is unique
         if ( $soxId == "-1") {
             if ( $this->_checkIdent( $aParams['oxcontents__oxloadid'] )) {
@@ -182,6 +186,11 @@ class Content_Main extends oxAdminDetails
 
         $soxId      = oxConfig::getParameter( "oxid");
         $aParams    = oxConfig::getParameter( "editval");
+
+        if ( isset( $aParams['oxcontents__oxloadid'] ) ) {
+            $aParams['oxcontents__oxloadid'] = $this->_prepareIdent( $aParams['oxcontents__oxloadid'] );
+        }
+
         // checkbox handling
         if ( !isset( $aParams['oxcontents__oxactive']))
             $aParams['oxcontents__oxactive'] = 0;
@@ -212,6 +221,20 @@ class Content_Main extends oxAdminDetails
         // set oxid if inserted
         if ( $soxId == "-1")
             oxSession::setVar( "saved_oxid", $oContent->oxcontents__oxid->value);
+    }
+
+    /**
+     * Prepares ident (removes bad chars, leaves only thoose that fits in a-zA-Z0-9_ range)
+     *
+     * @param string $sIdent ident to filter
+     *
+     * @return string
+     */
+    protected function _prepareIdent( $sIdent )
+    {
+        if ( $sIdent ) {
+            return preg_replace( "/[^a-zA-Z0-9_]*/u", "", $sIdent );
+        }
     }
 
     /**

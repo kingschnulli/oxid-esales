@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxstatistic.php 16081 2009-01-30 12:02:17Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxstatistic.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /**

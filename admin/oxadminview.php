@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxadminview.php 16045 2009-01-29 13:56:34Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxadminview.php 16386 2009-02-09 13:31:39Z tomas $
  */
 
 /**
@@ -130,8 +130,8 @@ class oxAdminView extends oxView
 
         // authorization check
         if ( !$this->_authorize() ) {
-            oxUtils::getInstance()->redirect( 'index.php' );
-            exit();
+            oxUtils::getInstance()->redirect( 'index.php');
+            exit;
         }
 
         /*

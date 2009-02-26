@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxorder.php 16037 2009-01-29 06:35:30Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxorder.php 16643 2009-02-20 14:15:02Z vilma $
  */
 
 /**
@@ -352,6 +352,12 @@ class oxOrder extends oxBase
         // payment information
         $oUserPayment = $this->_setPayment( $oBasket->getPaymentId() );
 
+        // set folder information, if order is new
+        // #M575 in recalcualting order case folder must be the same as it was
+        if ( !$blRecalculatingOrder ) {
+            $this->_setFolder();
+        }
+
         //saving all order data to DB
         $this->save();
 
@@ -427,7 +433,7 @@ class oxOrder extends oxBase
         $myConfig = $this->getConfig();
 
         // store IP Adress - default must be FALSE as it is illegal to store
-        if ( $myConfig->getConfigParam( 'blStoreIPs' ) ) {
+        if ( $myConfig->getConfigParam( 'blStoreIPs' ) &&  $this->oxorder__oxip->value === null ) {
             $this->oxorder__oxip = new oxField(oxUtilsServer::getInstance()->getRemoteAddress(), oxField::T_RAW);
         }
 
@@ -451,7 +457,9 @@ class oxOrder extends oxBase
         }
 
         // user remark
-        $this->oxorder__oxremark = new oxField(oxSession::getVar( 'ordrem' ), oxField::T_RAW);
+        if ( $this->oxorder__oxremark->value === null ) {
+            $this->oxorder__oxremark = new oxField(oxSession::getVar( 'ordrem' ), oxField::T_RAW);
+        }
 
         // currency
         $oCur = $myConfig->getActShopCurrencyObject();
@@ -770,6 +778,17 @@ class oxOrder extends oxBase
     }
 
     /**
+     * Assigns oxfolder as new
+     *
+     * @return null
+     */
+    protected function _setFolder()
+    {
+        $myConfig = $this->getConfig();
+        $this->oxorder__oxfolder    = new oxField(key( $myConfig->getShopConfVar(  'aOrderfolder', $myConfig->getShopId() ) ), oxField::T_RAW);
+    }
+
+    /**
      * aAdds/removes user chosen article to/from his noticelist
      * or wishlist (oxuserbasket::addItemToBasket()).
      *
@@ -974,10 +993,10 @@ class oxOrder extends oxBase
         if ( !$this->oxorder__oxorderdate->value ) {
             $this->oxorder__oxorderdate = new oxField(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ), oxField::T_RAW);
         } else {
-        	$this->oxorder__oxorderdate  = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxorderdate->value, true ));
+            $this->oxorder__oxorderdate = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxorderdate->value, true ));
         }
         $this->oxorder__oxshopid    = new oxField($myConfig->getShopId(), oxField::T_RAW);
-        $this->oxorder__oxfolder    = new oxField(key( $myConfig->getShopConfVar(  'aOrderfolder', $myConfig->getShopId() ) ), oxField::T_RAW);
+
         $this->oxorder__oxsenddate  = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxsenddate->value, true ));
 
         if ( ( $blInsert = parent::_insert() ) ) {
@@ -1061,10 +1080,11 @@ class oxOrder extends oxBase
      *
      * @param array $aNewOrderArticles article list of new order
      * @param bool  $blChangeDelivery  if delivery was changed in admin
+     * @param bool  $blChangeDiscount  if discount was changed in admin
      *
      * @return null
      */
-    public function recalculateOrder( $aNewOrderArticles = array(), $blChangeDelivery = false )
+    public function recalculateOrder( $aNewOrderArticles = array(), $blChangeDelivery = false, $blChangeDiscount = false )
     {
         oxDb::startTransaction();
 
@@ -1143,14 +1163,14 @@ class oxOrder extends oxBase
             }
 
             // add this order articles to virtual basket and recalculates basket
-            $oBasket = $this->_addOrderArticlesToBasket( $oUser, $this->_oArticles, $blChangeDelivery );
+            $oBasket = $this->_addOrderArticlesToBasket( $oUser, $this->_oArticles, $blChangeDelivery, $blChangeDiscount );
 
             //finalizing order (skipping payment execution, vouchers marking and mail sending)
             $iRet = $this->finalizeOrder( $oBasket, $oUser, true );
 
             //adding back canceled articles
             if ( count($aCanceledArticles) > 0 ) {
-                foreach($aCanceledArticles as $oCanceledOrderArticle ) {
+                foreach ($aCanceledArticles as $oCanceledOrderArticle ) {
                     $oCanceledOrderArticle->save();
                 }
             }
@@ -1241,7 +1261,7 @@ class oxOrder extends oxBase
         $oUser->load( $this->oxorder__oxuserid->value );
 
         // add this order articles to basket and recalculate basket
-        $oBasket = $this->_addOrderArticlesToBasket( $oUser, $this->getOrderArticles(), false, false );
+        $oBasket = $this->_addOrderArticlesToBasket( $oUser, $this->getOrderArticles(), false, false, false );
 
         // load fitting deliveries list
         $oDeliveryList = oxNew( "oxDeliveryList", "core" );
@@ -1542,10 +1562,12 @@ class oxOrder extends oxBase
      * @param oxUser $oUser            basket user object
      * @param array  $aOrderArticles   order articles
      * @param bool   $blChangeDelivery if delivery was changed in admin
+     * @param bool   $blChangeDiscount if discount was changed in admin
+     * @param bool   $blStockCheck     to check stock
      *
      * @return oxBasket
      */
-    protected function _addOrderArticlesToBasket( $oUser = null, $aOrderArticles = null, $blChangeDelivery = false, $blStockCheck = true )
+    protected function _addOrderArticlesToBasket( $oUser = null, $aOrderArticles = null, $blChangeDelivery = false, $blChangeDiscount = false, $blStockCheck = true )
     {
         $oBasket = oxNew( "oxbasket" );
 
@@ -1609,6 +1631,9 @@ class oxOrder extends oxBase
         //when user changed delivery costs in admin
         if ( $blChangeDelivery ) {
             $oBasket->setDeliveryPrice( $this->getOrderDeliveryPrice() );
+        }
+        if ( $blChangeDiscount ) {
+            $oBasket->setTotalDiscount( $this->oxorder__oxdiscount->value );
         }
         //set basket payment
         $oBasket->setPayment( $this->oxorder__oxpaymenttype->value );

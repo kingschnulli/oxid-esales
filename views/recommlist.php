@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: recommlist.php 13614 2008-10-24 09:36:52Z sarunas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: recommlist.php 16603 2009-02-19 09:36:42Z arvydas $
  */
 
 /**
@@ -297,9 +297,9 @@ class RecommList extends oxUBase
      *
      * @return array
      */
-    protected function _getNavigationParams()
+    public function getNavigationParams()
     {
-        $aParams = parent::_getNavigationParams();
+        $aParams = parent::getNavigationParams();
         $aParams['recommid'] = oxConfig::getParameter( 'recommid' );
 
         return $aParams;

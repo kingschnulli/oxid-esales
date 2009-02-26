@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxseoencoder.php 15918 2009-01-27 10:23:55Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxseoencoder.php 16732 2009-02-24 07:39:25Z arvydas $
  */
 
 /**
@@ -198,7 +198,8 @@ class oxSeoEncoder extends oxSuperCfg
     /**
      * Returns part of url defining active language
      *
-     * @param int $iObjectLang object language id
+     * @param int  $iObjectLang object language id
+     * @param bool $blForce     forse language id
      *
      * @return string
      */
@@ -277,7 +278,7 @@ class oxSeoEncoder extends oxSuperCfg
             if ( preg_match('/\.html?$/i', $sSeoUrl, $aMatched ) ) {
                 $sConstEnd = $aMatched[0];
             } else {
-                if ($sSeoUrl{strlen($sSeoUrl)-1} != '/') {
+                if ($sSeoUrl{getStr()->strlen($sSeoUrl)-1} != '/') {
                     $sSeoUrl .= '/';
                 }
                 $sConstEnd = '/';
@@ -285,8 +286,8 @@ class oxSeoEncoder extends oxSuperCfg
         }
 
         $sBaseSeoUrl = $sSeoUrl;
-        if ( $sConstEnd && substr( $sSeoUrl, 0 - strlen( $sConstEnd ) ) == $sConstEnd ) {
-            $sBaseSeoUrl = substr( $sSeoUrl, 0, strlen( $sSeoUrl ) - strlen( $sConstEnd ) );
+        if ( $sConstEnd && getStr()->substr( $sSeoUrl, 0 - getStr()->strlen( $sConstEnd ) ) == $sConstEnd ) {
+            $sBaseSeoUrl = getStr()->substr( $sSeoUrl, 0, getStr()->strlen( $sSeoUrl ) - getStr()->strlen( $sConstEnd ) );
         }
 
         $oDb = oxDb::getDb();
@@ -387,7 +388,7 @@ class oxSeoEncoder extends oxSuperCfg
         // basic string preparation
         $sTitle = strip_tags( $sTitle );
         $sSeparator = self::$_sSeparator;
-        $sPrefix     = self::$_sPrefix;
+        $sPrefix    = self::$_sPrefix;
         // 'fixing' reserved words
         foreach ( self::$_aReservedWords as $sWord ) {
             // this probably possible to do in one regexp
@@ -400,21 +401,21 @@ class oxSeoEncoder extends oxSuperCfg
         $sExt = '';
         $aMatched = array();
         if ( preg_match( '/\.html?$/i', $sTitle, $aMatched ) ) {
-            $sExt   = substr( $sTitle, 0 - strlen( $aMatched[0] ) );
-            $sTitle = substr( $sTitle, 0, strlen( $sTitle ) - strlen( $aMatched[0] ) );
+            $sExt   = getStr()->substr( $sTitle, 0 - getStr()->strlen( $aMatched[0] ) );
+            $sTitle = getStr()->substr( $sTitle, 0, getStr()->strlen( $sTitle ) - getStr()->strlen( $aMatched[0] ) );
         }
 
         // smart truncate
-        if ( !$blSkipTruncate && strlen( $sTitle ) > $this->_iIdLength ) {
+        if ( !$blSkipTruncate && getStr()->strlen( $sTitle ) > $this->_iIdLength ) {
 
-            if ( ( $iFirstSpace = strstr( substr( $sTitle, $this->_iIdLength ), ' ' ) ) ) {
-                $sTitle = substr( $sTitle, 0, $this->_iIdLength + $iFirstSpace );
+            if ( ( $iFirstSpace = getStr()->strstr( getStr()->substr( $sTitle, $this->_iIdLength ), ' ' ) !== false ) ) {
+                $sTitle = getStr()->substr( $sTitle, 0, $this->_iIdLength + $iFirstSpace );
             }
         }
 
         // removing any special characters
-        $sRegExp = '/[^A-Za-z0-9'.preg_quote( self::$_sSeparator, '/').'\/]+/';
-        $sTitle  = trim( preg_replace( $sRegExp, self::$_sSeparator, $sTitle ), self::$_sSeparator );
+        $sRegExp = '/[^A-Za-z0-9'.preg_quote( self::$_sSeparator, '/').'\/]+/u';
+        $sTitle  = trim( preg_replace( array( "/\W*\/\W*/", $sRegExp ), array( "/", self::$_sSeparator ), $sTitle ), self::$_sSeparator );
 
         // binding ".html" back
         $sTitle .= $sExt;
@@ -425,7 +426,7 @@ class oxSeoEncoder extends oxSuperCfg
         }
 
         // cleaning
-        return preg_replace( array( '|//+|', '/' . preg_quote( self::$_sSeparator . self::$_sSeparator, '/' ) .'+/' ),
+        return preg_replace( array( '|//+|u', '/' . preg_quote( self::$_sSeparator . self::$_sSeparator, '/' ) .'+/u' ),
                              array( '/', self::$_sSeparator ), $sTitle );
     }
 
@@ -488,8 +489,8 @@ class oxSeoEncoder extends oxSuperCfg
             }
         }
 
-        $sKeywords = $sKeywords?$oDb->quote( htmlentities( $this->encodeString( strip_tags( $sKeywords ) ) ) ):"''";
-        $sDescription = $sDescription?$oDb->quote( htmlentities( strip_tags( $sDescription ) ) ):"''";
+        $sKeywords = $sKeywords?$oDb->quote( htmlentities( $this->encodeString( strip_tags( $sKeywords ) ), ENT_QUOTES, 'UTF-8' ) ):"''";
+        $sDescription = $sDescription?$oDb->quote( htmlentities( strip_tags( $sDescription ), ENT_QUOTES, 'UTF-8' ) ):"''";
 
         // inserting new or updating
         $sParams = $sParams ? $oDb->quote( $sParams ) :'""';
@@ -531,7 +532,7 @@ class oxSeoEncoder extends oxSuperCfg
     public function encodeString( $sString )
     {
         // decoding entities
-        $sString = html_entity_decode( $sString );
+        $sString = html_entity_decode( $sString, ENT_QUOTES, 'UTF-8' );
 
         $aReplaceChars = $this->getConfig()->getConfigParam( 'aSeoReplaceChars' );
         $sString = str_replace( array_keys( $aReplaceChars ), array_values( $aReplaceChars ), $sString );
@@ -861,7 +862,7 @@ class oxSeoEncoder extends oxSuperCfg
         $sFullUrl = $sSeoUrl;
         $oSeoSecoder = oxNew('oxseodecoder');
         if ($iPos = strpos($sSeoUrl, '?')) {
-            $sSeoUrl = substr($sSeoUrl, 0, $iPos);
+            $sSeoUrl = getStr()->substr($sSeoUrl, 0, $iPos);
         }
         if (!($aHaveParams = $oSeoSecoder->decodeUrl($sSeoUrl))) {
             return $sFullUrl;

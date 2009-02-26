@@ -6,7 +6,7 @@
 <strong id="test_priceAlarmHeader" class="boxhead">[{$template_title}]</strong>
 <div class="box info">
     [{if $oView->getPriceAlarmStatus() == 1}]
-      [{ oxmultilang ident="PRICEALARM_THANKYOUMESSAGE1" }] [{ $oxcmp_shop->oxshops__oxname->value }][{ oxmultilang ident="PRICEALARM_THANKYOUMESSAGE2" }]<br><br>
+      [{ oxmultilang ident="PRICEALARM_THANKYOUMESSAGE1" }] [{ $oxcmp_shop->oxshops__oxname->value }] [{ oxmultilang ident="PRICEALARM_THANKYOUMESSAGE2" }]<br><br>
       [{ oxmultilang ident="PRICEALARM_THANKYOUMESSAGE3" }] [{ $product->oxarticles__oxtitle->value }][{if $product->oxarticles__oxvarselect->value}] [{ $product->oxarticles__oxvarselect->value }][{/if}] [{ oxmultilang ident="PRICEALARM_THANKYOUMESSAGE4" }] [{ $oView->getBidPrice()}] [{ $currency->sign}] [{ oxmultilang ident="PRICEALARM_THANKYOUMESSAGE5" }]<br><br>
     [{elseif $oView->getPriceAlarmStatus() == 2}]
       [{ oxmultilang ident="PRICEALARM_WRONGVERIFICATIONCODE" }]<br><br>

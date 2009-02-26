@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: vendorlist.php 14141 2008-11-11 14:09:46Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: vendorlist.php 16697 2009-02-23 09:29:44Z arvydas $
  */
 
 /**
@@ -46,12 +46,6 @@ class VendorList extends aList
      * @var string
      */
     protected $_oSubCatList = null;
-
-    /**
-     * List type
-     * @var string
-     */
-    protected $_iArticleCnt = null;
 
     /**
      * Recommlist
@@ -122,7 +116,7 @@ class VendorList extends aList
                     $iNrofCatArticles = $iNrofCatArticles ? $iNrofCatArticles : 1;
 
                     // load the articles
-                    $this->_iAllArtCnt = $this->getArticleCnt();
+                    $this->getArticleList();
                     $this->_iCntPages  = round( $this->_iAllArtCnt / $iNrofCatArticles + 0.49 );
 
                 }
@@ -131,7 +125,7 @@ class VendorList extends aList
         $this->_aViewData['hasVisibleSubCats'] = $this->hasVisibleSubCats();
         $this->_aViewData['subcatlist']        = $this->getSubCatList();
         $this->_aViewData['articlelist']       = $this->getArticleList();
-        $this->_aViewData['similarrecommlist'] = $this->getRecommList();
+        $this->_aViewData['similarrecommlist'] = $this->getSimilarRecommLists();
 
         $this->_aViewData['title']             = $this->getTitle();
         $this->_aViewData['template_location'] = $this->getTemplateLocation();
@@ -162,7 +156,7 @@ class VendorList extends aList
         if ( $aArtList = $this->getArticleList() ) {
             foreach ( $aArtList as $oArticle ) {
                 // forcing to generate vendor URLs by getLink
-                $oArticle->setLinkType( 1 );
+                $oArticle->setLinkType( OXARTICLE_LINKTYPE_VENDOR );
             }
         }
     }
@@ -314,50 +308,15 @@ class VendorList extends aList
              $this->_aArticleList = array();
              if ( ( $oVendorTree = $this->getVendorTree() ) ) {
                 if ( ( $oVendor = $this->getActVendor() ) && ( $oVendor->getId() != 'root' ) ) {
-                    list( $aArticleList, $iArticleCnt ) = $this->_loadArticles( $oVendor );
-                    if ( $iArticleCnt ) {
+                    list( $aArticleList, $this->_iAllArtCnt ) = $this->_loadArticles( $oVendor );
+                    if ( $this->_iAllArtCnt ) {
                         $this->_aArticleList = $aArticleList;
-                        $this->_iArticleCnt  = $iArticleCnt;
                     }
                 }
 
             }
         }
         return $this->_aArticleList;
-    }
-
-    /**
-     * Template variable getter. Returns active object's reviews
-     *
-     * @return array
-     */
-    public function getArticleCnt()
-    {
-         if ( $this->_iArticleCnt === null ) {
-             $this->_iArticleCnt = 0;
-             if ( $this->getArticleList() ) {
-                return $this->_iArticleCnt;
-            }
-        }
-        return $this->_iArticleCnt;
-    }
-
-    /**
-     * Template variable getter. Returns recommlist's reviews
-     *
-     * @return array
-     */
-    public function getRecommList()
-    {
-        if ( $this->_oRecommList === null ) {
-            $this->_oRecommList = false;
-            if ( $this->getArticleCnt() ) {
-                // loading recommlists
-                $oRecommList = oxNew('oxrecommlist');
-                $this->_oRecommList = $oRecommList->getRecommListsByIds( $this->_aArticleList->arrayKeys());
-            }
-        }
-        return $this->_oRecommList;
     }
 
     /**
@@ -426,20 +385,6 @@ class VendorList extends aList
             }
         }
         return $this->_sCatTreePath;
-    }
-
-    /**
-     * Template variable getter. Returns page navigation
-     *
-     * @return object
-     */
-    public function getPageNavigation()
-    {
-        if ( $this->_oPageNavigation === null ) {
-            $this->_oPageNavigation = false;
-            $this->_oPageNavigation = $this->generatePageNavigation();
-        }
-        return $this->_oPageNavigation;
     }
 
     /**

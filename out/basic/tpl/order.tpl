@@ -27,9 +27,9 @@
         <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
           <div>
               [{ $oViewConf->getHiddenSid() }]
+              [{ $oViewConf->getNavFormParams() }]
               <input type="hidden" name="cl" value="order">
               <input type="hidden" name="fnc" value="[{$oView->getExecuteFnc()}]">
-              <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
               <input type="hidden" name="challenge" value="[{$challenge}]">
               <div class="right arrowright">
                   <input id="test_OrderSubmitTop" type="submit" value="[{ oxmultilang ident="ORDER_SUBMITORDER" }]">
@@ -89,7 +89,7 @@
 
       <!-- basket items -->
       [{assign var="basketitemlist" value=$oView->getBasketArticles() }]
-      [{foreach key=basketindex from=$oxcmp_basket->getContents() item=basketitem name=testArt}]      
+      [{foreach key=basketindex from=$oxcmp_basket->getContents() item=basketitem name=testArt}]
       [{assign var="basketproduct" value=$basketitemlist.$basketindex }]
         <tr>
           <!-- product image -->
@@ -190,7 +190,7 @@
       [{ if $oCard }]
         <tr class="sumrow">
           <td class="brd"></td>
-          <td id="test_orderCardTitle" colspan="3"><b class="fs10">[{ oxmultilang ident="ORDER_GREETINGCARD" }] “[{ $oCard->oxwrapping__oxname->value }]”</b></td>
+          <td id="test_orderCardTitle" colspan="3"><b class="fs10">[{ oxmultilang ident="ORDER_GREETINGCARD" }] ï¿½[{ $oCard->oxwrapping__oxname->value }]ï¿½</b></td>
           <td id="test_orderCardPrice" align="right" class="orderprice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
           <td class="font10"></td>
           <td id="test_orderCardTotalPrice" align="right" class="orderprice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
@@ -518,9 +518,9 @@
             <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
               <div>
                   [{ $oViewConf->getHiddenSid() }]
+                  [{ $oViewConf->getNavFormParams() }]
                   <input type="hidden" name="cl" value="order">
                   <input type="hidden" name="fnc" value="[{$oView->getExecuteFnc()}]">
-                  <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
                   <input type="hidden" name="challenge" value="[{$challenge}]">
 
                   <div class="right arrowright">

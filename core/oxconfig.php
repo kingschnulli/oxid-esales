@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxconfig.php 15949 2009-01-27 15:48:51Z tomas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxconfig.php 16552 2009-02-13 18:28:48Z tomas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -164,7 +164,7 @@ class oxConfig extends oxSuperCfg
      * @var array
      */
     protected $aMultiShopTables = array( 'oxarticles', 'oxdiscount', 'oxcategories', 'oxattribute',
-                                         'oxlinks', 'oxvoucherseries',
+                                         'oxlinks', 'oxvoucherseries', 'oxmanufacturers',
                                          'oxnews', 'oxselectlist', 'oxwrapping',
                                          'oxdeliveryset', 'oxdelivery', 'oxvendor', 'oxobject2category');
 
@@ -332,7 +332,6 @@ class oxConfig extends oxSuperCfg
         $this->sShopDir     = $oFileUtils->normalizeDir($this->sShopDir);
         $this->sCompileDir  = $oFileUtils->normalizeDir($this->sCompileDir);
         $this->sShopURL     = $oFileUtils->normalizeDir($this->sShopURL);
-        $this->sShopDir     = $oFileUtils->normalizeDir($this->sShopDir);
         $this->sSSLShopURL  = $oFileUtils->normalizeDir($this->sSSLShopURL);
         $this->sAdminSSLURL = $oFileUtils->normalizeDir($this->sAdminSSLURL);
 
@@ -392,9 +391,6 @@ class oxConfig extends oxSuperCfg
         $iDBCacheLifeTime = $this->getConfigParam( 'iDBCacheLifeTime' );
         if( !isset( $iDBCacheLifeTime ) )
             $this->setConfigParam( 'iDBCacheLifeTime', 3600 ); // 1 hour
-
-        if ( ( $sSSLShopURL = $this->getConfigParam( 'sSSLShopURL' ) ) )
-            $this->setConfigParam( 'sSSLShopURL', $sSSLShopURL.'/' );
 
         $sCoreDir = $this->getConfigParam( 'sShopDir' );
         $this->setConfigParam( 'sCoreDir', $sCoreDir.'/core/' );
@@ -558,10 +554,10 @@ class oxConfig extends oxSuperCfg
             $sValue = $_POST[$sName];
         } elseif ( isset( $_SERVER['REQUEST_METHOD'] ) && $_SERVER['REQUEST_METHOD'] == 'GET' && isset( $_GET[$sName] ) ) {
             $sValue = $_GET[$sName];
-        //<deprecated>
+            //<deprecated>
         } elseif ( oxSession::hasVar( $sName ) ) {
             $sValue = oxSession::getVar( $sName );
-        //</deprecated>
+            //</deprecated>
         } else {
             $sValue = null;
         }
@@ -732,7 +728,7 @@ class oxConfig extends oxSuperCfg
         $sURL = str_replace( '/', '', $sURL );
 
         //so far comparing for the host is enought for us
-        if ( strpos( $sURL, $sCurrentHost ) !== false ) {
+        if ( getStr()->strpos( $sURL, $sCurrentHost ) !== false ) {
             return true;
         }
 
@@ -742,13 +738,15 @@ class oxConfig extends oxSuperCfg
     /**
      * Returns config sShopURL or sMallShopURL if secondary shop
      *
-     * @param int $iLang language
+     * @param int  $iLang   language
+     * @param bool $blAdmin if admin
      *
      * @return string
      */
-    public function getShopUrl( $iLang = null )
+    public function getShopUrl( $iLang = null, $blAdmin = null )
     {
-        if ( $this->isAdmin() ) {
+        $blAdmin = isset( $blAdmin ) ? $blAdmin : $this->isAdmin();
+        if ( $blAdmin ) {
             return $this->getConfigParam( 'sShopURL' );
         }
 
@@ -848,11 +846,14 @@ class oxConfig extends oxSuperCfg
     /**
      * Returns shop non SSL URL including index.php and sid.
      *
+     * @param int  $iLang   language
+     * @param bool $blAdmin if admin
+     *
      * @return string
      */
-    public function getShopHomeUrl()
+    public function getShopHomeUrl( $iLang = null, $blAdmin = null )
     {
-        return $this->getSession()->url( $this->getShopUrl().'index.php' );
+        return $this->getSession()->url( $this->getShopUrl( $iLang, $blAdmin).'index.php' );
     }
 
     /**
@@ -1196,7 +1197,7 @@ class oxConfig extends oxSuperCfg
     public function getImageUrl( $blAdmin = false, $blSSL = null, $blNativeImg = null )
     {
         $blNativeImg = is_null($blNativeImg)?$this->getConfigParam( 'blNativeImages' ):$blNativeImg;
-        return $this->getUrl( null , $this->_sImageDir, $blAdmin, $blSSL, $blNativeImg );
+        return $this->getUrl( null, $this->_sImageDir, $blAdmin, $blSSL, $blNativeImg );
     }
 
     /**
@@ -1227,11 +1228,11 @@ class oxConfig extends oxSuperCfg
     /**
      * Finds and returns product picture file or folder url
      *
-     * @param string $sFile    File name
-     * @param bool   $blAdmin  Whether to force admin
-     * @param bool   $blSSL    Whether to force ssl
-     * @param int    $iLang    Language
-     * @param int    $iShopId  Shop id
+     * @param string $sFile   File name
+     * @param bool   $blAdmin Whether to force admin
+     * @param bool   $blSSL   Whether to force ssl
+     * @param int    $iLang   Language
+     * @param int    $iShopId Shop id
      *
      * @return string
      */
@@ -1582,8 +1583,9 @@ class oxConfig extends oxSuperCfg
                 $oCur->decimal  = trim( $sCur[5] );
 
                 // change for US version
-                if ( isset( $sCur[6] ) )
+                if ( isset( $sCur[6] ) ) {
                     $oCur->side = trim($sCur[6]);
+                }
 
                 if ( isset( $iCurrency) && $key == $iCurrency ) {
                     $oCur->selected = 1;
@@ -1728,7 +1730,7 @@ class oxConfig extends oxSuperCfg
     public function saveShopConfVar( $sVarType, $sVarName, $sVarVal, $sShopId = null )
     {
         if ( !$sShopId ) {
-          $sShopId = $this->getShopId();
+            $sShopId = $this->getShopId();
         }
 
         $sQ = "delete from oxconfig where oxshopid = '$sShopId' and oxvarname = '$sVarName'";
@@ -1777,7 +1779,7 @@ class oxConfig extends oxSuperCfg
                     break;
                 default:
                     $sValue = $sVarVal;
-                }
+            }
         }
         return $sValue;
     }

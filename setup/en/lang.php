@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package lang
- * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 15735 2009-01-21 16:17:45Z tomas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: lang.php 16723 2009-02-23 14:22:03Z philipp.grashoff $
  */
 
 $aLang = array(
@@ -67,7 +67,7 @@ $aLang = array(
 
 'MOD_MOD_REWRITE'                                 => 'apache mod_rewrite module',
 'MOD_ALLOW_URL_FOPEN'                             => 'allow_url_fopen or fsockopen to port 80',
-'MOD_PHP4_COMPAT'                                 => 'Zend compatibility mode off',
+'MOD_PHP4_COMPAT'                                 => 'Zend compatibility mode must be off',
 'MOD_PHPVERSION'                                  => 'PHP version at least 5.2.0',
 'MOD_REQUEST_URI'                                 => 'REQUEST_URI set',
 'MOD_LIBXML2'                                     => 'LIB XML2',
@@ -79,9 +79,10 @@ $aLang = array(
 'MOD_MYSQL_CONNECT'                               => 'MySQL module for MySQL 5',
 'MOD_GD_INFO'                                     => 'GDlib v2 [v1] incl. JPEG support',
 'MOD_INI_SET'                                     => 'ini_set allowed',
-'MOD_REGISTER_GLOBALS'                            => 'register_globals off',
+'MOD_REGISTER_GLOBALS'                            => 'register_globals must be off',
 'MOD_ZEND_OPTIMIZER'                              => 'Zend Optimizer installed',
 'MOD_ZEND_PLATFORM'                               => 'Zend Platform installed',
+'MOD_MB_STRING'                                   => 'mbstring',
 
 'STEP_0_ERROR_TEXT'                               => 'Your system does not fit system requirements',
 'STEP_0_TEXT'                                     => '<ul class="req">'.

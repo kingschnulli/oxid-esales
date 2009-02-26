@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxvendor.php 15252 2009-01-14 13:57:13Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxvendor.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /**
@@ -165,7 +165,7 @@ class oxVendor extends oxI18n
             $oRootVendor->setId( 'root' );
             $oRootVendor->setLanguage( $iLang );
             $oRootVendor->oxvendor__oxicon      = new oxField('');
-            $oRootVendor->oxvendor__oxtitle     = new oxField(oxLang::getInstance()->translateString( 'byBrand', $iLang, false ) );
+            $oRootVendor->oxvendor__oxtitle     = new oxField(oxLang::getInstance()->translateString( 'byVendor', $iLang, false ) );
             $oRootVendor->oxvendor__oxshortdesc = new oxField('');
             self::$_aRootVendor[$iLang] = $oRootVendor;
         }

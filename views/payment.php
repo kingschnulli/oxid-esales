@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: payment.php 13742 2008-10-27 07:12:06Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: payment.php 16591 2009-02-18 11:48:46Z vilma $
  */
 
 /**
@@ -161,13 +161,12 @@ class Payment extends oxUBase
         }
 
         //additional check if we really really have a user now
+        //and the basket is not empty
         $oUser = $this->getUser();
-        if ( !$oUser ) {
+        $oBasket = $this->getSession()->getBasket();
+        if ( !$oBasket || !$oUser || ( $oBasket && !$oBasket->getProductsCount() ) ) {
             oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() );
         }
-
-        
-
 
         // passing payments to view
         $this->_aViewData[ 'payments' ] = $this->getPaymentList();

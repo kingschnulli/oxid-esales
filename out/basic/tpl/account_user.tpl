@@ -8,9 +8,9 @@
     <form action="[{ $oViewConf->getSelfActionLink() }]" name="order" method="post">
       <div class="account">
           [{ $oViewConf->getHiddenSid() }]
+          [{ $oViewConf->getNavFormParams() }]
           <input type="hidden" name="fnc" value="changeuser_testvalues">
           <input type="hidden" name="cl" value="account_user">
-          <input type="hidden" name="cnid" value="[{ $oViewConf->getActCatId() }]">
           <input type="hidden" name="CustomError" value='user'>
           <table class="form" width="90%">
           <tr class="th_sep">

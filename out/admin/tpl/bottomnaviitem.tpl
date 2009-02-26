@@ -50,7 +50,7 @@
   <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.new" href="#" onClick="Javascript:parent.list.document.search.oxid.value='-1'; parent.list.document.search.submit();document.location='[{$shop->selflink}]?cl=article_main';return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWARTICLE" }]</a> |</li>
   [{/if}]
 [{if $bottom_buttons->article_preview && $oxid != -1 }]
-<li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.preview" href="[{$shop->basedir}]?cl=details&anid=[{$oxid}]&preview=1" target="new">[{ oxmultilang ident="TOOLTIPS_ARTICLEREVIEW" }]</a> |</li>
+<li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.preview" href="[{if $edit}][{$edit->getLink()}][{else}][{$shop->basedir}]?cl=details&anid=[{$oxid}][{/if}]&amp;preview=1" target="new">[{ oxmultilang ident="TOOLTIPS_ARTICLEREVIEW" }]</a> |</li>
 [{/if}]
 [{* attribute *}]
 [{if $bottom_buttons->attribute_new }]
@@ -107,6 +107,13 @@
 [{/if}]
 [{if $bottom_buttons->vendor_resetnrofarticles }]
 <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.resetnrofarticles" href="#" onClick="Javascript:document.myedit.fnc.value='resetNrOfVendorArticles';document.myedit.submit();" target="edit">[{ oxmultilang ident="TOOLTIPS_RESETNROFARTICLESINVND" }]</a> |</li>
+[{/if}]
+[{* manufacturer *}]
+[{if $bottom_buttons->manufacturer_new }]
+<li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.new" href="#" onClick="Javascript:parent.list.document.search.oxid.value='-1'; parent.list.document.search.submit();document.location='[{$shop->selflink}]?cl=manufacturer_main';return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWMANUFACTURER" }]</a> |</li>
+[{/if}]
+[{if $bottom_buttons->manufacturer_resetnrofarticles }]
+<li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.resetnrofarticles" href="#" onClick="Javascript:document.myedit.fnc.value='resetNrOfManufacturerArticles';document.myedit.submit();" target="edit">[{ oxmultilang ident="TOOLTIPS_RESETNROFARTICLESINMAN" }]</a> |</li>
 [{/if}]
 [{* wrapping *}]
 [{if $bottom_buttons->wrapping_new }]

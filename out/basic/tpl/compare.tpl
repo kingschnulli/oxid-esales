@@ -77,11 +77,11 @@
         <form action="[{ $oViewConf->getSelfActionLink() }]" method="post">
           <div>
               [{ $oViewConf->getHiddenSid() }]
+              [{ $oViewConf->getNavFormParams() }]
               <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
               <input type="hidden" name="fnc" value="tocomparelist">
               <input type="hidden" name="aid" value="[{ $product->oxarticles__oxid->value }]">
               <input type="hidden" name="anid" value="[{ $product->oxarticles__oxnid->value }]">
-              <input type="hidden" name="cnid" value="[{ $oViewConf->getActCatId() }]">
               <input type="hidden" name="pgNr" value="0">
               <input type="hidden" name="am" value="1">
               <input type="hidden" name="removecompare" value="1">

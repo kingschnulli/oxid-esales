@@ -47,7 +47,7 @@ input {color: #000;}
 
 span.btn{background: transparent url(oxButtons) right -150px no-repeat;padding: 0 1px 0 0;height:18px;line-height:18px;display:-moz-inline-stack;display:inline-block;margin:0;outline:0;}
 span.btn input, span.btn a{border:none;height:18px;line-height:10px;outline:0;position:relative;display:block;padding:2px 7px;margin:0;color:oxButtonCl;font-weight: bold;cursor:pointer;background: transparent url(oxButtons) no-repeat left -150px;}
-span.btn a{padding:3px 8px 2px;}
+span.btn a{padding:3px 8px 2px; position:relative;}
 
 
 input.btn.hl {border-color:#f90;color:#f90;}
@@ -82,8 +82,8 @@ ul.menue li a {line-height: 100%;}
 ul.menue.horizontall li {float:left;}
 ul.menue.verticall   li {float:none;height: 100%;}
 
-.dropdown { display:none;  position:absolute; left:0;top:100%;padding:0;margin:0;z-index:1000;}
-.open .dropdown { display:block; }
+.dropdown { visibility: hidden; display:block; position:absolute; left:0;top:100%;padding:0;margin:0;z-index:1000;}
+.open .dropdown { visibility: visible; }
 
 /* Navigation - tree */
 ul.tree {padding:0;margin:0;}
@@ -172,7 +172,7 @@ div.bar.categories ul.menue.verticall   li a:hover { background-color:oxHeaderBa
 #footer a:hover{text-decoration: underline;}
 #footer .shopicons {padding: 0 150px;}
 #footer .footertext {text-align: center; font-size: 10px; padding: 5px 0; clear: both;color:oxFooterCl}
-div.bar.copy{ background:oxFooterCopyBg;border-top:2px solid oxFooterBg;color:oxFooterCopyCl;padding:5px 10px 5px 200px;}
+div.bar.copy{ height:13px;background:oxFooterCopyBg;border-top:2px solid oxFooterBg;color:oxFooterCopyCl;padding:5px 10px 5px 200px;}
 div.bar.copy a{color:oxFooterCopyCl;}
 div.bar.shop{ background:oxFooterShopBg;color:oxFooterShopCl;padding:8px 190px 10px 180px;text-align: center;}
 div.bar.shop a{color:oxFooterShopCl;margin:0 7px;}
@@ -417,7 +417,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .product.small .price {white-space:nowrap;}
 #body .product.small .tocart {width:121px;}
 #body .product.small .tocart input{width:121px;}
-#body .product.small .variants select{width: 124px;}
+#body .product.small .variants select{width: 123px;}
 
 #body .product.thin{width:433px;height:130px; border-color: oxProductFilledHdBr;}
 #body .product.head strong.h4{margin:0;background:oxProductBg; padding:8px 5px 1px 7px;height:20px; position:absolute;top:-30px;left:-1px;border-top:1px solid oxProductHdBr;border-left:8px solid oxProductHdBr;border-right:1px solid oxProductHdBr;width:259px;line-height:20px; font-size: 11px;font-weight: bold;color:oxProductHdCl;}
@@ -730,7 +730,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .form.orderhistory td {font-size: 10px; padding: 2px 0;}
 #body .form.orderhistory th {font-weight: bold; font-size: 10px; border: none; background: none; padding: 2px 0;}
 #body .form.orderhistory tr.headrow td, #body .form.orderhistory tr.headrow th {font-size: 11px;}
-#body .form.orderhistory a.tocart {height:18px; width: 20px; background: transparent url(bg/buttons.gif) 0 0 no-repeat; margin:0; border: none; padding:0; display: block;}
+#body .form.orderhistory a.tocart {height:18px; width: 20px; background: transparent url(oxButtons) 0 0 no-repeat; margin:0; border: none; padding:0; display: block;}
 #body .form.orderhistory a.artlink {margin-right: 7px; color: #000; font-size: 10px;}
 #body .form.orderhistory a.artlink:hover {color: #000;}
 #body .form.orderhistory .amount {padding-right: 7px;}

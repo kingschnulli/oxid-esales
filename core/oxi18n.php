@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxi18n.php 14388 2008-11-26 15:43:17Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxi18n.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /**
@@ -78,7 +78,7 @@ class oxI18n extends oxBase
     public function setLanguage( $iLang = null )
     {
         $myConfig = $this->getConfig();
-        if( isset($iLang)) {
+        if ( isset($iLang)) {
             $this->_iLanguage = (int) $iLang;
         } else {
             $this->_iLanguage = (int) oxLang::getInstance()->getBaseLanguage();

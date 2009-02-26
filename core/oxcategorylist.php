@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxcategorylist.php 14378 2008-11-26 13:59:41Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxcategorylist.php 16455 2009-02-11 13:40:50Z vilma $
  */
 
 
@@ -363,11 +363,12 @@ class oxCategoryList extends oxList
      */
     protected function _ppBuildTree()
     {
-
+        $aIds = $this->sortCats();
         $aTree = array();
         foreach ($this->_aArray as $oCat) {
             $sParentId = $oCat->oxcategories__oxparentid->value;
             if ( $sParentId != 'oxrootid') {
+                $this->_aArray[$sParentId]->setSortingIds( $aIds );
                 $this->_aArray[$sParentId]->setSubCat($oCat, $oCat->getId());
             } else {
                 $aTree[$oCat->getId()] = $oCat;
@@ -375,9 +376,35 @@ class oxCategoryList extends oxList
         }
 
         // Sort root categories
-        uasort($aTree, array(oxNew('oxCategory'), "cmpCat"));
+        $oCategory = oxNew('oxcategory');
+        $oCategory->setSortingIds( $aIds );
+        uasort($aTree, array( $oCategory, 'cmpCat' ) );
 
         $this->assign($aTree);
+    }
+
+    /**
+     * Sorts category tree after oxsort and oxtitle fields and returns ids.
+     *
+     * @return array $aIds
+     */
+    public function sortCats()
+    {
+        $oDB = oxDb::getDb();
+        $sViewName  = getViewName('oxcategories');
+        $sSortSql = "SELECT oxid FROM $sViewName ORDER BY oxparentid, oxsort, oxtitle";
+        $aIds = array();
+        $rs = $oDB->execute($sSortSql);
+        $cnt = 0;
+        if ($rs != false && $rs->recordCount() > 0) {
+            while (!$rs->EOF) {
+                $aIds[$rs->fields[0]] = $cnt;
+                $cnt++;
+                $rs->moveNext();
+            }
+        }
+
+        return $aIds;
     }
 
     /**

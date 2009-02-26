@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxsession.php 15710 2009-01-21 09:33:44Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxsession.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 
@@ -192,7 +192,7 @@ class oxSession extends oxSuperCfg
             $sid = $sForceSidParam;
         } elseif ($blUseCookies && $this->_getCookieSid()) {
             $sid = $this->_getCookieSid();
-        } elseif($sSidParam) {
+        } elseif ($sSidParam) {
             $sid = $sSidParam;
         }
 
@@ -572,7 +572,7 @@ class oxSession extends oxSuperCfg
             return true;
         }
 
-        if($sFunction && in_array($sFunction, $this->_aRequireCookiesInFncs)) {
+        if ($sFunction && in_array($sFunction, $this->_aRequireCookiesInFncs)) {
             return false;
         }
 
@@ -799,7 +799,7 @@ class oxSession extends oxSuperCfg
     protected function _getBasketName()
     {
         $myConfig = $this->getConfig();
-        if( $myConfig->getConfigParam( 'blMallSharedBasket' ) == 0) {
+        if ( $myConfig->getConfigParam( 'blMallSharedBasket' ) == 0) {
             return $myConfig->getShopId()."_basket";
         } else {
             return "basket";

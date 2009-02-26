@@ -17,7 +17,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package setup
- * @copyright © OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2009
  * $Id: index.php 14926 2009-01-05 09:27:56Z arvydas $
  */
 if ( isset( $_REQUEST['mod_rewrite'] ) ) {

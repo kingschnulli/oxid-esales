@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxerptype.php 16000 2009-01-28 15:27:22Z rimvydas.paskevicius $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxerptype.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 class oxERPType
@@ -512,7 +512,7 @@ class oxERPType
 
         $aData = $this->_preAssignObject($oShopObject, $aData, $blAllowCustomShopId);
 
-        $oShopObject->setForceCoreTableUsage(true);
+
         $oShopObject->Load( $aData['OXID']);
 
         $oShopObject->Assign( $aData );

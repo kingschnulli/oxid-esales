@@ -1,5 +1,5 @@
 <?php
-// // © oxid e:sales GmbH 2003
+// // ï¿½ oxid e:sales GmbH 2003
 //
 // Diese Software ist urheberrechtlich geschuetzt - sie ist
 // KEINE Freeware.
@@ -109,24 +109,24 @@ class oxPDF extends FPDF
         $this->SetStyle('U',false);
         $this->SetTextColor(0);
     }
-    
+
     function Text($x,$y,$txt)
     {
         // replaces some special code to chars
         $txt = str_replace( "&nbsp;", " ", $txt);
-        $txt = str_replace( "&auml;", "ä", $txt);
-        $txt = str_replace( "&ouml;", "ö", $txt);
-        $txt = str_replace( "&uuml;", "ü", $txt);
-        $txt = str_replace( "&Auml;", "Ä", $txt);
-        $txt = str_replace( "&Ouml;", "Ö", $txt);
-        $txt = str_replace( "&Uuml;", "Ü", $txt);
-        $txt = str_replace( "&szlig;", "ß", $txt);
+        $txt = str_replace( "&auml;", "ï¿½", $txt);
+        $txt = str_replace( "&ouml;", "ï¿½", $txt);
+        $txt = str_replace( "&uuml;", "ï¿½", $txt);
+        $txt = str_replace( "&Auml;", "ï¿½", $txt);
+        $txt = str_replace( "&Ouml;", "ï¿½", $txt);
+        $txt = str_replace( "&Uuml;", "ï¿½", $txt);
+        $txt = str_replace( "&szlig;", "ï¿½", $txt);
 
         // replacing html specific codes
 
-        // if this doesn't help, we should create own entity table 
+        // if this doesn't help, we should create own entity table
         // and replace codes to symbols
-        $txt = html_entity_decode($txt);
+        $txt = html_entity_decode( $txt, ENT_QUOTES, 'UTF-8' );
 
         // cleaning up possible html code
         $txt = strip_tags($txt);

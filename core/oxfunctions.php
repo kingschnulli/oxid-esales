@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxfunctions.php 14388 2008-11-26 15:43:17Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxfunctions.php 16594 2009-02-18 13:29:44Z vilma $
  */
 
 /**
@@ -30,6 +30,7 @@
  */
 function __autoload( $sClass )
 {
+
     $sClass = basename( $sClass );
 
     static $sBasePath  = null;
@@ -84,7 +85,7 @@ if ( !function_exists( 'error_404_handler' ) ) {
      *
      * @return void
      */
-    function error_404_handler($sUrl = '') 
+    function error_404_handler($sUrl = '')
     {
         header("HTTP/1.0 404 Not Found");
         echo "Page not found.";
@@ -267,6 +268,26 @@ function oxNewArticle( $sArtId )
 }
 
 /**
+ * Returns current DB handler
+ *
+ * @return oxDb
+ */
+function getDb($blAssoc = true)
+{
+    return oxDb::getDb($blAssoc);
+}
+
+/**
+ * Returns string handler
+ *
+ * @return oxStr
+ */
+function getStr()
+{
+    return oxStr::getStr();
+}
+
+/**
  * Sets template name to passed reference, returns true.
  *
  * @param string $sTplName    name of template
@@ -351,17 +372,16 @@ function smarty_modifier_oxtruncate( $sString, $iLength = 80, $sEtc = '...', $bl
 {
     if ( $iLength == 0 ) {
         $sString = '';
-    } elseif ( $iLength > 0 && strlen( $sString ) > $iLength ) {
-
-        $iLength -= strlen( $sEtc );
+    } elseif ( $iLength > 0 && getStr()->strlen( $sString ) > $iLength ) {
+        $iLength -= getStr()->strlen( $sEtc );
 
         $sString = str_replace( array('&#039;', '&quot;'), array( "'",'"' ), $sString );
 
         if ( !$blBreakWords ) {
-            $sString = preg_replace( '/\s+?(\S+)?$/', '', substr( $sString, 0, $iLength + 1 ) );
+            $sString = preg_replace( '/\s+?(\S+)?$/u', '', getStr()->substr( $sString, 0, $iLength + 1 ) );
         }
 
-        $sString = substr( $sString, 0, $iLength ).$sEtc;
+        $sString = getStr()->substr( $sString, 0, $iLength ).$sEtc;
 
         return str_replace( array( "'",'"' ), array('&#039;', '&quot;'), $sString );
     }
@@ -409,7 +429,7 @@ if ( !function_exists( 'getRequestUrl' ) ) {
             if ( $sRequest && ( $iPos = stripos( $sRequest, '?' ) ) !== false ) {
 
                 // formatting request url
-                $sRequest = 'index.php' . substr( $sRequest, $iPos );
+                $sRequest = 'index.php' . getStr()->substr( $sRequest, $iPos );
 
                 // removing possible session id
                 $sRequest = preg_replace( '/((\&)?sid=[^&]*(&)?)/', '', $sRequest );

@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxrssfeed.php 16119 2009-02-02 09:35:19Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxrssfeed.php 16592 2009-02-18 11:48:55Z arvydas $
  */
 
 /**
@@ -86,8 +86,8 @@ class oxRssFeed extends oxSuperCfg
 
         $this->_aChannel['generator']      = 'OXID eShop '.$oShop->oxshops__oxversion->value;
         $this->_aChannel['image']['url']   = $this->getConfig()->getImageUrl().'logo.png';
-        
-        
+
+
         $this->_aChannel['image']['title'] = $this->_aChannel['title'];
         $this->_aChannel['image']['link']  = $this->_aChannel['link'];
     }
@@ -193,7 +193,7 @@ class oxRssFeed extends oxSuperCfg
             if ($sIcon = $oArticle->getIconUrl()) {
                 $oItem->description = "<img src='$sIcon' border=0 align='left' hspace=5>".$oItem->description;
             }
-            $oItem->description = htmlspecialchars($oItem->description);
+            $oItem->description = htmlspecialchars( $oItem->description, ENT_QUOTES, 'UTF-8' );
 
             $aItems[] = $oItem;
         }
@@ -249,7 +249,7 @@ class oxRssFeed extends oxSuperCfg
     protected function _getShopUrl()
     {
         $sUrl = $this->getConfig()->getShopUrl();
-        if (strpos($sUrl, '?')) {
+        if (strpos($sUrl, '?') !== false ) {
             if (!preg_match('/[?&](amp;)?$/i', $sUrl)) {
                 $sUrl .= '&amp;';
             }
@@ -493,14 +493,15 @@ class oxRssFeed extends oxSuperCfg
      * @param string $sSearch   search string
      * @param string $sCatId    category id
      * @param string $sVendorId vendor id
+     * @param string $sManufacturerId Manufacturer id
      *
      * @access public
      *
      * @return string
      */
-    public function getSearchArticlesTitle($sSearch, $sCatId, $sVendorId)
+    public function getSearchArticlesTitle($sSearch, $sCatId, $sVendorId, $sManufacturerId)
     {
-        return $this->_prepareFeedName( htmlspecialchars($this->_getSearchParamsTranslation('RSS_SEARCHARTICLES_TITLE', $sSearch, $sCatId, $sVendorId)) );
+        return $this->_prepareFeedName( htmlspecialchars($this->_getSearchParamsTranslation('RSS_SEARCHARTICLES_TITLE', $sSearch, $sCatId, $sVendorId, $sManufacturerId)), ENT_QUOTES, 'UTF-8' );
     }
 
     /**
@@ -509,12 +510,13 @@ class oxRssFeed extends oxSuperCfg
      * @param string $sSearch   search string
      * @param string $sCatId    category id
      * @param string $sVendorId vendor id
+     * @param string $sManufacturerId Manufacturer id
      *
      * @access protected
      *
      * @return string
      */
-    protected function _getSearchParamsUrl($sSearch, $sCatId, $sVendorId)
+    protected function _getSearchParamsUrl($sSearch, $sCatId, $sVendorId, $sManufacturerId)
     {
         $sParams = "searchparam=".urlencode($sSearch);
         if ($sCatId) {
@@ -523,6 +525,10 @@ class oxRssFeed extends oxSuperCfg
 
         if ($sVendorId) {
             $sParams .= "&amp;searchvendor=".urlencode($sVendorId);
+        }
+
+        if ($sManufacturerId) {
+            $sParams .= "&amp;searchmanufacturer=".urlencode($sManufacturerId);
         }
 
         return $sParams;
@@ -558,11 +564,12 @@ class oxRssFeed extends oxSuperCfg
      * @param string $sSearch   search param
      * @param string $sCatId    category id
      * @param string $sVendorId vendor id
+     * @param string $sManufacturerId Manufacturer id
      *
      * @access protected
      * @return string
      */
-    protected function _getSearchParamsTranslation($sId, $sSearch, $sCatId, $sVendorId)
+    protected function _getSearchParamsTranslation($sId, $sSearch, $sCatId, $sVendorId, $sManufacturerId)
     {
         $oLang = oxLang::getInstance();
         $sCatTitle = '';
@@ -573,11 +580,16 @@ class oxRssFeed extends oxSuperCfg
         if ($sTitle = $this->_getObjectField($sVendorId, 'oxvendor', 'oxvendor__oxtitle')) {
             $sVendorTitle = sprintf($oLang->translateString( 'RSS_SEARCHARTICLES_TAG_VENDOR', $oLang->getBaseLanguage() ), $sTitle);
         }
+        $sManufacturerTitle = '';
+        if ($sTitle = $this->_getObjectField($sManufacturerId, 'oxmanufacturer', 'oxmanufacturers__oxtitle')) {
+            $sManufacturerTitle = sprintf($oLang->translateString( 'RSS_SEARCHARTICLES_TAG_MANUFACTURER', $oLang->getBaseLanguage() ), $sTitle);
+        }
 
         $sRet = sprintf($oLang->translateString( $sId, $oLang->getBaseLanguage() ), $sSearch);
 
         $sRet = str_replace('<TAG_CATEGORY>', $sCatTitle, $sRet);
         $sRet = str_replace('<TAG_VENDOR>', $sVendorTitle, $sRet);
+        $sRet = str_replace('<TAG_MANUFACTURER>', $sManufacturerTitle, $sRet);
 
         return $sRet;
     }
@@ -588,21 +600,22 @@ class oxRssFeed extends oxSuperCfg
      * @param string $sSearch   search string
      * @param string $sCatId    category id
      * @param string $sVendorId vendor id
+     * @param string $sManufacturerId Manufacturer id
      *
      * @access public
      *
      * @return string
      */
-    public function getSearchArticlesUrl( $sSearch, $sCatId, $sVendorId )
+    public function getSearchArticlesUrl( $sSearch, $sCatId, $sVendorId, $sManufacturerId )
     {
         $oLang = oxLang::getInstance();
         $sUrl = $this->_prepareUrl("cl=rss&amp;fnc=searcharts", $oLang->translateString( 'RSS_SEARCHARTICLES_URL', $oLang->getBaseLanguage()));
 
         $sJoin = '?';
-        if (strpos($sUrl, '?')) {
+        if (strpos($sUrl, '?') !== false) {
             $sJoin = '&amp;';
         }
-        return $sUrl.$sJoin.$this->_getSearchParamsUrl($sSearch, $sCatId, $sVendorId);
+        return $sUrl.$sJoin.$this->_getSearchParamsUrl($sSearch, $sCatId, $sVendorId, $sManufacturerId);
     }
 
     /**
@@ -611,12 +624,13 @@ class oxRssFeed extends oxSuperCfg
      * @param string $sSearch   search string
      * @param string $sCatId    category id
      * @param string $sVendorId vendor id
+     * @param string $sManufacturerId Manufacturer id
      *
      * @access public
      *
      * @return void
      */
-    public function loadSearchArticles( $sSearch, $sCatId, $sVendorId )
+    public function loadSearchArticles( $sSearch, $sCatId, $sVendorId, $sManufacturerId )
     {
         // dont use cache for search
         //if ($this->_aChannel = $this->_loadFromCache(self::RSS_SEARCHARTS.md5($sSearch.$sCatId.$sVendorId))) {
@@ -626,17 +640,17 @@ class oxRssFeed extends oxSuperCfg
         $oConfig = $this->getConfig();
         $oConfig->setConfigParam('iNrofCatArticles', $oConfig->getConfigParam( 'iRssItemsCount' ));
 
-        $oArtList = oxNew( 'oxsearch' )->getSearchArticles($sSearch, $sCatId, $sVendorId, oxNew('oxarticle')->getViewName().'.oxtimestamp desc');
+        $oArtList = oxNew( 'oxsearch' )->getSearchArticles($sSearch, $sCatId, $sVendorId, $sManufacturerId, oxNew('oxarticle')->getViewName().'.oxtimestamp desc');
 
         $this->_loadData(
             // dont use cache for search
             null,
             //self::RSS_SEARCHARTS.md5($sSearch.$sCatId.$sVendorId),
-            $this->getSearchArticlesTitle($sSearch, $sCatId, $sVendorId),
-            $this->_getSearchParamsTranslation('RSS_SEARCHARTICLES_DESCRIPTION', htmlspecialchars($sSearch), $sCatId, $sVendorId),
+            $this->getSearchArticlesTitle($sSearch, $sCatId, $sVendorId, $sManufacturerId),
+            $this->_getSearchParamsTranslation('RSS_SEARCHARTICLES_DESCRIPTION', htmlspecialchars( $sSearch, ENT_QUOTES, 'UTF-8' ), $sCatId, $sVendorId, $sManufacturerId),
             $this->_getArticleItems($oArtList),
-            $this->getSearchArticlesUrl($sSearch, $sCatId, $sVendorId),
-            $this->_getShopUrl()."cl=search&amp;".$this->_getSearchParamsUrl($sSearch, $sCatId, $sVendorId)
+            $this->getSearchArticlesUrl($sSearch, $sCatId, $sVendorId, $sManufacturerId),
+            $this->_getShopUrl()."cl=search&amp;".$this->_getSearchParamsUrl($sSearch, $sCatId, $sVendorId, $sManufacturerId)
         );
     }
 

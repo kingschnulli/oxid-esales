@@ -2,7 +2,7 @@
 <ul [{if $class}]class="[{$class}]"[{/if}]>
     <li>
         [{assign var="_rootvendor" value=$oView->getRootVendor() }]
-        <a id="test_leftRootVendor"rel="nofollow"  href="[{if $_rootvendor}][{ $_rootvendor->getLink() }][{/if}]" class="root[{if $oView->getVendorId()}] exp[{/if}] [{if $oView->getVendorId()==$_rootvendor->getId()}]act[{/if}]">[{ oxmultilang ident="INC_VENDORLEFTITEM_BYMARK" }]</a>
+        <a id="test_leftRootVendor"rel="nofollow"  href="[{if $_rootvendor}][{ $_rootvendor->getLink() }][{/if}]" class="root[{if $oView->getVendorId()}] exp[{/if}] [{if $oView->getVendorId()==$_rootvendor->getId()}]act[{/if}]">[{ $_rootvendor->oxvendor__oxtitle->value }]</a>
         [{if $oView->getVendorId() }]
             <ul>
             [{foreach from=$tree item=ovnd key=vndkey name=test_vendor }]

@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxvoucher.php 15315 2009-01-15 13:53:24Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxvoucher.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /**
@@ -77,7 +77,7 @@ class oxVoucher extends oxBase
                         {$sViewName}.oxvouchernr = '{$sVoucherNr}' and ";
 
             if ( is_array( $aVouchers ) ) {
-                foreach( $aVouchers as $sVoucherId => $sSkipVoucherNr ) {
+                foreach ( $aVouchers as $sVoucherId => $sSkipVoucherNr ) {
                     $sQ .= "{$sViewName}.oxid != '$sVoucherId' and ";
                 }
             }

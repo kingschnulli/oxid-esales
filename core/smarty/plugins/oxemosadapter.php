@@ -1,40 +1,41 @@
 <?php
-/*
-Copyright (c) 2004, 2005 ECONDA GmbH Karlsruhe
-All rights reserved.
-
-ECONDA GmbH
-Haid-und-Neu-Str. 7
-76131 Karlsruhe
-Tel. +49 (721) 6635726
-Fax +49 (721) 66499070
-info@econda.de
-www.econda.de
-
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice,
-this list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright notice,
-this list of conditions and the following disclaimer in the documentation
-and/or other materials provided with the distribution.
-* Neither the name of the ECONDA GmbH nor the names of its contributors may
-be used to endorse or promote products derived from this software without
-specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+/*******************************************************************************
+ * Copyright (c) 2004 - 2007 ECONDA GmbH Karlsruhe
+ * All rights reserved.
+ *
+ * ECONDA GmbH
+ * Haid-und-Neu-Str. 7
+ * 76131 Karlsruhe
+ * Tel. +49 (721) 6630350
+ * Fax +49 (721) 66303510
+ * info@econda.de
+ * www.econda.de
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * Neither the name of the ECONDA GmbH nor the names of its contributors may
+ * be used to endorse or promote products derived from this software without
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ *  $Id: oxemosadapter.php 16573 2009-02-17 10:54:56Z arvydas $
+ */
 
 
 /**
@@ -101,6 +102,8 @@ class oxEmosAdapter extends oxSuperCfg
      * Searches for product category id
      *
      * @param oxarticle $oArticle article object to search for category
+     *
+     * @deprecated replaced by oxemosadapter::_getBasketProductCatPath()
      *
      * @return string
      */
@@ -171,12 +174,16 @@ class oxEmosAdapter extends oxSuperCfg
         $oItem = $this->_getNewEmosItem();
         $oItem->productID   = ( isset( $oProduct->oxarticles__oxartnum->value ) && $oProduct->oxarticles__oxartnum->value ) ? $oProduct->oxarticles__oxartnum->value : $oProduct->getId();
         $oItem->productName = $oProduct->oxarticles__oxtitle->value;
+        if ( $oProduct->oxarticles__oxvarselect->value ) {
+            $oItem->productName .= " ".$oProduct->oxarticles__oxvarselect->value;
+        }
 
         // #810A
         $oCur = $this->getConfig()->getActShopCurrencyObject();
         $oItem->price        = $oProduct->getPrice()->getBruttoPrice() * ( 1/$oCur->rate );
         $oItem->productGroup = "{$sCatPath}/{$oProduct->oxarticles__oxtitle->value}";
         $oItem->quantity     = $iQty;
+        $oItem->variant3     = $oProduct->getId();
 
         return $oItem;
     }
@@ -200,7 +207,13 @@ class oxEmosAdapter extends oxSuperCfg
      */
     protected function _getEmosCl()
     {
-        $sCl = $this->getConfig()->getActiveView()->getClassName();
+        $oActView = $this->getConfig()->getActiveView();
+        // special case when showLogin is called
+        if ( strcasecmp( 'showLogin', (string) $oActView->getFncName() ) == 0 ) {
+            $sCl = 'account';
+        } else {
+            $sCl = $oActView->getClassName();
+        }
         return $sCl ? strtolower( $sCl ) : 'start';
     }
 
@@ -209,7 +222,7 @@ class oxEmosAdapter extends oxSuperCfg
      *
      * @return string
      */
-    function _getEmosCatPath()
+    protected function _getEmosCatPath()
     {
         if ( $this->_sEmosCatPath === null ) {
             $sCatPath = '';
@@ -218,12 +231,46 @@ class oxEmosAdapter extends oxSuperCfg
                     if ( $sCatPath ) {
                         $sCatPath .= '/';
                     }
-                    $sCatPath .= $oCat->oxcategories__oxtitle->value;
+                    $sCatPath .= strip_tags( $oCat->oxcategories__oxtitle->value );
                 }
             }
             $this->_sEmosCatPath = ( $sCatPath ? $sCatPath : 'NULL' );
         }
         return $this->_sEmosCatPath;
+    }
+
+    /**
+     * Builds basket product category path
+     *
+     * @param oxarticle $oArticle article to build category id
+     *
+     * @return string
+     */
+    protected function _getBasketProductCatPath( $oArticle )
+    {
+        $sCatPath = '';
+        if ( $oCategory = $oArticle->getCategory() ) {
+            $sTable = $oCategory->getViewName();
+
+            $sLang = oxLang::getInstance()->getLanguageTag();
+            $sQ = "select {$sTable}.oxtitle{$sLang} as oxtitle from {$sTable}
+                       where {$sTable}.oxleft <= '{$oCategory->oxcategories__oxleft->value}' and
+                             {$sTable}.oxright >= '{$oCategory->oxcategories__oxright->value}' and
+                             {$sTable}.oxrootid = '{$oCategory->oxcategories__oxrootid->value}'
+                       order by {$sTable}.oxleft";
+
+            $oRs = oxDb::getDb(true)->execute( $sQ );
+            if ( $oRs != false && $oRs->recordCount() > 0 ) {
+                while ( !$oRs->EOF ) {
+                    if ( $sCatPath ) {
+                        $sCatPath .= '/';
+                    }
+                    $sCatPath .= strip_tags( $oRs->fields['oxtitle'] );
+                    $oRs->moveNext();
+                }
+            }
+        }
+        return $sCatPath;
     }
 
     /**
@@ -356,15 +403,22 @@ class oxEmosAdapter extends oxSuperCfg
                 $aBasketProducts = $oBasket->getContents();
                 foreach ( $aBasketProducts as $oContent ) {
                     $oProduct = $oContent->getArticle();
-                    $sPath = $this->_getDeepestCategoryPath( $oProduct );
+                    //$sPath = $this->_getDeepestCategoryPath( $oProduct );
+                    $sPath = $this->_getBasketProductCatPath( $oProduct );
                     $aBasket[] = $this->_convProd2EmosItem( $oProduct, $sPath, $oContent->getAmount() );
                 }
                 $oEmos->addEmosBasketPageArray( $aBasket );
                 break;
             case 'details':
                 if ( $oProduct ) {
-                    $oEmos->addContent( 'Shop/'.$this->_getEmosCatPath().'/'.strip_tags( $oProduct->oxarticles__oxtitle->value ) );
-                    $sPath = $this->_getDeepestCategoryPath( $oProduct );
+                    //$oEmos->addContent( 'Shop/'.$this->_getEmosCatPath().'/'.strip_tags( $oProduct->oxarticles__oxtitle->value ) );
+                    //$sPath = $this->_getDeepestCategoryPath( $oProduct );
+                    $sPath = $this->_getEmosCatPath();
+                    $sTitle = $oProduct->oxarticles__oxtitle->value;
+                    if ( $oProduct->oxarticles__oxvarselect->value ) {
+                        $sTitle .= " ".$oProduct->oxarticles__oxvarselect->value;
+                    }
+                    $oEmos->addContent( "Shop/{$sPath}/".strip_tags( $sTitle ) );
                     $oEmos->addDetailView( $this->_convProd2EmosItem( $oProduct, $sPath, 1 ) );
                 }
                 break;
@@ -386,9 +440,10 @@ class oxEmosAdapter extends oxSuperCfg
             case 'contact':
                 if ( !$oCurrView->getContactSendStatus() ){
                     $oEmos->addContent( 'Service/Kontakt/Form' );
+                    $oEmos->addContact( 'Kontakt' );
                 } else {
                     $oEmos->addContent( 'Service/Kontakt/Success' );
-                    $oEmos->addContact( 'Kontakt-Formular' );
+                    $oEmos->addContact( 'Kontakt' );
                 }
                 break;
             case 'help':
@@ -518,9 +573,10 @@ class oxEmosAdapter extends oxSuperCfg
                 case 'changebasket':
                     foreach ( $aCallData as $sItemId => $aItemData ) {
                         $oProduct = oxNew( 'oxarticle' );
-                        if ( $oProduct->load( $sItemId ) ) {
+                        if ( $aItemData['oldam'] != $aItemData['am'] && $oProduct->load( $aItemData['aid'] ) ) {
                             //ECONDA FIX always use the main category
-                            $sPath = $this->_getDeepestCategoryPath( $oProduct );
+                            //$sPath = $this->_getDeepestCategoryPath( $oProduct );
+                            $sPath = $this->_getBasketProductCatPath( $oProduct );
                             $oEmos->removeFromBasket( $this->_convProd2EmosItem( $oProduct, $sPath, ( $aItemData['oldam'] - $aItemData['am'] ) ) );
                         }
                     }
@@ -531,8 +587,9 @@ class oxEmosAdapter extends oxSuperCfg
                         $oProduct = oxNew( 'oxarticle' );
                         if ( $oProduct->load( $sItemId ) ) {
                             //ECONDA FIX always use the main category
-                            $sPath = $this->_getDeepestCategoryPath( $oProduct );
-                            $oEmos->addToBasket( $this->_convProd2EmosItem( $oProduct, $sPath , 1 ) );
+                            //$sPath = $this->_getDeepestCategoryPath( $oProduct );
+                            $sPath = $this->_getBasketProductCatPath( $oProduct );
+                            $oEmos->addToBasket( $this->_convProd2EmosItem( $oProduct, $sPath , $aItemData['am'] ) );
                         }
                     }
                     break;

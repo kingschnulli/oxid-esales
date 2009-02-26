@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: details.php 15893 2009-01-26 15:10:28Z rimvydas.paskevicius $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: details.php 16697 2009-02-23 09:29:44Z arvydas $
  */
 
 /**
@@ -114,9 +114,15 @@ class Details extends oxUBase
 
     /**
      * Current product's vendor
-     * @var object
+     * @var oxvendor
      */
     protected $_oVendor = null;
+
+    /**
+     * Current product's manufacturer
+     * @var oxmanufacturer
+     */
+    protected $_oManufacturer = null;
 
     /**
      * Current product's category
@@ -223,33 +229,37 @@ class Details extends oxUBase
      */
     public function loadVariantInformation()
     {
-        //loading full list of variants
-        $this->_aVariantList = $this->_oProduct->getVariants( false );
+        if ( !count( $this->_aVariantList ) ) {
+            $oProduct = $this->getProduct();
 
-        //if we are child and do not have any variants then please load all parent variants as ours
-        if ( ( $oParent = $this->_getParentProduct( $this->_oProduct->oxarticles__oxparentid->value ) ) && count( $this->_aVariantList ) == 0 ) {
-            $myConfig = $this->getConfig();
+            //loading full list of variants
+            $this->_aVariantList = $oProduct->getVariants( false );
 
-            $this->_aVariantList = $oParent->getVariants( false );
+            //if we are child and do not have any variants then please load all parent variants as ours
+            if ( ( $oParent = $this->_getParentProduct( $oProduct->oxarticles__oxparentid->value ) ) && count( $this->_aVariantList ) == 0 ) {
+                $myConfig = $this->getConfig();
 
-            //in variant list parent may be NOT buyable
-            if ( $oParent->blNotBuyableParent ) {
-                $oParent->blNotBuyable = true;
-            }
+                $this->_aVariantList = $oParent->getVariants( false );
 
-            //lets additionally add parent article if it is sellable
-            if ( $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
-                //#1104S if parent is buyable load selectlists too
-                $oParent->aSelectlist = $oParent->getSelectLists();
-                $this->_aVariantList = array_merge( array( $oParent ), $this->_aVariantList->getArray() );
-            }
+                //in variant list parent may be NOT buyable
+                if ( $oParent->blNotBuyableParent ) {
+                    $oParent->blNotBuyable = true;
+                }
 
-            //..and skip myself from the list
-            if ( isset( $this->_aVariantList[$this->_oProduct->getId()] ) ) {
-                unset( $this->_aVariantList[$this->_oProduct->getId()] );
+                //lets additionally add parent article if it is sellable
+                if ( $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
+                    //#1104S if parent is buyable load selectlists too
+                    $oParent->aSelectlist = $oParent->getSelectLists();
+                    $this->_aVariantList = array_merge( array( $oParent ), $this->_aVariantList->getArray() );
+                }
+
+                //..and skip myself from the list
+                if ( isset( $this->_aVariantList[$oProduct->getId()] ) ) {
+                    unset( $this->_aVariantList[$oProduct->getId()] );
+                }
             }
         }
-
+        return $this->_aVariantList;
     }
 
     /**
@@ -276,10 +286,12 @@ class Details extends oxUBase
      */
     public function getViewResetId()
     {
+        $oProduct = $this->getProduct();
+
         $sId  = parent::GetViewResetID();
-        $sId .= '|anid='.$this->_oProduct->getId();
-        if ( $this->_oProduct->oxarticles__oxparentid->value ) {
-            $sId .= '|anid='.$this->_oProduct->oxarticles__oxparentid->value;
+        $sId .= '|anid='.$oProduct->getId();
+        if ( $oProduct->oxarticles__oxparentid->value ) {
+            $sId .= '|anid='.$oProduct->oxarticles__oxparentid->value;
         }
 
         return $sId;
@@ -295,51 +307,15 @@ class Details extends oxUBase
     {
         parent::init();
 
-        $myConfig = $this->getConfig();
-        $myUtils  = oxUtils::getInstance();
-
-        //this option is only for lists and we must reset value
-        //as blLoadVariants = false affect "ab price" functionality
-        $myConfig->setConfigParam( 'blLoadVariants', true );
-
-        $sOxid = oxConfig::getParameter( 'anid' );
-
-        // object is not yet loaded
-        if ( !$this->_oProduct || ($this->_oProduct && $this->_oProduct->getId() == $sOxid  ) ) {
-            $this->_oProduct = oxNew( 'oxarticle' );
-
-            /*
-            //skipping Ab price?
-            $blForceSkipAbPrice = true; //#1795
-            if ( !$myConfig->getConfigParam( 'blVariantParentBuyable' )) {
-                $blForceSkipAbPrice = false; // #870A.
-            }*/
-
-            $this->_oProduct->setSkipAbPrice( true);
-
-            if ( !$this->_oProduct->load( $sOxid ) ) {
-                $myUtils->redirect( $myConfig->getShopHomeURL() );
-            }
-
-        }
-
-        if ( !$this->_oProduct->isVisible() ) {
-            $myUtils->redirect($myConfig->getShopHomeURL());
-        }
+        $oProduct = $this->getProduct();
 
         // assign template name
-        if ( $this->_oProduct->oxarticles__oxtemplate->value ) {
-            $this->_sThisTemplate = $this->_oProduct->oxarticles__oxtemplate->value;
+        if ( $oProduct->oxarticles__oxtemplate->value ) {
+            $this->_sThisTemplate = $oProduct->oxarticles__oxtemplate->value;
         }
 
         if ( ( $sTplName = oxConfig::getParameter( 'tpl' ) ) ) {
             $this->_sThisTemplate = basename ( $sTplName );
-        }
-
-        $this->loadVariantInformation();
-
-        if (oxConfig::getParameter( 'listtype' ) == 'vendor') {
-            $this->_oProduct->setLinkType(1);
         }
     }
 
@@ -366,11 +342,13 @@ class Details extends oxUBase
     {
         $myConfig = $this->getConfig();
 
+        $oProduct = $this->getProduct();
+
         //loading amount price list
-        $this->_oProduct->loadAmountPriceInfo();
+        $oProduct->loadAmountPriceInfo();
 
         // Passing to view. Left for compatibility reasons for a while. Will be removed in future
-        $this->_aViewData['product'] = $this->getProduct();
+        $this->_aViewData['product'] = $oProduct;
 
         $this->_aViewData["aTags"]      = $this->getTags();
         $this->_aViewData["blEditTags"] = $this->getEditTags();
@@ -382,11 +360,10 @@ class Details extends oxUBase
 
         $this->_aViewData['ispricealarm'] = $this->isPriceAlarm();
 
-        $this->_aViewData['customerwho']       = $this->getAlsoBoughtThiesProducts();
-        $this->_aViewData['accessoirelist']    = $this->getAccessoires();
-        //$this->_aViewData['similarrecommlist'] = $this->getSimilarRecommLists();
-        $this->_aViewData['similarlist']       = $this->getSimilarProducts();
-        $this->_aViewData['crossselllist']     = $this->getCrossSelling();
+        $this->_aViewData['customerwho']    = $this->getAlsoBoughtThiesProducts();
+        $this->_aViewData['accessoirelist'] = $this->getAccessoires();
+        $this->_aViewData['similarlist']    = $this->getSimilarProducts();
+        $this->_aViewData['crossselllist']  = $this->getCrossSelling();
 
         $this->_aViewData['variants'] = $this->getVariantList();
 
@@ -394,13 +371,13 @@ class Details extends oxUBase
 
         $this->_aViewData['selectlist'] = $this->getSelectLists();
 
-        $sSource = strtolower($this->_oProduct->oxarticles__oxlongdesc->value);
+        $sSource = getStr()->strtolower( $oProduct->oxarticles__oxlongdesc->value );
         $sSource = str_replace( array( '<br>', '<br />', '<br/>' ), "\n", $sSource );
         $sSource = strip_tags( $sSource );
 
-        $this->setMetaDescription( $this->_oProduct->oxarticles__oxtitle->value.' - '.$sSource, 200, true );
-        if ( strlen( trim( $this->_oProduct->oxarticles__oxsearchkeys->value ) ) > 0 ) {
-            $sSource = $this->_oProduct->oxarticles__oxsearchkeys->value.' '.$sSource;
+        $this->setMetaDescription( $oProduct->oxarticles__oxtitle->value.' - '.$sSource, 200, true );
+        if ( strlen( trim( $oProduct->oxarticles__oxsearchkeys->value ) ) > 0 ) {
+            $sSource = $oProduct->oxarticles__oxsearchkeys->value.' '.$sSource;
         }
         $this->setMetaKeywords( $sSource );
 
@@ -428,18 +405,20 @@ class Details extends oxUBase
 
         $this->_aViewData['oVendor'] = $this->getVendor();
 
+        $this->_aViewData['oManufacturer'] = $this->getManufacturer();
+
         $this->_aViewData['aLastProducts'] = $this->getLastProducts();
 
         // #785A loads and sets locator data
         $oLocator = oxNew( 'oxlocator', $this->getListType() );
-        $oLocator->setLocatorData( $this->_oProduct, $this );
+        $oLocator->setLocatorData( $oProduct, $this );
 
         //media files
         $this->_aViewData['aMediaUrls'] = $this->getMediaFiles();
 
         if (in_array('oxrss_recommlists', $myConfig->getConfigParam( 'aRssSelected' )) && $this->getSimilarRecommLists()) {
             $oRss = oxNew('oxrssfeed');
-            $this->addRssFeed($oRss->getRecommListsTitle($this->_oProduct), $oRss->getRecommListsUrl($this->_oProduct), 'recommlists');
+            $this->addRssFeed($oRss->getRecommListsTitle( $oProduct ), $oRss->getRecommListsUrl( $oProduct ), 'recommlists');
         }
 
 
@@ -467,7 +446,7 @@ class Details extends oxUBase
                  $oUser = $this->getUser() ) {
 
                 $oRating = oxNew( 'oxrating' );
-                $this->_blCanRate = $oRating->allowRating( $oUser->getId(), 'oxarticle', $this->_oProduct->getId() );
+                $this->_blCanRate = $oRating->allowRating( $oUser->getId(), 'oxarticle', $this->getProduct()->getId() );
             }
         }
         return $this->_blCanRate;
@@ -491,15 +470,17 @@ class Details extends oxUBase
 
         //save rating
         if ( $dRating ) {
+            $oProduct = $this->getProduct();
+
             $oRating = oxNew( 'oxrating' );
-            $blRate = $oRating->allowRating( $sUserId, 'oxarticle', $this->_oProduct->getId());
+            $blRate = $oRating->allowRating( $sUserId, 'oxarticle', $oProduct->getId());
             if ( $blRate) {
                 $oRating->oxratings__oxuserid = new oxField($sUserId);
                 $oRating->oxratings__oxtype   = new oxField('oxarticle', oxField::T_RAW);
                 $oRating->oxratings__oxobjectid = new oxField($sArtId);
                 $oRating->oxratings__oxrating = new oxField($dRating);
                 $oRating->save();
-                $this->_oProduct->addToRatingAverage( $dRating);
+                $oProduct->addToRatingAverage( $dRating);
             } else {
                 $dRating = null;
             }
@@ -556,20 +537,21 @@ class Details extends oxUBase
      */
     public function addTags()
     {
-        $sTag = $this->getConfig()->getParameter('newTags', 1);
-        $sTag .= " ".html_entity_decode($this->getConfig()->getParameter('highTags', 1));
+        $sTag  = $this->getConfig()->getParameter('newTags', true );
+        $sTag .= " ".html_entity_decode( $this->getConfig()->getParameter( 'highTags', true ), ENT_QUOTES, 'UTF-8' );
 
-        $this->_oProduct->addTag($sTag);
+        $oProduct = $this->getProduct();
+        $oProduct->addTag( $sTag );
 
         //refresh
-        $oTagHandler = oxNew('oxTagCloud');
-        $this->_sTagCloud = $oTagHandler->getTagCloud($this->_oProduct->getId());
+        $oTagHandler = oxNew( 'oxTagCloud' );
+        $this->_sTagCloud = $oTagHandler->getTagCloud( $oProduct->getId() );
     }
 
     public function editTags()
     {
         $oTagCloud = oxNew("oxTagCloud");
-        $this->_aTags = $oTagCloud->getTags($this->_oProduct->getId());
+        $this->_aTags = $oTagCloud->getTags( $this->getProduct()->getId() );
         $this->_blEditTags = true;
     }
 
@@ -580,8 +562,8 @@ class Details extends oxUBase
      */
     protected function _getSeoObjectId()
     {
-        if ( isset( $this->_oProduct ) ) {
-            return $this->_oProduct->getId();
+        if ( $oProduct = $this->getProduct() ) {
+            return $oProduct->getId();
         }
     }
 
@@ -594,7 +576,7 @@ class Details extends oxUBase
     {
         if ( $this->_aAttributes === null ) {
             // all attributes this article has
-            $aArtAttributes = $this->_oProduct->getAttributes();
+            $aArtAttributes = $this->getProduct()->getAttributes();
 
             //making a new array for backward compatibility
             $this->_aAttributes = array();
@@ -660,10 +642,49 @@ class Details extends oxUBase
     /**
      * Returns current product
      *
-     * @return object
+     * @return oxarticle
      */
     public function getProduct()
     {
+        if ( $this->_oProduct === null ) {
+
+            $myConfig = $this->getConfig();
+            $myUtils  = oxUtils::getInstance();
+
+            //this option is only for lists and we must reset value
+            //as blLoadVariants = false affect "ab price" functionality
+            $myConfig->setConfigParam( 'blLoadVariants', true );
+
+            $sOxid = oxConfig::getParameter( 'anid' );
+
+            // object is not yet loaded
+            $this->_oProduct = oxNew( 'oxarticle' );
+            $this->_oProduct->setSkipAbPrice( true );
+
+            if ( !$this->_oProduct->load( $sOxid ) ) {
+                $myUtils->redirect( $myConfig->getShopHomeURL() );
+                $myUtils->showMessageAndExit( '' );
+            }
+
+            if ( !$this->_oProduct->isVisible() ) {
+                $myUtils->redirect( $myConfig->getShopHomeURL() );
+                $myUtils->showMessageAndExit( '' );
+            }
+
+            $this->loadVariantInformation();
+
+            $sListType = oxConfig::getParameter( 'listtype' );
+            if ( 'vendor' == $sListType ) {
+                $iLinkType = OXARTICLE_LINKTYPE_VENDOR;
+            } elseif ( 'manufacturer' == $sListType ) {
+                $iLinkType = OXARTICLE_LINKTYPE_MANUFACTURER;
+            } else {
+                $iLinkType = OXARTICLE_LINKTYPE_CATEGORY;
+            }
+
+            $this->_oProduct->setLinkType( $iLinkType );
+        }
+
         return $this->_oProduct;
     }
 
@@ -674,7 +695,8 @@ class Details extends oxUBase
      */
     public function getVariantList()
     {
-        return $this->_aVariantList;
+
+        return $this->loadVariantInformation();
     }
 
     /**
@@ -713,7 +735,8 @@ class Details extends oxUBase
     {
         if ( $this->_aLastProducts === null ) {
             //last seen products for #768CA
-            $sArtId = $this->_oProduct->oxarticles__oxparentid->value?$this->_oProduct->oxarticles__oxparentid->value:$this->_oProduct->getId();
+            $oProduct = $this->getProduct();
+            $sArtId = $oProduct->oxarticles__oxparentid->value?$oProduct->oxarticles__oxparentid->value:$oProduct->getId();
 
             $oHistoryArtList = oxNew( 'oxarticlelist' );
             $oHistoryArtList->loadHistoryArticles( $sArtId );
@@ -732,11 +755,28 @@ class Details extends oxUBase
         if ( $this->_oVendor === null ) {
             $this->_oVendor = false;
             // #671
-            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadVendorTree' ) && ( $oVendor = $this->_oProduct->getVendor( false ) ) ) {
+            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadVendorTree' ) && ( $oVendor = $this->getProduct()->getVendor( false ) ) ) {
                 $this->_oVendor = $oVendor;
             }
         }
         return $this->_oVendor;
+    }
+
+    /**
+     * Template variable getter. Returns product's vendor
+     *
+     * @return object
+     */
+    public function getManufacturer()
+    {
+        if ( $this->_oManufacturer === null ) {
+            $this->_oManufacturer = false;
+            // #671
+            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadManufacturerTree' ) && ( $oManufacturer = $this->getProduct()->getManufacturer( false ) ) ) {
+                $this->_oManufacturer = $oManufacturer;
+            }
+        }
+        return $this->_oManufacturer;
     }
 
     /**
@@ -748,7 +788,9 @@ class Details extends oxUBase
     {
         if ( $this->_oCategory === null ) {
             $this->_oCategory = false;
-            $this->_oCategory = $this->_oProduct->getCategory();
+            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadCatTree' ) && ( $oCategory = $this->getProduct()->getCategory() ) ) {
+                $this->_oCategory = $oCategory;
+            }
         }
         return $this->_oCategory;
     }
@@ -760,8 +802,8 @@ class Details extends oxUBase
      */
     public function drawParentUrl()
     {
-        if ( ( $oParent = $this->_getParentProduct( $this->_oProduct->oxarticles__oxparentid->value ) ) ) {
-            if ( $this->getConfig()->getConfigParam( 'blVariantParentBuyable' ) || count( $this->_aVariantList ) > 0 ) {
+        if ( ( $oParent = $this->_getParentProduct( $this->getProduct()->oxarticles__oxparentid->value ) ) ) {
+            if ( $this->getConfig()->getConfigParam( 'blVariantParentBuyable' ) || count( $this->getVariantList() ) > 0 ) {
                 return true;
             }
         }
@@ -776,7 +818,7 @@ class Details extends oxUBase
     {
         if ( $this->_sParentName === null ) {
             $this->_sParentName = false;
-            if ( ( $oParent = $this->_getParentProduct( $this->_oProduct->oxarticles__oxparentid->value ) ) ) {
+            if ( ( $oParent = $this->_getParentProduct( $this->getProduct()->oxarticles__oxparentid->value ) ) ) {
                 $this->_sParentName = $oParent->oxarticles__oxtitle->value;
             }
         }
@@ -792,8 +834,8 @@ class Details extends oxUBase
     {
         if ( $this->_sParentUrl === null ) {
             $this->_sParentUrl = false;
-            if ( ( $oParent = $this->_getParentProduct( $this->_oProduct->oxarticles__oxparentid->value ) ) ) {
-                $this->_sParentUrl = $oParent->oxdetaillink;
+            if ( ( $oParent = $this->_getParentProduct( $this->getProduct()->oxarticles__oxparentid->value ) ) ) {
+                $this->_sParentUrl = $oParent->getLink();
             }
         }
         return $this->_sParentUrl;
@@ -807,9 +849,8 @@ class Details extends oxUBase
     public function getPictureGallery()
     {
         if ( $this->_aPicGallery === null ) {
-            $this->_aPicGallery = false;
             //get picture gallery
-            $this->_aPicGallery = $this->_oProduct->getPictureGallery();
+            $this->_aPicGallery = $this->getProduct()->getPictureGallery();
         }
         return $this->_aPicGallery;
     }
@@ -924,7 +965,7 @@ class Details extends oxUBase
         if ( $this->_aSelectLists === null ) {
             $this->_aSelectLists = false;
             if ( $this->getConfig()->getConfigParam( 'bl_perfLoadSelectLists' ) ) {
-                $this->_aSelectLists = $this->_oProduct->getSelectLists();
+                $this->_aSelectLists = $this->getProduct()->getSelectLists();
             }
         }
         return $this->_aSelectLists;
@@ -939,9 +980,8 @@ class Details extends oxUBase
     {
         if ( $this->_aReviews === null ) {
             $this->_aReviews = false;
-            $myConfig = $this->getConfig();
-            if ( $myConfig->getConfigParam( 'bl_perfLoadReviews' ) ) {
-                $this->_aReviews = $this->_oProduct->getReviews();
+            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadReviews' ) ) {
+                $this->_aReviews = $this->getProduct()->getReviews();
             }
         }
         return $this->_aReviews;
@@ -956,8 +996,8 @@ class Details extends oxUBase
     {
         if ( $this->_oCrossSelling === null ) {
             $this->_oCrossSelling = false;
-            if ( $this->_oProduct ) {
-                $this->_oCrossSelling = $this->_oProduct->getCrossSelling();
+            if ( $oProduct = $this->getProduct() ) {
+                $this->_oCrossSelling = $oProduct->getCrossSelling();
             }
         }
         return $this->_oCrossSelling;
@@ -972,8 +1012,8 @@ class Details extends oxUBase
     {
         if ( $this->_oSimilarProducts === null ) {
             $this->_oSimilarProducts = false;
-            if ( $this->_oProduct ) {
-                $this->_oSimilarProducts = $this->_oProduct->getSimilarProducts();
+            if ( $oProduct = $this->getProduct() ) {
+                $this->_oSimilarProducts = $oProduct->getSimilarProducts();
             }
         }
         return $this->_oSimilarProducts;
@@ -988,9 +1028,9 @@ class Details extends oxUBase
     {
         if ( $this->_oRecommList === null ) {
             $this->_oRecommList = false;
-            if ( $this->_oProduct ) {
+            if ( $oProduct = $this->getProduct() ) {
                 $oRecommList = oxNew('oxrecommlist');
-                $this->_oRecommList = $oRecommList->getRecommListsByIds( array($this->_oProduct->getId()));
+                $this->_oRecommList = $oRecommList->getRecommListsByIds( array( $oProduct->getId() ) );
             }
         }
         return $this->_oRecommList;
@@ -1005,8 +1045,8 @@ class Details extends oxUBase
     {
         if ( $this->_oAccessoires === null ) {
             $this->_oAccessoires = false;
-            if ( $this->_oProduct ) {
-                $this->_oAccessoires = $this->_oProduct->getAccessoires();
+            if ( $oProduct = $this->getProduct() ) {
+                $this->_oAccessoires = $oProduct->getAccessoires();
             }
         }
         return $this->_oAccessoires;
@@ -1021,8 +1061,8 @@ class Details extends oxUBase
     {
         if ( $this->_aAlsoBoughtArts === null ) {
             $this->_aAlsoBoughtArts = false;
-            if ( $this->_oProduct ) {
-                $this->_aAlsoBoughtArts = $this->_oProduct->getCustomerAlsoBoughtThisProducts();
+            if ( $oProduct = $this->getProduct() ) {
+                $this->_aAlsoBoughtArts = $oProduct->getCustomerAlsoBoughtThisProducts();
             }
         }
         return $this->_aAlsoBoughtArts;
@@ -1036,7 +1076,8 @@ class Details extends oxUBase
     public function isPriceAlarm()
     {
         // #419 disabling pricealarm if article has fixed price
-        if ( isset($this->_oProduct->oxarticles__oxblfixedprice->value) && $this->_oProduct->oxarticles__oxblfixedprice->value) {
+        $oProduct = $this->getProduct();
+        if ( isset( $oProduct->oxarticles__oxblfixedprice->value ) && $oProduct->oxarticles__oxblfixedprice->value ) {
             return 0;
         }
         return 1;
@@ -1050,7 +1091,7 @@ class Details extends oxUBase
      */
     protected function getSubject()
     {
-        return $this->_oProduct;
+        return $this->getProduct();
     }
 
     /**
@@ -1095,7 +1136,8 @@ class Details extends oxUBase
      */
     public function noIndex()
     {
-        if (oxConfig::getParameter( 'listtype' ) == 'vendor') {
+        $sListType = oxConfig::getParameter( 'listtype' );
+        if ( $sListType && ( 'vendor' == $sListType || 'manufacturer' == $sListType ) ) {
             return $this->_iViewIndexState = 2;
         }
         return parent::noIndex();
@@ -1108,8 +1150,8 @@ class Details extends oxUBase
      */
     public function getTitle()
     {
-        if ( $this->_oProduct ) {
-            return $this->_oProduct->oxarticles__oxtitle->value . ( $this->_oProduct->oxarticles__oxvarselect->value ? ' ' . $this->_oProduct->oxarticles__oxvarselect->value : '' );
+        if ( $oProduct = $this->getProduct() ) {
+            return $oProduct->oxarticles__oxtitle->value . ( $oProduct->oxarticles__oxvarselect->value ? ' ' . $oProduct->oxarticles__oxvarselect->value : '' );
         }
     }
 }

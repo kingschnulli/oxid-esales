@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: category_seo.php 14637 2008-12-11 12:17:09Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: category_seo.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
  */
 
 /**
@@ -73,20 +73,6 @@ class Category_Seo extends Object_Seo
     }
 
     /**
-     * Returns seo object
-     *
-     * @return mixed
-     */
-    protected function _getObject( $sOxid )
-    {
-        // load object
-        $oCategory = oxNew( 'oxcategory' );
-        if ( $oCategory->loadInLang( $this->_iEditLang, $sOxid ) ) {
-            return $oCategory;
-        }
-    }
-
-    /**
      * Returns url type
      *
      * @return string
@@ -94,18 +80,6 @@ class Category_Seo extends Object_Seo
     protected function _getType()
     {
         return 'oxcategory';
-    }
-
-    /**
-     * Returns objects std url
-     *
-     * @return string
-     */
-    protected function _getStdUrl( $sOxid )
-    {
-        $oCategory = oxNew( 'oxcategory' );
-        $oCategory->loadInLang( $this->_iEditLang, $sOxid );
-        return $oCategory->getLink();
     }
 
     /**

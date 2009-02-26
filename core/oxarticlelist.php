@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxarticlelist.php 15740 2009-01-22 08:37:17Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxarticlelist.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /**
@@ -117,7 +117,7 @@ class oxArticleList extends oxList
         // removing dublicates
         $aHistoryArticles = array_unique( $aHistoryArticles);
 
-        if(count($aHistoryArticles) > 5) {
+        if (count($aHistoryArticles) > 5) {
             array_shift($aHistoryArticles);
         }
 
@@ -223,7 +223,7 @@ class oxArticleList extends oxList
     public function loadAktionArticles( $sActionID )
     {
         // Performance
-        if( !trim( $sActionID) ) {
+        if ( !trim( $sActionID) ) {
             return;
         }
 
@@ -241,7 +241,7 @@ class oxArticleList extends oxList
         $sSelect = "select $sArticleFields from oxactions2article
                               left join $sArticleTable on $sArticleTable.oxid = oxactions2article.oxartid
                               left join oxactions on oxactions.oxid = oxactions2article.oxactionid
-                              where oxactions2article.oxshopid = '$sShopID' and oxactions2article.oxactionid = '$sActionID' and $sActiveSql  
+                              where oxactions2article.oxshopid = '$sShopID' and oxactions2article.oxactionid = '$sActionID' and $sActiveSql
                               and $sArticleTable.oxid is not null and " .$this->getBaseObject()->getSqlActiveSnippet(). "
                               order by oxactions2article.oxsort";
 
@@ -417,21 +417,23 @@ class oxArticleList extends oxList
     /**
      * Loads only ID's and create Fake objects for cmp_categories.
      *
-     * @param string $sSearchStr    Search string
-     * @param string $sSearchCat    Search within category
-     * @param string $sSearchVendor Search within vendor
+     * @param string $sSearchStr          Search string
+     * @param string $sSearchCat          Search within category
+     * @param string $sSearchVendor       Search within vendor
+     * @param string $sSearchManufacturer Search within manufacturer
      *
      * @return null;
      */
-    public function loadSearchIds( $sSearchStr = '', $sSearchCat = '', $sSearchVendor = '' )
+    public function loadSearchIds( $sSearchStr = '', $sSearchCat = '', $sSearchVendor = '', $sSearchManufacturer = '' )
     {
         $oDb = oxDb::getDb();
         $sSearchCat    = $sSearchCat?$oDb->quote( $sSearchCat ):null;
         $sSearchVendor = $sSearchVendor?$oDb->quote( $sSearchVendor ):null;
+        $sSearchManufacturer = $sSearchManufacturer?$oDb->quote( $sSearchManufacturer ):null;
 
         $sWhere = null;
 
-        if( $sSearchStr ) {
+        if ( $sSearchStr ) {
             $sWhere = $this->_getSearchSelect( $sSearchStr );
         }
 
@@ -463,6 +465,10 @@ class oxArticleList extends oxList
         // #671
         if ( $sSearchVendor ) {
             $sSelect .= " and $sArticleTable.oxvendorid = $sSearchVendor ";
+        }
+
+        if ( $sSearchManufacturer ) {
+            $sSelect .= " and $sArticleTable.oxmanufacturerid = $sSearchManufacturer ";
         }
         $sSelect .= $sWhere;
 
@@ -534,6 +540,19 @@ class oxArticleList extends oxList
     }
 
     /**
+     * Loads Products for specified Manufacturer
+     *
+     * @param string $sManufacturerId Manufacturer id
+     *
+     * @return null;
+     */
+    public function loadManufacturerIDs( $sManufacturerId)
+    {
+        $sSelect = $this->_getManufacturerSelect($sManufacturerId);
+        $this->_createIdListFromSql($sSelect);
+    }
+
+    /**
      * Loads articles that belongs to vendor, passed by parameter $sVendorId.
      * Returns count of selected articles.
      *
@@ -551,6 +570,23 @@ class oxArticleList extends oxList
     }
 
     /**
+     * Loads articles that belongs to Manufacturer, passed by parameter $sManufacturerId.
+     * Returns count of selected articles.
+     *
+     * @param string $sManufacturerId Manufacturer ID
+     * @param object $oManufacturer   Active Manufacturer object
+     *
+     * @return integer
+     */
+    public function loadManufacturerArticles( $sManufacturerId, $oManufacturer = null )
+    {
+        $sSelect = $this->_getManufacturerSelect($sManufacturerId);
+        $this->selectString( $sSelect);
+
+        return oxUtilsCount::getInstance()->getManufacturerArticleCount( $sManufacturerId );
+    }
+
+    /**
      * Loads a list of articles having
      *
      * @param string $sTag  Searched tag
@@ -561,9 +597,8 @@ class oxArticleList extends oxList
     public function loadTagArticles( $sTag, $iLang )
     {
         $oListObject = $this->getBaseObject();
-        $sArticleTable  = $oListObject->getViewName();
+        $sArticleTable = $oListObject->getViewName();
         $sArticleFields = $oListObject->getSelectFields();
-        $sActiveSnippet = $oListObject->getSqlActiveSnippet();
 
         $sLangExt = oxLang::getInstance()->getLanguageTag( $iLang );
 
@@ -575,7 +610,7 @@ class oxArticleList extends oxList
                against( ".oxDb::getDb()->quote( $sTag )." )";
 
         // checking stock etc
-        if ( $sActiveSnippet ) {
+        if ( ( $sActiveSnippet = $oListObject->getSqlActiveSnippet() ) ) {
             $sQ .= " and {$sActiveSnippet}";
         }
 
@@ -600,8 +635,7 @@ class oxArticleList extends oxList
     public function getTagArticleIds( $sTag, $iLang )
     {
         $oListObject = $this->getBaseObject();
-        $sArticleTable  = $oListObject->getViewName();
-        $sActiveSnippet = $oListObject->getSqlActiveSnippet();
+        $sArticleTable = $oListObject->getViewName();
         $sLangExt = oxLang::getInstance()->getLanguageTag( $iLang );
 
         $oTagHandler = oxNew( 'oxtagcloud' );
@@ -612,7 +646,7 @@ class oxArticleList extends oxList
                against( ".oxDb::getDb()->quote( $sTag )." )";
 
         // checking stock etc
-        if ( $sActiveSnippet ) {
+        if ( ( $sActiveSnippet = $oListObject->getSqlActiveSnippet() ) ) {
             $sQ .= " and {$sActiveSnippet}";
         }
 
@@ -637,8 +671,9 @@ class oxArticleList extends oxList
             return;
         }
 
-        foreach ($aIds as $iKey => $sVal)
+        foreach ($aIds as $iKey => $sVal) {
             $aIds[$iKey] = mysql_real_escape_string($sVal);
+        }
 
         $sArticleTable = $this->getBaseObject()->getViewName();
         $sArticleFields = $this->getBaseObject()->getSelectFields();
@@ -918,4 +953,25 @@ class oxArticleList extends oxList
         return $sSelect;
     }
 
+    /**
+     * Builds Manufacturer select SQL statement
+     *
+     * @param string $sManufacturerId Manufacturer ID
+     *
+     * @return string
+     */
+    protected function _getManufacturerSelect( $sManufacturerId )
+    {
+        $sArticleTable = getViewName('oxarticles');
+        $sFieldNames = $this->getBaseObject()->getSelectFields();
+        $sSelect  = "select $sFieldNames from $sArticleTable ";
+        $sSelect .= "where $sArticleTable.oxmanufacturerid = '$sManufacturerId' ";
+        $sSelect .= " and " . $this->getBaseObject()->getSqlActiveSnippet() . " and $sArticleTable.oxparentid = ''  ";
+
+        if ( $this->_sCustomSorting ) {
+            $sSelect .= " ORDER BY {$this->_sCustomSorting} ";
+        }
+
+        return $sSelect;
+    }
 }

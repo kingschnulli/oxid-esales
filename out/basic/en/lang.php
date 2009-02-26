@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package lang
- * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 16044 2009-01-29 13:15:41Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: lang.php 16720 2009-02-23 14:15:01Z philipp.grashoff $
  */
 
 $sLangName  = "English";
@@ -27,7 +27,7 @@ $iLangNr    = 1;
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
 $aLang = array(
-'charset'                                         => 'ISO-8859-15',
+'charset'                                         => 'UTF-8',
 'fullDateFormat'                                  => 'Y-m-d H:i:s',
 
 'ACCOUNT_LOGIN_LOGIN'                             => "Login",
@@ -276,6 +276,7 @@ $aLang = array(
 'DETAILS_PERSPARAM_ZOOM'                          => "[+] zoom",
 'DETAILS_PERSPARAM_ARTNOMBER'                     => "Art.No.:",
 'DETAILS_PERSPARAM_MANUFACTURER'                  => "Manufacturer:",
+'DETAILS_PERSPARAM_VENDOR'                        => "Vendor",
 'DETAILS_PERSPARAM_CATEGORY'                      => "Category:",
 'DETAILS_PERSPARAM_NOTONSTOCK'                    => "This item is not in stock and must be back-ordered.",
 'DETAILS_PERSPARAM_AVAILABLEON'                   => "Available on",
@@ -681,8 +682,9 @@ $aLang = array(
 'INC_RIGHTLIST_COMPARE'                           =>"compare",
 'INC_RIGHTLIST_ORDERNOW'                          =>"Order now!",
 'INC_RIGHTITEM_OPENID'                            =>"OpenID",
-'INC_SEARCHLEFTITEM_ALLCATEGORIES'                =>"- all Categories -",
+'INC_SEARCHLEFTITEM_ALLCATEGORIES'                =>"- all categories -",
 'INC_SEARCHLEFTITEM_ALLMANUFACTURERS'             =>"- all manufacturers -",
+'INC_SEARCHLEFTITEM_ALLDISTRIBUTORS'              =>"- all distributors -",
 'INC_SEARCH_PRODUCT_ITEM_ARTNOMBER'               =>"Art.No.:",
 'INC_SEARCH_PRODUCT_ITEM_MOREINFO'                =>"more Info",
 'INC_SEARCH_PRODUCT_ITEM_REMOVEFROMCOMPARELIST'   =>"remove from compare list",
@@ -705,8 +707,8 @@ $aLang = array(
 'INC_STEPS_ITEM_SUBMITORDER'                      =>"submit order",
 'INC_STEPS_ITEM_LASTSTEP1'                        =>"Ready",
 'INC_STEPS_ITEM_LASTSTEP2'                        =>"Order completed",
-'INC_TRUSTEDSHOPS_ITEM_IMGTITLE'                  =>"Klicken Sie auf das G&uuml;tesiegel, um die G&uuml;ltigkeit zu pr&uuml;fen",
-'INC_TRUSTEDSHOPS_ITEM_ALTTEXT'                   =>"Mehr Informationen",
+'INC_TRUSTEDSHOPS_ITEM_IMGTITLE'                  =>"Click on the seal in order to examine the validity",
+'INC_TRUSTEDSHOPS_ITEM_ALTTEXT'                   =>"More...",
 'INC_TRUSTEDSHOPS_ITEM_SEALOFAPPROVAL'            =>" is a certified online shop with Trusted Shops Buyer Protection. More...",
 'INC_TRUSTEDSHOPS_ITEM_LINK'                      =>"http://www.trustedshops.com/merchants/membership.html?shopsw=OXID&amp;et_cid=14&amp;et_lid=84",
 'INC_VENDORLEFTITEM_BYMARK'                       =>"by brand/manufacturer",
@@ -724,7 +726,7 @@ $aLang = array(
 'MALLSTART_OXIDSOFTWAREALT'                       => "Shop software and Shop system by OXID eSales",
 'MALLCATITEM_PLEASECHOOSE'                        => "Please choose:",
 'MEDIA'                                           => "Media files",
-'MOREDETAILS_POPUP_TITLE'                         => "[tr] moredetails title",
+'MOREDETAILS_POPUP_TITLE'                         => "Zoom Pictures",
 'NEWS_TITLE'                                      => "Latest News and Updates",
 'NEWS_LATESTNEWSBY'                               => "Latest News and Updates at",
 'NEWSLETTER_NEWSLWTTERTITLE'                      => "Latest News and Updates at",
@@ -859,9 +861,9 @@ $aLang = array(
 'PAYMENT_ACCOUNTHOLDER2'                          => "Account Holder:",
 'PAYMENT_NEXTSTEP'                                => "Continue to Next Step",
 'PAYMENT_INFO'                                    => "Payment Information",
-'PAYMENT_EMPTY_TEXT'                              => "<p>Currently we have no delivery method set up for this country.</p>
+'PAYMENT_EMPTY_TEXT'                              => '<p>Currently we have no delivery method set up for this country.</p>
                                                       <p>We are aiming to find a possible delivery method and we will inform you as soon as possible via eMail about the result, including further information about delivery costs.</p>
-                                                      <p>If you agree to this procedure, please select &quot;move on to next step&quot;</p>",
+                                                      <p>If you agree to this procedure, please select "move on to next step"</p>',
 'PRICEALARM_TITLE'                                => "Price Alert",
 'PRICEALARM_THANKYOUMESSAGE1'                     => "Thank you.",
 'PRICEALARM_THANKYOUMESSAGE2'                     => "appreciates your comments.",
@@ -977,10 +979,11 @@ $aLang = array(
 'RSS_CATEGORYARTICLES_TITLE'                      => " products",
 'RSS_CATEGORYARTICLES_DESCRIPTION'                => "%s category's articles",
 'RSS_SEARCHARTICLES_URL'                          => "search",
-'RSS_SEARCHARTICLES_TITLE'                        => "search for '%s' articles <TAG_CATEGORY> <TAG_VENDOR>",
-'RSS_SEARCHARTICLES_DESCRIPTION'                  => "search for '%s' articles <TAG_CATEGORY> <TAG_VENDOR>",
+'RSS_SEARCHARTICLES_TITLE'                        => "search for '%s' articles <TAG_CATEGORY> <TAG_VENDOR> <TAG_MANUFACTURER>",
+'RSS_SEARCHARTICLES_DESCRIPTION'                  => "search for '%s' articles <TAG_CATEGORY> <TAG_VENDOR> <TAG_MANUFACTURER>",
 'RSS_SEARCHARTICLES_TAG_CATEGORY'                 => "Category: %s",
 'RSS_SEARCHARTICLES_TAG_VENDOR'                   => "Vendor: %s",
+'RSS_SEARCHARTICLES_TAG_MANUFACTURER'             => "Manufacturer: %s",
 'RSS_ARTRECOMMLISTS_URL'                          => "Listmania/%s",
 'RSS_ARTRECOMMLISTS_TITLE'                        => "Listmania lists for %s",
 'RSS_ARTRECOMMLISTS_DESCRIPTION'                  => "Listmania lists for %s",
@@ -1171,7 +1174,9 @@ $aLang = array(
 'WRAPPING_ADDFORANDFROM'                          => 'Please also add "For" and "From".',
 'WRAPPING_BACKTOORDER'                            => "Back to Order",
 'priceFrom'                                       => '<span style="font-size: 50%;">from</span>',
-'byBrand'                                         => 'by manufacturer',
+'byBrand'                                         => 'By Brand/Manufacturer',
+'byVendor'                                        => 'By Distributor',
+'byManufacturer'                                  => 'By Brand/Manufacturer',
 'searchResult'                                    => 'Search result for "%s"',
 'usrRegistered'                                   => 'User will be registered after he provided his password',
 'simpleDateFormat'                                => 'Y-m-d',
@@ -1216,12 +1221,6 @@ $aLang = array(
 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" not found'
 );
 
-
 /*
-
 [{ oxmultilang ident="GENERAL_YOUWANTTODELETE"}]
-
-
 */
-
-

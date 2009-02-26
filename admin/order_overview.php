@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: order_overview.php 15947 2009-01-27 15:22:21Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: order_overview.php 16553 2009-02-13 18:29:53Z tomas $
  */
 
     // DTAUS
@@ -94,7 +94,7 @@ class Order_Overview extends oxAdminDetails
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header("Expires: 0");
             header("Content-type: application/x-download");
-            header('Content-Length: '.strlen($sLexware));
+            header('Content-Length: '.getStr()->strlen($sLexware));
             header("Content-Disposition: attachment; filename=intern.xml");
             echo( $sLexware);
             exit();

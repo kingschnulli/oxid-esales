@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: review.php 14630 2008-12-11 10:04:12Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: review.php 16482 2009-02-12 09:44:52Z arvydas $
  */
 
 /**
@@ -124,7 +124,6 @@ class Review extends oxUBase
 
         parent::init();
 
-        $this->_oProduct = $this->getProduct();
         $this->_oActiveRecommList = $this->getActiveRecommList();
         if ( oxConfig::getParameter( 'recommid' ) && !$this->_oActiveRecommList ) {
             oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() );
@@ -228,8 +227,8 @@ class Review extends oxUBase
                 $oRating->oxratings__oxobjectid = new oxField($sObjectId);
                 $oRating->oxratings__oxrating   = new oxField($dRating);
                 $oRating->save();
-                if ($this->_oProduct) {
-                    $this->_oProduct->addToRatingAverage( $dRating);
+                if ( $oProduct = $this->getProduct() ) {
+                    $oProduct->addToRatingAverage( $dRating);
                 } elseif ($this->_oActiveRecommList) {
                     $this->_oActiveRecommList->addToRatingAverage( $dRating);
                 }
@@ -337,8 +336,8 @@ class Review extends oxUBase
         if ( $this->_oActObject === null ) {
             $this->_oActObject = false;
 
-            if ( $this->_oProduct ) {
-                $this->_oActObject = $this->_oProduct;
+            if ( $oProduct = $this->getProduct() ) {
+                $this->_oActObject = $oProduct;
             } elseif ( $this->_oActiveRecommList ) {
                 $this->_oActObject = $this->_oActiveRecommList;
             }
@@ -353,7 +352,7 @@ class Review extends oxUBase
      */
     protected function _getActiveType()
     {
-        if ($this->_oProduct) {
+        if ( $this->getProduct() ) {
             $sType = 'oxarticle';
         } elseif ($this->_oActiveRecommList) {
             $sType = 'oxrecommlist';
@@ -424,8 +423,8 @@ class Review extends oxUBase
     {
         if ( $this->_oCrossSelling === null ) {
             $this->_oCrossSelling = false;
-            if ( $this->_oProduct ) {
-                $this->_oCrossSelling = $this->_oProduct->getCrossSelling();
+            if ( $oProduct = $this->getProduct() ) {
+                $this->_oCrossSelling = $oProduct->getCrossSelling();
             }
         }
         return $this->_oCrossSelling;
@@ -440,8 +439,8 @@ class Review extends oxUBase
     {
         if ( $this->_oSimilarProducts === null ) {
             $this->_oSimilarProducts = false;
-            if ( $this->_oProduct ) {
-                $this->_oSimilarProducts = $this->_oProduct->getSimilarProducts();
+            if ( $oProduct = $this->getProduct() ) {
+                $this->_oSimilarProducts = $oProduct->getSimilarProducts();
             }
         }
         return $this->_oSimilarProducts;
@@ -456,9 +455,9 @@ class Review extends oxUBase
     {
         if ( $this->_oRecommList === null ) {
             $this->_oRecommList = false;
-            if ( $this->_oProduct ) {
+            if ( $oProduct = $this->getProduct() ) {
                 $oRecommList = oxNew('oxrecommlist');
-                $this->_oRecommList = $oRecommList->getRecommListsByIds( array($this->_oProduct->getId()));
+                $this->_oRecommList = $oRecommList->getRecommListsByIds( array( $oProduct->getId() ) );
             }
         }
         return $this->_oRecommList;

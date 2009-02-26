@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxuser.php 16050 2009-01-29 15:12:11Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxuser.php 16552 2009-02-13 18:28:48Z tomas $
  */
 
 /**
@@ -191,7 +191,7 @@ class oxUser extends oxBase
                 return $this->sDBOptin = $this->getNewsSubscription()->getOptInStatus();
             case 'sEmailFailed':
                 return $this->sEmailFailed = $this->getNewsSubscription()->getOptInEmailStatus();
-            }
+        }
     }
 
     /**
@@ -246,11 +246,9 @@ class oxUser extends oxBase
     }
 
     /**
-     * Returns user country (object) according to passed parameters or they
-     * are taken from user object ( oxid, country id) and session (language)
+     * Returns user countryid according to passed name
      *
-     * @param string $sCountryId country id (optional)
-     * @param int    $iLang      active language (optional)
+     * @param string $sCountry country
      *
      * @return string
      */
@@ -447,12 +445,12 @@ class oxUser extends oxBase
      */
     public function inGroup( $sGroupID )
     {
-         $blIn = false;
-         if( ( $oGroups = $this->getUserGroups() ) ) {
+        $blIn = false;
+        if ( ( $oGroups = $this->getUserGroups() ) ) {
             $blIn = isset( $oGroups[ $sGroupID ] );
-         }
+        }
 
-         return $blIn;
+        return $blIn;
     }
 
     /**
@@ -1189,7 +1187,7 @@ class oxUser extends oxBase
      * Performs user login by username and password. Fetches user data from DB.
      * Registers in session. Returns true on success, FALSE otherwise.
      *
-     * @param string $sUser     User username
+     * @param string $sUser User username
      *
      * @throws oxConnectionException, oxUserException
      *
@@ -1356,7 +1354,7 @@ class oxUser extends oxBase
         $oLDAP = new oxLDAP( $aLDAPParams['HOST'], $aLDAPParams['PORT'] );
         // maybe this is LDAP user but supplied email Address instead of LDAP login
         $sLDAPKey = oxDb::getDb()->GetOne("select oxldapkey from oxuser where oxuser.oxactive = 1 and oxuser.oxusername = ".oxDb::getDb()->Quote($sUser)." $sShopSelect");
-        if( isset( $sLDAPKey) && $sLDAPKey) {
+        if ( isset( $sLDAPKey) && $sLDAPKey) {
             $sUser = $sLDAPKey;
         }
 
@@ -1709,21 +1707,39 @@ class oxUser extends oxBase
      * @param bool   $blCheckLenght option to check password lenght
      *
      * @throws oxUserException, oxInputException
+     * 
+     * @deprecated use public oxuser::checkPassword() instead
      *
      * @return null
      */
     protected function _checkPassword( $sNewPass, $sConfPass, $blCheckLenght = false )
     {
-
-        //  no passwrod at all
-        if ( $blCheckLenght && strlen( $sNewPass ) == 0 ) {
+        $this->checkPassword( $sNewPass, $sConfPass, $blCheckLenght );
+    }
+    
+    /**
+     * Checking if user password is fine. In case of error
+     * exception is thrown
+     *
+     * @param string $sNewPass      new user password
+     * @param string $sConfPass     retyped user password
+     * @param bool   $blCheckLenght option to check password lenght
+     *
+     * @throws oxUserException, oxInputException
+     *
+     * @return null
+     */
+    public function checkPassword( $sNewPass, $sConfPass, $blCheckLenght = false )
+    {
+        //  no password at all
+        if ( $blCheckLenght && getStr()->strlen( $sNewPass ) == 0 ) {
             $oEx = oxNew( 'oxInputException' );
             $oEx->setMessage('EXCEPTION_INPUT_EMPTYPASS');
             throw $oEx;
         }
 
         //  password is too short ?
-        if ( $blCheckLenght &&  strlen( $sNewPass ) < 6 ) {
+        if ( $blCheckLenght &&  getStr()->strlen( $sNewPass ) < 6 ) {
             $oEx = oxNew( 'oxInputException' );
             $oEx->setMessage('EXCEPTION_INPUT_PASSTOOSHORT');
             throw $oEx;
@@ -1809,9 +1825,9 @@ class oxUser extends oxBase
     {
         foreach ( $aFieldValues as $sValue ) {
             if ( !trim( $sValue ) ) {
-               $oEx = oxNew( 'oxInputException' );
-               $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS');
-               throw $oEx;
+                $oEx = oxNew( 'oxInputException' );
+                $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS');
+                throw $oEx;
             }
         }
     }
@@ -1924,12 +1940,12 @@ class oxUser extends oxBase
     /**
      * Sets user info into cookie
      *
-     * @deprecated should be used oxUtilsServer::setUserCookie()
-     *
      * @param string  $sUser     user ID
      * @param string  $sPassword password
      * @param string  $sShopId   shop ID (default null)
      * @param integer $iTimeout  timeout value (default 31536000)
+     *
+     * @deprecated should be used oxUtilsServer::setUserCookie()
      *
      * @return null
      */
@@ -1941,9 +1957,9 @@ class oxUser extends oxBase
     /**
      * Deletes user cookie data
      *
-     * @deprecated should be used oxUtilsServer::deleteUserCookie()
-     *
      * @param string $sShopId shop ID (default null)
+     *
+     * @deprecated should be used oxUtilsServer::deleteUserCookie()
      *
      * @return null
      */
@@ -1955,9 +1971,9 @@ class oxUser extends oxBase
     /**
      * Returns cookie stored used login data
      *
-     * @deprecated should be used oxUtilsServer::getUserCookie()
-     *
      * @param string $sShopId shop ID (default null)
+     *
+     * @deprecated should be used oxUtilsServer::getUserCookie()
      *
      * @return string
      */
@@ -2048,6 +2064,7 @@ class oxUser extends oxBase
      * Encodes and returns given password
      *
      * @param string $sPassword password to encode
+     * @param string $sSalt     any unique string value
      *
      * @return string
      */
@@ -2078,7 +2095,7 @@ class oxUser extends oxBase
      */
     public function decodeSalt( $sSaltHex )
     {
-    	return ( $sSaltHex ? oxDb::getDb()->getOne( "select UNHEX( '{$sSaltHex}' )" ) : '' );
+        return ( $sSaltHex ? oxDb::getDb()->getOne( "select UNHEX( '{$sSaltHex}' )" ) : '' );
     }
 
     /**
@@ -2130,7 +2147,7 @@ class oxUser extends oxBase
      */
     public function getPasswordHash()
     {
-    	$sHash = null;
+        $sHash = null;
         if ( $this->oxuser__oxpassword->value ) {
             if ( strpos( $this->oxuser__oxpassword->value, 'ox_' ) === 0 ) {
                 // decodable pass ?
@@ -2140,7 +2157,7 @@ class oxUser extends oxBase
                 $this->setPassword( $this->oxuser__oxpassword->value );
             }
             $sHash = $this->oxuser__oxpassword->value;
-    	}
+        }
         return $sHash;
     }
 
@@ -2162,6 +2179,7 @@ class oxUser extends oxBase
      * user is not available - returns false.
      *
      * @param bool $blForceAdmin (default false)
+     *
      * @deprecated use non static method loadActiveUser
      *
      * @return bool

@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxadmindetails.php 14554 2008-12-08 15:37:05Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxadmindetails.php 16553 2009-02-13 18:29:53Z tomas $
  */
 
 /**
@@ -127,7 +127,7 @@ class oxAdminDetails extends oxAdminView
         // document & image directory:
         $this->_oEditor->documentDir = $this->_oEditor->imageDir = $myConfig->getPictureDir( false ).'wysiwigpro/';
         $this->_oEditor->documentURL = $this->_oEditor->imageURL = $myConfig->getPictureUrl( null, false ).'wysiwigpro/';
-        
+
         // enabling upload
         $this->_oEditor->upload = true;
 
@@ -177,13 +177,13 @@ class oxAdminDetails extends oxAdminView
 
                         if ( $sLine[0] == '.' && !strstr( $sLine, 'default' ) ) {
                             // found one tag
-                            $sTag = substr( $sLine, 1);
-                            $iEnd = strpos( $sTag, ' ' );
+                            $sTag = getStr()->substr( $sLine, 1);
+                            $iEnd = getStr()->strpos( $sTag, ' ' );
                             if ( !isset( $iEnd ) || !$iEnd ) {
-                                $iEnd = strpos( $sTag, '\n' );
+                                $iEnd = getStr()->strpos( $sTag, '\n' );
                         }
 
-                            if ( $sTag = substr( $sTag, 0, $iEnd ) ) {
+                            if ( $sTag = getStr()->substr( $sTag, 0, $iEnd ) ) {
                                 $aClasses["span class='{$sTag}'"] = $sTag;
                     }
                 }
@@ -228,6 +228,17 @@ class oxAdminDetails extends oxAdminView
      * @return null
      */
     public function resetNrOfVendorArticles()
+    {
+
+            oxUtils::getInstance()->oxResetFileCache();
+    }
+
+    /**
+     * Resets number of articles in current shop manufacturers
+     *
+     * @return null
+     */
+    public function resetNrOfManufacturerArticles()
     {
 
             oxUtils::getInstance()->oxResetFileCache();
@@ -329,6 +340,30 @@ class oxAdminDetails extends oxAdminView
 
             // buttons
             $this->_aViewData['bottom_buttons'] = $myAdminNavig->getBtn( $sNode );
+        }
+    }
+
+    /**
+     * Resets count of vendor/manufacturer category items
+     *
+     * @param string $aIds array to reset type => id
+     *
+     * @return null
+     */
+    protected function _resetCounts( $aIds )
+    {
+    	$oUtils = oxUtilsCount::getInstance();
+        foreach ( $aIds as $sType => $aResetInfo ) {
+            foreach ( $aResetInfo as $sResetId => $iPos ) {
+                switch ( $sType ) {
+            		case 'vendor':
+                        $oUtils->resetVendorArticleCount( $sResetId );
+                        break;
+                    case 'manufacturer':
+                        $oUtils->resetManufacturerArticleCount( $sResetId );
+                        break;
+                }
+            }
         }
     }
 }

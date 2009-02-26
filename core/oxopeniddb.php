@@ -17,12 +17,12 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2009
  * $Id: oxdb.php 14368 2008-11-26 07:36:13Z vilma $
  */
 
-require_once( 'Auth/OpenID/Interface.php' );
-require_once( 'Auth/OpenID/Nonce.php' );
+require_once 'Auth/OpenID/Interface.php';
+require_once 'Auth/OpenID/Nonce.php';
 
 /**
  * Database connection class for openid
@@ -150,25 +150,25 @@ class oxOpenIdDb extends Auth_OpenID_OpenIDStore
                     $aAssociations[] = array($oAssoc->issued, $oAssoc);
                 }
             } else {
-            	return null;
+                return null;
             }
         } else {
             $aAssocs = $this->_getAssocs($sServerUrl);
             if ( !$aAssocs || ( $aAssocs->recordCount() == 0 ) ) {
                 return null;
             }
-                $aAssocRow = $aAssocs->fields;
-                $oAssoc = new Auth_OpenID_Association($aAssocRow['0'], 
-                                                 $aAssocRow['1'],
-                                                 $aAssocRow['2'],
-                                                 $aAssocRow['3'],
-                                                 $aAssocRow['4']);
-                $oAssoc->secret = $this->blobDecode($oAssoc->secret);
-                if ($oAssoc->getExpiresIn() == 0) {
-                    $this->removeAssociation($sServerUrl, $oAssoc->handle);
-                } else {
-                    $aAssociations[] = array($oAssoc->issued, $oAssoc);
-                }
+            $aAssocRow = $aAssocs->fields;
+            $oAssoc = new Auth_OpenID_Association($aAssocRow['0'], 
+                                             $aAssocRow['1'],
+                                             $aAssocRow['2'],
+                                             $aAssocRow['3'],
+                                             $aAssocRow['4']);
+            $oAssoc->secret = $this->blobDecode($oAssoc->secret);
+            if ($oAssoc->getExpiresIn() == 0) {
+                $this->removeAssociation($sServerUrl, $oAssoc->handle);
+            } else {
+                $aAssociations[] = array($oAssoc->issued, $oAssoc);
+            }
         }
 
         if ($aAssociations) {
@@ -179,7 +179,7 @@ class oxOpenIdDb extends Auth_OpenID_OpenIDStore
                 $aAssocs[$key] = $assoc[1];
             }
 
-            array_multisort($aIssued, SORT_DESC, $aAssocs, SORT_DESC,$aAssociations);
+            array_multisort($aIssued, SORT_DESC, $aAssocs, SORT_DESC, $aAssociations);
 
             // return the most recently issued one.
             list($aIssued, $oAssoc) = $aAssociations[0];
@@ -242,6 +242,8 @@ class oxOpenIdDb extends Auth_OpenID_OpenIDStore
     /**
      * Resets the store by removing all records from the store's
      * tables.
+     * 
+     * @return null
      */
     public function reset()
     {

@@ -17,10 +17,12 @@
  *
  * @link http://www.oxid-esales.com
  * @package setup
- * @copyright © OXID eSales AG 2003-2009
- * $Id: index.php 15243 2009-01-14 10:50:16Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: index.php 16554 2009-02-13 18:30:21Z tomas $
  */
 
+
+error_reporting( (E_ALL ^ E_NOTICE) | E_STRICT );
 
 global $aSetupSteps;
 $aSetupSteps['STEP_SYSTEMREQ']  = 100;      // 0
@@ -47,7 +49,7 @@ $sSID = null;
 if ( isset( $_GET['sid'] ) ) {
     $sSID = $_GET['sid'];
 } elseif ( isset( $_POST['sid'] ) ) {
-	$sSID = $_POST['sid'];
+    $sSID = $_POST['sid'];
 }
 
 // creating array to store persistent data
@@ -83,7 +85,7 @@ if ( isset( $_GET['istep'] ) && $_GET['istep'] ) {
 } elseif ( isset( $_POST['istep'] ) && $_POST['istep'] ) {
     $istep = $_POST['istep'];
 } else {
-	$istep = $aSetupSteps['STEP_SYSTEMREQ'];
+    $istep = $aSetupSteps['STEP_SYSTEMREQ'];
 }
 
 // store eula to session
@@ -93,7 +95,7 @@ if ( isset( $_POST['iEula'] ) ) {
 } elseif ( isset( $aPersistentData['eula'] ) ) {
     $iEula = $aPersistentData['eula'];
 } else {
-	$iEula = 0;
+    $iEula = 0;
 }
 
 // routing table
@@ -424,7 +426,8 @@ function getNextModuleInfo()
             'iconv',
             'tokenizer',
             'mysql_connect',
-            'gd_info'
+            'gd_info',
+            'mb_string',
             );
 
             $aRequiredPHPExtensions[] = 'bcmath';
@@ -452,6 +455,9 @@ function getNextModuleInfo()
         $sGroup = current( $aRequiredModules );
         $iModStat = null;
         switch ( $sModule ) {
+            case 'mb_string':
+                $iModStat = extension_loaded( 'mbstring' ) ? 2 : 1;
+                break;
             case 'mod_rewrite':
                 // mod_rewrite extension
                 $sHost   = $_SERVER['HTTP_HOST'];

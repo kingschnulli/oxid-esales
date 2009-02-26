@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html [{foreach from = $oxcmp_lang item = _language}][{if $_language->selected}]lang="[{ $_language->abbr }]"[{/if}][{/foreach}]>
+<html[{if $oView->getActiveLangAbbr()}] lang="[{ $oView->getActiveLangAbbr() }]"[{/if}]>
 <head>
     [{assign var="_titlesuffix" value=$_titlesuffix|default:$oView->getTitleSuffix()}]
     [{assign var="title" value=$title|default:$oView->getTitle() }]

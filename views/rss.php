@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: rss.php 15905 2009-01-27 07:08:55Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: rss.php 16531 2009-02-13 07:47:29Z arvydas $
  */
 
 /**
@@ -164,7 +164,7 @@ class Rss extends oxView
     public function searcharts()
     {
         if (in_array('oxrss_search', oxConfig::getInstance()->getConfigParam( 'aRssSelected' ))) {
-            $this->_oRss->loadSearchArticles(oxConfig::getParameter('searchparam', true), oxConfig::getParameter('searchcnid'), oxConfig::getParameter('searchvendor'));
+            $this->_oRss->loadSearchArticles(oxConfig::getParameter('searchparam', true), oxConfig::getParameter('searchcnid'), oxConfig::getParameter('searchvendor'), oxConfig::getParameter('searchmanufacturer'));
         } else {
             error_404_handler();
         }

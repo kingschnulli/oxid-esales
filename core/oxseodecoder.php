@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxseodecoder.php 14637 2008-12-11 12:17:09Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxseodecoder.php 16617 2009-02-20 09:06:11Z arvydas $
  */
 
 /**
@@ -39,9 +39,9 @@ class oxSeoDecoder extends oxSuperCfg
     public function parseStdUrl($sUrl)
     {
         $aRet = array();
-        $sUrl = html_entity_decode($sUrl);
+        $sUrl = html_entity_decode( $sUrl, ENT_QUOTES, 'UTF-8' );
         if (($iPos = strpos($sUrl, '?')) !== false) {
-            $aParams = explode('&', substr($sUrl, $iPos+1));
+            $aParams = explode('&', getStr()->substr($sUrl, $iPos+1));
             foreach ($aParams as $sParam) {
                 $aP = explode('=', $sParam);
                 if (count($aP) == 2) {
@@ -57,8 +57,8 @@ class oxSeoDecoder extends oxSuperCfg
     /**
      * Returns ident (md5 of seo url) to fetch seo data from DB
      *
-     * @param string $sSeoUrlseo url to calculate ident
-     * @param bool   $blIgnore   if FALSE - blocks from direct access when default language seo url with language ident executed
+     * @param string $sSeoUrl  seo url to calculate ident
+     * @param bool   $blIgnore if FALSE - blocks from direct access when default language seo url with language ident executed
      *
      * @return string
      */
@@ -73,7 +73,7 @@ class oxSeoDecoder extends oxSuperCfg
         $aLangCodes = array_keys( $myConfig->getConfigParam( 'aLanguages' ) );
         foreach ( $aLangCodes as $iLangId => $sLangCode ) {
             if ( stripos( $sSeoUrl, "$sLangCode/" ) === 0 ) {
-            	$blLangIsSet   = true;
+                $blLangIsSet   = true;
                 $iNotSetLangId = $iLangId;
                 break;
             }
@@ -85,13 +85,13 @@ class oxSeoDecoder extends oxSuperCfg
                 // if language not set - appending default to calculate md5
                 $sSeoUrl = $aLangCodes[ $iDefSeoLang ] . '/' . $sSeoUrl;
             } else {
-            	// if language is set - this should block from direct access
+                // if language is set - this should block from direct access
                 // but must be ignored when checking in history table
                 $sSeoUrl = '!' . $sSeoUrl;
             }
         }
 
-    	return md5( strtolower( $sSeoUrl ) );
+        return md5( strtolower( $sSeoUrl ) );
     }
 
     /**
@@ -106,7 +106,7 @@ class oxSeoDecoder extends oxSuperCfg
         $aLangCodes = array_keys( $this->getConfig()->getConfigParam( 'aLanguages' ) );
         foreach ( $aLangCodes as $iLangId => $sLangCode ) {
             if ( stripos( $sSeoUrl, "$sLangCode/" ) === 0 ) {
-                $sSeoUrl = substr( $sSeoUrl, strlen( "$sLangCode/" ) );
+                $sSeoUrl = getStr()->substr( $sSeoUrl, getStr()->strlen( "$sLangCode/" ) );
                 break;
             }
         }
@@ -126,8 +126,8 @@ class oxSeoDecoder extends oxSuperCfg
     public function decodeUrl( $sSeoUrl )
     {
         $sBaseUrl = $this->getConfig()->getShopURL();
-        if ( strpos( $sSeoUrl, $sBaseUrl ) === 0 ) {
-            $sSeoUrl = substr( $sSeoUrl, strlen( $sBaseUrl ) );
+        if ( getStr()->strpos( $sSeoUrl, $sBaseUrl ) === 0 ) {
+            $sSeoUrl = getStr()->substr( $sSeoUrl, getStr()->strlen( $sBaseUrl ) );
         }
         $sSeoUrl = rawurldecode( $sSeoUrl );
         $iShopId = $this->getConfig()->getShopId();
@@ -157,8 +157,8 @@ class oxSeoDecoder extends oxSuperCfg
     {
         $oDb = oxDb::getDb(true);
         $sBaseUrl = $this->getConfig()->getShopURL();
-        if ( strpos( $sSeoUrl, $sBaseUrl ) === 0 ) {
-            $sSeoUrl = substr( $sSeoUrl, strlen( $sBaseUrl ) );
+        if ( getStr()->strpos( $sSeoUrl, $sBaseUrl ) === 0 ) {
+            $sSeoUrl = getStr()->substr( $sSeoUrl, getStr()->strlen( $sBaseUrl ) );
         }
         $iShopId = $this->getConfig()->getShopId();
         $sSeoUrl = rawurldecode($sSeoUrl);
@@ -230,7 +230,7 @@ class oxSeoDecoder extends oxSuperCfg
     protected function _decodeSimpleUrl( $sParams )
     {
         $sLastParam = rtrim( $sParams, '/' );
-        $sLastParam = substr( $sLastParam, ( ( int ) strrpos( $sLastParam, '/' ) ) - ( strlen( $sLastParam ) ) );
+        $sLastParam = getStr()->substr( $sLastParam, ( ( int ) strrpos( $sLastParam, '/' ) ) - ( getStr()->strlen( $sLastParam ) ) );
         $sLastParam = trim( $sParams, '/' );
 
         // active object id
@@ -248,8 +248,11 @@ class oxSeoDecoder extends oxSuperCfg
 
                 // category ?
                 if ( !( $sUrl = $this->_getObjectUrl( $sLastParam, 'oxcategories', $iLanguage, 'oxcategory' ) ) ) {
-                    // then maybe vendor ?
-                    $sUrl = $this->_getObjectUrl( $sLastParam, 'oxvendor', $iLanguage, 'oxvendor' );
+                    // maybe manufacturer ?
+                    if ( !( $sUrl = $this->_getObjectUrl( $sLastParam, 'oxmanufacturers', $iLanguage, 'oxmanufacturer' ) ) ) {
+                        // then maybe vendor ?
+                        $sUrl = $this->_getObjectUrl( $sLastParam, 'oxvendor', $iLanguage, 'oxvendor' );
+                    }
                 }
             }
         }

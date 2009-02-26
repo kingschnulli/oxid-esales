@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package modules
- * @copyright © OXID eSales AG 2003-2009
- * $Id: myorder.php 15989 2009-01-28 10:18:52Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: myorder.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /**

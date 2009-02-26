@@ -15,9 +15,9 @@
               <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
                 <div>
                     [{ $oViewConf->getHiddenSid() }]
+                    [{ $oViewConf->getNavFormParams() }]
                     <input type="hidden" name="cl" value="user">
                     <input type="hidden" name="fnc" value="">
-                    <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
                     <input type="hidden" name="option" value="1">
                     <span class="btn"><input id="test_UsrOpt1" type="submit" name="send" value="[{ oxmultilang ident="USER_NEXT" }]" class="btn"></span>
                 </div>
@@ -36,9 +36,9 @@
               <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
                 <div>
                     [{ $oViewConf->getHiddenSid() }]
+                    [{ $oViewConf->getNavFormParams() }]
                     <input type="hidden" name="fnc" value="login_noredirect">
                     <input type="hidden" name="cl" value="user">
-                    <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
                     <input type="hidden" name="option" value="2">
                     <input type="hidden" name="lgn_cook" value="0">
                     <input type="hidden" name="CustomError" value='user'>
@@ -74,9 +74,9 @@
               <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
                 <div>
                     [{ $oViewConf->getHiddenSid() }]
+                    [{ $oViewConf->getNavFormParams() }]
                     <input type="hidden" name="cl" value="user">
                     <input type="hidden" name="fnc" value="">
-                    <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
                     <input type="hidden" name="option" value="3">
                     <span class="btn"><input id="test_UsrOpt3" type="submit" name="send" value="[{ oxmultilang ident="USER_LOGIN2" }]" class="btn"></span>
                 </div>
@@ -90,7 +90,7 @@
     <form action="[{ $oViewConf->getSslSelfLink() }]" name="order" method="post">
       <div>
           [{ $oViewConf->getHiddenSid() }]
-          <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
+          [{ $oViewConf->getNavFormParams() }]
           <input type="hidden" name="option" value="[{$oView->getLoginOption()}]">
           <input type="hidden" name="cl" value="user">
           <input type="hidden" name="CustomError" value='user'>

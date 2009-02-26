@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package smartyPlugins
- * @copyright © OXID eSales AG 2003-2009
- * $Id: function.oxmultilang.php 14981 2009-01-08 08:43:05Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: function.oxmultilang.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /*

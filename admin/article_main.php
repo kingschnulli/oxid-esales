@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: article_main.php 14018 2008-11-06 13:33:39Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: article_main.php 16642 2009-02-20 13:55:32Z sarunas $
  */
 
 /**
@@ -193,32 +193,37 @@ class Article_Main extends oxAdminDetails
                 oxUtilsCount::getInstance()->resetPriceCatArticleCount($oArticle->oxarticles__oxprice->value);
             }
 
+            $aResetIds = array();
             if ( $aParams['oxarticles__oxactive'] != $oArticle->oxarticles__oxactive->value) {
                 //check categories
                 $sQ = "select oxcatnid from oxobject2category where oxobjectid = '".$oArticle->oxarticles__oxid->value."'";
                 $rs = oxDb::getDb()->Execute($sQ);
-                if ($rs !== false && $rs->recordCount() > 0)
+                if ( $rs !== false && $rs->recordCount() > 0 ) {
                     while (!$rs->EOF) {
                         oxUtilsCount::getInstance()->resetCatArticleCount($rs->fields[0]);
                         $rs->moveNext();
                     }
-                // checking vendors
-                if ( $oArticle->oxarticles__oxvendorid->value) {
-                    oxUtilsCount::getInstance()->resetVendorArticleCount($oArticle->oxarticles__oxvendorid->value);
-                }
-            }
-            if ( isset($aParams["oxarticles__oxvendorid"]) && $aParams["oxarticles__oxvendorid"] != $oArticle->oxarticles__oxvendorid->value) {
-                // must reset both vendors
-                if ( $aParams["oxarticles__oxvendorid"]) {
-                    oxUtilsCount::getInstance()->resetVendorArticleCount($aParams["oxarticles__oxvendorid"]);
                 }
 
-                if ( $oArticle->oxarticles__oxvendorid->value) {
-                    oxUtilsCount::getInstance()->resetVendorArticleCount($oArticle->oxarticles__oxvendorid->value);
-                }
+                // vendors
+                $aResetIds['vendor'][$oArticle->oxarticles__oxvendorid->value] = 1;
+                $aResetIds['manufacturer'][$oArticle->oxarticles__oxmanufacturerid->value] = 1;
             }
 
-        //$aParams = $oArticle->ConvertNameArray2Idx( $aParams);
+            // reset vendors
+            if ( isset( $aParams["oxarticles__oxvendorid"] ) && $aParams["oxarticles__oxvendorid"] != $oArticle->oxarticles__oxvendorid->value ) {
+                $aResetIds['vendor'][$aParams['oxarticles__oxvendorid']] = 1;
+                $aResetIds['vendor'][$oArticle->oxarticles__oxvendorid->value] = 1;
+            }
+
+            // reset Manufacturers
+            if ( isset($aParams["oxarticles__oxmanufacturerid"]) && $aParams["oxarticles__oxmanufacturerid"] != $oArticle->oxarticles__oxmanufacturerid->value) {
+                $aResetIds['manufacturer'][$aParams['oxarticles__oxmanufacturerid']] = 1;
+                $aResetIds['manufacturer'][$oArticle->oxarticles__oxmanufacturerid->value] = 1;
+            }
+
+            // resetting counts
+            $this->_resetCounts( $aResetIds );
 
         $oArticle->setLanguage(0);
 
@@ -317,10 +322,10 @@ class Article_Main extends oxAdminDetails
             //copy article extends (longdescription, tags)
             $this->_copyArtExtends( $sOldId, $sNewId);
 
-                // resetting article count in vendor
-                if ( $oArticle->oxarticles__oxvendorid->value) {
-                    oxUtilsCount::getInstance()->resetVendorArticleCount($oArticle->oxarticles__oxvendorid->value);
-                }
+                // resetting
+                $aResetIds['vendor'][$oArticle->oxarticles__oxvendorid->value] = 1;
+                $aResetIds['manufacturer'][$oArticle->oxarticles__oxmanufacturerid->value] = 1;
+                $this->_resetCounts( $aResetIds );
 
 
             //copy variants
@@ -560,6 +565,9 @@ class Article_Main extends oxAdminDetails
             if ( isset($aParams["oxarticles__oxprice"]) && $aParams["oxarticles__oxprice"] != $oArticle->oxarticles__oxprice->value) {
                 oxUtilsCount::getInstance()->resetPriceCatArticleCount($oArticle->oxarticles__oxprice->value);
             }
+
+            $aResetIds = array();
+
             if ( $aParams['oxarticles__oxactive'] != $oArticle->oxarticles__oxactive->value) {
                 //check categories
                 $sQ = "select oxcatnid from oxobject2category where oxobjectid = '".$oArticle->oxarticles__oxid->value."'";
@@ -569,21 +577,24 @@ class Article_Main extends oxAdminDetails
                         oxUtilsCount::getInstance()->resetCatArticleCount($rs->fields[0]);
                         $rs->moveNext();
                     }
-                // checking vendors
-                if ( $oArticle->oxarticles__oxvendorid->value) {
-                            oxUtilsCount::getInstance()->resetVendorArticleCount($oArticle->oxarticles__oxvendorid->value);
-                }
+                // vendors
+                $aResetIds['vendor'][$oArticle->oxarticles__oxvendorid->value] = 1;
+                $aResetIds['manufacturer'][$oArticle->oxarticles__oxmanufacturerid->value] = 1;
             }
-            if ( isset($aParams["oxarticles__oxvendorid"]) && $aParams["oxarticles__oxvendorid"] != $oArticle->oxarticles__oxvendorid->value) {
-                // must reset both vendors
-                if ( $aParams["oxarticles__oxvendorid"]) {
-                       oxUtilsCount::getInstance()->resetVendorArticleCount($aParams["oxarticles__oxvendorid"]);
-                }
 
-                if ( $oArticle->oxarticles__oxvendorid->value) {
-                        oxUtilsCount::getInstance()->resetVendorArticleCount($oArticle->oxarticles__oxvendorid->value);
-                }
+            // vendors
+            if ( isset($aParams['oxarticles__oxvendorid']) && $aParams['oxarticles__oxvendorid'] != $oArticle->oxarticles__oxvendorid->value) {
+                $aResetIds['vendor'][$aParams['oxarticles__oxvendorid']] = 1;
+                $aResetIds['vendor'][$oArticle->oxarticles__oxvendorid->value] = 1;
             }
+
+            // manufacturers
+            if ( isset($aParams['oxarticles__oxmanufacturerid']) && $aParams['oxarticles__oxmanufacturerid'] != $oArticle->oxarticles__oxmanufacturerid->value ) {
+                $aResetIds['manufacturer'][$aParams['oxarticles__oxmanufacturerid']] = 1;
+                $aResetIds['manufacturer'][$oArticle->oxarticles__oxmanufacturerid->value] = 1;
+            }
+
+            $this->_resetCounts( $aResetIds );
 
 
         //$aParams = $oArticle->ConvertNameArray2Idx( $aParams);
@@ -673,5 +684,12 @@ class Article_Main extends oxAdminDetails
         }
 
         return $sTitle;
+    }
+
+    public function getManufacturerList()
+    {
+        $oManufacturerList = oxNew( "oxmanufacturerlist" );
+        $oManufacturerList->loadManufacturerList();
+        return $oManufacturerList;
     }
 }

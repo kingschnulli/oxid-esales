@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: shop_config.php 14841 2008-12-19 10:51:54Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: shop_config.php 16592 2009-02-18 11:48:55Z arvydas $
  */
 
 /**
@@ -106,21 +106,21 @@ class Shop_Config extends oxAdminDetails
                 if ($sVarType == "str" || $sVarType == "int") {
                     $aConfStrs[$sVarName] = $sVarVal;
                     if ( $aConfStrs[$sVarName] ) {
-                        $aConfStrs[$sVarName] = htmlentities( $aConfStrs[$sVarName] );
+                        $aConfStrs[$sVarName] = htmlentities( $aConfStrs[$sVarName], ENT_QUOTES, 'UTF-8' );
                     }
                 }
                 if ($sVarType == "arr") {
                     if (in_array($sVarName, $this->_aSkipMultiline)) {
                         $aConfArrs[$sVarName] = unserialize( $sVarVal );
                     } else {
-                        $aConfArrs[$sVarName] = htmlentities( $this->_arrayToMultiline( unserialize( $sVarVal ) ) );
+                        $aConfArrs[$sVarName] = htmlentities( $this->_arrayToMultiline( unserialize( $sVarVal ) ), ENT_QUOTES, 'UTF-8' );
                     }
                 }
                 if ($sVarType == "aarr") {
                     if (in_array($sVarName, $this->_aSkipMultiline)) {
                         $aConfAarrs[$sVarName] = unserialize( $sVarVal );
                     } else {
-                        $aConfAarrs[$sVarName] = htmlentities( $this->_aarrayToMultiline( unserialize( $sVarVal ) ) );
+                        $aConfAarrs[$sVarName] = htmlentities( $this->_aarrayToMultiline( unserialize( $sVarVal ) ), ENT_QUOTES, 'UTF-8' );
                     }
                 }
                 $rs->moveNext();
@@ -288,7 +288,7 @@ class Shop_Config extends oxAdminDetails
         foreach ($aInput as $key => $val) {
             $sMultiline .= $key." => ".$val."\n";
         }
-        $sMultiline = substr($sMultiline, 0, -1);
+        $sMultiline = getStr()->substr($sMultiline, 0, -1);
         return $sMultiline;
     }
 

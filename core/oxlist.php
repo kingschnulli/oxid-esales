@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxlist.php 14506 2008-12-05 12:19:39Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxlist.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /**
@@ -69,7 +69,7 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      */
     public function offsetExists( $offset )
     {
-        if( isset( $this->_aArray[$offset] ) ) {
+        if ( isset( $this->_aArray[$offset] ) ) {
             return true;
         } else {
             return false;
@@ -85,7 +85,7 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      */
     public function offsetGet( $offset )
     {
-        if( $this->offsetExists( $offset ) ) {
+        if ( $this->offsetExists( $offset ) ) {
             return $this->_aArray[$offset];
         } else {
             return false;
@@ -309,7 +309,7 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
         //echo( "Access to ".$sName.PHP_EOL);
 
         // TMP
-        if( $sName == 'aList') {
+        if ( $sName == 'aList') {
             return $this->_aArray;
         }
     }

@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxcmp_lang.php 13614 2008-10-24 09:36:52Z sarunas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxcmp_lang.php 16683 2009-02-21 15:23:49Z rimvydas.paskevicius $
  */
 
 /**
@@ -98,7 +98,6 @@ class oxcmp_lang extends oxView
         }
 
         reset($this->aLanguages);
-        $aLanguageURLs = $myConfig->getConfigParam( 'aLanguageURLs' );
 
         while ( list( $sKey, $oVal ) = each( $this->aLanguages ) ) {
             $this->aLanguages[$sKey]->link = $this->getParent()->getLink($oVal->id);

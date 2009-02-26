@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: account.php 15455 2009-01-20 13:01:08Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: account.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
  */
 
 /**
@@ -67,6 +67,12 @@ class Account extends oxUBase
     protected $_sSearchVendor = null;
 
     /**
+     * Searched vendor
+     * @var string
+     */
+    protected $_sSearchManufacturer = null;
+
+    /**
      * List type
      * @var string
      */
@@ -98,7 +104,8 @@ class Account extends oxUBase
      *
      * Template variables:
      * <b>searchparam</b>, <b>searchparamforhtml</b>,
-     * <b>searchcnid</b>, <b>searchvendor</b>, <b>listtype</b>
+     * <b>searchcnid</b>, <b>searchvendor</b>, <b>listtype</b>,
+     * <b>searchmanufacturer</b>
      *
      * @return  string  $_sThisTemplate current template file name
      */
@@ -117,6 +124,7 @@ class Account extends oxUBase
             $this->_aViewData['searchparamforhtml'] = $this->getSearchParamForHtml();
             $this->_aViewData['searchcnid']         = $this->getSearchCatId();
             $this->_aViewData['searchvendor']       = $this->getSearchVendor();
+            $this->_aViewData['searchmanufacturer'] = $this->getSearchManufacturer();
             $this->_aViewData['listtype']           = $this->getListType();
         }
 
@@ -160,9 +168,12 @@ class Account extends oxUBase
                 $sReturn .= "&searchcnid=$sSearchCatId";
             }
 
-            $sSearchVendor = oxConfig::getParameter( 'searchvendor' );
-            if ( $sSearchVendor ) {
+            if ( ( $sSearchVendor = oxConfig::getParameter( 'searchvendor' ) ) ) {
                 $sReturn .= "&searchvendor=$sSearchVendor";
+            }
+
+            if ( ( $sSearchManufacturer = oxConfig::getParameter( 'searchmanufacturer' ) ) ) {
+                $sReturn .= "&searchmanufacturer=$sSearchManufacturer";
             }
 
             $sListType = oxConfig::getParameter( 'listtype' );
@@ -269,6 +280,23 @@ class Account extends oxUBase
             }
         }
         return $this->_sSearchVendor;
+    }
+
+    /**
+     * Template variable getter. Returns searched Manufacturer id
+     *
+     * @return string
+     */
+    public function getSearchManufacturer()
+    {
+        if ( $this->_sSearchManufacturer === null ) {
+            $this->_sSearchManufacturer = false;
+            if ( $this->getArticleId() ) {
+                // searching in Manufacturer #671
+                $this->_sSearchManufacturer = rawurldecode( oxConfig::getParameter( 'searchmanufacturer' ) );
+            }
+        }
+        return $this->_sSearchManufacturer;
     }
 
     /**

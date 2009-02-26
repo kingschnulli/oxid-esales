@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: pricealarm.php 15441 2009-01-19 15:34:40Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: pricealarm.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
  */
 
 /**

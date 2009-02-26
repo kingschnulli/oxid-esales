@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxcmp_basket.php 15381 2009-01-16 13:06:22Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxcmp_basket.php 16432 2009-02-10 17:40:50Z arvydas $
  */
 
 /**
@@ -41,13 +41,15 @@ class oxcmp_basket extends oxView
      * @var array
      */
     public $aRedirectParams = array( 'cnid',        // category id
+                                     'mnid',        // manufacturer id
                                      'anid',        // active article id
                                      'tpl',         // spec. template
                                      'listtype',    // list type
                                      'searchcnid',  // search category
                                      'searchvendor',// search vendor
-                                     'searchtag',   // search vendor
-                                     'searchrecomm',// search vendor
+                                     'searchmanufacturer',// search manufacturer
+                                     'searchtag',   // search tag
+                                     'searchrecomm',// search recomendation
                                      'recommid'     // recomm. list id
                                     );
 
@@ -162,7 +164,10 @@ class oxcmp_basket extends oxView
         if ( $aProducts = $this->_getItems( $sProductId, $dAmount, $aSel, $aPersParam, $blOverride ) ) {
 
             // information that last call was changebasket
-            $this->_setLastCall( 'changebasket', $aProducts, $this->getSession()->getBasket()->getBasketSummary() );
+            $oBasket = $this->getSession()->getBasket();
+            $oBasket->onUpdate();
+            $this->_setLastCall( 'changebasket', $aProducts, $oBasket->getBasketSummary() );
+
             $oBasketItem = $this->_addItems( $aProducts );
         }
 
@@ -374,7 +379,7 @@ class oxcmp_basket extends oxView
         foreach ( $aProductInfo as $sProdId => $aProdData ) {
             $aProducts[$sProdId] = $aProdData;
             // setting previous amount
-            $aProducts[$sProdId]['oldam'] = isset( $aBasketInfo->aArticles[$sProdId] ) ? $aBasketInfo->aArticles[$sProdId] : 0;
+            $aProducts[$sProdId]['oldam'] = isset( $aBasketInfo->aArticles[$aProdData['aid']] ) ? $aBasketInfo->aArticles[$aProdData['aid']] : 0;
         }
 
         oxSession::setVar( 'aLastcall', array( $sCallName => $aProducts ) );

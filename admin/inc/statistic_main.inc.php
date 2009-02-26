@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package inc
- * @copyright © OXID eSales AG 2003-2009
- * $Id: statistic_main.inc.php 16080 2009-01-30 12:01:31Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: statistic_main.inc.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
  */
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
                                         array( 'oxtitle', 'oxstat', 1, 0, 0 ),

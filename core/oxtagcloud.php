@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxtagcloud.php 16095 2009-01-30 14:55:42Z tomas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxtagcloud.php 16658 2009-02-21 11:49:55Z vilma $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -45,50 +45,6 @@ class oxTagCloud extends oxSuperCfg
     protected $_sCacheKey = "tagcloud_";
 
     /**
-     * This method generates test tags data and probably should be deleted for the release.
-     * Or if you need tags you can generate them by: oxTagCloud::generateTagsFromLongDescription();
-     * We used this method for demo data only
-     *
-     * @param int $iLang language
-     *
-     * @return null
-     */
-    public static function generateTagsFromLongDescription($iLang = 0)
-    {
-        $sQ = "select oxid, oxlongdesc".oxLang::getLanguageTag($iLang)." from oxartextends";
-        $rs = oxDB::getDb(true)->Execute($sQ);
-        while (!$rs->EOF && $i++ < 100) {
-            $sLD = '';
-            try {
-                $sLD = strip_tags($rs->fields["oxlongdesc"]);
-                $sLD = substr($sLD, 0, strpos($sLD, ' ', 80));
-                $sLD = str_replace(array("!","?",".",":","*", "«", "»", ",", "'", '"',"(",")", "&nbsp;", "\n", "\r"), "", $sLD);
-                $sLD = trim(strtolower($sLD));
-                $aLD = explode(" ", $sLD);
-
-                $sLD = '';
-                $aStopWords = array("die", "das", "die", "dieses", "aus", "in", "das", "den", "und", "mit", "ist", "so", "dem", "de", "die", "el","für"
-                ,"das","is","im","hat","nur","du","sie","ihr","diese","als","da","kann","wenn","ein","eine","dein","der","nicht","viel","jede","zum","sich","ja","bis"
-                ,"auf","oder","von","des","ab","dieser","vor","dir","von","einige","nach", "bei", "deiner","wie","also","sind","ins","einem", "wird", "am", "-", "22cm", "man", "24x19x4cm", "of", "es", "auch", "einen", "noch", "war", "waren", "wir", "aber", "haben");
-                foreach ($aLD as $ld) {
-                    if ($ld && !in_array($ld, $aStopWords) && !is_numeric($ld)) {
-                        $sLD .= $ld." ";
-                    }
-                }
-            } catch (Exception $e) {
-            }
-
-            $sLD = self::prepareTags($sLD);
-
-            echo $sLD."<br><br>\n";
-
-            $sQ = "update oxartextends set oxtags".oxLang::getLanguageTag($iLang)." = '$sLD' where oxid = '".$rs->fields['oxid']."'";
-            oxDb::getDb(true)->execute($sQ);
-            $rs->moveNext();
-        }
-    }
-
-    /**
      * Returns tag array
      *
      * @param string $sArtId     article id
@@ -98,18 +54,17 @@ class oxTagCloud extends oxSuperCfg
      */
     public function getTags($sArtId = null, $blExtended = false)
     {
+        $oDb = oxDb::getDb(true);
         if ($blExtended) {
             $iAmount = OXTAGCLOUD_EXTENDEDCOUNT;
         } else {
             $iAmount = OXTAGCLOUD_STARTPAGECOUNT;
         }
 
-        //$oArticle = oxNew("oxarticle");
-        //$sQ = "select oxtags from oxarticles where " . $oArticle->getSqlActiveSnippet();
         $sArticleSelect = " 1 ";
-        if ($sArtId) {
-            $sArtId = mysql_real_escape_string($sArtId);
-            $sArticleSelect = " oxarticles.oxid = '$sArtId' ";
+        if ( $sArtId ) {
+            $sArtId = $oDb->quote( $sArtId );
+            $sArticleSelect = " oxarticles.oxid = $sArtId ";
             $iAmount = 0;
         }
 
@@ -118,13 +73,13 @@ class oxTagCloud extends oxSuperCfg
         $sArtView = getViewName('oxarticles');
         $sQ = "select $sField as oxtags from $sArtView as oxarticles left join oxartextends on oxarticles.oxid=oxartextends.oxid where oxarticles.oxactive=1 AND $sArticleSelect";
         //$sQ = "select $sField from oxartextends where $sArticleSelect";
-        $rs = oxDb::getDb(true)->execute($sQ);
+        $rs = $oDb->execute( $sQ );
         $aTags = array();
-        while ($rs && $rs->recordCount() && !$rs->EOF) {
-            $sTags = $this->trimTags($rs->fields['oxtags']);
-            $aArticleTags = explode(' ', $sTags);
-            foreach ($aArticleTags as $sTag) {
-                if (trim($sTag)) {
+        while ( $rs && $rs->recordCount() && !$rs->EOF ) {
+            $sTags = $this->trimTags( $rs->fields['oxtags'] );
+            $aArticleTags = explode( ' ', $sTags );
+            foreach ( $aArticleTags as $sTag ) {
+                if ( trim( $sTag ) ) {
                     ++$aTags[$sTag];
                 }
             }
@@ -132,13 +87,12 @@ class oxTagCloud extends oxSuperCfg
         }
 
         //taking only top tags
-        if ($iAmount) {
+        if ( $iAmount ) {
             arsort($aTags);
             $aTags = array_slice($aTags, 0, $iAmount, true );
         }
 
         ksort($aTags);
-
         return $aTags;
     }
 
@@ -154,12 +108,13 @@ class oxTagCloud extends oxSuperCfg
     {
         $sTagCloud = "";
         $sCacheKey = $this->_getCacheKey($blExtended);
-        if ($this->_sCacheKey && !$sArtId) {
-            $sTagCloud = oxUtils::getInstance()->fromFileCache($sCacheKey);
+        if ( $this->_sCacheKey && !$sArtId ) {
+            $sTagCloud = oxUtils::getInstance()->fromFileCache( $sCacheKey );
         }
 
-        if ($sTagCloud)
+        if ( $sTagCloud ) {
             return $sTagCloud;
+        }
 
         startProfile('trimTags');
         $aTags = $this->getTags($sArtId, $blExtended);
@@ -182,7 +137,7 @@ class oxTagCloud extends oxSuperCfg
             if ( $blSeoIsActive) {
                 $sLink = $oSeoEncoder->getDynamicUrl( "index.php?cl=tag&amp;searchtag=".rawurlencode($sTag), "tag/$sTag/", $iLang );
             }
-            $sTagCloud .= "<a style='font-size:". $this->_getFontSize($sRelevance, $iMaxHit) ."%;' href='$sLink'>".htmlentities($sTag)."</a> ";
+            $sTagCloud .= "<a style='font-size:". $this->_getFontSize($sRelevance, $iMaxHit) ."%;' href='$sLink'>".htmlentities($sTag, ENT_QUOTES, 'UTF-8')."</a> ";
         }
 
         if ($this->_sCacheKey && !$sArtId) {
@@ -228,26 +183,21 @@ class oxTagCloud extends oxSuperCfg
      *
      * @return string
      */
-    public function prepareTags($sTags)
+    public function prepareTags( $sTags )
     {
-        $aTags = explode(' ', $sTags);
+        $aTags = explode( ' ', $sTags );
         $sRes = '';
-        foreach ($aTags as $sTag) {
-            if (!strlen($sTag)) {
-                continue;
-            }
-
-            if (strlen($sTag) < OXTAGCLOUD_MINTAGLENGTH) {
-                $sLength = strlen($sTag);
-                for ($i = 0; $i < OXTAGCLOUD_MINTAGLENGTH - $sLength; $i++) {
-                    $sTag .= '_';
+        foreach ( $aTags as $sTag ) {
+            if ( ( $iLen = getStr()->strlen( $sTag ) ) ) {
+                if ( $iLen < OXTAGCLOUD_MINTAGLENGTH ) {
+                    $sTag .= str_repeat( '_', OXTAGCLOUD_MINTAGLENGTH - $iLen );
                 }
-            }
 
-            $sRes .= strtolower($sTag) . " ";
+                $sRes .= getStr()->strtolower( $sTag ) . " ";
+            }
         }
 
-        return trim ($sRes);
+        return trim( $sRes );
     }
 
     /**
@@ -261,19 +211,13 @@ class oxTagCloud extends oxSuperCfg
     {
         $aTags = explode(' ', $sTags);
         $sRes = '';
-        foreach ($aTags as $sTag) {
-            if (!strlen($sTag)) {
-                continue;
+        foreach ( $aTags as $sTag ) {
+            if ( getStr()->strlen( $sTag ) ) {
+                $sRes .= rtrim( $sTag, '_' ) . " ";
             }
-
-            while($sTag[strlen($sTag) - 1] == '_') {
-                $sTag = substr($sTag, 0, -1);
-            }
-
-            $sRes .= $sTag . " ";
         }
 
-        return trim ($sRes);
+        return trim( $sRes );
     }
 
     /**

@@ -21,8 +21,8 @@
             <form method="post" action="[{ $oViewConf->getSelfActionLink() }]" name="_filterlist" id="_filterlist">
             <div class="catfilter">
                 [{ $oViewConf->getHiddenSid() }]
+                [{ $oViewConf->getNavFormParams() }]
                 <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
-                <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
                 <input type="hidden" name="tpl" value="[{$tpl}]">
                 <input type="hidden" name="fnc" value="executefilter">
                 [{foreach from=$oView->getAttributes() item=oFilterAttr key=sAttrID name=testAttr}]
@@ -46,11 +46,11 @@
             <hr size="1">
             <ul class="list">
             [{foreach from=$oView->getSubCatList() item=category name=MoreSubCat}]
-		        [{if $category->getContentCats() }]
-		            [{foreach from=$category->getContentCats() item=ocont name=MoreCms}]
-		            <li><a id="test_MoreSubCms_[{$smarty.foreach.MoreSubCat.iteration}]_[{$smarty.foreach.MoreCms.iteration}]" href="[{$ocont->getLink()}]">[{ $ocont->oxcontents__oxtitle->value }]</a></li>
-		            [{/foreach}]
-		        [{/if}]
+                [{if $category->getContentCats() }]
+                    [{foreach from=$category->getContentCats() item=ocont name=MoreCms}]
+                    <li><a id="test_MoreSubCms_[{$smarty.foreach.MoreSubCat.iteration}]_[{$smarty.foreach.MoreCms.iteration}]" href="[{$ocont->getLink()}]">[{ $ocont->oxcontents__oxtitle->value }]</a></li>
+                    [{/foreach}]
+                [{/if}]
                 [{if $category->getIsVisible()}]
                     [{if $category->oxcategories__oxicon->value }]
                         <a id="test_MoreSubCatIco_[{$smarty.foreach.MoreSubCat.iteration}]" href="[{ $category->getLink() }]">

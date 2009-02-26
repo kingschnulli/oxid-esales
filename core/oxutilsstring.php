@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxutilsstring.php 15904 2009-01-27 07:08:10Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxutilsstring.php 16552 2009-02-13 18:28:48Z tomas $
  */
 
 /**
@@ -38,7 +38,7 @@ class oxUtilsString
      *
      * @var array
      */
-    protected $_aUmls = array( "\344", "\366", "\374", "\304", "\326", "\334", "\337" );
+    protected $_aUmls = array( "\xc3\xa4", "\xc3\xb6", "\xc3\xbc", "\xC3\x84", "\xC3\x96", "\xC3\x9C", "\xC3\x9F" );
 
     /**
      * oxUtilsString::$_aUmls equivalent in entities form
@@ -105,8 +105,8 @@ class oxUtilsString
         $sString = ereg_replace( "^[ \t\n\r\v]+|[ \t\n\r\v]+$", "", $sString );
         //multiple whitespaces
         $sString = ereg_replace( "[ \t\n\r\v]+", " ", $sString );
-        if ( strlen( $sString ) > $iLength && $iLength != -1 ) {
-            $sString = substr( $sString, 0, $iLength );
+        if ( getStr()->strlen( $sString ) > $iLength && $iLength != -1 ) {
+            $sString = getStr()->substr( $sString, 0, $iLength );
         }
         return $sString;
     }
@@ -120,7 +120,7 @@ class oxUtilsString
      */
     public function prepareStrForSearch($sSearchStr)
     {
-        if ( preg_match( "/(".implode( "|", $this->_aUmls  )."|(&amp;))/", $sSearchStr ) ) {
+        if ( preg_match( "/(".implode( "|", $this->_aUmls  )."|(&amp;))/u", $sSearchStr ) ) {
             return $this->recodeEntities( $sSearchStr, true,
                                           $this->_aUmls + array( count( $this->_aUmls ) => '&amp;' ),
                                           $this->_aUmlEntities + array( count( $this->_aUmlEntities ) => '&' ) );
@@ -131,8 +131,8 @@ class oxUtilsString
 
     /**
      * Recodes and returns passed input:
-     *     if $blToHtmlEntities == true  ä -> &auml;
-     *     if $blToHtmlEntities == false &auml; -> ä
+     *     if $blToHtmlEntities == true  ï¿½ -> &auml;
+     *     if $blToHtmlEntities == false &auml; -> ï¿½
      *
      * @param string $sInput           text to recode
      * @param bool   $blToHtmlEntities recode direction

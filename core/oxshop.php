@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxshop.php 14221 2008-11-17 08:37:08Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxshop.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /**

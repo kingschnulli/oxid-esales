@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxubase.php 14985 2009-01-08 08:46:30Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxubase.php 16493 2009-02-12 11:27:48Z arvydas $
  */
 
 /**
@@ -90,6 +90,12 @@ class oxUBase extends oxView
     protected $_oVendorTree  = null;
 
     /**
+     * Manufacturer list object.
+     * @var object
+     */
+    protected $_oManufacturerTree  = null;
+
+    /**
      * Category tree object.
      * @var oxcategorylist
      */
@@ -126,10 +132,7 @@ class oxUBase extends oxView
     protected $_iNewsRealStatus  = null;
 
     /**
-     * Executes parent method parent::init(). If oxUBase::_blCommonAdded
-     * is true - in array oxUBase::_aComponentNames stores newly defined
-     * component names and allready registered in oxUBase::_aUserComponentNames
-     *
+     * Url parameters which block redirection
      * @return null
      */
     protected $_aBlockRedirectParams = array( 'fnc' );
@@ -151,6 +154,24 @@ class oxUBase extends oxView
      * @var string
      */
     protected $_sVendorId = null;
+
+    /**
+     * Manufacturer list for search
+     * @var array
+     */
+    protected $_aManufacturerlist = null;
+
+    /**
+     * Root manufacturer object
+     * @var object
+     */
+    protected $_oRootManufacturer = null;
+
+    /**
+     * Manufacturer id
+     * @var string
+     */
+    protected $_sManufacturerId = null;
 
     /**
      * Category tree for search
@@ -413,9 +434,7 @@ class oxUBase extends oxView
      */
     public function getViewProduct()
     {
-        if ( $this->_oProduct ) {
-            return $this->_oProduct;
-        }
+        return $this->getProduct();
     }
 
     /**
@@ -522,24 +541,49 @@ class oxUBase extends oxView
         // this may be usefull when category component was unable to load active vendor
         // and we still need some object to mount navigation info
         if ( $this->_oActVendor === null ) {
-
             $this->_oActVendor = false;
             $sVendorId = oxConfig::getParameter( 'cnid' );
             $sVendorId = $sVendorId ? str_replace( 'v_', '', $sVendorId ) : $sVendorId;
-
-            $oVendor = oxNew( 'oxvendor' );
-
             if ( 'root' == $sVendorId ) {
-                $oVendor->setId( $sVendorId );
-                $oVendor->oxvendor__oxtitle     = new oxField( oxLang::getInstance()->translateString( 'byBrand' ) );
-                $oVendor->oxcategories__oxtitle = clone( $oVendor->oxvendor__oxtitle );
-                $this->_oActVendor = $oVendor;
-            } elseif ( $oVendor->load( $sVendorId ) ) {
-                $this->_oActVendor = $oVendor;
+                $this->_oActVendor = oxVendor::getRootVendor();
+            } elseif ( $sVendorId ) {
+                $oVendor = oxNew( 'oxvendor' );
+                if ( $oVendor->load( $sVendorId ) ) {
+                    $this->_oActVendor = $oVendor;
+                }
             }
         }
 
         return $this->_oActVendor;
+    }
+
+    /**
+     * Returns active Manufacturer set by categories component; if Manufacturer is
+     * not set by component - will create Manufacturer object and will try to
+     * load by id passed by request
+     *
+     * @return oxmanufacturer
+     */
+    public function getActManufacturer()
+    {
+        // if active Manufacturer is not set yet - trying to load it from request params
+        // this may be usefull when category component was unable to load active Manufacturer
+        // and we still need some object to mount navigation info
+        if ( $this->_oActManufacturer === null ) {
+
+            $this->_oActManufacturer = false;
+            $sManufacturerId = oxConfig::getParameter( 'mnid' );
+            if ( 'root' == $sManufacturerId ) {
+                $this->_oActManufacturer = oxManufacturer::getRootManufacturer();
+            } elseif ( $sManufacturerId ) {
+                $oManufacturer = oxNew( 'oxmanufacturer' );
+                if ( $oManufacturer->load( $sManufacturerId ) ) {
+                    $this->_oActManufacturer = $oManufacturer;
+                }
+            }
+        }
+
+        return $this->_oActManufacturer;
     }
 
     /**
@@ -552,6 +596,18 @@ class oxUBase extends oxView
     public function setActVendor( $oVendor )
     {
         $this->_oActVendor = $oVendor;
+    }
+
+    /**
+     * Active Manufacturer setter
+     *
+     * @param oxmanufacturer $oManufacturer active Manufacturer
+     *
+     * @return null
+     */
+    public function setActManufacturer( $oManufacturer )
+    {
+        $this->_oActManufacturer = $oManufacturer;
     }
 
     /**
@@ -577,7 +633,7 @@ class oxUBase extends oxView
     public function getActRecommList()
     {
         if ( $this->_oActRecomm === null ) {
-            $this->_oActVendor = false;
+            $this->_oActRecomm = false;
             $sRecommId = oxConfig::getParameter( 'recommid' );
 
             $oRecommList = oxNew( 'oxrecommlist' );
@@ -633,6 +689,27 @@ class oxUBase extends oxView
         $this->_oVendorTree = $oVendorTree;
     }
 
+    /**
+     * Returns Manufacturer tree (if it is loaded0
+     *
+     * @return oxManufacturerlist
+     */
+    public function getManufacturerTree()
+    {
+        return $this->_oManufacturerTree;
+    }
+
+    /**
+     * Manufacturer tree setter
+     *
+     * @param oxManufacturerlist $oManufacturerTree Manufacturer tree
+     *
+     * @return null
+     */
+    public function setManufacturerTree( $oManufacturerTree )
+    {
+        $this->_oManufacturerTree = $oManufacturerTree;
+    }
     /**
      * Loads article actions: top articles, bargain - right side and top 5 articles
      *
@@ -831,6 +908,28 @@ class oxUBase extends oxView
     }
 
     /**
+     * Template variable getter. Returns Manufacturerlist for search
+     *
+     * @return array
+     */
+    public function getManufacturerlist()
+    {
+        return $this->_aManufacturerlist;
+    }
+
+    /**
+     * Sets Manufacturerlist for search
+     *
+     * @param array $aList
+     *
+     * @return null
+     */
+    public function setManufacturerlist( $aList )
+    {
+        $this->_aManufacturerlist = $aList;
+    }
+
+    /**
      * Sets root vendor
      *
      * @param object $oVendor
@@ -853,6 +952,28 @@ class oxUBase extends oxView
     }
 
     /**
+     * Sets root Manufacturer
+     *
+     * @param object $oManufacturer
+     *
+     * @return null
+     */
+    public function setRootManufacturer( $oManufacturer )
+    {
+        $this->_oRootManufacturer = $oManufacturer;
+    }
+
+    /**
+     * Template variable getter. Returns root Manufacturer
+     *
+     * @return object
+     */
+    public function getRootManufacturer()
+    {
+        return $this->_oRootManufacturer;
+    }
+
+    /**
      * Template variable getter. Returns vendor id
      *
      * @return string
@@ -860,11 +981,28 @@ class oxUBase extends oxView
     public function getVendorId()
     {
         if ( $this->_sVendorId === null ) {
+            $this->_sVendorId = false;
             if ( ( $oVendor = $this->getActVendor() ) ) {
                 $this->_sVendorId = $oVendor->getId();
             }
         }
         return $this->_sVendorId;
+    }
+
+    /**
+     * Template variable getter. Returns Manufacturer id
+     *
+     * @return string
+     */
+    public function getManufacturerId()
+    {
+        if ( $this->_sManufacturerId === null ) {
+            $this->_sManufacturerId = false;
+            if ( ( $oManufacturer = $this->getActManufacturer() ) ) {
+                $this->_sManufacturerId = $oManufacturer->getId();
+            }
+        }
+        return $this->_sManufacturerId;
     }
 
     /**

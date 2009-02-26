@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxerpgenimport.php 16000 2009-01-28 15:27:22Z rimvydas.paskevicius $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxerpgenimport.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
 /**
@@ -62,6 +62,30 @@ class oxErpGenImport extends oxErpCsv {
     protected $_blCsvContainsHeader = null;
 
     /**
+     * Only used for convenience in UNIT tests by doing so we avoid
+     * writing extended classes for testing protected or private methods
+     *
+     * @param string $sMethod Methods name
+     * @param array  $aArgs   Argument array
+     *
+     * @throws oxSystemComponentException Throws an exception if the called method does not exist or is not accessable in current class
+     *
+     * @return string
+     */
+    public function __call( $sMethod, $aArgs )
+    {
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            if ( substr( $sMethod, 0, 4) == "UNIT" ) {
+                $sMethod = str_replace( "UNIT", "_", $sMethod );
+            }
+            if ( method_exists( $this, $sMethod)) {
+                return call_user_func_array( array( & $this, $sMethod ), $aArgs );
+            }
+        }
+
+        throw new oxSystemComponentException( "Function '$sMethod' does not exist or is not accessible! (" . get_class($this) . ")".PHP_EOL);
+    }
+        /**
      * Class constructor.
      *
      * @return null
@@ -75,6 +99,8 @@ class oxErpGenImport extends oxErpCsv {
      * Get instance of type
      *
      * @param string $sType
+     *
+     * @throws Exeption
      *
      * @return object
      */
@@ -300,10 +326,10 @@ class oxErpGenImport extends oxErpCsv {
         try {
             $this->init(null, null);
         }catch(Exception $ex){
-            return self::$ERROR_USER_NO_RIGHTS;
+            return $this->_sReturn = 'ERPGENIMPORT_ERROR_USER_NO_RIGHTS';
         }
 
-        $file = fopen($this->_sPath, "r");
+        $file = @fopen($this->_sPath, "r");
 
         if(isset($file) && $file){
             $iRow = 0;
@@ -322,20 +348,17 @@ class oxErpGenImport extends oxErpCsv {
             try {
                 $this->Import();
             } catch (Exception $ex) {
-                $this->_sReturn .= self::$ERROR_DURING_IMPORT.PHP_EOL;
+                echo $ex->getMessage();
+                $this->_sReturn = 'ERPGENIMPORT_ERROR_DURING_IMPORT';
             }
 
         } else {
-            return self::$ERROR_WRONG_FILE;
+            $this->_sReturn = 'ERPGENIMPORT_ERROR_WRONG_FILE';
         }
-        fclose($file);
 
-        if(strlen($this->_sReturn)==0) {
-            $this->_sReturn .= self::$IMPORT_DONE;
-        }
+        @fclose($file);
+
         return $this->_sReturn;
     }
-
-
 
 }

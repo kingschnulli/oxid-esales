@@ -17,12 +17,12 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxlocator.php 13629 2008-10-24 11:33:47Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxlocator.php 16697 2009-02-23 09:29:44Z arvydas $
  */
 
 /**
- * Locator controller for: category, vendor and search lists.
+ * Locator controller for: category, vendor, manufacturers and search lists.
  */
 class oxLocator extends oxSuperCfg
 {
@@ -80,7 +80,7 @@ class oxLocator extends oxSuperCfg
         $this->$sLocfnc( $oLocatorTarget, $oCurrArticle );
 
         // passing list type to view
-        $oLocatorTarget->setListType( 'sListType', $this->_sType );
+        $oLocatorTarget->setListType( $this->_sType );
     }
 
     /**
@@ -178,11 +178,11 @@ class oxLocator extends oxSuperCfg
 
             // forcing vendor links
             if ( $this->_oNextProduct ) {
-                $this->_oNextProduct->setLinkType( 1 );
+                $this->_oNextProduct->setLinkType( OXARTICLE_LINKTYPE_VENDOR );
             }
 
             if ( $this->_oBackProduct ) {
-                $this->_oBackProduct->setLinkType( 1 );
+                $this->_oBackProduct->setLinkType( OXARTICLE_LINKTYPE_VENDOR );
             }
 
             $oVendor->nextProductLink = $this->_oNextProduct?$this->_makeLink( $this->_oNextProduct->getLink(), $sAdd ):null;
@@ -203,11 +203,79 @@ class oxLocator extends oxSuperCfg
     }
 
     /**
+     * Sets details locator data for articles that came from Manufacturer list.
+     *
+     * Template variables:
+     * <b>actCatpath</b>
+     *
+     * @param object    $oLocatorTarget oxview object
+     * @param oxarticle $oCurrArticle   current article
+     *
+     * @return null
+     */
+    protected function _setManufacturerLocatorData( $oLocatorTarget, $oCurrArticle )
+    {
+        if ( ( $oManufacturer = $oLocatorTarget->getActManufacturer() ) ) {
+            $sManufacturerId = $oManufacturer->getId();
+
+            // loading data for article navigation
+            $oIdList = oxNew( "oxarticlelist" );
+            if ( $oLocatorTarget->showSorting() ) {
+                $oLocatorTarget->prepareSortColumns();
+                $oIdList->setCustomSorting( $oLocatorTarget->getSortingSql( "$sManufacturerId:manufacturer" ) );
+            }
+            $oIdList->loadManufacturerIds( $sManufacturerId );
+
+            //page number
+            $iPage = $this->_findActPageNumber( $oLocatorTarget->getActPage(), $oIdList, $oCurrArticle );
+
+            $sAdd = null;
+            if ( !oxUtils::getInstance()->seoIsActive() ) {
+                $sAdd = 'listtype=manufacturer&amp;mnid='.$sManufacturerId;
+            }
+
+            // setting product position in list, amount of articles etc
+            $oManufacturer->iCntOfProd  = $oIdList->count();
+            $oManufacturer->iProductPos = $this->_getProductPos( $oCurrArticle, $oIdList );
+
+            if ( oxUtils::getInstance()->seoIsActive() && $iPage ) {
+                $oManufacturer->toListLink = oxSeoEncoderManufacturer::getInstance()->getManufacturerPageUrl( $oManufacturer, $iPage );
+            } else {
+                $oManufacturer->toListLink  = $this->_makeLink( $oManufacturer->getLink(), $this->_getPageNumber( $iPage ) );
+            }
+
+            // forcing Manufacturer links
+            if ( $this->_oNextProduct ) {
+                $this->_oNextProduct->setLinkType( OXARTICLE_LINKTYPE_MANUFACTURER );
+            }
+
+            if ( $this->_oBackProduct ) {
+                $this->_oBackProduct->setLinkType( OXARTICLE_LINKTYPE_MANUFACTURER );
+            }
+
+            $oManufacturer->nextProductLink = $this->_oNextProduct?$this->_makeLink( $this->_oNextProduct->getLink(), $sAdd ):null;
+            $oManufacturer->prevProductLink = $this->_oBackProduct?$this->_makeLink( $this->_oBackProduct->getLink(), $sAdd ):null;
+
+            // active Manufacturer
+            $oLocatorTarget->setActiveCategory( $oManufacturer );
+            // for compatibility reasons for a while. will be removed in future
+            $oLocatorTarget->addTplParam( 'actCategory', $oLocatorTarget->getActiveCategory() );
+
+            // Manufacturer path
+            if ( ( $oManufacturerTree = $oLocatorTarget->getManufacturerTree() ) ) {
+                $oLocatorTarget->setCatTreePath( $oManufacturerTree->getPath() );
+                // for compatibility reasons for a while. will be removed in future
+                $oLocatorTarget->addTplParam( 'actCatpath', $oLocatorTarget->getCatTreePath() );
+            }
+        }
+    }
+
+    /**
      * Sets details locator data for articles that came from search list.
      *
      * Template variables:
      * <b>sSearchTitle</b>, <b>searchparam</b>,
-     * <b>searchparamforhtml</b>, <b>searchcnid</b>, <b>searchvendor</b>
+     * <b>searchparamforhtml</b>, <b>searchcnid</b>, <b>searchvendor</b>, <b>searchmanufacturer</b>
      *
      * @param object    $oLocatorTarget oxview object
      * @param oxarticle $oCurrArticle   current article
@@ -229,13 +297,16 @@ class oxLocator extends oxSuperCfg
             $sSearchVendor = oxConfig::getParameter( 'searchvendor' );
             $sSearchVendor = $sSearchVendor?rawurldecode( $sSearchVendor ):$sSearchVendor;
 
+            $sSearchManufacturer = oxConfig::getParameter( 'searchmanufacturer' );
+            $sSearchManufacturer = $sSearchManufacturer?rawurldecode( $sSearchManufacturer ):$sSearchManufacturer;
+
             // loading data for article navigation
             $oIdList = oxNew( 'oxarticlelist' );
             if ( $oLocatorTarget->showSorting() ) {
                 $oLocatorTarget->prepareSortColumns();
                 $oIdList->setCustomSorting( $oLocatorTarget->getSortingSql( 'oxsearch' ) );
             }
-            $oIdList->loadSearchIds( $sSearchParam, $sSearchCat, $sSearchVendor );
+            $oIdList->loadSearchIds( $sSearchParam, $sSearchCat, $sSearchVendor, $sSearchManufacturer );
 
             //page number
             $iPage = $this->_findActPageNumber( $oLocatorTarget->getActPage(), $oIdList, $oCurrArticle );
@@ -247,6 +318,10 @@ class oxLocator extends oxSuperCfg
 
             if ( $sSearchVendor !== null ) {
                 $sAddSearch .= "&amp;searchvendor={$sSearchVendor}";
+            }
+
+            if ( $sSearchManufacturer !== null ) {
+                $sAddSearch .= "&amp;searchmanufacturer={$sSearchManufacturer}";
             }
 
             // setting product position in list, amount of articles etc
@@ -266,6 +341,7 @@ class oxLocator extends oxSuperCfg
             $oLocatorTarget->addTplParam( 'searchparam', $sSearchLinkParam );
             $oLocatorTarget->addTplParam( 'searchcnid', $sSearchCat );
             $oLocatorTarget->addTplParam( 'searchvendor', $sSearchVendor );
+            $oLocatorTarget->addTplParam( 'searchmanufacturer', $sSearchManufacturer );
             $oLocatorTarget->addTplParam( 'searchparamforhtml', $sSearchFormParam );
 
             $oLocatorTarget->setActiveCategory( $oSearchCat );
@@ -315,7 +391,7 @@ class oxLocator extends oxSuperCfg
             $oTag->nextProductLink = $this->_oNextProduct?$this->_makeLink( $this->_oNextProduct->getLink(), $sAddSearch ):null;
             $oTag->prevProductLink = $this->_oBackProduct?$this->_makeLink( $this->_oBackProduct->getLink(), $sAddSearch ):null;
 
-            $oLocatorTarget->setSearchTitle( oxLang::getInstance()->translateString('TAGS').' / '.htmlspecialchars( ucfirst( $oTag->sTag ) ) );
+            $oLocatorTarget->setSearchTitle( oxLang::getInstance()->translateString('TAGS').' / '.htmlspecialchars( ucfirst( $oTag->sTag ), ENT_QUOTES, 'UTF-8' ) );
             // for compatibility reasons for a while. will be removed in future
             $oLocatorTarget->addTplParam( 'sSearchTitle', $oLocatorTarget->getSearchTitle() );
             $oLocatorTarget->addTplParam( 'searchtagforhtml', null );

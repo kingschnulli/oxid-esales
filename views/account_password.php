@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: account_password.php 15261 2009-01-14 15:27:07Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: account_password.php 16489 2009-02-12 10:07:15Z arvydas $
  */
 
 
@@ -95,20 +95,17 @@ class Account_Password extends Account
         $sOldPass  = oxConfig::getParameter( 'password_old' );
         $sNewPass  = oxConfig::getParameter( 'password_new' );
         $sConfPass = oxConfig::getParameter( 'password_new_confirm' );
-
-        if ( !$sNewPass || !$sConfPass ) {
-            oxUtilsView::getInstance()->addErrorToDisplay('ACCOUNT_PASSWORD_ERRPASSWORDTOSHORT', false, true);
-            return;
-        }
-
-        if ( $sNewPass != $sConfPass ) {
-            oxUtilsView::getInstance()->addErrorToDisplay('ACCOUNT_PASSWORD_ERRPASSWDONOTMATCH', false, true);
-            return;
-        }
-
-        if ( strlen($sNewPass) < 6 ||  strlen($sConfPass) < 6 ) {
-            oxUtilsView::getInstance()->addErrorToDisplay('ACCOUNT_PASSWORD_ERRPASSWORDTOSHORT', false, true);
-            return;
+        
+        try {
+            $oUser->checkPassword( $sNewPass, $sConfPass, true );
+        } catch ( Exception $oExcp ) {            
+            switch ( $oExcp->getMessage() ) {
+                case 'EXCEPTION_INPUT_EMPTYPASS':
+                case 'EXCEPTION_INPUT_PASSTOOSHORT':
+                    return oxUtilsView::getInstance()->addErrorToDisplay('ACCOUNT_PASSWORD_ERRPASSWORDTOSHORT', false, true);
+                default:
+                    return oxUtilsView::getInstance()->addErrorToDisplay('ACCOUNT_PASSWORD_ERRPASSWDONOTMATCH', false, true);
+            }
         }
 
         if ( !$sOldPass || !$oUser->isSamePassword( $sOldPass ) ) {
@@ -121,7 +118,6 @@ class Account_Password extends Account
         if ( $oUser->save() ) {
             $this->_blPasswordChanged = true;
         }
-
     }
 
     /**

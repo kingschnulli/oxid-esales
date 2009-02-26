@@ -7,13 +7,6 @@
         [{$_login_additional_form_parameters}]
         <input type="hidden" name="fnc" value="login_noredirect">
         <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
-        <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
-        <input type="hidden" name="searchrecomm" value="[{$_login_searchrecomm}]">
-        <input type="hidden" name="searchtag" value="[{$_login_searchtag}]">
-        <input type="hidden" name="searchparam" value="[{$_login_searchparam}]">
-        <input type="hidden" name="searchcnid" value="[{$_login_searchcnid}]">
-        <input type="hidden" name="searchvendor" value="[{$_login_searchvendor}]">
-        <input type="hidden" name="listtype" value="[{$_login_listtype}]">
         <input type="hidden" name="pgNr" value="[{$_login_pgnr-1}]">
         <input type="hidden" name="tpl" value="[{$_login_tpl}]">
         <input type="hidden" name="CustomError" value='dyn_cmp_openidlogin_right'>

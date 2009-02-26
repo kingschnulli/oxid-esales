@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxdiscount.php 14378 2008-11-26 13:59:41Z vilma $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxdiscount.php 16609 2009-02-19 14:16:30Z arvydas $
  */
 
 /**
@@ -83,7 +83,7 @@ class oxDiscount extends oxI18n
     /**
      * Checks if discount is setup for article
      *
-     * @param object $oArticle article object
+     * @param oxarticle $oArticle article object
      *
      * @return bool
      */
@@ -98,12 +98,16 @@ class oxDiscount extends oxI18n
             return false;
         }
 
+        if ( $this->oxdiscount__oxpriceto->value < $oArticle->getBasePrice() ) {
+            return false;
+        }
+
         $myDB = oxDb::getDb();
 
         //check for global discount (no articles, no categories)
         $sQ = "select 1 from oxobject2discount where oxdiscountid = '{$this->oxdiscount__oxid->value}' and ( oxtype = 'oxarticles' or oxtype = 'oxcategories')";
         $blOk = (bool) $myDB->getOne( $sQ );
-        
+
         if ( !$blOk ) {
             return true;
         }

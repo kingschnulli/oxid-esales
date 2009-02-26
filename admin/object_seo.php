@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: object_seo.php 14813 2008-12-18 09:03:34Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: object_seo.php 16307 2009-02-05 10:31:42Z arvydas $
  */
 
 /**
@@ -29,7 +29,7 @@ class Object_Seo extends oxAdminDetails
     /**
      * Executes parent method parent::render(),
      * and returns name of template file
-     * "vendor_main.tpl".
+     * "object_main.tpl".
      *
      * @return string
      */
@@ -89,20 +89,44 @@ class Object_Seo extends oxAdminDetails
 
     /**
      * Returns objects seo url
+     *
+     * @param object $oObject object to return url
+     *
      * @return string
      */
     protected function _getSeoUrl( $oObject )
     {
         $iShopId  = oxConfig::getInstance()->getShopId();
-        $sQ = "select oxseourl from oxseo where oxobjectid = '".$oObject->getId()."' and oxshopid = '{$iShopId}' and oxlang = {$this->_iEditLang} ";
-        return oxDb::getDb()->getOne( $sQ );
+        return oxDb::getDb()->getOne( $this->_getSeoUrlQuery( $oObject, $iShopId ) );
     }
+
+    /**
+     * Returns query for selecting seo url
+     *
+     * @param object $oObject object to build query
+     *
+     * @return string
+     */
+     protected function _getSeoUrlQuery( $oObject, $iShopId )
+     {
+        return "select oxseourl from oxseo where oxobjectid = '".$oObject->getId()."' and oxshopid = '{$iShopId}' and oxlang = {$this->_iEditLang} ";
+     }
 
     /**
      * Returns seo object
      * @return mixed
      */
-    protected function _getObject( $sOxid ) {}
+    protected function _getObject( $sOxid )
+    {
+        if ( $this->_oObject === null ) {
+            // load object
+            $this->_oObject = oxNew( $this->_getType() );
+            if ( !$this->_oObject->loadInLang( $this->_iEditLang, $sOxid ) ) {
+                $this->_oObject = false;
+            }
+        }
+        return $this->_oObject;
+    }
 
     /**
      * Returns url type
@@ -114,7 +138,10 @@ class Object_Seo extends oxAdminDetails
      * Returns objects std url
      * @return string
      */
-    protected function _getStdUrl( $sOxid ) {}
+    protected function _getStdUrl( $sOxid )
+    {
+        return $this->_getObject( $sOxid )->getLink();
+    }
 
     /**
      * Saves selection list parameters changes.
@@ -137,10 +164,21 @@ class Object_Seo extends oxAdminDetails
             $oEncoder = oxSeoEncoder::getInstance();
             $oEncoder->addSeoEntry( $sOxid, $iShopId, $this->_iEditLang, $this->_getStdUrl( $sOxid ),
                                     $aSeoData['oxseourl'], $this->_getType(), $aSeoData['oxfixed'],
-                                    trim( $aSeoData['oxkeywords'] ), trim( $aSeoData['oxdescription'] ), $aSeoData['oxparams'] );
-
+                                    trim( $aSeoData['oxkeywords'] ), trim( $aSeoData['oxdescription'] ), $this->processParam( $aSeoData['oxparams'] ) );
         }
 
         return $this->autosave();
+    }
+
+    /**
+     * Processes parameter before writing to db
+     *
+     * @param string $sParam parameter to process
+     *
+     * @return string
+     */
+    public function processParam( $sParam )
+    {
+        return $sParam;
     }
 }

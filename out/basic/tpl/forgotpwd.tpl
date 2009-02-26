@@ -23,10 +23,10 @@
     <form action="[{ $oViewConf->getSelfActionLink() }]" name="order" method="post">
       <div>
           [{ $oViewConf->getHiddenSid() }]
+          [{ $oViewConf->getNavFormParams() }]
           <input type="hidden" name="fnc" value="updatePassword">
           <input type="hidden" name="uid" value="[{ $oView->getUpdateId() }]">
           <input type="hidden" name="cl" value="forgotpwd">
-          <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
       </div>
       <table class="form">
           <tr>
@@ -88,9 +88,9 @@
       <form action="[{ $oViewConf->getSelfActionLink() }]" name="order" method="post">
         <div>
           [{ $oViewConf->getHiddenSid() }]
+          [{ $oViewConf->getNavFormParams() }]
           <input type="hidden" name="fnc" value="forgotpassword">
           <input type="hidden" name="cl" value="forgotpwd">
-          <input type="hidden" name="cnid" value="[{$oViewConf->getActCatId()}]">
         </div>
         <table class="form">
           <tr>

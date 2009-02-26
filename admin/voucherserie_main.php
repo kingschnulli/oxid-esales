@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: voucherserie_main.php 14014 2008-11-06 13:26:22Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: voucherserie_main.php 16683 2009-02-21 15:23:49Z rimvydas.paskevicius $
  */
 
 /**
@@ -98,20 +98,6 @@ class VoucherSerie_Main extends oxAdminDetails
         //$aSerieParams = $oVoucherSerie->ConvertNameArray2Idx($aSerieParams);
         $oVoucherSerie->assign($aSerieParams);
         $oVoucherSerie->save();
-
-        // #614A
-        if ($soxId == "-1") {
-            // all usergroups
-            $oGroups = oxNew( "oxlist" );
-            $oGroups->init( "oxgroups" );
-            $oGroups->selectString( "select * from oxgroups" );
-            foreach ($oGroups as $sGroupID => $oGroup) {
-                $oNewGroup = oxNew( "oxobject2group" );
-                $oNewGroup->oxobject2group__oxobjectid = new oxField($oVoucherSerie->oxvoucherseries__oxid->value);
-                $oNewGroup->oxobject2group__oxgroupsid = new oxField($oGroup->oxgroups__oxid->value);
-                $oNewGroup->save();
-            }
-        }
 
         // Voucher processing
 

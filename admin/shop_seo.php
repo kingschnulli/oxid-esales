@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package admin
- * @copyright © OXID eSales AG 2003-2009
- * $Id: shop_seo.php 16098 2009-01-30 15:24:33Z arvydas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: shop_seo.php 16569 2009-02-17 09:25:51Z arvydas $
  */
 
 /**
@@ -151,13 +151,13 @@ class Shop_Seo extends Shop_Config
      */
     protected function _processUrls( $aUrls )
     {
-    	if ( isset( $aUrls['oxseo__oxstdurl'] ) && $aUrls['oxseo__oxstdurl'] ) {
+        if ( isset( $aUrls['oxseo__oxstdurl'] ) && $aUrls['oxseo__oxstdurl'] ) {
             $aUrls['oxseo__oxstdurl'] = $this->_cleanupUrl( $aUrls['oxseo__oxstdurl'] );
-    	}
+        }
 
         if ( isset( $aUrls['oxseo__oxseourl'] ) && is_array( $aUrls['oxseo__oxseourl'] ) ) {
             foreach ( $aUrls['oxseo__oxseourl'] as $iPos => $sUrl) {
-            	$aUrls['oxseo__oxseourl'][$iPos] = $this->_cleanupUrl( $sUrl );
+                $aUrls['oxseo__oxseourl'][$iPos] = $this->_cleanupUrl( $sUrl );
             }
         }
 
@@ -175,7 +175,7 @@ class Shop_Seo extends Shop_Config
     {
         // replacing &amp; to & or removing double &&
         while ( ( stripos( $sUrl, '&amp;' ) !== false ) || ( stripos( $sUrl, '&&' ) !== false ) ) {
-        	$sUrl = str_replace( '&amp;', '&', $sUrl );
+            $sUrl = str_replace( '&amp;', '&', $sUrl );
             $sUrl = str_replace( '&&', '&', $sUrl );
         }
 

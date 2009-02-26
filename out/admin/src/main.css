@@ -39,7 +39,7 @@ dl dd ul {padding:3px 0 0 0;}
 dl dd ul a {color:#535353}
 
 /* Lists */
-#liste {padding:5px 0 0;}
+#liste {padding: 5px 0 32px;}
 #liste td.listfilter {background: #f0f0f0 url(bg/filter_bg.gif) -1px 0 no-repeat;padding:0 0 0 5px;}
 #liste td.listfilter input, #liste td.listfilter  select{font-size: 11px;}
 #liste td.listfilter .r1{background: #f0f0f0 url(bg/filter_bg.gif) top right no-repeat;padding:0 5px 0 0;}
@@ -90,7 +90,7 @@ tr.conftext2 td {background-color:#f0f0f0;}
 .messagebox {color: #000;padding: 3px;background: #ffe;border: solid gray 1px;margin:1px 0;}
 
 /* Tabs */
-.tabs {position:absolute;bottom:0px;border-collapse: collapse;}
+.tabs {position:fixed;bottom:0px;border-collapse: collapse;}
 .tabs .tab {border-bottom:1px solid #7a7a7a;position:relative;background-color: #f0f0f0;}
 .tabs .tab .b1 {color:#787878;border-left:1px solid #7a7a7a;border-top:1px solid #7a7a7a;padding:5px 15px;}
 .tabs .tab .b1 a{color:#787878;}

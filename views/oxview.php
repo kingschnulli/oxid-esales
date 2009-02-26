@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package views
- * @copyright © OXID eSales AG 2003-2009
- * $Id: oxview.php 16106 2009-01-30 20:14:30Z tomas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: oxview.php 16683 2009-02-21 15:23:49Z rimvydas.paskevicius $
  */
 
 /**
@@ -89,6 +89,13 @@ class oxView extends oxSuperCfg
      * @var oxvendor
      */
     protected $_oActVendor = null;
+
+    /**
+     * Active Manufacturer object.
+     *
+     * @var oxManufacturer
+     */
+    protected $_oActManufacturer = null;
 
     /**
      * Active search object - Oxstdclass object which keeps navigation info
@@ -207,6 +214,12 @@ class oxView extends oxSuperCfg
      * @var bool
      */
     protected $_blLoadVendorTree = null;
+
+    /**
+     * Load Manufacturers option
+     * @var bool
+     */
+    protected $_blLoadManufacturerTree = null;
 
     /**
      * Dont show emty cats
@@ -464,9 +477,6 @@ class oxView extends oxSuperCfg
             foreach ( array_keys( $this->_oaComponents ) as $sComponentName ) {
                 $this->_aViewData[$sComponentName] = $this->_oaComponents[$sComponentName]->render();
             }
-
-            // set url and form navigation string
-            $this->_setNavigationParams();
         }
 
         return $this->_sThisTemplate;
@@ -528,6 +538,9 @@ class oxView extends oxSuperCfg
 
         // show/hide vendors
         $this->_aViewData['bl_perfLoadVendorTree'] = $this->loadVendorTree();
+
+        // show/hide Manufacturers
+        $this->_aViewData['bl_perfLoadManufacturerTree'] = $this->loadManufacturerTree();
 
         // show/hide empty categories
         $this->_aViewData['blDontShowEmptyCategories'] = $this->dontShowEmptyCategories();
@@ -651,7 +664,7 @@ class oxView extends oxSuperCfg
 
     /**
      * Sets additional parameters: cl, searchparam, searchcnid,
-     * searchvendor, cnid.
+     * searchvendor, searchmanufacturer, cnid.
      *
      * Template variables:
      * <b>additionalparams</b>
@@ -668,15 +681,23 @@ class oxView extends oxSuperCfg
         if ( isset( $sSearchParamForLink ) ) {
             $this->_sAdditionalParams .= "&amp;searchparam={$sSearchParamForLink}";
         }
-
+        if ( ( $sVar = oxConfig::getParameter( 'searchtag' ) ) ) {
+            $this->_sAdditionalParams .= '&amp;searchtag='.rawurlencode( rawurldecode( $sVar ) );
+        }
         if ( ( $sVar = oxConfig::getParameter( 'searchcnid' ) ) ) {
             $this->_sAdditionalParams .= '&amp;searchcnid='.rawurlencode( rawurldecode( $sVar ) );
         }
         if ( ( $sVar = oxConfig::getParameter( 'searchvendor' ) ) ) {
             $this->_sAdditionalParams .= '&amp;searchvendor='.rawurlencode( rawurldecode( $sVar ) );
         }
+        if ( ( $sVar = oxConfig::getParameter( 'searchmanufacturer' ) ) ) {
+            $this->_sAdditionalParams .= '&amp;searchmanufacturer='.rawurlencode( rawurldecode( $sVar ) );
+        }
         if ( ( $sVar = oxConfig::getParameter( 'cnid' ) ) ) {
             $this->_sAdditionalParams .= '&amp;cnid='.rawurlencode( rawurldecode( $sVar ) );
+        }
+        if ( ( $sVar = oxConfig::getParameter( 'mnid' ) ) ) {
+            $this->_sAdditionalParams .= '&amp;mnid='.rawurlencode( rawurldecode( $sVar ) );
         }
     }
 
@@ -796,21 +817,22 @@ class oxView extends oxSuperCfg
             $sString = implode( '  ', $aInput );
         }
 
+        // decoding html entities
+        $sString = html_entity_decode( $sString, ENT_QUOTES, 'UTF-8' );
+
         if ( $iLength != -1 ) {
             $iELength = ( $iLength * 2 );
             $sString = substr( $sString, 0, $iELength );
         }
 
-        // decoding html entities
-        $sString = html_entity_decode( $sString );
         // stripping HTML tags
         $sString = strip_tags( $sString );
 
         // removing some special chars
-        $aRemoveChars = array( "\"", "'", ".", ":", "!", "?", "\n", "\r", "\t", "\x95", "\xA0", ";" );
+        $aRemoveChars = array( "\"", "'", ".", ":", "!", "?", "\n", "\r", "\t", "\xc2\x95", "\xc2\xa0", ";" );
         $sString = str_replace( $aRemoveChars, ' ', $sString );
 
-        // removing duplicat words
+        // removing duplicate words
         if ( !$blDescTag ) {
             $sString = $this->_removeDuplicatedWords( $sString );
         }
@@ -895,51 +917,27 @@ class oxView extends oxSuperCfg
     }
 
     /**
-     * Formats url/form navigation parameters
-     *
-     * @return array navigation strings for url and form
-     */
-    protected function _setNavigationParams()
-    {
-        $aParams = $this->_getNavigationParams();
-
-        $aNavString['url']  = '';
-        $aNavString['form'] = '';
-
-        foreach ( $aParams as $sKey => $sValue ) {
-            if ( $sValue ) {
-
-                $aNavString['url'] .= '&amp;'.$sKey.'='.rawurlencode( $sValue );
-
-                // get searchparam for form in different way
-                if ( $sKey == 'searchparam' )
-                    $sValue = oxConfig::getParameter( 'searchparam' );
-
-                $aNavString['form'] .= "<input type=\"hidden\" name=\"$sKey\" value=\"$sValue\">\n";
-            }
-        }
-
-        $oViewConf = $this->getViewConfig();
-        $oViewConf->setViewConfigParam( 'navurlparams', $aNavString['url'] );
-        $oViewConf->setViewConfigParam( 'navformparams', $aNavString['form'] );
-    }
-
-    /**
-     * Returns array of params => values which are used in hidden forms and as additional url params
+     * Returns array of params => values which are used in hidden forms and as additional url params.
+     * NOTICE: this method SHOULD return raw (non encoded into entities) parameters, because values
+     * are processed by htmlentities() to avoid security and brokent templates problems
      *
      * @return array
      */
-    protected function _getNavigationParams()
+    public function getNavigationParams()
     {
-        $aParams['cnid']     = $this->getCategoryId();
-        $aParams['listtype'] = $this->getListType();
+        $aParams['cnid'] = $this->getCategoryId();
+        $aParams['mnid'] = oxConfig::getParameter( 'mnid' );
 
-        $aParams['recommid']     = oxConfig::getParameter( 'recommid' );
+        $aParams['listtype'] = $this->getListType();
+        $aParams['recommid'] = oxConfig::getParameter( 'recommid' );
+
         $aParams['searchrecomm'] = oxConfig::getParameter( 'searchrecomm', true );
         $aParams['searchparam']  = oxConfig::getParameter( 'searchparam', true );
-        $aParams['searchcnid']   = oxConfig::getParameter( 'searchcnid' );
+        $aParams['searchtag']    = oxConfig::getParameter( 'searchtag', true );
+
         $aParams['searchvendor'] = oxConfig::getParameter( 'searchvendor' );
-        $aParams['searchtag']    = oxConfig::getParameter( 'searchtag', 1 );
+        $aParams['searchcnid']   = oxConfig::getParameter( 'searchcnid' );
+        $aParams['searchmanufacturer'] = oxConfig::getParameter( 'searchmanufacturer' );
 
         return $aParams;
     }
@@ -972,7 +970,7 @@ class oxView extends oxSuperCfg
     /**
      * Get category ID
      *
-     * @return string $sListType
+     * @return string
      */
     public function getCategoryId()
     {
@@ -1458,6 +1456,15 @@ class oxView extends oxSuperCfg
                 if ( ( $sVar = oxConfig::getParameter( 'searchvendor' ) ) ) {
                     $sRet .= '&amp;searchvendor='.rawurlencode( rawurldecode( $sVar ) );
                 }
+                if ( ( $sVar = oxConfig::getParameter( 'searchmanufacturer' ) ) ) {
+                    $sRet .= '&amp;searchmanufacturer='.rawurlencode( rawurldecode( $sVar ) );
+                }
+               break;
+            case 'tag':
+                $sRet .= "&amp;listtype={$sListType}";
+                if ( $sParam = rawurlencode( oxConfig::getParameter( 'searchtag', 1 ) ) ) {
+                    $sRet .= "&amp;searchtag={$sParam}";
+                }
                break;
         }
 
@@ -1538,21 +1545,24 @@ class oxView extends oxSuperCfg
         // #680
         $sURL = "cl={$sClass}";
         if ( $sFnc ) {
-            $sURL       .= "&amp;fnc={$sFnc}";
+            $sURL .= "&amp;fnc={$sFnc}";
         }
         if ( $sVal = oxConfig::getParameter( 'cnid' ) ) {
-            $sURL       .= "&amp;cnid={$sVal}";
+            $sURL .= "&amp;cnid={$sVal}";
+        }
+        if ( $sVal = oxConfig::getParameter( 'mnid' ) ) {
+            $sURL .= "&amp;mnid={$sVal}";
         }
         if ( $sVal= oxConfig::getParameter( 'anid' ) ) {
             $sURL .= "&amp;anid={$sVal}";
         }
 
         if ( $sVal = basename( oxConfig::getParameter( 'page' ) ) ) {
-            $sURL       .= "&amp;page={$sVal}";
+            $sURL .= "&amp;page={$sVal}";
         }
 
         if ( $sVal = basename( oxConfig::getParameter( 'tpl' ) ) ) {
-            $sURL       .= "&amp;tpl={$sVal}";
+            $sURL .= "&amp;tpl={$sVal}";
         }
 
         $iPgNr = (int) oxConfig::getParameter( 'pgNr' );
@@ -1575,12 +1585,16 @@ class oxView extends oxSuperCfg
             $sURL .= "&amp;searchvendor={$sVal}";
         }
 
+        if ( $sVal = oxConfig::getParameter( 'searchmanufacturer' ) ) {
+            $sURL .= "&amp;searchmanufacturer={$sVal}";
+        }
+
         if ( $sVal = oxConfig::getParameter( 'searchrecomm' ) ) {
-            $sUrl .= "&amp;searchrecomm={$sVal}";
+            $sURL .= "&amp;searchrecomm={$sVal}";
         }
 
         if ( $sVal = oxConfig::getParameter( 'searchtag' ) ) {
-            $sUrl .= "&amp;searchtag={$sVal}";
+            $sURL .= "&amp;searchtag={$sVal}";
         }
 
         if ( $sVal = oxConfig::getParameter( 'recommid' ) ) {
@@ -1756,6 +1770,22 @@ class oxView extends oxSuperCfg
     }
 
     /**
+     * Returns if show/hide Manufacturers
+     *
+     * @return bool
+     */
+    public function loadManufacturerTree()
+    {
+        if ( $this->_blLoadManufacturerTree == null ) {
+            $this->_blLoadManufacturerTree = false;
+            if ( $blLoadManufacturerTree = $this->getConfig()->getConfigParam( 'bl_perfLoadManufacturerTree' ) ) {
+                $this->_blLoadManufacturerTree = $blLoadManufacturerTree;
+            }
+        }
+        return $this->_blLoadManufacturerTree;
+    }
+
+    /**
      * Returns true if empty categories are not loaded
      *
      * @return bool
@@ -1782,7 +1812,7 @@ class oxView extends oxSuperCfg
             $iLangId = (int) oxLang::getInstance()->getBaseLanguage();
             // compatibility to old data
             if ( !is_array( $aTrustedShopIds ) && $iLangId == 0 ) {
-            	$this->_sTrustedShopId = $aTrustedShopIds;
+                $this->_sTrustedShopId = $aTrustedShopIds;
             }
             if ( is_array( $aTrustedShopIds ) ) {
                 $this->_sTrustedShopId = $aTrustedShopIds[$iLangId];
@@ -2255,6 +2285,34 @@ class oxView extends oxSuperCfg
     public function setShopLogo( $sLogo )
     {
         $this->_sShopLogo = $sLogo;
+    }
+
+    /**
+     * Returns active lang suffix
+     *
+     * @return string
+     */
+    public function getActiveLangAbbr()
+    {
+        // Performance
+        if ( !$this->getConfig()->getConfigParam( 'bl_perfLoadLanguages' ) ) {
+            return;
+        }
+
+        if ( isset($this->_sActiveLangAbbr) && $this->_sActiveLangAbbr ) {
+            return $this->_sActiveLangAbbr;
+        }
+
+        $aLanguages = oxLang::getInstance()->getLanguageArray();
+
+        while ( list( $sKey, $oVal ) = each( $aLanguages ) ) {
+            if ( $oVal->selected ) {
+                $this->_sActiveLangAbbr = $oVal->abbr;
+                break;
+            }
+        }
+
+        return $this->_sActiveLangAbbr;
     }
 
 }

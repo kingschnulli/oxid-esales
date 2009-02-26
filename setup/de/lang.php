@@ -17,8 +17,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package setup
- * @copyright © OXID eSales AG 2003-2009
- * $Id: lang.php 15735 2009-01-21 16:17:45Z tomas $
+ * @copyright (C) OXID eSales AG 2003-2009
+ * $Id: lang.php 16722 2009-02-23 14:21:17Z philipp.grashoff $
  */
 
 $aLang = array(
@@ -67,7 +67,7 @@ $aLang = array(
 
 'MOD_MOD_REWRITE'                                 => 'Apache mod_rewrite Modul',
 'MOD_ALLOW_URL_FOPEN'                             => 'allow_url_fopen oder fsockopen auf Port 80',
-'MOD_PHP4_COMPAT'                                 => 'Zend Kompatibilit&auml;tsmodus ausgeschaltet',
+'MOD_PHP4_COMPAT'                                 => 'Zend Kompatibilit&auml;tsmodus muss ausgeschaltet sein',
 'MOD_PHPVERSION'                                  => 'PHP mindestens Version 5.2.0',
 'MOD_REQUEST_URI'                                 => 'REQUEST_URI vorhanden',
 'MOD_LIBXML2'                                     => 'LIB XML2',
@@ -76,12 +76,13 @@ $aLang = array(
 'MOD_ICONV'                                       => 'ICONV',
 'MOD_TOKENIZER'                                   => 'Tokenizer',
 'MOD_BCMATH'                                      => 'BCMath',
-'MOD_MYSQL_CONNECT'                               => 'MySQL Modul für MySQL 5',
+'MOD_MYSQL_CONNECT'                               => 'MySQL Modul fï¿½r MySQL 5',
 'MOD_GD_INFO'                                     => 'GDlib v2 [v1] incl. JPEG Unterst&uuml;tzung',
 'MOD_INI_SET'                                     => 'ini_set erlaubt',
-'MOD_REGISTER_GLOBALS'                            => 'register_globals ausgeschaltet',
+'MOD_REGISTER_GLOBALS'                            => 'register_globals muss ausgeschaltet sein',
 'MOD_ZEND_OPTIMIZER'                              => 'Zend Optimizer installiert',
 'MOD_ZEND_PLATFORM'                               => 'Zend Platform installiert',
+'MOD_MB_STRING'                                   => 'mbstring',
 
 'STEP_0_ERROR_TEXT'                               => 'Ihr System erf&uuml;llt nicht alle n&ouml;tigen Systemvoraussetzungen',
 'STEP_0_TEXT'                                     => '<ul class="req">'.
