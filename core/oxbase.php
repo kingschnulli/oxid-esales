@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxbase.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxbase.php 16907 2009-03-02 09:28:12Z vilma $
  */
 
 /**
@@ -691,11 +691,11 @@ class oxBase extends oxSuperCfg
         if ( $this->isAdmin() && !$this->getConfig()->getConfigParam( 'blSkipFormatConversion' ) ) {
             foreach ($this->_aFieldNames as $sName => $sVal) {
                 $sLongName = $this->_getFieldLongName($sName);
-                if ( $this->$sLongName->fldtype == "datetime" ) {
+                if ( isset($this->$sLongName->fldtype) && $this->$sLongName->fldtype == "datetime" ) {
                     oxDb::getInstance()->convertDBDateTime( $this->$sLongName, true );
-                } elseif ( $this->$sLongName->fldtype == "timestamp" ) {
+                } elseif ( isset($this->$sLongName->fldtype) && $this->$sLongName->fldtype == "timestamp" ) {
                     oxDb::getInstance()->convertDBTimestamp( $this->$sLongName, true);
-                } elseif ( $this->$sLongName->fldtype == "date" ) {
+                } elseif ( isset($this->$sLongName->fldtype) && $this->$sLongName->fldtype == "date" ) {
                     oxDb::getInstance()->convertDBDate( $this->$sLongName, true);
                 }
             }
@@ -1149,7 +1149,7 @@ class oxBase extends oxSuperCfg
             }
         }
         // if we have a double field we replace "," with "." in case somebody enters it in european format
-        if (isset($this->$sLongFieldName) && $this->$sLongFieldName->fldtype == "double") {
+        if (isset($this->$sLongFieldName) && isset($this->$sLongFieldName->fldtype) && $this->$sLongFieldName->fldtype == "double") {
             $sValue = str_replace( ",", ".", $sValue );
         }
 

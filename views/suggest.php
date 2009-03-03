@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: suggest.php 16750 2009-02-24 12:36:48Z vilma $
+ * $Id: suggest.php 16884 2009-02-27 13:16:59Z vilma $
  */
 
 /**
@@ -134,7 +134,8 @@ class Suggest extends oxUBase
             $sReturn .= "&searchcnid=$sSearchCatId";
         }
 
-        if ( ( $sSearchVendor = oxConfig::getParameter( 'searchvendor' ) ) ) {
+        $sSearchVendor = oxConfig::getParameter( 'searchvendor' );
+        if ( $sSearchVendor ) {
             $sReturn .= "&searchvendor=$sSearchVendor";
         }
 

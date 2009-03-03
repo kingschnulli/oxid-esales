@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: help_lang.php 16419 2009-02-10 12:59:54Z vilma $
+ * $Id: help_lang.php 16904 2009-03-02 09:26:34Z philipp.grashoff $
  */
  
 /**
@@ -152,12 +152,12 @@ $aLang =  array(
 
 
 
-'HELP_SHOP_PERF_NEWESTARTICLES'					=>	"On the front page a list of newest products are shown in <i>Just arrived!</i>. Here you can set how the list is generated:" .
+'HELP_SHOP_PERF_NEWESTARTICLES'					=>	"A list of newest products are shown in <i>Just arrived!</i>. Here you can set how the list is generated:" .
 													"<ul><li><kbd>inactive</kbd>: The list is not shown.</li>" .
 													"<li><kbd>manual</kbd>: You can define the products in <em>Customer Info -> Promotions -></em> in the promotion <i>Just arrived!</i>.</li>" .
 													"<li><kbd>automatic</kbd>: The products are calculated automatically.</li></ul>", 
 
-'HELP_SHOP_PERF_TOPSELLER'						=>	"On the front page a list of most often sold products is shown in <i>Top of the Shop</i>. Here you can set how the list is generated:" .
+'HELP_SHOP_PERF_TOPSELLER'						=>	"A list of most often sold products is shown in <i>Top of the Shop</i>. Here you can set how the list is generated:" .
 													"<ul><li><kbd>inactive</kbd>: The list is not shown.</li>" .
 													"<li><kbd>manual</kbd>: You can define the products in <em>Customer Info -> Promotions -></em> in the promotion <i>Top of the Shop</i>.</li>" .
 													"<li><kbd>automatic</kbd>: The products are calculated automatically.</li></ul>", 

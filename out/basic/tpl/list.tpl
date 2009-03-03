@@ -25,15 +25,25 @@
                 <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
                 <input type="hidden" name="tpl" value="[{$tpl}]">
                 <input type="hidden" name="fnc" value="executefilter">
+
+                <table cellpadding="0" cellspacing="0">
                 [{foreach from=$oView->getAttributes() item=oFilterAttr key=sAttrID name=testAttr}]
-                    <label id="test_attrfilterTitle_[{$sAttrID}]_[{$smarty.foreach.testAttr.iteration}]">[{ $oFilterAttr->title }]:</label>
-                    <select name="attrfilter[[{ $sAttrID }]]" onchange="oxid.form.send('_filterlist');">
-                        <option value="" selected>[{ oxmultilang ident="LIST_PLEASECHOOSE" }]</option>
-                        [{foreach from=$oFilterAttr->aValues item=oValue}]
-                        <option value="[{ $oValue->id }]" [{ if $oValue->blSelected }]selected[{/if}]>[{ $oValue->value }]</option>
-                        [{/foreach}]
-                    </select>
+                    <tr>
+                        <td>
+                            <label id="test_attrfilterTitle_[{$sAttrID}]_[{$smarty.foreach.testAttr.iteration}]">[{ $oFilterAttr->title }]:</label>
+                        </td>
+                        <td>
+		                   <select name="attrfilter[[{ $sAttrID }]]" onchange="oxid.form.send('_filterlist');">
+		                       <option value="" selected>[{ oxmultilang ident="LIST_PLEASECHOOSE" }]</option>
+		                       [{foreach from=$oFilterAttr->aValues item=oValue}]
+		                       <option value="[{ $oValue->id }]" [{ if $oValue->blSelected }]selected[{/if}]>[{ $oValue->value }]</option>
+		                       [{/foreach}]
+		                   </select>
+                        </td>
+                    </tr>
                 [{/foreach}]
+                </table>
+
                 <noscript>
                     <input type="submit" value="[{ oxmultilang ident="LIST_APPLYFILTER" }]">
                 </noscript>

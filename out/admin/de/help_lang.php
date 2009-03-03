@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: help_lang.php 16424 2009-02-10 14:19:32Z vilma $
+ * $Id: help_lang.php 16902 2009-03-02 09:25:42Z philipp.grashoff $
  */
 
 /**
@@ -153,14 +153,14 @@ $aLang =  array(
 
 
 
-'HELP_SHOP_PERF_NEWESTARTICLES'					=>	"Auf der Startseite Ihres eShops wird eine Liste mit den neusten Artikeln (Frisch eingetroffen!) angezeigt. Hier können Sie einstellen, wie die Liste generiert wird:" .
+'HELP_SHOP_PERF_NEWESTARTICLES'					=>	"In Ihrem eShop wird eine Liste mit den neusten Artikeln (Frisch eingetroffen!) angezeigt. Hier können Sie einstellen, wie die Liste generiert wird:" .
 													"<ul><li><kbd>ausgeschaltet</kbd>: Die Liste wird nicht angezeigt</li>" .
-													"<li><kbd>manuell</kbd>: Sie können unter Kundeninformationen -> Aktionen verwalten in der Aktion 'Frisch eingetroffen' einstellen, welche Artikel in der Liste angezeigt werden</li>" .
+													"<li><kbd>manuell</kbd>: Sie können unter <em>Kundeninformationen -> Aktionen verwalten</em> in der Aktion <var>Frisch eingetroffen</var> einstellen, welche Artikel in der Liste angezeigt werden</li>" .
 													"<li><kbd>automatisch</kbd>: Die Liste der neusten Artikel wird automatisch berechnet.</li></ul>",
 
-'HELP_SHOP_PERF_TOPSELLER'						=>	"Auf der Startseite Ihres eShops wird eine Liste mit den meistverkauften Artikeln (Top of the Shop) angezeigt. Hier können Sie einstellen, wie die Liste generiert wird:" .
+'HELP_SHOP_PERF_TOPSELLER'						=>	"In Ihrem eShop wird eine Liste mit den meistverkauften Artikeln (Top of the Shop) angezeigt. Hier können Sie einstellen, wie die Liste generiert wird:" .
 													"<ul><li><kbd>ausgeschaltet</kbd>: Die Liste wird nicht angezeigt</li>" .
-													"<li><kbd>manuell</kbd>: Sie können unter Kundeninformationen -> Aktionen verwalten in der Aktion 'Topseller' einstellen, welche Artikel in der Liste angezeigt werden</li>" .
+													"<li><kbd>manuell</kbd>: Sie können unter <em>Kundeninformationen -> Aktionen verwalten</em> in der Aktion <var>Topseller</var> einstellen, welche Artikel in der Liste angezeigt werden</li>" .
 													"<li><kbd>automatisch</kbd>: Die Liste der meistverkauften Artikel wird automatisch berechnet.</li></ul>",
 
 'HELP_SHOP_PERF_LOADFULLTREE'					=>	"Wenn die Einstellung aktiv ist, wird in der Kategoriennavigation der komplette Kategoriebaum angezeigt (Alle Kategorien sind \"ausgeklappt\"). Diese Einstellung funktioniert nur, wenn die Kategoriennavigation <strong>nicht</strong> oben angezeigt wird.",

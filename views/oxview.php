@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxview.php 16683 2009-02-21 15:23:49Z rimvydas.paskevicius $
+ * $Id: oxview.php 16824 2009-02-25 15:01:27Z rimvydas.paskevicius $
  */
 
 /**
@@ -354,6 +354,12 @@ class oxView extends oxSuperCfg
      * @var string
      */
     protected $_sShopLogo = null;
+
+    /**
+     * Active shop language abbervation
+     * @var string
+     */
+    protected $_sActiveLangAbbr = null;
 
     /**
      * Initiates all components stored, executes oxview::addGlobalParams.

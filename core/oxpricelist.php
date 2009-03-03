@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxpricelist.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxpricelist.php 16849 2009-02-26 12:02:56Z arvydas $
  */
 
 /**
@@ -75,8 +75,8 @@ class oxPriceList
     {
         $oLang = oxLang::getInstance();
         $aVatValues = array();
-        foreach ( $this->_aList as $oPrice ) {            
-            $sVatKey = $oLang->formatVat( $oPrice->getVat() );            
+        foreach ( $this->_aList as $oPrice ) {
+            $sVatKey = ( string ) $oLang->formatVat( $oPrice->getVat() );
             if ( !isset( $aVatValues[$sVatKey] )) {
                 $aVatValues[$sVatKey] = 0;
             }
@@ -95,10 +95,11 @@ class oxPriceList
     {
         $aPrices = array();
         foreach ( $this->_aList as $oPrice ) {
-            if ( !isset( $aPrices[$oPrice->getVat()] )) {
-                $aPrices[$oPrice->getVat()] = 0;
+            $sVat = ( string ) $oPrice->getVat();
+            if ( !isset( $aPrices[$sVat] )) {
+                $aPrices[$sVat] = 0;
             }
-            $aPrices[$oPrice->getVat()] += $oPrice->getBruttoPrice();
+            $aPrices[$sVat] += $oPrice->getBruttoPrice();
         }
 
         return $aPrices;

@@ -82,13 +82,11 @@ class GenImport_Main extends oxAdminDetails
             $oErpImport->setCsvFileFieldsOrder( $aCsvFields );
             $oErpImport->setCsvContainsHeader( $oSession->getVar('blCsvContainsHeader') );
 
-            try {
-                $oErpImport->doImport( $this->_getUploadedCsvFilePath() );
-                $this->_aViewData['iTotalRows'] = $oErpImport->getTotalImportedRowsNumber();
+            $oErpImport->doImport( $this->_getUploadedCsvFilePath() );
+            $this->_aViewData['iTotalRows'] = $oErpImport->getTotalImportedRowsNumber();
 
-            } catch( Exception $e) {
-
-            }
+            //checking if errors occured during import
+            $this->_checkImportErrors( $oErpImport );
 
             //deleting uploaded csv file from temp dir
             $this->_deleteCsvFile();
@@ -252,4 +250,20 @@ class GenImport_Main extends oxAdminDetails
         }
     }
 
+    /**
+     * Checks if any error occured during import and displays them
+     *
+     * @return null
+     */
+    protected function _checkImportErrors( $oErpImport )
+    {
+        foreach ( $oErpImport->getStatistics() as $aValue ) {
+            if ( !$aValue ['r'] ) {
+                $oEx = new oxExceptionToDisplay();
+                $oEx->setMessage( $aValue ['m'] );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true, 'genimport' );
+            }
+        }
+
+    }
 }

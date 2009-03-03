@@ -23,10 +23,9 @@
         <input type="hidden" name="oxid" value="1">
         <input type="hidden" name="cl" value="">
     </form>
-    
+
     [{ if $sNavStep == 1}]
     <h3>[{ oxmultilang ident="GENIMPORT_STEP_1_TITLE" }]</h3>
-    
     [{if $Errors.genimport}]
     <div class="errorbox">
         [{foreach from=$Errors.genimport item=oEr key=key }]
@@ -35,14 +34,14 @@
     </div>
     <br>
     [{/if}]
-    
+
     [{if $iRepeatImport}]
     <p>[{ oxmultilang ident="GENIMPORT_IMPORTDONE" }]</p>
     <p>[{ oxmultilang ident="GENIMPORT_TOTALROWS" }]: <b>[{$iTotalRows}]</b></p>
     <p>[{ oxmultilang ident="GENIMPORT_REPEATINGIMPORT" }]...</p>
     <br>
     [{/if}]
-    
+
 
     <table cellspacing="0" cellpadding="0" border="0">
         <form name="myedit" id="myedit" method="post" action="[{ $shop->selflink }]" enctype="multipart/form-data">
@@ -84,7 +83,7 @@
 
     [{ if $sNavStep == 2}]
     <h3>[{ oxmultilang ident="GENIMPORT_STEP_2_TITLE" }]</h3>
-    
+
     [{if $Errors.genimport}]
     <div class="errorbox">
         [{foreach from=$Errors.genimport item=oEr key=key }]
@@ -92,7 +91,7 @@
         [{/foreach}]
     </div>
     [{/if}]
-    
+
     <p>[{ oxmultilang ident="GENIMPORT_ASSIGNFIELDS" }] <b>"[{$sImportTable}]"</b></p>
     <table cellspacing="1" cellpadding="0" border="0" class="genImportFieldsAssign">
         <form name="myedit" id="myedit" method="post" action="[{ $shop->selflink }]">
@@ -133,12 +132,23 @@
         </form>
     </table>
     [{/if}]
-    
+
     [{ if $sNavStep == 3}]
     <h3>[{ oxmultilang ident="GENIMPORT_STEP_3_TITLE" }]</h3>
-    <p>[{ oxmultilang ident="GENIMPORT_IMPORTDONE" }].</p>
+
+    [{if $Errors.genimport}]
+    <div class="errorbox">
+        [{foreach from=$Errors.genimport item=oEr key=key }]
+            <p>[{ $oEr->getOxMessage()}]</p>
+        [{/foreach}]
+    </div>
+    <p>[{ oxmultilang ident="GENIMPORT_IMPORTDONEWITHERRORS" }]</p>
+    [{else}]
+    <p>[{ oxmultilang ident="GENIMPORT_IMPORTDONE" }]</p>
+    [{/if}]
+
     <p>[{ oxmultilang ident="GENIMPORT_TOTALROWS" }]: <b>[{$iTotalRows}]</b></p>
-    [{/if}]    
+    [{/if}]
 
 
 </div>

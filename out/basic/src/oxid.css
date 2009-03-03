@@ -308,7 +308,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .boxhead {margin:0 5px;background:#f0f0f0; padding:6px 5px 6px 7px;height:20px;border-top:1px solid #969696;border-left:8px solid #969696;border-right:1px solid #969696;line-height:20px; font-size: 11px;font-weight: bold;color:#424c56;width:549px;float:left;}
 
 #body .box{border:1px solid #969696;border-top:none;padding:8px 6px;margin:0 5px 10px;width:556px;float:left;background:#fff;}
-#body .empty{padding:0 6px !important;}
+#body .empty{padding:0 6px !important; height: 0px; overflow: hidden;}
 #body .box img{border:none;padding:0;margin:0;}
 #body .box p {margin:0 0 1em 0;}
 #body .box ul.list{margin:0;padding:0;}
@@ -317,7 +317,9 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .box ul.list li a:hover{text-decoration: underline;color:#ff3600;}
 #body .box.info  {padding: 10px 10px 10px 15px; width:543px;}
 #body .box.notice  {padding: 5px 0 0; width:568px; border: none;}
-#body .box.catfilter {margin-top:10px;}
+#body .box .catfilter {margin: 5px 5px 10px 0;}
+#body .box .catfilter label {margin-right: 7px;}
+#body .box .catfilter select {margin: 3px;}
 
 #body.plain .boxhead {margin: 5px 5px 0 5px; width: auto; float:none;}
 #body.plain .box {width: auto; float:none;}

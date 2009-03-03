@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: details.php 16697 2009-02-23 09:29:44Z arvydas $
+ * $Id: details.php 16908 2009-03-02 09:29:21Z vilma $
  */
 
 /**
@@ -754,8 +754,7 @@ class Details extends oxUBase
     {
         if ( $this->_oVendor === null ) {
             $this->_oVendor = false;
-            // #671
-            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadVendorTree' ) && ( $oVendor = $this->getProduct()->getVendor( false ) ) ) {
+            if ( $oVendor = $this->getProduct()->getVendor( false ) ) {
                 $this->_oVendor = $oVendor;
             }
         }
@@ -771,8 +770,7 @@ class Details extends oxUBase
     {
         if ( $this->_oManufacturer === null ) {
             $this->_oManufacturer = false;
-            // #671
-            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadManufacturerTree' ) && ( $oManufacturer = $this->getProduct()->getManufacturer( false ) ) ) {
+            if ( $oManufacturer = $this->getProduct()->getManufacturer( false ) ) {
                 $this->_oManufacturer = $oManufacturer;
             }
         }

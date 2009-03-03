@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: category_main.inc.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: category_main.inc.php 16814 2009-02-25 12:52:49Z arvydas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -133,6 +133,8 @@ class ajaxComponent extends ajaxListComponent
                 $oNew->oxobject2category__oxtime     = new oxField(time());
                 $oNew->save();
             }
+
+            oxUtilsCount::getInstance()->resetCatArticleCount( $sCategoryID );
         }
     }
 
@@ -160,6 +162,8 @@ class ajaxComponent extends ajaxListComponent
             oxDb::getDb()->Execute( $sQ );
 
         }
+
+        oxUtilsCount::getInstance()->resetCatArticleCount( $sCategoryID );
     }
 
     /**

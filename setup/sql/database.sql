@@ -9,7 +9,7 @@ SET character_set_results = utf8;
 SET character_set_server = utf8;
 
 #
-# Tabellenstruktur für Tabelle `oxaccessoire2article`
+# Table structure for table `oxaccessoire2article`
 #
 
 DROP TABLE IF EXISTS `oxaccessoire2article`;
@@ -25,7 +25,7 @@ CREATE TABLE `oxaccessoire2article` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxaddress`
+# Table structure for table `oxaddress`
 #
 
 DROP TABLE IF EXISTS `oxaddress`;
@@ -52,7 +52,7 @@ CREATE TABLE `oxaddress` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxadminlog`
+# Table structure for table `oxadminlog`
 #
 
 DROP TABLE IF EXISTS `oxadminlog`;
@@ -64,7 +64,7 @@ CREATE TABLE `oxadminlog` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxarticles`
+# Table structure for table `oxarticles`
 #
 
 DROP TABLE IF EXISTS `oxarticles`;
@@ -128,17 +128,17 @@ CREATE TABLE `oxarticles` (
   `OXTEMPLATE` varchar(128) NOT NULL default '',
   `OXQUESTIONEMAIL` varchar(255) NOT NULL default '',
   `OXISSEARCH` tinyint(1) NOT NULL default '1',
-  `OXVARNAME` varchar(32) NOT NULL default '',
+  `OXVARNAME` varchar(255) NOT NULL default '',
   `OXVARSTOCK` int(5) NOT NULL default '0',
   `OXVARCOUNT` int(1) NOT NULL default '0',
-  `OXVARSELECT` varchar(32) NOT NULL default '',
+  `OXVARSELECT` varchar(255) NOT NULL default '',
   `OXVARMINPRICE` double NOT NULL default '0',
-  `OXVARNAME_1` varchar(32) NOT NULL default '',
-  `OXVARSELECT_1` varchar(32) NOT NULL default '',
-  `OXVARNAME_2` varchar(32) NOT NULL default '',
-  `OXVARSELECT_2` varchar(32) NOT NULL default '',
-  `OXVARNAME_3` varchar(32) NOT NULL default '',
-  `OXVARSELECT_3` varchar(32) NOT NULL default '',
+  `OXVARNAME_1` varchar(255) NOT NULL default '',
+  `OXVARSELECT_1` varchar(255) NOT NULL default '',
+  `OXVARNAME_2` varchar(255) NOT NULL default '',
+  `OXVARSELECT_2` varchar(255) NOT NULL default '',
+  `OXVARNAME_3` varchar(255) NOT NULL default '',
+  `OXVARSELECT_3` varchar(255) NOT NULL default '',
   `OXTITLE_1` varchar(255) NOT NULL default '',
   `OXSHORTDESC_1` varchar(255) NOT NULL default '',
   `OXURLDESC_1` varchar(255) NOT NULL default '',
@@ -189,9 +189,10 @@ CREATE TABLE `oxarticles` (
   KEY `OXACTIVETO` (`OXACTIVETO`)
 )TYPE=InnoDB;
 
-
-# extend article information
+#
+# Table structure for table `oxartextends`
 # created on 2008-05-23
+#
 
 DROP TABLE IF EXISTS `oxartextends`;
 
@@ -214,7 +215,7 @@ CREATE TABLE `oxartextends` (
 
 
 #
-# Tabellenstruktur für Tabelle `oxattribute`
+# Table structure for table `oxattribute`
 #
 
 DROP TABLE IF EXISTS `oxattribute`;
@@ -231,7 +232,7 @@ CREATE TABLE `oxattribute` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxuserbaskets`
+# Table structure for table `oxuserbaskets`
 #
 
 DROP TABLE IF EXISTS `oxuserbaskets`;
@@ -246,7 +247,7 @@ CREATE TABLE `oxuserbaskets` (
 ) TYPE=InnoDB;
 
 #
-# Tabellenstruktur für Tabelle `oxuserbasketitems`
+# Table structure for table `oxuserbasketitems`
 #
 
 DROP TABLE IF EXISTS `oxuserbasketitems`;
@@ -263,7 +264,7 @@ CREATE TABLE `oxuserbasketitems` (
 ) TYPE=InnoDB;
 
 #
-# Tabellenstruktur für Tabelle `oxcategories`
+# Table structure for table `oxcategories`
 #
 
 DROP TABLE IF EXISTS `oxcategories`;
@@ -316,7 +317,7 @@ CREATE TABLE `oxcategories` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxconfig`
+# Table structure for table `oxconfig`
 #
 
 DROP TABLE IF EXISTS `oxconfig`;
@@ -333,7 +334,7 @@ CREATE TABLE `oxconfig` (
 ) TYPE=MyISAM;
 
 #
-# Daten für Tabelle `oxconfig`
+# Data for table `oxconfig`
 #
 
 INSERT INTO `oxconfig` VALUES ('8563fba1965a11df3.34244997', 'oxbaseshop', 'blEnterNetPrice', 'bool', 0x7900fdf51e);
@@ -456,7 +457,7 @@ INSERT INTO `oxconfig` VALUES ('fd7a064bbb64466f8e6ba847902b2005', 'oxbaseshop',
 
 
 #
-# Tabellenstruktur für Tabelle `oxcontents`
+# Table structure for table `oxcontents`
 #
 
 DROP TABLE IF EXISTS `oxcontents`;
@@ -488,7 +489,7 @@ CREATE TABLE `oxcontents` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxcontents`
+# Table structure for table `oxcontents`
 #
 
 INSERT INTO `oxcontents` VALUES ('c4241316b2e5c1966.96997015', 'oxstartwelcome', 'oxbaseshop', '1', '0', '1', '1', '', 'start.tpl Begrüßungstext', '<h1><strong>Willkommen</strong> [{ if $oxcmp_user }]<strong>[{ $oxcmp_user->oxuser__oxfname->value }] [{ $oxcmp_user->oxuser__oxlname->value }] </strong>[{else}] [{/if}][{ if !$oxcmp_user }]<strong>im OXID <span style="color: #ff3301;">e</span>Shop 4</strong>[{/if}]\r\n</h1>\r\nDies ist eine Demo-Installation des <strong>OXID eShop 4</strong>. Also keine Sorge, wenn Sie bestellen: Die Ware wird weder ausgeliefert, noch in Rechnung gestellt. Die gezeigten Produkte (und Preise) dienen nur zur Veranschaulichung der umfangreichen Funktionalität des Systems.\r\n<div><strong>&nbsp;</strong></div>\r\n<div><strong>Wir wünschen viel Spa&szlig; beim Testen!</strong></div>\r\n<div><strong>Ihr OXID eSales Team</strong></div>', 'start.tpl welcome text', '<div><strong>Notice for Shop Administrator:</strong></div>\r\n<div><strong>&nbsp;</strong></div>\r\n<div>Update this text easily and comfortable in the Admin with a WYSYWYG-Editor.<strong>&nbsp;</strong></div>\r\n<div>&nbsp;</div>\r\n<div>Admin Menu: Customer Info -> CMS Pages -> start.tpl welcome text</div>\r\n<div>&nbsp;</div>', '1', '', '', '1', '', '', '', 'CMSFOLDER_USERINFO');
@@ -529,7 +530,7 @@ INSERT INTO `oxcontents` VALUES ('ad542e49541c1add', 'oxupdatepassinfoemail', 'o
 INSERT INTO `oxcontents` VALUES ('ad542e495c392c6e', 'oxupdatepassinfoplainemail', 'oxbaseshop', 1, 0, 1, 1, '', 'Ihr Passwort im eShop Plain', 'Hallo [{ $user->oxuser__oxsal->value }] [{ $user->oxuser__oxfname->value }] [{ $user->oxuser__oxlname->value }],\r\n\r\nöffnen Sie den folgenden Link, um ein neues Passwort für [{ $shop->oxshops__oxname->value }] einzurichten:\r\n\r\n[{ $oViewConf->getBaseDir() }]index.php?cl=forgotpwd&uid=[{ $user->getUpdateId()}]&lang=[{ $oViewConf->getActLanguageId() }]&shp=[{ $shop->oxshops__oxid->value }]\r\n\r\nDiesen Link können Sie innerhalb der nächsten [{ $user->getUpdateLinkTerm()/3600 }] Stunden aufrufen.\r\n\r\nIhr [{ $shop->oxshops__oxname->value }] Team', 'password update info plain', 'Notice for Shop Administrator:\r\n \r\nUpdate this text easily and comfortable in the Admin with a WYSYWYG-Editor. \r\n \r\nAdmin Menu: Customer Info -> CMS Pages -> password update info plain\r\n', 1, '', '', 1, '', '', '8a142c3e4143562a5.46426637', 'CMSFOLDER_EMAILS');
 
 #
-# Tabellenstruktur für Tabelle `oxcountry`
+# Table structure for table `oxcountry`
 #
 
 DROP TABLE IF EXISTS `oxcountry`;
@@ -559,6 +560,9 @@ CREATE TABLE `oxcountry` (
   KEY `OXSHOPID` (`OXSHOPID`,`OXACTIVE`)
 ) TYPE=MyISAM;
 
+#
+# Data for table `oxcountry`
+#
 
 INSERT INTO `oxcountry` VALUES ('2db455824e4a19cc7.14731328', 'oxbaseshop', '0', 'Anderes Land', '', '', '', 10000, '', 'Select this if you can not find your country.', 'Other country', '', '', '', '', '', 'Select this if you can not find your country.', '', '', 0);
 INSERT INTO `oxcountry` VALUES ('a7c40f631fc920687.20179984', 'oxbaseshop', '1', 'Deutschland', 'DE', 'DEU', '276', 9999, 'EU1', '', 'Germany', '', '', 'EU1', '', '', '', '', '', 1);
@@ -802,7 +806,7 @@ INSERT INTO `oxcountry` VALUES ('8f241f110969da699.04185888', 'oxbaseshop', '0',
 INSERT INTO `oxcountry` VALUES ('8f241f110969db489.04448851', 'oxbaseshop', '0', 'Serbien und Montenegro', 'CS', 'SCG', '891', 9999, 'Rest Europa', '', 'Serbia and Montenegro', '', '', 'Rest Europe', '', '', '', '', '', 0);
 
 #
-# Tabellenstruktur für Tabelle `oxdelivery`
+# Table structure for table `oxdelivery`
 #
 
 DROP TABLE IF EXISTS `oxdelivery`;
@@ -830,7 +834,7 @@ CREATE TABLE `oxdelivery` (
 )  TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxdiscount`
+# Table structure for table `oxdiscount`
 #
 
 DROP TABLE IF EXISTS `oxdiscount`;
@@ -862,7 +866,7 @@ CREATE TABLE `oxdiscount` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxgbentries`
+# Table structure for table `oxgbentries`
 #
 
 DROP TABLE IF EXISTS `oxgbentries`;
@@ -879,7 +883,7 @@ CREATE TABLE `oxgbentries` (
 ) TYPE=MyISAM COMMENT='Guestbook`s entries';
 
 #
-# Tabellenstruktur für Tabelle `oxgroups`
+# Table structure for table `oxgroups`
 #
 
 DROP TABLE IF EXISTS `oxgroups`;
@@ -893,7 +897,7 @@ CREATE TABLE `oxgroups` (
 ) TYPE=MyISAM;
 
 #
-# Daten für Tabelle `oxgroups`
+# Daten f�r Tabelle `oxgroups`
 #
 
 INSERT INTO `oxgroups` VALUES ('oxidblacklist', '1', 'Blacklist');
@@ -914,7 +918,7 @@ INSERT INTO `oxgroups` VALUES ('oxidcustomer', '1', 'Kunde');
 INSERT INTO `oxgroups` VALUES ('oxidnotyetordered', '1', 'Noch nicht bestellt');
 
 #
-# Tabellenstruktur für Tabelle `oxlinks`
+# Table structure for table `oxlinks`
 #
 
 DROP TABLE IF EXISTS `oxlinks`;
@@ -936,7 +940,7 @@ CREATE TABLE `oxlinks` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxlogs`
+# Table structure for table `oxlogs`
 #
 
 DROP TABLE IF EXISTS `oxlogs`;
@@ -954,7 +958,7 @@ CREATE TABLE `oxlogs` (
 ) TYPE=InnoDB;
 
 #
-# Tabellenstruktur für Tabelle `oxvouchers`
+# Table structure for table `oxvouchers`
 #
 
 DROP TABLE IF EXISTS `oxvouchers` ;
@@ -976,16 +980,8 @@ CREATE  TABLE IF NOT EXISTS `oxvouchers` (
 ) ENGINE = InnoDB;
 
 #
-# Daten für Tabelle `oxvouchers`
+# Table structure for table `oxvoucherseries`
 #
-
-
-# --------------------------------------------------------
-
-#
-# Tabellenstruktur für Tabelle `oxvoucherseries`
-#
-
 
 DROP TABLE IF EXISTS `oxvoucherseries` ;
 
@@ -1010,7 +1006,7 @@ CREATE  TABLE IF NOT EXISTS `oxvoucherseries` (
 ) ENGINE = InnoDB;
 
 #
-# Tabellenstruktur für Tabelle `oxnews`
+# Table structure for table `oxnews`
 #
 
 DROP TABLE IF EXISTS `oxnews`;
@@ -1041,7 +1037,7 @@ CREATE TABLE `oxnews` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxnewsletter`
+# Table structure for table `oxnewsletter`
 #
 
 DROP TABLE IF EXISTS `oxnewsletter`;
@@ -1056,7 +1052,7 @@ CREATE TABLE `oxnewsletter` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxobject2article`
+# Table structure for table `oxobject2article`
 #
 
 DROP TABLE IF EXISTS `oxobject2article`;
@@ -1071,7 +1067,7 @@ CREATE TABLE `oxobject2article` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxobject2attribute`
+# Table structure for table `oxobject2attribute`
 #
 
 DROP TABLE IF EXISTS `oxobject2attribute`;
@@ -1091,7 +1087,7 @@ CREATE TABLE `oxobject2attribute` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxobject2category`
+# Table structure for table `oxobject2category`
 #
 
 DROP TABLE IF EXISTS `oxobject2category`;
@@ -1109,7 +1105,7 @@ CREATE TABLE `oxobject2category` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxobject2delivery`
+# Table structure for table `oxobject2delivery`
 #
 
 DROP TABLE IF EXISTS `oxobject2delivery`;
@@ -1125,7 +1121,7 @@ CREATE TABLE `oxobject2delivery` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxobject2discount`
+# Table structure for table `oxobject2discount`
 #
 
 DROP TABLE IF EXISTS `oxobject2discount`;
@@ -1141,7 +1137,7 @@ CREATE TABLE `oxobject2discount` (
    ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxobject2group`
+# Table structure for table `oxobject2group`
 #
 
 DROP TABLE IF EXISTS `oxobject2group`;
@@ -1159,7 +1155,7 @@ CREATE TABLE `oxobject2group` (
 INSERT INTO `oxobject2group` VALUES ('e913fdd8443ed43e1.51222316', 'oxbaseshop', 'oxdefaultadmin', 'oxidadmin');
 
 #
-# Tabellenstruktur für Tabelle `oxobject2payment`
+# Table structure for table `oxobject2payment`
 #
 
 DROP TABLE IF EXISTS `oxobject2payment`;
@@ -1173,7 +1169,7 @@ CREATE TABLE `oxobject2payment` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxobject2selectlist`
+# Table structure for table `oxobject2selectlist`
 #
 
 DROP TABLE IF EXISTS `oxobject2selectlist`;
@@ -1189,7 +1185,7 @@ CREATE TABLE `oxobject2selectlist` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxorder`
+# Table structure for table `oxorder`
 #
 
 DROP TABLE IF EXISTS `oxorder`;
@@ -1265,7 +1261,7 @@ CREATE TABLE `oxorder` (
 ) TYPE=InnoDB;
 
 #
-# Tabellenstruktur für Tabelle `oxorderarticles`
+# Table structure for table `oxorderarticles`
 #
 
 DROP TABLE IF EXISTS `oxorderarticles`;
@@ -1321,7 +1317,7 @@ CREATE TABLE `oxorderarticles` (
 ) TYPE=InnoDB;
 
 #
-# Tabellenstruktur für Tabelle `oxpayments`
+# Table structure for table `oxpayments`
 #
 
 DROP TABLE IF EXISTS `oxpayments`;
@@ -1353,7 +1349,7 @@ CREATE TABLE `oxpayments` (
 ) TYPE=MyISAM;
 
 #
-# Daten für Tabelle `oxpayments`
+# Data for table `oxpayments`
 #
 INSERT INTO `oxpayments` VALUES('oxidcashondel', 1, 'Nachnahme', 7.5, 'abs', 0, 0, 1000000, '', '1', 'COD cash on delivery', '', '', '', '', '', '', '', '', '', 0);
 INSERT INTO `oxpayments` VALUES('oxidcreditcard', 1, 'Kreditkarte', 20.9, 'abs', 500, 0, 1000000, 'kktype__@@kknumber__@@kkmonth__@@kkyear__@@kkname__@@kkpruef__@@', '1', 'Credit Card', 'kktype__@@kknumber__@@kkmonth__@@kkyear__@@kkname__@@kkpruef__@@', '', '', '', '', 'Die Belastung Ihrer Kreditkarte erfolgt mit dem Abschluss der Bestellung.', 'Your Credit Card is charged when you submit the order.', '', '', 0);
@@ -1363,7 +1359,7 @@ INSERT INTO `oxpayments` VALUES('oxidinvoice', 1, 'Rechnung', 0, 'abs', 800, 0, 
 INSERT INTO `oxpayments` VALUES('oxempty', 1, 'Empty', 0, 'abs', 0, 0, 0, '', '0', 'Empty', '', '', '', '', '', 'for other countries', 'for other countries', '', '', 0);
 
 #
-# Tabellenstruktur für Tabelle `oxprice2article`
+# Table structure for table `oxprice2article`
 #
 
 DROP TABLE IF EXISTS `oxprice2article`;
@@ -1382,7 +1378,7 @@ CREATE TABLE `oxprice2article` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxpricealarm`
+# Table structure for table `oxpricealarm`
 #
 
 DROP TABLE IF EXISTS `oxpricealarm`;
@@ -1402,7 +1398,7 @@ PRIMARY KEY (`OXID`)
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxrecommlists`
+# Table structure for table `oxrecommlists`
 #
 
 DROP TABLE IF EXISTS `oxrecommlists`;
@@ -1424,7 +1420,7 @@ CREATE TABLE `oxrecommlists` (
 # --------------------------------------------------------
 
 #
-# Tabellenstruktur für Tabelle `oxobject2list`
+# Table structure for table `oxobject2list`
 #
 
 DROP TABLE IF EXISTS `oxobject2list`;
@@ -1441,7 +1437,7 @@ CREATE TABLE `oxobject2list` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxremark`
+# Table structure for table `oxremark`
 #
 
 DROP TABLE IF EXISTS `oxremark`;
@@ -1459,7 +1455,7 @@ CREATE TABLE `oxremark` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxratings`
+# Table structure for table `oxratings`
 #
 
 DROP TABLE IF EXISTS `oxratings`;
@@ -1477,7 +1473,7 @@ CREATE TABLE `oxratings` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxreviews`
+# Table structure for table `oxreviews`
 #
 
 DROP TABLE IF EXISTS `oxreviews`;
@@ -1498,7 +1494,7 @@ CREATE TABLE `oxreviews` (
 ) ENGINE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxselectlist`
+# Table structure for table `oxselectlist`
 #
 
 DROP TABLE IF EXISTS `oxselectlist`;
@@ -1519,7 +1515,7 @@ CREATE TABLE `oxselectlist` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxshops`
+# Table structure for table `oxshops`
 #
 
 DROP TABLE IF EXISTS `oxshops`;
@@ -1603,13 +1599,13 @@ CREATE TABLE `oxshops` (
 ) TYPE=MyISAM;
 
 #
-# Daten für Tabelle `oxshops`
+# Data for table `oxshops`
 #
 
 INSERT INTO `oxshops` VALUES ('oxbaseshop', 1, 1, 1, 1, 0, '', 0, 'OXID eShop 4', 'OXID Geschenke Shop', 'OXID Gift Shop', '', '', 'online kaufen', 'buy online', '', '', 'Originelle, witzige Geschenkideen - Lifestyle, Trends, Accessoires', 'Gift Ideas - Original, Funny Presents - Lifestyle, Trends, Accessories', '', '', 'Ihre Info e-Mail Adresse', 'Ihre Bestell Reply e-Mail Adresse', 'Ihre Bestell e-Mail Adresse', 'Ihre Bestellung bei OXID eSales', 'Vielen Dank für Ihre Registrierung im OXID eShop', 'Ihr Passwort im OXID eShop', 'Ihre OXID eSales Bestellung wurde versandt', 'Your order from OXID eShop', 'Thank you for your registration in OXID eShop', 'Your OXID eShop password', 'Your OXID eSales Order has been shipped', '', '', '', '', '', '', '', '', 'Tragen Sie bitte hier Ihren SMTP Server ein', '', '', 'Ihr Firmenname', 'Musterstr. 10', '79098', 'Musterstadt', 'Deutschland', 'Volksbank Musterstadt', '1234567890', '900 1234567', 'DE651234567', '', '', 'Hans', 'Mustermann', '0800 1234567', '0800 1234567', 'www.meineshopurl.com', '8a142c3e60a535f16.78077188', '', '', '', '', '', '', '', 'CE', '4.0.1.0', 1, 1, 0, 0);
 
 #
-# Tabellenstruktur für Tabelle `oxstatistics`
+# Table structure for table `oxstatistics`
 #
 
 DROP TABLE IF EXISTS `oxstatistics`;
@@ -1624,7 +1620,7 @@ CREATE TABLE `oxstatistics` (
 
 
 #
-# Tabellenstruktur für Tabelle `oxuser`
+# Table structure for table `oxuser`
 #
 
 DROP TABLE IF EXISTS `oxuser`;
@@ -1669,13 +1665,13 @@ CREATE TABLE `oxuser` (
 ) TYPE=MyISAM;
 
 #
-# Daten für Tabelle `oxuser`
+# Data for table `oxuser`
 #
 
 INSERT INTO `oxuser` VALUES ('oxdefaultadmin', '1', 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Ihr Firmenname', 'Hans', 'Mustermann', 'Musterstr.', '10', '', 'Musterstadt', 'a7c40f631fc920687.20179984', '79098', '0800 1234567', '0800 1234567', 'Herr', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', '0', '', '0', '0');
 
 #
-# Tabellenstruktur für Tabelle `oxuserpayments`
+# Table structure for table `oxuserpayments`
 #
 
 DROP TABLE IF EXISTS `oxuserpayments`;
@@ -1690,7 +1686,7 @@ CREATE TABLE `oxuserpayments` (
 ) TYPE=InnoDB;
 
 #
-# Tabellenstruktur für Tabelle `oxactions`
+# Table structure for table `oxactions`
 #
 
 DROP TABLE IF EXISTS `oxactions`;
@@ -1704,6 +1700,10 @@ CREATE TABLE `oxactions` (
   PRIMARY KEY  (`OXID`)
 ) TYPE=MyISAM;
 
+#
+# Data for table `oxactions`
+#
+
 INSERT INTO `oxactions` VALUES ('oxstart', 'Startseite unten', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 INSERT INTO `oxactions` VALUES ('oxtopstart', 'Topangebot Startseite', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 INSERT INTO `oxactions` VALUES ('oxfirststart', 'Großes Angebot Startseite', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
@@ -1714,7 +1714,7 @@ INSERT INTO `oxactions` VALUES ('oxnewest', 'Frisch eingetroffen', '1', '0000-00
 INSERT INTO `oxactions` VALUES ('oxnewsletter', 'Newsletter', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 #
-# Tabellenstruktur für Tabelle `oxactions2article`
+# Table structure for table `oxactions2article`
 #
 
 DROP TABLE IF EXISTS `oxactions2article`;
@@ -1730,7 +1730,7 @@ CREATE TABLE `oxactions2article` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxwrapping`
+# Table structure for table `oxwrapping`
 #
 
 DROP TABLE IF EXISTS `oxwrapping`;
@@ -1753,7 +1753,7 @@ CREATE TABLE `oxwrapping` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxdel2delset`
+# Table structure for table `oxdel2delset`
 #
 
 DROP TABLE IF EXISTS `oxdel2delset`;
@@ -1767,7 +1767,7 @@ CREATE TABLE `oxdel2delset` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxdeliveryset`
+# Table structure for table `oxdeliveryset`
 #
 
 DROP TABLE IF EXISTS `oxdeliveryset`;
@@ -1787,10 +1787,14 @@ CREATE TABLE `oxdeliveryset` (
   KEY `OXSHOPID` (`OXSHOPID`)
 ) TYPE=MyISAM;
 
+#
+# Data for table `oxdeliveryset`
+#
+
 INSERT INTO `oxdeliveryset` VALUES ('oxidstandard', 'oxbaseshop', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Standard', 'Standard', '', '', 10);
 
 #
-# Tabellenstruktur für Tabelle `oxcategory2attribute`
+# Table structure for table `oxcategory2attribute`
 #
 
 DROP TABLE IF EXISTS `oxcategory2attribute`;
@@ -1805,7 +1809,7 @@ CREATE TABLE `oxcategory2attribute` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxnewssubscribed`
+# Table structure for table `oxnewssubscribed`
 #
 
 DROP TABLE IF EXISTS `oxnewssubscribed`;
@@ -1825,10 +1829,14 @@ CREATE TABLE `oxnewssubscribed` (
   UNIQUE KEY `OXUSERID` (`OXUSERID`)
 ) TYPE=MyISAM;
 
+#
+# Data for table `oxnewssubscribed`
+#
+
 INSERT INTO `oxnewssubscribed` VALUES ('0b742e66fd94c88b8.61001136', 'oxdefaultadmin', 'Herr', 'Shop', 'Administrator', 'admin', 1, '0', '2005-07-26 19:16:09', '0000-00-00 00:00:00');
 
 #
-# Tabellenstruktur für Tabelle `oxvendor`
+# Table structure for table `oxvendor`
 #
 
 DROP TABLE IF EXISTS `oxvendor`;
@@ -1851,7 +1859,7 @@ CREATE TABLE `oxvendor` (
 ) TYPE=MyISAM;
 
 #
-# Tabellenstruktur für Tabelle `oxmanufacturers`
+# Table structure for table `oxmanufacturers`
 #
 
 DROP TABLE IF EXISTS `oxmanufacturers`;
@@ -1873,8 +1881,9 @@ CREATE TABLE `oxmanufacturers` (
   PRIMARY KEY  (`OXID`)
 ) TYPE=MyISAM;
 
-# table oxseo for SEO
-# created 2008.04.16
+#
+# Table structure for table `oxseo`# created 2008.04.16
+#
 
 DROP TABLE IF EXISTS `oxseo`;
 
@@ -1894,6 +1903,11 @@ CREATE TABLE `oxseo` (
 PRIMARY KEY (`OXIDENT`, `OXSHOPID`, `OXLANG`),
 UNIQUE KEY search (`OXTYPE`, `OXOBJECTID`, `OXSHOPID`, `OXLANG`,`OXPARAMS`)
 ) TYPE=InnoDB;
+
+
+#
+# Data for table `oxseo`
+#
 
 INSERT INTO `oxseo` VALUES ('c855234180a3b4056b496120d229ea68', '023abc17c853f9bccc201c5afd549a92', 'oxbaseshop', 1, 'index.php?cl=account_wishlist', 'my-gift-registry/', 'static', 0, '', '', 0, '');
 INSERT INTO `oxseo` VALUES ('2e17757c0aaf8ed9ef2ba30317fa1faf', '0469752d03d80da379a679aaef4c0546', 'oxbaseshop', 1, 'index.php?cl=suggest', 'recommend/', 'static', 0, '', '', 0, '');
@@ -1988,8 +2002,11 @@ INSERT INTO `oxseo` VALUES ('05c0f9a36dc4eaf3df528f0da18664d8', '8e7ebaebb0a8105
 INSERT INTO `oxseo` VALUES ('a0ee4fb33f618ef2bef24e20d12d572f', 'b2101f25345a55d7154f8c85f7ed5081', 'oxbaseshop', 0, 'index.php?cl=help&amp;page=account_recommlist', 'hilfe/meine-lieblingslisten/', 'static', 0, '', '', 0, '');
 INSERT INTO `oxseo` VALUES ('a0ee4fb33f618ef2bef24e20d12d572f', 'dd78cb9b34d9cd30f8a848005c402ba6', 'oxbaseshop', 1, 'index.php?cl=help&amp;page=account_recommlist', 'help/my-listmania-list/', 'static', 0, '', '', 0, '');
 
-# table oxseohistory for tracking old SEO urls
+#
+# Table structure for table `oxseohistory`
+# for tracking old SEO urls
 # created 2008-05-21
+#
 
 DROP TABLE IF EXISTS `oxseohistory`;
 
@@ -2005,8 +2022,11 @@ CREATE TABLE `oxseohistory` (
   KEY `search` (`OXOBJECTID`,`OXSHOPID`,`OXLANG`)
 ) ENGINE=InnoDB;
 
-# table oxseolog for tracking untranslatable to SEO format non SEO urls
-# created 2008-10-21
+#
+# Table structure for table `oxseologs`
+# for tracking untranslatable to SEO format non SEO urls
+# created 2008-05-21
+#
 
 DROP TABLE IF EXISTS `oxseologs`;
 
@@ -2019,8 +2039,11 @@ CREATE TABLE IF NOT EXISTS `oxseologs` (
   PRIMARY KEY  (`OXIDENT`,`OXSHOPID`,`OXLANG`)
 ) ENGINE=InnoDB;
 
-# table oxmediaurls for storing extended file urls
+#
+# Table structure for table `oxmediaurls`
+# for storing extended file urls
 # created 2008-06-25
+#
 
 DROP TABLE IF EXISTS `oxmediaurls`;
 

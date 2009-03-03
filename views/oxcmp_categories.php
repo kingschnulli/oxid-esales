@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxcmp_categories.php 16644 2009-02-20 14:18:03Z arvydas $
+ * $Id: oxcmp_categories.php 16808 2009-02-25 10:44:05Z arvydas $
  */
 
 /**
@@ -66,13 +66,18 @@ class oxcmp_categories extends oxView
 
         $blArtLoaded = false;
         if ( $sActProduct ) {
-            $oProduct = oxNew( 'oxarticle' );
-            $oProduct->setSkipAbPrice( true );
-            if ( $oProduct->load( $sActProduct ) ) {
+            // some views has specific product getters..
+            $oProduct = $this->_oParent->getViewProduct();
+            $blArtLoaded = $oProduct ? true : false;
+            if ( !$blArtLoaded ) {
+                $oProduct = oxNew( 'oxarticle' );
+                $oProduct->setSkipAbPrice( true );
+                if ( $oProduct->load( $sActProduct ) ) {
 
-                // storing for reuse
-                $this->_oParent->setViewProduct( $oProduct );
-                $blArtLoaded = true;
+                    // storing for reuse
+                    $this->_oParent->setViewProduct( $oProduct );
+                    $blArtLoaded = true;
+                }
             }
         }
 

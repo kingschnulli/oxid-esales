@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxconfig.php 16552 2009-02-13 18:28:48Z tomas $
+ * $Id: oxconfig.php 16802 2009-02-25 09:40:02Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1823,8 +1823,10 @@ class oxConfig extends oxSuperCfg
      */
     public function getActiveShop()
     {
-        if ( $this->_oActShop && $this->_iShopId == $this->_oActShop->getId() )
+        if ( $this->_oActShop && $this->_iShopId == $this->_oActShop->getId() &&
+             $this->_oActShop->getLanguage() == oxLang::getInstance()->getBaseLanguage() ) {
             return $this->_oActShop;
+        }
 
         $this->_oActShop = oxNew( 'oxshop' );
         $this->_oActShop->load( $this->getShopId() );

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxutils.php 16552 2009-02-13 18:28:48Z tomas $
+ * $Id: oxutils.php 16812 2009-02-25 12:51:54Z arvydas $
  */
 
 /**
@@ -538,7 +538,12 @@ class oxUtils extends oxSuperCfg
      */
     public function oxResetFileCache()
     {
-        $sFilePath = $this->getConfig()->getConfigParam( 'sCompileDir' ) . "/oxc_*.txt";
+        $sVersionPrefix = "";
+
+
+            $sVersionPrefix = 'pe';
+
+        $sFilePath = $this->getConfig()->getConfigParam( 'sCompileDir' ) . "/ox{$sVersionPrefix}c_*.txt";
         $aPathes   = glob( $sFilePath);
         if (is_array($aPathes)) {
             foreach ($aPathes as $sFilename) {

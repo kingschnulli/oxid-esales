@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: user.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
+ * $Id: user.php 16856 2009-02-26 14:02:40Z vilma $
  */
 
 /**
@@ -282,6 +282,8 @@ class User extends oxUBase
         if ( $this->_sOrderRemark === null ) {
             $this->_sOrderRemark = false;
             if ( $sOrderRemark = oxSession::getVar( 'ordrem' ) ) {
+                $this->_sOrderRemark = $sOrderRemark;
+            } elseif ($sOrderRemark = oxConfig::getParameter( 'order_remark' )) {
                 $this->_sOrderRemark = $sOrderRemark;
             }
         }

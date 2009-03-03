@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 16692 2009-02-23 08:36:28Z vilma $
+ * $Id: lang.php 16905 2009-03-02 09:26:43Z philipp.grashoff $
  */
 
 /*
@@ -1488,13 +1488,13 @@ $aLang = array(
 'SHOP_PERF_LOADVENDORTREE'                      => 'Load and display Distributor List',
 'SHOP_PERF_LOADMANUFACTURERTREE'                => 'Load and display Manufacturer List',
 'SHOP_PERF_LOADATTRIBUTES'                      => 'Always load Attributes of a Product together with Product',
-'SHOP_PERF_NEWESTARTICLES'                      => 'List of newest Products on Front Page (Just arrived!)',
+'SHOP_PERF_NEWESTARTICLES'                      => 'List of newest Products (Just arrived!)',
 'SHOP_PERF_PARSELONGDESCINSMARTY'               => 'Process Description of Articles and Categories with Smarty',
 'SHOP_PERF_PERFORMANCE'                         => 'Performance',
 'SHOP_PERF_SHOWACTCATARTCOUNT'                  => 'Display Number of contained Products behind Category Names',
 'SHOP_PERF_SHOWLEFTBASKET'                      => 'Display Cart on left side',
 'SHOP_PERF_SHOWRIGHTBASKET'                     => 'Display Cart on right side',
-'SHOP_PERF_TOPSELLER'                           => 'List of most sold Products on Front Page (Top of the Shop)',
+'SHOP_PERF_TOPSELLER'                           => 'List of most sold Products (Top of the Shop)',
 'SHOP_PERF_USESELECTLISTPRICE'                  => 'Support Price Modifications by Selection Lists',
 'SHOP_PERF_USETIMECHECKINARTLOAD'               => 'Check "Active From/To" when loading Products',
 'SHOP_PERF_SHOWTOPBASKET'                       => 'Display Cart at Top',
@@ -1517,6 +1517,7 @@ $aLang = array(
 'GENIMPORT_REPEATINGIMPORT'                     => 'Repeating import',
 'GENIMPORT_BEGINIMPORT'                         => 'Begin import',
 'GENIMPORT_IMPORTDONE'                          => 'CSV data was successfully imported.',
+'GENIMPORT_IMPORTDONEWITHERRORS'                => 'CSV data was not successfully imported. Some errors occured during import.',
 'GENIMPORT_TOTALROWS'                           => 'Total rows imported',
 'GENIMPORT_STEP'                                => 'Step',
 'GENIMPORT_FINISH'                              => 'Finish',

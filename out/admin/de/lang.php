@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 16692 2009-02-23 08:36:28Z vilma $
+ * $Id: lang.php 16901 2009-03-02 09:25:20Z philipp.grashoff $
  */
 
 $sLangName  = 'Deutsch';
@@ -1148,7 +1148,7 @@ $aLang = array(
 'SHOP_CONFIG_IMPORTTICKERREFRESH'               => 'Sekunden, nach denen der Importticker neu geladen wird',
 'SHOP_CONFIG_MWSTSETTING'                       => 'MwSt.-Einstellungen für Lexware Faktura',
 'SHOP_CONFIG_NUMBEROFEMAILSPERTICK'             => 'Anzahl von E-Mails, die der Newsletter pro Tick verschickt',
-'SHOP_CONFIG_ACTIVECATEGORYBYSTART'             => 'Aktive Kategorie beim Start (Diese Kategorie wird in der Kategorien-Navigation „ausgeklappt“ angezeigt)',
+'SHOP_CONFIG_ACTIVECATEGORYBYSTART'             => 'Aktive Kategorie beim Start (Diese Kategorie wird in der Kategorien-Navigation "ausgeklappt" angezeigt)',
 'SHOP_CONFIG_AUTOSEARCHONCAT'                   => 'Die Suche automatisch starten, sobald der Kunde eine Kategorie ausgewählt hat',
 'SHOP_CONFIG_AUTOICONS'                         => 'Icons automatisch generieren aus Thumbnail (kann u.U. das System stark verlangsamen)',
 'SHOP_CONFIG_ALLOWUNEVENAMOUNTS'                => 'Nicht ganzzahlige Eingaben bei Artikelmengen erlauben (z.B. 1,5)',
@@ -1481,13 +1481,13 @@ $aLang = array(
 'SHOP_PERF_LOADVENDORTREE'                      => 'Lieferantenliste laden und anzeigen',
 'SHOP_PERF_LOADMANUFACTURERTREE'                => 'Herstellerliste laden und anzeigen',
 'SHOP_PERF_LOADATTRIBUTES'                      => 'Attribute eines Artikels immer zusammen mit dem Artikel laden',
-'SHOP_PERF_NEWESTARTICLES'                      => 'Liste der neusten Artikel auf der Startseite (Frisch eingetroffen!)',
+'SHOP_PERF_NEWESTARTICLES'                      => 'Liste der neusten Artikel (Frisch eingetroffen!)',
 'SHOP_PERF_PARSELONGDESCINSMARTY'               => 'Artikelbeschreibung und Kategorienbeschreibung mit Smarty ausführen',
 'SHOP_PERF_PERFORMANCE'                         => 'Performance',
 'SHOP_PERF_SHOWACTCATARTCOUNT'                  => 'Anzahl enthaltener Artikel hinter den Kategorienamen anzeigen',
 'SHOP_PERF_SHOWLEFTBASKET'                      => 'Warenkorb links anzeigen',
 'SHOP_PERF_SHOWRIGHTBASKET'                     => 'Warenkorb rechts anzeigen',
-'SHOP_PERF_TOPSELLER'                           => 'Liste der meistverkauften Artikel auf der Startseite (Top of the Shop)',
+'SHOP_PERF_TOPSELLER'                           => 'Liste der meistverkauften Artikel (Top of the Shop)',
 'SHOP_PERF_USESELECTLISTPRICE'                  => 'Preisänderungen durch Auswahllisten unterstützen',
 'SHOP_PERF_USETIMECHECKINARTLOAD'               => 'Beim Laden von Artikeln "Aktiv von/bis" berücksichtigen',
 'SHOP_PERF_SHOWTOPBASKET'                       => 'Warenkorb oben anzeigen',
@@ -1510,6 +1510,7 @@ $aLang = array(
 'GENIMPORT_REPEATINGIMPORT'                     => 'Import wird wiederholt',
 'GENIMPORT_BEGINIMPORT'                         => 'Import starten',
 'GENIMPORT_IMPORTDONE'                          => 'Die CSV-Daten wurden erfolgreich importiert.',
+'GENIMPORT_IMPORTDONEWITHERRORS'                => '[tr]CSV data was not successfully imported. Some errors occured during import.',
 'GENIMPORT_TOTALROWS'                           => 'Zeilen wurden importiert',
 'GENIMPORT_STEP'                                => 'Schritt',
 'GENIMPORT_FINISH'                              => 'Import ausgeführt',

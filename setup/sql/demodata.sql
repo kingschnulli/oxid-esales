@@ -9,7 +9,7 @@ SET character_set_results = utf8;
 SET character_set_server = utf8;
 
 #
-# Daten für Tabelle `oxactions2article`
+# Data for table `oxactions2article`
 #
 
 INSERT INTO `oxactions2article` VALUES ('d8842e3c913930f47.00463447', 'oxbaseshop', 'oxstart', '2077', 0);
@@ -32,7 +32,7 @@ INSERT INTO `oxactions2article` VALUES ('d8842e3ca342c5fb8.21231681', 'oxbasesho
 INSERT INTO `oxactions2article` VALUES ('79042e78791e8ef10.24050762', 'oxbaseshop', 'oxbargain', 'd8842e3cbf9290351.59301740', 0);
 
 #
-# Daten für Tabelle `oxarticles`
+# Data for table `oxarticles`
 #
 
 INSERT INTO `oxarticles` VALUES('1126', 'oxbaseshop', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1126', '', '', 'Bar-Set ABSINTH', 'Darf in keiner Alkohol-Sammlung fehlen !', 34, 0, 0, 0, 0, 0, 0, '', 0, '', '', '', NULL, '1126_th.jpg', '1126_ico.jpg', '1126_p1.jpg', '1126_p2.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', '1126_z1.jpg', '1126_z2.jpg', 'nopic.jpg', 'nopic.jpg', 0, 1, 1, 'Lieferzeit 1-2 Tage', 'Lieferzeit 1-2 Wochen', '0000-00-00', '2005-07-28', '2008-09-02 15:13:25', 0, 0, 0, '', 'saufen alkohol geschenk kult russland russia', '', '', 1, '', 0, 0, '', 34, '', '', '', '', '', '', 'Bar-Set ABSINTH', 'A must-have for your bar collection !', '', 'saufen alkohol geschenk kult russland russia', '', '', '', '', '', '', '', '', '', '', '', 'Will be shipped in 24-48 hours', '', '', 'Will be shipped in 7-14 days', '', '', 0, 0, 0, 0, 0, 0, '', '', '', '', 0, 0, 0);
@@ -77,7 +77,7 @@ INSERT INTO `oxarticles` VALUES('d8842e3cbb8ac9238.37666205', 'oxbaseshop', '', 
 INSERT INTO `oxarticles` VALUES('d8842e3cbf9290351.59301740', 'oxbaseshop', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1876', '', '', 'Barwagen LOUNGE', '', 179, 0, 0, 0, 0, 0, 0, '', 0, '', '', '', NULL, '1876_th.jpg', '1876_ico.jpg', '1876_p1.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', 'nopic.jpg', '1876_z1.jpg', '1876_z2.jpg', 'nopic.jpg', 'nopic.jpg', 0, -1, 1, 'Lieferzeit 1-2 Tage', 'Lieferzeit 1-2 Wochen', '0000-00-00', '2005-07-24', '2008-09-02 15:13:25', 0, 0, 0, '', '', '', '', 1, '', 0, 0, '', 179, '', '', '', '', '', '', 'Bar Cart LOUNGE', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Will be shipped in 24-48 hours', '', '', 'Will be shipped in 7-14 days', '', '', 0, 0, 0, 0, 0, 0, '', '', '', '', 0, 0, 0);
 
 #
-# Daten für Tabelle `oxattribute`
+# Data for table `oxattribute`
 #
 
 INSERT INTO `oxattribute` VALUES ('8a142c3e9cd961518.80299776', 'oxbaseshop', 'Design', 'Design', '', '', 0);
@@ -93,7 +93,7 @@ INSERT INTO `oxattribute` VALUES ('d8842e3b51c3342c8.87563759', 'oxbaseshop', 'P
 INSERT INTO `oxattribute` VALUES ('d8842e3b7c5e108c1.63072778', 'oxbaseshop', 'Beschaffenheit', 'Texture', '', '', 0);
 
 #
-# Daten für Tabelle `oxcategories`
+# Data for table `oxcategories`
 #
 
 INSERT INTO `oxcategories` VALUES ('8a142c3e4143562a5.46426637', 'oxrootid', 1, 10, '8a142c3e4143562a5.46426637', 9999, '1', '0', 'oxbaseshop', 'Geschenke', '', '', '', '', '', '', '0', '0', '0', '1', 'Gifts', '', '', '1', '', '', '', '0', '', '', '', '', null, '0', '1');
@@ -103,7 +103,7 @@ INSERT INTO `oxcategories` VALUES ('8a142c3e4d3253c95.46563530', '8a142c3e414356
 INSERT INTO `oxcategories` VALUES ('8a142c3e60a535f16.78077188', '8a142c3e44ea4e714.31136811', 3, 4, '8a142c3e4143562a5.46426637', 9999, '1', '0', 'oxbaseshop', 'Uhren', '', '', 'uhren3_tc.jpg', '', '', '', '0', '0', '0', '1', 'Clocks', '', '', '1', '', '', '', '0', '', '', '', '', null, '0', '1');
 
 #
-# Daten für Tabelle `oxobject2article`
+# Data for table `oxobject2article`
 #
 
 INSERT INTO `oxobject2article` VALUES ('f3b42c8ebed014e90.57967132', '1127', '1126', 0);
@@ -188,7 +188,7 @@ INSERT INTO `oxobject2article` VALUES ('85b42c94a7f6be5c0.09007775', '1940', '85
 INSERT INTO `oxobject2article` VALUES ('85b42c94a7f6d94a1.21526421', '2077', '85b42c94a32b3fdd2.66642220', 2);
 
 #
-# Daten für Tabelle `oxobject2attribute`
+# Data for table `oxobject2attribute`
 #
 
 INSERT INTO `oxobject2attribute` VALUES ('8a142c3e9d9ce6bb3.51485896', '1354', '8a142c3e9cd961518.80299776', 'originell', 0, 'funny', '', '');
@@ -247,7 +247,7 @@ INSERT INTO `oxobject2attribute` VALUES ('d8842e3cb35675756.41352910', 'd8842e3c
 INSERT INTO `oxobject2attribute` VALUES ('d8842e3b541cfaee2.08718010', '85b42c94a32b3fdd2.66642220', 'd8842e3b51c3342c8.87563759', '', 0, '', '', '');
 
 #
-# Daten für Tabelle `oxobject2category`
+# Data for table `oxobject2category`
 #
 
 INSERT INTO `oxobject2category` VALUES ('8a142c3e4f40b3a28.96765934', '5064', '8a142c3e4d3253c95.46563530', 0, 1120134448);
@@ -312,7 +312,7 @@ INSERT INTO `oxobject2category` VALUES ('be642cadac2561a74.79582788', 'be642cada
 INSERT INTO `oxobject2category` VALUES ('d8842e3badeecd957.54415547', '1651', '8a142c3e49b5a80c1.23676990', 0, 1122220766);
 
 #
-# Daten für Tabelle `oxobject2delivery`
+# Data for table `oxobject2delivery`
 #
 
 INSERT INTO `oxobject2delivery` VALUES ('1b842e73492c49fc1.89449037', '1b842e73470578914.54719298', 'a7c40f631fc920687.20179984', 'oxcountry');
@@ -336,7 +336,7 @@ INSERT INTO `oxobject2delivery` VALUES ('1b842e7379e4ad6b4.73750214', 'oxidstand
 INSERT INTO `oxobject2delivery` VALUES ('b0e42247b75236c85.30800643', 'oxidstandard', 'a7c40f631fc920687.20179984', 'oxdelset');
 
 #
-# Daten für Tabelle `oxwrapping`
+# Data for table `oxwrapping`
 #
 
 INSERT INTO `oxwrapping` VALUES ('a6840cc0ec80b3991.74884864', 'oxbaseshop', '1', '1', '1', '1', 'WRAP', 'Rote Sterne', 'Red stars', '', '', 'img_geschenkpapier_1_wp.gif', 2.95);
@@ -345,14 +345,14 @@ INSERT INTO `oxwrapping` VALUES ('81b40cf0cd383d3a9.70988998', 'oxbaseshop', '1'
 INSERT INTO `oxwrapping` VALUES ('81b40cf210343d625.49755120', 'oxbaseshop', '1', '1', '1', '1', 'WRAP', 'Gelbe Sterne', 'Yellow stars', '', '', 'img_geschenkpapier_1_gelb_wp.gif', 2.95);
 
 #
-# Daten für Tabelle `oxdeliveryset`
+# Data for table `oxdeliveryset`
 #
 
 INSERT INTO `oxdeliveryset` VALUES ('1b842e732a23255b1.91207750', 'oxbaseshop', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Beispiel Set1: UPS 48 Std.', 'Example Set1: UPS 48 hours', '', '', 30);
 INSERT INTO `oxdeliveryset` VALUES ('1b842e732a23255b1.91207751', 'oxbaseshop', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Beispiel Set1: UPS 24 Std. Express', 'Example Set1: UPS Express 24 hours', '', '', 30);
 
 #
-# Daten für Tabelle `oxdel2delset`
+# Data for table `oxdel2delset`
 #
 
 INSERT INTO `oxdel2delset` VALUES ('1b842e736771236b3.36345789', '1b842e73470578914.54719298', 'oxidstandard');
@@ -362,7 +362,7 @@ INSERT INTO `oxdel2delset` VALUES ('1b842e738aec52cd0.76136364', '1b842e738970d3
 INSERT INTO `oxdel2delset` VALUES ('1b842e7377e12ba11.73796406', '1b842e7352422a708.01472527', 'oxidstandard');
 
 #
-# Daten für Tabelle `oxobject2delivery`
+# Data for table `oxobject2delivery`
 #
 
 INSERT INTO `oxobject2delivery` VALUES ('b0e42247b8d71f086.77687951', 'f324215af31591936.94392085', 'a7c40f631fc920687.20179984', 'oxdelset');
@@ -370,7 +370,7 @@ INSERT INTO `oxobject2delivery` VALUES ('b0e42247b8d74bcc1.13991977', 'f324215af
 INSERT INTO `oxobject2delivery` VALUES ('b0e42247b8d762574.83891789', 'f324215af31591936.94392085', 'a7c40f6321c6f6109.43859248', 'oxdelset');
 
 #
-# Daten für Tabelle `oxobject2payment`
+# Data for table `oxobject2payment`
 #
 
 INSERT INTO `oxobject2payment` VALUES ('92d4214bf673df592.85542338', 'oxidpayadvance', 'a434214960877b879.20979568', 'oxdelset');
@@ -398,13 +398,13 @@ INSERT INTO `oxobject2payment` VALUES ('1b842e738b3f1ca46.72529947', 'oxidcredit
 INSERT INTO `oxobject2payment` VALUES ('1b842e738b3f1ca46.72529948', 'oxidcreditcard', '1b842e732a23255b1.91207751', 'oxdelset');
 
 #
-# Daten für Tabelle `oxnewsletter`
+# Data for table `oxnewsletter`
 #
 
 INSERT INTO `oxnewsletter` VALUES ('oxidnewsletter', 'oxbaseshop', 'Beispiel Newsletter', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">\r\n<html>\r\n<head>\r\n<title>OXID eSales Newsletter</title>\r\n<style media="screen" type="text/css"><!--\r\nA        {\r\n        font-size: 9pt;\r\n        text-decoration: none;\r\n        color: black;\r\n        }\r\nA:Hover     {\r\n        text-decoration: underline;\r\n        color: #AB0101;\r\n        }\r\nbody    {\r\n    margin-bottom : 0;\r\n    margin-left : 0;\r\n    margin-right : 0;\r\n    margin-top : 0;\r\n    background-color: #FFFFFF;\r\n}\r\n.pagehead {\r\n font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n font-size: 10px;\r\n    color: #000000;\r\n font-weight: normal;\r\n    background-color: #494949;\r\n  height : 50;\r\n    vertical-align : bottom;\r\n}\r\n.pageheadlink {\r\n    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n font-size: 11px;\r\n    color: #F7F7F7;\r\n font-weight: normal;\r\n}\r\n.pagebottom {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 9px;\r\n        color: #000000;\r\n        font-weight: normal;\r\n     height : 13;\r\n        vertical-align : top;\r\n}\r\n.defaultcontent {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #000000;\r\n        font-weight: normal;\r\n       vertical-align : top;\r\n}\r\n.detailcontent {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #000000;\r\n        font-weight: normal;\r\n        vertical-align : top;\r\n       padding-left: 10px;\r\n}\r\n.detailproductlink {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 9px;\r\n        color: #9D0101;\r\n        font-weight: bold;\r\n}\r\n.detailheader {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 11px;\r\n        color: #9D0101;\r\n        font-weight: bold;\r\n}\r\n.detailsales {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #000000;\r\n        font-weight: bold;\r\n      background-color: #CECDCD;\r\n}\r\n.aktionhead {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #FFFFFF;\r\n        font-weight: bold;\r\n        background-color: #767575;\r\n}\r\n.aktionmain {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #000000;\r\n        font-weight: normal;\r\n      border : 3px #767575;\r\n       border-style : none solid solid solid;\r\n      padding-left : 2px;\r\n     padding-top : 5px;\r\n      padding-bottom : 5px;\r\n       padding-right : 2px;\r\n}\r\n.aktion {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #000000;\r\n        font-weight: normal;\r\n}\r\n.aktionhighlight {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #AB0101;\r\n        font-weight: bold;\r\n}\r\n.startpageFirstProductTitle {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 12px;\r\n        color: #AB0101;\r\n        font-weight: bold;\r\n}\r\n.startpageFirstProductText {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #242424;\r\n        font-weight: normal;\r\n}\r\n.startpageFirstProductPrice {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 17px;\r\n        color: #AB0101;\r\n        font-weight: bold;\r\n}\r\n.startpageFirstProductOldPrice {\r\n font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n font-size: 17px;\r\n    color: #AB0101;\r\n font-weight: bold;\r\n  text-decoration : line-through;\r\n}\r\n.startpageProductTitle {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 12px;\r\n        color: #242424;\r\n        font-weight: bold;\r\n}\r\n.startpageProductText {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #AB0101;\r\n        font-weight: normal;\r\n}\r\n.startpageBoxContent {\r\n   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n font-size: 10px;\r\n    color: #000000;\r\n font-weight: normal;\r\n    border : 3px #CECDCD;\r\n   border-style : none solid solid solid;\r\n  padding-left : 5px;\r\n padding-top : 5px;\r\n  padding-bottom : 5px;\r\n   padding-right : 5px;\r\n}\r\n.startpageBoxHead {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #000000;\r\n        font-weight: bold;\r\n        background-color: #CECDCD;\r\n}\r\n.newestProductHead {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #8D0101;\r\n        font-weight: bold;\r\n}\r\n.newestProduct {\r\n        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;\r\n        font-size: 10px;\r\n        color: #000000;\r\n        font-weight: normal;\r\n}\r\n}\r\n--></style>\r\n</head>\r\n<body marginwidth="0" marginheight="0" leftmargin="0" topmargin="0">\r\n<table width="780" height="100%" cellspacing="0" cellpadding="0" border="0"><!-- Kopf Start --><tbody><tr><td class="pagehead">\r\n<table width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="152" align="right" class="pagehead"> <a class="pageheadlink" href="[{$shop->basedir}]"><img border="0" alt="" src="[{$myshop->imagedir}]/logo.jpg"></a> </td></tr></tbody></table></td></tr><tr><td height="15"> <br>\r\n</td></tr><!-- Kopf Ende --> <!-- Content Start --><tr><td valign="top">\r\n<table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="defaultcontent">\r\nHallo [{ $myuser->oxuser__oxsal->value }] [{\r\n$myuser->oxuser__oxfname->value }] [{\r\n$myuser->oxuser__oxlname->value }],<br>\r\n<br>\r\nwie Sie sehen können funktioniert unser Newsletter Modul richtig gut.<br>\r\n<br>\r\nNicht nur, das wir hier Ihre Adresse ausgeben können :<br>\r\n [{ $myuser->oxuser__oxaddinfo->value }]<br>\r\n[{ $myuser->oxuser__oxstreet->value }]<br>\r\n[{ $myuser->oxuser__oxzip->value }] [{ $myuser->oxuser__oxcity->value }]<br>\r\n[{ $myuser->oxuser__oxcountry->value }]<br>\r\nTelefon: [{ $myuser->oxuser__oxfon->value }]<br>\r\n<br>\r\nsondern wir können noch viel mehr !<br>\r\n<br>\r\nSie wollen diesen Newsletter nicht mehr erhalten ? Kein Problem - klicken Sie einfach <a class="defaultcontent" href="[{$shop->basedir}]index.php?cl=newsletter&amp;fnc=removeme&amp;uid=[{$myuser->oxuser__oxid->value}]">hier</a>.\r\n<br>\r\n<br>\r\n [{if isset($simarticle0) }]\r\n     Ein Ähnlicher Artikel zu Ihrer letzten Bestellung :<br>\r\n\r\n<table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td> <a href="[{$simarticle0->oxdetaillink}]" class="startpageProduct"><img vspace="0" hspace="0" border="0" alt="[{ $simarticle0->oxarticles__oxtitle->value }]" src="[{$myshop->dimagedir}]/1/[{$simarticle0->oxarticles__oxpic1->value }]"></a> </td><td width="10" valign="top" class="startpageFirstProductTitle">*</td><td width="320" valign="top" class="startpageFirstProductTitle"> [{ $simarticle0->oxarticles__oxtitle->value }]<br>\r\n <br>\r\n <span class="startpageFirstProductText">[{ $simarticle0->oxarticles__oxshortdesc->value }]</span><br>\r\n <br>\r\n <span class="startpageProductText"><strong>Statt <span class="startpageFirstProductOldPrice">[{ $simarticle0->ftprice}]</span> jetzt nur </strong></span><span class="startpageFirstProductPrice">[{ $simarticle0->fprice }] [{ $mycurrency->sign}]</span><br>\r\n <br>\r\n <a href="[{$simarticle0->oxdetaillink}]" class="startpageProductText"><strong>mehr Infos</strong></a><br>\r\n </td></tr></tbody></table> [{/if}] <br>\r\n<br>\r\n [{if isset($articlelist) }]\r\n     Ausgesuchte Artikel aus unserem Shop extra für diesen Newsletter : <br>\r\n\r\n<table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td height="1" bgcolor="#cecdcd"><br>\r\n</td><td height="1" bgcolor="#cecdcd"><br>\r\n</td></tr><tr><td height="7"><br>\r\n</td><td><br>\r\n</td></tr>[{assign var="iPos" value=1}]\r\n       [{foreach from=$articlelist item=product}]\r\n     \r\n        [{if $iPos == 1}] <tr><td valign="top">\r\n<table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="220" height="100" align="left" class="startpageProduct"> <a href="[{$product->oxdetaillink}]" class="startpageProduct"><img vspace="0" hspace="0" border="0" alt="[{ $product->oxarticles__oxtitle->value }]" src="[{$myshop->dimagedir}]/0/[{$product->oxarticles__oxthumb->value }]"></a> </td></tr><tr><td align="left" class="startpageProductTitle"> [{ $product->oxarticles__oxtitle->value }] </td></tr><tr><td height="20" align="left" class="startpageProductText"> <strong>Jetzt nur [{ $product->fprice }] [{ $mycurrency->sign}]</strong> </td></tr><tr><td height="20" align="left" class="startpageProductText"> <a href="[{$product->oxdetaillink}]" class="startpageProductText">mehr Infos</a><br>\r\n </td></tr></tbody></table> </td>[{assign var="iPos" value=2}]\r\n       [{elseif $iPos==2}] <td valign="top">\r\n<table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="220" height="100" align="left" class="startpageProduct"> <a href="[{$product->oxdetaillink}]" class="startpageProduct"><img vspace="0" hspace="0" border="0" alt="[{ $product->oxarticles__oxtitle->value }]" src="[{$myshop->dimagedir}]/0/[{$product->oxarticles__oxthumb->value }]"></a> </td></tr><tr><td align="left" class="startpageProductTitle"> [{ $product->oxarticles__oxtitle->value }] </td></tr><tr><td height="20" align="left" class="startpageProductText"> <strong>Jetzt nur [{ $product->fprice }] [{ $mycurrency->sign}]</strong> </td></tr><tr><td height="20" align="left" class="startpageProductText"> <a href="[{$product->oxdetaillink}]" class="startpageProductText">mehr Infos</a><br>\r\n </td></tr></tbody></table> </td></tr><tr><td height="7"><br>\r\n</td><td><br>\r\n</td></tr><tr><td height="1" bgcolor="#cecdcd"><br>\r\n</td><td height="1" bgcolor="#cecdcd"><br>\r\n</td></tr><tr><td height="7"><br>\r\n</td><td><br>\r\n</td></tr><!-- ende zeile --> [{assign var="iPos" value=1}]\r\n       [{/if}]\r\n     [{/foreach}] <!-- fehlende ausgleichen --> [{if $iPos == 1}] <tr><td><br>\r\n</td></tr>[{/if}] </tbody></table> [{/if}] <br>\r\n </td><td width="165" align="right" class="defaultcontent"> [{ if $simarticle1 }]\r\n     Auch das hier ist ein Ähnlicher Artikel zu Ihrer letzten Bestellung :<br>\r\n\r\n<table width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="100%" height="15" align="center" class="aktionhead">Top Angebot der Woche</td></tr><tr><td class="aktionmain">\r\n<table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="aktion"><a href="[{$simarticle1->oxdetaillink}]" class="aktion"><img vspace="0" hspace="0" border="0" alt="[{ $simarticle1->oxarticles__oxtitle->value }]" src="[{$myshop->dimagedir}]/0/[{$simarticle1->oxarticles__oxthumb->value }]"></a></td></tr><tr><td height="15" class="aktion">[{ $simarticle1->oxarticles__oxtitle->value }]</td><td class="aktion"><br>\r\n</td></tr><tr><td height="15" class="aktionhighlight"><strong>Jetzt nur [{ $simarticle1->fprice }] [{ $mycurrency->sign}] !!</strong></td></tr><tr><td height="25" class="aktion">\r\n<table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="120" class="aktion"><a href="[{$simarticle1->oxdetaillink}]" class="aktion">mehr Infos</a></td></tr></tbody></table> </td></tr></tbody></table> </td></tr></tbody></table> [{ /if }] <br>\r\n <br>\r\n [{ if $simarticle2 }]\r\n       Und zuletzt nochmal ein Ähnlicher Artikel zu Ihrer letzten Bestellung :<br>\r\n\r\n<table width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="165" height="15" align="center" class="aktionhead">Schnäppchen !</td></tr><tr><td valign="top" height="145" class="aktionmain"> Jetzt gibt es unseren Bestseller <a class="aktionhighlight" href="[{$simarticle2->oxdetaillink}]">[{ $simarticle2->oxarticles__oxtitle->value }]</a> in der günstigen Sonderausgabe exklusiv bei OXID !<br>\r\n Gleich <a class="aktionhighlight" href="[{$simarticle2->tobasketlink}]&am=1">bestellen</a> !<br>\r\n </td></tr></tbody></table> [{/if}] </td></tr></tbody></table> </td></tr><tr><td align="right" class="pagebottom">\r\n© 2005 OXID </td></tr></tbody></table>\r\n</body>\r\n</html>', 'OXID eSales Newsletter\r\n\r\nHallo, [{ $myuser->oxuser__oxsal->value }] [{ $myuser->oxuser__oxfname->value }] [{ $myuser->oxuser__oxlname->value }],\r\n\r\nwie Sie sehen können, funktioniert unser Newsletter-Modul richtig gut.\r\n\r\nNicht nur, dass wir hier Ihre Adresse ausgeben können:\r\n\r\n[{ $myuser->oxuser__oxaddinfo->value }]\r\n[{ $myuser->oxuser__oxstreet->value }]\r\n[{ $myuser->oxuser__oxzip->value }] [{ $myuser->oxuser__oxcity->value }]\r\n[{ $myuser->oxuser__oxcountry->value }]\r\nTelefon: [{ $myuser->oxuser__oxfon->value }]\r\n\r\nsondern wir können noch viel mehr!\r\n\r\nSie wollen diesen Newsletter nicht mehr erhalten? Kein Problem - klicken Sie einfach hier:\r\n[{$shop->basedir}]index.php?cl=newsletter&fnc=removeme&uid=[{ $myuser->oxuser__oxid->value}]\r\n\r\n[{if isset($simarticle0) }]\r\n   Ein Ähnlicher Artikel zu Ihrer letzten Bestellung ist:\r\n \r\n    [{ $simarticle0->oxarticles__oxtitle->value }] \r\n Statt [{ $simarticle0->ftprice}] jetzt nur [{ $simarticle0->fprice }] [{ $mycurrency->name}]\r\n[{/if}]\r\n\r\n[{if isset($articlelist) }]\r\n  Ausgesuchte Artikel aus unserem Shop extra für diesen Newsletter: \r\n     [{foreach from=$articlelist item=product}]  \r\n        [{ $product->oxarticles__oxtitle->value }]   Jetzt nur [{ $product->fprice }] [{ $mycurrency->name}]\r\n    [{/foreach}] \r\n[{/if}]           \r\n     \r\n');
 
 #
-# Daten für Tabelle `oxdelivery`
+# Data for table `oxdelivery`
 #
 
 INSERT INTO `oxdelivery` VALUES ('1b842e734b62a4775.45738618', 'oxbaseshop', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Versandkosten für Standard: Versandkostenfrei ab 80,-', '', '', '', 'abs', '0', 'p', '80.00', '999999', '0', 1000, '1');
@@ -414,7 +414,7 @@ INSERT INTO `oxdelivery` VALUES ('1b842e738970d31e3.71258327', 'oxbaseshop', '1'
 INSERT INTO `oxdelivery` VALUES ('1b842e738970d31e3.71258328', 'oxbaseshop', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Versandkosten für Beispiel Set2: UPS 24 Std. Express: 12,90.-', '', '', '', 'abs', '12.9', 'p', '0', '99999', '0', 5000, '1');
 
 #
-# Daten für Tabelle `oxdiscount`
+# Data for table `oxdiscount`
 #
 
 INSERT INTO `oxdiscount` VALUES ('9fc3e801d40332ae4.08296552', 'oxbaseshop', '0', '2003-03-29 00:00:00', '2003-03-30 00:00:00', '15% auf den gesamten Shop an einem Tag', '15% on all articles for one day', '', '', '0', '999999', '999999', '0', '%', '15', '', 0, 0);
@@ -422,7 +422,7 @@ INSERT INTO `oxdiscount` VALUES ('9fc3e801da9cdd0b2.74513077', 'oxbaseshop', '0'
 INSERT INTO `oxdiscount` VALUES ('4e542e4e8dd127836.00288451', 'oxbaseshop', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Aktion Schnäppchen', 'Current Bargain', '', '', '1', '99999', '0', '0', '%', '10', '', 0, 0);
 
 #
-# Daten für Tabelle `oxobject2discount`
+# Data for table `oxobject2discount`
 #
 
 INSERT INTO `oxobject2discount` VALUES ('4e542e4e8f60a0562.61817542', '4e542e4e8dd127836.00288451', '1771', 'oxarticles');
@@ -431,7 +431,7 @@ INSERT INTO `oxobject2discount` VALUES ('0a842e4fd23a60e04.47404876', '4e542e4e8
 INSERT INTO `oxobject2discount` VALUES ('79042e787aea9e9d9.36926408', '4e542e4e8dd127836.00288451', 'd8842e3cbf9290351.59301740', 'oxarticles');
 
 #
-# Daten für Tabelle `oxobject2group`
+# Data for table `oxobject2group`
 #
 
 INSERT INTO `oxobject2group` VALUES ('f1d3fdd845d646ce0.54037160', 'oxbaseshop', 'oxidcashondel', 'oxidsmallcust');
@@ -480,13 +480,13 @@ INSERT INTO `oxobject2group` VALUES ('c193fddd49b5f65d4.60703125', 'oxbaseshop',
 INSERT INTO `oxobject2group` VALUES ('dfc42e744180bf4a9.98598495', 'oxbaseshop', 'dfc42e74417f07347.45624764', 'oxidnewcustomer');
 
 #
-# Daten für Tabelle `oxlinks`
+# Data for table `oxlinks`
 #
 
 INSERT INTO `oxlinks` VALUES ('ce342e8acb69f1748.25672556', 'oxbaseshop', 1, 'http://www.oxid-esales.com', 'Die OXID eSales AG ist Hersteller der E-Commerce Software OXID eShop. Mit den Produktlinien Professional Edition und Enterprise Edition sowie der Mietshop-Lösung OXID eShop easy setzt das Unternehmen Standards im Online-Versandhandel zu einem außergewöhnlichen Preis-/Leistungsverhältnis. Die OXID eShop Produkte basieren auf modernster Technologie, lassen sich umfassend anpassen und vollständig in Ihre Geschäftsprozesse integrieren. Die ergänzende E-Commerce Plattform OXID eFire bietet Schnittstellen zu E-Commerce Partnern wie Payment-Dienstleistern, Webcontrolling und Datamining, Produktportalen, Preissuchmaschinen oder Affiliate-Programmen und sorgt dafür, dass der Onlinehandel nachhaltig zum Erfolg wird.', '<div><span style="color: #333333;">Check out <strong><span style="color: #666666;">OXID</span> <span style="color: #ff6633;"> e</span><span style="color: #333333;">Shop</span></strong><span style="color: #333333;"> - download the 30 day free trial today!\r\n</span></span></div>', '', '', NOW());
 
 #
-# Daten für Tabelle `oxobject2delivery`
+# Data for table `oxobject2delivery`
 #
 
 INSERT INTO `oxobject2delivery` VALUES ('1b842e7374c0e1f94.89847367', 'oxidstandard', 'a7c40f631fc920687.20179984', 'oxdelset');
@@ -504,7 +504,7 @@ INSERT INTO `oxobject2delivery` (`OXID`, `OXDELIVERYID`, `OXOBJECTID`, `OXTYPE`)
 INSERT INTO `oxobject2delivery` (`OXID`, `OXDELIVERYID`, `OXOBJECTID`, `OXTYPE`) VALUES ('ae04162c316786d15.81085559', 'b763e957d6d42dd40.18579550', 'a7c40f6321c6f6109.43859248', 'oxcountry');
 
 #
-# Daten für Tabelle `oxstatistics`
+# Data for table `oxstatistics`
 #
 
 INSERT INTO `oxstatistics` VALUES ('79c3fbcc7793ee6a2.42827424', 'oxbaseshop', 'Report 1', 'a:2:{i:0;s:27:"report_visitor_absolute.php";i:1;s:24:"report_searchstrings.php";}');
@@ -512,21 +512,21 @@ INSERT INTO `oxstatistics` VALUES ('79c3fbcc7793ee6a2.42827424', 'oxbaseshop', '
 UPDATE `oxshops` SET `OXDEFCAT` = '8a142c3e60a535f16.78077188' WHERE `OXID` = 'oxbaseshop';
 
 #
-# Daten für Tabelle `vendor`
+# Data for table `vendor`
 #
 
 INSERT INTO `oxvendor` VALUES ('68342e2955d7401e6.18967838', 'oxbaseshop', '1', '', 'Haller Stahlwaren', '', 'Haller Stahlwaren', '', '', '', '', '', '1');
 INSERT INTO `oxvendor` VALUES ('77442e37fdf34ccd3.94620745', 'oxbaseshop', '1', '', 'Bush', 'Original Retro_Electronics', 'Bush', 'Originale Retro_Electronics.', '', '', '', '', '1');
 
 #
-# Daten für Tabelle `oxmanufacturers`
+# Data for table `oxmanufacturers`
 #
 
 INSERT INTO `oxmanufacturers` VALUES ('fe07958b49de225bd1dbc7594fb9a6b0', 'oxbaseshop', '1', '', 'Haller Stahlwaren', '', 'Haller Stahlwaren', '', '', '', '', '', '1');
 INSERT INTO `oxmanufacturers` VALUES ('ee4948794e28d488cf1c8101e716a3f4', 'oxbaseshop', '1', '', 'Bush', 'Original Retro_Electronics', 'Bush', 'Originale Retro_Electronics.', '', '', '', '', '1');
 
 #
-# Daten für Tabelle `oxprice2article`
+# Data for table `oxprice2article`
 #
 
 INSERT INTO `oxprice2article` VALUES ('d8842e3d44dc80470.49214559', 'oxbaseshop', '85b42c94a32b3fdd2.66642220', '18.4', '0', '6', '20');
@@ -539,7 +539,7 @@ INSERT INTO `oxprice2article` VALUES ('1b842e75abb2e7bb1.31308046', 'oxbaseshop'
 INSERT INTO `oxprice2article` VALUES ('43642e8ae668a3a47.66942915', 'oxbaseshop', '85b42c94a32b3fdd2.66642220', '14.9', '0', '51', '999');
 
 #
-# Daten für Tabelle `oxartextends`
+# Data for table `oxartextends`
 #
 
 

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxbasket.php 16757 2009-02-24 13:45:45Z vilma $
+ * $Id: oxbasket.php 16841 2009-02-26 09:23:09Z arvydas $
  */
 
 /**
@@ -1355,7 +1355,7 @@ class oxBasket extends oxSuperCfg
         $aSavedItems = $oBasket->getItems();
         foreach ( $aSavedItems as $oItem ) {
             try {
-                $this->addToBasket( $oItem->getId(), $oItem->dAmount, $oItem->aSelList, null, true );
+                $this->addToBasket( $oItem->oxuserbasketitems__oxartid->value, $oItem->oxuserbasketitems__oxamount->value, $oItem->getSelList(), null, true );
             } catch( oxArticleException $oEx ) {
                 // caught and ignored
             }
