@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: article_seo.php 16307 2009-02-05 10:31:42Z arvydas $
+ * $Id: article_seo.php 17706 2009-03-31 13:59:00Z vilma $
  */
 
 /**
@@ -181,10 +181,10 @@ class Article_Seo extends Object_Seo
                 if ( $this->_getCategoryList( $oArticle )->count() ) {
                     $this->_sActCatType = 'oxcategories';
                     $this->_sActCatId   = $this->_getCategoryList( $oArticle )->current()->oxcategories__oxrootid->value;
-                } elseif ( $this->_getVendorList( $oArticle )->count() ) {
+                } elseif ( $this->_getVendorList( $oArticle ) && $this->_getVendorList( $oArticle )->count() ) {
                     $this->_sActCatType = 'oxvendor';
                     $this->_sActCatId   = $this->_getVendorList( $oArticle )->current()->getId();
-                } elseif ( $this->_getManufacturerList( $oArticle )->count() ) {
+                } elseif ( $this->_getManufacturerList( $oArticle ) && $this->_getManufacturerList( $oArticle )->count() ) {
                     $this->_sActCatType = 'oxmanufacturer';
                     $this->_sActCatId   = $this->_getManufacturerList( $oArticle )->current()->getId();
                 }

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: newsletter.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
+ * $Id: newsletter.php 17315 2009-03-17 16:18:58Z arvydas $
  */
 
 /**
@@ -66,12 +66,11 @@ class Newsletter extends oxUBase
     protected $_sThisTemplate = 'newsletter.tpl';
 
     /**
-     * Current view search engine indexing state:
-     *     0 - index without limitations
-     *     1 - no index / no follow
-     *     2 - no index / follow
+     * Current view search engine indexing state
+     *
+     * @var int
      */
-    protected $_iViewIndexState = 1;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXNOFOLLOW;
 
     /**
      * Executes parent::render(), loads action articles and
@@ -143,7 +142,7 @@ class Newsletter extends oxUBase
         }
 
         $blSubscribe = oxConfig::getParameter("subscribeStatus");
-        
+
         $oUser = oxNew( 'oxuser' );
         $oUser->oxuser__oxusername = new oxField($aParams['oxuser__oxusername'], oxField::T_RAW);
 
@@ -162,12 +161,12 @@ class Newsletter extends oxUBase
         } else {
             $blUserLoaded = $oUser->load( $oUser->getId() );
         }
-        
+
         // if user was added/loaded successfully and subscribe is on - subscribing to newsletter
         if ( $blSubscribe && $blUserLoaded ) {
-            //removing user from subscribe list before adding 
+            //removing user from subscribe list before adding
             $oUser->setNewsSubscription( false, false );
-            
+
             if ( $oUser->setNewsSubscription( true, true ) ) {
                 // done, confirmation required
                 $this->_iNewsletterStatus = 1;

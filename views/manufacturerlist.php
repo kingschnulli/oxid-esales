@@ -80,19 +80,18 @@ class ManufacturerList extends aList
     protected $_blShowSorting = true;
 
     /**
-     * Current view search engine indexing state:
-     *     0 - index without limitations
-     *     1 - no index / no follow
-     *     2 - no index / follow
+     * Current view search engine indexing state
+     *
+     * @var int
      */
-    protected $_iViewIndexState = 2;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXFOLLOW;
 
     /**
      * Executes parent::render(), loads active Manufacturer, prepares article
      * list sorting rules. Loads list of articles which belong to this Manufacturer
      * Generates page navigation data
      * such as previous/next window URL, number of available pages, generates
-     * metatags info (oxview::_convertForMetaTags()) and returns name of
+     * metatags info (oxubase::_convertForMetaTags()) and returns name of
      * template to render.
      *
      * Template variables:

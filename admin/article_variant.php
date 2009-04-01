@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: article_variant.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: article_variant.php 17243 2009-03-16 15:16:57Z arvydas $
  */
 
 /**
@@ -265,20 +265,23 @@ class Article_Variant extends oxAdminDetails
 
         $sSLViewName = getViewName('oxselectlist');
 
-        if ($aSels)
+        if ($aSels) {
+            $myUtils = oxUtils::getInstance();
+            $myLang  = oxLang::getInstance();
+            $oDb = oxDb::getDb();
             foreach ($aSels as $sSelID) {
 
                 $oSel = oxNew("oxselectlist");
                 $oSel->load($sSelID);
 
                 //selecting select list name values
-                $this->sLanguage = oxLang::getInstance()->getBaseLanguage();
+                $this->sLanguage = $myLang->getBaseLanguage();
 
-                $sField = "oxvaldesc".oxLang::getInstance()->getLanguageTag();
+                $sField = "oxvaldesc".$myLang->getLanguageTag();
                 $sQ = "select $sField from $sSLViewName where oxid  = '$sSelID' ";
-                $sValues = oxDb::getDb()->GetOne($sQ);
+                $sValues = $oDb->GetOne($sQ);
 
-                $aValues = oxUtils::getInstance()->assignValuesFromText($sValues );
+                $aValues = $myUtils->assignValuesFromText($sValues );
                 //iterating through all select list values (eg. $oValue->name = S, M, X, XL)
                 $iCounter = 0;
                 foreach ($aValues as $oValue) {
@@ -338,5 +341,6 @@ class Article_Variant extends oxAdminDetails
                 $oArticle->oxarticles__oxvarname->setValue(trim($oArticle->oxarticles__oxvarname->value));
                 $oArticle->save();
             }
+        }
     }
 }

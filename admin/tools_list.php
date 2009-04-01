@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: tools_list.php 16553 2009-02-13 18:29:53Z tomas $
+ * $Id: tools_list.php 17644 2009-03-27 14:00:12Z arvydas $
  */
 
 /**
@@ -59,7 +59,8 @@ class Tools_List extends oxAdminList
         }
 
         $sUpdateSQL = trim(stripslashes($sUpdateSQL));
-        $iLen = getStr()->strlen($sUpdateSQL);
+        $oStr = getStr();
+        $iLen = $oStr->strlen($sUpdateSQL);
         if ( $this->_prepareSQL(trim(stripslashes($sUpdateSQL)), $iLen)) {
             $aQueries = $this->aSQLs;
             $this->_aViewData["aQueries"] = array();
@@ -78,10 +79,10 @@ class Tools_List extends oxAdminList
                     if ( strlen( $sUpdateSQL)>0) {
                         $aPassedQueries[$iQueriesCounter] = nl2br( htmlentities($sUpdateSQL));
                         if ( getStr()->strlen( $aPassedQueries[$iQueriesCounter]) > 200)
-                            $aPassedQueries[$iQueriesCounter] = getStr()->getStr()->substr( $aPassedQueries[$iQueriesCounter], 0, 200)."...";
+                            $aPassedQueries[$iQueriesCounter] = $oStr->substr( $aPassedQueries[$iQueriesCounter], 0, 200)."...";
 
-                        while ( $sUpdateSQL[ getStr()->strlen( $sUpdateSQL)-1] == ";") {
-                            $sUpdateSQL = getStr()->substr( $sUpdateSQL, 0, ( getStr()->strlen( $sUpdateSQL)-1));
+                        while ( $sUpdateSQL[ $oStr->strlen( $sUpdateSQL)-1] == ";") {
+                            $sUpdateSQL = $oStr->substr( $sUpdateSQL, 0, ( $oStr->strlen( $sUpdateSQL)-1));
                         }
 
                         $oDB->execute( $sUpdateSQL);
@@ -159,6 +160,7 @@ class Tools_List extends oxAdminList
         $sChar = "";
         $sStrStart = "";
         $blString  = false;
+        $oStr = getStr();
 
         //removing "mysqldump" application comments
         while ( preg_match("/^\-\-.*\n/", $sSQL))
@@ -170,7 +172,7 @@ class Tools_List extends oxAdminList
             $sChar = $sSQL[$iPos];
             if ( $blString) {
                 while ( true) {
-                    $iPos = getStr()->strpos( $sSQL, $sStrStart, $iPos);
+                    $iPos = $oStr->strpos( $sSQL, $sStrStart, $iPos);
                     //we are at the end of string ?
                     if (!$iPos) {
                         $this->aSQLs[] = $sSQL;
@@ -195,9 +197,9 @@ class Tools_List extends oxAdminList
                     }
                 }
             } elseif ( $sChar == ";") { // delimiter found, appending query array
-                $this->aSQLs[] = getStr()->substr( $sSQL, 0, $iPos);
-                $sSQL = ltrim( getStr()->substr( $sSQL, min( $iPos + 1, $iSQLlen)));
-                $iSQLlen = getStr()->strlen( $sSQL);
+                $this->aSQLs[] = $oStr->substr( $sSQL, 0, $iPos);
+                $sSQL = ltrim( $oStr->substr( $sSQL, min( $iPos + 1, $iSQLlen)));
+                $iSQLlen = $oStr->strlen( $sSQL);
                 if ( $iSQLlen)
                     $iPos      = -1;
                 else
@@ -207,16 +209,16 @@ class Tools_List extends oxAdminList
                 $sStrStart = $sChar;
             } elseif ( $sChar == "#" || ( $sChar == ' ' && $iPos > 1 && $sSQL[$iPos-2] . $sSQL[$iPos-1] == '--')) {  // removing # commented query code
                 $iCommStart = (( $sSQL[$iPos] == "#") ? $iPos : $iPos-2);
-                $iCommEnd = (getStr()->strpos(' ' . $sSQL, "\012", $iPos+2))
-                           ? getStr()->strpos(' ' . $sSQL, "\012", $iPos+2)
-                           : getStr()->strpos(' ' . $sSQL, "\015", $iPos+2);
+                $iCommEnd = ($oStr->strpos(' ' . $sSQL, "\012", $iPos+2))
+                           ? $oStr->strpos(' ' . $sSQL, "\012", $iPos+2)
+                           : $oStr->strpos(' ' . $sSQL, "\015", $iPos+2);
                 if ( !$iCommEnd) {
                     if ( $iCommStart > 0)
-                        $this->aSQLs[] = trim(getStr()->substr($sSQL, 0, $iCommStart));
+                        $this->aSQLs[] = trim($oStr->substr($sSQL, 0, $iCommStart));
                     return true;
                 } else {
-                    $sSQL = getStr()->substr($sSQL, 0, $iCommStart).ltrim(getStr()->substr($sSQL, $iCommEnd));
-                    $iSQLlen = getStr()->strlen($sSQL);
+                    $sSQL = $oStr->substr($sSQL, 0, $iCommStart).ltrim($oStr->substr($sSQL, $iCommEnd));
+                    $iSQLlen = $oStr->strlen($sSQL);
                     $iPos--;
                 }
             } elseif ( 32358 < 32270 && ($sChar == '!' && $iPos > 1  && $sSQL[$iPos-2] . $sSQL[$iPos-1] == '/*'))  // removing comments like /**/

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: payment.php 16591 2009-02-18 11:48:46Z vilma $
+ * $Id: payment.php 17247 2009-03-16 15:21:20Z arvydas $
  */
 
 /**
@@ -395,10 +395,11 @@ class Payment extends oxUBase
     protected function _setDeprecatedValues( & $aPaymentList, $oBasket = null )
     {
         if ( is_array($aPaymentList) ) {
+            $oLang = oxLang::getInstance();
             foreach ( $aPaymentList as $oPayment ) {
                 $oPrice = $oPayment->getPaymentPrice( $oBasket );
                 $oPayment->dAddPaymentSum = $oPrice->getBruttoPrice();
-                $oPayment->fAddPaymentSum = oxLang::getInstance()->formatCurrency( $oPayment->dAddPaymentSum, $oBasket->getBasketCurrency() );
+                $oPayment->fAddPaymentSum = $oLang->formatCurrency( $oPayment->dAddPaymentSum, $oBasket->getBasketCurrency() );
                 $oPayment->aDynValues     = $oPayment->getDynValues();
                 if ( $oPayment->oxpayments__oxchecked->value ) {
                     $this->_sCheckedId = $oPayment->getId();
@@ -477,7 +478,7 @@ class Payment extends oxUBase
         //such info available ?
         if ( $oUserPayment->getPaymentByPaymentType( $this->getUser(), 'oxiddebitnote' ) ) {
             $aAddPaymentData = oxUtils::getInstance()->assignValuesFromText( $oUserPayment->oxuserpayments__oxvalue->value );
-       
+
             //checking if some of values is allready set in session - leave it
             foreach ( $aAddPaymentData as $oData ) {
                 if ( !isset( $this->_aDynValue[$oData->name] ) ||

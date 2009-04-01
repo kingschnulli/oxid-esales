@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: attribute_main.inc.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: attribute_main.inc.php 17244 2009-03-16 15:17:48Z arvydas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -141,7 +141,9 @@ class ajaxComponent extends ajaxListComponent
      */
     protected function _getQueryCols()
     {
-        $myConfig      = $this->getConfig();
+        $myConfig = $this->getConfig();
+        $sLangTag = oxLang::getInstance()->getLanguageTag();
+
         $sQ = '';
         $blSep = false;
         $aVisiblecols = $this->_getVisibleColNames();
@@ -150,9 +152,9 @@ class ajaxComponent extends ajaxListComponent
                 $sQ .= ', ';
             $sViewTable = getViewName( $aCol[1] );
             // multilanguage
-            $sCol = $aCol[3]?$aCol[0].oxLang::getInstance()->getLanguageTag():$aCol[0];
+            $sCol = $aCol[3]?$aCol[0].$sLangTag:$aCol[0];
             if ( $myConfig->getConfigParam( 'blVariantsSelection' ) && $aCol[0] == 'oxtitle' ) {
-                $sVarSelect = "$sViewTable.oxvarselect".oxLang::getInstance()->getLanguageTag();
+                $sVarSelect = "$sViewTable.oxvarselect".$sLangTag;
                 $sQ .= " IF( $sViewTable.$sCol != '', $sViewTable.$sCol, CONCAT((select oxart.$sCol from $sViewTable as oxart where oxart.oxid = $sViewTable.oxparentid),', ',$sVarSelect)) as _" . $iCnt;
             } else {
                 $sQ  .= $sViewTable . '.' . $sCol . ' as _' . $iCnt;
@@ -166,7 +168,7 @@ class ajaxComponent extends ajaxListComponent
                 $sQ .= ', ';
 
             // multilanguage
-            $sCol = $aCol[3]?$aCol[0].oxLang::getInstance()->getLanguageTag():$aCol[0];
+            $sCol = $aCol[3]?$aCol[0].$sLangTag:$aCol[0];
             $sQ  .= getViewName( $aCol[1] ) . '.' . $sCol . ' as _' . $iCnt;
         }
 

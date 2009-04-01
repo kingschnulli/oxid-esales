@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 16720 2009-02-23 14:15:01Z philipp.grashoff $
+ * $Id: lang.php 17729 2009-04-01 07:50:51Z rimvydas.paskevicius $
  */
 
 $sLangName  = "English";
@@ -27,7 +27,7 @@ $iLangNr    = 1;
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
 $aLang = array(
-'charset'                                         => 'UTF-8',
+'charset'                                         => 'ISO-8859-15',
 'fullDateFormat'                                  => 'Y-m-d H:i:s',
 
 'ACCOUNT_LOGIN_LOGIN'                             => "Login",
@@ -107,7 +107,7 @@ $aLang = array(
 'ACCOUNT_USER_ERRINVALIDEMAIL'                    => "Error: Invalid eMail Address!",
 'ACCOUNT_USER_ERREMAILALREADYTAKEN'               => "Error: This email address is already taken!",
 'ACCOUNT_USER_BILLINGADDRESS'                     => "Billing Address",
-'ACCOUNT_USER_COMPLETEMARKEDFIELDS'               => '(Please complete all fields marked with a <span class="req">*</span>.)',
+'ACCOUNT_USER_COMPLETEMARKEDFIELDS'               => '(Please complete all fields marked with a <span class="req">*</span>)',
 'ACCOUNT_USER_EMAIL'                              => "eMail Address:",
 'ACCOUNT_USER_TITLE'                              => "Title:",
 'ACCOUNT_USER_MR'                                 => "Mr",
@@ -254,7 +254,7 @@ $aLang = array(
 'COMPARE_SELECTATLEASTTWOART'                     => "Please select at least two products to be compared.",
 'COMPARE_BACKTOSHOP'                              => "Back to Shop",
 'CONTACT_TITLECONTACT'                            => "Contact",
-'CONTACT_COMPLETEMARKEDFIELDS'                    => 'Please complete all fields marked with a <span class="req">*</span>.',
+'CONTACT_COMPLETEMARKEDFIELDS'                    => 'Please complete all fields marked with a <span class="req">*</span>',
 'CONTACT_PHONE'                                   => "Phone:",
 'CONTACT_FAX'                                     => "Fax:",
 'CONTACT_EMAIL'                                   => "eMail:",
@@ -268,7 +268,7 @@ $aLang = array(
 'CONTACT_SUBJECT'                                 => "Subject:",
 'CONTACT_MESSAGE'                                 => "Message:",
 'CONTACT_VERIFICATIONCODE'                        => "Verification code:",
-'CONTACT_COMPLETEMARKEDFIELDS2'                   => 'Please complete all fields marked with a <span class="req">*</span>.',
+'CONTACT_COMPLETEMARKEDFIELDS2'                   => 'Please complete all fields marked with a <span class="req">*</span>',
 'CONTACT_SEND'                                    => "Send",
 'CONTACT_THANKYOU1'                               => "Thank you.",
 'CONTACT_THANKYOU2'                               => " appreciates your comments.",
@@ -293,8 +293,6 @@ $aLang = array(
 'DETAILS_PERSPARAM_FROM'                          => "from",
 'DETAILS_PERSPARAM_PCS'                           => "pcs",
 'DETAILS_PERSPARAM_DISCOUNT'                      => "% Discount",
-'DETAILS_PERSPARAM_QUANTITY'                      => "Quantity:",
-'DETAILS_PERSPARAM_ADDTOCART'                     => "add to Cart",
 'DETAILS_PERSPARAM_PRICEALARM'                    => "<b>[!]</b> Price Alert",
 'DETAILS_PERSPARAM_LABEL'                         => "Label:",
 'DETAILS_PERSPARAM_PRICEALARM2'                   => "<b>[!]</b> Price Alert",
@@ -351,7 +349,6 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_DISCOUNT'                  =>"Discount:",
 'EMAIL_ORDER_CUST_HTML_REVIEW'                    =>"review",
 'EMAIL_ORDER_CUST_HTML_YOURGREETINGCARD'          =>"Your Greeting Card:",
-'EMAIL_ORDER_CUST_HTML_YOURMESSAGE'               =>"Your Message:",
 'EMAIL_ORDER_CUST_HTML_USEDCOUPONS'               =>"Used Coupons,",
 'EMAIL_ORDER_CUST_HTML_REBATE'                    =>"Rebate",
 'EMAIL_ORDER_CUST_HTML_TOTALNET'                  =>"Total Products (net) :",
@@ -460,7 +457,6 @@ $aLang = array(
 'FORGOTPWD_UPDATESUCCESSTITLE'                    => "Change password",
 'FORGOTPWD_UPDATE_SUCCESS'                        => "Your password was changed successfully!",
 'FORGOTPWD_UPDATETITLE'                           => "New password",
-'FORGOTPWD_BACKTOSHOP'                            => "Back to Shop",
 'FORGOTPWD_ENTERNEWPASSWORD'                      => "Please enter new password.",
 'FORGOTPWD_NEWPASSWORD'                           => "New password:",
 'FORGOTPWD_CONFIRMPASSWORD'                       => "Confirm password:",
@@ -593,7 +589,6 @@ $aLang = array(
 'INC_HEADER_NOTICELIST'                           =>"My Wish List",
 'INC_HEADER_HELP'                                 =>"Help",
 'INC_HEADER_LINKS'                                =>"Links",
-'INC_HEADER_HOME'                                 =>"HOME",
 'INC_HEADER_WISHLIST'                             =>"My Gift Registry",
 'INC_HEADER_PRIVATWISHLIST'                       =>"'s Gift Registry",
 'INC_HEADER_HOME'                                 =>"Home",
@@ -913,13 +908,13 @@ $aLang = array(
 'REGISTER_ERRMINLENGTH'                           => "Error: The Password minimum length is 6 characters.",
 'REGISTER_OPENACCOUNT'                            => "Open account",
 'REGISTER_ACCOUNTINFO'                            => "Account information",
-'REGISTER_COMPLETEMARKEDFIELDS'                   => '(Please complete all fields marked with a <span class="req">*</span>.)',
+'REGISTER_COMPLETEMARKEDFIELDS'                   => '(Please complete all fields marked with a <span class="req">*</span>)',
 'REGISTER_EMAIL'                                  => "eMail Address:",
 'REGISTER_PWD'                                    => "Password:",
 'REGISTER_CONFIRMPWD'                             => "Confirm Password:",
 'REGISTER_NEWSLETTER'                             => "Newsletter subscription",
 'REGISTER_BILLINGADDRESS'                         => "Billing Address",
-'REGISTER_COMPLETEMARKEDFIELDS2'                  => '(Please complete all fields marked with a <span class="req">*</span>.)',
+'REGISTER_COMPLETEMARKEDFIELDS2'                  => '(Please complete all fields marked with a <span class="req">*</span>)',
 'REGISTER_TITLE'                                  => "Title:",
 'REGISTER_MR'                                     => "Mr",
 'REGISTER_MRS'                                    => "Mrs",
@@ -1084,7 +1079,7 @@ $aLang = array(
 'USER_ERROR'                                      => "<b>Error:</b>",
 'USER_ERRPWDDONTMATCH'                            => "Error: Passwords don't match.",
 'USER_ERRWRONGUSERORPWD2'                         => "Error: Wrong Username/Password.",
-'USER_ERRCOMLETEMARKEDFIELDS'                     => 'Error: Please complete all fields marked with a <span class="req">*</span>.',
+'USER_ERRCOMLETEMARKEDFIELDS'                     => 'Error: Please complete all fields marked with a <span class="req">*</span>',
 'USER_ERRCOMPLETEBILLINGADDRESS'                  => "Error: Please complete the Billing Address.",
 'USER_ERRINVALIDEMAIL2'                           => "Error: Invalid eMail Address !",
 'USER_ERRALREADYREGISTERED2'                      => "Error: You're already registered. Please enter your correct Password.",
@@ -1098,7 +1093,7 @@ $aLang = array(
 'USER_CONFIRMPWD'                                 => "Confirm Password:",
 'USER_SEND'                                       => "Send",
 'USER_BILLINDADDRESS'                             => "Billing Address",
-'USER_COMPLETEALLMARKEDFIELDS'                    => '(Please complete all fields marked with a <span class="req">*</span>.)',
+'USER_COMPLETEALLMARKEDFIELDS'                    => '(Please complete all fields marked with a <span class="req">*</span>)',
 'USER_EMAILADDRESS2'                              => "eMail Address:",
 'USER_TITLE'                                      => "Title:",
 'USER_MR'                                         => "Mr",
@@ -1190,7 +1185,7 @@ $aLang = array(
 'EXCEPTION_USER_OPENIDCANCELED'                   => 'Verification Cancelled by user',
 'EXCEPTION_USER_OPENIDVALIDFAILED'                => 'OpenID authentication failed: %s',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                    => 'Please enter a valid e-mail address',
-'EXCEPTION_INPUT_NOTALLFIELDS'                    => 'Please complete all fields marked with a <span class="req">*</span>.',
+'EXCEPTION_INPUT_NOTALLFIELDS'                    => 'Please complete all fields marked with a <span class="req">*</span>',
 'EXCEPTION_PAGE_TITLE'                            => 'Error',
 'EXCEPTION_PAGE_HEADLINE'                         => 'The shop is temporary offline<br>Please come back later<br><br>Thank you for understanding.',
 'EXCEPTION_FILE_ERRORINFILE'                      => 'Error in file!',

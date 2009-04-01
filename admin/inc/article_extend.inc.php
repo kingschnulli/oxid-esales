@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: article_extend.inc.php 16814 2009-02-25 12:52:49Z arvydas $
+ * $Id: article_extend.inc.php 17244 2009-03-16 15:17:48Z arvydas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -118,17 +118,18 @@ class ajaxComponent extends ajaxListComponent
         $soxId      = oxConfig::getParameter( 'oxid' );
         $sShopID    = $myConfig->getShopId();
         $sO2CView = getViewName( 'oxobject2category' );
+        $oDb = oxDb::getDb();
 
         // removing all
         if ( oxConfig::getParameter( 'all' ) ) {
 
             $sQ = $this->_addFilter( "delete $sO2CView.* ".$this->_getQuery() );
-            oxDb::getDb()->Execute( $sQ );
+            $oDb->Execute( $sQ );
 
         } elseif ( is_array( $aRemoveCat ) && count( $aRemoveCat ) ) {
 
             $sQ = 'delete from oxobject2category where oxid in ("' . implode( '", "', $aRemoveCat ) . '")';
-            oxDb::getDb()->Execute( $sQ );
+            $oDb->Execute( $sQ );
 
         }
 
@@ -157,18 +158,20 @@ class ajaxComponent extends ajaxListComponent
 
         if ( isset( $aAddCat) && is_array($aAddCat)) {
 
+            $oDb = oxDb::getDb();
 
             $oNew = oxNew( 'oxbase' );
             $oNew->init( 'oxobject2category' );
+            $myUtilsObj = oxUtilsObject::getInstance();
 
             foreach ( $aAddCat as $sAdd ) {
 
                 // check, if it's already in, then don't add it again
                 $sSelect = 'select 1 from ' . $sO2CView . ' as oxobject2category where oxobject2category.oxcatnid="' . $sAdd . '" and oxobject2category.oxobjectid ="' . $soxId . '"';
-                if ( oxDb::getDb()->getOne( $sSelect ) )
+                if ( $oDb->getOne( $sSelect ) )
                     continue;
 
-                $oNew->oxobject2category__oxid       = new oxField($oNew->setId( oxUtilsObject::getInstance()->generateUID() ));
+                $oNew->setId( $myUtilsObj->generateUID() );
                 $oNew->oxobject2category__oxobjectid = new oxField($soxId);
                 $oNew->oxobject2category__oxcatnid   = new oxField($sAdd);
                 $oNew->oxobject2category__oxtime     = new oxField(time());

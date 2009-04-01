@@ -38,8 +38,6 @@ function DeleteThis( sID)
 
 function ChangeEditBar( sLocation, sPos)
 {
-    [{include file="autosave.script.tpl"}]
-
     var oSearch = document.getElementById("search");
     oSearch.actedit.value=sPos;
     oSearch.submit();

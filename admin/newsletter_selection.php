@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: newsletter_selection.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: newsletter_selection.php 17189 2009-03-13 12:19:59Z arvydas $
  */
 
 /**
@@ -145,7 +145,5 @@ class Newsletter_Selection extends oxAdminDetails
         // set oxid if inserted
         if ( $soxId == "-1")
             oxSession::setVar( "saved_oxid", $oNewsletter->oxnewsletter__oxid->value);
-
-        return $this->autosave();
     }
 }

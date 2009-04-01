@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: compare.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
+ * $Id: compare.php 17016 2009-03-04 13:05:30Z vilma $
  */
 
 /**
@@ -80,6 +80,18 @@ class Compare extends oxUBase
      * @var object
      */
     protected $_oPageNavigation = null;
+
+    /**
+     * Sign if to load and show top5articles action
+     * @var bool
+     */
+    protected $_blTop5Action = true;
+
+    /**
+     * Sign if to load and show bargain action
+     * @var bool
+     */
+    protected $_blBargainAction = true;
 
     /**
      * Current class template name.

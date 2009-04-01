@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxcategorylist.php 16455 2009-02-11 13:40:50Z vilma $
+ * $Id: oxcategorylist.php 17411 2009-03-19 09:24:17Z arvydas $
  */
 
 
@@ -94,15 +94,16 @@ class oxCategoryList extends oxList
      */
     protected function _getSelectString($blReverse = false)
     {
-        $sViewName  = $this->getBaseObject()->getViewName();
-        $sFieldList = $this->getBaseObject()->getSelectFields();
+        $oBaseObject = $this->getBaseObject();
+        $sViewName  = $oBaseObject->getViewName();
+        $sFieldList = $oBaseObject->getSelectFields();
         //$sFieldList = "oxid, oxparentid, oxleft, oxright, oxrootid, oxsort, oxtitle, oxpricefrom, oxpriceto, oxicon ";
         $sWhere     = $this->_getDepthSqlSnippet();
 
         $sOrdDir    = $blReverse?'desc':'asc';
         $sOrder     = "$sViewName.oxrootid $sOrdDir, $sViewName.oxleft $sOrdDir";
 
-            $sFieldList.= ",not $sViewName.oxactive as remove";
+            $sFieldList.= ",not $sViewName.".$oBaseObject->getSqlFieldName( 'oxactive' )." as remove";
 
 
         return "select $sFieldList from $sViewName where $sWhere order by $sOrder";

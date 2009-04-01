@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: guestbook.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
+ * $Id: guestbook.php 17315 2009-03-17 16:18:58Z arvydas $
  */
 
 /**
@@ -94,12 +94,11 @@ class GuestBook extends oxUBase
     protected $_oPageNavigation = null;
 
     /**
-     * Current view search engine indexing state:
-     *     0 - index without limitations
-     *     1 - no index / no follow
-     *     2 - no index / follow
+     * Current view search engine indexing state
+     *
+     * @var int
      */
-    protected $_iViewIndexState = 1;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXNOFOLLOW;
 
     /**
      * Loads guestbook entries, forms guestbook naviagation URLS,

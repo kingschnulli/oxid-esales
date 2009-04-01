@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 16722 2009-02-23 14:21:17Z philipp.grashoff $
+ * $Id: lang.php 17042 2009-03-05 11:52:04Z sarunas $
  */
 
 $aLang = array(
@@ -76,7 +76,7 @@ $aLang = array(
 'MOD_ICONV'                                       => 'ICONV',
 'MOD_TOKENIZER'                                   => 'Tokenizer',
 'MOD_BCMATH'                                      => 'BCMath',
-'MOD_MYSQL_CONNECT'                               => 'MySQL Modul fï¿½r MySQL 5',
+'MOD_MYSQL_CONNECT'                               => 'MySQL Modul für MySQL 5',
 'MOD_GD_INFO'                                     => 'GDlib v2 [v1] incl. JPEG Unterst&uuml;tzung',
 'MOD_INI_SET'                                     => 'ini_set erlaubt',
 'MOD_REGISTER_GLOBALS'                            => 'register_globals muss ausgeschaltet sein',
@@ -116,6 +116,9 @@ $aLang = array(
 'STEP_3_DB_PASSWORD'                              => "Datenbank Passwort",
 'STEP_3_DB_DATABSE_NAME'                          => "Datenbank Name",
 'STEP_3_DB_DEMODATA'                              => "Demodaten",
+'STEP_3_UTFMODE'                                  => "UTF-8 Zeichenkodierung benutzen",
+'STEP_3_UTFNOTSUPPORTED'                          => "Weil das mbstring PHP-Modul fehlt, kann der OXID eShop nicht im UTF-8 Modus verwendet werden.",
+'STEP_3_UTFINFO'                                  => "Die UTF-8 Zeichenkodierung kann besser mit Sonderzeichen umgehen als andere Zeichenkodierungen. Dies ist insbesondere für vielsprachige eShops wichtig. Allerdings ist der eShop mit UTF-8 geringfügig langsamer als mit der Standard-Zeichenkodierung (ISO 8859-15). <br /> Wenn Sie vorhaben, viele verschiedene Sprachen im eShop zu benutzen, sollten sie UTF-8 verwenden. Wenn Sie nur Sprachen mit ähnlichen Zeichensätzen (z. B. Deutsch, Englisch, Französisch) im eShop benutzen möchten, benötigen Sie UTF-8 nicht.",
 'STEP_3_CREATE_DB_WHEN_NO_DB_FOUND'               => "Falls die Datenbank nicht vorhanden ist, wird versucht diese anzulegen",
 'BUTTON_RADIO_INSTALL_DB_DEMO'                    => "Demodaten installieren",
 'BUTTON_RADIO_NOT_INSTALL_DB_DEMO'                => "Demodaten <strong>nicht</strong> installieren",

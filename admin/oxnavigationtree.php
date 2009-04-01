@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxnavigationtree.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: oxnavigationtree.php 17442 2009-03-19 13:36:46Z arvydas $
  */
 
 /**
@@ -110,7 +110,9 @@ class OxNavigationTree extends oxSuperCfg
      */
     protected function _addDynLinks( $oDom )
     {
-        $myConfig  = $this->getConfig();
+        $myConfig = $this->getConfig();
+        $myUtilsFile = oxUtilsFile::getInstance();
+
         //$iLanguage = (int) $myConfig->getConfigParam( 'iAdminLanguage' );
         $iLanguage = oxLang::getInstance()->getTplLanguage();
         $sURL = $this->_getAdminUrl();
@@ -145,7 +147,7 @@ class OxNavigationTree extends oxSuperCfg
             $sFile = $oNode->getAttribute( 'cl' );
 
             // always display the "about" tab no matter what licence
-            if ( oxUtilsFile::getInstance()->checkFile( "{$this->_sDynIncludeUrl}pages/{$sFile}_about.php" ) ) {
+            if ( $myUtilsFile->checkFile( "{$this->_sDynIncludeUrl}pages/{$sFile}_about.php" ) ) {
                 $oTabElem = new DOMElement( 'TAB' );
                 $oNode->appendChild( $oTabElem );
                 $oTabElem->setAttribute( 'external', 'true' );
@@ -154,7 +156,7 @@ class OxNavigationTree extends oxSuperCfg
             }
 
             // checking for technics page
-            if ( oxUtilsFile::getInstance()->checkFile( "{$this->_sDynIncludeUrl}/pages/{$sFile}_technics.php" ) ) {
+            if ( $myUtilsFile->checkFile( "{$this->_sDynIncludeUrl}/pages/{$sFile}_technics.php" ) ) {
                 $oTabElem = new DOMElement( 'TAB' );
                 $oNode->appendChild( $oTabElem );
                 $oTabElem->setAttribute( 'external', 'true' );
@@ -500,7 +502,7 @@ class OxNavigationTree extends oxSuperCfg
 
 
                     $sVersionPrefix = 'ce';
-                
+
                 $sDynLang = $this->_getDynMenuLang();
                 $sCacheFile = $this->getConfig()->getConfigParam( 'sCompileDir' ) . "/ox{$sVersionPrefix}"."c_menu_{$sDynLang}_xml.txt";
 
@@ -729,11 +731,12 @@ class OxNavigationTree extends oxSuperCfg
     protected function _getDynMenuLang()
     {
         $myConfig = $this->getConfig();
+        $oLang = oxLang::getInstance();
 
         $iDynLang = $myConfig->getConfigParam( 'iDynInterfaceLanguage' );
-        $iDynLang = isset( $iDynLang )?$iDynLang:( oxLang::getInstance()->getTplLanguage() );
+        $iDynLang = isset( $iDynLang )?$iDynLang:( $oLang->getTplLanguage() );
 
-        $aLanguages = oxLang::getInstance()->getLanguageArray();
+        $aLanguages = $oLang->getLanguageArray();
         $sLangAbr = $aLanguages[$iDynLang]->abbr;
 
         return $sLangAbr;

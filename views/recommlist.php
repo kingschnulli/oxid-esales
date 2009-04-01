@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: recommlist.php 16603 2009-02-19 09:36:42Z arvydas $
+ * $Id: recommlist.php 17481 2009-03-20 12:35:53Z arvydas $
  */
 
 /**
@@ -127,7 +127,7 @@ class RecommList extends oxUBase
     public function render()
     {
         parent::render();
-        $myConfig = oxConfig::getInstance();
+        $myConfig = $this->getConfig();
 
         $this->_iAllArtCnt = 0;
         $this->_aViewData['actvrecommlist'] = $this->getActiveRecommList();
@@ -150,11 +150,6 @@ class RecommList extends oxUBase
             if ( $oList && $oList->count()) {
                     $this->_iAllArtCnt = $oActiveRecommList->getArtCount();
             }
-            $sAdd = '';
-            if ( $this->getRecommSearch() ) {
-                $sAdd = "&amp;searchrecomm=". rawurlencode( $this->getRecommSearch() );
-            }
-            $this->_sAdditionalParams .= "&amp;recommid={$sOxid}" . $sAdd;
 
             if (in_array('oxrss_recommlistarts', $myConfig->getConfigParam( 'aRssSelected' ))) {
                 $oRss = oxNew('oxrssfeed');
@@ -166,8 +161,6 @@ class RecommList extends oxUBase
                 $oRecommList = oxNew( 'oxrecommlist' );
                 $this->_iAllArtCnt = $oRecommList->getSearchRecommListCount( $this->getRecommSearch() );
             }
-
-            $this->_sAdditionalParams .= "&amp;searchrecomm=". rawurlencode( $this->getRecommSearch() );
         }
 
         if ( !$oList = $this->getActiveRecommItems() ) {
@@ -180,10 +173,7 @@ class RecommList extends oxUBase
             $this->_iCntPages  = round( $this->_iAllArtCnt / $iNrofCatArticles + 0.49 );
         }
 
-        $this->_aViewData['additionalparams'] = $this->getAdditionalParams();
-
         $this->_aViewData['pageNavigation'] = $this->getPageNavigation();
-
         $this->_aViewData['template_location']   = $this->getTemplateLocation();
         $this->_aViewData['searchrecomm']        = $this->getRecommSearch();
         $this->_aViewData['searchrecommforhtml'] = $this->getSearchForHtml();
@@ -527,14 +517,15 @@ class RecommList extends oxUBase
     {
         if ( $this->_sTplLocation === null ) {
             $this->_sTplLocation = false;
+            $oLang = oxLang::getInstance();
             if ( $sSearchparam = $this->getRecommSearch() ) {
                 $sUrl = $this->getConfig()->getShopHomeURL();
                 $sLink = "{$sUrl}cl=recommlist&amp;searchrecomm=".rawurlencode( $sSearchparam );
-                $sTitle = oxLang::getInstance()->translateString('RECOMMLIST');
-                $sTitle .= " / ".oxLang::getInstance()->translateString('RECOMMLIST_SEARCH').' "'.$sSearchparam.'"';
+                $sTitle = $oLang->translateString('RECOMMLIST');
+                $sTitle .= " / ".$oLang->translateString('RECOMMLIST_SEARCH').' "'.$sSearchparam.'"';
                 $this->_sTplLocation = "<a href='".$sLink."'>".$sTitle."</a>";
             } else {
-                $this->_sTplLocation = oxLang::getInstance()->translateString('RECOMMLIST');
+                $this->_sTplLocation = $oLang->translateString('RECOMMLIST');
             }
         }
         return $this->_sTplLocation;
@@ -574,4 +565,23 @@ class RecommList extends oxUBase
         return $this->_oPageNavigation;
     }
 
+    /**
+     * Template variable getter. Returns additional params for url
+     *
+     * @return string
+     */
+    public function getAdditionalParams()
+    {
+        $sAddParams = parent::getAdditionalParams();
+
+        if ( $sOxid = $this->getRecommId() ) {
+            $sAddParams .= "&amp;recommid={$sOxid}";
+        }
+
+        if ( $sSearch = $this->getRecommSearch() ) {
+            $sAddParams .= "&amp;searchrecomm=". rawurlencode( $sSearch );
+        }
+
+        return $sAddParams;
+    }
 }

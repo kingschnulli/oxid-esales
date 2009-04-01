@@ -39,7 +39,6 @@ function UpdateList( sID)
 <input type="hidden" name="fnc" value="save">
 <input type="hidden" name="oxid" value="[{ $oxid }]">
 <input type="hidden" name="editval[oxshops__oxid]" value="[{ $oxid }]">
-[{include file="autosave.form.tpl"}]
 
 
     <table border=0>
@@ -239,7 +238,7 @@ function UpdateList( sID)
                [{ oxmultilang ident="SHOP_PERF_LOADMANUFACTURERTREE" }]
              </td>
             </tr>
-            
+
             <tr>
              <td valign="top" class="conftext">
                 <input type=hidden name=confbools[bl_perfShowLeftBasket] value=false>

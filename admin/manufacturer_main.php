@@ -131,8 +131,6 @@ class Manufacturer_Main extends oxAdminDetails
         // set oxid if inserted
         if ( $soxId == "-1")
             oxSession::setVar( "saved_oxid", $oManufacturer->oxmanufacturers__oxid->value);
-
-        return $this->autosave();
     }
 
     /**
@@ -172,7 +170,5 @@ class Manufacturer_Main extends oxAdminDetails
         // set oxid if inserted
         if ( $soxId == "-1")
             oxSession::setVar( "saved_oxid", $oManufacturer->oxmanufacturers__oxid->value);
-
-        return $this->autosave();
     }
 }

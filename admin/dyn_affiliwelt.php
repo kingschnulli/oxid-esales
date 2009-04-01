@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: dyn_affiliwelt.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: dyn_affiliwelt.php 17209 2009-03-13 16:32:12Z arvydas $
  */
 
 /**
@@ -37,13 +37,7 @@ class dyn_affiliwelt extends Shop_Config
     public function render()
     {
         parent::render();
-
-        $soxId = oxSession::getVar( "actshop");
-
-        $oShop = oxNew( "oxshop" );
-        $oShop->load( $soxId);
-        $this->_aViewData["edit"] =  $oShop;
-
+        $this->_aViewData["edit"] = $this->_getEditShop( oxSession::getVar( "actshop") );
         return "dyn_affiliwelt.tpl";
     }
 

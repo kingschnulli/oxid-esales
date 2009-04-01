@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: suggest.php 16884 2009-02-27 13:16:59Z vilma $
+ * $Id: suggest.php 17481 2009-03-20 12:35:53Z arvydas $
  */
 
 /**
@@ -114,10 +114,11 @@ class Suggest extends oxUBase
         }
         $this->_aSuggestData = $oParams;
 
+        $oUtilsView = oxUtilsView::getInstance();
         // filled not all fields ?
         foreach ( $this->_aReqFields as $sFieldName ) {
             if ( !isset( $aParams[$sFieldName] ) || !$aParams[$sFieldName] ) {
-                oxUtilsView::getInstance()->addErrorToDisplay('SUGGEST_COMLETECORRECTLYFIELDS');
+                $oUtilsView->addErrorToDisplay('SUGGEST_COMLETECORRECTLYFIELDS');
                 return;
             }
         }

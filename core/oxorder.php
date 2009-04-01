@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxorder.php 16643 2009-02-20 14:15:02Z vilma $
+ * $Id: oxorder.php 17480 2009-03-20 12:33:16Z arvydas $
  */
 
 /**
@@ -178,9 +178,11 @@ class oxOrder extends oxBase
 
         parent::assign( $dbRecord );
 
+        $oUtilsDate = oxUtilsDate::getInstance();
+
         // convert date's to international format
-        $this->oxorder__oxorderdate = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxorderdate->value));
-        $this->oxorder__oxsenddate  = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxsenddate->value));
+        $this->oxorder__oxorderdate = new oxField( $oUtilsDate->formatDBDate( $this->oxorder__oxorderdate->value));
+        $this->oxorder__oxsenddate  = new oxField( $oUtilsDate->formatDBDate( $this->oxorder__oxsenddate->value));
 
 
         //get billing country name from billing country id
@@ -472,8 +474,15 @@ class oxOrder extends oxBase
         }
 
         // general discount
-        if ( ( $oTotalDiscount = $oBasket->getTotalDiscount() ) ) {
-            $this->oxorder__oxdiscount = new oxField($oTotalDiscount->getBruttoPrice(), oxField::T_RAW);
+        $dDiscount = 0;
+        $aDiscounts = $oBasket->getDiscounts();
+        if ( count($aDiscounts) > 0 ) {
+            foreach ($aDiscounts as $oDiscount) {
+                $dDiscount += $oDiscount->dDiscount;
+            }
+        }
+        if ( $dDiscount ) {
+            $this->oxorder__oxdiscount = new oxField($dDiscount, oxField::T_RAW);
         }
 
         //order language
@@ -988,16 +997,17 @@ class oxOrder extends oxBase
     protected function _insert()
     {
         $myConfig = $this->getConfig();
+        $oUtilsDate = oxUtilsDate::getInstance();
 
         //V #M525 orderdate must be the same as it was
         if ( !$this->oxorder__oxorderdate->value ) {
-            $this->oxorder__oxorderdate = new oxField(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ), oxField::T_RAW);
+            $this->oxorder__oxorderdate = new oxField(date( 'Y-m-d H:i:s', $oUtilsDate->getTime() ), oxField::T_RAW);
         } else {
-            $this->oxorder__oxorderdate = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxorderdate->value, true ));
+            $this->oxorder__oxorderdate = new oxField( $oUtilsDate->formatDBDate( $this->oxorder__oxorderdate->value, true ));
         }
         $this->oxorder__oxshopid    = new oxField($myConfig->getShopId(), oxField::T_RAW);
 
-        $this->oxorder__oxsenddate  = new oxField(oxUtilsDate::getInstance()->formatDBDate( $this->oxorder__oxsenddate->value, true ));
+        $this->oxorder__oxsenddate  = new oxField( $oUtilsDate->formatDBDate( $this->oxorder__oxsenddate->value, true ));
 
         if ( ( $blInsert = parent::_insert() ) ) {
             // setting order number
@@ -1655,25 +1665,26 @@ class oxOrder extends oxBase
     {
         if ( $this->oxorder__oxstorno->value != 1 ) {
             $oCur = $this->getConfig()->getActShopCurrencyObject();
+            $oLang = oxLang::getInstance();
 
             $this->totalnetsum   = $this->oxorder__oxtotalnetsum->value;
             $this->totalbrutsum  = $this->oxorder__oxtotalbrutsum->value;
             $this->totalorder    = $this->oxorder__oxtotalordersum->value;
-            $this->ftotalnetsum  = oxLang::getInstance()->formatCurrency( $this->oxorder__oxtotalnetsum->value, $oCur );
-            $this->ftotalbrutsum = oxLang::getInstance()->formatCurrency( $this->oxorder__oxtotalbrutsum->value, $oCur );
-            $this->fdelcost      = oxLang::getInstance()->formatCurrency( $this->oxorder__oxdelcost->value, $oCur );
-            $this->fpaycost      = oxLang::getInstance()->formatCurrency( $this->oxorder__oxpaycost->value, $oCur );
-            $this->fwrapcost     = oxLang::getInstance()->formatCurrency( $this->oxorder__oxwrapcost->value, $oCur );
+            $this->ftotalnetsum  = $oLang->formatCurrency( $this->oxorder__oxtotalnetsum->value, $oCur );
+            $this->ftotalbrutsum = $oLang->formatCurrency( $this->oxorder__oxtotalbrutsum->value, $oCur );
+            $this->fdelcost      = $oLang->formatCurrency( $this->oxorder__oxdelcost->value, $oCur );
+            $this->fpaycost      = $oLang->formatCurrency( $this->oxorder__oxpaycost->value, $oCur );
+            $this->fwrapcost     = $oLang->formatCurrency( $this->oxorder__oxwrapcost->value, $oCur );
             $this->ftotalorder   = $this->getTotalOrderSum();
             $this->totalvouchers = 0;
 
             if ( $this->oxorder__oxvoucherdiscount->value ) {
-                $this->totalvouchers  = oxLang::getInstance()->formatCurrency( $this->oxorder__oxvoucherdiscount->value, $oCur );
+                $this->totalvouchers  = $oLang->formatCurrency( $this->oxorder__oxvoucherdiscount->value, $oCur );
             }
 
             if ( $this->oxorder__oxdiscount->value ) {
                 $this->discount  = $this->oxorder__oxdiscount->value;
-                $this->fdiscount = oxLang::getInstance()->formatCurrency( $this->oxorder__oxdiscount->value, $oCur );
+                $this->fdiscount = $oLang->formatCurrency( $this->oxorder__oxdiscount->value, $oCur );
             }
         }
     }

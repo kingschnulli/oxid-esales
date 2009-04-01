@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: delivery_main.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: delivery_main.php 17243 2009-03-16 15:16:57Z arvydas $
  */
 
 /**
@@ -42,7 +42,8 @@ class Delivery_Main extends oxAdminDetails
 
         parent::render();
 
-        $iLang = oxLang::getInstance()->getTplLanguage();
+        $oLang = oxLang::getInstance();
+        $iLang = $oLang->getTplLanguage();
 
         // remove itm from list
         unset( $this->_aViewData["sumtype"][2]);
@@ -51,19 +52,19 @@ class Delivery_Main extends oxAdminDetails
         $aDelTypes = array();
         $oType = new oxStdClass();
         $oType->typ     = "a";      // amount
-        $oType->Desc    = oxLang::getInstance()->translateString( "amount", $iLang );
+        $oType->Desc    = $oLang->translateString( "amount", $iLang );
         $aDelTypes['a'] = $oType;
         $oType = new oxStdClass();
         $oType->typ     = "s";      // Size
-        $oType->Desc    = oxLang::getInstance()->translateString( "size", $iLang );
+        $oType->Desc    = $oLang->translateString( "size", $iLang );
         $aDelTypes['s'] = $oType;
         $oType = new oxStdClass();
         $oType->typ     = "w";      // Weight
-        $oType->Desc    = oxLang::getInstance()->translateString( "weight", $iLang );
+        $oType->Desc    = $oLang->translateString( "weight", $iLang );
         $aDelTypes['w'] = $oType;
         $oType = new oxStdClass();
         $oType->typ     = "p";      // Price
-        $oType->Desc    = oxLang::getInstance()->translateString( "price", $iLang );
+        $oType->Desc    = $oLang->translateString( "price", $iLang );
         $aDelTypes['p'] = $oType;
 
         $soxId = oxConfig::getParameter( "oxid");
@@ -92,7 +93,7 @@ class Delivery_Main extends oxAdminDetails
 
 
             // remove already created languages
-            $aLang = array_diff ( oxLang::getInstance()->getLanguageNames(), $oOtherLang);
+            $aLang = array_diff ( $oLang->getLanguageNames(), $oOtherLang);
             if ( count( $aLang))
                 $this->_aViewData["posslang"] = $aLang;
 
@@ -164,8 +165,6 @@ class Delivery_Main extends oxAdminDetails
         // set oxid if inserted
         if ( $soxId == "-1")
             oxSession::setVar( "saved_oxid", $oAttr->oxdelivery__oxid->value);
-
-        return $this->autosave();
     }
 
     /**
@@ -205,8 +204,6 @@ class Delivery_Main extends oxAdminDetails
         // set oxid if inserted
         if ( $soxId == "-1")
             oxSession::setVar( "saved_oxid", $oAttr->oxdelivery__oxid->value);
-
-        return $this->autosave();
     }
 
     /**
@@ -221,9 +218,10 @@ class Delivery_Main extends oxAdminDetails
 
 
         if ( isset( $soxId) && $soxId != "-1" && isset( $aChosenSets) && $aChosenSets) {
+            $oDb = oxDb::getDb();
             foreach ( $aChosenSets as $sChosenSet) {
                 // check if we have this entry already in
-                $sID = oxDb::getDb()->GetOne("select oxid from oxdel2delset where oxdelid = '$soxId' and oxdelsetid = '$sChosenSet'");
+                $sID = $oDb->GetOne("select oxid from oxdel2delset where oxdelid = '$soxId' and oxdelsetid = '$sChosenSet'");
                 if ( !isset( $sID) || !$sID) {
                         $oDel2delset = oxNew( 'oxbase' );
                         $oDel2delset->init( 'oxdel2delset' );
@@ -247,8 +245,9 @@ class Delivery_Main extends oxAdminDetails
 
 
         if ( isset( $soxId) && $soxId != "-1" && isset( $aChosenSets) && $aChosenSets) {
+            $oDb = oxDb::getDb();
             foreach ( $aChosenSets as $sChosenSet) {
-                oxDb::getDb()->Execute( "delete from oxdel2delset where oxdelid = '$soxId' and oxdelsetid = '$sChosenSet'");
+                $oDb->Execute( "delete from oxdel2delset where oxdelid = '$soxId' and oxdelsetid = '$sChosenSet'");
             }
         }
     }

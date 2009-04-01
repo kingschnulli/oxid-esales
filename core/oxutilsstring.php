@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxutilsstring.php 16552 2009-02-13 18:28:48Z tomas $
+ * $Id: oxutilsstring.php 17643 2009-03-27 13:59:37Z arvydas $
  */
 
 /**
@@ -32,19 +32,6 @@ class oxUtilsString
      * @var oxutils instance
      */
     private static $_instance = null;
-
-    /**
-     * Language specific characters (currently german; storen in octal form)
-     *
-     * @var array
-     */
-    protected $_aUmls = array( "\xc3\xa4", "\xc3\xb6", "\xc3\xbc", "\xC3\x84", "\xC3\x96", "\xC3\x9C", "\xC3\x9F" );
-
-    /**
-     * oxUtilsString::$_aUmls equivalent in entities form
-     * @var array
-     */
-    protected $_aUmlEntities = array('&auml;', '&ouml;', '&uuml;', '&Auml;', '&Ouml;', '&Uuml;', '&szlig;' );
 
     /**
      * Returns string manipulation utility instance
@@ -101,12 +88,13 @@ class oxUtilsString
     public function minimizeTruncateString( $sString, $iLength )
     {
         $sString = str_replace( ",", " ", $sString );
-        //leading and ending whitesapces
-        $sString = ereg_replace( "^[ \t\n\r\v]+|[ \t\n\r\v]+$", "", $sString );
+        //leading and ending whitespaces
+        $sString = trim( $sString );
         //multiple whitespaces
-        $sString = ereg_replace( "[ \t\n\r\v]+", " ", $sString );
-        if ( getStr()->strlen( $sString ) > $iLength && $iLength != -1 ) {
-            $sString = getStr()->substr( $sString, 0, $iLength );
+        $sString = ereg_replace( "[ \t\n\r]+", " ", $sString );
+        $oStr = getStr();
+        if ( $oStr->strlen( $sString ) > $iLength && $iLength != -1 ) {
+            $sString = $oStr->substr( $sString, 0, $iLength );
         }
         return $sString;
     }
@@ -120,31 +108,11 @@ class oxUtilsString
      */
     public function prepareStrForSearch($sSearchStr)
     {
-        if ( preg_match( "/(".implode( "|", $this->_aUmls  )."|(&amp;))/u", $sSearchStr ) ) {
-            return $this->recodeEntities( $sSearchStr, true,
-                                          $this->_aUmls + array( count( $this->_aUmls ) => '&amp;' ),
-                                          $this->_aUmlEntities + array( count( $this->_aUmlEntities ) => '&' ) );
+        $oStr = getStr();
+        if ( $oStr->hasSpecialChars( $sSearchStr ) ) {
+            return $oStr->recodeEntities( $sSearchStr, true, array( '&amp;' ), array( '&' ) );
         }
 
         return '';
-    }
-
-    /**
-     * Recodes and returns passed input:
-     *     if $blToHtmlEntities == true  � -> &auml;
-     *     if $blToHtmlEntities == false &auml; -> �
-     *
-     * @param string $sInput           text to recode
-     * @param bool   $blToHtmlEntities recode direction
-     * @param array  $aUmls            language specific characters
-     * @param array  $aUmlEntities     language specific characters equivalents in entities form
-     *
-     * @return string
-     */
-    public function recodeEntities( $sInput, $blToHtmlEntities = false, $aUmls = array(), $aUmlEntities = array() )
-    {
-        $aUmls = $aUmls ? $aUmls : $this->_aUmls;
-        $aUmlEntities = $aUmlEntities ? $aUmlEntities : $this->_aUmlEntities;
-        return $blToHtmlEntities ? str_replace( $aUmls, $aUmlEntities, $sInput ) : str_replace( $aUmlEntities, $aUmls, $sInput );
     }
 }

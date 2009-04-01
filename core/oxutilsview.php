@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxutilsview.php 16545 2009-02-13 14:24:57Z vilma $
+ * $Id: oxutilsview.php 17677 2009-03-30 15:19:39Z vilma $
  */
 
 /**
@@ -259,7 +259,6 @@ class oxUtilsView extends oxSuperCfg
                                                   'ox_get_secure',
                                                   'ox_get_trusted' ) );
 
-        $oSmarty->register_modifier( 'truncate', 'smarty_modifier_oxtruncate' );
 
         // $myConfig->blTemplateCaching; // DODGER #655 : permanently switched off as it doesnt work good enough
         $oSmarty->caching      = false;

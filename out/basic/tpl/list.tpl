@@ -1,7 +1,7 @@
 [{include file="_header.tpl" location=$oView->getTemplateLocation() }]
 [{assign var="pageNavigation" value=$oView->getPageNavigation()}]
 
-    <strong class="head">
+    <div class="boxhead">
         <h1 id="test_catTitle">[{$oView->getTitle()}]</h1>
         [{if $pageNavigation->iArtCnt }]<em id="test_catArtCnt">([{ $pageNavigation->iArtCnt }])</em>[{/if}]
         [{assign var="actCategory" value=$oView->getActiveCategory()}]
@@ -10,7 +10,7 @@
             <a class="rss" id="rss.activeCategory" href="[{$rsslinks.activeCategory.link}]" title="[{$rsslinks.activeCategory.title}]"></a>
             [{oxscript add="oxid.blank('rss.activeCategory');"}]
         [{/if}]
-    </strong>
+    </div>
 
     [{capture name=list_details}]
         [{if $actCategory->oxcategories__oxthumb->value }]
@@ -53,7 +53,7 @@
 
         [{if $oView->hasVisibleSubCats()}]
             [{ oxmultilang ident="LIST_SELECTOTHERCATS1" }]<b>[{$actCategory->oxcategories__oxtitle->value}]</b> [{ oxmultilang ident="LIST_SELECTOTHERCATS2" }]
-            <hr size="1">
+            <hr>
             <ul class="list">
             [{foreach from=$oView->getSubCatList() item=category name=MoreSubCat}]
                 [{if $category->getContentCats() }]
@@ -75,7 +75,7 @@
         [{/if}]
 
         [{if $actCategory->oxcategories__oxlongdesc->value }]
-            <hr size="1">
+            <hr>
             <span id="test_catLongDesc">[{ $actCategory->oxcategories__oxlongdesc->value }]</span>
         [{/if}]
     [{/capture}]

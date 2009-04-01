@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: user.php 16856 2009-02-26 14:02:40Z vilma $
+ * $Id: user.php 17653 2009-03-30 08:13:53Z arvydas $
  */
 
 /**
@@ -311,6 +311,19 @@ class User extends oxUBase
     }
 
     /**
+     * Sets if show user shipping address
+     *
+     * @param bool $blShowShipAddress
+     *
+     * @return null
+     */
+    public function setShowShipAddress( $blShowShipAddress )
+    {
+        // does nothing, used for compat with old templates, remove it
+        // after removing old templates support
+    }
+
+    /**
      * Template variable getter. Returns if to show shipping address
      *
      * @return bool
@@ -318,7 +331,9 @@ class User extends oxUBase
     public function showShipAddress()
     {
         if ( $this->_blShowShipAddress === null ) {
-            $this->_blShowShipAddress = oxConfig::getParameter( 'blshowshipaddress' );
+            $sAddressId = (int) oxConfig::getParameter( 'oxaddressid' );
+            $this->_blShowShipAddress = ( $sAddressId == -2 ) ? 0 : oxConfig::getParameter( 'blshowshipaddress' );
+
             if ( ( $oUser = $this->_getActiveUser() ) ) {
                 // wishlist user address id
                 if ( $sWishId = $this->_getWishListId() ) {
@@ -343,6 +358,18 @@ class User extends oxUBase
             }
         }
         return $this->_blShowShipAddress;
+    }
+
+    /**
+     * Sets shipping address
+     *
+     * @param bool $oDelAddress
+     *
+     * @return null
+     */
+    public function setDelAddress( $oDelAddress )
+    {
+        // disabling default behaviour ..
     }
 
     /**

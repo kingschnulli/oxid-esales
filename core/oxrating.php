@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxrating.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxrating.php 17480 2009-03-20 12:33:16Z arvydas $
  */
 
 /**
@@ -76,7 +76,7 @@ class oxRating extends oxBase
     public function allowRating( $sUserId, $sType, $sObjectId)
     {
         $oDB = oxDb::getDb();
-        $myConfig = oxConfig::getInstance();
+        $myConfig = $this->getConfig();
         if ( $iRatingLogsTimeout = $myConfig->getConfigParam( 'iRatingLogsTimeout' ) ) {
             $sExpDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() - $iRatingLogsTimeout*24*60*60);
             $oDB->execute( "delete from oxratings where oxtimestamp < '$sExpDate'" );

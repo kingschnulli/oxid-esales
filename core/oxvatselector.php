@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxvatselector.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxvatselector.php 17248 2009-03-16 15:22:07Z arvydas $
  */
 
 /**
@@ -102,6 +102,7 @@ class oxVatSelector extends oxSuperCfg
         //$sMainCat  = $aCats[0];
         //$aCats = $oArticle->getCategoryIds();
 
+        $oDb = oxDb::getDb();
         $sCatT = getViewName('oxcategories');
         $sSelect = "SELECT oxid
                     FROM $sCatT
@@ -109,7 +110,7 @@ class oxVatSelector extends oxSuperCfg
 
         //no category specific vats in shop?
         //then for performance reasons we just return false
-        $iCount = oxDb::getDb()->getOne($sSelect);
+        $iCount = $oDb->getOne($sSelect);
         if (!$iCount) {
             return false;
         }
@@ -124,7 +125,7 @@ class oxVatSelector extends oxSuperCfg
 
         //echo $sSql."<br>";
 
-        $fVat = oxDb::getDb()->getOne($sSql);
+        $fVat = $oDb->getOne($sSql);
         if ($fVat !== false && $fVat !== null) {
             return $fVat;
         }

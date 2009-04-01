@@ -86,7 +86,7 @@
               <img src="[{$oManufacturer->getIconUrl()}]" alt="[{ $oManufacturer->oxmanufacturers__oxtitle->value}]">
           [{/if}]
           <b>[{ oxmultilang ident="DETAILS_PERSPARAM_MANUFACTURER" }]</b>
-          [{if !$oManufacturer->blReadOnly}]
+          [{if !$oManufacturer->isReadOnly()}]
               <a id="test_manufacturer_[{$oManufacturer->oxmanufacturers__oxid->value}]" href="[{ $oManufacturer->getLink() }]">[{ $oManufacturer->oxmanufacturers__oxtitle->value}]</a>
           [{else}]
               [{ $oManufacturer->oxmanufacturers__oxtitle->value}]
@@ -99,7 +99,7 @@
                 <img src="[{$oVendor->getIconUrl()}]" alt="[{ $oVendor->oxvendor__oxtitle->value}]">
             [{/if}]
             <b>[{ oxmultilang ident="DETAILS_PERSPARAM_VENDOR" }]</b>
-            [{if !$oVendor->blReadOnly}]
+            [{if !$oVendor->isReadOnly()}]
                 <a id="test_vendor_[{$oVendor->oxvendor__oxid->value}]" href="[{ $oVendor->getLink() }]">[{ $oVendor->oxvendor__oxtitle->value}]</a>
             [{else}]
                 [{ $oVendor->oxvendor__oxtitle->value}]
@@ -438,6 +438,7 @@
             <input type="hidden" name="fnc" value="savereview">
             <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
             <input type="hidden" name="reviewuserid" value="[{$oView->getReviewUserId()}]">
+            <input type="hidden" name="anid" value="[{ $product->oxarticles__oxid->value }]">
             <textarea cols="102" rows="15" name="rvw_txt" class="fullsize"></textarea><br>
             <span class="btn"><input id="test_reviewSave" type="submit" value="[{ oxmultilang ident="DETAILS_PERSPARAM_SAVEREVIEW" }]" class="btn"></span>
         </div>

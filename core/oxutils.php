@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxutils.php 16812 2009-02-25 12:51:54Z arvydas $
+ * $Id: oxutils.php 17643 2009-03-27 13:59:37Z arvydas $
  */
 
 /**
@@ -463,13 +463,7 @@ class oxUtils extends oxSuperCfg
      */
     protected function _oxFileCache( $blMode, $sName, $sInput = null )
     {
-        $sVersionPrefix = "";
-
-
-            $sVersionPrefix = 'pe';
-
-        $sFilePath = $this->getConfig()->getConfigParam( 'sCompileDir' ) . "/ox$sVersionPrefix"."c_".$sName.".txt";
-
+        $sFilePath = $this->_getCacheFilePath( $sName );
         $sRet = null;
         if ( $blMode) {
             // write to cache
@@ -538,17 +532,11 @@ class oxUtils extends oxSuperCfg
      */
     public function oxResetFileCache()
     {
-        $sVersionPrefix = "";
-
-
-            $sVersionPrefix = 'pe';
-
-        $sFilePath = $this->getConfig()->getConfigParam( 'sCompileDir' ) . "/ox{$sVersionPrefix}c_*.txt";
-        $aPathes   = glob( $sFilePath);
-        if (is_array($aPathes)) {
-            foreach ($aPathes as $sFilename) {
+        $aPathes = glob( $this->_getCacheFilePath( '*' ) );
+        if ( is_array( $aPathes ) ) {
+            foreach ( $aPathes as $sFilename ) {
                 // delete all the files
-                @unlink( $sFilename);
+                @unlink( $sFilename );
             }
         }
     }
@@ -628,8 +616,9 @@ class oxUtils extends oxSuperCfg
 
         if ( $sUserID) {
             // escaping
-            $sUserID = oxDb::getDb()->Quote($sUserID);
-            $sRights = oxDb::getDb()->GetOne("select oxrights from oxuser where oxid = $sUserID");
+            $oDb = oxDb::getDb();
+            $sUserID = $oDb->Quote($sUserID);
+            $sRights = $oDb->GetOne("select oxrights from oxuser where oxid = $sUserID");
 
             if ( $sRights != "user") {
                 // malladmin ?
@@ -647,7 +636,7 @@ class oxUtils extends oxSuperCfg
                     }
                     $blIsAuth = true;
                 } else {   // Shopadmin... check if this shop is valid and exists
-                    $sShopID = oxDb::getDb()->GetOne("select oxid from oxshops where oxid = '{$sRights}'");
+                    $sShopID = $oDb->GetOne("select oxid from oxshops where oxid = '{$sRights}'");
                     if ( isset( $sShopID) && $sShopID) {   // success, this shop exists
 
                         oxSession::setVar( "actshop", $sRights);
@@ -1028,14 +1017,15 @@ class oxUtils extends oxSuperCfg
      */
     public function prepareUrlForNoSession($sUrl)
     {
-        if ( oxUtils::getInstance()->seoIsActive() ) {
+        if ( $this->seoIsActive() ) {
             return $sUrl;
         }
 
         $sUrl = preg_replace('/(force_)?sid=[a-z0-9\._]*&?(amp;)?/i', '', $sUrl);
 
-        if ($qpos = getStr()->strpos($sUrl, '?')) {
-            if ($qpos == getStr()->strlen($sUrl)-1) {
+        $oStr = getStr();
+        if ($qpos = $oStr->strpos($sUrl, '?')) {
+            if ($qpos == $oStr->strlen($sUrl)-1) {
                 $sSep = '';
             } else {
                 $sSep = '&amp;';
@@ -1058,5 +1048,53 @@ class oxUtils extends oxSuperCfg
         }
 
         return $sUrl;
+    }
+
+    /**
+     * Returns full path (including file name) to cache file
+     *
+     * @param string $sCacheName cache file name
+     *
+     * @return string
+     */
+    protected function _getCacheFilePath( $sCacheName )
+    {
+        $sVersionPrefix = "";
+
+
+            $sVersionPrefix = 'pe';
+
+        return $this->getConfig()->getConfigParam( 'sCompileDir' ) . "/ox{$sVersionPrefix}c_{$sCacheName}.txt";
+    }
+
+    /**
+     * Tries to load lang cache array from cache file
+     *
+     * @param string $sCacheName cache file name
+     *
+     * @return array
+     */
+    public function getLangCache( $sCacheName )
+    {
+        $aLangCache = null;
+        $sFilePath = $this->_getCacheFilePath( $sCacheName );
+        if ( file_exists( $sFilePath ) && is_readable( $sFilePath ) ) {
+            include( $sFilePath );
+        }
+        return $aLangCache;
+    }
+
+    /**
+     * Writes languge array to file cache
+     *
+     * @param string $sCacheName name of cache file
+     * @param array  $aLangCache language array
+     *
+     * @return null
+     */
+    public function setLangCache( $sCacheName, $aLangCache )
+    {
+        $sCache = "<?php\n\$aLangCache = ".var_export( $aLangCache, true ).";";
+        $this->_oxFileCache( true, $sCacheName, $sCache );
     }
 }

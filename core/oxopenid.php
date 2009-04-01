@@ -123,7 +123,7 @@ class oxOpenId extends oxBase
      */
     protected function _getConsumer()
     {
-        $oConsumer = new Auth_OpenID_Consumer( $this->_getStore(), oxOpenIdSession::getInstance() );
+        $oConsumer = new Auth_OpenID_Consumer( $this->_getStore(), oxOpenIdSession::getInstance(), 'oxOpenIdGenericConsumer' );
 
         return $oConsumer;
     }

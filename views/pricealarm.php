@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: pricealarm.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
+ * $Id: pricealarm.php 17481 2009-03-20 12:35:53Z arvydas $
  */
 
 /**
@@ -90,6 +90,7 @@ class Pricealarm extends oxUBase
     public function addme()
     {
         $myConfig = $this->getConfig();
+        $myUtils  = oxUtils::getInstance();
 
         //control captcha
         $sMac     = oxConfig::getParameter( 'c_mac' );
@@ -103,22 +104,22 @@ class Pricealarm extends oxUBase
 
 
         $aParams = oxConfig::getParameter( 'pa' );
-        if ( !isset( $aParams['email'] ) || !oxUtils::getInstance()->isValidEmail( $aParams['email'] ) ) {
+        if ( !isset( $aParams['email'] ) || !$myUtils->isValidEmail( $aParams['email'] ) ) {
             $this->_iPriceAlarmStatus = 0;
             return;
         }
 
         $oCur = $myConfig->getActShopCurrencyObject();
         // convert currency to default
-        $dPrice = oxUtils::getInstance()->currency2Float( $aParams['price'] );
+        $dPrice = $myUtils->currency2Float( $aParams['price'] );
 
         $oAlarm = oxNew( "oxpricealarm" );
-        $oAlarm->oxpricealarm__oxuserid = new oxField(oxSession::getVar( 'usr' ));
-        $oAlarm->oxpricealarm__oxemail  = new oxField($aParams['email']);
-        $oAlarm->oxpricealarm__oxartid  = new oxField($aParams['aid']);
-        $oAlarm->oxpricealarm__oxprice  = new oxField(oxUtils::getInstance()->fRound( $dPrice, $oCur ));
-        $oAlarm->oxpricealarm__oxshopid = new oxField($myConfig->getShopId());
-        $oAlarm->oxpricealarm__oxcurrency = new oxField($oCur->name);
+        $oAlarm->oxpricealarm__oxuserid = new oxField( oxSession::getVar( 'usr' ));
+        $oAlarm->oxpricealarm__oxemail  = new oxField( $aParams['email']);
+        $oAlarm->oxpricealarm__oxartid  = new oxField( $aParams['aid']);
+        $oAlarm->oxpricealarm__oxprice  = new oxField( $myUtils->fRound( $dPrice, $oCur ));
+        $oAlarm->oxpricealarm__oxshopid = new oxField( $myConfig->getShopId());
+        $oAlarm->oxpricealarm__oxcurrency = new oxField( $oCur->name);
 
             $oAlarm->oxpricealarm__oxlang = new oxField(oxLang::getInstance()->getBaseLanguage());
 

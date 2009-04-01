@@ -47,7 +47,7 @@ window.onLoad = top.reloadEditFrame();
     [{ assign var="sErrorMsg"     value=$aErrorMessages.$key}]
     [{ assign var="iErrorNum"     value=$aErrorNumbers.$key}]    
     [{ if $sQuery }]
-    <tr valign="top"><td>[{ oxmultilang ident="TOOLS_LIST_SQLQUERY" }] ([{$key+1}]) : </td><td>[{ $sQuery|wordwrap:100:"<br>":true }]</td></tr>
+    <tr valign="top"><td>[{ oxmultilang ident="TOOLS_LIST_SQLQUERY" }] ([{$key+1}]) : </td><td>[{ $sQuery|oxwordwrap:100:"<br>":true }]</td></tr>
     [{/if}]
     [{ if $sAffectedRows }]
     <tr><td colspan="2"><br></td></tr>

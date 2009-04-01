@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxfield.php 16665 2009-02-21 12:23:37Z vilma $
+ * $Id: oxfield.php 17305 2009-03-17 15:02:22Z vilma $
  */
 
 /**
@@ -88,7 +88,7 @@ class oxField // extends oxSuperCfg
                 return $this->value;
             case 'value':
                 if (is_string($this->rawValue)) {
-                    $this->value = htmlspecialchars( $this->rawValue, ENT_QUOTES, 'UTF-8' );
+                    $this->value = getStr()->htmlspecialchars( $this->rawValue );
                 } else {
                     // TODO: call htmlentities for each (recursive ???)
                     $this->value = $this->rawValue;
@@ -129,7 +129,7 @@ class oxField // extends oxSuperCfg
      */
     public function convertToPseudoHtml()
     {
-        $this->setValue( str_replace( "\r", '', nl2br( htmlspecialchars( $this->rawValue, ENT_QUOTES, 'UTF-8' ) ) ), self::T_RAW );
+        $this->setValue( str_replace( "\r", '', nl2br( getStr()->htmlspecialchars( $this->rawValue ) ) ), self::T_RAW );
     }
 
     /**

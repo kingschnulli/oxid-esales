@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: selectlist_main.php 16366 2009-02-09 10:02:36Z arvydas $
+ * $Id: selectlist_main.php 17193 2009-03-13 12:21:45Z arvydas $
  */
 
 DEFINE("ERR_SUCCESS", 1);
@@ -174,8 +174,6 @@ class SelectList_Main extends oxAdminDetails
         if ( $sOxId == "-1") {
             oxSession::setVar( "saved_oxid", $oAttr->oxselectlist__oxid->value);
         }
-
-        return $this->autosave();
     }
 
     /**

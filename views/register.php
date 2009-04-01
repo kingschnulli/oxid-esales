@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: register.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
+ * $Id: register.php 17315 2009-03-17 16:18:58Z arvydas $
  */
 
 /**
@@ -49,12 +49,11 @@ class Register extends User
     protected $_aMustFillFields = null;
 
     /**
-     * Current view search engine indexing state:
-     *     0 - index without limitations
-     *     1 - no index / no follow
-     *     2 - no index / follow
+     * Current view search engine indexing state
+     *
+     * @var int
      */
-    protected $_iViewIndexState = 1;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXNOFOLLOW;
 
     /**
      * Executes parent::render(), passes error code to template engine,

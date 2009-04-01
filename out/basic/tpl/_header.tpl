@@ -12,7 +12,7 @@
     [{/if}]
     [{if $oView->getMetaDescription()}]<meta name="description" content="[{$oView->getMetaDescription()}]">[{/if}]
     [{if $oView->getMetaKeywords()}]<meta name="keywords" content="[{$oView->getMetaKeywords()}]">[{/if}]
-
+    <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid.css">
     <!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxidbc.css"><![endif]-->
 
@@ -83,7 +83,7 @@
                 <a id="test_HeaderImpressum" href="[{ $oCont->getLink() }]" rel="nofollow">[{ $oCont->oxcontents__oxtitle->value }]</a>
                 [{if $oView->getMenueList()}]
                   [{ foreach from=$oView->getMenueList() item=oMenueContent }]
-                    <a href="[{ $oViewConf->getSelfLink() }]cl=content&amp;tpl=[{$oMenueContent->oxcontents__oxid->value}]">[{$oMenueContent->oxcontents__oxtitle->value}]</a>
+                    <a href="[{ $oViewConf->getSelfLink() }]cl=content&amp;oxcid=[{$oMenueContent->oxcontents__oxid->value}]">[{$oMenueContent->oxcontents__oxtitle->value}]</a>
                   [{/foreach}]
                 [{/if}]
             </div>

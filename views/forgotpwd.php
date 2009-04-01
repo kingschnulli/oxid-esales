@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: forgotpwd.php 16490 2009-02-12 10:23:12Z arvydas $
+ * $Id: forgotpwd.php 17315 2009-03-17 16:18:58Z arvydas $
  */
 
 /**
@@ -43,12 +43,11 @@ class ForgotPwd extends oxUBase
     protected $_sForgotEmail = null;
 
     /**
-     * Current view search engine indexing state:
-     *     0 - index without limitations
-     *     1 - no index / no follow
-     *     2 - no index / follow
+     * Current view search engine indexing state
+     *
+     * @var int
      */
-    protected $_iViewIndexState = 1;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXNOFOLLOW;
 
     /**
      * Update link expiration status
@@ -56,6 +55,18 @@ class ForgotPwd extends oxUBase
      * @var bool
      */
     protected $_blUpdateLinkStatus = null;
+
+    /**
+     * Sign if to load and show top5articles action
+     * @var bool
+     */
+    protected $_blTop5Action = true;
+
+    /**
+     * Sign if to load and show bargain action
+     * @var bool
+     */
+    protected $_blBargainAction = true;
 
     /**
      * Executes oxemail::SendForgotPwdEmail() and sends login

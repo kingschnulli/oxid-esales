@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxlist.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxlist.php 17414 2009-03-19 09:48:33Z arvydas $
  */
 
 /**
@@ -399,12 +399,12 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
         }
 
         //$blFirstLoop = true;
+        $oListObject = $this->getBaseObject();
         $oSaved = oxNew( $this->_sObjectsInListName);
-
-        $oSaved->init($this->getBaseObject()->getCoreTableName());
+        $oSaved->init( $oListObject->getCoreTableName() );
 
         if ( $oSaved->isMultilang() ) {
-            $oSaved->setLanguage( $this->getBaseObject()->getLanguage() );
+            $oSaved->setLanguage( $oListObject->getLanguage() );
         }
 
         if ( $this->_aAssignCallbackPrepend && is_callable($this->_aAssignCallbackPrepend)) {
@@ -474,9 +474,10 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      */
     public function getList()
     {
-        $sFieldList = $this->getBaseObject()->getSelectFields();
-        $sQ = "select $sFieldList from " . $this->getBaseObject()->getViewName();
-        if ($sActiveSnippet = $this->getBaseObject()->getSqlActiveSnippet()) {
+        $oListObject =$this->getBaseObject();
+        $sFieldList = $oListObject->getSelectFields();
+        $sQ = "select $sFieldList from " . $oListObject->getViewName();
+        if ( $sActiveSnippet = $oListObject->getSqlActiveSnippet() ) {
             $sQ .= " where $sActiveSnippet ";
         }
         $this->selectString($sQ);

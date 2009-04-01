@@ -36,7 +36,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $Id: emos.php 16617 2009-02-20 09:06:11Z arvydas $
+ * $Id: emos.php 17677 2009-03-30 15:19:39Z vilma $
  */
 
 /**
@@ -171,7 +171,7 @@ class EMOS{
         } else {
             $str = $this->htmlspecialchars_decode_php4( $str );
         }
-        $str = html_entity_decode( $str, ENT_QUOTES, 'UTF-8' );
+        $str = getStr()->html_entity_decode( $str );
         $str = strip_tags( $str );
         $str = trim( $str );
 
@@ -196,7 +196,7 @@ class EMOS{
         $str = str_replace( " /", "/", $str );
         $str = str_replace( "/ ", "/", $str );
 
-        $str = substr( $str, 0, 254 );
+        $str = getStr()->substr( $str, 0, 254 );
         $str = rawurlencode( $str );
         return $str;
     }

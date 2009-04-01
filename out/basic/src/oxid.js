@@ -60,16 +60,16 @@ var oxid = {
                             nr ++;
                         }
                         if(mi.childNodes[n].tagName && mi.childNodes[n].tagName.toUpperCase() == 'UL'){
-                        	mi.childNodes[n].onmouseover = mi.childNodes[n].onfocus = oxid.nav.stoptm ;
+                            mi.childNodes[n].onmouseover = mi.childNodes[n].onfocus = oxid.nav.stoptm ;
                             mi.childNodes[n].onmouseout  = mi.childNodes[n].onblur  = oxid.nav.starttm;
                             /* setting all childs nodes width same as <ul> */
                             var ml = mi.childNodes[n];
-                        	var mlWidth = ml.offsetWidth;
-                        	for ( var k=0; k<ml.childNodes.length; k++) {
-                        		if(ml.childNodes[k].tagName && ml.childNodes[k].tagName.toUpperCase() == 'LI'){
-                                	ml.childNodes[k].style.width = mlWidth;
-                        		}
-                        	}
+                            var mlWidth = ml.offsetWidth;
+                            for ( var k=0; k<ml.childNodes.length; k++) {
+                                if(ml.childNodes[k].tagName && ml.childNodes[k].tagName.toUpperCase() == 'LI'){
+                                    ml.childNodes[k].style.width = mlWidth;
+                                }
+                            }
                         }
                     }
                 }
@@ -140,8 +140,24 @@ var oxid = {
             }
         },
 
+        compare : function(url){
+            oxid.popup.open(url,620,400,true);
+        },
+
         zoom    : function(){
             oxid.popup.setClass('zoom','popup zoom on','on');
+        },
+
+        addResizer : function(image_id,container_id,pw,ph){
+            var _el = document.getElementById(image_id);
+
+            if(_el) {
+                _el.onload = function(e){
+                    if(this.tagName.toUpperCase() == 'IMG'){
+                        oxid.popup.resize(container_id, this.width+pw, this.height+ph);
+                    }
+                };
+            }
         },
 
         resize  : function(id, newWidth, newHeight ){
@@ -172,9 +188,8 @@ var oxid = {
                 _el.style.marginLeft = '-'+Math.round(newWidth/2)+'px';
                 _el.style.marginTop  = '-'+Math.round(newHeight/2)+'px';
             }
-        },
+        }
 
-        compare : function(url){ oxid.popup.open(url,620,400,true); }
     },
 
     // Tags
@@ -270,16 +285,16 @@ var oxid = {
         }
     },
 
-	checkAll: function(obj,pref) {
-		if(document.getElementsByTagName){
-		    var inputs = document.getElementsByTagName("input");
-		    for (var i=0,input;input=inputs[i]; i++) {
-		        if(input.type == 'checkbox' && input.checked != obj.checked && pref == input.name.split('[')[0]){
-		            input.checked = obj.checked;
-		        }
-		    }
-		}
-	}
+    checkAll: function(obj,pref) {
+        if(document.getElementsByTagName){
+            var inputs = document.getElementsByTagName("input");
+            for (var i=0,input;input=inputs[i]; i++) {
+                if(input.type == 'checkbox' && input.checked != obj.checked && pref == input.name.split('[')[0]){
+                    input.checked = obj.checked;
+                }
+            }
+        }
+    }
 
 };
 
@@ -291,10 +306,10 @@ var oxid = {
       var oActForm = document.getElementById("rating");
       if ( oActForm !== null) {
         if (oActForm.artrating) {
-	        oActForm.artrating.value = arguments[0];
-	    } else if (oActForm.recommlistrating) {
-	    	oActForm.recommlistrating.value = arguments[0];
-	    }
+            oActForm.artrating.value = arguments[0];
+        } else if (oActForm.recommlistrating) {
+            oActForm.recommlistrating.value = arguments[0];
+        }
         var width = arguments[0] * 20;
         document.getElementById('current_rate').style.width = width + '%';
       }

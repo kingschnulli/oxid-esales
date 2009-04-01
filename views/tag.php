@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: tag.php 16619 2009-02-20 09:12:17Z arvydas $
+ * $Id: tag.php 17306 2009-03-17 15:09:04Z vilma $
  */
 
 /**
@@ -97,10 +97,6 @@ class Tag extends aList
 
         // processing list articles
         $this->_processListArticles();
-
-        // generating meta info
-        $this->setMetaDescription( null );
-        $this->setMetaKeywords( null );
 
         return $this->_sThisTemplate;
     }
@@ -264,7 +260,7 @@ class Tag extends aList
             $this->_sTagTitle = false;
             if ( ( $sTag = $this->getTag() ) ) {
                 $sTitle = ucfirst( $sTag );
-                $this->_sTagTitle = htmlspecialchars( $sTitle, ENT_QUOTES, 'UTF-8' );
+                $this->_sTagTitle = getStr()->htmlspecialchars( $sTitle );
             }
         }
         return $this->_sTagTitle;
@@ -281,7 +277,7 @@ class Tag extends aList
             $this->_sTemplateLocation = false;
             if ( ( $sTag = $this->getTag() ) ) {
                 $sTitle = ucfirst( $sTag );
-                $this->_sTemplateLocation = oxLang::getInstance()->translateString('TAGS')." / ".htmlspecialchars( $sTitle, ENT_QUOTES, 'UTF-8' );
+                $this->_sTemplateLocation = oxLang::getInstance()->translateString('TAGS')." / ".getStr()->htmlspecialchars( $sTitle );
             }
         }
         return $this->_sTemplateLocation;
@@ -312,31 +308,30 @@ class Tag extends aList
     }
 
     /**
-     * Calls and returns result of parent::_collectMetaKeyword( $aCatPath );
+     * Returns current view keywords seperated by comma
+     * (calls parent::_collectMetaKeyword())
      *
-     * @param mixed $aCatPath category path
+     * @param string $sKeywords data to use as keywords
      *
-     * @return string of keywords seperated by comma
+     * @return string
      */
-    protected function _prepareMetaKeyword( $aCatPath )
+    protected function _prepareMetaKeyword( $sKeywords )
     {
-        return parent::_collectMetaKeyword( $aCatPath );
+        return parent::_collectMetaKeyword( $sKeywords );
     }
 
     /**
-     * Metatags - description and keywords - generator for search
-     * engines. Uses string passed by parameters, cleans HTML tags,
-     * string dublicates, special chars. Also removes strings defined
-     * in $myConfig->aSkipTags (Admin area).
+     * Returns current view meta description data
+     * (calls parent::_collectMetaDescription())
      *
-     * @param mixed $aCatPath  category path
-     * @param int   $iLength   max length of result, -1 for no truncation
-     * @param bool  $blDescTag if true - performs additional dublicate cleaning
+     * @param string $sMeta     category path
+     * @param int    $iLength   max length of result, -1 for no truncation
+     * @param bool   $blDescTag if true - performs additional dublicate cleaning
      *
      * @return  string  $sString    converted string
      */
-    protected function _prepareMetaDescription( $aCatPath, $iLength = 1024, $blDescTag = false )
+    protected function _prepareMetaDescription( $sMeta, $iLength = 1024, $blDescTag = false )
     {
-        return parent::_collectMetaDescription( $aCatPath, $iLength, $blDescTag );
+        return parent::_collectMetaDescription( $sMeta, $iLength, $blDescTag );
     }
 }

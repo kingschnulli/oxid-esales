@@ -46,7 +46,6 @@ function _groupExp(el) {
 <input type="hidden" name="fnc" value="save">
 <input type="hidden" name="oxid" value="[{ $oxid }]">
 <input type="hidden" name="editval[oxshops__oxid]" value="[{ $oxid }]">
-[{include file="autosave.form.tpl"}]
 
 
     <div class="groupExp">
@@ -219,17 +218,6 @@ function _groupExp(el) {
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_SYSTEM_INTERFACEPROFILES" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
-            <dl>
-                <dt>
-                    <input type=hidden name=confbools[blAutoSave] value=false>
-                    <input type=checkbox name=confbools[blAutoSave] value=true  [{if ($confbools.blAutoSave)}]checked[{/if}] [{ $readonly }]>
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_SYSTEM_AUTOSAVE" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>

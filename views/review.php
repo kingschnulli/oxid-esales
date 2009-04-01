@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: review.php 16482 2009-02-12 09:44:52Z arvydas $
+ * $Id: review.php 17315 2009-03-17 16:18:58Z arvydas $
  */
 
 /**
@@ -106,12 +106,11 @@ class Review extends oxUBase
     protected $_sThisLoginTemplate = 'review_login.tpl';
 
     /**
-     * Current view search engine indexing state:
-     *     0 - index without limitations
-     *     1 - no index / no follow
-     *     2 - no index / follow
+     * Current view search engine indexing state
+     *
+     * @var int
      */
-    protected $_iViewIndexState = 1;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXNOFOLLOW;
 
     /**
      * Executes parent::init(), Loads user chosen product object (with all data).
@@ -175,14 +174,8 @@ class Review extends oxUBase
             $this->_iCntPages  = round( $this->_iAllArtCnt / $iNrofCatArticles + 0.49 );
         }
 
-        if ( $this->_oActiveRecommList) {
-            $this->_sAdditionalParams .= '&amp;recommid='.$this->_oActiveRecommList->getId();
-        }
-
         $this->_aViewData['pageNavigation'] = $this->getPageNavigation();
-
         $this->_aViewData['rate'] = $this->canRate();
-
         $this->_aViewData['success'] = $this->getReviewSendStatus();
 
         return $this->_sThisTemplate;
@@ -518,5 +511,19 @@ class Review extends oxUBase
             }
         }
         return $this->_oPageNavigation;
+    }
+
+    /**
+     * Template variable getter. Returns additional params for url
+     *
+     * @return string
+     */
+    public function getAdditionalParams()
+    {
+        $sAddParams = parent::getAdditionalParams();
+        if ( $oActRecommList = $this->getActiveRecommList() ) {
+            $sAddParams .= '&amp;recommid='.$oActRecommList->getId();
+        }
+        return $sAddParams;
     }
 }

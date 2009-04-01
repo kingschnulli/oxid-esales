@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: account.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
+ * $Id: account.php 17315 2009-03-17 16:18:58Z arvydas $
  */
 
 /**
@@ -91,12 +91,23 @@ class Account extends oxUBase
     protected $_sThisLoginTemplate = 'account_login.tpl';
 
     /**
-     * Current view search engine indexing state:
-     *     0 - index without limitations
-     *     1 - no index / no follow
-     *     2 - no index / follow
+     * Current view search engine indexing state
+     *
+     * @var int
      */
-    protected $_iViewIndexState = 1;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXNOFOLLOW;
+
+    /**
+     * Sign if to load and show top5articles action
+     * @var bool
+     */
+    protected $_blTop5Action = true;
+
+    /**
+     * Sign if to load and show bargain action
+     * @var bool
+     */
+    protected $_blBargainAction = true;
 
     /**
      * Loads action articles. If user is logged and returns name of

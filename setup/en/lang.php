@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 16723 2009-02-23 14:22:03Z philipp.grashoff $
+ * $Id: lang.php 17028 2009-03-04 16:06:15Z philipp.grashoff $
  */
 
 $aLang = array(
@@ -117,6 +117,9 @@ $aLang = array(
 'STEP_3_DB_PASSWORD'                              => "Database password",
 'STEP_3_DB_DATABSE_NAME'                          => "Database name",
 'STEP_3_DB_DEMODATA'                              => "Demodata",
+'STEP_3_UTFMODE'                                  => "Use UTF-8 character encoding",
+'STEP_3_UTFNOTSUPPORTED'                          => "Due to missing mbstring PHP module the OXID eShop cannot operate in UTF-8 mode",
+'STEP_3_UTFINFO'                                  => "UTF-8 character encoding provides better support for special chars than other character encodings. This is particulary important for multilingual eShops. However, UTF-8 is slightly slower than the standard encoding (ISO 8859-15). <br /> If you plan to provide your eShop in many different languages, you should use UTF-8. If you just want to provide a few languages using related symbol sets (e. g. English, German, French), you don't need UTF-8.",
 'STEP_3_CREATE_DB_WHEN_NO_DB_FOUND'               => "If database does not exist, it's going to be created",
 'BUTTON_RADIO_INSTALL_DB_DEMO'                    => "Install demodata",
 'BUTTON_RADIO_NOT_INSTALL_DB_DEMO'                => "Do <strong>not</strong> install demodata",

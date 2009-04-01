@@ -32,8 +32,11 @@ class EFire_Downloader extends oxAdminView
 
     public function render()
     {
-        $this->_aViewData['sEfiUsername'] = htmlspecialchars($this->getConfig()->getConfigParam('sEfiUsername'), ENT_QUOTES, 'UTF-8' );
-        $this->_aViewData['sEfiPassword'] = htmlspecialchars($this->getConfig()->getConfigParam('sEfiPassword'), ENT_QUOTES, 'UTF-8' );
+        $oStr = getStr();
+        $myConfig = $this->getConfig();
+
+        $this->_aViewData['sEfiUsername'] = $oStr->htmlspecialchars( $myConfig->getConfigParam( 'sEfiUsername' ) );
+        $this->_aViewData['sEfiPassword'] = $oStr->htmlspecialchars( $myConfig->getConfigParam( 'sEfiPassword' ) );
 
         return parent::render();
     }

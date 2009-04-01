@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: search.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
+ * $Id: search.php 17481 2009-03-20 12:35:53Z arvydas $
  */
 
 /**
@@ -112,12 +112,11 @@ class Search extends oxUBase
     protected $_oPageNavigation = null;
 
     /**
-     * Current view search engine indexing state:
-     *     0 - index without limitations
-     *     1 - no index / no follow
-     *     2 - no index / follow
+     * Current view search engine indexing state
+     *
+     * @var int
      */
-    protected $_iViewIndexState = 1;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXNOFOLLOW;
 
     /**
      * Fetches search parameter from GET/POST/session, prepares search
@@ -219,7 +218,8 @@ class Search extends oxUBase
 
         parent::render();
 
-        if (is_array(oxConfig::getInstance()->getConfigParam( 'aRssSelected' )) && in_array('oxrss_search', oxConfig::getInstance()->getConfigParam( 'aRssSelected' ))) {
+        $myConfig = $this->getConfig();
+        if ( is_array( $myConfig->getConfigParam( 'aRssSelected' ) ) && in_array( 'oxrss_search', $myConfig->getConfigParam( 'aRssSelected' ) ) ) {
             $oRss = oxNew('oxrssfeed');
             $sSearch = oxConfig::getParameter( 'searchparam', true );
             $sCnid = oxConfig::getParameter( 'searchcnid', true );

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxcontent.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxcontent.php 17063 2009-03-06 09:29:46Z rimvydas.paskevicius $
  */
 
 /**
@@ -105,7 +105,7 @@ class oxContent extends oxI18n
     public function getExpanded()
     {
         if ( !isset( $this->_blExpanded ) ) {
-            $this->_blExpanded = ( $this->getId() == oxConfig::getParameter( 'tpl' ) );
+            $this->_blExpanded = ( $this->getId() == oxConfig::getParameter( 'oxcid' ) );
         }
         return $this->_blExpanded;
     }
@@ -198,7 +198,7 @@ class oxContent extends oxI18n
                 $sAdd .= "&amp;cnid=$sParentId";
             }
         }
-        return $this->getConfig()->getShopHomeURL() . "cl=content&amp;tpl=" . $this->getId() . $sAdd;
+        return $this->getConfig()->getShopHomeURL() . "cl=content&amp;oxcid=" . $this->getId() . $sAdd;
     }
 
     /**

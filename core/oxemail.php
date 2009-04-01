@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxemail.php 16545 2009-02-13 14:24:57Z vilma $
+ * $Id: oxemail.php 17710 2009-03-31 14:23:34Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -386,7 +386,8 @@ class oxEmail extends phpmailer
         $sFullName = $oOrder->getUser()->oxuser__oxfname->value . " " . $oOrder->getUser()->oxuser__oxlname->value;
         $this->setFrom( $oOrder->getUser()->oxuser__oxusername->value, $sFullName );
 
-        $iOrderLang = oxLang::getInstance()->getTplLanguage();
+        $oLang = oxLang::getInstance();
+        $iOrderLang = $oLang->getTplLanguage();
 
         $oShop = $this->_getShop();
 
@@ -400,7 +401,7 @@ class oxEmail extends phpmailer
 
         // create messages
         $smarty = oxUtilsView::getInstance()->getSmarty();
-        $smarty->assign( "charset", oxLang::getInstance()->translateString("charset"));
+        $smarty->assign( "charset", $oLang->translateString("charset"));
         $smarty->assign( "order", $oOrder );
         $smarty->assign( "shop", $oShop );
         $smarty->assign( "oViewConf", $oShop );
@@ -421,7 +422,7 @@ class oxEmail extends phpmailer
             $smarty->assign( $key, $val );
 
         //path to admin message template file
-        $sPathToTemplate = $myConfig->getTemplateDir(false, $iOrderLang).'/';
+        $sPathToTemplate = $myConfig->getTemplateDir(false).'/';
 
         $this->setBody( $smarty->fetch( $sPathToTemplate.$sOwnerHTML ) );
         $this->setAltBody( $smarty->fetch( $sPathToTemplate.$sOwnerPLAIN ) );
@@ -433,7 +434,7 @@ class oxEmail extends phpmailer
         else
             $this->setSubject( $oShop->oxshops__oxordersubject->value." (#".$oOrder->oxorder__oxordernr->value.")" );
 
-        $this->setRecipient( $oShop->oxshops__oxowneremail->value, oxLang::getInstance()->translateString("order") );
+        $this->setRecipient( $oShop->oxshops__oxowneremail->value, $oLang->translateString("order") );
 
         if ( $oOrder->getUser()->oxuser__oxusername->value != "admin" )
             $this->setReplyTo( $oOrder->getUser()->oxuser__oxusername->value, $sFullName );
@@ -759,8 +760,9 @@ class oxEmail extends phpmailer
         //$this->setMailWordWrap( 0 );
 
         //create messages
+        $oLang = oxLang::getInstance();
         $smarty = oxUtilsView::getInstance()->getSmarty();
-        $smarty->assign( "charset", oxLang::getInstance()->translateString("charset"));
+        $smarty->assign( "charset", $oLang->translateString("charset"));
         $smarty->assign( "shop", $oShop );
         $smarty->assign( "oViewConf", $oShop );
         $smarty->assign( "order", $oOrder );
@@ -779,20 +781,20 @@ class oxEmail extends phpmailer
         // dodger #1469 - we need to patch security here as we do not use standard template dir, so smarty stops working
         $aStore['INCLUDE_ANY'] = $smarty->security_settings['INCLUDE_ANY'];
         //V send email in order language
-        $iOldTplLang = oxLang::getInstance()->getTplLanguage();
-        $iOldBaseLang = oxLang::getInstance()->getTplLanguage();
-        oxLang::getInstance()->setTplLanguage( $iOrderLang );
-        oxLang::getInstance()->setBaseLanguage( $iOrderLang );
+        $iOldTplLang = $oLang->getTplLanguage();
+        $iOldBaseLang = $oLang->getTplLanguage();
+        $oLang->setTplLanguage( $iOrderLang );
+        $oLang->setBaseLanguage( $iOrderLang );
 
         $smarty->security_settings['INCLUDE_ANY'] = true;
 
         //Sets path to template file
-        $sPathToTemplate = $myConfig->getTemplateDir(false, $iOrderLang)."/";
+        $sPathToTemplate = $myConfig->getTemplateDir(false)."/";
 
         $this->setBody( $smarty->fetch( $sPathToTemplate."email_sendednow_html.tpl") );
         $this->setAltBody( $smarty->fetch( $sPathToTemplate."email_sendednow_plain.tpl") );
-        oxLang::getInstance()->setTplLanguage( $iOldTplLang );
-        oxLang::getInstance()->setBaseLanguage( $iOldBaseLang );
+        $oLang->setTplLanguage( $iOldTplLang );
+        $oLang->setBaseLanguage( $iOldBaseLang );
         // set it back
         $smarty->security_settings['INCLUDE_ANY'] = $aStore['INCLUDE_ANY'] ;
 
@@ -941,10 +943,11 @@ class oxEmail extends phpmailer
 
         //set mail params (from, fromName, smtp... )
         $this->_setMailParams( $oShop );
+        $oLang = oxLang::getInstance();
 
 
         $smarty = oxUtilsView::getInstance()->getSmarty();
-        $smarty->assign( "charset", oxLang::getInstance()->translateString("charset"));
+        $smarty->assign( "charset", $oLang->translateString("charset"));
         $smarty->assign( "shop", $oShop );
         $smarty->assign( "oViewConf", $oShop );
         $smarty->assign( "articles", $aRemindArticles );
@@ -956,7 +959,7 @@ class oxEmail extends phpmailer
         $this->setFrom( $oShop->oxshops__oxowneremail->value, $oShop->oxshops__oxname->getRawValue() );
         $this->setBody( $smarty->fetch($sPathToTemplate.$this->_sReminderMailTemplate) );
         $this->setAltBody( "" );
-        $this->setSubject( oxLang::getInstance()->translateString('EMAIL_STOCKREMINDER_SUBJECT') );
+        $this->setSubject( $oLang->translateString('EMAIL_STOCKREMINDER_SUBJECT') );
 
         return $this->send();
     }
@@ -1022,7 +1025,8 @@ class oxEmail extends phpmailer
         $oArticle->setSkipAbPrice( true );
         $oArticle->loadInLang( $iAlarmLang, $aParams['aid'] );
 
-        $oCur = $this->getConfig()->getActShopCurrencyObject();
+        $oCur  = $this->getConfig()->getActShopCurrencyObject();
+        $oLang = oxLang::getInstance();
 
         // create messages
         $smarty = oxUtilsView::getInstance()->getSmarty();
@@ -1030,11 +1034,11 @@ class oxEmail extends phpmailer
         $smarty->assign( "oViewConf", $oShop );
         $smarty->assign( "product", $oArticle );
         $smarty->assign( "email", $aParams['email']);
-        $smarty->assign( "bidprice", oxLang::getInstance()->formatCurrency( $oAlarm->oxpricealarm__oxprice->value, $oCur ) );
+        $smarty->assign( "bidprice", $oLang->formatCurrency( $oAlarm->oxpricealarm__oxprice->value, $oCur ) );
         $smarty->assign( "currency", $oCur );
 
         $this->setRecipient( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
-        $sSubject = oxLang::getInstance()->translateString( 'EMAIL_PRICEALARM_OWNER_SUBJECT', $iAlarmLang ) . " " . $oArticle->oxarticles__oxtitle->value;
+        $sSubject = $oLang->translateString( 'EMAIL_PRICEALARM_OWNER_SUBJECT', $iAlarmLang ) . " " . $oArticle->oxarticles__oxtitle->value;
         $this->setSubject( $sSubject );
         $this->setBody( $smarty->fetch( $this->_sOwnerPricealarmTemplate ) );
         $this->setFrom( $aParams['email'], "" );
@@ -1069,6 +1073,8 @@ class oxEmail extends phpmailer
 
             if (is_array($matches) && count($matches)) {
                 $aImageCache = array();
+                $myUtils = oxUtils::getInstance();
+                $myUtilsObject = oxUtilsObject::getInstance();
 
                 foreach ($matches as $aImage) {
 
@@ -1087,8 +1093,8 @@ class oxEmail extends phpmailer
                         if ( isset( $aImageCache[$sFileName] ) && $aImageCache[$sFileName] ) {
                             $sCId = $aImageCache[$sFileName];
                         } else {
-                            $sCId = oxUtilsObject::getInstance()->generateUID();
-                            $sMIME = oxUtils::getInstance()->oxMimeContentType($sFileName);
+                            $sCId = $myUtilsObject->generateUID();
+                            $sMIME = $myUtils->oxMimeContentType($sFileName);
                             if ($sMIME == 'image/jpeg' || $sMIME == 'image/gif' || $sMIME == 'image/png') {
                                 if ( $this->addEmbeddedImage( $sFileName, $sCId, "image", "base64", $sMIME ) ) {
                                     $aImageCache[$sFileName] = $sCId;

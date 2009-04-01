@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: news_text.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: news_text.php 17189 2009-03-13 12:19:59Z arvydas $
  */
 
 /**
@@ -114,8 +114,6 @@ class News_Text extends oxAdminDetails
         // set oxid if inserted
         if ( $soxId == "-1")
             oxSession::setVar( "saved_oxid", $oNews->oxnews__oxid->value);
-
-        return $this->autosave();
     }
 
 }

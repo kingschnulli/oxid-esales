@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: article_stock.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: article_stock.php 17188 2009-03-13 12:19:11Z arvydas $
  */
 
 /**
@@ -123,8 +123,6 @@ class Article_Stock extends oxAdminDetails
             $oArticle->oxarticles__oxremindactive->value = 1;
 
         $oArticle->save();
-
-        return $this->autosave();
     }
 
 

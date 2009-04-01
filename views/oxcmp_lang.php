@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxcmp_lang.php 16683 2009-02-21 15:23:49Z rimvydas.paskevicius $
+ * $Id: oxcmp_lang.php 17402 2009-03-19 09:00:17Z rimvydas.paskevicius $
  */
 
 /**
@@ -59,7 +59,8 @@ class oxcmp_lang extends oxView
             return;
         }
 
-        $iLang = oxLang::getInstance()->getBaseLanguage();
+        $oLang = oxLang::getInstance();
+        $iLang = $oLang->getBaseLanguage();
         $iChangeLang = oxConfig::getParameter( 'lang' );
 
         if ( oxConfig::getParameter( 'changelang' ) ) {
@@ -68,16 +69,16 @@ class oxcmp_lang extends oxView
 
         if ( isset( $iChangeLang ) ) {
             // set new language
-            $iChangeLang = oxLang::getInstance()->validateLanguage( $iChangeLang );
-            oxLang::getInstance()->setTplLanguage( $iChangeLang );
-            oxLang::getInstance()->setBaseLanguage( $iChangeLang );
+            $iChangeLang = $oLang->validateLanguage( $iChangeLang );
+            $oLang->setTplLanguage( $iChangeLang );
+            $oLang->setBaseLanguage( $iChangeLang );
 
             // recalc basket
             $oBasket = $this->getSession()->getBasket();
             $oBasket->onUpdate();
         }
 
-        $this->aLanguages = oxLang::getInstance()->getLanguageArray();
+        $this->aLanguages = $oLang->getLanguageArray( null, true, true );
 
         parent::init();
     }

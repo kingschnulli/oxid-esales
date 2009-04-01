@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxnewsletter.php 16545 2009-02-13 14:24:57Z vilma $
+ * $Id: oxnewsletter.php 17636 2009-03-27 09:15:44Z arvydas $
  */
 
 /**
@@ -269,20 +269,15 @@ class oxNewsletter extends oxBase
             $sSelect .= " where ".$oArticle->getSqlActiveSnippet();
             $sSelect .= " and oxorder.oxuserid = '".$this->_oUser->oxuser__oxid->value."' order by oxorder.oxorderdate desc";
 
-            $oArtList = oxNew( 'oxarticlelist' );
-            $oArtList->selectString( $sSelect );
-
-            $oSimList = null;
-            if ( $oArtList->count() ) {
-                $oSimList = $oArtList->current()->getSimilarProducts();
-            }
-
-            if ( $oSimList && $oSimList->count() ) {
-                $oView->addTplParam( 'simlist', $oSimList );
-                $iCnt = 0;
-                foreach ( $oSimList as $oArt ) {
-                    $oView->addTplParam( "simarticle$iCnt", $oArt );
-                    $iCnt++;
+            if ( $oArticle->assignRecord( $sSelect ) ) {
+                $oSimList = $oArticle->getSimilarProducts();
+                if ( $oSimList && $oSimList->count() ) {
+                    $oView->addTplParam( 'simlist', $oSimList );
+                    $iCnt = 0;
+                    foreach ( $oSimList as $oArt ) {
+                        $oView->addTplParam( "simarticle$iCnt", $oArt );
+                        $iCnt++;
+                    }
                 }
             }
         }

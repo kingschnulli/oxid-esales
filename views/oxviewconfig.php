@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxviewconfig.php 16730 2009-02-24 06:16:51Z vilma $
+ * $Id: oxviewconfig.php 17642 2009-03-27 13:58:14Z arvydas $
  */
 
 /**
@@ -724,11 +724,12 @@ class oxViewConfig extends oxSuperCfg
     {
 
         if ( ( $sParams = $this->getViewConfigParam( 'navformparams' ) ) === null ) {
+            $oStr = getStr();
             $sParams = '';
             $aNavParams = $this->getConfig()->getActiveView()->getNavigationParams();
             foreach ( $aNavParams as $sName => $sValue ) {
                 if ( isset( $sValue ) ) {
-                    $sParams .= "<input type=\"hidden\" name=\"{$sName}\" value=\"".htmlentities( $sValue, ENT_QUOTES, 'UTF-8' )."\">\n";
+                    $sParams .= "<input type=\"hidden\" name=\"{$sName}\" value=\"".$oStr->htmlentities( $sValue )."\">\n";
                 }
             }
             $this->setViewConfigParam( 'navformparams', $sParams );
@@ -785,16 +786,6 @@ class oxViewConfig extends oxSuperCfg
     {
         $oShop = $this->getConfig()->getActiveShop();
         return isset( $oShop->oxshops__oxismultishop ) ? ( (bool) $oShop->oxshops__oxismultishop->value ) : false;
-    }
-
-    /**
-     * Returns autosave config option
-     *
-     * @return bool
-     */
-    public function isAutoSave()
-    {
-        return $this->getConfig()->getConfigParam( 'blAutoSave' );
     }
 
     /**
@@ -962,9 +953,6 @@ class oxViewConfig extends oxSuperCfg
                     break;
                 case 'ismultishop':
                     $sVarValue = $this->isMultiShop();
-                    break;
-                case 'blAutoSave':
-                    $sVarValue = $this->isAutoSave();
                     break;
                 case 'sServiceUrl':
                     $sVarValue = $this->getServiceUrl();

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: object_seo.php 16307 2009-02-05 10:31:42Z arvydas $
+ * $Id: object_seo.php 17479 2009-03-20 12:32:53Z arvydas $
  */
 
 /**
@@ -39,7 +39,7 @@ class Object_Seo extends oxAdminDetails
 
         if ( ( $oObject= $this->_getObject( oxConfig::getParameter( 'oxid' ) ) ) ) {
 
-            $iShopId  = oxConfig::getInstance()->getShopId();
+            $iShopId  = $this->getConfig()->getShopId();
             $oOtherLang = $oObject->getAvailableInLangs();
             if (!isset($oOtherLang[$this->_iEditLang])) {
                 // echo "language entry doesn't exist! using: ".key($oOtherLang);
@@ -96,7 +96,7 @@ class Object_Seo extends oxAdminDetails
      */
     protected function _getSeoUrl( $oObject )
     {
-        $iShopId  = oxConfig::getInstance()->getShopId();
+        $iShopId  = $this->getConfig()->getShopId();
         return oxDb::getDb()->getOne( $this->_getSeoUrlQuery( $oObject, $iShopId ) );
     }
 
@@ -153,7 +153,7 @@ class Object_Seo extends oxAdminDetails
         // saving/updating seo params
         if ( ( $sOxid = oxConfig::getParameter( 'oxid' ) ) ) {
             $aSeoData = oxConfig::getParameter( 'aSeoData' );
-            $iShopId  = oxConfig::getInstance()->getShopId();
+            $iShopId  = $this->getConfig()->getShopId();
 
             // checkbox handling
             if ( !isset( $aSeoData['oxfixed'] ) ) {
@@ -166,8 +166,6 @@ class Object_Seo extends oxAdminDetails
                                     $aSeoData['oxseourl'], $this->_getType(), $aSeoData['oxfixed'],
                                     trim( $aSeoData['oxkeywords'] ), trim( $aSeoData['oxdescription'] ), $this->processParam( $aSeoData['oxparams'] ) );
         }
-
-        return $this->autosave();
     }
 
     /**

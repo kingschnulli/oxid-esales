@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxoutput.php 16613 2009-02-20 08:24:52Z arvydas $
+ * $Id: oxoutput.php 17129 2009-03-10 15:42:09Z rimvydas.paskevicius $
  */
 
 /**
@@ -67,9 +67,11 @@ class oxOutput extends oxSuperCfg
      */
     public function process( $sValue, $sClassName )
     {
+        $myConfig = $this->getConfig();
+
         //fix for euro currency problem (it's invisible in some older browsers)
-        if ( !$this->getConfig()->getConfigParam( 'blSkipEuroReplace' ) ) {
-            $sValue = str_replace( 'â‚¬', '&euro;', $sValue );
+        if ( !$myConfig->getConfigParam( 'blSkipEuroReplace' ) && !$myConfig->isUtf() ) {
+            $sValue = str_replace( '¤', '&euro;', $sValue );
         }
 
         return $sValue;

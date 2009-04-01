@@ -10,7 +10,7 @@ strong.h2 {font-size: 11px;}
 strong.h3 {font-size: 10px;}
 img  {border:none;}
 ul {padding:0 0 0 2em;}
-hr {margin:4px 0;height:1px;text-align:center;color:#cbcbcb;background-color:#cbcbcb;}
+hr {margin:4px 0;height:1px;text-align:center;color:#cbcbcb;background-color:#cbcbcb;border: 0;}
 hr.line{background-color:#EEEFF0;border:none;color:#EEEFF0;height:1px;margin:4px 0}
 
 /* Typography */
@@ -277,7 +277,7 @@ ul.tree li a.exp.act{background-position: 0 -225px;}
 
 #right .recommlistsearch .btn {width: auto;}
 #right .recommlistsearch .search_input {width: 120px;}
-#right input.openid {width: 99px; background: #FFFFFF url(bg/openid-icon-small.gif) no-repeat 0pt 50%; border:1px solid inactivecaptiontext; padding:1px 1px 1px 18px;}
+#right input.openid {background: #FFFFFF url(bg/openid-icon-small.gif) no-repeat 0pt 50%; border:1px solid inactivecaptiontext; padding:1px 1px 1px 18px;}
 
 /* RSS */
 #right .box  {position:relative;}
@@ -305,7 +305,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 
 
 #body .boxhead {margin:0 5px;background:oxBoxHdBg; padding:6px 5px 6px 7px;height:20px;border-top:1px solid oxBoxHdBr;border-left:8px solid oxBoxHdBr;border-right:1px solid oxBoxBr;line-height:20px; font-size: 11px;font-weight: bold;color:oxBoxHdCl;width:549px;float:left;}
-
+#body .boxhead h1{margin:0; padding: 0; display: inline;}
 #body .box{border:1px solid oxBoxBr;border-top:none;padding:8px 6px;margin:0 5px 10px;width:556px;float:left;background:oxBoxBg;}
 #body .empty{padding:0 6px !important; height: 0px; overflow: hidden;}
 #body .box img{border:none;padding:0;margin:0;}

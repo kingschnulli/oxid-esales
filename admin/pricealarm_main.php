@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: pricealarm_main.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: pricealarm_main.php 17243 2009-03-16 15:16:57Z arvydas $
  */
 
 /**
@@ -90,10 +90,11 @@ class PriceAlarm_Main extends oxAdminDetails
 
             // #889C - Netto prices in Admin
             // (we have to call $oArticle->getPrice() to get price with VAT)
+            $oLang = oxLang::getInstance();
             $oArticle->oxarticles__oxprice->setValue($oArticle->getPrice()->getBruttoPrice() * $oThisCurr->rate);
-            $oArticle->fprice = oxLang::getInstance()->formatCurrency( $oArticle->oxarticles__oxprice->value, $oThisCurr);
+            $oArticle->fprice = $oLang->formatCurrency( $oArticle->oxarticles__oxprice->value, $oThisCurr);
 
-            $oPricealarm->oxpricealarm__oxprice->setValue(oxLang::getInstance()->formatCurrency( $oPricealarm->oxpricealarm__oxprice->value, $oThisCurr));
+            $oPricealarm->oxpricealarm__oxprice->setValue( $oLang->formatCurrency( $oPricealarm->oxpricealarm__oxprice->value, $oThisCurr));
 
             $oPricealarm->oArticle = $oArticle;
             $oCur = $myConfig->getCurrencyObject( $oPricealarm->oxpricealarm__oxcurrency->value);
@@ -120,7 +121,7 @@ class PriceAlarm_Main extends oxAdminDetails
             $iLang = @$oPricealarm->oxpricealarm__oxlang->value;
             if (!$iLang)
                 $iLang = 0;
-            $aLanguages = oxLang::getInstance()->getLanguageNames();
+            $aLanguages = $oLang->getLanguageNames();
             $this->_aViewData["edit_lang"] = $aLanguages[$iLang];
             // rendering mail message text
             $oLetter = new oxStdClass();
@@ -128,12 +129,12 @@ class PriceAlarm_Main extends oxAdminDetails
             if ( isset( $aParams['oxpricealarm__oxlongdesc'] ) && $aParams['oxpricealarm__oxlongdesc'] ) {
                 $oLetter->oxpricealarm__oxlongdesc = new oxField( stripslashes( $aParams['oxpricealarm__oxlongdesc'] ), oxField::T_RAW );
             } else {
-                $old_iLang = oxLang::getInstance()->getTplLanguage();
-                oxLang::getInstance()->setTplLanguage( $iLang );
+                $old_iLang = $oLang->getTplLanguage();
+                $oLang->setTplLanguage( $iLang );
                 $smarty->fetch( "email_pricealarm_customer.tpl");
 
                 $oLetter->oxpricealarm__oxlongdesc = new oxField( $smarty->fetch( "email_pricealarm_customer.tpl"), oxField::T_RAW );
-                oxLang::getInstance()->setTplLanguage( $old_iLang );
+                $oLang->setTplLanguage( $old_iLang );
             }
 
             $this->_aViewData["editor"]  = $this->_generateTextEditor( "100%", 300, $oLetter, "oxpricealarm__oxlongdesc", "details.tpl.css");

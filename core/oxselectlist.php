@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxselectlist.php 16592 2009-02-18 11:48:55Z arvydas $
+ * $Id: oxselectlist.php 17689 2009-03-31 08:36:41Z sarunas $
  */
 
 /**
@@ -62,9 +62,10 @@ class oxSelectlist extends oxI18n
     public function getFieldList( $dVat = null )
     {
         if ( $this->_aFieldList == null && $this->oxselectlist__oxvaldesc->value ) {
+            $oStr = getStr();
             $this->_aFieldList = oxUtils::getInstance()->assignValuesFromText( $this->oxselectlist__oxvaldesc->getRawValue(), $dVat );
             foreach ( $this->_aFieldList as $sKey => $oField ) {
-                $this->_aFieldList[$sKey]->name = htmlspecialchars( strip_tags( $this->_aFieldList[$sKey]->name ), ENT_QUOTES, 'UTF-8' );
+                $this->_aFieldList[$sKey]->name = $oStr->htmlspecialchars( strip_tags( $this->_aFieldList[$sKey]->name ), false );
             }
         }
         return $this->_aFieldList;

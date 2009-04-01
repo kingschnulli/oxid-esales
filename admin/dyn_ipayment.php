@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: dyn_ipayment.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: dyn_ipayment.php 17479 2009-03-20 12:32:53Z arvydas $
  */
 /**
  * Includes configuration class.
@@ -42,7 +42,7 @@ class dyn_ipayment extends Shop_Config
     {
         parent::render();
 
-        $this->_aViewData['oxid'] = oxConfig::getInstance()->getShopId();
+        $this->_aViewData['oxid'] = $this->getConfig()->getShopId();
 
         return 'dyn_ipayment.tpl';
 

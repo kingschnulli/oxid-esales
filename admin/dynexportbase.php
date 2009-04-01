@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: dynexportbase.php 16553 2009-02-13 18:29:53Z tomas $
+ * $Id: dynexportbase.php 17644 2009-03-27 14:00:12Z arvydas $
  */
 
 /**
@@ -106,7 +106,7 @@ class DynExportBase extends oxAdminDetails
         //$oCountries = oxNew( "oxCountryList" );
         //$oCountries->select();
 
-        /*$aCountries = array("Deutschland", "ï¿½sterreich", "Schweiz", "Liechtenstein", "Italien",
+        /*$aCountries = array("Deutschland", "Österreich", "Schweiz", "Liechtenstein", "Italien",
                             "Luxemburg", "Frankreich", "Schweden", "Finnland", "Grossbritannien",
                             "Irland", "Holland", "Belgien", "Portugal", "Spanien", "Griechenland");
 
@@ -272,8 +272,9 @@ class DynExportBase extends oxAdminDetails
         // remove html entities, remove html tags
         $sOutput = $this->_unHTMLEntities( strip_tags( $sOutput));
 
-        if ( getStr()->strlen( $sOutput) > $iMaxSize - 3) {
-            $sOutput = getStr()->substr( $sOutput, 0, $iMaxSize - 5) . "...";
+        $oStr = getStr();
+        if ( $oStr->strlen( $sOutput) > $iMaxSize - 3) {
+            $sOutput = $oStr->substr( $sOutput, 0, $iMaxSize - 5) . "...";
         }
         return $sOutput;
     }
@@ -357,7 +358,7 @@ class DynExportBase extends oxAdminDetails
     {
         $sInput = oxUtilsString::getInstance()->prepareCSVField( $sInput);
         $sOutput = str_replace( "&nbsp;", " ", $sInput);
-        $sOutput = str_replace( "&euro;", "ï¿½", $sOutput);
+        $sOutput = str_replace( "&euro;", "€", $sOutput);
         $sOutput = str_replace( "|", "", $sOutput);
 
         return $sOutput;
@@ -756,15 +757,16 @@ class DynExportBase extends oxAdminDetails
 
             $sLang = oxLang::getInstance()->getBaseLanguage();
             $sCatView = getViewName('oxcategories');
+            $oDb = oxDb::getDb();
 
             // Load all root cat's == all trees
             $sSQL = "select oxid from $sCatView where oxparentid = 'oxrootid'";
-            $rs = oxDb::getDb()->Execute( $sSQL);
+            $rs = $oDb->Execute( $sSQL);
             if ($rs != false && $rs->recordCount() > 0) {
                 while (!$rs->EOF) {
                     // now load each tree
                     $sSQL = "SELECT s.oxid, s.oxtitle".(($sLang)?"_$sLang":"").", s.oxparentid, count( * ) AS LEVEL FROM oxcategories v, oxcategories s WHERE s.oxrootid = '".$rs->fields[0]."' and v.oxrootid='".$rs->fields[0]."' and s.oxleft BETWEEN v.oxleft AND v.oxright  AND s.oxhidden = '0' GROUP BY s.oxleft order by level";
-                    $rs2 = oxDb::getDb()->Execute( $sSQL);
+                    $rs2 = $oDb->Execute( $sSQL);
                     if ($rs2 != false && $rs2->recordCount() > 0) {
                         while (!$rs2->EOF) {
                             // store it

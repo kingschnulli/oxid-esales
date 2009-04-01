@@ -90,13 +90,15 @@ class oxManufacturerList extends oxList
     public function loadManufacturerList()
     {
         $sLangAdd = oxLang::getInstance()->getLanguageTag();
-        $sFieldList = $this->getBaseObject()->getSelectFields();
-        $sViewName  = $this->getBaseObject()->getViewName();
+        $oBaseObject = $this->getBaseObject();
+
+        $sFieldList = $oBaseObject->getSelectFields();
+        $sViewName  = $oBaseObject->getViewName();
         $this->getBaseObject()->setShowArticleCnt( $this->_blShowManufacturerArticleCnt );
 
         $sWhere = '';
         if ( !$this->isAdmin() ) {
-            $sWhere  = $this->getBaseObject()->getSqlActiveSnippet();
+            $sWhere  = $oBaseObject->getSqlActiveSnippet();
             $sWhere  = $sWhere?" where $sWhere and ":' where ';
             $sWhere .= "{$sViewName}.oxtitle{$sLangAdd} != '' ";
         }

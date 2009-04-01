@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: attribute_category.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: attribute_category.php 17243 2009-03-16 15:16:57Z arvydas $
  */
 
 /**
@@ -190,13 +190,13 @@ class Attribute_Category extends oxAdminDetails
      */
     function updateSorting( $sTable, $aIds)
     {
+        $oDB = oxDb::getDb();
         foreach ( $aIds as $soxId) {
             //$soxId    = oxConfig::getParameter( "oxid");
             //if ( !isset($soxId) && $soxId == "-1")
             //    return;
             $aList = $this->_getSortingList( $sTable, $soxId);
             // updates sorting
-            $oDB = oxDb::getDb();
             foreach ( $aList as $iNum => $aItem) {
                 if ( $aItem[1] != $iNum) {
                     $sSelect = "update $sTable set $sTable.oxsort=$iNum where $sTable.oxid='".$aItem[0]."'";

@@ -56,8 +56,8 @@
       <td id="test_LoginUser">
         [{ oxmultilang ident="INC_CMP_LOGIN_RIGHT_LOGGEDINAS" }]<br>
         [{assign var="fullname" value=$oxcmp_user->oxuser__oxfname->value|cat:" "|cat:$oxcmp_user->oxuser__oxlname->value }]
-        <b>&quot;[{ $oxcmp_user->oxuser__oxusername->value|truncate:25:"...":true }]&quot;</b> <br>
-        ([{ $fullname|truncate:25:"...":true }])
+        <b>&quot;[{ $oxcmp_user->oxuser__oxusername->value|oxtruncate:25:"...":true }]&quot;</b> <br>
+        ([{ $fullname|oxtruncate:25:"...":true }])
       </td>
     </tr>
     <tr>

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: order_package.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: order_package.php 17585 2009-03-25 08:54:05Z vilma $
  */
 
 /**
@@ -88,8 +88,13 @@ class Order_Package extends oxAdminDetails
             while ( !$rs->EOF) {
                 $key = $rs->fields['orderid'];
 
-                $aOrders[$key] = new oxStdClass();
+                if ( !$aOrders[$key] ) {
+                    $aOrders[$key] = new oxStdClass();
+                }
                 $aOrders[$key]->fields = $rs->fields;
+                if ( !$aOrders[$key]->articles ) {
+                	$aOrders[$key]->articles = array();
+                }
                 $aOrders[$key]->articles[$rs->fields['orderartid']] = $rs->fields;
 
                 $sLangAppend = '';

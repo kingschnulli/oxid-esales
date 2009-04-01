@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: user_remark.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: user_remark.php 17191 2009-03-13 12:21:00Z arvydas $
  */
 
 /**
@@ -84,10 +84,6 @@ class User_Remark extends oxAdminDetails
         $soxId      = oxConfig::getParameter( "oxid");
         $sRemoxId   = oxConfig::getParameter( "rem_oxid");
 
-        if ( $sRedirect = $this->autosave() ) {
-            return $sRedirect;
-        }
-
         $oRemark = oxNew( "oxremark" );
         $oRemark->load( $sRemoxId);
 
@@ -98,8 +94,6 @@ class User_Remark extends oxAdminDetails
         $oRemark->oxremark__oxparentid = new oxField($soxId);
 
         $oRemark->save();
-
-        return $this->autosave();
     }
 
     /**

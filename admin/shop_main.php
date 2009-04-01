@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: shop_main.php 16596 2009-02-18 15:41:27Z vilma $
+ * $Id: shop_main.php 17243 2009-03-16 15:16:57Z arvydas $
  */
 
 
@@ -107,7 +107,7 @@ class Shop_Main extends oxAdminDetails
         if ($aParams['oxshops__oxsmtp']) {
             $aParams['oxshops__oxsmtp'] = trim($aParams['oxshops__oxsmtp']);
         }
-        
+
         //$aParams = $oShop->ConvertNameArray2Idx( $aParams);
         $oShop->assign( $aParams);
 
@@ -131,8 +131,6 @@ class Shop_Main extends oxAdminDetails
         $this->_aViewData["updatelist"] =  "1";
 
         oxSession::setVar( "actshop", $soxId);
-
-        return $this->autosave();
     }
 
 

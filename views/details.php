@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: details.php 16908 2009-03-02 09:29:21Z vilma $
+ * $Id: details.php 17481 2009-03-20 12:35:53Z arvydas $
  */
 
 /**
@@ -35,7 +35,7 @@ class Details extends oxUBase
      *
      * @var array
      */
-    protected $_aVariantList = array();
+    protected $_aVariantList = null;
 
     /**
      * Current class default template name.
@@ -203,6 +203,13 @@ class Details extends oxUBase
     protected $_sSearchTitle = null;
 
     /**
+     * Marker if active product was fully initialized before returning it
+     * (see details::getProduct())
+     * @var bool
+     */
+    protected $_blIsInitialized = false;
+
+    /**
      * Returns current product parent article object if it is available
      *
      * @param string $sParentId parent product id
@@ -212,10 +219,9 @@ class Details extends oxUBase
     protected function _getParentProduct( $sParentId )
     {
         if ( $sParentId && $this->_oParent === null ) {
+            $this->_oParent = false;
             if ( ( $oParent = oxNewArticle( $sParentId ) ) ) {
                 $this->_oParent = $oParent;
-            } else {
-                $this->_oParent = false;
             }
         }
         return $this->_oParent;
@@ -229,7 +235,7 @@ class Details extends oxUBase
      */
     public function loadVariantInformation()
     {
-        if ( !count( $this->_aVariantList ) ) {
+        if ( $this->_aVariantList === null ) {
             $oProduct = $this->getProduct();
 
             //loading full list of variants
@@ -258,6 +264,12 @@ class Details extends oxUBase
                     unset( $this->_aVariantList[$oProduct->getId()] );
                 }
             }
+
+            // setting link type for variants ..
+            foreach ( $this->_aVariantList as $oVariant ) {
+                $this->_setLinkType( $oVariant );
+            }
+
         }
         return $this->_aVariantList;
     }
@@ -273,29 +285,12 @@ class Details extends oxUBase
             return $this->_sViewId;
         }
 
-            $_sViewId = parent::getViewId().'|'.oxConfig::getParameter( 'anid' ).'|'.count( $this->_aVariantList ).'|';
+            $_sViewId = parent::getViewId().'|'.oxConfig::getParameter( 'anid' ).'|'.count( $this->getVariantList() ).'|';
 
 
         return $this->_sViewId = $_sViewId;
     }
 
-    /**
-     * Returns view reset id
-     *
-     * @return string
-     */
-    public function getViewResetId()
-    {
-        $oProduct = $this->getProduct();
-
-        $sId  = parent::GetViewResetID();
-        $sId .= '|anid='.$oProduct->getId();
-        if ( $oProduct->oxarticles__oxparentid->value ) {
-            $sId .= '|anid='.$oProduct->oxarticles__oxparentid->value;
-        }
-
-        return $sId;
-    }
 
     /**
      * Executes parent method parent::init() and newly loads article
@@ -371,16 +366,6 @@ class Details extends oxUBase
 
         $this->_aViewData['selectlist'] = $this->getSelectLists();
 
-        $sSource = getStr()->strtolower( $oProduct->oxarticles__oxlongdesc->value );
-        $sSource = str_replace( array( '<br>', '<br />', '<br/>' ), "\n", $sSource );
-        $sSource = strip_tags( $sSource );
-
-        $this->setMetaDescription( $oProduct->oxarticles__oxtitle->value.' - '.$sSource, 200, true );
-        if ( strlen( trim( $oProduct->oxarticles__oxsearchkeys->value ) ) > 0 ) {
-            $sSource = $oProduct->oxarticles__oxsearchkeys->value.' '.$sSource;
-        }
-        $this->setMetaKeywords( $sSource );
-
         $this->_aViewData["actpicid"]  = $this->getActPictureId();
         $this->_aViewData["actpic"]    = $this->getActPicture();
         $this->_aViewData['blMorePic'] = $this->morePics();
@@ -428,6 +413,54 @@ class Details extends oxUBase
         $this->_aViewData['actCatpath']   = $this->getCatTreePath();
 
         return $this->_sThisTemplate;
+    }
+
+    /**
+     * Returns current view meta data
+     * If $sMeta parameter comes empty, sets to it article title and description.
+     * It happens if current view has no meta data defined in oxcontent table
+     *
+     * @param string $sMeta     category path
+     * @param int    $iLength   max length of result, -1 for no truncation
+     * @param bool   $blDescTag if true - performs additional dublicate cleaning
+     *
+     * @return string
+     */
+    protected function _prepareMetaDescription( $sMeta, $iLength = 200, $blDescTag = true )
+    {
+        if ( !$sMeta ) {
+            $oProduct = $this->getProduct();
+
+            $sMeta = getStr()->strtolower( $oProduct->getArticleLongDesc()->value );
+            $sMeta = str_replace( array( '<br>', '<br />', '<br/>' ), "\n", $sMeta );
+            $sMeta = $oProduct->oxarticles__oxtitle->value.' - '.$sMeta;
+            $sMeta = strip_tags( $sMeta );
+        }
+        return parent::_prepareMetaDescription( $sMeta, $iLength, $blDescTag );
+    }
+
+    /**
+     * Returns current view keywords seperated by comma
+     * If $sKeywords parameter comes empty, sets to it article title and description.
+     * It happens if current view has no meta data defined in oxcontent table
+     *
+     * @param string $sKeywords data to use as keywords
+     *
+     * @return string
+     */
+    protected function _prepareMetaKeyword( $sKeywords )
+    {
+        if ( !$sKeywords ) {
+            $oProduct = $this->getProduct();
+
+            $sKeywords = getStr()->strtolower( $oProduct->getArticleLongDesc()->value );
+            $sKeywords = str_replace( array( '<br>', '<br />', '<br/>' ), "\n", $sKeywords );
+            if ( trim( $oProduct->oxarticles__oxsearchkeys->value ) ) {
+                $sKeywords = $oProduct->oxarticles__oxsearchkeys->value.' '.$sKeywords;
+            }
+            $sKeywords = strip_tags( $sKeywords );
+        }
+        return parent::_prepareMetaKeyword( $sKeywords );
     }
 
     /**
@@ -507,7 +540,7 @@ class Details extends oxUBase
     {
         $this->_sThisTemplate = 'account_login.tpl';
 
-        $sAnchor = oxConfig::getInstance()->getParameter("anchor");
+        $sAnchor = $this->getConfig()->getParameter("anchor");
         if ($sAnchor)
             $this->_sLoginFormAnchor = $sAnchor;
     }
@@ -538,7 +571,7 @@ class Details extends oxUBase
     public function addTags()
     {
         $sTag  = $this->getConfig()->getParameter('newTags', true );
-        $sTag .= " ".html_entity_decode( $this->getConfig()->getParameter( 'highTags', true ), ENT_QUOTES, 'UTF-8' );
+        $sTag .= " ".getStr()->html_entity_decode( $this->getConfig()->getParameter( 'highTags', true ) );
 
         $oProduct = $this->getProduct();
         $oProduct->addTag( $sTag );
@@ -646,10 +679,10 @@ class Details extends oxUBase
      */
     public function getProduct()
     {
-        if ( $this->_oProduct === null ) {
+        $myConfig = $this->getConfig();
+        $myUtils  = oxUtils::getInstance();
 
-            $myConfig = $this->getConfig();
-            $myUtils  = oxUtils::getInstance();
+        if ( $this->_oProduct === null ) {
 
             //this option is only for lists and we must reset value
             //as blLoadVariants = false affect "ab price" functionality
@@ -665,16 +698,34 @@ class Details extends oxUBase
                 $myUtils->redirect( $myConfig->getShopHomeURL() );
                 $myUtils->showMessageAndExit( '' );
             }
+        }
 
+        // additional checks
+        if ( !$this->_blIsInitialized ) {
             if ( !$this->_oProduct->isVisible() ) {
                 $myUtils->redirect( $myConfig->getShopHomeURL() );
                 $myUtils->showMessageAndExit( '' );
             }
 
-            $this->loadVariantInformation();
+            $this->_setLinkType( $this->_oProduct );
+            $this->_blIsInitialized = true;
+        }
 
-            $sListType = oxConfig::getParameter( 'listtype' );
-            if ( 'vendor' == $sListType ) {
+        return $this->_oProduct;
+    }
+
+    /**
+     * Sets link type for product
+     *
+     * @param oxarticle $oProduct  product to set link type
+     * @param int       $iListType list type [optional]
+     *
+     * @return null
+     */
+    protected function _setLinkType( $oProduct, $iListType = null )
+    {
+        $sListType = isset( $iListType ) ? $iListType : oxConfig::getParameter( 'listtype' );
+        if ( 'vendor' == $sListType ) {
                 $iLinkType = OXARTICLE_LINKTYPE_VENDOR;
             } elseif ( 'manufacturer' == $sListType ) {
                 $iLinkType = OXARTICLE_LINKTYPE_MANUFACTURER;
@@ -682,10 +733,7 @@ class Details extends oxUBase
                 $iLinkType = OXARTICLE_LINKTYPE_CATEGORY;
             }
 
-            $this->_oProduct->setLinkType( $iLinkType );
-        }
-
-        return $this->_oProduct;
+        $oProduct->setLinkType( $iLinkType );
     }
 
     /**
@@ -695,7 +743,6 @@ class Details extends oxUBase
      */
     public function getVariantList()
     {
-
         return $this->loadVariantInformation();
     }
 
@@ -753,10 +800,7 @@ class Details extends oxUBase
     public function getVendor()
     {
         if ( $this->_oVendor === null ) {
-            $this->_oVendor = false;
-            if ( $oVendor = $this->getProduct()->getVendor( false ) ) {
-                $this->_oVendor = $oVendor;
-            }
+            $this->_oVendor = $this->getProduct()->getVendor( false );
         }
         return $this->_oVendor;
     }
@@ -769,10 +813,7 @@ class Details extends oxUBase
     public function getManufacturer()
     {
         if ( $this->_oManufacturer === null ) {
-            $this->_oManufacturer = false;
-            if ( $oManufacturer = $this->getProduct()->getManufacturer( false ) ) {
-                $this->_oManufacturer = $oManufacturer;
-            }
+            $this->_oManufacturer = $this->getProduct()->getManufacturer( false );
         }
         return $this->_oManufacturer;
     }
@@ -785,10 +826,7 @@ class Details extends oxUBase
     public function getCategory()
     {
         if ( $this->_oCategory === null ) {
-            $this->_oCategory = false;
-            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadCatTree' ) && ( $oCategory = $this->getProduct()->getCategory() ) ) {
-                $this->_oCategory = $oCategory;
-            }
+            $this->_oCategory = $this->getProduct()->getCategory();
         }
         return $this->_oCategory;
     }
@@ -1087,7 +1125,7 @@ class Details extends oxUBase
      *
      * @return object
      */
-    protected function getSubject()
+    protected function _getSubject()
     {
         return $this->getProduct();
     }
@@ -1136,7 +1174,7 @@ class Details extends oxUBase
     {
         $sListType = oxConfig::getParameter( 'listtype' );
         if ( $sListType && ( 'vendor' == $sListType || 'manufacturer' == $sListType ) ) {
-            return $this->_iViewIndexState = 2;
+            return $this->_iViewIndexState = VIEW_INDEXSTATE_NOINDEXFOLLOW;
         }
         return parent::noIndex();
     }

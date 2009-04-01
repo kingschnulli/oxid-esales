@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: login.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: login.php 17622 2009-03-26 14:02:31Z rimvydas.paskevicius $
  */
 
 /**
@@ -33,7 +33,7 @@ class Login extends oxAdminView
      */
     public function __construct()
     {
-        oxConfig::getInstance()->setConfigParam( 'blAdmin', true );
+        $this->getConfig()->setConfigParam( 'blAdmin', true );
         $this->_sThisAction  = "login";
     }
 
@@ -74,19 +74,25 @@ class Login extends oxAdminView
         $iDefLangCache = (int) oxUtilsServer::getInstance()->getOxCookie('oxidadminlanguage');
 
         // setting template language ..
-        oxLang::getInstance()->setTplLanguage( $iDefLangCache );
+        $aLangParams = $myConfig->getConfigParam('aLanguageParams');
+
+        $aLangArr = oxLang::getInstance()->getLanguageArray();
 
         $handle = opendir( $sSourceDir);
         while ( false !== ( $file = readdir( $handle ) ) ) {
             $sLangName = "";
             $iLangNr = 0;
+
             if ( is_dir("$sSourceDir/$file") && file_exists("$sSourceDir/$file/lang.php") ) {
                     include "$sSourceDir/$file/lang.php";
                     $oLang = new stdClass();
                     $oLang->sValue      = $sLangName;
                     $oLang->blSelected  = ($iLangNr == $iDefLangCache);
+                    if ( isset($aLangParams[$file]['baseId']) ) {
+                        $iLangNr = $aLangParams[$file]['baseId'];
+                    }
                     $aLanguages[$iLangNr] = $oLang;
-                }
+            }
         }
         $this->addTplParam( "aLanguages", $aLanguages);
 

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: article_attribute.inc.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: article_attribute.inc.php 17244 2009-03-16 15:17:48Z arvydas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -121,6 +121,7 @@ class ajaxComponent extends ajaxListComponent
         if ( $oArticle->load( $soxId ) ) {
 
 
+            $sLangTag = oxLang::getInstance()->getLanguageTag();
             if ( isset( $this->sAttributeOXID) && ("" != $this->sAttributeOXID)) {
                 $oGroups = oxNew( "oxlist" );
                 $oGroups->init( "oxbase", "oxobject2attribute" );
@@ -129,7 +130,7 @@ class ajaxComponent extends ajaxListComponent
                 $oGroups->selectString( $sSelect );
                 foreach ($oGroups as $oGroup) {
                     // sets new value
-                    $sFieldName = "oxobject2attribute__oxvalue".oxLang::getInstance()->getLanguageTag();
+                    $sFieldName = "oxobject2attribute__oxvalue".$sLangTag;
                     $oGroup->$sFieldName->setValue($sAttributeValue);
                     $oGroup->save();
                 }

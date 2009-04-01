@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxadmindetails.php 16553 2009-02-13 18:29:53Z tomas $
+ * $Id: oxadmindetails.php 17644 2009-03-27 14:00:12Z arvydas $
  */
 
 /**
@@ -55,8 +55,7 @@ class oxAdminDetails extends oxAdminView
             $sDir = $myConfig->getConfigParam( 'sShopURL' ) . 'documentation/admin';
         } else {
 
-                $oShop = oxNew( 'oxshop' );
-                $oShop->load( oxSession::getVar( 'actshop' ) );
+                $oShop = $this->_getEditShop( oxSession::getVar( 'actshop' ) );
                 //$sDir = "http://docu.oxid-esales.com/PE/{$oShop->oxshops__oxversion->value}/" . $myConfig->getConfigParam( 'iAdminLanguage' ) . '/admin';
                 $sDir = "http://docu.oxid-esales.com/PE/{$oShop->oxshops__oxversion->value}/" . oxLang::getInstance()->getTplLanguage() . '/admin';
         }
@@ -95,7 +94,7 @@ class oxAdminDetails extends oxAdminView
             } else {
                 $sInitialValue = $oObject->$sField->value;
             }
-            $oObject->$sField = new oxField(str_replace( '[{$shop->currenthomedir}]', $myConfig->getCurrentShopURL(), $sInitialValue ), oxField::T_RAW);
+            $oObject->$sField = new oxField(str_replace( array( '[{$shop->currenthomedir}]', '[{$oViewConf->getCurrentHomeDir()}]' ), $myConfig->getCurrentShopURL(), $sInitialValue ), oxField::T_RAW);
             $sEditObjectValue = $oObject->$sField->value;
         }
 
@@ -122,7 +121,7 @@ class oxAdminDetails extends oxAdminView
         }
 
         $this->_oEditor->editorURL = $sEditorUrl;
-        $this->_oEditor->urlFormat = 'absolute';
+        $this->_oEditor->urlFormat = 'preserve';
 
         // document & image directory:
         $this->_oEditor->documentDir = $this->_oEditor->imageDir = $myConfig->getPictureDir( false ).'wysiwigpro/';
@@ -145,7 +144,8 @@ class oxAdminDetails extends oxAdminView
         $this->_oEditor->name = $sField;
 
         // set language file name
-        $this->_oEditor->lang = oxLang::getInstance()->translateString( 'editor_language', oxLang::getInstance()->getTplLanguage() );
+        $oLang = oxLang::getInstance();
+        $this->_oEditor->lang = $oLang->translateString( 'editor_language', $oLang->getTplLanguage() );
 
         // set contents
         if ( $sEditObjectValue ) {
@@ -166,31 +166,31 @@ class oxAdminDetails extends oxAdminView
 
         if (is_file($sCSSPath)) {
 
-                $aCSSPaths[] = $sCSSUrl;
+            $aCSSPaths[] = $sCSSUrl;
 
             if (is_readable($sCSSPath)) {
                 $aCSS = @file( $sCSSPath);
                 if ( isset( $aCSS) && $aCSS) {
                     $aClasses = array();
+                    $oStr = getStr();
                     foreach ( $aCSS as $key => $sLine ) {
                         $sLine = trim($sLine);
 
                         if ( $sLine[0] == '.' && !strstr( $sLine, 'default' ) ) {
                             // found one tag
-                            $sTag = getStr()->substr( $sLine, 1);
-                            $iEnd = getStr()->strpos( $sTag, ' ' );
+                            $sTag = $oStr->substr( $sLine, 1);
+                            $iEnd = $oStr->strpos( $sTag, ' ' );
                             if ( !isset( $iEnd ) || !$iEnd ) {
-                                $iEnd = getStr()->strpos( $sTag, '\n' );
-                        }
+                                $iEnd = $oStr->strpos( $sTag, '\n' );
+                            }
 
-                            if ( $sTag = getStr()->substr( $sTag, 0, $iEnd ) ) {
+                            if ( $sTag = $oStr->substr( $sTag, 0, $iEnd ) ) {
                                 $aClasses["span class='{$sTag}'"] = $sTag;
+                            }
+                        }
                     }
-                }
-            }
-
                     $this->_oEditor->stylesMenu = $aClasses;
-        }
+                }
             }
         }
 
@@ -203,8 +203,8 @@ class oxAdminDetails extends oxAdminView
         $this->_oEditor->loadPlugin( 'templateFilter' );
         $this->_oEditor->plugins['templateFilter']->protect( '[{', '}]' );
         if ( $myConfig->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
-            $this->_oEditor->plugins['templateFilter']->assign( '[{$shop->currenthomedir}]', $myConfig->getShopURL() );
-            $this->_oEditor->plugins['templateFilter']->assign( '[{$shop->currenthomedir}]', $myConfig->getSSLShopURL() );
+            $this->_oEditor->plugins['templateFilter']->assign( '[{$oViewConf->getCurrentHomeDir()}]', $myConfig->getShopURL() );
+            $this->_oEditor->plugins['templateFilter']->assign( '[{$oViewConf->getCurrentHomeDir()}]', $myConfig->getSSLShopURL() );
         }
 
         // generate and return editor code
@@ -284,6 +284,7 @@ class oxAdminDetails extends oxAdminView
             foreach ($oCatTree as $oCategory) {
                 if ($oCategory->getId() == $sSelectedCatId ) {
                     $oCategory->selected = 1;
+                    break;
                 }
             }
         } else { // no category selected - opening first available
@@ -352,11 +353,11 @@ class oxAdminDetails extends oxAdminView
      */
     protected function _resetCounts( $aIds )
     {
-    	$oUtils = oxUtilsCount::getInstance();
+        $oUtils = oxUtilsCount::getInstance();
         foreach ( $aIds as $sType => $aResetInfo ) {
             foreach ( $aResetInfo as $sResetId => $iPos ) {
                 switch ( $sType ) {
-            		case 'vendor':
+                    case 'vendor':
                         $oUtils->resetVendorArticleCount( $sResetId );
                         break;
                     case 'manufacturer':

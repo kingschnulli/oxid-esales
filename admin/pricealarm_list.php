@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: pricealarm_list.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: pricealarm_list.php 17243 2009-03-16 15:16:57Z arvydas $
  */
 
 /**
@@ -75,6 +75,8 @@ class PriceAlarm_List extends oxAdminList
 
 
         $oDefCurr = $myConfig->getActShopCurrencyObject();
+        $myUtils  = oxUtils::getInstance();
+        $myLang   = oxLang::getInstance();
 
         foreach ( $this->_aViewData["mylist"] as $oListItem ) {
 
@@ -94,9 +96,9 @@ class PriceAlarm_List extends oxAdminList
             // #889C - Netto prices in Admin
             // (we have to call $oArticle->getPrice() to get price with VAT)
             $dArtPrice = $oArticle->getPrice()->getBruttoPrice() * $oThisCurr->rate;
-            $dArtPrice = oxUtils::getInstance()->fRound( $dArtPrice );
+            $dArtPrice = $myUtils->fRound( $dArtPrice );
 
-            $oListItem->fprice = oxLang::getInstance()->formatCurrency( $dArtPrice, $oThisCurr );
+            $oListItem->fprice = $myLang->formatCurrency( $dArtPrice, $oThisCurr );
 
             if ( $oArticle->oxarticles__oxparentid->value && !$oArticle->oxarticles__oxtitle->value) {
                 $oParent = oxNew( "oxarticle" );
@@ -104,7 +106,7 @@ class PriceAlarm_List extends oxAdminList
                 $oListItem->oxpricealarm__articletitle = new oxField( $oParent->oxarticles__oxtitle->value." ".$oArticle->oxarticles__oxvarselect->value );
             }
 
-            $oListItem->fpricealarmprice = oxLang::getInstance()->formatCurrency( $oListItem->oxpricealarm__oxprice->value, $oThisCurr);
+            $oListItem->fpricealarmprice = $myLang->formatCurrency( $oListItem->oxpricealarm__oxprice->value, $oThisCurr);
 
             // neutral status
             $oListItem->iStatus = 0;

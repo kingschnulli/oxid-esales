@@ -40,7 +40,6 @@ function UpdateList( sID)
 <input type="hidden" name="fnc" value="">
 <input type="hidden" name="oxid" value="[{ $oxid }]">
 <input type="hidden" name="editval[oxshops__oxid]" value="[{ $oxid }]">
-[{include file="autosave.form.tpl"}]
 
 
    [{ oxmultilang ident="SHOP_SEO_NEWINSTALL" }]<br>
@@ -128,19 +127,6 @@ function UpdateList( sID)
          </td>
          <td valign="top" width="100%">
            [{ oxmultilang ident="SHOP_SEO_RESERVEDWORDS" }]
-         </td>
-        </tr>
-
-        <tr class="conftext[{cycle}]">
-         <td valign="top">
-            <select class="saveinnewlanginput" name=confstrs[iDefSeoLang]>
-              [{foreach from=$languages key=lang item=olang}]
-              <option value="[{ $lang }]"[{ if $lang == $confstrs.iDefSeoLang }]SELECTED[{/if}]>[{ $olang->name }]</option>
-              [{/foreach}]
-            </select>
-         </td>
-         <td valign="top" width="100%">
-           [{ oxmultilang ident="SHOP_SEO_MAINLANGUAGE" }]
          </td>
         </tr>
 

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: article_extend.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: article_extend.php 17479 2009-03-20 12:32:53Z arvydas $
  */
 
 /**
@@ -87,7 +87,7 @@ class Article_Extend extends oxAdminDetails
 
 
             $oDB = oxDb::GetDB();
-            $myConfig = oxConfig::getInstance();
+            $myConfig = $this->getConfig();
             $suffix = ($this->_iEditLang)?"_$this->_iEditLang":"";
 
             $aList = array();
@@ -191,7 +191,7 @@ class Article_Extend extends oxAdminDetails
         //saving media file
         $sMediaUrl  = oxConfig::getParameter( "mediaUrl");
         $sMediaDesc = oxConfig::getParameter( "mediaDesc");
-        $aMediaFile = oxConfig::getInstance()->getUploadedFile( "mediaFile");
+        $aMediaFile = $this->getConfig()->getUploadedFile( "mediaFile");
 
         if ($sMediaUrl || $aMediaFile['name'] || $sMediaDesc) {
 
@@ -227,8 +227,6 @@ class Article_Extend extends oxAdminDetails
             $oMediaUrl->save();
 
         }
-
-        return $this->autosave();
     }
 
     /**

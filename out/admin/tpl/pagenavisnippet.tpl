@@ -11,7 +11,7 @@
         </td>
         <td class="pagenavigation" height="22" align="center" width="33%">
            [{foreach key=iPage from=$pagenavi->changePage item=page}]
-             <a id="nav.page.[{$iPage}]" class="pagenavigation[{if $iPage == $pagenavi->actpage }] pagenavigationactive[{/if}]" href="[{ $shop->selflink }]?cl=[{ $shop->cl }]&amp;oxid=[{ $oxid }]&amp;jumppage=[{$iPage}]&amp;sort=[{ $sort }]&amp;actedit=[{ $actedit }]&amp;language=[{ $actlang }]&amp;editlanguage=[{ $actlang }][{ $whereparam }]&amp;folder=[{$folder}]">[{$iPage}]</a>
+             <a id="nav.page.[{$iPage}]" class="pagenavigation[{if $iPage == $pagenavi->actpage }] pagenavigationactive[{/if}]" href="[{ $shop->selflink }]?cl=[{ $shop->cl }]&amp;oxid=[{ $oxid }]&amp;jumppage=[{$iPage}]&amp;sort=[{ $sort }]&amp;actedit=[{ $actedit }]&amp;language=[{ $actlang }]&amp;editlanguage=[{ $actlang }][{ $whereparam }]&amp;folder=[{$folder}]&amp;pwrsearchfld=[{$pwrsearchfld}]">[{$iPage}]</a>
            [{/foreach}]
         </td>
         <td class="pagenavigation" align="right" width="33%">

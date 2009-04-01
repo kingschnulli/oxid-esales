@@ -84,7 +84,6 @@ function modSmtpField()
 <input type="hidden" name="fnc" value="">
 <input type="hidden" name="oxid" value="[{ $oxid }]">
 <input type="hidden" name="editval[oxshops__oxid]" value="[{ $oxid }]">
-[{include file="autosave.form.tpl"}]
 
 <table border="0" width="98%">
 <tr>

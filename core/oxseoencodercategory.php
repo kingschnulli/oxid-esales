@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxseoencodercategory.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxseoencodercategory.php 17727 2009-04-01 07:46:23Z sarunas $
  */
 
 /**
@@ -143,7 +143,7 @@ class oxSeoEncoderCategory extends oxSeoEncoder
             }
 
             foreach ( $aCacheMap as $sId => $sUri ) {
-                $this->_aCatCache[$sId.'_'.$iLang] = $this->_getUniqueSeoUrl( $sSeoUrl.$sUri.'/', '/', $sId );
+                $this->_aCatCache[$sId.'_'.$iLang] = $this->_getUniqueSeoUrl( $sSeoUrl.$sUri.'/', '/', $sId, $iLang );
                 $this->_saveToDb( 'oxcategory', $sId, $aStdLinks[$sId], $this->_aCatCache[$sId.'_'.$iLang], $iLang );
             }
 

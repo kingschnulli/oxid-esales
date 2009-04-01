@@ -1,30 +1,15 @@
-[{ if $oxid != "-1"}]
-    <table cellspacing="2" cellpadding="2" border="0">
-    <tr>
-    <td align="left" class="saveinnewlangtext">
-        [{ oxmultilang ident="GENERAL_LANGUAGE" }]
-    </td>
-    <td align="left">
-        <select name="editlanguage" id="test_editlanguage" class="saveinnewlanginput" onChange="Javascript:document.myedit.submit();" [{$readonly}] [{$readonly_fields}]>
-        [{foreach from=$otherlang key=lang item=olang}]
-        <option value="[{ $lang }]"[{ if $olang->selected}]SELECTED[{/if}]>[{ $olang->sLangDesc }]</option>
-        [{/foreach}]
-        </select>
-    </td>
-    </tr>
-    [{ if $posslang }]
-    <tr>
-    <td align="left">
-        <input type="submit" name="save" value="[{ oxmultilang ident="GENERAL_SAVEIN" }]" class="saveinnewlangtext" style="width: 100;" onClick="Javascript:document.myedit.fnc.value='saveinnlang'" [{$readonly}] [{$readonly_fields}]>
-    </td>
-    <td align="left">
-        <select name="new_lang" class="saveinnewlanginput" [{$readonly}] [{$readonly_fields}]>
-        [{foreach from=$posslang key=lang item=desc}]
-        <option value="[{ $lang }]">[{ $desc}]</option>
-        [{/foreach}]
-        </select>
-    </td>
-    </tr>
-    [{/if}]
-    </table>
-[{/if}]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+    <title>[{ oxmultilang ident="GENERAL_ADMIN_TITLE_1" }]</title>
+</head>
+
+<!-- frames -->
+<frameset  rows="40%,*" border="0" onLoad="document.getElementById('edit').src='[{$shop->selflink}]?[{ $editurl }][{ if $oxid }]&oxid=[{$oxid}][{/if}]';">
+    <frame src="[{$shop->selflink}]?[{ $listurl }][{ if $oxid }]&oxid=[{$oxid}][{/if}]" name="list" id="list" frameborder="0" scrolling="auto" noresize marginwidth="0" marginheight="0">
+    <frame src="" name="edit" id="edit" frameborder="0" scrolling="auto" noresize marginwidth="0" marginheight="0">
+</frameset>
+
+
+</html>

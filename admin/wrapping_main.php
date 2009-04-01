@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: wrapping_main.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: wrapping_main.php 17191 2009-03-13 12:21:00Z arvydas $
  */
 
 /**
@@ -120,8 +120,6 @@ class Wrapping_Main extends oxAdminDetails
         // set oxid if inserted
         if ( $soxId == "-1")
             oxSession::setVar( "saved_oxid", $oWrapping->oxwrapping__oxid->value);
-
-        return $this->autosave();
     }
 
     /**

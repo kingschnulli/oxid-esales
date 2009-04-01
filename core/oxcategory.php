@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxcategory.php 16592 2009-02-18 11:48:55Z arvydas $
+ * $Id: oxcategory.php 17643 2009-03-27 13:59:37Z arvydas $
  */
 
 /**
@@ -216,11 +216,13 @@ class oxCategory extends oxI18n
         $blRet    = false;
 
         if ( $this->oxcategories__oxright->value == ($this->oxcategories__oxleft->value+1) ) {
+            $myUtilsPic = oxUtilsPic::getInstance();
+
             // only delete empty categories
             // #1173M - not all pic are deleted, after article is removed
-            oxUtilsPic::getInstance()->safePictureDelete($this->oxcategories__oxthumb->value, $myConfig->getAbsDynImageDir().'/0', 'oxcategories', 'oxthumb' );
+            $myUtilsPic->safePictureDelete($this->oxcategories__oxthumb->value, $myConfig->getAbsDynImageDir().'/0', 'oxcategories', 'oxthumb' );
 
-            oxUtilsPic::getInstance()->safePictureDelete($this->oxcategories__oxicon->value, $myConfig->getAbsDynImageDir().'/icon', 'oxcategories', 'oxicon' );
+            $myUtilsPic->safePictureDelete($this->oxcategories__oxicon->value, $myConfig->getAbsDynImageDir().'/icon', 'oxcategories', 'oxicon' );
 
             $sAdd = " and oxshopid = '" . $this->getShopId() . "' ";
 
@@ -663,6 +665,7 @@ class oxCategory extends oxI18n
 
             $rs = oxDb::getDb()->Execute( $sSelect);
             if ($rs != false && $rs->recordCount() > 0) {
+                $oStr = getStr();
                 while ( !$rs->EOF && list($sAttId,$sAttTitle,$sAttVid,$sAttValue) = $rs->fields ) {
                     if ( !isset( $aAttributes[$sAttId])) {
                         $oAttribute           = new stdClass();
@@ -671,8 +674,8 @@ class oxCategory extends oxI18n
                         $aAttributes[$sAttId] = $oAttribute;
                     }
                     $oValue             = new stdClass();
-                    $oValue->id         = htmlspecialchars( $sAttValue, ENT_QUOTES, 'UTF-8' );
-                    $oValue->value      = htmlspecialchars( $sAttValue, ENT_QUOTES, 'UTF-8' );
+                    $oValue->id         = $oStr->htmlspecialchars( $sAttValue );
+                    $oValue->value      = $oStr->htmlspecialchars( $sAttValue );
                     $oValue->blSelected = isset($aSessionFilter[$sActCat][$sAttId]) && $aSessionFilter[$sActCat][$sAttId] == $sAttValue;
 
                     $blActiveFilter = $blActiveFilter || $oValue->blSelected;

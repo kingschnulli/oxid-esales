@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: deliveryset_payment.inc.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: deliveryset_payment.inc.php 17244 2009-03-16 15:17:48Z arvydas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -102,9 +102,10 @@ class ajaxComponent extends ajaxListComponent
             $aChosenSets = $this->_getAll( $this->_addFilter( "select $sPayTable.oxid ".$this->_getQuery() ) );
         }
         if ( $soxId && $soxId != "-1" && is_array( $aChosenSets ) ) {
+            $oDb = oxDb::getDb();
             foreach ( $aChosenSets as $sChosenSet) {
                 // check if we have this entry already in
-                $sID = oxDb::getDb()->GetOne("select oxid from oxobject2payment where oxpaymentid = '$sChosenSet' and oxobjectid = '$soxId' and oxtype = 'oxdelset'");
+                $sID = $oDb->GetOne("select oxid from oxobject2payment where oxpaymentid = '$sChosenSet' and oxobjectid = '$soxId' and oxtype = 'oxdelset'");
                 if ( !isset( $sID) || !$sID) {
                     $oObject = oxNew( 'oxbase' );
                     $oObject->init( 'oxobject2payment' );

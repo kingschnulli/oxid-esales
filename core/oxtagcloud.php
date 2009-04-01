@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxtagcloud.php 16658 2009-02-21 11:49:55Z vilma $
+ * $Id: oxtagcloud.php 17643 2009-03-27 13:59:37Z arvydas $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -106,10 +106,12 @@ class oxTagCloud extends oxSuperCfg
      */
     public function getTagCloud($sArtId = null, $blExtended = false)
     {
+        $myUtils = oxUtils::getInstance();
+
         $sTagCloud = "";
         $sCacheKey = $this->_getCacheKey($blExtended);
         if ( $this->_sCacheKey && !$sArtId ) {
-            $sTagCloud = oxUtils::getInstance()->fromFileCache( $sCacheKey );
+            $sTagCloud = $myUtils->fromFileCache( $sCacheKey );
         }
 
         if ( $sTagCloud ) {
@@ -124,24 +126,25 @@ class oxTagCloud extends oxSuperCfg
         }
 
         $iMaxHit = max( $aTags);
-        $blSeoIsActive = oxUtils::getInstance()->seoIsActive();
+        $blSeoIsActive = $myUtils->seoIsActive();
         if ( $blSeoIsActive) {
             $oSeoEncoder = oxSeoEncoder::getInstance();
         }
 
         $iLang = oxLang::getInstance()->getBaseLanguage();
         $sUrl = $this->getConfig()->getShopUrl();
+        $oStr = getStr();
 
         foreach ($aTags as $sTag => $sRelevance) {
             $sLink = $sUrl."index.php?cl=tag&amp;searchtag=".rawurlencode($sTag)."&amp;lang=".$iLang;
             if ( $blSeoIsActive) {
                 $sLink = $oSeoEncoder->getDynamicUrl( "index.php?cl=tag&amp;searchtag=".rawurlencode($sTag), "tag/$sTag/", $iLang );
             }
-            $sTagCloud .= "<a style='font-size:". $this->_getFontSize($sRelevance, $iMaxHit) ."%;' href='$sLink'>".htmlentities($sTag, ENT_QUOTES, 'UTF-8')."</a> ";
+            $sTagCloud .= "<a style='font-size:". $this->_getFontSize($sRelevance, $iMaxHit) ."%;' href='$sLink'>".$oStr->htmlentities($sTag)."</a> ";
         }
 
         if ($this->_sCacheKey && !$sArtId) {
-            oxUtils::getInstance()->toFileCache($sCacheKey, $sTagCloud);
+            $myUtils->toFileCache($sCacheKey, $sTagCloud);
         }
 
         return $sTagCloud;
@@ -187,13 +190,14 @@ class oxTagCloud extends oxSuperCfg
     {
         $aTags = explode( ' ', $sTags );
         $sRes = '';
+        $oStr = getStr();
         foreach ( $aTags as $sTag ) {
-            if ( ( $iLen = getStr()->strlen( $sTag ) ) ) {
+            if ( ( $iLen = $oStr->strlen( $sTag ) ) ) {
                 if ( $iLen < OXTAGCLOUD_MINTAGLENGTH ) {
                     $sTag .= str_repeat( '_', OXTAGCLOUD_MINTAGLENGTH - $iLen );
                 }
 
-                $sRes .= getStr()->strtolower( $sTag ) . " ";
+                $sRes .= $oStr->strtolower( $sTag ) . " ";
             }
         }
 
@@ -211,8 +215,9 @@ class oxTagCloud extends oxSuperCfg
     {
         $aTags = explode(' ', $sTags);
         $sRes = '';
+        $oStr = getStr();
         foreach ( $aTags as $sTag ) {
-            if ( getStr()->strlen( $sTag ) ) {
+            if ( $oStr->strlen( $sTag ) ) {
                 $sRes .= rtrim( $sTag, '_' ) . " ";
             }
         }
@@ -227,11 +232,13 @@ class oxTagCloud extends oxSuperCfg
      */
     public function resetTagCache()
     {
+        $myUtils = oxUtils::getInstance();
+
         $sCacheKey1 = $this->_getCacheKey(true);
-        oxUtils::getInstance()->toFileCache($sCacheKey1, null);
+        $myUtils->toFileCache($sCacheKey1, null);
 
         $sCacheKey2 = $this->_getCacheKey(false);
-        oxUtils::getInstance()->toFileCache($sCacheKey2, null);
+        $myUtils->toFileCache($sCacheKey2, null);
     }
 
     /**

@@ -88,6 +88,8 @@ tr.conftext  td {background-color:#fafafa;}
 tr.conftext2 td {background-color:#f0f0f0;}
 
 .messagebox {color: #000;padding: 3px;background: #ffe;border: solid gray 1px;margin:1px 0;}
+.messagebox p.message {color: #000;}
+.messagebox p.warning {color:#F00000;font-weight: bold;}
 
 /* Tabs */
 .tabs {position:fixed;bottom:0px;border-collapse: collapse;}
@@ -104,7 +106,7 @@ tr.conftext2 td {background-color:#f0f0f0;}
 .tabs .disabled .b1 a {color:#fff;}
 
 .error {color:#F00000;font-weight: bold;}
-.errorbox {color:#F00000;font-weight: bold;padding: 3px 9px;background: #ffe;border: solid gray 1px;margin:1px 0;}
+.errorbox {color:#F00000;font-weight: bold;padding: 3px 9px;background: #ffe;border: solid gray 1px;margin:1px 0 15px 0;}
 
 a.pagenavigation {padding-left:0.5em;padding-right:0.2em;}
 a.pagenavigationactive {font-weight: bold;}
@@ -142,3 +144,15 @@ ul.genimportnav li a:hover {background: #ddd; text-decoration: none;}
 table.genImportFieldsAssign {border: 1px solid #ccc; width: 1%;}
 table.genImportFieldsAssign td {padding: 3px; border-bottom: 1px solid #eee;}
 table.genImportFieldsAssign thead td {background: #eee; color: #666; font-weight: bold; border-bottom: 1px solid #ddd;}
+
+ul li {list-style-position: inside;list-style: none;padding:2px 2px 2px 11px;margin:0;}
+ul.req {padding:0 5px;border:1px solid #888;margin:5px 0;clear:both;display:block;}
+ul.req li{list-style:none;margin:5px 0;border-left:14px solid gray;padding-left:.5em; background:none;padding:0 5px;}
+ul.req li.pass{border-color:green;}
+ul.req li.pmin{border-color:orange;}
+ul.req li.fail{border-color:red;}
+ul.req li.null{border-color:gray;}
+ul.req ul{padding:0;margin:0;}
+ul.req li.group {border:none;float:left;font-weight:bold;width:32%;}
+ul.req li.coll {border:none;float:left;font-weight:bold;width:32%;}
+ul.req li.clear{clear:left;diplay:none;border:none;visibility:collapse;height:0px;padding:0;margin:0;display:block;line-height: 0;}

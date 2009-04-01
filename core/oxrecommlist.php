@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxrecommlist.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxrecommlist.php 17480 2009-03-20 12:33:16Z arvydas $
  */
 
 /**
@@ -414,7 +414,7 @@ class oxRecommList extends oxBase
      */
     public function getLink()
     {
-        $sUrl = oxConfig::getInstance()->getShopHomeURL().'cl=recommlist';
+        $sUrl = $this->getConfig()->getShopHomeURL().'cl=recommlist';
         if ( oxUtils::getInstance()->seoIsActive() ) {
             $oEncoder = oxSeoEncoder::getInstance();
             if ( ( $sStaticUrl = $oEncoder->getStaticUrl( $sUrl ) ) ) {

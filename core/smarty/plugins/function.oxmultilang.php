@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package smartyPlugins
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: function.oxmultilang.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: function.oxmultilang.php 17246 2009-03-16 15:18:58Z arvydas $
  */
 
 /*
@@ -33,22 +33,23 @@ function smarty_function_oxmultilang( $params, &$smarty )
     $sIdent  = isset( $params['ident'] ) ? $params['ident'] : 'IDENT MISSING';
     $iLang   = null;
     $blAdmin = isAdmin();
+    $oLang = oxLang::getInstance();
 
     if ( $blAdmin ) {
-        $iLang = oxLang::getInstance()->getTplLanguage();
+        $iLang = $oLang->getTplLanguage();
         if ( !isset( $iLang ) ) {
             $iLang = 0;
         }
     }
 
     try {
-        $sTranslation = oxLang::getInstance()->translateString( $sIdent, $iLang, $blAdmin );
+        $sTranslation = $oLang->translateString( $sIdent, $iLang, $blAdmin );
     } catch ( oxLanguageException $oEx ) {
         // is thrown in debug mode and has to be caught here, as smarty hangs otherwise!
     }
 
     if ( $blAdmin && $sTranslation == $sIdent && !isset( $params['noerror'] ) ) {
-    	$sTranslation = '<b>ERROR : Translation for '.$sIdent.' not found!</b>';
+        $sTranslation = '<b>ERROR : Translation for '.$sIdent.' not found!</b>';
     }
 
     return $sTranslation;

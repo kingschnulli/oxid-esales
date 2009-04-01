@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: category_main.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: category_main.php 17243 2009-03-16 15:16:57Z arvydas $
  */
 
 /**
@@ -141,9 +141,10 @@ class Category_Main extends oxAdminDetails
             oxUtilsCount::getInstance()->resetCatArticleCount($soxId);
             $oCategory->load( $soxId);
             $oCategory->loadInLang( $this->_iEditLang, $soxId );
+                $myUtilsPic = oxUtilsPic::getInstance();
                 // #1173M - not all pic are deleted, after article is removed
-                oxUtilsPic::getInstance()->overwritePic( $oCategory, 'oxcategories', 'oxthumb', 'TC', '0', $aParams, $myConfig->getAbsDynImageDir() );
-                oxUtilsPic::getInstance()->overwritePic( $oCategory, 'oxcategories', 'oxicon', 'CICO', 'icon', $aParams, $myConfig->getAbsDynImageDir() );
+                $myUtilsPic->overwritePic( $oCategory, 'oxcategories', 'oxthumb', 'TC', '0', $aParams, $myConfig->getAbsDynImageDir() );
+                $myUtilsPic->overwritePic( $oCategory, 'oxcategories', 'oxicon', 'CICO', 'icon', $aParams, $myConfig->getAbsDynImageDir() );
 
         } else {
             //#550A - if new category is made then is must be default activ
@@ -165,8 +166,6 @@ class Category_Main extends oxAdminDetails
         // set oxid if inserted
         if ( $soxId == "-1")
             oxSession::setVar( "saved_oxid", $oCategory->oxcategories__oxid->value);
-
-        return $this->autosave();
     }
 
     /**

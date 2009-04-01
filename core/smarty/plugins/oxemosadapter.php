@@ -34,7 +34,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  $Id: oxemosadapter.php 16573 2009-02-17 10:54:56Z arvydas $
+ *  $Id: oxemosadapter.php 17246 2009-03-16 15:18:58Z arvydas $
  */
 
 
@@ -109,9 +109,10 @@ class oxEmosAdapter extends oxSuperCfg
      */
     protected function _getDeepestCategoryPath( $oArticle )
     {
-        $iLanguage = oxLang::getInstance()->getBaseLanguage();
+        $oLang = oxLang::getInstance();
+        $iLanguage = $oLang->getBaseLanguage();
 
-        $sSuffix  = oxLang::getInstance()->getLanguageTag( $iLanguage );
+        $sSuffix  = $oLang->getLanguageTag( $iLanguage );
         $sCatView = getViewName('oxcategories');
         $sO2CView = getViewName('oxobject2category');
 
@@ -573,11 +574,16 @@ class oxEmosAdapter extends oxSuperCfg
                 case 'changebasket':
                     foreach ( $aCallData as $sItemId => $aItemData ) {
                         $oProduct = oxNew( 'oxarticle' );
-                        if ( $aItemData['oldam'] != $aItemData['am'] && $oProduct->load( $aItemData['aid'] ) ) {
+                        if ( $aItemData['oldam'] > $aItemData['am'] && $oProduct->load( $aItemData['aid'] ) ) {
                             //ECONDA FIX always use the main category
                             //$sPath = $this->_getDeepestCategoryPath( $oProduct );
                             $sPath = $this->_getBasketProductCatPath( $oProduct );
                             $oEmos->removeFromBasket( $this->_convProd2EmosItem( $oProduct, $sPath, ( $aItemData['oldam'] - $aItemData['am'] ) ) );
+                            $oEmos->appendPreScript($aItemData['oldam'].'->'.$aItemData['am'].':'.$oProduct->load( $aItemData['aid']));
+                        }
+                        else if( $aItemData['oldam'] < $aItemData['am'] && $oProduct->load( $aItemData['aid'] )) {
+                            $sPath = $this->_getBasketProductCatPath( $oProduct );
+                            $oEmos->addToBasket( $this->_convProd2EmosItem( $oProduct, $sPath , $aItemData['am'] -  $aItemData['oldam']) );
                         }
                     }
                     break;

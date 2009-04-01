@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxrssfeed.php 16592 2009-02-18 11:48:55Z arvydas $
+ * $Id: oxrssfeed.php 17643 2009-03-27 13:59:37Z arvydas $
  */
 
 /**
@@ -71,15 +71,17 @@ class oxRssFeed extends oxSuperCfg
      */
     protected function _loadBaseChannel()
     {
+        $myUtils = oxUtils::getInstance();
         $oShop = $this->getConfig()->getActiveShop();
         $this->_aChannel['title'] = $oShop->oxshops__oxname->value;
-        $this->_aChannel['link']  = oxUtils::getInstance()->prepareUrlForNoSession($this->getConfig()->getShopHomeURL());
+        $this->_aChannel['link']  = $myUtils->prepareUrlForNoSession($this->getConfig()->getShopHomeURL());
         $this->_aChannel['description'] = '';
-        $aLangIds = oxLang::getInstance()->getLanguageIds();
-        $this->_aChannel['language']  = $aLangIds[oxLang::getInstance()->getBaseLanguage()];
+        $oLang = oxLang::getInstance();
+        $aLangIds = $oLang->getLanguageIds();
+        $this->_aChannel['language']  = $aLangIds[$oLang->getBaseLanguage()];
         $this->_aChannel['copyright'] = $oShop->oxshops__oxname->value;
         $this->_aChannel['selflink'] = '';
-        if (oxUtils::getInstance()->isValidEmail( $oShop->oxshops__oxinfoemail->value )) {
+        if ( $myUtils->isValidEmail( $oShop->oxshops__oxinfoemail->value )) {
             $this->_aChannel['managingEditor'] = $oShop->oxshops__oxinfoemail->value;
         }
         //$this->_aChannel['webMaster']      = '';
@@ -176,13 +178,17 @@ class oxRssFeed extends oxSuperCfg
      */
     protected function _getArticleItems(oxArticleList $oList)
     {
+        $myUtils = oxUtils::getInstance();
         $aItems = array();
+        $oLang = oxLang::getInstance();
+        $oStr  = getStr();
+
         foreach ($oList as $oArticle) {
             $oItem = new oxStdClass();
             $oActCur = $this->getConfig()->getActShopCurrencyObject();
-            $sPrice = $oArticle->getPriceFromPrefix().oxLang::getInstance()->formatCurrency( $oArticle->getPrice()->getBruttoPrice(), $oActCur );
+            $sPrice = $oArticle->getPriceFromPrefix().$oLang->formatCurrency( $oArticle->getPrice()->getBruttoPrice(), $oActCur );
             $oItem->title                   = strip_tags($oArticle->oxarticles__oxtitle->value . " " . $sPrice . " ". $oActCur->sign);
-            $oItem->guid     = $oItem->link = oxUtils::getInstance()->prepareUrlForNoSession($oArticle->getLink());
+            $oItem->guid     = $oItem->link = $myUtils->prepareUrlForNoSession($oArticle->getLink());
             $oItem->isGuidPermalink         = true;
             $oItem->description             = $oArticle->getArticleLongDesc()->value; //oxarticles__oxshortdesc->value;
             if (trim(str_replace('&nbsp;', '', (strip_tags($oItem->description)))) == '') {
@@ -193,7 +199,7 @@ class oxRssFeed extends oxSuperCfg
             if ($sIcon = $oArticle->getIconUrl()) {
                 $oItem->description = "<img src='$sIcon' border=0 align='left' hspace=5>".$oItem->description;
             }
-            $oItem->description = htmlspecialchars( $oItem->description, ENT_QUOTES, 'UTF-8' );
+            $oItem->description = $oStr->htmlspecialchars( $oItem->description );
 
             $aItems[] = $oItem;
         }
@@ -501,7 +507,7 @@ class oxRssFeed extends oxSuperCfg
      */
     public function getSearchArticlesTitle($sSearch, $sCatId, $sVendorId, $sManufacturerId)
     {
-        return $this->_prepareFeedName( htmlspecialchars($this->_getSearchParamsTranslation('RSS_SEARCHARTICLES_TITLE', $sSearch, $sCatId, $sVendorId, $sManufacturerId)), ENT_QUOTES, 'UTF-8' );
+        return $this->_prepareFeedName( getStr()->htmlspecialchars($this->_getSearchParamsTranslation('RSS_SEARCHARTICLES_TITLE', $sSearch, $sCatId, $sVendorId, $sManufacturerId)) );
     }
 
     /**
@@ -647,7 +653,7 @@ class oxRssFeed extends oxSuperCfg
             null,
             //self::RSS_SEARCHARTS.md5($sSearch.$sCatId.$sVendorId),
             $this->getSearchArticlesTitle($sSearch, $sCatId, $sVendorId, $sManufacturerId),
-            $this->_getSearchParamsTranslation('RSS_SEARCHARTICLES_DESCRIPTION', htmlspecialchars( $sSearch, ENT_QUOTES, 'UTF-8' ), $sCatId, $sVendorId, $sManufacturerId),
+            $this->_getSearchParamsTranslation('RSS_SEARCHARTICLES_DESCRIPTION', getStr()->htmlspecialchars( $sSearch ), $sCatId, $sVendorId, $sManufacturerId),
             $this->_getArticleItems($oArtList),
             $this->getSearchArticlesUrl($sSearch, $sCatId, $sVendorId, $sManufacturerId),
             $this->_getShopUrl()."cl=search&amp;".$this->_getSearchParamsUrl($sSearch, $sCatId, $sVendorId, $sManufacturerId)
@@ -692,11 +698,12 @@ class oxRssFeed extends oxSuperCfg
      */
     protected function _getRecommListItems($oList)
     {
+        $myUtils = oxUtils::getInstance();
         $aItems = array();
         foreach ($oList as $oRecommList) {
             $oItem = new oxStdClass();
             $oItem->title                   = $oRecommList->oxrecommlists__oxtitle->value;
-            $oItem->guid     = $oItem->link = oxUtils::getInstance()->prepareUrlForNoSession($oRecommList->getLink());
+            $oItem->guid     = $oItem->link = $myUtils->prepareUrlForNoSession($oRecommList->getLink());
             $oItem->isGuidPermalink         = true;
             $oItem->description             = $oRecommList->oxrecommlists__oxdesc->value;
 

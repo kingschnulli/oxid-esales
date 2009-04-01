@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: shop_config.php 16592 2009-02-18 11:48:55Z arvydas $
+ * $Id: shop_config.php 17644 2009-03-27 14:00:12Z arvydas $
  */
 
 /**
@@ -61,9 +61,7 @@ class Shop_Config extends oxAdminDetails
 
         if ( $soxId != "-1" && isset( $soxId)) {
             // load object
-            $oShop = oxNew( "oxshop" );
-            $oShop->load( $soxId);
-            $this->_aViewData["edit"] =  $oShop;
+            $this->_aViewData["edit"] = $oShop = $this->_getEditShop( $soxId );
 
             try {
                 // category choose list
@@ -96,6 +94,7 @@ class Shop_Config extends oxAdminDetails
 
         $rs = oxDb::getDb()->Execute("select oxvarname, oxvartype, DECODE( oxvarvalue, '".$myConfig->getConfigParam( 'sConfigKey' )."') as oxvarvalue from oxconfig where oxshopid = '$soxId'");
         if ($rs != false && $rs->recordCount() > 0) {
+            $oStr = getStr();
             while (!$rs->EOF) {
                 $sVarName = $rs->fields[0];
                 $sVarType = $rs->fields[1];
@@ -106,21 +105,21 @@ class Shop_Config extends oxAdminDetails
                 if ($sVarType == "str" || $sVarType == "int") {
                     $aConfStrs[$sVarName] = $sVarVal;
                     if ( $aConfStrs[$sVarName] ) {
-                        $aConfStrs[$sVarName] = htmlentities( $aConfStrs[$sVarName], ENT_QUOTES, 'UTF-8' );
+                        $aConfStrs[$sVarName] = $oStr->htmlentities( $aConfStrs[$sVarName] );
                     }
                 }
                 if ($sVarType == "arr") {
                     if (in_array($sVarName, $this->_aSkipMultiline)) {
                         $aConfArrs[$sVarName] = unserialize( $sVarVal );
                     } else {
-                        $aConfArrs[$sVarName] = htmlentities( $this->_arrayToMultiline( unserialize( $sVarVal ) ), ENT_QUOTES, 'UTF-8' );
+                        $aConfArrs[$sVarName] = $oStr->htmlentities( $this->_arrayToMultiline( unserialize( $sVarVal ) ) );
                     }
                 }
                 if ($sVarType == "aarr") {
                     if (in_array($sVarName, $this->_aSkipMultiline)) {
                         $aConfAarrs[$sVarName] = unserialize( $sVarVal );
                     } else {
-                        $aConfAarrs[$sVarName] = htmlentities( $this->_aarrayToMultiline( unserialize( $sVarVal ) ), ENT_QUOTES, 'UTF-8' );
+                        $aConfAarrs[$sVarName] = $oStr->htmlentities( $this->_aarrayToMultiline( unserialize( $sVarVal ) ) );
                     }
                 }
                 $rs->moveNext();
@@ -197,11 +196,6 @@ class Shop_Config extends oxAdminDetails
             }
         }
 
-        // on language array change all shop SEO urls must be revalidated
-        if ( isset( $aConfAarrs['aLanguages'] ) && serialize( $this->_multilineToAarray( $aConfAarrs['aLanguages'] ) ) != serialize( $myConfig->getShopConfVar( 'aLanguages', $soxId ) ) ) {
-            $this->resetSeoData( $soxId );
-        }
-
         if ( is_array( $aConfAarrs ) ) {
             foreach ( $aConfAarrs as $sVarName => $sVarVal ) {
                 $myConfig->saveShopConfVar( "aarr", $sVarName, serialize( $this->_multilineToAarray( $sVarVal ) ), $soxId );
@@ -229,8 +223,6 @@ class Shop_Config extends oxAdminDetails
         $oShop->save();
 
         oxUtils::getInstance()->rebuildCache();
-
-        return $this->autosave();
     }
 
 

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxarticle.php 16764 2009-02-24 14:22:22Z tomas $
+ * $Id: oxarticle.php 17617 2009-03-26 12:53:29Z sarunas $
  */
 
 // defining supported link types
@@ -1276,11 +1276,13 @@ class oxArticle extends oxI18n
         } elseif ( !$blShopCheck && $this->oxarticles__oxvendorid->value ) {
             $oVendor = oxNew( 'oxi18n' );
             $oVendor->init('oxvendor');
-            //#T2008-04-22 ?
-            //$oVendor->blReadOnly = true;
+            $oVendor->setReadOnly( true );
             $sVendorId = $this->oxarticles__oxvendorid->value;
         }
         if ( $sVendorId && $oVendor->load( $sVendorId ) && $oVendor->oxvendor__oxactive->value ) {
+            if ( !$this->getConfig()->getConfigParam( 'bl_perfLoadVendorTree' ) ) {
+                $oVendor->setReadOnly( true );
+            }
             return $oVendor;
         }
         return null;
@@ -1343,10 +1345,14 @@ class oxArticle extends oxI18n
         } elseif ( !$blShopCheck && $this->oxarticles__oxmanufacturerid->value ) {
             $oManufacturer = oxNew( 'oxI18n' );
             $oManufacturer->init('oxmanufacturers');
+            $oManufacturer->setReadOnly( true );
             $sManufacturerId = $this->oxarticles__oxmanufacturerid->value;
         }
 
         if ( $sManufacturerId && $oManufacturer->load( $sManufacturerId ) ) {
+            if ( !$this->getConfig()->getConfigParam( 'bl_perfLoadManufacturerTree' ) ) {
+                $oManufacturer->setReadOnly( true );
+            }
             $oManufacturer = $oManufacturer->oxmanufacturers__oxactive->value ? $oManufacturer : null;
         } else {
             $oManufacturer = null;
@@ -1934,6 +1940,16 @@ class oxArticle extends oxI18n
     public function getArticleLongDesc($sOXID = null)
     {
 
+        if ( !$sOXID ) {
+            $sOXID = $this->oxarticles__oxid->value;
+        }
+
+        if ($sOXID == $this->oxarticles__oxid->value) {
+            if (isset($this->oxarticles__oxlongdesc) && ($this->oxarticles__oxlongdesc instanceof oxField) && $this->oxarticles__oxlongdesc->value) {
+                return $this->oxarticles__oxlongdesc;
+            }
+        }
+
         $myConfig = $this->getConfig();
 
         // TODO: check if keeping fldname is needed in non-admin mode
@@ -1941,10 +1957,6 @@ class oxArticle extends oxI18n
         $this->oxarticles__oxlongdesc->fldname = 'oxlongdesc';
         $this->oxarticles__oxlongdesc->table   = 'oxarticles';
         $this->oxarticles__oxlongdesc->fldtype = 'text';
-
-        if ( !$sOXID ) {
-            $sOXID = $this->oxarticles__oxid->value;
-        }
 
         if ( $sOXID ) {
             $sLangField = oxLang::getInstance()->getLanguageTag($this->getLanguage());
@@ -2122,7 +2134,7 @@ class oxArticle extends oxI18n
             $sListType = oxConfig::getParameter( 'listtype' );
             if ( !isset( $sListType ) ) {
                 // view defined list type
-                $sListType = oxConfig::getInstance()->getGlobalParameter( 'listtype' );
+                $sListType = $this->getConfig()->getGlobalParameter( 'listtype' );
             }
 
             // list type
@@ -2681,6 +2693,7 @@ class oxArticle extends oxI18n
         $oLowestPrice = null;
 
         $dBasePrice = $this->_getGroupPrice();
+        $oLang = oxLang::getInstance();
         // trying to find lowest price value
         foreach ($oAmPriceList as $sId => $oItem) {
 
@@ -2702,9 +2715,9 @@ class oxArticle extends oxI18n
                 $oLowestPrice = $oItemPrice;
             }
 
-            $oAmPriceList[$sId]->oxprice2article__oxaddabs = new oxField( oxLang::getInstance()->formatCurrency( $myUtils->fRound( $oItemPrice->getBruttoPrice(), $oCur ) ) );
-            $oAmPriceList[$sId]->fnetprice  = oxLang::getInstance()->formatCurrency( $myUtils->fRound($oItemPrice->getNettoPrice(), $oCur ) );
-            $oAmPriceList[$sId]->fbrutprice = oxLang::getInstance()->formatCurrency( $myUtils->fRound($oItemPrice->getBruttoPrice(), $oCur ) );
+            $oAmPriceList[$sId]->oxprice2article__oxaddabs = new oxField( $oLang->formatCurrency( $myUtils->fRound( $oItemPrice->getBruttoPrice(), $oCur ) ) );
+            $oAmPriceList[$sId]->fnetprice  = $oLang->formatCurrency( $myUtils->fRound($oItemPrice->getNettoPrice(), $oCur ) );
+            $oAmPriceList[$sId]->fbrutprice = $oLang->formatCurrency( $myUtils->fRound($oItemPrice->getBruttoPrice(), $oCur ) );
         }
 
         $this->_dAmountPrice = $myUtils->fRound( $oLowestPrice->getBruttoPrice() );
@@ -3014,7 +3027,7 @@ class oxArticle extends oxI18n
             }
         }
 
-        $iLimit = (int) oxConfig::getInstance()->getConfigParam( 'iNrofCustomerWhoArticles' );
+        $iLimit = (int) $this->getConfig()->getConfigParam( 'iNrofCustomerWhoArticles' );
         $iLimit = $iLimit?( $iLimit * 10 ): 50;
 
         // building sql (optimized)
@@ -3076,7 +3089,7 @@ class oxArticle extends oxI18n
             return $this->_oAmountPriceList;
         }
 
-        $myConfig = oxConfig::getInstance();
+        $myConfig = $this->getConfig();
 
         $sArtID  = $this->getId();
 
@@ -3087,8 +3100,6 @@ class oxArticle extends oxI18n
 
         // echo( "TODO replace oxlist usage here _collectAmPriceList".PHP_EOL);
         $sArtID = mysql_real_escape_string($sArtID);
-
-        $myConfig = oxConfig::getInstance();
 
         //collecting assigned to article amount-price list
         $oAmPriceList = oxNew( 'oxlist');
@@ -3160,74 +3171,79 @@ class oxArticle extends oxI18n
      */
     protected function _assignParentFieldValue($sFieldName)
     {
-        $name = $this->_getFieldLongName($sFieldName);
         if (!($oParentArticle = $this->_getParentAricle())) {
             return;
         }
 
-        // only overwrite database values
-        if ( substr( $name, 0, 12) != 'oxarticles__') {
-            continue;
-        }
+        $sCopyFieldName = $this->_getFieldLongName($sFieldName);
 
-        //do not copy certain fields
-        $aNonCopyFields = array('oxarticles__oxinsert',
-                                'oxarticles__oxtimestamp',
-                                'oxarticles__oxnid',
-                                'oxarticles__oxid',
-                                'oxarticles__oxparentid');
+        // assigning only theese which parent article has
+        if ( $oParentArticle->$sCopyFieldName != null ) {
 
-        $aDoubleCopyFields = array('oxarticles__oxprice',
-                                   'oxarticles__oxvat');
-
-        $aCopyParentField = array('oxarticles__oxnonmaterial',
-                                  'oxarticles__oxfreeshipping',
-                                  'oxarticles__oxremindactive');
-
-        if (in_array($name, $aNonCopyFields)) {
-            return;
-        }
-
-
-
-        //do not copy parent data for icons in case we have (need) own variant icon (in case variant thumbnail exists)
-        if ($sFieldName == "oxicon" && !$this->_isFieldEmpty("oxarticles__oxthumb") && $this->oxarticles__oxthumb->value != $oParentArticle->oxarticles__oxthumb->value && $this->getConfig()->getConfigParam( 'blAutoIcons' ) ) {
-            return ;
-        }
-
-        //COPY THE VALUE
-        //replaced the code bellow with this two liner
-        //T2009-01-12
-        if ($this->_isFieldEmpty($name) || in_array($name, $aCopyParentField)) {
-            $this->$name = clone $oParentArticle->$name;
-        }
-
-
-        /*
-        //#1101S empty image fields (without nopic.jpg, nopic_ico.jpg) should be copied from parent too
-        if ( $this->$name->value == 'nopic.jpg' || $this->$name->value == 'nopic_ico.jpg' || ((stristr($name, '_oxthumb') || stristr($name, '_oxicon') || stristr($name, '_oxpic') || stristr($name, '_oxzoom') ) && $this->$name->value == '')) {
-            // pictures
-            if ( $this->_blLoadParentData && $this->isAdmin() ) {
-                $this->$name = clone $oParentArticle->$name;
-            } else {
-                $aFile = explode( '/', $oParentArticle->$name->value);
-                $this->$name->setValue(basename);
+            // only overwrite database values
+            if ( substr( $sCopyFieldName, 0, 12) != 'oxarticles__') {
+                continue;
             }
-        } elseif ( $this->$name->value == '' ||
-                $this->$name->value == '0000-00-00 00:00:00' ||
-                $this->$name->value == '0000-00-00' ||
-                ( in_array($name, $aDoubleCopyFields) && $this->$name->value == 0)
-               ) {
-            $this->$name = clone $oParentArticle->$name;
-        }
 
-        //another fields which should be copied from parent if empty and not covered by above condition
-        $aCopyParentField = array('oxarticles__oxnonmaterial',
-                                  'oxarticles__oxfreeshipping',
-                                  'oxarticles__oxremindactive');
-        if (!$this->$name->value && in_array($name, $aCopyParentField)) {
-            $this->$name = clone $oParentArticle->$name;
-        }*/
+            //do not copy certain fields
+            $aNonCopyFields = array('oxarticles__oxinsert',
+                                    'oxarticles__oxtimestamp',
+                                    'oxarticles__oxnid',
+                                    'oxarticles__oxid',
+                                    'oxarticles__oxparentid');
+
+            $aDoubleCopyFields = array('oxarticles__oxprice',
+                                       'oxarticles__oxvat');
+
+            $aCopyParentField = array('oxarticles__oxnonmaterial',
+                                      'oxarticles__oxfreeshipping',
+                                      'oxarticles__oxremindactive');
+
+            if (in_array($sCopyFieldName, $aNonCopyFields)) {
+                return;
+            }
+
+
+
+            //do not copy parent data for icons in case we have (need) own variant icon (in case variant thumbnail exists)
+            if ($sFieldName == "oxicon" && !$this->_isFieldEmpty("oxarticles__oxthumb") && $this->oxarticles__oxthumb->value != $oParentArticle->oxarticles__oxthumb->value && $this->getConfig()->getConfigParam( 'blAutoIcons' ) ) {
+                return ;
+            }
+
+            //COPY THE VALUE
+            //replaced the code bellow with this two liner
+            //T2009-01-12
+            if ($this->_isFieldEmpty($sCopyFieldName) || in_array($sCopyFieldName, $aCopyParentField)) {
+                $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
+            }
+
+
+            /*
+            //#1101S empty image fields (without nopic.jpg, nopic_ico.jpg) should be copied from parent too
+            if ( $this->$sCopyFieldName->value == 'nopic.jpg' || $this->$sCopyFieldName->value == 'nopic_ico.jpg' || ((stristr($sCopyFieldName, '_oxthumb') || stristr($sCopyFieldName, '_oxicon') || stristr($sCopyFieldName, '_oxpic') || stristr($sCopyFieldName, '_oxzoom') ) && $this->$sCopyFieldName->value == '')) {
+                // pictures
+                if ( $this->_blLoadParentData && $this->isAdmin() ) {
+                    $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
+                } else {
+                    $aFile = explode( '/', $oParentArticle->$sCopyFieldName->value);
+                    $this->$sCopyFieldName->setValue(basename);
+                }
+            } elseif ( $this->$sCopyFieldName->value == '' ||
+                    $this->$sCopyFieldName->value == '0000-00-00 00:00:00' ||
+                    $this->$sCopyFieldName->value == '0000-00-00' ||
+                    ( in_array($sCopyFieldName, $aDoubleCopyFields) && $this->$sCopyFieldName->value == 0)
+                   ) {
+                $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
+            }
+
+            //another fields which should be copied from parent if empty and not covered by above condition
+            $aCopyParentField = array('oxarticles__oxnonmaterial',
+                                      'oxarticles__oxfreeshipping',
+                                      'oxarticles__oxremindactive');
+            if (!$this->$sCopyFieldName->value && in_array($sCopyFieldName, $aCopyParentField)) {
+                $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
+            }*/
+        }
     }
 
     /**
@@ -3271,7 +3287,9 @@ class oxArticle extends oxI18n
 
                 //assing long description
                 $oParentArticle = $this->_getParentAricle();
-                $this->oxarticles__oxlongdesc = $oParentArticle->oxarticles__oxlongdesc;
+                if ( !$this->oxarticles__oxlongdesc->value ) {
+                    $this->oxarticles__oxlongdesc = $oParentArticle->oxarticles__oxlongdesc;
+                }
             }
         } elseif ( $this->oxarticles__oxid->value ) {
             // I am not a variant but I might have some
@@ -3349,11 +3367,12 @@ class oxArticle extends oxI18n
                 $this->oxarticles__oxicon = new oxField('icon/'.basename($this->oxarticles__oxicon->value));
             }
 
+            $myUtilsPic = oxUtilsPic::getInstance();
             for ( $i=1; $i<= $iPicCount; $i++ ) {
                 $sFieldName = 'oxarticles__oxpic'.$i;
                 if ( isset($this->_aFieldNames["oxpic".$i])) {
                     $sIconFieldName = 'oxarticles__oxpic'.$i.'_ico';
-                    $this->$sIconFieldName = new oxField($i.'/'.basename(oxUtilsPic::getInstance()->iconName($this->$sFieldName->value)));
+                    $this->$sIconFieldName = new oxField($i.'/'.basename($myUtilsPic->iconName($this->$sFieldName->value)));
                     $this->$sFieldName     = new oxField($i.'/'.basename($this->$sFieldName->value));
                 }
             }
@@ -3773,17 +3792,18 @@ class oxArticle extends oxI18n
      */
     protected function _onChangeUpdateStock( $sParentID )
     {
+        $oDb = oxDb::getDb();
         $sQ = 'select oxstock, oxvendorid, oxmanufacturerid from oxarticles where oxid = \''.$sParentID.'\' ';
-        $rs = oxDb::getDb()->execute($sQ);
+        $rs = $oDb->execute($sQ);
         $iOldStock = $rs->fields[0];
         $iVendorID = $rs->fields[1];
         $iManufacturerID = $rs->fields[2];
 
         $sQ = 'select sum(oxstock) from oxarticles where oxparentid = \''.$sParentID.'\' and '. $this->getSqlActiveSnippet( true ).' and oxstock > 0 ';
-        $iStock = (float) oxDb::getDb()->getOne( $sQ );
+        $iStock = (float) $oDb->getOne( $sQ );
 
         $sQ = 'update oxarticles set oxvarstock = '.$iStock.' where oxid = \''.$sParentID.'\'';
-        oxDb::getDb()->execute( $sQ );
+        $oDb->execute( $sQ );
 
             //now lets update category counts
             //first detect stock status change for this article (to or from 0)
@@ -3809,12 +3829,12 @@ class oxArticle extends oxI18n
      */
     protected function _onChangeUpdateVarCount( $sParentID )
     {
+        $oDb = oxDb::getDb();
         $sQ = 'select count(*) as varcount from oxarticles where oxparentid = \''.$sParentID.'\' ';
-        $iVarCount = (int) oxDb::getDb()->getOne($sQ);
+        $iVarCount = (int) $oDb->getOne($sQ);
 
         $sQ = 'update oxarticles set oxvarcount = '.$iVarCount.' where oxid = \''.$sParentID.'\'';
-        oxDb::getDb()->execute($sQ);
-
+        $oDb->execute($sQ);
     }
 
     /**
@@ -3828,14 +3848,15 @@ class oxArticle extends oxI18n
     {
         $sQ = 'select min(oxprice) as varminprice from oxarticles where oxparentid = "'.$sParentID.'"';
         //V #M378: Quicksorting after price in articlelist does not work correctly when parent article is not buyable
-        if ( $this->isParentNotBuyable() ) {
+        if ( !$this->isParentNotBuyable() || $this->oxarticles__oxvarcount->value == 0) {
             $sQ .= ' or oxid = "'.$sParentID.'"';
         }
-        $dVarMinPrice = oxDb::getDb()->getOne($sQ);
 
+        $oDb = oxDb::getDb();
+        $dVarMinPrice = $oDb->getOne($sQ);
         if ( $dVarMinPrice ) {
             $sQ = 'update oxarticles set oxvarminprice = '.$dVarMinPrice.' where oxid = "'.$sParentID.'"';
-            oxDb::getDb()->execute($sQ);
+            $oDb->execute($sQ);
         }
     }
 
@@ -3900,5 +3921,10 @@ class oxArticle extends oxI18n
             $this->_blIsRangePrice = true;
         }
 
+        if ( $this->isParentNotBuyable() && !$this->getConfig()->getConfigParam( 'blLoadVariants' )) {
+            $this->getPrice()->setBruttoPriceMode();
+            $this->getPrice()->setPrice($this->oxarticles__oxvarminprice->value);
+            $this->_blIsRangePrice = true;
+        }
     }
 }

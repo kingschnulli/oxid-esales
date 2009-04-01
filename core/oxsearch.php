@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxsearch.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $l
+ * $Id: oxsearch.php 17480 2009-03-20 12:33:16Z arvydas $l
  */
 
 /**
@@ -129,15 +129,17 @@ class oxSearch extends oxSuperCfg
      */
     protected function _getSearchSelect( $sSearchParamForQuery = false, $sInitialSearchCat = false, $sInitialSearchVendor = false, $sInitialSearchManufacturer = false, $sSortBy = false)
     {
+        $oDb = oxDb::getDb();
+
         // performance
         if ( $sInitialSearchCat ) {
             // lets search this category - is no such category - skip all other code
             $oCategory = oxNew( 'oxcategory' );
             $sCatTable = $oCategory->getViewName();
 
-            $sQ  = "select 1 from $sCatTable where $sCatTable.oxid = ".oxDb::getDb()->quote( $sInitialSearchCat )." ";
+            $sQ  = "select 1 from $sCatTable where $sCatTable.oxid = ".$oDb->quote( $sInitialSearchCat )." ";
             $sQ .= "and ".$oCategory->getSqlActiveSnippet();
-            if ( !oxDb::getDb()->getOne( $sQ ) ) {
+            if ( !$oDb->getOne( $sQ ) ) {
                 return;
             }
         }
@@ -148,9 +150,9 @@ class oxSearch extends oxSuperCfg
             $oVendor   = oxNew( 'oxvendor' );
             $sVndTable = $oVendor->getViewName();
 
-            $sQ  = "select 1 from $sVndTable where $sVndTable.oxid = ".oxDb::getDb()->quote( $sInitialSearchVendor )." ";
+            $sQ  = "select 1 from $sVndTable where $sVndTable.oxid = ".$oDb->quote( $sInitialSearchVendor )." ";
             $sQ .= "and ".$oVendor->getSqlActiveSnippet();
-            if ( !oxDb::getDb()->getOne( $sQ ) ) {
+            if ( !$oDb->getOne( $sQ ) ) {
                 return;
             }
         }
@@ -161,9 +163,9 @@ class oxSearch extends oxSuperCfg
             $oManufacturer   = oxNew( 'oxmanufacturer' );
             $sManTable = $oManufacturer->getViewName();
 
-            $sQ  = "select 1 from $sManTable where $sManTable.oxid = ".oxDb::getDb()->quote( $sInitialSearchManufacturer )." ";
+            $sQ  = "select 1 from $sManTable where $sManTable.oxid = ".$oDb->quote( $sInitialSearchManufacturer )." ";
             $sQ .= "and ".$oManufacturer->getSqlActiveSnippet();
-            if ( !oxDb::getDb()->getOne( $sQ ) ) {
+            if ( !$oDb->getOne( $sQ ) ) {
                 return;
             }
         }
@@ -186,7 +188,7 @@ class oxSearch extends oxSuperCfg
         // longdesc field now is kept on different table
         $sDescTable = '';
         $sDescJoin  = '';
-        if ( is_array( $aSearchCols = oxConfig::getInstance()->getConfigParam( 'aSearchCols' ) ) ) {
+        if ( is_array( $aSearchCols = $this->getConfig()->getConfigParam( 'aSearchCols' ) ) ) {
             if ( in_array( 'oxlongdesc', $aSearchCols ) || in_array( 'oxtags', $aSearchCols ) ) {
                 $sDescView  = getViewName( 'oxartextends' );
                 $sDescTable = ", {$sDescView} ";
@@ -233,6 +235,7 @@ class oxSearch extends oxSuperCfg
      */
     protected function _getWhere( $sSearchString )
     {
+        $oDb = oxDb::getDb();
         $myConfig = $this->getConfig();
         $blSep    = false;
         $sArticleTable = getViewName( 'oxarticles' );
@@ -246,6 +249,8 @@ class oxSearch extends oxSuperCfg
         $sSearchSep   = $myConfig->getConfigParam( 'blSearchUseAND' )?'and ':'or ';
         $aSearch  = explode( ' ', $sSearchString );
         $sSearch  = ' and ( ';
+        $myUtilsString = oxUtilsString::getInstance();
+        $oLang = oxLang::getInstance();
 
         foreach ( $aSearch as $sSearchString ) {
 
@@ -268,7 +273,7 @@ class oxSearch extends oxSuperCfg
 
                 $sLanguage = '';
                 if ( $this->_iLanguage && $oTempArticle->isMultilingualField( $sField ) ) {
-                    $sLanguage = oxLang::getInstance()->getLanguageTag( $this->_iLanguage );
+                    $sLanguage = $oLang->getLanguageTag( $this->_iLanguage );
                 }
 
                 // as long description now is on different table table must differ
@@ -278,11 +283,11 @@ class oxSearch extends oxSuperCfg
                     $sSearchField = "{$sArticleTable}.{$sField}{$sLanguage}";
                 }
 
-                $sSearch .= " {$sSearchField} like ".oxDb::getDb()->quote( "%$sSearchString%" );
+                $sSearch .= " {$sSearchField} like ".$oDb->quote( "%$sSearchString%" );
 
                 // special chars ?
-                if ( ( $sUml = oxUtilsString::getInstance()->prepareStrForSearch( $sSearchString ) ) ) {
-                    $sSearch  .= " or {$sSearchField} like ".oxDb::getDb()->quote( "%$sUml%" );
+                if ( ( $sUml = $myUtilsString->prepareStrForSearch( $sSearchString ) ) ) {
+                    $sSearch  .= " or {$sSearchField} like ".$oDb->quote( "%$sUml%" );
                 }
 
                 $blSep2 = true;

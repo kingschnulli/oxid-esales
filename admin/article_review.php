@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: article_review.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: article_review.php 17479 2009-03-20 12:32:53Z arvydas $
  */
 
 /**
@@ -81,12 +81,12 @@ class Article_Review extends oxAdminDetails
     }
 
     /**
-     * returns reviews list for article 
-     * 
+     * returns reviews list for article
+     *
      * @param oxArticle $oArticle
      * @return oxList
      */
-    protected function _getReviewList($oArticle) 
+    protected function _getReviewList($oArticle)
     {
         $sSelect  = "select oxreviews.* from oxreviews
                      where oxreviews.OXOBJECTID = '".$oArticle->oxarticles__oxid->value
@@ -94,8 +94,8 @@ class Article_Review extends oxAdminDetails
 
         $aVariantList = $oArticle->getVariants();
 
-        if ( oxConfig::getInstance()->getConfigParam( 'blShowVariantReviews' ) && count( $aVariantList )) {
-            
+        if ( $this->getConfig()->getConfigParam( 'blShowVariantReviews' ) && count( $aVariantList )) {
+
             // verifying rights
             foreach ( $aVariantList as $oVariant ) {
                 $sSelect .= "or oxreviews.oxobjectid = '".$oVariant->oxarticles__oxid->value."' ";
@@ -111,10 +111,10 @@ class Article_Review extends oxAdminDetails
         $oRevs = oxNew( "oxlist" );
         $oRevs->init( "oxreview" );
         $oRevs->selectString( $sSelect );
-        
+
         return $oRevs;
     }
-    
+
     /**
      * Saves article review information changes.
      *
@@ -140,8 +140,6 @@ class Article_Review extends oxAdminDetails
 
         $oReview->assign( $aParams);
         $oReview->save();
-
-        return $this->autosave();
     }
 
     /**

@@ -101,6 +101,10 @@
 [{if $bottom_buttons->country_new }]
 <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.new" href="#" onClick="Javascript:parent.list.document.search.oxid.value='-1'; parent.list.document.search.submit();document.location='[{$shop->selflink}]?cl=country_main';return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWCOUNTRY" }]</a> |</li>
 [{/if}]
+[{* language *}]
+[{if $bottom_buttons->language_new }]
+<li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.new" href="#" onClick="Javascript:parent.list.document.search.oxid.value='-1'; parent.list.document.search.submit();document.location='[{$shop->selflink}]?cl=language_main';return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWLANGUAGE" }]</a> |</li>
+[{/if}]
 [{* vendor *}]
 [{if $bottom_buttons->vendor_new }]
 <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.new" href="#" onClick="Javascript:parent.list.document.search.oxid.value='-1'; parent.list.document.search.submit();document.location='[{$shop->selflink}]?cl=vendor_main';return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWVENDOR" }]</a> |</li>
@@ -135,7 +139,7 @@
 
 [{ if $sHelpURL }]
 [{* HELP *}]
-<li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.help" href="[{ $sHelpURL }]/[{ $shop->cl|lower }].html" OnClick="window.open('[{ $sHelpURL }]/[{ $shop->cl|lower }].html','OXID_Help','width=800,height=600,resizable=no,scrollbars=yes');return false;">[{ oxmultilang ident="TOOLTIPS_OPENHELP" }]</a></li>
+<li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.help" href="[{ $sHelpURL }]/[{ $shop->cl|oxlower }].html" OnClick="window.open('[{ $sHelpURL }]/[{ $shop->cl|lower }].html','OXID_Help','width=800,height=600,resizable=no,scrollbars=yes');return false;">[{ oxmultilang ident="TOOLTIPS_OPENHELP" }]</a></li>
 [{/if}]
 </ul>
 [{/strip}]

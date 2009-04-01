@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: order_overview.php 16553 2009-02-13 18:29:53Z tomas $
+ * $Id: order_overview.php 17243 2009-03-16 15:16:57Z arvydas $
  */
 
     // DTAUS
@@ -59,17 +59,18 @@ class Order_Overview extends oxAdminDetails
         }
 
         // orders today
-        $oCur = $myConfig->getActShopCurrencyObject();
-        $dSum = $oOrder->getOrderSum(true);
-        $this->_aViewData["ordersum"] = oxLang::getInstance()->formatCurrency($dSum, $oCur);
+        $oLang = oxLang::getInstance();
+        $oCur  = $myConfig->getActShopCurrencyObject();
+        $dSum  = $oOrder->getOrderSum(true);
+        $this->_aViewData["ordersum"] = $oLang->formatCurrency($dSum, $oCur);
         $this->_aViewData["ordercnt"] = $oOrder->getOrderCnt(true);
 
         // ALL orders
         $dSum = $oOrder->getOrderSum();
-        $this->_aViewData["ordertotalsum"] = oxLang::getInstance()->formatCurrency( $dSum, $oCur);
+        $this->_aViewData["ordertotalsum"] = $oLang->formatCurrency( $dSum, $oCur);
         $this->_aViewData["ordertotalcnt"] = $oOrder->getOrderCnt();
         $this->_aViewData["afolder"] = $myConfig->getConfigParam( 'aOrderfolder' );
-            $this->_aViewData["alangs"] = oxLang::getInstance()->getLanguageNames();
+            $this->_aViewData["alangs"] = $oLang->getLanguageNames();
 
 
         $this->_aViewData["currency"] = $oCur;
@@ -152,17 +153,17 @@ class Order_Overview extends oxAdminDetails
             return;
 
         $oPayment = oxNew( "oxuserpayment" );
-        $oShop = oxNew( "oxshop" );
-        $oShop->load( $this->getConfig()->getShopId());
-
+        $oShop = $this->getConfig()->getActiveShop();
         $dtaus = new DTAUS("L", $oShop->oxshops__oxcompany->value, str_replace( " ", "", $oShop->oxshops__oxbankcode->value), str_replace( " ", "", $oShop->oxshops__oxbanknumber->value));
 
+        $myUtils = oxUtils::getInstance();
+        $myLang  = oxLang::getInstance();
         foreach ( $oOrderList as $oOrder) {
             $oPayment->load( $oOrder->oxorder__oxpaymentid->value);
-            $aDynValues = oxUtils::getInstance()->assignValuesFromText( $oPayment->oxuserpayments__oxvalue->value );
+            $aDynValues = $myUtils->assignValuesFromText( $oPayment->oxuserpayments__oxvalue->value );
             // #630
             //$dtaus->addTransaktion( $aDynValues[3]->value, str_replace( array(" ", "-"), "", $aDynValues[1]->value), str_replace( array(" ", "-"), "", $aDynValues[2]->value), str_replace( ",", ".",$oOrder->ftotalorder), $oShop->oxshops__oxname->getRawValue(), oxLang::getInstance()->translateString("order")." ".$oOrder->oxorder__oxordernr->value,"");
-            $dtaus->addTransaktion( $aDynValues[3]->value, str_replace( " ", "", $aDynValues[1]->value), str_replace( " ", "", $aDynValues[2]->value), str_replace( ",", ".", $oOrder->ftotalorder), $oShop->oxshops__oxname->getRawValue(), oxLang::getInstance()->translateString("order")." ".$oOrder->oxorder__oxordernr->value, "");
+            $dtaus->addTransaktion( $aDynValues[3]->value, str_replace( " ", "", $aDynValues[1]->value), str_replace( " ", "", $aDynValues[2]->value), str_replace( ",", ".", $oOrder->ftotalorder), $oShop->oxshops__oxname->getRawValue(), $myLang->translateString("order")." ".$oOrder->oxorder__oxordernr->value, "");
 
         }
 

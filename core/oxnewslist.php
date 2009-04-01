@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxnewslist.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxnewslist.php 17414 2009-03-19 09:48:33Z arvydas $
  */
 
 /**
@@ -55,7 +55,8 @@ class oxNewslist extends oxList
         }
 
         $sNewsViewName = getViewName( 'oxnews' );
-        $sSelectFields = $this->getBaseObject()->getSelectFields();
+        $oBaseObject   = $this->getBaseObject();
+        $sSelectFields = $oBaseObject->getSelectFields();
 
         if ( $oUser = $this->getUser() ) {
             // performance - only join if user is logged in
@@ -68,7 +69,7 @@ class oxNewslist extends oxList
             $sSelect .= "left join oxobject2group on oxobject2group.oxobjectid=$sNewsViewName.oxid where oxobject2group.oxgroupsid is null ";
         }
 
-        $sSelect .= " and ".$this->getBaseObject()->getSqlActiveSnippet();
+        $sSelect .= " and ".$oBaseObject->getSqlActiveSnippet();
         $sSelect .= " group by $sNewsViewName.oxid order by $sNewsViewName.oxdate desc ";
 
         $this->selectString( $sSelect );

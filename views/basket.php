@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: basket.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
+ * $Id: basket.php 17315 2009-03-17 16:18:58Z arvydas $
  */
 
 /**
@@ -41,7 +41,7 @@ class Basket extends oxUBase
      *
      * @var string
      */
-    protected $_sThisAltTemplate = 'impressum.tpl';
+    protected $_sThisAltTemplate = 'content.tpl';
 
     /**
      * Order step marker
@@ -80,17 +80,16 @@ class Basket extends oxUBase
     protected $_oFirstBasketProduct = null;
 
     /**
-     * Current view search engine indexing state:
-     *     0 - index without limitations
-     *     1 - no index / no follow
-     *     2 - no index / follow
+     * Current view search engine indexing state
+     *
+     * @var int
      */
-    protected $_iViewIndexState = 1;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXNOFOLLOW;
 
     /**
      * Executes parent::render(), creates list with basket articles
      * Returns name of template file basket::_sThisTemplate (for Search
-     * engines return "impressum.tpl" template to avoid fake orders etc).
+     * engines return "content.tpl" template to avoid fake orders etc).
      *
      * Template variables:
      * <b>similarlist</b>, <b>basketitemlist</b>
@@ -99,12 +98,12 @@ class Basket extends oxUBase
      */
     public function render()
     {
+        parent::render();
+
         // checks if current http client is SE and skips basket preview on success
         if ( oxUtils::getInstance()->isSearchEngine() ) {
             return $this->_sThisTemplate = $this->_sThisAltTemplate;
         }
-
-        parent::render();
 
         //for older templates
         $this->_aViewData['basketitemlist']    = $this->getBasketArticles();

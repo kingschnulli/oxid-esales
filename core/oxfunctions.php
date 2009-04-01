@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxfunctions.php 16594 2009-02-18 13:29:44Z vilma $
+ * $Id: oxfunctions.php 17680 2009-03-30 15:40:22Z vilma $
  */
 
 /**
@@ -66,10 +66,11 @@ function __autoload( $sClass )
     // special case
     if ( !in_array( $sClass, $aTriedClasses ) && is_array( $aModules = oxConfig::getInstance()->getConfigParam( 'aModules' ) ) ) {
 
+        $myUtilsObject = oxUtilsObject::getInstance();
         foreach ( $aModules as $sParentName => $sModuleName ) {
             // looking for module parent class
             if ( stripos( $sModuleName, $sClass ) !== false ) {
-                oxUtilsObject::getInstance()->getClassName( $sParentName );
+                $myUtilsObject->getClassName( $sParentName );
                 break;
             }
         }
@@ -353,40 +354,6 @@ function ox_get_secure( $sTplName, $oSmarty )
 function ox_get_trusted( $sTplName, $oSmarty )
 {
     // not used for templates
-}
-
-/**
- * This method replaces existing Smarty function for truncating strings
- * (check Smarty documentation for details). When truncating strings
- * additionally we need to convert &#039;/&quot; entities to '/"
- * and after truncating convert them back.
- *
- * @param string $sString      string to process
- * @param int    $iLength      max string length
- * @param string $sEtc         addon to truncated string (default '...')
- * @param bool   $blBreakWords marker to break words
- *
- * @return string
- */
-function smarty_modifier_oxtruncate( $sString, $iLength = 80, $sEtc = '...', $blBreakWords = false)
-{
-    if ( $iLength == 0 ) {
-        $sString = '';
-    } elseif ( $iLength > 0 && getStr()->strlen( $sString ) > $iLength ) {
-        $iLength -= getStr()->strlen( $sEtc );
-
-        $sString = str_replace( array('&#039;', '&quot;'), array( "'",'"' ), $sString );
-
-        if ( !$blBreakWords ) {
-            $sString = preg_replace( '/\s+?(\S+)?$/u', '', getStr()->substr( $sString, 0, $iLength + 1 ) );
-        }
-
-        $sString = getStr()->substr( $sString, 0, $iLength ).$sEtc;
-
-        return str_replace( array( "'",'"' ), array('&#039;', '&quot;'), $sString );
-    }
-
-    return $sString;
 }
 
 if ( !function_exists( 'getViewName' ) ) {

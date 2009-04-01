@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxbase.php 16907 2009-03-02 09:28:12Z vilma $
+ * $Id: oxbase.php 17248 2009-03-16 15:22:07Z arvydas $
  */
 
 /**
@@ -149,6 +149,13 @@ class oxBase extends oxSuperCfg
     protected $_blIsSeoObject = false;
 
     /**
+     * Read only for object
+     *
+     * @var bool
+     */
+    protected $_blReadOnly = false;
+
+    /**
      * Class constructor, sets active shop.
      */
     public function __construct()
@@ -210,6 +217,9 @@ class oxBase extends oxSuperCfg
             return $this->getId();
         }
 
+        if ( $sName == 'blReadOnly' ) {
+            return $this->isReadOnly();
+        }
         // implementing lazy loading fields
         // This part of the code is slow and normally is called before field cache is built.
         // Make sure it is not called after first page is loaded and cache data is fully built.
@@ -242,10 +252,11 @@ class oxBase extends oxSuperCfg
 
                     //save names to cache for next loading
                     if ($this->_sCacheKey) {
+                        $myUtils = oxUtils::getInstance();
                         $sCacheKey = 'fieldnames_' . $this->_sCoreTable . "_" . $this->_sCacheKey;
-                        $aFieldNames = oxUtils::getInstance()->fromFileCache($sCacheKey);
+                        $aFieldNames = $myUtils->fromFileCache($sCacheKey);
                         $aFieldNames[$sFieldName] = $iFieldStatus;
-                        oxUtils::getInstance()->toFileCache($sCacheKey, $aFieldNames);
+                        $myUtils->toFileCache($sCacheKey, $aFieldNames);
                     }
 
                 } catch ( Exception $e ) {
@@ -1275,18 +1286,19 @@ class oxBase extends oxSuperCfg
 
         $oDB      = oxDb::getDb(true);
         $myConfig = $this->getConfig();
+        $myUtils  = oxUtils::getInstance();
 
         // let's get a new ID
         if ( !$this->getId()) {
             $this->setId();
         }
 
-        $sIDKey = oxUtils::getInstance()->getArrFldName( $this->_sCoreTable.".oxid");
+        $sIDKey = $myUtils->getArrFldName( $this->_sCoreTable.".oxid");
         $this->$sIDKey = new oxField($this->getId(), oxField::T_RAW);
         $sInsert= "Insert into {$this->_sCoreTable} set ";
 
         //setting oxshopid
-        $sShopField = oxUtils::getInstance()->getArrFldName($this->_sCoreTable.".oxshopid");
+        $sShopField = $myUtils->getArrFldName($this->_sCoreTable.".oxshopid");
         if (isset($this->$sShopField) && !$this->$sShopField->value)
             $this->$sShopField = new oxField($myConfig->getShopId(), oxField::T_RAW);
         $sInsert .= $this->_getUpdateFields( false );
@@ -1379,6 +1391,28 @@ class oxBase extends oxSuperCfg
             return true;
         }
         return false;
+    }
+
+    /**
+     * Is object readonly
+     *
+     * @return bool
+     */
+    public function isReadOnly()
+    {
+        return $this->_blReadOnly;
+    }
+
+    /**
+     * Set object readonly
+     *
+     * @param bool $blReadOnly readonly flag
+     *
+     * @return null
+     */
+    public function setReadOnly( $blReadOnly )
+    {
+        $this->_blReadOnly = $blReadOnly;
     }
 
 }

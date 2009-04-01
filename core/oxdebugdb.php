@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxdebugdb.php 16592 2009-02-18 11:48:55Z arvydas $
+ * $Id: oxdebugdb.php 17643 2009-03-27 13:59:37Z arvydas $
  */
 
 
@@ -232,10 +232,11 @@ class oxDebugDb
      */
     protected function _logToFile($aWarnings)
     {
+        $oStr = getStr();
         $s = "\n\n\n\n\n\n-- ".date("m-d  H:i:s")." --\n\n";
         foreach ($aWarnings as $w)
         {
-            $s .= "{$w['check']}: {$w['time']} - ".htmlentities($w['sql'], ENT_QUOTES, 'UTF-8')."\n\n";
+            $s .= "{$w['check']}: {$w['time']} - ".$oStr->htmlentities($w['sql'])."\n\n";
             $s .= $w['trace']."\n\n\n\n";
         }
         $f = fopen(realpath(dirname(__FILE__).'/..').'/oxdebugdb.txt', "a+");

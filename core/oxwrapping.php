@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxwrapping.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxwrapping.php 17411 2009-03-19 09:24:17Z arvydas $
  */
 
 /**
@@ -153,7 +153,7 @@ class oxWrapping extends oxI18n
         $oEntries = oxNew( 'oxlist' );
         $oEntries->init( 'oxwrapping' );
         $sWrappingViewName = getViewName( 'oxwrapping' );
-        $sSelect =  "select * from $sWrappingViewName where $sWrappingViewName.oxactive = '1' and $sWrappingViewName.oxtype = '$sWrapType' ";
+        $sSelect =  "select * from $sWrappingViewName where $sWrappingViewName.".$this->getSqlFieldName( 'oxactive' )." = '1' and $sWrappingViewName.oxtype = '$sWrapType' ";
         $oEntries->selectString( $sSelect );
 
         return $oEntries;
@@ -169,7 +169,7 @@ class oxWrapping extends oxI18n
     public function getWrappingCount( $sWrapType )
     {
         $sWrappingViewName = getViewName( 'oxwrapping' );
-        $sQ = "select count(*) from $sWrappingViewName where $sWrappingViewName.oxactive = '1' and $sWrappingViewName.oxtype = '$sWrapType' ";
+        $sQ = "select count(*) from $sWrappingViewName where $sWrappingViewName.".$this->getSqlFieldName( 'oxactive' )." = '1' and $sWrappingViewName.oxtype = '$sWrapType' ";
         return (int) oxDb::getDb()->getOne( $sQ );
     }
 

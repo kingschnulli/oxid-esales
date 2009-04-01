@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: news.php 16306 2009-02-05 10:28:05Z rimvydas.paskevicius $
+ * $Id: news.php 17016 2009-03-04 13:05:30Z vilma $
  */
 
 /**
@@ -38,6 +38,18 @@ class News extends oxUBase
      * @var string
      */
     protected $_sThisTemplate = 'news.tpl';
+
+    /**
+     * Sign if to load and show top5articles action
+     * @var bool
+     */
+    protected $_blTop5Action = true;
+
+    /**
+     * Sign if to load and show bargain action
+     * @var bool
+     */
+    protected $_blBargainAction = true;
 
     /**
      * Loads news list oxnewslist::LoadNews(), action articles,

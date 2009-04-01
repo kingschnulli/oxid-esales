@@ -82,7 +82,6 @@ function SetSticker( sStickerId, oObject)
         <input type="hidden" name="voxid" value="[{ $oxid }]">
         <input type="hidden" name="oxparentid" value="[{ $oxparentid }]">
         <input type="hidden" name="editval[article__oxid]" value="[{ $oxid }]">
-        [{include file="autosave.form.tpl"}]
         <tr>
           <td valign="top" class="edittext" style="padding-left:10px;width:50%">
             <table cellspacing="0" cellpadding="0" border="0">

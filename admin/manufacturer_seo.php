@@ -86,7 +86,7 @@ class Manufacturer_Seo extends Object_Seo
                 $oManufacturer->save();
 
                 // marking page links as expired
-                oxSeoEncoderManufacturer::getInstance()->markAsExpired( $sOxid, oxConfig::getInstance()->getShopId(), 1, $this->_iEditLang, "oxparams != '' " );
+                oxSeoEncoderManufacturer::getInstance()->markAsExpired( $sOxid, $this->getConfig()->getShopId(), 1, $this->_iEditLang, "oxparams != '' " );
             }
         }
 

@@ -44,8 +44,6 @@ function DeleteThis( sID)
 
 function ChangeEditBar( sLocation, sPos)
 {
-    [{include file="autosave.script.tpl"}]
-
     var oSearch = document.getElementById("search");
     oSearch.actedit.value=sPos;
     oSearch.submit();
@@ -149,7 +147,7 @@ window.onLoad = top.reloadEditFrame();
         [{assign var="listclass" value=listitem4 }]
     [{ /if}]
     <td valign="top" class="[{ $listclass}]" height="15"><div class="listitemfloating">&nbsp;<a href="Javascript:EditThis('[{ $listitem->oxuser__oxid->value}]');" class="[{ $listclass}]">[{ if !$listitem->oxuser__oxlname->value }]-kein Name-[{else}][{ $listitem->oxuser__oxlname->value }][{/if}] [{ $listitem->oxuser__oxfname->value }]</a></div></td>
-    <td valign="top" class="[{ $listclass}]"><div class="listitemfloating"><a href="Javascript:EditThis('[{ $listitem->oxuser__oxid->value }]');" class="[{ $listclass}]">[{ $listitem->oxuser__oxusername->value|truncate:21:"...":true }]</a></div></td>
+    <td valign="top" class="[{ $listclass}]"><div class="listitemfloating"><a href="Javascript:EditThis('[{ $listitem->oxuser__oxid->value }]');" class="[{ $listclass}]">[{ $listitem->oxuser__oxusername->value|oxtruncate:21:"...":true }]</a></div></td>
     <td valign="top" class="[{ $listclass}]"><div class="listitemfloating"><a href="Javascript:EditThis('[{ $listitem->oxuser__oxid->value }]');" class="[{ $listclass}]">[{ $listitem->oxuser__oxstreet->value }]</a></div></td>
     <td valign="top" class="[{ $listclass}]"><div class="listitemfloating"><a href="Javascript:EditThis('[{ $listitem->oxuser__oxid->value }]');" class="[{ $listclass}]">[{ $listitem->oxuser__oxzip->value }]</a></div></td>
     <td valign="top" class="[{ $listclass}]"><div class="listitemfloating"><a href="Javascript:EditThis('[{ $listitem->oxuser__oxid->value }]');" class="[{ $listclass}]">[{ $listitem->oxuser__oxcity->value }]</a></div></td>

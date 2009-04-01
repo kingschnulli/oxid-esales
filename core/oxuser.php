@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxuser.php 16552 2009-02-13 18:28:48Z tomas $
+ * $Id: oxuser.php 17480 2009-03-20 12:33:16Z arvydas $
  */
 
 /**
@@ -385,10 +385,10 @@ class oxUser extends oxBase
             $this->_oPayments->init( 'oxUserPayment' );
             $this->_oPayments->selectString( $sSelect );
 
-            //while ( list( $key, $val ) = each( $oPayments ) ) {
+            $myUtils = oxUtils::getInstance();
             foreach ( $this->_oPayments as $oPayment ) {
                 // add custom fields to this class
-                $oPayment = oxUtils::getInstance()->assignValuesFromText( $val->oxuserpayments__oxvalue->value );
+                $oPayment = $myUtils->assignValuesFromText( $val->oxuserpayments__oxvalue->value );
             }
         }
 
@@ -1273,7 +1273,7 @@ class oxUser extends oxBase
      */
     public function loadActiveUser( $blForceAdmin = false )
     {
-        $myConfig = oxConfig::getInstance();
+        $myConfig = $this->getConfig();
 
         $blAdmin = $myConfig->isAdmin() || $blForceAdmin;
         $oDB = oxDb::getDb();
@@ -1349,11 +1349,12 @@ class oxUser extends oxBase
     {
         include "oxldap.php";
         $myConfig = $this->getConfig();
+        $oDb = oxDb::getDb();
         //$throws oxConnectionException
         $aLDAPParams = $myConfig->getConfigParam( 'aLDAPParams' );
         $oLDAP = new oxLDAP( $aLDAPParams['HOST'], $aLDAPParams['PORT'] );
         // maybe this is LDAP user but supplied email Address instead of LDAP login
-        $sLDAPKey = oxDb::getDb()->GetOne("select oxldapkey from oxuser where oxuser.oxactive = 1 and oxuser.oxusername = ".oxDb::getDb()->Quote($sUser)." $sShopSelect");
+        $sLDAPKey = $oDb->GetOne("select oxldapkey from oxuser where oxuser.oxactive = 1 and oxuser.oxusername = ".$oDb->Quote($sUser)." $sShopSelect");
         if ( isset( $sLDAPKey) && $sLDAPKey) {
             $sUser = $sLDAPKey;
         }
@@ -1365,8 +1366,8 @@ class oxUser extends oxBase
         if ( isset( $aData['OXUSERNAME']) && $aData['OXUSERNAME']) {   // login successful
 
             // check if user is already in database
-            $sSelect =  "select oxid from oxuser where oxuser.oxusername = ".oxDb::getDb()->Quote($aData['OXUSERNAME'])." $sShopSelect";
-            $sOXID = oxDb::getDb()->GetOne( $sSelect);
+            $sSelect =  "select oxid from oxuser where oxuser.oxusername = ".$oDb->Quote($aData['OXUSERNAME'])." $sShopSelect";
+            $sOXID = $oDb->GetOne( $sSelect);
 
             if ( !isset( $sOXID) || !$sOXID) {   // we need to create a new user
                 //$oUser->oxuser__oxid->setValue($oUser->setId());
@@ -1707,7 +1708,7 @@ class oxUser extends oxBase
      * @param bool   $blCheckLenght option to check password lenght
      *
      * @throws oxUserException, oxInputException
-     * 
+     *
      * @deprecated use public oxuser::checkPassword() instead
      *
      * @return null
@@ -1716,7 +1717,7 @@ class oxUser extends oxBase
     {
         $this->checkPassword( $sNewPass, $sConfPass, $blCheckLenght );
     }
-    
+
     /**
      * Checking if user password is fine. In case of error
      * exception is thrown

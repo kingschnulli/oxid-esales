@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxajax.php 16607 2009-02-19 12:54:42Z arvydas $
+ * $Id: oxajax.php 17644 2009-03-27 14:00:12Z arvydas $
  */
 
 // shop path for includes
@@ -244,6 +244,7 @@ class ajaxListComponent extends oxSuperCfg
      */
     protected function _getQueryCols()
     {
+        $sLangTag = oxLang::getInstance()->getLanguageTag();
         $sQ = '';
         $blSep = false;
         $aVisiblecols = $this->_getVisibleColNames();
@@ -252,7 +253,7 @@ class ajaxListComponent extends oxSuperCfg
                 $sQ .= ', ';
 
             // multijanguage
-            $sCol = $aCol[3]?$aCol[0].oxLang::getInstance()->getLanguageTag():$aCol[0];
+            $sCol = $aCol[3]?$aCol[0].$sLangTag:$aCol[0];
             $sQ  .= getViewName( $aCol[1] ) . '.' . $sCol . ' as _' . $iCnt;
             $blSep = true;
         }
@@ -263,7 +264,7 @@ class ajaxListComponent extends oxSuperCfg
                 $sQ .= ', ';
 
             // multijanguage
-            $sCol = $aCol[3]?$aCol[0].oxLang::getInstance()->getLanguageTag():$aCol[0];
+            $sCol = $aCol[3]?$aCol[0].$sLangTag:$aCol[0];
             $sQ  .= getViewName( $aCol[1] ) . '.' . $sCol . ' as _' . $iCnt;
         }
 
@@ -305,11 +306,16 @@ class ajaxListComponent extends oxSuperCfg
      */
     protected function _getFilter()
     {
+        $myConfig = $this->getConfig();
         $sQ = '';
         $aFilter = oxConfig::getParameter( 'aFilter' );
         if ( is_array( $aFilter ) && count( $aFilter ) ) {
             $aCols = $this->_getVisibleColNames();
             $blSep = false;
+            $oDb = oxDb::getDb();
+            $sLangTag = oxLang::getInstance()->getLanguageTag();
+            $oStr = getStr();
+
             foreach ( $aFilter as $sCol => $sValue ) {
 
                 // skipping empty filters
@@ -322,15 +328,19 @@ class ajaxListComponent extends oxSuperCfg
                     if ( $sQ )
                         $sQ .= ' and ';
 
+                    if (!$myConfig->isUtf()) {
+                        $sValue = iconv('UTF-8', oxLang::getInstance()->translateString("charset"), $sValue );
+                    }
+
                     // escaping special characters
                     $sValue = str_replace( array( '%', '_' ), array( '\%', '\_' ), $sValue );
 
                     // possibility to search in the middle ..
-                    $sValue = preg_replace( '/^\*/u', '%', $sValue );
+                    $sValue = $oStr->preg_replace( '/^\*/', '%', $sValue );
 
-                    $sCol = $aCols[ $iCol ][3]?$aCols[ $iCol ][0].oxLang::getInstance()->getLanguageTag():$aCols[ $iCol ][0];
+                    $sCol = $aCols[ $iCol ][3]?$aCols[ $iCol ][0].$sLangTag:$aCols[ $iCol ][0];
                     $sQ .= getViewName( $aCols[ $iCol ][1] ) . '.' . $sCol;
-                    $sQ .= ' like ' . oxDb::getDb()->Quote( $sValue . '%' ). ' ';
+                    $sQ .= ' like ' . $oDb->Quote( $sValue . '%' ). ' ';
                 }
 
             }
@@ -437,18 +447,18 @@ class ajaxListComponent extends oxSuperCfg
      */
     protected function _outputResponse( $aData )
     {
-        /* as we now use UTF8, no need to reencode before outputting ..
-        // TODO: improve this
-        if ( is_array( $aData['records'] ) && $iRecSize = count( $aData['records'] ) ) {
-            $aKeys = array_keys( current( $aData['records'] ) );
-            $iKeySize = count( $aKeys );
-            for ( $i = 0; $i < $iRecSize; $i++ ) {
-                for ( $c = 0; $c < $iKeySize; $c++ ) {
-                    $aData['records'][$i][$aKeys[$c]] = iconv("ISO-8859-15", "UTF-8", $aData['records'][$i][$aKeys[$c]] );
+        if ( !$this->getConfig()->isUtf() ) {
+            // TODO: improve this
+            if ( is_array( $aData['records'] ) && $iRecSize = count( $aData['records'] ) ) {
+                $aKeys = array_keys( current( $aData['records'] ) );
+                $iKeySize = count( $aKeys );
+                for ( $i = 0; $i < $iRecSize; $i++ ) {
+                    for ( $c = 0; $c < $iKeySize; $c++ ) {
+                        $aData['records'][$i][$aKeys[$c]] = iconv(oxLang::getInstance()->translateString("charset"), "UTF-8", $aData['records'][$i][$aKeys[$c]] );
+                    }
                 }
             }
         }
-        */
 
         echo json_encode( $aData );
     }

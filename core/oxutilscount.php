@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxutilscount.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxutilscount.php 17248 2009-03-16 15:22:07Z arvydas $
  */
 
 /**
@@ -340,6 +340,7 @@ class oxUtilsCount extends oxSuperCfg
     public function getTagArticleCount( $sTag, $iLang )
     {
         $sLangExt = oxLang::getInstance()->getLanguageTag( $iLang );
+        $oDb = oxDb::getDb();
 
         $oArticle = oxNew("oxarticle");
         $sArticleTable  = $oArticle->getViewName();
@@ -348,9 +349,9 @@ class oxUtilsCount extends oxSuperCfg
         $sQ = "select count(*) from oxartextends inner join $sArticleTable
                on $sArticleTable.oxid = oxartextends.oxid where $sActiveSnippet
                and match(oxartextends.oxtags$sLangExt)
-               against ( ".oxDb::getDb()->Quote( $sTag )." ) ";
+               against ( ".$oDb->Quote( $sTag )." ) ";
 
-        return oxDb::getDb()->getOne( $sQ );
+        return $oDb->getOne( $sQ );
     }
 
     /**

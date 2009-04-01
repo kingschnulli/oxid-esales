@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxdb.php 16326 2009-02-06 09:47:09Z sarunas $
+ * $Id: oxdb.php 17248 2009-03-16 15:22:07Z arvydas $
  */
 
 /**
@@ -210,12 +210,14 @@ class oxDb extends oxSuperCfg
         self::$_oDB->cacheSecs = 60 * 10; // 10 minute caching
         self::$_oDB->execute( 'SET @@session.sql_mode = ""' );
 
-        self::$_oDB->execute( 'SET NAMES "utf8"' );
-        self::$_oDB->execute( 'SET CHARACTER SET utf8' );
-        self::$_oDB->execute( 'SET CHARACTER_SET_CONNECTION = utf8' );
-        self::$_oDB->execute( 'SET CHARACTER_SET_DATABASE = utf8' );
-        self::$_oDB->execute( 'SET character_set_results = utf8' );
-        self::$_oDB->execute( 'SET character_set_server = utf8' );
+        if ( $myConfig->isUtf() ) {
+            self::$_oDB->execute( 'SET NAMES "utf8"' );
+            self::$_oDB->execute( 'SET CHARACTER SET utf8' );
+            self::$_oDB->execute( 'SET CHARACTER_SET_CONNECTION = utf8' );
+            self::$_oDB->execute( 'SET CHARACTER_SET_DATABASE = utf8' );
+            self::$_oDB->execute( 'SET character_set_results = utf8' );
+            self::$_oDB->execute( 'SET character_set_server = utf8' );
+        }
 
         return self::$_oDB;
     }

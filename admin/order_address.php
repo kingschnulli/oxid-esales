@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: order_address.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: order_address.php 17190 2009-03-13 12:20:25Z arvydas $
  */
 
 /**
@@ -94,7 +94,5 @@ class Order_Address extends oxAdminDetails
         // set oxid if inserted
         if ( $soxId == "-1" )
             oxSession::setVar( "saved_oxid", $oOrder->oxorder__oxid->value);
-
-        return $this->autosave();
     }
 }

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxconfig.php 16802 2009-02-25 09:40:02Z arvydas $
+ * $Id: oxconfig.php 17590 2009-03-25 11:10:12Z vilma $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -689,8 +689,9 @@ class oxConfig extends oxSuperCfg
             return $this->_blIsSsl;
         }
 
-        $aServerVars     = oxUtilsServer::getInstance()->getServerVar();
-        $aHttpsServerVar = oxUtilsServer::getInstance()->getServerVar( 'HTTPS' );
+        $myUtilsServer   = oxUtilsServer::getInstance();
+        $aServerVars     = $myUtilsServer->getServerVar();
+        $aHttpsServerVar = $myUtilsServer->getServerVar( 'HTTPS' );
 
         $blIsSsl = ( isset( $aHttpsServerVar ) && $this->getConfigParam( 'sSSLShopURL' ) &&
                      ( $aHttpsServerVar == 'on' || $aHttpsServerVar == '1' ) ); // 1&1 provides "1"
@@ -753,7 +754,7 @@ class oxConfig extends oxSuperCfg
         // #680 per language another URL
         $iLang = isset( $iLang ) ? $iLang : oxLang::getInstance()->getBaseLanguage();
         $aLanguageURLs = $this->getConfigParam( 'aLanguageURLs' );
-        if ( isset( $iLang ) && isset( $aLanguageURLs[$iLang] ) ) {
+        if ( isset( $iLang ) && isset( $aLanguageURLs[$iLang] ) && !empty( $aLanguageURLs[$iLang] ) ) {
             return $aLanguageURLs[$iLang];
         }
 
@@ -778,7 +779,7 @@ class oxConfig extends oxSuperCfg
         // #680 per language another URL
         $iLang = isset( $iLang ) ? $iLang : oxLang::getInstance()->getBaseLanguage();
         $aLanguageSSLURLs = $this->getConfigParam( 'aLanguageSSLURLs' );
-        if ( isset( $iLang ) && isset( $aLanguageSSLURLs[$iLang] ) ) {
+        if ( isset( $iLang ) && isset( $aLanguageSSLURLs[$iLang] ) && !empty( $aLanguageSSLURLs[$iLang] ) ) {
             return $aLanguageSSLURLs[$iLang];
         }
 
@@ -1733,8 +1734,9 @@ class oxConfig extends oxSuperCfg
             $sShopId = $this->getShopId();
         }
 
+        $oDb = oxDb::getDb();
         $sQ = "delete from oxconfig where oxshopid = '$sShopId' and oxvarname = '$sVarName'";
-        oxDb::getDb()->Execute( $sQ );
+        $oDb->Execute( $sQ );
         $sUid = oxUtilsObject::getInstance()->generateUID();
 
         $sUid     = mysql_real_escape_string($sUid);
@@ -1745,7 +1747,7 @@ class oxConfig extends oxSuperCfg
         $sQ = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
                values('$sUid', '$sShopId', '$sVarName', '$sVarType', ENCODE( '$sVarVal', '".$this->getConfigParam('sConfigKey')."'))";
 
-        oxDb::getDb()->Execute($sQ);
+        $oDb->Execute($sQ);
     }
 
     /**
@@ -1858,5 +1860,15 @@ class oxConfig extends oxSuperCfg
     public function setActiveView( $oView )
     {
         $this->_oActView = $oView;
+    }
+
+    /**
+     * Returns true if current installation works in UTF8 mode, or false if not
+     *
+     * @return bool
+     */
+    public function isUtf()
+    {
+        return ( bool ) $this->getConfigParam( 'iUtfMode' );
     }
 }

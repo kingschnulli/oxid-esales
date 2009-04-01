@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxcmp_user.php 16544 2009-02-13 13:11:49Z vilma $
+ * $Id: oxcmp_user.php 17678 2009-03-30 15:22:11Z vilma $
  */
 
 /**
@@ -138,7 +138,7 @@ class oxcmp_user extends oxView
 
         // this user is blocked, deny him
         if ( $oUser->inGroup( 'oxidblocked' ) ) {
-            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() . 'cl=info&tpl=user_blocked.tpl' );
+            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() . 'cl=content&tpl=user_blocked.tpl' );
         }
 
         // TODO: we need todo something with this !!!
@@ -185,7 +185,7 @@ class oxcmp_user extends oxView
                 $oOpenId->authenticateOid( $sOpenId, $this->_getReturnUrl() );
                 error_reporting($iOldErrorReproting);
             } else {
-            	$oUser->login( $sUser, $sPassword, $sCookie );
+                $oUser->login( $sUser, $sPassword, $sCookie );
             }
         } catch ( oxUserException $oEx ) {
             // for login component send excpetion text to a custom component (if defined)
@@ -207,7 +207,7 @@ class oxcmp_user extends oxView
     /**
      * Special functionality which is performed after user logs in (or user is created without pass).
      * Performes additional checking if user is not BLOCKED (oxuser::InGroup("oxidblocked")) - if
-     * yes - redirects to blocked user page ("cl=info&tpl=user_blocked.tpl"). If user status
+     * yes - redirects to blocked user page ("cl=content&tpl=user_blocked.tpl"). If user status
      * is OK - sets user ID to session, automatically assigns him to dynamic
      * group (oxuser::addDynGroup(); if this directive is set (usually
      * by URL)). Stores cookie info if user confirmed in login screen.
@@ -227,7 +227,7 @@ class oxcmp_user extends oxView
 
         // this user is blocked, deny him
         if ( $oUser->inGroup( 'oxidblocked' ) ) {
-            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL().'cl=info&tpl=user_blocked.tpl' );
+            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL().'cl=content&tpl=user_blocked.tpl' );
         }
 
         // adding to dyn group
@@ -426,7 +426,7 @@ class oxcmp_user extends oxView
         }
 
         // order remark
-        //V #427: order remark for new users 
+        //V #427: order remark for new users
         $sOrd_Remark = oxConfig::getParameter( 'order_remark' );
         if ( $sOrd_Remark ) {
             oxSession::setVar( 'ordrem', $sOrd_Remark );
@@ -508,7 +508,7 @@ class oxcmp_user extends oxView
             if (($blOptin = oxConfig::getParameter( 'blnewssubscribed' )) === null) {
                 $blOptin = $oUser->getNewsSubscription()->getOptInStatus();
             }
-            $this->_blNewsSubscriptionStatus = $oUser->setNewsSubscription( $blOptin, oxConfig::getInstance()->getConfigParam( 'blOrderOptInEmail' ) );
+            $this->_blNewsSubscriptionStatus = $oUser->setNewsSubscription( $blOptin, $this->getConfig()->getConfigParam( 'blOrderOptInEmail' ) );
 
         } catch ( oxUserException $oEx ) { // errors in input
             // marking error code
@@ -645,6 +645,9 @@ class oxcmp_user extends oxView
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
         }
         error_reporting($iOldErrorReproting);
+        if ( count( $aData ) < 1 ) {
+        	oxUtils::getInstance()->redirect($this->getConfig()->getShopHomeURL().'cl=register');
+        }
         if ( $aData['email'] ) {
             $oUser = oxNew( 'oxuser' );
             $oUser->oxuser__oxusername = new oxField($aData['email'], oxField::T_RAW);
@@ -658,7 +661,7 @@ class oxcmp_user extends oxView
                 list ($sFName, $sLName)    = split(' ', $aData['fullname']);
                 $oUser->oxuser__oxfname    = new oxField($sFName, oxField::T_RAW);
                 $oUser->oxuser__oxlname    = new oxField($sLName, oxField::T_RAW);
-                
+
                 $oUser->oxuser__oxsal      = new oxField($this->_getUserTitle($aData['gender']), oxField::T_RAW);
                 $oUser->oxuser__oxisopenid = new oxField(1, oxField::T_RAW);
                 if ( $sCountryId = $oUser->getUserCountryId( $aData['country'] ) ) {
@@ -669,14 +672,14 @@ class oxcmp_user extends oxView
                 }
                 $oUser->save();
             } else {
-            	$oUser->load( $oUser->getId() );
+                $oUser->load( $oUser->getId() );
                 //if existing user loggins first time with openid
                 if ( $oUser->oxuser__oxisopenid->value == 0 ) {
-                	if ( !$oUser->oxuser__oxpassword->value ) {
+                    if ( !$oUser->oxuser__oxpassword->value ) {
                         $oUser->oxuser__oxisopenid = new oxField(1, oxField::T_RAW);
                         $oUser->oxuser__oxpassword = new oxField($oUser->getOpenIdPassword(), oxField::T_RAW);
                     } else {
-                    	$oUser->oxuser__oxisopenid = new oxField(2, oxField::T_RAW);
+                        $oUser->oxuser__oxisopenid = new oxField(2, oxField::T_RAW);
                     }
                     $oUser->save();
                 }
@@ -710,9 +713,9 @@ class oxcmp_user extends oxView
     protected function _getUserTitle( $sGender )
     {
         if ( $sGender == "F" ) {
-        	return oxLang::getInstance()->translateString( "ACCOUNT_USER_MRS" );
+            return oxLang::getInstance()->translateString( "ACCOUNT_USER_MRS" );
         } else {
-        	return oxLang::getInstance()->translateString( "ACCOUNT_USER_MR" );
+            return oxLang::getInstance()->translateString( "ACCOUNT_USER_MR" );
         }
     }
 

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxvendorlist.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxvendorlist.php 17414 2009-03-19 09:48:33Z arvydas $
  */
 
 /**
@@ -90,13 +90,14 @@ class oxVendorList extends oxList
     public function loadVendorList()
     {
         $sLangAdd = oxLang::getInstance()->getLanguageTag();
-        $sFieldList = $this->getBaseObject()->getSelectFields();
-        $sViewName  = $this->getBaseObject()->getViewName();
+        $oBaseObject = $this->getBaseObject();
+        $sFieldList = $oBaseObject->getSelectFields();
+        $sViewName  = $oBaseObject->getViewName();
         $this->getBaseObject()->setShowArticleCnt( $this->_blShowVendorArticleCnt );
 
         $sWhere = '';
         if ( !$this->isAdmin() ) {
-            $sWhere  = $this->getBaseObject()->getSqlActiveSnippet();
+            $sWhere  = $oBaseObject->getSqlActiveSnippet();
             $sWhere  = $sWhere?" where $sWhere and ":' where ';
             $sWhere .= "{$sViewName}.oxtitle{$sLangAdd} != '' ";
         }

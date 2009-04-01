@@ -6,6 +6,7 @@
   [{if isset($meta_refresh_sec,$meta_refresh_url) }]
   <meta http-equiv=Refresh content="[{$meta_refresh_sec}];URL=[{$meta_refresh_url}]">
   [{/if}]
+  <link rel="shortcut icon" href="[{ $oViewConf->getBaseDir() }]favicon.ico">
   <link rel="stylesheet" href="[{$shop->basetpldir}]main.css">
   <link rel="stylesheet" href="[{$shop->basetpldir}]colors.css">
   [{include file="tooltips.tpl"}]
