@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: order_main.php 17190 2009-03-13 12:20:25Z arvydas $
+ * $Id: order_main.php 17799 2009-04-03 07:26:50Z arvydas $
  */
 
 /**
@@ -139,6 +139,8 @@ class Order_Main extends oxAdminDetails
         if ( $soxId == "-1")
             oxSession::setVar( "saved_oxid", $oOrder->oxorder__oxid->value);
 
+        // reloading upper frame
+        $this->_aViewData["updatelist"] =  "1";
     }
 
     /**

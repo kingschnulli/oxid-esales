@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxvendor.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxvendor.php 17768 2009-04-02 10:52:12Z sarunas $
  */
 
 /**
@@ -314,5 +314,21 @@ class oxVendor extends oxI18n
      */
     public function getContentCats()
     {
+    }
+
+    /**
+     * Delete this object from the database, returns true on success.
+     *
+     * @param string $sOXID Object ID(default null)
+     *
+     * @return bool
+     */
+    public function delete( $sOXID = null)
+    {
+        if (parent::delete($sOXID)) {
+            oxSeoEncoderVendor::getInstance()->onDeleteVendor($this);
+            return true;
+        }
+        return false;
     }
 }

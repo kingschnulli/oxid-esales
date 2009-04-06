@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxbase.php 17248 2009-03-16 15:22:07Z arvydas $
+ * $Id: oxbase.php 17830 2009-04-03 14:23:31Z tomas $
  */
 
 /**
@@ -154,6 +154,13 @@ class oxBase extends oxSuperCfg
      * @var bool
      */
     protected $_blReadOnly = false;
+
+    /**
+     * Indicates if the item is list element
+     *
+     * @var bool
+     */
+    protected $_blIsInList = false;
 
     /**
      * Class constructor, sets active shop.
@@ -897,6 +904,26 @@ class oxBase extends oxSuperCfg
         if ( $error = $this->getError($sField) ) {
             return $error;
         }
+    }
+
+    /**
+     * Sets item as list element
+     *
+     * @return null
+     */
+    public function setInList()
+    {
+        $this->_blIsInList = true;
+    }
+
+    /**
+     * Checks if this instance is one of oxList elements.
+     *
+     * @return bool
+     */
+    protected function _isInList()
+    {
+        return $this->_blIsInList;
     }
 
     /**

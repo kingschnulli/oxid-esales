@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxubase.php 17702 2009-03-31 13:39:16Z sarunas $
+ * $Id: oxubase.php 17795 2009-04-03 06:36:02Z rimvydas.paskevicius $
  */
 
 /**
@@ -1609,7 +1609,7 @@ class oxUBase extends oxView
 
             if ( $blTrySeo ) {
                 $oEncoder = oxSeoEncoder::getInstance();
-                if ( ( $sSeoUrl = $oEncoder->getStaticUrl( $myConfig->getShopHomeURL() . $this->_getSeoRequestParams(), $iLang ) ) ) {
+                if ( ( $sSeoUrl = $oEncoder->getStaticUrl( $myConfig->getShopHomeURL( $iLang ) . $this->_getSeoRequestParams(), $iLang ) ) ) {
                     return $this->_addPageNrParam( $sSeoUrl, $iActPageNr, $iLang );
                 }
             }

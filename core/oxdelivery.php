@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxdelivery.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxdelivery.php 17789 2009-04-02 14:21:44Z vilma $
  */
 
 /**
@@ -146,7 +146,7 @@ class oxDelivery extends oxI18n
         $aArtIds = oxDb::getDb()->getArray( $sQ );
 
         //make single dimension array
-        foreach ( $aArtIds AS $aItem ) {
+        foreach ( $aArtIds as $aItem ) {
             $this->_aArtIds[] = $aItem[0];
         }
 

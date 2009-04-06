@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxtagcloud.php 17643 2009-03-27 13:59:37Z arvydas $
+ * $Id: oxtagcloud.php 17875 2009-04-06 08:10:28Z arvydas $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -92,7 +92,45 @@ class oxTagCloud extends oxSuperCfg
             $aTags = array_slice($aTags, 0, $iAmount, true );
         }
 
-        ksort($aTags);
+        $aTags = $this->_sortTags( $aTags );
+        return $aTags;
+    }
+
+    /**
+     * Sorts passed tag array. Using MySQL for sorting (to keep user defined ordering way).
+     *
+     * @param array $aTags tags to sort
+     *
+     * @return array
+     */
+    protected function _sortTags( $aTags )
+    {
+        if ( is_array( $aTags ) && count( $aTags ) ) {
+            $oDb = oxDb::getDb( true );
+            $sSubQ = '';
+            foreach ( $aTags as $sKey => $sTag ) {
+                if ( $sSubQ ) {
+                    $sSubQ .= ' union all ';
+                }
+                $sSubQ .= 'select '.$oDb->quote( $sKey ).' as _oxsort, '.$oDb->quote( $sTag ).' as _oxval';
+            }
+
+            $sField = "oxartextends.oxtags".oxLang::getInstance()->getLanguageTag();
+
+            // forcing collation
+            $sSubQ = "select {$sField} as _oxsort, 'ox_skip' as _oxval from oxartextends limit 1 union $sSubQ";
+
+            $sQ = "select _oxtable._oxsort, _oxtable._oxval from ( {$sSubQ} ) as _oxtable order by _oxtable._oxsort desc";
+
+            $aTags = array();
+            $oRs = $oDb->execute( $sQ );
+            while ( $oRs && $oRs->recordCount() && !$oRs->EOF ) {
+                if ( $oRs->fields['_oxval'] != 'ox_skip' ) {
+                    $aTags[$oRs->fields['_oxsort']] = $oRs->fields['_oxval'];
+                }
+                $oRs->moveNext();
+            }
+        }
         return $aTags;
     }
 

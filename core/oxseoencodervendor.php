@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxseoencodervendor.php 17727 2009-04-01 07:46:23Z sarunas $
+ * $Id: oxseoencodervendor.php 17768 2009-04-02 10:52:12Z sarunas $
  */
 
 /**
@@ -124,5 +124,18 @@ class oxSeoEncoderVendor extends oxSeoEncoder
             $iLang = $oVendor->getLanguage();
         }
         return $this->_getFullUrl( $this->getVendorUri( $oVendor, $iLang ), $iLang );
+    }
+
+    /**
+     * Deletes Vendor seo entry
+     *
+     * @param oxvendor $oVendor Vendor object
+     *
+     * @return null
+     */
+    public function onDeleteVendor($oVendor)
+    {
+        $sId = oxDb::getDb()->quote($oVendor->getId());
+        oxDb::getDb()->execute("delete from oxseo where oxobjectid = $sId and oxtype = 'oxvendor'");
     }
 }

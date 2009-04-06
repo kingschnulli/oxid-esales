@@ -111,7 +111,7 @@ class oxStrMb
     }
 
     /**
-     * PHP multibute compliant strtolower() function wrapper
+     * PHP multibute compliant strtoupper() function wrapper
      *
      * @param string $sString string being lowercased
      *

@@ -278,7 +278,7 @@ ul.tree li a.exp.act{background-position: 0 -225px;}
 
 #right .recommlistsearch .btn {width: auto;}
 #right .recommlistsearch .search_input {width: 120px;}
-#right input.openid {background: #FFFFFF url(bg/openid-icon-small.gif) no-repeat 0pt 50%; border:1px solid inactivecaptiontext; padding:1px 1px 1px 18px;}
+#right input.openid {width: 99px; background: #FFFFFF url(bg/openid-icon-small.gif) no-repeat 0pt 50%; border:1px solid inactivecaptiontext; padding:1px 1px 1px 18px;}
 
 /* RSS */
 #right .box  {position:relative;}
@@ -515,7 +515,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .product.moredetails .morepics{margin-top: 10px; padding: 5px 0; height: 44px; border-top: 1px solid #f0f0f0; }
 #body .product.moredetails .morepics a{border: 1px solid #969696; width: 56px; height: 42px; margin: 0 11px 0 2px; float: left;}
 
-#body .product.moredetails .longdesc {margin-top: 10px;padding: 15px 0 0; border-top: 1px solid #f0f0f0;}
+#body .product.moredetails .longdesc {margin-top: 10px;padding: 15px 0 0; border-top: 1px solid #f0f0f0; line-height: normal;}
 #body .product.moredetails .longdesc strong.h3 {font-size: 12px; height: auto; margin: 0px; padding-bottom: 7px; font-weight: bold; display: block;}
 #body .product.moredetails .longdesc p{margin: 0; padding:7px 0px;}
 #body .product.moredetails .longdesc .question {margin: 10px 0 1px; padding-top: 11px; border-top: 1px solid #f0f0f0;}

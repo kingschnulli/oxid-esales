@@ -158,9 +158,8 @@ class Language_Main extends oxAdminDetails
         $this->_aLangData['urls'][$iBaseId] = $aParams['baseurl'];
         $this->_aLangData['sslUrls'][$iBaseId] = $aParams['basesslurl'];
 
-        //sorting urls array by language base id
-        $this->_aLangData['urls']    = $this->_sortArrayByBaseLangId($this->_aLangData['urls']);
-        $this->_aLangData['sslUrls'] = $this->_sortArrayByBaseLangId($this->_aLangData['sslUrls']);
+        //sort parameters, urls and languages arrays by language base id
+        $this->_sortLangArraysByBaseId();
 
         $this->_aViewData["updatelist"] = "1";
 
@@ -247,22 +246,29 @@ class Language_Main extends oxAdminDetails
     }
 
     /**
-     * Sort given array according languages base ID's
+     * Sort languages, languages parameters, urls, ssl urls arrays according
+     * base land ID
      *
-     * @param array $aData array which will be sorted
-     *
-     * @return array
+     * @return null
      */
-    protected function _sortArrayByBaseLangId( $aData )
+    protected function _sortLangArraysByBaseId()
     {
-        $aOrdered = array();
+        $aUrls      = array();
+        $aSslUrls   = array();
+        $aLanguages = array();
 
-        foreach( $this->_aLangData['params'] as $aParams ) {
+        uasort( $this->_aLangData['params'], array($this, '_sortLangParamsByBaseIdCallback') );
+
+        foreach( $this->_aLangData['params'] as  $sAbbr => $aParams ) {
             $iId = (int)$aParams['baseId'];
-            $aOrdered[$iId] = $aData[$iId];
+            $aUrls[$iId]        = $this->_aLangData['urls'][$iId];
+            $aSslUrls[$iId]     = $this->_aLangData['sslUrls'][$iId];
+            $aLanguages[$sAbbr] = $this->_aLangData['lang'][$sAbbr];
         }
 
-        return $aOrdered;
+        $this->_aLangData['lang']    = $aLanguages;
+        $this->_aLangData['urls']    = $aUrls;
+        $this->_aLangData['sslUrls'] = $aSslUrls;
     }
 
     /**
@@ -384,6 +390,20 @@ class Language_Main extends oxAdminDetails
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
         }
 
+    }
+
+    /**
+     * Callback function for sorting languages arraty. Sorts array according
+     * 'baseId' parameter
+     *
+     * @param object $oLang1 language array
+     * @param object $oLang2 language array
+     *
+     * @return bool
+     */
+    protected function _sortLangParamsByBaseIdCallback( $oLang1, $oLang2 )
+    {
+        return ($oLang1['baseId'] < $oLang2['baseId']) ? -1 : 1;
     }
 
 }

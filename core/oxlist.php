@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxlist.php 17414 2009-03-19 09:48:33Z arvydas $
+ * $Id: oxlist.php 17845 2009-04-03 15:47:03Z tomas $
  */
 
 /**
@@ -373,6 +373,7 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
     {
         if ( !$this->_oBaseObject ) {
             $this->_oBaseObject = oxNew( $this->_sObjectsInListName );
+            $this->_oBaseObject->setInList();
             $this->_oBaseObject->init( $this->_sCoreTable );
         }
 
@@ -401,6 +402,7 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
         //$blFirstLoop = true;
         $oListObject = $this->getBaseObject();
         $oSaved = oxNew( $this->_sObjectsInListName);
+        $oSaved->setInList();
         $oSaved->init( $oListObject->getCoreTableName() );
 
         if ( $oSaved->isMultilang() ) {
@@ -468,7 +470,7 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
     }
 
     /**
-     * Generic function for getting the list
+     * Generic function for laoding the list
      *
      * @return null;
      */
@@ -481,6 +483,8 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
             $sQ .= " where $sActiveSnippet ";
         }
         $this->selectString($sQ);
+
+        return $this;
     }
 
     /**

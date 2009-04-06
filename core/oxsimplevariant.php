@@ -64,6 +64,7 @@ class oxSimpleVariant extends oxI18n
     /**
      * Implementing (faking) performance friendly method from oxArticle
      *oxbase
+     *
      * @return null
      */
     public function getSelectLists()
@@ -78,8 +79,9 @@ class oxSimpleVariant extends oxI18n
      */
     public function getPrice()
     {
-        if (!is_null($this->_oPrice))
+        if (!is_null($this->_oPrice)) {
             return $this->_oPrice;
+        }
 
         $this->_oPrice = oxNew("oxPrice");
         $this->_oPrice->setPrice($this->oxarticles__oxprice->value, $this->_dVat);
@@ -87,12 +89,7 @@ class oxSimpleVariant extends oxI18n
     }
 
     /**
-     * Returns formatted price
-     *
-     * @return string
-     */
-/**
-     * Returns formated product's price.
+     * Returns formated product price.
      *
      * @return double
      */
@@ -108,7 +105,9 @@ class oxSimpleVariant extends oxI18n
     /**
      * Sets variant VAT
      *
-     * @param double $dVat
+     * @param double $dVat Custom VAT
+     *
+     * @return null
      */
     public function setVat($dVat)
     {

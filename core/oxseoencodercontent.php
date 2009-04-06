@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxseoencodercontent.php 17727 2009-04-01 07:46:23Z sarunas $
+ * $Id: oxseoencodercontent.php 17768 2009-04-02 10:52:12Z sarunas $
  */
 
 /**
@@ -106,4 +106,16 @@ class oxSeoEncoderContent extends oxSeoEncoder
         return $this->_getFullUrl( $this->_getContentUri( $oCont, $iLang ), $iLang );
     }
 
+    /**
+     * deletes content seo entries
+     *
+     * @param oxContent $oCont category object
+     *
+     * @return null
+     */
+    public function onDeleteContent($oCont)
+    {
+        $sId = oxDb::getDb()->quote($oCont->getId());
+        oxDb::getDb()->execute("delete from oxseo where oxobjectid = $sId and oxtype = 'oxcontent'");
+    }
 }

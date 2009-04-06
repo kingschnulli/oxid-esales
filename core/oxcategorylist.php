@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxcategorylist.php 17411 2009-03-19 09:24:17Z arvydas $
+ * $Id: oxcategorylist.php 17856 2009-04-03 18:01:21Z tomas $
  */
 
 
@@ -96,8 +96,9 @@ class oxCategoryList extends oxList
     {
         $oBaseObject = $this->getBaseObject();
         $sViewName  = $oBaseObject->getViewName();
-        $sFieldList = $oBaseObject->getSelectFields();
-        //$sFieldList = "oxid, oxparentid, oxleft, oxright, oxrootid, oxsort, oxtitle, oxpricefrom, oxpriceto, oxicon ";
+        //$sFieldList = $oBaseObject->getSelectFields();
+        //excluding long desc
+        $sFieldList = "oxid, oxactive, oxhidden, oxparentid, oxdefsort, oxdefsortmode, oxleft, oxright, oxrootid, oxsort, oxtitle, oxpricefrom, oxpriceto, oxicon ";
         $sWhere     = $this->_getDepthSqlSnippet();
 
         $sOrdDir    = $blReverse?'desc':'asc';
@@ -364,7 +365,9 @@ class oxCategoryList extends oxList
      */
     protected function _ppBuildTree()
     {
+        startProfile("_sortCats");
         $aIds = $this->sortCats();
+        stopProfile("_sortCats");
         $aTree = array();
         foreach ($this->_aArray as $oCat) {
             $sParentId = $oCat->oxcategories__oxparentid->value;

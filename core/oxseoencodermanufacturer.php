@@ -125,4 +125,17 @@ class oxSeoEncoderManufacturer extends oxSeoEncoder
         }
         return $this->_getFullUrl( $this->getManufacturerUri( $oManufacturer, $iLang ), $iLang );
     }
+
+    /**
+     * Deletes manufacturer seo entry
+     *
+     * @param oxmanufacturer $oManufacturer Manufacturer object
+     *
+     * @return null
+     */
+    public function onDeleteManufacturer($oManufacturer)
+    {
+        $sId = oxDb::getDb()->quote($oManufacturer->getId());
+        oxDb::getDb()->execute("delete from oxseo where oxobjectid = $sId and oxtype = 'oxmanufacturers'");
+    }
 }

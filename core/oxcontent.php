@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxcontent.php 17063 2009-03-06 09:29:46Z rimvydas.paskevicius $
+ * $Id: oxcontent.php 17768 2009-04-02 10:52:12Z sarunas $
  */
 
 /**
@@ -219,4 +219,19 @@ class oxContent extends oxI18n
         return parent::_setFieldData($sFieldName, $sValue, $iDataType);
     }
 
+    /**
+     * Delete this object from the database, returns true on success.
+     *
+     * @param string $sOXID Object ID(default null)
+     *
+     * @return bool
+     */
+    public function delete( $sOXID = null)
+    {
+        if (parent::delete($sOXID)) {
+            oxSeoEncoderContent::getInstance()->onDeleteContent($this);
+            return true;
+        }
+        return false;
+    }
 }

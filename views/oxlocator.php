@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxlocator.php 17481 2009-03-20 12:35:53Z arvydas $
+ * $Id: oxlocator.php 17850 2009-04-03 16:41:36Z tomas $
  */
 
 /**
@@ -483,7 +483,6 @@ class oxLocator extends oxSuperCfg
 
             $sActCat = $oCategory->getId();
             $oIdList->loadCategoryIDs( $sActCat, oxSession::getVar( 'session_attrfilter' ) );
-
             // if not found - reloading with empty filter
             if ( !isset( $oIdList[$oCurrArticle->getId()] ) ) {
                 $oIdList->loadCategoryIDs( $sActCat, null );
@@ -575,6 +574,7 @@ class oxLocator extends oxSuperCfg
 
             if (array_key_exists($iPos-1, $aIds)) {
                 $this->_oBackProduct = oxNew( 'oxarticle' );
+                $this->_oBackProduct->setNoVariantLoading(true);
                 if (!$this->_oBackProduct->load( $aIds[$iPos-1] )) {
                     $this->_oBackProduct = null;
                 }
@@ -582,6 +582,7 @@ class oxLocator extends oxSuperCfg
 
             if (array_key_exists($iPos+1, $aIds)) {
                 $this->_oNextProduct = oxNew( 'oxarticle' );
+                $this->_oNextProduct->setNoVariantLoading(true);
                 if (!$this->_oNextProduct->load( $aIds[$iPos+1] )) {
                     $this->_oNextProduct = null;
                 }

@@ -22,7 +22,7 @@
       </colgroup>
         <tr>
             <td><label>[{ oxmultilang ident="INC_CMP_LOGIN_RIGHT_OPENID" }]</label></td>
-            <td><input id="test_RightLogin_OpenId" type="text" name="lgn_openid" value="" class="fullsize openid"></td>
+            <td><input id="test_RightLogin_OpenId" type="text" name="lgn_openid" value="" class="openid"></td>
         </tr>
         <tr>
             <td></td>

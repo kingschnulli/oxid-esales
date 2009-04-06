@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxutilsstring.php 17643 2009-03-27 13:59:37Z arvydas $
+ * $Id: oxutilsstring.php 17826 2009-04-03 14:15:59Z vilma $
  */
 
 /**
@@ -68,9 +68,10 @@ class oxUtilsString
      */
     public function prepareCSVField($sInField)
     {
-        if (strstr($sInField, '"')) {
+        $oStr = getStr();
+        if ($oStr->strstr($sInField, '"')) {
             return '"'.str_replace('"', '""', $sInField).'"';
-        } elseif (strstr($sInField, ';')) {
+        } elseif ($oStr->strstr($sInField, ';')) {
             return '"'.$sInField.'"';
         }
         return $sInField;

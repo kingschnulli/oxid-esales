@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 17699 2009-03-31 13:29:49Z arvydas $
+ * $Id: lang.php 17804 2009-04-03 08:18:46Z vilma $
  */
 
 /*
@@ -838,8 +838,8 @@ $aLang = array(
 'GUI_TREE_ICON'                                 => 'Category icon',
 'GUI_TOBASKET'                                  => 'To basket',
 'GUI_VENDOR_TEXT'                               => 'Vendor text',
-'LANGUAGE_ABBERVATION'                          => 'Abbervation',
-'LANGUAGE_DESCRIPTION'                          => 'Description',
+'LANGUAGE_ABBERVATION'                          => 'Abbreviation',
+'LANGUAGE_DESCRIPTION'                          => 'Name',
 'LANGUAGE_DEFAULT'                              => 'Is default',
 'LANGUAGE_LANGUAGEID'                           => 'Language ID',
 'LANGUAGE_BASEURL'                              => 'Base URL',
@@ -941,8 +941,8 @@ $aLang = array(
 'NAVIGATION_FAVORITES_EDIT'                     => '[ edit ]',
 'FAVORITES_DESC'                                => 'favorites description ....',
 'NAVIGATION_HISTORY'                            => 'History',
-'NAVIGATION_SYSREQ_MESSAGE'                     => "Your system doesn't fit the requirements. For more information click ",
-'NAVIGATION_SYSREQ_MESSAGE2'                    => "here.",
+'NAVIGATION_SYSREQ_MESSAGE'                     => "Your system doesn't fit the system requirements. More information can be found in the ",
+'NAVIGATION_SYSREQ_MESSAGE2'                    => "system requirements check.",
 
 'NEWSLETTER_DONE_NEWSSEND'                      => 'Your Newsletter has been sent.',
 'NEWSLETTER_DONE_GOTONEWSLETTER'                => 'go to Newsletter ',
@@ -985,6 +985,10 @@ $aLang = array(
 'ORDER_MAIN_ORDERPAID'                          => 'Order was paid',
 'ORDER_MAIN_CURRENT_DATE'                       => 'Current Date',
 'ORDER_MAIN_DELTYPE'                            => 'Shipped with',
+'ORDER_REMARK_REMARK'                           => '[Remark]',
+'ORDER_REMARK_ORDER'                            => '[Order]',
+'ORDER_REMARK_USER'                             => '[Reg.]',
+'ORDER_REMARK_NEWS'                             => '[News]',
 'ORDER_OVERVIEW_VATID'                          => 'Vat id:',
 'ORDER_OVERVIEW_DELTYPE'                        => 'Shipped with',
 'ORDER_OVERVIEW_INFOLDER'                       => 'In Folder',
@@ -1050,10 +1054,6 @@ $aLang = array(
 'ORDER_PACKAGE_ORDERNR2'                        => 'Ordered on',
 'ORDER_PACKAGE_MENUITEM'                        => 'Orders',
 'ORDER_PACKAGE_MENUSUBITEM'                     => 'Packing List',
-'ORDER_REMARK_REMARK'                           => '[Remark]',
-'ORDER_REMARK_ORDER'                            => '[Order]',
-'ORDER_REMARK_USER'                             => '[Reg.]',
-'ORDER_REMARK_NEWS'                             => '[News]',
 'PAGENAVISNIPPET_FROM'                          => 'from',
 'PAYMENT_COUNTRY_ALLCOUNTRIES'                  => 'All Countries',
 'PAYMENT_COUNTRY_SELCOUNTRIES'                  => 'Assigned Countries',

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 17732 2009-04-01 09:00:15Z philipp.grashoff $
+ * $Id: lang.php 17804 2009-04-03 08:18:46Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -832,8 +832,8 @@ $aLang = array(
 'GUI_TREE_ACTIVE_ICON'                          => 'Aktive Kategorie Icon',
 'GUI_TREE_ICON'                                 => 'Kategorie Icon',
 'GUI_VENDOR_TEXT'                               => 'Hersteller-Text',
-'LANGUAGE_ABBERVATION'                          => 'Abkürzung',
-'LANGUAGE_DESCRIPTION'                          => 'Beschreibung',
+'LANGUAGE_ABBERVATION'                          => 'Sprachkürzel',
+'LANGUAGE_DESCRIPTION'                          => 'Name',
 'LANGUAGE_DEFAULT'                              => 'Standardsprache',
 'LANGUAGE_LANGUAGEID'                           => 'Sprach-ID',
 'LANGUAGE_BASEURL'                              => 'Basis URL',
@@ -935,8 +935,8 @@ $aLang = array(
 'NAVIGATION_FAVORITES_EDIT'                     => '[ändern]',
 'FAVORITES_DESC'                                => '',
 'NAVIGATION_HISTORY'                            => 'History',
-'NAVIGATION_SYSREQ_MESSAGE'                     => "Ihr System hat die Voraussetzungen nicht erfüllt. Für mehr Informationen klicken Sie bitte ",
-'NAVIGATION_SYSREQ_MESSAGE2'                    => "hier.",
+'NAVIGATION_SYSREQ_MESSAGE'                     => "Ihr System erfüllt die Systemvoraussetzungen nicht. Weitere Informationen finden Sie im ",
+'NAVIGATION_SYSREQ_MESSAGE2'                    => "Systemvoraussetzungs-Check.",
 
 'NEWSLETTER_DONE_NEWSSEND'                      => 'Ihr Newsletter wurde versendet.',
 'NEWSLETTER_DONE_GOTONEWSLETTER'                => 'gehen Sie zu Newsletter',
@@ -979,6 +979,10 @@ $aLang = array(
 'ORDER_MAIN_ORDERPAID'                          => 'Bestellung wurde bezahlt',
 'ORDER_MAIN_CURRENT_DATE'                       => 'Aktuelles Datum',
 'ORDER_MAIN_DELTYPE'                            => 'Versandart',
+'ORDER_REMARK_REMARK'                           => '[Bem.]',
+'ORDER_REMARK_ORDER'                            => '[Best.]',
+'ORDER_REMARK_USER'                             => '[Reg.]',
+'ORDER_REMARK_NEWS'                             => '[News]',
 'ORDER_OVERVIEW_VATID'                          => 'Umsatzsteuer-Identnummer:',
 'ORDER_OVERVIEW_DELTYPE'                        => 'Versandart',
 'ORDER_OVERVIEW_INFOLDER'                       => 'In Ordner',
@@ -1044,10 +1048,6 @@ $aLang = array(
 'ORDER_PACKAGE_ORDERNR2'                        => 'Bestellt am',
 'ORDER_PACKAGE_MENUITEM'                        => 'Bestellungen',
 'ORDER_PACKAGE_MENUSUBITEM'                     => 'Packliste',
-'ORDER_REMARK_REMARK'                           => '[Bem.]',
-'ORDER_REMARK_ORDER'                            => '[Best.]',
-'ORDER_REMARK_USER'                             => '[Reg.]',
-'ORDER_REMARK_NEWS'                             => '[News]',
 'PAGENAVISNIPPET_FROM'                          => 'von',
 'PAYMENT_COUNTRY_ALLCOUNTRIES'                  => 'Alle Länder',
 'PAYMENT_COUNTRY_SELCOUNTRIES'                  => 'Zugeordnete Länder',

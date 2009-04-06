@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxseoencoder.php 17727 2009-04-01 07:46:23Z sarunas $
+ * $Id: oxseoencoder.php 17836 2009-04-03 14:58:10Z rimvydas.paskevicius $
  */
 
 /**
@@ -234,7 +234,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _getStaticUri( $sStdUrl, $iShopId, $iLang )
     {
-        $sIdent  = md5( strtolower( $iShopId . $this->_trimUrl( $sStdUrl ) ) );
+        $sIdent  = md5( strtolower( $iShopId . $this->_trimUrl( $sStdUrl, $iLang ) ) );
         return $this->_loadFromDb( 'static', $sIdent, $iLang );
     }
 
@@ -496,7 +496,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _trimUrl( $sUrl, $iLang = null )
     {
-        $sUrl = str_replace( $this->getConfig()->getShopURL(), '', $sUrl );
+        $sUrl = str_replace( $this->getConfig()->getShopURL( $iLang ), '', $sUrl );
 
         return preg_replace( '/(force_)?sid=[a-z0-9\.]+&?(amp;)?/i', '', $sUrl );
     }

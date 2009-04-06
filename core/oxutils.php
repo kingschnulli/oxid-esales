@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxutils.php 17643 2009-03-27 13:59:37Z arvydas $
+ * $Id: oxutils.php 17862 2009-04-03 18:33:05Z tomas $
  */
 
 /**
@@ -517,8 +517,11 @@ class oxUtils extends oxSuperCfg
         $sRes = $this->fromStaticCache( $sStaticCacheKey );
 
         if ( is_null( $sRes ) ) {
-            $sRes = unserialize( $this->_oxFileCache( false, $sKey ) );
-            $this->toStaticCache( $sStaticCacheKey, $sRes );
+            $sRes = $this->_oxFileCache( false, $sKey );
+            if (!is_null($sRes)) {
+                $sRes = unserialize( $sRes );
+                $this->toStaticCache( $sStaticCacheKey, $sRes );
+            }
         }
 
         return $sRes;

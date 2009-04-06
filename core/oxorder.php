@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxorder.php 17480 2009-03-20 12:33:16Z arvydas $
+ * $Id: oxorder.php 17789 2009-04-02 14:21:44Z vilma $
  */
 
 /**
@@ -1531,10 +1531,10 @@ class oxOrder extends oxBase
                 if ( $sList ) {
 
                     $aVal = explode( ":", $sList );
-
+                    $oStr = getStr();
                     if ( isset($aVal[0]) && isset($aVal[1])) {
-                        $sOrderArtListTitle = strtolower( trim($aVal[0]) );
-                        $sOrderArtSelValue  = strtolower( trim($aVal[1]) );
+                        $sOrderArtListTitle = $oStr->strtolower( trim($aVal[0]) );
+                        $sOrderArtSelValue  = $oStr->strtolower( trim($aVal[1]) );
 
                         //checking article list for matches with article list stored in oxorderitem
                         $iSelListNum = 0;
@@ -1542,11 +1542,11 @@ class oxOrder extends oxBase
                             foreach ( $aArticleSelList as $aSelect ) {
                                 //chek if selects titles are equal
 
-                                if ( strtolower($aSelect['name']) == $sOrderArtListTitle ) {
+                                if ( $oStr->strtolower($aSelect['name']) == $sOrderArtListTitle ) {
                                     //try to find matching select items value
                                     $iSelValueNum = 0;
                                     foreach ( $aSelect as $oSel ) {
-                                        if ( strtolower($oSel->name) == $sOrderArtSelValue ) {
+                                        if ( $oStr->strtolower($oSel->name) == $sOrderArtSelValue ) {
                                             // found, adding tu return array
                                             $aRet[$iSelListNum] = $iSelValueNum;
                                         }

@@ -315,4 +315,20 @@ class oxManufacturer extends oxI18n
     public function getContentCats()
     {
     }
+
+    /**
+     * Delete this object from the database, returns true on success.
+     *
+     * @param string $sOXID Object ID(default null)
+     *
+     * @return bool
+     */
+    public function delete( $sOXID = null)
+    {
+        if (parent::delete($sOXID)) {
+            oxSeoEncoderManufacturer::getInstance()->onDeleteManufacturer($this);
+            return true;
+        }
+        return false;
+    }
 }

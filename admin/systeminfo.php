@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: systeminfo.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: systeminfo.php 17794 2009-04-03 06:34:31Z rimvydas.paskevicius $
  */
 
 /**
@@ -61,6 +61,7 @@ class SystemInfo extends oxAdminView
                 $aSystemInfo[$name] = $value;
                 //echo( "$name = $value <br>");
             }
+            $oSmarty->assign( "oViewConf", $this->_aViewData["oViewConf"]);
             $oSmarty->assign( "shop", $this->_aViewData["shop"]);
             $oSmarty->assign( "isdemo", $myConfig->isDemoShop());
             $oSmarty->assign( "aSystemInfo", $aSystemInfo);

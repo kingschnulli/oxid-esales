@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxcategory.php 17643 2009-03-27 13:59:37Z arvydas $
+ * $Id: oxcategory.php 17854 2009-04-03 17:48:55Z tomas $
  */
 
 /**
@@ -182,9 +182,10 @@ class oxCategory extends oxI18n
 
         parent::assign( $dbRecord );
 
+        startProfile("parseThroughSmarty");
         // #1030C run through smarty
         $myConfig = $this->getConfig();
-        if ( !$this->isAdmin() && $myConfig->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
+        if (!$this->_isInList() && !$this->isAdmin() && $myConfig->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
             $this->oxcategories__oxlongdesc = new oxField( oxUtilsView::getInstance()->parseThroughSmarty( $this->oxcategories__oxlongdesc->value, $this->getId() ), oxField::T_RAW );
         }
 
@@ -195,6 +196,8 @@ class oxCategory extends oxI18n
                 $this->_iNrOfArticles = oxUtilsCount::getInstance()->getCatArticleCount( $this->getId() );
             }
         }
+
+        stopProfile("parseThroughSmarty");
     }
 
     /**
@@ -248,6 +251,8 @@ class oxCategory extends oxI18n
             $oDB->execute( "delete from oxobject2delivery where oxobject2delivery.oxobjectid='".$this->oxcategories__oxid->value."' ");
             // - discounts
             $oDB->execute( "delete from oxobject2discount where oxobject2discount.oxobjectid='".$this->oxcategories__oxid->value."' ");
+
+            oxSeoEncoderCategory::getInstance()->onDeleteCategory($this);
         }
         return $blRet;
     }
@@ -346,9 +351,13 @@ class oxCategory extends oxI18n
         if ( count( $this->_aIds ) == 0 ) {
             return;
         }
-        if ( $this->_aIds[$a->oxcategories__oxid->value] < $this->_aIds[$b->oxcategories__oxid->value] ) {
+
+        $sNumA = $this->_aIds[$a->oxcategories__oxid->value];
+        $sNumB = $this->_aIds[$b->oxcategories__oxid->value];
+
+        if ($sNumA  < $sNumB ) {
             return -1;
-        } if ( $this->_aIds[$a->oxcategories__oxid->value] == $this->_aIds[$b->oxcategories__oxid->value] ) {
+        } if ( $sNumA == $sNumB) {
             return 0;
         }
         return 1;

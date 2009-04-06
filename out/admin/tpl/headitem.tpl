@@ -26,13 +26,20 @@
 
     window.onclick = focusPopup;
 
+    function cleanupLongDesc( sValue )
+    {
+        if ( sValue == '<br>' || sValue == '<br />' ) {
+            return '';
+        }
+    }
+
     function copyLongDesc( sIdent )
     {
         var textVal = null;
         try {
             if ( WPro.editors[sIdent] != null ) {
                WPro.editors[sIdent].prepareSubmission();
-               textVal = WPro.editors[sIdent].getValue();
+               textVal = cleanupLongDesc( WPro.editors[sIdent].getValue() );
             }
         } catch(err) {}
 
@@ -40,7 +47,7 @@
             var varName = 'editor_'+sIdent;
             var varEl = document.getElementById(varName);
             if (varEl != null) {
-                textVal = varEl.value;
+                textVal = cleanupLongDesc( varEl.value );
             }
         }
 

@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxconfig.php 17590 2009-03-25 11:10:12Z vilma $
+ * $Id: oxconfig.php 17863 2009-04-03 18:45:55Z tomas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1254,6 +1254,10 @@ class oxConfig extends oxSuperCfg
         $sUrl = $this->getUrl( $sFile, $this->_sPictureDir, $blAdmin, $blSSL, null, $iLang, $iShopId );
         if ( $sFile && $this->getConfigParam('blFormerTplSupport') ) {
             $sUrl = str_replace( $this->getPictureUrl( null, $blAdmin, $blSSL, $iLang, $iShopId ), '', $sUrl );
+        }
+        //anything is better than empty name, because <img src=""> calls shop once more = x2 SLOW.
+        if (!$sUrl) {
+            return $this->getTemplateUrl()."../".$this->_sPictureDir."/0/nopic.jpg";
         }
         return $sUrl;
     }

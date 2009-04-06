@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxadmindetails.php 17644 2009-03-27 14:00:12Z arvydas $
+ * $Id: oxadmindetails.php 17814 2009-04-03 12:27:05Z arvydas $
  */
 
 /**
@@ -129,6 +129,9 @@ class oxAdminDetails extends oxAdminView
 
         // enabling upload
         $this->_oEditor->upload = true;
+
+        // setting empty value
+        $this->_oEditor->emptyValue = "";
 
         //#M432 enabling deleting files and folders
         $this->_oEditor->deleteFiles = true;

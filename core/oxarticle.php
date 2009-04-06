@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxarticle.php 17617 2009-03-26 12:53:29Z sarunas $
+ * $Id: oxarticle.php 17852 2009-04-03 17:40:52Z tomas $
  */
 
 // defining supported link types
@@ -94,6 +94,13 @@ class oxArticle extends oxI18n
      * @var bool
      */
     protected $_blLoadVariants = true;
+
+    /**
+     * Article variants
+     *
+     * @var array
+     */
+    protected $_aVariants = null;
 
     /**
      * $_blNotBuyableParent is set to true, when article has variants and is not buyable due to:
@@ -1079,6 +1086,10 @@ class oxArticle extends oxI18n
      */
     public function getVariants( $blRemoveNotOrderables = true )
     {
+        if ($this->_aVariants) {
+            return $this->_aVariants;
+        }
+
         //return ;
         if (!$this->_blLoadVariants) {
             return array();
@@ -1097,27 +1108,28 @@ class oxArticle extends oxI18n
             return array();
         }
 
-        //$this->aList = array();
-
-        // we do not check for blLoadVariants here as actually in admin performace tag
-        // this option is described like "Whether or not to load variants IN LISTS"
-        //*
-        //if( !$this->isAdmin() && !$myConfig->blLoadVariants)
-          //  return array();
-
-        // no article list here as this list don't load variants
-        $oVariants = oxNew( 'oxarticlelist' );
-
         //do not load me as a parent later
         self::$_aLoadedParents[$this->getId()] = $this;
 
-        $sSelectFields = $this->getSelectFields();
+        //improve this
+        if ($this->_isInList()) {
+            $oVariants = oxNew( 'oxlist' );
+            $oVariants->init('oxsimplevariant');
+        } else {
+            //loading variants
+            $oVariants = oxNew( 'oxarticlelist' );
+        }
+
+        startProfile("selectVariants");
+        $sSelectFields = $oVariants->getBaseObject()->getSelectFields();
         $sArticleTable = $this->getViewName();
         $sSelect =  "select $sSelectFields from $sArticleTable where ";
         $sSelect .= " $sArticleTable.oxparentid ='".$this->getId()."' ";
         $sSelect .= " order by $sArticleTable.oxsort";
-
         $oVariants->selectString( $sSelect);
+        stopProfile("selectVariants");
+
+        //print_r($oVariants);
 
         if (!$oVariants->count()) {
             return array();
@@ -1130,6 +1142,7 @@ class oxArticle extends oxI18n
                 $oVariants[$key]->aSelectlist = $oVariant->getSelectLists();
             }
         }
+        $this->_aVariants = $oVariants;
         return $oVariants;
     }
 
@@ -1662,6 +1675,9 @@ class oxArticle extends oxI18n
         $this->_onChangeResetCounts( $sOXID, $this->oxarticles__oxvendorid->value, $this->oxarticles__oxmanufacturerid->value );
         $this->_deleteVariantRecords( $sOXID );
         $rs = $this->_deleteRecords( $sOXID );
+
+        oxSeoEncoderArticle::getInstance()->onDeleteArticle($this);
+
         $this->onChange( ACTION_DELETE, $sOXID, $this->oxarticles__oxparentid->value );
 
         return $rs->EOF;
@@ -1796,6 +1812,10 @@ class oxArticle extends oxI18n
                 $blZoomPic = true;
                 $aZoomPics[$c]['id'] = $c;
                 $aZoomPics[$c]['file'] = $sVal;
+                //anything is better than empty name, because <img src=""> calls shop once more = x2 SLOW.
+                if (!$sVal) {
+                    $aZoomPics[$c]['file'] = "nopic.jpg";
+                }
                 $c++;
             }
         }
@@ -2545,7 +2565,7 @@ class oxArticle extends oxI18n
     }
 
     /**
-     * Removes object data fields (oxarticles__oxtimestamp, oxarticles__oxparentid).
+     * Removes object data fields (oxarticles__oxtimestamp, oxarticles__oxparentid, oxarticles__oxinsert).
      */
     protected function _skipSaveFields()
     {
@@ -2555,7 +2575,7 @@ class oxArticle extends oxI18n
 
         $this->_aSkipSaveFields[] = 'oxtimestamp';
         $this->_aSkipSaveFields[] = 'oxlongdesc';
-        //$this->_aSkipSaveFields[] = 'oxinsert';
+        $this->_aSkipSaveFields[] = 'oxinsert';
 
         if ( !isset( $this->oxarticles__oxparentid->value) || $this->oxarticles__oxparentid->value == '') {
             $this->_aSkipSaveFields[] = 'oxparentid';
@@ -3276,8 +3296,7 @@ class oxArticle extends oxI18n
      * @return null;
      */
     protected function _assignParentFieldValues()
-    {
-        startProfile('articleAssignParentInternal');
+    {   startProfile('articleAssignParentInternal');
         if ( $this->oxarticles__oxparentid->value) {
             // yes, we are in fact a variant
             if ( !$this->isAdmin() || ($this->_blLoadParentData && $this->isAdmin() ) ) {

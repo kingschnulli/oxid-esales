@@ -18,7 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxseoencoderarticle.php 17727 2009-04-01 07:46:23Z sarunas $
+ * $Id: oxseoencoderarticle.php 17768 2009-04-02 10:52:12Z sarunas $
  */
 
 /**
@@ -74,7 +74,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         }
 
         //load details link from DB
-        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, $iShopId, $sActCatId, false ) ) ) {
+        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, null, $sActCatId, false ) ) ) {
 
             if ($iLang != $oArticle->getLanguage()) {
                 $sId = $oArticle->getId();
@@ -160,7 +160,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         }
 
         //load details link from DB
-        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, $iShopId, $sActVendorId, true ) ) ) {
+        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, null, $sActVendorId, true ) ) ) {
 
             if ( $iLang != $oArticle->getLanguage() ) {
                 $sId = $oArticle->getId();
@@ -210,7 +210,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         }
 
         //load details link from DB
-        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, $iShopId, $sActManufacturerId, true ) ) ) {
+        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, null, $sActManufacturerId, true ) ) ) {
 
             if ( $iLang != $oArticle->getLanguage() ) {
                 $sId = $oArticle->getId();
@@ -252,6 +252,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             $iLang = $oArticle->getLanguage();
         }
 
+        $sUri = '';
         switch ( $iType ) {
             case 1 :
                 $sUri = $this->_getArticleVendorUri( $oArticle, $iLang );
@@ -318,5 +319,18 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             }
         }
         return $oList;
+    }
+
+    /**
+     * deletes article seo entries
+     *
+     * @param oxarticle $oArticle article to remove
+     *
+     * @return null
+     */
+    public function onDeleteArticle($oArticle)
+    {
+        $sId = oxDb::getDb()->quote($oArticle->getId());
+        oxDb::getDb()->execute("delete from oxseo where oxobjectid = $sId and oxtype = 'oxarticle'");
     }
 }
