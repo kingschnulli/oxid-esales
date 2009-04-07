@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: help_lang.php 17699 2009-03-31 13:29:49Z arvydas $
  */
 

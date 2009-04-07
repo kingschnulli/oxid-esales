@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: tpl.php 16496 2009-02-12 12:05:59Z arvydas $
  */
 

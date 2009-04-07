@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: manufacturerlist.php 14141 2008-11-11 14:09:46Z arvydas $
  */
 

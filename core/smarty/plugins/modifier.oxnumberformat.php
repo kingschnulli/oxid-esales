@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package smartyPlugins
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: modifier.oxnumberformat.php 17042 2009-03-05 11:52:04Z sarunas $
  */
 

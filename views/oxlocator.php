@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: oxlocator.php 17850 2009-04-03 16:41:36Z tomas $
  */
 

@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: oxcmp_categories.php 16808 2009-02-25 10:44:05Z arvydas $
  */
 

@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: oxlist.php 17845 2009-04-03 15:47:03Z tomas $
  */
 

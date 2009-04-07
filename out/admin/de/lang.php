@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 17804 2009-04-03 08:18:46Z vilma $
+ * @version OXID eShop CE
+ * $Id: lang.php 17895 2009-04-06 13:14:51Z rimvydas.paskevicius $
  */
 
 $sLangName  = 'Deutsch';
@@ -89,7 +90,6 @@ $aLang = array(
 'GENERAL_ARTICLE_OXUNITNAME'                    => 'Einheit',
 'GENERAL_ARTICLE_OXUNITQUANTITY'                => 'Mengeneinheit',
 'GENERAL_ARTICLE_OXURLDESC'                     => 'URL Beschreibung',
-'GENERAL_ARTICLE_OXURLIMG'                      => 'URL Bild',
 'GENERAL_ARTICLE_OXVAT'                         => 'Artikel Mwst.',
 'GENERAL_ARTICLE_OXTHUMB'                       => 'Vorschaubild',
 'GENERAL_ARTICLE_OXICON'                        => '',
@@ -333,7 +333,6 @@ $aLang = array(
 'ARTICLE_EXTEND_UNITNAME'                       => 'Mengeneinheit',
 'ARTICLE_EXTEND_EXTURL'                         => 'Externe URL',
 'ARTICLE_EXTEND_URLDESC'                        => 'Text für ext. URL',
-'ARTICLE_EXTEND_URLIMG'                         => 'Bild für ext. URL',
 'ARTICLE_EXTEND_BPRICE'                         => 'Einkaufspreis',
 'ARTICLE_EXTEND_TPRICE'                         => 'UVP',
 'ARTICLE_EXTEND_FILE'                           => 'Datei',

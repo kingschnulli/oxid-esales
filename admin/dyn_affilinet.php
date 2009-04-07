@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: dyn_affilinet.php 17209 2009-03-13 16:32:12Z arvydas $
  */
 

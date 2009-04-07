@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: oxexceptiontodisplay.php, v 1.0 2007.8.9 17.47.16 developer_name Exp
  */
 

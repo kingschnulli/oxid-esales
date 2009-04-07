@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxconfig.php 17863 2009-04-03 18:45:55Z tomas $
+ * @version OXID eShop CE
+ * $Id: oxconfig.php 17899 2009-04-06 13:58:58Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -685,28 +686,24 @@ class oxConfig extends oxSuperCfg
      */
     public function isSsl()
     {
-        if (!is_null($this->_blIsSsl)) {
-            return $this->_blIsSsl;
+        if ( is_null( $this->_blIsSsl ) ) {
+
+            $myUtilsServer   = oxUtilsServer::getInstance();
+            $aServerVars     = $myUtilsServer->getServerVar();
+            $aHttpsServerVar = $myUtilsServer->getServerVar( 'HTTPS' );
+
+            $this->_blIsSsl = ( isset( $aHttpsServerVar ) && $this->getConfigParam( 'sSSLShopURL' ) &&
+                         ( $aHttpsServerVar == 'on' || $aHttpsServerVar == '1' ) ); // 1&1 provides "1"
+
+            //additional special handling for profihost customers
+            if ( isset( $aServerVars['HTTP_X_FORWARDED_SERVER'] ) &&
+                 ( strpos( $aServerVars['HTTP_X_FORWARDED_SERVER'], 'ssl' ) !== false ||
+                 strpos( $aServerVars['HTTP_X_FORWARDED_SERVER'], 'secure-online-shopping.de' ) !== false ) ) {
+                $this->_blIsSsl = true;
+            }
         }
 
-        $myUtilsServer   = oxUtilsServer::getInstance();
-        $aServerVars     = $myUtilsServer->getServerVar();
-        $aHttpsServerVar = $myUtilsServer->getServerVar( 'HTTPS' );
-
-        $blIsSsl = ( isset( $aHttpsServerVar ) && $this->getConfigParam( 'sSSLShopURL' ) &&
-                     ( $aHttpsServerVar == 'on' || $aHttpsServerVar == '1' ) ); // 1&1 provides "1"
-
-        //additional special handling for profihost customers
-        if ( isset( $aServerVars['HTTP_X_FORWARDED_SERVER'] ) &&
-             ( strpos( $aServerVars['HTTP_X_FORWARDED_SERVER'], 'ssl' ) !== false ||
-             strpos( $aServerVars['HTTP_X_FORWARDED_SERVER'], 'secure-online-shopping.de' ) !== false ) ) {
-            $blIsssl = true;
-        }
-
-        //oxUtils::getInstance()->toStaticCache($sCacheName, $blIsSsl);
-        $this->_blIsSsl = $blIsSsl;
-
-        return $blIsSsl;
+        return $this->_blIsSsl;
     }
 
     /**
@@ -1642,7 +1639,9 @@ class oxConfig extends oxSuperCfg
      */
     public function getEdition()
     {
-        return $this->getActiveShop()->oxshops__oxedition->value;
+            return "CE";
+
+
     }
 
     /**

@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 17804 2009-04-03 08:18:46Z vilma $
+ * @version OXID eShop CE
+ * $Id: lang.php 17912 2009-04-06 16:23:57Z philipp.grashoff $
  */
 
 /*
@@ -94,7 +95,6 @@ $aLang = array(
 'GENERAL_ARTICLE_OXUNITNAME'                    => 'Unit',
 'GENERAL_ARTICLE_OXUNITQUANTITY'                => 'Quantity Unit',
 'GENERAL_ARTICLE_OXURLDESC'                     => 'URL Description',
-'GENERAL_ARTICLE_OXURLIMG'                      => 'URL Picture',
 'GENERAL_ARTICLE_OXVAT'                         => 'Product VAT',
 'GENERAL_ARTICLE_OXTHUMB'                       => 'Preview Picture',
 'GENERAL_ARTICLE_OXICON'                        => '',
@@ -338,7 +338,6 @@ $aLang = array(
 'ARTICLE_EXTEND_UNITNAME'                       => 'Unit',
 'ARTICLE_EXTEND_EXTURL'                         => 'External URL',
 'ARTICLE_EXTEND_URLDESC'                        => 'Text for external URL',
-'ARTICLE_EXTEND_URLIMG'                         => 'Picture for ext. URL',
 'ARTICLE_EXTEND_BPRICE'                         => 'Purchase Price',
 'ARTICLE_EXTEND_TPRICE'                         => 'RRP',
 'ARTICLE_EXTEND_FILE'                           => 'File',
@@ -622,9 +621,9 @@ $aLang = array(
 'DYN_IPAYMENT_QUESTIONORDERMANUALRESET_NOTE'    => '(e.g. because of manual reverse in the payshow)? Click ',
 'DYN_SUPERCLIX_SUPERCLICKSID'                   => 'SuperClix Partner ID',
 'DYN_TRUSTED_TRUSTEDSHOP'                       => 'Trusted Shops ID',
-'DYN_TRUSTED_TRUSTEDSHOP_ERROR'                 => 'Ung�ltige Trusted Shops ID. Bitte wenden Sie sich an Ihren Ansprechpartner bei Trusted Shops, um eine g�ltige Trusted Shops ID zu erhalten.',
+'DYN_TRUSTED_TRUSTEDSHOP_ERROR'                 => 'Invalid Trusted Shops ID. Contact Trusted Shops for your valid ID.',
 'DYNBASE_ADDCATTOCAMPAIGN'                      => 'Add category to campaign parameter',
-'DYNBASE_DO_SUCCESS'                            => 'Success ! Your Export File can be downloaded',
+'DYNBASE_DO_SUCCESS'                            => 'Success! Your Export File can be downloaded',
 'DYNBASE_DO_HERE'                               => 'here',
 'DYNBASE_DO_DOWNLOAD'                           => '',
 'DYNBASE_DO_LINK'                               => 'The Partner can also pick-up this file himself - please note following Link: ',

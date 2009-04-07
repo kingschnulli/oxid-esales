@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: oxsession.php 15261 2009-01-14 15:27:07Z vilma $
  */
 

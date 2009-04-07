@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: oxopenid.php 15202 2009-01-13 20:03:30Z Vilma $
  */
 $iOldErrorReproting = error_reporting();

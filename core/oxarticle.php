@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxarticle.php 17852 2009-04-03 17:40:52Z tomas $
+ * @version OXID eShop CE
+ * $Id: oxarticle.php 17908 2009-04-06 15:11:52Z sarunas $
  */
 
 // defining supported link types
@@ -1537,9 +1538,7 @@ class oxArticle extends oxI18n
 
         // apply VAT only if configuration requires it
         if ( !$myConfig->getConfigParam( 'bl_perfCalcVatOnlyForBasketOrder' ) ) {
-            startProfile("_applyVAT");
             $this->_applyVAT( $this->_oPrice, oxNew('oxVatSelector')->getArticleVat( $this ) );
-            stopProfile("_applyVAT");
         }
 
         // apply currency
@@ -2714,12 +2713,15 @@ class oxArticle extends oxI18n
 
         $dBasePrice = $this->_getGroupPrice();
         $oLang = oxLang::getInstance();
+
+        $dArticleVat = null;
+        if ( !$myConfig->getConfigParam( 'bl_perfCalcVatOnlyForBasketOrder' ) ) {
+            $dArticleVat = oxNew('oxVatSelector')->getArticleVat( $this );
+        }
+
         // trying to find lowest price value
         foreach ($oAmPriceList as $sId => $oItem) {
-
             $oItemPrice = oxNew( 'oxprice' );
-            $oItemPrice->setVat( $this->getPrice()->getVAT() );
-
             if ( $oItem->oxprice2article__oxaddabs->value) {
                 $oItemPrice->setPrice( $oItem->oxprice2article__oxaddabs->value );
                 $this->_applyDiscounts( $oItemPrice, $aDiscountList );
@@ -2727,6 +2729,10 @@ class oxArticle extends oxI18n
             } else {
                 $oItemPrice->setPrice( $dBasePrice );
                 $oItemPrice->subtractPercent( $oItem->oxprice2article__oxaddperc->value );
+            }
+
+            if (isset($dArticleVat)) {
+                $this->_applyVAT($oItemPrice, $dArticleVat);
             }
 
             if (!$oLowestPrice) {
@@ -2772,12 +2778,14 @@ class oxArticle extends oxI18n
      */
     protected function _applyVAT( oxPrice $oPrice, $dVat )
     {
+        startProfile(__FUNCTION__);
         $oPrice->setVAT( $dVat );
         if ( ( $oUser = $this->getArticleUser() ) ) {
             if ( ( $dVat = oxNew( 'oxVatSelector' )->getUserVat( $oUser ) ) !== false ) {
                 $oPrice->setUserVat( $dVat );
             }
         }
+        stopProfile(__FUNCTION__);
     }
 
     /**

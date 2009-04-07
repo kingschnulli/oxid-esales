@@ -132,14 +132,6 @@ window.onLoad = top.reloadEditFrame();
           </tr>
           <tr>
             <td class="edittext">
-              [{ oxmultilang ident="ARTICLE_EXTEND_URLIMG" }]
-            </td>
-            <td class="edittext">
-              <input type="text" class="editinput" size="40" maxlength="[{$edit->oxarticles__oxurlimg->fldmax_length}]" name="editval[oxarticles__oxurlimg]" value="[{$edit->oxarticles__oxurlimg->value}]" [{ $readonly }]>
-            </td>
-          </tr>
-          <tr>
-            <td class="edittext">
               [{ oxmultilang ident="ARTICLE_EXTEND_BPRICE" }]
             </td>
             <td class="edittext">

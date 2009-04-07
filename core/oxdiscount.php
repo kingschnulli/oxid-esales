@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxdiscount.php 16609 2009-02-19 14:16:30Z arvydas $
+ * @version OXID eShop CE
+ * $Id: oxdiscount.php 17903 2009-04-06 14:38:41Z arvydas $
  */
 
 /**
@@ -186,7 +187,6 @@ class oxDiscount extends oxI18n
     public function isForBasketAmount( $oBasket )
     {
         $dAmount = 0;
-        $oBasketInfo  = $oBasket->getBasketSummary();
         $aBasketItems = $oBasket->getContents();
         foreach ( $aBasketItems as $oBasketItem ) {
 
@@ -201,9 +201,9 @@ class oxDiscount extends oxI18n
 
             if ( $blForBasketItem ) {
                 if ( $this->oxdiscount__oxprice->value ) {
-                    $dAmount += $oBasketArticle->getPrice()->getBruttoPrice() * $oBasketInfo->aArticles[$oBasketArticle->getId()];
+                    $dAmount += $oBasketArticle->getPrice()->getBruttoPrice() * $oBasketItem->getAmount();
                 } elseif ( $this->oxdiscount__oxamount->value ) {
-                    $dAmount += $oBasketInfo->aArticles[$oBasketArticle->getId()];
+                    $dAmount += $oBasketItem->getAmount();
                 }
             }
         }

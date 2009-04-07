@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: systeminfo.php 17794 2009-04-03 06:34:31Z rimvydas.paskevicius $
  */
 

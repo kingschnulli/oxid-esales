@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 17729 2009-04-01 07:50:51Z rimvydas.paskevicius $
+ * @version OXID eShop CE
+ * $Id: lang.php 17902 2009-04-06 14:22:54Z vilma $
  */
 
 $sLangName  = "English";
@@ -272,6 +273,7 @@ $aLang = array(
 'CONTACT_SEND'                                    => "Send",
 'CONTACT_THANKYOU1'                               => "Thank you.",
 'CONTACT_THANKYOU2'                               => " appreciates your comments.",
+'CONTACT_FROM'                                    => "Message from",
 'DETAILS_PERSPARAM_PRODUCTDETAILS'                => "Product Details",
 'DETAILS_PERSPARAM_ZOOM'                          => "[+] zoom",
 'DETAILS_PERSPARAM_ARTNOMBER'                     => "Art.No.:",

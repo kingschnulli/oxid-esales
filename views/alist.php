@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: alist.php 17642 2009-03-27 13:58:14Z arvydas $
+ * @version OXID eShop CE
+ * $Id: alist.php 17902 2009-04-06 14:22:54Z vilma $
  */
 
 /**
@@ -347,9 +348,7 @@ class aList extends oxUBase
         }
 
         // making safe for output
-        $aRemoveChars = array( "\"", "'", "\n", "\r", "\t", "\x95", "\xA0" );
-        $sDescription = str_replace( $aRemoveChars, ' ', $sDescription );
-
+        $sDescription = getStr()->cleanStr($sDescription);
         return trim( strip_tags( getStr()->html_entity_decode( $sDescription ) ) );
     }
 

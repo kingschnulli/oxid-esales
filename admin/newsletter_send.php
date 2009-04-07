@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: newsletter_send.php 17627 2009-03-26 15:08:34Z arvydas $
  */
 

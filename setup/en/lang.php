@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: lang.php 17028 2009-03-04 16:06:15Z philipp.grashoff $
+ * @version OXID eShop CE
+ * $Id: lang.php 17881 2009-04-06 09:13:17Z alfonsas $
  */
 
 $aLang = array(
@@ -26,7 +27,7 @@ $aLang = array(
 'charset'                                         => 'ISO-8859-15',
 'HEADER_META_MAIN_TITLE'                          => "OXID eShop installation wizard",
 'HEADER_TEXT_SETUP_NOT_RUNS_AUTOMATICLY'          => "If setup does not continue in a few seconds, please click ",
-'FOOTER_OXID_ESALES'                              => "&copy; OXID eSales AG 2008",
+'FOOTER_OXID_ESALES'                              => "&copy; OXID eSales AG 2003 - ".@date("Y"),
 
 'TAB_0_TITLE'                                     => "System Requirements",
 'TAB_1_TITLE'                                     => "Welcome",

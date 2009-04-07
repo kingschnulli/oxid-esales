@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxorder.php 17789 2009-04-02 14:21:44Z vilma $
+ * @version OXID eShop CE
+ * $Id: oxorder.php 17911 2009-04-06 15:57:59Z alfonsas $
  */
 
 /**
@@ -751,6 +752,14 @@ class oxOrder extends oxBase
             return null;
         }
 
+        // #756M Preserve already stored payment information
+        if( !$aDynvalue && $oUserpayment = $this->getPaymentType() ) {
+            $aStoredDynvalue = $oUserpayment->getDynValues();
+            foreach ( $aStoredDynvalue as $oVal ){
+                $aDynvalue[$oVal->name] = $oVal->value;
+            }
+        }
+
         $oPayment->setDynValues( oxUtils::getInstance()->assignValuesFromText( $oPayment->oxpayments__oxvaldesc->value ) );
 
         // collecting dynamic values
@@ -1075,9 +1084,8 @@ class oxOrder extends oxBase
         }
 
         // #440 - deleting user payment info
-        if ( $this->oxorder__oxpaymentid->value ) {
-            $oDB = oxDb::getDb();
-            $oDB->execute( 'delete from oxuserpayments where oxuserpayments.oxid = "'.$this->oxorder__oxpaymentid->value.'"' );
+        if ( $oPaymentType = $this->getPaymentType() ) {
+            $oPaymentType->delete();
         }
 
         return parent::delete( $sOxId );

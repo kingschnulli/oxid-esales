@@ -18,6 +18,7 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
+ * @version OXID eShop CE
  * $Id: oxdiscountlist.php 17414 2009-03-19 09:48:33Z arvydas $
  */
 

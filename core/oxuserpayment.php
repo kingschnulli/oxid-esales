@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxuserpayment.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * @version OXID eShop CE
+ * $Id: oxuserpayment.php 17878 2009-04-06 09:08:00Z alfonsas $
  */
 
 /**
@@ -154,7 +155,14 @@ class oxUserPayment extends oxBase
             $this->oxuserpayments__oxvalue->setValue($sEncodedValue);
         }
 
-        return parent::_insert();
+        $blRet = parent::_insert();
+
+        //restore, as encoding was needed only for saving
+        if( $sEncodedValue ) {
+            $this->oxuserpayments__oxvalue->setValue($sValue);
+        }
+
+        return $blRet;
     }
 
     /**
@@ -170,7 +178,14 @@ class oxUserPayment extends oxBase
             $this->oxuserpayments__oxvalue->setValue($sEncodedValue);
         }
 
-        return parent::_update();
+        $blRet = parent::_update();
+
+        //restore, as encoding was needed only for saving
+        if ( $sEncodedValue ) {
+            $this->oxuserpayments__oxvalue->setValue($sValue);
+        }
+
+        return $blRet;
     }
 
     /**

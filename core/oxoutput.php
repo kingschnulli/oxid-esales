@@ -18,7 +18,8 @@
  * @link http://www.oxid-esales.com
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
- * $Id: oxoutput.php 17129 2009-03-10 15:42:09Z rimvydas.paskevicius $
+ * @version OXID eShop CE
+ * $Id: oxoutput.php 17880 2009-04-06 09:08:44Z alfonsas $
  */
 
 /**
@@ -91,7 +92,7 @@ class oxOutput extends oxSuperCfg
         $sEdition = $this->getConfig()->getFullEdition();
         $sCurYear = date("Y");
 
-        $sOutput = preg_replace("/<\/head>/i", "</head>\n  <!-- OXID eShop {$sEdition}, Version {$sVersion}, Shopsystem (c) OXID eSales AG 2003-{$sCurYear} - http://www.oxid-esales.com -->", $sOutput);
+        $sOutput = preg_replace("/<\/head>/i", "</head>\n  <!-- OXID eShop {$sEdition}, Version {$sVersion}, Shopsystem (c) OXID eSales AG 2003 - {$sCurYear} - http://www.oxid-esales.com -->", $sOutput);
 
         return $sOutput;
     }
