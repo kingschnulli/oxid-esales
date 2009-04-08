@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadmindetails.php 17814 2009-04-03 12:27:05Z arvydas $
+ * $Id: oxadmindetails.php 17958 2009-04-07 14:29:36Z rimvydas.paskevicius $
  */
 
 /**
@@ -222,8 +222,8 @@ class oxAdminDetails extends oxAdminView
      */
     public function resetNrOfCatArticles()
     {
-
-            oxUtils::getInstance()->oxResetFileCache();
+        // resetting categories article count cache
+        $this->resetContentCache();
     }
 
     /**
@@ -233,8 +233,8 @@ class oxAdminDetails extends oxAdminView
      */
     public function resetNrOfVendorArticles()
     {
-
-            oxUtils::getInstance()->oxResetFileCache();
+        // resetting vendors cache
+        $this->resetContentCache();
     }
 
     /**
@@ -244,8 +244,8 @@ class oxAdminDetails extends oxAdminView
      */
     public function resetNrOfManufacturerArticles()
     {
-
-            oxUtils::getInstance()->oxResetFileCache();
+        // resetting manufacturers cache
+        $this->resetContentCache();
     }
 
     /**
@@ -362,10 +362,10 @@ class oxAdminDetails extends oxAdminView
             foreach ( $aResetInfo as $sResetId => $iPos ) {
                 switch ( $sType ) {
                     case 'vendor':
-                        $oUtils->resetVendorArticleCount( $sResetId );
+                        $this->resetCounter( "vendorArticle", $sResetId );
                         break;
                     case 'manufacturer':
-                        $oUtils->resetManufacturerArticleCount( $sResetId );
+                        $this->resetCounter( "manufacturerArticle", $sResetId );
                         break;
                 }
             }

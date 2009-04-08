@@ -31,6 +31,7 @@
         if ( sValue == '<br>' || sValue == '<br />' ) {
             return '';
         }
+        return sValue;
     }
 
     function copyLongDesc( sIdent )

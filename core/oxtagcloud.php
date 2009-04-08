@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxtagcloud.php 17875 2009-04-06 08:10:28Z arvydas $
+ * $Id: oxtagcloud.php 17928 2009-04-07 08:51:12Z tomas $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -147,20 +147,22 @@ class oxTagCloud extends oxSuperCfg
     {
         $myUtils = oxUtils::getInstance();
 
-        $sTagCloud = "";
+        $sTagCloud = null;
         $sCacheKey = $this->_getCacheKey($blExtended);
         if ( $this->_sCacheKey && !$sArtId ) {
             $sTagCloud = $myUtils->fromFileCache( $sCacheKey );
         }
 
-        if ( $sTagCloud ) {
+        if ( !is_null($sTagCloud) ) {
             return $sTagCloud;
         }
 
-        startProfile('trimTags');
         $aTags = $this->getTags($sArtId, $blExtended);
-        stopProfile('trimTags');
         if (!count($aTags)) {
+            if ($this->_sCacheKey && !$sArtId) {
+                $sTagCloud = false;
+                $myUtils->toFileCache($sCacheKey, $sTagCloud);
+            }
             return $sTagCloud;
         }
 
@@ -174,6 +176,7 @@ class oxTagCloud extends oxSuperCfg
         $sUrl = $this->getConfig()->getShopUrl();
         $oStr = getStr();
 
+        $sTagCloud = false;
         foreach ($aTags as $sTag => $sRelevance) {
             $sLink = $sUrl."index.php?cl=tag&amp;searchtag=".rawurlencode($sTag)."&amp;lang=".$iLang;
             if ( $blSeoIsActive) {

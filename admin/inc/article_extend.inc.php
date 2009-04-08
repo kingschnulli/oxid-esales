@@ -19,7 +19,7 @@
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_extend.inc.php 17244 2009-03-16 15:17:48Z arvydas $
+ * $Id: article_extend.inc.php 17958 2009-04-07 14:29:36Z rimvydas.paskevicius $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -134,8 +134,7 @@ class ajaxComponent extends ajaxListComponent
 
         }
 
-
-            oxUtils::getInstance()->oxResetFileCache();
+        $this->resetContentCache();
     }
 
     /**
@@ -181,8 +180,7 @@ class ajaxComponent extends ajaxListComponent
                 $oNew->save();
             }
 
-
-                oxUtils::getInstance()->oxResetFileCache();
+            $this->resetContentCache();
         }
     }
 

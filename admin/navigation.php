@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: navigation.php 17603 2009-03-25 14:53:16Z arvydas $
+ * $Id: navigation.php 17958 2009-04-07 14:29:36Z rimvydas.paskevicius $
  */
 
 /**
@@ -95,7 +95,7 @@ class Navigation extends oxAdminView
     }
 
     /**
-     * destroy session, redirects to admin login
+     * Destroy session, redirects to admin login and clears cache
      *
      * @return null
      */
@@ -118,6 +118,13 @@ class Navigation extends oxAdminView
         if ( $myConfig->getConfigParam( 'blAdodbSessionHandler' ) ) {
             $sSQL = "delete from oxsessions where SessionID = '$sSID'";
             oxDb::getDb()->Execute( $sSQL);
+        }
+
+        //reseting content cache if needed
+        $blDeleteCacheOnLogout = $this->getConfig()->getConfigParam( 'blClearCacheOnLogout' );
+        if ( $blDeleteCacheOnLogout ) {
+
+                oxUtils::getInstance()->oxResetFileCache();
         }
 
         oxUtils::getInstance()->redirect( 'index.php' );

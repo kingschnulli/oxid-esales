@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxajax.php 17644 2009-03-27 14:00:12Z arvydas $
+ * $Id: oxajax.php 17958 2009-04-07 14:29:36Z rimvydas.paskevicius $
  */
 
 // shop path for includes
@@ -505,6 +505,50 @@ class ajaxListComponent extends oxSuperCfg
         return $aResponse;
     }
 
+    /**
+     * Reset output cache
+     *
+     * @return null
+     */
+    public function resetContentCache()
+    {
+        $blDeleteCacheOnLogout = $this->getConfig()->getConfigParam( 'blClearCacheOnLogout' );
+
+
+            oxUtils::getInstance()->oxResetFileCache();
+    }
+
+    /**
+     * Resets counters values from cache. Resets price category articles, category articles,
+     * vendor articles, manufacturer articles count.
+     *
+     * @param $sCounterType counter type
+     * @param $sValue reset value
+     *
+     * @return null
+     */
+    public function resetCounter( $sCounterType, $sValue = null )
+    {
+        $blDeleteCacheOnLogout = $this->getConfig()->getConfigParam( 'blClearCacheOnLogout' );
+        $myUtilsCount = oxUtilsCount::getInstance();
+
+        if ( !$blDeleteCacheOnLogout ) {
+            switch ( $sCounterType ) {
+                case 'priceCatArticle':
+                    $myUtilsCount->resetPriceCatArticleCount( $sValue );
+                    break;
+                case 'catArticle':
+                    $myUtilsCount->resetCatArticleCount( $sValue );
+                    break;
+                case 'vendorArticle':
+                    $myUtilsCount->resetVendorArticleCount( $sValue );
+                    break;
+                case 'manufacturerArticle':
+                    $myUtilsCount->resetManufacturerArticleCount( $sValue );
+                    break;
+            }
+        }
+    }
 
 }
 

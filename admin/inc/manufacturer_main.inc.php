@@ -100,7 +100,8 @@ class ajaxComponent extends ajaxListComponent
         if ( is_array(  $aRemoveArt ) ) {
             $sSelect = "update oxarticles set oxmanufacturerid = null where oxid in ( '".implode("', '", $aRemoveArt )."') ";
             oxDb::getDb()->Execute( $sSelect);
-            oxUtilsCount::getInstance()->resetManufacturerArticleCount( oxConfig::getParameter( 'oxid' ) );
+
+            $this->resetCounter( "manufacturerArticle", oxConfig::getParameter( 'oxid' ) );
         }
     }
 
@@ -125,7 +126,7 @@ class ajaxComponent extends ajaxListComponent
             $sSelect = "update oxarticles set oxmanufacturerid = '$soxId' where oxid in ( '".implode("', '", $aAddArticle )."' )";
 
             oxDb::getDb()->Execute( $sSelect);
-            oxUtilsCount::getInstance()->resetManufacturerArticleCount( $soxId );
+            $this->resetCounter( "manufacturerArticle", $soxId );
         }
     }
 

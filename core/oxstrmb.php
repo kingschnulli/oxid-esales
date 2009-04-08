@@ -215,6 +215,19 @@ class oxStrMb
     }
 
     /**
+     * PHP ucfirst() function wrapper
+     *
+     * @param string $sSubject input string
+     *
+     * @return string
+     */
+    public function ucfirst($sSubject)
+    {
+        $sString = $this->strtoupper($this->substr($sSubject, 0, 1));
+        return $sString . $this->substr($sSubject, 1);
+    }
+
+    /**
      * PHP wordwrap() function wrapper
      *
      * @param string $sString input string

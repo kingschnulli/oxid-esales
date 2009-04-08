@@ -39,8 +39,8 @@
         </div>
 
         <div class="shopicons">
-            <div class="left"><img src="[{$oViewConf->getImageUrl()}]/cc.jpg" alt=""></div>
-            <div class="right"><a href="http://www.oxid-esales.com"><img src="[{$oViewConf->getImageUrl()}]/oxid_powered.jpg" alt="[{ oxmultilang ident="INC_FOOTER_SOFTWAREANDSYSTEMBYOXID" }]" height="30" width="80"></a></div>
+            <div class="left"><img src="[{$oViewConf->getImageUrl()}]cc.jpg" alt=""></div>
+            <div class="right"><a href="http://www.oxid-esales.com"><img src="[{$oViewConf->getImageUrl()}]oxid_powered.jpg" alt="[{ oxmultilang ident="INC_FOOTER_SOFTWAREANDSYSTEMBYOXID" }]" height="30" width="80"></a></div>
         </div>
 
         <div class="footertext">[{oxcontent ident="oxstdfooter"}]</div>

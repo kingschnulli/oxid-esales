@@ -190,7 +190,7 @@
       [{ if $oCard }]
         <tr class="sumrow">
           <td class="brd"></td>
-          <td id="test_orderCardTitle" colspan="3"><b class="fs10">[{ oxmultilang ident="ORDER_GREETINGCARD" }] �[{ $oCard->oxwrapping__oxname->value }]�</b></td>
+          <td id="test_orderCardTitle" colspan="3"><b class="fs10">[{ oxmultilang ident="ORDER_GREETINGCARD" }] "[{ $oCard->oxwrapping__oxname->value }]"</b></td>
           <td id="test_orderCardPrice" align="right" class="orderprice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
           <td class="font10"></td>
           <td id="test_orderCardTotalPrice" align="right" class="orderprice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>

@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 17912 2009-04-06 16:23:57Z philipp.grashoff $
+ * $Id: lang.php 17955 2009-04-07 14:17:30Z rimvydas.paskevicius $
  */
 
 /*
@@ -928,7 +928,7 @@ $aLang = array(
 'NAVIGATION_LOGOUT'                             => 'Logout',
 'NAVIGATION_HOME'                               => 'Home',
 'NAVIGATION_PAGE'                               => 'Page',
-'NAVIGATION_NEWVERSIONAVAILABLE'                => '[tr] Version %s is available.',
+'NAVIGATION_NEWVERSIONAVAILABLE'                => 'Version %s is available.',
 'NEWS_LIST_TITLE'                               => '[OXID News Administration]',
 'NEWS_LIST_SHORTTEXT'                           => 'Title',
 'NEWS_LIST_MENUITEM'                            => 'Customer Information',
@@ -1485,6 +1485,7 @@ $aLang = array(
 'SHOP_PERF_CHECKIFTPLCOMPILE'                   => 'Automatic detection of necessary Template re-compilation. Uncheck during normal operation for increased performance.',
 'SHOP_PERF_COMPARE'                             => 'Activate Product Comparison',
 'SHOP_PERF_DONTSHOWEMTYCATEGORIES'              => 'Do <strong>not</strong> display empty Categories (Categories which have no Sub-Categories and no Products).',
+'SHOP_PERF_CLEARCACHEONLOGOUT'                  => 'Delete cache <b>only</b> on logout from admin.',
 'SHOP_PERF_EXTERNALPERFORMANCE'                 => 'Enhanced Performance Settings',
 'SHOP_PERF_LOADTREEFORSEARCH'                   => 'Load complete Category Tree for Search',
 'SHOP_PERF_LOADFULLTREE'                        => 'Load complete Category Tree for Navigation (May cause Performance Problems if much Categories exist)',

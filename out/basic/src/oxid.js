@@ -162,7 +162,7 @@ var oxid = {
 
         resize  : function(id, newWidth, newHeight ){
 
-            if(newWidth == 0 && newHeight == 0){
+            if(newWidth === 0 && newHeight === 0){
                 return;
             }
 
@@ -232,8 +232,8 @@ var oxid = {
             if(stop) { return; }
             var _form = document.forms[form];
             if(_form) {
-                _form.elements['cl'].value  = cl;
-                _form.elements['fnc'].value = fnc;
+                _form.elements.cl.value  = cl;
+                _form.elements.fnc.value = fnc;
                 _form.submit();
             }
         },
@@ -288,9 +288,9 @@ var oxid = {
     checkAll: function(obj,pref) {
         if(document.getElementsByTagName){
             var inputs = document.getElementsByTagName("input");
-            for (var i=0,input;input=inputs[i]; i++) {
-                if(input.type == 'checkbox' && input.checked != obj.checked && pref == input.name.split('[')[0]){
-                    input.checked = obj.checked;
+            for (var i=0;i<inputs.length; i=i+1) {
+                if(inputs[i].type == 'checkbox' && inputs[i].checked != obj.checked && pref == inputs[i].name.split('[')[0]){
+                    inputs[i].checked = obj.checked;
                 }
             }
         }
@@ -298,36 +298,35 @@ var oxid = {
 
 };
 
-  function showReview()
-  {
+function showReview()
+{
     document.getElementById('write_review').style.display = 'block';
     document.getElementById('write_new_review').style.display = 'none';
     if (arguments.length == 1) {
-      var oActForm = document.getElementById("rating");
-      if ( oActForm !== null) {
-        if (oActForm.artrating) {
-            oActForm.artrating.value = arguments[0];
-        } else if (oActForm.recommlistrating) {
-            oActForm.recommlistrating.value = arguments[0];
+        var oActForm = document.getElementById("rating");
+        if ( oActForm !== null) {
+            if (oActForm.artrating) {
+                oActForm.artrating.value = arguments[0];
+            } else if (oActForm.recommlistrating) {
+                oActForm.recommlistrating.value = arguments[0];
+            }
+            var width = arguments[0] * 20;
+            document.getElementById('current_rate').style.width = width + '%';
         }
-        var width = arguments[0] * 20;
-        document.getElementById('current_rate').style.width = width + '%';
-      }
     }
-  }
-  function setSellList( oInObj)
-  {
+}
+
+function setSellList( oInObj)
+{
     //for module wlist
     var _wlist = document.getElementById("wlist");
-    if ( _wlist != null)
-    {
-      _wlist.href = _wlist.href + "&" + oInObj.name + "=" + oInObj.value;
-    }
-    //for original selectlist
-    var _wlist = document.getElementById("slist");
-    if ( _wlist != null)
-    {
+    if ( _wlist !== null) {
         _wlist.href = _wlist.href + "&" + oInObj.name + "=" + oInObj.value;
     }
-  }
+    //for original selectlist
+    var _slist = document.getElementById("slist");
+    if ( _slist !== null) {
+        _slist.href = _slist.href + "&" + oInObj.name + "=" + oInObj.value;
+    }
+}
 

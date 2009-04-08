@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 17862 2009-04-03 18:33:05Z tomas $
+ * $Id: oxutils.php 17916 2009-04-07 07:16:48Z rimvydas.paskevicius $
  */
 
 /**
@@ -1101,4 +1101,21 @@ class oxUtils extends oxSuperCfg
         $sCache = "<?php\n\$aLangCache = ".var_export( $aLangCache, true ).";";
         $this->_oxFileCache( true, $sCacheName, $sCache );
     }
+
+    /**
+     * Cheks if url has ending slash / - if not, adds it
+     *
+     * @param string $sUrl url string
+     *
+     * @return string
+     */
+    public function checkUrlEndingSlash( $sUrl )
+    {
+        if ( !preg_match("/\/$/", $sUrl) ) {
+            $sUrl .= '/';
+        }
+
+        return $sUrl;
+    }
+
 }

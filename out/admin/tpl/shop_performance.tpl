@@ -119,6 +119,15 @@ function UpdateList( sID)
          </td>
         </tr>
 
+        <tr class="conftext[{cycle}]">
+         <td valign="top">
+            <input type=hidden name=confbools[blClearCacheOnLogout] value=false>
+            <input type=checkbox class="confinput" name=confbools[blClearCacheOnLogout] value=true  [{if ($confbools.blClearCacheOnLogout)}]checked[{/if}] [{ $readonly }]>
+         </td>
+         <td valign="top" width="100%" >
+           [{ oxmultilang ident="SHOP_PERF_CLEARCACHEONLOGOUT" }]
+         </td>
+        </tr>
     </table>
     <br>
 

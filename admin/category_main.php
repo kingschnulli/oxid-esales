@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: category_main.php 17243 2009-03-16 15:16:57Z arvydas $
+ * $Id: category_main.php 17958 2009-04-07 14:29:36Z rimvydas.paskevicius $
  */
 
 /**
@@ -139,7 +139,7 @@ class Category_Main extends oxAdminDetails
         $oCategory = oxNew( "oxcategory" );
 
         if ( $soxId != "-1") {
-            oxUtilsCount::getInstance()->resetCatArticleCount($soxId);
+            $this->resetCounter( "catArticle", $soxId );
             $oCategory->load( $soxId);
             $oCategory->loadInLang( $this->_iEditLang, $soxId );
                 $myUtilsPic = oxUtilsPic::getInstance();

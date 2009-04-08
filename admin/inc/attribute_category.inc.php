@@ -19,7 +19,7 @@
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: attribute_category.inc.php 17244 2009-03-16 15:17:48Z arvydas $
+ * $Id: attribute_category.inc.php 17958 2009-04-07 14:29:36Z rimvydas.paskevicius $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -94,6 +94,8 @@ class ajaxComponent extends ajaxListComponent
             $sQ = "delete from oxcategory2attribute where oxcategory2attribute.oxid in ('" . implode( "', '", $aChosenCat ) . "') ";
             oxDb::getDb()->Execute( $sQ );
         }
+
+        $this->resetContentCache();
     }
 
     /**
@@ -124,6 +126,8 @@ class ajaxComponent extends ajaxListComponent
                 $oNewGroup->save();
             }
         }
+
+        $this->resetContentCache();
     }
 
 }

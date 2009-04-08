@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlocator.php 17850 2009-04-03 16:41:36Z tomas $
+ * $Id: oxlocator.php 17915 2009-04-07 07:15:19Z vilma $
  */
 
 /**
@@ -394,8 +394,8 @@ class oxLocator extends oxSuperCfg
             $sAddSearch .= '&amp;listtype=tag';
             $oTag->nextProductLink = $this->_oNextProduct?$this->_makeLink( $this->_oNextProduct->getLink(), $sAddSearch ):null;
             $oTag->prevProductLink = $this->_oBackProduct?$this->_makeLink( $this->_oBackProduct->getLink(), $sAddSearch ):null;
-
-            $oLocatorTarget->setSearchTitle( $oLang->translateString('TAGS').' / '.getStr()->htmlspecialchars( ucfirst( $oTag->sTag ) ) );
+            $oStr = getStr();
+            $oLocatorTarget->setSearchTitle( $oLang->translateString('TAGS').' / '.$oStr->htmlspecialchars( $oStr->ucfirst( $oTag->sTag ) ) );
             // for compatibility reasons for a while. will be removed in future
             $oLocatorTarget->addTplParam( 'sSearchTitle', $oLocatorTarget->getSearchTitle() );
             $oLocatorTarget->addTplParam( 'searchtagforhtml', null );

@@ -36,6 +36,7 @@
     [{if $oView->showZoomPics() }]
         [{assign var="aZoomPics" value=$oView->getZoomPics() }]
         [{assign var="iZoomPic" value=$oView->getActZoomPic() }]
+        [{assign var="sZoomPopup" value="inc/popup_zoom.tpl" }]
         <a id="test_zoom" rel="nofollow" href="[{$product->getMoreDetailLink()}]" onmouseover="" onclick="oxid.popup.zoom();oxid.image('zoom_img','[{$aZoomPics[$iZoomPic].file}]');return false;"><b>[{ oxmultilang ident="DETAILS_PERSPARAM_ZOOM" }]</b></a>
     [{/if}]
 
@@ -228,9 +229,7 @@
             <div class="amount">
                 <label>[{ oxmultilang ident="DETAILS_PERSPARAM_QUANTITY" }]</label><input id="test_AmountToBasket" type="text" name="am" value="1" size="3">
             </div>
-            <div class="tocart" >
-                <input id="test_toBasket" type="submit" value="[{if $size=='small'}][{oxmultilang ident="INC_PRODUCTITEM_ADDTOCARD3" }][{else}][{oxmultilang ident="INC_PRODUCTITEM_ADDTOCARD2"}][{/if}]" onclick="oxid.popup.load();">
-            </div>
+            <div class="tocart"><input id="test_toBasket" type="submit" value="[{if $size=='small'}][{oxmultilang ident="INC_PRODUCTITEM_ADDTOCARD3" }][{else}][{oxmultilang ident="INC_PRODUCTITEM_ADDTOCARD2"}][{/if}]" onclick="oxid.popup.load();"></div>
             [{if $oView->isPriceAlarm()}]
             <div class="pricealarm">
                 <a id="test_PriceAlarmLink" rel="nofollow" href="#preisalarm_link">[{ oxmultilang ident="DETAILS_PERSPARAM_PRICEALARM" }]</a>
@@ -477,4 +476,4 @@
 [{include file="inc/details_locator.tpl" where="Bottom"}]
 
 [{ insert name="oxid_tracker" title="DETAILS_PERSPARAM_TITLE"|oxmultilangassign product=$product cpath=$oView->getCatTreePath() }]
-[{include file="_footer.tpl" popup="inc/popup_zoom.tpl" }]
+[{include file="_footer.tpl" popup=$sZoomPopup }]

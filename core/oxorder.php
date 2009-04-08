@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 17911 2009-04-06 15:57:59Z alfonsas $
+ * $Id: oxorder.php 17924 2009-04-07 07:57:43Z sarunas $
  */
 
 /**
@@ -1262,6 +1262,16 @@ class oxOrder extends oxBase
         return ( ( int ) oxDb::getDb()->getOne( $sQ ) + 1 );
     }
 
+    /**
+     * Returns next possible (free) order bill number.
+     *
+     * @return integer
+     */
+    public function getNextBillNum()
+    {
+        $sQ = 'select max(oxorder.oxbillnr) from oxorder where oxorder.oxshopid = "'.$this->getConfig()->getShopId().'" ';
+        return ( ( int ) oxDb::getDb()->getOne( $sQ ) + 1 );
+    }
 
     /**
      * Loads possible shipping sets for this order
@@ -1528,6 +1538,7 @@ class oxOrder extends oxBase
 
         if ( $sArtId ) {
             $aList = explode( ",", $sOrderArtSelList );
+            $oStr = getStr();
 
             //$oArticle = oxNew( "oxArticle", "core" );
             $oArticle = oxNew( "oxArticle" );
@@ -1539,7 +1550,6 @@ class oxOrder extends oxBase
                 if ( $sList ) {
 
                     $aVal = explode( ":", $sList );
-                    $oStr = getStr();
                     if ( isset($aVal[0]) && isset($aVal[1])) {
                         $sOrderArtListTitle = $oStr->strtolower( trim($aVal[0]) );
                         $sOrderArtSelValue  = $oStr->strtolower( trim($aVal[1]) );

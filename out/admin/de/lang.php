@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 17895 2009-04-06 13:14:51Z rimvydas.paskevicius $
+ * $Id: lang.php 17955 2009-04-07 14:17:30Z rimvydas.paskevicius $
  */
 
 $sLangName  = 'Deutsch';
@@ -749,10 +749,10 @@ $aLang = array(
 'GUI_COMPARE_PREVNEXT_BORDER'                   => 'Navigations Rand',
 'GUI_COMPARE_ATTRIBUTES_BORDER'                 => 'Attribute Rand',
 'GUI_DESC_TEXT'                                 => 'Beschreibung-Text',
-'GUI_FIXED_BACKGROUND'                          => '[tr] Home-Hintergrund',
-'GUI_FIXED_TEXT_COLOR'                          => '[tr] Home Text-Farbe',
-'GUI_FIXED_HL_BACKGROUND'                       => '[tr] Home Hervorgehobener-Hintergrund',
-'GUI_FIXED_HL_TEXT_COLOR'                       => '[tr] Home Hervorgehobene Text-Farbe',
+'GUI_FIXED_BACKGROUND'                          => 'Home-Hintergrund',
+'GUI_FIXED_TEXT_COLOR'                          => 'Home Text-Farbe',
+'GUI_FIXED_HL_BACKGROUND'                       => 'Home Hervorgehobener-Hintergrund',
+'GUI_FIXED_HL_TEXT_COLOR'                       => 'Home Hervorgehobene Text-Farbe',
 'GUI_DROPDOWN_BACKGROUND'                       => 'Ausgeklappter Menü-Hintergrund',
 'GUI_DROPDOWN_TEXT_COLOR'                       => 'Ausgeklappter Menü Text-Farbe',
 'GUI_DROPDOWN_ICON'                             => 'Ausgeklappter Menü-Icon',
@@ -1478,6 +1478,7 @@ $aLang = array(
 'SHOP_PERF_CHECKIFTPLCOMPILE'                   => 'Überprüfen ob Templates neu kompiliert werden müssen. Schalten Sie diese Einstellung aus, wenn der eShop in den Live-Betrieb geht.',
 'SHOP_PERF_COMPARE'                             => 'Artikelvergleiche einschalten',
 'SHOP_PERF_DONTSHOWEMTYCATEGORIES'              => 'Leere Kategorien (keine Unterkategorien, keine Artikel) <strong>nicht</strong> anzeigen.',
+'SHOP_PERF_CLEARCACHEONLOGOUT'                  => 'Datenbank-Cache erst beim Ausloggen aus dem Shop Admin leeren.',
 'SHOP_PERF_EXTERNALPERFORMANCE'                 => 'Erweiterte Performance-Einstellungen',
 'SHOP_PERF_LOADTREEFORSEARCH'                   => 'Kategoriebaum für die Suche laden (Die Suche kann auf einzelne Kategorien beschränkt werden)',
 'SHOP_PERF_LOADFULLTREE'                        => 'Den kompletten Kategoriebaum für die Navigation laden (belastet die Performance, wenn viele Kategorien vorhanden sind)',

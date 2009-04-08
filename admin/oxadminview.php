@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminview.php 17425 2009-03-19 11:38:50Z vilma $
+ * $Id: oxadminview.php 17958 2009-04-07 14:29:36Z rimvydas.paskevicius $
  */
 
 /**
@@ -410,6 +410,51 @@ class oxAdminView extends oxView
      */
     public function save()
     {
+    }
+
+    /**
+     * Reset output cache
+     *
+     * @return null
+     */
+    public function resetContentCache()
+    {
+        $blDeleteCacheOnLogout = $this->getConfig()->getConfigParam( 'blClearCacheOnLogout' );
+
+
+            oxUtils::getInstance()->oxResetFileCache();
+    }
+
+    /**
+     * Resets counters values from cache. Resets price category articles, category articles,
+     * vendor articles, manufacturer articles count.
+     *
+     * @param $sCounterType counter type
+     * @param $sValue       reset value
+     *
+     * @return null
+     */
+    public function resetCounter( $sCounterType, $sValue = null )
+    {
+        $blDeleteCacheOnLogout = $this->getConfig()->getConfigParam( 'blClearCacheOnLogout' );
+        $myUtilsCount = oxUtilsCount::getInstance();
+
+        if ( !$blDeleteCacheOnLogout ) {
+            switch ( $sCounterType ) {
+                case 'priceCatArticle':
+                    $myUtilsCount->resetPriceCatArticleCount( $sValue );
+                    break;
+                case 'catArticle':
+                    $myUtilsCount->resetCatArticleCount( $sValue );
+                    break;
+                case 'vendorArticle':
+                    $myUtilsCount->resetVendorArticleCount( $sValue );
+                    break;
+                case 'manufacturerArticle':
+                    $myUtilsCount->resetManufacturerArticleCount( $sValue );
+                    break;
+            }
+        }
     }
 
 

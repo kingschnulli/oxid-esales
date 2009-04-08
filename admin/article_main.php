@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_main.php 17297 2009-03-17 13:42:30Z arvydas $
+ * $Id: article_main.php 17958 2009-04-07 14:29:36Z rimvydas.paskevicius $
  */
 
 /**
@@ -179,7 +179,7 @@ class Article_Main extends oxAdminDetails
 
             // #905A resetting article count in price categories if price has been changed
             if ( isset($aParams["oxarticles__oxprice"]) && $aParams["oxarticles__oxprice"] != $oArticle->oxarticles__oxprice->value) {
-                $myUtilsCount->resetPriceCatArticleCount($oArticle->oxarticles__oxprice->value);
+                $this->resetCounter( "priceCatArticle", $oArticle->oxarticles__oxprice->value );
             }
 
             $aResetIds = array();
@@ -189,7 +189,7 @@ class Article_Main extends oxAdminDetails
                 $rs = oxDb::getDb()->Execute($sQ);
                 if ( $rs !== false && $rs->recordCount() > 0 ) {
                     while (!$rs->EOF) {
-                        $myUtilsCount->resetCatArticleCount($rs->fields[0]);
+                        $this->resetCounter( "catArticle", $rs->fields[0] );
                         $rs->moveNext();
                     }
                 }
@@ -239,7 +239,7 @@ class Article_Main extends oxAdminDetails
                 $oNew->save();
 
                     // resetting amount of articles in category
-                    $myUtilsCount->resetCatArticleCount($sFastCat);
+                    $this->resetCounter( "catArticle", $sFastCat );
             }
         }
 
@@ -375,7 +375,7 @@ class Article_Main extends oxAdminDetails
                 $rs->moveNext();
 
                     // resetting article count in category
-                    $myUtilsCount->resetCatArticleCount($sCatID);
+                    $this->resetCounter( "catArticle", $sCatID );
             }
         }
     }
@@ -570,7 +570,7 @@ class Article_Main extends oxAdminDetails
 
             // #905A resetting article count in price categories if price has been changed
             if ( isset($aParams["oxarticles__oxprice"]) && $aParams["oxarticles__oxprice"] != $oArticle->oxarticles__oxprice->value) {
-                $myUtilsCount->resetPriceCatArticleCount($oArticle->oxarticles__oxprice->value);
+                $this->resetCounter( "priceCatArticle", $oArticle->oxarticles__oxprice->value );
             }
 
             $aResetIds = array();
@@ -581,7 +581,7 @@ class Article_Main extends oxAdminDetails
                 $rs = oxDb::getDb()->Execute($sQ);
                 if ($rs !== false && $rs->recordCount() > 0)
                     while (!$rs->EOF) {
-                        $myUtilsCount->resetCatArticleCount($rs->fields[0]);
+                        $this->resetCounter( "catArticle", $rs->fields[0] );
                         $rs->moveNext();
                     }
                 // vendors

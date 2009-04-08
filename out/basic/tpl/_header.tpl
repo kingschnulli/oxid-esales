@@ -12,7 +12,7 @@
     [{/if}]
     [{if $oView->getMetaDescription()}]<meta name="description" content="[{$oView->getMetaDescription()}]">[{/if}]
     [{if $oView->getMetaKeywords()}]<meta name="keywords" content="[{$oView->getMetaKeywords()}]">[{/if}]
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="[{ $oViewConf->getBaseDir() }]favicon.ico">
     <link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid.css">
     <!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxidbc.css"><![endif]-->
 
@@ -29,7 +29,7 @@
     <div id="header">
         <div class="bar oxid">
             <a class="logo" href="[{ $oViewConf->getBaseDir() }]">
-                <img src="[{$oViewConf->getImageUrl()}]/logo.png" alt="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]">
+                <img src="[{$oViewConf->getImageUrl()}]logo.png" alt="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]">
             </a>
 
             [{if $oView->showTopBasket()}]
@@ -57,7 +57,7 @@
             <div class="fixed">
                 [{if $oView->isLanguageLoaded() }]
                     [{foreach from = $oxcmp_lang item = _language}]
-                        <a id="test_Lang_[{$_language->name}]" class="language[{if $_language->selected}] act[{/if}]" href="[{ oxgetseourl ident=$_language->link params=$oView->getDynUrlParams() }]" hreflang="[{ $_language->abbr }]" title="[{ $_language->name }]"><img src="[{$oViewConf->getImageUrl()}]/lang/[{ $_language->abbr }].gif" alt="[{$_language->name}]"></a>
+                        <a id="test_Lang_[{$_language->name}]" class="language[{if $_language->selected}] act[{/if}]" href="[{ oxgetseourl ident=$_language->link params=$oView->getDynUrlParams() }]" hreflang="[{ $_language->abbr }]" title="[{ $_language->name }]"><img src="[{$oViewConf->getImageUrl()}]lang/[{ $_language->abbr }].gif" alt="[{$_language->name}]"></a>
                     [{/foreach}]
                 [{/if}]
                 [{if $oView->loadCurrency()}]

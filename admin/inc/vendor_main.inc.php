@@ -19,7 +19,7 @@
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: vendor_main.inc.php 17244 2009-03-16 15:17:48Z arvydas $
+ * $Id: vendor_main.inc.php 17958 2009-04-07 14:29:36Z rimvydas.paskevicius $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,       visible, multilanguage, ident
@@ -100,7 +100,7 @@ class ajaxComponent extends ajaxListComponent
         if ( is_array(  $aRemoveArt ) ) {
             $sSelect = "update oxarticles set oxvendorid = null where oxid in ( '".implode("', '", $aRemoveArt )."') ";
             oxDb::getDb()->Execute( $sSelect);
-            oxUtilsCount::getInstance()->resetVendorArticleCount( oxConfig::getParameter( 'oxid' ) );
+            $this->resetCounter( "vendorArticle", oxConfig::getParameter( 'oxid' ) );
         }
     }
 
@@ -125,7 +125,7 @@ class ajaxComponent extends ajaxListComponent
             $sSelect = "update oxarticles set oxvendorid = '$soxId' where oxid in ( '".implode("', '", $aAddArticle )."' )";
 
             oxDb::getDb()->Execute( $sSelect);
-            oxUtilsCount::getInstance()->resetVendorArticleCount( $soxId );
+            $this->resetCounter( "vendorArticle", $soxId );
         }
     }
 

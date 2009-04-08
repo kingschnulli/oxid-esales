@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 17899 2009-04-06 13:58:58Z arvydas $
+ * $Id: oxconfig.php 17917 2009-04-07 07:19:08Z rimvydas.paskevicius $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -752,12 +752,14 @@ class oxConfig extends oxSuperCfg
         $iLang = isset( $iLang ) ? $iLang : oxLang::getInstance()->getBaseLanguage();
         $aLanguageURLs = $this->getConfigParam( 'aLanguageURLs' );
         if ( isset( $iLang ) && isset( $aLanguageURLs[$iLang] ) && !empty( $aLanguageURLs[$iLang] ) ) {
+            $aLanguageURLs[$iLang] = oxUtils::getInstance()->checkUrlEndingSlash( $aLanguageURLs[$iLang] );
             return $aLanguageURLs[$iLang];
         }
 
         //normal section
         $sMallShopURL = $this->getConfigParam( 'sMallShopURL' );
         if ( $sMallShopURL ) {
+            $sMallShopURL = oxUtils::getInstance()->checkUrlEndingSlash( $sMallShopURL );
             return $sMallShopURL;
         }
 
@@ -777,15 +779,18 @@ class oxConfig extends oxSuperCfg
         $iLang = isset( $iLang ) ? $iLang : oxLang::getInstance()->getBaseLanguage();
         $aLanguageSSLURLs = $this->getConfigParam( 'aLanguageSSLURLs' );
         if ( isset( $iLang ) && isset( $aLanguageSSLURLs[$iLang] ) && !empty( $aLanguageSSLURLs[$iLang] ) ) {
+            $aLanguageSSLURLs[$iLang] = oxUtils::getInstance()->checkUrlEndingSlash( $aLanguageSSLURLs[$iLang] );
             return $aLanguageSSLURLs[$iLang];
         }
 
         //mall mode
         if ( ( $sMallSSLShopURL = $this->getConfigParam( 'sMallSSLShopURL' ) ) ) {
+            $sMallSSLShopURL = oxUtils::getInstance()->checkUrlEndingSlash( $sMallSSLShopURL );
             return $sMallSSLShopURL;
         }
 
         if ( ( $sMallShopURL = $this->getConfigParam( 'sMallShopURL' ) ) ) {
+            $sMallShopURL = oxUtils::getInstance()->checkUrlEndingSlash( $sMallShopURL );
             return $sMallShopURL;
         }
 

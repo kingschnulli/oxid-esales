@@ -67,7 +67,7 @@
       [{include file="inc/trustedshops_item.tpl"}]
     </div>
     <div class="logo">
-        <a href="http://www.zend.com" id="link.zendSite"><img src="[{$oViewConf->getImageUrl()}]/zend_logo.gif" alt=""></a>
+        <a href="http://www.zend.com" id="link.zendSite"><img src="[{$oViewConf->getImageUrl()}]zend_logo.gif" alt=""></a>
         [{oxscript add="oxid.blank('link.zendSite');"}]
     </div>
 </div>

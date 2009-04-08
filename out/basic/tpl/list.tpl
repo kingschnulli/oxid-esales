@@ -14,7 +14,7 @@
 
     [{capture name=list_details}]
         [{if $actCategory->oxcategories__oxthumb->value }]
-          <img src="[{$actCategory->getPictureUrl()}]/0/[{ $actCategory->oxcategories__oxthumb->value }]" alt="[{ $actCategory->oxcategories__oxtitle->value }]"><br>
+          <img src="[{$actCategory->getPictureUrl()}]0/[{ $actCategory->oxcategories__oxthumb->value }]" alt="[{ $actCategory->oxcategories__oxtitle->value }]"><br>
         [{/if}]
 
         [{if $oView->getAttributes() }]
@@ -33,12 +33,12 @@
                             <label id="test_attrfilterTitle_[{$sAttrID}]_[{$smarty.foreach.testAttr.iteration}]">[{ $oFilterAttr->title }]:</label>
                         </td>
                         <td>
-		                   <select name="attrfilter[[{ $sAttrID }]]" onchange="oxid.form.send('_filterlist');">
-		                       <option value="" selected>[{ oxmultilang ident="LIST_PLEASECHOOSE" }]</option>
-		                       [{foreach from=$oFilterAttr->aValues item=oValue}]
-		                       <option value="[{ $oValue->id }]" [{ if $oValue->blSelected }]selected[{/if}]>[{ $oValue->value }]</option>
-		                       [{/foreach}]
-		                   </select>
+                           <select name="attrfilter[[{ $sAttrID }]]" onchange="oxid.form.send('_filterlist');">
+                               <option value="" selected>[{ oxmultilang ident="LIST_PLEASECHOOSE" }]</option>
+                               [{foreach from=$oFilterAttr->aValues item=oValue}]
+                               <option value="[{ $oValue->id }]" [{ if $oValue->blSelected }]selected[{/if}]>[{ $oValue->value }]</option>
+                               [{/foreach}]
+                           </select>
                         </td>
                     </tr>
                 [{/foreach}]

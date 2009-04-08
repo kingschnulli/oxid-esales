@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategorylist.php 17892 2009-04-06 12:40:46Z tomas $
+ * $Id: oxcategorylist.php 17944 2009-04-07 12:38:30Z sarunas $
  */
 
 
@@ -187,6 +187,9 @@ class oxCategoryList extends oxList
             // remove inactive categories
             $this->_ppRemoveInactiveCategories();
 
+            // add active cat as full object
+            $this->_ppLoadFullCategory($sActCat);
+
             // builds navigation path
             $this->_ppAddPathInfo();
 
@@ -198,6 +201,20 @@ class oxCategoryList extends oxList
         }
 
         stopProfile("buildTree");
+    }
+
+    /**
+     * set full category object in tree
+     * 
+     * @param string $sId category id
+     */
+    protected function _ppLoadFullCategory($sId)
+    {
+        $oNewCat = oxNew('oxcategory');
+        if ($oNewCat->load($sId)) {
+            // replace aArray object with fully loaded category
+            $this->_aArray[$sId] = $oNewCat;
+        }
     }
 
     /**

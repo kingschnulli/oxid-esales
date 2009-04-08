@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: tag.php 17306 2009-03-17 15:09:04Z vilma $
+ * $Id: tag.php 17915 2009-04-07 07:15:19Z vilma $
  */
 
 /**
@@ -260,8 +260,9 @@ class Tag extends aList
         if ( $this->_sTagTitle === null ) {
             $this->_sTagTitle = false;
             if ( ( $sTag = $this->getTag() ) ) {
-                $sTitle = ucfirst( $sTag );
-                $this->_sTagTitle = getStr()->htmlspecialchars( $sTitle );
+                $oStr = getStr();
+                $sTitle = $oStr->ucfirst( $sTag );
+                $this->_sTagTitle = $oStr->htmlspecialchars( $sTitle );
             }
         }
         return $this->_sTagTitle;
@@ -277,8 +278,9 @@ class Tag extends aList
         if ( $this->_sTemplateLocation === null ) {
             $this->_sTemplateLocation = false;
             if ( ( $sTag = $this->getTag() ) ) {
-                $sTitle = ucfirst( $sTag );
-                $this->_sTemplateLocation = oxLang::getInstance()->translateString('TAGS')." / ".getStr()->htmlspecialchars( $sTitle );
+                $oStr = getStr();
+                $sTitle = $oStr->ucfirst( $sTag );
+                $this->_sTemplateLocation = oxLang::getInstance()->translateString('TAGS')." / ".$oStr->htmlspecialchars( $sTitle );
             }
         }
         return $this->_sTemplateLocation;

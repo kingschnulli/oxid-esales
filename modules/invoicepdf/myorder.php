@@ -19,7 +19,7 @@
  * @package modules
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: myorder.php 17482 2009-03-20 12:36:00Z arvydas $
+ * $Id: myorder.php 17924 2009-04-07 07:57:43Z sarunas $
  */
 
 /**
@@ -704,8 +704,8 @@ class MyOrder extends MyOrder_parent
         $this->_iSelectedLang = $iSelLang;
 
         // setting invoice number
-        if ( !$this->oxorder__oxinvoicenr->value ) {
-            $this->oxorder__oxinvoicenr->setValue($this->getInvoiceNum());
+        if ( !$this->oxorder__oxbillnr->value ) {
+            $this->oxorder__oxbillnr->setValue($this->getNextBillNum());
             $this->save();
         }
 
@@ -909,7 +909,7 @@ class MyOrder extends MyOrder_parent
         }
 
         // invoice number
-        $sText = $this->translate( 'ORDER_OVERVIEW_PDF_COUNTNR' ).' '.$this->oxorder__oxinvoicenr->value;
+        $sText = $this->translate( 'ORDER_OVERVIEW_PDF_COUNTNR' ).' '.$this->oxorder__oxbillnr->value;
         $oPdf->text( 195 - $oPdf->getStringWidth( $sText ), $iTop + 8, $sText );
 
         // marking if order is canceled
@@ -1030,7 +1030,7 @@ class MyOrder extends MyOrder_parent
         }
 
         // invoice number
-        $sText = $this->translate( 'ORDER_OVERVIEW_PDF_COUNTNR' ).' '.$this->oxorder__oxinvoicenr->value;
+        $sText = $this->translate( 'ORDER_OVERVIEW_PDF_COUNTNR' ).' '.$this->oxorder__oxbillnr->value;
         $oPdf->text( 195 - $oPdf->getStringWidth( $sText ), $iTop, $sText );
 
         // canceled order marker
