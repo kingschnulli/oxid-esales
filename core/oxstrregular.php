@@ -29,6 +29,13 @@
 class oxStrRegular
 {
     /**
+     * The character encoding.
+     *
+     * @var string
+     */
+    protected $_sEncoding = 'ISO8859-15';
+
+    /**
      * Language specific characters (currently german; storen in octal form)
      *
      * @var array
@@ -136,7 +143,7 @@ class oxStrRegular
      */
     public function htmlspecialchars($sString, $blDoubleEncode = true)
     {
-        return htmlspecialchars( $sString, ENT_QUOTES, 'ISO-8859-15', $blDoubleEncode );
+        return htmlspecialchars( $sString, ENT_QUOTES, $this->_sEncoding, $blDoubleEncode );
     }
 
     /**
@@ -148,7 +155,7 @@ class oxStrRegular
      */
     public function htmlentities($sString)
     {
-        return htmlentities( $sString, ENT_QUOTES );
+        return htmlentities( $sString, ENT_QUOTES, $this->_sEncoding );
     }
 
     /**
@@ -160,7 +167,7 @@ class oxStrRegular
      */
     public function html_entity_decode($sString)
     {
-        return html_entity_decode( $sString, ENT_QUOTES );
+        return html_entity_decode( $sString, ENT_QUOTES, $this->_sEncoding );
     }
 
     /**
