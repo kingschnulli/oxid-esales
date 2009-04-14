@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategorylist.php 17944 2009-04-07 12:38:30Z sarunas $
+ * $Id: oxcategorylist.php 18022 2009-04-09 11:28:16Z arvydas $
  */
 
 
@@ -205,10 +205,12 @@ class oxCategoryList extends oxList
 
     /**
      * set full category object in tree
-     * 
+     *
      * @param string $sId category id
+     *
+     * @return null
      */
-    protected function _ppLoadFullCategory($sId)
+    protected function _ppLoadFullCategory( $sId )
     {
         $oNewCat = oxNew('oxcategory');
         if ($oNewCat->load($sId)) {
@@ -554,7 +556,7 @@ class oxCategoryList extends oxList
             case 'aPath':
             case 'aFullPath':
                 return $this->getPath();
-            }
+        }
         return parent::__get($sName);
     }
 

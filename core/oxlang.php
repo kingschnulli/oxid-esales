@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlang.php 17643 2009-03-27 13:59:37Z arvydas $
+ * $Id: oxlang.php 18029 2009-04-09 11:34:25Z arvydas $
  */
 
 /**
@@ -233,7 +233,9 @@ class oxLang extends oxSuperCfg
     /**
      * Returns array of available languages.
      *
-     * @param integer $iLanguage Number if current language (default null)
+     * @param integer $iLanguage    Number if current language (default null)
+     * @param bool    $blOnlyActive load only current language or all
+     * @param bool    $blSort       enable sorting or not
      *
      * @return array
      */
@@ -346,7 +348,7 @@ class oxLang extends oxSuperCfg
             $aIds = array();
 
             foreach ( $aLangParams as $sAbbr => $aValue ) {
-                $iBaseId = (int)$aValue['baseId'];
+                $iBaseId = (int) $aValue['baseId'];
                 $aIds[$iBaseId] = $sAbbr;
             }
             return $aIds;
@@ -442,7 +444,7 @@ class oxLang extends oxSuperCfg
      * @param array  $aLangArray language data
      * @param string $sCharset   charset which was used while making file
      *
-     * @return
+     * @return array
      */
     protected function _recodeLangArray( $aLangArray, $sCharset )
     {
@@ -684,6 +686,14 @@ class oxLang extends oxSuperCfg
         oxSession::setVar( 'tpllanguage', $iLang );
     }
 
+    /**
+     * Language sorting callback function
+     *
+     * @param object $a1 first value to check
+     * @param object $a2 second value to check
+     *
+     * @return bool
+     */
     protected function _sortLanguagesCallback( $a1, $a2 )
     {
         return ($a1->sort > $a2->sort);

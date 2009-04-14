@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 17924 2009-04-07 07:57:43Z sarunas $
+ * $Id: oxorder.php 18027 2009-04-09 11:32:17Z arvydas $
  */
 
 /**
@@ -753,9 +753,9 @@ class oxOrder extends oxBase
         }
 
         // #756M Preserve already stored payment information
-        if( !$aDynvalue && $oUserpayment = $this->getPaymentType() ) {
+        if ( !$aDynvalue && ( $oUserpayment = $this->getPaymentType() ) ) {
             $aStoredDynvalue = $oUserpayment->getDynValues();
-            foreach ( $aStoredDynvalue as $oVal ){
+            foreach ( $aStoredDynvalue as $oVal ) {
                 $aDynvalue[$oVal->name] = $oVal->value;
             }
         }

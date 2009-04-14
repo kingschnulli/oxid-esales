@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 17917 2009-04-07 07:19:08Z rimvydas.paskevicius $
+ * $Id: oxconfig.php 18022 2009-04-09 11:28:16Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -500,7 +500,7 @@ class oxConfig extends oxSuperCfg
                         break;
                     default:
                         $this->setConfigParam( $sVarName, $sVarVal );
-                    }
+                }
 
 
                 if ( $sVarType == 'arr' || $sVarType == 'aarr' ) {
@@ -1744,7 +1744,7 @@ class oxConfig extends oxSuperCfg
 
         $oDb = oxDb::getDb();
         $sQ = "delete from oxconfig where oxshopid = '$sShopId' and oxvarname = '$sVarName'";
-        $oDb->Execute( $sQ );
+        $oDb->execute( $sQ );
         $sUid = oxUtilsObject::getInstance()->generateUID();
 
         $sUid     = mysql_real_escape_string($sUid);
@@ -1755,7 +1755,7 @@ class oxConfig extends oxSuperCfg
         $sQ = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
                values('$sUid', '$sShopId', '$sVarName', '$sVarType', ENCODE( '$sVarVal', '".$this->getConfigParam('sConfigKey')."'))";
 
-        $oDb->Execute($sQ);
+        $oDb->execute( $sQ );
     }
 
     /**
@@ -1789,7 +1789,7 @@ class oxConfig extends oxSuperCfg
                     break;
                 default:
                     $sValue = $sVarVal;
-            }
+                }
         }
         return $sValue;
     }

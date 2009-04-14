@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_categories.php 16808 2009-02-25 10:44:05Z arvydas $
+ * $Id: oxcmp_categories.php 18041 2009-04-09 12:23:18Z arvydas $
  */
 
 /**
@@ -301,10 +301,10 @@ class oxcmp_categories extends oxView
     /**
      * Adds additional parameters: active category, list type and category id
      *
-     * @param oxarticle $oProduct loaded product
-     * @param string    $sActCat  active category id
+     * @param oxarticle $oProduct         loaded product
+     * @param string    $sActCat          active category id
      * @param string    $sActManufacturer active manufacturer id
-     * @param string    $sActCont active template
+     * @param string    $sActCont         active template
      *
      * @return string $sActCat
      */

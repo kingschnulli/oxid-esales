@@ -138,9 +138,9 @@ class oxSysRequirements
                                       );
 
 
-            $this->_aRequiredModules = array_fill_keys($aRequiredPHPExtensions,'php_extennsions') +
-                                       array_fill_keys($aRequiredPHPConfigs,'php_config') +
-                                       array_fill_keys($aRequiredServerConfigs,'server_config');
+            $this->_aRequiredModules = array_fill_keys( $aRequiredPHPExtensions, 'php_extennsions' ) +
+                                       array_fill_keys( $aRequiredPHPConfigs, 'php_config' ) +
+                                       array_fill_keys( $aRequiredServerConfigs, 'server_config' );
         }
         return $this->_aRequiredModules;
     }
@@ -185,7 +185,7 @@ class oxSysRequirements
             $iModStat = ( strpos( $sOut, 'mod_rewrite_on' ) !== false ) ? 2 : 0;
         } else {
             if ( function_exists( 'apache_get_modules' ) ) {
-               // it does not assure that mod_rewrite is enabled on current host, so setting 1
+                // it does not assure that mod_rewrite is enabled on current host, so setting 1
                 $iModStat = in_array( 'mod_rewrite', apache_get_modules() ) ? 1 : 0;
             } else {
                 $iModStat = -1;
@@ -450,6 +450,7 @@ class oxSysRequirements
             }
         }
 
+        $this->_blSysReqStatus = true;
         if ( count($aCollations) > 0 ) {
             $this->_blSysReqStatus = false;
         }
@@ -599,6 +600,7 @@ class oxSysRequirements
                 $sBytes *= 1024;
             case 'k':
                 $sBytes *= 1024;
+                break;
         }
 
         return $sBytes;

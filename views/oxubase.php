@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 17795 2009-04-03 06:36:02Z rimvydas.paskevicius $
+ * $Id: oxubase.php 18043 2009-04-09 12:25:00Z arvydas $
  */
 
 /**
@@ -670,9 +670,7 @@ class oxUBase extends oxView
     }
 
     /**
-     * Active category setter
-     *
-     * @param oxcategory $oCategory active category
+     * Returns active category
      *
      * @return null
      */
@@ -763,7 +761,7 @@ class oxUBase extends oxView
     public function showRightBasket()
     {
         if ( $this->_blShowRightBasket === null ) {
-            if ( $blShowRightBasket = $this->getConfig()->getConfigParam( 'bl_perfShowRightBasket' ) )  {
+            if ( $blShowRightBasket = $this->getConfig()->getConfigParam( 'bl_perfShowRightBasket' ) ) {
                 $this->_blShowRightBasket = $blShowRightBasket;
             }
         }
@@ -773,7 +771,7 @@ class oxUBase extends oxView
     /**
      * Returns show right basket
      *
-     * @param bool $blShowBasket
+     * @param bool $blShowBasket if TRUE - right basket will be shown
      *
      * @return null
      */
@@ -800,7 +798,7 @@ class oxUBase extends oxView
     /**
      * Returns show left basket
      *
-     * @param bool $blShowBasket
+     * @param bool $blShowBasket if TRUE - left basket will be shown
      *
      * @return null
      */
@@ -827,7 +825,7 @@ class oxUBase extends oxView
     /**
      * Returns show top basket
      *
-     * @param bool $blShowBasket
+     * @param bool $blShowBasket if TRUE - basket will be shown
      *
      * @return null
      */
@@ -949,10 +947,11 @@ class oxUBase extends oxView
     /**
      * addRssFeed adds link to rss
      *
-     * @param string $sTitle
-     * @param string $sUrl
-     * @access public
-     * @return void
+     * @param string $sTitle feed page title
+     * @param string $sUrl   feed url
+     * @param int    $key    feed number
+     *
+     * @return null
      */
     public function addRssFeed($sTitle, $sUrl, $key = null)
     {
@@ -1067,7 +1066,7 @@ class oxUBase extends oxView
             $this->_sMetaKeywords = false;
             // set special meta keywords ?
             if ( oxUtils::getInstance()->seoIsActive() && ( $sOxid = $this->_getSeoObjectId() ) &&
-                 ( $sKeywords = oxSeoEncoder::getInstance()->getMetaData( $sOxid , 'oxkeywords' ) ) ) {
+                 ( $sKeywords = oxSeoEncoder::getInstance()->getMetaData( $sOxid, 'oxkeywords' ) ) ) {
                 return $this->_sMetaKeywords = $sKeywords;
             } elseif ( $this->_sMetaKeywordsIdent ) {
                 $oContent = oxNew( 'oxcontent' );
@@ -1091,7 +1090,7 @@ class oxUBase extends oxView
             $this->_sMetaDescription = false;
             // set special meta description ?
             if ( oxUtils::getInstance()->seoIsActive() && ( $sOxid = $this->_getSeoObjectId() ) &&
-                 ( $sMeta = oxSeoEncoder::getInstance()->getMetaData( $sOxid , 'oxdescription' ) ) ) {
+                 ( $sMeta = oxSeoEncoder::getInstance()->getMetaData( $sOxid, 'oxdescription' ) ) ) {
                 return $this->_sMetaDescription = $sMeta;
             } elseif ( $this->_sMetaDescriptionIdent ) {
                 $oContent = oxNew( 'oxcontent' );
@@ -1117,7 +1116,7 @@ class oxUBase extends oxView
     /**
      * Active language setter
      *
-     * @param object $oCur
+     * @param object $oCur corrency object
      *
      * @return object
      */
@@ -1139,7 +1138,7 @@ class oxUBase extends oxView
     /**
      * Articlelist count in comparison setter
      *
-     * @param integer $iCount
+     * @param integer $iCount compare items count
      *
      * @return integer
      */
@@ -1161,7 +1160,7 @@ class oxUBase extends oxView
     /**
      * Sets user name of searched wishlist
      *
-     * @param string $sName
+     * @param string $sName wishlist name
      *
      * @return null
      */
@@ -1261,7 +1260,7 @@ class oxUBase extends oxView
     /**
      * Header menue list setter
      *
-     * @param array $aMenue
+     * @param array $aMenue menu list
      *
      * @return null
      */
@@ -1563,13 +1562,13 @@ class oxUBase extends oxView
                 if ( ( $sVar = oxConfig::getParameter( 'searchmanufacturer' ) ) ) {
                     $sRet .= '&amp;searchmanufacturer='.rawurlencode( rawurldecode( $sVar ) );
                 }
-               break;
+                break;
             case 'tag':
                 $sRet .= "&amp;listtype={$sListType}";
                 if ( $sParam = rawurlencode( oxConfig::getParameter( 'searchtag', 1 ) ) ) {
                     $sRet .= "&amp;searchtag={$sParam}";
                 }
-               break;
+                break;
         }
 
         return $sRet;
@@ -1638,7 +1637,7 @@ class oxUBase extends oxView
     /**
      * collects _GET parameters used by eShop and returns uri
      *
-     * @param bool $blAddPageNr
+     * @param bool $blAddPageNr if TRUE - page number will be added
      *
      * @return string
      */
@@ -2047,13 +2046,11 @@ class oxUBase extends oxView
     /**
      * Generates URL for page navigation
      *
-     * @param string $sClass class name
-     *
      * @return string $sUrl String with working page url.
      */
     public function generatePageNavigationUrl()
     {
-//        $sClass = $this->_sThisAction;
+        // $sClass = $this->_sThisAction;
         return $this->getConfig()->getShopHomeURL().$this->_getRequestParams( false );
     }
 
@@ -2658,7 +2655,7 @@ class oxUBase extends oxView
     /**
      * Sets vendorlist for search
      *
-     * @param array $aList
+     * @param array $aList vendor list
      *
      * @return null
      */
@@ -2680,7 +2677,7 @@ class oxUBase extends oxView
     /**
      * Sets Manufacturerlist for search
      *
-     * @param array $aList
+     * @param array $aList manufacturer list
      *
      * @return null
      */
@@ -2692,7 +2689,7 @@ class oxUBase extends oxView
     /**
      * Sets root vendor
      *
-     * @param object $oVendor
+     * @param object $oVendor vendor object
      *
      * @return null
      */
@@ -2714,7 +2711,7 @@ class oxUBase extends oxView
     /**
      * Sets root Manufacturer
      *
-     * @param object $oManufacturer
+     * @param object $oManufacturer manufacturer object
      *
      * @return null
      */
@@ -2778,7 +2775,7 @@ class oxUBase extends oxView
     /**
      * Sets category tree for search
      *
-     * @param array $aTree
+     * @param array $aTree category tree
      *
      * @return null
      */
@@ -2800,7 +2797,7 @@ class oxUBase extends oxView
     /**
      * Sets more category
      *
-     * @param object $oCat
+     * @param object $oCat category object
      *
      * @return null
      */
@@ -2822,7 +2819,7 @@ class oxUBase extends oxView
     /**
      * Sets if user subscribed for newsletter
      *
-     * @param bool $blNewsSubscribed
+     * @param bool $blNewsSubscribed TRUE - news are subscribed
      *
      * @return null
      */
@@ -2844,7 +2841,7 @@ class oxUBase extends oxView
     /**
      * Sets if show user shipping address
      *
-     * @param bool $blShowShipAddress
+     * @param bool $blShowShipAddress TRUE - show shipping address
      *
      * @return null
      */
@@ -2866,7 +2863,7 @@ class oxUBase extends oxView
     /**
      * Sets shipping address
      *
-     * @param bool $oDelAddress
+     * @param bool $oDelAddress delivery address
      *
      * @return null
      */

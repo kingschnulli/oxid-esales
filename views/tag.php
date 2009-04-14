@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: tag.php 17915 2009-04-07 07:15:19Z vilma $
+ * $Id: tag.php 18045 2009-04-09 12:26:14Z arvydas $
  */
 
 /**
@@ -66,6 +66,11 @@ class Tag extends aList
      */
     protected $_sTemplateLocation;
 
+    /**
+     * Initiates tag view
+     *
+     * @return null
+     */
     public function init()
     {
         $this->_sTag = oxConfig::getParameter("searchtag", 1);
@@ -201,8 +206,6 @@ class Tag extends aList
 
     /**
      * Generates Url for page navigation
-     *
-     * @param string $sClass active class name (optional)
      *
      * @return string
      */

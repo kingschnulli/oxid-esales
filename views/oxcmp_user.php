@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 17678 2009-03-30 15:22:11Z vilma $
+ * $Id: oxcmp_user.php 18041 2009-04-09 12:23:18Z arvydas $
  */
 
 /**
@@ -127,7 +127,7 @@ class oxcmp_user extends oxView
      *
      * @return null
      */
-    public function _loadSessionUser()
+    protected function _loadSessionUser()
     {
         $myConfig = $this->getConfig();
         $oUser = $this->getUser();
@@ -647,7 +647,7 @@ class oxcmp_user extends oxView
         }
         error_reporting($iOldErrorReproting);
         if ( count( $aData ) < 1 ) {
-        	oxUtils::getInstance()->redirect($this->getConfig()->getShopHomeURL().'cl=register');
+            oxUtils::getInstance()->redirect($this->getConfig()->getShopHomeURL().'cl=register');
         }
         if ( $aData['email'] ) {
             $oUser = oxNew( 'oxuser' );

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 17916 2009-04-07 07:16:48Z rimvydas.paskevicius $
+ * $Id: oxutils.php 18025 2009-04-09 11:30:19Z arvydas $
  */
 
 /**
@@ -621,8 +621,8 @@ class oxUtils extends oxSuperCfg
         if ( $sUserID) {
             // escaping
             $oDb = oxDb::getDb();
-            $sUserID = $oDb->Quote($sUserID);
-            $sRights = $oDb->GetOne("select oxrights from oxuser where oxid = $sUserID");
+            $sUserID = $oDb->quote($sUserID);
+            $sRights = $oDb->getOne("select oxrights from oxuser where oxid = $sUserID");
 
             if ( $sRights != "user") {
                 // malladmin ?
@@ -640,7 +640,7 @@ class oxUtils extends oxSuperCfg
                     }
                     $blIsAuth = true;
                 } else {   // Shopadmin... check if this shop is valid and exists
-                    $sShopID = $oDb->GetOne("select oxid from oxshops where oxid = '{$sRights}'");
+                    $sShopID = $oDb->getOne("select oxid from oxshops where oxid = '{$sRights}'");
                     if ( isset( $sShopID) && $sShopID) {   // success, this shop exists
 
                         oxSession::setVar( "actshop", $sRights);
@@ -1083,7 +1083,7 @@ class oxUtils extends oxSuperCfg
         $aLangCache = null;
         $sFilePath = $this->_getCacheFilePath( $sCacheName );
         if ( file_exists( $sFilePath ) && is_readable( $sFilePath ) ) {
-            include( $sFilePath );
+            include $sFilePath;
         }
         return $aLangCache;
     }

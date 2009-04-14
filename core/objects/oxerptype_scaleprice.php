@@ -19,14 +19,21 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxerptype_scaleprice.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxerptype_scaleprice.php 18033 2009-04-09 12:15:54Z arvydas $
  */
 
-require_once( 'oxerptype.php');
+require_once 'oxerptype.php';
 
+/**
+ * ERP scale price description class
+ */
 class oxERPType_ScalePrice extends oxERPType
 {
-
+    /**
+     * Class constructor
+     *
+     * @return null
+     */
     public function __construct()
     {
         parent::__construct();
@@ -46,7 +53,7 @@ class oxERPType_ScalePrice extends oxERPType
 
         $this->_aKeyFieldList = array(
             'OXID' => 'OXID'
-		);
+        );
     }
 
 }

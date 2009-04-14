@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: content.php 17676 2009-03-30 15:06:42Z arvydas $
+ * $Id: content.php 18040 2009-04-09 12:22:44Z arvydas $
  */
 
 /**
@@ -245,6 +245,7 @@ class Content extends oxUBase
     }
 
     /**
+     * Returns name of template
      *
      * @return string
      */
