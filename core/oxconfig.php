@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 18022 2009-04-09 11:28:16Z arvydas $
+ * $Id: oxconfig.php 18242 2009-04-15 14:34:30Z sarunas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -629,17 +629,19 @@ class oxConfig extends oxSuperCfg
         }
 
         if ( is_array( $sValue ) ) {
+            $newValue = array();
             foreach ( $sValue as $sKey => $sVal ) {
+                $sValidKey = $sKey;
                 if ( !$aRaw || !in_array($sKey, $aRaw) ) {
-                    $sValidKey = $sKey;
                     self::checkSpecialChars( $sValidKey );
                     self::checkSpecialChars( $sVal );
                     if ($sValidKey != $sKey) {
                         unset ($sValue[$sKey]);
                     }
-                    $sValue[$sValidKey] = $sVal;
                 }
+                $newValue[$sValidKey] = $sVal;
             }
+            $sValue = $newValue;
         } else {
             $sValue = str_replace( array( '&',     '<',    '>',    '"',      "'",      chr(0), '\\' ),
                                    array( '&amp;', '&lt;', '&gt;', '&quot;', '&#039;', '',     '&#092;' ),

@@ -130,13 +130,12 @@ class oxStrMb
      * PHP htmlspecialchars() function wrapper
      *
      * @param string $sString        string being converted
-     * @param bool   $blDoubleEncode When this is turned off PHP will not encode existing html entities, the default is to convert everything.
      *
      * @return string
      */
-    public function htmlspecialchars($sString, $blDoubleEncode= true)
+    public function htmlspecialchars($sString)
     {
-        return htmlspecialchars($sString, ENT_QUOTES, $this->_sEncoding, $blDoubleEncode);
+        return htmlspecialchars($sString, ENT_QUOTES, $this->_sEncoding);
     }
 
     /**
@@ -243,9 +242,9 @@ class oxStrMb
     public function wordwrap( $sString, $iLength = 75, $sBreak = "\n", $blCut = null )
     {
         if ( !$blCut ) {
-            $sRegexp = '/.{'.$iLength.',}\s/u';
+            $sRegexp = "/^(.{1,{$iLength}}\r?(\s|$|\n)|.{1,{$iLength}}[^\r\s\n]*\r?(\n|\s|$))/u";
         } else {
-            $sRegexp = '/(\S{'.$iLength.'}|.{1,'.$iLength.'}\s)/u';
+            $sRegexp = "/^([^\s]{{$iLength}}|.{1,{$iLength}}\s)/u";
         }
 
         $iStrLen = mb_strlen( $sString, $this->_sEncoding );
@@ -260,14 +259,18 @@ class oxStrMb
             $i = $iWraps;
             if ( preg_match( $sRegexp, $sString, $aMatches ) ) {
                 $sStr = $aMatches[0];
-                $sReturn .= trim( $sStr ) . $sBreak;
-                $sString = $this->substr( trim( $sString ), mb_strlen( $sStr, $this->_sEncoding ) );
+                $sReturn .= preg_replace( '/\s$/s', '', $sStr ) . $sBreak;
+                $sString = $this->substr( $sString , mb_strlen( $sStr, $this->_sEncoding ) );
             } else {
                 break;
             }
             $i--;
         }
-        return $sReturn.$sString;
+        $sReturn = preg_replace( "/$sBreak$/", '', $sReturn );
+        if ($sString) {
+            $sReturn .= $sBreak.$sString;
+        }
+        return $sReturn;
     }
 
     /**

@@ -136,13 +136,12 @@ class oxStrRegular
      * PHP htmlspecialchars() function wrapper
      *
      * @param string $sString        string being converted
-     * @param bool   $blDoubleEncode When this is turned off PHP will not encode existing html entities, the default is to convert everything.
      *
      * @return string
      */
-    public function htmlspecialchars($sString, $blDoubleEncode = true)
+    public function htmlspecialchars($sString)
     {
-        return htmlspecialchars( $sString, ENT_QUOTES, $this->_sEncoding, $blDoubleEncode );
+        return htmlspecialchars( $sString, ENT_QUOTES, $this->_sEncoding );
     }
 
     /**

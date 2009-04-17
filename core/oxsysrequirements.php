@@ -130,7 +130,8 @@ class oxSysRequirements
                                        'request_uri',
                                        'ini_set',
                                        'register_globals',
-                                       'memory_limit'
+                                       'memory_limit',
+                                       'unicode_support'
                                    );
 
             $aRequiredServerConfigs = array(
@@ -468,6 +469,17 @@ class oxSysRequirements
     }
 
     /**
+     * Checks if PCRE unicode support is turned off/on. Should be on.
+     *
+     * @return integer
+     */
+    public function checkUnicodeSupport()
+    {
+        // simple check: is two chars actually one char? and two non utf chars are not one char.
+        return (@preg_match("/^.$/u", "\xc3\xbc") && !@preg_match("/^.$/u", "aa")) ? 2 : 1;
+    }
+
+    /**
      * Checks system requirements status
      *
      * @return bool
@@ -573,6 +585,9 @@ class oxSysRequirements
                     break;
                 case 'memory_limit':
                     $iModStat = $this->checkMemoryLimit();
+                    break;
+                case 'unicode_support':
+                    $iModStat = $this->checkUnicodeSupport();
                     break;
             }
 

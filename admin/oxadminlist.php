@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminlist.php 17414 2009-03-19 09:48:33Z arvydas $
+ * $Id: oxadminlist.php 18141 2009-04-14 11:39:01Z arvydas $
  */
 
 /**
@@ -106,28 +106,59 @@ class oxAdminList extends oxAdminView
     protected $_iOverPos = null;
 
     /**
-     * Calls parent constructor and sets list size parameters
+     * Viewable list size
      *
-     * @return null
+     * @var int
      */
-    public function __construct()
+    protected $_iViewListSize = 0;
+
+    /**
+     * Viewable default list size (used in list_*.php views)
+     *
+     * @var int
+     */
+    protected $_iDefViewListSize = 50;
+
+    /**
+     * Viewable list size getter
+     *
+     * @return int
+     */
+    protected function _getViewListSize()
     {
-        parent::__construct();
+        if ( !$this->_iViewListSize ) {
+            $myConfig = $this->getConfig();
+            if ( $aProfile = oxSession::getVar( 'profile' ) ) {
+                if ( isset( $aProfile[1] ) ) {
+                    $myConfig->setConfigParam( 'iAdminListSize', (int) $aProfile[1] );
+                }
+            }
 
-        $myConfig  = $this->getConfig();
-
-        // #533
-        if ( $aProfile = oxSession::getVar( 'profile' ) ) {
-            if (isset($aProfile[1]))
-                $myConfig->setConfigParam( 'iAdminListSize', (int) $aProfile[1] );
+            $this->_iViewListSize = (int) $myConfig->getConfigParam( 'iAdminListSize' );
+            if ( !$this->_iViewListSize ) {
+                $this->_iViewListSize = 10;
+                $myConfig->setConfigParam( 'iAdminListSize', $this->_iViewListSize );
+            }
         }
-        // list protection
-        if ( !$myConfig->getConfigParam( 'iAdminListSize' ) )
-            $myConfig->setConfigParam( 'iAdminListSize', 10 );
 
-        //maybe somebody badly configured admin ?
-        if ( !is_int( $myConfig->getConfigParam( 'iAdminListSize' ) ) )
-            $myConfig->setConfigParam( 'iAdminListSize', 10 );
+        return $this->_iViewListSize;
+    }
+
+    /**
+     * Viewable list size getter (used in list_*.php views)
+     *
+     * @return int
+     */
+    protected function _getUserDefListSize()
+    {
+        if ( !$this->_iViewListSize ) {
+            if ( ! ($iViewListSize = (int) oxConfig::getParameter( 'viewListSize' ) ) ) {
+                $iViewListSize = $this->_iDefViewListSize;
+            }
+            $this->_iViewListSize = $iViewListSize;
+        }
+
+        return $this->_iViewListSize;
     }
 
     /**
@@ -175,7 +206,7 @@ class oxAdminList extends oxAdminView
             $this->_setCurrentListPosition( oxConfig::getParameter( 'jumppage' ) );
 
             // settting additioan params for list: current list size
-            $this->_oList->setSqlLimit( $this->_iCurrListPos, $myConfig->getConfigParam( 'iAdminListSize' ) );
+            $this->_oList->setSqlLimit( $this->_iCurrListPos, $this->_getViewListSize() );
 
             $this->_oList->selectString( $sSql );
         }
@@ -285,7 +316,7 @@ class oxAdminList extends oxAdminView
      */
     protected function _setCurrentListPosition( $sPage = null )
     {
-        $iAdminListSize = (int) $this->getConfig()->getConfigParam( 'iAdminListSize' );
+        $iAdminListSize = $this->_getViewListSize();
 
         $iJumpTo = $sPage?( (int) $sPage):( (int) ( (int) oxConfig::getParameter( 'lstrt' ) ) / $iAdminListSize );
         $iJumpTo = ( $sPage && $iJumpTo )?( $iJumpTo - 1 ):$iJumpTo;
@@ -580,9 +611,7 @@ class oxAdminList extends oxAdminView
 
         // list navigation
         $blShowNavigation = false;
-        $iAdminListSize = (int) $myConfig->getConfigParam( 'iAdminListSize' );
-        $iAdminListSize = $iAdminListSize ? $iAdminListSize : 1;
-
+        $iAdminListSize = $this->_getViewListSize();
         if ( $this->_iListSize > $iAdminListSize ) {
             // yes, we need to build the navigation object
             $pagenavigation = new oxStdClass();
@@ -644,7 +673,7 @@ class oxAdminList extends oxAdminView
 
         // determine not used space in List
         $iShowListSize  = $this->_iListSize - $this->_iCurrListPos;
-        $iAdminListSize = (int) $myConfig->getConfigParam( 'iAdminListSize' );
+        $iAdminListSize = $this->_getViewListSize();
         $iNotUsed = $iAdminListSize - min( $iShowListSize, $iAdminListSize );
         $iSpace = $iNotUsed * 15;
 

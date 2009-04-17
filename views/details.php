@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 18040 2009-04-09 12:22:44Z arvydas $
+ * $Id: details.php 18089 2009-04-10 13:18:52Z vilma $
  */
 
 /**
@@ -427,7 +427,7 @@ class Details extends oxUBase
      *
      * @return string
      */
-    protected function _prepareMetaDescription( $sMeta, $iLength = 200, $blDescTag = true )
+    protected function _prepareMetaDescription( $sMeta, $iLength = 200, $blDescTag = false )
     {
         if ( !$sMeta ) {
             $oProduct = $this->getProduct();

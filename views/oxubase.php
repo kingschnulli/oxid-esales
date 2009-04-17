@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 18043 2009-04-09 12:25:00Z arvydas $
+ * $Id: oxubase.php 18089 2009-04-10 13:18:52Z vilma $
  */
 
 /**
@@ -1358,7 +1358,7 @@ class oxUBase extends oxView
             $sMeta = $oStr->cleanStr( $sMeta );
 
             // removing duplicate words
-            if ( !$blDescTag ) {
+            if ( $blDescTag ) {
                 $sMeta = $this->_removeDuplicatedWords( $sMeta );
             }
 

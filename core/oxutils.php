@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 18025 2009-04-09 11:30:19Z arvydas $
+ * $Id: oxutils.php 18153 2009-04-14 13:55:21Z vilma $
  */
 
 /**
@@ -902,7 +902,7 @@ class oxUtils extends oxSuperCfg
             }
 
             // add price info into list
-            if ( !$this->isAdmin() ) {
+            if ( !$this->isAdmin() && $oObject->price != 0 ) {
                 $aName[0] .= " ";
                 if ( $oObject->price > 0 ) {
                     $aName[0] .= "+";

@@ -51,6 +51,8 @@ class oxSimpleVariant extends oxI18n
      */
     protected $_oPrice = null;
 
+    static protected $_aParentPrices = array();
+
     /**
      * Initializes instance
      *
@@ -85,7 +87,10 @@ class oxSimpleVariant extends oxI18n
         }
 
         $this->_oPrice = oxNew("oxPrice");
-        $this->_oPrice->setPrice($this->oxarticles__oxprice->value, $this->_dVat);
+        $dPrice = $this->oxarticles__oxprice->value;
+        if (!$dPrice)
+            $dPrice = $this->_getParentPrice();
+        $this->_oPrice->setPrice($dPrice, $this->_dVat);
         return $this->_oPrice;
     }
 
@@ -113,5 +118,23 @@ class oxSimpleVariant extends oxI18n
     public function setVat($dVat)
     {
         $this->_dVat = $dVat;
+    }
+
+    /**
+     * Returns parent price.
+     *
+     * @return unknown
+     */
+    protected function _getParentPrice()
+    {
+        $sParentId = $this->oxarticles__oxparentid->value;
+        if (isset($this->_aParentPrices[$sParentId]))
+            return $this->_aParentPrices[$sParentId];
+
+        $sQ = "select oxprice from oxarticles where oxid = '$sParentId'";
+        $dParentPrice = oxDb::getDb(true)->getOne($sQ);
+
+        $this->_aParentPrices[$sParentId] = $dParentPrice;
+        return $dParentPrice;
     }
 }
