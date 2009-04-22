@@ -110,7 +110,7 @@ function ChangeListSize()
             <input class="listedit" type="submit" name="submitit" value="[{ oxmultilang ident="GENERAL_SEARCH" }]">
         </div>
 
-        <input class="listedit" type="text" size="15" maxlength="128" name="where[oxarticles.oxtitle]" value="[{ $where->oxarticles__oxtitle }]">
+        <input class="listedit" type="text" size="15" maxlength="128" name="where[[{$articleListTable}].oxtitle]" value="[{ $where->oxarticles__oxtitle }]">
 
         </div>
       </div>

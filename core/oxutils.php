@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 18153 2009-04-14 13:55:21Z vilma $
+ * $Id: oxutils.php 18345 2009-04-20 08:39:01Z rimvydas.paskevicius $
  */
 
 /**
@@ -539,8 +539,10 @@ class oxUtils extends oxSuperCfg
         $aPathes = glob( $this->_getCacheFilePath( '*' ) );
         if ( is_array( $aPathes ) ) {
             foreach ( $aPathes as $sFilename ) {
-                // delete all the files
-                @unlink( $sFilename );
+                // delete all the files, except cached tables fieldnames
+                if ( strpos($sFilename, "c_fieldnames_") === false ) {
+                    @unlink( $sFilename );
+                }
             }
         }
     }

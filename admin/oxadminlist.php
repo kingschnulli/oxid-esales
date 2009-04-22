@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminlist.php 18141 2009-04-14 11:39:01Z arvydas $
+ * $Id: oxadminlist.php 18338 2009-04-20 07:54:06Z arvydas $
  */
 
 /**
@@ -226,30 +226,8 @@ class oxAdminList extends oxAdminView
             $this->_aViewData['mylist'] = $this->_oList;
         }
 
-        // build where
-        $aWhere = oxConfig::getParameter( 'where' );
-
-        $myConfig = $this->getConfig();
-        $myUtils  = oxUtils::getInstance();
-        $sListTable = $myConfig->getGlobalParameter( 'ListCoreTable' );
-
-        $oSearchKeys = new oxStdClass();
-        $sWhereParam = "";
-        if ( is_array( $aWhere ) ) {
-            while ( list( $sName, $sValue ) = each( $aWhere ) ) {
-                $sWhereParam .= "&amp;where[".$sName."]=".$sValue;
-                $sFieldName = str_replace( array( getViewName( $sListTable ) . '.', $sListTable . '.' ), $sListTable . '.', $sName );
-                $sFieldName = $myUtils->getArrFldName( $sFieldName );
-                $oSearchKeys->$sFieldName = $sValue;
-            }
-            $this->_aViewData['where'] = $oSearchKeys;
-            //#M430: Pagination in admin list loses category parameter
-            $sChosenCat  = oxConfig::getParameter( "art_category");
-            if ( $sChosenCat ) {
-                $sWhereParam .= "&amp;art_category=".$sChosenCat;
-            }
-            $this->_aViewData['whereparam'] = $sWhereParam;
-        }
+        // setting filter data back to view
+        $this->_setFilterParams();
 
         // set navigation parameters
         $this->_setListNavigationParams();
@@ -262,6 +240,44 @@ class oxAdminList extends oxAdminView
         $this->_aViewData['sort'] = $this->_aSort[0];
 
         return $sReturn;
+    }
+
+    /**
+     * Sets view filter data
+     *
+     *  - aViewData['where'] containts filter data like $object->oxarticles__oxtitle = filter_value
+     *  - aViewData['whereparam'] contains string which can be later used in url. and
+     *    looks like &amp;where[oxarticles.oxtitle]=_filter_value_&amp;art_category=_filter_categry_;
+     *
+     * @return null
+     */
+    protected function _setFilterParams()
+    {
+        // build where
+        if ( is_array( $aWhere = oxConfig::getParameter( 'where' ) ) ) {
+
+            $myConfig = $this->getConfig();
+            $myUtils  = oxUtils::getInstance();
+            $sListTable = $myConfig->getGlobalParameter( 'ListCoreTable' );
+
+            $oSearchKeys = new oxStdClass();
+            $sWhereParam = "";
+
+            while ( list( $sName, $sValue ) = each( $aWhere ) ) {
+                $sWhereParam .= "&amp;where[".$sName."]=".$sValue;
+                $sFieldName = str_replace( getViewName( $sListTable ) . '.', $sListTable . '.', $sName );
+                $sFieldName = $myUtils->getArrFldName( $sFieldName );
+                $oSearchKeys->$sFieldName = $sValue;
+            }
+
+            $this->_aViewData['where'] = $oSearchKeys;
+
+            //#M430: Pagination in admin list loses category parameter
+            if ( $sChosenCat  = oxConfig::getParameter( "art_category") ) {
+                $sWhereParam .= "&amp;art_category=".$sChosenCat;
+            }
+            $this->_aViewData['whereparam'] = $sWhereParam;
+        }
     }
 
     /**

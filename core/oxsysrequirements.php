@@ -439,7 +439,8 @@ class oxSysRequirements
                    'LEFT JOIN INFORMATION_SCHEMA.columns c ON t.TABLE_NAME = c.TABLE_NAME  ' .
                    'where t.TABLE_SCHEMA = "'.$myConfig->getConfigParam( 'dbName' ).'" ' .
                    'and c.TABLE_SCHEMA = "'.$myConfig->getConfigParam( 'dbName' ).'" ' .
-                   'and c.COLUMN_NAME in ("'.implode('", "', $this->_aColumns).'") ' . $this->_getAdditionalCheck();
+                   'and c.COLUMN_NAME in ("'.implode('", "', $this->_aColumns).'") ' . $this->_getAdditionalCheck() . 
+                   ' ORDER BY (t.TABLE_NAME = "oxarticles") DESC';
         $aRez = oxDb::getDb()->getAll($sSelect);
         foreach ( $aRez as $aRetTable ) {
             if ( !$sCollation ) {
@@ -475,8 +476,7 @@ class oxSysRequirements
      */
     public function checkUnicodeSupport()
     {
-        // simple check: is two chars actually one char? and two non utf chars are not one char.
-        return (@preg_match("/^.$/u", "\xc3\xbc") && !@preg_match("/^.$/u", "aa")) ? 2 : 1;
+        return (@preg_match('/\pL/u', 'a') == 1) ? 2 : 1;
     }
 
     /**

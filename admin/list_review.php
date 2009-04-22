@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: list_review.php 18141 2009-04-14 11:39:01Z arvydas $
+ * $Id: list_review.php 18338 2009-04-20 07:54:06Z arvydas $
  */
 
 /**
@@ -65,8 +65,39 @@ class List_Review extends Article_List
         $this->_aViewData["viewListSize"]  = $this->_getViewListSize();
         $this->_aViewData["whereparam"]    = $this->_aViewData["whereparam"] . '&amp;viewListSize='.$this->_getViewListSize();
         $this->_aViewData["menustructure"] = $this->getNavigation()->getDomXml()->documentElement->childNodes;
+        $this->_aViewData["articleListTable"] = getViewName('oxarticles');
 
         return "list_review.tpl";
+    }
+
+    /**
+     * Sets view filter data
+     *
+     *  - aViewData['where'] containts filter data like $object->oxarticles__oxtitle = filter_value
+     *  - aViewData['whereparam'] contains string which can be later used in url. and
+     *    looks like &amp;where[oxarticles.oxtitle]=_filter_value_&amp;art_category=_filter_categry_;
+     *
+     * @return null
+     */
+    protected function _setFilterParams()
+    {
+        parent::_setFilterParams();
+
+        // build where
+        if ( is_array( $aWhere = oxConfig::getParameter( 'where' ) ) ) {
+
+            $myUtils  = oxUtils::getInstance();
+            $sTable = 'oxarticles';
+
+            $oSearchKeys = isset( $this->_aViewData['where'] ) ? $this->_aViewData['where'] : new oxStdClass();
+
+            while ( list( $sName, $sValue ) = each( $aWhere ) ) {
+                $sFieldName = str_replace( getViewName( $sTable ) . '.', $sTable . '.', $sName );
+                $sFieldName = $myUtils->getArrFldName( $sFieldName );
+                $oSearchKeys->$sFieldName = $sValue;
+            }
+            $this->_aViewData['where'] = $oSearchKeys;
+        }
     }
 
     /**

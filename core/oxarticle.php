@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 18177 2009-04-15 08:48:10Z tomas $
+ * $Id: oxarticle.php 18378 2009-04-20 16:05:36Z tomas $
  */
 
 // defining supported link types
@@ -1114,8 +1114,8 @@ class oxArticle extends oxI18n
 
         //load simple variants for lists
         if ($this->_isInList()) {
-            $oVariants = oxNew( 'oxlist' );
-            $oVariants->init('oxsimplevariant');
+            $oVariants = oxNew( 'oxsimplevariantlist' );
+            $oVariants->setParent($this);
         } else {
             //loading variants
             $oVariants = oxNew( 'oxarticlelist' );

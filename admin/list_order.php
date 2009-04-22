@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: list_order.php 18141 2009-04-14 11:39:01Z arvydas $
+ * $Id: list_order.php 18354 2009-04-20 10:42:25Z arvydas $
  */
 
 /**
@@ -53,6 +53,16 @@ class List_Order extends Order_List
         $this->_aViewData["menustructure"] = $this->getNavigation()->getDomXml()->documentElement->childNodes;
 
         return "list_order.tpl";
+    }
+
+    /**
+     * Adding shop check
+     *
+     * @return null
+     */
+    public function buildWhere()
+    {
+        return oxAdminList::buildWhere();
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategorylist.php 18022 2009-04-09 11:28:16Z arvydas $
+ * $Id: oxcategorylist.php 18365 2009-04-20 13:08:55Z tomas $
  */
 
 
@@ -100,7 +100,7 @@ class oxCategoryList extends oxList
         //$sFieldList = $oBaseObject->getSelectFields();
         //excluding long desc
         $sLangSuffix = oxLang::getInstance()->getLanguageTag();
-        $sFieldList = "oxid, oxactive$sLangSuffix as oxactive, oxhidden, oxparentid, oxdefsort, oxdefsortmode, oxleft, oxright, oxrootid, oxsort, oxtitle$sLangSuffix as oxtitle, oxpricefrom, oxpriceto, oxicon ";
+        $sFieldList = "oxid, oxactive$sLangSuffix as oxactive, oxhidden, oxparentid, oxdefsort, oxdefsortmode, oxleft, oxright, oxrootid, oxsort, oxtitle$sLangSuffix as oxtitle, oxdesc$sLangSuffix as oxdesc, oxpricefrom, oxpriceto, oxicon ";
         $sWhere     = $this->_getDepthSqlSnippet();
 
         $sOrdDir    = $blReverse?'desc':'asc';
