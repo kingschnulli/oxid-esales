@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxstart.php 18042 2009-04-09 12:24:06Z arvydas $
+ * $Id: oxstart.php 18431 2009-04-22 07:35:10Z alfonsas $
  */
 
 /**
@@ -30,7 +30,7 @@
 /**
  * Encapsulates methods for application initialization.
  */
-class oxStart extends oxView
+class oxStart extends oxUBase
 {
     /**
      * Initializes globals and environment vars

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 18089 2009-04-10 13:18:52Z vilma $
+ * $Id: oxubase.php 18438 2009-04-22 08:36:17Z vilma $
  */
 
 /**
@@ -1413,17 +1413,14 @@ class oxUBase extends oxView
             //is String
             $aStrings = $oStr->preg_split( "/[\s,]+/", $aInput );
         }
-
-        foreach ( $aStrings as $iANum => $sAString ) {
-            $sAString = $oStr->strtolower( $sAString );
-            foreach ( $aStrings as $iBNum => $sBString ) {
-                // duplicates
-                $sBString = $oStr->strtolower( $sBString );
-                if ( $sAString && $iANum != $iBNum && strcmp( $sAString, $sBString ) === 0 ) {
-                    unset( $aStrings[$iANum] );
-                }
-            }
+        
+        $sCount = count($aStrings);
+        for ( $iNum = 0; $iNum < $sCount; $iNum++ ) {
+            $aStrings[$iNum] = $oStr->strtolower( $aStrings[$iNum] );
         }
+
+        // duplicates
+        $aStrings = array_unique($aStrings);
 
         return implode( ', ', $aStrings );
     }
