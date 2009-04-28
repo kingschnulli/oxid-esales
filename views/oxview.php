@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxview.php 18043 2009-04-09 12:25:00Z arvydas $
+ * $Id: oxview.php 18561 2009-04-27 08:02:54Z vilma $
  */
 
 /**
@@ -547,6 +547,7 @@ class oxView extends oxSuperCfg
     public function getTrustedShopId()
     {
         if ( $this->_sTrustedShopId == null && ( $aTrustedShopIds = $this->getConfig()->getConfigParam( 'iShopID_TrustedShops' ) ) ) {
+            $this->_sTrustedShopId = false;
             $iLangId = (int) oxLang::getInstance()->getBaseLanguage();
             // compatibility to old data
             if ( !is_array( $aTrustedShopIds ) && $iLangId == 0 ) {
@@ -554,6 +555,9 @@ class oxView extends oxSuperCfg
             }
             if ( is_array( $aTrustedShopIds ) ) {
                 $this->_sTrustedShopId = $aTrustedShopIds[$iLangId];
+            }
+            if ( strlen( $this->_sTrustedShopId ) != 33 || substr( $this->_sTrustedShopId, 0, 1 ) != 'X' ) {
+                $this->_sTrustedShopId = false;
             }
         }
         return $this->_sTrustedShopId;
