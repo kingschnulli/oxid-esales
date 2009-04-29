@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 18295 2009-04-16 15:09:12Z rimvydas.paskevicius $
+ * $Id: lang.php 18590 2009-04-28 09:32:13Z philipp.grashoff $
  */
 
 /*
@@ -1458,9 +1458,9 @@ $aLang = array(
 'VOUCHERSERIE_LIST_MENUSUBITEM'                 => 'Vochers',
 'VOUCHERSERIE_MAIN_GENERATERANDOM'              => 'Generate Random No',
 'VOUCHERSERIE_MAIN_MINORDERPRICE'               => 'Min. Order Sum',
-'VOUCHERSERIE_MAIN_ALLOWSAMESERIES'             => 'Valid with same serie ?',
-'VOUCHERSERIE_MAIN_ALLOWOTHERSERIES'            => 'Valid with different serie ?',
-'VOUCHERSERIE_MAIN_SAMESEROTHERORDER'           => 'Same serie, different order ?',
+'VOUCHERSERIE_MAIN_ALLOWSAMESERIES'             => 'Valid with same Series',
+'VOUCHERSERIE_MAIN_ALLOWOTHERSERIES'            => 'Valid with different Series',
+'VOUCHERSERIE_MAIN_SAMESEROTHERORDER'           => 'Valid with same Series, different Order',
 'VOUCHERSERIE_MAIN_NEWVOUCHER'                  => 'Create new Coupons',
 'VOUCHERSERIE_MAIN_RANDOMNUM'                   => 'Random Numbers',
 'VOUCHERSERIE_MAIN_VOUCHERNUM'                  => 'Coupon Number',
