@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 18378 2009-04-20 16:05:36Z tomas $
+ * $Id: oxarticle.php 18602 2009-04-28 12:00:35Z arvydas $
  */
 
 // defining supported link types
@@ -1212,15 +1212,16 @@ class oxArticle extends oxI18n
             $sOXID = $this->oxarticles__oxparentid->value;
         }
 
+        $oStr = getStr();
         $sWhere   = $oCategory->getSqlActiveSnippet();
         $sSelect  = $this->_generateSearchStr( $sOXID );
-        $sSelect .= ( strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere . " order by oxobject2category.oxtime ";
+        $sSelect .= ( $oStr->strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere . " order by oxobject2category.oxtime ";
 
         // category not found ?
         if ( !$oCategory->assignRecord( $sSelect ) ) {
 
             $sSelect  = $this->_generateSearchStr( $sOXID, true );
-            $sSelect .= ( strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere ;
+            $sSelect .= ( $oStr->strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere ;
 
             // looking for price category
             if ( !$oCategory->assignRecord( $sSelect ) ) {
@@ -1781,12 +1782,13 @@ class oxArticle extends oxI18n
             $iActPicId = oxConfig::getParameter('actpicid');
         }
 
+        $oStr = getStr();
         $iCntr = 0;
         $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
         for ( $i = 1; $i <= $iPicCount; $i++) {
             $sPicVal = $this->getPictureUrl( $i );
             $sIcoVal = $this->getIconUrl( $i );
-            if ( !strstr($sIcoVal, 'nopic_ico.jpg')) {
+            if ( !$oStr->strstr($sIcoVal, 'nopic_ico.jpg')) {
                 if ($iCntr) {
                     $blMorePic = true;
                 }
@@ -1804,7 +1806,7 @@ class oxArticle extends oxI18n
         $iZoomPicCount = $myConfig->getConfigParam( 'iZoomPicCount' );
         for ( $j = 1,$c = 1; $j <= $iZoomPicCount; $j++) {
             $sVal = $this->getZoomPictureUrl($j);
-            if ( !strstr($sVal, 'nopic.jpg')) {
+            if ( !$oStr->strstr($sVal, 'nopic.jpg')) {
                 if ($this->getConfig()->getConfigParam('blFormerTplSupport')) {
                     $sVal = $this->_sDynImageDir."/".$sVal;
                 }
@@ -1986,11 +1988,12 @@ class oxArticle extends oxI18n
             $this->oxarticles__oxlongdesc->setValue(str_replace( '&amp;nbsp;', '&nbsp;', $this->oxarticles__oxlongdesc->value ), oxField::T_RAW);
             $this->oxarticles__oxlongdesc->setValue(str_replace( '&amp;', '&', $this->oxarticles__oxlongdesc->value ), oxField::T_RAW);
             $this->oxarticles__oxlongdesc->setValue(str_replace( '&quot;', '"', $this->oxarticles__oxlongdesc->value ), oxField::T_RAW);
-            $blHasSmarty = strstr( $this->oxarticles__oxlongdesc->value, '[{' );
-            if ( $blHasSmarty && ($myConfig->getConfigParam( 'blExport' ) || !$this->isAdmin() ) && $myConfig->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
+            $oStr = getStr();
+            $blHasSmarty = $oStr->strstr( $this->oxarticles__oxlongdesc->value, '[{' );
+            $blHasPhp = $oStr->strstr( $this->oxarticles__oxlongdesc->value, '<?' );
+            if ( ( $blHasSmarty || $blHasPhp ) && ($myConfig->getConfigParam( 'blExport' ) || !$this->isAdmin() ) && $myConfig->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
                 $this->oxarticles__oxlongdesc->setValue(oxUtilsView::getInstance()->parseThroughSmarty( $this->oxarticles__oxlongdesc->value, $this->getId() ), oxField::T_RAW);
             }
-
         }
 
         return $this->oxarticles__oxlongdesc;
