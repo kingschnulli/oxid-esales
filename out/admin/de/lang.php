@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 18295 2009-04-16 15:09:12Z rimvydas.paskevicius $
+ * $Id: lang.php 18765 2009-05-04 13:11:33Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -1047,6 +1047,9 @@ $aLang = array(
 'ORDER_PACKAGE_ORDERNR2'                        => 'Bestellt am',
 'ORDER_PACKAGE_MENUITEM'                        => 'Bestellungen',
 'ORDER_PACKAGE_MENUSUBITEM'                     => 'Packliste',
+'ORDERFOLDER_NEW'                               => 'Neu',
+'ORDERFOLDER_FINISHED'                          => 'Bearbeitet',
+'ORDERFOLDER_PROBLEMS'                          => 'Probleme',
 'PAGENAVISNIPPET_FROM'                          => 'von',
 'PAYMENT_COUNTRY_ALLCOUNTRIES'                  => 'Alle Länder',
 'PAYMENT_COUNTRY_SELCOUNTRIES'                  => 'Zugeordnete Länder',

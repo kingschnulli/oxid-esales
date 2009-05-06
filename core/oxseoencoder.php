@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 18357 2009-04-20 11:17:02Z arvydas $
+ * $Id: oxseoencoder.php 18800 2009-05-05 12:21:26Z arvydas $
  */
 
 /**
@@ -473,15 +473,20 @@ class oxSeoEncoder extends oxSuperCfg
             }
         }
         $oStr = getStr();
-        $sKeywords = $sKeywords?$oDb->quote( $oStr->htmlentities( $this->encodeString( strip_tags( $sKeywords ), false ) ) ):"''";
-        $sDescription = $sDescription?$oDb->quote( $oStr->htmlentities( strip_tags( $sDescription ) ) ):"''";
+        $sKeywords = $sKeywords ? $oDb->quote( $oStr->htmlentities( $this->encodeString( strip_tags( $sKeywords ), false ) ) ) : false;
+        $sDescription = $sDescription ? $oDb->quote( $oStr->htmlentities( strip_tags( $sDescription ) ) ) : false;
 
         // inserting new or updating
         $sParams = $sParams ? $oDb->quote( $sParams ) :'""';
-        $sQ  = "replace into oxseo
+
+        $sQ  = "insert into oxseo
                     (oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed, oxexpired, oxkeywords, oxdescription, oxparams)
                 values
-                    ( {$sObjectId}, '$sIdent', {$iShopId}, {$iLang}, {$sStdUrl}, {$sSeoUrl}, {$sType}, '$blFixed', '0', {$sKeywords}, {$sDescription}, $sParams )";
+                    ( {$sObjectId}, '$sIdent', {$iShopId}, {$iLang}, {$sStdUrl}, {$sSeoUrl}, {$sType}, '$blFixed', '0',
+                    ".( $sKeywords ? $sKeywords : "''" ).", ".( $sDescription ? $sDescription : "''" ).", $sParams )
+                on duplicate key update oxident = '$sIdent', oxstdurl = {$sStdUrl}, oxseourl = {$sSeoUrl}, oxfixed = '$blFixed', oxexpired = '0',
+                    oxkeywords = ".( $sKeywords ? $sKeywords : "oxkeywords" ).", oxdescription = ".( $sDescription ? $sDescription : "oxdescription" );
+
         return $oDb->execute( $sQ );
     }
 
