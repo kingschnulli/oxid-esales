@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 18800 2009-05-05 12:21:26Z arvydas $
+ * $Id: oxseoencoder.php 18834 2009-05-06 10:51:53Z arvydas $
  */
 
 /**
@@ -329,12 +329,11 @@ class oxSeoEncoder extends oxSuperCfg
         $sQ = "select oxfixed, oxseourl, oxexpired, oxtype from oxseo where oxtype = {$sType}
                and oxobjectid = {$sId} and oxshopid = {$iShopId} and oxlang = {$iLang}";
 
-        if ($sParams) {
-            if ($blStrictParamsCheck) {
-                $sQ .= " and oxparams = '{$sParams}'";
-            } else {
-                $sQ .= " order by oxparams = '{$sParams}' desc";
-            }
+        $sParams = $sParams ? $sParams : '';
+        if ( $sParams && $blStrictParamsCheck ) {
+            $sQ .= " and oxparams = '{$sParams}'";
+        } else {
+            $sQ .= " order by oxparams = '{$sParams}' desc";
         }
         $sQ .= " limit 1";
 

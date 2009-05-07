@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 18765 2009-05-04 13:11:33Z vilma $
+ * $Id: lang.php 18823 2009-05-06 07:47:17Z rimvydas.paskevicius $
  */
 
 /*
@@ -845,6 +845,8 @@ $aLang = array(
 'LANGUAGE_BASESSLURL'                           => 'Base SSL URL',
 'LANGUAGE_NOTRANSLATIONS_WARNING'               => 'Warning: No translations files were found in templates dir for selected language!',
 'LANGUAGE_NODBMULTILANGFIELDS_WARNING'          => 'Warning: No multilanguage DB fields were found for selected language!',
+'LANGUAGE_DELETINGMAINLANG_WARNING'             => 'Warning: you can\'t delete main language (with ID = 0)!',
+'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Error: language with such abbervation already exists!',
 'LOGIN_TITLE'                                   => 'OXID eSales Login',
 'LOGIN_ERROR'                                   => 'Error ! Incorrect User Name and/or Password !',
 'LOGIN_NO_COOKIE_SUPPORT'                       => 'Error! Your browser does not support cookies !',
