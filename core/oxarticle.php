@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 18602 2009-04-28 12:00:35Z arvydas $
+ * $Id: oxarticle.php 18853 2009-05-07 09:05:26Z arvydas $
  */
 
 // defining supported link types
@@ -725,9 +725,16 @@ class oxArticle extends oxI18n
     {
 
         // admin preview mode
-        $myConfig = $this->getConfig();
-        if ( oxConfig::getParameter( 'preview' ) == 1 &&  $this->isAdmin()) {
-            return true;
+        $myConfig  = $this->getConfig();
+        if ( ( $sPrevId = oxConfig::getParameter( 'preview' ) ) &&
+             ( $sAdminSid = oxUtilsServer::getInstance()->getOxCookie( 'admin_sid' ) ) ) {
+
+            $oDb = oxDb::getDb();
+            $sPrevId   = $oDb->quote( $sPrevId );
+            $sAdminSid = $oDb->quote( $sAdminSid );
+            $sTable    = getViewName( 'oxuser' );
+
+            return (bool) $oDb->getOne( "select 1 from $sTable where MD5( CONCAT( {$sAdminSid}, {$sTable}.oxid, {$sTable}.oxpassword, {$sTable}.oxrights ) ) = $sPrevId" );
         }
 
         // active ?
