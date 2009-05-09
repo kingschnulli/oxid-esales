@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 18823 2009-05-06 07:47:17Z rimvydas.paskevicius $
+ * $Id: lang.php 18910 2009-05-08 14:24:06Z vilma $
  */
 
 /*
@@ -322,6 +322,10 @@ $aLang = array(
 'ARTICLE_ATTRIBUTE_ITEMSSELLIST'                => "Product's Selection Lists",
 'ARTICLE_ATTRIBUTE_ASSIGNATTRIBUTE'             => 'Assign Attributes',
 'ARTICLE_ATTRIBUTE_ASSIGNSELECTLIST'            => 'Assign Selection Lists',
+'ARTICLE_BUNDLE_ASSIGNARTICLE'                  => 'Assign Product',
+'ARTICLE_BUNDLE_UNASSIGNARTICLE'                => 'Unassign Product',
+'ARTICLE_BUNDLE_ASSIGNEDARTICLE'                => 'Bundled Product:',
+'ARTICLE_BUNDLE_ALLITEMS'                       => 'All available Products',
 'ARTICLE_CROSSSELLING_CROSSSELLING'             => 'Crossselling Products',
 'ARTICLE_CROSSSELLING_EXTRAS'                   => 'Accessories for Product',
 'ARTICLE_CROSSSELLING_ALLITEMS'                 => 'All available Products',
@@ -971,6 +975,7 @@ $aLang = array(
 'ORDER_SEARCH_FIELD_ARTID'                      => 'Product',
 'ORDER_SEARCH_FIELD_PAYMENT'                    => 'Payment',
 'ORDER_LIST_YOUWANTTOSTORNO'                    => 'Do you really want to cancel this order ?',
+'ORDER_LIST_FOLDER_ALL'                         => 'all',
 'ORDER_LIST_ORDERTIME'                          => 'Order Time',
 'ORDER_LIST_PAID'                               => 'Payment Date',
 'ORDER_LIST_CUSTOMER'                           => 'Customer',
