@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 18853 2009-05-07 09:05:26Z arvydas $
+ * $Id: oxarticle.php 18940 2009-05-11 14:54:40Z sarunas $
  */
 
 // defining supported link types
@@ -76,6 +76,13 @@ class oxArticle extends oxI18n
      * @var oxPrice
      */
     protected $_oPrice      = null;
+
+    /**
+     * caches article vat
+     *
+     * @var double | null
+     */
+    protected $_dArticleVat = null;
 
     /**
      * Persistent Parameter.
@@ -1137,8 +1144,6 @@ class oxArticle extends oxI18n
         $oVariants->selectString( $sSelect);
         stopProfile("selectVariants");
 
-        //print_r($oVariants);
-
         if (!$oVariants->count()) {
             return array();
         }
@@ -1453,7 +1458,7 @@ class oxArticle extends oxI18n
         $this->_oTPrice = oxNew( 'oxPrice' );
         $this->_oTPrice->setPrice( $this->oxarticles__oxtprice->value );
 
-        $this->_applyVat( $this->_oTPrice, oxNew( 'oxVatSelector' )->getArticleVat( $this ) );
+        $this->_applyVat( $this->_oTPrice, $this->getArticleVat() );
         $this->_applyCurrency( $this->_oTPrice );
 
         return $this->_oTPrice;
@@ -1546,7 +1551,7 @@ class oxArticle extends oxI18n
 
         // apply VAT only if configuration requires it
         if ( !$myConfig->getConfigParam( 'bl_perfCalcVatOnlyForBasketOrder' ) ) {
-            $this->_applyVAT( $this->_oPrice, oxNew('oxVatSelector')->getArticleVat( $this ) );
+            $this->_applyVAT( $this->_oPrice, $this->getArticleVat() );
         }
 
         // apply currency
@@ -1611,7 +1616,7 @@ class oxArticle extends oxI18n
         $oBasketPrice->setPrice( $dBasePrice );
 
         // apply VAT
-        $this->_applyVat( $oBasketPrice, oxNew('oxVatSelector')->getBasketItemVat( $this, $oBasket ) );
+        $this->_applyVat( $oBasketPrice, oxVatSelector::getInstance()->getBasketItemVat( $this, $oBasket ) );
 
         // apply currency
         $this->_applyCurrency( $oBasketPrice );
@@ -2726,7 +2731,7 @@ class oxArticle extends oxI18n
 
         $dArticleVat = null;
         if ( !$myConfig->getConfigParam( 'bl_perfCalcVatOnlyForBasketOrder' ) ) {
-            $dArticleVat = oxNew('oxVatSelector')->getArticleVat( $this );
+            $dArticleVat = $this->getArticleVat();
         }
 
         // trying to find lowest price value
@@ -2779,6 +2784,19 @@ class oxArticle extends oxI18n
     }
 
     /**
+     * retrieve article VAT (cached)
+     *
+     * @return double
+     */
+    public function getArticleVat()
+    {
+        if (!isset($this->_dArticleVat)) {
+            $this->_dArticleVat = oxVatSelector::getInstance()->getArticleVat( $this );
+        }
+        return $this->_dArticleVat;
+    }
+
+    /**
      * Applies VAT to article
      *
      * @param oxPrice $oPrice Price object
@@ -2790,12 +2808,22 @@ class oxArticle extends oxI18n
     {
         startProfile(__FUNCTION__);
         $oPrice->setVAT( $dVat );
-        if ( ( $oUser = $this->getArticleUser() ) ) {
-            if ( ( $dVat = oxNew( 'oxVatSelector' )->getUserVat( $oUser ) ) !== false ) {
-                $oPrice->setUserVat( $dVat );
-            }
+        if ( ($dVat = oxVatSelector::getInstance()->getArticleUserVat($this)) !== false ) {
+            $oPrice->setUserVat( $dVat );
         }
         stopProfile(__FUNCTION__);
+    }
+
+    /**
+     * apply article and article use
+     * 
+     * @param oxPrice $oPrice target price
+     */
+    public function applyVats( oxPrice $oPrice )
+    {
+        $this->_applyVAT($oPrice, 
+                         $this->getArticleVat()
+                        );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_utils.php 18599 2009-04-28 11:07:50Z arvydas $
+ * $Id: oxcmp_utils.php 18919 2009-05-11 07:59:10Z arvydas $
  */
 
 /**
@@ -172,8 +172,8 @@ class oxcmp_utils extends oxView
             return; // we shouldnt call this if not logged in
         }
 
-        $sProductId = $sProductId ? $sProductId : oxConfig::getParameter( 'aid' );
         $sProductId = $sProductId ? $sProductId : oxConfig::getParameter( 'itmid' );
+        $sProductId = $sProductId ? $sProductId : oxConfig::getParameter( 'aid' );
         $dAmount    = isset( $dAmount ) ? $dAmount : oxConfig::getParameter( 'am' );
         $aSel       = $aSel ? $aSel : oxConfig::getParameter( 'sel' );
 
@@ -207,8 +207,8 @@ class oxcmp_utils extends oxView
             return; // we shouldnt call this if not logged in
         }
 
-        $sProductId = $sProductId ? $sProductId : oxConfig::getParameter( 'aid' );
         $sProductId = $sProductId ? $sProductId : oxConfig::getParameter( 'itmid' );
+        $sProductId = $sProductId ? $sProductId : oxConfig::getParameter( 'aid' );
         $dAmount    = isset( $dAmount ) ? $dAmount : oxConfig::getParameter( 'am' );
         $aSel       = $aSel ? $aSel : oxConfig::getParameter( 'sel' );
 
