@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 18940 2009-05-11 14:54:40Z sarunas $
+ * $Id: oxarticle.php 18966 2009-05-12 12:14:19Z sarunas $
  */
 
 // defining supported link types
@@ -3915,12 +3915,13 @@ class oxArticle extends oxI18n
      */
     protected function _onChangeUpdateMinVarPrice( $sParentID )
     {
-        $sQ = 'select min(oxprice) as varminprice from oxarticles where oxparentid = "'.$sParentID.'"';
-        //V #M378: Quicksorting after price in articlelist does not work correctly when parent article is not buyable
-        if ( !$this->isParentNotBuyable() || $this->oxarticles__oxvarcount->value == 0) {
+        //#M0000883 (Sarunas)
+        $sQ = 'select min(oxprice) as varminprice from oxarticles where '.$this->getSqlActiveSnippet(true).' and (oxparentid = "'.$sParentID.'"';
+        //#M0000886 (Sarunas)
+        if ( $this->getConfig()->getConfigParam( 'blVariantParentBuyable' ) ) {
             $sQ .= ' or oxid = "'.$sParentID.'"';
         }
-
+        $sQ .= ')';
         $oDb = oxDb::getDb();
         $dVarMinPrice = $oDb->getOne($sQ);
         if ( $dVarMinPrice ) {
