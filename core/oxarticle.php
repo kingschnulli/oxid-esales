@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 18966 2009-05-12 12:14:19Z sarunas $
+ * $Id: oxarticle.php 18988 2009-05-13 07:49:23Z sarunas $
  */
 
 // defining supported link types
@@ -3920,6 +3920,8 @@ class oxArticle extends oxI18n
         //#M0000886 (Sarunas)
         if ( $this->getConfig()->getConfigParam( 'blVariantParentBuyable' ) ) {
             $sQ .= ' or oxid = "'.$sParentID.'"';
+        } else {
+            $sQ .= ' or (oxid = "'.$sParentID.'" and oxvarcount=0)';
         }
         $sQ .= ')';
         $oDb = oxDb::getDb();

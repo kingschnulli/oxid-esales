@@ -357,6 +357,10 @@ class Language_Main extends oxAdminDetails
         $iBaseId = $this->_aLangData['params'][$sOxId]['baseId'];
 
         $sDir = dirname( $myConfig->getLanguagePath( 'lang.php', 0, $iBaseId ) );
+            if ( !$sDir ) {
+                //additional check for former templates
+                $sDir = dirname( $myConfig->getLanguagePath( 'lang.txt', 0, $iBaseId ) );
+            }
 
         if ( empty($sDir) ) {
             $oEx = new oxExceptionToDisplay();
