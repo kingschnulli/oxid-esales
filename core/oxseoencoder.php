@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 18834 2009-05-06 10:51:53Z arvydas $
+ * $Id: oxseoencoder.php 19051 2009-05-14 07:19:59Z arvydas $
  */
 
 /**
@@ -432,7 +432,7 @@ class oxSeoEncoder extends oxSuperCfg
      *
      * @return void
      */
-    protected function _saveToDb( $sType, $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId = null, $blFixed = 0, $sKeywords = '', $sDescription = '', $sParams = null )
+    protected function _saveToDb( $sType, $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId = null, $blFixed = 0, $sKeywords = false, $sDescription = false, $sParams = null )
     {
         $oDb = oxDb::getDb( true );
         if ( $iShopId === null ) {
@@ -472,8 +472,13 @@ class oxSeoEncoder extends oxSuperCfg
             }
         }
         $oStr = getStr();
-        $sKeywords = $sKeywords ? $oDb->quote( $oStr->htmlentities( $this->encodeString( strip_tags( $sKeywords ), false ) ) ) : false;
-        $sDescription = $sDescription ? $oDb->quote( $oStr->htmlentities( strip_tags( $sDescription ) ) ) : false;
+        if ( $sKeywords !== false ) {
+            $sKeywords = $oDb->quote( $oStr->htmlentities( $this->encodeString( strip_tags( $sKeywords ), false ) ) );
+        }
+
+        if ( $sDescription !== false ) {
+            $sDescription = $oDb->quote( $oStr->htmlentities( strip_tags( $sDescription ) ) );
+        }
 
         // inserting new or updating
         $sParams = $sParams ? $oDb->quote( $sParams ) :'""';
@@ -639,7 +644,7 @@ class oxSeoEncoder extends oxSuperCfg
             }
         }
 
-        $this->_saveToDb( $sType, $oObject->getId(), $sStdUrl, $sSeoUrl, $iLang, $iShopId, (int) $blFixed, '', '', $sParams );
+        $this->_saveToDb( $sType, $oObject->getId(), $sStdUrl, $sSeoUrl, $iLang, $iShopId, (int) $blFixed, false, false, $sParams );
 
         return $sSeoUrl;
     }

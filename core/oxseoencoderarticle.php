@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoderarticle.php 18514 2009-04-23 16:22:51Z arvydas $
+ * $Id: oxseoencoderarticle.php 19051 2009-05-14 07:19:59Z arvydas $
  */
 
 /**
@@ -109,7 +109,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                     $sTmpSeoUrl .= $sTitle;
                     $sTmpSeoUrl  = $this->_getUniqueSeoUrl( $sTmpSeoUrl, '.html', $oArticle->getId(), $iLang );
 
-                    $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sTmpSeoUrl, $iLang, null, 0, '', '', $oCategory->oxcategories__oxrootid->value);
+                    $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sTmpSeoUrl, $iLang, null, 0, false, false, $oCategory->oxcategories__oxrootid->value);
                     if ($oCategory->oxcategories__oxrootid->value == $sActCatId) {
                         $sSeoUrl = $sTmpSeoUrl;
                     }
@@ -206,7 +206,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 $sSeoUrl = oxSeoEncoderVendor::getInstance()->getVendorUri( $oVendor, $iLang );
                 $sSeoUrl = $this->_getUniqueSeoUrl( $sSeoUrl . $sTitle, '.html', $oArticle->getId(), $iLang );
 
-                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang, null, 0, '', '', $sActVendorId );
+                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang, null, 0, false, false, $sActVendorId );
             }
         }
 
@@ -256,7 +256,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 $sSeoUrl = oxSeoEncoderManufacturer::getInstance()->getManufacturerUri( $oManufacturer, $iLang );
                 $sSeoUrl = $this->_getUniqueSeoUrl( $sSeoUrl . $sTitle, '.html', $oArticle->getId(), $iLang );
 
-                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang, null, 0, '', '', $sActManufacturerId );
+                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang, null, 0, false, false, $sActManufacturerId );
             }
         }
 
