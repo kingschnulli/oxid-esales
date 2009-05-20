@@ -19,9 +19,18 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 17902 2009-04-06 14:22:54Z vilma $
+ * $Id: lang.php 19183 2009-05-18 15:24:34Z philipp.grashoff $
  */
-
+ 
+ 
+/* -----------------------
+--  ADAPTING THIS FILE  --
+--------------------------
+If you want to adapt this language file, use cust_lang.php instead. 
+Further information is available in the manual at
+http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/editing-language-files
+*/ 
+ 
 $sLangName  = "English";
 $iLangNr    = 1;
 // -------------------------------
