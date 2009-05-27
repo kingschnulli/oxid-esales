@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 18988 2009-05-13 07:49:23Z sarunas $
+ * $Id: oxarticle.php 19371 2009-05-26 07:51:02Z vilma $
  */
 
 // defining supported link types
@@ -785,7 +785,6 @@ class oxArticle extends oxI18n
             return;
         }
 
-        $this->_assignLinks();
         $this->_assignParentFieldValues();
         $this->_assignNotBuyableParent();
         $this->_assignPictureValues();
@@ -1549,20 +1548,31 @@ class oxArticle extends oxI18n
             return $this->_oPrice;
         }
 
+        $this->_calculatePrice( $this->_oPrice );
+
+        return $this->_oPrice;
+    }
+
+    /**
+     * Calculates price of article (adds taxes, currency and discounts).
+     *
+     * @return oxPrice
+     */
+    protected function _calculatePrice( $oPrice )
+    {
         // apply VAT only if configuration requires it
-        if ( !$myConfig->getConfigParam( 'bl_perfCalcVatOnlyForBasketOrder' ) ) {
-            $this->_applyVAT( $this->_oPrice, $this->getArticleVat() );
+        if ( !$this->getConfig()->getConfigParam( 'bl_perfCalcVatOnlyForBasketOrder' ) ) {
+            $this->_applyVAT( $oPrice, $this->getArticleVat() );
         }
 
         // apply currency
-        $this->_applyCurrency( $this->_oPrice );
-
+        $this->_applyCurrency( $oPrice );
         // apply discounts
         if ( !$this->skipDiscounts() ) {
-            $this->_applyDiscounts($this->_oPrice, oxDiscountList::getInstance()->getArticleDiscounts($this, $this->getArticleUser()));
+            $this->_applyDiscounts($oPrice, oxDiscountList::getInstance()->getArticleDiscounts($this, $this->getArticleUser()));
         }
 
-        return $this->_oPrice;
+        return $oPrice;
     }
 
     /**
@@ -2144,8 +2154,8 @@ class oxArticle extends oxI18n
     public function getStdLink($iLang = null)
     {
         //always returns shop url, not admin
-        $sUrl  = $this->getConfig()->getShopHomeURL( $iLang, false );
-        $sUrl .= "cl=details&amp;anid=".$this->getId();
+        $this->_sStdLink  = $this->getConfig()->getShopHomeURL( $iLang, false );
+        $this->_sStdLink .= "cl=details&amp;anid=".$this->getId();
 
         $blSeo = oxUtils::getInstance()->seoIsActive();
         if ( !$blSeo || $this->_iLinkType != 0 ) {
@@ -2153,16 +2163,16 @@ class oxArticle extends oxI18n
             if ( !$blSeo ) {
                 $iPgNr = (int) oxConfig::getParameter( 'pgNr' );
                 if ( $iPgNr > 0 ) {
-                    $sUrl .= "&amp;pgNr={$iPgNr}";
+                    $this->_sStdLink .= "&amp;pgNr={$iPgNr}";
                 }
             }
 
             if ( ( $sCat = oxConfig::getParameter( 'cnid' ) ) ) {
-                $sUrl .= "&amp;cnid={$sCat}";
+                $this->_sStdLink .= "&amp;cnid={$sCat}";
             }
 
             if ( ( $sCat = oxConfig::getParameter( 'mnid' ) ) ) {
-                $sUrl .= "&amp;mnid={$sCat}";
+                $this->_sStdLink .= "&amp;mnid={$sCat}";
             }
 
             $sListType = oxConfig::getParameter( 'listtype' );
@@ -2173,18 +2183,18 @@ class oxArticle extends oxI18n
 
             // list type
             if ( $sListType ) {
-                $sUrl .= "&amp;listtype={$sListType}";
+                $this->_sStdLink .= "&amp;listtype={$sListType}";
             }
 
             if (!$blSeo && isset($iLang)) {
                 $iLang = (int) $iLang;
                 if ($iLang != (int) $this->getLanguage()) {
-                    $sUrl .= "&amp;lang={$iLang}";
+                    $this->_sStdLink .= "&amp;lang={$iLang}";
                 }
             }
         }
 
-        return $sUrl;
+        return $this->_sStdLink = $this->getSession()->processUrl( $this->_sStdLink );
     }
 
     /**
@@ -2296,6 +2306,19 @@ class oxArticle extends oxI18n
      */
     public function getMoreDetailLink()
     {
+        if ( $this->_sMoreDetailLink == null ) {
+
+            // and assign special article values
+            $this->_sMoreDetailLink = $this->getConfig()->getShopHomeURL() . 'cl=moredetails';
+
+            // not always it is okey, as not all the time active category is the same as primary article cat.
+            if ( $sActCat = oxConfig::getParameter( 'cnid' ) ) {
+                $this->_sMoreDetailLink .= '&amp;cnid='.$sActCat;
+            }
+            $this->_sMoreDetailLink .= '&amp;anid='.$this->getId();
+            $this->_sMoreDetailLink = $this->getSession()->processUrl( $this->_sMoreDetailLink );
+        }
+
         return $this->_sMoreDetailLink;
     }
 
@@ -2306,6 +2329,37 @@ class oxArticle extends oxI18n
      */
     public function getToBasketLink()
     {
+        if ( $this->_sToBasketLink == null ) {
+            $myConfig = $this->getConfig();
+
+            if ( oxUtils::getInstance()->isSearchEngine() ) {
+                $this->_sToBasketLink = $this->getLink();
+            } else {
+                // and assign special article values
+                $this->_sToBasketLink = $myConfig->getShopHomeURL();
+
+                // override some classes as these should never showup
+                $sActClass = oxConfig::getParameter( 'cl' );
+                if ( $sActClass == 'thankyou') {
+                    $sActClass = 'basket';
+                }
+                $this->_sToBasketLink .= 'cl='.$sActClass;
+
+                // this is not very correct
+                if ( $sActCat = oxConfig::getParameter( 'cnid' ) ) {
+                    $this->_sToBasketLink .= '&amp;cnid='.$sActCat;
+                }
+
+                $this->_sToBasketLink .= '&amp;fnc=tobasket&amp;aid='.$this->getId().'&amp;anid='.$this->getId();
+
+                if ( $sTpl = basename( oxConfig::getParameter( 'tpl' ) ) ) {
+                    $this->_sToBasketLink .= '&amp;tpl='.$sTpl;
+                }
+            }
+
+            $this->_sToBasketLink = $this->getSession()->processUrl( $this->_sToBasketLink );
+        }
+
         return $this->_sToBasketLink;
     }
 
@@ -2391,6 +2445,18 @@ class oxArticle extends oxI18n
     public function isNotBuyable()
     {
         return $this->_blNotBuyable;
+    }
+
+    /**
+     * Sets product state - buyable or not
+     *
+     * @param bool $blBuyable state - buyable or not (default false)
+     *
+     * @return null
+     */
+    public function setBuyableState( $blBuyable = false )
+    {
+        $this->_blNotBuyable = !$blBuyable;
     }
 
     /**
@@ -2816,12 +2882,12 @@ class oxArticle extends oxI18n
 
     /**
      * apply article and article use
-     * 
+     *
      * @param oxPrice $oPrice target price
      */
     public function applyVats( oxPrice $oPrice )
     {
-        $this->_applyVAT($oPrice, 
+        $this->_applyVAT($oPrice,
                          $this->getArticleVat()
                         );
     }
@@ -2839,6 +2905,22 @@ class oxArticle extends oxI18n
         reset( $aDiscounts );
         while ( list( , $oDiscount ) = each( $aDiscounts ) ) {
             $oDiscount->applyDiscount( $oPrice );
+        }
+    }
+
+    /**
+     * Applies discounts which should be applied in general case (for 0 amount)
+     *
+     * @param oxprice $oPrice     Price object
+     * @param array   $aDiscounts Discount list
+     *
+     * @return null
+     */
+    public function applyDiscountsForVariant( $oPrice )
+    {
+        // apply discounts
+        if ( !$this->skipDiscounts() ) {
+            $this->_applyDiscounts($oPrice, oxDiscountList::getInstance()->getArticleDiscounts($this, $this->getArticleUser()));
         }
     }
 
@@ -3610,54 +3692,6 @@ class oxArticle extends oxI18n
 
 
     /**
-     * Assigns links to article object
-     *
-     * @return null;
-     */
-    protected function _assignLinks()
-    {
-        $myConfig = $this->getConfig();
-
-        // and assign special article values
-        $sURL       = $myConfig->getShopHomeURL();
-        $sActCat    = oxConfig::getParameter( 'cnid' );
-        $sActClass  = oxConfig::getParameter( 'cl' );
-        $sTPL       = basename( oxConfig::getParameter( 'tpl' ) );
-
-        // override some classes as these should never showup
-        if ( $sActClass == 'thankyou') {
-            $sActClass = 'basket';
-        }
-
-        $sCnid = '';
-
-        // this is not very correct
-        if ($sActCat) {
-            $sCnid = '&amp;cnid='.$sActCat;
-        }
-
-        $this->_sDetailLink     = $this->getLink();
-
-        // mallchange to make sure
-        // MALL OFF
-        /*if( $myConfig->isMall() && !$this->InShop())
-            $this->oxdetaillink .= "&amp;cshp=".$this->oxarticles__oxshopid->value;*/
-
-        $this->_sMoreDetailLink = $sURL. 'cl=moredetails&amp;cnid='.$sActCat.'&amp;anid='.$this->getId();
-
-        if ( oxUtils::getInstance()->isSearchEngine() ) {
-            $this->_sToBasketLink = $this->_sDetailLink;
-        } else {
-            $this->_sToBasketLink = $sURL. 'cl='.$sActClass.'&amp;fnc=tobasket'.$sCnid.'&amp;aid='.$this->getId().'&amp;anid='.$this->getId();
-        }
-
-
-        if ( isset( $sTPL) && $sTPL) {
-            $this->_sToBasketLink .=  '&amp;tpl='.$sTPL;
-        }
-    }
-
-    /**
      * Sets article creation date
      * (oxarticle::oxarticles__oxinsert). Then executes parent method
      * parent::_insert() and returns insertion status.
@@ -3997,6 +4031,7 @@ class oxArticle extends oxI18n
             $this->getPrice()->setBruttoPriceMode();
             $this->getPrice()->setPrice($this->oxarticles__oxvarminprice->value);
             $this->_blIsRangePrice = true;
+            $this->_calculatePrice( $this->getPrice() );
         }
     }
 }

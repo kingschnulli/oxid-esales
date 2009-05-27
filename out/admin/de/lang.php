@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 18910 2009-05-08 14:24:06Z vilma $
+ * $Id: lang.php 19240 2009-05-20 11:06:26Z philipp.grashoff $
  */
 
 $sLangName  = 'Deutsch';
@@ -1264,9 +1264,9 @@ $aLang = array(
 'SHOP_SEO_ROOTVENDORID'                         => 'Hersteller Wurzel SEO ID',
 'SHOP_SEO_IDSSEPARATOR'                         => 'SEO IDs Trennzeichen (z. B. "+", "-")',
 'SHOP_SEO_SAFESEOPREF'                          => 'SEO Suffix um gleiche Artikel zu unterscheiden',
-'SHOP_SEO_RESETIDS'                             => 'SEO IDs zurücksetzen',
+'SHOP_SEO_RESETIDS'                             => 'SEO URLs neu berechnen',
 'SHOP_SEO_REPLACECHARS'                         => 'Zeichen, die in SEO URLs ersetzt werden',
-'SHOP_SEO_QRESETIDS'                            => 'ACHTUNG: Es werden die SEO URLS zurückgesetzt für Kategorien, Artikel und Hersteller.!',
+'SHOP_SEO_QRESETIDS'                            => 'ACHTUNG: Die SEO URLS von Kategorien, Artikeln, Herstellern und Lieferanten werden neu berechnet, wenn die entsprechende Seite das nächste mal aufgerufen',
 'SHOP_SEO_NEWINSTALL'                           => 'ACHTUNG: Dies erfordert die korrekte Ausführung der mitgelieferten .htaccess (mod rewrite)',
 'SHOP_SEO_STATICURLS'                           => 'Statische URLs',
 'SHOP_SEO_STDURL'                               => 'Standard URL',
@@ -1406,7 +1406,7 @@ $aLang = array(
 'TOOLTIPS_RECALCNROFARTICLESINMAN'              => 'Artikelanzahl der Hersteller neu berechnen',
 'TOOLTIPS_RESETNROFARTICLESINCAT'               => 'Artikelanzahl in den Kategorien zurücksetzen',
 'TOOLTIPS_RESETNROFARTICLESINVND'               => 'Artikelanzahl in den Lieferanten zurücksetzen',
-'TOOLTIPS_RESETNROFARTICLESINMAN'               => 'Artikelanzahl in den Hersteller zurücksetzen',
+'TOOLTIPS_RESETNROFARTICLESINMAN'               => 'Artikelanzahl in den Herstellern zurücksetzen',
 'TOOLTIPS_TIMEFORMAT'                           => 'Zeit Format: ',
 'TOOLTIPS_VALDESC'                              => 'Eintrag1__@@Eintrag2__@@ usw.',
 'USER_ADDRESS_DELIVERYADDRESS'                  => 'Lieferadressen',

@@ -93,8 +93,29 @@ class oxSimpleVariant extends oxI18n
         $this->_oPrice->setPrice($dPrice, $this->_dVat);
 
         $this->_applyParentVat($this->_oPrice);
+        // apply discounts
+        $this->_applyParentDiscounts($this->_oPrice);
 
         return $this->_oPrice;
+    }
+
+    /**
+     * Applies discounts which should be applied in general case (for 0 amount)
+     *
+     * @param oxprice $oPrice     Price object
+     * @param array   $aDiscounts Discount list
+     *
+     * @return null
+     */
+    protected function _applyParentDiscounts( $oPrice )
+    {
+        $oParent = $this->getParent();
+        if (!($oParent instanceof oxarticle)) {
+            return;
+        }
+
+        $oParent->applyDiscountsForVariant( $oPrice );
+
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 18910 2009-05-08 14:24:06Z vilma $
+ * $Id: lang.php 19242 2009-05-20 11:12:52Z philipp.grashoff $
  */
 
 /*
@@ -1270,9 +1270,9 @@ $aLang = array(
 'SHOP_SEO_ROOTVENDORID'                         => 'Root vendor SEO ID',
 'SHOP_SEO_IDSSEPARATOR'                         => 'SEO IDs Separator (e.g. "+", "-")',
 'SHOP_SEO_SAFESEOPREF'                          => 'SEO Suffix for differing Similar SEO URLs',
-'SHOP_SEO_RESETIDS'                             => 'Reset SEO IDs',
+'SHOP_SEO_RESETIDS'                             => 'Update SEO URLs',
 'SHOP_SEO_REPLACECHARS'                         => 'Characters which are replaced in SEO URLs',
-'SHOP_SEO_QRESETIDS'                            => 'ATTENTION: This function will reset current SEO IDs for Categories, Products and Manufacturers!',
+'SHOP_SEO_QRESETIDS'                            => 'ATTENTION: This function will reset current SEO IDs for Categories, Products, Manufacturers and Distributors. The SEO IDs will be recalculated the next time the accordant page is opened.',
 'SHOP_SEO_NEWINSTALL'                           => 'ATTENTION: you need to make sure that the distributed .htaccess works correct (mod rewrite)',
 'SHOP_SEO_STATICURLS'                           => 'Static URLs',
 'SHOP_SEO_STDURL'                               => 'Standard URL',

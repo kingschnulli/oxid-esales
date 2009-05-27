@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxviewconfig.php 18043 2009-04-09 12:25:00Z arvydas $
+ * $Id: oxviewconfig.php 19252 2009-05-21 07:52:04Z arvydas $
  */
 
 /**
@@ -58,7 +58,9 @@ class oxViewConfig extends oxSuperCfg
     public function getHomeLink()
     {
 
-            return $this->getBaseDir();
+            $sLink = $this->getBaseDir();
+
+        return $this->getSession()->processUrl( $sLink );
     }
 
     /**
@@ -83,7 +85,8 @@ class oxViewConfig extends oxSuperCfg
         $sCatnid  = $this->getActCatId();
         $sTplName = $this->getActTplName();
 
-        return $this->getConfig()->getShopHomeURL()."cl={$sClass}&amp;".( $sCatnid ? "cnid={$sCatnid} " : '' )."&amp;fnc=logout".( $sTplName ? "&amp;tpl=".basename( $sTplName ) : '' )."&amp;redirect=1";
+        $sLink = $this->getConfig()->getShopHomeURL()."cl={$sClass}&amp;".( $sCatnid ? "cnid={$sCatnid} " : '' )."&amp;fnc=logout".( $sTplName ? "&amp;tpl=".basename( $sTplName ) : '' )."&amp;redirect=1";
+        return $this->getSession()->processUrl( $sLink );
     }
 
     /**
@@ -95,7 +98,8 @@ class oxViewConfig extends oxSuperCfg
     {
         $sTplName = $this->getActTplName();
         $sClass   = $this->getActiveClassName();
-        return $this->getConfig()->getShopCurrentURL()."cl=help&amp;page={$sClass}".( $sTplName ? "&amp;tpl={$sTplName}" : '' );
+        $sLink = $this->getConfig()->getShopCurrentURL()."cl=help&amp;page={$sClass}".( $sTplName ? "&amp;tpl={$sTplName}" : '' );
+        return $this->getSession()->processUrl( $sLink );
     }
 
     /**

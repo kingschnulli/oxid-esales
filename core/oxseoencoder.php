@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 19051 2009-05-14 07:19:59Z arvydas $
+ * $Id: oxseoencoder.php 19252 2009-05-21 07:52:04Z arvydas $
  */
 
 /**
@@ -206,7 +206,8 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _getFullUrl( $sSeoUrl, $iLang = null)
     {
-        return $this->getConfig()->getShopURL( $iLang ) . $sSeoUrl . $this->_getAddParams();
+        $sFullUrl = $this->getConfig()->getShopUrl( $iLang ) . $sSeoUrl . $this->_getAddParams();
+        return $this->getSession()->processUrl( $sFullUrl );
     }
 
     /**

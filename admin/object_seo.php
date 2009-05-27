@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: object_seo.php 17479 2009-03-20 12:32:53Z arvydas $
+ * $Id: object_seo.php 19355 2009-05-25 13:43:03Z arvydas $
  */
 
 /**
@@ -161,8 +161,12 @@ class Object_Seo extends oxAdminDetails
                 $aSeoData['oxfixed'] = 0;
             }
 
-            // saving
             $oEncoder = oxSeoEncoder::getInstance();
+
+            // marking self and page links as expired
+            $oEncoder->markAsExpired( $sOxid, $this->getconfig()->getShopId(), 1, $this->_iEditLang );
+
+            // saving
             $oEncoder->addSeoEntry( $sOxid, $iShopId, $this->_iEditLang, $this->_getStdUrl( $sOxid ),
                                     $aSeoData['oxseourl'], $this->_getType(), $aSeoData['oxfixed'],
                                     trim( $aSeoData['oxkeywords'] ), trim( $aSeoData['oxdescription'] ), $this->processParam( $aSeoData['oxparams'] ) );
