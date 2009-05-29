@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 19252 2009-05-21 07:52:04Z arvydas $
+ * $Id: oxseoencoder.php 19379 2009-05-26 11:30:04Z arvydas $
  */
 
 /**
@@ -433,7 +433,7 @@ class oxSeoEncoder extends oxSuperCfg
      *
      * @return void
      */
-    protected function _saveToDb( $sType, $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId = null, $blFixed = 0, $sKeywords = false, $sDescription = false, $sParams = null )
+    protected function _saveToDb( $sType, $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId = null, $blFixed = null, $sKeywords = false, $sDescription = false, $sParams = null )
     {
         $oDb = oxDb::getDb( true );
         if ( $iShopId === null ) {
@@ -442,7 +442,7 @@ class oxSeoEncoder extends oxSuperCfg
 
         $iShopId = $oDb->quote( $iShopId );
 
-        $sObjectId   = $oDb->quote( $sObjectId );
+        $sObjectId = $oDb->quote( $sObjectId );
         $sType = $oDb->quote( $sType );
 
         $iLang = (int) $iLang;
@@ -455,10 +455,12 @@ class oxSeoEncoder extends oxSuperCfg
         $sStdUrl = $oDb->quote( $sStdUrl );
         $sSeoUrl = $oDb->quote( $sSeoUrl );
 
-        $blFixed = (int) $blFixed;
         // transferring old url, thus current url will be regenerated
         $sQ  = "select oxfixed, oxexpired, ( oxstdurl like {$sStdUrl} and oxexpired != 2 ) as samestdurl, oxseourl like {$sSeoUrl} as sameseourl from oxseo where oxtype = {$sType} and oxobjectid = {$sObjectId} and oxshopid = {$iShopId} and oxlang = {$iLang} ";
-        $sQ .= $sParams?" and oxparams = '{$sParams}' " : '';
+        $sQ .= $sParams ? " and oxparams = " . $oDb->quote( $sParams ) : '';
+        $sQ .= ( $sKeywords !== false ) ? " and oxkeywords = " . $oDb->quote( $sKeywords ) . " " : '';
+        $sQ .= ( $sDescription !== false ) ? " and oxdescription = " . $oDb->quote( $sDescription ) . " " : '';
+        $sQ .= isset( $blFixed ) ? " and oxfixed = " . ( (int) $blFixed ) . " " : '';
         $sQ .= "limit 1";
 
         $oRs = $oDb->execute( $sQ );
@@ -483,6 +485,7 @@ class oxSeoEncoder extends oxSuperCfg
 
         // inserting new or updating
         $sParams = $sParams ? $oDb->quote( $sParams ) :'""';
+        $blFixed = (int) $blFixed;
 
         $sQ  = "insert into oxseo
                     (oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed, oxexpired, oxkeywords, oxdescription, oxparams)

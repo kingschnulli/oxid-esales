@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: tag.php 18244 2009-04-15 14:49:32Z arvydas $
+ * $Id: tag.php 19384 2009-05-26 13:16:18Z rimvydas.paskevicius $
  */
 
 /**
@@ -322,11 +322,12 @@ class Tag extends aList
      * Returns current view keywords seperated by comma
      * (calls parent::_collectMetaKeyword())
      *
-     * @param string $sKeywords data to use as keywords
+     * @param string $sKeywords               data to use as keywords
+     * @param bool   $blRemoveDuplicatedWords remove dublicated words
      *
      * @return string
      */
-    protected function _prepareMetaKeyword( $sKeywords )
+    protected function _prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords = true )
     {
         return parent::_collectMetaKeyword( $sKeywords );
     }

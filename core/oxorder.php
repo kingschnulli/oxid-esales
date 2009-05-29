@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 18978 2009-05-12 15:45:00Z arvydas $
+ * $Id: oxorder.php 19436 2009-05-28 08:07:19Z arvydas $
  */
 
 /**
@@ -1464,9 +1464,12 @@ class oxOrder extends oxBase
      */
     public function getPaymentType()
     {
-        if ( $this->oxorder__oxpaymentid->value && $this->_oPaymentType == null ) {
-            $this->_oPaymentType = oxNew( 'oxuserpayment' );
-            $this->_oPaymentType->load( $this->oxorder__oxpaymentid->value );
+        if ( $this->oxorder__oxpaymentid->value && $this->_oPaymentType === null ) {
+            $this->_oPaymentType = false;
+            $oPaymentType = oxNew( 'oxuserpayment' );
+            if ( $oPaymentType->load( $this->oxorder__oxpaymentid->value ) ) {
+                $this->_oPaymentType = $oPaymentType;
+            }
         }
 
         return $this->_oPaymentType;

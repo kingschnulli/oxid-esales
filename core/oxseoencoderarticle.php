@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoderarticle.php 19051 2009-05-14 07:19:59Z arvydas $
+ * $Id: oxseoencoderarticle.php 19467 2009-05-28 14:12:54Z arvydas $
  */
 
 /**
@@ -54,6 +54,47 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             self::$_instance = oxNew("oxSeoEncoderArticle");
         }
         return self::$_instance;
+    }
+
+    protected function _getArticlePriceCategoryUri( $oArticle, $iLang = null)
+    {
+        startProfile(__FUNCTION__);
+        if (!isset($iLang)) {
+            $iLang = $oArticle->getLanguage();
+        }
+
+        $sActCatId = '';
+        $oView = $this->getConfig()->getActiveView();
+        $oCategory = null;
+
+        if ( $oView instanceof oxUBase ) {
+            $oCategory = $oView->getActCategory();
+        }
+
+        if ( $oCategory ) {
+            $sActCatId = $oCategory->oxcategories__oxrootid->value;
+        }
+
+        //load details link from DB
+        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, null, $sActCatId, true ) ) ) {
+
+            if ( $iLang != $oArticle->getLanguage() ) {
+                $sId = $oArticle->getId();
+                $oArticle = oxNew( 'oxarticle' );
+                $oArticle->loadInLang( $iLang, $sId );
+            }
+
+            // writing category path
+            $sSeoUrl  = oxSeoEncoderCategory::getInstance()->getCategoryUri( $oCategory );
+            $sSeoUrl .= $this->_prepareArticleTitle( $oArticle );
+            $sSeoUrl  = $this->_getUniqueSeoUrl( $sSeoUrl, '.html', $oArticle->getId(), $iLang );
+
+            $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang, null, 0, false, false, $oCategory->oxcategories__oxrootid->value);
+        }
+
+        stopProfile(__FUNCTION__);
+
+        return $sSeoUrl;
     }
 
     /**
@@ -286,6 +327,9 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 break;
             case 2 :
                 $sUri = $this->_getArticleManufacturerUri( $oArticle, $iLang );
+                break;
+            case 3 :
+                $sUri = $this->_getArticlePriceCategoryUri( $oArticle, $iLang );
                 break;
             default:
                 $sUri = $this->_getArticleUri( $oArticle, $iLang );

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlocator.php 18042 2009-04-09 12:24:06Z arvydas $
+ * $Id: oxlocator.php 19455 2009-05-28 11:56:34Z arvydas $
  */
 
 /**
@@ -476,11 +476,9 @@ class oxLocator extends oxSuperCfg
         $oIdList->setCustomSorting( $sOrderBy ) ;
 
         // additionally check if this category is loaded and is price category ?
-        if ( $oCategory->oxcategories__oxpricefrom->value || $oCategory->oxcategories__oxpriceto->value ) {
-
+        if ( $oCategory->isPriceCategory() ) {
             $oIdList->loadPriceIds( $oCategory->oxcategories__oxpricefrom->value, $oCategory->oxcategories__oxpriceto->value );
         } else {
-
             $sActCat = $oCategory->getId();
             $oIdList->loadCategoryIDs( $sActCat, oxSession::getVar( 'session_attrfilter' ) );
             // if not found - reloading with empty filter

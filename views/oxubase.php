@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 18520 2009-04-24 08:10:19Z vilma $
+ * $Id: oxubase.php 19384 2009-05-26 13:16:18Z rimvydas.paskevicius $
  */
 
 /**
@@ -1074,6 +1074,7 @@ class oxUBase extends oxView
                     $this->_sMetaKeywords = strip_tags( $oContent->oxcontents__oxcontent->value );
                 }
             }
+
             $this->_sMetaKeywords = $this->_prepareMetaKeyword( $this->_sMetaKeywords );
         }
         return $this->_sMetaKeywords;
@@ -1091,15 +1092,17 @@ class oxUBase extends oxView
             // set special meta description ?
             if ( oxUtils::getInstance()->seoIsActive() && ( $sOxid = $this->_getSeoObjectId() ) &&
                  ( $sMeta = oxSeoEncoder::getInstance()->getMetaData( $sOxid, 'oxdescription' ) ) ) {
-                return $this->_sMetaDescription = $sMeta;
+                     return $this->_sMetaDescription = $sMeta;
             } elseif ( $this->_sMetaDescriptionIdent ) {
                 $oContent = oxNew( 'oxcontent' );
                 if ( $oContent->loadByIdent( $this->_sMetaDescriptionIdent ) && $oContent->oxcontents__oxactive->value ) {
                     $this->_sMetaDescription = strip_tags( $oContent->oxcontents__oxcontent->value );
                 }
             }
+
             $this->_sMetaDescription = $this->_prepareMetaDescription( $this->_sMetaDescription );
         }
+
         return $this->_sMetaDescription;
     }
 
@@ -1328,13 +1331,13 @@ class oxUBase extends oxView
     /**
      * Returns current view meta description data
      *
-     * @param string $sMeta     category path
-     * @param int    $iLength   max length of result, -1 for no truncation
-     * @param bool   $blDescTag if true - performs additional dublicate cleaning
+     * @param string $sMeta                   category path
+     * @param int    $iLength                 max length of result, -1 for no truncation
+     * @param bool   $blRemoveDuplicatedWords if true - performs additional dublicate cleaning
      *
      * @return  string  $sString    converted string
      */
-    protected function _prepareMetaDescription( $sMeta, $iLength = 1024, $blDescTag = false )
+    protected function _prepareMetaDescription( $sMeta, $iLength = 1024, $blRemoveDuplicatedWords = false )
     {
         if ( $sMeta ) {
 
@@ -1358,7 +1361,7 @@ class oxUBase extends oxView
             $sMeta = $oStr->cleanStr( $sMeta );
 
             // removing duplicate words
-            if ( $blDescTag ) {
+            if ( $blRemoveDuplicatedWords ) {
                 $sMeta = $this->_removeDuplicatedWords( $sMeta );
             }
 
@@ -1379,13 +1382,19 @@ class oxUBase extends oxView
      *
      * @return string of keywords seperated by comma
      */
-    protected function _prepareMetaKeyword( $sKeywords )
+    protected function _prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords = true )
     {
+
         $sString = $this->_prepareMetaDescription( $sKeywords, -1, false );
+
         $aSkipTags = $this->getConfig()->getConfigParam( 'aSkipTags' );
-        $sString = $this->_removeDuplicatedWords( $sString, $aSkipTags );
+
+        if ( $blRemoveDuplicatedWords ) {
+            $sString = $this->_removeDuplicatedWords( $sString, $aSkipTags );
+        }
+
         // removing in admin defined strings
-        
+
         /*if ( is_array( $aSkipTags ) && $sString ) {
             $oStr = getStr();
             foreach ( $aSkipTags as $sSkip ) {
@@ -1395,6 +1404,7 @@ class oxUBase extends oxView
                 $sString  = $oStr->preg_replace( $aPattern, '', $sString );
             }
         }*/
+
         return trim( $sString );
     }
 
@@ -1426,7 +1436,7 @@ class oxUBase extends oxView
             $aStrings[$iNum] = $oStr->strtolower( $aStrings[$iNum] );
             // removing in admin defined strings
             if ( in_array( $aStrings[$iNum], $aSkipTags ) ) {
-            	unset( $aStrings[$iNum] );
+              unset( $aStrings[$iNum] );
             }
         }
 

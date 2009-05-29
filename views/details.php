@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 18934 2009-05-11 13:53:24Z vilma $
+ * $Id: details.php 19402 2009-05-27 11:22:14Z arvydas $
  */
 
 /**
@@ -421,7 +421,7 @@ class Details extends oxUBase
      * If $sMeta parameter comes empty, sets to it article title and description.
      * It happens if current view has no meta data defined in oxcontent table
      *
-     * @param string $sMeta     category path
+     * @param string $sMeta     user defined description, description content or empty value
      * @param int    $iLength   max length of result, -1 for no truncation
      * @param bool   $blDescTag if true - performs additional dublicate cleaning
      *
@@ -432,7 +432,7 @@ class Details extends oxUBase
         if ( !$sMeta ) {
             $oProduct = $this->getProduct();
 
-            $sMeta = getStr()->strtolower( $oProduct->getArticleLongDesc()->value );
+            $sMeta = $oProduct->getArticleLongDesc()->value;
             $sMeta = str_replace( array( '<br>', '<br />', '<br/>' ), "\n", $sMeta );
             $sMeta = $oProduct->oxarticles__oxtitle->value.' - '.$sMeta;
             $sMeta = strip_tags( $sMeta );
@@ -445,23 +445,35 @@ class Details extends oxUBase
      * If $sKeywords parameter comes empty, sets to it article title and description.
      * It happens if current view has no meta data defined in oxcontent table
      *
-     * @param string $sKeywords data to use as keywords
+     * @param string $sKeywords               user defined keywords, keywords content or empty value
+     * @param bool   $blRemoveDuplicatedWords remove dublicated words
      *
      * @return string
      */
-    protected function _prepareMetaKeyword( $sKeywords )
+    protected function _prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords = true )
     {
+        $myConfig = $this->getConfig();
+
         if ( !$sKeywords ) {
             $oProduct = $this->getProduct();
+            $aKeywords[] = trim( $this->getTitle() );
 
-            $sKeywords = getStr()->strtolower( $oProduct->getArticleLongDesc()->value );
-            $sKeywords = str_replace( array( '<br>', '<br />', '<br/>' ), "\n", $sKeywords );
-            if ( trim( $oProduct->oxarticles__oxsearchkeys->value ) ) {
-                $sKeywords = $oProduct->oxarticles__oxsearchkeys->value.' '.$sKeywords;
+            if ( $oCatTree = $this->getCategoryTree() ) {
+                foreach ( $oCatTree->getPath() as $oCat ) {
+                    $aKeywords[] = trim( $oCat->oxcategories__oxtitle->value );
+                }
             }
-            $sKeywords = strip_tags( $sKeywords );
+
+            $sKeywords = implode( ", ", $aKeywords );
+
+            //adding searchkeys info
+            if ( $sSearchKeys = trim( $oProduct->oxarticles__oxsearchkeys->value ) ) {
+                $sSearchKeys = preg_replace( "/\s+/", ", ", $sSearchKeys );
+                $sKeywords .= ", " . $sSearchKeys;
+            }
         }
-        return parent::_prepareMetaKeyword( $sKeywords );
+
+        return parent::_prepareMetaKeyword( $sKeywords, false );
     }
 
     /**

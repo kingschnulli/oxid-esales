@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 18956 2009-05-12 08:55:26Z vilma $
+ * $Id: oxuser.php 19449 2009-05-28 11:09:08Z alfonsas $
  */
 
 /**
@@ -419,12 +419,7 @@ class oxUser extends oxBase
             $this->oxuser__oxbirthdate = new oxField($this->convertBirthday( $this->oxuser__oxbirthdate->value ), oxField::T_RAW);
         }
 
-        // dodger  Task #1535 - editing user information in shop
-        // isDerived seems to be wrong here
-        $blStore = $this->_blIsDerived;
-        $this->_blIsDerived = false;
         $blRet = parent::save();
-        $this->_blIsDerived = $blStore;
 
         //add registered remark
         if ( $blAddRemark && $blRet ) {
@@ -435,6 +430,16 @@ class oxUser extends oxBase
         }
 
         return $blRet;
+    }
+
+    /**
+     * Overrides parent isDerived check and returns true
+     *
+     * @return bool
+     */
+    public function allowDerivedUpdate()
+    {
+        return true;
     }
 
     /**
@@ -679,8 +684,8 @@ class oxUser extends oxBase
 
         // user without password found - lets use
         if ( isset( $sOXID ) && $sOXID ) {
-            // try to update
-            $this->setId( $sOXID );
+            // delete user
+            $this->delete($sOXID );
         } elseif ( $this->_blMallUsers ) { // must be sure if there is no dublicate user
             $sQ = "select oxid from oxuser where oxusername = '{$this->oxuser__oxusername->value}' and oxusername != '' ";
             if ( $oDB->getOne( $sQ ) ) {
@@ -1291,7 +1296,7 @@ class oxUser extends oxBase
                 $sUser = $oDB->quote( $aData[0] );
                 $sPWD  = @$aData[1];
 
-                $sSelect =  'select oxid, oxpassword from oxuser where oxuser.oxactive = 1 and oxuser.oxusername = '.$sUser;
+                $sSelect =  'select oxid, oxpassword from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$sUser;
 
 
                 $oDB = oxDb::getDb();
