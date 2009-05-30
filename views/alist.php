@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 19459 2009-05-28 12:19:13Z arvydas $
+ * $Id: alist.php 19507 2009-05-29 12:35:36Z arvydas $
  */
 
 /**
@@ -244,6 +244,23 @@ class aList extends oxUBase
     }
 
     /**
+     * Special page indexing handling for price categories (page should not be indexed):
+     *  - if current category is price category returns VIEW_INDEXSTATE_NOINDEXFOLLOW
+     *  - else returns parent::noIndex()
+     *
+     * @return int
+     */
+    public function noIndex()
+    {
+        // no indexing for price categories
+        if ( $this->_getProductLinkType() == OXARTICLE_LINKTYPE_PRICECATEGORY ) {
+            return $this->_iViewIndexState = VIEW_INDEXSTATE_NOINDEXFOLLOW;
+        }
+
+        return parent::noIndex();
+    }
+
+    /**
      * Returns product link type:
      *  - OXARTICLE_LINKTYPE_PRICECATEGORY - when active category is price category
      *  - OXARTICLE_LINKTYPE_CATEGORY - when active category is regular category
@@ -253,8 +270,8 @@ class aList extends oxUBase
     protected function _getProductLinkType()
     {
         $iCatType = OXARTICLE_LINKTYPE_CATEGORY;
-        if ( $this->getActCategory()->isPriceCategory() ) {
-            $iCatType = OXARTICLE_LINKTYPE_PRICECATEGORY;
+        if ( ( $oCat = $this->getActCategory() ) && $oCat->isPriceCategory() ) {
+            $iCatType =  OXARTICLE_LINKTYPE_PRICECATEGORY;
         }
         return $iCatType;
     }

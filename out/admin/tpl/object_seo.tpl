@@ -92,7 +92,7 @@ function SetSticker( sStickerId, oObject)
                 [{assign var="blCat" value="1"}]
                 <optgroup label="[{ oxmultilang ident="GENERAL_SEO_CAT" }]">
                 [{ foreach from=$oCategories item=oCategory }]
-                <option value="oxcategory#[{$oCategory->oxcategories__oxrootid->value}]" [{if $sCatId == $oCategory->oxcategories__oxrootid->value}]selected[{/if}]>[{$oCategory->oxcategories__oxtitle->value}]</option>
+                <option value="oxcategory#[{if $oCategory->isPriceCategory() }][{ $oCategory->getId() }][{else}][{$oCategory->oxcategories__oxrootid->value}][{/if}]" [{if ( $oCategory->isPriceCategory() && $sCatId == $oCategory->getId() ) || $sCatId == $oCategory->oxcategories__oxrootid->value}]selected[{/if}]>[{$oCategory->oxcategories__oxtitle->value}]</option>
                 [{ /foreach }]
                 </optgroup>
               [{/if}]
