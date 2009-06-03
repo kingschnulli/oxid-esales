@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 19448 2009-05-28 11:07:41Z arvydas $
+ * $Id: oxarticle.php 19565 2009-06-02 12:23:39Z arvydas $
  */
 
 // defining supported link types
@@ -27,6 +27,7 @@ define( 'OXARTICLE_LINKTYPE_CATEGORY', 0 );
 define( 'OXARTICLE_LINKTYPE_VENDOR', 1 );
 define( 'OXARTICLE_LINKTYPE_MANUFACTURER', 2 );
 define( 'OXARTICLE_LINKTYPE_PRICECATEGORY', 3 );
+define( 'OXARTICLE_LINKTYPE_TAG', 4 );
 
 /**
  * Article manager.

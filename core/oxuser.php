@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 19449 2009-05-28 11:09:08Z alfonsas $
+ * $Id: oxuser.php 19536 2009-06-01 15:19:37Z alfonsas $
  */
 
 /**
@@ -684,8 +684,8 @@ class oxUser extends oxBase
 
         // user without password found - lets use
         if ( isset( $sOXID ) && $sOXID ) {
-            // delete user
-            $this->delete($sOXID );
+            // try to update
+            $this->setId( $sOXID );
         } elseif ( $this->_blMallUsers ) { // must be sure if there is no dublicate user
             $sQ = "select oxid from oxuser where oxusername = '{$this->oxuser__oxusername->value}' and oxusername != '' ";
             if ( $oDB->getOne( $sQ ) ) {
