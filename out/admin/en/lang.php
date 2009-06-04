@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 19242 2009-05-20 11:12:52Z philipp.grashoff $
+ * $Id: lang.php 19590 2009-06-03 08:45:19Z arvydas $
  */
 
 /*
@@ -269,6 +269,7 @@ $aLang = array(
 'GENERAL_SEO_CAT'                               => '-- Category --',
 'GENERAL_SEO_VND'                               => '-- Distributor --',
 'GENERAL_SEO_MANUFACTURER'                      => '-- Manufacturer --',
+'GENERAL_SEO_TAG'                               => '-- Tags --',
 
 'GENERAL_SEO_URL'                               => 'SEO URL',
 'GENERAL_SEO_OXKEYWORDS'                        => 'META Keywords',
