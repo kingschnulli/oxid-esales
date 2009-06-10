@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 19565 2009-06-02 12:23:39Z arvydas $
+ * $Id: oxarticle.php 19670 2009-06-09 10:37:39Z sarunas $
  */
 
 // defining supported link types
@@ -88,19 +88,22 @@ class oxArticle extends oxI18n
 
     /**
      * Persistent Parameter.
+     * 
      * @var array
      */
     protected $_aPersistParam  = null;
 
     /**
      * Status of article - buyable/not buyable.
+     * 
      * @var bool
      */
     protected $_blNotBuyable   = false;
 
     /**
-     * Indicats should we load variants for current article. When $_blLoadVariants is set to false then
+     * Indicates if we should load variants for current article. When $_blLoadVariants is set to false then
      * neither simple nor full variants for this article are loaded.
+     * 
      * @var bool
      */
     protected $_blLoadVariants = true;
@@ -111,6 +114,13 @@ class oxArticle extends oxI18n
      * @var array
      */
     protected $_aVariants = null;
+
+    /**
+     * Article variants without 
+     *
+     * @var array
+     */
+    protected $_aVariantsWithNotOrderables = null;
 
     /**
      * $_blNotBuyableParent is set to true, when article has variants and is not buyable due to:
@@ -1102,8 +1112,10 @@ class oxArticle extends oxI18n
      */
     public function getVariants( $blRemoveNotOrderables = true )
     {
-        if ($this->_aVariants) {
+        if ($blRemoveNotOrderables && $this->_aVariants) {
             return $this->_aVariants;
+        } elseif (!$blRemoveNotOrderables && $this->_aVariantsWithNotOrderables) {
+            return $this->_aVariantsWithNotOrderables;
         }
 
         //return ;
@@ -1156,7 +1168,12 @@ class oxArticle extends oxI18n
                 $oVariants[$key]->aSelectlist = $oVariant->getSelectLists();
             }
         }
-        $this->_aVariants = $oVariants;
+        if ( $blRemoveNotOrderables ) {
+            $this->_aVariants = $oVariants;
+        } else {
+            $this->_aVariantsWithNotOrderables = $oVariants;
+        }
+
         return $oVariants;
     }
 
@@ -2031,7 +2048,7 @@ class oxArticle extends oxI18n
     public function setArticleLongDesc()
     {
 
-        if ($this->_blEmployMultilanguage) {
+        if ( $this->_blEmployMultilanguage ) {
             // update or insert article long description
             if ($this->oxarticles__oxlongdesc instanceof oxField) {
                 $sLongDesc = $this->oxarticles__oxlongdesc->getRawValue();
@@ -2045,16 +2062,18 @@ class oxArticle extends oxI18n
             $aObjFields = $oArtExt->_getAllFields(true);
             foreach ($aObjFields as $sKey => $sValue ) {
                 if ( preg_match('/^oxlongdesc(_(\d{1,2}))?$/', $sKey) ) {
-                    $iLang = $oArtExt->_getFieldLang($sKey);
                     $sField = $this->_getFieldLongName($sKey);
-                    $sLongDesc = null;
-                    if ($this->$sField instanceof oxField) {
-                        $sLongDesc = $this->$sField->getRawValue();
-                    } elseif (is_object($this->$sField)) {
-                        $sLongDesc = $this->$sField->value;
-                    }
-                    if (isset($sLongDesc)) {
-                        $this->_saveArtLongDesc($iLang, $sLongDesc);
+                    if (isset($this->$sField)) {
+                        $iLang = $oArtExt->_getFieldLang($sKey);
+                        $sLongDesc = null;
+                        if ($this->$sField instanceof oxField) {
+                            $sLongDesc = $this->$sField->getRawValue();
+                        } elseif (is_object($this->$sField)) {
+                            $sLongDesc = $this->$sField->value;
+                        }
+                        if (isset($sLongDesc)) {
+                            $this->_saveArtLongDesc($iLang, $sLongDesc);
+                        }
                     }
                 }
             }

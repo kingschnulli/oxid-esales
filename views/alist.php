@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 19507 2009-05-29 12:35:36Z arvydas $
+ * $Id: alist.php 19632 2009-06-05 13:14:07Z arvydas $
  */
 
 /**
@@ -655,9 +655,11 @@ class aList extends oxUBase
      * returns object, assosiated with current view.
      * (the object that is shown in frontend)
      *
+     * @param int $iLang language id
+     *
      * @return object
      */
-    protected function _getSubject()
+    protected function _getSubject( $iLang )
     {
         return $this->getActCategory();
     }

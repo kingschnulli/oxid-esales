@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: content.php 19384 2009-05-26 13:16:18Z rimvydas.paskevicius $
+ * $Id: content.php 19632 2009-06-05 13:14:07Z arvydas $
  */
 
 /**
@@ -237,9 +237,11 @@ class Content extends oxUBase
      * returns object, assosiated with current view.
      * (the object that is shown in frontend)
      *
+     * @param int $iLang language id
+     *
      * @return object
      */
-    protected function _getSubject()
+    protected function _getSubject( $iLang )
     {
         return $this->getContent();
     }

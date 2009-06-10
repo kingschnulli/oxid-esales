@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: vendorlist.php 19461 2009-05-28 12:42:24Z arvydas $
+ * $Id: vendorlist.php 19632 2009-06-05 13:14:07Z arvydas $
  */
 
 /**
@@ -415,5 +415,23 @@ class VendorList extends aList
     protected function _prepareMetaDescription( $sMeta, $iLength = 1024, $blDescTag = false )
     {
         return parent::_collectMetaDescription( $sMeta, $iLength, $blDescTag );
+    }
+
+    /**
+     * returns object, assosiated with current view.
+     * (the object that is shown in frontend)
+     *
+     * @param int $iLang language id
+     *
+     * @return object
+     */
+    protected function _getSubject( $iLang )
+    {
+        $oVendor = $this->getActiveCategory();
+        if ( $oVendor->getLanguage() != $iLang && $oVendor->getId() == 'root' ) {
+            return oxVendor::getRootVendor( $iLang );
+        }
+
+        return $oVendor;
     }
 }

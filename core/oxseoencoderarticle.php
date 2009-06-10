@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoderarticle.php 19511 2009-05-29 13:22:57Z arvydas $
+ * $Id: oxseoencoderarticle.php 19702 2009-06-09 16:07:30Z arvydas $
  */
 
 /**
@@ -53,6 +53,12 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         if (!self::$_instance) {
             self::$_instance = oxNew("oxSeoEncoderArticle");
         }
+
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            // resetting cache
+            self::$_instance->_aSeoCache = array();
+        }
+
         return self::$_instance;
     }
 
@@ -77,10 +83,44 @@ class oxSeoEncoderArticle extends oxSeoEncoder
     }
 
     /**
+     * Returns SEO uri for passed article and active tag
+     *
+     * @param object $oArticle article object
+     * @param object $iLang    language id [optional]
+     *
+     * @return string
+     */
+    protected function _getArticleTagUri( $oArticle, $iLang = null )
+    {
+        $oView = $this->getConfig()->getActiveView();
+
+        $sTag = null;
+        if ( $oView instanceof oxView ) {
+            $sTag = $oView->getTag();
+        }
+
+        $iShopId = $this->getConfig()->getShopId();
+
+        $sStdUrl = "index.php?cl=details&amp;anid=".$oArticle->getId()."&amp;listtype=tag&amp;searchtag=".rawurlencode( $sTag );
+        $sSeoUrl = $this->_loadFromDb( 'dynamic', $this->_getDynamicObjectId( $iShopId, $sStdUrl ), $iLang );
+        if ( !$sSeoUrl ) {
+
+            // generating new if not found
+            $sSeoUrl  = oxSeoEncoderTag::getInstance()->getTagUri( $sTag, $iLang );
+            $sSeoUrl .= $this->_prepareArticleTitle( $oArticle );
+            $sSeoUrl  = $this->_getUniqueSeoUrl( $sSeoUrl, '.html', $this->_getStaticObjectId( $iShopId, $sStdUrl ), $iLang );
+
+            $sSeoUrl = $this->_getDynamicUri( $sStdUrl, $sSeoUrl, $iLang );
+        }
+
+        return $sSeoUrl;
+    }
+
+    /**
      * Returns SEO uri for passed article and price category
      *
      * @param oxarticle $oArticle article object
-     * @param int       $iLang    language
+     * @param int       $iLang    language id [optional]
      *
      * @return string
      */
@@ -343,6 +383,9 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 break;
             case 3 :
                 $sUri = $this->_getArticlePriceCategoryUri( $oArticle, $iLang );
+                break;
+            case 4 :
+                $sUri = $this->_getArticleTagUri( $oArticle, $iLang );
                 break;
             default:
                 $sUri = $this->_getArticleUri( $oArticle, $iLang );

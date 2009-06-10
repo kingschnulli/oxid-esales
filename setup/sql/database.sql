@@ -1721,7 +1721,8 @@ CREATE TABLE `oxactions2article` (
   `OXARTID` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
   `OXSORT` int(11) NOT NULL default '0',
   PRIMARY KEY  (`OXID`),
-  KEY `OXMAINIDX` (`OXSHOPID`,`OXACTIONID`,`OXSORT`)
+  KEY `OXMAINIDX` (`OXSHOPID`,`OXACTIONID`,`OXSORT`),
+  KEY `OXARTID` (`OXARTID`)
 ) TYPE=MyISAM;
 
 #

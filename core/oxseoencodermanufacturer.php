@@ -44,6 +44,12 @@ class oxSeoEncoderManufacturer extends oxSeoEncoder
         if (!self::$_instance) {
             self::$_instance = oxNew("oxSeoEncoderManufacturer");
         }
+
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            // resetting cache
+            self::$_instance->_aSeoCache = array();
+        }
+
         return self::$_instance;
     }
 

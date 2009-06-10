@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 19384 2009-05-26 13:16:18Z rimvydas.paskevicius $
+ * $Id: oxubase.php 19701 2009-06-09 16:00:47Z arvydas $
  */
 
 /**
@@ -539,9 +539,6 @@ class oxUBase extends oxView
             $this->_blCommonAdded = true;
         }
 
-        // setting list type if needed
-        $this->_setListType();
-
         // storing current view
         $blInit = true;
 
@@ -708,8 +705,12 @@ class oxUBase extends oxView
      */
     public function getListType()
     {
-        if ( $this->_sListType == null && ( $sListType = oxConfig::getParameter( 'listtype' ) ) ) {
-            $this->_sListType = $sListType;
+        if ( $this->_sListType == null ) {
+            if ( $sListType = oxConfig::getParameter( 'listtype' ) ) {
+                $this->_sListType = $sListType;
+            } elseif ( $sListType = $this->getConfig()->getGlobalParameter( 'listtype' ) ) {
+                $this->_sListType = $sListType;
+            }
         }
         return $this->_sListType;
     }
@@ -724,6 +725,7 @@ class oxUBase extends oxView
     public function setListType( $sType )
     {
         $this->_sListType = $sType;
+        $this->getConfig()->setGlobalParameter( 'listtype', $sType );
     }
 
     /**
@@ -1545,9 +1547,11 @@ class oxUBase extends oxView
      * returns object, assosiated with current view.
      * (the object that is shown in frontend)
      *
+     * @param int $iLang language id
+     *
      * @return object
      */
-    protected function _getSubject()
+    protected function _getSubject( $iLang )
     {
         return null;
     }
@@ -1608,7 +1612,7 @@ class oxUBase extends oxView
         $oDisplayObj = null;
         if ( oxUtils::getInstance()->seoIsActive() ) {
             $blTrySeo = true;
-            $oDisplayObj = $this->_getSubject();
+            $oDisplayObj = $this->_getSubject( $iLang );
         }
         $iActPageNr = $this->getActPage();
 
@@ -1618,7 +1622,7 @@ class oxUBase extends oxView
             if ( $oDisplayObj->getLanguage() != $iLang ) {
                 $sOxId = $oDisplayObj->getId();
                 $oDisplayObj = oxNew( $oDisplayObj->getClassName() );
-                $oDisplayObj->load( $sOxId );
+                $oDisplayObj->loadInLang( $iLang, $sOxId );
             }
 
             return $this->_addPageNrParam( $oDisplayObj->getLink( $iLang ), $iActPageNr, $iLang );
@@ -2050,18 +2054,6 @@ class oxUBase extends oxView
     }
 
     /**
-     * Sets active list type if it was not set by request
-     *
-     * @return null
-     */
-    protected function _setListType()
-    {
-        if ( !oxConfig::getParameter( 'listtype' ) && isset( $this->_sListType ) ) {
-            $this->getConfig()->setGlobalParameter( 'listtype', $this->_sListType );
-        }
-    }
-
-    /**
      * Generates URL for page navigation
      *
      * @return string $sUrl String with working page url.
@@ -2301,10 +2293,15 @@ class oxUBase extends oxView
     {
         if ( $this->_oActTag === null ) {
             $this->_oActTag = new Oxstdclass();
-            $this->_oActTag->sTag = oxConfig::getParameter("searchtag", 1);
+            $this->_oActTag->sTag = $sTag = oxConfig::getParameter("searchtag", 1);
+            $oSeoEncoderTag = oxSeoEncoderTag::getInstance();
 
-            $sUrl = $this->getConfig()->getShopHomeURL();
-            $this->_oActTag->link = "{$sUrl}cl=tag";
+            if ( oxUtils::getInstance()->seoIsActive() ) {
+                $this->_oActTag->link = $oSeoEncoderTag->getTagUrl( $sTag, oxLang::getInstance()->getBaseLanguage() );
+            } else {
+                $this->_oActTag->link = $this->getConfig()->getShopHomeURL().$oSeoEncoderTag->getStdTagUri( $sTag, false );
+            }
+
         }
         return $this->_oActTag;
     }
@@ -2537,8 +2534,8 @@ class oxUBase extends oxView
     protected function _processListArticles()
     {
         $sAddParams = $this->getAddUrlParams();
-        if ( $sAddParams && $this->_aArticleList ) {
-            foreach ( $this->_aArticleList as $oArticle ) {
+        if ( $sAddParams && ( $oArticleList = $this->getArticleList() ) ) {
+            foreach ( $oArticleList as $oArticle ) {
                 $oArticle->appendLink( $sAddParams );
             }
         }
@@ -2561,19 +2558,17 @@ class oxUBase extends oxView
      */
     public function getTop5ArticleList()
     {
-        if ( !$this->_blTop5Action ) {
-            return null;
-        }
-
-        if ( $this->_aTop5ArticleList === null ) {
-            $this->_aTop5ArticleList = false;
-            $myConfig = $this->getConfig();
-            if ( $myConfig->getConfigParam( 'bl_perfLoadAktion' ) ) {
-                // top 5 articles
-                $oArtList = oxNew( 'oxarticlelist' );
-                $oArtList->loadTop5Articles();
-                if ( $oArtList->count() ) {
-                    $this->_aTop5ArticleList = $oArtList;
+        if ( $this->_blTop5Action ) {
+            if ( $this->_aTop5ArticleList === null ) {
+                $this->_aTop5ArticleList = false;
+                $myConfig = $this->getConfig();
+                if ( $myConfig->getConfigParam( 'bl_perfLoadAktion' ) ) {
+                    // top 5 articles
+                    $oArtList = oxNew( 'oxarticlelist' );
+                    $oArtList->loadTop5Articles();
+                    if ( $oArtList->count() ) {
+                        $this->_aTop5ArticleList = $oArtList;
+                    }
                 }
             }
         }
@@ -2588,17 +2583,15 @@ class oxUBase extends oxView
      */
     public function getBargainArticleList()
     {
-        if ( !$this->_blBargainAction ) {
-            return null;
-        }
-
-        if ( $this->_aBargainArticleList === null ) {
-            $this->_aBargainArticleList = array();
-            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadAktion' ) ) {
-                $oArtList = oxNew( 'oxarticlelist' );
-                $oArtList->loadAktionArticles( 'OXBARGAIN' );
-                if ( $oArtList->count() ) {
-                    $this->_aBargainArticleList = $oArtList;
+        if ( $this->_blBargainAction ) {
+            if ( $this->_aBargainArticleList === null ) {
+                $this->_aBargainArticleList = array();
+                if ( $this->getConfig()->getConfigParam( 'bl_perfLoadAktion' ) ) {
+                    $oArtList = oxNew( 'oxarticlelist' );
+                    $oArtList->loadAktionArticles( 'OXBARGAIN' );
+                    if ( $oArtList->count() ) {
+                        $this->_aBargainArticleList = $oArtList;
+                    }
                 }
             }
         }

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 19379 2009-05-26 11:30:04Z arvydas $
+ * $Id: oxseoencoder.php 19702 2009-06-09 16:07:30Z arvydas $
  */
 
 /**
@@ -67,8 +67,17 @@ class oxSeoEncoder extends oxSuperCfg
 
     /**
      * Singleton instance.
+     *
+     * @var oxseoencoder
      */
     protected static $_instance = null;
+
+    /**
+     * Seo Urls cache
+     *
+     * @var array
+     */
+    protected $_aSeoCache = array();
 
     /**
      * Singleton method
@@ -80,7 +89,23 @@ class oxSeoEncoder extends oxSuperCfg
         if (!self::$_instance) {
             self::$_instance = oxNew("oxSeoEncoder");
         }
+
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            // resetting cache
+            self::$_instance->_aSeoCache = array();
+        }
+
         return self::$_instance;
+    }
+
+    /**
+     * Resets seo cache (use in case you need forced reset)
+     *
+     * @return null
+     */
+    public function resetCache()
+    {
+        $this->_aSeoCache = array();
     }
 
     /**
@@ -159,6 +184,19 @@ class oxSeoEncoder extends oxSuperCfg
     }
 
     /**
+     * Generates dynamic url object id (calls oxseoencoder::_getStaticObjectId)
+     *
+     * @param int    $iShopId shop id
+     * @param string $sStdUrl standard (dynamic) url
+     *
+     * @return string
+     */
+    protected function _getDynamicObjectId( $iShopId, $sStdUrl )
+    {
+        return $this->_getStaticObjectId( $iShopId, $sStdUrl );
+    }
+
+    /**
      * Returns dynamic object SEO URI
      *
      * @param string $sStdUrl standart url
@@ -172,7 +210,7 @@ class oxSeoEncoder extends oxSuperCfg
         $iShopId = $this->getConfig()->getShopId();
 
         $sStdUrl   = $this->_trimUrl( $sStdUrl );
-        $sObjectId = md5( strtolower( $iShopId . $sStdUrl ) );
+        $sObjectId = $this->_getDynamicObjectId( $iShopId, $sStdUrl );
         $sSeoUrl   = $this->_prepareTitle( $sSeoUrl );
 
         //load details link from DB
@@ -236,8 +274,8 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _getStaticUri( $sStdUrl, $iShopId, $iLang )
     {
-        $sIdent  = md5( strtolower( $iShopId . $this->_trimUrl( $sStdUrl, $iLang ) ) );
-        return $this->_loadFromDb( 'static', $sIdent, $iLang );
+        $sStdUrl = $this->_trimUrl( $sStdUrl, $iLang );
+        return $this->_loadFromDb( 'static', $this->_getStaticObjectId( $iShopId, $sStdUrl ), $iLang );
     }
 
     /**
@@ -338,6 +376,15 @@ class oxSeoEncoder extends oxSuperCfg
         }
         $sQ .= " limit 1";
 
+        // caching to avoid same queries..
+        $sIdent = md5($sQ);
+        if ( isset( $this->_aSeoCache[$sIdent] ) ) {
+            return $this->_aSeoCache[$sIdent];
+        }
+
+        startProfile("<b style='color:green'>seo: $sQ</b>");
+        stopProfile("<b style='color:green'>seo: $sQ</b>");
+
         $sSeoUrl = false;
         $oRs = $oDb->execute( $sQ );
         if ( $oRs && $oRs->recordCount() > 0 && !$oRs->EOF ) {
@@ -351,6 +398,9 @@ class oxSeoEncoder extends oxSuperCfg
                 // if seo url is available and is valid
                 $sSeoUrl = $oRs->fields['oxseourl'];
             }
+
+            // store cache
+            $this->_aSeoCache[$sIdent] = $sSeoUrl;
         }
         return $sSeoUrl;
     }
@@ -511,7 +561,6 @@ class oxSeoEncoder extends oxSuperCfg
     protected function _trimUrl( $sUrl, $iLang = null )
     {
         $sUrl = str_replace( $this->getConfig()->getShopURL( $iLang ), '', $sUrl );
-
         return preg_replace( '/(force_)?sid=[a-z0-9\.]+&?(amp;)?/i', '', $sUrl );
     }
 
@@ -654,6 +703,19 @@ class oxSeoEncoder extends oxSuperCfg
     }
 
     /**
+     * Generates static url object id
+     *
+     * @param int    $iShopId shop id
+     * @param string $sStdUrl standard (dynamic) url
+     *
+     * @return string
+     */
+    protected function _getStaticObjectId( $iShopId, $sStdUrl )
+    {
+        return md5( strtolower ( $iShopId . $sStdUrl ) );
+    }
+
+    /**
      * Static url encoder
      *
      * @param array $aStaticUrl static url info (contains standard URL and urls for each language)
@@ -673,14 +735,14 @@ class oxSeoEncoder extends oxSuperCfg
         $sObjectId = $aStaticUrl['oxseo__oxobjectid'];
 
         if ( !$sObjectId || $sObjectId == '-1' ) {
-            $sObjectId = md5( strtolower ( $iShopId.$sStdUrl ) );
+            $sObjectId = $this->_getStaticObjectId( $iShopId, $sStdUrl );
         } else {
             // marking entry as needs to move to history
             $sOldObjectId = $sObjectId;
 
             // if std url does not match old
-            if ( md5( strtolower ( $iShopId.$sStdUrl ) ) != $sObjectId ) {
-                $sObjectId = md5( strtolower ( $iShopId.$sStdUrl ) );
+            if ( $this->_getStaticObjectId( $iShopId, $sStdUrl ) != $sObjectId ) {
+                $sObjectId = $this->_getStaticObjectId( $iShopId, $sStdUrl );
             }
         }
 

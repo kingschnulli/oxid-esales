@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 19402 2009-05-27 11:22:14Z arvydas $
+ * $Id: details.php 19632 2009-06-05 13:14:07Z arvydas $
  */
 
 /**
@@ -211,6 +211,13 @@ class Details extends oxUBase
     protected $_blIsInitialized = false;
 
     /**
+     * Current view link type
+     *
+     * @var int
+     */
+    protected $_iLinkType = null;
+
+    /**
      * Returns current product parent article object if it is available
      *
      * @param string $sParentId parent product id
@@ -268,7 +275,7 @@ class Details extends oxUBase
 
             // setting link type for variants ..
             foreach ( $this->_aVariantList as $oVariant ) {
-                $this->_setLinkType( $oVariant );
+                $oVariant->setLinkType( $this->getLinkType() );
             }
 
         }
@@ -724,7 +731,7 @@ class Details extends oxUBase
                 $myUtils->showMessageAndExit( '' );
             }
 
-            $this->_setLinkType( $this->_oProduct );
+            $this->_oProduct->setLinkType( $this->getLinkType() );
             $this->_blIsInitialized = true;
         }
 
@@ -732,25 +739,33 @@ class Details extends oxUBase
     }
 
     /**
-     * Sets link type for product
+     * Returns current view link type
      *
-     * @param oxarticle $oProduct  product to set link type
-     * @param int       $iListType list type [optional]
+     * @param string $sListType current list type [optional]
      *
-     * @return null
+     * @return int
      */
-    protected function _setLinkType( $oProduct, $iListType = null )
+    public function getLinkType()
     {
-        $sListType = isset( $iListType ) ? $iListType : oxConfig::getParameter( 'listtype' );
-        if ( 'vendor' == $sListType ) {
-            $iLinkType = OXARTICLE_LINKTYPE_VENDOR;
-        } elseif ( 'manufacturer' == $sListType ) {
-            $iLinkType = OXARTICLE_LINKTYPE_MANUFACTURER;
-        } else {
-            $iLinkType = OXARTICLE_LINKTYPE_CATEGORY;
+        if ( $this->_iLinkType === null ) {
+            $sListType = oxConfig::getParameter( 'listtype' );
+            if ( 'vendor' == $sListType ) {
+                $this->_iLinkType = OXARTICLE_LINKTYPE_VENDOR;
+            } elseif ( 'manufacturer' == $sListType ) {
+                $this->_iLinkType = OXARTICLE_LINKTYPE_MANUFACTURER;
+            } elseif ( 'tag' == $sListType ) {
+                $this->_iLinkType = OXARTICLE_LINKTYPE_TAG;
+            } else {
+                $this->_iLinkType = OXARTICLE_LINKTYPE_CATEGORY;
+
+                // price category has own type..
+                if ( ( $oCat = $this->getCategory() ) && $oCat->isPriceCategory() ) {
+                    $this->_iLinkType = OXARTICLE_LINKTYPE_PRICECATEGORY;
+                }
+            }
         }
 
-        $oProduct->setLinkType( $iLinkType );
+        return $this->_iLinkType;
     }
 
     /**
@@ -1140,9 +1155,11 @@ class Details extends oxUBase
      * returns object, assosiated with current view.
      * (the object that is shown in frontend)
      *
+     * @param int $iLang language id
+     *
      * @return object
      */
-    protected function _getSubject()
+    protected function _getSubject( $iLang )
     {
         return $this->getProduct();
     }
@@ -1206,5 +1223,16 @@ class Details extends oxUBase
         if ( $oProduct = $this->getProduct() ) {
             return $oProduct->oxarticles__oxtitle->value . ( $oProduct->oxarticles__oxvarselect->value ? ' ' . $oProduct->oxarticles__oxvarselect->value : '' );
         }
+    }
+
+
+    /**
+     * Template variable getter. Returns current tag
+     *
+     * @return string
+     */
+    public function getTag()
+    {
+        return oxConfig::getParameter("searchtag", 1);
     }
 }

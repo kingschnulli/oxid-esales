@@ -115,6 +115,15 @@ function SetSticker( sStickerId, oObject)
                 </optgroup>
               [{/if}]
 
+              [{ if $oTags && count($oTags) }]
+                [{assign var="blCat" value="1"}]
+                <optgroup label="[{ oxmultilang ident="GENERAL_SEO_TAG" }]">
+                [{ foreach from=$oTags key=sTag item=sItem }]
+                <option value="oxtag#[{$sTag}]" [{if $sCatType && $sCatType == 'oxtag' && $sCatId == $sTag}]selected[{/if}]>[{$sTag}]</option>
+                [{ /foreach }]
+                </optgroup>
+              [{/if}]
+
               [{if !$blCat}]
                 <option>--</option>
               [{/if}]
