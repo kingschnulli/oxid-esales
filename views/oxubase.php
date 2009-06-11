@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 19701 2009-06-09 16:00:47Z arvydas $
+ * $Id: oxubase.php 19752 2009-06-10 13:01:01Z arvydas $
  */
 
 /**
@@ -2322,13 +2322,9 @@ class oxUBase extends oxView
             $this->_oActVendor = false;
             $sVendorId = oxConfig::getParameter( 'cnid' );
             $sVendorId = $sVendorId ? str_replace( 'v_', '', $sVendorId ) : $sVendorId;
-            if ( 'root' == $sVendorId ) {
-                $this->_oActVendor = oxVendor::getRootVendor();
-            } elseif ( $sVendorId ) {
-                $oVendor = oxNew( 'oxvendor' );
-                if ( $oVendor->load( $sVendorId ) ) {
-                    $this->_oActVendor = $oVendor;
-                }
+            $oVendor = oxNew( 'oxvendor' );
+            if ( $oVendor->load( $sVendorId ) ) {
+                $this->_oActVendor = $oVendor;
             }
         }
 
@@ -2351,13 +2347,9 @@ class oxUBase extends oxView
 
             $this->_oActManufacturer = false;
             $sManufacturerId = oxConfig::getParameter( 'mnid' );
-            if ( 'root' == $sManufacturerId ) {
-                $this->_oActManufacturer = oxManufacturer::getRootManufacturer();
-            } elseif ( $sManufacturerId ) {
-                $oManufacturer = oxNew( 'oxmanufacturer' );
-                if ( $oManufacturer->load( $sManufacturerId ) ) {
-                    $this->_oActManufacturer = $oManufacturer;
-                }
+            $oManufacturer = oxNew( 'oxmanufacturer' );
+            if ( $oManufacturer->load( $sManufacturerId ) ) {
+                $this->_oActManufacturer = $oManufacturer;
             }
         }
 

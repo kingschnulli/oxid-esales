@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 19702 2009-06-09 16:07:30Z arvydas $
+ * $Id: oxseoencoder.php 19737 2009-06-10 07:58:50Z arvydas $
  */
 
 /**
@@ -381,9 +381,6 @@ class oxSeoEncoder extends oxSuperCfg
         if ( isset( $this->_aSeoCache[$sIdent] ) ) {
             return $this->_aSeoCache[$sIdent];
         }
-
-        startProfile("<b style='color:green'>seo: $sQ</b>");
-        stopProfile("<b style='color:green'>seo: $sQ</b>");
 
         $sSeoUrl = false;
         $oRs = $oDb->execute( $sQ );

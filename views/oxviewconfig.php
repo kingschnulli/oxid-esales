@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxviewconfig.php 19252 2009-05-21 07:52:04Z arvydas $
+ * $Id: oxviewconfig.php 19755 2009-06-10 14:16:24Z arvydas $
  */
 
 /**
@@ -57,10 +57,24 @@ class oxViewConfig extends oxSuperCfg
      */
     public function getHomeLink()
     {
+        if ( ( $sValue = $this->getViewConfigParam( 'homeLink' ) ) === null ) {
+            $myConfig = $this->getConfig();
+            $myUtils = oxUtils::getInstance();
 
-            $sLink = $this->getBaseDir();
+            $sValue = null;
 
-        return $this->getSession()->processUrl( $sLink );
+
+            if ( $myUtils->seoIsActive() && !$sValue && $iLang = oxLang::getInstance()->getBaseLanguage() ) {
+                $sValue = oxSeoEncoder::getInstance()->getStaticUrl( $this->getSelfLink() . 'cl=start', $iLang );
+            }
+
+            if ( !$sValue ) {
+                $sValue = $this->getSession()->processUrl( $this->getBaseDir() );
+            }
+
+            $this->setViewConfigParam( 'homeLink', $sValue );
+        }
+        return $sValue;
     }
 
     /**

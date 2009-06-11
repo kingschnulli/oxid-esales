@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 19590 2009-06-03 08:45:19Z arvydas $
+ * $Id: lang.php 19741 2009-06-10 10:02:10Z philipp.grashoff $
  */
 
 /*
@@ -1379,7 +1379,7 @@ $aLang = array(
 'TOOLTIPS_NEWUSERPAYMENT'                       => 'Create new Payment Method',
 'TOOLTIPS_NEWREMARK'                            => 'Add Note',
 'TOOLTIPS_NEWPAYMENT'                           => 'Create new Payment Method',
-'TOOLTIPS_NEWNEWSLETTER'                        => 'Neue Newsletter Sample',
+'TOOLTIPS_NEWNEWSLETTER'                        => 'New Newsletter Sample',
 'TOOLTIPS_NEWSHOP'                              => 'Create New Shop',
 'TOOLTIPS_NEWUSERGROUP'                         => 'Create New User Group',
 'TOOLTIPS_NEWCATEGORY'                          => 'Create New Cateogry',

@@ -412,22 +412,4 @@ class ManufacturerList extends aList
     {
         return parent::_collectMetaDescription( $aCatPath, $iLength, $blDescTag );
     }
-
-    /**
-     * returns object, assosiated with current view.
-     * (the object that is shown in frontend)
-     *
-     * @param int $iLang language id
-     *
-     * @return object
-     */
-    protected function _getSubject( $iLang )
-    {
-        $oManufacturer = $this->getActiveCategory();
-        if ( $oManufacturer->getLanguage() != $iLang && $oManufacturer->getId() == 'root' ) {
-            return oxManufacturer::getRootManufacturer( $iLang );
-        }
-
-        return $oManufacturer;
-    }
 }
