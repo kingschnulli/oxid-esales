@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 19252 2009-05-21 07:52:04Z arvydas $
+ * $Id: oxconfig.php 19791 2009-06-11 14:32:31Z sarunas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -493,13 +493,6 @@ class oxConfig extends oxSuperCfg
                         break;
                     default:
                         $this->setConfigParam( $sVarName, $sVarVal );
-                }
-
-
-                if ( $sVarType == 'arr' || $sVarType == 'aarr' ) {
-                } elseif ( $sVarType == 'bool' ) {
-                } else {
-
                 }
 
                 $oRs->moveNext();

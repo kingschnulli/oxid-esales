@@ -111,7 +111,7 @@
                         [{defun name="style_tree" _tree=$styles _id='gui-tree-src' _class=''}]
                             <ul class="[{$_class}]">
                             [{foreach from=$_tree index=id item=style}]
-                                [{if $style->nodeType == XML_ELEMENT_NODE}]
+                                [{if $style->nodeType == $smarty.const.OXXML_ELEMENT_NODE}]
                                 <li>
                                 [{strip}]
                                     [{assign var="_const" value=$style->getAttribute('const') }]

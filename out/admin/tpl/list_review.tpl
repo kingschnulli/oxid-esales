@@ -7,17 +7,17 @@ function EditThis( sID)
     [{assign var="shMen" value=1}]
 
     [{foreach from=$menustructure item=menuholder }]
-      [{if $shMen && $menuholder->nodeType == XML_ELEMENT_NODE && $menuholder->childNodes->length }]
+      [{if $shMen && $menuholder->nodeType == $smarty.const.OXXML_ELEMENT_NODE && $menuholder->childNodes->length }]
 
         [{assign var="shMen" value=0}]
         [{assign var="mn" value=1}]
 
         [{foreach from=$menuholder->childNodes item=menuitem }]
-          [{if $menuitem->nodeType == XML_ELEMENT_NODE && $menuitem->childNodes->length }]
+          [{if $menuitem->nodeType == $smarty.const.OXXML_ELEMENT_NODE && $menuitem->childNodes->length }]
             [{ if $menuitem->getAttribute('id') == 'mxmanageprod' }]
 
               [{foreach from=$menuitem->childNodes item=submenuitem }]
-                [{if $submenuitem->nodeType == XML_ELEMENT_NODE && $submenuitem->getAttribute('cl') == 'article' }]
+                [{if $submenuitem->nodeType == $smarty.const.OXXML_ELEMENT_NODE && $submenuitem->getAttribute('cl') == 'article' }]
 
                     if ( top && top.navigation && top.navigation.adminnav ) {
                         var _sbli = top.navigation.adminnav.document.getElementById( 'nav-1-[{$mn}]-1' );
