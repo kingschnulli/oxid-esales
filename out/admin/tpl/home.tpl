@@ -33,7 +33,7 @@
     [{assign var="shMen" value=1}]
 
     [{foreach from=$menustructure item=menuholder }]
-    [{if $shMen && $menuholder->nodeType == $smarty.const.OXXML_ELEMENT_NODE && $menuholder->childNodes->length }]
+    [{if $shMen && $menuholder->nodeType == XML_ELEMENT_NODE && $menuholder->childNodes->length }]
 
         [{assign var="nrCol" value=1}]
         [{assign var="ttCol" value=1}]
@@ -44,7 +44,7 @@
             <tr>
             <td valign="top" width="30%">
             [{foreach from=$menuholder->childNodes item=menuitem }]
-            [{if $menuitem->nodeType == $smarty.const.OXXML_ELEMENT_NODE && $menuitem->childNodes->length }]
+            [{if $menuitem->nodeType == XML_ELEMENT_NODE && $menuitem->childNodes->length }]
                 [{assign var="sb" value=1}]
                 <dl [{if $nrCol == 1}]class="first"[{/if}]>
                     <dt>[{ oxmultilang ident=$menuitem->getAttribute('name')|default:$menuitem->getAttribute('id') }]</dt>
@@ -53,7 +53,7 @@
                         <ul>
                         [{strip}]
                         [{foreach from=$menuitem->childNodes item=submenuitem }]
-                        [{if $submenuitem->nodeType == $smarty.const.OXXML_ELEMENT_NODE}]
+                        [{if $submenuitem->nodeType == XML_ELEMENT_NODE}]
                             <li>
                                 <a href="[{ $submenuitem->getAttribute('link') }]" onclick="_homeExpAct('nav-1-[{$mn}]','nav-1-[{$mn}]-[{$sb}]');" target="basefrm"><b>[{ oxmultilang ident=$submenuitem->getAttribute('name')|default:$submenuitem->getAttribute('id') }]</b></a>
                             </li>

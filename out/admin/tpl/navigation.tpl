@@ -33,7 +33,7 @@
 
     [{assign var='mh' value=0 }]
     [{foreach from=$menustructure item=menuholder }]
-    [{if $menuholder->nodeType == $smarty.const.OXXML_ELEMENT_NODE && $menuholder->childNodes->length }]
+    [{if $menuholder->nodeType == XML_ELEMENT_NODE && $menuholder->childNodes->length }]
         [{assign var='mh' value=$mh+1 }]
         [{assign var='mn' value=0 }]
         <h2>
@@ -45,7 +45,7 @@
         [{strip}]
             [{foreach from=$menuholder->childNodes item=menuitem name=menuloop }]
             [{assign var='actClass' value=$menuitem->childNodes->length }]
-            [{if $menuitem->nodeType == $smarty.const.OXXML_ELEMENT_NODE}]
+            [{if $menuitem->nodeType == XML_ELEMENT_NODE}]
                 [{assign var='mn' value=$mn+1 }]
                 [{assign var='sm' value=0 }]
                 <li class="" id="nav-[{$mh}]-[{$mn}]">
@@ -59,7 +59,7 @@
                     [{if $menuitem->childNodes->length }]
                     <ul>
                         [{foreach from=$menuitem->childNodes item=submenuitem }]
-                        [{if $submenuitem->nodeType == $smarty.const.OXXML_ELEMENT_NODE}]
+                        [{if $submenuitem->nodeType == XML_ELEMENT_NODE}]
                             [{assign var='sm' value=$sm+1 }]
                             [{if $submenuitem->getAttribute('linkicon')}] [{assign var='linkicon' value=$submenuitem->getAttribute('linkicon') }][{/if}]
                             <li class="" id="nav-[{$mh}]-[{$mn}]-[{$sm}]">
@@ -91,7 +91,7 @@
 
                 <ul>
                     [{foreach from=$menuhistory item=submenuitem }]
-                        [{if $submenuitem->nodeType == $smarty.const.OXXML_ELEMENT_NODE}]
+                        [{if $submenuitem->nodeType == XML_ELEMENT_NODE}]
                             [{assign var='sm' value=$sm+1 }]
                             <li id="nav-[{$mh}]-[{$mn}]-[{$sm}]" class="">
                                 <a href="[{ $submenuitem->getAttribute('link') }]" onclick="_navAct(this);" target="basefrm" class="rc"><b>[{ oxmultilang ident=$submenuitem->getAttribute('name')|default:$submenuitem->getAttribute('id') noerror=true }]</b></a>
@@ -113,7 +113,7 @@
                 <a class="ed" href="index.php?cl=navigation&amp;item=favorites.tpl" target="basefrm" >[{ oxmultilang ident=NAVIGATION_FAVORITES_EDIT noerror=true }]</a>
                 <ul>
                     [{foreach from=$menufavorites item=submenuitem }]
-                        [{if $submenuitem->nodeType == $smarty.const.OXXML_ELEMENT_NODE}]
+                        [{if $submenuitem->nodeType == XML_ELEMENT_NODE}]
                             [{assign var='sm' value=$sm+1 }]
                             <li id="nav-[{$mh}]-[{$mn}]-[{$sm}]" class="">
                                 <a href="[{ $submenuitem->getAttribute('link') }]" onclick="_navAct(this);" target="basefrm" class="rc"><b>[{ oxmultilang ident=$submenuitem->getAttribute('name')|default:$submenuitem->getAttribute('id') noerror=true }]</b></a>

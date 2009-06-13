@@ -19,11 +19,8 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminview.php 19774 2009-06-11 08:01:49Z arvydas $
+ * $Id: oxadminview.php 19793 2009-06-11 14:43:24Z sarunas $
  */
-
-// defining for access in templates
-define( "OXXML_ELEMENT_NODE", XML_ELEMENT_NODE );
 
 /**
  * Main "view" class.

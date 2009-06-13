@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 19436 2009-05-28 08:07:19Z arvydas $
+ * $Id: oxorder.php 19813 2009-06-12 10:44:07Z sarunas $
  */
 
 /**
@@ -1261,7 +1261,7 @@ class oxOrder extends oxBase
      */
     public function getNextBillNum()
     {
-        $sQ = 'select max(oxorder.oxbillnr) from oxorder where oxorder.oxshopid = "'.$this->getConfig()->getShopId().'" ';
+        $sQ = 'select max(cast(oxorder.oxbillnr as unsigned)) from oxorder where oxorder.oxshopid = "'.$this->getConfig()->getShopId().'" ';
         return ( ( int ) oxDb::getDb()->getOne( $sQ ) + 1 );
     }
 
