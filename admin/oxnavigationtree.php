@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxnavigationtree.php 19824 2009-06-12 14:36:37Z sarunas $
+ * $Id: oxnavigationtree.php 19835 2009-06-15 06:57:28Z sarunas $
  */
 
 /**
@@ -61,19 +61,28 @@ class OxNavigationTree extends oxSuperCfg
             $this->_checkDemoShopDenials( $oDom );
 
 
-            $this->_cleanEmptyParents($oDom, 'SUBMENU', 'TAB');
-            $this->_cleanEmptyParents($oDom, 'MAINMENU', 'SUBMENU');
+            $this->_cleanEmptyParents($oDom, '//SUBMENU[@id][@list]', 'TAB');
+            $this->_cleanEmptyParents($oDom, '//MAINMENU[@id]', 'SUBMENU');
         }
     }
 
-    protected function _cleanEmptyParents($oDom, $sParentTag, $sChildTag)
+    /**
+     * clean empty nodes from tree
+     *
+     * @param object $oDom         dom object
+     * @param string $sParentXPath parent xpath
+     * @param string $sChildXPath  child xpath from parent
+     *
+     * @return null
+     */
+    protected function _cleanEmptyParents($oDom, $sParentXPath, $sChildXPath)
     {
         $oXPath = new DomXPath( $oDom );
-        $oNodeList = $oXPath->query( "//{$sParentTag}[@id]" );
+        $oNodeList = $oXPath->query( $sParentXPath );
 
         foreach ( $oNodeList as $oNode ) {
             $sId = $oNode->getAttribute( 'id' );
-            $oChildList = $oXPath->query( "//{$sParentTag}[@id='$sId']/$sChildTag" );
+            $oChildList = $oXPath->query( "{$sParentXPath}[@id='$sId']/$sChildXPath" );
             if (!$oChildList->length) {
                 $oNode->parentNode->removeChild( $oNode );
             }

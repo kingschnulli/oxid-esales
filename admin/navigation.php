@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: navigation.php 19181 2009-05-18 15:14:56Z rimvydas.paskevicius $
+ * $Id: navigation.php 19850 2009-06-15 13:40:58Z rimvydas.paskevicius $
  */
 
 /**
@@ -60,7 +60,9 @@ class Navigation extends oxAdminView
             //checking requirements if this is not nav frame reload
             if ( !oxConfig::getParameter( "navReload" ) ) {
                 // #661 execute stuff we run each time when we start admin once
-                $this->_aViewData['aMessage'] = $this->_doStartUpChecks();
+                if ('home.tpl' == $sItem) {
+                    $this->_aViewData['aMessage'] = $this->_doStartUpChecks();
+                }
             } else {
                 //removing reload param to force requirements checking next time
                 oxSession::deleteVar( "navReload" );
@@ -220,6 +222,12 @@ class Navigation extends oxAdminView
         // version check
         if ( $sVersionNotice = $this->_checkVersion() ) {
             $aMessage['message'] .= $sVersionNotice;
+        }
+
+
+        // check if setup dir is deleted
+        if ( file_exists( $this->getConfig()->getConfigParam( 'sShopDir' ) . '/setup/index.php' ) ) {
+            $aMessage['warning']  .= ( ( !empty($aMessage['warning']) ) ? "<br>" : '' ) . oxLang::getInstance()->translateString('SETUP_DIRNOTDELETED_WARNING');
         }
 
         return $aMessage;

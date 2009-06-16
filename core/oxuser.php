@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 19536 2009-06-01 15:19:37Z alfonsas $
+ * $Id: oxuser.php 19837 2009-06-15 07:32:08Z vilma $
  */
 
 /**
@@ -1540,14 +1540,14 @@ class oxUser extends oxBase
     {
         $myConfig = $this->getConfig();
 
-        $sLogin   = ( isset( $aInvAddress['oxuser__oxusername'] ) && $aInvAddress['oxuser__oxusername'] )?$aInvAddress['oxuser__oxusername']:$sLogin;
+        $sLogin   = ( isset( $aInvAddress['oxuser__oxusername'] ) )?$aInvAddress['oxuser__oxusername']:$sLogin;
 
         // check only for users with password during registration
         // if user wants to change user name - we must check if passwords are ok before changing
         if ( $this->oxuser__oxpassword->value && $sLogin != $this->oxuser__oxusername->value ) {
 
             // on this case password must be taken directly from request
-            $sNewPass = isset( $aInvAddress['oxuser__oxpassword'] )?$aInvAddress['oxuser__oxpassword']:oxConfig::getParameter( 'user_password' );
+            $sNewPass = (isset( $aInvAddress['oxuser__oxpassword']) && $aInvAddress['oxuser__oxpassword'] )?$aInvAddress['oxuser__oxpassword']:oxConfig::getParameter( 'user_password' );
             if ( !$sNewPass ) {
 
                 // 1. user forgot to enter password

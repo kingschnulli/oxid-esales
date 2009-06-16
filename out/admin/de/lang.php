@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 19590 2009-06-03 08:45:19Z arvydas $
+ * $Id: lang.php 19850 2009-06-15 13:40:58Z rimvydas.paskevicius $
  */
 
 $sLangName  = 'Deutsch';
@@ -846,6 +846,7 @@ $aLang = array(
 'LANGUAGE_NODBMULTILANGFIELDS_WARNING'          => 'Warnung: Es wurden keine Datenbankfelder für die ausgewählte Sprache gefunden!',
 'LANGUAGE_DELETINGMAINLANG_WARNING'             => '[tr]Warning: you can\'t delete main language (with ID = 0)!',
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => '[tr]Error: language with such abbervation already exists!',
+'SETUP_DIRNOTDELETED_WARNING'                   => 'Bitte löschen Sie das Setupverzeichnis: setup!',
 'LOGIN_TITLE'                                   => 'OXID eShop Login',
 'LOGIN_ERROR'                                   => 'Fehler! Falscher Benutzername und/oder Passwort.',
 'LOGIN_NO_COOKIE_SUPPORT'                       => 'Fehler! Ihr Browser unterstützt keine Cookies.',
