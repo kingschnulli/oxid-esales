@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbase.php 19518 2009-06-01 08:02:52Z arvydas $
+ * $Id: oxbase.php 19884 2009-06-16 12:01:15Z arvydas $
  */
 
 /**
@@ -754,7 +754,7 @@ class oxBase extends oxSuperCfg
     }
 
     /**
-     * Checks if derived update is allowed (calls oxbase::isDerived)
+     * Checks if derived delete is allowed (calls oxbase::isDerived)
      *
      * @return bool
      */

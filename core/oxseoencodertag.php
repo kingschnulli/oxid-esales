@@ -94,7 +94,7 @@ class oxSeoEncoderTag extends oxSeoEncoder
     }
 
     /**
-     * encodeContentUrl encodes content link
+     * Returns full url for passed tag
      *
      * @param string $sTag  tag
      * @param int    $iLang language

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 19737 2009-06-10 07:58:50Z arvydas $
+ * $Id: oxseoencoder.php 19882 2009-06-16 11:59:04Z sarunas $
  */
 
 /**
@@ -36,6 +36,13 @@ class oxSeoEncoder extends oxSuperCfg
      * @var array
      */
     protected static $_aReservedWords = array( 'admin' );
+
+    /**
+     * cache for reserved path root node keys
+     *
+     * @var array
+     */
+    protected static $_aReservedEntryKeys = null;
 
     /**
      * SEO separator.
@@ -306,6 +313,15 @@ class oxSeoEncoder extends oxSuperCfg
             }
         }
 
+        // fix for not having url, which executes through /other/ script then seo decoder
+        $sAdd = ' ';
+        if ('/' != self::$_sSeparator) {
+            $sAdd = self::$_sSeparator . self::$_sPrefix;
+        } else {
+            $sAdd = '_' . self::$_sPrefix;
+        }
+        $sSeoUrl = preg_replace( "#^(/*)(".implode('|', $this->_getReservedEntryKeys()).")/#i" , "\$1\$2$sAdd/", $sSeoUrl );
+
         $sBaseSeoUrl = $sSeoUrl;
         if ( $sConstEnd && $oStr->substr( $sSeoUrl, 0 - $oStr->strlen( $sConstEnd ) ) == $sConstEnd ) {
             $sBaseSeoUrl = $oStr->substr( $sSeoUrl, 0, $oStr->strlen( $sSeoUrl ) - $oStr->strlen( $sConstEnd ) );
@@ -400,6 +416,29 @@ class oxSeoEncoder extends oxSuperCfg
             $this->_aSeoCache[$sIdent] = $sSeoUrl;
         }
         return $sSeoUrl;
+    }
+
+    /**
+     * cached getter: check root directory php file names for them not to be in 1st part of seo url
+     * because then apache will execute that php file instead of url parser
+     *
+     * @return array
+     */
+    protected function _getReservedEntryKeys()
+    {
+        if (!isset(self::$_aReservedEntryKeys) && !is_array(self::$_aReservedEntryKeys)) {
+            $sDir = getShopBasePath();
+            self::$_aReservedEntryKeys = array();
+            foreach (glob("$sDir/*") as $file) {
+                if (preg_match('/^(.+)\.php[0-9]*$/i', basename($file), $m)) {
+                    self::$_aReservedEntryKeys[] = $m[0];
+                    self::$_aReservedEntryKeys[] = $m[1];
+                } elseif (is_dir($file)) {
+                    self::$_aReservedEntryKeys[] = basename($file);
+                }
+            }
+        }
+        return self::$_aReservedEntryKeys;
     }
 
     /**

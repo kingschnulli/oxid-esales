@@ -93,10 +93,28 @@ class oxSimpleVariant extends oxI18n
         $this->_oPrice->setPrice($dPrice, $this->_dVat);
 
         $this->_applyParentVat($this->_oPrice);
+        $this->_applyCurrency($this->_oPrice);
         // apply discounts
         $this->_applyParentDiscounts($this->_oPrice);
 
         return $this->_oPrice;
+    }
+
+    /**
+     * Applies currency factor
+     *
+     * @param oxPrice $oPrice Price object
+     * @param object  $oCur   Currency object
+     *
+     * @return null
+     */
+    protected function _applyCurrency(oxPrice $oPrice, $oCur = null )
+    {
+        if ( !$oCur ) {
+            $oCur = $this->getConfig()->getActShopCurrencyObject();
+        }
+
+        $oPrice->multiply($oCur->rate);
     }
 
     /**

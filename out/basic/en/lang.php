@@ -19,18 +19,18 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 19760 2009-06-10 14:24:26Z rimvydas.paskevicius $
+ * $Id: lang.php 19866 2009-06-16 10:33:17Z alfonsas $
  */
- 
- 
+
+
 /* -----------------------
 --  ADAPTING THIS FILE  --
 --------------------------
-If you want to adapt this language file, use cust_lang.php instead. 
+If you want to adapt this language file, use cust_lang.php instead.
 Further information is available in the manual at
 http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/editing-language-files
-*/ 
- 
+*/
+
 $sLangName  = "English";
 $iLangNr    = 1;
 // -------------------------------
@@ -247,7 +247,7 @@ $aLang = array(
 'BASKET_MINORDERPRICE'                            => "Minimum order price",
 'BASKET_WRONGAMOUNT1'                             => "Please enter valid quantity for product ",
 'BASKET_WRONGAMOUNT2'                             => ".",
-'BASKET_SELECT_ALL'  	                          => "Select all",
+'BASKET_SELECT_ALL'                               => "Select all",
 'COMPARE_POPUP_TITLE'                             => "Product Comparison",
 'COMPARE_POPUP_ARTICELNO'                         => "Art.No.:",
 'COMPARE_POPUP_PRODUCTATTRIBUTES'                 => "Product Attributes",
@@ -681,7 +681,7 @@ $aLang = array(
 'INC_RIGHTITEM_RECOMMLIST'                        =>"Listmania",
 'INC_RIGHTITEM_SEARCHFORLISTS'                    =>"Search for more lists:",
 'INC_RIGHTITEM_HAVEPOUSEEN'                       =>"Have you seen ... ?",
-'INC_RIGHTITEM_CUSTOMERWHO'                       =>"Customer who bought this product also have bought that one:",
+'INC_RIGHTITEM_CUSTOMERWHO'                       =>"Customer who bought this product also bought:",
 'INC_RIGHTLIST_ARTNOMBER'                         =>"Art.No.:",
 'INC_RIGHTLIST_MOREINFO'                          =>"more Info",
 'INC_RIGHTLIST_REMOVEFROMCOMPARELIST'             =>"remove from compare list",
@@ -754,7 +754,7 @@ $aLang = array(
 'NEWSLETTER_YOUHAVEBEENSENTCONFIRMATION'          => "You have just been sent a confirmation eMail, with which you can activate your subscription.",
 'NEWSLETTER_CONGRATULATIONS'                      => "Congratulations and Welcome!",
 'NEWSLETTER_SUBSCRIPTIONACTIVATED'                => "Your subscription to our Newsletter has now been activated.",
-'NEWSLETTER_FORSUBSCRIPTIONBONUSPOINTS'           => "Just now! Get for your Newsletter-Subscription Bonuspoints.",
+'NEWSLETTER_FORSUBSCRIPTIONBONUSPOINTS'           => "Just now! Get Bonuspoints for your Newsletter-Subscription.",
 'NEWSLETTER_SECCESS'                              => "Success!",
 'NEWSLETTER_SUBSCRIPTIONCANCELED'                 => "Your subscription to our Newsletter has been canceled.",
 'ORDER_COMPLETEORDER'                             => "Complete Order",
@@ -828,11 +828,11 @@ $aLang = array(
 'ORDER_IAGREETORIGHTOFWITHDRAWAL1'                => "I've read",
 'ORDER_IAGREETORIGHTOFWITHDRAWAL3'                => "",
 'ORDER_RIGHTOFWITHDRAWAL'                         => "Right of withdrawal",
-'ORDER_RIGHTOFWITHDRAWAL_TEXT'                    => "Each consumer is allowed to revoke his/her contractual declaration in written form 
-                                                      (e.g. letter, fax, eMail) or by returning the delivered products within two weeks 
-                                                      without any indication of reasons. The time limit commences no earlier than with 
-                                                      receipt of the goods and this policy in detail and in text form. The timely sending 
-                                                      of the revocation or the goods shall be sufficient to determine compliance with the 
+'ORDER_RIGHTOFWITHDRAWAL_TEXT'                    => "Each consumer is allowed to revoke his/her contractual declaration in written form
+                                                      (e.g. letter, fax, eMail) or by returning the delivered products within two weeks
+                                                      without any indication of reasons. The time limit commences no earlier than with
+                                                      receipt of the goods and this policy in detail and in text form. The timely sending
+                                                      of the revocation or the goods shall be sufficient to determine compliance with the
                                                       time limit for revocation. The revocation shall be addressed to: ",
 'ORDER_RIGHTOFWITHDRAWAL_MOREINFO1'               => "Click here for details about your ",
 'ORDER_SUBMITORDER'                               => "Submit Order",

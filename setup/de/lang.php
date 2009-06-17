@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 19389 2009-05-26 14:12:21Z vilma $
+ * $Id: lang.php 19886 2009-06-16 12:39:06Z alfonsas $
  */
 
 $aLang = array(

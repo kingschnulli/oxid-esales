@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsession.php 19327 2009-05-25 06:17:01Z arvydas $
+ * $Id: oxsession.php 19892 2009-06-16 13:30:17Z arvydas $
  */
 
 
@@ -565,7 +565,7 @@ class oxSession extends oxSuperCfg
         if ( !$this->isAdmin() ) {
             if ( oxUtils::getInstance()->isSearchEngine() || oxConfig::getParameter( 'skipSession' ) ) {
                 $blAllowSessionStart = false;
-            } elseif ( !$this->_forceSessionStart() ) {
+            } elseif ( !$this->_forceSessionStart() && !oxUtilsServer::getInstance()->getOxCookie( 'sid_key' ) ) {
 
                 // session is not needed to start when it is not necessary:
                 // - no sid in request and also user executes no session connected action

@@ -496,7 +496,7 @@ class oxSysRequirements
             }
         }
 
-        if ( $this->_blSysReqStatus == null ) {
+        if ( $this->_blSysReqStatus === null ) {
             $this->_blSysReqStatus = true;
         }
         if ( count($aCollations) > 0 ) {
@@ -533,6 +533,7 @@ class oxSysRequirements
     public function getSysReqStatus()
     {
         if ( $this->_blSysReqStatus == null ) {
+            $this->_blSysReqStatus = true;
             $this->getSystemInfo();
             $this->checkCollation();
         }

@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 19850 2009-06-15 13:40:58Z rimvydas.paskevicius $
+ * $Id: lang.php 19866 2009-06-16 10:33:17Z alfonsas $
  */
 
 /*
@@ -824,6 +824,8 @@ $aLang = array(
 'GUI_PRICEALARM_LABELS_TEXT'                    => 'Pricealarm label text',
 'GUI_QUESTION_ABOUT_PRODUCT'                    => 'Product Info E-mail',
 'GUI_SINGLE_BACKGROUND'                         => 'Single link background',
+'GUI_SINGLE_TEXT_COLOR'                         => 'Single link text color',
+'GUI_SINGLE_ACTIVE_TEXT_COLOR'                  => 'Single link active text color',
 'GUI_SHOP_BACKGROUND'                           => 'Shop Link background',
 'GUI_SHOP_TEXT_COLOR'                           => 'Shop Link text color',
 'GUI_TEXT'                                      => 'Text',
@@ -835,10 +837,10 @@ $aLang = array(
 'GUI_TREE_BORDER'                               => 'Category tree border',
 'GUI_TREE_TEXT_COLOR'                           => 'Category tree text color',
 'GUI_TREE_ROOT_BORDER'                          => 'Root category border',
-'GUI_TREE_ACTIVE_BACKGROUND'                    => 'Activ Category-background',
-'GUI_TREE_ACTIVE_BORDER'                        => 'Activ Category-border',
-'GUI_TREE_ACTIVE_TEXT_COLOR'                    => 'Activ Category text color',
-'GUI_TREE_ACTIVE_ICON'                          => 'Activ Category icon',
+'GUI_TREE_ACTIVE_BACKGROUND'                    => 'Active Category-background',
+'GUI_TREE_ACTIVE_BORDER'                        => 'Active Category-border',
+'GUI_TREE_ACTIVE_TEXT_COLOR'                    => 'Active Category text color',
+'GUI_TREE_ACTIVE_ICON'                          => 'Active Category icon',
 'GUI_TREE_ICON'                                 => 'Category icon',
 'GUI_TOBASKET'                                  => 'To basket',
 'GUI_VENDOR_TEXT'                               => 'Vendor text',
@@ -1490,10 +1492,10 @@ $aLang = array(
 'SHOP_PERF_CALCVATONLYFORBASKETORDER'           => 'Calculate specific VAT for countries only in Shopping Cart and Checkout',
 'MANUFACTURER_MAIN_ICONUPLOAD'                  => 'Upload Icon',
 'MANUFACTURER_MAIN_ITEMSWITHMANUFACTURER'       => 'Products from this Manufacturer',
-'MANUFACTURER_MAIN_ALLITEMS' 					=> 'All Products',
+'MANUFACTURER_MAIN_ALLITEMS'                     => 'All Products',
 'MANUFACTURER_LIST_TITLE'                       => 'Manufacturer List',
-'MANUFACTURER_LIST_MENUITEM'					=> 'Master Settings',
-'MANUFACTURER_LIST_MENUSUBITEM'					=> 'Manufacturers',
+'MANUFACTURER_LIST_MENUITEM'                    => 'Master Settings',
+'MANUFACTURER_LIST_MENUSUBITEM'                    => 'Manufacturers',
 'SHOP_PERF_CHECKIFTPLCOMPILE'                   => 'Automatic detection of necessary Template re-compilation. Uncheck during normal operation for increased performance.',
 'SHOP_PERF_COMPARE'                             => 'Activate Product Comparison',
 'SHOP_PERF_DONTSHOWEMTYCATEGORIES'              => 'Do <strong>not</strong> display empty Categories (Categories which have no Sub-Categories and no Products).',
@@ -1747,19 +1749,19 @@ $aLang = array(
 'serial_added'                                  => 'License key has beend added',
 'serial_updated'                                => 'License key has been updated',
 
-'SHOP_OPTIONS_GROUP_GLOBAL'						=> 'Global',
-'SHOP_OPTIONS_GROUP_SEARCH'						=> 'Search',
-'SHOP_OPTIONS_GROUP_STOCK'						=> 'Stock',
-'SHOP_OPTIONS_GROUP_ARTICLES'					=> 'Products',
-'SHOP_OPTIONS_GROUP_ORDER'						=> 'Order',
-'SHOP_OPTIONS_GROUP_VAT'						=> 'VAT',
-'SHOP_OPTIONS_GROUP_LANGUAGE'					=> 'Language',
-'SHOP_OPTIONS_GROUP_PICTURES'					=> 'Pictures',
-'SHOP_OPTIONS_GROUP_SHOP_FRONTEND'				=> 'Shop frontend',
-'SHOP_OPTIONS_GROUP_ADMINISTRATION'				=> 'Administration',
-'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'				=> 'Other settings',
-'SHOP_OPTIONS_GROUP_VARIANTS'					=> 'Variants',
-'SHOP_OPTIONS_GROUP_MODULES'					=> 'Modules',
+'SHOP_OPTIONS_GROUP_GLOBAL'                        => 'Global',
+'SHOP_OPTIONS_GROUP_SEARCH'                        => 'Search',
+'SHOP_OPTIONS_GROUP_STOCK'                        => 'Stock',
+'SHOP_OPTIONS_GROUP_ARTICLES'                    => 'Products',
+'SHOP_OPTIONS_GROUP_ORDER'                        => 'Order',
+'SHOP_OPTIONS_GROUP_VAT'                        => 'VAT',
+'SHOP_OPTIONS_GROUP_LANGUAGE'                    => 'Language',
+'SHOP_OPTIONS_GROUP_PICTURES'                    => 'Pictures',
+'SHOP_OPTIONS_GROUP_SHOP_FRONTEND'                => 'Shop frontend',
+'SHOP_OPTIONS_GROUP_ADMINISTRATION'                => 'Administration',
+'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'                => 'Other settings',
+'SHOP_OPTIONS_GROUP_VARIANTS'                    => 'Variants',
+'SHOP_OPTIONS_GROUP_MODULES'                    => 'Modules',
 
 
 );

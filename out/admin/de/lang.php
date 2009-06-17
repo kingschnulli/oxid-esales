@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 19850 2009-06-15 13:40:58Z rimvydas.paskevicius $
+ * $Id: lang.php 19866 2009-06-16 10:33:17Z alfonsas $
  */
 
 $sLangName  = 'Deutsch';
@@ -818,6 +818,8 @@ $aLang = array(
 'GUI_PRICEALARM_LABELS_TEXT'                    => 'Pricealarm Bezeichnung-Text',
 'GUI_QUESTION_ABOUT_PRODUCT'                    => 'Artikel Info E-Mail',
 'GUI_SINGLE_BACKGROUND'                         => 'Einzelner Link-Hintergrund',
+'GUI_SINGLE_TEXT_COLOR'                         => 'Einzelner Link Text-Farbe',
+'GUI_SINGLE_ACTIVE_TEXT_COLOR'                  => 'Einzelner Link Aktive Text-Farbe',
 'GUI_SHOP_BACKGROUND'                           => 'Shop Link-Hintergrund',
 'GUI_SHOP_TEXT_COLOR'                           => 'Shop Link Text-Farbe',
 'GUI_TEXT'                                      => 'Text',
@@ -1483,10 +1485,10 @@ $aLang = array(
 'WRAPPING_MAIN_TITLE'                           => '[OXID Geschenkverwaltung]',
 'MANUFACTURER_MAIN_ICONUPLOAD'                  => 'Icon hochladen',
 'MANUFACTURER_MAIN_ITEMSWITHMANUFACTURER'       => 'Artikel dieses Herstellers',
-'MANUFACTURER_MAIN_ALLITEMS' 					=> 'Alle Artikel',
+'MANUFACTURER_MAIN_ALLITEMS'                    => 'Alle Artikel',
 'MANUFACTURER_LIST_TITLE'                       => 'Herstellerliste',
-'MANUFACTURER_LIST_MENUITEM'					=> 'Stammdaten',
-'MANUFACTURER_LIST_MENUSUBITEM'					=> 'Hersteller',
+'MANUFACTURER_LIST_MENUITEM'                    => 'Stammdaten',
+'MANUFACTURER_LIST_MENUSUBITEM'                 => 'Hersteller',
 'SHOP_PERF_CALCVATONLYFORBASKETORDER'           => 'Länderspezifische Mehrwertsteuer nur im Warenkorb und im Bestellprozess berechnen',
 'SHOP_PERF_CHECKIFTPLCOMPILE'                   => 'Überprüfen ob Templates neu kompiliert werden müssen. Schalten Sie diese Einstellung aus, wenn der eShop in den Live-Betrieb geht.',
 'SHOP_PERF_COMPARE'                             => 'Artikelvergleiche einschalten',
@@ -1742,19 +1744,19 @@ $aLang = array(
 'serial_added'                                  => 'Neuer Lizenzschlüssel wurde aktiviert',
 'serial_updated'                                => 'Lizenzschlüssel wurde aktualisiert',
 
-'SHOP_OPTIONS_GROUP_GLOBAL'						=> 'Global',
-'SHOP_OPTIONS_GROUP_SEARCH'						=> 'Suche',
-'SHOP_OPTIONS_GROUP_STOCK'						=> 'Lager',
-'SHOP_OPTIONS_GROUP_ARTICLES'					=> 'Artikel',
-'SHOP_OPTIONS_GROUP_ORDER'						=> 'Bestellungen',
-'SHOP_OPTIONS_GROUP_VAT'						=> 'Mehrwertsteuer',
-'SHOP_OPTIONS_GROUP_LANGUAGE'					=> 'Sprache',
-'SHOP_OPTIONS_GROUP_PICTURES'					=> 'Bilder',
-'SHOP_OPTIONS_GROUP_SHOP_FRONTEND'				=> 'Shop Frontend',
-'SHOP_OPTIONS_GROUP_ADMINISTRATION'				=> 'Administrationsbereich',
-'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'				=> 'Weitere Einstellungen',
-'SHOP_OPTIONS_GROUP_VARIANTS'					=> 'Varianten',
-'SHOP_OPTIONS_GROUP_MODULES'					=> 'Module',
+'SHOP_OPTIONS_GROUP_GLOBAL'                     => 'Global',
+'SHOP_OPTIONS_GROUP_SEARCH'                     => 'Suche',
+'SHOP_OPTIONS_GROUP_STOCK'                      => 'Lager',
+'SHOP_OPTIONS_GROUP_ARTICLES'                   => 'Artikel',
+'SHOP_OPTIONS_GROUP_ORDER'                      => 'Bestellungen',
+'SHOP_OPTIONS_GROUP_VAT'                        => 'Mehrwertsteuer',
+'SHOP_OPTIONS_GROUP_LANGUAGE'                   => 'Sprache',
+'SHOP_OPTIONS_GROUP_PICTURES'                   => 'Bilder',
+'SHOP_OPTIONS_GROUP_SHOP_FRONTEND'              => 'Shop Frontend',
+'SHOP_OPTIONS_GROUP_ADMINISTRATION'             => 'Administrationsbereich',
+'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'             => 'Weitere Einstellungen',
+'SHOP_OPTIONS_GROUP_VARIANTS'                   => 'Varianten',
+'SHOP_OPTIONS_GROUP_MODULES'                    => 'Module',
 
 );
 
