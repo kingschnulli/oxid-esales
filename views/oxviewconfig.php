@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxviewconfig.php 19755 2009-06-10 14:16:24Z arvydas $
+ * $Id: oxviewconfig.php 19974 2009-06-18 10:54:17Z alfonsas $
  */
 
 /**
@@ -99,7 +99,7 @@ class oxViewConfig extends oxSuperCfg
         $sCatnid  = $this->getActCatId();
         $sTplName = $this->getActTplName();
 
-        $sLink = $this->getConfig()->getShopHomeURL()."cl={$sClass}&amp;".( $sCatnid ? "cnid={$sCatnid} " : '' )."&amp;fnc=logout".( $sTplName ? "&amp;tpl=".basename( $sTplName ) : '' )."&amp;redirect=1";
+        $sLink = $this->getConfig()->getShopHomeURL()."cl={$sClass}&amp;".( $sCatnid ? "cnid={$sCatnid}" : '' )."&amp;fnc=logout".( $sTplName ? "&amp;tpl=".basename( $sTplName ) : '' )."&amp;redirect=1";
         return $this->getSession()->processUrl( $sLink );
     }
 

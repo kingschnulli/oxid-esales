@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoderarticle.php 19702 2009-06-09 16:07:30Z arvydas $
+ * $Id: oxseoencoderarticle.php 19969 2009-06-18 08:32:57Z sarunas $
  */
 
 /**
@@ -422,7 +422,8 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 from oxobject2category as o2c
                 left join {$sCatTable} as catroots
                     on o2c.oxcatnid=catroots.oxid
-                where o2c.oxobjectid = '$sArtId'";
+                where o2c.oxobjectid = '$sArtId'
+                order by o2c.oxtime";
 
         $aRoots = $oDb->getAll($sQ);
 
