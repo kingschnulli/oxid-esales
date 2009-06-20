@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxfunctions.php 18054 2009-04-09 16:47:26Z arvydas $
+ * $Id: oxfunctions.php 20033 2009-06-19 11:44:36Z sarunas $
  */
 
 /**
@@ -90,6 +90,15 @@ if ( !function_exists( 'error_404_handler' ) ) {
     function error_404_handler($sUrl = '')
     {
         header("HTTP/1.0 404 Not Found");
+        try {
+            $oView = oxNew('oxubase');
+            $oView->init();
+            $oView->render();
+            $oView->addTplParam('sUrl', $sUrl);
+            echo oxUtilsView::getInstance()->getTemplateOutput('err_404.tpl', $oView);
+            exit(0);
+        } catch (Exception $e) {
+        }
         echo "Page not found.";
         exit(0);
     }
