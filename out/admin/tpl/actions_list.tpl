@@ -126,9 +126,9 @@ window.onLoad = top.reloadEditFrame();
 [{assign var="blWhite" value="2"}]
 [{/if}]
 [{/foreach}]
-</form>
 [{include file="pagenavisnippet.tpl" colspan="2"}]
 </table>
+</form>
 </div>
 
 [{include file="pagetabsnippet.tpl"}]

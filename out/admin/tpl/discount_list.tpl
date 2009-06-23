@@ -147,7 +147,7 @@ window.onLoad = top.reloadEditFrame();
         <a href="Javascript:DeleteThis('[{ $listitem->oxdiscount__oxid->value }]');" class="delete" id="del.[{$_cnt}]" title="" [{include file="help.tpl" helpid=item_delete}]></a>
     [{/if}]
     </td>
-</form></tr>
+</tr>
 [{if $blWhite == "2"}]
 [{assign var="blWhite" value=""}]
 [{else}]
@@ -156,6 +156,7 @@ window.onLoad = top.reloadEditFrame();
 [{/foreach}]
 [{include file="pagenavisnippet.tpl" colspan="2"}]
 </table>
+</form>
 </div>
 
 

@@ -160,7 +160,7 @@ window.onLoad = top.reloadEditFrame();
         [{ /if }]
     </td>
 
-</form></tr>
+</tr>
 [{if $blWhite == "2"}]
 [{assign var="blWhite" value=""}]
 [{else}]
@@ -169,6 +169,7 @@ window.onLoad = top.reloadEditFrame();
 [{/foreach}]
 [{include file="pagenavisnippet.tpl" colspan="8"}]
 </table>
+</form>
 </div>
 
 [{include file="pagetabsnippet.tpl"}]

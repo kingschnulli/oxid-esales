@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 19629 2009-06-05 11:27:37Z arvydas $
+ * $Id: oxutilsfile.php 20075 2009-06-22 13:55:44Z sarunas $
  */
 
 /**
@@ -115,7 +115,7 @@ class oxUtilsFile extends oxSuperCfg
      */
     public function normalizeDir( $sDir )
     {
-        if ( isset($sDir) && substr($sDir, -1) !== '/' ) {
+        if ( isset($sDir) && $sDir && substr($sDir, -1) !== '/' ) {
             $sDir .= "/";
         }
 
