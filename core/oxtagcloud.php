@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxtagcloud.php 19609 2009-06-04 07:33:12Z arvydas $
+ * $Id: oxtagcloud.php 20081 2009-06-23 08:34:50Z rimvydas.paskevicius $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -181,7 +181,7 @@ class oxTagCloud extends oxSuperCfg
             } else {
                 $sLink = $sUrl . $oSeoEncoderTag->getStdTagUri( $sTag ) . "&amp;lang=" . $iLang;
             }
-            $sTagCloud .= "<a style='font-size:". $this->_getFontSize($sRelevance, $iMaxHit) ."%;' href='$sLink'>".$oStr->htmlentities($sTag)."</a> ";
+            $sTagCloud .= "<a style='font-size:". $iFontSize ."%;' class='tagitem_". $iFontSize . "' href='$sLink'>".$oStr->htmlentities($sTag)."</a> ";
         }
 
         if ( $this->_sCacheKey && !$sArtId ) {
