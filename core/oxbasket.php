@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 19617 2009-06-04 15:20:49Z alfonsas $
+ * $Id: oxbasket.php 20457 2009-06-25 13:21:33Z vilma $
  */
 
 /**
@@ -1111,42 +1111,39 @@ class oxBasket extends oxSuperCfg
 
         $myConfig = $this->getConfig();
         foreach ( $this->_aBasketContents as $oBasketItem ) {
-            if ( !$oBasketItem->isBundle() ) {
-                if ( ( $oArticle = $oBasketItem->getArticle() ) ) {
-
-                    $aCatIds = $oArticle->getCategoryIds();
-                    //#M530 if price is not loaded for articles
-                    $dPrice = 0;
-                    if ( $oArticle->getPrice() != null ) {
-                        $dPrice  = $oArticle->getPrice()->getBruttoPrice();
-                    }
-
-                    foreach ( $aCatIds as $sCatId ) {
-                        if ( !isset( $this->_aBasketSummary->aCategories[$sCatId] ) ) {
-                            $this->_aBasketSummary->aCategories[$sCatId] = new Oxstdclass();
-                        }
-
-                        $this->_aBasketSummary->aCategories[$sCatId]->dPrice  += $dPrice * $oBasketItem->getAmount();
-                        $this->_aBasketSummary->aCategories[$sCatId]->dAmount += $oBasketItem->getAmount();
-                        $this->_aBasketSummary->aCategories[$sCatId]->iCount++;
-                    }
-
-                    // variant handling
-                    if ( $oArticle->oxarticles__oxparentid->value && $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
-                        if ( !isset( $this->_aBasketSummary->aArticles[$oArticle->oxarticles__oxparentid->value] ) ) {
-                            $this->_aBasketSummary->aArticles[$oArticle->oxarticles__oxparentid->value] = 0;
-                        }
-                        $this->_aBasketSummary->aArticles[$oArticle->oxarticles__oxparentid->value] += $oBasketItem->getAmount();
-                    }
-
-                    if ( !isset( $this->_aBasketSummary->aArticles[$oBasketItem->getProductId()] ) ) {
-                        $this->_aBasketSummary->aArticles[$oBasketItem->getProductId()] = 0;
-                    }
-
-                    $this->_aBasketSummary->aArticles[$oBasketItem->getProductId()] += $oBasketItem->getAmount();
-                    $this->_aBasketSummary->iArticleCount += $oBasketItem->getAmount();
-                    $this->_aBasketSummary->dArticlePrice += $dPrice * $oBasketItem->getAmount();
+            if ( !$oBasketItem->isBundle() && $oArticle = $oBasketItem->getArticle() ) {
+                $aCatIds = $oArticle->getCategoryIds();
+                //#M530 if price is not loaded for articles
+                $dPrice = 0;
+                if ( $oArticle->getPrice() != null ) {
+                    $dPrice  = $oArticle->getPrice()->getBruttoPrice();
                 }
+
+                foreach ( $aCatIds as $sCatId ) {
+                    if ( !isset( $this->_aBasketSummary->aCategories[$sCatId] ) ) {
+                        $this->_aBasketSummary->aCategories[$sCatId] = new Oxstdclass();
+                    }
+
+                    $this->_aBasketSummary->aCategories[$sCatId]->dPrice  += $dPrice * $oBasketItem->getAmount();
+                    $this->_aBasketSummary->aCategories[$sCatId]->dAmount += $oBasketItem->getAmount();
+                    $this->_aBasketSummary->aCategories[$sCatId]->iCount++;
+                }
+
+                // variant handling
+                if ( $oArticle->oxarticles__oxparentid->value && $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
+                    if ( !isset( $this->_aBasketSummary->aArticles[$oArticle->oxarticles__oxparentid->value] ) ) {
+                        $this->_aBasketSummary->aArticles[$oArticle->oxarticles__oxparentid->value] = 0;
+                    }
+                    $this->_aBasketSummary->aArticles[$oArticle->oxarticles__oxparentid->value] += $oBasketItem->getAmount();
+                }
+
+                if ( !isset( $this->_aBasketSummary->aArticles[$oBasketItem->getProductId()] ) ) {
+                    $this->_aBasketSummary->aArticles[$oBasketItem->getProductId()] = 0;
+                }
+
+                $this->_aBasketSummary->aArticles[$oBasketItem->getProductId()] += $oBasketItem->getAmount();
+                $this->_aBasketSummary->iArticleCount += $oBasketItem->getAmount();
+                $this->_aBasketSummary->dArticlePrice += $dPrice * $oBasketItem->getAmount();
             }
         }
         return $this->_aBasketSummary;

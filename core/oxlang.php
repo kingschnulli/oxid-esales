@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlang.php 20072 2009-06-22 13:19:28Z rimvydas.paskevicius $
+ * $Id: oxlang.php 20457 2009-06-25 13:21:33Z vilma $
  */
 
 /**
@@ -259,7 +259,7 @@ class oxLang extends oxSuperCfg
                 if ( $blOnlyActive && is_array($aLangParams) ) {
                     //skipping non active languages
                     if ( !$aLangParams[$key]['active'] ) {
-                    	$i++;
+                        $i++;
                         continue;
                     }
                 }
@@ -547,7 +547,7 @@ class oxLang extends oxSuperCfg
 
             $aLangCache[$iLang] = array();
             if (!$sDir) {
-            	return array();
+                return array();
             }
             foreach ( $aLangFiles as $sLangFile ) {
                 require $sLangFile;

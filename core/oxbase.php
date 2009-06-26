@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbase.php 19884 2009-06-16 12:01:15Z arvydas $
+ * $Id: oxbase.php 20457 2009-06-25 13:21:33Z vilma $
  */
 
 /**
@@ -217,17 +217,18 @@ class oxBase extends oxSuperCfg
      */
     public function __get( $sName )
     {
-        if ( $sName == 'blIsDerived' ) {
-            return $this->isDerived();
+        switch ($sName) {
+            case 'blIsDerived':
+                return $this->isDerived();
+                break;
+            case 'sOXID':
+                return $this->getId();
+                break;
+            case 'blReadOnly':
+                return $this->isReadOnly();
+                break;
         }
 
-        if ( $sName == 'sOXID' ) {
-            return $this->getId();
-        }
-
-        if ( $sName == 'blReadOnly' ) {
-            return $this->isReadOnly();
-        }
         // implementing lazy loading fields
         // This part of the code is slow and normally is called before field cache is built.
         // Make sure it is not called after first page is loaded and cache data is fully built.

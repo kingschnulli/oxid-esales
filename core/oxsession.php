@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsession.php 19892 2009-06-16 13:30:17Z arvydas $
+ * $Id: oxsession.php 20457 2009-06-25 13:21:33Z vilma $
  */
 
 
@@ -178,8 +178,6 @@ class oxSession extends oxSuperCfg
 
     /**
      * Starts shop session, generates unique session ID, extracts user IP.
-     *
-     * @throws oxSystemComponentException
      *
      * @return null
      */

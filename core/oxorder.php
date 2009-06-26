@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 19886 2009-06-16 12:39:06Z alfonsas $
+ * $Id: oxorder.php 20457 2009-06-25 13:21:33Z vilma $
  */
 
 /**
@@ -1720,7 +1720,7 @@ class oxOrder extends oxBase
      */
     public function getBillCountry()
     {
-        if( !$this->oxorder__oxbillcountry->value ) {
+        if ( !$this->oxorder__oxbillcountry->value ) {
             $this->oxorder__oxbillcountry = new oxField($this->_getCountryTitle( $this->oxorder__oxbillcountryid->value ));
         }
         return $this->oxorder__oxbillcountry;
@@ -1733,7 +1733,7 @@ class oxOrder extends oxBase
      */
     public function getDelCountry()
     {
-        if( !$this->oxorder__oxdelcountry->value ) {
+        if ( !$this->oxorder__oxdelcountry->value ) {
             $this->oxorder__oxdelcountry = new oxField($this->_getCountryTitle( $this->oxorder__oxdelcountryid->value ));
         }
         return $this->oxorder__oxdelcountry;

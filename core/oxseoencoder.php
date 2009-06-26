@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 19882 2009-06-16 11:59:04Z sarunas $
+ * $Id: oxseoencoder.php 20457 2009-06-25 13:21:33Z vilma $
  */
 
 /**
@@ -320,7 +320,7 @@ class oxSeoEncoder extends oxSuperCfg
         } else {
             $sAdd = '_' . self::$_sPrefix;
         }
-        $sSeoUrl = preg_replace( "#^(/*)(".implode('|', $this->_getReservedEntryKeys()).")/#i" , "\$1\$2$sAdd/", $sSeoUrl );
+        $sSeoUrl = preg_replace( "#^(/*)(".implode('|', $this->_getReservedEntryKeys()).")/#i", "\$1\$2$sAdd/", $sSeoUrl );
 
         $sBaseSeoUrl = $sSeoUrl;
         if ( $sConstEnd && $oStr->substr( $sSeoUrl, 0 - $oStr->strlen( $sConstEnd ) ) == $sConstEnd ) {
