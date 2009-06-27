@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: content.php 19632 2009-06-05 13:14:07Z arvydas $
+ * $Id: content.php 20503 2009-06-26 14:54:11Z vilma $
  */
 
 /**
@@ -136,7 +136,8 @@ class Content extends oxUBase
      * Returns current view keywords seperated by comma
      * If $sKeywords parameter comes empty, sets to it current content title
      *
-     * @param string $sKeywords data to use as keywords
+     * @param string $sKeywords               data to use as keywords
+     * @param bool   $blRemoveDuplicatedWords remove dublicated words
      *
      * @return string
      */

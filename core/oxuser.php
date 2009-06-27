@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 19837 2009-06-15 07:32:08Z vilma $
+ * $Id: oxuser.php 20503 2009-06-26 14:54:11Z vilma $
  */
 
 /**
@@ -176,22 +176,31 @@ class oxUser extends oxBase
         switch ( $sParamName ) {
             case 'oGroups':
                 return $this->_oGroups = $this->getUserGroups();
+                break;
             case 'iCntNoticeListArticles':
                 return $this->_iCntNoticeListArticles = $this->getNoticeListArtCnt();
+                break;
             case 'iCntWishListArticles':
                 return $this->_iCntWishListArticles = $this->getWishListArtCnt();
+                break;
             case 'iCntRecommLists':
                 return $this->_iCntRecommLists = $this->getRecommListsCount();
+                break;
             case 'oAddresses':
                 return $this->_oAddresses = $this->getUserAddresses();
+                break;
             case 'oPayments':
                 return $this->_oPayments = $this->getUserPayments();
+                break;
             case 'oxuser__oxcountry':
                 return $this->oxuser__oxcountry = $this->getUserCountry();
+                break;
             case 'sDBOptin':
                 return $this->sDBOptin = $this->getNewsSubscription()->getOptInStatus();
+                break;
             case 'sEmailFailed':
                 return $this->sEmailFailed = $this->getNewsSubscription()->getOptInEmailStatus();
+                break;
         }
     }
 

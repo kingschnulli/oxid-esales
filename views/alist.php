@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 19632 2009-06-05 13:14:07Z arvydas $
+ * $Id: alist.php 20503 2009-06-26 14:54:11Z vilma $
  */
 
 /**
@@ -446,7 +446,7 @@ class aList extends oxUBase
     /**
      * Returns current view keywords seperated by comma
      *
-     * @param string $sKeywords data to use as keywords
+     * @param string $sKeywords               data to use as keywords
      * @param bool   $blRemoveDuplicatedWords remove dublicated words
      *
      * @return string

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxwrapping.php 18024 2009-04-09 11:29:24Z arvydas $
+ * $Id: oxwrapping.php 20503 2009-06-26 14:54:11Z vilma $
  */
 
 /**
@@ -84,8 +84,7 @@ class oxWrapping extends oxI18n
                 $sValue = $this->getFPrice();
                 break;
             default:
-                $sValue = parent::__get( $sName );
-                break;
+                return $sValue = parent::__get( $sName );
         }
 
         return $sValue;

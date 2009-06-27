@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 19886 2009-06-16 12:39:06Z alfonsas $
+ * $Id: details.php 20503 2009-06-26 14:54:11Z vilma $
  */
 
 /**
@@ -740,8 +740,6 @@ class Details extends oxUBase
 
     /**
      * Returns current view link type
-     *
-     * @param string $sListType current list type [optional]
      *
      * @return int
      */

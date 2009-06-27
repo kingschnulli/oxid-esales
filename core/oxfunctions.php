@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxfunctions.php 20059 2009-06-22 08:04:03Z sarunas $
+ * $Id: oxfunctions.php 20495 2009-06-26 14:35:38Z arvydas $
  */
 
 /**
@@ -46,6 +46,7 @@ function __autoload( $sClass )
         $aClassDirs = array( $sBasePath . 'core/',
                              $sBasePath . 'views/',
                              $sBasePath . 'core/exception/',
+                             $sBasePath . 'core/interface/',
                              $sBasePath . 'admin/reports/',
                              $sBasePath . 'admin/',
                              $sBasePath . 'modules/',

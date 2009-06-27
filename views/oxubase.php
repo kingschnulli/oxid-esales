@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 19752 2009-06-10 13:01:01Z arvydas $
+ * $Id: oxubase.php 20503 2009-06-26 14:54:11Z vilma $
  */
 
 /**
@@ -1380,7 +1380,8 @@ class oxUBase extends oxView
     /**
      * Returns current view keywords seperated by comma
      *
-     * @param string $sKeywords data to use as keywords
+     * @param string $sKeywords               data to use as keywords
+     * @param bool   $blRemoveDuplicatedWords if true - performs additional dublicate cleaning
      *
      * @return string of keywords seperated by comma
      */
@@ -1438,7 +1439,7 @@ class oxUBase extends oxView
             $aStrings[$iNum] = $oStr->strtolower( $aStrings[$iNum] );
             // removing in admin defined strings
             if ( in_array( $aStrings[$iNum], $aSkipTags ) ) {
-              unset( $aStrings[$iNum] );
+                unset( $aStrings[$iNum] );
             }
         }
 
@@ -2091,7 +2092,7 @@ class oxUBase extends oxView
         startProfile('generatePageNavigation');
         // generate the page navigation
         $pageNavigation = new stdClass();
-        $pageNavigation->NrOfPages = $this->_iCntPages;
+        $pageNavigation->nrOfPages = $this->_iCntPages;
         $pageNavigation->iArtCnt   = $this->_iAllArtCnt;
         $iActPage = $this->getActPage();
         $pageNavigation->actPage   = $iActPage + 1;
@@ -2102,12 +2103,12 @@ class oxUBase extends oxView
             $pageNavigation->previousPage = $this->_addPageNrParam( $sUrl, $iActPage - 1 );
         }
 
-        if ( $iActPage < $pageNavigation->NrOfPages - 1 ) {
+        if ( $iActPage < $pageNavigation->nrOfPages - 1 ) {
             $pageNavigation->nextPage = $this->_addPageNrParam( $sUrl, $iActPage + 1 );
         }
 
-        if ( $pageNavigation->NrOfPages > 1 ) {
-            for ( $i=1; $i < $pageNavigation->NrOfPages + 1; $i++ ) {
+        if ( $pageNavigation->nrOfPages > 1 ) {
+            for ( $i=1; $i < $pageNavigation->nrOfPages + 1; $i++ ) {
                 $page = new Oxstdclass();
                 $page->url = $this->_addPageNrParam( $sUrl, $i - 1 );
                 $page->selected = 0;
@@ -2119,7 +2120,7 @@ class oxUBase extends oxView
 
             // first/last one
             $pageNavigation->firstpage = $this->_addPageNrParam( $sUrl, 0 );
-            $pageNavigation->lastpage  = $this->_addPageNrParam( $sUrl, $pageNavigation->NrOfPages - 1 );
+            $pageNavigation->lastpage  = $this->_addPageNrParam( $sUrl, $pageNavigation->nrOfPages - 1 );
         }
 
         stopProfile('generatePageNavigation');

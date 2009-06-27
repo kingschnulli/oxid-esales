@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 20037 2009-06-19 14:31:09Z sarunas $
+ * $Id: oxutils.php 20503 2009-06-26 14:54:11Z vilma $
  */
 
 /**
@@ -861,6 +861,8 @@ class oxUtils extends oxSuperCfg
      * set header sent to browser
      *
      * @param string $sHeader header to sent
+     *
+     * @return null
      */
     public function setHeader($sHeader)
     {

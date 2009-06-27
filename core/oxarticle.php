@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 19670 2009-06-09 10:37:39Z sarunas $
+ * $Id: oxarticle.php 20503 2009-06-26 14:54:11Z vilma $
  */
 
 // defining supported link types
@@ -36,7 +36,7 @@ define( 'OXARTICLE_LINKTYPE_TAG', 4 );
  *
  * @package core
  */
-class oxArticle extends oxI18n
+class oxArticle extends oxI18n implements oxIArticle
 {
     /**
      * Object core table name
@@ -88,14 +88,14 @@ class oxArticle extends oxI18n
 
     /**
      * Persistent Parameter.
-     * 
+     *
      * @var array
      */
     protected $_aPersistParam  = null;
 
     /**
      * Status of article - buyable/not buyable.
-     * 
+     *
      * @var bool
      */
     protected $_blNotBuyable   = false;
@@ -103,7 +103,7 @@ class oxArticle extends oxI18n
     /**
      * Indicates if we should load variants for current article. When $_blLoadVariants is set to false then
      * neither simple nor full variants for this article are loaded.
-     * 
+     *
      * @var bool
      */
     protected $_blLoadVariants = true;
@@ -116,7 +116,7 @@ class oxArticle extends oxI18n
     protected $_aVariants = null;
 
     /**
-     * Article variants without 
+     * Article variants without
      *
      * @var array
      */
@@ -2668,6 +2668,9 @@ class oxArticle extends oxI18n
     /**
      * Removes object data fields (oxarticles__oxtimestamp, oxarticles__oxparentid, oxarticles__oxinsert).
      */
+    /**
+     * @return null
+     */
     protected function _skipSaveFields()
     {
         $myConfig = $this->getConfig();
@@ -2905,6 +2908,8 @@ class oxArticle extends oxI18n
      * apply article and article use
      *
      * @param oxPrice $oPrice target price
+     * 
+     * @return null
      */
     public function applyVats( oxPrice $oPrice )
     {
@@ -2932,8 +2937,7 @@ class oxArticle extends oxI18n
     /**
      * Applies discounts which should be applied in general case (for 0 amount)
      *
-     * @param oxprice $oPrice     Price object
-     * @param array   $aDiscounts Discount list
+     * @param oxprice $oPrice Price object
      *
      * @return null
      */
@@ -3317,8 +3321,9 @@ class oxArticle extends oxI18n
         $aDoubleCopyFields = array('oxarticles__oxprice',
                                        'oxarticles__oxvat');
 
-        if (!$mValue && in_array($sFieldName, $aDoubleCopyFields))
+        if (!$mValue && in_array($sFieldName, $aDoubleCopyFields)) {
             return true;
+        }
 
 
         if (!strcmp($mValue, '0000-00-00 00:00:00') || !strcmp($mValue, '0000-00-00')) {
@@ -4054,5 +4059,15 @@ class oxArticle extends oxI18n
             $this->_blIsRangePrice = true;
             $this->_calculatePrice( $this->getPrice() );
         }
+    }
+
+    /**
+     * Returns product id (oxid)
+     *
+     * @return string
+     */
+    public function getProductId()
+    {
+        return $this->getId();
     }
 }
