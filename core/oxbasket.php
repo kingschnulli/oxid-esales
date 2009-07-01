@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 20457 2009-06-25 13:21:33Z vilma $
+ * $Id: oxbasket.php 20531 2009-06-29 15:06:33Z arvydas $
  */
 
 /**
@@ -329,7 +329,6 @@ class oxBasket extends oxSuperCfg
         //in case amount is 0 removing item
         if ( $this->_aBasketContents[$sItemId]->getAmount() == 0 || $blRemoveItem ) {
             $this->removeItem( $sItemId );
-            $blRemoveItem = true;
         } elseif ( $blBundle ) { //marking bundles
             $this->_aBasketContents[$sItemId]->setBundle( true );
         }
@@ -346,6 +345,31 @@ class oxBasket extends oxSuperCfg
             throw $oEx;
         }
         return $this->_aBasketContents[$sItemId];
+    }
+
+    /**
+     * Adds order article to basket (method normally used while recalculating order)
+     *
+     * @param oxorderarticle $oOrderArticle order article to store in basket
+     *
+     * @return oxbasketitem
+     */
+    public function addOrderArticleToBasket( $oOrderArticle )
+    {
+        // adding only if amount > 0
+        if ( $oOrderArticle->oxorderarticles__oxamount->value > 0 ) {
+            $sItemId = $oOrderArticle->getId();
+
+            //inserting new
+            $this->_aBasketContents[$sItemId] = oxNew( 'oxbasketitem' );
+            $this->_aBasketContents[$sItemId]->initFromOrderArticle( $oOrderArticle );
+            $this->_aBasketContents[$sItemId]->setWrapping( $oOrderArticle->oxorderarticles__oxwrapid->value );
+
+            //calling update method
+            $this->onUpdate();
+
+            return $this->_aBasketContents[$sItemId];
+        }
     }
 
     /**
@@ -822,7 +846,7 @@ class oxBasket extends oxSuperCfg
                     $dPrice -= $dVoucherdiscount;
                 } catch ( oxVoucherException $oEx ) {
 
-                       // removing voucher on error
+                    // removing voucher on error
                     $oVoucher->unMarkAsReserved();
                     unset( $this->_aVouchers[$sVoucherId] );
 

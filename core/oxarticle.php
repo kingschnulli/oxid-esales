@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: oxarticle.php 20521 2009-06-29 10:49:03Z sarunas $
  */
 
 // defining supported link types
@@ -384,23 +384,6 @@ class oxArticle extends oxI18n implements oxIArticle
             return true;
         }
         return isset( $this->$sName );
-    }
-
-    /**
-     * Magic setter. disallows oxlongdesc to go to aFieldNames
-     *
-     * @param string $sName  Long field name
-     * @param mixed  $sValue Field value
-     *
-     * @return null
-     */
-    public function __set( $sName, $sValue)
-    {
-        if ($sName == 'oxarticles__oxlongdesc') {
-            $this->$sName = $sValue;
-            return;
-        }
-        return parent::__set($sName, $sValue);
     }
 
     /**
@@ -816,20 +799,6 @@ class oxArticle extends oxI18n implements oxIArticle
     }
 
     /**
-     * Sets data field value
-     *
-     * @param string $sFieldName index OR name (eg. 'oxarticles__oxtitle') of a data field to set
-     * @param string $sValue     value of data field
-     * @param int    $iDataType  field type
-     *
-     * @return null
-     */
-    protected function _setFieldData( $sFieldName, $sValue, $iDataType = oxField::T_TEXT)
-    {
-        parent::_setFieldData( $sFieldName, $sValue, $iDataType);
-    }
-
-    /**
      * Loads object data from DB (object data ID must be passed to method).
      * Converts dates (oxarticle::oxarticles__oxinsert, oxarticle::oxarticles__oxtimestamp)
      * to international format (oxutils.php oxUtilsDate::getInstance()->formatDBDate(...)).
@@ -1118,7 +1087,6 @@ class oxArticle extends oxI18n implements oxIArticle
             return $this->_aVariantsWithNotOrderables;
         }
 
-        //return ;
         if (!$this->_blLoadVariants) {
             return array();
         }
@@ -1146,6 +1114,7 @@ class oxArticle extends oxI18n implements oxIArticle
         } else {
             //loading variants
             $oVariants = oxNew( 'oxarticlelist' );
+            $oVariants->getBaseObject()->modifyCacheKey('_variants');
         }
 
         startProfile("selectVariants");

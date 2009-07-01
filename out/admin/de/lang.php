@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 19866 2009-06-16 10:33:17Z alfonsas $
+ * $Id: lang.php 20544 2009-06-30 06:50:34Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -970,6 +970,7 @@ $aLang = array(
 'ORDER_ARTICLE_ADDITEM'                         => 'Artikel hinzufügen',
 'ORDER_ARTICLE_PARAMS'                          => 'Parameter',
 'ORDER_ARTICLE_STORNO'                          => 'Bestellung wurde storniert',
+'ORDER_ARTICLE_UPDATE_STOCK'                    => 'Aktualisieren',
 'ORDER_SEARCH_FIELD_ARTID'                      => 'Artikel',
 'ORDER_SEARCH_FIELD_PAYMENT'                    => 'Zahlungsarten',
 'ORDER_LIST_YOUWANTTOSTORNO'                    => 'Wollen Sie diese Bestellung wirklich stornieren?',

@@ -19,13 +19,15 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsession.php 20457 2009-06-25 13:21:33Z vilma $
+ * $Id: oxsession.php 20535 2009-06-30 00:58:33Z alfonsas $
  */
 
-
+DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
 // Including database session managing class if needed.
-if (oxConfig::getInstance()->getConfigParam( 'blAdodbSessionHandler' ) )
-    require_once getShopBasePath() . 'core/adodb/session/adodb-session.php';
+if (oxConfig::getInstance()->getConfigParam( 'blAdodbSessionHandler' ) ) {
+    $oDB = oxDb::getDb();
+    require_once _DB_SESSION_HANDLER;
+}
 
 /**
  * Session manager.

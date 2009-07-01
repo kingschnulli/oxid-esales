@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 19866 2009-06-16 10:33:17Z alfonsas $
+ * $Id: lang.php 20544 2009-06-30 06:50:34Z arvydas $
  */
 
 /*
@@ -976,6 +976,7 @@ $aLang = array(
 'ORDER_ARTICLE_ADDITEM'                         => 'Add Product',
 'ORDER_ARTICLE_PARAMS'                          => 'Parameter',
 'ORDER_ARTICLE_STORNO'                          => 'Order is canceled',
+'ORDER_ARTICLE_UPDATE_STOCK'                    => 'Update',
 'ORDER_SEARCH_FIELD_ARTID'                      => 'Product',
 'ORDER_SEARCH_FIELD_PAYMENT'                    => 'Payment',
 'ORDER_LIST_YOUWANTTOSTORNO'                    => 'Do you really want to cancel this order ?',

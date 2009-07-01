@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: start.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: start.php 20551 2009-06-30 12:04:07Z arvydas $
  */
 
 /**
@@ -237,7 +237,7 @@ class Start extends oxUBase
             $sKeywords = $oDescField->value;
         }
 
-        return parent::_prepareMetaKeyword( $sKeywords, true );
+        return parent::_prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords );
     }
 
     /**

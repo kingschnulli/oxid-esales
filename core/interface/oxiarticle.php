@@ -89,7 +89,7 @@ interface oxIArticle
     public function getProductId();
 
     /**
-     * Applies discoutns which are supposed to be applied on amounts greater than zero.
+     * Applies discounts which are supposed to be applied on amounts greater than zero.
      * Returns applied discounts.
      *
      * @param oxPrice $oPrice     Old article price
@@ -99,4 +99,5 @@ interface oxIArticle
      * @return array
      */
     public function applyBasketDiscounts( oxPrice $oPrice, $aDiscounts, $dAmount = 1 );
+
 }

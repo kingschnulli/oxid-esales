@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlist.php 18377 2009-04-20 16:05:00Z tomas $
+ * $Id: oxlist.php 20521 2009-06-29 10:49:03Z sarunas $
  */
 
 /**
@@ -390,8 +390,6 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      */
     public function selectString( $sSql)
     {
-        //echo $sSql."<br><br>\n"; // DONT COMMIT
-
         $this->clear();
 
         if ( $this->_aSqlLimit[0] || $this->_aSqlLimit[1]) {
@@ -400,15 +398,7 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
             $rs = oxDb::getDb(true)->Execute( $sSql);
         }
 
-        //$blFirstLoop = true;
-        $oListObject = $this->getBaseObject();
-        $oSaved = oxNew( $this->_sObjectsInListName);
-        $oSaved->setInList();
-        $oSaved->init( $oListObject->getCoreTableName() );
-
-        if ( $oSaved->isMultilang() ) {
-            $oSaved->setLanguage( $oListObject->getLanguage() );
-        }
+        $oSaved = clone $this->getBaseObject();
 
         if ( $this->_aAssignCallbackPrepend && is_callable($this->_aAssignCallbackPrepend)) {
             call_user_func( $this->_aAssignCallbackPrepend, $oSaved);
@@ -420,7 +410,6 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
                 $oListObject = clone $oSaved;
 
                 $this->_assignElement($oListObject, $rs->fields);
-                //$oListObject->assign( $rs->fields);
 
                 if ( $this->_aAssignCallback ) {
                     call_user_func( $this->_aAssignCallback, $oListObject );

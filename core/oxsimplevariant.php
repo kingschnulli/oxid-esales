@@ -120,7 +120,7 @@ class oxSimpleVariant extends oxI18n
     /**
      * Applies discounts which should be applied in general case (for 0 amount)
      *
-     * @param oxprice $oPrice     Price object
+     * @param oxprice $oPrice Price object
      *
      * @return null
      */
@@ -137,7 +137,7 @@ class oxSimpleVariant extends oxI18n
 
     /**
      * apply parent article VAT to given price
-     * 
+     *
      * @param oxPrice $oPrice price object
      *
      * @return null
