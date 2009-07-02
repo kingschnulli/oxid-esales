@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 19886 2009-06-16 12:39:06Z alfonsas $
+ * $Id: lang.php 20555 2009-06-30 14:55:28Z vilma $
  */
 
 $aLang = array(
@@ -69,14 +69,14 @@ $aLang = array(
 'MOD_MOD_REWRITE'                                 => 'Apache mod_rewrite Modul',
 'MOD_ALLOW_URL_FOPEN'                             => 'allow_url_fopen oder fsockopen auf Port 80',
 'MOD_PHP4_COMPAT'                                 => 'Zend Kompatibilit&auml;tsmodus muss ausgeschaltet sein',
-'MOD_PHPVERSION'                                  => 'PHP mindestens Version 5.2.0',
+'MOD_PHP_VERSION'                                  => 'PHP mindestens Version 5.2.0',
 'MOD_REQUEST_URI'                                 => 'REQUEST_URI vorhanden',
-'MOD_LIBXML2'                                     => 'LIB XML2',
-'MOD_PHP-XML'                                     => 'DOM',
-'MOD_JSON'                                        => 'JSON',
-'MOD_ICONV'                                       => 'ICONV',
+'MOD_LIB_XML2'                                     => 'LIB XML2',
+'MOD_PHP_XML'                                     => 'DOM',
+'MOD_J_SON'                                        => 'JSON',
+'MOD_I_CONV'                                       => 'ICONV',
 'MOD_TOKENIZER'                                   => 'Tokenizer',
-'MOD_BCMATH'                                      => 'BCMath',
+'MOD_BC_MATH'                                      => 'BCMath',
 'MOD_MYSQL_CONNECT'                               => 'MySQL Modul für MySQL 5',
 'MOD_GD_INFO'                                     => 'GDlib v2 [v1] incl. JPEG Unterst&uuml;tzung',
 'MOD_INI_SET'                                     => 'ini_set erlaubt',

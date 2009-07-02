@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: oxuser.php 20555 2009-06-30 14:55:28Z vilma $
  */
 
 /**
@@ -1223,7 +1223,7 @@ class oxUser extends oxBase
         // load from DB
         $aData = $oDb->getAll( $sSelect );
         $sOXID = @$aData[0][0];
-        if ( isset( $sOXID ) && $sOXID && !@$aData[0][1] ) {
+        if ( isset( $sOXID ) && $sOXID ) {
 
             if ( !$this->load( $sOXID ) ) {
                 $oEx = oxNew( 'oxUserException' );
@@ -2248,4 +2248,5 @@ class oxUser extends oxBase
         $sUserId = oxDb::getDb()->getOne('select oxid from oxuser where md5(concat("oxid", oxpassword, oxusername )) = "'.$sReviewUserHash.'"');
         return $sUserId;
     }
+
 }

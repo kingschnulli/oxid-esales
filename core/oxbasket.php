@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 20531 2009-06-29 15:06:33Z arvydas $
+ * $Id: oxbasket.php 20565 2009-07-01 06:50:12Z arvydas $
  */
 
 /**
@@ -702,7 +702,7 @@ class oxBasket extends oxSuperCfg
             $aDeliveryList = oxDeliveryList::getInstance()->getDeliveryList( $this,
                                         $oUser,
                                         $this->_findDelivCountry(),
-                                        oxConfig::getParameter( 'sShipSet' )
+                                        $this->getShippingId()
                                     );
 
             if ( count( $aDeliveryList ) > 0 ) {

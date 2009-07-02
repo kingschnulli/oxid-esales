@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: index.php 18114 2009-04-14 07:53:45Z vilma $
+ * $Id: index.php 20560 2009-06-30 18:09:54Z tomas $
  */
 
 
@@ -34,6 +34,8 @@ $aSetupSteps['STEP_DB_CONNECT'] = 410;      // 31
 $aSetupSteps['STEP_DB_CREATE']  = 420;      // 32
 $aSetupSteps['STEP_DIRS_INFO']  = 500;      // 4
 $aSetupSteps['STEP_DIRS_WRITE'] = 510;      // 41
+$aSetupSteps['STEP_SERIAL']      = 600;     // 5
+$aSetupSteps['STEP_SERIAL_SAVE'] = 610;     // 51
 $aSetupSteps['STEP_FINISH'] = 700;          // 6
 
 ob_start();
@@ -580,7 +582,7 @@ if ( $istep == $aSetupSteps['STEP_SYSTEMREQ'] ) {
     } else {
         $iAdminLang = 0;
     }
-    
+
     setcookie("oxidadminlanguage", $iAdminLang, time()+31536000, "/");
 
 ?>
@@ -747,21 +749,21 @@ if ( $istep == $aSetupSteps['STEP_SYSTEMREQ'] ) {
     <td><?php echo( $aLang['STEP_3_UTFMODE'] ) ?>:</td>
     <td>
         &nbsp;&nbsp;<input type="checkbox" name="aDB[iUtfMode]" value="1" <?php if( $aDB['iUtfMode'] == 1 && $blMbStringOn > 1 && $blUnicodeSupport > 1) { echo( "checked"); } echo ($blMbStringOn > 1 && $blUnicodeSupport > 1) ? '' : 'disabled'; ?>>
-        <?php 
+        <?php
             if ( $blMbStringOn > 1 && $blUnicodeSupport > 1 ) {
             	echo ( $aLang['STEP_3_UTFINFO'] );
             } else {
-                echo ( $aLang['STEP_3_UTFNOTSUPPORTED'] ); 
+                echo ( $aLang['STEP_3_UTFNOTSUPPORTED'] );
                 if ( $blMbStringOn < 2 ) {
-                    echo ( $aLang['STEP_3_UTFNOTSUPPORTED1'] ); 
+                    echo ( $aLang['STEP_3_UTFNOTSUPPORTED1'] );
                 }
                 if ( ($blMbStringOn + $blUnicodeSupport) == 2) {
-                	echo ","; 
+                	echo ",";
                 }
                 if ( $blUnicodeSupport < 2 ) {
-                    echo ( $aLang['STEP_3_UTFNOTSUPPORTED2'] ); 
+                    echo ( $aLang['STEP_3_UTFNOTSUPPORTED2'] );
                 }
-                echo "."; 
+                echo ".";
             }
         ?>
         <br>

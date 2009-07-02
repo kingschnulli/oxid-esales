@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 20544 2009-06-30 06:50:34Z arvydas $
+ * $Id: lang.php 20565 2009-07-01 06:50:12Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -990,6 +990,7 @@ $aLang = array(
 'ORDER_MAIN_ORDERPAID'                          => 'Bestellung wurde bezahlt',
 'ORDER_MAIN_CURRENT_DATE'                       => 'Aktuelles Datum',
 'ORDER_MAIN_DELTYPE'                            => 'Versandart',
+'ORDER_MAIN_UPDATE_DELPAY'                      => 'Aktualisieren',
 'ORDER_REMARK_REMARK'                           => '[Bem.]',
 'ORDER_REMARK_ORDER'                            => '[Best.]',
 'ORDER_REMARK_USER'                             => '[Reg.]',
@@ -1319,14 +1320,14 @@ $aLang = array(
 'SYSREQ_MOD_REWRITE'                            => 'Apache mod_rewrite Modul',
 'SYSREQ_ALLOW_URL_FOPEN'                        => 'allow_url_fopen oder fsockopen auf Port 80',
 'SYSREQ_PHP4_COMPAT'                            => 'Zend Kompatibilitätsmodus muss ausgeschaltet sein',
-'SYSREQ_PHPVERSION'                             => 'PHP mindestens Version 5.2.0',
+'SYSREQ_PHP_VERSION'                            => 'PHP mindestens Version 5.2.0',
 'SYSREQ_REQUEST_URI'                            => 'REQUEST_URI vorhanden',
-'SYSREQ_LIBXML2'                                => 'LIB XML2',
-'SYSREQ_PHP-XML'                                => 'PHP XML',
-'SYSREQ_JSON'                                   => 'JSON',
-'SYSREQ_ICONV'                                  => 'ICONV',
+'SYSREQ_LIB_XML2'                               => 'LIB XML2',
+'SYSREQ_PHP_XML'                                => 'PHP XML',
+'SYSREQ_J_SON'                                  => 'JSON',
+'SYSREQ_I_CONV'                                 => 'ICONV',
 'SYSREQ_TOKENIZER'                              => 'Tokenizer',
-'SYSREQ_BCMATH'                                 => 'BCMath',
+'SYSREQ_BC_MATH'                                => 'BCMath',
 'SYSREQ_MYSQL_CONNECT'                          => 'MySQL Modul für MySQL 5',
 'SYSREQ_GD_INFO'                                => 'GDlib v2 [v1] incl. JPEG Unterstützung',
 'SYSREQ_INI_SET'                                => 'ini_set erlaubt',

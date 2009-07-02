@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: oxubase.php 20571 2009-07-01 08:04:39Z arvydas $
  */
 
 /**
@@ -1364,7 +1364,7 @@ class oxUBase extends oxView
 
             // removing duplicate words
             if ( $blRemoveDuplicatedWords ) {
-                $sMeta = $this->_removeDuplicatedWords( $sMeta );
+                $sMeta = $this->_removeDuplicatedWords( $sMeta, $this->getConfig()->getConfigParam( 'aSkipTags' ) );
             }
 
             // some special cases
@@ -1390,10 +1390,8 @@ class oxUBase extends oxView
 
         $sString = $this->_prepareMetaDescription( $sKeywords, -1, false );
 
-        $aSkipTags = $this->getConfig()->getConfigParam( 'aSkipTags' );
-
         if ( $blRemoveDuplicatedWords ) {
-            $sString = $this->_removeDuplicatedWords( $sString, $aSkipTags );
+            $sString = $this->_removeDuplicatedWords( $sString, $this->getConfig()->getConfigParam( 'aSkipTags' ) );
         }
 
         // removing in admin defined strings
@@ -2087,28 +2085,28 @@ class oxUBase extends oxView
      *
      * @return  stdClass    $pageNavigation Object with pagenavigation data
      */
-    public function generatePageNavigation( )
+    public function generatePageNavigation()
     {
         startProfile('generatePageNavigation');
         // generate the page navigation
         $pageNavigation = new stdClass();
-        $pageNavigation->nrOfPages = $this->_iCntPages;
+        $pageNavigation->NrOfPages = $this->_iCntPages;
         $pageNavigation->iArtCnt   = $this->_iAllArtCnt;
         $iActPage = $this->getActPage();
         $pageNavigation->actPage   = $iActPage + 1;
 
-        $sUrl = $this->generatePageNavigationUrl( );
+        $sUrl = $this->generatePageNavigationUrl();
 
         if ( $iActPage > 0) {
             $pageNavigation->previousPage = $this->_addPageNrParam( $sUrl, $iActPage - 1 );
         }
 
-        if ( $iActPage < $pageNavigation->nrOfPages - 1 ) {
+        if ( $iActPage < $pageNavigation->NrOfPages - 1 ) {
             $pageNavigation->nextPage = $this->_addPageNrParam( $sUrl, $iActPage + 1 );
         }
 
-        if ( $pageNavigation->nrOfPages > 1 ) {
-            for ( $i=1; $i < $pageNavigation->nrOfPages + 1; $i++ ) {
+        if ( $pageNavigation->NrOfPages > 1 ) {
+            for ( $i=1; $i < $pageNavigation->NrOfPages + 1; $i++ ) {
                 $page = new Oxstdclass();
                 $page->url = $this->_addPageNrParam( $sUrl, $i - 1 );
                 $page->selected = 0;
@@ -2120,7 +2118,7 @@ class oxUBase extends oxView
 
             // first/last one
             $pageNavigation->firstpage = $this->_addPageNrParam( $sUrl, 0 );
-            $pageNavigation->lastpage  = $this->_addPageNrParam( $sUrl, $pageNavigation->nrOfPages - 1 );
+            $pageNavigation->lastpage  = $this->_addPageNrParam( $sUrl, $pageNavigation->NrOfPages - 1 );
         }
 
         stopProfile('generatePageNavigation');

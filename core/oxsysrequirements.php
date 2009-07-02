@@ -111,18 +111,18 @@ class oxSysRequirements
     {
         if ( $this->_aRequiredModules == null ) {
             $aRequiredPHPExtensions = array(
-                                          'phpversion',
-                                          'libxml2',
-                                          'php-xml',
-                                          'json',
-                                          'iconv',
+                                          'php_version',
+                                          'lib_xml2',
+                                          'php_xml',
+                                          'j_son',
+                                          'i_conv',
                                           'tokenizer',
                                           'mysql_connect',
                                           'gd_info',
                                           'mb_string',
                                       );
 
-                $aRequiredPHPExtensions[] = 'bcmath';
+                $aRequiredPHPExtensions[] = 'bc_math';
 
             $aRequiredPHPConfigs = array(
                                        'allow_url_fopen',
@@ -581,63 +581,8 @@ class oxSysRequirements
     {
         if ( $sModule ) {
             $iModStat = null;
-            switch ( $sModule ) {
-                case 'mb_string':
-                    $iModStat = $this->checkMbString();
-                    break;
-                case 'mod_rewrite':
-                    $iModStat = $this->checkModRewrite();
-                    break;
-                case 'allow_url_fopen':
-                    $iModStat = $this->checkAllowUrlFopen();
-                    break;
-                case 'php4_compat':
-                    $iModStat = $this->checkPhp4Compat();
-                    break;
-                case 'phpversion':
-                    $iModStat = $this->checkPhp4Compat();
-                    break;
-                case 'request_uri':
-                    $iModStat = $this->checkRequestUri();
-                    break;
-                case 'libxml2':
-                    $iModStat = $this->checkLibXml2();
-                    break;
-                case 'php-xml':
-                    $iModStat = $this->checkPhpXml();
-                    break;
-                case 'json':
-                    $iModStat = $this->checkJSon();
-                    break;
-                case 'iconv':
-                    $iModStat = $this->checkIConv();
-                    break;
-                case 'tokenizer':
-                    $iModStat = $this->checkTokenizer();
-                    break;
-                case 'bcmath':
-                    $iModStat = $this->checkBcMath();
-                    break;
-                case 'mysql_connect':
-                    $iModStat = $this->checkMysqlConnect();
-                    break;
-                case 'gd_info':
-                    $iModStat = $this->checkGdInfo();
-                    break;
-                case 'ini_set':
-                    $iModStat = $this->checkIniSet();
-                    break;
-                case 'register_globals':
-                    $iModStat = $this->checkRegisterGlobals();
-                    break;
-                case 'memory_limit':
-                    $iModStat = $this->checkMemoryLimit();
-                    break;
-                case 'unicode_support':
-                    $iModStat = $this->checkUnicodeSupport();
-                    break;
-            }
-
+            $sCheckFunction = "check".str_replace(" ","",ucwords(str_replace("_"," ",$sModule)));
+            $iModStat = $this->$sCheckFunction();
 
             return $iModStat;
         }

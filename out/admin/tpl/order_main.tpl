@@ -36,7 +36,7 @@ function ThisDate( sID)
 <form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post">
 [{ $shop->hiddensid }]
 <input type="hidden" name="cl" value="order_main">
-<input type="hidden" name="fnc" value="">
+<input type="hidden" name="fnc" value="save">
 <input type="hidden" name="oxid" value="[{ $oxid }]">
 <input type="hidden" name="editval[oxorder__oxid]" value="[{ $oxid }]">
 
@@ -107,14 +107,14 @@ function ThisDate( sID)
             <b>[{ oxmultilang ident="GENERAL_SENDON" }]</b>
             </td>
             <td class="edittext" valign="bottom">
-            <b>[{$edit->oxorder__oxsenddate|oxformdate:'datetime':true }]</b>
+            <b>[{ $edit->oxorder__oxsenddate->value|oxformdate:'datetime':true }]</b>
             </td>
         </tr>
         <tr>
             <td class="edittext">
             </td>
             <td class="edittext"><br>
-            <input type="submit" class="edittext" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'"" [{ $readonly }]><br><br>
+            <input type="submit" class="edittext" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" [{ $readonly }]><br><br>
             </td>
         </tr>
         [{foreach from=$aVouchers item=sVoucher}]
@@ -132,23 +132,47 @@ function ThisDate( sID)
     </td>
     <!-- Anfang rechte Seite -->
     <td valign="top" class="edittext" align="left" width="50%">
+
+        </form>
+
         <table cellspacing="0" cellpadding="0" border="0">
         <tr>
             <td class="edittext">[{ oxmultilang ident="ORDER_MAIN_DELTYPE" }]:</td>
             <td class="edittext">
-                <select name="setDelSet" class="editinput" onChange="Javascript:document.myedit.fnc.value='changeDelSet'; document.myedit.submit();" style="width: 135px;">
+
+        <form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post">
+        [{ $shop->hiddensid }]
+        <input type="hidden" name="cl" value="order_main">
+        <input type="hidden" name="fnc" value="changeDelSet">
+        <input type="hidden" name="oxid" value="[{ $oxid }]">
+        <input type="hidden" name="editval[oxorder__oxid]" value="[{ $oxid }]">
+
+
+                <select name="setDelSet" class="editinput" style="width: 135px;">
                 <option value="">----</option>
                 [{foreach from=$oShipSet key=sShipSetId item=oShipSet}]
                 <option value="[{ $sShipSetId }]" [{ if $edit->oxorder__oxdeltype->value == $sShipSetId }]SELECTED[{/if}]>[{$oShipSet->oxdeliveryset__oxtitle->value}]</option>
                 [{/foreach}]
                 </select>
             </td>
+            <td>
+                <input type="submit" value="[{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }]">
+            </td>
         </tr>
         <tr>
             <td class="edittext">[{ oxmultilang ident="ORDER_MAIN_PAIDWITH" }]:</td>
             <td class="edittext">
+
+        </form>
+        <form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post">
+        [{ $shop->hiddensid }]
+        <input type="hidden" name="cl" value="order_main">
+        <input type="hidden" name="fnc" value="changePayment">
+        <input type="hidden" name="oxid" value="[{ $oxid }]">
+        <input type="hidden" name="editval[oxorder__oxid]" value="[{ $oxid }]">
+
                 [{if $oPayments}]
-                    <select name="setPayment" class="editinput" onChange="Javascript:document.myedit.fnc.value='changePayment'; document.myedit.submit();" style="width: 135px;">
+                    <select name="setPayment" class="editinput" style="width: 135px;">
                     <option value="oxempty" [{ if $edit->oxorder__oxpaymenttype->value == "oxempty" }]SELECTED[{/if}]>----</option>
                     [{foreach from=$oPayments key=sPaymentId item=oPayment}]
                     <option value="[{ $sPaymentId }]" [{ if $edit->oxorder__oxpaymenttype->value == $sPaymentId }]SELECTED[{/if}]>[{$oPayment->oxpayments__oxdesc->value}]</option>
@@ -158,9 +182,12 @@ function ThisDate( sID)
                     <b>[{$paymentType->oxpayments__oxdesc->value}]</b>
                 [{/if}]
             </td>
+            <td>
+                <input type="submit" value="[{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }]">
+            </td>
         </tr>
         </table>
-        <br/>
+        <br />
         <table cellspacing="0" cellpadding="0" border="0">
         [{ if $paymentType->aDynValues }]
         [{foreach from=$paymentType->aDynValues item=value}]
@@ -173,14 +200,7 @@ function ThisDate( sID)
             </td>
         </tr>
         [{/foreach}]
-        <tr>
-            <td class="edittext">
-            </td>
-            <td class="edittext"><br><br>
-            </td>
-        </tr>
-        [{/if}]
-        </form>
+
         [{ if $edit->blIsPaid }]
         <tr>
             <td class="edittext">
@@ -190,6 +210,17 @@ function ThisDate( sID)
             </td>
         </tr>
         [{/if}]
+
+        <tr>
+            <td class="edittext">
+            </td>
+            <td class="edittext"><br><br>
+            </td>
+        </tr>
+        [{/if}]
+
+
+        </form>
 
         <form name="sendorder" id="sendorder" action="[{ $shop->selflink }]" method="post">
         [{ $shop->hiddensid }]

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 20549 2009-06-30 08:45:32Z arvydas $
+ * $Id: oxorder.php 20565 2009-07-01 06:50:12Z arvydas $
  */
 
 /**
@@ -29,7 +29,6 @@
  */
 class oxOrder extends oxBase
 {
-
     /**
      * Skip update fields
      *
@@ -134,6 +133,13 @@ class oxOrder extends oxBase
      * @var int
      */
     protected $_iOrderLang = null;
+
+    /**
+     * Marker is order has new delivery type
+     *
+     * @var bool
+     */
+    protected $_blNewDelivery = false;
 
     /**
      * Class constructor, initiates parent constructor (parent::oxBase()).
@@ -1107,17 +1113,15 @@ class oxOrder extends oxBase
      * If no errors, finishing transaction.
      *
      * @param array $aNewArticles      article list of new order
-     * @param bool  $blChangeDelivery  if delivery was changed in admin
-     * @param bool  $blChangeDiscount  if discount was changed in admin
      *
      * @return null
      */
-    public function recalculateOrder( $aNewArticles = array(), $blChangeDelivery = false, $blChangeDiscount = false )
+    public function recalculateOrder( $aNewArticles = array() )
     {
         oxDb::startTransaction();
 
         try {
-            $oBasket = $this->_getOrderBasket( $blChangeDelivery, $blChangeDiscount );
+            $oBasket = $this->_getOrderBasket();
 
             // add this order articles to virtual basket and recalculates basket
             $this->_addOrderArticlesToBasket( $oBasket, $this->getOrderArticles( true ) );
@@ -1148,13 +1152,11 @@ class oxOrder extends oxBase
     /**
      * Returns basket object filled up with discount, delivery, wrapping and all other info
      *
-     * @param bool $blChangeDelivery change delivery method or not (default false)
-     * @param bool $blChangeDiscount change used discount or not (default false)
-     * @param bool $blStockCheck     perform stock check or not (default true)
+     * @param bool $blStockCheck perform stock check or not (default true)
      *
      * @return oxbasket
      */
-    protected function _getOrderBasket( $blChangeDelivery = false, $blChangeDiscount = false, $blStockCheck = true )
+    protected function _getOrderBasket( $blStockCheck = true )
     {
         $this->_oOrderBasket = oxNew( "oxbasket" );
 
@@ -1189,25 +1191,38 @@ class oxOrder extends oxBase
         // add previously used vouchers
         $sQ = 'select oxid from oxvouchers where oxorderid = "'.$this->getId().'"';
         $aVouchers = oxDb::getDb( true )->getAll( $sQ );
-        foreach ( $aVouchers AS $aVoucher ) {
+        foreach ( $aVouchers as $aVoucher ) {
             $this->_oOrderBasket->addVoucher( $aVoucher['oxid'] );
         }
 
-        //set shipping
+        //  set shipping
         $this->_oOrderBasket->setShipping( $this->oxorder__oxdeltype->value );
 
-        //V #M429: Shipping and total prices were not calculated correct
-        //when user changed delivery costs in admin
-        if ( $blChangeDelivery ) {
-            $this->_oOrderBasket->setDeliveryPrice( $this->getOrderDeliveryPrice() );
-        }
-        if ( $blChangeDiscount ) {
-            $this->_oOrderBasket->setTotalDiscount( $this->oxorder__oxdiscount->value );
-        }
+        // setting delivery price
+        $oDelPrice = $this->_blNewDelivery ? null : $this->getOrderDeliveryPrice();
+        $this->_oOrderBasket->setDeliveryPrice( $oDelPrice );
+
+        // setting total discount
+        $this->_oOrderBasket->setTotalDiscount( $this->oxorder__oxdiscount->value );
+
         //set basket payment
         $this->_oOrderBasket->setPayment( $this->oxorder__oxpaymenttype->value );
 
         return $this->_oOrderBasket;
+    }
+
+    /**
+     * Sets new delivery id for order and forces order to recalculate using new delivery type.
+     * Order is not recalculated automatically, to do this oxOrder::recalculateOrder() must be called ;
+     *
+     * @param string $sDeliveryId new delivery id
+     *
+     * @return null
+     */
+    public function setDelivery( $sDeliveryId )
+    {
+        $this->_blNewDelivery = true;
+        $this->oxorder__oxdeltype->value = $sDeliveryId;
     }
 
     /**
@@ -1302,7 +1317,7 @@ class oxOrder extends oxBase
             $sShipId = $this->oxorder__oxbillcountryid->value;
         }
 
-        $oBasket = $this->_getOrderBasket( false, false, false );
+        $oBasket = $this->_getOrderBasket( false );
 
         // add this order articles to basket and recalculate basket
         $this->_addOrderArticlesToBasket( $oBasket, $this->getOrderArticles() );
