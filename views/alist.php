@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: alist.php 20575 2009-07-01 10:35:29Z arvydas $
  */
 
 /**
@@ -451,7 +451,7 @@ class aList extends oxUBase
      *
      * @return string
      */
-    protected function _prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords = false )
+    protected function _prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords = true )
     {
         $sKeywords = '';
         if ( ( $oCategory = $this->getActCategory() ) ) {
@@ -793,7 +793,6 @@ class aList extends oxUBase
     public function getPageNavigation()
     {
         if ( $this->_oPageNavigation === null ) {
-            $this->_oPageNavigation = false;
             $this->_oPageNavigation = $this->generatePageNavigation();
         }
         return $this->_oPageNavigation;

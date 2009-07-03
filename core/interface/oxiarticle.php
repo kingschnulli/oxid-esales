@@ -89,15 +89,19 @@ interface oxIArticle
     public function getProductId();
 
     /**
-     * Applies discounts which are supposed to be applied on amounts greater than zero.
-     * Returns applied discounts.
+     * Returns base article price from database
      *
-     * @param oxPrice $oPrice     Old article price
-     * @param array   $aDiscounts Discount array
-     * @param amount  $dAmount    Amount in basket
+     * @param double $dAmount article amount. Default is 1
      *
-     * @return array
+     * @return double
      */
-    public function applyBasketDiscounts( oxPrice $oPrice, $aDiscounts, $dAmount = 1 );
+    public function getBasePrice( $dAmount = 1 );
+
+    /**
+     * Returns product parent id (oxparentid)
+     *
+     * @return string
+     */
+    public function getProductParentId();
 
 }

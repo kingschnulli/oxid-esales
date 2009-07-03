@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 20565 2009-07-01 06:50:12Z arvydas $
+ * $Id: oxorder.php 20609 2009-07-02 12:21:14Z arvydas $
  */
 
 /**
@@ -637,7 +637,7 @@ class oxOrder extends oxBase
 
                 // if order language doe not match product language - article must be reloaded in order language
                 if ( $iCurrLang != $oProduct->getLanguage() ) {
-                    $oProduct->loadInLang( $iCurrLang, $oProduct->getId() );
+                    $oProduct->loadInLang( $iCurrLang, $oProduct->getProductId() );
                 }
 
                 // set chosen selectlist
@@ -1222,7 +1222,7 @@ class oxOrder extends oxBase
     public function setDelivery( $sDeliveryId )
     {
         $this->_blNewDelivery = true;
-        $this->oxorder__oxdeltype->value = $sDeliveryId;
+        $this->oxorder__oxdeltype = new oxField( $sDeliveryId );
     }
 
     /**

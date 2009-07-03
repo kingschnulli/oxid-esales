@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 20521 2009-06-29 10:49:03Z sarunas $
+ * $Id: oxarticle.php 20615 2009-07-02 15:49:30Z arvydas $
  */
 
 // defining supported link types
@@ -1557,7 +1557,8 @@ class oxArticle extends oxI18n implements oxIArticle
         $this->_applyCurrency( $oPrice );
         // apply discounts
         if ( !$this->skipDiscounts() ) {
-            $this->_applyDiscounts($oPrice, oxDiscountList::getInstance()->getArticleDiscounts($this, $this->getArticleUser()));
+            $oDiscountList = oxDiscountList::getInstance();
+            $oDiscountList->applyDiscounts( $oPrice, $oDiscountList->getArticleDiscounts($this, $this->getArticleUser() ) );
         }
 
         return $oPrice;
@@ -1622,7 +1623,8 @@ class oxArticle extends oxI18n implements oxIArticle
         // apply discounts
         if ( !$this->skipDiscounts() ) {
             // apply general discounts
-            $this->_applyDiscounts( $oBasketPrice, oxDiscountList::getInstance()->getArticleDiscounts( $this, $oUser ) );
+            $oDiscountList = oxDiscountList::getInstance();
+            $oDiscountList->applyDiscounts( $oBasketPrice, $oDiscountList->getArticleDiscounts( $this, $oUser ) );
         }
 
         // returning final price object
@@ -1637,29 +1639,14 @@ class oxArticle extends oxI18n implements oxIArticle
      * @param array   $aDiscounts Discount array
      * @param amount  $dAmount    Amount in basket
      *
+     * @deprecated use oxDiscountList::applyBasketDiscounts() instead
+     *
      * @return array
      */
     public function applyBasketDiscounts(oxPrice $oPrice, $aDiscounts, $dAmount = 1)
     {
-        $aDiscLog = array();
-        reset( $aDiscounts );
-
-        // price object to correctly perform calculations
-        $dOldPrice = $oPrice->getBruttoPrice();
-
-        while (list( , $oDiscount) = each($aDiscounts)) {
-            $oDiscount->applyDiscount( $oPrice );
-            $dNewPrice = $oPrice->getBruttoPrice();
-
-            if (!isset($aDiscLog[$oDiscount->getId()])) {
-                $aDiscLog[$oDiscount->getId()] = $oDiscount->getSimpleDiscount();
-            }
-
-            $aDiscLog[$oDiscount->getId()]->dDiscount += $dOldPrice - $dNewPrice;
-            $aDiscLog[$oDiscount->getId()]->dDiscount *= $dAmount;
-            $dOldPrice = $dNewPrice;
-        }
-        return $aDiscLog;
+        $oDiscountList = oxDiscountList::getInstance();
+        return $oDiscountList->applyBasketDiscounts( $oPrice, $aDiscounts, $dAmount );
     }
 
     /**
@@ -2781,7 +2768,8 @@ class oxArticle extends oxI18n implements oxIArticle
 
         $oUser = $this->getArticleUser();
 
-        $aDiscountList = oxDiscountList::getInstance()->getArticleDiscounts($this, $oUser );
+        $oDiscountList = oxDiscountList::getInstance();
+        $aDiscountList = $oDiscountList->getArticleDiscounts( $this, $oUser );
 
         $oLowestPrice = null;
 
@@ -2798,7 +2786,7 @@ class oxArticle extends oxI18n implements oxIArticle
             $oItemPrice = oxNew( 'oxprice' );
             if ( $oItem->oxprice2article__oxaddabs->value) {
                 $oItemPrice->setPrice( $oItem->oxprice2article__oxaddabs->value );
-                $this->_applyDiscounts( $oItemPrice, $aDiscountList );
+                $oDiscountList->applyDiscounts( $oItemPrice, $aDiscountList );
                 $this->_applyCurrency( $oItemPrice, $oCur );
             } else {
                 $oItemPrice->setPrice( $dBasePrice );
@@ -2877,7 +2865,7 @@ class oxArticle extends oxI18n implements oxIArticle
      * apply article and article use
      *
      * @param oxPrice $oPrice target price
-     * 
+     *
      * @return null
      */
     public function applyVats( oxPrice $oPrice )
@@ -2893,14 +2881,14 @@ class oxArticle extends oxI18n implements oxIArticle
      * @param oxprice $oPrice     Price object
      * @param array   $aDiscounts Discount list
      *
+     * @deprecated use oxDiscountList::applyDiscounts() instead
+     *
      * @return null
      */
     protected function _applyDiscounts( $oPrice, $aDiscounts )
     {
-        reset( $aDiscounts );
-        while ( list( , $oDiscount ) = each( $aDiscounts ) ) {
-            $oDiscount->applyDiscount( $oPrice );
-        }
+        $oDiscountList = oxDiscountList::getInstance();
+        $oDiscountList->applyDiscounts( $oPrice, $aDiscounts );
     }
 
     /**
@@ -2914,7 +2902,8 @@ class oxArticle extends oxI18n implements oxIArticle
     {
         // apply discounts
         if ( !$this->skipDiscounts() ) {
-            $this->_applyDiscounts($oPrice, oxDiscountList::getInstance()->getArticleDiscounts($this, $this->getArticleUser()));
+            $oDiscountList = oxDiscountList::getInstance();
+            $oDiscountList->applyDiscounts( $oPrice, $oDiscountList->getArticleDiscounts( $this, $this->getArticleUser() ) );
         }
     }
 
@@ -4038,5 +4027,15 @@ class oxArticle extends oxI18n implements oxIArticle
     public function getProductId()
     {
         return $this->getId();
+    }
+
+    /**
+     * Returns product parent id (oxparentid)
+     *
+     * @return string
+     */
+    public function getProductParentId()
+    {
+        return $this->oxarticles__oxparentid->value;
     }
 }

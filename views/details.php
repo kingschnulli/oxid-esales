@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: details.php 20602 2009-07-02 11:53:06Z rimvydas.paskevicius $
  */
 
 /**
@@ -473,14 +473,15 @@ class Details extends oxUBase
 
             $sKeywords = implode( ", ", $aKeywords );
 
+            $sKeywords = parent::_prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords );
+            
             //adding searchkeys info
             if ( $sSearchKeys = trim( $oProduct->oxarticles__oxsearchkeys->value ) ) {
-                $sSearchKeys = preg_replace( "/\s+/", ", ", $sSearchKeys );
-                $sKeywords .= ", " . $sSearchKeys;
+                $sKeywords .= ", " . parent::_prepareMetaKeyword( $sSearchKeys, false );
             }
         }
 
-        return parent::_prepareMetaKeyword( $sKeywords, false );
+        return $sKeywords;
     }
 
     /**

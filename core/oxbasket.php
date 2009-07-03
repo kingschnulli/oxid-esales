@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 20565 2009-07-01 06:50:12Z arvydas $
+ * $Id: oxbasket.php 20615 2009-07-02 15:49:30Z arvydas $
  */
 
 /**
@@ -607,6 +607,8 @@ class oxBasket extends oxSuperCfg
         $this->_oDiscountProductsPriceList = oxNew( 'oxpricelist' );
         $this->_oNotDiscountedProductsPriceList = oxNew( 'oxpricelist' );
 
+        $oDiscountList = oxDiscountList::getInstance();
+
         foreach ( $this->_aBasketContents as $oBasketItem ) {
             $this->_iProductsCnt++;
             $this->_dItemsCnt += $oBasketItem->getAmount();
@@ -621,7 +623,7 @@ class oxBasket extends oxSuperCfg
                 $oBasketPrice->setBruttoPriceMode();
                 if ( !$oArticle->skipDiscounts() ) {
                     // apply basket type discounts
-                    $aItemDiscounts = $oArticle->applyBasketDiscounts( $oBasketPrice, oxDiscountList::getInstance()->getBasketItemDiscounts( $oArticle, $this, $this->getBasketUser() ), $oBasketItem->getAmount() );
+                    $aItemDiscounts = $oDiscountList->applyBasketDiscounts( $oBasketPrice, $oDiscountList->getBasketItemDiscounts( $oArticle, $this, $this->getBasketUser() ), $oBasketItem->getAmount() );
                     if ( is_array($this->_aItemDiscounts) && is_array($aItemDiscounts) ) {
                         $this->_aItemDiscounts = $this->_mergeDiscounts( $this->_aItemDiscounts, $aItemDiscounts);
                     }
@@ -1154,11 +1156,11 @@ class oxBasket extends oxSuperCfg
                 }
 
                 // variant handling
-                if ( $oArticle->oxarticles__oxparentid->value && $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
-                    if ( !isset( $this->_aBasketSummary->aArticles[$oArticle->oxarticles__oxparentid->value] ) ) {
-                        $this->_aBasketSummary->aArticles[$oArticle->oxarticles__oxparentid->value] = 0;
+                if ( $sParentId = $oArticle->getProductParentId() && $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
+                    if ( !isset( $this->_aBasketSummary->aArticles[$sParentId] ) ) {
+                        $this->_aBasketSummary->aArticles[$sParentId] = 0;
                     }
-                    $this->_aBasketSummary->aArticles[$oArticle->oxarticles__oxparentid->value] += $oBasketItem->getAmount();
+                    $this->_aBasketSummary->aArticles[$sParentId] += $oBasketItem->getAmount();
                 }
 
                 if ( !isset( $this->_aBasketSummary->aArticles[$oBasketItem->getProductId()] ) ) {

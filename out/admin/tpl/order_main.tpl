@@ -140,7 +140,7 @@ function ThisDate( sID)
             <td class="edittext">[{ oxmultilang ident="ORDER_MAIN_DELTYPE" }]:</td>
             <td class="edittext">
 
-        <form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post">
+        <form name="myedit2" id="myedit2" action="[{ $shop->selflink }]" method="post">
         [{ $shop->hiddensid }]
         <input type="hidden" name="cl" value="order_main">
         <input type="hidden" name="fnc" value="changeDelSet">
@@ -156,7 +156,7 @@ function ThisDate( sID)
                 </select>
             </td>
             <td>
-                <input type="submit" value="[{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }]">
+                <input type="submit" name="updateShipping" id="updateShipping" value="[{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }]">
             </td>
         </tr>
         <tr>
@@ -164,7 +164,7 @@ function ThisDate( sID)
             <td class="edittext">
 
         </form>
-        <form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post">
+        <form name="myedit3" id="myedit3" action="[{ $shop->selflink }]" method="post">
         [{ $shop->hiddensid }]
         <input type="hidden" name="cl" value="order_main">
         <input type="hidden" name="fnc" value="changePayment">
@@ -183,7 +183,7 @@ function ThisDate( sID)
                 [{/if}]
             </td>
             <td>
-                <input type="submit" value="[{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }]">
+                <input type="submit" name="updatePayment" id="updatePayment" value="[{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }]">
             </td>
         </tr>
         </table>
@@ -200,25 +200,20 @@ function ThisDate( sID)
             </td>
         </tr>
         [{/foreach}]
+        <tr>
+            <td class="edittext" colspan="3">&nbsp;</td>
+        </tr>
+        [{/if}]
 
         [{ if $edit->blIsPaid }]
         <tr>
             <td class="edittext">
             </td>
-            <td class="edittext"><br>
-                <b>[{ oxmultilang ident="ORDER_MAIN_ORDERPAID" }]: [{ $edit->oxorder__oxpaid->value|oxformdate:'datetime':true }]</b>
-            </td>
-        </tr>
-        [{/if}]
-
-        <tr>
             <td class="edittext">
-            </td>
-            <td class="edittext"><br><br>
+                <b>[{ oxmultilang ident="ORDER_MAIN_ORDERPAID" }]: [{ $edit->oxorder__oxpaid->value|oxformdate:'datetime':true }]</b><br /><br />
             </td>
         </tr>
         [{/if}]
-
 
         </form>
 

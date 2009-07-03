@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorderarticle.php 20545 2009-06-30 07:31:24Z arvydas $
+ * $Id: oxorderarticle.php 20615 2009-07-02 15:49:30Z arvydas $
  */
 
 /**
@@ -312,6 +312,24 @@ class oxOrderArticle extends oxBase implements oxIArticle
     }
 
     /**
+     * Returns product parent id (oxparentid)
+     *
+     * @return string
+     */
+    public function getProductParentId()
+    {
+        // when this field will be introduced there will be no need to load from real article
+        if ( isset( $this->oxorderarticles__oxartparentid ) && $this->oxorderarticles__oxartparentid->value !== false ) {
+            return $this->oxorderarticles__oxartparentid->value;
+        }
+
+        $oArticle = oxNew( "oxarticle" );
+        $sQ = "select oxparentid from " . $oArticle->getViewName() . " where oxid='" . $this->getProductId() . "'";
+        $this->oxarticles__oxparentid = new oxField( oxDb::getDb()->getOne( $sQ ) );
+        return $this->oxarticles__oxparentid->value;
+    }
+
+    /**
      * Sets article parameters to current object, so this object can be used for basket calculation
      *
      * @return null
@@ -490,11 +508,6 @@ class oxOrderArticle extends oxBase implements oxIArticle
         return false;
     }
 
-    public function applyBasketDiscounts( oxPrice $oPrice, $aDiscounts, $dAmount = 1 )
-    {
-        return array();
-    }
-
     /**
      * Returns empty array, implements iBaseArticle interface getter method
      *
@@ -504,7 +517,11 @@ class oxOrderArticle extends oxBase implements oxIArticle
      */
     public function getCategoryIds( $blSkipCache = false )
     {
-        return array();
+        $aCatIds = array();
+        if ( $oOrderArticle = $this->_getOrderArticle() ) {
+            $aCatIds = $oOrderArticle->getCategoryIds( $blSkipCache );
+        }
+        return $aCatIds;
     }
 
     /**
@@ -518,7 +535,19 @@ class oxOrderArticle extends oxBase implements oxIArticle
     }
 
     /**
-     * Returns base order article price
+     * Returns base article price from database
+     *
+     * @param double $dAmount article amount. Default is 1
+     *
+     * @return double
+     */
+    public function getBasePrice( $dAmount = 1 )
+    {
+        return $this->getPrice();
+    }
+
+    /**
+     * Returns order article unit price
      *
      * @return oxprice
      */

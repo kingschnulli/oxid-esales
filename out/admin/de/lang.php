@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 20565 2009-07-01 06:50:12Z arvydas $
+ * $Id: lang.php 20601 2009-07-02 11:17:21Z sarunas $
  */
 
 $sLangName  = 'Deutsch';
