@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 20555 2009-06-30 14:55:28Z vilma $
+ * $Id: oxuser.php 20634 2009-07-03 14:24:34Z arvydas $
  */
 
 /**
@@ -300,27 +300,47 @@ class oxUser extends oxBase
     /**
      * Returns user defined Address list object
      *
-     * @param string $sOXID object ID (default is null)
+     * @param string $sUserId object ID (default is null)
      *
      * @return object
      */
-    public function getUserAddresses( $sOXID = null )
+    public function getUserAddresses( $sUserId = null )
     {
 
-        if ( isset( $this->_oAddresses ) ) {
-            return $this->_oAddresses;
-        }
+        if ( $this->_oAddresses == null ) {
 
-        if ( !$sOXID ) {
-            $sOXID = $this->getId();
-        }
+            $sSelect = "select * from oxaddress where oxaddress.oxuserid = '".( $sUserId ? $sUserId : $this->getId() )."'";
 
-        //P
-        $this->_oAddresses = oxNew( 'oxlist' );
-        $this->_oAddresses->init( "oxbase", "oxaddress" );
-        $sSelect = 'select * from oxaddress where oxaddress.oxuserid = "'.$sOXID.'" ';
-        $this->_oAddresses->selectString( $sSelect );
+            //P
+            $this->_oAddresses = oxNew( 'oxlist' );
+            $this->_oAddresses->init( "oxbase", "oxaddress" );
+            $this->_oAddresses->selectString( $sSelect );
+
+            // marking selected
+            if ( $sAddressId = $this->getSelectedAddressId() ) {
+                foreach ( $this->_oAddresses as $oAddress ) {
+                    $oAddress->selected = 0;
+                    if ( $oAddress->getId() == $sAddressId ) {
+                        $oAddress->selected = 1;
+                        break;
+                    }
+                }
+            }
+        }
         return $this->_oAddresses;
+    }
+
+    /**
+     * Returns user chosen address id ("oxaddressid" or "deladrid")
+     *
+     * @return string
+     */
+    public function getSelectedAddressId()
+    {
+        if ( !( $sAddressId = oxConfig::getParameter( "oxaddressid") ) ) {
+            $sAddressId = oxSession::getVar( "deladrid" );
+        }
+        return $sAddressId;
     }
 
     /**
@@ -333,41 +353,31 @@ class oxUser extends oxBase
      */
     public function getSelectedAddress( $sWishId = false )
     {
-        $sAddressId = oxConfig::getParameter( "oxaddressid");
-        if ( !$sAddressId ) {
-            $sAddressId = oxSession::getVar( "deladrid" );
-        }
-
-        if ( $sAddressId ) {
-            $sWishId = null;
-        }
-
         $oAddresses = $this->getUserAddresses();
-        if ( $sWishId && $oAddresses->count()) {
-            foreach ( $oAddresses as $oAddress ) {
-                $oAddress->selected = 0;
-                if ( $oAddress->oxaddress__oxaddressuserid->value == $sWishId ) {
-                    $oAddress->selected = 1;
-                    return $oAddress->getId();
+        if ( $oAddresses->count() ) {
+            if ( $sAddressId = $this->getSelectedAddressId() ) {
+                foreach ( $oAddresses as $oAddress ) {
+                    if ( $oAddress->selected == 1 ) {
+                        $sAddressId = $oAddress->getId();
+                        break;
+                    }
+                }
+            } elseif ( $sWishId ) {
+                foreach ( $oAddresses as $oAddress ) {
+                    $oAddress->selected = 0;
+                    if( $oAddress->oxaddress__oxaddressuserid->value == $sWishId ) {
+                        $oAddress->selected = 1;
+                        $sAddressId = $oAddress->getId();
+                    }
                 }
             }
-        }
 
-        if ( !$sAddressId && $oAddresses->count() ) {
-            $oAddresses->rewind();
-            if ( ( $oCurAdress = $oAddresses->current() ) ) {
-                $sAddressId = $oCurAdress->getId();
-            }
-        }
-
-        // #597A
-        if ( $sAddressId ) {
-            foreach ( $oAddresses as $oAddress ) {
-                $oAddress->selected = 0;
-                if ( $oAddress->getId() == $sAddressId ) {
-                    $oAddress->selected = 1;
-                    break;
-                }
+            // in case none is set - setting first one
+            if ( !$sAddressId ) {
+                $oAddresses->rewind();
+                $oAddress = $oAddresses->current();
+                $oAddress->selected = 1;
+                $sAddressId = $oAddress->getId();
             }
         }
 
@@ -652,10 +662,7 @@ class oxUser extends oxBase
     public function getActiveCountry()
     {
         $sDeliveryCountry = '';
-        if (!($soxAddressId = oxConfig::getParameter( 'deladrid' ))) {
-            $soxAddressId = oxSession::getVar( 'deladrid' );
-        }
-        if ( $soxAddressId ) {
+        if ( $soxAddressId = oxConfig::getParameter( 'deladrid' ) ) {
             $oDelAddress = oxNew( 'oxbase' );
             $oDelAddress->init( 'oxaddress' );
             $oDelAddress->load( $soxAddressId );

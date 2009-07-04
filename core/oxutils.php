@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: oxutils.php 20626 2009-07-03 10:56:31Z vilma $
  */
 
 /**
@@ -220,6 +220,8 @@ class oxUtils extends oxSuperCfg
 
     /**
      * Returns formatted currency string, according to formatting standards.
+     *
+     * @deprecated use oxLang::formatCurrency
      *
      * @param double $dValue  Plain price
      * @param object $oActCur Object of active currency

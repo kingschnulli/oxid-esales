@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 20601 2009-07-02 11:17:21Z sarunas $
+ * $Id: lang.php 20618 2009-07-03 06:15:03Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -1272,7 +1272,7 @@ $aLang = array(
 'SHOP_SEO_SAFESEOPREF'                          => 'SEO Suffix um gleiche Artikel zu unterscheiden',
 'SHOP_SEO_RESETIDS'                             => 'SEO URLs neu berechnen',
 'SHOP_SEO_REPLACECHARS'                         => 'Zeichen, die in SEO URLs ersetzt werden',
-'SHOP_SEO_QRESETIDS'                            => 'ACHTUNG: Die SEO URLS von Kategorien, Artikeln, Herstellern und Lieferanten werden neu berechnet, wenn die entsprechende Seite das nächste mal aufgerufen',
+'SHOP_SEO_QRESETIDS'                            => 'ACHTUNG: Die SEO URLS von Kategorien, Artikeln, Herstellern und Lieferanten werden neu berechnet, wenn die entsprechende Seite das nächste Mal aufgerufen wird',
 'SHOP_SEO_NEWINSTALL'                           => 'ACHTUNG: Dies erfordert die korrekte Ausführung der mitgelieferten .htaccess (mod rewrite)',
 'SHOP_SEO_STATICURLS'                           => 'Statische URLs',
 'SHOP_SEO_STDURL'                               => 'Standard URL',
