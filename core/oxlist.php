@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlist.php 20521 2009-06-29 10:49:03Z sarunas $
+ * $Id: oxlist.php 20651 2009-07-07 08:16:53Z sarunas $
  */
 
 /**
@@ -265,6 +265,8 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      * Holds a name of the method to be called on list object before executing assign()
      *
      * @var array/string
+     *
+     * @deprecated
      */
     protected $_aAssignCallbackPrepend  = null;
 
@@ -272,6 +274,8 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      * Holds a name of the method to be called on list object after executing assign()
      *
      * @var array/string
+     *
+     * @deprecated
      */
     protected $_aAssignCallback = null;
 
@@ -346,6 +350,8 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      *
      * @param array $aAssignCallbackPrepend callback array
      *
+     * @deprecated
+     *
      * @return null
      */
     public function setAssignCallbackPrepend($aAssignCallbackPrepend)
@@ -357,6 +363,8 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      * Sets function to be called on list object before loading it
      *
      * @param array $aAssignCallBack callback array
+     *
+     * @deprecated
      *
      * @return null
      */
@@ -400,9 +408,11 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
 
         $oSaved = clone $this->getBaseObject();
 
+        // this code is deprecated and will be removed:
         if ( $this->_aAssignCallbackPrepend && is_callable($this->_aAssignCallbackPrepend)) {
             call_user_func( $this->_aAssignCallbackPrepend, $oSaved);
         }
+        // end of deprecated code
 
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
@@ -411,9 +421,11 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
 
                 $this->_assignElement($oListObject, $rs->fields);
 
+                // this code is deprecated and will be removed:
                 if ( $this->_aAssignCallback ) {
                     call_user_func( $this->_aAssignCallback, $oListObject );
                 }
+                // end of deprecated code
 
                 if ($oListObject->getId()) {
                     $this->_aArray[$oListObject->getId()] = $oListObject;

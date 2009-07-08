@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 20621 2009-07-03 07:48:52Z arvydas $
+ * $Id: oxbasket.php 20665 2009-07-07 15:20:45Z arvydas $
  */
 
 /**
@@ -1558,10 +1558,12 @@ class oxBasket extends oxSuperCfg
 
         // setting default if none is set
         if ( !$this->_sShippingSetId && $this->getPaymentId() != 'oxempty' ) {
+            $oUser = $this->getUser();
+
             // choosing first preferred delivery set
-            list( , $sActShipSet ) = oxDeliverySetList::getInstance()->getDeliverySetData( null, $this->getUser(), $this );
-            // in case nothing was found - choosing default
-            $this->_sShippingSetId = $sActShipSet ? $sActShipSet : 'oxidstandard';
+            list( , $sActShipSet ) = oxDeliverySetList::getInstance()->getDeliverySetData( null, $oUser, $this );
+            // in case nothing was found and no user set - choosing default
+            $this->_sShippingSetId = $sActShipSet ? $sActShipSet : ( $oUser ? null : 'oxidstandard' );
         }
 
         return $this->_sShippingSetId;
