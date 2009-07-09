@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: order_main.php 20565 2009-07-01 06:50:12Z arvydas $
+ * $Id: order_main.php 20675 2009-07-08 13:44:08Z arvydas $
  */
 
 /**
@@ -119,6 +119,12 @@ class Order_Main extends oxAdminDetails
             $oPayment->oxuserpayments__oxvalue->setValue(oxUtils::getInstance()->assignValuesToText( $aDynvalues));
             $oPayment->save();
         }
+
+        // keeps old delivery cost
+        $oOrder->reloadDelivery( false );
+
+        // keeps old discount
+        $oOrder->reloadDiscount( false );
 
         $oOrder->recalculateOrder();
 

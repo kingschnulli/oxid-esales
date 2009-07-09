@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 20609 2009-07-02 12:21:14Z arvydas $
+ * $Id: oxorder.php 20675 2009-07-08 13:44:08Z arvydas $
  */
 
 /**
@@ -135,11 +135,18 @@ class oxOrder extends oxBase
     protected $_iOrderLang = null;
 
     /**
-     * Marker is order has new delivery type
+     * If true delivery will be recalculated while recalculating order
      *
      * @var bool
      */
-    protected $_blNewDelivery = false;
+    protected $_blReloadDelivery = true;
+
+    /**
+     * If true discount will be recalculated while recalculating order
+     *
+     * @var bool
+     */
+    protected $_blReloadDiscount = true;
 
     /**
      * Class constructor, initiates parent constructor (parent::oxBase()).
@@ -631,7 +638,7 @@ class oxOrder extends oxBase
             $oProduct = $oContent->getArticle();
 
             // copy only if object is oxarticle type
-            if ( $oProduct instanceof oxorderarticle ) {
+            if ( $oProduct->isOrderArticle() ) {
                 $oOrderArticle = $oProduct;
             } else {
 
@@ -1185,25 +1192,30 @@ class oxOrder extends oxBase
         $this->_oOrderBasket->setCardId( $this->oxorder__oxcardid->value );
         $this->_oOrderBasket->setCardMessage( $this->oxorder__oxcardtext->value );
 
-        // disabling availability check
-        $this->_oOrderBasket->setSkipVouchersChecking( true );
+        if ( $this->_blReloadDiscount ) {
+            // disabling availability check
+            $this->_oOrderBasket->setSkipVouchersChecking( true );
 
-        // add previously used vouchers
-        $sQ = 'select oxid from oxvouchers where oxorderid = "'.$this->getId().'"';
-        $aVouchers = oxDb::getDb( true )->getAll( $sQ );
-        foreach ( $aVouchers as $aVoucher ) {
-            $this->_oOrderBasket->addVoucher( $aVoucher['oxid'] );
+            // add previously used vouchers
+            $sQ = 'select oxid from oxvouchers where oxorderid = "'.$this->getId().'"';
+            $aVouchers = oxDb::getDb( true )->getAll( $sQ );
+            foreach ( $aVouchers as $aVoucher ) {
+                $this->_oOrderBasket->addVoucher( $aVoucher['oxid'] );
+            }
+        } else {
+            $this->_oOrderBasket->setDiscountCalcMode( false );
+            $this->_oOrderBasket->setVoucherDiscount( $this->oxorder__oxvoucherdiscount->value );
+            $this->_oOrderBasket->setTotalDiscount( $this->oxorder__oxdiscount->value );
         }
 
-        //  set shipping
-        $this->_oOrderBasket->setShipping( $this->oxorder__oxdeltype->value );
-
-        // setting delivery price
-        $oDelPrice = $this->_blNewDelivery ? null : $this->getOrderDeliveryPrice();
-        $this->_oOrderBasket->setDeliveryPrice( $oDelPrice );
-
-        // setting total discount
-        $this->_oOrderBasket->setTotalDiscount( $this->oxorder__oxdiscount->value );
+        // must be kept old delivery?
+        if ( !$this->_blReloadDelivery ) {
+            $this->_oOrderBasket->setDeliveryPrice( $this->getOrderDeliveryPrice() );
+        } else {
+            //  set shipping
+            $this->_oOrderBasket->setShipping( $this->oxorder__oxdeltype->value );
+            $this->_oOrderBasket->setDeliveryPrice( null );
+        }
 
         //set basket payment
         $this->_oOrderBasket->setPayment( $this->oxorder__oxpaymenttype->value );
@@ -1221,7 +1233,7 @@ class oxOrder extends oxBase
      */
     public function setDelivery( $sDeliveryId )
     {
-        $this->_blNewDelivery = true;
+        $this->reloadDelivery( true );
         $this->oxorder__oxdeltype = new oxField( $sDeliveryId );
     }
 
@@ -1688,6 +1700,30 @@ class oxOrder extends oxBase
             $this->oxorder__oxdelcountry = new oxField($this->_getCountryTitle( $this->oxorder__oxdelcountryid->value ));
         }
         return $this->oxorder__oxdelcountry;
+    }
+
+    /**
+     * Tells to keep old or reload delivery costs while recalculating order
+     *
+     * @param bool $blReload reload state marker
+     *
+     * @return null
+     */
+    public function reloadDelivery( $blReload )
+    {
+        $this->_blReloadDelivery = $blReload;
+    }
+
+    /**
+     * Tells to keep old or reload discount while recalculating order
+     *
+     * @param bool $blReload reload state marker
+     *
+     * @return null
+     */
+    public function reloadDiscount( $blReload )
+    {
+        $this->_blReloadDiscount = $blReload;
     }
 
 }

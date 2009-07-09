@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorderarticle.php 20615 2009-07-02 15:49:30Z arvydas $
+ * $Id: oxorderarticle.php 20672 2009-07-08 11:38:22Z arvydas $
  */
 
 /**
@@ -616,6 +616,16 @@ class oxOrderArticle extends oxBase implements oxIArticle
                 $this->save();
             }
         }
+    }
+
+    /**
+     * Returns true if object is derived from oxorderarticle class
+     *
+     * @return bool
+     */
+    public function isOrderArticle()
+    {
+        return true;
     }
 
 }

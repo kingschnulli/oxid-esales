@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 20615 2009-07-02 15:49:30Z arvydas $
+ * $Id: oxarticle.php 20672 2009-07-08 11:38:22Z arvydas $
  */
 
 // defining supported link types
@@ -4038,4 +4038,15 @@ class oxArticle extends oxI18n implements oxIArticle
     {
         return $this->oxarticles__oxparentid->value;
     }
+
+    /**
+     * Returns false if object is not derived from oxorderarticle class
+     *
+     * @return bool
+     */
+    public function isOrderArticle()
+    {
+        return false;
+    }
+
 }

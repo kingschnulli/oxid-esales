@@ -104,4 +104,11 @@ interface oxIArticle
      */
     public function getProductParentId();
 
+    /**
+     * Returns true if object is derived from oxorderarticle class
+     *
+     * @return bool
+     */
+    public function isOrderArticle();
+
 }
