@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 20634 2009-07-03 14:24:34Z arvydas $
+ * $Id: oxuser.php 20690 2009-07-09 10:46:21Z alfonsas $
  */
 
 /**
@@ -365,7 +365,7 @@ class oxUser extends oxBase
             } elseif ( $sWishId ) {
                 foreach ( $oAddresses as $oAddress ) {
                     $oAddress->selected = 0;
-                    if( $oAddress->oxaddress__oxaddressuserid->value == $sWishId ) {
+                    if ( $oAddress->oxaddress__oxaddressuserid->value == $sWishId ) {
                         $oAddress->selected = 1;
                         $sAddressId = $oAddress->getId();
                     }
@@ -444,6 +444,7 @@ class oxUser extends oxBase
         if ( $blAddRemark && $blRet ) {
             $oRemark = oxNew( 'oxremark' );
             $oRemark->oxremark__oxtext     = new oxField(oxLang::getInstance()->translateString( 'usrRegistered' ), oxField::T_RAW);
+            $oRemark->oxremark__oxtype     = new oxField('r', oxField::T_RAW);
             $oRemark->oxremark__oxparentid = new oxField($this->getId(), oxField::T_RAW);
             $oRemark->save();
         }
@@ -502,10 +503,8 @@ class oxUser extends oxBase
             $oDB = oxDb::getDb();
 
             // deleting stored payment, address, group dependencies, remarks info
-            $rs = $oDB->execute( 'delete from oxuserpayments where oxuserpayments.oxuserid = "'.$sOXID.'" ' );
             $rs = $oDB->execute( 'delete from oxaddress where oxaddress.oxuserid = "'.$sOXID.'" ' );
             $rs = $oDB->execute( 'delete from oxobject2group where oxobject2group.oxobjectid = "'.$sOXID.'" ');
-            $rs = $oDB->execute( 'delete from oxremark where oxparentid = "'.$sOXID.'" ' );
 
             // deleting notice/wish lists
             $rs = $oDB->execute( 'delete oxuserbasketitems.* from oxuserbasketitems, oxuserbaskets where oxuserbasketitems.oxbasketid = oxuserbaskets.oxid and oxuserid = "'.$sOXID.'" ' );
@@ -513,6 +512,9 @@ class oxUser extends oxBase
 
             // deleting Newsletter subscription
             $rs = $oDB->execute( 'delete from oxnewssubscribed where oxuserid = "'.$sOXID.'" ');
+
+            // and leaving all order related information
+            $rs = $oDB->execute( 'delete from oxremark where oxparentid = "'.$sOXID.'" and oxtype !="o"' );
 
             $blDeleted = $rs->EOF;
         }
@@ -701,7 +703,7 @@ class oxUser extends oxBase
         // user without password found - lets use
         if ( isset( $sOXID ) && $sOXID ) {
             // try to update
-            $this->setId( $sOXID );
+            $this->delete( $sOXID );
         } elseif ( $this->_blMallUsers ) { // must be sure if there is no dublicate user
             $sQ = "select oxid from oxuser where oxusername = '{$this->oxuser__oxusername->value}' and oxusername != '' ";
             if ( $oDB->getOne( $sQ ) ) {

@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: index.php 20560 2009-06-30 18:09:54Z tomas $
+ * $Id: index.php 20684 2009-07-09 08:51:12Z arvydas $
  */
 
 
@@ -715,6 +715,29 @@ if ( $istep == $aSetupSteps['STEP_SYSTEMREQ'] ) {
     $blMbStringOn = $oSysReq->getModuleInfo( 'mb_string' );
     $blUnicodeSupport = $oSysReq->getModuleInfo( 'unicode_support' );
 ?>
+<script>
+/**
+ * Replaces password type field into plain and vice versa
+ */
+function changeField()
+{
+    var oField = document.getElementsByName( "aDB[dbPwd]" );
+    doChange( oField[0], oField[1] );
+    doChange( oField[1], oField[0] )
+}
+function doChange( oField1, oField2 )
+{
+    if ( oField1.disabled ) {
+        oField1.disabled = '';
+        oField1.style.display = '';
+        oField1.value = oField2.value;
+    } else {
+        oField1.disabled = 'disabled';
+        oField1.style.display = 'none';
+        oField2.value = oField1.value;
+    }
+}
+</script>
 
 <?php echo( $aLang['STEP_3_DESC'] ) ?><br>
 <br>
@@ -736,7 +759,10 @@ if ( $istep == $aSetupSteps['STEP_SYSTEMREQ'] ) {
   </tr>
   <tr>
     <td><?php echo( $aLang['STEP_3_DB_PASSWORD'] ) ?>:</td>
-    <td>&nbsp;&nbsp;<input size="40" name="aDB[dbPwd]" class="editinput" value="<?php echo( $aDB['dbPwd']);?>"> </td>
+    <td>
+        &nbsp;&nbsp;<input size="40" name="aDB[dbPwd]" class="editinput" type="password" value="<?php echo( $aDB['dbPwd']);?>"><input size="40" name="aDB[dbPwd]" class="editinput" type="text" disabled="disabled" style="display:none">
+        <input type="checkbox" onClick="JavaScript:changeField();"><?php echo( $aLang['STEP_3_DB_PASSWORD_DISPLAY'] ) ?>
+    </td>
   </tr>
   <tr>
     <td><?php echo( $aLang['STEP_3_DB_DEMODATA'] ) ?>:</td>
@@ -751,14 +777,14 @@ if ( $istep == $aSetupSteps['STEP_SYSTEMREQ'] ) {
         &nbsp;&nbsp;<input type="checkbox" name="aDB[iUtfMode]" value="1" <?php if( $aDB['iUtfMode'] == 1 && $blMbStringOn > 1 && $blUnicodeSupport > 1) { echo( "checked"); } echo ($blMbStringOn > 1 && $blUnicodeSupport > 1) ? '' : 'disabled'; ?>>
         <?php
             if ( $blMbStringOn > 1 && $blUnicodeSupport > 1 ) {
-            	echo ( $aLang['STEP_3_UTFINFO'] );
+                echo ( $aLang['STEP_3_UTFINFO'] );
             } else {
                 echo ( $aLang['STEP_3_UTFNOTSUPPORTED'] );
                 if ( $blMbStringOn < 2 ) {
                     echo ( $aLang['STEP_3_UTFNOTSUPPORTED1'] );
                 }
                 if ( ($blMbStringOn + $blUnicodeSupport) == 2) {
-                	echo ",";
+                    echo ",";
                 }
                 if ( $blUnicodeSupport < 2 ) {
                     echo ( $aLang['STEP_3_UTFNOTSUPPORTED2'] );

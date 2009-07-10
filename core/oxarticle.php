@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 20672 2009-07-08 11:38:22Z arvydas $
+ * $Id: oxarticle.php 20690 2009-07-09 10:46:21Z alfonsas $
  */
 
 // defining supported link types
@@ -1543,6 +1543,8 @@ class oxArticle extends oxI18n implements oxIArticle
 
     /**
      * Calculates price of article (adds taxes, currency and discounts).
+     *
+     * @param oxPrice $oPrice price object
      *
      * @return oxPrice
      */
