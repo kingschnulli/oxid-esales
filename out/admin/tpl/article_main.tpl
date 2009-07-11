@@ -2,50 +2,19 @@
 
 <script type="text/javascript">
 <!--
-[{ if $updatelist == 1}]
-    UpdateList('[{ $oxid }]');
-[{ /if}]
-function UpdateList( sID)
+top.oxid.admin.editThis = function ( sID )
 {
-    var oSearch = parent.list.document.getElementById("search");
-    oSearch.oxid.value=sID;
-    oSearch.fnc.value='';
-    oSearch.submit();
-}
+    var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
+    oTransfer.oxid.value = sID;
+    oTransfer.cl.value = top.basefrm.list.sDefClass;
 
-function EditThis( sID)
-{
-    var oTransfer = document.getElementById("transfer");
-    oTransfer.oxid.value=sID;
-    oTransfer.cl.value='article_main';
-    oTransfer.submit();
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 
-    var oSearch = parent.list.document.getElementById("search");
+    var oSearch = top.basefrm.list.document.getElementById( "search" );
+    oSearch.oxid.value = sID;
     oSearch.actedit.value = 0;
-    oSearch.oxid.value=sID;
     oSearch.submit();
-}
-
-function ChangeLstrt()
-{
-    var oSearch = document.getElementById("search");
-    if (document.search != null && document.search.lstrt != null)
-        oSearch.lstrt.value=0;
-}
-
-function UnlockSave(obj)
-{   var saveButton = document.myedit.saveArticle;
-    if ( saveButton != null && obj != null )
-    {
-        if (obj.value.length > 0)
-        {
-            saveButton.disabled = false;
-        }
-        else
-        {
-            saveButton.disabled = true;
-        }
-    }
 }
 //-->
 </script>
@@ -96,7 +65,7 @@ function UnlockSave(obj)
                     <b>[{ oxmultilang ident="ARTICLE_MAIN_VARIANTE" }]</b>
                 </td>
                 <td class="edittext">
-                  <a href="Javascript:EditThis('[{ $parentarticle->oxarticles__oxid->value}]');" class="edittext"><b>[{ $parentarticle->oxarticles__oxartnum->value }] [{ $parentarticle->oxarticles__oxtitle->value}] [{if !$parentarticle->oxarticles__oxtitle->value }][{ $parentarticle->oxarticles__oxvarselect->value }][{/if}]</b></a>
+                  <a href="Javascript:top.oxid.admin.editThis('[{ $parentarticle->oxarticles__oxid->value}]');" class="edittext"><b>[{ $parentarticle->oxarticles__oxartnum->value }] [{ $parentarticle->oxarticles__oxtitle->value}] [{if !$parentarticle->oxarticles__oxtitle->value }][{ $parentarticle->oxarticles__oxvarselect->value }][{/if}]</b></a>
                 </td>
               </tr>
               [{ /if}]
@@ -127,7 +96,7 @@ function UnlockSave(obj)
                     [{ oxmultilang ident="ARTICLE_MAIN_TITLE" }]&nbsp;
                   </td>
                   <td class="edittext">
-                    <input type="text" class="editinput" size="32" maxlength="[{$edit->oxarticles__oxtitle->fldmax_length}]" name="editval[oxarticles__oxtitle]" value="[{$edit->oxarticles__oxtitle->value}]" [{if !$oxparentid}]onchange="JavaScript:UnlockSave(this);" onkeyup="JavaScript:UnlockSave(this);" onmouseout="JavaScript:UnlockSave(this);"[{/if}] [{ $readonly }]>
+                    <input type="text" class="editinput" size="32" maxlength="[{$edit->oxarticles__oxtitle->fldmax_length}]" name="editval[oxarticles__oxtitle]" value="[{$edit->oxarticles__oxtitle->value}]" [{if !$oxparentid}]onchange="JavaScript:top.oxid.admin.unlockSave(this);" onkeyup="JavaScript:top.oxid.admin.unlockSave(this);" onmouseout="JavaScript:top.oxid.admin.unlockSave(this);"[{/if}] [{ $readonly }]>
                   </td>
                 </tr>
                 <tr>
@@ -257,7 +226,7 @@ function UnlockSave(obj)
                 [{ oxmultilang ident="ARTICLE_MAIN_INCATEGORY" }]
                 </td>
                 <td class="edittext">
-                <select name="art_category" class="editinput" onChange="Javascript:ChangeLstrt()" [{ $readonly }]>
+                <select name="art_category" class="editinput" onChange="Javascript:top.oxid.admin.changeLstrt()" [{ $readonly }]>
                 <option value="-1">[{ oxmultilang ident="ARTICLE_MAIN_NONE" }]</option>
                 [{foreach from=$oView->getCategoryList() item=pcat}]
                 <option value="[{ $pcat->oxcategories__oxid->value }]">[{ $pcat->oxcategories__oxtitle->value|oxtruncate:40:"..":true }]</option>

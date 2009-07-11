@@ -13,6 +13,19 @@
 
   <script type="text/javascript">
   <!--
+    // standard messages
+    var sUnassignMessage = "[{ oxmultilang ident='GENERAL_YOUWANTTOUNASSIGN' }]";
+    var sDeleteMessage   = "[{ oxmultilang ident='GENERAL_YOUWANTTODELETE' }]";;
+
+    // class info
+    var sDefClass = '[{ $default_edit }]';
+    var sActClass = '[{$actlocation}]';
+
+    [{ if $updatelist == 1}]
+        top.oxid.admin.updateList('[{ $oxid }]');
+    [{ /if}]
+
+
     var ajaxpopup = null;
     function showDialog( sParams )
     {

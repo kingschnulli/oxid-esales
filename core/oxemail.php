@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 19352 2009-05-25 13:16:24Z vilma $
+ * $Id: oxemail.php 20709 2009-07-10 06:50:27Z sarunas $
  */
 /**
  * Includes PHP mailer class.
@@ -320,7 +320,7 @@ class oxEmail extends phpmailer
         // setting some deprecated variables
         $oOrder->oDelSet = $oOrder->getDelSet();
 
-        $oUser = $oOrder->getUser();
+        $oUser = $oOrder->getOrderUser();
         // create messages
         $smarty = oxUtilsView::getInstance()->getSmarty();
         $smarty->assign( "charset", oxLang::getInstance()->translateString("charset"));
@@ -393,8 +393,8 @@ class oxEmail extends phpmailer
         $oOrder = $this->_addUserInfoOrderEMail( $oOrder );
 
         // send confirmation to shop owner
-        $sFullName = $oOrder->getUser()->oxuser__oxfname->value . " " . $oOrder->getUser()->oxuser__oxlname->value;
-        $this->setFrom( $oOrder->getUser()->oxuser__oxusername->value, $sFullName );
+        $sFullName = $oOrder->getOrderUser()->oxuser__oxfname->value . " " . $oOrder->getOrderUser()->oxuser__oxlname->value;
+        $this->setFrom( $oOrder->getOrderUser()->oxuser__oxusername->value, $sFullName );
 
         $oLang = oxLang::getInstance();
         $iOrderLang = $oLang->getTplLanguage();
@@ -415,7 +415,7 @@ class oxEmail extends phpmailer
         $smarty->assign( "order", $oOrder );
         $smarty->assign( "shop", $oShop );
         $smarty->assign( "oViewConf", $oShop );
-        $smarty->assign( "user", $oOrder->getUser() );
+        $smarty->assign( "user", $oOrder->getOrderUser() );
         $smarty->assign( "currency", $myConfig->getActShopCurrencyObject() );
         $smarty->assign( "basket", $oOrder->getBasket() );
         $smarty->assign( "payment", $oOrder->getPayment() );
@@ -446,15 +446,15 @@ class oxEmail extends phpmailer
 
         $this->setRecipient( $oShop->oxshops__oxowneremail->value, $oLang->translateString("order") );
 
-        if ( $oOrder->getUser()->oxuser__oxusername->value != "admin" )
-            $this->setReplyTo( $oOrder->getUser()->oxuser__oxusername->value, $sFullName );
+        if ( $oOrder->getOrderUser()->oxuser__oxusername->value != "admin" )
+            $this->setReplyTo( $oOrder->getOrderUser()->oxuser__oxusername->value, $sFullName );
 
         $blSuccess = $this->send();
 
         // add user history
         $oRemark = oxNew( "oxremark" );
         $oRemark->oxremark__oxtext      = new oxField($this->getAltBody(), oxField::T_RAW);
-        $oRemark->oxremark__oxparentid  = new oxField($oOrder->getUser()->getId(), oxField::T_RAW);
+        $oRemark->oxremark__oxparentid  = new oxField($oOrder->getOrderUser()->getId(), oxField::T_RAW);
         $oRemark->oxremark__oxtype      = new oxField("o", oxField::T_RAW);
         $oRemark->save();
 

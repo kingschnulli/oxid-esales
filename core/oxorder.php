@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 20675 2009-07-08 13:44:08Z arvydas $
+ * $Id: oxorder.php 20699 2009-07-09 15:00:39Z sarunas $
  */
 
 /**
@@ -1244,10 +1244,13 @@ class oxOrder extends oxBase
      */
     public function getOrderUser()
     {
-        $oUser = oxNew( "oxuser" );
-        $oUser->load( $this->oxorder__oxuserid->value );
+        if ($this->_oUser) {
+            return $this->_oUser;
+        }
+        $this->_oUser = oxNew( "oxuser" );
+        $this->_oUser->load( $this->oxorder__oxuserid->value );
 
-        return $oUser;
+        return $this->_oUser;
     }
 
     /**
@@ -1453,16 +1456,6 @@ class oxOrder extends oxBase
         $oxEmail->sendOrderEMailToOwner( $this );
 
         return $iRet;
-    }
-
-    /**
-     * Returns order user
-     *
-     * @return oxUser
-     */
-    public function getUser()
-    {
-        return $this->_oUser;
     }
 
     /**
