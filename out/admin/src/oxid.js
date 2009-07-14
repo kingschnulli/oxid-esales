@@ -109,7 +109,7 @@ var oxid = {
         {
             var saveButton = top.basefrm.edit.document.myedit.saveArticle;
             if ( saveButton != null && obj != null ) {
-                if (obj.value.length > 0) {
+                if ( obj.value && obj.value.length > 0) {
                     saveButton.disabled = false;
                 } else {
                     saveButton.disabled = true;
@@ -139,6 +139,6 @@ var oxid = {
                 //forcing edit frame to reload after submit
                 top.forceReloadingEditFrame();
             }
-        },
+        }
     }
 };

@@ -22,7 +22,10 @@
     var sActClass = '[{$actlocation}]';
 
     [{ if $updatelist == 1}]
+    window.onload = function ()
+    {
         top.oxid.admin.updateList('[{ $oxid }]');
+    }
     [{ /if}]
 
 

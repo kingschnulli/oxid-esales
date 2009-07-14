@@ -2,19 +2,22 @@
 
 <script type="text/javascript">
 <!--
-top.oxid.admin.editThis = function ( sID )
+window.onload = function ()
 {
-    var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
-    oTransfer.oxid.value = sID;
-    oTransfer.cl.value = top.basefrm.list.sDefClass;
+    function editThis( sID )
+    {
+        var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
+        oTransfer.oxid.value = sID;
+        oTransfer.cl.value = top.basefrm.list.sDefClass;
 
-    //forcing edit frame to reload after submit
-    top.forceReloadingEditFrame();
+        //forcing edit frame to reload after submit
+        top.forceReloadingEditFrame();
 
-    var oSearch = top.basefrm.list.document.getElementById( "search" );
-    oSearch.oxid.value = sID;
-    oSearch.actedit.value = 0;
-    oSearch.submit();
+        var oSearch = top.basefrm.list.document.getElementById( "search" );
+        oSearch.oxid.value = sID;
+        oSearch.actedit.value = 0;
+        oSearch.submit();
+    }
 }
 //-->
 </script>
@@ -38,7 +41,7 @@ top.oxid.admin.editThis = function ( sID )
       <td valign="top" class="edittext">
 
         [{if $oxparentid }]
-          <b>[{ oxmultilang ident="GENERAL_VARIANTE" }]<a href="Javascript:top.oxid.admin.editThis('[{ $parentarticle->oxarticles__oxid->value}]');" class="edittext"><b>[{ $parentarticle->oxarticles__oxartnum->value }] [{ $parentarticle->oxarticles__oxtitle->value }]</b></a><br>
+          <b>[{ oxmultilang ident="GENERAL_VARIANTE" }]<a href="Javascript:editThis('[{ $parentarticle->oxarticles__oxid->value}]');" class="edittext"><b>[{ $parentarticle->oxarticles__oxartnum->value }] [{ $parentarticle->oxarticles__oxtitle->value }]</b></a><br>
           <br>
         [{/if}]
 

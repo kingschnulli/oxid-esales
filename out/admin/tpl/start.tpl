@@ -65,6 +65,10 @@ function reloadListEditFrames()
   reloadEditFrame();
 }
 
+function gaidys()
+{
+    alert("gaidys");
+}
 
 function loadEditFrame(sUrl)
 {

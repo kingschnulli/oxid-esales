@@ -2,15 +2,12 @@
 
 <script type="text/javascript">
 <!--
-function refreshParent()
+window.onload = function ()
 {
     var oSearch = opener.parent.list.document.getElementById("search");
     oSearch.oxid.value='-1';
     oSearch.submit();
 }
-
-refreshParent();
-
 //-->
 </script>
 

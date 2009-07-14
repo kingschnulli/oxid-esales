@@ -1,21 +1,5 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
-<script type="text/javascript">
-<!--
-[{ if $updatelist == 1}]
-    UpdateList('[{ $oxid }]');
-[{ /if}]
-
-function UpdateList( sID)
-{
-    var oSearch = parent.list.document.getElementById("search");
-    oSearch.oxid.value=sID;
-    oSearch.submit();
-}
-
-//-->
-</script>
-
 [{ if $error}]<div class="errorbox">[{ $error }]</div>[{/if}]
 [{ if $message}]<div class="messagebox">[{ $message }]</div>[{/if}]
 

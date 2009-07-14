@@ -207,7 +207,7 @@ class oxSysRequirements
         if ( $iModStat == 1 ) {
             $iErrNo  = 0;
             $sErrStr = '';
-            if ( $oRes = @fsockopen( 'www.oxid-esales.com', 80, $iErrNo, $sErrStr, 10 ) ) {
+            if ( $oRes = @fsockopen( 'www.example.com', 80, $iErrNo, $sErrStr, 10 ) ) {
                 $iModStat = 2;
                 fclose( $oRes );
             }
@@ -483,7 +483,7 @@ class oxSysRequirements
                    'LEFT JOIN INFORMATION_SCHEMA.columns c ON t.TABLE_NAME = c.TABLE_NAME  ' .
                    'where t.TABLE_SCHEMA = "'.$myConfig->getConfigParam( 'dbName' ).'" ' .
                    'and c.TABLE_SCHEMA = "'.$myConfig->getConfigParam( 'dbName' ).'" ' .
-                   'and c.COLUMN_NAME in ("'.implode('", "', $this->_aColumns).'") ' . $this->_getAdditionalCheck() . 
+                   'and c.COLUMN_NAME in ("'.implode('", "', $this->_aColumns).'") ' . $this->_getAdditionalCheck() .
                    ' ORDER BY (t.TABLE_NAME = "oxarticles") DESC';
         $aRez = oxDb::getDb()->getAll($sSelect);
         foreach ( $aRez as $aRetTable ) {

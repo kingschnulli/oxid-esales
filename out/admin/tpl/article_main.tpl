@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 <!--
-top.oxid.admin.editThis = function ( sID )
+function editThis( sID )
 {
     var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
     oTransfer.oxid.value = sID;
@@ -15,6 +15,15 @@ top.oxid.admin.editThis = function ( sID )
     oSearch.oxid.value = sID;
     oSearch.actedit.value = 0;
     oSearch.submit();
+}
+
+window.onload = function () {
+    [{if !$oxparentid}]
+    var oField = document.getElementsByName( "editval[oxarticles__oxtitle]" )[0];
+    oField.onchange = top.oxid.admin.unlockSave;
+    oField.onkeyup = top.oxid.admin.unlockSave;
+    oField.onmouseout = top.oxid.admin.unlockSave;
+    [{/if}]
 }
 //-->
 </script>
@@ -65,7 +74,7 @@ top.oxid.admin.editThis = function ( sID )
                     <b>[{ oxmultilang ident="ARTICLE_MAIN_VARIANTE" }]</b>
                 </td>
                 <td class="edittext">
-                  <a href="Javascript:top.oxid.admin.editThis('[{ $parentarticle->oxarticles__oxid->value}]');" class="edittext"><b>[{ $parentarticle->oxarticles__oxartnum->value }] [{ $parentarticle->oxarticles__oxtitle->value}] [{if !$parentarticle->oxarticles__oxtitle->value }][{ $parentarticle->oxarticles__oxvarselect->value }][{/if}]</b></a>
+                  <a href="Javascript:editThis('[{ $parentarticle->oxarticles__oxid->value}]');" class="edittext"><b>[{ $parentarticle->oxarticles__oxartnum->value }] [{ $parentarticle->oxarticles__oxtitle->value}] [{if !$parentarticle->oxarticles__oxtitle->value }][{ $parentarticle->oxarticles__oxvarselect->value }][{/if}]</b></a>
                 </td>
               </tr>
               [{ /if}]
@@ -96,7 +105,7 @@ top.oxid.admin.editThis = function ( sID )
                     [{ oxmultilang ident="ARTICLE_MAIN_TITLE" }]&nbsp;
                   </td>
                   <td class="edittext">
-                    <input type="text" class="editinput" size="32" maxlength="[{$edit->oxarticles__oxtitle->fldmax_length}]" name="editval[oxarticles__oxtitle]" value="[{$edit->oxarticles__oxtitle->value}]" [{if !$oxparentid}]onchange="JavaScript:top.oxid.admin.unlockSave(this);" onkeyup="JavaScript:top.oxid.admin.unlockSave(this);" onmouseout="JavaScript:top.oxid.admin.unlockSave(this);"[{/if}] [{ $readonly }]>
+                    <input type="text" class="editinput" size="32" maxlength="[{$edit->oxarticles__oxtitle->fldmax_length}]" name="editval[oxarticles__oxtitle]" value="[{$edit->oxarticles__oxtitle->value}]">
                   </td>
                 </tr>
                 <tr>

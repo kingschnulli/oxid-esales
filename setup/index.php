@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: index.php 20684 2009-07-09 08:51:12Z arvydas $
+ * $Id: index.php 20809 2009-07-13 10:00:20Z arvydas $
  */
 
 
@@ -761,7 +761,7 @@ function doChange( oField1, oField2 )
     <td><?php echo( $aLang['STEP_3_DB_PASSWORD'] ) ?>:</td>
     <td>
         &nbsp;&nbsp;<input size="40" name="aDB[dbPwd]" class="editinput" type="password" value="<?php echo( $aDB['dbPwd']);?>"><input size="40" name="aDB[dbPwd]" class="editinput" type="text" disabled="disabled" style="display:none">
-        <input type="checkbox" onClick="JavaScript:changeField();"><?php echo( $aLang['STEP_3_DB_PASSWORD_DISPLAY'] ) ?>
+        <input type="checkbox" onClick="JavaScript:changeField();"><?php echo( $aLang['STEP_3_DB_PASSWORD_SHOW'] ) ?>
     </td>
   </tr>
   <tr>

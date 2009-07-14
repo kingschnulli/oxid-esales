@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 20684 2009-07-09 08:51:12Z arvydas $
+ * $Id: lang.php 20809 2009-07-13 10:00:20Z arvydas $
  */
 
 $aLang = array(
@@ -117,7 +117,7 @@ $aLang = array(
 'STEP_3_DB_HOSTNAME'                              => "Database hostname or IP",
 'STEP_3_DB_USER_NAME'                             => "Database username",
 'STEP_3_DB_PASSWORD'                              => "Database password",
-'STEP_3_DB_PASSWORD_DISPLAY'                      => "[tr]Show password",
+'STEP_3_DB_PASSWORD_SHOW'                         => "Show password",
 'STEP_3_DB_DATABSE_NAME'                          => "Database name",
 'STEP_3_DB_DEMODATA'                              => "Demodata",
 'STEP_3_UTFMODE'                                  => "Use UTF-8 character encoding",

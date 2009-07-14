@@ -9,7 +9,7 @@ function DeletePic( sField )
     oForm.fnc.value='save';
     oForm.submit();
 }
-top.oxid.admin.editThis = function ( sID )
+function editThis( sID )
 {
     var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
     oTransfer.oxid.value = sID;
@@ -63,7 +63,7 @@ top.oxid.admin.editThis = function ( sID )
             <b>[{ oxmultilang ident="GENERAL_VARIANTE" }]</b>
             </td>
             <td class="edittext" colspan="2">
-            <a href="Javascript:top.oxid.admin.editThis('[{ $parentarticle->oxarticles__oxid->value}]');" class="edittext"><b>[{ $parentarticle->oxarticles__oxartnum->value }] [{ $parentarticle->oxarticles__oxtitle->value }]</b></a>
+            <a href="Javascript:editThis('[{ $parentarticle->oxarticles__oxid->value}]');" class="edittext"><b>[{ $parentarticle->oxarticles__oxartnum->value }] [{ $parentarticle->oxarticles__oxtitle->value }]</b></a>
             </td>
         </tr>
         [{ /if}]

@@ -7,21 +7,64 @@
     [{assign var="readonly" value=""}]
   [{/if}]
 
-<script type="text/javascript">
-<!--
-[{ if $updatelist == 1}]
-    UpdateList('[{ $oxid }]');
-[{ /if}]
+<link rel="stylesheet" type="text/css" href="http://eshop-linux/out/admin/src/yui/build/container/assets/skins/sam/container.css"> 
+<script type="text/javascript" src="http://eshop-linux/out/admin/src/yui/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="http://eshop-linux/out/admin/src/yui/build/dragdrop/dragdrop-min.js"></script> 
+<script type="text/javascript" src="http://eshop-linux/out/admin/src/yui/build/container/container-min.js"></script>
 
-function UpdateList( sID)
-{
-    var oSearch = parent.list.document.getElementById("search");
-    oSearch.oxid.value=sID;
-    oSearch.submit();
-}
+<div id="helpText_HELP_PAYMENT_MAIN_SORT" class="helpPanelText">
+    [{ oxmultilang ident="HELP_PAYMENT_MAIN_SORT" }]
+</div>
 
-//-->
+<div id="helpText_HELP_PAYMENT_MAIN_SELECTED" class="helpPanelText">
+    [{ oxmultilang ident="HELP_PAYMENT_MAIN_SELECTED" }]
+</div>
+
+<div id="helpText_HELP_PAYMENT_MAIN_FROMBONI" class="helpPanelText">
+    [{ oxmultilang ident="HELP_PAYMENT_MAIN_FROMBONI" }]
+</div>
+
+<div id="helpText_HELP_PAYMENT_MAIN_AMOUNT" class="helpPanelText">
+    [{ oxmultilang ident="HELP_PAYMENT_MAIN_AMOUNT" }]
+</div>
+
+<div id="helpText_HELP_PAYMENT_MAIN_ADDPRICE" class="helpPanelText">
+    [{ oxmultilang ident="HELP_PAYMENT_MAIN_ADDPRICE" }]
+</div>
+
+
+<div id="helpTextContainer" class="yui-skin-sam">
+    <div id="helpPanel"></div>     
+</div>
+
+<script>
+        YAHOO.namespace("helpTextContainer");
+
+        function showHelpPanel( helpId ) {
+
+        	var Dom = YAHOO.util.Dom;
+            var helpBtntId  = "helpBtn_"  + helpId;
+            var helpTexttId = "helpText_" + helpId;
+            var helpBody = Dom.get(helpTexttId).innerHTML;
+              
+            if ( YAHOO.helpTextContainer.panel ) {
+                var helpTextPanel = YAHOO.helpTextContainer.panel;
+            } else {
+            	var helpTextPanel = YAHOO.helpTextContainer.panel = new YAHOO.widget.Panel("helpPanel");
+            }
+            
+            helpTextPanel.cfg.setProperty("width", "370px");
+            helpTextPanel.cfg.setProperty("visible", false);
+            helpTextPanel.cfg.setProperty("constraintoviewport", true);
+            helpTextPanel.cfg.setProperty("draggable", true);
+            helpTextPanel.cfg.setProperty("context", [helpBtntId, "tl", "tr"]);
+            
+            YAHOO.helpTextContainer.panel.setBody(helpBody);
+            YAHOO.helpTextContainer.panel.render("helpTextContainer");
+            YAHOO.helpTextContainer.panel.show();
+        }
 </script>
+
 
 <form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
     [{ $shop->hiddensid }]
@@ -72,6 +115,7 @@ function UpdateList( sID)
                 <option value="[{ $sum }]" [{ if $sum == $edit->oxpayments__oxaddsumtype->value}]SELECTED[{/if}]>[{ $sum }]</option>
                 [{/foreach}]
                 </select>
+            <input type="button" id="helpBtn_HELP_PAYMENT_MAIN_ADDPRICE" class="btnShowHelpPanel" onClick="showHelpPanel('HELP_PAYMENT_MAIN_ADDPRICE');">
             </td>
         </tr>
         <tr>
@@ -80,6 +124,7 @@ function UpdateList( sID)
             </td>
             <td class="edittext">
             <input type="text" class="editinput" size="25" maxlength="[{$edit->oxpayments__oxfromboni->fldmax_length}]" name="editval[oxpayments__oxfromboni]" value="[{$edit->oxpayments__oxfromboni->value}]" [{ $readonly }]>
+            <input type="button" id="helpBtn_HELP_PAYMENT_MAIN_FROMBONI" class="btnShowHelpPanel" onClick="showHelpPanel('HELP_PAYMENT_MAIN_FROMBONI');">
             </td>
         </tr>
         <tr>
@@ -88,6 +133,7 @@ function UpdateList( sID)
             </td>
             <td class="edittext">
             [{ oxmultilang ident="PAYMENT_MAIN_FROM" }] <input type="text" class="editinput" size="5" maxlength="[{$edit->oxpayments__oxfromamount->fldmax_length}]" name="editval[oxpayments__oxfromamount]" value="[{$edit->oxpayments__oxfromamount->value}]" [{ $readonly }]>  [{ oxmultilang ident="PAYMENT_MAIN_TILL" }] <input type="text" class="editinput" size="5" maxlength="[{$edit->oxpayments__oxtoamount->fldmax_length}]" name="editval[oxpayments__oxtoamount]" value="[{$edit->oxpayments__oxtoamount->value}]" [{ $readonly }]>
+            <input type="button" id="helpBtn_HELP_PAYMENT_MAIN_AMOUNT" class="btnShowHelpPanel" onClick="showHelpPanel('HELP_PAYMENT_MAIN_AMOUNT');">
             </td>
         </tr>
 
@@ -97,6 +143,7 @@ function UpdateList( sID)
             </td>
             <td class="edittext">
             <input type="checkbox" name="editval[oxpayments__oxchecked]" value="1" [{if $edit->oxpayments__oxchecked->value}]checked[{/if}] [{ $readonly }]>
+            <input type="button" id="helpBtn_HELP_PAYMENT_MAIN_SELECTED" class="btnShowHelpPanel" onClick="showHelpPanel('HELP_PAYMENT_MAIN_SELECTED');">
             </td>
         </tr>
         <tr>
@@ -105,6 +152,7 @@ function UpdateList( sID)
             </td>
             <td class="edittext">
             <input type="text" class="editinput" size="25" maxlength="[{$edit->oxpayments__oxsort->fldmax_length}]" name="editval[oxpayments__oxsort]" value="[{$edit->oxpayments__oxsort->value}]" [{ $readonly }]>
+            <input type="button" id="helpBtn_HELP_PAYMENT_MAIN_SORT" class="btnShowHelpPanel" onClick="showHelpPanel('HELP_PAYMENT_MAIN_SORT');">
             </td>
         </tr>
         <tr>

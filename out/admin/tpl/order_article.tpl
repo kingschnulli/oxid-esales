@@ -2,27 +2,22 @@
 
 <script type="text/javascript">
 <!--
-[{ if $updatelist == 1}]
-    UpdateList('[{ $oxid }]');
-[{ /if}]
-
-function EditThis( sID)
+function editThis(sID)
 {
     var oSearch = document.getElementById("search");
-    oSearch.oxid.value=sID;
-    oSearch.cl.value='article_main';
+    oSearch.oxid.value = sID;
+    oSearch.cl.value = 'article_main';
     oSearch.submit();
 
     var oSearch = parent.list.document.getElementById("search");
     oSearch.sort.value = '';
     oSearch.fnc.value = '';
     oSearch.lstrt.value = '';
-    oSearch.oxid.value=sID;
-    oSearch.cl.value='article_list';
-    oSearch.actedit.value=1;
+    oSearch.oxid.value = sID;
+    oSearch.cl.value = 'article_list';
+    oSearch.actedit.value = 1;
     oSearch.submit();
 }
-
 function EditVoucher( sID)
 {
     var oSearch = document.getElementById("search");
@@ -36,15 +31,6 @@ function EditVoucher( sID)
     oSearch.actedit.value=1;
     oSearch.submit();
 }
-
-
-function UpdateList( sID)
-{
-    var oSearch = parent.list.document.getElementById("search");
-    oSearch.oxid.value=sID;
-    oSearch.submit();
-}
-
 function DeleteThisArticle( sID)
 {
     blCheck = confirm("[{ oxmultilang ident="ORDER_ARTICLE_YOUWANTTODELETE" }]");
@@ -119,8 +105,8 @@ function StornoThisArticle( sID)
         [{assign var="listclass" value=listitem$blWhite }]
     [{/if}]
     <td valign="top" class="[{ $listclass}]">[{ if $listitem->oxorderarticles__oxstorno->value != 1 }]<input type="text" name="aOrderArticles[[{$listitem->getId()}]][oxamount]" value="[{ $listitem->oxorderarticles__oxamount->value }]" class="listedit">[{else}][{ $listitem->oxorderarticles__oxamount->value }][{/if}]</td>
-    <td valign="top" class="[{ $listclass}]" height="15">[{if $listitem->oxarticles__oxid->value}]<a href="Javascript:EditThis('[{ $listitem->oxarticles__oxid->value}]');" class="[{ $listclass}]">[{/if}][{ $listitem->oxorderarticles__oxartnum->value }]</a></td>
-    <td valign="top" class="[{ $listclass}]">[{if $listitem->oxarticles__oxid->value}]<a href="Javascript:EditThis('[{ $listitem->oxarticles__oxid->value }]');" class="[{ $listclass}]">[{/if}][{ $listitem->oxorderarticles__oxtitle->value|string_format:"%.20s"|strip_tags }]</a></td>
+    <td valign="top" class="[{ $listclass}]" height="15">[{if $listitem->oxarticles__oxid->value}]<a href="Javascript:editThis('[{ $listitem->oxarticles__oxid->value}]');" class="[{ $listclass}]">[{/if}][{ $listitem->oxorderarticles__oxartnum->value }]</a></td>
+    <td valign="top" class="[{ $listclass}]">[{if $listitem->oxarticles__oxid->value}]<a href="Javascript:editThis('[{ $listitem->oxarticles__oxid->value }]');" class="[{ $listclass}]">[{/if}][{ $listitem->oxorderarticles__oxtitle->value|string_format:"%.20s"|strip_tags }]</a></td>
     <td valign="top" class="[{ $listclass}]">[{ $listitem->oxorderarticles__oxselvariant->value }]</td>
     <td valign="top" class="[{ $listclass}]">
         [{ if $listitem->aPersParam }]

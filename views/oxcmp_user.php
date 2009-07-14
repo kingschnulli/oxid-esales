@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 18327 2009-04-17 14:58:36Z alfonsas $
+ * $Id: oxcmp_user.php 20812 2009-07-13 11:20:06Z sarunas $
  */
 
 /**
@@ -497,7 +497,11 @@ class oxcmp_user extends oxView
         // collecting values to check
         $aDelAdress = $this->_getDelAddressData();
         // if user company name, user name and additional info has special chars
-        $aRawVal = array('oxuser__oxcompany', 'oxuser__oxaddinfo', 'oxuser__oxfname', 'oxuser__oxlname');
+        $aRawVal = array('oxuser__oxcompany', 'oxuser__oxaddinfo', 'oxuser__oxfname',
+                            'oxuser__oxlname', 'oxuser__oxstreet', 'oxuser__oxstreetnr',
+                            'oxuser__oxcity', 'oxuser__oxfon', 'oxuser__oxfax',
+                            'oxuser__oxmobfon', 'oxuser__oxprivfon');
+
         $aInvAdress = oxConfig::getParameter( 'invadr', $aRawVal );
 
         $sUserName  = $oUser->oxuser__oxusername->value;

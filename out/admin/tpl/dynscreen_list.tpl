@@ -2,16 +2,16 @@
 
 <script type="text/javascript">
 <!--
-
-function ChangeEditBar( sLocation, sPos)
+window.onload = function()
 {
-    parent.edit.location='[{ $shop->selflink }]?cl=' + sLocation;
+    top.oxid.admin.changeEditBar = function(sLocation, sPos){
+        parent.edit.location = '[{ $shop->selflink }]?cl=' + sLocation;
 
-    var oSearch = document.getElementById("search");
-    oSearch.actedit.value=sPos;
-    oSearch.submit();
+        var oSearch = document.getElementById("search");
+        oSearch.actedit.value = sPos;
+        oSearch.submit();
+    }
 }
-
 function ChangeExternal( sLocation, sPos)
 {
     parent.edit.location=sLocation;

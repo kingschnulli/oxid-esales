@@ -16,7 +16,7 @@ function SetSticker( sStickerId, oObject)
     else
         oSticker.style.display = "none";
 }
-top.oxid.admin.editThis = function ( sID )
+function editThis( sID )
 {
     var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
     oTransfer.oxid.value = sID;
@@ -176,7 +176,7 @@ top.oxid.admin.editThis = function ( sID )
           <tr id="test_variant.[{$_cnt1}]">
             [{assign var="listclass" value=listitem$blWhite }]
             [{assign var="hasvariants" value=true }]
-            <td class="[{ $listclass}]"><a href="Javascript:top.oxid.admin.editThis('[{ $listitem->oxarticles__oxid->value}]');" class="[{ $listclass}]" [{include file="help.tpl" helpid=editvariant}] [{ $readonly }]><img src="[{$shop->imagedir}]/editvariant.gif" width="15" height="15" alt="" border="0" align="absmiddle"></a></td>
+            <td class="[{ $listclass}]"><a href="Javascript:editThis('[{ $listitem->oxarticles__oxid->value}]');" class="[{ $listclass}]" [{include file="help.tpl" helpid=editvariant}] [{ $readonly }]><img src="[{$shop->imagedir}]/editvariant.gif" width="15" height="15" alt="" border="0" align="absmiddle"></a></td>
             <td class="[{ $listclass}]" align="center"><input class="edittext" type="checkbox" name="editval[[{ $listitem->oxarticles__oxid->value}]][oxarticles__oxactive]" value='1' [{if $listitem->oxarticles__oxactive->value == 1}]checked[{/if}] [{ $readonly }]></td>
             <td class="[{ $listclass}]"><input type="text" class="editinput" size="15" maxlength="[{$listitem->oxarticles__oxvarselect->fldmax_length}]" name="editval[[{ $listitem->oxarticles__oxid->value}]][oxarticles__oxvarselect]" value="[{$listitem->oxarticles__oxvarselect->value}]" [{ $readonly }]></td>
             <td class="[{ $listclass}]"><input type="text" class="editinput" size="10" maxlength="[{$listitem->oxarticles__oxartnum->fldmax_length}]" name="editval[[{ $listitem->oxarticles__oxid->value}]][oxarticles__oxartnum]" value="[{$listitem->oxarticles__oxartnum->value}]" [{ $readonly }]></td>

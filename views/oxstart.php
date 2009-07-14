@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxstart.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: oxstart.php 20794 2009-07-12 14:57:32Z tomas $
  */
 
 /**
@@ -120,6 +120,9 @@ class oxStart extends oxUBase
         if ( isset( $mySession ) ) {
             $mySession->freeze();
         }
+
+        //commit file cache
+        oxUtils::getInstance()->commitFileCache();
     }
 
     /**

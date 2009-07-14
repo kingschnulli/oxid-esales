@@ -8,36 +8,46 @@
 
 <script type="text/javascript">
 <!--
-function EditThis( sID)
+function UpdateMain( sID)
 {
-    var oTransfer = parent.edit.document.getElementById("transfer");
+    var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
     oTransfer.oxid.value = sID;
-    oTransfer.cl.value='[{if $actlocation}][{$actlocation}][{else}][{ $default_edit }][{/if}]';
+    oTransfer.cl.value = '[{ $default_edit }]';
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
+}
+
+function editThis( sID)
+{
+    var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
+    oTransfer.oxid.value = sID;
+    oTransfer.cl.value = top.oxid.admin.getClass( sID );
     oTransfer.fnc.value = 'chshp';
 
     //forcing edit frame to reload after submit
     top.forceReloadingEditFrame();
 
-    var oSearch = document.getElementById("search");
+    var oSearch = top.basefrm.list.document.getElementById( "search" );
     oSearch.oxid.value = sID;
 
     oSearch.submit();
 }
 
-function DeleteThis( sID)
+function deleteThis( sID)
 {
     var currentshop = [{$oxid}];
     var newshop = (sID == currentshop)?1:currentshop;
 
     blCheck = confirm("[{ oxmultilang ident="SHOP_LIST_YOUWANTTODELETE" }]");
     if( blCheck == true)
-    {   var oSearch = document.getElementById("search");
+    {   var oSearch = top.basefrm.list.document.getElementById( "search" );
         oSearch.oxid.value=sID;
         oSearch.fnc.value='Deleteentry';
         oSearch.actedit.value=0;
         oSearch.submit();
 
-        var oTransfer = parent.edit.document.getElementById("transfer");
+        var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
         oTransfer.oxid.value = newshop;
         oTransfer.actshop.value = newshop;
         oTransfer.cl.value='[{ $default_edit }]';
@@ -47,35 +57,15 @@ function DeleteThis( sID)
     }
 }
 
-function ChangeEditBar( sLocation, sPos)
+window.onload = function ()
 {
-    var oSearch = document.getElementById("search");
-    oSearch.actedit.value=sPos;
-    oSearch.submit();
-
-    var oTransfer = parent.edit.document.getElementById("transfer");
-    oTransfer.cl.value=sLocation;
-
-    //forcing edit frame to reload after submit
-    top.forceReloadingEditFrame();
-}
-
-[{ if $updatemain }]
+    [{ if $updatemain }]
     UpdateMain('[{ $oxid }]');
-[{ /if}]
+    [{ /if}]
 
-function UpdateMain( sID)
-{
-    var oTransfer = parent.edit.document.getElementById("transfer");
-    oTransfer.oxid.value=sID;
-    oTransfer.cl.value='[{ $default_edit }]';
+    top.reloadEditFrame();
 
-    //forcing edit frame to reload after submit
-    top.forceReloadingEditFrame();
 }
-
-window.onLoad = top.reloadEditFrame();
-
 //-->
 </script>
 

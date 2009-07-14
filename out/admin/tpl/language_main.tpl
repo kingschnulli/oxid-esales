@@ -1,55 +1,5 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
-<script type="text/javascript">
-<!--
-[{ if $updatelist == 1}]
-    UpdateList('[{ $oxid }]');
-[{ /if}]
-
-function UpdateList( sID)
-{
-    var oSearch = parent.list.document.getElementById("search");
-    oSearch.oxid.value=sID;
-    oSearch.submit();
-}
-
-function EditThis( sID)
-{
-    var oTransfer = document.getElementById("transfer");
-    oTransfer.oxid.value=sID;
-    oTransfer.cl.value='article_main';
-    oTransfer.submit();
-
-    var oSearch = parent.list.document.getElementById("search");
-    oSearch.oxid.value=sID;
-    oSearch.submit();
-}
-
-function ChangeLstrt()
-{
-    var oSearch = document.getElementById("search");
-    if (oSearch != null && oSearch.lstrt != null)
-        oSearch.lstrt.value=0
-}
-
-function UnlockSave(obj)
-{   var saveButton = document.myedit.saveArticle;
-    if ( saveButton != null && obj != null )
-    {   if (obj.value.length > 0)
-            saveButton.disabled = false;
-        else
-            saveButton.disabled = true;
-    }
-}
-function ChangeLanguage(obj)
-{
-    var oTransfer = document.getElementById("transfer");
-    oTransfer.language.value=obj.value;
-    oTransfer.submit();
-}
-//-->
-</script>
-
 [{ if $readonly }]
     [{assign var="readonly" value="readonly disabled"}]
 [{else}]
@@ -93,7 +43,7 @@ function ChangeLanguage(obj)
             [{ oxmultilang ident="LANGUAGE_ABBERVATION" }]
             </td>
             <td class="edittext">
-            <input type="text" class="editinput" size="5" maxlength="3" name="editval[abbr]" value="[{$edit.abbr}]" [{if !$oxparentid}]onchange="JavaScript:UnlockSave(this);" onkeyup="JavaScript:UnlockSave(this);" onmouseout="JavaScript:UnlockSave(this);"[{/if}] [{ $readonly }]>
+            <input type="text" class="editinput" size="5" maxlength="3" name="editval[abbr]" value="[{$edit.abbr}]" [{if !$oxparentid}]onchange="JavaScript:top.oxid.admin.unlockSave(this);" onkeyup="JavaScript:top.oxid.admin.unlockSave(this);" onmouseout="JavaScript:top.oxid.admin.unlockSave(this);"[{/if}] [{ $readonly }]>
             </td>
         </tr>
         <tr>

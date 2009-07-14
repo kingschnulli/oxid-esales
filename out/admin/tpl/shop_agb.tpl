@@ -3,17 +3,14 @@
 <script type="text/javascript">
 <!--
 [{ if $updatelist == 1}]
-    UpdateList('[{ $oxid }]');
-[{ /if}]
-
-function UpdateList( sID)
+window.onload = function ()
 {
     var oSearch = parent.list.document.getElementById("search");
     oSearch.oxid.value=sID;
     oSearch.fnc.value='';
     oSearch.submit();
 }
-
+[{ /if}]
 function loadLang(obj)
 {
     var langvar = document.getElementById("agblang");

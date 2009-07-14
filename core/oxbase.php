@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbase.php 20457 2009-06-25 13:21:33Z vilma $
+ * $Id: oxbase.php 20797 2009-07-12 15:33:49Z tomas $
  */
 
 /**
@@ -273,7 +273,7 @@ class oxBase extends oxSuperCfg
                 }
 
                 //do not use field cache for this page
-                //as if we use it for lists then objects are laoded empty instead of lazy lodaing.
+                //as if we use it for lists then objects are loaded empty instead of lazy lodaing.
                 self::$_blDisableFieldCaching[get_class($this)] = true;
             }
 

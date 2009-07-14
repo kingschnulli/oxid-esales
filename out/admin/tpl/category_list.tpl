@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 <!--
-window.onLoad = top.reloadEditFrame();
+window.onload = top.reloadEditFrame;
 //-->
 </script>
 

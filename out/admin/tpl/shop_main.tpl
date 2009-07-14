@@ -2,14 +2,6 @@
 
 <script type="text/javascript">
 <!--
-function UpdateList()
-{
-    sID = '[{ $oxid }]';
-    var oSearch = parent.list.document.getElementById("search");
-    oSearch.oxid.value=sID;
-    oSearch.submit();
-}
-
 
 function loadLang(obj)
 {
@@ -18,17 +10,6 @@ function loadLang(obj)
         langvar.value = obj.value;
     document.myedit.submit();
 }
-
-function UnlockSave(obj)
-{   var saveButton = document.myedit.save;
-    if ( saveButton != null && obj != null )
-    {   if (obj.value.length > 0)
-            saveButton.disabled = false;
-        else
-            saveButton.disabled = true;
-    }
-}
-
 function setSmtpField()
 {
     var sPass = '';
@@ -253,7 +234,7 @@ function modSmtpField()
                 [{ oxmultilang ident="SHOP_MAIN_SHOPNAME" }]
             </td>
             <td class="edittext">
-                <input type="text" class="editinput" size="35" maxlength="[{$edit->oxshops__oxname->fldmax_length}]" name="editval[oxshops__oxname]" value="[{$edit->oxshops__oxname->value}]" onchange="JavaScript:UnlockSave(this);" onkeyup="JavaScript:UnlockSave(this);" onmouseout="JavaScript:UnlockSave(this);" [{ $readonly}]>
+                <input type="text" class="editinput" size="35" maxlength="[{$edit->oxshops__oxname->fldmax_length}]" name="editval[oxshops__oxname]" value="[{$edit->oxshops__oxname->value}]" onchange="JavaScript:top.oxid.admin.unlockSave(this);" onkeyup="JavaScript:top.oxid.admin.unlockSave(this);" onmouseout="JavaScript:top.oxid.admin.unlockSave(this);" [{ $readonly}]>
             </td>
         </tr>
         [{ if !$IsOXDemoShop }]
@@ -379,7 +360,6 @@ function modSmtpField()
 <script type="text/javascript">
 <!--
 [{ if $updatelist == 1}]
-    //UpdateList('[{ $oxid }]');
     //Reloading list
     top.forceReloadingListFrame();
 [{ /if}]
