@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 20037 2009-06-19 14:31:09Z sarunas $
+ * $Id: lang.php 20868 2009-07-14 15:18:55Z philipp.grashoff $
  */
 
 
@@ -240,7 +240,7 @@ $aLang = array(
 'BASKET_SUBMITCOUPON'                             => "Submit Coupon",
 'BASKET_NEXTSTEP2'                                => "Continue to Next Step",
 'BASKET_POPUP_FULL_ADDEDARTICLETOBASKET'          => "You just added a product to the cart.",
-'BASKET_POPUP_FULL_DISPLAYCART'                   => "To the till",
+'BASKET_POPUP_FULL_DISPLAYCART'                   => "Proceed to checkout",
 'BASKET_POPUP_FULL_CONTINUESHOPPING'              => "Continue Shopping",
 'BASKET_POPUP_ADDEDARTICLETOBASKET'               => "You just added a product to the cart.",
 'BASKET_POPUP_CONTINUESHOPPING'                   => "Continue Shopping",
@@ -518,7 +518,7 @@ $aLang = array(
 'INC_ACCOUNT_HEADER_UPDATEYOURBILLINGSHIPPINGSET' =>"Update your billing and delivery settings",
 'INC_ACCOUNT_HEADER_ADDRESS'                      =>"My Address",
 'INC_ACCOUNT_HEADER_TOBASKET'                     =>"Display Cart",
-'INC_ACCOUNT_HEADER_TOPAYMENT'                    =>"To the till",
+'INC_ACCOUNT_HEADER_TOPAYMENT'                    =>"Proceed to checkout",
 'INC_ACCOUNT_HEADER_ORDERHISTORY'                 =>"Order History",
 'INC_ACCOUNT_HEADER_ORDERS'                       =>"Orders:",
 'INC_ACCOUNT_HEADER_MYWISHLIST'                   =>"My Gift Registry",

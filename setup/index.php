@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: index.php 20809 2009-07-13 10:00:20Z arvydas $
+ * $Id: index.php 20870 2009-07-15 01:10:44Z alfonsas $
  */
 
 
@@ -34,8 +34,6 @@ $aSetupSteps['STEP_DB_CONNECT'] = 410;      // 31
 $aSetupSteps['STEP_DB_CREATE']  = 420;      // 32
 $aSetupSteps['STEP_DIRS_INFO']  = 500;      // 4
 $aSetupSteps['STEP_DIRS_WRITE'] = 510;      // 41
-$aSetupSteps['STEP_SERIAL']      = 600;     // 5
-$aSetupSteps['STEP_SERIAL_SAVE'] = 610;     // 51
 $aSetupSteps['STEP_FINISH'] = 700;          // 6
 
 ob_start();
@@ -567,7 +565,10 @@ if ( $istep == $aSetupSteps['STEP_SYSTEMREQ'] ) {
               echo '<b>',$aLang['STEP_0_ERROR_TEXT'],'</b>';
           }
 // startpage, licence
-} elseif ( $istep == $aSetupSteps['STEP_WELCOME'] ) {
+}
+
+
+if ( $istep == $aSetupSteps['STEP_WELCOME'] ) {
     // ---------------------------------------------------------
     // WELCOME
     // ---------------------------------------------------------
@@ -667,7 +668,10 @@ if ( $istep == $aSetupSteps['STEP_SYSTEMREQ'] ) {
 </form>
 
 <?PHP
-} elseif ( $istep == $aSetupSteps['STEP_LICENSE'] ) {
+}
+
+
+if ( $istep == $aSetupSteps['STEP_LICENSE'] ) {
     // ---------------------------------------------------------
     // LICENCE
     // ---------------------------------------------------------
@@ -691,7 +695,10 @@ if ( $istep == $aSetupSteps['STEP_SYSTEMREQ'] ) {
   <input type="submit" id="step2Submit" class="edittext" value="<?php echo( $aLang['BUTTON_LICENCE'] ) ?>">
 </form>
 <?PHP
-} elseif ( $istep == $aSetupSteps['STEP_DB_INFO'] ) {
+}
+
+
+if ( $istep == $aSetupSteps['STEP_DB_INFO'] ) {
     // ---------------------------------------------------------
     // ENTER DATABASE INFO
     // ---------------------------------------------------------
@@ -760,8 +767,8 @@ function doChange( oField1, oField2 )
   <tr>
     <td><?php echo( $aLang['STEP_3_DB_PASSWORD'] ) ?>:</td>
     <td>
-        &nbsp;&nbsp;<input size="40" name="aDB[dbPwd]" class="editinput" type="password" value="<?php echo( $aDB['dbPwd']);?>"><input size="40" name="aDB[dbPwd]" class="editinput" type="text" disabled="disabled" style="display:none">
-        <input type="checkbox" onClick="JavaScript:changeField();"><?php echo( $aLang['STEP_3_DB_PASSWORD_SHOW'] ) ?>
+        &nbsp;&nbsp;<input size="40" name="aDB[dbPwd]" id="sDbPass" class="editinput" type="password" value="<?php echo( $aDB['dbPwd']);?>"><input size="40" name="aDB[dbPwd]" id="sDbPassPlain" class="editinput" type="text" disabled="disabled" style="display:none">
+        <input type="checkbox" id="sDbPassCheckbox" onClick="JavaScript:changeField();"><?php echo( $aLang['STEP_3_DB_PASSWORD_SHOW'] ) ?>
     </td>
   </tr>
   <tr>
@@ -774,7 +781,7 @@ function doChange( oField1, oField2 )
   <tr>
     <td><?php echo( $aLang['STEP_3_UTFMODE'] ) ?>:</td>
     <td>
-        &nbsp;&nbsp;<input type="checkbox" name="aDB[iUtfMode]" value="1" <?php if( $aDB['iUtfMode'] == 1 && $blMbStringOn > 1 && $blUnicodeSupport > 1) { echo( "checked"); } echo ($blMbStringOn > 1 && $blUnicodeSupport > 1) ? '' : 'disabled'; ?>>
+        &nbsp;&nbsp;<input type="checkbox" name="aDB[iUtfMode]" value="1" <?php if( (isset($aDB['iUtfMode']) && $aDB['iUtfMode'] == 1) && $blMbStringOn > 1 && $blUnicodeSupport > 1) { echo( "checked"); } echo ($blMbStringOn > 1 && $blUnicodeSupport > 1) ? '' : 'disabled'; ?>>
         <?php
             if ( $blMbStringOn > 1 && $blUnicodeSupport > 1 ) {
                 echo ( $aLang['STEP_3_UTFINFO'] );
@@ -800,7 +807,10 @@ function doChange( oField1, oField2 )
 <input type="submit" id="step3Submit" class="edittext" value="<?php echo( $aLang['BUTTON_DB_INSTALL'] ) ?>">
 </form>
 <?PHP
-} elseif ( $istep == $aSetupSteps['STEP_DB_CONNECT'] ) {
+}
+
+
+if ( $istep == $aSetupSteps['STEP_DB_CONNECT'] ) {
     // ---------------------------------------------------------
     // CHECK DATABASE
     // ---------------------------------------------------------
@@ -849,7 +859,10 @@ function doChange( oField1, oField2 )
     if ( $blCreated)
         echo( "<b>" . sprintf($aLang['STEP_3_1_DB_CREATE_IS_OK'], $aDB['dbName']) . "</b><br>");
     echo( "<br>" . $aLang['STEP_3_1_CREATING_TABLES'] . "<br>");
-} elseif ( $istep == $aSetupSteps['STEP_DB_CREATE'] ) {
+}
+
+
+if ( $istep == $aSetupSteps['STEP_DB_CREATE'] ) {
     // ---------------------------------------------------------
     // CREATE DATABASE
     // ---------------------------------------------------------
@@ -873,7 +886,7 @@ function doChange( oField1, oField2 )
     $sqlDir = 'sql';
 
     //settting database collation
-    setMySqlCollation( $aDB['iUtfMode'] );
+    setMySqlCollation( isset($aDB['iUtfMode'])?$aDB['iUtfMode']:0 );
 
     $sProblems = QueryFile(  "$sqlDir/database.sql" ,$aDB);
     if ( strlen( $sProblems)) {
@@ -900,7 +913,7 @@ function doChange( oField1, oField2 )
     saveDynPagesSettings();
 
     //applying utf-8 specific queries
-    if ( $aDB['iUtfMode'] ) {
+    if ( isset($aDB['iUtfMode'])?$aDB['iUtfMode']:0 ) {
         QueryFile(  "$sqlDir/latin1_to_utf8.sql" ,$aDB);
 
         //converting oxconfig table field 'oxvarvalue' values to utf
@@ -913,7 +926,10 @@ function doChange( oField1, oField2 )
     include "headitem.php";
     include "bottomitem.php";
     exit();
-} elseif ( $istep == $aSetupSteps['STEP_DIRS_INFO'] ) {
+}
+
+
+if ( $istep == $aSetupSteps['STEP_DIRS_INFO'] ) {
     $title =  $aLang['STEP_4_TITLE'];
     include "headitem.php";
 
@@ -982,7 +998,10 @@ function doChange( oField1, oField2 )
 <input type="submit" id="step4Submit" class="edittext" value="<?php echo( $aLang['BUTTON_WRITE_DATA'] ) ?>">
 </form>
 <?PHP
-} elseif ( $istep == $aSetupSteps['STEP_DIRS_WRITE'] ) {
+}
+
+
+if ( $istep == $aSetupSteps['STEP_DIRS_WRITE'] ) {
     // ---------------------------------------------------------
     // CHECK PATH
     // ---------------------------------------------------------
@@ -1095,18 +1114,140 @@ function doChange( oField1, oField2 )
     include "bottomitem.php";
     exit();
 
-} elseif ( $istep == $aSetupSteps['STEP_SERIAL'] ) {
+}
 
 
 
 
+?>
+<b><?php echo( $aLang['STEP_5_DESC'] ) ?></b><br>
+<br>
+<form action="index.php" method="post">
+<input type="hidden" name="istep" value="<?php echo $aSetupSteps['STEP_SERIAL_SAVE']; ?>">
 
-} elseif ( $istep == $aSetupSteps['STEP_SERIAL_SAVE'] ) {
+<table cellpadding="0" cellspacing="5" border="0">
+  <tr>
+    <td><?php echo( $aLang['STEP_5_LICENCE_KEY'] ) ?>:</td>
+    <td>&nbsp;&nbsp;<input size="47" name="sLicence" class="editinput" value="<?php echo( $sLicense); ?>"></td>
+    <td>&nbsp;&nbsp;<input type="submit" id="step5Submit" class="edittext" value="<?php echo( $aLang['BUTTON_WRITE_LICENCE'] ) ?>"></td>
+  </tr>
+</table>
+<br>
+<input type="hidden" name="sid" value="<?php echo( getSID()); ?>">
+</form>
+<?php echo( $aLang['STEP_5_LICENCE_DESC'] ) ?>
+<?PHP
+}
+
+
+if ( $istep == $aSetupSteps['STEP_SERIAL_SAVE'] ) {
 
 
 
+    // ---------------------------------------------------------
+    // CHECK LICENCE
+    // ---------------------------------------------------------
 
-} elseif ( $istep == $aSetupSteps['STEP_FINISH'] ) {
+    $title = $aLang['STEP_5_1_TITLE'];
+    $sLicence = @$_POST['sLicence'];
+
+    $sLicence = trim($sLicence);
+
+    require_once "../core/oxserial.php";
+
+    $oSerial = new oxSerial();
+    $oSerial->setEd($iEd);
+
+    $blValidSerial = $oSerial->isValidSerial($sLicence);
+
+    // check if important parameters are set
+    if ( !isset( $sLicence ) || !$sLicence ) {
+        $iRedir2Step = $aSetupSteps['STEP_SERIAL'];
+        $sMessage = $aLang['ERROR_FILL_ALL_FIELDS'];
+        include "headitem.php";
+        include "bottomitem.php";
+        exit();
+    } elseif ( !$blValidSerial ) {
+        $iRedir2Step = $aSetupSteps['STEP_SERIAL'];
+        $sMessage = $aLang['ERROR_BAD_SERIAL_NUMBER'];
+        include "headitem.php";
+        include "bottomitem.php";
+        exit();
+    } else {
+        // ---------------------------------------------------------
+        // STORE Licencekey now
+        // ---------------------------------------------------------
+        $aDB = @$aPersistentData['aDB'];
+
+        $oConfk = new Conf();
+
+        $sID = generateUID();
+        $sIDStart = generateUID();
+        $sIDIMD = generateUID();
+        $sIDIMA = generateUID();
+        $sIDIMS = generateUID();
+        $sIDIMU = generateUID();
+
+
+        $sQ = "update oxshops set oxserial = '$sLicence' where oxid = '$sBaseShopId'";
+        $sQConfDelete = "delete from oxconfig where oxvarname = 'aSerials'";
+
+        $sQConfInsert = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
+                                 values('$sID', '$sBaseShopId', 'aSerials', 'arr', ENCODE( '".serialize(array($sLicence))."', '".$oConfk->sConfigKey."'))";
+
+        $sStartTime = time();
+        $sQStartDelete = "delete from oxconfig where oxvarname = 'sTagList'";
+        $sQStart = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
+                                 values('$sIDStart', '$sBaseShopId', 'sTagList', 'str', ENCODE( '".$sStartTime."', '".$oConfk->sConfigKey."'))";
+
+
+        $iMaxDays = $oSerial->getMaxDays($sLicence);
+        $sQMaxDaysDelete = "delete from oxconfig where oxvarname = 'IMD'";
+        $sQMaxDays = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
+                                 values('$sIDIMD', '$sBaseShopId', 'IMD', 'str', ENCODE( '".$iMaxDays."', '".$oConfk->sConfigKey."'))";
+
+        $iMaxArticles = $oSerial->getMaxArticles($sLicence);
+        $sQMaxArticlesDelete = "delete from oxconfig where oxvarname = 'IMA'";
+        $sQMaxArticles = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
+                                 values('$sIDIMA', '$sBaseShopId', 'IMA', 'str', ENCODE( '".$iMaxArticles."', '".$oConfk->sConfigKey."'))";
+
+
+        $iMaxShops = $oSerial->getMaxShops($sLicence);
+        $sQMaxShopsDelete = "delete from oxconfig where oxvarname = 'IMS'";
+        $sQMaxShops = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
+                                 values('$sIDIMS', '$sBaseShopId', 'IMS', 'str', ENCODE( '".$iMaxShops."', '".$oConfk->sConfigKey."'))";
+
+        $sQUtfMode = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
+                                 values('$sIDIMU', '$sBaseShopId', 'iSetUtfMode', 'str', ENCODE( '".((int) isset( $aDB['iUtfMode'] ) ? $aDB['iUtfMode'] : 0 )."', '".$oConfk->sConfigKey."') )";
+
+        OpenDatabase($aDB);
+        mysql_query($sQMaxDaysDelete);
+        mysql_query($sQMaxDays);
+        mysql_query($sQMaxArticlesDelete);
+        mysql_query($sQMaxArticles);
+        mysql_query($sQMaxShopsDelete);
+        mysql_query($sQMaxShops);
+        mysql_query($sQ);
+        mysql_query($sQConfDelete);
+        mysql_query($sQConfInsert);
+        mysql_query($sQStartDelete);
+        mysql_query($sQStart);
+        mysql_query($sQUtfMode);
+
+
+        $iRedir2Step = $aSetupSteps['STEP_FINISH'];
+        $sMessage = $aLang['STEP_5_1_SERIAL_ADDED'];
+        include "headitem.php";
+        include "bottomitem.php";
+        exit();
+
+    }
+
+}
+endif;
+
+
+if ( $istep == $aSetupSteps['STEP_FINISH'] ) {
     // ---------------------------------------------------------
     // END
     // ---------------------------------------------------------

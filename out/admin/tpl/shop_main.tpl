@@ -1,8 +1,7 @@
-[{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign sOnLoadFnc='setSmtpField' }]
+[{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign }]
 
 <script type="text/javascript">
 <!--
-
 function loadLang(obj)
 {
     var langvar = document.getElementById("agblang");
@@ -34,6 +33,18 @@ function modSmtpField()
     }
 }
 
+
+window.onload = function ()
+{
+    [{ if $updatelist == 1}]
+    //Reloading list
+    top.forceReloadingListFrame();
+    [{ /if}]
+
+    top.oxid.admin.updateList('[{ $oxid }]');
+    setSmtpField();
+
+}
 //-->
 </script>
 
@@ -46,6 +57,7 @@ function modSmtpField()
 <form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
     [{ $shop->hiddensid }]
     <input type="hidden" name="oxid" value="[{ $oxid }]">
+    <input type="hidden" name="updatenav" value="">
     <input type="hidden" name="cl" value="shop_main">
     <input type="hidden" name="fnc" value="">
     <input type="hidden" name="actshop" value="[{ $shop->id }]">
@@ -356,20 +368,6 @@ function modSmtpField()
 </table>
 
 </form>
-
-<script type="text/javascript">
-<!--
-[{ if $updatelist == 1}]
-    //Reloading list
-    top.forceReloadingListFrame();
-[{ /if}]
-
-[{ if $updatenav }]
-    UpdateNav();
-[{ /if}]
--->
-</script>
-
 
 [{include file="bottomnaviitem.tpl"}]
 

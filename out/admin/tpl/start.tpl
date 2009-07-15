@@ -65,11 +65,6 @@ function reloadListEditFrames()
   reloadEditFrame();
 }
 
-function gaidys()
-{
-    alert("gaidys");
-}
-
 function loadEditFrame(sUrl)
 {
     top.basefrm.edit.document.location = sUrl;

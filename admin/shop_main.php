@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: shop_main.php 20821 2009-07-13 13:30:16Z arvydas $
+ * $Id: shop_main.php 20866 2009-07-14 14:53:35Z arvydas $
  */
 
 
@@ -45,7 +45,6 @@ class Shop_Main extends oxAdminDetails
         parent::render();
 
         $soxId = oxConfig::getParameter( "oxid");
-        $sSavedID = oxConfig::getParameter( "saved_oxid");
 
 
         if ( $soxId != "-1" && isset( $soxId)) {
@@ -68,6 +67,9 @@ class Shop_Main extends oxAdminDetails
 
 
         $this->_aViewData['IsOXDemoShop'] = $myConfig->isDemoShop();
+        if ( !isset( $this->_aViewData['updatenav'] ) ) {
+            $this->_aViewData['updatenav']    = oxConfig::getParameter( 'updatenav' );
+        }
 
         return "shop_main.tpl";
     }

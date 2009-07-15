@@ -560,7 +560,7 @@ class oxSysRequirements
         $aRequiredModules = $this->getRequiredModules();
         $this->_blSysReqStatus = true;
         foreach ( $aRequiredModules as $sModule => $sGroup ) {
-            if ( !$aSysInfo[$sGroup] ) {
+            if ( isset($aSysInfo[$sGroup]) && !$aSysInfo[$sGroup] ) {
                 $aSysInfo[$sGroup] = array();
             }
             $iModuleState = $this->getModuleInfo( $sModule );

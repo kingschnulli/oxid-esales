@@ -8,16 +8,6 @@
 
 <script type="text/javascript">
 <!--
-function UpdateMain( sID)
-{
-    var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
-    oTransfer.oxid.value = sID;
-    oTransfer.cl.value = '[{ $default_edit }]';
-
-    //forcing edit frame to reload after submit
-    top.forceReloadingEditFrame();
-}
-
 function editThis( sID)
 {
     var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
@@ -30,7 +20,6 @@ function editThis( sID)
 
     var oSearch = top.basefrm.list.document.getElementById( "search" );
     oSearch.oxid.value = sID;
-
     oSearch.submit();
 }
 
@@ -60,7 +49,12 @@ function deleteThis( sID)
 window.onload = function ()
 {
     [{ if $updatemain }]
-    UpdateMain('[{ $oxid }]');
+    var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
+    oTransfer.oxid.value = '[{ $oxid }]';
+    oTransfer.cl.value = '[{ $default_edit }]';
+
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
     [{ /if}]
 
     top.reloadEditFrame();

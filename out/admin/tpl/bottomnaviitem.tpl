@@ -29,7 +29,7 @@
 [{/if}]
 [{* shop *}]
 [{if $bottom_buttons->shop_new && $ismall && $malladmin == 1 }]
-<li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.new" href="#" onClick="Javascript:top.basefrm.list.editThis( -1 );return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWSHOP" }]</a> |</li>
+<li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.new" href="#" onClick="Javascript:editThis( -1 );return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWSHOP" }]</a> |</li>
 [{/if}]
 [{* usergroups *}]
 [{if $bottom_buttons->usergroup_new && $allowSharedEdit }]
