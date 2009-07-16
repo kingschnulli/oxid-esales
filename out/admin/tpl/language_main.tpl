@@ -1,5 +1,15 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
+<script type="text/javascript">
+<!--
+window.onload = function ()
+{
+    var oField = top.oxid.admin.getLockTarget();
+    oField.onchange = oField.onkeyup = oField.onmouseout = top.oxid.admin.unlockSave;
+}
+//-->
+</script>
+
 [{ if $readonly }]
     [{assign var="readonly" value="readonly disabled"}]
 [{else}]
@@ -43,7 +53,7 @@
             [{ oxmultilang ident="LANGUAGE_ABBERVATION" }]
             </td>
             <td class="edittext">
-            <input type="text" class="editinput" size="5" maxlength="3" name="editval[abbr]" value="[{$edit.abbr}]" [{if !$oxparentid}]onchange="JavaScript:top.oxid.admin.unlockSave(this);" onkeyup="JavaScript:top.oxid.admin.unlockSave(this);" onmouseout="JavaScript:top.oxid.admin.unlockSave(this);"[{/if}] [{ $readonly }]>
+            <input type="text" class="editinput" size="5" maxlength="3" id="oLockTarget" name="editval[abbr]" value="[{$edit.abbr}]" [{ $readonly }]>
             </td>
         </tr>
         <tr>
@@ -102,7 +112,7 @@
             <td class="edittext"><br><br>
             </td>
             <td class="edittext"><br><br>
-            <input type="submit" class="edittext" name="saveArticle" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'"" [{ $readonly }]><br>
+            <input type="submit"  [{if !$edit.abbr}]disabled[{/if}] class="edittext" id="oLockButton" name="saveArticle" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'"" [{ $readonly }]><br>
             </td>
         </tr>
         </table>

@@ -38,12 +38,17 @@ window.onload = function ()
 {
     [{ if $updatelist == 1}]
     //Reloading list
-    top.forceReloadingListFrame();
+     var oSearch = top.basefrm.list.document.getElementById( "search" );
+    oSearch.oxid.value = '[{ $oxid }]';
+    oSearch.submit();
     [{ /if}]
 
     top.oxid.admin.updateList('[{ $oxid }]');
     setSmtpField();
 
+
+    var oField = top.oxid.admin.getLockTarget();
+    oField.onchange = oField.onkeyup = oField.onmouseout = top.oxid.admin.unlockSave;
 }
 //-->
 </script>
@@ -57,10 +62,10 @@ window.onload = function ()
 <form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
     [{ $shop->hiddensid }]
     <input type="hidden" name="oxid" value="[{ $oxid }]">
-    <input type="hidden" name="updatenav" value="">
     <input type="hidden" name="cl" value="shop_main">
     <input type="hidden" name="fnc" value="">
     <input type="hidden" name="actshop" value="[{ $shop->id }]">
+    <input type="hidden" name="updatenav" value="">
     <input type="hidden" name="editlanguage" value="[{ $editlanguage }]">
 </form>
 
@@ -246,7 +251,7 @@ window.onload = function ()
                 [{ oxmultilang ident="SHOP_MAIN_SHOPNAME" }]
             </td>
             <td class="edittext">
-                <input type="text" class="editinput" size="35" maxlength="[{$edit->oxshops__oxname->fldmax_length}]" name="editval[oxshops__oxname]" value="[{$edit->oxshops__oxname->value}]" onchange="JavaScript:top.oxid.admin.unlockSave(this);" onkeyup="JavaScript:top.oxid.admin.unlockSave(this);" onmouseout="JavaScript:top.oxid.admin.unlockSave(this);" [{ $readonly}]>
+                <input type="text" class="editinput" size="35" maxlength="[{$edit->oxshops__oxname->fldmax_length}]" name="editval[oxshops__oxname]" value="[{$edit->oxshops__oxname->value}]" id="oLockTarget" [{ $readonly}]>
             </td>
         </tr>
         [{ if !$IsOXDemoShop }]
@@ -354,7 +359,7 @@ window.onload = function ()
           <tr>
             <td class="edittext"></td>
             <td class="edittext"><br>
-              <input type="submit" class="edittext" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'"" [{ if $oxid==-1 }]disabled[{/if}] [{ $readonly}]>
+              <input type="submit" class="edittext" id="oLockButton" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'"" [{ if $oxid==-1 }]disabled[{/if}] [{ $readonly}]>
             </td>
           </tr>
         [{else}]

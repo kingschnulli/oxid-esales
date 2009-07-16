@@ -1,6 +1,6 @@
 var oxid = {
     admin : {
-        changeLanguage : function ()
+        changeLanguage : function()
         {
             var oSearch = top.basefrm.list.document.getElementById( "search" );
             oSearch.language.value = oSearch.changelang.value;
@@ -15,7 +15,7 @@ var oxid = {
             top.forceReloadingEditFrame();
         },
 
-        editThis : function ( sID )
+        editThis : function( sID )
         {
             var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
             oTransfer.oxid.value = sID;
@@ -29,13 +29,13 @@ var oxid = {
             oSearch.submit();
         },
 
-        deleteThis : function ( sID )
+        deleteThis : function( sID )
         {
             var blCheck = window.confirm( top.oxid.admin.getDeleteMessage() );
             if( blCheck == true ) {
                 var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
                 oTransfer.oxid.value = '-1';
-                oTransfer.cl.value = top.oxid.admin.getClass( -1 );;
+                oTransfer.cl.value = top.oxid.admin.getClass( -1 );
 
                 //forcing edit frame to reload after submit
                 top.forceReloadingEditFrame();
@@ -47,7 +47,7 @@ var oxid = {
             }
         },
 
-        getDeleteMessage : function ()
+        getDeleteMessage : function()
         {
             if ( top.basefrm.list.sDeleteMessage ) {
                 return top.basefrm.list.sDeleteMessage;
@@ -57,7 +57,7 @@ var oxid = {
             return '';
         },
 
-        getClass : function ( sID )
+        getClass : function( sID )
         {
             if ( top.basefrm.list.sDefClass && top.basefrm.list.sActClass ) {
                 return ( sID == -1 || sID == '-1' ) ? top.basefrm.list.sDefClass : top.basefrm.list.sActClass;
@@ -67,7 +67,7 @@ var oxid = {
             return '';
         },
 
-        getUnassignMessage : function ()
+        getUnassignMessage : function()
         {
             if ( top.basefrm.list.sUnassignMessage ) {
                 return top.basefrm.list.sUnassignMessage;
@@ -77,7 +77,7 @@ var oxid = {
             return '';
         },
 
-        changeEditBar : function ( sLocation, sPos )
+        changeEditBar : function( sLocation, sPos )
         {
             var oSearch = top.basefrm.list.document.getElementById( "search" );
             oSearch.actedit.value = sPos;
@@ -90,14 +90,20 @@ var oxid = {
             top.forceReloadingEditFrame();
         },
 
-        updateList : function ( sID )
+        updateList : function( sID )
         {
             var oSearch = top.basefrm.list.document.getElementById( "search" );
             oSearch.oxid.value = sID;
             oSearch.submit();
         },
 
-        changeLstrt : function ()
+        reloadNavigation : function()
+        {
+            var oNavigation = top.document.getElementById("navigation");
+            oNavigation.src = oNavigation.src;
+        },
+
+        changeLstrt : function()
         {
             var oSearch = top.basefrm.list.document.getElementById( "search" );
             if ( oSearch != null && oSearch.lstrt != null ) {
@@ -105,24 +111,35 @@ var oxid = {
             }
         },
 
-        unlockSave : function ( obj )
+        getLockTarget : function()
         {
-            var saveButton = top.basefrm.edit.document.myedit.saveArticle;
-            if ( saveButton != null && obj != null ) {
-                if ( obj.value && obj.value.length > 0) {
-                    saveButton.disabled = false;
+            return top.basefrm.edit.document.getElementById( "oLockTarget" );
+        },
+
+        getLockedButton : function()
+        {
+            return top.basefrm.edit.document.getElementById( "oLockButton" );
+        },
+
+        unlockSave : function()
+        {
+            var oLockedButton = top.oxid.admin.getLockedButton();
+            var oLockTarget   = top.oxid.admin.getLockTarget();
+            if ( oLockedButton != null && oLockTarget != null ) {
+                if ( oLockTarget.value ) {
+                    oLockedButton.disabled = false;
                 } else {
-                    saveButton.disabled = true;
+                    oLockedButton.disabled = true;
                 }
             }
         },
 
-        changeListSize : function ()
+        changeListSize : function()
         {
             top.basefrm.document.showlist.submit();
         },
 
-        unassignThis : function ( sID )
+        unassignThis : function( sID )
         {
             var blCheck = confirm( top.oxid.admin.getUnassignMessage() );
             if ( blCheck == true ) {

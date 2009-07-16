@@ -31,35 +31,22 @@ function deleteThis( sID)
     blCheck = confirm("[{ oxmultilang ident="SHOP_LIST_YOUWANTTODELETE" }]");
     if( blCheck == true)
     {   var oSearch = top.basefrm.list.document.getElementById( "search" );
-        oSearch.oxid.value=sID;
-        oSearch.fnc.value='Deleteentry';
-        oSearch.actedit.value=0;
+        oSearch.delshopid.value = sID;
+        oSearch.fnc.value = 'deleteentry';
+        oSearch.actedit.value = 0;
         oSearch.submit();
 
         var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
         oTransfer.oxid.value = newshop;
         oTransfer.actshop.value = newshop;
         oTransfer.cl.value='[{ $default_edit }]';
+        oTransfer.updatenav.value = 1;
 
         //forcing edit frame to reload after submit
         top.forceReloadingEditFrame();
     }
 }
 
-window.onload = function ()
-{
-    [{ if $updatemain }]
-    var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
-    oTransfer.oxid.value = '[{ $oxid }]';
-    oTransfer.cl.value = '[{ $default_edit }]';
-
-    //forcing edit frame to reload after submit
-    top.forceReloadingEditFrame();
-    [{ /if}]
-
-    top.reloadEditFrame();
-
-}
 //-->
 </script>
 
@@ -70,6 +57,7 @@ window.onload = function ()
 <input type="hidden" name="sort" value="[{ $sort }]">
 <input type="hidden" name="actedit" value="[{ $actedit }]">
 <input type="hidden" name="oxid" value="[{ $oxid }]">
+<input type="hidden" name="delshopid" value="">
 <input type="hidden" name="fnc" value="">
 <input type="hidden" name="updatenav" value="">
 

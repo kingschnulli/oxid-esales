@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: index.php 20870 2009-07-15 01:10:44Z alfonsas $
+ * $Id: index.php 20950 2009-07-15 12:09:27Z rimvydas.paskevicius $
  */
 
 
@@ -1119,132 +1119,9 @@ if ( $istep == $aSetupSteps['STEP_DIRS_WRITE'] ) {
 
 
 
-?>
-<b><?php echo( $aLang['STEP_5_DESC'] ) ?></b><br>
-<br>
-<form action="index.php" method="post">
-<input type="hidden" name="istep" value="<?php echo $aSetupSteps['STEP_SERIAL_SAVE']; ?>">
-
-<table cellpadding="0" cellspacing="5" border="0">
-  <tr>
-    <td><?php echo( $aLang['STEP_5_LICENCE_KEY'] ) ?>:</td>
-    <td>&nbsp;&nbsp;<input size="47" name="sLicence" class="editinput" value="<?php echo( $sLicense); ?>"></td>
-    <td>&nbsp;&nbsp;<input type="submit" id="step5Submit" class="edittext" value="<?php echo( $aLang['BUTTON_WRITE_LICENCE'] ) ?>"></td>
-  </tr>
-</table>
-<br>
-<input type="hidden" name="sid" value="<?php echo( getSID()); ?>">
-</form>
-<?php echo( $aLang['STEP_5_LICENCE_DESC'] ) ?>
-<?PHP
-}
-
-
-if ( $istep == $aSetupSteps['STEP_SERIAL_SAVE'] ) {
 
 
 
-    // ---------------------------------------------------------
-    // CHECK LICENCE
-    // ---------------------------------------------------------
-
-    $title = $aLang['STEP_5_1_TITLE'];
-    $sLicence = @$_POST['sLicence'];
-
-    $sLicence = trim($sLicence);
-
-    require_once "../core/oxserial.php";
-
-    $oSerial = new oxSerial();
-    $oSerial->setEd($iEd);
-
-    $blValidSerial = $oSerial->isValidSerial($sLicence);
-
-    // check if important parameters are set
-    if ( !isset( $sLicence ) || !$sLicence ) {
-        $iRedir2Step = $aSetupSteps['STEP_SERIAL'];
-        $sMessage = $aLang['ERROR_FILL_ALL_FIELDS'];
-        include "headitem.php";
-        include "bottomitem.php";
-        exit();
-    } elseif ( !$blValidSerial ) {
-        $iRedir2Step = $aSetupSteps['STEP_SERIAL'];
-        $sMessage = $aLang['ERROR_BAD_SERIAL_NUMBER'];
-        include "headitem.php";
-        include "bottomitem.php";
-        exit();
-    } else {
-        // ---------------------------------------------------------
-        // STORE Licencekey now
-        // ---------------------------------------------------------
-        $aDB = @$aPersistentData['aDB'];
-
-        $oConfk = new Conf();
-
-        $sID = generateUID();
-        $sIDStart = generateUID();
-        $sIDIMD = generateUID();
-        $sIDIMA = generateUID();
-        $sIDIMS = generateUID();
-        $sIDIMU = generateUID();
-
-
-        $sQ = "update oxshops set oxserial = '$sLicence' where oxid = '$sBaseShopId'";
-        $sQConfDelete = "delete from oxconfig where oxvarname = 'aSerials'";
-
-        $sQConfInsert = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
-                                 values('$sID', '$sBaseShopId', 'aSerials', 'arr', ENCODE( '".serialize(array($sLicence))."', '".$oConfk->sConfigKey."'))";
-
-        $sStartTime = time();
-        $sQStartDelete = "delete from oxconfig where oxvarname = 'sTagList'";
-        $sQStart = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
-                                 values('$sIDStart', '$sBaseShopId', 'sTagList', 'str', ENCODE( '".$sStartTime."', '".$oConfk->sConfigKey."'))";
-
-
-        $iMaxDays = $oSerial->getMaxDays($sLicence);
-        $sQMaxDaysDelete = "delete from oxconfig where oxvarname = 'IMD'";
-        $sQMaxDays = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
-                                 values('$sIDIMD', '$sBaseShopId', 'IMD', 'str', ENCODE( '".$iMaxDays."', '".$oConfk->sConfigKey."'))";
-
-        $iMaxArticles = $oSerial->getMaxArticles($sLicence);
-        $sQMaxArticlesDelete = "delete from oxconfig where oxvarname = 'IMA'";
-        $sQMaxArticles = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
-                                 values('$sIDIMA', '$sBaseShopId', 'IMA', 'str', ENCODE( '".$iMaxArticles."', '".$oConfk->sConfigKey."'))";
-
-
-        $iMaxShops = $oSerial->getMaxShops($sLicence);
-        $sQMaxShopsDelete = "delete from oxconfig where oxvarname = 'IMS'";
-        $sQMaxShops = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
-                                 values('$sIDIMS', '$sBaseShopId', 'IMS', 'str', ENCODE( '".$iMaxShops."', '".$oConfk->sConfigKey."'))";
-
-        $sQUtfMode = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
-                                 values('$sIDIMU', '$sBaseShopId', 'iSetUtfMode', 'str', ENCODE( '".((int) isset( $aDB['iUtfMode'] ) ? $aDB['iUtfMode'] : 0 )."', '".$oConfk->sConfigKey."') )";
-
-        OpenDatabase($aDB);
-        mysql_query($sQMaxDaysDelete);
-        mysql_query($sQMaxDays);
-        mysql_query($sQMaxArticlesDelete);
-        mysql_query($sQMaxArticles);
-        mysql_query($sQMaxShopsDelete);
-        mysql_query($sQMaxShops);
-        mysql_query($sQ);
-        mysql_query($sQConfDelete);
-        mysql_query($sQConfInsert);
-        mysql_query($sQStartDelete);
-        mysql_query($sQStart);
-        mysql_query($sQUtfMode);
-
-
-        $iRedir2Step = $aSetupSteps['STEP_FINISH'];
-        $sMessage = $aLang['STEP_5_1_SERIAL_ADDED'];
-        include "headitem.php";
-        include "bottomitem.php";
-        exit();
-
-    }
-
-}
-endif;
 
 
 if ( $istep == $aSetupSteps['STEP_FINISH'] ) {

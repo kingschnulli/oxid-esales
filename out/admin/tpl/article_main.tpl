@@ -16,15 +16,13 @@ function editThis( sID )
     oSearch.actedit.value = 0;
     oSearch.submit();
 }
-
-window.onload = function () {
-    [{if !$oxparentid}]
-    var oField = document.getElementsByName( "editval[oxarticles__oxtitle]" )[0];
-    oField.onchange = top.oxid.admin.unlockSave;
-    oField.onkeyup = top.oxid.admin.unlockSave;
-    oField.onmouseout = top.oxid.admin.unlockSave;
-    [{/if}]
+[{if !$oxparentid}]
+window.onload = function ()
+{
+    var oField = top.oxid.admin.getLockTarget();
+    oField.onchange = oField.onkeyup = oField.onmouseout = top.oxid.admin.unlockSave;
 }
+[{/if}]
 //-->
 </script>
 
@@ -105,7 +103,7 @@ window.onload = function () {
                     [{ oxmultilang ident="ARTICLE_MAIN_TITLE" }]&nbsp;
                   </td>
                   <td class="edittext">
-                    <input type="text" class="editinput" size="32" maxlength="[{$edit->oxarticles__oxtitle->fldmax_length}]" name="editval[oxarticles__oxtitle]" value="[{$edit->oxarticles__oxtitle->value}]">
+                    <input type="text" class="editinput" size="32" maxlength="[{$edit->oxarticles__oxtitle->fldmax_length}]" id="oLockTarget" name="editval[oxarticles__oxtitle]" value="[{$edit->oxarticles__oxtitle->value}]">
                   </td>
                 </tr>
                 <tr>
@@ -223,7 +221,7 @@ window.onload = function () {
 
               <tr>
                 <td class="edittext" colspan="2"><br><br>
-                <input type="submit" class="edittext" name="saveArticle" value="[{ oxmultilang ident="ARTICLE_MAIN_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'" [{ if !$edit->oxarticles__oxtitle->value && !$oxparentid }]disabled[{/if}] [{ $readonly }]>
+                <input type="submit" class="edittext" id="oLockButton" name="saveArticle" value="[{ oxmultilang ident="ARTICLE_MAIN_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'" [{ if !$edit->oxarticles__oxtitle->value && !$oxparentid }]disabled[{/if}] [{ $readonly }]>
                 [{if $oxid!=-1 && !$readonly}]
                   <input type="submit" class="edittext" name="save" value="[{ oxmultilang ident="ARTICLE_MAIN_ARTCOPY" }]" onClick="Javascript:document.myedit.fnc.value='copyArticle';" [{ $readonly }]>&nbsp;&nbsp;&nbsp;
                 [{/if}]
