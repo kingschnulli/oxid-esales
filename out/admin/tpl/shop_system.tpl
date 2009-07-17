@@ -8,7 +8,6 @@ function _groupExp(el) {
     if (_cur.className == "exp") _cur.className = "";
       else _cur.className = "exp";
 }
-
 //-->
 </script>
 
@@ -26,6 +25,7 @@ function _groupExp(el) {
     <input type="hidden" name="cl" value="shop_system">
     <input type="hidden" name="fnc" value="">
     <input type="hidden" name="actshop" value="[{ $shop->id }]">
+    <input type="hidden" name="updatenav" value="">
     <input type="hidden" name="editlanguage" value="[{ $editlanguage }]">
 </form>
 

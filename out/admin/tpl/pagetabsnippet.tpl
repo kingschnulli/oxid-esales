@@ -24,7 +24,7 @@
     [{assign var="_action" value="ChangeExternal"}]
     [{assign var="_param1" value=$edit->getAttribute('location')}]
   [{else}]
-    [{assign var="_action" value="top.oxid.admin.changeEditBar"}]
+    [{assign var="_action" value=$sEditAction|default:"top.oxid.admin.changeEditBar"}]
     [{assign var="_param1" value=$edit->getAttribute('cl')}]
   [{/if}]
 

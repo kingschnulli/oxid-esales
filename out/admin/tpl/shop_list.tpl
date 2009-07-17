@@ -23,30 +23,16 @@ function editThis( sID)
     oSearch.submit();
 }
 
-function deleteThis( sID)
+
+window.onload = function ()
 {
-    var currentshop = [{$oxid}];
-    var newshop = (sID == currentshop)?1:currentshop;
-
-    blCheck = confirm("[{ oxmultilang ident="SHOP_LIST_YOUWANTTODELETE" }]");
-    if( blCheck == true)
-    {   var oSearch = top.basefrm.list.document.getElementById( "search" );
-        oSearch.delshopid.value = sID;
-        oSearch.fnc.value = 'deleteentry';
-        oSearch.actedit.value = 0;
-        oSearch.submit();
-
-        var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
-        oTransfer.oxid.value = newshop;
-        oTransfer.actshop.value = newshop;
-        oTransfer.cl.value='[{ $default_edit }]';
-        oTransfer.updatenav.value = 1;
-
-        //forcing edit frame to reload after submit
-        top.forceReloadingEditFrame();
-    }
+    [{ if $updatenav }]
+    var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
+    oTransfer.updatenav.value = 1;
+    oTransfer.cl.value = '[{ $default_edit }]';
+    [{ /if}]
+    top.reloadEditFrame();
 }
-
 //-->
 </script>
 

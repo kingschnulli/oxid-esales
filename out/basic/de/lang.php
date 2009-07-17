@@ -19,17 +19,17 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 20037 2009-06-19 14:31:09Z sarunas $
+ * $Id: lang.php 20971 2009-07-16 09:15:37Z arvydas $
  */
 
- 
+
 /* -----------------------
 --  ADAPTING THIS FILE  --
 --------------------------
-If you want to adapt this language file, use cust_lang.php instead. 
+If you want to adapt this language file, use cust_lang.php instead.
 Further information is available in the manual at
 http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/editing-language-files
-*/ 
+*/
 
 $sLangName  = "Deutsch";
 $iLangNr    = 0;
@@ -832,10 +832,10 @@ $aLang = array(
 'ORDER_IAGREETORIGHTOFWITHDRAWAL1'                => "die",
 'ORDER_IAGREETORIGHTOFWITHDRAWAL3'                => "habe ich gelesen.",
 'ORDER_RIGHTOFWITHDRAWAL'                         => "Widerrufsrecht",
-'ORDER_RIGHTOFWITHDRAWAL_TEXT'                    => "Verbraucher können ihre Vertragserklärung innerhalb von zwei Wochen ohne Angabe von 
-                                                      Gründen in Textform (z. B. Brief, Fax, E-Mail) oder durch Rücksendung der Sache widerrufen. 
-                                                      Die Frist beginnt frühestens mit Erhalt der Ware und einer ausführlichen Belehrung in Textform. 
-                                                      Zur Wahrung der Widerrufsfrist genügt die rechtzeitige Absendung des Widerrufs oder der Sache. 
+'ORDER_RIGHTOFWITHDRAWAL_TEXT'                    => "Verbraucher können ihre Vertragserklärung innerhalb von zwei Wochen ohne Angabe von
+                                                      Gründen in Textform (z. B. Brief, Fax, E-Mail) oder durch Rücksendung der Sache widerrufen.
+                                                      Die Frist beginnt frühestens mit Erhalt der Ware und einer ausführlichen Belehrung in Textform.
+                                                      Zur Wahrung der Widerrufsfrist genügt die rechtzeitige Absendung des Widerrufs oder der Sache.
                                                       Der Widerruf ist zu richten an: ",
 'ORDER_RIGHTOFWITHDRAWAL_MOREINFO1'               => "Hier finden Sie die Einzelheiten zu Ihrem ",
 'ORDER_SUBMITORDER'                               => "Bestellung absenden",
@@ -1222,6 +1222,7 @@ $aLang = array(
 'EXCEPTION_CONNECTION_IPAYMENTPROXYFAULT'         => 'Fehler bei der Kommunikation mit dem IPaymentserver!',
 'EXCEPTION_CONNECTION_IPAYMENTPROXYERROR'         => 'Fehler bei der Kommunikation mit dem IPaymentserver!',
 'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST'           => 'Artikel existiert nicht!',
+'EXCEPTION_ARTICLE_ARTICELNOTBUYABLE'             => "[tr] Article is not buyable",
 'EXCEPTION_OUTOFSTOCK_OUTOFSTOCK'                 => 'Der Lagerbestand dieses Artikels ist nicht ausreichend! Verfügbar:',
 'EXCEPTION_ARTICLE_NOPRODUCTID'                   => 'Keine Artikel ID angegeben!',
 'EXCEPTION_INPUT_INVALIDAMOUNT'                   => 'Bitte geben Sie eine gültige Menge für das Artikel ein!',

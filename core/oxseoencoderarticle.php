@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoderarticle.php 19969 2009-06-18 08:32:57Z sarunas $
+ * $Id: oxseoencoderarticle.php 20953 2009-07-15 13:36:51Z arvydas $
  */
 
 /**
@@ -60,6 +60,16 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         }
 
         return self::$_instance;
+    }
+
+    /**
+     * Returns target "extension" (.html)
+     *
+     * @return string
+     */
+    protected function _getUrlExtension()
+    {
+        return '.html';
     }
 
     /**
@@ -108,7 +118,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             // generating new if not found
             $sSeoUrl  = oxSeoEncoderTag::getInstance()->getTagUri( $sTag, $iLang );
             $sSeoUrl .= $this->_prepareArticleTitle( $oArticle );
-            $sSeoUrl  = $this->_getUniqueSeoUrl( $sSeoUrl, '.html', $this->_getStaticObjectId( $iShopId, $sStdUrl ), $iLang );
+            $sSeoUrl  = $this->_processSeoUrl( $sSeoUrl, $this->_getStaticObjectId( $iShopId, $sStdUrl ), $iLang );
 
             $sSeoUrl = $this->_getDynamicUri( $sStdUrl, $sSeoUrl, $iLang );
         }
@@ -152,7 +162,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             // writing category path
             $sSeoUrl  = oxSeoEncoderCategory::getInstance()->getCategoryUri( $oCategory );
             $sSeoUrl .= $this->_prepareArticleTitle( $oArticle );
-            $sSeoUrl  = $this->_getUniqueSeoUrl( $sSeoUrl, '.html', $oArticle->getId(), $iLang );
+            $sSeoUrl  = $this->_processSeoUrl( $sSeoUrl, $oArticle->getId(), $iLang );
 
             $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang, null, 0, false, false, $sActCatId );
         }
@@ -200,7 +210,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             // create uri for all categories
             $oCategorys = $this->getSeoCategories( $oArticle, $iLang );
             if (!$oCategorys->count()) {
-                $sSeoUrl = $this->_getUniqueSeoUrl( $sTitle, '.html', $oArticle->getId(), $iLang );
+                $sSeoUrl = $this->_processSeoUrl( $sTitle, $oArticle->getId(), $iLang );
                 $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang );
             } else {
                 $sTmpSeoUrl = '';
@@ -209,7 +219,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                     // writing category path
                     $sTmpSeoUrl = $oEncoder->getCategoryUri( $oCategory );
                     $sTmpSeoUrl .= $sTitle;
-                    $sTmpSeoUrl  = $this->_getUniqueSeoUrl( $sTmpSeoUrl, '.html', $oArticle->getId(), $iLang );
+                    $sTmpSeoUrl  = $this->_processSeoUrl( $sTmpSeoUrl, $oArticle->getId(), $iLang );
 
                     $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sTmpSeoUrl, $iLang, null, 0, false, false, $oCategory->oxcategories__oxrootid->value);
                     if ($oCategory->oxcategories__oxrootid->value == $sActCatId) {
@@ -298,11 +308,11 @@ class oxSeoEncoderArticle extends oxSeoEncoder
 
             // create uri for all categories
             if ( !$sActVendorId || !$oVendor ) {
-                $sSeoUrl = $this->_getUniqueSeoUrl( $sTitle, '.html', $oArticle->getId(), $iLang );
+                $sSeoUrl = $this->_processSeoUrl( $sTitle, $oArticle->getId(), $iLang );
                 $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang );
             } else {
                 $sSeoUrl = oxSeoEncoderVendor::getInstance()->getVendorUri( $oVendor, $iLang );
-                $sSeoUrl = $this->_getUniqueSeoUrl( $sSeoUrl . $sTitle, '.html', $oArticle->getId(), $iLang );
+                $sSeoUrl = $this->_processSeoUrl( $sSeoUrl . $sTitle, $oArticle->getId(), $iLang );
 
                 $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang, null, 0, false, false, $sActVendorId );
             }
@@ -344,11 +354,11 @@ class oxSeoEncoderArticle extends oxSeoEncoder
 
             // create uri for all categories
             if ( !$sActManufacturerId || !$oManufacturer ) {
-                $sSeoUrl = $this->_getUniqueSeoUrl( $sTitle, '.html', $oArticle->getId(), $iLang );
+                $sSeoUrl = $this->_processSeoUrl( $sTitle, $oArticle->getId(), $iLang );
                 $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang );
             } else {
                 $sSeoUrl = oxSeoEncoderManufacturer::getInstance()->getManufacturerUri( $oManufacturer, $iLang );
-                $sSeoUrl = $this->_getUniqueSeoUrl( $sSeoUrl . $sTitle, '.html', $oArticle->getId(), $iLang );
+                $sSeoUrl = $this->_processSeoUrl( $sSeoUrl . $sTitle, $oArticle->getId(), $iLang );
 
                 $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sSeoUrl, $iLang, null, 0, false, false, $sActManufacturerId );
             }

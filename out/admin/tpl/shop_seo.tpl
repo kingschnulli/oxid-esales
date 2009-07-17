@@ -1,5 +1,6 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
+
 [{ if $readonly}]
     [{assign var="readonly" value="readonly disabled"}]
 [{else}]
@@ -14,6 +15,7 @@
     <input type="hidden" name="cl" value="shop_seo">
     <input type="hidden" name="fnc" value="">
     <input type="hidden" name="actshop" value="[{ $shop->id }]">
+    <input type="hidden" name="updatenav" value="">
     <input type="hidden" name="editlanguage" value="[{ $editlanguage }]">
 </form>
 
@@ -76,6 +78,19 @@
             [{/if}]
             <br>
           </td>
+        </tr>
+
+        <tr class="conftext[{cycle}]">
+         <td valign="top">
+           <select class="saveinnewlanginput" name=confstrs[iDefSeoLang] [{$readonly}]>
+             [{foreach from=$languages key=lang item=olang}]
+             <option value="[{ $lang }]"[{ if $confstrs.iDefSeoLang == $lang}]SELECTED[{/if}]>[{ $olang->name }]</option>
+             [{/foreach}]
+           </select>
+         </td>
+         <td valign="top" width="100%">
+           [{ oxmultilang ident="SHOP_SEO_DEFSEOLANGUAGE" }]
+         </td>
         </tr>
 
         <tr class="conftext[{cycle}]">

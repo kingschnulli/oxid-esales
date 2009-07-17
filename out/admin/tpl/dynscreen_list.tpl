@@ -2,16 +2,15 @@
 
 <script type="text/javascript">
 <!--
-window.onload = function()
+function changeEditBar( sLocation, sPos )
 {
-    top.oxid.admin.changeEditBar = function(sLocation, sPos){
-        parent.edit.location = '[{ $shop->selflink }]?cl=' + sLocation;
+    parent.edit.location = '[{ $shop->selflink }]?cl=' + sLocation;
 
-        var oSearch = document.getElementById("search");
-        oSearch.actedit.value = sPos;
-        oSearch.submit();
-    }
+    var oSearch = document.getElementById("search");
+    oSearch.actedit.value = sPos;
+    oSearch.submit();
 }
+
 function ChangeExternal( sLocation, sPos)
 {
     parent.edit.location=sLocation;
@@ -37,7 +36,7 @@ function ChangeExternal( sLocation, sPos)
 <b>[{ oxmultilang ident="GENERAL_OXIDESHOP" }]</b> - [{ oxmultilang ident="DYNSCREEN_LIST_SERVICE" }]
 </div>
 
-[{include file="pagetabsnippet.tpl" noOXIDCheck="true"}]
+[{include file="pagetabsnippet.tpl" noOXIDCheck="true" sEditAction="changeEditBar" }]
 
 
 <script type="text/javascript">

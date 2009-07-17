@@ -2,22 +2,19 @@
 
 <script type="text/javascript">
 <!--
-window.onload = function ()
+function editThis( sID )
 {
-    function editThis( sID )
-    {
-        var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
-        oTransfer.oxid.value = sID;
-        oTransfer.cl.value = top.basefrm.list.sDefClass;
+    var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
+    oTransfer.oxid.value = sID;
+    oTransfer.cl.value = top.basefrm.list.sDefClass;
 
-        //forcing edit frame to reload after submit
-        top.forceReloadingEditFrame();
+    //forcing edit frame to reload after submit
+    top.forceReloadingEditFrame();
 
-        var oSearch = top.basefrm.list.document.getElementById( "search" );
-        oSearch.oxid.value = sID;
-        oSearch.actedit.value = 0;
-        oSearch.submit();
-    }
+    var oSearch = top.basefrm.list.document.getElementById( "search" );
+    oSearch.oxid.value = sID;
+    oSearch.actedit.value = 0;
+    oSearch.submit();
 }
 //-->
 </script>

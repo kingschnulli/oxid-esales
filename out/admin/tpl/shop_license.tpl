@@ -1,5 +1,6 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
+
 [{ if $error}]<div class="errorbox">[{ $error }]</div>[{/if}]
 [{ if $message}]<div class="messagebox">[{ $message }]</div>[{/if}]
 
@@ -15,6 +16,7 @@
     <input type="hidden" name="cl" value="shop_license">
     <input type="hidden" name="fnc" value="">
     <input type="hidden" name="actshop" value="[{ $shop->id }]">
+    <input type="hidden" name="updatenav" value="">
     <input type="hidden" name="editlanguage" value="[{ $editlanguage }]">
 </form>
 

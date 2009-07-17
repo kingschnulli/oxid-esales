@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_seo.php 19623 2009-06-04 16:55:21Z arvydas $
+ * $Id: article_seo.php 20979 2009-07-16 13:29:08Z arvydas $
  */
 
 /**
@@ -99,7 +99,7 @@ class Article_Seo extends Object_Seo
     protected function _getSeoDataSql( $oObject, $iShopId, $iLang )
     {
         $sParam = ( $sCat = $this->getSelectedCategoryId() ) ? " and oxparams = '$sCat' " : '';
-        $sQ = "select * from oxseo where oxobjectid = '".$oObject->getId()."' and
+        $sQ = "select * from oxseo where oxobjectid = '".$oObject->getId()."' and oxexpired != '1' and
                oxshopid = '{$iShopId}' and oxlang = {$iLang} {$sParam} ";
         return $sQ;
     }

@@ -6,7 +6,13 @@
 
 <script type="text/javascript">
 <!--
-window.onload = top.reloadEditFrame;
+window.onload = function ()
+{
+    top.reloadEditFrame();
+    [{ if $updatelist == 1}]
+        top.oxid.admin.updateList('[{ $oxid }]');
+    [{ /if}]
+}
 //-->
 </script>
 <body>

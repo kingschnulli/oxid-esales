@@ -37,13 +37,9 @@ function modSmtpField()
 window.onload = function ()
 {
     [{ if $updatelist == 1}]
-    //Reloading list
-     var oSearch = top.basefrm.list.document.getElementById( "search" );
-    oSearch.oxid.value = '[{ $oxid }]';
-    oSearch.submit();
+        top.oxid.admin.updateList('[{ $oxid }]');
     [{ /if}]
 
-    top.oxid.admin.updateList('[{ $oxid }]');
     setSmtpField();
 
 

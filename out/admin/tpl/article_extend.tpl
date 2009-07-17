@@ -8,8 +8,11 @@
 
 <script type="text/javascript">
 <!--
-window.onload = function()
+window.onload = function ()
 {
+    [{ if $updatelist == 1}]
+        top.oxid.admin.updateList('[{ $oxid }]');
+    [{ /if}]
     top.reloadEditFrame();
 }
 function editThis( sID )

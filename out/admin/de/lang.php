@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 20618 2009-07-03 06:15:03Z vilma $
+ * $Id: lang.php 20955 2009-07-15 13:53:27Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -1264,6 +1264,7 @@ $aLang = array(
 'SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE_TOBASKET' => 'Warenkorb öffnen',
 
 'SHOP_SEO_SEOMODE'                              => 'Aktiv',
+'SHOP_SEO_DEFSEOLANGUAGE'                       => 'Standardsprache für SEO URLs',
 'SHOP_SEO_TITLEPREFIX'                          => 'Titel Präfix',
 'SHOP_SEO_TITLESUFFIX'                          => 'Titel Suffix',
 'SHOP_SEO_STARTTITLE'                           => 'Titel der Startseite',

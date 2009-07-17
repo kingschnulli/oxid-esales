@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 20601 2009-07-02 11:17:21Z sarunas $
+ * $Id: lang.php 20955 2009-07-15 13:53:27Z arvydas $
  */
 
 /*
@@ -1270,6 +1270,7 @@ $aLang = array(
 'SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE_TOBASKET' => 'Open Basket',
 
 'SHOP_SEO_SEOMODE'                              => 'Active',
+'SHOP_SEO_DEFSEOLANGUAGE'                       => 'Default language for SEO URLs',
 'SHOP_SEO_TITLEPREFIX'                          => 'Title Prefix',
 'SHOP_SEO_TITLESUFFIX'                          => 'Title Suffix',
 'SHOP_SEO_STARTTITLE'                           => 'Front Page Title',

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 20681 2009-07-09 06:44:59Z arvydas $
+ * $Id: oxbasket.php 20970 2009-07-16 09:04:17Z arvydas $
  */
 
 /**
@@ -326,7 +326,9 @@ class oxBasket extends oxSuperCfg
                 //$oBasketItem->dAmount = 0;
                 $blRemoveItem = true;
 
-            } catch( oxOutOfStockException $oEx ){
+            } catch( oxOutOfStockException $oEx ) {
+                // rethrow later
+            } catch ( oxArticleInputException $oEx ) {
                 // rethrow later
             }
 

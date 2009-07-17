@@ -19,6 +19,9 @@ function editThis( sID )
 [{if !$oxparentid}]
 window.onload = function ()
 {
+    [{ if $updatelist == 1}]
+        top.oxid.admin.updateList('[{ $oxid }]');
+    [{ /if}]
     var oField = top.oxid.admin.getLockTarget();
     oField.onchange = oField.onkeyup = oField.onmouseout = top.oxid.admin.unlockSave;
 }

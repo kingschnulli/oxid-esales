@@ -1,5 +1,6 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
+
 [{ if $readonly}]
     [{assign var="readonly" value="readonly disabled"}]
 [{else}]
@@ -14,6 +15,7 @@
     <input type="hidden" name="cl" value="shop_performance">
     <input type="hidden" name="fnc" value="">
     <input type="hidden" name="actshop" value="[{ $shop->id }]">
+    <input type="hidden" name="updatenav" value="">
     <input type="hidden" name="editlanguage" value="[{ $editlanguage }]">
 </form>
 

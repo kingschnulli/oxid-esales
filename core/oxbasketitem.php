@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasketitem.php 20529 2009-06-29 13:58:06Z arvydas $
+ * $Id: oxbasketitem.php 20973 2009-07-16 11:10:05Z arvydas $
  */
 
 /**
@@ -410,6 +410,14 @@ class oxBasketItem extends oxSuperCfg
             if ( !$this->_oArticle->load( $sProductId ) ) {
                 $oEx = oxNew( 'oxNoArticleException' );
                 $oEx->setMessage( 'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST' );
+                $oEx->setArticleNr( $sProductId );
+                throw $oEx;
+            }
+
+            // cant put not buyable product to basket
+            if ( !$this->_oArticle->isBuyable() ) {
+                $oEx = oxNew( 'oxArticleInputException' );
+                $oEx->setMessage( 'EXCEPTION_ARTICLE_ARTICELNOTBUYABLE' );
                 $oEx->setArticleNr( $sProductId );
                 throw $oEx;
             }
