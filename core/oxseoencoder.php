@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 20953 2009-07-15 13:36:51Z arvydas $
+ * $Id: oxseoencoder.php 20994 2009-07-17 08:17:12Z arvydas $
  */
 
 /**
@@ -134,12 +134,13 @@ class oxSeoEncoder extends oxSuperCfg
      * @param string $sSeoUrl   seo url to process
      * @param string $sObjectId seo object id [optional]
      * @param int    $iLang     active language id [optional]
+     * @param bool   $blExclude exclude language prefix while building seo url
      *
      * @return string
      */
-    protected function _processSeoUrl( $sSeoUrl, $sObjectId = null, $iLang = null )
+    protected function _processSeoUrl( $sSeoUrl, $sObjectId = null, $iLang = null, $blExclude = false )
     {
-        return $this->_getUniqueSeoUrl( $this->addLanguageParam( $sSeoUrl, $iLang ), $sObjectId, $iLang );
+        return $this->_getUniqueSeoUrl( $blExclude ? $sSeoUrl : $this->addLanguageParam( $sSeoUrl, $iLang ), $sObjectId, $iLang );
     }
 
     /**
@@ -931,12 +932,13 @@ class oxSeoEncoder extends oxSuperCfg
      * @param string $sKeywords    seo keywords
      * @param string $sDescription seo description
      * @param string $sParams      additional seo params. optional (mostly used for db indexing)
+     * @param bool   $blExclude    exclude language prefix while building seo url
      *
      * @return null
      */
-    public function addSeoEntry( $sObjectId, $iShopId, $iLang, $sStdUrl, $sSeoUrl, $sType, $blFixed = 1, $sKeywords = '', $sDescription = '', $sParams = '' )
+    public function addSeoEntry( $sObjectId, $iShopId, $iLang, $sStdUrl, $sSeoUrl, $sType, $blFixed = 1, $sKeywords = '', $sDescription = '', $sParams = '', $blExclude = false )
     {
-        $sSeoUrl = $this->_processSeoUrl( $this->_prepareTitle( $this->_trimUrl( $sSeoUrl ) ), $sObjectId, $iLang );
+        $sSeoUrl = $this->_processSeoUrl( $this->_prepareTitle( $this->_trimUrl( $sSeoUrl ) ), $sObjectId, $iLang, $blExclude );
         $this->_saveToDb( $sType, $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId, $blFixed, $sKeywords, $sDescription, $sParams );
     }
 

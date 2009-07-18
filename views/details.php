@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 20602 2009-07-02 11:53:06Z rimvydas.paskevicius $
+ * $Id: details.php 21001 2009-07-17 14:04:43Z arvydas $
  */
 
 /**
@@ -229,6 +229,7 @@ class Details extends oxUBase
         if ( $sParentId && $this->_oParent === null ) {
             $this->_oParent = false;
             if ( ( $oParent = oxNewArticle( $sParentId ) ) ) {
+                $this->_processProduct( $oParent );
                 $this->_oParent = $oParent;
             }
         }
@@ -275,11 +276,38 @@ class Details extends oxUBase
 
             // setting link type for variants ..
             foreach ( $this->_aVariantList as $oVariant ) {
-                $oVariant->setLinkType( $this->getLinkType() );
+                $this->_processProduct( $oVariant );
             }
 
         }
         return $this->_aVariantList;
+    }
+
+    /**
+     * In case list type is "search" returns search parameters which will be added to product details link
+     *
+     * @return string | null
+     */
+    protected function _getAddUrlParams()
+    {
+        if ( $this->getListType() == "search" ) {
+            return $this->getDynUrlParams();
+        }
+    }
+
+    /**
+     * Processes product by setting link type and in case list type is search adds search parameters to details link
+     * 
+     * @param object $oProduct
+     *
+     * @return null
+     */
+    protected function _processProduct( $oProduct )
+    {
+        $oProduct->setLinkType( $this->getLinkType() );
+        if ( $sAddParams = $this->_getAddUrlParams() ) {
+            $oProduct->appendLink( $sAddParams );
+        }
     }
 
     /**
@@ -474,7 +502,7 @@ class Details extends oxUBase
             $sKeywords = implode( ", ", $aKeywords );
 
             $sKeywords = parent::_prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords );
-            
+
             //adding searchkeys info
             if ( $sSearchKeys = trim( $oProduct->oxarticles__oxsearchkeys->value ) ) {
                 $sKeywords .= ", " . parent::_prepareMetaKeyword( $sSearchKeys, false );
@@ -732,7 +760,7 @@ class Details extends oxUBase
                 $myUtils->showMessageAndExit( '' );
             }
 
-            $this->_oProduct->setLinkType( $this->getLinkType() );
+            $this->_processProduct( $this->_oProduct );
             $this->_blIsInitialized = true;
         }
 

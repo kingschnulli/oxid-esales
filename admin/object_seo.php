@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: object_seo.php 20979 2009-07-16 13:29:08Z arvydas $
+ * $Id: object_seo.php 21003 2009-07-17 14:52:17Z arvydas $
  */
 
 /**
@@ -62,7 +62,8 @@ class Object_Seo extends oxAdminDetails
             $aSeoData = ( is_array( $aSeoData ) && isset( $aSeoData[0] ) )?$aSeoData[0]:array();
 
             // setting default values if empty
-            if ( !isset( $aSeoData['OXSEOURL'] ) || !$aSeoData['OXSEOURL'] ) {
+            if ( !isset( $aSeoData['OXSEOURL'] ) || !$aSeoData['OXSEOURL'] ||
+                 ( isset( $aSeoData['OXEXPIRED'] ) && $aSeoData['OXEXPIRED'] ) ) {
                 $aSeoData['OXSEOURL'] = $this->_getSeoUrl( $oObject );
             }
 
@@ -84,7 +85,7 @@ class Object_Seo extends oxAdminDetails
      */
     protected function _getSeoDataSql( $oObject, $iShopId, $iLang )
     {
-        return "select * from oxseo where oxobjectid = '".$oObject->getId()."' and oxexpired != '1' and
+        return "select * from oxseo where oxobjectid = '".$oObject->getId()."' and
                 oxshopid = '{$iShopId}' and oxlang = {$iLang} ";
     }
 
@@ -169,7 +170,7 @@ class Object_Seo extends oxAdminDetails
             // saving
             $oEncoder->addSeoEntry( $sOxid, $iShopId, $this->_iEditLang, $this->_getStdUrl( oxConfig::getParameter( 'oxid' ) ),
                                     $aSeoData['oxseourl'], $this->_getSeoEntryType(), $aSeoData['oxfixed'],
-                                    trim( $aSeoData['oxkeywords'] ), trim( $aSeoData['oxdescription'] ), $this->processParam( $aSeoData['oxparams'] ) );
+                                    trim( $aSeoData['oxkeywords'] ), trim( $aSeoData['oxdescription'] ), $this->processParam( $aSeoData['oxparams'] ), true );
         }
     }
 

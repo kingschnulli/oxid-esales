@@ -16,6 +16,17 @@ function SetSticker( sStickerId, oObject)
     else
         oSticker.style.display = "none";
 }
+function deleteThis( sID)
+{
+    blCheck = confirm("[{ oxmultilang ident="ARTICLE_VARIANT_YOUWANTTODELETE" }]");
+    if( blCheck == true)
+    {
+        var oSearch = document.getElementById("search");
+        oSearch.fnc.value='deletevariant';
+        oSearch.voxid.value=sID;
+        oSearch.submit();
+    }
+}
 function editThis( sID )
 {
     var oTransfer = top.basefrm.edit.document.getElementById( "transfer" );
