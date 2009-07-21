@@ -203,7 +203,7 @@ function editThis( sID )
               </select>
             </td>
             <td class="[{ $listclass}]">
-              <a href="Javascript:top.oxid.admin.deleteThis('[{ $listitem->oxarticles__oxid->value }]');" class="delete"[{include file="help.tpl" helpid=item_delete}]></a>
+              <a href="Javascript:deleteThis('[{ $listitem->oxarticles__oxid->value }]');" class="delete"[{include file="help.tpl" helpid=item_delete}]></a>
             </td>
           </tr>
 

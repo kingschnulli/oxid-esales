@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 20690 2009-07-09 10:46:21Z alfonsas $
+ * $Id: oxarticle.php 21019 2009-07-20 15:00:56Z arvydas $
  */
 
 // defining supported link types
@@ -3967,7 +3967,8 @@ class oxArticle extends oxI18n implements oxIArticle
 
         $this->_blIsRangePrice = false;
 
-        if ($this->_blSkipAbPrice && !$this->_blNotBuyableParent) {
+        // if parent is buyable - do not apply range price calcculations
+        if ($this->_blSkipAbPrice || !$this->_blNotBuyableParent) {
             return;
         }
 

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: content.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: content.php 21008 2009-07-20 07:31:26Z arvydas $
  */
 
 /**
@@ -100,9 +100,9 @@ class Content extends oxUBase
         parent::render();
 
         if ( $sTplName = $this->_getTplName() ) {
-            $this->_sThisTemplate = $sTplName;
+            $this->_sThisTemplate = $sTpl = $sTplName;
         } else {
-            $this->_aViewData['oxcid'] = $this->getContentId();
+            $this->_aViewData['oxcid'] = $sTpl = $this->getContentId();
             $this->_aViewData['oContent'] = $this->getContent();
         }
 
@@ -111,6 +111,7 @@ class Content extends oxUBase
             $this->_sThisTemplate = $this->_sThisPlainTemplate;
         }
 
+        $this->_aViewData['tpl'] = $sTpl;
         return $this->_sThisTemplate;
     }
 
