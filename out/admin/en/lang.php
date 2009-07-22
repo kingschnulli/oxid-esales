@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 20955 2009-07-15 13:53:27Z arvydas $
+ * $Id: lang.php 21077 2009-07-21 12:50:06Z arvydas $
  */
 
 /*
@@ -479,6 +479,8 @@ $aLang = array(
 'AUCTMASTER_DO_EXPORTFILE2'                     => '',
 'AUCTMASTER_DO_EXPORTING1'                      => 'Export running. Export',
 'AUCTMASTER_DO_EXPORTING2'                      => 'of overall',
+'GENEXPORT_EXPRUNNING'                          => 'Export running.',
+'GENEXPORT_EXPORTEDITEMS'                       => 'Products exported:',
 'BOTTOMNAVIITEM_SHOP'                           => 'Shop: ',
 'BOTTOMNAVIITEM_ATTENTION'                      => 'ATTENTION: This function can delete categories - backup before execution!',
 'CATEGORY_LIST_MENUSUBITEM'                     => 'Categories',
@@ -1018,7 +1020,7 @@ $aLang = array(
 'ORDER_OVERVIEW_MAKE'                           => 'Create',
 'ORDER_OVERVIEW_XMLEXPORT'                      => 'XML Export',
 'ORDER_OVERVIEW_PDF_TYPE'                       => 'PDF type',
-'ORDER_OVERVIEW_PDF_STANDART'                   => 'Standard',
+'ORDER_OVERVIEW_PDF_STANDART'                   => 'Invoice',
 'ORDER_OVERVIEW_PDF_DELIVERYADDRESS'            => 'Shipping Address',
 'ORDER_OVERVIEW_PDF_DNOTE'                      => 'Deliv. Note',
 'ORDER_OVERVIEW_PDF_FILLONPAYMENT'              => 'Please always indicate for payments.',
@@ -1262,11 +1264,11 @@ $aLang = array(
 'SHOP_SYSTEM_BLLOGGING'                         => 'Activate Logging for Statistics',
 'SHOP_SYSTEM_INLINEIMGEMAIL'                    => 'Send E-mails with inline Images',
 'SHOP_SYSTEM_LOGSKIPTAGS'                       => 'Exclusions for Admin log',
-'SHOP_SYSTEM_SMARTYPHPHANDLING'                 => 'How to handle PHP code embedded in Smarty templates',
-'SHOP_SYSTEM_SMARTYPHPHANDLING_REMOVE'          => 'Remove the tags from the templates',
-'SHOP_SYSTEM_SMARTYPHPHANDLING_PASSTHRU'        => 'Echo tags as-is',
-'SHOP_SYSTEM_SMARTYPHPHANDLING_QUOTE'           => 'Quote the tags as html entities',
-'SHOP_SYSTEM_SMARTYPHPHANDLING_ALLOW'           => 'Execute the tags as PHP code',
+'SHOP_SYSTEM_SMARTYPHPHANDLING'                 => 'How to handle PHP code embedded in templates',
+'SHOP_SYSTEM_SMARTYPHPHANDLING_REMOVE'          => 'Output code in HTML source (not displayed)',
+'SHOP_SYSTEM_SMARTYPHPHANDLING_PASSTHRU'        => 'Display code with PHP tags',
+'SHOP_SYSTEM_SMARTYPHPHANDLING_QUOTE'           => 'Display code without PHP tags',
+'SHOP_SYSTEM_SMARTYPHPHANDLING_ALLOW'           => 'Execute the PHP code',
 'SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE_TOBASKET' => 'Open Basket',
 
 'SHOP_SEO_SEOMODE'                              => 'Active',

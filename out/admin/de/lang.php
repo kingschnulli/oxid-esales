@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 20955 2009-07-15 13:53:27Z arvydas $
+ * $Id: lang.php 21077 2009-07-21 12:50:06Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -474,6 +474,8 @@ $aLang = array(
 'AUCTMASTER_DO_EXPORTFILE2'                     => 'nicht schreiben!',
 'AUCTMASTER_DO_EXPORTING1'                      => 'Export läuft. Exportiere',
 'AUCTMASTER_DO_EXPORTING2'                      => 'von insgesamt',
+'GENEXPORT_EXPRUNNING'                          => 'Export läuft.',
+'GENEXPORT_EXPORTEDITEMS'                       => 'Exportierte Artikel:',
 'BOTTOMNAVIITEM_SHOP'                           => 'Shop: ',
 'BOTTOMNAVIITEM_ATTENTION'                      => 'ACHTUNG: Diese Funktion kann Kategorien löschen - unbedingt vorher ein Backup durchführen.',
 'CATEGORY_LIST_MENUSUBITEM'                     => 'Kategorien',
@@ -1012,9 +1014,9 @@ $aLang = array(
 'ORDER_OVERVIEW_MAKE'                           => 'Erzeugen',
 'ORDER_OVERVIEW_XMLEXPORT'                      => 'XML Export',
 'ORDER_OVERVIEW_PDF_TYPE'                       => 'PDF Typ',
-'ORDER_OVERVIEW_PDF_STANDART'                   => 'standard',
+'ORDER_OVERVIEW_PDF_STANDART'                   => 'Rechnung',
 'ORDER_OVERVIEW_PDF_DELIVERYADDRESS'            => 'Lieferadresse',
-'ORDER_OVERVIEW_PDF_DNOTE'                      => 'Lieferhinweis',
+'ORDER_OVERVIEW_PDF_DNOTE'                      => 'Lieferschein',
 'ORDER_OVERVIEW_PDF_FILLONPAYMENT'              => 'Bei Zahlungen bitte immer angeben.',
 'ORDER_OVERVIEW_PDF_CUSTNR'                     => 'Kundennummer',
 'ORDER_OVERVIEW_PDF_TAXIDNR'                    => 'USt.-ID-Nr.:',
@@ -1256,11 +1258,11 @@ $aLang = array(
 'SHOP_SYSTEM_BLLOGGING'                         => 'Mitloggen für Statistik einschalten',
 'SHOP_SYSTEM_INLINEIMGEMAIL'                    => 'E-Mails mitsamt Bildern versenden',
 'SHOP_SYSTEM_LOGSKIPTAGS'                       => 'Diese Änderungen im Administrationsbereich nicht mitloggen',
-'SHOP_SYSTEM_SMARTYPHPHANDLING'                 => 'Wie soll man mit PHP-Code innerhalb von Smarty Templates umgehen',
-'SHOP_SYSTEM_SMARTYPHPHANDLING_REMOVE'          => 'Entfernt die Tags',
-'SHOP_SYSTEM_SMARTYPHPHANDLING_PASSTHRU'        => 'Gibt die Tags aus',
-'SHOP_SYSTEM_SMARTYPHPHANDLING_QUOTE'           => 'Maskiert die Tags als HTML-Entities',
-'SHOP_SYSTEM_SMARTYPHPHANDLING_ALLOW'           => 'Führt den Code als PHP-Code aus',
+'SHOP_SYSTEM_SMARTYPHPHANDLING'                 => 'Was soll mit PHP-Code in Templates gemacht werden',
+'SHOP_SYSTEM_SMARTYPHPHANDLING_REMOVE'          => 'Code in HTML-Quelltext ausgeben (wird nicht angezeigt)',
+'SHOP_SYSTEM_SMARTYPHPHANDLING_PASSTHRU'        => 'Code mit PHP-Tags anzeigen',
+'SHOP_SYSTEM_SMARTYPHPHANDLING_QUOTE'           => 'Code ohne PHP-Tags anzeigen',
+'SHOP_SYSTEM_SMARTYPHPHANDLING_ALLOW'           => 'Den PHP-Code ausführen',
 'SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE_TOBASKET' => 'Warenkorb öffnen',
 
 'SHOP_SEO_SEOMODE'                              => 'Aktiv',

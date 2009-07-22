@@ -159,8 +159,3 @@ ul.req li.clear{clear:left;diplay:none;border:none;visibility:collapse;height:0p
 
 .inputHelpBtn {display: inline; position: relative; padding-left: 16px; padding-right: 5px; margin-left: 5px; margin-left: 1px !ie; border: 1px solid #f00;}
 .inputHelpBtn a {display: block; position: absolute; left: 0px; top: 0px; top: 3px !ie; background: url(../img/help_button.gif) no-repeat; width: 16px; height: 16px; overflow: hidden;}
-
-/* Input fields help button and help text panel */
-.helpPanelText {display: none;}
-#helpTextContainer .yui-panel .bd {line-height: 120%;}
-.btnShowHelpPanel {background: url(bg/ico_help.gif) no-repeat; border:0 none; color:transparent; cursor:pointer; width:21px; height:20px;}
