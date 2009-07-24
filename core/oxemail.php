@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 21027 2009-07-21 08:28:37Z arvydas $
+ * $Id: oxemail.php 21092 2009-07-22 14:42:13Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -1183,7 +1183,7 @@ class oxEmail extends phpmailer
     public function setBody( $sBody = null, $blClearSid = true )
     {
         if ( $blClearSid ) {
-            $sBody = eregi_replace("sid=[A-Z0-9\.]+", "sid=x&amp;shp=" . $this->getConfig()->getShopId(), $sBody);
+            $sBody = preg_replace("/sid=[A-Z0-9\.]+/i", "sid=x&amp;shp=" . $this->getConfig()->getShopId(), $sBody);
         }
 
         $this->Body = $sBody;
@@ -1211,7 +1211,7 @@ class oxEmail extends phpmailer
     public function setAltBody( $sAltBody = null, $blClearSid = true )
     {
         if ( $blClearSid ) {
-            $sAltBody = eregi_replace("sid=[A-Z0-9\.]+", "sid=x&amp;shp=" . $this->getConfig()->getShopId(), $sAltBody);
+            $sAltBody = preg_replace("/sid=[A-Z0-9\.]+/i", "sid=x&amp;shp=" . $this->getConfig()->getShopId(), $sAltBody);
         }
 
         // A. alt body is used for plain text emails so we should eliminate HTML entities

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxpdf.php 20535 2009-06-30 00:58:33Z alfonsas $
+ * $Id: oxpdf.php 21092 2009-07-22 14:42:13Z vilma $
  */
 
 $myConfig = oxConfig::getInstance();
@@ -275,7 +275,7 @@ class oxPDF extends TCPDF
                     $tag=strtoupper(array_shift($a2));
                     $attr=array();
                     foreach ($a2 as $v) {
-                        if (ereg('^([^=]*)=["\']?([^"\']*)["\']?$', $v, $a3)) {
+                        if (preg_match('/^([^=]*)=["\']?([^"\']*)["\']?$/', $v, $a3)) {
                             $attr[strtoupper($a3[1])]=$a3[2];
                         }
                     }

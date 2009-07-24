@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 21001 2009-07-17 14:04:43Z arvydas $
+ * $Id: details.php 21103 2009-07-23 13:56:01Z arvydas $
  */
 
 /**
@@ -297,7 +297,7 @@ class Details extends oxUBase
 
     /**
      * Processes product by setting link type and in case list type is search adds search parameters to details link
-     * 
+     *
      * @param object $oProduct
      *
      * @return null
@@ -897,11 +897,7 @@ class Details extends oxUBase
      */
     public function drawParentUrl()
     {
-        if ( ( $oParent = $this->_getParentProduct( $this->getProduct()->oxarticles__oxparentid->value ) ) ) {
-            if ( $this->getConfig()->getConfigParam( 'blVariantParentBuyable' ) || count( $this->getVariantList() ) > 0 ) {
-                return true;
-            }
-        }
+        return $this->getProduct()->isVariant();
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 20075 2009-06-22 13:55:44Z sarunas $
+ * $Id: oxutilsfile.php 21092 2009-07-22 14:42:13Z vilma $
  */
 
 /**
@@ -502,7 +502,7 @@ class oxUtilsFile extends oxSuperCfg
                 $sResponse = fgets( $oConn, 22 );
                 fclose( $oConn );
 
-                if ( ereg( "200 OK", $sResponse ) ) {
+                if ( preg_match( "/200 OK/", $sResponse ) ) {
                     $blValid = true;
                 }
             }
@@ -531,7 +531,7 @@ class oxUtilsFile extends oxSuperCfg
         }
 
         //wrong chars in file name?
-        if ( !eregi('^[_a-z0-3\.]+$', $aFileInfo['name'] ) ) {
+        if ( !preg_match('/^[_a-z0-3\.]+$/i', $aFileInfo['name'] ) ) {
             throw new oxException( 'EXCEPTION_FILENAMEINVALIDCHARS' );
         }
 

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 20812 2009-07-13 11:20:06Z sarunas $
+ * $Id: oxcmp_user.php 21092 2009-07-22 14:42:13Z vilma $
  */
 
 /**
@@ -663,7 +663,7 @@ class oxcmp_user extends oxView
                 $oUser->oxuser__oxactive   = new oxField(1, oxField::T_RAW);
                 $oUser->oxuser__oxrights   = new oxField('user', oxField::T_RAW);
                 $oUser->oxuser__oxshopid   = new oxField($this->getConfig()->getShopId(), oxField::T_RAW);
-                list ($sFName, $sLName)    = split(' ', $aData['fullname']);
+                list ($sFName, $sLName)    = explode(' ', $aData['fullname']);
                 $oUser->oxuser__oxfname    = new oxField($sFName, oxField::T_RAW);
                 $oUser->oxuser__oxlname    = new oxField($sLName, oxField::T_RAW);
 

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 20793 2009-07-12 14:57:10Z tomas $
+ * $Id: oxutils.php 21099 2009-07-23 07:43:26Z vilma $
  */
 
 /**
@@ -52,7 +52,7 @@ class oxUtils extends oxSuperCfg
      *
      * @var string
      */
-    protected $_sEmailTpl = "^([-!#\$%&'*+./0-9=?A-Z^_`a-z{|}~\177])+@([-!#\$%&'*+/0-9=?A-Z^_`a-z{|}~\177]+\\.)+[a-zA-Z]{2,6}\$";
+    protected $_sEmailTpl = "/^([-!#\$%&'*+.\/0-9=?A-Z^_`a-z{|}~\177])+@([-!#\$%&'*+\/0-9=?A-Z^_`a-z{|}~\177]+\\.)+[a-zA-Z]{2,6}\$/i";
 
     /**
      * Some files, like object structure should not be deleted, because thay are changed rarely
@@ -319,7 +319,7 @@ class oxUtils extends oxSuperCfg
     {
         $blValid = true;
         if ( $sEmail != 'admin' ) {
-            $blValid = ( eregi( $this->_sEmailTpl, $sEmail ) != 0 );
+            $blValid = ( preg_match( $this->_sEmailTpl, $sEmail ) != 0 );
         }
 
         return $blValid;
@@ -968,7 +968,7 @@ class oxUtils extends oxSuperCfg
             }
         } elseif ( isset( $aPrice[0] ) && isset($aPrice[1] ) ) {
             // A. removing unused part of information
-            $aName[0] = ereg_replace( "!P!.*", "", $aName[0] );
+            $aName[0] = preg_replace( "/!P!.*/", "", $aName[0] );
         }
 
         $oObject->name  = $aName[0];

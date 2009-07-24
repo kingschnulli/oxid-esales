@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsession.php 20535 2009-06-30 00:58:33Z alfonsas $
+ * $Id: oxsession.php 21102 2009-07-23 12:21:10Z vilma $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -400,6 +400,7 @@ class oxSession extends oxSuperCfg
     public function url($url)
     {
         $myConfig = $this->getConfig();
+        $blForceSID = false;
         if (strpos(" ".$url, "https:") === 1 && !$myConfig->isSsl()) {
             $blForceSID = true;
         }

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 21019 2009-07-20 15:00:56Z arvydas $
+ * $Id: oxarticle.php 21103 2009-07-23 13:56:01Z arvydas $
  */
 
 // defining supported link types
@@ -2962,8 +2962,8 @@ class oxArticle extends oxI18n implements oxIArticle
             $sTargetFile = str_replace('_th', '_ico', $sSourceFile);
 
             if ($sSourceFile == $sTargetFile) {
-                $sPattern = '(\.[a-z0-9]*$)';
-                $sTargetFile = eregi_replace($sPattern, '_ico\\1', $sTargetFile);
+                $sPattern = '/(\.[a-z0-9]*$)/i';
+                $sTargetFile = preg_replace($sPattern, '_ico\\1', $sTargetFile);
             }
 
             $sTarget = $myConfig->getAbsDynImageDir().'/icon/'. basename($sTargetFile);
@@ -4052,4 +4052,13 @@ class oxArticle extends oxI18n implements oxIArticle
         return false;
     }
 
+    /**
+     * Returns TRUE if product is variant, and false if not
+     *
+     * @return bool
+     */
+    public function isVariant()
+    {
+        return (bool) ( isset( $this->oxarticles__oxparentid ) ? $this->oxarticles__oxparentid->value : false );
+    }
 }
