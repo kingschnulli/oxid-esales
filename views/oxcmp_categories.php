@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_categories.php 21092 2009-07-22 14:42:13Z vilma $
+ * $Id: oxcmp_categories.php 21123 2009-07-24 08:20:59Z arvydas $
  */
 
 /**
@@ -73,7 +73,7 @@ class oxcmp_categories extends oxView
             $blArtLoaded = $oProduct ? true : false;
             if ( !$blArtLoaded ) {
                 $oProduct = oxNew( 'oxarticle' );
-                $oProduct->setSkipAbPrice( true );
+                //$oProduct->setSkipAbPrice( true );
                 if ( $oProduct->load( $sActProduct ) ) {
 
                     // storing for reuse

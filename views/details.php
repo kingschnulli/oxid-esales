@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 21103 2009-07-23 13:56:01Z arvydas $
+ * $Id: details.php 21122 2009-07-24 08:19:07Z arvydas $
  */
 
 /**
@@ -745,7 +745,7 @@ class Details extends oxUBase
 
             // object is not yet loaded
             $this->_oProduct = oxNew( 'oxarticle' );
-            $this->_oProduct->setSkipAbPrice( true );
+            //$this->_oProduct->setSkipAbPrice( true );
 
             if ( !$this->_oProduct->load( $sOxid ) ) {
                 $myUtils->redirect( $myConfig->getShopHomeURL() );
