@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 20571 2009-07-01 08:04:39Z arvydas $
+ * $Id: oxubase.php 21135 2009-07-27 10:56:53Z rimvydas.paskevicius $
  */
 
 /**
@@ -1066,6 +1066,7 @@ class oxUBase extends oxView
     {
         if ( $this->_sMetaKeywords === null ) {
             $this->_sMetaKeywords = false;
+            $blRemoveDuplicatedWords = true;
             // set special meta keywords ?
             if ( oxUtils::getInstance()->seoIsActive() && ( $sOxid = $this->_getSeoObjectId() ) &&
                  ( $sKeywords = oxSeoEncoder::getInstance()->getMetaData( $sOxid, 'oxkeywords' ) ) ) {
@@ -1073,12 +1074,14 @@ class oxUBase extends oxView
             } elseif ( $this->_sMetaKeywordsIdent ) {
                 $oContent = oxNew( 'oxcontent' );
                 if ( $oContent->loadByIdent( $this->_sMetaKeywordsIdent ) && $oContent->oxcontents__oxactive->value ) {
-                    $this->_sMetaKeywords = strip_tags( $oContent->oxcontents__oxcontent->value );
+                	$this->_sMetaKeywords = strip_tags( $oContent->oxcontents__oxcontent->value );
+                    $blRemoveDuplicatedWords = false;
                 }
             }
 
-            $this->_sMetaKeywords = $this->_prepareMetaKeyword( $this->_sMetaKeywords );
+            $this->_sMetaKeywords = $this->_prepareMetaKeyword( $this->_sMetaKeywords, $blRemoveDuplicatedWords );
         }
+        
         return $this->_sMetaKeywords;
     }
 

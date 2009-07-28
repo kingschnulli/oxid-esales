@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21011 2009-07-20 08:05:57Z arvydas $
+ * $Id: lang.php 21132 2009-07-27 07:55:36Z vilma $
  */
 
 
@@ -1128,7 +1128,7 @@ $aLang = array(
 'USER_BIRTHDATE'                                  => "Birthdate:",
 'USER_BIRTHDAYMESSAGE'                            => "Tell us your birthday<br>so that we can surprise you.",
 'USER_SUBSCRIBENEWSLETTER'                        => "Subscribe Newsletter:",
-'USER_SUBSCRIBENEWSLETTER_MESSAGE'                => "You can cancel the Newsletter at any time without charge.",
+'USER_SUBSCRIBENEWSLETTER_MESSAGE'                => "It's possible to cancel newsletter at any time.",
 'USER_YOURMESSAGE'                                => "What I wanted to say...:",
 'USER_MESSAGEHERE'                                => "Here you can enter an optional message.",
 'USER_SHIPPINGADDRESS'                            => "Shipping Addresses",

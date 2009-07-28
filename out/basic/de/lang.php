@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21011 2009-07-20 08:05:57Z arvydas $
+ * $Id: lang.php 21131 2009-07-27 07:52:10Z philipp.grashoff $
  */
 
 
@@ -427,9 +427,9 @@ $aLang = array(
 'EMAIL_WISHLIST_HTML_TOMYWISHLISTCLICKHERE2'      =>"hier klicken.",
 'EMAIL_WISHLIST_HTML_WITHLOVE'                    =>"Alles liebe,",
 'ERR_404TITLE'                                    =>'Fehler',
-'ERR_404'                                         =>'[tr] The requested page could not be found.',
-'ERR_404_PREURL'                                  =>'[tr] The requested page ',
-'ERR_404_POSTURL'                                 =>'[tr] could not be found.',
+'ERR_404'                                         =>'Die angeforderte Seite konnte nicht gefunden werden.',
+'ERR_404_PREURL'                                  =>'Die angeforderte Seite ',
+'ERR_404_POSTURL'                                 =>'konnte nicht gefunden werden.',
 'ERR_ACCESSDENIEDTITLE'                           =>'Fehler.',
 'ERR_ACCESSDENIED'                                =>'Zugriff verweigert.',
 'ERR_EXPIRED_DAYS_TITLE'                          =>"OXID eShop Fehler",

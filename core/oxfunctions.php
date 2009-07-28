@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxfunctions.php 20495 2009-06-26 14:35:38Z arvydas $
+ * $Id: oxfunctions.php 21136 2009-07-27 14:49:28Z rimvydas.paskevicius $
  */
 
 /**
@@ -414,7 +414,8 @@ if ( !function_exists( 'getRequestUrl' ) ) {
                 $sRequest = 'index.php' . getStr()->substr( $sRequest, $iPos );
 
                 // removing possible session id
-                $sRequest = preg_replace( '/((\&)?sid=[^&]*(&)?)/', '', $sRequest );
+                $sRequest = preg_replace( '/(&|\?){1}sid=[^&]*&?/', '$1', $sRequest );
+                $sRequest = preg_replace( '/&$/', '', $sRequest );
                 return str_replace( '&', '&amp;', $sRequest );
             }
         }
