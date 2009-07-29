@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 21092 2009-07-22 14:42:13Z vilma $
+ * $Id: oxcmp_user.php 21145 2009-07-28 11:10:29Z vilma $
  */
 
 /**
@@ -194,11 +194,6 @@ class oxcmp_user extends oxView
             return 'user';
         } catch( oxCookieException $oEx ){
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
-            return 'user';
-        } catch( oxConnectionException $oEx ){
-            //connection to external resource broken, change message and pass to the view
-            $oEx->setMessage( 'EXCEPTION_ACTIONNOTPOSSIBLEATTHEMOMENT' );
-            oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
             return 'user';
         }
         // finalizing ..
@@ -694,10 +689,6 @@ class oxcmp_user extends oxView
                 $oUser->openIdLogin( $oUser->oxuser__oxusername->value );
             } catch ( oxUserException $oEx ) {
                 // for login component send excpetion text to a custom component (if defined)
-                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
-            } catch( oxConnectionException $oEx ) {
-                //connection to external resource broken, change message and pass to the view
-                $oEx->setMessage( 'EXCEPTION_ACTIONNOTPOSSIBLEATTHEMOMENT' );
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
             }
 

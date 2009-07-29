@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21132 2009-07-27 07:55:36Z vilma $
+ * $Id: lang.php 21145 2009-07-28 11:10:29Z vilma $
  */
 
 
@@ -1205,7 +1205,6 @@ $aLang = array(
 'EXCEPTION_PAGE_HEADLINE'                         => 'The shop is temporary offline<br>Please come back later<br><br>Thank you for understanding.',
 'EXCEPTION_FILE_ERRORINFILE'                      => 'Error in file!',
 'EXCEPTION_CONNECTION_NODB'                       => 'No connection to database!',
-'EXCEPTION_ACTIONNOTPOSSIBLEATTHEMOMENT'          => 'This action is at the moment not possible!',
 'EXCEPTION_ACCESSRIGHT_ACCESSDENIED'              => 'Access denied, no sufficient rights!',
 'EXCEPTION_VOUCHER_NOVOUCHER'                     => 'Coupon invalid!',
 'EXCEPTION_VOUCHER_TOTALBELOWZERO'                => 'Pruchase price below 0,- is not allowed!',

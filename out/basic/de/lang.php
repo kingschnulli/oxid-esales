@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21131 2009-07-27 07:52:10Z philipp.grashoff $
+ * $Id: lang.php 21145 2009-07-28 11:10:29Z vilma $
  */
 
 
@@ -1204,7 +1204,6 @@ $aLang = array(
 'EXCEPTION_PAGE_HEADLINE'                         => 'Der Shop ist vorübergehend offline...',
 'EXCEPTION_FILE_ERRORINFILE'                      => 'Fehler in Datei!',
 'EXCEPTION_CONNECTION_NODB'                       => 'Keine Verbindung zur Datenbank möglich!',
-'EXCEPTION_ACTIONNOTPOSSIBLEATTHEMOMENT'          => 'Diese Aktion ist zur Zeit nicht möglich!',
 'EXCEPTION_ACCESSRIGHT_ACCESSDENIED'              => 'Zugriff verweigert, keine ausreichenden Rechte!',
 'EXCEPTION_VOUCHER_NOVOUCHER'                     => 'Gutschein ungültig!',
 'EXCEPTION_VOUCHER_TOTALBELOWZERO'                => 'Einkaufswert unter 0,- nicht erlaubt!',

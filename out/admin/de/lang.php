@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21129 2009-07-27 07:48:27Z philipp.grashoff $
+ * $Id: lang.php 21145 2009-07-28 11:10:29Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -671,7 +671,6 @@ $aLang = array(
 'EXCEPTION_USER_NOVALIDLOGIN'                   => 'Falsche E-Mail oder Passwort!',
 'EXCEPTION_USER_USEREXISTS'                     => 'Dieser Benutzer existiert bereits!',
 'EXCEPTION_CONNECTION_NODB'                     => 'Keine Verbindung zur Datenbank möglich!',
-'EXCEPTION_ACTIONNOTPOSSIBLEATTHEMOMENT'        => 'Diese Aktion ist zur Zeit nicht möglich!',
 'EXCEPTION_ACCESSRIGHT_ACCESSDENIED'            => 'Zugriff verweigert, keine ausreichende Rechte!',
 'EXCEPTION_NOFILE'                              => 'Keine Dateien hochgeladen',
 'EXCEPTION_FILENAMEINVALIDCHARS'                => 'Ungültige Zeichen im Dateinamne',

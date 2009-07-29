@@ -69,7 +69,7 @@
               [{/if}]
 
               [{if !$blCat}]
-                <option>--</option>
+                <option value="">--</option>
               [{/if}]
 
               </optgroup>
