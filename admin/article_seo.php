@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_seo.php 21003 2009-07-17 14:52:17Z arvydas $
+ * $Id: article_seo.php 21159 2009-07-28 14:12:48Z arvydas $
  */
 
 /**
@@ -267,8 +267,7 @@ class Article_Seo extends Object_Seo
     public function getActCategory()
     {
         $oCat = oxNew( 'oxcategory' );
-        $oCat->load( $this->_sActCatId );
-        if ( $oCat->isPriceCategory() ) {
+        if ( $oCat->load( $this->_sActCatId ) ) {
             return $oCat;
         }
     }

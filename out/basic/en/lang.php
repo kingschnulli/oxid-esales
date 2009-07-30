@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21145 2009-07-28 11:10:29Z vilma $
+ * $Id: lang.php 21166 2009-07-28 14:56:10Z arvydas $
  */
 
 
@@ -348,6 +348,7 @@ $aLang = array(
 'DETAILS_PERSPARAM_STAR'                          => "Star",
 'DETAILS_PERSPARAM_STARS'                         => "Stars",
 'EMAIL_NEWSLETTEROPTIN_HTML_NEWSLETTER'           => "Newsletter",
+'EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT'             => "Newsletter",
 'EMAIL_ORDER_CUST_HTML_ORDERNOMBER'               =>"Order No.",
 'EMAIL_ORDER_CUST_HTML_PRODUCT'                   =>"Product",
 'EMAIL_ORDER_CUST_HTML_QUANTITY'                  =>"Quantity",

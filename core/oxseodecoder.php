@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseodecoder.php 21092 2009-07-22 14:42:13Z vilma $
+ * $Id: oxseodecoder.php 21171 2009-07-29 08:51:28Z arvydas $
  */
 
 /**
@@ -42,17 +42,11 @@ class oxSeoDecoder extends oxSuperCfg
         $oStr = getStr();
         $aRet = array();
         $sUrl = $oStr->html_entity_decode( $sUrl );
-        if (($iPos = strpos($sUrl, '?')) !== false) {
-            $aParams = explode('&', $oStr->substr($sUrl, $iPos+1));
-            foreach ($aParams as $sParam) {
-                $aP = explode('=', $sParam);
-                if (count($aP) == 2) {
-                    if (($sName = trim($aP[0])) && ($sValue = trim($aP[1]))) {
-                        $aRet[$sName] = rawurldecode($sValue);
-                    }
-                }
-            }
+
+        if ( ( $iPos = strpos( $sUrl, '?' ) ) !== false ) {
+            parse_str( $oStr->substr( $sUrl, $iPos+1 ), $aRet );
         }
+
         return $aRet;
     }
 

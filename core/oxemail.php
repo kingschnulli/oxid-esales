@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 21092 2009-07-22 14:42:13Z vilma $
+ * $Id: oxemail.php 21166 2009-07-28 14:56:10Z arvydas $
  */
 /**
  * Includes PHP mailer class.
@@ -651,7 +651,7 @@ class oxEmail extends phpmailer
 
         $this->setBody( $smarty->fetch("email_newsletteroptin_html.tpl") );
         $this->setAltBody( $smarty->fetch( "email_newsletteroptin_plain.tpl") );
-        $this->setSubject( ( $sSubject !== null ) ? $sSubject : "Newsletter " . $oShop->oxshops__oxname->getRawValue() );
+        $this->setSubject( ( $sSubject !== null ) ? $sSubject : oxLang::getInstance()->translateString("EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT") . " " . $oShop->oxshops__oxname->getRawValue() );
 
         $sFullName = $oUser->oxuser__oxfname->value . " " . $oUser->oxuser__oxlname->value;
 

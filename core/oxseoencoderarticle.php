@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoderarticle.php 20953 2009-07-15 13:36:51Z arvydas $
+ * $Id: oxseoencoderarticle.php 21159 2009-07-28 14:12:48Z arvydas $
  */
 
 /**
@@ -191,7 +191,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         $oView = $this->getConfig()->getActiveView();
         $oActCat = null;
 
-        if ( $oView instanceof oxUBase ) {
+        if ( $oView instanceof oxview ) {
             $oActCat = $oView->getActCategory();
         }
 
@@ -200,7 +200,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         }
 
         //load details link from DB
-        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, null, $sActCatId, false ) ) ) {
+        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, null, $sActCatId, $sActCatId ? true : false ) ) ) {
 
             $oArticle = $this->_getProductForLang( $oArticle, $iLang );
 

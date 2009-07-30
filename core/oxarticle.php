@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 21103 2009-07-23 13:56:01Z arvydas $
+ * $Id: oxarticle.php 21185 2009-07-29 13:56:46Z vilma $
  */
 
 // defining supported link types
@@ -3044,7 +3044,8 @@ class oxArticle extends oxI18n implements oxIArticle
         if ( !$iAttrPercent || $iAttrPercent < 0 || $iAttrPercent > 1) {
             $iAttrPercent = 0.70;
         }
-        $iHitMin = round( $iCnt * $iAttrPercent + 0.5);
+        // #1137V iAttributesPercent = 100 doesnt work 
+        $iHitMin = ceil( $iCnt * $iAttrPercent );
 
         // we do not use lists here as we dont need this overhead right now
         $aList= array();
