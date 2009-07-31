@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxshopcontrol.php 20057 2009-06-22 06:58:22Z arvydas $
+ * $Id: oxshopcontrol.php 21209 2009-07-30 12:34:20Z alfonsas $
  */
 
 /**
@@ -303,6 +303,9 @@ class oxShopControl extends oxSuperCfg
 
         // show output
         //ob_Start("gzip");
+        
+        // #M1047 Firefox duplicated GET fix
+        header("Content-Type: text/html; charset=".oxLang::getInstance()->translateString( 'charset' ));
         echo ( $sOutput );
 
         $myConfig->pageClose();
