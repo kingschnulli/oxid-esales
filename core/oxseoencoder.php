@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 20994 2009-07-17 08:17:12Z arvydas $
+ * $Id: oxseoencoder.php 21220 2009-07-31 12:38:23Z arvydas $
  */
 
 /**
@@ -234,9 +234,24 @@ class oxSeoEncoder extends oxSuperCfg
      * @param int    $iShopId shop id
      * @param string $sStdUrl standard (dynamic) url
      *
+     * @deprecated user oxseoencoder::getDynamicObjectId() instead
+     *
      * @return string
      */
     protected function _getDynamicObjectId( $iShopId, $sStdUrl )
+    {
+        return $this->getDynamicObjectId( $iShopId, $sStdUrl );
+    }
+
+    /**
+     * Generates dynamic url object id (calls oxseoencoder::_getStaticObjectId)
+     *
+     * @param int    $iShopId shop id
+     * @param string $sStdUrl standard (dynamic) url
+     *
+     * @return string
+     */
+    public function getDynamicObjectId( $iShopId, $sStdUrl )
     {
         return $this->_getStaticObjectId( $iShopId, $sStdUrl );
     }
@@ -255,7 +270,7 @@ class oxSeoEncoder extends oxSuperCfg
         $iShopId = $this->getConfig()->getShopId();
 
         $sStdUrl   = $this->_trimUrl( $sStdUrl );
-        $sObjectId = $this->_getDynamicObjectId( $iShopId, $sStdUrl );
+        $sObjectId = $this->getDynamicObjectId( $iShopId, $sStdUrl );
         $sSeoUrl   = $this->_prepareTitle( $sSeoUrl );
 
         //load details link from DB
@@ -796,7 +811,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _getStaticObjectId( $iShopId, $sStdUrl )
     {
-        return md5( strtolower ( $iShopId . $sStdUrl ) );
+        return md5( strtolower ( $iShopId . $this->_trimUrl( $sStdUrl ) ) );
     }
 
     /**

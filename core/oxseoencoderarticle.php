@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoderarticle.php 21159 2009-07-28 14:12:48Z arvydas $
+ * $Id: oxseoencoderarticle.php 21221 2009-07-31 12:41:23Z arvydas $
  */
 
 /**
@@ -110,9 +110,8 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         }
 
         $iShopId = $this->getConfig()->getShopId();
-
-        $sStdUrl = "index.php?cl=details&amp;anid=".$oArticle->getId()."&amp;listtype=tag&amp;searchtag=".rawurlencode( $sTag );
-        $sSeoUrl = $this->_loadFromDb( 'dynamic', $this->_getDynamicObjectId( $iShopId, $sStdUrl ), $iLang );
+        $sStdUrl = $oArticle->getStdTagLink( $sTag );
+        $sSeoUrl = $this->_loadFromDb( 'dynamic', $this->getDynamicObjectId( $iShopId, $sStdUrl ), $iLang );
         if ( !$sSeoUrl ) {
 
             // generating new if not found

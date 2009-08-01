@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_categories.php 21123 2009-07-24 08:20:59Z arvydas $
+ * $Id: oxcmp_categories.php 21224 2009-07-31 13:37:17Z vilma $
  */
 
 /**
@@ -330,7 +330,7 @@ class oxcmp_categories extends oxView
         // removed this check according to problems: if listtype is set, but active category not.
         // e.g. in details change language
 
-        if ( !$sListType && ( $sSearchPar || $sSearchCat || $sSearchVnd ) ) {
+        if ( ( !$sListType || $sListType == 'search' ) && ( $sSearchPar || $sSearchCat || $sSearchVnd ) ) {
             // setting list type directly
             $sListType = 'search';
         } else {

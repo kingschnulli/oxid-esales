@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 21185 2009-07-29 13:56:46Z vilma $
+ * $Id: oxarticle.php 21219 2009-07-31 12:23:49Z arvydas $
  */
 
 // defining supported link types
@@ -2177,6 +2177,19 @@ class oxArticle extends oxI18n implements oxIArticle
     }
 
     /**
+     * Returns standard product Tag URL
+     *
+     * @param string $sTag tag
+     *
+     * @return string
+     */
+    public function getStdTagLink( $sTag )
+    {
+        $sStdTagLink = $this->getConfig()->getShopHomeURL( $this->getLanguage(), false );
+        return $sStdTagLink . "cl=details&amp;anid=".$this->getId()."&amp;listtype=tag&amp;searchtag=".rawurlencode( $sTag );
+    }
+
+    /**
      * Returns article tags
      *
      * @return string;
@@ -3044,7 +3057,7 @@ class oxArticle extends oxI18n implements oxIArticle
         if ( !$iAttrPercent || $iAttrPercent < 0 || $iAttrPercent > 1) {
             $iAttrPercent = 0.70;
         }
-        // #1137V iAttributesPercent = 100 doesnt work 
+        // #1137V iAttributesPercent = 100 doesnt work
         $iHitMin = ceil( $iCnt * $iAttrPercent );
 
         // we do not use lists here as we dont need this overhead right now

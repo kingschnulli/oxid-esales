@@ -61,11 +61,14 @@
 
               [{ if $oTags && count($oTags) }]
                 [{assign var="blCat" value="1"}]
-                <optgroup label="[{ oxmultilang ident="GENERAL_SEO_TAG" }]">
-                [{ foreach from=$oTags key=sTag item=sItem }]
-                <option value="oxtag#[{$sTag}]" [{if $sCatType && $sCatType == 'oxtag' && $sCatId == $sTag}]selected[{/if}]>[{$sTag}]</option>
+                [{ foreach from=$oTags key=iLang item=aLangTags }]
+                  [{assign var="oTagLang" value=$otherlang.$iLang }]
+                  <optgroup label="[{ oxmultilang ident="GENERAL_SEO_TAG" }] [{ $oTagLang->sLangDesc }]">
+                    [{ foreach from=$aLangTags key=sTag item=sItem }]
+                    <option value="oxtag#[{$sTag}]#[{$iLang}]" [{if $sCatType && $sCatType == 'oxtag' && $sCatId == $sTag && $sCatLang == $iLang }]selected[{/if}]>[{$sTag}]</option>
+                    [{ /foreach }]
+                  </optgroup>
                 [{ /foreach }]
-                </optgroup>
               [{/if}]
 
               [{if !$blCat}]
@@ -133,7 +136,8 @@
             <td class="edittext">
             </td>
             <td class="edittext"><br>
-                [{include file="language_edit.tpl"}]
+                [{if $sCatType == 'oxtag' }][{assign var="blTags" value="readonly disabled"}][{else}][{assign var="blTags" value=$readonly}][{/if}]
+                [{include file="language_edit.tpl" readonly=$blTags }]
             </td>
         </tr>
         [{/if}]
