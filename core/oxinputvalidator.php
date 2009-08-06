@@ -20,7 +20,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxinputvalidator.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: oxinputvalidator.php 21461 2009-08-05 16:42:31Z tomas $
  */
 
 /**
@@ -73,6 +73,15 @@ class oxInputValidator
                                            'lsktonr',
                                            'lsktoinhaber'
                                          );
+
+   /**
+     * Class constructor. The constructor is defined in order to be possible to call parent::__construct() in modules.
+     *
+     * @return null;
+     */
+	public function __construct()
+	{
+	}
 
     /**
      * Validates basket amount
