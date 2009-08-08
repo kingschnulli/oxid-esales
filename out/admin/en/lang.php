@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21145 2009-07-28 11:10:29Z vilma $
+ * $Id: lang.php 21485 2009-08-07 07:49:38Z vilma $
  */
 
 /*
@@ -1225,7 +1225,7 @@ $aLang = array(
 'SHOP_CONFIG_USENEGATIVESTOCK'                  => 'Allow negative Stock Values',
 'SHOP_CONFIG_WARNONSAMEARTNUMS'                 => 'Display Warning if a Product Number already exists',
 'SHOP_CONFIG_ZOOMIMAGESIZE'                     => 'Zoom Pictures Size (width*height)',
-'SHOP_CONFIG_DELETERATINGLOGS'                  => 'Number of Days until Users can review Products again',
+'SHOP_CONFIG_DELETERATINGLOGS'                  => 'How long product ratings are stored (in days)',
 'SHOP_CONFIG_RSSITEMSCOUNT'                     => 'Number of Elements which are shown in RSS Feeds',
 'SHOP_CONFIG_RSSSELECTED'                       => 'Shown RSS feeds (Use Crtl Key for multiple Selection',
 'SHOP_CONFIG_RSSTOPSHOP'                        => 'Top of the Shop',

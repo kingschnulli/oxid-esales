@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 20970 2009-07-16 09:04:17Z arvydas $
+ * $Id: oxbasket.php 21468 2009-08-06 12:32:38Z rimvydas.paskevicius $
  */
 
 /**
@@ -2178,4 +2178,22 @@ class oxBasket extends oxSuperCfg
         $this->_oTotalDiscount->add( $dDiscount );
     }
 
+    /**
+     * Get basket price without payment cost
+     *
+     * @return double
+     */
+    public function getPriceWithoutPayment()
+    {
+        $oPrice = clone $this->getPrice();
+
+        if ( $oPaymentPrice = $this->_aCosts['oxpayment'] ) {
+            $dPaymentPrice = $oPaymentPrice->getBruttoPrice();
+            if ( $dPaymentPrice > 0 ) {
+                $oPrice->subtract( $dPaymentPrice );
+            }
+        }
+
+        return $oPrice->getBruttoPrice();
+    }
 }
