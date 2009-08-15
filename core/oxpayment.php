@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxpayment.php 21468 2009-08-06 12:32:38Z rimvydas.paskevicius $
+ * $Id: oxpayment.php 21594 2009-08-14 12:04:44Z rimvydas.paskevicius $
  */
 
 /**
@@ -166,8 +166,8 @@ class oxPayment extends oxI18n
      */
     public function getPaymentPrice( $oBasket )
     {
-        //getting basket price with applied discounts and without costs
-        $dBasketPrice = $this->_getBasketPrice( $oBasket );
+        //getting basket price with applied discounts and vouchers
+        $dBasketPrice = $oBasket->getPriceForPayment();
         $dPrice = $this->getPaymentValue( $dBasketPrice );
 
         // calculating total price
@@ -261,20 +261,5 @@ class oxPayment extends oxI18n
         }
 
         return true;
-    }
-
-    /**
-     * Get basket products price with applied discounts and any cost
-     *
-     * @return double
-     */
-    protected function _getBasketPrice( $oBasket )
-    {
-        $dPrice = $oBasket->getProductsPrice()->getBruttoSum();
-
-        //applying discounts
-        $dDiscountedPrice = $dPrice - $oBasket->getTotalDiscount()->getBruttoPrice() - $oBasket->getVoucherDiscount()->getBruttoPrice();
-
-        return $dDiscountedPrice;
     }
 }

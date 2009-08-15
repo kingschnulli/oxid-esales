@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: payment.php 21468 2009-08-06 12:32:38Z rimvydas.paskevicius $
+ * $Id: payment.php 21594 2009-08-14 12:04:44Z rimvydas.paskevicius $
  */
 
 /**
@@ -308,8 +308,8 @@ class Payment extends oxUBase
         $oPayment = oxNew( 'oxpayment' );
         $oPayment->load( $sPaymentId );
 
-        // removing payment price from basket price before payment calculation
-        $dBasketPrice = $oBasket->getPriceWithoutPayment();
+        // getting basket price for payment calculation
+        $dBasketPrice = $oBasket->getPriceForPayment();
 
         $blOK = $oPayment->isValidPayment( $aDynvalue, $myConfig->getShopId(), $oUser, $dBasketPrice, $sShipSetId );
 

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 21468 2009-08-06 12:32:38Z rimvydas.paskevicius $
+ * $Id: oxbasket.php 21599 2009-08-14 13:10:28Z rimvydas.paskevicius $
  */
 
 /**
@@ -2179,21 +2179,28 @@ class oxBasket extends oxSuperCfg
     }
 
     /**
-     * Get basket price without payment cost
+     * Get basket price for payment cost calculation. Returned price
+     * is with applied discounts, vouchers and added delivery cost
      *
      * @return double
      */
-    public function getPriceWithoutPayment()
+    public function getPriceForPayment()
     {
-        $oPrice = clone $this->getPrice();
+        $dPrice = 0;
 
-        if ( $oPaymentPrice = $this->_aCosts['oxpayment'] ) {
-            $dPaymentPrice = $oPaymentPrice->getBruttoPrice();
-            if ( $dPaymentPrice > 0 ) {
-                $oPrice->subtract( $dPaymentPrice );
-            }
+        if ( $oProductsPrice = $this->getDiscountProductsPrice() ) {
+           $dPrice = $oProductsPrice->getBruttoSum();
         }
 
-        return $oPrice->getBruttoPrice();
+        if ( $oVoucherPrice = $this->getVoucherDiscount() ) {
+           $dPrice -= $oVoucherPrice->getBruttoPrice();
+        }
+
+        // adding delivery price to final price
+        if ( $oDeliveryPrice = $this->_aCosts['oxdelivery'] ) {
+            $dPrice += $oDeliveryPrice->getBruttoPrice();
+        }
+
+        return $dPrice;
     }
 }

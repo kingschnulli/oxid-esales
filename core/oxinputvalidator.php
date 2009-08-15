@@ -20,7 +20,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxinputvalidator.php 21461 2009-08-05 16:42:31Z tomas $
+ * $Id: oxinputvalidator.php 21536 2009-08-11 16:35:04Z tomas $
  */
 
 /**
@@ -169,7 +169,7 @@ class oxInputValidator
                     $aDynvalue['lsktonr'] = $sNewNum;
                 }
 
-                if ( preg_match( "/\d{8}/", $aDynvalue['lsblz'] ) && preg_match( "/\d{10}/", $aDynvalue['lsktonr'] ) ) {
+                if ( preg_match( "/^\d{5,8}$/", $aDynvalue['lsblz'] ) && preg_match( "/\d{10}/", $aDynvalue['lsktonr'] ) ) {
                     $blOK = true;
                 }
                 break;
