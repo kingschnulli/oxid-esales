@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21485 2009-08-07 07:49:38Z vilma $
+ * $Id: lang.php 21617 2009-08-17 12:14:53Z tomas $
  */
 
 /*
@@ -95,6 +95,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXUNITNAME'                    => 'Unit',
 'GENERAL_ARTICLE_OXUNITQUANTITY'                => 'Quantity Unit',
 'GENERAL_ARTICLE_OXURLDESC'                     => 'URL Description',
+'GENERAL_ARTICLE_OXURLIMG'                      => 'External URL image',
 'GENERAL_ARTICLE_OXVAT'                         => 'Product VAT',
 'GENERAL_ARTICLE_OXTHUMB'                       => 'Preview Picture',
 'GENERAL_ARTICLE_OXICON'                        => '',
@@ -131,6 +132,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXISSEARCH'                    => 'Is searchable',
 'GENERAL_ARTICLE_OXVARNAME'                     => 'Variant Name',
 'GENERAL_ARTICLE_OXVARSELECT'                   => '',
+'GENERAL_ARTICLE_OXVARMINPRICE'                 => 'Minimum price of all variants',
 'GENERAL_ARTICLE_OXFOLDER'                      => 'Folder',
 'GENERAL_ARTICLE_OXSUBCLASS'                    => 'internal',
 'GENERAL_ARTICLE_OXSORT'                        => 'Sorting',
@@ -141,7 +143,8 @@ $aLang = array(
 'GENERAL_ARTICLE_OXREMINDAMOUNT'                => 'Low stock threshold',
 'GENERAL_ARTICLE_OXAMITEMID'                    => '',
 'GENERAL_ARTICLE_OXAMTASKID'                    => '',
-'GENERAL_ARTICLE_OXVENDORID'                    => 'Manufacturer ID',
+'GENERAL_ARTICLE_OXVENDORID'                    => 'Vendor ID',
+'GENERAL_ARTICLE_OXMANUFACTURERID'              => 'Manufacturer ID',
 'GENERAL_ARTICLE_OXVARCOUNT'                    => 'Variant count',
 'GENERAL_ARTICLE_OXSHOPINCL'                    => 'Shop include',
 'GENERAL_ARTICLE_OXSHOPEXCL'                    => 'Shop exclude',
