@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 21145 2009-07-28 11:10:29Z vilma $
+ * $Id: oxcmp_user.php 21710 2009-08-19 14:52:39Z tomas $
  */
 
 /**
@@ -105,8 +105,7 @@ class oxcmp_user extends oxView
         }
 
         if ( $aDelAdressID = oxConfig::getParameter( 'deladrid' ) ) {
-            $oAddress = oxNew( 'oxbase' );
-            $oAddress->init( 'oxaddress' );
+            $oAddress = oxNew( 'oxaddress' );
             $oAddress->load( $aDelAdressID );
             $this->_oParent->setDelAddress( $oAddress );
             $this->_oParent->addTplParam( 'delivadr', $this->_oParent->getDelAddress() );

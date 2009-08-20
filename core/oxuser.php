@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 21614 2009-08-17 11:46:51Z arvydas $
+ * $Id: oxuser.php 21709 2009-08-19 14:48:58Z tomas $
  */
 
 /**
@@ -313,7 +313,7 @@ class oxUser extends oxBase
 
             //P
             $this->_oAddresses = oxNew( 'oxlist' );
-            $this->_oAddresses->init( "oxbase", "oxaddress" );
+            $this->_oAddresses->init( "oxaddress" );
             $this->_oAddresses->selectString( $sSelect );
 
             // marking selected
@@ -665,8 +665,7 @@ class oxUser extends oxBase
     {
         $sDeliveryCountry = '';
         if ( $soxAddressId = oxConfig::getParameter( 'deladrid' ) ) {
-            $oDelAddress = oxNew( 'oxbase' );
-            $oDelAddress->init( 'oxaddress' );
+            $oDelAddress = oxNew( 'oxaddress' );
             $oDelAddress->load( $soxAddressId );
             $sDeliveryCountry = $oDelAddress->oxaddress__oxcountryid->value;
         } elseif ( $this->getId() ) {
@@ -1071,8 +1070,7 @@ class oxUser extends oxBase
             return false;
         }
 
-        $oAddress = oxNew( 'oxbase' );
-        $oAddress->init( 'oxaddress' );
+        $oAddress = oxNew( 'oxaddress' );
 
         $oAddress->oxaddress__oxuserid        = new oxField($this->getId(), oxField::T_RAW);
         $oAddress->oxaddress__oxaddressuserid = new oxField($oUser->getId(), oxField::T_RAW);
@@ -1109,8 +1107,7 @@ class oxUser extends oxBase
             $sAddressId = oxConfig::getParameter( 'oxaddressid' );
             $aDelAddress['oxaddress__oxid'] = ( $sAddressId === null || $sAddressId == -1 || $sAddressId == -2 ) ?  null : $sAddressId;
 
-            $oAddress = oxNew( 'oxbase' );
-            $oAddress->init( 'oxaddress' );
+            $oAddress = oxNew( 'oxaddress' );
             $oAddress->assign( $aDelAddress );
             $oAddress->oxaddress__oxuserid  = new oxField( $this->getId(), oxField::T_RAW );
             $oAddress->oxaddress__oxcountry = $this->getUserCountry( $oAddress->oxaddress__oxcountryid->value );

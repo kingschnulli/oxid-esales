@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxajax.php 18346 2009-04-20 08:39:52Z rimvydas.paskevicius $
+ * $Id: oxajax.php 21671 2009-08-19 06:42:55Z arvydas $
  */
 
 // shop path for includes
@@ -571,6 +571,7 @@ if ( $blAjaxCall ) {
 
     // Generic utility method file.
     $sBasePath = getShopBasePath();
+    include_once $sBasePath . 'modules/functions.php';
     include_once $sBasePath . 'core/oxfunctions.php';
     include_once $sBasePath . 'core/adodblite/adodb.inc.php';
     include_once $sBasePath . 'core/oxconfig.php';

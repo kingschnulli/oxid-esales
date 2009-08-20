@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 21599 2009-08-14 13:10:28Z rimvydas.paskevicius $
+ * $Id: oxbasket.php 21706 2009-08-19 14:40:38Z tomas $
  */
 
 /**
@@ -285,16 +285,16 @@ class oxBasket extends oxSuperCfg
         if ( !$this->isEnabled() )
             return null;
 
-        //validate amount
-        //possibly throws exception
         $sItemId = $this->getItemKey( $sProductID, $aSel, $aPersParam, $blBundle );
-        if ($sOldBasketItemId && strcmp($sOldBasketItemId, $sItemId)) {
-            if (isset( $this->_aBasketContents[$sItemId] )) {
+        if ( $sOldBasketItemId && ( strcmp( $sOldBasketItemId, $sItemId ) != 0 ) ) {
+            if ( isset( $this->_aBasketContents[$sItemId] ) ) {
                 // we are merging, so params will just go to the new key
                 unset( $this->_aBasketContents[$sOldBasketItemId] );
+                // do not override stock
+                $blOverride = false;
             } else {
                 // value is null - means isset will fail and real values will be filled
-                $this->_changeBasketItemKey($sOldBasketItemId, $sItemId);
+                $this->_changeBasketItemKey( $sOldBasketItemId, $sItemId );
             }
         }
 
@@ -310,6 +310,8 @@ class oxBasket extends oxSuperCfg
             try {
                 // setting stock check status
                 $this->_aBasketContents[$sItemId]->setStockCheckStatus( $this->getStockCheckMode() );
+                //validate amount
+                //possibly throws exception
                 $this->_aBasketContents[$sItemId]->setAmount( $dAmount, $blOverride );
             } catch( oxOutOfStockException $oEx ) {
                 // rethrow later
@@ -1509,8 +1511,7 @@ class oxBasket extends oxSuperCfg
                 $sDelivCountry = $sCountryId;
             } elseif ( $sAddressId = oxConfig::getParameter( 'deladrid' ) ) {
 
-                $oDelAdress = oxNew( 'oxbase' );
-                $oDelAdress->init( 'oxaddress' );
+                $oDelAdress = oxNew( 'oxaddress' );
                 if ( $oDelAdress->load( $sAddressId ) ) {
                     $sDelivCountry = $oDelAdress->oxaddress__oxcountryid->value;
                 }

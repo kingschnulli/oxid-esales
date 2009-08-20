@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: user.php 18045 2009-04-09 12:26:14Z arvydas $
+ * $Id: user.php 21712 2009-08-19 15:06:23Z tomas $
  */
 
 /**
@@ -150,7 +150,7 @@ class User extends oxUBase
     }
 
     /**
-     * Generats facke address for selection
+     * Generats fake address for selection
      *
      * @param object $oAddresses user address list
      *
@@ -162,6 +162,10 @@ class User extends oxUBase
         $oDefAddress = new oxStdClass();
         $oDefAddress->oxaddress__oxid = new oxStdClass();
         $oDefAddress->oxaddress__oxid->value    = -2;
+
+        //T2009-08-19
+        //deprecated part
+        //no more fields are used in templates anymore
         $oDefAddress->oxaddress__oxfname = new oxStdClass();
         $oDefAddress->oxaddress__oxfname->value = '-';
         $oDefAddress->oxaddress__oxlname = new oxStdClass();

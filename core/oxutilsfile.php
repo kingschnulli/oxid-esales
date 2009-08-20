@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 21470 2009-08-06 13:01:57Z rimvydas.paskevicius $
+ * $Id: oxutilsfile.php 21687 2009-08-19 10:46:19Z arvydas $
  */
 
 /**
@@ -30,9 +30,23 @@ class oxUtilsFile extends oxSuperCfg
     /**
      * oxUtils class instance.
      *
-     * @var oxutils* instance
+     * @var oxutils
      */
     private static $_instance = null;
+
+    /**
+     * Max pictures count
+     *
+     * @var int
+     */
+    protected $_iMaxPicImgCount  = 12;
+
+    /**
+     * Max zoom pictures count
+     *
+     * @var int
+     */
+    protected $_iMaxZoomImgCount = 12;
 
     /**
      * Image type and its folder information array
@@ -265,6 +279,44 @@ class oxUtilsFile extends oxSuperCfg
     }
 
     /**
+     * Returns array of sizes which are used to resize images. If size is not
+     * defined - NULL will be returned
+     *
+     * @param string $sImgType image type (TH, TC, ICO etc), can be useful for modules
+     * @param int    $iImgNum  number of image (e.g. numper of ZOOM1 is 1)
+     * @param string $sImgConf config parameter name, which keeps size info
+     *
+     * @return array | null
+     */
+    protected function _getImageSize( $sImgType, $iImgNum, $sImgConf )
+    {
+        $myConfig = $this->getConfig();
+        $sSize = false;
+
+        switch ( $sImgConf ) {
+            case 'aDetailImageSizes':
+                $aDetailImageSizes = $myConfig->getConfigParam( $sImgConf );
+                $sSize = $myConfig->getConfigParam( 'sDetailImageSize' );
+                if ( isset( $aDetailImageSizes['oxpic'.$iImgNum] ) ) {
+                    $sSize = $aDetailImageSizes['oxpic'.$iImgNum];
+                }
+                break;
+            case 'aZoomImageSizes':
+                $aZoomImageSizes = $myConfig->getConfigParam( $sImgConf );
+                $sSize = $myConfig->getConfigParam( 'sZoomImageSize' );
+                if ( isset( $aZoomImageSizes['oxzoom'.intval( $iImgNum )] ) ) {
+                    $sSize = $aZoomImageSizes['oxzoom'.$iImgNum];
+                }
+                break;
+            default:
+                $sSize = $myConfig->getConfigParam( $sImgConf );
+        }
+        if ( $sSize ) {
+            return explode( '*', $sSize );
+        }
+    }
+
+    /**
      * Prepares (resizes anc copies) images according to its type.
      * Returns preparation status
      *
@@ -276,101 +328,53 @@ class oxUtilsFile extends oxSuperCfg
      */
     protected function _prepareImage( $sType, $sSource, $sTarget )
     {
-        $myConfig  = $this->getConfig();
         $oUtilsPic = oxUtilspic::getInstance();
 
+        // picture type
+        $sPicType = preg_replace( "/\d*$/", "", $sType );
+
+        // numper of processable picture
+        $iPicNum  = (int) preg_replace( "/^\D*/", "", $sType );
+        $iPicNum = $iPicNum ? abs( $iPicNum ) : 1;
+
+        $aSize = false;
+        $blResize = false;
+
         // add file process here
-        $blCopy = false;
-        switch ( $sType ) {
+        switch ( $sPicType ) {
             case 'TH':
-                if ( ( $sSize = $myConfig->getConfigParam( 'sThumbnailsize' ) ) ) {
-                    // convert this file
-                    $aSize = explode( '*', $sSize );
-                    $blCopy = $oUtilsPic->resizeImage( $sSource, $sTarget, $aSize[0], $aSize[1] );
-                }
+                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sThumbnailsize' );
                 break;
             case 'TC':
-                if ( ( $sSize = $myConfig->getConfigParam( 'sCatThumbnailsize' ) ) ) {
-                    // convert this file
-                    $aSize = explode( '*', $sSize );
-                    $blCopy = $oUtilsPic->resizeImage( $sSource, $sTarget, $aSize[0], $aSize[1] );
-                }
+                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sCatThumbnailsize' );
                 break;
             case 'CICO':
             case 'ICO':
-                if ( ( $sSize = $myConfig->getConfigParam( 'sIconsize' ) ) ) {
-                    // convert this file
-                    $aSize = explode( '*', $sSize );
-                    $blCopy = $oUtilsPic->resizeImage( $sSource, $sTarget, $aSize[0], $aSize[1] );
-                }
+                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' );
                 break;
-            case 'P1':
-            case 'P2':
-            case 'P3':
-            case 'P4':
-            case 'P5':
-            case 'P6':
-            case 'P7':
-            case 'P8':
-            case 'P9':
-            case 'P10':
-            case 'P11':
-            case 'P12':
-                //
-                $aPType = explode( 'P', $sType );
-                $iPic = intval( $aPType[1] ) - 1;
+            case 'P':
+                // pictures count is limited to 12
+                $iPicNum = ( $iPicNum > $this->_iMaxPicImgCount ) ? $this->_iMaxPicImgCount : $iPicNum;
 
-                // #840A + compatibility with prev. versions
-                $aDetailImageSizes = $myConfig->getConfigParam( 'aDetailImageSizes' );
-                $sDetailImageSize  = $myConfig->getConfigParam( 'sDetailImageSize' );
-                if ( isset( $aDetailImageSizes['oxpic'.intval( $aPType[1] )] ) ) {
-                    $sDetailImageSize = $aDetailImageSizes['oxpic'.intval( $aPType[1] )];
+                //make an icon
+                if ( ( $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' ) ) ) {
+                    $oUtilsPic->resizeImage( $sSource, $oUtilsPic->iconName( $sTarget ), $aSize[0], $aSize[1] );
                 }
 
-                if ( $sDetailImageSize ) {
-                    // convert this file
-                    $aSize = explode( '*', $sDetailImageSize );
-                    $blCopy = $oUtilsPic->resizeImage( $sSource, $sTarget, $aSize[0], $aSize[1] );
-
-                    //make an icon
-                    $sIconName = $oUtilsPic->iconName( $sTarget );
-                    $aSize = explode( '*', $myConfig->getConfigParam( 'sIconsize' ) );
-                    $blCopy = $oUtilsPic->resizeImage( $sSource, $sIconName, $aSize[0], $aSize[1] );
-                }
+                $aSize = $this->_getImageSize( $sType, $iPicNum, 'aDetailImageSizes' );
                 break;
-            case 'Z1':
-            case 'Z2':
-            case 'Z3':
-            case 'Z4':
-            case 'Z5':
-            case 'Z6':
-            case 'Z7':
-            case 'Z8':
-            case 'Z9':
-            case 'Z10':
-            case 'Z11':
-            case 'Z12':
-                //
-                $aPType = explode( 'Z', $sType );
-                $iPic = intval( $aPType[1] ) - 1;
+            case 'Z':
+                // zoom pictures count is limited to 12
+                $iPicNum = ( $iPicNum > $this->_iMaxZoomImgCount ) ? $this->_iMaxZoomImgCount : $iPicNum;
 
-                // #840A + compatibility with prev. versions
-                $aZoomImageSizes = $myConfig->getConfigParam( 'aZoomImageSizes' );
-                $sZoomImageSize  = $myConfig->getConfigParam( 'sZoomImageSize' );
-                if ( isset( $aZoomImageSizes['oxzoom'.intval( $aPType[1] )] ) ) {
-                    $sZoomImageSize = $aZoomImageSizes['oxzoom'.intval( $aPType[1] )];
-                }
-
-                //
-                if ( $sZoomImageSize ) {
-                    // convert this file
-                    $aSize = explode( '*', $sZoomImageSize );
-                    $blCopy = $oUtilsPic->resizeImage( $sSource, $sTarget, $aSize[0], $aSize[1] );
-                }
+                $aSize = $this->_getImageSize( $sType, $iPicNum, 'aZoomImageSizes' );
                 break;
         }
 
-        return $blCopy;
+        if ( $aSize ) {
+            $blResize = $oUtilsPic->resizeImage( $sSource, $sTarget, $aSize[0], $aSize[1] );
+        }
+        return $blResize;
     }
 
     /**
@@ -531,7 +535,7 @@ class oxUtilsFile extends oxSuperCfg
         }
 
         //wrong chars in file name?
-        if ( !preg_match('/^[_a-z0-3\.]+$/i', $aFileInfo['name'] ) ) {
+        if ( !preg_match('/^[_a-z0-9\.]+$/i', $aFileInfo['name'] ) ) {
             throw new oxException( 'EXCEPTION_FILENAMEINVALIDCHARS' );
         }
 

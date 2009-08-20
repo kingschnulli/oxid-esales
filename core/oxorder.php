@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 21499 2009-08-07 13:49:56Z vilma $
+ * $Id: oxorder.php 21707 2009-08-19 14:41:20Z tomas $
  */
 
 /**
@@ -984,8 +984,7 @@ class oxOrder extends oxBase
     {
         $oDelAdress = null;
         if ( ( $soxAddressId = oxConfig::getParameter( 'deladrid' ) ) ) {
-            $oDelAdress = oxNew( 'oxbase' );
-            $oDelAdress->init( 'oxaddress' );
+            $oDelAdress = oxNew( 'oxaddress' );
             $oDelAdress->load( $soxAddressId );
 
             //get delivery country name from delivery country id
