@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 21604 2009-08-14 16:06:01Z rimvydas.paskevicius $
+ * $Id: oxseoencoder.php 21790 2009-08-24 08:33:31Z arvydas $
  */
 
 /**
@@ -628,11 +628,11 @@ class oxSeoEncoder extends oxSuperCfg
         }
         $oStr = getStr();
         if ( $sKeywords !== false ) {
-            $sKeywords = $oDb->quote( $oStr->htmlentities( $this->encodeString( strip_tags( $sKeywords ), false ) ) );
+            $sKeywords = $oDb->quote( $oStr->htmlspecialchars( $this->encodeString( strip_tags( $sKeywords ), false ) ) );
         }
 
         if ( $sDescription !== false ) {
-            $sDescription = $oDb->quote( $oStr->htmlentities( strip_tags( $sDescription ) ) );
+            $sDescription = $oDb->quote( $oStr->htmlspecialchars( strip_tags( $sDescription ) ) );
         }
 
         // inserting new or updating

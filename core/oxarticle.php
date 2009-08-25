@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 21219 2009-07-31 12:23:49Z arvydas $
+ * $Id: oxarticle.php 21735 2009-08-20 13:18:33Z sarunas $
  */
 
 // defining supported link types
@@ -711,8 +711,10 @@ class oxArticle extends oxI18n implements oxIArticle
      */
     public function isMultilingualField($sFieldName)
     {
-        if ($sFieldName == "oxlongdesc") {
-            return true;
+        switch ($sFieldName) {
+            case "oxlongdesc":
+            case "oxtags":
+                return true;
         }
 
         return parent::isMultilingualField($sFieldName);
@@ -1972,36 +1974,50 @@ class oxArticle extends oxI18n implements oxIArticle
 
         $myConfig = $this->getConfig();
 
-        // TODO: check if keeping fldname is needed in non-admin mode
-        $this->oxarticles__oxlongdesc = new oxField();
-        $this->oxarticles__oxlongdesc->fldname = 'oxlongdesc';
-        $this->oxarticles__oxlongdesc->table   = 'oxarticles';
-        $this->oxarticles__oxlongdesc->fldtype = 'text';
-
         if ( $sOXID ) {
             $sLangField = oxLang::getInstance()->getLanguageTag($this->getLanguage());
-            $this->oxarticles__oxlongdesc->setValue(oxDb::getDb()->getOne( "select oxlongdesc{$sLangField} from oxartextends where oxid = '$sOXID'" ), oxField::T_RAW);
-
-            // TODO: eliminate code below
-            // hack, if editor screws up text, htmledit tends to do so
-            $this->oxarticles__oxlongdesc->setValue(str_replace( '&amp;nbsp;', '&nbsp;', $this->oxarticles__oxlongdesc->value ), oxField::T_RAW);
-            $this->oxarticles__oxlongdesc->setValue(str_replace( '&amp;', '&', $this->oxarticles__oxlongdesc->value ), oxField::T_RAW);
-            $this->oxarticles__oxlongdesc->setValue(str_replace( '&quot;', '"', $this->oxarticles__oxlongdesc->value ), oxField::T_RAW);
-            $oStr = getStr();
-            $blHasSmarty = $oStr->strstr( $this->oxarticles__oxlongdesc->value, '[{' );
-            $blHasPhp = $oStr->strstr( $this->oxarticles__oxlongdesc->value, '<?' );
-            if ( ( $blHasSmarty || $blHasPhp ) && ($myConfig->getConfigParam( 'blExport' ) || !$this->isAdmin() ) && $myConfig->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
-                $this->oxarticles__oxlongdesc->setValue(oxUtilsView::getInstance()->parseThroughSmarty( $this->oxarticles__oxlongdesc->value, $this->getId() ), oxField::T_RAW);
-            }
+            $this->_setLongDesc(oxDb::getDb()->getOne( "select oxlongdesc{$sLangField} from oxartextends where oxid = '$sOXID'" ));
+        } else {
+            // TODO: check if keeping fldname is needed in non-admin mode
+            $this->oxarticles__oxlongdesc = new oxField();
+            $this->oxarticles__oxlongdesc->fldname = 'oxlongdesc';
+            $this->oxarticles__oxlongdesc->table   = 'oxarticles';
+            $this->oxarticles__oxlongdesc->fldtype = 'text';
         }
 
         return $this->oxarticles__oxlongdesc;
     }
 
     /**
-     * Set article long description
+     * set given value to object's oxlongdesc - also prepare it (parse throug smarty)
      *
-     * @return object $oField field object
+     * @param string $sDbValue value to set
+     */
+    protected function _setLongDesc($sDbValue)
+    {
+        // TODO: eliminate code below
+        // hack, if editor screws up text, htmledit tends to do so
+        $sDbValue = str_replace( '&amp;nbsp;', '&nbsp;', $sDbValue );
+        $sDbValue = str_replace( '&amp;', '&', $sDbValue );
+        $sDbValue = str_replace( '&quot;', '"', $sDbValue );
+        $oStr = getStr();
+        $blHasSmarty = $oStr->strstr( $sDbValue, '[{' );
+        $blHasPhp = $oStr->strstr( $sDbValue, '<?' );
+        $myConfig = oxConfig::getInstance();
+        if ( ( $blHasSmarty || $blHasPhp ) && ($myConfig->getConfigParam( 'blExport' ) || !$this->isAdmin() ) && $myConfig->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
+            $sDbValue = oxUtilsView::getInstance()->parseThroughSmarty( $sDbValue, $this->getId() );
+        }
+        $this->oxarticles__oxlongdesc = new oxField($sDbValue, oxField::T_RAW);
+        // TODO: check if keeping fldname is needed in non-admin mode
+        $this->oxarticles__oxlongdesc->fldname = 'oxlongdesc';
+        $this->oxarticles__oxlongdesc->table   = 'oxarticles';
+        $this->oxarticles__oxlongdesc->fldtype = 'text';
+    }
+
+    /**
+     * Save article long description to oxartext table
+     *
+     * @return null
      */
     public function setArticleLongDesc()
     {
@@ -3615,7 +3631,6 @@ class oxArticle extends oxI18n implements oxIArticle
             return;
         }
 
-
         // compute price
         $dPrice = $this->getPrice()->getBruttoPrice();
 
@@ -3720,10 +3735,10 @@ class oxArticle extends oxI18n implements oxIArticle
     protected function _update()
     {
 
+        $this->_skipSaveFields();
+
         $myConfig = $this->getConfig();
 
-
-        $this->_skipSaveFields();
 
         return parent::_update();
     }

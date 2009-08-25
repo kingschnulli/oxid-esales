@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticlelist.php 21579 2009-08-13 11:36:07Z tomas $
+ * $Id: oxarticlelist.php 21745 2009-08-20 14:56:25Z arvydas $
  */
 
 /**
@@ -491,9 +491,8 @@ class oxArticleList extends oxList
      */
     public function loadPriceIds( $dPriceFrom, $dPriceTo )
     {
-
-        $sSelect =  $this->_getPriceSelect( $dPriceFrom, $dPriceTo );
-        $this->_createIdListFromSql($sSelect);
+        $sSelect = $this->_getPriceSelect( $dPriceFrom, $dPriceTo );
+        $this->_createIdListFromSql( $sSelect );
     }
 
     /**
@@ -935,22 +934,18 @@ class oxArticleList extends oxList
         $sArticleTable = $oBaseObject->getViewName();
         $sSelectFields = $oBaseObject->getSelectFields();
 
-        $sSubSelect  = "select if(oxparentid='',oxid,oxparentid) as id from $sArticleTable where oxprice > 0 ";
-        if ( $dPriceTo) {
-            $sSubSelect .= $dPriceTo?"and oxprice <= $dPriceTo ":" ";
-        }
-        $sSubSelect .= "group by id having ";
-        if ( $dPriceFrom) {
-            $sSubSelect .= $dPriceFrom?"min(oxprice) >= $dPriceFrom ":" ";
-        }
-        $sSelect =  "select $sSelectFields from $sArticleTable where ";
-        $sSelect .= "$sArticleTable.oxid in ($sSubSelect) ";
-        $sSelect .= "and ".$oBaseObject->getSqlActiveSnippet()." and $sArticleTable.oxissearch = 1";
+        $sSubSelect  = "select if( oxparentid = '',oxid,oxparentid ) as id from {$sArticleTable} where oxprice >= 0 ";
+        $sSubSelect .= $dPriceTo ? "and oxprice <= {$dPriceTo} " : " ";
+        $sSubSelect .= $dPriceFrom ? "group by id having min( oxprice ) >= {$dPriceFrom} " : " ";
+
+        $sSelect  = "select {$sSelectFields} from {$sArticleTable} where ";
+        $sSelect .= "{$sArticleTable}.oxid in ( {$sSubSelect} ) ";
+        $sSelect .= "and ".$oBaseObject->getSqlActiveSnippet()." and {$sArticleTable}.oxissearch = 1";
 
         if ( !$this->_sCustomSorting ) {
-            $sSelect .= " order by $sArticleTable.oxprice asc , $sArticleTable.oxid";
+            $sSelect .= " order by {$sArticleTable}.oxprice asc , {$sArticleTable}.oxid";
         } else {
-            $sSelect .= " order by {$this->_sCustomSorting}, $sArticleTable.oxid ";
+            $sSelect .= " order by {$this->_sCustomSorting}, {$sArticleTable}.oxid ";
         }
 
         return $sSelect;

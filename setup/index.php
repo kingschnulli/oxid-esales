@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: index.php 21558 2009-08-12 13:44:42Z tomas $
+ * $Id: index.php 21797 2009-08-24 12:54:06Z vilma $
  */
 
 
@@ -101,7 +101,19 @@ if ( isset( $_POST['iEula'] ) ) {
 
 // routing table
 if ( !$iEula && $istep > $aSetupSteps['STEP_LICENSE'] ) {
-    $istep = $aSetupSteps['STEP_WELCOME'];
+    $istep = $aSetupSteps['STEP_FINISH'];
+    $sMessage = $aLang['ERROR_SETUP_CANCELLED'];
+    include "headitem.php";
+    ?>
+    </br></br>
+    <form action="index.php" method="post">
+    <input type="hidden" name="sid" value="<?php echo( getSID()); ?>">
+    <input type="hidden" name="istep" value="<?php echo $aSetupSteps['STEP_WELCOME']; ?>">
+    <input type="submit" id="step0Submit" class="edittext" value="<?php echo( $aLang['BUTTON_START_INSTALL'] ) ?>">
+    </form>
+    <?php
+    include "bottomitem.php";
+    exit();
 }
 
 

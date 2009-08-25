@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: thankyou.php 17016 2009-03-04 13:05:30Z vilma $
+ * $Id: thankyou.php 21737 2009-08-20 13:21:59Z arvydas $
  */
 
 /**
@@ -177,7 +177,7 @@ class Thankyou extends oxUBase
         $this->_aViewData['convindex']  = $this->getCurrencyCovIndex();
 
         $this->_aViewData['blShowFinalStep'] = $this->showFinalStep();
-        $this->_aViewData['aLastProducts']   = $this->getAlsoBoughtThiesProducts();
+        $this->_aViewData['aLastProducts']   = $this->getAlsoBoughtTheseProducts();
 
         // we must set active class as start
         $this->getViewConfig()->setViewConfigParam( 'cl', 'start' );
@@ -214,9 +214,21 @@ class Thankyou extends oxUBase
     /**
      * Template variable getter. Returns list of customer also bought thies products
      *
+     * @deprecated use thankyou::getAlsoBoughtTheseProducts()
+     *
      * @return object
      */
     public function getAlsoBoughtThiesProducts()
+    {
+        return $this->getAlsoBoughtTheseProducts();
+    }
+
+    /**
+     * Template variable getter. Returns list of customer also bought thies products
+     *
+     * @return object
+     */
+    public function getAlsoBoughtTheseProducts()
     {
         if ( $this->_aLastProducts === null ) {
             $this->_aLastProducts = false;

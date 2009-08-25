@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 21709 2009-08-19 14:48:58Z tomas $
+ * $Id: oxuser.php 21713 2009-08-19 15:14:47Z tomas $
  */
 
 /**
@@ -1101,27 +1101,20 @@ class oxUser extends oxBase
      */
     protected function _assignAddress( $aDelAddress )
     {
-        if ( ( isset( $aDelAddress['oxaddress__oxfname'] ) && $aDelAddress['oxaddress__oxfname'] ) ||
-             ( isset( $aDelAddress['oxaddress__oxlname'] ) && $aDelAddress['oxaddress__oxlname'] ) ) {
+        $sAddressId = oxConfig::getParameter( 'oxaddressid' );
+        $aDelAddress['oxaddress__oxid'] = ( $sAddressId === null || $sAddressId == -1 || $sAddressId == -2 ) ?  null : $sAddressId;
 
-            $sAddressId = oxConfig::getParameter( 'oxaddressid' );
-            $aDelAddress['oxaddress__oxid'] = ( $sAddressId === null || $sAddressId == -1 || $sAddressId == -2 ) ?  null : $sAddressId;
+        $oAddress = oxNew( 'oxaddress' );
+        $oAddress->assign( $aDelAddress );
+        $oAddress->oxaddress__oxuserid  = new oxField( $this->getId(), oxField::T_RAW );
+        $oAddress->oxaddress__oxcountry = $this->getUserCountry( $oAddress->oxaddress__oxcountryid->value );
+        $oAddress->save();
 
-            $oAddress = oxNew( 'oxaddress' );
-            $oAddress->assign( $aDelAddress );
-            $oAddress->oxaddress__oxuserid  = new oxField( $this->getId(), oxField::T_RAW );
-            $oAddress->oxaddress__oxcountry = $this->getUserCountry( $oAddress->oxaddress__oxcountryid->value );
-            $oAddress->save();
+        // resetting addresses
+        $this->_oAddresses = null;
 
-            // resetting addresses
-            $this->_oAddresses = null;
-
-            // saving delivery Address for later use
-            oxSession::setVar( 'deladrid', $oAddress->getId() );
-        } else {
-            // resetting
-            oxSession::setVar( 'deladrid', null );
-        }
+        // saving delivery Address for later use
+        oxSession::setVar( 'deladrid', $oAddress->getId() );
     }
 
     /**

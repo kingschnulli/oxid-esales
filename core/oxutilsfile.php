@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 21687 2009-08-19 10:46:19Z arvydas $
+ * $Id: oxutilsfile.php 21758 2009-08-21 09:31:32Z arvydas $
  */
 
 /**
@@ -238,30 +238,31 @@ class oxUtilsFile extends oxSuperCfg
      */
     protected function _prepareImageName( $sValue, $sType, $blDemo = false )
     {
-        // add type to name
-        $aFilename = explode( ".", $sValue );
-        $sFileType = trim( $aFilename[count( $aFilename )-1] );
+        if ( $sValue ) {
+            // add type to name
+            $aFilename = explode( ".", $sValue );
+            $sFileType = trim( $aFilename[count( $aFilename )-1] );
 
-        if ( isset( $sFileType ) ) {
+            if ( isset( $sFileType ) ) {
 
-            // unallowed files ?
-            if ( in_array( $sFileType, $this->_aBadFiles ) || ( $blDemo && !in_array( $sFileType, $this->_aAllowedFiles ) ) ) {
-                oxUtils::getInstance()->showMessageAndExit( "We don't play this game, go away" );
+                // unallowed files ?
+                if ( in_array( $sFileType, $this->_aBadFiles ) || ( $blDemo && !in_array( $sFileType, $this->_aAllowedFiles ) ) ) {
+                    oxUtils::getInstance()->showMessageAndExit( "We don't play this game, go away" );
+                }
+
+                // removing file type
+                if ( count( $aFilename ) > 0 ) {
+                    unset( $aFilename[count( $aFilename )-1] );
+                }
+
+                $sFName = '';
+                if ( isset( $aFilename[0] ) ) {
+                    $sFName = preg_replace( '/[^a-zA-Z0-9_\.-]/', '', implode( '.', $aFilename ) );
+                }
+
+                $sValue = "{$sFName}_" . strtolower( $sType ) . ".{$sFileType}";
             }
-
-            // removing file type
-            if ( count( $aFilename ) > 0 ) {
-                unset( $aFilename[count( $aFilename )-1] );
-            }
-
-            $sFName = '';
-            if ( isset( $aFilename[0] ) ) {
-                $sFName = preg_replace( '/[^a-zA-Z0-9_\.-]/', '', implode( '.', $aFilename ) );
-            }
-
-            $sValue = "{$sFName}_" . strtolower( $sType ) . ".{$sFileType}";
         }
-
         return $sValue;
     }
 
@@ -396,6 +397,18 @@ class oxUtilsFile extends oxSuperCfg
     }
 
     /**
+     * Removes temporary created image
+     *
+     * @param string $sImagePath temporary image path
+     *
+     * @return
+     */
+    protected function _removeTempImage( $sImagePath )
+    {
+        return unlink( $sImagePath );
+    }
+
+    /**
      * Uploaded file processor (filters, etc), sets configuration parameters to
      * passed object and returns it.
      *
@@ -409,8 +422,13 @@ class oxUtilsFile extends oxSuperCfg
         $aFiles = $aFiles ? $aFiles : $_FILES;
         if ( isset( $aFiles['myfile']['name'] ) ) {
 
+            $oConfig = $this->getConfig();
+
             // A. protection for demoshops - strictly defining allowed file extensions
-            $blDemo = (bool) $this->getConfig()->isDemoShop();
+            $blDemo = (bool) $oConfig->isDemoShop();
+
+            // folder where images will be processed
+            $sTmpFolder = $oConfig->getConfigParam( "sCompileDir" );
 
             // process all files
             while ( list( $sKey, $sValue ) = each( $aFiles['myfile']['name'] ) ) {
@@ -422,26 +440,28 @@ class oxUtilsFile extends oxSuperCfg
                 $sType   = $aFiletype[0];
                 $sValue  = strtolower( $sValue );
 
-                // no file ? - skip
-                if ( $sValue ) {
+                // checking file type and building final file name
+                if ( $sSource && ( $sValue = $this->_prepareImageName( $sValue, $sType, $blDemo ) ) ) {
 
-                    // building file name
-                    $sValue = $this->_prepareImageName( $sValue, $sType, $blDemo );
+                    // moving to tmp folder for processing as safe mode or spec. open_basedir setup
+                    // usually does not allow file modification in php's temp folder
+                    $sProcessPath = $sTmpFolder . basename( $sSource );
+                    if ( $sProcessPath && $this->_moveImage( $sSource, $sProcessPath ) ) {
 
-                    // finding directory
-                    $sTarget = $this->_getImagePath( $sType ) . $sValue;
+                        // finding final image path
+                        if ( ( $sTarget = $this->_getImagePath( $sType ) . $sValue ) ) {
 
-                    // processing images
-                    $blCopy = $this->_prepareImage( $sType, $sSource, $sTarget );
+                            // processing image and moving to final location
+                            $this->_prepareImage( $sType, $sProcessPath, $sTarget );
 
-                    // moving ..
-                    if ( !$blCopy && $sSource ) {
-                        $this->_moveImage( $sSource, $sTarget );
-                    }
+                            // assign the name
+                            if ( $oObject ) {
+                                $oObject->{$sKey}->setValue( $sValue );
+                            }
+                        }
 
-                    // assign the name
-                    if ( $oObject && isset( $sValue ) && $sValue ) {
-                        $oObject->{$sKey}->setValue( $sValue );
+                        // removing temporary file
+                        $this->_removeTempImage( $sProcessPath );
                     }
                 }
             }

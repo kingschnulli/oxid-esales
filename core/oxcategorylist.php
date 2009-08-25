@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategorylist.php 20457 2009-06-25 13:21:33Z vilma $
+ * $Id: oxcategorylist.php 21784 2009-08-21 15:17:50Z tomas $
  */
 
 
@@ -46,18 +46,18 @@ class oxCategoryList extends oxList
     protected $_blHideEmpty = false;
 
     /**
-     * Performance option used to forse full tree loading
+     * Performance option used to force full tree loading
      *
      * @var boolean
      */
-    protected $_blForseFull = false;
+    protected $_blForceFull = false;
 
     /**
-     * Performance option used to forse loading to desired level (currently wokrs only [0,1,2]
+     * Performance option used to force loading to desired level (currently wokrs only [0,1,2]
      *
      * @var integer
      */
-    protected $_iForseLevel = 1;
+    protected $_iForceLevel = 1;
 
     /**
      * Active category id, used in path building, and performance optimization
@@ -113,8 +113,8 @@ class oxCategoryList extends oxList
     }
 
     /**
-     * constructs the sql snippet responsible for dept optimizations, based on performance options:
-     * ( HideEmpty, ForseFull, ForseLevel, ActCat, isAdmin )
+     * Constructs the sql snippet responsible for depth optimizations, based on performance options:
+     * ( HideEmpty, ForceFull, ForceLevel, ActCat, isAdmin )
      *
      * @return string
      */
@@ -123,7 +123,7 @@ class oxCategoryList extends oxList
         $sDepthSnippet = ' 1 ';
 
         // complex tree depth loading optimization ...
-        if (!$this->isAdmin() && !$this->_blHideEmpty && !$this->_blForseFull) {
+        if (!$this->isAdmin() && !$this->_blHideEmpty && !$this->_blForceFull) {
             $sViewName  = $this->getBaseObject()->getViewName();
             $sDepthSnippet = ' ( 0';
 
@@ -144,12 +144,12 @@ class oxCategoryList extends oxList
             }
 
             // load 1'st category level (roots)
-            if ($this->_iForseLevel >= 1) {
+            if ($this->_iForceLevel >= 1) {
                 $sDepthSnippet .= " or $sViewName.oxparentid = 'oxrootid'";
             }
 
             // load 2'nd category level ()
-            if ($this->_iForseLevel >= 2) {
+            if ($this->_iForceLevel >= 2) {
                 $sDepthSnippet .= " or $sViewName.oxrootid = $sViewName.oxparentid or $sViewName.oxid = $sViewName.oxrootid";
             }
 
@@ -176,8 +176,8 @@ class oxCategoryList extends oxList
         startProfile("buildTree");
 
         $this->_sActCat     = $sActCat;
-        $this->_blForseFull = $blLoadFullTree || $blPerfLoadTreeForSearch;
-        $this->_iForseLevel = $blTopNaviLayout?2:1;
+        $this->_blForceFull = $blLoadFullTree || $blPerfLoadTreeForSearch;
+        $this->_iForceLevel = $blTopNaviLayout?2:1;
 
         $sSelect = $this->_getSelectString(true);
         $this->selectString($sSelect);
@@ -235,7 +235,7 @@ class oxCategoryList extends oxList
 
         startProfile('buildCategoryList');
 
-        $this->_blForseFull = true;
+        $this->_blForceFull = true;
         $this->selectString($this->_getSelectString(false));
 
         // PostProcessing

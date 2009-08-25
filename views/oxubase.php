@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 21135 2009-07-27 10:56:53Z rimvydas.paskevicius $
+ * $Id: oxubase.php 21737 2009-08-20 13:21:59Z arvydas $
  */
 
 /**
@@ -1074,14 +1074,14 @@ class oxUBase extends oxView
             } elseif ( $this->_sMetaKeywordsIdent ) {
                 $oContent = oxNew( 'oxcontent' );
                 if ( $oContent->loadByIdent( $this->_sMetaKeywordsIdent ) && $oContent->oxcontents__oxactive->value ) {
-                	$this->_sMetaKeywords = strip_tags( $oContent->oxcontents__oxcontent->value );
+                    $this->_sMetaKeywords = strip_tags( $oContent->oxcontents__oxcontent->value );
                     $blRemoveDuplicatedWords = false;
                 }
             }
 
             $this->_sMetaKeywords = $this->_prepareMetaKeyword( $this->_sMetaKeywords, $blRemoveDuplicatedWords );
         }
-        
+
         return $this->_sMetaKeywords;
     }
 
@@ -1884,9 +1884,20 @@ class oxUBase extends oxView
     /**
      * Template variable getter. Returns list of customer also bought thies products
      *
+     * @deprecated use thankyou::getAlsoBoughtTheseProducts()
+     *
      * @return object
      */
     public function getAlsoBoughtThiesProducts()
+    {
+    }
+
+    /**
+     * Template variable getter. Returns list of customer also bought thies products
+     *
+     * @return object
+     */
+    public function getAlsoBoughtTheseProducts()
     {
     }
 
