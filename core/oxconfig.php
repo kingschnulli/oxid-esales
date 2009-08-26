@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 20457 2009-06-25 13:21:33Z vilma $
+ * $Id: oxconfig.php 21807 2009-08-25 08:04:51Z alfonsas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1242,7 +1242,10 @@ class oxConfig extends oxSuperCfg
 
             return $sAltUrl;
         }
-        $sUrl = $this->getUrl( $sFile, $this->_sPictureDir, $blAdmin, $blSSL, null, $iLang, $iShopId );
+
+        $blNativeImg = $this->getConfigParam( 'blNativeImages' );
+        
+        $sUrl = $this->getUrl( $sFile, $this->_sPictureDir, $blAdmin, $blSSL, $blNativeImg, $iLang, $iShopId );
         if ( $sFile && $this->getConfigParam('blFormerTplSupport') ) {
             $sUrl = str_replace( $this->getPictureUrl( null, $blAdmin, $blSSL, $iLang, $iShopId ), '', $sUrl );
         }
@@ -1343,7 +1346,8 @@ class oxConfig extends oxSuperCfg
      */
     public function getResourceUrl( $sFile, $blAdmin = false , $blSSL = null , $iLang = null )
     {
-        return $this->getUrl( $sFile, $this->_sResourceDir, $blAdmin, $blSSL, false, $iLang );
+        $blNativeImg = $this->getConfigParam( 'blNativeImages' );
+        return $this->getUrl( $sFile, $this->_sResourceDir, $blAdmin, $blSSL, $blNativeImg, $iLang );
     }
 
     /**

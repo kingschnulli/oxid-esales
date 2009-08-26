@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 21713 2009-08-19 15:14:47Z tomas $
+ * $Id: oxuser.php 21837 2009-08-25 15:07:08Z tomas $
  */
 
 /**
@@ -1101,20 +1101,22 @@ class oxUser extends oxBase
      */
     protected function _assignAddress( $aDelAddress )
     {
-        $sAddressId = oxConfig::getParameter( 'oxaddressid' );
-        $aDelAddress['oxaddress__oxid'] = ( $sAddressId === null || $sAddressId == -1 || $sAddressId == -2 ) ?  null : $sAddressId;
+        if ($aDelAddress) {
+            $sAddressId = oxConfig::getParameter( 'oxaddressid' );
+            $sMyAddressId = ( $sAddressId === null || $sAddressId == -1 || $sAddressId == -2 ) ?  null : $sAddressId;
+            $aDelAddress['oxaddress__oxid'] = $sMyAddressId;
+            $oAddress = oxNew( 'oxaddress' );
+            $oAddress->assign( $aDelAddress );
+            $oAddress->oxaddress__oxuserid  = new oxField( $this->getId(), oxField::T_RAW );
+            $oAddress->oxaddress__oxcountry = $this->getUserCountry( $oAddress->oxaddress__oxcountryid->value );
+            $oAddress->save();
 
-        $oAddress = oxNew( 'oxaddress' );
-        $oAddress->assign( $aDelAddress );
-        $oAddress->oxaddress__oxuserid  = new oxField( $this->getId(), oxField::T_RAW );
-        $oAddress->oxaddress__oxcountry = $this->getUserCountry( $oAddress->oxaddress__oxcountryid->value );
-        $oAddress->save();
+            // resetting addresses
+            $this->_oAddresses = null;
 
-        // resetting addresses
-        $this->_oAddresses = null;
-
-        // saving delivery Address for later use
-        oxSession::setVar( 'deladrid', $oAddress->getId() );
+            // saving delivery Address for later use
+            oxSession::setVar( 'deladrid', $oAddress->getId() );
+        }
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 21735 2009-08-20 13:18:33Z sarunas $
+ * $Id: oxarticle.php 21830 2009-08-25 14:04:20Z vilma $
  */
 
 // defining supported link types
@@ -3457,6 +3457,11 @@ class oxArticle extends oxI18n implements oxIArticle
                 if ( !$this->oxarticles__oxlongdesc->value ) {
                     $this->oxarticles__oxlongdesc = $oParentArticle->oxarticles__oxlongdesc;
                 }
+                //#1031: Lazy loading of field values does not load parent's oxtitle 
+                if ( !$this->oxarticles__oxtitle->value ) {
+                    $sTitle = $this->getParentTitle($this->oxarticles__oxparentid->value);
+                    $this->oxarticles__oxtitle = new oxField($sTitle);
+                }
             }
         } elseif ( $this->oxarticles__oxid->value ) {
             // I am not a variant but I might have some
@@ -4089,5 +4094,20 @@ class oxArticle extends oxI18n implements oxIArticle
     public function isVariant()
     {
         return (bool) ( isset( $this->oxarticles__oxparentid ) ? $this->oxarticles__oxparentid->value : false );
+    }
+
+    /**
+     * Returns parent article title
+     * 
+     * @param string $sId parent article id
+     *
+     * @return string
+     */
+    public function getParentTitle( $sId )
+    {
+        $sArtView = getViewName('oxarticles');
+        $sLang = oxLang::getInstance()->getBaseLanguage();
+        $sQ = "select oxtitle".(($sLang)?"_$sLang":"")." from $sArtView where oxid='".$sId."'";
+        return oxDb::getDb()->getOne($sQ);
     }
 }

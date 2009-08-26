@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 21758 2009-08-21 09:31:32Z arvydas $
+ * $Id: oxutilsfile.php 21811 2009-08-25 10:34:40Z arvydas $
  */
 
 /**
@@ -555,7 +555,7 @@ class oxUtilsFile extends oxSuperCfg
         }
 
         //wrong chars in file name?
-        if ( !preg_match('/^[_a-z0-9\.]+$/i', $aFileInfo['name'] ) ) {
+        if ( !preg_match('/^[\-_a-z0-9\.]+$/i', $aFileInfo['name'] ) ) {
             throw new oxException( 'EXCEPTION_FILENAMEINVALIDCHARS' );
         }
 
@@ -569,7 +569,9 @@ class oxUtilsFile extends oxSuperCfg
         $sExt = $aPathInfo['extension'];
         $sFileName = $aPathInfo['filename'];
 
-        if ( !in_array( $sExt, $this->getConfig()->getConfigParam( 'aAllowedUploadTypes' ) ) ) {
+        $aAllowedUploadTypes = (array) $this->getConfig()->getConfigParam( 'aAllowedUploadTypes' );
+        $aAllowedUploadTypes = array_map( "strtolower", $aAllowedUploadTypes );
+        if ( !in_array( strtolower( $sExt ), $aAllowedUploadTypes ) ) {
             throw new oxException( 'EXCEPTION_NOTALLOWEDTYPE' );
         }
 
