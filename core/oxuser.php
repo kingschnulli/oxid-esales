@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 21837 2009-08-25 15:07:08Z tomas $
+ * $Id: oxuser.php 21844 2009-08-26 07:16:56Z tomas $
  */
 
 /**
@@ -965,7 +965,7 @@ class oxUser extends oxBase
         $this->_checkPassword( $sPassword, $sPassword2, ((int) oxConfig::getParameter( 'option' ) == 3) );
 
         // 4. required fields
-        $this->_checkRequiredFields( $aInvAddress, $aDelAddress );
+        $this->_checkRequiredFields( $aInvAddress, $aDelAddress, (bool) oxConfig::getParameter( 'oxaddressid' ) );
 
         // 5. country check
         $this->_checkCountries( $aInvAddress, $aDelAddress );
@@ -1101,7 +1101,7 @@ class oxUser extends oxBase
      */
     protected function _assignAddress( $aDelAddress )
     {
-        if ($aDelAddress) {
+        if (isset($aDelAddress)) {
             $sAddressId = oxConfig::getParameter( 'oxaddressid' );
             $sMyAddressId = ( $sAddressId === null || $sAddressId == -1 || $sAddressId == -2 ) ?  null : $sAddressId;
             $aDelAddress['oxaddress__oxid'] = $sMyAddressId;
@@ -1116,7 +1116,11 @@ class oxUser extends oxBase
 
             // saving delivery Address for later use
             oxSession::setVar( 'deladrid', $oAddress->getId() );
+        } else {
+            // resetting
+            oxSession::setVar( 'deladrid', null );
         }
+
     }
 
     /**
@@ -1816,7 +1820,7 @@ class oxUser extends oxBase
      *
      * @return null
      */
-    protected function _checkRequiredFields( $aInvAddress, $aDelAddress )
+    protected function _checkRequiredFields( $aInvAddress, $aDelAddress, $blCheckDel )
     {
         // collecting info about required fields
         $aMustFields = array( 'oxuser__oxfname',
@@ -1839,11 +1843,12 @@ class oxUser extends oxBase
         // collecting fields
         $aFields = array_merge( $aInvAddress, $aDelAddress );
 
+        /*
         // check delivery address ?
         $blCheckDel = false;
         if ( count( $aDelAddress ) ) {
             $blCheckDel = true;
-        }
+        }*/
 
         // checking
         foreach ( $aMustFields as $sMustField ) {

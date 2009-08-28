@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasketitem.php 21488 2009-08-07 08:48:48Z vilma $
+ * $Id: oxbasketitem.php 21852 2009-08-26 08:43:52Z vilma $
  */
 
 /**
@@ -382,14 +382,15 @@ class oxBasketItem extends oxSuperCfg
      * Retrieves the article
      *
      * @param string $sProductId product id
+     * @param bool   $blDisableLazyLoading disable lazy loading
      *
      * @throws oxArticleException exception
      *
      * @return oxarticle
      */
-    public function getArticle( $sProductId = null )
+    public function getArticle( $sProductId = null, $blDisableLazyLoading = false )
     {
-        if ( $this->_oArticle === null ) {
+        if ( $this->_oArticle === null || ( !$this->_oArticle->isOrderArticle() && $blDisableLazyLoading ) ) {
             $sProductId = $sProductId ? $sProductId : $this->_sProductId;
             if ( !$sProductId ) {
                 //this excpetion may not be caught, anyhow this is a critical exception
@@ -399,6 +400,11 @@ class oxBasketItem extends oxSuperCfg
             }
 
             $this->_oArticle = oxNew( 'oxarticle' );
+            // #M773 Do not use article lazy loading on order save 
+            if ( $blDisableLazyLoading ) {
+                $this->_oArticle->modifyCacheKey('_allviews');
+                $this->_oArticle->disableLazyLoading();
+            }
 
             // performance:
             // - skipping variants loading

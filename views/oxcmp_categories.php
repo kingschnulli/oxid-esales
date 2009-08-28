@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_categories.php 21224 2009-07-31 13:37:17Z vilma $
+ * $Id: oxcmp_categories.php 21916 2009-08-27 12:26:00Z arvydas $
  */
 
 /**
@@ -61,7 +61,9 @@ class oxcmp_categories extends oxView
         }
 
         $sActProduct = oxConfig::getParameter( 'anid' );
-        $sActCont = oxConfig::getParameter( 'tpl' );
+        if ( ! ( $sActCont = oxConfig::getParameter( 'oxcid' ) ) ) {
+            $sActCont = oxConfig::getParameter( 'tpl' );
+        }
         $sActManufacturer = oxConfig::getParameter( 'mnid' );
         $sActCat = $sActManufacturer ? null : oxConfig::getParameter( 'cnid' );
         $sActTag = oxConfig::getParameter( 'searchtag' );

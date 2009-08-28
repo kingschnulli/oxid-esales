@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategory.php 20457 2009-06-25 13:21:33Z vilma $
+ * $Id: oxcategory.php 21909 2009-08-27 11:16:12Z sarunas $
  */
 
 /**
@@ -305,12 +305,13 @@ class oxCategory extends oxI18n
     /**
      * sets a single category, handles sorting and parent hasVisibleSubCats
      *
-     * @param oxcategory $oCat the category
-     * @param string     $sKey optional, the key for that category, without a key, the category isjust added to the array
+     * @param oxcategory $oCat          the category
+     * @param string     $sKey          (optional, default=null)  the key for that category, without a key, the category isjust added to the array
+     * @param boolean    $blSkipSorting (optional, default=false) should we skip sorting now?
      *
      * @return null
      */
-    public function setSubCat($oCat, $sKey=null)
+    public function setSubCat($oCat, $sKey=null, $blSkipSorting = false)
     {
         if ( $sKey ) {
             $this->_aSubCats[$sKey] = $oCat;
@@ -325,7 +326,9 @@ class oxCategory extends oxI18n
             $this->setHasVisibleSubCats( true );
         }
 
-        $this->sortSubCats();
+        if (!$blSkipSorting) {
+            $this->sortSubCats();
+        }
     }
 
     /**

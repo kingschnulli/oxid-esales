@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 21707 2009-08-19 14:41:20Z tomas $
+ * $Id: oxorder.php 21847 2009-08-26 07:31:46Z vilma $
  */
 
 /**
@@ -635,7 +635,8 @@ class oxOrder extends oxBase
         foreach ( $aArticleList as $oContent ) {
 
             //$oContent->oProduct = $oContent->getArticle();
-            $oProduct = $oContent->getArticle();
+            // #M773 Do not use article lazy loading on order save
+            $oProduct = $oContent->getArticle( null, true);
 
             // copy only if object is oxarticle type
             if ( $oProduct->isOrderArticle() ) {

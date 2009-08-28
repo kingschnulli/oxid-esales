@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsserver.php 21804 2009-08-24 15:16:41Z arvydas $
+ * $Id: oxutilsserver.php 21861 2009-08-26 13:34:27Z arvydas $
  */
 
 /**
@@ -102,8 +102,13 @@ class oxUtilsServer extends oxSuperCfg
     protected function _getCookiePath( $sPath )
     {
         // possibility for users to define cookie path
+        // @deprecated use "aCookiePaths" instead
         if ( $sCookiePath = $this->getConfig()->getConfigParam( 'sCookiePath' ) ) {
             $sPath = $sCookiePath;
+        } elseif ( $aCookiePaths = $this->getConfig()->getConfigParam( 'aCookiePaths' ) ) {
+            // in case user wants to have shop specific setup
+            $sShopId = $this->getConfig()->getShopId();
+            $sPath = isset( $aCookiePaths[$sShopId] ) ? $aCookiePaths[$sShopId] : $sPath;
         }
 
         // from php doc: .. You may also replace an argument with an empty string ("") in order to skip that argument..
@@ -127,8 +132,14 @@ class oxUtilsServer extends oxSuperCfg
         // on special cases, like separate domain for SSL, cookies must be defined on domain specific path
         // please have a look at
         if ( !$sDomain ) {
-            $sCookieDomain = $this->getConfig()->getConfigParam( 'sCookieDomain' );
-            $sDomain = $sCookieDomain ? $sCookieDomain : "";
+            // @deprecated use "aCookieDomains" instead
+            if ( $sCookieDomain = $this->getConfig()->getConfigParam( 'sCookieDomain' ) ) {
+                $sDomain = $sCookieDomain;
+            } elseif ( $aCookieDomains = $this->getConfig()->getConfigParam( 'aCookieDomains' ) ) {
+                // in case user wants to have shop specific setup
+                $sShopId = $this->getConfig()->getShopId();
+                $sDomain = isset( $aCookieDomains[$sShopId] ) ? $aCookieDomains[$sShopId] : $sDomain;
+            }
         }
         return $sDomain;
     }

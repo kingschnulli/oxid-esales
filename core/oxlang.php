@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlang.php 20457 2009-06-25 13:21:33Z vilma $
+ * $Id: oxlang.php 21921 2009-08-27 14:05:24Z arvydas $
  */
 
 /**
@@ -523,6 +523,38 @@ class oxLang extends oxSuperCfg
     }
 
     /**
+     * Returns array with pathes where language files are stored
+     *
+     * @return array
+     */
+    protected function _getLangFilesPathArray( $blAdmin, $iLang )
+    {
+        $aLangFiles = false;
+        if ( ( $sDir = dirname( $this->getConfig()->getLanguagePath( 'lang.php', $blAdmin, $iLang ) ) ) ) {
+            //get all lang files
+            //#M681: content of cust_lang.php should be prefered to lang.php
+            $aLangFiles = glob( $sDir."/*_lang.php" );
+            array_unshift( $aLangFiles, $sDir."/lang.php");
+        }
+
+        return $aLangFiles;
+    }
+
+    /**
+     * Returns language cache file name
+     *
+     * @param bool $blAdmin admin or not
+     * @param int  $iLang   current language id
+     *
+     * @return string
+     */
+    protected function _getLangFileCacheName( $blAdmin, $iLang )
+    {
+        $myConfig = $this->getConfig();
+        return "langcache_" . ( (int) $blAdmin ) . "_{$iLang}_" . $myConfig->getShopId() . "_" . $myConfig->getConfigParam( 'sTheme' );
+    }
+
+    /**
      * Returns language cache array
      *
      * @param bool $blAdmin admin or not [optional]
@@ -535,24 +567,15 @@ class oxLang extends oxSuperCfg
         $myConfig = $this->getConfig();
         $myUtils  = oxUtils::getInstance();
 
-        $sCacheName = "langcache_".( (int) $blAdmin )."_{$iLang}_".$myConfig->getShopId();
+        $sCacheName = $this->_getLangFileCacheName( $blAdmin, $iLang );
         $aLangCache = $myUtils->getLangCache( $sCacheName );
-        if ( !$aLangCache ) {
-            $sDir = dirname( $myConfig->getLanguagePath( 'lang.php', $blAdmin, $iLang ) );
-
-            //get all lang files
-            //#M681: content of cust_lang.php should be prefered to lang.php
-            $aLangFiles = glob( $sDir."/*_lang.php" );
-            array_unshift($aLangFiles, $sDir."/lang.php");
-
+        if ( !$aLangCache && ( $aLangFiles = $this->_getLangFilesPathArray( $blAdmin, $iLang ) ) ) {
             $aLangCache[$iLang] = array();
-            if (!$sDir) {
-                return array();
-            }
+            $sBaseCharset = false;
             foreach ( $aLangFiles as $sLangFile ) {
                 require $sLangFile;
 
-                // inclyding only (!) thoose, which has charset defined
+                // including only (!) thoose, which has charset defined
                 if ( isset( $aLang['charset'] ) ) {
 
                     // recoding only in utf
@@ -563,8 +586,17 @@ class oxLang extends oxSuperCfg
                         $aLang['charset'] = 'UTF-8';
                     }
 
+                    if ( !$sBaseCharset ) {
+                        $sBaseCharset = $aLang['charset'];
+                    }
+
                     $aLangCache[$iLang] = array_merge( $aLangCache[$iLang], $aLang );
                 }
+            }
+
+            // setting base charset
+            if ( $sBaseCharset ) {
+                $aLangCache[$iLang]['charset'] = $sBaseCharset;
             }
 
             //save to cache
