@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 21737 2009-08-20 13:21:59Z arvydas $
+ * $Id: oxubase.php 21955 2009-08-28 11:45:09Z vilma $
  */
 
 /**
@@ -73,19 +73,6 @@ class oxUBase extends oxView
      * @var oxcategory
      */
     protected $_oActCategory = null;
-
-    /**
-     * Active category object.
-     * @var object
-     */
-    protected $_oClickCat = null;
-
-    /**
-     * Category ID
-     *
-     * @var string
-     */
-    protected $_sCategoryId = null;
 
     /**
      * Active Manufacturer object.
@@ -727,33 +714,6 @@ class oxUBase extends oxView
         $this->_sListType = $sType;
         $this->getConfig()->setGlobalParameter( 'listtype', $sType );
     }
-
-    /**
-     * Get category ID
-     *
-     * @return string
-     */
-    public function getCategoryId()
-    {
-        if ( $this->_sCategoryId == null && ( $sCatId = oxConfig::getParameter( 'cnid' ) ) ) {
-            $this->_sCategoryId = $sCatId;
-        }
-
-        return $this->_sCategoryId;
-    }
-
-    /**
-     * Category ID setter
-     *
-     * @param string $sCategoryId Id of category to cache
-     *
-     * @return null
-     */
-    public function setCategoryId( $sCategoryId )
-    {
-        $this->_sCategoryId = $sCategoryId;
-    }
-
 
     /**
      * Returns show right basket
@@ -2257,42 +2217,6 @@ class oxUBase extends oxView
             $this->_iActPage = ( $this->_iActPage < 0 ) ? 0 : $this->_iActPage;
         }
         return $this->_iActPage;
-    }
-
-    /**
-     * Returns active category set by categories component; if category is
-     * not set by component - will create category object and will try to
-     * load by id passed by request
-     *
-     * @return oxcategory
-     */
-    public function getActCategory()
-    {
-        // if active category is not set yet - trying to load it from request params
-        // this may be usefull when category component was unable to load active category
-        // and we still need some object to mount navigation info
-        if ( $this->_oClickCat === null ) {
-
-            $this->_oClickCat = false;
-            $oCategory = oxNew( 'oxcategory' );
-            if ( $oCategory->load( $this->getCategoryId() ) ) {
-                $this->_oClickCat = $oCategory;
-            }
-        }
-
-        return $this->_oClickCat;
-    }
-
-    /**
-     * Active category setter
-     *
-     * @param oxcategory $oCategory active category
-     *
-     * @return null
-     */
-    public function setActCategory( $oCategory )
-    {
-        $this->_oClickCat = $oCategory;
     }
 
     /**
