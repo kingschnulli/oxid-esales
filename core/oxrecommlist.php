@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxrecommlist.php 17480 2009-03-20 12:33:16Z arvydas $
+ * $Id: oxrecommlist.php 21983 2009-08-31 07:53:43Z arvydas $
  */
 
 /**
@@ -182,12 +182,10 @@ class oxRecommList extends oxBase
      */
     public function removeArticle( $sOXID )
     {
-        if ( !$sOXID ) {
-            return false;
+        if ( $sOXID ) {
+            $sQ = "delete from oxobject2list where oxobjectid = '$sOXID' and oxlistid='".$this->getId()."'";
+            return oxDb::getDb()->execute( $sQ );
         }
-
-        $sQ = "delete from oxobject2list where oxobjectid = '$sOXID' ";
-        return oxDb::getDb()->execute( $sQ );
     }
 
     /**
@@ -230,7 +228,7 @@ class oxRecommList extends oxBase
 
             $aIds = array();
             foreach ( $aArticleIds as $iKey => $sVal ) {
-                $aIds[$sVal] = mysql_real_escape_string($sVal);
+                $aIds[$iKey] = mysql_real_escape_string($sVal);
             }
 
             $sIds = implode("','", $aIds);

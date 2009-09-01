@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminlist.php 18338 2009-04-20 07:54:06Z arvydas $
+ * $Id: oxadminlist.php 21991 2009-08-31 12:41:57Z vilma $
  */
 
 /**
@@ -608,12 +608,41 @@ class oxAdminList extends oxAdminView
                         }
                     }
 
+                    // #M1260: if field is date
+                    $sFldName = strtolower( preg_replace('/(.+)\./', '', $sName ) );
+                    $sLongName = $sTable."__".$sFldName;
+                    $sFldType = $oListObject->$sLongName->fldtype;
+                    if ( $sFldType && ( $sFldType == "datetime" || $sFldType == "timestamp" || $sFldType == "date" ) ) {
+                        $sValue = $this->_convertToDBDate( $sValue, $sFldType );
+                    }
                     $this->_aWhere[$sName] = "%{$sValue}%";
                 }
             }
         }
 
         return $this->_aWhere;
+    }
+
+    /**
+     * Converts date/datetime values to DB scheme
+     *
+     * @param string $sValue   field value
+     * @param string $sFldType field type
+     *
+     * @return string
+     */
+    protected function _convertToDBDate( $sValue, $sFldType )
+    {
+        $oConvObject = new oxField();
+        $oConvObject->setValue($sValue);
+        if ( $sFldType == "datetime" ) {
+            oxDb::getInstance()->convertDBDateTime( $oConvObject, true );
+        } elseif ( $sFldType == "timestamp" ) {
+            oxDb::getInstance()->convertDBTimestamp( $oConvObject, true);
+        } elseif ( $sFldType == "date" ) {
+            oxDb::getInstance()->convertDBDate( $oConvObject, true);
+        }
+        return $oConvObject->value;
     }
 
     /**

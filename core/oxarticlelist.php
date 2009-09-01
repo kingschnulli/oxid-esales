@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticlelist.php 21745 2009-08-20 14:56:25Z arvydas $
+ * $Id: oxarticlelist.php 21988 2009-08-31 12:00:38Z arvydas $
  */
 
 /**
@@ -755,28 +755,30 @@ class oxArticleList extends oxList
     }
 
     /**
-     * Returns filtered articles sql "oxid in (filtered ids)" part
+     * Returns sql to fetch ids of articles fitting current filter
      *
      * @param string $sCatId  category id
      * @param array  $aFilter filters for this category
      *
      * @return string
      */
-    protected function _getFilterSql($sCatId, $aFilter)
+    protected function _getFilterIdsSql( $sCatId, $aFilter )
     {
-        $sO2CView      = getViewName( 'oxobject2category' );
-        $sArticleTable = getViewName( 'oxarticles' );
+        $sO2CView = getViewName( 'oxobject2category' );
         $sFilter = '';
         $iCnt    = 0;
         $sSuffix = oxLang::getInstance()->getLanguageTag();
 
+        $oDb = oxDb::getDb();
         foreach ( $aFilter as $sAttrId => $sValue ) {
             if ( $sValue ) {
                 if ( $sFilter ) {
                     $sFilter .= ' or ';
                 }
-                $sValue = mysql_real_escape_string($sValue);
-                $sFilter .= "( oa.oxattrid = '$sAttrId' and oa.oxvalue$sSuffix = '$sValue' )";
+                $sValue  = $oDb->quote( $sValue );
+                $sAttrId = $oDb->quote( $sAttrId );
+
+                $sFilter .= "( oa.oxattrid = {$sAttrId} and oa.oxvalue{$sSuffix} = {$sValue} )";
                 $iCnt++;
             }
         }
@@ -787,10 +789,22 @@ class oxArticleList extends oxList
         $sFilterSelect = "select oc.oxobjectid as oxobjectid, count(*) as cnt from ";
         $sFilterSelect.= "(SELECT * FROM $sO2CView WHERE $sO2CView.oxcatnid = '$sCatId' GROUP BY $sO2CView.oxobjectid, $sO2CView.oxcatnid) as oc ";
         $sFilterSelect.= "INNER JOIN oxobject2attribute as oa ON ( oa.oxobjectid = oc.oxobjectid ) ";
-        $sFilterSelect.= $sFilter;
-        $sFilterSelect.= "GROUP BY oa.oxobjectid HAVING cnt = $iCnt ";
+        return $sFilterSelect . "{$sFilter} GROUP BY oa.oxobjectid HAVING cnt = $iCnt ";
+    }
 
-        $aIds = oxDb::getDb( true )->getAll( $sFilterSelect );
+    /**
+     * Returns filtered articles sql "oxid in (filtered ids)" part
+     *
+     * @param string $sCatId  category id
+     * @param array  $aFilter filters for this category
+     *
+     * @return string
+     */
+    protected function _getFilterSql( $sCatId, $aFilter )
+    {
+        $oDb = oxDb::getDb( true );
+        $sArticleTable = getViewName( 'oxarticles' );
+        $aIds = $oDb->getAll( $this->_getFilterIdsSql( $sCatId, $aFilter ) );
         $sIds = '';
 
         if ( $aIds ) {
@@ -798,7 +812,7 @@ class oxArticleList extends oxList
                 if ( $sIds ) {
                     $sIds .= ', ';
                 }
-                $sIds .= " '{$aArt['oxobjectid']}' ";
+                $sIds .= $oDb->quote( current( $aArt ) );
             }
 
             if ( $sIds ) {

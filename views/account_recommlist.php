@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: account_recommlist.php 18038 2009-04-09 12:21:40Z arvydas $
+ * $Id: account_recommlist.php 21975 2009-08-28 14:38:36Z arvydas $
  */
 
 /**
@@ -186,15 +186,31 @@ class Account_Recommlist extends Account
         if ( $this->_oActRecommList === null ) {
             $this->_oActRecommList = false;
 
-            if ( $sOxid = oxConfig::getParameter( 'recommid' ) ) {
-                $this->_oActRecommList = oxNew( 'oxrecommlist' );
-                if ( !$this->_oActRecommList->load( $sOxid) ) {
-                    $this->_oActRecommList = false;
+            if ( $sRecommId = oxConfig::getParameter( 'recommid' ) && $oUser = $this->getUser() ) {
+                if ( $oRecommList = $this->_getUserRecommList( $sRecommId, $oUser ) ) {
+                    $this->_oActRecommList = $oRecommList;
                 }
             }
         }
 
         return $this->_oActRecommList;
+    }
+
+    /**
+     * If current recommendation list belongs to current session user - loads
+     * recomendation list and returns it
+     *
+     * @param string $sRecommId recommendation list id
+     * @param oxuser $oUser     session user object
+     *
+     * @return oxrecommlist
+     */
+    protected function _getUserRecommList( $sRecommId, $oUser )
+    {
+        $oRecommList = oxNew( 'oxrecommlist' );
+        if ( ( $oRecommList->load( $sRecommId ) ) && $oUser->getId() === $oRecommList->oxrecommlists__oxuserid->value ) {
+            return $oRecommList;
+        }
     }
 
     /**
@@ -204,29 +220,28 @@ class Account_Recommlist extends Account
      */
     public function saveRecommList()
     {
-        $oUser = $this->getUser();
-        if ( !$oUser ) {
-            return;
+        if ( $oUser = $this->getUser() ) {
+            if ( $sRecommId = oxConfig::getParameter( 'recommid' ) ) {
+                if ( !$oRecommList->_getUserRecommList( $sRecommId, $oUser ) ) {
+                    return;
+                }
+            } else {
+                $oRecommList = oxNew( 'oxrecommlist' );
+                $oRecommList->oxrecommlists__oxuserid = new oxField( $oUser->getId());
+                $oRecommList->oxrecommlists__oxshopid = new oxField( $this->getConfig()->getShopId() );
+            }
+
+            $sTitle  = trim( ( string ) oxConfig::getParameter( 'recomm_title', 1 ) );
+            $sAuthor = trim( ( string ) oxConfig::getParameter( 'recomm_author', 1 ) );
+            $sText   = trim( ( string ) oxConfig::getParameter( 'recomm_desc', 1 ) );
+
+            $oRecommList->oxrecommlists__oxtitle  = new oxField($sTitle, oxField::T_RAW);
+            $oRecommList->oxrecommlists__oxauthor = new oxField($sAuthor, oxField::T_RAW);
+            $oRecommList->oxrecommlists__oxdesc   = new oxField($sText, oxField::T_RAW);
+
+            // marking entry as saved
+            $this->_blSavedEntry = (bool) $oRecommList->save();
         }
-
-        $sTitle  = trim( ( string ) oxConfig::getParameter( 'recomm_title', 1 ) );
-        $sAuthor = trim( ( string ) oxConfig::getParameter( 'recomm_author', 1 ) );
-        $sText   = trim( ( string ) oxConfig::getParameter( 'recomm_desc', 1 ) );
-
-        $oRecommList = oxNew( 'oxrecommlist' );
-        $sOxid = oxConfig::getParameter( 'recommid' );
-        if ($sOxid) {
-            $oRecommList->load( $sOxid);
-        } else {
-            $oRecommList->oxrecommlists__oxuserid = new oxField($oUser->getId());
-            $oRecommList->oxrecommlists__oxshopid = new oxField($this->getConfig()->getShopId());
-        }
-        $oRecommList->oxrecommlists__oxtitle  = new oxField($sTitle, oxField::T_RAW);
-        $oRecommList->oxrecommlists__oxauthor = new oxField($sAuthor, oxField::T_RAW);
-        $oRecommList->oxrecommlists__oxdesc   = new oxField($sText, oxField::T_RAW);
-
-        // marking entry as saved
-        $this->_blSavedEntry = (bool) $oRecommList->save();
     }
 
     /**
@@ -251,8 +266,9 @@ class Account_Recommlist extends Account
             $sRecommId = oxConfig::getParameter( 'recommid' );
             $sAction = oxConfig::getParameter( 'deleteList' );
             if ( isset( $sAction ) && $sRecommId ) {
-                $oRecommList = oxNew( 'oxrecommlist' );
-                $oRecommList->delete( $sRecommId );
+                if ( $oRecommList = $this->_getUserRecommList( $sRecommId, $oUser ) ) {
+                    $oRecommList->delete();
+                }
             }
         }
     }
@@ -264,17 +280,14 @@ class Account_Recommlist extends Account
      */
     public function removeArticle()
     {
-        $oUser = $this->getUser();
-        if ( !$oUser ) {
-            return;
-        }
-
-        $sArtId = oxConfig::getParameter( 'aid' );
-        $sOxid  = oxConfig::getParameter( 'recommid' );
-        if ( $sOxid && $sArtId) {
-            $oRecommList = oxNew( 'oxrecommlist' );
-            $oRecommList->load( $sOxid );
-            $oRecommList->removeArticle( $sArtId );
+        if ( $oUser = $this->getUser() ) {
+            $sArtId = oxConfig::getParameter( 'aid' );
+            $sRecommId  = oxConfig::getParameter( 'recommid' );
+            if ( $sRecommId && $sArtId ) {
+                if ( $oRecommList = $this->_getUserRecommList( $sRecommId, $oUser ) ) {
+                    $oRecommList->removeArticle( $sArtId );
+                }
+            }
         }
     }
 

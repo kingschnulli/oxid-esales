@@ -19,7 +19,7 @@
  * @package smartyPlugins
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: function.oxcontent.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
+ * $Id: function.oxcontent.php 21960 2009-08-28 12:23:05Z arvydas $
  */
 
 /*
@@ -32,10 +32,10 @@
 * add [{ insert name="oxid_content" ident="..." }] where you want to display content
 * -------------------------------------------------------------
 */
-function smarty_function_oxcontent($params, &$smarty)
+function smarty_function_oxcontent( $params, &$smarty )
 {
     $myConfig = oxConfig::getInstance();
-    $sText = "<b>content not found ! check ident(".$params['ident'].") !</b>";
+    $sText = $myConfig->getActiveShop()->oxshops__oxproductive->value ? null : "<b>content not found ! check ident(".$params['ident'].") !</b>";
     $smarty->oxidcache = new oxField($sText, oxField::T_RAW);
 
     $sIdent = isset( $params['ident'] )?$params['ident']:null;
@@ -49,7 +49,7 @@ function smarty_function_oxcontent($params, &$smarty)
             $blLoaded = $oContent->loadbyIdent( $sIdent );
         }
 
-        if ( $blLoaded ) {
+        if ( $blLoaded && $oContent->oxcontents__oxactive->value ) {
             // set value
             $sField = "oxcontent";
             if ( $params['field'] ) {
