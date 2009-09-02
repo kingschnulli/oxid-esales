@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21166 2009-07-28 14:56:10Z arvydas $
+ * $Id: lang.php 22018 2009-09-01 13:24:07Z philipp.grashoff $
  */
 
 
@@ -1222,9 +1222,9 @@ $aLang = array(
 'EXCEPTION_CONNECTION_IPAYMENTNOSERVICE'          => 'Error during communication with the IPayment server!',
 'EXCEPTION_CONNECTION_IPAYMENTPROXYFAULT'         => 'Error during communication with the IPayment server!',
 'EXCEPTION_CONNECTION_IPAYMENTPROXYERROR'         => 'Error during communication with the IPayment server!',
-'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST'           => "Article doesn't exist!",
+'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST'           => "Product doesn't exist!",
 'EXCEPTION_ARTICLE_ARTICELNOTBUYABLE'             => "Product is not buyable",
-'EXCEPTION_OUTOFSTOCK_OUTOFSTOCK'                 => 'No enought items of this article in stock! Available:',
+'EXCEPTION_OUTOFSTOCK_OUTOFSTOCK'                 => 'Not enough items of this product in stock! Available:',
 'EXCEPTION_ARTICLE_NOPRODUCTID'                   => 'No product id given!',
 'EXCEPTION_INPUT_INVALIDAMOUNT'                   => 'Please enter a valid amount for this product!',
 'EXCEPTION_NOFILE'                                => 'No uploaded file',

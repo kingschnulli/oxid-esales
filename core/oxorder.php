@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 21847 2009-08-26 07:31:46Z vilma $
+ * $Id: oxorder.php 22023 2009-09-01 13:42:03Z arvydas $
  */
 
 /**
@@ -781,9 +781,10 @@ class oxOrder extends oxBase
 
         // #756M Preserve already stored payment information
         if ( !$aDynvalue && ( $oUserpayment = $this->getPaymentType() ) ) {
-            $aStoredDynvalue = $oUserpayment->getDynValues();
-            foreach ( $aStoredDynvalue as $oVal ) {
-                $aDynvalue[$oVal->name] = $oVal->value;
+            if ( is_array( $aStoredDynvalue = $oUserpayment->getDynValues() ) ) {
+                foreach ( $aStoredDynvalue as $oVal ) {
+                    $aDynvalue[$oVal->name] = $oVal->value;
+                }
             }
         }
 
@@ -792,15 +793,16 @@ class oxOrder extends oxBase
         // collecting dynamic values
         $aDynVal = array();
 
-        $aPaymentDynValues = $oPayment->getDynValues();
-        foreach ( $aPaymentDynValues  as $key => $oVal ) {
-            if ( isset( $aDynvalue[$oVal->name] ) ) {
-                $oVal->value = $aDynvalue[$oVal->name];
-            }
+        if ( is_array( $aPaymentDynValues = $oPayment->getDynValues() ) ) {
+            foreach ( $aPaymentDynValues  as $key => $oVal ) {
+                if ( isset( $aDynvalue[$oVal->name] ) ) {
+                    $oVal->value = $aDynvalue[$oVal->name];
+                }
 
-            //$oPayment->setDynValue($key, $oVal);
-            $aPaymentDynValues[$key] = $oVal;
-            $aDynVal[$oVal->name] = $oVal->value;
+                //$oPayment->setDynValue($key, $oVal);
+                $aPaymentDynValues[$key] = $oVal;
+                $aDynVal[$oVal->name] = $oVal->value;
+            }
         }
 
         // Store this payment information, we might allow users later to

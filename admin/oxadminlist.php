@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminlist.php 21991 2009-08-31 12:41:57Z vilma $
+ * $Id: oxadminlist.php 22017 2009-09-01 12:19:02Z vilma $
  */
 
 /**
@@ -636,11 +636,21 @@ class oxAdminList extends oxAdminView
         $oConvObject = new oxField();
         $oConvObject->setValue($sValue);
         if ( $sFldType == "datetime" ) {
-            oxDb::getInstance()->convertDBDateTime( $oConvObject, true );
+            if ( strlen($sValue) == 10 || strlen($sValue) == 19 ) {
+                oxDb::getInstance()->convertDBDateTime( $oConvObject, true );
+            } else {
+            	return $oConvObject->value;
+            }
         } elseif ( $sFldType == "timestamp" ) {
             oxDb::getInstance()->convertDBTimestamp( $oConvObject, true);
         } elseif ( $sFldType == "date" ) {
-            oxDb::getInstance()->convertDBDate( $oConvObject, true);
+            if ( strlen($sValue) >= 9 ) {
+                oxDb::getInstance()->convertDBDate( $oConvObject, true);
+            } elseif (strlen($sValue) > 5 && strlen($sValue) < 5 ) {
+            	return $oConvObject->value;
+            } else {
+            	return $oConvObject->value;
+            }
         }
         return $oConvObject->value;
     }

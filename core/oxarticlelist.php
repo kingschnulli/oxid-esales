@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticlelist.php 21988 2009-08-31 12:00:38Z arvydas $
+ * $Id: oxarticlelist.php 22005 2009-09-01 08:32:55Z sarunas $
  */
 
 /**
@@ -130,8 +130,55 @@ class oxArticleList extends oxList
         if (($iCurrentArt = array_search($sArtId, $aHistoryArticles)) !== false) {
             unset ($aHistoryArticles[$iCurrentArt]);
         }
+        $aHistoryArticles = array_values($aHistoryArticles);
+        $this->loadIds($aHistoryArticles);
+        $this->_sortByIds($aHistoryArticles);
+    }
 
-        $this->loadIds(array_values($aHistoryArticles));
+    /**
+     * sort this list by given order.
+     *
+     * @param array $aIds ordered ids
+     */
+    protected function _sortByIds($aIds)
+    {
+        $this->_aOrderMap = array_flip($aIds);
+        uksort($this->_aArray, array($this, '_sortByOrderMapCallback'));
+    }
+
+    /**
+     * callback function only used from _sortByIds
+     *
+     * @param string $key1 1st key
+     * @param string $key2 2nd key
+     *
+     * @see oxArticleList::_sortByIds
+     *
+     * @return int
+     */
+    protected function _sortByOrderMapCallback($key1, $key2)
+    {
+        if (isset($this->_aOrderMap[$key1])) {
+            if (isset($this->_aOrderMap[$key2])) {
+                $iDiff = $this->_aOrderMap[$key2] - $this->_aOrderMap[$key1];
+                if ($iDiff > 0) {
+                    return -1;
+                } elseif ($iDiff < 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                // first is here, but 2nd is not - 1st gets more priority
+                return -1;
+            }
+        } elseif (isset($this->_aOrderMap[$key2])) {
+            // first is not here, but 2nd is - 2nd gets more priority
+            return 1;
+        } else {
+            // both unset, equal
+            return 0;
+        }
     }
 
     /**

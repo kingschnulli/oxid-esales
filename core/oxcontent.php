@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcontent.php 20457 2009-06-25 13:21:33Z vilma $
+ * $Id: oxcontent.php 22008 2009-09-01 10:33:44Z vilma $
  */
 
 /**
@@ -230,8 +230,11 @@ class oxContent extends oxI18n
      */
     public function delete( $sOXID = null)
     {
+        if ( !$sOXID ) {
+        	$sOXID = $this->getId();
+        }
         if (parent::delete($sOXID)) {
-            oxSeoEncoderContent::getInstance()->onDeleteContent($this);
+            oxSeoEncoderContent::getInstance()->onDeleteContent($sOXID);
             return true;
         }
         return false;

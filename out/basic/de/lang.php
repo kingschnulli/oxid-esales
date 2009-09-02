@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21166 2009-07-28 14:56:10Z arvydas $
+ * $Id: lang.php 22021 2009-09-01 13:35:46Z philipp.grashoff $
  */
 
 
@@ -251,7 +251,7 @@ $aLang = array(
 'COMPARE_POPUP_TITLE'                             => "Artikelvergleich",
 'COMPARE_POPUP_ARTICELNO'                         => "Art.Nr.:",
 'COMPARE_POPUP_PRODUCTATTRIBUTES'                 => "Artikelattribute",
-'COMPARE_POPUP_SELECTATLEASTTWOART'               => "Bitte wählen Sie mind. zwei Artikel zum vergleichen",
+'COMPARE_POPUP_SELECTATLEASTTWOART'               => "Bitte wählen Sie mind. zwei Artikel zum Vergleichen",
 'COMPARE_POPUP_PRINT'                             => "Diese Seite drucken",
 'COMPARE_TITLE'                                   => "Artikelvergleich",
 'COMPARE_ARTICLENOMBER'                           => "Art.Nr.:",
@@ -261,7 +261,7 @@ $aLang = array(
 'COMPARE_WISHLIST'                                => "Wunschzettel",
 'COMPARE_PRODUCTATTRIBUTES'                       => "Artikelattribute",
 'COMPARE_REMOVE'                                  => "entfernen",
-'COMPARE_SELECTATLEASTTWOART'                     => "Bitte wählen Sie mind. zwei Artikel zum vergleichen",
+'COMPARE_SELECTATLEASTTWOART'                     => "Bitte wählen Sie mind. zwei Artikel zum Vergleichen",
 'COMPARE_BACKTOSHOP'                              => "Zurück zum Shop",
 'CONTACT_TITLECONTACT'                            => "Kontakt",
 'CONTACT_COMPLETEMARKEDFIELDS'                    => 'Bitte alle Felder mit * ausfüllen !',

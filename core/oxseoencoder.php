@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 21790 2009-08-24 08:33:31Z arvydas $
+ * $Id: oxseoencoder.php 22015 2009-09-01 11:30:08Z arvydas $
  */
 
 /**
@@ -609,19 +609,21 @@ class oxSeoEncoder extends oxSuperCfg
         $sQ .= $sParams ? " and oxparams = " . $oDb->quote( $sParams ) : '';
         $sQ .= ( $sKeywords !== false ) ? " and oxkeywords = " . $oDb->quote( $sKeywords ) . " " : '';
         $sQ .= ( $sDescription !== false ) ? " and oxdescription = " . $oDb->quote( $sDescription ) . " " : '';
-        $sQ .= isset( $blFixed ) ? " and oxfixed = " . ( (int) $blFixed ) . " " : '';
+        //$sQ .= isset( $blFixed ) ? " and oxfixed = " . ( (int) $blFixed ) . " " : '';
         $sQ .= "limit 1";
 
         $oRs = $oDb->execute( $sQ );
         if ( $oRs && $oRs->recordCount() > 0 && !$oRs->EOF ) {
             if ( $oRs->fields['samestdurl'] && $oRs->fields['sameseourl'] && $oRs->fields['oxexpired'] ) {
+                // fixed state change
+                $sFixed = isset( $blFixed ) ? ", oxfixed = " . ( (int) $blFixed ) . " " : '';
                 // nothing was changed - setting expired status back to 0
-                $sSql  = "update oxseo set oxexpired = 0 where oxtype = {$sType} and oxobjectid = {$sObjectId} and oxshopid = {$iShopId} and oxlang = {$iLang} ";
+                $sSql  = "update oxseo set oxexpired = 0 {$sFixed} where oxtype = {$sType} and oxobjectid = {$sObjectId} and oxshopid = {$iShopId} and oxlang = {$iLang} ";
                 $sSql .= $sParams ? " and oxparams = " . $oDb->quote( $sParams ) : '';
                 $sSql .= " limit 1";
 
                 return $oDb->execute( $sSql );
-            } elseif ( $oRs->fields['oxexpired'] && !$oRs->fields['oxfixed'] ) {
+            } elseif ( $oRs->fields['oxexpired'] ) {//&& !$oRs->fields['oxfixed'] ) {
                 // copy to history
                 $this->_copyToHistory( $sObjectId, $iShopId, $iLang, $sType );
             }

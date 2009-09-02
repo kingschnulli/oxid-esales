@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 21811 2009-08-25 10:34:40Z arvydas $
+ * $Id: oxutilsfile.php 22016 2009-09-01 11:49:37Z arvydas $
  */
 
 /**
@@ -118,6 +118,24 @@ class oxUtilsFile extends oxSuperCfg
             }
         }
         return self::$_instance;
+    }
+
+    /**
+     * Class constructor, initailizes pictures count info (_iMaxPicImgCount/_iMaxZoomImgCount)
+     *
+     * @return null
+     */
+    public function __construct()
+    {
+        $myConfig = $this->getConfig();
+
+        if ( $iPicCount = $myConfig->getConfigParam( 'iPicCount' ) ) {
+            $this->_iMaxPicImgCount = $iPicCount;
+        }
+
+        if ( $iZoomPicCount = $myConfig->getConfigParam( 'iZoomPicCount' ) ) {
+            $this->_iMaxZoomImgCount = $iZoomPicCount;
+        }
     }
 
     /**
