@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasketitem.php 21852 2009-08-26 08:43:52Z vilma $
+ * $Id: oxbasketitem.php 22081 2009-09-02 11:24:38Z arvydas $
  */
 
 /**
@@ -298,6 +298,7 @@ class oxBasketItem extends oxSuperCfg
             $dAmount = $oValidator->validateBasketAmount( $dAmount );
         } catch( oxArticleInputException $oEx ) {
             $oEx->setArticleNr( $this->getProductId() );
+            $oEx->setProductId( $this->getProductId() );
             // setting additional information for excp and then rethrowing
             throw $oEx;
         }
@@ -336,6 +337,7 @@ class oxBasketItem extends oxSuperCfg
             $oEx = oxNew( 'oxOutOfStockException' );
             $oEx->setMessage( 'EXCEPTION_OUTOFSTOCK_OUTOFSTOCK' );
             $oEx->setArticleNr( $oArticle->oxarticles__oxartnum->value );
+            $oEx->setProductId( $oArticle->getProductId() );
             $oEx->setRemainingAmount( $this->_dAmount );
             throw $oEx;
         }
@@ -400,7 +402,7 @@ class oxBasketItem extends oxSuperCfg
             }
 
             $this->_oArticle = oxNew( 'oxarticle' );
-            // #M773 Do not use article lazy loading on order save 
+            // #M773 Do not use article lazy loading on order save
             if ( $blDisableLazyLoading ) {
                 $this->_oArticle->modifyCacheKey('_allviews');
                 $this->_oArticle->disableLazyLoading();
@@ -417,6 +419,7 @@ class oxBasketItem extends oxSuperCfg
                 $oEx = oxNew( 'oxNoArticleException' );
                 $oEx->setMessage( 'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST' );
                 $oEx->setArticleNr( $sProductId );
+                $oEx->setProductId( $sProductId );
                 throw $oEx;
             }
 
@@ -425,6 +428,7 @@ class oxBasketItem extends oxSuperCfg
                 $oEx = oxNew( 'oxArticleInputException' );
                 $oEx->setMessage( 'EXCEPTION_ARTICLE_ARTICELNOTBUYABLE' );
                 $oEx->setArticleNr( $sProductId );
+                $oEx->setProductId( $sProductId );
                 throw $oEx;
             }
         }

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminlist.php 22017 2009-09-01 12:19:02Z vilma $
+ * $Id: oxadminlist.php 22041 2009-09-01 15:11:21Z vilma $
  */
 
 /**
@@ -609,11 +609,14 @@ class oxAdminList extends oxAdminView
                     }
 
                     // #M1260: if field is date
-                    $sFldName = strtolower( preg_replace('/(.+)\./', '', $sName ) );
-                    $sLongName = $sTable."__".$sFldName;
-                    $sFldType = $oListObject->$sLongName->fldtype;
-                    if ( $sFldType && ( $sFldType == "datetime" || $sFldType == "timestamp" || $sFldType == "date" ) ) {
-                        $sValue = $this->_convertToDBDate( $sValue, $sFldType );
+                    $sLocalDateFormat = $this->getConfig()->getConfigParam( 'sLocalDateFormat' );
+                    if ( $sLocalDateFormat && $sLocalDateFormat != 'ISO') {
+                        $sFldName = strtolower( preg_replace('/(.+)\./', '', $sName ) );
+                        $sLongName = $sTable."__".$sFldName;
+                        $sFldType = $oListObject->$sLongName->fldtype;
+                        if ( $sFldType && ( $sFldType == "datetime" || $sFldType == "date" ) ) {
+                            $sValue = $this->_convertToDBDate( $sValue, $sFldType );
+                        }
                     }
                     $this->_aWhere[$sName] = "%{$sValue}%";
                 }
@@ -624,7 +627,7 @@ class oxAdminList extends oxAdminView
     }
 
     /**
-     * Converts date/datetime values to DB scheme
+     * Converts date/datetime values to DB scheme (#M1260)
      *
      * @param string $sValue   field value
      * @param string $sFldType field type
@@ -636,23 +639,99 @@ class oxAdminList extends oxAdminView
         $oConvObject = new oxField();
         $oConvObject->setValue($sValue);
         if ( $sFldType == "datetime" ) {
-            if ( strlen($sValue) == 10 || strlen($sValue) == 19 ) {
+            if ( strlen($sValue) == 10 || strlen($sValue) == 22 || ( strlen($sValue) == 19 && !stripos( $sValue, "m" ) ) ) {
                 oxDb::getInstance()->convertDBDateTime( $oConvObject, true );
             } else {
-            	return $oConvObject->value;
+                if ( strlen($sValue) > 10 ) {
+                    return $this->_convertTime( $sValue );
+                } else {
+                	return $this->_convertDate( $sValue );
+                }
             }
-        } elseif ( $sFldType == "timestamp" ) {
-            oxDb::getInstance()->convertDBTimestamp( $oConvObject, true);
         } elseif ( $sFldType == "date" ) {
-            if ( strlen($sValue) >= 9 ) {
+            if ( strlen($sValue) == 10 ) {
                 oxDb::getInstance()->convertDBDate( $oConvObject, true);
-            } elseif (strlen($sValue) > 5 && strlen($sValue) < 5 ) {
-            	return $oConvObject->value;
             } else {
-            	return $oConvObject->value;
+            	return $this->_convertDate( $sValue );
             }
         }
         return $oConvObject->value;
+    }
+
+    /**
+     * Converter for date field search. If not full date will be searched.
+     *
+     * @param string $sDate searched date
+     *
+     * @return string
+     */
+    protected function _convertDate( $sDate )
+    {
+        // regexps to validate input
+        $aDatePatterns = array("/^([0-9]{2})\.([0-9]{4})/" => "EUR2",    // MM.YYYY
+                               "/^([0-9]{2})\.([0-9]{2})/" => "EUR1",    // DD.MM
+                               "/^([0-9]{2})\/([0-9]{4})/" => "USA2",    // MM.YYYY
+                               "/^([0-9]{2})\/([0-9]{2})/" => "USA1"     // DD.MM
+                              );
+
+        // date/time formatting rules
+        $aDFormats  = array("EUR1" => array(2, 1),
+                            "EUR2" => array(2, 1),
+                            "USA1" => array(1, 2),
+                            "USA2" => array(2, 1)
+                           );
+
+        // looking for date field
+        $aDateMatches = array();
+        foreach ( $aDatePatterns as $sPattern => $sType) {
+            if ( preg_match( $sPattern, $sDate, $aDateMatches)) {
+                $sDate = $aDateMatches[$aDFormats[$sType][0]] . "-" . $aDateMatches[$aDFormats[$sType][1]];
+                break;
+            }
+        }
+
+        return $sDate;
+    }
+
+    /**
+     * Converter for datetime field search. If not full time will be searched.
+     *
+     * @param string $sFullDate searched date
+     *
+     * @return string
+     */
+    protected function _convertTime( $sFullDate )
+    {
+        $sDate = substr( $sFullDate, 0, 10 );
+        $oConvObject = new oxField();
+        $oConvObject->setValue($sDate);
+        oxDb::getInstance()->convertDBDate( $oConvObject, true);
+
+        // looking for time field
+        $sTime = substr( $sFullDate, 11);
+        if ( preg_match( "/([0-9]{2}):([0-9]{2}) ([AP]{1}[M]{1})$/", $sTime, $aTimeMatches ) ) {
+            if ( $aTimeMatches[3] == "PM") {
+                $iIntVal = (int) $aTimeMatches[1];
+                if ( $iIntVal < 13) {
+                    $sTime = ($iIntVal + 12) . ":" . $aTimeMatches[2];
+                }
+            } else {
+            	$sTime = $aTimeMatches[1] . ":" . $aTimeMatches[2];
+            }
+        } elseif ( preg_match( "/([0-9]{2}) ([AP]{1}[M]{1})$/", $sTime, $aTimeMatches ) ) {
+            if ( $aTimeMatches[2] == "PM") {
+                $iIntVal = (int) $aTimeMatches[1];
+                if ( $iIntVal < 13) {
+                    $sTime = ($iIntVal + 12);
+                }
+            } else {
+                $sTime = $aTimeMatches[1];
+            }
+        } else {
+            $sTime = str_replace(".", ":", $sTime);
+        }
+
+        return $oConvObject->value . " " . $sTime;
     }
 
     /**

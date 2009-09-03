@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxview.php 21955 2009-08-28 11:45:09Z vilma $
+ * $Id: oxview.php 22072 2009-09-02 10:19:07Z arvydas $
  */
 
 /**
@@ -779,4 +779,12 @@ class oxView extends oxSuperCfg
         $this->_sCategoryId = $sCategoryId;
     }
 
+    /**
+     * Returns a name of the view variable containing the error/exception messages
+     *
+     * @return null
+     */
+    public function getErrorDestination()
+    {
+    }
 }

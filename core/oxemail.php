@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 21166 2009-07-28 14:56:10Z arvydas $
+ * $Id: oxemail.php 22085 2009-09-02 11:44:32Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -948,8 +948,10 @@ class oxEmail extends phpmailer
 
         $aRemindArticles = array();
         foreach ( $aBasketContents as $oBasketItem ) {
-            $oArticle = $oBasketItem->getArticle();
-             // reminder not set
+            $sId = $oBasketItem->getProductId();
+            $oArticle = oxNew('oxarticle');
+            $oArticle->load($sId);
+            // reminder not set
             if ( !$oArticle->oxarticles__oxremindactive->value || $oArticle->oxarticles__oxremindactive->value > 1 ) {
                 continue;
             }

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 21807 2009-08-25 08:04:51Z alfonsas $
+ * $Id: oxconfig.php 22096 2009-09-02 14:12:06Z sarunas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -412,7 +412,7 @@ class oxConfig extends oxSuperCfg
         } catch ( oxCookieException $oEx ) {
             // redirect to start page and display the error
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
-            oxUtils::getInstance()->redirect( $this->getShopHomeURL() .'cl=start' );
+            oxUtils::getInstance()->redirect( $this->getShopHomeURL() .'cl=start', true, 302 );
         }
 
         //application initialization

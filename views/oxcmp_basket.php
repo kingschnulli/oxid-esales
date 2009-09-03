@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_basket.php 18041 2009-04-09 12:23:18Z arvydas $
+ * $Id: oxcmp_basket.php 22072 2009-09-02 10:19:07Z arvydas $
  */
 
 /**
@@ -336,6 +336,9 @@ class oxcmp_basket extends oxView
      */
     protected function _addItems ( $aProducts )
     {
+        $oActView   = $this->getConfig()->getActiveView();
+        $sErrorDest = $oActView->getErrorDestination();
+
         $oBasket = $this->getSession()->getBasket();
         foreach ( $aProducts as $sProductId => $aProductInfo ) {
 
@@ -353,10 +356,12 @@ class oxcmp_basket extends oxView
                 $oBasketItem = $oBasket->addToBasket( $sProductId, $dAmount, $aSelList, $aPersParam, $blOverride, false, $sOldBasketItemId );
             } catch( oxOutOfStockException $oEx ) {
                 //add to display at specific position
-                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true, 'basket');
+                $oEx->setDestination( $sErrorDest );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, (bool) $sErrorDest, $sErrorDest );
             } catch( oxArticleInputException $oEx ) {
                 //add to display at specific position
-                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true, 'basket');
+                $oEx->setDestination( $sErrorDest );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, (bool) $sErrorDest, $sErrorDest );
             } catch( oxNoArticleException $oEx ) {
                 //ignored, best solution F ?
             }

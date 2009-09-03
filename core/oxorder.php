@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 22023 2009-09-01 13:42:03Z arvydas $
+ * $Id: oxorder.php 22081 2009-09-02 11:24:38Z arvydas $
  */
 
 /**
@@ -1021,6 +1021,7 @@ class oxOrder extends oxBase
                 $oEx = oxNew( 'oxOutOfStockException' );
                 $oEx->setMessage( 'EXCEPTION_OUTOFSTOCK_OUTOFSTOCK' );
                 $oEx->setArticleNr( $oProd->oxarticles__oxartnum->value );
+                $oEx->setProductId( $oProd->getProductId() );
                 $oEx->setRemainingAmount( $oProd->oxarticles__oxstock->value );
                 throw $oEx;
             }

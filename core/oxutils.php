@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 21099 2009-07-23 07:43:26Z vilma $
+ * $Id: oxutils.php 22096 2009-09-02 14:12:06Z sarunas $
  */
 
 /**
@@ -835,7 +835,7 @@ class oxUtils extends oxSuperCfg
      *
      * @return null or exit
      */
-    public function redirect( $sUrl, $blAddRedirectParam = true )
+    public function redirect( $sUrl, $blAddRedirectParam = true, $iHeaderCode = 301 )
     {
         //preventing possible cyclic redirection
         //#M341 and check only if redirect paramater must be added
@@ -848,7 +848,18 @@ class oxUtils extends oxSuperCfg
         }
 
         $sUrl = str_ireplace( "&amp;", "&", $sUrl );
-        $this->_simpleRedirect( $sUrl, "HTTP/1.1 301 Moved Permanently" );
+
+        $sHeaderCode = '';
+        switch ($iHeaderCode) {
+            case 301: 
+                $sHeaderCode = "HTTP/1.1 301 Moved Permanently";
+                break;
+            case 302: 
+            default:
+                $sHeaderCode = "HTTP/1.1 302 Found";
+        }
+
+        $this->_simpleRedirect( $sUrl, $sHeaderCode );
 
         try {//may occur in case db is lost
             $this->getSession()->freeze();
