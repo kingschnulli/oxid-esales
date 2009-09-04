@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21617 2009-08-17 12:14:53Z tomas $
+ * $Id: lang.php 22117 2009-09-03 11:59:10Z sarunas $
  */
 
 /*
@@ -1169,6 +1169,9 @@ $aLang = array(
 'SHOP_CONFIG_IMPORTTICKERREFRESH'               => 'Number of Seconds before CSV Import Ticker is restarted',
 'SHOP_CONFIG_MWSTSETTING'                       => 'VAT Settings for Lexware Faktura (German Accounting Software)',
 'SHOP_CONFIG_NUMBEROFEMAILSPERTICK'             => 'Number of Newsletters sent per Tick',
+'SHOP_CONFIG_ASSIGNDEFAULTCAT'                  => 'Assign default category',
+'SHOP_CONFIG_UNASSIGNDEFAULTCAT'                => 'Unassign default category',
+'SHOP_CONFIG_ASSIGNEDDEFAULTCAT'                => 'Default category:',
 'SHOP_CONFIG_ACTIVECATEGORYBYSTART'             => 'Active Category at Start',
 'SHOP_CONFIG_AUTOSEARCHONCAT'                   => 'Start Search automatically if User selects a Category',
 'SHOP_CONFIG_AUTOICONS'                         => 'Generate Icons automatically from Thumbnails (might slow down your server)',

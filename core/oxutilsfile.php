@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 22016 2009-09-01 11:49:37Z arvydas $
+ * $Id: oxutilsfile.php 22113 2009-09-03 11:44:26Z arvydas $
  */
 
 /**
@@ -248,13 +248,14 @@ class oxUtilsFile extends oxSuperCfg
     /**
      * Prepares image file name
      *
-     * @param object $sValue uploadable file name
-     * @param string $sType  image type
-     * @param object $blDemo if true = whecks if file type is defined in oxutilsfile::_aAllowedFiles
+     * @param object $sValue     uploadable file name
+     * @param string $sType      image type
+     * @param object $blDemo     if true = whecks if file type is defined in oxutilsfile::_aAllowedFiles
+     * @patam string $sImagePath final image file location
      *
      * @return string
      */
-    protected function _prepareImageName( $sValue, $sType, $blDemo = false )
+    protected function _prepareImageName( $sValue, $sType, $blDemo = false, $sImagePath )
     {
         if ( $sValue ) {
             // add type to name
@@ -278,7 +279,7 @@ class oxUtilsFile extends oxSuperCfg
                     $sFName = preg_replace( '/[^a-zA-Z0-9_\.-]/', '', implode( '.', $aFilename ) );
                 }
 
-                $sValue = "{$sFName}_" . strtolower( $sType ) . ".{$sFileType}";
+                $sValue = $this->_getUniqueFileName( $sImagePath, "{$sFName}_" . strtolower( $sType ), $sFileType );
             }
         }
         return $sValue;
@@ -457,9 +458,10 @@ class oxUtilsFile extends oxSuperCfg
                 $sKey    = $aFiletype[1];
                 $sType   = $aFiletype[0];
                 $sValue  = strtolower( $sValue );
+                $sImagePath = $this->_getImagePath( $sType );
 
                 // checking file type and building final file name
-                if ( $sSource && ( $sValue = $this->_prepareImageName( $sValue, $sType, $blDemo ) ) ) {
+                if ( $sSource && ( $sValue = $this->_prepareImageName( $sValue, $sType, $blDemo, $sImagePath ) ) ) {
 
                     // moving to tmp folder for processing as safe mode or spec. open_basedir setup
                     // usually does not allow file modification in php's temp folder
@@ -467,7 +469,7 @@ class oxUtilsFile extends oxSuperCfg
                     if ( $sProcessPath && $this->_moveImage( $sSource, $sProcessPath ) ) {
 
                         // finding final image path
-                        if ( ( $sTarget = $this->_getImagePath( $sType ) . $sValue ) ) {
+                        if ( ( $sTarget = $sImagePath . $sValue ) ) {
 
                             // processing image and moving to final location
                             $this->_prepareImage( $sType, $sProcessPath, $sTarget );
@@ -593,15 +595,8 @@ class oxUtilsFile extends oxSuperCfg
             throw new oxException( 'EXCEPTION_NOTALLOWEDTYPE' );
         }
 
-        //file exists ?
-        $iFileCounter = 0;
-        $sTempFileName = $sFileName;
-        while (file_exists($sBasePath . "/" .$sUploadPath . "/" . $sFileName . "." . $sExt)) {
-            $iFileCounter++;
-            $sFileName = $sTempFileName . "($iFileCounter)";
-        }
-
-        move_uploaded_file($aFileInfo['tmp_name'], $sBasePath . "/" .$sUploadPath . "/" . $sFileName . "." . $sExt);
+        $sFileName = $this->_getUniqueFileName( $sBasePath . "/" .$sUploadPath, $sFileName, $sExt );
+        $this->_moveImage( $aFileInfo['tmp_name'], $sBasePath . "/" .$sUploadPath . "/" . $sFileName . "." . $sExt );
 
         $sUrl = $this->getConfig()->getShopUrl() . "/" . $sUploadPath . "/" . $sFileName . "." . $sExt;
 
@@ -610,5 +605,29 @@ class oxUtilsFile extends oxSuperCfg
         $sUrl = str_replace('http:/', 'http://', $sUrl);
 
         return $sUrl;
+    }
+
+    /**
+     * Checks if file with same name does not exist, if exists - addes number prefix
+     * to file name Returns unique file name.
+     *
+     * @param string $sFilePath file storage path/folder (e.g. /htdocs/out/img/)
+     * @param string $sFileName name of file (e.g. picture1)
+     * @param string $sFileExt  file extension (e.g. gif)
+     *
+     * @return string
+     */
+    protected function _getUniqueFileName( $sFilePath, $sFileName, $sFileExt )
+    {
+        $sFilePath     = $this->normalizeDir( $sFilePath );
+        $iFileCounter  = 0;
+        $sTempFileName = $sFileName;
+
+        //file exists ?
+        while ( file_exists( $sFilePath . "/" . $sFileName . "." . $sFileExt ) ) {
+            $iFileCounter++;
+            $sFileName = $sTempFileName . "($iFileCounter)";
+        }
+        return $sFileName . "." . $sFileExt;
     }
 }

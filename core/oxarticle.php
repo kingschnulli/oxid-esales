@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 21830 2009-08-25 14:04:20Z vilma $
+ * $Id: oxarticle.php 22105 2009-09-03 08:56:40Z arvydas $
  */
 
 // defining supported link types
@@ -541,9 +541,11 @@ class oxArticle extends oxI18n implements oxIArticle
         // check if article is still active
         $sQ = " $sTable.oxactive = 1 ";
 
+        $blTimeCheck = $myConfig->getConfigParam( 'blUseTimeCheck' );
+        $sDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
+
         // enabled time range check ?
-        if ( $myConfig->getConfigParam( 'blUseTimeCheck' ) ) {
-            $sDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
+        if ( $blTimeCheck ) {
             $sQ = "( $sQ or ( $sTable.oxactivefrom < '$sDate' and $sTable.oxactiveto > '$sDate' ) ) ";
         }
 
@@ -552,7 +554,8 @@ class oxArticle extends oxI18n implements oxIArticle
             $sQ = " $sQ and ( $sTable.oxstockflag != 2 or ( $sTable.oxstock + $sTable.oxvarstock ) > 0  ) ";
             //V #M513: When Parent article is not purchaseble, it's visibility should be displayed in shop only if any of Variants is available.
             if ( !$myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
-                $sQ = " $sQ and ( $sTable.oxvarcount=0 or ( select count(art.oxid) from $sTable as art where art.oxstockflag=2 and art.oxparentid=$sTable.oxid and art.oxstock=0 ) < $sTable.oxvarcount ) ";
+                $sTimeCheckQ = $blTimeCheck ? " or ( art.oxactivefrom < '$sDate' and art.oxactiveto > '$sDate' )" : '';
+                $sQ = " $sQ and IF( $sTable.oxvarcount = 0, 1, ( select 1 from $sTable as art where art.oxparentid=$sTable.oxid and ( art.oxactive = 1 $sTimeCheckQ ) and ( art.oxstockflag != 2 or art.oxstock > 0 ) limit 1 ) ) ";
             }
         }
 
@@ -561,7 +564,7 @@ class oxArticle extends oxI18n implements oxIArticle
     }
 
     /**
-     * Assign condition setter. In case article assignment is skipped ($_blSkipAssign = true), it does nto perform additiojal
+     * Assign condition setter. In case article assignment is skipped ($_blSkipAssign = true), it does not perform additional
      *
      * @param bool $blSkipAssign Whether to skip assign process for the article
      *
@@ -3457,7 +3460,7 @@ class oxArticle extends oxI18n implements oxIArticle
                 if ( !$this->oxarticles__oxlongdesc->value ) {
                     $this->oxarticles__oxlongdesc = $oParentArticle->oxarticles__oxlongdesc;
                 }
-                //#1031: Lazy loading of field values does not load parent's oxtitle 
+                //#1031: Lazy loading of field values does not load parent's oxtitle
                 if ( !$this->oxarticles__oxtitle->value ) {
                     $sTitle = $this->getParentTitle($this->oxarticles__oxparentid->value);
                     $this->oxarticles__oxtitle = new oxField($sTitle);
@@ -4098,7 +4101,7 @@ class oxArticle extends oxI18n implements oxIArticle
 
     /**
      * Returns parent article title
-     * 
+     *
      * @param string $sId parent article id
      *
      * @return string

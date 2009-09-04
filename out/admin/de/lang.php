@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 21618 2009-08-17 12:54:51Z philipp.grashoff $
+ * $Id: lang.php 22117 2009-09-03 11:59:10Z sarunas $
  */
 
 $sLangName  = 'Deutsch';
@@ -1163,6 +1163,9 @@ $aLang = array(
 'SHOP_CONFIG_IMPORTTICKERREFRESH'               => 'Sekunden, nach denen der Importticker neu geladen wird',
 'SHOP_CONFIG_MWSTSETTING'                       => 'MwSt.-Einstellungen für Lexware Faktura',
 'SHOP_CONFIG_NUMBEROFEMAILSPERTICK'             => 'Anzahl von E-Mails, die der Newsletter pro Tick verschickt',
+'SHOP_CONFIG_ASSIGNDEFAULTCAT'                  => '[tr] Assign default category',
+'SHOP_CONFIG_UNASSIGNDEFAULTCAT'                => '[tr] Unassign default category',
+'SHOP_CONFIG_ASSIGNEDDEFAULTCAT'                => '[tr] Default category:',
 'SHOP_CONFIG_ACTIVECATEGORYBYSTART'             => 'Aktive Kategorie beim Start (Diese Kategorie wird in der Kategorien-Navigation "ausgeklappt" angezeigt)',
 'SHOP_CONFIG_AUTOSEARCHONCAT'                   => 'Die Suche automatisch starten, sobald der Kunde eine Kategorie ausgewählt hat',
 'SHOP_CONFIG_AUTOICONS'                         => 'Icons automatisch generieren aus Thumbnail (kann u.U. das System stark verlangsamen)',
