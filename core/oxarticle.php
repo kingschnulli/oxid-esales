@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 22105 2009-09-03 08:56:40Z arvydas $
+ * $Id: oxarticle.php 22146 2009-09-04 10:27:25Z arvydas $
  */
 
 // defining supported link types
@@ -1349,8 +1349,8 @@ class oxArticle extends oxI18n implements oxIArticle
 
     /**
      * Returns current article Manufacturer object. If $blShopCheck = false, then
-     * Manufacturer loading will fallback to oxI18n object and blReadOnly parameter
-     * will be set to true if Manufacturer is not assigned to current shop
+     * Manufacturer blReadOnly parameter will be set to true. If Manufacturer is
+     * not assigned to current shop
      *
      * @param bool $blShopCheck Set false if shop check is not required (default is true)
      *
@@ -1358,12 +1358,9 @@ class oxArticle extends oxI18n implements oxIArticle
      */
     public function getManufacturer( $blShopCheck = true )
     {
-        $oManufacturer = null;
-        if ( ( $sManufacturerId = $this->getManufacturerId() ) ) {
-            $oManufacturer = oxNew( 'oxmanufacturer' );
-        } elseif ( !$blShopCheck && $this->oxarticles__oxmanufacturerid->value ) {
-            $oManufacturer = oxNew( 'oxI18n' );
-            $oManufacturer->init('oxmanufacturers');
+        $oManufacturer = oxNew( 'oxmanufacturer' );;
+        if ( !( $sManufacturerId = $this->getManufacturerId() ) &&
+             !$blShopCheck && $this->oxarticles__oxmanufacturerid->value ) {
             $oManufacturer->setReadOnly( true );
             $sManufacturerId = $this->oxarticles__oxmanufacturerid->value;
         }
@@ -2003,6 +2000,9 @@ class oxArticle extends oxI18n implements oxIArticle
         $sDbValue = str_replace( '&amp;nbsp;', '&nbsp;', $sDbValue );
         $sDbValue = str_replace( '&amp;', '&', $sDbValue );
         $sDbValue = str_replace( '&quot;', '"', $sDbValue );
+        $sDbValue = str_replace( '&lang=', '&amp;lang=', $sDbValue);
+        //
+
         $oStr = getStr();
         $blHasSmarty = $oStr->strstr( $sDbValue, '[{' );
         $blHasPhp = $oStr->strstr( $sDbValue, '<?' );

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasketitem.php 22081 2009-09-02 11:24:38Z arvydas $
+ * $Id: oxbasketitem.php 22150 2009-09-04 11:06:11Z rimvydas.paskevicius $
  */
 
 /**
@@ -381,12 +381,13 @@ class oxBasketItem extends oxSuperCfg
     }
 
     /**
-     * Retrieves the article
+     * Retrieves the article .Throws an execption if article does not exist,
+     * is not buyable or visible.
      *
      * @param string $sProductId product id
      * @param bool   $blDisableLazyLoading disable lazy loading
      *
-     * @throws oxArticleException exception
+     * @throws oxArticleException, oxNoArticleException exception
      *
      * @return oxarticle
      */
@@ -416,6 +417,15 @@ class oxBasketItem extends oxSuperCfg
             $this->_oArticle->setSkipAbPrice( true );
             $this->_oArticle->setLoadParentData( true );
             if ( !$this->_oArticle->load( $sProductId ) ) {
+                $oEx = oxNew( 'oxNoArticleException' );
+                $oEx->setMessage( 'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST' );
+                $oEx->setArticleNr( $sProductId );
+                $oEx->setProductId( $sProductId );
+                throw $oEx;
+            }
+
+            // cant put not visible product to basket (M:1286)
+            if ( !$this->_oArticle->isVisible() ) {
                 $oEx = oxNew( 'oxNoArticleException' );
                 $oEx->setMessage( 'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST' );
                 $oEx->setArticleNr( $sProductId );

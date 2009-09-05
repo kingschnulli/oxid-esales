@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategory.php 21909 2009-08-27 11:16:12Z sarunas $
+ * $Id: oxcategory.php 22126 2009-09-03 15:09:40Z sarunas $
  */
 
 /**
@@ -184,6 +184,9 @@ class oxCategory extends oxI18n
     {
 
         parent::assign( $dbRecord );
+
+        // workaround for firefox showing &lang= as &9001;= entity, mantis#0001272
+        $this->oxcategories__oxlongdesc = new oxField( str_replace( '&lang=', '&amp;lang=', $this->oxcategories__oxlongdesc->value ), oxField::T_RAW);
 
         startProfile("parseThroughSmarty");
         // #1030C run through smarty

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 21710 2009-08-19 14:52:39Z tomas $
+ * $Id: oxcmp_user.php 22159 2009-09-04 12:27:39Z tomas $
  */
 
 /**
@@ -314,7 +314,7 @@ class oxcmp_user extends oxView
     public function changeUser( )
     {
         // checking if "open address area" button was clicked
-        if ( $blSetup = $this->_setupDelAddress() ) {
+        if ( $this->_setupDelAddress() ) {
             return;
         }
 
@@ -600,13 +600,13 @@ class oxcmp_user extends oxView
      */
     protected function _setupDelAddress()
     {
-        $blSetup = false;
+        $blShowIt = false;
         $blShowShipAddress = $blSessShowAddress = (int) oxSession::getVar( 'blshowshipaddress' );
 
         // user clicked on button to hide
         if ( $blHideAddress = oxConfig::getParameter( 'blhideshipaddress' ) ) {
             $blShowShipAddress = 0;
-            $blSetup = true;
+            $blShowIt = true;
 
             // unsetting delivery address
             oxSession::deleteVar( 'deladdrid' );
@@ -616,14 +616,14 @@ class oxcmp_user extends oxView
             // user clicked on button to show
             if ( $blShowAddress != $blSessShowAddress ) {
                 $blShowShipAddress = 1;
-                $blSetup = true;
+                $blShowIt = true;
             }
         }
 
         oxSession::setVar( 'blshowshipaddress', $blShowShipAddress );
         $this->_oParent->_aViewData['blshowshipaddress'] = $blShowShipAddress;
 
-        return $blSetup;
+        return $blShowIt;
     }
 
     /**

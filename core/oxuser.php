@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 21844 2009-08-26 07:16:56Z tomas $
+ * $Id: oxuser.php 22168 2009-09-04 16:28:21Z tomas $
  */
 
 /**
@@ -965,7 +965,7 @@ class oxUser extends oxBase
         $this->_checkPassword( $sPassword, $sPassword2, ((int) oxConfig::getParameter( 'option' ) == 3) );
 
         // 4. required fields
-        $this->_checkRequiredFields( $aInvAddress, $aDelAddress, (bool) oxConfig::getParameter( 'oxaddressid' ) );
+        $this->_checkRequiredFields( $aInvAddress, $aDelAddress );
 
         // 5. country check
         $this->_checkCountries( $aInvAddress, $aDelAddress );
@@ -1820,7 +1820,7 @@ class oxUser extends oxBase
      *
      * @return null
      */
-    protected function _checkRequiredFields( $aInvAddress, $aDelAddress, $blCheckDel )
+    protected function _checkRequiredFields( $aInvAddress, $aDelAddress )
     {
         // collecting info about required fields
         $aMustFields = array( 'oxuser__oxfname',
@@ -1843,12 +1843,12 @@ class oxUser extends oxBase
         // collecting fields
         $aFields = array_merge( $aInvAddress, $aDelAddress );
 
-        /*
+
         // check delivery address ?
         $blCheckDel = false;
         if ( count( $aDelAddress ) ) {
             $blCheckDel = true;
-        }*/
+        }
 
         // checking
         foreach ( $aMustFields as $sMustField ) {

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcontent.php 22008 2009-09-01 10:33:44Z vilma $
+ * $Id: oxcontent.php 22125 2009-09-03 15:06:02Z sarunas $
  */
 
 /**
@@ -141,6 +141,8 @@ class oxContent extends oxI18n
 
         parent::assign( $dbRecord );
         $this->oxcontents__oxcontent->setValue(str_replace( '&amp;', '&', $this->oxcontents__oxcontent->value ), oxField::T_RAW);
+        // workaround for firefox showing &lang= as &9001;= entity, mantis#0001272
+        $this->oxcontents__oxcontent->setValue(str_replace( '&lang=', '&amp;lang=', $this->oxcontents__oxcontent->value ), oxField::T_RAW);
         $this->getLink();
     }
 

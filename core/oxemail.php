@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 22085 2009-09-02 11:44:32Z vilma $
+ * $Id: oxemail.php 22162 2009-09-04 12:55:21Z sarunas $
  */
 /**
  * Includes PHP mailer class.
@@ -546,10 +546,15 @@ class oxEmail extends phpmailer
         $this->_setMailParams( $oShop );
 
         // user
-        $sSelect = "select oxid from oxuser where oxuser.oxactive = 1 and
-                    oxuser.oxusername = '$sEmailAddress' and oxuser.oxpassword != ''
-                    order by oxshopid = '".$oShop->getId()."' desc";
+        $sWhere = "oxuser.oxactive = 1 and oxuser.oxusername = '$sEmailAddress' and oxuser.oxpassword != ''";
+        $sOrder = "";
+        if (oxConfig::getInstance()->getConfigParam( 'blMallUsers' )) {
+            $sOrder = "order by oxshopid = '".$oShop->getId()."' desc";
+        } else {
+            $sWhere .= " and oxshopid = '".$oShop->getId()."'";
+        }
 
+        $sSelect = "select oxid from oxuser where $sWhere $sOrder";
         if ( ( $sOxId = oxDb::getDb()->getOne( $sSelect ) ) ) {
 
             $oUser = oxNew( 'oxuser' );
