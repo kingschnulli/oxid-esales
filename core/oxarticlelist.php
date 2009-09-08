@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticlelist.php 22005 2009-09-01 08:32:55Z sarunas $
+ * $Id: oxarticlelist.php 22184 2009-09-07 09:01:11Z arvydas $
  */
 
 /**
@@ -1057,5 +1057,38 @@ class oxArticleList extends oxList
         }
 
         return $sSelect;
+    }
+
+    /**
+     * Loads list of low stock state products
+     *
+     * @param array $aIds product ids array
+     *
+     * @return null
+     */
+    public function loadStockRemindProducts( $aBasketContents )
+    {
+        if ( is_array( $aBasketContents ) && count( $aBasketContents ) ) {
+            foreach ( $aBasketContents as $oBasketItem ) {
+                $aArtIds[] = $oBasketItem->getProductId();
+            }
+
+            $oBaseObject = $this->getBaseObject();
+
+            $sFieldNames = $oBaseObject->getSelectFields();
+            $sTable      = $oBaseObject->getViewName();
+
+            // fetching actual db stock state and reminder status
+            $sQ = "select {$sFieldNames} from {$sTable} where {$sTable}.oxid in ( '".implode( "','", $aArtIds )."' ) and
+                          oxremindactive = '1' and oxstock <= oxremindamount";
+            $this->selectString( $sQ );
+
+            // updating stock reminder state
+            if ( $this->count() ) {
+                $sQ = "update {$sTable} set oxremindactive = '2' where {$sTable}.oxid in ( '".implode( '","', $aArtIds )."' ) and
+                              oxremindactive = '1' and oxstock <= oxremindamount";
+                oxDb::getDb()->execute( $sQ );
+            }
+        }
     }
 }

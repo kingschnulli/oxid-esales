@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 22096 2009-09-02 14:12:06Z sarunas $
+ * $Id: oxconfig.php 22196 2009-09-07 13:31:36Z rimvydas.paskevicius $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -681,8 +681,8 @@ class oxConfig extends oxSuperCfg
             $aServerVars     = $myUtilsServer->getServerVar();
             $aHttpsServerVar = $myUtilsServer->getServerVar( 'HTTPS' );
 
-            $this->_blIsSsl = ( isset( $aHttpsServerVar ) && $this->getConfigParam( 'sSSLShopURL' ) &&
-                         ( $aHttpsServerVar == 'on' || $aHttpsServerVar == '1' ) ); // 1&1 provides "1"
+            $this->_blIsSsl = ( isset( $aHttpsServerVar ) && ( $this->getConfigParam( 'sSSLShopURL' ) || $this->getConfigParam( 'sMallSSLShopURL' ) ) &&
+                         ( $aHttpsServerVar === 'on' || $aHttpsServerVar == '1' ) ); // 1&1 provides "1"
 
             //additional special handling for profihost customers
             if ( isset( $aServerVars['HTTP_X_FORWARDED_SERVER'] ) &&
@@ -1244,7 +1244,7 @@ class oxConfig extends oxSuperCfg
         }
 
         $blNativeImg = $this->getConfigParam( 'blNativeImages' );
-        
+
         $sUrl = $this->getUrl( $sFile, $this->_sPictureDir, $blAdmin, $blSSL, $blNativeImg, $iLang, $iShopId );
         if ( $sFile && $this->getConfigParam('blFormerTplSupport') ) {
             $sUrl = str_replace( $this->getPictureUrl( null, $blAdmin, $blSSL, $iLang, $iShopId ), '', $sUrl );

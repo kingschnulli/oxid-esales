@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 22168 2009-09-04 16:28:21Z tomas $
+ * $Id: oxuser.php 22203 2009-09-07 14:37:25Z arvydas $
  */
 
 /**
@@ -802,9 +802,9 @@ class oxUser extends oxBase
                 }
             }
 
-                if ( $this->inGroup( 'oxidnotyetordered' ) ) {
-                    $this->removeFromGroup( 'oxidnotyetordered' );
-                }
+            if ( $this->inGroup( 'oxidnotyetordered' ) ) {
+                $this->removeFromGroup( 'oxidnotyetordered' );
+            }
         }
     }
 

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 22159 2009-09-04 12:27:39Z tomas $
+ * $Id: oxcmp_user.php 22204 2009-09-07 14:39:13Z arvydas $
  */
 
 /**
@@ -454,8 +454,8 @@ class oxcmp_user extends oxView
 
         // registered new user ?
         if ( $this->createuser()!= false && $this->_blIsNewUser ) {
-                // #1672 R
-                $this->getUser()->addToGroup( 'oxidnotyetordered' );
+            // #1672 R
+            $this->getUser()->addToGroup( 'oxidnotyetordered' );
 
             if ( $this->_blNewsSubscriptionStatus === null || $this->_blNewsSubscriptionStatus ) {
                 return 'register?success=1';
