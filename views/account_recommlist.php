@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: account_recommlist.php 22000 2009-09-01 06:57:21Z arvydas $
+ * $Id: account_recommlist.php 22226 2009-09-08 13:06:42Z arvydas $
  */
 
 /**
@@ -101,7 +101,6 @@ class Account_Recommlist extends Account
         $this->_aViewData['recommlists']    = $this->getRecommLists();
         $this->_aViewData['itemList']       = $this->getActiveRecommItems();
         $this->_aViewData['actvrecommlist'] = $this->getActiveRecommList();
-        $this->_aViewData['pageNavigation'] = $this->getPageNavigation();
 
         if ( !( $this->getActiveRecommList() ) ) {
             // list of found oxrecommlists
@@ -114,6 +113,7 @@ class Account_Recommlist extends Account
             }
         }
 
+        $this->_aViewData['pageNavigation'] = $this->getPageNavigation();
         return $this->_sThisTemplate;
     }
 
