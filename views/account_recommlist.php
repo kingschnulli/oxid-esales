@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: account_recommlist.php 22226 2009-09-08 13:06:42Z arvydas $
+ * $Id: account_recommlist.php 22232 2009-09-09 12:25:07Z sarunas $
  */
 
 /**
@@ -239,8 +239,13 @@ class Account_Recommlist extends Account
             $oRecommList->oxrecommlists__oxauthor = new oxField($sAuthor, oxField::T_RAW);
             $oRecommList->oxrecommlists__oxdesc   = new oxField($sText, oxField::T_RAW);
 
-            // marking entry as saved
-            $this->_blSavedEntry = (bool) $oRecommList->save();
+            try {
+                // marking entry as saved
+                $this->_blSavedEntry = (bool) $oRecommList->save();
+            } catch (oxObjectException $oEx ) {
+                //add to display at specific position
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true, 'user' );
+            }
         }
     }
 

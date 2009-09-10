@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 22204 2009-09-07 14:39:13Z arvydas $
+ * $Id: oxcmp_user.php 22239 2009-09-09 13:41:02Z tomas $
  */
 
 /**
@@ -86,15 +86,17 @@ class oxcmp_user extends oxView
             oxSession::setVar( 'dgr', $sDynGoup );
         }
 
+        /*
         if ( $blNewsReg = oxConfig::getParameter( 'blnewssubscribed' )) {
             $this->_oParent->setNewsSubscribed( $blNewsReg );
             // Passing to view. Left for compatibility reasons for a while. Will be removed in future
             $this->_oParent->addTplParam( 'blnewssubscribed', $this->_oParent->isNewsSubscribed() );
-        }
+        }*/
 
         if ( $aInvAdress = oxConfig::getParameter( 'invadr') ) {
             $this->_oParent->addTplParam( 'invadr', $aInvAdress );
         }
+
 
         if ( $aDelAdress = oxConfig::getParameter( 'deladr') ) {
             $this->_oParent->addTplParam( 'deladr', $aDelAdress );
@@ -104,6 +106,7 @@ class oxcmp_user extends oxView
             $this->_oParent->addTplParam( 'lgn_usr', $sUser );
         }
 
+        /*
         if ( $aDelAdressID = oxConfig::getParameter( 'deladrid' ) ) {
             $oAddress = oxNew( 'oxaddress' );
             $oAddress->load( $aDelAdressID );
@@ -116,7 +119,7 @@ class oxcmp_user extends oxView
             $this->_oParent->setShowShipAddress( 1 );
             // Passing to view. Left for compatibility reasons for a while. Will be removed in future
             $this->_oParent->addTplParam( 'blshowshipaddress', 1 );
-        }
+        }*/
 
         return $this->getUser();
     }
@@ -635,6 +638,7 @@ class oxcmp_user extends oxView
     public function loginOid()
     {
         $iOldErrorReproting = error_reporting();
+        //for 3rd part library disabling our E_STRICT error reporting
         error_reporting($iOldErrorReproting & ~E_STRICT);
         try {
             $oOpenId = oxNew( "oxOpenID" );

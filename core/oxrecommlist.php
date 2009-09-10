@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxrecommlist.php 21983 2009-08-31 07:53:43Z arvydas $
+ * $Id: oxrecommlist.php 22232 2009-09-09 12:25:07Z sarunas $
  */
 
 /**
@@ -435,5 +435,18 @@ class oxRecommList extends oxBase
     public function setArticlesFilter($sArticlesFilter)
     {
         $this->_sArticlesFilter = $sArticlesFilter;
+    }
+
+    /**
+     * Save this Object to database, insert or update as needed.
+     *
+     * @return mixed
+     */
+    public function save()
+    {
+        if (!$this->oxrecommlists__oxtitle->value) {
+            throw new oxObjectException('EXCEPTION_RECOMMLIST_NOTITLE');
+        }
+        return parent::save();
     }
 }

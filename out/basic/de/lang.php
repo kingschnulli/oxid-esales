@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22021 2009-09-01 13:35:46Z philipp.grashoff $
+ * $Id: lang.php 22233 2009-09-09 12:25:17Z sarunas $
  */
 
 
@@ -1228,7 +1228,8 @@ $aLang = array(
 'EXCEPTION_INPUT_INVALIDAMOUNT'                   => 'Bitte geben Sie eine gültige Menge für das Artikel ein!',
 'EXCEPTION_NOFILE'                                => 'Keine Datei hochgeladen',
 'EXCEPTION_NOTALLOWEDTYPE'                        => 'Verbotener Dateityp. Bitte config.inc.php anpassen, um diesen Dateityp zu erlauben.',
-'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" nicht gefunden'
+'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" nicht gefunden',
+'EXCEPTION_RECOMMLIST_NOTITLE'                    => '[tr] Title field is empty',
 );
 
 /*

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: user.php 21712 2009-08-19 15:06:23Z tomas $
+ * $Id: user.php 22251 2009-09-09 16:25:33Z tomas $
  */
 
 /**
@@ -56,7 +56,7 @@ class User extends oxUBase
      * Active user
      * @var object
      */
-    protected $_oUser = null;
+    //protected $_oUser = null;
 
     /**
      * Selected Address
@@ -100,14 +100,9 @@ class User extends oxUBase
     {
         parent::render();
 
-        if ( ( $oUser = $this->getUser() ) ) {
-
-            if ( oxConfig::getParameter( 'blshowshipaddress' ) ) {
-                // empty address to disable delivery address
-                $this->showShipAddress();
+        if ( $this->showShipAddress() && $oUser = $this->getUser()) {
                 $this->getDelAddress();
                 $this->_addFakeAddress( $oUser->getUserAddresses() );
-            }
         }
 
         $this->_aViewData['blshowshipaddress'] = $this->showShipAddress();
@@ -135,9 +130,6 @@ class User extends oxUBase
     protected function _getWishListId()
     {
         $this->_sWishId = null;
-        // added check because sometimes it throws php warning
-        //if ( is_array($oBasket->getContents()))
-        $this->_sWishId = false;
         // check if we have to set it here
         $oBasket = $this->getSession()->getBasket();
         foreach ( $oBasket->getContents() as $oBasketItem ) {
@@ -181,6 +173,7 @@ class User extends oxUBase
      *
      * @return object
      */
+    /*
     protected function _getActiveUser()
     {
         if ( $this->_oUser === null ) {
@@ -190,7 +183,7 @@ class User extends oxUBase
             }
         }
         return $this->_oUser;
-    }
+    }*/
 
     /**
      * Returns selected delivery address
@@ -201,7 +194,7 @@ class User extends oxUBase
     {
         if ( $this->_sSelectedAddress === null ) {
             $this->_sSelectedAddress = false;
-            if ( $oUser = $this->_getActiveUser() ) {
+            if ( $oUser = $this->getUser() ) {
                 $this->_sSelectedAddress = $oUser->getSelectedAddress( $this->_getWishListId() );
             }
         }
@@ -250,7 +243,7 @@ class User extends oxUBase
             // passing user chosen option value to display correct content
             $iOption = oxConfig::getParameter( 'option' );
             // if user chosen "Option 2"" - we should show user details only if he is authorized
-            if ( $iOption == 2 && !$this->_getActiveUser() ) {
+            if ( $iOption == 2 && !$this->getUser() ) {
                 $iOption = 0;
             }
             $this->_iOption = $iOption;
@@ -307,16 +300,22 @@ class User extends oxUBase
             if ( ( $blNews = oxConfig::getParameter( 'blnewssubscribed' ) ) === null ) {
                 $blNews = true;
             }
-            if ( ( $oUser = $this->_getActiveUser() ) ) {
+            if ( ( $oUser = $this->getUser() ) ) {
                 $blNews = $oUser->getNewsSubscription()->getOptInStatus();
             }
             $this->_blNewsSubscribed = $blNews;
         }
-        return $this->_blNewsSubscribed;
+
+        if (is_null($this->_blNewsSubscribed))
+            $this->_blNewsSubscribed = false;
+
+        return  $this->_blNewsSubscribed;
     }
 
     /**
      * Sets if show user shipping address
+     *
+     * @deprecated
      *
      * @param bool $blShowShipAddress if TRUE - shipping address is shown
      *
@@ -329,39 +328,48 @@ class User extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns if to show shipping address
+     * Template variable getter. Checks to show or not shipping address entry form
      *
      * @return bool
      */
     public function showShipAddress()
     {
+
         if ( $this->_blShowShipAddress === null ) {
+
             $sAddressId = (int) oxConfig::getParameter( 'oxaddressid' );
             $this->_blShowShipAddress = ( $sAddressId == -2 ) ? 0 : oxConfig::getParameter( 'blshowshipaddress' );
 
-            if ( ( $oUser = $this->_getActiveUser() ) ) {
+            if ( ( $oUser = $this->getUser() ) ) {
                 // wishlist user address id
                 if ( $sWishId = $this->_getWishListId() ) {
                     // if user didn't click on button to hide
                     if ( $sWishId && oxSession::getVar( 'blshowshipaddress' ) === null ) {
                         // opening address field for wishlist address information
-                        oxSession::setVar( 'blshowshipaddress', 1 );
-                        $this->_blShowShipAddress = 1;
-                    }
-                }
-                // loading if only address must be shown
-                if ( oxConfig::getParameter( 'blshowshipaddress' ) ) {
-                    $sAddressId = $this->_getSelectedAddress();
-                    if ( '-2' == $sAddressId ) {
-                        // user decided to use paymetn address as delivery
-                        oxSession::setVar( 'blshowshipaddress', 0 );
-                        $this->_blShowShipAddress = 0;
-                        // unsetting delivery address
-                        oxSession::deleteVar( 'deladdrid' );
+                        oxSession::setVar( 'blshowshipaddress', true );
+                        $this->_blShowShipAddress = true;
                     }
                 }
             }
+
+            if ( '-2' == $sAddressId ) {
+                // user decided to use paymetn address as delivery
+                oxSession::setVar( 'blshowshipaddress', 0 );
+                // unsetting delivery address
+                oxSession::deleteVar( 'deladdrid' );
+                $this->_blShowShipAddress = false;
+            }
         }
+
+        //if still not set then take it from session
+        if ( $this->_blShowShipAddress === null ) {
+            $this->_blShowShipAddress = oxSession::getVar( 'blshowshipaddress');
+        }
+
+        if ( $this->_blShowShipAddress === null ) {
+            $this->_blShowShipAddress = false;
+        }
+
         return $this->_blShowShipAddress;
     }
 
@@ -372,10 +380,11 @@ class User extends oxUBase
      *
      * @return null
      */
+    /*
     public function setDelAddress( $oDelAddress )
     {
         // disabling default behaviour ..
-    }
+    }*/
 
     /**
      * Template variable getter. Returns shipping address

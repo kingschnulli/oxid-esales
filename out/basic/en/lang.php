@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22018 2009-09-01 13:24:07Z philipp.grashoff $
+ * $Id: lang.php 22233 2009-09-09 12:25:17Z sarunas $
  */
 
 
@@ -1229,7 +1229,8 @@ $aLang = array(
 'EXCEPTION_INPUT_INVALIDAMOUNT'                   => 'Please enter a valid amount for this product!',
 'EXCEPTION_NOFILE'                                => 'No uploaded file',
 'EXCEPTION_NOTALLOWEDTYPE'                        => 'Not allowed file type (please, edit config.inc.php to allow this type of file)',
-'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" not found'
+'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" not found',
+'EXCEPTION_RECOMMLIST_NOTITLE'                    => 'Title field is empty',
 );
 
 /*
