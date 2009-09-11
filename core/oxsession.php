@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsession.php 21102 2009-07-23 12:21:10Z vilma $
+ * $Id: oxsession.php 22262 2009-09-10 12:43:30Z sarunas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -629,7 +629,8 @@ class oxSession extends oxSuperCfg
         }
 
         $blDisableCookieCheck = $myConfig->getConfigParam( 'blDisableCookieCheck' );
-        if ( !$blDisableCookieCheck ) {
+        $blUseCookies         = $myConfig->getConfigParam( 'blSessionUseCookies' ) || $this->isAdmin();
+        if ( !$blDisableCookieCheck && $blUseCookies ) {
             $sCookieSid = oxUtilsServer::getInstance()->getOxCookie( 'sid_key' );
             $aSessCookieSetOnce = self::getVar("sessioncookieisset");
             if ( $this->_checkCookies( $sCookieSid, $aSessCookieSetOnce ) ) {
@@ -774,13 +775,19 @@ class oxSession extends oxSuperCfg
 
         $this->setId($sSessId);
 
+        $blUseCookies = $this->getConfig()->getConfigParam( 'blSessionUseCookies' ) || $this->isAdmin();
+
         if (!$this->_allowSessionStart()) {
-            oxUtilsServer::getInstance()->setOxCookie($this->getName(), null);
+            if ($blUseCookies) {
+                oxUtilsServer::getInstance()->setOxCookie($this->getName(), null);
+            }
             return;
         }
 
-        //setting session cookie
-         oxUtilsServer::getInstance()->setOxCookie($this->getName(), $sSessId);
+        if ($blUseCookies) {
+            //setting session cookie
+            oxUtilsServer::getInstance()->setOxCookie($this->getName(), $sSessId);
+        }
 
         if ( $this->_sErrorMsg) {
             //display debug error msg

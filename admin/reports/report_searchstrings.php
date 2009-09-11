@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: report_searchstrings.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: report_searchstrings.php 22260 2009-09-10 08:12:23Z arvydas $
  */
 
 if ( !class_exists( "report_searchstrings")) {
@@ -41,7 +41,7 @@ if ( !class_exists( "report_searchstrings")) {
          *
          * @return null
          */
-        public function graphToText()
+        public function render()
         {
             $aDataX = array();
             $aDataY = array();
@@ -105,6 +105,8 @@ if ( !class_exists( "report_searchstrings")) {
             $oSmarty->assign( "cols", count( $aAligns ) );
             $oSmarty->assign( "percents", array ( $aDataVals ));
             $oSmarty->assign( "y", $aDataY);
+
+            return parent::render();
         }
 
         /**
@@ -160,7 +162,7 @@ if ( !class_exists( "report_searchstrings")) {
             $graph->xaxis->setTickLabels( $aDataY);
 
             // Set title and subtitle
-            $graph->title->set("Suchwï¿½rter");
+            $graph->title->set("Suchwörter");
 
             // Use built in font
             $graph->title->setFont(FF_FONT1, FS_BOLD);

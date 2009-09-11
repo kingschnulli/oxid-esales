@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: report_top_viewed_products.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: report_top_viewed_products.php 22260 2009-09-10 08:12:23Z arvydas $
  */
 
 if ( !class_exists( "report_top_viewed_products")) {
@@ -41,7 +41,7 @@ if ( !class_exists( "report_top_viewed_products")) {
          *
          * @return null
          */
-        public function graphToText()
+        public function render()
         {
             $aDataX = array();
             $aDataY = array();
@@ -108,6 +108,8 @@ if ( !class_exists( "report_top_viewed_products")) {
             $oSmarty->assign( "cols", count( $aAligns ) );
             $oSmarty->assign( "percents", array ( $aDataVals ));
             $oSmarty->assign( "y", $aDataY);
+
+            return parent::render();
         }
 
         /**
@@ -164,7 +166,7 @@ if ( !class_exists( "report_top_viewed_products")) {
 
 
             // Set title and subtitle
-            $graph->title->set("Suchwï¿½rter");
+            $graph->title->set("Suchwörter");
 
             // Use built in font
             $graph->title->setFont(FF_FONT1, FS_BOLD);
