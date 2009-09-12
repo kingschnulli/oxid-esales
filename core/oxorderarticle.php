@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorderarticle.php 20672 2009-07-08 11:38:22Z arvydas $
+ * $Id: oxorderarticle.php 22263 2009-09-10 12:57:29Z vilma $
  */
 
 /**
@@ -515,11 +515,11 @@ class oxOrderArticle extends oxBase implements oxIArticle
      *
      * @return array
      */
-    public function getCategoryIds( $blSkipCache = false )
+    public function getCategoryIds( $blActCats = false, $blSkipCache = false )
     {
         $aCatIds = array();
         if ( $oOrderArticle = $this->_getOrderArticle() ) {
-            $aCatIds = $oOrderArticle->getCategoryIds( $blSkipCache );
+            $aCatIds = $oOrderArticle->getCategoryIds( $blActCats, $blSkipCache );
         }
         return $aCatIds;
     }

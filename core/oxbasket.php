@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 21706 2009-08-19 14:40:38Z tomas $
+ * $Id: oxbasket.php 22268 2009-09-10 14:36:51Z arvydas $
  */
 
 /**
@@ -2203,5 +2203,45 @@ class oxBasket extends oxSuperCfg
         }
 
         return $dPrice;
+    }
+
+    /**
+     * Returns ( current basket products sum - total discount - voucher discount )
+     *
+     * @return double
+     */
+    public function getDiscountedProductsBruttoPrice()
+    {
+        $dTotalProdPrice = $this->getProductsPrice()->getBruttoSum();
+
+        // substracting total discount
+        if ( $oPrice = $this->getTotalDiscount() ) {
+            $dTotalProdPrice -= $oPrice->getBruttoPrice();
+        }
+
+        // substracting voucher discount
+        if ( $oPrice = $this->getVoucherDiscount() ) {
+            $dTotalProdPrice -= $oPrice->getBruttoPrice();
+        }
+
+        return $dTotalProdPrice;
+    }
+
+    /**
+     * Returns TRUE if ( current basket products sum - total discount - voucher discount ) > 0
+     *
+     * @return bool
+     */
+    public function isBelowMinOrderPrice()
+    {
+        $blIsBelowMinOrderPrice = false;
+        $dMinOrderPrice = oxPrice::getPriceInActCurrency( ( int ) $this->getConfig()->getConfigParam( 'iMinOrderPrice' ) );
+        if ( $dMinOrderPrice && $this->getProductsCount() &&
+             $dMinOrderPrice > $this->getDiscountedProductsBruttoPrice() ) {
+             $blIsBelowMinOrderPrice = true;
+        }
+
+        return $blIsBelowMinOrderPrice;
+
     }
 }

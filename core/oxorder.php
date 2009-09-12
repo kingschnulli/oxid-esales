@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 22081 2009-09-02 11:24:38Z arvydas $
+ * $Id: oxorder.php 22270 2009-09-10 15:08:16Z rimvydas.paskevicius $
  */
 
 /**
@@ -443,6 +443,9 @@ class oxOrder extends oxBase
     {
         $sQ = 'update oxorder set oxtransstatus="'.$sStatus.'" where oxid="'.$this->getId().'" ';
         oxDb::getDb()->execute( $sQ );
+
+        //updating order object
+        $this->oxorder__oxtransstatus = new oxField( $sStatus, oxField::T_RAW );
     }
 
     /**

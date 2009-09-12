@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxajax.php 21671 2009-08-19 06:42:55Z arvydas $
+ * $Id: oxajax.php 22272 2009-09-10 15:21:06Z rimvydas.paskevicius $
  */
 
 // shop path for includes
@@ -609,6 +609,8 @@ if ( $blAjaxCall ) {
     } else {
 
     }
+
+    $myConfig->pageClose();
 
     // closing session handlers
     // session_write_close();

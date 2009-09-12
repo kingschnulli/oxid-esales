@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_categories.php 21916 2009-08-27 12:26:00Z arvydas $
+ * $Id: oxcmp_categories.php 22263 2009-09-10 12:57:29Z vilma $
  */
 
 /**
@@ -371,7 +371,8 @@ class oxcmp_categories extends oxView
             if ( $sActCat && !$blVendor && !$blManufacturer && !$blTags ) {
                 if ( !$oProduct->isAssignedToCategory( $sActCat ) ) {
                     // article is assigned to any category ?
-                    $aArticleCats = $oProduct->getCategoryIds();
+                    // #1306: selecting active categories will not be checked if parent categories are active 
+                    $aArticleCats = $oProduct->getCategoryIds(true);
                     if ( is_array( $aArticleCats ) && count( $aArticleCats ) ) {
                         $sActCat = reset( $aArticleCats );
                         // setting list type directly
@@ -389,7 +390,7 @@ class oxcmp_categories extends oxView
                     }
                 }
             } elseif ( !$sActCat && !$sActCont && !$sActManufacturer && !$blTags ) {
-                $aArticleCats = $oProduct->getCategoryIds();
+                $aArticleCats = $oProduct->getCategoryIds(true);
                 if ( is_array( $aArticleCats ) && count( $aArticleCats ) ) {
                     $sActCat = reset( $aArticleCats );
                     // setting list type directly

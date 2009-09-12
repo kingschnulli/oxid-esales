@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlang.php 21921 2009-08-27 14:05:24Z arvydas $
+ * $Id: oxlang.php 22287 2009-09-11 11:30:09Z vilma $
  */
 
 /**
@@ -280,7 +280,7 @@ class oxLang extends oxSuperCfg
                         $oLang->sort   = $aLangParams[$key]['sort'];
                     }
 
-                    if ( isset( $iLanguage ) && $i == $iLanguage ) {
+                    if ( isset( $iLanguage ) && $oLang->id == $iLanguage ) {
                         $oLang->selected = 1;
                     } else {
                         $oLang->selected = 0;
@@ -331,7 +331,14 @@ class oxLang extends oxSuperCfg
      */
     public function getLanguageNames()
     {
-        return array_values( $this->getConfig()->getConfigParam( 'aLanguages' ));
+        
+        $aConfLanguages = $this->getConfig()->getConfigParam( 'aLanguages' );
+        $aLangIds = $this->getLanguageIds();
+        $aLanguages = array();
+        foreach ( $aLangIds as $iId => $sValue ) {
+            $aLanguages[$iId] = $aConfLanguages[$sValue];
+        }
+        return $aLanguages;
     }
 
     /**

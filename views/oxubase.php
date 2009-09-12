@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 22238 2009-09-09 13:40:28Z tomas $
+ * $Id: oxubase.php 22268 2009-09-10 14:36:51Z arvydas $
  */
 
 /**
@@ -360,6 +360,15 @@ class oxUBase extends oxView
 
     /**
      * If order price to low
+     * @var integer
+     */
+    protected $_blLowOrderPrice = null;
+
+    /**
+     * If order price to low
+     *
+     * @deprecated
+     *
      * @var integer
      */
     protected $_iLowOrderPrice  = null;
@@ -2103,6 +2112,8 @@ class oxUBase extends oxView
     /**
      * performs setup of aViewData according to iMinOrderPrice admin setting
      *
+     * @deprecated
+     *
      * @return null
      */
     public function prepareMinimumOrderPrice4View()
@@ -2139,9 +2150,6 @@ class oxUBase extends oxView
         parent::render();
 
         if ( $this->getIsOrderStep() ) {
-
-            // min. order price check
-            $this->prepareMinimumOrderPrice4View();
 
             // disabling navigation during order ...
             if ( $this->getConfig()->getConfigParam( 'blDisableNavBars' ) ) {
@@ -2528,22 +2536,31 @@ class oxUBase extends oxView
     }
 
     /**
-     * Template variable getter. Returns if order price is to low
+     * Template variable getter. Returns if order price is lower than
+     * minimum order price setup (config param "iMinOrderPrice")
      *
-     * @return integer
+     * @return bool
      */
     public function isLowOrderPrice()
     {
-        return $this->_iLowOrderPrice;
+        if ( $this->_blLowOrderPrice === null && ( $oBasket = $this->getSession()->getBasket() ) ) {
+            $this->_blLowOrderPrice = $oBasket->isBelowMinOrderPrice();
+        }
+
+        return $this->_blLowOrderPrice;
     }
 
     /**
-     * Template variable getter. Returns min order price
+     * Template variable getter. Returns formatted min order price value
      *
      * @return string
      */
     public function getMinOrderPrice()
     {
+        if ( $this->_sMinOrderPrice === null && $this->isLowOrderPrice() ) {
+            $dMinOrderPrice = oxPrice::getPriceInActCurrency( $this->getConfig()->getConfigParam( 'iMinOrderPrice' ) );
+            $this->_sMinOrderPrice = oxLang::getInstance()->formatCurrency( $dMinOrderPrice );
+        }
         return $this->_sMinOrderPrice;
     }
 

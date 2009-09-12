@@ -72,7 +72,7 @@ interface oxIArticle
      *
      * @return array
      */
-    public function getCategoryIds( $blSkipCache = false );
+    public function getCategoryIds( $blActCats = false, $blSkipCache = false );
 
     /**
      * Calculates and returns price of article (adds taxes and discounts).

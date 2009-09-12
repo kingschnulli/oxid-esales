@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 22146 2009-09-04 10:27:25Z arvydas $
+ * $Id: oxarticle.php 22263 2009-09-10 12:57:29Z vilma $
  */
 
 // defining supported link types
@@ -1240,11 +1240,12 @@ class oxArticle extends oxI18n implements oxIArticle
     /**
      * Returns ID's of categories. where this article is assigned
      *
+     * @param bool $blActCats select categories if all parents are active
      * @param bool $blSkipCache Whether to skip cache
      *
      * @return array
      */
-    public function getCategoryIds( $blSkipCache = false )
+    public function getCategoryIds( $blActCats = false, $blSkipCache = false )
     {
         $myConfig = $this->getConfig();
         if ( isset( self::$_aArticleCats[$this->getId()] ) && !$blSkipCache ) {
@@ -1257,14 +1258,9 @@ class oxArticle extends oxI18n implements oxIArticle
             $sOXID = $this->oxarticles__oxparentid->value;
         }
 
-        $sO2CView = $this->_getObjectViewName('oxobject2category');
-        $sCatView = $this->_getObjectViewName('oxcategories');
-
         // we do not use lists here as we dont need this overhead right now
         $oDB = oxDb::getDb(true);
-        $sSelect =  "select oxobject2category.oxcatnid as oxcatnid from $sO2CView as oxobject2category left join $sCatView as oxcategories on oxcategories.oxid = oxobject2category.oxcatnid ";
-        $sSelect .= 'where oxobject2category.oxobjectid=\''.$sOXID.'\' and oxcategories.oxid is not null and oxcategories.oxactive'.(($this->getLanguage())?'_'.$this->getLanguage():'').' = 1 order by oxobject2category.oxtime ';
-        $rs = $oDB->execute( $sSelect);
+        $rs = $oDB->execute( $this->_getSelectCatIds( $sOXID, $blActCats ) );
 
 
         $aRet = array();
@@ -1277,6 +1273,27 @@ class oxArticle extends oxI18n implements oxIArticle
         }
 
         return self::$_aArticleCats[$this->getId()] = $aRet;
+    }
+
+    /**
+     * Returns query for article categories select
+     *
+     * @param string $sOXID     article id
+     * @param bool   $blActCats select categories if all parents are active
+     *
+     * @return string
+     */
+    protected function _getSelectCatIds( $sOXID, $blActCats = false )
+    {
+        $sO2CView = $this->_getObjectViewName('oxobject2category');
+        $sCatView = $this->_getObjectViewName('oxcategories');
+        $sSelect =  "select oxobject2category.oxcatnid as oxcatnid from $sO2CView as oxobject2category left join $sCatView as oxcategories on oxcategories.oxid = oxobject2category.oxcatnid ";
+        $sSelect .= 'where oxobject2category.oxobjectid=\''.$sOXID.'\' and oxcategories.oxid is not null and oxcategories.oxactive'.(($this->getLanguage())?'_'.$this->getLanguage():'').' = 1 ';
+        if ( $blActCats ) {
+            $sSelect .= "and oxcategories.oxhidden = 0 and (select count(cats.oxid) from $sCatView as cats where cats.oxrootid = oxcategories.oxrootid and cats.oxleft < oxcategories.oxleft and cats.oxright > oxcategories.oxright and ( cats.oxhidden = 1 or cats.oxactive".(($this->getLanguage())?"_".$this->getLanguage():"")." = 0 ) ) = 0 ";
+        }
+        $sSelect .= 'order by oxobject2category.oxtime ';
+        return $sSelect;
     }
 
     /**
@@ -4112,5 +4129,20 @@ class oxArticle extends oxI18n implements oxIArticle
         $sLang = oxLang::getInstance()->getBaseLanguage();
         $sQ = "select oxtitle".(($sLang)?"_$sLang":"")." from $sArtView where oxid='".$sId."'";
         return oxDb::getDb()->getOne($sQ);
+    }
+
+    /**
+     * Fillters active category, if parent categories are not active
+     *
+     * @param array $aArticleCats all article categories
+     *
+     * @return array $aActCats
+     */
+    protected function _fillterActiveCats( $aArticleCats )
+    {
+        $aActCats = array();
+        
+        $sSelect = "select count(*) from ";
+        return $aActCats;
     }
 }

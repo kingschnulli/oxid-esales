@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxvoucher.php 21499 2009-08-07 13:49:56Z vilma $
+ * $Id: oxvoucher.php 22264 2009-09-10 13:14:48Z sarunas $
  */
 
 /**
@@ -247,7 +247,8 @@ class oxVoucher extends oxBase
             throw $oEx;
         }
         $oSerie = $this->getSerie();
-        if ( $oSerie->oxvoucherseries__oxminimumvalue->value && $dPrice < $oSerie->oxvoucherseries__oxminimumvalue->value ) {
+        $oCur = $this->getConfig()->getActShopCurrencyObject();
+        if ( $oSerie->oxvoucherseries__oxminimumvalue->value && $dPrice < ($oSerie->oxvoucherseries__oxminimumvalue->value*$oCur->rate) ) {
             $oEx = oxNew( 'oxVoucherException' );
             $oEx->setMessage('EXCEPTION_VOUCHER_INCORRECTPRICE');
             $oEx->setVoucherNr($this->oxVouchers__voucherNr->value);
