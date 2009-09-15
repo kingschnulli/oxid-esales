@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: order_list.php 18765 2009-05-04 13:11:33Z vilma $
+ * $Id: order_list.php 22302 2009-09-14 08:18:05Z arvydas $
  */
 
 /**
@@ -145,6 +145,7 @@ class Order_List extends oxAdminList
     }
 
     /**
+     * Cancels order and its order articles
      *
      * @return null
      */
@@ -154,24 +155,12 @@ class Order_List extends oxAdminList
         $soxId    = oxConfig::getParameter( "oxid");
 
         $oOrder = oxNew( "oxorder" );
-        $oOrder->load( $soxId);
-        $oOrder->oxorder__oxstorno->setValue(1);
-        $oOrder->save();
-
-        // stock information
-        $blUseStock = $myConfig->getConfigParam( 'blUseStock' );
-        $blAllowNegativeStock = $myConfig->getConfigParam('blAllowNegativeStock');
-        $oDB = oxDb::getDb();
-        foreach ( $oOrder->getOrderArticles() as $oArticle) {
-            if ( $oArticle->oxorderarticles__oxstorno->value == 0) {
-                if ( $blUseStock )
-                    $oArticle->updateArticleStock($oArticle->oxorderarticles__oxamount->value, $blAllowNegativeStock );
-                $oDB->execute( "update oxorderarticles set oxorderarticles.oxstorno = '1' where oxorderarticles.oxid = '".$oArticle->oxorderarticles__oxid->value."' ");
-            }
+        if ( $oOrder->load( $soxId ) ) {
+            $oOrder->cancelOrder();
         }
 
 
-        //we call init() here to loads list items after sorno()
+        //we call init() here to load list items after sorno()
         $this->init();
     }
 

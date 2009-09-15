@@ -34,7 +34,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  $Id: oxemosadapter.php 19886 2009-06-16 12:39:06Z alfonsas $
+ *  $Id: oxemosadapter.php 22304 2009-09-14 08:37:39Z vilma $
  */
 
 
@@ -417,7 +417,9 @@ class oxEmosAdapter extends oxSuperCfg
                 $aBasket = array();
                 $aBasketProducts = $oBasket->getContents();
                 foreach ( $aBasketProducts as $oContent ) {
-                    $oProduct = $oContent->getArticle();
+                    $sId = $oContent->getProductId();
+                    $oProduct = oxNew('oxarticle');
+                    $oProduct->load($sId);
                     //$sPath = $this->_getDeepestCategoryPath( $oProduct );
                     $sPath = $this->_getBasketProductCatPath( $oProduct );
                     $aBasket[] = $this->_convProd2EmosItem( $oProduct, $sPath, $oContent->getAmount() );

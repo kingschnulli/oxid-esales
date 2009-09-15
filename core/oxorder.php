@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 22270 2009-09-10 15:08:16Z rimvydas.paskevicius $
+ * $Id: oxorder.php 22302 2009-09-14 08:18:05Z arvydas $
  */
 
 /**
@@ -1104,9 +1104,9 @@ class oxOrder extends oxBase
         // update article stock information and delete order articles
         $myConfig = $this->getConfig();
         $blUseStock = $myConfig->getConfigParam( 'blUseStock' );
-        $oOrderArticles = $this->getOrderArticles( $blUseStock );
+        $oOrderArticles = $this->getOrderArticles( false );
         foreach ( $oOrderArticles as $oOrderArticle ) {
-            if ( $blUseStock ) {
+            if ( $blUseStock && $oOrderArticle->oxorderarticles__oxstorno->value != 1 ) {
                 $oOrderArticle->updateArticleStock( $oOrderArticle->oxorderarticles__oxamount->value, $myConfig->getConfigParam('blAllowNegativeStock') );
             }
             $oOrderArticle->delete();
@@ -1725,4 +1725,19 @@ class oxOrder extends oxBase
         $this->_blReloadDiscount = $blReload;
     }
 
+    /**
+     * Performs order cancelation process
+     *
+     * @return null
+     */
+    public function cancelOrder()
+    {
+        $this->oxorder__oxstorno = new oxField( 1 );
+        if ( $this->save() ) {
+            // canceling ordered products
+            foreach ( $this->getOrderArticles() as $oOrderArticle ) {
+                $oOrderArticle->cancelOrderArticle();
+            }
+        }
+    }
 }

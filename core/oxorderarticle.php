@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorderarticle.php 22263 2009-09-10 12:57:29Z vilma $
+ * $Id: oxorderarticle.php 22302 2009-09-14 08:18:05Z arvydas $
  */
 
 /**
@@ -628,4 +628,21 @@ class oxOrderArticle extends oxBase implements oxIArticle
         return true;
     }
 
+
+   /**
+    * Sets order article storno value to 1 and if stock control is on -
+    * restores previous oxarticle stock state
+    *
+    * @return null
+    */
+   public function cancelOrderArticle()
+   {
+        if ( $this->oxorderarticles__oxstorno->value == 0 ) {
+            $myConfig = $this->getConfig();
+            $this->oxorderarticles__oxstorno->setValue( 1 );
+            if ( $this->save() && $myConfig->getConfigParam( 'blUseStock' ) ) {
+                $this->updateArticleStock( $this->oxorderarticles__oxamount->value, $myConfig->getConfigParam('blAllowNegativeStock') );
+            }
+        }
+   }
 }
