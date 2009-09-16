@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 22196 2009-09-07 13:31:36Z rimvydas.paskevicius $
+ * $Id: oxconfig.php 22311 2009-09-14 14:59:10Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -708,7 +708,11 @@ class oxConfig extends oxSuperCfg
             return false;
         }
 
-        $sCurrentHost = preg_replace( '/\/\w*\.php.*/', '', $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'] );
+        $oUtilsServer = oxUtilsServer::getInstance();
+        $sHost = $oUtilsServer->getServerVar( 'HTTP_HOST' );
+        $sScriptName = $oUtilsServer->getServerVar( 'SCRIPT_NAME' );
+
+        $sCurrentHost = preg_replace( '/\/\w*\.php.*/', '', $sHost . $sScriptName );
 
         //remove double slashes all the way
         $sCurrentHost = str_replace( '/', '', $sCurrentHost );

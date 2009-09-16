@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilscount.php 21745 2009-08-20 14:56:25Z arvydas $
+ * $Id: oxutilscount.php 22310 2009-09-14 14:40:15Z rimvydas.paskevicius $
  */
 
 /**
@@ -234,7 +234,7 @@ class oxUtilsCount extends oxSuperCfg
 
         // select each vendor articles count
         $sQ  = "select $sTable.oxvendorid AS vendorId, count(*) from $sTable where ";
-        $sQ .= "$sTable.oxvendorid <> '' and ".$oArticle->getSqlActiveSnippet()." group by $sTable.oxvendorid ";
+        $sQ .= "$sTable.oxvendorid <> '' and $sTable.oxparentid = '' and ".$oArticle->getSqlActiveSnippet()." group by $sTable.oxvendorid ";
         $aDbResult = oxDb::getDb()->getAssoc( $sQ );
 
         foreach ( $aDbResult as $sKey => $sValue ) {
@@ -266,7 +266,7 @@ class oxUtilsCount extends oxSuperCfg
 
         // select each Manufacturer articles count
         $sQ  = "select $sTable.oxmanufacturerid AS manufacturerId, count(*) from $sTable where ";
-        $sQ .= "$sTable.oxmanufacturerid <> '' and ".$oArticle->getSqlActiveSnippet()." group by $sTable.oxmanufacturerid ";
+        $sQ .= "$sTable.oxmanufacturerid <> '' and $sTable.oxparentid = '' and ".$oArticle->getSqlActiveSnippet()." group by $sTable.oxmanufacturerid ";
         $aDbResult = oxDb::getDb()->getAssoc( $sQ );
 
         foreach ( $aDbResult as $sKey => $sValue ) {

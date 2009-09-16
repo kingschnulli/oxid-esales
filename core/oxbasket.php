@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 22268 2009-09-10 14:36:51Z arvydas $
+ * $Id: oxbasket.php 22334 2009-09-15 14:15:31Z arvydas $
  */
 
 /**
@@ -2213,6 +2213,17 @@ class oxBasket extends oxSuperCfg
     public function getDiscountedProductsBruttoPrice()
     {
         $dTotalProdPrice = $this->getProductsPrice()->getBruttoSum();
+
+        // substracting product specific discounts
+        if ( is_array( $aDiscounts = $this->getDiscounts() )) {
+            foreach ( $aDiscounts as $oDiscount ) {
+                // skipping bundle discounts
+                if ( $oDiscount->sType == 'itm' ) {
+                    continue;
+                }
+                $dTotalProdPrice -= $oDiscount->dDiscount;
+            }
+        }
 
         // substracting total discount
         if ( $oPrice = $this->getTotalDiscount() ) {

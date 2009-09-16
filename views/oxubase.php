@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 22268 2009-09-10 14:36:51Z arvydas $
+ * $Id: oxubase.php 22311 2009-09-14 14:59:10Z arvydas $
  */
 
 /**
@@ -1612,8 +1612,10 @@ class oxUBase extends oxView
                 $sForceLangChange = "&amp;lang={$iLang}";
             }
 
+            $sUrl = $this->getSession()->processUrl( $myConfig->getShopCurrentURL( $iLang ) . $this->_getRequestParams() . $sForceLangChange );
+
             // fallback to old non seo url
-            return $this->_addPageNrParam( $myConfig->getShopCurrentURL( $iLang ) . $this->_getRequestParams() . $sForceLangChange, $iActPageNr, $iLang );
+            return $this->_addPageNrParam( $sUrl, $iActPageNr, $iLang );
         }
     }
 
