@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: thankyou.php 22085 2009-09-02 11:44:32Z vilma $
+ * $Id: thankyou.php 22336 2009-09-15 15:44:43Z vilma $
  */
 
 /**
@@ -236,10 +236,7 @@ class Thankyou extends oxUBase
             if ( $this->showFinalStep() ) {
                 $aBasketContents = array_values($this->getBasket()->getContents());
                 if ( $oBasketItem = $aBasketContents[0] ) {
-                    // do not use oxbasketitem::getArticle(), because of #1276
-                    $sId = $oBasketItem->getProductId();
-                    $oProduct = oxNew('oxarticle');
-                    if ( $oProduct->load($sId) ) {
+                    if ( $oProduct = $oBasketItem->getArticle(false) ) {
                         $this->_aLastProducts = $oProduct->getCustomerAlsoBoughtThisProducts();
                     }
                 }

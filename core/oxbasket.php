@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 22334 2009-09-15 14:15:31Z arvydas $
+ * $Id: oxbasket.php 22336 2009-09-15 15:44:43Z vilma $
  */
 
 /**
@@ -553,20 +553,25 @@ class oxBasket extends oxSuperCfg
           // iterating through articles and binding bundles
         foreach ( $this->_aBasketContents as $key => $oBasketItem ) {
 
-            // adding discount type bundles
-            if ( !$oBasketItem->isDiscountArticle() && !$oBasketItem->isBundle() ) {
-                $aBundles = $this->_getItemBundles( $oBasketItem );
-            } else {
-                continue;
-            }
+           try {
+                // adding discount type bundles
+                if ( !$oBasketItem->isDiscountArticle() && !$oBasketItem->isBundle() ) {
+                    $aBundles = $this->_getItemBundles( $oBasketItem );
+                } else {
+                    continue;
+                }
 
-            $this->_addBundlesToBasket( $aBundles );
-
-                // adding item type bundles
-                $aBundles = $this->_getArticleBundles( $oBasketItem );
-
-                // adding bundles to basket
                 $this->_addBundlesToBasket( $aBundles );
+
+                    // adding item type bundles
+                    $aBundles = $this->_getArticleBundles( $oBasketItem );
+
+                    // adding bundles to basket
+                    $this->_addBundlesToBasket( $aBundles );
+            } catch( oxNoArticleException $oEx ) {
+                $this->removeItem( $key );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+            }
         }
 
         // adding global basket bundles
@@ -1086,11 +1091,13 @@ class oxBasket extends oxSuperCfg
      */
     public function calculateBasket( $blForceUpdate = false )
     {
-        if ( !$this->isEnabled() )
+        if ( !$this->isEnabled() ) {
             return;
+        }
 
-        if ( !$this->_blUpdateNeeded && !$blForceUpdate )
+        if ( !$this->_blUpdateNeeded && !$blForceUpdate ) {
             return;
+        }
 
         $this->_aCosts = array();
 
@@ -1184,7 +1191,7 @@ class oxBasket extends oxSuperCfg
 
         $myConfig = $this->getConfig();
         foreach ( $this->_aBasketContents as $oBasketItem ) {
-            if ( !$oBasketItem->isBundle() && $oArticle = $oBasketItem->getArticle() ) {
+            if ( !$oBasketItem->isBundle() && $oArticle = $oBasketItem->getArticle(false) ) {
                 $aCatIds = $oArticle->getCategoryIds();
                 //#M530 if price is not loaded for articles
                 $dPrice = 0;
@@ -1627,20 +1634,27 @@ class oxBasket extends oxSuperCfg
     public function getBasketArticles()
     {
         $aBasketArticles = array();
+        
         foreach ( $this->_aBasketContents as $sItemKey => $oBasketItem ) {
+            try {
+                $oProduct = $oBasketItem->getArticle();
 
-            $oProduct = $oBasketItem->getArticle();
-
-            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadSelectLists' ) ) {
-                // marking chosen select list
-                $aSelList = $oBasketItem->getSelList();
-                if ( is_array( $aSelList ) && ( $aSelectlist = $oProduct->getSelectLists( $sItemKey ) ) ) {
-                    reset( $aSelList );
-                    while ( list( $conkey, $iSel ) = each( $aSelList ) ) {
-                        $aSelectlist[$conkey][$iSel]->selected = 1;
+                if ( $this->getConfig()->getConfigParam( 'bl_perfLoadSelectLists' ) ) {
+                    // marking chosen select list
+                    $aSelList = $oBasketItem->getSelList();
+                    if ( is_array( $aSelList ) && ( $aSelectlist = $oProduct->getSelectLists( $sItemKey ) ) ) {
+                        reset( $aSelList );
+                        while ( list( $conkey, $iSel ) = each( $aSelList ) ) {
+                            $aSelectlist[$conkey][$iSel]->selected = 1;
+                        }
+                        $oProduct->setSelectlist( $aSelectlist );
                     }
-                    $oProduct->setSelectlist( $aSelectlist );
                 }
+            } catch( oxNoArticleException $oEx ) {
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+                $this->removeItem( $sItemKey );
+                $this->calculateBasket( true );
+                continue;
             }
 
             $aBasketArticles[$sItemKey] = $oProduct;

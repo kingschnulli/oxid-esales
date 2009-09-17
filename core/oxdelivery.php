@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdelivery.php 21592 2009-08-14 10:22:24Z vilma $
+ * $Id: oxdelivery.php 22336 2009-09-15 15:44:43Z vilma $
  */
 
 /**
@@ -211,8 +211,9 @@ class oxDelivery extends oxI18n
 
         $blExclNonMaterial = $this->getConfig()->getConfigParam( 'blExclNonMaterialFromDelivery' );
         // calculating only the price which is for non free shipping products
-        if ( !$oBasketItem->getArticle()->oxarticles__oxfreeshipping->value &&
-              !( $oBasketItem->getArticle()->oxarticles__oxnonmaterial->value && $blExclNonMaterial ) ) {
+        $oProduct = $oBasketItem->getArticle(false);
+        if ( !$oProduct->oxarticles__oxfreeshipping->value &&
+              !( $oProduct->oxarticles__oxnonmaterial->value && $blExclNonMaterial ) ) {
 
             $this->_blFreeShipping = false;
 
@@ -224,9 +225,9 @@ class oxDelivery extends oxI18n
                     $dAmount += $oBasketItem->getWeight();
                     break;
                 case 's': // size
-                    $dAmount += $oBasketItem->getArticle()->oxarticles__oxlength->value *
-                                $oBasketItem->getArticle()->oxarticles__oxwidth->value *
-                                $oBasketItem->getArticle()->oxarticles__oxheight->value *
+                    $dAmount += $oProduct->oxarticles__oxlength->value *
+                                $oProduct->oxarticles__oxwidth->value *
+                                $oProduct->oxarticles__oxheight->value *
                                 $oBasketItem->getAmount();
                     break;
                 case 'a': // amount
@@ -357,7 +358,7 @@ class oxDelivery extends oxI18n
             foreach ( $oBasket->getContents() as $oContent ) {
 
                 //V FS#1954 - load delivery for variants from parent article
-                $oArticle   = $oContent->getArticle();
+                $oArticle   = $oContent->getArticle(false);
                 $sProductId = $oArticle->getProductId();
                 $sParentId  = $oArticle->getProductParentId();
 

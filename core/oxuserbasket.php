@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuserbasket.php 21478 2009-08-06 15:41:06Z tomas $
+ * $Id: oxuserbasket.php 22339 2009-09-16 07:12:16Z vilma $
  */
 
 /**

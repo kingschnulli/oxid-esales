@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasketitem.php 22150 2009-09-04 11:06:11Z rimvydas.paskevicius $
+ * $Id: oxbasketitem.php 22336 2009-09-15 15:44:43Z vilma $
  */
 
 /**
@@ -384,14 +384,15 @@ class oxBasketItem extends oxSuperCfg
      * Retrieves the article .Throws an execption if article does not exist,
      * is not buyable or visible.
      *
-     * @param string $sProductId product id
+     * @param bool   $blCheckProduct       checks if product is buyable and visible
+     * @param string $sProductId           product id
      * @param bool   $blDisableLazyLoading disable lazy loading
      *
      * @throws oxArticleException, oxNoArticleException exception
      *
      * @return oxarticle
      */
-    public function getArticle( $sProductId = null, $blDisableLazyLoading = false )
+    public function getArticle( $blCheckProduct = true, $sProductId = null, $blDisableLazyLoading = false )
     {
         if ( $this->_oArticle === null || ( !$this->_oArticle->isOrderArticle() && $blDisableLazyLoading ) ) {
             $sProductId = $sProductId ? $sProductId : $this->_sProductId;
@@ -418,23 +419,25 @@ class oxBasketItem extends oxSuperCfg
             $this->_oArticle->setLoadParentData( true );
             if ( !$this->_oArticle->load( $sProductId ) ) {
                 $oEx = oxNew( 'oxNoArticleException' );
-                $oEx->setMessage( 'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST' );
+                $oLang = oxLang::getInstance();
+                $oEx->setMessage( sprintf($oLang->translateString( 'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST', $oLang->getBaseLanguage() ), $sProductId) );
                 $oEx->setArticleNr( $sProductId );
                 $oEx->setProductId( $sProductId );
                 throw $oEx;
             }
 
             // cant put not visible product to basket (M:1286)
-            if ( !$this->_oArticle->isVisible() ) {
+            if ( $blCheckProduct && !$this->_oArticle->isVisible() ) {
                 $oEx = oxNew( 'oxNoArticleException' );
-                $oEx->setMessage( 'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST' );
+                $oLang = oxLang::getInstance();
+                $oEx->setMessage( sprintf($oLang->translateString( 'EXCEPTION_ARTICLE_ARTICELDOESNOTEXIST', $oLang->getBaseLanguage() ), $this->_oArticle->oxarticles__oxartnum->value) );
                 $oEx->setArticleNr( $sProductId );
                 $oEx->setProductId( $sProductId );
                 throw $oEx;
             }
 
             // cant put not buyable product to basket
-            if ( !$this->_oArticle->isBuyable() ) {
+            if ( $blCheckProduct && !$this->_oArticle->isBuyable() ) {
                 $oEx = oxNew( 'oxArticleInputException' );
                 $oEx->setMessage( 'EXCEPTION_ARTICLE_ARTICELNOTBUYABLE' );
                 $oEx->setArticleNr( $sProductId );
@@ -730,7 +733,7 @@ class oxBasketItem extends oxSuperCfg
      */
     protected function _setArticle( $sProductId )
     {
-        $oArticle = $this->getArticle( $sProductId );
+        $oArticle = $this->getArticle( true, $sProductId );
 
         // product ID
         $this->_sProductId = $sProductId;

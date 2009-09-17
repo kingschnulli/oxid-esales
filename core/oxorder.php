@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 22302 2009-09-14 08:18:05Z arvydas $
+ * $Id: oxorder.php 22336 2009-09-15 15:44:43Z vilma $
  */
 
 /**
@@ -639,7 +639,7 @@ class oxOrder extends oxBase
 
             //$oContent->oProduct = $oContent->getArticle();
             // #M773 Do not use article lazy loading on order save
-            $oProduct = $oContent->getArticle( null, true);
+            $oProduct = $oContent->getArticle( true, null, true);
 
             // copy only if object is oxarticle type
             if ( $oProduct->isOrderArticle() ) {
@@ -1015,8 +1015,14 @@ class oxOrder extends oxBase
      */
     public function validateStock( $oBasket )
     {
-        foreach ( $oBasket->getContents() as $oContent ) {
-            $oProd = $oContent->getArticle();
+        foreach ( $oBasket->getContents() as $key => $oContent ) {
+            try {
+                $oProd = $oContent->getArticle();
+            } catch ( oxNoArticleException $oEx ) {
+                $oBasket->removeItem( $key );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+                continue;
+            }
 
             // check if its still available
             $iOnStock = $oProd->checkForStock( $oContent->getAmount() );

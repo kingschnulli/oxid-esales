@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdiscount.php 20698 2009-07-09 14:01:43Z sarunas $
+ * $Id: oxdiscount.php 22336 2009-09-15 15:44:43Z vilma $
  */
 
 /**
@@ -191,7 +191,7 @@ class oxDiscount extends oxI18n
         $aBasketItems = $oBasket->getContents();
         foreach ( $aBasketItems as $oBasketItem ) {
 
-            $oBasketArticle = $oBasketItem->getArticle();
+            $oBasketArticle = $oBasketItem->getArticle(false);
 
             $blForBasketItem = false;
             if ( $this->oxdiscount__oxaddsumtype->value != 'itm' ) {
