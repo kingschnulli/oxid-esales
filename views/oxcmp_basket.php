@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_basket.php 22072 2009-09-02 10:19:07Z arvydas $
+ * $Id: oxcmp_basket.php 22381 2009-09-17 13:11:50Z vilma $
  */
 
 /**
@@ -354,15 +354,15 @@ class oxcmp_basket extends oxView
 
             try {
                 $oBasketItem = $oBasket->addToBasket( $sProductId, $dAmount, $aSelList, $aPersParam, $blOverride, false, $sOldBasketItemId );
-            } catch( oxOutOfStockException $oEx ) {
+            } catch ( oxOutOfStockException $oEx ) {
                 //add to display at specific position
                 $oEx->setDestination( $sErrorDest );
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, (bool) $sErrorDest, $sErrorDest );
-            } catch( oxArticleInputException $oEx ) {
+            } catch ( oxArticleInputException $oEx ) {
                 //add to display at specific position
                 $oEx->setDestination( $sErrorDest );
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, (bool) $sErrorDest, $sErrorDest );
-            } catch( oxNoArticleException $oEx ) {
+            } catch ( oxNoArticleException $oEx ) {
                 //ignored, best solution F ?
             }
         }

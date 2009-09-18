@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsession.php 22330 2009-09-15 13:12:28Z arvydas $
+ * $Id: oxsession.php 22352 2009-09-16 11:34:18Z sarunas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -224,16 +224,16 @@ class oxSession extends oxSuperCfg
             $sid = $sSidParam;
         }
 
-        //creating new sid
-        if ( !$sid) {
-            $this->initNewSession();
-            self::$_blIsNewSession = true;
-        } else {
-            $this->_setSessionId($sid);
-        }
-
         //starting session if only we can
         if ($this->_allowSessionStart()) {
+
+            //creating new sid
+            if ( !$sid) {
+                $this->initNewSession();
+                self::$_blIsNewSession = true;
+            } else {
+                $this->_setSessionId($sid);
+            }
 
             $this->_sessionStart();
 
@@ -447,13 +447,11 @@ class oxSession extends oxSuperCfg
             if ( (int) $sLangParam != (int) $sConfLang ) {
                 $url   .= "lang=" . $sLangParam . "&amp;";
             }
-        } elseif ($this->sid()) {
-            //removing dublicate params
-            //..hopefully this is not needed
-            //$url    = ereg_replace("[&?]+$", "", $url);
-
+        } elseif ( ($sIcludeParams = $this->sid()) ) {
             //cookies are not supported or this is first time visit
-            $url   .= $sSeparator . $this->sid(). '&amp;';
+            $url .= $sSeparator . $sIcludeParams . '&amp;';
+        } else {
+            $url .= $sSeparator;
         }
 
         return $url;
@@ -470,15 +468,12 @@ class oxSession extends oxSuperCfg
      */
     public function sid( $blForceSid = false )
     {
-        if ( !$this->getId() ) {
-            return false;
-        }
-
         $myConfig     = $this->getConfig();
         $blUseCookies = $myConfig->getConfigParam( 'blSessionUseCookies' ) || $this->isAdmin();
+        $sRet         = '';
 
         //no cookie?
-        if ( $blForceSid || !$blUseCookies || !$this->_getCookieSid()) {
+        if ( $this->getId() && ($blForceSid || !$blUseCookies || !$this->_getCookieSid())) {
             $sRet = ( $blForceSid ? $this->getForcedName() : $this->getName() )."=".$this->getId();
         }
 
@@ -904,9 +899,10 @@ class oxSession extends oxSuperCfg
     {
         if ( $this->isSidNeeded( $sUrl ) ) {
             $oStr = getStr();
-            // only if sid is not yet set
-            if ( $oStr->strstr( $sUrl, 'sid=' ) === false ) {
-                $sUrl .= ( $oStr->strstr( $sUrl, '?' ) !== false ?  '&amp;' : '?' ) . $this->sid( true ). '&amp;';
+            // only if sid is not yet set and we have something to append
+            $sSid = $this->sid( true );
+            if ( $sSid && $oStr->strstr( $sUrl, 'sid=' ) === false ) {
+                $sUrl .= ( $oStr->strstr( $sUrl, '?' ) !== false ?  '&amp;' : '?' ) . $sSid . '&amp;';
             }
         }
 

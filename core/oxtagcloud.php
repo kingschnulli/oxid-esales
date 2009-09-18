@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxtagcloud.php 21675 2009-08-19 07:03:09Z arvydas $
+ * $Id: oxtagcloud.php 22395 2009-09-17 14:45:03Z arvydas $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -102,7 +102,7 @@ class oxTagCloud extends oxSuperCfg
      * Sorts passed tag array. Using MySQL for sorting (to keep user defined ordering way).
      *
      * @param array $aTags tags to sort
-     * @param int   $iLang      preferred language [optional]
+     * @param int   $iLang preferred language [optional]
      *
      * @return array
      */

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlang.php 22287 2009-09-11 11:30:09Z vilma $
+ * $Id: oxlang.php 22390 2009-09-17 14:40:09Z arvydas $
  */
 
 /**
@@ -331,7 +331,7 @@ class oxLang extends oxSuperCfg
      */
     public function getLanguageNames()
     {
-        
+
         $aConfLanguages = $this->getConfig()->getConfigParam( 'aLanguages' );
         $aLangIds = $this->getLanguageIds();
         $aLanguages = array();
@@ -531,6 +531,9 @@ class oxLang extends oxSuperCfg
 
     /**
      * Returns array with pathes where language files are stored
+     *
+     * @param bool $blAdmin admin mode
+     * @param int  $iLang   active language
      *
      * @return array
      */

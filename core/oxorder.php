@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 22336 2009-09-15 15:44:43Z vilma $
+ * $Id: oxorder.php 22391 2009-09-17 14:41:25Z arvydas $
  */
 
 /**
@@ -656,7 +656,7 @@ class oxOrder extends oxBase
                 if ( count( $aChosenSelList = $oContent->getChosenSelList() ) ) {
                     foreach ( $aChosenSelList as $oItem ) {
                         if ( $sSelList ) {
-                           $sSelList .= ", ";
+                            $sSelList .= ", ";
                         }
                         $sSelList .= "{$oItem->name} : {$oItem->value}";
                     }
@@ -1020,8 +1020,10 @@ class oxOrder extends oxBase
                 $oProd = $oContent->getArticle();
             } catch ( oxNoArticleException $oEx ) {
                 $oBasket->removeItem( $key );
-                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
-                continue;
+                throw $oEx;
+            } catch ( oxArticleInputException $oEx ) {
+                $oBasket->removeItem( $key );
+                throw $oEx;
             }
 
             // check if its still available
@@ -1030,7 +1032,7 @@ class oxOrder extends oxBase
                 $oEx = oxNew( 'oxOutOfStockException' );
                 $oEx->setMessage( 'EXCEPTION_OUTOFSTOCK_OUTOFSTOCK' );
                 $oEx->setArticleNr( $oProd->oxarticles__oxartnum->value );
-                $oEx->setProductId( $oProd->getProductId() );
+                $oEx->setProductId( $oProd->getId() );
                 $oEx->setRemainingAmount( $oProd->oxarticles__oxstock->value );
                 throw $oEx;
             }
@@ -1131,7 +1133,7 @@ class oxOrder extends oxBase
      * adds current order articles to virtual basket and finaly recalculates order by calling oxorder::finalizeOrder()
      * If no errors, finishing transaction.
      *
-     * @param array $aNewArticles      article list of new order
+     * @param array $aNewArticles article list of new order
      *
      * @return null
      */
@@ -1596,8 +1598,8 @@ class oxOrder extends oxBase
     /**
      * Adds order articles back to virtual basket. Needed for recalculating order.
      *
-     * @param oxUser $oUser            basket user object
-     * @param array  $aOrderArticles   order articles
+     * @param oxUser $oUser          basket user object
+     * @param array  $aOrderArticles order articles
      *
      * @return oxBasket
      */
@@ -1618,6 +1620,8 @@ class oxOrder extends oxBase
      *
      * @param oxbasket $oBasket   basket to add articles
      * @param array    $aArticles article array
+     *
+     * @return null
      */
     protected function _addArticlesToBasket( $oBasket, $aArticles )
     {

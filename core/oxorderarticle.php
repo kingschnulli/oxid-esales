@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorderarticle.php 22302 2009-09-14 08:18:05Z arvydas $
+ * $Id: oxorderarticle.php 22393 2009-09-17 14:43:48Z arvydas $
  */
 
 /**
@@ -294,6 +294,9 @@ class oxOrderArticle extends oxBase implements oxIArticle
     /**
      * Executes oxOrderArticle::load() and returns its result
      *
+     * @param int    $iLanguage language id
+     * @param string $sOxid     order article id
+     *
      * @return bool
      */
     public function loadInLang( $iLanguage, $sOxid )
@@ -408,6 +411,8 @@ class oxOrderArticle extends oxBase implements oxIArticle
     /**
      * Returns article select lists, implements iBaseArticle interface method
      *
+     * @param string $sKeyPrefix prefix (not used)
+     *
      * @return array
      */
     public function getSelectLists( $sKeyPrefix = null )
@@ -511,6 +516,7 @@ class oxOrderArticle extends oxBase implements oxIArticle
     /**
      * Returns empty array, implements iBaseArticle interface getter method
      *
+     * @param bool $blActCats   select categories if all parents are active
      * @param bool $blSkipCache force reload or not (default false - no reload)
      *
      * @return array

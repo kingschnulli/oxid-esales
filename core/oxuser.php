@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 22203 2009-09-07 14:37:25Z arvydas $
+ * $Id: oxuser.php 22355 2009-09-16 13:53:54Z tomas $
  */
 
 /**
@@ -1101,7 +1101,7 @@ class oxUser extends oxBase
      */
     protected function _assignAddress( $aDelAddress )
     {
-        if (isset($aDelAddress)) {
+        if (isset($aDelAddress) && count($aDelAddress)) {
             $sAddressId = oxConfig::getParameter( 'oxaddressid' );
             $sMyAddressId = ( $sAddressId === null || $sAddressId == -1 || $sAddressId == -2 ) ?  null : $sAddressId;
             $aDelAddress['oxaddress__oxid'] = $sMyAddressId;
@@ -1981,7 +1981,6 @@ class oxUser extends oxBase
      */
     protected function _hasUserAddress( $sUserId )
     {
-
         $oAddresses = $this->getUserAddresses();
         if ( $oAddresses && count($oAddresses)>0 ) {
             $oAddresses->rewind() ;

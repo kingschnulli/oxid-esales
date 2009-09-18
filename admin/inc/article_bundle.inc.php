@@ -72,6 +72,23 @@ class ajaxComponent extends ajaxListComponent
     }
 
     /**
+     * Return fully formatted query for data loading
+     *
+     * @param string $sQ part of initial query
+     *
+     * @return string
+     */
+    protected function _getDataQuery( $sQ )
+    {
+        $sArtTable = getViewName('oxarticles');
+        $sQ = parent::_getDataQuery( $sQ );
+
+        // display variants or not ?
+        $sQ .= $this->getConfig()->getConfigParam( 'blVariantsSelection' ) ? ' group by '.$sArtTable.'.oxid ' : '';
+        return $sQ;
+    }
+
+    /**
      * Removing article from corssselling list
      *
      * @return null
@@ -97,5 +114,45 @@ class ajaxComponent extends ajaxListComponent
         $sQ = "update oxarticles set oxarticles.oxbundleid = '" . $sChosenArt . "' where oxarticles.oxid  = '" . $soxId . "' ";
         oxDb::getDb()->Execute( $sQ );
     }
+    /**
+     * Formats and returns chunk of SQL query string with definition of
+     * fields to load from DB. Adds subselect to get variant title from parent article
+     *
+     * @return string
+     */
+    protected function _getQueryCols()
+    {
+        $myConfig = $this->getConfig();
+        $sLangTag = oxLang::getInstance()->getLanguageTag();
 
+        $sQ = '';
+        $blSep = false;
+        $aVisiblecols = $this->_getVisibleColNames();
+        foreach ( $aVisiblecols as $iCnt => $aCol ) {
+            if ( $blSep )
+                $sQ .= ', ';
+            $sViewTable = getViewName( $aCol[1] );
+            // multilanguage
+            $sCol = $aCol[3]?$aCol[0].$sLangTag:$aCol[0];
+            if ( $myConfig->getConfigParam( 'blVariantsSelection' ) && $aCol[0] == 'oxtitle' ) {
+                $sVarSelect = "$sViewTable.oxvarselect".$sLangTag;
+                $sQ .= " IF( $sViewTable.$sCol != '', $sViewTable.$sCol, CONCAT((select oxart.$sCol from $sViewTable as oxart where oxart.oxid = $sViewTable.oxparentid),', ',$sVarSelect)) as _" . $iCnt;
+            } else {
+                $sQ  .= $sViewTable . '.' . $sCol . ' as _' . $iCnt;
+            }
+            $blSep = true;
+        }
+
+        $aIdentCols = $this->_getIdentColNames();
+        foreach ( $aIdentCols as $iCnt => $aCol ) {
+            if ( $blSep )
+                $sQ .= ', ';
+
+            // multilanguage
+            $sCol = $aCol[3]?$aCol[0].$sLangTag:$aCol[0];
+            $sQ  .= getViewName( $aCol[1] ) . '.' . $sCol . ' as _' . $iCnt;
+        }
+
+        return " $sQ ";
+    }
 }

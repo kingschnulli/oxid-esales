@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 22263 2009-09-10 12:57:29Z vilma $
+ * $Id: oxarticle.php 22387 2009-09-17 14:34:59Z arvydas $
  */
 
 // defining supported link types
@@ -492,6 +492,12 @@ class oxArticle extends oxI18n implements oxIArticle
             case 'oxdetaillink' :
                 return $this->getLink();
                 break;
+            case 'aSelectlist' :
+                if ( $this->getConfig()->getConfigParam( 'bl_perfLoadSelectLists' ) ) {
+                    return $this->aSelectlist = $this->getSelectLists();
+                }
+                return;
+                break;
             /*case 'oxarticles__oxnid':
                 return $this->getId();*/
         }
@@ -527,6 +533,106 @@ class oxArticle extends oxI18n implements oxIArticle
     }
 
     /**
+     * Returns name of table used when building active snippet query
+     *
+     * @param bool $blForceCoreTable force core table usage
+     *
+     * @return string
+     */
+    protected function _getTableNameForActiveSnippet( $blForceCoreTable = false )
+    {
+            $sTable = $this->getCoreTableName();
+
+        return $sTable;
+    }
+
+    /**
+     * Returns part of sql query used in active snippet. Query checks
+     * if product "oxactive = 1". If config option "blUseTimeCheck" is TRUE
+     * additionally checks if "oxactivefrom < current data < oxactiveto"
+     *
+     * @param bool $blForceCoreTable force core table usage
+     *
+     * @return string
+     */
+    protected function _getActiveCheckQuery( $blForceCoreTable = false )
+    {
+        $sTable = $this->_getTableNameForActiveSnippet( $blForceCoreTable );
+
+        // check if article is still active
+        $sQ = " $sTable.oxactive = 1 ";
+
+        // enabled time range check ?
+        if ( $this->getConfig()->getConfigParam( 'blUseTimeCheck' ) ) {
+            $sDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
+            $sQ = "( $sQ or ( $sTable.oxactivefrom < '$sDate' and $sTable.oxactiveto > '$sDate' ) ) ";
+        }
+
+        return $sQ;
+    }
+
+    /**
+     * Returns part of sql query used in active snippet. If config
+     * option "blUseStock" is TRUE checks if "oxstockflag != 2 or
+     * ( oxstock + oxvarstock ) > 0". If config option "blVariantParentBuyable"
+     * is TRUE checks if product has variants, and if has - checks is
+     * there at least one variant which is buyable. If config option
+     * option "blUseTimeCheck" is TRUE additionally checks if variants
+     * "oxactivefrom < current data < oxactiveto"
+     *
+     * @param bool $blForceCoreTable force core table usage
+     *
+     * @return string
+     */
+    protected function _getStockCheckQuery( $blForceCoreTable = false )
+    {
+        $myConfig = $this->getConfig();
+        $sTable = $this->_getTableNameForActiveSnippet( $blForceCoreTable );
+
+        $sQ = "";
+
+        //do not check for variants
+        if ( $myConfig->getConfigParam( 'blUseStock' ) ) {
+            $sQ = " and ( $sTable.oxstockflag != 2 or ( $sTable.oxstock + $sTable.oxvarstock ) > 0  ) ";
+            //V #M513: When Parent article is not purchaseble, it's visibility should be displayed in shop only if any of Variants is available.
+            if ( !$myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
+                $sTimeCheckQ = '';
+                if ( $myConfig->getConfigParam( 'blUseTimeCheck' ) ) {
+                     $sDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
+                     $sTimeCheckQ = " or ( art.oxactivefrom < '$sDate' and art.oxactiveto > '$sDate' )";
+                }
+                $sQ = " $sQ and IF( $sTable.oxvarcount = 0, 1, ( select 1 from $sTable as art where art.oxparentid=$sTable.oxid and ( art.oxactive = 1 $sTimeCheckQ ) and ( art.oxstockflag != 2 or art.oxstock > 0 ) limit 1 ) ) ";
+            }
+        }
+
+        return $sQ;
+    }
+
+    /**
+     * Returns part of query which checks if product is variant of current
+     * object. Additionally if config option "blUseStock" is TRUE checks
+     * stock state "( oxstock > 0 or ( oxstock <= 0 and ( oxstockflag = 1
+     * or oxstockflag = 4 ) )"
+     *
+     * @param bool $blRemoveNotOrderables remove or leave non orderable products
+     * @param bool $blForceCoreTable      force core table usage
+     *
+     * @return string
+     */
+    protected function _getVariantsQuery( $blRemoveNotOrderables, $blForceCoreTable = false  )
+    {
+        $sTable = $this->_getTableNameForActiveSnippet( $blForceCoreTable );
+        $sQ = " and $sTable.oxparentid = '".$this->getId()."' ";
+
+        //checking if variant is active and stock status
+        if ( $this->getConfig()->getConfigParam( 'blUseStock' ) && $blRemoveNotOrderables ) {
+            $sQ .= " and ( $sTable.oxstock > 0 or ( $sTable.oxstock <= 0 and ( $sTable.oxstockflag = 1 or $sTable.oxstockflag = 4 ) ) ) ";
+        }
+
+        return $sQ;
+    }
+
+    /**
      * Returns SQL select string with checks if items are available
      *
      * @param bool $blForceCoreTable forces core table usage (optional)
@@ -536,28 +642,12 @@ class oxArticle extends oxI18n implements oxIArticle
     public function getSqlActiveSnippet( $blForceCoreTable = false )
     {
         $myConfig = $this->getConfig();
-            $sTable = $this->getCoreTableName();
 
         // check if article is still active
-        $sQ = " $sTable.oxactive = 1 ";
+        $sQ = $this->_getActiveCheckQuery( $blForceCoreTable );
 
-        $blTimeCheck = $myConfig->getConfigParam( 'blUseTimeCheck' );
-        $sDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
-
-        // enabled time range check ?
-        if ( $blTimeCheck ) {
-            $sQ = "( $sQ or ( $sTable.oxactivefrom < '$sDate' and $sTable.oxactiveto > '$sDate' ) ) ";
-        }
-
-        //do not check for variants
-        if ( $myConfig->getConfigParam( 'blUseStock' ) ) {
-            $sQ = " $sQ and ( $sTable.oxstockflag != 2 or ( $sTable.oxstock + $sTable.oxvarstock ) > 0  ) ";
-            //V #M513: When Parent article is not purchaseble, it's visibility should be displayed in shop only if any of Variants is available.
-            if ( !$myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
-                $sTimeCheckQ = $blTimeCheck ? " or ( art.oxactivefrom < '$sDate' and art.oxactiveto > '$sDate' )" : '';
-                $sQ = " $sQ and IF( $sTable.oxvarcount = 0, 1, ( select 1 from $sTable as art where art.oxparentid=$sTable.oxid and ( art.oxactive = 1 $sTimeCheckQ ) and ( art.oxstockflag != 2 or art.oxstock > 0 ) limit 1 ) ) ";
-            }
-        }
+        // stock and variants check
+        $sQ .= $this->_getStockCheckQuery( $blForceCoreTable );
 
 
         return "( $sQ ) ";
@@ -1078,34 +1168,37 @@ class oxArticle extends oxI18n implements oxIArticle
     }
 
     /**
+     * Checks if parent has ANY variant assigned
+     *
+     * @param bool $blForceCoreTable force core table usage
+     *
+     * @return bool
+     */
+    protected function _hasAnyVariant( $blForceCoreTable = false )
+    {
+        $sArticleTable = $this->_getTableNameForActiveSnippet( $blForceCoreTable );
+        return (bool) oxDb::getDb()->getOne( "select 1 from $sArticleTable where oxparentid='".$this->getId()."'" );
+    }
+
+    /**
      * Collects and returns article variants.
      *
      * @param bool $blRemoveNotOrderables if true, removes from list not orderable articles, which are out of stock
      *
      * @return array
      */
-    public function getVariants( $blRemoveNotOrderables = true )
+    public function getVariants( $blRemoveNotOrderables = true, $blForceCoreTable = false  )
     {
-        if ($blRemoveNotOrderables && $this->_aVariants) {
+        if ( $blRemoveNotOrderables && $this->_aVariants ) {
             return $this->_aVariants;
-        } elseif (!$blRemoveNotOrderables && $this->_aVariantsWithNotOrderables) {
+        } elseif ( !$blRemoveNotOrderables && $this->_aVariantsWithNotOrderables ) {
             return $this->_aVariantsWithNotOrderables;
         }
 
-        if (!$this->_blLoadVariants) {
-            return array();
-        }
-
         $myConfig = $this->getConfig();
-
-        // Performance
-        if ( !$this->isAdmin() && !$myConfig->getConfigParam( 'blLoadVariants')) {
-            return array();
-        }
-
-        //do not load variants where variant oxvarcount is 0
-        //hint: if variantas are not loaded you should check your data integrity oxvarcount should always be equal to variant count
-        if (!$this->isAdmin() && !$this->oxarticles__oxvarcount->value) {
+        if ( !$this->_blLoadVariants ||
+            ( !$this->isAdmin() && !$myConfig->getConfigParam( 'blLoadVariants') ) ||
+            ( !$this->isAdmin() && !$this->oxarticles__oxvarcount->value ) ) {
             return array();
         }
 
@@ -1113,35 +1206,42 @@ class oxArticle extends oxI18n implements oxIArticle
         self::$_aLoadedParents[$this->getId()] = $this;
 
         //load simple variants for lists
-        if ($this->_isInList()) {
+        if ( $this->_isInList() ) {
             $oVariants = oxNew( 'oxsimplevariantlist' );
-            $oVariants->setParent($this);
+            $oVariants->setParent( $this );
         } else {
             //loading variants
             $oVariants = oxNew( 'oxarticlelist' );
-            $oVariants->getBaseObject()->modifyCacheKey('_variants');
+            $oVariants->getBaseObject()->modifyCacheKey( '_variants' );
         }
 
-        startProfile("selectVariants");
-        $sSelectFields = $oVariants->getBaseObject()->getSelectFields();
-        $sArticleTable = $this->getViewName();
-        $sSelect =  "select $sSelectFields from $sArticleTable where ";
-        $sSelect .= " $sArticleTable.oxparentid ='".$this->getId()."' ";
-        $sSelect .= " order by $sArticleTable.oxsort";
-        $oVariants->selectString( $sSelect);
-        stopProfile("selectVariants");
+        $this->_iVarStock = $this->oxarticles__oxvarstock->value;
+        if ( $this->_blHasVariants = $this->_hasAnyVariant( $blForceCoreTable ) ) {
 
-        if (!$oVariants->count()) {
-            return array();
+            startProfile("selectVariants");
+            $sSelectFields = $oVariants->getBaseObject()->getSelectFields();
+            $sArticleTable = $this->_getTableNameForActiveSnippet( $blForceCoreTable );
+
+            $sSelect = "select $sSelectFields from $sArticleTable where " .
+                       $this->_getActiveCheckQuery( $blForceCoreTable ) .
+                       $this->_getVariantsQuery( $blRemoveNotOrderables, $blForceCoreTable ) .
+                       " order by $sArticleTable.oxsort";
+
+            $oVariants->selectString( $sSelect );
+            stopProfile("selectVariants");
         }
-        $oVariants = $this->_removeInactiveVariants( $oVariants, $blRemoveNotOrderables );
-        //$this->calculateMinVarPrice($oVariants);
-        //#1104S Load selectlists
-        if ( $myConfig->getConfigParam( 'bl_perfLoadSelectLists' ) ) {
-            foreach ($oVariants as $key => $oVariant) {
-                $oVariants[$key]->aSelectlist = $oVariant->getSelectLists();
-            }
+
+        //if we have variants then depending on config option the parent may be non buyable
+        if ( !$myConfig->getConfigParam( 'blVariantParentBuyable' ) && $this->_blHasVariants ) {
+            $this->_blNotBuyableParent = true;
         }
+
+        //if we have variants, but all variants are incative means article may be non buyable (depends on config option)
+        if ( !$myConfig->getConfigParam( 'blVariantParentBuyable' ) && $oVariants->count() == 0 && $this->_blHasVariants ) {
+            $this->_blNotBuyable = true;
+        }
+
+        // cache
         if ( $blRemoveNotOrderables ) {
             $this->_aVariants = $oVariants;
         } else {
@@ -1240,7 +1340,7 @@ class oxArticle extends oxI18n implements oxIArticle
     /**
      * Returns ID's of categories. where this article is assigned
      *
-     * @param bool $blActCats select categories if all parents are active
+     * @param bool $blActCats   select categories if all parents are active
      * @param bool $blSkipCache Whether to skip cache
      *
      * @return array
@@ -1963,6 +2063,9 @@ class oxArticle extends oxI18n implements oxIArticle
             if ( $iOnStock > 0 ) {
                 return $iOnStock;
             } else {
+                $oEx = oxNew( 'oxArticleInputException' );
+                $oEx->setMessage( 'EXCEPTION_ARTICLE_ARTICELNOTBUYABLE' );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
                 return false;
             }
         }
@@ -2009,6 +2112,8 @@ class oxArticle extends oxI18n implements oxIArticle
      * set given value to object's oxlongdesc - also prepare it (parse throug smarty)
      *
      * @param string $sDbValue value to set
+     *
+     * @return null
      */
     protected function _setLongDesc($sDbValue)
     {
@@ -2611,65 +2716,6 @@ class oxArticle extends oxI18n implements oxIArticle
                        ON DUPLICATE KEY update oxartextends.OXLONGDESC{$sLangField} = {$sLongDesc} ";
 
         $oDB->execute($sLongDescSQL);
-    }
-
-    /**
-     * This function basically is intended to call from GetVariants()
-     * for further variant processing.
-     * Function removes inactive or out of stock variants and sets class variables:
-     * $_iVarStock
-     * $_blHasVariants
-     * $_blNotBuyableParent
-     * $_blNotBuyable
-     *
-     * @param oxArticleList $oVariants Object with article variants
-     * @param bool          $blStrict  If true articles with oxstockflag = 3 will be removed
-     * (currently is used in getSimpleVariants to skip these articles in list)
-     *
-     * @return object oxarticlelist object with modified article variants
-     */
-    protected function _removeInactiveVariants( $oVariants, $blStrict = false )
-    {
-        $myConfig = $this->getConfig();
-        $this->_iVarStock = 0;
-        $this->_blHasVariants = false;
-        $now = time();
-        $sSearchdate = date('Y-m-d H:i:s', $now);
-        $this->_iVarStock = $this->oxarticles__oxvarstock->value;
-
-        //checking if variant is active and stock status
-        foreach (array_keys($oVariants->getArray()) as $key ) {
-
-            $oVariant = $oVariants[$key];
-            $this->_blHasVariants = true;
-            //removing variants not in stock
-            if ( $myConfig->getConfigParam( 'blUseStock' ) &&
-                $oVariant->oxarticles__oxstockflag->value != 1 && $oVariant->oxarticles__oxstockflag->value != 4 &&
-                ($oVariant->oxarticles__oxstockflag->value != 3 || $blStrict) && $oVariant->oxarticles__oxstock->value <= 0) {
-                    unset($oVariants[$key]);
-                    continue;
-            }
-
-            //removing non active variants
-            if (!$oVariant->oxarticles__oxactive->value &&
-                !($oVariant->oxarticles__oxactivefrom->value < $sSearchdate &&
-                $oVariant->oxarticles__oxactiveto->value > $sSearchdate) ) {
-                    unset($oVariants[$key]);
-                    continue;
-            }
-        }
-
-        //if we have variants then depending on config option the parent may be non buyable
-        if (!$myConfig->getConfigParam( 'blVariantParentBuyable' ) && $this->_blHasVariants ) {
-            $this->_blNotBuyableParent = true;
-        }
-
-        //if we have variants, but all variants are incative means article may be non buyable (depends on config option)
-        if (!$myConfig->getConfigParam( 'blVariantParentBuyable' ) && $oVariants->count() == 0 && $this->_blHasVariants) {
-            $this->_blNotBuyable = true;
-        }
-
-        return $oVariants;
     }
 
     /**
@@ -3815,6 +3861,9 @@ class oxArticle extends oxI18n implements oxIArticle
         $sDelete = 'delete from oxactions2article where oxartid = \''.$sOXID.'\' ';
         $rs = $oDB->execute( $sDelete );
 
+        $sDelete = 'delete from oxobject2list where oxobjectid = \''.$sOXID.'\' ';
+        $rs = $oDB->execute( $sDelete );
+
 
         return $rs;
     }
@@ -4129,20 +4178,5 @@ class oxArticle extends oxI18n implements oxIArticle
         $sLang = oxLang::getInstance()->getBaseLanguage();
         $sQ = "select oxtitle".(($sLang)?"_$sLang":"")." from $sArtView where oxid='".$sId."'";
         return oxDb::getDb()->getOne($sQ);
-    }
-
-    /**
-     * Fillters active category, if parent categories are not active
-     *
-     * @param array $aArticleCats all article categories
-     *
-     * @return array $aActCats
-     */
-    protected function _fillterActiveCats( $aArticleCats )
-    {
-        $aActCats = array();
-        
-        $sSelect = "select count(*) from ";
-        return $aActCats;
     }
 }

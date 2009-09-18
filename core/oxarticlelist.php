@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticlelist.php 22184 2009-09-07 09:01:11Z arvydas $
+ * $Id: oxarticlelist.php 22388 2009-09-17 14:35:46Z arvydas $
  */
 
 /**
@@ -139,6 +139,8 @@ class oxArticleList extends oxList
      * sort this list by given order.
      *
      * @param array $aIds ordered ids
+     *
+     * @return null
      */
     protected function _sortByIds($aIds)
     {
@@ -1062,7 +1064,7 @@ class oxArticleList extends oxList
     /**
      * Loads list of low stock state products
      *
-     * @param array $aIds product ids array
+     * @param array $aBasketContents product ids array
      *
      * @return null
      */

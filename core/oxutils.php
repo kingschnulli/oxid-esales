@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 22096 2009-09-02 14:12:06Z sarunas $
+ * $Id: oxutils.php 22383 2009-09-17 14:13:19Z arvydas $
  */
 
 /**
@@ -525,8 +525,8 @@ class oxUtils extends oxSuperCfg
         $sRes = null;
         // read the file
         $sFilePath = $this->_getCacheFilePath( $sKey );
-		if (!file_exists( $sFilePath))
-			return null;
+        if (!file_exists( $sFilePath))
+            return null;
         if ( file_exists( $sFilePath) && is_readable($sFilePath)) {
             // read it
             $sRes = file_get_contents( $sFilePath);
@@ -617,11 +617,15 @@ class oxUtils extends oxSuperCfg
                 if ( $hSocket) {
                     fputs( $hSocket, "GET ".$sPath." HTTP/1.0\r\nHost: $sHost\r\n\r\n");
                     $headers = stream_get_line($hSocket, 4096, "\r\n\r\n");
-                    $hLocal = @fopen( $sLocal, "wb");
-                    stream_copy_to_stream($hSocket, $hLocal);
-                    fclose( $hSocket);
-                    fclose($hLocal);
-                    $blSuccess = true;
+                    if ( ( $hLocal = @fopen( $sLocal, "wb") ) !== false ) {
+                        rewind($hLocal);
+                        // does not copy all the data
+                        // stream_copy_to_stream($hSocket, $hLocal);
+                        fwrite ( $hLocal, stream_get_contents( $hSocket ) );
+                        fclose( $hLocal );
+                        fclose( $hSocket );
+                        $blSuccess = true;
+                    }
                 }
             }
         }
@@ -851,10 +855,10 @@ class oxUtils extends oxSuperCfg
 
         $sHeaderCode = '';
         switch ($iHeaderCode) {
-            case 301: 
+            case 301:
                 $sHeaderCode = "HTTP/1.1 301 Moved Permanently";
                 break;
-            case 302: 
+            case 302:
             default:
                 $sHeaderCode = "HTTP/1.1 302 Found";
         }

@@ -755,6 +755,16 @@ function _groupExp(el) {
 
             <dl>
                 <dt>
+                    <input type=text class="txt" name=confstrs[sGiCsvFieldEncloser] value="[{$confstrs.sGiCsvFieldEncloser}]">
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_CSVFIELDENCLOSER" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
+            <dl>
+                <dt>
                     <input type=text class="txt" name=confstrs[sCSVSign] value="[{$confstrs.sCSVSign}]">
                 </dt>
                 <dd>

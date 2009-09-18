@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 22015 2009-09-01 11:30:08Z arvydas $
+ * $Id: oxseoencoder.php 22394 2009-09-17 14:44:23Z arvydas $
  */
 
 /**
@@ -108,8 +108,8 @@ class oxSeoEncoder extends oxSuperCfg
     /**
      * Returns part of url defining active language
      *
-     * @param string  $sSeoUrl seo url
-     * @param int     $iLang   language id
+     * @param string $sSeoUrl seo url
+     * @param int    $iLang   language id
      *
      * @return string
      */

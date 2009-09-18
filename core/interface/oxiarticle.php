@@ -68,6 +68,7 @@ interface oxIArticle
     /**
      * Returns ID's of categories. where this article is assigned
      *
+     * @param bool $blActCats   select categories if all parents are active
      * @param bool $blSkipCache Whether to skip cache
      *
      * @return array

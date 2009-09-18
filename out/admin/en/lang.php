@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22117 2009-09-03 11:59:10Z sarunas $
+ * $Id: lang.php 22360 2009-09-16 14:24:38Z vilma $
  */
 
 /*
@@ -1161,6 +1161,7 @@ $aLang = array(
 'SHOP_CONFIG_TOPNAVILAYOUT'                     => 'Display Category Navigation at Top',
 'SHOP_CONFIG_TOPNAVICATCOUNT'                   => 'Number of Categories that are displayed at Top',
 'SHOP_CONFIG_CSVSEPARATOR'                      => 'CSV Separation Char for Im/Export',
+'SHOP_CONFIG_CSVFIELDENCLOSER'                  => 'CSV-Encloser for Im/Export',
 'SHOP_CONFIG_CSVDECIMALSEPARATOR'               => 'CSV decimal Separation Char for Im/Export',
 'SHOP_CONFIG_DISABLEARTDUBLICATES'              => 'When Products are copied: Do not set copied Product to active',
 'SHOP_CONFIG_EXPORTNUMBEROFLINES'               => 'Number of Lines which are exported per Tick in CSV Export',

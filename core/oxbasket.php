@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 22336 2009-09-15 15:44:43Z vilma $
+ * $Id: oxbasket.php 22389 2009-09-17 14:38:55Z arvydas $
  */
 
 /**
@@ -332,6 +332,7 @@ class oxBasket extends oxSuperCfg
                 // rethrow later
             } catch ( oxArticleInputException $oEx ) {
                 // rethrow later
+                $blRemoveItem = true;
             }
 
             $this->_aBasketContents[$sItemId] = $oBasketItem;
@@ -550,10 +551,9 @@ class oxBasket extends oxSuperCfg
      */
     protected function _addBundles()
     {
-          // iterating through articles and binding bundles
+        // iterating through articles and binding bundles
         foreach ( $this->_aBasketContents as $key => $oBasketItem ) {
-
-           try {
+            try {
                 // adding discount type bundles
                 if ( !$oBasketItem->isDiscountArticle() && !$oBasketItem->isBundle() ) {
                     $aBundles = $this->_getItemBundles( $oBasketItem );
@@ -568,7 +568,10 @@ class oxBasket extends oxSuperCfg
 
                     // adding bundles to basket
                     $this->_addBundlesToBasket( $aBundles );
-            } catch( oxNoArticleException $oEx ) {
+            } catch ( oxNoArticleException $oEx ) {
+                $this->removeItem( $key );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+            } catch ( oxArticleInputException $oEx ) {
                 $this->removeItem( $key );
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
             }
@@ -665,9 +668,9 @@ class oxBasket extends oxSuperCfg
     }
 
     /**
+     * Sets discount calculation mode
      *
-     *
-     * @param bool $blCalcDiscounts
+     * @param bool $blCalcDiscounts calculate discounts or not
      *
      * @return null
      */
@@ -1634,7 +1637,7 @@ class oxBasket extends oxSuperCfg
     public function getBasketArticles()
     {
         $aBasketArticles = array();
-        
+
         foreach ( $this->_aBasketContents as $sItemKey => $oBasketItem ) {
             try {
                 $oProduct = $oBasketItem->getArticle();
@@ -1650,7 +1653,12 @@ class oxBasket extends oxSuperCfg
                         $oProduct->setSelectlist( $aSelectlist );
                     }
                 }
-            } catch( oxNoArticleException $oEx ) {
+            } catch ( oxNoArticleException $oEx ) {
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+                $this->removeItem( $sItemKey );
+                $this->calculateBasket( true );
+                continue;
+            } catch ( oxArticleInputException $oEx ) {
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
                 $this->removeItem( $sItemKey );
                 $this->calculateBasket( true );
@@ -2204,11 +2212,11 @@ class oxBasket extends oxSuperCfg
         $dPrice = 0;
 
         if ( $oProductsPrice = $this->getDiscountProductsPrice() ) {
-           $dPrice = $oProductsPrice->getBruttoSum();
+            $dPrice = $oProductsPrice->getBruttoSum();
         }
 
         if ( $oVoucherPrice = $this->getVoucherDiscount() ) {
-           $dPrice -= $oVoucherPrice->getBruttoPrice();
+            $dPrice -= $oVoucherPrice->getBruttoPrice();
         }
 
         // adding delivery price to final price

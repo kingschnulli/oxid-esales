@@ -9,6 +9,7 @@ a {text-decoration: none;color: #000;outline:0;}
 a:hover {text-decoration: underline;}
 
 h1{font-size: 25px;color:#535353;padding:0.3em 0 0.7em 0;margin:0;}
+div.box h3 {font-size: 14px; font-weight: bold; margin: 7px 0 10px 0; padding-bottom: 7px; border-bottom: 1px solid #ddd;}
 p.desc {padding:.5em 0;margin:0;color:#535353;line-height: 16px;}
 
 abbr{border-bottom: 1px dotted red;}

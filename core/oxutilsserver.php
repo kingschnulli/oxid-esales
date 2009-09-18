@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsserver.php 21861 2009-08-26 13:34:27Z arvydas $
+ * $Id: oxutilsserver.php 22348 2009-09-16 09:08:30Z sarunas $
  */
 
 /**
@@ -174,6 +174,7 @@ class oxUtilsServer extends oxSuperCfg
     {
         if ( isset( $_SERVER["HTTP_X_FORWARDED_FOR"] ) ) {
             $sIP = $_SERVER["HTTP_X_FORWARDED_FOR"];
+            $sIP = preg_replace('/,.*$/', '', $sIP);
         } elseif ( isset( $_SERVER["HTTP_CLIENT_IP"] ) ) {
             $sIP = $_SERVER["HTTP_CLIENT_IP"];
         } else {

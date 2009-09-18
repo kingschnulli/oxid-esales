@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oximex.php 21012 2009-07-20 11:04:39Z arvydas $
+ * $Id: oximex.php 22375 2009-09-17 11:50:04Z rimvydas.paskevicius $
  */
 
 /**
@@ -488,7 +488,7 @@ class oxImex extends oxBase
      *
      * @return string
      */
-    function exportLexwareOrders( $iFromOrderNr = null, $iToOrderNr = null)
+    function exportLexwareOrders( $iFromOrderNr = "", $iToOrderNr = "")
     {
         // thnx to Volker Dörk for this function and his help here
         $myConfig = $this->getConfig();
@@ -497,11 +497,11 @@ class oxImex extends oxBase
 
         $sSelect = "select * from oxorder where 1 ";
 
-        if ( $iFromOrderNr !== null ) {
+        if ( $iFromOrderNr !== "" ) {
             $sSelect .= "and oxordernr >= $iFromOrderNr ";
         }
 
-        if ( $iToOrderNr !== null ) {
+        if ( $iToOrderNr !== "" ) {
             $sSelect .= "and oxordernr <= $iToOrderNr ";
         }
 
@@ -513,7 +513,9 @@ class oxImex extends oxBase
             return null;
         }
 
-        $sExport  = "<?xml version=\"1.0\" encoding=\"ISO-8859-15\"?>$sNewLine";
+        $sCharset = $this->_getCharset();
+
+        $sExport  = "<?xml version=\"1.0\" encoding=\"{$sCharset}\"?>$sNewLine";
         $sExport .= "<Bestellliste>$sNewLine";
         $sRet     = $sExport;
 
@@ -523,7 +525,7 @@ class oxImex extends oxBase
             $oUser = oxNew( "oxuser" );
             $oUser->load( $oOrder->oxorder__oxuserid->value );
 
-            $sExport  = "<Bestellung zurückgestellt=\"Nein\" bearbeitet=\"Nein\" übertragen=\"Nein\">$sNewLine";
+            $sExport  = "<Bestellung " . $this->_convertStr( "zurückgestellt" ) . "=\"Nein\" bearbeitet=\"Nein\" " . $this->_convertStr( "übertragen" ) . "=\"Nein\">$sNewLine";
             $sExport .= "<Bestellnummer>".$oOrder->oxorder__oxordernr->value."</Bestellnummer>$sNewLine";
             $sExport .= "<Standardwaehrung>978</Standardwaehrung>$sNewLine";
             $sExport .= "<Bestelldatum>$sNewLine";
@@ -722,5 +724,33 @@ class oxImex extends oxBase
         } else {
             return null;
         }
+    }
+
+    /**
+     * Get current charset
+     *
+     * @return string
+     */
+    protected function _getCharset()
+    {
+        return oxLang::getInstance()->translateString( 'charset' );
+    }
+
+    /**
+     * Converts string from 'ISO-8859-15' to defined charset
+     *
+     * @param string $sStr string to convert
+     *
+     * @return string
+     */
+    protected function _convertStr( $sStr )
+    {
+        $sCharset = $this->_getCharset();
+
+        if ( $sCharset == 'ISO-8859-15' ) {
+            return $sStr;
+        }
+
+        return $sStr = iconv( 'ISO-8859-15', $sCharset, $sStr );
     }
 }
