@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: order_remark.php 17190 2009-03-13 12:20:25Z arvydas $
+ * $Id: order_remark.php 22422 2009-09-18 12:25:08Z vilma $
  */
 
 /**
@@ -92,9 +92,10 @@ class Order_Remark extends oxAdminDetails
 
         $sNewText   = oxConfig::getParameter( "remarktext");
         $sNewHeader = oxConfig::getParameter( "remarkheader");
-        $oRemark->oxremark__oxtext->setValue($sNewText);
-        $oRemark->oxremark__oxheader->setValue($sNewHeader);
-        $oRemark->oxremark__oxparentid->setValue($oOrder->oxorder__oxuserid->value);
+        $oRemark->oxremark__oxtext = new oxField($sNewText);
+        $oRemark->oxremark__oxheader = new oxField($sNewHeader);
+        $oRemark->oxremark__oxtype = new oxField("r");
+        $oRemark->oxremark__oxparentid = new oxField($oOrder->oxorder__oxuserid->value);
         $oRemark->save();
     }
 

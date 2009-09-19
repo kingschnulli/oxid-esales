@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: shop_seo.php 19048 2009-05-14 06:53:33Z arvydas $
+ * $Id: shop_seo.php 22409 2009-09-18 07:08:16Z vilma $
  */
 
 /**
@@ -116,9 +116,10 @@ class Shop_Seo extends Shop_Config
         $oEncoder = oxSeoEncoder::getInstance();
 
         $oShop = oxNew( 'oxshop' );
-        $oShop->load( $soxId );
+        $oShop->loadInLang( $this->_iEditLang, $soxId );
 
         //assigning values
+        $oShop->setLanguage(0);
         $oShop->assign( $aParams );
         $oShop->setLanguage( $this->_iEditLang );
         $oShop->save();

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_main.php 19886 2009-06-16 12:39:06Z alfonsas $
+ * $Id: article_main.php 22407 2009-09-18 06:58:18Z arvydas $
  */
 
 /**
@@ -364,14 +364,15 @@ class Article_Main extends oxAdminDetails
         $oDb = oxDb::getDb();
 
         $sO2CView = getViewName('oxobject2category');
-        $sQ = "select oxcatnid from $sO2CView where oxobjectid = '$sOldID'";
+        $sQ = "select oxcatnid, oxtime from $sO2CView where oxobjectid = '$sOldID'";
         $rs = $oDb->execute($sQ);
         if ($rs !== false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
                 $sUID = $myUtilsObject->generateUID();
                 $sCatID = $rs->fields[0];
+                $sTime =  $rs->fields[1];
 
-                    $oDb->execute("insert into oxobject2category (oxid, oxobjectid, oxcatnid) VALUES ('$sUID', '$sNewID', '$sCatID') ");
+                    $oDb->execute("insert into oxobject2category (oxid, oxobjectid, oxcatnid, oxtime) VALUES ('$sUID', '$sNewID', '$sCatID', '$sTime') ");
                 $rs->moveNext();
 
                     // resetting article count in category

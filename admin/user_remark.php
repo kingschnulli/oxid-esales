@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: user_remark.php 17191 2009-03-13 12:21:00Z arvydas $
+ * $Id: user_remark.php 22422 2009-09-18 12:25:08Z vilma $
  */
 
 /**
@@ -93,6 +93,7 @@ class User_Remark extends oxAdminDetails
         $oRemark->oxremark__oxtext = new oxField($sNewText);
         $oRemark->oxremark__oxheader = new oxField($sNewHeader);
         $oRemark->oxremark__oxparentid = new oxField($soxId);
+        $oRemark->oxremark__oxtype = new oxField("r");
 
         $oRemark->save();
     }
