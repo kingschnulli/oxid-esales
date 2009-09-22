@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: navigation.php 19850 2009-06-15 13:40:58Z rimvydas.paskevicius $
+ * $Id: navigation.php 22484 2009-09-22 06:57:02Z arvydas $
  */
 
 /**
@@ -125,8 +125,9 @@ class Navigation extends oxAdminView
 
         // delete also, this is usually not needed but for security reasons we execute still
         if ( $myConfig->getConfigParam( 'blAdodbSessionHandler' ) ) {
-            $sSQL = "delete from oxsessions where SessionID = '$sSID'";
-            oxDb::getDb()->Execute( $sSQL);
+            $oDb = oxDb::getDb();
+            $sSQL = "delete from oxsessions where SessionID = ".$oDb->quote( $sSID );
+            $oDb->execute( $sSQL );
         }
 
         //reseting content cache if needed

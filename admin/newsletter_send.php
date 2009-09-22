@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: newsletter_send.php 21910 2009-08-27 11:16:25Z arvydas $
+ * $Id: newsletter_send.php 22484 2009-09-22 06:57:02Z arvydas $
  */
 
 /**
@@ -84,7 +84,7 @@ class Newsletter_Send extends oxAdminList
             $sSearchKey = $sInGroup->oxgroups__oxid->value;
             if ( $blSep)
                 $sSelectGroups .= ",";
-            $sSelectGroups .= "'$sSearchKey'";
+            $sSelectGroups .= $oDB->quote( $sSearchKey );
             $blSep = true;
         }
         $sSelectGroups .= ") )";

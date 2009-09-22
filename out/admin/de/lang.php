@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22360 2009-09-16 14:24:38Z vilma $
+ * $Id: lang.php 22445 2009-09-21 08:02:07Z rimvydas.paskevicius $
  */
 
 $sLangName  = 'Deutsch';
@@ -1563,6 +1563,9 @@ $aLang = array(
 'GENIMPORT_STEP'                                => 'Schritt',
 'GENIMPORT_FINISH'                              => 'Import ausgeführt',
 'GENIMPORT_SKIP'                                => 'Überspringen',
+'GENIMPORT_FIELDSTERMINATEDBY'                  => '[tr]Fields terminated by',
+'GENIMPORT_FIELDSENCLOSEDBY'                    => '[tr]Fields enclosed by',
+
 
 # menu
 'dyn_menu'                                      => 'Servicebereich',

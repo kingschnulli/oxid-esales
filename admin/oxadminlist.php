@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminlist.php 22041 2009-09-01 15:11:21Z vilma $
+ * $Id: oxadminlist.php 22480 2009-09-21 15:19:33Z rimvydas.paskevicius $
  */
 
 /**
@@ -530,6 +530,7 @@ class oxAdminList extends oxAdminView
 
                     foreach ( $aVal as $sVal) {
 
+                        $sFieldName = oxDb::getInstance()->escapeString( $sFieldName );
                         $sqlFull .= " {$sSqlBoolAction} {$sFieldName} ";
 
                         //for search in same field for different values using AND
@@ -618,6 +619,7 @@ class oxAdminList extends oxAdminView
                             $sValue = $this->_convertToDBDate( $sValue, $sFldType );
                         }
                     }
+
                     $this->_aWhere[$sName] = "%{$sValue}%";
                 }
             }
@@ -645,14 +647,14 @@ class oxAdminList extends oxAdminView
                 if ( strlen($sValue) > 10 ) {
                     return $this->_convertTime( $sValue );
                 } else {
-                	return $this->_convertDate( $sValue );
+                    return $this->_convertDate( $sValue );
                 }
             }
         } elseif ( $sFldType == "date" ) {
             if ( strlen($sValue) == 10 ) {
                 oxDb::getInstance()->convertDBDate( $oConvObject, true);
             } else {
-            	return $this->_convertDate( $sValue );
+                return $this->_convertDate( $sValue );
             }
         }
         return $oConvObject->value;
@@ -716,7 +718,7 @@ class oxAdminList extends oxAdminView
                     $sTime = ($iIntVal + 12) . ":" . $aTimeMatches[2];
                 }
             } else {
-            	$sTime = $aTimeMatches[1] . ":" . $aTimeMatches[2];
+                $sTime = $aTimeMatches[1] . ":" . $aTimeMatches[2];
             }
         } elseif ( preg_match( "/([0-9]{2}) ([AP]{1}[M]{1})$/", $sTime, $aTimeMatches ) ) {
             if ( $aTimeMatches[2] == "PM") {

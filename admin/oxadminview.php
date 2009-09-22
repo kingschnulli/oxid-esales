@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminview.php 22154 2009-09-04 12:08:54Z arvydas $
+ * $Id: oxadminview.php 22480 2009-09-21 15:19:33Z rimvydas.paskevicius $
  */
 
 /**
@@ -497,7 +497,7 @@ class oxAdminView extends oxView
         $sCountry = 'international';
 
         if ( !empty($sCountryCode) ) {
-            $sQ = "select oxtitle_1 from oxcountry where oxisoalpha2 = '$sCountryCode' ";
+            $sQ = "select oxtitle_1 from oxcountry where oxisoalpha2 = " . oxDb::getDb()->quote( $sCountryCode );
             $sCountry = oxDb::getDb()->getOne( $sQ );
         }
 

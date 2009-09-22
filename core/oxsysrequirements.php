@@ -147,7 +147,6 @@ class oxSysRequirements
                                           'mod_rewrite'
                                       );
 
-            $aRequiredServerConfigs[] = 'zend_optimizer';
 
             $this->_aRequiredModules = array_fill_keys( $aRequiredPHPExtensions, 'php_extennsions' ) +
                                        array_fill_keys( $aRequiredPHPConfigs, 'php_config' ) +
@@ -410,7 +409,7 @@ class oxSysRequirements
      */
     public function checkZendOptimizer()
     {
-            $iMinStat = 1;
+        $iMinStat = 0;
         $iModStat = extension_loaded( 'Zend Optimizer' ) ? 2 : $iMinStat;
         $sHost   = $_SERVER['HTTP_HOST'];
         $sScript = $_SERVER['SCRIPT_NAME'];

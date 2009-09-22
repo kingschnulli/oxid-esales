@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: report_top_clicked_categories.php 22260 2009-09-10 08:12:23Z arvydas $
+ * $Id: report_top_clicked_categories.php 22478 2009-09-21 14:51:46Z arvydas $
  */
 
 if ( !class_exists( "report_top_clicked_categories" ) ) {
@@ -44,15 +44,17 @@ if ( !class_exists( "report_top_clicked_categories" ) ) {
          */
         public function render()
         {
+            $oDb = oxDb::getDb();
+
             $aDataX = array();
             $aDataY = array();
 
-            $oSmarty = oxUtilsView::getInstance()->getSmarty();
-            $sTime_from = date( "Y-m-d H:i:s", strtotime( $oSmarty->_tpl_vars['time_from']));
-            $sTime_to   = date( "Y-m-d H:i:s", strtotime( $oSmarty->_tpl_vars['time_to']));
+            $oSmarty    = $this->getSmarty();
+            $sTime_from = $oDb->quote( date( "Y-m-d H:i:s", strtotime( $oSmarty->_tpl_vars['time_from'] ) ) );
+            $sTime_to   = $oDb->quote( date( "Y-m-d H:i:s", strtotime( $oSmarty->_tpl_vars['time_to'] ) ) );
 
-            $sSQL = "select count(*) as nrof, oxcategories.oxtitle from oxlogs, oxcategories where oxlogs.oxclass = 'alist' and oxlogs.oxcnid = oxcategories.oxid  and oxlogs.oxtime >= '$sTime_from' and oxlogs.oxtime <= '$sTime_to' group by oxcategories.oxtitle order by nrof desc limit 0, 25";
-            $rs = oxDb::getDb()->execute( $sSQL);
+            $sSQL = "select count(*) as nrof, oxcategories.oxtitle from oxlogs, oxcategories where oxlogs.oxclass = 'alist' and oxlogs.oxcnid = oxcategories.oxid  and oxlogs.oxtime >= $sTime_from and oxlogs.oxtime <= $sTime_to group by oxcategories.oxtitle order by nrof desc limit 0, 25";
+            $rs = $oDb->execute( $sSQL);
             if ($rs != false && $rs->recordCount() > 0) {
                 while (!$rs->EOF) {
                     if ( $rs->fields[1]) {
@@ -118,15 +120,16 @@ if ( !class_exists( "report_top_clicked_categories" ) ) {
         public function graph1()
         {
             $myConfig = $this->getConfig();
+            $oDb = oxDb::getDb();
 
             $aDataX = array();
             $aDataY = array();
 
-            $sTime_from = date( "Y-m-d H:i:s", strtotime( oxConfig::getParameter( "time_from")));
-            $sTime_to   = date( "Y-m-d H:i:s", strtotime( oxConfig::getParameter( "time_to")));
+            $sTime_from = $oDb->quote( date( "Y-m-d H:i:s", strtotime( oxConfig::getParameter( "time_from" ) ) ) );
+            $sTime_to   = $oDb->quote( date( "Y-m-d H:i:s", strtotime( oxConfig::getParameter( "time_to" ) ) ) );
 
-            $sSQL = "select count(*) as nrof, oxparameter from oxlogs where oxclass = 'search' and oxtime >= '$sTime_from' and oxtime <= '$sTime_to' group by oxparameter order by nrof desc";
-            $rs = oxDb::getDb()->execute( $sSQL);
+            $sSQL = "select count(*) as nrof, oxparameter from oxlogs where oxclass = 'search' and oxtime >= $sTime_from and oxtime <= $sTime_to group by oxparameter order by nrof desc";
+            $rs = $oDb->execute( $sSQL);
             if ($rs != false && $rs->recordCount() > 0) {
                 while (!$rs->EOF) {
                     if ( $rs->fields[1]) {

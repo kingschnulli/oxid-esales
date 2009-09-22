@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 22239 2009-09-09 13:41:02Z tomas $
+ * $Id: oxcmp_user.php 22448 2009-09-21 08:09:11Z vilma $
  */
 
 /**
@@ -380,7 +380,7 @@ class oxcmp_user extends oxView
         // second pass
         $sPassword2 = oxConfig::getParameter( 'lgn_pwd2' );
 
-        $aRawVal = array('oxuser__oxcompany', 'oxuser__oxaddinfo', 'oxuser__oxfname', 'oxuser__oxlname');
+        $aRawVal = array('oxuser__oxcompany', 'oxuser__oxaddinfo', 'oxuser__oxfname', 'oxuser__oxlname', 'oxuser__oxcity');
         $aInvAdress = oxConfig::getParameter( 'invadr', $aRawVal );
         $aDelAdress = $this->_getDelAddressData();
 
@@ -548,7 +548,7 @@ class oxcmp_user extends oxView
     protected function _getDelAddressData()
     {
         // if user company name, user name and additional info has special chars
-        $aRawVal = array('oxaddress__oxcompany', 'oxaddress__oxaddinfo', 'oxuser__oxfname', 'oxuser__oxlname');
+        $aRawVal = array('oxaddress__oxcompany', 'oxaddress__oxaddinfo', 'oxaddress__oxfname', 'oxaddress__oxlname', 'oxaddress__oxcity');
         $aDelAdress = $aDeladr = oxConfig::getParameter( 'deladr', $aRawVal );
 
         if ( is_array( $aDeladr ) ) {
