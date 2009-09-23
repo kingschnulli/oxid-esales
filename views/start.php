@@ -138,10 +138,19 @@ class Start extends oxUBase
     public function render()
     {
 
+        startProfile('Simple ZF element');
         $figlet = new Zend_Text_Figlet();
         echo "<pre>";
         echo $figlet->render('oxZend');
         echo "</pre>";
+
+        //class with required subclasses
+        set_include_path(getShopBasePath(). "/core/");
+        $form = new Zend_Form_Element('labas');
+        //it's 0.05575s	3.56%
+        stopProfile('Simple ZF element');
+
+
 
         if ( oxConfig::getParameter( 'showexceptionpage' ) == '1' ) {
             return 'exception.tpl';
