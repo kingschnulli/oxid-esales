@@ -137,6 +137,12 @@ class Start extends oxUBase
      */
     public function render()
     {
+
+        $figlet = new Zend_Text_Figlet();
+        echo "<pre>";
+        echo $figlet->render('oxZend');
+        echo "</pre>";
+
         if ( oxConfig::getParameter( 'showexceptionpage' ) == '1' ) {
             return 'exception.tpl';
         }

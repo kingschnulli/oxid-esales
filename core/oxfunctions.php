@@ -62,6 +62,12 @@ function __autoload( $sClass )
         }
     }
 
+    //ZF spike
+    if (strpos($sClass, 'Zend_') === 0) {
+        $sZendPath = $sBasePath . "/core/" . str_replace('_', '/', $sClass) . ".php";
+        require_once($sZendPath);
+    }
+
     // in case module parent class (*_parent) is required
     $sClass = preg_replace( '/_parent$/i', '', $sClass );
 
