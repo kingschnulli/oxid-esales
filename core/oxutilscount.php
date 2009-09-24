@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilscount.php 22310 2009-09-14 14:40:15Z rimvydas.paskevicius $
+ * $Id: oxutilscount.php 22548 2009-09-22 13:50:42Z rimvydas.paskevicius $
  */
 
 /**
@@ -200,8 +200,8 @@ class oxUtilsCount extends oxSuperCfg
         $sTable   = $oArticle->getViewName();
 
         $sSubSelect  = "select if( oxparentid='', oxid, oxparentid ) as id from {$sTable} where oxprice >= 0 ";
-        $sSubSelect .= $dPriceTo ? "and oxprice <= {$dPriceTo} ":" ";
-        $sSubSelect .= $dPriceFrom ? "group by id having min( oxprice ) >= {$dPriceFrom} ":" ";
+        $sSubSelect .= $dPriceTo ? "and oxprice <= " . (double)$dPriceTo . " " : " ";
+        $sSubSelect .= $dPriceFrom ? "group by id having min( oxprice ) >= " . (double)$dPriceFrom . " " : " ";
 
         $sSelect  = "select count({$sTable}.oxid) from {$sTable} where ";
         $sSelect .= "{$sTable}.oxid in ($sSubSelect) ";
@@ -311,7 +311,7 @@ class oxUtilsCount extends oxSuperCfg
         if ( $aCatData = $this->_getCatCache() ) {
 
             $sTable  = getViewName( 'oxcategories' );
-            $sSelect = "select $sTable.oxid from $sTable where '$iPrice' >= $sTable.oxpricefrom and '$iPrice' <= $sTable.oxpriceto ";
+            $sSelect = "select $sTable.oxid from $sTable where " . (double)$iPrice . " >= $sTable.oxpricefrom and " . (double)$iPrice . " <= $sTable.oxpriceto ";
 
             $rs = oxDb::getDb()->execute( $sSelect );
             if ( $rs != false && $rs->recordCount() > 0 ) {

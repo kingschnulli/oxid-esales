@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 22394 2009-09-17 14:44:23Z arvydas $
+ * $Id: oxseoencoder.php 22550 2009-09-22 14:04:43Z arvydas $
  */
 
 /**
@@ -181,7 +181,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _copyToHistory( $sId, $iShopId, $iLang, $sType = null, $sNewId = null )
     {
-        $sObjectid = $sNewId?"'$sNewId'":'oxobjectid';
+        $sObjectid = $sNewId?"$sNewId":'oxobjectid';
         $sType     = $sType?"oxtype = {$sType} and":'';
 
         // moving
@@ -398,10 +398,10 @@ class oxSeoEncoder extends oxSuperCfg
 
         // skipping self
         if ( $sObjectId && isset($iObjectLang) ) {
-            $sQ .= " and not (oxobjectid = '{$sObjectId}' and oxlang = $iObjectLang)";
+            $sQ .= " and not (oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxlang = $iObjectLang)";
         }
 
-        while ( $oDb->getOne( $sQ ." and oxident='".$this->_getSeoIdent( $sCheckSeoUrl )."' " ) ) {
+        while ( $oDb->getOne( $sQ ." and oxident= " . $oDb->quote( $this->_getSeoIdent( $sCheckSeoUrl ) ) . " " ) ) {
             $sAdd = '';
             if ( self::$_sPrefix ) {
                 $sAdd = self::$_sSeparator . self::$_sPrefix;
@@ -600,6 +600,7 @@ class oxSeoEncoder extends oxSuperCfg
         $sSeoUrl = $this->_trimUrl( $sSeoUrl );
 
         $sIdent = $this->_getSeoIdent( $sSeoUrl );
+        $sIdent = $oDb->quote( $sIdent );
 
         $sStdUrl = $oDb->quote( $sStdUrl );
         $sSeoUrl = $oDb->quote( $sSeoUrl );
@@ -644,9 +645,9 @@ class oxSeoEncoder extends oxSuperCfg
         $sQ  = "insert into oxseo
                     (oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed, oxexpired, oxkeywords, oxdescription, oxparams)
                 values
-                    ( {$sObjectId}, '$sIdent', {$iShopId}, {$iLang}, {$sStdUrl}, {$sSeoUrl}, {$sType}, '$blFixed', '0',
+                    ( {$sObjectId}, $sIdent, {$iShopId}, {$iLang}, {$sStdUrl}, {$sSeoUrl}, {$sType}, '$blFixed', '0',
                     ".( $sKeywords ? $sKeywords : "''" ).", ".( $sDescription ? $sDescription : "''" ).", $sParams )
-                on duplicate key update oxident = '$sIdent', oxstdurl = {$sStdUrl}, oxseourl = {$sSeoUrl}, oxfixed = '$blFixed', oxexpired = '0',
+                on duplicate key update oxident = $sIdent, oxstdurl = {$sStdUrl}, oxseourl = {$sSeoUrl}, oxfixed = '$blFixed', oxexpired = '0',
                     oxkeywords = ".( $sKeywords ? $sKeywords : "oxkeywords" ).", oxdescription = ".( $sDescription ? $sDescription : "oxdescription" );
 
         return $oDb->execute( $sQ );
@@ -762,13 +763,14 @@ class oxSeoEncoder extends oxSuperCfg
      */
     public function markAsExpired( $sId, $iShopId = null, $iExpStat = 1, $iLang = null, $sParams = null )
     {
-        $sWhere  = $sId ? "where oxobjectid = '{$sId}'" : '';
+        $oDb = oxDb::getDb();
+        $sWhere  = $sId ? "where oxobjectid =  " . $oDb->quote( $sId ) : '';
         $sWhere .= isset( $iShopId ) ? ( $sWhere ? " and oxshopid = '{$iShopId}'" : "where oxshopid = '{$iShopId}'" ) : '';
         $sWhere .= $iLang ? ( $sWhere ? " and oxlang = '{$iLang}'" : "where oxlang = '{$iLang}'" ) : '';
         $sWhere .= $sParams ? ( $sWhere ? " and {$sParams}" : "where {$sParams}" ) : '';
 
-        $sQ = "update oxseo set oxexpired = '{$iExpStat}' $sWhere ";
-        oxDb::getDb()->execute( $sQ );
+        $sQ = "update oxseo set oxexpired =  " . $oDb->quote( $iExpStat ) . " $sWhere ";
+        $oDb->execute( $sQ );
     }
 
     /**
@@ -858,10 +860,11 @@ class oxSeoEncoder extends oxSuperCfg
                 $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $sObjectId, $iLang );
             }
 
+
             if ( $sOldObjectId ) {
                 // move changed records to history
-                if ( !$oDb->getOne( "select ('{$sSeoUrl}' like oxseourl) & ('{$sStdUrl}' like oxstdurl) from oxseo where oxobjectid = '{$sOldObjectId}' and oxshopid = '{$iShopId}' and oxlang = '{$iLang}' " ) ) {
-                    $this->_copyToHistory( $oDb->quote( $sOldObjectId ), $oDb->quote( $iShopId ), $iLang, $oDb->quote( 'static' ), $sObjectId );
+                if ( !$oDb->getOne( "select (" . $oDb->quote( $sSeoUrl ) . " like oxseourl) & (" . $oDb->quote( $sStdUrl ) . " like oxstdurl) from oxseo where oxobjectid = ".$oDb->quote( $sOldObjectId )." and oxshopid = '{$iShopId}' and oxlang = '{$iLang}' " ) ) {
+                    $this->_copyToHistory( $oDb->quote( $sOldObjectId ), $oDb->quote( $iShopId ), $iLang, $oDb->quote( 'static' ), $oDb->quote( $sObjectId ) );
                 }
             }
 
@@ -875,12 +878,12 @@ class oxSeoEncoder extends oxSuperCfg
                 $sValues .= ', ';
             }
 
-            $sValues .= "( '{$sObjectId}', '{$sIdent}', '{$iShopId}', '{$iLang}', '$sStdUrl', '$sSeoUrl', 'static' )";
+            $sValues .= "( " . $oDb->quote( $sObjectId ) . ", " . $oDb->quote( $sIdent ) . ", '{$iShopId}', '{$iLang}', " . $oDb->quote( $sStdUrl ) . ", " . $oDb->quote( $sSeoUrl ) . ", 'static' )";
         }
 
         // must delete old before insert/update
         if ( $sOldObjectId ) {
-            $oDb->execute( "delete from oxseo where oxobjectid in ( '{$sOldObjectId}', '{$sObjectId}' )" );
+            $oDb->execute( "delete from oxseo where oxobjectid in ( " . $oDb->quote( $sOldObjectId ) . ", " . $oDb->quote( $sObjectId ) . " )" );
         }
 
         // (re)inserting
@@ -904,12 +907,13 @@ class oxSeoEncoder extends oxSuperCfg
     {
         $iBaseShopId = $this->getConfig()->getBaseShopId();
         if ( $iShopId != $iBaseShopId ) {
+            $oDb = oxDb::getDb();
             foreach (array_keys(oxLang::getInstance()->getLanguageIds()) as $iLang) {
                 $iLang = (int) $iLang;
                 $sQ = "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype )
-                       select MD5( LOWER( CONCAT( '{$iShopId}', oxstdurl ) ) ), MD5( LOWER( oxseourl ) ),
-                       '$iShopId', oxlang, oxstdurl, oxseourl, oxtype from oxseo where oxshopid = '{$iBaseShopId}' and oxtype = 'static' and oxlang='$iLang' ";
-                oxDb::getDb()->execute( $sQ );
+                       select MD5( LOWER( CONCAT( " . $oDb->quote( $iShopId ) . ", oxstdurl ) ) ), MD5( LOWER( oxseourl ) ),
+                       " . $oDb->quote( $iShopId ) . ", oxlang, oxstdurl, oxseourl, oxtype from oxseo where oxshopid = '{$iBaseShopId}' and oxtype = 'static' and oxlang='$iLang' ";
+                $oDb->execute( $sQ );
             }
         }
     }
@@ -974,7 +978,8 @@ class oxSeoEncoder extends oxSuperCfg
      */
     public function deleteSeoEntry( $sObjectId, $iShopId, $iLang, $sType )
     {
-        $sQ = "delete from oxseo where oxobjectid = '{$sObjectId}' and oxshopid = '{$iShopId}' and oxlang = '{$iLang}' and oxtype = '{$sType}' ";
+        $oDb = oxDb::getDb();
+        $sQ = "delete from oxseo where oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxshopid = " . $oDb->quote( $iShopId ) . " and oxlang = " . $oDb->quote( $iLang ) . " and oxtype = " . $oDb->quote( $sType ) . " ";
         oxDb::getDb()->execute( $sQ );
     }
 
@@ -993,7 +998,8 @@ class oxSeoEncoder extends oxSuperCfg
         $iShopId = ( !isset( $iShopId ) ) ? $this->getConfig()->getShopId():$iShopId;
         $iLang   = ( !isset( $iLang ) ) ? oxLang::getInstance()->getTplLanguage():$iLang;
 
-        return oxDb::getDb()->getOne( "select {$sMetaType} from oxseo where oxobjectid = '{$sObjectId}' and oxshopid = '{$iShopId}' and oxlang = '{$iLang}' order by oxparams" );
+        $oDb = oxDb::getDb();
+        return $oDb->getOne( "select {$sMetaType} from oxseo where oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxshopid = '{$iShopId}' and oxlang = '{$iLang}' order by oxparams" );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 22387 2009-09-17 14:34:59Z arvydas $
+ * $Id: oxarticle.php 22555 2009-09-22 14:48:27Z sarunas $
  */
 
 // defining supported link types
@@ -931,7 +931,7 @@ class oxArticle extends oxI18n implements oxIArticle
         $this->oxarticles__oxrating->setValue(( $dOldRating * $dOldCnt + $iRating ) / ($dOldCnt + 1));
         $this->oxarticles__oxratingcnt->setValue($dOldCnt + 1);
         $dRating = ( $dOldRating * $dOldCnt + $iRating ) / ($dOldCnt + 1);
-        $dRatingCnt = $dOldCnt + 1;
+        $dRatingCnt = (int)($dOldCnt + 1);
         // oxarticles.oxtimestamp = oxarticles.oxtimestamp to keep old timestamp value
         oxDb::getDb()->execute( 'update oxarticles set oxarticles.oxrating = '.$dRating.',oxarticles.oxratingcnt = '.$dRatingCnt.', oxarticles.oxtimestamp = oxarticles.oxtimestamp where oxarticles.oxid = "'.$this->getId().'" ' );
     }
@@ -1144,9 +1144,10 @@ class oxArticle extends oxI18n implements oxIArticle
 
         //#1104S if this is variant ant it has no selectlists, trying with parent
         if ( $this->oxarticles__oxparentid->value && $oLists->count() == 0 ) {
+            $sParentQuoted = oxDb::getDb()->quote($this->oxarticles__oxparentid->value);
             //#1496C - select fixed ( * => $sSLViewName.*)
             $sSelect  = "select $sSLViewName.* from oxobject2selectlist left join $sSLViewName on $sSLViewName.oxid=oxobject2selectlist.oxselnid ";
-            $sSelect .= "where oxobject2selectlist.oxobjectid='{$this->oxarticles__oxparentid->value}' ";
+            $sSelect .= "where oxobject2selectlist.oxobjectid=$sParentQuoted ";
             //sorting
             $sSelect .= ' order by oxobject2selectlist.oxsort';
             $oLists->selectString( $sSelect);
@@ -1359,8 +1360,9 @@ class oxArticle extends oxI18n implements oxIArticle
         }
 
         // we do not use lists here as we dont need this overhead right now
+        $sSql = $this->_getSelectCatIds( $sOXID, $blActCats );
         $oDB = oxDb::getDb(true);
-        $rs = $oDB->execute( $this->_getSelectCatIds( $sOXID, $blActCats ) );
+        $rs = $oDB->execute( $sSql );
 
 
         $aRet = array();
@@ -1388,7 +1390,7 @@ class oxArticle extends oxI18n implements oxIArticle
         $sO2CView = $this->_getObjectViewName('oxobject2category');
         $sCatView = $this->_getObjectViewName('oxcategories');
         $sSelect =  "select oxobject2category.oxcatnid as oxcatnid from $sO2CView as oxobject2category left join $sCatView as oxcategories on oxcategories.oxid = oxobject2category.oxcatnid ";
-        $sSelect .= 'where oxobject2category.oxobjectid=\''.$sOXID.'\' and oxcategories.oxid is not null and oxcategories.oxactive'.(($this->getLanguage())?'_'.$this->getLanguage():'').' = 1 ';
+        $sSelect .= 'where oxobject2category.oxobjectid='.oxDb::getDb()->quote($sOXID).' and oxcategories.oxid is not null and oxcategories.oxactive'.(($this->getLanguage())?'_'.$this->getLanguage():'').' = 1 ';
         if ( $blActCats ) {
             $sSelect .= "and oxcategories.oxhidden = 0 and (select count(cats.oxid) from $sCatView as cats where cats.oxrootid = oxcategories.oxrootid and cats.oxleft < oxcategories.oxleft and cats.oxright > oxcategories.oxright and ( cats.oxhidden = 1 or cats.oxactive".(($this->getLanguage())?"_".$this->getLanguage():"")." = 0 ) ) = 0 ";
         }
@@ -1438,8 +1440,10 @@ class oxArticle extends oxI18n implements oxIArticle
             if ( !$blForceReload && isset( self::$_aArticleVendors[$this->getId()] ) ) {
                 return self::$_aArticleVendors[$this->getId()];
             }
-            $sQ = "select oxid from ".getViewName('oxvendor')." where oxid='{$this->oxarticles__oxvendorid->value}'";
-            self::$_aArticleVendors[$this->getId()] = $sVendorId = oxDb::getDb()->getOne( $sQ );
+            $oDb = oxDb::getDb();
+            $sVendorIdQuoted = $oDb->quote($this->oxarticles__oxvendorid->value);
+            $sQ = "select oxid from ".getViewName('oxvendor')." where oxid=$sVendorIdQuoted";
+            self::$_aArticleVendors[$this->getId()] = $sVendorId = $oDb->getOne( $sQ );
         }
         return $sVendorId;
     }
@@ -1458,8 +1462,9 @@ class oxArticle extends oxI18n implements oxIArticle
             if ( !$blForceReload && isset( self::$_aArticleManufacturers[$this->getId()])) {
                 return self::$_aArticleManufacturers[$this->getId()];
             }
-            $sQ = "select oxid from ".getViewName('oxmanufacturers')." where oxid='{$this->oxarticles__oxmanufacturerid->value}'";
-            self::$_aArticleManufacturers[$this->getId()] = $sManufacturerId = oxDb::getDb()->getOne( $sQ );
+            $oDb = oxDb::getDb();
+            $sQ = "select oxid from ".getViewName('oxmanufacturers')." where oxid=".$oDb->quote($this->oxarticles__oxmanufacturerid->value);
+            self::$_aArticleManufacturers[$this->getId()] = $sManufacturerId = $oDb->getOne( $sQ );
         }
         return $sManufacturerId;
     }
@@ -1805,13 +1810,13 @@ class oxArticle extends oxI18n implements oxIArticle
      * Recursive function. Updates quantity of sold articles.
      * Return true on success
      *
-     * @param integer $iAmount Number of articles sold
+     * @param double $dAmount Number of articles sold
      *
      * @return bool
      */
-    public function updateSoldAmount( $iAmount = 0 )
+    public function updateSoldAmount( $dAmount = 0 )
     {
-        if ( !$iAmount ) {
+        if ( !$dAmount ) {
             return;
         }
 
@@ -1820,11 +1825,13 @@ class oxArticle extends oxI18n implements oxIArticle
         // article is not variant - should be updated current amount
         if ( !$this->oxarticles__oxparentid->value ) {
             //updating by SQL query, due to wrong behaviour if saving article using not admin mode
-            $rs = oxDb::getDb()->execute( "update oxarticles set oxarticles.oxsoldamount = oxarticles.oxsoldamount + $iAmount, oxarticles.oxtimestamp = oxarticles.oxtimestamp where oxarticles.oxid = '".$this->oxarticles__oxid->value."'");
+            $dAmount = (double)$dAmount;
+            $oDb = oxDb::getDb();
+            $rs = $oDb->execute( "update oxarticles set oxarticles.oxsoldamount = oxarticles.oxsoldamount + $dAmount, oxarticles.oxtimestamp = oxarticles.oxtimestamp where oxarticles.oxid = ".$oDb->quote($this->oxarticles__oxid->value));
         } elseif ( $this->oxarticles__oxparentid->value) {
             // article is variant - should be updated this article parent amount
             $oUpdateArticle = oxNewArticle( $this->oxarticles__oxparentid->value );
-            $oUpdateArticle->updateSoldAmount( $iAmount );
+            $oUpdateArticle->updateSoldAmount( $dAmount );
         }
 
         $this->onChange( ACTION_UPDATE );
@@ -1840,7 +1847,7 @@ class oxArticle extends oxI18n implements oxIArticle
     public function disableReminder()
     {
         $oDB = oxDb::getDb(true);
-        return $oDB->execute( "update oxarticles set oxarticles.oxremindactive = 2 where oxarticles.oxid = '".$this->oxarticles__oxid->value."'");
+        return $oDB->execute( "update oxarticles set oxarticles.oxremindactive = 2 where oxarticles.oxid = ".$oDB->quote($this->oxarticles__oxid->value));
     }
 
     /**
@@ -1987,8 +1994,9 @@ class oxArticle extends oxI18n implements oxIArticle
             //if article has variants then updating oxvarstock field
             //getting parent id
             if (!isset($sParentID)) {
-                $sQ = 'select oxparentid from oxarticles where oxid = \''.$sOXID.'\'';
-                $sParentID = oxDb::getDb()->getOne($sQ);
+                $oDb = oxDb::getDb();
+                $sQ = 'select oxparentid from oxarticles where oxid = '.$oDb->quote($sOXID);
+                $sParentID = $oDb->getOne($sQ);
             }
             //if we have parent id then update stock
             if ($sParentID) {
@@ -2096,7 +2104,8 @@ class oxArticle extends oxI18n implements oxIArticle
 
         if ( $sOXID ) {
             $sLangField = oxLang::getInstance()->getLanguageTag($this->getLanguage());
-            $this->_setLongDesc(oxDb::getDb()->getOne( "select oxlongdesc{$sLangField} from oxartextends where oxid = '$sOXID'" ));
+            $oDb = oxDb::getDb();
+            $this->_setLongDesc($oDb->getOne( "select oxlongdesc{$sLangField} from oxartextends where oxid = ".$oDb->quote($sOXID) ));
         } else {
             // TODO: check if keeping fldname is needed in non-admin mode
             $this->oxarticles__oxlongdesc = new oxField();
@@ -2917,7 +2926,7 @@ class oxArticle extends oxI18n implements oxIArticle
     protected function _getVariantsIds()
     {
         $aSelect = array();
-        $oRs = oxDb::getDb(true)->execute( "select oxid from oxarticles where oxparentid = '".$this->oxarticles__oxid->value."' " );
+        $oRs = oxDb::getDb(true)->execute( "select oxid from oxarticles where oxparentid = '".$this->getId()."' " );
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
             while (!$oRs->EOF) {
                 $aSelect[] = $oRs->fields['oxid'];
@@ -3082,9 +3091,10 @@ class oxArticle extends oxI18n implements oxIArticle
         //saving new icon
         $sIconFile = basename($sResult);
 
-        $sQ = "UPDATE oxarticles SET oxicon = '$sIconFile' WHERE oxid = '".$this->getId()."'";
+        $oDb = oxDb::getDb();
 
-        oxDb::getDb()->execute($sQ);
+        $sQ = "UPDATE oxarticles SET oxicon = ".$oDb->quote($sIconFile)." WHERE oxid = '".$this->getId()."'";
+        $oDb->execute($sQ);
 
         return $sIconFile;
     }
@@ -3102,7 +3112,7 @@ class oxArticle extends oxI18n implements oxIArticle
     {
         // we do not use lists here as we dont need this overhead right now
         $oDB = oxDb::getDb(true);
-        $sSelect =  'select oxattrid from oxobject2attribute where oxobject2attribute.oxobjectid="'.$this->oxarticles__oxid->value.'" ';
+        $sSelect =  'select oxattrid from oxobject2attribute where oxobject2attribute.oxobjectid="'.$this->getId().'" ';
         $sAttribs = '';
         $blSep = false;
         $rs = $oDB->execute( $sSelect);
@@ -3112,7 +3122,7 @@ class oxArticle extends oxI18n implements oxIArticle
                 if ( $blSep) {
                     $sAttribs .= ' or ';
                 }
-                $sAttribs .= 't1.oxattrid = "'.$rs->fields['oxattrid'].'" ';
+                $sAttribs .= 't1.oxattrid = '.$oDB->quote($rs->fields['oxattrid']).' ';
                 $blSep = true;
                 $iCnt++;
                 $rs->moveNext();
@@ -3177,11 +3187,12 @@ class oxArticle extends oxI18n implements oxIArticle
         $sSearch = "select $sFieldList from $sArticleTable where ".$this->getSqlActiveSnippet()."  and $sArticleTable.oxissearch = 1 and $sArticleTable.oxid in ( ";
         $blSep = false;
         $iCnt = 0;
+        $oDb = oxDb::getDb();
         foreach ( $aList as $oTemp) {
             if ( $blSep) {
                 $sSearch .= ',';
             }
-            $sSearch .= "'".$oTemp->id."'";
+            $sSearch .= $oDb->quote($oTemp->id);
             $blSep = true;
             if ( $iCnt >= $myConfig->getConfigParam( 'iNrofSimilarArticles' ) ) {
                 break;
@@ -3216,7 +3227,7 @@ class oxArticle extends oxI18n implements oxIArticle
         if ( !$blSearchPriceCat ) {
             $sSelect  = "select {$sCatView}.* from {$sO2CView} as oxobject2category left join {$sCatView} on
                          {$sCatView}.oxid = oxobject2category.oxcatnid
-                         where oxobject2category.oxobjectid='{$sOXID}' and {$sCatView}.oxid is not null ";
+                         where oxobject2category.oxobjectid=".oxDb::getDb()->quote($sOXID)." and {$sCatView}.oxid is not null ";
         } else {
             $sSelect  = "select {$sCatView}.* from {$sCatView} where
                          '{$this->oxarticles__oxprice->value}' >= {$sCatView}.oxpricefrom and
@@ -3248,10 +3259,11 @@ class oxArticle extends oxI18n implements oxIArticle
         }
 
         // adding variants
-        $oRs = oxDb::getDb(true)->execute( "select oxid from {$sArtTable} where oxparentid = '{$sParentIdForVariants}' and oxid != '{$this->oxarticles__oxid->value}' " );
+        $oDb = oxDb::getDb(true);
+        $oRs = $oDb->execute( "select oxid from {$sArtTable} where oxparentid = ".$oDb->quote($sParentIdForVariants)." and oxid != ".$oDb->quote($this->oxarticles__oxid->value)." " );
         if ( $oRs != false && $oRs->recordCount() > 0) {
             while ( !$oRs->EOF ) {
-                $sIn .= ", '".current( $oRs->fields )."' ";
+                $sIn .= ", ".$oDb->quote(current( $oRs->fields ))." ";
                 $oRs->moveNext();
             }
         }
@@ -3294,15 +3306,21 @@ class oxArticle extends oxI18n implements oxIArticle
         $sCategoryView = getViewName('oxcategories');
         $sO2CView = getViewName('oxobject2category');
         $sLangPrefix = (($this->getLanguage())?'_'.$this->getLanguage():'');
+
+        $oDb    = oxDb::getDb();
+        $sOXID  = $oDb->quote($sOXID);
+        $sCatId = $oDb->quote($sCatId);
+
         if (!$dPriceFromTo) {
             $sSelect  = "select oxobject2category.oxcatnid from $sO2CView as oxobject2category ";
             $sSelect .= "left join $sCategoryView as oxcategories on oxcategories.oxid = oxobject2category.oxcatnid ";
-            $sSelect .= "where oxobject2category.oxcatnid='$sCatId' and oxobject2category.oxobjectid='$sOXID' ";
+            $sSelect .= "where oxobject2category.oxcatnid=$sCatId and oxobject2category.oxobjectid=$sOXID ";
             $sSelect .= "and oxcategories.oxactive$sLangPrefix = 1 order by oxobject2category.oxtime ";
         } else {
+            $dPriceFromTo = $oDb->quote($dPriceFromTo);
             $sSelect  = "select oxcategories.oxid from $sCategoryView as oxcategories where ";
-            $sSelect .= "oxcategories.oxid='$sCatId' and '$dPriceFromTo' >= oxcategories.oxpricefrom and ";
-            $sSelect .= "'$dPriceFromTo' <= oxcategories.oxpriceto ";
+            $sSelect .= "oxcategories.oxid=$sCatId and $dPriceFromTo >= oxcategories.oxpricefrom and ";
+            $sSelect .= "$dPriceFromTo <= oxcategories.oxpriceto ";
         }
         return $sSelect;
     }
@@ -3823,45 +3841,47 @@ class oxArticle extends oxI18n implements oxIArticle
      */
     protected function _deleteRecords($sOXID)
     {
+        $oDB = oxDb::getDb();
+
+        $sOXID = $oDB->quote($sOXID);
 
         //delete the record
-        $oDB = oxDb::getDb();
-        $sDelete = 'delete from '.$this->_sCoreTbl.' where oxid = \''.$sOXID.'\' ';
+        $sDelete = 'delete from '.$this->_sCoreTbl.' where oxid = '.$sOXID.' ';
         $oDB->execute( $sDelete);
 
         //remove other records
-        $sDelete = 'delete from oxobject2article where oxarticlenid = \''.$sOXID.'\' or oxobjectid = \''.$sOXID.'\' ';
+        $sDelete = 'delete from oxobject2article where oxarticlenid = '.$sOXID.' or oxobjectid = '.$sOXID.' ';
         $oDB->execute( $sDelete);
 
-        $sDelete = 'delete from oxobject2attribute where oxobjectid = \''.$sOXID.'\' ';
+        $sDelete = 'delete from oxobject2attribute where oxobjectid = '.$sOXID.' ';
         $oDB->execute( $sDelete);
 
-        $sDelete = 'delete from oxobject2category where oxobjectid = \''.$sOXID.'\' ';
+        $sDelete = 'delete from oxobject2category where oxobjectid = '.$sOXID.' ';
         $oDB->execute( $sDelete);
 
-        $sDelete = 'delete from oxobject2selectlist where oxobjectid = \''.$sOXID.'\' ';
+        $sDelete = 'delete from oxobject2selectlist where oxobjectid = '.$sOXID.' ';
         $oDB->execute( $sDelete);
 
-        $sDelete = 'delete from oxprice2article where oxartid = \''.$sOXID.'\' ';
+        $sDelete = 'delete from oxprice2article where oxartid = '.$sOXID.' ';
         $oDB->execute( $sDelete);
 
-        $sDelete = 'delete from oxreviews where oxtype="oxarticle" and oxobjectid = \''.$sOXID.'\' ';
+        $sDelete = 'delete from oxreviews where oxtype="oxarticle" and oxobjectid = '.$sOXID.' ';
         $oDB->execute( $sDelete);
 
-        $sDelete = 'delete from oxaccessoire2article where oxobjectid = "'.$sOXID.'" or oxarticlenid = "'.$sOXID.'" ';
+        $sDelete = 'delete from oxaccessoire2article where oxobjectid = '.$sOXID.' or oxarticlenid = '.$sOXID.' ';
         $oDB->execute( $sDelete);
 
         //#1508C - deleting oxobject2delivery entries added
-        $sDelete = 'delete from oxobject2delivery where oxobjectid = \''.$sOXID.'\' and oxtype=\'oxarticles\' ';
+        $sDelete = 'delete from oxobject2delivery where oxobjectid = '.$sOXID.' and oxtype=\'oxarticles\' ';
         $oDB->execute( $sDelete);
 
-        $sDelete = 'delete from oxartextends where oxid = \''.$sOXID.'\' ';
+        $sDelete = 'delete from oxartextends where oxid = '.$sOXID.' ';
         $oDB->execute( $sDelete);
 
-        $sDelete = 'delete from oxactions2article where oxartid = \''.$sOXID.'\' ';
+        $sDelete = 'delete from oxactions2article where oxartid = '.$sOXID.' ';
         $rs = $oDB->execute( $sDelete );
 
-        $sDelete = 'delete from oxobject2list where oxobjectid = \''.$sOXID.'\' ';
+        $sDelete = 'delete from oxobject2list where oxobjectid = '.$sOXID.' ';
         $rs = $oDB->execute( $sDelete );
 
 
@@ -3879,7 +3899,7 @@ class oxArticle extends oxI18n implements oxIArticle
     {
         $oDB = oxDb::getDb();
         //collect variants to remove recursively
-        $sVariants = 'select oxid from '.$this->getViewName().' where oxparentid = \''.$sOXID.'\'';
+        $sVariants = 'select oxid from '.$this->getViewName().' where oxparentid = '.$oDB->quote($sOXID);
         $rs = $oDB->execute( $sVariants);
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
@@ -3965,8 +3985,9 @@ class oxArticle extends oxI18n implements oxIArticle
         }
 
         //also reseting category counts
-        $sQ = "select oxcatnid from oxobject2category where oxobjectid = '{$sOxid}'";
-        $oRs = oxDb::getDb()->execute( $sQ );
+        $oDb = oxDb::getDb();
+        $sQ = "select oxcatnid from oxobject2category where oxobjectid = ".$oDb->quote($sOxid);
+        $oRs = $oDb->execute( $sQ );
         if ( $oRs !== false && $oRs->recordCount() > 0) {
             while ( !$oRs->EOF ) {
                 $myUtilsCount->resetCatArticleCount( $oRs->fields[0] );
@@ -3985,16 +4006,17 @@ class oxArticle extends oxI18n implements oxIArticle
     protected function _onChangeUpdateStock( $sParentID )
     {
         $oDb = oxDb::getDb();
-        $sQ = 'select oxstock, oxvendorid, oxmanufacturerid from oxarticles where oxid = \''.$sParentID.'\' ';
+        $sParentIdQuoted = $oDb->quote($sParentID);
+        $sQ = 'select oxstock, oxvendorid, oxmanufacturerid from oxarticles where oxid = '.$sParentIdQuoted;
         $rs = $oDb->execute($sQ);
         $iOldStock = $rs->fields[0];
         $iVendorID = $rs->fields[1];
         $iManufacturerID = $rs->fields[2];
 
-        $sQ = 'select sum(oxstock) from oxarticles where oxparentid = \''.$sParentID.'\' and '. $this->getSqlActiveSnippet( true ).' and oxstock > 0 ';
+        $sQ = 'select sum(oxstock) from oxarticles where oxparentid = '.$sParentIdQuoted.' and '. $this->getSqlActiveSnippet( true ).' and oxstock > 0 ';
         $iStock = (float) $oDb->getOne( $sQ );
 
-        $sQ = 'update oxarticles set oxvarstock = '.$iStock.' where oxid = \''.$sParentID.'\'';
+        $sQ = 'update oxarticles set oxvarstock = '.$iStock.' where oxid = '.$sParentIdQuoted;
         $oDb->execute( $sQ );
 
             //now lets update category counts
@@ -4022,10 +4044,11 @@ class oxArticle extends oxI18n implements oxIArticle
     protected function _onChangeUpdateVarCount( $sParentID )
     {
         $oDb = oxDb::getDb();
-        $sQ = 'select count(*) as varcount from oxarticles where oxparentid = \''.$sParentID.'\' ';
+        $sParentIdQuoted = $oDb->quote($sParentID);
+        $sQ = 'select count(*) as varcount from oxarticles where oxparentid = '.$sParentIdQuoted;
         $iVarCount = (int) $oDb->getOne($sQ);
 
-        $sQ = 'update oxarticles set oxvarcount = '.$iVarCount.' where oxid = \''.$sParentID.'\'';
+        $sQ = 'update oxarticles set oxvarcount = '.$iVarCount.' where oxid = '.$sParentIdQuoted;
         $oDb->execute($sQ);
     }
 
@@ -4038,19 +4061,20 @@ class oxArticle extends oxI18n implements oxIArticle
      */
     protected function _onChangeUpdateMinVarPrice( $sParentID )
     {
+        $oDb = oxDb::getDb();
+        $sParentIdQuoted = $oDb->quote($sParentID);
         //#M0000883 (Sarunas)
-        $sQ = 'select min(oxprice) as varminprice from oxarticles where '.$this->getSqlActiveSnippet(true).' and (oxparentid = "'.$sParentID.'"';
+        $sQ = 'select min(oxprice) as varminprice from oxarticles where '.$this->getSqlActiveSnippet(true).' and (oxparentid = '.$sParentIdQuoted;
         //#M0000886 (Sarunas)
         if ( $this->getConfig()->getConfigParam( 'blVariantParentBuyable' ) ) {
-            $sQ .= ' or oxid = "'.$sParentID.'"';
+            $sQ .= ' or oxid = '.$sParentIdQuoted;
         } else {
-            $sQ .= ' or (oxid = "'.$sParentID.'" and oxvarcount=0)';
+            $sQ .= ' or (oxid = '.$sParentIdQuoted.' and oxvarcount=0)';
         }
         $sQ .= ')';
-        $oDb = oxDb::getDb();
         $dVarMinPrice = $oDb->getOne($sQ);
         if ( $dVarMinPrice ) {
-            $sQ = 'update oxarticles set oxvarminprice = '.$dVarMinPrice.' where oxid = "'.$sParentID.'"';
+            $sQ = 'update oxarticles set oxvarminprice = '.$dVarMinPrice.' where oxid = '.$sParentIdQuoted;
             $oDb->execute($sQ);
         }
     }
@@ -4127,6 +4151,7 @@ class oxArticle extends oxI18n implements oxIArticle
 
     /**
      * Returns product id (oxid)
+     * (required for interface oxIArticle)
      *
      * @return string
      */
@@ -4176,7 +4201,8 @@ class oxArticle extends oxI18n implements oxIArticle
     {
         $sArtView = getViewName('oxarticles');
         $sLang = oxLang::getInstance()->getBaseLanguage();
-        $sQ = "select oxtitle".(($sLang)?"_$sLang":"")." from $sArtView where oxid='".$sId."'";
-        return oxDb::getDb()->getOne($sQ);
+        $oDb = oxDb::getDb();
+        $sQ = "select oxtitle".(($sLang)?"_$sLang":"")." from $sArtView where oxid=".$oDb->quote($sId);
+        return $oDb->getOne($sQ);
     }
 }

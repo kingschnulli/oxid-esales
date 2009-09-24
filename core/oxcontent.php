@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcontent.php 22125 2009-09-03 15:06:02Z sarunas $
+ * $Id: oxcontent.php 22539 2009-09-22 13:05:20Z sarunas $
  */
 
 /**
@@ -197,7 +197,8 @@ class oxContent extends oxI18n
             }
         }
         if ($this->oxcontents__oxcatid->value && $this->oxcontents__oxcatid->value != 'oxrootid') {
-            $sParentId = oxDb::getDb()->getOne("select oxparentid from oxcategories where oxid = '{$this->oxcontents__oxcatid->value}'");
+            $oDb = oxDb::getDb();
+            $sParentId = $oDb->getOne("select oxparentid from oxcategories where oxid = ".$oDb->quote($this->oxcontents__oxcatid->value));
             if ($sParentId && 'oxrootid' != $sParentId) {
                 $sAdd .= "&amp;cnid=$sParentId";
             }

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: shop_config.php 22117 2009-09-03 11:59:10Z sarunas $
+ * $Id: shop_config.php 22487 2009-09-22 07:03:10Z arvydas $
  */
 
 /**
@@ -97,8 +97,8 @@ class Shop_Config extends oxAdminDetails
         $aConfArrs = array();
         $aConfAarrs = array();
 
-
-        $rs = oxDb::getDb()->Execute("select oxvarname, oxvartype, DECODE( oxvarvalue, '".$myConfig->getConfigParam( 'sConfigKey' )."') as oxvarvalue from oxconfig where oxshopid = '$soxId'");
+        $oDb = oxDb::getDb();
+        $rs = $oDb->Execute("select oxvarname, oxvartype, DECODE( oxvarvalue, ".$oDb->quote( $myConfig->getConfigParam( 'sConfigKey' ) ).") as oxvarvalue from oxconfig where oxshopid = '$soxId'");
         if ($rs != false && $rs->recordCount() > 0) {
             $oStr = getStr();
             while (!$rs->EOF) {

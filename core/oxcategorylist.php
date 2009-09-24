@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategorylist.php 21909 2009-08-27 11:16:12Z sarunas $
+ * $Id: oxcategorylist.php 22537 2009-09-22 13:00:18Z sarunas $
  */
 
 
@@ -182,7 +182,7 @@ class oxCategoryList extends oxList
         // load compleate tree of active category, if it exists
         if ($oCat) {
             // select children here, siblings will be selected from union
-            $sDepthSnippet .= " or ($sViewName.oxparentid = '{$oCat->oxcategories__oxid->value}')";
+            $sDepthSnippet .= " or ($sViewName.oxparentid = ".oxDb::getDb()->quote($oCat->oxcategories__oxid->value).")";
         }
 
         // load 1'st category level (roots)
@@ -217,9 +217,9 @@ class oxCategoryList extends oxList
         return "UNION SELECT ".$this->_getSqlSelectFieldsForTree('maincats', $aColumns)
                 ." FROM oxcategories AS subcats"
                 ." LEFT JOIN oxcategories AS maincats on maincats.oxparentid = subcats.oxparentid"
-                ." WHERE subcats.oxrootid = '{$oCat->oxcategories__oxrootid->value}'"
-                ." AND subcats.oxleft <= {$oCat->oxcategories__oxleft->value}"
-                ." AND subcats.oxright >= {$oCat->oxcategories__oxright->value}";
+                ." WHERE subcats.oxrootid = ".oxDb::getDb()->quote($oCat->oxcategories__oxrootid->value)
+                ." AND subcats.oxleft <= ". (int)$oCat->oxcategories__oxleft->value
+                ." AND subcats.oxright >= ".(int)$oCat->oxcategories__oxright->value;
     }
 
 
@@ -605,24 +605,26 @@ class oxCategoryList extends oxList
         }
 
         // Get sub categories of root categorie
-        $rs = $oDB->execute("update oxcategories set oxrootid = '$thisRoot' where oxparentid = '$oxRootId'");
-        $rs = $oDB->execute("select oxid, oxparentid from oxcategories where oxparentid = '$oxRootId' order by oxsort");
+        $rs = $oDB->execute("update oxcategories set oxrootid = ".$oDB->quote($thisRoot)." where oxparentid = ".$oDB->quote($oxRootId));
+        $rs = $oDB->execute("select oxid, oxparentid from oxcategories where oxparentid = ".$oDB->quote($oxRootId)." order by oxsort");
         // If there are sub categories
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
                 $parentId = $rs->fields[1];
                 $actOxid = $rs->fields[0];
+                $sActOxidQuoted = $oDB->quote($actOxid);
 
                 // Get the data of the parent category to the current Cat
-                $rs3 = $oDB->execute("select oxrootid, oxright from oxcategories where oxid = '$parentId'");
+                $rs3 = $oDB->execute("select oxrootid, oxright from oxcategories where oxid = ".$oDB->quote($parentId));
                 while (!$rs3->EOF) {
                     $parentOxRootId = $rs3->fields[0];
-                    $parentRight = $rs3->fields[1];
+                    $parentRight    = (int)$rs3->fields[1];
                     $rs3->moveNext();
                 }
-                $oDB->execute("update oxcategories set oxleft = oxleft + 2 where oxrootid = '$parentOxRootId' and oxleft > '$parentRight' and oxright >= '$parentRight' and oxid != '$actOxid'");
-                $oDB->execute("update oxcategories set oxright = oxright + 2 where oxrootid = '$parentOxRootId' and oxright >= '$parentRight' and oxid != '$actOxid'");
-                $oDB->execute("update oxcategories set oxleft = $parentRight, oxright = ($parentRight + 1) where oxid = '$actOxid'");
+                $sParentOxRootIdQuoted = $oDB->quote($parentOxRootId);
+                $oDB->execute("update oxcategories set oxleft = oxleft + 2 where oxrootid = $sParentOxRootIdQuoted and oxleft > '$parentRight' and oxright >= '$parentRight' and oxid != $sActOxidQuoted");
+                $oDB->execute("update oxcategories set oxright = oxright + 2 where oxrootid = $sParentOxRootIdQuoted and oxright >= '$parentRight' and oxid != $sActOxidQuoted");
+                $oDB->execute("update oxcategories set oxleft = $parentRight, oxright = ($parentRight + 1) where oxid = $sActOxidQuoted");
                 $this->_updateNodes($actOxid, false, $thisRoot);
                 $rs->moveNext();
             }

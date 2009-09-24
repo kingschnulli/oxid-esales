@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oximex.php 22375 2009-09-17 11:50:04Z rimvydas.paskevicius $
+ * $Id: oximex.php 22560 2009-09-22 14:58:12Z rimvydas.paskevicius $
  */
 
 /**
@@ -131,7 +131,7 @@ class oxImex extends oxBase
             if ($blSep) {
                 $sInGroup .= ", ";
             }
-            $sInGroup .= "'".$sGroupId."'";
+            $sInGroup .= $oDB->quote( $sGroupId );
             $blSep = true;
         }
 
@@ -237,7 +237,7 @@ class oxImex extends oxBase
                 $oArticle->load( $rs->fields['OXID']);
                 $this->setAdminMode( $blAdmin );
 
-                $sSelect = "select oxtitle from oxarticles where oxid = '".$oArticle->oxarticles__oxparentid->value."'";
+                $sSelect = "select oxtitle from oxarticles where oxid = " . $oDB->quote( $oArticle->oxarticles__oxparentid->value );
                 $oTitle = $oDB->getOne( $sSelect);
                 if ($oTitle != false && strlen ($oTitle)) {
                     $nTitle = $this->interForm($oTitle);
@@ -498,10 +498,12 @@ class oxImex extends oxBase
         $sSelect = "select * from oxorder where 1 ";
 
         if ( $iFromOrderNr !== "" ) {
+            $iFromOrderNr = (int)$iFromOrderNr;
             $sSelect .= "and oxordernr >= $iFromOrderNr ";
         }
 
         if ( $iToOrderNr !== "" ) {
+            $iToOrderNr = (int)$iToOrderNr;
             $sSelect .= "and oxordernr <= $iToOrderNr ";
         }
 

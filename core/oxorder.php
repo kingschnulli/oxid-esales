@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 22391 2009-09-17 14:41:25Z arvydas $
+ * $Id: oxorder.php 22526 2009-09-22 12:01:34Z arvydas $
  */
 
 /**
@@ -441,8 +441,9 @@ class oxOrder extends oxBase
      */
     protected function _setOrderStatus( $sStatus )
     {
-        $sQ = 'update oxorder set oxtransstatus="'.$sStatus.'" where oxid="'.$this->getId().'" ';
-        oxDb::getDb()->execute( $sQ );
+        $oDb = oxDb::getDb();
+        $sQ = 'update oxorder set oxtransstatus='.$oDb->quote( $sStatus ).' where oxid="'.$this->getId().'" ';
+        $oDb->execute( $sQ );
 
         //updating order object
         $this->oxorder__oxtransstatus = new oxField( $sStatus, oxField::T_RAW );
@@ -1370,7 +1371,7 @@ class oxOrder extends oxBase
     {
         $oDB = oxDb::getDb( true );
         $aVouchers = array();
-        $sSelect = "select oxvouchernr from oxvouchers where oxorderid = '".$this->oxorder__oxid->value."'";
+        $sSelect = "select oxvouchernr from oxvouchers where oxorderid = ".$oDB->quote( $this->oxorder__oxid->value );
         $rs = $oDB->execute( $sSelect);
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
@@ -1433,7 +1434,8 @@ class oxOrder extends oxBase
             return false;
         }
 
-        if ( oxDb::getDb()->getOne( 'select oxid from oxorder where oxid = "'.$sOxId.'"' ) ) {
+        $oDb = oxDb::getDb();
+        if ( $oDb->getOne( 'select oxid from oxorder where oxid = '.$oDb->quote( $sOxId ) ) ) {
             return true;
         }
 
@@ -1572,8 +1574,9 @@ class oxOrder extends oxBase
      */
     public function getLastUserPaymentType( $sUserId)
     {
-        $sQ = 'select oxorder.oxpaymenttype from oxorder where oxorder.oxshopid="'.$this->getConfig()->getShopId().'" and oxorder.oxuserid="'.$sUserId.'" order by oxorder.oxorderdate desc ';
-        $sLastPaymentId = oxDb::getDb()->getOne( $sQ );
+        $oDb = oxDb::getDb();
+        $sQ = 'select oxorder.oxpaymenttype from oxorder where oxorder.oxshopid="'.$this->getConfig()->getShopId().'" and oxorder.oxuserid='.$oDb->quote( $sUserId ).' order by oxorder.oxorderdate desc ';
+        $sLastPaymentId = $oDb->getOne( $sQ );
         return $sLastPaymentId;
     }
 

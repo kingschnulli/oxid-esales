@@ -102,14 +102,14 @@ class oxSysRequirements
                                   'OXORDERID',
                                   'OXVOUCHERSERIEID');
 
-   /**
+    /**
      * Class constructor. The constructor is defined in order to be possible to call parent::__construct() in modules.
      *
      * @return null;
      */
-	public function __construct()
-	{
-	}
+    public function __construct()
+    {
+    }
 
     /**
      * Sets system required modules
@@ -591,7 +591,7 @@ class oxSysRequirements
     {
         if ( $sModule ) {
             $iModStat = null;
-            $sCheckFunction = "check".str_replace(" ","",ucwords(str_replace("_"," ",$sModule)));
+            $sCheckFunction = "check".str_replace(" ", "", ucwords(str_replace("_", " ", $sModule)));
             $iModStat = $this->$sCheckFunction();
 
             return $iModStat;

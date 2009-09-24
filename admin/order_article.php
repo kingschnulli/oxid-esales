@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: order_article.php 20543 2009-06-30 06:24:21Z arvydas $
+ * $Id: order_article.php 22489 2009-09-22 07:05:28Z arvydas $
  */
 
 /**
@@ -65,8 +65,9 @@ class Order_Article extends oxAdminDetails
             $sOrderId = oxConfig::getParameter( 'oxid' );
 
             //get article id
-            $sQ = "select oxid from oxarticles where oxarticles.oxartnum = '{$sArtNum}'";
-            if ( ( $sArtId = oxDb::getDb()->getOne( $sQ ) ) && $dAmount > 0 ) {
+            $oDb = oxDb::getDb();
+            $sQ  = "select oxid from oxarticles where oxarticles.oxartnum = ".$oDb->quote( $sArtNum );
+            if ( ( $sArtId = $oDb->getOne( $sQ ) ) && $dAmount > 0 ) {
                 $oOrderArticle = oxNew( 'oxorderArticle' );
                 $oOrderArticle->oxorderarticles__oxartid  = new oxField( $sArtId );
                 $oOrderArticle->oxorderarticles__oxartnum = new oxField( $sArtNum );
@@ -138,11 +139,12 @@ class Order_Article extends oxAdminDetails
             $oArticle->updateArticleStock( $oArticle->oxorderarticles__oxamount->value * $sStockSign, $myConfig->getConfigParam('blAllowNegativeStock') );
         }
 
-        $sQ = "update oxorderarticles set oxstorno = '{$oArticle->oxorderarticles__oxstorno->value}' where oxid = '{$sOrderArtId}'";
-        oxDb::getDb()->execute( $sQ );
+        $oDb = oxDb::getDb();
+        $sQ = "update oxorderarticles set oxstorno = ".$oDb->quote( $oArticle->oxorderarticles__oxstorno->value )." where oxid = ".$oDb->quote( $sOrderArtId );
+        $oDb->execute( $sQ );
 
         //get article id
-        $sQ = "select oxartid from oxorderarticles where oxid = '{$sOrderArtId}'";
+        $sQ = "select oxartid from oxorderarticles where oxid = ".$oDb->quote( $sOrderArtId );
         if ( ( $sArtId = oxDb::getDb()->getOne( $sQ ) ) ) {
             $oOrder = oxNew( 'oxorder' );
             if ( $oOrder->load( oxConfig::getParameter( 'oxid' ) ) ) {

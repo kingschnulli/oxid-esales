@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: shop_main.php 22409 2009-09-18 07:08:16Z vilma $
+ * $Id: shop_main.php 22498 2009-09-22 07:45:43Z arvydas $
  */
 
 
@@ -102,14 +102,14 @@ class Shop_Main extends oxAdminDetails
 
         $oShop = oxNew( "oxshop" );
 
-        
+
         $isubjlang = oxConfig::getParameter("subjlang");
         if ( $isubjlang && $isubjlang > 0 ) {
             $iLang = $isubjlang;
         } else {
-        	$iLang = 0;
+            $iLang = 0;
         }
-        
+
         if ( $soxId != "-1") {
             $oShop->loadInLang( $iLang, $soxId );
         } else {

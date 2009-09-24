@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticlelist.php 22388 2009-09-17 14:35:46Z arvydas $
+ * $Id: oxarticlelist.php 22520 2009-09-22 11:31:51Z sarunas $
  */
 
 /**
@@ -278,7 +278,7 @@ class oxArticleList extends oxList
         }
 
         $sShopID        = $this->getConfig()->getShopId();
-        $sActionID      = strtolower( $sActionID);
+        $sActionID      = oxDb::getDb()->quote(strtolower( $sActionID));
 
         //echo $sSelect;
         $oBaseObject    = $this->getBaseObject();
@@ -291,7 +291,7 @@ class oxArticleList extends oxList
         $sSelect = "select $sArticleFields from oxactions2article
                               left join $sArticleTable on $sArticleTable.oxid = oxactions2article.oxartid
                               left join oxactions on oxactions.oxid = oxactions2article.oxactionid
-                              where oxactions2article.oxshopid = '$sShopID' and oxactions2article.oxactionid = '$sActionID' and $sActiveSql
+                              where oxactions2article.oxshopid = '$sShopID' and oxactions2article.oxactionid = $sActionID and $sActiveSql
                               and $sArticleTable.oxid is not null and " .$oBaseObject->getSqlActiveSnippet(). "
                               order by oxactions2article.oxsort";
 
@@ -317,15 +317,17 @@ class oxArticleList extends oxList
         $oBaseObject   = $this->getBaseObject();
         $sArticleTable = $oBaseObject->getViewName();
 
+        $sArticleId = oxDb::getDb()->quote($sArticleId);
+
         $sSelect  = "select $sArticleTable.* from oxobject2article left join $sArticleTable on oxobject2article.oxobjectid=$sArticleTable.oxid ";
-        $sSelect .= "where oxobject2article.oxarticlenid = '$sArticleId' ";
+        $sSelect .= "where oxobject2article.oxarticlenid = $sArticleId ";
         $sSelect .= " and $sArticleTable.oxid is not null and " .$oBaseObject->getSqlActiveSnippet(). " order by rand()";
 
         // #525 bidirectional crossselling
         if ( $myConfig->getConfigParam( 'blBidirectCross' ) ) {
             $sSelect  = "select distinct $sArticleTable.* from oxobject2article left join $sArticleTable on (oxobject2article.oxobjectid=$sArticleTable.oxid or oxobject2article.oxarticlenid=$sArticleTable.oxid) ";
-            $sSelect .= "where (oxobject2article.oxarticlenid = '$sArticleId' or oxobject2article.oxobjectid = '$sArticleId' )";
-            $sSelect .= " and $sArticleTable.oxid is not null and " .$oBaseObject->getSqlActiveSnippet(). " having $sArticleTable.oxid!='$sArticleId' order by rand()";
+            $sSelect .= "where (oxobject2article.oxarticlenid = $sArticleId or oxobject2article.oxobjectid = $sArticleId )";
+            $sSelect .= " and $sArticleTable.oxid is not null and " .$oBaseObject->getSqlActiveSnippet(). " having $sArticleTable.oxid!=$sArticleId order by rand()";
         }
 
         $this->setSqlLimit( 0, $myConfig->getConfigParam( 'iNrofCrossellArticles' ));
@@ -348,11 +350,13 @@ class oxArticleList extends oxList
             return;
         }
 
+        $sArticleId = oxDb::getDb()->quote($sArticleId);
+
         $oBaseObject   = $this->getBaseObject();
         $sArticleTable = $oBaseObject->getViewName();
 
         $sSelect  = "select $sArticleTable.* from oxaccessoire2article left join $sArticleTable on oxaccessoire2article.oxobjectid=$sArticleTable.oxid ";
-        $sSelect .= "where oxaccessoire2article.oxarticlenid = '$sArticleId' ";
+        $sSelect .= "where oxaccessoire2article.oxarticlenid = $sArticleId ";
         $sSelect .= " and $sArticleTable.oxid is not null and " .$oBaseObject->getSqlActiveSnippet();
         //sorting articles
         $sSelect .= " order by oxaccessoire2article.oxsort";
@@ -458,10 +462,12 @@ class oxArticleList extends oxList
      */
     protected function _getArticleSelect( $sRecommId, $sArticlesFilter = null )
     {
+        $sRecommId = oxDb::getDb()->quote($sRecommId);
+
         $sArtView = getViewName( 'oxarticles' );
         $sSelect  = "select distinct $sArtView.*, oxobject2list.oxdesc from oxobject2list ";
         $sSelect .= "left join $sArtView on oxobject2list.oxobjectid = $sArtView.oxid ";
-        $sSelect .= "where (oxobject2list.oxlistid = '".$sRecommId."') ".$sArticlesFilter;
+        $sSelect .= "where (oxobject2list.oxlistid = $sRecommId) ".$sArticlesFilter;
 
         return $sSelect;
     }
@@ -899,10 +905,13 @@ class oxArticleList extends oxList
             $sFilterSql = $this->_getFilterSql($sCatId, $aSessionFilter[$sCatId]);
         }
 
+        $oDb = oxDb::getDb();
+        $sCatId = $oDb->quote($sCatId);
+
         $sSelect = "SELECT $sFields FROM $sO2CView as oc left join $sArticleTable
                     ON $sArticleTable.oxid = oc.oxobjectid
                     WHERE ".$this->getBaseObject()->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''
-                    and oc.oxcatnid = '$sCatId' $sFilterSql GROUP BY oc.oxcatnid, oc.oxobjectid ORDER BY $sSorting oc.oxpos, oc.oxobjectid ";
+                    and oc.oxcatnid = $sCatId $sFilterSql GROUP BY oc.oxcatnid, oc.oxobjectid ORDER BY $sSorting oc.oxpos, oc.oxobjectid ";
 
         return $sSelect;
     }
@@ -998,8 +1007,16 @@ class oxArticleList extends oxList
         $sSelectFields = $oBaseObject->getSelectFields();
 
         $sSubSelect  = "select if( oxparentid = '',oxid,oxparentid ) as id from {$sArticleTable} where oxprice >= 0 ";
-        $sSubSelect .= $dPriceTo ? "and oxprice <= {$dPriceTo} " : " ";
-        $sSubSelect .= $dPriceFrom ? "group by id having min( oxprice ) >= {$dPriceFrom} " : " ";
+        if ($dPriceTo) {
+            $sSubSelect .= "and oxprice <= ".(double)$dPriceTo." ";
+        } else {
+            $sSubSelect .= " ";
+        }
+        if ($dPriceFrom) {
+            $sSubSelect .= "group by id having min( oxprice ) >= ".(double)$dPriceFrom." ";
+        } else {
+            $sSubSelect .= " ";
+        }
 
         $sSelect  = "select {$sSelectFields} from {$sArticleTable} where ";
         $sSelect .= "{$sArticleTable}.oxid in ( {$sSubSelect} ) ";
@@ -1024,11 +1041,12 @@ class oxArticleList extends oxList
      */
     protected function _getVendorSelect( $sVendorId )
     {
+        $sVendorId = oxDb::getDb()->quote($sVendorId);
         $sArticleTable = getViewName('oxarticles');
         $oBaseObject = $this->getBaseObject();
         $sFieldNames = $oBaseObject->getSelectFields();
         $sSelect  = "select $sFieldNames from $sArticleTable ";
-        $sSelect .= "where $sArticleTable.oxvendorid = '$sVendorId' ";
+        $sSelect .= "where $sArticleTable.oxvendorid = $sVendorId ";
         $sSelect .= " and " . $oBaseObject->getSqlActiveSnippet() . " and $sArticleTable.oxparentid = ''  ";
 
         if ( $this->_sCustomSorting ) {
@@ -1047,11 +1065,12 @@ class oxArticleList extends oxList
      */
     protected function _getManufacturerSelect( $sManufacturerId )
     {
+        $sManufacturerId = oxDb::getDb()->quote($sManufacturerId);
         $sArticleTable = getViewName('oxarticles');
         $oBaseObject = $this->getBaseObject();
         $sFieldNames = $oBaseObject->getSelectFields();
         $sSelect  = "select $sFieldNames from $sArticleTable ";
-        $sSelect .= "where $sArticleTable.oxmanufacturerid = '$sManufacturerId' ";
+        $sSelect .= "where $sArticleTable.oxmanufacturerid = $sManufacturerId ";
         $sSelect .= " and " . $oBaseObject->getSqlActiveSnippet() . " and $sArticleTable.oxparentid = ''  ";
 
         if ( $this->_sCustomSorting ) {
@@ -1071,8 +1090,9 @@ class oxArticleList extends oxList
     public function loadStockRemindProducts( $aBasketContents )
     {
         if ( is_array( $aBasketContents ) && count( $aBasketContents ) ) {
+            $oDb = oxDb::getDb();
             foreach ( $aBasketContents as $oBasketItem ) {
-                $aArtIds[] = $oBasketItem->getProductId();
+                $aArtIds[] = $oDb->quote($oBasketItem->getProductId());
             }
 
             $oBaseObject = $this->getBaseObject();
@@ -1081,15 +1101,15 @@ class oxArticleList extends oxList
             $sTable      = $oBaseObject->getViewName();
 
             // fetching actual db stock state and reminder status
-            $sQ = "select {$sFieldNames} from {$sTable} where {$sTable}.oxid in ( '".implode( "','", $aArtIds )."' ) and
+            $sQ = "select {$sFieldNames} from {$sTable} where {$sTable}.oxid in ( ".implode( ",", $aArtIds )." ) and
                           oxremindactive = '1' and oxstock <= oxremindamount";
             $this->selectString( $sQ );
 
             // updating stock reminder state
             if ( $this->count() ) {
-                $sQ = "update {$sTable} set oxremindactive = '2' where {$sTable}.oxid in ( '".implode( '","', $aArtIds )."' ) and
+                $sQ = "update {$sTable} set oxremindactive = '2' where {$sTable}.oxid in ( ".implode( ',', $aArtIds )." ) and
                               oxremindactive = '1' and oxstock <= oxremindamount";
-                oxDb::getDb()->execute( $sQ );
+                $oDb->execute( $sQ );
             }
         }
     }

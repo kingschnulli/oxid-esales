@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 22311 2009-09-14 14:59:10Z arvydas $
+ * $Id: oxconfig.php 22538 2009-09-22 13:04:24Z sarunas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1769,8 +1769,9 @@ class oxConfig extends oxSuperCfg
             $sShopId = $this->getShopId();
         }
 
-        $sQ  = "select oxvartype, DECODE( oxvarvalue, '".$this->getConfigParam( 'sConfigKey' )."') as oxvarvalue from oxconfig where oxshopid = '$sShopId' and oxvarname = '$sVarName'";
-        $oRs = oxDb::getDb(true)->Execute( $sQ );
+        $oDb = oxDb::getDb(true);
+        $sQ  = "select oxvartype, DECODE( oxvarvalue, '".$this->getConfigParam( 'sConfigKey' )."') as oxvarvalue from oxconfig where oxshopid = '$sShopId' and oxvarname = ".$oDb->quote($sVarName);
+        $oRs = $oDb->Execute( $sQ );
 
         $sValue = null;
         if ( $oRs != false && $oRs->recordCount() > 0 ) {

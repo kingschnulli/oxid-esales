@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdeliverylist.php 21592 2009-08-14 10:22:24Z vilma $
+ * $Id: oxdeliverylist.php 22555 2009-09-22 14:48:27Z sarunas $
  */
 
 /**
@@ -185,9 +185,11 @@ class oxDeliveryList extends oxList
      */
     protected function _getFilterSelect( $oUser, $sCountryId, $sDelSet )
     {
+        $oDb = oxDb::getDb();
+
         $sTable = getViewName( 'oxdelivery' );
         $sQ  = "select $sTable.* from ( select $sTable.* from $sTable left join oxdel2delset on oxdel2delset.oxdelid=$sTable.oxid ";
-        $sQ .= "where ".$this->getBaseObject()->getSqlActiveSnippet()." and oxdel2delset.oxdelsetid = '$sDelSet' ";
+        $sQ .= "where ".$this->getBaseObject()->getSqlActiveSnippet()." and oxdel2delset.oxdelsetid = ".$oDb->quote($sDelSet)." ";
 
         // do we need to check in filter starting param ?
         //$sQ .= "and ( $sTable.oxparam != 0 and $sTable.oxparamend != 0 ";
@@ -216,8 +218,8 @@ class oxDeliveryList extends oxList
             $sIds = implode(', ', $aIds);
         }
 
-        $sCountrySql = $sCountryId ? "EXISTS(select oxobject2delivery.oxid from oxobject2delivery where oxobject2delivery.oxdeliveryid=$sTable.OXID and oxobject2delivery.oxtype='oxcountry' and oxobject2delivery.OXOBJECTID='$sCountryId')" : '0';
-        $sUserSql    = $sUserId    ? "EXISTS(select oxobject2delivery.oxid from oxobject2delivery where oxobject2delivery.oxdeliveryid=$sTable.OXID and oxobject2delivery.oxtype='oxuser' and oxobject2delivery.OXOBJECTID='$sUserId')"   : '0';
+        $sCountrySql = $sCountryId ? "EXISTS(select oxobject2delivery.oxid from oxobject2delivery where oxobject2delivery.oxdeliveryid=$sTable.OXID and oxobject2delivery.oxtype='oxcountry' and oxobject2delivery.OXOBJECTID=".$oDb->quote($sCountryId).")" : '0';
+        $sUserSql    = $sUserId    ? "EXISTS(select oxobject2delivery.oxid from oxobject2delivery where oxobject2delivery.oxdeliveryid=$sTable.OXID and oxobject2delivery.oxtype='oxuser' and oxobject2delivery.OXOBJECTID=".$oDb->quote($sUserId).")"   : '0';
         $sGroupSql   = $sIds       ? "EXISTS(select oxobject2delivery.oxid from oxobject2delivery where oxobject2delivery.oxdeliveryid=$sTable.OXID and oxobject2delivery.oxtype='oxgroups' and oxobject2delivery.OXOBJECTID in ($sIds) )"  : '0';
 
         $sQ .= ") as $sTable where (

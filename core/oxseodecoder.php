@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseodecoder.php 21171 2009-07-29 08:51:28Z arvydas $
+ * $Id: oxseodecoder.php 22549 2009-09-22 13:52:37Z arvydas $
  */
 
 /**
@@ -85,7 +85,8 @@ class oxSeoDecoder extends oxSuperCfg
         $sKey = $this->_getIdent( $sSeoUrl );
         $aRet = false;
 
-        $oRs = oxDb::getDb(true)->Execute( "select oxstdurl, oxlang from oxseo where oxident='$sKey' and oxshopid='$iShopId' limit 1");
+        $oDb = oxDb::getDb(true);
+        $oRs = $oDb->Execute( "select oxstdurl, oxlang from oxseo where oxident=" . $oDb->quote( $sKey ) . " and oxshopid='$iShopId' limit 1");
         if ( !$oRs->EOF ) {
             // primary seo language changed ?
             $aRet = $this->parseStdUrl( $oRs->fields['oxstdurl'] );
@@ -117,13 +118,13 @@ class oxSeoDecoder extends oxSuperCfg
         $sKey = $this->_getIdent( $sSeoUrl, true );
 
         $sUrl = false;
-        $oRs = $oDb->execute( "select oxobjectid, oxlang from oxseohistory where oxident = '{$sKey}' and oxshopid = '{$iShopId}' limit 1");
+        $oRs = $oDb->execute( "select oxobjectid, oxlang from oxseohistory where oxident = " . $oDb->quote( $sKey ) . " and oxshopid = '{$iShopId}' limit 1");
         if ( !$oRs->EOF ) {
             // updating hit info (oxtimestamp field will be updated automatically)
-            $oDb->execute( "update oxseohistory set oxhits = oxhits + 1 where oxident = '{$sKey}' and oxshopid = '{$iShopId}' limit 1" );
+            $oDb->execute( "update oxseohistory set oxhits = oxhits + 1 where oxident = " . $oDb->quote( $sKey ) . " and oxshopid = '{$iShopId}' limit 1" );
 
             // fetching new url
-            $sUrl = $oDb->getOne( "select oxseourl from oxseo where oxobjectid = '{$oRs->fields['oxobjectid']}' and oxlang = '{$oRs->fields['oxlang']}' and oxshopid = '{$iShopId}' order by oxparams " );
+            $sUrl = $oDb->getOne( "select oxseourl from oxseo where oxobjectid =  " . $oDb->quote( $oRs->fields['oxobjectid'] ) . " and oxlang =  " . $oDb->quote( $oRs->fields['oxlang'] ) . " and oxshopid = '{$iShopId}' order by oxparams " );
         }
 
         return $sUrl;
@@ -229,7 +230,7 @@ class oxSeoDecoder extends oxSuperCfg
 
         try {
             if ( $sObjectId = $oDb->getOne( "select oxid from $sTable where $sField = $sSeoId" ) ) {
-                $sSeoUrl = $oDb->getOne( "select oxseourl from oxseo where oxtype = '$sType' and oxobjectid = '$sObjectId' and oxlang = '$iLanguage' " );
+                $sSeoUrl = $oDb->getOne( "select oxseourl from oxseo where oxtype = " . $oDb->quote( $sType ) . " and oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxlang = " . $oDb->quote( $iLanguage ) . " " );
             }
         } catch ( Exception $oEx ) {
             // in case field does not exist must catch db exception

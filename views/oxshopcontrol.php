@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxshopcontrol.php 22096 2009-09-02 14:12:06Z sarunas $
+ * $Id: oxshopcontrol.php 22503 2009-09-22 08:41:51Z arvydas $
  */
 
 /**
@@ -105,10 +105,11 @@ class oxShopControl extends oxSuperCfg
      */
     protected function _log( $sClass, $sFnc )
     {
+        $oDb = oxDb::getDb();
         $sShopID    = oxSession::getVar( 'actshop' );
         $sTime      = date( 'Y-m-d H:i:s' );
-        $sSid       = $this->getSession()->getId();
-        $sUserID    = oxSession::getVar( 'usr' );
+        $sSid       = $oDb->quote( $this->getSession()->getId() );
+        $sUserID    = $oDb->quote( oxSession::getVar( 'usr' ) );
         $sCnid      = oxConfig::getParameter( 'cnid' );
         $sAnid      = oxConfig::getParameter( 'aid' )?oxConfig::getParameter( 'aid' ):oxConfig::getParameter( 'anid' );
         $sParameter = '';
@@ -119,8 +120,12 @@ class oxShopControl extends oxSuperCfg
             $sParameter = oxConfig::getParameter( 'searchparam' );
         }
 
-        oxDb::getDb()->Execute( "insert into oxlogs (oxtime, oxshopid, oxuserid, oxsessid, oxclass, oxfnc, oxcnid, oxanid, oxparameter)
-                                 values('$sTime','$sShopID','$sUserID','$sSid','$sClass','$sFnc','$sCnid','$sAnid', '$sParameter')" );
+        $sFnc = $oDb->quote( $sFnc );
+        $sClass = $oDb->quote( $sClass );
+        $sParameter = $oDb->quote( $sParameter );
+
+        $oDb->execute( "insert into oxlogs (oxtime, oxshopid, oxuserid, oxsessid, oxclass, oxfnc, oxcnid, oxanid, oxparameter)
+                                 values( '$sTime', '$sShopID', $sUserID, $sSid, $sClass, $sFnc, '$sCnid', '$sAnid', $sParameter )" );
     }
 
     // OXID : add timing
@@ -303,7 +308,7 @@ class oxShopControl extends oxSuperCfg
 
         // show output
         //ob_Start("gzip");
-        
+
         // #M1047 Firefox duplicated GET fix
         header("Content-Type: text/html; charset=".oxLang::getInstance()->translateString( 'charset' ));
         echo ( $sOutput );

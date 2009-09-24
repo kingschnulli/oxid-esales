@@ -34,7 +34,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  $Id: oxemosadapter.php 22304 2009-09-14 08:37:39Z vilma $
+ *  $Id: oxemosadapter.php 22510 2009-09-22 10:38:27Z arvydas $
  */
 
 
@@ -116,12 +116,13 @@ class oxEmosAdapter extends oxSuperCfg
         $sCatView = getViewName('oxcategories');
         $sO2CView = getViewName('oxobject2category');
 
+        $oDb = oxDb::getDb();
         $sSelect  = "select {$sCatView}.oxtitle{$sSuffix} from $sO2CView as oxobject2category left join {$sCatView}
                      on {$sCatView}.oxid=oxobject2category.oxcatnid where
-                     oxobject2category.oxobjectid = '".$oArticle->getId()."' and
+                     oxobject2category.oxobjectid = ".$oDb->quote( $oArticle->getId() )." and
                      {$sCatView}.oxid is not null order by oxobject2category.oxtime ";
 
-        return oxDb::getDb()->getOne( $sSelect );
+        return $oDb->getOne( $sSelect );
     }
 
     /**
@@ -266,15 +267,15 @@ class oxEmosAdapter extends oxSuperCfg
         $sCatPath = '';
         if ( $oCategory = $oArticle->getCategory() ) {
             $sTable = $oCategory->getViewName();
-
+            $oDb = oxDb::getDb(true);
             $sLang = oxLang::getInstance()->getLanguageTag();
             $sQ = "select {$sTable}.oxtitle{$sLang} as oxtitle from {$sTable}
-                       where {$sTable}.oxleft <= '{$oCategory->oxcategories__oxleft->value}' and
-                             {$sTable}.oxright >= '{$oCategory->oxcategories__oxright->value}' and
-                             {$sTable}.oxrootid = '{$oCategory->oxcategories__oxrootid->value}'
+                       where {$sTable}.oxleft <= ".$oDb->quote( $oCategory->oxcategories__oxleft->value )." and
+                             {$sTable}.oxright >= ".$oDb->quote( $oCategory->oxcategories__oxright->value )." and
+                             {$sTable}.oxrootid = ".$oDb->quote( $oCategory->oxcategories__oxrootid->value )."
                        order by {$sTable}.oxleft";
 
-            $oRs = oxDb::getDb(true)->execute( $sQ );
+            $oRs = $oDb->execute( $sQ );
             if ( $oRs != false && $oRs->recordCount() > 0 ) {
                 while ( !$oRs->EOF ) {
                     if ( $sCatPath ) {

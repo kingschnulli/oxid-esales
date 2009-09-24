@@ -19,7 +19,7 @@
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: category_main.inc.php 22370 2009-09-17 08:29:36Z arvydas $
+ * $Id: category_main.inc.php 22508 2009-09-22 09:57:39Z vilma $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -60,6 +60,7 @@ class ajaxComponent extends ajaxListComponent
 
         $sOxid      = oxConfig::getParameter( 'oxid' );
         $sSynchOxid = oxConfig::getParameter( 'synchoxid' );
+        $oDb        = oxDb::getDb();
 
         $sShopID    = $myConfig->getShopId();
 
@@ -78,12 +79,12 @@ class ajaxComponent extends ajaxListComponent
 
                 $sSubSelect  = ' and '.$sArticleTable.'.oxid not in ( ';
                 $sSubSelect .= "select $sArticleTable.oxid from $sO2CView left join $sArticleTable ";
-                $sSubSelect .= "on $sJoin where $sO2CView.oxcatnid = '$sSynchOxid' ";
+                $sSubSelect .= "on $sJoin where $sO2CView.oxcatnid =  " . $oDb->quote( $sSynchOxid ) . " ";
                 $sSubSelect .= 'and '.$sArticleTable.'.oxid is not null ) ';
             }
 
             $sQAdd  = " from $sO2CView join $sArticleTable ";
-            $sQAdd .= " on $sJoin where $sO2CView.oxcatnid = '$sOxid' ";
+            $sQAdd .= " on $sJoin where $sO2CView.oxcatnid = '" . $sOxid . "' ";
             $sQAdd .= " and $sArticleTable.oxid is not null $sSubSelect ";
         }
 
@@ -141,7 +142,7 @@ class ajaxComponent extends ajaxListComponent
             foreach ( $aArticles as $sAdd) {
 
                 // check, if it's already in, then don't add it again
-                $sSelect = "select 1 from $sO2CView as oxobject2category where oxobject2category.oxcatnid='$sCategoryID' and oxobject2category.oxobjectid ='$sAdd'";
+                $sSelect = "select 1 from $sO2CView as oxobject2category where oxobject2category.oxcatnid= " . $oDb->quote( $sCategoryID ) . " and oxobject2category.oxobjectid = " . $oDb->quote( $sAdd ) . "";
                 if ( $oDb->getOne( $sSelect ) )
                     continue;
 
@@ -177,7 +178,7 @@ class ajaxComponent extends ajaxListComponent
 
         } elseif ( is_array( $aArticles ) && count( $aArticles ) ) {
 
-            $sQ = 'delete from oxobject2category where oxid in ("' . implode( '", "', $aArticles ) . '")';
+            $sQ = "delete from oxobject2category where oxid in (" . implode( ", ", oxDb::getInstance()->quoteArray( $aArticles ) ) . ")";
             $oDb->Execute( $sQ );
 
         }

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 22383 2009-09-17 14:13:19Z arvydas $
+ * $Id: oxutils.php 22548 2009-09-22 13:50:42Z rimvydas.paskevicius $
  */
 
 /**
@@ -679,7 +679,7 @@ class oxUtils extends oxSuperCfg
                     }
                     $blIsAuth = true;
                 } else {   // Shopadmin... check if this shop is valid and exists
-                    $sShopID = $oDb->getOne("select oxid from oxshops where oxid = '{$sRights}'");
+                    $sShopID = $oDb->getOne("select oxid from oxshops where oxid = " . $oDb->quote( $sRights ) );
                     if ( isset( $sShopID) && $sShopID) {   // success, this shop exists
 
                         oxSession::setVar( "actshop", $sRights);

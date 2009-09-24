@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 22183 2009-09-07 08:57:02Z arvydas $
+ * $Id: oxemail.php 22558 2009-09-22 14:50:45Z arvydas $
  */
 /**
  * Includes PHP mailer class.
@@ -535,6 +535,7 @@ class oxEmail extends phpmailer
     public function sendForgotPwdEmail( $sEmailAddress, $sSubject = null )
     {
         $myConfig = $this->getConfig();
+        $oDb = oxDb::getDb();
 
         // shop info
         $oShop = $this->_getShop();
@@ -546,7 +547,7 @@ class oxEmail extends phpmailer
         $this->_setMailParams( $oShop );
 
         // user
-        $sWhere = "oxuser.oxactive = 1 and oxuser.oxusername = '$sEmailAddress' and oxuser.oxpassword != ''";
+        $sWhere = "oxuser.oxactive = 1 and oxuser.oxusername = ".$oDb->quote( $sEmailAddress )." and oxuser.oxpassword != ''";
         $sOrder = "";
         if (oxConfig::getInstance()->getConfigParam( 'blMallUsers' )) {
             $sOrder = "order by oxshopid = '".$oShop->getId()."' desc";
@@ -555,7 +556,7 @@ class oxEmail extends phpmailer
         }
 
         $sSelect = "select oxid from oxuser where $sWhere $sOrder";
-        if ( ( $sOxId = oxDb::getDb()->getOne( $sSelect ) ) ) {
+        if ( ( $sOxId = $oDb->getOne( $sSelect ) ) ) {
 
             $oUser = oxNew( 'oxuser' );
             if ( $oUser->load($sOxId) ) {

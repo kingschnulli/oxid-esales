@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdiscountlist.php 20615 2009-07-02 15:49:30Z arvydas $
+ * $Id: oxdiscountlist.php 22556 2009-09-22 14:48:58Z arvydas $
  */
 
 /**
@@ -175,7 +175,8 @@ class oxDiscountList extends oxList
             }
         }
 
-        $sCountrySql = $sCountryId?"EXISTS(select oxobject2discount.oxid from oxobject2discount where oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxcountry' and oxobject2discount.OXOBJECTID='$sCountryId')":'0';
+        $oDb = oxDb::getDb();
+        $sCountrySql = $sCountryId?"EXISTS(select oxobject2discount.oxid from oxobject2discount where oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxcountry' and oxobject2discount.OXOBJECTID=".$oDb->quote( $sCountryId ).")":'0';
         $sUserSql    = $sUserId   ?"EXISTS(select oxobject2discount.oxid from oxobject2discount where oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxuser' and oxobject2discount.OXOBJECTID='$sUserId')":'0';
         $sGroupSql   = $sGroupIds ?"EXISTS(select oxobject2discount.oxid from oxobject2discount where oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxgroups' and oxobject2discount.OXOBJECTID in ($sGroupIds) )":'0';
 

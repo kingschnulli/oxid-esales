@@ -115,7 +115,7 @@ class ajaxComponent extends ajaxListComponent
         }
 
         if ( is_array(  $aRemoveArt ) ) {
-            $sSelect = "update oxarticles set oxmanufacturerid = null where oxid in ( '".implode("', '", $aRemoveArt )."') ";
+            $sSelect = "update oxarticles set oxmanufacturerid = null where oxid in ( ".implode(", ", oxDb::getInstance()->quoteArray( $aRemoveArt ) ).") ";
             oxDb::getDb()->Execute( $sSelect);
 
             $this->resetCounter( "manufacturerArticle", oxConfig::getParameter( 'oxid' ) );
@@ -140,7 +140,7 @@ class ajaxComponent extends ajaxListComponent
         }
 
         if ( $soxId && $soxId != "-1" && is_array( $aAddArticle ) ) {
-            $sSelect = "update oxarticles set oxmanufacturerid = '$soxId' where oxid in ( '".implode("', '", $aAddArticle )."' )";
+            $sSelect = "update oxarticles set oxmanufacturerid = '$soxId' where oxid in ( ".implode(", ", oxDb::getInstance()->quoteArray( $aAddArticle ) )." )";
 
             oxDb::getDb()->Execute( $sSelect);
             $this->resetCounter( "manufacturerArticle", $soxId );

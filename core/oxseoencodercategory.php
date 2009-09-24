@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencodercategory.php 20953 2009-07-15 13:36:51Z arvydas $
+ * $Id: oxseoencodercategory.php 22521 2009-09-22 11:33:52Z arvydas $
  */
 
 /**
@@ -234,13 +234,13 @@ class oxSeoEncoderCategory extends oxSeoEncoder
         // this is because this method is usually called inside update,
         // where object may already be carrying changed id
         $aCatInfo = $oDb->getAll("select oxrootid, oxleft, oxright from oxcategories where oxid = '".$oCategory->getId()."' limit 1");
-        $sCatRootId = $aCatInfo[0][0];
+        $sCatRootId = $oDb->quote( $aCatInfo[0][0] );
         // update article for root of this cat
-        $sQ = "update oxseo as seo1, (select oxobjectid from oxseo where oxtype = 'oxarticle' and oxparams = '{$sCatRootId}') as seo2 set seo1.oxexpired = '1' where seo1.oxtype = 'oxarticle' and seo1.oxobjectid = seo2.oxobjectid";
+        $sQ = "update oxseo as seo1, (select oxobjectid from oxseo where oxtype = 'oxarticle' and oxparams = {$sCatRootId}) as seo2 set seo1.oxexpired = '1' where seo1.oxtype = 'oxarticle' and seo1.oxobjectid = seo2.oxobjectid";
         $oDb->execute( $sQ );
 
         // update sub cats
-        $sQ = "update oxseo as seo1, (select oxid from oxcategories where oxrootid='$sCatRootId' and oxleft > {$aCatInfo[0][1]} and oxright < {$aCatInfo[0][2]}) as seo2 set seo1.oxexpired = '1' where seo1.oxtype = 'oxcategory' and seo1.oxobjectid = seo2.oxid";
+        $sQ = "update oxseo as seo1, (select oxid from oxcategories where oxrootid={$sCatRootId} and oxleft > ".$oDb->quote( $aCatInfo[0][1] )." and oxright < ".$oDb->quote( $aCatInfo[0][2] ).") as seo2 set seo1.oxexpired = '1' where seo1.oxtype = 'oxcategory' and seo1.oxobjectid = seo2.oxid";
         $oDb->execute( $sQ );
     }
 

@@ -1,5 +1,15 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE_1"|oxmultilangassign skip_onload="true"}]
 
+<script type="text/javascript">
+    if (top)
+    {   top.sShopTitle   = "[{$actshopobj->oxshops__oxname->getRawValue()|oxaddslashes}]";
+        top.sMenuItem    = "[{ oxmultilang ident="GENIMPORT_MENUITEM" }]";
+        top.sMenuSubItem = "[{ oxmultilang ident="GENIMPORT_MENUSUBITEM" }]";
+        top.sWorkArea    = "[{$_act}]";
+        top.setTitle();
+    }
+</script>
+
 [{ if $readonly }]
     [{assign var="readonly" value="readonly disabled"}]
 [{else}]
