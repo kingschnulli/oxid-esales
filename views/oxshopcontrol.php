@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxshopcontrol.php 22503 2009-09-22 08:41:51Z arvydas $
+ * $Id: oxshopcontrol.php 22590 2009-09-24 06:24:00Z alfonsas $
  */
 
 /**
@@ -108,8 +108,8 @@ class oxShopControl extends oxSuperCfg
         $oDb = oxDb::getDb();
         $sShopID    = oxSession::getVar( 'actshop' );
         $sTime      = date( 'Y-m-d H:i:s' );
-        $sSid       = $oDb->quote( $this->getSession()->getId() );
-        $sUserID    = $oDb->quote( oxSession::getVar( 'usr' ) );
+        $sSidQuoted       = $oDb->quote( $this->getSession()->getId() );
+        $sUserIDQuoted    = $oDb->quote( oxSession::getVar( 'usr' ) );
         $sCnid      = oxConfig::getParameter( 'cnid' );
         $sAnid      = oxConfig::getParameter( 'aid' )?oxConfig::getParameter( 'aid' ):oxConfig::getParameter( 'anid' );
         $sParameter = '';
@@ -120,12 +120,12 @@ class oxShopControl extends oxSuperCfg
             $sParameter = oxConfig::getParameter( 'searchparam' );
         }
 
-        $sFnc = $oDb->quote( $sFnc );
-        $sClass = $oDb->quote( $sClass );
-        $sParameter = $oDb->quote( $sParameter );
+        $sFncQuoted = $oDb->quote( $sFnc );
+        $sClassQuoted = $oDb->quote( $sClass );
+        $sParameterQuoted = $oDb->quote( $sParameter );
 
         $oDb->execute( "insert into oxlogs (oxtime, oxshopid, oxuserid, oxsessid, oxclass, oxfnc, oxcnid, oxanid, oxparameter)
-                                 values( '$sTime', '$sShopID', $sUserID, $sSid, $sClass, $sFnc, '$sCnid', '$sAnid', $sParameter )" );
+                                 values( '$sTime', '$sShopID', $sUserIDQuoted, $sSidQuoted, $sClassQuoted, $sFncQuoted, '$sCnid', '$sAnid', $sParameterQuoted )" );
     }
 
     // OXID : add timing

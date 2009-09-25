@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 22554 2009-09-22 14:24:52Z arvydas $
+ * $Id: alist.php 22590 2009-09-24 06:24:00Z alfonsas $
  */
 
 /**
@@ -574,10 +574,10 @@ class aList extends oxUBase
     {
         if ( $this->_blFixedUrl == null ) {
             $oDb = oxDb::getDb();
-            $sId = $oDb->quote( $oCategory->getId() );
+            $sIdQuoted = $oDb->quote( $oCategory->getId() );
             $iLang = $oCategory->getLanguage();
             $sShopId = $this->getConfig()->getShopId();
-            $this->_blFixedUrl = $oDb->getOne( "select oxfixed from oxseo where oxobjectid = {$sId} and oxshopid = '{$sShopId}' and oxlang = '{$iLang}' and oxparams = '' " );
+            $this->_blFixedUrl = $oDb->getOne( "select oxfixed from oxseo where oxobjectid = {$sIdQuoted} and oxshopid = '{$sShopId}' and oxlang = '{$iLang}' and oxparams = '' " );
         }
         return $this->_blFixedUrl;
     }

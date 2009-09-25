@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 22548 2009-09-22 13:50:42Z rimvydas.paskevicius $
+ * $Id: oxutils.php 22590 2009-09-24 06:24:00Z alfonsas $
  */
 
 /**
@@ -660,8 +660,7 @@ class oxUtils extends oxSuperCfg
         if ( $sUserID) {
             // escaping
             $oDb = oxDb::getDb();
-            $sUserID = $oDb->quote($sUserID);
-            $sRights = $oDb->getOne("select oxrights from oxuser where oxid = $sUserID");
+            $sRights = $oDb->getOne("select oxrights from oxuser where oxid = ".$oDb->quote($sUserID));
 
             if ( $sRights != "user") {
                 // malladmin ?

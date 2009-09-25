@@ -623,6 +623,17 @@ function _groupExp(el) {
                 </dd>
                 <div class="spacer"></div>
             </dl>
+            
+            <dl>
+                <dt>
+                    <input type=hidden name="confbools[blCheckForUpdates]" value="false">
+                    <input type=checkbox name="confbools[blCheckForUpdates]" value="true"  [{if ($confbools.blCheckForUpdates)}]checked[{/if}] [{ $readonly}]>
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_CHECK_UPDATES" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
          </div>
     </div>
 

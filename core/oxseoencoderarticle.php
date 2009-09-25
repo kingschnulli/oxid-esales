@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoderarticle.php 22521 2009-09-22 11:33:52Z arvydas $
+ * $Id: oxseoencoderarticle.php 22590 2009-09-24 06:24:00Z alfonsas $
  */
 
 /**
@@ -425,7 +425,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         }
 
         $oDb = oxDb::getDb( false );
-        $sArtId = $oDb->quote( $sArtId );
+        $sArtIdQuoted = $oDb->quote( $sArtId );
 
         // checking cache
         $sCatTable = getViewName('oxcategories');
@@ -434,7 +434,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 from oxobject2category as o2c
                 left join {$sCatTable} as catroots
                     on o2c.oxcatnid=catroots.oxid
-                where o2c.oxobjectid = $sArtId
+                where o2c.oxobjectid = $sArtIdQuoted
                 order by o2c.oxtime";
 
         $aRoots = $oDb->getAll($sQ);
@@ -443,7 +443,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         foreach ($aRoots as $aRootId) {
             $sQ = "select node.* _depth from
                     ( select oxcatnid from oxobject2category
-                            where oxobjectid = $sArtId order by oxtime
+                            where oxobjectid = $sArtIdQuoted order by oxtime
                         ) as sub
                         left join {$sCatTable} as node
                             on sub.oxcatnid=node.oxid
@@ -471,7 +471,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
      */
     public function onDeleteArticle($oArticle)
     {
-        $sId = oxDb::getDb()->quote($oArticle->getId());
-        oxDb::getDb()->execute("delete from oxseo where oxobjectid = $sId and oxtype = 'oxarticle'");
+        $sIdQuoted = oxDb::getDb()->quote($oArticle->getId());
+        oxDb::getDb()->execute("delete from oxseo where oxobjectid = $sIdQuoted and oxtype = 'oxarticle'");
     }
 }

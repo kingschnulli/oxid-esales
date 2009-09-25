@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 22551 2009-09-22 14:04:49Z vilma $
+ * $Id: oxuser.php 22601 2009-09-24 08:32:35Z alfonsas $
  */
 
 /**
@@ -503,21 +503,21 @@ class oxUser extends oxBase
 
         if ( $blDeleted ) {
             $oDB = oxDb::getDb();
-            $sOXID = $oDB->quote($sOXID);
+            $sOXIDQuoted = $oDB->quote($sOXID);
 
             // deleting stored payment, address, group dependencies, remarks info
-            $rs = $oDB->execute( 'delete from oxaddress where oxaddress.oxuserid = '.$sOXID.' ' );
-            $rs = $oDB->execute( 'delete from oxobject2group where oxobject2group.oxobjectid = '.$sOXID.' ');
+            $rs = $oDB->execute( 'delete from oxaddress where oxaddress.oxuserid = '.$sOXIDQuoted.' ' );
+            $rs = $oDB->execute( 'delete from oxobject2group where oxobject2group.oxobjectid = '.$sOXIDQuoted.' ');
 
             // deleting notice/wish lists
-            $rs = $oDB->execute( 'delete oxuserbasketitems.* from oxuserbasketitems, oxuserbaskets where oxuserbasketitems.oxbasketid = oxuserbaskets.oxid and oxuserid = '.$sOXID.' ' );
-            $rs = $oDB->execute( 'delete from oxuserbaskets where oxuserid = '.$sOXID.' ' );
+            $rs = $oDB->execute( 'delete oxuserbasketitems.* from oxuserbasketitems, oxuserbaskets where oxuserbasketitems.oxbasketid = oxuserbaskets.oxid and oxuserid = '.$sOXIDQuoted.' ' );
+            $rs = $oDB->execute( 'delete from oxuserbaskets where oxuserid = '.$sOXIDQuoted.' ' );
 
             // deleting Newsletter subscription
-            $rs = $oDB->execute( 'delete from oxnewssubscribed where oxuserid = '.$sOXID.' ');
+            $rs = $oDB->execute( 'delete from oxnewssubscribed where oxuserid = '.$sOXIDQuoted.' ');
 
             // and leaving all order related information
-            $rs = $oDB->execute( 'delete from oxremark where oxparentid = '.$sOXID.' and oxtype !="o"' );
+            $rs = $oDB->execute( 'delete from oxremark where oxparentid = '.$sOXIDQuoted.' and oxtype !="o"' );
 
             $blDeleted = $rs->EOF;
         }
@@ -1315,10 +1315,10 @@ class oxUser extends oxBase
             $sShopID = $myConfig->getShopId();
             if ( ( $sSet = oxUtilsServer::getInstance()->getUserCookie( $sShopID ) ) ) {
                 $aData = explode( '@@@', $sSet );
-                $sUser = $oDB->quote( $aData[0] );
+                $sUser = $aData[0];
                 $sPWD  = @$aData[1];
 
-                $sSelect =  'select oxid, oxpassword from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$sUser;
+                $sSelect =  'select oxid, oxpassword from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$oDB->quote($sUser);
 
 
                 $oDB = oxDb::getDb();
@@ -1445,8 +1445,7 @@ class oxUser extends oxBase
         $sAuthUserID = $this->isAdmin()?oxSession::getVar( 'auth' ):null;
         $sAuthUserID = $sAuthUserID?$sAuthUserID:oxSession::getVar( 'usr' );
         if ( $sAuthUserID ) {
-            $sAuthUserID = $oDB->quote( $sAuthUserID );
-            $sAuthRights = $oDB->getOne( 'select oxrights from '.$this->getViewName().' where oxid='.$sAuthUserID );
+            $sAuthRights = $oDB->getOne( 'select oxrights from '.$this->getViewName().' where oxid='.$oDB->quote( $sAuthUserID ) );
         }
 
         //preventing user rights edit for non admin

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxrecommlist.php 22529 2009-09-22 12:24:13Z arvydas $
+ * $Id: oxrecommlist.php 22590 2009-09-24 06:24:00Z alfonsas $
  */
 
 /**
@@ -204,8 +204,7 @@ class oxRecommList extends oxBase
             $oDb = oxDb::getDb();
             if ( !$oDb->getOne( "select oxid from oxobject2list where oxobjectid=".$oDb->quote( $sOXID )." and oxlistid='".$this->getId()."'" ) ) {
                 $sUid  = oxUtilsObject::getInstance()->generateUID();
-                $sDesc = $oDb->quote( $sDesc );
-                $sQ    = "insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( '$sUid', ".$oDb->quote( $sOXID ).", '".$this->getId()."', $sDesc )";
+                $sQ    = "insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( '$sUid', ".$oDb->quote( $sOXID ).", '".$this->getId()."', ".$oDb->quote( $sDesc )." )";
                 $blAdd = $oDb->execute( $sQ );
             }
         }
@@ -227,8 +226,7 @@ class oxRecommList extends oxBase
         if ( count( $aArticleIds ) ) {
             startProfile(__FUNCTION__);
 
-            $aIds = oxDb::getInstance()->quoteArray( $aArticleIds );
-            $sIds = implode( ",", $aIds );
+            $sIds = implode( ",", oxDb::getInstance()->quoteArray( $aArticleIds ) );
 
             $oRecommList = oxNew( 'oxlist' );
             $oRecommList->init( 'oxrecommlist' );
@@ -277,11 +275,12 @@ class oxRecommList extends oxBase
     protected function _loadFirstArticles(oxList $oRecommList, $aIds)
     {
         $aIds = oxDb::getInstance()->quoteArray( $aIds );
+        $sIds = implode(", ", $aIds);
 
         $aPrevIds = array();
         $sArtView = getViewName( 'oxarticles' );
         foreach ($oRecommList as $key => $oRecomm) {
-            $sIds = implode(", ", $aIds);
+
             if (count($aPrevIds)) {
                 $sNegateSql = " AND $sArtView.oxid not in ( '".implode("','", $aPrevIds)."' ) ";
             } else {
@@ -299,6 +298,7 @@ class oxRecommList extends oxBase
                 $sId = $oArticle->getId();
                 $aPrevIds[$sId] = $sId;
                 unset($aIds[$sId]);
+                $sIds = implode(", ", $aIds);
             } else {
                 unset($oRecommList[$key]);
             }
@@ -362,13 +362,13 @@ class oxRecommList extends oxBase
      */
     protected function _getSearchSelect( $sSearchStr )
     {
-        $iShopId    = $this->getConfig()->getShopId();
-        $sSearchStr = oxDb::getDb()->quote( "%$sSearchStr%" );
+        $iShopId          = $this->getConfig()->getShopId();
+        $sSearchStrQuoted = oxDb::getDb()->quote( "%$sSearchStr%" );
 
         $sSelect = "select distinct rl.* from oxrecommlists as rl";
         $sSelect.= " inner join oxobject2list as o2l on o2l.oxlistid = rl.oxid";
-        $sSelect.= " where ( rl.oxtitle like $sSearchStr or rl.oxdesc like $sSearchStr";
-        $sSelect.= " or o2l.oxdesc like $sSearchStr ) and rl.oxshopid = '$iShopId'";
+        $sSelect.= " where ( rl.oxtitle like $sSearchStrQuoted or rl.oxdesc like $sSearchStrQuoted";
+        $sSelect.= " or o2l.oxdesc like $sSearchStrQuoted ) and rl.oxshopid = '$iShopId'";
 
         return $sSelect;
     }

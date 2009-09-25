@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsearch.php 22531 2009-09-22 12:30:48Z vilma $l
+ * $Id: oxsearch.php 22590 2009-09-24 06:24:00Z alfonsas $l
  */
 
 /**
@@ -202,16 +202,16 @@ class oxSearch extends oxSuperCfg
         // must be additional conditions in select if searching in category
         if ( $sInitialSearchCat ) {
             $sCatView = getViewName( 'oxcategories' );
-            $sInitialSearchCat = $oDb->quote( $sInitialSearchCat );
-            $sSelectCat  = "select oxid from {$sCatView} where oxid =  $sInitialSearchCat and (oxpricefrom != '0' or oxpriceto != 0)";
+            $sInitialSearchCatQuoted = $oDb->quote( $sInitialSearchCat );
+            $sSelectCat  = "select oxid from {$sCatView} where oxid =  $sInitialSearchCatQuoted and (oxpricefrom != '0' or oxpriceto != 0)";
             if ( $oDb->getOne($sSelectCat) ) {
                 $sSelect = "select {$sSelectFields} from {$sArticleTable} $sDescJoin " .
                            "where {$sArticleTable}.oxid in ( select {$sArticleTable}.oxid as id from {$sArticleTable}, {$sO2CView} as oxobject2category, {$sCatView} as oxcategories " .
-                           "where (oxobject2category.oxcatnid=$sInitialSearchCat and oxobject2category.oxobjectid={$sArticleTable}.oxid) or (oxcategories.oxid=$sInitialSearchCat and {$sArticleTable}.oxprice >= oxcategories.oxpricefrom and
+                           "where (oxobject2category.oxcatnid=$sInitialSearchCatQuoted and oxobject2category.oxobjectid={$sArticleTable}.oxid) or (oxcategories.oxid=$sInitialSearchCatQuoted and {$sArticleTable}.oxprice >= oxcategories.oxpricefrom and
                             {$sArticleTable}.oxprice <= oxcategories.oxpriceto )) and ";
             } else {
                 $sSelect = "select {$sSelectFields} from {$sO2CView} as
-                            oxobject2category, {$sArticleTable} {$sDescJoin} where oxobject2category.oxcatnid=$sInitialSearchCat and
+                            oxobject2category, {$sArticleTable} {$sDescJoin} where oxobject2category.oxcatnid=$sInitialSearchCatQuoted and
                             oxobject2category.oxobjectid={$sArticleTable}.oxid and ";
             }
         }

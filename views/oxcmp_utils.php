@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_utils.php 22588 2009-09-23 16:22:22Z alfonsas $
+ * $Id: oxcmp_utils.php 22590 2009-09-24 06:24:00Z alfonsas $
  */
 
 /**
@@ -271,8 +271,8 @@ class oxcmp_utils extends oxView
             $oDb = oxDb::getDb();
 
             // counts how many pages
-            $sAddSql  = implode( ",", oxDb::getInstance()->quoteArray( array_keys( $aItems ) ) );
-            $sSelect  = "select count(oxid) from oxarticles where oxarticles.oxid in (".$sAddSql.") ";
+            $sInSql   = implode( ",", oxDb::getInstance()->quoteArray( array_keys( $aItems ) ) );
+            $sSelect  = "select count(oxid) from oxarticles where oxarticles.oxid in (".$sInSql.") ";
             $sSelect .= 'and '.$oArticle->getSqlActiveSnippet();
 
             $iCnt = (int) $oDb->getOne( $sSelect );

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 22526 2009-09-22 12:01:34Z arvydas $
+ * $Id: oxorder.php 22620 2009-09-24 13:54:00Z arvydas $
  */
 
 /**
@@ -147,6 +147,13 @@ class oxOrder extends oxBase
      * @var bool
      */
     protected $_blReloadDiscount = true;
+
+    /**
+     * Current order currency object
+     *
+     * @var oxStdClass
+     */
+    protected $_oOrderCurrency = null;
 
     /**
      * Class constructor, initiates parent constructor (parent::oxBase()).
@@ -503,14 +510,14 @@ class oxOrder extends oxBase
         }
 
         // general discount
-        $dDiscount = 0;
-        $aDiscounts = $oBasket->getDiscounts();
-        if ( count($aDiscounts) > 0 ) {
-            foreach ($aDiscounts as $oDiscount) {
-                $dDiscount += $oDiscount->dDiscount;
+        if ( $this->_blReloadDiscount ) {
+            $dDiscount = 0;
+            $aDiscounts = $oBasket->getDiscounts();
+            if ( count($aDiscounts) > 0 ) {
+                foreach ($aDiscounts as $oDiscount) {
+                    $dDiscount += $oDiscount->dDiscount;
+                }
             }
-        }
-        if ( $dDiscount ) {
             $this->oxorder__oxdiscount = new oxField($dDiscount, oxField::T_RAW);
         }
 
@@ -1752,5 +1759,29 @@ class oxOrder extends oxBase
                 $oOrderArticle->cancelOrderArticle();
             }
         }
+    }
+
+    /**
+     * Returns actual order currency object. In case currency was not recognized
+     * due to changed name returns first shop currency object
+     *
+     * @return oxStdClass
+     */
+    public function getOrderCurrency()
+    {
+        if ( $this->_oOrderCurrency === null ) {
+
+            // setting default in case unrecognized currency was set during order
+            $aCurrencies = $this->getConfig()->getCurrencyArray();
+            $this->_oOrderCurrency = current( $aCurrencies );
+
+            foreach ( $aCurrencies as $oCurr ) {
+                if( $oCurr->name == $this->oxorder__oxcurrency->value ) {
+                    $this->_oOrderCurrency = $oCurr;
+                    break;
+                }
+            }
+        }
+        return $this->_oOrderCurrency;
     }
 }

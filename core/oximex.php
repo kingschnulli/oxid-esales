@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oximex.php 22560 2009-09-22 14:58:12Z rimvydas.paskevicius $
+ * $Id: oximex.php 22592 2009-09-24 07:21:04Z alfonsas $
  */
 
 /**
@@ -125,19 +125,11 @@ class oxImex extends oxBase
         $oDB = oxDb::getDb();
 
         $sWhere = "";
-        $sInGroup = "";
-        $blSep = false;
-        foreach ($aGroups as $sGroupId => $iAct) {
-            if ($blSep) {
-                $sInGroup .= ", ";
-            }
-            $sInGroup .= $oDB->quote( $sGroupId );
-            $blSep = true;
-        }
+        $sInGroup = implode(',',oxDb::getInstance()->quoteArray(array_keys($aGroups)));
 
         $sSelect  = "select count(".$this->getViewName().".oxid) from ".$this->getViewName()." ";
         $sSelect .= "left join oxobject2group on ".$this->getViewName().".oxid=oxobject2group.oxobjectid ";
-        $sSelect .= "where oxobject2group.oxgroupsid in ($sInGroup) ";
+        $sSelect .= "where oxobject2group.oxgroupsid in (".$sInGroup.") ";
         $sSearch = $this->getViewName() . "__oxshopid";
         if ( isset( $this->$sSearch)) {
             $sSelect .= $sWhere = "and ".$this->getViewName().".oxshopid = '".$myConfig->getShopId()."' ";

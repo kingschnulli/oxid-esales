@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdeliverysetlist.php 22555 2009-09-22 14:48:27Z sarunas $
+ * $Id: oxdeliverysetlist.php 22603 2009-09-24 09:01:27Z arvydas $
  */
 
 /**
@@ -192,19 +192,18 @@ class oxDeliverySetList extends oxList
             $aGroupIds = $oUser->getUserGroups();
         }
 
-        $sIds = '';
+        $aIds = array();
         if ( count( $aGroupIds ) ) {
             foreach ( $aGroupIds as $oGroup ) {
-                $aIds[] = "'".$oGroup->getId()."'";
+                $aIds[] = $oGroup->getId();
             }
-            $sIds = implode(', ', $aIds);
         }
 
         $oDb = oxDb::getDb();
 
         $sCountrySql = $sCountryId?"EXISTS(select oxobject2delivery.oxid from oxobject2delivery where oxobject2delivery.oxdeliveryid=$sTable.OXID and oxobject2delivery.oxtype='oxdelset' and oxobject2delivery.OXOBJECTID=".$oDb->quote($sCountryId).")":'0';
         $sUserSql    = $sUserId   ?"EXISTS(select oxobject2delivery.oxid from oxobject2delivery where oxobject2delivery.oxdeliveryid=$sTable.OXID and oxobject2delivery.oxtype='oxdelsetu' and oxobject2delivery.OXOBJECTID=".$oDb->quote($sUserId).")":'0';
-        $sGroupSql   = $sIds      ?"EXISTS(select oxobject2delivery.oxid from oxobject2delivery where oxobject2delivery.oxdeliveryid=$sTable.OXID and oxobject2delivery.oxtype='oxdelsetg' and oxobject2delivery.OXOBJECTID in ($sIds) )":'0';
+        $sGroupSql   = count( $aIds ) ?"EXISTS(select oxobject2delivery.oxid from oxobject2delivery where oxobject2delivery.oxdeliveryid=$sTable.OXID and oxobject2delivery.oxtype='oxdelsetg' and oxobject2delivery.OXOBJECTID in (".implode(', ', oxDb::getInstance()->quoteArray($aIds) ).") )":'0';
 
         $sQ .= "and (
             select

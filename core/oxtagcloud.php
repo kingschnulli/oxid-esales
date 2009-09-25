@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxtagcloud.php 22395 2009-09-17 14:45:03Z arvydas $
+ * $Id: oxtagcloud.php 22590 2009-09-24 06:24:00Z alfonsas $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -65,8 +65,7 @@ class oxTagCloud extends oxSuperCfg
 
         $sArticleSelect = " 1 ";
         if ( $sArtId ) {
-            $sArtId = $oDb->quote( $sArtId );
-            $sArticleSelect = " oxarticles.oxid = $sArtId ";
+            $sArticleSelect = " oxarticles.oxid = ".$oDb->quote( $sArtId )." ";
             $iAmount = 0;
         }
 

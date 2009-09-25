@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseodecoder.php 22549 2009-09-22 13:52:37Z arvydas $
+ * $Id: oxseodecoder.php 22590 2009-09-24 06:24:00Z alfonsas $
  */
 
 /**
@@ -189,7 +189,6 @@ class oxSeoDecoder extends oxSuperCfg
 
         if ( $sLastParam ) {
 
-            $sLastParam = oxDb::getDb()->quote( $sLastParam );
             $iLanguage  = oxLang::getInstance()->getBaseLanguage();
 
             // article ?
@@ -229,7 +228,7 @@ class oxSeoDecoder extends oxSuperCfg
         $sSeoUrl = null;
 
         try {
-            if ( $sObjectId = $oDb->getOne( "select oxid from $sTable where $sField = $sSeoId" ) ) {
+            if ( $sObjectId = $oDb->getOne( "select oxid from $sTable where $sField = ".$oDb->quote( $sSeoId ) ) ) {
                 $sSeoUrl = $oDb->getOne( "select oxseourl from oxseo where oxtype = " . $oDb->quote( $sType ) . " and oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxlang = " . $oDb->quote( $iLanguage ) . " " );
             }
         } catch ( Exception $oEx ) {

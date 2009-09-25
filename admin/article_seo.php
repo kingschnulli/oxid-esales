@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_seo.php 22482 2009-09-22 06:53:41Z arvydas $
+ * $Id: article_seo.php 22624 2009-09-24 14:45:24Z rimvydas.paskevicius $
  */
 
 /**
@@ -323,7 +323,9 @@ class Article_Seo extends Object_Seo
      */
      protected function _getSeoUrlQuery( $oObject, $iShopId )
      {
-        // tag type urls are loaded differently from others..
+        $oDb = oxDb::getDb();
+
+         // tag type urls are loaded differently from others..
         if ( $sTag = $this->getTag() ) {
 
             $sStdUrl = "index.php?cl=details&amp;anid=".$oObject->getId()."&amp;listtype=tag&amp;searchtag=".rawurlencode( $sTag );

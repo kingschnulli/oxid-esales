@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22577 2009-09-23 12:19:28Z alfonsas $
+ * $Id: lang.php 22625 2009-09-24 15:06:46Z arvydas $
  */
 
 /*
@@ -983,6 +983,8 @@ $aLang = array(
 'ORDER_ARTICLE_EBRUTTO'                         => 'Gross',
 'ORDER_ARTICLE_MWST'                            => 'VAT',
 'ORDER_ARTICLE_ADDITEM'                         => 'Add Product',
+'ORDER_ARTICLE_SEARCH'                          => 'Search',
+'ORDER_ARTICLE_SEARCH_NOITEMSFOUND'             => 'Sorry, no items found.',
 'ORDER_ARTICLE_PARAMS'                          => 'Parameter',
 'ORDER_ARTICLE_STORNO'                          => 'Order is canceled',
 'ORDER_ARTICLE_UPDATE_STOCK'                    => 'Update',
@@ -1248,6 +1250,7 @@ $aLang = array(
 'SHOP_CONFIG_RSSARTRECOMMLISTS'                 => 'Listmania (overview)',
 'SHOP_CONFIG_RSSRECOMMLISTARTS'                 => 'Listmania (products)',
 'SHOP_CONFIG_LOAD_DYNAMIC_PAGES'                => 'Load additional Information from OXID server',
+'SHOP_CONFIG_CHECK_UPDATES'                     => 'Check for available updates regularly',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Number of equal Attributes for similar Products (%)',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Picture Quality - from 0 (poor Quality, small File Size) to 100 (best Quality, large File Size)',

@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22577 2009-09-23 12:19:28Z alfonsas $
+ * $Id: lang.php 22625 2009-09-24 15:06:46Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -977,6 +977,8 @@ $aLang = array(
 'ORDER_ARTICLE_EBRUTTO'                         => 'eBrutto',
 'ORDER_ARTICLE_MWST'                            => 'MwSt.',
 'ORDER_ARTICLE_ADDITEM'                         => 'Artikel hinzufügen',
+'ORDER_ARTICLE_SEARCH'                          => 'Suchen',
+'ORDER_ARTICLE_SEARCH_NOITEMSFOUND'             => 'Leider keine Artikel gefunden.',
 'ORDER_ARTICLE_PARAMS'                          => 'Parameter',
 'ORDER_ARTICLE_STORNO'                          => 'Bestellung wurde storniert',
 'ORDER_ARTICLE_UPDATE_STOCK'                    => 'Aktualisieren',
@@ -1242,6 +1244,7 @@ $aLang = array(
 'SHOP_CONFIG_RSSARTRECOMMLISTS'                 => 'Lieblingslisten (Übersicht)',
 'SHOP_CONFIG_RSSRECOMMLISTARTS'                 => 'Lieblingslisten (Artikel)',
 'SHOP_CONFIG_LOAD_DYNAMIC_PAGES'                => 'Zusätzliche Informationen vom OXID Server laden',
+'SHOP_CONFIG_CHECK_UPDATES'                     => 'Regelmaßig überprüfen, ob Updates vorhanden sind',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Prozentsatz gleicher Attribute, damit Artikel ähnlich sind',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Bildqualität - von 0 (schlechteste Qualität, kleine Dateigröße) bis 100 (beste Qualität, große Dateigröße)',

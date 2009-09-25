@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxnewssubscribed.php 22516 2009-09-22 11:17:13Z arvydas $
+ * $Id: oxnewssubscribed.php 22590 2009-09-24 06:24:00Z alfonsas $
  */
 
 /**
@@ -85,8 +85,8 @@ class oxNewsSubscribed extends oxBase
     public function loadFromEmail( $sEmailAddress )
     {
         $oDb = oxDb::getDb();
-        $sEmailAddress = $oDb->quote( $sEmailAddress );
-            $sOxId = $oDb->getOne( "select oxid from oxnewssubscribed where oxemail = {$sEmailAddress} " );
+        $sEmailAddressQuoted = $oDb->quote( $sEmailAddress );
+            $sOxId = $oDb->getOne( "select oxid from oxnewssubscribed where oxemail = {$sEmailAddressQuoted} " );
 
         return $this->load( $sOxId );
     }

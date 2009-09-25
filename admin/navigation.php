@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: navigation.php 22484 2009-09-22 06:57:02Z arvydas $
+ * $Id: navigation.php 22591 2009-09-24 07:09:30Z vilma $
  */
 
 /**
@@ -221,8 +221,10 @@ class Navigation extends oxAdminView
         }
 
         // version check
-        if ( $sVersionNotice = $this->_checkVersion() ) {
-            $aMessage['message'] .= $sVersionNotice;
+        if ( $this->getConfig()->getConfigParam( 'blCheckForUpdates' ) ) {
+	        if ( $sVersionNotice = $this->_checkVersion() ) {
+	            $aMessage['message'] .= $sVersionNotice;
+	        }
         }
 
 
