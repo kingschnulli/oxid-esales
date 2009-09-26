@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: user.php 22251 2009-09-09 16:25:33Z tomas $
+ * $Id: user.php 22647 2009-09-25 13:49:12Z tomas $
  */
 
 /**
@@ -51,12 +51,6 @@ class User extends oxUBase
      * @var array
      */
     protected $_blShowNoRegOpt = null;
-
-    /**
-     * Active user
-     * @var object
-     */
-    //protected $_oUser = null;
 
     /**
      * Selected Address
@@ -372,19 +366,6 @@ class User extends oxUBase
 
         return $this->_blShowShipAddress;
     }
-
-    /**
-     * Sets shipping address
-     *
-     * @param bool $oDelAddress delivery address
-     *
-     * @return null
-     */
-    /*
-    public function setDelAddress( $oDelAddress )
-    {
-        // disabling default behaviour ..
-    }*/
 
     /**
      * Template variable getter. Returns shipping address

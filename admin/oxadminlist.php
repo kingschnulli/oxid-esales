@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminlist.php 22480 2009-09-21 15:19:33Z rimvydas.paskevicius $
+ * $Id: oxadminlist.php 22642 2009-09-25 12:13:51Z rimvydas.paskevicius $
  */
 
 /**
@@ -409,7 +409,7 @@ class oxAdminList extends oxAdminView
                     $orderColumn = $sViewName . '.' . $orderColumn;
                 }
 
-                $sSql  .= ( ( ( $blSep ) ? ', ' : '' ) ) . $orderColumn;
+                $sSql  .= ( ( ( $blSep ) ? ', ' : '' ) ) . oxDb::getInstance()->escapeString( $orderColumn );
                 $blSep  = true;
             }
 

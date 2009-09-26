@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: list_review.php 22484 2009-09-22 06:57:02Z arvydas $
+ * $Id: list_review.php 22642 2009-09-25 12:13:51Z rimvydas.paskevicius $
  */
 
 /**
@@ -156,7 +156,7 @@ class List_Review extends Article_List
     protected function _prepareOrderByQuery( $sSql = null )
     {
         if ( $sSort = oxConfig::getParameter( "sort" ) ) {
-            $sSql .= " order by ".oxDb::getDb()->quote( $sSort ) ." ";
+            $sSql .= " order by ".oxDb::getInstance()->escapeString( $sSort ) ." ";
         }
 
         return $sSql;

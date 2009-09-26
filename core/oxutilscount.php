@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilscount.php 22548 2009-09-22 13:50:42Z rimvydas.paskevicius $
+ * $Id: oxutilscount.php 22628 2009-09-25 06:47:51Z vilma $
  */
 
 /**
@@ -149,7 +149,6 @@ class oxUtilsCount extends oxSuperCfg
 
         // loading from cache
         $aManufacturerData = $this->_getManufacturerCache();
-
         if ( !$aManufacturerData || !isset( $aManufacturerData[$sManufacturerId][$sActIdent] ) ) {
             $iCnt = $this->setManufacturerArticleCount( $aManufacturerData, $sManufacturerId, $sActIdent );
         } else {
@@ -415,7 +414,7 @@ class oxUtilsCount extends oxSuperCfg
         if ( !$aLocalCatCache ) {
             $sLocalCatCache = oxUtils::getInstance()->fromFileCache( 'aLocalCatCache');
             if ( $sLocalCatCache ) {
-                $aLocalCatCache = unserialize( $sLocalCatCache );
+                $aLocalCatCache = $sLocalCatCache;
             } else {
                 $aLocalCatCache = null;
             }
@@ -434,7 +433,7 @@ class oxUtilsCount extends oxSuperCfg
     protected function _setCatCache( $aCache )
     {
         $this->getConfig()->setGlobalParameter( 'aLocalCatCache', $aCache );
-        oxUtils::getInstance()->toFileCache( 'aLocalCatCache', serialize( $aCache ) );
+        oxUtils::getInstance()->toFileCache( 'aLocalCatCache', $aCache );
     }
 
     /**
@@ -447,7 +446,7 @@ class oxUtilsCount extends oxSuperCfg
     protected function _setVendorCache( $aCache )
     {
         $this->getConfig()->setGlobalParameter( 'aLocalVendorCache', $aCache );
-        oxUtils::getInstance()->toFileCache( 'aLocalVendorCache', serialize( $aCache ) );
+        oxUtils::getInstance()->toFileCache( 'aLocalVendorCache', $aCache );
     }
 
     /**
@@ -459,8 +458,8 @@ class oxUtilsCount extends oxSuperCfg
      */
     protected function _setManufacturerCache( $aCache )
     {
-        $this->getConfig()->setGlobalParameter( 'aLocalManufacturerCache', $aCache );
-        oxUtils::getInstance()->toFileCache( 'aLocalManufacturerCache', serialize( $aCache ) );
+    	$this->getConfig()->setGlobalParameter( 'aLocalManufacturerCache', $aCache );
+        oxUtils::getInstance()->toFileCache( 'aLocalManufacturerCache', $aCache );
     }
 
     /**
@@ -478,7 +477,7 @@ class oxUtilsCount extends oxSuperCfg
         if ( !$aLocalVendorCache ) {
             $sLocalVendorCache = oxUtils::getInstance()->fromFileCache( 'aLocalVendorCache' );
             if ( $sLocalVendorCache ) {
-                $aLocalVendorCache = unserialize( $sLocalVendorCache );
+                $aLocalVendorCache = $sLocalVendorCache;
             } else {
                 $aLocalVendorCache = null;
             }
@@ -502,7 +501,7 @@ class oxUtilsCount extends oxSuperCfg
         if ( !$aLocalManufacturerCache ) {
             $sLocalManufacturerCache = oxUtils::getInstance()->fromFileCache( 'aLocalManufacturerCache' );
             if ( $sLocalManufacturerCache ) {
-                $aLocalManufacturerCache = unserialize( $sLocalManufacturerCache );
+                $aLocalManufacturerCache = $sLocalManufacturerCache;
             } else {
                 $aLocalManufacturerCache = null;
             }

@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22625 2009-09-24 15:06:46Z arvydas $
+ * $Id: lang.php 22645 2009-09-25 13:28:37Z tomas $
  */
 
 /*
@@ -85,7 +85,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXSHORTDESC'                   => 'Short Description',
 'GENERAL_ARTICLE_OXLONGDESC'                    => 'Detailed Description',
 'GENERAL_ARTICLE_OXPRICE'                       => 'Price',
-'GENERAL_ARTICLE_OXBLFIXEDPRICE'                => '',
+'GENERAL_ARTICLE_OXBLFIXEDPRICE'                => 'oxblfixedprice',
 'GENERAL_ARTICLE_OXPRICEA'                      => 'Price A',
 'GENERAL_ARTICLE_OXPRICEB'                      => 'Price B',
 'GENERAL_ARTICLE_OXPRICEC'                      => 'Price C',
@@ -98,7 +98,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXURLIMG'                      => 'External URL image',
 'GENERAL_ARTICLE_OXVAT'                         => 'Product VAT',
 'GENERAL_ARTICLE_OXTHUMB'                       => 'Preview Picture',
-'GENERAL_ARTICLE_OXICON'                        => '',
+'GENERAL_ARTICLE_OXICON'                        => 'oxicon',
 'GENERAL_ARTICLE_OXPIC1'                        => 'Picture1',
 'GENERAL_ARTICLE_OXPIC2'                        => 'Picture2',
 'GENERAL_ARTICLE_OXPIC3'                        => 'Picture3',
@@ -131,18 +131,18 @@ $aLang = array(
 'GENERAL_ARTICLE_OXQUESTIONEMAIL'               => 'E-mail for question',
 'GENERAL_ARTICLE_OXISSEARCH'                    => 'Is searchable',
 'GENERAL_ARTICLE_OXVARNAME'                     => 'Variant Name',
-'GENERAL_ARTICLE_OXVARSELECT'                   => '',
+'GENERAL_ARTICLE_OXVARSELECT'                   => 'oxvarselect',
 'GENERAL_ARTICLE_OXVARMINPRICE'                 => 'Minimum price of all variants',
 'GENERAL_ARTICLE_OXFOLDER'                      => 'Folder',
-'GENERAL_ARTICLE_OXSUBCLASS'                    => 'internal',
+'GENERAL_ARTICLE_OXSUBCLASS'                    => 'oxsubclass',
 'GENERAL_ARTICLE_OXSORT'                        => 'Sorting',
 'GENERAL_ARTICLE_OXSOLDAMOUNT'                  => 'Quantity Sold',
 'GENERAL_ARTICLE_OXNONMATERIAL'                 => 'Immaterial',
 'GENERAL_ARTICLE_OXFREESHIPPING'                => 'Free Shipping',
 'GENERAL_ARTICLE_OXREMINDACTIVE'                => 'Low stock E-mail active',
 'GENERAL_ARTICLE_OXREMINDAMOUNT'                => 'Low stock threshold',
-'GENERAL_ARTICLE_OXAMITEMID'                    => '',
-'GENERAL_ARTICLE_OXAMTASKID'                    => '',
+'GENERAL_ARTICLE_OXAMITEMID'                    => 'oxamitemid',
+'GENERAL_ARTICLE_OXAMTASKID'                    => 'oxamtaskid',
 'GENERAL_ARTICLE_OXVENDORID'                    => 'Vendor ID',
 'GENERAL_ARTICLE_OXMANUFACTURERID'              => 'Manufacturer ID',
 'GENERAL_ARTICLE_OXVARCOUNT'                    => 'Variant count',

@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22625 2009-09-24 15:06:46Z arvydas $
+ * $Id: lang.php 22645 2009-09-25 13:28:37Z tomas $
  */
 
 $sLangName  = 'Deutsch';
@@ -80,7 +80,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXSHORTDESC'                   => 'Kurzbeschreibung',
 'GENERAL_ARTICLE_OXLONGDESC'                    => 'Langtext',
 'GENERAL_ARTICLE_OXPRICE'                       => 'Preis',
-'GENERAL_ARTICLE_OXBLFIXEDPRICE'                => '',
+'GENERAL_ARTICLE_OXBLFIXEDPRICE'                => 'oxblfixedprice',
 'GENERAL_ARTICLE_OXPRICEA'                      => 'Preis A',
 'GENERAL_ARTICLE_OXPRICEB'                      => 'Preis B',
 'GENERAL_ARTICLE_OXPRICEC'                      => 'Preis C',
@@ -93,7 +93,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXURLIMG'                      => 'Bild für externe URL',
 'GENERAL_ARTICLE_OXVAT'                         => 'Artikel Mwst.',
 'GENERAL_ARTICLE_OXTHUMB'                       => 'Vorschaubild',
-'GENERAL_ARTICLE_OXICON'                        => '',
+'GENERAL_ARTICLE_OXICON'                        => 'oxicon',
 'GENERAL_ARTICLE_OXPIC1'                        => 'Bild1',
 'GENERAL_ARTICLE_OXPIC2'                        => 'Bild2',
 'GENERAL_ARTICLE_OXPIC3'                        => 'Bild3',
@@ -126,18 +126,18 @@ $aLang = array(
 'GENERAL_ARTICLE_OXQUESTIONEMAIL'               => 'E-Mail bei Frage',
 'GENERAL_ARTICLE_OXISSEARCH'                    => 'Kann gesucht werden',
 'GENERAL_ARTICLE_OXVARNAME'                     => 'Name der Variante',
-'GENERAL_ARTICLE_OXVARSELECT'                   => '',
+'GENERAL_ARTICLE_OXVARSELECT'                   => 'oxvarselect',
 'GENERAL_ARTICLE_OXVARMINPRICE'                 => 'Niedrigster Variantenpreis',
 'GENERAL_ARTICLE_OXFOLDER'                      => 'Ordner',
-'GENERAL_ARTICLE_OXSUBCLASS'                    => 'intern',
+'GENERAL_ARTICLE_OXSUBCLASS'                    => 'oxsubclass',
 'GENERAL_ARTICLE_OXSORT'                        => 'Sortierung',
 'GENERAL_ARTICLE_OXSOLDAMOUNT'                  => 'Verkaufte Anzahl',
 'GENERAL_ARTICLE_OXNONMATERIAL'                 => 'Immateriell',
 'GENERAL_ARTICLE_OXFREESHIPPING'                => 'Versandkostenfrei',
 'GENERAL_ARTICLE_OXREMINDACTIVE'                => 'Zuwenig Lagerbestand E-Mail aktiv',
 'GENERAL_ARTICLE_OXREMINDAMOUNT'                => 'Zuwenig Lagerbestand Mindestmenge',
-'GENERAL_ARTICLE_OXAMITEMID'                    => '',
-'GENERAL_ARTICLE_OXAMTASKID'                    => '',
+'GENERAL_ARTICLE_OXAMITEMID'                    => 'oxamitemid',
+'GENERAL_ARTICLE_OXAMTASKID'                    => 'oxamtaskid',
 'GENERAL_ARTICLE_OXVENDORID'                    => 'Lieferant',
 'GENERAL_ARTICLE_OXMANUFACTURERID'              => 'Hersteller',
 'GENERAL_ARTICLE_OXVARCOUNT'                    => 'Varianten Anzahl',
