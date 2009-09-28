@@ -19,9 +19,8 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 22311 2009-09-14 14:59:10Z arvydas $
+ * $Id: oxconfig.php 21592 2009-08-14 10:22:24Z vilma $
  */
-
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
 
 /**
@@ -221,7 +220,6 @@ class oxConfig extends oxSuperCfg
      */
     protected $_iShopId = null;
 
-
     /**
      * Out dir name
      *
@@ -321,6 +319,8 @@ class oxConfig extends oxSuperCfg
         include getShopBasePath().'config.inc.php';
         include getShopBasePath().'core/oxconfk.php';
 
+
+
         //adding trailing slashes
         $oFileUtils = oxUtilsFile::getInstance();
         $this->sShopDir     = $oFileUtils->normalizeDir($this->sShopDir);
@@ -328,7 +328,6 @@ class oxConfig extends oxSuperCfg
         $this->sShopURL     = $oFileUtils->normalizeDir($this->sShopURL);
         $this->sSSLShopURL  = $oFileUtils->normalizeDir($this->sSSLShopURL);
         $this->sAdminSSLURL = $oFileUtils->normalizeDir($this->sAdminSSLURL);
-
 
         // some important defaults
         if( !$this->getConfigParam( 'sDefaultLang' ) )
@@ -386,6 +385,8 @@ class oxConfig extends oxSuperCfg
         if( !isset( $iDBCacheLifeTime ) )
             $this->setConfigParam( 'iDBCacheLifeTime', 3600 ); // 1 hour
 
+
+
         $sCoreDir = $this->getConfigParam( 'sShopDir' );
         $this->setConfigParam( 'sCoreDir', $sCoreDir.'/core/' );
 
@@ -397,6 +398,7 @@ class oxConfig extends oxSuperCfg
 
             // load now
             $this->_loadVarsFromDb( $sShopID );
+
 
         } catch ( oxConnectionException $oEx ) {
             $oEx->debugOut( $this->iDebug);
@@ -527,6 +529,10 @@ class oxConfig extends oxSuperCfg
      */
     public static function getParameter(  $sName, $blRaw = false )
     {
+        echo Zend_Controller_Request_Http::getPost($sName);
+        echo Zend_Controller_Request_Http::getQuery($sName);
+
+
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             if ( isset( modConfig::$unitMOD ) && is_object( modConfig::$unitMOD ) ) {
                 try{
@@ -536,6 +542,8 @@ class oxConfig extends oxSuperCfg
                 }
             }
         }
+
+
 
         $sValue = null;
         if ( isset( $_SERVER['REQUEST_METHOD'] ) && $_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST[$sName] ) ) {
@@ -549,6 +557,8 @@ class oxConfig extends oxSuperCfg
         } else {
             $sValue = null;
         }
+
+
 
         // TODO: remove this after special charts concept implementation
         $blIsAdmin = oxConfig::getInstance()->isAdmin() && oxSession::getVar("blIsAdmin");
@@ -581,7 +591,9 @@ class oxConfig extends oxSuperCfg
      */
     public function setGlobalParameter( $sName, $sValue )
     {
-        $this->_aGlobalParams[$sName] = $sValue;
+        startProfile("setGlobalParameter");
+        Zend_Registry::set($sName, $sValue);
+        stopProfile("setGlobalParameter");
     }
 
     /**
@@ -593,11 +605,9 @@ class oxConfig extends oxSuperCfg
      */
     public function getGlobalParameter( $sName )
     {
-        if ( isset( $this->_aGlobalParams[$sName] ) ) {
-            return $this->_aGlobalParams[$sName];
-        } else {
-            return null;
-        }
+        startProfile("getGlobalParameter");
+        return Zend_Registry::get($sName);
+        stopProfile("getGlobalParameter");
     }
 
     /**
@@ -1642,8 +1652,6 @@ class oxConfig extends oxSuperCfg
     public function getEdition()
     {
             return "CE";
-
-
     }
 
     /**
@@ -1658,8 +1666,6 @@ class oxConfig extends oxSuperCfg
             if ($sEdition == "CE") {
                 return "Community Edition";
             }
-
-
 
         return $sEdition;
     }
@@ -1696,7 +1702,6 @@ class oxConfig extends oxSuperCfg
         return $iRev;
     }
 
-
     /**
      * Checks if shop is MALL. Returns true on success.
      *
@@ -1704,7 +1709,6 @@ class oxConfig extends oxSuperCfg
      */
     public function isMall()
     {
-
             return false;
     }
 
@@ -1719,8 +1723,8 @@ class oxConfig extends oxSuperCfg
      */
     public function detectVersion()
     {
-    }
 
+    }
 
 
     /**
@@ -1769,8 +1773,9 @@ class oxConfig extends oxSuperCfg
             $sShopId = $this->getShopId();
         }
 
-        $sQ  = "select oxvartype, DECODE( oxvarvalue, '".$this->getConfigParam( 'sConfigKey' )."') as oxvarvalue from oxconfig where oxshopid = '$sShopId' and oxvarname = '$sVarName'";
+            $sQ  = "select oxvartype, DECODE( oxvarvalue, '".$this->getConfigParam( 'sConfigKey' )."') as oxvarvalue from oxconfig where oxshopid = '$sShopId' and oxvarname = '$sVarName'";
         $oRs = oxDb::getDb(true)->Execute( $sQ );
+
 
         $sValue = null;
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
@@ -1812,7 +1817,6 @@ class oxConfig extends oxSuperCfg
     }
 
 
-
     /**
      * Function returns default shop ID
      *
@@ -1820,7 +1824,6 @@ class oxConfig extends oxSuperCfg
      */
     public function getBaseShopId()
     {
-
             return 'oxbaseshop';
     }
 
