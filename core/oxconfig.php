@@ -529,9 +529,8 @@ class oxConfig extends oxSuperCfg
      */
     public static function getParameter(  $sName, $blRaw = false )
     {
-        echo Zend_Controller_Request_Http::getPost($sName);
-        echo Zend_Controller_Request_Http::getQuery($sName);
-
+        //echo Zend_Controller_Request_Http::getPost($sName);
+        //echo Zend_Controller_Request_Http::getQuery($sName);
 
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             if ( isset( modConfig::$unitMOD ) && is_object( modConfig::$unitMOD ) ) {
