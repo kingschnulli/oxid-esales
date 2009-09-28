@@ -482,6 +482,18 @@ class oxUtils extends oxSuperCfg
      */
     public function toFileCache($sKey, $mContents)
     {
+        $sTmp = $this->getConfig()->getConfigParam("sCompileDir");
+
+        $aFrontendOptions = array('lifeTime' => 10000);
+        $aBackendOptions = array('cacheDir' => $sTmp);
+
+
+        startProfile("toFileCache");
+        $oCache = Zend_Cache::factory('Core', 'File', $aFrontendOptions, $aBackendOptions);
+        $oCache->save(serialize($mContents), $sKey);
+        stopProfile("toFileCache");
+
+    	 /*
         $sFilePath = $this->_getCacheFilePath( $sKey );
         $iCurTime = oxUtilsDate::getInstance()->getTime();
 
@@ -507,7 +519,8 @@ class oxUtils extends oxSuperCfg
             }
         }
 
-        return true;
+        return true;*/
+
     }
 
     /**
@@ -519,6 +532,20 @@ class oxUtils extends oxSuperCfg
      */
     public function fromFileCache( $sKey )
     {
+        $sTmp = $this->getConfig()->getConfigParam("sCompileDir");
+
+        $aFrontendOptions = array('lifeTime' => 10000);
+        $aBackendOptions = array('cacheDir' => $sTmp);
+
+
+        startProfile("fromFileCache");
+        $oCache = Zend_Cache::factory('Core', 'File', $aFrontendOptions, $aBackendOptions);
+        $oRes = $oCache->get($sKey);
+        stopProfile("fromFileCache");
+
+        return $oRes;
+
+        /*
         if (isset($this->_aFileCacheContents[$sKey]))
             return $this->_aFileCacheContents[$sKey];
 
@@ -536,6 +563,7 @@ class oxUtils extends oxSuperCfg
         $sRes = unserialize($sRes);
 
         return $sRes;
+        */
     }
 
     /**
