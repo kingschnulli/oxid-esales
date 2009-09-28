@@ -22,6 +22,8 @@
  * $Id: details.php 21739 2009-08-20 13:28:17Z arvydas $
  */
 
+
+
 /**
  * Article details information page.
  * Collects detailed article information, possible variants, such information
@@ -279,6 +281,7 @@ class Details extends oxUBase
                 $this->_processProduct( $oVariant );
             }
 
+
         }
         return $this->_aVariantList;
     }
@@ -321,8 +324,7 @@ class Details extends oxUBase
             return $this->_sViewId;
         }
 
-            $sViewId = parent::getViewId().'|'.oxConfig::getParameter( 'anid' ).'|'.count( $this->getVariantList() ).'|';
-
+        $sViewId = parent::getViewId().'|'.oxConfig::getParameter( 'anid' ).'|'.count( $this->getVariantList() ).'|';
 
         return $this->_sViewId = $sViewId;
     }
@@ -371,7 +373,16 @@ class Details extends oxUBase
      */
     public function render()
     {
+
+        $oProduct = $this->getProduct();
+        $sLongDesc = $oProduct->getArticleLongDesc()->value;
+
+        //saving a test pdf with parsed long text
+        $oPdf = new Zend_Pdf::parse($sLongDesc);
+        $oPdf->save($this->getConfig()->getConfigParam("sCompileDir") . "/test.pdf", true);
+
         $myConfig = $this->getConfig();
+
 
         $oProduct = $this->getProduct();
 
@@ -677,7 +688,6 @@ class Details extends oxUBase
 
         return $this->_aAttributes;
     }
-
 
     /**
      * Returns if tags will be edit
