@@ -22,6 +22,8 @@
  * $Id: oxubase.php 22311 2009-09-14 14:59:10Z arvydas $
  */
 
+
+
 /**
  * Includes extended class.
  */
@@ -589,11 +591,12 @@ class oxUBase extends oxView
         $iCur  = (int) oxConfig::getParameter( 'currency' );
 
 
-            $this->_sViewId =  "ox|$iLang|$iCur";
+
+        $this->_sViewId =  "ox|$iLang|$iCur";
+
 
         return $this->_sViewId;
     }
-
 
     /**
      * Template variable getter. Returns true if sorting is on
@@ -2137,6 +2140,15 @@ class oxUBase extends oxView
         }
     }
 
+    public function indexAction()
+    {
+        $view = $this->initView();
+        $view->message = 'Hello';
+
+        // Renders views/scripts/index/index.phtml
+        return $this->render();
+    }
+
     /**
      * While ordering disables navigation controls if oxConfig::blDisableNavBars
      * is on and executes parent::render()
@@ -2774,78 +2786,6 @@ class oxUBase extends oxView
     {
         return $this->_sCatTreePath;
     }
-
-    /**
-     * Template variable getter. Returns if user subscribed for newsletter
-     *
-     * @return bool
-     */
-    /*
-    public function isNewsSubscribed()
-    {
-        return $this->_blNewsSubscribed;
-    }*/
-
-    /**
-     * Sets if user subscribed for newsletter
-     *
-     * @param bool $blNewsSubscribed TRUE - news are subscribed
-     *
-     * @return null
-     */
-    /*
-    public function setNewsSubscribed( $blNewsSubscribed )
-    {
-        $this->_blNewsSubscribed = $blNewsSubscribed;
-    }*/
-
-    /**
-     * Template variable getter. Returns if show user shipping address
-     *
-     * @return bool
-     */
-    /*
-    public function showShipAddress()
-    {
-        return $this->_blShowShipAddress;
-    }*/
-
-    /**
-     * Sets if show user shipping address
-     *
-     * @param bool $blShowShipAddress TRUE - show shipping address
-     *
-     * @return null
-     */
-    /*
-    public function setShowShipAddress( $blShowShipAddress )
-    {
-        $this->_blShowShipAddress = $blShowShipAddress;
-    }*/
-
-    /**
-     * Template variable getter. Returns shipping address
-     *
-     * @return bool
-     */
-    /*
-    public function getDelAddress()
-    {
-        return $this->_oDelAddress;
-    }*/
-
-    /**
-     * Sets shipping address
-     *
-     * @param bool $oDelAddress delivery address
-     *
-     * @return null
-     */
-    /*
-    public function setDelAddress( $oDelAddress )
-    {
-        $this->_oDelAddress = $oDelAddress;
-    }*/
 
     /**
      * Loads and returns oxcontent object requested by its ident
