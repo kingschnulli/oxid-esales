@@ -212,6 +212,17 @@ class oxEmail extends phpmailer
      */
     public function send()
     {
+
+        startProfile("send");
+        $oMail = new Zend_Mail();
+        stopProfile("send");
+        $oMail->setBodyText($this->Body);
+        $oMail->setFrom($this->From, $this->FromName);
+        $oMail->setSubject($this->Subject);
+        $oMail->send();
+
+        /*
+
         $myConfig = $this->getConfig();
         $this->setCharSet();
 
@@ -243,6 +254,7 @@ class oxEmail extends phpmailer
         }
 
         return $blRet;
+        */
     }
 
     /**
