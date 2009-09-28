@@ -605,9 +605,10 @@ class oxConfig extends oxSuperCfg
      */
     public function getGlobalParameter( $sName )
     {
-        startProfile("getGlobalParameter");
-        return Zend_Registry::get($sName);
-        stopProfile("getGlobalParameter");
+        if (Zend_Registry::isRegistered($sName))
+            return Zend_Registry::get($sName);
+
+        return null;
     }
 
     /**
