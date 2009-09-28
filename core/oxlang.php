@@ -1,24 +1,10 @@
 <?php
 /**
- *    This file is part of OXID eShop Community Edition.
- *
- *    OXID eShop Community Edition is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
- *
- *    OXID eShop Community Edition is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License
- *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
+ * #PHPHEADER_OXID_LICENSE_INFORMATION#
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright (C) OXID eSales AG 2003-2009
- * @version OXID eShop CE
+ * @copyright (c) oxid eSales GmbH 2003-#OXID_VERSION_YEAR#
  * $Id: oxlang.php 22390 2009-09-17 14:40:09Z arvydas $
  */
 
@@ -166,6 +152,16 @@ class oxLang extends oxSuperCfg
      */
     public function getTplLanguage()
     {
+        $aLangs = $this->getLanguageArray();
+        $oLocale = new Zend_Locale();
+        $sBrowserLocale = $oLocale->getDefault(Zend_Locale::BROWSER, TRUE);
+        $sBrowserLang = substr($sBrowserLocale, 0, 2);
+
+        if (is_array($aLangs))
+            foreach ($aLangs as $iKey => $oLang)
+                if ($oLang->abbr == $sBrowserLang)
+                    return $iKey;
+
         if ( $this->_iTplLanguageId !== null ) {
             return $this->_iTplLanguageId;
         }
@@ -382,10 +378,12 @@ class oxLang extends oxSuperCfg
         $aLangCache = $this->_getLangTranslationArray( $iLang, $blAdminMode );
         $sText = isset( $aLangCache[$sStringToTranslate] ) ? $aLangCache[$sStringToTranslate] : $sStringToTranslate;
 
+        if ( OXID_VERSION_PE ) :
             $blIsAdmin = isset( $blAdminMode ) ? $blAdminMode : $this->isAdmin();
             if ( !$blIsAdmin && $sText === $sStringToTranslate ) {
                 $sText = $this->_readTranslateStrFromTextFile( $sStringToTranslate, $iLang, $blIsAdmin );
             }
+        endif;
 
         return $sText;
     }
