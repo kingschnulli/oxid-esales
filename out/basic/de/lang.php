@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22336 2009-09-15 15:44:43Z vilma $
+ * $Id: lang.php 22733 2009-09-29 08:06:02Z philipp.grashoff $
  */
 
 
@@ -1229,7 +1229,7 @@ $aLang = array(
 'EXCEPTION_NOFILE'                                => 'Keine Datei hochgeladen',
 'EXCEPTION_NOTALLOWEDTYPE'                        => 'Verbotener Dateityp. Bitte config.inc.php anpassen, um diesen Dateityp zu erlauben.',
 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" nicht gefunden',
-'EXCEPTION_RECOMMLIST_NOTITLE'                    => '[tr] Title field is empty',
+'EXCEPTION_RECOMMLIST_NOTITLE'                    => 'Kein Titel angegeben',
 );
 
 /*

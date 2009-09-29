@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 22662 2009-09-28 07:33:36Z arvydas $
+ * $Id: oxarticle.php 22731 2009-09-29 07:55:55Z arvydas $
  */
 
 // defining supported link types
@@ -1220,12 +1220,13 @@ class oxArticle extends oxI18n implements oxIArticle
         if ( $this->_blHasVariants = $this->_hasAnyVariant( $blForceCoreTable ) ) {
 
             startProfile("selectVariants");
-            $sSelectFields = $this->getSelectFields();
-            $sArticleTable = $this->getTableNameForActiveSnippet( $blForceCoreTable );
+            $blUseCoreTable = $blForceCoreTable;
+            $oBaseObject = $oVariants->getBaseObject();
+            $sArticleTable = $this->getTableNameForActiveSnippet( $blUseCoreTable );
 
-            $sSelect = "select $sSelectFields from $sArticleTable where " .
-                       $this->getActiveCheckQuery( $blForceCoreTable ) .
-                       $this->getVariantsQuery( $blRemoveNotOrderables, $blForceCoreTable ) .
+            $sSelect = "select ".$oBaseObject->getSelectFields()." from $sArticleTable where " .
+                       $this->getActiveCheckQuery( $blUseCoreTable ) .
+                       $this->getVariantsQuery( $blRemoveNotOrderables, $blUseCoreTable ) .
                        " order by $sArticleTable.oxsort";
 
             $oVariants->selectString( $sSelect );
