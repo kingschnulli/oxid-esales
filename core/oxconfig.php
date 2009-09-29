@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 22538 2009-09-22 13:04:24Z sarunas $
+ * $Id: oxconfig.php 22669 2009-09-28 07:43:10Z sarunas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -653,6 +653,7 @@ class oxConfig extends oxSuperCfg
         oxSession::setVar( 'actshop', $this->_iShopId );
         return $this->_iShopId;
     }
+
 
     /**
      * Active Shop id setter

@@ -19,7 +19,7 @@
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: delivery_users.inc.php 22508 2009-09-22 09:57:39Z vilma $
+ * $Id: delivery_users.inc.php 22657 2009-09-25 15:39:22Z arvydas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,  visible, multilanguage, ident
@@ -80,13 +80,13 @@ class ajaxComponent extends ajaxListComponent
                     $sQAdd .= " and $sUserTable.oxshopid = '".$myConfig->getShopId()."' ";
             } else {
                 $sQAdd  = " from oxobject2delivery left join $sUserTable on $sUserTable.oxid=oxobject2delivery.oxobjectid ";
-                $sQAdd .= " where oxobject2delivery.oxdeliveryid = '$sId' and oxobject2delivery.oxtype = 'oxuser' ";
+                $sQAdd .= " where oxobject2delivery.oxdeliveryid = '$sId' and oxobject2delivery.oxtype = 'oxuser' and $sUserTable.oxid IS NOT NULL ";
             }
         }
 
         if ( $sSynchId && $sSynchId != $sId) {
             $sQAdd .= " and $sUserTable.oxid not in ( select $sUserTable.oxid from oxobject2delivery left join $sUserTable on $sUserTable.oxid=oxobject2delivery.oxobjectid ";
-            $sQAdd .= " where oxobject2delivery.oxdeliveryid = '$sSynchId' and oxobject2delivery.oxtype = 'oxuser' ) ";
+            $sQAdd .= " where oxobject2delivery.oxdeliveryid = '$sSynchId' and oxobject2delivery.oxtype = 'oxuser' and $sUserTable.oxid IS NOT NULL ) ";
         }
 
         return $sQAdd;

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdiscountlist.php 22556 2009-09-22 14:48:58Z arvydas $
+ * $Id: oxdiscountlist.php 22657 2009-09-25 15:39:22Z arvydas $
  */
 
 /**
@@ -175,6 +175,10 @@ class oxDiscountList extends oxList
             }
         }
 
+        $sUserTable    = getViewName( 'oxuser' );
+        $sGroupTable   = getViewName( 'oxgroups' );
+        $sCountryTable = getViewName( 'oxcountry' );
+
         $oDb = oxDb::getDb();
         $sCountrySql = $sCountryId?"EXISTS(select oxobject2discount.oxid from oxobject2discount where oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxcountry' and oxobject2discount.OXOBJECTID=".$oDb->quote( $sCountryId ).")":'0';
         $sUserSql    = $sUserId   ?"EXISTS(select oxobject2discount.oxid from oxobject2discount where oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxuser' and oxobject2discount.OXOBJECTID='$sUserId')":'0';
@@ -182,13 +186,13 @@ class oxDiscountList extends oxList
 
         $sQ .= "and (
             select
-                if(EXISTS(select 1 from oxobject2discount where oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxcountry' LIMIT 1),
+                if(EXISTS(select 1 from oxobject2discount, $sCountryTable where $sCountryTable.oxid=oxobject2discount.oxobjectid and oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxcountry' LIMIT 1),
                         $sCountrySql,
                         1) &&
-                if(EXISTS(select 1 from oxobject2discount where oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxuser' LIMIT 1),
+                if(EXISTS(select 1 from oxobject2discount, $sUserTable where $sUserTable.oxid=oxobject2discount.oxobjectid and oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxuser' LIMIT 1),
                         $sUserSql,
                         1) &&
-                if(EXISTS(select 1 from oxobject2discount where oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxgroups' LIMIT 1),
+                if(EXISTS(select 1 from oxobject2discount, $sGroupTable where $sGroupTable.oxid=oxobject2discount.oxobjectid and oxobject2discount.OXDISCOUNTID=$sTable.OXID and oxobject2discount.oxtype='oxgroups' LIMIT 1),
                         $sGroupSql,
                         1)
             )";

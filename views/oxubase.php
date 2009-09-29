@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 22311 2009-09-14 14:59:10Z arvydas $
+ * $Id: oxubase.php 22650 2009-09-25 14:32:34Z tomas $
  */
 
 /**
@@ -2774,78 +2774,6 @@ class oxUBase extends oxView
     {
         return $this->_sCatTreePath;
     }
-
-    /**
-     * Template variable getter. Returns if user subscribed for newsletter
-     *
-     * @return bool
-     */
-    /*
-    public function isNewsSubscribed()
-    {
-        return $this->_blNewsSubscribed;
-    }*/
-
-    /**
-     * Sets if user subscribed for newsletter
-     *
-     * @param bool $blNewsSubscribed TRUE - news are subscribed
-     *
-     * @return null
-     */
-    /*
-    public function setNewsSubscribed( $blNewsSubscribed )
-    {
-        $this->_blNewsSubscribed = $blNewsSubscribed;
-    }*/
-
-    /**
-     * Template variable getter. Returns if show user shipping address
-     *
-     * @return bool
-     */
-    /*
-    public function showShipAddress()
-    {
-        return $this->_blShowShipAddress;
-    }*/
-
-    /**
-     * Sets if show user shipping address
-     *
-     * @param bool $blShowShipAddress TRUE - show shipping address
-     *
-     * @return null
-     */
-    /*
-    public function setShowShipAddress( $blShowShipAddress )
-    {
-        $this->_blShowShipAddress = $blShowShipAddress;
-    }*/
-
-    /**
-     * Template variable getter. Returns shipping address
-     *
-     * @return bool
-     */
-    /*
-    public function getDelAddress()
-    {
-        return $this->_oDelAddress;
-    }*/
-
-    /**
-     * Sets shipping address
-     *
-     * @param bool $oDelAddress delivery address
-     *
-     * @return null
-     */
-    /*
-    public function setDelAddress( $oDelAddress )
-    {
-        $this->_oDelAddress = $oDelAddress;
-    }*/
 
     /**
      * Loads and returns oxcontent object requested by its ident

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 22633 2009-09-25 08:41:02Z vilma $
+ * $Id: oxarticle.php 22662 2009-09-28 07:33:36Z arvydas $
  */
 
 // defining supported link types
@@ -539,7 +539,7 @@ class oxArticle extends oxI18n implements oxIArticle
      *
      * @return string
      */
-    protected function _getTableNameForActiveSnippet( $blForceCoreTable = false )
+    public function getTableNameForActiveSnippet( $blForceCoreTable = false )
     {
             $sTable = $this->getCoreTableName();
 
@@ -555,9 +555,9 @@ class oxArticle extends oxI18n implements oxIArticle
      *
      * @return string
      */
-    protected function _getActiveCheckQuery( $blForceCoreTable = false )
+    public function getActiveCheckQuery( $blForceCoreTable = false )
     {
-        $sTable = $this->_getTableNameForActiveSnippet( $blForceCoreTable );
+        $sTable = $this->getTableNameForActiveSnippet( $blForceCoreTable );
 
         // check if article is still active
         $sQ = " $sTable.oxactive = 1 ";
@@ -584,10 +584,10 @@ class oxArticle extends oxI18n implements oxIArticle
      *
      * @return string
      */
-    protected function _getStockCheckQuery( $blForceCoreTable = false )
+    public function getStockCheckQuery( $blForceCoreTable = false )
     {
         $myConfig = $this->getConfig();
-        $sTable = $this->_getTableNameForActiveSnippet( $blForceCoreTable );
+        $sTable = $this->getTableNameForActiveSnippet( $blForceCoreTable );
 
         $sQ = "";
 
@@ -619,9 +619,9 @@ class oxArticle extends oxI18n implements oxIArticle
      *
      * @return string
      */
-    protected function _getVariantsQuery( $blRemoveNotOrderables, $blForceCoreTable = false  )
+    public function getVariantsQuery( $blRemoveNotOrderables, $blForceCoreTable = false  )
     {
-        $sTable = $this->_getTableNameForActiveSnippet( $blForceCoreTable );
+        $sTable = $this->getTableNameForActiveSnippet( $blForceCoreTable );
         $sQ = " and $sTable.oxparentid = '".$this->getId()."' ";
 
         //checking if variant is active and stock status
@@ -644,10 +644,10 @@ class oxArticle extends oxI18n implements oxIArticle
         $myConfig = $this->getConfig();
 
         // check if article is still active
-        $sQ = $this->_getActiveCheckQuery( $blForceCoreTable );
+        $sQ = $this->getActiveCheckQuery( $blForceCoreTable );
 
         // stock and variants check
-        $sQ .= $this->_getStockCheckQuery( $blForceCoreTable );
+        $sQ .= $this->getStockCheckQuery( $blForceCoreTable );
 
 
         return "( $sQ ) ";
@@ -1177,7 +1177,7 @@ class oxArticle extends oxI18n implements oxIArticle
      */
     protected function _hasAnyVariant( $blForceCoreTable = false )
     {
-        $sArticleTable = $this->_getTableNameForActiveSnippet( $blForceCoreTable );
+        $sArticleTable = $this->getTableNameForActiveSnippet( $blForceCoreTable );
         return (bool) oxDb::getDb()->getOne( "select 1 from $sArticleTable where oxparentid='".$this->getId()."'" );
     }
 
@@ -1220,12 +1220,12 @@ class oxArticle extends oxI18n implements oxIArticle
         if ( $this->_blHasVariants = $this->_hasAnyVariant( $blForceCoreTable ) ) {
 
             startProfile("selectVariants");
-            $sSelectFields = $oVariants->getBaseObject()->getSelectFields();
-            $sArticleTable = $this->_getTableNameForActiveSnippet( $blForceCoreTable );
+            $sSelectFields = $this->getSelectFields();
+            $sArticleTable = $this->getTableNameForActiveSnippet( $blForceCoreTable );
 
             $sSelect = "select $sSelectFields from $sArticleTable where " .
-                       $this->_getActiveCheckQuery( $blForceCoreTable ) .
-                       $this->_getVariantsQuery( $blRemoveNotOrderables, $blForceCoreTable ) .
+                       $this->getActiveCheckQuery( $blForceCoreTable ) .
+                       $this->getVariantsQuery( $blRemoveNotOrderables, $blForceCoreTable ) .
                        " order by $sArticleTable.oxsort";
 
             $oVariants->selectString( $sSelect );
@@ -3499,7 +3499,7 @@ class oxArticle extends oxI18n implements oxIArticle
     }
 
     /**
-     * get parent article
+     * Get parent article
      *
      * @return oxArticle
      */

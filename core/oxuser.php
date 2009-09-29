@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxuser.php 22601 2009-09-24 08:32:35Z alfonsas $
+ * $Id: oxuser.php 22657 2009-09-25 15:39:22Z arvydas $
  */
 
 /**
@@ -506,18 +506,25 @@ class oxUser extends oxBase
             $sOXIDQuoted = $oDB->quote($sOXID);
 
             // deleting stored payment, address, group dependencies, remarks info
-            $rs = $oDB->execute( 'delete from oxaddress where oxaddress.oxuserid = '.$sOXIDQuoted.' ' );
-            $rs = $oDB->execute( 'delete from oxobject2group where oxobject2group.oxobjectid = '.$sOXIDQuoted.' ');
+            $rs = $oDB->execute( "delete from oxaddress where oxaddress.oxuserid = {$sOXIDQuoted}" );
+            $rs = $oDB->execute( "delete from oxobject2group where oxobject2group.oxobjectid = {$sOXIDQuoted}" );
 
             // deleting notice/wish lists
-            $rs = $oDB->execute( 'delete oxuserbasketitems.* from oxuserbasketitems, oxuserbaskets where oxuserbasketitems.oxbasketid = oxuserbaskets.oxid and oxuserid = '.$sOXIDQuoted.' ' );
-            $rs = $oDB->execute( 'delete from oxuserbaskets where oxuserid = '.$sOXIDQuoted.' ' );
+            $rs = $oDB->execute( "delete oxuserbasketitems.* from oxuserbasketitems, oxuserbaskets where oxuserbasketitems.oxbasketid = oxuserbaskets.oxid and oxuserid = {$sOXIDQuoted}" );
+            $rs = $oDB->execute( "delete from oxuserbaskets where oxuserid = {$sOXIDQuoted}" );
 
-            // deleting Newsletter subscription
-            $rs = $oDB->execute( 'delete from oxnewssubscribed where oxuserid = '.$sOXIDQuoted.' ');
+            // deleting newsletter subscription
+            $rs = $oDB->execute( "delete from oxnewssubscribed where oxuserid = {$sOXIDQuoted}" );
+
+            // delivery and delivery sets
+            $rs = $oDB->execute( "delete from oxobject2delivery where oxobjectid = {$sOXIDQuoted}");
+
+            // discounts
+            $rs = $oDB->execute( "delete from oxobject2discount where oxobjectid = {$sOXIDQuoted}");
+
 
             // and leaving all order related information
-            $rs = $oDB->execute( 'delete from oxremark where oxparentid = '.$sOXIDQuoted.' and oxtype !="o"' );
+            $rs = $oDB->execute( "delete from oxremark where oxparentid = {$sOXIDQuoted} and oxtype !='o'" );
 
             $blDeleted = $rs->EOF;
         }
