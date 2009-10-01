@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 22558 2009-09-22 14:50:45Z arvydas $
+ * $Id: oxemail.php 22807 2009-09-30 07:25:02Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -389,6 +389,11 @@ class oxEmail extends phpmailer
     {
         $myConfig = $this->getConfig();
 
+        $oShop = $this->_getShop();
+        if ( !$oShop->oxshops__oxowneremail->value ) {
+        	return;
+        }
+
         $sOwnerHTML  = $this->_sOrderOwnerTemplate;
         $sOwnerPLAIN = $this->_sOrderOwnerPlainTemplate;
 
@@ -404,8 +409,6 @@ class oxEmail extends phpmailer
 
         $oLang = oxLang::getInstance();
         $iOrderLang = $oLang->getTplLanguage();
-
-        $oShop = $this->_getShop();
 
         // if running shop language is different from admin lang. set in config
         // we have to load shop in config language

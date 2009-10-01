@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxerpgenimport.php 22356 2009-09-16 13:54:18Z vilma $
+ * $Id: oxerpgenimport.php 22819 2009-09-30 12:42:22Z vilma $
  */
 
 /**
@@ -395,10 +395,10 @@ class oxErpGenImport extends oxErpCsv
         // deprecated
         $sChar = $myConfig->getConfigParam( 'sGiCsvFieldTerminator' );
 
-        if ( !$sChar ){
+        if ( !$sChar ) {
             $sChar = $myConfig->getConfigParam( 'sCSVSign' );
         }
-        if ( !$sChar ){
+        if ( !$sChar ) {
             $sChar = $this->_sDefaultStringTerminator;
         }
         return $sChar;
@@ -413,7 +413,7 @@ class oxErpGenImport extends oxErpCsv
     {
         $myConfig = oxConfig::getInstance();
 
-        if ( $sChar = $myConfig->getConfigParam( 'sGiCsvFieldEncloser' ) ){
+        if ( $sChar = $myConfig->getConfigParam( 'sGiCsvFieldEncloser' ) ) {
             return $sChar;
         } else {
             return $this->_sDefaultStringEncloser;

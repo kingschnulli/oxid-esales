@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 22590 2009-09-24 06:24:00Z alfonsas $
+ * $Id: alist.php 22818 2009-09-30 12:38:21Z vilma $
  */
 
 /**
@@ -490,7 +490,7 @@ class aList extends oxUBase
      */
     protected function _collectMetaKeyword( $sKeywords )
     {
-        $iMaxTextLenght = 60;
+        $iMaxTextLength = 60;
         $sText = '';
 
         if ( count( $aArticleList = $this->getArticleList() ) ) {
@@ -501,9 +501,9 @@ class aList extends oxUBase
                 //removing dots from string (they are not cleaned up during general string cleanup)
                 $sDesc = preg_replace( "/\./", " ", $sDesc );
 
-                if ( $oStr->strlen( $sDesc ) > $iMaxTextLenght ) {
-                    $sMidText = $oStr->substr( $sDesc, 0, $iMaxTextLenght );
-                    $sDesc   .= $oStr->substr( $sMidText, 0, ( $oStr->strlen( $sMidText ) - $oStr->strpos( strrev( $sMidText ), ' ' ) ) );
+                if ( $oStr->strlen( $sDesc ) > $iMaxTextLength ) {
+                    $sMidText = $oStr->substr( $sDesc, 0, $iMaxTextLength );
+                    $sDesc    = $oStr->substr( $sMidText, 0, ( $oStr->strlen( $sMidText ) - $oStr->strpos( strrev( $sMidText ), ' ' ) ) );
                 }
                 if ( $sText ) {
                     $sText .= ', ';
