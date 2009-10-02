@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 22669 2009-09-28 07:43:10Z sarunas $
+ * $Id: oxconfig.php 22852 2009-10-01 12:12:43Z sarunas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -803,10 +803,7 @@ class oxConfig extends oxSuperCfg
      */
     public function getCoreUtilsUrl()
     {
-        if ( ( $sSSLShopURL = $this->getConfigParam( 'sSSLShopURL' ) ) ) {
-            return $sSSLShopURL.'core/utils/';
-        }
-        return $this->getConfigParam( 'sShopURL' ).'core/utils/';
+        return $this->getCurrentShopUrl().'core/utils/';
     }
 
     /**
@@ -1738,8 +1735,10 @@ class oxConfig extends oxSuperCfg
     {
         if ( !$sShopId ) {
             $sShopId = $this->getShopId();
+            $this->setConfigParam( $sVarName, $sVarVal );
+        } elseif ($sShopId == $this->getShopId()) {
+            $this->setConfigParam( $sVarName, $sVarVal );
         }
-
         $oDb = oxDb::getDb();
         $sQ = "delete from oxconfig where oxshopid = '$sShopId' and oxvarname = '$sVarName'";
         $oDb->execute( $sQ );

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 22389 2009-09-17 14:38:55Z arvydas $
+ * $Id: oxbasket.php 22851 2009-10-01 12:07:14Z rimvydas.paskevicius $
  */
 
 /**
@@ -2089,13 +2089,28 @@ class oxBasket extends oxSuperCfg
     }
 
     /**
-     * Returns payment costs
+     * Returns payment costs brutto value
      *
      * @return double | bool
      */
     public function getPaymentCosts()
     {
         return $this->getCosts( 'oxpayment' )->getBruttoPrice();
+    }
+
+    /**
+     * Returns if exists formatted payment costs
+     *
+     * @return string | bool
+     */
+    public function getFPaymentCosts()
+    {
+        $oPaymentCost = $this->getCosts( 'oxpayment' );
+
+        if ( $oPaymentCost && $oPaymentCost->getBruttoPrice() ) {
+            return oxLang::getInstance()->formatCurrency( $oPaymentCost->getBruttoPrice(), $this->getBasketCurrency() );
+        }
+        return false;
     }
 
     /**
@@ -2146,6 +2161,20 @@ class oxBasket extends oxSuperCfg
         $dWrappNet = $this->getCosts( 'oxwrapping' )->getNettoPrice();
         if ( $dWrappNet > 0 ) {
             return  oxLang::getInstance()->formatCurrency( $dWrappNet, $this->getBasketCurrency() );
+        }
+        return false;
+    }
+
+    /**
+     * Returns if exists formatted wrapping costs
+     *
+     * @return string | bool
+     */
+    public function getFWrappingCosts()
+    {
+        $oWrappingCost = $this->getCosts( 'oxwrapping' );
+        if ( $oWrappingCost && $oWrappingCost->getBruttoPrice() ) {
+            return oxLang::getInstance()->formatCurrency( $oWrappingCost->getBruttoPrice(), $this->getBasketCurrency() );
         }
         return false;
     }

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: navigation.php 22591 2009-09-24 07:09:30Z vilma $
+ * $Id: navigation.php 22835 2009-10-01 08:14:18Z vilma $
  */
 
 /**
@@ -165,7 +165,7 @@ class Navigation extends oxAdminView
                     $sOutput = file_get_contents($sPath);
 
                     // Fix base path
-                    $sOutput = preg_replace("/<\/head>/i", "<base href=\"{$sBase}\"></head>\n  <!-- OXID eShop {$sEdition}, Version {$sVersion}, Shopsystem (c) OXID eSales AG 2003 - {$sCurYear} - http://www.oxid-esales.com -->", $sOutput);
+                    $sOutput = preg_replace("/<\/head>/i", "<base href=\"{$sBase}\"></head>\n  <!-- OXID eShop {$sEdition}, Version {$sVersion}, Shopping Cart System (c) OXID eSales AG 2003 - {$sCurYear} - http://www.oxid-esales.com -->", $sOutput);
 
                     // Fix self url's
                     $sOutput = preg_replace("/href=\"#\"/i", 'href="javascript::void();"', $sOutput);
