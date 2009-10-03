@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 21739 2009-08-20 13:28:17Z arvydas $
+ * $Id: details.php 22897 2009-10-02 11:24:07Z arvydas $
  */
 
 /**

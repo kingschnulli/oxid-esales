@@ -451,6 +451,7 @@ INSERT INTO `oxconfig` VALUES ('b1296159b7641d31b93423972af6150b', 'oxbaseshop',
 INSERT INTO `oxconfig` VALUES ('fd770460540c32422b415a65fefb8f90', 'oxbaseshop', 'blLoadDynContents', 'bool', 0x7900fdf51e);
 INSERT INTO `oxconfig` VALUES ('fd7a064bbb64466f8e6ba847902b2005', 'oxbaseshop', 'sShopCountry', 'str', '');
 INSERT INTO `oxconfig` VALUES ('44bcd90bd1d059.053753111', 'oxbaseshop', 'sTagList', 'str', 0x071d33336bce8dbe0606);
+INSERT INTO `oxconfig` VALUES ('603a1a28ff2a421b64c631ffaf97f324', 'oxbaseshop', 'sGiCsvFieldEncloser', 'str', 0x95);
 
 
 #

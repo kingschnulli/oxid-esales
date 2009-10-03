@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_seo.php 22624 2009-09-24 14:45:24Z rimvydas.paskevicius $
+ * $Id: article_seo.php 22897 2009-10-02 11:24:07Z arvydas $
  */
 
 /**
@@ -402,7 +402,7 @@ class Article_Seo extends Object_Seo
     {
         $oArticle = oxNew( 'oxarticle' );
         $oArticle->loadInLang( $this->_iEditLang, $sOxid );
-        $sStdLink = $oArticle->getLink();
+        $sStdLink = $oArticle->getStdLink();
 
         // adding vendor or manufacturer id
         switch ( $this->_sActCatType ) {

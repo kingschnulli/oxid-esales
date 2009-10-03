@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22645 2009-09-25 13:28:37Z tomas $
+ * $Id: lang.php 22908 2009-10-02 13:58:09Z vilma $
  */
 
 /*
@@ -694,6 +694,7 @@ $aLang = array(
 'EXCEPTION_NOTALLOWEDTYPE'                      => 'Not allowed file type (please, edit config.inc.php to allow this type of file)',
 'EXCEPTION_NODESCRIPTIONADDED'                  => 'Please enter description',
 'EXCEPTION_NOMEDIAADDED'                        => 'Please enter existing media URL or upload the file',
+'EXCEPTION_COULDNOTWRITETOFILE'                 => 'Could not write to file',
 
 'GUI_LIST_MENUITEM'                             => 'Master Settings',
 'GUI_LIST_MENUSUBITEM'                          => 'Look & Feel',

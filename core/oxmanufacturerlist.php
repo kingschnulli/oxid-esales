@@ -230,20 +230,19 @@ class oxManufacturerList extends oxList
      */
     protected function _seoSetManufacturerData()
     {
-        if (!oxUtils::getInstance()->seoIsActive()) {
-            return;
-        }
+        if ( oxUtils::getInstance()->seoIsActive() && !$this->isAdmin()) {
 
-        $oEncoder = oxSeoEncoderManufacturer::getInstance();
+            $oEncoder = oxSeoEncoderManufacturer::getInstance();
 
-        // preparing root manufacturer category
-        if ($this->_oRoot) {
-            $oEncoder->getManufacturerUrl($this->_oRoot);
-        }
+            // preparing root manufacturer category
+            if ($this->_oRoot) {
+                $oEncoder->getManufacturerUrl($this->_oRoot);
+            }
 
-        // encoding manufacturer category
-        foreach ($this as $sVndId => $value) {
-            $oEncoder->getManufacturerUrl( $this->_aArray[$sVndId] );
+            // encoding manufacturer category
+            foreach ($this as $sVndId => $value) {
+                $oEncoder->getManufacturerUrl( $this->_aArray[$sVndId] );
+            }
         }
     }
 }

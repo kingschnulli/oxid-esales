@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 22731 2009-09-29 07:55:55Z arvydas $
+ * $Id: oxarticle.php 22907 2009-10-02 13:51:42Z vilma $
  */
 
 // defining supported link types
@@ -347,6 +347,26 @@ class oxArticle extends oxI18n implements oxIArticle
      * @var array
      */
     protected static $_aArticleCats = array();
+
+    /**
+     * Do not copy certain parent fields to variant
+     *
+     * @var array
+     */
+    protected $_aNonCopyParentFields = array('oxarticles__oxinsert',
+                                             'oxarticles__oxtimestamp',
+                                             'oxarticles__oxnid',
+                                             'oxarticles__oxid',
+                                             'oxarticles__oxparentid');
+
+    /**
+     * Override certain parent fields to variant
+     *
+     * @var array
+     */
+    protected $_aCopyParentField = array('oxarticles__oxnonmaterial',
+                                         'oxarticles__oxfreeshipping',
+                                         'oxarticles__oxremindactive');
 
     /**
      * Class constructor, sets shop ID for article (oxconfig::getShopId()),
@@ -3442,21 +3462,9 @@ class oxArticle extends oxI18n implements oxIArticle
             }
 
             //do not copy certain fields
-            $aNonCopyFields = array('oxarticles__oxinsert',
-                                    'oxarticles__oxtimestamp',
-                                    'oxarticles__oxnid',
-                                    'oxarticles__oxid',
-                                    'oxarticles__oxparentid');
-
-            $aCopyParentField = array('oxarticles__oxnonmaterial',
-                                      'oxarticles__oxfreeshipping',
-                                      'oxarticles__oxremindactive');
-
-            if (in_array($sCopyFieldName, $aNonCopyFields)) {
+            if (in_array($sCopyFieldName, $this->_aNonCopyParentFields)) {
                 return;
             }
-
-
 
             //do not copy parent data for icons in case we have (need) own variant icon (in case variant thumbnail exists)
             if ($sFieldName == "oxicon" && !$this->_isFieldEmpty("oxarticles__oxthumb") && $this->oxarticles__oxthumb->value != $oParentArticle->oxarticles__oxthumb->value && $this->getConfig()->getConfigParam( 'blAutoIcons' ) ) {
@@ -3466,8 +3474,8 @@ class oxArticle extends oxI18n implements oxIArticle
             //COPY THE VALUE
             //replaced the code bellow with this two liner
             //T2009-01-12
-            if ($this->_isFieldEmpty($sCopyFieldName) || in_array($sCopyFieldName, $aCopyParentField)) {
-                $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
+            if ($this->_isFieldEmpty($sCopyFieldName) || in_array( $sCopyFieldName, $this->_aCopyParentField ) ) {
+            	$this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
             }
 
 

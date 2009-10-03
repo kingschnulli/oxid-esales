@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 22620 2009-09-24 13:54:00Z arvydas $
+ * $Id: oxorder.php 22897 2009-10-02 11:24:07Z arvydas $
  */
 
 /**

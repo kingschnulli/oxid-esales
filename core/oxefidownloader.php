@@ -71,7 +71,7 @@ class oxEfiDownloader extends oxSuperCfg
         //writing to file
         $fOut = fopen($sFileName, "w");
         if (!fputs($fOut, $sFileContents)) {
-            throw new oxException();
+            throw new oxException('EXCEPTION_COULDNOTWRITETOFILE');
         }
         fclose($fOut);
 

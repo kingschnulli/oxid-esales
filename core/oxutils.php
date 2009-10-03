@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 22590 2009-09-24 06:24:00Z alfonsas $
+ * $Id: oxutils.php 22900 2009-10-02 12:43:11Z arvydas $
  */
 
 /**
@@ -84,7 +84,7 @@ class oxUtils extends oxSuperCfg
 
         }
 
-        if ( !self::$_instance instanceof oxUtils ) {
+        if ( !(self::$_instance instanceof oxUtils) ) {
 
 
             self::$_instance = oxNew( 'oxUtils' );
@@ -728,10 +728,7 @@ class oxUtils extends oxSuperCfg
 
         $myConfig = $this->getConfig();
 
-        if ( $this->isAdmin() ) {
-            // allways off in admin
-            $this->_blSeoIsActive = false;
-        } elseif ( ( $this->_blSeoIsActive = $myConfig->getConfigParam( 'blSeoMode' ) ) === null ) {
+        if ( ( $this->_blSeoIsActive = $myConfig->getConfigParam( 'blSeoMode' ) ) === null ) {
             $this->_blSeoIsActive = true;
 
             $aSeoModes  = $myConfig->getconfigParam( 'aSeoModes' );
