@@ -174,16 +174,10 @@ class Language_Main extends oxAdminDetails
         $this->_aViewData["updatelist"] = "1";
 
         //saving languages info
-        $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguageParams', serialize($this->_aLangData['params']) );
-        $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguages', serialize($this->_aLangData['lang']) );
-        $this->getConfig()->saveShopConfVar( 'arr',  'aLanguageURLs', serialize($this->_aLangData['urls']) );
-        $this->getConfig()->saveShopConfVar( 'arr',  'aLanguageSSLURLs', serialize($this->_aLangData['sslUrls']) );
-
-        //updating oConfig object
-        $this->getConfig()->setConfigParam( 'aLanguageParams', $this->_aLangData['params'] );
-        $this->getConfig()->setConfigParam( 'aLanguages', $this->_aLangData['lang'] );
-        $this->getConfig()->setConfigParam( 'aLanguageURLs', $this->_aLangData['urls'] );
-        $this->getConfig()->setConfigParam( 'aLanguageSSLURLs', $this->_aLangData['sslUrls'] );
+        $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguageParams',  $this->_aLangData['params']  );
+        $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguages',       $this->_aLangData['lang']    );
+        $this->getConfig()->saveShopConfVar( 'arr',  'aLanguageURLs',    $this->_aLangData['urls']    );
+        $this->getConfig()->saveShopConfVar( 'arr',  'aLanguageSSLURLs', $this->_aLangData['sslUrls'] );
     }
 
     /**
@@ -313,7 +307,6 @@ class Language_Main extends oxAdminDetails
     {
         $sDefaultId = $this->_aLangData['params'][$sOxId]['baseId'];
         $this->getConfig()->saveShopConfVar( 'str',  'sDefaultLang', $sDefaultId );
-        $this->getConfig()->setConfigParam( 'sDefaultLang', $sDefaultId );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 22897 2009-10-02 11:24:07Z arvydas $
+ * $Id: oxconfig.php 22944 2009-10-05 15:11:43Z alfonsas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1723,34 +1723,58 @@ class oxConfig extends oxSuperCfg
 
     /**
      * Updates or adds new shop configuration parameters to DB.
+     * Arrays must be passed not serialized, serialized values are supported just for backward compatibility.
      *
      * @param string $sVarType Variable Type
      * @param string $sVarName Variable name
-     * @param string $sVarVal  Variable value
+     * @param mixed  $sVarVal  Variable value (can be string, integer or array)
      * @param string $sShopId  Shop ID, default is current shop
      *
      * @return null
      */
     public function saveShopConfVar( $sVarType, $sVarName, $sVarVal, $sShopId = null )
     {
+        switch ( $sVarType ) {
+            case 'arr':
+            case 'aarr':
+                if (is_array($sVarVal)) {
+                    $sValue = serialize( $sVarVal );
+                } else {
+                    // Deprecated functionality
+                    $sValue  = $sVarVal ;
+                    $sVarVal = unserialize( $sVarVal );
+                }
+                break;
+            case 'bool':
+                $sValue  =  $sVarVal = ( $sVarVal == 'true' || $sVarVal == '1' );
+                break;
+            default:
+                $sValue  = $sVarVal;
+                break;
+        }
+
         if ( !$sShopId ) {
             $sShopId = $this->getShopId();
-            $this->setConfigParam( $sVarName, $sVarVal );
-        } elseif ($sShopId == $this->getShopId()) {
+        }
+
+        // Update value only for current shop
+        if ($sShopId == $this->getShopId()) {
             $this->setConfigParam( $sVarName, $sVarVal );
         }
+
         $oDb = oxDb::getDb();
         $sQ = "delete from oxconfig where oxshopid = '$sShopId' and oxvarname = '$sVarName'";
         $oDb->execute( $sQ );
-        $sUid = oxUtilsObject::getInstance()->generateUID();
 
-        $sUid     = mysql_real_escape_string($sUid);
-        $sShopId  = mysql_real_escape_string($sShopId);
-        $sVarName = mysql_real_escape_string($sVarName);
-        $sVarVal  = mysql_real_escape_string($sVarVal);
+        $sNewOXIDdQuoted  = $oDb->quote(oxUtilsObject::getInstance()->generateUID());
+        $sShopIdQuoted    = $oDb->quote($sShopId);
+        $sVarNameQuoted   = $oDb->quote($sVarName);
+        $sVarTypeQuoted   = $oDb->quote($sVarType);
+        $sVarValueQuoted  = $oDb->quote($sValue);
+        $sConfigKeyQuoted = $oDb->quote($this->getConfigParam('sConfigKey'));
 
         $sQ = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
-               values('$sUid', '$sShopId', '$sVarName', '$sVarType', ENCODE( '$sVarVal', '".$this->getConfigParam('sConfigKey')."'))";
+               values($sNewOXIDdQuoted, $sShopIdQuoted, $sVarNameQuoted, $sVarTypeQuoted, ENCODE( $sVarValueQuoted, $sConfigKeyQuoted))";
 
         $oDb->execute( $sQ );
     }

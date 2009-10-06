@@ -62,10 +62,10 @@ class VoucherSerie_Export extends oxAdminDetails
         $oSerie = oxNew( "oxvoucherserie" );
         $oSerie->load(oxConfig::getParameter("oxid"));
 
-        $oDB = oxDb::getDb();
+        $oDb = oxDb::getDb();
 
         $sSelect = "select oxvouchernr from oxvouchers where oxvoucherserieid = ".$oDb->quote( $oSerie->oxvoucherseries__oxid->value );
-        $rs = $oDB->execute($sSelect);
+        $rs = $oDb->execute($sSelect);
         // if first, delete the file
         $fp = @fopen( $sFilepath, "w");
         if ( $fp) {

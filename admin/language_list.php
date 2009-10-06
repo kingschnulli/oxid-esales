@@ -78,21 +78,14 @@ class Language_List extends oxAdminList
         unset( $aLangData['sslUrls'][$iBaseId] );
 
         //saving languages info back to DB
-        $myConfig->saveShopConfVar( 'aarr', 'aLanguageParams', serialize($aLangData['params']) );
-        $myConfig->saveShopConfVar( 'aarr', 'aLanguages', serialize($aLangData['lang']) );
-        $myConfig->saveShopConfVar( 'arr',  'aLanguageURLs', serialize($aLangData['urls']) );
-        $myConfig->saveShopConfVar( 'arr',  'aLanguageSSLURLs', serialize($aLangData['sslUrls']) );
-
-        //updating oConfig object
-        $myConfig->setConfigParam( 'aLanguageParams', $aLangData['params'] );
-        $myConfig->setConfigParam( 'aLanguages', $aLangData['lang'] );
-        $myConfig->setConfigParam( 'aLanguageURLs', $aLangData['urls'] );
-        $myConfig->setConfigParam( 'aLanguageSSLURLs', $aLangData['sslUrls'] );
+        $myConfig->saveShopConfVar( 'aarr', 'aLanguageParams',  $aLangData['params']  );
+        $myConfig->saveShopConfVar( 'aarr', 'aLanguages',       $aLangData['lang']    );
+        $myConfig->saveShopConfVar( 'arr',  'aLanguageURLs',    $aLangData['urls']    );
+        $myConfig->saveShopConfVar( 'arr',  'aLanguageSSLURLs', $aLangData['sslUrls'] );
 
         //if deleted language was default, setting defalt lang to 0
         if ( $iBaseId == $myConfig->getConfigParam( 'sDefaultLang' ) ) {
             $myConfig->saveShopConfVar( 'str',  'sDefaultLang', 0 );
-            $myConfig->setConfigParam( 'sDefaultLang', 0 );
         }
     }
 

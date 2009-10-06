@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 22897 2009-10-02 11:24:07Z arvydas $
+ * $Id: oxorder.php 22931 2009-10-05 11:51:31Z arvydas $
  */
 
 /**
@@ -412,9 +412,6 @@ class oxOrder extends oxBase
 
         // store orderid
         $oBasket->setOrderId( $this->getId() );
-
-        // updating bought items stock
-        $this->_updateStock();
 
         // updating wish lists
         $this->_updateWishlist( $oBasket->getContents(), $oUser );
@@ -1117,14 +1114,9 @@ class oxOrder extends oxBase
         }
 
 
-        // update article stock information and delete order articles
-        $myConfig = $this->getConfig();
-        $blUseStock = $myConfig->getConfigParam( 'blUseStock' );
+        // delete order articles
         $oOrderArticles = $this->getOrderArticles( false );
         foreach ( $oOrderArticles as $oOrderArticle ) {
-            if ( $blUseStock && $oOrderArticle->oxorderarticles__oxstorno->value != 1 ) {
-                $oOrderArticle->updateArticleStock( $oOrderArticle->oxorderarticles__oxamount->value, $myConfig->getConfigParam('blAllowNegativeStock') );
-            }
             $oOrderArticle->delete();
         }
 
