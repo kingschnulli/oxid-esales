@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: payment.php 22336 2009-09-15 15:44:43Z vilma $
+ * $Id: payment.php 22959 2009-10-06 08:53:06Z vilma $
  */
 
 /**
@@ -166,7 +166,7 @@ class Payment extends oxUBase
         $oUser = $this->getUser();
         $oBasket = $this->getSession()->getBasket();
         if ( !$oBasket || !$oUser || ( $oBasket && !$oBasket->getProductsCount() ) ) {
-            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() );
+            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() .'cl=start' );
         }
 
         // passing payments to view

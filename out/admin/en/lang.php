@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22908 2009-10-02 13:58:09Z vilma $
+ * $Id: lang.php 22969 2009-10-06 12:58:57Z vilma $
  */
 
 /*
@@ -159,7 +159,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXRRBUY'                       => 'Exclusive buyable',
 'GENERAL_ARTICLE_OXORDERINFO'                   => 'Bestell. Info',
 'GENERAL_ARTICLE_OXSEOID'                       => 'SEOID',
-'GENERAL_ARTICLE_OXVPE'                         => 'Verpackungseinheit',
+'GENERAL_ARTICLE_OXVPE'                         => 'Packingunit',
 'GENERAL_ARTICLE_OXBUNDLEID'                    => 'Bundle Identno',
 'GENERAL_ARTICLE_OXVARSTOCK'                    => 'Variant Stock',
 'GENERAL_ASSIGNUSERS'                           => 'Assign Users',
