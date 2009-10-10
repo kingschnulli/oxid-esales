@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoderarticle.php 22590 2009-09-24 06:24:00Z alfonsas $
+ * $Id: oxseoencoderarticle.php 23080 2009-10-09 13:44:58Z sarunas $
  */
 
 /**
@@ -215,14 +215,21 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 $sTmpSeoUrl = '';
                 $oEncoder = oxSeoEncoderCategory::getInstance();
                 foreach ($oCategorys as $oCategory) {
-                    // writing category path
-                    $sTmpSeoUrl = $oEncoder->getCategoryUri( $oCategory );
-                    $sTmpSeoUrl .= $sTitle;
-                    $sTmpSeoUrl  = $this->_processSeoUrl( $sTmpSeoUrl, $oArticle->getId(), $iLang );
+                    if (!$this->_isFixed('oxarticle', $oArticle->getId(), $iLang, null, $oCategory->oxcategories__oxrootid->value, true)) {
+                        // writing category path
+                        $sTmpSeoUrl = $oEncoder->getCategoryUri( $oCategory );
+                        $sTmpSeoUrl .= $sTitle;
+                        $sTmpSeoUrl  = $this->_processSeoUrl( $sTmpSeoUrl, $oArticle->getId(), $iLang );
 
-                    $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sTmpSeoUrl, $iLang, null, 0, false, false, $oCategory->oxcategories__oxrootid->value);
-                    if ($oCategory->oxcategories__oxrootid->value == $sActCatId) {
-                        $sSeoUrl = $sTmpSeoUrl;
+                        $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink(), $sTmpSeoUrl, $iLang, null, 0, false, false, $oCategory->oxcategories__oxrootid->value);
+                        if ($oCategory->oxcategories__oxrootid->value == $sActCatId) {
+                            $sSeoUrl = $sTmpSeoUrl;
+                        }
+                    } elseif($oCategory->oxcategories__oxrootid->value == $sActCatId) {
+                        // load url for this category
+                        if ( ($sTmpSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, null, $oCategory->getId(), true ) )) {
+                            $sSeoUrl = $sTmpSeoUrl;
+                        }
                     }
                 }
                 if (!$sSeoUrl) {

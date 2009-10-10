@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 22599 2009-09-24 08:20:19Z arvydas $
+ * $Id: oxseoencoder.php 23057 2009-10-09 12:59:36Z sarunas $
  */
 
 /**
@@ -419,6 +419,43 @@ class oxSeoEncoder extends oxSuperCfg
             $sCheckSeoUrl = $this->_trimUrl( $sSeoUrl );
         }
         return $sSeoUrl;
+    }
+
+    /**
+     * check if seo url exist and is fixed
+     *
+     * @param string $sType               object type
+     * @param string $sId                 object identifier
+     * @param int    $iLang               active language id
+     * @param mixed  $iShopId             active shop id
+     * @param string $sParams             additional seo params. optional (mostly used for db indexing)
+     * @param bool   $blStrictParamsCheck strict parameters check
+     *
+     * @access protected
+     *
+     * @return bool
+     */
+    protected function _isFixed( $sType, $sId, $iLang, $iShopId = null, $sParams = null, $blStrictParamsCheck = true)
+    {
+        $oDb = oxDb::getDb( true );
+        if ( $iShopId === null ) {
+            $iShopId = $this->getConfig()->getShopId();
+        }
+
+        $iLang = (int) $iLang;
+
+        $sQ = "select oxfixed from oxseo where oxtype = ".$oDb->quote( $sType )."
+               and oxobjectid = ".$oDb->quote( $sId ) ." and oxshopid = ".$oDb->quote( $iShopId )." and oxlang = '{$iLang}'";
+
+        $sParams = $sParams ? $sParams : '';
+        if ( $sParams && $blStrictParamsCheck ) {
+            $sQ .= " and oxparams = '{$sParams}'";
+        } else {
+            $sQ .= " order by oxparams = '{$sParams}' desc";
+        }
+        $sQ .= " limit 1";
+
+        return (bool) $oDb->getOne( $sQ );
     }
 
     /**
