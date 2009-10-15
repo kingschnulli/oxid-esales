@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsview.php 19870 2009-06-16 11:18:11Z sarunas $
+ * $Id: oxutilsview.php 23188 2009-10-13 06:59:38Z sarunas $
  */
 
 /**

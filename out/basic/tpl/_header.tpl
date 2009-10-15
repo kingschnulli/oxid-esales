@@ -12,9 +12,12 @@
     [{/if}]
     [{if $oView->getMetaDescription()}]<meta name="description" content="[{$oView->getMetaDescription()}]">[{/if}]
     [{if $oView->getMetaKeywords()}]<meta name="keywords" content="[{$oView->getMetaKeywords()}]">[{/if}]
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
     <link rel="shortcut icon" href="[{ $oViewConf->getBaseDir() }]favicon.ico">
     <link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid.css">
-    <!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxidbc.css"><![endif]-->
+    <!--[if IE 8]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid_ie8.css"><![endif]-->
+    <!--[if IE 7]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid_ie7.css"><![endif]-->
+    <!--[if IE 6]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid_ie6.css"><![endif]-->
 
     [{if $rsslinks}]
       [{foreach from=$rsslinks item='rssentry'}]
@@ -28,7 +31,7 @@
 
     <div id="header">
         <div class="bar oxid">
-            <a class="logo" href="[{ $oViewConf->getBaseDir() }]">
+            <a class="logo" href="[{ oxgetseourl ident=$oViewConf->getHomeLink() }]">
                 <img src="[{$oViewConf->getImageUrl()}]logo.png" alt="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]">
             </a>
 
@@ -62,7 +65,7 @@
                 [{/if}]
                 [{if $oView->loadCurrency()}]
                     [{foreach from = $oxcmp_cur item = _currency name=curr}]
-                        <a id="test_Curr_[{$_currency->name}]" class="currency[{if $smarty.foreach.curr.first}] sep[{/if}][{if $_currency->selected}] act[{/if}]" href="[{ oxgetseourl ident=$_currency->link params="listtype=`$sListType`" }]" rel="nofollow">[{ $_currency->name }]</a>
+                        <a id="test_Curr_[{$_currency->name}]" class="currency[{if $smarty.foreach.curr.first}] sep[{/if}][{if $_currency->selected}] act[{/if}]" href="[{ oxgetseourl ident=$_currency->link params=$oView->getDynUrlParams() }]" rel="nofollow">[{ $_currency->name }]</a>
                     [{/foreach}]
                 [{/if}]
             </div>
@@ -82,8 +85,8 @@
                 [{assign var="oCont" value=$oView->getContentByIdent("oximpressum") }]
                 <a id="test_HeaderImpressum" href="[{ $oCont->getLink() }]" rel="nofollow">[{ $oCont->oxcontents__oxtitle->value }]</a>
                 [{if $oView->getMenueList()}]
-                  [{ foreach from=$oView->getMenueList() item=oMenueContent }]
-                    <a href="[{ $oViewConf->getSelfLink() }]cl=content&amp;oxcid=[{$oMenueContent->oxcontents__oxid->value}]">[{$oMenueContent->oxcontents__oxtitle->value}]</a>
+                  [{foreach from=$oView->getMenueList() item=oMenueContent }]
+                    <a href="[{ $oMenueContent->getLink() }]">[{$oMenueContent->oxcontents__oxtitle->value}]</a>
                   [{/foreach}]
                 [{/if}]
             </div>
@@ -93,7 +96,7 @@
         [{if $oView->showTopCatNavigation()}]
         <div class="bar categories">
             <a id="test_HeaderHome" href="[{ oxgetseourl ident=$oViewConf->getHomeLink() }]" class="fixed">[{ oxmultilang ident="INC_HEADER_HOME" }]</a>
-            <ul class="menue horizontall" id="mn.categories">
+            <ul class="menue horizontal" id="mn.categories">
 
             [{assign var="iCatCnt" value="1"}]
             [{foreach from=$oxcmp_categories item=ocat key=catkey name=root}]
@@ -113,7 +116,7 @@
                     <a id="root[{$iCatCnt}]" href="[{$ocat->getLink()}]" [{if $ocat->expanded}]class="exp"[{/if}]>[{$ocat->oxcategories__oxtitle->value}] [{ if $ocat->getNrOfArticles() > 0}] ([{$ocat->getNrOfArticles()}])[{/if}] </a>
                     [{if $ocat->getSubCats()}]
                     [{strip}]
-                    <ul class="menue verticall dropdown">
+                    <ul class="menue vertical dropdown">
                     [{foreach from=$ocat->getSubCats() item=osubcat key=subcatkey name=SubCat}]
                         [{if $osubcat->getContentCats()}]
                             [{foreach from=$osubcat->getContentCats() item=osubcont key=subcontkey name=subcont}]
@@ -139,9 +142,9 @@
                     [{assign var="_navcatmore" value=$oView->getCatMore()}]
                     <a id="root[{$oView->getTopNavigationCatCnt()+1}]" href="[{ oxgetseourl ident="`$_navcatmore->closelink`&amp;cl=alist" }]" class="more[{if $_navcatmore->expanded}] exp[{/if}]">[{ oxmultilang ident="INC_HEADER_URLMORE" }] </a>
                     [{strip}]
-                    <ul class="menue verticall dropdown">
+                    <ul class="menue vertical dropdown">
                     [{foreach from=$oxcmp_categories item=omorecat key=morecatkey name=more}]
-                      [{if $ocat->getIsVisible() }]
+                      [{if $omorecat->getIsVisible() }]
                         [{if $omorecat->getContentCats()}]
                             [{foreach from=$omorecat->getContentCats() item=omorecont key=morecontkey name=morecont}]
                             <li><a href="[{$omorecont->getLink()}]">[{$omorecont->oxcontents__oxtitle->value}] </a></li>

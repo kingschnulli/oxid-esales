@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 22944 2009-10-05 15:11:43Z alfonsas $
+ * $Id: oxconfig.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1812,7 +1812,7 @@ class oxConfig extends oxSuperCfg
                 default:
                     $sValue = $sVarVal;
                     break;
-            }
+                }
         }
         return $sValue;
     }

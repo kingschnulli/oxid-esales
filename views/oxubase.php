@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 22650 2009-09-25 14:32:34Z tomas $
+ * $Id: oxubase.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 /**
@@ -1043,7 +1043,7 @@ class oxUBase extends oxView
             } elseif ( $this->_sMetaKeywordsIdent ) {
                 $oContent = oxNew( 'oxcontent' );
                 if ( $oContent->loadByIdent( $this->_sMetaKeywordsIdent ) && $oContent->oxcontents__oxactive->value ) {
-                    $this->_sMetaKeywords = strip_tags( $oContent->oxcontents__oxcontent->value );
+                	$this->_sMetaKeywords = strip_tags( $oContent->oxcontents__oxcontent->value );
                     $blRemoveDuplicatedWords = false;
                 }
             }

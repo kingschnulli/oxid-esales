@@ -30,6 +30,7 @@
         </td>
         <td class="edittext">
         <input class="editinput" type="text" size="100" name="filepath" value="[{ $filepath }]" [{ $readonly }]>
+        [{ oxinputhelp ident="HELP_GENERAL_FILE" }]
         </td>
     </tr>
     <tr>

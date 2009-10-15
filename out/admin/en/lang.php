@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22969 2009-10-06 12:58:57Z vilma $
+ * $Id: lang.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 /*
@@ -159,7 +159,6 @@ $aLang = array(
 'GENERAL_ARTICLE_OXRRBUY'                       => 'Exclusive buyable',
 'GENERAL_ARTICLE_OXORDERINFO'                   => 'Bestell. Info',
 'GENERAL_ARTICLE_OXSEOID'                       => 'SEOID',
-'GENERAL_ARTICLE_OXVPE'                         => 'Packingunit',
 'GENERAL_ARTICLE_OXBUNDLEID'                    => 'Bundle Identno',
 'GENERAL_ARTICLE_OXVARSTOCK'                    => 'Variant Stock',
 'GENERAL_ASSIGNUSERS'                           => 'Assign Users',
@@ -530,8 +529,10 @@ $aLang = array(
 'CONTENT_MAIN_INSERTBEFORE'                     => 'Inserted before',
 'CONTENT_MAIN_SNIPPET'                          => 'Snippet',
 'CONTENT_MAIN_TITLE'                            => '[OXID Content Administration]',
-'CONTENT_MAIN_ERROR'                            => 'ERROR !',
-'CONTENT_MAIN_USEDIDENTCODE'                    => 'Identcode already in use !',
+'CONTENT_MAIN_ERROR'                            => 'ERROR!',
+'CONTENT_MAIN_USEDIDENTCODE'                    => 'Identcode already in use!',
+'CONTENT_MAIN_CATEGORY'                         => 'Category',
+'CONTENT_MAIN_MANUAL'                           => 'Manually',
 'COUNTRY_LIST_ISO'                              => 'ISO 3',
 'COUNTRY_LIST_MENUITEM'                         => 'Master Settings',
 'COUNTRY_LIST_MENUSUBITEM'                      => 'Countries',
@@ -861,7 +862,8 @@ $aLang = array(
 'LANGUAGE_BASEURL'                              => 'Base URL',
 'LANGUAGE_BASESSLURL'                           => 'Base SSL URL',
 'LANGUAGE_NOTRANSLATIONS_WARNING'               => 'Warning: No translations files were found in templates dir for selected language!',
-'LANGUAGE_NODBMULTILANGFIELDS_WARNING'          => 'Warning: No multilanguage DB fields were found for selected language!',
+'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS'        => 'Warning: Error occured while adding new multilanguage fields to tables!',
+'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'      => 'Warning: Error occured while reseting multilanguage fields after language delete!',
 'LANGUAGE_DELETINGMAINLANG_WARNING'             => 'Warning: you can\'t delete main language (with ID = 0)!',
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Error: language with such abbervation already exists!',
 'SETUP_DIRNOTDELETED_WARNING'                   => 'Please delete directory: setup!',
@@ -1138,6 +1140,8 @@ $aLang = array(
 'REPORT_USER_PER_GROUP'                         => 'Customers by User Group',
 'REPORT_VISITOR_ABSOLUTE'                       => 'Customers/Visitors',
 'SELECTLIST_LIST_MENUSUBITEM'                   => 'Selection Lists',
+'SELECTLIST_MAIN_FIELDS'                        => 'Fields',
+'SELECTLIST_MAIN_TITLEIDENT'                    => 'Working Title',
 'SELECTLIST_MAIN_ADDFIELD_NAME'                 => 'Name',
 'SELECTLIST_MAIN_ADDFIELD_PREIS'                => 'Price Surcharge/<br />Discount',
 'SELECTLIST_MAIN_ADDFIELD_POS'                  => 'Sorting',
@@ -1361,7 +1365,7 @@ $aLang = array(
 'SYSREQ_INI_SET'                                => 'ini_set allowed',
 'SYSREQ_REGISTER_GLOBALS'                       => 'register_globals must be off',
 'SYSREQ_ZEND_OPTIMIZER'                         => 'Zend Optimizer installed',
-'SYSREQ_ZEND_PLATFORM'                          => 'Zend Platform installed',
+'SYSREQ_ZEND_PLATFORM_OR_SERVER'                => '[tr] Zend Platform or Zend Server installed',
 'SYSREQ_MB_STRING'                              => 'mbstring',
 'SYSREQ_UNICODE_SUPPORT'                        => 'UTF-8 support',
 'SYSREQ_MEMORY_LIMIT'                           => 'PHP Memory limit (min. 14MB, 30MB recommended)',
@@ -1504,6 +1508,7 @@ $aLang = array(
 'VOUCHERSERIE_MAIN_VOUCHERNUM'                  => 'Coupon Number',
 'VOUCHERSERIE_MAIN_AVAILABLE'                   => 'Available',
 'VOUCHERSERIE_MAIN_USED'                        => 'Used',
+'VOUCHERSERIE_MAIN_DISCOUNT'                    => 'Discount',
 'WRAPPING_LIST_PICTURE'                         => 'Picture',
 'WRAPPING_LIST_PRESENTPACKUNG'                  => 'Gift Wrapping',
 'WRAPPING_LIST_MENUITEM'                        => 'Shop Settings',

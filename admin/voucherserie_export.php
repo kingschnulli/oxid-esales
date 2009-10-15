@@ -41,8 +41,7 @@ class VoucherSerie_Export extends oxAdminDetails
 
         $sFilepath = oxConfig::getParameter( "filepath" );
         if ( !isset( $sFilepath)) {
-            $sFilepath = getShopBasePath();
-            $sFilepath.= "export/oxexport.csv";
+            $sFilepath = "oxexport.csv";
         }
 
         $this->_aViewData["filepath"] =  $sFilepath;
@@ -66,25 +65,23 @@ class VoucherSerie_Export extends oxAdminDetails
 
         $sSelect = "select oxvouchernr from oxvouchers where oxvoucherserieid = ".$oDb->quote( $oSerie->oxvoucherseries__oxid->value );
         $rs = $oDb->execute($sSelect);
-        // if first, delete the file
-        $fp = @fopen( $sFilepath, "w");
-        if ( $fp) {
-             fputs( $fp, "Gutschein\n");
-            while (!$rs->EOF) {
 
-                $sLine = "";
-
-                foreach ( $rs->fields as $field)
-                    $sLine .= $field/*.$myConfig->sCSVSign*/;
-                $sLine .= "\n";
-
-                fputs( $fp, $sLine);
-
-                $rs->moveNext();
+        $sLine = "Gutschein\n";
+        while (!$rs->EOF) {
+            foreach ( $rs->fields as $field) {
+                $sLine .= $field/*.$myConfig->sCSVSign*/;
             }
-            fclose( $fp);
-            $this->_aViewData["exportCompleted"] = true;
-        } else
-            $this->_aViewData["exportCompleted"] =false;
+            $sLine .= "\n";
+            $rs->moveNext();
+        }
+        $this->_aViewData["exportCompleted"] = true;
+
+        header("Pragma: public");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Expires: 0");
+        header("Content-Disposition: attachment; filename=".$sFilepath);
+        header("Content-Type: application/csv");
+        echo($sLine);
+        exit();
     }
 }

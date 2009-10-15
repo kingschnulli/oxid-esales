@@ -19,8 +19,17 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22336 2009-09-15 15:44:43Z vilma $
+ * $Id: lang.php 23173 2009-10-12 13:29:45Z sarunas $
  */
+
+
+/* -----------------------
+--  ADAPTING THIS FILE  --
+--------------------------
+If you want to adapt this language file, use cust_lang.php instead.
+Further information is available in the manual at
+http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/editing-language-files
+*/
 
 
 /* -----------------------
@@ -138,6 +147,7 @@ $aLang = array(
 'ACCOUNT_USER_SAVE'                               => "Save",
 'ACCOUNT_USER_SHIPPINGADDRESSES'                  => "Shipping Addresses",
 'ACCOUNT_USER_ADDRESSES'                          => "Addresses",
+'ACCOUNT_USER_ADDRESSES_SELECT'                   => "Select",
 'ACCOUNT_USER_NEWADDRESS'                         => "New Address",
 'ACCOUNT_USER_TITLE2'                             => "Title:",
 'ACCOUNT_USER_MR2'                                => "Mr",
@@ -150,12 +160,13 @@ $aLang = array(
 'ACCOUNT_USER_COUNTRY2'                           => "Country:",
 'ACCOUNT_USER_PHONE2'                             => "Phone:",
 'ACCOUNT_USER_FAX2'                               => "Fax:",
+'ACCOUNT_USER_SELECT'                             => "Select",
 'ACCOUNT_USER_SAVE2'                              => "Save",
 'ACCOUNT_USER_BACKTOSHOP'                         => "Back to Shop",
 'ACCOUNT_WISHLIST_TITLE'                          => "My Gift Registry",
 'ACCOUNT_WISHLIST_LOCATION'                       => "My Account / ",
 'ACCOUNT_WISHLIST_SEARCHWISHLIST'                 => "Search Gift Registry",
-'ACCOUNT_WISHLIST_ENTEREMAILORNAME'               => "Enter eMail address or Name:",
+'ACCOUNT_WISHLIST_ENTEREMAILORNAME'               => "Enter eMail address or Last name:",
 'ACCOUNT_WISHLIST_SEARCH'                         => "Search",
 'ACCOUNT_WISHLIST_WISHLISTOFF'                    => "Gift Registry of",
 'ACCOUNT_WISHLIST_SORRYNOWISHLIST'                => "Sorry, no Gift Registry found!",
@@ -762,6 +773,8 @@ $aLang = array(
 'NEWSLETTER_FORSUBSCRIPTIONBONUSPOINTS'           => "Just now! Get Bonuspoints for your Newsletter-Subscription.",
 'NEWSLETTER_SECCESS'                              => "Success!",
 'NEWSLETTER_SUBSCRIPTIONCANCELED'                 => "Your subscription to our Newsletter has been canceled.",
+'OXID_ESALES_URL'                                 => "http://www.oxid-esales.com/",
+'OXID_ESALES_URL_TITLE'                           => "Shopping cart software by OXID eSales",
 'ORDER_COMPLETEORDER'                             => "Complete Order",
 'ORDER_VERIFYYOURINPUT'                           => "Please verify your input!",
 'ORDER_READANDCONFIRMTERMS'                       => "Please read and confirm our terms and conditions.",
@@ -853,7 +866,9 @@ $aLang = array(
 'PAYMENT_AUTHORIZATIONFAILED'                     => "The payment authorization failed. Please verify your input.",
 'PAYMENT_UNAVAILABLEPAYMENT'                      => "Due to technical problems this payment method is unavailable. Please select a different payment method.",
 'PAYMENT_ERRUNAVAILABLEPAYMENT'                   => "Due to technical problems this payment method is unavailable. Please select a different payment method. (Error:",
+'PAYMENT_SELECTANOTHERPAYMENT'                    => "Please select a different payment method.",
 'PAYMENT_NOSHIPPINGFOUND'                         => "No shipping methods found. Please contact us by phone or email.",
+'PAYMENT_UNAVAILABLESHIPPING'                     => "The shipping method you selected isn't available any more. Please choose another shipping  method.",
 'PAYMENT_PAYMENT'                                 => "Payment Method",
 'PAYMENT_PLUSCODCHARGE1'                          => "plus",
 'PAYMENT_PLUSCODCHARGE2'                          => "COD Charge",
@@ -952,6 +967,7 @@ $aLang = array(
 'REGISTER_NOTE'                                   => "Note:",
 'REGISTER_DIFFERENTDELIVERYADDRESS'               => "Please complete following fields only, if the delivery address is different from the billing address.",
 'REGISTER_ADDRESSES'                              => "Addresses:",
+'REGISTER_ADDRESSES_SELECT'                       => "Select",
 'REGISTER_NEWADDRESSES'                           => "New Address",
 'REGISTER_TITLE2'                                 => "Title:",
 'REGISTER_MR2'                                    => "Mr",
@@ -1137,6 +1153,7 @@ $aLang = array(
 'USER_NOTE'                                       => "Note:",
 'USER_DIFFERENTDELIVERYADDRESS'                   => "Please complete following fields only, if the delivery address is different from the billing address.",
 'USER_ADDRESSES'                                  => "Addresses:",
+'USER_ADDRESSES_SELECT'                           => "Select",
 'USER_NEWADDRESS'                                 => "New Address",
 'USER_USEBILLINGADDR'                             => "Use billing Address",
 'USER_TITLE2'                                     => "Title:",
@@ -1153,6 +1170,7 @@ $aLang = array(
 'USER_CONTINUENEXTSTEP'                           => "Continue to Next Step",
 'USER_OPENID'                                     => "OpenID:",
 'USER_DISABLESHIPPINGADDRESS'                     => "Click here to hide different shipping address",
+'USER_SELECTSHIPPINGADDRESS'                      => "Select",
 'VAT_MESSAGE_ID_VALID'                            => "The VAT id is valid",
 'VAT_MESSAGE_ID_NOT_VALID'                        => "Error: The VAT id is not valid",
 'VAT_MESSAGE_INVALID_INPUT'                       => "The provided CountryCode is invalid or the VAT number is empty",

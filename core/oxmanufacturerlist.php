@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxmanufacturerlist.php 14368 2008-11-26 07:36:13Z vilma $
+ * $Id: oxmanufacturerlist.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 /**
@@ -230,6 +230,7 @@ class oxManufacturerList extends oxList
      */
     protected function _seoSetManufacturerData()
     {
+        // only when SEO id on and in front end
         if ( oxUtils::getInstance()->seoIsActive() && !$this->isAdmin()) {
 
             $oEncoder = oxSeoEncoderManufacturer::getInstance();

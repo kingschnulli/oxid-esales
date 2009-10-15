@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 22897 2009-10-02 11:24:07Z arvydas $
+ * $Id: details.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 /**
@@ -583,6 +583,8 @@ class Details extends oxUBase
     /**
      * Show login template
      *
+     * @deprecated use link to account page instead (e.g. "cl=account&amp;sourcecl=details"+required parameters)
+     *
      * @return null
      */
     public function showLogin()
@@ -778,11 +780,11 @@ class Details extends oxUBase
             $sListType = oxConfig::getParameter( 'listtype' );
             if ( 'vendor' == $sListType ) {
                 $this->_iLinkType = OXARTICLE_LINKTYPE_VENDOR;
-            } elseif ( 'manufacturer' == $sListType ) {
+        } elseif ( 'manufacturer' == $sListType ) {
                 $this->_iLinkType = OXARTICLE_LINKTYPE_MANUFACTURER;
             } elseif ( 'tag' == $sListType ) {
                 $this->_iLinkType = OXARTICLE_LINKTYPE_TAG;
-            } else {
+        } else {
                 $this->_iLinkType = OXARTICLE_LINKTYPE_CATEGORY;
 
                 // price category has own type..

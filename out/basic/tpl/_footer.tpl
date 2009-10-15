@@ -8,7 +8,7 @@
                 <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_INCLTAXANDPLUSSHIPPING" }]</a>
             </div>
             <div class="right">
-                &copy; <a href="http://www.oxid-esales.com">[{ oxmultilang ident="INC_FOOTER_SOFTWAREFROMOXIDESALES" }]</a>
+                &copy; <a href="[{ oxmultilang ident="OXID_ESALES_URL" }]" title="[{ oxmultilang ident="OXID_ESALES_URL_TITLE" }]">[{ oxmultilang ident="INC_FOOTER_SOFTWAREFROMOXIDESALES" }]</a>
             </div>
             <div class="clear"></div>
         </div>
@@ -40,7 +40,7 @@
 
         <div class="shopicons">
             <div class="left"><img src="[{$oViewConf->getImageUrl()}]cc.jpg" alt=""></div>
-            <div class="right"><a href="http://www.oxid-esales.com"><img src="[{$oViewConf->getImageUrl()}]oxid_powered.jpg" alt="[{ oxmultilang ident="INC_FOOTER_SOFTWAREANDSYSTEMBYOXID" }]" height="30" width="80"></a></div>
+            <div class="right"><a href="[{ oxmultilang ident="OXID_ESALES_URL" }]" title="[{ oxmultilang ident="OXID_ESALES_URL_TITLE" }]"><img src="[{$oViewConf->getImageUrl()}]oxid_powered.jpg" alt="[{ oxmultilang ident="INC_FOOTER_SOFTWAREANDSYSTEMBYOXID" }]" height="30" width="80"></a></div>
         </div>
 
         <div class="footertext">[{oxcontent ident="oxstdfooter"}]</div>

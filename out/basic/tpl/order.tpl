@@ -39,7 +39,7 @@
                     <input type="hidden" name="ord_agb" value="0">
                     <table>
                       <tr>
-                        <td><input id="test_OrderConfirmAGBTop" type="checkbox" class="chkbox" name="ord_agb" value="1"></td>
+                        <td><input id="test_OrderConfirmAGBTop" type="checkbox" class="chk" name="ord_agb" value="1"></td>
                         <td>
                             [{assign var="oCont" value=$oView->getContentByIdent("oxagb") }]
                             [{ oxmultilang ident="ORDER_IAGREETOTERMS1" }] <a id="test_OrderOpenAGBTop" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open('[{ $oCont->getLink()|oxaddparams:"plain=1"}]', 'agb_popup', 'resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400');return false;">[{ oxmultilang ident="ORDER_IAGREETOTERMS2" }]</a> [{ oxmultilang ident="ORDER_IAGREETOTERMS3" }],&nbsp;
@@ -167,7 +167,7 @@
       [{foreach from=$Errors.basket item=oEr key=key name=orderErrors}]
        [{if $oEr->getErrorClassType() == 'oxOutOfStockException'}]
        <!-- display only the excpetions for the current article-->
-           [{if $basketitem->sProduct == $oEr->getValue('articleNr') }]
+           [{if $basketitem->sProduct == $oEr->getValue('productId') }]
            <tr>
              <td class="brd"></td>
              <td id="test_orderErrors_[{ $basketproduct->oxarticles__oxid->value }]_[{$smarty.foreach.orderErrors.iteration}]" colspan="7"><span class="err">[{ $oEr->getOxMessage() }] [{ $oEr->getValue('remainingAmount') }]</span></td>
@@ -532,7 +532,7 @@
                         <input type="hidden" name="ord_agb" value="0">
                         <table>
                           <tr>
-                            <td><input id="test_OrderConfirmAGBBottom" type="checkbox" class="chkbox" name="ord_agb" value="1"></td>
+                            <td><input id="test_OrderConfirmAGBBottom" type="checkbox" class="chk" name="ord_agb" value="1"></td>
                             <td>
                                 [{assign var="oCont" value=$oView->getContentByIdent("oxagb") }]
                                 [{ oxmultilang ident="ORDER_IAGREETOTERMS1" }] <a id="test_OrderOpenAGBBottom" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open('[{ $oCont->getLink()|oxaddparams:"plain=1"}]', 'agb_popup', 'resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400');return false;" class="fontunderline">[{ oxmultilang ident="ORDER_IAGREETOTERMS2" }]</a> [{ oxmultilang ident="ORDER_IAGREETOTERMS3" }],&nbsp;

@@ -54,10 +54,9 @@ span.btn a{padding:3px 8px 2px; position:relative;}
 
 input.btn.hl {border-color:#f90;color:#f90;}
 input.chbox {vertical-align:middle; margin-top: 0px;}
-input.chk {margin: 1px 5px 1px 0px;}
-input.fullsize {width: 100%;}
+input.chk {margin: 1px 5px 1px 0px !important; padding: 0 !important;}
 textarea.fullsize {width: 100%;}
-input.openid {background: #fff url(bg/openid-icon-small.gif) no-repeat 0pt 50%; border:1px solid activeCaption; padding:1px 1px 1px 18px;}
+input.openid {background: #fff url(bg/openid-icon-small.gif) no-repeat 0 50%; border:1px solid activeCaption; padding:2px 1px 2px 18px;}
 
 /* Tables .....*/
 table {border-collapse: collapse;}
@@ -81,8 +80,8 @@ dl.box dd        {margin:0;padding:4px 4px 0;}
 ul.menue      {padding:0; margin:0; list-style:none;}
 ul.menue li   {margin:0; white-space:nowrap;position: relative;}
 ul.menue li a {line-height: 100%;}
-ul.menue.horizontall li {float:left;}
-ul.menue.verticall   li {float:none;height: 100%;}
+ul.menue.horizontal  li {float:left;}
+ul.menue.vertical    li {float:none;height: 100%;}
 
 .dropdown { visibility: hidden; display:block; position:absolute; left:0;top:100%;padding:0;margin:0;z-index:1000;}
 .open .dropdown { visibility: visible; }
@@ -166,10 +165,10 @@ div.bar.categories a.fixed { padding: 10px 0; text-align: center; background-col
 div.bar.categories a.fixed:hover { background-color: #efefef;color:#5e5e5e;text-decoration: none; }
 div.bar.categories li.open a, div.bar.categories li a.exp{ background-color: #efefef;color:#5e5e5e;text-decoration: none; }
 
-div.bar.categories ul.menue.horizontall li {float:left; border-right : 1px solid #ffffff;}
-div.bar.categories ul.menue.verticall   li {float:none; border-top   : 1px solid #ffffff;}
-div.bar.categories ul.menue.verticall   li a { text-align:left;padding: 7px 10px; background: #efefef;color:#5e5e5e;font-weight: normal;}
-div.bar.categories ul.menue.verticall   li a:hover { background-color:#fc6634;color:#ffffff;}
+div.bar.categories ul.menue.horizontal  li {float:left; border-right : 1px solid #ffffff;}
+div.bar.categories ul.menue.vertical    li {float:none; border-top   : 1px solid #ffffff;}
+div.bar.categories ul.menue.vertical    li a { text-align:left;padding: 7px 10px; background: #efefef;color:#5e5e5e;font-weight: normal;}
+div.bar.categories ul.menue.vertical    li a:hover { background-color:#fc6634;color:#ffffff;}
 
 /* + layout - footer*/
 #footer a{text-decoration: none;}
@@ -233,9 +232,11 @@ ul.tree li a.exp.act{background-position: 0 -225px;}
 #right strong.h2 a:hover {text-decoration: underline;}
 #right div.box {border-left:4px solid #efefef;padding:7px 10px;}
 #right div.box p{padding:7px 10px;}
-#right form label {color:#5e5e5e;}
-#right span.btn input {width: 119px;}
-#right input.fullsize {width: 116px; padding: 0;}
+#right .form label {color:#5e5e5e;display:block;margin:0 0 3px;}
+#right .form input.txt {width: 176px; margin:0 0 3px;}
+#right .form input.txt.openid{width: 159px;}
+#right .form span.btn input {width: 179px;}
+#right .form a.link {display:block;margin:0 0 3px;}
 
 #right div.forms strong.h2 {background-color: #efefef;color:#5e5e5e;border-left-color:#efefef;}
 #right div.forms strong.h2 a{color:#5e5e5e;}
@@ -279,7 +280,6 @@ ul.tree li a.exp.act{background-position: 0 -225px;}
 
 #right .recommlistsearch .btn {width: auto;}
 #right .recommlistsearch .search_input {width: 120px;}
-#right input.openid {width: 99px; background: #fff url(bg/openid-icon-small.gif) no-repeat 0pt 50%; border:1px solid activeCaption; padding:1px 1px 1px 18px;}
 
 /* RSS */
 #right .box  {position:relative;}
@@ -442,7 +442,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .product.thinest .price sup.dinfo a{font-size: 11px;}
 #body .product.thinest .amount {position:absolute; bottom:5px; right:170px;}
 #body .product.thinest .tocart {position:absolute; bottom:5px; right:5px;}
-#body .product.thinest .actions {margin-top:0em;}
+#body .product.thinest .actions {margin-top:0em; clear: left;}
 #body .product.thinest tt {float: left;}
 #body .product.thinest .flag {float: left;margin-left:4px;}
 #body .product.thinest .variants {height: auto;}
@@ -528,7 +528,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .box .pricealarm th {padding-top:.5em;}
 #body .box .pricealarm th label{font-weight: bold;font-size: 10px;color:#5e5e5e;}
 
-#body .wellcome {float:left;width:280px;height:157px;margin:0 5px 10px 5px;padding:0;}
+#body .welcome {float:left;width:280px;height:157px;margin:0 5px 10px 5px;padding:0;}
 
 #body .box .guestbook {margin-top: 9px;}
 #body .box .guestbook .head td {border-top: 1px solid #efefef; border-bottom: 1px solid #efefef; padding: 5px 0; color: #5e5e5e;}
@@ -645,7 +645,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 
 #body .basket .frombasket { height:18px;line-height:1;width: 100px; background: transparent url(bg/buttons_ce_.gif) no-repeat right -50px; margin:0; border: 0 none; padding:0 1px 0 0;float: left}
 #body .basket .frombasket input{ height:18px;line-height:1;width: 100px; background: transparent url(bg/buttons_ce_.gif) no-repeat 0 -50px; margin:0; border:0;color:#ffffff;padding:0 0 0 23px;cursor:pointer;font-weight: bold;}
-#body .basket .frombasket a { width: 77px; background: transparent; margin:0; border:0;color:#ffffff;padding:2px 0 0 23px;font-weight: bold; font-size: 10px; text-align: center; text-decoration: none; display: block;}
+#body .basket .frombasket a { width: 77px; height: 16px; background: transparent url(bg/buttons_ce_.gif) no-repeat 0 -50px; margin:0; border:0; color:#ffffff; padding:4px 0 0 23px; font-weight: bold; font-size: 10px; text-align: center; text-decoration: none; display: block;}
 
 
 /* user options step */
@@ -715,8 +715,8 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .account small{font-size: 10px;}
 
 /* Account remove from list button */
-#body .product .fromlist { right: 155px; top: 117px; height:18px; width: 100px; background: transparent url(bg/buttons_ce_.gif) 0 -50px no-repeat; margin:0; border: 0 none; padding:0; border-right: 1px solid #5e5e5e; position: absolute;}
-#body .product .fromlist input { width: 100%; background: transparent; margin:0; border:0;color:#ffffff;padding:2px 0 0 23px;cursor:pointer;font-weight: bold;}
+#body .product .fromlist { position: absolute;right: 155px; top: 117px; height:18px;line-height:1;width: 100px; background: transparent url(bg/buttons_ce_.gif) no-repeat right -50px; margin:0; border: 0 none; padding:0 1px 0 0;float: left}
+#body .product .fromlist input{ height:18px;line-height:1;width: 100px; background: transparent url(bg/buttons_ce_.gif) no-repeat 0 -50px; margin:0; border:0;color:#ffffff;padding:0 0 0 23px;cursor:pointer;font-weight: bold;}
 
 /* Account wishlist */
 #body .wishlist .product {padding: 5px 0 5px 130px; margin: 0; border: none;}
@@ -772,11 +772,11 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 
 div.popup{visibility: hidden;display:none;}
 div.popup strong{display: block; margin: 9px 0; font-size: 11px;}
-div.on.popup{visibility: visible;display:block;position:fixed;top:50%;left:50%;width:250px;height: 150px;background: #ffffff;z-index: 2000;margin-top:-75px;margin-left:-125px;border:1px solid #000000;padding:10px;}
+div.on.popup{visibility: visible;display:block;position:fixed;top:50%;left:50%;width:270px;height: 150px;background: #ffffff;z-index: 2000;margin-top:-75px;margin-left:-135px;border:1px solid #000000;padding:10px;}
 div.on.popup.load {background: #fff url(bg/ajax-loader.gif) center center no-repeat;}
 div.on.popup table {width:100%;}
-div.on.popup input {color:#5e5e5e;background:#efefef;border:1px solid #5e5e5e;font-weight: bold;padding:2px;width:120px;}
-div.on.popup input.disabled {color:#cbcbcb;background:#fff;border:1px solid #cbcbcb;font-weight: bold;padding:2px;width:120px;}
+div.on.popup input {color:#5e5e5e;background:#efefef;border:1px solid #5e5e5e;font-weight: bold;padding:2px;width:130px;}
+div.on.popup input.disabled {color:#cbcbcb;background:#fff;border:1px solid #cbcbcb;font-weight: bold;padding:2px;width:130px;}
 div.on.popup input.bl{position:absolute;bottom:10px;left:10px;}
 div.on.popup input.br{position:absolute;bottom:10px;right:10px;}
 
@@ -787,7 +787,7 @@ div.on.popup input.br{position:absolute;bottom:10px;right:10px;}
 #zoom ul.tabs li.close{float:right;}
 
 /* Message boxes */
-#body .msg{ float:left;width:548px;background: #ffffff;border: 1px solid #efefef;margin: 0 5px 10px 5px;padding: 5px 10px;}
+#body .msg{ float:left;width:548px;color: #000000;background: #ffffff;border: 1px solid #efefef;margin: 0 5px 10px 5px;padding: 5px 10px;}
 #body .msg .err{color: #5e5e5e;font-weight: bold;}
 
 /* Tags */

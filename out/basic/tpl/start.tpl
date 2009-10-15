@@ -4,7 +4,7 @@
     [{include file="inc/admin_banner.tpl"}]
 [{/if}]
 
-<div class="wellcome">
+<div class="welcome">
     [{ oxcontent ident="oxstartwelcome" }]
 </div>
 

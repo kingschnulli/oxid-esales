@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 22851 2009-10-01 12:07:14Z rimvydas.paskevicius $
+ * $Id: oxbasket.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 /**
@@ -571,7 +571,7 @@ class oxBasket extends oxSuperCfg
             } catch ( oxNoArticleException $oEx ) {
                 $this->removeItem( $key );
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
-            } catch ( oxArticleInputException $oEx ) {
+            } catch( oxArticleInputException $oEx ) {
                 $this->removeItem( $key );
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
             }
@@ -2051,7 +2051,10 @@ class oxBasket extends oxSuperCfg
      */
     public function getDelCostNet()
     {
-        return oxLang::getInstance()->formatCurrency( $this->getCosts( 'oxdelivery' )->getNettoPrice(), $this->getBasketCurrency() );
+        if ( $this->getBasketUser() || $this->getConfig()->getConfigParam( 'blCalculateDelCostIfNotLoggedIn' ) ) {
+            return oxLang::getInstance()->formatCurrency( $this->getCosts( 'oxdelivery' )->getNettoPrice(), $this->getBasketCurrency() );
+        }
+        return false;
     }
 
     /**

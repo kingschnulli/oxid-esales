@@ -78,6 +78,7 @@
               </optgroup>
 
             </select>
+            [{ oxinputhelp ident="HELP_GENERAL_SEO_ACTCAT" }]
             </td>
         </tr>
         [{/if}]
@@ -89,6 +90,7 @@
             </td>
             <td class="edittext">
             <input class="edittext" type="checkbox" name="aSeoData[oxfixed]" value='1' [{if $aSeoData.OXFIXED == 1}]checked[{/if}] [{ $readonly }]>
+            [{ oxinputhelp ident="HELP_GENERAL_SEO_FIXED" }]
             </td>
         </tr>
 
@@ -99,6 +101,7 @@
             </td>
             <td class="edittext">
             <input class="edittext" type="checkbox" name="blShowSuffix" value='1' [{if $blShowSuffix == 1}]checked[{/if}] [{ $readonly }]>
+            [{ oxinputhelp ident="HELP_GENERAL_SEO_SHOWSUFFIX" }]
             </td>
         </tr>
         [{/if}]
@@ -109,6 +112,7 @@
             </td>
             <td class="edittext">
             <input type="text" class="editinput" style="width: 100%;" name="aSeoData[oxseourl]" value="[{ $aSeoData.OXSEOURL }]" [{ $readonly }]>
+            [{ oxinputhelp ident="HELP_GENERAL_SEO_URL" }]
             </td>
         </tr>
 
@@ -118,6 +122,7 @@
             </td>
             <td class="edittext">
               <textarea type="text" class="editinput" style="width: 100%; height: 78px"  name="aSeoData[oxkeywords]" [{ $readonly }]>[{ $aSeoData.OXKEYWORDS }]</textarea>
+              [{ oxinputhelp ident="HELP_GENERAL_SEO_OXKEYWORDS" }]
             </td>
         </tr>
 
@@ -127,6 +132,7 @@
             </td>
             <td class="edittext">
               <textarea type="text" class="editinput" style="width: 100%; height: 78px"  name="aSeoData[oxdescription]" [{ $readonly }]>[{ $aSeoData.OXDESCRIPTION }]</textarea>
+              [{ oxinputhelp ident="HELP_GENERAL_SEO_OXDESCRIPTION" }]
             </td>
         </tr>
 

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 22907 2009-10-02 13:51:42Z vilma $
+ * $Id: oxarticle.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 // defining supported link types
@@ -3447,7 +3447,7 @@ class oxArticle extends oxI18n implements oxIArticle
      */
     protected function _assignParentFieldValue($sFieldName)
     {
-        if (!($oParentArticle = $this->_getParentAricle())) {
+        if (!($oParentArticle = $this->getParentArticle())) {
             return;
         }
 
@@ -3512,7 +3512,7 @@ class oxArticle extends oxI18n implements oxIArticle
      *
      * @return oxArticle
      */
-    protected function _getParentAricle()
+    public function getParentArticle()
     {
         $sParentId = $this->oxarticles__oxparentid->value;
         if (!$sParentId) {
@@ -3532,6 +3532,18 @@ class oxArticle extends oxI18n implements oxIArticle
     }
 
     /**
+     * Get parent article
+     *
+     * @deprecated since version 4.2
+     *
+     * @return oxArticle
+     */
+    protected function _getParentAricle()
+    {
+        return $this->getParentArticle();
+    }
+
+    /**
      * Assigns parent field values to article
      *
      * @return null;
@@ -3546,7 +3558,7 @@ class oxArticle extends oxI18n implements oxIArticle
                 }
 
                 //assing long description
-                $oParentArticle = $this->_getParentAricle();
+                $oParentArticle = $this->getParentArticle();
                 if ( !$this->oxarticles__oxlongdesc->value ) {
                     $this->oxarticles__oxlongdesc = $oParentArticle->oxarticles__oxlongdesc;
                 }

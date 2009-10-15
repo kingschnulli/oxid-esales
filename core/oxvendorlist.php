@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxvendorlist.php 22900 2009-10-02 12:43:11Z arvydas $
+ * $Id: oxvendorlist.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 /**
@@ -231,6 +231,7 @@ class oxVendorList extends oxList
      */
     protected function _seoSetVendorData()
     {
+        // only when SEO id on and in front end
         if ( oxUtils::getInstance()->seoIsActive() && !$this->isAdmin()) {
 
             $oEncoder = oxSeoEncoderVendor::getInstance();

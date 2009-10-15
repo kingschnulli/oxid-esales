@@ -4,43 +4,20 @@
     <title>[{ oxmultilang ident="GUI_TITLE" }]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]">
 
-    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]/yui/build/reset-fonts/reset-fonts.css">
-    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]/yui/build/base/base-min.css">
-    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]/yui/build/assets/skins/sam/skin.css">
+    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]yui/build/reset-fonts/reset-fonts.css">
+    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]yui/build/base/base-min.css">
+    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]yui/build/assets/skins/sam/skin.css">
 
-    <script type="text/javascript" src="[{$shop->basetpldir}]/yui/build/utilities/utilities.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]/yui/build/slider/slider-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]/yui/build/colorpicker/colorpicker-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]/yui/build/container/container-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]/yui/build/tabview/tabview-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]/yui/build/treeview/treeview-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]/yui/build/button/button-min.js"></script>
+    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/utilities/utilities.js"></script>
+    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/button/button-min.js"></script>
+    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/slider/slider-min.js"></script>
+    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/colorpicker/colorpicker-min.js"></script>
+    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/container/container-min.js"></script>
+    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/tabview/tabview-min.js"></script>
+    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/treeview/treeview-min.js"></script>
 
-    <script type="text/javascript" src="[{$shop->basetpldir}]/yui/oxid-gui.js" ></script>
-
-    <style type="text/css">
-        html,body {height:100%;margin:0; padding:0;font:12px Trebuchet MS, Tahoma, Verdana, Arial, Helvetica, sans-serif;}
-
-        #gui-dialog {visibility:hidden;}
-        #gui-dialog .gui-dialog-bd{height:440px !important;}
-        #gui-tabs .yui-content{overflow:auto;height:200px;}
-        #gui-picker {height:200px;position:relative;width:350px;}
-
-        #gui-colors {paddin:0;margin:0;}
-        #gui-colors li{float:left;width:25%;*width:24.3%;list-style:none;text-align:center;}
-        #gui-colors li b{padding:10px 0;border:1px inset #000;display:block;margin:1px;}
-        #gui-colors li b input{width:60%;font-weight:normal;}
-        #gui-tree a{background:transparent;color:black;}
-        #gui-tree table{width:100%}
-        #gui-tree .gui-tree-color{padding:1px 0;}
-        #gui-tree .gui-tree-color b{display:block;float:left;width:20px;height:20px;border:1px inset gray;cursor:pointer;}
-        #gui-tree .gui-tree-color input{float:right;width:50px;}
-        #gui-tree .gui-tree-color label{padding-left:5px;cursor:pointer;}
-
-        #gui-tree .ygtvlabel{background:transparent;}
-        #gui-tree .ygtvhtml span{cursor:pointer;display:block;line-height: 2em;}
-        #gui-tree .ygtvhtml span b{display:block;width:1.5em;height: 1.5em;float:left;margin:2px 5px 2px 2px;border:1px inset gray;}
-     </style>
+    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]gui.css">
+    <script type="text/javascript" src="[{$shop->basetpldir}]yui/oxid-gui.js" ></script>
 
      <!--[if lt IE 7]>
      <style type="text/css">

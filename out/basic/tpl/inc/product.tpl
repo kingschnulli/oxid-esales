@@ -15,6 +15,7 @@
 
     <strong class="h3">
         <a id="test_title_[{$testid}]" href="[{ $product->getLink()}]"[{if $oView->noIndex() }] rel="nofollow"[{/if}]>[{$product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]</a>
+        <br>
         <tt id="test_no_[{$testid}]">[{ oxmultilang ident="INC_PRODUCTITEM_ARTNOMBER2" }] [{ $product->oxarticles__oxartnum->value }]</tt>
         [{if $size=='thin' || $size=='thinest'}]
         <span class="flag [{if $product->getStockStatus() == -1}]red[{elseif $product->getStockStatus() == 1}]orange[{elseif $product->getStockStatus() == 0}]green[{/if}]">&nbsp;</span>
@@ -89,7 +90,7 @@
 
     [{*if $size!='small'*}]
 
-    [{ if $product->getVariantList() }]
+    [{ if $product->getVariantList() && ($size!='thinest') }]
       <label>[{ $product->oxarticles__oxvarname->value }] :</label>
       <select id="test_varSelect_[{$testid}]" name="aid">
         [{ if !$product->isParentNotBuyable()}]

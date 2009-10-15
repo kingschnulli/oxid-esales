@@ -1,3 +1,5 @@
+// http://developer.yahoo.com/yui/articles/hosting/?base&button&colorpicker&container&reset-fonts-grids&slider&tabview&treeview&utilities&MIN&nocombine&norollup&basepath&[{$shop->basetpldir}]yui/build/ */
+
 YAHOO.namespace( 'YAHOO.oxid' );
 
 var $  = YAHOO.util.Dom.get,
@@ -33,8 +35,8 @@ if(YAHOO.widget.Dialog && YAHOO.widget.ColorPicker){
         this.init = function() {
 
             me.dialog = new YAHOO.widget.Dialog(elBox, {
-                width : "350px",
-                height : "518px",
+                width  : "410px",
+                height : "522px",
                 fixedcenter : false,
                 visible : false,
                 constraintoviewport : true ,
@@ -65,16 +67,13 @@ if(YAHOO.widget.Dialog && YAHOO.widget.ColorPicker){
             if (!me.tree) {
                 me.tree = new YAHOO.widget.TreeView( elTree );
                 me.tree.render();
-                me.tree.subscribe("expand", function(node) {
-
-                // all colors has no child nodes
-                if (!node.hasChildren()) {
-                    var iid = node.getEl().getElementsByTagName('b')[0].title;
-
-                    me.editColor( iid );
-                    return false;
-                }
-
+                me.tree.subscribe("clickEvent", function(e) {
+                    // all colors has no child nodes
+                    if (!e.node.hasChildren()) {
+                        var iid = e.node.getEl().getElementsByTagName('b')[0].title;
+                        me.editColor( iid );
+                        //return false;
+                    }
                 });
             }
 

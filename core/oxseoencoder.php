@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 23057 2009-10-09 12:59:36Z sarunas $
+ * $Id: oxseoencoder.php 23224 2009-10-13 14:24:30Z arvydas $
  */
 
 /**
@@ -634,7 +634,7 @@ class oxSeoEncoder extends oxSuperCfg
         $sIdent  = $this->_getSeoIdent( $sSeoUrl );
 
         // transferring old url, thus current url will be regenerated
-        $sQ  = "select oxfixed, oxexpired, ( oxstdurl like ".$oDb->quote( $sStdUrl )." and oxexpired != 2 ) as samestdurl,
+        $sQ  = "select oxfixed, oxexpired, ( oxstdurl like ".$oDb->quote( $sStdUrl )." ) as samestdurl,
                 oxseourl like ".$oDb->quote( $sSeoUrl )." as sameseourl from oxseo where oxtype = ".$oDb->quote( $sType )." and
                 oxobjectid = ".$oDb->quote( $sObjectId )." and oxshopid = ".$oDb->quote( $iShopId )."  and oxlang = {$iLang} ";
 

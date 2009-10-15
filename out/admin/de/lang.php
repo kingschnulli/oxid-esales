@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22908 2009-10-02 13:58:09Z vilma $
+ * $Id: lang.php 23203 2009-10-13 11:11:19Z rimvydas.paskevicius $
  */
 
 $sLangName  = 'Deutsch';
@@ -154,7 +154,6 @@ $aLang = array(
 'GENERAL_ARTICLE_OXRRBUY'                       => 'Ausschließlich kaufbar',
 'GENERAL_ARTICLE_OXORDERINFO'                   => 'Bestell. Info',
 'GENERAL_ARTICLE_OXSEOID'                       => 'SEOID',
-'GENERAL_ARTICLE_OXVPE'                         => 'Verpackungseinheit',
 'GENERAL_ARTICLE_OXBUNDLEID'                    => 'Bundle Identnr.',
 'GENERAL_ARTICLE_OXVARSTOCK'                    => 'Varianten Lagerbestand',
 'GENERAL_ASSIGNUSERS'                           => 'Benutzer zuordnen',
@@ -526,6 +525,8 @@ $aLang = array(
 'CONTENT_MAIN_TITLE'                            => '[OXID Inhalte Verwaltung]',
 'CONTENT_MAIN_ERROR'                            => 'FEHLER!',
 'CONTENT_MAIN_USEDIDENTCODE'                    => 'Identcode schon benutzt!',
+'CONTENT_MAIN_CATEGORY'                         => 'Kategorie',
+'CONTENT_MAIN_MANUAL'                           => 'Manuell',
 'COUNTRY_LIST_ISO'                              => 'ISO 3',
 'COUNTRY_LIST_MENUITEM'                         => 'Stammdaten',
 'COUNTRY_LIST_MENUSUBITEM'                      => 'Länder',
@@ -855,7 +856,8 @@ $aLang = array(
 'LANGUAGE_BASEURL'                              => 'Basis URL',
 'LANGUAGE_BASESSLURL'                           => 'Basis SSL URL',
 'LANGUAGE_NOTRANSLATIONS_WARNING'               => 'Warnung: Es wurden keine Sprachdateien für die ausgewählte Sprache gefunden!',
-'LANGUAGE_NODBMULTILANGFIELDS_WARNING'          => 'Warnung: Es wurden keine Datenbankfelder für die ausgewählte Sprache gefunden!',
+'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS'        => 'Warnung: Beim anlegen der neuen Datenbankfelder ist ein Fehler aufgetreten',
+'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'      => '[tr]Warning: Error occured while reseting multilanguage fields after language delete!',
 'LANGUAGE_DELETINGMAINLANG_WARNING'             => 'Warnung: Sie können nicht die Hauptsprache löschen (Sprach-ID 0)',
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Fehler: Eine Sprache mit diesem Sprachkürzel existiert bereits',
 'SETUP_DIRNOTDELETED_WARNING'                   => 'Bitte löschen Sie das Setup-Verzeichnis',
@@ -1132,6 +1134,8 @@ $aLang = array(
 'REPORT_USER_PER_GROUP'                         => 'Kunden nach Benutzergruppen',
 'REPORT_VISITOR_ABSOLUTE'                       => 'Kunden/Besucher',
 'SELECTLIST_LIST_MENUSUBITEM'                   => 'Auswahllisten',
+'SELECTLIST_MAIN_FIELDS'                        => 'Felder',
+'SELECTLIST_MAIN_TITLEIDENT'                    => 'Arbeitstitel',
 'SELECTLIST_MAIN_ADDFIELD_NAME'                 => 'Name',
 'SELECTLIST_MAIN_ADDFIELD_PREIS'                => 'Preis Auf/Abschlag',
 'SELECTLIST_MAIN_ADDFIELD_POS'                  => 'Sortierung',
@@ -1355,7 +1359,7 @@ $aLang = array(
 'SYSREQ_INI_SET'                                => 'ini_set erlaubt',
 'SYSREQ_REGISTER_GLOBALS'                       => 'register_globals muss ausgeschaltet sein',
 'SYSREQ_ZEND_OPTIMIZER'                         => 'Zend Optimizer installiert',
-'SYSREQ_ZEND_PLATFORM'                          => 'Zend Platform installiert',
+'SYSREQ_ZEND_PLATFORM_OR_SERVER'                => '[tr] Zend Platform oder Zend Server installiert',
 'SYSREQ_MB_STRING'                              => 'mbstring',
 'SYSREQ_UNICODE_SUPPORT'                        => 'UTF-8 Unterstützung',
 'SYSREQ_MEMORY_LIMIT'                           => 'PHP Memory limit (min. 14MB, 30MB empfohlen)',
@@ -1375,8 +1379,8 @@ $aLang = array(
 'TOOLS_LIST_MENUITEM'                           => 'Service',
 'TOOLS_LIST_MENUSUBITEM'                        => 'Tools',
 'TOOLS_MAIN_TITLE'                              => '[OXID Tools]',
-'TOOLS_MAIN_UPDATESQL'                          => 'Update SQL',
-'TOOLS_MAIN_SQLDUMB'                            => 'SQL Datei importieren<br>(große Dateien sollten per FTP hochgeladen werden)',
+'TOOLS_MAIN_UPDATESQL'                          => 'SQL ausführen',
+'TOOLS_MAIN_SQLDUMB'                            => 'SQL Datei importieren',
 'TOOLS_MAIN_START'                              => 'Update starten',
 'TOOLS_MAIN_CHECKPICS'                          => 'Unbenutzte Bilder suchen und löschen',
 'TOOLTIPS_ADDSUMTYPE'                           => 'Absoluter oder<br>prozentualer<br>Auf/Abschlag',
@@ -1498,6 +1502,7 @@ $aLang = array(
 'VOUCHERSERIE_MAIN_VOUCHERNUM'                  => 'Gutscheinnummer',
 'VOUCHERSERIE_MAIN_AVAILABLE'                   => 'Verfügbar',
 'VOUCHERSERIE_MAIN_USED'                        => 'Benutzt',
+'VOUCHERSERIE_MAIN_DISCOUNT'                    => 'Rabatt',
 'WRAPPING_LIST_PICTURE'                         => 'Bild',
 'WRAPPING_LIST_PRESENTPACKUNG'                  => 'Geschenkverpackung',
 'WRAPPING_LIST_MENUITEM'                        => 'Shopeinstellungen',
@@ -1516,8 +1521,8 @@ $aLang = array(
 'SHOP_PERF_CALCVATONLYFORBASKETORDER'           => 'Länderspezifische Mehrwertsteuer nur im Warenkorb und im Bestellprozess berechnen',
 'SHOP_PERF_CHECKIFTPLCOMPILE'                   => 'Überprüfen ob Templates neu kompiliert werden müssen. Schalten Sie diese Einstellung aus, wenn der eShop in den Live-Betrieb geht.',
 'SHOP_PERF_COMPARE'                             => 'Artikelvergleiche einschalten',
-'SHOP_PERF_DONTSHOWEMTYCATEGORIES'              => 'Leere Kategorien (keine Unterkategorien, keine Artikel) <strong>nicht</strong> anzeigen.',
-'SHOP_PERF_CLEARCACHEONLOGOUT'                  => 'Datenbank-Cache erst beim Ausloggen aus dem Shop Admin leeren.',
+'SHOP_PERF_DONTSHOWEMTYCATEGORIES'              => 'Leere Kategorien (keine Unterkategorien, keine Artikel) <strong>nicht</strong> anzeigen',
+'SHOP_PERF_CLEARCACHEONLOGOUT'                  => 'Cache nur beim Ausloggen aus dem Administrationsbereich leeren',
 'SHOP_PERF_EXTERNALPERFORMANCE'                 => 'Erweiterte Performance-Einstellungen',
 'SHOP_PERF_LOADTREEFORSEARCH'                   => 'Kategoriebaum für die Suche laden (Die Suche kann auf einzelne Kategorien beschränkt werden)',
 'SHOP_PERF_LOADFULLTREE'                        => 'Den kompletten Kategoriebaum für die Navigation laden (belastet die Performance, wenn viele Kategorien vorhanden sind)',

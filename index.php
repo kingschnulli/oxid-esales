@@ -19,7 +19,7 @@
  * @package main
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: index.php 22896 2009-10-02 11:04:57Z sarunas $
+ * $Id: index.php 23188 2009-10-13 06:59:38Z sarunas $
  */
 
 // Setting error reporting mode

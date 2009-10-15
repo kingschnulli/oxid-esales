@@ -172,7 +172,9 @@
                 [{foreach from=$afolder key=field item=color}]
                 <option value="[{ $field }]" [{ if $edit->oxorder__oxfolder->value == $field || ($field|oxmultilangassign == $edit->oxorder__oxfolder->value)}]SELECTED[{/if}] style="color: [{ $color }];">[{ oxmultilang ident=$field noerror=true }]</option>
                 [{/foreach}]
-                </select>&nbsp;&nbsp;
+                </select>
+                [{ oxinputhelp ident="HELP_ORDER_OVERVIEW_INFOLDER" }]
+                &nbsp;&nbsp;
                 </form>
             [{/if}]
             [{ if $edit && $edit->oxorder__oxtransstatus->value }]

@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 22591 2009-09-24 07:09:30Z vilma $
+ * $Id: lang.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 $aLang = array(
@@ -82,7 +82,7 @@ $aLang = array(
 'MOD_INI_SET'                                     => 'ini_set allowed',
 'MOD_REGISTER_GLOBALS'                            => 'register_globals must be off',
 'MOD_ZEND_OPTIMIZER'                              => 'Zend Optimizer installed',
-'MOD_ZEND_PLATFORM'                               => 'Zend Platform installed',
+'MOD_ZEND_PLATFORM_OR_SERVER'                     => '[tr] Zend Platform or Zend Server installed',
 'MOD_MB_STRING'                                   => 'mbstring',
 'MOD_UNICODE_SUPPORT'                             => 'UTF-8 support',
 

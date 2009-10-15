@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdiscount.php 12855 2008-10-06 06:49:07Z vilma $
+ * $Id: oxefidownloader.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 

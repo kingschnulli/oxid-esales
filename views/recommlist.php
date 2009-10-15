@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: recommlist.php 21990 2009-08-31 12:40:28Z arvydas $
+ * $Id: recommlist.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 /**
@@ -274,6 +274,8 @@ class RecommList extends oxUBase
 
     /**
      * Show login template
+     *
+     * @deprecated use link to account page instead (e.g. "cl=account&amp;sourcecl=recommlist"+required parameters)
      *
      * @return null;
      */

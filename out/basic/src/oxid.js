@@ -129,9 +129,13 @@ var oxid = {
         },
 
         addShim : function(){
-             var _mk = document.getElementById('mask');
-             if(_mk) {_mk.appendChild(document.createElement('iframe'));}
-        },
+            var _fr, _mk = document.getElementById('mask');
+            if(_mk) {
+                _fr = document.createElement('iframe');
+                _fr.setAttribute('src','javascript:false;'); //MS Q261188
+                _mk.appendChild(_fr);
+            }
+       },
 
         open : function(url,w,h,r){
             if (url !== null && url.length > 0) {
@@ -227,7 +231,7 @@ var oxid = {
             if(_form) { _form.submit(); }
         },
 
-        // submits form + changes cl and fnc values
+        // submits form + changes cl, fnc, formReload values
         reload: function(stop,form,cl,fnc) {
             if(stop) { return; }
             var _form = document.forms[form];
@@ -255,6 +259,13 @@ var oxid = {
         select: function(id,value) {
             var _el = document.getElementsByName(id);
             if(_el) { _el[value].checked='true'; }
+        },
+
+        set: function(id, value, blset) {
+            var _el = document.getElementsByName(id);
+            if (_el) {
+                _el.value = value;
+            }
         }
 
     },

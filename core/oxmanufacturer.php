@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxmanufacturer.php 15252 2009-01-14 13:57:13Z arvydas $
+ * $Id: oxmanufacturer.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 /**

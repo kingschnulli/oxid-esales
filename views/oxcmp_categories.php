@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_categories.php 22897 2009-10-02 11:24:07Z arvydas $
+ * $Id: oxcmp_categories.php 23173 2009-10-12 13:29:45Z sarunas $
  */
 
 /**

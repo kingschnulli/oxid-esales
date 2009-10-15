@@ -1,10 +1,12 @@
-// creating own namespace
+// http://developer.yahoo.com/yui/articles/hosting/?button&connection&container&datatable&dragdrop&json&menu&utilities&MIN&nocombine&norollup&basepath&[{$shop-%3Ebasetpldir}]yui/build/
+
 YAHOO.namespace( 'YAHOO.oxid' );
 
-// shortcuts
 var $  = YAHOO.util.Dom.get,
     $D = YAHOO.util.Dom,
     $E = YAHOO.util.Event;
+
+//--------------------------------------------------------------------------------
 
 YAHOO.oxid.aoc = function( elContainer , aColumnDefs , sDataSource , oConfigs )
 {
@@ -840,9 +842,10 @@ YAHOO.oxid.aoc = function( elContainer , aColumnDefs , sDataSource , oConfigs )
     this.initAssignBtn = function()
     {
         // only if this action is allowed
-        var oBtn = $( this.elContainer + '_btn' );
-        if ( oBtn != null ) {
-            $E.on( oBtn, 'click', this.assignAll, this );
+        var oBtn,sBtn = $( this.elContainer + '_btn' );
+        if ( sBtn != null ) {
+            oBtn = new YAHOO.widget.Button(sBtn);
+            oBtn.on("click", this.assignAll, this );
         }
     };
 
