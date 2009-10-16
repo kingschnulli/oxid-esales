@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxconfig.php 23250 2009-10-14 13:40:12Z alfonsas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1063,6 +1063,14 @@ class oxConfig extends oxSuperCfg
      */
     public function getDir($sFile, $sDir, $blAdmin, $iLang = null, $iShop = null, $sTheme = null, $blAbsolute = true )
     {
+        if ( is_null($sTheme) ) {
+            $sTheme = $this->getConfigParam( 'sTheme' );
+        }
+
+        if ( $blAdmin ) {
+            $sTheme = 'admin';
+        }
+
         $sBase    = $this->getOutDir( $blAbsolute );
         $sAbsBase = $this->getOutDir();
 
@@ -1078,14 +1086,6 @@ class oxConfig extends oxSuperCfg
             $iShop = $this->getShopId();
         }
 
-        if ( is_null($sTheme) ) {
-            $sTheme = $this->getConfigParam( 'sTheme' );
-        }
-
-        if ( $blAdmin ) {
-            $sTheme = 'admin';
-        }
-
         //Load from
         $sPath = "$sTheme/$iShop/$sLang/$sDir/$sFile";
         $sCacheKey = $sPath . "_$blAbsolute";
@@ -1095,6 +1095,12 @@ class oxConfig extends oxSuperCfg
         }
 
         $sReturn = false;
+
+        // Check for custom template
+        $sCustomTheme = $this->getConfigParam( 'sCustomTheme' );
+        if( !$blAdmin && $sCustomTheme && $sCustomTheme != $sTheme) {
+            $sReturn = $this->getDir($sFile, $sDir, $blAdmin, $iLang, $iShopl, $sCustomTheme, $blAbsolute, $blReturnArray);
+        }
 
         //test lang level ..
         if ( !$sReturn && !$blAdmin && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath ) ) ) ) {

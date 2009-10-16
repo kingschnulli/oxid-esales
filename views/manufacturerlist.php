@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: manufacturerlist.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: manufacturerlist.php 23252 2009-10-14 14:28:44Z arvydas $
  */
 
 /**
@@ -411,5 +411,18 @@ class ManufacturerList extends aList
     protected function _prepareMetaDescription( $aCatPath, $iLength = 1024, $blDescTag = false )
     {
         return parent::_collectMetaDescription( $aCatPath, $iLength, $blDescTag );
+    }
+
+    /**
+     * returns object, assosiated with current view.
+     * (the object that is shown in frontend)
+     *
+     * @param int $iLang language id
+     *
+     * @return object
+     */
+    protected function _getSubject( $iLang )
+    {
+        return $this->getActManufacturer();
     }
 }

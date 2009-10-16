@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: help_lang.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: help_lang.php 23254 2009-10-14 14:46:01Z philipp.grashoff $
  */
 
 /**
@@ -156,7 +156,7 @@ $aLang =  array(
                                                     '<ul><li><span class="navipath_or_inputname">Show shop selector</span>: A page where the different eShops can be selected is shown.</li>' .
                                                     '<li><span class="navipath_or_inputname">Show main shop front page</span>: The normal front page of this Shop is shown.</li></ul>',
 
-'HELP_SHOP_MALL_PRICEADDITION'                  =>  'You can define a surcharge on all product prices in this shop: Enter the surcharge and select if its a percentual (<span class="userinput_or_code">%</span>) or absolute (<span class="userinput_or_code">abs</span>).',
+'HELP_SHOP_MALL_PRICEADDITION'                  =>  'You can define a surcharge on all product prices in this shop: Enter the surcharge and select if its a percental (<span class="userinput_or_code">%</span>) or absolute (<span class="userinput_or_code">abs</span>).',
 
 
 
@@ -192,7 +192,7 @@ $aLang =  array(
 'HELP_SHOP_PERF_LOADSELECTLISTSINALIST'			=>	'Normally selection lists are only shown in the detail view of a product. If you activate this setting, the selection lists are also shown in product lists (e. g. search results, categories).',
 
 'HELP_SHOP_PERF_CHECKIFTPLCOMPILE'              =>  'If this setting is activated the eShop checks on each call if any templates were changed. If so, the output is  recalculated. Activate this setting when adapting templates, deactivate it if the eShop is live for better performance. <br />' .
-                                                    'Further infotmation can be found in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/advices-adepting-templates">caching article in the manual</a>.',
+                                                    'Further information can be found in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/advices-adepting-templates">caching article in the manual</a>.',
 
 'HELP_SHOP_PERF_CLEARCACHEONLOGOUT'             =>  'Usually the complete cache is emptied as soon as you save any changes in the eShop admin. This can lead to performance problems in admin. If this setting is activated, the cache is only emptied when you log out from eShop admin.',
 
@@ -233,15 +233,15 @@ $aLang =  array(
 
 'HELP_SHOP_MAIN_OWNEREMAIL'						=>	'When users order, you receive an e-mail with a summary of the order. These e-mails are sent to <span class="navipath_or_inputname">Order E-mails to</span>.',
 
-'HELP_SHOP_MAIN_SMTPSERVER'						=>	'[tr]Die SMTP-Daten müssen eingegeben werden, damit der eShop E-Mails versenden kann. Weitere Informationen zur Einrichtung finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/smtp-daten-eingeben">eShop Handbuch</a>.',
+'HELP_SHOP_MAIN_SMTPSERVER'						=>	'SMTP data is needed for sending e-mails (e.g. sending customers an order confirmation e-mail) Further information can be found in the <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/entering-smtp-data">accordant manual entry</a>.',
 
 
 
 'HELP_ARTICLE_MAIN_ALDPRICE'					=>	'With <span class="navipath_or_inputname">Alt. Prices</span> you can set up special prices for certain users. More information is available in the <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/set-alternative-prices-special-users">eShop Manual</a> on the OXID eSales website.',
 
-'HELP_ARTICLE_MAIN_VAT'							=>	'Here you can enter a special VAT for this product. This VAT is used for this product in all later calculations (basket, otder, invoice)',
+'HELP_ARTICLE_MAIN_VAT'							=>	'Here you can enter a special VAT for this product. This VAT is used for this product in all later calculations (basket, order, invoice)',
 
-'HELP_ARTICLE_MAIN_TAGS'                        =>  '[tr]Hier können Sie passende Stichworte zum Artikel eingeben. Aus diesen Stichworten wird die Tagcloud (Stichwortwolke) auf der Startseite generiert. Die einzelnen Stichworte werden mit Leerzeichen getrennt.',
+'HELP_ARTICLE_MAIN_TAGS'                        =>  'Here you can enter tags for the product. From these tags the tag cloud on the front page is generated. The tags are separated by a space.',
 
 
 
@@ -255,25 +255,25 @@ $aLang =  array(
 
 'HELP_ARTICLE_EXTEND_SKIPDISCOUNTS'				=>	'If <span class="navipath_or_inputname">Skip all negative discounts</span> is active, negative allowances will not be calculated for this product. These include discounts and vouchers.',
 
-'HELP_ARTICLE_EXTEND_TEMPLATE'					=>	'[tr]Sie können die Detailansicht des Artikels mit einem anderen Template anzeigen lassen. Tragen Sie dazu den Dateinamen des Templates ein, das verwendet werden soll. Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/bestimmte-artikel-oder-kategorien-mit-anderen-templates-anzeigen">eShop Handbuch</a>.',
+'HELP_ARTICLE_EXTEND_TEMPLATE'					=>	'The detail view of a product can be displayed with a different template. For doing so, enter the filename of the template to be used. Further information is available in the <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/display-certain-products-or-categories-another-template">accordant manual entry</a>.',
 
 
 
-'HELP_ARTICLE_PICTURES_ICON'                    =>  '[tr]Icons sind die kleinsten Bilder eines Artikels, sie werden z. B. im Warenkorb verwendet. <br />'.
-                                                    'Ein Icon können Sie bei <span class="navipath_or_inputname">Icon hochladen</span> hochladen. Bei <span class="navipath_or_inputname">Icon</span> wird nach dem Hochladen der Dateiname des Icons angezeigt,  wenn noch kein Icon hochgeladen wurde, wird <span class="userinput_or_code">nopic.jpg</span> angezeigt. <br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen">Artikelbilder-Kapitel des Handbuchs</a>.',
+'HELP_ARTICLE_PICTURES_ICON'                    =>  'Icons are the smallest pictures of a product. For example, they are used in the shopping cart.<br />'.
+                                                    'You can upload an icon in <span class="navipath_or_inputname">Icon upload</span>. After uploading, the filename is shown in <span class="navipath_or_inputname">Icon</span>. If no icon is uploaded yet, <span class="userinput_or_code">nopic.jpg</span> is displayed. <br />' .
+                                                    'Further information is available in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/product-images-basics">product pictures manual entry</a>.',
 
-'HELP_ARTICLE_PICTURES_THUMB'                   =>  '[tr]Thumbnails sind kleine Bilder eines Artikels, sie werden z. B. in der in Artikellisten verwendet. <br />' .
-                                                    'Ein Thumbnail können Sie bei <span class="navipath_or_inputname">Thumbn. hochladen</span> hochladen. Bei <span class="navipath_or_inputname">Thumbnail</span> wird nach dem Hochladen der Dateiname des Thumbnails angezeigt, wenn noch kein Thumbnail hochgeladen wurde, wird <span class="userinput_or_code">nopic.jpg</span> angezeigt.<br />' . 
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen">Artikelbilder-Kapitel des Handbuchs</a>.',
+'HELP_ARTICLE_PICTURES_THUMB'                   =>  'Thumbnails are small product pictures. For example, they are used in product lists (categories, search results).<br />' .
+                                                    'You can upload a thumbnail in <span class="navipath_or_inputname">Thumb. upload</span>. After uploading, the filename is shown in <span class="navipath_or_inputname">Thumbnail</span>. If no thumbnail is uploaded yet, <span class="userinput_or_code">nopic.jpg</span> is displayed.<br />' . 
+                                                    'Further information is available in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/product-images-basics">product pictures manual entry</a>.',
 
-'HELP_ARTICLE_PICTURES_PIC1'                    =>  '[tr]Bilder sind normal große Artikelbilder, sie werden in der Detailansicht eines Artikels verwendet. </br>' .
-                                                    'Bilder können Sie bei <span class="navipath_or_inputname">Bild X hochladen</span> hochladen. Bei <span class="navipath_or_inputname">Bild X</span> wird nach dem Hochladen der Dateiname des Bildes angezeigt, wenn noch kein Bild hochgeladen wurde, wird <span class="userinput_or_code">nopic.jpg</span> angezeigt.<br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen">Artikelbilder-Kapitel des Handbuchs</a>.',
+'HELP_ARTICLE_PICTURES_PIC1'                    =>  'Pictures are used in the detail view of a product. You can upload up to 7 pictures per product. </br>' .
+                                                    'You can upload pictures in <span class="navipath_or_inputname">Picture x upload</span>. After uploading, the filename is shown in <span class="navipath_or_inputname">Pic X</span>. If no picture is uploaded yet, <span class="userinput_or_code">nopic.jpg</span> is displayed.<br />' .
+                                                    'Further information is available in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/product-images-basics">product pictures manual entry</a>.',
 
-'HELP_ARTICLE_PICTURES_ZOOM1'                   =>  '[tr]Zoom-Bilder sind extra große Artikelbilder, Die in der Detailansicht eines Artikels verlinkt werden. </br>' .
-                                                    'Zoom-Bilder können Sie bei <span class="navipath_or_inputname">Zoom X hochladen</span> hochladen. Bei <span class="navipath_or_inputname">Zoom X</span> wird nach dem Hochladen der Dateiname des Zoom-Bildes angezeigt, wenn noch kein Zoom-Bild hochgeladen wurde, wird <span class="userinput_or_code">nopic.jpg</span> angezeigt.<br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen">Artikelbilder-Kapitel des Handbuchs</a>.',
+'HELP_ARTICLE_PICTURES_ZOOM1'                   =>  'Zoom pictures are extra large pictures which can be opened from the detail view of a product. </br>' .
+                                                    'You can upload zoom pictures in <span class="navipath_or_inputname">Zoom X upload</span>. After uploading, the filename is shown in <span class="navipath_or_inputname">Zoom X</span>. If no zoom picture is uploaded yet, <span class="userinput_or_code">nopic.jpg</span> is displayed.<br />' .
+                                                    'Further information is available in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/product-images-basics">product pictures manual entry</a>.',
 
 
 
@@ -301,7 +301,7 @@ $aLang =  array(
 'HELP_ARTICLE_STOCK_AMOUNTPRICE_AMOUNTFROM'     =>  'In <span class="navipath_or_inputname">Quantity From/To/bis</span> you set for which quantity range the scale price is valid.<br />' .
                                                     'Further information about scale prices can be found in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/setting-graduated-prices">scale price article in the manual.</a>.',
 
-'HELP_ARTICLE_STOCK_AMOUNTPRICE_PRICE'          =>  'Here you can set the price for the quantity entered above. You can enter the price absolutely or as percentual discount.<br /> ' .
+'HELP_ARTICLE_STOCK_AMOUNTPRICE_PRICE'          =>  'Here you can set the price for the quantity entered above. You can enter the price absolutely or as percental discount.<br /> ' .
                                                     'Further information about scale prices can be found in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/setting-graduated-prices">scale price article in the manual.</a>.',
 
 
@@ -456,6 +456,7 @@ $aLang =  array(
 'HELP_MANUFACTURER_SEO_DESCRIPTION'				=>	'This description is integrated in the HTML sourcecode of the manufacturer page (META description). This text is often displayed in result pages of search engines. A suitable description can be entered here. If left blank, the description is generated automatically.',
 
 'HELP_MANUFACTURER_SEO_SHOWSUFFIX'				=>	'With this setting you can specify if the title suffix is shown in the browser window title when the manufacturer page is opened. The title suffix can be set in <span class="navipath_or_inputname">Master Settings -> Core Settings -> SEO -> Title Suffix</span>.',
+
 'HELP_VOUCHERSERIE_MAIN_DISCOUNT'				=>	'In <span class="navipath_or_inputname">Discount</span>, you specify the magnitude of the discount. You can use the selection list after the entry field to specify whether the discount is to be applied as an absolute discount or as a percentage discount:' .
                                                     '<ul>' .
 													'<li><span class="userinput_or_code">abs</span>: The discount is an absolute discount, e.g. EUR 5.</li>' .

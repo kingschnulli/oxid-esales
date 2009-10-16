@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcontent.php 22539 2009-09-22 13:05:20Z sarunas $
+ * $Id: oxcontent.php 23264 2009-10-15 06:58:08Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  *
  * @package core
  */
-class oxContent extends oxI18n
+class oxContent extends oxI18n implements oxIUrl
 {
     /**
      * Core database table name. $_sCoreTbl could be only original data table name and not view name.
@@ -182,11 +182,12 @@ class oxContent extends oxI18n
     /**
      * Returns standard URL to product
      *
-     * @param integer $iLang language
+     * @param integer $iLang   language
+     * @param array   $aParams additional params to use [optional]
      *
      * @return string
      */
-    public function getStdLink($iLang = null)
+    public function getStdLink( $iLang = null, $aParams = array() )
     {
         $sAdd = '';
 
@@ -204,6 +205,19 @@ class oxContent extends oxI18n
             }
         }
         return $this->getConfig()->getShopHomeURL() . "cl=content&amp;oxcid=" . $this->getId() . $sAdd;
+    }
+
+    /**
+     * Returns main object URL. If SEO is ON returned link will be in SEO form,
+     * else URL will have dynamic form
+     *
+     * @param int $iLang language id [optional]
+     *
+     * @return string
+     */
+    public function getMainLink( $iLang = null )
+    {
+
     }
 
     /**
@@ -234,7 +248,7 @@ class oxContent extends oxI18n
     public function delete( $sOXID = null)
     {
         if ( !$sOXID ) {
-        	$sOXID = $this->getId();
+            $sOXID = $this->getId();
         }
         if (parent::delete($sOXID)) {
             oxSeoEncoderContent::getInstance()->onDeleteContent($sOXID);

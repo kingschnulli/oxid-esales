@@ -19,7 +19,7 @@
  * @package smartyPlugins
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: function.oxinputhelp.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: function.oxinputhelp.php 23250 2009-10-14 13:40:12Z alfonsas $
  */
 
 /*
@@ -46,12 +46,12 @@ function smarty_function_oxinputhelp($params, &$smarty)
         //no translation, return empty string
         return '';
     }
-    
+
     //name of template file where is stored message text
-    $sTemplate = $myConfig->getTemplateDir( true ) . 'inputhelp.tpl';
-    
+    $sTemplate = 'inputhelp.tpl';
+
     $smarty->assign( 'sHelpId',   $sIdent );
     $smarty->assign( 'sHelpText', $sTranslation );
-    
+
     return $smarty->fetch( $sTemplate );
 }

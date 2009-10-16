@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxubase.php 23255 2009-10-14 15:25:09Z sarunas $
  */
 
 /**
@@ -1043,7 +1043,7 @@ class oxUBase extends oxView
             } elseif ( $this->_sMetaKeywordsIdent ) {
                 $oContent = oxNew( 'oxcontent' );
                 if ( $oContent->loadByIdent( $this->_sMetaKeywordsIdent ) && $oContent->oxcontents__oxactive->value ) {
-                	$this->_sMetaKeywords = strip_tags( $oContent->oxcontents__oxcontent->value );
+                    $this->_sMetaKeywords = strip_tags( $oContent->oxcontents__oxcontent->value );
                     $blRemoveDuplicatedWords = false;
                 }
             }
@@ -1616,6 +1616,19 @@ class oxUBase extends oxView
 
             // fallback to old non seo url
             return $this->_addPageNrParam( $sUrl, $iActPageNr, $iLang );
+        }
+    }
+
+    /**
+     * Returns view object canonical url
+     *
+     * @return string
+     */
+    public function getCanonicalUrl()
+    {
+        if ( oxUtils::getInstance()->seoIsActive() &&
+             ( $oObj = $this->_getSubject( oxLang::getInstance()->getBaseLanguage() ) ) ) {
+            return $oObj->getMainLink( oxLang::getInstance()->getBaseLanguage() );
         }
     }
 
@@ -2440,29 +2453,6 @@ class oxUBase extends oxView
     {
         $this->_aViewData['articlebargainlist'] = $this->getBargainArticleList();
         $this->_aViewData['aTop5Articles']      = $this->getTop5ArticleList();
-    }
-
-    /**
-     * Active category id tracker used when SEO is on to track active category and
-     * keep correct navigation
-     *
-     * @param string $sCategoryId active category Id
-     *
-     * @return null
-     */
-    public function setSessionCategoryId( $sCategoryId )
-    {
-        oxSession::setVar( 'cnid', $sCategoryId );
-    }
-
-    /**
-     * Active category id getter
-     *
-     * @return string
-     */
-    public function getSessionCategoryId()
-    {
-        return oxSession::getVar( 'cnid' );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_categories.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxcmp_categories.php 23255 2009-10-14 15:25:09Z sarunas $
  */
 
 /**
@@ -117,11 +117,6 @@ class oxcmp_categories extends oxView
 
             if ( $myConfig->getConfigParam( 'blTopNaviLayout' ) ) {
                 $this->_oMoreCat = $this->_getMoreCategory( $sActCat, $sActCont );
-            }
-
-            if ( oxUtils::getInstance()->seoIsActive() ) {
-                // tracking active category
-                $this->_oParent->setSessionCategoryId( $sActCat );
             }
         }
     }
@@ -319,13 +314,6 @@ class oxcmp_categories extends oxView
         $sSearchVnd = oxConfig::getParameter( 'searchvendor' );
         $sSearchMan = oxConfig::getParameter( 'searchmanufacturer' );
         $sListType  = oxConfig::getParameter( 'listtype' );
-
-        if ( oxUtils::getInstance()->seoIsActive() ) {
-            // tracking active category
-            if ( ( $sSessCat = $this->_oParent->getSessionCategoryId() ) !== null ) {
-                $sActCat = $sSessCat;
-            }
-        }
 
         // search ?
         //if ( !$sListType ) {

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_seo.php 22897 2009-10-02 11:24:07Z arvydas $
+ * $Id: article_seo.php 23255 2009-10-14 15:25:09Z sarunas $
  */
 
 /**
@@ -126,13 +126,14 @@ class Article_Seo extends Object_Seo
      */
     protected function _getCategoryList( $oArticle )
     {
-        if ( $this->_oArtCategories === null ) {
-            $this->_oArtCategories = ( $oArticle ) ? oxSeoEncoderArticle::getInstance()->getSeoCategories( $oArticle ) : false;
-
-            // adding price categories
-            $sCatTable = "oxcategories";
+        if ( ($this->_oArtCategories === null) && isset($oArticle)) {
+            // adding categories
+            $sO2CView = getViewName( 'oxobject2category');
+            $sCatView = getViewName( 'oxcategories');
             $oDb = oxDb::getDb( true );
-            $sQ = "select oxid from $sCatTable where ( oxpricefrom != 0 || oxpriceto != 0 ) and ( oxpricefrom <= ".$oDb->quote( $oArticle->oxarticles__oxprice->value ) ." || oxpriceto >= ".$oDb->quote( $oArticle->oxarticles__oxprice->value ) ." ) ";
+            $sQ = "select oxobject2category.oxcatnid as oxid from $sO2CView as oxobject2category where oxobject2category.oxobjectid=".oxDb::getDb()->quote($oArticle->getId())
+                 ." union ".$oArticle->getSqlForPriceCategories('oxid');
+
             $rs = $oDb->execute( $sQ );
             if ( $rs != false && $rs->recordCount() > 0 ) {
                 while ( !$rs->EOF ) {
@@ -144,7 +145,6 @@ class Article_Seo extends Object_Seo
                     $rs->moveNext();
                 }
             }
-
         }
 
         return $this->_oArtCategories;

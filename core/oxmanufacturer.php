@@ -19,13 +19,13 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxmanufacturer.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxmanufacturer.php 23255 2009-10-14 15:25:09Z sarunas $
  */
 
 /**
  * @package core
  */
-class oxManufacturer extends oxI18n
+class oxManufacturer extends oxI18n implements oxIUrl
 {
 
     protected static $_aRootManufacturer = array();
@@ -239,11 +239,12 @@ class oxManufacturer extends oxI18n
     /**
      * Returns standard URL to manufacturer
      *
-     * @param integer $iLang language
+     * @param int   $iLang language
+     * @param array $aParams additional params to use [optional]
      *
      * @return string
      */
-    public function getStdLink($iLang = null)
+    public function getStdLink($iLang = null, $aParams = array() )
     {
         $sLangUrl = '';
 
@@ -253,7 +254,27 @@ class oxManufacturer extends oxI18n
                 $sLangUrl = "&amp;lang={$iLang}";
             }
         }
+
+        foreach ($aParams as $key => $value) {
+            if ( $value ) {
+                $sLangUrl .= "&amp;$key=$value";
+            }
+        }
+
         return $this->getConfig()->getShopHomeURL().'cl=manufacturerlist&amp;mnid='.$this->getId().$sLangUrl;
+    }
+
+    /**
+     * Returns main object URL. If SEO is ON returned link will be in SEO form,
+     * else URL will have dynamic form
+     *
+     * @param int $iLang language id [optional]
+     *
+     * @return string
+     */
+    public function getMainLink( $iLang = null )
+    {
+
     }
 
     /**

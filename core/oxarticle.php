@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxarticle.php 23255 2009-10-14 15:25:09Z sarunas $
  */
 
 // defining supported link types
@@ -36,7 +36,7 @@ define( 'OXARTICLE_LINKTYPE_TAG', 4 );
  *
  * @package core
  */
-class oxArticle extends oxI18n implements oxIArticle
+class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 {
     /**
      * Object core table name
@@ -1341,13 +1341,13 @@ class oxArticle extends oxI18n implements oxIArticle
         $oStr = getStr();
         $sWhere   = $oCategory->getSqlActiveSnippet();
         $sSelect  = $this->_generateSearchStr( $sOXID );
-        $sSelect .= ( $oStr->strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere . " order by oxobject2category.oxtime ";
+        $sSelect .= ( $oStr->strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere . " order by oxobject2category.oxtime limit 1";
 
         // category not found ?
         if ( !$oCategory->assignRecord( $sSelect ) ) {
 
             $sSelect  = $this->_generateSearchStr( $sOXID, true );
-            $sSelect .= ( $oStr->strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere ;
+            $sSelect .= ( $oStr->strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere . " limit 1";
 
             // looking for price category
             if ( !$oCategory->assignRecord( $sSelect ) ) {
@@ -2297,15 +2297,25 @@ class oxArticle extends oxI18n implements oxIArticle
     /**
      * Returns standard URL to product
      *
-     * @param int $iLang required language. optional
+     * @param int   $iLang required language. optional
+     * @param array $aParams additional params to use [optional]
      *
      * @return string
      */
-    public function getStdLink($iLang = null)
+    public function getStdLink($iLang = null, $aParams = array() )
     {
         //always returns shop url, not admin
         $this->_sStdLink  = $this->getConfig()->getShopHomeURL( $iLang, false );
         $this->_sStdLink .= "cl=details&amp;anid=".$this->getId();
+
+        if ( !isset($aParams['cnid']) ) {
+            $aParams['cnid'] = oxConfig::getParameter( 'cnid' );
+        }
+        foreach ($aParams as $key => $value) {
+            if ( $value ) {
+                $this->_sStdLink .= "&amp;$key=$value";
+            }
+        }
 
         $blSeo = oxUtils::getInstance()->seoIsActive();
         if ( !$blSeo || $this->_iLinkType != 0 ) {
@@ -2315,10 +2325,6 @@ class oxArticle extends oxI18n implements oxIArticle
                 if ( $iPgNr > 0 ) {
                     $this->_sStdLink .= "&amp;pgNr={$iPgNr}";
                 }
-            }
-
-            if ( ( $sCat = oxConfig::getParameter( 'cnid' ) ) ) {
-                $this->_sStdLink .= "&amp;cnid={$sCat}";
             }
 
             if ( ( $sCat = oxConfig::getParameter( 'mnid' ) ) ) {
@@ -2345,6 +2351,19 @@ class oxArticle extends oxI18n implements oxIArticle
         }
 
         return $this->_sStdLink = $this->getSession()->processUrl( $this->_sStdLink );
+    }
+
+    /**
+     * Returns main object URL. If SEO is ON returned link will be in SEO form,
+     * else URL will have dynamic form
+     *
+     * @param int $iLang language id [optional]
+     *
+     * @return string
+     */
+    public function getMainLink( $iLang = null )
+    {
+
     }
 
     /**
@@ -3475,7 +3494,7 @@ class oxArticle extends oxI18n implements oxIArticle
             //replaced the code bellow with this two liner
             //T2009-01-12
             if ($this->_isFieldEmpty($sCopyFieldName) || in_array( $sCopyFieldName, $this->_aCopyParentField ) ) {
-            	$this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
+                $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
             }
 
 
@@ -4205,5 +4224,47 @@ class oxArticle extends oxI18n implements oxIArticle
     public function isVariant()
     {
         return (bool) ( isset( $this->oxarticles__oxparentid ) ? $this->oxarticles__oxparentid->value : false );
+    }
+
+    /**
+     * get Sql for loading price categories which include this article
+     *
+     * @param string $sFields fields to load from oxcategories
+     * 
+     * @return string
+     */
+    public function getSqlForPriceCategories($sFields = '')
+    {
+        if (!$sFields) {
+            $sFields = 'oxid';
+        }
+        $sSelectWhere = "select $sFields from ".$this->_getObjectViewName('oxcategories')." where";
+        $sQuotedPrice = oxDb::getDb()->quote( $oArticle->oxarticles__oxprice->value );
+        return  "$sSelectWhere oxpricefrom != 0 and oxpriceto != 0 and oxpricefrom <= $sQuotedPrice and oxpriceto >= $sQuotedPrice"
+               ." union $sSelectWhere oxpricefrom != 0 and oxpriceto = 0 and oxpricefrom <= $sQuotedPrice"
+               ." union $sSelectWhere oxpricefrom = 0 and oxpriceto != 0 and oxpriceto >= $sQuotedPrice";
+    }
+
+    /**
+     * Checks if artickle is assigned to price category $sCatNID.
+     * on success.
+     *
+     * @param string $sCatNid Price category ID
+     *
+     * @return bool
+     */
+    public function inPriceCategory( $sCatNid )
+    {
+        $oDb = oxDb::getDb();
+
+        $sQuotedPrice = oxDb::getDb()->quote( $oArticle->oxarticles__oxprice->value );
+        $sQuotedCnid = oxDb::getDb()->quote( $sCatNid );
+        return (bool) $oDb->getOne(
+            "select 1 from ".$this->_getObjectViewName('oxcategories')." where oxid=$sQuotedCnid and"
+           ."(   (oxpricefrom != 0 and oxpriceto != 0 and oxpricefrom <= $sQuotedPrice and oxpriceto >= $sQuotedPrice)"
+           ." or (oxpricefrom != 0 and oxpriceto = 0 and oxpricefrom <= $sQuotedPrice)"
+           ." or (oxpricefrom = 0 and oxpriceto != 0 and oxpriceto >= $sQuotedPrice)"
+           .")"
+        );
     }
 }

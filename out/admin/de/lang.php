@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23203 2009-10-13 11:11:19Z rimvydas.paskevicius $
+ * $Id: lang.php 23240 2009-10-14 11:20:27Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -1274,6 +1274,7 @@ $aLang = array(
 'SHOP_SYSTEM_VARIANTSSELECTION'                 => 'Varianten im Administrationsbereich in Zuordnungs-Listen anzeigen',
 'SHOP_SYSTEM_VARIANTPARENTBUYABLE'              => 'Varianten-"Vater" ist kaufbar',
 'SHOP_SYSTEM_VARIANTINHERITAMOUNTPRICE'         => 'Varianten erben Staffelpreise vom "Vater"',
+'SHOP_SYSTEM_USEMULTIDIMENSIONVARIANTS'         => '[tr] Use multidimensional variants',
 'SHOP_SYSTEM_BLLOGGING'                         => 'Mitloggen für Statistik einschalten',
 'SHOP_SYSTEM_INLINEIMGEMAIL'                    => 'E-Mails mitsamt Bildern versenden',
 'SHOP_SYSTEM_LOGSKIPTAGS'                       => 'Diese Änderungen im Administrationsbereich nicht mitloggen',

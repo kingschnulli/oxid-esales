@@ -21,7 +21,6 @@
  * @version OXID eShop CE
  */
 
-
     /** @name database information */
         $this->dbHost = '<dbHost_ce>'; // database host name
         $this->dbName = '<dbName_ce>'; // database name
@@ -36,6 +35,9 @@
 
     // Template theme name, a directory in out/ folder containing all needed resources
     $this->sTheme = 'basic';
+
+    // Custom  theme, a directory in out/ folder containing only modified template files
+    $this->sCustomTheme = null;
 
     // Uncoment only for former (pre version 4) template compatibility
     // $this->blFormerTplSupport = true;

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 23224 2009-10-13 14:24:30Z arvydas $
+ * $Id: oxseoencoder.php 23272 2009-10-15 11:07:09Z sarunas $
  */
 
 /**
@@ -787,7 +787,7 @@ class oxSeoEncoder extends oxSuperCfg
      *
      * @param string $sId      changed object id. If null is passed, object dependency is not checked
      * @param int    $iShopId  active shop id. Shop id must be passed uf you want to do shop level update (default null)
-     * @param int    $iExpStat expiration status: 1 - standard expiration, 2 - seo primary language id expiration
+     * @param int    $iExpStat expiration status: 1 - standard expiration
      * @param int    $iLang    active language (optiona;)
      * @param string $sParams  additional params
      *

@@ -37,7 +37,7 @@ class oxVariantHandler
     protected $_aVariants = array();
 
     /**
-     * Multidiemnsional variant separator
+     * Multidimensional variant separator
      *
      * @var string
      */
@@ -47,6 +47,8 @@ class oxVariantHandler
      * Sets internal variant name array from article list.
      *
      * @param oxArticleList $oArticles Article list
+     * 
+     * @return null
      */
     public function init(oxArticleList $oArticles)
     {
@@ -56,6 +58,58 @@ class oxVariantHandler
         }
     }
 
+    /**
+     * Generate variants from selection lists
+     *
+     * @param string $sVarId      article id
+     * @param string $sSellTitle  selection list title
+     * @param string $sSellValue  selection list values
+     *
+     * @return null
+     */
+    public function assignVarToAttribute( $sVarId, $sSellTitle, $sSellValue )
+    {
+    	$sAttrId = $this->_getAttrId( $sSellTitle );
+    	if ( !$sAttrId ) {
+    		$sAttrId = $this->_createAttribute( $sSellTitle );
+    	}
+    	$oNewAssign = oxNew( "oxbase" );
+        $oNewAssign->init( "oxobject2attribute" );
+        $oNewAssign->oxobject2attribute__oxobjectid = new oxField($sVarId);
+        $oNewAssign->oxobject2attribute__oxattrid   = new oxField($sAttrId);
+        $oNewAssign->oxobject2attribute__oxvalue    = new oxField($sSellValue);
+        $oNewAssign->save();
+    }
+
+    /**
+     * Searches for attribute by oxtitle. If exists returns attribute id
+     *
+     * @param string $sSelTitle selection list title
+     * 
+     * @return mixed attribute id or false
+     */
+    protected function _getAttrId( $sSelTitle )
+    {
+        $oDb = oxDb::getDB();
+        $sAttViewName = getViewName('oxattribute');
+        return $oDb->getOne("select oxid from $sAttViewName where LOWER(oxtitle) = " . $oDb->quote(getStr()->strtolower($sSelTitle)));
+    }
+
+    /**
+     * Checks if attribute exists
+     *
+     * @param string $sSelTitle selection list title
+     *
+     * @return string attribute id
+     */
+    protected function _createAttribute( $sSelTitle )
+    {
+        $oAttr = oxNew( "oxattribute" );
+        $oAttr->oxattribute__oxtitle = new oxField($sSelTitle);
+        $oAttr->save();
+        return $oAttr->getId();
+    }
+    
     /**
      * Check if variant is multidimensional
      *
@@ -151,5 +205,5 @@ class oxVariantHandler
         }
 
         return $oArticles;
-    }
+    }    
 }

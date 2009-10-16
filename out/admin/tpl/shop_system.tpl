@@ -152,6 +152,17 @@ function _groupExp(el) {
                 </dd>
                 <div class="spacer"></div>
             </dl>
+
+            <dl>
+                <dt>
+                    <input type=hidden name=confbools[blUseMultidimensionVariants] value=false>
+                    <input type=checkbox class="confinput" name=confbools[blUseMultidimensionVariants] value=true  [{if ($confbools.blUseMultidimensionVariants)}]checked[{/if}] [{ $readonly }]>
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_SYSTEM_USEMULTIDIMENSIONVARIANTS" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
          </div>
     </div>
 

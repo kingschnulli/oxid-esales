@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxemail.php 23271 2009-10-15 09:00:52Z alfonsas $
  */
 /**
  * Includes PHP mailer class.
@@ -445,11 +445,8 @@ class oxEmail extends PHPMailer
         foreach ($aNewSmartyArray as $key => $val)
             $oSmarty->assign( $key, $val );
 
-        //path to admin message template file
-        $sPathToTemplate = $myConfig->getTemplateDir(false).'/';
-
-        $this->setBody( $oSmarty->fetch( $sPathToTemplate.$sOwnerHTML ) );
-        $this->setAltBody( $oSmarty->fetch( $sPathToTemplate.$sOwnerPLAIN ) );
+        $this->setBody( $oSmarty->fetch( $myConfig->getTemplatePath($sOwnerHTML,false) ) );
+        $this->setAltBody( $oSmarty->fetch( $myConfig->getTemplatePath($sOwnerPLAIN,false) ) );
 
         //Sets subject to email
         // #586A
@@ -830,11 +827,8 @@ class oxEmail extends PHPMailer
 
         $oSmarty->security_settings['INCLUDE_ANY'] = true;
 
-        //Sets path to template file
-        $sPathToTemplate = $myConfig->getTemplateDir(false)."/";
-
-        $this->setBody( $oSmarty->fetch( $sPathToTemplate."email_sendednow_html.tpl") );
-        $this->setAltBody( $oSmarty->fetch( $sPathToTemplate."email_sendednow_plain.tpl") );
+        $this->setBody( $oSmarty->fetch( $myConfig->getTemplatePath("email_sendednow_html.tpl",false)) );
+        $this->setAltBody( $oSmarty->fetch( $myConfig->getTemplatePath("email_sendednow_plain.tpl",false)) );
         $oLang->setTplLanguage( $iOldTplLang );
         $oLang->setBaseLanguage( $iOldBaseLang );
         // set it back
@@ -978,12 +972,9 @@ class oxEmail extends PHPMailer
             $oSmarty->assign( "oViewConf", $oShop );
             $oSmarty->assign( "articles", $oArticleList );
 
-            //path to admin message template file
-            $sPathToTemplate = $this->getConfig()->getTemplateDir( false ).'/';
-
             $this->setRecipient( $oShop->oxshops__oxowneremail->value, $oShop->oxshops__oxname->getRawValue() );
             $this->setFrom( $oShop->oxshops__oxowneremail->value, $oShop->oxshops__oxname->getRawValue() );
-            $this->setBody( $oSmarty->fetch( $sPathToTemplate . $this->_sReminderMailTemplate ) );
+            $this->setBody( $oSmarty->fetch( $sPathToTemplate . $this->getConfig()->getTemplatePath($this->_sReminderMailTemplate,false) ) );
             $this->setAltBody( "" );
             $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oLang->translateString( 'EMAIL_STOCKREMINDER_SUBJECT' ) );
 
