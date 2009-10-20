@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 23272 2009-10-15 11:07:09Z sarunas $
+ * $Id: oxseoencoder.php 23319 2009-10-16 14:03:21Z arvydas $
  */
 
 /**
@@ -275,7 +275,7 @@ class oxSeoEncoder extends oxSuperCfg
 
         $sStdUrl   = $this->_trimUrl( $sStdUrl );
         $sObjectId = $this->getDynamicObjectId( $iShopId, $sStdUrl );
-        $sSeoUrl   = $this->_prepareTitle( $sSeoUrl );
+        $sSeoUrl   = $this->_prepareUri( $sSeoUrl );
 
         //load details link from DB
         $sOldSeoUrl = $this->_loadFromDb( 'dynamic', $sObjectId, $iLang );
@@ -543,6 +543,57 @@ class oxSeoEncoder extends oxSuperCfg
     }
 
     /**
+     * Makes safe seo uri - removes unsupported/reserved characters
+     *
+     * @param string $sUri seo uri
+     *
+     * @return string
+     */
+    protected function _prepareUri( $sUri )
+    {
+        // decoding entities
+        $sUri = $this->encodeString( $sUri );
+
+        // basic string preparation
+        $sUri = strip_tags( $sUri );
+
+        $sSeparator = self::$_sSeparator;
+        $sPrefix    = self::$_sPrefix;
+        // 'fixing' reserved words
+        foreach ( self::$_aReservedWords as $sWord ) {
+            // this probably possible to do in one regexp
+            $sUri = preg_replace( array( "/(\s$sWord)$/i", "/^($sWord\s)/i", "/(\s$sWord\s)/i", "/^($sWord)$/i",
+                                           "/(\/$sWord)$/i", "/^($sWord\/)/i", "/(\/$sWord\/)/i"),
+                                    " $1{$sSeparator}{$sPrefix}{$sSeparator} ", $sUri );
+        }
+
+        // if found ".html" at the end - removing it temporary
+        $sExt = '';
+        $oStr = getStr();
+        $aMatched = array();
+        if ( preg_match( '/\.html?$/i', $sUri, $aMatched ) ) {
+            $sExt   = $oStr->substr( $sUri, 0 - $oStr->strlen( $aMatched[0] ) );
+            $sUri = $oStr->substr( $sUri, 0, $oStr->strlen( $sUri ) - $oStr->strlen( $aMatched[0] ) );
+        }
+
+        // removing any special characters
+        $sRegExp = '/[^A-Za-z0-9'.preg_quote( self::$_sSeparator, '/').'\/]+/';
+        $sUri  = trim( $oStr->preg_replace( array( "/\W*\/\W*/", $sRegExp ), array( "/", self::$_sSeparator ), $sUri ), self::$_sSeparator );
+
+        // SEO id is empty ?
+        if ( !$sUri ) {
+            $sUri = $this->_prepareUri( self::$_sPrefix );
+        }
+
+        // binding ".html" back
+        $sUri .= $sExt;
+
+        // cleaning
+        return $oStr->preg_replace( array( '|//+|', '/' . preg_quote( self::$_sSeparator . self::$_sSeparator, '/' ) .'+/' ),
+                             array( '/', self::$_sSeparator ), $sUri );
+    }
+
+    /**
      * Prepares and returns formatted object SEO id
      *
      * @param string $sTitle         Original object title
@@ -552,53 +603,18 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _prepareTitle( $sTitle, $blSkipTruncate = false )
     {
-        // decoding entities
-        $sTitle = $this->encodeString( $sTitle );
+        $sTitle = $this->_prepareUri( str_replace( "/", self::$_sSeparator, $sTitle ) );
 
-        // basic string preparation
-        $sTitle = strip_tags( $sTitle );
-        $sSeparator = self::$_sSeparator;
-        $sPrefix    = self::$_sPrefix;
-        // 'fixing' reserved words
-        foreach ( self::$_aReservedWords as $sWord ) {
-            // this probably possible to do in one regexp
-            $sTitle = preg_replace( array( "/(\s$sWord)$/i", "/^($sWord\s)/i", "/(\s$sWord\s)/i", "/^($sWord)$/i",
-                                           "/(\/$sWord)$/i", "/^($sWord\/)/i", "/(\/$sWord\/)/i"),
-                                    " $1{$sSeparator}{$sPrefix}{$sSeparator} ", $sTitle );
-        }
-
-        // if found ".html" at the end - removing it temporary
-        $sExt = '';
         $oStr = getStr();
-        $aMatched = array();
-        if ( preg_match( '/\.html?$/i', $sTitle, $aMatched ) ) {
-            $sExt   = $oStr->substr( $sTitle, 0 - $oStr->strlen( $aMatched[0] ) );
-            $sTitle = $oStr->substr( $sTitle, 0, $oStr->strlen( $sTitle ) - $oStr->strlen( $aMatched[0] ) );
-        }
-
         // smart truncate
         if ( !$blSkipTruncate && $oStr->strlen( $sTitle ) > $this->_iIdLength ) {
-
-            if ( ( $iFirstSpace = $oStr->strstr( $oStr->substr( $sTitle, $this->_iIdLength ), ' ' ) !== false ) ) {
-                $sTitle = $oStr->substr( $sTitle, 0, $this->_iIdLength + $iFirstSpace );
+            if ( ( $iFirstSpace = $oStr->strstr( $oStr->substr( $sTitle, $this->_iIdLength ), self::$_sSeparator ) !== false ) ) {
+                $sTitle = trim( $oStr->substr( $sTitle, 0, $this->_iIdLength + $iFirstSpace ), self::$_sSeparator );
             }
         }
 
-        // removing any special characters
-        $sRegExp = '/[^A-Za-z0-9'.preg_quote( self::$_sSeparator, '/').'\/]+/';
-        $sTitle  = trim( $oStr->preg_replace( array( "/\W*\/\W*/", $sRegExp ), array( "/", self::$_sSeparator ), $sTitle ), self::$_sSeparator );
-
-        // SEO id is empty ?
-        if ( !$sTitle ) {
-            $sTitle = $this->_prepareTitle( self::$_sPrefix );
-        }
-
-        // binding ".html" back
-        $sTitle .= $sExt;
-
         // cleaning
-        return $oStr->preg_replace( array( '|//+|', '/' . preg_quote( self::$_sSeparator . self::$_sSeparator, '/' ) .'+/' ),
-                             array( '/', self::$_sSeparator ), $sTitle );
+        return $sTitle;
     }
 
 
@@ -889,7 +905,7 @@ class oxSeoEncoder extends oxSuperCfg
 
             // generating seo url
             if ( ( $sSeoUrl = trim( $sSeoUrl ) ) ) {
-                $sSeoUrl = $this->_prepareTitle( $this->_trimUrl( $sSeoUrl ) );
+                $sSeoUrl = $this->_prepareUri( $this->_trimUrl( $sSeoUrl ) );
                 $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $sObjectId, $iLang );
             }
 
@@ -994,7 +1010,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     public function addSeoEntry( $sObjectId, $iShopId, $iLang, $sStdUrl, $sSeoUrl, $sType, $blFixed = 1, $sKeywords = '', $sDescription = '', $sParams = '', $blExclude = false )
     {
-        $sSeoUrl = $this->_processSeoUrl( $this->_prepareTitle( $this->_trimUrl( $sSeoUrl ) ), $sObjectId, $iLang, $blExclude );
+        $sSeoUrl = $this->_processSeoUrl( $this->_prepareUri( $this->_trimUrl( $sSeoUrl ) ), $sObjectId, $iLang, $blExclude );
         $this->_saveToDb( $sType, $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId, $blFixed, $sKeywords, $sDescription, $sParams );
     }
 

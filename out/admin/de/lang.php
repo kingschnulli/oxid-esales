@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23240 2009-10-14 11:20:27Z vilma $
+ * $Id: lang.php 23307 2009-10-16 10:33:03Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -1486,8 +1486,7 @@ $aLang = array(
 'VENDOR_MAIN_ALLITEMS'                          => 'Alle verfügbaren Artikel',
 'VENDOR_MAIN_ITEMSWITHVENDOR'                   => 'Artikel von diesem Lieferanten',
 'VENDOR_MAIN_ICONUPLOAD'                        => 'Icon hochladen',
-'VOUCHERSERIE_EXPORT_COMPLETED'                 => 'Export Completed!',
-'VOUCHERSERIE_EXPORT_EXPORT'                    => 'Export',
+'VOUCHERSERIE_EXPORT_EXPORT'                    => 'Exportieren',
 'VOUCHERSERIE_GROUPS_INGROUP'                   => 'Verfügbar für Benutzergruppen',
 'VOUCHERSERIE_LIST_SERIALNUM'                   => 'Name',
 'VOUCHERSERIE_LIST_MINVALUE'                    => 'Ab Einkaufswert',
@@ -1499,6 +1498,7 @@ $aLang = array(
 'VOUCHERSERIE_MAIN_ALLOWOTHERSERIES'            => 'Gültig mit anderer Serie',
 'VOUCHERSERIE_MAIN_SAMESEROTHERORDER'           => 'Gültig mit gleiche Serie bei einer anderen Bestellung',
 'VOUCHERSERIE_MAIN_NEWVOUCHER'                  => 'Neue Gutscheine anlegen',
+'VOUCHERSERIE_MAIN_VOUCHERSTATISTICS'           => 'Gutscheine',
 'VOUCHERSERIE_MAIN_RANDOMNUM'                   => 'Zufallsnummern erzeugen',
 'VOUCHERSERIE_MAIN_VOUCHERNUM'                  => 'Gutscheinnummer',
 'VOUCHERSERIE_MAIN_AVAILABLE'                   => 'Verfügbar',
@@ -1727,7 +1727,6 @@ $aLang = array(
 //  voucherserie_list',
 'tbclvoucherserie_main'                         => 'Stamm',
 'tbclvoucherserie_groups'                       => 'Benutzergruppen',
-'tbclvoucherserie_export'                       => 'Export',
 'tbclwrapping_main'                             => 'Stamm',
 'tbclcontent_seo'                               => 'SEO',
 'tbclarticle_seo'                               => 'SEO',

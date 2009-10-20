@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23240 2009-10-14 11:20:27Z vilma $
+ * $Id: lang.php 23307 2009-10-16 10:33:03Z vilma $
  */
 
 /*
@@ -1492,7 +1492,6 @@ $aLang = array(
 'VENDOR_MAIN_ALLITEMS'                          => 'All available Products',
 'VENDOR_MAIN_ITEMSWITHVENDOR'                   => 'Products from this Distributor',
 'VENDOR_MAIN_ICONUPLOAD'                        => 'Upload Icon',
-'VOUCHERSERIE_EXPORT_COMPLETED'                 => 'Export Completed !',
 'VOUCHERSERIE_EXPORT_EXPORT'                    => 'Export',
 'VOUCHERSERIE_GROUPS_INGROUP'                   => 'Available for User Groups',
 'VOUCHERSERIE_LIST_SERIALNUM'                   => 'Name',
@@ -1505,6 +1504,7 @@ $aLang = array(
 'VOUCHERSERIE_MAIN_ALLOWOTHERSERIES'            => 'Valid with different Series',
 'VOUCHERSERIE_MAIN_SAMESEROTHERORDER'           => 'Valid with same Series, different Order',
 'VOUCHERSERIE_MAIN_NEWVOUCHER'                  => 'Create new Coupons',
+'VOUCHERSERIE_MAIN_VOUCHERSTATISTICS'           => 'Coupons',
 'VOUCHERSERIE_MAIN_RANDOMNUM'                   => 'Random Numbers',
 'VOUCHERSERIE_MAIN_VOUCHERNUM'                  => 'Coupon Number',
 'VOUCHERSERIE_MAIN_AVAILABLE'                   => 'Available',
@@ -1741,7 +1741,6 @@ $aLang = array(
 //  voucherserie_list',
 'tbclvoucherserie_main'                         => 'Main',
 'tbclvoucherserie_groups'                       => 'User Groups',
-'tbclvoucherserie_export'                       => 'Export',
 'tbclwrapping_main'                             => 'Main',
 'tbclvendor_seo'                                => 'SEO',
 'tbclmanufacturer_seo'                          => 'SEO',

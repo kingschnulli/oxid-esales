@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 23255 2009-10-14 15:25:09Z sarunas $
+ * $Id: oxubase.php 23323 2009-10-16 14:59:42Z sarunas $
  */
 
 /**
@@ -1626,10 +1626,6 @@ class oxUBase extends oxView
      */
     public function getCanonicalUrl()
     {
-        if ( oxUtils::getInstance()->seoIsActive() &&
-             ( $oObj = $this->_getSubject( oxLang::getInstance()->getBaseLanguage() ) ) ) {
-            return $oObj->getMainLink( oxLang::getInstance()->getBaseLanguage() );
-        }
     }
 
     /**

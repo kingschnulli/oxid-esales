@@ -19,11 +19,11 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxvarianthandler.php 22524 2009-09-22 11:47:27Z tomas $
+ * $Id: oxvarianthandler.php 22524 2009-10-15 11:47:27Z tomas $
  */
 
 /**
- * oxVariantHandler encapsulates methods dealing with multidimensional variant names.
+ * oxVariantHandler encapsulates methods dealing with multidimensional variant and variant names.
  *
  * @package core
  */
@@ -34,28 +34,54 @@ class oxVariantHandler
      *
      * @var array
      */
-    protected $_aVariants = array();
+    protected $_oArticles = null;
 
     /**
      * Multidimensional variant separator
      *
      * @var string
      */
-    protected $_sSeparator = "|";
+    protected $_sMdSeparator = "|";
+
+    /**
+     * Multidimensional variant tree structure
+     *
+     * @var OxMdVariant
+     */
+    protected $_oMdVariants = null;
 
     /**
      * Sets internal variant name array from article list.
      *
-     * @param oxArticleList $oArticles Article list
-     * 
+     * @param oxList[string]oxArticle $oArticles Variant list as
+     *
      * @return null
      */
-    public function init(oxArticleList $oArticles)
+    public function init($oArticles)
     {
-        $this->_aVariants = array();
-        foreach ($oArticles as $sId => $oArticle) {
-            $this->_aVariants[$sId] = $oArticle->oxarticles__oxvarselect->value;
+        $this->_oArticles = $oArticles;
+    }
+
+    /**
+     * Returns multidimensional variant structure
+     *
+     * @return OxMdVariants
+     */
+    public function getMdVariants()
+    {
+        if ($this->_oMdVariants)
+            return $this->_oMdVariants;
+
+        $oMdVariants = oxNew("OxMdVariants");
+        $oMdVariants->setName("_parent_product_");
+        foreach($this->_aVariants as $sKey => $oVariant) {
+            $oMdVariants->addNames($sKey,
+                                   explode($this->_sMdSeparator, $oVariant->oxarticles__oxvarselect->value),
+                                   $oVariant->getPrice()->getBruttoPrice());
         }
+
+        $this->_oMdVariants = $oMdVariants;
+        return $this->_oMdVariants;
     }
 
     /**
@@ -85,7 +111,7 @@ class oxVariantHandler
      * Searches for attribute by oxtitle. If exists returns attribute id
      *
      * @param string $sSelTitle selection list title
-     * 
+     *
      * @return mixed attribute id or false
      */
     protected function _getAttrId( $sSelTitle )
@@ -109,7 +135,7 @@ class oxVariantHandler
         $oAttr->save();
         return $oAttr->getId();
     }
-    
+
     /**
      * Check if variant is multidimensional
      *
@@ -119,52 +145,40 @@ class oxVariantHandler
      */
     public function isMdVariant( $oArticle )
     {
-        if ( $oArticle->isVariant() ) {
-           if ( strpos( $oArticle->oxarticles__oxtitle->value, $this->_sSeparator ) !== false )
-               return true;
+        if ( strpos( $oArticle->oxarticles__oxvarselect->value, $this->_sSeparator ) !== false ) {
+            return true;
         }
 
         return false;
     }
 
     /**
-     * Get top variant attribute value. Extracts first variant value from values
-     * strings separated by separator.
+     * Get multidimensional variant attribute value by it index number.
+     * 0 - top, 1 - next and so on
+     *
+     * @param int    $iId        Index number
+     * @param string $sVarValues Variant values separated by separator
+     *
+     * @return string
+     */
+    protected function _getMdVariantValue( $iId = 0, $sVarValue )
+    {
+        $aVarValues = explode( $this->_sSeparator, $sVarValue );
+
+        return trim($aVarValues[$iId]);
+    }
+
+
+    /**
+     * Get top variant attribute value.
      *
      * @param string $sVarValue Variant values
      *
-     * @return double
+     * @return string
      */
     protected function _getMdVariantTopValue( $sVarValue )
     {
-        $sTopVarValue = trim( preg_replace("/([^|]+)|.+$/", "$1", $sVarValue ) );
-
-        return $sTopVarValue;
-    }
-
-    /**
-     * Get min price of selected top level variants by given var value
-     * e.g. get lowest price of top variants with attribute "green".
-     *
-     * @param string        $sVarValue Variant value
-     * @param oxArticleList $oArticles Articles list
-     *
-     * @return double
-     */
-    protected function _getMdVariantsMinPrice( $sVarValue, $oArticles )
-    {
-        $dPrice = 0;
-        foreach ( $oArticles as $oArticle ) {
-
-            $sTopVarValue = $this->_getMdVariantTopValue( $oArticle->oxarticles__oxvarselect->value );
-            if ( $sVarValue == $sTopVarValue ) {
-                if (  $dPrice < $oArticle->oxarticles__oxvarselect->value ) {
-                    $dPrice = $oArticle->oxarticles__oxvarselect->value;
-                }
-            }
-        }
-
-        return $dPrice;
+        return $this->_getMdVariantValue( 0, $sVarValue );
     }
 
     /**
@@ -172,38 +186,56 @@ class oxVariantHandler
      * only one top attribute value. Also checks min price for this top attribute
      * and sets it to article object.
      *
-     * @param oxArticle $oArticle Article object
+     * @param object $oArticle Variants list
      *
      * @return bool
      */
     public function getTopMdVariants( $oArticles )
     {
+        // Check if article list has multidimensional variants.
+        // If first element is not MD variant, return null
+        if ( $oArticles && !$this->isMdVariant( $oArticles->current() ) ) {
+            return null;
+        }
+
         $aMinPrices = array();
 
         if ( $oArticles && count( $oArticles ) > 0 ) {
 
             foreach ( $oArticles as $oArticle ) {
 
-                // reik idet loop reset
-
-
-
+                $dPrice = 0;
                 $sTopVarValue = $this->_getMdVariantTopValue( $oArticle->oxarticles__oxvarselect->value );
 
-                if ( !in_array( $sTopVarValue, $aMinPrices ) ) {
-                    //getting min price by attribute value
-                    $dPrice = $this->_getMdVariantsMinPrice( $sTopVarValue, $oArticles );
-
-                    //adding to already searched array to skip checking when
-                    //article with same value will apier again
-                    $aMinPrices[] = $sTopVarValue;
-
-                    $oArticle->oxarticles__oxvarselect->value = $sTopVarValue;
+                //getting min price by attribute value
+                if (  $dPrice < $oArticle->getPrice()->getNettoPrice() ) {
+                    $dPrice = $oArticle->getPrice()->getNettoPrice();
+                    $aMinPrices[$sTopVarValue] = $oArticle->getId();
                 }
 
+                $oArticle->oxarticles__oxvarselect->value = $sTopVarValue;
             }
+
+            // formating new top variants list, where are only distinct var values
+            // with min price
+            $aNewArticles = array();
+            foreach ( $aMinPrices as $sKey => $sArtId ) {
+                $aNewArticles[$sArtId] = $oArticles[$sArtId];
+            }
+/*
+            if ( $blUseSimpleVariants ) {
+                $oTopArticles = oxNew( "oxsimplevariantlist" );
+            } else {
+                $oTopArticles = oxNew( "oxArticleList" );
+            }
+
+
+*/
+            $oArticles->clear();
+            $oArticles->assign( $aNewArticles );
         }
 
         return $oArticles;
-    }    
+    }
+
 }

@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: help_lang.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: help_lang.php 23326 2009-10-16 15:21:46Z rimvydas.paskevicius $
  */
 
 /**
@@ -95,11 +95,11 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_STOCKONDEFAULTMESSAGE'        =>  'Bei jedem Artikel können Sie einrichten, welche Meldung den Benutzern angezeigt wird, wenn der Artikel auf Lager ist. ' .
                                                     'Wenn diese Einstellung aktiv ist, wird den Benutzern auch dann eine Meldung angezeigt, wenn bei einem Artikel keine eigene Meldung hinterlegt ist. Dann die Standardmeldung <span class="filename_filepath_or_italic">sofort lieferbar</span> angezeigt.<br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/meldungen-zu-den-lagerbestaenden-einrichten">Handbuch-Beitrag zu den Lagerbestandsmeldungen</a>.',
+                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/meldungen-zu-den-lagerbestaenden-einrichten" target="_blank">Handbuch-Beitrag zu den Lagerbestandsmeldungen</a>.',
 
 'HELP_SHOP_CONFIG_STOCKOFFDEFAULTMESSAGE'       =>  'Bei jedem Artikel können Sie einrichten, welche Meldung den Benutzern angezeigt wird, wenn der Artikel nicht auf Lager ist. ' .
                                                     'Wenn diese Einstellung aktiv ist, wird den Benutzern auch dann eine Meldung angezeigt, wenn bei einem Artikel keine eigene Meldung hinterlegt ist. Dann die Standardmeldung <span class="filename_filepath_or_italic">Dieser Artikel ist nicht auf Lager und muss erst nachbestellt werden</span> angezeigt.<br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/meldungen-zu-den-lagerbestaenden-einrichten">Handbuch-Beitrag zu den Lagerbestandsmeldungen</a>.',
+                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/meldungen-zu-den-lagerbestaenden-einrichten" target="_blank">Handbuch-Beitrag zu den Lagerbestandsmeldungen</a>.',
 
 'HELP_SHOP_CONFIG_OVERRIDEZEROABCPRICES'        =>  'Sie können für bestimmte Benutzer spezielle Preise einrichten. Dadurch können Sie bei jedem Artikel A, B, und C-Preise eingeben. Wenn Benutzer z. B. in der Benutzergruppe Preis A sind, werden ihnen die A-Preise anstatt dem normalen Artikelpreis angezeigt.<br />' .
                                                     'Wenn die Einstellung aktiv ist, wird diesen Benutzern der normale Artikelpreis angezeigt, wenn für den Artikel kein A, B oder C-Preis vorhanden ist.<br />' .
@@ -193,7 +193,7 @@ $aLang =  array(
 'HELP_SHOP_PERF_LOADSELECTLISTSINALIST'         =>  'Normalerweise werden Auswahllisten nur in der Detailansicht eines Artikels angezeigt. Wenn Sie die Einstellung aktivieren, werden die Auswahllisten auch in Artikellisten (z. B. Suchergebnisse, Kategorieansichten) angezeigt.',
 
 'HELP_SHOP_PERF_CHECKIFTPLCOMPILE'              =>  'Wenn diese Einstellung aktiv ist, überprüft der eShop bei jedem Aufruf, ob sich Templates geändert haben und berechnet die Ausgabe neu, falls Änderungen vorhanden sind. Aktivieren Sie die Einstellung, wenn Sie Templates anpassen, und deaktivieren Sie sie, wenn der eShop produktiv verwendet wird. <br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/hinweise-zum-templates-anpassen">Caching-Beitrag im Handbuch</a>.',
+                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/hinweise-zum-templates-anpassen" target="_blank">Caching-Beitrag im Handbuch</a>.',
 
 'HELP_SHOP_PERF_CLEARCACHEONLOGOUT'             =>  'Normalerweise wird der komplette Cache geleert, sobald Änderungen im Administrationsbereich vorgenommen werden. Das kann zu eine verschlechterten Performance im Administrationsbereich führen. Wenn Sie die Einstellung aktivieren, wird der Cache nur geleert, wenn Sie sich aus dem Administrationsbereich ausloggen.',
 
@@ -234,11 +234,11 @@ $aLang =  array(
 
 'HELP_SHOP_MAIN_OWNEREMAIL'                     =>  'Wenn Benutzer bestellen, wird an Sie als eShop-Administrator eine E-Mail gesendet, dass eine Bestellung im eShop gemacht wurde. Diese E-Mails werden an <span class="navipath_or_inputname">Bestellungen an</span> gesendet.',
 
-'HELP_SHOP_MAIN_SMTPSERVER'                     =>  'Die SMTP-Daten müssen eingegeben werden, damit der eShop E-Mails versenden kann. Weitere Informationen zur Einrichtung finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/smtp-daten-eingeben">eShop Handbuch</a>.',
+'HELP_SHOP_MAIN_SMTPSERVER'                     =>  'Die SMTP-Daten müssen eingegeben werden, damit der eShop E-Mails versenden kann. Weitere Informationen zur Einrichtung finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/smtp-daten-eingeben" target="_blank">eShop Handbuch</a>.',
 
 
 
-'HELP_ARTICLE_MAIN_ALDPRICE'                    =>  'Mit <span class="navipath_or_inputname">Alt. Preise</span> können Sie für bestimmte Benutzer spezielle Preise einrichten. Wie das funktioniert, erfahren Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/fuer-bestimmte-benutzer-besondere-preise-einrichten">eShop Handbuch</a> auf der OXID eSales Website.',
+'HELP_ARTICLE_MAIN_ALDPRICE'                    =>  'Mit <span class="navipath_or_inputname">Alt. Preise</span> können Sie für bestimmte Benutzer spezielle Preise einrichten. Wie das funktioniert, erfahren Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/fuer-bestimmte-benutzer-besondere-preise-einrichten" target="_blank">eShop Handbuch</a> auf der OXID eSales Website.',
 
 'HELP_ARTICLE_MAIN_VAT'                         =>  'Hier können Sie für diesen Artikel einen speziellen Mehrwertsteuersatz eingeben (z. B: 7% für Lebensmittel).',
 
@@ -256,28 +256,28 @@ $aLang =  array(
 
 'HELP_ARTICLE_EXTEND_SKIPDISCOUNTS'             =>  'Wenn <span class="navipath_or_inputname">Alle neg. Nachlässe ignorieren</span> aktiviert ist, werden für diesen Artikel keine negativen Nachlässe berechnet. Das sind z. B. Rabatte und Gutscheine.',
 
-'HELP_ARTICLE_EXTEND_TEMPLATE'                  =>  'Sie können die Detailansicht des Artikels mit einem anderen Template anzeigen lassen. Tragen Sie dazu den Dateinamen des Templates ein, das verwendet werden soll. Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/bestimmte-artikel-oder-kategorien-mit-anderen-templates-anzeigen">eShop Handbuch</a>.',
+'HELP_ARTICLE_EXTEND_TEMPLATE'                  =>  'Sie können die Detailansicht des Artikels mit einem anderen Template anzeigen lassen. Tragen Sie dazu den Dateinamen des Templates ein, das verwendet werden soll. Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/bestimmte-artikel-oder-kategorien-mit-anderen-templates-anzeigen" target="_blank">eShop Handbuch</a>.',
 
 
 
 'HELP_ARTICLE_PICTURES_ICON'                    =>  'Icons sind die kleinsten Bilder eines Artikels, sie werden z. B. im Warenkorb verwendet. <br />'.
                                                     'Ein Icon können Sie bei <span class="navipath_or_inputname">Icon hochladen</span> hochladen. Bei <span class="navipath_or_inputname">Icon</span> wird nach dem Hochladen der Dateiname des Icons angezeigt,  wenn noch kein Icon hochgeladen wurde, wird <span class="userinput_or_code">nopic.jpg</span> angezeigt. <br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen">Artikelbilder-Kapitel des Handbuchs</a>.',
+                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen" target="_blank">Artikelbilder-Kapitel des Handbuchs</a>.',
 
 'HELP_ARTICLE_PICTURES_THUMB'                   =>  'Thumbnails sind kleine Bilder eines Artikels, sie werden z. B. in der in Artikellisten verwendet. <br />' .
-                                                    'Ein Thumbnail können Sie bei <span class="navipath_or_inputname">Thumbn. hochladen</span> hochladen. Bei <span class="navipath_or_inputname">Thumbnail</span> wird nach dem Hochladen der Dateiname des Thumbnails angezeigt, wenn noch kein Thumbnail hochgeladen wurde, wird <span class="userinput_or_code">nopic.jpg</span> angezeigt.<br />' . 
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen">Artikelbilder-Kapitel des Handbuchs</a>.',
+                                                    'Ein Thumbnail können Sie bei <span class="navipath_or_inputname">Thumbn. hochladen</span> hochladen. Bei <span class="navipath_or_inputname">Thumbnail</span> wird nach dem Hochladen der Dateiname des Thumbnails angezeigt, wenn noch kein Thumbnail hochgeladen wurde, wird <span class="userinput_or_code">nopic.jpg</span> angezeigt.<br />' .
+                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen" target="_blank">Artikelbilder-Kapitel des Handbuchs</a>.',
 
 'HELP_ARTICLE_PICTURES_PIC1'                    =>  'Bilder sind normal große Artikelbilder, sie werden in der Detailansicht eines Artikels verwendet. </br>' .
                                                     'Bilder können Sie bei <span class="navipath_or_inputname">Bild X hochladen</span> hochladen. Bei <span class="navipath_or_inputname">Bild X</span> wird nach dem Hochladen der Dateiname des Bildes angezeigt, wenn noch kein Bild hochgeladen wurde, wird <span class="userinput_or_code">nopic.jpg</span> angezeigt.<br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen">Artikelbilder-Kapitel des Handbuchs</a>.',
+                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen" target="_blank">Artikelbilder-Kapitel des Handbuchs</a>.',
 
 'HELP_ARTICLE_PICTURES_ZOOM1'                   =>  'Zoom-Bilder sind extra große Artikelbilder, Die in der Detailansicht eines Artikels verlinkt werden. </br>' .
                                                     'Zoom-Bilder können Sie bei <span class="navipath_or_inputname">Zoom X hochladen</span> hochladen. Bei <span class="navipath_or_inputname">Zoom X</span> wird nach dem Hochladen der Dateiname des Zoom-Bildes angezeigt, wenn noch kein Zoom-Bild hochgeladen wurde, wird <span class="userinput_or_code">nopic.jpg</span> angezeigt.<br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen">Artikelbilder-Kapitel des Handbuchs</a>.',
+                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen" target="_blank">Artikelbilder-Kapitel des Handbuchs</a>.',
 
 
-													
+
 'HELP_ARTICLE_STOCK_STOCKFLAG'                  =>  'Hier können Sie einstellen, wie sich der eShop verhält, wenn der Artikel ausverkauft ist:<br />' .
                                                     '<ul><li>Standard: Der Artikel kann auch dann bestellt werden, wenn er ausverkauft ist.</li>' .
                                                     '<li>Fremdlager: Der Artikel kann immer gekauft werden und wird immer als <span class="filename_filepath_or_italic">auf Lager</span> angezeigt. (In einem Fremdlager kann der Lagerbestand nicht ermittelt werden. Deswegen wird der Artikel immer als auf Lager geführt).</li>' .
@@ -295,20 +295,20 @@ $aLang =  array(
 'HELP_ARTICLE_SEO_DESCRIPTION'					=>	'Dieser Beschreibungstext wird in den HTML-Quelltext (Meta Description) eingebunden. Dieser Text wird von vielen Suchmaschinen bei den Suchergebnissen angezeigt. Hier können Sie eine passende Beschreibung zu dem Artikel eingeben. Wenn Sie nichts eingeben, wird die Beschreibung automatisch erzeugt.',
 
 'HELP_ARTICLE_SEO_ACTCAT'						=>	'Sie können für einen Artikel unterschiedliche SEO URLs festlegen: Für bestimmte Kategorien und für den Hersteller des Artikels. Mit <span class="navipath_or_inputname">Aktive Kategorie/Hersteller</span> können Sie wählen, welche SEO URL Sie anpassen möchten.',
-'HELP_ARTICLE_STOCK_STOCKTEXT'                  =>  'Hier können Sie eine Meldung eingeben, die beim Artikel angezeigt wird, falls der Artikel auf Lager ist. Weitere Informationen zu Lagerbestandsmeldungen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/meldungen-zu-den-lagerbestaenden-einrichten">eShop Handbuch</a>.',
+'HELP_ARTICLE_STOCK_STOCKTEXT'                  =>  'Hier können Sie eine Meldung eingeben, die beim Artikel angezeigt wird, falls der Artikel auf Lager ist. Weitere Informationen zu Lagerbestandsmeldungen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/meldungen-zu-den-lagerbestaenden-einrichten" target="_blank">eShop Handbuch</a>.',
 
-'HELP_ARTICLE_STOCK_NOSTOCKTEXT'                =>  'Hier können Sie eine Meldung eingeben, die beim Artikel angezeigt wird, falls der Artikel ausverkauft ist. Weitere Informationen zu Lagerbestandsmeldungen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/meldungen-zu-den-lagerbestaenden-einrichten">eShop Handbuch</a>.',
+'HELP_ARTICLE_STOCK_NOSTOCKTEXT'                =>  'Hier können Sie eine Meldung eingeben, die beim Artikel angezeigt wird, falls der Artikel ausverkauft ist. Weitere Informationen zu Lagerbestandsmeldungen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/meldungen-zu-den-lagerbestaenden-einrichten" target="_blank">eShop Handbuch</a>.',
 
 'HELP_ARTICLE_STOCK_AMOUNTPRICE_AMOUNTFROM'     =>  'Mit <span class="navipath_or_inputname">Menge von/bis</span> stellen Sie ein, für welchen Mengenbereich der Staffelpreis gültig ist.<br />' .
-                                                    'Weitere Informationen zu Staffelpreisen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/staffelpreise-einrichten">OXID eShop Handbuch</a>.',
+                                                    'Weitere Informationen zu Staffelpreisen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/staffelpreise-einrichten" target="_blank">OXID eShop Handbuch</a>.',
 
 'HELP_ARTICLE_STOCK_AMOUNTPRICE_PRICE'          =>  'Bei <span class="navipath_or_inputname">Preis </span>können Sie den Preis für die eingegebene Menge einstellen. Sie haben die Möglichkeit, den Preis absolut einzugeben oder prozentualen Rabatt einzurichten.<br /> ' .
-                                                    'Weitere Informationen zu Staffelpreisen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/staffelpreise-einrichten">OXID eShop Handbuch</a>.',
+                                                    'Weitere Informationen zu Staffelpreisen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/staffelpreise-einrichten" target="_blank">OXID eShop Handbuch</a>.',
 
 
 
 'HELP_ARTICLE_VARIANT_VARNAME'                  =>  'Bei <span class="navipath_or_inputname">Name der Auswahl</span> können Sie einstellen, wie die Auswahl zwischen den verschiedenen Varianten heißen soll, z. B. <span class="userinput_or_code">Farbe</span> oder <span class="userinput_or_code">Größe</span>.<br /> '.
-                                                    'Weitere Informationen zu Varianten finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/varianten-eines-artikels-anlegen">Varianten-Kapitel des Handbuchs</a>.',
+                                                    'Weitere Informationen zu Varianten finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/varianten-eines-artikels-anlegen" target="_blank">Varianten-Kapitel des Handbuchs</a>.',
 
 
 
@@ -325,7 +325,7 @@ $aLang =  array(
 'HELP_CATEGORY_MAIN_PRICEFROMTILL'              =>  'Mit <span class="navipath_or_inputname">Preis von/bis</span> können sie einstellen, dass in der Kategorie <span class="warning_or_important_hint">alle</span> Artikel angezeigt werden, die einen bestimmten Preis haben. Im ersten Eingabefeld wird die Untergrenze eingegeben, in das zweite Eingabefeld die Obergrenze. Dann werden in der Kategorie <span class="warning_or_important_hint">alle Artikel Ihres eShops</span> angezeigt, die einen entsprechenden Preis haben.',
 
 'HELP_CATEGORY_MAIN_DEFSORT'                    =>  'Mit <span class="navipath_or_inputname">Schnellsortierung</span> stellen Sie ein, wie die Artikel in der Kategorie sortiert werden. Mit <span class="navipath_or_inputname">asc</span> und <span class="navipath_or_inputname">desc</span> stellen Sie ein, ob auf- oder absteigend sortiert wird. <br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikel-sortieren">Handbuch-Eintrag zum Sortieren von Artikeln</a>.',
+                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikel-sortieren" target="_blank">Handbuch-Eintrag zum Sortieren von Artikeln</a>.',
 
 'HELP_CATEGORY_MAIN_SORT'                       =>  'Mit <span class="navipath_or_inputname">Sortierung</span> können Sie festlegen, in welcher Reihenfolge die Kategorien angezeigt werden: Die Kategorie mit der kleinsten Zahl wird oben angezeigt, die Kategorie mit der größten Zahl unten.',
 
@@ -438,7 +438,7 @@ $aLang =  array(
 'HELP_SELECTLIST_MAIN_TITLEIDENT'               =>  'Bei <span class="navipath_or_inputname">Arbeitstitel</span> können Sie einen zusätzlichen Titel eingeben, der den Benutzern Ihres eShops nicht angezeigt wird. Sie können den Arbeitstitel dazu verwenden, um ähnliche Auswahllisten zu unterscheiden (z. B. <span class="filename_filepath_or_italic">Größe für Hosen</span> und <span class="filename_filepath_or_italic">Größe für Hemden</span>).',
 
 'HELP_SELECTLIST_MAIN_FIELDS'                   =>  'In der Liste <span class="navipath_or_inputname">Felder</span> werden alle vorhandenen Ausführungen der Auswahlliste angezeigt. Mit den Eingabefeldern rechts neben <span class="navipath_or_inputname">Felder</span> können Sie neue Ausführungen anlegen.<br />' .
-                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/einfache-varianten-mit-auswahllisten-umsetzen">Auswahllisten-Kapitel im Handbuch</a>.',
+                                                    'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/einfache-varianten-mit-auswahllisten-umsetzen" target="_blank">Auswahllisten-Kapitel im Handbuch</a>.',
 
 
 
@@ -453,7 +453,7 @@ $aLang =  array(
 'HELP_USER_EXTEND_EMAILFAILED'                  =>  'Wenn an die E-Mail Adresse des Benutzers keine E-Mails versendet werden können (z. B. weil die Adresse falsch eingetragen ist), dann setzen Sie hier das Häkchen. Dann werden dem Benutzer keine Newsletter mehr zugesendet. Andere E-Mails werden weiterhin versendet.',
 
 'HELP_USER_EXTEND_DISABLEAUTOGROUP'             =>  'Die Benutzer werden automatisch zu Benutzergruppen zugeordnet. Wenn Sie diese Einstellung aktivieren, wird dieser Benutzer nicht mehr automatisch zugeordnet. <br />' .
-                                                    'Die automatischen Benutzergruppen-Zuordnungen werden im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/automatische-benutzergruppen-zuordnungen">éntsprechenden Handbuch-Beitrag</a> aufgelistet.',
+                                                    'Die automatischen Benutzergruppen-Zuordnungen werden im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/automatische-benutzergruppen-zuordnungen" target="_blank">éntsprechenden Handbuch-Beitrag</a> aufgelistet.',
 
 'HELP_USER_EXTEND_BONI'                         =>  'Hier können Sie einen Zahlenwert für die Bonität des Benutzers eingeben. Mit der Bonität können Sie beeinflussen, welche Zahlungsarten dem Benutzer zur Verfügung stehen.',
 

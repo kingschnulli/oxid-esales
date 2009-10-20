@@ -6,6 +6,17 @@
     [{assign var="readonly" value=""}]
 [{/if}]
 
+<script type="text/javascript">
+<!--
+function changeFnc( fncName )
+{
+    var langvar = document.myedit.elements['fnc'];
+    if (langvar != null )
+    	langvar.value = fncName;
+}
+//-->
+</script>
+
 <form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
     [{ $shop->hiddensid }]
     <input type="hidden" name="oxid" value="[{ $oxid }]">
@@ -122,21 +133,49 @@
             [{ oxinputhelp ident="HELP_VOUCHERSERIE_MAIN_SAMESEROTHERORDER" }]
             </td>
         </tr>
-        <tr>
-            <td class="edittext">
-            </td>
-            <td class="edittext"><br>
-            <input type="submit" class="edittext" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" [{ $readonly }]>
-            </td>
-        </tr>
         </table>
     </td>
-    <td width="35" valign="top" align="center">
-    <img src="[{ $shop->imagedir }]/grayline_vert.gif" width="2" height="270" alt="" border="0">
-    </td>
     <td width="355" valign="top">
+       [{if $status.total > 0 }]
+            <fieldset title="[{ oxmultilang ident="VOUCHERSERIE_MAIN_VOUCHERSTATISTICS" }]" style="padding-left: 5px; padding-right: 5px;">
+            <legend>[{ oxmultilang ident="VOUCHERSERIE_MAIN_VOUCHERSTATISTICS" }]</legend><br>
         <table cellspacing="2" cellpadding="0" width="">
             <tr>
+                <td class="edittext">
+                    [{ oxmultilang ident="GENERAL_SUM" }]
+                </td>
+                <td class="edittext">
+                    <b>[{ $status.total }]</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="edittext">
+                    [{ oxmultilang ident="VOUCHERSERIE_MAIN_AVAILABLE" }]
+                </td>
+                <td class="edittext">
+                    <b>[{$status.available}]</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="edittext">
+                    [{ oxmultilang ident="VOUCHERSERIE_MAIN_USED" }]
+                </td>
+                <td class="edittext">
+                    <b>[{$status.used}]</b>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>
+                <input type="submit" class="edittext" name="export" value="[{ oxmultilang ident="VOUCHERSERIE_EXPORT_EXPORT" }]" [{ $readonly }] onClick="Javascript:changeFnc('export');">
+                </td>
+            </tr>
+            </table>
+            </fieldset>
+            <br><br>
+            [{/if}]
+            <table cellspacing="2" cellpadding="0" width="">
                 <td class="edittext" colspan="2">
                     <b>[{ oxmultilang ident="VOUCHERSERIE_MAIN_NEWVOUCHER" }]</b> (optional)<br><br>
                 </td>
@@ -167,36 +206,17 @@
                     <input type="text" size="15" class="editinput" name="voucherAmount" value="0" [{ $readonly }]>
                     [{ oxinputhelp ident="HELP_GENERAL_SUM" }]
                 </td>
-            </tr>
-            <tr>
-                <td><br><br></td><td></td></tr>
-            <tr>
-                <td class="edittext">
-                    [{ oxmultilang ident="GENERAL_SUM" }]
-                </td>
-                <td class="edittext">
-                    <b>[{ $status.total }]</b>
-                </td>
-            </tr>
-            <tr>
-                <td class="edittext">
-                    [{ oxmultilang ident="VOUCHERSERIE_MAIN_AVAILABLE" }]
-                </td>
-                <td class="edittext">
-                    <b>[{$status.available}]</b>
-                </td>
-            </tr>
-            <tr>
-                <td class="edittext">
-                    [{ oxmultilang ident="VOUCHERSERIE_MAIN_USED" }]
-                </td>
-                <td class="edittext">
-                    <b>[{$status.used}]</b>
-                </td>
-            </tr>
+            </tr>            
         </table>
     </td>
     </tr>
+            <tr>
+            <td class="edittext">
+            </td>
+            <td class="edittext"><br>
+            <input type="submit" class="edittext" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" [{ $readonly }] onClick="Javascript:changeFnc('save');">
+            </td>
+        </tr>
 </table>
 </form>
 [{include file="bottomnaviitem.tpl"}]

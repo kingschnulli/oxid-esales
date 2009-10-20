@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsimplevariant.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxsimplevariant.php 23285 2009-10-15 14:58:11Z rimvydas.paskevicius $
  */
 
 /**
@@ -49,6 +49,13 @@ class oxSimpleVariant extends oxI18n
      * @var oxArticle
      */
     protected $_oParent = null;
+
+    /**
+     * Details link
+     *
+     * @var string
+     */
+    protected $_sDetailLink = null;
 
     /**
      * Initializes instance
@@ -234,5 +241,24 @@ class oxSimpleVariant extends oxI18n
         }
 
         return 0;
+    }
+
+    /**
+     * Gets article link
+     *
+     * @param int $iLang required language. optional
+     *
+     * @return string
+     */
+    public function getLink( $iLang = null )
+    {
+        if ( $this->_sDetailLink === null ) {
+
+            $oArticle = oxNew( "oxArticle" );
+            $oArticle->setId( $this->getId() );
+            $this->_sDetailLink = $oArticle->getLink( $iLang );
+        }
+
+        return $this->_sDetailLink;
     }
 }

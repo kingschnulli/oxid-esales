@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 22818 2009-09-30 12:38:21Z vilma $
+ * $Id: alist.php 23342 2009-10-19 08:41:39Z arvydas $
  */
 
 /**
@@ -125,6 +125,12 @@ class aList extends oxUBase
      * @var bool
      */
     protected $_blFixedUrl = null;
+
+    /**
+     * Current page url
+     * @var string
+     */
+    protected $_sActPageUrl = null;
 
     /**
      * Generates (if not generated yet) and returns view ID (for
@@ -241,23 +247,6 @@ class aList extends oxUBase
                 $oArticle->setLinkType( $iLinkType );
             }
         }
-    }
-
-    /**
-     * Special page indexing handling for price categories (page should not be indexed):
-     *  - if current category is price category returns VIEW_INDEXSTATE_NOINDEXFOLLOW
-     *  - else returns parent::noIndex()
-     *
-     * @return int
-     */
-    public function noIndex()
-    {
-        // no indexing for price categories
-        if ( $this->_getProductLinkType() == OXARTICLE_LINKTYPE_PRICECATEGORY ) {
-            return $this->_iViewIndexState = VIEW_INDEXSTATE_NOINDEXFOLLOW;
-        }
-
-        return parent::noIndex();
     }
 
     /**
@@ -553,14 +542,17 @@ class aList extends oxUBase
      */
     protected function _addPageNrParam( $sUrl, $iPage, $iLang = null)
     {
-        if ( oxUtils::getInstance()->seoIsActive() && ( $oCategory = $this->getActCategory() ) ) {
-            if ( $iPage ) { // only if page number > 0
-                $sUrl = oxSeoEncoderCategory::getInstance()->getCategoryPageUrl( $oCategory, $iPage, $iLang, $this->_isFixedUrl( $oCategory ) );
+        if ( $this->_sActPageUrl === null ) {
+            $this->_sActPageUrl = $sUrl;
+            if ( oxUtils::getInstance()->seoIsActive() && ( $oCategory = $this->getActCategory() ) ) {
+                if ( $iPage ) { // only if page number > 0
+                    $this->_sActPageUrl = oxSeoEncoderCategory::getInstance()->getCategoryPageUrl( $oCategory, $iPage, $iLang, $this->_isFixedUrl( $oCategory ) );
+                }
+            } else {
+                $this->_sActPageUrl = parent::_addPageNrParam( $sUrl, $iPage, $iLang );
             }
-        } else {
-            $sUrl = parent::_addPageNrParam( $sUrl, $iPage, $iLang );
         }
-        return $sUrl;
+        return $this->_sActPageUrl;
     }
 
     /**
@@ -867,4 +859,17 @@ class aList extends oxUBase
         return $this->getActCategory();
     }
 
+    /**
+     * Returns view canonical url
+     *
+     * @return string
+     */
+    public function getCanonicalUrl()
+    {
+        if ( ( $iPage = $this->getActPage() ) ) {
+            return $this->_addPageNrParam( $this->generatePageNavigationUrl(), $iPage );
+        } elseif ( ( $oCategory = $this->getActiveCategory() ) ) {
+            return $oCategory->getLink();
+        }
+    }
 }

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: tag.php 23255 2009-10-14 15:25:09Z sarunas $
+ * $Id: tag.php 23342 2009-10-19 08:41:39Z arvydas $
  */
 
 /**
@@ -71,7 +71,7 @@ class Tag extends aList
      *
      * @var int
      */
-    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXFOLLOW;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_INDEX;
 
     /**
      * Initiates tag view and calls parent::init();
@@ -236,14 +236,17 @@ class Tag extends aList
      */
     protected function _addPageNrParam( $sUrl, $iPage, $iLang = null)
     {
-        if ( oxUtils::getInstance()->seoIsActive() && ( $sTag = $this->getTag() ) ) {
-            if ( $iPage ) { // only if page number > 0
-                $sUrl = oxSeoEncoderTag::getInstance()->getTagPageUrl( $sTag, $iPage, $iLang );
+        if ( $this->_sActPageUrl === null ) {
+            $this->_sActPageUrl = $sUrl;
+            if ( oxUtils::getInstance()->seoIsActive() && ( $sTag = $this->getTag() ) ) {
+                if ( $iPage ) { // only if page number > 0
+                    $this->_sActPageUrl = oxSeoEncoderTag::getInstance()->getTagPageUrl( $sTag, $iPage, $iLang );
+                }
+            } else {
+                $this->_sActPageUrl = oxUBase::_addPageNrParam( $sUrl, $iPage, $iLang );
             }
-        } else {
-            $sUrl = oxUBase::_addPageNrParam( $sUrl, $iPage, $iLang );
         }
-        return $sUrl;
+        return $this->_sActPageUrl;
     }
 
     /**
@@ -344,5 +347,19 @@ class Tag extends aList
     protected function _prepareMetaDescription( $sMeta, $iLength = 1024, $blDescTag = false )
     {
         return parent::_collectMetaDescription( $sMeta, $iLength, $blDescTag );
+    }
+
+    /**
+     * Returns view canonical url
+     *
+     * @return string
+     */
+    public function getCanonicalUrl()
+    {
+        if ( ( $iPage = $this->getActPage() ) ) {
+            return $this->_addPageNrParam( $this->generatePageNavigationUrl(), $iPage );
+        } elseif ( ( $sTag = $this->getTag() ) ) {
+            return oxSeoEncoderTag::getInstance()->getTagUrl( $sTag );
+        }
     }
 }

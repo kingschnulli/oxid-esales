@@ -48,16 +48,6 @@ interface oxIUrl
      * @return string
      */
     public function getStdLink( $iLang = null, $aParams = array() );
-
-    /**
-     * Returns main object URL. If SEO is ON returned link will be in SEO form,
-     * else URL will have dynamic form
-     *
-     * @param int $iLang language id [optional]
-     *
-     * @return string
-     */
-    public function getMainLink( $iLang = null );
 }
 
 ?>

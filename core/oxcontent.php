@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcontent.php 23264 2009-10-15 06:58:08Z arvydas $
+ * $Id: oxcontent.php 23323 2009-10-16 14:59:42Z sarunas $
  */
 
 /**
@@ -143,7 +143,6 @@ class oxContent extends oxI18n implements oxIUrl
         $this->oxcontents__oxcontent->setValue(str_replace( '&amp;', '&', $this->oxcontents__oxcontent->value ), oxField::T_RAW);
         // workaround for firefox showing &lang= as &9001;= entity, mantis#0001272
         $this->oxcontents__oxcontent->setValue(str_replace( '&lang=', '&amp;lang=', $this->oxcontents__oxcontent->value ), oxField::T_RAW);
-        $this->getLink();
     }
 
     /**
@@ -205,19 +204,6 @@ class oxContent extends oxI18n implements oxIUrl
             }
         }
         return $this->getConfig()->getShopHomeURL() . "cl=content&amp;oxcid=" . $this->getId() . $sAdd;
-    }
-
-    /**
-     * Returns main object URL. If SEO is ON returned link will be in SEO form,
-     * else URL will have dynamic form
-     *
-     * @param int $iLang language id [optional]
-     *
-     * @return string
-     */
-    public function getMainLink( $iLang = null )
-    {
-
     }
 
     /**

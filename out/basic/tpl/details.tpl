@@ -279,6 +279,8 @@
     </div>
     [{/if}]
 
+    [{include file="inc/variant_selector.tpl"}]
+
     <div class="longdesc">
         <strong class="h3" id="test_productFullTitle">[{ $product->oxarticles__oxtitle->value }][{if $product->oxarticles__oxvarselect->value}] [{ $product->oxarticles__oxvarselect->value }][{/if}]</strong>
         [{oxhasrights ident="SHOWLONGDESCRIPTION"}]

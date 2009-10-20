@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 23255 2009-10-14 15:25:09Z sarunas $
+ * $Id: oxarticle.php 23332 2009-10-16 17:24:12Z tomas $
  */
 
 // defining supported link types
@@ -137,6 +137,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * As an opposite to $_oVariantList this works even if variants are not active
      */
     protected $_blHasVariants = false;
+
+    /**
+     * $_blHasVariants is set to true if article has multidimensional variants.
+     */
+    protected $_blHasMdVariants = false;
 
     /**
      * Indicates how many variants this article has "on stock" (very large number for unlimited)
@@ -367,6 +372,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     protected $_aCopyParentField = array('oxarticles__oxnonmaterial',
                                          'oxarticles__oxfreeshipping',
                                          'oxarticles__oxremindactive');
+
+    /**
+     * Multidimensional variant tree structure
+     *
+     * @var OxMdVariant
+     */
+    protected $_oMdVariants = null;
 
     /**
      * Class constructor, sets shop ID for article (oxconfig::getShopId()),
@@ -1202,6 +1214,16 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
+     * Checks if article has multidimensional variants
+     *
+     * @return bool
+     */
+    public function hasMdVariants()
+    {
+        return $this->_blHasMdVariants;
+    }
+
+    /**
      * Collects and returns article variants.
      *
      * @param bool $blRemoveNotOrderables if true, removes from list not orderable articles, which are out of stock
@@ -1250,6 +1272,16 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                        " order by $sArticleTable.oxsort";
 
             $oVariants->selectString( $sSelect );
+
+            //if this is multidimensional variants, make additional processing
+            if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+
+                $oMdVariants = oxNew( "oxVariantHandler" );
+
+                if ( $this->_blHasMdVariants = $oMdVariants->isMdVariant( $oVariants->current() ) ) {
+                    $oVariants = $this->_parseMdVariantList( $oVariants );
+                }
+            }
             stopProfile("selectVariants");
         }
 
@@ -1360,7 +1392,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Returns ID's of categories. where this article is assigned
+     * Returns ID's of categories where this article is assigned
      *
      * @param bool $blActCats   select categories if all parents are active
      * @param bool $blSkipCache Whether to skip cache
@@ -2363,7 +2395,17 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getMainLink( $iLang = null )
     {
-
+        if (isset($iLang)) {
+            $iLang = (int) $iLang;
+            if ($iLang == (int) $this->getLanguage()) {
+                $iLang = null;
+            }
+        }
+        if ( oxUtils::getInstance()->seoIsActive() ) {
+            return oxSeoEncoderArticle::getInstance()->getArticleMainUrl( $this, $iLang );
+        } else {
+            return $this->getStdLink($iLang, array('cnid'=>''));
+        }
     }
 
     /**
@@ -2650,6 +2692,21 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         return $this->_oVariantList;
     }
+
+    /**
+     * Parses variants list to have only variants with top level distinct values
+     *
+     * @param oxArticleList $oVariantsList Variants list
+     *
+     * @return oxArticleList
+     */
+    protected function _parseMdVariantList( $oVariantsList )
+    {
+        $oMdVariants = oxNew( "oxVariantHandler" );
+
+        return $oMdVariants->getTopMdVariants( $oVariantsList, $this->_isInList() );
+    }
+
 
     /**
      * Sets selectlists of current product
@@ -4227,10 +4284,22 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
+     * Returns TRUE if product is multidimensional variant, and false if not
+     *
+     * @return bool
+     */
+    public function isMdVariant()
+    {
+        $oMdVariant = oxNew( "oxVariantHandler" );
+
+        return $oMdVariant->isMdVariant();
+    }
+
+    /**
      * get Sql for loading price categories which include this article
      *
      * @param string $sFields fields to load from oxcategories
-     * 
+     *
      * @return string
      */
     public function getSqlForPriceCategories($sFields = '')
@@ -4239,7 +4308,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $sFields = 'oxid';
         }
         $sSelectWhere = "select $sFields from ".$this->_getObjectViewName('oxcategories')." where";
-        $sQuotedPrice = oxDb::getDb()->quote( $oArticle->oxarticles__oxprice->value );
+        $sQuotedPrice = oxDb::getDb()->quote( $this->oxarticles__oxprice->value );
         return  "$sSelectWhere oxpricefrom != 0 and oxpriceto != 0 and oxpricefrom <= $sQuotedPrice and oxpriceto >= $sQuotedPrice"
                ." union $sSelectWhere oxpricefrom != 0 and oxpriceto = 0 and oxpricefrom <= $sQuotedPrice"
                ." union $sSelectWhere oxpricefrom = 0 and oxpriceto != 0 and oxpriceto >= $sQuotedPrice";
@@ -4257,7 +4326,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         $oDb = oxDb::getDb();
 
-        $sQuotedPrice = oxDb::getDb()->quote( $oArticle->oxarticles__oxprice->value );
+        $sQuotedPrice = oxDb::getDb()->quote( $this->oxarticles__oxprice->value );
         $sQuotedCnid = oxDb::getDb()->quote( $sCatNid );
         return (bool) $oDb->getOne(
             "select 1 from ".$this->_getObjectViewName('oxcategories')." where oxid=$sQuotedCnid and"
@@ -4266,5 +4335,28 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
            ." or (oxpricefrom = 0 and oxpriceto != 0 and oxpriceto >= $sQuotedPrice)"
            .")"
         );
+    }
+
+    /**
+     * Returns multidimensional variant structure
+     *
+     * @return OxMdVariants
+     */
+    public function getMdVariants()
+    {
+        if ($this->_oMdVariants)
+            return $this->_oMdVariants;
+
+        $oMdVariants = oxNew("OxMdVariant");
+        $oMdVariants->setName("_parent_product_");
+        $oVariants = $this->getVariants();
+        foreach($oVariants as $sKey => $oVariant) {
+            $oMdVariants->addNames($sKey,
+                                   explode("|", $oVariant->oxarticles__oxvarselect->value),
+                                   $oVariant->getPrice()->getBruttoPrice());
+        }
+
+        $this->_oMdVariants = $oMdVariants;
+        return $this->_oMdVariants;
     }
 }

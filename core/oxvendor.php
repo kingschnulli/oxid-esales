@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxvendor.php 23255 2009-10-14 15:25:09Z sarunas $
+ * $Id: oxvendor.php 23323 2009-10-16 14:59:42Z sarunas $
  */
 
 /**
@@ -262,19 +262,6 @@ class oxVendor extends oxI18n implements oxIUrl
         }
 
         return $this->getConfig()->getShopHomeURL().'cl=vendorlist&amp;cnid=v_'.$this->getId().$sLangUrl;
-    }
-
-    /**
-     * Returns main object URL. If SEO is ON returned link will be in SEO form,
-     * else URL will have dynamic form
-     *
-     * @param int $iLang language id [optional]
-     *
-     * @return string
-     */
-    public function getMainLink( $iLang = null )
-    {
-
     }
 
     /**

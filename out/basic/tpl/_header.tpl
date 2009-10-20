@@ -73,7 +73,7 @@
             </div>
             <div class="left">
                 [{if !$oView->showTopCatNavigation() }]
-                    <a id="test_HeaderHome" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getHomeLink() }]">[{ oxmultilang ident="INC_HEADER_HOME" }]</a>
+                    <a id="test_HeaderHome" href="[{ oxgetseourl ident=$oViewConf->getHomeLink() }]">[{ oxmultilang ident="INC_HEADER_HOME" }]</a>
                 [{/if}]
 
                 [{if $oView->getWishlistName()}]
@@ -85,7 +85,7 @@
                 [{assign var="oCont" value=$oView->getContentByIdent("oxagb") }]
                 <a id="test_HeaderTerms" href="[{ $oCont->getLink() }]" rel="nofollow">[{ $oCont->oxcontents__oxtitle->value }]</a>
                 [{assign var="oCont" value=$oView->getContentByIdent("oximpressum") }]
-                <a id="test_HeaderImpressum" href="[{ $oCont->getLink() }]" rel="nofollow">[{ $oCont->oxcontents__oxtitle->value }]</a>
+                <a id="test_HeaderImpressum" href="[{ $oCont->getLink() }]">[{ $oCont->oxcontents__oxtitle->value }]</a>
                 [{if $oView->getMenueList()}]
                   [{foreach from=$oView->getMenueList() item=oMenueContent }]
                     <a href="[{ $oMenueContent->getLink() }]">[{$oMenueContent->oxcontents__oxtitle->value}]</a>

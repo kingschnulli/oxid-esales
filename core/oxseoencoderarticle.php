@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoderarticle.php 23272 2009-10-15 11:07:09Z sarunas $
+ * $Id: oxseoencoderarticle.php 23319 2009-10-16 14:03:21Z arvydas $
  */
 
 /**
@@ -125,6 +125,15 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         return $sSeoUrl;
     }
 
+    /**
+     * create article uri for given category and save it
+     *
+     * @param oxArticle  $oArticle  article object
+     * @param oxCategory $oCategory category object
+     * @param int        $iLang     language to generate uri for
+     *
+     * @return string
+     */
     protected function _createArticleCategoryUri( $oArticle, $oCategory, $iLang = null)
     {
         startProfile(__FUNCTION__);
@@ -180,10 +189,18 @@ class oxSeoEncoderArticle extends oxSeoEncoder
 
         //load details link from DB
         if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, null, $sActCatId, true ) ) ) {
-            if ($sActCatId && ($oArticle->inCategory($sActCatId) || $oArticle->inPriceCategory($sActCatId))) {
-                $sSeoUrl = $this->_createArticleCategoryUri($oArticle, $oActCat, $iLang);
+            $blInCat  = false;
+            if ( $sActCatId ) {
+                if ( $oActCat->isPriceCategory() ) {
+                    $blInCat = $oArticle->inPriceCategory( $sActCatId );
+                } else {
+                    $blInCat = $oArticle->inCategory( $sActCatId );
+                }
+            }
+            if ( $blInCat ) {
+                $sSeoUrl = $this->_createArticleCategoryUri( $oArticle, $oActCat, $iLang );
             } else {
-                $sSeoUrl = $this->_getArticleMainUri($oArticle, $iLang);
+                $sSeoUrl = $this->_getArticleMainUri( $oArticle, $iLang );
             }
         }
 
@@ -207,18 +224,30 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             $iLang = $oArticle->getLanguage();
         }
 
-        $oActCat = $oArticle->getCategory();
-        $sActCatId = $oActCat?$oActCat->getId():'';
+        // if variant parent id must be used
+        $sArtId = $oArticle->getId();
+        if ( isset( $oArticle->oxarticles__oxparentid->value ) && $oArticle->oxarticles__oxparentid->value ) {
+            $sArtId = $oArticle->oxarticles__oxparentid->value;
+        }
 
-        //load details link from DB
-        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, null, $sActCatId, true ) ) ) {
-            $oArticle = $this->_getProductForLang( $oArticle, $iLang );
-            if ($sActCatId) {
-                $sSeoUrl = $this->_createArticleCategoryUri($oArticle, $oActCat, $iLang);
+        if ( !( $sMainCatId = oxDb::getDb()->getOne( "select oxcatnid from ".getViewName( "oxobject2category" )." where oxobjectid = '{$sArtId}' order by oxtime" ) ) ) {
+            $sMainCatId = '';
+        }
+
+        //load default article url from DB
+        if ( !( $sSeoUrl = $this->_loadFromDb( 'oxarticle', $oArticle->getId(), $iLang, null, $sMainCatId, true ) ) ) {
+            if ( $sMainCatId ) {
+                $oMainCat = oxNew( "oxcategory" );
+                $oMainCat->load( $sMainCatId );
+                // save for main category
+                $sSeoUrl = $this->_createArticleCategoryUri( $oArticle, $oMainCat, $iLang );
             } else {
+                // get default article url
                 $oArticle = $this->_getProductForLang( $oArticle, $iLang );
                 $sSeoUrl = $this->_processSeoUrl( $this->_prepareArticleTitle( $oArticle ), $oArticle->getId(), $iLang );
-                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink($iLang, array('cnid'=>'')), $sSeoUrl, $iLang );
+
+                // save default article url
+                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink($iLang, array( 'cnid' => '' ) ), $sSeoUrl, $iLang, null, 0, false, false, '' );
             }
         }
 
@@ -263,7 +292,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             $sTitle .= $oArticle->oxarticles__oxartnum->value;
         }
 
-        return $this->_prepareTitle( $sTitle . '.html' );
+        return $this->_prepareTitle( $sTitle ) . '.html';
     }
 
     /**
@@ -357,6 +386,22 @@ class oxSeoEncoderArticle extends oxSeoEncoder
 
         return $sSeoUrl;
     }
+
+    /**
+     * return article main url, with path of its default category
+     *
+     * @param <type> $oArticle
+     * @param <type> $iLang
+     * @return <type>
+     */
+    public function getArticleMainUrl( $oArticle, $iLang = null )
+    {
+        if (!isset($iLang)) {
+            $iLang = $oArticle->getLanguage();
+        }
+        return $this->_getFullUrl( $this->_getArticleMainUri( $oArticle, $iLang ), $iLang );
+    }
+
     /**
      * Encodes article URLs into SEO format
      *

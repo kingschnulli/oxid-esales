@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: lang.php 23313 2009-10-16 12:26:01Z rimvydas.paskevicius $
  */
 
 
@@ -1202,6 +1202,7 @@ $aLang = array(
 'WRAPPING_OPTIONALMESSAGE'                        => "Here you can enter an optional greeting message:",
 'WRAPPING_ADDFORANDFROM'                          => 'Please also add "For" and "From".',
 'WRAPPING_BACKTOORDER'                            => "Back to Order",
+'VARIANT_PRICEFROM'                               => 'from',
 'priceFrom'                                       => '<span style="font-size: 50%;">from</span>',
 'byBrand'                                         => 'By Brand/Manufacturer',
 'byVendor'                                        => 'By Distributor',

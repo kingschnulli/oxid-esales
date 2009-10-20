@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: manufacturerlist.php 23252 2009-10-14 14:28:44Z arvydas $
+ * $Id: manufacturerlist.php 23342 2009-10-19 08:41:39Z arvydas $
  */
 
 /**
@@ -85,7 +85,7 @@ class ManufacturerList extends aList
      *
      * @var int
      */
-    protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXFOLLOW;
+    protected $_iViewIndexState = VIEW_INDEXSTATE_INDEX;
 
     /**
      * Executes parent::render(), loads active Manufacturer, prepares article
@@ -220,15 +220,18 @@ class ManufacturerList extends aList
      */
     protected function _addPageNrParam( $sUrl, $iPage, $iLang = null)
     {
-        if ( oxUtils::getInstance()->seoIsActive() && ( $oManufacturer = $this->getActManufacturer() ) ) {
-            if ( $iPage ) { // only if page number > 0
-                $sUrl = oxSeoEncoderManufacturer::getInstance()->getManufacturerPageUrl( $oManufacturer, $iPage, $iLang, $this->_isFixedUrl( $oManufacturer ) );
+        if ( $this->_sActPageUrl === null ) {
+            $this->_sActPageUrl = $sUrl;
+            if ( oxUtils::getInstance()->seoIsActive() && ( $oManufacturer = $this->getActManufacturer() ) ) {
+                if ( $iPage ) { // only if page number > 0
+                    $this->_sActPageUrl = oxSeoEncoderManufacturer::getInstance()->getManufacturerPageUrl( $oManufacturer, $iPage, $iLang, $this->_isFixedUrl( $oManufacturer ) );
+                }
+            } else {
+                $this->_sActPageUrl = parent::_addPageNrParam( $sUrl, $iPage, $iLang );
             }
-        } else {
-            $sUrl = parent::_addPageNrParam( $sUrl, $iPage, $iLang );
         }
 
-        return $sUrl;
+        return $this->_sActPageUrl;
     }
 
     /**

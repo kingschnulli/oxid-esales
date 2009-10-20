@@ -305,6 +305,19 @@ var oxid = {
                 }
             }
         }
+    },
+
+    // reloading page by selected value in select list
+    getMdVariantUrl : function(selId) {
+        var _mdVar  = document.getElementById(selId);
+
+        if (_mdVar) {
+            _newUrl = _mdVar.options[_mdVar.selectedIndex].value;
+        }
+
+        if(_newUrl) {
+            document.location.href = _newUrl;
+        }
     }
 
 };

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: details.php 23340 2009-10-19 07:47:49Z arvydas $
  */
 
 /**
@@ -1271,5 +1271,17 @@ class Details extends oxUBase
     public function getTag()
     {
         return oxConfig::getParameter("searchtag", 1);
+    }
+
+    /**
+     * Returns view canonical url
+     *
+     * @return string
+     */
+    public function getCanonicalUrl()
+    {
+        if ( $oProduct = $this->getProduct() ) {
+            return $oProduct->getMainLink();
+        }
     }
 }

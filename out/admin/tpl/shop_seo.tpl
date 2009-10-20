@@ -97,7 +97,7 @@
         </tr>
 
         <tr class="conftext[{cycle}]">
-         <td valign="top">
+         <td valign="top" nowrap>
             <input type=text class="confinput" style="width:270px;" name=confstrs[sSEOSeparator] value="[{$confstrs.sSEOSeparator}]" [{ $readonly }]>
             [{ oxinputhelp ident="HELP_SHOP_SEO_IDSSEPARATOR" }]
          </td>
