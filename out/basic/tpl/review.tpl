@@ -43,11 +43,9 @@
         <div>
             [{ if $oView->canRate() }]
               <table>
-                <tr title="5 [{ oxmultilang ident="REVIEW_STARS" }]"><td><input type="radio" name="artrating" value="5" class="rating_review_input"></td><td class="rating_review_background fivestar">&nbsp;</td></tr>
-                <tr title="4 [{ oxmultilang ident="REVIEW_STARS" }]"><td><input type="radio" name="artrating" value="4" class="rating_review_input"></td><td class="rating_review_background fourstar">&nbsp;</td></tr>
-                <tr title="3 [{ oxmultilang ident="REVIEW_STARS" }]"><td><input type="radio" name="artrating" value="3" class="rating_review_input"></td><td class="rating_review_background threestar">&nbsp;</td></tr>
-                <tr title="2 [{ oxmultilang ident="REVIEW_STARS" }]"><td><input type="radio" name="artrating" value="2" class="rating_review_input"></td><td class="rating_review_background twostar">&nbsp;</td></tr>
-                <tr title="1 [{ oxmultilang ident="REVIEW_STAR" }]"><td><input type="radio" name="artrating" value="1" class="rating_review_input"></td><td class="rating_review_background onestar">&nbsp;</td></tr>
+              [{section name=star start=5 loop=6 step=-1 max=5}]
+              <tr title="[{$smarty.section.star.index}] [{if $smarty.section.star.index==1}][{ oxmultilang ident="REVIEW_STAR" }][{else}][{ oxmultilang ident="REVIEW_STARS" }][{/if}]"><td><input type="radio" name="artrating" value="[{$smarty.section.star.index}]" class="rating_review_input"></td><td class="rating s[{$smarty.section.star.index}]">&nbsp;</td></tr>
+              [{/section}]
               </table>
             [{/if}]
             [{ $oViewConf->getHiddenSid() }]

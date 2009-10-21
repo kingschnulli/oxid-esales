@@ -645,7 +645,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 
 #body .basket .frombasket { height:18px;line-height:1;width: 100px; background: transparent url(oxButtons) no-repeat right -50px; margin:0; border: 0 none; padding:0 1px 0 0;float: left}
 #body .basket .frombasket input{ height:18px;line-height:1;width: 100px; background: transparent url(oxButtons) no-repeat 0 -50px; margin:0; border:0;color:oxButtonCl;padding:0 0 0 23px;cursor:pointer;font-weight: bold;}
-#body .basket .frombasket a { width: 77px; height: 16px; background: transparent url(oxSprite) no-repeat 0 -50px; margin:0; border:0; color:oxButtonCl; padding:4px 0 0 23px; font-weight: bold; font-size: 10px; text-align: center; text-decoration: none; display: block;}
+#body .basket .frombasket a { width: 77px; height: 16px; background: transparent url(oxButtons) no-repeat 0 -50px; margin:0; border:0; color:oxButtonCl; padding:4px 0 0 23px; font-weight: bold; font-size: 10px; text-align: center; text-decoration: none; display: block;}
 
 
 /* user options step */
@@ -797,27 +797,27 @@ div.on.popup input.br{position:absolute;bottom:10px;right:10px;}
 
 /* Ratings */
 #write_review {display: none;}
-#body .rating_review_background { width:89px; height:16px; margin:0; padding:0; background: url(bg/stars.jpg) no-repeat 0 0;}
-#body .onestar {background-position:-72px -38px}
-#body .twostar {background-position:-54px -38px}
-#body .threestar {background-position:-36px -38px}
-#body .fourstar {background-position:-18px -38px}
-#body .fivestar {background-position:0 -38px}
+#body td.rating { width:89px; height:16px; margin:0; padding:0; background: url(bg/stars.jpg) no-repeat 0 0;}
+#body td.rating.s1 {background-position:-72px -38px;}
+#body td.rating.s2 {background-position:-54px -38px;}
+#body td.rating.s3 {background-position:-36px -38px;}
+#body td.rating.s4 {background-position:-18px -38px;}
+#body td.rating.s5 {background-position:0 -38px;}
 #body ul.rating {width:89px; height:16px; margin:0 0 3px; padding:0; list-style:none; clear:both; position:relative; background: url(bg/stars.jpg) no-repeat left top;}
 #body ul.rating li {cursor: pointer; float:left;}
 #body ul.rating li a {position:absolute; left:0; top:0; width:18px; height:16px; text-decoration:none; z-index: 200;}
 #body ul.rating li a b {display: none;}
-#body ul.rating li.one a {left:0}
-#body ul.rating li.two a {left:17px;}
-#body ul.rating li.three a {left:34px;}
-#body ul.rating li.four a {left:51px;}
-#body ul.rating li.five a {left:68px;}
-#body ul.rating li a:hover {z-index:2; width:89px; height:16px; overflow:hidden; left:0; background: url(bg/stars.jpg) no-repeat 0 -18px}
-#body ul.rating li.one a:hover {background-position: -72px -18px;}
-#body ul.rating li.two a:hover {background-position: -54px -18px;}
-#body ul.rating li.three a:hover {background-position: -36px -18px;}
-#body ul.rating li.four a:hover {background-position: -18px -18px;}
-#body ul.rating li.five a:hover {background-position: 0 -18px;}
+#body ul.rating li.s1 a {left:0;}
+#body ul.rating li.s2 a {left:17px;}
+#body ul.rating li.s3 a {left:34px;}
+#body ul.rating li.s4 a {left:51px;}
+#body ul.rating li.s5 a {left:68px;}
+#body ul.rating li a:hover {z-index:2; width:89px; height:16px; overflow:hidden; left:0; background: url(bg/stars.jpg) no-repeat 0 -18px;}
+#body ul.rating li.s1 a:hover {background-position: -72px -18px;}
+#body ul.rating li.s2 a:hover {background-position: -54px -18px;}
+#body ul.rating li.s3 a:hover {background-position: -36px -18px;}
+#body ul.rating li.s4 a:hover {background-position: -18px -18px;}
+#body ul.rating li.s5 a:hover {background-position: 0 -18px;}
 #body .rating_review_input {margin:0; height:16px;}
 #body .rating li.current_rate{background: url(bg/stars.jpg) left bottom; position: absolute; height: 16px; z-index: 1;}
 

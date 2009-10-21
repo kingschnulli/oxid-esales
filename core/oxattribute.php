@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxattribute.php 22524 2009-09-22 11:47:27Z sarunas $
+ * $Id: oxattribute.php 23389 2009-10-20 13:46:15Z vilma $
  */
 
 /**
@@ -78,5 +78,69 @@ class oxAttribute extends oxI18n
         $rs = $oDB->execute( $sDelete);
 
         return parent::delete( $sOXID);
+    }
+
+    /**
+     * Assigns attribute to variant
+     *
+     * @param array $aMDVariants article ids with selectionlist values
+     * @param array $aSelTitle   selection list titles 
+     *
+     * @return null
+     */
+    public function assignVarToAttribute( $aMDVariants, $aSelTitle )
+    {
+        $myLang    = oxLang::getInstance();
+        $aConfLanguages = $myLang->getLanguageIds();
+        $sAttrId = $this->_getAttrId( $aSelTitle[0] );
+        if ( !$sAttrId ) {
+            $sAttrId = $this->_createAttribute( $aSelTitle );
+        }
+        foreach ( $aMDVariants as $sVarId => $oValue ) {
+            $oNewAssign = oxNew( "oxbase" );
+            $oNewAssign->init( "oxobject2attribute" );
+            $oNewAssign->oxobject2attribute__oxobjectid = new oxField($sVarId);
+            $oNewAssign->oxobject2attribute__oxattrid   = new oxField($sAttrId);
+            foreach ($aConfLanguages as $sKey => $sLang) {
+                $sPrefix = $myLang->getLanguageTag($sKey);
+                $oNewAssign->{'oxobject2attribute__oxvalue'.$sPrefix} = new oxField($oValue[$sKey]->name);
+            }
+            $oNewAssign->save();
+        }
+    }
+
+    /**
+     * Searches for attribute by oxtitle. If exists returns attribute id
+     *
+     * @param string $sSelTitle selection list title
+     *
+     * @return mixed attribute id or false
+     */
+    protected function _getAttrId( $sSelTitle )
+    {
+        $oDb = oxDb::getDB();
+        $sAttViewName = getViewName('oxattribute');
+        return $oDb->getOne("select oxid from $sAttViewName where LOWER(oxtitle) = " . $oDb->quote(getStr()->strtolower($sSelTitle)));
+    }
+
+    /**
+     * Checks if attribute exists
+     *
+     * @param string $sSelTitle selection list title
+     *
+     * @return string attribute id
+     */
+    protected function _createAttribute( $aSelTitle )
+    {
+        $myLang    = oxLang::getInstance();
+        $aConfLanguages = $myLang->getLanguageIds();
+        $oAttr = oxNew('oxbase');
+        $oAttr->init('oxattribute');
+        foreach ($aConfLanguages as $sKey => $sLang) {
+           $sPrefix = $myLang->getLanguageTag($sKey);
+           $oAttr->{'oxattribute__oxtitle'.$sPrefix} = new oxField($aSelTitle[$sKey]);
+        }
+        $oAttr->save();
+        return $oAttr->getId();
     }
 }

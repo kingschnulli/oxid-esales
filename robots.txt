@@ -4,6 +4,7 @@ Disallow: /core/
 Disallow: /tmp/
 Disallow: /views/
 Disallow: /setup/
+Disallow: /log/
 #
 Disallow: /newsletter/
 Disallow: /en/newsletter/

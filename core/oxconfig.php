@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 23250 2009-10-14 13:40:12Z alfonsas $
+ * $Id: oxconfig.php 23366 2009-10-20 08:53:58Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1907,5 +1907,15 @@ class oxConfig extends oxSuperCfg
     public function isUtf()
     {
         return ( bool ) $this->getConfigParam( 'iUtfMode' );
+    }
+
+    /**
+     * Returns log files storage path
+     *
+     * @return string
+     */
+    public function getLogsDir()
+    {
+        return $this->getConfigParam( 'sShopDir' ).'log/';
     }
 }

@@ -15,6 +15,7 @@
     <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/container/container-min.js"></script>
     <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/tabview/tabview-min.js"></script>
     <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/treeview/treeview-min.js"></script>
+    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/stylesheet/stylesheet-min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]gui.css">
     <script type="text/javascript" src="[{$shop->basetpldir}]yui/oxid-gui.js" ></script>
@@ -26,7 +27,7 @@
      <![endif]-->
 
      [{foreach from=$themes key=th item=title}]
-     <style type="text/css" rel="alternate stylesheet" id="gui-th-[{$th}]" title="gui-th-[{$th}]-css" [{if $theme != $th}]disabled[{/if}]>
+     <style type="text/css" rel="alternate stylesheet" id="gui-th-[{$th}]" title="gui-th-[{$th}]-css">
             [{foreach from=$colors[$th] key=index item=color}]
             .gui-cl-[{$index}]{ background-color:[{$color}];}
             [{/foreach}]
@@ -64,14 +65,16 @@
                 <div class="yui-content">
 
                     <div id="gui-tab-themes">
-                        <p>
-                        <label for="gui-themes">[{ oxmultilang ident="GUI_THEME_LABEL" }]</label>
-                        <select id="gui-themes" name="t">
-                            [{foreach from=$themes key=id item=title}]
-                            <option value="[{$id}]" [{if $theme == $id}]selected[{/if}]>[{$title}]</option>
+                        <table width="100%">
+                        [{foreach from=$themes key=th item=title}]
+                        <tr>
+                            <td><label><input type="radio" value="[{$th}]" name="t" [{if $theme == $th}]checked[{/if}] onclick="gui.setTheme(this.value)"> <b>[{$title}]</b></label></td>
+                            [{foreach from=$colors[$th] key=index item=color}]
+                            <td style="background:[{$color}];">&nbsp;</td>
                             [{/foreach}]
-                        </select>
-                        </p>
+                        </tr>
+                        [{/foreach}]
+                        </table>
                     </div>
 
                     <div id="gui-tab-colors">
@@ -120,9 +123,6 @@
                             [{/foreach}]
                             </ul>
                         [{/defun}]
-
-
-
                         </div>
 
                     </div>
@@ -144,7 +144,7 @@
         var gui;
 
         YAHOO.util.Event.onDOMReady(function() {
-            gui = new YAHOO.oxid.gui( 'gui-dialog', 'gui-tabs', 'gui-themes' , 'gui-picker', 'gui-tree', 'gui-preview', '[{ $shop->selflink }]', '[{ $shop->basetpldir }]');
+            gui = new YAHOO.oxid.gui( 'gui-dialog', 'gui-tabs', 'gui-picker', 'gui-tree', 'gui-preview', '[{ $shop->selflink }]', '[{ $shop->basetpldir }]');
             gui.render();
             gui.show();
         });

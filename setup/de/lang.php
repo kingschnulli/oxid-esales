@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: lang.php 23384 2009-10-20 12:58:12Z vilma $
  */
 
 $aLang = array(
@@ -170,6 +170,7 @@ $aLang = array(
 
 'ATTENTION'                                       => "Bitte beachten Sie",
 'SETUP_DIR_DELETE_NOTICE'                         => "WICHTIG: Bitte l&ouml;schen Sie Ihr Setup Verzeichnis falls dieses nicht bereits automatisch entfernt wurde!",
+'SETUP_CONFIG_PERMISSIONS'                        => "WICHTIG: Aus Sicherheitsgründen setzen Sie Ihre config.inc.php Datei auf read-only-Modus!",
 
 'SELECT_SETUP_LANG'                               => "Sprache f&uuml;r die Installation",
 'SELECT_COUNTRY_LANG'                             => "Ihr Standort",

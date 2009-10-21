@@ -103,17 +103,20 @@
       [{ if $product->hasMdVariants() }]
       <select id="mdVariant_[{$testid}]" name="mdVariant_[{$testid}]">
         [{ if !$product->isParentNotBuyable()}]
-          <option value="[{$product->sOXID}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]* [{/oxhasrights}]</option>
+          <option value="[{$product->getId()}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]*[{/oxhasrights}]</option>
         [{/if}]
 
-        [{foreach from=$product->getVariantList() item=variant}]
-          <option value="[{$variant->getLink()}]">[{ $variant->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ oxmultilang ident="VARIANT_PRICEFROM" }] [{ $variant->getFPrice() }] [{ $currency->sign|strip_tags}]* [{/oxhasrights}]</option>
+        [{foreach from=$product->getMdSubvariants() item=mdVariant}]
+          <option value="[{$mdVariant->getLink()}]">[{ $mdVariant->getName() }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $mdVariant->getFPrice()|strip_tags }]* [{/oxhasrights}]</option>
         [{/foreach}]
       </select>
       [{else}]
       <select id="test_varSelect_[{$testid}]" name="aid">
+        [{ if !$product->isParentNotBuyable()}]
+          <option value="[{$product->getId()}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]*[{/oxhasrights}]</option>
+        [{/if}]
         [{foreach from=$product->getVariantList() item=variant}]
-          <option value="[{$variant->sOXID}]">[{ $variant->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $variant->getFPrice() }] [{ $currency->sign|strip_tags}]* [{/oxhasrights}]</option>
+          <option value="[{$variant->getId()}]">[{ $variant->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $variant->getFPrice() }] [{ $currency->sign|strip_tags}]* [{/oxhasrights}]</option>
         [{/foreach}]
       </select>
       [{/if}]

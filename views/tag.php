@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: tag.php 23342 2009-10-19 08:41:39Z arvydas $
+ * $Id: tag.php 23400 2009-10-20 14:38:13Z arvydas $
  */
 
 /**
@@ -236,17 +236,14 @@ class Tag extends aList
      */
     protected function _addPageNrParam( $sUrl, $iPage, $iLang = null)
     {
-        if ( $this->_sActPageUrl === null ) {
-            $this->_sActPageUrl = $sUrl;
-            if ( oxUtils::getInstance()->seoIsActive() && ( $sTag = $this->getTag() ) ) {
-                if ( $iPage ) { // only if page number > 0
-                    $this->_sActPageUrl = oxSeoEncoderTag::getInstance()->getTagPageUrl( $sTag, $iPage, $iLang );
-                }
-            } else {
-                $this->_sActPageUrl = oxUBase::_addPageNrParam( $sUrl, $iPage, $iLang );
+        if ( oxUtils::getInstance()->seoIsActive() && ( $sTag = $this->getTag() ) ) {
+            if ( $iPage ) { // only if page number > 0
+                $sUrl = oxSeoEncoderTag::getInstance()->getTagPageUrl( $sTag, $iPage, $iLang );
             }
+        } else {
+            $sUrl = oxUBase::_addPageNrParam( $sUrl, $iPage, $iLang );
         }
-        return $this->_sActPageUrl;
+        return $sUrl;
     }
 
     /**
@@ -295,6 +292,8 @@ class Tag extends aList
     /**
      * Template variable getter. Returns template location
      *
+     * @deprecated use tag::getTreePath() and adjust template
+     *
      * @return string
      */
     public function getTemplateLocation()
@@ -308,6 +307,27 @@ class Tag extends aList
             }
         }
         return $this->_sTemplateLocation;
+    }
+
+    /**
+     * Template variable getter. Returns category path array
+     *
+     * @return array
+     */
+    public function getTreePath()
+    {
+        if ( ( $sTag = $this->getTag() ) ) {
+            $oStr = getStr();
+
+            $aPath[0] = oxNew( "oxcategory" );
+            $aPath[0]->setLink( false );
+            $aPath[0]->oxcategories__oxtitle = new oxField( oxLang::getInstance()->translateString('TAGS') );
+
+            $aPath[1] = oxNew( "oxcategory" );
+            $aPath[1]->setLink( false );
+            $aPath[1]->oxcategories__oxtitle = new oxField( $oStr->htmlspecialchars( $oStr->ucfirst( $sTag ) ) );
+            return $aPath;
+        }
     }
 
     /**

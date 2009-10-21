@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 22900 2009-10-02 12:43:11Z arvydas $
+ * $Id: oxutils.php 23366 2009-10-20 08:53:58Z arvydas $
  */
 
 /**
@@ -1035,7 +1035,8 @@ class oxUtils extends oxSuperCfg
             if ( gettype( $sText ) != 'string' ) {
                 $sText = var_export( $sText, true);
             }
-            @error_log("----------------------------------------------\n$sText".( ( $blNewline ) ?"\n":"" )."\n", 3, $myConfig->getConfigParam( 'sCompileDir' ).'/log.txt' );
+            $sLogMsg = "----------------------------------------------\n{$sText}".( ( $blNewline ) ?"\n":"" )."\n";
+            $this->writeToLog( $sLogMsg, "log.txt" );
         }
 
     }
@@ -1179,4 +1180,24 @@ class oxUtils extends oxSuperCfg
         return $sUrl;
     }
 
+    /**
+     * Writes given log message. Returns write state
+     *
+     * @param string $sLogMessage  log message
+     * @param string $sLogFileName log file name
+     *
+     * @return bool
+     */
+    public function writeToLog( $sLogMessage, $sLogFileName )
+    {
+        $sLogDist = $this->getConfig()->getLogsDir().$sLogFileName;
+        $blOk = false;
+
+        if ( ( $oHandle = fopen( $sLogDist, 'a' ) ) !== false ) {
+            fwrite( $oHandle, $sLogMessage );
+            $blOk = fclose( $oHandle );
+        }
+
+        return $blOk;
+    }
 }

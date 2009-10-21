@@ -58,26 +58,24 @@
     [{/oxhasrights}]
 
     [{ if !$oxcmp_user}]
-      [{assign var="star_title" value="DETAILS_PERSPARAM_LOGGIN"|oxmultilangassign }]
+      [{assign var="_star_title" value="DETAILS_PERSPARAM_LOGGIN"|oxmultilangassign }]
     [{ elseif !$oView->canRate() }]
-      [{assign var="star_title" value="DETAILS_PERSPARAM_ALREADYRATED"|oxmultilangassign }]
+      [{assign var="_star_title" value="DETAILS_PERSPARAM_ALREADYRATED"|oxmultilangassign }]
     [{ else }]
-      [{assign var="star_title" value="DETAILS_PERSPARAM_RATETHISARTICLE"|oxmultilangassign }]
+      [{assign var="_star_title" value="DETAILS_PERSPARAM_RATETHISARTICLE"|oxmultilangassign }]
     [{/if}]
     [{math equation="x*y" x=20 y=$product->getArticleRatingAverage() assign="currentRate" }]
     <br>
     <ul id="star_rate_top" class="rating">
-      <li class="current_rate" style="width: [{$currentRate}]%;"><a title="[{$star_title}]"><b>1</b></a></li>
-      <li class="one"><a rel="nofollow" [{ if !$oxcmp_user}]href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]"[{ elseif $oView->canRate() }]href="#review" onclick="showReview(1);"[{/if}] title="[{$star_title}]"><b>1</b></a></li>
-      <li class="two"><a rel="nofollow" [{ if !$oxcmp_user}]href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]"[{ elseif $oView->canRate() }]href="#review" onclick="showReview(2);"[{/if}] title="[{$star_title}]"><b>2</b></a></li>
-      <li class="three"><a rel="nofollow" [{ if !$oxcmp_user}]href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]"[{ elseif $oView->canRate() }]href="#review" onclick="showReview(3);"[{/if}] title="[{$star_title}]"><b>3</b></a></li>
-      <li class="four"><a rel="nofollow" [{ if !$oxcmp_user}]href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]"[{ elseif $oView->canRate() }]href="#review" onclick="showReview(4);"[{/if}] title="[{$star_title}]"><b>4</b></a></li>
-      <li class="five"><a rel="nofollow" [{ if !$oxcmp_user}]href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]"[{ elseif $oView->canRate() }]href="#review" onclick="showReview(5);"[{/if}] title="[{$star_title}]"><b>5</b></a></li>
+      <li class="current_rate" style="width: [{$currentRate}]%;"><a title="[{$_star_title}]"><b>1</b></a></li>
+      [{section name=star start=1 loop=6}]
+      <li class="s[{$smarty.section.star.index}]"><a rel="nofollow" [{ if !$oxcmp_user}]href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]"[{ elseif $oView->canRate() }]href="#review" onclick="oxid.review.rate([{$smarty.section.star.index}]);"[{/if}] title="[{$_star_title}]"><b>[{$smarty.section.star.index}]</b></a></li>
+      [{/section}]
     </ul>
     [{if $product->oxarticles__oxratingcnt->value}]
-      <a id="star_rating_text" rel="nofollow" href="#review" onclick="showReview();" class="fs10 link2">[{$product->oxarticles__oxratingcnt->value}] [{if $product->oxarticles__oxratingcnt->value == 1}][{ oxmultilang ident="DETAILS_PERSPARAM_RATINGREZULT" }][{else}][{ oxmultilang ident="DETAILS_PERSPARAM_RATINGREZULTS" }] [{/if}]</a>
+      <a id="star_rating_text" rel="nofollow" href="#review" onclick="oxid.review.show();" class="fs10 link2">[{$product->oxarticles__oxratingcnt->value}] [{if $product->oxarticles__oxratingcnt->value == 1}][{ oxmultilang ident="DETAILS_PERSPARAM_RATINGREZULT" }][{else}][{ oxmultilang ident="DETAILS_PERSPARAM_RATINGREZULTS" }] [{/if}]</a>
     [{else}]
-      <a id="star_rating_text" rel="nofollow" href="#review" onclick="showReview();" class="fs10 link2">[{ oxmultilang ident="DETAILS_PERSPARAM_NORATINGS" }]</a>
+      <a id="star_rating_text" rel="nofollow" href="#review" onclick="oxid.review.show();" class="fs10 link2">[{ oxmultilang ident="DETAILS_PERSPARAM_NORATINGS" }]</a>
     [{/if}]
 
     <div class="cats">
@@ -416,13 +414,10 @@
             [{ if $oView->canRate() }]
             <input type="hidden" name="artrating" value="0">
             <ul id="star_rate" class="rating">
-                <li id="current_rate" class="current_rate" style="width: 0px;"><a title="[{$star_title}]"><b>1</b></a></li>
-                [{ assign var="__params" value="anid=`$product->oxarticles__oxnid->value`&amp;"|cat:$oViewConf->getNavUrlParams() }]
-                <li class="one"><a rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params=$__params }]" onclick="showReview(1);return false;" title="1 [{ oxmultilang ident="DETAILS_PERSPARAM_STAR" }]"><b>1</b></a></li>
-                <li class="two"><a rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params=$__params }]" onclick="showReview(2);return false;" title="2 [{ oxmultilang ident="DETAILS_PERSPARAM_STARS" }]"><b>2</b></a></li>
-                <li class="three"><a rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params=$__params }]" onclick="showReview(3);return false;" title="3 [{ oxmultilang ident="DETAILS_PERSPARAM_STARS" }]"><b>3</b></a></li>
-                <li class="four"><a rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params=$__params }]" onclick="showReview(4);return false;" title="4 [{ oxmultilang ident="DETAILS_PERSPARAM_STARS" }]"><b>4</b></a></li>
-                <li class="five"><a rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params=$__params }]" onclick="showReview(5);return false;" title="5 [{ oxmultilang ident="DETAILS_PERSPARAM_STARS" }]"><b>5</b></a></li>
+                <li id="current_rate" class="current_rate" style="width: 0px;"><a title="[{$_star_title}]"><b>1</b></a></li>
+                [{section name=star start=1 loop=6}]
+                <li class="s[{$smarty.section.star.index}]"><a rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params="anid=`$product->oxarticles__oxnid->value`&amp;"|cat:$oViewConf->getNavUrlParams() }]" onclick="oxid.review.rate([{$smarty.section.star.index}]);return false;" title="[{$smarty.section.star.index}] [{if $smarty.section.star.index==1}][{ oxmultilang ident="DETAILS_PERSPARAM_STAR" }][{else}][{ oxmultilang ident="DETAILS_PERSPARAM_STARS" }][{/if}]"><b>[{$smarty.section.star.index}]</b></a></li>
+                [{/section}]
             </ul>
             [{/if}]
             [{ $oViewConf->getHiddenSid() }]
@@ -435,7 +430,7 @@
             <span class="btn"><input id="test_reviewSave" type="submit" value="[{ oxmultilang ident="DETAILS_PERSPARAM_SAVEREVIEW" }]" class="btn"></span>
         </div>
     </form>
-    <a id="write_new_review" rel="nofollow" class="fs10" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params="anid=`$product->oxarticles__oxnid->value`&amp;"|cat:$oViewConf->getNavUrlParams() }]" onclick="showReview();return false;"><b>[{ oxmultilang ident="DETAILS_PERSPARAM_WRITEREVIEW" }]</b></a>
+    <a id="write_new_review" rel="nofollow" class="fs10" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params="anid=`$product->oxarticles__oxnid->value`&amp;"|cat:$oViewConf->getNavUrlParams() }]" onclick="oxid.review.show();return false;"><b>[{ oxmultilang ident="DETAILS_PERSPARAM_WRITEREVIEW" }]</b></a>
   [{else}]
     <a id="test_Reviews_login" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" class="fs10"><b>[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOWRITEREVIEW" }]</b></a>
   [{/if}]

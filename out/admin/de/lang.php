@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23307 2009-10-16 10:33:03Z vilma $
+ * $Id: lang.php 23384 2009-10-20 12:58:12Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -861,6 +861,7 @@ $aLang = array(
 'LANGUAGE_DELETINGMAINLANG_WARNING'             => 'Warnung: Sie können nicht die Hauptsprache löschen (Sprach-ID 0)',
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Fehler: Eine Sprache mit diesem Sprachkürzel existiert bereits',
 'SETUP_DIRNOTDELETED_WARNING'                   => 'Bitte löschen Sie das Setup-Verzeichnis',
+'SETUP_CONFIGPERMISSIONS_WARNING'               => 'WICHTIG: Aus Sicherheitsgründen setzen Sie Ihre config.inc.php Datei auf read-only-Modus!',
 'LOGIN_TITLE'                                   => 'OXID eShop Login',
 'LOGIN_ERROR'                                   => 'Fehler! Falscher Benutzername und/oder Passwort.',
 'LOGIN_NO_COOKIE_SUPPORT'                       => 'Fehler! Ihr Browser unterstützt keine Cookies.',

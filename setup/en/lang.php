@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: lang.php 23384 2009-10-20 12:58:12Z vilma $
  */
 
 $aLang = array(
@@ -170,6 +170,7 @@ $aLang = array(
 
 'ATTENTION'                                       => "Attention, important",
 'SETUP_DIR_DELETE_NOTICE'                         => "Due to security reasons remove setup directory if not yet done during installation.",
+'SETUP_CONFIG_PERMISSIONS'                        => "Due to security reasons put your config.inc.php file to read-only mode!",
 
 'SELECT_SETUP_LANG'                               => "Please choose your language",
 'SELECT_COUNTRY_LANG'                             => "Please choose your country",

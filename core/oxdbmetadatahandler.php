@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdbmetadatahandler.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxdbmetadatahandler.php 23405 2009-10-20 15:29:03Z rimvydas.paskevicius $
  */
 
 /**
@@ -46,6 +46,12 @@ class oxDbMetaDataHandler extends oxSuperCfg
      * @var unknown_type
      */
     protected $_iCurrentMaxLangId;
+
+    /**
+     *
+     * @var array Tables which shloud be skipped from reseting
+     */
+    protected $_aSkipTablesOnReset = array( "oxcountry" );
 
     /**
      *
@@ -368,9 +374,17 @@ class oxDbMetaDataHandler extends oxSuperCfg
             return;
         }
 
-        $aTable = $this->getAllTables();
+        $aTables = $this->getAllTables();
 
-        foreach( $aTable as $sTableName ) {
+        // removing tables which does not requires reset
+        foreach ( $this->_aSkipTablesOnReset as $sSkipTable ) {
+
+            if ( ($iSkipId = array_search( $sSkipTable, $aTables )) !== false ) {
+                unset( $aTables[$iSkipId] );
+            }
+        }
+
+        foreach( $aTables as $sTableName ) {
             $this->resetMultilangFields( $iLangId, $sTableName );
         }
     }

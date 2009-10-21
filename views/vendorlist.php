@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: vendorlist.php 23342 2009-10-19 08:41:39Z arvydas $
+ * $Id: vendorlist.php 23400 2009-10-20 14:38:13Z arvydas $
  */
 
 /**
@@ -225,18 +225,14 @@ class VendorList extends aList
      */
     protected function _addPageNrParam( $sUrl, $iPage, $iLang = null)
     {
-        if ( $this->_sActPageUrl === null ) {
-            $this->_sActPageUrl = $sUrl;
-            if ( oxUtils::getInstance()->seoIsActive() && ( $oVendor = $this->getActVendor() ) ) {
-                if ( $iPage ) { // only if page number > 0
-                    $this->_sActPageUrl = oxSeoEncoderVendor::getInstance()->getVendorPageUrl( $oVendor, $iPage, $iLang, $this->_isFixedUrl( $oVendor ) );
-                }
-            } else {
-                $this->_sActPageUrl = oxUBase::_addPageNrParam( $sUrl, $iPage, $iLang );
+        if ( oxUtils::getInstance()->seoIsActive() && ( $oVendor = $this->getActVendor() ) ) {
+            if ( $iPage ) { // only if page number > 0
+                $sUrl = oxSeoEncoderVendor::getInstance()->getVendorPageUrl( $oVendor, $iPage, $iLang, $this->_isFixedUrl( $oVendor ) );
             }
+        } else {
+            $sUrl = oxUBase::_addPageNrParam( $sUrl, $iPage, $iLang );
         }
-
-        return $this->_sActPageUrl;
+        return $sUrl;
     }
 
     /**
@@ -332,6 +328,8 @@ class VendorList extends aList
     /**
      * Template variable getter. Returns template location
      *
+     * @deprecated use vendorList::getTreePath() and adjust template
+     *
      * @return string
      */
     public function getTemplateLocation()
@@ -343,6 +341,18 @@ class VendorList extends aList
             }
         }
         return $this->_sTplLocation;
+    }
+
+    /**
+     * Template variable getter. Returns category path array
+     *
+     * @return array
+     */
+    public function getTreePath()
+    {
+        if ( $oVendorTree = $this->getVendorTree() ) {
+            return $oVendorTree->getPath();
+        }
     }
 
     /**

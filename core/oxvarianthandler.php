@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxvarianthandler.php 22524 2009-10-15 11:47:27Z tomas $
+ * $Id: oxvarianthandler.php 22524 2009-09-22 11:47:27Z tomas $
  */
 
 /**
@@ -27,7 +27,7 @@
  *
  * @package core
  */
-class oxVariantHandler
+class oxVariantHandler extends oxSuperCfg
 {
     /**
      * Variant names
@@ -87,53 +87,171 @@ class oxVariantHandler
     /**
      * Generate variants from selection lists
      *
-     * @param string $sVarId      article id
-     * @param string $sSellTitle  selection list title
-     * @param string $sSellValue  selection list values
+     * @param array  $aSels    ids of selection list
+     * @param object $oArticle parent article
      *
      * @return null
      */
-    public function assignVarToAttribute( $sVarId, $sSellTitle, $sSellValue )
+    public function genVariantFromSell( $aSels, $oArticle )
     {
-    	$sAttrId = $this->_getAttrId( $sSellTitle );
-    	if ( !$sAttrId ) {
-    		$sAttrId = $this->_createAttribute( $sSellTitle );
-    	}
-    	$oNewAssign = oxNew( "oxbase" );
-        $oNewAssign->init( "oxobject2attribute" );
-        $oNewAssign->oxobject2attribute__oxobjectid = new oxField($sVarId);
-        $oNewAssign->oxobject2attribute__oxattrid   = new oxField($sAttrId);
-        $oNewAssign->oxobject2attribute__oxvalue    = new oxField($sSellValue);
-        $oNewAssign->save();
+        $oVariants = $oArticle->getAdminVariants();
+        $myConfig  = $this->getConfig();
+        $myUtils   = oxUtils::getInstance();
+        $myLang    = oxLang::getInstance();
+        $aConfLanguages = $myLang->getLanguageIds();
+
+        foreach ($aSels as $sSelId) {
+            $oSel = oxNew("oxbase");
+            $oSel->init( 'oxselectlist' );
+            $oSel->load( $sSelId );
+            foreach ($aConfLanguages as $sKey => $sLang) {
+                $sPrefix = $myLang->getLanguageTag($sKey);
+                $aSelValues = $myUtils->assignValuesFromText($oSel->{"oxselectlist__oxvaldesc".$sPrefix}->value );
+                foreach ($aSelValues as $sI => $oValue ) {
+                    $aValues[$sI][$sKey] = $oValue;
+                }
+                $aSelTitle[$sKey] = $oSel->{"oxselectlist__oxtitle".$sPrefix}->value;
+                $oArticle->{"oxarticles__oxvarname".$sPrefix}->setValue(trim($oArticle->{"oxarticles__oxvarname".$sPrefix}->value." ".$aSelTitle[$sKey]));
+
+            }
+            $MDVariants = $this->_assignValues( $aValues, $oVariants, $oArticle, $aConfLanguages);
+            if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+                $oAttribute = oxNew("oxattribute");
+                $oAttribute->assignVarToAttribute( $MDVariants, $aSelTitle );
+            }
+            $oArticle->save();
+        }
     }
 
     /**
-     * Searches for attribute by oxtitle. If exists returns attribute id
+     * Assigns values of selection list to variants
      *
-     * @param string $sSelTitle selection list title
+     * @param array  $aValues        multilang values of selection list
+     * @param object $oVariants      variant list
+     * @param object $oArticle       parent article
+     * @param array  $aConfLanguages array of all active languages
      *
-     * @return mixed attribute id or false
+     * @return mixed
      */
-    protected function _getAttrId( $sSelTitle )
+    protected function _assignValues( $aValues, $oVariants, $oArticle, $aConfLanguages)
     {
-        $oDb = oxDb::getDB();
-        $sAttViewName = getViewName('oxattribute');
-        return $oDb->getOne("select oxid from $sAttViewName where LOWER(oxtitle) = " . $oDb->quote(getStr()->strtolower($sSelTitle)));
+        $myConfig = $this->getConfig();
+        $myLang    = oxLang::getInstance();
+        $iCounter = 0;
+        $aVarselect = array(); //multilanguage names of existing variants
+        //iterating through all select list values (eg. $oValue->name = S, M, X, XL)
+        for ( $i=0; $i<count($aValues); $i++ ) {
+            $oValue = $aValues[$i][0];
+            $dPriceMod = $this->_getValuePrice( $oValue, $oArticle->oxarticles__oxprice->value);
+            if ( $oVariants->count() > 0 ) {
+                //if we have any existing variants then copying each variant with $oValue->name
+                foreach ( $oVariants as $oSimpleVariant ) {
+                    if ( !$iCounter ) {
+                        //we just update the first variant
+                        $oVariant = oxNew("oxarticle");
+                        $oVariant->setEnableMultilang(false);
+                        $oVariant->load($oSimpleVariant->oxarticles__oxid->value);
+                        $oVariant->oxarticles__oxprice->setValue( $oVariant->oxarticles__oxprice->value + $dPriceMod );
+                        //assign for all languages
+                        foreach ( $aConfLanguages as $sKey => $sLang ) {
+                            $oValue = $aValues[$i][$sKey];
+                            $sPrefix = $myLang->getLanguageTag($sKey);
+                            $aVarselect[$oSimpleVariant->oxarticles__oxid->value][$sKey] = $oVariant->{"oxarticles__oxvarselect".$sPrefix}->value;
+                            $oVariant->{'oxarticles__oxvarselect'.$sPrefix}->setValue($oVariant->{"oxarticles__oxvarselect".$sPrefix}->value.$this->_sMdSeparator.$oValue->name);
+                        }
+                        $oVariant->oxarticles__oxsort->setValue($oVariant->oxarticles__oxsort->value * 10);
+                        $oVariant->save();
+                        $sVarId = $oSimpleVariant->oxarticles__oxid->value;
+                    } else {
+                        //we create new variants
+                        foreach ($aVarselect[$oSimpleVariant->oxarticles__oxid->value] as $sKey => $sVarselect) {
+                            $oValue = $aValues[$i][$sKey];
+                            $sPrefix = $myLang->getLanguageTag($sKey);
+                            $aParams['oxarticles__oxvarselect'.$sPrefix] = $sVarselect.$this->_sMdSeparator.$oValue->name;
+                        }
+                        $aParams['oxarticles__oxartnum'] = $oSimpleVariant->oxarticles__oxartnum->value . "-" . $iCounter;
+                        $aParams['oxarticles__oxprice'] = $oSimpleVariant->oxarticles__oxprice->value + $dPriceMod;
+                        $aParams['oxarticles__oxsort'] = $oSimpleVariant->oxarticles__oxsort->value*10 + 10*$iCounter;
+                        $aParams['oxarticles__oxstock'] = 0;
+                        $aParams['oxarticles__oxstockflag'] = $oSimpleVariant->oxarticles__oxstockflag->value;
+                        $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
+                    }
+                }
+                $iCounter++;
+            } else {
+                //in case we don't have any variants then we just create variant(s) with $oValue->name
+                $iCounter++;
+                foreach ($aConfLanguages as $sKey => $sLang) {
+                    $oValue = $aValues[$i][$sKey];
+                    $sPrefix = $myLang->getLanguageTag($sKey);
+                    $aParams['oxarticles__oxvarselect'.$sPrefix] = $oValue->name;
+                }
+                $aParams['oxarticles__oxartnum'] = $oArticle->oxarticles__oxartnum->value . "-" . $iCounter ;
+                $aParams['oxarticles__oxprice'] = $oArticle->oxarticles__oxprice->value + $dPriceMod;
+                $aParams['oxarticles__oxsort'] = 5000 + $iCounter * 1000;
+                $aParams['oxarticles__oxstock'] = 0;
+                $aParams['oxarticles__oxstockflag'] = $oArticle->oxarticles__oxstockflag->value;
+                $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
+            }
+            if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+                $MDVariants[$sVarId] = $aValues[$i];
+            }
+        }
+        return $MDVariants;
     }
 
     /**
-     * Checks if attribute exists
+     * Generate variants from selection lists
      *
-     * @param string $sSelTitle selection list title
-     *
-     * @return string attribute id
+     * @param oxArticleList $oArticles Article list
      */
-    protected function _createAttribute( $sSelTitle )
+    protected function _getValuePrice( $oValue, $dParentPrice)
     {
-        $oAttr = oxNew( "oxattribute" );
-        $oAttr->oxattribute__oxtitle = new oxField($sSelTitle);
-        $oAttr->save();
-        return $oAttr->getId();
+        $myConfig = $this->getConfig();
+        $dPriceMod = 0;
+        if ( $myConfig->getConfigParam( 'bl_perfLoadSelectLists' ) && $myConfig->getConfigParam( 'bl_perfUseSelectlistPrice' ) ) {
+            if ($oValue->priceUnit == 'abs') {
+                $dPriceMod = $oValue->price;
+            } elseif ($oValue->priceUnit == '%') {
+                $dPriceModPerc = abs($oValue->price)*$dParentPrice/100.0;
+                if (($oValue->price) >= 0.0) {
+                    $dPriceMod = $dPriceModPerc;
+                } else {
+                    $dPriceMod = -$dPriceModPerc;
+                }
+            }
+        }
+        return $dPriceMod;
+    }
+
+    /**
+     * Creates new article variant.
+     *
+     * @param array  $aParams   assigned parameters
+     * @param string $sParentId parent article id
+     *
+     * @return null
+     */
+    protected function _craeteNewVariant( $aParams = null, $sParentId = null)
+    {
+        // checkbox handling
+        $aParams['oxarticles__oxactive'] = 0;
+
+            // shopid
+            $sShopID = oxSession::getVar( "actshop");
+            $aParams['oxarticles__oxshopid'] = $sShopID;
+
+        // varianthandling
+        $aParams['oxarticles__oxparentid'] = $sParentId;
+
+        $oArticle = oxNew("oxbase");
+        $oArticle->init( 'oxarticles' );
+        $oArticle->assign( $aParams);
+
+            //echo $aParams['oxarticles__oxartnum']."---";
+            $oArticle->save();
+
+        return $oArticle->getId();
     }
 
     /**
@@ -145,97 +263,13 @@ class oxVariantHandler
      */
     public function isMdVariant( $oArticle )
     {
-        if ( strpos( $oArticle->oxarticles__oxvarselect->value, $this->_sSeparator ) !== false ) {
-            return true;
+        if ( $this->getConfig()->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+            if ( strpos( $oArticle->oxarticles__oxvarselect->value, $this->_sMdSeparator ) !== false ) {
+                return true;
+            }
         }
 
         return false;
-    }
-
-    /**
-     * Get multidimensional variant attribute value by it index number.
-     * 0 - top, 1 - next and so on
-     *
-     * @param int    $iId        Index number
-     * @param string $sVarValues Variant values separated by separator
-     *
-     * @return string
-     */
-    protected function _getMdVariantValue( $iId = 0, $sVarValue )
-    {
-        $aVarValues = explode( $this->_sSeparator, $sVarValue );
-
-        return trim($aVarValues[$iId]);
-    }
-
-
-    /**
-     * Get top variant attribute value.
-     *
-     * @param string $sVarValue Variant values
-     *
-     * @return string
-     */
-    protected function _getMdVariantTopValue( $sVarValue )
-    {
-        return $this->_getMdVariantValue( 0, $sVarValue );
-    }
-
-    /**
-     * Parses all articles list and updates field "oxarticles__oxvarselect" to have
-     * only one top attribute value. Also checks min price for this top attribute
-     * and sets it to article object.
-     *
-     * @param object $oArticle Variants list
-     *
-     * @return bool
-     */
-    public function getTopMdVariants( $oArticles )
-    {
-        // Check if article list has multidimensional variants.
-        // If first element is not MD variant, return null
-        if ( $oArticles && !$this->isMdVariant( $oArticles->current() ) ) {
-            return null;
-        }
-
-        $aMinPrices = array();
-
-        if ( $oArticles && count( $oArticles ) > 0 ) {
-
-            foreach ( $oArticles as $oArticle ) {
-
-                $dPrice = 0;
-                $sTopVarValue = $this->_getMdVariantTopValue( $oArticle->oxarticles__oxvarselect->value );
-
-                //getting min price by attribute value
-                if (  $dPrice < $oArticle->getPrice()->getNettoPrice() ) {
-                    $dPrice = $oArticle->getPrice()->getNettoPrice();
-                    $aMinPrices[$sTopVarValue] = $oArticle->getId();
-                }
-
-                $oArticle->oxarticles__oxvarselect->value = $sTopVarValue;
-            }
-
-            // formating new top variants list, where are only distinct var values
-            // with min price
-            $aNewArticles = array();
-            foreach ( $aMinPrices as $sKey => $sArtId ) {
-                $aNewArticles[$sArtId] = $oArticles[$sArtId];
-            }
-/*
-            if ( $blUseSimpleVariants ) {
-                $oTopArticles = oxNew( "oxsimplevariantlist" );
-            } else {
-                $oTopArticles = oxNew( "oxArticleList" );
-            }
-
-
-*/
-            $oArticles->clear();
-            $oArticles->assign( $aNewArticles );
-        }
-
-        return $oArticles;
     }
 
 }

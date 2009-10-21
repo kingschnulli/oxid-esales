@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsimplevariant.php 23285 2009-10-15 14:58:11Z rimvydas.paskevicius $
+ * $Id: oxsimplevariant.php 23406 2009-10-20 15:30:59Z rimvydas.paskevicius $
  */
 
 /**
@@ -253,10 +253,10 @@ class oxSimpleVariant extends oxI18n
     public function getLink( $iLang = null )
     {
         if ( $this->_sDetailLink === null ) {
-
             $oArticle = oxNew( "oxArticle" );
             $oArticle->setId( $this->getId() );
-            $this->_sDetailLink = $oArticle->getLink( $iLang );
+            $oArticle->setLinkType( $this->getParent()->getLinkType() );
+            $this->_sDetailLink = $oArticle->getStdLink( $iLang );
         }
 
         return $this->_sDetailLink;

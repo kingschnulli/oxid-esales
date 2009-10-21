@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: manufacturerlist.php 23342 2009-10-19 08:41:39Z arvydas $
+ * $Id: manufacturerlist.php 23400 2009-10-20 14:38:13Z arvydas $
  */
 
 /**
@@ -220,18 +220,14 @@ class ManufacturerList extends aList
      */
     protected function _addPageNrParam( $sUrl, $iPage, $iLang = null)
     {
-        if ( $this->_sActPageUrl === null ) {
-            $this->_sActPageUrl = $sUrl;
-            if ( oxUtils::getInstance()->seoIsActive() && ( $oManufacturer = $this->getActManufacturer() ) ) {
-                if ( $iPage ) { // only if page number > 0
-                    $this->_sActPageUrl = oxSeoEncoderManufacturer::getInstance()->getManufacturerPageUrl( $oManufacturer, $iPage, $iLang, $this->_isFixedUrl( $oManufacturer ) );
-                }
-            } else {
-                $this->_sActPageUrl = parent::_addPageNrParam( $sUrl, $iPage, $iLang );
+        if ( oxUtils::getInstance()->seoIsActive() && ( $oManufacturer = $this->getActManufacturer() ) ) {
+            if ( $iPage ) { // only if page number > 0
+                $sUrl = oxSeoEncoderManufacturer::getInstance()->getManufacturerPageUrl( $oManufacturer, $iPage, $iLang, $this->_isFixedUrl( $oManufacturer ) );
             }
+        } else {
+            $sUrl = parent::_addPageNrParam( $sUrl, $iPage, $iLang );
         }
-
-        return $this->_sActPageUrl;
+        return $sUrl;
     }
 
     /**
@@ -327,6 +323,8 @@ class ManufacturerList extends aList
     /**
      * Template variable getter. Returns template location
      *
+     * @deprecated use manufacturerList::getTreePath() and adjust template
+     *
      * @return string
      */
     public function getTemplateLocation()
@@ -338,6 +336,18 @@ class ManufacturerList extends aList
             }
         }
         return $this->_sTplLocation;
+    }
+
+    /**
+     * Template variable getter. Returns category path array
+     *
+     * @return array
+     */
+    public function getTreePath()
+    {
+        if ( $oManufacturerTree = $this->getManufacturerTree() ) {
+            return $oManufacturerTree->getPath();
+        }
     }
 
     /**

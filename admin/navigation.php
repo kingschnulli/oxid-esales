@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: navigation.php 22835 2009-10-01 08:14:18Z vilma $
+ * $Id: navigation.php 23384 2009-10-20 12:58:12Z vilma $
  */
 
 /**
@@ -231,6 +231,13 @@ class Navigation extends oxAdminView
         // check if setup dir is deleted
         if ( file_exists( $this->getConfig()->getConfigParam( 'sShopDir' ) . '/setup/index.php' ) ) {
             $aMessage['warning']  .= ( ( !empty($aMessage['warning']) ) ? "<br>" : '' ) . oxLang::getInstance()->translateString('SETUP_DIRNOTDELETED_WARNING');
+        }
+
+        // check if config file is writable
+        $sConfPath = $this->getConfig()->getConfigParam( 'sShopDir' )."/config.inc.php";
+        $sPerms = substr( decoct( fileperms($sConfPath) ), 2 );
+        if ( $sPerms > 644 ) {
+            $aMessage['warning']  .= ( ( !empty($aMessage['warning']) ) ? "<br>" : '' ) . oxLang::getInstance()->translateString('SETUP_CONFIGPERMISSIONS_WARNING');
         }
 
         return $aMessage;

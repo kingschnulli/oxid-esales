@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_seo.php 23359 2009-10-19 14:48:31Z arvydas $
+ * $Id: article_seo.php 23380 2009-10-20 12:23:24Z arvydas $
  */
 
 /**
@@ -140,7 +140,7 @@ class Article_Seo extends Object_Seo
                 while ( !$rs->EOF ) {
                     $oCat = oxNew('oxcategory');
                     $oCat->setLanguage( $iLang );
-                    if ( $oCat->load( $rs->fields[0] ) ) {
+                    if ( $oCat->load( current( $rs->fields ) ) ) {
                         $this->_oArtCategories->offsetSet( $oCat->getId(), $oCat );
                     }
                     $rs->moveNext();

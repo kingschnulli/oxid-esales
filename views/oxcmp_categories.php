@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_categories.php 23255 2009-10-14 15:25:09Z sarunas $
+ * $Id: oxcmp_categories.php 23385 2009-10-20 13:01:01Z sarunas $
  */
 
 /**
@@ -316,55 +316,71 @@ class oxcmp_categories extends oxView
         $sListType  = oxConfig::getParameter( 'listtype' );
 
         // search ?
-        //if ( !$sListType ) {
-        // removed this check according to problems: if listtype is set, but active category not.
-        // e.g. in details change language
+        if ( !$sListType ) {
 
-        if ( ( !$sListType || $sListType == 'search' ) && ( $sSearchPar || $sSearchCat || $sSearchVnd ) ) {
-            // setting list type directly
-            $sListType = 'search';
-        } else {
+            if ( ( !$sListType || $sListType == 'search' ) && ( $sSearchPar || $sSearchCat || $sSearchVnd ) ) {
+                // setting list type directly
+                $sListType = 'search';
+            } else {
 
-            // manufacturer ?
-            $blManufacturer = false;
-            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadManufacturerTree' ) && $sActManufacturer ) {
-                // such Manufacturer is available ?
-                if ( $sActManufacturer == $oProduct->getManufacturerId() ) {
-                    $blManufacturer = true;
-                    // setting list type directly
-                    $sListType = 'manufacturer';
+                // manufacturer ?
+                $blManufacturer = false;
+                if ( $this->getConfig()->getConfigParam( 'bl_perfLoadManufacturerTree' ) && $sActManufacturer ) {
+                    // such Manufacturer is available ?
+                    if ( $sActManufacturer == $oProduct->getManufacturerId() ) {
+                        $blManufacturer = true;
+                        // setting list type directly
+                        $sListType = 'manufacturer';
+                    }
                 }
-            }
 
-            // vendor ?
-            $blVendor = false;
-            if ( !$blManufacturer && $sActCat && $this->getConfig()->getConfigParam( 'bl_perfLoadVendorTree' ) && preg_match( '/^v_.?/i', $sActCat ) ) {
-                // such vendor is available ?
-                if ( substr( $sActCat, 2 ) == $oProduct->getVendorId() ) {
-                    $blVendor = true;
-                    // setting list type directly
-                    $sListType = 'vendor';
+                // vendor ?
+                $blVendor = false;
+                if ( !$blManufacturer && $sActCat && $this->getConfig()->getConfigParam( 'bl_perfLoadVendorTree' ) && preg_match( '/^v_.?/i', $sActCat ) ) {
+                    // such vendor is available ?
+                    if ( substr( $sActCat, 2 ) == $oProduct->getVendorId() ) {
+                        $blVendor = true;
+                        // setting list type directly
+                        $sListType = 'vendor';
+                    }
                 }
-            }
 
-            // tag ?
-            $blTags = false;
-            if ( !$blVendor && !$blManufacturer && $sActTag ) {
-                $blTags = true;
-                // setting list type..
-                $sListType = 'tag';
-            }
+                // tag ?
+                $blTags = false;
+                if ( !$blVendor && !$blManufacturer && $sActTag ) {
+                    $blTags = true;
+                    // setting list type..
+                    $sListType = 'tag';
+                }
 
-            // category ?
-            if ( $sActCat && !$blVendor && !$blManufacturer && !$blTags ) {
-                if ( !$oProduct->isAssignedToCategory( $sActCat ) ) {
-                    // article is assigned to any category ?
-                    // #1306: selecting active categories will not be checked if parent categories are active 
+                // category ?
+                if ( $sActCat && !$blVendor && !$blManufacturer && !$blTags ) {
+                    if ( !$oProduct->isAssignedToCategory( $sActCat ) ) {
+                        // article is assigned to any category ?
+                        // #1306: selecting active categories will not be checked if parent categories are active
+                        $aArticleCats = $oProduct->getCategoryIds(true);
+                        if ( is_array( $aArticleCats ) && count( $aArticleCats ) ) {
+                            $sActCat = reset( $aArticleCats );
+                            // setting list type directly
+                            $sListType = null;
+                        } elseif ( ( $sActCat = $oProduct->getManufacturerId() ) ) {
+                            // not assigned to any category ? maybe it is assigned to Manufacturer ?
+                            // setting list type directly
+                            $sListType = 'manufacturer';
+                        } elseif ( ( $sActCat = $oProduct->getVendorId() ) ) {
+                            // not assigned to any category ? maybe it is assigned to vendor ?
+                            // setting list type directly
+                            $sListType = 'vendor';
+                        } else {
+                            $sActCat = null;
+                        }
+                    }
+                } elseif ( !$sActCat && !$sActCont && !$sActManufacturer && !$blTags ) {
                     $aArticleCats = $oProduct->getCategoryIds(true);
                     if ( is_array( $aArticleCats ) && count( $aArticleCats ) ) {
                         $sActCat = reset( $aArticleCats );
                         // setting list type directly
-                        $sListType = null;
+                        $sListType  = null;
                     } elseif ( ( $sActCat = $oProduct->getManufacturerId() ) ) {
                         // not assigned to any category ? maybe it is assigned to Manufacturer ?
                         // setting list type directly
@@ -373,28 +389,10 @@ class oxcmp_categories extends oxView
                         // not assigned to any category ? maybe it is assigned to vendor ?
                         // setting list type directly
                         $sListType = 'vendor';
-                    } else {
-                        $sActCat = null;
                     }
-                }
-            } elseif ( !$sActCat && !$sActCont && !$sActManufacturer && !$blTags ) {
-                $aArticleCats = $oProduct->getCategoryIds(true);
-                if ( is_array( $aArticleCats ) && count( $aArticleCats ) ) {
-                    $sActCat = reset( $aArticleCats );
-                    // setting list type directly
-                    $sListType  = null;
-                } elseif ( ( $sActCat = $oProduct->getManufacturerId() ) ) {
-                    // not assigned to any category ? maybe it is assigned to Manufacturer ?
-                    // setting list type directly
-                    $sListType = 'manufacturer';
-                } elseif ( ( $sActCat = $oProduct->getVendorId() ) ) {
-                    // not assigned to any category ? maybe it is assigned to vendor ?
-                    // setting list type directly
-                    $sListType = 'vendor';
                 }
             }
         }
-
         //set list type and category id
         $this->_oParent->setListType( $sListType );
         $this->_oParent->setCategoryId( $sActCat );

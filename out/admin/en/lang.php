@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23307 2009-10-16 10:33:03Z vilma $
+ * $Id: lang.php 23384 2009-10-20 12:58:12Z vilma $
  */
 
 /*
@@ -867,6 +867,7 @@ $aLang = array(
 'LANGUAGE_DELETINGMAINLANG_WARNING'             => 'Warning: you can\'t delete main language (with ID = 0)!',
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Error: language with such abbervation already exists!',
 'SETUP_DIRNOTDELETED_WARNING'                   => 'Please delete directory: setup!',
+'SETUP_CONFIGPERMISSIONS_WARNING'               => 'Due to security reasons put your config.inc.php file to read-only mode!',
 'LOGIN_TITLE'                                   => 'OXID eSales Login',
 'LOGIN_ERROR'                                   => 'Error ! Incorrect User Name and/or Password !',
 'LOGIN_NO_COOKIE_SUPPORT'                       => 'Error! Your browser does not support cookies !',

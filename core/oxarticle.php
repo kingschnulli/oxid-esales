@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 23332 2009-10-16 17:24:12Z tomas $
+ * $Id: oxarticle.php 23404 2009-10-20 15:22:39Z rimvydas.paskevicius $
  */
 
 // defining supported link types
@@ -1275,12 +1275,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
             //if this is multidimensional variants, make additional processing
             if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
-
                 $oMdVariants = oxNew( "oxVariantHandler" );
-
-                if ( $this->_blHasMdVariants = $oMdVariants->isMdVariant( $oVariants->current() ) ) {
-                    $oVariants = $this->_parseMdVariantList( $oVariants );
-                }
+                $this->_blHasMdVariants = $oMdVariants->isMdVariant( $oVariants->current() );
             }
             stopProfile("selectVariants");
         }
@@ -2327,6 +2323,17 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
+     * Get link type
+     *
+     * @return int
+     */
+    public function getLinkType()
+    {
+        return $this->_iLinkType;
+    }
+
+
+    /**
      * Returns standard URL to product
      *
      * @param int   $iLang required language. optional
@@ -2692,21 +2699,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         return $this->_oVariantList;
     }
-
-    /**
-     * Parses variants list to have only variants with top level distinct values
-     *
-     * @param oxArticleList $oVariantsList Variants list
-     *
-     * @return oxArticleList
-     */
-    protected function _parseMdVariantList( $oVariantsList )
-    {
-        $oMdVariants = oxNew( "oxVariantHandler" );
-
-        return $oMdVariants->getTopMdVariants( $oVariantsList, $this->_isInList() );
-    }
-
 
     /**
      * Sets selectlists of current product
@@ -4344,19 +4336,33 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getMdVariants()
     {
-        if ($this->_oMdVariants)
-            return $this->_oMdVariants;
+        if ($this->_oMdVariants) {
+            return $this->_oMdVariants->getMdSubvariants();
+        }
 
         $oMdVariants = oxNew("OxMdVariant");
         $oMdVariants->setName("_parent_product_");
         $oVariants = $this->getVariants();
+
         foreach($oVariants as $sKey => $oVariant) {
             $oMdVariants->addNames($sKey,
                                    explode("|", $oVariant->oxarticles__oxvarselect->value),
-                                   $oVariant->getPrice()->getBruttoPrice());
+                                   $oVariant->getPrice()->getBruttoPrice(),
+                                   $oVariant->getLink() );
         }
 
         $this->_oMdVariants = $oMdVariants;
+
         return $this->_oMdVariants;
+    }
+
+    /**
+     * Returns first level variants from multidimensional variants list
+     *
+     * @return OxMdVariants
+     */
+    public function getMdSubvariants()
+    {
+        return $this->getMdVariants()->getMdSubvariants();
     }
 }

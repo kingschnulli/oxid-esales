@@ -270,10 +270,36 @@ var oxid = {
 
     },
 
+    // Review / Rating
+    review: {
+        show : function(){
+            oxid.showhideblock('write_review',true);
+            oxid.showhideblock('write_new_review',false);
+        },
+
+        rate : function(value){
+            oxid.review.show();
+            var _form = document.getElementById("rating");
+            if ( _form !== null) {
+                if (_form.artrating) {
+                    _form.artrating.value = value;
+                } else if (_form.recommlistrating) {
+                    _form.recommlistrating.value = value;
+                }
+                document.getElementById('current_rate').style.width = (value * 20) + '%';
+            }
+       }
+    },
+
     // etc...
     showhide: function(id,show){
         var _el = document.getElementById(id);
-        if (_el) { _el.style.display=show?'':'none'; }
+        if (_el) { _el.style.display=show?'':'none';}
+    },
+
+    showhideblock: function(id,show){
+        var _el = document.getElementById(id);
+        if (_el) { _el.style.display=show?'block':'none';}
     },
 
     focus: function(id){
@@ -321,24 +347,6 @@ var oxid = {
     }
 
 };
-
-function showReview()
-{
-    document.getElementById('write_review').style.display = 'block';
-    document.getElementById('write_new_review').style.display = 'none';
-    if (arguments.length == 1) {
-        var oActForm = document.getElementById("rating");
-        if ( oActForm !== null) {
-            if (oActForm.artrating) {
-                oActForm.artrating.value = arguments[0];
-            } else if (oActForm.recommlistrating) {
-                oActForm.recommlistrating.value = arguments[0];
-            }
-            var width = arguments[0] * 20;
-            document.getElementById('current_rate').style.width = width + '%';
-        }
-    }
-}
 
 function setSellList( oInObj)
 {
