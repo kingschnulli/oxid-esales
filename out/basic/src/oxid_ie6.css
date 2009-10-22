@@ -1,4 +1,5 @@
 /* IE6 header min-width  / min-heigth fix */
+#header div.bar {height: 1%;}
 #header div.bar .fixed {width:184px;}
 #header dl.box {height:95px;width:150px;}
 #header dl.box.basket dd.dropdown {width:150px;}
@@ -25,6 +26,8 @@ p {margin:0}
 #body .product .price sup.dinfo a{font-size: 16px;}
 
 #body .product .price sup.dinfo{_width: auto;}
+#body .product span.btn a { line-height: 14px;}
+#body .product .variants label { padding-bottom: 2px;}
 
 #body .product.thinest .price sup.dinfo a{font-size: 11px;}
 #body .product.details .price sup.dinfo{font-size: 12px;}
@@ -87,5 +90,5 @@ ul.tree li a.last { background-image: none; }
 div.bar.copy{overflow: hidden;}
 
 /* IE 6 top popup category menu fix */
-div.bar.categories ul.menue.vertical    li { width: 1%; }
+div.bar.categories ul.menue.vertical    li { width: 1%;}
 div.bar.categories ul.menue.vertical    li a { width: 100%; padding-right: 0px; }

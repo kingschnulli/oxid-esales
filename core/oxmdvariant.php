@@ -30,11 +30,18 @@
 class oxMdVariant extends oxSuperCfg
 {
     /**
-     * Pseudo identifier
+     * MD variant identifier
      *
      * @var string
      */
     protected $_sId;
+
+    /**
+     * Parent ID
+     *
+     * @var string
+     */
+    protected $_sParentId;
 
     /**
      * Corresponding article id
@@ -79,13 +86,47 @@ class oxMdVariant extends oxSuperCfg
     protected $_aSubvariants = array();
 
     /**
-     * Returns variant identifier
+     * Sets MD variant identifier
+     *
+     * @param string $sId New id
+     *
+     * @return null;
+     */
+    public function setId($sId)
+    {
+        $this->_sId = $sId;
+    }
+
+    /**
+     * Returns MD variant identifier
      *
      * @return string
      */
     public function getId()
     {
         return $this->_sId;
+    }
+
+    /**
+     * Sets parent id
+     *
+     * @param string $sParentId Parent id
+     *
+     * @return null;
+     */
+    public function setParentId($sParentId)
+    {
+        $this->_sParentId = $sParentId;
+    }
+
+    /**
+     * Returns parent id
+     *
+     * @return string
+     */
+    public function getParentId()
+    {
+        return $this->_sParentId;
     }
 
     /**
@@ -184,7 +225,6 @@ class oxMdVariant extends oxSuperCfg
     public function setName($sName)
     {
         $this->_sName = $sName;
-        $this->_sId = md5($sName);
     }
 
     /**
@@ -325,6 +365,8 @@ class oxMdVariant extends oxSuperCfg
 
         $oNewSubvariant = oxNew("oxMdVariant");
         $oNewSubvariant->setName($sName);
+        $oNewSubvariant->setId(md5($sName.$this->getId()));
+        $oNewSubvariant->setParentId($this->getId());
         $this->_addMdSubvariant($oNewSubvariant);
 
         return $oNewSubvariant;

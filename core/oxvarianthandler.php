@@ -111,7 +111,8 @@ class oxVariantHandler extends oxSuperCfg
                     $aValues[$sI][$sKey] = $oValue;
                 }
                 $aSelTitle[$sKey] = $oSel->{"oxselectlist__oxtitle".$sPrefix}->value;
-                $oArticle->{"oxarticles__oxvarname".$sPrefix}->setValue(trim($oArticle->{"oxarticles__oxvarname".$sPrefix}->value." ".$aSelTitle[$sKey]));
+                $sMdSeparator = ($oArticle->{"oxarticles__oxvarname".$sPrefix}->value) ? $this->_sMdSeparator: '';
+                $oArticle->{"oxarticles__oxvarname".$sPrefix}->setValue(trim($oArticle->{"oxarticles__oxvarname".$sPrefix}->value.$sMdSeparator.$aSelTitle[$sKey]));
 
             }
             $MDVariants = $this->_assignValues( $aValues, $oVariants, $oArticle, $aConfLanguages);
@@ -174,8 +175,16 @@ class oxVariantHandler extends oxSuperCfg
                         $aParams['oxarticles__oxsort'] = $oSimpleVariant->oxarticles__oxsort->value*10 + 10*$iCounter;
                         $aParams['oxarticles__oxstock'] = 0;
                         $aParams['oxarticles__oxstockflag'] = $oSimpleVariant->oxarticles__oxstockflag->value;
-                        $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
+                        $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value ); 
+	                    if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+	                        $oAttrList = oxNew('oxattribute');
+	                        $aIds = $oAttrList->getAttributeAssigns( $oSimpleVariant->oxarticles__oxid->value);
+	                        $MDVariants["mdvar_".$sVarId] = $aIds;
+	                    }
                     }
+		            if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+		                $MDVariants[$sVarId] = $aValues[$i];
+		            }
                 }
                 $iCounter++;
             } else {
@@ -192,10 +201,10 @@ class oxVariantHandler extends oxSuperCfg
                 $aParams['oxarticles__oxstock'] = 0;
                 $aParams['oxarticles__oxstockflag'] = $oArticle->oxarticles__oxstockflag->value;
                 $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
-            }
-            if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
-                $MDVariants[$sVarId] = $aValues[$i];
-            }
+	            if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+	                $MDVariants[$sVarId] = $aValues[$i];
+	            }
+    		}
         }
         return $MDVariants;
     }

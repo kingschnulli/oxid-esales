@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23384 2009-10-20 12:58:12Z vilma $
+ * $Id: lang.php 23433 2009-10-21 08:29:49Z birute $
  */
 
 /*
@@ -1217,7 +1217,7 @@ $aLang = array(
 'SHOP_CONFIG_MINORDERPRICE'                     => 'Min. Order Price (leave empty to disable)',
 'SHOP_CONFIG_MUSTFILLFIELDS'                    => 'Mandatory fields in User Registration Form',
 'SHOP_CONFIG_NEWARTBYINSERT'                    => 'Calculate newest Products by Date of Creation (otherwise by Date of last Change)',
-'SHOP_CONFIG_NROFCATARTICLES'                   => 'Number of Products which can be shown in a Product List (Category Pages, Search Results)',
+'SHOP_CONFIG_NROFCATARTICLES'                   => 'Number of Products which can be shown in a Product List (Category Pages, Search Results)<br>Warning: A large number of products per page (above 100) can cause serious performance issues!',
 'SHOP_CONFIG_NROFCUSTOMERWHOARTICLES'           => 'Number of Products which are shown in "Customers who bought this product also purchased:"',
 'SHOP_CONFIG_NROFNEWCOMERARTICLES'              => 'Number of Products which are shown in "Just arrived!" (newest Products)',
 'SHOP_CONFIG_NUMBEROFSIMILARARTICLES'           => 'Number of similar Products which are shown with a Product',
@@ -1367,7 +1367,7 @@ $aLang = array(
 'SYSREQ_INI_SET'                                => 'ini_set allowed',
 'SYSREQ_REGISTER_GLOBALS'                       => 'register_globals must be off',
 'SYSREQ_ZEND_OPTIMIZER'                         => 'Zend Optimizer installed',
-'SYSREQ_ZEND_PLATFORM_OR_SERVER'                => '[tr] Zend Platform or Zend Server installed',
+'SYSREQ_ZEND_PLATFORM_OR_SERVER'                => 'Zend Platform or Zend Server installed',
 'SYSREQ_MB_STRING'                              => 'mbstring',
 'SYSREQ_UNICODE_SUPPORT'                        => 'UTF-8 support',
 'SYSREQ_MEMORY_LIMIT'                           => 'PHP Memory limit (min. 14MB, 30MB recommended)',

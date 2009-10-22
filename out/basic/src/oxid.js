@@ -291,6 +291,22 @@ var oxid = {
        }
     },
 
+    // SelectList
+    sellist: {
+        set : function(name,value){
+            //selectlist
+            var _slist = document.getElementById("slist");
+            if ( _slist !== null) {
+                _slist.href = _slist.href + "&" + name + "=" + value;
+            }
+            //wishlist
+            var _wlist = document.getElementById("wlist");
+            if ( _wlist !== null) {
+                _wlist.href = _wlist.href + "&" + name + "=" + value;
+            }
+        }
+    },
+
     // etc...
     showhide: function(id,show){
         var _el = document.getElementById(id);
@@ -334,7 +350,7 @@ var oxid = {
     },
 
     // reloading page by selected value in select list
-    getMdVariantUrl : function(selId) {
+    getMdVariantUrl: function(selId) {
         var _mdVar  = document.getElementById(selId);
 
         if (_mdVar) {
@@ -344,21 +360,106 @@ var oxid = {
         if(_newUrl) {
             document.location.href = _newUrl;
         }
-    }
+    },
+    
+    mdVariants: {
+        mdAttachAll: function()
+        {
+            for (var i = 0; i < mdVariantSelectIds.length; i++) {
+                if (mdVariantSelectIds[i]) {
+                    for (var j=0; j < mdVariantSelectIds[i].length; j++) {
+                        //attach JS handlers
+                        var mdSelect = document.getElementById(mdVariantSelectIds[i][j]);
+                        if (mdSelect) {
+                            mdSelect.onchange = oxid.mdVariants.resetMdVariantSelection;
+                        }
+                    }
+                }
+            }
+        },
+        
+        resetMdVariantSelection: function(e) {
+            mdSelect = e.target;
+            
+            //hide all
+            selectedValue = mdSelect.options[mdSelect.selectedIndex].value;
+            level = oxid.mdVariants.getSelectLevel(oxid.mdVariants.getMdSelectNameById(selectedValue));
+            if (level !== null) {
+                oxid.mdVariants.hideAllMdSelect(level);
+            }
+            //show selection
+            var showId = selectedValue;
+            while (showId) {
+                showSelectId = oxid.mdVariants.getMdSelectNameById(showId);
+                oxid.mdVariants.showMdSelect(showSelectId);
+                shownSelect = document.getElementById(showSelectId);
+                if (shownSelect) {
+                    showId = shownSelect.options[shownSelect.selectedIndex].value;
+                } else {
+                    showId = null;
+                }
+            }
+            
+            oxid.mdVariants.showMdRealVariant();
+        },
+        
+        getMdSelectNameById: function(id)
+        {
+            var name = 'mdvariantselect_' + id;
+            return name;
+        },
+        
+        getSelectLevel: function(name) {
+            for (var i=0; i < mdVariantSelectIds.length; i++) {
+                for (var j=0; j < mdVariantSelectIds[i].length; j++) {
+                    if (mdVariantSelectIds[i][j] == name) {
+                        return i;
+                    }
+                }
+            }
+            return null;
+        },
 
+        showMdSelect: function(id) {
+            if (document.getElementById(id)) {
+              document.getElementById(id).style.display = 'inline';
+            }
+        },
+        
+        hideAllMdSelect: function (level) {
+            for (var i=level; i < mdVariantSelectIds.length; i++) {
+                if (mdVariantSelectIds[i]) {
+                    for (var j=0; j < mdVariantSelectIds[i].length; j++) {
+                        if (document.getElementById(mdVariantSelectIds[i][j])) {
+                            document.getElementById(mdVariantSelectIds[i][j]).style.display = 'none';
+                        }
+                    }
+                }
+            }
+        },
+        
+        getSelectedMdRealVariant: function() {
+            for (var i=0; i < mdVariantSelectIds.length; i++) {
+                for (var j=0; j < mdVariantSelectIds[i].length; j++) {
+                    var mdSelectId = mdVariantSelectIds[i][j];
+                    var mdSelect = document.getElementById(mdSelectId);
+                    if (mdSelect && mdSelect.style.display == "inline") {
+                        var selectedVal = mdSelect.options[mdSelect.selectedIndex].value;
+                        if (mdRealVariants[selectedVal])
+                            return mdRealVariants[selectedVal];
+                    }
+                }
+            }
+        },
+        
+        showMdRealVariant: function() {
+            document.getElementById('md_variant_box').innerHTML = '';
+            var selectedId = oxid.mdVariants.getSelectedMdRealVariant();
+            
+            if (selectedId && document.getElementById('product_' + selectedId)) {
+                document.getElementById('md_variant_box').innerHTML = document.getElementById('product_' + selectedId).innerHTML;;
+            }
+
+        } 
+    }
 };
-
-function setSellList( oInObj)
-{
-    //for module wlist
-    var _wlist = document.getElementById("wlist");
-    if ( _wlist !== null) {
-        _wlist.href = _wlist.href + "&" + oInObj.name + "=" + oInObj.value;
-    }
-    //for original selectlist
-    var _slist = document.getElementById("slist");
-    if ( _slist !== null) {
-        _slist.href = _slist.href + "&" + oInObj.name + "=" + oInObj.value;
-    }
-}
-

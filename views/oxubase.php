@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 23323 2009-10-16 14:59:42Z sarunas $
+ * $Id: oxubase.php 23418 2009-10-20 21:43:20Z tomas $
  */
 
 /**
@@ -1272,8 +1272,6 @@ class oxUBase extends oxView
         $oViewConf = $this->getViewConfig();
         //value from user input
         if ( ( $iUserArtPerPage = (int) oxConfig::getParameter( '_artperpage' ) ) ) {
-            // performing floor() to skip such variants as 7.5 etc
-            $iNrofArticles = ( $iUserArtPerPage > 100 ) ? 10 : abs( $iUserArtPerPage );
             // M45 Possibility to push any "Show articles per page" number parameter
             $iNrofCatArticles = ( in_array( $iNrofArticles, $aNrofCatArticles ) ) ? $iNrofArticles : $iNrofCatArticles;
             $oViewConf->setViewConfigParam( 'iartPerPage', $iNrofCatArticles );

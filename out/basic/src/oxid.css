@@ -384,14 +384,15 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .product .amprice {clear: left;}
 #body .product .amount {padding-top:.5em;}
 #body .product .amount label{margin-right:.5em;color:#555555;font-size: 10px;}
-#body .product .price {margin-bottom:2px; }
+#body .product .price {margin-bottom: 4px; }
 #body .product .price big {font-size: 18px;line-height: 100%; font-weight: bold;white-space:nowrap;}
 #body .product .price sup.dinfo {vertical-align:super;margin:0;padding:0;}
 #body .product .price sup.dinfo a{color: inherit;text-decoration: none;font-weight: bold;font-size: 13px;}
 #body .product .price sup.dinfo a:hover{text-decoration: underline;color: inherit;}
 #body .product .price small {font-weight: inherit; font-size:69% ;}
-#body .product span.btn a { width: 118px; padding-top: 5px; font-size: 10px; text-align: center; color:#ffffff;}
+#body .product span.btn a { width: 118px; line-height: 19px; padding: 0px; margin-top: 0px; font-size: 10px; text-align: center; color:#ffffff; display: block;}
 #body .product span.btn a:hover { text-decoration: none; }
+#body .product .price .pricefrom {line-height: 9px;}
 
 #body .product .tocart { height:18px;line-height: 1;width: 134px; background: transparent url(bg/buttons_ce_.gif) no-repeat right 0; margin:0; border: 0 none;padding:0 1px 0 0;clear:left;}
 #body .product .tocart input{ height:18px;line-height: 1;width: 134px; background: transparent url(bg/buttons_ce_.gif) no-repeat 0 0; border:0;color:#ffffff;padding:0 0 0 23px;cursor:pointer;font-weight: bold;}
@@ -423,6 +424,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .product.small .tocart {width:121px;}
 #body .product.small .tocart input{width:121px;}
 #body .product.small .variants select{width: 123px;}
+#body .product.small span.btn a { width: 121px;}
 
 #body .product.thin{width:433px;height:130px; border-color: #555555;}
 #body .product.head strong.h4{margin:0;background:#ffffff; padding:8px 5px 1px 7px;height:20px; position:absolute;top:-30px;left:-1px;border-top:1px solid #555555;border-left:8px solid #555555;border-right:1px solid #555555;width:259px;line-height:20px; font-size: 11px;font-weight: bold;color:#555555;}
@@ -430,6 +432,8 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 #body .product.thin .price {position:absolute; top:5px; right:5px;}
 #body .product.thin .amount {position:absolute; bottom:25px; right:5px;}
 #body .product.thin .tocart {position:absolute; bottom:5px; right:5px;}
+#body .product.thin .moreinfo {position:absolute; bottom:5px; right:100px;}
+#body .product.thin .moreinfo a {width: 135px;}
 #body .product.thin .variants {position:absolute; bottom:25px; right:100px;}
 #body .product.thin .actions {margin-top:2em;}
 #body .product.thin tt {float: left;}

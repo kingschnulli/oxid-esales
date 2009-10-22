@@ -1,4 +1,7 @@
     
-    [{oxvariantselect value=$product->getMdVariants() separator=" " artid=$product->getId() displayFunction="showVariant"}]
+    [{oxvariantselect value=$product->getMdVariants() separator=" " artid=$product->getId()}]
     
-    <div id="variant_box" class="product  thinest inlist"></div>
+    [{oxscript add="oxid.mdVariants.mdAttachAll();"}]
+    [{oxscript add="oxid.mdVariants.showMdRealVariant();"}]
+    
+    <div id="md_variant_box" class="product  thinest inlist"></div>

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxattribute.php 23389 2009-10-20 13:46:15Z vilma $
+ * $Id: oxattribute.php 23441 2009-10-21 11:37:48Z vilma $
  */
 
 /**
@@ -97,15 +97,30 @@ class oxAttribute extends oxI18n
             $sAttrId = $this->_createAttribute( $aSelTitle );
         }
         foreach ( $aMDVariants as $sVarId => $oValue ) {
-            $oNewAssign = oxNew( "oxbase" );
-            $oNewAssign->init( "oxobject2attribute" );
-            $oNewAssign->oxobject2attribute__oxobjectid = new oxField($sVarId);
-            $oNewAssign->oxobject2attribute__oxattrid   = new oxField($sAttrId);
-            foreach ($aConfLanguages as $sKey => $sLang) {
-                $sPrefix = $myLang->getLanguageTag($sKey);
-                $oNewAssign->{'oxobject2attribute__oxvalue'.$sPrefix} = new oxField($oValue[$sKey]->name);
+        	if ( strpos( $sVarId, "mdvar_" ) === 0 ) {
+            	foreach ( $oValue as $sId ) {
+	                //var_dump($sVarId, $oAttribute->oxattribute__oxid->value);
+            		$sVarId = substr($sVarId, 6);
+            		$oNewAssign = oxNew( "oxbase" );
+	                $oNewAssign->init( "oxobject2attribute" );
+	                $sNewId = oxUtilsObject::getInstance()->generateUID();
+	                if ($oNewAssign->load($sId)) {
+                        $oNewAssign->oxobject2attribute__oxobjectid = new oxField($sVarId);
+	                    $oNewAssign->setId($sNewId);
+	                    $oNewAssign->save();
+	                }
+            	}
+            } else {
+	        	$oNewAssign = oxNew( "oxbase" );
+	            $oNewAssign->init( "oxobject2attribute" );
+	            $oNewAssign->oxobject2attribute__oxobjectid = new oxField($sVarId);
+	            $oNewAssign->oxobject2attribute__oxattrid   = new oxField($sAttrId);
+	            foreach ($aConfLanguages as $sKey => $sLang) {
+	                $sPrefix = $myLang->getLanguageTag($sKey);
+	                $oNewAssign->{'oxobject2attribute__oxvalue'.$sPrefix} = new oxField($oValue[$sKey]->name);
+	            }
+	            $oNewAssign->save();
             }
-            $oNewAssign->save();
         }
     }
 
@@ -142,5 +157,33 @@ class oxAttribute extends oxI18n
         }
         $oAttr->save();
         return $oAttr->getId();
+    }
+
+    /**
+     * Returns all oxobject2attribute Ids of article
+     *
+     * @param string $sArtId article ids
+     *
+     * @return null;
+     */
+    public function getAttributeAssigns( $sArtId)
+    {
+        if ( !$sArtId) {
+            return;
+        }
+        $sSelect  = "select o2a.oxid ";
+        $sSelect .= "from oxobject2attribute as o2a ";
+        $sSelect .= "where o2a.oxobjectid = '$sArtId' ";
+        $sSelect .= "order by o2a.oxpos";
+
+        $aIds = array();
+        $rs = oxDb::getDb()->Execute( $sSelect);
+        if ($rs != false && $rs->recordCount() > 0) {
+            while (!$rs->EOF) {
+                $aIds[] = $rs->fields[0];
+                $rs->moveNext();
+            }
+        }
+        return $aIds;
     }
 }

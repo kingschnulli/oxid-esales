@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23384 2009-10-20 12:58:12Z vilma $
+ * $Id: lang.php 23435 2009-10-21 09:22:14Z tomas $
  */
 
 $sLangName  = 'Deutsch';
@@ -460,7 +460,7 @@ $aLang = array(
 'ARTICLE_VARIANT_CHOICE'                        => 'Auswahl',
 'ARTICLE_VARIANT_SORT'                          => 'Sort.',
 'ARTICLE_VARIANT_STOCK'                         => 'Lager',
-'ARTICLE_VARIANT_VARSAVE'                       => 'Varianten Speichern',
+'ARTICLE_VARIANT_VARSAVE'                       => 'Varianten speichern',
 'ATTRIBUTE_CATEGORY_ALLCATEGORY'                => 'Alle verfügbaren Kategorien',
 'ATTRIBUTE_CATEGORY_ATRCATEGORY'                => 'Kategorien mit diesem Attribut',
 'ATTRIBUTE_CATEGORY_ATRLIST'                    => 'Alle Attribute der Kategorie',
@@ -1211,7 +1211,7 @@ $aLang = array(
 'SHOP_CONFIG_MINORDERPRICE'                     => 'Mindestbestellwert (leer lassen, falls nicht gewünscht)',
 'SHOP_CONFIG_MUSTFILLFIELDS'                    => '"Muss"-Felder für die Registrierung des Kunden',
 'SHOP_CONFIG_NEWARTBYINSERT'                    => 'Neueste Artikel nach dem Erstellungsdatum berechnen. (Ansonsten nach Datum der letzten Änderung)',
-'SHOP_CONFIG_NROFCATARTICLES'                   => 'Anzahl der Artikel, die in einer Artikelliste pro Seite angezeigt werden können',
+'SHOP_CONFIG_NROFCATARTICLES'                   => 'Anzahl der Artikel, die in einer Artikelliste pro Seite angezeigt werden können<br>Warnung: Eine große Anzahl von Artikeln pro Seite (über 100) kann erhebliche Performance-Probleme verursachen!',
 'SHOP_CONFIG_NROFCUSTOMERWHOARTICLES'           => 'Anzahl der Artikel, die bei "Kunden, die dies gekauft haben, haben auch das gekauft" angezeigt werden',
 'SHOP_CONFIG_NROFNEWCOMERARTICLES'              => 'Anzahl der Artikel, die bei "Frisch eingetroffen!" (neuste Artikel) angezeigt werden',
 'SHOP_CONFIG_NUMBEROFSIMILARARTICLES'           => 'Anzahl ähnlicher Artikel, die bei einem Artikel angezeigt werden',
@@ -1275,7 +1275,7 @@ $aLang = array(
 'SHOP_SYSTEM_VARIANTSSELECTION'                 => 'Varianten im Administrationsbereich in Zuordnungs-Listen anzeigen',
 'SHOP_SYSTEM_VARIANTPARENTBUYABLE'              => 'Varianten-"Vater" ist kaufbar',
 'SHOP_SYSTEM_VARIANTINHERITAMOUNTPRICE'         => 'Varianten erben Staffelpreise vom "Vater"',
-'SHOP_SYSTEM_USEMULTIDIMENSIONVARIANTS'         => '[tr] Use multidimensional variants',
+'SHOP_SYSTEM_USEMULTIDIMENSIONVARIANTS'         => 'Multidimensionale Varianten einschalten',
 'SHOP_SYSTEM_BLLOGGING'                         => 'Mitloggen für Statistik einschalten',
 'SHOP_SYSTEM_INLINEIMGEMAIL'                    => 'E-Mails mitsamt Bildern versenden',
 'SHOP_SYSTEM_LOGSKIPTAGS'                       => 'Diese Änderungen im Administrationsbereich nicht mitloggen',
@@ -1361,7 +1361,7 @@ $aLang = array(
 'SYSREQ_INI_SET'                                => 'ini_set erlaubt',
 'SYSREQ_REGISTER_GLOBALS'                       => 'register_globals muss ausgeschaltet sein',
 'SYSREQ_ZEND_OPTIMIZER'                         => 'Zend Optimizer installiert',
-'SYSREQ_ZEND_PLATFORM_OR_SERVER'                => '[tr] Zend Platform oder Zend Server installiert',
+'SYSREQ_ZEND_PLATFORM_OR_SERVER'                => 'Zend Platform oder Zend Server installiert',
 'SYSREQ_MB_STRING'                              => 'mbstring',
 'SYSREQ_UNICODE_SUPPORT'                        => 'UTF-8 Unterstützung',
 'SYSREQ_MEMORY_LIMIT'                           => 'PHP Memory limit (min. 14MB, 30MB empfohlen)',

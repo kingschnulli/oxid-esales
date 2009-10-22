@@ -30,7 +30,8 @@
                                                       [{/strip}]
                                                       [{assign var="sSep" value=","}]
                                                       [{ /foreach }] ],
-                                                    '[{ $oViewConf->getAjaxLink() }]cmpid=container2&container=attribute_category&oxid=[{ $oxid }]'
+                                                    '[{ $oViewConf->getAjaxLink() }]cmpid=container2&container=attribute_category&oxid=[{ $oxid }]',
+                                                    { selectionMode:'single' }
                                                     );
 
         YAHOO.oxid.container1.getDropAction = function()
@@ -77,17 +78,17 @@
         YAHOO.oxid.orderBtn('orderup','orderdown',true);
 
         YAHOO.oxid.container2.subscribe( "dataReturnEvent", function( oParam ) {
-            if ( YAHOO.oxid.container3.oContextMenu ) {
-                YAHOO.oxid.container3.oContextMenu.destroy();
-            }
-            YAHOO.oxid.container3 = null;
-            $('container3').innerHTML = '';
-            YAHOO.oxid.orderBtn.hide();
+            resetSortingContainer();
         })
         //
         YAHOO.oxid.container2.subscribe( "rowSelectEvent", function( oParam )
         {
             var sOxid = oParam.record._oData._3;
+
+            if ( YAHOO.oxid.container3 != null && ( !YAHOO.oxid.container3._lastRecord || YAHOO.oxid.container3._lastRecord != oParam.record ) ) {
+                resetSortingContainer();
+            }
+
             if ( YAHOO.oxid.container3 == null) {
                 YAHOO.oxid.container3 = new YAHOO.oxid.aoc( 'container3',
                                                 [ [{ foreach from=$oxajax.container3 item=aItem key=iKey }]
@@ -137,16 +138,20 @@
                 }
 
                 YAHOO.oxid.orderBtn.addOn(YAHOO.oxid.container3.setOrderUp,YAHOO.oxid.container3.setOrderDown);
-
                 YAHOO.oxid.container3._lastRecord = oParam.record;
-            } else if ( !YAHOO.oxid.container3._lastRecord || YAHOO.oxid.container3._lastRecord != oParam.record ) {
-                YAHOO.oxid.container3._lastRecord = oParam.record;
-                YAHOO.oxid.container3.modRequest = function( sRequest ) { return sRequest+'&oxid='+sOxid; }
-                YAHOO.oxid.container3.getPage( 0 );
             }
         })
     }
     $E.onDOMReady( initAoc );
+    function resetSortingContainer()
+    {
+        if ( YAHOO.oxid.container3.oContextMenu ) {
+            YAHOO.oxid.container3.oContextMenu.destroy();
+        }
+        YAHOO.oxid.container3 = null;
+        $('container3').innerHTML = '';
+        YAHOO.oxid.orderBtn.hide();
+    }
 </script>
 
     <table width="100%">

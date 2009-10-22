@@ -12,7 +12,6 @@
     [{/if}]
     [{if $oView->getMetaDescription()}]<meta name="description" content="[{$oView->getMetaDescription()}]">[{/if}]
     [{if $oView->getMetaKeywords()}]<meta name="keywords" content="[{$oView->getMetaKeywords()}]">[{/if}]
-    <meta http-equiv="X-UA-Compatible" content="IE=8">
     [{assign var="canonical_url" value=$oView->getCanonicalUrl()}]
     [{if $canonical_url }]<link rel="canonical" href="[{ $canonical_url }]">[{/if}]
     <link rel="shortcut icon" href="[{ $oViewConf->getBaseDir() }]favicon.ico">
@@ -171,20 +170,7 @@
 
     <div id="content">
         <div id="left">[{ include file="_left.tpl" }]</div>
-        <div id="path">
-            [{ oxmultilang ident="INC_HEADER_YOUAREHERE" }] / [{ $location }]
-            [{foreach from=$tree_path item=oTreeItem }]
-                [{ $_path_separator }]
-                [{assign var="_path_link" value=$oTreeItem->getLink() }]
-                [{ if $_path_link }]<a href="[{ $_path_link }]">[{/if}][{ $oTreeItem->oxcategories__oxtitle->value }][{ if $_path_link }]</a>[{/if}]
-                [{assign var="_path_separator" value="/" }]
-            [{/foreach}]
-
-            [{if $isStart}]
-                [{assign var="oCont" value=$oView->getContentByIdent("oxdeliveryinfo") }]
-                <a rel="nofollow" class="dinfo" href="[{ $oCont->getLink() }]">[{ oxmultilang ident="INC_HEADER_INCLTAXPLUSSHIPPING" }]</a>
-            [{/if}]
-        </div>
+        <div id="path">[{ include file="_path.tpl" is_start=$isStart}]</div>
         <div id="right">[{include file="_right.tpl" }]</div>
         <div id="body">
         [{oxid_include_dynamic file="dyn/newbasketitem_message.tpl"}]

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 23404 2009-10-20 15:22:39Z rimvydas.paskevicius $
+ * $Id: oxarticle.php 23451 2009-10-21 14:15:06Z rimvydas.paskevicius $
  */
 
 // defining supported link types
@@ -4336,19 +4336,25 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getMdVariants()
     {
-        if ($this->_oMdVariants) {
-            return $this->_oMdVariants->getMdSubvariants();
+        if ( $this->_oMdVariants ) {
+            return $this->_oMdVariants;
         }
 
-        $oMdVariants = oxNew("OxMdVariant");
-        $oMdVariants->setName("_parent_product_");
-        $oVariants = $this->getVariants();
+        $oMdVariants = oxNew( "OxMdVariant" );
+        $oMdVariants->setParentId( $this->getId() );
+        $oMdVariants->setName( "_parent_product_" );
+        $oParentArticle = $this->getParentArticle();
+        if ( $oParentArticle ) {
+            $oVariants = $oParentArticle->getVariants();
+        } else {
+            $oVariants = $this->getVariants();
+        }
 
-        foreach($oVariants as $sKey => $oVariant) {
-            $oMdVariants->addNames($sKey,
-                                   explode("|", $oVariant->oxarticles__oxvarselect->value),
-                                   $oVariant->getPrice()->getBruttoPrice(),
-                                   $oVariant->getLink() );
+        foreach ( $oVariants as $sKey => $oVariant ) {
+            $oMdVariants->addNames( $sKey,
+                                    explode("|", $oVariant->oxarticles__oxvarselect->value),
+                                    $oVariant->getPrice()->getBruttoPrice(),
+                                    $oVariant->getLink() );
         }
 
         $this->_oMdVariants = $oMdVariants;

@@ -23,7 +23,7 @@
 [{assign var="product" value=$oView->getProduct() }]
 <div class="product details head big">
 
-    <strong id="test_detailsHeader" class="h4 big">[{oxmultilang ident="DETAILS_PERSPARAM_PRODUCTDETAILS"}]</strong>
+    <strong id="test_detailsHeader" class="h4 big">[{oxmultilang ident="DETAILS_PRODUCTDETAILS"}]</strong>
 
     <h1 id="test_product_name">[{$product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]</h1>
     <tt id="test_product_artnum">[{ oxmultilang ident="INC_PRODUCTITEM_ARTNOMBER2" }] [{ $product->oxarticles__oxartnum->value }]</tt>
@@ -37,7 +37,7 @@
         [{assign var="aZoomPics" value=$oView->getZoomPics() }]
         [{assign var="iZoomPic" value=$oView->getActZoomPic() }]
         [{assign var="sZoomPopup" value="inc/popup_zoom.tpl" }]
-        <a id="test_zoom" rel="nofollow" href="[{$product->getMoreDetailLink()}]" onmouseover="" onclick="oxid.popup.zoom();oxid.image('zoom_img','[{$aZoomPics[$iZoomPic].file}]');return false;"><b>[{ oxmultilang ident="DETAILS_PERSPARAM_ZOOM" }]</b></a>
+        <a id="test_zoom" rel="nofollow" href="[{$product->getMoreDetailLink()}]" onmouseover="" onclick="oxid.popup.zoom();oxid.image('zoom_img','[{$aZoomPics[$iZoomPic].file}]');return false;"><b>[{ oxmultilang ident="DETAILS_ZOOM" }]</b></a>
     [{/if}]
 
     [{if $product->oxarticles__oxfile->value}]
@@ -58,11 +58,11 @@
     [{/oxhasrights}]
 
     [{ if !$oxcmp_user}]
-      [{assign var="_star_title" value="DETAILS_PERSPARAM_LOGGIN"|oxmultilangassign }]
+      [{assign var="_star_title" value="DETAILS_LOGGIN"|oxmultilangassign }]
     [{ elseif !$oView->canRate() }]
-      [{assign var="_star_title" value="DETAILS_PERSPARAM_ALREADYRATED"|oxmultilangassign }]
+      [{assign var="_star_title" value="DETAILS_ALREADYRATED"|oxmultilangassign }]
     [{ else }]
-      [{assign var="_star_title" value="DETAILS_PERSPARAM_RATETHISARTICLE"|oxmultilangassign }]
+      [{assign var="_star_title" value="DETAILS_RATETHISARTICLE"|oxmultilangassign }]
     [{/if}]
     [{math equation="x*y" x=20 y=$product->getArticleRatingAverage() assign="currentRate" }]
     <br>
@@ -73,9 +73,9 @@
       [{/section}]
     </ul>
     [{if $product->oxarticles__oxratingcnt->value}]
-      <a id="star_rating_text" rel="nofollow" href="#review" onclick="oxid.review.show();" class="fs10 link2">[{$product->oxarticles__oxratingcnt->value}] [{if $product->oxarticles__oxratingcnt->value == 1}][{ oxmultilang ident="DETAILS_PERSPARAM_RATINGREZULT" }][{else}][{ oxmultilang ident="DETAILS_PERSPARAM_RATINGREZULTS" }] [{/if}]</a>
+      <a id="star_rating_text" rel="nofollow" href="#review" onclick="oxid.review.show();" class="fs10 link2">[{$product->oxarticles__oxratingcnt->value}] [{if $product->oxarticles__oxratingcnt->value == 1}][{ oxmultilang ident="DETAILS_RATINGREZULT" }][{else}][{ oxmultilang ident="DETAILS_RATINGREZULTS" }] [{/if}]</a>
     [{else}]
-      <a id="star_rating_text" rel="nofollow" href="#review" onclick="oxid.review.show();" class="fs10 link2">[{ oxmultilang ident="DETAILS_PERSPARAM_NORATINGS" }]</a>
+      <a id="star_rating_text" rel="nofollow" href="#review" onclick="oxid.review.show();" class="fs10 link2">[{ oxmultilang ident="DETAILS_NORATINGS" }]</a>
     [{/if}]
 
     <div class="cats">
@@ -84,7 +84,7 @@
           [{if $oManufacturer->oxmanufacturers__oxicon->value}]
               <img src="[{$oManufacturer->getIconUrl()}]" alt="[{ $oManufacturer->oxmanufacturers__oxtitle->value}]">
           [{/if}]
-          <b>[{ oxmultilang ident="DETAILS_PERSPARAM_MANUFACTURER" }]</b>
+          <b>[{ oxmultilang ident="DETAILS_MANUFACTURER" }]</b>
           [{if !$oManufacturer->isReadOnly()}]
               <a id="test_manufacturer_[{$oManufacturer->oxmanufacturers__oxid->value}]" href="[{ $oManufacturer->getLink() }]">[{ $oManufacturer->oxmanufacturers__oxtitle->value}]</a>
           [{else}]
@@ -97,7 +97,7 @@
             [{if $oVendor->oxvendor__oxicon->value}]
                 <img src="[{$oVendor->getIconUrl()}]" alt="[{ $oVendor->oxvendor__oxtitle->value}]">
             [{/if}]
-            <b>[{ oxmultilang ident="DETAILS_PERSPARAM_VENDOR" }]</b>
+            <b>[{ oxmultilang ident="DETAILS_VENDOR" }]</b>
             [{if !$oVendor->isReadOnly()}]
                 <a id="test_vendor_[{$oVendor->oxvendor__oxid->value}]" href="[{ $oVendor->getLink() }]">[{ $oVendor->oxvendor__oxtitle->value}]</a>
             [{else}]
@@ -108,7 +108,7 @@
         [{/if}]
         [{ assign var="oCategory" value=$oView->getCategory()}]
         [{if $oCategory && $oView->getListType()!='list'}]
-            <b>[{ oxmultilang ident="DETAILS_PERSPARAM_CATEGORY" }]</b>
+            <b>[{ oxmultilang ident="DETAILS_CATEGORY" }]</b>
             <a id="test_category_[{$oCategory->oxcategories__oxid->value }]" href="[{ $oCategory->getLink() }]">[{ $oCategory->oxcategories__oxtitle->value }]</a>
         [{/if}]
     </div>
@@ -120,17 +120,17 @@
         [{ if $product->oxarticles__oxnostocktext->value  }]
             [{ $product->oxarticles__oxnostocktext->value  }]
         [{elseif $oViewConf->getStockOffDefaultMessage() }]
-            [{ oxmultilang ident="DETAILS_PERSPARAM_NOTONSTOCK" }]
+            [{ oxmultilang ident="DETAILS_NOTONSTOCK" }]
         [{/if}]
 
         [{ if $product->getDeliveryDate() }]
-          <br>[{ oxmultilang ident="DETAILS_PERSPARAM_AVAILABLEON" }] [{ $product->getDeliveryDate() }]
+          <br>[{ oxmultilang ident="DETAILS_AVAILABLEON" }] [{ $product->getDeliveryDate() }]
         [{/if}]
 
       [{elseif $product->getStockStatus() == 1}]
 
       <div class="flag orange"></div>
-      <b>[{ oxmultilang ident="DETAILS_PERSPARAM_LOWSTOCK" }]</b>
+      <b>[{ oxmultilang ident="DETAILS_LOWSTOCK" }]</b>
 
       [{elseif $product->getStockStatus() == 0}]
 
@@ -139,7 +139,7 @@
       [{ if $product->oxarticles__oxstocktext->value  }]
         [{ $product->oxarticles__oxstocktext->value  }]
       [{elseif $oViewConf->getStockOnDefaultMessage() }]
-        [{ oxmultilang ident="DETAILS_PERSPARAM_READYFORSHIPPING" }]
+        [{ oxmultilang ident="DETAILS_READYFORSHIPPING" }]
       [{/if}]
 
       [{/if}]
@@ -162,7 +162,7 @@
     [{foreach key=iSel from=$oView->getSelectLists() item=oList}]
      <div class="variants">
       <label>[{ $oList.name }]:</label>
-        <select id="test_select_[{$product->oxarticles__oxid->value}]_[{$iSel}]" name="sel[[{$iSel}]]" onchange="JavaScript:setSellList(this);">
+        <select id="test_select_[{$product->oxarticles__oxid->value}]_[{$iSel}]" name="sel[[{$iSel}]]" onchange="oxid.sellist.set(this.name,this.value);">
           [{foreach key=iSelIdx from=$oList item=oSelItem}]
             [{ if $oSelItem->name }]<option value="[{$iSelIdx}]">[{ $oSelItem->name }]</option>[{/if}]
           [{/foreach}]
@@ -174,15 +174,15 @@
     [{oxhasrights ident="SHOWARTICLEPRICE"}]
         <div class="price">
             [{if $product->getFTPrice() }]
-                <b class="old">[{ oxmultilang ident="DETAILS_PERSPARAM_REDUCEDFROM" }] <del>[{ $product->getFTPrice()}] [{ $currency->sign}]</del></b>
-                <span class="desc">[{ oxmultilang ident="DETAILS_PERSPARAM_REDUCEDTEXT" }]</span><br>
-                <sub class="only">[{ oxmultilang ident="DETAILS_PERSPARAM_NOWONLY" }]</sub>
+                <b class="old">[{ oxmultilang ident="DETAILS_REDUCEDFROM" }] <del>[{ $product->getFTPrice()}] [{ $currency->sign}]</del></b>
+                <span class="desc">[{ oxmultilang ident="DETAILS_REDUCEDTEXT" }]</span><br>
+                <sub class="only">[{ oxmultilang ident="DETAILS_NOWONLY" }]</sub>
             [{/if}]
             [{if $product->getFPrice() }]
                 <big id="test_product_price">[{ $product->getFPrice() }] [{ $currency->sign}]</big>
             [{/if}]
             [{assign var="oCont" value=$oView->getContentByIdent("oxdeliveryinfo") }]
-            <sup class="dinfo">[{ oxmultilang ident="DETAILS_PERSPARAM_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_PLUSSHIPPING2" }]</a></sup>
+            <sup class="dinfo">[{ oxmultilang ident="DETAILS_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PLUSSHIPPING2" }]</a></sup>
         </div>
     [{/oxhasrights}]
 
@@ -197,14 +197,14 @@
      [{if $product->loadAmountPriceInfo()}]
        <table class="amprice">
          <tr>
-            <th colspan="2">[{ oxmultilang ident="DETAILS_PERSPARAM_MOREYOUBUYMOREYOUSAVE" }]</th>
+            <th colspan="2">[{ oxmultilang ident="DETAILS_MOREYOUBUYMOREYOUSAVE" }]</th>
          </tr>
          [{foreach from=$product->loadAmountPriceInfo() item=priceItem}]
            <tr>
-             <td class="am">[{ oxmultilang ident="DETAILS_PERSPARAM_FROM" }] [{$priceItem->oxprice2article__oxamount->value}] [{ oxmultilang ident="DETAILS_PERSPARAM_PCS" }]</td>
+             <td class="am">[{ oxmultilang ident="DETAILS_FROM" }] [{$priceItem->oxprice2article__oxamount->value}] [{ oxmultilang ident="DETAILS_PCS" }]</td>
              <td id="test_amprice_[{$priceItem->oxprice2article__oxamount->value}]_[{$priceItem->oxprice2article__oxamountto->value}]" class="pr">
                [{if $priceItem->oxprice2article__oxaddperc->value}]
-                 - [{$priceItem->oxprice2article__oxaddperc->value}] [{ oxmultilang ident="DETAILS_PERSPARAM_DISCOUNT" }]
+                 - [{$priceItem->oxprice2article__oxaddperc->value}] [{ oxmultilang ident="DETAILS_DISCOUNT" }]
                [{else}]
                  - [{$priceItem->fbrutprice}] [{ $currency->sign}]
                [{/if}]
@@ -220,18 +220,18 @@
     [{oxhasrights ident="TOBASKET"}]
         [{ if $product->isBuyable() }]
             <div class="amount">
-                <label>[{ oxmultilang ident="DETAILS_PERSPARAM_QUANTITY" }]</label><input id="test_AmountToBasket" type="text" name="am" value="1" size="3">
+                <label>[{ oxmultilang ident="DETAILS_QUANTITY" }]</label><input id="test_AmountToBasket" type="text" name="am" value="1" size="3">
             </div>
             <div class="tocart"><input id="test_toBasket" type="submit" value="[{if $size=='small'}][{oxmultilang ident="INC_PRODUCTITEM_ADDTOCARD3" }][{else}][{oxmultilang ident="INC_PRODUCTITEM_ADDTOCARD2"}][{/if}]" onclick="oxid.popup.load();"></div>
             [{if $oView->isPriceAlarm()}]
             <div class="pricealarm">
-                <a id="test_PriceAlarmLink" rel="nofollow" href="#preisalarm_link">[{ oxmultilang ident="DETAILS_PERSPARAM_PRICEALARM" }]</a>
+                <a id="test_PriceAlarmLink" rel="nofollow" href="#preisalarm_link">[{ oxmultilang ident="DETAILS_PRICEALARM" }]</a>
             </div>
             [{/if}]
         [{else}]
             [{if $oView->isPriceAlarm() && !$product->isParentNotBuyable()}]
             <div class="pricealarm">
-                <a rel="nofollow" href="#preisalarm_link">[{ oxmultilang ident="DETAILS_PERSPARAM_PRICEALARM2" }]</a>
+                <a rel="nofollow" href="#preisalarm_link">[{ oxmultilang ident="DETAILS_PRICEALARM2" }]</a>
             </div>
             [{/if}]
         [{/if}]
@@ -240,27 +240,27 @@
 
     <div class="actions">
         [{if $isfiltering }]
-            [{oxid_include_dynamic file="dyn/compare_links.tpl" testid="" type="compare" aid=$product->oxarticles__oxid->value anid=$product->oxarticles__oxnid->value in_list=$product->isOnComparisonList() page=$pageNavigation->actPage-1 text_to_id="DETAILS_PERSPARAM_COMPARE" text_from_id="DETAILS_PERSPARAM_REMOVEFROMCOMPARELIST"}]
+            [{oxid_include_dynamic file="dyn/compare_links.tpl" testid="" type="compare" aid=$product->oxarticles__oxid->value anid=$product->oxarticles__oxnid->value in_list=$product->isOnComparisonList() page=$pageNavigation->actPage-1 text_to_id="DETAILS_COMPARE" text_from_id="DETAILS_REMOVEFROMCOMPARELIST"}]
         [{/if}]
 
-        <a id="test_suggest" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=suggest" params="anid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="DETAILS_PERSPARAM_RECOMMEND" }]</a>
+        <a id="test_suggest" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=suggest" params="anid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="DETAILS_RECOMMEND" }]</a>
 
         [{ if $oxcmp_user }]
-            <a id="test_Recommlist" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=recommadd" params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]" class="details">[{ oxmultilang ident="DETAILS_PERSPARAM_ADDTORECOMMLIST" }]</a>
+            <a id="test_Recommlist" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=recommadd" params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]" class="details">[{ oxmultilang ident="DETAILS_ADDTORECOMMLIST" }]</a>
         [{ else}]
-            <a id="test_LoginToRecommlist" class="reqlogin" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOACCESSRECOMMLIST" }]</a>
+            <a id="test_LoginToRecommlist" class="reqlogin" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="DETAILS_LOGGINTOACCESSRECOMMLIST" }]</a>
         [{ /if}]
 
         [{if $oxcmp_user }]
-            <a id="slist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`&amp;fnc=tonoticelist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_ADDTONOTICELIST" }]</a>
+            <a id="slist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`&amp;fnc=tonoticelist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_ADDTONOTICELIST" }]</a>
         [{else}]
-            <a id="test_LoginToNotice" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOACCESSNOTICELIST" }]</a>
+            <a id="test_LoginToNotice" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_LOGGINTOACCESSNOTICELIST" }]</a>
         [{/if}]
 
         [{if $oxcmp_user }]
-            <a id="wlist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&anid=`$product->oxarticles__oxnid->value`&amp;fnc=towishlist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_ADDTOWISHLIST" }]</a>
+            <a id="wlist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&anid=`$product->oxarticles__oxnid->value`&amp;fnc=towishlist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_ADDTOWISHLIST" }]</a>
         [{else}]
-            <a id="test_LoginToWish" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOACCESSWISHLIST" }]</a>
+            <a id="test_LoginToWish" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_LOGGINTOACCESSWISHLIST" }]</a>
         [{/if}]
     </div>
 
@@ -286,7 +286,7 @@
         [{/oxhasrights}]
 
         <div class="question">
-            [{mailto extra='id="test_QuestionMail"' address=$product->oxarticles__oxquestionemail->value|default:$oxcmp_shop->oxshops__oxinfoemail->value subject='DETAILS_PERSPARAM_QUESTIONSSUBJECT'|oxmultilangassign|cat:" "|cat:$product->oxarticles__oxartnum->value text='DETAILS_PERSPARAM_QUESTIONS'|oxmultilangassign encode="javascript"}]
+            [{mailto extra='id="test_QuestionMail"' address=$product->oxarticles__oxquestionemail->value|default:$oxcmp_shop->oxshops__oxinfoemail->value subject='DETAILS_QUESTIONSSUBJECT'|oxmultilangassign|cat:" "|cat:$product->oxarticles__oxartnum->value text='DETAILS_QUESTIONS'|oxmultilangassign encode="javascript"}]
         </div>
     </div>
 
@@ -294,7 +294,7 @@
 
 
 [{ if $oView->getAttributes() }]
-<strong id="test_specsHeader" class="boxhead">[{ oxmultilang ident="DETAILS_PERSPARAM_SPECIFICATION" }]</strong>
+<strong id="test_specsHeader" class="boxhead">[{ oxmultilang ident="DETAILS_SPECIFICATION" }]</strong>
 <div class="box">
     <table width="100%" class="attributes">
       <colgroup><col width="50%" span="2"></colgroup>
@@ -313,9 +313,9 @@
 [{include file="inc/tags.tpl"}]
 
 [{if $oView->isPriceAlarm() && !$product->isParentNotBuyable()}]
-<strong id="preisalarm_link" class="boxhead">[{ oxmultilang ident="DETAILS_PERSPARAM_PRICEALARM3" }]</strong>
+<strong id="preisalarm_link" class="boxhead">[{ oxmultilang ident="DETAILS_PRICEALARM3" }]</strong>
 <div class="box">
-    <p>[{ oxmultilang ident="DETAILS_PERSPARAM_PRICEALARMMESSAGE" }]</p>
+    <p>[{ oxmultilang ident="DETAILS_PRICEALARMMESSAGE" }]</p>
     <form name="pricealarm" action="[{ $oViewConf->getSelfActionLink() }]" method="post">
     <div>
         [{ $oViewConf->getHiddenSid() }]
@@ -327,7 +327,7 @@
         <input type="hidden" name="c_mach" value="[{$oCaptcha->getHash()}]"/>
     </div>
 
-    <table class="pricealarm" width="100%" summary="[{ oxmultilang ident="DETAILS_PERSPARAM_PRICEALARM3" }]">
+    <table class="pricealarm" width="100%" summary="[{ oxmultilang ident="DETAILS_PRICEALARM3" }]">
         <colgroup>
             <col width="20%">
             <col width="10%">
@@ -337,8 +337,8 @@
         </colgroup>
         <tr>
           <th colspan="2"><label class="nobold">[{ oxmultilang ident="CONTACT_VERIFICATIONCODE" }]</label></th>
-          <th><label>[{ oxmultilang ident="DETAILS_PERSPARAM_EMAIL" }]</label></th>
-          <th colspan="3"><label class="hl">[{ oxmultilang ident="DETAILS_PERSPARAM_YOURPRICE" }]</label></th>
+          <th><label>[{ oxmultilang ident="DETAILS_EMAIL" }]</label></th>
+          <th colspan="3"><label class="hl">[{ oxmultilang ident="DETAILS_YOURPRICE" }]</label></th>
         </tr>
         <tr>
             <td>
@@ -354,7 +354,7 @@
             <td><b class="hl">[{ $currency->sign}]</b></td>
             <td>
                 <span class="btn">
-                    <input id="test_PriceAlarmSubmit" type="submit" name="submit" value="[{ oxmultilang ident="DETAILS_PERSPARAM_SEND" }]" class="btn">
+                    <input id="test_PriceAlarmSubmit" type="submit" name="submit" value="[{ oxmultilang ident="DETAILS_SEND" }]" class="btn">
                 </span>
             </td>
         </tr>
@@ -406,7 +406,7 @@
 
 [{/if}]
 
-<strong id="test_reviewHeader" class="boxhead">[{ oxmultilang ident="DETAILS_PERSPARAM_PRODUCTREVIEW" }]</strong>
+<strong id="test_reviewHeader" class="boxhead">[{ oxmultilang ident="DETAILS_PRODUCTREVIEW" }]</strong>
 <div id="review" class="box info">
   [{ if $oxcmp_user }]
     <form action="[{ $oViewConf->getSelfActionLink() }]" method="post" id="rating">
@@ -416,7 +416,7 @@
             <ul id="star_rate" class="rating">
                 <li id="current_rate" class="current_rate" style="width: 0px;"><a title="[{$_star_title}]"><b>1</b></a></li>
                 [{section name=star start=1 loop=6}]
-                <li class="s[{$smarty.section.star.index}]"><a rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params="anid=`$product->oxarticles__oxnid->value`&amp;"|cat:$oViewConf->getNavUrlParams() }]" onclick="oxid.review.rate([{$smarty.section.star.index}]);return false;" title="[{$smarty.section.star.index}] [{if $smarty.section.star.index==1}][{ oxmultilang ident="DETAILS_PERSPARAM_STAR" }][{else}][{ oxmultilang ident="DETAILS_PERSPARAM_STARS" }][{/if}]"><b>[{$smarty.section.star.index}]</b></a></li>
+                <li class="s[{$smarty.section.star.index}]"><a rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params="anid=`$product->oxarticles__oxnid->value`&amp;"|cat:$oViewConf->getNavUrlParams() }]" onclick="oxid.review.rate([{$smarty.section.star.index}]);return false;" title="[{$smarty.section.star.index}] [{if $smarty.section.star.index==1}][{ oxmultilang ident="DETAILS_STAR" }][{else}][{ oxmultilang ident="DETAILS_STARS" }][{/if}]"><b>[{$smarty.section.star.index}]</b></a></li>
                 [{/section}]
             </ul>
             [{/if}]
@@ -427,12 +427,12 @@
             <input type="hidden" name="reviewuserid" value="[{$oView->getReviewUserId()}]">
             <input type="hidden" name="anid" value="[{ $product->oxarticles__oxid->value }]">
             <textarea cols="102" rows="15" name="rvw_txt" class="fullsize"></textarea><br>
-            <span class="btn"><input id="test_reviewSave" type="submit" value="[{ oxmultilang ident="DETAILS_PERSPARAM_SAVEREVIEW" }]" class="btn"></span>
+            <span class="btn"><input id="test_reviewSave" type="submit" value="[{ oxmultilang ident="DETAILS_SAVEREVIEW" }]" class="btn"></span>
         </div>
     </form>
-    <a id="write_new_review" rel="nofollow" class="fs10" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params="anid=`$product->oxarticles__oxnid->value`&amp;"|cat:$oViewConf->getNavUrlParams() }]" onclick="oxid.review.show();return false;"><b>[{ oxmultilang ident="DETAILS_PERSPARAM_WRITEREVIEW" }]</b></a>
+    <a id="write_new_review" rel="nofollow" class="fs10" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params="anid=`$product->oxarticles__oxnid->value`&amp;"|cat:$oViewConf->getNavUrlParams() }]" onclick="oxid.review.show();return false;"><b>[{ oxmultilang ident="DETAILS_WRITEREVIEW" }]</b></a>
   [{else}]
-    <a id="test_Reviews_login" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" class="fs10"><b>[{ oxmultilang ident="DETAILS_PERSPARAM_LOGGINTOWRITEREVIEW" }]</b></a>
+    <a id="test_Reviews_login" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" class="fs10"><b>[{ oxmultilang ident="DETAILS_LOGGINTOWRITEREVIEW" }]</b></a>
   [{/if}]
 
   [{if $oView->getReviews() }]
@@ -440,10 +440,10 @@
 
     <dl class="review">
         <dt>
-            <span class="left"><b id="test_ReviewName_[{$smarty.foreach.ReviewsCounter.iteration}]">[{ $review->oxuser__oxfname->value }]</b> [{ oxmultilang ident="DETAILS_PERSPARAM_WRITES" }]</span>
-            <span class="right param"><b id="test_ReviewTime_[{$smarty.foreach.ReviewsCounter.iteration}]">[{ oxmultilang ident="DETAILS_PERSPARAM_TIME" }]</b>&nbsp;[{ $review->oxreviews__oxcreate->value|date_format:"%H:%M" }]</span>
-            <span class="right param"><b id="test_ReviewDate_[{$smarty.foreach.ReviewsCounter.iteration}]">[{ oxmultilang ident="DETAILS_PERSPARAM_DATE" }]</b>&nbsp;[{ $review->oxreviews__oxcreate->value|date_format:"%d.%m.%Y" }]</span>
-            <span class="right param">[{if $review->oxreviews__oxrating->value }]<b id="test_ReviewRating_[{$smarty.foreach.ReviewsCounter.iteration}]">[{ oxmultilang ident="DETAILS_PERSPARAM_RATING" }]</b>&nbsp;[{ $review->oxreviews__oxrating->value }][{/if}]</span>
+            <span class="left"><b id="test_ReviewName_[{$smarty.foreach.ReviewsCounter.iteration}]">[{ $review->oxuser__oxfname->value }]</b> [{ oxmultilang ident="DETAILS_WRITES" }]</span>
+            <span class="right param"><b id="test_ReviewTime_[{$smarty.foreach.ReviewsCounter.iteration}]">[{ oxmultilang ident="DETAILS_TIME" }]</b>&nbsp;[{ $review->oxreviews__oxcreate->value|date_format:"%H:%M" }]</span>
+            <span class="right param"><b id="test_ReviewDate_[{$smarty.foreach.ReviewsCounter.iteration}]">[{ oxmultilang ident="DETAILS_DATE" }]</b>&nbsp;[{ $review->oxreviews__oxcreate->value|date_format:"%d.%m.%Y" }]</span>
+            <span class="right param">[{if $review->oxreviews__oxrating->value }]<b id="test_ReviewRating_[{$smarty.foreach.ReviewsCounter.iteration}]">[{ oxmultilang ident="DETAILS_RATING" }]</b>&nbsp;[{ $review->oxreviews__oxrating->value }][{/if}]</span>
         </dt>
         <dd id="test_ReviewText_[{$smarty.foreach.ReviewsCounter.iteration}]">
             [{ $review->oxreviews__oxtext->value }]
@@ -453,12 +453,12 @@
    [{/foreach}]
   [{else}]
     <div class="dot_sep mid"></div>
-    [{ oxmultilang ident="DETAILS_PERSPARAM_REVIEWNOTAVAILABLE" }]
+    [{ oxmultilang ident="DETAILS_REVIEWNOTAVAILABLE" }]
   [{/if}]
 </div>
 
 
-[{ include file="inc/product.tpl" product=$product size="thin" isfiltering=false head="DETAILS_PERSPARAM_CURRENTPRODUCT"|oxmultilangassign testid="current"}]
+[{ include file="inc/product.tpl" product=$product size="thin" isfiltering=false head="DETAILS_CURRENTPRODUCT"|oxmultilangassign testid="current"}]
 
 
 
@@ -467,5 +467,5 @@
 <!-- article locator -->
 [{include file="inc/details_locator.tpl" where="Bottom"}]
 
-[{ insert name="oxid_tracker" title="DETAILS_PERSPARAM_TITLE"|oxmultilangassign product=$product cpath=$oView->getCatTreePath() }]
+[{ insert name="oxid_tracker" title="DETAILS_TITLE"|oxmultilangassign product=$product cpath=$oView->getCatTreePath() }]
 [{include file="_footer.tpl" popup=$sZoomPopup }]

@@ -66,9 +66,9 @@ function _groupExp(el) {
 
             <dl>
                 <dt>
-		            <input [{ $readonly }] type=hidden name=confbools[blDisableNavBars] value=false>
-		            <input type=checkbox name=confbools[blDisableNavBars] value=true  [{if ($confbools.blDisableNavBars)}]checked[{/if}] [{ $readonly }]>
-		            [{ oxinputhelp ident="HELP_SHOP_SYSTEM_DISABLENAVBARS" }]
+                    <input [{ $readonly }] type=hidden name=confbools[blDisableNavBars] value=false>
+                    <input type=checkbox name=confbools[blDisableNavBars] value=true  [{if ($confbools.blDisableNavBars)}]checked[{/if}] [{ $readonly }]>
+                    [{ oxinputhelp ident="HELP_SHOP_SYSTEM_DISABLENAVBARS" }]
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_SYSTEM_DISABLENAVBARS" }]
@@ -157,6 +157,7 @@ function _groupExp(el) {
                 <dt>
                     <input type=hidden name=confbools[blUseMultidimensionVariants] value=false>
                     <input type=checkbox class="confinput" name=confbools[blUseMultidimensionVariants] value=true  [{if ($confbools.blUseMultidimensionVariants)}]checked[{/if}] [{ $readonly }]>
+                    [{ oxinputhelp ident="HELP_SHOP_SYSTEM_USEMULTIDIMENSIONVARIANTS" }]
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_SYSTEM_USEMULTIDIMENSIONVARIANTS" }]

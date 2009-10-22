@@ -22,38 +22,12 @@
  * $Id: function.oxgetseourl.php 16303 2009-02-05 10:23:41Z rimvydas.paskevicius $
  */
 
-
-define("MDVARIANTS_SELECTION_JS", "
-
-<script language=JavaScript><!--
-  mdVariantSelectIds = Array();
-
-  function showMdSelect(name)
-  {
-    if (document.getElementById(name)) {
-      document.getElementById(mdVariantSelectIds[i]).style.display = 'inline';
-    }
-  }
-
-  function hideAllMdSelect(level)
-  {
-    for (var i=level; i < mdVariantSelectIds.length; i++) {
-      for (var j=0; j < mdVariantSelectIds[i].length; j++) {
-      if (document.getElementById(mdVariantSelectIds[i][j])) {
-        document.getElementById(mdVariantSelectIds[i]).style.display = 'none';
-      }
-    }
-  }-->
-</script>
-
-");
-
 /*
 * Smarty function
 * ----------------------------------------------------------------------
-* Purpose: outputs HTML and JavaScript selectboxes for variant selection
+* Purpose: outputs HTML and JavaScript selectboxes for MD variant management
 * call example:
-* [{oxvariantselect value=$product->getMdVariants() separator=" " artid=$product->getId() displayFunction="showVariant"}]
+* [{oxvariantselect value=$product->getMdVariants() separator=" " artid=$product->getId()}]
 * ----------------------------------------------------------------------
 */
 function smarty_function_oxvariantselect( $params, &$smarty )
@@ -61,7 +35,6 @@ function smarty_function_oxvariantselect( $params, &$smarty )
     $sOutput = '';
     $oMdVariants = $params['value'];
     $sSeparator  = $params['separator'];
-    $sCallMethod = $params['displayFunction'];
     //default selected art id
     $sArtId      = $params['artid'];
 
@@ -69,12 +42,15 @@ function smarty_function_oxvariantselect( $params, &$smarty )
         $sArtId = $oMdVariants->getArticleId();
     }
 
+    //all select boxes
     $aSelectBoxes = array();
+    //real variants to MD variants
+    $aRealVariants = array();
 
     if (count($oMdVariants->getMdSubvariants())) {
-        $sOutput = MDVARIANTS_SELECTION_JS;
-        $sOutput .= oxvariantselect_addSubvariants($oMdVariants->getMdSubvariants(), 0, $aSelectBoxes, $sSeparator, $sCallMethod, $sArtId);
-        $sOutput .= oxvariantselect_formatJsArray($aSelectBoxes);
+        $sOutput = oxvariantselect_addSubvariants($oMdVariants->getMdSubvariants(), 0, $aSelectBoxes, $aRealVariants, $sSeparator, $sCallMethod, $sArtId);
+        $sOutput .= oxvariantselect_formatJsSelecBoxesArray($aSelectBoxes);
+        $sOutput .= oxvariantselect_formatJsRealVariantArray($aRealVariants);
     }
 
     return $sOutput;
@@ -83,16 +59,17 @@ function smarty_function_oxvariantselect( $params, &$smarty )
 /**
  * Recursiovely adds selection box of for subvariants
  *
- * @param array[string]OxMdVariant $oMdVariants  Variant list
- * @param int                      $iLevel       Depth level
- * @param array[int][int]string    $aSelectBoxes Array of select boxes
- * @param string                   $sSeparator   Separator placed between select boxes
- * @param string                   $sCallMethod  Method to be called to display the variant
- * @param string                   $sArtId       Default selected article Id
+ * @param array[string]OxMdVariant $oMdVariants   Variant list
+ * @param int                      $iLevel        Depth level
+ * @param array[int][int]string    $aSelectBoxes  Cummulative array of select boxes
+ * @param array[string]string      $aRealVariants Cummulative array or real variants
+ * @param string                   $sSeparator    Separator placed between select boxes
+ * @param string                   $sCallMethod   Method to be called to display the variant
+ * @param string                   $sArtId        Default selected article Id
  *
  * @return string
  */
-function oxvariantselect_addSubvariants($oMdVariants, $iLevel, &$aSelectBoxes, $sSeparator, $sCallMethod, $sArtId)
+function oxvariantselect_addSubvariants($oMdVariants, $iLevel, &$aSelectBoxes, &$aRealVariants, $sSeparator, $sCallMethod, $sArtId)
 {
     $sRes = '';
     $aOptions = array();
@@ -100,7 +77,7 @@ function oxvariantselect_addSubvariants($oMdVariants, $iLevel, &$aSelectBoxes, $
         $blVisible = false;
         $sSelectedVariant = null;
         foreach($oMdVariants as $sKey => $oVariant) {
-            $sSelectBoxName = "mdvariantselect_".(string)$iLevel."_".$oVariant->getId();
+            $sSelectBoxName = "mdvariantselect_".$oVariant->getParentId();
             $aSelectBoxes[$iLevel][] = $sSelectBoxName;
             $aOptions[$oVariant->getId()] = $oVariant->getName();
             if ($oVariant->hasArticleId($sArtId)) {
@@ -116,9 +93,14 @@ function oxvariantselect_addSubvariants($oMdVariants, $iLevel, &$aSelectBoxes, $
         $sRes .= oxvariantselect_formatSelectBox($sSelectBoxName, $aOptions, $iLevel, $blVisible, $sSelectedVariant) . "\n";
         $sRes .= $sSeparator;
 
-        //add recursively
+        //add select boxes recursively
         foreach($oMdVariants as $oVariant) {
-            $sRes .= oxvariantselect_addSubvariants($oVariant->getMdSubvariants(), $iLevel+1, &$aSelectBoxes, $sSeparator, $sCallMethod, $sArtId);
+            $sRes .= oxvariantselect_addSubvariants($oVariant->getMdSubvariants(), $iLevel+1, &$aSelectBoxes,  &$aRealVariants, $sSeparator, $sCallMethod, $sArtId);
+
+            //no more subvariants? Mseans we are the last level select box, good enought to register a real variant now
+            if (!count($oVariant->getMdSubvariants())) {
+                $aRealVariants[$oVariant->getId()] = $oVariant->getArticleId();
+            }
         }
     }
 
@@ -149,17 +131,45 @@ function oxvariantselect_formatSelectBox($sId, $aOptions, $iLevel, $blVisible, $
     return $sRes;
 }
 
-function oxvariantselect_formatJsArray($aSelectBoxes)
+/**
+ * Formats Select Box array in JavaScritp format
+ *
+ * @param array[int][int]string $aSelectBoxes Select box array
+ *
+ * @return string
+ */
+function oxvariantselect_formatJsSelecBoxesArray($aSelectBoxes)
 {
     $sRes = "<script language=JavaScript><!--\n";
     $iLevelCount = count($aSelectBoxes);
     $sRes .= "mdVariantSelectIds = Array($iLevelCount);\n";
     foreach ($aSelectBoxes as $iLevel => $aSelects) {
         $sSelectCount = count($aSelects);
-        $sRes .= " mdVariantSelectIds[$iLevel] = Array($sSelectCount)\n";
+        $sRes .= " mdVariantSelectIds[$iLevel] = Array($sSelectCount);\n";
         foreach ($aSelects as $iSelect => $sSelect) {
-            $sRes .= " mdVariantSelectIds[$iLevel][$iSelect] = '$sSelect'\n";
+            $sRes .= " mdVariantSelectIds[$iLevel][$iSelect] = '$sSelect';\n";
         }
+    }
+
+    $sRes .= "--></script>";
+
+    return $sRes;
+}
+
+/**
+ * Formats Real Variant array in JavaScritp format
+ *
+ * @param array[string]string $aRealVariants Select box array
+ *
+ * @return string
+ */
+function oxvariantselect_formatJsRealVariantArray($aRealVariants)
+{
+    $sRes = "<script language=JavaScript><!--\n";
+    $iCount = count($aRealVariants);
+    $sRes .= "mdRealVariants = Array($iCount);\n";
+    foreach ($aRealVariants as $sMdVarian => $sRealVariant) {
+        $sRes .= " mdRealVariants['$sMdVarian'] = '$sRealVariant';\n";
     }
 
     $sRes .= "--></script>";

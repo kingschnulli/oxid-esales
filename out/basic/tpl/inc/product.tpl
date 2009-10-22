@@ -1,4 +1,4 @@
-<div [{if $test_Cntr}]id="test_cntr_[{$test_Cntr}]_[{$product->oxarticles__oxartnum->value}]"[{/if}] class="product [{if $head}] head[{/if}] [{$size|default:''}] [{$class|default:''}]">
+<div id="product_[{$product->oxarticles__oxid->value}]" [{if $test_Cntr}]id="test_cntr_[{$test_Cntr}]_[{$product->oxarticles__oxid->value}]"[{/if}] class="product [{if $head}] head[{/if}] [{$size|default:''}] [{$class|default:''}]">
     [{if $showMainLink}]
         [{assign var='_productLink' value=$product->getMainLink()}]
     [{else}]
@@ -49,9 +49,9 @@
     [{oxhasrights ident="SHOWARTICLEPRICE"}]
         <div id="test_price_[{$testid}]" class="price">
             [{if $product->getFTPrice() && $size=='big' }]
-                <b class="old">[{ oxmultilang ident="DETAILS_PERSPARAM_REDUCEDFROM" }] <del>[{ $product->getFTPrice()}] [{ $currency->sign}]</del></b>
-                <span class="desc">[{ oxmultilang ident="DETAILS_PERSPARAM_REDUCEDTEXT" }]</span><br>
-                <sub class="only">[{ oxmultilang ident="DETAILS_PERSPARAM_NOWONLY" }]</sub>
+                <b class="old">[{ oxmultilang ident="DETAILS_REDUCEDFROM" }] <del>[{ $product->getFTPrice()}] [{ $currency->sign}]</del></b>
+                <span class="desc">[{ oxmultilang ident="DETAILS_REDUCEDTEXT" }]</span><br>
+                <sub class="only">[{ oxmultilang ident="DETAILS_NOWONLY" }]</sub>
             [{/if}]
             [{if $product->getFPrice()}]
               <big>[{ $product->getFPrice() }] [{ $currency->sign}]</big><sup class="dinfo"><a href="#delivery_link" rel="nofollow">*</a></sup>
@@ -95,10 +95,8 @@
     <input id="test_am_[{$testid}]" type="hidden" name="am" value="1">
     [{/if}]
 
-    [{*if $size!='small'*}]
-
     [{ if $product->getVariantList() && ($size!='thinest') }]
-      <label>[{ $product->oxarticles__oxvarname->value }] :</label>
+      <label>[{ $product->oxarticles__oxvarname->value }]:</label>
 
       [{ if $product->hasMdVariants() }]
       <select id="mdVariant_[{$testid}]" name="mdVariant_[{$testid}]">
@@ -124,7 +122,7 @@
     [{elseif $product->getDispSelList()}]
       [{foreach key=iSel from=$product->selectlist item=oList}]
         <label>[{ $oList.name }] :</label>
-        <select id="test_sellist_[{$testid}]_[{$iSel}]" name="sel[[{$iSel}]]" onchange="JavaScript:setSellList(this);">
+        <select id="test_sellist_[{$testid}]_[{$iSel}]" name="sel[[{$iSel}]]" onchange="oxid.sellist.set(this.name,this.value);">
           [{foreach key=iSelIdx from=$oList item=oSelItem}]
             [{ if $oSelItem->name }]
               <option value="[{$iSelIdx}]"[{if $oSelItem->selected }]SELECTED[{/if }]>[{ $oSelItem->name }]</option>
@@ -134,7 +132,6 @@
       [{/foreach}]
     [{/if}]
 
-    [{*/if*}]
     </div>
 
     [{if $size!='big'}] [{$smarty.capture.product_price}] [{/if}]
@@ -144,7 +141,7 @@
 
         [{if $size=='thin' || $size=='thinest'}]
         <div class="amount">
-            <label>[{ oxmultilang ident="DETAILS_PERSPARAM_QUANTITY" }]</label><input id="test_am_[{$testid}]" type="text" name="am" value="1" size="3">
+            <label>[{ oxmultilang ident="DETAILS_QUANTITY" }]</label><input id="test_am_[{$testid}]" type="text" name="am" value="1" size="3">
         </div>
         [{/if}]
         <div class="tocart"><input id="test_toBasket_[{$testid}]" type="submit" value="[{if $size=='small'}][{oxmultilang ident="INC_PRODUCTITEM_ADDTOCARD3" }][{else}][{oxmultilang ident="INC_PRODUCTITEM_ADDTOCARD2"}][{/if}]" onclick="oxid.popup.load();"></div>
@@ -152,7 +149,7 @@
     [{/oxhasrights}]
 
     [{if $product->hasMdVariants() }]
-    <span class="btn">
+    <span class="btn moreinfo">
         <a id="test_variantMoreInfo_[{$testid}]" class="" href="[{ $_productLink }]" onclick="oxid.getMdVariantUrl('mdVariant_[{$testid}]'); return false;">[{ oxmultilang ident="INC_PRODUCT_VARIANTS_MOREINFO" }]</a>
     </span>
     [{/if}]

@@ -166,7 +166,7 @@ ul.req li.clear{clear:left;diplay:none;border:none;visibility:collapse;height:0p
 td.edittext {white-space: nowrap; padding: 1px 0px 1px 5px; line-height: 110%;}
 .wrap {white-space: normal !important;}
 .nowrap {white-space: nowrap !important;}
-
+.varsell {vertical-align: top;}
 
 <!-- HELP POPUPS -->
 #helpPanel .warning_or_important_hint {color:#AC0000; font-weight:bold; }
