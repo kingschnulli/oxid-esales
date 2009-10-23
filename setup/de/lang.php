@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23430 2009-10-21 08:12:41Z birute $
+ * $Id: lang.php 23462 2009-10-21 15:15:23Z vilma $
  */
 
 $aLang = array(
@@ -103,7 +103,7 @@ $aLang = array(
                                                       Bertoldstr. 48<br>
                                                       79098 Freiburg<br>
                                                       Deutschland<br>",
-'STEP_1_CHECK_UPDATES'                            => 'Regelmaßig überprüfen, ob Updates vorhanden sind',
+'STEP_1_CHECK_UPDATES'                            => 'Regelmäßig überprüfen, ob Aktualisierungen vorhanden sind.',
 'BUTTON_BEGIN_INSTALL'                            => "Shopinstallation beginnen",
 'BUTTON_PROCEED_INSTALL'                          => "Setup beginnen",
 

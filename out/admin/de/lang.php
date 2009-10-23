@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23435 2009-10-21 09:22:14Z tomas $
+ * $Id: lang.php 23462 2009-10-21 15:15:23Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -1250,7 +1250,7 @@ $aLang = array(
 'SHOP_CONFIG_RSSARTRECOMMLISTS'                 => 'Lieblingslisten (Übersicht)',
 'SHOP_CONFIG_RSSRECOMMLISTARTS'                 => 'Lieblingslisten (Artikel)',
 'SHOP_CONFIG_LOAD_DYNAMIC_PAGES'                => 'Zusätzliche Informationen vom OXID Server laden',
-'SHOP_CONFIG_CHECK_UPDATES'                     => 'Regelmaßig überprüfen, ob Updates vorhanden sind',
+'SHOP_CONFIG_CHECK_UPDATES'                     => 'Regelmäßig überprüfen, ob Aktualisierungen vorhanden sind',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Prozentsatz gleicher Attribute, damit Artikel ähnlich sind',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Bildqualität - von 0 (schlechteste Qualität, kleine Dateigröße) bis 100 (beste Qualität, große Dateigröße)',

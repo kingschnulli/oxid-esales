@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 23340 2009-10-19 07:47:49Z arvydas $
+ * $Id: details.php 23463 2009-10-21 16:43:24Z tomas $
  */
 
 /**
@@ -216,6 +216,13 @@ class Details extends oxUBase
      * @var int
      */
     protected $_iLinkType = null;
+
+    /**
+     * Is multidimension variant view?
+     *
+     * @var bool
+     */
+    protected $_blMdView = null;
 
     /**
      * Returns current product parent article object if it is available
@@ -1283,5 +1290,22 @@ class Details extends oxUBase
         if ( $oProduct = $this->getProduct() ) {
             return $oProduct->getMainLink();
         }
+    }
+
+    /**
+     * Should we show MD variant selection? - Not for 1 dimension variants.
+     *
+     * @return bool
+     */
+    public function isMdVariantView()
+    {
+        if(!is_null($this->_blMdView))
+            return $this->_blMdView;
+
+        $iMaxMdDepth = $this->getProduct()->getMdVariants()->getMaxDepth();
+
+        $this->_blMdView = ($iMaxMdDepth > 1);
+
+        return $this->_blMdView;
     }
 }

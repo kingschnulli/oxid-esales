@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 23418 2009-10-20 21:43:20Z tomas $
+ * $Id: oxubase.php 23483 2009-10-22 08:37:14Z rimvydas.paskevicius $
  */
 
 /**
@@ -1271,7 +1271,7 @@ class oxUBase extends oxView
 
         $oViewConf = $this->getViewConfig();
         //value from user input
-        if ( ( $iUserArtPerPage = (int) oxConfig::getParameter( '_artperpage' ) ) ) {
+        if ( ( $iNrofArticles = (int) oxConfig::getParameter( '_artperpage' ) ) ) {
             // M45 Possibility to push any "Show articles per page" number parameter
             $iNrofCatArticles = ( in_array( $iNrofArticles, $aNrofCatArticles ) ) ? $iNrofArticles : $iNrofCatArticles;
             $oViewConf->setViewConfigParam( 'iartPerPage', $iNrofCatArticles );

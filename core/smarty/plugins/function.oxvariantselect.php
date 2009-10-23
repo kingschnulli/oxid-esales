@@ -38,7 +38,7 @@ function smarty_function_oxvariantselect( $params, &$smarty )
     //default selected art id
     $sArtId      = $params['artid'];
 
-    if ($sArtId || !$oMdVariants->hasArticleId($sArtId)) {
+    if (!$sArtId || !$oMdVariants->hasArticleId($sArtId)) {
         $sArtId = $oMdVariants->getArticleId();
     }
 
@@ -84,7 +84,7 @@ function oxvariantselect_addSubvariants($oMdVariants, $iLevel, &$aSelectBoxes, &
                 $blVisible = true;
             }
 
-            if ($oVariant->getArticleId() == $sArtId) {
+            if ($oVariant->hasArticleId($sArtId)) {
                 $sSelectedVariant = $oVariant->getId();
             }
 

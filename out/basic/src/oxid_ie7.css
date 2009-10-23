@@ -7,7 +7,6 @@ p {margin:0}
 #body .product.big strong.h4{width: 549px;}
 
 /* line height containing <sup> fix */
-#body .product .price {margin-bottom:1em;}
 #body .product .price sup.dinfo a{font-size: 16px;}
 
 #body .product.thinest .price sup.dinfo a{font-size: 11px;}

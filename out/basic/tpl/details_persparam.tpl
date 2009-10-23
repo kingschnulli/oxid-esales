@@ -281,8 +281,6 @@
     </div>
     [{/if}]
 
-    [{include file="inc/variant_selector.tpl"}]
-
     <div class="longdesc">
         <strong class="h3" id="test_productFullTitle">[{ $product->oxarticles__oxtitle->value }][{if $product->oxarticles__oxvarselect->value}] [{ $product->oxarticles__oxvarselect->value }][{/if}]</strong>
         [{oxhasrights ident="SHOWLONGDESCRIPTION"}]
@@ -385,6 +383,12 @@
       <div class="txtseparator inbox"></div>
     [{/if}]
 
+    [{include file="inc/variant_selector.tpl"}]
+
+    [{if $oView->isMdVariantView()}]
+      <noscript>
+    [{/if}]
+
     [{foreach from=$oView->getVariantList() name=variants item=variant_product}]
 
         [{if $smarty.foreach.variants.first}]
@@ -405,6 +409,10 @@
         [{assign var="details_variants_head" value=""}]
 
     [{/foreach}]
+
+    [{if $oView->isMdVariantView()}]
+      </noscript>
+    [{/if}]
 
     </div>
 

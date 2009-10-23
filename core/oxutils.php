@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 23366 2009-10-20 08:53:58Z arvydas $
+ * $Id: oxutils.php 23456 2009-10-21 14:49:35Z sarunas $
  */
 
 /**
@@ -489,23 +489,23 @@ class oxUtils extends oxSuperCfg
         //due to possible race conditions
         //check if there are any other cache files already opened for writing by another process
         //additionally perform the check for older (aged 40 or more secs) locked files
-        if (!isset($this->_aFileCacheContents[$sKey]) && file_exists($sFilePath) && abs($iCurTime - filectime($sFilePath) < 40) ) {
+        clearstatcache();
+        if (!isset($this->_aFileCacheContents[$sKey]) && file_exists($sFilePath) && (!filesize($sFilePath)) && abs($iCurTime - filectime($sFilePath) < 40) ) {
             //then leave the cache to be dealt by another process and do nothing
             return false;
         }
         //the above code ensures that $_aFileCacheContet is writen only in case cache file has not been started
         //by another process
+        if (!isset($this->_aFileCacheContents[$sKey])) {
+            //start a blank file to inform other processes we are dealing with it.
+            $hFile = fopen($sFilePath, "w");
+            if ($hFile) {
+                fclose($hFile);
+            }
+            clearstatcache();
+        }
 
         $this->_aFileCacheContents[$sKey] = $mContents;
-
-        //start a blank file to inform other processes we are dealing with it.
-        if (!file_exists($sFilePath)) {
-            $hFile = fopen( $sFilePath, "w");
-            if ( $hFile) {
-                fwrite( $hFile, null);
-                fclose( $hFile);
-            }
-        }
 
         return true;
     }
@@ -558,7 +558,8 @@ class oxUtils extends oxSuperCfg
         }
 
         //empty buffer
-        //$this->_aFileCacheContents = array();
+        $this->_aFileCacheContents = array();
+        clearstatcache ();
     }
 
     /**
@@ -1128,7 +1129,7 @@ class oxUtils extends oxSuperCfg
 
             $sVersionPrefix = 'pe';
 
-        $sPath = $this->getConfig()->getConfigParam( 'sCompileDir' );
+        $sPath = realpath($this->getConfig()->getConfigParam( 'sCompileDir' ));
         return $blPathOnly ? "{$sPath}/" : "{$sPath}/ox{$sVersionPrefix}c_{$sCacheName}.txt";
     }
 

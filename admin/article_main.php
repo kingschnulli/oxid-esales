@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_main.php 23188 2009-10-13 06:59:38Z sarunas $
+ * $Id: article_main.php 23492 2009-10-22 11:10:44Z arvydas $
  */
 
 /**
@@ -288,6 +288,11 @@ class Article_Main extends oxAdminDetails
             if ( $sParentId ) {
                 $oArticle->oxarticles__oxparentid->setValue($sParentId);
             }
+
+            // setting oxinsert/oxtimestamp
+            $iNow = date('Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
+            $oArticle->oxarticles__oxinsert    = new oxField( $iNow );
+            $oArticle->oxarticles__oxtimestamp = new oxField( $iNow );
 
             $oArticle->setId( $sNewId );
             $oArticle->save();

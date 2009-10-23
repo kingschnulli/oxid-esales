@@ -176,6 +176,7 @@ class oxMdVariant extends oxSuperCfg
     public function getArticleId()
     {
         $oFirstSubvariant = $this->getFirstMdSubvariant();
+
         if ($oFirstSubvariant)
             return $oFirstSubvariant->getArticleId();
 
@@ -258,30 +259,6 @@ class oxMdVariant extends oxSuperCfg
     }
 
     /**
-     * Checks if vairant price is fixed or not ("from" price)
-     *
-     * @return bool
-     */
-    protected function isFixedPrice()
-    {
-        $dPrice = $this->getDPrice();
-        $aVariants = $this->getMdSubvariants();
-        foreach ($aVariants as $oVariant) {
-            $dVariantPrice = $oVariant->getDPrice();
-            if (is_null($dPrice)) {
-                $dPrice = $dVariantPrice;
-            }
-            if (!is_null($dVariantPrice) && $dVariantPrice != $dPRice) {
-                return false;
-            }
-            if (!$oVariant->isFixedPrice()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Returns min price recursively selected from full subvariant tree.
      *
      * @return double
@@ -304,6 +281,28 @@ class oxMdVariant extends oxSuperCfg
     }
 
     /**
+     * Gets max subvariant depth. 0 means no deeper subvariants.
+     *
+     * @return int
+     */
+    public function getMaxDepth()
+    {
+        $aSubvariants = $this->getMdSubvariants();
+
+        if (!count($aSubvariants))
+            return 0;
+
+        $iMaxDepth = 0;
+        foreach ($aSubvariants as $oSubvariant) {
+            if ($oSubvariant->getMaxDepth() > $iMaxDepth) {
+                $iMaxDepth = $oSubvariant->getMaxDepth();
+            }
+        }
+
+        return $iMaxDepth + 1;
+    }
+
+    /**
      * Returns MD variant price as a text.
      *
      * @return string
@@ -313,8 +312,11 @@ class oxMdVariant extends oxSuperCfg
         if ($this->_sFPrice)
             return $this->_sFPrice;
 
-        if (!$this->isFixedPrice())
+        $sFromPrefix = '';
+
+        if (!$this->isFixedPrice()) {
             $sFromPrefix = oxLang::getInstance()->translateString('priceFrom') . ' ';
+        }
 
         $dMinPrice = $this->getMinDPrice();
         $sFMinPrice = oxLang::getInstance()->formatCurrency( $dMinPrice );
@@ -383,6 +385,30 @@ class oxMdVariant extends oxSuperCfg
     protected function _addMdSubvariant($oSubvariant)
     {
         $this->_aSubvariants[$oSubvariant->getId()] = $oSubvariant;
+    }
+
+    /**
+     * Checks if vairant price is fixed or not ("from" price)
+     *
+     * @return bool
+     */
+    protected function isFixedPrice()
+    {
+        $dPrice = $this->getDPrice();
+        $aVariants = $this->getMdSubvariants();
+        foreach ($aVariants as $oVariant) {
+            $dVariantPrice = $oVariant->getDPrice();
+            if (is_null($dPrice)) {
+                $dPrice = $dVariantPrice;
+            }
+            if (!is_null($dVariantPrice) && $dVariantPrice != $dPrice) {
+                return false;
+            }
+            if (!$oVariant->isFixedPrice()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

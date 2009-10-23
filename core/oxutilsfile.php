@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 23188 2009-10-13 06:59:38Z sarunas $
+ * $Id: oxutilsfile.php 23482 2009-10-22 08:34:11Z arvydas $
  */
 
 /**
@@ -408,8 +408,15 @@ class oxUtilsFile extends oxSuperCfg
     protected function _moveImage( $sSource, $sTarget )
     {
         $blDone = false;
-        if ( ( $blDone = move_uploaded_file( $sSource, $sTarget ) ) ) {
-            $blDone = chmod( $sTarget, 0644 );
+
+        if ( $sSource === $sTarget ) {
+            $blDone = true;
+        } else {
+            $blDone = move_uploaded_file( $sSource, $sTarget );
+        }
+
+        if ( $blDone ) {
+            $blDone = @chmod( $sTarget, 0644 );
         }
 
         return $blDone;

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxorder.php 23488 2009-10-22 09:14:15Z alfonsas $
  */
 
 /**
@@ -975,7 +975,7 @@ class oxOrder extends oxBase
     }
 
     /**
-     * Markes voucher as used (oxvoucher::markAsUsed())
+     * Marks voucher as used (oxvoucher::markAsUsed())
      * and sets them to $this->_aVoucherList.
      *
      * @param oxBasket $oBasket basket object
@@ -994,7 +994,7 @@ class oxOrder extends oxBase
                 $oVoucher = oxNew( 'oxvoucher' );
                 $oVoucher->load( $sVoucherId );
                 $oVSerie = $oVoucher->getSerie();
-                $oVoucher->markAsUsed( $this->oxorder__oxid->value, $oUser->oxuser__oxid->value, $oVSerie->oxvoucherseries__oxdiscount );
+                $oVoucher->markAsUsed( $this->oxorder__oxid->value, $oUser->oxuser__oxid->value, $oVSerie->oxvoucherseries__oxdiscount->value );
 
                 // -- set deprecated values for email templates
                 $oVoucher->oxmodvouchers__oxvouchernr = $oVoucher->oxvouchers__oxvouchernr;
@@ -1858,10 +1858,10 @@ class oxOrder extends oxBase
     {
         // proceed with no delivery
         // used for other countries
-    	if ( $oBasket->getPaymentId() == 'oxempty') {
+        if ( $oBasket->getPaymentId() == 'oxempty') {
             return;
         }
-    	$oDb = oxDb::getDb();
+        $oDb = oxDb::getDb();
 
         $oDelSet = oxNew( "oxdeliveryset" );
         $sTable = $oDelSet->getViewName();

@@ -1,4 +1,4 @@
-<div id="product_[{$product->oxarticles__oxid->value}]" [{if $test_Cntr}]id="test_cntr_[{$test_Cntr}]_[{$product->oxarticles__oxid->value}]"[{/if}] class="product [{if $head}] head[{/if}] [{$size|default:''}] [{$class|default:''}]">
+<div [{if $test_Cntr}]id="test_cntr_[{$test_Cntr}]_[{$product->oxarticles__oxid->value}]"[{/if}] class="product [{if $head}] head[{/if}] [{$size|default:''}] [{$class|default:''}]">
     [{if $showMainLink}]
         [{assign var='_productLink' value=$product->getMainLink()}]
     [{else}]
@@ -150,7 +150,7 @@
 
     [{if $product->hasMdVariants() }]
     <span class="btn moreinfo">
-        <a id="test_variantMoreInfo_[{$testid}]" class="" href="[{ $_productLink }]" onclick="oxid.getMdVariantUrl('mdVariant_[{$testid}]'); return false;">[{ oxmultilang ident="INC_PRODUCT_VARIANTS_MOREINFO" }]</a>
+        <a id="test_variantMoreInfo_[{$testid}]" class="" href="[{ $_productLink }]" onclick="oxid.mdVariants.getMdVariantUrl('mdVariant_[{$testid}]'); return false;">[{ oxmultilang ident="INC_PRODUCT_VARIANTS_MOREINFO" }]</a>
     </span>
     [{/if}]
 
