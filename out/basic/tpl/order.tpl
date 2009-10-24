@@ -412,7 +412,9 @@
             <br>
             [{ oxmultilang ident="ORDER_EMAIL" }]&nbsp;[{ $oxcmp_user->oxuser__oxusername->value }]<br>
             [{ $oxcmp_user->oxuser__oxcompany->value }]&nbsp;<br>
-            [{ $oxcmp_user->oxuser__oxsal->value }]&nbsp;[{ $oxcmp_user->oxuser__oxfname->value }]&nbsp;[{ $oxcmp_user->oxuser__oxlname->value }]<br>
+
+            [{assign var=_sal value=$oxcmp_user->oxuser__oxsal->value}]
+            [{oxmultilang ident="SALUTATION_$_sal" noerror="yes" alternative=$_sal }]&nbsp;[{ $oxcmp_user->oxuser__oxfname->value }]&nbsp;[{ $oxcmp_user->oxuser__oxlname->value }]<br>
             [{ $oxcmp_user->oxuser__oxaddinfo->value }]<br>
             [{ $oxcmp_user->oxuser__oxstreet->value }]&nbsp;[{ $oxcmp_user->oxuser__oxstreetnr->value }]<br>
             [{ $oxcmp_user->oxuser__oxzip->value }]&nbsp;[{ $oxcmp_user->oxuser__oxcity->value }]<br>
@@ -437,7 +439,8 @@
             [{if $oDelAdress }]
               <br>
               [{ $oDelAdress->oxaddress__oxcompany->value }]&nbsp;<br>
-              [{ $oDelAdress->oxaddress__oxsal->value }]&nbsp;[{ $oDelAdress->oxaddress__oxfname->value }]&nbsp;[{ $oDelAdress->oxaddress__oxlname->value }]<br>
+              [{assign var=_sal value=$oDelAdress->oxaddress__oxsal->value}]
+              [{oxmultilang ident="SALUTATION_$_sal" noerror="yes" alternative=$_sal }]&nbsp;[{ $oDelAdress->oxaddress__oxfname->value }]&nbsp;[{ $oDelAdress->oxaddress__oxlname->value }]<br>
               [{ $oDelAdress->oxaddress__oxaddinfo->value }]<br>
               [{ $oDelAdress->oxaddress__oxstreet->value }]&nbsp;[{ $oDelAdress->oxaddress__oxstreetnr->value }]<br>
               [{ $oDelAdress->oxaddress__oxzip->value }]&nbsp;[{ $oDelAdress->oxaddress__oxcity->value }]<br>

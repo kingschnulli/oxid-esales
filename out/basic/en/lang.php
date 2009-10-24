@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23445 2009-10-21 12:57:14Z rimvydas.paskevicius $
+ * $Id: lang.php 23512 2009-10-22 17:42:52Z tomas $
  */
 
 
@@ -129,8 +129,6 @@ $aLang = array(
 'ACCOUNT_USER_COMPLETEMARKEDFIELDS'               => '(Please complete all fields marked with a <span class="req">*</span>)',
 'ACCOUNT_USER_EMAIL'                              => "eMail Address:",
 'ACCOUNT_USER_TITLE'                              => "Title:",
-'ACCOUNT_USER_MR'                                 => "Mr",
-'ACCOUNT_USER_MRS'                                => "Mrs",
 'ACCOUNT_USER_FIRSTNAME'                          => "First Name:",
 'ACCOUNT_USER_LASTNAME'                           => "Last Name:",
 'ACCOUNT_USER_COMPANY'                            => "Company:",
@@ -150,8 +148,6 @@ $aLang = array(
 'ACCOUNT_USER_ADDRESSES_SELECT'                   => "Select",
 'ACCOUNT_USER_NEWADDRESS'                         => "New Address",
 'ACCOUNT_USER_TITLE2'                             => "Title:",
-'ACCOUNT_USER_MR2'                                => "Mr",
-'ACCOUNT_USER_MRS2'                               => "Mrs",
 'ACCOUNT_USER_FIRSTLASTNAME'                      => "First/Last Name:",
 'ACCOUNT_USER_COMPANY2'                           => "Company:",
 'ACCOUNT_USER_STREETANDSTREETNO2'                 => "Street, StreetNo:",
@@ -281,8 +277,6 @@ $aLang = array(
 'CONTACT_EMAIL'                                   => "eMail:",
 'CONTACT_CONTACT'                                 => "Contact",
 'CONTACT_TITLE'                                   => "Title",
-'CONTACT_MR'                                      => "Mr",
-'CONTACT_MRS'                                     => "Mrs",
 'CONTACT_FIRSTNAME'                               => "First Name:",
 'CONTACT_LASTNAME'                                => "Last Name:",
 'CONTACT_EMAIL2'                                  => "eMail:",
@@ -758,8 +752,6 @@ $aLang = array(
 'NEWSLETTER_NOTABLETOSENDEMAIL'                   => "Unfortunately we were not able to send you a Newsletter activation eMail.<br>Please verify your eMail address.",
 'NEWSLETTER_STAYINFORMED'                         => "Stay informed !",
 'NEWSLETTER_TITLE'                                => "Title",
-'NEWSLETTER_MR'                                   => "Mr",
-'NEWSLETTER_MRS'                                  => "Mrs",
 'NEWSLETTER_FIRSTNAME'                            => "First Name:",
 'NEWSLETTER_LASTNAME'                             => "Last Name",
 'NEWSLETTER_EMAIL'                                => "eMail",
@@ -947,8 +939,6 @@ $aLang = array(
 'REGISTER_BILLINGADDRESS'                         => "Billing Address",
 'REGISTER_COMPLETEMARKEDFIELDS2'                  => '(Please complete all fields marked with a <span class="req">*</span>)',
 'REGISTER_TITLE'                                  => "Title:",
-'REGISTER_MR'                                     => "Mr",
-'REGISTER_MRS'                                    => "Mrs",
 'REGISTER_FIRSTNAME'                              => "First Name:",
 'REGISTER_LASTNAME'                               => "Last Name:",
 'REGISTER_COMPANY'                                => "Company:",
@@ -970,8 +960,6 @@ $aLang = array(
 'REGISTER_ADDRESSES_SELECT'                       => "Select",
 'REGISTER_NEWADDRESSES'                           => "New Address",
 'REGISTER_TITLE2'                                 => "Title:",
-'REGISTER_MR2'                                    => "Mr",
-'REGISTER_MRS2'                                   => "Mrs",
 'REGISTER_FIRSTNAME2'                             => "First Name:",
 'REGISTER_LASTNAME2'                              => "Last Name:",
 'REGISTER_COMPANY2'                               => "Company:",
@@ -1020,6 +1008,8 @@ $aLang = array(
 'RECOMMLIST_SELECTLIST'                           => "Please select the Listmania list!",
 'RECOMMLIST_SEARCH'                               => "Search for",
 'RECOMMLIST'                                      => "Recomendation List",
+'SALUTATION_MR'                                   => "Mr",
+'SALUTATION_MRS'                                  => "Mrs",
 'SEARCH_TITLE'                                    => "Search",
 'SEARCH_LOCATION'                                 => "Search",
 'SEARCH_NOITEMSFOUND'                             => "Sorry, no items found.",
@@ -1128,8 +1118,6 @@ $aLang = array(
 'USER_COMPLETEALLMARKEDFIELDS'                    => '(Please complete all fields marked with a <span class="req">*</span>)',
 'USER_EMAILADDRESS2'                              => "eMail Address:",
 'USER_TITLE'                                      => "Title:",
-'USER_MR'                                         => "Mr",
-'USER_MRS'                                        => "Mrs",
 'USER_FIRSTNAME'                                  => "First Name:",
 'USER_LASTNAME'                                   => "Last Name:",
 'USER_COMPANY'                                    => "Company:",
@@ -1157,8 +1145,6 @@ $aLang = array(
 'USER_NEWADDRESS'                                 => "New Address",
 'USER_USEBILLINGADDR'                             => "Use billing Address",
 'USER_TITLE2'                                     => "Title:",
-'USER_MR2'                                        => "Mr",
-'USER_MRS2'                                       => "Mrs",
 'USER_NAME'                                       => "First/Last Name:",
 'USER_COMPANY2'                                   => "Company:",
 'USER_STREET2'                                    => "Street, StreetNo:",

@@ -31,7 +31,7 @@
   </div><br><br>
   [{/if}]
 
-  [{if ( $oView->getTrustedShopId()) || $oxcmp_shop->oxshops__oxadbutlerid->value ||
+  [{if ( $oView->getTrustedShopId()) || $iswebmiles || $oxcmp_shop->oxshops__oxadbutlerid->value ||
        $oxcmp_shop->oxshops__oxaffilinetid->value || $oxcmp_shop->oxshops__oxsuperclicksid->value ||
        $oxcmp_shop->oxshops__oxaffiliweltid->value || $oxcmp_shop->oxshops__oxaffili24id->value }]
 

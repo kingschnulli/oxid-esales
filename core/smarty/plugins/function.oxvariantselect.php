@@ -95,7 +95,7 @@ function oxvariantselect_addSubvariants($oMdVariants, $iLevel, &$aSelectBoxes, &
 
         //add select boxes recursively
         foreach($oMdVariants as $oVariant) {
-            $sRes .= oxvariantselect_addSubvariants($oVariant->getMdSubvariants(), $iLevel+1, &$aSelectBoxes,  &$aRealVariants, $sSeparator, $sCallMethod, $sArtId);
+            $sRes .= oxvariantselect_addSubvariants($oVariant->getMdSubvariants(), $iLevel+1, $aSelectBoxes,  $aRealVariants, $sSeparator, $sCallMethod, $sArtId);
 
             //no more subvariants? Mseans we are the last level select box, good enought to register a real variant now
             if (!count($oVariant->getMdSubvariants())) {

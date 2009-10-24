@@ -407,9 +407,9 @@ var oxid = {
             mdSelect = oxid.getEventTarget(e);
             //hide all
             selectedValue = mdSelect.options[mdSelect.selectedIndex].value;
-            level = oxid.mdVariants.getSelectLevel(oxid.mdVariants.getMdSelectNameById(selectedValue));
+            level = oxid.mdVariants.getSelectLevel(mdSelect.id);
             if (level !== null) {
-                oxid.mdVariants.hideAllMdSelect(level);
+                oxid.mdVariants.hideAllMdSelect(level+1);
             }
             //show selection
             var showId = selectedValue;

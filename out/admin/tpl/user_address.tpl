@@ -57,7 +57,11 @@
             [{ oxmultilang ident="GENERAL_BILLSAL" }]
             </td>
             <td class="edittext">
-            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxuser__oxsal->fldmax_length}]" name="editval[oxaddress__oxsal]" value="[{$edit->oxaddress__oxsal->value }]" [{ $readonly}]>
+            <!--<input type="text" class="editinput" size="15" maxlength="[{$edit->oxuser__oxsal->fldmax_length}]" name="editval[oxaddress__oxsal]" value="[{$edit->oxaddress__oxsal->value }]" [{ $readonly}]>-->
+            <select name="editval[oxaddress__oxsal]" class="editinput" [{ $readonly }]>
+                <option value="MR"  [{if $edit->oxaddress__oxsal->value|lower  == "mr"  }]SELECTED[{/if}]>[{ oxmultilang ident="GENERAL_SALUTATION_MR"  }]</option>
+                <option value="MRS" [{if $edit->oxaddress__oxsal->value|lower  == "mrs" }]SELECTED[{/if}]>[{ oxmultilang ident="GENERAL_SALUTATION_MRS" }]</option>
+              </select>
             [{ oxinputhelp ident="HELP_GENERAL_BILLSAL" }]
             </td>
         </tr>

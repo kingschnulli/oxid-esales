@@ -46,10 +46,7 @@
             <tr>
                 <td><label>[{ oxmultilang ident="REGISTER_TITLE" }]</label></td>
                 <td>
-                    <select NAME="invadr[oxuser__oxsal]">
-                        <option [{ if $oxcmp_user->oxuser__oxsal->value == "REGISTER_MR"|oxmultilangassign or $invadr.oxuser__oxsal == "REGISTER_MR"|oxmultilangassign}]SELECTED[{/if}]>[{ oxmultilang ident="REGISTER_MR" }]</option>
-                        <option [{ if $oxcmp_user->oxuser__oxsal->value == "REGISTER_MRS"|oxmultilangassign or $invadr.oxuser__oxsal == "REGISTER_MRS"|oxmultilangassign}]SELECTED[{/if}]>[{ oxmultilang ident="REGISTER_MRS" }]</option>
-                    </select>
+                    [{include file="inc/salutation.tpl" name="invadr[oxuser__oxsal]" value=$oxcmp_user->oxuser__oxsal->value value2=$invadr.oxuser__oxsal}]
                     [{if isset($aMustFillFields.oxuser__oxsal) }]<span class="req">*</span>[{/if}]
                 </td>
             </tr>
@@ -168,10 +165,7 @@
             <tr>
                 <td><label>[{ oxmultilang ident="REGISTER_TITLE2" }]</label></td>
                 <td>
-                    <select name="deladr[oxaddress__oxsal]" >
-                        <option [{ if $delivadr->oxaddress__oxsal->value == "REGISTER_MR2"|oxmultilangassign}]SELECTED[{/if}]>[{ oxmultilang ident="REGISTER_MR2" }]</option>
-                        <option [{ if $delivadr->oxaddress__oxsal->value == "REGISTER_MRS2"|oxmultilangassign}]SELECTED[{/if}]>[{ oxmultilang ident="REGISTER_MRS2" }]</option>
-                    </select>
+                    [{include file="deladr[oxaddress__oxsal]" name="invadr[oxuser__oxsal]" value=$delivadr->oxaddress__oxsal->value}]
                     [{if isset($aMustFillFields.oxaddress__oxsal) }]<span class="req">*</span>[{/if}]
                 </td>
             </tr>

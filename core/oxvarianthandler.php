@@ -41,7 +41,7 @@ class oxVariantHandler extends oxSuperCfg
      *
      * @var string
      */
-    protected $_sMdSeparator = "|";
+    protected $_sMdSeparator = " | ";
 
     /**
      * Multidimensional variant tree structure
@@ -65,23 +65,28 @@ class oxVariantHandler extends oxSuperCfg
     /**
      * Returns multidimensional variant structure
      *
+     * @param object $oVariants all article variants
+     * @param string $sParentId parent article id
+     *
      * @return OxMdVariants
      */
-    public function getMdVariants()
+    public function buildMdVariants( $oVariants, $sParentId )
     {
-        if ($this->_oMdVariants)
-            return $this->_oMdVariants;
-
-        $oMdVariants = oxNew("OxMdVariants");
-        $oMdVariants->setName("_parent_product_");
-        foreach($this->_aVariants as $sKey => $oVariant) {
-            $oMdVariants->addNames($sKey,
-                                   explode($this->_sMdSeparator, $oVariant->oxarticles__oxvarselect->value),
-                                   $oVariant->getPrice()->getBruttoPrice());
+        $oMdVariants = oxNew( "OxMdVariant" );
+        $oMdVariants->setParentId( $sParentId );
+        $oMdVariants->setName( "_parent_product_" );
+        foreach ( $oVariants as $sKey => $oVariant ) {
+            $aNames = explode(trim($this->_sMdSeparator), $oVariant->oxarticles__oxvarselect->value);
+            foreach ( $aNames as $sNameKey => $sName ) {
+                $aNames[$sNameKey] = trim($sName);
+            }
+            $oMdVariants->addNames( $sKey,
+                                    $aNames,
+                                    $oVariant->getPrice()->getBruttoPrice(),
+                                    $oVariant->getLink() );
         }
 
-        $this->_oMdVariants = $oMdVariants;
-        return $this->_oMdVariants;
+        return $oMdVariants;
     }
 
     /**
@@ -104,6 +109,7 @@ class oxVariantHandler extends oxSuperCfg
             $oSel = oxNew("oxbase");
             $oSel->init( 'oxselectlist' );
             $oSel->load( $sSelId );
+            $sVarNameUpdate = "";
             foreach ($aConfLanguages as $sKey => $sLang) {
                 $sPrefix = $myLang->getLanguageTag($sKey);
                 $aSelValues = $myUtils->assignValuesFromText($oSel->{"oxselectlist__oxvaldesc".$sPrefix}->value );
@@ -111,16 +117,19 @@ class oxVariantHandler extends oxSuperCfg
                     $aValues[$sI][$sKey] = $oValue;
                 }
                 $aSelTitle[$sKey] = $oSel->{"oxselectlist__oxtitle".$sPrefix}->value;
-                $sMdSeparator = ($oArticle->{"oxarticles__oxvarname".$sPrefix}->value) ? $this->_sMdSeparator: '';
-                $oArticle->{"oxarticles__oxvarname".$sPrefix}->setValue(trim($oArticle->{"oxarticles__oxvarname".$sPrefix}->value.$sMdSeparator.$aSelTitle[$sKey]));
-
+                $sMdSeparator = ($oArticle->oxarticles__oxvarname->value) ? $this->_sMdSeparator: '';
+                if ( $sVarNameUpdate ) {
+                	$sVarNameUpdate .= ", ";
+                }
+                $sVarName = oxDb::getDb()->quote($sMdSeparator.$aSelTitle[$sKey]);
+                $sVarNameUpdate .= "oxvarname".$sPrefix." = CONCAT(oxvarname".$sPrefix.", ".$sVarName.")";
             }
             $MDVariants = $this->_assignValues( $aValues, $oVariants, $oArticle, $aConfLanguages);
             if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
                 $oAttribute = oxNew("oxattribute");
                 $oAttribute->assignVarToAttribute( $MDVariants, $aSelTitle );
             }
-            $oArticle->save();
+            $this->_updateArticleVarName( $sVarNameUpdate, $oArticle->oxarticles__oxid->value );
         }
     }
 
@@ -149,8 +158,11 @@ class oxVariantHandler extends oxSuperCfg
                 foreach ( $oVariants as $oSimpleVariant ) {
                     if ( !$iCounter ) {
                         //we just update the first variant
-                        $oVariant = oxNew("oxarticle");
-                        $oVariant->setEnableMultilang(false);
+                        //cannot use setEnableMultilang() at this place
+                        //$oVariant = oxNew("oxarticle");
+                        //$oVariant->setEnableMultilang(false);
+                        $oVariant = oxNew("oxbase");
+                        $oVariant->init( 'oxarticles' );
                         $oVariant->load($oSimpleVariant->oxarticles__oxid->value);
                         $oVariant->oxarticles__oxprice->setValue( $oVariant->oxarticles__oxprice->value + $dPriceMod );
                         //assign for all languages
@@ -175,7 +187,7 @@ class oxVariantHandler extends oxSuperCfg
                         $aParams['oxarticles__oxsort'] = $oSimpleVariant->oxarticles__oxsort->value*10 + 10*$iCounter;
                         $aParams['oxarticles__oxstock'] = 0;
                         $aParams['oxarticles__oxstockflag'] = $oSimpleVariant->oxarticles__oxstockflag->value;
-                        $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value ); 
+                        $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
 	                    if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
 	                        $oAttrList = oxNew('oxattribute');
 	                        $aIds = $oAttrList->getAttributeAssigns( $oSimpleVariant->oxarticles__oxid->value);
@@ -201,7 +213,7 @@ class oxVariantHandler extends oxSuperCfg
                 $aParams['oxarticles__oxstock'] = 0;
                 $aParams['oxarticles__oxstockflag'] = $oArticle->oxarticles__oxstockflag->value;
                 $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
-	            if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+                if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
 	                $MDVariants[$sVarId] = $aValues[$i];
 	            }
     		}
@@ -210,9 +222,12 @@ class oxVariantHandler extends oxSuperCfg
     }
 
     /**
-     * Generate variants from selection lists
+     * Returns article price
      *
-     * @param oxArticleList $oArticles Article list
+     * @param object $oValue       selection list value
+     * @param double $dParentPrice parent article price
+     *
+     * @return double
      */
     protected function _getValuePrice( $oValue, $dParentPrice)
     {
@@ -264,6 +279,21 @@ class oxVariantHandler extends oxSuperCfg
     }
 
     /**
+     * Inserts article variant name for all languages
+     *
+     * @param string $sUpdate query for update variant name
+     * @param string $sArtId  parent article id
+     *
+     * @return null
+     */
+    protected function _updateArticleVarName( $sUpdate, $sArtId )
+    {
+        $sUpdate = "update oxarticles set " . $sUpdate . " where oxid = '" . $sArtId . "'";
+
+    	oxDb::getDb()->Execute( $sUpdate);
+    }
+
+    /**
      * Check if variant is multidimensional
      *
      * @param oxArticle $oArticle Article object
@@ -273,7 +303,7 @@ class oxVariantHandler extends oxSuperCfg
     public function isMdVariant( $oArticle )
     {
         if ( $this->getConfig()->getConfigParam( 'blUseMultidimensionVariants' ) ) {
-            if ( strpos( $oArticle->oxarticles__oxvarselect->value, $this->_sMdSeparator ) !== false ) {
+            if ( strpos( $oArticle->oxarticles__oxvarselect->value, trim($this->_sMdSeparator) ) !== false ) {
                 return true;
             }
         }

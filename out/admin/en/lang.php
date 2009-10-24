@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23433 2009-10-21 08:29:49Z birute $
+ * $Id: lang.php 23511 2009-10-22 17:42:27Z tomas $
  */
 
 /*
@@ -257,6 +257,8 @@ $aLang = array(
 'GENERAL_REVIEW'                                => 'Overview',
 'GENERAL_REMARK'                                => 'Remark',
 'GENERAL_REQUIRED_MISS'                         => 'Required field is missing',
+'GENERAL_SALUTATION_MR'                         => "Mr",
+'GENERAL_SALUTATION_MRS'                        => "Mrs",
 'GENERAL_SAVE'                                  => 'Save',
 'GENERAL_SAVEIN'                                => 'Copy to',
 'GENERAL_SEARCH'                                => 'Search',

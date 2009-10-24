@@ -212,7 +212,7 @@ function _groupExp(el) {
 
             <dl>
                 <dt>
-                    <input type=text class="txt" name=confstrs[sUtilModule] value="[{$confstrs.sUtilModule}]" [{ $readonly }]>
+                    <input type=text class="txt" style="width: 430px;" name=confstrs[sUtilModule] value="[{$confstrs.sUtilModule}]" [{ $readonly }]>
                     [{ oxinputhelp ident="HELP_SHOP_SYSTEM_UTILMODULE" }]
                 </dt>
                 <dd>

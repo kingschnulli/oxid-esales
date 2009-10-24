@@ -290,11 +290,14 @@
         </tr>
       [{/foreach }]
     [{/if }]
+
+    [{if $oxcmp_basket->getDelCostNet() || $oxcmp_basket->getDelCostVat()}]
     <tr class="bsk_sep">
       <td class="brd"></td>
       <td colspan="6" class="line"></td>
       <td></td>
     </tr>
+    [{/if}]
 
     [{if $oxcmp_basket->getDelCostNet() }]
       <tr class="sumrow">

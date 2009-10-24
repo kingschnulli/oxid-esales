@@ -62,7 +62,7 @@
                 [{ if $oView->canRate() }]
                 <input type="hidden" name="recommlistrating" value="0">
                 <ul id="star_rate" class="rating">
-                    <li id="current_rate" class="current_rate" style="width: 0px;"><a title="[{$star_title}]"><b>1</b></a></li>
+                    <li id="current_rate" class="current_rate" style="width: 0px;"><a title="[{$_star_title}]"><b>1</b></a></li>
                     [{section name=star start=1 loop=6}]
                     <li class="s[{$smarty.section.star.index}]"><a rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=review" params="anid=`$product->oxarticles__oxnid->value`&amp;"|cat:$oViewConf->getNavUrlParams() }]" onclick="showReview([{$smarty.section.star.index}]);return false;" title="[{$smarty.section.star.index}] [{if $smarty.section.star.index==1}][{ oxmultilang ident="RECOMMLIST_STAR" }][{else}][{ oxmultilang ident="RECOMMLIST_STARS" }][{/if}]"><b>[{$smarty.section.star.index}]</b></a></li>
                     [{/section}]

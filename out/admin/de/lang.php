@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23462 2009-10-21 15:15:23Z vilma $
+ * $Id: lang.php 23511 2009-10-22 17:42:27Z tomas $
  */
 
 $sLangName  = 'Deutsch';
@@ -252,6 +252,8 @@ $aLang = array(
 'GENERAL_REVIEW'                                => 'Übersicht',
 'GENERAL_REMARK'                                => 'Mitteilung',
 'GENERAL_REQUIRED_MISS'                         => 'Bitte füllen Sie alle Pflichtfelder aus',
+'GENERAL_SALUTATION_MR'                         => "Herr",
+'GENERAL_SALUTATION_MRS'                        => "Frau",
 'GENERAL_SAVE'                                  => 'Speichern',
 'GENERAL_SAVEIN'                                => 'Kopieren',
 'GENERAL_SEARCH'                                => 'Suchen',

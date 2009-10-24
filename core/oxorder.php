@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 23488 2009-10-22 09:14:15Z alfonsas $
+ * $Id: oxorder.php 23550 2009-10-23 12:58:05Z alfonsas $
  */
 
 /**
@@ -990,17 +990,10 @@ class oxOrder extends oxBase
         $this->_aVoucherList = $oBasket->getVouchers();
 
         if ( is_array( $this->_aVoucherList ) ) {
-            foreach ( array_keys( $this->_aVoucherList ) as $sVoucherId ) {
+            foreach ( $this->_aVoucherList as $sVoucherId => $oSimpleVoucher) {
                 $oVoucher = oxNew( 'oxvoucher' );
                 $oVoucher->load( $sVoucherId );
-                $oVSerie = $oVoucher->getSerie();
-                $oVoucher->markAsUsed( $this->oxorder__oxid->value, $oUser->oxuser__oxid->value, $oVSerie->oxvoucherseries__oxdiscount->value );
-
-                // -- set deprecated values for email templates
-                $oVoucher->oxmodvouchers__oxvouchernr = $oVoucher->oxvouchers__oxvouchernr;
-                $oVoucher->oxmodvouchers__oxdiscount     = clone $oVSerie->oxvoucherseries__oxdiscount;
-                $oVoucher->oxmodvouchers__oxdiscounttype = clone $oVSerie->oxvoucherseries__oxdiscounttype;
-                // -- set deprecated values for email templates
+                $oVoucher->markAsUsed( $this->oxorder__oxid->value, $oUser->oxuser__oxid->value, $oSimpleVoucher->fVoucherdiscount );
 
                 $this->_aVoucherList[$sVoucherId] = $oVoucher;
             }

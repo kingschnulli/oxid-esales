@@ -27,10 +27,7 @@
           <tr>
             <td><label>[{ oxmultilang ident="ACCOUNT_USER_TITLE" }]</label></td>
             <td>
-              <select name="invadr[oxuser__oxsal]">
-                <option [{if $oxcmp_user->oxuser__oxsal->value == "ACCOUNT_USER_MR"|oxmultilangassign }]SELECTED[{/if }]>[{ oxmultilang ident="ACCOUNT_USER_MR" }]</option>
-                <option  [{if $oxcmp_user->oxuser__oxsal->value == "ACCOUNT_USER_MRS"|oxmultilangassign }]SELECTED[{/if }]>[{ oxmultilang ident="ACCOUNT_USER_MRS" }]</option>
-              </select>  &nbsp;
+              [{include file="inc/salutation.tpl" name="invadr[oxuser__oxsal]" value=$oxcmp_user->oxuser__oxsal->value }] &nbsp;
               [{if $oView->isFieldRequired(oxuser__oxsal) }]<span class="req">*</span>[{/if }]
             </td>
           </tr>
@@ -177,10 +174,7 @@
           <tr>
             <td><label>[{ oxmultilang ident="ACCOUNT_USER_TITLE2" }]</label></td>
             <td>
-              <select name="deladr[oxaddress__oxsal]">
-                <option [{if $delivadr->oxaddress__oxsal->value == "ACCOUNT_USER_MR2"|oxmultilangassign or $deladr.oxaddress__oxsal == "ACCOUNT_USER_MR2"|oxmultilangassign }]SELECTED[{/if }]>[{ oxmultilang ident="ACCOUNT_USER_MR2" }]</option>
-                <option [{if $delivadr->oxaddress__oxsal->value == "ACCOUNT_USER_MRS2"|oxmultilangassign or $deladr.oxaddress__oxsal == "ACCOUNT_USER_MRS2"|oxmultilangassign }]SELECTED[{/if }]>[{ oxmultilang ident="ACCOUNT_USER_MRS2" }]</option>
-              </select>
+              [{include file="inc/salutation.tpl" name="deladr[oxaddress__oxsal]" value=$delivadr->oxaddress__oxsal->value value2=$deladr.oxaddress__oxsal }]
               [{if $oView->isFieldRequired(oxaddress__oxsal) }]<span class="req">*</span>[{/if }]
             </td>
           </tr>
