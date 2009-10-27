@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 23400 2009-10-20 14:38:13Z arvydas $
+ * $Id: alist.php 23591 2009-10-26 11:18:34Z arvydas $
  */
 
 /**
@@ -388,6 +388,25 @@ class aList extends oxUBase
     }
 
     /**
+     * Template variable getter. Returns meta description
+     *
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        $sMeta = parent::getMetaDescription();
+
+        if ( $sTitlePageSuffix = $this->getTitlePageSuffix() ) {
+            if ( $sMeta ) {
+                $sMeta .= ", ";
+            }
+            $sMeta .= $sTitlePageSuffix;
+        }
+
+        return $sMeta;
+    }
+
+    /**
      * Metatags - description and keywords - generator for search
      * engines. Uses string passed by parameters, cleans HTML tags,
      * string dublicates, special chars. Also removes strings defined
@@ -632,6 +651,18 @@ class aList extends oxUBase
     {
         if ( $this->getActCategory()->oxcategories__oxshowsuffix->value ) {
             return $this->getConfig()->getActiveShop()->oxshops__oxtitlesuffix->value;
+        }
+    }
+
+    /**
+     * Returns title page suffix used in template
+     *
+     * @return string
+     */
+    public function getTitlePageSuffix()
+    {
+        if ( ( $iPage = $this->getActPage() ) ) {
+            return oxLang::getInstance()->translateString( 'INC_HEADER_TITLEPAGE' ). ( $iPage + 1 );
         }
     }
 

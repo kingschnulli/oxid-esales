@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23512 2009-10-22 17:42:52Z tomas $
+ * $Id: lang.php 23588 2009-10-26 10:39:45Z arvydas $
  */
 
 
@@ -619,6 +619,7 @@ $aLang = array(
 'INC_HEADER_YOUAREHERE'                           =>"You are here:",
 'INC_HEADER_INCLTAXPLUSSHIPPING'                  =>"All prices incl. VAT, plus Shipping",
 'INC_HEADER_URLMORE'                              =>"more",
+'INC_HEADER_TITLEPAGE'                            =>"Page ",
 'INC_INFOBOX_NEWSLETTER'                          =>"Newsletter",
 'INC_LEFTITEM_PRODUCTSEARCH'                      =>"Product Search",
 'INC_LEFTITEM_BASKET'                             =>"Cart",

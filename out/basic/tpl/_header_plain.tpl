@@ -3,7 +3,7 @@
 <head>
     [{assign var="_titlesuffix" value=$_titlesuffix|default:$oView->getTitleSuffix()}]
     [{assign var="title" value=$title|default:$oView->getTitle() }]
-    <title>[{ $oView->getTitlePrefix() }][{if $title}] | [{$title|strip_tags}][{/if}][{if $_titlesuffix}] | [{$_titlesuffix}][{/if}]</title>
+    <title>[{ $oView->getTitlePrefix() }][{if $title}] | [{$title|strip_tags}][{/if}][{if $_titlesuffix}] | [{$_titlesuffix}][{/if}][{if $titlepagesuffix}] | [{$titlepagesuffix}][{/if}]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]">
     [{if $oView->noIndex() == 1 }]
     <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">

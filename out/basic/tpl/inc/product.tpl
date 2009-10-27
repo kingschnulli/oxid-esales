@@ -1,4 +1,4 @@
-<div [{if $test_Cntr}]id="test_cntr_[{$test_Cntr}]_[{$product->oxarticles__oxid->value}]"[{/if}] class="product [{if $head}] head[{/if}] [{$size|default:''}] [{$class|default:''}]">
+<div [{if $test_Cntr}]id="test_cntr_[{$test_Cntr}]_[{$product->oxarticles__oxartnum->value}]"[{/if}] class="product [{if $head}] head[{/if}] [{$size|default:''}] [{$class|default:''}]">
     [{if $showMainLink}]
         [{assign var='_productLink' value=$product->getMainLink()}]
     [{else}]

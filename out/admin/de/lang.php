@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23511 2009-10-22 17:42:27Z tomas $
+ * $Id: lang.php 23594 2009-10-26 13:19:30Z alfonsas $
  */
 
 $sLangName  = 'Deutsch';
@@ -691,7 +691,7 @@ $aLang = array(
 'EXCEPTION_NOTALLOWEDTYPE'                      => 'Verbotener Dateityp. Bitte config.inc.php anpassen, um diesen Dateityp zu erlauben.',
 'EXCEPTION_NODESCRIPTIONADDED'                  => 'Bitte Beschreibung angeben',
 'EXCEPTION_NOMEDIAADDED'                        => 'Bitte Medien URL angeben',
-'EXCEPTION_COULDNOTWRITETOFILE'                 => '[tr] Could not write to file',
+'EXCEPTION_COULDNOTWRITETOFILE'                 => 'Kann die Datei nicht schreiben',
 
 'GUI_LIST_MENUITEM'                             => 'Stammdaten',
 'GUI_LIST_MENUSUBITEM'                          => 'Look & Feel',
@@ -859,7 +859,7 @@ $aLang = array(
 'LANGUAGE_BASESSLURL'                           => 'Basis SSL URL',
 'LANGUAGE_NOTRANSLATIONS_WARNING'               => 'Warnung: Es wurden keine Sprachdateien für die ausgewählte Sprache gefunden!',
 'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS'        => 'Warnung: Beim anlegen der neuen Datenbankfelder ist ein Fehler aufgetreten',
-'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'      => '[tr]Warning: Error occured while reseting multilanguage fields after language delete!',
+'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'      => 'Achtung: Während des Löschens einer Sprache ist beim Zurücksetzens der Multisprachen-Felder ein Fehler aufgetreten!',
 'LANGUAGE_DELETINGMAINLANG_WARNING'             => 'Warnung: Sie können nicht die Hauptsprache löschen (Sprach-ID 0)',
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Fehler: Eine Sprache mit diesem Sprachkürzel existiert bereits',
 'SETUP_DIRNOTDELETED_WARNING'                   => 'Bitte löschen Sie das Setup-Verzeichnis',

@@ -165,7 +165,7 @@
             <tr>
                 <td><label>[{ oxmultilang ident="REGISTER_TITLE2" }]</label></td>
                 <td>
-                    [{include file="deladr[oxaddress__oxsal]" name="invadr[oxuser__oxsal]" value=$delivadr->oxaddress__oxsal->value}]
+                    [{include file="inc/salutation.tpl" name="deladr[oxaddress__oxsal]" value=$delivadr->oxaddress__oxsal->value}]
                     [{if isset($aMustFillFields.oxaddress__oxsal) }]<span class="req">*</span>[{/if}]
                 </td>
             </tr>

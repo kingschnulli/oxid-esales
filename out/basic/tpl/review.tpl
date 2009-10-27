@@ -1,10 +1,15 @@
-[{assign var="product" value=$oView->getProduct()}]
-[{assign var="template_title" value=$product->oxarticles__oxtitle->value|cat:" "|cat:$product->oxarticles__oxvarselect->value}]
+[{if $oView->getProduct()}]
+  [{assign var="product" value=$oView->getProduct()}]
+  [{assign var="template_title" value=$product->oxarticles__oxtitle->value|cat:" "|cat:$product->oxarticles__oxvarselect->value}]
+[{else}]
+  [{assign var="template_title" value="REVIEW_YOURREVIEW"|oxmultilangassign}]
+[{/if}]
 [{include file="_header.tpl" title=$template_title location=$template_title}]
 
 [{if !$oxcmp_user->oxuser__oxusername->value && !$oView->getProduct()}]
   [{include file="inc/cmp_login.tpl" }]
 [{else}]
+  [{if $oView->getProduct()}]
   <strong class="boxhead">[{$template_title}]</strong>
   <div class="box info">
     <table width="100%">
@@ -30,6 +35,7 @@
       </tr>
     </table>
   </div>
+  [{/if}]
 
   [{if $oView->getReviewSendStatus()}]
     <strong class="boxhead">[{ oxmultilang ident="REVIEW_REVIEW" }]</strong>
@@ -52,7 +58,9 @@
             [{ $oViewConf->getNavFormParams() }]
             <input type="hidden" name="fnc" value="savereview">
             <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
+            [{if $product}]
             <input type="hidden" name="anid" value="[{ $product->oxarticles__oxid->value }]">
+            [{/if}]
             <input type="hidden" name="reviewuserid" value="[{$oView->getReviewUserId()}]">
             <textarea cols="102" rows="15" name="rvw_txt" class="fullsize"></textarea><br>
             <span class="btn"><input type="submit" value="[{ oxmultilang ident="REVIEW_TOSAVEREVIEW" }]" class="btn"></span>

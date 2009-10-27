@@ -32,7 +32,10 @@
             [{ oxmultilang ident="GENERAL_BILLSAL" }]
             </td>
             <td class="edittext">
-            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxbillsal->fldmax_length}]" name="editval[oxorder__oxbillsal]" value="[{$edit->oxorder__oxbillsal->value }]" [{ $readonly }]>
+            <select name="editval[oxorder__oxbillsal]" class="editinput" [{ $readonly }]>
+                <option value="MR"  [{if $edit->oxorder__oxbillsal->value|lower  == "mr"  }]SELECTED[{/if}]>[{ oxmultilang ident="GENERAL_SALUTATION_MR"  }]</option>
+                <option value="MRS" [{if $edit->oxorder__oxbillsal->value|lower  == "mrs" }]SELECTED[{/if}]>[{ oxmultilang ident="GENERAL_SALUTATION_MRS" }]</option>
+            </select>
             [{ oxinputhelp ident="HELP_GENERAL_BILLSAL" }]
             </td>
         </tr>
