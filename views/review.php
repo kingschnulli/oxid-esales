@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: review.php 23584 2009-10-26 10:01:11Z arvydas $
+ * $Id: review.php 23718 2009-10-27 14:39:50Z alfonsas $
  */
 
 /**
@@ -542,14 +542,17 @@ class Review extends oxUBase
     {
         $sParams = parent::getDynUrlParams();
 
-        if ( $sVal = oxConfig::getParameter( 'cnid' ) ) {
-            $sParams .= "&amp;cnid={$sVal}";
+        if ( $sCnId = oxConfig::getParameter( 'cnid' ) ) {
+            $sParams .= "&amp;cnid={$sCnId}";
         }
-        if ( $sVal= oxConfig::getParameter( 'anid' ) ) {
-            $sParams .= "&amp;anid={$sVal}";
+        if ( $sAnId = oxConfig::getParameter( 'anid' ) ) {
+            $sParams .= "&amp;anid={$sAnId}";
         }
-        if ( $sVal= oxConfig::getParameter( 'listtype' ) ) {
-            $sParams .= "&amp;listtype={$sVal}";
+        if ( $sListType = oxConfig::getParameter( 'listtype' ) ) {
+            $sParams .= "&amp;listtype={$sListType}";
+        }
+        if ( $sRecommId = oxConfig::getParameter( 'recommid' ) ) {
+            $sParams .= "&amp;recommid={$sRecommId}";
         }
 
         return $sParams;

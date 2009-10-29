@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 23550 2009-10-23 12:58:05Z alfonsas $
+ * $Id: oxorder.php 23732 2009-10-28 13:46:22Z sarunas $
  */
 
 /**
@@ -279,7 +279,6 @@ class oxOrder extends oxBase
     {
         // checking set value
         if ( $this->_oArticles === null  ) {
-            $blExcludeState = $blExcludeCanceled;
             $sTable = getViewName( "oxorderarticles" );
             $sSelect = "select {$sTable}.* from {$sTable}
                         where {$sTable}.oxorderid = '".$this->getId() . "'" .

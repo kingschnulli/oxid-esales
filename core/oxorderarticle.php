@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorderarticle.php 22931 2009-10-05 11:51:31Z arvydas $
+ * $Id: oxorderarticle.php 23734 2009-10-28 14:08:18Z sarunas $
  */
 
 /**
@@ -691,5 +691,21 @@ class oxOrderArticle extends oxBase implements oxIArticle
        }
 
        return $blSave;
+   }
+
+   /**
+    * get used wrapping
+    *
+    * @return oxWrapping
+    */
+   public function getWrapping()
+   {
+       if ($this->oxorderarticles__oxwrapid->value) {
+           $oWrapping = oxNew('oxwrapping');
+           if ($oWrapping->load($this->oxorderarticles__oxwrapid->value)) {
+               return $oWrapping;
+           }
+       }
+       return null;
    }
 }

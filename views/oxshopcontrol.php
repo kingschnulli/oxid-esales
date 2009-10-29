@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxshopcontrol.php 22590 2009-09-24 06:24:00Z alfonsas $
+ * $Id: oxshopcontrol.php 23733 2009-10-28 13:55:26Z sarunas $
  */
 
 /**
@@ -226,6 +226,7 @@ class oxShopControl extends oxSuperCfg
     protected function _process( $sClass, $sFunction )
     {
         $myConfig = $this->getConfig();
+        $sViewID = null;
 
         if ( !oxUtils::getInstance()->isSearchEngine() &&
              !( $this->isAdmin() || !$myConfig->getConfigParam( 'blLogging' ) ) ) {

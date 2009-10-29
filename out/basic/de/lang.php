@@ -16,10 +16,10 @@
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link http://www.oxid-esales.com
- * @package lang
+ * @package main
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23588 2009-10-26 10:39:45Z arvydas $
+ * $Id: lang.php 23719 2009-10-27 14:42:28Z vilma $
  */
 
 
@@ -826,8 +826,8 @@ $aLang = array(
 'ORDER_MODIFY2'                                   => "ändern",
 'ORDER_IAGREETOTERMS1'                            => "Ich habe die",
 'ORDER_IAGREETOTERMS2'                            => "AGB",
-'ORDER_IAGREETOTERMS3'                            => "gelesen und bin einverstanden",
-'ORDER_IAGREETORIGHTOFWITHDRAWAL1'                => "die",
+'ORDER_IAGREETOTERMS3'                            => "gelesen und erkläre mich mit ihnen einverstanden.",
+'ORDER_IAGREETORIGHTOFWITHDRAWAL1'                => "Die Informationen zum",
 'ORDER_IAGREETORIGHTOFWITHDRAWAL3'                => "habe ich gelesen.",
 'ORDER_RIGHTOFWITHDRAWAL'                         => "Widerrufsrecht",
 'ORDER_RIGHTOFWITHDRAWAL_TEXT'                    => "Verbraucher können ihre Vertragserklärung innerhalb von zwei Wochen ohne Angabe von
