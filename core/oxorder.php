@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxorder.php 23732 2009-10-28 13:46:22Z sarunas $
+ * $Id: oxorder.php 23745 2009-10-29 09:36:50Z arvydas $
  */
 
 /**
@@ -832,7 +832,7 @@ class oxOrder extends oxBase
         // #756M Preserve already stored payment information
         if ( !$aDynvalue && ( $oUserpayment = $this->getPaymentType() ) ) {
             if ( is_array( $aStoredDynvalue = $oUserpayment->getDynValues() ) ) {
-            foreach ( $aStoredDynvalue as $oVal ) {
+                foreach ( $aStoredDynvalue as $oVal ) {
                     $aDynvalue[$oVal->name] = $oVal->value;
                 }
             }
@@ -1293,11 +1293,31 @@ class oxOrder extends oxBase
      */
     public function getOrderUser()
     {
-        if ($this->_oUser) {
-            return $this->_oUser;
+        if ($this->_oUser === null ) {
+            $this->_oUser = oxNew( "oxuser" );
+            $this->_oUser->load( $this->oxorder__oxuserid->value );
+
+            // if object is loaded then reusing its order info
+            if ( $this->_isLoaded ) {
+                // bill address
+                $this->_oUser->oxuser__oxcompany  = clone $this->oxorder__oxbillcompany;
+                $this->_oUser->oxuser__oxusername = clone $this->oxorder__oxbillemail;
+                $this->_oUser->oxuser__oxfname    = clone $this->oxorder__oxbillfname;
+                $this->_oUser->oxuser__oxlname    = clone $this->oxorder__oxbilllname;
+                $this->_oUser->oxuser__oxstreet   = clone $this->oxorder__oxbillstreet;
+                $this->_oUser->oxuser__oxstreetnr = clone $this->oxorder__oxbillstreetnr;
+                $this->_oUser->oxuser__oxaddinfo  = clone $this->oxorder__oxbilladdinfo;
+                $this->_oUser->oxuser__oxustid    = clone $this->oxorder__oxbillustid;
+
+
+                $this->_oUser->oxuser__oxcity      = clone $this->oxorder__oxbillcity;
+                $this->_oUser->oxuser__oxcountryid = clone $this->oxorder__oxbillcountryid;
+                $this->_oUser->oxuser__oxzip       = clone $this->oxorder__oxbillzip;
+                $this->_oUser->oxuser__oxfon       = clone $this->oxorder__oxbillfon;
+                $this->_oUser->oxuser__oxfax       = clone $this->oxorder__oxbillfax;
+                $this->_oUser->oxuser__oxsal       = clone $this->oxorder__oxbillsal;
+            }
         }
-        $this->_oUser = oxNew( "oxuser" );
-        $this->_oUser->load( $this->oxorder__oxuserid->value );
 
         return $this->_oUser;
     }
@@ -1635,8 +1655,8 @@ class oxOrder extends oxBase
     /**
      * Adds order articles back to virtual basket. Needed for recalculating order.
      *
-     * @param oxUser $oUser          basket user object
-     * @param array  $aOrderArticles order articles
+     * @param oxBasket $oBasket        basket object
+     * @param array    $aOrderArticles order articles
      *
      * @return oxBasket
      */
@@ -1802,7 +1822,7 @@ class oxOrder extends oxBase
             $this->_oOrderCurrency = current( $aCurrencies );
 
             foreach ( $aCurrencies as $oCurr ) {
-                if( $oCurr->name == $this->oxorder__oxcurrency->value ) {
+                if ( $oCurr->name == $this->oxorder__oxcurrency->value ) {
                     $this->_oOrderCurrency = $oCurr;
                     break;
                 }
