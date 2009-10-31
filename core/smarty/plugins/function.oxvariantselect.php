@@ -23,13 +23,13 @@
  */
 
 /*
-* Smarty function
-* ----------------------------------------------------------------------
-* Purpose: outputs HTML and JavaScript selectboxes for MD variant management
-* call example:
-* [{oxvariantselect value=$product->getMdVariants() separator=" " artid=$product->getId()}]
-* ----------------------------------------------------------------------
-*/
+ * Smarty function
+ * ----------------------------------------------------------------------
+ * Purpose: outputs HTML and JavaScript selectboxes for MD variant management
+ * call example:
+ * [{oxvariantselect value=$product->getMdVariants() separator=" " artid=$product->getId()}]
+ * ----------------------------------------------------------------------
+ */
 function smarty_function_oxvariantselect( $params, &$smarty )
 {
     $sOutput = '';

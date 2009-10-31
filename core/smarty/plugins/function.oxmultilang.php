@@ -19,7 +19,7 @@
  * @package smartyPlugins
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: function.oxmultilang.php 23513 2009-10-22 17:43:28Z tomas $
+ * $Id: function.oxmultilang.php 23768 2009-10-30 16:16:11Z tomas $
  */
 
 /*
@@ -49,11 +49,11 @@ function smarty_function_oxmultilang( $params, &$smarty )
         // is thrown in debug mode and has to be caught here, as smarty hangs otherwise!
     }
 
-    if ( $blAdmin && $sTranslation == $sIdent && !isset( $params['noerror'] ) ) {
+    if ($blAdmin && $sTranslation == $sIdent && (!isset( $params['noerror']) || !$params['noerror']) ) {
         $sTranslation = '<b>ERROR : Translation for '.$sIdent.' not found!</b>';
     }
 
-    if ( $blAdmin && $sTranslation == $sIdent && isset( $params['alternative'] ) ) {
+    if ( $sTranslation == $sIdent && isset( $params['alternative'] ) ) {
         $sTranslation = $params['alternative'];
     }
 

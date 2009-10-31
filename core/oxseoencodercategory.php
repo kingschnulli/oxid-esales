@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencodercategory.php 23311 2009-10-16 12:17:10Z sarunas $
+ * $Id: oxseoencodercategory.php 23764 2009-10-30 10:19:25Z sarunas $
  */
 
 /**
@@ -238,17 +238,20 @@ class oxSeoEncoderCategory extends oxSeoEncoder
     public function markRelatedAsExpired( $oCategory )
     {
         $oDb = oxDb::getDb();
+        $sIdQuoted = oxDb::getDb()->quote($oCategory->getId());
+
         // select it from table instead of using object carrying value
         // this is because this method is usually called inside update,
         // where object may already be carrying changed id
-        $aCatInfo = $oDb->getAll("select oxrootid, oxleft, oxright from oxcategories where oxid = '".$oCategory->getId()."' limit 1");
+        $aCatInfo = $oDb->getAll("select oxrootid, oxleft, oxright from oxcategories where oxid = $sIdQuoted limit 1");
         $sCatRootIdQuoted = $oDb->quote( $aCatInfo[0][0] );
-        // update article for root of this cat
-        $sQ = "update oxseo as seo1, (select oxobjectid from oxseo where oxtype = 'oxarticle' and oxparams = {$sCatRootIdQuoted}) as seo2 set seo1.oxexpired = '1' where seo1.oxtype = 'oxarticle' and seo1.oxobjectid = seo2.oxobjectid";
-        $oDb->execute( $sQ );
 
         // update sub cats
-        $sQ = "update oxseo as seo1, (select oxid from oxcategories where oxrootid={$sCatRootIdQuoted} and oxleft > ".$oDb->quote( $aCatInfo[0][1] )." and oxright < ".$oDb->quote( $aCatInfo[0][2] ).") as seo2 set seo1.oxexpired = '1' where seo1.oxtype = 'oxcategory' and seo1.oxobjectid = seo2.oxid";
+        $sQ = "update oxseo as seo1, (select oxid from oxcategories where oxrootid={$sCatRootIdQuoted} and oxleft > ".((int) $aCatInfo[0][1] )." and oxright < ".((int) $aCatInfo[0][2] ).") as seo2 set seo1.oxexpired = '1' where seo1.oxtype = 'oxcategory' and seo1.oxobjectid = seo2.oxid";
+        $oDb->execute( $sQ );
+
+        // update subarticles
+        $sQ = "update oxseo as seo1, (select o2c.oxobjectid as id from oxcategories as cat left join oxobject2category as o2c on o2c.oxcatnid=cat.oxid where cat.oxrootid={$sCatRootIdQuoted} and cat.oxleft >= ".((int) $aCatInfo[0][1] )." and cat.oxright <= ".((int) $aCatInfo[0][2] ).") as seo2 set seo1.oxexpired = '1' where seo1.oxtype = 'oxarticle' and seo1.oxobjectid = seo2.id";
         $oDb->execute( $sQ );
     }
 
