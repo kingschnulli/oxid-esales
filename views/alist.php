@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 23591 2009-10-26 11:18:34Z arvydas $
+ * $Id: alist.php 23794 2009-11-02 16:31:48Z arvydas $
  */
 
 /**
@@ -237,10 +237,51 @@ class aList extends oxUBase
     {
         if ( $aArtList = $this->getArticleList() ) {
             $iLinkType = $this->_getProductLinkType();
+            $sAddDynParams = $this->getAddUrlParams();
+            $sAddSeoParams = $this->getAddSeoUrlParams();
+
             foreach ( $aArtList as $oArticle ) {
                 $oArticle->setLinkType( $iLinkType );
+
+                // appending dynamic urls
+                if ( $sAddDynParams ) {
+                    $oArticle->appendStdLink( $sAddDynParams );
+                }
+
+                // appending seo urls
+                if ( $sAddSeoParams ) {
+                    $oArticle->appendLink( $sAddSeoParams );
+                }
             }
         }
+    }
+
+
+    /**
+     * Returns additional URL parameters which must be added to list products dynamic urls
+     *
+     * @return string
+     */
+    public function getAddUrlParams()
+    {
+        $sParams = parent::getAddUrlParams();
+        if ( !oxUtils::getInstance()->seoIsActive() ) {
+            $iPgNr = (int) oxConfig::getParameter( 'pgNr' );
+            if ( $iPgNr > 0 ) {
+                $sParams .= ($sParams?'&amp;':'') . "pgNr={$iPgNr}";
+            }
+        }
+
+        return $sParams;
+    }
+
+    /**
+     * Returns additional URL parameters which must be added to list products seo urls
+     *
+     * @return string
+     */
+    public function getAddSeoUrlParams()
+    {
     }
 
     /**

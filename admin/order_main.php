@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: order_main.php 20675 2009-07-08 13:44:08Z arvydas $
+ * $Id: order_main.php 23783 2009-11-02 13:52:20Z sarunas $
  */
 
 /**
@@ -199,6 +199,8 @@ class Order_Main extends oxAdminDetails
         if ( ( $sDelSetId = oxConfig::getParameter( "setDelSet" ) ) &&
              $oOrder->load( oxConfig::getParameter( "oxid" ) ) ) {
             $oOrder->oxorder__oxpaymenttype->setValue( "oxempty" );
+            // keeps old discount
+            $oOrder->reloadDiscount( false );
             $oOrder->setDelivery( $sDelSetId );
             $oOrder->recalculateOrder();
         }
@@ -216,6 +218,8 @@ class Order_Main extends oxAdminDetails
         if ( ( $sPayId = oxConfig::getParameter( "setPayment") ) &&
              $oOrder->load( oxConfig::getParameter( "oxid" ) ) ) {
             $oOrder->oxorder__oxpaymenttype->setValue( $sPayId );
+            // keeps old discount
+            $oOrder->reloadDiscount( false );
             $oOrder->recalculateOrder();
         }
     }

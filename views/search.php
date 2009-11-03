@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: search.php 23255 2009-10-14 15:25:09Z sarunas $
+ * $Id: search.php 23780 2009-11-02 13:01:28Z arvydas $
  */
 
 /**
@@ -236,7 +236,7 @@ class Search extends oxUBase
     }
 
     /**
-     * Returns additional URL paramerets which must be added to list products urls
+     * Returns additional URL parameters which must be added to list products urls
      *
      * @return string
      */

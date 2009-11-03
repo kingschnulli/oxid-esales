@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 23463 2009-10-21 16:43:24Z tomas $
+ * $Id: details.php 23789 2009-11-02 15:48:08Z arvydas $
  */
 
 /**
@@ -787,11 +787,13 @@ class Details extends oxUBase
             $sListType = oxConfig::getParameter( 'listtype' );
             if ( 'vendor' == $sListType ) {
                 $this->_iLinkType = OXARTICLE_LINKTYPE_VENDOR;
-        } elseif ( 'manufacturer' == $sListType ) {
-                $this->_iLinkType = OXARTICLE_LINKTYPE_MANUFACTURER;
+            } elseif ( 'manufacturer' == $sListType ) {
+                    $this->_iLinkType = OXARTICLE_LINKTYPE_MANUFACTURER;
             } elseif ( 'tag' == $sListType ) {
-                $this->_iLinkType = OXARTICLE_LINKTYPE_TAG;
-        } else {
+                    $this->_iLinkType = OXARTICLE_LINKTYPE_TAG;
+            } elseif ( 'recommlist' == $sListType ) {
+                    $this->_iLinkType = OXARTICLE_LINKTYPE_RECOMM;
+            } else {
                 $this->_iLinkType = OXARTICLE_LINKTYPE_CATEGORY;
 
                 // price category has own type..

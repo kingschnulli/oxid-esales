@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: tag.php 23400 2009-10-20 14:38:13Z arvydas $
+ * $Id: tag.php 23791 2009-11-02 15:49:26Z arvydas $
  */
 
 /**
@@ -125,7 +125,7 @@ class Tag extends aList
     }
 
     /**
-     * Returns additional URL paramerets which must be added to list products urls
+     * Returns additional URL parameters which must be added to list products dynamic urls
      *
      * @return string
      */
@@ -133,11 +133,9 @@ class Tag extends aList
     {
         $sAddParams  = parent::getAddUrlParams();
         $sAddParams .= ($sAddParams?'&amp;':'') . "listtype={$this->_sListType}";
-
-        if ( $sParam = rawurlencode( oxConfig::getParameter( 'searchtag', 1 ) ) ) {
-            $sAddParams .= "&amp;searchtag={$sParam}";
+        if ( $sParam = oxConfig::getParameter( 'searchtag', 1 ) ) {
+            $sAddParams .= "&amp;searchtag=" . rawurlencode( $sParam );
         }
-
         return $sAddParams;
     }
 

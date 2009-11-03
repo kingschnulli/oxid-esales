@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 23483 2009-10-22 08:37:14Z rimvydas.paskevicius $
+ * $Id: oxubase.php 23787 2009-11-02 15:43:12Z arvydas $
  */
 
 /**
@@ -2465,7 +2465,7 @@ class oxUBase extends oxView
     }
 
     /**
-     * Returns additional URL paramerets which must be added to list products urls
+     * Returns additional URL parameters which must be added to list products urls
      *
      * @return string
      */
