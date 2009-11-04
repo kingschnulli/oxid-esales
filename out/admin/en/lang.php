@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23511 2009-10-22 17:42:27Z tomas $
+ * $Id: lang.php 23814 2009-11-03 15:55:49Z tomas $
  */
 
 /*
@@ -1568,8 +1568,8 @@ $aLang = array(
 'SHOP_PERF_USETIMECHECKINARTLOAD'               => 'Check "Active From/To" when loading Products',
 'SHOP_PERF_SHOWTOPBASKET'                       => 'Display Cart at Top',
 'SHOP_PERF_DISBASKETSAVING'                     => 'Don\'t save Shopping Carts of registered Users',
-'DYNSCREEN_LOCAL_TITLE'                         => 'E-Commerce Services',
-'DYNSCREEN_LOCAL_TEXT'                          => 'Some general info about e-commerce services...',
+'DYNSCREEN_LOCAL_TITLE'                         => 'eCommerce Services',
+'DYNSCREEN_LOCAL_TEXT'                          => 'Some general info about eCommerce services...',
 
 'GENIMPORT_MENUITEM'                            => 'Service',
 'GENIMPORT_MENUSUBITEM'                         => 'Generic Import',
@@ -1628,7 +1628,7 @@ $aLang = array(
 'mxremlist'                                     => 'List All Reviews',
 'mxsellist'                                     => 'Selection Lists',
 'mxservice'                                     => 'Service',
-'mxservicearea'                                 => 'E-Commerce Services',
+'mxservicearea'                                 => 'eCommerce Services',
 'mxshipping'                                    => 'Shipping Cost Rules',
 'mxshippingset'                                 => 'Shipping Methods',
 'mxshopsett'                                    => 'Shop Settings',

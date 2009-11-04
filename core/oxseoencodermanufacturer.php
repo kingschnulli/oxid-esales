@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencodermanufacturer.php 23319 2009-10-16 14:03:21Z arvydas $
+ * $Id: oxseoencodermanufacturer.php 23796 2009-11-02 17:29:52Z arvydas $
  */
 
 /**
@@ -129,7 +129,7 @@ class oxSeoEncoderManufacturer extends oxSeoEncoder
             $iLang = $oManufacturer->getLanguage();
         }
         $sStdUrl = $oManufacturer->getStdLink() . '&amp;pgNr=' . $iPage;
-        $sParams = sprintf( "%0" . ceil( $this->_iCntPages / 10 + 1 ) . "d", $iPage + 1 );
+        $sParams = $sParams = (int) ($iPage + 1);
 
         $sStdUrl = $this->_trimUrl( $sStdUrl, $iLang );
         $sSeoUrl = $this->getManufacturerUri( $oManufacturer, $iLang ) . $sParams . "/";

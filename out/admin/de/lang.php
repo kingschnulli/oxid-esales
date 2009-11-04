@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23594 2009-10-26 13:19:30Z alfonsas $
+ * $Id: lang.php 23814 2009-11-03 15:55:49Z tomas $
  */
 
 $sLangName  = 'Deutsch';
@@ -1562,8 +1562,8 @@ $aLang = array(
 'SHOP_PERF_USETIMECHECKINARTLOAD'               => 'Beim Laden von Artikeln "Aktiv von/bis" berücksichtigen',
 'SHOP_PERF_SHOWTOPBASKET'                       => 'Warenkorb oben anzeigen',
 'SHOP_PERF_DISBASKETSAVING'                     => 'Warenkörbe von angemeldeten Benutzern <strong>nicht</strong> speichern',
-'DYNSCREEN_LOCAL_TITLE'                         => 'E-Commerce Services',
-'DYNSCREEN_LOCAL_TEXT'                          => 'Some general info about e-commerce services...',
+'DYNSCREEN_LOCAL_TITLE'                         => 'eCommerce Services',
+'DYNSCREEN_LOCAL_TEXT'                          => 'Some general info about eCommerce services...',
 
 'GENIMPORT_MENUITEM'                            => 'Service',
 'GENIMPORT_MENUSUBITEM'                         => 'Gener. Import',
@@ -1622,7 +1622,7 @@ $aLang = array(
 'mxremlist'                                     => 'Alle Bewertungen',
 'mxsellist'                                     => 'Auswahllisten',
 'mxservice'                                     => 'Service',
-'mxservicearea'                                 => 'E-Commerce Services',
+'mxservicearea'                                 => 'eCommerce Services',
 'mxshipping'                                    => 'Versandkostenregeln',
 'mxshippingset'                                 => 'Versandarten',
 'mxshopsett'                                    => 'Shopeinstellungen',

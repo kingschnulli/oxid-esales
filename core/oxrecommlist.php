@@ -19,13 +19,13 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxrecommlist.php 22590 2009-09-24 06:24:00Z alfonsas $
+ * $Id: oxrecommlist.php 23802 2009-11-03 09:31:29Z arvydas $
  */
 
 /**
  * Recommendation list manager class.
  */
-class oxRecommList extends oxBase
+class oxRecommList extends oxBase implements oxIUrl
 {
     /**
      * Current object class name
@@ -47,6 +47,20 @@ class oxRecommList extends oxBase
      * @var string
      */
     protected $_sArticlesFilter = '';
+
+    /**
+     * Seo article urls for languages
+     *
+     * @var array
+     */
+    protected $_aSeoUrls = array();
+
+    /**
+     * Stardard/dynamic article urls for languages
+     *
+     * @var array
+     */
+    protected $_aStdUrls = array();
 
     /**
      * Class constructor, initiates parent constructor (parent::oxBase()).
@@ -408,18 +422,67 @@ class oxRecommList extends oxBase
     /**
      * return url to this recomm list page
      *
+     * @param int $iLang language id [optional]
+     *
      * @return string
      */
-    public function getLink()
+    public function getLink( $iLang = null )
     {
-        $sUrl = $this->getConfig()->getShopHomeURL().'cl=recommlist';
-        if ( oxUtils::getInstance()->seoIsActive() ) {
-            $oEncoder = oxSeoEncoder::getInstance();
-            if ( ( $sStaticUrl = $oEncoder->getStaticUrl( $sUrl ) ) ) {
-                $sUrl = $sStaticUrl;
-            }
+        if ( $iLang === null ) {
+            $iLang = oxLang::getInstance()->getBaseLanguage();
         }
-        $sUrl .= ( ( strpos( $sUrl, '?' ) !== false ) ? "&amp;":"?" ) . "recommid=".$this->getId();
+
+        if ( !oxUtils::getInstance()->seoIsActive() ) {
+            return $this->getStdLink( $iLang );
+        }
+
+        if ( !isset( $this->_aSeoUrls[$iLang] ) ) {
+            $this->_aSeoUrls[$iLang] = oxSeoEncoderRecomm::getInstance()->getRecommUrl( $this, $iLang );
+        }
+
+        return $this->_aSeoUrls[$iLang];
+    }
+
+    /**
+     * Returns standard (dynamic) object URL
+     *
+     * @param int   $iLang   language id [optional]
+     * @param array $aParams additional params to use [optional]
+     *
+     * @return string
+     */
+    public function getStdLink( $iLang = null, $aParams = array() )
+    {
+        if ( $iLang === null ) {
+            $iLang = oxLang::getInstance()->getBaseLanguage();
+        }
+
+        if ( !isset( $this->_aStdUrls[$iLang] ) ) {
+            $this->_aStdUrls[$iLang] = $this->getBaseLink( $iLang )."&amp;recommid=".$this->getId();
+        }
+
+        // appending parameters
+        $sUrl = $this->_aStdUrls[$iLang];
+        foreach ( $aParams as $sKey => $sValue ) {
+            $sUrl .= "&amp;$sKey=$sValue";
+        }
+
+        return $this->getSession()->processUrl( $sUrl );
+    }
+
+    /**
+     * Returns base dynamic recommlist url: shopurl/index.php?cl=recommlist
+     *
+     * @param int $iLang language id
+     *
+     * @return string
+     */
+    public function getBaseLink( $iLang )
+    {
+        $sUrl = $this->getConfig()->getShopHomeUrl() . "cl=recommlist";
+        if ( !oxUtils::getInstance()->seoIsActive() && $iLang != oxLang::getInstance()->getBaseLanguage() ) {
+            $sUrl .= "&amp;lang={$iLang}";
+        }
 
         return $sUrl;
     }

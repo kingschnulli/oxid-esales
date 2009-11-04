@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcontent.php 23323 2009-10-16 14:59:42Z sarunas $
+ * $Id: oxcontent.php 23802 2009-11-03 09:31:29Z arvydas $
  */
 
 /**
@@ -203,7 +203,7 @@ class oxContent extends oxI18n implements oxIUrl
                 $sAdd .= "&amp;cnid=$sParentId";
             }
         }
-        return $this->getConfig()->getShopHomeURL() . "cl=content&amp;oxcid=" . $this->getId() . $sAdd;
+        return $this->getSession()->processUrl( $this->getConfig()->getShopHomeUrl() . "cl=content&amp;oxcid=" . $this->getId() . $sAdd );
     }
 
     /**

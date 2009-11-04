@@ -27,7 +27,7 @@
  *
  * @package core
  */
-class oxSeoEncoderTag extends oxSeoEncoder
+class oxSeoEncoderRecomm extends oxSeoEncoder
 {
     /**
      * Singleton instance.
@@ -47,8 +47,8 @@ class oxSeoEncoderTag extends oxSeoEncoder
             self::$_instance = $inst[oxClassCacheKey()];
         }
 
-        if ( !self::$_instance instanceof oxSeoEncoderTag ) {
-            self::$_instance = oxNew( 'oxSeoEncoderTag' );
+        if ( !self::$_instance instanceof oxSeoEncoderRecomm ) {
+            self::$_instance = oxNew( 'oxSeoEncoderRecomm' );
             if ( defined( 'OXID_PHP_UNIT' ) ) {
                 $inst[oxClassCacheKey()] = self::$_instance;
             }
@@ -65,71 +65,65 @@ class oxSeoEncoderTag extends oxSeoEncoder
     /**
      * Returns SEO uri for tag.
      *
-     * @param string $sTag  tag
-     * @param int    $iLang language
+     * @param oxrecommlist $oRecomm recomm list object
+     * @param int          $iLang   language
      *
      * @return string
      */
-    public function getTagUri( $sTag, $iLang = null )
+    public function getRecommUri( $oRecomm, $iLang = null )
     {
-        return $this->_getDynamicUri( $this->getStdTagUri( $sTag ), "tag/{$sTag}/", $iLang );
-    }
+        if ( !( $sSeoUrl = $this->_loadFromDb( 'dynamic', $oRecomm->getId(), $iLang ) ) ) {
 
-    /**
-     * Returns standard tag url
-     *
-     * @param string $sTag           tag
-     * @param bool   $blIncludeIndex if you need only parameters set this param to false (optional)
-     *
-     * @return string
-     */
-    public function getStdTagUri( $sTag, $blIncludeIndex = true )
-    {
-        // while tags are just strings, standard ulrs formatted stays here
-        $sUri = "cl=tag&amp;searchtag=" . rawurlencode( $sTag );
-        if ( $blIncludeIndex ) {
-            $sUri = "index.php?" . $sUri;
+            // fetching part of base url
+            $sSeoUrl = $this->_getStaticUri( $oRecomm->getBaseLink( $iLang ), $this->getConfig()->getShopId(), $iLang ) . $this->_prepareTitle( $oRecomm->oxrecommlists__oxtitle->value );
+
+            // creating unique
+            $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $oRecomm->getId(), $iLang );
+
+            // inserting
+            $this->_saveToDb( 'dynamic', $oRecomm->getId(), $oRecomm->getStdLink( $iLang ), $sSeoUrl, $iLang, $this->getConfig()->getShopId() );
         }
-        return $sUri;
+
+        return $sSeoUrl;
     }
 
     /**
      * Returns full url for passed tag
      *
-     * @param string $sTag  tag
-     * @param int    $iLang language
+     * @param oxrecommlist $oRecomm recomendation list object
+     * @param int          $iLang   language
      *
      * @return string
      */
-    public function getTagUrl( $sTag, $iLang = null)
+    public function getRecommUrl( $oRecomm, $iLang = null)
     {
         if (!isset($iLang)) {
             $iLang = oxLang::getInstance()->getBaseLanguage();
         }
-        return $this->_getFullUrl( $this->getTagUri( $sTag, $iLang ), $iLang );
+        return $this->_getFullUrl( $this->getRecommUri( $oRecomm, $iLang ), $iLang );
     }
 
     /**
      * Returns tag SEO url for specified page
      *
-     * @param string $sTag    manufacturer object
-     * @param int    $iPage   page tu prepare number
-     * @param int    $iLang   language
-     * @param bool   $blFixed fixed url marker (default is false)
+     * @param oxrecommlist $oRecomm recomendation list object
+     * @param int          $iPage   page tu prepare number
+     * @param int          $iLang   language
+     * @param bool         $blFixed fixed url marker (default is false)
      *
      * @return string
      */
-    public function getTagPageUrl( $sTag, $iPage, $iLang = null, $blFixed = false )
+    public function getRecommPageUrl( $oRecomm, $iPage, $iLang = null, $blFixed = false )
     {
         if (!isset($iLang)) {
             $iLang = oxLang::getInstance()->getBaseLanguage();
         }
-        $sStdUrl = $this->getStdTagUri( $sTag ) . '&amp;pgNr=' . $iPage;
+        $sStdUrl = $oRecomm->getStdLink( $iLang ) . '&amp;pgNr=' . $iPage;
         $sParams = (int) ($iPage + 1);
 
         $sStdUrl = $this->_trimUrl( $sStdUrl, $iLang );
-        $sSeoUrl = $this->getTagUri( $sTag, $iLang ) . $sParams . "/";
+        $sSeoUrl = $this->getRecommUri( $oRecomm, $iLang ) . $sParams . "/";
 
-        return $this->_getFullUrl( $this->_getDynamicUri( $sStdUrl, $sSeoUrl, $iLang ), $iLang );
+        return $this->_getFullUrl( $this->_getPageUri( $oRecomm, 'dynamic', $sStdUrl, $sSeoUrl, $sParams, $iLang, $blFixed ), $iLang );
     }
 }

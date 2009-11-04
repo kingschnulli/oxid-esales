@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategory.php 23323 2009-10-16 14:59:42Z sarunas $
+ * $Id: oxcategory.php 23802 2009-11-03 09:31:29Z arvydas $
  */
 
 /**
@@ -590,7 +590,7 @@ class oxCategory extends oxI18n implements oxIUrl
             }
         }
 
-        return $sLink;
+        return $this->getSession()->processUrl( $sLink );
     }
 
     /**

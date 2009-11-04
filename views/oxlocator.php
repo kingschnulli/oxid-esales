@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlocator.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: oxlocator.php 23816 2009-11-03 16:24:14Z arvydas $
  */
 
 /**
@@ -433,7 +433,11 @@ class oxLocator extends oxSuperCfg
             $sPageNr = $this->_getPageNumber( $iPage );
             $oRecommList->toListLink  = $this->_makeLink( $oRecommList->getLink(), $sPageNr.(($sPageNr && $sAddSearch)?'&amp;':'').$sAddSearch );
 
-            $sAdd = 'recommid='.$oRecommList->getId().'&amp;listtype=recommlist'.($sAddSearch?'&amp;':'').$sAddSearch;
+            $sAdd = '';
+            if ( !oxUtils::getInstance()->seoIsActive() ) {
+                $sAdd = 'recommid='.$oRecommList->getId().'&amp;listtype=recommlist'.($sAddSearch?'&amp;':'');
+            }
+            $sAdd .= $sAddSearch;
             $oRecommList->nextProductLink = $this->_oNextProduct?$this->_makeLink( $this->_oNextProduct->getLink(), $sAdd ):null;
             $oRecommList->prevProductLink = $this->_oBackProduct?$this->_makeLink( $this->_oBackProduct->getLink(), $sAdd ):null;
 

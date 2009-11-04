@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxvendor.php 23323 2009-10-16 14:59:42Z sarunas $
+ * $Id: oxvendor.php 23802 2009-11-03 09:31:29Z arvydas $
  */
 
 /**
@@ -261,7 +261,7 @@ class oxVendor extends oxI18n implements oxIUrl
             }
         }
 
-        return $this->getConfig()->getShopHomeURL().'cl=vendorlist&amp;cnid=v_'.$this->getId().$sLangUrl;
+        return $this->getSession()->processUrl( $this->getConfig()->getShopHomeUrl().'cl=vendorlist&amp;cnid=v_'.$this->getId().$sLangUrl );
     }
 
     /**
