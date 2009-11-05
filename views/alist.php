@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 23794 2009-11-02 16:31:48Z arvydas $
+ * $Id: alist.php 23839 2009-11-04 14:46:58Z arvydas $
  */
 
 /**
@@ -929,7 +929,7 @@ class aList extends oxUBase
     /**
      * Template variable getter. Returns active search
      *
-     * @return object
+     * @return oxcategory
      */
     public function getActiveCategory()
     {

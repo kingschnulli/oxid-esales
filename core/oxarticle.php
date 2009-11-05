@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 23803 2009-11-03 09:40:00Z arvydas $
+ * $Id: oxarticle.php 23838 2009-11-04 14:46:39Z arvydas $
  */
 
 // defining supported link types
@@ -2358,7 +2358,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getBaseLink( $iLang )
     {
         //always returns shop url, not admin
-        $sUrl = $this->getConfig()->getShopHomeURL( $iLang, false ) . "cl=details";
+        $sUrl = $this->getConfig()->getShopHomeUrl( $iLang, false ) . "cl=details";
         if ( !oxUtils::getInstance()->seoIsActive() && $iLang != $this->getLanguage() ) {
             $sUrl .= "&amp;lang={$iLang}";
         }
@@ -2380,7 +2380,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $iLang = $this->getLanguage();
         }
 
-        $blSeo = oxUtils::getInstance()->seoIsActive();
         if ( !isset( $this->_aStdUrls[$iLang] ) ) {
             $this->_aStdUrls[$iLang] = $this->getBaseLink( $iLang )."&amp;anid=".$this->getId();
         }

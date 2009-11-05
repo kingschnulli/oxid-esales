@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 23366 2009-10-20 08:53:58Z arvydas $
+ * $Id: oxconfig.php 23830 2009-11-04 10:51:19Z alfonsas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1098,8 +1098,8 @@ class oxConfig extends oxSuperCfg
 
         // Check for custom template
         $sCustomTheme = $this->getConfigParam( 'sCustomTheme' );
-        if( !$blAdmin && $sCustomTheme && $sCustomTheme != $sTheme) {
-            $sReturn = $this->getDir($sFile, $sDir, $blAdmin, $iLang, $iShopl, $sCustomTheme, $blAbsolute, $blReturnArray);
+        if ( !$blAdmin && $sCustomTheme && $sCustomTheme != $sTheme) {
+            $sReturn = $this->getDir($sFile, $sDir, $blAdmin, $iLang, $iShopl, $sCustomTheme, $blAbsolute);
         }
 
         //test lang level ..
@@ -1818,7 +1818,7 @@ class oxConfig extends oxSuperCfg
                 default:
                     $sValue = $sVarVal;
                     break;
-                }
+            }
         }
         return $sValue;
     }

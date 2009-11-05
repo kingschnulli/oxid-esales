@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 23787 2009-11-02 15:43:12Z arvydas $
+ * $Id: oxubase.php 23824 2009-11-04 09:29:42Z arvydas $
  */
 
 /**
@@ -87,6 +87,12 @@ class oxUBase extends oxView
      * @var oxvendor
      */
     protected $_oActVendor = null;
+
+    /**
+     * Active recommendation's list
+     * @var object
+     */
+    protected $_oActiveRecommList = null;
 
     /**
      * Active search object - Oxstdclass object which keeps navigation info
@@ -1830,6 +1836,14 @@ class oxUBase extends oxView
      */
     public function getActiveRecommList()
     {
+        if ( $this->_oActiveRecommList === null ) {
+            $this->_oActiveRecommList = false;
+            if ( $sOxid = oxConfig::getParameter( 'recommid' ) ) {
+                $this->_oActiveRecommList = oxNew( 'oxrecommlist' );
+                $this->_oActiveRecommList->load( $sOxid );
+            }
+        }
+        return $this->_oActiveRecommList;
     }
 
     /**
@@ -2447,21 +2461,6 @@ class oxUBase extends oxView
     {
         $this->_aViewData['articlebargainlist'] = $this->getBargainArticleList();
         $this->_aViewData['aTop5Articles']      = $this->getTop5ArticleList();
-    }
-
-    /**
-     * Iterates through list articles and performs list view specific tasks
-     *
-     * @return null
-     */
-    protected function _processListArticles()
-    {
-        $sAddParams = $this->getAddUrlParams();
-        if ( $sAddParams && ( $oArticleList = $this->getArticleList() ) ) {
-            foreach ( $oArticleList as $oArticle ) {
-                $oArticle->appendLink( $sAddParams );
-            }
-        }
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 23271 2009-10-15 09:00:52Z alfonsas $
+ * $Id: oxemail.php 23834 2009-11-04 13:44:43Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -653,6 +653,7 @@ class oxEmail extends PHPMailer
         $oSmarty->assign( "charset", $oLang->translateString("charset"));
         $oSmarty->assign( "shop", $oShop );
         $oSmarty->assign( "oViewConf", $oShop );
+        $oSmarty->assign( "subscribeLink", $this->_getNewsSubsLink($oUser->oxuser__oxid->value) );
         $oSmarty->assign( "user", $oUser );
 
         $oOutputProcessor = oxNew( "oxoutput" );
@@ -672,6 +673,25 @@ class oxEmail extends PHPMailer
         $this->setReplyTo( $oShop->oxshops__oxinfoemail->value, $oShop->oxshops__oxname->getRawValue() );
 
         return $this->send();
+    }
+
+    /**
+     * Returns newsletter subscription link
+     *
+     * @param string $sId user id
+     *
+     * @return string $sUrl
+     */
+    protected function _getNewsSubsLink( $sId )
+    {
+        $myConfig = $this->getConfig();
+    	$iActShopLang = $myConfig->getActiveShop()->getLanguage();
+    	$sLang = "";
+    	if ( $iActShopLang ) {
+    		$sLang = '&amp;lang='.$iActShopLang;
+    	}
+    	$sUrl = $myConfig->getShopHomeURL().'cl=newsletter&amp;fnc=addme&amp;uid='.$sId.$sLang;
+    	return $sUrl;
     }
 
     /**

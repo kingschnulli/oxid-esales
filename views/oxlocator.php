@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlocator.php 23816 2009-11-03 16:24:14Z arvydas $
+ * $Id: oxlocator.php 23824 2009-11-04 09:29:42Z arvydas $
  */
 
 /**
@@ -429,12 +429,17 @@ class oxLocator extends oxSuperCfg
             // setting product position in list, amount of articles etc
             $oRecommList->iCntOfProd  = $oIdList->count();
             $oRecommList->iProductPos = $this->_getProductPos( $oCurrArticle, $oIdList, $oLocatorTarget );
+            $blSeo = oxUtils::getInstance()->seoIsActive();
 
-            $sPageNr = $this->_getPageNumber( $iPage );
-            $oRecommList->toListLink  = $this->_makeLink( $oRecommList->getLink(), $sPageNr.(($sPageNr && $sAddSearch)?'&amp;':'').$sAddSearch );
+            if ( $blSeo && $iPage ) {
+                $oRecommList->toListLink = oxSeoEncoderRecomm::getInstance()->getRecommPageUrl( $oRecommList, $iPage );
+            } else {
+                $oRecommList->toListLink  = $this->_makeLink( $oRecommList->getLink(), $this->_getPageNumber( $iPage ) );
+            }
+            $oRecommList->toListLink  = $this->_makeLink( $oRecommList->toListLink, $sAddSearch );
 
             $sAdd = '';
-            if ( !oxUtils::getInstance()->seoIsActive() ) {
+            if ( !$blSeo ) {
                 $sAdd = 'recommid='.$oRecommList->getId().'&amp;listtype=recommlist'.($sAddSearch?'&amp;':'');
             }
             $sAdd .= $sAddSearch;

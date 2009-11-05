@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_seo.php 23380 2009-10-20 12:23:24Z arvydas $
+ * $Id: article_seo.php 23819 2009-11-03 16:51:02Z arvydas $
  */
 
 /**
@@ -313,6 +313,56 @@ class Article_Seo extends Object_Seo
         if ( $this->_sActCatType == 'oxtag' ) {
             return $sTag;
         }
+    }
+
+    /**
+     * Returns active vendor object if available
+     *
+     * @return oxvendor | null
+     */
+    public function getActVendor()
+    {
+        $oVendor = oxNew( 'oxvendor' );
+        if ( $this->_sActCatType == 'oxvendor' && $oVendor->load( $this->_sActCatId ) ) {
+            return $oVendor;
+        }
+    }
+
+    /**
+     * Returns active manufacturer object if available
+     *
+     * @return oxmanufacturer | null
+     */
+    public function getActManufacturer()
+    {
+        $oManufacturer = oxNew( 'oxmanufacturer' );
+        if ( $this->_sActCatType == 'oxmanufacturer' && $oManufacturer->load( $this->_sActCatId ) ) {
+            return $oManufacturer;
+        }
+    }
+
+    /**
+     * Returns list type for current seo url
+     *
+     * @return string
+     */
+    public function getListType()
+    {
+        $sListType = '';
+        switch ( $this->_sActCatType ) {
+            case 'oxvendor':
+                $sListType = 'vendor';
+                break;
+            case 'oxmanufacturer':
+                $sListType = 'manufacturer';
+                break;
+            case 'oxtag':
+                $sListType = 'tag';
+                break;
+            default:
+                break;
+        }
+        return $sListType;
     }
 
     /**

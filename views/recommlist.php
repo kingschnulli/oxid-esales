@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: recommlist.php 23795 2009-11-02 17:29:23Z arvydas $
+ * $Id: recommlist.php 23817 2009-11-03 16:42:47Z arvydas $
  */
 
 /**
@@ -40,18 +40,6 @@ class RecommList extends aList
      * @var string
      */
     protected $_sThisTemplate = 'recommlist.tpl';
-
-    /**
-     * Active recommendation's list id
-     * @var string
-     */
-    protected $_sRecommId = null;
-
-    /**
-     * Active recommendation's list
-     * @var object
-     */
-    protected $_oActiveRecommList = null;
 
     /**
      * Other recommendations list
@@ -139,8 +127,7 @@ class RecommList extends aList
 
         // list of found oxrecommlists
         $this->_aViewData['recommlists'] = $this->getRecommLists();
-        if ( $sOxid = $this->getRecommId() ) {
-            $oActiveRecommList = $this->getActiveRecommList();
+        if ( $oActiveRecommList = $this->getActiveRecommList() ) {
             if ( ( $oList = $this->getArticleList() ) && $oList->count()) {
                 $this->_iAllArtCnt = $oActiveRecommList->getArtCount();
             }
@@ -297,23 +284,6 @@ class RecommList extends aList
     }
 
     /**
-     * Template variable getter. Returns active recommlists
-     *
-     * @return oxrecommlist
-     */
-    public function getActiveRecommList()
-    {
-        if ( $this->_oActiveRecommList === null ) {
-            $this->_oActiveRecommList = false;
-            if ( $sOxid = $this->getRecommId()) {
-                $this->_oActiveRecommList = oxNew( 'oxrecommlist' );
-                $this->_oActiveRecommList->load( $sOxid);
-            }
-        }
-        return $this->_oActiveRecommList;
-    }
-
-    /**
      * Template variable getter. Returns active recommlist's items
      *
      * @deprecated use recommlist::getArticleList() instead
@@ -368,7 +338,7 @@ class RecommList extends aList
                 if ( $oList = $this->getArticleList() ) {
                     $oRecommLists  = $oActiveRecommList->getRecommListsByIds( $oList->arrayKeys());
                     //do not show the same list
-                    unset($oRecommLists[$this->getRecommId()]);
+                    unset($oRecommLists[$oActiveRecommList->getId()]);
                     $this->_oOtherRecommList = $oRecommLists;
                 }
             }
@@ -379,17 +349,13 @@ class RecommList extends aList
     /**
      * Template variable getter. Returns recommlist id
      *
+     * @deprecated use oxUBase::getActiveRecommList()->getId()
+     *
      * @return string
      */
     public function getRecommId()
     {
-        if ( $this->_sRecommId === null ) {
-            $this->_sRecommId = false;
-            if ( $sOxid = oxConfig::getParameter( 'recommid' )) {
-                $this->_sRecommId = $sOxid;
-            }
-        }
-        return $this->_sRecommId;
+       return oxConfig::getParameter( 'recommid' );
     }
 
     /**
@@ -490,7 +456,7 @@ class RecommList extends aList
     {
         if ( $this->_oSearchRecommLists === null ) {
             $this->_oSearchRecommLists = array();
-            if ( !$this->getRecommId()) {
+            if ( !$this->getActiveRecommList() ) {
                 $sSearch = $this->getRecommSearch();
                 // list of found oxrecommlists
                 $oRecommList = oxNew( 'oxrecommlist' );
@@ -633,8 +599,8 @@ class RecommList extends aList
     {
         $sAddParams = oxUBase::getAdditionalParams();
 
-        if ( $sOxid = $this->getRecommId() ) {
-            $sAddParams .= "&amp;recommid={$sOxid}";
+        if ( $oRecomm = $this->getActiveRecommList() ) {
+            $sAddParams .= "&amp;recommid=".$oRecomm->getId();
         }
 
         if ( $sSearch = $this->getRecommSearch() ) {
@@ -653,13 +619,10 @@ class RecommList extends aList
      */
     public function getLink( $iLang = null )
     {
-        if ( ( $oRecomm = $this->getActiveRecommList() ) ) {
+        if ( $oRecomm = $this->getActiveRecommList() ) {
             $sLink = $oRecomm->getLink( $iLang );
         } else {
             $sLink = oxUBase::getLink( $iLang );
-            if ( $sRecommId = $this->getRecommId() ) {
-                $sLink .= ( ( strpos( $sLink, '?' ) === false ) ? '?' : '&amp;' ) . "recommid={$sRecommId}";
-            }
         }
 
         if ( $sSearch = $this->getSearchForHtml() ) {

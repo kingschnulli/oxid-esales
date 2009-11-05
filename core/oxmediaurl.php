@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxmediaurl.php 19178 2009-05-18 13:37:46Z arvydas $
+ * $Id: oxmediaurl.php 23829 2009-11-04 10:44:33Z tomas $
  */
 
 /**
@@ -108,9 +108,9 @@ class oxMediaUrl extends oxI18n
         $sUrl = $this->oxmediaurls__oxurl->value;
         $sDesc = $this->oxmediaurls__oxdesc->value;
 
-        //http://www.youtube.com/watch?v=Fx--jNQYNgA&feature=related
+        //http://www.youtube.com/watch?v=J0oE3X4cgIc&feature=related
         //to
-        //<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/Fx--jNQYNgA&hl=en"></param><embed src="http://www.youtube.com/v/Fx--jNQYNgA&hl=en" type="application/x-shockwave-flash" width="425" height="344"></embed></object>
+        //<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/J0oE3X4cgIc&hl=en"></param><embed src="http://www.youtube.com/v/Fx--jNQYNgA&hl=en" type="application/x-shockwave-flash" width="425" height="344"></embed></object>
 
         $sYoutubeUrl = str_replace("www.youtube.com/watch?v=", "www.youtube.com/v/", $sUrl);
 

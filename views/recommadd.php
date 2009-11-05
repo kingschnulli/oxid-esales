@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: recommadd.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: recommadd.php 23836 2009-11-04 14:02:13Z arvydas $
  */
 
 /**
@@ -44,14 +44,13 @@ class RecommAdd extends Details
     protected $_aUserRecommList = null;
 
     /**
-     * Renders the view
+     * Executes oxUBase::init()
      *
-     * @return unknown
+     * @return null
      */
-    public function render()
+    public function init()
     {
-        parent::render();
-        return $this->_sThisTemplate;
+        oxUBase::init();
     }
 
     /**

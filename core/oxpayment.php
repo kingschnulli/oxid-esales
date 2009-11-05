@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxpayment.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxpayment.php 23831 2009-11-04 13:32:07Z arvydas $
  */
 
 /**
@@ -246,7 +246,13 @@ class oxPayment extends oxI18n
      */
     public function isValidPayment( $aDynvalue, $sShopId, $oUser, $dBasketPrice, $sShipSetId )
     {
+        $myConfig = $this->getConfig();
         if ( $this->oxpayments__oxid->value == 'oxempty' ) {
+            // inactive or blOtherCountryOrder is off
+            if ( !$this->oxpayments__oxactive->value || !$myConfig->getConfigParam( "blOtherCountryOrder" ) ) {
+                $this->_iPaymentError = -3;
+                return false;
+            }
             return true;
         }
 
@@ -256,7 +262,7 @@ class oxPayment extends oxI18n
             return false;
         }
 
-        $oCur = $this->getConfig()->getActShopCurrencyObject();
+        $oCur = $myConfig->getActShopCurrencyObject();
         $dBasketPrice = $dBasketPrice / $oCur->rate;
 
         if ( $sShipSetId ) {

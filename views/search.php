@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: search.php 23780 2009-11-02 13:01:28Z arvydas $
+ * $Id: search.php 23824 2009-11-04 09:29:42Z arvydas $
  */
 
 /**
@@ -233,6 +233,24 @@ class Search extends oxUBase
         $this->_processListArticles();
 
         return $this->_sThisTemplate;
+    }
+
+    /**
+     * Iterates through list articles and performs list view specific tasks:
+     *  - sets type of link whicn needs to be generated (Manufacturer link)
+     *
+     * @return null
+     */
+    protected function _processListArticles()
+    {
+        $sAddDynParams = $this->getAddUrlParams();
+        if ( $sAddDynParams && ( $aArtList = $this->getArticleList() ) ) {
+            foreach ( $aArtList as $oArticle ) {
+                // appending sen and dynamic urls
+                $oArticle->appendStdLink( $sAddDynParams );
+                $oArticle->appendLink( $sAddDynParams );
+            }
+        }
     }
 
     /**
