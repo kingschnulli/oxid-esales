@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxpayment.php 23831 2009-11-04 13:32:07Z arvydas $
+ * $Id: oxpayment.php 23857 2009-11-05 15:17:36Z arvydas $
  */
 
 /**

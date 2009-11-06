@@ -19,7 +19,7 @@
  * @package smartyPlugins
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: insert.oxid_newbasketitem.php 23250 2009-10-14 13:40:12Z alfonsas $
+ * $Id: insert.oxid_newbasketitem.php 23851 2009-11-05 12:10:32Z sarunas $
  */
 
 /*
@@ -39,7 +39,7 @@ function smarty_insert_oxid_newbasketitem($params, &$smarty)
     $iType  = $myConfig->getConfigParam( 'iNewBasketItemMessage' );
 
     // If corect type of message is expected
-    if($iType && $params['type'] && $params['type'] != $aTypes[$iType] ){
+    if ($iType && $params['type'] && ($params['type'] != $aTypes[$iType] )) {
         return '';
     }
 

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: recommlist.php 23817 2009-11-03 16:42:47Z arvydas $
+ * $Id: recommlist.php 23853 2009-11-05 13:31:13Z arvydas $
  */
 
 /**
@@ -52,12 +52,6 @@ class RecommList extends aList
      * @var array
      */
     protected $_aReviews = null;
-
-    /**
-     * Is review active
-     * @var bool
-     */
-    protected $_blReviewActive = null;
 
     /**
      * Can user rate
@@ -215,45 +209,32 @@ class RecommList extends aList
      */
     public function saveReview()
     {
-        $sReviewText = trim( ( string ) oxConfig::getParameter( 'rvw_txt', true ) );
-        $dRating     = oxConfig::getParameter( 'recommlistrating' );
-        if ( $dRating < 0 || $dRating > 5 ) {
-            $dRating = null;
-        }
+        if ( ( $oRecommList = $this->getActiveRecommList() ) && ( $oUser = $this->getUser() ) ) {
 
-        $sRLId  = oxConfig::getParameter( 'recommid' );
-        $sUserId = oxSession::getVar( 'usr' );
-
-        $oRecommList = oxNew('oxrecommlist');
-        if (!$oRecommList->load($sRLId)) {
-            return;
-        }
-
-        //save rating
-        if ( $dRating && $sUserId ) {
-            $oRating = oxNew( 'oxrating' );
-            $blRate = $oRating->allowRating( $sUserId, 'oxrecommlist', $oRecommList->getId());
-            if ( $blRate) {
-                $oRating->oxratings__oxuserid   = new oxField($sUserId);
-                $oRating->oxratings__oxtype     = new oxField('oxrecommlist', oxField::T_RAW);
-                $oRating->oxratings__oxobjectid = new oxField($sRLId);
-                $oRating->oxratings__oxrating   = new oxField($dRating);
-                $oRating->save();
-                $oRecommList->addToRatingAverage( $dRating);
-            } else {
-                $dRating = null;
+            //save rating
+            $dRating = (int) oxConfig::getParameter( 'recommlistrating' );
+            if ( $dRating >= 0 && $dRating <= 5 ) {
+                $oRating = oxNew( 'oxrating' );
+                if ( $oRating->allowRating( $oUser->getId(), 'oxrecommlist', $oRecommList->getId() ) ) {
+                    $oRating->oxratings__oxuserid   = new oxField( $oUser->getId() );
+                    $oRating->oxratings__oxtype     = new oxField( 'oxrecommlist' );
+                    $oRating->oxratings__oxobjectid = new oxField( $oRecommList->getId() );
+                    $oRating->oxratings__oxrating   = new oxField( $dRating );
+                    $oRating->save();
+                    $oRecommList->addToRatingAverage( $dRating );
+                }
             }
-        }
 
-        if ( $sReviewText && $sUserId ) {
-            $oReview = oxNew( 'oxreview' );
-            $oReview->oxreviews__oxobjectid = new oxField($sRLId);
-            $oReview->oxreviews__oxtype     = new oxField('oxrecommlist', oxField::T_RAW);
-            $oReview->oxreviews__oxtext     = new oxField($sReviewText, oxField::T_RAW);
-            $oReview->oxreviews__oxlang     = new oxField(oxLang::getInstance()->getBaseLanguage());
-            $oReview->oxreviews__oxuserid   = new oxField($sUserId);
-            $oReview->oxreviews__oxrating   = new oxField(( $dRating) ? $dRating : null);
-            $oReview->save();
+            if ( ( $sReviewText = trim( ( string ) oxConfig::getParameter( 'rvw_txt', true ) ) ) ) {
+                $oReview = oxNew( 'oxreview' );
+                $oReview->oxreviews__oxobjectid = new oxField( $oRecommList->getId() );
+                $oReview->oxreviews__oxtype     = new oxField( 'oxrecommlist' );
+                $oReview->oxreviews__oxtext     = new oxField( $sReviewText, oxField::T_RAW );
+                $oReview->oxreviews__oxlang     = new oxField( oxLang::getInstance()->getBaseLanguage() );
+                $oReview->oxreviews__oxuserid   = new oxField( $oUser->getId() );
+                $oReview->oxreviews__oxrating   = new oxField( ( $dRating ) ? $dRating : null );
+                $oReview->save();
+            }
         }
     }
 
@@ -334,13 +315,11 @@ class RecommList extends aList
     {
         if ( $this->_oOtherRecommList === null ) {
             $this->_oOtherRecommList = false;
-            if ( $oActiveRecommList = $this->getActiveRecommList() ) {
-                if ( $oList = $this->getArticleList() ) {
-                    $oRecommLists  = $oActiveRecommList->getRecommListsByIds( $oList->arrayKeys());
-                    //do not show the same list
-                    unset($oRecommLists[$oActiveRecommList->getId()]);
-                    $this->_oOtherRecommList = $oRecommLists;
-                }
+            if ( ( $oActiveRecommList = $this->getActiveRecommList() ) && ( $oList = $this->getArticleList() ) ) {
+                $oRecommLists = $oActiveRecommList->getRecommListsByIds( $oList->arrayKeys());
+                //do not show the same list
+                unset( $oRecommLists[$oActiveRecommList->getId()] );
+                $this->_oOtherRecommList = $oRecommLists;
             }
         }
         return $this->_oOtherRecommList;
@@ -367,10 +346,8 @@ class RecommList extends aList
     {
         if ( $this->_aReviews === null ) {
             $this->_aReviews = false;
-            if ( $this->isReviewActive() ) {
-                if ( $oActiveRecommList = $this->getActiveRecommList() ) {
-                    $this->_aReviews = $oActiveRecommList->getReviews();
-                }
+            if ( $this->isReviewActive() && ( $oActiveRecommList = $this->getActiveRecommList() ) ) {
+                $this->_aReviews = $oActiveRecommList->getReviews();
             }
         }
         return $this->_aReviews;
@@ -383,13 +360,7 @@ class RecommList extends aList
      */
     public function isReviewActive()
     {
-        if ( $this->_blReviewActive === null ) {
-            $this->_blReviewActive = false;
-            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadReviews' ) ) {
-                $this->_blReviewActive = true;
-            }
-        }
-        return $this->_blReviewActive;
+        return $this->getConfig()->getConfigParam( 'bl_perfLoadReviews' );
     }
 
     /**
@@ -401,11 +372,9 @@ class RecommList extends aList
     {
         if ( $this->_blRate === null ) {
             $this->_blRate = false;
-            if ( $this->isReviewActive() ) {
-                if ( $oActiveRecommList = $this->getActiveRecommList() ) {
-                    $oRating = oxNew( 'oxrating' );
-                    $this->_blRate = $oRating->allowRating( oxSession::getVar( 'usr' ), 'oxrecommlist', $oActiveRecommList->getId());
-                }
+            if ( $this->isReviewActive() && ( $oActiveRecommList = $this->getActiveRecommList() ) ) {
+                $oRating = oxNew( 'oxrating' );
+                $this->_blRate = $oRating->allowRating( oxSession::getVar( 'usr' ), 'oxrecommlist', $oActiveRecommList->getId());
             }
         }
         return $this->_blRate;
@@ -420,10 +389,8 @@ class RecommList extends aList
     {
         if ( $this->_dRatingValue === null ) {
             $this->_dRatingValue = false;
-            if ( $this->isReviewActive() ) {
-                if ( $oActiveRecommList = $this->getActiveRecommList() ) {
-                    $this->_dRatingValue = round( $oActiveRecommList->oxrecommlists__oxrating->value, 1);
-                }
+            if ( $this->isReviewActive() && ( $oActiveRecommList = $this->getActiveRecommList() ) ) {
+                $this->_dRatingValue = round( $oActiveRecommList->oxrecommlists__oxrating->value, 1);
             }
         }
         return $this->_dRatingValue;
@@ -438,10 +405,8 @@ class RecommList extends aList
     {
         if ( $this->_iRatingCnt === null ) {
             $this->_iRatingCnt = false;
-            if ( $this->isReviewActive() ) {
-                if ( $oActiveRecommList = $this->getActiveRecommList() ) {
-                    $this->_iRatingCnt = $oActiveRecommList->oxrecommlists__oxratingcnt->value;
-                }
+            if ( $this->isReviewActive() && ( $oActiveRecommList = $this->getActiveRecommList() ) ) {
+                $this->_iRatingCnt = $oActiveRecommList->oxrecommlists__oxratingcnt->value;
             }
         }
         return $this->_iRatingCnt;
@@ -457,10 +422,9 @@ class RecommList extends aList
         if ( $this->_oSearchRecommLists === null ) {
             $this->_oSearchRecommLists = array();
             if ( !$this->getActiveRecommList() ) {
-                $sSearch = $this->getRecommSearch();
                 // list of found oxrecommlists
                 $oRecommList = oxNew( 'oxrecommlist' );
-                $oList = $oRecommList->getSearchRecommLists( $sSearch );
+                $oList = $oRecommList->getSearchRecommLists( $this->getRecommSearch() );
                 if ( $oList && $oList->count() ) {
                     $this->_oSearchRecommLists = $oList;
                 }
@@ -563,10 +527,11 @@ class RecommList extends aList
     public function generatePageNavigationUrl()
     {
         if ( ( oxUtils::getInstance()->seoIsActive() && ( $oRecomm = $this->getActiveRecommList() ) ) ) {
-            return $oRecomm->getLink();
+            $sUrl = $oRecomm->getLink();
         } else {
-            return oxUBase::generatePageNavigationUrl();
+            $sUrl = oxUBase::generatePageNavigationUrl();
         }
+        return $sUrl;
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_basket.php 23810 2009-11-03 13:45:24Z sarunas $
+ * $Id: oxcmp_basket.php 23850 2009-11-05 12:10:01Z sarunas $
  */
 
 /**
@@ -114,6 +114,11 @@ class oxcmp_basket extends oxView
                 // passing article
                 oxSession::setVar( '_newitem', $oNewItem );
             }
+        }
+
+        if ( $this->getConfig()->getConfigParam( 'iNewBasketItemMessage' ) == 3 ) {
+            // redirect to basket
+            return $this->_getRedirectUrl();
         }
     }
 

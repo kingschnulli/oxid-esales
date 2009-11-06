@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxbasket.php 23857 2009-11-05 15:17:36Z arvydas $
  */
 
 /**
@@ -924,14 +924,24 @@ class oxBasket extends oxSuperCfg
      */
     protected function _applyDiscounts()
     {
-        $dBruttoPrice = $this->_oDiscountProductsPriceList->getBruttoSum();
-        $this->_aDiscountedVats = $this->_oDiscountProductsPriceList->getVatInfo();
+        $dBruttoPrice = 0;
+        $this->_aDiscountedVats = array();
+        if ( $oPriceList = $this->getDiscountProductsPrice() ) {
+            $dBruttoPrice = $oPriceList->getBruttoSum();
+            $this->_aDiscountedVats = $oPriceList->getVatInfo();
+        }
 
         //apply discounts for brutto price
-        $dDiscountedBruttoPrice = $dBruttoPrice - $this->_oTotalDiscount->getBruttoPrice() - $this->_oVoucherDiscount->getBruttoPrice();
+        $dDiscountedBruttoPrice = $this->getDiscountedProductsBruttoPrice();
+        $oTotalDiscount   = $this->getTotalDiscount();
+        $oVoucherDiscount = $this->getVoucherDiscount();
 
         //apply discount for VATs
-        if ( $dBruttoPrice && ( $this->_oTotalDiscount->getBruttoPrice() || $this->_oVoucherDiscount->getBruttoPrice() )) {
+        if ( $dBruttoPrice &&
+             ( ( $oTotalDiscount && $oTotalDiscount->getBruttoPrice() ) ||
+               ( $oVoucherDiscount && $oVoucherDiscount->getBruttoPrice() )
+             )
+           ) {
             $dPercent = ( $dDiscountedBruttoPrice / $dBruttoPrice) * 100;
             foreach ( $this->_aDiscountedVats as $sKey => $dVat ) {
                 $this->_aDiscountedVats[$sKey] = oxPrice::percent( $dVat, $dPercent);
@@ -2241,15 +2251,7 @@ class oxBasket extends oxSuperCfg
      */
     public function getPriceForPayment()
     {
-        $dPrice = 0;
-
-        if ( $oProductsPrice = $this->getDiscountProductsPrice() ) {
-            $dPrice = $oProductsPrice->getBruttoSum();
-        }
-
-        if ( $oVoucherPrice = $this->getVoucherDiscount() ) {
-            $dPrice -= $oVoucherPrice->getBruttoPrice();
-        }
+        $dPrice = $this->getDiscountedProductsBruttoPrice();
 
         // adding delivery price to final price
         if ( $oDeliveryPrice = $this->_aCosts['oxdelivery'] ) {
@@ -2266,30 +2268,20 @@ class oxBasket extends oxSuperCfg
      */
     public function getDiscountedProductsBruttoPrice()
     {
-        $dTotalProdPrice = $this->getProductsPrice()->getBruttoSum();
-
-        // substracting product specific discounts
-        if ( is_array( $aDiscounts = $this->getDiscounts() )) {
-            foreach ( $aDiscounts as $oDiscount ) {
-                // skipping bundle discounts
-                if ( $oDiscount->sType == 'itm' ) {
-                    continue;
-                }
-                $dTotalProdPrice -= $oDiscount->dDiscount;
-            }
+        if ( $oProductsPrice = $this->getDiscountProductsPrice() ) {
+            $dPrice = $oProductsPrice->getBruttoSum();
         }
 
         // substracting total discount
         if ( $oPrice = $this->getTotalDiscount() ) {
-            $dTotalProdPrice -= $oPrice->getBruttoPrice();
+            $dPrice -= $oPrice->getBruttoPrice();
         }
 
-        // substracting voucher discount
-        if ( $oPrice = $this->getVoucherDiscount() ) {
-            $dTotalProdPrice -= $oPrice->getBruttoPrice();
+        if ( $oVoucherPrice = $this->getVoucherDiscount() ) {
+            $dPrice -= $oVoucherPrice->getBruttoPrice();
         }
 
-        return $dTotalProdPrice;
+        return $dPrice;
     }
 
     /**
