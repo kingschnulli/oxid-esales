@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: login.php 17622 2009-03-26 14:02:31Z rimvydas.paskevicius $
+ * $Id: login.php 23867 2009-11-06 10:05:51Z rimvydas.paskevicius $
  */
 
 /**
@@ -109,9 +109,9 @@ class Login extends oxAdminView
     {
         $myUtilsServer = oxUtilsServer::getInstance();
 
-        $user    = oxConfig::getParameter(  'user' );
-        $pwd     = oxConfig::getParameter(  'pwd' );
-        $profile = oxConfig::getParameter(  'profile' );
+        $user    = oxConfig::getParameter( 'user', true );
+        $pwd     = oxConfig::getParameter( 'pwd', true );
+        $profile = oxConfig::getParameter( 'profile' );
 
         try { // trying to login
             $oUser = oxNew( "oxuser" );

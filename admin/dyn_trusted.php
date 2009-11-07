@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: dyn_trusted.php 22945 2009-10-05 15:40:36Z alfonsas $
+ * $Id: dyn_trusted.php 23868 2009-11-06 10:32:30Z vilma $
  */
 
 
@@ -73,7 +73,8 @@ class dyn_trusted extends Shop_Config
                 }
             }
         }
-        if ( $blNotEmpty && ( count( array_unique( $aConfStrs ) ) < count( $aConfStrs ) ) ) {
+        $aTSIds = array_filter($aConfStrs);
+        if ( $blNotEmpty && ( count( array_unique( $aTSIds ) ) < count( $aTSIds ) ) ) {             
             $this->_aViewData["errorsaving"] = 1;
             $blSave = false;
             $this->_aViewData["aShopID_TrustedShops"] = null;
