@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23814 2009-11-03 15:55:49Z tomas $
+ * $Id: lang.php 23885 2009-11-09 10:00:40Z vilma $
  */
 
 /*
@@ -437,8 +437,8 @@ $aLang = array(
 'ARTICLE_RIGHTS_SETGROUPS_BUYABLE'              => 'Exclusively buyable by User Group',
 'ARTICLE_RIGHTS_SETGROUPS_VISIBLE'              => 'Exclusively visible to User Group',
 'ARTICLE_RIGHTS_ALLGROUPS'                      => 'All User Groups',
-'ARTICLE_RIGHTS_ASSIGNVISIBLE'                  => 'Assign User Groups ( Exclusively visible )',
-'ARTICLE_RIGHTS_ASSIGNBUYABLE'                  => 'Assign User Groups ( Exclusively buyable )',
+'ARTICLE_RIGHTS_ASSIGNVISIBLE'                  => 'Assign User Groups (Exclusively visible)',
+'ARTICLE_RIGHTS_ASSIGNBUYABLE'                  => 'Assign User Groups (Exclusively buyable)',
 'ARTICLE_STOCK_AMOUNTPRICE_ABS'                 => 'abs',
 'ARTICLE_STOCK_AMOUNTPRICE_DISCOUNT'            => '% Discount',
 'ARTICLE_STOCK_AMOUNTPRICE_PRICE'               => 'Price',
@@ -1208,7 +1208,7 @@ $aLang = array(
 'SHOP_CONFIG_DETAILIMAGESIZE'                   => 'Product Pictures Size (width*height)',
 'SHOP_CONFIG_DELIVERYCOSTS'                     => 'Calculate default Shipping costs when User is not logged in yet',
 'SHOP_CONFIG_DEFAULTVAT'                        => 'Default VAT for all Products',
-'SHOP_CONFIG_DEFAULTLANGUAGE'                   => 'Default Language ( 0, 1, 2...) - 0 for German, 1 for English',
+'SHOP_CONFIG_DEFAULTLANGUAGE'                   => 'Default Language (0, 1, 2...) - 0 for German, 1 for English',
 'SHOP_CONFIG_EXCLUDENONMATERIALPRODUCTS'        => "Don't consider intangible Products (e.g. Gift Certificates) in Shipping Costs Calculation",
 'SHOP_CONFIG_ENTERNETPRICE'                     => 'Product and Gift Wrapping prices entered/displayed in Admin are Net Prices',
 'SHOP_CONFIG_ICONSIZE'                          => 'Icon Size (width*height)',

@@ -19,7 +19,7 @@
  * @package main
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23719 2009-10-27 14:42:28Z vilma $
+ * $Id: lang.php 23885 2009-11-09 10:00:40Z vilma $
  */
 
 
@@ -919,7 +919,7 @@ $aLang = array(
 'REGISTER_FORGOTPWD'                              => "Passwort vergessen?",
 'REGISTER_CLICKHERE'                              => "KLICKEN SIE HIER!",
 'REGISTER_ERRADDRESSUNKNOWN'                      => "Fehler: Adresse unbekannt!",
-'REGISTER_ERRMINLENGTH'                           => "Fehler: Passwort zu kurz! ( Mind. 6 Zeichen )",
+'REGISTER_ERRMINLENGTH'                           => "Fehler: Passwort zu kurz! (Mind. 6 Zeichen)",
 'REGISTER_OPENACCOUNT'                            => "Neues Konto eröffnen",
 'REGISTER_ACCOUNTINFO'                            => "Kontoinformationen",
 'REGISTER_COMPLETEMARKEDFIELDS'                   => '(Felder mit einem <span class="req">*</span> müssen ausgefüllt werden)',
@@ -1097,7 +1097,7 @@ $aLang = array(
 'USER_ERRINVALIDEMAIL2'                           => "Fehler: Keine gültige E-Mail-Adresse!",
 'USER_ERRALREADYREGISTERED2'                      => "Fehler: Sie sind bereits registriert! Bitte geben Sie das korrekte Passwort ein.",
 'USER_ERRUNKNOWNADDRESS2'                         => "Fehler: Adresse unbekannt!",
-'USER_ERRMINPWDLENGTH'                            => "Fehler: Passwort zu kurz! ( Mind. 6 Zeichen )",
+'USER_ERRMINPWDLENGTH'                            => "Fehler: Passwort zu kurz! (Mind. 6 Zeichen)",
 'USER_LOGIN3'                                     => "Anmeldung",
 'USER_ENTEREMAILANDPWD'                           => "Bitte geben Sie Ihre E-Mail-Adresse und ein Passwort ein.",
 'USER_RECEIVECONFIRMATION'                        => "Sie erhalten eine Anmeldebestätigung mit Ihren Daten, die Sie sorgfältig aufbewahren sollten.",

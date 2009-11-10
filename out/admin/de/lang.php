@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23814 2009-11-03 15:55:49Z tomas $
+ * $Id: lang.php 23885 2009-11-09 10:00:40Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -432,8 +432,8 @@ $aLang = array(
 'ARTICLE_RIGHTS_SETGROUPS_BUYABLE'              => 'Ausschließlich kaufbar für die Benutzergruppe ',
 'ARTICLE_RIGHTS_SETGROUPS_VISIBLE'              => 'Ausschließlich sichtbar für die Benutzergruppe',
 'ARTICLE_RIGHTS_ALLGROUPS'                      => 'Alle Benutzergruppen',
-'ARTICLE_RIGHTS_ASSIGNVISIBLE'                  => 'Benutzergruppen zuordnen ( Ausschließlich sichtbar)',
-'ARTICLE_RIGHTS_ASSIGNBUYABLE'                  => 'Benutzergruppen zuordnen ( Ausschließlich kaufbar)',
+'ARTICLE_RIGHTS_ASSIGNVISIBLE'                  => 'Benutzergruppen zuordnen (Ausschließlich sichtbar)',
+'ARTICLE_RIGHTS_ASSIGNBUYABLE'                  => 'Benutzergruppen zuordnen (Ausschließlich kaufbar)',
 'ARTICLE_STOCK_AMOUNTPRICE_ABS'                 => 'abs',
 'ARTICLE_STOCK_AMOUNTPRICE_DISCOUNT'            => '% Rabatt',
 'ARTICLE_STOCK_AMOUNTPRICE_PRICE'               => 'Preis',

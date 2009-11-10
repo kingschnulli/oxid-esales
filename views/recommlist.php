@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: recommlist.php 23853 2009-11-05 13:31:13Z arvydas $
+ * $Id: recommlist.php 23882 2009-11-09 09:42:29Z vilma $
  */
 
 /**
@@ -506,7 +506,11 @@ class RecommList extends aList
      */
     public function getSearchForHtml()
     {
-        return oxConfig::getParameter( 'searchrecomm' );
+        // #M1450 if active recommlist is loaded return it's title
+    	if ( $oActiveRecommList = $this->getActiveRecommList()) {
+            return $oActiveRecommList->oxrecommlists__oxtitle->value;
+        }
+    	return oxConfig::getParameter( 'searchrecomm' );
     }
 
     /**
@@ -589,8 +593,8 @@ class RecommList extends aList
         } else {
             $sLink = oxUBase::getLink( $iLang );
         }
-
-        if ( $sSearch = $this->getSearchForHtml() ) {
+        $sSearch = oxConfig::getParameter( 'searchrecomm' );
+        if ( $sSearch ) {
             $sLink .= ( ( strpos( $sLink, '?' ) === false ) ? '?' : '&amp;' ) . "searchrecomm={$sSearch}";
         }
 
