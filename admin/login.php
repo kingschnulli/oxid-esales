@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: login.php 23867 2009-11-06 10:05:51Z rimvydas.paskevicius $
+ * $Id: login.php 23891 2009-11-09 13:44:39Z rimvydas.paskevicius $
  */
 
 /**
@@ -68,6 +68,7 @@ class Login extends oxAdminView
         //#533 user profile
         $this->addTplParam( "profiles", oxUtils::getInstance()->loadAdminProfile($myConfig->getConfigParam( 'aInterfaceProfiles' )));
 
+        /*
         // #656 add admin languages
         $aLanguages = array();
         $sSourceDir = $myConfig->getConfigParam('sShopDir') . $myConfig->getTemplateBase( true );
@@ -76,8 +77,6 @@ class Login extends oxAdminView
 
         // setting template language ..
         $aLangParams = $myConfig->getConfigParam('aLanguageParams');
-
-        $aLangArr = oxLang::getInstance()->getLanguageArray();
 
         $handle = opendir( $sSourceDir);
         while ( false !== ( $file = readdir( $handle ) ) ) {
@@ -95,6 +94,9 @@ class Login extends oxAdminView
                     $aLanguages[$iLangNr] = $oLang;
             }
         }
+        */
+
+        $aLanguages = $this->_getAvailableLanguages();
         $this->addTplParam( "aLanguages", $aLanguages);
 
         return "login.tpl";
@@ -174,5 +176,60 @@ class Login extends oxAdminView
     public function getViewId()
     {
         return strtolower( get_class( $this ) );
+    }
+
+    /**
+     * Get available admin interface languages
+     *
+     * @return array
+     */
+    protected function _getAvailableLanguages()
+    {
+        $myConfig = $this->getConfig();
+
+        // #656 add admin languages
+        $aLanguages = array();
+        $sSourceDir = $myConfig->getConfigParam('sShopDir') . $myConfig->getTemplateBase( true );
+        $iDefLangCache = oxUtilsServer::getInstance()->getOxCookie('oxidadminlanguage');
+        $sBrowserLang = $this->_getBrowserLanguage();
+
+        // setting template language ..
+        $aLangParams = $myConfig->getConfigParam('aLanguageParams');
+
+        $handle = opendir( $sSourceDir );
+        while ( false !== ( $file = readdir( $handle ) ) ) {
+            $sLangName = "";
+            $iLangNr = 0;
+
+            if ( is_dir("$sSourceDir/$file") && file_exists("$sSourceDir/$file/lang.php") ) {
+                    include "$sSourceDir/$file/lang.php";
+                    $oLang = new stdClass();
+                    $oLang->sValue = $sLangName;
+
+                    if ( is_null($iDefLangCache) || $iDefLangCache == "" ) {
+                        $oLang->blSelected  = ( strtolower($file) == $sBrowserLang );
+                    } else {
+                        $oLang->blSelected  = ( $iLangNr == $iDefLangCache );
+                    }
+
+                    if ( isset($aLangParams[$file]['baseId']) ) {
+                        $iLangNr = $aLangParams[$file]['baseId'];
+                    }
+
+                    $aLanguages[$iLangNr] = $oLang;
+            }
+        }
+
+        return $aLanguages;
+    }
+
+    /**
+     * Get detected user browser language abbervation
+     *
+     * @return string
+     */
+    protected function _getBrowserLanguage()
+    {
+        return strtolower( substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2) );
     }
 }
