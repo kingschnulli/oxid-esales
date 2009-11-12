@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 23319 2009-10-16 14:03:21Z arvydas $
+ * $Id: oxseoencoder.php 23938 2009-11-11 09:29:53Z vilma $
  */
 
 /**
@@ -85,6 +85,13 @@ class oxSeoEncoder extends oxSuperCfg
      * @var array
      */
     protected $_aSeoCache = array();
+
+    /**
+     * Url fixed state cache
+     *
+     * @return array
+     */
+    protected $_aFixedCache = array();
 
     /**
      * Singleton method
@@ -198,6 +205,8 @@ class oxSeoEncoder extends oxSuperCfg
      * Returns string for SEO url with specific parameters (language,
      * currency and active shop)
      *
+     * @deprecated use oxUtilsUrl::getAddUrlParams()
+     *
      * @return string
      */
     protected function _getAddParams()
@@ -216,20 +225,27 @@ class oxSeoEncoder extends oxSuperCfg
      * @param integer $iCur     shop currency
      * @param mixed   $iActShop active shop id
      *
+     * @deprecated use oxUtilsUrl::getAddUrlParams()
+     *
      * @return string
      */
     protected function _getAddParamsFnc( $iCur, $iActShop )
     {
-        // according to new functionality we don't need this ??
-        $this->_sAddParams = '';
-        $sSep = '?';
-        if ( $iCur ) {
-            $this->_sAddParams .= $sSep . 'cur=' . $iCur;
-            $sSep = '&amp;';
+        $sParams = '';
+        if ( count( $aParams = oxUtilsUrl::getInstance()->getAddUrlParams() ) ) {
+            foreach ( $aParams as $sName => $sValue ) {
+                if ( $sValue ) {
+                    if ( $sParams ) {
+                        $sParams .= "&amp;";
+                    }
+                    $sParams .= $sName . "=" . $sValue;
+                }
+            }
+            if ( $sParams ) {
+                $sParams = '?'.$sParams;
+            }
         }
-
-
-        return $this->_sAddParams;
+        return $sParams;
     }
 
     /**
@@ -307,7 +323,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _getFullUrl( $sSeoUrl, $iLang = null)
     {
-        $sFullUrl = $this->getConfig()->getShopUrl( $iLang ) . $sSeoUrl . $this->_getAddParams();
+        $sFullUrl = $this->getConfig()->getShopUrl( $iLang ) . $sSeoUrl;
         return $this->getSession()->processUrl( $sFullUrl );
     }
 
@@ -437,25 +453,28 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _isFixed( $sType, $sId, $iLang, $iShopId = null, $sParams = null, $blStrictParamsCheck = true)
     {
-        $oDb = oxDb::getDb( true );
         if ( $iShopId === null ) {
             $iShopId = $this->getConfig()->getShopId();
         }
-
         $iLang = (int) $iLang;
 
-        $sQ = "select oxfixed from oxseo where oxtype = ".$oDb->quote( $sType )."
-               and oxobjectid = ".$oDb->quote( $sId ) ." and oxshopid = ".$oDb->quote( $iShopId )." and oxlang = '{$iLang}'";
+        if ( !isset( $this->_aFixedCache[$sType][$sShopId][$sId][$iLang] ) ) {
+            $oDb = oxDb::getDb( true );
 
-        $sParams = $sParams ? $sParams : '';
-        if ( $sParams && $blStrictParamsCheck ) {
-            $sQ .= " and oxparams = '{$sParams}'";
-        } else {
-            $sQ .= " order by oxparams = '{$sParams}' desc";
+            $sQ = "select oxfixed from oxseo where oxtype = ".$oDb->quote( $sType )."
+                   and oxobjectid = ".$oDb->quote( $sId ) ." and oxshopid = ".$oDb->quote( $iShopId )." and oxlang = '{$iLang}'";
+
+            $sParams = $sParams ? $oDb->quote( $sParams ) : "''";
+            if ( $sParams && $blStrictParamsCheck ) {
+                $sQ .= " and oxparams = {$sParams}";
+            } else {
+                $sQ .= " order by oxparams = {$sParams} desc";
+            }
+            $sQ .= " limit 1";
+
+            $this->_aFixedCache[$sType][$sShopId][$sId][$iLang] = (bool) $oDb->getOne( $sQ );
         }
-        $sQ .= " limit 1";
-
-        return (bool) $oDb->getOne( $sQ );
+        return $this->_aFixedCache[$sType][$sShopId][$sId][$iLang];
     }
 
     /**
@@ -714,7 +733,7 @@ class oxSeoEncoder extends oxSuperCfg
     protected function _trimUrl( $sUrl, $iLang = null )
     {
         $sUrl = str_replace( $this->getConfig()->getShopURL( $iLang ), '', $sUrl );
-        return preg_replace( '/(force_)?sid=[a-z0-9\.]+&?(amp;)?/i', '', $sUrl );
+        return preg_replace( '/(force_)?(admin_)?sid=[a-z0-9\.]+&?(amp;)?/i', '', $sUrl );
     }
 
     /**
@@ -845,13 +864,11 @@ class oxSeoEncoder extends oxSuperCfg
         if ( ( $sOldSeoUrl = $this->_loadFromDb( $sType, $oObject->getId(), $iLang, $iShopId, $sParams ) ) ) {
             if ( $sOldSeoUrl === $sSeoUrl ) {
                 return $sSeoUrl;
-            } else {
-                $this->_copyToHistory( $oObject->getId(), $iShopId, $iLang, $sType );
             }
+            $this->_copyToHistory( $oObject->getId(), $iShopId, $iLang, $sType );
         }
 
         $this->_saveToDb( $sType, $oObject->getId(), $sStdUrl, $sSeoUrl, $iLang, $iShopId, (int) $blFixed, false, false, $sParams );
-
         return $sSeoUrl;
     }
 
@@ -1044,7 +1061,7 @@ class oxSeoEncoder extends oxSuperCfg
     public function getMetaData( $sObjectId, $sMetaType, $iShopId = null, $iLang = null )
     {
         $iShopId = ( !isset( $iShopId ) ) ? $this->getConfig()->getShopId():$iShopId;
-        $iLang   = ( !isset( $iLang ) ) ? oxLang::getInstance()->getTplLanguage():((int)$iLang);
+        $iLang   = ( !isset( $iLang ) ) ? oxLang::getInstance()->getTplLanguage():((int) $iLang);
 
         $oDb = oxDb::getDb();
         return $oDb->getOne( "select {$sMetaType} from oxseo where oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxshopid = " . $oDb->quote( $iShopId )." and oxlang = '{$iLang}' order by oxparams" );

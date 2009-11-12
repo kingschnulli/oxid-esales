@@ -37,7 +37,7 @@ class oxSeoEncoderRecomm extends oxSeoEncoder
     /**
      * Singleton method
      *
-     * @return oxseoencoder
+     * @return oxSeoEncoderRecomm
      */
     public static function getInstance()
     {
@@ -73,15 +73,16 @@ class oxSeoEncoderRecomm extends oxSeoEncoder
     public function getRecommUri( $oRecomm, $iLang = null )
     {
         if ( !( $sSeoUrl = $this->_loadFromDb( 'dynamic', $oRecomm->getId(), $iLang ) ) ) {
+            $myConfig = $this->getConfig();
 
             // fetching part of base url
-            $sSeoUrl = $this->_getStaticUri( $oRecomm->getBaseLink( $iLang ), $this->getConfig()->getShopId(), $iLang ) . $this->_prepareTitle( $oRecomm->oxrecommlists__oxtitle->value );
+            $sSeoUrl = $this->_getStaticUri( $oRecomm->getBaseStdLink( $iLang, false ), $myConfig->getShopId(), $iLang ) . $this->_prepareTitle( $oRecomm->oxrecommlists__oxtitle->value );
 
             // creating unique
             $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $oRecomm->getId(), $iLang );
 
             // inserting
-            $this->_saveToDb( 'dynamic', $oRecomm->getId(), $oRecomm->getStdLink( $iLang ), $sSeoUrl, $iLang, $this->getConfig()->getShopId() );
+            $this->_saveToDb( 'dynamic', $oRecomm->getId(), $oRecomm->getStdLink( $iLang ), $sSeoUrl, $iLang, $myConfig->getShopId() );
         }
 
         return $sSeoUrl;

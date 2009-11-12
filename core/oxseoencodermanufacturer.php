@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencodermanufacturer.php 23796 2009-11-02 17:29:52Z arvydas $
+ * $Id: oxseoencodermanufacturer.php 23919 2009-11-10 15:35:44Z arvydas $
  */
 
 /**
@@ -46,12 +46,20 @@ class oxSeoEncoderManufacturer extends oxSeoEncoder
     /**
      * Singleton method
      *
-     * @return oxseoencoder
+     * @return oxSeoEncoderManufacturer
      */
     public static function getInstance()
     {
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            static $inst = array();
+            self::$_instance = $inst[oxClassCacheKey()];
+        }
+
         if (!self::$_instance) {
             self::$_instance = oxNew("oxSeoEncoderManufacturer");
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                $inst[oxClassCacheKey()] = self::$_instance;
+            }
         }
 
         if ( defined( 'OXID_PHP_UNIT' ) ) {
@@ -119,11 +127,11 @@ class oxSeoEncoderManufacturer extends oxSeoEncoder
      * @param oxManufacturer $oManufacturer manufacturer object
      * @param int            $iPage         page tu prepare number
      * @param int            $iLang         language
-     * @param bool           $blFixed       fixed url marker (default is false)
+     * @param bool           $blFixed       fixed url marker (default is null)
      *
      * @return string
      */
-    public function getManufacturerPageUrl( $oManufacturer, $iPage, $iLang = null, $blFixed = false )
+    public function getManufacturerPageUrl( $oManufacturer, $iPage, $iLang = null, $blFixed = null )
     {
         if (!isset($iLang)) {
             $iLang = $oManufacturer->getLanguage();
@@ -134,6 +142,9 @@ class oxSeoEncoderManufacturer extends oxSeoEncoder
         $sStdUrl = $this->_trimUrl( $sStdUrl, $iLang );
         $sSeoUrl = $this->getManufacturerUri( $oManufacturer, $iLang ) . $sParams . "/";
 
+        if ( $blFixed === null ) {
+            $blFixed = $this->_isFixed( 'oxmanufacturers', $oManufacturer->getId(), $iLang );
+        }
         return $this->_getFullUrl( $this->_getPageUri( $oManufacturer, 'oxmanufacturers', $sStdUrl, $sSeoUrl, $sParams, $iLang, $blFixed ), $iLang );
     }
 

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcontent.php 23802 2009-11-03 09:31:29Z arvydas $
+ * $Id: oxcontent.php 23919 2009-11-10 15:35:44Z arvydas $
  */
 
 /**
@@ -53,11 +53,18 @@ class oxContent extends oxI18n implements oxIUrl
     protected $_aSkipSaveFields = array( 'oxtimestamp' );
 
     /**
-     * noparamlink link to this content
+     * Seo article urls for languages
+     *
+     * @var array
+     */
+    protected $_aSeoUrls = array();
+
+    /**
+     * Content parent category id
      *
      * @var string
      */
-    protected $_sNoparamlink = null;
+    protected $_sParentCatId = null;
 
     /**
      * expanded state of a content category
@@ -146,36 +153,75 @@ class oxContent extends oxI18n implements oxIUrl
     }
 
     /**
-     * getLink returns link for this content in the frontend
+     * Returns raw content seo url
      *
-     * @param integer $iLang language
+     * @param int $iLang language id
      *
-     * @access public
      * @return string
      */
-    public function getLink($iLang = null)
+    public function getBaseSeoLink( $iLang )
     {
-        if (isset($iLang)) {
-            $iLang = (int) $iLang;
-            if ($iLang == (int) $this->getLanguage()) {
-                $iLang = null;
-            }
-        }
-        if ( $this->_sNoparamlink === null || isset($iLang) ) {
-            if ( oxUtils::getInstance()->seoIsActive() ) {
-                $sNoparamlink = oxSeoEncoderContent::getInstance()->getContentUrl( $this, $iLang );
-            } else {
-                $sNoparamlink = $this->getStdLink($iLang);
-            }
+        return oxSeoEncoderContent::getInstance()->getContentUrl( $this, $iLang );
+    }
 
-            if (isset($iLang)) {
-                return $sNoparamlink;
-            } else {
-                $this->_sNoparamlink = $sNoparamlink;
-            }
+    /**
+     * getLink returns link for this content in the frontend
+     *
+     * @param int $iLang language id [optional]
+     *
+     * @return string
+     */
+    public function getLink( $iLang = null )
+    {
+        if ( !oxUtils::getInstance()->seoIsActive() ) {
+            return $this->getStdLink( $iLang );
         }
 
-        return $this->_sNoparamlink;
+        if ( $iLang === null ) {
+            $iLang = $this->getLanguage();
+        }
+
+        if ( !isset( $this->_aSeoUrls[$iLang] ) ) {
+            $this->_aSeoUrls[$iLang] = $this->getBaseSeoLink( $iLang );
+        }
+
+        return oxUtilsUrl::getInstance()->processSeoUrl( $this->_aSeoUrls[$iLang] );
+    }
+
+    /**
+     * Returns base dynamic url: shopurl/index.php?cl=details
+     *
+     * @param int  $iLang   language id
+     * @param bool $blAddId add current object id to url or not
+     *
+     * @return string
+     */
+    public function getBaseStdLink( $iLang, $blAddId = true )
+    {
+        $sUrl = $this->getConfig()->getShopHomeUrl( $iLang, false ) . "cl=content";
+        if ( $blAddId ) {
+            $sUrl .= "&amp;oxcid=".$this->getId();
+            // adding parent category if if available
+            if ( $this->_sParentCatId !== false &&
+                 $this->oxcontents__oxcatid->value && $this->oxcontents__oxcatid->value != 'oxrootid' ) {
+
+                if ( $this->_sParentCatId === null ) {
+                    $this->_sParentCatId = false;
+                    $oDb = oxDb::getDb();
+                    $sParentId = $oDb->getOne( "select oxparentid from oxcategories where oxid = ".$oDb->quote( $this->oxcontents__oxcatid->value ) );
+                    if ( $sParentId && 'oxrootid' != $sParentId ) {
+                        $this->_sParentCatId = $sParentId;
+                    }
+                }
+
+                if ( $this->_sParentCatId ) {
+                    $sUrl .= "&amp;cnid=".$this->_sParentCatId;
+                }
+            }
+        }
+
+        //always returns shop url, not admin
+        return $sUrl;
     }
 
     /**
@@ -188,22 +234,11 @@ class oxContent extends oxI18n implements oxIUrl
      */
     public function getStdLink( $iLang = null, $aParams = array() )
     {
-        $sAdd = '';
+        if ( $iLang === null ) {
+            $iLang = $this->getLanguage();
+        }
 
-        if (isset($iLang) && !oxUtils::getInstance()->seoIsActive()) {
-            $iLang = (int) $iLang;
-            if ($iLang != (int) $this->getLanguage()) {
-                $sAdd .= "&amp;lang={$iLang}";
-            }
-        }
-        if ($this->oxcontents__oxcatid->value && $this->oxcontents__oxcatid->value != 'oxrootid') {
-            $oDb = oxDb::getDb();
-            $sParentId = $oDb->getOne("select oxparentid from oxcategories where oxid = ".$oDb->quote($this->oxcontents__oxcatid->value));
-            if ($sParentId && 'oxrootid' != $sParentId) {
-                $sAdd .= "&amp;cnid=$sParentId";
-            }
-        }
-        return $this->getSession()->processUrl( $this->getConfig()->getShopHomeUrl() . "cl=content&amp;oxcid=" . $this->getId() . $sAdd );
+        return oxUtilsUrl::getInstance()->processStdUrl( $this->getBaseStdLink( $iLang ), $aParams, $iLang, $iLang != $this->getLanguage() );
     }
 
     /**

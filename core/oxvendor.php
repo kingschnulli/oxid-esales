@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxvendor.php 23802 2009-11-03 09:31:29Z arvydas $
+ * $Id: oxvendor.php 23930 2009-11-10 17:29:24Z arvydas $
  */
 
 /**
@@ -73,6 +73,13 @@ class oxVendor extends oxI18n implements oxIUrl
      * @var int
      */
     protected $_blHasVisibleSubCats;
+
+    /**
+     * Seo article urls for languages
+     *
+     * @var array
+     */
+    protected $_aSeoUrls = array();
 
     /**
      * Class constructor, initiates parent constructor (parent::oxI18n()).
@@ -203,65 +210,76 @@ class oxVendor extends oxI18n implements oxIUrl
     }
 
     /**
+     * Returns raw content seo url
+     *
+     * @param int $iLang language id
+     * @param int $iPage page number [optional]
+     *
+     * @return string
+     */
+    public function getBaseSeoLink( $iLang, $iPage = 0 )
+    {
+        $oEncoder = oxSeoEncoderVendor::getInstance();
+        if ( !$iPage ) {
+            return $oEncoder->getVendorUrl( $this, $iLang );
+        }
+        return $oEncoder->getVendorPageUrl( $this, $iPage, $iLang );
+    }
+
+    /**
      * Returns vendor link Url
      *
-     * @param integer $iLang language
+     * @param int $iLang language id [optional]
      *
      * @return string
      */
     public function getLink( $iLang = null )
     {
-        if ( isset( $iLang ) ) {
-            $iLang = (int) $iLang;
-            if ( $iLang == (int) $this->getLanguage() ) {
-                $iLang = null;
-            }
+        if ( !oxUtils::getInstance()->seoIsActive() ) {
+            return $this->getStdLink( $iLang );
         }
 
-        if ( $this->link === null || isset( $iLang ) ) {
-
-            if ( oxUtils::getInstance()->seoIsActive() ) {
-                $sLink = oxSeoEncoderVendor::getInstance()->getVendorUrl( $this, $iLang );
-            } else {
-                $sLink = $this->getStdLink( $iLang );
-            }
-
-            if ( isset( $iLang ) ) {
-                return $sLink;
-            }
-
-            $this->link = $sLink;
+        if ( $iLang === null ) {
+            $iLang = $this->getLanguage();
         }
 
-        return $this->link;
+        if ( !isset( $this->_aSeoUrls[$iLang] ) ) {
+            $this->_aSeoUrls[$iLang] = $this->getBaseSeoLink( $iLang );
+        }
+
+        return oxUtilsUrl::getInstance()->processSeoUrl( $this->_aSeoUrls[$iLang] );
+    }
+
+    /**
+     * Returns base dynamic url: shopurl/index.php?cl=details
+     *
+     * @param int  $iLang   language id
+     * @param bool $blAddId add current object id to url or not
+     *
+     * @return string
+     */
+    public function getBaseStdLink( $iLang, $blAddId = true )
+    {
+        //always returns shop url, not admin
+        $sUrl = $this->getConfig()->getShopHomeUrl( $iLang, false ) . 'cl=vendorlist';
+        return $sUrl . ( $blAddId ? '&amp;cnid=v_'.$this->getId() : '' );
     }
 
     /**
      * Returns standard URL to vendor
      *
-     * @param int   $iLang language
+     * @param int   $iLang   language
      * @param array $aParams additional params to use [optional]
      *
      * @return string
      */
-    public function getStdLink($iLang = null, $aParams = array() )
+    public function getStdLink( $iLang = null, $aParams = array() )
     {
-        $sLangUrl = '';
-
-        if (isset($iLang) && !oxUtils::getInstance()->seoIsActive()) {
-            $iLang = (int) $iLang;
-            if ($iLang != (int) $this->getLanguage()) {
-                $sLangUrl = "&amp;lang={$iLang}";
-            }
+        if ( $iLang === null ) {
+            $iLang = $this->getLanguage();
         }
 
-        foreach ($aParams as $key => $value) {
-            if ( $value ) {
-                $sLangUrl .= "&amp;$key=$value";
-            }
-        }
-
-        return $this->getSession()->processUrl( $this->getConfig()->getShopHomeUrl().'cl=vendorlist&amp;cnid=v_'.$this->getId().$sLangUrl );
+        return oxUtilsUrl::getInstance()->processStdUrl( $this->getBaseStdLink( $iLang ), $aParams, $iLang, $iLang != $this->getLanguage() );
     }
 
     /**

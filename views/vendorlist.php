@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: vendorlist.php 23793 2009-11-02 15:58:49Z arvydas $
+ * $Id: vendorlist.php 23919 2009-11-10 15:35:44Z arvydas $
  */
 
 /**
@@ -227,7 +227,7 @@ class VendorList extends aList
     {
         if ( oxUtils::getInstance()->seoIsActive() && ( $oVendor = $this->getActVendor() ) ) {
             if ( $iPage ) { // only if page number > 0
-                $sUrl = oxSeoEncoderVendor::getInstance()->getVendorPageUrl( $oVendor, $iPage, $iLang, $this->_isFixedUrl( $oVendor ) );
+                $sUrl = oxSeoEncoderVendor::getInstance()->getVendorPageUrl( $oVendor, $iPage, $iLang );
             }
         } else {
             $sUrl = oxUBase::_addPageNrParam( $sUrl, $iPage, $iLang );

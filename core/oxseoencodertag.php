@@ -37,7 +37,7 @@ class oxSeoEncoderTag extends oxSeoEncoder
     /**
      * Singleton method
      *
-     * @return oxseoencoder
+     * @return oxSeoEncoderTag
      */
     public static function getInstance()
     {

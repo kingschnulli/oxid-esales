@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 23482 2009-10-22 08:34:11Z arvydas $
+ * $Id: oxutilsfile.php 23930 2009-11-10 17:29:24Z arvydas $
  */
 
 /**
@@ -251,7 +251,7 @@ class oxUtilsFile extends oxSuperCfg
      * @param object $sValue     uploadable file name
      * @param string $sType      image type
      * @param object $blDemo     if true = whecks if file type is defined in oxutilsfile::_aAllowedFiles
-     * @patam string $sImagePath final image file location
+     * @param string $sImagePath final image file location
      *
      * @return string
      */
@@ -330,6 +330,7 @@ class oxUtilsFile extends oxSuperCfg
                 break;
             default:
                 $sSize = $myConfig->getConfigParam( $sImgConf );
+                break;
         }
         if ( $sSize ) {
             return explode( '*', $sSize );
@@ -423,11 +424,11 @@ class oxUtilsFile extends oxSuperCfg
     }
 
     /**
-     * Removes temporary created image
+     * Removes temporary created image. Returns deletion state
      *
      * @param string $sImagePath temporary image path
      *
-     * @return
+     * @return bool
      */
     protected function _removeTempImage( $sImagePath )
     {
@@ -603,9 +604,9 @@ class oxUtilsFile extends oxSuperCfg
         }
 
         $sFileName = $this->_getUniqueFileName( $sBasePath . "/" .$sUploadPath, $sFileName, $sExt );
-        $this->_moveImage( $aFileInfo['tmp_name'], $sBasePath . "/" .$sUploadPath . "/" . $sFileName . "." . $sExt );
+        $this->_moveImage( $aFileInfo['tmp_name'], $sBasePath . "/" .$sUploadPath . "/" . $sFileName );
 
-        $sUrl = $this->getConfig()->getShopUrl() . "/" . $sUploadPath . "/" . $sFileName . "." . $sExt;
+        $sUrl = $this->getConfig()->getShopUrl() . "/" . $sUploadPath . "/" . $sFileName;
 
         //removing dublicate slashes
         $sUrl = str_replace('//', '/', $sUrl);

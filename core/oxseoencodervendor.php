@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencodervendor.php 23797 2009-11-02 17:30:07Z arvydas $
+ * $Id: oxseoencodervendor.php 23919 2009-11-10 15:35:44Z arvydas $
  */
 
 /**
@@ -46,13 +46,27 @@ class oxSeoEncoderVendor extends oxSeoEncoder
     /**
      * Singleton method
      *
-     * @return oxseoencoder
+     * @return oxSeoEncoderVendor
      */
     public static function getInstance()
     {
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            static $inst = array();
+            self::$_instance = $inst[oxClassCacheKey()];
+        }
+
         if (!self::$_instance) {
             self::$_instance = oxNew("oxSeoEncoderVendor");
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                $inst[oxClassCacheKey()] = self::$_instance;
+            }
         }
+
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            // resetting cache
+            self::$_instance->_aSeoCache = array();
+        }
+
         return self::$_instance;
     }
 
@@ -113,11 +127,11 @@ class oxSeoEncoderVendor extends oxSeoEncoder
      * @param oxvendor $oVendor vendor object
      * @param int      $iPage   page tu prepare number
      * @param int      $iLang   language
-     * @param bool     $blFixed fixed url marker (default is false)
+     * @param bool     $blFixed fixed url marker (default is null)
      *
      * @return string
      */
-    public function getVendorPageUrl( $oVendor, $iPage, $iLang = null, $blFixed = false )
+    public function getVendorPageUrl( $oVendor, $iPage, $iLang = null, $blFixed = null )
     {
         if (!isset($iLang)) {
             $iLang = $oVendor->getLanguage();
@@ -128,6 +142,9 @@ class oxSeoEncoderVendor extends oxSeoEncoder
         $sStdUrl = $this->_trimUrl( $sStdUrl, $iLang );
         $sSeoUrl = $this->getVendorUri( $oVendor, $iLang ) . $sParams . "/";
 
+        if ( $blFixed === null ) {
+            $blFixed = $this->_isFixed( 'oxvendor', $oVendor->getId(), $iLang );
+        }
         return $this->_getFullUrl( $this->_getPageUri( $oVendor, 'oxvendor', $sStdUrl, $sSeoUrl, $sParams, $iLang, $blFixed ), $iLang );
     }
 

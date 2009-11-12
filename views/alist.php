@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: alist.php 23839 2009-11-04 14:46:58Z arvydas $
+ * $Id: alist.php 23930 2009-11-10 17:29:24Z arvydas $
  */
 
 /**
@@ -598,7 +598,7 @@ class aList extends oxUBase
     {
         if ( oxUtils::getInstance()->seoIsActive() && ( $oCategory = $this->getActCategory() ) ) {
             if ( $iPage ) { // only if page number > 0
-                $sUrl = oxSeoEncoderCategory::getInstance()->getCategoryPageUrl( $oCategory, $iPage, $iLang, $this->_isFixedUrl( $oCategory ) );
+                $sUrl = oxSeoEncoderCategory::getInstance()->getCategoryPageUrl( $oCategory, $iPage, $iLang );
             }
         } else {
             $sUrl = parent::_addPageNrParam( $sUrl, $iPage, $iLang );
@@ -610,6 +610,8 @@ class aList extends oxUBase
      * Returns category seo url status (fixed or not)
      *
      * @param oxcategory $oCategory active category
+     *
+     * @deprecated is not used any more
      *
      * @return bool
      */
@@ -656,9 +658,8 @@ class aList extends oxUBase
     {
         if ( ( oxUtils::getInstance()->seoIsActive() && ( $oCategory = $this->getActCategory() ) ) ) {
             return $oCategory->getLink();
-        } else {
-            return parent::generatePageNavigationUrl( );
         }
+        return parent::generatePageNavigationUrl( );
     }
 
     /**
@@ -943,10 +944,12 @@ class aList extends oxUBase
      */
     public function getCanonicalUrl()
     {
-        if ( ( $iPage = $this->getActPage() ) ) {
-            return $this->_addPageNrParam( $this->generatePageNavigationUrl(), $iPage );
-        } elseif ( ( $oCategory = $this->getActiveCategory() ) ) {
-            return $oCategory->getLink();
+        if ( ( $oCategory = $this->getActiveCategory() ) ) {
+            $oUtils = oxUtilsUrl::getInstance();
+            if ( oxUtils::getInstance()->seoIsActive() ) {
+                return $oUtils->processUrl( $oCategory->getBaseSeoLink( $oCategory->getLanguage(), $this->getActPage() ) );
+            }
+            return $oUtils->processUrl( $oCategory->getBaseStdLink( $oCategory->getLanguage(), $this->getActPage() ) );
         }
     }
 }

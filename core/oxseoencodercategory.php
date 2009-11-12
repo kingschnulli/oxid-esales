@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencodercategory.php 23840 2009-11-04 14:53:58Z arvydas $
+ * $Id: oxseoencodercategory.php 23919 2009-11-10 15:35:44Z arvydas $
  */
 
 /**
@@ -187,11 +187,11 @@ class oxSeoEncoderCategory extends oxSeoEncoder
      * @param oxcategory $oCategory category object
      * @param int        $iPage     page tu prepare number
      * @param int        $iLang     language
-     * @param bool       $blFixed   fixed url marker (default is false)
+     * @param bool       $blFixed   fixed url marker (default is null)
      *
      * @return string
      */
-    public function getCategoryPageUrl( $oCategory, $iPage, $iLang = null, $blFixed = false )
+    public function getCategoryPageUrl( $oCategory, $iPage, $iLang = null, $blFixed = null )
     {
         if (!isset($iLang)) {
             $iLang = $oCategory->getLanguage();
@@ -202,6 +202,9 @@ class oxSeoEncoderCategory extends oxSeoEncoder
         $sStdUrl = $this->_trimUrl( $sStdUrl, $iLang );
         $sSeoUrl = $this->getCategoryUri( $oCategory, $iLang ) . $sParams . "/";
 
+        if ( $blFixed === null ) {
+            $blFixed = $this->_isFixed( 'oxcategory', $oCategory->getId(), $iLang );
+        }
         return $this->_getFullUrl( $this->_getPageUri( $oCategory, 'oxcategory', $sStdUrl, $sSeoUrl, $sParams, $iLang, $blFixed ), $iLang );
     }
 
@@ -218,14 +221,15 @@ class oxSeoEncoderCategory extends oxSeoEncoder
      */
     public function getCategoryUrl( $oCategory, $iLang = null )
     {
+        $sUrl = '';
         if (!isset($iLang)) {
             $iLang = $oCategory->getLanguage();
         }
         // category may have specified url
         if ( ( $sSeoUrl = $this->getCategoryUri( $oCategory, $iLang ) ) ) {
-            return $this->_getFullUrl( $sSeoUrl, $iLang );
+            $sUrl = $this->_getFullUrl( $sSeoUrl, $iLang );
         }
-        return '';
+        return $sUrl;
     }
 
     /**

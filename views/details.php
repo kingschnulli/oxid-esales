@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 23789 2009-11-02 15:48:08Z arvydas $
+ * $Id: details.php 23930 2009-11-10 17:29:24Z arvydas $
  */
 
 /**
@@ -305,7 +305,7 @@ class Details extends oxUBase
     /**
      * Processes product by setting link type and in case list type is search adds search parameters to details link
      *
-     * @param object $oProduct
+     * @param object $oProduct product to process
      *
      * @return null
      */
@@ -548,42 +548,36 @@ class Details extends oxUBase
      */
     public function saveReview()
     {
-        $sReviewText = trim( ( string ) oxConfig::getParameter( 'rvw_txt', true ) );
-        $dRating     = oxConfig::getParameter( 'artrating' );
-        if ($dRating < 0 || $dRating > 5) {
-            $dRating = null;
-        }
+        if ( ( $oUser = $this->getUser() ) && ( $oProduct = $this->getProduct() ) ) {
 
-        $sArtId  = oxConfig::getParameter( 'anid' );
-        $sUserId = oxSession::getVar( 'usr' );
-
-        //save rating
-        if ( $dRating && $sUserId ) {
-            $oProduct = $this->getProduct();
-
-            $oRating = oxNew( 'oxrating' );
-            $blRate = $oRating->allowRating( $sUserId, 'oxarticle', $oProduct->getId());
-            if ( $blRate) {
-                $oRating->oxratings__oxuserid = new oxField($sUserId);
-                $oRating->oxratings__oxtype   = new oxField('oxarticle', oxField::T_RAW);
-                $oRating->oxratings__oxobjectid = new oxField($sArtId);
-                $oRating->oxratings__oxrating = new oxField($dRating);
-                $oRating->save();
-                $oProduct->addToRatingAverage( $dRating);
-            } else {
-                $dRating = null;
+            $dRating = oxConfig::getParameter( 'artrating' );
+            if ( $dRating !== null ) {
+                $dRating = (int) $dRating;
             }
-        }
 
-        if ( $sReviewText && $sUserId ) {
-            $oReview = oxNew( 'oxreview' );
-            $oReview->oxreviews__oxobjectid = new oxField($sArtId);
-            $oReview->oxreviews__oxtype = new oxField('oxarticle', oxField::T_RAW);
-            $oReview->oxreviews__oxtext = new oxField($sReviewText, oxField::T_RAW);
-            $oReview->oxreviews__oxlang = new oxField(oxLang::getInstance()->getBaseLanguage());
-            $oReview->oxreviews__oxuserid = new oxField($sUserId);
-            $oReview->oxreviews__oxrating = new oxField(( $dRating) ? $dRating : null);
-            $oReview->save();
+            //save rating
+            if ( $dRating !== null && $dRating >= 0 && $dRating <= 5 ) {
+                $oRating = oxNew( 'oxrating' );
+                if ( $oRating->allowRating( $oUser->getId(), 'oxarticle', $oProduct->getId() ) ) {
+                    $oRating->oxratings__oxuserid   = new oxField( $oUser->getId() );
+                    $oRating->oxratings__oxtype     = new oxField( 'oxarticle' );
+                    $oRating->oxratings__oxobjectid = new oxField( $oProduct->getId() );
+                    $oRating->oxratings__oxrating   = new oxField( $dRating );
+                    $oRating->save();
+                    $oProduct->addToRatingAverage( $dRating );
+                }
+            }
+
+            if ( ( $sReviewText = trim( ( string ) oxConfig::getParameter( 'rvw_txt', true ) ) ) ) {
+                $oReview = oxNew( 'oxreview' );
+                $oReview->oxreviews__oxobjectid = new oxField( $oProduct->getId() );
+                $oReview->oxreviews__oxtype     = new oxField( 'oxarticle' );
+                $oReview->oxreviews__oxtext     = new oxField( $sReviewText, oxField::T_RAW );
+                $oReview->oxreviews__oxlang     = new oxField( oxLang::getInstance()->getBaseLanguage() );
+                $oReview->oxreviews__oxuserid   = new oxField( $oUser->getId() );
+                $oReview->oxreviews__oxrating   = new oxField( ( $dRating !== null ) ? $dRating : null );
+                $oReview->save();
+            }
         }
     }
 
@@ -1289,8 +1283,12 @@ class Details extends oxUBase
      */
     public function getCanonicalUrl()
     {
-        if ( $oProduct = $this->getProduct() ) {
-            return $oProduct->getMainLink();
+        if ( ( $oProduct = $this->getProduct() ) ) {
+            $oUtils = oxUtilsUrl::getInstance();
+            if ( oxUtils::getInstance()->seoIsActive() ) {
+                return $oUtils->processUrl( $oProduct->getBaseSeoLink( $oProduct->getLanguage(), true ) );
+            }
+            return $oUtils->processUrl( $oProduct->getBaseStdLink( $oProduct->getLanguage()  ) );
         }
     }
 
@@ -1301,12 +1299,10 @@ class Details extends oxUBase
      */
     public function isMdVariantView()
     {
-        if(!is_null($this->_blMdView))
-            return $this->_blMdView;
-
-        $iMaxMdDepth = $this->getProduct()->getMdVariants()->getMaxDepth();
-
-        $this->_blMdView = ($iMaxMdDepth > 1);
+        if ( $this->_blMdView === null ) {
+            $iMaxMdDepth = $this->getProduct()->getMdVariants()->getMaxDepth();
+            $this->_blMdView = ($iMaxMdDepth > 1);
+        }
 
         return $this->_blMdView;
     }

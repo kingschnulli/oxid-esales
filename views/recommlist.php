@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: recommlist.php 23882 2009-11-09 09:42:29Z vilma $
+ * $Id: recommlist.php 23930 2009-11-10 17:29:24Z arvydas $
  */
 
 /**
@@ -212,8 +212,12 @@ class RecommList extends aList
         if ( ( $oRecommList = $this->getActiveRecommList() ) && ( $oUser = $this->getUser() ) ) {
 
             //save rating
-            $dRating = (int) oxConfig::getParameter( 'recommlistrating' );
-            if ( $dRating >= 0 && $dRating <= 5 ) {
+            $dRating = oxConfig::getParameter( 'recommlistrating' );
+            if ( $dRating !== null ) {
+                $dRating = (int) $dRating;
+            }
+
+            if ( $dRating !== null && $dRating >= 0 && $dRating <= 5 ) {
                 $oRating = oxNew( 'oxrating' );
                 if ( $oRating->allowRating( $oUser->getId(), 'oxrecommlist', $oRecommList->getId() ) ) {
                     $oRating->oxratings__oxuserid   = new oxField( $oUser->getId() );
@@ -232,7 +236,7 @@ class RecommList extends aList
                 $oReview->oxreviews__oxtext     = new oxField( $sReviewText, oxField::T_RAW );
                 $oReview->oxreviews__oxlang     = new oxField( oxLang::getInstance()->getBaseLanguage() );
                 $oReview->oxreviews__oxuserid   = new oxField( $oUser->getId() );
-                $oReview->oxreviews__oxrating   = new oxField( ( $dRating ) ? $dRating : null );
+                $oReview->oxreviews__oxrating   = new oxField( ( $dRating !== null ) ? $dRating : null );
                 $oReview->save();
             }
         }
@@ -334,7 +338,7 @@ class RecommList extends aList
      */
     public function getRecommId()
     {
-       return oxConfig::getParameter( 'recommid' );
+        return oxConfig::getParameter( 'recommid' );
     }
 
     /**
@@ -507,10 +511,10 @@ class RecommList extends aList
     public function getSearchForHtml()
     {
         // #M1450 if active recommlist is loaded return it's title
-    	if ( $oActiveRecommList = $this->getActiveRecommList()) {
+        if ( $oActiveRecommList = $this->getActiveRecommList()) {
             return $oActiveRecommList->oxrecommlists__oxtitle->value;
         }
-    	return oxConfig::getParameter( 'searchrecomm' );
+        return oxConfig::getParameter( 'searchrecomm' );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 23838 2009-11-04 14:46:39Z arvydas $
+ * $Id: oxarticle.php 23930 2009-11-10 17:29:24Z arvydas $
  */
 
 // defining supported link types
@@ -964,7 +964,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $this->oxarticles__oxrating->setValue(( $dOldRating * $dOldCnt + $iRating ) / ($dOldCnt + 1));
         $this->oxarticles__oxratingcnt->setValue($dOldCnt + 1);
         $dRating = ( $dOldRating * $dOldCnt + $iRating ) / ($dOldCnt + 1);
-        $dRatingCnt = (int)($dOldCnt + 1);
+        $dRatingCnt = (int) ($dOldCnt + 1);
         // oxarticles.oxtimestamp = oxarticles.oxtimestamp to keep old timestamp value
         oxDb::getDb()->execute( 'update oxarticles set oxarticles.oxrating = '.$dRating.',oxarticles.oxratingcnt = '.$dRatingCnt.', oxarticles.oxtimestamp = oxarticles.oxtimestamp where oxarticles.oxid = "'.$this->getId().'" ' );
     }
@@ -1130,18 +1130,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             return array();
         }
 
-        if ( $this->_oAmountPriceInfo !== null ) {
-            return $this->_oAmountPriceInfo;
+        if ( $this->_oAmountPriceInfo === null ) {
+            $this->_oAmountPriceInfo = array();
+            if ( count( ( $oAmPriceList = $this->_getAmountPriceList() ) ) ) {
+                $this->_oAmountPriceInfo = $this->_fillAmountPriceList( $oAmPriceList );
+
+            }
         }
-
-        $oAmPriceList = $this->_getAmountPriceList();
-
-        if ( count( $oAmPriceList ) ) {
-            $this->_oAmountPriceInfo = $this->_fillAmountPriceList( $oAmPriceList );
-            return $this->_oAmountPriceInfo;
-        }
-
-        return array();
+        return $this->_oAmountPriceInfo;
     }
 
     /**
@@ -1160,43 +1156,41 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $sKey = $sKeyPrefix.'__'.$this->getId();
         }
 
-        if ( self::$_aSelList[$sKey]) {
-            return self::$_aSelList[$sKey];
-        }
-
-        // all selectlists this article has
-        $oLists = oxNew( 'oxlist' );
-        $oLists->init('oxselectlist');
-        $sSLViewName = getViewName('oxselectlist');
-        $sSelect  = "select $sSLViewName.* from oxobject2selectlist left join $sSLViewName on $sSLViewName.oxid=oxobject2selectlist.oxselnid ";
-        $sSelect .= 'where oxobject2selectlist.oxobjectid=\''.$this->getId().'\' ';
-        //sorting
-        $sSelect .= ' order by oxobject2selectlist.oxsort';
-
-        $oLists->selectString( $sSelect );
-
-        //#1104S if this is variant ant it has no selectlists, trying with parent
-        if ( $this->oxarticles__oxparentid->value && $oLists->count() == 0 ) {
-            $sParentQuoted = oxDb::getDb()->quote($this->oxarticles__oxparentid->value);
-            //#1496C - select fixed ( * => $sSLViewName.*)
+        if ( !isset( self::$_aSelList[$sKey] ) ) {
+            // all selectlists this article has
+            $oLists = oxNew( 'oxlist' );
+            $oLists->init('oxselectlist');
+            $sSLViewName = getViewName('oxselectlist');
             $sSelect  = "select $sSLViewName.* from oxobject2selectlist left join $sSLViewName on $sSLViewName.oxid=oxobject2selectlist.oxselnid ";
-            $sSelect .= "where oxobject2selectlist.oxobjectid=$sParentQuoted ";
+            $sSelect .= 'where oxobject2selectlist.oxobjectid=\''.$this->getId().'\' ';
             //sorting
             $sSelect .= ' order by oxobject2selectlist.oxsort';
-            $oLists->selectString( $sSelect);
-        }
 
-        $dVat = 0;
-        if ( $this->getPrice() != null ) {
-            $dVat = $this->getPrice()->getVat();
-        }
+            $oLists->selectString( $sSelect );
 
-        $iCnt = 0;
-        self::$_aSelList[$sKey] = array();
-        foreach ( $oLists as $oSelectlist ) {
-            self::$_aSelList[$sKey][$iCnt] = $oSelectlist->getFieldList( $dVat );
-            self::$_aSelList[$sKey][$iCnt]['name'] = $oSelectlist->oxselectlist__oxtitle->value;
-            $iCnt++;
+            //#1104S if this is variant ant it has no selectlists, trying with parent
+            if ( $this->oxarticles__oxparentid->value && $oLists->count() == 0 ) {
+                $sParentQuoted = oxDb::getDb()->quote($this->oxarticles__oxparentid->value);
+                //#1496C - select fixed ( * => $sSLViewName.*)
+                $sSelect  = "select $sSLViewName.* from oxobject2selectlist left join $sSLViewName on $sSLViewName.oxid=oxobject2selectlist.oxselnid ";
+                $sSelect .= "where oxobject2selectlist.oxobjectid=$sParentQuoted ";
+                //sorting
+                $sSelect .= ' order by oxobject2selectlist.oxsort';
+                $oLists->selectString( $sSelect);
+            }
+
+            $dVat = 0;
+            if ( $this->getPrice() != null ) {
+                $dVat = $this->getPrice()->getVat();
+            }
+
+            $iCnt = 0;
+            self::$_aSelList[$sKey] = array();
+            foreach ( $oLists as $oSelectlist ) {
+                self::$_aSelList[$sKey][$iCnt] = $oSelectlist->getFieldList( $dVat );
+                self::$_aSelList[$sKey][$iCnt]['name'] = $oSelectlist->oxselectlist__oxtitle->value;
+                $iCnt++;
+            }
         }
         return self::$_aSelList[$sKey];
     }
@@ -1228,6 +1222,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * Collects and returns article variants.
      *
      * @param bool $blRemoveNotOrderables if true, removes from list not orderable articles, which are out of stock
+     * @param bool $blForceCoreTable      if true forces core tabel use, default is false [optional]
      *
      * @return array
      */
@@ -1874,7 +1869,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         // article is not variant - should be updated current amount
         if ( !$this->oxarticles__oxparentid->value ) {
             //updating by SQL query, due to wrong behaviour if saving article using not admin mode
-            $dAmount = (double)$dAmount;
+            $dAmount = (double) $dAmount;
             $oDb = oxDb::getDb();
             $rs = $oDb->execute( "update oxarticles set oxarticles.oxsoldamount = oxarticles.oxsoldamount + $dAmount, oxarticles.oxtimestamp = oxarticles.oxtimestamp where oxarticles.oxid = ".$oDb->quote($this->oxarticles__oxid->value));
         } elseif ( $this->oxarticles__oxparentid->value) {
@@ -2273,35 +2268,32 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 $iLang = $this->getLanguage();
             }
 
-            // initializing in case they were not
-            $this->getLink( $iLang );
-            $this->_aSeoUrls[$iLang][$this->getLinkType()] .= ( ( strpos( $this->_aSeoUrls[$iLang][$this->getLinkType()], '?' ) !== false ) ? '&amp;' : '?' ) . $sAddParams;
+            $sUrl = $this->getLink( $iLang );
+            $this->_aSeoUrls[$iLang][$this->getLinkType()] .= ( ( strpos( $sUrl, '?' ) !== false ) ? '&amp;' : '?' ) . $sAddParams;
         }
     }
 
     /**
-     * Appends article dynemic url with additional request parameters
+     * Returns raw article seo url
      *
-     * @param string $sAddParams additional parameters which needs to be added to product url
-     * @param int    $iLang      language id
+     * @param int  $iLang  language id
+     * @param bool $blMain force to return main url [optional]
      *
-     * @return null
+     * @return string
      */
-    public function appendStdLink( $sAddParams, $iLang = null )
+    public function getBaseSeoLink( $iLang, $blMain = false )
     {
-        if ( $iLang === null ) {
-            $iLang = $this->getLanguage();
+        $oEncoder = oxSeoEncoderArticle::getInstance();
+        if ( !$blMain ) {
+            return $oEncoder->getArticleUrl( $this, $iLang, $this->getLinkType() );
         }
-
-        // initializing in case they were not
-        $this->getStdLink( $iLang );
-        $this->_aStdUrls[$iLang] .= ( ( strpos( $this->_aStdUrls[$iLang], '?' ) !== false ) ? '&amp;' : '?' ) . $sAddParams;
+        return $oEncoder->getArticleMainUrl( $this, $iLang );
     }
 
     /**
      * Gets article link
      *
-     * @param int $iLang required language. optional
+     * @param int $iLang language id [optional]
      *
      * @return string
      */
@@ -2317,9 +2309,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
         $iLinkType = $this->getLinkType();
         if ( !isset( $this->_aSeoUrls[$iLang][$iLinkType] ) ) {
-            $this->_aSeoUrls[$iLang][$iLinkType] = oxSeoEncoderArticle::getInstance()->getArticleUrl( $this, $iLang, $iLinkType );
+            $this->_aSeoUrls[$iLang][$iLinkType] = $this->getBaseSeoLink( $iLang );
         }
-        return $this->_aSeoUrls[$iLang][$iLinkType];
+        return oxUtilsUrl::getInstance()->processSeoUrl( $this->_aSeoUrls[$iLang][$iLinkType] );
     }
 
     /**
@@ -2349,27 +2341,42 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
+     * Appends article dynemic url with additional request parameters
+     *
+     * @param string $sAddParams additional parameters which needs to be added to product url
+     * @param int    $iLang      language id
+     *
+     * @return null
+     */
+    public function appendStdLink( $sAddParams, $iLang = null )
+    {
+        if ( $iLang === null ) {
+            $iLang = $this->getLanguage();
+        }
+
+        $sUrl = $this->getStdLink( $iLang );
+        $this->_aStdUrls[$iLang] .= ( ( strpos( $sUrl, '?' ) !== false ) ? '&amp;' : '?' ) . $sAddParams;
+    }
+
+    /**
      * Returns base dynamic url: shopurl/index.php?cl=details
      *
-     * @param int $iLang language id
+     * @param int  $iLang   language id
+     * @param bool $blAddId add current object id to url or not
      *
      * @return string
      */
-    public function getBaseLink( $iLang )
+    public function getBaseStdLink( $iLang, $blAddId = true )
     {
         //always returns shop url, not admin
         $sUrl = $this->getConfig()->getShopHomeUrl( $iLang, false ) . "cl=details";
-        if ( !oxUtils::getInstance()->seoIsActive() && $iLang != $this->getLanguage() ) {
-            $sUrl .= "&amp;lang={$iLang}";
-        }
-
-        return $sUrl;
+        return $sUrl . ( $blAddId ? "&amp;anid=".$this->getId() : '' );
     }
 
     /**
      * Returns standard URL to product
      *
-     * @param int   $iLang required language. optional
+     * @param int   $iLang   required language. optional
      * @param array $aParams additional params to use [optional]
      *
      * @return string
@@ -2381,17 +2388,10 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         if ( !isset( $this->_aStdUrls[$iLang] ) ) {
-            $this->_aStdUrls[$iLang] = $this->getBaseLink( $iLang )."&amp;anid=".$this->getId();
+            $this->_aStdUrls[$iLang] = $this->getBaseStdLink( $iLang );
         }
 
-        $sUrl = $this->_aStdUrls[$iLang];
-
-        // appending parameters
-        foreach ( $aParams as $sKey => $sValue ) {
-            $sUrl .= "&amp;$sKey=$sValue";
-        }
-
-        return $this->getSession()->processUrl( $sUrl );
+        return oxUtilsUrl::getInstance()->processStdUrl( $this->_aStdUrls[$iLang], $aParams, $iLang, $iLang != $this->getLanguage() );
     }
 
     /**
@@ -2404,11 +2404,15 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getMainLink( $iLang = null )
     {
-        if ( oxUtils::getInstance()->seoIsActive() ) {
-            return oxSeoEncoderArticle::getInstance()->getArticleMainUrl( $this, $iLang );
-        } else {
+        if ( !oxUtils::getInstance()->seoIsActive() ) {
             return $this->getStdLink( $iLang );
         }
+
+        if ( $iLang === null ) {
+            $iLang = $this->getLanguage();
+        }
+
+        return oxUtilsUrl::getInstance()->processSeoUrl( oxSeoEncoderArticle::getInstance()->getArticleMainUrl( $this, $iLang ) );
     }
 
     /**
@@ -2487,17 +2491,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getMediaUrls()
     {
-        if ($this->_aMediaUrls) {
-            return $this->_aMediaUrls;
+        if ( $this->_aMediaUrls === null ) {
+            $this->_aMediaUrls = oxNew("oxlist");
+            $this->_aMediaUrls->init("oxmediaurl");
+            $this->_aMediaUrls->getBaseObject()->setLanguage( $this->getLanguage() );
+
+            $sQ = "select * from oxmediaurls where oxobjectid = '".$this->getId()."'";
+            $this->_aMediaUrls->selectString($sQ);
         }
-
-        $this->_aMediaUrls = oxNew("oxlist");
-        $this->_aMediaUrls->init("oxmediaurl");
-        $this->_aMediaUrls->getBaseObject()->setLanguage( $this->getLanguage() );
-
-        $sQ = "select * from oxmediaurls where oxobjectid = '".$this->getId()."'";
-        $this->_aMediaUrls->selectString($sQ);
-
         return $this->_aMediaUrls;
     }
 
@@ -2609,9 +2610,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         if ( $this->oxarticles__oxdelivery->value != '0000-00-00') {
             return oxUtilsDate::getInstance()->formatDBDate( $this->oxarticles__oxdelivery->value);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -2625,8 +2625,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             if ( $oPrice->getBruttoPrice() ) {
                 return oxLang::getInstance()->formatCurrency( oxUtils::getInstance()->fRound($oPrice->getBruttoPrice()));
             }
-        } else {
-            return null;
         }
     }
 
@@ -2639,8 +2637,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         if ( $oPrice = $this->getPrice() ) {
             return $this->getPriceFromPrefix().oxLang::getInstance()->formatCurrency( $oPrice->getBruttoPrice() );
-        } else {
-            return null;
         }
     }
 
@@ -3578,20 +3574,15 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getParentArticle()
     {
-        $sParentId = $this->oxarticles__oxparentid->value;
-        if (!$sParentId) {
-            return null;
-        }
-        if (isset(self::$_aLoadedParents[$sParentId])) {
+        if ( ( $sParentId = $this->oxarticles__oxparentid->value ) ) {
+            if ( !isset( self::$_aLoadedParents[$sParentId] ) ) {
+                self::$_aLoadedParents[$sParentId] = oxNew( 'oxarticle' );
+                self::$_aLoadedParents[$sParentId]->_blSkipAbPrice  = true;
+                self::$_aLoadedParents[$sParentId]->_blLoadPrice    = false;
+                self::$_aLoadedParents[$sParentId]->_blLoadVariants = false;
+                self::$_aLoadedParents[$sParentId]->load( $sParentId );
+            }
             return self::$_aLoadedParents[$sParentId];
-        } else {
-            $oParentArticle = oxNew( 'oxarticle' );
-            $oParentArticle->_blSkipAbPrice = true;
-            $oParentArticle->_blLoadPrice = false;
-            $oParentArticle->_blLoadVariants = false;
-            $oParentArticle->load( $sParentId);
-            self::$_aLoadedParents[$sParentId] = $oParentArticle;
-            return $oParentArticle;
         }
     }
 

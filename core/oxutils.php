@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 23456 2009-10-21 14:49:35Z sarunas $
+ * $Id: oxutils.php 23919 2009-11-10 15:35:44Z arvydas $
  */
 
 /**
@@ -632,9 +632,8 @@ class oxUtils extends oxSuperCfg
         }
         if ( $blSuccess || file_exists( $sLocal ) ) {
             return $sLocal;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -1074,44 +1073,20 @@ class oxUtils extends oxSuperCfg
      * prepareUrlForNoSession adds extra url params making it usable without session
      * also removes sid=xxxx&
      *
+     * @deprecated use oxUtilsUrl::prepareUrlForNoSession()
+     *
      * @param string $sUrl given url
      *
      * @access public
      * @return string
      */
-    public function prepareUrlForNoSession($sUrl)
+    public function prepareUrlForNoSession( $sUrl )
     {
         if ( $this->seoIsActive() ) {
             return $sUrl;
         }
 
-        $sUrl = preg_replace('/(force_)?sid=[a-z0-9\._]*&?(amp;)?/i', '', $sUrl);
-
-        $oStr = getStr();
-        if ($qpos = $oStr->strpos($sUrl, '?')) {
-            if ($qpos == $oStr->strlen($sUrl)-1) {
-                $sSep = '';
-            } else {
-                $sSep = '&amp;';
-            }
-        } else {
-            $sSep = '?';
-        }
-
-        if (!preg_match('/[&?](amp;)?lang=[0-9]+/i', $sUrl)) {
-            $sUrl .= "{$sSep}lang=".oxLang::getInstance()->getBaseLanguage();
-            $sSep = '&amp;';
-        }
-
-        if (!preg_match('/[&?](amp;)?cur=[0-9]+/i', $sUrl)) {
-            $iCur = (int) oxConfig::getParameter('currency');
-            if ($iCur) {
-                $sUrl .= "{$sSep}cur=".$iCur;
-                $sSep = '&amp;';
-            }
-        }
-
-        return $sUrl;
+        return oxUtilsUrl::getInstance()->prepareUrlForNoSession( $sUrl );
     }
 
     /**
