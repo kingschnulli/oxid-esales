@@ -19,7 +19,7 @@
  * @package smartyPlugins
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: insert.oxid_newbasketitem.php 23851 2009-11-05 12:10:32Z sarunas $
+ * $Id: insert.oxid_newbasketitem.php 23971 2009-11-12 12:56:11Z alfonsas $
  */
 
 /*
@@ -47,7 +47,7 @@ function smarty_insert_oxid_newbasketitem($params, &$smarty)
     $sTemplate = $params['tpl']?$params['tpl']:'inc_newbasketitem.snippet.tpl';
 
     //allways render for ajaxstyle popup
-    $blRender = $params['ajax'];
+    $blRender = $params['ajax'] && ($iType == 2);
 
     //fetching article data
     $oNewItem = oxSession::getVar( '_newitem' );

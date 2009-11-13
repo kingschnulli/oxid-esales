@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: user_payment.php 17191 2009-03-13 12:21:00Z arvydas $
+ * $Id: user_payment.php 23969 2009-11-12 12:32:51Z vilma $
  */
 
 /**
@@ -37,6 +37,41 @@ class User_Payment extends oxAdminDetails
     protected $_blDelete = false;
 
     /**
+     * Selected user
+     *
+     * @var object
+     */
+    protected $_oActiveUser = null;
+
+    /**
+     * Selected user payment
+     *
+     * @var string
+     */
+    protected $_sPaymentId = null;
+
+    /**
+     * List of all payments 
+     *
+     * @var object
+     */
+    protected $_oPaymentTypes = null;
+
+    /**
+     * Selected user payment
+     *
+     * @var object
+     */
+    protected $_oUserPayment = null;
+
+    /**
+     * List of all user payments
+     *
+     * @var object
+     */
+    protected $_oUserPayments = null;
+
+    /**
      * Executes parent method parent::render(), creates oxlist and oxuser objects,
      * passes data to Smarty engine and returns name of template file "user_payment.tpl".
      *
@@ -45,58 +80,11 @@ class User_Payment extends oxAdminDetails
     public function render()
     {
         parent::render();
-
-        // all paymenttypes
-        $oPaymentTypes = oxNew( "oxlist" );
-        $oPaymentTypes->init( "oxpayment");
-        $oPaymentTypes->getList();
-
-        $soxId = oxConfig::getParameter( "oxid");
-        if ( $soxId != "-1" && isset( $soxId)) {
-            // load object
-            $oUser = oxNew( "oxuser" );
-            $oUser->load( $soxId);
-
-            // load payment
-            $soxPaymentId = oxConfig::getParameter( "oxpaymentid");
-            if ( (!$soxPaymentId || $this->_blDelete) && isset( $oUser->oPayments[0]))
-                $soxPaymentId = $oUser->oPayments[0]->oxuserpayments__oxid->value;
-            if ( $soxPaymentId != "-1" && isset( $soxPaymentId)) {
-                $oUserPayment = oxNew( "oxuserpayment" );
-                $oUserPayment->load( $soxPaymentId);
-                $sTemplate = $oUserPayment->oxuserpayments__oxvalue->value;
-
-                // generate selected paymenttype
-                foreach ( $oPaymentTypes as $oPayment ) {
-                    if ( $oPayment->oxpayments__oxid->value == $oUserPayment->oxuserpayments__oxpaymentsid->value) {
-                        $oPayment->selected = 1;
-                        // if there are no values assigned we set default from paymenttype
-                        if ( !$sTemplate )
-                            $sTemplate = $oPayment->oxpayments__oxvaldesc->value;
-                        break;
-                    }
-                }
-                $oUserPayment->setDynValues( oxUtils::getInstance()->assignValuesFromText( $sTemplate ) );
-                $this->_aViewData["edit"] =  $oUserPayment;
-
-            }
-            if ( !$soxPaymentId)
-                $soxPaymentId = "-1";
-            $this->_aViewData["oxpaymentid"]    = $soxPaymentId;
-
-            $this->_aViewData["paymenttypes"]    = $oPaymentTypes;
-
-            // generate selected
-            $oUserPayments = $oUser->getUserPayments();
-            foreach ( $oUserPayments as $oPayment ) {
-                if ( $oPayment->oxuserpayments__oxid->value == $soxPaymentId ) {
-                    $oPayment->selected = 1;
-                    break;
-                }
-            }
-
-            $this->_aViewData["edituser"] =  $oUser;
-        }
+        $this->_aViewData["edit"]         = $this->getSelUserPayment();
+        $this->_aViewData["oxpaymentid"]  = $this->getPaymentId();
+        $this->_aViewData["paymenttypes"] = $this->getPaymentTypes();
+        $this->_aViewData["edituser"]     = $this->getUser();
+        $this->_aViewData["userpayments"] = $this->getUserPayments();
 
         if (!$this->_allowAdminEdit($soxId))
             $this->_aViewData['readonly'] = true;
@@ -154,4 +142,129 @@ class User_Payment extends oxAdminDetails
             $this->_blDelete = true;
         }
     }
+
+    /**
+     * Returns selected user
+     *
+     * @return object
+     */
+    public function getUser()
+    {
+        if ( $this->_oActiveUser == null ) {
+        	$this->_oActiveUser = false;
+            $sOxId = oxConfig::getParameter( "oxid");
+            if ( $sOxId != "-1" && isset( $sOxId)) {
+                // load object
+                $this->_oActiveUser = oxNew( "oxuser" );
+                $this->_oActiveUser->load( $sOxId);
+            }
+        }
+        return $this->_oActiveUser;
+    }
+
+    /**
+     * Returns selected Payment Id
+     *
+     * @return object
+     */
+    public function getPaymentId()
+    {
+        if ( $this->_sPaymentId == null ) {
+            $this->_sPaymentId = oxConfig::getParameter( "oxpaymentid");
+            if ( !$this->_sPaymentId || $this->_blDelete ) {
+	            if ( $oUser = $this->getUser() ) {
+	               $oUserPayments = $oUser->getUserPayments();
+	               if ( isset( $oUserPayments[0]) ) {
+	                   $this->_sPaymentId = $oUserPayments[0]->oxuserpayments__oxid->value;
+	               }
+	            }
+            }
+            if ( !$this->_sPaymentId ) {
+                $this->_sPaymentId = "-1";
+            }
+        }
+        return $this->_sPaymentId;
+    }
+
+    /**
+     * Returns selected Payment Id
+     *
+     * @return object
+     */
+    public function getPaymentTypes()
+    {
+        if ( $this->_oPaymentTypes == null ) {
+            $sTplLang = oxLang::getInstance()->getTplLanguage();
+
+            // all paymenttypes
+            $this->_oPaymentTypes = oxNew( "oxlist" );
+            $this->_oPaymentTypes->init( "oxpayment");
+            $oListObject = $this->_oPaymentTypes->getBaseObject();
+            $oListObject->setLanguage( $sTplLang );
+            $this->_oPaymentTypes->getList();
+        }
+        return $this->_oPaymentTypes;
+    }
+
+    /**
+     * Returns selected Payment
+     *
+     * @return object
+     */
+    public function getSelUserPayment()
+    {
+        if ( $this->_oUserPayment == null ) {
+            $this->_oUserPayment = false;
+            $sPaymentId = $this->getPaymentId();
+            if ( $sPaymentId != "-1" && isset( $sPaymentId ) ) {
+                $this->_oUserPayment = oxNew( "oxuserpayment" );
+                $this->_oUserPayment->load( $sPaymentId );
+                $sTemplate = $this->_oUserPayment->oxuserpayments__oxvalue->value;
+
+                // generate selected paymenttype
+                $oPaymentTypes = $this->getPaymentTypes();
+                foreach ( $oPaymentTypes as $oPayment ) {
+                    if ( $oPayment->oxpayments__oxid->value == $this->_oUserPayment->oxuserpayments__oxpaymentsid->value) {
+                        $oPayment->selected = 1;
+                        // if there are no values assigned we set default from paymenttype
+                        if ( !$sTemplate )
+                            $sTemplate = $oPayment->oxpayments__oxvaldesc->value;
+                        break;
+                    }
+                }
+                $this->_oUserPayment->setDynValues( oxUtils::getInstance()->assignValuesFromText( $sTemplate ) );
+            }
+        }
+        return $this->_oUserPayment;
+    }
+
+    /**
+     * Returns selected Payment Id
+     *
+     * @return object
+     */
+    public function getUserPayments()
+    {
+        if ( $this->_oUserPayments == null ) {
+            $this->_oUserPayments = false;
+            if ( $oUser = $this->getUser() ) {
+                $sTplLang = oxLang::getInstance()->getTplLanguage();
+                $sPaymentId = $this->getPaymentId();
+                $this->_oUserPayments = $oUser->getUserPayments();
+	            // generate selected
+	            foreach ( $this->_oUserPayments as $oUserPayment ) {
+	                $oPayment = oxNew( 'oxpayment' );
+	                $oPayment->setLanguage( $sTplLang );
+	                $oPayment->load( $oUserPayment->oxuserpayments__oxpaymentsid->value );
+	                $oUserPayment->oxpayments__oxdesc = clone $oPayment->oxpayments__oxdesc;
+	                if ( $oUserPayment->oxuserpayments__oxid->value == $sPaymentId ) {
+	                    $oUserPayment->selected = 1;
+	                    break;
+	                }
+	            }
+            }
+        }
+        return $this->_oUserPayments;
+    }
+
 }
