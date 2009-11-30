@@ -19,14 +19,14 @@
  * @package smartyPlugins
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: modifier.oxmultilangassign.php 17246 2009-03-16 15:18:58Z arvydas $
+ * $Id: modifier.oxmultilangassign.php 24255 2009-11-25 17:11:35Z tomas $
  */
 
 /*
 * Smarty function
 * -------------------------------------------------------------
-* Purpose: Output multilang string for admin
-* add [{ oxmultilang ident="..." }] where you want to display content
+* Purpose: Modifies provided language constant with it's translation
+* usage: [{ $val|oxmultilangassign}]
 * -------------------------------------------------------------
 */
 function smarty_modifier_oxmultilangassign( $sIdent )

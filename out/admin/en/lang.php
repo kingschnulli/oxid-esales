@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23885 2009-11-09 10:00:40Z vilma $
+ * $Id: lang.php 24252 2009-11-25 17:04:34Z tomas $
  */
 
 /*
@@ -274,6 +274,8 @@ $aLang = array(
 'GENERAL_SEO_VND'                               => '-- Distributor --',
 'GENERAL_SEO_MANUFACTURER'                      => '-- Manufacturer --',
 'GENERAL_SEO_TAG'                               => '-- Tags --',
+'GENERAL_SEO_MAINCAT'                           => '[tr] (main category)', // product seo tab near main category title
+'GENERAL_SEO_NOCAT'                             => '[tr] (no category)',   // product seo tab, article ha no category assigned
 
 'GENERAL_SEO_URL'                               => 'SEO URL',
 'GENERAL_SEO_OXKEYWORDS'                        => 'META Keywords',
@@ -366,10 +368,10 @@ $aLang = array(
 'ARTICLE_EXTEND_DESCRIPTION'                    => 'Description',
 'ARTICLE_EXTEND_ENTERURL'                       => 'Enter existing media URL <br>(external PDF, movie, mp3 or YouTube!)',
 'ARTICLE_EXTEND_UPLOADFILE'                     => 'Or upload the file (large files should be uploaded via ftp)<br>(file name may only contain letters, numbers, underscore (_) and dot (.))',
-'ARTICLE_EXTEND_ERRORSAVINGTPRICE'                => 'Warning: RRP price must be bigger than normal price.',
+'ARTICLE_EXTEND_ERRORSAVINGTPRICE'              => 'Attention: RRP price must be bigger than normal price.',
 'ARTICLE_LIST_ALLPRODUCTS'                      => 'all Products',
 'ARTICLE_LIST_MENUSUBITEM'                      => 'Product',
-'ARTICLE_MAIN_ERRORSAVINGARTICLE'               => 'Warning: Product already exists!',
+'ARTICLE_MAIN_ERRORSAVINGARTICLE'               => 'Attention: Product already exists!',
 'ARTICLE_MAIN_ALDPRICE'                         => 'Alt. Prices',
 'ARTICLE_MAIN_NONE'                             => '-- none --',
 'ARTICLE_MAIN_GOTO'                             => 'Go to',
@@ -863,10 +865,10 @@ $aLang = array(
 'LANGUAGE_LANGUAGEID'                           => 'Language ID',
 'LANGUAGE_BASEURL'                              => 'Base URL',
 'LANGUAGE_BASESSLURL'                           => 'Base SSL URL',
-'LANGUAGE_NOTRANSLATIONS_WARNING'               => 'Warning: No translations files were found in templates dir for selected language!',
-'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS'        => 'Warning: Error occured while adding new multilanguage fields to tables!',
-'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'      => 'Warning: Error occured while reseting multilanguage fields after language delete!',
-'LANGUAGE_DELETINGMAINLANG_WARNING'             => 'Warning: you can\'t delete main language (with ID = 0)!',
+'LANGUAGE_NOTRANSLATIONS_WARNING'               => 'Attention: No translations files were found in templates dir for selected language!',
+'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS'        => 'Attention: Error occured while adding new multilanguage fields to tables!',
+'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'      => 'Attention: Error occured while reseting multilanguage fields after language delete!',
+'LANGUAGE_DELETINGMAINLANG_WARNING'             => 'Attention: you can\'t delete main language (with ID = 0)!',
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Error: language with such abbervation already exists!',
 'SETUP_DIRNOTDELETED_WARNING'                   => 'Please delete directory: setup!',
 'SETUP_CONFIGPERMISSIONS_WARNING'               => 'Due to security reasons put your config.inc.php file to read-only mode!',
@@ -946,6 +948,8 @@ $aLang = array(
 'LOOKNFEEL_THEME_PASTEL'                        => 'Pastell',
 'MAIN_TITLE'                                    => '[OXID Startpage]',
 'MAIN_INFO'                                     => 'Information',
+'MR'                                            => 'Mr',
+'MRS'                                           => 'Mrs',
 'HOME_DESC'                                     => 'Welcome to the OXID eShop Admin. This is an overview of the main areas and functions.',
 'HOME_EXPLAIN'                                  => '',
 'NAVIGATION_TITLE'                              => 'Navigation',
@@ -1219,7 +1223,7 @@ $aLang = array(
 'SHOP_CONFIG_MINORDERPRICE'                     => 'Min. Order Price (leave empty to disable)',
 'SHOP_CONFIG_MUSTFILLFIELDS'                    => 'Mandatory fields in User Registration Form',
 'SHOP_CONFIG_NEWARTBYINSERT'                    => 'Calculate newest Products by Date of Creation (otherwise by Date of last Change)',
-'SHOP_CONFIG_NROFCATARTICLES'                   => 'Number of Products which can be shown in a Product List (Category Pages, Search Results)<br>Warning: A large number of products per page (above 100) can cause serious performance issues!',
+'SHOP_CONFIG_NROFCATARTICLES'                   => 'Number of Products which can be shown in a Product List (Category Pages, Search Results)<br>Attention: A large number of products per page (above 100) can cause serious performance issues!',
 'SHOP_CONFIG_NROFCUSTOMERWHOARTICLES'           => 'Number of Products which are shown in "Customers who bought this product also purchased:"',
 'SHOP_CONFIG_NROFNEWCOMERARTICLES'              => 'Number of Products which are shown in "Just arrived!" (newest Products)',
 'SHOP_CONFIG_NUMBEROFSIMILARARTICLES'           => 'Number of similar Products which are shown with a Product',

@@ -138,15 +138,17 @@ class oxException extends Exception
     /**
      * Prints exception in file EXCEPTION_LOG.txt
      *
-     * @param integer $iDebug current debug level (will only print out on debug != 0)
+     * @param integer $iDebug current debug level. This parameter is deprecated.
      *
      * @return null
      */
     public function debugOut($iDebug = -1)
     {
-        if (0 != $iDebug) {
+        //We are most likely are already dealing with an exception so making sure no other exceptions interfere
+        try {
             $sLogMsg = $this->getString() . "\n---------------------------------------------\n";
             oxUtils::getInstance()->writeToLog( $sLogMsg, $this->getLogFileName() );
+        } catch (Exception $e) {
         }
     }
 

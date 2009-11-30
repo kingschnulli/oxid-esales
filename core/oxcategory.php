@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategory.php 23930 2009-11-10 17:29:24Z arvydas $
+ * $Id: oxcategory.php 24024 2009-11-18 12:21:39Z arvydas $
  */
 
 /**
@@ -592,14 +592,20 @@ class oxCategory extends oxI18n implements oxIUrl
      *
      * @param int  $iLang   language id
      * @param bool $blAddId add current object id to url or not
+     * @param bool $blFull  return full including domain name [optional]
      *
      * @return string
      */
-    public function getBaseStdLink( $iLang, $blAddId = true )
+    public function getBaseStdLink( $iLang, $blAddId = true, $blFull = true )
     {
+        $sUrl = '';
+        if ( $blFull ) {
+            //always returns shop url, not admin
+            $sUrl = $this->getConfig()->getShopUrl( $iLang, false );
+        }
+
         //always returns shop url, not admin
-        $sUrl = $this->getConfig()->getShopHomeUrl( $iLang, false ) . "cl=alist";
-        return $sUrl . ( $blAddId ? "&amp;cnid=".$this->getId() : '' );
+        return $sUrl . "index.php?cl=alist" . ( $blAddId ? "&amp;cnid=".$this->getId() : "" );
     }
 
     /**

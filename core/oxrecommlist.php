@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxrecommlist.php 23919 2009-11-10 15:35:44Z arvydas $
+ * $Id: oxrecommlist.php 24024 2009-11-18 12:21:39Z arvydas $
  */
 
 /**
@@ -475,14 +475,19 @@ class oxRecommList extends oxBase implements oxIUrl
      *
      * @param int  $iLang   language id
      * @param bool $blAddId add current object id to url or not
+     * @param bool $blFull  return full including domain name [optional]
      *
      * @return string
      */
-    public function getBaseStdLink( $iLang, $blAddId = true )
+    public function getBaseStdLink( $iLang, $blAddId = true, $blFull = true )
     {
-        //always returns shop url, not admin
-        $sUrl = $this->getConfig()->getShopHomeUrl( $iLang, false ) . "cl=recommlist";
-        return $sUrl . ( $blAddId ? "&amp;recommid=".$this->getId() : '' );
+        $sUrl = '';
+        if ( $blFull ) {
+            //always returns shop url, not admin
+            $sUrl = $this->getConfig()->getShopUrl( $iLang, false );
+        }
+
+        return $sUrl . "index.php?cl=recommlist" . ( $blAddId ? "&amp;recommid=".$this->getId() : "" );
     }
 
     /**

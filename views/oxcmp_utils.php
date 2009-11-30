@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_utils.php 22590 2009-09-24 06:24:00Z alfonsas $
+ * $Id: oxcmp_utils.php 24250 2009-11-25 16:53:43Z tomas $
  */
 
 /**
@@ -91,7 +91,6 @@ class oxcmp_utils extends oxView
         // stop shop here
         die( serialize( $aExport ) );
     }
-
 
     /**
      * Adds/removes chosen article to/from article comparison list

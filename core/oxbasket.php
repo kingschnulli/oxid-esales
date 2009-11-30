@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxbasket.php 23857 2009-11-05 15:17:36Z arvydas $
+ * $Id: oxbasket.php 23995 2009-11-17 13:33:13Z  $
  */
 
 /**
@@ -1196,6 +1196,7 @@ class oxBasket extends oxSuperCfg
             $this->_aBasketSummary->aCategories = array();
             $this->_aBasketSummary->iArticleCount = 0;
             $this->_aBasketSummary->dArticlePrice = 0;
+            $this->_aBasketSummary->dArticleDiscountablePrice = 0;
         }
 
         if ( !$this->isEnabled() ) {
@@ -1208,8 +1209,12 @@ class oxBasket extends oxSuperCfg
                 $aCatIds = $oArticle->getCategoryIds();
                 //#M530 if price is not loaded for articles
                 $dPrice = 0;
-                if ( $oArticle->getPrice() != null ) {
-                    $dPrice  = $oArticle->getPrice()->getBruttoPrice();
+                $dDiscountablePrice = 0;
+                if ( ( $oPrice = $oArticle->getPrice( $oBasketItem->getAmount() ) ) ) {
+                    $dPrice = $oPrice->getBruttoPrice();
+                    if ( !$oArticle->skipDiscounts() ) {
+                        $dDiscountablePrice = $dPrice;
+                    }
                 }
 
                 foreach ( $aCatIds as $sCatId ) {
@@ -1218,6 +1223,7 @@ class oxBasket extends oxSuperCfg
                     }
 
                     $this->_aBasketSummary->aCategories[$sCatId]->dPrice  += $dPrice * $oBasketItem->getAmount();
+                    $this->_aBasketSummary->aCategories[$sCatId]->dDiscountablePrice += $dDiscountablePrice * $oBasketItem->getAmount();
                     $this->_aBasketSummary->aCategories[$sCatId]->dAmount += $oBasketItem->getAmount();
                     $this->_aBasketSummary->aCategories[$sCatId]->iCount++;
                 }
@@ -1237,6 +1243,7 @@ class oxBasket extends oxSuperCfg
                 $this->_aBasketSummary->aArticles[$oBasketItem->getProductId()] += $oBasketItem->getAmount();
                 $this->_aBasketSummary->iArticleCount += $oBasketItem->getAmount();
                 $this->_aBasketSummary->dArticlePrice += $dPrice * $oBasketItem->getAmount();
+                $this->_aBasketSummary->dArticleDiscountablePrice += $dDiscountablePrice * $oBasketItem->getAmount();
             }
         }
         return $this->_aBasketSummary;

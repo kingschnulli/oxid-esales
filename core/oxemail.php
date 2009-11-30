@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 23834 2009-11-04 13:44:43Z vilma $
+ * $Id: oxemail.php 24275 2009-11-26 13:58:27Z arvydas $
  */
 /**
  * Includes PHP mailer class.
@@ -41,6 +41,90 @@ class oxEmail extends PHPMailer
      * @var int
      */
     public $SMTP_PORT = 25;
+
+    /**
+     * Password reminder mail template
+     *
+     * @var string
+     */
+    protected $_sForgotPwdTemplate = "email_forgotpwd_html.tpl";
+
+    /**
+     * Password reminder plain mail template
+     *
+     * @var string
+     */
+    protected $_sForgotPwdTemplatePlain = "email_forgotpwd_plain.tpl";
+
+    /**
+     * Newsletter registration mail template
+     *
+     * @var string
+     */
+    protected $_sNewsletterOptInTemplate = "email_newsletteroptin_html.tpl";
+
+    /**
+     * Newsletter registration plain mail template
+     *
+     * @var string
+     */
+    protected $_sNewsletterOptInTemplatePlain = "email_newsletteroptin_plain.tpl";
+
+    /**
+     * Product suggest mail template
+     *
+     * @var string
+     */
+    protected $_sSuggestTemplate = "email_suggest_html.tpl";
+
+    /**
+     * Product suggest plain mail template
+     *
+     * @var string
+     */
+    protected $_sSuggestTemplatePlain = "email_suggest_plain.tpl";
+
+    /**
+     * Send order notification mail template
+     *
+     * @var string
+     */
+    protected $_sSenedNowTemplate = "email_sendednow_html.tpl";
+
+    /**
+     * Send order notification plain mail template
+     *
+     * @var string
+     */
+    protected $_sSenedNowTemplatePlain = "email_sendednow_plain.tpl";
+
+    /**
+     * Wishlist mail template
+     *
+     * @var string
+     */
+    protected $_sWishListTemplate = "email_wishlist_html.tpl";
+
+    /**
+     * Wishlist plain mail template
+     *
+     * @var string
+     */
+    protected $_sWishListTemplatePlain = "email_wishlist_plain.tpl";
+
+    /**
+     * Name of template used during registration
+     *
+     * @var string
+     */
+    protected $_sRegisterTemplate = "email_register_html.tpl";
+
+    /**
+     * Name of plain template used during registration
+     *
+     * @var string
+     */
+    protected $_sRegisterTemplatePlain = "email_register_plain.tpl";
 
     /**
      * Name of template used by reminder function (article).
@@ -315,9 +399,6 @@ class oxEmail extends PHPMailer
     {
         $myConfig = $this->getConfig();
 
-        $sCustHTML  = $this->_sOrderUserTemplate;
-        $sCustPLAIN = $this->_sOrderUserPlainTemplate;
-
         // add user defined stuff if there is any
         $oOrder = $this->_addUserInfoOrderEMail( $oOrder );
 
@@ -336,18 +417,19 @@ class oxEmail extends PHPMailer
         $oSmarty->assign( "order", $oOrder);
         $oSmarty->assign( "shop", $oShop );
         $oSmarty->assign( "oViewConf", $oShop );
+        $oSmarty->assign( "oView", $myConfig->getActiveView() );
         $oSmarty->assign( "user", $oUser );
         $oSmarty->assign( "currency", $myConfig->getActShopCurrencyObject() );
         $oSmarty->assign( "basket", $oOrder->getBasket() );
         $oSmarty->assign( "payment", $oOrder->getPayment() );
         if ( $oUser ) {
-            $oSmarty->assign( "reviewuser", $oUser->getReviewUserHash($oUser->getId()) );
+            $oSmarty->assign( "reviewuser", $oUser->getReviewUserHash( $oUser->getId() ) );
         }
         $oSmarty->assign( "paymentinfo", $myConfig->getActiveShop() );
 
         //deprecated vars
-        $oSmarty->assign( "iswishlist", true);
-        $oSmarty->assign( "isreview", true);
+        $oSmarty->assign( "iswishlist", true );
+        $oSmarty->assign( "isreview", true );
 
         if ( $aVoucherList = $oOrder->getVoucherList() ) {
             $oSmarty->assign( "vouchers", $aVoucherList );
@@ -360,8 +442,8 @@ class oxEmail extends PHPMailer
             $oSmarty->assign( $key, $val );
         }
 
-        $this->setBody( $oSmarty->fetch( $sCustHTML) );
-        $this->setAltBody( $oSmarty->fetch( $sCustPLAIN) );
+        $this->setBody( $oSmarty->fetch( $this->_sOrderUserTemplate ) );
+        $this->setAltBody( $oSmarty->fetch( $this->_sOrderUserPlainTemplate ) );
 
         // #586A
         if ( $sSubject === null ) {
@@ -399,9 +481,6 @@ class oxEmail extends PHPMailer
 
         $oShop = $this->_getShop();
 
-        $sOwnerHTML  = $this->_sOrderOwnerTemplate;
-        $sOwnerPLAIN = $this->_sOrderOwnerPlainTemplate;
-
         // cleanup
         $this->_clearMailer();
 
@@ -429,6 +508,7 @@ class oxEmail extends PHPMailer
         $oSmarty->assign( "order", $oOrder );
         $oSmarty->assign( "shop", $oShop );
         $oSmarty->assign( "oViewConf", $oShop );
+        $oSmarty->assign( "oView", $myConfig->getActiveView() );
         $oSmarty->assign( "user", $oOrder->getOrderUser() );
         $oSmarty->assign( "currency", $myConfig->getActShopCurrencyObject() );
         $oSmarty->assign( "basket", $oOrder->getBasket() );
@@ -445,8 +525,8 @@ class oxEmail extends PHPMailer
         foreach ($aNewSmartyArray as $key => $val)
             $oSmarty->assign( $key, $val );
 
-        $this->setBody( $oSmarty->fetch( $myConfig->getTemplatePath($sOwnerHTML,false) ) );
-        $this->setAltBody( $oSmarty->fetch( $myConfig->getTemplatePath($sOwnerPLAIN,false) ) );
+        $this->setBody( $oSmarty->fetch( $myConfig->getTemplatePath( $this->_sOrderOwnerTemplate, false ) ) );
+        $this->setAltBody( $oSmarty->fetch( $myConfig->getTemplatePath( $this->_sOrderOwnerPlainTemplate, false ) ) );
 
         //Sets subject to email
         // #586A
@@ -506,6 +586,7 @@ class oxEmail extends PHPMailer
         $oSmarty->assign( "charset", oxLang::getInstance()->translateString("charset") );
         $oSmarty->assign( "shop", $oShop );
         $oSmarty->assign( "oViewConf", $oShop );
+        $oSmarty->assign( "oView", $this->getConfig()->getActiveView() );
         $oSmarty->assign( "user", $oUser );
 
         $oOutputProcessor = oxNew( "oxoutput" );
@@ -515,8 +596,8 @@ class oxEmail extends PHPMailer
             $oSmarty->assign( $key, $val );
         }
 
-        $this->setBody( $oSmarty->fetch( "email_register_html.tpl") );
-        $this->setAltBody( $oSmarty->fetch( "email_register_plain.tpl") );
+        $this->setBody( $oSmarty->fetch( $this->_sRegisterTemplate ) );
+        $this->setAltBody( $oSmarty->fetch( $this->_sRegisterTemplatePlain ) );
 
         $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oShop->oxshops__oxregistersubject->value );
 
@@ -554,7 +635,7 @@ class oxEmail extends PHPMailer
         // user
         $sWhere = "oxuser.oxactive = 1 and oxuser.oxusername = ".$oDb->quote( $sEmailAddress )." and oxuser.oxpassword != ''";
         $sOrder = "";
-        if (oxConfig::getInstance()->getConfigParam( 'blMallUsers' )) {
+        if ( $myConfig->getConfigParam( 'blMallUsers' )) {
             $sOrder = "order by oxshopid = '".$oShop->getId()."' desc";
         } else {
             $sWhere .= " and oxshopid = '".$oShop->getId()."'";
@@ -570,6 +651,7 @@ class oxEmail extends PHPMailer
                 $oSmarty->assign( "charset", oxLang::getInstance()->translateString("charset"));
                 $oSmarty->assign( "shop", $oShop );
                 $oSmarty->assign( "oViewConf", $oShop );
+                $oSmarty->assign( "oView", $myConfig->getActiveView() );
                 $oSmarty->assign( "user", $oUser );
 
                 $oOutputProcessor = oxNew( "oxoutput" );
@@ -579,8 +661,8 @@ class oxEmail extends PHPMailer
                     $oSmarty->assign($key, $val);
                 }
 
-                $this->setBody( $oSmarty->fetch( "email_forgotpwd_html.tpl") );
-                $this->setAltBody( $oSmarty->fetch( "email_forgotpwd_plain.tpl") );
+                $this->setBody( $oSmarty->fetch( $this->_sForgotPwdTemplate ) );
+                $this->setAltBody( $oSmarty->fetch( $this->_sForgotPwdTemplatePlain ) );
 
                 //sets subject of email
                 $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oShop->oxshops__oxforgotpwdsubject->value );
@@ -653,6 +735,7 @@ class oxEmail extends PHPMailer
         $oSmarty->assign( "charset", $oLang->translateString("charset"));
         $oSmarty->assign( "shop", $oShop );
         $oSmarty->assign( "oViewConf", $oShop );
+        $oSmarty->assign( "oView", $this->getConfig()->getActiveView() );
         $oSmarty->assign( "subscribeLink", $this->_getNewsSubsLink($oUser->oxuser__oxid->value) );
         $oSmarty->assign( "user", $oUser );
 
@@ -662,8 +745,8 @@ class oxEmail extends PHPMailer
             $oSmarty->assign( $key, $val );
         }
 
-        $this->setBody( $oSmarty->fetch("email_newsletteroptin_html.tpl") );
-        $this->setAltBody( $oSmarty->fetch( "email_newsletteroptin_plain.tpl") );
+        $this->setBody( $oSmarty->fetch( $this->_sNewsletterOptInTemplate ) );
+        $this->setAltBody( $oSmarty->fetch( $this->_sNewsletterOptInTemplatePlain ) );
         $this->setSubject( ( $sSubject !== null ) ? $sSubject : oxLang::getInstance()->translateString("EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT") . " " . $oShop->oxshops__oxname->getRawValue() );
 
         $sFullName = $oUser->oxuser__oxfname->value . " " . $oUser->oxuser__oxlname->value;
@@ -685,13 +768,13 @@ class oxEmail extends PHPMailer
     protected function _getNewsSubsLink( $sId )
     {
         $myConfig = $this->getConfig();
-    	$iActShopLang = $myConfig->getActiveShop()->getLanguage();
-    	$sLang = "";
-    	if ( $iActShopLang ) {
-    		$sLang = '&amp;lang='.$iActShopLang;
-    	}
-    	$sUrl = $myConfig->getShopHomeURL().'cl=newsletter&amp;fnc=addme&amp;uid='.$sId.$sLang;
-    	return $sUrl;
+        $iActShopLang = $myConfig->getActiveShop()->getLanguage();
+        $sLang = "";
+        if ( $iActShopLang ) {
+            $sLang = '&amp;lang='.$iActShopLang;
+        }
+        $sUrl = $myConfig->getShopHomeURL().'cl=newsletter&amp;fnc=addme&amp;uid='.$sId.$sLang;
+        return $sUrl;
     }
 
     /**
@@ -769,6 +852,7 @@ class oxEmail extends PHPMailer
         $oSmarty->assign( "charset", oxLang::getInstance()->translateString("charset") );
         $oSmarty->assign( "shop", $oShop );
         $oSmarty->assign( "oViewConf", $oShop );
+        $oSmarty->assign( "oView", $myConfig->getActiveView() );
         $oSmarty->assign( "userinfo", $oParams );
         $oSmarty->assign( "product", $oProduct );
 
@@ -779,8 +863,8 @@ class oxEmail extends PHPMailer
             $oSmarty->assign( $key, $val );
         }
 
-        $this->setBody( $oSmarty->fetch( "email_suggest_html.tpl") );
-        $this->setAltBody( $oSmarty->fetch( "email_suggest_plain.tpl") );
+        $this->setBody( $oSmarty->fetch( $this->_sSuggestTemplate ) );
+        $this->setAltBody( $oSmarty->fetch( $this->_sSuggestTemplatePlain ) );
         $this->setSubject( $oParams->send_subject );
 
         $this->setRecipient( $oParams->rec_email, $oParams->rec_name );
@@ -822,6 +906,7 @@ class oxEmail extends PHPMailer
         $oSmarty->assign( "charset", $oLang->translateString("charset"));
         $oSmarty->assign( "shop", $oShop );
         $oSmarty->assign( "oViewConf", $oShop );
+        $oSmarty->assign( "oView", $myConfig->getActiveView() );
         $oSmarty->assign( "order", $oOrder );
         $oSmarty->assign( "currency", $myConfig->getActShopCurrencyObject() );
 
@@ -847,8 +932,8 @@ class oxEmail extends PHPMailer
 
         $oSmarty->security_settings['INCLUDE_ANY'] = true;
 
-        $this->setBody( $oSmarty->fetch( $myConfig->getTemplatePath("email_sendednow_html.tpl",false)) );
-        $this->setAltBody( $oSmarty->fetch( $myConfig->getTemplatePath("email_sendednow_plain.tpl",false)) );
+        $this->setBody( $oSmarty->fetch( $myConfig->getTemplatePath( $this->_sSenedNowTemplate, false ) ) );
+        $this->setAltBody( $oSmarty->fetch( $myConfig->getTemplatePath( $this->_sSenedNowTemplatePlain, false ) ) );
         $oLang->setTplLanguage( $iOldTplLang );
         $oLang->setBaseLanguage( $iOldBaseLang );
         // set it back
@@ -990,11 +1075,12 @@ class oxEmail extends PHPMailer
             $oSmarty->assign( "charset", $oLang->translateString( "charset" ) );
             $oSmarty->assign( "shop", $oShop );
             $oSmarty->assign( "oViewConf", $oShop );
+            $oSmarty->assign( "oView", $this->getConfig()->getActiveView() );
             $oSmarty->assign( "articles", $oArticleList );
 
             $this->setRecipient( $oShop->oxshops__oxowneremail->value, $oShop->oxshops__oxname->getRawValue() );
             $this->setFrom( $oShop->oxshops__oxowneremail->value, $oShop->oxshops__oxname->getRawValue() );
-            $this->setBody( $oSmarty->fetch( $sPathToTemplate . $this->getConfig()->getTemplatePath($this->_sReminderMailTemplate,false) ) );
+            $this->setBody( $oSmarty->fetch( $sPathToTemplate . $this->getConfig()->getTemplatePath( $this->_sReminderMailTemplate, false ) ) );
             $this->setAltBody( "" );
             $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oLang->translateString( 'EMAIL_STOCKREMINDER_SUBJECT' ) );
 
@@ -1030,10 +1116,11 @@ class oxEmail extends PHPMailer
         $oSmarty->assign( "charset", oxLang::getInstance()->translateString("charset") );
         $oSmarty->assign( "shop", $oShop );
         $oSmarty->assign( "oViewConf", $oShop );
+        $oSmarty->assign( "oView", $myConfig->getActiveView() );
         $oSmarty->assign( "userinfo", $oParams );
 
-        $this->setBody( $oSmarty->fetch( "email_wishlist_html.tpl") );
-        $this->setAltBody( $oSmarty->fetch( "email_wishlist_plain.tpl") );
+        $this->setBody( $oSmarty->fetch( $this->_sWishListTemplate ) );
+        $this->setAltBody( $oSmarty->fetch( $this->_sWishListTemplatePlain ) );
         $this->setSubject( $oParams->send_subject );
 
         $this->setRecipient( $oParams->rec_email, $oParams->rec_name );
@@ -1073,6 +1160,7 @@ class oxEmail extends PHPMailer
         $oSmarty = oxUtilsView::getInstance()->getSmarty();
         $oSmarty->assign( "shop", $oShop );
         $oSmarty->assign( "oViewConf", $oShop );
+        $oSmarty->assign( "oView", $this->getConfig()->getActiveView() );
         $oSmarty->assign( "product", $oArticle );
         $oSmarty->assign( "email", $aParams['email']);
         $oSmarty->assign( "bidprice", $oLang->formatCurrency( $oAlarm->oxpricealarm__oxprice->value, $oCur ) );

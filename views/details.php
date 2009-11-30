@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: details.php 23930 2009-11-10 17:29:24Z arvydas $
+ * $Id: details.php 24119 2009-11-20 10:02:42Z vilma $
  */
 
 /**
@@ -791,7 +791,7 @@ class Details extends oxUBase
                 $this->_iLinkType = OXARTICLE_LINKTYPE_CATEGORY;
 
                 // price category has own type..
-                if ( ( $oCat = $this->getCategory() ) && $oCat->isPriceCategory() ) {
+                if ( ( $oCat = $this->getActCategory() ) && $oCat->isPriceCategory() ) {
                     $this->_iLinkType = OXARTICLE_LINKTYPE_PRICECATEGORY;
                 }
             }
@@ -1300,10 +1300,49 @@ class Details extends oxUBase
     public function isMdVariantView()
     {
         if ( $this->_blMdView === null ) {
-            $iMaxMdDepth = $this->getProduct()->getMdVariants()->getMaxDepth();
-            $this->_blMdView = ($iMaxMdDepth > 1);
+            $this->_blMdView = false;
+        	if ( $this->getConfig()->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+	        	$iMaxMdDepth = $this->getProduct()->getMdVariants()->getMaxDepth();
+	            $this->_blMdView = ($iMaxMdDepth > 1);
+            }
         }
 
         return $this->_blMdView;
+    }
+
+    /**
+     * Returns seo parameter to filter meta data by it e.g. article
+     * meta data for active category
+     *
+     * @return string
+     */
+    protected function _getMetaSeoParam()
+    {
+        $sParam = null;
+        switch ( $this->getLinkType() ) {
+            case OXARTICLE_LINKTYPE_VENDOR:
+                $sParam = $this->getVendorId();
+                break;
+            case OXARTICLE_LINKTYPE_MANUFACTURER:
+                $sParam = $this->getManufacturerId();
+                break;
+            case OXARTICLE_LINKTYPE_TAG:
+                if ( ( $oTag = $this->getActTag() ) ) {
+                    $sParam = $oTag->sTag;
+                }
+                break;
+            case OXARTICLE_LINKTYPE_RECOMM:
+                if ( ( $oRecomm = $this->getActiveRecommList() ) ) {
+                    $sParam = $oRecomm->getId();
+                }
+                break;
+            default:
+                if ( ( $oCat = $this->getActCategory() ) ) {
+                    $sParam = $oCat->getId();
+                }
+                break;
+        }
+
+        return $sParam;
     }
 }

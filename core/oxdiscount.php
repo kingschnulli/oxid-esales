@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdiscount.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxdiscount.php 23995 2009-11-17 13:33:13Z  $
  */
 
 /**
@@ -255,8 +255,8 @@ class oxDiscount extends oxI18n
             return false;
             // price check
         } elseif ($this->oxdiscount__oxprice->value) {
-            $dRate = $this->getConfig()->getActShopCurrencyObject()->rate;
-            if ( $oSummary->dArticlePrice < $this->oxdiscount__oxprice->value*$dRate || $oSummary->dArticlePrice > $this->oxdiscount__oxpriceto->value*$dRate ) {
+            $dRate = $oBasket->getBasketCurrency()->rate;
+            if ( $oSummary->dArticleDiscountablePrice < $this->oxdiscount__oxprice->value*$dRate || $oSummary->dArticleDiscountablePrice > $this->oxdiscount__oxpriceto->value*$dRate ) {
                 return false;
             }
         }

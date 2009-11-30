@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_list.php 17958 2009-04-07 14:29:36Z rimvydas.paskevicius $
+ * $Id: article_list.php 24016 2009-11-17 15:37:37Z rimvydas.paskevicius $
  */
 
 /**
@@ -158,15 +158,15 @@ class Article_List extends oxAdminList
     /**
      * Adding empty parent check
      *
-     * @param array  $aWhere SQL condition array
-     * @param string $sQ     SQL query string
+     * @param array  $aWhere         SQL condition array
+     * @param string $sQ             SQL query string
      *
      * @return $sQ
      */
     protected function _prepareWhereQuery( $aWhere, $sQ )
     {
         $sQ = parent::_prepareWhereQuery( $aWhere, $sQ );
-        //searching for empty oxfolder fields
+
         return $sQ . " and ".getViewName( 'oxarticles' ).".oxparentid = '' ";
     }
 

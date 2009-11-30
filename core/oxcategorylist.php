@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategorylist.php 23355 2009-10-19 12:37:04Z arvydas $
+ * $Id: oxcategorylist.php 23988 2009-11-13 06:19:33Z alfonsas $
  */
 
 
@@ -142,7 +142,6 @@ class oxCategoryList extends oxList
         $sViewName  = $this->getBaseObject()->getViewName();
         $sFieldList = $this->_getSqlSelectFieldsForTree($sViewName, $aColumns);
 
-        //$sFieldList = $oBaseObject->getSelectFields();
         //excluding long desc
         if (!$this->isAdmin() && !$this->_blHideEmpty && !$this->_blForceFull) {
             $oCat = oxNew('oxcategory');
@@ -494,12 +493,12 @@ class oxCategoryList extends oxList
         $sViewName  = getViewName('oxcategories');
         $sSortSql = $this->_getSelectString(false, array('oxid', 'oxparentid', 'oxsort', 'oxtitle'), 'oxparentid, oxsort, oxtitle');
         $aIds = array();
-        $oDB = oxDb::getDb();
+        $oDB = oxDb::getDb(true);
         $rs = $oDB->execute($sSortSql);
         $cnt = 0;
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
-                $aIds[$rs->fields[0]] = $cnt;
+                $aIds[$rs->fields['oxid']] = $cnt;
                 $cnt++;
                 $rs->moveNext();
             }

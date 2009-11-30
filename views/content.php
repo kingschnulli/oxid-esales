@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: content.php 23255 2009-10-14 15:25:09Z sarunas $
+ * $Id: content.php 24214 2009-11-24 15:45:03Z arvydas $
  */
 
 /**
@@ -56,16 +56,6 @@ class Content extends oxUBase
      * @var oxcontent
      */
      protected $_oContentCat = null;
-
-    /**
-     * Unsets SEO category and call parent::init();
-     *
-     * @return null
-     */
-    public function init()
-    {
-        parent::init();
-    }
 
     /**
      * Returns prefix ID used by template engine.

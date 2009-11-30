@@ -19,7 +19,7 @@
  * @package main
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23885 2009-11-09 10:00:40Z vilma $
+ * $Id: lang.php 24253 2009-11-25 17:08:41Z tomas $
  */
 
 
@@ -735,6 +735,8 @@ $aLang = array(
 'MALLCATITEM_PLEASECHOOSE'                        => "Bitte wählen Sie:",
 'MEDIA'                                           => "Zusatzinformationen",
 'MOREDETAILS_POPUP_TITLE'                         => "Zoombilder",
+'MR'                                              => "Herr",
+'MRS'                                             => "Frau",
 'NEWS_TITLE'                                      => "Neuigkeiten bei uns",
 'NEWS_LATESTNEWSBY'                               => "Neuigkeiten bei",
 'NEWSLETTER_NEWSLWTTERTITLE'                      => "Neuigkeiten bei uns",

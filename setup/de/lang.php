@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23462 2009-10-21 15:15:23Z vilma $
+ * $Id: lang.php 24074 2009-11-19 09:23:41Z alfonsas $
  */
 
 $aLang = array(
@@ -87,6 +87,8 @@ $aLang = array(
 'MOD_UNICODE_SUPPORT'                             => 'UTF-8 Unterstützung',
 
 'STEP_0_ERROR_TEXT'                               => 'Ihr System erf&uuml;llt nicht alle n&ouml;tigen Systemvoraussetzungen',
+'STEP_0_ERROR_TEXT'                               => 'Your system does not fit system requirements',
+'STEP_0_ERROR_URL'                                  => "http://www.oxid-esales.com/de/produkte/community-edition/systemvoraussetzungen",
 'STEP_0_TEXT'                                     => '<ul class="req">'.
                                                      '<li class="pass"> - Die Voraussetzung ist erf&uuml;llt.</li>'.
                                                      '<li class="pmin"> - Die Voraussetzung ist nicht oder nur teilweise erf&uuml;llt. Der OXID eShop funktioniert trotzdem und kann installiert werden.</li>'.
@@ -178,7 +180,7 @@ $aLang = array(
 'USE_DYNAMIC_PAGES'                               => "Um Ihren Gesch&auml;ftserfolg zu vergr&ouml;&szlig;ern, laden Sie weitere Informationen vom OXID Server nach. <br>Mehr Informationen in unserern ",
 'PRIVACY_POLICY'                                  => "Datenschutzerl&auml;uterungen",
 
-'LOAD_DYN_CONTENT_NOTICE'                         => "<p>Falls die Option &quot;Weitere Informationen&quot; nachladen eingeschaltet ist, sehen Sie ein zus&auml;tzliches Men&uuml; im Admin Bereich Ihres OXID eShops.</p><p>Mittels dieses Men&uuml;s erhalten Sie weitere Informationen &uuml;ber E-Commerce Services wie z.B. Google Produktsuche oder econda.</p> <p>Sie k&ouml;nnen diese Einstellung im Admin Bereich jederzeit wieder &auml;ndern.</p>",
+'LOAD_DYN_CONTENT_NOTICE'                         => "<p>Falls die Option &quot;Weitere Informationen&quot; nachladen eingeschaltet ist, sehen Sie ein zus&auml;tzliches Men&uuml; im Admin Bereich Ihres OXID eShops.</p><p>Mittels dieses Men&uuml;s erhalten Sie weitere Informationen &uuml;ber eCommerce Services wie z.B. Google Produktsuche oder econda.</p> <p>Sie k&ouml;nnen diese Einstellung im Admin Bereich jederzeit wieder &auml;ndern.</p>",
 'ERROR_SETUP_CANCELLED'                           => "Das Setup wurde abgebrochen, weil Sie die Lizenzvereinbarungen nicht akzeptiert haben.",
 'BUTTON_START_INSTALL'                            => "Setup erneut starten",
 

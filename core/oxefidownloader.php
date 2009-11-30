@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxefidownloader.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxefidownloader.php 24277 2009-11-26 15:00:31Z arvydas $
  */
 
 
@@ -76,8 +76,8 @@ class oxEfiDownloader extends oxSuperCfg
         fclose($fOut);
 
         //remove possible old connector from the main shop dir
-        if (file_exists(getShopBasePath() . "/oxefi.php")) {
-            unlink(getShopBasePath() . "/oxefi.php");
+        if (file_exists(getShopBasePath() . "oxefi.php")) {
+            unlink(getShopBasePath() . "oxefi.php");
         }
 
         return $sFileName;

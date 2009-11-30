@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: payment.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: payment.php 23976 2009-11-12 14:27:42Z vilma $
  */
 
 /**
@@ -316,6 +316,7 @@ class Payment extends oxUBase
         if ( $blOK ) {
             oxSession::setVar( 'paymentid', $sPaymentId );
             oxSession::setVar( 'dynvalue', $aDynvalue );
+            $oBasket->setShipping($sShipSetId);
             oxSession::deleteVar( '_selected_paymentid' );
             return 'order';
         } else {

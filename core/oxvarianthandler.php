@@ -161,8 +161,8 @@ class oxVariantHandler extends oxSuperCfg
                         //cannot use setEnableMultilang() at this place
                         //$oVariant = oxNew("oxarticle");
                         //$oVariant->setEnableMultilang(false);
-                        $oVariant = oxNew("oxbase");
-                        $oVariant->init( 'oxarticles' );
+                        $oVariant = oxNew("oxarticle");
+                        $oVariant->setEnableMultilang(false);
                         $oVariant->load($oSimpleVariant->oxarticles__oxid->value);
                         $oVariant->oxarticles__oxprice->setValue( $oVariant->oxarticles__oxprice->value + $dPriceMod );
                         //assign for all languages

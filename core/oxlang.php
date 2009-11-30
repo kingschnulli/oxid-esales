@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlang.php 23422 2009-10-21 07:22:02Z tomas $
+ * $Id: oxlang.php 24311 2009-11-27 15:15:10Z arvydas $
  */
 
 /**
@@ -260,7 +260,7 @@ class oxLang extends oxSuperCfg
                     //skipping non active languages
                     if ( !$aLangParams[$key]['active'] ) {
                         $i++;
-                    	continue;
+                        continue;
                     }
                 }
 
@@ -539,15 +539,25 @@ class oxLang extends oxSuperCfg
      */
     protected function _getLangFilesPathArray( $blAdmin, $iLang )
     {
-        $aLangFiles = false;
-        if ( ( $sDir = dirname( $this->getConfig()->getLanguagePath( 'lang.php', $blAdmin, $iLang ) ) ) ) {
-            //get all lang files
-            //#M681: content of cust_lang.php should be prefered to lang.php
-            $aLangFiles = glob( $sDir."/*_lang.php" );
-            array_unshift( $aLangFiles, $sDir."/lang.php");
+        $myConfig = $this->getConfig();
+        $aLangFiles = array();
+
+        //get all lang files
+        $sStdPath = $myConfig->getStdLanguagePath( "", $blAdmin, $iLang );
+        if ( $sStdPath ) {
+            $aLangFiles[] = $sStdPath . "lang.php";
+            $aLangFiles = array_merge( $aLangFiles, glob( $sStdPath."*_lang.php" ) );
         }
 
-        return $aLangFiles;
+        $sCustPath = $myConfig->getLanguagePath( "", $blAdmin, $iLang );
+        if ( $sCustPath && $sCustPath != $sStdPath ) {
+            if ( is_readable( $sCustPath . "lang.php" ) ) {
+                $aLangFiles[] = $sCustPath . "lang.php";
+            }
+            $aLangFiles = array_merge( $aLangFiles, glob( $sCustPath."*_lang.php" ) );
+        }
+
+        return count( $aLangFiles ) ? $aLangFiles : false;
     }
 
     /**
@@ -732,38 +742,6 @@ class oxLang extends oxSuperCfg
         return $sStringToTranslate;
     }
 
-    /**
-     * Language sorting callback function
-     *
-     * @param object $a1 first value to check
-     * @param object $a2 second value to check
-     *
-     * @return bool
-     */
-    /**
-     * Language sorting callback function
-     *
-     * @param object $a1 first value to check
-     * @param object $a2 second value to check
-     *
-     * @return bool
-     */
-    /**
-     * Language sorting callback function
-     *
-     * @param object $a1 first value to check
-     * @param object $a2 second value to check
-     *
-     * @return bool
-     */
-    /**
-     * Language sorting callback function
-     *
-     * @param object $a1 first value to check
-     * @param object $a2 second value to check
-     *
-     * @return bool
-     */
     /**
      * Language sorting callback function
      *

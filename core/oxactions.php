@@ -19,14 +19,14 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxactions.php 22507 2009-09-22 09:33:55Z sarunas $
+ * $Id: oxactions.php 24036 2009-11-18 15:09:45Z arvydas $
  */
 
 /**
  * Article actions manager. Collects and keeps actions of chosen article.
  * @package core
  */
-class oxActions extends oxBase
+class oxActions extends oxI18n
 {
     /**
      * Current class name

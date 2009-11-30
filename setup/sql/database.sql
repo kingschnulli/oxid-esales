@@ -1664,7 +1664,7 @@ CREATE TABLE `oxuser` (
 # Data for table `oxuser`
 #
 
-INSERT INTO `oxuser` VALUES ('oxdefaultadmin', '1', 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Ihr Firmenname', 'Hans', 'Mustermann', 'Musterstr.', '10', '', 'Musterstadt', 'a7c40f631fc920687.20179984', '79098', '0800 1234567', '0800 1234567', 'Herr', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', '0', '', '0', '0');
+INSERT INTO `oxuser` VALUES ('oxdefaultadmin', '1', 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Ihr Firmenname', 'Hans', 'Mustermann', 'Musterstr.', '10', '', 'Musterstadt', 'a7c40f631fc920687.20179984', '79098', '0800 1234567', '0800 1234567', 'MR', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', '0', '', '0', '0');
 
 #
 # Table structure for table `oxuserpayments`
@@ -1690,6 +1690,9 @@ DROP TABLE IF EXISTS `oxactions`;
 CREATE TABLE `oxactions` (
   `OXID` char(32) character set latin1 collate latin1_general_ci NOT NULL,
   `OXTITLE` char(128) NOT NULL default '',
+  `OXTITLE_1` char(128) NOT NULL default '',
+  `OXTITLE_2` char(128) NOT NULL default '',
+  `OXTITLE_3` char(128) NOT NULL default '',
   `OXACTIVE` tinyint(1) NOT NULL default '1',
   `OXACTIVEFROM` datetime NOT NULL default '0000-00-00 00:00:00',
   `OXACTIVETO` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1700,14 +1703,14 @@ CREATE TABLE `oxactions` (
 # Data for table `oxactions`
 #
 
-INSERT INTO `oxactions` VALUES ('oxstart', 'Startseite unten', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `oxactions` VALUES ('oxtopstart', 'Topangebot Startseite', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `oxactions` VALUES ('oxfirststart', 'Groﬂes Angebot Startseite', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `oxactions` VALUES ('oxbargain', 'Schn‰ppchen', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `oxactions` VALUES ('oxtop5', 'Topseller', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `oxactions` VALUES ('oxcatoffer', 'Kategorien-Topangebot', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `oxactions` VALUES ('oxnewest', 'Frisch eingetroffen', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `oxactions` VALUES ('oxnewsletter', 'Newsletter', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `oxactions` VALUES ('oxstart', 'Startseite unten', 'Start page bottom', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `oxactions` VALUES ('oxtopstart', 'Topangebot Startseite', 'Top offer start page', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `oxactions` VALUES ('oxfirststart', 'Groﬂes Angebot Startseite', 'Big offer start page', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `oxactions` VALUES ('oxbargain', 'Schn‰ppchen', 'Bargain', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `oxactions` VALUES ('oxtop5', 'Topseller', 'Top seller', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `oxactions` VALUES ('oxcatoffer', 'Kategorien-Topangebot', 'Top offer in categories', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `oxactions` VALUES ('oxnewest', 'Frisch eingetroffen', 'Just arrived', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `oxactions` VALUES ('oxnewsletter', 'Newsletter', 'Newsletter', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 #
 # Table structure for table `oxactions2article`
@@ -1830,7 +1833,7 @@ CREATE TABLE `oxnewssubscribed` (
 # Data for table `oxnewssubscribed`
 #
 
-INSERT INTO `oxnewssubscribed` VALUES ('0b742e66fd94c88b8.61001136', 'oxdefaultadmin', 'Herr', 'Shop', 'Administrator', 'admin', 1, '0', '2005-07-26 19:16:09', '0000-00-00 00:00:00');
+INSERT INTO `oxnewssubscribed` VALUES ('0b742e66fd94c88b8.61001136', 'oxdefaultadmin', 'MR', 'Shop', 'Administrator', 'admin', 1, '0', '2005-07-26 19:16:09', '0000-00-00 00:00:00');
 
 #
 # Table structure for table `oxvendor`

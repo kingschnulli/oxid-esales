@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 23830 2009-11-04 10:51:19Z alfonsas $
+ * $Id: oxconfig.php 24311 2009-11-27 15:15:10Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -399,7 +399,7 @@ class oxConfig extends oxSuperCfg
             $this->_loadVarsFromDb( $sShopID );
 
         } catch ( oxConnectionException $oEx ) {
-            $oEx->debugOut( $this->iDebug);
+            $oEx->debugOut();
             if ( defined( 'OXID_PHP_UNIT' ) ) {
                 return false;
             } elseif ( 0 != $this->iDebug ) {
@@ -1061,7 +1061,7 @@ class oxConfig extends oxSuperCfg
      *
      * @return string
      */
-    public function getDir($sFile, $sDir, $blAdmin, $iLang = null, $iShop = null, $sTheme = null, $blAbsolute = true )
+    public function getDir($sFile, $sDir, $blAdmin, $iLang = null, $iShop = null, $sTheme = null, $blAbsolute = true, $blIgnoreCust = false )
     {
         if ( is_null($sTheme) ) {
             $sTheme = $this->getConfigParam( 'sTheme' );
@@ -1088,7 +1088,7 @@ class oxConfig extends oxSuperCfg
 
         //Load from
         $sPath = "$sTheme/$iShop/$sLang/$sDir/$sFile";
-        $sCacheKey = $sPath . "_$blAbsolute";
+        $sCacheKey = $sPath . "_{$blIgnoreCust}{$blAbsolute}";
 
         if ( ( $sReturn = oxutils::getInstance()->fromStaticCache( $sCacheKey ) ) !== null ) {
             return $sReturn;
@@ -1098,8 +1098,8 @@ class oxConfig extends oxSuperCfg
 
         // Check for custom template
         $sCustomTheme = $this->getConfigParam( 'sCustomTheme' );
-        if ( !$blAdmin && $sCustomTheme && $sCustomTheme != $sTheme) {
-            $sReturn = $this->getDir($sFile, $sDir, $blAdmin, $iLang, $iShopl, $sCustomTheme, $blAbsolute);
+        if ( !$blAdmin && !$blIgnoreCust && $sCustomTheme && $sCustomTheme != $sTheme) {
+            $sReturn = $this->getDir( $sFile, $sDir, $blAdmin, $iLang, $iShop, $sCustomTheme, $blAbsolute );
         }
 
         //test lang level ..
@@ -1382,6 +1382,20 @@ class oxConfig extends oxSuperCfg
     public function getLanguagePath( $sFile, $blAdmin, $iLang = null )
     {
         return $this->getDir( $sFile, oxLang::getInstance()->getLanguageAbbr( $iLang ), $blAdmin, $iLang );
+    }
+
+    /**
+     * Returns standard ("basic" theme) language files or folders path
+     *
+     * @param string $sFile   File name
+     * @param bool   $blAdmin Whether to force admin
+     * @param int    $iLang   Language id
+     *
+     * @return string
+     */
+    public function getStdLanguagePath( $sFile, $blAdmin, $iLang = null )
+    {
+        return $this->getDir( $sFile, oxLang::getInstance()->getLanguageAbbr( $iLang ), $blAdmin, $iLang, null, $this->getConfigParam( "sTheme" ), true, true );
     }
 
     /**

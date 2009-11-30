@@ -108,7 +108,7 @@ class oxUtilsUrl extends oxSuperCfg
             return $sUrl;
         }
 
-        $sUrl = preg_replace('/(force_)?sid=[a-z0-9\._]*&?(amp;)?/i', '', $sUrl);
+        $sUrl = preg_replace('/(force_)?(admin_)?sid=[a-z0-9\._]*&?(amp;)?/i', '', $sUrl);
 
         $oStr = getStr();
         if ($qpos = $oStr->strpos($sUrl, '?')) {

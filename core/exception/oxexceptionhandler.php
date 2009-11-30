@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxexceptionhandler.php 23366 2009-10-20 08:53:58Z arvydas $
+ * $Id: oxexceptionhandler.php 24041 2009-11-18 16:23:26Z tomas $
  */
 
 /**
@@ -119,7 +119,7 @@ class oxExceptionHandler
         // exception occured in function processing
         $oEx->setNotCaught();
         // general log entry for all exceptions here
-        $oEx->debugOut($this->_iDebug);
+        $oEx->debugOut();
 
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             return $oEx->getString();

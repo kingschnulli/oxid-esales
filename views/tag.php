@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: tag.php 23791 2009-11-02 15:49:26Z arvydas $
+ * $Id: tag.php 24214 2009-11-24 15:45:03Z arvydas $
  */
 
 /**
@@ -72,17 +72,6 @@ class Tag extends aList
      * @var int
      */
     protected $_iViewIndexState = VIEW_INDEXSTATE_INDEX;
-
-    /**
-     * Initiates tag view and calls parent::init();
-     *
-     * @return null
-     */
-    public function init()
-    {
-        $this->_sTag = oxConfig::getParameter("searchtag", 1);
-        return parent::init();
-    }
 
     /**
      * Executes parent::render(), loads article list according active tag
@@ -157,7 +146,7 @@ class Tag extends aList
         $oArtList->setCustomSorting( $this->getSortingSql( 'oxtags' ) );
 
         // load the articles
-        $this->_iAllArtCnt = $oArtList->loadTagArticles( $this->_sTag, oxLang::getInstance()->getBaseLanguage());
+        $this->_iAllArtCnt = $oArtList->loadTagArticles( $this->getTag(), oxLang::getInstance()->getBaseLanguage());
         $this->_iCntPages  = round( $this->_iAllArtCnt / $iNrofCatArticles + 0.49 );
 
         return $oArtList;
@@ -170,7 +159,7 @@ class Tag extends aList
      */
     protected function _getCatPathString()
     {
-        return $this->_sTag;
+        return $this->getTag();
     }
 
     /**
@@ -180,7 +169,7 @@ class Tag extends aList
      */
     protected function _getSeoObjectId()
     {
-        return md5("tag" . $this->_sTag);
+        return md5("tag" . $this->getTag() );
     }
 
     /**
@@ -218,9 +207,8 @@ class Tag extends aList
     {
         if ( ( oxUtils::getInstance()->seoIsActive() && ( $sTag = $this->getTag() ) ) ) {
             return oxSeoEncoderTag::getInstance()->getTagUrl( $sTag, oxLang::getInstance()->getBaseLanguage() );
-        } else {
-            return oxUBase::generatePageNavigationUrl();
         }
+        return oxUBase::generatePageNavigationUrl();
     }
 
     /**
@@ -266,6 +254,9 @@ class Tag extends aList
      */
     public function getTag()
     {
+        if ( $this->_sTag === null ) {
+            $this->_sTag = oxConfig::getParameter("searchtag", 1);
+        }
         return $this->_sTag;
     }
 

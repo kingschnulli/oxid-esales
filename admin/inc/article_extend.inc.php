@@ -19,7 +19,7 @@
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_extend.inc.php 22508 2009-09-22 09:57:39Z vilma $
+ * $Id: article_extend.inc.php 24004 2009-11-17 14:20:20Z  $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -135,6 +135,7 @@ class ajaxComponent extends ajaxListComponent
 
         }
 
+        $this->resetArtSeoUrl( $soxId );
         $this->resetContentCache();
     }
 
@@ -182,6 +183,7 @@ class ajaxComponent extends ajaxListComponent
                 $oNew->save();
             }
 
+            $this->resetArtSeoUrl( $soxId );
             $this->resetContentCache();
         }
     }

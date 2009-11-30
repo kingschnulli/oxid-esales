@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: recommlist.php 23930 2009-11-10 17:29:24Z arvydas $
+ * $Id: recommlist.php 24214 2009-11-24 15:45:03Z arvydas $
  */
 
 /**

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 23938 2009-11-11 09:29:53Z vilma $
+ * $Id: oxseoencoder.php 23996 2009-11-17 13:36:27Z  $
  */
 
 /**
@@ -1053,18 +1053,21 @@ class oxSeoEncoder extends oxSuperCfg
      *
      * @param string $sObjectId information object id
      * @param string $sMetaType metadata type - "oxkeywords", "oxdescription"
-     * @param int    $iShopId   active shop id
-     * @param int    $iLang     active language
+     * @param int    $iShopId   active shop id [optional]
+     * @param int    $iLang     active language [optional]
+     * @param string $sParams   parameters to filter data (like category id etc) [optional]
      *
      * @return string
      */
-    public function getMetaData( $sObjectId, $sMetaType, $iShopId = null, $iLang = null )
+    public function getMetaData( $sObjectId, $sMetaType, $iShopId = null, $iLang = null, $sParams = null )
     {
+        $oDb = oxDb::getDb();
+
         $iShopId = ( !isset( $iShopId ) ) ? $this->getConfig()->getShopId():$iShopId;
         $iLang   = ( !isset( $iLang ) ) ? oxLang::getInstance()->getTplLanguage():((int) $iLang);
+        $sParams = ( !isset( $sParams ) ) ? "order by oxparams" : "and oxparams=".$oDb->quote( $sParams );
 
-        $oDb = oxDb::getDb();
-        return $oDb->getOne( "select {$sMetaType} from oxseo where oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxshopid = " . $oDb->quote( $iShopId )." and oxlang = '{$iLang}' order by oxparams" );
+        return $oDb->getOne( "select {$sMetaType} from oxseo where oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxshopid = " . $oDb->quote( $iShopId )." and oxlang = '{$iLang}' {$sParams}" );
     }
 
     /**

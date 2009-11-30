@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: index.php 23384 2009-10-20 12:58:12Z vilma $
+ * $Id: index.php 24246 2009-11-25 15:58:55Z tomas $
  */
 
 
@@ -588,8 +588,9 @@ if ( $istep == $aSetupSteps['STEP_SYSTEMREQ'] ) {
     <input type="submit" id="step0Submit" class="edittext" value="<?php echo( $aLang['BUTTON_PROCEED_INSTALL'] ) ?>">
     </form>
     <?php } else {
-              echo '<b>',$aLang['STEP_0_ERROR_TEXT'],'</b>';
-          }
+        echo '<b>',$aLang['STEP_0_ERROR_TEXT'],'</b><br>';
+        echo '<a target="_blank" href="',$aLang['STEP_0_ERROR_URL'],'">',$aLang['STEP_0_ERROR_URL'],'</a>';
+    }
 // startpage, licence
 }
 
@@ -951,7 +952,9 @@ if ( $istep == $aSetupSteps['STEP_DB_CREATE'] ) {
         convertConfigTableToUtf();
     }
 
+
     $oConfk = new Conf();
+    $sIDIMU = generateUID();
     $sQUtfMode = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
                                  values('$sIDIMU', '$sBaseShopId', 'iSetUtfMode', 'str', ENCODE( '".((int) isset( $aDB['iUtfMode'] ) ? $aDB['iUtfMode'] : 0 )."', '".$oConfk->sConfigKey."') )";
 

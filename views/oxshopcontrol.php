@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxshopcontrol.php 23733 2009-10-28 13:55:26Z sarunas $
+ * $Id: oxshopcontrol.php 24043 2009-11-18 16:24:43Z tomas $
  */
 
 /**
@@ -172,7 +172,8 @@ class oxShopControl extends oxSuperCfg
             // output timing
             list( $sUsec, $sSec ) = explode( ' ', microtime() );
             $this->dTimeEnd = ( ( float ) $sUsec + ( float ) $sSec );
-            $dTimeSpent = $this->dTimeEnd - $this->dTimeStart;
+            //getting rid of float precission shift
+            $dTimeSpent = ((int)($this->dTimeEnd*10000 - $this->dTimeStart*10000))/10000;
 
             echo 'Execution time :'.$dTimeSpent.'<br />';
 

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxcmp_user.php 24262 2009-11-26 10:31:19Z arvydas $
  */
 
 // defining login/logout states
@@ -425,6 +425,7 @@ class oxcmp_user extends oxView
             $blOptin = oxConfig::getParameter( 'blnewssubscribed' );
             $this->_blNewsSubscriptionStatus = $oUser->setNewsSubscription( $blOptin, true );
 
+            $oUser->addToGroup( 'oxidnotyetordered' );
             $oUser->logout();
 
         } catch ( oxUserException $oEx ) {
@@ -479,9 +480,6 @@ class oxcmp_user extends oxView
 
         // registered new user ?
         if ( $this->createuser()!= false && $this->_blIsNewUser ) {
-            // #1672 R
-            $this->getUser()->addToGroup( 'oxidnotyetordered' );
-
             if ( $this->_blNewsSubscriptionStatus === null || $this->_blNewsSubscriptionStatus ) {
                 return 'register?success=1';
             } else {

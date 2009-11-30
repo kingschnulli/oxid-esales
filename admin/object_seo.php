@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: object_seo.php 22897 2009-10-02 11:24:07Z arvydas $
+ * $Id: object_seo.php 24024 2009-11-18 12:21:39Z arvydas $
  */
 
 /**
@@ -142,7 +142,7 @@ class Object_Seo extends oxAdminDetails
      */
     protected function _getStdUrl( $sOxid )
     {
-        return $this->_getObject( $sOxid )->getStdLink();
+        return $this->_getObject( $sOxid )->getBaseStdLink( $this->_iEditLang, true, false );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23430 2009-10-21 08:12:41Z birute $
+ * $Id: lang.php 24074 2009-11-19 09:23:41Z alfonsas $
  */
 
 $aLang = array(
@@ -87,6 +87,7 @@ $aLang = array(
 'MOD_UNICODE_SUPPORT'                             => 'UTF-8 support',
 
 'STEP_0_ERROR_TEXT'                               => 'Your system does not fit system requirements',
+'STEP_0_ERROR_URL'                                  => "http://www.oxid-esales.com/en/products/community-edition/system-requirements",
 'STEP_0_TEXT'                                     => '<ul class="req">'.
                                                      '<li class="pass"> - Your system fits the requirement.</li>'.
                                                      '<li class="pmin"> - The requirement is not or only partly fit. The OXID eShop will work anyway and can be installed..</li>'.
@@ -178,7 +179,7 @@ $aLang = array(
 'USE_DYNAMIC_PAGES'                               => "To increase your business success get additional information from OXID's server. You find more information in our ",
 'PRIVACY_POLICY'                                  => "privacy statements",
 
-'LOAD_DYN_CONTENT_NOTICE'                         => "<p>If checkbox &quot;more information&quot; is set, you will see an additional menu in the admin area of your OXID eShop.</p><p>In that menu you get further information about e-commerce services like Google product search.</p> <p>You can change these settings at any time.</p>",
+'LOAD_DYN_CONTENT_NOTICE'                         => "<p>If checkbox &quot;more information&quot; is set, you will see an additional menu in the admin area of your OXID eShop.</p><p>In that menu you get further information about eCommerce services like Google product search.</p> <p>You can change these settings at any time.</p>",
 'ERROR_SETUP_CANCELLED'                           => "Setup has been cancelled because you didn't accept the license conditions.",
 'BUTTON_START_INSTALL'                            => "Restart setup",
 

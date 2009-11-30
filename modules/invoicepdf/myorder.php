@@ -19,7 +19,7 @@
  * @package modules
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: myorder.php 20623 2009-07-03 09:14:26Z vilma $
+ * $Id: myorder.php 24006 2009-11-17 14:22:31Z  $
  */
 
 /**
@@ -832,7 +832,10 @@ class MyOrder extends MyOrder_parent
                 if ( !isset( $this->_aVATs[$oOrderArt->oxorderarticles__oxvat->value] ) ) {
                     $this->_aVATs[$oOrderArt->oxorderarticles__oxvat->value] = 0;
                 }
-                $this->_aVATs[$oOrderArt->oxorderarticles__oxvat->value] += $oOrderArt->oxorderarticles__oxvatprice->value;
+                // #M1434: VAT recalculation in admin (pdf) is wrong 
+                if ( $oOrderArt->oxorderarticles__oxamount->value > 0 ) {
+                    $this->_aVATs[$oOrderArt->oxorderarticles__oxvat->value] += $oOrderArt->oxorderarticles__oxvatprice->value;
+                }
             }
 
             // additional variant info

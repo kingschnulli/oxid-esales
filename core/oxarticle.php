@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 23930 2009-11-10 17:29:24Z arvydas $
+ * $Id: oxarticle.php 24024 2009-11-18 12:21:39Z arvydas $
  */
 
 // defining supported link types
@@ -1682,30 +1682,33 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      *
      * @return oxPrice
      */
-    public function getPrice()
+    public function getPrice( $dAmount = 1 )
     {
         $myConfig = $this->getConfig();
         // Performance
         if ( !$myConfig->getConfigParam( 'bl_perfLoadPrice' ) || !$this->_blLoadPrice ) {
             return;
         }
+
         // return cached result, since oPrice is created ONLY in this function [or function of EQUAL level]
-        if ( $this->_oPrice ) {
-            return $this->_oPrice;
+        if ( $dAmount != 1 || $this->_oPrice === null ) {
+            $oPrice = oxNew( 'oxPrice' );
+
+            // get base
+            $oPrice->setPrice( $this->getBasePrice( $dAmount ) );
+
+            // price handling
+            if ( !$this->_blCalcPrice && $dAmount == 1 ) {
+                return $this->_oPrice = $oPrice;
+            }
+
+            $this->_calculatePrice( $oPrice );
+            if ( $dAmount != 1 ) {
+                return $oPrice;
+            }
+
+            $this->_oPrice = $oPrice;
         }
-
-        $this->_oPrice = oxNew( 'oxPrice' );
-
-        // get base
-        $this->_oPrice->setPrice( $this->getBasePrice() );
-
-        // price handling
-        if ( !$this->_blCalcPrice ) {
-            return $this->_oPrice;
-        }
-
-        $this->_calculatePrice( $this->_oPrice );
-
         return $this->_oPrice;
     }
 
@@ -2056,6 +2059,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $sId = ( $sParentID ) ? $sParentID : $sOXID;
         $this->_onChangeUpdateMinVarPrice( $sId );
 
+            // reseting articles count cache if stock has changed and some
+            // articles goes offline (M:1448)
+            if ( $sAction === ACTION_UPDATE_STOCK ) {
+                $this->_onChangeStockResetCount( $sOXID );
+            }
+
     }
 
     /**
@@ -2268,8 +2277,16 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 $iLang = $this->getLanguage();
             }
 
-            $sUrl = $this->getLink( $iLang );
-            $this->_aSeoUrls[$iLang][$this->getLinkType()] .= ( ( strpos( $sUrl, '?' ) !== false ) ? '&amp;' : '?' ) . $sAddParams;
+            $iLinkType = $this->getLinkType();
+
+            if ( !isset( $this->_aSeoUrls[$iLang][$iLinkType] ) ) {
+                $this->_aSeoUrls[$iLang][$iLinkType] = $this->getBaseSeoLink( $iLang );
+            }
+
+            if ( !empty( $sAddParams ) ) {
+                $sParams = ( ( strpos( $this->_aSeoUrls[$iLang][$iLinkType], '?' ) !== false ) ? '&amp;' : '?' ) . $sAddParams;
+                $this->_aSeoUrls[$iLang][$iLinkType] .= $sParams;
+            }
         }
     }
 
@@ -2362,15 +2379,20 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * Returns base dynamic url: shopurl/index.php?cl=details
      *
      * @param int  $iLang   language id
-     * @param bool $blAddId add current object id to url or not
+     * @param bool $blAddId add current object id to url or not [optional]
+     * @param bool $blFull  return full including domain name [optional]
      *
      * @return string
      */
-    public function getBaseStdLink( $iLang, $blAddId = true )
+    public function getBaseStdLink( $iLang, $blAddId = true, $blFull = true )
     {
-        //always returns shop url, not admin
-        $sUrl = $this->getConfig()->getShopHomeUrl( $iLang, false ) . "cl=details";
-        return $sUrl . ( $blAddId ? "&amp;anid=".$this->getId() : '' );
+        $sUrl = '';
+        if ( $blFull ) {
+            //always returns shop url, not admin
+            $sUrl = $this->getConfig()->getShopUrl( $iLang, false );
+        }
+
+        return $sUrl . "index.php?cl=details" . ( $blAddId ? "&amp;anid=".$this->getId() : "" );
     }
 
     /**
@@ -2711,9 +2733,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      *
      * @return string
      */
-    public function getPictureUrl( $iIndex )
+    public function getPictureUrl( $iIndex = '' )
     {
-        return $this->getConfig()->getPictureUrl( $this->{"oxarticles__oxpic".$iIndex}->value );
+        if ( $iIndex ) {
+            return $this->getConfig()->getPictureUrl( $this->{"oxarticles__oxpic".$iIndex}->value );
+        }
     }
 
     /**
@@ -2757,9 +2781,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      *
      * @return string
      */
-    public function getZoomPictureUrl($iIndex)
+    public function getZoomPictureUrl( $iIndex = '' )
     {
-        return $this->getConfig()->getPictureUrl( $this->{'oxarticles__oxzoom'.$iIndex}->value );
+        if ( $iIndex ) {
+           return $this->getConfig()->getPictureUrl( $this->{'oxarticles__oxzoom'.$iIndex}->value );
+        }
     }
 
     /**
@@ -4104,6 +4130,24 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 // so far we leave it like this but later we could move all count resets to one or two functions
                 $this->_onChangeResetCounts( $sParentID, $iVendorID, $iManufacturerID );
             }
+    }
+
+    /**
+     * Resets article count cache when stock value is zero and article goes offline.
+     *
+     * @param string $sOxid product id
+     *
+     * @return null
+     */
+    protected function _onChangeStockResetCount( $sOxid )
+    {
+        $myConfig = $this->getConfig();
+
+        if ( $myConfig->getConfigParam( 'blUseStock' ) && $this->oxarticles__oxstockflag->value == 2 &&
+           ( $this->oxarticles__oxstock->value + $this->oxarticles__oxvarstock->value ) <= 0 ) {
+
+               $this->_onChangeResetCounts( $sOxid, $this->oxarticles__oxvendorid->value, $this->oxarticles__oxmanufacturerid->value );
+        }
     }
 
     /**

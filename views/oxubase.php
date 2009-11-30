@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 23824 2009-11-04 09:29:42Z arvydas $
+ * $Id: oxubase.php 24018 2009-11-18 08:30:18Z arvydas $
  */
 
 /**
@@ -504,7 +504,7 @@ class oxUBase extends oxView
 
             // fetching standard url and looking for it in seo table
             if ( $this->_canRedirect() && ( $sRedirectUrl = oxSeoEncoder::getInstance()->fetchSeoUrl( $sStdUrl ) ) ) {
-                $myUtils->redirect( $this->getConfig()->getShopURL() . $sRedirectUrl, false );
+                $myUtils->redirect( $this->getConfig()->getCurrentShopUrl() . $sRedirectUrl, false );
             } else {
                 // forcing to set noindex/follow meta
                 $this->_forceNoIndex();
@@ -1033,6 +1033,54 @@ class oxUBase extends oxView
     }
 
     /**
+     * Returns seo parameter to filter meta data by it e.g. article
+     * meta data for active category
+     *
+     * @return null
+     */
+    protected function _getMetaSeoParam()
+    {
+    }
+
+    /**
+     * Fetches meta data (description or keywords) from seo table
+     *
+     * @param string $sDataType data type "oxkeywords" or "oxdescription"
+     *
+     * @return string
+     */
+    protected function _getMetaFromSeo( $sDataType )
+    {
+        $sOxid  = $this->_getSeoObjectId();
+        $iLang  = oxLang::getInstance()->getBaseLanguage();
+        $sShop  = $this->getConfig()->getShopId();
+        $sParam = $this->_getMetaSeoParam();
+
+        if ( $sOxid && oxUtils::getInstance()->seoIsActive() &&
+             ( $sKeywords = oxSeoEncoder::getInstance()->getMetaData( $sOxid, $sDataType, $sShop, $iLang, $sParam ) ) ) {
+            return $sKeywords;
+        }
+    }
+
+    /**
+     * Fetches meta data (description or keywords) from content table
+     *
+     * @param string $sMetaIdent meta content ident
+     *
+     * @return string
+     */
+    protected function _getMetaFromContent( $sMetaIdent )
+    {
+        if ( $sMetaIdent ) {
+            $oContent = oxNew( 'oxcontent' );
+            if ( $oContent->loadByIdent( $sMetaIdent ) &&
+                 $oContent->oxcontents__oxactive->value ) {
+                return strip_tags( $oContent->oxcontents__oxcontent->value );
+            }
+        }
+    }
+
+    /**
      * Template variable getter. Returns meta keywords
      *
      * @return string
@@ -1041,20 +1089,15 @@ class oxUBase extends oxView
     {
         if ( $this->_sMetaKeywords === null ) {
             $this->_sMetaKeywords = false;
-            $blRemoveDuplicatedWords = true;
-            // set special meta keywords ?
-            if ( oxUtils::getInstance()->seoIsActive() && ( $sOxid = $this->_getSeoObjectId() ) &&
-                 ( $sKeywords = oxSeoEncoder::getInstance()->getMetaData( $sOxid, 'oxkeywords' ) ) ) {
-                return $this->_sMetaKeywords = $sKeywords;
-            } elseif ( $this->_sMetaKeywordsIdent ) {
-                $oContent = oxNew( 'oxcontent' );
-                if ( $oContent->loadByIdent( $this->_sMetaKeywordsIdent ) && $oContent->oxcontents__oxactive->value ) {
-                    $this->_sMetaKeywords = strip_tags( $oContent->oxcontents__oxcontent->value );
-                    $blRemoveDuplicatedWords = false;
-                }
-            }
 
-            $this->_sMetaKeywords = $this->_prepareMetaKeyword( $this->_sMetaKeywords, $blRemoveDuplicatedWords );
+            // set special meta keywords ?
+            if ( ( $sKeywords = $this->_getMetaFromSeo( 'oxkeywords' ) ) ) {
+                $this->_sMetaKeywords = $sKeywords;
+            } elseif ( ( $sKeywords = $this->_getMetaFromContent( $this->_sMetaKeywordsIdent ) ) ) {
+                $this->_sMetaKeywords = $this->_prepareMetaKeyword( $sKeywords, false );
+            } else {
+                $this->_sMetaKeywords = $this->_prepareMetaKeyword( false, true );
+            }
         }
 
         return $this->_sMetaKeywords;
@@ -1069,18 +1112,15 @@ class oxUBase extends oxView
     {
         if ( $this->_sMetaDescription === null ) {
             $this->_sMetaDescription = false;
-            // set special meta description ?
-            if ( oxUtils::getInstance()->seoIsActive() && ( $sOxid = $this->_getSeoObjectId() ) &&
-                 ( $sMeta = oxSeoEncoder::getInstance()->getMetaData( $sOxid, 'oxdescription' ) ) ) {
-                     return $this->_sMetaDescription = $sMeta;
-            } elseif ( $this->_sMetaDescriptionIdent ) {
-                $oContent = oxNew( 'oxcontent' );
-                if ( $oContent->loadByIdent( $this->_sMetaDescriptionIdent ) && $oContent->oxcontents__oxactive->value ) {
-                    $this->_sMetaDescription = strip_tags( $oContent->oxcontents__oxcontent->value );
-                }
-            }
 
-            $this->_sMetaDescription = $this->_prepareMetaDescription( $this->_sMetaDescription );
+            // set special meta description ?
+            if ( ( $sDescription = $this->_getMetaFromSeo( 'oxdescription' ) ) ) {
+                $this->_sMetaDescription = $sDescription;
+            } elseif ( ( $sDescription = $this->_getMetaFromContent( $this->_sMetaDescriptionIdent ) ) ) {
+                $this->_sMetaDescription = $this->_prepareMetaDescription( $sDescription );
+            } else {
+                $this->_sMetaDescription = $this->_prepareMetaDescription( false );
+            }
         }
 
         return $this->_sMetaDescription;
@@ -1601,26 +1641,26 @@ class oxUBase extends oxView
             }
 
             return $this->_addPageNrParam( $oDisplayObj->getLink( $iLang ), $iActPageNr, $iLang );
-        } else {
-            $myConfig = $this->getConfig();
-
-            if ( $blTrySeo ) {
-                $oEncoder = oxSeoEncoder::getInstance();
-                if ( ( $sSeoUrl = $oEncoder->getStaticUrl( $myConfig->getShopHomeURL( $iLang ) . $this->_getSeoRequestParams(), $iLang ) ) ) {
-                    return $this->_addPageNrParam( $sSeoUrl, $iActPageNr, $iLang );
-                }
-            }
-
-            $sForceLangChange = '';
-            if ( oxLang::getInstance()->getBaseLanguage() != $iLang ) {
-                $sForceLangChange = "&amp;lang={$iLang}";
-            }
-
-            $sUrl = $this->getSession()->processUrl( $myConfig->getShopCurrentURL( $iLang ) . $this->_getRequestParams() . $sForceLangChange );
-
-            // fallback to old non seo url
-            return $this->_addPageNrParam( $sUrl, $iActPageNr, $iLang );
         }
+
+        $myConfig = $this->getConfig();
+
+        if ( $blTrySeo ) {
+            $oEncoder = oxSeoEncoder::getInstance();
+            if ( ( $sSeoUrl = $oEncoder->getStaticUrl( $myConfig->getShopHomeURL( $iLang ) . $this->_getSeoRequestParams(), $iLang ) ) ) {
+                return $this->_addPageNrParam( $sSeoUrl, $iActPageNr, $iLang );
+            }
+        }
+
+        $sForceLangChange = '';
+        if ( oxLang::getInstance()->getBaseLanguage() != $iLang ) {
+            $sForceLangChange = "&amp;lang={$iLang}";
+        }
+
+        $sUrl = $this->getSession()->processUrl( $myConfig->getShopCurrentURL( $iLang ) . $this->_getRequestParams() . $sForceLangChange );
+
+        // fallback to old non seo url
+        return $this->_addPageNrParam( $sUrl, $iActPageNr, $iLang );
     }
 
     /**
@@ -2366,21 +2406,13 @@ class oxUBase extends oxView
     /**
      * Returns active recommlist object which is used to mount navigation info
      *
+     * @deprecated dublicated, use oxUBase::getActiveRecommList()
+     *
      * @return object
      */
     public function getActRecommList()
     {
-        if ( $this->_oActRecomm === null ) {
-            $this->_oActRecomm = false;
-            $sRecommId = oxConfig::getParameter( 'recommid' );
-
-            $oRecommList = oxNew( 'oxrecommlist' );
-
-            if ( $oRecommList->load( $sRecommId ) ) {
-                $this->_oActRecomm = $oRecommList;
-            }
-        }
-        return $this->_oActRecomm;
+        return $this->getActiveRecommList();
     }
 
     /**

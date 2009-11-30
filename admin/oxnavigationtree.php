@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxnavigationtree.php 22383 2009-09-17 14:13:19Z arvydas $
+ * $Id: oxnavigationtree.php 24139 2009-11-20 13:44:59Z arvydas $
  */
 
 /**
@@ -161,7 +161,7 @@ class OxNavigationTree extends oxSuperCfg
 
             // fetching class
             $sCl = $oNode->getAttribute( 'cl' );
-            $sCl = "cl=dynscreen&amp;menu=$sCl";
+            $sCl = "cl=dynscreen&menu=$sCl";
 
             // fetching params
             $sParam = $oNode->getAttribute( 'clparam' );
@@ -194,16 +194,16 @@ class OxNavigationTree extends oxSuperCfg
             }
 
             // checking for technics page
-            if ( $myUtilsFile->checkFile( "{$this->_sDynIncludeUrl}/pages/{$sFile}_technics.php" ) ) {
+            if ( $myUtilsFile->checkFile( "{$this->_sDynIncludeUrl}pages/{$sFile}_technics.php" ) ) {
                 $oTabElem = new DOMElement( 'TAB' );
                 $oNode->appendChild( $oTabElem );
                 $oTabElem->setAttribute( 'external', 'true' );
-                $oTabElem->setAttribute( 'location', "{$this->_sDynIncludeUrl}/pages/{$sFile}_technics.php" );
+                $oTabElem->setAttribute( 'location', "{$this->_sDynIncludeUrl}pages/{$sFile}_technics.php" );
                 $oTabElem->setAttribute( 'id', 'dyn_interface' );
             }
 
             // checking for setup page
-            if ( file_exists( $myConfig->getConfigParam( 'sShopDir' )."/".$myConfig->getConfigParam( 'sAdminDir' )."/{$sFile}.php" ) ) {
+            if ( file_exists( $myConfig->getConfigParam( 'sShopDir' ).$myConfig->getConfigParam( 'sAdminDir' )."/{$sFile}.php" ) ) {
                 $oTabElem = new DOMElement( 'TAB' );
                 $oNode->appendChild( $oTabElem );
                 $oTabElem->setAttribute( 'id', 'dyn_interface' );
@@ -383,8 +383,9 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getTabs( $sId, $iAct, $blSetActive = true )
     {
-        $oXPath = new DOMXPath( $this->_oDom );
-        $oNodeList = $oXPath->query( "//SUBMENU[@cl='$sId' or @list='$sId']/TAB | //SUBMENU/../TAB[@cl='$sId']" );
+        $oXPath = new DOMXPath( $this->getDomXml() );
+        //$oNodeList = $oXPath->query( "//SUBMENU[@cl='$sId' or @list='$sId']/TAB | //SUBMENU/../TAB[@cl='$sId']" );
+        $oNodeList = $oXPath->query( "//SUBMENU[@cl='$sId']/TAB | //SUBMENU[@list='$sId']/TAB | //SUBMENU/../TAB[@cl='$sId']" );
 
         $iAct = ( $iAct > $oNodeList->length )?( $oNodeList->length - 1 ):$iAct;
 
@@ -428,17 +429,16 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getBtn( $sClass )
     {
-        $oXPath = new DOMXPath($this->_oDom);
+        $oXPath = new DOMXPath($this->getDomXml());
         $oNodeList = $oXPath->query("//TAB[@cl='$sClass']/../BTN");
         if ($oNodeList->length) {
-            $oButtons = new stdClass();
+            $oButtons = new OxstdClass();
             foreach ($oNodeList as $oNode) {
                 $sBtnID = $oNode->getAttribute('id');
                 $oButtons->$sBtnID = 1;
             }
             return $oButtons;
         }
-        return null;
     }
 
     /**
@@ -615,7 +615,7 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getDomXml()
     {
-        if ( !$this->_oDom ) {
+        if ( $this->_oDom === null ) {
             $this->_oDom = clone $this->_getInitialDom();
         }
 
@@ -629,7 +629,7 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getListNodes( $aNodes )
     {
-        $oXPath = new DOMXPath( $this->_oDom );
+        $oXPath = new DOMXPath( $this->getDomXml() );
         $oNodeList = $oXPath->query( "//SUBMENU[@cl='".implode("' or @cl='",$aNodes)."']" );
 
         if ( $oNodeList->length ) {
@@ -646,7 +646,7 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getListUrl( $sId )
     {
-        $oXPath = new DOMXPath( $this->_oDom );
+        $oXPath = new DOMXPath( $this->getDomXml() );
         $oNodeList = $oXPath->query( "//SUBMENU[@cl='{$sId}']" );
         if ( $oNodeList->length && ( $oNode = $oNodeList->item( 0 ) ) ) {
             $sCl = $oNode->getAttribute('list');
@@ -669,10 +669,10 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getEditUrl( $sId, $iActTab )
     {
-        $oXPath = new DOMXPath( $this->_oDom );
+        $oXPath = new DOMXPath( $this->getDomXml() );
         $oNodeList = $oXPath->query( "//SUBMENU[@cl='{$sId}']/TAB" );
 
-        $iActTab = ( $iActTab > $oNodeList->length )?( $oNodeList->length -1 ):$iActTab;
+        $iActTab = ( $iActTab > $oNodeList->length )?( $oNodeList->length - 1 ):$iActTab;
         if ( $oNodeList->length ) {
             foreach ( $oNodeList as $iPos => $oNode ) {
                 if ( $iActTab != $iPos ) {
@@ -760,6 +760,13 @@ class OxNavigationTree extends oxSuperCfg
         return $sClassId;
     }
 
+    /**
+     * Returns current shop version number
+     *
+     * @deprecated not used any more
+     *
+     * @return strong
+     */
     public function getShopVersionNr()
     {
         $myConfig = $this->getConfig();
@@ -786,11 +793,9 @@ class OxNavigationTree extends oxSuperCfg
      */
     protected function _getDynMenuUrl( $iLang, $blLoadDynContents )
     {
-        $myConfig = $this->getConfig();
-
-        if ( !$blLoadDynContents) {
+        if ( !$blLoadDynContents ) {
             // getting dyn info from oxid server is off, so getting local menu path
-            $sFullAdminDir = getShopBasePath() . $myConfig->getConfigParam( 'sAdminDir' );
+            $sFullAdminDir = getShopBasePath() . $this->getConfig()->getConfigParam( 'sAdminDir' );
             $sUrl = $sFullAdminDir . "/dynscreen_local.xml";
         } else {
             $oAdminView = oxNew( 'oxadminview' );

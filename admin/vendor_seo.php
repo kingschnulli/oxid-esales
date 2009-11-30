@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: vendor_seo.php 22897 2009-10-02 11:24:07Z arvydas $
+ * $Id: vendor_seo.php 23996 2009-11-17 13:36:27Z  $
  */
 
 /**
@@ -84,18 +84,6 @@ class Vendor_Seo extends Object_Seo
     protected function _getType()
     {
         return 'oxvendor';
-    }
-
-    /**
-     * Returns objects std url
-     *
-     * @return string
-     */
-    protected function _getStdUrl( $sOxid )
-    {
-        $oVendor = oxNew( 'oxvendor' );
-        $oVendor->loadInLang( $this->_iEditLang, $sOxid );
-        return $oVendor->getStdLink();
     }
 
     /**

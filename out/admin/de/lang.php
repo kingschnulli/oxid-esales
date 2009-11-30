@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 23885 2009-11-09 10:00:40Z vilma $
+ * $Id: lang.php 24251 2009-11-25 17:04:25Z tomas $
  */
 
 $sLangName  = 'Deutsch';
@@ -269,6 +269,8 @@ $aLang = array(
 'GENERAL_SEO_VND'                               => '-- Lieferant --',
 'GENERAL_SEO_MANUFACTURER'                      => '-- Hersteller --',
 'GENERAL_SEO_TAG'                               => '-- Stichworte --',
+'GENERAL_SEO_MAINCAT'                           => '[tr] (main category)', // product seo tab near main category title
+'GENERAL_SEO_NOCAT'                             => '[tr] (no category)',   // product seo tab, article ha no category assigned
 
 'GENERAL_SEO_URL'                               => 'SEO URL',
 'GENERAL_SEO_OXKEYWORDS'                        => 'Stichworte für Meta-Tags',
@@ -940,6 +942,8 @@ $aLang = array(
 'LOOKNFEEL_THEME_PASTEL'                        => 'Pastell',
 'MAIN_TITLE'                                    => '[OXID Startpage]',
 'MAIN_INFO'                                     => 'Information',
+'MR'                                            => 'Herr',
+'MRS'                                           => 'Frau',
 'HOME_DESC'                                     => 'Willkommen im OXID eShop Administrationsbereich. Hier finden Sie eine Übersicht über die grundlegenden Bereiche und Funktionen',
 'HOME_EXPLAIN'                                  => '',
 'NAVIGATION_TITLE'                              => 'Navigation',

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminview.php 23224 2009-10-13 14:24:30Z arvydas $
+ * $Id: oxadminview.php 24004 2009-11-17 14:20:20Z  $
  */
 
 /**
@@ -567,6 +567,23 @@ class oxAdminView extends oxView
         $oTagCloud->resetTagCache();
     }
 
+    /**
+     * Marks article seo url as expired
+     *
+     * @param array $aArtId article id's
+     *
+     * @return null
+     */
+    public function resetArtSeoUrl( $aArtIds )
+    {
+        if ( !is_array($aArtIds) ) {
+        	$aArtIds = array($aArtIds);
+        }
+        foreach ( $aArtIds as $sArtId ) {
+    	   oxSeoEncoder::getInstance()->markAsExpired( $sArtId );
+        }
+    }
+    
     /**
      * Returns id which is used for product preview in shop during administration
      *

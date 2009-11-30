@@ -113,3 +113,6 @@
 
     // Deactivate Static URL's for these Robots
     $this->aRobotsExcept = array();
+
+    // IP addresses for which session/cookie id match and user agent change checks are off
+    $this->aTrustedIPs = array();

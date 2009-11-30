@@ -19,7 +19,7 @@
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: category_main.inc.php 23547 2009-10-23 12:22:59Z arvydas $
+ * $Id: category_main.inc.php 24004 2009-11-17 14:20:20Z  $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -162,6 +162,7 @@ class ajaxComponent extends ajaxListComponent
                 $oNew->save();
             }
 
+            $this->resetArtSeoUrl( $aArticles );
             $this->resetCounter( "catArticle", $sCategoryID );
         }
     }
@@ -195,6 +196,7 @@ class ajaxComponent extends ajaxListComponent
 
         }
 
+        $this->resetArtSeoUrl( $sAdd );
         $this->resetCounter( "catArticle", $sCategoryID );
     }
 

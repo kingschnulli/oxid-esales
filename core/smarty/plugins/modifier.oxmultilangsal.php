@@ -19,48 +19,35 @@
  * @package smartyPlugins
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: function.oxmultilang.php 24256 2009-11-25 17:13:38Z tomas $
+ * $Id: modifier.oxmultilangassign.php 17246 2009-03-16 15:18:58Z arvydas $
  */
 
 /*
 * Smarty function
 * -------------------------------------------------------------
-* Purpose: Output multilang string
-* add [{ oxmultilang ident="..." }] where you want to display content
+* Purpose: Output translated salutation field
+* add [{ $ }] where you want to display content
 * -------------------------------------------------------------
 */
-function smarty_function_oxmultilang( $params, &$smarty )
+function smarty_modifier_oxmultilangsal( $sIdent )
 {
 
-    startProfile("smarty_function_oxmultilang");
-    $sIdent  = isset( $params['ident'] ) ? $params['ident'] : 'IDENT MISSING';
-    $iLang   = null;
-    $blAdmin = isAdmin();
     $oLang = oxLang::getInstance();
+    $iLang = $oLang->getTplLanguage();
 
-    if ( $blAdmin ) {
-        $iLang = $oLang->getTplLanguage();
+    if ( !isset( $iLang ) ) {
+        $iLang = $oLang->getBaseLanguage();
         if ( !isset( $iLang ) ) {
             $iLang = 0;
         }
     }
 
     try {
-        $sTranslation = $oLang->translateString( $sIdent, $iLang, $blAdmin );
+        $sTranslation = $oLang->translateString( $sIdent, $iLang, isAdmin() );
     } catch ( oxLanguageException $oEx ) {
         // is thrown in debug mode and has to be caught here, as smarty hangs otherwise!
     }
 
-    if ($blAdmin && $sTranslation == $sIdent && (!isset( $params['noerror']) || !$params['noerror']) ) {
-        $sTranslation = '<b>ERROR : Translation for '.$sIdent.' not found!</b>';
-    }
-
-    if ( $sTranslation == $sIdent && isset( $params['alternative'] ) ) {
-        $sTranslation = $params['alternative'];
-    }
-
-
-    stopProfile("smarty_function_oxmultilang");
 
     return $sTranslation;
 }

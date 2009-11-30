@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsserver.php 22348 2009-09-16 09:08:30Z sarunas $
+ * $Id: oxutilsserver.php 24003 2009-11-17 14:16:21Z  $
  */
 
 /**
@@ -253,5 +253,22 @@ class oxUtilsServer extends oxSuperCfg
         }
 
         return $this->_aUserCookie[$sShopId] = $this->getOxCookie( 'oxid_'.$sShopId );
+    }
+
+    /**
+     * Checks if current client ip is in trusted IPs list.
+     * IP list is defined in config file as "aTrustedIPs" parameter
+     *
+     * @return bool
+     */
+    public function isTrustedClientIp()
+    {
+        $blTrusted = false;
+        $aTrustedIPs = ( array ) $this->getConfig()->getConfigParam( "aTrustedIPs" );
+        if ( count( $aTrustedIPs ) ) {
+            $blTrusted = in_array( $this->getRemoteAddress(), $aTrustedIPs );
+        }
+
+        return $blTrusted;
     }
 }

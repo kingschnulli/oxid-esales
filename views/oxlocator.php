@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxlocator.php 23824 2009-11-04 09:29:42Z arvydas $
+ * $Id: oxlocator.php 23997 2009-11-17 13:37:27Z  $
  */
 
 /**
@@ -409,7 +409,7 @@ class oxLocator extends oxSuperCfg
      */
     protected function _setRecommlistLocatorData( $oLocatorTarget, $oCurrArticle )
     {
-        if ( ( $oRecommList = $oLocatorTarget->getActRecommList() ) ) {
+        if ( ( $oRecommList = $oLocatorTarget->getActiveRecommList() ) ) {
 
             // loading data for article navigation
             $oIdList = oxNew( 'oxarticlelist' );

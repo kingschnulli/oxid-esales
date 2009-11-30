@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsession.php 22900 2009-10-02 12:43:11Z arvydas $
+ * $Id: oxsession.php 23998 2009-11-17 14:01:32Z  $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -225,10 +225,10 @@ class oxSession extends oxSuperCfg
         }
 
         //starting session if only we can
-        if ($this->_allowSessionStart()) {
+        if ( $this->_allowSessionStart() ) {
 
             //creating new sid
-            if ( !$sid) {
+            if ( !$sid ) {
                 $this->initNewSession();
                 self::$_blIsNewSession = true;
             } else {
@@ -244,7 +244,7 @@ class oxSession extends oxSuperCfg
         }
 
         //checking for swapped client in case cookies are not available
-        if (!$this->_getCookieSid() && !oxUtils::getInstance()->isSearchEngine() && $this->_isSwappedClient() ) {
+        if ( !$this->_getCookieSid() && $this->_isSwappedClient() ) {
             $this->initNewSession();
         }
     }
@@ -410,51 +410,37 @@ class oxSession extends oxSuperCfg
     /**
      * Append URL with session information parameter.
      *
-     * @param string $url Current url
+     * @param string $sUrl Current url
      *
      * @return string
      */
-    public function url($url)
+    public function url( $sUrl )
     {
         $myConfig = $this->getConfig();
-        $blForceSID = false;
-        if (strpos(" ".$url, "https:") === 1 && !$myConfig->isSsl()) {
-            $blForceSID = true;
-        }
-        if (strpos(" ".$url, "http:") === 1 && $myConfig->isSsl()) {
-            $blForceSID = true;
-        }
 
         $blUseCookies = $myConfig->getConfigParam( 'blSessionUseCookies' ) || $this->isAdmin();
-        $oStr = getStr();
-        $sSeparator = $oStr->strstr($url, "?") !== false ?  "&amp;" : "?";
+        $sSeparator = getStr()->strstr( $sUrl, "?" ) !== false ?  "&amp;" : "?";
+        $sUrl .= $sSeparator;
 
-        if ($blUseCookies && $this->_getCookieSid()) {
-            //cookies are supported so we do nothing
-            $url .= $sSeparator;
-
-            //or this is SSL link in non SSL environment (or vice versa)
-            //and we force sid here
-            if ($blForceSID) {
-                $url .= $this->getForcedName().'=' . $this->getId() . '&amp;';
+        if ( $blUseCookies && $this->_getCookieSid() ) {
+            // switching from ssl to non ssl or vice versa?
+            if ( ( strpos( $sUrl, "https:" ) === 0 && !$myConfig->isSsl() ) ||
+                 ( strpos( $sUrl, "http:" ) === 0 && $myConfig->isSsl() ) ) {
+                $sUrl .= $this->getForcedName(). '=' . $this->getId() . "&amp;";
             }
-        } elseif (oxUtils::getInstance()->isSearchEngine()) {
-            $url .= $sSeparator;
-
+        } elseif ( oxUtils::getInstance()->isSearchEngine() ) {
             //adding lang parameter for search engines
-            $sLangParam = oxConfig::getParameter( "lang" );
-            $sConfLang = $myConfig->getConfigParam( 'sDefaultLang' );
-            if ( (int) $sLangParam != (int) $sConfLang ) {
-                $url   .= "lang=" . $sLangParam . "&amp;";
+            $sLangParam = (int) oxConfig::getParameter( "lang" );
+            $sConfLang  = (int) $myConfig->getConfigParam( "sDefaultLang" );
+            if ( $sLangParam != $sConfLang ) {
+                $sUrl   .= "lang={$sLangParam}&amp;";
             }
-        } elseif ( ($sIcludeParams = $this->sid()) ) {
+        } elseif ( ( $sIcludeParams = $this->sid() ) ) {
             //cookies are not supported or this is first time visit
-            $url .= $sSeparator . $sIcludeParams . '&amp;';
-        } else {
-            $url .= $sSeparator;
+            $sUrl .= "{$sIcludeParams}&amp;";
         }
 
-        return $url;
+        return $sUrl;
     }
 
     /**
@@ -605,50 +591,25 @@ class oxSession extends oxSuperCfg
      */
     protected function _isSwappedClient()
     {
-        $myConfig = $this->getConfig();
-        $myUtils  = oxUtils::getInstance();
-
         $blSwapped = false;
+        $myUtilsServer = oxUtilsServer::getInstance();
 
-        //checking search engine
-        if ( $myUtils->isSearchEngine() ) {
-            return false;
-        }
+        // check only for non search engines
+        if ( !oxUtils::getInstance()->isSearchEngine() && !$myUtilsServer->isTrustedClientIp() ) {
 
-        /*
-        //T2007-05-14
-        //checking 'skipSession' paramter to prevent new session generation for popup
-        elseif("x" == $this->getId() && !oxConfig::getParameter('skipSession'))
-        {
-            $this->_sErrorMsg = "Refered from search engine, creating new SID...<br>";
+            $myConfig = $this->getConfig();
 
-            $blSwapped = true;
-        }*/
+            // checking if session user agent matches actual
+            $blSwapped = $this->_checkUserAgent( $myUtilsServer->getServerVar( 'HTTP_USER_AGENT' ), self::getVar( 'sessionagent' ) );
 
-        $sAgent = oxUtilsServer::getInstance()->getServerVar( 'HTTP_USER_AGENT' );
-        $sExistingAgent = self::getVar( 'sessionagent' );
-        if ( $this->_checkUserAgent( $sAgent, $sExistingAgent ) ) {
-            $blSwapped = true;
-        }
-
-        /*
-        if ( $this->_checkByTimeOut() )
-            $blSwapped = true;
-        */
-
-        if ( $myConfig->getConfigParam( 'blAdodbSessionHandler' ) ) {
-            if ( $this->_checkSid() ) {
-                $blSwapped = true;
+            if ( $myConfig->getConfigParam( 'blAdodbSessionHandler' ) ) {
+                $blSwapped = $this->_checkSid();
             }
-        }
 
-        $blDisableCookieCheck = $myConfig->getConfigParam( 'blDisableCookieCheck' );
-        $blUseCookies         = $myConfig->getConfigParam( 'blSessionUseCookies' ) || $this->isAdmin();
-        if ( !$blDisableCookieCheck && $blUseCookies ) {
-            $sCookieSid = oxUtilsServer::getInstance()->getOxCookie( 'sid_key' );
-            $aSessCookieSetOnce = self::getVar("sessioncookieisset");
-            if ( $this->_checkCookies( $sCookieSid, $aSessCookieSetOnce ) ) {
-                $blSwapped = true;
+            $blDisableCookieCheck = $myConfig->getConfigParam( 'blDisableCookieCheck' );
+            $blUseCookies = $myConfig->getConfigParam( 'blSessionUseCookies' ) || $this->isAdmin();
+            if ( !$blDisableCookieCheck && $blUseCookies ) {
+                $blSwapped = $this->_checkCookies( $myUtilsServer->getOxCookie( 'sid_key' ), self::getVar( "sessioncookieisset" ) );
             }
         }
 
@@ -665,14 +626,14 @@ class oxSession extends oxSuperCfg
      */
     protected function _checkUserAgent( $sAgent, $sExistingAgent)
     {
-        $blIgnoreBrowserChange = oxConfig::getParameter("remoteaccess") == "true" && !$this->isAdmin();
-        if ($sAgent && $sExistingAgent && $sAgent != $sExistingAgent && (!$blIgnoreBrowserChange)) {
-            $this->_sErrorMsg = "Different browser ($sExistingAgent, $sAgent), creating new SID...<br>";
-            return true;
-        } elseif (!isset($sExistingAgent)) {
-            self::setVar("sessionagent", $sAgent);
+        $blCheck = false;
+        if ( $sAgent && $sAgent !== $sExistingAgent ) {
+            $this->_sErrorMsg = "Different browser ({$sExistingAgent}, {$sAgent}), creating new SID...<br>";
+            $blCheck = true;
+        } elseif ( !isset( $sExistingAgent ) ) {
+            self::setVar( "sessionagent", $sAgent );
         }
-        return false;
+        return $blCheck;
     }
 
     /**
@@ -781,29 +742,29 @@ class oxSession extends oxSuperCfg
     protected function _setSessionId($sSessId)
     {
         //marking this session as new one, as it might be not writen to db yet
-        if ($sSessId && session_id() != $sSessId) {
+        if ( $sSessId && session_id() != $sSessId ) {
             $this->_blNewSession = true;
         }
 
-        session_id($sSessId);
+        session_id( $sSessId );
 
-        $this->setId($sSessId);
+        $this->setId( $sSessId );
 
         $blUseCookies = $this->getConfig()->getConfigParam( 'blSessionUseCookies' ) || $this->isAdmin();
 
-        if (!$this->_allowSessionStart()) {
-            if ($blUseCookies) {
-                oxUtilsServer::getInstance()->setOxCookie($this->getName(), null);
+        if ( !$this->_allowSessionStart() ) {
+            if ( $blUseCookies ) {
+                oxUtilsServer::getInstance()->setOxCookie( $this->getName(), null );
             }
             return;
         }
 
-        if ($blUseCookies) {
+        if ( $blUseCookies ) {
             //setting session cookie
-            oxUtilsServer::getInstance()->setOxCookie($this->getName(), $sSessId);
+            oxUtilsServer::getInstance()->setOxCookie( $this->getName(), $sSessId );
         }
 
-        if ( $this->_sErrorMsg) {
+        if ( $this->_sErrorMsg ) {
             //display debug error msg
             echo $this->_sErrorMsg;
             $this->_sErrorMsg = null;
@@ -818,11 +779,10 @@ class oxSession extends oxSuperCfg
     protected function _getBasketName()
     {
         $myConfig = $this->getConfig();
-        if ( $myConfig->getConfigParam( 'blMallSharedBasket' ) == 0) {
+        if ( $myConfig->getConfigParam( 'blMallSharedBasket' ) == 0 ) {
             return $myConfig->getShopId()."_basket";
-        } else {
-            return "basket";
         }
+        return "basket";
     }
 
     /**
