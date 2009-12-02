@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 23919 2009-11-10 15:35:44Z arvydas $
+ * $Id: oxutils.php 24344 2009-12-01 09:25:06Z arvydas $
  */
 
 /**
@@ -482,7 +482,7 @@ class oxUtils extends oxSuperCfg
      */
     public function toFileCache($sKey, $mContents)
     {
-        $sFilePath = $this->_getCacheFilePath( $sKey );
+        $sFilePath = $this->getCacheFilePath( $sKey );
         $iCurTime = oxUtilsDate::getInstance()->getTime();
 
         //T2009-05-26
@@ -519,23 +519,21 @@ class oxUtils extends oxSuperCfg
      */
     public function fromFileCache( $sKey )
     {
-        if (isset($this->_aFileCacheContents[$sKey]))
-            return $this->_aFileCacheContents[$sKey];
+        if ( !isset( $this->_aFileCacheContents[$sKey] ) ) {
+            $sRes = null;
 
-        $sRes = null;
-        // read the file
-        $sFilePath = $this->_getCacheFilePath( $sKey );
-        if (!file_exists( $sFilePath))
-            return null;
-        if ( file_exists( $sFilePath) && is_readable($sFilePath)) {
-            // read it
-            $sRes = file_get_contents( $sFilePath);
-            if (!$sRes)
-                return null;
+            // read the file
+            $sFilePath = $this->getCacheFilePath( $sKey );
+            if ( file_exists( $sFilePath ) && is_readable( $sFilePath ) ) {
+                // read it
+                $sRes = file_get_contents( $sFilePath );
+                $sRes = $sRes ? unserialize( $sRes ) : null;
+            }
+
+            $this->_aFileCacheContents[$sKey] = $sRes;
         }
-        $sRes = unserialize($sRes);
 
-        return $sRes;
+        return $this->_aFileCacheContents[$sKey];
     }
 
     /**
@@ -547,7 +545,7 @@ class oxUtils extends oxSuperCfg
     {
         foreach($this->_aFileCacheContents as $sKey => $mContents) {
             $mContents = serialize($mContents);
-            $sFilePath = $this->_getCacheFilePath( $sKey );
+            $sFilePath = $this->getCacheFilePath( $sKey );
             //if ( is_writable($sFilePath))
             // dodger: somehow is_writeable() always says no on windows machines
             $hFile = fopen( $sFilePath, "w");
@@ -571,7 +569,7 @@ class oxUtils extends oxSuperCfg
      */
     public function oxResetFileCache()
     {
-        $aPathes = glob( $this->_getCacheFilePath( null, true ) . '*' );
+        $aPathes = glob( $this->getCacheFilePath( null, true ) . '*' );
         if ( is_array( $aPathes ) ) {
             // delete all the files, except cached tables fieldnames
             $aPathes = preg_grep( $this->_sPermanentCachePattern, $aPathes, PREG_GREP_INVERT );
@@ -1092,12 +1090,27 @@ class oxUtils extends oxSuperCfg
     /**
      * Returns full path (including file name) to cache file
      *
+     * @deprecated use oxUtils::getCacheFilePath()
+     *
      * @param string $sCacheName cache file name
      * @param bool   $blPathOnly if TRUE, name parameter will be ignored and only cache folder will be returned (default FALSE)
      *
      * @return string
      */
     protected function _getCacheFilePath( $sCacheName, $blPathOnly = false )
+    {
+        return $this->getCacheFilePath( $sCacheName, $blPathOnly );
+    }
+
+    /**
+     * Returns full path (including file name) to cache file
+     *
+     * @param string $sCacheName cache file name
+     * @param bool   $blPathOnly if TRUE, name parameter will be ignored and only cache folder will be returned (default FALSE)
+     *
+     * @return string
+     */
+    public function getCacheFilePath( $sCacheName, $blPathOnly = false )
     {
         $sVersionPrefix = "";
 
@@ -1118,7 +1131,7 @@ class oxUtils extends oxSuperCfg
     public function getLangCache( $sCacheName )
     {
         $aLangCache = null;
-        $sFilePath = $this->_getCacheFilePath( $sCacheName );
+        $sFilePath = $this->getCacheFilePath( $sCacheName );
         if ( file_exists( $sFilePath ) && is_readable( $sFilePath ) ) {
             include $sFilePath;
         }
@@ -1136,7 +1149,7 @@ class oxUtils extends oxSuperCfg
     public function setLangCache( $sCacheName, $aLangCache )
     {
         $sCache = "<?php\n\$aLangCache = ".var_export( $aLangCache, true ).";";
-        $blRes = file_put_contents($this->_getCacheFilePath($sCacheName), $sCache);
+        $blRes = file_put_contents($this->getCacheFilePath($sCacheName), $sCache);
         return $blRes;
     }
 

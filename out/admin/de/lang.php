@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 24251 2009-11-25 17:04:25Z tomas $
+ * $Id: lang.php 24350 2009-12-01 10:38:59Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -1366,7 +1366,7 @@ $aLang = array(
 'SYSREQ_GD_INFO'                                => 'GDlib v2 [v1] incl. JPEG Unterstützung',
 'SYSREQ_INI_SET'                                => 'ini_set erlaubt',
 'SYSREQ_REGISTER_GLOBALS'                       => 'register_globals muss ausgeschaltet sein',
-'SYSREQ_ZEND_OPTIMIZER'                         => 'Zend Optimizer installiert',
+'SYSREQ_ZEND_OPTIMIZER'                         => '[tr] Zend Optimizer oder Zend Guard Loader installiert',
 'SYSREQ_ZEND_PLATFORM_OR_SERVER'                => 'Zend Platform oder Zend Server installiert',
 'SYSREQ_MB_STRING'                              => 'mbstring',
 'SYSREQ_UNICODE_SUPPORT'                        => 'UTF-8 Unterstützung',
@@ -1602,6 +1602,7 @@ $aLang = array(
 'dyn_about'                                     => 'Allgemein',
 'dyn_interface'                                 => 'Interface',
 'dyn_technics'                                  => 'Technik',
+'dyn_efire'                                     => '[tr] OXID eFire',
 'mxactions'                                     => 'Aktionen verwalten',
 'mxarticles'                                    => 'Artikel',
 'mxattributes'                                  => 'Attribute',

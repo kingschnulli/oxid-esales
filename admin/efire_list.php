@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: efire_list.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: efire_list.php 24349 2009-12-01 10:35:34Z arvydas $
  */
 
 /**
@@ -28,7 +28,7 @@
  *
  * @package admin
  */
-class EFire_List extends oxAdminView
+class EFire_List extends Efire
 {
     /**
      * Executes marent method parent::render() and returns mane of template

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: efire.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: efire.php 24349 2009-12-01 10:35:34Z arvydas $
  */
 
 /**
@@ -35,4 +35,14 @@ class Efire extends oxAdminView
      * @var string
      */
     protected $_sThisTemplate = 'efire.tpl';
+
+    /**
+     * Returns current view identifier
+     *
+     * @return string
+     */
+    public function getViewId()
+    {
+        return 'dyn_efire';
+    }
 }

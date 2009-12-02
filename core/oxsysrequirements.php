@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsysrequirements.php 24328 2009-11-30 11:14:08Z sarunas $
+ * $Id: oxsysrequirements.php 24346 2009-12-01 10:18:58Z sarunas $
  */
 
 /**
@@ -410,7 +410,7 @@ class oxSysRequirements
     public function checkZendOptimizer()
     {
         $iMinStat = 0;
-        $iModStat = (extension_loaded( 'Zend Optimizer' ) || extension_loaded( 'Zend Optimizer+' )) ? 2 : $iMinStat;
+        $iModStat = (extension_loaded( 'Zend Optimizer' ) || (function_exists('zend_loader_enabled') && zend_loader_enabled())) ? 2 : $iMinStat;
         $sHost   = $_SERVER['HTTP_HOST'];
         $sScript = $_SERVER['SCRIPT_NAME'];
         if ( $iModStat > $iMinStat && $sScript && $rFp = @fsockopen( $sHost, 80, $iErrNo, $sErrStr, 10 ) ) {

@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 24074 2009-11-19 09:23:41Z alfonsas $
+ * $Id: lang.php 24346 2009-12-01 10:18:58Z sarunas $
  */
 
 $aLang = array(
@@ -81,7 +81,7 @@ $aLang = array(
 'MOD_GD_INFO'                                     => 'GDlib v2 [v1] incl. JPEG support',
 'MOD_INI_SET'                                     => 'ini_set allowed',
 'MOD_REGISTER_GLOBALS'                            => 'register_globals must be off',
-'MOD_ZEND_OPTIMIZER'                              => 'Zend Optimizer installed',
+'MOD_ZEND_OPTIMIZER'                              => 'Zend Optimizer or Zend Guard Loader installed',
 'MOD_ZEND_PLATFORM_OR_SERVER'                     => 'Zend Platform or Zend Server installed',
 'MOD_MB_STRING'                                   => 'mbstring',
 'MOD_UNICODE_SUPPORT'                             => 'UTF-8 support',

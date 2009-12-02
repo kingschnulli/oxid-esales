@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxnavigationtree.php 24139 2009-11-20 13:44:59Z arvydas $
+ * $Id: oxnavigationtree.php 24345 2009-12-01 09:47:39Z arvydas $
  */
 
 /**
@@ -46,29 +46,14 @@ class OxNavigationTree extends oxSuperCfg
     protected $_sDynIncludeUrl = null;
 
     /**
-     * Trys to load data form session, otherwise loads xml form menu.xml, user.xml
-     * and trys to get dynscreen.xml
+     * Empty init method
+     *
+     * @deprecated currently oxNavigationTree::getDomXml() does what this method did before
      *
      * @return null
      */
     public function init()
     {
-        // initiating menu tree
-        if ( ( $oDom = $this->getDomXml() ) ) {
-
-            // removes items denied by user group
-            $this->_checkGroups( $oDom );
-
-            // removes items denied by user rights
-            $this->_checkRights( $oDom );
-
-            // check config params
-            $this->_checkDemoShopDenials( $oDom );
-
-
-            $this->_cleanEmptyParents($oDom, '//SUBMENU[@id][@list]', 'TAB');
-            $this->_cleanEmptyParents($oDom, '//MAINMENU[@id]', 'SUBMENU');
-        }
     }
 
     /**
@@ -553,25 +538,18 @@ class OxNavigationTree extends oxSuperCfg
      */
     protected function _getInitialDom()
     {
-        if ( !$this->_oInitialDom ) {
+        if ( $this->_oInitialDom === null ) {
             $myOxUtlis = oxUtils::getInstance();
 
             if ( is_array( $aFilesToLoad = $this->_getMenuFiles() ) ) {
 
                 // now checking if xml files are newer than cached file
                 $blReload = false;
-
-                $sVersionPrefix = '';
-
-
-
-                    $sVersionPrefix = 'ce';
-
                 $sDynLang = $this->_getDynMenuLang();
-                $sCacheFile = $this->getConfig()->getConfigParam( 'sCompileDir' ) . "/ox{$sVersionPrefix}"."c_menu_{$sDynLang}_xml.txt";
 
-                $sCacheContents = $myOxUtlis->fromFileCache( 'menu_' . $sDynLang . '_xml' );
-
+                $sCacheName = 'menu_' . $sDynLang . '_xml';
+                $sCacheFile = $myOxUtlis->getCacheFilePath( $sCacheName );
+                $sCacheContents = $myOxUtlis->fromFileCache( $sCacheName );
                 if ( $sCacheContents && file_exists( $sCacheFile ) && ( $iCacheModTime = filemtime( $sCacheFile ) ) ) {
                     foreach ( $aFilesToLoad as $sDynPath ) {
                         if ( $iCacheModTime < filemtime( $sDynPath ) ) {
@@ -596,8 +574,9 @@ class OxNavigationTree extends oxSuperCfg
 
                     // adds links to dynamic parts
                     $this->_addDynLinks( $this->_oInitialDom );
+
                     // writing to cache
-                    $myOxUtlis->toFileCache( 'menu_' . $sDynLang . '_xml', $this->getDomXml()->saveXML() );
+                    $myOxUtlis->toFileCache( $sCacheName, $this->_oInitialDom->saveXML() );
                 } else {
                     // loading from cached file
                     $this->_oInitialDom->preserveWhiteSpace = false;
@@ -617,6 +596,19 @@ class OxNavigationTree extends oxSuperCfg
     {
         if ( $this->_oDom === null ) {
             $this->_oDom = clone $this->_getInitialDom();
+
+            // removes items denied by user group
+            $this->_checkGroups( $this->_oDom );
+
+            // removes items denied by user rights
+            $this->_checkRights( $this->_oDom );
+
+            // check config params
+            $this->_checkDemoShopDenials( $this->_oDom );
+
+
+            $this->_cleanEmptyParents( $this->_oDom, '//SUBMENU[@id][@list]', 'TAB');
+            $this->_cleanEmptyParents( $this->_oDom, '//MAINMENU[@id]', 'SUBMENU');
         }
 
         return $this->_oDom;

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oximex.php 23188 2009-10-13 06:59:38Z sarunas $
+ * $Id: oximex.php 24341 2009-11-30 16:07:35Z tomas $
  */
 
 /**
@@ -521,6 +521,7 @@ class oxImex extends oxBase
 
             $sExport  = "<Bestellung " . $this->_convertStr( "zurückgestellt" ) . "=\"Nein\" bearbeitet=\"Nein\" " . $this->_convertStr( "übertragen" ) . "=\"Nein\">$sNewLine";
             $sExport .= "<Bestellnummer>".$oOrder->oxorder__oxordernr->value."</Bestellnummer>$sNewLine";
+			$sExport .= "<Rechnungsnummer>".$oOrder->oxorder__oxbillnr->value."</Rechnungsnummer>$sNewLine";
             $sExport .= "<Standardwaehrung>978</Standardwaehrung>$sNewLine";
             $sExport .= "<Bestelldatum>$sNewLine";
             $sDBDate = oxUtilsDate::getInstance()->formatDBDate($oOrder->oxorder__oxorderdate->value);
@@ -531,6 +532,7 @@ class oxImex extends oxBase
 
             $sExport .= "<Kundennummer>"./*$this->interForm($oUser->oxuser__oxcustnr->value).*/"</Kundennummer>$sNewLine";
             $sExport .= "<Firmenname>".$this->interForm($oOrder->oxorder__oxbillcompany->value)."</Firmenname>$sNewLine";
+            $sExport .= "<Anrede>".$this->interForm(oxLang::getInstance()->translateString($oOrder->oxorder__oxbillsal->value))."</Anrede>$sNewLine";
             $sExport .= "<Vorname>".$this->interForm($oOrder->oxorder__oxbillfname->value)."</Vorname>$sNewLine";
             $sExport .= "<Name>".$this->interForm($oOrder->oxorder__oxbilllname->value)."</Name>$sNewLine";
             $sExport .= "<Strasse>".$this->interForm($oOrder->oxorder__oxbillstreet->value)." ".$this->interForm($oOrder->oxorder__oxbillstreetnr->value)."</Strasse>$sNewLine";
