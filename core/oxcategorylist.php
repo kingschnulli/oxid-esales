@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxcategorylist.php 23988 2009-11-13 06:19:33Z alfonsas $
+ * $Id: oxcategorylist.php 24388 2009-12-03 00:46:52Z alfonsas $
  */
 
 
@@ -275,10 +275,14 @@ class oxCategoryList extends oxList
      */
     protected function _ppLoadFullCategory( $sId )
     {
-        $oNewCat = oxNew('oxcategory');
-        if ($oNewCat->load($sId)) {
-            // replace aArray object with fully loaded category
-            $this->_aArray[$sId] = $oNewCat;
+        if ( isset($this->_aArray[$sId])) {
+            $oNewCat = oxNew('oxcategory');
+            if ( $oNewCat->load($sId)) {
+                // replace aArray object with fully loaded category
+                $this->_aArray[$sId] = $oNewCat;
+            }
+        } else {
+            $this->_sActCat = null;
         }
     }
 

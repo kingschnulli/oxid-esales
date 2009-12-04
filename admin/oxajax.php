@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxajax.php 22370 2009-09-17 08:29:36Z arvydas $
+ * $Id: oxajax.php 24385 2009-12-02 19:31:39Z tomas $
  */
 
 // shop path for includes
@@ -77,13 +77,13 @@ class ajaxListComponent extends oxSuperCfg
     protected $_iSqlLimit = 2500;
 
     /**
-     * Constructor class, initializes AJAX columns
+     * Initializes AJAX columns
      *
      * @param array $aColumns Array of DB table columns which are loaded from DB
      *
      * @return null
      */
-    public function __construct( $aColumns )
+    public function init( $aColumns )
     {
         $this->_aColumns = $aColumns;
     }
@@ -619,11 +619,15 @@ if ( $blAjaxCall ) {
 
     if ( $sContainer = oxConfig::getParameter( 'container' ) ) {
 
-        $sContainer = strtolower( basename( $sContainer ) );
+        $sContainer = trim(strtolower( basename( $sContainer ) ));
         $aColumns = array();
+
         include_once 'inc/'.$sContainer.'.inc.php';
 
-        $oAjaxComponent = new ajaxcomponent( $aColumns );
+        //$oAjaxComponent = new ajaxcomponent( $aColumns );
+        $oAjaxComponent = oxNew("ajaxcomponent");
+        $oAjaxComponent->init($aColumns);
+
         $oAjaxComponent->setName( $sContainer );
         $oAjaxComponent->processRequest( oxConfig::getParameter( 'fnc' ) );
 
