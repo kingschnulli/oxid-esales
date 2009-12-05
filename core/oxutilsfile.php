@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 23930 2009-11-10 17:29:24Z arvydas $
+ * $Id: oxutilsfile.php 24408 2009-12-04 08:07:15Z alfonsas $
  */
 
 /**
@@ -390,12 +390,41 @@ class oxUtilsFile extends oxSuperCfg
 
                 $aSize = $this->_getImageSize( $sType, $iPicNum, 'aZoomImageSizes' );
                 break;
+            case 'FL':
+                // just copy non image file to target forlder
+                $this->_copyFile($sSource, $sTarget);
+                break;
         }
 
         if ( $aSize ) {
             $blResize = $oUtilsPic->resizeImage( $sSource, $sTarget, $aSize[0], $aSize[1] );
         }
         return $blResize;
+    }
+
+    /**
+     * Copy file from source to target location
+     *
+     * @param string $sSource file location
+     * @param string $sTarget file location
+     *
+     * @return bool
+     */
+    protected function _copyFile( $sSource, $sTarget )
+    {
+        $blDone = false;
+
+        if ( $sSource === $sTarget ) {
+            $blDone = true;
+        } else {
+            $blDone = copy( $sSource, $sTarget );
+        }
+
+        if ( $blDone ) {
+            $blDone = @chmod( $sTarget, 0644 );
+        }
+
+        return $blDone;
     }
 
     /**
