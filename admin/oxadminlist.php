@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxadminlist.php 22642 2009-09-25 12:13:51Z rimvydas.paskevicius $
+ * $Id: oxadminlist.php 24476 2009-12-07 12:59:15Z arvydas $
  */
 
 /**
@@ -857,5 +857,15 @@ class oxAdminList extends oxAdminView
             // passign active tab number
             $this->_aViewData['actedit'] = $iActTab;
         }
+    }
+
+    /**
+     * Returns items list
+     *
+     * @return oxlist
+     */
+    public function getItemList()
+    {
+        return $this->_oList;
     }
 }

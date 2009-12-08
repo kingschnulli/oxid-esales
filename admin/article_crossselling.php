@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_crossselling.php 22481 2009-09-22 06:50:34Z arvydas $
+ * $Id: article_crossselling.php 24494 2009-12-07 14:37:18Z arvydas $
  */
 
 /**
@@ -31,7 +31,6 @@
  */
 class Article_Crossselling extends oxAdminDetails
 {
-
     /**
      * Collects article crosselling and attributes information, passes
      * them to Smarty engine and returns name or template file
@@ -76,119 +75,4 @@ class Article_Crossselling extends oxAdminDetails
         }
         return "article_crossselling.tpl";
     }
-
-    /**
-     * Universal method, perfoms object sorting. Return sorting value.
-     *
-     * @param string $sTable name of table used (default null)
-     *
-     * @return int
-     */
-    public function setSorting( $sTable = null)
-    {
-        if ( $sTable == null)
-            $sTable = oxConfig::getParameter("stable");
-        $soxId     = oxConfig::getParameter("oxid");
-        $sSorting  = oxConfig::getParameter("sorting");
-        $sTarget   = oxConfig::getParameter("starget");
-        $aObjectId = oxConfig::getParameter( $sTarget);
-
-
-        if ( !isset($soxId) || $soxId == "-1" || $sTable == null || !$sTable)
-            return 0;
-
-        $oDB = oxDb::getDb();
-        //means appending article to the end, sorting number will be last number
-        if ( !isset($sSorting) || !$sSorting) {
-            $sSelect = "select count(*) from $sTable where $sTable.oxarticlenid = '".$soxId."' ";
-            return $oDB->getOne( $sSelect);
-        } else if ( count($aObjectId) > 0) {
-            if ( $sSorting == "up") {
-                $aList = $this->_getSortingList( $sTable);
-                $sFItmId = $aObjectId[0];
-                foreach ( $aList as $iNum => $aItem) {
-                    if ( $aItem[2] == $sFItmId && $iNum > 0) {
-                        $sSelect = "update $sTable set $sTable.oxsort=".( $iNum + count($aObjectId) - 1 )." where $sTable.oxobjectid=".$oDB->quote( $aList[$iNum-1][2] );
-                        $oDB->execute( $sSelect);
-                        foreach ( $aObjectId as $iSNum => $sItem) {
-                            $sSelect = "update $sTable set $sTable.oxsort=".( $iNum + $iSNum - 1 )." where $sTable.oxobjectid=".$oDB->quote( $sItem );
-                            $oDB->execute( $sSelect);
-                        }
-                        break;
-                    }
-                }
-            } elseif ( $sSorting == "down") {
-                $aList = $this->_getSortingList( $sTable);
-                $sFItmId = $aObjectId[count($aObjectId)-1];
-                foreach ( $aList as $iNum => $aItem) {
-                    if ( $aItem[2] == $sFItmId && $iNum < (count($aList)-1)) {
-                        $sSelect = "update $sTable set $sTable.oxsort=".( $iNum - count($aObjectId) + 1 )." where $sTable.oxobjectid=".$oDB->quote( $aList[$iNum+1][2] );
-                        $oDB->execute( $sSelect);
-                        foreach ( $aObjectId as $iSNum => $sItem) {
-                            $sSelect = "update $sTable set $sTable.oxsort=".( $iNum - $iSNum + 1 )." where $sTable.oxobjectid=".$oDB->quote( $sItem );
-                            $oDB->execute( $sSelect);
-                        }
-                        break;
-                    }
-                }
-            }
-            $this->updateSorting( $sTable );
-        }
-    }
-
-
-    /**
-     * Methods used for updating sorting info after some objects were removed/added
-     *
-     * @param string $sTable object's data table
-     *
-     * @return null
-     */
-    public function updateSorting( $sTable )
-    {
-        $soxId = oxConfig::getParameter( "oxid");
-        if ( !isset($soxId) && $soxId == "-1")
-            return;
-
-        $aList = $this->_getSortingList( $sTable);
-        // updates sorting
-        $oDB = oxDb::getDb();
-        foreach ( $aList as $iNum => $aItem) {
-            if ( $aItem[1] != $iNum) {
-                $sSelect = "update $sTable set $sTable.oxsort=$iNum where $sTable.oxid=".$oDB->quote( $aItem[0] );
-                $oDB->execute( $sSelect);
-            }
-        }
-    }
-
-
-    /**
-     * Collects and returns array of object ID's for sorting, or false on error
-     *
-     * @param string $sTable object's data table
-     *
-     * @return mixed
-     */
-    protected function _getSortingList( $sTable)
-    {
-        $soxId    = oxConfig::getParameter( "oxid");
-
-
-        if ( !isset($soxId) && $soxId == "-1")
-            return;
-
-        $sSelect  = "select $sTable.oxid, $sTable.oxsort, $sTable.oxobjectid , ";
-        $sSelect .= "$sTable.oxarticlenid from $sTable where $sTable.oxarticlenid = '".$soxId."' order by $sTable.oxsort";
-        $aList = array();
-        $rs = oxDb::getDb()->selectLimit( $sSelect, 1000, 0);
-        //fetches assigned article list
-        if ($rs != false && $rs->recordCount() > 0) {
-            while (!$rs->EOF) {
-                $aList[] = array($rs->fields[0], $rs->fields[1], $rs->fields[2], $rs->fields[3]);
-                $rs->moveNext();
-            }
-        }
-        return $aList;
-    }
-
 }

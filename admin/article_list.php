@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_list.php 24016 2009-11-17 15:37:37Z rimvydas.paskevicius $
+ * $Id: article_list.php 24498 2009-12-07 15:59:17Z arvydas $
  */
 
 /**
@@ -60,31 +60,33 @@ class Article_List extends oxAdminList
         }
 
         $oArticle = null;
-        foreach ( $this->_oList as $key => $oArticle ) {
-            $sFieldName = "oxarticles__".strtolower( $sPwrSearchFld );
+        $oList = $this->getItemList();
+        if ( $oList) {
+            foreach ( $oList as $key => $oArticle ) {
+                $sFieldName = "oxarticles__".strtolower( $sPwrSearchFld );
 
-            // formatting view
-            if ( !$myConfig->getConfigParam( 'blSkipFormatConversion' ) ) {
-                if ( $oArticle->$sFieldName->fldtype == "datetime")
-                    oxDb::getInstance()->convertDBDateTime( $oArticle->$sFieldName );
-                elseif ( $oArticle->$sFieldName->fldtype == "timestamp")
-                    oxDb::getInstance()->convertDBTimestamp( $oArticle->$sFieldName );
-                elseif ( $oArticle->$sFieldName->fldtype == "date")
-                    oxDb::getInstance()->convertDBDate( $oArticle->$sFieldName );
+                // formatting view
+                if ( !$myConfig->getConfigParam( 'blSkipFormatConversion' ) ) {
+                    if ( $oArticle->$sFieldName->fldtype == "datetime")
+                        oxDb::getInstance()->convertDBDateTime( $oArticle->$sFieldName );
+                    elseif ( $oArticle->$sFieldName->fldtype == "timestamp")
+                        oxDb::getInstance()->convertDBTimestamp( $oArticle->$sFieldName );
+                    elseif ( $oArticle->$sFieldName->fldtype == "date")
+                        oxDb::getInstance()->convertDBDate( $oArticle->$sFieldName );
+                }
+
+                $oArticle->pwrsearchval = $oArticle->$sFieldName->value;
+                $oList[$key] = $oArticle;
             }
-
-            $oArticle->pwrsearchval = $oArticle->$sFieldName->value;
-            $this->_oList[$key] = $oArticle;
         }
-
 
         parent::render();
 
         // load fields
-        if ( !$oArticle ) {
-            $oArticle = $this->_oList->getBaseObject();
+        if ( !$oArticle && $oList ) {
+            $oArticle = $oList->getBaseObject();
         }
-        $this->_aViewData["pwrsearchfields"] = $oArticle->getSearchableFields();
+        $this->_aViewData["pwrsearchfields"] = $oArticle ? $oArticle->getSearchableFields() : null;
         $this->_aViewData["pwrsearchfld"]    = strtoupper( $sPwrSearchFld );
 
         $aWhere = array();

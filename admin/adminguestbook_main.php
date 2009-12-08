@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: adminguestbook_main.php 20714 2009-07-10 08:38:53Z sarunas $
+ * $Id: adminguestbook_main.php 24478 2009-12-07 13:17:57Z arvydas $
  */
 
 /**
@@ -62,8 +62,8 @@ class Adminguestbook_Main extends oxAdminDetails
             $oLinks->load( $soxId );
 
             // #580A - setting GB entry as viewed in admin
-            if ( !$oLinks->oxgbentries__oxviewed->value ) {
-                $oLinks->oxgbentries__oxviewed->setValue(1);
+            if ( !isset( $oLinks->oxgbentries__oxviewed ) || !$oLinks->oxgbentries__oxviewed->value ) {
+                $oLinks->oxgbentries__oxviewed = new oxField( 1 );
                 $oLinks->save();
             }
             $this->_aViewData["edit"] =  $oLinks;

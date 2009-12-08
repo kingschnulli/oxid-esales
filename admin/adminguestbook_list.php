@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: adminguestbook_list.php 17243 2009-03-16 15:16:57Z arvydas $
+ * $Id: adminguestbook_list.php 24477 2009-12-07 13:06:01Z arvydas $
  */
 
 /**
@@ -67,10 +67,11 @@ class AdminGuestbook_List extends oxAdminList
     {
         parent::render();
 
-        if ( $this->_oList->count() ) {
+        $oList = $this->getItemList();
+        if ( $oList && $oList->count() ) {
 
             $oDb = oxDb::getDb();
-            foreach ( $this->_oList as $oEntry ) {
+            foreach ( $oList as $oEntry ) {
                 // preloading user info ..
                 if ( isset( $oEntry->oxgbentries__oxuserid ) && $oEntry->oxgbentries__oxuserid->value ) {
                     $oEntry->oxuser__oxlname = new oxField( $oDb->getOne( "select oxlname from oxuser where oxid=".$oDb->quote( $oEntry->oxgbentries__oxuserid->value ) ));
@@ -78,7 +79,7 @@ class AdminGuestbook_List extends oxAdminList
             }
         }
 
-        $this->_aViewData["mylist"] = $this->_oList;
+        $this->_aViewData["mylist"] = $oList;
         return $this->_sThisTemplate;
     }
 

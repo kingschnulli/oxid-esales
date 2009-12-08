@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 24311 2009-11-27 15:15:10Z arvydas $
+ * $Id: oxconfig.php 24502 2009-12-07 18:21:52Z tomas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1766,7 +1766,10 @@ class oxConfig extends oxSuperCfg
                 }
                 break;
             case 'bool':
-                $sValue  =  $sVarVal = ( $sVarVal == 'true' || $sVarVal == '1' );
+                //config param
+                $sVarVal = (( $sVarVal == 'true' || $sVarVal) && $sVarVal && strcasecmp($sVarVal, "false"));
+                //db value
+                $sValue  = $sVarVal?"1":"";
                 break;
             default:
                 $sValue  = $sVarVal;

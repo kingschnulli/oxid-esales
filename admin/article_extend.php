@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_extend.php 22481 2009-09-22 06:50:34Z arvydas $
+ * $Id: article_extend.php 24496 2009-12-07 15:15:49Z arvydas $
  */
 
 /**
@@ -256,5 +256,4 @@ class Article_Extend extends oxAdminDetails
             }
         }
     }
-
 }
