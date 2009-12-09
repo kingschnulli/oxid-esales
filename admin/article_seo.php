@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_seo.php 24024 2009-11-18 12:21:39Z arvydas $
+ * $Id: article_seo.php 24525 2009-12-08 15:14:59Z arvydas $
  */
 
 /**
@@ -99,7 +99,7 @@ class Article_Seo extends Object_Seo
         $this->_aViewData["oManufacturers"]  = $this->_getManufacturerList( $oArticle );
         $this->_aViewData["oTags"]           = $this->_getTagList( $oArticle );
         $this->_aViewData["sCatId"]          = $this->getSelectedCategoryId();
-        $this->_aViewData["sCatType"]        = $this->_sActCatType;
+        $this->_aViewData["sCatType"]        = $this->getActCatType();
         $this->_aViewData["sCatLang"]        = $this->getActCategoryLang();
 
         return parent::render();
@@ -113,7 +113,7 @@ class Article_Seo extends Object_Seo
     protected function _getSeoDataSql( $oObject, $iShopId, $iLang )
     {
         $oDb = oxDb::getDb();
-        if ( $this->_sActCatType == 'oxtag' ) {
+        if ( $this->getActCatType() == 'oxtag' ) {
             $sObjectId = oxSeoEncoderArticle::getInstance()->getDynamicObjectId( $iShopId, $oObject->getStdTagLink( $this->getTag() ) );
             $sQ = "select * from oxseo where oxobjectid = ".$oDb->quote( $sObjectId ) . " and
                    oxshopid = '{$iShopId}' and oxlang = ".$this->getActCategoryLang();
@@ -160,10 +160,12 @@ class Article_Seo extends Object_Seo
     }
 
     /**
+     * Marks category from list as main
      *
-     * @return
-     * @param oxarticle $oProduct
-     * @param oxlist $oCatList
+     * @param oxarticle $oProduct active product object
+     * @param oxlist    $oCatList category list
+     *
+     * @return null
      */
     protected function _setMainCategory( $oProduct, $oCatList )
     {
@@ -179,7 +181,7 @@ class Article_Seo extends Object_Seo
         $oMainCat->oxcategories__oxtitle = new oxField( $oMainCat->oxcategories__oxtitle->getRawValue()." ".$sSuffix, oxField::T_RAW );
 
         // overriding
-        $this->_oArtCategories->offsetSet( $oMainCat->getId(), $oMainCat );
+        $oCatList->offsetSet( $oMainCat->getId(), $oMainCat );
     }
 
     /**
@@ -232,7 +234,7 @@ class Article_Seo extends Object_Seo
     protected function _getTagList( $oArticle )
     {
         $oTagCloud = oxNew("oxTagCloud");
-        $aLangs = $oArticle->getAvailableInLangs();
+        $aLangs = $oArticle ? $oArticle->getAvailableInLangs() : array();
 
         $aLangTags = array();
         foreach ( $aLangs as $iLang => $sLangTitle ) {
@@ -288,7 +290,9 @@ class Article_Seo extends Object_Seo
 
     /**
      * Returns objects seo url
+     *
      * @param oxarticle $oArticle active article object
+     *
      * @return string
      */
     protected function _getSeoUrl( $oArticle )
@@ -297,7 +301,7 @@ class Article_Seo extends Object_Seo
         $this->getSelectedCategoryId();
 
         // choosing type
-        switch ( $this->_sActCatType ) {
+        switch ( $this->getActCatType() ) {
             case 'oxvendor':
                 $sType = OXARTICLE_LINKTYPE_VENDOR;
                 break;
@@ -314,6 +318,7 @@ class Article_Seo extends Object_Seo
                 if ( $oCat->isPriceCategory() ) {
                     $sType = OXARTICLE_LINKTYPE_PRICECATEGORY;
                 }
+                break;
         }
 
         oxSeoEncoderArticle::getInstance()->getArticleUrl( $oArticle, $this->getEditLang(), $sType );
@@ -341,7 +346,7 @@ class Article_Seo extends Object_Seo
     public function getTag()
     {
         $sTag = $this->getSelectedCategoryId();
-        if ( $this->_sActCatType == 'oxtag' ) {
+        if ( $this->getActCatType() == 'oxtag' ) {
             return $sTag;
         }
     }
@@ -354,7 +359,7 @@ class Article_Seo extends Object_Seo
     public function getActVendor()
     {
         $oVendor = oxNew( 'oxvendor' );
-        if ( $this->_sActCatType == 'oxvendor' && $oVendor->load( $this->_sActCatId ) ) {
+        if ( $this->getActCatType() == 'oxvendor' && $oVendor->load( $this->_sActCatId ) ) {
             return $oVendor;
         }
     }
@@ -367,7 +372,7 @@ class Article_Seo extends Object_Seo
     public function getActManufacturer()
     {
         $oManufacturer = oxNew( 'oxmanufacturer' );
-        if ( $this->_sActCatType == 'oxmanufacturer' && $oManufacturer->load( $this->_sActCatId ) ) {
+        if ( $this->getActCatType() == 'oxmanufacturer' && $oManufacturer->load( $this->_sActCatId ) ) {
             return $oManufacturer;
         }
     }
@@ -380,7 +385,7 @@ class Article_Seo extends Object_Seo
     public function getListType()
     {
         $sListType = '';
-        switch ( $this->_sActCatType ) {
+        switch ( $this->getActCatType() ) {
             case 'oxvendor':
                 $sListType = 'vendor';
                 break;
@@ -408,7 +413,7 @@ class Article_Seo extends Object_Seo
         $oDb = oxDb::getDb();
 
          // tag type urls are loaded differently from others..
-        if ( $sTag = $this->getTag() ) {
+        if ( ( $sTag = $this->getTag() ) ) {
 
             $sStdUrl = "index.php?cl=details&amp;anid=".$oObject->getId()."&amp;listtype=tag&amp;searchtag=".rawurlencode( $sTag );
             $sObjectId = md5( strtolower( $oObject->getShopId() . $sStdUrl ) );
@@ -454,7 +459,7 @@ class Article_Seo extends Object_Seo
      *
      * @return
      */
-    protected function getSeoEntryId()
+    protected function _getSeoEntryId()
     {
         if ( $sTag = $this->getTag() ) {
             $oObject = $this->_getObject( oxConfig::getParameter( 'oxid' ) );
@@ -462,6 +467,18 @@ class Article_Seo extends Object_Seo
         } else {
             return parent::getSeoEntryId();
         }
+    }
+
+    /**
+     * Returns seo entry ident
+     *
+     * @deprecated should be used object_seo::_getSeoEntryId()
+     *
+     * @return string
+     */
+    protected function getSeoEntryId()
+    {
+        return $this->_getSeoEntryId();
     }
 
     /**
@@ -489,6 +506,9 @@ class Article_Seo extends Object_Seo
 
     /**
      * Returns objects std url
+     *
+     * @param string $sOxid object id
+     *
      * @return string
      */
     protected function _getStdUrl( $sOxid )
@@ -504,7 +524,7 @@ class Article_Seo extends Object_Seo
         $sCatId = ( $sCatId == $this->_sNoCategoryId ) ? false : $sCatId;
 
         // adding vendor or manufacturer id
-        switch ( $this->_sActCatType ) {
+        switch ( $this->getActCatType() ) {
             case 'oxvendor':
                 $sStdLink .= "&amp;cnid=v_{$sCatId}";
                 break;
@@ -520,6 +540,16 @@ class Article_Seo extends Object_Seo
         }
 
         return $sStdLink;
+    }
+
+    /**
+     * Returns active category type
+     *
+     * @return string
+     */
+    public function getActCatType()
+    {
+        return $this->_sActCatType;
     }
 
     /**
@@ -545,6 +575,6 @@ class Article_Seo extends Object_Seo
      */
     public function getNoCatId()
     {
-        return $this->_sNoneCategoryId;
+        return $this->_sNoCategoryId;
     }
 }

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: object_seo.php 24024 2009-11-18 12:21:39Z arvydas $
+ * $Id: object_seo.php 24525 2009-12-08 15:14:59Z arvydas $
  */
 
 /**
@@ -120,9 +120,9 @@ class Object_Seo extends oxAdminDetails
      */
     protected function _getObject( $sOxid )
     {
-        if ( $this->_oObject === null ) {
+        if ( $this->_oObject === null && ( $sType = $this->_getType() ) ) {
             // load object
-            $this->_oObject = oxNew( $this->_getType() );
+            $this->_oObject = oxNew( $sType );
             if ( !$this->_oObject->loadInLang( $this->_iEditLang, $sOxid ) ) {
                 $this->_oObject = false;
             }
@@ -153,7 +153,7 @@ class Object_Seo extends oxAdminDetails
     public function save()
     {
         // saving/updating seo params
-        if ( ( $sOxid = $this->getSeoEntryId() ) ) {
+        if ( ( $sOxid = $this->_getSeoEntryId() ) ) {
             $aSeoData = oxConfig::getParameter( 'aSeoData' );
             $iShopId  = $this->getConfig()->getShopId();
 
@@ -187,9 +187,21 @@ class Object_Seo extends oxAdminDetails
     /**
      * Returns seo entry ident
      *
+     * @deprecated should be used object_seo::_getSeoEntryId()
+     *
      * @return string
      */
     protected function getSeoEntryId()
+    {
+        return $this->_getSeoEntryId();
+    }
+
+    /**
+     * Returns seo entry ident
+     *
+     * @return string
+     */
+    protected function _getSeoEntryId()
     {
         return oxConfig::getParameter( 'oxid' );
     }
