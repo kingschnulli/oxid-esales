@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxubase.php 24386 2009-12-02 23:26:31Z alfonsas $
+ * $Id: oxubase.php 24541 2009-12-09 14:10:30Z sarunas $
  */
 
 /**
@@ -1632,14 +1632,6 @@ class oxUBase extends oxView
         $iActPageNr = $this->getActPage();
 
         if ( $oDisplayObj ) {
-
-            // if languages do not match object must be reload, but reference to view object should be broken
-            if ( $oDisplayObj->getLanguage() != $iLang ) {
-                $sOxId = $oDisplayObj->getId();
-                $oDisplayObj = clone $oDisplayObj;
-                $oDisplayObj->loadInLang( $iLang, $sOxId );
-            }
-
             return $this->_addPageNrParam( $oDisplayObj->getLink( $iLang ), $iActPageNr, $iLang );
         }
 

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_seo.php 24525 2009-12-08 15:14:59Z arvydas $
+ * $Id: article_seo.php 24546 2009-12-09 15:48:34Z arvydas $
  */
 
 /**
@@ -465,7 +465,7 @@ class Article_Seo extends Object_Seo
             $oObject = $this->_getObject( oxConfig::getParameter( 'oxid' ) );
             return md5( strtolower( $oObject->getShopId() . $this->_getStdUrl( $oObject->getId() ) ) );
         } else {
-            return parent::getSeoEntryId();
+            return parent::_getSeoEntryId();
         }
     }
 
