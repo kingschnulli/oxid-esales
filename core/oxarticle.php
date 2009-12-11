@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 24024 2009-11-18 12:21:39Z arvydas $
+ * $Id: oxarticle.php 24565 2009-12-10 11:50:46Z arvydas $
  */
 
 // defining supported link types
@@ -283,6 +283,20 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * @var array
      */
     protected $_aSeoUrls = array();
+
+    /**
+     * Additional parameters to seo urls
+     *
+     * @var array
+     */
+    protected $_aSeoAddParams = array();
+
+    /**
+     * Additional parameters to std urls
+     *
+     * @var array
+     */
+    protected $_aStdAddParams = array();
 
     /**
      * Image url
@@ -2248,18 +2262,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getAttributes()
     {
-
-        if ($this->_oAttributeList) {
-            return $this->_oAttributeList;
+        if ( $this->_oAttributeList === null ) {
+            $this->_oAttributeList = oxNew( 'oxattributelist' );
+            $this->_oAttributeList->loadAttributes( $this->getId() );
         }
 
-        $oAttributeList = oxNew( 'oxattributelist' );
-        $oAttributeList->loadAttributes( $this->getId());
-        //if config option is set then the value for this object is also set
-        //2007-02-09T
-        $this->_oAttributeList = $oAttributeList;
-
-        return $oAttributeList;
+        return $this->_oAttributeList;
     }
 
     /**
@@ -2272,21 +2280,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function appendLink( $sAddParams, $iLang = null )
     {
-        if ( oxUtils::getInstance()->seoIsActive() ) {
+        if ( $sAddParams ) {
             if ( $iLang === null ) {
                 $iLang = $this->getLanguage();
             }
 
-            $iLinkType = $this->getLinkType();
-
-            if ( !isset( $this->_aSeoUrls[$iLang][$iLinkType] ) ) {
-                $this->_aSeoUrls[$iLang][$iLinkType] = $this->getBaseSeoLink( $iLang );
-            }
-
-            if ( !empty( $sAddParams ) ) {
-                $sParams = ( ( strpos( $this->_aSeoUrls[$iLang][$iLinkType], '?' ) !== false ) ? '&amp;' : '?' ) . $sAddParams;
-                $this->_aSeoUrls[$iLang][$iLinkType] .= $sParams;
-            }
+            $this->_aSeoAddParams[$iLang]  = isset( $this->_aSeoAddParams[$iLang] ) ? $this->_aSeoAddParams[$iLang] . "&amp;" : "";
+            $this->_aSeoAddParams[$iLang] .= $sAddParams;
         }
     }
 
@@ -2311,10 +2311,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * Gets article link
      *
      * @param int $iLang language id [optional]
+     * @param bool $blMain force to return main url [optional]
      *
      * @return string
      */
-    public function getLink( $iLang = null )
+    public function getLink( $iLang = null, $blMain = false  )
     {
         if ( !oxUtils::getInstance()->seoIsActive() ) {
             return $this->getStdLink( $iLang );
@@ -2326,9 +2327,23 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
         $iLinkType = $this->getLinkType();
         if ( !isset( $this->_aSeoUrls[$iLang][$iLinkType] ) ) {
-            $this->_aSeoUrls[$iLang][$iLinkType] = $this->getBaseSeoLink( $iLang );
+            $this->_aSeoUrls[$iLang][$iLinkType] = $this->getBaseSeoLink( $iLang, $blMain );
         }
-        return oxUtilsUrl::getInstance()->processSeoUrl( $this->_aSeoUrls[$iLang][$iLinkType] );
+        $sUrl = oxUtilsUrl::getInstance()->processSeoUrl( $this->_aSeoUrls[$iLang][$iLinkType] );
+        return $sUrl . ( isset( $this->_aSeoAddParams[$iLang] ) ? "&amp;". $this->_aSeoAddParams[$iLang] : "" );
+    }
+
+    /**
+     * Returns main object URL. If SEO is ON returned link will be in SEO form,
+     * else URL will have dynamic form
+     *
+     * @param int $iLang language id [optional]
+     *
+     * @return string
+     */
+    public function getMainLink( $iLang = null )
+    {
+        return $this->getLink( $iLang, true );
     }
 
     /**
@@ -2367,12 +2382,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function appendStdLink( $sAddParams, $iLang = null )
     {
-        if ( $iLang === null ) {
-            $iLang = $this->getLanguage();
-        }
+        if ( $sAddParams ) {
+            if ( $iLang === null ) {
+                $iLang = $this->getLanguage();
+            }
 
-        $sUrl = $this->getStdLink( $iLang );
-        $this->_aStdUrls[$iLang] .= ( ( strpos( $sUrl, '?' ) !== false ) ? '&amp;' : '?' ) . $sAddParams;
+            $this->_aStdAddParams[$iLang]  = isset( $this->_aStdAddParams[$iLang] ) ? $this->_aStdAddParams[$iLang] . "&amp;" : "";
+            $this->_aStdAddParams[$iLang] .= $sAddParams;
+        }
     }
 
     /**
@@ -2392,7 +2409,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $sUrl = $this->getConfig()->getShopUrl( $iLang, false );
         }
 
-        return $sUrl . "index.php?cl=details" . ( $blAddId ? "&amp;anid=".$this->getId() : "" );
+        $sUrl .= "index.php?cl=details" . ( $blAddId ? "&amp;anid=".$this->getId() : "" );
+        return $sUrl . ( isset( $this->_aStdAddParams[$iLang] ) ? "&amp;". $this->_aStdAddParams[$iLang] : "" );
     }
 
     /**
@@ -2414,27 +2432,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         return oxUtilsUrl::getInstance()->processStdUrl( $this->_aStdUrls[$iLang], $aParams, $iLang, $iLang != $this->getLanguage() );
-    }
-
-    /**
-     * Returns main object URL. If SEO is ON returned link will be in SEO form,
-     * else URL will have dynamic form
-     *
-     * @param int $iLang language id [optional]
-     *
-     * @return string
-     */
-    public function getMainLink( $iLang = null )
-    {
-        if ( !oxUtils::getInstance()->seoIsActive() ) {
-            return $this->getStdLink( $iLang );
-        }
-
-        if ( $iLang === null ) {
-            $iLang = $this->getLanguage();
-        }
-
-        return oxUtilsUrl::getInstance()->processSeoUrl( oxSeoEncoderArticle::getInstance()->getArticleMainUrl( $this, $iLang ) );
     }
 
     /**
