@@ -33,8 +33,8 @@
             </td>
             <td class="edittext">
             <select name="editval[oxorder__oxbillsal]" class="editinput" [{ $readonly }]>
-                <option value="MR"  [{if $edit->oxorder__oxbillsal->value|lower  == "mr"  }]SELECTED[{/if}]>[{ oxmultilang ident="GENERAL_SALUTATION_MR"  }]</option>
-                <option value="MRS" [{if $edit->oxorder__oxbillsal->value|lower  == "mrs" }]SELECTED[{/if}]>[{ oxmultilang ident="GENERAL_SALUTATION_MRS" }]</option>
+                <option value="MR"  [{if $edit->oxorder__oxbillsal->value|lower  == "mr"  }]SELECTED[{/if}]>[{ oxmultilang ident="MR"  }]</option>
+                <option value="MRS" [{if $edit->oxorder__oxbillsal->value|lower  == "mrs" }]SELECTED[{/if}]>[{ oxmultilang ident="MRS" }]</option>
             </select>
             [{ oxinputhelp ident="HELP_GENERAL_BILLSAL" }]
             </td>

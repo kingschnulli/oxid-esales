@@ -22,8 +22,7 @@
             <br>
             [{ if $edit->oxorder__oxbillcompany->value }][{ oxmultilang ident="GENERAL_COMPANY" }] [{$edit->oxorder__oxbillcompany->value }]<br>[{/if}]
             [{ if $edit->oxorder__oxbilladdinfo->value }][{$edit->oxorder__oxbilladdinfo->value }]<br>[{/if}]
-            [{assign var=_sal value=$edit->oxorder__oxbillsal->value}]
-            [{oxmultilang ident="GENERAL_SALUTATION_$_sal" noerror="yes" alternative=$_sal }] [{$edit->oxorder__oxbillfname->value }] [{$edit->oxorder__oxbilllname->value }]<br>
+            [{$edit->oxorder__oxbillsal->value|oxmultilangsal}] [{$edit->oxorder__oxbillfname->value }] [{$edit->oxorder__oxbilllname->value }]<br>
             [{$edit->oxorder__oxbillstreet->value }] [{$edit->oxorder__oxbillstreetnr->value }]<br>
             [{$edit->oxorder__oxbillzip->value }] [{$edit->oxorder__oxbillcity->value }]<br>
             [{$edit->oxorder__oxbillcountry->value }]<br>

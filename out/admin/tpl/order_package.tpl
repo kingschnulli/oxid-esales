@@ -25,8 +25,7 @@ function printWindow()
 <tr>
 	<td class="listitem" width="150" valign="top">
 		<b>[{ oxmultilang ident="GENERAL_BILLADDRESS" }]<br></b>
-                [{assign var=_sal value=$order->oxorder__oxbillsal->value}]
-                [{oxmultilang ident="GENERAL_SALUTATION_$_sal" noerror="yes" alternative=$_sal }]&nbsp;[{ $order->oxorder__oxbillfname->value }]&nbsp;[{ $order->oxorder__oxbilllname->value }]<br>
+        [{ $order->oxorder__oxbillsal->value|oxmultilangsal}]&nbsp;[{ $order->oxorder__oxbillfname->value }]&nbsp;[{ $order->oxorder__oxbilllname->value }]<br>
 		[{ $order->oxorder__oxbillcompany->value }]<br>
 		[{ $order->oxorder__oxbillstreet->value }]  [{ $order->oxorder__oxbillstreetnr->value }]<br>
 		[{ $order->oxorder__oxbillzip->value }]&nbsp;[{ $order->oxorder__oxbillcity->value }]<br>
@@ -39,8 +38,7 @@ function printWindow()
 	</td>
 	<td class="listitem" width="150" valign="top">
 		<b>[{ oxmultilang ident="GENERAL_DELIVERYADDRESS" }]:<br></b>
-                [{assign var=_sal value=$order->oxorder__oxbillsal->value}]
-                [{oxmultilang ident="GENERAL_SALUTATION_$_sal" noerror="yes" alternative=$_sal }]&nbsp;[{if $order->oxorder__oxdelfname->value}][{ $order->oxorder__oxdelfname->value }][{ else }][{ $order->oxorder__oxbillfname->value }][{/if}]&nbsp;[{if $order->oxorder__oxdellname->value }][{$order->oxorder__oxdellname->value }][{else}][{$order->oxorder__oxbilllname->value }][{/if}]<br>
+        [{ if $order->oxorder__oxdelsal->value }][{$order->oxorder__oxdelsal->value|oxmultilangsal}][{else}][{$order->oxorder__oxbillsal->value|oxmultilangsal}][{/if}]&nbsp;[{if $order->oxorder__oxdelfname->value}][{ $order->oxorder__oxdelfname->value }][{ else }][{ $order->oxorder__oxbillfname->value }][{/if}]&nbsp;[{if $order->oxorder__oxdellname->value }][{$order->oxorder__oxdellname->value }][{else}][{$order->oxorder__oxbilllname->value }][{/if}]<br>
 		[{ if $order->oxorder__oxdelcompany->value }][{ $order->oxorder__oxdelcompany->value }][{else}][{ $order->oxorder__oxbillcompany->value }][{/if}]<br>
 		[{ if $order->oxorder__oxdelstreet->value }][{ $order->oxorder__oxdelstreet->value }]&nbsp;[{ $order->oxorder__oxdelstreetnr->value }][{else}][{ $order->oxorder__oxbillstreet->value }]&nbsp;[{ $order->oxorder__oxbillstreetnr->value }][{/if}]<br>
 		[{ if $order->oxorder__oxdelzip->value }][{ $order->oxorder__oxdelzip->value }][{else}][{ $order->oxorder__oxbillzip->value }][{/if}]&nbsp;[{ if $order->oxorder__oxdelcity->value }][{ $order->oxorder__oxdelcity->value }][{else}][{ $order->oxorder__oxbillcity->value }][{/if}]<br>
@@ -71,7 +69,7 @@ function printWindow()
                     </tr>
                     [{/if}]
             [{/foreach}]
-    
+
             [{assign var=_card value=$order->getGiftCard()}]
             [{if $_card}]
             <tr>
@@ -90,7 +88,7 @@ function printWindow()
 [{/foreach}]
 
 <script type="text/javascript">
-if (parent.parent) 
+if (parent.parent)
 {   parent.parent.sShopTitle   = "[{$actshopobj->oxshops__oxname->getRawValue()|oxaddslashes}]";
     parent.parent.sMenuItem    = "[{ oxmultilang ident="ORDER_PACKAGE_MENUITEM" }]";
     parent.parent.sMenuSubItem = "[{ oxmultilang ident="ORDER_PACKAGE_MENUSUBITEM" }]";

@@ -100,8 +100,8 @@ function chkInsert()
             </td>
             <td class="edittext">
               <select name="editval[oxuser__oxsal]" class="editinput" [{ $readonly }]>
-                <option value="MR"  [{if $edit->oxuser__oxsal->value|lower  == "mr"  }]SELECTED[{/if}]>[{ oxmultilang ident="GENERAL_SALUTATION_MR"  }]</option>
-                <option value="MRS" [{if $edit->oxuser__oxsal->value|lower  == "mrs" }]SELECTED[{/if}]>[{ oxmultilang ident="GENERAL_SALUTATION_MRS" }]</option>
+                <option value="MR"  [{if $edit->oxuser__oxsal->value|lower  == "mr"  }]SELECTED[{/if}]>[{ oxmultilang ident="MR"  }]</option>
+                <option value="MRS" [{if $edit->oxuser__oxsal->value|lower  == "mrs" }]SELECTED[{/if}]>[{ oxmultilang ident="MRS" }]</option>
               </select>
             [{ oxinputhelp ident="HELP_GENERAL_BILLSAL" }]
             </td>
