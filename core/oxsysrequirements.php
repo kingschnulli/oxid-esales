@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsysrequirements.php 24346 2009-12-01 10:18:58Z sarunas $
+ * $Id: oxsysrequirements.php 24642 2009-12-15 08:43:30Z vilma $
  */
 
 /**
@@ -328,7 +328,7 @@ class oxSysRequirements
     public function checkMysqlConnect()
     {
         // MySQL module for MySQL5
-        $iModStat = extension_loaded( 'mysql' ) ? 2 : 0;
+        $iModStat = ( extension_loaded( 'mysql' ) || extension_loaded( 'mysqli' ) || extension_loaded( 'pdo_mysql' ) ) ? 2 : 0;
         // client version must be >=5
         if ( $iModStat ) {
             $sClientVersion = mysql_get_client_info();

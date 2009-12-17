@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxemail.php 24275 2009-11-26 13:58:27Z arvydas $
+ * $Id: oxemail.php 24658 2009-12-15 15:01:10Z alfonsas $
  */
 /**
  * Includes PHP mailer class.
@@ -185,11 +185,11 @@ class oxEmail extends PHPMailer
     protected $_sOwnerPricealarmTemplate    = "email_pricealarm_owner.tpl";
 
     /**
-     * Current active shop
+     * Language specific viewconfig object array containing view data, view confic and shop object
      *
-     * @var oxShop
+     * @var array
      */
-    protected $_oShop = null;
+    protected $_aShops = array();
 
     /**
      * Add inline images to mail
@@ -232,7 +232,7 @@ class oxEmail extends PHPMailer
         $this->_setMailerPluginDir();
         $this->setSmtp();
 
-        $this->setUseInlineImages( true );
+        $this->setUseInlineImages( $myConfig->getConfigParam('blInlineImgEmail') );
         $this->setMailWordWrap( 100 );
 
         $this->isHtml( true );
@@ -555,7 +555,7 @@ class oxEmail extends PHPMailer
 
 
         if ( $myConfig->getConfigParam( 'iDebug' ) == 6) {
-            exit();
+            oxUtils::getInstance()->showMessageAndExit( "" );
         }
 
         return $blSuccess;
@@ -769,11 +769,9 @@ class oxEmail extends PHPMailer
     {
         $myConfig = $this->getConfig();
         $iActShopLang = $myConfig->getActiveShop()->getLanguage();
-        $sLang = "";
-        if ( $iActShopLang ) {
-            $sLang = '&amp;lang='.$iActShopLang;
-        }
-        $sUrl = $myConfig->getShopHomeURL().'cl=newsletter&amp;fnc=addme&amp;uid='.$sId.$sLang;
+
+        $sUrl      = $myConfig->getShopHomeURL().'cl=newsletter&amp;fnc=addme&amp;uid='.$sId.$sLang;
+        $sUrl .= ( $iActShopLang ) ? '&amp;lang='.$iActShopLang : "";
         return $sUrl;
     }
 
@@ -828,11 +826,7 @@ class oxEmail extends PHPMailer
         $myConfig = $this->getConfig();
 
         //sets language of shop
-        $iCurrLang = 0;
-        $iActShopLang = $myConfig->getActiveShop()->getLanguage();
-        if ( isset($iActShopLang) && $iActShopLang != $iCurrLang ) {
-            $iCurrLang = $iActShopLang;
-        }
+        $iCurrLang = $myConfig->getActiveShop()->getLanguage();
 
         // shop info
         $oShop = $this->_getShop( $iCurrLang );
@@ -886,10 +880,7 @@ class oxEmail extends PHPMailer
     {
         $myConfig = $this->getConfig();
 
-        $iOrderLang = 0;
-        if ( isset($oOrder->oxorder__oxlang->value) && $oOrder->oxorder__oxlang->value ) {
-            $iOrderLang = $oOrder->oxorder__oxlang->value;
-        }
+        $iOrderLang = (int) ( isset( $oOrder->oxorder__oxlang->value ) ? $oOrder->oxorder__oxlang->value : 0 );
 
         // shop info
         $oShop = $this->_getShop( $iOrderLang );
@@ -981,10 +972,7 @@ class oxEmail extends PHPMailer
         $this->setSubject( $sSubject );
 
         $this->setRecipient( $oShop->oxshops__oxinfoemail->value, "" );
-
-        if ( !$sEmailAddress ) {
-            $sEmailAddress = $oShop->oxshops__oxowneremail->value;
-        }
+        $sEmailAddress = $sEmailAddress ? $sEmailAddress : $oShop->oxshops__oxowneremail->value;
 
         $this->setFrom( $sEmailAddress, "" );
         $this->setReplyTo( $sEmailAddress, "" );
@@ -1347,7 +1335,6 @@ class oxEmail extends PHPMailer
             // copying values as original class does not allow to access recipients array
             $this->_aRecipients[] = array( $sAddress, $sName );
         } catch( Exception $oEx ) {
-            return;
         }
     }
 
@@ -1389,7 +1376,7 @@ class oxEmail extends PHPMailer
     public function setReplyTo( $sEmail = null, $sName = null )
     {
         if ( !oxUtils::getInstance()->isValidEmail( $sEmail ) ) {
-            $sEmail = $this->_oShop->oxshops__oxorderemail->value;
+            $sEmail = $this->_getShop()->oxshops__oxorderemail->value;
         }
 
         $this->_aReplies[] = array( $sEmail, $sName );
@@ -1397,7 +1384,6 @@ class oxEmail extends PHPMailer
         try {
             parent::addReplyTo( $sEmail, $sName );
         } catch( Exception $oEx ) {
-            return;
         }
     }
 
@@ -1441,7 +1427,6 @@ class oxEmail extends PHPMailer
         try {
             parent::setFrom( $sFromAdress, $sFromName );
         } catch( Exception $oEx ) {
-            return;
         }
     }
 
@@ -1475,11 +1460,7 @@ class oxEmail extends PHPMailer
      */
     public function setCharSet( $sCharSet = null )
     {
-        if ( empty($sCharSet) ) {
-            $sCharSet = oxLang::getInstance()->translateString( "charset" );
-        }
-
-        $this->set( "CharSet", $sCharSet );
+        $this->set( "CharSet", $sCharSet ? $sCharSet : oxLang::getInstance()->translateString( "charset" ) );
     }
 
     /**
@@ -1576,11 +1557,11 @@ class oxEmail extends PHPMailer
         $sFullPath = $sAttPath . $sAttFile;
 
         $this->_aAttachments[] = array( $sFullPath, $sAttFile, $sEncoding, $sType );
+        $blResult = false;
 
         try {
              $blResult = parent::addAttachment( $sFullPath, $sAttFile, $sEncoding, $sType );
         } catch( Exception $oEx ) {
-            return false;
         }
 
         return $blResult;
@@ -1769,7 +1750,6 @@ class oxEmail extends PHPMailer
         }
 
         $this->setFrom( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
-
         $this->setSmtp( $oShop );
     }
 
@@ -1784,31 +1764,18 @@ class oxEmail extends PHPMailer
     protected function _getShop( $iLangId = null )
     {
         $myConfig = $this->getConfig();
-        if ( !isset($iLangId) ) {
-            $iLangId = 0;
-            $iActShopLang = $myConfig->getActiveShop()->getLanguage();
-            if ( isset($iActShopLang) && $iActShopLang != $iLangId ) {
-                $iLangId = $iActShopLang;
-            }
+        if ( $iLangId === null ) {
+            $iLangId = $myConfig->getActiveShop()->getLanguage();
         }
-        if ( isset($this->_oShop) && $this->_oShop ) {
-            // if oShop already setted and reqesting oShop with same language as current oShop,
-            // or wihtout lang param, return oShop object
-            if ( isset($iLangId) && $iLangId == $this->_oShop->getLanguage() ) {
-                return $this->_oShop;
-            }
-        }
-
-        $this->_oShop = oxNew( 'oxshop' );
-
         $iLangId = oxLang::getInstance()->validateLanguage( $iLangId );
 
-        $this->_oShop->loadInLang( $iLangId, $myConfig->getShopId() );
+        if ( !isset( $this->_aShops[$iLangId] ) ) {
+            $oShop = oxNew( 'oxshop' );
+            $oShop->loadInLang( $iLangId, $myConfig->getShopId() );
+            $this->_aShops[$iLangId] = $myConfig->getActiveView()->addGlobalParams( $oShop );
+        }
 
-        $oView = $myConfig->getActiveView();
-        $this->_oShop = $oView->addGlobalParams( $this->_oShop );
-
-        return $this->_oShop;
+        return $this->_aShops[$iLangId];
     }
 
     /**
@@ -1869,10 +1836,10 @@ class oxEmail extends PHPMailer
      */
     protected function _sendMail()
     {
+        $blResult = false;
         try {
              $blResult = parent::send();
         } catch( Exception $oEx ) {
-            return false;
         }
 
         return $blResult;

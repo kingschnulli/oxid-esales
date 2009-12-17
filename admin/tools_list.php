@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: tools_list.php 21092 2009-07-22 14:42:13Z vilma $
+ * $Id: tools_list.php 24611 2009-12-14 09:24:01Z arvydas $
  */
 
 /**
@@ -144,8 +144,9 @@ class Tools_List extends oxAdminList
 
                 $aBadFiles = array("php", "jsp", "cgi", "cmf", "exe");
 
-                if (in_array($aFilename[1], $aBadFiles))
-                    die("We don't play this game, go away");
+                if (in_array($aFilename[1], $aBadFiles)) {
+                    oxUtils::getInstance()->showMessageAndExit( "We don't play this game, go away" );
+                }
 
                 //reading SQL dump file
                 if ( $sSource) {

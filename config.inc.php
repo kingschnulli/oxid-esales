@@ -44,7 +44,7 @@
     // $this->blFixedWidthLayout = true;
 
     // UTF-8 mode in shop 0 - off, 1 - on
-    $this->iUtfMode  = <iUtfMode>;
+    $this->iUtfMode  = '<iUtfMode>';
 
     // File type whitelist for file upload
     $this->aAllowedUploadTypes = array('jpg', 'gif', 'png', 'pdf', 'mp3', 'avi', 'mpg', 'mpeg', 'doc', 'xls', 'ppt');

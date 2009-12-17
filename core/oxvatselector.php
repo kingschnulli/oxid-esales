@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxvatselector.php 20503 2009-06-26 14:54:11Z vilma $
+ * $Id: oxvatselector.php 24650 2009-12-15 11:09:06Z sarunas $
  */
 
 /**
@@ -102,7 +102,7 @@ class oxVatSelector extends oxSuperCfg
     protected function _getForeignCountryUserVat(oxUser $oUser, oxCountry $oCountry )
     {
         if ($oCountry->isInEU()) {
-            if ($oUser->oxuser__oxustid->value && $oUser->oxuser__oxcompany->value) {
+            if ($oUser->oxuser__oxustid->value) {
                 return 0;
             }
             return false;

@@ -92,7 +92,7 @@
 
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_BILLINGADDRESS" }]
 [{ $order->oxorder__oxbillcompany->value }]
-[{ $order->oxorder__oxbillsal->value }] [{ $order->oxorder__oxbillfname->value }] [{ $order->oxorder__oxbilllname->value }]
+[{ $order->oxorder__oxbillsal->value|oxmultilangsal}] [{ $order->oxorder__oxbillfname->value }] [{ $order->oxorder__oxbilllname->value }]
 [{if $order->oxorder__oxbilladdinfo->value }][{ $order->oxorder__oxbilladdinfo->value }][{/if}]
 [{ $order->oxorder__oxbillstreet->value }] [{ $order->oxorder__oxbillstreetnr->value }]
 [{ $order->oxorder__oxbillzip->value }] [{ $order->oxorder__oxbillcity->value }]
@@ -102,7 +102,7 @@
 
 [{ if $order->oxorder__oxdellname->value }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGADDRESS" }]
 [{ $order->oxorder__oxdelcompany->value }]
-[{ $order->oxorder__oxdelsal->value }] [{ $order->oxorder__oxdelfname->value }] [{ $order->oxorder__oxdellname->value }]
+[{ $order->oxorder__oxdelsal->value|oxmultilangsal }] [{ $order->oxorder__oxdelfname->value }] [{ $order->oxorder__oxdellname->value }]
 [{if $order->oxorder__oxdeladdinfo->value }][{ $order->oxorder__oxdeladdinfo->value }][{/if}]
 [{ $order->oxorder__oxdelstreet->value }] [{ $order->oxorder__oxdelstreetnr->value }]
 [{ $order->oxorder__oxdelzip->value }] [{ $order->oxorder__oxdelcity->value }]

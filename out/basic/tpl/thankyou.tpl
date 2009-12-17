@@ -51,7 +51,7 @@
                   <div>
                       <input type="hidden" name="_charset_">
                       <input name="shop_id" type=hidden value="[{$oView->getTrustedShopId()}]">
-                      <input name="title" type=hidden value="[{ $order->oxorder__oxbillsal->value }]">
+                      <input name="title" type=hidden value="[{ $order->oxorder__oxbillsal->value|oxmultilangsal }]">
                       <input name="email" type="hidden" value="[{ $oxcmp_user->oxuser__oxusername->value }]">
                       <input name="first_name" type=hidden value="[{ $order->oxorder__oxbillfname->value }]">
                       <input name="last_name" type=hidden value="[{ $order->oxorder__oxbilllname->value }]">

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: navigation.php 23384 2009-10-20 12:58:12Z vilma $
+ * $Id: navigation.php 24609 2009-12-14 09:23:14Z arvydas $
  */
 
 /**
@@ -170,7 +170,7 @@ class Navigation extends oxAdminView
                     // Fix self url's
                     $sOutput = preg_replace("/href=\"#\"/i", 'href="javascript::void();"', $sOutput);
 
-                    die($sOutput);
+                    oxUtils::getInstance()->showMessageAndExit( $sOutput );
                }
 
             }else{
@@ -222,9 +222,9 @@ class Navigation extends oxAdminView
 
         // version check
         if ( $this->getConfig()->getConfigParam( 'blCheckForUpdates' ) ) {
-	        if ( $sVersionNotice = $this->_checkVersion() ) {
-	            $aMessage['message'] .= $sVersionNotice;
-	        }
+            if ( $sVersionNotice = $this->_checkVersion() ) {
+                $aMessage['message'] .= $sVersionNotice;
+            }
         }
 
 

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxajax.php 24385 2009-12-02 19:31:39Z tomas $
+ * $Id: oxajax.php 24610 2009-12-14 09:23:38Z arvydas $
  */
 
 // shop path for includes
@@ -614,7 +614,7 @@ if ( $blAjaxCall ) {
     // authorization
     if ( !count(oxUtilsServer::getInstance()->getOxCookie()) || !oxUtils::getInstance()->checkAccessRights()) {
         header( "location:index.php");
-        exit();
+        oxUtils::getInstance()->showMessageAndExit( "" );
     }
 
     if ( $sContainer = oxConfig::getParameter( 'container' ) ) {

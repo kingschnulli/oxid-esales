@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxutils.php 24344 2009-12-01 09:25:06Z arvydas $
+ * $Id: oxutils.php 24614 2009-12-14 09:26:47Z arvydas $
  */
 
 /**
@@ -883,12 +883,13 @@ class oxUtils extends oxSuperCfg
     public function showMessageAndExit( $sMsg )
     {
         $this->getSession()->freeze();
+        $this->commitFileCache();
 
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             return;
         }
 
-        die( $sMsg );
+        exit( $sMsg );
     }
 
     /**

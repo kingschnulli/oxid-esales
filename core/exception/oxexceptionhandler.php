@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxexceptionhandler.php 24041 2009-11-18 16:23:26Z tomas $
+ * $Id: oxexceptionhandler.php 24612 2009-12-14 09:25:15Z arvydas $
  */
 
 /**
@@ -124,7 +124,7 @@ class oxExceptionHandler
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             return $oEx->getString();
         } elseif ( 0 != $this->_iDebug ) {
-            exit( $oEx->getString() );
+            oxUtils::getInstance()->showMessageAndExit( $oEx->getString() );
         }
 
         //simple safe redirect in productive mode
@@ -150,7 +150,7 @@ class oxExceptionHandler
             if ( defined( 'OXID_PHP_UNIT' ) ) {
                 return;
             } elseif ( 0 != $this->_iDebug ) {
-                exit( $sOut );
+                oxUtils::getInstance()->showMessageAndExit( $sOut );
             }
         }
 

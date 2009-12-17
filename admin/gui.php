@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: gui.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: gui.php 24609 2009-12-14 09:23:14Z arvydas $
  */
 
 /**
@@ -266,7 +266,7 @@ class Gui extends oxAdminView
                 $sResponce = implode("\n",$aErrors);
             }
 
-            die($sResponce);
+            oxUtils::getInstance()->showMessageAndExit( $sResponce );
         }
 
     }
@@ -333,7 +333,7 @@ class Gui extends oxAdminView
         }
 
         header('Content-type: text/css');
-        die( str_replace("\n",'',$sStyle) );
+        oxUtils::getInstance()->showMessageAndExit( str_replace("\n",'',$sStyle) );
     }
 
     /**
@@ -349,7 +349,7 @@ class Gui extends oxAdminView
         $aColors  = $myConfig->getParameter('p');
 
         $this->gif( $sTpl , $aColors );
-        die();
+        oxUtils::getInstance()->showMessageAndExit( '' );
     }
 
     /**

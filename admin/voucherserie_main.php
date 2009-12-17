@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: voucherserie_main.php 23307 2009-10-16 10:33:03Z vilma $
+ * $Id: voucherserie_main.php 24611 2009-12-14 09:24:01Z arvydas $
  */
 
 /**
@@ -166,7 +166,6 @@ class VoucherSerie_Main extends oxAdminDetails
         header("Expires: 0");
         header("Content-Disposition: attachment; filename=vouchers.csv");
         header("Content-Type: application/csv");
-        echo($sLine);
-        exit();
+        oxUtils::getInstance()->showMessageAndExit( $sLine );
     }
 }

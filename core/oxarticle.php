@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxarticle.php 24565 2009-12-10 11:50:46Z arvydas $
+ * $Id: oxarticle.php 24618 2009-12-14 09:44:19Z alfonsas $
  */
 
 // defining supported link types
@@ -2329,8 +2329,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         if ( !isset( $this->_aSeoUrls[$iLang][$iLinkType] ) ) {
             $this->_aSeoUrls[$iLang][$iLinkType] = $this->getBaseSeoLink( $iLang, $blMain );
         }
+
         $sUrl = oxUtilsUrl::getInstance()->processSeoUrl( $this->_aSeoUrls[$iLang][$iLinkType] );
-        return $sUrl . ( isset( $this->_aSeoAddParams[$iLang] ) ? "&amp;". $this->_aSeoAddParams[$iLang] : "" );
+        if ( isset($this->_aSeoAddParams[$iLang])) {
+            $sUrl .= ( ( strpos( $sUrl.$this->_aSeoAddParams[$iLang], '?' ) === false ) ? '?' : '&amp;' ).$this->_aSeoAddParams[$iLang];
+        }
+
+        return $sUrl;
     }
 
     /**

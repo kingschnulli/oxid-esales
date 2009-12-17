@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxseoencodercontent.php 23919 2009-11-10 15:35:44Z arvydas $
+ * $Id: oxseoencodercontent.php 24646 2009-12-15 09:50:12Z sarunas $
  */
 
 /**
@@ -81,7 +81,9 @@ class oxSeoEncoderContent extends oxSeoEncoder
         if ( !( $sSeoUrl = $this->_loadFromDb( 'oxcontent', $oCont->getId(), $iLang ) ) ) {
 
             if ( $iLang != $oCont->getLanguage() ) {
-                $oCont->loadInLang( $iLang, $oCont->getId() );
+                $sId = $oCont->getId();
+                $oCont = oxNew('oxcontent');
+                $oCont->loadInLang( $iLang, $sId );
             }
 
             $sSeoUrl = '';

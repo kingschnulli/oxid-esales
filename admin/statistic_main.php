@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: statistic_main.php 22452 2009-09-21 08:28:12Z arvydas $
+ * $Id: statistic_main.php 24610 2009-12-14 09:23:38Z arvydas $
  */
 
 /**
@@ -197,7 +197,6 @@ class Statistic_Main extends oxAdminDetails
             }
         }
 
-        echo( $oSmarty->fetch( "report_bottomitem.tpl" ) );
-        exit();
+        oxUtils::getInstance()->showMessageAndExit( $oSmarty->fetch( "report_bottomitem.tpl" ) );
     }
 }

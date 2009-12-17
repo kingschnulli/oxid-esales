@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: order_overview.php 22375 2009-09-17 11:50:04Z rimvydas.paskevicius $
+ * $Id: order_overview.php 24609 2009-12-14 09:23:14Z arvydas $
  */
 
     // DTAUS
@@ -123,8 +123,7 @@ class Order_Overview extends oxAdminDetails
             header("Content-type: application/x-download");
             header('Content-Length: '.strlen($sLexware));
             header("Content-Disposition: attachment; filename=intern.xml");
-            echo( $sLexware);
-            exit();
+            oxUtils::getInstance()->showMessageAndExit( $sLexware );
         }
     }
     /**
@@ -151,8 +150,7 @@ class Order_Overview extends oxAdminDetails
             header("Expires: 0");
             header("Content-type: application/pdf");
             header("Content-Disposition: attachment; filename=".$sFilename);
-            echo( $sPDF);
-            exit();
+            oxUtils::getInstance()->showMessageAndExit( $sPDF );
         }
 
     }
@@ -196,9 +194,7 @@ class Order_Overview extends oxAdminDetails
         header("Content-Disposition: attachment; filename=\"dtaus0.txt\"");
         header("Content-type: text/plain");
         header("Cache-control: public");
-
-        echo(  $dtaus->create());
-        exit();
+        oxUtils::getInstance()->showMessageAndExit( $dtaus->create() );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: dynexportbase.php 22500 2009-09-22 07:48:17Z arvydas $
+ * $Id: dynexportbase.php 24608 2009-12-14 09:22:35Z arvydas $
  */
 
 /**
@@ -423,14 +423,14 @@ class DynExportBase extends oxAdminDetails
         $blRet = $this->_createHeapTable($sHeapTable, $sTableCharset);
         if ( $blRet == false) {
             // error
-            die( "Could not create HEAP Table $sHeapTable\n<br>");
+            oxUtils::getInstance()->showMessageAndExit( "Could not create HEAP Table $sHeapTable\n<br>" );
         }
 
         $aChosenCat = oxConfig::getParameter( "acat");
         $sCatAdd = $this->_getCatAdd($aChosenCat);
 
         if ( !$this->_insertArticles($sHeapTable, $sCatAdd) ) {
-            die( "Could not insert Articles in Table $sHeapTable\n<br>");
+            oxUtils::getInstance()->showMessageAndExit( "Could not insert Articles in Table $sHeapTable\n<br>" );
         }
 
         /* commented due to upper changes

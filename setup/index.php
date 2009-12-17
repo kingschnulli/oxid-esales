@@ -19,7 +19,7 @@
  * @package setup
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: index.php 24246 2009-11-25 15:58:55Z tomas $
+ * $Id: index.php 24599 2009-12-11 16:43:14Z arvydas $
  */
 
 
@@ -1130,7 +1130,7 @@ if ( $istep == $aSetupSteps['STEP_DIRS_WRITE'] ) {
     $aReplace["<sShopURL$sVerPrefix>"]    = $aPath['sURL'];
     $aReplace["<sShopDir$sVerPrefix>"]    = $aPath['sDIR'];
     $aReplace["<sCompileDir$sVerPrefix>"] = $aPath['sTMP'];
-    $aReplace["<iUtfMode>"]               = (int) ( isset( $aDB['iUtfMode'] ) ? $aDB['iUtfMode'] : 0 );
+    $aReplace["'<iUtfMode>'"]               = (int) ( isset( $aDB['iUtfMode'] ) ? $aDB['iUtfMode'] : 0 );
     $sConfFile = strtr( $sConfFile, $aReplace);
     $fp = fopen( $sConfPath, "w");
     if ( $fp) {

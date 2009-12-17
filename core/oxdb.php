@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdb.php 24075 2009-11-19 09:56:03Z alfonsas $
+ * $Id: oxdb.php 24627 2009-12-14 15:09:41Z arvydas $
  */
 
 
@@ -89,18 +89,19 @@ class oxDb extends oxSuperCfg
      */
     public static function getDb( $blAssoc = false )
     {
+        global $ADODB_FETCH_MODE;
+
+        if ( $blAssoc ) {
+            $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
+        } else {
+            $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+        }
+
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             if ( isset( modDB::$unitMOD ) && is_object( modDB::$unitMOD ) ) {
                 return modDB::$unitMOD;
             }
         }
-
-        global  $ADODB_FETCH_MODE;
-
-        if ( $blAssoc )
-            $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
-        else
-            $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
 
         if ( self::$_oDB !== null ) {
             return self::$_oDB;
@@ -160,7 +161,7 @@ class oxDb extends oxSuperCfg
             if ( strpos( $sConfig, '<dbHost'.$sVerPrefix.'>' ) !== false &&
                  strpos( $sConfig, '<dbName'.$sVerPrefix.'>' ) !== false ) {
                 header( 'location:setup/index.php' ); // pop to setup as there is something wrong
-                exit();
+                oxUtils::getInstance()->showMessageAndExit( "" );
             } else {
 
                 // notifying shop owner about connection problems

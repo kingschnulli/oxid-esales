@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: list_order.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: list_order.php 24651 2009-12-15 13:01:42Z sarunas $
  */
 
 /**
@@ -114,10 +114,12 @@ class List_Order extends Order_List
 
         $sSql = " $sSql group by oxorderarticles.oxartnum";
         if ( $sSort = oxConfig::getParameter( "sort" ) ) {
-            $sSortDesc = ($sSort == 'oxorder.oxorderdate') ? 'DESC' : '';
-            $sSql .= " order by " . oxDb::getInstance()->escapeString( $sSort ) . " " . $sSortDesc;
+            if ($sSort == 'oxorder.oxorderdate') {
+                $sSql .= " order by max(oxorder.oxorderdate) DESC";
+            } else {
+                $sSql .= " order by " . oxDb::getInstance()->escapeString( $sSort );
+            }
         }
-
         return $sSql;
     }
 }

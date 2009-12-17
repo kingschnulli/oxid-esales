@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxconfig.php 24502 2009-12-07 18:21:52Z tomas $
+ * $Id: oxconfig.php 24621 2009-12-14 12:33:48Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -403,7 +403,7 @@ class oxConfig extends oxSuperCfg
             if ( defined( 'OXID_PHP_UNIT' ) ) {
                 return false;
             } elseif ( 0 != $this->iDebug ) {
-                exit( $oEx->getString() );
+                oxUtils::getInstance()->showMessageAndExit( $oEx->getString() );
             } else {
                 header( "HTTP/1.1 500 Internal Server Error");
                 header( "Location: offline.html");
@@ -1254,12 +1254,13 @@ class oxConfig extends oxSuperCfg
         $blNativeImg = $this->getConfigParam( 'blNativeImages' );
 
         $sUrl = $this->getUrl( $sFile, $this->_sPictureDir, $blAdmin, $blSSL, $blNativeImg, $iLang, $iShopId );
-        if ( $sFile && $this->getConfigParam('blFormerTplSupport') ) {
+        if ( $sFile && $this->getConfigParam( 'blFormerTplSupport' ) ) {
             $sUrl = str_replace( $this->getPictureUrl( null, $blAdmin, $blSSL, $iLang, $iShopId ), '', $sUrl );
         }
+
         //anything is better than empty name, because <img src=""> calls shop once more = x2 SLOW.
-        if (!$sUrl) {
-            return $this->getTemplateUrl()."../".$this->_sPictureDir."/0/nopic.jpg";
+        if ( !$sUrl ) {
+            $sUrl = $this->getUrl( "0/nopic.jpg", $this->_sPictureDir, $blAdmin, $blSSL, $blNativeImg, $iLang, $iShopId );
         }
         return $sUrl;
     }

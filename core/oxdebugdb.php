@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxdebugdb.php 23366 2009-10-20 08:53:58Z arvydas $
+ * $Id: oxdebugdb.php 24644 2009-12-15 09:13:56Z alfonsas $
  */
 
 /**
@@ -65,11 +65,13 @@ class oxDebugDb
     protected static function _isSkipped($sSql)
     {
         if ( !count(self::$_aSkipSqls ) ) {
-            $file = file_get_contents( oxConfig::getInstance()->getLogsDir() . 'oxdebugdb_skipped.sql' );
-            $m = explode('-- -- ENTRY END', $file);
-            foreach ( $m as $n ) {
-                if ( ( $n = self::_skipWhiteSpace( $n ) ) ) {
-                    self::$_aSkipSqls[md5($n)] = true;
+            $sFile = oxConfig::getInstance()->getLogsDir() . 'oxdebugdb_skipped.sql';
+            if (is_readable($sFile)) {
+                $aSkip = explode('-- -- ENTRY END', file_get_contents( $sFile ));
+                foreach ( $aSkip as $sQ ) {
+                    if ( ( $sQ = self::_skipWhiteSpace( $sQ ) ) ) {
+                        self::$_aSkipSqls[md5($sQ)] = true;
+                    }
                 }
             }
         }
