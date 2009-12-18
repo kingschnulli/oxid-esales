@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 24350 2009-12-01 10:38:59Z arvydas $
+ * $Id: lang.php 24706 2009-12-17 19:21:54Z alfonsas $
  */
 
 $sLangName  = 'Deutsch';
@@ -138,8 +138,8 @@ $aLang = array(
 'GENERAL_ARTICLE_OXREMINDAMOUNT'                => 'Zuwenig Lagerbestand Mindestmenge',
 'GENERAL_ARTICLE_OXAMITEMID'                    => 'oxamitemid',
 'GENERAL_ARTICLE_OXAMTASKID'                    => 'oxamtaskid',
-'GENERAL_ARTICLE_OXVENDORID'                    => 'Lieferant',
-'GENERAL_ARTICLE_OXMANUFACTURERID'              => 'Hersteller',
+'GENERAL_ARTICLE_OXVENDORID'                    => 'Lieferant ID',
+'GENERAL_ARTICLE_OXMANUFACTURERID'              => 'Hersteller ID',
 'GENERAL_ARTICLE_OXVARCOUNT'                    => 'Varianten Anzahl',
 'GENERAL_ARTICLE_OXSHOPINCL'                    => 'Shop einschließen',
 'GENERAL_ARTICLE_OXSHOPEXCL'                    => 'Shop ausschließen',
@@ -232,7 +232,7 @@ $aLang = array(
 'GENERAL_MANUEL'                                => 'Manuell',
 'GENERAL_MANUELL'                               => 'manuell',
 'GENERAL_MENUITEM'                              => 'Artikel verwalten',
-'GENERAL_MANUFACTURER'                          => 'Hersteller',
+'GENERAL_MANUFACTURER'                          => 'Lieferant',
 'GENERAL_NAME'                                  => 'Name',
 'GENERAL_NO'                                    => 'Nein',
 'GENERAL_NOITEMSSEL'                            => 'Kein Artikel ausgewählt',

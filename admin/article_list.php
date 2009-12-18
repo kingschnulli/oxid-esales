@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: article_list.php 24498 2009-12-07 15:59:17Z arvydas $
+ * $Id: article_list.php 24706 2009-12-17 19:21:54Z alfonsas $
  */
 
 /**
@@ -97,20 +97,50 @@ class Article_List extends oxAdminList
                 $this->_aViewData["pwrsearchinput"] = $aWhere->$sFieldName;
         }
 
+        $sArtCat= oxConfig::getParameter("art_category");
+        if ( $sArtCat && strstr($sArtCat, "@@") !== false ) {
+            list($sType, $sValue) = explode("@@", $sArtCat);
+        }
+
         // parent categorie tree
         $oCatTree = oxNew( "oxCategoryList");
         $oCatTree->buildList( $myConfig->getConfigParam( 'bl_perfLoadCatTree' ) );
-
-        if ( ( $sChosenCat= oxConfig::getParameter( "art_category") ) ) {
+        if ( $sType === 'cat' ) {
             foreach ($oCatTree as $oCategory ) {
-                if ( $oCategory->oxcategories__oxid->value == $sChosenCat ) {
+                if ( $oCategory->oxcategories__oxid->value == $sValue ) {
                     $oCategory->selected = 1;
                     break;
                 }
             }
         }
-
         $this->_aViewData["cattree"] = $oCatTree;
+
+       // manufacturer list
+        $oMnfTree = oxNew( "oxManufacturerList");
+        $oMnfTree->loadManufacturerList();
+        if ( $sType === 'mnf' ) {
+            foreach ($oMnfTree as $oManufacturer ) {
+                if ( $oManufacturer->oxmanufacturers__oxid->value == $sValue ) {
+                    $oManufacturer->selected = 1;
+                    break;
+                }
+            }
+        }
+        $this->_aViewData["mnftree"] = $oMnfTree;
+
+        // vendor list
+        $oVndTree = oxNew( "oxVendorList");
+        $oVndTree->loadVendorList();
+        if ( $sType === 'vnd' ) {
+            foreach ($oVndTree as $oVendor ) {
+                if ( $oVendor->oxvendor__oxid->value == $sValue ) {
+                    $oVendor->selected = 1;
+                    break;
+                }
+            }
+        }
+        $this->_aViewData["vndtree"] = $oVndTree;
+
         return "article_list.tpl";
     }
 
@@ -123,14 +153,28 @@ class Article_List extends oxAdminList
      */
     protected function _changeselect( $sSql )
     {
-        // add category
-        if ( ( $sChosenCat = oxConfig::getParameter( "art_category" ) ) ) {
-            $sTable   = getViewName( "oxarticles" );
-            $sO2CView = getViewName( "oxobject2category" );
-            $sInsert  = "from $sTable left join $sO2CView on $sTable.oxid = $sO2CView.oxobjectid where $sO2CView.oxcatnid = '$sChosenCat' and ";
-            $sSql = preg_replace( "/from\s+$sTable\s+where/i", $sInsert, $sSql);
+        $sArtCat= oxConfig::getParameter("art_category");
+        if ( $sArtCat && strstr($sArtCat, "@@") !== false ) {
+            list($sType, $sValue) = explode("@@", $sArtCat);
         }
 
+        $sTable   = getViewName( "oxarticles" );
+        switch ($sType) {
+            // add category
+            case 'cat':
+                $sO2CView = getViewName( "oxobject2category" );
+                $sInsert  = "from $sTable left join $sO2CView on $sTable.oxid = $sO2CView.oxobjectid where $sO2CView.oxcatnid = ".oxDb::getDb()->quote($sValue)." and ";
+                $sSql = preg_replace( "/from\s+$sTable\s+where/i", $sInsert, $sSql);
+                break;
+            // add category
+            case 'mnf':
+                $sSql.= " and $sTable.oxmanufacturerid = ".oxDb::getDb()->quote($sValue);
+                break;
+            // add vendor
+            case 'vnd':
+                $sSql.= " and $sTable.oxvendorid = ".oxDb::getDb()->quote($sValue);
+                break;
+        }
         return $sSql;
     }
 

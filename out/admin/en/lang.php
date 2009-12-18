@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 24350 2009-12-01 10:38:59Z arvydas $
+ * $Id: lang.php 24706 2009-12-17 19:21:54Z alfonsas $
  */
 
 /*
@@ -300,7 +300,7 @@ $aLang = array(
 'GENERAL_USER'                                  => 'User',
 'GENERAL_USTID'                                 => 'VAT ID No.',
 'GENERAL_VARIANTE'                              => 'Variant of ',
-'GENERAL_VENDOR'                                => 'Manufacturer',
+'GENERAL_VENDOR'                                => 'Vendor',
 'GENERAL_VOUCHERS'                              => 'Coupon Discount',
 'GENERAL_YOUWANTTODELETE'                       => 'Do you really want to delete this entry ?',
 'GENERAL_YOUWANTTOUNASSIGN'                     => 'Do you really want to unassign this entry from current shop?',
