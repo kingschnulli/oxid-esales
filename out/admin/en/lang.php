@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 24706 2009-12-17 19:21:54Z alfonsas $
+ * $Id: lang.php 24709 2009-12-18 15:26:22Z rimvydas.paskevicius $
  */
 
 /*
@@ -870,6 +870,7 @@ $aLang = array(
 'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'      => 'Attention: Error occured while reseting multilanguage fields after language delete!',
 'LANGUAGE_DELETINGMAINLANG_WARNING'             => 'Attention: you can\'t delete main language (with ID = 0)!',
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Error: language with such abbervation already exists!',
+'LANGUAGE_EMPTYLANGUAGENAME_ERROR'              => 'Please enter language name!',
 'SETUP_DIRNOTDELETED_WARNING'                   => 'Please delete directory: setup!',
 'SETUP_CONFIGPERMISSIONS_WARNING'               => 'Due to security reasons put your config.inc.php file to read-only mode!',
 'LOGIN_TITLE'                                   => 'OXID eSales Login',

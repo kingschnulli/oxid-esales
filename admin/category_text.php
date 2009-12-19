@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: category_text.php 17188 2009-03-13 12:19:11Z arvydas $
+ * $Id: category_text.php 24711 2009-12-18 15:33:00Z arvydas $
  */
 
 /**
@@ -91,28 +91,25 @@ class Category_Text extends oxAdminDetails
         $soxId      = oxConfig::getParameter( "oxid");
         $aParams    = oxConfig::getParameter( "editval");
 
-
         $oCategory = oxNew( "oxcategory" );
-        //P
-        //$oCategory->setLanguage(oxConfig::getParameter("editlanguage"));
-
         $iCatLang = oxConfig::getParameter("catlang");
+        $iCatLang = $iCatLang ? $iCatLang : 0;
 
-        if (!$iCatLang)
-            $iCatLang = 0;
-
-        if(  $soxId != "-1")
+        if ( $soxId != "-1" ) {
             $oCategory->loadInLang( $iCatLang, $soxId );
-        else
+        } else {
             $aParams['oxcategories__oxid'] = null;
+        }
 
 
         $oCategory->setLanguage(0);
-        $oCategory->assign( $aParams);
-        $oCategory->setLanguage($iCatLang);
+        $oCategory->assign( $aParams );
+        $oCategory->setLanguage( $iCatLang );
         $oCategory->save();
+
         // set oxid if inserted
-        if ( $soxId == "-1")
+        if ( $soxId == "-1") {
             oxSession::setVar( "saved_oxid", $oCategory->oxcategories__oxid->value);
+        }
     }
 }

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: language_main.php 23174 2009-10-12 13:48:10Z sarunas $
+ * $Id: language_main.php 24709 2009-12-18 15:26:22Z rimvydas.paskevicius $
  */
 
 /**
@@ -127,6 +127,11 @@ class Language_Main extends oxAdminDetails
         //loading languages info from config
         $this->_loadLanguages();
 
+        //checking input errors
+        if ( !$this->_validateInput() ) {
+            return;
+        }
+
         // if changed language abbervation, updating it for all arrays related with languages
         if ( $sOxId != -1 && $sOxId  != $aParams['abbr'] ) {
             $this->_updateAbbervation( $sOxId, $aParams['abbr'] );
@@ -137,15 +142,6 @@ class Language_Main extends oxAdminDetails
         // if adding new language, setting lang id to abbervation
         if ( $sOxId == -1 ) {
             $sOxId = $aParams['abbr'];
-
-            if ( $this->_checkLangExists( $sOxId ) ) {
-                //language already exist, showing error and skipping saving
-                $oEx = new oxExceptionToDisplay();
-                $oEx->setMessage( 'LANGUAGE_ALREADYEXISTS_ERROR' );
-                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
-                return;
-            }
-
             $this->_aLangData['params'][$sOxId]['baseId'] = $this->_getAvailableLangBaseId();
             oxSession::setVar( "saved_oxid", $sOxId);
         }
@@ -172,7 +168,7 @@ class Language_Main extends oxAdminDetails
         $this->_sortLangArraysByBaseId();
 
         $this->_aViewData["updatelist"] = "1";
-
+return;
         //saving languages info
         $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguageParams',  $this->_aLangData['params']  );
         $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguages',       $this->_aLangData['lang']    );
@@ -397,32 +393,6 @@ class Language_Main extends oxAdminDetails
 
             oxDb::commitTransaction();
         }
-
-        /*
-        $oDB = oxDb::getDb( true );
-        $myConfig = $this->getConfig();
-
-
-        $sSql = "SHOW COLUMNS FROM oxarticles";
-        $aFields = $oDB->getAll( $sSql );
-
-        $sPrefix = ( $iBaseId > 0 ) ? '_' . $iBaseId : '';
-        $sMultiLangCol = 'OXTITLE' . $sPrefix;
-        $blExists = false;
-
-        foreach ( $aFields as $aCollInfo ) {
-            if ( $aCollInfo['Field'] == $sMultiLangCol ) {
-                $blExists = true;
-                break;
-            }
-        }
-
-        if ( !$blExists ) {
-            $oEx = new oxExceptionToDisplay();
-            $oEx->setMessage( 'LANGUAGE_NODBMULTILANGFIELDS_WARNING' );
-            oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
-        }
-        */
     }
 
     /**
@@ -458,4 +428,37 @@ class Language_Main extends oxAdminDetails
         return ($oLang1['baseId'] < $oLang2['baseId']) ? -1 : 1;
     }
 
+    /**
+     * Check language input errors
+     *
+     * @return bool
+     */
+    protected function _validateInput()
+    {
+        $blResult = true;
+
+        $sOxId   = oxConfig::getParameter( "oxid");
+        $aParams = oxConfig::getParameter( "editval" );
+
+        // if creating new language, checking if language already exists with
+        // entered language abbervation
+        if ( $sOxId == -1 ) {
+            if ( $this->_checkLangExists( $aParams['abbr'] ) ) {
+                $oEx = oxNew( 'oxExceptionToDisplay' );
+                $oEx->setMessage( 'LANGUAGE_ALREADYEXISTS_ERROR' );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+                $blResult = false;
+            }
+        }
+
+        // checking if language name is not empty
+        if ( empty($aParams['desc']) ) {
+            $oEx = oxNew( 'oxExceptionToDisplay' );
+            $oEx->setMessage( 'LANGUAGE_EMPTYLANGUAGENAME_ERROR' );
+            oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+            $blResult = false;
+        }
+
+        return $blResult;
+    }
 }

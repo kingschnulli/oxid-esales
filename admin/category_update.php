@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: category_update.php 21896 2009-08-27 07:59:00Z arvydas $
+ * $Id: category_update.php 24711 2009-12-18 15:33:00Z arvydas $
  */
 
 /**
@@ -45,15 +45,24 @@ class Category_Update extends oxAdminView
     /**
      * Returns category list object
      *
-     * @return
+     * @return oxCategoryList
      */
-    public function getCatListUpdateInfo()
+    protected function _getCategoryList()
     {
         if ( $this->_oCatList == null ) {
             $this->_oCatList = oxNew( "oxCategoryList" );
             $this->_oCatList->updateCategoryTree( false );
         }
+        return $this->_oCatList;
+    }
 
-        return $this->_oCatList->getUpdateInfo();
+    /**
+     * Returns category list object
+     *
+     * @return
+     */
+    public function getCatListUpdateInfo()
+    {
+        return $this->_getCategoryList()->getUpdateInfo();
     }
 }

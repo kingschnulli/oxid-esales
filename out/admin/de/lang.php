@@ -19,7 +19,7 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: lang.php 24706 2009-12-17 19:21:54Z alfonsas $
+ * $Id: lang.php 24709 2009-12-18 15:26:22Z rimvydas.paskevicius $
  */
 
 $sLangName  = 'Deutsch';
@@ -864,6 +864,7 @@ $aLang = array(
 'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'      => 'Achtung: Während des Löschens einer Sprache ist beim Zurücksetzens der Multisprachen-Felder ein Fehler aufgetreten!',
 'LANGUAGE_DELETINGMAINLANG_WARNING'             => 'Warnung: Sie können nicht die Hauptsprache löschen (Sprach-ID 0)',
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Fehler: Eine Sprache mit diesem Sprachkürzel existiert bereits',
+'LANGUAGE_EMPTYLANGUAGENAME_ERROR'              => '[tr]Please enter language name!',
 'SETUP_DIRNOTDELETED_WARNING'                   => 'Bitte löschen Sie das Setup-Verzeichnis',
 'SETUP_CONFIGPERMISSIONS_WARNING'               => 'WICHTIG: Aus Sicherheitsgründen setzen Sie Ihre config.inc.php Datei auf read-only-Modus!',
 'LOGIN_TITLE'                                   => 'OXID eShop Login',

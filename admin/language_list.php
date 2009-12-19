@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: language_list.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: language_list.php 24710 2009-12-18 15:30:12Z rimvydas.paskevicius $
  */
 
 /**
