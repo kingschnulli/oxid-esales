@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: oxsysrequirements.php 24642 2009-12-15 08:43:30Z vilma $
+ * $Id: oxsysrequirements.php 24734 2009-12-21 14:38:34Z vilma $
  */
 
 /**
@@ -340,6 +340,10 @@ class oxSysRequirements
             } elseif (version_compare($sClientVersion, '5.0.36', '>=') && version_compare($sClientVersion, '5.0.38', '<')) {
                 // mantis#0001003: Problems with MySQL version 5.0.37
                 $iModStat = 0;
+            }
+            if (strpos($sClientVersion, 'mysqlnd') !== false) {
+                // PHP 5.3 includes new mysqlnd extension
+                $iModStat = 1;
             }
         }
         return $iModStat;

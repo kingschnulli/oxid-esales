@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: language_main.php 24709 2009-12-18 15:26:22Z rimvydas.paskevicius $
+ * $Id: language_main.php 24730 2009-12-21 12:23:21Z rimvydas.paskevicius $
  */
 
 /**
@@ -168,7 +168,7 @@ class Language_Main extends oxAdminDetails
         $this->_sortLangArraysByBaseId();
 
         $this->_aViewData["updatelist"] = "1";
-return;
+
         //saving languages info
         $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguageParams',  $this->_aLangData['params']  );
         $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguages',       $this->_aLangData['lang']    );
