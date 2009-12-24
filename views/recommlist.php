@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2009
  * @version OXID eShop CE
- * $Id: recommlist.php 24214 2009-11-24 15:45:03Z arvydas $
+ * $Id: recommlist.php 24751 2009-12-23 15:02:34Z sarunas $
  */
 
 /**
@@ -392,7 +392,7 @@ class RecommList extends aList
     public function getRatingValue()
     {
         if ( $this->_dRatingValue === null ) {
-            $this->_dRatingValue = false;
+            $this->_dRatingValue = (double)0;
             if ( $this->isReviewActive() && ( $oActiveRecommList = $this->getActiveRecommList() ) ) {
                 $this->_dRatingValue = round( $oActiveRecommList->oxrecommlists__oxrating->value, 1);
             }
