@@ -17,7 +17,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package smartyPlugins
- * @copyright (C) OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
  * $Id: insert.oxid_newbasketitem.php 23971 2009-11-12 12:56:11Z alfonsas $
  */

@@ -17,7 +17,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package inc
- * @copyright (C) OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
  * $Id: deliveryset_users.inc.php 22508 2009-09-22 09:57:39Z vilma $
  */

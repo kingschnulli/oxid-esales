@@ -17,7 +17,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package modules
- * @copyright (C) OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
  * $Id: myorder.php 24006 2009-11-17 14:22:31Z  $
  */

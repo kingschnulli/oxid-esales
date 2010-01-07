@@ -17,9 +17,9 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright (C) OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxuser.php 24650 2009-12-15 11:09:06Z sarunas $
+ * $Id: oxuser.php 24799 2010-01-05 14:41:35Z vilma $
  */
 
 /**
@@ -983,7 +983,7 @@ class oxUser extends oxBase
     public function checkValues( $sLogin, $sPassword, $sPassword2, $aInvAddress, $aDelAddress )
     {
         // 1. checking user name
-        $this->_checkLogin( $sLogin, $aInvAddress );
+        $sLogin = $this->_checkLogin( $sLogin, $aInvAddress );
 
         // 2. cheking email
         $this->_checkEmail( $sLogin );
@@ -1576,9 +1576,9 @@ class oxUser extends oxBase
      *
      * @throws oxUserException, oxInputException
      *
-     * @return null
+     * @return string login name
      */
-    protected function _checkLogin( &$sLogin, $aInvAddress )
+    protected function _checkLogin( $sLogin, $aInvAddress )
     {
         $myConfig = $this->getConfig();
 
@@ -1614,6 +1614,8 @@ class oxUser extends oxBase
             $oEx->setMessage( sprintf( $oLang->translateString( 'EXCEPTION_USER_USEREXISTS', $oLang->getTplLanguage() ), $sLogin ) );
             throw $oEx;
         }
+
+        return $sLogin;
     }
 
     /**

@@ -17,9 +17,9 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright (C) OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxarticle.php 24618 2009-12-14 09:44:19Z alfonsas $
+ * $Id: oxarticle.php 24799 2010-01-05 14:41:35Z vilma $
  */
 
 // defining supported link types
@@ -1796,7 +1796,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $dBasePrice = $this->getBasePrice( $dAmount );
 
         // applying select list price
-        $this->_modifySelectListPrice( $dBasePrice, $aSelList );
+        $dBasePrice = $this->_modifySelectListPrice( $dBasePrice, $aSelList );
 
         // setting price
         $oBasketPrice->setPrice( $dBasePrice );
@@ -2944,7 +2944,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      *
      * @return double
      */
-    protected function _modifySelectListPrice( &$dPrice, $aChosenList = null )
+    protected function _modifySelectListPrice( $dPrice, $aChosenList = null )
     {
         $myConfig = $this->getConfig();
         // #690

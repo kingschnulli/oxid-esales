@@ -17,9 +17,9 @@
  *
  * @link http://www.oxid-esales.com
  * @package core
- * @copyright (C) OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oximex.php 24341 2009-11-30 16:07:35Z tomas $
+ * $Id: oximex.php 24800 2010-01-05 14:45:32Z vilma $
  */
 
 /**
@@ -391,7 +391,7 @@ class oxImex extends oxBase
     function internPrice( $nPrice)
     {  // thnx to Volker Dörk for this function and his help here
         $nPrice = $this->interForm($nPrice);
-        $nPrice = number_format($nPrice, 2, '.', '');
+        $nPrice = number_format( (double)$nPrice, 2, '.', '');
         return $nPrice;
     }
 
