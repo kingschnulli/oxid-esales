@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: genexport.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: genexport.php 24825 2010-01-07 08:38:54Z arvydas $
  */
 
 /**
@@ -28,6 +28,17 @@
  */
 class GenExport extends DynExportBase
 {
+    /**
+     * Export class name
+     *
+     * @var string
+     */
     public $sClass_do   = 'genexport_do';
+
+    /**
+     * Export ui class name
+     *
+     * @var string
+     */
     public $sClass_main = 'genexport_main';
 }

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: dyn_affiliwelt.php 17209 2009-03-13 16:32:12Z arvydas $
+ * $Id: dyn_affiliwelt.php 24825 2010-01-07 08:38:54Z arvydas $
  */
 
 /**
@@ -64,7 +64,9 @@ class dyn_affiliwelt extends Shop_Config
     }
 
     /**
+     * Returns view id
      *
+     * @return string
      */
     public function getViewId()
     {

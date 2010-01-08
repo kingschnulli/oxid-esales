@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: dyn_ipayment.php 22483 2009-09-22 06:55:52Z arvydas $
+ * $Id: dyn_ipayment.php 24825 2010-01-07 08:38:54Z arvydas $
  */
 /**
  * Includes configuration class.
@@ -44,11 +44,7 @@ class dyn_ipayment extends Shop_Config
         parent::render();
 
         $this->_aViewData['oxid'] = $this->getConfig()->getShopId();
-
         return 'dyn_ipayment.tpl';
-
-        /**
-        */
     }
 
     /**
@@ -58,16 +54,15 @@ class dyn_ipayment extends Shop_Config
      */
     public function addPayment()
     {
-        $myConfig = $this->getConfig();
         $aAddPayment = oxConfig::getParameter("allpayments");
-
-        if ( isset( $aAddPayment) && is_array($aAddPayment)) {
-            foreach ($aAddPayment as $sAdd) {
+        if ( is_array( $aAddPayment ) && count( $aAddPayment ) ) {
+            $iShopId = $this->getConfig()->getShopId();
+            foreach ( $aAddPayment as $sAdd ) {
                 $oNewGroup = oxNew( "oxbase" );
                 $oNewGroup->init( "oxobject2ipayment" );
-                $oNewGroup->oxobject2ipayment__oxpaymentid = new oxField($sAdd);
-                $oNewGroup->oxobject2ipayment__oxshopid    = new oxField($myConfig->getShopId());
-                $oNewGroup->oxobject2ipayment__oxtype      = new oxField("cc");
+                $oNewGroup->oxobject2ipayment__oxpaymentid = new oxField( $sAdd );
+                $oNewGroup->oxobject2ipayment__oxshopid    = new oxField( $iShopId );
+                $oNewGroup->oxobject2ipayment__oxtype      = new oxField( "cc" );
                 $oNewGroup->save();
             }
         }
@@ -80,20 +75,19 @@ class dyn_ipayment extends Shop_Config
      */
     public function removePayment()
     {
-        $myConfig = $this->getConfig();
-        $aRemovePayment = oxConfig::getParameter( "addpayments");
-
-        if ( isset( $aRemovePayment) && is_array($aRemovePayment) && count($aRemovePayment)) {
+        $aRemovePayment = oxConfig::getParameter( "addpayments" );
+        if ( is_array( $aRemovePayment ) && count( $aRemovePayment ) ) {
+            $myConfig = $this->getConfig();
             $oDb = oxDb::getDb();
             $sQ  = "delete from oxobject2ipayment where oxobject2ipayment.oxshopid='".$myConfig->getShopId()."' ";
             $sQ .= "and oxobject2ipayment.oxid in (";
             $blSep = false;
-            foreach ($aRemovePayment as $sRem) {
+            foreach ( $aRemovePayment as $sRem ) {
                 $sQ .= ( ( $blSep ) ? ", ":"" ) . " ".$oDb->quote( $sRem );
                 $blSep = true;
             }
             $sQ .= ")";
-            $oDb->execute( $sQ);
+            $oDb->execute( $sQ );
         }
     }
 
@@ -135,7 +129,9 @@ class dyn_ipayment extends Shop_Config
     }
 
     /**
+     * Returns view id
      *
+     * @return string
      */
     public function getViewId()
     {

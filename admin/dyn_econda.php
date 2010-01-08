@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: dyn_econda.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: dyn_econda.php 24825 2010-01-07 08:38:54Z arvydas $
  */
 
 
@@ -48,7 +48,9 @@ class dyn_econda extends Shop_Config
     }
 
     /**
+     * Returns view id
      *
+     * @return string
      */
     public function getViewId()
     {

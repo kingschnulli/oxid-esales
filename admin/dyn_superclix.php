@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: dyn_superclix.php 17209 2009-03-13 16:32:12Z arvydas $
+ * $Id: dyn_superclix.php 24825 2010-01-07 08:38:54Z arvydas $
  */
 
 /**
@@ -49,15 +49,10 @@ class dyn_superclix extends dyn_interface
      */
     public function save()
     {
-        $soxId      = oxConfig::getParameter( "oxid");
-        $aParams    = oxConfig::getParameter( "editval");
-
         $oShop = oxNew( "oxshop" );
-        $oShop->load( $soxId);
-
-        //$aParams = $oShop->ConvertNameArray2Idx( $aParams);
-        $oShop->assign( $aParams);
-
-        $oShop->save();
+        if ( $oShop->load( oxConfig::getParameter( "oxid" ) ) ) {
+            $oShop->assign( oxConfig::getParameter( "editval" ) );
+            $oShop->save();
+        }
     }
 }

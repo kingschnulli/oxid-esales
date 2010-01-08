@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: genexport_do.php 22356 2009-09-16 13:54:18Z vilma $
+ * $Id: genexport_do.php 24825 2010-01-07 08:38:54Z arvydas $
  */
 
 /**
@@ -28,8 +28,25 @@
  */
 class GenExport_Do extends DynExportBase
 {
+    /**
+     * Export class name
+     *
+     * @var string
+     */
     public $sClass_do       = "genExport_do";
+
+    /**
+     * Export ui class name
+     *
+     * @var string
+     */
     public $sClass_main     = "genExport_main";
+
+    /**
+     * Export file name
+     *
+     * @var string
+     */
     public $sExportFileName = "genexport";
 
     /**
@@ -47,15 +64,15 @@ class GenExport_Do extends DynExportBase
      */
     public function nextTick( $iCnt )
     {
-        $myConfig = oxConfig::getInstance();
         $iExportedItems = $iCnt;
         if ( $oArticle = $this->getOneArticle( $iCnt, $blContinue ) ) {
-            $smarty = oxUtilsView::getInstance()->getSmarty();
-            $smarty->assign_by_ref( "linenr", $iCnt );
-            $smarty->assign_by_ref( "article", $oArticle );
-            $smarty->assign( "spr", $myConfig->getConfigParam( 'sCSVSign' ) );
-            $smarty->assign( "encl", $myConfig->getConfigParam( 'sGiCsvFieldEncloser' ) );
-            $this->write( $smarty->fetch( "genexport.tpl", $this->getViewID() ) );
+            $myConfig = oxConfig::getInstance();
+            $oSmarty = oxUtilsView::getInstance()->getSmarty();
+            $oSmarty->assign_by_ref( "linenr", $iCnt );
+            $oSmarty->assign_by_ref( "article", $oArticle );
+            $oSmarty->assign( "spr", $myConfig->getConfigParam( 'sCSVSign' ) );
+            $oSmarty->assign( "encl", $myConfig->getConfigParam( 'sGiCsvFieldEncloser' ) );
+            $this->write( $oSmarty->fetch( "genexport.tpl", $this->getViewId() ) );
             return ++$iExportedItems;
         }
 
@@ -71,10 +88,10 @@ class GenExport_Do extends DynExportBase
      */
     public function write( $sLine )
     {
-        $sLine = $this->removeSID( $sLine);
+        $sLine = $this->removeSID( $sLine );
 
-        $sLine = str_replace( array("\r\n","\n"), "", $sLine);
-        $sLine = str_replace( "<br>", "\n", $sLine);
+        $sLine = str_replace( array("\r\n","\n"), "", $sLine );
+        $sLine = str_replace( "<br>", "\n", $sLine );
 
         fwrite( $this->fpFile, $sLine."\r\n");
     }

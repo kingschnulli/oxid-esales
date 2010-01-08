@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: dyn_trusted.php 23868 2009-11-06 10:32:30Z vilma $
+ * $Id: dyn_trusted.php 24825 2010-01-07 08:38:54Z arvydas $
  */
 
 
@@ -59,34 +59,37 @@ class dyn_trusted extends Shop_Config
      */
     public function save()
     {
-        $myConfig = $this->getConfig();
-        $aConfStrs  = oxConfig::getParameter( "aShopID_TrustedShops");
+        $aConfStrs = oxConfig::getParameter( "aShopID_TrustedShops" );
         $blSave = true;
         $blNotEmpty = false;
-        foreach ( $aConfStrs as $sConfStrs) {
+        foreach ( $aConfStrs as $sConfStrs ) {
             if ( $sConfStrs ) {
                 $blNotEmpty = true;
                 if ( strlen( $sConfStrs ) != 33 || substr( $sConfStrs, 0, 1 ) != 'X' ) {
-                    $this->_aViewData["errorsaving"] = 1;
                     $blSave = false;
-                    $this->_aViewData["aShopID_TrustedShops"] = null;
                 }
             }
         }
-        $aTSIds = array_filter($aConfStrs);
-        if ( $blNotEmpty && ( count( array_unique( $aTSIds ) ) < count( $aTSIds ) ) ) {             
-            $this->_aViewData["errorsaving"] = 1;
+
+        $aTSIds = array_filter( $aConfStrs );
+        if ( $blNotEmpty && ( count( array_unique( $aTSIds ) ) < count( $aTSIds ) ) ) {
             $blSave = false;
-            $this->_aViewData["aShopID_TrustedShops"] = null;
         }
 
         if ( $blSave ) {
+            $myConfig = $this->getConfig();
             $myConfig->saveShopConfVar( "aarr", 'iShopID_TrustedShops', $aConfStrs, $myConfig->getShopId() );
+        } else {
+            // displaying error..
+            $this->_aViewData["errorsaving"] = 1;
+            $this->_aViewData["aShopID_TrustedShops"] = null;
         }
     }
 
     /**
+     * Returns view id ('dyn_interface')
      *
+     * @return string
      */
     public function getViewId()
     {

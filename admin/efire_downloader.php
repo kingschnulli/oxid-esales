@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: efire_downloader.php 24349 2009-12-01 10:35:34Z arvydas $
+ * $Id: efire_downloader.php 24825 2010-01-07 08:38:54Z arvydas $
  */
 
 class EFire_Downloader extends Efire
@@ -31,6 +31,11 @@ class EFire_Downloader extends Efire
      */
     protected $_sThisTemplate = "efire_downloader.tpl";
 
+    /**
+     * Sets efire parameters to view, returns name of template to render
+     *
+     * @return string
+     */
     public function render()
     {
         $oStr = getStr();
@@ -71,17 +76,15 @@ class EFire_Downloader extends Efire
         $sEtUsername = $this->getConfig()->getParameter("etUsername");
         $sEtPassword = $this->getConfig()->getParameter("etPassword");
 
-        $oConnector = oxNew("oxefidownloader");
-
         $sShopVersion = $this->getConfig()->getEdition() . " " . $this->getConfig()->getVersion();
-
         $blSaveCredentials = $this->getConfig()->getParameter('blSaveCredentials');
 
         try {
-            $oConnector->downloadConnector($sEtUsername, $sEtPassword, $sShopVersion, $blSaveCredentials);
-            $this->_aViewData['message'] = oxLang::getInstance()->translateString('EFIRE_DOWNLOADER_SUCCESS');
-        } catch (Exception $e) {
-            oxUtilsView::getInstance()->addErrorToDisplay(sprintf(oxLang::getInstance()->translateString('EFIRE_DOWNLOADER_ERROR'), $e->getMessage()));
+            $oConnector = oxNew("oxefidownloader");
+            $oConnector->downloadConnector( $sEtUsername, $sEtPassword, $sShopVersion, $blSaveCredentials );
+            $this->_aViewData['message'] = oxLang::getInstance()->translateString('EFIRE_DOWNLOADER_SUCCESS' );
+        } catch ( Exception $e ) {
+            oxUtilsView::getInstance()->addErrorToDisplay( sprintf( oxLang::getInstance()->translateString('EFIRE_DOWNLOADER_ERROR' ), $e->getMessage() ) );
         }
     }
 }

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: language_list.php 24710 2009-12-18 15:30:12Z rimvydas.paskevicius $
+ * $Id: language_list.php 24836 2010-01-07 13:03:24Z arvydas $
  */
 
 /**
@@ -28,7 +28,6 @@
  */
 class Language_List extends oxAdminList
 {
-
     /**
      * Default sorting parameter.
      *
@@ -51,8 +50,8 @@ class Language_List extends oxAdminList
      */
     public function deleteEntry()
     {
-
         $myConfig = $this->getConfig();
+
 
         $sOxId = oxConfig::getParameter( 'oxid' );
 
@@ -61,7 +60,7 @@ class Language_List extends oxAdminList
         $aLangData['urls']    = $myConfig->getConfigParam( 'aLanguageURLs' );
         $aLangData['sslUrls'] = $myConfig->getConfigParam( 'aLanguageSSLURLs' );
 
-        $iBaseId = (int)$aLangData['params'][$sOxId]['baseId'];
+        $iBaseId = (int) $aLangData['params'][$sOxId]['baseId'];
 
         // preventing deleting main language with base id = 0
         if ( $iBaseId == 0 ) {
@@ -88,9 +87,9 @@ class Language_List extends oxAdminList
             $myConfig->saveShopConfVar( 'str',  'sDefaultLang', 0 );
         }
 
-        // reseting all multilanguage DB fields with deleted lang id
-        // to default value
-        $this->_resetMultiLangDbFields( $iBaseId );
+            // reseting all multilanguage DB fields with deleted lang id
+            // to default value
+            $this->_resetMultiLangDbFields( $iBaseId );
     }
 
     /**
@@ -119,17 +118,15 @@ class Language_List extends oxAdminList
         $aLanguages   = oxLang::getInstance()->getLanguageArray();
         $sDefaultLang = $this->getConfig()->getConfigParam( 'sDefaultLang' );
 
-        foreach( $aLanguages as $sKey => $sValue ) {
+        foreach ( $aLanguages as $sKey => $sValue ) {
             $sOxId = $sValue->oxid;
-            $aLanguages[$sKey]->active  = (!isset($aLangParams[$sOxId]["active"])) ? 1 : $aLangParams[$sOxId]["active"];
-            $aLanguages[$sKey]->default = ($aLangParams[$sOxId]["baseId"] == $sDefaultLang) ? true : false;
-            $aLanguages[$sKey]->sort   = $aLangParams[$sOxId]["sort"];
+            $aLanguages[$sKey]->active  = ( !isset( $aLangParams[$sOxId]["active"] ) ) ? 1 : $aLangParams[$sOxId]["active"];
+            $aLanguages[$sKey]->default = ( $aLangParams[$sOxId]["baseId"] == $sDefaultLang ) ? true : false;
+            $aLanguages[$sKey]->sort    = $aLangParams[$sOxId]["sort"];
         }
 
-        if ( is_array($aLangParams) ) {
-            $sSrotParam = $this->getConfig()->getParameter( 'sort' );
-
-            if ( !empty($sSrotParam) ) {
+        if ( is_array( $aLangParams ) ) {
+            if ( $sSrotParam = $this->getConfig()->getParameter( 'sort' ) ) {
                 $this->_sDefSort = $sSrotParam;
 
                 if ( $sSrotParam == 'active' ) {
@@ -138,7 +135,7 @@ class Language_List extends oxAdminList
                 }
             }
 
-            uasort( $aLanguages, array($this, '_sortLanguagesCallback') );
+            uasort( $aLanguages, array($this, '_sortLanguagesCallback' ) );
         }
 
         return $aLanguages;
@@ -156,13 +153,13 @@ class Language_List extends oxAdminList
     protected function _sortLanguagesCallback( $oLang1, $oLang2 )
     {
         $sSortParam = $this->_sDefSort;
-        $sVal1 = is_string($oLang1->$sSortParam) ? strtolower( $oLang1->$sSortParam ) : $oLang1->$sSortParam;
-        $sVal2 = is_string($oLang2->$sSortParam) ? strtolower( $oLang2->$sSortParam ) : $oLang2->$sSortParam;
+        $sVal1 = is_string( $oLang1->$sSortParam ) ? strtolower( $oLang1->$sSortParam ) : $oLang1->$sSortParam;
+        $sVal2 = is_string( $oLang2->$sSortParam ) ? strtolower( $oLang2->$sSortParam ) : $oLang2->$sSortParam;
 
         if ( $this->_sDefSortOrder == 'asc' ) {
-            return ($sVal1 < $sVal2) ? -1 : 1;
+            return ( $sVal1 < $sVal2 ) ? -1 : 1;
         } else {
-            return ($sVal1 > $sVal2) ? -1 : 1;
+            return ( $sVal1 > $sVal2 ) ? -1 : 1;
         }
     }
 
@@ -176,32 +173,28 @@ class Language_List extends oxAdminList
      */
     protected function _resetMultiLangDbFields( $iLangId )
     {
-        $iLangId = (int)$iLangId;
+        $iLangId = (int) $iLangId;
 
         //skipping reseting language with id = 0
-        if ( $iLangId == 0 ) {
-            return;
+        if ( $iLangId ) {
+
+            oxDb::startTransaction();
+
+            try {
+                $oDbMeta = oxNew( "oxDbMetaDataHandler" );
+                $oDbMeta->resetLanguage( $iLangId );
+
+                oxDb::commitTransaction();
+            } catch( Exception $oEx ) {
+
+                // if exception, rollBack everything
+                oxDb::rollbackTransaction();
+
+                //show warning
+                $oEx = new oxExceptionToDisplay();
+                $oEx->setMessage( 'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS' );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+            }
         }
-
-        $oDbMeta = oxNew( "oxDbMetaDataHandler" );
-
-        oxDb::startTransaction();
-
-        try {
-            $oDbMeta->resetLanguage( $iLangId );
-        } catch( Exception $oEx ) {
-            // if exception, rollBack everything
-            oxDb::rollbackTransaction();
-            //show warning
-            $oEx = new oxExceptionToDisplay();
-            $oEx->setMessage( 'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS' );
-            oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
-
-            return;
-        }
-
-        oxDb::commitTransaction();
     }
-
-
 }
