@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: recommlist.php 24751 2009-12-23 15:02:34Z sarunas $
+ * $Id: recommlist.php 24846 2010-01-08 08:15:10Z tomas $
  */
 
 /**
@@ -397,7 +397,7 @@ class RecommList extends aList
                 $this->_dRatingValue = round( $oActiveRecommList->oxrecommlists__oxrating->value, 1);
             }
         }
-        return $this->_dRatingValue;
+        return (double) $this->_dRatingValue;
     }
 
     /**
