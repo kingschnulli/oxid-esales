@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: vendor_seo.php 23996 2009-11-17 13:36:27Z  $
+ * $Id: vendor_seo.php 25030 2010-01-15 09:30:56Z arvydas $
  */
 
 /**
@@ -27,6 +27,13 @@
  */
 class Vendor_Seo extends Object_Seo
 {
+    /**
+     * Executes parent method parent::render(),
+     * and returns name of template file
+     * "object_main.tpl".
+     *
+     * @return string
+     */
     public function render()
     {
         $this->_aViewData['blShowSuffixEdit'] = true;
@@ -99,7 +106,6 @@ class Vendor_Seo extends Object_Seo
             if ( $oVendor->load( $sOxid ) ) {
                 $oVendor->oxvendor__oxshowsuffix = new oxField( (int) oxConfig::getParameter( 'blShowSuffix' ) );
                 $oVendor->save();
-
             }
         }
 

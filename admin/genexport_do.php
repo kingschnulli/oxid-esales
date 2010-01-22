@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: genexport_do.php 24825 2010-01-07 08:38:54Z arvydas $
+ * $Id: genexport_do.php 25272 2010-01-20 13:50:36Z vilma $
  */
 
 /**
@@ -65,6 +65,7 @@ class GenExport_Do extends DynExportBase
     public function nextTick( $iCnt )
     {
         $iExportedItems = $iCnt;
+        $blContinue = false;
         if ( $oArticle = $this->getOneArticle( $iCnt, $blContinue ) ) {
             $myConfig = oxConfig::getInstance();
             $oSmarty = oxUtilsView::getInstance()->getSmarty();

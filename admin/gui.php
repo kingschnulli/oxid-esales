@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: gui.php 24609 2009-12-14 09:23:14Z arvydas $
+ * $Id: gui.php 25157 2010-01-18 09:42:11Z arvydas $
  */
 
 /**
@@ -93,6 +93,18 @@ class Gui extends oxAdminView
     protected $_blLoaded = false;
 
     /**
+     * Current class template name.
+     * @var string
+     */
+    protected $_sThisTemplate = 'gui.tpl';
+
+    /**
+     * Current class error template name.
+     * @var string
+     */
+    protected $_sThisErrorTemplate = 'gui_error.tpl';
+
+    /**
      * Ininializes internal fields and loads dom objects
      *
      * @return null
@@ -108,9 +120,16 @@ class Gui extends oxAdminView
 
 
         $this->_loadGuiFiles();
+    }
 
-        $this->sTplName = "gui.tpl";
-        $this->sTplErr  = "gui_error.tpl";
+    /**
+     * Returns dom objects load state
+     *
+     * @return bool
+     */
+    protected function _isDomLoaded()
+    {
+        return $this->_blLoaded;
     }
 
     /**
@@ -122,7 +141,7 @@ class Gui extends oxAdminView
     {
         parent::render();
 
-        if($this->_blLoaded) {
+        if ( $this->_isDomLoaded() ) {
 
             $sTheme = null;
             $aColors = $aStyles = array();
@@ -168,10 +187,10 @@ class Gui extends oxAdminView
             $this->_aViewData["styles"]      = $this->getStyleTree();
             $this->_aViewData["colorstyles"] = $this->getColors($sTheme,'const','index');
 
-            return $this->sTplName;
+            return $this->_sThisTemplate;
 
         } else {
-            return $this->sTplErr;
+            return $this->_sThisErrorTemplate;
         }
     }
 

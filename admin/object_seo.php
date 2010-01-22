@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: object_seo.php 24525 2009-12-08 15:14:59Z arvydas $
+ * $Id: object_seo.php 24860 2010-01-08 13:30:15Z arvydas $
  */
 
 /**
@@ -98,8 +98,7 @@ class Object_Seo extends oxAdminDetails
      */
     protected function _getSeoUrl( $oObject )
     {
-        $iShopId  = $this->getConfig()->getShopId();
-        return oxDb::getDb()->getOne( $this->_getSeoUrlQuery( $oObject, $iShopId ) );
+        return oxDb::getDb()->getOne( $this->_getSeoUrlQuery( $oObject, $this->getConfig()->getShopId() ) );
     }
 
     /**
@@ -121,10 +120,12 @@ class Object_Seo extends oxAdminDetails
     protected function _getObject( $sOxid )
     {
         if ( $this->_oObject === null && ( $sType = $this->_getType() ) ) {
+            $this->_oObject = false;
+
             // load object
-            $this->_oObject = oxNew( $sType );
-            if ( !$this->_oObject->loadInLang( $this->_iEditLang, $sOxid ) ) {
-                $this->_oObject = false;
+            $oObject = oxNew( $sType );
+            if ( $oObject->loadInLang( $this->_iEditLang, $sOxid ) ) {
+                $this->_oObject = $oObject;
             }
         }
         return $this->_oObject;
@@ -165,10 +166,10 @@ class Object_Seo extends oxAdminDetails
             $oEncoder = oxSeoEncoder::getInstance();
 
             // marking self and page links as expired
-            $oEncoder->markAsExpired( $sOxid, $this->getconfig()->getShopId(), 1, $this->getEditLang() );
+            $oEncoder->markAsExpired( $sOxid, $iShopId, 1, $this->getEditLang() );
 
             // saving
-            $oEncoder->addSeoEntry( $sOxid, $iShopId, $this->getEditLang(), $this->_getStdUrl( oxConfig::getParameter( 'oxid' ) ),
+            $oEncoder->addSeoEntry( $sOxid, $iShopId, $this->getEditLang(), $this->_getStdUrl( $sOxid ),
                                     $aSeoData['oxseourl'], $this->_getSeoEntryType(), $aSeoData['oxfixed'],
                                     trim( $aSeoData['oxkeywords'] ), trim( $aSeoData['oxdescription'] ), $this->processParam( $aSeoData['oxparams'] ), true );
         }

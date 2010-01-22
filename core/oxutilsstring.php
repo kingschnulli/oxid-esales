@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxutilsstring.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: oxutilsstring.php 25005 2010-01-14 16:14:01Z sarunas $
  */
 
 /**
@@ -52,8 +52,7 @@ class oxUtilsString
     {
         // disable caching for test modules
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
         if ( !self::$_instance instanceof oxUtilsString ) {
@@ -62,7 +61,7 @@ class oxUtilsString
             self::$_instance = oxNew( 'oxUtilsString' );
 
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
         return self::$_instance;

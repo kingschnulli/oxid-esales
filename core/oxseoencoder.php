@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 23996 2009-11-17 13:36:27Z  $
+ * $Id: oxseoencoder.php 25152 2010-01-18 08:31:31Z arvydas $
  */
 
 /**
@@ -100,8 +100,15 @@ class oxSeoEncoder extends oxSuperCfg
      */
     public static function getInstance()
     {
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            self::$_instance = modInstances::getMod( __CLASS__ );
+        }
+
         if (!self::$_instance) {
             self::$_instance = oxNew("oxSeoEncoder");
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                modInstances::addMod( __CLASS__, self::$_instance);
+            }
         }
 
         if ( defined( 'OXID_PHP_UNIT' ) ) {
@@ -110,6 +117,7 @@ class oxSeoEncoder extends oxSuperCfg
         }
 
         return self::$_instance;
+
     }
 
     /**

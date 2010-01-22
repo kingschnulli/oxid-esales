@@ -19,11 +19,8 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: shop_performance.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: shop_performance.php 24973 2010-01-14 07:24:06Z arvydas $
  */
-
-
-
 
 /**
  * Admin shop system setting manager.

@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: order_article.php 22931 2009-10-05 11:51:31Z arvydas $
+ * $Id: order_article.php 25238 2010-01-19 14:27:31Z arvydas $
  */
 
 /**
@@ -193,13 +193,11 @@ class Order_Article extends oxAdminDetails
             $sOrderId = oxConfig::getParameter( 'oxid' );
             $oOrder   = oxNew( 'oxorder' );
             if ( $sOrderId && $oOrder->load( $sOrderId ) ) {
-
                 $oOrderArticle = oxNew( 'oxorderArticle' );
                 $oOrderArticle->oxorderarticles__oxartid  = new oxField( $oProduct->getId() );
                 $oOrderArticle->oxorderarticles__oxartnum = new oxField( $oProduct->oxarticles__oxartnum->value );
                 $oOrderArticle->oxorderarticles__oxamount = new oxField( $dAmount );
                 $oOrderArticle->oxorderarticles__oxselvariant = new oxField( oxConfig::getParameter( 'sel' ) );
-
                 $oOrder->recalculateOrder( array( $oOrderArticle ) );
             }
         }

@@ -43,14 +43,13 @@ class oxSeoEncoderTag extends oxSeoEncoder
     {
         // disable caching for test modules
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
         if ( !self::$_instance instanceof oxSeoEncoderTag ) {
             self::$_instance = oxNew( 'oxSeoEncoderTag' );
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
 

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxutilsdate.php 21097 2009-07-23 07:05:52Z vilma $
+ * $Id: oxutilsdate.php 25005 2010-01-14 16:14:01Z sarunas $
  */
 
 /**
@@ -43,15 +43,14 @@ class oxUtilsDate extends oxSuperCfg
     {
         // disable caching for test modules
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
         if ( !self::$_instance instanceof oxUtilsDate ) {
             self::$_instance = oxNew( 'oxUtilsDate' );
 
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
         return self::$_instance;

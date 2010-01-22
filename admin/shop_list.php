@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: shop_list.php 22487 2009-09-22 07:03:10Z arvydas $
+ * $Id: shop_list.php 24973 2010-01-14 07:24:06Z arvydas $
  */
 
 /**
@@ -30,6 +30,11 @@
  */
 class Shop_List extends oxAdminList
 {
+    /**
+     * Forces main frame update is set TRUE
+     *
+     * @var bool
+     */
     protected $_blUpdateMain = false;
 
     /**
@@ -132,12 +137,9 @@ class Shop_List extends oxAdminList
     {
         // we override this to add our shop if we are not malladmin
         $this->_aWhere = parent::buildWhere();
-
-        $blisMallAdmin = oxSession::getVar( 'malladmin' );
-        if ( !$blisMallAdmin) {
+        if ( !oxSession::getVar( 'malladmin' ) ) {
             // we only allow to see our shop
-            $sShopID = oxSession::getVar( "actshop" );
-            $this->_aWhere['oxshops.oxid'] = "$sShopID";
+            $this->_aWhere['oxshops.oxid'] = oxSession::getVar( "actshop" );
         }
 
         return $this->_aWhere;

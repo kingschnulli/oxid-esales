@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxutilsfile.php 24408 2009-12-04 08:07:15Z alfonsas $
+ * $Id: oxutilsfile.php 25069 2010-01-15 13:19:47Z arvydas $
  */
 
 /**
@@ -106,15 +106,14 @@ class oxUtilsFile extends oxSuperCfg
     {
         // disable caching for test modules
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
         if ( !self::$_instance instanceof oxUtilsFile ) {
 
             self::$_instance = oxNew( 'oxUtilsFile' );
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
         return self::$_instance;
@@ -632,10 +631,10 @@ class oxUtilsFile extends oxSuperCfg
             throw new oxException( 'EXCEPTION_NOTALLOWEDTYPE' );
         }
 
-        $sFileName = $this->_getUniqueFileName( $sBasePath . "/" .$sUploadPath, $sFileName, $sExt );
-        $this->_moveImage( $aFileInfo['tmp_name'], $sBasePath . "/" .$sUploadPath . "/" . $sFileName );
+        $sFileName = $this->_getUniqueFileName( $sBasePath . $sUploadPath, $sFileName, $sExt );
+        $this->_moveImage( $aFileInfo['tmp_name'], $sBasePath . $sUploadPath . "/" . $sFileName );
 
-        $sUrl = $this->getConfig()->getShopUrl() . "/" . $sUploadPath . "/" . $sFileName;
+        $sUrl = $this->getConfig()->getShopUrl() . $sUploadPath . "/" . $sFileName;
 
         //removing dublicate slashes
         $sUrl = str_replace('//', '/', $sUrl);

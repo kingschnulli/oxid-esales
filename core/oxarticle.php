@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxarticle.php 24799 2010-01-05 14:41:35Z vilma $
+ * $Id: oxarticle.php 24927 2010-01-12 14:08:25Z tomas $
  */
 
 // defining supported link types
@@ -4317,7 +4317,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         $oMdVariant = oxNew( "oxVariantHandler" );
 
-        return $oMdVariant->isMdVariant();
+        return $oMdVariant->isMdVariant($this);
     }
 
     /**

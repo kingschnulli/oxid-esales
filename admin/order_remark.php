@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: order_remark.php 22485 2009-09-22 06:59:12Z arvydas $
+ * $Id: order_remark.php 24895 2010-01-12 07:32:33Z arvydas $
  */
 
 /**
@@ -81,22 +81,17 @@ class Order_Remark extends oxAdminDetails
     public function save()
     {
 
-        $soxId      = oxConfig::getParameter( "oxid");
-        $sRemoxId   = oxConfig::getParameter( "rem_oxid");
-
         $oOrder = oxNew( "oxorder" );
-        $oOrder->load( $soxId);
+        if ( $oOrder->load( oxConfig::getParameter( "oxid" ) ) ) {
+            $oRemark = oxNew( "oxremark" );
+            $oRemark->load( oxConfig::getParameter( "rem_oxid" ) );
 
-        $oRemark = oxNew( "oxremark" );
-        $oRemark->load( $sRemoxId);
-
-        $sNewText   = oxConfig::getParameter( "remarktext");
-        $sNewHeader = oxConfig::getParameter( "remarkheader");
-        $oRemark->oxremark__oxtext = new oxField($sNewText);
-        $oRemark->oxremark__oxheader = new oxField($sNewHeader);
-        $oRemark->oxremark__oxtype = new oxField("r");
-        $oRemark->oxremark__oxparentid = new oxField($oOrder->oxorder__oxuserid->value);
-        $oRemark->save();
+            $oRemark->oxremark__oxtext     = new oxField( oxConfig::getParameter( "remarktext" ) );
+            $oRemark->oxremark__oxheader   = new oxField( oxConfig::getParameter( "remarkheader" ) );
+            $oRemark->oxremark__oxtype     = new oxField( "r" );
+            $oRemark->oxremark__oxparentid = new oxField( $oOrder->oxorder__oxuserid->value );
+            $oRemark->save();
+        }
     }
 
     /**
@@ -106,9 +101,7 @@ class Order_Remark extends oxAdminDetails
      */
     public function delete()
     {
-        $sRemoxId   = oxConfig::getParameter( "rem_oxid");
         $oRemark = oxNew( "oxRemark" );
-        $oRemark->load( $sRemoxId);
-        $oRemark->delete();
+        $oRemark->delete( oxConfig::getParameter( "rem_oxid" ) );
     }
 }

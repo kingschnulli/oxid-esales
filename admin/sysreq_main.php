@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: sysreq_main.php 23173 2009-10-12 13:29:45Z sarunas $
+ * $Id: sysreq_main.php 24973 2010-01-14 07:24:06Z arvydas $
  */
 
 /**
@@ -46,7 +46,14 @@ class sysreq_main extends oxAdminDetails
 
         return "sysreq_main.tpl";
     }
-    
+
+    /**
+     * Returns module state
+     *
+     * @param int $iModuleState state integer value
+     *
+     * @return string
+     */
     public function getModuleClass( $iModuleState )
     {
         switch ( $iModuleState ) {

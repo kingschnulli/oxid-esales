@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxutils.php 24614 2009-12-14 09:26:47Z arvydas $
+ * $Id: oxutils.php 25003 2010-01-14 15:36:18Z sarunas $
  */
 
 /**
@@ -79,18 +79,15 @@ class oxUtils extends oxSuperCfg
     {
         // disable caching for test modules
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
-
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
         if ( !(self::$_instance instanceof oxUtils) ) {
 
-
             self::$_instance = oxNew( 'oxUtils' );
 
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
         return self::$_instance;

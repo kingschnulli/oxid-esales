@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxutilscount.php 23567 2009-10-23 14:40:30Z arvydas $
+ * $Id: oxutilscount.php 25006 2010-01-14 16:30:08Z sarunas $
  */
 
 /**
@@ -50,15 +50,14 @@ class oxUtilsCount extends oxSuperCfg
     {
         // disable caching for test modules
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
         if ( !self::$_instance instanceof oxUtilsCount ) {
 
             self::$_instance = oxNew( 'oxUtilsCount' );
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
         return self::$_instance;

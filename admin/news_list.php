@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: news_list.php 16302 2009-02-05 10:18:49Z rimvydas.paskevicius $
+ * $Id: news_list.php 24860 2010-01-08 13:30:15Z arvydas $
  */
 
 /**
@@ -51,6 +51,13 @@ class News_List extends oxAdminList
     protected $_sListType = 'oxnewslist';
 
     /**
+     * Default SQL sorting parameter (default null).
+     *
+     * @var string
+     */
+    protected $_sDefSort = "oxdate";
+
+    /**
      * Sets SQL query parameters (such as sorting),
      * executes parent method parent::Init().
      *
@@ -58,13 +65,11 @@ class News_List extends oxAdminList
      */
     public function init()
     {
-        $this->_sDefSort = "oxdate";
         $sSortCol = oxConfig::getParameter( 'sort' );
-
         if ( !$sSortCol || $sSortCol == $this->_sDefSort ) {
             $this->_blDesc = true;
         }
 
-        parent::Init();
+        parent::init();
     }
 }

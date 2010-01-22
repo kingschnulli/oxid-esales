@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: voucherserie_main.php 24611 2009-12-14 09:24:01Z arvydas $
+ * $Id: voucherserie_main.php 25026 2010-01-15 09:19:19Z vilma $
  */
 
 /**
@@ -161,11 +161,12 @@ class VoucherSerie_Main extends oxAdminDetails
         }
         $this->_aViewData["exportCompleted"] = true;
 
-        header("Pragma: public");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Expires: 0");
-        header("Content-Disposition: attachment; filename=vouchers.csv");
-        header("Content-Type: application/csv");
-        oxUtils::getInstance()->showMessageAndExit( $sLine );
+        $oUtils = oxUtils::getInstance();
+        $oUtils->setHeader( "Pragma: public" );
+        $oUtils->setHeader( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
+        $oUtils->setHeader( "Expires: 0" );
+        $oUtils->setHeader( "Content-Disposition: attachment; filename=vouchers.csv");
+        $oUtils->setHeader( "Content-Type: application/csv" );
+        $oUtils->showMessageAndExit( $sLine );
     }
 }

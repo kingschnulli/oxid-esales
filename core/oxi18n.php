@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxi18n.php 19761 2009-06-10 14:28:43Z arvydas $
+ * $Id: oxi18n.php 24928 2010-01-12 14:08:52Z tomas $
  */
 
 /**
@@ -35,12 +35,14 @@ class oxI18n extends oxBase
 
     /**
      * Name of class.
+     *
      * @var string
      */
     protected $_sClassName = 'oxI18n';
 
     /**
      * Active object language.
+     *
      * @var int
      */
     protected $_iLanguage = null;
@@ -48,6 +50,7 @@ class oxI18n extends oxBase
     /**
      * Sometimes you need to deal with all fields not only with active
      * language, then set to false (default is true).
+     *
      * @var bool
      */
     protected $_blEmployMultilanguage = true;

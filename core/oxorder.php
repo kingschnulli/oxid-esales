@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxorder.php 23745 2009-10-29 09:36:50Z arvydas $
+ * $Id: oxorder.php 25227 2010-01-19 13:17:04Z sarunas $
  */
 
 /**
@@ -1201,6 +1201,10 @@ class oxOrder extends oxBase
         } catch( Exception $oE ) {
             // if exception, rollBack everything
             oxDb::rollbackTransaction();
+
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                throw $oE;
+            }
         }
     }
 

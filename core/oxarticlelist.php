@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxarticlelist.php 22590 2009-09-24 06:24:00Z alfonsas $
+ * $Id: oxarticlelist.php 25275 2010-01-20 14:47:05Z arvydas $
  */
 
 /**
@@ -662,8 +662,7 @@ class oxArticleList extends oxList
         $sTag = $oTagHandler->prepareTags( $sTag );
 
         $sQ = "select {$sArticleFields} from oxartextends inner join {$sArticleTable} on
-               {$sArticleTable}.oxid = oxartextends.oxid where {$sArticleTable}.oxissearch = 1
-               and match ( oxartextends.oxtags{$sLangExt} )
+               {$sArticleTable}.oxid = oxartextends.oxid where match ( oxartextends.oxtags{$sLangExt} )
                against( ".oxDb::getDb()->quote( $sTag )." )";
 
         // checking stock etc

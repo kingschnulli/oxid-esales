@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxdb.php 24627 2009-12-14 15:09:41Z arvydas $
+ * $Id: oxdb.php 25005 2010-01-14 16:14:01Z sarunas $
  */
 
 
@@ -61,8 +61,7 @@ class oxDb extends oxSuperCfg
     {
         // disable caching for test modules
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
 
@@ -72,7 +71,7 @@ class oxDb extends oxSuperCfg
             self::$_instance = oxNew( 'oxdb' );
 
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
         return self::$_instance;

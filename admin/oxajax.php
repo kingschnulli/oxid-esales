@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxajax.php 24610 2009-12-14 09:23:38Z arvydas $
+ * $Id: oxajax.php 25048 2010-01-15 10:26:40Z tomas $
  */
 
 // shop path for includes
@@ -524,6 +524,23 @@ class ajaxListComponent extends oxSuperCfg
         $aResponse['totalRecords'] = $iTotal;
 
         return $aResponse;
+    }
+
+    /**
+     * Marks article seo url as expired
+     *
+     * @param array $aArtId article id's
+     *
+     * @return null
+     */
+    public function resetArtSeoUrl( $aArtIds )
+    {
+        if ( !is_array($aArtIds) ) {
+            $aArtIds = array($aArtIds);
+        }
+        foreach ( $aArtIds as $sArtId ) {
+           oxSeoEncoder::getInstance()->markAsExpired( $sArtId );
+        }
     }
 
     /**

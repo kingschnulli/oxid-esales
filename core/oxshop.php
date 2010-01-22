@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxshop.php 22590 2009-09-24 06:24:00Z alfonsas $
+ * $Id: oxshop.php 25267 2010-01-20 12:30:17Z arvydas $
  */
 
 /**
@@ -58,6 +58,18 @@ class oxShop extends oxI18n
     {
         parent::__construct();
         $this->init( 'oxshops' );
+    }
+
+    /**
+     * Sets multi shop tables
+     *
+     * @param string $aMultiShopTables multi shop tables
+     *
+     * @return null
+     */
+    public function setMultiShopTables( $aMultiShopTables )
+    {
+        $this->_aMultiShopTables = $aMultiShopTables;
     }
 
 }

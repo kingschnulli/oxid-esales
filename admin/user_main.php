@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: user_main.php 20428 2009-06-23 14:46:14Z vilma $
+ * $Id: user_main.php 25012 2010-01-15 08:03:10Z arvydas $
  */
 
 /**
@@ -136,60 +136,53 @@ class User_Main extends oxAdminDetails
      */
     public function save()
     {
-        $myConfig = $this->getConfig();
-
-
-        $soxId      = oxConfig::getParameter( "oxid");
-        $aParams    = oxConfig::getParameter( "editval");
 
         //allow admin information edit only for MALL admins
-        if (!$this->_allowAdminEdit($soxId))
-            return;
+        $soxId = oxConfig::getParameter( "oxid" );
+        if ( $this->_allowAdminEdit( $soxId ) ) {
 
-        // checkbox handling
-        if ( !isset( $aParams['oxuser__oxactive']))
-            $aParams['oxuser__oxactive'] = 0;
+            $aParams = oxConfig::getParameter( "editval");
 
-        $oUser = oxNew( "oxuser" );
-        if ( $soxId != "-1")
-            $oUser->load( $soxId);
-        else
-            $aParams['oxuser__oxid'] = null;
+            // checkbox handling
+            if ( !isset( $aParams['oxuser__oxactive'] ) ) {
+                $aParams['oxuser__oxactive'] = 0;
+            }
 
-        //setting new password
-        if ( ( $sNewPass = oxConfig::getParameter( "newPassword" ) ) ) {
-            $oUser->setPassword( $sNewPass );
-        }
+            $oUser = oxNew( "oxuser" );
+            if ( $soxId != "-1" ) {
+                $oUser->load( $soxId );
+            } else {
+                $aParams['oxuser__oxid'] = null;
+            }
 
-        //FS#2167 V checks for already used email
-        if ( $oUser->checkIfEmailExists($aParams['oxuser__oxusername'])) {
-            $this->_sSaveError = 'EXCEPTION_USER_USEREXISTS';
-            return;
-        }
+            //setting new password
+            if ( ( $sNewPass = oxConfig::getParameter( "newPassword" ) ) ) {
+                $oUser->setPassword( $sNewPass );
+            }
 
-        //#1006T
-        //special treatment for newsletter fields
-        /* $aParams["oxuser__oxdboptin"] = $oUser->oxuser__oxdboptin->value;
-        $aParams["oxuser__oxemailfailed"] = $oUser->oxuser__oxemailfailed->value;*/
+            //FS#2167 V checks for already used email
+            if ( $oUser->checkIfEmailExists( $aParams['oxuser__oxusername'] ) ) {
+                $this->_sSaveError = 'EXCEPTION_USER_USEREXISTS';
+                return;
+            }
 
-        //$aParams = $oUser->ConvertNameArray2Idx( $aParams);
-        $oUser->assign( $aParams);
-
-        $sRights = $oUser->oxuser__oxrights->value;
+            $oUser->assign( $aParams );
 
 
-        // A. changing field type to save birth date correctly
-        $oUser->oxuser__oxbirthdate->fldtype = 'char';
+            // A. changing field type to save birth date correctly
+            $oUser->oxuser__oxbirthdate->fldtype = 'char';
 
-        try {
-            $oUser->save();
-            $this->_aViewData["updatelist"] = "1";
+            try {
+                $oUser->save();
+                $this->_aViewData["updatelist"] = "1";
 
-            // set oxid if inserted
-            if ( $soxId == "-1")
-                oxSession::setVar( "saved_oxid", $oUser->oxuser__oxid->value);
-        } catch (Exception $e) {
-            $this->_sSaveError = $e->getMessage();
+                // set oxid if inserted
+                if ( $soxId == "-1" ) {
+                    oxSession::setVar( "saved_oxid", $oUser->getId() );
+                }
+            } catch ( Exception $oExcp ) {
+                $this->_sSaveError = $oExcp->getMessage();
+            }
         }
     }
 }

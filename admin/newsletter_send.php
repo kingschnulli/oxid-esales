@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: newsletter_send.php 22484 2009-09-22 06:57:02Z arvydas $
+ * $Id: newsletter_send.php 25163 2010-01-18 12:37:38Z arvydas $
  */
 
 /**
@@ -48,7 +48,7 @@ class Newsletter_Send extends oxAdminList
         $myConfig  = $this->getConfig();
         parent::render();
 
-        $iStart = oxConfig::getParameter( "iStart");
+        $iStart = (int) oxConfig::getParameter( "iStart");
         $iUser  = oxConfig::getParameter( "user");
         $sID      = oxConfig::getParameter( "id");
 
@@ -174,7 +174,7 @@ class Newsletter_Send extends oxAdminList
         return $this->_aMailErrors;
     }
 
-    /*
+    /**
      * Overrides parent method to pass referred id
      *
      * @param string $sId class name

@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxpaymentlist.php 22657 2009-09-25 15:39:22Z arvydas $
+ * $Id: oxpaymentlist.php 25006 2010-01-14 16:30:08Z sarunas $
  */
 
 /**
@@ -77,8 +77,7 @@ class oxPaymentList extends oxList
     {
         // disable cashing for test modules
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
         if ( !isset( self::$_instance ) ) {
@@ -86,7 +85,7 @@ class oxPaymentList extends oxList
             self::$_instance = oxNew( 'oxPaymentList' );
 
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
         return self::$_instance;

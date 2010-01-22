@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxutilspic.php 22111 2009-09-03 11:00:40Z rimvydas.paskevicius $
+ * $Id: oxutilspic.php 25005 2010-01-14 16:14:01Z sarunas $
  */
 
 /**
@@ -50,8 +50,7 @@ class oxUtilsPic extends oxSuperCfg
     {
         // disable caching for test modules
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
         if ( !self::$_instance instanceof oxUtilsPic ) {
@@ -60,7 +59,7 @@ class oxUtilsPic extends oxSuperCfg
             self::$_instance = oxNew( 'oxUtilsPic' );
 
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
         return self::$_instance;

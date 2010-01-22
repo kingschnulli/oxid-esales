@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: pricealarm_list.php 17243 2009-03-16 15:16:57Z arvydas $
+ * $Id: pricealarm_list.php 24895 2010-01-12 07:32:33Z arvydas $
  */
 
 /**
@@ -133,17 +133,18 @@ class PriceAlarm_List extends oxAdminList
     {
         $this->_aWhere = parent::buildWhere();
 
-        if ( !is_array($this->_aWhere))
+        if ( !is_array( $this->_aWhere ) ) {
             $this->_aWhere = array();
+        }
 
         // updating price fields values for correct search in DB
         if ( $this->_aWhere['oxpricealarm.oxprice'] ) {
-            $sPriceParam = (double) str_replace(array('%',','), array('', '.'), $this->_aWhere['oxpricealarm.oxprice']);
+            $sPriceParam = (double) str_replace( array( '%', ',' ), array( '', '.' ), $this->_aWhere['oxpricealarm.oxprice'] );
             $this->_aWhere['oxpricealarm.oxprice'] = '%'. $sPriceParam. '%';
         }
 
         if ( $this->_aWhere['oxarticles.oxprice'] ) {
-            $sPriceParam = (double) str_replace(array('%',','), array('', '.'), $this->_aWhere['oxarticles.oxprice']);
+            $sPriceParam = (double) str_replace( array( '%', ',' ), array( '', '.' ), $this->_aWhere['oxarticles.oxprice'] );
             $this->_aWhere['oxarticles.oxprice'] = '%'. $sPriceParam. '%';
         }
 

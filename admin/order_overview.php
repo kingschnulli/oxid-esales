@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: order_overview.php 24609 2009-12-14 09:23:14Z arvydas $
+ * $Id: order_overview.php 24895 2010-01-12 07:32:33Z arvydas $
  */
 
     // DTAUS
@@ -55,7 +55,7 @@ class Order_Overview extends oxAdminDetails
             $this->_aViewData["edit"]          = $oOrder;
             $this->_aViewData["orderArticles"] = $oOrder->getOrderArticles();
             $this->_aViewData["giftCard"]      = $oOrder->getGiftCard();
-            $this->_aViewData["paymentType"]   = $this->getPaymentType( $oOrder );
+            $this->_aViewData["paymentType"]   = $this->_getPaymentType( $oOrder );
             $this->_aViewData["deliveryType"]  = $oOrder->getDelSet();
         }
 
@@ -89,14 +89,14 @@ class Order_Overview extends oxAdminDetails
      *
      * @return oxuserpayment
      */
-    protected function getPaymentType( $oOrder )
+    protected function _getPaymentType( $oOrder )
     {
         if ( !( $oUserPayment = $oOrder->getPaymentType() ) && $oOrder->oxorder__oxpaymenttype->value ) {
-                $oPayment = oxNew( "oxpayment" );
+            $oPayment = oxNew( "oxpayment" );
             if ( $oPayment->load( $oOrder->oxorder__oxpaymenttype->value ) ) {
                 // in case due to security reasons payment info was not kept in db
                 $oUserPayment = oxNew( "oxuserpayment" );
-                $oUserPayment->oxpayments__oxdesc->value = $oPayment->oxpayments__oxdesc->value;
+                $oUserPayment->oxpayments__oxdesc = new oxField( $oPayment->oxpayments__oxdesc->value );
             }
         }
 
@@ -112,18 +112,16 @@ class Order_Overview extends oxAdminDetails
     {
         $sOrderNr   = oxConfig::getParameter( "ordernr");
         $sToOrderNr = oxConfig::getParameter( "toordernr");
-
         $oImex = oxNew( "oximex" );
-        $sLexware = $oImex->exportLexwareOrders( $sOrderNr, $sToOrderNr);
-
-        if ( isset( $sLexware) && $sLexware) {
-            header("Pragma: public");
-            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-            header("Expires: 0");
-            header("Content-type: application/x-download");
-            header('Content-Length: '.strlen($sLexware));
-            header("Content-Disposition: attachment; filename=intern.xml");
-            oxUtils::getInstance()->showMessageAndExit( $sLexware );
+        if ( ( $sLexware = $oImex->exportLexwareOrders( $sOrderNr, $sToOrderNr ) ) ) {
+            $oUtils = oxUtils::getInstance();
+            $oUtils->setHeader( "Pragma: public" );
+            $oUtils->setHeader( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
+            $oUtils->setHeader( "Expires: 0" );
+            $oUtils->setHeader( "Content-type: application/x-download" );
+            $oUtils->setHeader( "Content-Length: ".strlen( $sLexware ) );
+            $oUtils->setHeader( "Content-Disposition: attachment; filename=intern.xml" );
+            $oUtils->showMessageAndExit( $sLexware );
         }
     }
     /**
@@ -133,26 +131,27 @@ class Order_Overview extends oxAdminDetails
      */
     public function createPDF()
     {
-        $soxId = oxConfig::getParameter( "oxid");
-        if ( $soxId != "-1" && isset( $soxId)) {
+        $soxId = oxConfig::getParameter( "oxid" );
+        if ( $soxId != "-1" && isset( $soxId ) ) {
             // load object
             $oOrder = oxNew( "oxorder" );
-            $oOrder->load( $soxId);
-            $sFilename = $oOrder->oxorder__oxordernr->value."_".$oOrder->oxorder__oxbilllname->value.".pdf";
+            if ( $oOrder->load( $soxId ) ) {
+                $oUtils = oxUtils::getInstance();
+                $sFilename = $oOrder->oxorder__oxordernr->value . "_" . $oOrder->oxorder__oxbilllname->value . ".pdf";
 
-            ob_start();
-            $oOrder->genPDF( $sFilename, oxConfig::getParameter( "pdflanguage"));
-            $sPDF = ob_get_contents();
-            ob_end_clean();
+                ob_start();
+                $oOrder->genPDF( $sFilename, oxConfig::getParameter( "pdflanguage" ) );
+                $sPDF = ob_get_contents();
+                ob_end_clean();
 
-            header("Pragma: public");
-            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-            header("Expires: 0");
-            header("Content-type: application/pdf");
-            header("Content-Disposition: attachment; filename=".$sFilename);
-            oxUtils::getInstance()->showMessageAndExit( $sPDF );
+                $oUtils->setHeader( "Pragma: public" );
+                $oUtils->setHeader( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
+                $oUtils->setHeader( "Expires: 0" );
+                $oUtils->setHeader( "Content-type: application/pdf" );
+                $oUtils->setHeader( "Content-Disposition: attachment; filename=".$sFilename );
+                oxUtils::getInstance()->showMessageAndExit( $sPDF );
+            }
         }
-
     }
 
     /**
@@ -162,39 +161,33 @@ class Order_Overview extends oxAdminDetails
      */
     public function exportDTAUS()
     {
-        $iFromOrderNr = oxConfig::getParameter( "ordernr");
-
         $oOrderList = oxNew( "oxlist" );
-        $oOrderList->init( "oxorder");
+        $oOrderList->init( "oxorder" );
         $sSelect =  "select * from oxorder where oxpaymenttype = 'oxiddebitnote'";
 
-        if ( isset( $iFromOrderNr) && $iFromOrderNr)
+        if ( ( $iFromOrderNr = oxConfig::getParameter( "ordernr") ) ) {
             $sSelect .= " and oxordernr >= $iFromOrderNr";
-
-        $oOrderList->selectString( $sSelect);
-
-        if ( !count( $oOrderList))
-            return;
-
-        $oPayment = oxNew( "oxuserpayment" );
-        $oShop = $this->getConfig()->getActiveShop();
-        $dtaus = new DTAUS("L", $oShop->oxshops__oxcompany->value, str_replace( " ", "", $oShop->oxshops__oxbankcode->value), str_replace( " ", "", $oShop->oxshops__oxbanknumber->value));
-
-        $myUtils = oxUtils::getInstance();
-        $myLang  = oxLang::getInstance();
-        foreach ( $oOrderList as $oOrder) {
-            $oPayment->load( $oOrder->oxorder__oxpaymentid->value);
-            $aDynValues = $myUtils->assignValuesFromText( $oPayment->oxuserpayments__oxvalue->value );
-            // #630
-            //$dtaus->addTransaktion( $aDynValues[3]->value, str_replace( array(" ", "-"), "", $aDynValues[1]->value), str_replace( array(" ", "-"), "", $aDynValues[2]->value), str_replace( ",", ".",$oOrder->ftotalorder), $oShop->oxshops__oxname->getRawValue(), oxLang::getInstance()->translateString("order")." ".$oOrder->oxorder__oxordernr->value,"");
-            $dtaus->addTransaktion( $aDynValues[3]->value, str_replace( " ", "", $aDynValues[1]->value), str_replace( " ", "", $aDynValues[2]->value), str_replace( ",", ".", $oOrder->ftotalorder), $oShop->oxshops__oxname->getRawValue(), $myLang->translateString("order")." ".$oOrder->oxorder__oxordernr->value, "");
-
         }
 
-        header("Content-Disposition: attachment; filename=\"dtaus0.txt\"");
-        header("Content-type: text/plain");
-        header("Cache-control: public");
-        oxUtils::getInstance()->showMessageAndExit( $dtaus->create() );
+        $oOrderList->selectString( $sSelect );
+        if ( count( $oOrderList ) ) {
+            $oPayment = oxNew( "oxuserpayment" );
+            $oShop = $this->getConfig()->getActiveShop();
+            $oDtaus = new DTAUS( "L", $oShop->oxshops__oxcompany->value, str_replace( " ", "", $oShop->oxshops__oxbankcode->value), str_replace( " ", "", $oShop->oxshops__oxbanknumber->value ) );
+
+            $oUtils = oxUtils::getInstance();
+            $oLang  = oxLang::getInstance();
+            foreach ( $oOrderList as $oOrder ) {
+                $oPayment->load( $oOrder->oxorder__oxpaymentid->value );
+                $aDynValues = $oUtils->assignValuesFromText( $oPayment->oxuserpayments__oxvalue->value );
+                $oDtaus->addTransaktion( $aDynValues[3]->value, str_replace( " ", "", $aDynValues[1]->value ), str_replace( " ", "", $aDynValues[2]->value ), str_replace( ",", ".", $oOrder->ftotalorder), $oShop->oxshops__oxname->getRawValue(), $oLang->translateString( "order" )." ".$oOrder->oxorder__oxordernr->value, "" );
+            }
+
+            $oUtils->setHeader( "Content-Disposition: attachment; filename=\"dtaus0.txt\"" );
+            $oUtils->setHeader( "Content-type: text/plain" );
+            $oUtils->setHeader( "Cache-control: public" );
+            $oUtils->showMessageAndExit( $oDtaus->create() );
+        }
     }
 
     /**
@@ -204,29 +197,25 @@ class Order_Overview extends oxAdminDetails
      */
     public function sendorder()
     {
-        $soxId  = oxConfig::getParameter( "oxid");
         $oOrder = oxNew( "oxorder" );
-        $oOrder->load( $soxId);
+        if ( $oOrder->load( oxConfig::getParameter( "oxid" ) ) ) {
+            $oOrder->oxorder__oxsenddate->setValue( date( "Y-m-d H:i:s", oxUtilsDate::getInstance()->getTime() ) );
+            $oOrder->save();
 
-        // #632A
-        $timeout = oxUtilsDate::getInstance()->getTime(); //time();
-        $now = date("Y-m-d H:i:s", $timeout);
-        $oOrder->oxorder__oxsenddate->setValue($now);
-        $oOrder->save();
+            // #1071C
+            $oOrderArticles = $oOrder->getOrderArticles();
+            foreach ( $oOrderArticles as $sOxid => $oArticle ) {
+                // remove canceled articles from list
+                if ( $oArticle->oxorderarticles__oxstorno->value == 1 ) {
+                    $oOrderArticles->offsetUnset( $sOxid );
+                }
+            }
 
-        // #1071C
-        $oOrderArticles = $oOrder->getOrderArticles();
-        foreach ( $oOrderArticles as $oxid=>$oArticle) {
-            // remove canceled articles from list
-            if ( $oArticle->oxorderarticles__oxstorno->value == 1 )
-                $oOrderArticles->offsetUnset($oxid);
-        }
-
-        $blMail  = oxConfig::getParameter( "sendmail");
-        if ( isset( $blMail) && $blMail) {
-            // send eMail
-            $oxEMail = oxNew( "oxemail" );
-            $oxEMail->sendSendedNowMail( $oOrder );
+            if ( ( $blMail = oxConfig::getParameter( "sendmail" ) ) ) {
+                // send eMail
+                $oEmail = oxNew( "oxemail" );
+                $oEmail->sendSendedNowMail( $oOrder );
+            }
         }
     }
 
@@ -237,12 +226,11 @@ class Order_Overview extends oxAdminDetails
      */
     public function resetorder()
     {
-        $soxId  = oxConfig::getParameter( "oxid");
         $oOrder = oxNew( "oxorder" );
-        $oOrder->load( $soxId);
-
-        $oOrder->oxorder__oxsenddate->setValue("0000-00-00 00:00:00");
-        $oOrder->save();
+        if ( $oOrder->load( oxConfig::getParameter( "oxid" ) ) ) {
+            $oOrder->oxorder__oxsenddate->setValue( "0000-00-00 00:00:00" );
+            $oOrder->save();
+        }
     }
 
     /**
@@ -252,14 +240,15 @@ class Order_Overview extends oxAdminDetails
      */
     public function canExport()
     {
-        //V #529: check if PDF invoice modul is active
+        $blCan = false;
+        //V #529: check if PDF invoice module is active
         if ( oxUtilsObject::getInstance()->isModuleActive( 'oxorder', 'myorder' ) ) {
             $oDb = oxDb::getDb();
             $sOrderId = oxConfig::getParameter( "oxid" );
             $sTable = getViewName( "oxorderarticles" );
             $sQ = "select count(oxid) from {$sTable} where oxorderid = ".$oDb->quote( $sOrderId )." and oxstorno = 0";
-            return (bool) $oDb->getOne( $sQ );
+            $blCan = (bool) $oDb->getOne( $sQ );
         }
-        return false;
+        return $blCan;
     }
 }

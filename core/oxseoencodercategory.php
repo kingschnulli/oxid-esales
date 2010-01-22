@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxseoencodercategory.php 23919 2009-11-10 15:35:44Z arvydas $
+ * $Id: oxseoencodercategory.php 25006 2010-01-14 16:30:08Z sarunas $
  */
 
 /**
@@ -50,14 +50,13 @@ class oxSeoEncoderCategory extends oxSeoEncoder
     public static function getInstance()
     {
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
         if (!self::$_instance) {
             self::$_instance = oxNew("oxSeoEncoderCategory");
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
 

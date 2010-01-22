@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: language_main.php 24730 2009-12-21 12:23:21Z rimvydas.paskevicius $
+ * $Id: language_main.php 24889 2010-01-11 16:14:27Z rimvydas.paskevicius $
  */
 
 /**
@@ -84,12 +84,11 @@ class Language_Main extends oxAdminDetails
         }
 
         //loading languages info from config
-        $this->_loadLanguages();
+        $this->_aLangData = $this->_getLanguages();
 
         if ( $sOxId != -1 ) {
-            //checking if translations files and DB multilanguage fields exists
+            //checking if translations files exists
             $this->_checkLangTranslations( $sOxId );
-            $this->_checkMultiLangDbFields( $sOxId );
         }
 
         if ( $sOxId != "-1" && isset( $sOxId)) {
@@ -125,13 +124,12 @@ class Language_Main extends oxAdminDetails
         }
 
         //loading languages info from config
-        $this->_loadLanguages();
-
+        $this->_aLangData = $this->_getLanguages();
         //checking input errors
         if ( !$this->_validateInput() ) {
             return;
         }
-
+        
         // if changed language abbervation, updating it for all arrays related with languages
         if ( $sOxId != -1 && $sOxId  != $aParams['abbr'] ) {
             $this->_updateAbbervation( $sOxId, $aParams['abbr'] );
@@ -144,6 +142,12 @@ class Language_Main extends oxAdminDetails
             $sOxId = $aParams['abbr'];
             $this->_aLangData['params'][$sOxId]['baseId'] = $this->_getAvailableLangBaseId();
             oxSession::setVar( "saved_oxid", $sOxId);
+            
+            //checking if added language already has created multilang fields
+            //with new base ID - if not, creating new fields
+            if ( !$this->_checkMultilangFieldsExistsInDb( $sOxId ) ) {
+            	$this->_addNewMultilangFieldsToDb();
+            }
         }
 
         //updating language description
@@ -153,7 +157,7 @@ class Language_Main extends oxAdminDetails
         $this->_aLangData['params'][$sOxId]['active']  = $aParams['active'];
         $this->_aLangData['params'][$sOxId]['default'] = $aParams['default'];
         $this->_aLangData['params'][$sOxId]['sort']   = $aParams['sort'];
-
+        
         //if setting lang as default
         if ( $aParams['default'] == '1' ) {
             $this->_setDefaultLang( $sOxId );
@@ -198,22 +202,37 @@ class Language_Main extends oxAdminDetails
     }
 
     /**
+     * Languages array setter
+     * 
+     * @param array $aLangData languages parameters array
+     *
+     * @return array
+     */
+    protected function _setLanguages( $aLangData )
+    {
+        $this->_aLangData = $aLangData;
+    }    
+    
+    /**
      * Loads from config all data related with languages.
      * If no languages parameters array exists, sets default parameters values.
+     * Returns collected languages parameters array.
      *
-     * @return null
+     * @return array
      */
-    protected function _loadLanguages()
+    protected function _getLanguages()
     {
-        $this->_aLangData['params']  = $this->getConfig()->getConfigParam( 'aLanguageParams' );
-        $this->_aLangData['lang']    = $this->getConfig()->getConfigParam( 'aLanguages' );
-        $this->_aLangData['urls']    = $this->getConfig()->getConfigParam( 'aLanguageURLs' );
-        $this->_aLangData['sslUrls'] = $this->getConfig()->getConfigParam( 'aLanguageSSLURLs' );
+        $aLangData['params']  = $this->getConfig()->getConfigParam( 'aLanguageParams' );
+        $aLangData['lang']    = $this->getConfig()->getConfigParam( 'aLanguages' );
+        $aLangData['urls']    = $this->getConfig()->getConfigParam( 'aLanguageURLs' );
+        $aLangData['sslUrls'] = $this->getConfig()->getConfigParam( 'aLanguageSSLURLs' );
 
         // empty languages parameters array - creating new one with default values
-        if ( !is_array($this->_aLangData['params']) ) {
-            $this->_aLangData['params'] = $this->_assignDefaultLangParams();
+        if ( !is_array( $aLangData['params']) ) {
+            $aLangData['params'] = $this->_assignDefaultLangParams( $aLangData['lang'] );
         }
+        
+        return $aLangData;
     }
 
     /**
@@ -276,12 +295,12 @@ class Language_Main extends oxAdminDetails
      *
      * @return array
      */
-    protected function _assignDefaultLangParams()
+    protected function _assignDefaultLangParams( $aLanguages )
     {
         $aParams = array();
         $iBaseId = 0;
 
-        foreach( array_keys($this->_aLangData['lang']) as $sOxId ) {
+        foreach( array_keys($aLanguages) as $sOxId ) {
             $aParams[$sOxId]['baseId']  = $iBaseId;
             $aParams[$sOxId]['active']  = 1;
             $aParams[$sOxId]['sort']   = $iBaseId + 1;
@@ -359,14 +378,13 @@ class Language_Main extends oxAdminDetails
     }
 
     /**
-     * Check if selected language has multilanguage fields in DB
-     * If not - displays warning
+     * Check if selected language already has multilanguage fields in DB
      *
      * @param string $sOxId language abbervation
 
-     * @return null
+     * @return bool
      */
-    protected function _checkMultiLangDbFields( $sOxId )
+    protected function _checkMultilangFieldsExistsInDb( $sOxId )
     {
         $oDbMeta = oxNew( "oxDbMetaDataHandler" );
         $iBaseId = $this->_aLangData['params'][$sOxId]['baseId'];
@@ -375,25 +393,41 @@ class Language_Main extends oxAdminDetails
         $sMultiLangCol = 'OXTITLE' . $sPrefix;
 
         if ( !$oDbMeta->fieldExists( $sMultiLangCol, "oxarticles" ) ) {
-            //creating new multilanguage fields with new id over whole DB
-            oxDb::startTransaction();
-            try {
-                $oDbMeta->addNewLangToDb();
-            } catch( Exception $oEx ) {
-                // if exception, rollBack everything
-                oxDb::rollbackTransaction();
-
-                //show warning
-                $oEx = new oxExceptionToDisplay();
-                $oEx->setMessage( 'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS' );
-                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
-
-                return;
-            }
-
-            oxDb::commitTransaction();
+            return false;
         }
+        
+        return true;
     }
+    
+    /**
+     * Adding new language to DB - creating new multilangue fields with new
+     * language ID (e.g. oxtitle_4)
+     *
+     * @return null
+     */
+    protected function _addNewMultilangFieldsToDb()
+    {
+        //creating new multilanguage fields with new id over whole DB
+    	oxDb::startTransaction();
+         
+        $oDbMeta = oxNew( "oxDbMetaDataHandler" );
+    	
+        try {
+             $oDbMeta->addNewLangToDb();
+         } catch( Exception $oEx ) {
+             // if exception, rollBack everything
+             oxDb::rollbackTransaction();
+
+             //show warning
+             $oEx = new oxExceptionToDisplay();
+             $oEx->setMessage( 'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS' );
+             oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+
+             return;
+         }
+        
+         oxDb::commitTransaction();
+    }    
 
     /**
      * Check if language already exists

@@ -19,7 +19,7 @@
  * @package inc
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: article_extend.inc.php 24004 2009-11-17 14:20:20Z  $
+ * $Id: article_extend.inc.php 25049 2010-01-15 10:27:16Z tomas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -207,5 +207,9 @@ class ajaxComponent extends ajaxListComponent
         oxDb::getInstance()->getDb()->Execute($sQ);
         $sQ = "update oxobject2category set oxtime = 0 where oxobjectid = " . $oDb->quote( $soxId ) . " and oxcatnid = " . $oDb->quote( $sDefCat ) . " $sShopCheck ";
         oxDb::getInstance()->getDb()->Execute($sQ);
+
+
+        $this->resetArtSeoUrl( $soxId );
+        $this->resetContentCache();
     }
 }

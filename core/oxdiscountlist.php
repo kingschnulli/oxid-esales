@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxdiscountlist.php 22657 2009-09-25 15:39:22Z arvydas $
+ * $Id: oxdiscountlist.php 25003 2010-01-14 15:36:18Z sarunas $
  */
 
 /**
@@ -69,8 +69,7 @@ class oxDiscountList extends oxList
     {
         // disable cashing for test modules
         if ( defined( 'OXID_PHP_UNIT' ) ) {
-            static $inst = array();
-            self::$_instance = $inst[oxClassCacheKey()];
+            self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
         if ( !isset( self::$_instance ) ) {
@@ -78,7 +77,7 @@ class oxDiscountList extends oxList
             self::$_instance = oxNew( 'oxDiscountList' );
 
             if ( defined( 'OXID_PHP_UNIT' ) ) {
-                $inst[oxClassCacheKey()] = self::$_instance;
+                modInstances::addMod( __CLASS__, self::$_instance);
             }
         }
 

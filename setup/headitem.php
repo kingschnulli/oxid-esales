@@ -72,8 +72,8 @@
             $iCntr++;
         ?>
         <dl class="tab <?php if( $blAct ){ echo "act";} ?>">
-            <dt><?php if( $blAct ): ?><a href="index.php?istep=<?php echo $_tab; ?>&sid=<?php echo getSID();?>"><?php endif;?><?php echo $iCntr ,'. ',$aLang['TAB_'.$iStepId.'_TITLE']; ?><?php if( $blAct ): ?></a><?php endif;?></dt>
-            <dd><?php if( $blAct ): ?><a href="index.php?istep=<?php echo $_tab; ?>&sid=<?php echo getSID();?>"><?php endif;?><?php echo $aLang['TAB_'.$iStepId.'_DESC'] ?><?php if( $blAct ): ?></a><?php endif;?></dd>
+            <dt><?php if ($blAct) { ?><a href="index.php?istep=<?php echo $_tab; ?>&sid=<?php echo getSID();?>"><?php } /* end if */ ?><?php echo $iCntr ,'. ',$aLang['TAB_'.$iStepId.'_TITLE']; ?><?php if ($blAct) { ?></a><?php } ?></dt>
+            <dd><?php if ($blAct) { ?><a href="index.php?istep=<?php echo $_tab; ?>&sid=<?php echo getSID();?>"><?php } /* end if */ ?><?php echo $aLang['TAB_'.$iStepId.'_DESC'] ?><?php                if ($blAct) { ?></a><?php } ?></dd>
         </dl>
         <?php } ?>
     </div>

@@ -19,7 +19,7 @@
  * @package views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: payment.php 23976 2009-11-12 14:27:42Z vilma $
+ * $Id: payment.php 24859 2010-01-08 13:18:38Z alfonsas $
  */
 
 /**
@@ -346,6 +346,8 @@ class Payment extends oxUBase
             list( $aAllSets, $sActShipSet, $aPaymentList ) = oxDeliverySetList::getInstance()->getDeliverySetData( $sActShipSet, $this->getUser(), $oBasket );
 
             oxSession::setVar( 'sShipSet', $sActShipSet );
+            $oBasket->setShipping( $sActShipSet );
+
             // calculating payment expences for preview for each payment
             $this->_setDeprecatedValues( $aPaymentList, $oBasket );
             $this->_oPaymentList = $aPaymentList;
