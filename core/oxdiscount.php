@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxdiscount.php 23995 2009-11-17 13:33:13Z  $
+ * $Id: oxdiscount.php 25340 2010-01-22 12:59:13Z tomas $
  */
 
 /**
@@ -202,9 +202,10 @@ class oxDiscount extends oxI18n
             }
 
             if ( $blForBasketItem ) {
+                $dRate = $oBasket->getBasketCurrency()->rate;
                 if ( $this->oxdiscount__oxprice->value ) {
                     if ( ( $oPrice = $oBasketArticle->getPrice() ) ) {
-                        $dAmount += $oPrice->getBruttoPrice() * $oBasketItem->getAmount();
+                        $dAmount += ($oPrice->getBruttoPrice() * $oBasketItem->getAmount())/$dRate;
                     }
                 } elseif ( $this->oxdiscount__oxamount->value ) {
                     $dAmount += $oBasketItem->getAmount();
@@ -225,6 +226,7 @@ class oxDiscount extends oxI18n
     public function isForAmount( $dAmount )
     {
         $blIs = true;
+
         if ( $this->oxdiscount__oxprice->value &&
             ( $dAmount < $this->oxdiscount__oxprice->value || $dAmount > $this->oxdiscount__oxpriceto->value ) ) {
             $blIs = false;
