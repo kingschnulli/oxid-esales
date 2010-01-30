@@ -19,7 +19,7 @@
  * @package admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: user_address.php 24973 2010-01-14 07:24:06Z arvydas $
+ * $Id: user_address.php 25428 2010-01-29 15:10:38Z sarunas $
  */
 
 /**
@@ -124,6 +124,5 @@ class User_Address extends oxAdminDetails
                 $this->_blDelete = $oAdress->delete( $aParams['oxaddress__oxid'] );
             }
         }
-        return $this->_blDelete;
     }
 }

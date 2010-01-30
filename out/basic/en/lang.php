@@ -19,17 +19,8 @@
  * @package lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: lang.php 24254 2009-11-25 17:08:49Z tomas $
+ * $Id: lang.php 25406 2010-01-28 08:03:06Z dainius.bigelis $
  */
-
-
-/* -----------------------
---  ADAPTING THIS FILE  --
---------------------------
-If you want to adapt this language file, use cust_lang.php instead.
-Further information is available in the manual at
-http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/editing-language-files
-*/
 
 
 /* -----------------------

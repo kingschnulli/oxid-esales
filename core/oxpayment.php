@@ -19,7 +19,7 @@
  * @package core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxpayment.php 23857 2009-11-05 15:17:36Z arvydas $
+ * $Id: oxpayment.php 25425 2010-01-29 14:54:24Z sarunas $
  */
 
 /**
@@ -250,6 +250,15 @@ class oxPayment extends oxI18n
         if ( $this->oxpayments__oxid->value == 'oxempty' ) {
             // inactive or blOtherCountryOrder is off
             if ( !$this->oxpayments__oxactive->value || !$myConfig->getConfigParam( "blOtherCountryOrder" ) ) {
+                $this->_iPaymentError = -2;
+                return false;
+            }
+            if (count(oxDeliverySetList::getInstance()
+                            ->getDeliverySetList(
+                                        $oUser,
+                                        $oUser->getActiveCountry()
+                                )
+                    )) {
                 $this->_iPaymentError = -3;
                 return false;
             }
