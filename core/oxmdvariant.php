@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxmdvariant.php 20503 2009-10-15 14:54:11Z tomas $
+ * @version   SVN: $Id: oxmdvariant.php 20503 2009-10-15 14:54:11Z tomas $
  */
 
 /**
@@ -207,6 +207,8 @@ class oxMdVariant extends oxSuperCfg
      * Name setter
      *
      * @param string $sName New name
+     *
+     * @return null;
      */
     public function setName($sName)
     {
@@ -304,6 +306,7 @@ class oxMdVariant extends oxSuperCfg
     /**
      * Inits MD variant by name. In case $aNames parameter has more than one element addNames recursively adds names for subvariants.
      *
+     * @param string     $sArtId Article ID
      * @param array[int] $aNames Expected array of $sKey=>$sName pairs.
      * @param double     $dPrice Price as double
      * @param string     $sUrl   Article URL
@@ -367,7 +370,6 @@ class oxMdVariant extends oxSuperCfg
     /**
      * Adds one subvariant to subvariant set
      *
-     * @param string      $sKey        Article id
      * @param OxMdVariant $oSubvariant Subvariant
      *
      * @return null

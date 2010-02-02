@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: deliveryset_users.php 24711 2009-12-18 15:33:00Z arvydas $
+ * @version   SVN: $Id: deliveryset_users.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -83,7 +83,7 @@ class DeliverySet_Users extends oxAdminDetails
             $this->_aViewData['oxajax'] = $aColumns;
 
             return "popups/deliveryset_groups.tpl";
-        } elseif ( $iAoc == 2 ){
+        } elseif ( $iAoc == 2 ) {
 
             include_once 'inc/deliveryset_users.inc.php';
             $this->_aViewData['oxajax'] = $aColumns;

@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxlang.php 24311 2009-11-27 15:15:10Z arvydas $
+ * @version   SVN: $Id: oxlang.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 /**
@@ -593,7 +593,8 @@ class oxLang extends oxSuperCfg
             $aLangCache[$iLang] = array();
             $sBaseCharset = false;
             foreach ( $aLangFiles as $sLangFile ) {
-                require $sLangFile;
+
+                include $sLangFile;
 
                 // including only (!) thoose, which has charset defined
                 if ( isset( $aLang['charset'] ) ) {

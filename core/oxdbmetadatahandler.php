@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxdbmetadatahandler.php 23405 2009-10-20 15:29:03Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxdbmetadatahandler.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 /**
@@ -70,11 +70,11 @@ class oxDbMetaDataHandler extends oxSuperCfg
     {
 
         if ( empty($this->_aDbTablesFields[$sTableName]) ) {
-            $oaFields = oxDb::getInstance()->getTableDescription( $sTableName );
+            $aFields = oxDb::getInstance()->getTableDescription( $sTableName );
 
             $this->_aDbTablesFields[$sTableName] = array();
 
-            foreach( $oaFields as $oField ) {
+            foreach ( $aFields as $oField ) {
                 $this->_aDbTablesFields[$sTableName][] = $oField->name;
             }
         }
@@ -192,7 +192,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
 
         if ( !empty($aIndexes) ) {
 
-            foreach( $aIndexes as $sIndexSql ) {
+            foreach ( $aIndexes as $sIndexSql ) {
                 if ( preg_match("/\([^)]*\b" . $sOldFieldName . "\b[^)]*\)/i", $sIndexSql )  ) {
 
                     //removing index name - new will be added automaticly
@@ -229,7 +229,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
         $aIds = array();
 
         //checking max "oxarticles" table field "oxtitle" lang suffics value (_1 ,_2 ...)
-        foreach( $aFields as $sFieldName ) {
+        foreach ( $aFields as $sFieldName ) {
             if ( preg_match("/^OXTITLE_(\d+)$/i", $sFieldName, $aMatches) ) {
                 $aIds[] = (int) $aMatches[1];
             }
@@ -264,7 +264,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
         $aFields = $this->getFields( $sTableName );
         $aMultiLangFields = array();
 
-        foreach( $aFields as $sFieldName ) {
+        foreach ( $aFields as $sFieldName ) {
             if ( preg_match("/(.+)_1$/", $sFieldName, $aMatches) ) {
                 $aMultiLangFields[] = $aMatches[1];
             }
@@ -277,8 +277,9 @@ class oxDbMetaDataHandler extends oxSuperCfg
      * Add new multilanguages fields to table. Dublicates all multilanguage
      * fields and fields indexes with next available language ID
      *
-     *  @param string $sTableName table name
+     * @param string $sTableName table name
      *
+     * @return null
      */
     public function addNewMultilangField( $sTableName )
     {
@@ -290,7 +291,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
         $iCurrentMaxLangId = $this->getCurrentMaxLangId();
 
         if ( is_array($aFields) && count($aFields) > 0 ) {
-            foreach( $aFields as $sFieldName ) {
+            foreach ( $aFields as $sFieldName ) {
                 $sNewFieldName = $sFieldName . "_" . $iLangNewBaseId;
                 $sLastMultilangFieldName = ( !empty($iCurrentMaxLangId) ) ? $sFieldName . "_" .  $iCurrentMaxLangId : $sFieldName;
 
@@ -316,10 +317,14 @@ class oxDbMetaDataHandler extends oxSuperCfg
         }
     }
 
-
     /**
      * Reseting all multilanguage fields with specific language id
      * to default value in selected table
+     *
+     * @param int    $iLangId    Language id
+     * @param string $sTableName Table name
+     *
+     * @return null
      */
     public function resetMultilangFields( $iLangId, $sTableName )
     {
@@ -333,7 +338,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
 
         $aFields = $this->getMultilangFields( $sTableName );
         if ( is_array($aFields) && count($aFields) > 0 ) {
-            foreach( $aFields as $sFieldName ) {
+            foreach ( $aFields as $sFieldName ) {
                 $sFieldName = $sFieldName . "_" . $iLangId;
 
                 if ( $this->fieldExists( $sFieldName, $sTableName ) ) {
@@ -358,7 +363,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
     {
         $aTable = $this->getAllTables();
 
-        foreach( $aTable as $sTableName ) {
+        foreach ( $aTable as $sTableName ) {
             $this->addNewMultilangField( $sTableName );
         }
     }
@@ -367,6 +372,9 @@ class oxDbMetaDataHandler extends oxSuperCfg
      * Reseting all multilanguage fields with specific language id
      * to default value in all tables. Only if language ID > 0.
      *
+     * @param int $iLangId Language id
+     *
+     * @return null
      */
     public function resetLanguage( $iLangId )
     {
@@ -384,7 +392,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
             }
         }
 
-        foreach( $aTables as $sTableName ) {
+        foreach ( $aTables as $sTableName ) {
             $this->resetMultilangFields( $iLangId, $sTableName );
         }
     }
@@ -392,7 +400,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
     /**
      * Executes arrary of sql strings
      *
-     * @param array $aSql
+     * @param array $aSql SQL query array
      *
      * @return null
      */
@@ -401,7 +409,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
         $oDb = oxDb::getDb();
 
         if ( is_array($aSql) && !empty($aSql) ) {
-            foreach( $aSql as $sSql) {
+            foreach ( $aSql as $sSql) {
                 $oDb->execute( $sSql );
             }
         }

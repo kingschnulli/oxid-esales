@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxajax.php 25048 2010-01-15 10:26:40Z tomas $
+ * @version   SVN: $Id: oxajax.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 // shop path for includes
@@ -48,7 +48,7 @@ if ( !function_exists( 'isAdmin' )) {
     }
 }
 
-include_once getShopBasePath() . 'core/oxsupercfg.php';
+require_once getShopBasePath() . 'core/oxsupercfg.php';
 
 /**
  * AJAX call processor class
@@ -529,7 +529,7 @@ class ajaxListComponent extends oxSuperCfg
     /**
      * Marks article seo url as expired
      *
-     * @param array $aArtId article id's
+     * @param array $aArtIds article id's
      *
      * @return null
      */
@@ -562,8 +562,8 @@ class ajaxListComponent extends oxSuperCfg
      * Resets counters values from cache. Resets price category articles, category articles,
      * vendor articles, manufacturer articles count.
      *
-     * @param $sCounterType counter type
-     * @param $sValue reset value
+     * @param string $sCounterType counter type
+     * @param string $sValue       reset value
      *
      * @return null
      */

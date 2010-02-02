@@ -15,16 +15,16 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxfield.php 25283 2010-01-21 08:27:03Z sarunas $
+ * @version   SVN: $Id: oxfield.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 /**
  * Database field description object.
- * 
+ *
  * when a value is requested from oxField, it either takes 'value' field or
  * 'rawValue' (depending which one is available).
  * In case 'rawValue' is taken, it is escaped first before returning.

@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package views
+ * @link      http://www.oxid-esales.com
+ * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxviewconfig.php 21697 2009-08-19 13:09:31Z vilma $
+ * @version   SVN: $Id: oxviewconfig.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -85,7 +85,7 @@ class oxViewConfig extends oxSuperCfg
     public function getActTplName()
     {
         $sTplName = oxConfig::getParameter( 'tpl' );
-        // #M1176: Logout from CMS page 
+        // #M1176: Logout from CMS page
         if ( !$sTplName ) {
             $sTplName = $this->getViewConfigParam('tpl');
         }

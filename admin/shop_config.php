@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: shop_config.php 24973 2010-01-14 07:24:06Z arvydas $
+ * @version   SVN: $Id: shop_config.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -202,7 +202,7 @@ class Shop_Config extends oxAdminDetails
 
         if ( is_array( $aConfAarrs ) ) {
             foreach ( $aConfAarrs as $sVarName => $aVarVal ) {
-                $myConfig->saveShopConfVar( "aarr", $sVarName, $this->_multilineToAarray( $aVarVal ) , $sOxId );
+                $myConfig->saveShopConfVar( "aarr", $sVarName, $this->_multilineToAarray( $aVarVal ), $sOxId );
             }
         }
     }

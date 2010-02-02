@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: object_seo.php 24860 2010-01-08 13:30:15Z arvydas $
+ * @version   SVN: $Id: object_seo.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -105,6 +105,7 @@ class Object_Seo extends oxAdminDetails
      * Returns query for selecting seo url
      *
      * @param object $oObject object to build query
+     * @param int    $iShopId shop id
      *
      * @return string
      */
@@ -115,6 +116,9 @@ class Object_Seo extends oxAdminDetails
 
     /**
      * Returns seo object
+     *
+     * @param string $sOxid object id
+     *
      * @return mixed
      */
     protected function _getObject( $sOxid )
@@ -133,12 +137,18 @@ class Object_Seo extends oxAdminDetails
 
     /**
      * Returns url type
+     *
      * @return string
      */
-    protected function _getType() {}
+    protected function _getType()
+    {
+    }
 
     /**
      * Returns objects std url
+     *
+     * @param string $sOxid object id
+     *
      * @return string
      */
     protected function _getStdUrl( $sOxid )

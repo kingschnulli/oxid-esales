@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: article_variant.php 23364 2009-10-20 07:18:49Z vilma $
+ * @version   SVN: $Id: article_variant.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -106,20 +106,20 @@ class Article_Variant extends oxAdminDetails
     /**
      * Saves article variant.
      *
-     * @param string $soxId
-     * @param array  $aParams
+     * @param string $sOXID   Object ID
+     * @param array  $aParams Parameters
      *
      * @return null
      */
-    public function savevariant($soxId = null, $aParams = null)
+    public function savevariant($sOXID = null, $aParams = null)
     {
         $myConfig  = $this->getConfig();
 
         //if (!oxConfig::getParameter( "editlanguage"))
         //    oxSession::setVar( "editlanguage", $this->_iEditLang);
 
-        if (!isset($soxId) && !isset($aParams)) {
-            $soxId      = oxConfig::getParameter( "voxid");
+        if (!isset($sOXID) && !isset($aParams)) {
+            $sOXID      = oxConfig::getParameter( "voxid");
             $aParams    = oxConfig::getParameter( "editval");
         }
 
@@ -151,8 +151,8 @@ class Article_Variant extends oxAdminDetails
         $oArticle->oxarticles__oxshopincl->value;
         $oArticle->oxarticles__oxshopexcl->value;*/
 
-        if ( $soxId != "-1") {
-            $oArticle->loadInLang( $this->_iEditLang, $soxId );
+        if ( $sOXID != "-1") {
+            $oArticle->loadInLang( $this->_iEditLang, $sOXID );
         }
 
 
@@ -235,6 +235,7 @@ class Article_Variant extends oxAdminDetails
 
 
     /**
+     * Add selection list
      *
      * @return null
      */
@@ -244,7 +245,7 @@ class Article_Variant extends oxAdminDetails
 
         $aSels = oxConfig::getParameter("allsel");
         $sParentID = oxConfig::getParameter("oxid");
-        
+
         $oArticle = oxNew("oxarticle");
         $oArticle->setEnableMultilang(false);
         $oArticle->load($sParentID);
@@ -252,8 +253,8 @@ class Article_Variant extends oxAdminDetails
 
 
         if ($aSels) {
-	        $oVariantHandler = oxNew("oxVariantHandler");
-	        $oVariantHandler->genVariantFromSell( $aSels, $oArticle );
+            $oVariantHandler = oxNew("oxVariantHandler");
+            $oVariantHandler->genVariantFromSell( $aSels, $oArticle );
         }
     }
 }

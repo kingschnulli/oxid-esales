@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: article_list.php 24706 2009-12-17 19:21:54Z alfonsas $
+ * @version   SVN: $Id: article_list.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -147,7 +147,7 @@ class Article_List extends oxAdminList
     /**
      * Sets articles sorting by category.
      *
-     * @param string $sSQL sql string
+     * @param string $sSql sql string
      *
      * @return string
      */

@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxseodecoder.php 22590 2009-09-24 06:24:00Z alfonsas $
+ * @version   SVN: $Id: oxseodecoder.php 25471 2010-02-01 14:35:11Z alfonsas $
  */
 
 /**
@@ -145,7 +145,8 @@ class oxSeoDecoder extends oxSuperCfg
         if ( !$sRequest ) {
             if ( isset( $_SERVER['REQUEST_URI'] ) && $_SERVER['REQUEST_URI'] ) {
                 $sRequest = $_SERVER['REQUEST_URI'];
-            } else {    // try something else
+            } else {
+                // try something else
                 $sRequest = $_SERVER['SCRIPT_URI'];
             }
         }
@@ -163,7 +164,8 @@ class oxSeoDecoder extends oxSuperCfg
             } elseif ( ( $sRedirectUrl = $this->_decodeSimpleUrl( $sParams ) ) ) {
                 // old type II seo urls
                 oxUtils::getInstance()->redirect( $this->getConfig()->getShopURL().$sRedirectUrl, false );
-            } else { // unrecognized url
+            } else {
+                // unrecognized url
                 error_404_handler( $sParams );
             }
         }

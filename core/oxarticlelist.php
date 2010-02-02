@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxarticlelist.php 25275 2010-01-20 14:47:05Z arvydas $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 25484 2010-02-01 19:23:52Z alfonsas $
  */
 
 /**
@@ -661,9 +661,9 @@ class oxArticleList extends oxList
         $oTagHandler = oxNew( 'oxtagcloud' );
         $sTag = $oTagHandler->prepareTags( $sTag );
 
-        $sQ = "select {$sArticleFields} from oxartextends inner join {$sArticleTable} on
-               {$sArticleTable}.oxid = oxartextends.oxid where match ( oxartextends.oxtags{$sLangExt} )
-               against( ".oxDb::getDb()->quote( $sTag )." )";
+        $sQ = "select {$sArticleFields} from oxartextends inner join {$sArticleTable} on ".
+              "{$sArticleTable}.oxid = oxartextends.oxid where match ( oxartextends.oxtags{$sLangExt} ) ".
+              "against( ".oxDb::getDb()->quote( $sTag )." )";
 
         // checking stock etc
         if ( ( $sActiveSnippet = $oListObject->getSqlActiveSnippet() ) ) {
@@ -701,10 +701,10 @@ class oxArticleList extends oxList
         $oTagHandler = oxNew( 'oxtagcloud' );
         $sTag = $oTagHandler->prepareTags( $sTag );
 
-        $sQ = "select oxartextends.oxid from oxartextends inner join {$sArticleTable} on
-               {$sArticleTable}.oxid = oxartextends.oxid where {$sArticleTable}.oxissearch = 1 and
-               match ( oxartextends.oxtags{$sLangExt} )
-               against( ".oxDb::getDb()->quote( $sTag )." )";
+        $sQ = "select oxartextends.oxid from oxartextends inner join {$sArticleTable} on ".
+              "{$sArticleTable}.oxid = oxartextends.oxid where {$sArticleTable}.oxissearch = 1 and ".
+              "match ( oxartextends.oxtags{$sLangExt} ) ".
+              "against( ".oxDb::getDb()->quote( $sTag )." )";
 
         // checking stock etc
         if ( ( $sActiveSnippet = $oListObject->getSqlActiveSnippet() ) ) {

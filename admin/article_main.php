@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: article_main.php 25257 2010-01-20 09:36:08Z arvydas $
+ * @version   SVN: $Id: article_main.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -263,7 +263,6 @@ class Article_Main extends oxAdminDetails
      * @param string $sOldId    old product id (default null)
      * @param string $sNewId    new product id (default null)
      * @param string $sParentId product parent id
-     * @param bool
      *
      * @return null
      */
@@ -359,8 +358,8 @@ class Article_Main extends oxAdminDetails
     /**
      * Copying category assignments
      *
-     * @param $sOldId string Id from old article
-     * @param $sNewId string Id from new article
+     * @param string $sOldId Id from old article
+     * @param string $sNewId Id from new article
      *
      * @return null
      */
@@ -393,8 +392,8 @@ class Article_Main extends oxAdminDetails
     /**
      * Copying attributes assignments
      *
-     * @param $sOldId string Id from old article
-     * @param $sNewId string Id from new article
+     * @param string $sOldId Id from old article
+     * @param string $sNewId Id from new article
      *
      * @return null
      */
@@ -422,8 +421,8 @@ class Article_Main extends oxAdminDetails
     /**
      * Copying selectlists assignments
      *
-     * @param $sOldId string Id from old article
-     * @param $sNewId string Id from new article
+     * @param string $sOldId Id from old article
+     * @param string $sNewId Id from new article
      *
      * @return null
      */
@@ -447,8 +446,8 @@ class Article_Main extends oxAdminDetails
     /**
      * Copying crossseling assignments
      *
-     * @param $sOldId string Id from old article
-     * @param $sNewId string Id from new article
+     * @param string $sOldId Id from old article
+     * @param string $sNewId Id from new article
      *
      * @return null
      */
@@ -472,8 +471,8 @@ class Article_Main extends oxAdminDetails
     /**
      * Copying accessoires assignments
      *
-     * @param $sOldId string Id from old article
-     * @param $sNewId string Id from new article
+     * @param string $sOldId Id from old article
+     * @param string $sNewId Id from new article
      *
      * @return null
      */
@@ -497,8 +496,8 @@ class Article_Main extends oxAdminDetails
     /**
      * Copying staffelpreis assignments
      *
-     * @param $sOldId string Id from old article
-     * @param $sNewId string Id from new article
+     * @param string $sOldId Id from old article
+     * @param string $sNewId Id from new article
      *
      * @return null
      */
@@ -521,8 +520,8 @@ class Article_Main extends oxAdminDetails
     /**
      * Copying article extends
      *
-     * @param $sOldId string Id from old article
-     * @param $sNewId string Id from new article
+     * @param string $sOldId Id from old article
+     * @param string $sNewId Id from new article
      *
      * @return null
      */
@@ -688,7 +687,7 @@ class Article_Main extends oxAdminDetails
     /**
      * Returns formed variant title
      *
-     * @param object &$oObj product object
+     * @param object $oObj product object
      *
      * @return string
      */

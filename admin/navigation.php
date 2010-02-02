@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: navigation.php 24860 2010-01-08 13:30:15Z arvydas $
+ * @version   SVN: $Id: navigation.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
  /**
  * Administrator GUI navigation manager class.
@@ -46,18 +46,15 @@ class Navigation extends oxAdminView
         $myUtilsServer = oxUtilsServer::getInstance();
 
         $sItem = oxConfig::getParameter("item");
-        if (! isset ($sItem) || !$sItem)
-        {
+        if (! isset ($sItem) || !$sItem) {
             $sItem = "nav_frame.tpl";
 
             $aFavorites = oxConfig::getParameter("favorites");
-            if (is_array($aFavorites))
-            {
+            if (is_array($aFavorites)) {
                 $myUtilsServer->setOxCookie('oxidadminfavorites', implode('|', $aFavorites));
             }
 
-        } else
-        {
+        } else {
 
             // set menu structure
             $this->_aViewData["menustructure"] = $this->getNavigation()->getDomXml()->documentElement->childNodes;
@@ -67,15 +64,12 @@ class Navigation extends oxAdminView
             $this->_aViewData["sVersion"] = trim($sVersion);
 
             //checking requirements if this is not nav frame reload
-            if (!oxConfig::getParameter("navReload"))
-            {
+            if (!oxConfig::getParameter("navReload")) {
                 // #661 execute stuff we run each time when we start admin once
-                if ('home.tpl' == $sItem)
-                {
+                if ('home.tpl' == $sItem) {
                     $this->_aViewData['aMessage'] = $this->_doStartUpChecks();
                 }
-            } else
-            {
+            } else {
                 //removing reload param to force requirements checking next time
                 oxSession::deleteVar("navReload");
             }
@@ -83,16 +77,14 @@ class Navigation extends oxAdminView
             // favorite navigation
             $aFavorites = explode('|', $myUtilsServer->getOxCookie('oxidadminfavorites'));
 
-            if (is_array($aFavorites) && count($aFavorites))
-            {
+            if (is_array($aFavorites) && count($aFavorites)) {
                 $this->_aViewData["menufavorites"] = $this->getNavigation()->getListNodes($aFavorites);
                 $this->_aViewData["aFavorites"] = $aFavorites;
             }
 
             // history navigation
             $aHistory = explode('|', $myUtilsServer->getOxCookie('oxidadminhistory'));
-            if (is_array($aHistory) && count($aHistory))
-            {
+            if (is_array($aHistory) && count($aHistory)) {
                 $this->_aViewData["menuhistory"] = $this->getNavigation()->getListNodes($aHistory);
             }
 
@@ -105,8 +97,7 @@ class Navigation extends oxAdminView
 
         $sWhere = '';
         $blisMallAdmin = oxSession::getVar('malladmin');
-        if (!$blisMallAdmin)
-        {
+        if (!$blisMallAdmin) {
             // we only allow to see our shop
             $sShopID = oxSession::getVar("actshop");
             $sWhere = "where oxshops.oxid = '$sShopID'";
@@ -238,11 +229,9 @@ class Navigation extends oxAdminView
             $sVersion = 'CE';
 
         $sQuery = 'http://admin.oxid-esales.com/'.$sVersion.'/onlinecheck.php?getlatestversion';
-        if ($sVersion = oxUtilsFile::getInstance()->readRemoteFileAsString($sQuery))
-        {
+        if ($sVersion = oxUtilsFile::getInstance()->readRemoteFileAsString($sQuery)) {
             // current version is older ..
-            if (version_compare($this->getConfig()->getVersion(), $sVersion) == '-1')
-            {
+            if (version_compare($this->getConfig()->getVersion(), $sVersion) == '-1') {
                 return sprintf(oxLang::getInstance()->translateString('NAVIGATION_NEWVERSIONAVAILABLE'), $sVersion);
             }
         }

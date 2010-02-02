@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package lang
+ * @link      http://www.oxid-esales.com
+ * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: lang.php 24709 2009-12-18 15:26:22Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /*
@@ -1604,7 +1604,7 @@ $aLang = array(
 'GENEXPORT_MENUITEM'                            => 'Service',
 'GENEXPORT_MENUSUBITEM'                         => 'Product Export',
 
-# menu
+/* menu */
 'dyn_menu'                                      => 'Servicearea',
 'dyn_about'                                     => 'General',
 'dyn_interface'                                 => 'Interface',
@@ -1656,7 +1656,7 @@ $aLang = array(
 'mxpacklist'                                    => 'Packing List',
 'mxshow'                                        => 'Stats & Log-Maint.',
 'mxstat'                                        => 'Statistics',
-# tabs
+/* tabs */
 'tbclorder_iPayment'                            => 'IPayment',
 // newsletter_list',
 'tbclnewsletter_main'                           => 'HTML',

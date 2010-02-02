@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxarticle.php 24927 2010-01-12 14:08:25Z tomas $
+ * @version   SVN: $Id: oxarticle.php 25483 2010-02-01 16:34:01Z alfonsas $
  */
 
 // defining supported link types
@@ -1694,6 +1694,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Calculates and returns price of article (adds taxes and discounts).
      *
+     * @param double $dAmount article amount
+     *
      * @return oxPrice
      */
     public function getPrice( $dAmount = 1 )
@@ -2310,7 +2312,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Gets article link
      *
-     * @param int $iLang language id [optional]
+     * @param int  $iLang  language id [optional]
      * @param bool $blMain force to return main url [optional]
      *
      * @return string
@@ -2838,8 +2840,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
     /**
      * Removes object data fields (oxarticles__oxtimestamp, oxarticles__oxparentid, oxarticles__oxinsert).
-     */
-    /**
+     *
      * @return null
      */
     protected function _skipSaveFields()
@@ -2939,7 +2940,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Modifies article price according to selected select list value
      *
-     * @param double &$dPrice     Modifyable price
+     * @param double $dPrice      Modifyable price
      * @param array  $aChosenList Selection list array
      *
      * @return double

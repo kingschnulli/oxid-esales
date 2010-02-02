@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: pricealarm_send.php 24895 2010-01-12 07:32:33Z arvydas $
+ * @version   SVN: $Id: pricealarm_send.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -61,7 +61,7 @@ class PriceAlarm_Send extends oxAdminList
                 $rs = $oDB->Execute( $sSelect);
             }
 
-            $iAllCnt_counting=0;
+            $iAllCntTmp=0;
 
             if ($rs != false && $rs->recordCount() > 0) {
                 while (!$rs->EOF) {
@@ -69,7 +69,7 @@ class PriceAlarm_Send extends oxAdminList
                     $oArticle->load($rs->fields['oxid']);
                     if ($oArticle->getPrice()->getBruttoPrice() <= $rs->fields['oxprice']) {
                         $this->sendeMail( $rs->fields['oxemail'], $rs->fields['oxartid'], $rs->fields['oxid'], $rs->fields['oxprice']);
-                        $iAllCnt_counting++;
+                        $iAllCntTmp++;
                     }
                     $rs->moveNext();
                 }
@@ -77,7 +77,7 @@ class PriceAlarm_Send extends oxAdminList
             if ( !isset( $iStart)) {
                 // first call
                 $iStart     = 0;
-                $iAllCnt    = $iAllCnt_counting;
+                $iAllCnt    = $iAllCntTmp;
             }
 
 
@@ -101,6 +101,8 @@ class PriceAlarm_Send extends oxAdminList
      * Overrides parent method to pass referred id
      *
      * @param string $sId class name
+     *
+     * @return null
      */
     protected function _setupNavigation( $sId )
     {
@@ -164,7 +166,7 @@ class PriceAlarm_Send extends oxAdminList
         $smarty->assign( "product", $oArticle );
         $smarty->assign( "bidprice", $oLang->formatCurrency( $sBidPrice, $oThisCurr ) );
         $smarty->assign( "currency", $oThisCurr );
-        $smarty->assign( "shopImageDir", $myConfig->getImageUrl( false , false ) );
+        $smarty->assign( "shopImageDir", $myConfig->getImageUrl( false, false ) );
 
         $iLang = (int) $oAlarm->oxpricealarm__oxlang->value;
 

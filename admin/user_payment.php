@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: user_payment.php 23969 2009-11-12 12:32:51Z vilma $
+ * @version   SVN: $Id: user_payment.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -51,7 +51,7 @@ class User_Payment extends oxAdminDetails
     protected $_sPaymentId = null;
 
     /**
-     * List of all payments 
+     * List of all payments
      *
      * @var object
      */
@@ -151,7 +151,7 @@ class User_Payment extends oxAdminDetails
     public function getUser()
     {
         if ( $this->_oActiveUser == null ) {
-        	$this->_oActiveUser = false;
+            $this->_oActiveUser = false;
             $sOxId = oxConfig::getParameter( "oxid");
             if ( $sOxId != "-1" && isset( $sOxId)) {
                 // load object
@@ -172,12 +172,12 @@ class User_Payment extends oxAdminDetails
         if ( $this->_sPaymentId == null ) {
             $this->_sPaymentId = oxConfig::getParameter( "oxpaymentid");
             if ( !$this->_sPaymentId || $this->_blDelete ) {
-	            if ( $oUser = $this->getUser() ) {
-	               $oUserPayments = $oUser->getUserPayments();
-	               if ( isset( $oUserPayments[0]) ) {
-	                   $this->_sPaymentId = $oUserPayments[0]->oxuserpayments__oxid->value;
-	               }
-	            }
+                if ( $oUser = $this->getUser() ) {
+                   $oUserPayments = $oUser->getUserPayments();
+                   if ( isset( $oUserPayments[0]) ) {
+                       $this->_sPaymentId = $oUserPayments[0]->oxuserpayments__oxid->value;
+                   }
+                }
             }
             if ( !$this->_sPaymentId ) {
                 $this->_sPaymentId = "-1";
@@ -251,17 +251,17 @@ class User_Payment extends oxAdminDetails
                 $sTplLang = oxLang::getInstance()->getTplLanguage();
                 $sPaymentId = $this->getPaymentId();
                 $this->_oUserPayments = $oUser->getUserPayments();
-	            // generate selected
-	            foreach ( $this->_oUserPayments as $oUserPayment ) {
-	                $oPayment = oxNew( 'oxpayment' );
-	                $oPayment->setLanguage( $sTplLang );
-	                $oPayment->load( $oUserPayment->oxuserpayments__oxpaymentsid->value );
-	                $oUserPayment->oxpayments__oxdesc = clone $oPayment->oxpayments__oxdesc;
-	                if ( $oUserPayment->oxuserpayments__oxid->value == $sPaymentId ) {
-	                    $oUserPayment->selected = 1;
-	                    break;
-	                }
-	            }
+                // generate selected
+                foreach ( $this->_oUserPayments as $oUserPayment ) {
+                    $oPayment = oxNew( 'oxpayment' );
+                    $oPayment->setLanguage( $sTplLang );
+                    $oPayment->load( $oUserPayment->oxuserpayments__oxpaymentsid->value );
+                    $oUserPayment->oxpayments__oxdesc = clone $oPayment->oxpayments__oxdesc;
+                    if ( $oUserPayment->oxuserpayments__oxid->value == $sPaymentId ) {
+                        $oUserPayment->selected = 1;
+                        break;
+                    }
+                }
             }
         }
         return $this->_oUserPayments;

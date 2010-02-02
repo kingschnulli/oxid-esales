@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oximex.php 24800 2010-01-05 14:45:32Z vilma $
+ * @version   SVN: $Id: oximex.php 25471 2010-02-01 14:35:11Z alfonsas $
  */
 
 /**
@@ -125,7 +125,7 @@ class oxImex extends oxBase
         $oDB = oxDb::getDb();
 
         $sWhere = "";
-        $sInGroup = implode(',',oxDb::getInstance()->quoteArray(array_keys($aGroups)));
+        $sInGroup = implode(',', oxDb::getInstance()->quoteArray(array_keys($aGroups)));
 
         $sSelect  = "select count(".$this->getViewName().".oxid) from ".$this->getViewName()." ";
         $sSelect .= "left join oxobject2group on ".$this->getViewName().".oxid=oxobject2group.oxobjectid ";
@@ -136,7 +136,8 @@ class oxImex extends oxBase
         }
 
         $iSize = $oDB->getOne( $sSelect);
-        if ( $iStart < $iSize) {   // #387A creating object to fetch field information
+        if ( $iStart < $iSize) {
+            // #387A creating object to fetch field information
             $oObj = oxNew( "oxbase" );
             $oObj->init($this->getViewName());
 
@@ -161,7 +162,8 @@ class oxImex extends oxBase
                 foreach ( $rs->fields as $iNum => $field) {
                     $sLine .= $myConfig->getConfigParam( 'sCSVSign' );
 
-                    if ( !is_numeric( $field)) {   // #387A
+                    if ( !is_numeric( $field)) {
+                        // #387A
                         $oFieldObj = null;
                         $aIdx2FldName = $oObj->getIdx2FldName();
                         if ( isset($aIdx2FldName[$iNum])) {
@@ -213,7 +215,8 @@ class oxImex extends oxBase
 
         if ( $iStart < $iSize) {
             $fp = fopen( $sFilepath, "ab");
-            if ( !$iStart) {   // first time, write header
+            if ( !$iStart) {
+                // first time, write header
                 fwrite( $fp, "\"Artikelnummer\";\"Bezeichnung\";\"Einheit\";\"Gewicht\";\"Matchcode\";\"Preis pro Anzahl\";\"Warengruppe\";\"Warengr.-Kurzbez.\";\"Warengr.-Steuersatz\";\"Warengr.-Konto Inland\";\"Warengr.-Konto Ausland\";\"Warengr.-Konto EG\";\"Preis 1\";\"Preis 2\";\"Preis 3\";\"Preis I/1\";\"Preis I/2\";\"Preis I/3\";\"Preis II/1\";\"Preis II/2\";\"Preis II/3\";\"Preis III/1\";\"Preis III/2\";\"Preis III/3\";\"B/N\";\"Lagerartikel\";\"EK 1\";\"Währung EK1\";\"EK 2\";\"Währung EK2\";\"Staffelmenge 1\";\"Staffelmenge 2\";\"Staffelmenge 3\";\"Lieferantennummer 1\";\"Lieferantennummer 2\";\"Bestellmenge Lf.1\";\"Bestellmenge Lf.2\";\"Bestellnr. Lf.1\";\"Bestellnr. Lf.2\";\"Lieferzeit Lf.1\";\"Lieferzeit Lf.2\";\"Lagerbestand\";\"Mindestbestand\";\"Lagerort\";\"Bestellte Menge\";\"Stückliste\";\"Internet\";\"Text\"\r\n");
             }
             $oldMode = $oDB->setFetchMode( ADODB_FETCH_ASSOC);
@@ -431,7 +434,8 @@ class oxImex extends oxBase
         for ( $i = 0; $i<=$iEnd; $i++) {
             $aData = $this->_oxFGetCsv( $fp, 40960, $myConfig->getConfigParam( 'sCSVSign' ) );
 
-            if ( $aData && $i >= $iStart) {   // import
+            if ( $aData && $i >= $iStart) {
+                // import
 
                 // read table description if needed
                 $sTable = $aData[0];
@@ -521,7 +525,7 @@ class oxImex extends oxBase
 
             $sExport  = "<Bestellung " . $this->_convertStr( "zurückgestellt" ) . "=\"Nein\" bearbeitet=\"Nein\" " . $this->_convertStr( "übertragen" ) . "=\"Nein\">$sNewLine";
             $sExport .= "<Bestellnummer>".$oOrder->oxorder__oxordernr->value."</Bestellnummer>$sNewLine";
-			$sExport .= "<Rechnungsnummer>".$oOrder->oxorder__oxbillnr->value."</Rechnungsnummer>$sNewLine";
+            $sExport .= "<Rechnungsnummer>".$oOrder->oxorder__oxbillnr->value."</Rechnungsnummer>$sNewLine";
             $sExport .= "<Standardwaehrung>978</Standardwaehrung>$sNewLine";
             $sExport .= "<Bestelldatum>$sNewLine";
             $sDBDate = oxUtilsDate::getInstance()->formatDBDate($oOrder->oxorder__oxorderdate->value);

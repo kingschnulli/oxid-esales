@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package views
+ * @link      http://www.oxid-esales.com
+ * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxcmp_lang.php 17402 2009-03-19 09:00:17Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxcmp_lang.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**

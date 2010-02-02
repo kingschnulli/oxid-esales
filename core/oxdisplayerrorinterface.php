@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxdisplayerrorinterface.php, v 1.0 2007.8.9 17.44.25 ,mathiasf Exp
+ * @version   SVN: $Id: oxdisplayerrorinterface.php, v 1.0 2007.8.9 17.44.25 ,mathiasf Exp
  */
 
 interface oxDisplayErrorInterface

@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxutilsview.php 25173 2010-01-18 15:12:33Z vilma $
+ * @version   SVN: $Id: oxutilsview.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 /**
@@ -329,7 +329,7 @@ class oxUtilsView extends oxSuperCfg
     {
         $myConfig = oxConfig::getInstance();
         if ( $sResourceType == 'file' && !is_readable($sResourceName) ) {
-            $sResourceName      = $myConfig->getTemplatePath($sResourceName,$myConfig->isAdmin());
+            $sResourceName      = $myConfig->getTemplatePath($sResourceName, $myConfig->isAdmin());
             $sResourceContent   = $oSmarty->_read_file($sResourceName);
             $sResourceTimestamp = filemtime($sResourceName);
             return is_file($sResourceName) && is_readable($sResourceName);

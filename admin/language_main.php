@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: language_main.php 24889 2010-01-11 16:14:27Z rimvydas.paskevicius $
+ * @version   SVN: $Id: language_main.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -129,7 +129,7 @@ class Language_Main extends oxAdminDetails
         if ( !$this->_validateInput() ) {
             return;
         }
-        
+
         // if changed language abbervation, updating it for all arrays related with languages
         if ( $sOxId != -1 && $sOxId  != $aParams['abbr'] ) {
             $this->_updateAbbervation( $sOxId, $aParams['abbr'] );
@@ -142,11 +142,11 @@ class Language_Main extends oxAdminDetails
             $sOxId = $aParams['abbr'];
             $this->_aLangData['params'][$sOxId]['baseId'] = $this->_getAvailableLangBaseId();
             oxSession::setVar( "saved_oxid", $sOxId);
-            
+
             //checking if added language already has created multilang fields
             //with new base ID - if not, creating new fields
             if ( !$this->_checkMultilangFieldsExistsInDb( $sOxId ) ) {
-            	$this->_addNewMultilangFieldsToDb();
+                $this->_addNewMultilangFieldsToDb();
             }
         }
 
@@ -157,7 +157,7 @@ class Language_Main extends oxAdminDetails
         $this->_aLangData['params'][$sOxId]['active']  = $aParams['active'];
         $this->_aLangData['params'][$sOxId]['default'] = $aParams['default'];
         $this->_aLangData['params'][$sOxId]['sort']   = $aParams['sort'];
-        
+
         //if setting lang as default
         if ( $aParams['default'] == '1' ) {
             $this->_setDefaultLang( $sOxId );
@@ -174,10 +174,10 @@ class Language_Main extends oxAdminDetails
         $this->_aViewData["updatelist"] = "1";
 
         //saving languages info
-        $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguageParams',  $this->_aLangData['params']  );
-        $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguages',       $this->_aLangData['lang']    );
-        $this->getConfig()->saveShopConfVar( 'arr',  'aLanguageURLs',    $this->_aLangData['urls']    );
-        $this->getConfig()->saveShopConfVar( 'arr',  'aLanguageSSLURLs', $this->_aLangData['sslUrls'] );
+        $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguageParams', $this->_aLangData['params'] );
+        $this->getConfig()->saveShopConfVar( 'aarr', 'aLanguages', $this->_aLangData['lang'] );
+        $this->getConfig()->saveShopConfVar( 'arr', 'aLanguageURLs', $this->_aLangData['urls'] );
+        $this->getConfig()->saveShopConfVar( 'arr', 'aLanguageSSLURLs', $this->_aLangData['sslUrls'] );
     }
 
     /**
@@ -203,7 +203,7 @@ class Language_Main extends oxAdminDetails
 
     /**
      * Languages array setter
-     * 
+     *
      * @param array $aLangData languages parameters array
      *
      * @return array
@@ -211,8 +211,8 @@ class Language_Main extends oxAdminDetails
     protected function _setLanguages( $aLangData )
     {
         $this->_aLangData = $aLangData;
-    }    
-    
+    }
+
     /**
      * Loads from config all data related with languages.
      * If no languages parameters array exists, sets default parameters values.
@@ -231,7 +231,7 @@ class Language_Main extends oxAdminDetails
         if ( !is_array( $aLangData['params']) ) {
             $aLangData['params'] = $this->_assignDefaultLangParams( $aLangData['lang'] );
         }
-        
+
         return $aLangData;
     }
 
@@ -245,7 +245,7 @@ class Language_Main extends oxAdminDetails
      */
     protected function _updateAbbervation( $sOldId, $sNewId )
     {
-        foreach( array_keys($this->_aLangData) as $sTypeKey ) {
+        foreach ( array_keys($this->_aLangData) as $sTypeKey ) {
 
             if ( is_array($this->_aLangData[$sTypeKey]) && count($this->_aLangData[$sTypeKey]) > 0 ) {
 
@@ -278,7 +278,7 @@ class Language_Main extends oxAdminDetails
 
         uasort( $this->_aLangData['params'], array($this, '_sortLangParamsByBaseIdCallback') );
 
-        foreach( $this->_aLangData['params'] as  $sAbbr => $aParams ) {
+        foreach ( $this->_aLangData['params'] as  $sAbbr => $aParams ) {
             $iId = (int)$aParams['baseId'];
             $aUrls[$iId]        = $this->_aLangData['urls'][$iId];
             $aSslUrls[$iId]     = $this->_aLangData['sslUrls'][$iId];
@@ -293,6 +293,8 @@ class Language_Main extends oxAdminDetails
     /**
      * Assign default values for eache language
      *
+     * @param array $aLanguages language array
+     *
      * @return array
      */
     protected function _assignDefaultLangParams( $aLanguages )
@@ -300,7 +302,7 @@ class Language_Main extends oxAdminDetails
         $aParams = array();
         $iBaseId = 0;
 
-        foreach( array_keys($aLanguages) as $sOxId ) {
+        foreach ( array_keys($aLanguages) as $sOxId ) {
             $aParams[$sOxId]['baseId']  = $iBaseId;
             $aParams[$sOxId]['active']  = 1;
             $aParams[$sOxId]['sort']   = $iBaseId + 1;
@@ -321,7 +323,7 @@ class Language_Main extends oxAdminDetails
     protected function _setDefaultLang( $sOxId )
     {
         $sDefaultId = $this->_aLangData['params'][$sOxId]['baseId'];
-        $this->getConfig()->saveShopConfVar( 'str',  'sDefaultLang', $sDefaultId );
+        $this->getConfig()->saveShopConfVar( 'str', 'sDefaultLang', $sDefaultId );
     }
 
     /**
@@ -332,7 +334,7 @@ class Language_Main extends oxAdminDetails
     protected function _getAvailableLangBaseId()
     {
         $aBaseId = array();
-        foreach( $this->_aLangData['params'] as $aLang ) {
+        foreach ( $this->_aLangData['params'] as $aLang ) {
             $aBaseId[] = $aLang['baseId'];
         }
 
@@ -341,7 +343,7 @@ class Language_Main extends oxAdminDetails
         $iTotal = count($aBaseId);
 
         //getting first available id
-        while( $iNewId <= $iTotal ) {
+        while ( $iNewId <= $iTotal ) {
             if ( $iNewId !== $aBaseId[$iNewId] ) {
                 break;
             }
@@ -356,7 +358,7 @@ class Language_Main extends oxAdminDetails
      * If not - displays warning
      *
      * @param string $sOxId language abbervation
-
+     *
      * @return null
      */
     protected function _checkLangTranslations( $sOxId )
@@ -381,7 +383,7 @@ class Language_Main extends oxAdminDetails
      * Check if selected language already has multilanguage fields in DB
      *
      * @param string $sOxId language abbervation
-
+     *
      * @return bool
      */
     protected function _checkMultilangFieldsExistsInDb( $sOxId )
@@ -395,10 +397,10 @@ class Language_Main extends oxAdminDetails
         if ( !$oDbMeta->fieldExists( $sMultiLangCol, "oxarticles" ) ) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      * Adding new language to DB - creating new multilangue fields with new
      * language ID (e.g. oxtitle_4)
@@ -408,13 +410,13 @@ class Language_Main extends oxAdminDetails
     protected function _addNewMultilangFieldsToDb()
     {
         //creating new multilanguage fields with new id over whole DB
-    	oxDb::startTransaction();
-         
+        oxDb::startTransaction();
+
         $oDbMeta = oxNew( "oxDbMetaDataHandler" );
-    	
+
         try {
              $oDbMeta->addNewLangToDb();
-         } catch( Exception $oEx ) {
+        } catch( Exception $oEx ) {
              // if exception, rollBack everything
              oxDb::rollbackTransaction();
 
@@ -424,16 +426,16 @@ class Language_Main extends oxAdminDetails
              oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
 
              return;
-         }
-        
-         oxDb::commitTransaction();
-    }    
+        }
+
+        oxDb::commitTransaction();
+    }
 
     /**
      * Check if language already exists
      *
      * @param string $sAbbr language abbervation
-
+     *
      * @return bool
      */
     protected function _checkLangExists( $sAbbr )

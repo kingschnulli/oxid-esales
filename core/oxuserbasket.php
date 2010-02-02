@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxuserbasket.php 22548 2009-09-22 13:50:42Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxuserbasket.php 25471 2010-02-01 14:35:11Z alfonsas $
  */
 
 /**
@@ -267,7 +267,8 @@ class oxUserBasket extends oxBase
                     unset( $this->_aBasketItems[$this->_getItemKey($sProductId, $aSel)] );
                 }
 
-            } else { // updating object info and adding (if not yet added) item into basket items array
+            } else {
+                // updating object info and adding (if not yet added) item into basket items array
                 if ( !$blOverride && !empty($oUserBasketItem->oxuserbasketitems__oxamount->value) ) {
                     $dAmount += $oUserBasketItem->oxuserbasketitems__oxamount->value;
                 }

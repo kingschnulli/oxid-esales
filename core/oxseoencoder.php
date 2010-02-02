@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxseoencoder.php 25152 2010-01-18 08:31:31Z arvydas $
+ * @version   SVN: $Id: oxseoencoder.php 25471 2010-02-01 14:35:11Z alfonsas $
  */
 
 /**
@@ -307,7 +307,8 @@ class oxSeoEncoder extends oxSuperCfg
             $sSeoUrl = $sOldSeoUrl;
         } else {
 
-            if ( $sOldSeoUrl ) { // old must be transferred to history
+            if ( $sOldSeoUrl ) {
+                // old must be transferred to history
                 $this->_copyToHistory( $sObjectId, $iShopId, $iLang, 'dynamic' );
             }
 
@@ -699,7 +700,7 @@ class oxSeoEncoder extends oxSuperCfg
                 $sSql .= " limit 1";
 
                 return $oDb->execute( $sSql );
-            } elseif ( $oRs->fields['oxexpired'] ) {//&& !$oRs->fields['oxfixed'] ) {
+            } elseif ( $oRs->fields['oxexpired'] ) {
                 // copy to history
                 $this->_copyToHistory( $sObjectId, $iShopId, $iLang, $sType );
             }

@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxtagcloud.php 22590 2009-09-24 06:24:00Z alfonsas $
+ * @version   SVN: $Id: oxtagcloud.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {

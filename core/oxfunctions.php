@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxfunctions.php 22884 2009-10-02 08:54:10Z sarunas $
+ * @version   SVN: $Id: oxfunctions.php 25471 2010-02-01 14:35:11Z alfonsas $
  */
 
 /**
@@ -57,7 +57,7 @@ function __autoload( $sClass )
     foreach ( $aClassDirs as $sDir ) {
         $sFilename = $sDir . strtolower( $sClass ) . '.php';
         if ( file_exists( $sFilename ) ) {
-            require_once $sFilename;
+            include_once $sFilename;
             return;
         }
     }
@@ -403,7 +403,8 @@ if ( !function_exists( 'getRequestUrl' ) ) {
 
             if ( isset( $_SERVER['REQUEST_URI'] ) && $_SERVER['REQUEST_URI'] ) {
                 $sRequest = $_SERVER['REQUEST_URI'];
-            } else {    // try something else
+            } else {
+                // try something else
                 $sRequest = $_SERVER['SCRIPT_URI'];
             }
 

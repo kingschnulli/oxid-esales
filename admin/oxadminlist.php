@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxadminlist.php 24476 2009-12-07 12:59:15Z arvydas $
+ * @version   SVN: $Id: oxadminlist.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -447,8 +447,7 @@ class oxAdminList extends oxAdminView
      * For each search value if german umlauts exist, adds them
      * and replaced by spec. char to query
      *
-     * @param array  $aWhere  SQL condition array
-     * @param string $sqlFull SQL query string
+     * @param string $sFieldValue Filters
      *
      * @return string
      */
@@ -836,7 +835,7 @@ class oxAdminList extends oxAdminView
 
             $sOxId = oxConfig::getParameter( 'oxid' );
 
-            if( $sOxId == -1) {
+            if ( $sOxId == -1) {
                 //on first call or when pressed creating new item button, reseting active tab
                 $iActTab = $this->_iDefEdit;
             } else {

@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxnavigationtree.php 24345 2009-12-01 09:47:39Z arvydas $
+ * @version   SVN: $Id: oxnavigationtree.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -346,8 +346,8 @@ class OxNavigationTree extends oxSuperCfg
     /**
      * If oDomXML exist meges nodes
      *
-     * @param DomDocument $oDomNew   what to merge
-     * @param DomDocument $oDom      where to merge
+     * @param DomDocument $oDomNew what to merge
+     * @param DomDocument $oDom    where to merge
      *
      * @return null
      */
@@ -617,12 +617,14 @@ class OxNavigationTree extends oxSuperCfg
     /**
      * Returns DOMNodeList of given navigation classes
      *
+     * @param array $aNodes Node array
+     *
      * @return DOMNodeList
      */
     public function getListNodes( $aNodes )
     {
         $oXPath = new DOMXPath( $this->getDomXml() );
-        $oNodeList = $oXPath->query( "//SUBMENU[@cl='".implode("' or @cl='",$aNodes)."']" );
+        $oNodeList = $oXPath->query( "//SUBMENU[@cl='".implode("' or @cl='", $aNodes)."']" );
 
         if ( $oNodeList->length ) {
             return $oNodeList;
@@ -775,11 +777,11 @@ class OxNavigationTree extends oxSuperCfg
     }
 
 
-    /*
+    /**
      * Get dynamic pages url or local path
      *
-     * @param int    $iLang              language id
-     * @param string $$blLoadDynContents get local or remote content path
+     * @param int    $iLang             language id
+     * @param string $blLoadDynContents get local or remote content path
      *
      * @return string
      */
@@ -798,7 +800,7 @@ class OxNavigationTree extends oxSuperCfg
         return $sUrl;
     }
 
-    /*
+    /**
      * Get dynamic pages language code
      *
      * @return string

@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxutilscount.php 25006 2010-01-14 16:30:08Z sarunas $
+ * @version   SVN: $Id: oxutilscount.php 25471 2010-02-01 14:35:11Z alfonsas $
  */
 
 /**
@@ -291,7 +291,8 @@ class oxUtilsCount extends oxSuperCfg
     {
         if ( !$sCatId ) {
             $this->getConfig()->setGlobalParameter( 'aLocalCatCache', null );
-        } else {   // loading from cache
+        } else {
+            // loading from cache
             $aCatData = $this->_getCatCache();
             if ( isset( $aCatData[$sCatId] ) ) {
                 unset( $aCatData[$sCatId] );
@@ -370,7 +371,8 @@ class oxUtilsCount extends oxSuperCfg
         if ( !$sVendorId ) {
             $this->getConfig()->setGlobalParameter( 'aLocalVendorCache', null );
             oxUtils::getInstance()->toFileCache( 'aLocalVendorCache', '' );
-        } else { // loading from cache
+        } else {
+            // loading from cache
             $aVendorData = $this->_getVendorCache();
             if ( isset( $aVendorData[$sVendorId] ) ) {
                 unset( $aVendorData[$sVendorId] );
@@ -392,7 +394,8 @@ class oxUtilsCount extends oxSuperCfg
         if ( !$sManufacturerId ) {
             $this->getConfig()->setGlobalParameter( 'aLocalManufacturerCache', null );
             oxUtils::getInstance()->toFileCache( 'aLocalManufacturerCache', '' );
-        } else { // loading from cache
+        } else {
+            // loading from cache
             $aManufacturerData = $this->_getManufacturerCache();
             if ( isset( $aManufacturerData[$sManufacturerId] ) ) {
                 unset( $aManufacturerData[$sManufacturerId] );

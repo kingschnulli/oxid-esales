@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxvoucher.php 23555 2009-10-23 13:31:07Z alfonsas $
+ * @version   SVN: $Id: oxvoucher.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 /**
@@ -106,8 +106,9 @@ class oxVoucher extends oxBase
     /**
      * marks voucher as used
      *
-     * @param string $sOrderId order id
-     * @param string $sUserId  user id
+     * @param string $sOrderId  order id
+     * @param string $sUserId   user id
+     * @param double $dDiscount used discount
      *
      * @return null
      */
@@ -177,7 +178,7 @@ class oxVoucher extends oxBase
         if ( $dDiscount > $dPrice ) {
             $oEx = oxNew( 'oxVoucherException' );
             $oEx->setMessage('EXCEPTION_VOUCHER_TOTALBELOWZERO');
-            $oEx->setVoucherNr($this->oxVouchers__voucherNr->value);
+            $oEx->setVoucherNr($this->oxvouchers__oxvouchernr->value);
             throw $oEx;
         }
 
@@ -243,7 +244,7 @@ class oxVoucher extends oxBase
         if ( $this->getDiscountValue( $dPrice ) < 0 ) {
             $oEx = oxNew( 'oxVoucherException' );
             $oEx->setMessage('EXCEPTION_VOUCHER_TOTALBELOWZERO');
-            $oEx->setVoucherNr($this->oxVouchers__voucherNr->value);
+            $oEx->setVoucherNr($this->oxvouchers__oxvouchernr->value);
             throw $oEx;
         }
         $oSerie = $this->getSerie();
@@ -251,7 +252,7 @@ class oxVoucher extends oxBase
         if ( $oSerie->oxvoucherseries__oxminimumvalue->value && $dPrice < ($oSerie->oxvoucherseries__oxminimumvalue->value*$oCur->rate) ) {
             $oEx = oxNew( 'oxVoucherException' );
             $oEx->setMessage('EXCEPTION_VOUCHER_INCORRECTPRICE');
-            $oEx->setVoucherNr($this->oxVouchers__voucherNr->value);
+            $oEx->setVoucherNr($this->oxvouchers__oxvouchernr->value);
             throw $oEx;
         }
 
@@ -324,7 +325,7 @@ class oxVoucher extends oxBase
             if ( !$blAvailable ) {
                     $oEx = oxNew( 'oxVoucherException' );
                     $oEx->setMessage('EXCEPTION_VOUCHER_NOTALLOWEDOTHERSERIES');
-                    $oEx->setVoucherNr($this->oxVouchers__voucherNr->value);
+                    $oEx->setVoucherNr($this->oxvouchers__oxvouchernr->value);
                     throw $oEx;
             }
         }
@@ -421,7 +422,7 @@ class oxVoucher extends oxBase
             if ( oxDb::getDb()->getOne( $sSelect )) {
                 $oEx = oxNew( 'oxVoucherException' );
                 $oEx->setMessage('EXCEPTION_VOUCHER_NOTAVAILABLEINOTHERORDER');
-                $oEx->setVoucherNr($this->oxVouchers__voucherNr->value);
+                $oEx->setVoucherNr($this->oxvouchers__oxvouchernr->value);
                 throw $oEx;
             }
         }
@@ -458,7 +459,7 @@ class oxVoucher extends oxBase
 
         $oEx = oxNew( 'oxVoucherException' );
         $oEx->setMessage( 'EXCEPTION_VOUCHER_NOTVALIDUSERGROUP' );
-        $oEx->setVoucherNr( $this->oxvouchers__vouchernr->value );
+        $oEx->setVoucherNr( $this->oxvouchers__oxvouchernr->value );
         throw $oEx;
     }
 
@@ -526,7 +527,7 @@ class oxVoucher extends oxBase
                 break;
             case 'oxmodvouchers__oxdiscount':
                 // former email templates are expecting type dependent discount values !!!
-                if($this->getSerie()->oxvoucherseries__oxdiscounttype->value == 'absolute') {
+                if ($this->getSerie()->oxvoucherseries__oxdiscounttype->value == 'absolute') {
                     return $this->oxvouchers__oxdiscount;
                 } else {
                     return $this->getSerie()->oxvoucherseries__oxdiscount;

@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package views
+ * @link      http://www.oxid-esales.com
+ * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxcmp_user.php 24262 2009-11-26 10:31:19Z arvydas $
+ * @version   SVN: $Id: oxcmp_user.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 // defining login/logout states
@@ -448,9 +448,9 @@ class oxcmp_user extends oxView
 
         // order remark
         //V #427: order remark for new users
-        $sOrd_Remark = oxConfig::getParameter( 'order_remark' );
-        if ( $sOrd_Remark ) {
-            oxSession::setVar( 'ordrem', $sOrd_Remark );
+        $sOrderRemark = oxConfig::getParameter( 'order_remark' );
+        if ( $sOrderRemark ) {
+            oxSession::setVar( 'ordrem', $sOrderRemark );
         }
 
         // send register eMail
@@ -548,9 +548,9 @@ class oxcmp_user extends oxView
 
 
         // order remark
-        $sOrd_Remark = oxConfig::getParameter( 'order_remark' );
-        if ( $sOrd_Remark ) {
-            oxSession::setVar( 'ordrem', $sOrd_Remark );
+        $sOrderRemark = oxConfig::getParameter( 'order_remark' );
+        if ( $sOrderRemark ) {
+            oxSession::setVar( 'ordrem', $sOrderRemark );
         }
 
         if ( $oBasket = $this->getSession()->getBasket() ) {

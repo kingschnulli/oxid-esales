@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package views
+ * @link      http://www.oxid-esales.com
+ * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: suggest.php 18680 2009-04-29 14:20:46Z vilma $
+ * @version   SVN: $Id: suggest.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -246,7 +246,7 @@ class Suggest extends oxUBase
     public function getLink( $iLang = null )
     {
         $sLink = parent::getLink( $iLang );
-        
+
         // active category
         if ( $sVal = oxConfig::getParameter( 'cnid' ) ) {
             $sLink .= ( ( strpos( $sLink, '?' ) === false ) ? '?' : '&amp;' ) . "cnid={$sVal}";

@@ -15,18 +15,18 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxsession.php 23998 2009-11-17 14:01:32Z  $
+ * @version   SVN: $Id: oxsession.php 25471 2010-02-01 14:35:11Z alfonsas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
 // Including database session managing class if needed.
 if (oxConfig::getInstance()->getConfigParam( 'blAdodbSessionHandler' ) ) {
     $oDB = oxDb::getDb();
-    require_once _DB_SESSION_HANDLER;
+    include_once _DB_SESSION_HANDLER;
 }
 
 /**

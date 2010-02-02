@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: article_seo.php 24546 2009-12-09 15:48:34Z arvydas $
+ * @version   SVN: $Id: article_seo.php 25484 2010-02-01 19:23:52Z alfonsas $
  */
 
 /**
@@ -108,6 +108,10 @@ class Article_Seo extends Object_Seo
     /**
      * Returns SQL to fetch seo data
      *
+     * @param object $oObject Object
+     * @param int    $iShopId Shop ID
+     * @param int    $iLang   Language ID
+     *
      * @return string
      */
     protected function _getSeoDataSql( $oObject, $iShopId, $iLang )
@@ -115,18 +119,20 @@ class Article_Seo extends Object_Seo
         $oDb = oxDb::getDb();
         if ( $this->getActCatType() == 'oxtag' ) {
             $sObjectId = oxSeoEncoderArticle::getInstance()->getDynamicObjectId( $iShopId, $oObject->getStdTagLink( $this->getTag() ) );
-            $sQ = "select * from oxseo where oxobjectid = ".$oDb->quote( $sObjectId ) . " and
-                   oxshopid = '{$iShopId}' and oxlang = ".$this->getActCategoryLang();
+            $sQ = "select * from oxseo where oxobjectid = ".$oDb->quote( $sObjectId ).
+                  " and oxshopid = '{$iShopId}' and oxlang = ".$this->getActCategoryLang();
         } else {
             $sParam = ( $sCat = $this->getSelectedCategoryId() ) ? " and oxparams = '$sCat' " : '';
-            $sQ = "select * from oxseo where oxobjectid = ".$oDb->quote( $oObject->getId() ) . " and
-                   oxshopid = '{$iShopId}' and oxlang = {$iLang} {$sParam} ";
+            $sQ = "select * from oxseo where oxobjectid = ".$oDb->quote( $oObject->getId() ) .
+                  " and oxshopid = '{$iShopId}' and oxlang = {$iLang} {$sParam} ";
         }
         return $sQ;
     }
 
     /**
      * Returns list with deepest article categories
+     *
+     * @param object $oArticle Article object
      *
      * @return oxlist
      */
@@ -187,6 +193,8 @@ class Article_Seo extends Object_Seo
     /**
      * Returns list with deepest article categories
      *
+     * @param object $oArticle Article object
+     *
      * @return oxlist
      */
     protected function _getVendorList( $oArticle )
@@ -208,6 +216,8 @@ class Article_Seo extends Object_Seo
     /**
      * Returns list with deepest article categories
      *
+     * @param object $oArticle Article object
+     *
      * @return oxlist
      */
     protected function _getManufacturerList( $oArticle )
@@ -228,6 +238,8 @@ class Article_Seo extends Object_Seo
 
     /**
      * Returns tag list
+     *
+     * @param object $oArticle Article object
      *
      * @return oxlist
      */
@@ -405,11 +417,12 @@ class Article_Seo extends Object_Seo
      * Returns query for selecting seo url
      *
      * @param object $oObject object to build query
+     * @param int    $iShopId Shop id
      *
      * @return string
      */
-     protected function _getSeoUrlQuery( $oObject, $iShopId )
-     {
+    protected function _getSeoUrlQuery( $oObject, $iShopId )
+    {
         $oDb = oxDb::getDb();
 
          // tag type urls are loaded differently from others..
@@ -417,14 +430,13 @@ class Article_Seo extends Object_Seo
 
             $sStdUrl = "index.php?cl=details&amp;anid=".$oObject->getId()."&amp;listtype=tag&amp;searchtag=".rawurlencode( $sTag );
             $sObjectId = md5( strtolower( $oObject->getShopId() . $sStdUrl ) );
-            $sQ = "select oxseourl from oxseo where oxobjectid = ".$oDb->quote( $sObjectId )."
-                   and oxshopid = '{$iShopId}' and oxlang = ".$this->getActCategoryLang();
+            $sQ = "select oxseourl from oxseo where oxobjectid = ".$oDb->quote( $sObjectId ).
+                  " and oxshopid = '{$iShopId}' and oxlang = ".$this->getActCategoryLang();
         } else {
             $sCatId = ( $this->_sActCatId == $this->_sNoCategoryId ) ? '' : $this->_sActCatId;
-            $sQ = "select oxseourl from oxseo where oxobjectid = ".$oDb->quote( $oObject->getId() )."
-                   and oxshopid = '{$iShopId}' and oxlang = {$this->_iEditLang}
-                   and oxparams = '{$sCatId}' ";
-
+            $sQ = "select oxseourl from oxseo where oxobjectid = ".$oDb->quote( $oObject->getId() ).
+                  " and oxshopid = '{$iShopId}' and oxlang = {$this->_iEditLang}".
+                  " and oxparams = '{$sCatId}' ";
         }
 
         return $sQ;
@@ -457,7 +469,7 @@ class Article_Seo extends Object_Seo
     /**
      * Returns seo entry ident
      *
-     * @return
+     * @return string
      */
     protected function _getSeoEntryId()
     {
@@ -497,6 +509,7 @@ class Article_Seo extends Object_Seo
 
     /**
      * Returns url type
+     *
      * @return string
      */
     protected function _getType()

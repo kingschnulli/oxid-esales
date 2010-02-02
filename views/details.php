@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package views
+ * @link      http://www.oxid-esales.com
+ * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: details.php 25120 2010-01-15 15:05:05Z tomas $
+ * @version   SVN: $Id: details.php 25481 2010-02-01 15:57:34Z sarunas $
  */
 
 /**
@@ -273,11 +273,6 @@ class Details extends oxUBase
                     //#1104S if parent is buyable load selectlists too
                     $oParent->aSelectlist = $oParent->getSelectLists();
                     $this->_aVariantList = array_merge( array( $oParent ), $this->_aVariantList->getArray() );
-                }
-
-                //..and skip myself from the list
-                if ( isset( $this->_aVariantList[$oProduct->getId()] ) ) {
-                    unset( $this->_aVariantList[$oProduct->getId()] );
                 }
             }
 
@@ -624,9 +619,9 @@ class Details extends oxUBase
     {
         $sTag  = $this->getConfig()->getParameter('newTags', true );
         $sHighTag  = $this->getConfig()->getParameter( 'highTags', true );
-		if ( !$sTag && !$sHighTag) {
-			return;
-		}
+        if ( !$sTag && !$sHighTag) {
+            return;
+        }
         $sTag .= " ".getStr()->html_entity_decode( $sHighTag );
 
         $oProduct = $this->getProduct();
@@ -813,6 +808,19 @@ class Details extends oxUBase
     public function getVariantList()
     {
         return $this->loadVariantInformation();
+    }
+
+    /**
+     * Returns variant lists of current product
+     * excludes currently viewed product
+     *
+     * @return array
+     */
+    public function getVariantListExceptCurrent()
+    {
+        $oList = clone $this->getVariantList();
+        unset($oList[$this->getProduct()->getId()]);
+        return $oList;
     }
 
     /**
@@ -1306,9 +1314,9 @@ class Details extends oxUBase
     {
         if ( $this->_blMdView === null ) {
             $this->_blMdView = false;
-        	if ( $this->getConfig()->getConfigParam( 'blUseMultidimensionVariants' ) ) {
-	        	$iMaxMdDepth = $this->getProduct()->getMdVariants()->getMaxDepth();
-	            $this->_blMdView = ($iMaxMdDepth > 1);
+            if ( $this->getConfig()->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+                $iMaxMdDepth = $this->getProduct()->getMdVariants()->getMaxDepth();
+                $this->_blMdView = ($iMaxMdDepth > 1);
             }
         }
 

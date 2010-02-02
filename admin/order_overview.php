@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: order_overview.php 24895 2010-01-12 07:32:33Z arvydas $
+ * @version   SVN: $Id: order_overview.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
     // DTAUS
@@ -85,7 +85,7 @@ class Order_Overview extends oxAdminDetails
      * credit card and user payment info is not stored in db (if oxConfig::blStoreCreditCardInfo = false),
      * just for preview user payment is set from oxpayment
      *
-     * @param object $oOrder
+     * @param object $oOrder Order object
      *
      * @return oxuserpayment
      */

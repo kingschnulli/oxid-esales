@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxutils.php 25003 2010-01-14 15:36:18Z sarunas $
+ * @version   SVN: $Id: oxutils.php 25471 2010-02-01 14:35:11Z alfonsas $
  */
 
 /**
@@ -225,10 +225,10 @@ class oxUtils extends oxSuperCfg
     /**
      * Returns formatted currency string, according to formatting standards.
      *
-     * @deprecated use oxLang::formatCurrency
-     *
      * @param double $dValue  Plain price
      * @param object $oActCur Object of active currency
+     *
+     * @deprecated use oxLang::formatCurrency
      *
      * @return string
      */
@@ -351,7 +351,8 @@ class oxUtils extends oxSuperCfg
         // improved #533
         // checking for available profiles list
         $aInterfaceProfiles = $aInterfaceProfiles;
-        if ( is_array( $aInterfaceProfiles ) ) {   //checking for previous profiles
+        if ( is_array( $aInterfaceProfiles ) ) {
+            //checking for previous profiles
             $sPrevProfile = oxUtilsServer::getInstance()->getOxCookie('oxidadminprofile');
             if (isset($sPrevProfile)) {
                 $aPrevProfile = @explode("@", trim($sPrevProfile));
@@ -473,7 +474,7 @@ class oxUtils extends oxSuperCfg
      * All file caches are supposed to be written once by commitFileCache() method.
      *
      * @param string $sKey      Cache key
-     * @param mixed  $,Contents Contents to cache
+     * @param mixed  $mContents Contents to cache
      *
      * @return bool
      */
@@ -540,7 +541,7 @@ class oxUtils extends oxSuperCfg
      */
     public function commitFileCache()
     {
-        foreach($this->_aFileCacheContents as $sKey => $mContents) {
+        foreach ($this->_aFileCacheContents as $sKey => $mContents) {
             $mContents = serialize($mContents);
             $sFilePath = $this->getCacheFilePath( $sKey );
             //if ( is_writable($sFilePath))
@@ -672,9 +673,11 @@ class oxUtils extends oxSuperCfg
                         oxSession::setVar( "actshop", $myConfig->getBaseShopId());
                     }
                     $blIsAuth = true;
-                } else {   // Shopadmin... check if this shop is valid and exists
+                } else {
+                    // Shopadmin... check if this shop is valid and exists
                     $sShopID = $oDb->getOne("select oxid from oxshops where oxid = " . $oDb->quote( $sRights ) );
-                    if ( isset( $sShopID) && $sShopID) {   // success, this shop exists
+                    if ( isset( $sShopID) && $sShopID) {
+                        // success, this shop exists
 
                         oxSession::setVar( "actshop", $sRights);
                         oxSession::setVar( "currentadminshop", $sRights);
@@ -827,6 +830,7 @@ class oxUtils extends oxSuperCfg
      *
      * @param string $sUrl               URL to be redirected
      * @param bool   $blAddRedirectParam add "redirect" param
+     * @param int    $iHeaderCode        header code, default 301
      *
      * @return null or exit
      */
@@ -1069,11 +1073,10 @@ class oxUtils extends oxSuperCfg
      * prepareUrlForNoSession adds extra url params making it usable without session
      * also removes sid=xxxx&
      *
-     * @deprecated use oxUtilsUrl::prepareUrlForNoSession()
-     *
      * @param string $sUrl given url
      *
-     * @access public
+     * @deprecated use oxUtilsUrl::prepareUrlForNoSession()
+     *
      * @return string
      */
     public function prepareUrlForNoSession( $sUrl )
@@ -1088,10 +1091,10 @@ class oxUtils extends oxSuperCfg
     /**
      * Returns full path (including file name) to cache file
      *
-     * @deprecated use oxUtils::getCacheFilePath()
-     *
      * @param string $sCacheName cache file name
      * @param bool   $blPathOnly if TRUE, name parameter will be ignored and only cache folder will be returned (default FALSE)
+     *
+     * @deprecated use oxUtils::getCacheFilePath()
      *
      * @return string
      */

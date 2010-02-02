@@ -385,11 +385,9 @@
       <noscript>
     [{/if}]
 
-    [{foreach from=$oView->getVariantList() name=variants item=variant_product}]
-
+    [{foreach from=$oView->getVariantListExceptCurrent() name=variants item=variant_product}]
         [{if $smarty.foreach.variants.first}]
           [{assign var="details_variants_class" value="firstinlist"}]
-
         [{elseif $smarty.foreach.variants.last}]
           [{assign var="details_variants_class" value="lastinlist"}]
           <div class="separator inbox"></div>
@@ -399,11 +397,8 @@
         [{/if}]
 
         [{$variants_head}]
-
         [{include file="inc/product.tpl" product=$variant_product size="thinest" altproduct=$product->getId() isfiltering=false class=$details_variants_class testid="Variant_"|cat:$variant_product->oxarticles__oxid->value}]
-
         [{assign var="details_variants_head" value=""}]
-
     [{/foreach}]
 
     [{if $oView->isMdVariantView()}]

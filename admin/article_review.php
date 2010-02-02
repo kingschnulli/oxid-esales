@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: article_review.php 22482 2009-09-22 06:53:41Z arvydas $
+ * @version   SVN: $Id: article_review.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -84,7 +84,8 @@ class Article_Review extends oxAdminDetails
     /**
      * returns reviews list for article
      *
-     * @param oxArticle $oArticle
+     * @param oxArticle $oArticle Article object
+     *
      * @return oxList
      */
     protected function _getReviewList($oArticle)

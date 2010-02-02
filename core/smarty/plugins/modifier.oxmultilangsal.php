@@ -15,23 +15,26 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package smartyPlugins
+ * @link      http://www.oxid-esales.com
+ * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: modifier.oxmultilangassign.php 17246 2009-03-16 15:18:58Z arvydas $
+ * @version   SVN: $Id: modifier.oxmultilangassign.php 17246 2009-03-16 15:18:58Z arvydas $
  */
 
-/*
-* Smarty function
-* -------------------------------------------------------------
-* Purpose: Output translated salutation field
-* add [{ $ }] where you want to display content
-* -------------------------------------------------------------
-*/
+/**
+ * Smarty function
+ * -------------------------------------------------------------
+ * Purpose: Output translated salutation field
+ * add [{ $ }] where you want to display content
+ * -------------------------------------------------------------
+ *
+ * @param string $sIdent language constant ident
+ *
+ * @return string
+ */
 function smarty_modifier_oxmultilangsal( $sIdent )
 {
-
     $oLang = oxLang::getInstance();
     $iLang = $oLang->getTplLanguage();
 
@@ -47,7 +50,6 @@ function smarty_modifier_oxmultilangsal( $sIdent )
     } catch ( oxLanguageException $oEx ) {
         // is thrown in debug mode and has to be caught here, as smarty hangs otherwise!
     }
-
 
     return $sTranslation;
 }

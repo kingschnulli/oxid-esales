@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxadminview.php 24345 2009-12-01 09:47:39Z arvydas $
+ * @version   SVN: $Id: oxadminview.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -313,16 +313,16 @@ class oxAdminView extends oxView
         $myUtilsServer = oxUtilsServer::getInstance();
 
         // store navigation history
-        $aHistory = explode('|',$myUtilsServer->getOxCookie('oxidadminhistory'));
-        if(!is_array($aHistory)) {
+        $aHistory = explode('|', $myUtilsServer->getOxCookie('oxidadminhistory'));
+        if (!is_array($aHistory)) {
             $aHistory = array();
         }
 
-        if(!in_array($sNode,$aHistory)) {
+        if (!in_array($sNode, $aHistory)) {
             $aHistory[] = $sNode;
         }
 
-        $myUtilsServer->setOxCookie('oxidadminhistory',implode('|',$aHistory));
+        $myUtilsServer->setOxCookie('oxidadminhistory', implode('|', $aHistory));
     }
 
     /**
@@ -376,7 +376,8 @@ class oxAdminView extends oxView
     /**
      * Returns maximum allowed size of upload file and formatted size equivalent
      *
-     * @param int $iMaxFileSize recommended maximum size of file (normalu value is taken from php ini, otherwise sets 2MB)
+     * @param int  $iMaxFileSize recommended maximum size of file (normalu value is taken from php ini, otherwise sets 2MB)
+     * @param bool $blFormatted  Return formated
      *
      * @return array
      */
@@ -422,7 +423,7 @@ class oxAdminView extends oxView
     /**
      * Reset output cache
      *
-     * @param  $blForceResete if true, forces reset
+     * @param bool $blForceResete if true, forces reset
      *
      * @return null
      */
@@ -440,8 +441,8 @@ class oxAdminView extends oxView
      * Resets counters values from cache. Resets price category articles, category articles,
      * vendor articles, manufacturer articles count.
      *
-     * @param $sCounterType counter type
-     * @param $sValue       reset value
+     * @param string $sCounterType counter type
+     * @param string $sValue       reset value
      *
      * @return null
      */
@@ -486,6 +487,8 @@ class oxAdminView extends oxView
 
     /**
      * Get english country name by country iso alpha 2 code
+     *
+     * @param string $sCountryCode Country code
      *
      * @return boolean
      */
@@ -554,6 +557,8 @@ class oxAdminView extends oxView
     /**
      * Marks seo entires as expired, cleans up tag clouds cache
      *
+     * @param string $sShopId Shop id
+     *
      * @return null
      */
     public function resetSeoData( $sShopId )
@@ -569,7 +574,7 @@ class oxAdminView extends oxView
     /**
      * Marks article seo url as expired
      *
-     * @param array $aArtId article id's
+     * @param array $aArtIds article id's
      *
      * @return null
      */

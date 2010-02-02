@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: pricealarm_main.php 24895 2010-01-12 07:32:33Z arvydas $
+ * @version   SVN: $Id: pricealarm_main.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -43,17 +43,17 @@ class PriceAlarm_Main extends oxAdminDetails
             // #1140 R - price must be checked from the object.
             $sql = "select oxarticles.oxid, oxpricealarm.oxprice from oxpricealarm, oxarticles where oxarticles.oxid = oxpricealarm.oxartid and oxpricealarm.oxsended = '000-00-00 00:00:00'";
             $rs = oxDb::getDb()->Execute( $sql);
-            $iAllCnt_counting = 0;
+            $iAllCnt = 0;
             if ($rs != false && $rs->recordCount() > 0) {
                 while (!$rs->EOF) {
                     $oArticle = oxNew("oxarticle" );
                     $oArticle->load($rs->fields[0]);
                     if ($oArticle->getPrice()->getBruttoPrice() <= $rs->fields[1])
-                        $iAllCnt_counting++;
+                        $iAllCnt++;
                     $rs->moveNext();
                 }
             }
-            $this->_aViewData['iAllCnt'] = $iAllCnt_counting;
+            $this->_aViewData['iAllCnt'] = $iAllCnt;
 
         $soxId = oxConfig::getParameter( "oxid");
         // check if we right now saved a new entry
@@ -116,7 +116,7 @@ class PriceAlarm_Main extends oxAdminDetails
             $smarty->assign( "shop", $oShop );
             $smarty->assign( "product", $oArticle );
             $smarty->assign( "bidprice", $oPricealarm->oxpricealarm__oxprice->value);
-            $smarty->assign( "shopImageDir", $myConfig->getImageUrl( false , false ) );
+            $smarty->assign( "shopImageDir", $myConfig->getImageUrl( false, false ) );
             $smarty->assign( "currency", $oCur );
 
             $iLang = $oPricealarm->oxpricealarm__oxlang->value;
@@ -133,12 +133,12 @@ class PriceAlarm_Main extends oxAdminDetails
             if ( isset( $aParams['oxpricealarm__oxlongdesc'] ) && $aParams['oxpricealarm__oxlongdesc'] ) {
                 $oLetter->oxpricealarm__oxlongdesc = new oxField( stripslashes( $aParams['oxpricealarm__oxlongdesc'] ), oxField::T_RAW );
             } else {
-                $old_iLang = $oLang->getTplLanguage();
+                $iOldLang = $oLang->getTplLanguage();
                 $oLang->setTplLanguage( $iLang );
                 $smarty->fetch( "email_pricealarm_customer.tpl");
 
                 $oLetter->oxpricealarm__oxlongdesc = new oxField( $smarty->fetch( "email_pricealarm_customer.tpl"), oxField::T_RAW );
-                $oLang->setTplLanguage( $old_iLang );
+                $oLang->setTplLanguage( $iOldLang );
             }
 
             $this->_aViewData["editor"]  = $this->_generateTextEditor( "100%", 300, $oLetter, "oxpricealarm__oxlongdesc", "details.tpl.css");

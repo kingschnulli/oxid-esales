@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxdelivery.php 24325 2009-11-30 10:07:54Z vilma $
+ * @version   SVN: $Id: oxdelivery.php 25471 2010-02-01 14:35:11Z alfonsas $
  */
 
 /**
@@ -219,12 +219,12 @@ class oxDelivery extends oxI18n
 
             switch ( $this->oxdelivery__oxdeltype->value ) {
                 case 'p': // price
-                	if ( $this->oxdelivery__oxfixed->value == 2 ) {
-                		$dAmount += $oBasketItem->getArticle()->getPrice()->getBruttoPrice();
-                	} else {
+                    if ( $this->oxdelivery__oxfixed->value == 2 ) {
+                        $dAmount += $oBasketItem->getArticle()->getPrice()->getBruttoPrice();
+                    } else {
                         $dAmount += $oBasketItem->getPrice()->getBruttoPrice(); // price// currency conversion must allready be done in price class / $oCur->rate; // $oBasketItem->oPrice->getPrice() / $oCur->rate;
-                	}
-                	break;
+                    }
+                    break;
                 case 'w': // weight
                     if ( $this->oxdelivery__oxfixed->value == 2 ) {
                         $dAmount += $oBasketItem->getArticle()->oxarticles__oxweight->value;
@@ -295,11 +295,14 @@ class oxDelivery extends oxI18n
 
                     $dAmount = 0;
 
-                    if ( $this->oxdelivery__oxfixed->value == 0 ) { // 1. Once per Cart
+                    if ( $this->oxdelivery__oxfixed->value == 0 ) {
+                        // 1. Once per Cart
                         $dAmount = 1;
-                    } elseif ( $this->oxdelivery__oxfixed->value == 1 ) { // 2. Once per Product overall
+                    } elseif ( $this->oxdelivery__oxfixed->value == 1 ) {
+                        // 2. Once per Product overall
                         $dAmount = $this->_iProdCnt;
-                    } elseif ( $this->oxdelivery__oxfixed->value == 2 ) { // 3. Once per Product in Cart
+                    } elseif ( $this->oxdelivery__oxfixed->value == 2 ) {
+                        // 3. Once per Product in Cart
                         $dAmount = $this->_iItemCnt;
                     }
 
@@ -419,7 +422,8 @@ class oxDelivery extends oxI18n
                 }
             }
 
-        } else { // regular amounts check
+        } else {
+            // regular amounts check
             foreach ( $oBasket->getContents() as $oContent ) {
                 $iArtAmount = $this->getDeliveryAmount( $oContent );
                 if ( $this->oxdelivery__oxfixed->value > 0 ) {
@@ -427,12 +431,12 @@ class oxDelivery extends oxI18n
                         $blForBasket = true;
                     }
                 } else {
-                	$iAmount += $iArtAmount;
+                    $iAmount += $iArtAmount;
                 }
             }
         }
 
-        //#M1130: Single article in Basket, checked as free shipping, is not buyable (step 3 no payments found) 
+        //#M1130: Single article in Basket, checked as free shipping, is not buyable (step 3 no payments found)
         if ( !$blForBasket && $blUse && ( $this->_checkDeliveryAmount($iAmount) || $this->_blFreeShipping ) ) {
             $blForBasket = true;
         }
@@ -456,7 +460,7 @@ class oxDelivery extends oxI18n
         }
         return false;
     }
-    
+
     /**
      * checks if amount param is ok for this delivery
      *

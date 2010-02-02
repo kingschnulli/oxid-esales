@@ -15,19 +15,24 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package smartyPlugins
+ * @link      http://www.oxid-esales.com
+ * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: function.oxmultilang.php 24256 2009-11-25 17:13:38Z tomas $
+ * @version   SVN: $Id: function.oxmultilang.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
-/*
-* Smarty function
-* -------------------------------------------------------------
-* Purpose: Output multilang string
-* add [{ oxmultilang ident="..." }] where you want to display content
-* -------------------------------------------------------------
+/**
+ * Smarty function
+ * -------------------------------------------------------------
+ * Purpose: Output multilang string
+ * add [{ oxmultilang ident="..." }] where you want to display content
+ * -------------------------------------------------------------
+ *
+ * @param array  $params  params
+ * @param Smarty &$smarty clever simulation of a method
+ *
+ * @return string
 */
 function smarty_function_oxmultilang( $params, &$smarty )
 {

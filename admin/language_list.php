@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: language_list.php 24836 2010-01-07 13:03:24Z arvydas $
+ * @version   SVN: $Id: language_list.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -77,14 +77,14 @@ class Language_List extends oxAdminList
         unset( $aLangData['sslUrls'][$iBaseId] );
 
         //saving languages info back to DB
-        $myConfig->saveShopConfVar( 'aarr', 'aLanguageParams',  $aLangData['params']  );
-        $myConfig->saveShopConfVar( 'aarr', 'aLanguages',       $aLangData['lang']    );
-        $myConfig->saveShopConfVar( 'arr',  'aLanguageURLs',    $aLangData['urls']    );
-        $myConfig->saveShopConfVar( 'arr',  'aLanguageSSLURLs', $aLangData['sslUrls'] );
+        $myConfig->saveShopConfVar( 'aarr', 'aLanguageParams', $aLangData['params'] );
+        $myConfig->saveShopConfVar( 'aarr', 'aLanguages', $aLangData['lang'] );
+        $myConfig->saveShopConfVar( 'arr', 'aLanguageURLs', $aLangData['urls'] );
+        $myConfig->saveShopConfVar( 'arr', 'aLanguageSSLURLs', $aLangData['sslUrls'] );
 
         //if deleted language was default, setting defalt lang to 0
         if ( $iBaseId == $myConfig->getConfigParam( 'sDefaultLang' ) ) {
-            $myConfig->saveShopConfVar( 'str',  'sDefaultLang', 0 );
+            $myConfig->saveShopConfVar( 'str', 'sDefaultLang', 0 );
         }
 
             // reseting all multilanguage DB fields with deleted lang id
@@ -168,7 +168,7 @@ class Language_List extends oxAdminList
      * to default value in all tables.
      *
      * @param string $iLangId language ID
-
+     *
      * @return null
      */
     protected function _resetMultiLangDbFields( $iLangId )

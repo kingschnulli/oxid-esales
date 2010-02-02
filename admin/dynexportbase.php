@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: dynexportbase.php 24825 2010-01-07 08:38:54Z arvydas $
+ * @version   SVN: $Id: dynexportbase.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -138,8 +138,8 @@ class DynExportBase extends oxAdminDetails
         parent::render();
 
         // assign all member variables to template
-        $aClass_vars = get_object_vars( $this );
-        while ( list( $name, $value ) = each( $aClass_vars ) ) {
+        $aClassVars = get_object_vars( $this );
+        while ( list( $name, $value ) = each( $aClassVars ) ) {
             $this->_aViewData[$name] = $value;
         }
 
@@ -269,7 +269,7 @@ class DynExportBase extends oxAdminDetails
     /**
      * Removes Session ID from $sInput
      *
-     * @param string $sInput
+     * @param string $sInput Input to process
      *
      * @return null
      */
@@ -585,7 +585,7 @@ class DynExportBase extends oxAdminDetails
     /**
      * creates additional cat string
      *
-     * @param array $aChosenCat
+     * @param array $aChosenCat Selected category array
      *
      * @return string
      */

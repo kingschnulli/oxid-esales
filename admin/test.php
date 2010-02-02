@@ -15,14 +15,14 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package setup
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: index.php 14926 2009-01-05 09:27:56Z arvydas $
+ * @version   SVN: $Id: index.php 14926 2009-01-05 09:27:56Z arvydas $
  */
 if ( isset( $_REQUEST['mod_rewrite'] ) ) {
-	echo 'mod_rewrite_on';
+    echo 'mod_rewrite_on';
 } else {
-	echo 'mod_rewrite_off';
+    echo 'mod_rewrite_off';
 }

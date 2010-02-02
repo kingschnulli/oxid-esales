@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxconfig.php 24621 2009-12-14 12:33:48Z arvydas $
+ * @version   SVN: $Id: oxconfig.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1051,13 +1051,14 @@ class oxConfig extends oxSuperCfg
     /**
      * Finds and returns files or folders path in out dir
      *
-     * @param string $sFile      File name
-     * @param string $sDir       Directory name
-     * @param bool   $blAdmin    Whether to force admin
-     * @param int    $iLang      Language id
-     * @param int    $iShop      Shop id
-     * @param string $sTheme     Theme name
-     * @param bool   $blAbsolute mode - absolute/relative path
+     * @param string $sFile        File name
+     * @param string $sDir         Directory name
+     * @param bool   $blAdmin      Whether to force admin
+     * @param int    $iLang        Language id
+     * @param int    $iShop        Shop id
+     * @param string $sTheme       Theme name
+     * @param bool   $blAbsolute   mode - absolute/relative path
+     * @param bool   $blIgnoreCust Ignore custom theme
      *
      * @return string
      */

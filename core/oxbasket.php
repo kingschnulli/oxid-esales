@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package core
+ * @link      http://www.oxid-esales.com
+ * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: oxbasket.php 23995 2009-11-17 13:33:13Z  $
+ * @version   SVN: $Id: oxbasket.php 25471 2010-02-01 14:35:11Z alfonsas $
  */
 
 /**
@@ -341,7 +341,8 @@ class oxBasket extends oxSuperCfg
         //in case amount is 0 removing item
         if ( $this->_aBasketContents[$sItemId]->getAmount() == 0 || $blRemoveItem ) {
             $this->removeItem( $sItemId );
-        } elseif ( $blBundle ) { //marking bundles
+        } elseif ( $blBundle ) {
+            //marking bundles
             $this->_aBasketContents[$sItemId]->setBundle( true );
         }
 
@@ -1526,14 +1527,16 @@ class oxBasket extends oxSuperCfg
         $oUser    = $this->getBasketUser();
 
         $sDelivCountry = null;
-        if ( !$oUser ) { // don't calculate if not logged in unless specified otherwise
 
+        if ( !$oUser ) {
+            // don't calculate if not logged in unless specified otherwise
             $aHomeCountry = $myConfig->getConfigParam( 'aHomeCountry' );
             if ( $myConfig->getConfigParam( 'blCalculateDelCostIfNotLoggedIn' ) && is_array( $aHomeCountry ) ) {
                 $sDelivCountry = current( $aHomeCountry );
             }
-        } else { // ok, logged in
+        } else {
 
+            // ok, logged in
             if ( $sCountryId = $myConfig->getGlobalParameter( 'delcountryid' ) ) {
                 $sDelivCountry = $sCountryId;
             } elseif ( $sAddressId = oxConfig::getParameter( 'deladrid' ) ) {

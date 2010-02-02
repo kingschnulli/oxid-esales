@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package admin
+ * @link      http://www.oxid-esales.com
+ * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: genimport_main.php 24825 2010-01-07 08:38:54Z arvydas $
+ * @version   SVN: $Id: genimport_main.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -307,6 +307,8 @@ class GenImport_Main extends oxAdminDetails
     /**
      * Checks if any error occured during import and displays them
      *
+     * @param object $oErpImport Import object
+     *
      * @return null
      */
     protected function _checkImportErrors( $oErpImport )
@@ -346,7 +348,7 @@ class GenImport_Main extends oxAdminDetails
     {
         if ( $this->_sStringEncloser === null ) {
             $this->_sStringEncloser = $this->_sDefaultStringEncloser;
-            if ( $sChar = $this->getConfig()->getConfigParam( 'sGiCsvFieldEncloser' ) ){
+            if ( $sChar = $this->getConfig()->getConfigParam( 'sGiCsvFieldEncloser' ) ) {
                 $this->_sStringEncloser = $sChar;
             }
         }

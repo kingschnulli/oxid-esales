@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package modules
+ * @link      http://www.oxid-esales.com
+ * @package   modules
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * $Id: myorder.php 24006 2009-11-17 14:22:31Z  $
+ * @version   SVN: $Id: myorder.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -832,7 +832,7 @@ class MyOrder extends MyOrder_parent
                 if ( !isset( $this->_aVATs[$oOrderArt->oxorderarticles__oxvat->value] ) ) {
                     $this->_aVATs[$oOrderArt->oxorderarticles__oxvat->value] = 0;
                 }
-                // #M1434: VAT recalculation in admin (pdf) is wrong 
+                // #M1434: VAT recalculation in admin (pdf) is wrong
                 if ( $oOrderArt->oxorderarticles__oxamount->value > 0 ) {
                     $this->_aVATs[$oOrderArt->oxorderarticles__oxvat->value] += $oOrderArt->oxorderarticles__oxvatprice->value;
                 }
@@ -911,7 +911,7 @@ class MyOrder extends MyOrder_parent
             $oPdf->text( 195 - $oPdf->getStringWidth( $sText ), $iTop + 12, $sText );
             $iTop += 8;
         } else {
-        	$iTop += 4;
+            $iTop += 4;
         }
 
         // invoice number
