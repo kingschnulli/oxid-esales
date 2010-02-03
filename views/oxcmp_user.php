@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxcmp_user.php 25542 2010-02-02 11:28:16Z alfonsas $
  */
 
 // defining login/logout states
@@ -485,7 +485,8 @@ class oxcmp_user extends oxView
             } else {
                 return 'register?success=1&newslettererror=4';
             }
-        } else { // problems with registration ...
+        } else {
+            // problems with registration ...
             $this->logout();
         }
     }

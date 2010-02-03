@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 25481 2010-02-01 15:57:34Z sarunas $
+ * @version   SVN: $Id: details.php 25566 2010-02-02 14:20:11Z sarunas $
  */
 
 /**
@@ -818,8 +818,14 @@ class Details extends oxUBase
      */
     public function getVariantListExceptCurrent()
     {
-        $oList = clone $this->getVariantList();
-        unset($oList[$this->getProduct()->getId()]);
+        $oList = $this->getVariantList();
+        if (is_object($oList)) {
+            $oList = clone $oList;
+        }
+        $sOxid = $this->getProduct()->getId();
+        if (isset($oList[$sOxid])) {
+            unset($oList[$sOxid]);
+        }
         return $oList;
     }
 

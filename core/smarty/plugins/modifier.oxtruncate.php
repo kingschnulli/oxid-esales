@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: modifier.oxtruncate.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: modifier.oxtruncate.php 25555 2010-02-02 12:49:21Z sarunas $
  */
 
 /**
@@ -48,9 +48,9 @@ function smarty_modifier_oxtruncate($sString, $iLength = 80, $sSufix = '...', $b
     if ($iLength == 0) {
         return '';
     } elseif ( $iLength > 0 && getStr()->strlen( $sString ) > $iLength ) {
-        $iLength -= getStr()->strlen( $etc );
+        $iLength -= getStr()->strlen( $sSufix );
 
-        $sString = str_replace( array('&#039;', '&quot;'), array( "'",'"' ), $string );
+        $sString = str_replace( array('&#039;', '&quot;'), array( "'",'"' ), $sString );
 
         if (!$blBreakWords ) {
             $sString = getStr()->preg_replace( '/\s+?(\S+)?$/', '', getStr()->substr( $sString, 0, $iLength + 1 ) );

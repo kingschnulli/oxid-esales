@@ -29,6 +29,7 @@
  * call example:
  * [{oxvariantselect value=$product->getMdVariants() separator=" " artid=$product->getId()}]
  * ----------------------------------------------------------------------
+ *
  * @param array  $params  params
  * @param Smarty &$smarty clever simulation of a method
  *

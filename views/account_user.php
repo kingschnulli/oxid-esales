@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: account_user.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: account_user.php 25528 2010-02-02 10:47:32Z tomas $
  */
 
 /**
@@ -52,13 +52,6 @@ class Account_User extends Account
      * @var oxcountrylist
      */
     protected $_oCountryList = null;
-
-    /**
-     * check all "must-be-fields" if they are completely
-     *
-     * @var array
-     */
-    protected $_aMustFillFields = null;
 
     /**
      * If user is not logged in - returns name of template account_user::_sThisLoginTemplate,
@@ -124,42 +117,5 @@ class Account_User extends Account
             $this->_oCountryList->loadActiveCountries();
         }
         return $this->_oCountryList;
-    }
-
-    /**
-     * return all must-be-fields.
-     *
-     * @return array | bool
-     */
-    public function getMustFillFields()
-    {
-        if ( $this->_aMustFillFields === null ) {
-            $this->_aMustFillFields = false;
-
-            $aMustFillFields = $this->getConfig()->getConfigParam( 'aMustFillFields' );
-            if ( is_array( $aMustFillFields ) ) {
-                $this->_aMustFillFields = array_flip( $aMustFillFields );
-            }
-        }
-
-        return $this->_aMustFillFields;
-    }
-
-    /**
-     * Returns if field is required.
-     *
-     * @param string $sField required field to check
-     *
-     * @return array | bool
-     */
-    public function isFieldRequired( $sField )
-    {
-        if ( $aMustFillFields = $this->getMustFillFields() ) {
-            if ( isset( $aMustFillFields[$sField] ) ) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

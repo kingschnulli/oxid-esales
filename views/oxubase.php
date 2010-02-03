@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxubase.php 25528 2010-02-02 10:47:32Z tomas $
  */
 
 /**
@@ -486,6 +486,13 @@ class oxUBase extends oxView
      * @var bool
      */
     protected $_blBargainAction = false;
+
+    /**
+     * check all "must-be-fields" if they are completely
+     *
+     * @var array
+     */
+    protected $_aMustFillFields = null;
 
     /**
      * In non admin mode checks if request was NOT processed by seo handler.
@@ -2805,6 +2812,43 @@ class oxUBase extends oxView
      */
     public function getContentCategory()
     {
+        return false;
+    }
+
+    /**
+     * Returns array of fields which must be filled during registration
+     *
+     * @return array | bool
+     */
+    public function getMustFillFields()
+    {
+        if ( $this->_aMustFillFields === null ) {
+            $this->_aMustFillFields = false;
+
+            // passing must-be-filled-fields info
+            $aMustFillFields = $this->getConfig()->getConfigParam( 'aMustFillFields' );
+            if ( is_array( $aMustFillFields ) ) {
+                $this->_aMustFillFields = array_flip( $aMustFillFields );
+            }
+        }
+        return $this->_aMustFillFields;
+    }
+
+    /**
+     * Returns if field is required.
+     *
+     * @param string $sField required field to check
+     *
+     * @return array | bool
+     */
+    public function isFieldRequired( $sField )
+    {
+        if ( $aMustFillFields = $this->getMustFillFields() ) {
+            if ( isset( $aMustFillFields[$sField] ) ) {
+                return true;
+            }
+        }
+
         return false;
     }
 }

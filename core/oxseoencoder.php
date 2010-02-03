@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 25471 2010-02-01 14:35:11Z alfonsas $
+ * @version   SVN: $Id: oxseoencoder.php 25542 2010-02-02 11:28:16Z alfonsas $
  */
 
 /**
@@ -591,8 +591,8 @@ class oxSeoEncoder extends oxSuperCfg
         foreach ( self::$_aReservedWords as $sWord ) {
             // this probably possible to do in one regexp
             $sUri = preg_replace( array( "/(\s$sWord)$/i", "/^($sWord\s)/i", "/(\s$sWord\s)/i", "/^($sWord)$/i",
-                                           "/(\/$sWord)$/i", "/^($sWord\/)/i", "/(\/$sWord\/)/i"),
-                                    " $1{$sSeparator}{$sPrefix}{$sSeparator} ", $sUri );
+                                         "/(\/$sWord)$/i", "/^($sWord\/)/i", "/(\/$sWord\/)/i"),
+                                         " \$1{$sSeparator}{$sPrefix}{$sSeparator} ", $sUri );
         }
 
         // if found ".html" at the end - removing it temporary

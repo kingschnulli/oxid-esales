@@ -19,7 +19,7 @@
  * @package   modules
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: myorder.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: myorder.php 25542 2010-02-02 11:28:16Z alfonsas $
  */
 
 /**
@@ -1004,7 +1004,8 @@ class MyOrder extends MyOrder_parent
             $oPdf->text( 15, 75, $this->oxorder__oxdelzip->value.' '.$this->oxorder__oxdelcity->value );
             $oPdf->setFont( 'Arial', '', 10 );
             $oPdf->text( 15, 79, $this->oxorder__oxdelcountry->value );
-        } else { // no delivery address - billing address is used for delivery
+        } else {
+            // no delivery address - billing address is used for delivery
             $this->_setBillingAddressToPdf( $oPdf );
         }
 
@@ -1101,7 +1102,8 @@ class MyOrder extends MyOrder_parent
 
         // #899C reverse html entities and references transformation is used in invoicepdf module
         // so this part must be enabled. Now it works with html references like &#123;
-        if ($blReverse) {   // replace now
+        if ($blReverse) {
+            // replace now
             $aTransTbl = get_html_translation_table (HTML_ENTITIES);
             $aTransTbl = array_flip ($aTransTbl) + array_flip ($aReplace);
             $sValue = strtr($sValue, $aTransTbl);
@@ -1143,6 +1145,8 @@ class MyOrder extends MyOrder_parent
 
     /**
      * Assigns data, stored in oxorderarticles to oxorder object .
+     *
+     * @param bool $blStorno Include canceled articles
      *
      * @return null
      */

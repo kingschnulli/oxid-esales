@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylist.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxcategorylist.php 25542 2010-02-02 11:28:16Z alfonsas $
  */
 
 
@@ -122,7 +122,7 @@ class oxCategoryList extends oxList
                     ." $sTable.oxpricefrom as oxpricefrom, $sTable.oxpriceto as oxpriceto,"
                     ." $sTable.oxicon as oxicon, $sTable.oxextlink as oxextlink ";
 
-            $sFieldList.= ",not $sTable.".$oBaseObject->getSqlFieldName( 'oxactive' )." as remove";
+            $sFieldList.= ",not $sTable.".$oBaseObject->getSqlFieldName( 'oxactive' )." as oxppremove";
 
 
         return $sFieldList;
@@ -383,7 +383,7 @@ class oxCategoryList extends oxList
         // Colect all items whitch must be remove
         $aRemoveList = array();
         foreach ($this->_aArray as $oCat) {
-            if ($oCat->oxcategories__remove->value) {
+            if ($oCat->oxcategories__oxppremove->value) {
                 if (isset($aRemoveList[$oCat->oxcategories__oxrootid->value])) {
                     $aRemoveRange = $aRemoveList[$oCat->oxcategories__oxrootid->value];
                 } else {
@@ -391,7 +391,7 @@ class oxCategoryList extends oxList
                 }
                 $aRemoveList[$oCat->oxcategories__oxrootid->value] = array_merge(range($oCat->oxcategories__oxleft->value, $oCat->oxcategories__oxright->value), $aRemoveRange);
             }
-            unset($oCat->oxcategories__remove);
+            unset($oCat->oxcategories__oxppremove);
         }
 
         // Remove colected items from list.

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: payment.php 25542 2010-02-02 11:28:16Z alfonsas $
  */
 
 /**
@@ -214,7 +214,8 @@ class Payment extends oxUBase
             $oPayment = oxNew( 'oxpayment' );
             if ( $oPayment->load( 'oxempty' ) ) {
                 $this->_oEmptyPayment = $oPayment;
-            } else { // some error with setup ??
+            } else {
+                // some error with setup ??
                 $this->_sPaymentError = -2;
             }
         } else {

@@ -124,10 +124,10 @@ class oxVariantHandler extends oxSuperCfg
                 $sVarName = oxDb::getDb()->quote($sMdSeparator.$aSelTitle[$sKey]);
                 $sVarNameUpdate .= "oxvarname".$sPrefix." = CONCAT(oxvarname".$sPrefix.", ".$sVarName.")";
             }
-            $MDVariants = $this->_assignValues( $aValues, $oVariants, $oArticle, $aConfLanguages);
+            $oMDVariants = $this->_assignValues( $aValues, $oVariants, $oArticle, $aConfLanguages);
             if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
                 $oAttribute = oxNew("oxattribute");
-                $oAttribute->assignVarToAttribute( $MDVariants, $aSelTitle );
+                $oAttribute->assignVarToAttribute( $oMDVariants, $aSelTitle );
             }
             $this->_updateArticleVarName( $sVarNameUpdate, $oArticle->oxarticles__oxid->value );
         }
@@ -191,11 +191,11 @@ class oxVariantHandler extends oxSuperCfg
                         if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
                             $oAttrList = oxNew('oxattribute');
                             $aIds = $oAttrList->getAttributeAssigns( $oSimpleVariant->oxarticles__oxid->value);
-                            $MDVariants["mdvar_".$sVarId] = $aIds;
+                            $aMDVariants["mdvar_".$sVarId] = $aIds;
                         }
                     }
                     if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
-                        $MDVariants[$sVarId] = $aValues[$i];
+                        $aMDVariants[$sVarId] = $aValues[$i];
                     }
                 }
                 $iCounter++;
@@ -214,11 +214,11 @@ class oxVariantHandler extends oxSuperCfg
                 $aParams['oxarticles__oxstockflag'] = $oArticle->oxarticles__oxstockflag->value;
                 $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
                 if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
-                    $MDVariants[$sVarId] = $aValues[$i];
+                    $aMDVariants[$sVarId] = $aValues[$i];
                 }
             }
         }
-        return $MDVariants;
+        return $aMDVariants;
     }
 
     /**

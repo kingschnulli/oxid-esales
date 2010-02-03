@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: user.php 25528 2010-02-02 10:47:32Z tomas $
  */
 
 /**
@@ -39,12 +39,6 @@ class User extends oxUBase
      * @var bool
      */
     protected $_blIsOrderStep = true;
-
-    /**
-     * Must be filled fields
-     * @var array
-     */
-    protected $_aMustFillFields = null;
 
     /**
      * Revers of option blOrderDisWithoutReg
@@ -196,24 +190,6 @@ class User extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns array of must-be-filled-fields
-     *
-     * @return array
-     */
-    public function getMustFillFields()
-    {
-        // passing must-be-filled-fields info
-        if ( $this->_aMustFillFields === null ) {
-            $this->_aMustFillFields = false;
-            $aMustFillFields = $this->getConfig()->getConfigParam( 'aMustFillFields');
-            if ( is_array( $aMustFillFields ) ) {
-                $this->_aMustFillFields = array_flip( $aMustFillFields );
-            }
-        }
-        return $this->_aMustFillFields;
-    }
-
-    /**
      * Template variable getter. Returns reverse option blOrderDisWithoutReg
      *
      * @return bool
@@ -309,9 +285,9 @@ class User extends oxUBase
     /**
      * Sets if show user shipping address
      *
-     * @param bool $blShowShipAddress if TRUE - shipping address is shown
-     *
      * @deprecated
+     *
+     * @param bool $blShowShipAddress if TRUE - shipping address is shown
      *
      * @return null
      */

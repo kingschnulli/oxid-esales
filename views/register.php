@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: register.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: register.php 25528 2010-02-02 10:47:32Z tomas $
  */
 
 /**
@@ -47,13 +47,6 @@ class Register extends User
      * @var string
      */
     protected $_sSuccessTemplate = 'register_success.tpl';
-
-    /**
-     * Array of fields which must be filled during registration
-     *
-     * @var array
-     */
-    protected $_aMustFillFields = null;
 
     /**
      * Current view search engine indexing state
@@ -105,25 +98,6 @@ class Register extends User
     public function getRegistrationStatus()
     {
         return oxConfig::getParameter( 'success' );
-    }
-
-    /**
-     * Returns array of fields which must be filled during registration
-     *
-     * @return array | bool
-     */
-    public function getMustFillFields()
-    {
-        if ( $this->_aMustFillFields === null ) {
-            $this->_aMustFillFields = false;
-
-            // passing must-be-filled-fields info
-            $aMustFillFields = $this->getConfig()->getConfigParam( 'aMustFillFields' );
-            if ( is_array( $aMustFillFields ) ) {
-                $this->_aMustFillFields = array_flip( $aMustFillFields );
-            }
-        }
-        return $this->_aMustFillFields;
     }
 
     /**

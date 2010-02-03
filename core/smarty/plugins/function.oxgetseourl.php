@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: function.oxgetseourl.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: function.oxgetseourl.php 25542 2010-02-02 11:28:16Z alfonsas $
  */
 
 
@@ -61,7 +61,7 @@ function smarty_function_oxgetseourl( $params, &$smarty )
 
     $sDynParams = isset( $params['params'] )?$params['params']:false;
     if ( $sDynParams ) {
-        include_once $smarty->_get_plugin_filepath( 'modifier','oxaddparams' );
+        include_once $smarty->_get_plugin_filepath( 'modifier', 'oxaddparams' );
         $sUrl = smarty_modifier_oxaddparams( $sUrl, $sDynParams );
     }
 

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: alist.php 25539 2010-02-02 11:24:21Z sarunas $
  */
 
 /**
@@ -597,7 +597,8 @@ class aList extends oxUBase
     protected function _addPageNrParam( $sUrl, $iPage, $iLang = null)
     {
         if ( oxUtils::getInstance()->seoIsActive() && ( $oCategory = $this->getActCategory() ) ) {
-            if ( $iPage ) { // only if page number > 0
+            if ( $iPage ) {
+                // only if page number > 0
                 $sUrl = oxSeoEncoderCategory::getInstance()->getCategoryPageUrl( $oCategory, $iPage, $iLang );
             }
         } else {
