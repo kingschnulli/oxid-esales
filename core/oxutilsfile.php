@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxutilsfile.php 25636 2010-02-04 21:36:25Z alfonsas $
  */
 
 /**
@@ -254,7 +254,7 @@ class oxUtilsFile extends oxSuperCfg
      *
      * @return string
      */
-    protected function _prepareImageName( $sValue, $sType, $blDemo = false, $sImagePath )
+    protected function _prepareImageName( $sValue, $sType, $blDemo, $sImagePath )
     {
         if ( $sValue ) {
             // add type to name

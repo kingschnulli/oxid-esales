@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 25471 2010-02-01 14:35:11Z alfonsas $
+ * @version   SVN: $Id: oxsession.php 25616 2010-02-04 15:15:33Z arvydas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -229,23 +229,23 @@ class oxSession extends oxSuperCfg
 
             //creating new sid
             if ( !$sid ) {
-                $this->initNewSession();
                 self::$_blIsNewSession = true;
+                $this->initNewSession();
             } else {
-                $this->_setSessionId($sid);
+                self::$_blIsNewSession = false;
+                $this->_setSessionId( $sid );
+                $this->_sessionStart();
             }
-
-            $this->_sessionStart();
 
             //special handling for new ZP cluster session, as in that case session_start() regenerates id
             if ( $this->_sId != session_id() ) {
                 $this->_setSessionId( session_id() );
             }
-        }
 
-        //checking for swapped client in case cookies are not available
-        if ( !$this->_getCookieSid() && $this->_isSwappedClient() ) {
-            $this->initNewSession();
+            //checking for swapped client
+            if ( !self::$_blIsNewSession && $this->_isSwappedClient() ) {
+                $this->initNewSession();
+            }
         }
     }
 
@@ -266,6 +266,11 @@ class oxSession extends oxSuperCfg
      */
     public function initNewSession()
     {
+        // starting session only if it was not started yet
+        if ( self::$_blIsNewSession ) {
+            $this->_sessionStart();
+        }
+
         //saving persistent params if old session exists
         $aPersistent = array();
         foreach ($this->_aPersistentParams as $sParam) {
@@ -283,6 +288,9 @@ class oxSession extends oxSuperCfg
         foreach ($aPersistent as $key => $sParam) {
             self::setVar($key, $aPersistent[$key]);
         }
+
+        // (re)setting actual user agent when initiating new session
+        self::setVar( "sessionagent", oxUtilsServer::getInstance()->getServerVar( 'HTTP_USER_AGENT' ) );
     }
 
     /**
@@ -601,15 +609,18 @@ class oxSession extends oxSuperCfg
 
             // checking if session user agent matches actual
             $blSwapped = $this->_checkUserAgent( $myUtilsServer->getServerVar( 'HTTP_USER_AGENT' ), self::getVar( 'sessionagent' ) );
+            if ( !$blSwapped ) {
+                if ( $myConfig->getConfigParam( 'blAdodbSessionHandler' ) ) {
+                    $blSwapped = $this->_checkSid();
+                }
 
-            if ( $myConfig->getConfigParam( 'blAdodbSessionHandler' ) ) {
-                $blSwapped = $this->_checkSid();
-            }
-
-            $blDisableCookieCheck = $myConfig->getConfigParam( 'blDisableCookieCheck' );
-            $blUseCookies = $myConfig->getConfigParam( 'blSessionUseCookies' ) || $this->isAdmin();
-            if ( !$blDisableCookieCheck && $blUseCookies ) {
-                $blSwapped = $this->_checkCookies( $myUtilsServer->getOxCookie( 'sid_key' ), self::getVar( "sessioncookieisset" ) );
+                if ( !$blSwapped ) {
+                    $blDisableCookieCheck = $myConfig->getConfigParam( 'blDisableCookieCheck' );
+                    $blUseCookies = $myConfig->getConfigParam( 'blSessionUseCookies' ) || $this->isAdmin();
+                    if ( !$blDisableCookieCheck && $blUseCookies ) {
+                        $blSwapped = $this->_checkCookies( $myUtilsServer->getOxCookie( 'sid_key' ), self::getVar( "sessioncookieisset" ) );
+                    }
+                }
             }
         }
 
@@ -624,15 +635,14 @@ class oxSession extends oxSuperCfg
      *
      * @return bool
      */
-    protected function _checkUserAgent( $sAgent, $sExistingAgent)
+    protected function _checkUserAgent( $sAgent, $sExistingAgent )
     {
         $blCheck = false;
         if ( $sAgent && $sAgent !== $sExistingAgent ) {
             $this->_sErrorMsg = "Different browser ({$sExistingAgent}, {$sAgent}), creating new SID...<br>";
             $blCheck = true;
-        } elseif ( !isset( $sExistingAgent ) ) {
-            self::setVar( "sessionagent", $sAgent );
         }
+
         return $blCheck;
     }
 

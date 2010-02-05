@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 25566 2010-02-02 14:20:11Z sarunas $
+ * @version   SVN: $Id: details.php 25611 2010-02-04 09:21:03Z sarunas $
  */
 
 /**
@@ -255,13 +255,13 @@ class Details extends oxUBase
             $oProduct = $this->getProduct();
 
             //loading full list of variants
-            $this->_aVariantList = $oProduct->getVariants();
+            $this->_aVariantList = $oProduct->getVariants( false );
 
             //if we are child and do not have any variants then let's load all parent variants as ours
             if ( ( $oParent = $this->_getParentProduct( $oProduct->oxarticles__oxparentid->value ) ) && count( $this->_aVariantList ) == 0 ) {
                 $myConfig = $this->getConfig();
 
-                $this->_aVariantList = $oParent->getVariants();
+                $this->_aVariantList = $oParent->getVariants( false );
 
                 //in variant list parent may be NOT buyable
                 if ( $oParent->blNotBuyableParent ) {

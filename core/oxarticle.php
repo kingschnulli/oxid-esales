@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 25483 2010-02-01 16:34:01Z alfonsas $
+ * @version   SVN: $Id: oxarticle.php 25611 2010-02-04 09:21:03Z sarunas $
  */
 
 // defining supported link types
@@ -672,8 +672,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $sQ = " and $sTable.oxparentid = '".$this->getId()."' ";
 
         //checking if variant is active and stock status
-        if ( $this->getConfig()->getConfigParam( 'blUseStock' ) && $blRemoveNotOrderables ) {
-            $sQ .= " and ( $sTable.oxstock > 0 or ( $sTable.oxstock <= 0 and ( $sTable.oxstockflag = 1 or $sTable.oxstockflag = 4 ) ) ) ";
+        if ( $this->getConfig()->getConfigParam( 'blUseStock' ) ) {
+            $sQ .= " and ( $sTable.oxstock > 0 or ( $sTable.oxstock <= 0 and $sTable.oxstockflag != 2 ";
+            if ( $blRemoveNotOrderables ) {
+                $sQ .= " and $sTable.oxstockflag != 3 ";
+            }
+            $sQ .= " ) ) ";
         }
 
         return $sQ;
@@ -1086,11 +1090,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         if ( !$sAttribs) {
             return null;
         }
-
-        // DODGER : Actually to optimize this function we only take the similar products from the first 100 hits
-        // I think that this is possible as this function anyway never worked like it should
-        // Calculation of iHitMin was ALWAYS == 1
-        // Still it's not so fast like I would like to have it, but I don't have any idea how to improve it more
 
         $aList = $this->_getSimList($sAttribs, $iCnt);
 

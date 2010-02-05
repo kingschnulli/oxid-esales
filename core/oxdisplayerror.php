@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdisplayerror.php, v 1.0 2007.8.23 17.34.22 mathiasf Exp
+ * @version   SVN: $Id: oxdisplayerror.php 25636 2010-02-04 21:36:25Z alfonsas $
  */
 
 /**

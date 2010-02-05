@@ -19,9 +19,14 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdisplayerrorinterface.php, v 1.0 2007.8.9 17.44.25 ,mathiasf Exp
+ * @version   SVN: $Id: oxdisplayerrorinterface.php 25636 2010-02-04 21:36:25Z alfonsas $
  */
 
+/**
+ * DisplayError interface
+ *
+ * @package core
+ */
 interface oxDisplayErrorInterface
 {
    /**

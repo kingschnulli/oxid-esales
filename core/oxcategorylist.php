@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylist.php 25542 2010-02-02 11:28:16Z alfonsas $
+ * @version   SVN: $Id: oxcategorylist.php 25628 2010-02-04 17:13:43Z tomas $
  */
 
 
@@ -213,9 +213,12 @@ class oxCategoryList extends oxList
         if (!$oCat) {
             return '';
         }
+
+        $sViewName = $this->getBaseObject()->getViewName();
+
         return "UNION SELECT ".$this->_getSqlSelectFieldsForTree('maincats', $aColumns)
                 ." FROM oxcategories AS subcats"
-                ." LEFT JOIN oxcategories AS maincats on maincats.oxparentid = subcats.oxparentid"
+                ." LEFT JOIN $sViewName AS maincats on maincats.oxparentid = subcats.oxparentid"
                 ." WHERE subcats.oxrootid = ".oxDb::getDb()->quote($oCat->oxcategories__oxrootid->value)
                 ." AND subcats.oxleft <= ". (int)$oCat->oxcategories__oxleft->value
                 ." AND subcats.oxright >= ".(int)$oCat->oxcategories__oxright->value;
@@ -460,8 +463,10 @@ class oxCategoryList extends oxList
         foreach ($this->_aArray as $oCat) {
             $sParentId = $oCat->oxcategories__oxparentid->value;
             if ( $sParentId != 'oxrootid') {
-                $this->_aArray[$sParentId]->setSortingIds( $aIds );
-                $this->_aArray[$sParentId]->setSubCat($oCat, $oCat->getId(), true);
+                if (isset($this->_aArray[$sParentId])) {
+                    $this->_aArray[$sParentId]->setSortingIds( $aIds );
+                    $this->_aArray[$sParentId]->setSubCat($oCat, $oCat->getId(), true);
+                }
             } else {
                 $aTree[$oCat->getId()] = $oCat;
             }
@@ -476,7 +481,9 @@ class oxCategoryList extends oxList
             unset($aParents['oxrootid']);
         }
         foreach (array_keys($aParents) as $sParent) {
-            $this->_aArray[$sParent]->sortSubCats();
+            if (isset($this->_aArray[$sParentId])) {
+                $this->_aArray[$sParent]->sortSubCats();
+            }
         }
 
         // Sort root categories
