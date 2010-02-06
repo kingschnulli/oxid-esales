@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: article_extend.php 25640 2010-02-05 06:42:24Z alfonsas $
  */
 
 /**
@@ -50,7 +50,8 @@ class Article_Extend extends oxAdminDetails
         $sChosenArtCat = $this->_getCategoryTree( "artcattree", oxConfig::getParameter( "artcat"));
 
         // all categories
-        if ( $soxId != "-1" && isset( $soxId ) ) { // load object
+        if ( $soxId != "-1" && isset( $soxId ) ) {
+            // load object
             $oArticle->loadInLang( $this->_iEditLang, $soxId );
 
 

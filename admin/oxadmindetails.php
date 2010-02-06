@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadmindetails.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxadmindetails.php 25640 2010-02-05 06:42:24Z alfonsas $
  */
 
 /**
@@ -353,7 +353,8 @@ class oxAdminDetails extends oxAdminView
                     break;
                 }
             }
-        } else { // no category selected - opening first available
+        } else {
+            // no category selected - opening first available
             $oCatTree->rewind();
             if ( $oCat = $oCatTree->current() ) {
                 $oCat->selected = 1;

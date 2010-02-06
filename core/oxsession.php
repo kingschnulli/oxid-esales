@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 25616 2010-02-04 15:15:33Z arvydas $
+ * @version   SVN: $Id: oxsession.php 25684 2010-02-05 17:09:00Z sarunas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -100,14 +100,32 @@ class oxSession extends oxSuperCfg
     /**
      * Array of Classes => methods, which requires forced cookies support
      *
-     * @var unknown_type
+     * @var array
+     *
+     * @deprecated
+     * @see $_aRequireSessionWithParams
      */
-    protected $_aRequireCookiesInFncs = array( 'register' => null,
-                                               'account'  => null,
-                                               'tobasket',
-                                               'login_noredirect',
-                                               'tocomparelist'
-                                               );
+    protected $_aRequireCookiesInFncs = array();
+
+    /**
+     * Force session start by defined parameter rules.
+     * First level array keys are parameters to check wich point to
+     * array of values wich need session.
+     *
+     * @var array
+     * @see _getRequireSessionWithParams()
+     */
+    protected $_aRequireSessionWithParams = array(
+                       'cl' => array (
+                            'register' => true,
+                            'account'  => true,
+                           ),
+                       'fnc' => array (
+                           'tobasket'         => true,
+                           'login_noredirect' => true,
+                           'tocomparelist'    => true,
+                           ),
+    );
 
     /**
      * Marker if processed urls must contain SID parameter
@@ -806,17 +824,56 @@ class oxSession extends oxSuperCfg
     }
 
     /**
+     * returns configuration array with info which parameters require session
+     * start
+     *
+     * @return array
+     */
+    protected function _getRequireSessionWithParams()
+    {
+        $aCfgArray = $this->getConfig()->getConfigParam('aRequireSessionWithParams');
+        if (is_array($aCfgArray)) {
+            $aDefault = $this->_aRequireSessionWithParams;
+            foreach ($aCfgArray as $key => $val) {
+                if (!is_array($val) && $val) {
+                    unset($aDefault[$key]);
+                }
+            }
+            return array_merge_recursive($aCfgArray, $aDefault);
+        }
+        return $this->_aRequireSessionWithParams;
+    }
+
+    /**
      * Tests if current action requires session
      *
      * @return bool
      */
     protected function _isSessionRequiredAction()
     {
+        // deprecated functionality for backwards compatibility
         $sFunction = oxConfig::getParameter( 'fnc' );
         $sClass = oxConfig::getParameter( 'cl' );
 
-        return ( $sFunction && in_array( strtolower( $sFunction ), $this->_aRequireCookiesInFncs ) ) ||
-               ( $sClass && array_key_exists( strtolower( $sClass ), $this->_aRequireCookiesInFncs ) );
+        if (( $sFunction && in_array( strtolower( $sFunction ), $this->_aRequireCookiesInFncs ) ) ||
+               ( $sClass && array_key_exists( strtolower( $sClass ), $this->_aRequireCookiesInFncs ) )) {
+            return true;
+        }
+        // end of deprecated functionality for backwards compatibility
+        foreach ($this->_getRequireSessionWithParams() as $sParam => $aValues) {
+            $sValue = oxConfig::getParameter( $sParam );
+            if (isset($sValue)) {
+                if (is_array($aValues)) {
+                    if (isset($aValues[$sValue]) && $aValues[$sValue]) {
+                        return true;
+                    }
+                } elseif ($aValues) {
+                    return true;
+                }
+            }
+        }
+
+        return ($_SERVER['REQUEST_METHOD'] == 'POST');
     }
 
     /**

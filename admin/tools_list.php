@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: tools_list.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: tools_list.php 25640 2010-02-05 06:42:24Z alfonsas $
  */
 
 /**
@@ -193,7 +193,8 @@ class Tools_List extends oxAdminList
                     if ( !$iPos ) {
                         $this->aSQLs[] = $sSQL;
                         return true;
-                    } elseif ( $sStrStart == '`' || $sSQL[$iPos-1] != '\\' ) { //found some query separators
+                    } elseif ( $sStrStart == '`' || $sSQL[$iPos-1] != '\\' ) {
+                        //found some query separators
                         $blString  = false;
                         $sStrStart = "";
                         break;
@@ -212,7 +213,8 @@ class Tools_List extends oxAdminList
                             $iPos++;
                     }
                 }
-            } elseif ( $sChar == ";" ) { // delimiter found, appending query array
+            } elseif ( $sChar == ";" ) {
+                // delimiter found, appending query array
                 $this->aSQLs[] = $oStr->substr( $sSQL, 0, $iPos );
                 $sSQL = ltrim( $oStr->substr( $sSQL, min( $iPos + 1, $iSQLlen ) ) );
                 $iSQLlen = $oStr->strlen( $sSQL );
@@ -223,7 +225,8 @@ class Tools_List extends oxAdminList
             } elseif ( ( $sChar == '"') || ( $sChar == '\'') || ( $sChar == '`')) {
                 $blString  = true;
                 $sStrStart = $sChar;
-            } elseif ( $sChar == "#" || ( $sChar == ' ' && $iPos > 1 && $sSQL[$iPos-2] . $sSQL[$iPos-1] == '--')) {  // removing # commented query code
+            } elseif ( $sChar == "#" || ( $sChar == ' ' && $iPos > 1 && $sSQL[$iPos-2] . $sSQL[$iPos-1] == '--')) {
+                // removing # commented query code
                 $iCommStart = (( $sSQL[$iPos] == "#") ? $iPos : $iPos-2);
                 $iCommEnd = ($oStr->strpos(' ' . $sSQL, "\012", $iPos+2))
                            ? $oStr->strpos(' ' . $sSQL, "\012", $iPos+2)

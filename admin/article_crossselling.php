@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_crossselling.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: article_crossselling.php 25640 2010-02-05 06:42:24Z alfonsas $
  */
 
 /**
@@ -51,7 +51,8 @@ class Article_Crossselling extends oxAdminDetails
         $sChosenArtCat2 = $this->_getCategoryTree( "artcattree2", oxConfig::getParameter( "artcat2"));
 
         $soxId = oxConfig::getParameter( "oxid");
-        if ( $soxId != "-1" && isset( $soxId ) ) {   // load object
+        if ( $soxId != "-1" && isset( $soxId ) ) {
+            // load object
             $oArticle->load( $soxId);
 
             if ($oArticle->isDerived())

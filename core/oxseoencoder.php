@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 25542 2010-02-02 11:28:16Z alfonsas $
+ * @version   SVN: $Id: oxseoencoder.php 25687 2010-02-05 17:30:10Z tomas $
  */
 
 /**
@@ -1111,7 +1111,9 @@ class oxSeoEncoder extends oxSuperCfg
         $iLanguage = isset( $iLanguage ) ? ( (int) $iLanguage ) : oxLang::getInstance()->getBaseLanguage();
         $sSeoUrl   = false;
 
-        $sQ = "select oxseourl, oxlang from oxseo where oxstdurl = ".$oDb->quote( $sStdUrl )." and oxlang = '$iLanguage' limit 1";
+        $sShopId = $this->getConfig()->getShopId();
+
+        $sQ = "select oxseourl, oxlang from oxseo where oxstdurl = ".$oDb->quote( $sStdUrl )." and oxlang = '$iLanguage' and oxshopid = '$sShopId' limit 1";
         $oRs = $oDb->execute( $sQ );
         if ( !$oRs->EOF ) {
             $sSeoUrl = $oRs->fields['oxseourl'];

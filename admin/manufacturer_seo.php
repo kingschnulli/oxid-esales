@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturer_seo.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: manufacturer_seo.php 25640 2010-02-05 06:42:24Z alfonsas $
  */
 
 /**
@@ -30,7 +30,7 @@ class Manufacturer_Seo extends Object_Seo
     /**
      * Render manufacturer seo view.
      *
-     * return string
+     * @return string
      */
     public function render()
     {
@@ -56,9 +56,9 @@ class Manufacturer_Seo extends Object_Seo
 
     /**
      * Returns objects seo url
-
+     *
      * @param oxmanufacturer $oManufacturer active manufacturer object
-
+     *
      * @return string
      */
     protected function _getSeoUrl( $oManufacturer )
@@ -80,7 +80,7 @@ class Manufacturer_Seo extends Object_Seo
     /**
      * Updating showsuffix field
      *
-     * return null
+     * @return null
      */
     public function save()
     {

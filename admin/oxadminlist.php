@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminlist.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxadminlist.php 25640 2010-02-05 06:42:24Z alfonsas $
  */
 
 /**
@@ -186,7 +186,8 @@ class oxAdminList extends oxAdminView
             $this->_aViewData['listTable'] = getViewName( $oListObject->getCoreTableName() );
             $myConfig->setGlobalParameter( 'ListCoreTable', $oListObject->getCoreTableName() );
 
-            if ( $oListObject->isMultilang() ) { // is the object multilingual?
+            if ( $oListObject->isMultilang() ) {
+                // is the object multilingual?
                 $oListObject->setLanguage( oxLang::getInstance()->getBaseLanguage() );
 
                 if ( isset( $this->_blEmployMultilanguage ) ) {

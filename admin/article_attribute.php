@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_attribute.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: article_attribute.php 25640 2010-02-05 06:42:24Z alfonsas $
  */
 
 /**
@@ -44,7 +44,8 @@ class Article_Attribute extends oxAdminDetails
         $this->_aViewData['edit'] = $oArticle = oxNew( 'oxarticle' );
 
         $soxId = oxConfig::getParameter( "oxid");
-        if ( $soxId != "-1" && isset( $soxId)) {   // load object
+        if ( $soxId != "-1" && isset( $soxId)) {
+            // load object
             $oArticle->load( $soxId);
 
             if ( $oArticle->isDerived() ) {
