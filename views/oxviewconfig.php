@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxviewconfig.php 25707 2010-02-08 13:08:01Z arvydas $
  */
 
 /**
@@ -59,17 +59,23 @@ class oxViewConfig extends oxSuperCfg
     {
         if ( ( $sValue = $this->getViewConfigParam( 'homeLink' ) ) === null ) {
             $myConfig = $this->getConfig();
-            $myUtils = oxUtils::getInstance();
+            $myUtils  = oxUtils::getInstance();
+            $oLang    = oxLang::getInstance();
 
             $sValue = null;
 
 
-            if ( $myUtils->seoIsActive() && !$sValue && $iLang = oxLang::getInstance()->getBaseLanguage() ) {
+            $iLang = $oLang->getBaseLanguage();
+            if ( $myUtils->seoIsActive() && !$sValue && $iLang ) {
                 $sValue = oxSeoEncoder::getInstance()->getStaticUrl( $this->getSelfLink() . 'cl=start', $iLang );
             }
 
             if ( !$sValue ) {
-                $sValue = $this->getSession()->processUrl( $this->getBaseDir() );
+                if ( $myConfig->getConfigParam( 'sDefaultLang' ) != $iLang ) {
+                    $sValue = $oLang->processUrl( $this->getSelfLink() );
+                } else {
+                    $sValue = $this->getSession()->processUrl( $this->getBaseDir() );
+                }
             }
 
             $this->setViewConfigParam( 'homeLink', $sValue );
@@ -283,6 +289,12 @@ class oxViewConfig extends oxSuperCfg
     {
         if ( ( $sValue = $this->getViewConfigParam( 'hiddensid' ) ) === null ) {
             $sValue = $this->getSession()->hiddenSid();
+
+            // appending language info to form
+            if ( ( $sLang = oxLang::getInstance()->getFormLang() ) ) {
+                $sValue .= "\n{$sLang}";
+            }
+
             $this->setViewConfigParam( 'hiddensid', $sValue );
         }
         return $sValue;

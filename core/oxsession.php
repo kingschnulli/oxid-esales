@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 25684 2010-02-05 17:09:00Z sarunas $
+ * @version   SVN: $Id: oxsession.php 25692 2010-02-08 07:29:01Z sarunas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -125,6 +125,7 @@ class oxSession extends oxSuperCfg
                            'login_noredirect' => true,
                            'tocomparelist'    => true,
                            ),
+                        '_artperpage' => true,
     );
 
     /**

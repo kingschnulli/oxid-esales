@@ -13,7 +13,7 @@
             <div class="clear"></div>
         </div>
         <div class="bar shop">
-            <a id="test_link_footer_home" href="[{ oxgetseourl ident=$oViewConf->getHomeLink() }]">[{ oxmultilang ident="INC_FOOTER_HOME" }]</a> |
+            <a id="test_link_footer_home" href="[{ $oViewConf->getHomeLink() }]">[{ oxmultilang ident="INC_FOOTER_HOME" }]</a> |
             <a id="test_link_footer_contact" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=contact" }]">[{ oxmultilang ident="INC_FOOTER_CONTACT" }]</a> |
             <a id="test_link_footer_help" href="[{ oxgetseourl ident=$oViewConf->getHelpLink() }]">[{ oxmultilang ident="INC_FOOTER_HELP" }]</a> |
             <a id="test_link_footer_guestbook" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=guestbook" }]">[{ oxmultilang ident="INC_FOOTER_GUESTBOOK" }]</a> |

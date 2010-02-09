@@ -32,7 +32,7 @@
 
     <div id="header">
         <div class="bar oxid">
-            <a class="logo" href="[{ oxgetseourl ident=$oViewConf->getHomeLink() }]">
+            <a class="logo" href="[{ $oViewConf->getHomeLink() }]">
                 <img src="[{$oViewConf->getImageUrl()}]logo.png" alt="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]">
             </a>
 
@@ -61,7 +61,7 @@
             <div class="fixed">
                 [{if $oView->isLanguageLoaded() }]
                     [{foreach from = $oxcmp_lang item = _language}]
-                        <a id="test_Lang_[{$_language->name}]" class="language[{if $_language->selected}] act[{/if}]" href="[{ oxgetseourl ident=$_language->link params=$oView->getDynUrlParams() }]" hreflang="[{ $_language->abbr }]" title="[{ $_language->name }]"><img src="[{$oViewConf->getImageUrl()}]lang/[{ $_language->abbr }].gif" alt="[{$_language->name}]"></a>
+                        <a id="test_Lang_[{$_language->name}]" class="language[{if $_language->selected}] act[{/if}]" href="[{ $_language->link|oxaddparams:$oView->getDynUrlParams() }]" hreflang="[{ $_language->abbr }]" title="[{ $_language->name }]"><img src="[{$oViewConf->getImageUrl()}]lang/[{ $_language->abbr }].gif" alt="[{$_language->name}]"></a>
                     [{/foreach}]
                 [{/if}]
                 [{if $oView->loadCurrency()}]
@@ -72,7 +72,7 @@
             </div>
             <div class="left">
                 [{if !$oView->showTopCatNavigation() }]
-                    <a id="test_HeaderHome" href="[{ oxgetseourl ident=$oViewConf->getHomeLink() }]">[{ oxmultilang ident="INC_HEADER_HOME" }]</a>
+                    <a id="test_HeaderHome" href="[{ $oViewConf->getHomeLink() }]">[{ oxmultilang ident="INC_HEADER_HOME" }]</a>
                 [{/if}]
 
                 [{if $oView->getWishlistName()}]
@@ -96,7 +96,7 @@
 
         [{if $oView->showTopCatNavigation()}]
         <div class="bar categories">
-            <a id="test_HeaderHome" href="[{ oxgetseourl ident=$oViewConf->getHomeLink() }]" class="fixed">[{ oxmultilang ident="INC_HEADER_HOME" }]</a>
+            <a id="test_HeaderHome" href="[{ $oViewConf->getHomeLink() }]" class="fixed">[{ oxmultilang ident="INC_HEADER_HOME" }]</a>
             <ul class="menue horizontal" id="mn.categories">
 
             [{assign var="iCatCnt" value="1"}]

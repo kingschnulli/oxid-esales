@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 25528 2010-02-02 10:47:32Z tomas $
+ * @version   SVN: $Id: oxubase.php 25707 2010-02-08 13:08:01Z arvydas $
  */
 
 /**
@@ -2104,8 +2104,7 @@ class oxUBase extends oxView
      */
     public function generatePageNavigationUrl()
     {
-        // $sClass = $this->_sThisAction;
-        return $this->getConfig()->getShopHomeURL().$this->_getRequestParams( false );
+        return oxLang::getInstance()->processUrl(  $this->getConfig()->getShopHomeURL().$this->_getRequestParams( false ) );
     }
 
     /**

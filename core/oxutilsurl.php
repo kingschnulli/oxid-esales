@@ -149,7 +149,7 @@ class oxUtilsUrl extends oxSuperCfg
         if ( count( $aAddParams ) ) {
 
             $sSep = '&amp;';
-            if ( strpos( $sUrl, '?' ) === false ) {
+            if ( getStr()->strpos( $sUrl, '?' ) === false ) {
                 $sSep = '?';
             }
 

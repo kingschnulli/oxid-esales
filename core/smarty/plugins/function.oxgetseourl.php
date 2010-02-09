@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: function.oxgetseourl.php 25542 2010-02-02 11:28:16Z alfonsas $
+ * @version   SVN: $Id: function.oxgetseourl.php 25707 2010-02-08 13:08:01Z arvydas $
  */
 
 
@@ -56,6 +56,9 @@ function smarty_function_oxgetseourl( $params, &$smarty )
         $oEncoder = oxSeoEncoder::getInstance();
         if ( ( $sStaticUrl = $oEncoder->getStaticUrl( $sUrl ) ) ) {
             $sUrl = $sStaticUrl;
+        } else {
+            // in case language parameter is not added to url
+            $sUrl =oxLang::getInstance()->processUrl( $sUrl );
         }
     }
 

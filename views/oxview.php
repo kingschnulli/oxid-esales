@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxview.php 25707 2010-02-08 13:08:01Z arvydas $
  */
 
 /**
@@ -550,7 +550,7 @@ class oxView extends oxSuperCfg
      */
     public function getAdditionalParams()
     {
-        return '';
+        return oxLang::getInstance()->processUrl( '' );
     }
 
     /**

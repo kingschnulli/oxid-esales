@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxlang.php 25707 2010-02-08 13:08:01Z arvydas $
  */
 
 /**
@@ -33,6 +33,13 @@ class oxLang extends oxSuperCfg
      * @var oxlang
      */
     private static $_instance = null;
+
+    /**
+     * Language parameter name
+     *
+     * @var string
+     */
+    protected $_sName = 'lang';
 
     /**
      * Current shop base language Id
@@ -756,4 +763,70 @@ class oxLang extends oxSuperCfg
         return ($a1->sort > $a2->sort);
     }
 
+    /**
+     * Returns language id param name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->_sName;
+    }
+
+    /**
+     * Returns form hidden language parameter
+     *
+     * @return string
+     */
+    public function getFormLang()
+    {
+        if ( !$this->isAdmin()) {
+            return "<input type=\"hidden\" name=\"".$this->getName()."\" value=\"". $this->getBaseLanguage() . "\">";
+        }
+    }
+
+    /**
+     * Returns url language parameter
+     *
+     * @param int $iLang lanugage id [optional]
+     *
+     * @return string
+     */
+    public function getUrlLang( $iLang = null )
+    {
+        if ( !$this->isAdmin()) {
+            $iLang = isset( $iLang ) ? $iLang : $this->getBaseLanguage();
+            return $this->getName()."=". $iLang;
+        }
+    }
+
+    /**
+     * Is needed appends url with language parameter
+     *
+     * @param string $sUrl  url to process
+     * @param int    $iLang language id [optional]
+     *
+     * @return string
+     */
+    public function processUrl( $sUrl, $iLang = null )
+    {
+        $iLang = isset( $iLang ) ? $iLang : $this->getBaseLanguage();
+        $oStr = getStr();
+        if ( !$this->isAdmin() && $oStr->strpos( $sUrl, 'lang=' ) === false &&
+             $iLang != oxConfig::getInstance()->getConfigParam( 'sDefaultLang' ) ) {
+
+            $sParam = $this->getUrlLang( $iLang );
+            if ( $sUrl ) {
+                $iLen = $oStr->strlen( $sUrl );
+                if ( $iLen < 5 || $oStr->strpos( $sUrl, '&amp;', $iLen - 5 ) === false ) {
+                    $sUrl .= "&amp;";
+                }
+                $sUrl .= $sParam;
+            } else {
+                $sUrl .= $sParam."&amp;";
+            }
+        }
+
+        return $sUrl;
+    }
 }
