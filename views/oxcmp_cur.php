@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_cur.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxcmp_cur.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 /**
@@ -156,7 +156,7 @@ class oxcmp_cur extends oxView
 
         reset( $this->aCurrencies );
         while ( list( , $oItem ) = each( $this->aCurrencies ) ) {
-            $oItem->link = "{$sURL}&amp;cur={$oItem->id}";
+            $oItem->link = oxUtilsUrl::getInstance()->processUrl("{$sURL}&amp;cur={$oItem->id}");
         }
 
         parent::init();

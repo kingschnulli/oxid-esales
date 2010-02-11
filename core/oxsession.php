@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 25692 2010-02-08 07:29:01Z sarunas $
+ * @version   SVN: $Id: oxsession.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -125,7 +125,7 @@ class oxSession extends oxSuperCfg
                            'login_noredirect' => true,
                            'tocomparelist'    => true,
                            ),
-                        '_artperpage' => true,
+                       '_artperpage' => true,
     );
 
     /**
@@ -439,6 +439,9 @@ class oxSession extends oxSuperCfg
      *
      * @param string $sUrl Current url
      *
+     * @deprecated
+     * @see oxUtilsUrl::processUrl()
+     *
      * @return string
      */
     public function url( $sUrl )
@@ -485,19 +488,13 @@ class oxSession extends oxSuperCfg
         $blUseCookies = $myConfig->getConfigParam( 'blSessionUseCookies' ) || $this->isAdmin();
         $sRet         = '';
 
+        $blDisableSid = oxUtils::getInstance()->isSearchEngine()
+                        && is_array($myConfig->getConfigParam( 'aCacheViews' ) )
+                        && !$this->isAdmin();
+
         //no cookie?
-        if ( $this->getId() && ($blForceSid || !$blUseCookies || !$this->_getCookieSid())) {
+        if ( !$blDisableSid && $this->getId() && ($blForceSid || !$blUseCookies || !$this->_getCookieSid())) {
             $sRet = ( $blForceSid ? $this->getForcedName() : $this->getName() )."=".$this->getId();
-        }
-
-        if (oxUtils::getInstance()->isSearchEngine() && is_array($myConfig->getConfigParam( 'aCacheViews' ) ) && !$this->isAdmin() ) {
-
-            $sRet = '';
-
-            $sShopId = $myConfig->getShopId();
-            if ( $sShopId != 1) {
-                $sRet = "shp=" . $sShopId;
-            }
         }
 
         return $sRet;
@@ -886,6 +883,14 @@ class oxSession extends oxSuperCfg
      */
     public function isSidNeeded( $sUrl = null )
     {
+        if ( $blUseCookies && $this->_getCookieSid() ) {
+            // switching from ssl to non ssl or vice versa?
+            if ( ( strpos( $sUrl, "https:" ) === 0 && !$this->getConfig()->isSsl() ) ||
+                 ( strpos( $sUrl, "http:" ) === 0 && $this->getConfig()->isSsl() ) ) {
+                return true;
+            }
+        }
+
         if ( $sUrl && !$this->getConfig()->isCurrentUrl( $sUrl ) ) {
             return true;
         } elseif ( $this->_blSidNeeded === null ) {
@@ -918,22 +923,35 @@ class oxSession extends oxSuperCfg
 
     /**
      * Appends url with session ID, but only if oxSession::_isSidNeeded() returns true
+     * Direct usage of this method to retrieve end url result is discouraged - instead
+     * see oxUtilsUrl::processUrl
      *
      * @param string $sUrl url to append with sid
+     *
+     * @see oxUtilsUrl::processUrl
      *
      * @return string
      */
     public function processUrl( $sUrl )
     {
-        if ( !$this->isAdmin() && $this->isSidNeeded( $sUrl ) ) {
-            $oStr = getStr();
-            // only if sid is not yet set and we have something to append
-            $sSid = $this->sid( true );
-            if ( $sSid && $oStr->strstr( $sUrl, 'sid=' ) === false ) {
-                $sUrl .= ( $oStr->strstr( $sUrl, '?' ) !== false ?  '&amp;' : '?' ) . $sSid . '&amp;';
+        if (!$this->isAdmin()) {
+            $sSid = '';
+            if ( $this->isSidNeeded( $sUrl ) ) {
+                // only if sid is not yet set and we have something to append
+                $sSid = $this->sid( true );
+            } else {
+                $sSid = $this->sid();
+            }
+            if ($sSid) {
+                if ( !preg_match('/(\?|&(amp;)?)sid=/i', $sUrl) && (false === strpos($sUrl, $sSid))) {
+                    if (!preg_match('/(\?|&(amp;)?)$/', $sUrl)) {
+                        $oStr = getStr();
+                        $sUrl .= ( $oStr->strstr( $sUrl, '?' ) !== false ?  '&amp;' : '?' );
+                    }
+                    $sUrl .= $sSid . '&amp;';
+                }
             }
         }
-
         return $sUrl;
     }
 }

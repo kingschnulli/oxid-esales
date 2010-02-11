@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxconfig.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -834,7 +834,7 @@ class oxConfig extends oxSuperCfg
             $sURL = $this->getShopURL( $iLang );
         }
 
-        return $this->getSession()->url( $sURL.'index.php' );
+        return oxUtilsUrl::getInstance()->processUrl( $sURL.'index.php', false );
     }
 
     /**
@@ -847,7 +847,7 @@ class oxConfig extends oxSuperCfg
      */
     public function getShopHomeUrl( $iLang = null, $blAdmin = null )
     {
-        return $this->getSession()->url( $this->getShopUrl( $iLang, $blAdmin).'index.php' );
+        return oxUtilsUrl::getInstance()->processUrl($this->getShopUrl( $iLang, $blAdmin).'index.php', false );
     }
 
     /**
@@ -857,7 +857,7 @@ class oxConfig extends oxSuperCfg
      */
     public function getShopSecureHomeUrl()
     {
-        return $this->getSession()->url( $this->getSslShopUrl().'index.php' );
+        return  oxUtilsUrl::getInstance()->processUrl( $this->getSslShopUrl().'index.php', false );
     }
 
     /**

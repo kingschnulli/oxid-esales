@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 25687 2010-02-05 17:30:10Z tomas $
+ * @version   SVN: $Id: oxseoencoder.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 /**
@@ -333,7 +333,7 @@ class oxSeoEncoder extends oxSuperCfg
     protected function _getFullUrl( $sSeoUrl, $iLang = null)
     {
         $sFullUrl = $this->getConfig()->getShopUrl( $iLang ) . $sSeoUrl;
-        return $this->getSession()->processUrl( $sFullUrl );
+        return oxUtilsUrl::getInstance()->processSeoUrl( $sFullUrl );
     }
 
     /**
@@ -742,7 +742,11 @@ class oxSeoEncoder extends oxSuperCfg
     protected function _trimUrl( $sUrl, $iLang = null )
     {
         $sUrl = str_replace( $this->getConfig()->getShopURL( $iLang ), '', $sUrl );
-        return preg_replace( '/(force_)?(admin_)?sid=[a-z0-9\.]+&?(amp;)?/i', '', $sUrl );
+        $sUrl = preg_replace( '/(\?|&(amp;)?)(force_)?(admin_)?sid=[a-z0-9\.]+&?(amp;)?/i', '\1', $sUrl );
+        $sUrl = preg_replace( '/(\?|&(amp;)?)shp=[0-9]+&?(amp;)?/i', '\1', $sUrl );
+        $sUrl = preg_replace( '/(\?|&(amp;)?)lang=[0-9]+&?(amp;)?/i', '\1', $sUrl );
+        $sUrl = preg_replace( '/(\?|&(amp;)?)&(amp;)?/i', '\1', $sUrl );
+        return $sUrl;
     }
 
     /**

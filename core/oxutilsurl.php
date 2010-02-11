@@ -146,33 +146,57 @@ class oxUtilsUrl extends oxSuperCfg
      */
     protected function _appendUrl( $sUrl, $aAddParams )
     {
+        $sSep = '&amp;';
+        if ( getStr()->strpos( $sUrl, '?' ) === false ) {
+            $sSep = '?';
+        }
+
         if ( count( $aAddParams ) ) {
 
-            $sSep = '&amp;';
-            if ( getStr()->strpos( $sUrl, '?' ) === false ) {
-                $sSep = '?';
-            }
-
             foreach ( $aAddParams as $sName => $sValue ) {
-                if ( $sValue ) {
+                if ( $sValue && !preg_match("/\?(.*&(amp;)?)?$sName=/", $sUrl)) {
                     $sUrl .= $sSep . $sName . "=" . $sValue;
                     $sSep = '&amp;';
                 }
             }
         }
-        return $sUrl;
+        if ($sUrl) {
+            return $sUrl.$sSep;
+        }
+        return '';
     }
 
     /**
      * Performs base url processing - adds required parameters to given url
      *
-     * @param string $sUrl url to process
+     * @param string $sUrl       url to process
+     * @param bool   $blFinalUrl should url be finalized or should it end with ? or &amp; (default true)
+     * @param array  $aParams    additional parameters (default null)
+     * @param int    $iLang      url target language (default null)
      *
      * @return string
      */
-    public function processUrl( $sUrl )
+    public function processUrl( $sUrl, $blFinalUrl = true, $aParams = null, $iLang = null )
     {
-        return $this->_appendUrl( $sUrl, $this->getBaseAddUrlParams() );
+        $aAddParams = $this->getAddUrlParams();
+        if ( is_array($aParams) && count( $aParams ) ) {
+            $aAddParams = array_merge( $aAddParams, $aParams );
+        }
+
+        $ret = oxSession::getInstance()->processUrl(
+                    oxLang::getInstance()->processUrl(
+                        $this->_appendUrl( 
+                                $sUrl, 
+                                $aAddParams
+                        ),
+                        $iLang
+                    )
+                );
+
+        if ($blFinalUrl) {
+            $ret = preg_replace('/(\?|&(amp;)?)$/', '', $ret);
+        }
+        return $ret;
     }
 
     /**
@@ -184,30 +208,27 @@ class oxUtilsUrl extends oxSuperCfg
      */
     public function processSeoUrl( $sUrl )
     {
-        return $this->getSession()->processUrl( $this->_appendUrl( $sUrl, $this->getAddUrlParams() ) );
+        $ret = $this->getSession()->processUrl( $this->_appendUrl( $sUrl, $this->getAddUrlParams() ) );
+        $ret = preg_replace('/(\?|&(amp;)?)$/', '', $ret);
+        return $ret;
     }
 
     /**
      * Standard/dynamic url processor: adds various needed parameters, like language id, currency, shop id
+     * This method is deprecated, see oxUtilsUrl::processUrl instead
      *
      * @param string $sUrl           url to process
      * @param array  $aParams        additional parameters add to url
      * @param int    $iLang          url language id
      * @param bool   $blAddLangParam add language parameter or not
      *
+     * @deprecated
+     * @see oxUtilsUrl::processUrl
+     *
      * @return string
      */
     public function processStdUrl( $sUrl, $aParams, $iLang, $blAddLangParam )
     {
-        $aAddParams = $this->getAddUrlParams();
-        if ( $blAddLangParam && !oxUtils::getInstance()->seoIsActive() ) {
-            $aAddParams['lang'] = $iLang;
-        }
-
-        if ( count( $aParams ) ) {
-            $aAddParams = array_merge( $aAddParams, $aParams );
-        }
-
-        return $this->getSession()->processUrl( $this->_appendUrl( $sUrl, $aAddParams ) );
+        return $this->processUrl($sUrl, true, $aParams, $iLang);
     }
 }

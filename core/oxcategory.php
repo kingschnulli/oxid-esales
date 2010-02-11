@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategory.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxcategory.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 /**
@@ -549,7 +549,7 @@ class oxCategory extends oxI18n implements oxIUrl
         if ( !isset( $this->_aSeoUrls[$iLang] ) ) {
             $this->_aSeoUrls[$iLang] = $this->getBaseSeoLink( $iLang );
         }
-        return oxUtilsUrl::getInstance()->processSeoUrl( $this->_aSeoUrls[$iLang] );
+        return $this->_aSeoUrls[$iLang];
     }
 
     /**
@@ -619,7 +619,7 @@ class oxCategory extends oxI18n implements oxIUrl
     public function getStdLink( $iLang = null, $aParams = array() )
     {
         if ( isset( $this->oxcategories__oxextlink ) && $this->oxcategories__oxextlink->value ) {
-            return $this->getSession()->url( $this->oxcategories__oxextlink->value );
+            return  oxUtilsUrl::getInstance()->processUrl( $this->oxcategories__oxextlink->value, false );
         }
 
         if ( $iLang === null ) {

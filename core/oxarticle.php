@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 25611 2010-02-04 09:21:03Z sarunas $
+ * @version   SVN: $Id: oxarticle.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 // defining supported link types
@@ -2331,7 +2331,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $this->_aSeoUrls[$iLang][$iLinkType] = $this->getBaseSeoLink( $iLang, $blMain );
         }
 
-        $sUrl = oxUtilsUrl::getInstance()->processSeoUrl( $this->_aSeoUrls[$iLang][$iLinkType] );
+        $sUrl = $this->_aSeoUrls[$iLang][$iLinkType];
         if ( isset($this->_aSeoAddParams[$iLang])) {
             $sUrl .= ( ( strpos( $sUrl.$this->_aSeoAddParams[$iLang], '?' ) === false ) ? '?' : '&amp;' ).$this->_aSeoAddParams[$iLang];
         }
@@ -2569,7 +2569,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 $this->_sMoreDetailLink .= '&amp;cnid='.$sActCat;
             }
             $this->_sMoreDetailLink .= '&amp;anid='.$this->getId();
-            $this->_sMoreDetailLink = $this->getSession()->processUrl( $this->_sMoreDetailLink );
+            $this->_sMoreDetailLink = $this->_sMoreDetailLink;
         }
 
         return $this->_sMoreDetailLink;
@@ -2609,8 +2609,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                     $this->_sToBasketLink .= '&amp;tpl='.$sTpl;
                 }
             }
-
-            $this->_sToBasketLink = $this->getSession()->processUrl( $this->_sToBasketLink );
         }
 
         return $this->_sToBasketLink;

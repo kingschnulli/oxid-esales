@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrecommlist.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxrecommlist.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 /**
@@ -450,7 +450,7 @@ class oxRecommList extends oxBase implements oxIUrl
             $this->_aSeoUrls[$iLang] = $this->getBaseSeoLink( $iLang );
         }
 
-        return oxUtilsUrl::getInstance()->processSeoUrl( $this->_aSeoUrls[$iLang] );
+        return $this->_aSeoUrls[$iLang];
     }
 
     /**

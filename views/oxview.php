@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 25707 2010-02-08 13:08:01Z arvydas $
+ * @version   SVN: $Id: oxview.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 /**
@@ -526,20 +526,22 @@ class oxView extends oxSuperCfg
             // building redirect path ...
             $sHeader  = ( $sClassName )?"cl=$sClassName&":'';  // adding view name
             $sHeader .= ( $sPageParams )?"$sPageParams&":'';   // adding page params
-            $sHeader .= $this->getSession()->sid();       // adding session Id
+            $sHeader .= $this->getSession()->sid();            // adding session Id
 
             // choosing URL to redirect
-            $sURL = $myConfig->isSsl()?$myConfig->getSslShopUrl():$myConfig->getShopUrl();
+            $sUrl = $myConfig->isSsl()?$myConfig->getSslShopUrl():$myConfig->getShopUrl();
 
             // different redirect URL in SEO mode
             if ( $this->isAdmin() ) {
-                $sURL .= $myConfig->getConfigParam( 'sAdminDir' ) . '/';
+                $sUrl .= $myConfig->getConfigParam( 'sAdminDir' ) . '/';
             }
 
-            $sURL = "{$sURL}index.php?{$sHeader}";
+            $sUrl = "{$sUrl}index.php?{$sHeader}";
+
+            $sUrl = oxUtilsUrl::getInstance()->processUrl($sUrl);
 
             //#M341 do not add redirect parameter
-            oxUtils::getInstance()->redirect( $sURL, (bool) oxConfig::getParameter( 'redirected' ) );
+            oxUtils::getInstance()->redirect( $sUrl, (bool) oxConfig::getParameter( 'redirected' ) );
         }
     }
 
@@ -550,7 +552,7 @@ class oxView extends oxSuperCfg
      */
     public function getAdditionalParams()
     {
-        return oxLang::getInstance()->processUrl( '' );
+        return oxUtilsUrl::getInstance()->processUrl( '', false );
     }
 
     /**

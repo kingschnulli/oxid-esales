@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 25484 2010-02-01 19:23:52Z alfonsas $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 25751 2010-02-10 11:22:06Z alfonsas $
  */
 
 /**
@@ -102,6 +102,38 @@ class oxArticleList extends oxList
     }
 
     /**
+     * Get history article id's from session or cookie.
+     *
+     * @return array
+     */
+    public function getHistoryArticles()
+    {
+        if ($aArticlesIds = $this->getSession()->getVar('aHistoryArticles')) {
+            return $aArticlesIds;
+        } elseif ( $sArticlesIds = oxUtilsServer::getInstance()->getOxCookie('aHistoryArticles')) {
+            return explode('|', $sArticlesIds);
+        }
+    }
+
+    /**
+     * Set history article id's to session or cookie
+     *
+     * @param array $aArticlesIds array history article ids
+     *
+     * @return null
+     */
+    public function setHistoryArticles($aArticlesIds)
+    {
+        if ($this->getSession()->getId()) {
+            $this->getSession()->setVar('aHistoryArticles', $aArticlesIds);
+            // clean cookie, if session started
+            oxUtilsServer::getInstance()->setOxCookie('aHistoryArticles', '');
+        } else {
+            oxUtilsServer::getInstance()->setOxCookie('aHistoryArticles', implode('|', $aArticlesIds));
+        }
+    }
+
+    /**
      * Loads up to 4 history (normally recently seen) articles from session, and adds $sArtId to history.
      * Returns article id array.
      *
@@ -111,8 +143,7 @@ class oxArticleList extends oxList
      */
     public function loadHistoryArticles($sArtId)
     {
-        $mySession = $this->getSession();
-        $aHistoryArticles = $mySession->getVar('aHistoryArticles');
+        $aHistoryArticles = $this->getHistoryArticles();
         $aHistoryArticles[] = $sArtId;
 
         // removing dublicates
@@ -122,14 +153,14 @@ class oxArticleList extends oxList
             array_shift($aHistoryArticles);
         }
 
-        //add to session
-        $mySession->setVar('aHistoryArticles', $aHistoryArticles);
+        $this->setHistoryArticles($aHistoryArticles);
 
         //remove current article and return array
         //asignment =, not ==
         if (($iCurrentArt = array_search($sArtId, $aHistoryArticles)) !== false) {
             unset ($aHistoryArticles[$iCurrentArt]);
         }
+
         $aHistoryArticles = array_values($aHistoryArticles);
         $this->loadIds($aHistoryArticles);
         $this->_sortByIds($aHistoryArticles);

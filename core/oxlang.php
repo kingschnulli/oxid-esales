@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 25707 2010-02-08 13:08:01Z arvydas $
+ * @version   SVN: $Id: oxlang.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 /**
@@ -802,9 +802,13 @@ class oxLang extends oxSuperCfg
 
     /**
      * Is needed appends url with language parameter
+     * Direct usage of this method to retrieve end url result is discouraged - instead
+     * see oxUtilsUrl::processUrl
      *
      * @param string $sUrl  url to process
      * @param int    $iLang language id [optional]
+     *
+     * @see oxUtilsUrl::processUrl
      *
      * @return string
      */
@@ -812,19 +816,22 @@ class oxLang extends oxSuperCfg
     {
         $iLang = isset( $iLang ) ? $iLang : $this->getBaseLanguage();
         $oStr = getStr();
+        
         if ( !$this->isAdmin() && $oStr->strpos( $sUrl, 'lang=' ) === false &&
-             $iLang != oxConfig::getInstance()->getConfigParam( 'sDefaultLang' ) ) {
+             ($iLang != oxConfig::getInstance()->getConfigParam( 'sDefaultLang' )) ) {
 
             $sParam = $this->getUrlLang( $iLang );
             if ( $sUrl ) {
-                $iLen = $oStr->strlen( $sUrl );
-                if ( $iLen < 5 || $oStr->strpos( $sUrl, '&amp;', $iLen - 5 ) === false ) {
-                    $sUrl .= "&amp;";
+                if ($oStr->strpos( $sUrl, '?') === false) {
+                    $sUrl .= "?";
+                } else {
+                    $iLen = $oStr->strlen( $sUrl );
+                    if ( $iLen < 5 || $oStr->strpos( $sUrl, '&amp;', $iLen - 5 ) === false ) {
+                        $sUrl .= "&amp;";
+                    }
                 }
-                $sUrl .= $sParam;
-            } else {
-                $sUrl .= $sParam."&amp;";
             }
+            $sUrl .= $sParam."&amp;";
         }
 
         return $sUrl;

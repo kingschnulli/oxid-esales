@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariant.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxsimplevariant.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 /**
@@ -350,7 +350,7 @@ class oxSimpleVariant extends oxI18n implements oxIUrl
         if ( !isset( $this->_aSeoUrls[$iLang][$iLinkType] ) ) {
             $this->_aSeoUrls[$iLang][$iLinkType] = $this->getBaseSeoLink( $iLang );
         }
-        return oxUtilsUrl::getInstance()->processSeoUrl( $this->_aSeoUrls[$iLang][$iLinkType] );
+        return $this->_aSeoUrls[$iLang][$iLinkType];
 
     }
 }

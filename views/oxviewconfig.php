@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 25707 2010-02-08 13:08:01Z arvydas $
+ * @version   SVN: $Id: oxviewconfig.php 25755 2010-02-10 13:59:48Z sarunas $
  */
 
 /**
@@ -71,11 +71,7 @@ class oxViewConfig extends oxSuperCfg
             }
 
             if ( !$sValue ) {
-                if ( $myConfig->getConfigParam( 'sDefaultLang' ) != $iLang ) {
-                    $sValue = $oLang->processUrl( $this->getSelfLink() );
-                } else {
-                    $sValue = $this->getSession()->processUrl( $this->getBaseDir() );
-                }
+                $sValue = preg_replace('#index.php\??$#', '', $this->getSelfLink());
             }
 
             $this->setViewConfigParam( 'homeLink', $sValue );
@@ -109,8 +105,7 @@ class oxViewConfig extends oxSuperCfg
         $sCatnid  = $this->getActCatId();
         $sTplName = $this->getActTplName();
 
-        $sLink = $this->getConfig()->getShopHomeURL()."cl={$sClass}&amp;".( $sCatnid ? "cnid={$sCatnid}" : '' )."&amp;fnc=logout".( $sTplName ? "&amp;tpl=".basename( $sTplName ) : '' )."&amp;redirect=1";
-        return $this->getSession()->processUrl( $sLink );
+        return $this->getConfig()->getShopHomeURL()."cl={$sClass}&amp;".( $sCatnid ? "cnid={$sCatnid}" : '' )."&amp;fnc=logout".( $sTplName ? "&amp;tpl=".basename( $sTplName ) : '' )."&amp;redirect=1";
     }
 
     /**
@@ -122,8 +117,7 @@ class oxViewConfig extends oxSuperCfg
     {
         $sTplName = $this->getActTplName();
         $sClass   = $this->getActiveClassName();
-        $sLink = $this->getConfig()->getShopCurrentURL()."cl=help&amp;page={$sClass}".( $sTplName ? "&amp;tpl={$sTplName}" : '' );
-        return $this->getSession()->processUrl( $sLink );
+        return $this->getConfig()->getShopCurrentURL()."cl=help&amp;page={$sClass}".( $sTplName ? "&amp;tpl={$sTplName}" : '' );
     }
 
     /**
@@ -294,6 +288,7 @@ class oxViewConfig extends oxSuperCfg
             if ( ( $sLang = oxLang::getInstance()->getFormLang() ) ) {
                 $sValue .= "\n{$sLang}";
             }
+
 
             $this->setViewConfigParam( 'hiddensid', $sValue );
         }
