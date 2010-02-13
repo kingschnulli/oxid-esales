@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_utils.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxcmp_utils.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 /**
@@ -105,6 +105,10 @@ class oxcmp_utils extends oxView
      */
     public function toCompareList( $sProductId = null, $dAmount = null, $aSel = null, $blOverride = false, $blBundle = false )
     {
+        if (!$this->getViewConfig()->getShowCompareList()) {
+            return;
+        }
+
         //disables adding of articles if current client is Search Engine
         if ( oxUtils::getInstance()->isSearchEngine() ) {
             return;
@@ -201,6 +205,10 @@ class oxcmp_utils extends oxView
      */
     public function toWishList( $sProductId = null, $dAmount = null, $aSel = null )
     {
+        if (!$this->getViewConfig()->getShowWishlist()) {
+            return;
+        }
+
         $oUser = $this->getUser();
         if ( !$oUser ) {
             return; // we shouldnt call this if not logged in

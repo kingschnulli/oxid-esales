@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 25611 2010-02-04 09:21:03Z sarunas $
+ * @version   SVN: $Id: details.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 /**
@@ -599,6 +599,10 @@ class Details extends oxUBase
      */
     public function addToRecomm()
     {
+        if (!$this->getViewConfig()->getShowListmania()) {
+            return;
+        }
+
         $sRecommText = trim( ( string ) oxConfig::getParameter( 'recomm_txt' ) );
         $sRecommList = oxConfig::getParameter( 'recomm' );
         $sArtId      = oxConfig::getParameter( 'anid' );
@@ -1141,6 +1145,10 @@ class Details extends oxUBase
      */
     public function getSimilarRecommLists()
     {
+        if (!$this->getViewConfig()->getShowListmania()) {
+            return false;
+        }
+
         if ( $this->_oRecommList === null ) {
             $this->_oRecommList = false;
             if ( $oProduct = $this->getProduct() ) {

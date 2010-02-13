@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 25539 2010-02-02 11:24:21Z sarunas $
+ * @version   SVN: $Id: alist.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 /**
@@ -766,6 +766,10 @@ class aList extends oxUBase
      */
     public function getSimilarRecommLists()
     {
+        if (!$this->getViewConfig()->getShowListmania()) {
+            return false;
+        }
+
         if ( $this->_oRecommList === null ) {
             $this->_oRecommList = false;
             if ( $aCatArtList = $this->getArticleList() ) {

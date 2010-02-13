@@ -28,8 +28,10 @@
             [{/oxhasrights}]
             <a id="test_link_footer_account" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_MYACCOUNT" }]</a> |
             <a id="test_link_footer_noticelist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_noticelist" }]" rel="nofollow"> [{ oxmultilang ident="INC_FOOTER_MYNOTICELIST" }]</a>
+            [{if $oViewConf->getShowWishlist()}]
               | <a id="test_link_footer_wishlist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_wishlist" }]" rel="nofollow"> [{ oxmultilang ident="INC_FOOTER_MYWISHLIST" }]</a>
               | <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wishlist" params="wishid="|cat:$wishid }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_PUBLICWISHLIST" }]</a>
+            [{/if}]
         </div>
         <div class="bar icons">
             [{*

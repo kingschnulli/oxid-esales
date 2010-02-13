@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: rss.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: rss.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 /**
@@ -177,7 +177,7 @@ class Rss extends oxUBase
      */
     public function recommlists()
     {
-        if (in_array('oxrss_recommlists', $this->getConfig()->getConfigParam( 'aRssSelected' ))) {
+        if ($this->getViewConfig()->getShowListmania() && in_array('oxrss_recommlists', $this->getConfig()->getConfigParam( 'aRssSelected' ))) {
             $oArticle = oxNew('oxarticle');
             if ($oArticle->load(oxConfig::getParameter('anid'))) {
                 $this->_oRss->loadRecommLists($oArticle);

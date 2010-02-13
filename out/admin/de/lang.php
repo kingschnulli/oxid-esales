@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: lang.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 $sLangName  = 'Deutsch';
@@ -1567,6 +1567,9 @@ $aLang = array(
 'SHOP_PERF_USETIMECHECKINARTLOAD'               => 'Beim Laden von Artikeln "Aktiv von/bis" berücksichtigen',
 'SHOP_PERF_SHOWTOPBASKET'                       => 'Warenkorb oben anzeigen',
 'SHOP_PERF_DISBASKETSAVING'                     => 'Warenkörbe von angemeldeten Benutzern <strong>nicht</strong> speichern',
+'SHOP_PERF_SHOWLISTMANIA'                       => '[tr] Show Listmania',
+'SHOP_PERF_SHOWWISHLIST'                        => '[tr] Show gift registry',
+'SHOP_PERF_SHOWCOMPARELIST'                     => '[tr] Show compare list',
 'DYNSCREEN_LOCAL_TITLE'                         => 'eCommerce Services',
 'DYNSCREEN_LOCAL_TEXT'                          => 'Some general info about eCommerce services...',
 

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: account_wishlist.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: account_wishlist.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 /**
@@ -202,6 +202,10 @@ class Account_Wishlist extends Account
      */
     public function getSimilarRecommLists()
     {
+        if (!$this->getViewConfig()->getShowListmania()) {
+            return false;
+        }
+
         // recomm list
         if ( $this->_aRecommList === null ) {
 

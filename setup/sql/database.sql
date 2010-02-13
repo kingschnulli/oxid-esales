@@ -410,6 +410,9 @@ INSERT INTO `oxconfig` VALUES ('7044252b61dd44324.24181665', 'oxbaseshop', 'bl_p
 INSERT INTO `oxconfig` VALUES ('77c425a29db68f0d9.00182375', 'oxbaseshop', 'bl_perfLoadManufacturerTree', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES ('669425a324684b6c0.57696393', 'oxbaseshop', 'bl_perfShowLeftBasket', 'bool', '');
 INSERT INTO `oxconfig` VALUES ('669425a3246855199.09823559', 'oxbaseshop', 'bl_perfShowRightBasket', 'bool', 0x07);
+INSERT INTO `oxconfig` VALUES ('78a9473894d473f6ed28f04e80d929fc', 'oxbaseshop', 'bl_perfShowCompareList', 'bool', 0x07);
+INSERT INTO `oxconfig` VALUES ('78acb2f595da54b5f865e54aaccdb967', 'oxbaseshop', 'bl_perfShowListmania', 'bool', 0x07);
+INSERT INTO `oxconfig` VALUES ('78a43329124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'bl_perfShowWishlist', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES ('79e417a4eaad1a593.54850808', 'oxbaseshop', 'blStoreIPs', 'bool', '');
 INSERT INTO `oxconfig` VALUES ('79e417a4eaad9dfa6.77588633', 'oxbaseshop', 'aDeniedDynGroups', 'arr', 0x4dba322c77e44ef7ced6acac1f35ea091294b94a7572f88ffe92);
 INSERT INTO `oxconfig` VALUES ('33341949f476b65e8.17282442', 'oxbaseshop', 'iAttributesPercent', 'str', 0x77c2);

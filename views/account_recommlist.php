@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: account_recommlist.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: account_recommlist.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 /**
@@ -183,6 +183,10 @@ class Account_Recommlist extends Account
      */
     public function getActiveRecommList()
     {
+        if (!$this->getViewConfig()->getShowListmania()) {
+            return false;
+        }
+
         if ( $this->_oActRecommList === null ) {
             $this->_oActRecommList = false;
 
@@ -218,6 +222,10 @@ class Account_Recommlist extends Account
      */
     public function saveRecommList()
     {
+        if (!$this->getViewConfig()->getShowListmania()) {
+            return;
+        }
+
         if ( ( $oUser = $this->getUser() ) ) {
             if ( !( $oRecommList = $this->getActiveRecommList() ) ) {
                 $oRecommList = oxNew( 'oxrecommlist' );
@@ -260,6 +268,10 @@ class Account_Recommlist extends Account
      */
     public function editList()
     {
+        if (!$this->getViewConfig()->getShowListmania()) {
+            return;
+        }
+
         // deleting on demand
         if ( ( $sAction = oxConfig::getParameter( 'deleteList' ) ) &&
              ( $oRecommList = $this->getActiveRecommList() ) ) {
@@ -275,6 +287,10 @@ class Account_Recommlist extends Account
      */
     public function removeArticle()
     {
+        if (!$this->getViewConfig()->getShowListmania()) {
+            return;
+        }
+
         if ( ( $sArtId = oxConfig::getParameter( 'aid' ) ) &&
              ( $oRecommList = $this->getActiveRecommList() ) ) {
             $oRecommList->removeArticle( $sArtId );

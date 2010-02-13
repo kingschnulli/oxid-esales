@@ -458,6 +458,39 @@
              </td>
             </tr>
 
+            <tr>
+             <td valign="top" class="conftext">
+                <input type=hidden name=confbools[bl_perfShowListmania] value=false>
+                <input type=checkbox name=confbools[bl_perfShowListmania] value=true  [{if ($confbools.bl_perfShowListmania)}]checked[{/if}] [{ $readonly }]>
+                [{ oxinputhelp ident="HELP_SHOP_PERF_SHOWLISTMANIA" }]
+             </td>
+             <td valign="top" class="conftext" width="100%">
+              [{ oxmultilang ident="SHOP_PERF_SHOWLISTMANIA" }]
+             </td>
+            </tr>
+
+            <tr>
+             <td valign="top" class="conftext">
+                <input type=hidden name=confbools[bl_perfShowWishlist] value=false>
+                <input type=checkbox name=confbools[bl_perfShowWishlist] value=true  [{if ($confbools.bl_perfShowWishlist)}]checked[{/if}] [{ $readonly }]>
+                [{ oxinputhelp ident="HELP_SHOP_PERF_SHOWWISHLIST" }]
+             </td>
+             <td valign="top" class="conftext" width="100%">
+              [{ oxmultilang ident="SHOP_PERF_SHOWWISHLIST" }]
+             </td>
+            </tr>
+
+            <tr>
+             <td valign="top" class="conftext">
+                <input type=hidden name=confbools[bl_perfShowCompareList] value=false>
+                <input type=checkbox name=confbools[bl_perfShowCompareList] value=true  [{if ($confbools.bl_perfShowCompareList)}]checked[{/if}] [{ $readonly }]>
+                [{ oxinputhelp ident="HELP_SHOP_PERF_SHOWCOMPARELIST" }]
+             </td>
+             <td valign="top" class="conftext" width="100%">
+              [{ oxmultilang ident="SHOP_PERF_SHOWCOMPARELIST" }]
+             </td>
+            </tr>
+
             </table>
         </td>
     </tr>

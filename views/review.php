@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: review.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: review.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 /**
@@ -366,6 +366,10 @@ class Review extends oxUBase
      */
     public function getActiveRecommList()
     {
+        if (!$this->getViewConfig()->getShowListmania()) {
+            return false;
+        }
+
         if ( $this->_oActiveRecommList === null ) {
             $this->_oActiveRecommList = false;
 

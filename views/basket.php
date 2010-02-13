@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: basket.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: basket.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 /**
@@ -177,6 +177,10 @@ class Basket extends oxUBase
      */
     public function getSimilarRecommLists()
     {
+        if (!$this->getViewConfig()->getShowListmania()) {
+            return false;
+        }
+
         if ( $this->_oRecommList === null) {
             $this->_oRecommList = false;
 

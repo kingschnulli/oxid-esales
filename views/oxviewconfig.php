@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 25755 2010-02-10 13:59:48Z sarunas $
+ * @version   SVN: $Id: oxviewconfig.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 /**
@@ -671,6 +671,36 @@ class oxViewConfig extends oxSuperCfg
     public function getNrOfCatArticles()
     {
         return $this->getConfig()->getConfigParam( 'aNrofCatArticles' );
+    }
+
+    /**
+     * Returns config param "aNrofCatArticles" value
+     *
+     * @return bool
+     */
+    public function getShowWishlist()
+    {
+        return $this->getConfig()->getConfigParam( 'bl_perfShowWishlist' );
+    }
+
+    /**
+     * Returns config param "aNrofCatArticles" value
+     *
+     * @return bool
+     */
+    public function getShowCompareList()
+    {
+        return $this->getConfig()->getConfigParam( 'bl_perfShowCompareList' );
+    }
+
+    /**
+     * Returns config param "aNrofCatArticles" value
+     *
+     * @return bool
+     */
+    public function getShowListmania()
+    {
+        return $this->getConfig()->getConfigParam( 'bl_perfShowListmania' );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: lang.php 25793 2010-02-12 10:18:17Z sarunas $
  */
 
 /*
@@ -1573,6 +1573,9 @@ $aLang = array(
 'SHOP_PERF_USETIMECHECKINARTLOAD'               => 'Check "Active From/To" when loading Products',
 'SHOP_PERF_SHOWTOPBASKET'                       => 'Display Cart at Top',
 'SHOP_PERF_DISBASKETSAVING'                     => 'Don\'t save Shopping Carts of registered Users',
+'SHOP_PERF_SHOWLISTMANIA'                       => 'Show Listmania',
+'SHOP_PERF_SHOWWISHLIST'                        => 'Show gift registry',
+'SHOP_PERF_SHOWCOMPARELIST'                     => 'Show compare list',
 'DYNSCREEN_LOCAL_TITLE'                         => 'eCommerce Services',
 'DYNSCREEN_LOCAL_TEXT'                          => 'Some general info about eCommerce services...',
 

@@ -75,8 +75,10 @@
                     <a id="test_HeaderHome" href="[{ $oViewConf->getHomeLink() }]">[{ oxmultilang ident="INC_HEADER_HOME" }]</a>
                 [{/if}]
 
-                [{if $oView->getWishlistName()}]
-                    <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wishlist" }]" class="">[{ $oView->getWishlistName() }][{ oxmultilang ident="INC_HEADER_PRIVATWISHLIST" }]</a>
+                [{if $oViewConf->getShowWishlist()}]
+                    [{if $oView->getWishlistName()}]
+                        <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wishlist" }]" class="">[{ $oView->getWishlistName() }][{ oxmultilang ident="INC_HEADER_PRIVATWISHLIST" }]</a>
+                    [{/if}]
                 [{/if}]
             </div>
 

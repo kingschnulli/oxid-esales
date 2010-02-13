@@ -243,16 +243,18 @@
     </form>
 
     <div class="actions">
-        [{if $isfiltering }]
+        [{if $isfiltering && $oViewConf->getShowCompareList()}]
             [{oxid_include_dynamic file="dyn/compare_links.tpl" testid="" type="compare" aid=$product->oxarticles__oxid->value anid=$product->oxarticles__oxnid->value in_list=$product->isOnComparisonList() page=$pageNavigation->actPage-1 text_to_id="DETAILS_COMPARE" text_from_id="DETAILS_REMOVEFROMCOMPARELIST"}]
         [{/if}]
 
         <a id="test_suggest" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=suggest" params="anid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="DETAILS_RECOMMEND" }]</a>
 
-        [{ if $oxcmp_user }]
-            <a id="test_Recommlist" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=recommadd" params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]" class="details">[{ oxmultilang ident="DETAILS_ADDTORECOMMLIST" }]</a>
-        [{ else}]
-            <a id="test_LoginToRecommlist" class="reqlogin" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="DETAILS_LOGGINTOACCESSRECOMMLIST" }]</a>
+        [{if $oViewConf->getShowListmania()}]
+            [{ if $oxcmp_user }]
+                <a id="test_Recommlist" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=recommadd" params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]" class="details">[{ oxmultilang ident="DETAILS_ADDTORECOMMLIST" }]</a>
+            [{ else}]
+                <a id="test_LoginToRecommlist" class="reqlogin" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="DETAILS_LOGGINTOACCESSRECOMMLIST" }]</a>
+            [{ /if}]
         [{ /if}]
 
         [{if $oxcmp_user }]
@@ -261,10 +263,12 @@
             <a id="test_LoginToNotice" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_LOGGINTOACCESSNOTICELIST" }]</a>
         [{/if}]
 
-        [{if $oxcmp_user }]
-            <a id="wlist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&anid=`$product->oxarticles__oxnid->value`&amp;fnc=towishlist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_ADDTOWISHLIST" }]</a>
-        [{else}]
-            <a id="test_LoginToWish" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_LOGGINTOACCESSWISHLIST" }]</a>
+        [{if $oViewConf->getShowWishlist()}]
+            [{if $oxcmp_user }]
+                <a id="wlist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&anid=`$product->oxarticles__oxnid->value`&amp;fnc=towishlist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_ADDTOWISHLIST" }]</a>
+            [{else}]
+                <a id="test_LoginToWish" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_LOGGINTOACCESSWISHLIST" }]</a>
+            [{/if}]
         [{/if}]
     </div>
 
