@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnavigationtree.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxnavigationtree.php 25840 2010-02-17 17:10:28Z arvydas $
  */
 
 /**
@@ -629,6 +629,28 @@ class OxNavigationTree extends oxSuperCfg
         if ( $oNodeList->length ) {
             return $oNodeList;
         }
+    }
+
+    /**
+     * Marks passed node as active
+     *
+     * @param string $sNodeId node id
+     *
+     * @return null
+     */
+    public function markNodeActive( $sNodeId )
+    {
+        $oXPath = new DOMXPath( $this->getDomXml() );
+        $oNodeList = $oXPath->query( "//*[@cl='{$sNodeId}' or @list='{$sNodeId}']" );
+
+        if ( $oNodeList->length ) {
+            foreach ( $oNodeList as $oNode ) {
+                // special case for external resources
+                $oNode->setAttribute( 'active', 1 );
+                $oNode->parentNode->setAttribute( 'active', 1 );
+            }
+        }
+
     }
 
     /**

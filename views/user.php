@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 25528 2010-02-02 10:47:32Z tomas $
+ * @version   SVN: $Id: user.php 25824 2010-02-17 09:22:52Z alfonsas $
  */
 
 /**
@@ -285,9 +285,9 @@ class User extends oxUBase
     /**
      * Sets if show user shipping address
      *
-     * @deprecated
-     *
      * @param bool $blShowShipAddress if TRUE - shipping address is shown
+     *
+     * @deprecated
      *
      * @return null
      */

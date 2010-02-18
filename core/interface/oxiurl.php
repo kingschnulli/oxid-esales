@@ -49,5 +49,3 @@ interface oxIUrl
      */
     public function getStdLink( $iLang = null, $aParams = array() );
 }
-
-?>

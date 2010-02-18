@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminview.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxadminview.php 25840 2010-02-17 17:10:28Z arvydas $
  */
 
 /**
@@ -548,9 +548,8 @@ class oxAdminView extends oxView
      */
     public function chshp()
     {
-        $sActShop = oxConfig::getParameter( 'actshop' );
-        $this->getConfig()->setShopId( $sActShop );
-        oxSession::setVar( "shp", $sActShop);
+        $sActShop = oxConfig::getParameter( 'shp' );
+        oxSession::setVar( "shp", $sActShop );
         oxSession::setVar( 'currentadminshop', $sActShop );
     }
 

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: navigation.php 25640 2010-02-05 06:42:24Z alfonsas $
+ * @version   SVN: $Id: navigation.php 25840 2010-02-17 17:10:28Z arvydas $
  */
  /**
  * Administrator GUI navigation manager class.
@@ -107,6 +107,27 @@ class Navigation extends oxAdminView
         $this->_aViewData['shoplist'] = $oShoplist;
 
         return $sItem;
+    }
+
+    /**
+     * Changing active shop
+     *
+     * @return string
+     */
+    public function chshp()
+    {
+        parent::chshp();
+
+        // informing about basefrm parameters
+        $this->_aViewData['loadbasefrm'] = true;
+        $sListView = oxConfig::getParameter( 'listview' );
+        $sEditView = oxConfig::getParameter( 'editview' );
+        $iActEdit  = oxConfig::getParameter( 'actedit' );
+
+
+        $this->_aViewData['listview'] = $sListView;
+        $this->_aViewData['editview'] = $sEditView;
+        $this->_aViewData['actedit']  = $iActEdit;
     }
 
     /**
