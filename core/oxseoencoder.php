@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 25755 2010-02-10 13:59:48Z sarunas $
+ * @version   SVN: $Id: oxseoencoder.php 25873 2010-02-18 15:03:27Z arvydas $
  */
 
 /**
@@ -327,12 +327,13 @@ class oxSeoEncoder extends oxSuperCfg
      *
      * @param string $sSeoUrl seo URL
      * @param int    $iLang   active language (deprecated - does nothing)
+     * @param bool   $blSsl   forces to build ssl url
      *
      * @return string
      */
-    protected function _getFullUrl( $sSeoUrl, $iLang = null)
+    protected function _getFullUrl( $sSeoUrl, $iLang = null, $blSsl = false )
     {
-        $sFullUrl = $this->getConfig()->getShopUrl( $iLang ) . $sSeoUrl;
+        $sFullUrl = ( $blSsl ? $this->getConfig()->getSslShopUrl( $iLang ) : $this->getConfig()->getShopUrl( $iLang ) ) . $sSeoUrl;
         return oxUtilsUrl::getInstance()->processSeoUrl( $sFullUrl );
     }
 
@@ -741,7 +742,8 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _trimUrl( $sUrl, $iLang = null )
     {
-        $sUrl = str_replace( $this->getConfig()->getShopURL( $iLang ), '', $sUrl );
+        $myConfig = $this->getConfig();
+        $sUrl = str_replace( array( $myConfig->getShopUrl( $iLang ), $myConfig->getSslShopUrl( $iLang ) ), '', $sUrl );
         $sUrl = preg_replace( '/(\?|&(amp;)?)(force_)?(admin_)?sid=[a-z0-9\.]+&?(amp;)?/i', '\1', $sUrl );
         $sUrl = preg_replace( '/(\?|&(amp;)?)shp=[0-9]+&?(amp;)?/i', '\1', $sUrl );
         $sUrl = preg_replace( '/(\?|&(amp;)?)lang=[0-9]+&?(amp;)?/i', '\1', $sUrl );
@@ -1016,7 +1018,7 @@ class oxSeoEncoder extends oxSuperCfg
 
         $sFullUrl = '';
         if ( ( $sSeoUrl = $this->_getStaticUri( $sStdUrl, $iShopId, $iLang ) ) ) {
-            $sFullUrl = $this->_getFullUrl( $sSeoUrl, $iLang );
+            $sFullUrl = $this->_getFullUrl( $sSeoUrl, $iLang, strpos( $sStdUrl, "https:" ) === 0 );
         }
         return $sFullUrl;
     }
@@ -1098,7 +1100,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     public function getDynamicUrl( $sStdUrl, $sSeoUrl, $iLang )
     {
-        return $this->_getFullUrl( $this->_getDynamicUri( $sStdUrl, $sSeoUrl, $iLang ) );
+        return $this->_getFullUrl( $this->_getDynamicUri( $sStdUrl, $sSeoUrl, $iLang ), strpos( $sStdUrl, "https:" ) === 0 );
     }
 
     /**

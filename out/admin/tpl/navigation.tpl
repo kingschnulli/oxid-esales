@@ -49,7 +49,7 @@
             <input type="hidden" name="cl" value="[{ $shop->cl }]">
             <input type="hidden" name="item" value="navigation.tpl">
             <input type="hidden" name="fnc" value="chshp">
-            <select class="folderselect" onChange="selectShop( this.value );">
+            <select id="selectshop" class="folderselect" onChange="selectShop( this.value );">
             [{foreach from=$shoplist item=oShop}]
               <option value="[{ $oShop->oxshops__oxid->value|default:$shop->id }]" [{ if $shop->id == $oShop->oxshops__oxid->value|default:$shop->id }]SELECTED[{/if}] >[{$oShop->oxshops__oxname->value|default:$actshop}]</option>
             [{/foreach}]

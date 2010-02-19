@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 25542 2010-02-02 11:28:16Z alfonsas $
+ * @version   SVN: $Id: oxcmp_user.php 25871 2010-02-18 14:36:10Z rimvydas.paskevicius $
  */
 
 // defining login/logout states
@@ -569,7 +569,11 @@ class oxcmp_user extends oxView
     protected function _getDelAddressData()
     {
         // if user company name, user name and additional info has special chars
-        $aRawVal = array('oxaddress__oxcompany', 'oxaddress__oxaddinfo', 'oxaddress__oxfname', 'oxaddress__oxlname', 'oxaddress__oxcity');
+        $aRawVal = array('oxaddress__oxcompany', 'oxaddress__oxaddinfo', 'oxaddress__oxfname',
+                         'oxaddress__oxlname', 'oxaddress__oxcity', 'oxaddress__oxstreet',
+                         'oxaddress__oxstreetnr', 'oxaddress__oxzip', 'oxaddress__oxfon',
+                         'oxaddress__oxfax');
+
         $aDelAdress = $aDeladr = oxConfig::getParameter( 'deladr', $aRawVal );
 
         if ( is_array( $aDeladr ) ) {
