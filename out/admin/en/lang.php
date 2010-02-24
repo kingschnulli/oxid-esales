@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 25793 2010-02-12 10:18:17Z sarunas $
+ * @version   SVN: $Id: lang.php 25992 2010-02-23 10:32:48Z philipp.grashoff $
  */
 
 /*
@@ -597,7 +597,7 @@ $aLang = array(
 'DISCOUNT_USERS_SETUSER'                        => 'Assigned Users',
 'DYN_ADBUTLER_PARTNERID'                        => 'AdButler PartnerID',
 'DYN_AFFILI24_PARTNERID'                        => 'Affili24 PartnerID',
-'DYN_AFFILINET_SITEID'                          => 'Affili.Net SiteID',
+'DYN_AFFILINET_SITEID'                          => 'Affili.Net Partner Program ID',
 'DYN_AFFILIWELT_PARTNERID'                      => 'Affiliwelt PartnerID (alt)',
 'DYN_ECONDA_ACTIVE'                             => 'Activate Econda Webcontrolling?',
 'DYN_ECONDA_ATTENTION'                          => 'Please note: ',
