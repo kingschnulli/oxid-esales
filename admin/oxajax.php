@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxajax.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxajax.php 26584 2010-03-16 16:34:23Z arvydas $
  */
 
 // shop path for includes
@@ -77,6 +77,13 @@ class ajaxListComponent extends oxSuperCfg
     protected $_iSqlLimit = 2500;
 
     /**
+     * Ajax container name
+     *
+     * @var string
+     */
+    protected $_sContainer = null;
+
+    /**
      * Initializes AJAX columns
      *
      * @param array $aColumns Array of DB table columns which are loaded from DB
@@ -116,7 +123,7 @@ class ajaxListComponent extends oxSuperCfg
      */
     public function setName( $sName )
     {
-        $this->sContainer = $sName;
+        $this->_sContainer = $sName;
     }
 
     /**
@@ -328,15 +335,18 @@ class ajaxListComponent extends oxSuperCfg
      */
     protected function _getFilter()
     {
-        $myConfig = $this->getConfig();
         $sQ = '';
         $aFilter = oxConfig::getParameter( 'aFilter' );
         if ( is_array( $aFilter ) && count( $aFilter ) ) {
             $aCols = $this->_getVisibleColNames();
             $blSep = false;
             $oDb = oxDb::getDb();
-            $sLangTag = oxLang::getInstance()->getLanguageTag();
+            $oLang = oxLang::getInstance();
             $oStr = getStr();
+
+            $sLangTag = $oLang->getLanguageTag();
+            $blIsUtf  = $this->getConfig()->isUtf();
+            $sCharset = $oLang->translateString( "charset" );
 
             foreach ( $aFilter as $sCol => $sValue ) {
 
@@ -350,8 +360,8 @@ class ajaxListComponent extends oxSuperCfg
                     if ( $sQ )
                         $sQ .= ' and ';
 
-                    if (!$myConfig->isUtf()) {
-                        $sValue = iconv('UTF-8', oxLang::getInstance()->translateString("charset"), $sValue );
+                    if ( !$blIsUtf ) {
+                        $sValue = iconv( 'UTF-8', $sCharset, $sValue );
                     }
 
                     // escaping special characters
@@ -379,7 +389,7 @@ class ajaxListComponent extends oxSuperCfg
      */
     protected function _addFilter( $sQ )
     {
-        if ( $sQ && $sFilter = $this->_getFilter() ) {
+        if ( $sQ && ( $sFilter = $this->_getFilter() ) ) {
             $sQ .= ( ( stristr( $sQ, 'where' ) === false )?'where':' and ' ) . $sFilter;
         }
         return $sQ;
@@ -395,7 +405,7 @@ class ajaxListComponent extends oxSuperCfg
     protected function _getAll( $sQ )
     {
         $aReturn = array();
-        $rs = oxDb::getDb()->Execute( $sQ );
+        $rs = oxDb::getDb()->execute( $sQ );
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
                 $aReturn[] = $rs->fields[0];
@@ -471,18 +481,31 @@ class ajaxListComponent extends oxSuperCfg
     {
         if ( !$this->getConfig()->isUtf() ) {
             // TODO: improve this
-            if ( is_array( $aData['records'] ) && $iRecSize = count( $aData['records'] ) ) {
+            if ( is_array( $aData['records'] ) && ( $iRecSize = count( $aData['records'] ) ) ) {
                 $aKeys = array_keys( current( $aData['records'] ) );
                 $iKeySize = count( $aKeys );
+                $sCharset = oxLang::getInstance()->translateString("charset");
                 for ( $i = 0; $i < $iRecSize; $i++ ) {
                     for ( $c = 0; $c < $iKeySize; $c++ ) {
-                        $aData['records'][$i][$aKeys[$c]] = iconv(oxLang::getInstance()->translateString("charset"), "UTF-8", $aData['records'][$i][$aKeys[$c]] );
+                        $aData['records'][$i][$aKeys[$c]] = iconv( $sCharset, "UTF-8", $aData['records'][$i][$aKeys[$c]] );
                     }
                 }
             }
         }
 
-        echo json_encode( $aData );
+        $this->_output( json_encode( $aData ) );
+    }
+
+    /**
+     * Echoes given string
+     *
+     * @param string $sOut string to echo
+     *
+     * @return null
+     */
+    protected function _output( $sOut )
+    {
+        echo $sOut;
     }
 
     /**
@@ -535,9 +558,10 @@ class ajaxListComponent extends oxSuperCfg
      */
     public function resetArtSeoUrl( $aArtIds )
     {
-        if ( !is_array($aArtIds) ) {
-            $aArtIds = array($aArtIds);
+        if ( !is_array( $aArtIds ) ) {
+            $aArtIds = array( $aArtIds );
         }
+
         foreach ( $aArtIds as $sArtId ) {
            oxSeoEncoder::getInstance()->markAsExpired( $sArtId );
         }
@@ -570,9 +594,9 @@ class ajaxListComponent extends oxSuperCfg
     public function resetCounter( $sCounterType, $sValue = null )
     {
         $blDeleteCacheOnLogout = $this->getConfig()->getConfigParam( 'blClearCacheOnLogout' );
-        $myUtilsCount = oxUtilsCount::getInstance();
 
         if ( !$blDeleteCacheOnLogout ) {
+            $myUtilsCount = oxUtilsCount::getInstance();
             switch ( $sCounterType ) {
                 case 'priceCatArticle':
                     $myUtilsCount->resetPriceCatArticleCount( $sValue );
@@ -629,7 +653,7 @@ if ( $blAjaxCall ) {
     $myConfig->setConfigParam( 'blTemplateCaching', false );
 
     // authorization
-    if ( !count(oxUtilsServer::getInstance()->getOxCookie()) || !oxUtils::getInstance()->checkAccessRights()) {
+    if ( !(oxSession::getInstance()->checkSessionChallenge() && count(oxUtilsServer::getInstance()->getOxCookie()) && oxUtils::getInstance()->checkAccessRights())) {
         header( "location:index.php");
         oxUtils::getInstance()->showMessageAndExit( "" );
     }

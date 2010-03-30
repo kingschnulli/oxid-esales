@@ -26,6 +26,7 @@ $aColumns = array( 'container1' => array(    // field , table,         visible, 
                                         array( 'oxartnum', 'oxarticles', 1, 0, 0 ),
                                         array( 'oxtitle',  'oxarticles', 1, 1, 0 ),
                                         array( 'oxean',    'oxarticles', 1, 0, 0 ),
+                                        array( 'oxmpn',    'oxarticles', 0, 0, 0 ),
                                         array( 'oxprice',  'oxarticles', 0, 0, 0 ),
                                         array( 'oxstock',  'oxarticles', 0, 0, 0 ),
                                         array( 'oxid',     'oxarticles', 0, 0, 1 )

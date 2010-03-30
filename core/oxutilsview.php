@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxutilsview.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -168,12 +168,12 @@ class oxUtilsView extends oxSuperCfg
              $oEx->setStackTrace( $oEr->getTraceAsString() );
              $oEx->setDebug( $blFull );
              $oEr = $oEx;
-        } elseif ( $oEr && ! ( $oEr instanceof oxDisplayErrorInterface ) ) {
+        } elseif ( $oEr && ! ( $oEr instanceof oxIDisplayError ) ) {
             // assuming that a string was given
             $sTmp = $oEr;
             $oEr = oxNew( 'oxDisplayError' );
             $oEr->setMessage( $sTmp );
-        } elseif ( $oEr instanceof oxDisplayErrorInterface ) {
+        } elseif ( $oEr instanceof oxIDisplayError ) {
             // take the object
         } else {
             $oEr = null;
@@ -249,12 +249,17 @@ class oxUtilsView extends oxSuperCfg
 
         $myConfig = $this->getConfig();
 
-        //T2010-01-13#1531
+        //T2010-01-13
+        //#1531
         $sTplDir1 = $myConfig->getTemplateDir( $this->isAdmin() );
         $sTplDir2 = $myConfig->getOutDir() . $myConfig->getConfigParam('sTheme') . "/tpl/";
         $aTemplateDir = array($sTplDir1);
         if (!$this->isAdmin() && $sTplDir1 != $sTplDir2)
             $aTemplateDir[] = $sTplDir2;
+
+
+        $aTemplateDir = array($myConfig->getTemplateDir( $this->isAdmin() ));
+        $aTemplateDir[] = "/htdocs/oxideshop/eshop/source/out/basic/tpl/";
 
 
         $aTemplateDir = array($myConfig->getTemplateDir( $this->isAdmin() ));

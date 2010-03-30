@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxorder.php 26442 2010-03-10 08:34:20Z alfonsas $
  */
 
 /**
@@ -514,9 +514,17 @@ class oxOrder extends oxBase
         }
 
         // copying main price info
-        $this->oxorder__oxtotalnetsum   = new oxField(oxUtils::getInstance()->fRound($oBasket->getProductsPrice()->getNettoSum()), oxField::T_RAW);
+        $this->oxorder__oxtotalnetsum   = new oxField(oxUtils::getInstance()->fRound($oBasket->getDiscountedNettoPrice()), oxField::T_RAW);
         $this->oxorder__oxtotalbrutsum  = new oxField($oBasket->getProductsPrice()->getBruttoSum(), oxField::T_RAW);
         $this->oxorder__oxtotalordersum = new oxField($oBasket->getPrice()->getBruttoPrice(), oxField::T_RAW);
+
+        // copying discounted VAT info
+        $iVatIndex = 1;
+        foreach ( $oBasket->getProductVats(false) as $iVat => $dPrice ) {
+            $this->{"oxorder__oxartvat$iVatIndex"}      = new oxField($iVat, oxField::T_RAW);
+            $this->{"oxorder__oxartvatprice$iVatIndex"} = new oxField($dPrice, oxField::T_RAW);
+            $iVatIndex ++;
+        }
 
         // payment costs if available
         if ( ( $oPaymentCost = $oBasket->getCosts( 'oxpayment' ) ) ) {
@@ -614,6 +622,7 @@ class oxOrder extends oxBase
         $this->oxorder__oxbillustid       = clone $oUser->oxuser__oxustid;
         $this->oxorder__oxbillcity        = clone $oUser->oxuser__oxcity;
         $this->oxorder__oxbillcountryid   = clone $oUser->oxuser__oxcountryid;
+        $this->oxorder__oxbillstateid     = clone $oUser->oxuser__oxstateid;
         $this->oxorder__oxbillzip         = clone $oUser->oxuser__oxzip;
         $this->oxorder__oxbillfon         = clone $oUser->oxuser__oxfon;
         $this->oxorder__oxbillfax         = clone $oUser->oxuser__oxfax;
@@ -631,6 +640,7 @@ class oxOrder extends oxBase
             $this->oxorder__oxdeladdinfo   = clone $oDelAdress->oxaddress__oxaddinfo;
             $this->oxorder__oxdelcity      = clone $oDelAdress->oxaddress__oxcity;
             $this->oxorder__oxdelcountryid = clone $oDelAdress->oxaddress__oxcountryid;
+            $this->oxorder__oxdelstateid   = clone $oDelAdress->oxaddress__oxstateid;
             $this->oxorder__oxdelzip       = clone $oDelAdress->oxaddress__oxzip;
             $this->oxorder__oxdelfon       = clone $oDelAdress->oxaddress__oxfon;
             $this->oxorder__oxdelfax       = clone $oDelAdress->oxaddress__oxfax;
@@ -1067,7 +1077,8 @@ class oxOrder extends oxBase
             }
 
             // check if its still available
-            $iOnStock = $oProd->checkForStock( $oContent->getAmount() );
+            $dArtStockAmount = $oBasket->getArtStockInBasket( $oProd->getId(), $key );
+            $iOnStock = $oProd->checkForStock( $oContent->getAmount(), $dArtStockAmount );
             if ( $iOnStock !== true ) {
                 $oEx = oxNew( 'oxOutOfStockException' );
                 $oEx->setMessage( 'EXCEPTION_OUTOFSTOCK_OUTOFSTOCK' );
@@ -1316,6 +1327,7 @@ class oxOrder extends oxBase
 
                 $this->_oUser->oxuser__oxcity      = clone $this->oxorder__oxbillcity;
                 $this->_oUser->oxuser__oxcountryid = clone $this->oxorder__oxbillcountryid;
+                $this->_oUser->oxuser__oxstateid   = clone $this->oxorder__oxbillstateid;
                 $this->_oUser->oxuser__oxzip       = clone $this->oxorder__oxbillzip;
                 $this->_oUser->oxuser__oxfon       = clone $this->oxorder__oxbillfon;
                 $this->_oUser->oxuser__oxfax       = clone $this->oxorder__oxbillfax;
@@ -1744,6 +1756,33 @@ class oxOrder extends oxBase
     {
         $oCur = $this->getConfig()->getActShopCurrencyObject();
         return number_format( $this->oxorder__oxtotalordersum->value, $oCur->decimal, '.', '');
+    }
+
+    /**
+     * Returns array of palain of formatted VATs stored in order
+     *
+     * @param bool $blFormatCurrency enambles currency formating
+     *
+     * @return array
+     */
+    public function getProductVats( $blFormatCurrency = true )
+    {
+        $aVats = array();
+        if ($this->oxorder__oxartvat1->value) {
+            $aVats[$this->oxorder__oxartvat1->value] = $this->oxorder__oxartvatprice1->value;
+        }
+        if ($this->oxorder__oxartvat2->value) {
+            $aVats[$this->oxorder__oxartvat2->value] = $this->oxorder__oxartvatprice2->value;
+        }
+
+        if ( $blFormatCurrency ) {
+            $oLang = oxLang::getInstance();
+            $oCur = $this->getConfig()->getActShopCurrencyObject();
+            foreach ( $aVats as $sKey => $dVat ) {
+                $aVats[$sKey] = $oLang->formatCurrency( $dVat, $oCur );
+            }
+        }
+        return $aVats;
     }
 
     /**

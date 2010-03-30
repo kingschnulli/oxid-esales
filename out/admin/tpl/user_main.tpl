@@ -164,6 +164,15 @@ function chkInsert()
         </tr>
         <tr>
             <td class="edittext">
+            [{ oxmultilang ident="GENERAL_STATE" }]
+            </td>
+            <td class="edittext">
+            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxuser__oxstateid->fldmax_length}]" name="editval[oxuser__oxstateid]" value="[{$edit->oxuser__oxstateid->value }]" [{ $readonly }]>
+            [{ oxinputhelp ident="HELP_GENERAL_STATE" }]
+            </td>
+        </tr>
+        <tr>
+            <td class="edittext">
             [{ oxmultilang ident="GENERAL_COUNTRY" }]
             </td>
             <td class="edittext">
@@ -238,7 +247,7 @@ function chkInsert()
     <!-- Anfang rechte Seite -->
     <td valign="top" class="edittext vr" align="left" width="50%">
     [{ if $oxid != "-1"}]
-       <input [{ $readonly }] type="button" value="[{ oxmultilang ident="GENERAL_ASSIGNGROUPS" }]" class="edittext" onclick="JavaScript:showDialog('?cl=user_main&aoc=1&oxid=[{ $oxid }]');">
+       <input [{ $readonly }] type="button" value="[{ oxmultilang ident="GENERAL_ASSIGNGROUPS" }]" class="edittext" onclick="JavaScript:showDialog('&cl=user_main&aoc=1&oxid=[{ $oxid }]');">
     [{ /if}]
     </td>
     </tr>

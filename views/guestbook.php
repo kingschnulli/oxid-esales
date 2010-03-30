@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: guestbook.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: guestbook.php 26730 2010-03-22 11:58:18Z arvydas $
  */
 
 /**
@@ -120,9 +120,6 @@ class GuestBook extends oxUBase
             //no valid login
             return $this->_sThisLoginTemplate;
         }
-
-        $myConfig = $this->getConfig();
-
 
         // flood protection
         $this->_aViewData['hideentries'] = $this->floodProtection();

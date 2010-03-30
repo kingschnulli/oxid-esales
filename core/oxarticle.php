@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 25755 2010-02-10 13:59:48Z sarunas $
+ * @version   SVN: $Id: oxarticle.php 26878 2010-03-26 12:44:47Z vilma $
  */
 
 // defining supported link types
@@ -553,9 +553,10 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         if ( $this->$sName ) {
             $this->_assignParentFieldValue($sName);
         }
+
         //checking for picture information
-        if ($sName == "oxarticles__oxthumb" || $sName == "oxarticles__oxicon" || strpos($sName, "oxarticles__oxpic") === 0 || strpos($sName, "oxarticles__oxzoom") === 0) {
-            $this->_assignPictureValues();
+        if ($sName == "oxarticles__oxthumb" || $sName == "oxarticles__oxicon" || (strpos($sName, "oxarticles__oxpic") === 0 && $sName != "oxarticles__oxpicsgenerated") || strpos($sName, "oxarticles__oxzoom") === 0) {
+            $this->_assignPictureValues( $sName );
             return $this->$sName;
         }
 
@@ -928,7 +929,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
         $this->_assignParentFieldValues();
         $this->_assignNotBuyableParent();
-        $this->_assignPictureValues();
+
+        $this->_assignAllPictureValues();
+
         $this->_assignStock();
         startProfile('articleAssignPrices');
         $this->_assignPrices();
@@ -1889,7 +1892,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             //updating by SQL query, due to wrong behaviour if saving article using not admin mode
             $dAmount = (double) $dAmount;
             $oDb = oxDb::getDb();
-            $rs = $oDb->execute( "update oxarticles set oxarticles.oxsoldamount = oxarticles.oxsoldamount + $dAmount, oxarticles.oxtimestamp = oxarticles.oxtimestamp where oxarticles.oxid = ".$oDb->quote($this->oxarticles__oxid->value));
+            $rs = $oDb->execute( "update oxarticles set oxarticles.oxsoldamount = oxarticles.oxsoldamount + $dAmount where oxarticles.oxid = ".$oDb->quote($this->oxarticles__oxid->value));
         } elseif ( $this->oxarticles__oxparentid->value) {
             // article is variant - should be updated this article parent amount
             $oUpdateArticle = oxNewArticle( $this->oxarticles__oxparentid->value );
@@ -1930,19 +1933,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 $this->{'oxarticles__oxpic'.$i}->setValue(basename($this->{'oxarticles__oxpic'.$i}->value));
             }
         }
-        $iZoomPicCount = $myConfig->getConfigParam( 'iZoomPicCount' );
-        for ($i=1; $i <= $iZoomPicCount; $i++) {
-            if ( isset($this->{'oxarticles__oxzoom'.$i}) ) {
-                $this->{'oxarticles__oxzoom'.$i}->setValue(basename($this->{'oxarticles__oxzoom'.$i}->value));
-            }
-        }
 
         $blRet = parent::save();
 
         // save article long description
         $this->setArticleLongDesc();
+
         // load article images after save
-        $this->_assignPictureValues();
+        $this->_assignAllPictureValues();
 
         return $blRet;
     }
@@ -1972,27 +1970,38 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $oStr = getStr();
         $iCntr = 0;
         $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
+        $blCheckActivePicId = true;
+
         for ( $i = 1; $i <= $iPicCount; $i++) {
             $sPicVal = $this->getPictureUrl( $i );
             $sIcoVal = $this->getIconUrl( $i );
-            if ( !$oStr->strstr($sIcoVal, 'nopic_ico.jpg')) {
+            if ( !$oStr->strstr($sIcoVal, 'nopic_ico.jpg') && !$oStr->strstr($sIcoVal, 'nopic.jpg') ) {
                 if ($iCntr) {
                     $blMorePic = true;
                 }
                 $aArtIcons[$i]= $sIcoVal;
                 $aArtPics[$i]= $sPicVal;
                 $iCntr++;
-            }
-            if ($iActPicId == $i) {
-                $sActPic = $sPicVal;
+
+                if ($iActPicId == $i) {
+                    $sActPic = $sPicVal;
+                    $blCheckActivePicId = false;
+                }
+
+            } else if ( $blCheckActivePicId && $iActPicId <= $i) {
+                // if picture is empty, setting active pic id to next
+                // picture
+                $iActPicId++;
             }
         }
 
         $blZoomPic  = false;
         $aZoomPics = array();
-        $iZoomPicCount = $myConfig->getConfigParam( 'iZoomPicCount' );
+        $iZoomPicCount = $myConfig->getConfigParam( 'iPicCount' );
+
         for ( $j = 1,$c = 1; $j <= $iZoomPicCount; $j++) {
             $sVal = $this->getZoomPictureUrl($j);
+
             if ( !$oStr->strstr($sVal, 'nopic.jpg')) {
                 if ($this->getConfig()->getConfigParam('blFormerTplSupport')) {
                     $sVal = $this->_sDynImageDir."/".$sVal;
@@ -2098,11 +2107,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Checks if stock configuration allows to buy user chosen amount $dAmount
      *
-     * @param double $dAmount buyable amount
+     * @param double $dAmount         buyable amount
+     * @param double $dArtStockAmount stock amount
      *
      * @return mixed
      */
-    public function checkForStock( $dAmount )
+    public function checkForStock( $dAmount, $dArtStockAmount = 0 )
     {
         $myConfig = $this->getConfig();
         if ( !$myConfig->getConfigParam( 'blUseStock' ) ) {
@@ -2116,7 +2126,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $iOnStock   = 0;
         $iStockFlag = 0;
         if ( $rs !== false && $rs->recordCount() > 0 ) {
-            $iOnStock   = $rs->fields['oxstock'];
+            $iOnStock   = $rs->fields['oxstock'] - $dArtStockAmount;
             $iStockFlag = $rs->fields['oxstockflag'];
 
             // dodger : fremdlager is also always considered as on stock
@@ -2501,10 +2511,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $oTagCloud = oxNew('oxtagcloud');
         $oTagCloud->resetTagCache();
         $sTag = $oTagCloud->prepareTags($sTag);
+        $sTagSeparator = $this->getConfig()->getConfigParam('sTagSeparator');
+        $sTailTag = $sTagSeparator.$sTag;
 
         $sField = "oxartextends.OXTAGS".oxLang::getInstance()->getLanguageTag();
         $sQ = "insert into oxartextends (oxartextends.OXID, $sField) values ('".$this->getId()."', '{$sTag}')
-                       ON DUPLICATE KEY update $sField = CONCAT(TRIM($sField), ' $sTag') ";
+                       ON DUPLICATE KEY update $sField = CONCAT(TRIM($sField), '$sTailTag') ";
 
         return oxDb::getDb()->Execute($sQ);
     }
@@ -2737,12 +2749,38 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getPictureUrl( $iIndex = '' )
     {
         if ( $iIndex ) {
-            return $this->getConfig()->getPictureUrl( $this->{"oxarticles__oxpic".$iIndex}->value );
+
+            if ( !$this->_hasGeneratedImage( $iIndex ) ) {
+                $this->_generateImages( $iIndex );
+            }
+
+            $sPic = $iIndex . "/" . $this->_getPictureName( $iIndex );
+
+            return $this->getConfig()->getPictureUrl( $sPic, $this->isAdmin() );
         }
     }
 
     /**
-     * Returns article icon picture url
+     * Returns article main picture file name
+     *
+     * @param int $iIndex picture index
+     *
+     * @return string
+     */
+    protected function _getPictureName( $iIndex = '' )
+    {
+        if ( !$this->_isFieldEmpty( "oxarticles__oxpic".$iIndex ) ) {
+            $sPicName = basename($this->{"oxarticles__oxpic".$iIndex}->value);
+        } else {
+            $sPicName = "nopic.jpg";
+        }
+
+        return $sPicName;
+    }
+
+    /**
+     * Returns article icon picture url. If no index specified, will
+     * return main icon url.
      *
      * @param int $iIndex picture index
      *
@@ -2750,18 +2788,52 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getIconUrl( $iIndex = '')
     {
-        if (!$iIndex) {
-            $sFile = $this->oxarticles__oxicon->value;
-        } else {
-            $sFile = $this->{'oxarticles__oxpic' . $iIndex . '_ico'}->value;
+        if ( $this->_isFieldEmpty( "oxarticles__oxicon" ) ) {
+
+            $iIconIndex = ( $iIndex ) ? $iIndex : 1;
+            //generating new images if needed
+            if ( !$this->_hasGeneratedImage( $iIconIndex ) ) {
+                $this->_generateImages( $iIconIndex );
+            }
         }
 
-        $sFile = str_replace('nopic.jpg', 'nopic_ico.jpg', $sFile);
+        $sIconName = $this->_getIconName( $iIndex );
 
-        //$sFile = $this->getConfig()->getPictureUrl( 'icon/' ). basename($sFile);
-        $sFile = $this->getConfig()->getPictureUrl( $sFile );
+        if ( !$iIndex ) {
+            $sPic = "icon/" . basename( $sIconName );
+        } else {
+            $sPic = $iIndex . "/" . basename( $sIconName );
+        }
 
-        return $sFile;
+        return $this->getConfig()->getPictureUrl( $sPic, $this->isAdmin() );
+    }
+
+    /**
+     * Returns article picture icon file name. If no index specified, will return
+     * main icon file name.
+     *
+     * @param int $iIndex picture index
+     *
+     * @return string
+     */
+    protected function _getIconName( $iIndex = '' )
+    {
+        $oPictureHandler = oxPictureHandler::getInstance();
+        $sIconName = "nopic_ico.jpg";
+
+        if ( !$iIndex ) {
+            if ( !$this->_isFieldEmpty( "oxarticles__oxicon" ) ) {
+                $sIconName = basename( $this->oxarticles__oxicon->value );
+            } elseif ( $this->_hasGeneratedImage( 1 ) && $this->_hasMasterImage( 1 )  && $this->oxarticles__oxpic1->value ) {
+                $sIconName = $oPictureHandler->getMainIconName( $this->oxarticles__oxpic1->value );
+            }
+        } else {
+            if ( $this->_hasGeneratedImage( $iIndex ) && $this->{"oxarticles__oxpic".$iIndex}->value ) {
+                $sIconName = $oPictureHandler->getIconName( $this->{"oxarticles__oxpic".$iIndex}->value );
+            }
+        }
+
+        return $sIconName;
     }
 
     /**
@@ -2771,8 +2843,37 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getThumbnailUrl()
     {
-        //return $this->getConfig()->getPictureUrl( $this->oxarticles__oxthumb->value );
-        return $this->getConfig()->getPictureUrl( '0/' ) . basename($this->oxarticles__oxthumb->value);
+        if ( $this->_isFieldEmpty( "oxarticles__oxthumb" ) ) {
+            //generating new images if needed
+            if ( !$this->_hasGeneratedImage( 1 ) ) {
+                $this->_generateImages( 1 );
+            }
+        }
+
+        $sPic = "0/" . $this->_getThumbnailName();
+
+        return $this->getConfig()->getPictureUrl( $sPic, $this->isAdmin() );
+    }
+
+    /**
+     * Returns article thumbnail file name
+     *
+     * @return string
+     */
+    protected function _getThumbnailName()
+    {
+        if ( !$this->_isFieldEmpty( "oxarticles__oxthumb" ) ) {
+            $sThumbName = basename($this->oxarticles__oxthumb->value);
+        } else {
+            if ( $this->_hasGeneratedImage( 1 ) && $this->_hasMasterImage( 1 ) && $this->oxarticles__oxpic1->value ) {
+                $oPictureHandler = oxPictureHandler::getInstance();
+                $sThumbName = $oPictureHandler->getThumbName( $this->oxarticles__oxpic1->value );
+            } else {
+                $sThumbName = "nopic.jpg";
+            }
+        }
+
+        return $sThumbName;
     }
 
     /**
@@ -2784,9 +2885,45 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getZoomPictureUrl( $iIndex = '' )
     {
-        if ( $iIndex ) {
-           return $this->getConfig()->getPictureUrl( $this->{'oxarticles__oxzoom'.$iIndex}->value );
+        $iIndex = (int) $iIndex;
+        if ( $iIndex > 0) {
+            //generating new images if needed
+            if ( $this->_isFieldEmpty( "oxarticles__oxzoom" . $iIndex ) ) {
+                //generating new images if needed
+                if ( !$this->_hasGeneratedImage( $iIndex ) ) {
+                    $this->_generateImages( $iIndex );
+                }
+            }
+
+            $sPic = "z{$iIndex}/" . $this->_getZoomPictureName( $iIndex );
+
+            return $this->getConfig()->getPictureUrl( $sPic, $this->isAdmin() );
         }
+    }
+
+    /**
+     * Returns article zoom picture file name
+     *
+     * @param int $iIndex zoom picture index
+     *
+     * @return string
+     */
+    protected function _getZoomPictureName( $iIndex = '' )
+    {
+        $sZoomField = "oxarticles__oxzoom" . $iIndex;
+
+        if ( !$this->_isFieldEmpty( $sZoomField ) ) {
+            $sZoomName = basename( $this->$sZoomField->value );
+        } else {
+            if ( $this->_hasGeneratedImage( $iIndex ) && $this->_hasMasterImage( $iIndex ) && $this->{"oxarticles__oxpic".$iIndex}->value ) {
+                $oPictureHandler = oxPictureHandler::getInstance();
+                $sZoomName = $oPictureHandler->getZoomName( $this->{"oxarticles__oxpic".$iIndex}->value, $iIndex );
+            } else {
+                $sZoomName = "nopic.jpg";
+            }
+        }
+
+        return $sZoomName;
     }
 
     /**
@@ -3137,75 +3274,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $oPrice->multiply($oCur->rate);
     }
 
-    /**
-     * Returns path of icon file ("/0/".$this->oxarticles__oxicon->value) or
-     * if icon is not generated yet - tries to generate this file (if no GD
-     * lib available and oxarticles__oxthumb is not set as default icon sets
-     * "/0/nopic_ico.jpg")and updates DB article field "oxicon".
-     *
-     * @return string
-     */
-    protected function _getIcon()
-    {
-        // #1479/1179M - Article icon automatic generation
-        //if set to do not generate.
-        $myConfig = $this->getConfig();
-
-        if (!$myConfig->getConfigParam( 'blAutoIcons' ) ) {
-            if ($this->oxarticles__oxicon->value) {
-                return basename($this->oxarticles__oxicon->value);
-            } else {
-                $sQ = "UPDATE oxarticles SET oxicon = 'nopic_ico.jpg' WHERE oxid = '".$this->getId()."'";
-                oxDb::getDb()->execute($sQ);
-                return 'nopic_ico.jpg';
-            }
-        }
-
-        // if set to generate and icon already exist
-        if ( $this->oxarticles__oxicon->value && strpos( $this->oxarticles__oxicon->value, 'nopic_ico.jpg') === false ) {
-            return basename($this->oxarticles__oxicon->value);
-        }
-
-        //we don't have an icon yet so lets make one
-        if ($this->oxarticles__oxthumb->value && strpos( $this->oxarticles__oxthumb->value, 'nopic.jpg') === false &&  function_exists('gd_info')) {
-
-            $sSourceFile = $this->oxarticles__oxthumb->value;
-            $sTargetFile = str_replace('_th', '_ico', $sSourceFile);
-
-            if ($sSourceFile == $sTargetFile) {
-                $sPattern = '/(\.[a-z0-9]*$)/i';
-                $sTargetFile = preg_replace($sPattern, '_ico\\1', $sTargetFile);
-            }
-
-            $sTarget = $myConfig->getAbsDynImageDir().'/icon/'. basename($sTargetFile);
-            $sSource = $myConfig->getAbsDynImageDir().'/0/'. basename($sSourceFile);
-
-            if (!$myConfig->getConfigParam( 'sIconsize' ) ) {
-                $myConfig->setConfigParam( 'sIconsize', '56*42' );
-            }
-
-            $aSize = explode('*', $myConfig->getConfigParam( 'sIconsize' ) );
-            $iX = $aSize[0];
-            $iY = $aSize[1];
-
-            oxUtilspic::getInstance()->resizeImage( $sSource, $sTarget, $iX, $iY );
-
-            $sResult = $sTargetFile;
-        } else {
-            $sResult = 'nopic_ico.jpg';
-        }
-
-        //saving new icon
-        $sIconFile = basename($sResult);
-
-        $oDb = oxDb::getDb();
-
-        $sQ = "UPDATE oxarticles SET oxicon = ".$oDb->quote($sIconFile)." WHERE oxid = '".$this->getId()."'";
-        $oDb->execute($sQ);
-
-        return $sIconFile;
-    }
-
 
     /**
      * gets attribs string
@@ -3513,11 +3581,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
         $sFieldName = strtolower($sFieldName);
 
-        if ($mValue == "nopic_ico.jpg" && $sFieldName == 'oxarticles__oxicon') {
+        if ( $sFieldName == 'oxarticles__oxicon' && strpos($mValue, "nopic_ico.jpg") !== false ) {
             return true;
         }
 
-        if ($mValue == "nopic.jpg" && ($sFieldName == 'oxarticles__oxthumb' || substr($sFieldName, 0, 17) == 'oxarticles__oxpic' || substr($sFieldName, 0, 18) == 'oxarticles__oxzoom')) {
+        if ( strpos($mValue, "nopic.jpg") !== false && ($sFieldName == 'oxarticles__oxthumb' || substr($sFieldName, 0, 17) == 'oxarticles__oxpic' || substr($sFieldName, 0, 18) == 'oxarticles__oxzoom') ) {
             return true;
         }
 
@@ -3677,66 +3745,81 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Assigns picture values to article
+     * Assigns all picture values to article.
      *
      * @return null
      */
-    protected function _assignPictureValues()
+    protected function _assignAllPictureValues()
     {
         $myConfig = $this->getConfig();
-        $this->oxarticles__oxicon = new oxField($this->_getIcon());
 
-        // picture isset($this->_aFieldNames["thumb"]) && re handling
-        $sNoPic     = 'nopic.jpg';
-        $sNoPicIcon = 'nopic_ico.jpg';
-
-        if ( isset($this->_aFieldNames["oxthumb"]) && !$this->oxarticles__oxthumb->value) {
-            $this->oxarticles__oxthumb = new oxField($sNoPic);
-        }
-        /*
-        if( isset($this->_aFieldNames["oxicon"]) && !isset($this->oxarticles__oxicon->value))
-            $this->oxarticles__oxicon  = new oxField($sNoPicIcon);
-        */
+        $this->_assignPictureValues( "oxarticles__oxicon" );
+        $this->_assignPictureValues( "oxarticles__oxthumb" );
 
         $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
         for ( $i=1; $i<= $iPicCount; $i++ ) {
-            if ( isset($this->_aFieldNames["oxpic".$i]) &&  !$this->{'oxarticles__oxpic'.$i}->value ) {
-                $this->{'oxarticles__oxpic'.$i} = new oxField($sNoPic);
-            }
+            $this->_assignPictureValues( "oxarticles__oxpic".$i );
         }
 
-        $iZoomPicCount = $myConfig->getConfigParam( 'iZoomPicCount' );
-        for ( $i=1; $i<= $iZoomPicCount; $i++ ) {
-            if ( isset($this->_aFieldNames["oxzoom".$i]) &&  !$this->{'oxarticles__oxzoom'.$i}->value) {
-                $this->{'oxarticles__oxzoom'.$i} = new oxField($sNoPic);
-            }
-        }
-
-        if ( !$this->isAdmin() ) {
-            // add directories
-            if ( isset($this->_aFieldNames["oxthumb"])) {
-                $this->oxarticles__oxthumb->setValue('0/'.basename($this->oxarticles__oxthumb->value));
-            }
-            if ( isset($this->_aFieldNames["oxicon"])) {
-                $this->oxarticles__oxicon = new oxField('icon/'.basename($this->oxarticles__oxicon->value));
-            }
-
-            $myUtilsPic = oxUtilsPic::getInstance();
-            for ( $i=1; $i<= $iPicCount; $i++ ) {
-                $sFieldName = 'oxarticles__oxpic'.$i;
-                if ( isset($this->_aFieldNames["oxpic".$i])) {
-                    $sIconFieldName = 'oxarticles__oxpic'.$i.'_ico';
-                    $this->$sIconFieldName = new oxField($i.'/'.basename($myUtilsPic->iconName($this->$sFieldName->value)));
-                    $this->$sFieldName     = new oxField($i.'/'.basename($this->$sFieldName->value));
-                }
-            }
+        if ( $iZoomPicCount = $myConfig->getConfigParam( 'iZoomPicCount' ) ) {
             for ( $i=1; $i<= $iZoomPicCount; $i++ ) {
-                if ( isset($this->_aFieldNames["oxzoom".$i])) {
-                    $this->{'oxarticles__oxzoom'.$i} = new oxField('z'.$i.'/'.basename($this->{'oxarticles__oxzoom'.$i}->value));
-                }
+                $this->_assignPictureValues( "oxarticles__oxzoom".$i );
+            }
+        }
+    }
+
+    /**
+     * Assigns picture values to article.
+     *
+     * @param string $sName field name
+     *
+     * @return null
+     */
+    protected function _assignPictureValues( $sName='' )
+    {
+        if ( $this->isAdmin() || !$sName ) {
+            return;
+        }
+
+        $sFieldName = substr_replace( $sName, "", 0, 12);
+        $myConfig = $this->getConfig();
+
+        // add directories
+        if ( $sFieldName == 'oxicon' && isset($this->_aFieldNames["oxicon"]) ) {
+            $this->oxarticles__oxicon = new oxField('icon/'.$this->_getIconName());
+            return;
+        }
+
+        if ( $sFieldName == 'oxthumb' && isset($this->_aFieldNames["oxthumb"]) ) {
+            $this->oxarticles__oxthumb = new oxField('0/'.$this->_getThumbnailName());
+            return;
+        }
+
+        $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
+
+        if ( strpos($sFieldName, "oxpic") === 0 && isset($this->_aFieldNames[$sFieldName] ) ) {
+
+            $iIndex = (int) str_ireplace( "oxpic", "", $sFieldName );
+
+            if ( $iIndex > 0 && $iIndex < $iPicCount ) {
+                $this->$sName = new oxField( $iIndex . '/'.$this->_getPictureName($iIndex) );
+                $this->{$sName.'_ico'} = new oxField( $iIndex . '/'.$this->_getIconName($iIndex) );
+                return;
             }
         }
 
+        if ( strpos($sFieldName, "oxzoom") === 0 ) {
+
+            $iIndex = (int) str_ireplace( "oxzoom", "", $sFieldName );
+
+            // if oxzoom or oxpic field with same index is setted, loading field values
+            if ( isset($this->_aFieldNames[$sFieldName]) || isset($this->_aFieldNames["oxpic".$iIndex]) ) {
+                if ( $iIndex > 0 && $iIndex < $iPicCount ) {
+                    $this->$sName = new oxField( 'z' . $iIndex.'/'.$this->_getZoomPictureName($iIndex) );
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -4030,34 +4113,21 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         $myUtilsPic = oxUtilsPic::getInstance();
         $myConfig   = $this->getConfig();
+        $oPictureHandler = oxPictureHandler::getInstance();
 
-        // #1173M - not all pic are deleted, after article is removed
-        $blThumbDeleted = $myUtilsPic->safePictureDelete( $this->oxarticles__oxthumb->value, $myConfig->getAbsDynImageDir().'/0', 'oxarticles', 'oxthumb' );
+        //deleting custom main icon
+        $oPictureHandler->deleteMainIcon( $this );
 
-        if ( $blThumbDeleted ) {
-            $myUtilsPic->safePictureDelete('icon/'.$this->oxarticles__oxicon->value, $myConfig->getAbsDynImageDir(), 'oxarticles', 'oxicon' );
-        }
-        //removed and replaced with savePcitureDelete MAFI
-        //if( $blThumbDeleted && $myUtilsPic->isPicDeletable( $this->oxarticles__oxthumb->value, 'oxarticles', 'oxicon' )) {
-            //TODO: is it correct that oxarticles__oxthumb is checked and oxarticles__oxicon deleted? if not replace this with safePictureDelete MAFI
-         //   $myUtilsPic->deletePicture( 'icon/'.$this->oxarticles__oxicon->value, $myConfig->getAbsDynImageDir(), '' $myConfig->getConfigParam( 'blIsOXDemoShop' ));
-        //}
+        //deleting custom thumbnail
+        $oPictureHandler->deleteThumbnail( $this );
 
-        $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
         $sAbsDynImageDir = $myConfig->getAbsDynImageDir();
-        for ( $i = 1; $i <= $iPicCount; $i++ ) {
-            // Getting coresponding pic's filename value
-            $sPicFName = $this->{'oxarticles__oxpic'.$i}->value;
-            $myUtilsPic->safePictureDelete($sPicFName, $sAbsDynImageDir.'/'.$i, 'oxarticles', 'oxpic'.$i );
-        }
-        // deleting zoom images
-        $iZoomPicCount = $myConfig->getConfigParam( 'iZoomPicCount' );
-        for ( $i = 1; $i <= $iZoomPicCount; $i++ ) {
-            if ( isset($this->{'oxarticles__oxzoom'.$i}) ) {
-                $myUtilsPic->safePictureDelete($this->{'oxarticles__oxzoom'.$i}->value, $sAbsDynImageDir.'/z'.$i, 'oxarticles', 'oxzoom'.$i );
-            }
-        }
 
+        // deleting master image and all generated images
+        $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
+        for ( $i = 1; $i <= $iPicCount; $i++ ) {
+            $oPictureHandler->deleteArticleMasterPicture( $this, $i );
+        }
     }
 
     /**
@@ -4391,5 +4461,81 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getMdSubvariants()
     {
         return $this->getMdVariants()->getMdSubvariants();
+    }
+
+
+    /**
+     * Generates article pictures from master picture.
+     * Calls oxPictureHandler::generateArticlePictures for pictures generation.
+     *
+     * @param int $iIndex field index
+     *
+     * @return null
+     */
+    protected function _generateImages( $iIndex )
+    {
+        if ( isset($this->_aFieldNames["oxpic".$iIndex]) && !$this->_hasGeneratedImage( $iIndex ) ) {
+            if ( !$this->_isFieldEmpty( "oxarticles__oxpic".$iIndex ) && $this->_hasMasterImage( $iIndex ) ) {
+                $oPictureHandler = oxPictureHandler::getInstance();
+                $oPictureHandler->generateArticlePictures( $this, $iIndex );
+            }
+        }
+    }
+
+    /**
+     * Updates count of how many master pictures where used for
+     * images generation.
+     *
+     * @param int $iTotalGenerated total generated images
+     *
+     * @return null
+     */
+    public function updateAmountOfGeneratedPictures( $iTotalGenerated )
+    {
+        $sQ = "UPDATE oxarticles SET oxpicsgenerated = '$iTotalGenerated' WHERE oxid = '".$this->getId()."'";
+        oxDb::getDb()->execute($sQ);
+
+        $this->oxarticles__oxpicsgenerated = new oxField( $iTotalGenerated );
+    }
+
+    /**
+     * Checks if article already has generated images from master picture
+     * specified by index.
+     *
+     * @param int $iIndex master picture index
+     *
+     * @return bool
+     */
+    protected function _hasGeneratedImage( $iIndex )
+    {
+        if ( $iIndex > (int) $this->oxarticles__oxpicsgenerated->value ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if article has uplodaded master image for selected picture
+     *
+     * @param int $iIndex master picture index
+     *
+     * @return bool
+     */
+    protected function _hasMasterImage( $iIndex )
+    {
+        $sPicName = basename($this->{"oxarticles__oxpic" . $iIndex}->value);
+
+        if ( $sPicName == "nopic.jpg" ) {
+            return false;
+        }
+
+        $sMasterPic = $iIndex . "/" . $sPicName;
+
+        if ( $this->getConfig()->getMasterPicturePath( $sMasterPic ) ) {
+            return true;
+        }
+
+        return false;
     }
 }

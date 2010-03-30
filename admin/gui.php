@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: gui.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: gui.php 26795 2010-03-24 12:10:56Z alfonsas $
  */
 
 /**
@@ -143,33 +143,14 @@ class Gui extends oxAdminView
 
         if ( $this->_isDomLoaded() ) {
 
-            $sTheme = null;
-            $aColors = $aStyles = array();
 
-            $sFilePath = $this->_sSrcDir.$this->_sUserGui;
+                $sTheme = 'ce';
 
-            if (is_readable($sFilePath)) {
 
-                include $sFilePath;
+            $aUserColors = array();
+            $aUserStyles = array();
 
-                if (is_array($aColors)) {
-                    $this->_aViewData["user_colors"] = $aColors;
-                } else {
-                    $this->_aViewData["user_colors"] = array();
-                }
-
-                if (is_array($aStyles)) {
-                    $this->_aViewData["user_styles"] = $aStyles;
-                } else {
-                    $this->_aViewData["user_styles"] = array();
-                }
-            }
-
-            if (!$sTheme) {
-
-                    $sTheme = 'ce';
-
-            }
+            $this->loadUserSettings(&$sTheme, &$aUserColors, &$aUserStyles);
 
             $aThemes = $this->getThemes();
             $aColors = array();
@@ -178,17 +159,17 @@ class Gui extends oxAdminView
                 $aColors[$id] = $this->getColors($id);
             }
 
-            $this->_aViewData["themes"] = $aThemes;
-
-            $this->_aViewData["theme"]  = $sTheme;
-
-            $this->_aViewData["colors"] = $aColors;
-
+            $this->_aViewData["theme"]       = $sTheme;
+            $this->_aViewData["themes"]      = $aThemes;
+            $this->_aViewData["colors"]      = $aColors;
             $this->_aViewData["styles"]      = $this->getStyleTree();
             $this->_aViewData["colorstyles"] = $this->getColors($sTheme, 'const', 'index');
+            $this->_aViewData["user_colors"] = $aUserColors;
+            $this->_aViewData["user_styles"] = $aUserStyles;
+
+            $this->_aViewData["sAddData"] = "stoken=".$this->getSession()->getSessionChallengeToken();
 
             return $this->_sThisTemplate;
-
         } else {
             return $this->_sThisErrorTemplate;
         }
@@ -245,12 +226,13 @@ class Gui extends oxAdminView
 
             if (file_exists($sFilePath) && !is_writable($sFilePath)) {
                 @chmod( $sFilePath, 0766);
-                if (!is_writable($sFilePath)) {
-                    $aErrors[] = 'Could not write to : '.$sFilePath;
-                }
             }
 
-            $this->gif($sTpl, $aGifStyles, $sFile, $this->_sSrcDir);
+            if (is_writable($sFilePath) || (!file_exists($sFilePath) && is_dir(dirname($sFilePath)) && is_writable(dirname($sFilePath)))) {
+                $this->gif($sTpl, $aGifStyles, $sFile, $this->_sSrcDir);
+            } else {
+                $aErrors[] = 'Could not write to : '.$sFilePath;
+            }
 
             $aStyles[$sConst] = $sFile;
         }
@@ -271,7 +253,7 @@ class Gui extends oxAdminView
                 @chmod( $sFilePath, 0766);
             }
 
-            if (is_writable($sFilePath)) {
+            if (is_writable($sFilePath) || (!file_exists($sFilePath) && is_dir(dirname($sFilePath)) && is_writable(dirname($sFilePath)))) {
                 file_put_contents($sFilePath, $sStyle);
             } else {
                 $aErrors[] = 'Could not write to : '.$sFilePath;
@@ -317,13 +299,30 @@ class Gui extends oxAdminView
     }
 
     /**
+     * Loads user setting from php file
+     *
+     * @param string $sTheme  Theme id
+     * @param string $aColors Color palette
+     * @param string $aStyles Element styles
+     *
+     * @return null
+     */
+    public function loadUserSettings($sTheme, $aColors, $aStyles)
+    {
+        $sFilePath = $this->_sSrcDir.$this->_sUserGui;
+        if (is_readable($sFilePath)) {
+            include $sFilePath;
+        }
+    }
+
+    /**
      * Renders css preview with image preview link
      *
      * @return null
      */
     public function previewCss()
     {
-        $aStyles = $this->fillColors( $this->getUserStyles(), $this->getUserColors() );
+        $aStyles = $this->fillColors($this->getUserStyles(), $this->getUserColors());
 
         $aGif = $this->getRes('gif');
         $sAdminUrl = $this->getViewConfig()->getViewConfigParam('selflink');
@@ -351,7 +350,7 @@ class Gui extends oxAdminView
             $sStyle .= strtr( file_get_contents($this->_sGuiDir.$sTpl), $aStyles);
         }
 
-        header('Content-type: text/css');
+        oxUtils::getInstance()->setHeader('Content-type: text/css');
         oxUtils::getInstance()->showMessageAndExit( str_replace("\n", '', $sStyle) );
     }
 
@@ -391,10 +390,10 @@ class Gui extends oxAdminView
         }
 
         if (is_null($sDir)) {
-            header('Content-type: image/gif');
+            oxUtils::getInstance()->setHeader('Content-type: image/gif');
             imagegif($img);
         } else {
-            imagegif( $img, $sDir.$sFile );
+            imagegif($img, $sDir.$sFile );
         }
 
         imagedestroy($img);
@@ -447,7 +446,6 @@ class Gui extends oxAdminView
      */
     protected function _loadGuiFiles()
     {
-
         $this->_blLoaded = false;
 
         if (is_readable($this->_sGuiDir.$this->_sGuiXml)) {
@@ -492,7 +490,7 @@ class Gui extends oxAdminView
      *
      * @return array
      */
-    public function getColors($sThemeId,$sKey = 'index',$sValue = 'color')
+    public function getColors($sThemeId, $sKey = 'index', $sValue = 'color')
     {
         $oXPath = new DomXPath( $this->_oThemesDom );
 
@@ -576,7 +574,7 @@ class Gui extends oxAdminView
 
         $aColors = array();
         foreach ( $oColorList as $oColor ) {
-            $aColors[$oColor->getAttribute('index')] =  $aStyles[$oColor->getAttribute('const')];
+            $aColors[$oColor->getAttribute('color')] =  $aStyles[$oColor->getAttribute('const')];
         }
 
         return  $aColors;
@@ -584,9 +582,6 @@ class Gui extends oxAdminView
 
    /**
      * Returns element styles tree nodes
-     *
-     * @var string $sImageID Image id
-     * @var array  $aStyles  Styles array with collors
      *
      * @return DOMNodeList
      */
@@ -630,7 +625,7 @@ class Gui extends oxAdminView
         $gg = hexdec( $gh );
         $bb = hexdec( $bh );
 
-        return array($rr,$gg,$bb);
+        return array($rr, $gg, $bb);
     }
 
 }

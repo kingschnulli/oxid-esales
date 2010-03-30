@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_cur.php 25755 2010-02-10 13:59:48Z sarunas $
+ * @version   SVN: $Id: oxcmp_cur.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -174,9 +174,10 @@ class oxcmp_cur extends oxView
     public function render()
     {
         parent::render();
-        $this->_oParent->setActCurrency( $this->_oActCur );
+        $oParentView = $this->getParent();
+        $oParentView->setActCurrency( $this->_oActCur );
         // Passing to view. Left for compatibility reasons for a while. Will be removed in future
-        $this->_oParent->addTplParam( 'currency', $this->_oParent->getActCurrency() );
+        $oParentView->addTplParam( 'currency', $oParentView->getActCurrency() );
         return $this->aCurrencies;
     }
 }

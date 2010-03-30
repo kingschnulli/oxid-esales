@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 25779 2010-02-11 13:05:17Z sarunas $
+ * @version   SVN: $Id: oxlang.php 26574 2010-03-16 13:50:09Z alfonsas $
  */
 
 /**
@@ -152,6 +152,19 @@ class oxLang extends oxSuperCfg
             $this->_iBaseLanguageId = oxConfig::getParameter( 'language' );
         }
 
+        // if language still not setted and not search engine browsing,
+        // getting language from browser
+        if ( is_null( $this->_iBaseLanguageId ) && !$blAdmin && !oxUtils::getInstance()->isSearchEngine() ) {
+
+            // getting from cookie
+            $this->_iBaseLanguageId = oxUtilsServer::getInstance()->getOxCookie( 'language' );
+
+            // getting from browser
+            if ( is_null( $this->_iBaseLanguageId ) ) {
+                $this->_iBaseLanguageId = $this->detectLanguageByBrowser();
+            }
+        }
+
         if ( is_null( $this->_iBaseLanguageId ) ) {
             $this->_iBaseLanguageId = $myConfig->getConfigParam( 'sDefaultLang' );
         }
@@ -160,6 +173,9 @@ class oxLang extends oxSuperCfg
 
         // validating language
         $this->_iBaseLanguageId = $this->validateLanguage( $this->_iBaseLanguageId );
+
+        // setting language to cookie
+        oxUtilsServer::getInstance()->setOxCookie( 'language', $this->_iBaseLanguageId );
 
         return $this->_iBaseLanguageId;
     }
@@ -173,28 +189,24 @@ class oxLang extends oxSuperCfg
      */
     public function getTplLanguage()
     {
-        if ( $this->_iTplLanguageId !== null ) {
-            return $this->_iTplLanguageId;
-        }
-
-        if ( !$this->isAdmin() ) {
-            $this->_iTplLanguageId = $this->getBaseLanguage();
-        } else {
-            //admin area
-
-            if ( is_null( $this->_iTplLanguageId ) ) {
-                //$this->_iTplLanguageId = oxConfig::getParameter( 'tpllanguage' );
-                $this->_iTplLanguageId = oxSession::getVar( 'tpllanguage' );
-            }
-
-            if ( is_null( $this->_iTplLanguageId ) ) {
+        if ( $this->_iTplLanguageId === null ) {
+            if ( !$this->isAdmin() ) {
                 $this->_iTplLanguageId = $this->getBaseLanguage();
+            } else {
+
+                //admin area
+                if ( is_null( $this->_iTplLanguageId ) ) {
+                    $this->_iTplLanguageId = oxSession::getVar( 'tpllanguage' );
+                }
+
+                if ( is_null( $this->_iTplLanguageId ) ) {
+                    $this->_iTplLanguageId = $this->getBaseLanguage();
+                }
             }
+
+            // validating language
+            $this->_iTplLanguageId = $this->validateLanguage( $this->_iTplLanguageId );
         }
-
-        // validating language
-        $this->_iTplLanguageId = $this->validateLanguage( $this->_iTplLanguageId );
-
         return $this->_iTplLanguageId;
     }
 
@@ -601,6 +613,10 @@ class oxLang extends oxSuperCfg
             $sBaseCharset = false;
             foreach ( $aLangFiles as $sLangFile ) {
 
+                if (!file_exists($sLangFile)) {
+                    continue;
+                }
+
                 include $sLangFile;
 
                 // including only (!) thoose, which has charset defined
@@ -816,7 +832,7 @@ class oxLang extends oxSuperCfg
     {
         $iLang = isset( $iLang ) ? $iLang : $this->getBaseLanguage();
         $oStr = getStr();
-        
+
         if ( !$this->isAdmin() ) {
             $sParam = $this->getUrlLang( $iLang );
             if (!preg_match('/(\?|&(amp;)?)lang=[0-9]+/', $sUrl)  && ($iLang != oxConfig::getInstance()->getConfigParam( 'sDefaultLang' ))) {
@@ -834,5 +850,28 @@ class oxLang extends oxSuperCfg
         }
 
         return $sUrl;
+    }
+
+    /**
+     * Detect language by user browser settings. Returns language ID if
+     * detected, otherwise returns null.
+     *
+     * @return int
+     */
+    public function detectLanguageByBrowser()
+    {
+        $sBrowserLang = strtolower( substr( $_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2 ) );
+
+        if ( !$sBrowserLang ) {
+            return;
+        }
+
+        $aLangs = $this->getLanguageArray(null, true );
+
+        foreach ( $aLangs as $oLang ) {
+            if ( $oLang->abbr == $sBrowserLang ) {
+                return (int) $oLang->id;
+            }
+        }
     }
 }

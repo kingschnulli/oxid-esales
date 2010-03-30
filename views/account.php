@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: account.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: account.php 26146 2010-03-01 14:37:08Z arvydas $
  */
 
 /**
@@ -205,7 +205,7 @@ class Account extends oxUBase
                 }
             }
 
-            oxUtils::getInstance()->redirect( $this->getConfig()->getShopUrl().'index.php?cl='.rawurlencode( $sSource ).$sParams );
+            return oxUtils::getInstance()->redirect( $this->getConfig()->getShopUrl().'index.php?cl='.rawurlencode( $sSource ).$sParams );
         }
     }
 

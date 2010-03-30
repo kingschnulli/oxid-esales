@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: account_noticelist.php 25793 2010-02-12 10:18:17Z sarunas $
+ * @version   SVN: $Id: account_noticelist.php 26147 2010-03-01 14:38:04Z arvydas $
  */
 
 /**
@@ -140,24 +140,22 @@ class Account_Noticelist extends Account
      */
     public function getSimilarRecommLists()
     {
-        if (!$this->getViewConfig()->getShowListmania()) {
-            return false;
-        }
+        if ( $this->getViewConfig()->getShowListmania() ) {
+            // recommlist
+            if ( $this->_aRecommList === null ) {
 
-        // recommlist
-        if ( $this->_aRecommList === null ) {
+                // just ensuring that next call will skip this check
+                $this->_aRecommList = false;
 
-            // just ensuring that next call will skip this check
-            $this->_aRecommList = false;
+                // loading recomm list
+                $aNoticeProdList = $this->getNoticeProductList();
+                if ( is_array( $aNoticeProdList ) && count( $aNoticeProdList ) ) {
+                    $oRecommList = oxNew('oxrecommlist');
+                    $this->_aRecommList = $oRecommList->getRecommListsByIds( array_keys( $aNoticeProdList ));
 
-            // loading recomm list
-            $aNoticeProdList = $this->getNoticeProductList();
-            if ( is_array( $aNoticeProdList ) && count( $aNoticeProdList ) ) {
-                $oRecommList = oxNew('oxrecommlist');
-                $this->_aRecommList = $oRecommList->getRecommListsByIds( array_keys( $aNoticeProdList ));
-
+                }
             }
+            return $this->_aRecommList;
         }
-        return $this->_aRecommList;
     }
 }

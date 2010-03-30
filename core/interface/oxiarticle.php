@@ -32,11 +32,12 @@ interface oxIArticle
     /**
      * Checks if stock configuration allows to buy user chosen amount $dAmount
      *
-     * @param double $dAmount buyable amount
+     * @param double $dAmount         buyable amount
+     * @param double $dArtStockAmount stock amount
      *
      * @return mixed
      */
-    public function checkForStock( $dAmount );
+    public function checkForStock( $dAmount, $dArtStockAmount = 0 );
 
     /**
      * Returns all selectlists this article has.

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_overview.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: article_overview.php 26697 2010-03-20 12:24:07Z arvydas $
  */
 
 /**
@@ -53,6 +53,7 @@ class Article_Overview extends oxAdminDetails
 
 
             $oDB = oxDb::getDb();
+
                 // variant handling
                 if ( $oArticle->oxarticles__oxparentid->value) {
                     $oParentArticle = oxNew( "oxarticle");
@@ -81,7 +82,8 @@ class Article_Overview extends oxAdminDetails
 
                 // position in top ten
                 $sSelect =  "select oxartid,sum(oxamount) as cnt from oxorderarticles group by oxartid order by cnt desc";
-            $rs = $oDB->execute( $sSelect);
+
+            $rs = $oDB->execute( $sSelect );
             $iTopPos = 0;
             $iPos    = 0;
             if ( $rs != false && $rs->recordCount() > 0) {

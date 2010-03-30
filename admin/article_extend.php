@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.php 25640 2010-02-05 06:42:24Z alfonsas $
+ * @version   SVN: $Id: article_extend.php 26176 2010-03-02 13:19:57Z arvydas $
  */
 
 /**
@@ -173,13 +173,11 @@ class Article_Extend extends oxAdminDetails
         if ($sMediaUrl || $aMediaFile['name'] || $sMediaDesc) {
 
             if ( !$sMediaDesc ) {
-                oxUtilsView::getInstance()->addErrorToDisplay('EXCEPTION_NODESCRIPTIONADDED');
-                return;
+                return oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_NODESCRIPTIONADDED' );
             }
 
             if ( !$sMediaUrl && !$aMediaFile['name'] ) {
-                oxUtilsView::getInstance()->addErrorToDisplay('EXCEPTION_NOMEDIAADDED');
-                return;
+                return oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_NOMEDIAADDED' );
             }
 
             $oMediaUrl = oxNew("oxMediaUrl");
@@ -192,8 +190,7 @@ class Article_Extend extends oxAdminDetails
                     $sMediaUrl = oxUtilsFile::getInstance()->handleUploadedFile($aMediaFile, 'out/media/');
                     $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(1, oxField::T_RAW);
                 } catch (Exception $e) {
-                    oxUtilsView::getInstance()->addErrorToDisplay($e->getMessage());
-                    return;
+                    return oxUtilsView::getInstance()->addErrorToDisplay( $e->getMessage() );
                 }
             }
 

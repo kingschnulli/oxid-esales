@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 25824 2010-02-17 09:22:52Z alfonsas $
+ * @version   SVN: $Id: user.php 26826 2010-03-25 09:25:31Z arvydas $
  */
 
 /**
@@ -250,8 +250,8 @@ class User extends oxUBase
         if ( $this->_sOrderRemark === null ) {
             $this->_sOrderRemark = false;
             if ( $sOrderRemark = oxSession::getVar( 'ordrem' ) ) {
-                $this->_sOrderRemark = $sOrderRemark;
-            } elseif ($sOrderRemark = oxConfig::getParameter( 'order_remark' )) {
+                $this->_sOrderRemark = oxConfig::checkSpecialChars( $sOrderRemark );
+            } elseif ( $sOrderRemark = oxConfig::getParameter( 'order_remark' ) ) {
                 $this->_sOrderRemark = $sOrderRemark;
             }
         }
@@ -355,8 +355,7 @@ class User extends oxUBase
             if ( $this->showShipAddress() ) {
                 $sAddressId = $this->_getSelectedAddress();
                 if ( $sAddressId && $sAddressId != '-1' ) {
-                    $oAdress = oxNew( 'oxbase' );
-                    $oAdress->init( 'oxaddress' );
+                    $oAdress = oxNew( 'oxaddress' );
                     if ( $oAdress->load( $sAddressId ) ) {
                         $this->_oDelAddress = $oAdress;
                         $this->_aViewData['deladr'] = null;

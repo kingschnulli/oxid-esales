@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvatselector.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxvatselector.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -77,7 +77,9 @@ class oxVatSelector extends oxSuperCfg
 
         $ret = false;
 
-        if ($sCountryId = $oUser->oxuser__oxcountryid->value) {
+        $sCountryId = $this->_getVatCountry($oUser);
+
+        if ($sCountryId) {
             $oCountry = oxNew('oxcountry');
             if (!$oCountry->load($sCountryId)) {
                 throw new oxObjectException();
@@ -210,6 +212,31 @@ class oxVatSelector extends oxSuperCfg
             return $this->getUserVat( $oUser );
         }
         return false;
+    }
+
+
+    /**
+     * Returns country id which VAT should be applied to.
+     * Depending on configuration option either user billing country or shipping country (if available) is returned.
+     *
+     * @param oxUser $oUser user object
+     *
+     * @return string
+     */
+    protected function _getVatCountry(oxUser $oUser = null)
+    {
+        $blUseShippingCountry = $this->getConfig()->getConfigParam("blShippingCountryVat");
+
+        if ($blUseShippingCountry) {
+            $aAddresses = $oUser->getUserAddresses($oUser->getId());
+            $sSelectedAddress = $oUser->getSelectedAddressId();
+
+            if (isset($aAddresses[$sSelectedAddress])) {
+                return $aAddresses[$sSelectedAddress]->oxaddress__oxcountryid->value;
+            }
+        }
+
+        return $oUser->oxuser__oxcountryid->value;
     }
 
 }

@@ -83,10 +83,12 @@
             </div>
 
             <div class="right">
-                [{assign var="oCont" value=$oView->getContentByIdent("oxagb") }]
+                [{oxifcontent ident="oxagb" object="oCont"}]
                 <a id="test_HeaderTerms" href="[{ $oCont->getLink() }]" rel="nofollow">[{ $oCont->oxcontents__oxtitle->value }]</a>
-                [{assign var="oCont" value=$oView->getContentByIdent("oximpressum") }]
+                [{/oxifcontent}]
+                [{oxifcontent ident="oximpressum" object="oCont"}]
                 <a id="test_HeaderImpressum" href="[{ $oCont->getLink() }]">[{ $oCont->oxcontents__oxtitle->value }]</a>
+                [{/oxifcontent}]
                 [{if $oView->getMenueList()}]
                   [{foreach from=$oView->getMenueList() item=oMenueContent }]
                     <a href="[{ $oMenueContent->getLink() }]">[{$oMenueContent->oxcontents__oxtitle->value}]</a>

@@ -19,14 +19,14 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxexceptiontodisplay.php 25635 2010-02-04 21:29:50Z alfonsas $
+ * @version   SVN: $Id: oxexceptiontodisplay.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
  * simplified Exception classes for simply displaying errors
  * saves resources when exception functionality is not needed
  */
-class oxExceptionToDisplay implements oxDisplayErrorInterface
+class oxExceptionToDisplay implements oxIDisplayError
 {
     /**
      * Language const of a Message

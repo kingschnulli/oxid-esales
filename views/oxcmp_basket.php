@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_basket.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxcmp_basket.php 26611 2010-03-17 12:02:26Z sarunas $
  */
 
 /**
@@ -62,8 +62,6 @@ class oxcmp_basket extends oxView
      */
     public function render()
     {
-        // Performance
-        $myConfig = $this->getConfig();
         // recalculating
         if ( $oBasket = $this->getSession()->getBasket() ) {
             $oBasket->calculateBasket( false );
@@ -136,7 +134,6 @@ class oxcmp_basket extends oxView
     public function changebasket( $sProductId = null, $dAmount = null, $aSel = null, $aPersParam = null, $blOverride = true )
     {
         // adding to basket is not allowed ?
-        $myConfig = $this->getConfig();
         if ( oxUtils::getInstance()->isSearchEngine() ) {
             return;
         }
@@ -190,7 +187,6 @@ class oxcmp_basket extends oxView
     public function wl_tobasket( $sProductId = null, $dAmount = null, $aSel = null, $aPersParam = null, $blOverride = false )
     {
         // adding to basket is not allowed ?
-        $myConfig = $this->getConfig();
         if ( oxUtils::getInstance()->isSearchEngine() ) {
             return;
         }
@@ -349,10 +345,11 @@ class oxcmp_basket extends oxView
             $aSelList = isset( $aProductInfo['sel'] )?$aProductInfo['sel']:null;
             $aPersParam = isset( $aProductInfo['persparam'] )?$aProductInfo['persparam']:null;
             $blOverride = isset( $aProductInfo['override'] )?$aProductInfo['override']:null;
+            $blIsBundle = isset( $aProductInfo['bundle'] )?true:false;
             $sOldBasketItemId = isset( $aProductInfo['basketitemid'] )?$aProductInfo['basketitemid']:null;
 
             try {
-                $oBasketItem = $oBasket->addToBasket( $sProductId, $dAmount, $aSelList, $aPersParam, $blOverride, false, $sOldBasketItemId );
+                $oBasketItem = $oBasket->addToBasket( $sProductId, $dAmount, $aSelList, $aPersParam, $blOverride, $blIsBundle, $sOldBasketItemId );
             } catch ( oxOutOfStockException $oEx ) {
                 $oEx->setDestination( $sErrorDest );
                 // #950 Change error destination to basket popup

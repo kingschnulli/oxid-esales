@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 25471 2010-02-01 14:35:11Z alfonsas $
+ * @version   SVN: $Id: oxuser.php 26374 2010-03-08 15:53:00Z arvydas $
  */
 
 /**
@@ -2326,6 +2326,16 @@ class oxUser extends oxBase
         $oDb = oxDb::getDb();
         $sUserId = $oDb->getOne('select oxid from oxuser where md5(concat("oxid", oxpassword, oxusername )) = ' . $oDb->quote( $sReviewUserHash ) .'');
         return $sUserId;
+    }
+
+    /**
+     * Returns string representation of user state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->oxuser__oxstateid->value;
     }
 
 }

@@ -114,6 +114,15 @@
         </tr>
         <tr>
             <td class="edittext">
+            [{ oxmultilang ident="GENERAL_STATE" }]
+            </td>
+            <td class="edittext">
+            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxaddress__oxstateid->fldmax_length}]" name="editval[oxaddress__oxstateid]" value="[{$edit->oxaddress__oxstateid->value }]" [{ $readonly }]>
+            [{ oxinputhelp ident="HELP_GENERAL_STATE" }]
+            </td>
+        </tr>
+        <tr>
+            <td class="edittext">
             [{ oxmultilang ident="GENERAL_COUNTRY" }]
             </td>
             <td class="edittext">

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_main.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: attribute_main.php 26706 2010-03-20 13:37:49Z arvydas $
  */
 
 /**
@@ -109,8 +109,7 @@ class Attribute_Main extends oxAdminDetails
         $aParams = oxConfig::getParameter( "editval");
 
             // shopid
-            $sShopID = oxSession::getVar( "actshop");
-            $aParams['oxattribute__oxshopid'] = $sShopID;
+            $aParams['oxattribute__oxshopid'] = oxSession::getVar( "actshop" );
         $oAttr = oxNew( "oxattribute" );
 
         if ( $soxId != "-1")
@@ -144,15 +143,14 @@ class Attribute_Main extends oxAdminDetails
         $aParams    = oxConfig::getParameter( "editval");
 
             // shopid
-            $sShopID = oxSession::getVar( "actshop");
-            $aParams['oxattribute__oxshopid'] = $sShopID;
+            $aParams['oxattribute__oxshopid'] = oxSession::getVar( "actshop");
         $oAttr = oxNew( "oxattribute" );
 
-        if ( $soxId != "-1")
+        if ( $soxId != "-1") {
             $oAttr->loadInLang( $this->_iEditLang, $soxId );
-        else
+        } else {
             $aParams['oxattribute__oxid'] = null;
-        //$aParams = $oAttr->ConvertNameArray2Idx( $aParams);
+        }
 
 
         $oAttr->setLanguage(0);

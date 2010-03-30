@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerptype_article.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxerptype_article.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 require_once 'oxerptype.php';
@@ -45,6 +45,7 @@ class oxERPType_Article extends oxERPType
             'OXARTNUM'         => 'OXARTNUM',
             'OXEAN'            => 'OXEAN',
             'OXDISTEAN'        => 'OXDISTEAN',
+            'OXMPN'            => 'OXMPN',
             'OXTITLE'          => 'OXTITLE',
             'OXSHORTDESC'      => 'OXSHORTDESC',
             'OXLONGDESC'       => 'OXLONGDESC',
@@ -161,6 +162,7 @@ class oxERPType_Article extends oxERPType
             'OXARTNUM' => 'OXARTNUM',
             'OXEAN' => 'OXEAN',
             'OXDISTEAN' => 'OXDISTEAN',
+            'OXMPN' => 'OXMPN',
             'OXTITLE' => 'OXTITLE',
             'OXSHORTDESC' => 'OXSHORTDESC',
             'OXPRICE' => 'OXPRICE',

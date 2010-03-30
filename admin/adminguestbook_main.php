@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: adminguestbook_main.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: adminguestbook_main.php 26691 2010-03-20 08:01:52Z arvydas $
  */
 
 /**
@@ -87,23 +87,21 @@ class Adminguestbook_Main extends oxAdminDetails
         $aParams = oxConfig::getParameter( "editval" );
 
         // checkbox handling
-        if ( !isset( $aParams['oxgbentries__oxactive'] ) )
+        if ( !isset( $aParams['oxgbentries__oxactive'] ) ) {
             $aParams['oxgbentries__oxactive'] = 0;
+        }
 
             // shopid
-            $sShopID = oxSession::getVar( "actshop");
-            $aParams['oxgbentries__oxshopid'] = $sShopID;
+            $aParams['oxgbentries__oxshopid'] = oxSession::getVar( "actshop");
 
         $oLinks = oxNew( "oxgbentry" );
-
         if ( $soxId != "-1" ) {
             $oLinks->load( $soxId );
         } else {
             $aParams['oxgbentries__oxid'] = null;
 
             // author
-            $iUsrID = oxSession::getVar( 'auth' );
-            $aParams['oxgbentries__oxuserid'] = $iUsrID;
+            $aParams['oxgbentries__oxuserid'] = oxSession::getVar( 'auth' );
         }
 
         $oLinks->assign( $aParams );

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 25471 2010-02-01 14:35:11Z alfonsas $
+ * @version   SVN: $Id: oxutils.php 26909 2010-03-26 17:27:59Z tomas $
  */
 
 /**
@@ -506,6 +506,67 @@ class oxUtils extends oxSuperCfg
         $this->_aFileCacheContents[$sKey] = $mContents;
 
         return true;
+    }
+
+    /**
+     * Generates php file, which could later be loaded as include instead of paresed data.
+     * Currenntly this method supports simple arrays only.
+     *
+     * @param string $sKey      Cache key
+     * @param mixed  $mContents Cache contents. At this moment only simple array type is supported.
+     *
+     * @return null;
+     */
+    public function toPhpFileCache($sKey, $mContents)
+    {
+        $sFilePath = $this->getCacheFilePath( $sKey, false, 'php' );
+        $sDate = date("Y-m-d H:i:s");
+        $sVarName = '$_aCacheContents';
+
+        //only simple arrays are supported
+        if (!is_array($mContents))
+            return;
+
+        $sContents = "<?php ?>";
+        if (is_array($mContents)) {
+            $sContents  = "<?php\n//automatically generated file\n//$sDate\n\n$sVarName = array (\n";
+            foreach ($mContents as $sKey => $mVal) {
+                if (!is_numeric($mVal)) {
+                    $mVal = "'$mVal'";
+                }
+                if (!is_numeric($sKey)) {
+                    $sKey = "'$sKey'";
+                }
+                $sContents .= "  $sKey => $mVal,\n";
+            }
+            $sContents .= ");\n?>";
+        }
+
+        $hFile = fopen( $sFilePath, "w");
+        if ( $hFile) {
+            fwrite( $hFile, $sContents);
+            fclose( $hFile);
+        }
+
+    }
+
+    /**
+     * Includes cached php file and loads stored contents.
+     *
+     * @param string $sKey Cache key.
+     *
+     * @return null;
+     */
+    public function fromPhpFileCache($sKey)
+    {
+        $sFilePath = $this->getCacheFilePath( $sKey, false, 'php' );
+
+        if (file_exists($sFilePath)) {
+            include $sFilePath;
+            return $_aCacheContents;
+        }
+
+        return null;
     }
 
     /**
@@ -1108,10 +1169,11 @@ class oxUtils extends oxSuperCfg
      *
      * @param string $sCacheName cache file name
      * @param bool   $blPathOnly if TRUE, name parameter will be ignored and only cache folder will be returned (default FALSE)
+     * @param string $sExtension cache file extension
      *
      * @return string
      */
-    public function getCacheFilePath( $sCacheName, $blPathOnly = false )
+    public function getCacheFilePath( $sCacheName, $blPathOnly = false, $sExtension = 'txt' )
     {
         $sVersionPrefix = "";
 
@@ -1119,7 +1181,7 @@ class oxUtils extends oxSuperCfg
             $sVersionPrefix = 'pe';
 
         $sPath = realpath($this->getConfig()->getConfigParam( 'sCompileDir' ));
-        return $blPathOnly ? "{$sPath}/" : "{$sPath}/ox{$sVersionPrefix}c_{$sCacheName}.txt";
+        return $blPathOnly ? "{$sPath}/" : "{$sPath}/ox{$sVersionPrefix}c_{$sCacheName}." . $sExtension;
     }
 
     /**
@@ -1189,5 +1251,29 @@ class oxUtils extends oxSuperCfg
         }
 
         return $blOk;
+    }
+
+    /**
+     * handler for 404 (page not found) error
+     *
+     * @param string $sUrl url wich was given, can be not specified in some cases
+     *
+     * @return void
+     */
+    public function handlePageNotFoundError($sUrl = '')
+    {
+        $this->setHeader("HTTP/1.0 404 Not Found");
+        $sReturn = "Page not found.";
+        try {
+            $oView = oxNew('oxubase');
+            $oView->init();
+            $oView->render();
+            $oView->addTplParam('sUrl', $sUrl);
+            if ($sRet = oxUtilsView::getInstance()->getTemplateOutput('err_404.tpl', $oView)) {
+                $sReturn = $sRet;
+            }
+        } catch (Exception $e) {
+        }
+        $this->showMessageAndExit( $sReturn );
     }
 }

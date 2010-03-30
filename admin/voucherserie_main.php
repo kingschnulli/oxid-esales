@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: voucherserie_main.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: voucherserie_main.php 26641 2010-03-18 09:10:17Z arvydas $
  */
 
 /**
@@ -74,21 +74,19 @@ class VoucherSerie_Main extends oxAdminDetails
     {
 
         // Parameter Processing
-
         $soxId          = oxConfig::getParameter("oxid");
         $aSerieParams   = oxConfig::getParameter("editval");
-        $dVoucherAmount = oxConfig::getParameter("voucherAmount");
-        if (!is_numeric($dVoucherAmount) || $dVoucherAmount < 0)
-            $dVoucherAmount = 0;
+        $dVoucherAmount = abs( (int) oxConfig::getParameter( "voucherAmount" ) );
 
         // Voucher Serie Processing
 
         $oVoucherSerie = oxNew( "oxvoucherserie" );
         // if serie already exist use it
-        if ($soxId != "-1")
-            $oVoucherSerie->load($soxId);
-        else
+        if ( $soxId != "-1" ) {
+            $oVoucherSerie->load( $soxId );
+        } else {
             $aSerieParams["oxvoucherseries__oxid"] = null;
+        }
 
 
         // select random nr if chosen

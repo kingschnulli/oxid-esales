@@ -88,4 +88,15 @@ class oxAddress extends oxBase
 
         return $sAddress;
     }
+
+    /**
+     * Returns string representation of address state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->oxaddress__oxstateid->value;
+    }
+
 }

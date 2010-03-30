@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_list.php 25640 2010-02-05 06:42:24Z alfonsas $
+ * @version   SVN: $Id: article_list.php 26619 2010-03-17 13:44:29Z arvydas $
  */
 
 /**
@@ -67,11 +67,11 @@ class Article_List extends oxAdminList
 
                 // formatting view
                 if ( !$myConfig->getConfigParam( 'blSkipFormatConversion' ) ) {
-                    if ( $oArticle->$sFieldName->fldtype == "datetime")
+                    if ( $oArticle->$sFieldName->fldtype == "datetime" )
                         oxDb::getInstance()->convertDBDateTime( $oArticle->$sFieldName );
-                    elseif ( $oArticle->$sFieldName->fldtype == "timestamp")
+                    elseif ( $oArticle->$sFieldName->fldtype == "timestamp" )
                         oxDb::getInstance()->convertDBTimestamp( $oArticle->$sFieldName );
-                    elseif ( $oArticle->$sFieldName->fldtype == "date")
+                    elseif ( $oArticle->$sFieldName->fldtype == "date" )
                         oxDb::getInstance()->convertDBDate( $oArticle->$sFieldName );
                 }
 
@@ -89,17 +89,19 @@ class Article_List extends oxAdminList
         $this->_aViewData["pwrsearchfields"] = $oArticle ? $oArticle->getSearchableFields() : null;
         $this->_aViewData["pwrsearchfld"]    = strtoupper( $sPwrSearchFld );
 
-        $aWhere = array();
         if ( isset( $this->_aViewData["where"] ) ) {
-            $aWhere = &$this->_aViewData["where"];
             $sFieldName = "oxarticles__".strtoupper( $sPwrSearchFld );
-            if ( isset( $aWhere->$sFieldName ) )
-                $this->_aViewData["pwrsearchinput"] = $aWhere->$sFieldName;
+            if ( isset( $this->_aViewData["where"]->$sFieldName ) ) {
+                $this->_aViewData["pwrsearchinput"] = $this->_aViewData["where"]->$sFieldName;
+            }
         }
 
-        $sArtCat= oxConfig::getParameter("art_category");
-        if ( $sArtCat && strstr($sArtCat, "@@") !== false ) {
-            list($sType, $sValue) = explode("@@", $sArtCat);
+        $sType  = '';
+        $sValue = '';
+
+        $sArtCat= oxConfig::getParameter( "art_category" );
+        if ( $sArtCat && strstr( $sArtCat, "@@" ) !== false ) {
+            list( $sType, $sValue ) = explode( "@@", $sArtCat );
         }
 
         // parent categorie tree
@@ -186,10 +188,7 @@ class Article_List extends oxAdminList
     public function buildWhere()
     {
         // we override this to select only parent articles
-        $this->_aWhere = parent::buildWhere();
-        if ( !is_array( $this->_aWhere ) ) {
-            $this->_aWhere = array();
-        }
+        $this->_aWhere = ( array ) parent::buildWhere();
 
         // adding folder check
         $sFolder = oxConfig::getParameter( 'folder' );

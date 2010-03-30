@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: news.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: news.php 26736 2010-03-22 13:40:09Z sarunas $
  */
 
 /**
@@ -64,9 +64,6 @@ class News extends oxUBase
      */
     public function render()
     {
-
-        $myConfig = $this->getConfig();
-
         parent::render();
 
         $this->_aViewData['news'] = $this->getNews();

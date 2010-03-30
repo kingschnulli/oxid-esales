@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliverysetlist.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxdeliverysetlist.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -291,7 +291,8 @@ class oxDeliverySetList extends oxList
             $oPayList = oxPaymentList::getInstance();
             $oDelList = oxDeliveryList::getInstance();
 
-           $dBasketPrice = $oBasket->getPriceForPayment();
+            $oCur = $this->getConfig()->getActShopCurrencyObject();
+            $dBasketPrice = $oBasket->getPriceForPayment() / $oCur->rate;
 
             // checking if these ship sets available (number of possible payment methods > 0)
             foreach ( $this as $sShipSetId => $oShipSet ) {

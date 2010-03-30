@@ -231,4 +231,23 @@ class oxUtilsUrl extends oxSuperCfg
     {
         return $this->processUrl($sUrl, true, $aParams, $iLang);
     }
+
+    /**
+     * append parameter separator - '?' if it is not in the url or &amp; otherwise
+     *
+     * @param string $sUrl url
+     *
+     * @return string
+     */
+    public function appendParamSeparator($sUrl)
+    {
+        if (preg_match('/(\?|&(amp;)?)$/i', $sUrl)) {
+            // it is already ok
+            return $sUrl;
+        }
+        if (strpos($sUrl, '?') === false) {
+            return $sUrl.'?';
+        }
+        return $sUrl.'&amp;';
+    }
 }

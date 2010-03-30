@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 25793 2010-02-12 10:18:17Z sarunas $
+ * @version   SVN: $Id: details.php 26303 2010-03-04 16:11:37Z sarunas $
  */
 
 /**
@@ -50,7 +50,7 @@ class Details extends oxUBase
      *
      * @var oxarticle
      */
-    protected $_oParent = null;
+    protected $_oParentProd = null;
 
     /**
      * Marker if user can rate current product
@@ -233,14 +233,14 @@ class Details extends oxUBase
      */
     protected function _getParentProduct( $sParentId )
     {
-        if ( $sParentId && $this->_oParent === null ) {
-            $this->_oParent = false;
+        if ( $sParentId && $this->_oParentProd === null ) {
+            $this->_oParentProd = false;
             if ( ( $oParent = oxNewArticle( $sParentId ) ) ) {
                 $this->_processProduct( $oParent );
-                $this->_oParent = $oParent;
+                $this->_oParentProd = $oParent;
             }
         }
-        return $this->_oParent;
+        return $this->_oParentProd;
     }
 
     /**
@@ -440,7 +440,7 @@ class Details extends oxUBase
         //media files
         $this->_aViewData['aMediaUrls'] = $this->getMediaFiles();
 
-        if (in_array('oxrss_recommlists', $myConfig->getConfigParam( 'aRssSelected' )) && $this->getSimilarRecommLists()) {
+        if ($myConfig->getConfigParam( 'bl_rssRecommLists' ) && $this->getSimilarRecommLists()) {
             $oRss = oxNew('oxrssfeed');
             $this->addRssFeed($oRss->getRecommListsTitle( $oProduct ), $oRss->getRecommListsUrl( $oProduct ), 'recommlists');
         }
@@ -544,7 +544,8 @@ class Details extends oxUBase
      */
     public function saveReview()
     {
-        if ( ( $oUser = $this->getUser() ) && ( $oProduct = $this->getProduct() ) ) {
+        if ( $this->canAcceptFormData() &&
+             ( $oUser = $this->getUser() ) && ( $oProduct = $this->getProduct() ) ) {
 
             $dRating = oxConfig::getParameter( 'artrating' );
             if ( $dRating !== null ) {
@@ -709,6 +710,8 @@ class Details extends oxUBase
     /**
      * Returns tag cloud
      *
+     * @deprecated should be used details::getTagCloudManager()
+     *
      * @return string
      */
     public function getTagCloud()
@@ -721,6 +724,18 @@ class Details extends oxUBase
         return $this->_sTagCloud;
     }
 
+    /**
+     * Returns tag cloud manager class
+     *
+     * @return oxTagCloud
+     */
+    public function getTagCloudManager()
+    {
+        $oManager = oxNew( "oxTagCloud" );
+        $oManager->setExtendedMode( true );
+        $oManager->setProductId( $this->getProduct()->getId() );
+        return $oManager;
+    }
 
     /**
      * Returns login form anchor
@@ -1338,6 +1353,28 @@ class Details extends oxUBase
     }
 
     /**
+     * Checks should persistent parametere input field be displayed
+     *
+     * @return bool
+     */
+    public function isPersParam()
+    {
+        $oProduct = $this->getProduct();
+        return $oProduct->oxarticles__oxisconfigurable->value;
+    }
+
+    /**
+     * Returns tag separator
+     *
+     * @return string
+     */
+    public function getTagSeparator()
+    {
+        $sSepartor = $this->getConfig()->getConfigParam("sTagSeparator");
+        return $sSepartor;
+    }
+
+    /**
      * Returns seo parameter to filter meta data by it e.g. article
      * meta data for active category
      *
@@ -1372,4 +1409,5 @@ class Details extends oxUBase
 
         return $sParam;
     }
+
 }

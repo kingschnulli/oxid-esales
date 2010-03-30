@@ -19,8 +19,13 @@
  * @package   main
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseo.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxseo.php 26071 2010-02-25 15:12:55Z sarunas $
  */
+
+// mod_rewrite check
+if ( isset( $_REQUEST['mod_rewrite_module_is'] ) ) {
+    die( "mod_rewrite_".$_REQUEST['mod_rewrite_module_is'] );
+}
 
 /**
  * Detects serchengine URLs

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdb.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxdb.php 26784 2010-03-23 16:07:09Z tomas $
  */
 
 
@@ -36,14 +36,14 @@ class oxDb extends oxSuperCfg
      *
      * @var oxdb
      */
-    private static $_instance = null;
+    protected static $_instance = null;
 
     /**
      * Database object
      *
      * @var oxdb
      */
-    private static  $_oDB = null;
+    protected static  $_oDB = null;
 
     /**
      * Database tables descriptions cache array

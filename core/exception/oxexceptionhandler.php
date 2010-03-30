@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxexceptionhandler.php 25635 2010-02-04 21:29:50Z alfonsas $
+ * @version   SVN: $Id: oxexceptionhandler.php 26572 2010-03-16 13:10:50Z tomas $
  */
 
 /**
@@ -150,7 +150,7 @@ class oxExceptionHandler
             if ( defined( 'OXID_PHP_UNIT' ) ) {
                 return;
             } elseif ( 0 != $this->_iDebug ) {
-                oxUtils::getInstance()->showMessageAndExit( $sOut );
+                oxUtils::getInstance()->showMessageAndExit( $sLogMsg );
             }
         }
 

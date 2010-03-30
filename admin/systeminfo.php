@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: systeminfo.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: systeminfo.php 26273 2010-03-04 08:51:32Z arvydas $
  */
 
 /**
@@ -73,7 +73,7 @@ class SystemInfo extends oxAdminView
 
             oxUtils::getInstance()->showMessageAndExit( "" );
         } else {
-            oxUtils::getInstance()->showMessageAndExit( "Access denied !" );
+            return oxUtils::getInstance()->showMessageAndExit( "Access denied !" );
         }
     }
 }

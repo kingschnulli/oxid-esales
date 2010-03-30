@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: account_password.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: account_password.php 26149 2010-03-01 14:56:56Z arvydas $
  */
 
 
@@ -33,7 +33,6 @@
  */
 class Account_Password extends Account
 {
-
     /**
      * Current class template name.
      *
@@ -53,7 +52,7 @@ class Account_Password extends Account
      *
      * @var bool
      */
-    protected $_blHasPassword = true;
+    protected $_blHasPassword = null;
 
     /**
      * If user is not logged in - returns name of template account_user::_sThisLoginTemplate,
@@ -73,9 +72,6 @@ class Account_Password extends Account
         $oUser = $this->getUser();
         if ( !$oUser ) {
             return $this->_sThisTemplate = $this->_sThisLoginTemplate;
-        }
-        if ( $oUser->oxuser__oxisopenid->value == 1 && strpos( $oUser->oxuser__oxpassword->value, 'openid_' ) === 0 ) {
-            $this->_blHasPassword = false;
         }
 
         return $this->_sThisTemplate;
@@ -110,8 +106,7 @@ class Account_Password extends Account
         }
 
         if ( !$sOldPass || !$oUser->isSamePassword( $sOldPass ) ) {
-            oxUtilsView::getInstance()->addErrorToDisplay('ACCOUNT_PASSWORD_ERRINCORRECTCURRENTPASSW', false, true, 'user');
-            return;
+            return oxUtilsView::getInstance()->addErrorToDisplay('ACCOUNT_PASSWORD_ERRINCORRECTCURRENTPASSW', false, true, 'user');
         }
 
         // testing passed - changing password
@@ -138,6 +133,14 @@ class Account_Password extends Account
      */
     public function hasPassword()
     {
+        if ( $this->_blHasPassword === null ) {
+            $this->_blHasPassword = true;
+            if ( ( $oUser = $this->getUser() ) ) {
+                if ( $oUser->oxuser__oxisopenid->value == 1 && strpos( $oUser->oxuser__oxpassword->value, 'openid_' ) === 0 ) {
+                    $this->_blHasPassword = false;
+                }
+            }
+        }
         return $this->_blHasPassword;
     }
 }

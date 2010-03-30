@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcountry.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxcountry.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 
@@ -34,6 +34,13 @@ class oxCountry extends oxI18n
      * @var string
      */
     protected $_sClassName = 'oxcountry';
+
+    /**
+     * State list
+     *
+     * @var oxStateList
+     */
+    protected $_aStates = null;
 
     /**
      * Class constructor, initiates parent constructor (parent::oxI18n()).
@@ -62,5 +69,24 @@ class oxCountry extends oxI18n
     public function isInEU()
     {
         return (bool) ($this->oxcountry__oxvatstatus->value == 1);
+    }
+
+    /**
+     * Returns current state list
+     *
+     * @return unknown
+     */
+    public function getStates()
+    {
+        if (!is_null($this->_aStates))
+            return $this->_aStates;
+
+        $sCountryId = $this->getId();
+        $sQ = "select * from oxstates where oxcountryid = '$sCountryId' ";
+        $this->_aStates = oxNew("oxlist");
+        $this->_aStates->init("oxstate");
+        $this->_aStates->selectString($sQ);
+
+        return $this->_aStates;
     }
 }

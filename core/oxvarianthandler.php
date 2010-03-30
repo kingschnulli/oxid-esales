@@ -57,7 +57,7 @@ class oxVariantHandler extends oxSuperCfg
      *
      * @return null
      */
-    public function init($oArticles)
+    public function init( $oArticles )
     {
         $this->_oArticles = $oArticles;
     }
@@ -76,7 +76,7 @@ class oxVariantHandler extends oxSuperCfg
         $oMdVariants->setParentId( $sParentId );
         $oMdVariants->setName( "_parent_product_" );
         foreach ( $oVariants as $sKey => $oVariant ) {
-            $aNames = explode(trim($this->_sMdSeparator), $oVariant->oxarticles__oxvarselect->value);
+            $aNames = explode( trim( $this->_sMdSeparator ), $oVariant->oxarticles__oxvarselect->value );
             foreach ( $aNames as $sNameKey => $sName ) {
                 $aNames[$sNameKey] = trim($sName);
             }

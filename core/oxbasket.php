@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 25471 2010-02-01 14:35:11Z alfonsas $
+ * @version   SVN: $Id: oxbasket.php 26319 2010-03-05 09:58:47Z sarunas $
  */
 
 /**
@@ -312,7 +312,7 @@ class oxBasket extends oxSuperCfg
                 $this->_aBasketContents[$sItemId]->setStockCheckStatus( $this->getStockCheckMode() );
                 //validate amount
                 //possibly throws exception
-                $this->_aBasketContents[$sItemId]->setAmount( $dAmount, $blOverride );
+                $this->_aBasketContents[$sItemId]->setAmount( $dAmount, $blOverride, $sItemId );
             } catch( oxOutOfStockException $oEx ) {
                 // rethrow later
             }
@@ -829,7 +829,9 @@ class oxBasket extends oxSuperCfg
             $this->_oPrice->subtract( $this->_oTotalDiscount->getBruttoPrice() );
 
             // 2.3 applying voucher discounts
-            $this->_oPrice->subtract( $this->_oVoucherDiscount->getBruttoPrice() );
+            if ($oVoucherDisc = $this->getVoucherDiscount()) {
+                $this->_oPrice->subtract( $oVoucherDisc->getBruttoPrice() );
+            }
         }
 
         // 2.3 add delivery cost
@@ -869,7 +871,7 @@ class oxBasket extends oxSuperCfg
      */
     protected function _calcVoucherDiscount()
     {
-        if ( $this->_oVoucherDiscount === null || ( $this->_blUpdateNeeded && !$this->isAdmin() ) ) {
+        if ( $this->getConfig()->getConfigParam( 'bl_showVouchers' ) && ($this->_oVoucherDiscount === null || ( $this->_blUpdateNeeded && !$this->isAdmin() ) ) ) {
 
             $this->_oVoucherDiscount = oxNew( 'oxPrice' );
             $this->_oVoucherDiscount->setBruttoPriceMode();
@@ -1230,7 +1232,7 @@ class oxBasket extends oxSuperCfg
                 }
 
                 // variant handling
-                if ( $sParentId = $oArticle->getProductParentId() && $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
+                if ( ($sParentId = $oArticle->getProductParentId()) && $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
                     if ( !isset( $this->_aBasketSummary->aArticles[$sParentId] ) ) {
                         $this->_aBasketSummary->aArticles[$sParentId] = 0;
                     }
@@ -1819,33 +1821,31 @@ class oxBasket extends oxSuperCfg
     }
 
     /**
-     * Returns array of formatted VATs which were calculated for basket
+     * Returns array of palain of formatted VATs which were calculated for basket
+     *
+     * @param bool $blFormatCurrency enambles currency formating
      *
      * @return array
      */
-    public function getProductVats()
+    public function getProductVats( $blFormatCurrency = true)
     {
         if ( !$this->_oNotDiscountedProductsPriceList ) {
             return array();
         }
 
-        $aVats = array();
-
-        $aAllVats = $this->_oNotDiscountedProductsPriceList->getVatInfo();
+        $aVats = $this->_oNotDiscountedProductsPriceList->getVatInfo();
 
         $oUtils = oxUtils::getInstance();
         foreach ( $this->_aDiscountedVats as $sKey => $dVat ) {
             // add prices of the same discounts
-            if ( array_key_exists ($sKey, $aAllVats) ) {
-                $aAllVats[$sKey] += $oUtils->fRound( $dVat, $this->_oCurrency);
-            } else {
-                $aAllVats[$sKey] = $dVat;
-            }
+            $aVats[$sKey] += $oUtils->fRound( $dVat, $this->_oCurrency);
         }
 
-        $oLang = oxLang::getInstance();
-        foreach ( $aAllVats as $sKey => $dVat ) {
-            $aVats[$sKey] = $oLang->formatCurrency( $dVat, $this->getBasketCurrency() );
+        if ( $blFormatCurrency ) {
+            $oLang = oxLang::getInstance();
+            foreach ( $aVats as $sKey => $dVat ) {
+                $aVats[$sKey] = $oLang->formatCurrency( $dVat, $this->getBasketCurrency() );
+            }
         }
 
         return $aVats;
@@ -1954,7 +1954,10 @@ class oxBasket extends oxSuperCfg
      */
     public function getVoucherDiscount()
     {
-        return $this->_oVoucherDiscount;
+        if ($this->getConfig()->getConfigParam( 'bl_showVouchers' )) {
+            return $this->_oVoucherDiscount;
+        }
+        return null;
     }
 
     /**
@@ -2310,5 +2313,27 @@ class oxBasket extends oxSuperCfg
 
         return $blIsBelowMinOrderPrice;
 
+    }
+
+    /**
+     * Returns stock of article in basket, including bundle article
+     *
+     * @param string $sArtId        article id
+     * @param string $sExpiredArtId item id of updated article
+     *
+     * @return double
+     */
+    public function getArtStockInBasket( $sArtId, $sExpiredArtId = null )
+    {
+        $dArtStock = 0;
+        foreach ( $this->_aBasketContents as $sItemKey => $oOrderArticle ) {
+            if ( $oOrderArticle && ( $sExpiredArtId == null || $sExpiredArtId != $sItemKey ) ) {
+                if ( $oOrderArticle->getArticle()->getId() == $sArtId ) {
+                    $dArtStock += $oOrderArticle->getAmount();
+                }
+            }
+        }
+
+        return $dArtStock;
     }
 }

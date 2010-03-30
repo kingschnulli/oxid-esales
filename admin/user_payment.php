@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: user_payment.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: user_payment.php 26254 2010-03-03 15:25:21Z arvydas $
  */
 
 /**
@@ -101,25 +101,25 @@ class User_Payment extends oxAdminDetails
     public function save()
     {
 
-        $soxId      = oxConfig::getParameter( "oxid");
-        if (!$this->_allowAdminEdit($soxId))
-            return;
+        $soxId = oxConfig::getParameter( "oxid");
+        if ( $this->_allowAdminEdit( $soxId ) ) {
 
-        $aParams    = oxConfig::getParameter( "editval");
-        $aDynvalues = oxConfig::getParameter( "dynvalue");
+            $aParams    = oxConfig::getParameter( "editval");
+            $aDynvalues = oxConfig::getParameter( "dynvalue");
 
-        if ( isset($aDynvalues)) {
-            // store the dynvalues
-            $aParams['oxuserpayments__oxvalue'] = oxUtils::getInstance()->assignValuesToText( $aDynvalues);
+            if ( isset( $aDynvalues ) ) {
+                // store the dynvalues
+                $aParams['oxuserpayments__oxvalue'] = oxUtils::getInstance()->assignValuesToText( $aDynvalues );
+            }
+
+            if ( $aParams['oxuserpayments__oxid'] == "-1" ) {
+                $aParams['oxuserpayments__oxid'] = null;
+            }
+
+            $oAdress = oxNew( "oxuserpayment" );
+            $oAdress->assign( $aParams );
+            $oAdress->save();
         }
-
-        $oAdress = oxNew( "oxuserpayment" );
-
-        if ( $aParams['oxuserpayments__oxid'] == "-1")
-            $aParams['oxuserpayments__oxid'] = null;
-        //$aParams = $oAdress->ConvertNameArray2Idx( $aParams);
-        $oAdress->assign( $aParams);
-        $oAdress->save();
     }
 
     /**
@@ -131,15 +131,13 @@ class User_Payment extends oxAdminDetails
     {
         $aParams = oxConfig::getParameter( "editval" );
         $soxId   = oxConfig::getParameter( "oxid" );
-        if (!$this->_allowAdminEdit($soxId))
-            return;
-
-        $oAdress = oxNew( "oxuserpayment" );
-
-        if ( $aParams['oxuserpayments__oxid'] != "-1") {
-            $oAdress->load( $aParams['oxuserpayments__oxid']);
-            $oAdress->delete();
-            $this->_blDelete = true;
+        if ( $this->_allowAdminEdit( $soxId )) {
+            if ( $aParams['oxuserpayments__oxid'] != "-1") {
+                $oAdress = oxNew( "oxuserpayment" );
+                if ( $oAdress->load( $aParams['oxuserpayments__oxid'] ) ) {
+                    $this->_blDelete = ( bool ) $oAdress->delete();
+                }
+            }
         }
     }
 

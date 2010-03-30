@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: language_list.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: language_list.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -46,7 +46,6 @@ class Language_List extends oxAdminList
      * Checks for Malladmin rights
      *
      * @return null
-     *
      */
     public function deleteEntry()
     {

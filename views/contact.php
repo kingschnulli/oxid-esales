@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: contact.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: contact.php 26581 2010-03-16 15:59:53Z vilma $
  */
 
 /**
@@ -160,7 +160,7 @@ class Contact extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns entered user data
+     * Template variable getter. Returns entered contact subject
      *
      * @return object
      */
@@ -173,7 +173,7 @@ class Contact extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns entered user data
+     * Template variable getter. Returns entered message
      *
      * @return object
      */

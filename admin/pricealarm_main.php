@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarm_main.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: pricealarm_main.php 26912 2010-03-26 17:37:36Z arvydas $
  */
 
 /**
@@ -38,12 +38,14 @@ class PriceAlarm_Main extends oxAdminDetails
      * @return string
      */
     public function render()
-    {   $myConfig = $this->getConfig();
+    {
+        $myConfig = $this->getConfig();
 
             // #1140 R - price must be checked from the object.
             $sql = "select oxarticles.oxid, oxpricealarm.oxprice from oxpricealarm, oxarticles where oxarticles.oxid = oxpricealarm.oxartid and oxpricealarm.oxsended = '000-00-00 00:00:00'";
             $rs = oxDb::getDb()->Execute( $sql);
             $iAllCnt = 0;
+
             if ($rs != false && $rs->recordCount() > 0) {
                 while (!$rs->EOF) {
                     $oArticle = oxNew("oxarticle" );
@@ -86,16 +88,16 @@ class PriceAlarm_Main extends oxAdminDetails
 
             if ( !$oThisCurr ) {
                 $oThisCurr = $oDefCurr;
-                $oPricealarm->oxpricealarm__oxcurrency->setValue($oDefCurr->name);
+                $oPricealarm->oxpricealarm__oxcurrency = new oxField( $oDefCurr->name );
             }
 
             // #889C - Netto prices in Admin
             // (we have to call $oArticle->getPrice() to get price with VAT)
             $oLang = oxLang::getInstance();
-            $oArticle->oxarticles__oxprice->setValue($oArticle->getPrice()->getBruttoPrice() * $oThisCurr->rate);
+            $oArticle->oxarticles__oxprice = new oxField($oArticle->getPrice()->getBruttoPrice() * $oThisCurr->rate);
             $oArticle->fprice = $oLang->formatCurrency( $oArticle->oxarticles__oxprice->value, $oThisCurr);
 
-            $oPricealarm->oxpricealarm__oxprice->setValue( $oLang->formatCurrency( $oPricealarm->oxpricealarm__oxprice->value, $oThisCurr));
+            $oPricealarm->oxpricealarm__oxprice = new oxField( $oLang->formatCurrency( $oPricealarm->oxpricealarm__oxprice->value, $oThisCurr));
 
             $oPricealarm->oArticle = $oArticle;
             $oCur = $myConfig->getCurrencyObject( $oPricealarm->oxpricealarm__oxcurrency->value);
@@ -107,10 +109,11 @@ class PriceAlarm_Main extends oxAdminDetails
                 $oUser->load($oPricealarm->oxpricealarm__oxuserid->value);
                 $oPricealarm->oUser = $oUser;
             }
+
             //
             $oShop = oxNew( "oxshop" );
             $oShop->load( $myConfig->getShopId());
-            $oShop = $this->addGlobalParams( $oShop);
+            $oShop = $this->addGlobalParams( $oShop );
 
             $smarty = oxUtilsView::getInstance()->getSmarty();
             $smarty->assign( "shop", $oShop );
@@ -119,9 +122,7 @@ class PriceAlarm_Main extends oxAdminDetails
             $smarty->assign( "shopImageDir", $myConfig->getImageUrl( false, false ) );
             $smarty->assign( "currency", $oCur );
 
-            $iLang = $oPricealarm->oxpricealarm__oxlang->value;
-
-            if (!$iLang) {
+            if ( !( $iLang = $oPricealarm->oxpricealarm__oxlang->value ) ) {
                 $iLang = 0;
             }
 
@@ -135,15 +136,13 @@ class PriceAlarm_Main extends oxAdminDetails
             } else {
                 $iOldLang = $oLang->getTplLanguage();
                 $oLang->setTplLanguage( $iLang );
-                $smarty->fetch( "email_pricealarm_customer.tpl");
-
-                $oLetter->oxpricealarm__oxlongdesc = new oxField( $smarty->fetch( "email_pricealarm_customer.tpl"), oxField::T_RAW );
+                $oLetter->oxpricealarm__oxlongdesc = new oxField( $smarty->fetch( "email_pricealarm_customer.tpl" ), oxField::T_RAW );
                 $oLang->setTplLanguage( $iOldLang );
             }
 
             $this->_aViewData["editor"]  = $this->_generateTextEditor( "100%", 300, $oLetter, "oxpricealarm__oxlongdesc", "details.tpl.css");
-            $this->_aViewData["edit"] =  $oPricealarm;
-            $this->_aViewData["oxid"] = $soxId;
+            $this->_aViewData["edit"]    = $oPricealarm;
+            $this->_aViewData["oxid"]    = $soxId;
             $this->_aViewData["actshop"] = $oShop->getShopId();
         }
 

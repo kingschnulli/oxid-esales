@@ -19,7 +19,7 @@
  * @package   main
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: index.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: index.php 26911 2010-03-26 17:29:31Z tomas $
  */
 
 // Setting error reporting mode
@@ -115,7 +115,7 @@ if (!isAdmin() && $iDebug) {
 
 if (!isAdmin() && $iDebug && is_array($aProfileTimes)) {
     echo "----------------------------------------------------------<br>".PHP_EOL;
-    $iTotalTime = $oShopControl->dTimeEnd - $oShopControl->dTimeStart;
+    $iTotalTime = $oShopControl->getTotalTime();
     arsort($aProfileTimes);
     echo "<table cellspacing='10px' style='border: 1px solid #000'>";
     foreach ($aProfileTimes as $sKey => $sVal) {

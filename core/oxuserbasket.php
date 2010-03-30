@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasket.php 25471 2010-02-01 14:35:11Z alfonsas $
+ * @version   SVN: $Id: oxuserbasket.php 26434 2010-03-09 16:25:56Z rimvydas.paskevicius $
  */
 
 /**
@@ -98,6 +98,30 @@ class oxUserBasket extends oxBase
     public function setIsNewBasket()
     {
         $this->_blNewBasket = true;
+    }
+
+    /**
+     * Checks if user basket is newly created
+     *
+     * @return bool
+     */
+    public function isNewBasket()
+    {
+        return $this->_blNewBasket;
+    }
+
+    /**
+     * Checks if user basket is empty
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        if ( $this->isNewBasket() || $this->getItemCount() < 1 ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

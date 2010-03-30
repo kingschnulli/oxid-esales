@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: wrapping_main.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: wrapping_main.php 26218 2010-03-03 07:55:32Z arvydas $
  */
 
 /**
@@ -90,15 +90,15 @@ class Wrapping_Main extends oxAdminDetails
     {
         $myConfig  = $this->getConfig();
 
-        $soxId      = oxConfig::getParameter( "oxid");
-        $aParams    = oxConfig::getParameter( "editval");
+        $soxId   = oxConfig::getParameter( "oxid");
+        $aParams = oxConfig::getParameter( "editval");
+
         // checkbox handling
         if ( !isset( $aParams['oxwrapping__oxactive']))
             $aParams['oxwrapping__oxactive'] = 0;
 
             // shopid
-            $sShopID = oxSession::getVar( "actshop");
-            $aParams['oxwrapping__oxshopid'] = $sShopID;
+            $aParams['oxwrapping__oxshopid'] = oxSession::getVar( "actshop" );
 
         $oWrapping = oxNew( "oxwrapping" );
 
@@ -130,15 +130,16 @@ class Wrapping_Main extends oxAdminDetails
      */
     public function saveinnlang()
     {
-        $soxId      = oxConfig::getParameter( "oxid");
-        $aParams    = oxConfig::getParameter( "editval");
+        $soxId   = oxConfig::getParameter( "oxid");
+        $aParams = oxConfig::getParameter( "editval");
+
         // checkbox handling
         if ( !isset( $aParams['oxwrapping__oxactive']))
             $aParams['oxwrapping__oxactive'] = 0;
 
             // shopid
-            $sShopID = oxSession::getVar( "actshop");
-            $aParams['oxwrapping__oxshopid'] = $sShopID;
+            $aParams['oxwrapping__oxshopid'] = oxSession::getVar( "actshop" );
+
         $oWrapping = oxNew( "oxwrapping" );
         if ( $soxId != "-1")
             $oWrapping->load( $soxId);

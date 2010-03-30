@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_review.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: article_review.php 26440 2010-03-10 07:54:49Z arvydas $
  */
 
 /**
@@ -125,23 +125,16 @@ class Article_Review extends oxAdminDetails
      */
     public function save()
     {
-        $myConfig  = $this->getConfig();
-
 
         $aParams = oxConfig::getParameter( "editval");
         // checkbox handling
-        if ( $myConfig->getConfigParam( 'blGBModerate' ) && !isset( $aParams['oxreviews__oxactive'] ) ) {
+        if ( $this->getConfig()->getConfigParam( 'blGBModerate' ) && !isset( $aParams['oxreviews__oxactive'] ) ) {
             $aParams['oxreviews__oxactive'] = 0;
         }
 
-        $sRevoxId = oxConfig::getParameter( "rev_oxid" );
-        $oReview  = oxNew( "oxreview" );
-        $oReview->load( $sRevoxId );
-
-            // shopid
-            $oReview->oxreviews__oxshopid->value = oxSession::getVar( "actshop");
-
-        $oReview->assign( $aParams);
+        $oReview = oxNew( "oxreview" );
+        $oReview->load( oxConfig::getParameter( "rev_oxid" ) );
+        $oReview->assign( $aParams );
         $oReview->save();
     }
 

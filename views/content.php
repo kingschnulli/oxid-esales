@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: content.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: content.php 26777 2010-03-23 15:32:19Z sarunas $
  */
 
 /**
@@ -88,6 +88,9 @@ class Content extends oxUBase
             $this->_sThisTemplate = $sTpl = $sTplName;
         } else {
             $this->_aViewData['oxcid'] = $sTpl = $this->getContentId();
+            if ( !$sTpl ) {
+                error_404_handler( );
+            }
             $this->_aViewData['oContent'] = $this->getContent();
         }
 

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadmindetails.php 25640 2010-02-05 06:42:24Z alfonsas $
+ * @version   SVN: $Id: oxadmindetails.php 26679 2010-03-19 14:40:47Z rimvydas.paskevicius $
  */
 
 /**
@@ -139,14 +139,15 @@ class oxAdminDetails extends oxAdminView
 
                 // parse for styles and add them
                 $this->setAdminMode( false );
-                $sCSSPath = $myConfig->getResourcePath("styles/{$sStylesheet}", false );
-                $sCSSUrl  = $myConfig->getResourceUrl("styles/{$sStylesheet}", false );
+                if ( $myConfig->getConfigParam( "blFormerTplSupport" ) ) {
+                    $sCSSPath = $myConfig->getResourcePath("styles/{$sStylesheet}", false );
+                    $sCSSUrl  = $myConfig->getResourceUrl("styles/{$sStylesheet}", false );
+                } else {
+                    $sCSSPath = $myConfig->getResourcePath("{$sStylesheet}", false );
+                    $sCSSUrl  = $myConfig->getResourceUrl("{$sStylesheet}", false );
+                }
 
                 $aCSSPaths = array();
-
-                // #1157C - in wysiwigpro editor font problem
-                $aCSSPaths[] = $myConfig->getResourcePath("oxid.css", false );
-
                 $this->setAdminMode( true );
 
                 if (is_file($sCSSPath)) {

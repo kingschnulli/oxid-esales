@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseodecoder.php 25471 2010-02-01 14:35:11Z alfonsas $
+ * @version   SVN: $Id: oxseodecoder.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -229,12 +229,12 @@ class oxSeoDecoder extends oxSuperCfg
         $sField  = "oxseoid".oxLang::getInstance()->getLanguageTag( $iLanguage );
         $sSeoUrl = null;
 
-        try {
-            if ( $sObjectId = $oDb->getOne( "select oxid from $sTable where $sField = ".$oDb->quote( $sSeoId ) ) ) {
+        // first checking of field exists at all
+        if ( $oDb->getOne( "show columns from {$sTable} where field = '{$sField}'" ) ) {
+            // if field exists - searching for object id
+            if ( $sObjectId = $oDb->getOne( "select oxid from {$sTable} where {$sField} = ".$oDb->quote( $sSeoId ) ) ) {
                 $sSeoUrl = $oDb->getOne( "select oxseourl from oxseo where oxtype = " . $oDb->quote( $sType ) . " and oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxlang = " . $oDb->quote( $iLanguage ) . " " );
             }
-        } catch ( Exception $oEx ) {
-            // in case field does not exist must catch db exception
         }
 
         return $sSeoUrl;

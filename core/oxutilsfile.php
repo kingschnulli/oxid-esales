@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 25636 2010-02-04 21:36:25Z alfonsas $
+ * @version   SVN: $Id: oxutilsfile.php 26578 2010-03-16 15:16:08Z rimvydas.paskevicius $
  */
 
 /**
@@ -57,6 +57,18 @@ class oxUtilsFile extends oxSuperCfg
                                      'CICO' => 'icon',
                                      'TH'   => '0',
                                      'TC'   => '0',
+                                     'M1'   => 'master/1',
+                                     'M2'   => 'master/2',
+                                     'M3'   => 'master/3',
+                                     'M4'   => 'master/4',
+                                     'M5'   => 'master/5',
+                                     'M6'   => 'master/6',
+                                     'M7'   => 'master/7',
+                                     'M8'   => 'master/8',
+                                     'M9'   => 'master/9',
+                                     'M10'  => 'master/10',
+                                     'M11'  => 'master/11',
+                                     'M12'  => 'master/12',
                                      'P1'   => '1',
                                      'P2'   => '2',
                                      'P3'   => '3',
@@ -132,9 +144,7 @@ class oxUtilsFile extends oxSuperCfg
             $this->_iMaxPicImgCount = $iPicCount;
         }
 
-        if ( $iZoomPicCount = $myConfig->getConfigParam( 'iZoomPicCount' ) ) {
-            $this->_iMaxZoomImgCount = $iZoomPicCount;
-        }
+        $this->_iMaxZoomImgCount = $this->_iMaxPicImgCount;
     }
 
     /**
@@ -146,7 +156,7 @@ class oxUtilsFile extends oxSuperCfg
      */
     public function normalizeDir( $sDir )
     {
-        if ( isset($sDir) && $sDir && substr($sDir, -1) !== '/' ) {
+        if ( isset($sDir) && $sDir != "" && substr($sDir, -1) !== '/' ) {
             $sDir .= "/";
         }
 
@@ -275,10 +285,14 @@ class oxUtilsFile extends oxSuperCfg
 
                 $sFName = '';
                 if ( isset( $aFilename[0] ) ) {
-                    $sFName = preg_replace( '/[^a-zA-Z0-9_\.-]/', '', implode( '.', $aFilename ) );
+                    $sFName = preg_replace( '/[^a-zA-Z0-9()_\.-]/', '', implode( '.', $aFilename ) );
                 }
 
-                $sValue = $this->_getUniqueFileName( $sImagePath, "{$sFName}_" . strtolower( $sType ), $sFileType );
+                // removing sufix from main pictures, only zoom pictures, thumbnails
+                // and icons will have it.
+                $sSufix = ( preg_match( "/P\d+/", $sType ) ) ? "" : "_".strtolower( $sType );
+
+                $sValue = $this->_getUniqueFileName( $sImagePath, "{$sFName}", $sFileType, $sSufix );
             }
         }
         return $sValue;
@@ -294,7 +308,8 @@ class oxUtilsFile extends oxSuperCfg
     protected function _getImagePath( $sType )
     {
         $sFolder = array_key_exists( $sType, $this->_aTypeToPath ) ? $this->_aTypeToPath[ $sType ] : '0';
-        return $this->getConfig()->getAbsDynImageDir() . "/{$sFolder}/";
+        $sPath = $this->normalizeDir( $this->getConfig()->getAbsDynImageDir() ) . "{$sFolder}/";
+        return $sPath;
     }
 
     /**
@@ -320,13 +335,6 @@ class oxUtilsFile extends oxSuperCfg
                     $sSize = $aDetailImageSizes['oxpic'.$iImgNum];
                 }
                 break;
-            case 'aZoomImageSizes':
-                $aZoomImageSizes = $myConfig->getConfigParam( $sImgConf );
-                $sSize = $myConfig->getConfigParam( 'sZoomImageSize' );
-                if ( isset( $aZoomImageSizes['oxzoom'.intval( $iImgNum )] ) ) {
-                    $sSize = $aZoomImageSizes['oxzoom'.$iImgNum];
-                }
-                break;
             default:
                 $sSize = $myConfig->getConfigParam( $sImgConf );
                 break;
@@ -349,6 +357,7 @@ class oxUtilsFile extends oxSuperCfg
     protected function _prepareImage( $sType, $sSource, $sTarget )
     {
         $oUtilsPic = oxUtilspic::getInstance();
+        $oPictureHandler = oxPictureHandler::getInstance();
 
         // picture type
         $sPicType = preg_replace( "/\d*$/", "", $sType );
@@ -377,21 +386,21 @@ class oxUtilsFile extends oxSuperCfg
                 $iPicNum = ( $iPicNum > $this->_iMaxPicImgCount ) ? $this->_iMaxPicImgCount : $iPicNum;
 
                 //make an icon
-                if ( ( $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' ) ) ) {
-                    $oUtilsPic->resizeImage( $sSource, $oUtilsPic->iconName( $sTarget ), $aSize[0], $aSize[1] );
+                if ( ( $aSize = $this->_getImageSize( $sType, 1, 'sIconsize' ) ) ) {
+                    $sIconTarget = dirname($sTarget) . '/' . $oPictureHandler->getIconName( $sTarget );
+                    $oUtilsPic->resizeImage( $sSource, $sIconTarget, $aSize[0], $aSize[1] );
                 }
 
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'aDetailImageSizes' );
+                $aSize = $this->_getImageSize( $sType, 1, 'aDetailImageSizes' );
+                break;
+            case 'M':
+            case 'WP':
+            case 'FL':
+                // just copy non image file to target folder
+                $this->_copyFile($sSource, $sTarget);
                 break;
             case 'Z':
-                // zoom pictures count is limited to 12
-                $iPicNum = ( $iPicNum > $this->_iMaxZoomImgCount ) ? $this->_iMaxZoomImgCount : $iPicNum;
-
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'aZoomImageSizes' );
-                break;
-            case 'FL':
-                // just copy non image file to target forlder
-                $this->_copyFile($sSource, $sTarget);
+                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sZoomImageSize' );
                 break;
         }
 
@@ -467,12 +476,13 @@ class oxUtilsFile extends oxSuperCfg
      * Uploaded file processor (filters, etc), sets configuration parameters to
      * passed object and returns it.
      *
-     * @param object $oObject object, that parameters are modified according to passed files
-     * @param array  $aFiles  name of files to process
+     * @param object $oObject          object, that parameters are modified according to passed files
+     * @param array  $aFiles           name of files to process
+     * @param bool   $blUseMasterImage use master image as source for processing
      *
      * @return object
      */
-    public function processFiles( $oObject = null, $aFiles = array() )
+    public function processFiles( $oObject = null, $aFiles = array(), $blUseMasterImage = false )
     {
         $aFiles = $aFiles ? $aFiles : $_FILES;
         if ( isset( $aFiles['myfile']['name'] ) ) {
@@ -488,31 +498,50 @@ class oxUtilsFile extends oxSuperCfg
             // process all files
             while ( list( $sKey, $sValue ) = each( $aFiles['myfile']['name'] ) ) {
 
-                $aSource = $aFiles['myfile']['tmp_name'];
-                $sSource = $aSource[$sKey];
-                $aFiletype = explode( "@", $sKey );
-                $sKey    = $aFiletype[1];
-                $sType   = $aFiletype[0];
+                $aSource    = $aFiles['myfile']['tmp_name'];
+                $sSource    = $aSource[$sKey];
+                $aFiletype  = explode( "@", $sKey );
+                $sKey       = $aFiletype[1];
+                $sType      = $aFiletype[0];
+
+
+                //if uplading master image, master image name will be with
+                //sufics "p" (eg. image_p1.jpg). This is because of compatibility
+                //with previous versions
+                if ( preg_match("/(M)(\d+)/", $sType, $aMatches ) ) {
+                    $sMasterImageType = "P" . $aMatches[2];
+                }
+
                 $sValue  = strtolower( $sValue );
                 $sImagePath = $this->_getImagePath( $sType );
 
-                // checking file type and building final file name
-                if ( $sSource && ( $sValue = $this->_prepareImageName( $sValue, $sType, $blDemo, $sImagePath ) ) ) {
+                $sImageNameType = ( $sMasterImageType ) ? $sMasterImageType : $sType;
 
+                // checking file type and building final file name
+                if ( $sSource && ( $sValue = $this->_prepareImageName( $sValue, $sImageNameType, $blDemo, $sImagePath ) ) ) {
                     // moving to tmp folder for processing as safe mode or spec. open_basedir setup
                     // usually does not allow file modification in php's temp folder
                     $sProcessPath = $sTmpFolder . basename( $sSource );
-                    if ( $sProcessPath && $this->_moveImage( $sSource, $sProcessPath ) ) {
+                    if ( $sProcessPath ) {
 
-                        // finding final image path
-                        if ( ( $sTarget = $sImagePath . $sValue ) ) {
+                        if ( $blUseMasterImage ) {
+                            //using master image as source, so only copying it to
+                            //temp dir for processing
+                            $blMoved = $this->_copyFile( $sSource, $sProcessPath );
+                        } else {
+                            $blMoved = $this->_moveImage( $sSource, $sProcessPath );
+                        }
 
-                            // processing image and moving to final location
-                            $this->_prepareImage( $sType, $sProcessPath, $sTarget );
+                        if ( $blMoved ) {
+                            // finding final image path
+                            if ( ( $sTarget = $sImagePath . $sValue ) ) {
+                                // processing image and moving to final location
+                                $this->_prepareImage( $sType, $sProcessPath, $sTarget );
 
-                            // assign the name
-                            if ( $oObject ) {
-                                $oObject->{$sKey}->setValue( $sValue );
+                                // assign the name
+                                if ( $oObject ) {
+                                    $oObject->{$sKey}->setValue( $sValue );
+                                }
                             }
                         }
 
@@ -650,20 +679,40 @@ class oxUtilsFile extends oxSuperCfg
      * @param string $sFilePath file storage path/folder (e.g. /htdocs/out/img/)
      * @param string $sFileName name of file (e.g. picture1)
      * @param string $sFileExt  file extension (e.g. gif)
+     * @param string $sSufix    file name sufix (e.g. _ico)
      *
      * @return string
      */
-    protected function _getUniqueFileName( $sFilePath, $sFileName, $sFileExt )
+    protected function _getUniqueFileName( $sFilePath, $sFileName, $sFileExt, $sSufix = "" )
     {
         $sFilePath     = $this->normalizeDir( $sFilePath );
         $iFileCounter  = 0;
         $sTempFileName = $sFileName;
 
         //file exists ?
-        while ( file_exists( $sFilePath . "/" . $sFileName . "." . $sFileExt ) ) {
+        while ( file_exists( $sFilePath . "/" . $sFileName . $sSufix . "." . $sFileExt ) ) {
             $iFileCounter++;
+
+            //removing "(any digit)" from file name end
+            $sTempFileName = preg_replace("/\(".$iFileCounter."\)/", "", $sTempFileName );
+
             $sFileName = $sTempFileName . "($iFileCounter)";
         }
-        return $sFileName . "." . $sFileExt;
+
+        return $sFileName . $sSufix . "." . $sFileExt;
+    }
+
+    /**
+     * Returns image storage path
+     *
+     * @param string $sType image type
+     *
+     * @return string
+     */
+    public function getImageDirByType( $sType )
+    {
+        $sFolder = array_key_exists( $sType, $this->_aTypeToPath ) ? $this->_aTypeToPath[ $sType ] : '0';
+
+        return $this->normalizeDir( $sFolder );
     }
 }

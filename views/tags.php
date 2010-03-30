@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: tags.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: tags.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -61,8 +61,19 @@ class Tags extends oxUBase
      */
     public function getTagCloud()
     {
-        $oTagHandler = oxNew('oxTagCloud');
-        return $oTagHandler->getTagCloud(null, true);
+        return oxNew( 'oxTagCloud' )->getTagCloud( null, true );
+    }
+
+    /**
+     * Returns tag cloud manager class
+     *
+     * @return oxTagCloud
+     */
+    public function getTagCloudManager()
+    {
+        $oManager = oxNew( "oxTagCloud" );
+        $oManager->setExtendedMode( true );
+        return $oManager;
     }
 
     /**

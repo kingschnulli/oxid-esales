@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticle.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxorderarticle.php 26878 2010-03-26 12:44:47Z vilma $
  */
 
 /**
@@ -182,7 +182,7 @@ class oxOrderArticle extends oxBase implements oxIArticle
 
         // #874A. added oxarticles.oxtimestamp = oxarticles.oxtimestamp to keep old timestamp value
         $oArticle->oxarticles__oxstock = new oxField($iStockCount);
-        $oDb->execute( 'update oxarticles set oxarticles.oxstock = '.$oDb->quote( $iStockCount ).', oxarticles.oxtimestamp = oxarticles.oxtimestamp where oxarticles.oxid = '.$oDb->quote( $this->oxorderarticles__oxartid->value ) );
+        $oDb->execute( 'update oxarticles set oxarticles.oxstock = '.$oDb->quote( $iStockCount ).' where oxarticles.oxid = '.$oDb->quote( $this->oxorderarticles__oxartid->value ) );
         $oArticle->onChange( ACTION_UPDATE_STOCK );
 
         //update article sold amount
@@ -381,11 +381,12 @@ class oxOrderArticle extends oxBase implements oxIArticle
     /**
      * Returns true, implements iBaseArticle interface method
      *
-     * @param double $dAmount stock to check
+     * @param double $dAmount         stock to check
+     * @param double $dArtStockAmount stock amount
      *
      * @return bool
      */
-    public function checkForStock( $dAmount )
+    public function checkForStock( $dAmount, $dArtStockAmount = 0 )
     {
         return true;
     }

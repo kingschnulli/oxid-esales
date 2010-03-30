@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscount.php 25471 2010-02-01 14:35:11Z alfonsas $
+ * @version   SVN: $Id: oxutilscount.php 26828 2010-03-25 09:49:28Z sarunas $
  */
 
 /**
@@ -265,15 +265,15 @@ class oxUtilsCount extends oxSuperCfg
         }
 
         $oArticle = oxNew( 'oxarticle' );
-        $sTable   = $oArticle->getViewName();
+        $sArtTable   = $oArticle->getViewName();
+        $sManTable = getViewName('oxmanufacturers');
 
         // select each Manufacturer articles count
-        $sQ  = "select $sTable.oxmanufacturerid AS manufacturerId, count(*) from $sTable where ";
-        $sQ .= "$sTable.oxmanufacturerid <> '' and $sTable.oxparentid = '' and ".$oArticle->getSqlActiveSnippet()." group by $sTable.oxmanufacturerid ";
+        $sQ = "select oxmanufacturers.oxid, count($sArtTable.oxid) from $sManTable as oxmanufacturers left outer join $sArtTable on $sArtTable.oxmanufacturerid=oxmanufacturers.oxid and $sArtTable.oxparentid = '' and ".$oArticle->getSqlActiveSnippet()." group by oxmanufacturers.oxid";
         $aDbResult = oxDb::getDb()->getAssoc( $sQ );
 
         foreach ( $aDbResult as $sKey => $sValue ) {
-            $aCache[$sKey][$sActIdent] = $sValue;
+            $aCache[$sKey][$sActIdent] = (int) $sValue;
         }
 
         $this->_setManufacturerCache( $aCache );
@@ -354,7 +354,7 @@ class oxUtilsCount extends oxSuperCfg
                on {$sArticleTable}.oxid = oxartextends.oxid where {$sActiveSnippet}
                and {$sArticleTable}.oxissearch = 1
                and match(oxartextends.oxtags{$sLangExt})
-               against ( ".$oDb->quote( $sTag )." ) ";
+               against ( ".$oDb->quote( $sTag )." IN BOOLEAN MODE ) ";
 
         return $oDb->getOne( $sQ );
     }

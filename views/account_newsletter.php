@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: account_newsletter.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: account_newsletter.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -116,15 +116,16 @@ class Account_Newsletter extends Account
             return false;
         }
 
+        $oSubscription = $oUser->getNewsSubscription();
         if ( ! ( $iStatus = oxConfig::getParameter( 'status' ) ) ) {
             $oUser->removeFromGroup( 'oxidnewsletter' );
-            $oUser->getNewsSubscription()->setOptInStatus( 0 );
+            $oSubscription->setOptInStatus( 0 );
             $this->_iSubscriptionStatus = -1;
         } else {
             // assign user to newsletter group
             $oUser->addToGroup( 'oxidnewsletter' );
-            $oUser->getNewsSubscription()->setOptInEmailStatus( 0 );
-            $oUser->getNewsSubscription()->setOptInStatus( 1 );
+            $oSubscription->setOptInEmailStatus( 0 );
+            $oSubscription->setOptInStatus( 1 );
             $this->_iSubscriptionStatus = 1;
         }
 

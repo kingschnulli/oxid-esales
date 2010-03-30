@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: order_main.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: order_main.php 26510 2010-03-15 10:01:56Z arvydas $
  */
 
 /**
@@ -60,7 +60,7 @@ class Order_Main extends oxAdminDetails
             // paid ?
             if ( $oOrder->oxorder__oxpaid->value != "0000-00-00 00:00:00") {
                 $oOrder->blIsPaid = true;
-                $oOrder->oxorder__oxpaid->setValue( oxUtilsDate::getInstance()->formatDBDate( $oOrder->oxorder__oxpaid->value ) );
+                $oOrder->oxorder__oxpaid = new oxField( oxUtilsDate::getInstance()->formatDBDate( $oOrder->oxorder__oxpaid->value ) );
             }
 
             $this->_aViewData["edit"] =  $oOrder;

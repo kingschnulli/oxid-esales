@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 25542 2010-02-02 11:28:16Z alfonsas $
+ * @version   SVN: $Id: payment.php 26591 2010-03-16 19:53:04Z tomas $
  */
 
 /**
@@ -119,6 +119,8 @@ class Payment extends oxUBase
      */
     public function init()
     {
+        $this->_filterDynData();
+
         parent::init();
 
         if ( ( $soxAddressId = oxConfig::getParameter( 'oxaddressid' ) ) ) {
@@ -567,6 +569,59 @@ class Payment extends oxUBase
             $this->_aCreditYears = range( date('Y'), date('Y') + 10 );
         }
         return $this->_aCreditYears;
+    }
+
+    /**
+     * Due to legal reasons probably you are not allowed to store or even handle credit card data.
+     * In this case we just delete and forget all submited credit card data from this point.
+     * Override this method if you actually want to process credit card data.
+     *
+     * Note: You should override this method as setting blStoreCreditCardInfo to true would
+     *       force storing CC data on shop side (what most often is illegal).
+     *
+     * @return null
+     */
+    protected function _filterDynData()
+    {
+        //in case we actually ARE allowed to store the data
+        if (oxConfig::getInstance()->getConfigParam("blStoreCreditCardInfo"))
+            //then do nothing
+            return;
+
+        $aDynData = $this->getSession()->getVar("dynvalue");
+
+        if ($aDynData) {
+            $aDynData["kktype"] = null;
+            $aDynData["kknumber"] = null;
+            $aDynData["kkname"] = null;
+            $aDynData["kkmonth"] = null;
+            $aDynData["kkyear"] = null;
+            $aDynData["kkpruef"] = null;
+            $this->getSession()->setVar("dynvalue", $aDynData);
+        }
+
+
+        unset($_REQUEST["dynvalue"]["kktype"]);
+        unset($_REQUEST["dynvalue"]["kknumber"]);
+        unset($_REQUEST["dynvalue"]["kkname"]);
+        unset($_REQUEST["dynvalue"]["kkmonth"]);
+        unset($_REQUEST["dynvalue"]["kkyear"]);
+        unset($_REQUEST["dynvalue"]["kkpruef"]);
+
+        unset($_POST["dynvalue"]["kktype"]);
+        unset($_POST["dynvalue"]["kknumber"]);
+        unset($_POST["dynvalue"]["kkname"]);
+        unset($_POST["dynvalue"]["kkmonth"]);
+        unset($_POST["dynvalue"]["kkyear"]);
+        unset($_POST["dynvalue"]["kkpruef"]);
+
+        unset($_GET["dynvalue"]["kktype"]);
+        unset($_GET["dynvalue"]["kknumber"]);
+        unset($_GET["dynvalue"]["kkname"]);
+        unset($_GET["dynvalue"]["kkmonth"]);
+        unset($_GET["dynvalue"]["kkyear"]);
+        unset($_GET["dynvalue"]["kkpruef"]);
+
     }
 
 }

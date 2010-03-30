@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarm_list.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: pricealarm_list.php 26692 2010-03-20 08:55:36Z arvydas $
  */
 
 /**
@@ -103,8 +103,9 @@ class PriceAlarm_List extends oxAdminList
 
             if ( $oArticle->oxarticles__oxparentid->value && !$oArticle->oxarticles__oxtitle->value) {
                 $oParent = oxNew( "oxarticle" );
-                $oParent->load($oArticle->oxarticles__oxparentid->value);
-                $oListItem->oxpricealarm__articletitle = new oxField( $oParent->oxarticles__oxtitle->value." ".$oArticle->oxarticles__oxvarselect->value );
+                $oParent->load( $oArticle->oxarticles__oxparentid->value );
+                $sFieldName = "oxpricealarm__articletitle";
+                $oListItem->$sFieldName = new oxField( $oParent->oxarticles__oxtitle->value . " " . $oArticle->oxarticles__oxvarselect->value );
             }
 
             $oListItem->fpricealarmprice = $myLang->formatCurrency( $oListItem->oxpricealarm__oxprice->value, $oThisCurr);
@@ -131,11 +132,7 @@ class PriceAlarm_List extends oxAdminList
      */
     public function buildWhere()
     {
-        $this->_aWhere = parent::buildWhere();
-
-        if ( !is_array( $this->_aWhere ) ) {
-            $this->_aWhere = array();
-        }
+        $this->_aWhere = ( array ) parent::buildWhere();
 
         // updating price fields values for correct search in DB
         if ( $this->_aWhere['oxpricealarm.oxprice'] ) {

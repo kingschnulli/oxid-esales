@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: account_user.php 25528 2010-02-02 10:47:32Z tomas $
+ * @version   SVN: $Id: account_user.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -83,7 +83,7 @@ class Account_User extends Account
     /**
      * Return deliver address
      *
-     * @return oxbase | false
+     * @return oxAddress | null
      */
     public function getDeliverAddress()
     {
@@ -97,11 +97,10 @@ class Account_User extends Account
                         return $oAddress;
                     }
                 }
+                $oAdresses->rewind();
+                return $oAdresses->current();
             }
         }
-
-        $oAdresses->rewind();
-        return $oAdresses->current();;
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilspic.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxutilspic.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -149,13 +149,14 @@ class oxUtilsPic extends oxSuperCfg
 
             $sFile = "$sAbsDynImageDir/$sPicName";
 
-            if ( file_exists( $sFile ) ) {
+            if ( file_exists( $sFile ) && is_file( $sFile ) ) {
                 $blDeleted = unlink( $sFile );
             }
 
             // additionally deleting icon ..
             $sIconFile = preg_replace( "/(\.[a-z0-9]*$)/i", "_ico\\1", $sFile );
-            if ( file_exists( $sIconFile ) ) {
+
+            if ( file_exists( $sIconFile ) && is_file( $sIconFile ) ) {
                 unlink( $sIconFile );
             }
         }
@@ -215,17 +216,19 @@ class oxUtilsPic extends oxSuperCfg
     }
 
     /**
-     * Returns icon name for give image filename
+     * Returns icon name for give image filename.
+     * This function is deprecated. Use oxPictureHandler::getIconName() instead.
      *
-     * @param string $sFilename file name(withou path)
+     * @param string $sFilename file name(without path)
+     *
+     * @deprecated
      *
      * @return string
      */
     public function iconName( $sFilename )
     {
-        $sIconName = preg_replace( '/(\.jpg|\.gif|\.png)$/i', '_ico\\1', $sFilename );
-
-        return $sIconName;
+        $oPictureHandler = oxPictureHandler::getInstance();
+        return $oPictureHandler->getIconName( $sFilename );
     }
 
 

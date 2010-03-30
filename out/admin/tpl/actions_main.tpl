@@ -89,7 +89,7 @@
     <td valign="top" class="edittext" align="left" width="50%">
     [{ if $oxid != "-1"}]
 
-        <input type="button" value="[{ oxmultilang ident="GENERAL_ASSIGNARTICLES" }]" class="edittext" onclick="JavaScript:showDialog('?cl=actions_main&aoc=1&oxid=[{ $oxid }]');" [{ $readonly }]>
+        <input type="button" value="[{ oxmultilang ident="GENERAL_ASSIGNARTICLES" }]" class="edittext" onclick="JavaScript:showDialog('&cl=actions_main&aoc=1&oxid=[{ $oxid }]');" [{ $readonly }]>
 
     [{ /if}]
     </td>

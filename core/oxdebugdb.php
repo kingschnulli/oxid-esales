@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdebugdb.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxdebugdb.php 26908 2010-03-26 17:20:25Z tomas $
  */
 
 /**
@@ -90,7 +90,9 @@ class oxDebugDb
         $aWarnings = array();
         $aHistory = array();
         $oDb = oxDb::getDb();
-        $iLastDbgState = $oDb->logSQL( false );
+        if (method_exists($oDb, "logSQL")) {
+            $iLastDbgState = $oDb->logSQL( false );
+        }
         $rs = $oDb->execute( "select sql0, sql1, tracer from adodb_logsql order by created limit 5000" );
         if ($rs != false && $rs->recordCount() > 0 ) {
             $aLastRecord = null;
@@ -130,7 +132,9 @@ class oxDebugDb
         }
         $aWarnings = $this->_generateWarningsResult($aWarnings);
         $this->_logToFile( $aWarnings );
-        $oDb->logSQL( $iLastDbgState );
+        if (method_exists($oDb, "logSQL")) {
+            $oDb->logSQL( $iLastDbgState );
+        }
         return $aWarnings;
     }
 
@@ -200,6 +204,10 @@ class oxDebugDb
     private function _missingKeysChecker($aExplain)
     {
         if ( $aExplain['type'] == 'system' ) {
+            return false;
+        }
+
+        if ( strstr($aExplain['Extra'], 'Impossible WHERE' ) !== false ) {
             return false;
         }
 

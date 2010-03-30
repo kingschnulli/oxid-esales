@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: register.php 25528 2010-02-02 10:47:32Z tomas $
+ * @version   SVN: $Id: register.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -132,6 +132,24 @@ class Register extends User
      */
     protected function _addFakeAddress( $oAddresses )
     {
+    }
+
+    /**
+     * Check if field is required.
+     *
+     * @param string $sField required field to check
+     *
+     * @return bool
+     */
+    public function isFieldRequired( $sField )
+    {
+        if ( $aMustFillFields = $this->getMustFillFields() ) {
+            if ( isset( $aMustFillFields[$sField] ) ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

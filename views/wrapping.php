@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: wrapping.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: wrapping.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -99,13 +99,17 @@ class Wrapping extends oxUBase
     /**
      * Return basket wrappings list if available
      *
-     * @return oxlist | bool
+     * @return oxlist
      */
     public function getWrappingList()
     {
         if ( $this->_oWrappings === null ) {
+            $this->_oWrappings = new oxlist();
+
             // load wrapping papers
-            $this->_oWrappings = oxNew( 'oxwrapping' )->getWrappingList( 'WRAP' );
+            if ( $this->getViewConfig()->getShowGiftWrapping() ) {
+                $this->_oWrappings = oxNew( 'oxwrapping' )->getWrappingList( 'WRAP' );
+            }
         }
         return $this->_oWrappings;
     }
@@ -113,13 +117,17 @@ class Wrapping extends oxUBase
     /**
      * Returns greeting cards list if available
      *
-     * @return oxlist | bool
+     * @return oxlist
      */
     public function getCardList()
     {
         if ( $this->_oCards === null ) {
+            $this->_oCards = new oxlist();
+
             // load gift cards
-            $this->_oCards = oxNew( 'oxwrapping' )->getWrappingList( 'CARD' );
+            if ( $this->getViewConfig()->getShowGiftWrapping() ) {
+                $this->_oCards = oxNew( 'oxwrapping' )->getWrappingList( 'CARD' );
+            }
         }
 
         return $this->_oCards;
@@ -138,21 +146,22 @@ class Wrapping extends oxUBase
      */
     public function changeWrapping()
     {
-        $oBasket   = $this->getSession()->getBasket();
         $aWrapping = oxConfig::getParameter( 'wrapping' );
+        if ( $this->getViewConfig()->getShowGiftWrapping() &&
+             is_array( $aWrapping ) && count( $aWrapping ) ) {
+            $oBasket = $this->getSession()->getBasket();
 
-        // setting wrapping info
-        if ( is_array( $aWrapping ) ) {
+            // setting wrapping info
             foreach ( $oBasket->getContents() as $sKey => $oBasketItem ) {
                 // wrapping ?
                 if ( isset( $aWrapping[$sKey] ) ) {
                     $oBasketItem->setWrapping( $aWrapping[$sKey] );
                 }
             }
-        }
 
-        $oBasket->setCardMessage( oxConfig::getParameter( 'giftmessage' ) );
-        $oBasket->setCardId( oxConfig::getParameter( 'chosencard' ) );
+            $oBasket->setCardMessage( oxConfig::getParameter( 'giftmessage' ) );
+            $oBasket->setCardId( oxConfig::getParameter( 'chosencard' ) );
+        }
 
         return 'order';
     }

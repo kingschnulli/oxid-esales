@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_main.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: article_main.php 26695 2010-03-20 11:52:45Z arvydas $
  */
 
 /**
@@ -146,10 +146,11 @@ class Article_Main extends oxAdminDetails
 
         // varianthandling
         $soxparentId = oxConfig::getParameter( "oxparentid");
-        if ( isset( $soxparentId) && $soxparentId && $soxparentId != "-1")
+        if ( isset( $soxparentId) && $soxparentId && $soxparentId != "-1") {
             $aParams['oxarticles__oxparentid'] = $soxparentId;
-        else
+        } else {
             unset( $aParams['oxarticles__oxparentid']);
+        }
 
         $oArticle = oxNew( "oxarticle");
 
@@ -161,8 +162,7 @@ class Article_Main extends oxAdminDetails
             $aParams['oxarticles__oxissearch']  = 1;
             $aParams['oxarticles__oxstockflag'] = 1;
                 // shopid
-                $sShopID = oxSession::getVar( "actshop");
-                $aParams['oxarticles__oxshopid'] = $sShopID;
+                $aParams['oxarticles__oxshopid'] = oxSession::getVar( "actshop");
         }
 
         //article number handling, warns for artnum dublicates

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_seo.php 25484 2010-02-01 19:23:52Z alfonsas $
+ * @version   SVN: $Id: article_seo.php 26705 2010-03-20 13:20:46Z arvydas $
  */
 
 /**
@@ -345,9 +345,7 @@ class Article_Seo extends Object_Seo
     public function getActCategory()
     {
         $oCat = oxNew( 'oxcategory' );
-        if ( $oCat->load( $this->_sActCatId ) ) {
-            return $oCat;
-        }
+        return ( $oCat->load( $this->_sActCatId ) ) ? $oCat : null;
     }
 
     /**
@@ -358,9 +356,7 @@ class Article_Seo extends Object_Seo
     public function getTag()
     {
         $sTag = $this->getSelectedCategoryId();
-        if ( $this->getActCatType() == 'oxtag' ) {
-            return $sTag;
-        }
+        return ( $this->getActCatType() == 'oxtag' ) ? $sTag : null;
     }
 
     /**
@@ -371,9 +367,7 @@ class Article_Seo extends Object_Seo
     public function getActVendor()
     {
         $oVendor = oxNew( 'oxvendor' );
-        if ( $this->getActCatType() == 'oxvendor' && $oVendor->load( $this->_sActCatId ) ) {
-            return $oVendor;
-        }
+        return ( $this->getActCatType() == 'oxvendor' && $oVendor->load( $this->_sActCatId ) ) ? $oVendor : null;
     }
 
     /**
@@ -384,9 +378,7 @@ class Article_Seo extends Object_Seo
     public function getActManufacturer()
     {
         $oManufacturer = oxNew( 'oxmanufacturer' );
-        if ( $this->getActCatType() == 'oxmanufacturer' && $oManufacturer->load( $this->_sActCatId ) ) {
-            return $oManufacturer;
-        }
+        return ( $this->getActCatType() == 'oxmanufacturer' && $oManufacturer->load( $this->_sActCatId ) ) ? $oManufacturer : null;
     }
 
     /**
@@ -473,12 +465,14 @@ class Article_Seo extends Object_Seo
      */
     protected function _getSeoEntryId()
     {
+        $sId = '';
         if ( $sTag = $this->getTag() ) {
             $oObject = $this->_getObject( oxConfig::getParameter( 'oxid' ) );
-            return md5( strtolower( $oObject->getShopId() . $this->_getStdUrl( $oObject->getId() ) ) );
+            $sId = md5( strtolower( $oObject->getShopId() . $this->_getStdUrl( $oObject->getId() ) ) );
         } else {
-            return parent::_getSeoEntryId();
+            $sId = parent::_getSeoEntryId();
         }
+        return $sId;
     }
 
     /**

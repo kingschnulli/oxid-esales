@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminview.php 25840 2010-02-17 17:10:28Z arvydas $
+ * @version   SVN: $Id: oxadminview.php 26740 2010-03-22 16:12:41Z tomas $
  */
 
 /**
@@ -188,18 +188,19 @@ class oxAdminView extends oxView
         // override cause of admin dir
         $sURL = $myConfig->getConfigParam( 'sShopURL' ). $myConfig->getConfigParam( 'sAdminDir' );
 
-        if ($myConfig->getConfigParam('sAdminSSLURL'))
+        if ($myConfig->getConfigParam('sAdminSSLURL')) {
             $sURL = $myConfig->getConfigParam('sAdminSSLURL');
+        }
 
         $oViewConf = $this->getViewConfig();
-        $oViewConf->setViewConfigParam( 'selflink', $sURL.'/index.php' );
+        $oViewConf->setViewConfigParam( 'selflink', $mySession->url($sURL.'/index.php') );
         $oViewConf->setViewConfigParam( 'ajaxlink', str_replace( '&amp;', '&', $mySession->url( $sURL.'/oxajax.php' ) ) );
         $oViewConf->setViewConfigParam( 'sServiceUrl', $this->getServiceUrl() );
         $oViewConf->setViewConfigParam( 'blLoadDynContents', $myConfig->getConfigParam( 'blLoadDynContents' ) );
         $oViewConf->setViewConfigParam( 'sShopCountry', $myConfig->getConfigParam( 'sShopCountry' ) );
 
         if ( $sURL = $myConfig->getConfigParam( 'sAdminSSLURL') ) {
-            $oViewConf->setViewConfigParam( 'selflink', $sURL.'/index.php' );
+            $oViewConf->setViewConfigParam( 'selflink', $mySession->url($sURL.'/index.php') );
             $oViewConf->setViewConfigParam( 'ajaxlink', str_replace( '&amp;', '&', $mySession->url( $sURL.'/oxajax.php' ) ) );
         }
 
@@ -499,8 +500,14 @@ class oxAdminView extends oxView
         //default country
         $sCountry = 'international';
 
+        $aLandIds = oxLang::getInstance()->getLanguageIds();
+
+        $iEnglishId = array_search("en", $aLandIds);
+
+        $sEnTag = oxLang::getInstance()->getLanguageTag($iEnglishId);
+
         if ( !empty($sCountryCode) ) {
-            $sQ = "select oxtitle_1 from oxcountry where oxisoalpha2 = " . oxDb::getDb()->quote( $sCountryCode );
+            $sQ = "select oxtitle$sEnTag from oxcountry where oxisoalpha2 = " . oxDb::getDb()->quote( $sCountryCode );
             $sCountry = oxDb::getDb()->getOne( $sQ );
         }
 
@@ -514,7 +521,7 @@ class oxAdminView extends oxView
      */
     protected function _authorize()
     {
-        return ( bool ) ( count( oxUtilsServer::getInstance()->getOxCookie() ) && oxUtils::getInstance()->checkAccessRights() );
+        return ( bool ) ( $this->getSession()->checkSessionChallenge() && count( oxUtilsServer::getInstance()->getOxCookie() ) && oxUtils::getInstance()->checkAccessRights() );
     }
 
     /**

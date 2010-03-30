@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_userdef.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: article_userdef.php 26701 2010-03-20 12:49:04Z arvydas $
  */
 
 /**
@@ -43,9 +43,8 @@ class Article_Userdef extends oxAdminDetails
 
         $soxId = oxConfig::getParameter( "oxid" );
         if ( $soxId != "-1" && isset( $soxId ) ) {
+
             // load object
-
-
             $oArticle->load( $soxId );
         }
 

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: guestbookentry.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: guestbookentry.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -79,34 +79,15 @@ class GuestbookEntry extends GuestBook
         }
 
         // double click protection
-        $sFormId = oxConfig::getParameter( "gbFormId" );
-        $sSessionFormId = oxSession::getVar( "gbSessionFormId" );
-        if ( $sFormId && $sFormId == $sSessionFormId ) {
+        if ( $this->canAcceptFormData() ) {
             // here the guest book entry is saved
             $oEntry = oxNew( 'oxgbentry' );
             $oEntry->oxgbentries__oxshopid  = new oxField($sShopId);
             $oEntry->oxgbentries__oxuserid  = new oxField($sUserId);
             $oEntry->oxgbentries__oxcontent = new oxField($sReviewText);
             $oEntry->save();
-
-            // regenerating form id
-            $this->getFormId();
         }
 
         return 'guestbook';
-    }
-
-    /**
-     * Guestbook form id getter (prevents double entry submit)
-     *
-     * @return string
-     */
-    public function getFormId()
-    {
-        if ( $this->_sGbFormId === null ) {
-            $this->_sGbFormId = oxUtilsObject::getInstance()->generateUId();
-            oxSession::setVar( 'gbSessionFormId', $this->_sGbFormId );
-        }
-        return $this->_sGbFormId;
     }
 }

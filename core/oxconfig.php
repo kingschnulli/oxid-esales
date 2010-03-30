@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 25755 2010-02-10 13:59:48Z sarunas $
+ * @version   SVN: $Id: oxconfig.php 26557 2010-03-16 08:38:14Z rimvydas.paskevicius $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -244,6 +244,13 @@ class oxConfig extends oxSuperCfg
     protected $_sPictureDir = 'pictures';
 
     /**
+     * Master pictures dir name
+     *
+     * @var string
+     */
+    protected $_sMasterPictureDir = 'master';
+
+    /**
      * Template dir name
      *
      * @var string
@@ -353,7 +360,7 @@ class oxConfig extends oxSuperCfg
         // #1173M  for EE - not all pic are deleted
         $iPicCount = $this->getConfigParam( 'iPicCount' );
         if( !isset( $iPicCount ) )
-            $this->setConfigParam( 'iPicCount', 12 );
+            $this->setConfigParam( 'iPicCount', 7 );
 
         $iZoomPicCount = $this->getConfigParam( 'iZoomPicCount' );
         if( !isset( $iZoomPicCount ) )
@@ -1227,6 +1234,31 @@ class oxConfig extends oxSuperCfg
     }
 
     /**
+     * Finds and returns master pictures folder path
+     *
+     * @param bool $blAdmin Whether to force admin
+     *
+     * @return string
+     */
+    public function getMasterPictureDir( $blAdmin = false )
+    {
+        return $this->getDir( null, $this->_sPictureDir . "/" . $this->_sMasterPictureDir, $blAdmin );
+    }
+
+    /**
+     * Finds and returns master picture path
+     *
+     * @param string $sFile   File name
+     * @param bool   $blAdmin Whether to force admin
+     *
+     * @return string
+     */
+    public function getMasterPicturePath( $sFile, $blAdmin = false )
+    {
+        return $this->getDir( $sFile, $this->_sPictureDir . "/" . $this->_sMasterPictureDir, $blAdmin );
+    }
+
+    /**
      * Finds and returns product picture file or folder url
      *
      * @param string $sFile   File name
@@ -1255,7 +1287,7 @@ class oxConfig extends oxSuperCfg
         $blNativeImg = $this->getConfigParam( 'blNativeImages' );
 
         $sUrl = $this->getUrl( $sFile, $this->_sPictureDir, $blAdmin, $blSSL, $blNativeImg, $iLang, $iShopId );
-        if ( $sFile && $this->getConfigParam( 'blFormerTplSupport' ) ) {
+        if ( $sFile && $this->getConfigParam( 'blFormerTplSupport' ) && !$blAdmin ) {
             $sUrl = str_replace( $this->getPictureUrl( null, $blAdmin, $blSSL, $iLang, $iShopId ), '', $sUrl );
         }
 

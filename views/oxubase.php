@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 25774 2010-02-11 08:55:28Z sarunas $
+ * @version   SVN: $Id: oxubase.php 26310 2010-03-05 08:57:22Z rimvydas.paskevicius $
  */
 
 /**
@@ -2184,7 +2184,11 @@ class oxUBase extends oxView
             $oCur    = $myConfig->getActShopCurrencyObject();
             $dMinOrderPrice = $iMinOrderPrice * $oCur->rate;
             // Coupons and discounts should be considered in "Min order price" check
-            if ( $dMinOrderPrice > ( $oBasket->getDiscountProductsPrice()->getBruttoSum() - $oBasket->getTotalDiscount()->getBruttoPrice() - $oBasket->getVoucherDiscount()->getBruttoPrice()) ) {
+            $dVoucherDiscount = 0;
+            if ( ( $oVoucherPrice = $oBasket->getVoucherDiscount() ) ) {
+                $dVoucherDiscount = $oVoucherPrice->getBruttoPrice();
+            }
+            if ( $dMinOrderPrice > ( $oBasket->getDiscountProductsPrice()->getBruttoSum() - $oBasket->getTotalDiscount()->getBruttoPrice() - $dVoucherDiscount) ) {
                 $this->_iLowOrderPrice = 1;
                 $this->_sMinOrderPrice = oxLang::getInstance()->formatCurrency( $dMinOrderPrice, $oCur );
             }
@@ -2845,4 +2849,44 @@ class oxUBase extends oxView
 
         return false;
     }
+
+    /**
+     * Form id getter. This id used to prevent double guestbook, review entry submit
+     *
+     * @return string
+     */
+    public function getFormId()
+    {
+        if ( $this->_sFormId === null ) {
+            $this->_sFormId = oxUtilsObject::getInstance()->generateUId();
+            oxSession::setVar( 'sessionuformid', $this->_sFormId );
+        }
+
+        return $this->_sFormId;
+    }
+
+    /**
+     * Checks if session session form id matches with form id
+     *
+     * @return bool
+     */
+    public function canAcceptFormData()
+    {
+        if ( $this->_blCanAcceptFormData === null ) {
+            $this->_blCanAcceptFormData = false;
+
+            $sFormId = oxConfig::getParameter( "uformid" );
+            $sSessionFormId = oxSession::getVar( "sessionuformid" );
+
+            // testing if form and session ids matches
+            if ( $sFormId && $sFormId === $sSessionFormId ) {
+                $this->_blCanAcceptFormData = true;
+            }
+
+            // regenerating form data
+            $this->getFormId();
+        }
+        return $this->_blCanAcceptFormData;
+    }
+
 }

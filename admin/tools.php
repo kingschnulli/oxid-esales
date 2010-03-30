@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: tools.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: tools.php 26271 2010-03-04 08:42:11Z arvydas $
  */
 
 /**
@@ -39,7 +39,7 @@ class Tools extends oxAdminView
     public function render()
     {
         if ( $this->getConfig()->isDemoShop() ) {
-            oxUtils::getInstance()->showMessageAndExit( "Access denied !" );
+            return oxUtils::getInstance()->showMessageAndExit( "Access denied !" );
         }
 
         parent::render();

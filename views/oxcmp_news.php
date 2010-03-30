@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_news.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxcmp_news.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -46,17 +46,18 @@ class oxcmp_news extends oxView
         parent::render();
 
         $myConfig = $this->getConfig();
+        $oActView = $myConfig->getActiveView();
 
         // news loading is disabled
         if ( !$myConfig->getConfigParam( 'bl_perfLoadNews' ) ||
               ( $myConfig->getConfigParam( 'blDisableNavBars' ) &&
-                $myConfig->getActiveView()->getIsOrderStep() ) ) {
+                $oActView->getIsOrderStep() ) ) {
             return;
         }
 
         // if news must be displayed only on start page ?
         if ( $myConfig->getConfigParam( 'bl_perfLoadNewsOnlyStart' ) &&
-             $myConfig->getActiveView()->getClassName() != "start" ) {
+             $oActView->getClassName() != "start" ) {
             return;
         }
 

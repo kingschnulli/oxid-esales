@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstrmb.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxstrmb.php 26366 2010-03-08 12:18:14Z arvydas $
  */
 
 /**
@@ -94,8 +94,12 @@ class oxStrMb
      */
     public function strpos( $sHaystack, $sNeedle, $iOffset = null )
     {
-        $iOffset = is_null( $iOffset ) ? 0 : $iOffset;
-        return mb_strpos( $sHaystack, $sNeedle, $iOffset, $this->_sEncoding );
+        $iPos = false;
+        if ( $sHaystack && $sNeedle ) {
+            $iOffset = is_null( $iOffset ) ? 0 : $iOffset;
+            $iPos = mb_strpos( $sHaystack, $sNeedle, $iOffset, $this->_sEncoding );
+        }
+        return $iPos;
     }
 
     /**

@@ -12,10 +12,10 @@
         window.onload = function ()
         {
             if ( '[{ $listview }]' != '' ) {
-                top.basefrm.list.location = "[{ $shop->selflink }]?cl=[{ $listview }]&oxid=[{$shop->id}]&actedit=[{$actedit}]";
-                top.basefrm.edit.location = "[{ $shop->selflink }]?cl=[{ $editview }]&oxid=[{$shop->id}]";
+                top.basefrm.list.location = "[{ $shop->selflink }]&cl=[{ $listview }]&oxid=[{$shop->id}]&actedit=[{$actedit}]";
+                top.basefrm.edit.location = "[{ $shop->selflink }]&cl=[{ $editview }]&oxid=[{$shop->id}]";
             } else if ( top.basefrm ) {
-                top.basefrm.location = "[{ $shop->selflink }]?cl=navigation&item=home.tpl";
+                top.basefrm.location = "[{ $shop->selflink }]&cl=navigation&item=home.tpl";
             }
         }
         [{/if}]
@@ -65,7 +65,7 @@
         [{assign var='mh' value=$mh+1 }]
         [{assign var='mn' value=0 }]
         <h2>
-            [{if $menuholder->getAttribute('url')}]<a href="[{ $shop->selflink }]?cl=navigation&amp;fnc=exturl&amp;url=[{ $menuholder->getAttribute('url')|escape:'url'}]" target="basefrm" >[{/if}]
+            [{if $menuholder->getAttribute('url')}]<a href="[{ $shop->selflink }]&cl=navigation&amp;fnc=exturl&amp;url=[{ $menuholder->getAttribute('url')|escape:'url'}]" target="basefrm" >[{/if}]
             [{ oxmultilang ident=$menuholder->getAttribute('name')|default:$menuholder->getAttribute('id') noerror=true }]
             [{if $menuholder->getAttribute('url')}]</a>[{/if}]
         </h2>
@@ -115,7 +115,7 @@
             [{assign var='mn' value=1 }]
             [{assign var='sm' value=0 }]
             <li id="nav-[{$mh}]-[{$mn}]" class="[{if $blOpenHistory}]exp[{assign var='sHistoryId' value="nav-`$mh`-`$mn`" }][{/if}]">
-                <a class="rc" name="_hist" href="[{ $shop->selflink }]?cl=navigation&item=navigation.tpl&openHistory=1&[{$smarty.now}]#_hist"><b>[{ oxmultilang ident=NAVIGATION_HISTORY noerror=true }]</b></a>
+                <a class="rc" name="_hist" href="[{ $shop->selflink }]&cl=navigation&item=navigation.tpl&openHistory=1&[{$smarty.now}]#_hist"><b>[{ oxmultilang ident=NAVIGATION_HISTORY noerror=true }]</b></a>
 
                 <ul>
                     [{foreach from=$menuhistory item=submenuitem }]
@@ -138,7 +138,7 @@
             [{assign var='sm' value=0 }]
             <li id="nav-[{$mh}]-[{$mn}]">
                 <a class="rc" onclick="_navExp(this);return false;" href="#" ><b>[{ oxmultilang ident=NAVIGATION_FAVORITES noerror=true }]</b></a>
-                <a class="ed" href="index.php?cl=navigation&amp;item=favorites.tpl" target="basefrm" >[{ oxmultilang ident=NAVIGATION_FAVORITES_EDIT noerror=true }]</a>
+                <a class="ed" href="[{$shop->selflink}]&cl=navigation&amp;item=favorites.tpl" target="basefrm" >[{ oxmultilang ident=NAVIGATION_FAVORITES_EDIT noerror=true }]</a>
                 <ul>
                     [{foreach from=$menufavorites item=submenuitem }]
                         [{if $submenuitem->nodeType == XML_ELEMENT_NODE}]

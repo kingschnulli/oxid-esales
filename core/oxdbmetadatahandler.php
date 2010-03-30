@@ -19,12 +19,11 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandler.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxdbmetadatahandler.php 26848 2010-03-25 15:08:28Z rimvydas.paskevicius $
  */
 
 /**
- * Class handling CAPTCHA image
- * This class requires utility file utils/verificationimg.php as image generator
+ * Class for handling database related operations
  *
  */
 class oxDbMetaDataHandler extends oxSuperCfg
@@ -52,12 +51,6 @@ class oxDbMetaDataHandler extends oxSuperCfg
      * @var array Tables which shloud be skipped from reseting
      */
     protected $_aSkipTablesOnReset = array( "oxcountry" );
-
-    /**
-     *
-     * @var unknown_type
-     */
-    //protected $_aTablesFieldsSimpleMode = null;
 
     /**
      *  Get table fields
@@ -366,6 +359,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
         foreach ( $aTable as $sTableName ) {
             $this->addNewMultilangField( $sTableName );
         }
+
     }
 
     /**
@@ -414,6 +408,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
             }
         }
     }
+
 
 }
 

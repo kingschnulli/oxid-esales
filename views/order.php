@@ -19,14 +19,14 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: order.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: order.php 26825 2010-03-25 09:24:44Z arvydas $
  */
 
 /**
  * Order manager. Arranges user ordering data, checks/validates
  * it, on success stores ordering data to DB.
  */
-class Order extends oxUBase
+class order extends oxUBase
 {
     /**
      * Payment object
@@ -225,6 +225,10 @@ class Order extends oxUBase
      */
     public function execute()
     {
+        if (!$this->getSession()->checkSessionChallenge()) {
+            return;
+        }
+
         $myConfig = $this->getConfig();
 
         if ( !oxConfig::getParameter( 'ord_agb' ) && $myConfig->getConfigParam( 'blConfirmAGB' ) ) {
@@ -375,7 +379,7 @@ class Order extends oxUBase
         if ( $this->_sOrderRemark === null ) {
             $this->_sOrderRemark = false;
             if ( $sRemark = oxSession::getVar( 'ordrem' ) ) {
-                $this->_sOrderRemark = $sRemark;
+                $this->_sOrderRemark = oxConfig::checkSpecialChars( $sRemark );
             }
         }
         return $this->_sOrderRemark;
@@ -505,6 +509,10 @@ class Order extends oxUBase
      */
     public function isWrapping()
     {
+        if (!$this->getViewConfig()->getShowGiftWrapping() ) {
+            return false;
+        }
+
         if ( $this->_iWrapCnt === null ) {
             $this->_iWrapCnt = 0;
 

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnavigationtree.php 25840 2010-02-17 17:10:28Z arvydas $
+ * @version   SVN: $Id: oxnavigationtree.php 26678 2010-03-19 14:30:27Z arvydas $
  */
 
 /**
@@ -136,8 +136,6 @@ class OxNavigationTree extends oxSuperCfg
         $myConfig = $this->getConfig();
         $myUtilsFile = oxUtilsFile::getInstance();
 
-        //$iLanguage = (int) $myConfig->getConfigParam( 'iAdminLanguage' );
-        $iLanguage = oxLang::getInstance()->getTplLanguage();
         $sURL = $this->_getAdminUrl();
 
         $oXPath = new DomXPath( $oDom );
@@ -193,6 +191,28 @@ class OxNavigationTree extends oxSuperCfg
                 $oNode->appendChild( $oTabElem );
                 $oTabElem->setAttribute( 'id', 'dyn_interface' );
                 $oTabElem->setAttribute( 'cl', $sFile );
+            }
+        }
+    }
+
+    /**
+     * add session parameters to local urls
+     *
+     * @param object $oDom dom element to add links
+     *
+     * @return null
+     */
+    protected function _sessionizeLocalUrls( $oDom )
+    {
+        $sURL = $this->_getAdminUrl();
+
+        $oXPath = new DomXPath( $oDom );
+        $oNodeList = $oXPath->query( "//OXMENU/*[@url]" );
+        foreach ( $oNodeList as $oNode ) {
+            $sLocalUrl = $oNode->getAttribute( 'url' );
+            if (strpos($sLocalUrl, 'index.php?') === 0) {
+                $sLocalUrl = preg_replace('#^index.php\?#', $sURL, $sLocalUrl);
+                $oNode->setAttribute( 'url', $sLocalUrl );
             }
         }
     }
@@ -315,30 +335,29 @@ class OxNavigationTree extends oxSuperCfg
     protected function _mergeNodes( $oDomElemTo, $oDomElemFrom, $oXPathTo, $oDomDocTo, $sQueryStart )
     {
         foreach ( $oDomElemFrom->childNodes as $oFromNode ) {
-            if ( $oFromNode->nodeType != XML_ELEMENT_NODE ) {
-                continue;
-            }
+            if ( $oFromNode->nodeType === XML_ELEMENT_NODE ) {
 
-            $sFromAttrName = $oFromNode->getAttribute( 'id' );
-            $sFromNodeName = $oFromNode->tagName;
+                $sFromAttrName = $oFromNode->getAttribute( 'id' );
+                $sFromNodeName = $oFromNode->tagName;
 
-            // find current item
-            $sQuery   = "{$sQueryStart}/{$sFromNodeName}[@id='{$sFromAttrName}']";
-            $oCurNode = $oXPathTo->query( $sQuery );
+                // find current item
+                $sQuery   = "{$sQueryStart}/{$sFromNodeName}[@id='{$sFromAttrName}']";
+                $oCurNode = $oXPathTo->query( $sQuery );
 
-            // if not found - append
-            if ( $oCurNode->length == 0 ) {
-                $oDomElemTo->appendChild( $oDomDocTo->importNode( $oFromNode, true ) );
-                continue;
-            }
+                // if not found - append
+                if ( $oCurNode->length == 0 ) {
+                    $oDomElemTo->appendChild( $oDomDocTo->importNode( $oFromNode, true ) );
+                } else {
 
-            $oCurNode = $oCurNode->item( 0 );
+                    $oCurNode = $oCurNode->item( 0 );
 
-            // if found copy all attributes and check childnodes
-            $this->_copyAttributes( $oCurNode, $oFromNode );
+                    // if found copy all attributes and check childnodes
+                    $this->_copyAttributes( $oCurNode, $oFromNode );
 
-            if ( $oFromNode->childNodes->length ) {
-                $this->_mergeNodes( $oCurNode, $oFromNode, $oXPathTo, $oDomDocTo, $sQuery );
+                    if ( $oFromNode->childNodes->length ) {
+                        $this->_mergeNodes( $oCurNode, $oFromNode, $oXPathTo, $oDomDocTo, $sQuery );
+                    }
+                }
             }
         }
     }
@@ -396,13 +415,14 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getActiveTab( $sId, $iAct )
     {
+        $sTab = null;
         $oNodeList = $this->getTabs( $sId, $iAct, false );
-
         $iAct = ( $iAct > $oNodeList->length )?( $oNodeList->length - 1 ):$iAct;
-
         if ( $oNodeList->length && ( $oNode = $oNodeList->item( $iAct ) ) ) {
-            return $oNode->getAttribute( 'cl' );
+            $sTab = $oNode->getAttribute( 'cl' );
         }
+
+        return $sTab;
     }
 
     /**
@@ -414,6 +434,7 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getBtn( $sClass )
     {
+        $oButtons = null;
         $oXPath = new DOMXPath($this->getDomXml());
         $oNodeList = $oXPath->query("//TAB[@cl='$sClass']/../BTN");
         if ($oNodeList->length) {
@@ -422,8 +443,8 @@ class OxNavigationTree extends oxSuperCfg
                 $sBtnID = $oNode->getAttribute('id');
                 $oButtons->$sBtnID = 1;
             }
-            return $oButtons;
         }
+        return $oButtons;
     }
 
     /**
@@ -532,6 +553,22 @@ class OxNavigationTree extends oxSuperCfg
     }
 
     /**
+     * process cache contents and return the result
+     *
+     * @param string $sCacheContents initial cached string
+     *
+     * @return string
+     */
+    protected function _processCachedFile($sCacheContents)
+    {
+        $sNewUrl = htmlentities($this->_getAdminUrl());
+        $sTok    = preg_quote("stoken=", '@');
+        $sSearch = preg_replace('@'.preg_quote($sTok, '@').'[A-Z0-9]+@i', "{$sTok}[A-Z0-9]+", preg_quote($sNewUrl, '@'));
+        return preg_replace("@$sSearch@i", $sNewUrl, $sCacheContents);
+
+    }
+
+    /**
      * get initial dom, not modified by init method
      *
      * @return DOMDocument
@@ -575,9 +612,13 @@ class OxNavigationTree extends oxSuperCfg
                     // adds links to dynamic parts
                     $this->_addDynLinks( $this->_oInitialDom );
 
+                    // add session params
+                    $this->_sessionizeLocalUrls( $this->_oInitialDom );
+
                     // writing to cache
                     $myOxUtlis->toFileCache( $sCacheName, $this->_oInitialDom->saveXML() );
                 } else {
+                    $sCacheContents = $this->_processCachedFile($sCacheContents);
                     // loading from cached file
                     $this->_oInitialDom->preserveWhiteSpace = false;
                     $this->_oInitialDom->loadXML( $sCacheContents );
@@ -626,9 +667,7 @@ class OxNavigationTree extends oxSuperCfg
         $oXPath = new DOMXPath( $this->getDomXml() );
         $oNodeList = $oXPath->query( "//SUBMENU[@cl='".implode("' or @cl='", $aNodes)."']" );
 
-        if ( $oNodeList->length ) {
-            return $oNodeList;
-        }
+        return ( $oNodeList->length ) ? $oNodeList : null;
     }
 
     /**
@@ -662,6 +701,7 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getListUrl( $sId )
     {
+        $sUrl = null;
         $oXPath = new DOMXPath( $this->getDomXml() );
         $oNodeList = $oXPath->query( "//SUBMENU[@cl='{$sId}']" );
         if ( $oNodeList->length && ( $oNode = $oNodeList->item( 0 ) ) ) {
@@ -671,8 +711,9 @@ class OxNavigationTree extends oxSuperCfg
             $sParams = $oNode->getAttribute('listparam');
             $sParams = $sParams?"&$sParams":'';
 
-            return "{$sCl}{$sParams}";
+            $sUrl = "{$sCl}{$sParams}";
         }
+        return $sUrl;
     }
 
     /**
@@ -685,30 +726,26 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getEditUrl( $sId, $iActTab )
     {
+        $sUrl = null;
         $oXPath = new DOMXPath( $this->getDomXml() );
         $oNodeList = $oXPath->query( "//SUBMENU[@cl='{$sId}']/TAB" );
 
-        $iActTab = ( $iActTab > $oNodeList->length )?( $oNodeList->length - 1 ):$iActTab;
-        if ( $oNodeList->length ) {
-            foreach ( $oNodeList as $iPos => $oNode ) {
-                if ( $iActTab != $iPos ) {
-                    continue;
-                }
+        $iActTab = ( $iActTab > $oNodeList->length )?( $oNodeList->length - 1 ) : $iActTab;
+        if ( $oNodeList->length && ( $oActTab = $oNodeList->item( $iActTab ) ) ) {
+            // special case for external resources
+            if ( $oActTab->getAttribute( 'external' ) ) {
+                $sUrl = $oActTab->getAttribute( 'location' );
+            } else {
+                $sCl = $oActTab->getAttribute( 'cl' );
+                $sCl = $sCl?"cl={$sCl}":'';
 
-                // special case for external resources
-                if ( $oNode->getAttribute( 'external' ) ) {
-                    return $oNode->getAttribute( 'location' );
-                }
+                $sParams = $oActTab->getAttribute( 'clparam' );
+                $sParams = $sParams?"&{$sParams}":'';
 
-                $sCl = $oNode->getAttribute('cl');
-                $sCl = $sCl?"cl=$sCl":'';
-
-                $sParams = $oNode->getAttribute('clparam');
-                $sParams = $sParams?"&$sParams":'';
-
-                return "{$sCl}{$sParams}";
+                $sUrl = "{$sCl}{$sParams}";
             }
         }
+        return $sUrl;
     }
 
     /**
@@ -725,7 +762,7 @@ class OxNavigationTree extends oxSuperCfg
         } else {
             $sURL = trim( $myConfig->getConfigParam( 'sShopURL' ), '/' ).'/admin';
         }
-        return "{$sURL}/index.php?";
+        return oxUtilsUrl::getInstance()->appendParamSeparator($this->getSession()->url("{$sURL}/index.php"));
     }
 
     /**
@@ -765,12 +802,8 @@ class OxNavigationTree extends oxSuperCfg
 
         $oXPath = new DOMXPath( $this->_getInitialDom() );
         $oNodeList = $oXPath->query( "//*[@cl='{$sClassName}' or @list='{$sClassName}']" );
-
-        if ( $oNodeList->length ) {
-            foreach ( $oNodeList as $oNode ) {
-                $sClassId = $oNode->getAttribute( 'id' );
-                break;
-            }
+        if ( $oNodeList->length && ( $oFirstItem = $oNodeList->item( 0 ) ) ) {
+            $sClassId = $oFirstItem->getAttribute( 'id' );
         }
 
         return $sClassId;
@@ -785,15 +818,11 @@ class OxNavigationTree extends oxSuperCfg
      */
     public function getShopVersionNr()
     {
-        $myConfig = $this->getConfig();
-
-
-        if ( $sShopID = $myConfig->getShopId() ) {
-            $sQ = "select oxversion from oxshops where oxid = '$sShopID' ";
-            $sVersion = oxDb::getDb()->getOne( $sQ );
+        $sVersion = "";
+        if ( ( $sShopId = $this->getConfig()->getShopId() ) ) {
+            $sVersion = oxDb::getDb()->getOne( "select oxversion from oxshops where oxid = '$sShopId' " );
+            $sVersion = preg_replace( "/(^[^0-9]+)(.+)$/", "\$2", $sVersion );
         }
-
-        $sVersion = preg_replace("/(^[^0-9]+)(.+)$/", "$2", $sVersion);
 
         return trim( $sVersion );
     }

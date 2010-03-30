@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstart.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: oxstart.php 26460 2010-03-10 14:22:54Z rimvydas.paskevicius $
  */
 
 /**
@@ -62,17 +62,6 @@ class oxStart extends oxUBase
 
         $sTemplate = '';
 
-        if ( $sErrorNo == 'unlicensed' ) {
-            $sTemplate = 'err_unlicensed.tpl';
-        }
-
-        if ( $sErrorNo == 'expireddemo' ) {
-            $sTemplate = 'err_expired_days.tpl';
-        }
-
-        if ( $sErrorNo == 'pro_exceeded' ) {
-            $sTemplate = 'err_overloaded_articles.tpl';
-        }
 
 
         if ( $sErrorNo == 'unknown' ) {
@@ -89,7 +78,7 @@ class oxStart extends oxUBase
 
 
     /**
-     * Creates and starts session object, sets default session language and currency.
+     * Creates and starts session object, sets default currency.
      *
      * @return null
      */
@@ -98,8 +87,6 @@ class oxStart extends oxUBase
         $myConfig  = $this->getConfig();
 
         // assign default values
-        if ( !oxSession::hasVar( 'language') )
-            oxSession::setVar( 'language', $myConfig->getConfigParam( 'sDefaultLang' ) );
         if ( !oxSession::hasVar('currency') )
             oxSession::setVar( 'currency', '0' );
 

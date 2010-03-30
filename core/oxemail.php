@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxemail.php 26935 2010-03-29 14:44:09Z sarunas $
  */
 /**
  * Includes PHP mailer class.
@@ -338,6 +338,32 @@ class oxEmail extends PHPMailer
     }
 
     /**
+     * Sets smtp parameters depending on the protocol used
+     * returns smtp url which should be used for fsockopen
+     *
+     * @param string $sUrl initial smtp
+     * 
+     * @return string
+     */
+    protected function _setSmtpProtocol($sUrl)
+    {
+        $sProtocol = '';
+        $sSmtpHost = $sUrl;
+        if (preg_match('@^([0-9a-z]+://)?(.*)$@i', $sUrl, $m)) {
+            if ($m[1]) {
+                if (($m[1] == 'ssl://') || ($m[1] == 'tls://')) {
+                    $this->set( "SMTPSecure", substr($m[1], 0, 3) );
+                } else {
+                    $sProtocol = $m[1];
+                }
+            }
+            $sSmtpHost = $m[2];
+        }
+
+        return $sProtocol.$sSmtpHost;
+    }
+
+    /**
      * Sets SMTP mailer parameters, such as user name, password, location.
      *
      * @param oxShop $oShop Object, that keeps base shop info
@@ -349,12 +375,14 @@ class oxEmail extends PHPMailer
         $myConfig = $this->getConfig();
         $oShop = ( $oShop ) ? $oShop : $this->_getShop();
 
-        if ( !$this->_isValidSmtpHost( $oShop->oxshops__oxsmtp->value ) ) {
+        $sSmtpUrl = $this->_setSmtpProtocol($oShop->oxshops__oxsmtp->value);
+
+        if ( !$this->_isValidSmtpHost( $sSmtpUrl ) ) {
             $this->setMailer( "mail" );
             return;
         }
 
-        $this->setHost( $oShop->oxshops__oxsmtp->value );
+        $this->setHost( $sSmtpUrl );
         $this->setMailer( "smtp" );
 
         if ( $oShop->oxshops__oxsmtpuser->value ) {
@@ -377,7 +405,15 @@ class oxEmail extends PHPMailer
     {
         $blIsSmtp = false;
         if ( $sSmtpHost ) {
-            if ( $blIsSmtp = (bool) ( $rHandle = @fsockopen( $sSmtpHost, $this->SMTP_PORT, $iErrNo, $sErrStr, 30 )) ) {
+            $sSmtpPort = $this->SMTP_PORT;
+            if (preg_match('@^(.*?)(:([0-9]+))?$@i', $sSmtpHost, $m)) {
+                $sSmtpHost = $m[1];
+                $sSmtpPort = (int)$m[3];
+                if (!$sSmtpPort) {
+                    $sSmtpPort = $this->SMTP_PORT;
+                }
+            }
+            if ( $blIsSmtp = (bool) ( $rHandle = @fsockopen( $sSmtpHost, $sSmtpPort, $iErrNo, $sErrStr, 30 )) ) {
                 // closing connection ..
                 fclose( $rHandle );
             }
@@ -450,13 +486,13 @@ class oxEmail extends PHPMailer
             if ( $oSmarty->template_exists( $this->_sOrderUserSubjectTemplate) ) {
                 $sSubject = $oSmarty->fetch( $this->_sOrderUserSubjectTemplate );
             } else {
-                $sSubject = $oShop->oxshops__oxordersubject->value." (#".$oOrder->oxorder__oxordernr->value.")";
+                $sSubject = $oShop->oxshops__oxordersubject->getRawValue()." (#".$oOrder->oxorder__oxordernr->value.")";
             }
         }
 
         $this->setSubject( $sSubject );
 
-        $sFullName = $oUser->oxuser__oxfname->value . " " . $oUser->oxuser__oxlname->value;
+        $sFullName = $oUser->oxuser__oxfname->getRawValue() . " " . $oUser->oxuser__oxlname->getRawValue();
 
         $this->setRecipient( $oUser->oxuser__oxusername->value, $sFullName );
         $this->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
@@ -488,7 +524,7 @@ class oxEmail extends PHPMailer
         $oOrder = $this->_addUserInfoOrderEMail( $oOrder );
 
         // send confirmation to shop owner
-        $sFullName = $oOrder->getOrderUser()->oxuser__oxfname->value . " " . $oOrder->getOrderUser()->oxuser__oxlname->value;
+        $sFullName = $oOrder->getOrderUser()->oxuser__oxfname->getRawValue() . " " . $oOrder->getOrderUser()->oxuser__oxlname->getRawValue();
         $this->setFrom( $oOrder->getOrderUser()->oxuser__oxusername->value, $sFullName );
 
         $oLang = oxLang::getInstance();
@@ -534,7 +570,7 @@ class oxEmail extends PHPMailer
             if ( $oSmarty->template_exists( $this->_sOrderOwnerSubjectTemplate) ) {
                 $sSubject = $oSmarty->fetch( $this->_sOrderOwnerSubjectTemplate );
             } else {
-                 $sSubject = $oShop->oxshops__oxordersubject->value." (#".$oOrder->oxorder__oxordernr->value.")";
+                 $sSubject = $oShop->oxshops__oxordersubject->getRawValue()." (#".$oOrder->oxorder__oxordernr->value.")";
             }
         }
 
@@ -599,9 +635,9 @@ class oxEmail extends PHPMailer
         $this->setBody( $oSmarty->fetch( $this->_sRegisterTemplate ) );
         $this->setAltBody( $oSmarty->fetch( $this->_sRegisterTemplatePlain ) );
 
-        $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oShop->oxshops__oxregistersubject->value );
+        $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oShop->oxshops__oxregistersubject->getRawValue() );
 
-        $sFullName = $oUser->oxuser__oxfname->value . " " . $oUser->oxuser__oxlname->value;
+        $sFullName = $oUser->oxuser__oxfname->getRawValue() . " " . $oUser->oxuser__oxlname->getRawValue();
 
         $this->setRecipient( $oUser->oxuser__oxusername->value, $sFullName );
         $this->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
@@ -665,9 +701,9 @@ class oxEmail extends PHPMailer
                 $this->setAltBody( $oSmarty->fetch( $this->_sForgotPwdTemplatePlain ) );
 
                 //sets subject of email
-                $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oShop->oxshops__oxforgotpwdsubject->value );
+                $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oShop->oxshops__oxforgotpwdsubject->getRawValue() );
 
-                $sFullName = $oUser->oxuser__oxfname->value . " " . $oUser->oxuser__oxlname->value;
+                $sFullName = $oUser->oxuser__oxfname->getRawValue() . " " . $oUser->oxuser__oxlname->getRawValue();
 
                 $this->setRecipient( $sEmailAddress, $sFullName );
                 $this->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
@@ -749,7 +785,7 @@ class oxEmail extends PHPMailer
         $this->setAltBody( $oSmarty->fetch( $this->_sNewsletterOptInTemplatePlain ) );
         $this->setSubject( ( $sSubject !== null ) ? $sSubject : oxLang::getInstance()->translateString("EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT") . " " . $oShop->oxshops__oxname->getRawValue() );
 
-        $sFullName = $oUser->oxuser__oxfname->value . " " . $oUser->oxuser__oxlname->value;
+        $sFullName = $oUser->oxuser__oxfname->getRawValue() . " " . $oUser->oxuser__oxlname->getRawValue();
 
         $this->setRecipient( $oUser->oxuser__oxusername->value, $sFullName );
         $this->setFrom( $oShop->oxshops__oxinfoemail->value, $oShop->oxshops__oxname->getRawValue() );
@@ -803,9 +839,9 @@ class oxEmail extends PHPMailer
             $this->setBody( $oNewsLetter->getPlainText() );
         }
 
-        $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oNewsLetter->oxnewsletter__oxtitle->value );
+        $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oNewsLetter->oxnewsletter__oxtitle->getRawValue() );
 
-        $sFullName = $oUser->oxuser__oxfname->value . " " . $oUser->oxuser__oxlname->value;
+        $sFullName = $oUser->oxuser__oxfname->getRawValue() . " " . $oUser->oxuser__oxlname->getRawValue();
         $this->setRecipient( $oUser->oxuser__oxusername->value, $sFullName );
         $this->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
 
@@ -931,9 +967,9 @@ class oxEmail extends PHPMailer
         $oSmarty->security_settings['INCLUDE_ANY'] = $aStore['INCLUDE_ANY'] ;
 
         //Sets subject to email
-        $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oShop->oxshops__oxsendednowsubject->value );
+        $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oShop->oxshops__oxsendednowsubject->getRawValue() );
 
-        $sFullName = $oOrder->oxorder__oxbillfname->value . " " . $oOrder->oxorder__oxbilllname->value;
+        $sFullName = $oOrder->oxorder__oxbillfname->getRawValue() . " " . $oOrder->oxorder__oxbilllname->getRawValue();
 
         $this->setRecipient( $oOrder->oxorder__oxbillemail->value, $sFullName );
         $this->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
@@ -1068,7 +1104,7 @@ class oxEmail extends PHPMailer
 
             $this->setRecipient( $oShop->oxshops__oxowneremail->value, $oShop->oxshops__oxname->getRawValue() );
             $this->setFrom( $oShop->oxshops__oxowneremail->value, $oShop->oxshops__oxname->getRawValue() );
-            $this->setBody( $oSmarty->fetch( $sPathToTemplate . $this->getConfig()->getTemplatePath( $this->_sReminderMailTemplate, false ) ) );
+            $this->setBody( $oSmarty->fetch( $this->getConfig()->getTemplatePath( $this->_sReminderMailTemplate, false ) ) );
             $this->setAltBody( "" );
             $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oLang->translateString( 'EMAIL_STOCKREMINDER_SUBJECT' ) );
 
@@ -1155,7 +1191,7 @@ class oxEmail extends PHPMailer
         $oSmarty->assign( "currency", $oCur );
 
         $this->setRecipient( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
-        $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oLang->translateString( 'EMAIL_PRICEALARM_OWNER_SUBJECT', $iAlarmLang ) . " " . $oArticle->oxarticles__oxtitle->value );
+        $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oLang->translateString( 'EMAIL_PRICEALARM_OWNER_SUBJECT', $iAlarmLang ) . " " . $oArticle->oxarticles__oxtitle->getRawValue() );
         $this->setBody( $oSmarty->fetch( $this->_sOwnerPricealarmTemplate ) );
         $this->setFrom( $aParams['email'], "" );
         $this->setReplyTo( $aParams['email'], "" );

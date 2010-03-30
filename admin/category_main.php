@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: category_main.php 26710 2010-03-20 15:12:20Z arvydas $
  */
 
 /**
@@ -134,8 +134,7 @@ class Category_Main extends oxAdminDetails
             $aParams['oxcategories__oxvat'] = null;
 
             // shopid
-            $sShopID = oxSession::getVar( "actshop");
-            $aParams['oxcategories__oxshopid'] = $sShopID;
+            $aParams['oxcategories__oxshopid'] = oxSession::getVar( "actshop" );
         $oCategory = oxNew( "oxcategory" );
 
         if ( $soxId != "-1") {
@@ -190,14 +189,13 @@ class Category_Main extends oxAdminDetails
             $aParams['oxcategories__oxvat'] = null;
 
             // shopid
-            $sShopID = oxSession::getVar( "actshop");
-            $aParams['oxcategories__oxshopid'] = $sShopID;
+            $aParams['oxcategories__oxshopid'] = oxSession::getVar( "actshop" );
 
         $oCategory = oxNew( "oxcategory" );
 
-        if ( $soxId != "-1")
+        if ( $soxId != "-1") {
             $oCategory->loadInLang( $this->_iEditLang, $soxId );
-        else {
+        } else {
             $aParams['oxcategories__oxid'] = null;
         }
 
@@ -216,7 +214,8 @@ class Category_Main extends oxAdminDetails
         oxSession::setVar( "new_lang", $sNewLanguage);
 
         // set oxid if inserted
-        if ( $soxId == "-1")
+        if ( $soxId == "-1") {
             oxSession::setVar( "saved_oxid", $oCategory->oxcategories__oxid->value);
+        }
     }
 }

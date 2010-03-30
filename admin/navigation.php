@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: navigation.php 25840 2010-02-17 17:10:28Z arvydas $
+ * @version   SVN: $Id: navigation.php 26850 2010-03-25 15:33:10Z arvydas $
  */
  /**
  * Administrator GUI navigation manager class.
@@ -46,25 +46,25 @@ class Navigation extends oxAdminView
         $myUtilsServer = oxUtilsServer::getInstance();
 
         $sItem = oxConfig::getParameter("item");
-        if (! isset ($sItem) || !$sItem) {
+        $sItem = $sItem ? basename( $sItem ) : false;
+        if ( !$sItem ) {
             $sItem = "nav_frame.tpl";
-
-            $aFavorites = oxConfig::getParameter("favorites");
-            if (is_array($aFavorites)) {
-                $myUtilsServer->setOxCookie('oxidadminfavorites', implode('|', $aFavorites));
+            $aFavorites = oxConfig::getParameter( "favorites" );
+            if ( is_array( $aFavorites ) ) {
+                $myUtilsServer->setOxCookie('oxidadminfavorites', implode( '|', $aFavorites ) );
             }
-
         } else {
+            $oNavTree = $this->getNavigation();
 
             // set menu structure
-            $this->_aViewData["menustructure"] = $this->getNavigation()->getDomXml()->documentElement->childNodes;
+            $this->_aViewData["menustructure"] = $oNavTree->getDomXml()->documentElement->childNodes;
 
             // version patch strin
             $sVersion = str_replace( array ("EE.", "PE."), "", $this->_sShopVersion);
             $this->_aViewData["sVersion"] = trim($sVersion);
 
             //checking requirements if this is not nav frame reload
-            if (!oxConfig::getParameter("navReload")) {
+            if ( !oxConfig::getParameter( "navReload" ) ) {
                 // #661 execute stuff we run each time when we start admin once
                 if ('home.tpl' == $sItem) {
                     $this->_aViewData['aMessage'] = $this->_doStartUpChecks();
@@ -75,28 +75,28 @@ class Navigation extends oxAdminView
             }
 
             // favorite navigation
-            $aFavorites = explode('|', $myUtilsServer->getOxCookie('oxidadminfavorites'));
+            $aFavorites = explode( '|', $myUtilsServer->getOxCookie( 'oxidadminfavorites' ) );
 
-            if (is_array($aFavorites) && count($aFavorites)) {
-                $this->_aViewData["menufavorites"] = $this->getNavigation()->getListNodes($aFavorites);
-                $this->_aViewData["aFavorites"] = $aFavorites;
+            if ( is_array( $aFavorites ) && count( $aFavorites ) ) {
+                $this->_aViewData["menufavorites"] = $oNavTree->getListNodes( $aFavorites );
+                $this->_aViewData["aFavorites"]    = $aFavorites;
             }
 
             // history navigation
-            $aHistory = explode('|', $myUtilsServer->getOxCookie('oxidadminhistory'));
-            if (is_array($aHistory) && count($aHistory)) {
-                $this->_aViewData["menuhistory"] = $this->getNavigation()->getListNodes($aHistory);
+            $aHistory = explode( '|', $myUtilsServer->getOxCookie( 'oxidadminhistory' ) );
+            if ( is_array( $aHistory ) && count( $aHistory ) ) {
+                $this->_aViewData["menuhistory"] = $oNavTree->getListNodes( $aHistory );
             }
 
             // open history node ?
-            $this->_aViewData["blOpenHistory"] = oxConfig::getParameter('openHistory');
+            $this->_aViewData["blOpenHistory"] = oxConfig::getParameter( 'openHistory' );
         }
 
-        $oShoplist = oxNew('oxshoplist');
+        $oShoplist = oxNew( 'oxshoplist' );
         $oBaseShop = $oShoplist->getBaseObject();
 
         $sWhere = '';
-        $blisMallAdmin = oxSession::getVar('malladmin');
+        $blisMallAdmin = oxSession::getVar( 'malladmin' );
         if (!$blisMallAdmin) {
             // we only allow to see our shop
             $sShopID = oxSession::getVar("actshop");
@@ -213,7 +213,7 @@ class Navigation extends oxAdminView
         $oSysReq = new oxSysRequirements();
         if ( !$oSysReq->getSysReqStatus() ) {
             $aMessage['warning']  = oxLang::getInstance()->translateString('NAVIGATION_SYSREQ_MESSAGE');
-            $aMessage['warning'] .= '<a href="?cl=sysreq" target="basefrm">';
+            $aMessage['warning'] .= '<a href="?cl=sysreq&amp;stoken='.$this->getSession()->getSessionChallengeToken().'" target="basefrm">';
             $aMessage['warning'] .= oxLang::getInstance()->translateString('NAVIGATION_SYSREQ_MESSAGE2').'</a>';
         }
 
@@ -232,8 +232,7 @@ class Navigation extends oxAdminView
 
         // check if config file is writable
         $sConfPath = $this->getConfig()->getConfigParam( 'sShopDir' ) . "/config.inc.php";
-        $sPerms = substr( decoct(fileperms( $sConfPath ) ), 2 );
-        if ( $sPerms > 644 ) {
+        if ( !is_readable( $sConfPath ) || is_writable( $sConfPath ) ) {
             $aMessage['warning'] .= ( ( ! empty($aMessage['warning'] ) )?"<br>":'' ).oxLang::getInstance()->translateString('SETUP_CONFIGPERMISSIONS_WARNING' );
         }
 

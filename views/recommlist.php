@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: recommlist.php 25542 2010-02-02 11:28:16Z alfonsas $
+ * @version   SVN: $Id: recommlist.php 26303 2010-03-04 16:11:37Z sarunas $
  */
 
 /**
@@ -126,7 +126,7 @@ class RecommList extends aList
                 $this->_iAllArtCnt = $oActiveRecommList->getArtCount();
             }
 
-            if ( in_array('oxrss_recommlistarts', $myConfig->getConfigParam( 'aRssSelected' ) ) ) {
+            if ( $myConfig->getConfigParam( 'bl_rssRecommListArts' ) ) {
                 $oRss = oxNew('oxrssfeed');
                 $this->addRssFeed($oRss->getRecommListArticlesTitle($oActiveRecommList), $oRss->getRecommListArticlesUrl($this->_oActiveRecommList), 'recommlistarts');
             }
@@ -209,7 +209,8 @@ class RecommList extends aList
      */
     public function saveReview()
     {
-        if ( ( $oRecommList = $this->getActiveRecommList() ) && ( $oUser = $this->getUser() ) ) {
+        if ( $this->canAcceptFormData() &&
+             ( $oRecommList = $this->getActiveRecommList() ) && ( $oUser = $this->getUser() ) ) {
 
             //save rating
             $dRating = oxConfig::getParameter( 'recommlistrating' );

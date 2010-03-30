@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 25755 2010-02-10 13:59:48Z sarunas $
+ * @version   SVN: $Id: oxview.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -207,6 +207,7 @@ class oxView extends oxSuperCfg
 
         $this->_aViewData['isdtaus'] = true;
         $this->_aViewData['isstaffelpreis'] = true;
+        $this->_aViewData['belboon'] = $this->getBelboonParam();
 
         // by default we allways display newsletter bar
         $this->_iNewsStatus = 1;
@@ -265,6 +266,23 @@ class oxView extends oxSuperCfg
     protected function _setAdditionalParams()
     {
         $this->getAdditionalParams();
+    }
+
+    /**
+     * Returns belboon parameter
+     *
+     * @return string $sBelboon
+     */
+    public function getBelboonParam()
+    {
+        if ( $sBelboon = oxSession::getVar( 'belboon' ) ) {
+            return $sBelboon;
+        }
+        if ( ( $sBelboon = oxConfig::getParameter( 'belboon' ) ) ) {
+            oxSession::setVar( 'belboon', $sBelboon );
+        }
+
+        return $sBelboon;
     }
 
     /**
@@ -496,8 +514,7 @@ class oxView extends oxSuperCfg
     /**
      * Formats header for new controller action
      *
-     * Input example: "[component_name@]view_name[/function_name]?param1=val1&param2=val2"
-     * Parameters in [] are optional.
+     * Input example: "view_name?param1=val1&param2=val2" => "cl=view_name&param1=val1&param2=val2"
      *
      * @param string $sNewAction new action params
      *
@@ -517,11 +534,6 @@ class oxView extends oxSuperCfg
             // looking for function name
             $aParams    = explode( '/', $aParams[0] );
             $sClassName = $aParams[0];
-
-            // looking for component name
-            $aParams    = explode( '@', $aParams[0] );
-            $sCmpName   = ( count( $aParams ) > 1 )?$aParams[0]:null;
-            $sClassName = ( $sCmpName !== null )?$aParams[1]:$sClassName;
 
             // building redirect path ...
             $sHeader  = ( $sClassName )?"cl=$sClassName&":'';  // adding view name

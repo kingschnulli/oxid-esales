@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 25793 2010-02-12 10:18:17Z sarunas $
+ * @version   SVN: $Id: oxviewconfig.php 26319 2010-03-05 09:58:47Z sarunas $
  */
 
 /**
@@ -674,33 +674,63 @@ class oxViewConfig extends oxSuperCfg
     }
 
     /**
-     * Returns config param "aNrofCatArticles" value
+     * Returns config param "bl_showWishlist" value
      *
      * @return bool
      */
     public function getShowWishlist()
     {
-        return $this->getConfig()->getConfigParam( 'bl_perfShowWishlist' );
+        return $this->getConfig()->getConfigParam( 'bl_showWishlist' );
     }
 
     /**
-     * Returns config param "aNrofCatArticles" value
+     * Returns config param "bl_showCompareList" value
      *
      * @return bool
      */
     public function getShowCompareList()
     {
-        return $this->getConfig()->getConfigParam( 'bl_perfShowCompareList' );
+        return $this->getConfig()->getConfigParam( 'bl_showCompareList' );
     }
 
     /**
-     * Returns config param "aNrofCatArticles" value
+     * Returns config param "bl_showListmania" value
      *
      * @return bool
      */
     public function getShowListmania()
     {
-        return $this->getConfig()->getConfigParam( 'bl_perfShowListmania' );
+        return $this->getConfig()->getConfigParam( 'bl_showListmania' );
+    }
+
+    /**
+     * Returns config param "bl_showOpenId" value
+     *
+     * @return bool
+     */
+    public function getShowOpenIdLogin()
+    {
+        return $this->getConfig()->getConfigParam( 'bl_showOpenId' );
+    }
+
+    /**
+     * Returns config param "bl_showVouchers" value
+     *
+     * @return bool
+     */
+    public function getShowVouchers()
+    {
+        return $this->getConfig()->getConfigParam( 'bl_showVouchers' );
+    }
+
+    /**
+     * Returns config param "bl_showGiftWrapping" value
+     *
+     * @return bool
+     */
+    public function getShowGiftWrapping()
+    {
+        return $this->getConfig()->getConfigParam( 'bl_showGiftWrapping' );
     }
 
     /**

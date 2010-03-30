@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: category_order.inc.php 25640 2010-02-05 06:42:24Z alfonsas $
+ * @version   SVN: $Id: category_order.inc.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -27,6 +27,7 @@ $aColumns = array( 'container1' => array(    // field , table,         visible, 
                                         array( 'oxtitle',  'oxarticles', 1, 1, 0 ),
                                         array( 'oxpos',    'oxobject2category', 1, 0, 0 ),
                                         array( 'oxean',    'oxarticles', 0, 0, 0 ),
+                                        array( 'oxmpn',    'oxarticles', 0, 0, 0 ),
                                         array( 'oxprice',  'oxarticles', 0, 0, 0 ),
                                         array( 'oxstock',  'oxarticles', 0, 0, 0 ),
                                         array( 'oxid',     'oxarticles', 0, 0, 1 )
@@ -35,6 +36,7 @@ $aColumns = array( 'container1' => array(    // field , table,         visible, 
                                         array( 'oxartnum', 'oxarticles', 1, 0, 0 ),
                                         array( 'oxtitle',  'oxarticles', 1, 1, 0 ),
                                         array( 'oxean',    'oxarticles', 0, 0, 0 ),
+                                        array( 'oxmpn',    'oxarticles', 0, 0, 0 ),
                                         array( 'oxprice',  'oxarticles', 0, 0, 0 ),
                                         array( 'oxstock',  'oxarticles', 0, 0, 0 ),
                                         array( 'oxid',     'oxarticles', 0, 0, 1 )

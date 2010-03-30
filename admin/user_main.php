@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: user_main.php 25640 2010-02-05 06:42:24Z alfonsas $
+ * @version   SVN: $Id: user_main.php 26086 2010-02-26 08:47:42Z arvydas $
  */
 
 /**
@@ -59,17 +59,18 @@ class User_Main extends oxAdminDetails
         // User rights
         $aUserRights = array();
         $oLang = oxLang::getInstance();
+        $iTplLang = $oLang->getTplLanguage();
 
         $iPos = count( $aUserRights );
         $aUserRights[$iPos] = new OxstdClass();
-        $aUserRights[$iPos]->name = $oLang->translateString( "user", $oLang->getTplLanguage() );
+        $aUserRights[$iPos]->name = $oLang->translateString( "user", $iTplLang );
         $aUserRights[$iPos]->id   = "user";
 
         if ( $blisMallAdmin ) {
             $iPos = count( $aUserRights );
             $aUserRights[$iPos] = new OxstdClass();
             $aUserRights[$iPos]->id   = "malladmin";
-            $aUserRights[$iPos]->name = $oLang->translateString( "Admin", $oLang->getTplLanguage() );
+            $aUserRights[$iPos]->name = $oLang->translateString( "Admin", $iTplLang );
         }
 
 
@@ -104,7 +105,7 @@ class User_Main extends oxAdminDetails
 
         // passing country list
         $oCountryList = oxNew( "oxCountryList" );
-        $oCountryList->loadActiveCountries( $oLang->getTplLanguage() );
+        $oCountryList->loadActiveCountries( $iTplLang );
 
         $this->_aViewData["countrylist"] = $oCountryList;
 

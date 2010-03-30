@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstrregular.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxstrregular.php 26366 2010-03-08 12:18:14Z arvydas $
  */
 
 /**
@@ -97,11 +97,15 @@ class oxStrRegular
      */
     public function strpos($sHaystack, $sNeedle, $iOffset = null)
     {
-        if (is_null($iOffset)) {
-            return strpos($sHaystack, $sNeedle);
-        } else {
-            return strpos($sHaystack, $sNeedle, $iOffset);
+        $iPos = false;
+        if ( $sHaystack && $sNeedle ) {
+            if ( is_null( $iOffset ) ) {
+                $iPos = strpos( $sHaystack, $sNeedle );
+            } else {
+                $iPos = strpos( $sHaystack, $sNeedle, $iOffset );
+            }
         }
+        return $iPos;
     }
 
     /**

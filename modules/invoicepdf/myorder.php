@@ -19,7 +19,7 @@
  * @package   modules
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: myorder.php 25542 2010-02-02 11:28:16Z alfonsas $
+ * @version   SVN: $Id: myorder.php 26917 2010-03-29 05:01:47Z alfonsas $
  */
 
 /**
@@ -197,10 +197,10 @@ class PdfArticleSummary extends PdfBlock
 
         // #345 - product VAT info
         $iCtr = 0;
-        foreach ( $this->_oData->getVats() as $iVATPercent => $dVATValue ) {
+        foreach ( $this->_oData->getProductVats(false) as $iVat => $dVatPrice ) {
             $iStartPos += 4 * $iCtr;
-            $sVATSum = $oLang->formatCurrency( $dVATValue * $this->_oData->getCurrency()->rate, $this->_oData->getCurrency() ).' '.$this->_oData->getCurrency()->name;
-            $this->text( 45, $iStartPos + 8, $this->_oData->translate( 'ORDER_OVERVIEW_PDF_ZZGLVAT' ).$iVATPercent.$this->_oData->translate( 'ORDER_OVERVIEW_PDF_PERCENTSUM' ) );
+            $sVATSum = $oLang->formatCurrency( $dVatPrice, $this->_oData->getCurrency() ).' '.$this->_oData->getCurrency()->name;
+            $this->text( 45, $iStartPos + 8, $this->_oData->translate( 'ORDER_OVERVIEW_PDF_ZZGLVAT' ).$iVat.$this->_oData->translate( 'ORDER_OVERVIEW_PDF_PERCENTSUM' ) );
             $this->text( 195 - $this->_oPdf->getStringWidth( $sVATSum ), $iStartPos + 8, $sVATSum );
             $iCtr++;
         }
@@ -259,10 +259,10 @@ class PdfArticleSummary extends PdfBlock
 
         // #345 - product VAT info
         $iCtr = 0;
-        foreach ( $this->_oData->getVats() as $iVATPercent => $dVATValue ) {
+        foreach ( $this->_oData->getProductVats(false) as $iVat => $dVatPrice ) {
             $iStartPos += 4 * $iCtr;
-            $sVATSum = $oLang->formatCurrency( $dVATValue * $this->_oData->getCurrency()->rate, $this->_oData->getCurrency() ).' '.$this->_oData->getCurrency()->name;
-            $this->text( 45, $iStartPos + 12, $this->_oData->translate( 'ORDER_OVERVIEW_PDF_ZZGLVAT' ).$iVATPercent.$this->_oData->translate('ORDER_OVERVIEW_PDF_PERCENTSUM' ) );
+            $sVATSum = $oLang->formatCurrency( $dVatPrice, $this->_oData->getCurrency() ).' '.$this->_oData->getCurrency()->name;
+            $this->text( 45, $iStartPos + 12, $this->_oData->translate( 'ORDER_OVERVIEW_PDF_ZZGLVAT' ).$iVat.$this->_oData->translate('ORDER_OVERVIEW_PDF_PERCENTSUM' ) );
             $this->text( 195 - $this->_oPdf->getStringWidth( $sVATSum ), $iStartPos + 12, $sVATSum );
             $iCtr++;
         }
@@ -413,10 +413,12 @@ class PdfArticleSummary extends PdfBlock
         }
 
         // payment costs
-        $iStartPos += 4;
-        $sPayCost = $oLang->formatCurrency( $this->_oData->oxorder__oxpaycost->value, $this->_oData->getCurrency() ).' '.$this->_oData->getCurrency()->name;
-        $this->text( 45, $iStartPos, $this->_oData->translate( 'ORDER_OVERVIEW_PDF_PAYMENTIMPACT' ) );
-        $this->text( 195 - $this->_oPdf->getStringWidth( $sPayCost ), $iStartPos, $sPayCost );
+        if ( $this->_oData->oxorder__oxpaycost->value ) {
+            $iStartPos += 4;
+            $sPayCost = $oLang->formatCurrency( $this->_oData->oxorder__oxpaycost->value, $this->_oData->getCurrency() ).' '.$this->_oData->getCurrency()->name;
+            $this->text( 45, $iStartPos, $this->_oData->translate( 'ORDER_OVERVIEW_PDF_PAYMENTIMPACT' ) );
+            $this->text( 195 - $this->_oPdf->getStringWidth( $sPayCost ), $iStartPos, $sPayCost );
+        }
 
         $iStartPos++;
     }
@@ -562,12 +564,6 @@ class MyOrder extends MyOrder_parent
     protected $_oActShop = null;
 
     /**
-     * Order arctiles VAT's
-     * @var array
-     */
-    protected $_aVATs = array();
-
-    /**
      * Order currency object
      * @var object
      */
@@ -618,11 +614,11 @@ class MyOrder extends MyOrder_parent
 
         /* column 1 - company name, shop owner info, shop address */
         $oPdf->setFont( 'Arial', '', 7 );
-        $oPdf->text( 15, 275, strip_tags( $oShop->oxshops__oxcompany->value ) );
-        $oPdf->text( 15, 278, strip_tags( $oShop->oxshops__oxfname->value ).' '. strip_tags( $oShop->oxshops__oxlname->value ) );
-        $oPdf->text( 15, 281, strip_tags( $oShop->oxshops__oxstreet->value ) );
-        $oPdf->text( 15, 284, strip_tags( $oShop->oxshops__oxzip->value ).' '. strip_tags( $oShop->oxshops__oxcity->value ) );
-        $oPdf->text( 15, 287, strip_tags( $oShop->oxshops__oxcountry->value ) );
+        $oPdf->text( 15, 275, strip_tags( $oShop->oxshops__oxcompany->getRawValue() ) );
+        $oPdf->text( 15, 278, strip_tags( $oShop->oxshops__oxfname->getRawValue() ).' '. strip_tags( $oShop->oxshops__oxlname->getRawValue() ) );
+        $oPdf->text( 15, 281, strip_tags( $oShop->oxshops__oxstreet->getRawValue() ) );
+        $oPdf->text( 15, 284, strip_tags( $oShop->oxshops__oxzip->value ).' '. strip_tags( $oShop->oxshops__oxcity->getRawValue() ) );
+        $oPdf->text( 15, 287, strip_tags( $oShop->oxshops__oxcountry->getRawValue() ) );
 
         /* column 2 - phone, fax, url, email address */
         $oPdf->text( 85, 275, $this->translate( 'ORDER_OVERVIEW_PDF_PHONE' ).strip_tags( $oShop->oxshops__oxtelefon->value ) );
@@ -631,7 +627,7 @@ class MyOrder extends MyOrder_parent
         $oPdf->text( 85, 284, strip_tags( $oShop->oxshops__oxorderemail->value ) );
 
         /* column 3 - bank information */
-        $oPdf->text( 150, 275, strip_tags( $oShop->oxshops__oxbankname->value ) );
+        $oPdf->text( 150, 275, strip_tags( $oShop->oxshops__oxbankname->getRawValue() ) );
         $oPdf->text( 150, 278, $this->translate( 'ORDER_OVERVIEW_PDF_ACCOUNTNR' ).strip_tags( $oShop->oxshops__oxbanknumber->value ) );
         $oPdf->text( 150, 281, $this->translate( 'ORDER_OVERVIEW_PDF_BANKCODE' ).strip_tags( $oShop->oxshops__oxbankcode->value ) );
         $oPdf->text( 150, 284, strip_tags( $oShop->oxshops__oxvatnumber->value ) );
@@ -743,15 +739,21 @@ class MyOrder extends MyOrder_parent
      */
     protected function _setBillingAddressToPdf( $oPdf )
     {
+        $oLang = oxLang::getInstance();
+        $sSal = $this->oxorder__oxbillsal->value;
+        try {
+            $sSal = $oLang->translateString($this->oxorder__oxbillsal->value, $this->_iSelectedLang);
+        } catch (Exception $e) {
+        }
         $oPdf->setFont( 'Arial', '', 10 );
-        $oPdf->text( 15, 59, $this->oxorder__oxbillsal->value );
-        $oPdf->text( 15, 63, $this->oxorder__oxbilllname->value.' '.$this->oxorder__oxbillfname->value );
-        $oPdf->text( 15, 67, $this->oxorder__oxbillcompany->value );
-        $oPdf->text( 15, 71, $this->oxorder__oxbillstreet->value.' '.$this->oxorder__oxbillstreetnr->value );
+        $oPdf->text( 15, 59, $sSal);
+        $oPdf->text( 15, 63, $this->oxorder__oxbilllname->getRawValue().' '.$this->oxorder__oxbillfname->getRawValue() );
+        $oPdf->text( 15, 67, $this->oxorder__oxbillcompany->getRawValue() );
+        $oPdf->text( 15, 71, $this->oxorder__oxbillstreet->getRawValue().' '.$this->oxorder__oxbillstreetnr->value );
         $oPdf->setFont( 'Arial', 'B', 10 );
-        $oPdf->text( 15, 75, $this->oxorder__oxbillzip->value.' '.$this->oxorder__oxbillcity->value );
+        $oPdf->text( 15, 75, $this->oxorder__oxbillzip->value.' '.$this->oxorder__oxbillcity->getRawValue() );
         $oPdf->setFont( 'Arial', '', 10 );
-        $oPdf->text( 15, 79, $this->oxorder__oxbillcountry->value );
+        $oPdf->text( 15, 79, $this->oxorder__oxbillcountry->getRawValue() );
     }
 
     /**
@@ -763,17 +765,23 @@ class MyOrder extends MyOrder_parent
      */
     protected function _setDeliveryAddressToPdf( $oPdf )
     {
+        $oLang = oxLang::getInstance();
+        $sSal = $this->oxorder__oxdelsal->value;
+        try {
+            $sSal = $oLang->translateString($this->oxorder__oxdelsal->value, $this->_iSelectedLang);
+        } catch (Exception $e) {
+        }
         $oPdf->setFont( 'Arial', '', 6 );
         $oPdf->text( 15, 87, $this->translate( 'ORDER_OVERVIEW_PDF_DELIVERYADDRESS' ) );
         $oPdf->setFont( 'Arial', '', 10 );
-        $oPdf->text( 15, 91, $this->oxorder__oxdelsal->value );
-        $oPdf->text( 15, 95, $this->oxorder__oxdellname->value.' '.$this->oxorder__oxdelfname->value );
-        $oPdf->text( 15, 99, $this->oxorder__oxdelcompany->value );
-        $oPdf->text( 15, 103, $this->oxorder__oxdelstreet->value.' '.$this->oxorder__oxdelstreetnr->value );
+        $oPdf->text( 15, 91, $sSal);
+        $oPdf->text( 15, 95, $this->oxorder__oxdellname->getRawValue().' '.$this->oxorder__oxdelfname->getRawValue() );
+        $oPdf->text( 15, 99, $this->oxorder__oxdelcompany->getRawValue() );
+        $oPdf->text( 15, 103, $this->oxorder__oxdelstreet->getRawValue().' '.$this->oxorder__oxdelstreetnr->value );
         $oPdf->setFont( 'Arial', 'B', 10 );
-        $oPdf->text( 15, 107, $this->oxorder__oxdelzip->value.' '.$this->oxorder__oxdelcity->value );
+        $oPdf->text( 15, 107, $this->oxorder__oxdelzip->value.' '.$this->oxorder__oxdelcity->getRawValue() );
         $oPdf->setFont( 'Arial', '', 10 );
-        $oPdf->text( 15, 111, $this->oxorder__oxdelcountry->value );
+        $oPdf->text( 15, 111, $this->oxorder__oxdelcountry->getRawValue() );
     }
 
     /**
@@ -812,30 +820,22 @@ class MyOrder extends MyOrder_parent
 
             // product title
             $oPdf->setFont( 'Arial', '', 10 );
-            $oPdf->text( 45, $iStartPos, substr( strip_tags( $this->_replaceExtendedChars( $oOrderArt->oxorderarticles__oxtitle->value, true ) ), 0, 58 ) );
+            $oPdf->text( 45, $iStartPos, substr( strip_tags( $this->_replaceExtendedChars( $oOrderArt->oxorderarticles__oxtitle->getRawValue(), true ) ), 0, 58 ) );
 
             if ( $blShowPrice ) {
                 $oLang = oxLang::getInstance();
 
+                // product VAT percent
+                $oPdf->text( 150 - $oPdf->getStringWidth( $oOrderArt->oxorderarticles__oxvat->value ), $iStartPos, $oOrderArt->oxorderarticles__oxvat->value );
+
                 // product price
                 $sText = $oLang->formatCurrency( $oOrderArt->oxorderarticles__oxbprice->value, $this->_oCur ).' '.$this->_oCur->name;
-                $oPdf->text( 163 - $oPdf->getStringWidth( $sText ), $iStartPos, $sText );
+                $oPdf->text( 173 - $oPdf->getStringWidth( $sText ), $iStartPos, $sText );
 
                 // total product price
                 $sText = $oLang->formatCurrency( $oOrderArt->oxorderarticles__oxbrutprice->value, $this->_oCur ).' '.$this->_oCur->name;
-                $oPdf->text( 184 - $oPdf->getStringWidth( $sText ), $iStartPos, $sText );
+                $oPdf->text( 195 - $oPdf->getStringWidth( $sText ), $iStartPos, $sText );
 
-                // product VAT percent
-                $oPdf->text( 195 - $oPdf->getStringWidth( $oOrderArt->oxorderarticles__oxvat->value ), $iStartPos, $oOrderArt->oxorderarticles__oxvat->value );
-
-                // calculating product VAT info
-                if ( !isset( $this->_aVATs[$oOrderArt->oxorderarticles__oxvat->value] ) ) {
-                    $this->_aVATs[$oOrderArt->oxorderarticles__oxvat->value] = 0;
-                }
-                // #M1434: VAT recalculation in admin (pdf) is wrong
-                if ( $oOrderArt->oxorderarticles__oxamount->value > 0 ) {
-                    $this->_aVATs[$oOrderArt->oxorderarticles__oxvat->value] += $oOrderArt->oxorderarticles__oxvatprice->value;
-                }
             }
 
             // additional variant info
@@ -869,7 +869,7 @@ class MyOrder extends MyOrder_parent
 
         // shop information
         $oPdf->setFont( 'Arial', '', 6 );
-        $oPdf->text( 15, 55, $oShop->oxshops__oxname->value.' - '.$oShop->oxshops__oxstreet->value.' - '.$oShop->oxshops__oxzip->value.' - '.$oShop->oxshops__oxcity->value );
+        $oPdf->text( 15, 55, $oShop->oxshops__oxname->getRawValue().' - '.$oShop->oxshops__oxstreet->getRawValue().' - '.$oShop->oxshops__oxzip->value.' - '.$oShop->oxshops__oxcity->getRawValue() );
 
         // billing address
         $this->_setBillingAddressToPdf( $oPdf );
@@ -901,7 +901,7 @@ class MyOrder extends MyOrder_parent
         }
 
         // shop city
-        $sText = $oShop->oxshops__oxcity->value.', '.date( 'd.m.Y' );
+        $sText = $oShop->oxshops__oxcity->getRawValue().', '.date( 'd.m.Y' );
         $oPdf->setFont( 'Arial', '', 10 );
         $oPdf->text( 195 - $oPdf->getStringWidth( $sText ), $iTop + 8, $sText );
 
@@ -939,9 +939,9 @@ class MyOrder extends MyOrder_parent
         $oPdf->text( 15, $iTop, $this->translate( 'ORDER_OVERVIEW_PDF_AMOUNT' ) );
         $oPdf->text( 30, $iTop, $this->translate( 'ORDER_OVERVIEW_PDF_ARTID' ) );
         $oPdf->text( 45, $iTop, $this->translate( 'ORDER_OVERVIEW_PDF_DESC' ) );
-        $oPdf->text( 148, $iTop, $this->translate( 'ORDER_OVERVIEW_PDF_UNITPRICE' ) );
-        $oPdf->text( 168, $iTop, $this->translate( 'ORDER_OVERVIEW_PDF_ALLPRICE' ) );
-        $sText = $this->translate( 'ORDER_OVERVIEW_PDF_VAT' );
+        $oPdf->text( 145, $iTop, $this->translate( 'ORDER_OVERVIEW_PDF_VAT' ) );
+        $oPdf->text( 158, $iTop, $this->translate( 'ORDER_OVERVIEW_PDF_UNITPRICE' ) );
+        $sText = $this->translate( 'ORDER_OVERVIEW_PDF_ALLPRICE' );
         $oPdf->text( 195 - $oPdf->getStringWidth( $sText ), $iTop, $sText );
 
         // separator line
@@ -983,6 +983,13 @@ class MyOrder extends MyOrder_parent
         $myConfig = $this->getConfig();
         $oShop    = $this->_getActShop();
 
+        $oLang = oxLang::getInstance();
+        $sSal = $this->oxorder__oxdelsal->value;
+        try {
+            $sSal = $oLang->translateString($this->oxorder__oxdelsal->value, $this->_iSelectedLang);
+        } catch (Exception $e) {
+        }
+
         // loading order currency info
         $this->_oCur = $myConfig->getCurrencyObject( $this->oxorder__oxcurrency->value );
         if ( !isset( $this->_oCur ) ) {
@@ -991,19 +998,19 @@ class MyOrder extends MyOrder_parent
 
         // shop info
         $oPdf->setFont( 'Arial', '', 6 );
-        $oPdf->text( 15, 55, $oShop->oxshops__oxname->value.' - '.$oShop->oxshops__oxstreet->value.' - '.$oShop->oxshops__oxzip->value.' - '.$oShop->oxshops__oxcity->value );
+        $oPdf->text( 15, 55, $oShop->oxshops__oxname->getRawValue().' - '.$oShop->oxshops__oxstreet->getRawValue().' - '.$oShop->oxshops__oxzip->value.' - '.$oShop->oxshops__oxcity->getRawValue() );
 
         // delivery address
         $oPdf->setFont( 'Arial', '', 10 );
         if ( $this->oxorder__oxdelsal->value ) {
-            $oPdf->text( 15, 59, $this->oxorder__oxdelsal->value );
-            $oPdf->text( 15, 63, $this->oxorder__oxdellname->value.' '.$this->oxorder__oxdelfname->value );
-            $oPdf->text( 15, 67, $this->oxorder__oxdelcompany->value );
-            $oPdf->text( 15, 71, $this->oxorder__oxdelstreet->value.' '.$this->oxorder__oxdelstreetnr->value );
+            $oPdf->text( 15, 59, $sSal );
+            $oPdf->text( 15, 63, $this->oxorder__oxdellname->getRawValue().' '.$this->oxorder__oxdelfname->getRawValue() );
+            $oPdf->text( 15, 67, $this->oxorder__oxdelcompany->getRawValue() );
+            $oPdf->text( 15, 71, $this->oxorder__oxdelstreet->getRawValue().' '.$this->oxorder__oxdelstreetnr->value );
             $oPdf->setFont( 'Arial', 'B', 10 );
-            $oPdf->text( 15, 75, $this->oxorder__oxdelzip->value.' '.$this->oxorder__oxdelcity->value );
+            $oPdf->text( 15, 75, $this->oxorder__oxdelzip->value.' '.$this->oxorder__oxdelcity->getRawValue() );
             $oPdf->setFont( 'Arial', '', 10 );
-            $oPdf->text( 15, 79, $this->oxorder__oxdelcountry->value );
+            $oPdf->text( 15, 79, $this->oxorder__oxdelcountry->getRawValue() );
         } else {
             // no delivery address - billing address is used for delivery
             $this->_setBillingAddressToPdf( $oPdf );
@@ -1024,7 +1031,7 @@ class MyOrder extends MyOrder_parent
         $oPdf->text( 195 - $oPdf->getStringWidth( $sCustNr ), 73, $sCustNr );
 
         // shops city
-        $sText = $oShop->oxshops__oxcity->value.', '.date( 'd.m.Y' );
+        $sText = $oShop->oxshops__oxcity->getRawValue().', '.date( 'd.m.Y' );
         $oPdf->setFont( 'Arial', '', 10 );
         $oPdf->text( 195 - $oPdf->getStringWidth( $sText ), 95, $sText );
 
@@ -1111,16 +1118,6 @@ class MyOrder extends MyOrder_parent
         }
 
         return $sValue;
-    }
-
-    /**
-     * Returns order articles VATS's
-     *
-     * @return array
-     */
-    public function getVats()
-    {
-        return $this->_aVATs;
     }
 
     /**

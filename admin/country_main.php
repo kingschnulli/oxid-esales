@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: country_main.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: country_main.php 26463 2010-03-10 14:37:54Z rimvydas.paskevicius $
  */
 
 /**
@@ -153,7 +153,7 @@ class Country_Main extends oxAdminDetails
         $oCountry->setLanguage(0);
         $oCountry->assign( $aParams);
         $oCountry->setLanguage($this->_iEditLang);
-        $oCountry = oxUtilsFile::getInstance()->processFiles( $oCountry );
+
         $oCountry->save();
         $this->_aViewData["updatelist"] = "1";
 

@@ -18,6 +18,7 @@
 
 
 <form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post">
+  [{ $shop->hiddensid }]
   <input type=hidden name=cl value=efire_downloader>
   <input type=hidden name=fnc value=getConnector>
 <p>

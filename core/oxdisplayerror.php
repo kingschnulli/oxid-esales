@@ -19,13 +19,13 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdisplayerror.php 25636 2010-02-04 21:36:25Z alfonsas $
+ * @version   SVN: $Id: oxdisplayerror.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
  * simple class to add a error message to display
  */
-class oxDisplayError implements oxDisplayErrorInterface
+class oxDisplayError implements oxIDisplayError
 {
     /**
      * Error message

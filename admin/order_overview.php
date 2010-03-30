@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: order_overview.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: order_overview.php 26796 2010-03-24 12:57:55Z arvydas $
  */
 
     // DTAUS
@@ -53,6 +53,7 @@ class Order_Overview extends oxAdminDetails
             $oOrder->load( $soxId);
 
             $this->_aViewData["edit"]          = $oOrder;
+            $this->_aViewData["aProductVats"]  = $oOrder->getProductVats();
             $this->_aViewData["orderArticles"] = $oOrder->getOrderArticles();
             $this->_aViewData["giftCard"]      = $oOrder->getGiftCard();
             $this->_aViewData["paymentType"]   = $this->_getPaymentType( $oOrder );
@@ -137,7 +138,7 @@ class Order_Overview extends oxAdminDetails
             $oOrder = oxNew( "oxorder" );
             if ( $oOrder->load( $soxId ) ) {
                 $oUtils = oxUtils::getInstance();
-                $sFilename = $oOrder->oxorder__oxordernr->value . "_" . $oOrder->oxorder__oxbilllname->value . ".pdf";
+                $sFilename = $oOrder->oxorder__oxordernr->value . "_" . $oOrder->oxorder__oxbilllname->getRawValue() . ".pdf";
 
                 ob_start();
                 $oOrder->genPDF( $sFilename, oxConfig::getParameter( "pdflanguage" ) );

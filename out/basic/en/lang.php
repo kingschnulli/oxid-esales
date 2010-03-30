@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: lang.php 26901 2010-03-26 15:56:26Z rimvydas.paskevicius $
  */
 
 
@@ -347,8 +347,9 @@ $aLang = array(
 'EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT'             => "Newsletter",
 'EMAIL_ORDER_CUST_HTML_ORDERNOMBER'               =>"Order No.",
 'EMAIL_ORDER_CUST_HTML_PRODUCT'                   =>"Product",
-'EMAIL_ORDER_CUST_HTML_QUANTITY'                  =>"Quantity",
 'EMAIL_ORDER_CUST_HTML_UNITPRICE'                 =>"Unit Price",
+'EMAIL_ORDER_CUST_HTML_QUANTITY'                  =>"Quantity",
+'EMAIL_ORDER_CUST_HTML_VAT'                       =>"VAT",
 'EMAIL_ORDER_CUST_HTML_TOTAL'                     =>"Total",
 'EMAIL_ORDER_CUST_HTML_PRODUCTREVIEW'             =>"Product Review",
 'EMAIL_ORDER_CUST_HTML_WRAPPING'                  =>"Gift Wrapping:",
@@ -434,11 +435,6 @@ $aLang = array(
 'ERR_EXPIRED_DAYS_VERSIONEXPIRED1'                =>"Your OXID version is expired, contact",
 'ERR_EXPIRED_DAYS_VERSIONEXPIRED2'                =>"OXID eSales",
 'ERR_EXPIRED_DAYS_VERSIONEXPIRED3'                =>"for more information.",
-'ERR_OVERLOADED_ARTICLES_TITLE'                   =>"OXID eShop Error",
-'ERR_OVERLOADED_ARTICLES_OXIDESHOPERROR'          =>"OXID eShop ERROR!",
-'ERR_OVERLOADED_ARTICLES_VERSIONEXPIRED1'         =>"The number of products exceeds version limits, please contact",
-'ERR_OVERLOADED_ARTICLES_VERSIONEXPIRED2'         =>"OXID eSales",
-'ERR_OVERLOADED_ARTICLES_VERSIONEXPIRED3'         =>"for more information.",
 'ERR_SETUP_TITLE'                                 =>"OXID eShop Error",
 'ERR_SETUP_OXIDESHOPERROR'                        =>"OXID eShop ERROR!",
 'ERR_SETUP_VERSIONEXPIRED1'                       =>"Please delete directory:",
@@ -451,6 +447,9 @@ $aLang = array(
 'ERR_UNLICENSED_VERSIONEXPIRED1'                  =>"The shop is unlicensed, contact",
 'ERR_UNLICENSED_VERSIONEXPIRED2'                  =>"OXID eSales",
 'ERR_UNLICENSED_VERSIONEXPIRED3'                  =>"for more information.",
+'ERR_UPDATE_OXIDESHOPERROR'                       =>"An OXID eShop error occured!",
+'ERR_UPDATE_DELETEDIRECTORY1'                     =>"Please delete the following directory:",
+'ERR_UPDATE_DELETEDIRECTORY2'                     =>"updateApp",
 'ERR_MANDATES_EXCEEDED_TITLE'                     =>"OXID eShop Error",
 'ERR_MANDATES_EXCEEDED_OXIDESHOPERROR'            =>"OXID eShop ERROR!",
 'ERR_MANDATES_EXCEEDED_VERSIONEXPIRED1'           =>"The number of available mandates exceeds version limits, please contact",
@@ -1015,6 +1014,7 @@ $aLang = array(
 'START_LONGRUNNINGHITS'                           => "Long-running Hits",
 'START_JUSTARRIVED'                               => "Just arrived!",
 'START_CATEGORIES'                                => "Categories",
+'STATE_PROMPT'                                    => "Please select a state",
 'SUGGEST_TITLE'                                   => "Recommend Product",
 'SUGGEST_COMLETECORRECTLYFIELDS'                  => "Please complete all fields correctly!",
 'SUGGEST_INVALIDMAIL'                             => "An error occured sending the eMail - please check the eMail address.",
@@ -1034,8 +1034,10 @@ $aLang = array(
 'SUGGEST_MESSAGE2'                                => "today and saw something that might interest you. Just click on the picture or the description and you will be taken directly to the shop.",
 'SUGGEST_SEND'                                    => "Send",
 'SUGGEST_ABOUTDATAPROTECTION'                     => "About Data Protection: Your data is kept strictly confidential and will not be given to any third parties.",
+'SUGGEST_VERIFICATIONCODE'                        => "Verification code:",
 'TAGS'                                            => "Tags",
 'TAGS_ADD'                                        => "Add tags",
+'TAGS_SEPARATEBY'                                 => "Separate by",
 'TAGS_EDIT'                                       => "Edit tags",
 'TAGS_HIGHLIHGT_INSTRUCTIONS'                     => "Highlight existing tags or add new",
 'TAGS_MORE'                                       => "More",
@@ -1081,10 +1083,10 @@ $aLang = array(
 'USER_FORGOTPWD'                                  => "Forgot Password",
 'USER_OPTION3'                                    => "Option 3",
 'USER_OPENPERSONALACCOUNT1'                       => "Open personal customer account.",
-'USER_OPENPERSONALACCOUNT2'                       => "A customer account with",
+'USER_OPENPERSONALACCOUNT2'                       => "A customer with an account",
 'USER_OPENPERSONALACCOUNT3'                       => "has advantages like:",
-'USER_OPENPERSONALACCOUNT4'                       => "- Administration of my address data",
-'USER_OPENPERSONALACCOUNT5'                       => "- Possibility to check the Status of your orders",
+'USER_OPENPERSONALACCOUNT4'                       => "- Administration of shipping addresses",
+'USER_OPENPERSONALACCOUNT5'                       => "- Check order status",
 'USER_OPENPERSONALACCOUNT6'                       => "- Order History",
 'USER_OPENPERSONALACCOUNT7'                       => "- Personal Wish List",
 'USER_OPENPERSONALACCOUNT8'                       => "- Personal Gift Registry",
@@ -1182,7 +1184,7 @@ $aLang = array(
 'WRAPPING_OPTIONALMESSAGE'                        => "Here you can enter an optional greeting message:",
 'WRAPPING_ADDFORANDFROM'                          => 'Please also add "For" and "From".',
 'WRAPPING_BACKTOORDER'                            => "Back to Order",
-'priceFrom'                                       => '<span style="font-size: 50%;" class="pricefrom">from</span>',
+'priceFrom'                                       => '<span class="pricefrom">from</span>',
 'byBrand'                                         => 'By Brand/Manufacturer',
 'byVendor'                                        => 'By Distributor',
 'byManufacturer'                                  => 'By Brand/Manufacturer',

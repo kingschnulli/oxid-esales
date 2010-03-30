@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 25793 2010-02-12 10:18:17Z sarunas $
+ * @version   SVN: $Id: alist.php 26303 2010-03-04 16:11:37Z sarunas $
  */
 
 /**
@@ -208,7 +208,7 @@ class aList extends oxUBase
         $this->_aViewData['actCategory'] = $this->getActCategory();
 
         $oCat = $this->getActCategory();
-        if ($oCat && is_array($myConfig->getConfigParam( 'aRssSelected' )) && in_array('oxrss_categories', $myConfig->getConfigParam( 'aRssSelected' ))) {
+        if ($oCat && $myConfig->getConfigParam( 'bl_rssCategories' )) {
             $oRss = oxNew('oxrssfeed');
             $this->addRssFeed($oRss->getCategoryArticlesTitle($oCat), $oRss->getCategoryArticlesUrl($oCat), 'activeCategory');
         }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: search.php 25793 2010-02-12 10:18:17Z sarunas $
+ * @version   SVN: $Id: search.php 26303 2010-03-04 16:11:37Z sarunas $
  */
 
 /**
@@ -220,7 +220,7 @@ class Search extends oxUBase
         parent::render();
 
         $myConfig = $this->getConfig();
-        if ( is_array( $myConfig->getConfigParam( 'aRssSelected' ) ) && in_array( 'oxrss_search', $myConfig->getConfigParam( 'aRssSelected' ) ) ) {
+        if ( $myConfig->getConfigParam( 'bl_rssSearch' ) ) {
             $oRss = oxNew('oxrssfeed');
             $sSearch = oxConfig::getParameter( 'searchparam', true );
             $sCnid = oxConfig::getParameter( 'searchcnid', true );

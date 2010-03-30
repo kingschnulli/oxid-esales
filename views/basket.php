@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: basket.php 25793 2010-02-12 10:18:17Z sarunas $
+ * @version   SVN: $Id: basket.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -209,6 +209,10 @@ class Basket extends oxUBase
      */
     public function addVoucher()
     {
+        if (!$this->getViewConfig()->getShowVouchers()) {
+            return;
+        }
+
         $oBasket = $this->getSession()->getBasket();
         $oBasket->addVoucher( oxConfig::getParameter( 'voucherNr' ) );
     }
@@ -220,6 +224,10 @@ class Basket extends oxUBase
      */
     public function removeVoucher()
     {
+        if (!$this->getViewConfig()->getShowVouchers()) {
+            return;
+        }
+
         $oBasket = $this->getSession()->getBasket();
         $oBasket->removeVoucher( oxConfig::getParameter( 'voucherId' ) );
     }

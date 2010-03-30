@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: account_recommlist.php 25793 2010-02-12 10:18:17Z sarunas $
+ * @version   SVN: $Id: account_recommlist.php 26162 2010-03-02 08:35:15Z arvydas $
  */
 
 /**
@@ -98,19 +98,16 @@ class Account_Recommlist extends Account
             return $this->_sThisTemplate = $this->_sThisLoginTemplate;
         }
 
-        $this->_aViewData['recommlists']    = $this->getRecommLists();
+        $this->_aViewData['recommlists']    = $oLists   = $this->getRecommLists();
+        $this->_aViewData['actvrecommlist'] = $oActList = $this->getActiveRecommList();
         $this->_aViewData['itemList']       = $this->getActiveRecommItems();
-        $this->_aViewData['actvrecommlist'] = $this->getActiveRecommList();
 
-        if ( !( $this->getActiveRecommList() ) ) {
-            // list of found oxrecommlists
-            if ( $this->getRecommLists()->count() ) {
-                $this->_iAllArtCnt = $oUser->getRecommListsCount();
-
-                $iNrofCatArticles = (int) $this->getConfig()->getConfigParam( 'iNrofCatArticles' );
-                $iNrofCatArticles = $iNrofCatArticles ? $iNrofCatArticles : 10;
-                $this->_iCntPages  = round( $this->_iAllArtCnt / $iNrofCatArticles + 0.49 );
-            }
+        // list of found oxrecommlists
+        if ( !$oActList && $oLists->count() ) {
+            $this->_iAllArtCnt = $oUser->getRecommListsCount();
+            $iNrofCatArticles = (int) $this->getConfig()->getConfigParam( 'iNrofCatArticles' );
+            $iNrofCatArticles = $iNrofCatArticles ? $iNrofCatArticles : 10;
+            $this->_iCntPages  = round( $this->_iAllArtCnt / $iNrofCatArticles + 0.49 );
         }
 
         $this->_aViewData['pageNavigation'] = $this->getPageNavigation();
@@ -237,9 +234,9 @@ class Account_Recommlist extends Account
             $sAuthor = trim( ( string ) oxConfig::getParameter( 'recomm_author', 1 ) );
             $sText   = trim( ( string ) oxConfig::getParameter( 'recomm_desc', 1 ) );
 
-            $oRecommList->oxrecommlists__oxtitle  = new oxField( $sTitle, oxField::T_RAW );
-            $oRecommList->oxrecommlists__oxauthor = new oxField( $sAuthor, oxField::T_RAW );
-            $oRecommList->oxrecommlists__oxdesc   = new oxField( $sText, oxField::T_RAW );
+            $oRecommList->oxrecommlists__oxtitle  = new oxField( $sTitle );
+            $oRecommList->oxrecommlists__oxauthor = new oxField( $sAuthor );
+            $oRecommList->oxrecommlists__oxdesc   = new oxField( $sText );
 
             try {
                 // marking entry as saved

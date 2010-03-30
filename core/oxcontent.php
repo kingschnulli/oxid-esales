@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcontent.php 25755 2010-02-10 13:59:48Z sarunas $
+ * @version   SVN: $Id: oxcontent.php 26406 2010-03-09 11:27:24Z alfonsas $
  */
 
 /**
@@ -132,8 +132,7 @@ class oxContent extends oxI18n implements oxIUrl
                                                     'oxcontents.'.$this->getSqlFieldName( 'oxactive' ) => '1',
                                                     'oxcontents.oxshopid' => $this->getConfig()->getShopId() ) );
 
-        $sRes = $this->assignRecord( $sSelect );
-        return $sRes;
+        return $this->assignRecord( $sSelect );
     }
 
     /**

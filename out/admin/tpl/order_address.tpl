@@ -106,10 +106,19 @@
         </tr>
         <tr>
             <td class="edittext">
+            [{ oxmultilang ident="GENERAL_STATE" }]
+            </td>
+            <td class="edittext">
+            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxbillstateid->fldmax_length}]" name="editval[oxorder__oxbillstateid]" value="[{$edit->oxorder__oxbillstateid->value }]" [{ $readonly }]>
+            [{ oxinputhelp ident="HELP_GENERAL_STATE" }]
+            </td>
+        </tr>
+        <tr>
+            <td class="edittext">
             [{ oxmultilang ident="GENERAL_COUNTRY" }]
             </td>
             <td class="edittext">
-            <select class="editinput" name="editval[oxorder__oxbillcountryid]" [{ $readonly }]>
+            <select id="del_country_select" class="editinput" name="editval[oxorder__oxbillcountryid]" [{ $readonly }]>
                <option value=''>---</option>
                [{ foreach from=$countrylist item=oCountry}]
                <option value="[{$oCountry->oxcountry__oxid->value}]" [{if $oCountry->oxcountry__oxid->value == $edit->oxorder__oxbillcountryid->value}]selected[{/if}]>[{$oCountry->oxcountry__oxtitle->value}]</option>
@@ -121,6 +130,7 @@
             [{/if}]
             </td>
         </tr>
+
         <tr>
             <td class="edittext">
             [{ oxmultilang ident="GENERAL_FON" }]
@@ -219,6 +229,15 @@
             <td class="edittext">
             <input type="text" class="editinput" size="37" maxlength="[{$edit->oxorder__oxdeladdinfo->fldmax_length}]" name="editval[oxorder__oxdeladdinfo]" value="[{$edit->oxorder__oxdeladdinfo->value }]" [{ $readonly }]>
             [{ oxinputhelp ident="HELP_GENERAL_EXTRAINFO" }]
+            </td>
+        </tr>
+        <tr>
+            <td class="edittext">
+            [{ oxmultilang ident="GENERAL_STATE" }]
+            </td>
+            <td class="edittext">
+            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxdelstateid->fldmax_length}]" name="editval[oxorder__oxdelstateid]" value="[{$edit->oxorder__oxdelstateid->value }]" [{ $readonly }]>
+            [{ oxinputhelp ident="HELP_GENERAL_STATE" }]
             </td>
         </tr>
         <tr>

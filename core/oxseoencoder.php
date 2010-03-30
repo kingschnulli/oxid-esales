@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 25873 2010-02-18 15:03:27Z arvydas $
+ * @version   SVN: $Id: oxseoencoder.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 /**
@@ -606,7 +606,7 @@ class oxSeoEncoder extends oxSuperCfg
         }
 
         // removing any special characters
-        $sRegExp = '/[^A-Za-z0-9'.preg_quote( self::$_sSeparator, '/').'\/]+/';
+        $sRegExp = '/[^A-Za-z0-9'.preg_quote( self::$_sSeparator, '/').preg_quote( self::$_sPrefix, '/').'\/]+/';
         $sUri  = trim( $oStr->preg_replace( array( "/\W*\/\W*/", $sRegExp ), array( "/", self::$_sSeparator ), $sUri ), self::$_sSeparator );
 
         // SEO id is empty ?
@@ -870,20 +870,21 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _getPageUri( $oObject, $sType, $sStdUrl, $sSeoUrl, $sParams, $iLang = null, $blFixed = false )
     {
-        if (!isset($iLang)) {
+        if ( !isset( $iLang ) ) {
             $iLang = $oObject->getLanguage();
         }
         $iShopId = $this->getConfig()->getShopId();
 
-        //load details link from DB
-        if ( ( $sOldSeoUrl = $this->_loadFromDb( $sType, $oObject->getId(), $iLang, $iShopId, $sParams ) ) ) {
-            if ( $sOldSeoUrl === $sSeoUrl ) {
-                return $sSeoUrl;
-            }
-            $this->_copyToHistory( $oObject->getId(), $iShopId, $iLang, $sType );
+        //load page link from DB
+        $sOldSeoUrl = $this->_loadFromDb( $sType, $oObject->getId(), $iLang, $iShopId, $sParams );
+        if ( !$sOldSeoUrl ) {
+            // generating new..
+            $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $oObject->getId(), $iLang );
+            $this->_saveToDb( $sType, $oObject->getId(), $sStdUrl, $sSeoUrl, $iLang, $iShopId, (int) $blFixed, false, false, $sParams );
+        } else {
+            // using old
+            $sSeoUrl = $sOldSeoUrl;
         }
-
-        $this->_saveToDb( $sType, $oObject->getId(), $sStdUrl, $sSeoUrl, $iLang, $iShopId, (int) $blFixed, false, false, $sParams );
         return $sSeoUrl;
     }
 
