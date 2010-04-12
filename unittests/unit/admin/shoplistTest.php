@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: shoplistTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: shoplistTest.php 27095 2010-04-08 07:45:02Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -41,8 +41,12 @@ class Unit_Admin_ShopListTest extends OxidTestCase
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return array(1);}");
         oxTestModules::addFunction("oxUtils", "checkAccessRights", "{return true;}");
 
-        // testing..
-        $oView = $this->getProxyClass( "Shop_List" );
+        $oSess = $this->getMock('oxsession', array('checkSessionChallenge'));
+        $oSess->expects($this->once())->method('checkSessionChallenge')->will($this->returnValue(true));
+
+        $oView = $this->getMock($this->getProxyClassName('Shop_List'), array('getSession'));
+        $oView->expects($this->any())->method('getSession')->will($this->returnValue($oSess));
+
         $oView->init();
 
         $this->assertEquals( "oxshops.oxname", $oView->getNonPublicVar( "_sDefSort" ) );
@@ -90,7 +94,12 @@ class Unit_Admin_ShopListTest extends OxidTestCase
         oxTestModules::addFunction( 'oxshop', 'load', '{ return true; }' );
         oxTestModules::addFunction( 'oxshop', 'delete', '{ return true; }' );
 
-        $oView = new Shop_List();
+        $oSess = $this->getMock('oxsession', array('checkSessionChallenge'));
+        $oSess->expects($this->any())->method('checkSessionChallenge')->will($this->returnValue(true));
+
+        $oView = $this->getMock($this->getProxyClassName('Shop_List'), array('getSession'));
+        $oView->expects($this->any())->method('getSession')->will($this->returnValue($oSess));
+
         $oView->deleteEntry();
     }
 }

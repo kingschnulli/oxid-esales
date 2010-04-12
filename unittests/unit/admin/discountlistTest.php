@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: discountlistTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: discountlistTest.php 27089 2010-04-07 14:28:32Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -40,8 +40,12 @@ class Unit_Admin_DiscountListTest extends OxidTestCase
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return array(1);}");
         oxTestModules::addFunction("oxUtils", "checkAccessRights", "{return true;}");
 
-        // testing..
-        $oView = $this->getProxyClass( "Discount_List" );
+        $oSess = $this->getMock('oxsession', array('checkSessionChallenge'));
+        $oSess->expects($this->once())->method('checkSessionChallenge')->will($this->returnValue(true));
+
+        $oView = $this->getMock($this->getProxyClassName('Discount_List'), array('getSession'));
+        $oView->expects($this->any())->method('getSession')->will($this->returnValue($oSess));
+
         $oView->init();
 
         $this->assertEquals( "oxdiscount", $oView->getNonPublicVar( "_sListClass" ) );

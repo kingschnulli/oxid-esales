@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxuserTest.php 27000 2010-04-01 12:41:51Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -182,7 +182,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
 
         $myDB->execute( 'delete from oxuser where oxusername="aaa@bbb.lt" ' );
         $myDB->execute( 'delete from oxconfig where oxshopid != "'.oxConfig::getInstance()->getBaseShopId().'" ' );
-
+        $myDB->execute( 'delete from oxaddress where oxid like "test%" ' );
         // resetting globally admin mode
         $oUser = new oxuser();
         $oUser->setAdminMode( null );
@@ -2886,7 +2886,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
      */
     public function testLoginIsDemoAndAdminButNonAdminUser_Logout()
     {
-        oxTestModules::addFunction('oxUtilsServer', 'getOxCookie', '{ return array(1); }');
+        oxTestModules::addFunction('oxUtilsServer', 'getOxCookie', '{ return ""; }');
         modConfig::getInstance()->setConfigParam( 'blDemoShop', 1 );
 
         $oUser = $this->getMock( 'oxuser', array( 'isAdmin' ));

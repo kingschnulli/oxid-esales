@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: articlelistTest.php 26619 2010-03-17 13:44:29Z arvydas $
+ * @version   SVN: $Id: articlelistTest.php 27094 2010-04-08 07:34:16Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -208,7 +208,12 @@ class Unit_Admin_ArticleListTest extends OxidTestCase
 
         modConfig::setParameter( "oxid", "testId" );
 
-        $oView = new Article_List();
+        $oSess = $this->getMock('oxsession', array('checkSessionChallenge'));
+        $oSess->expects( $this->any() )->method('checkSessionChallenge')->will($this->returnValue(true));
+
+        $oView = $this->getMock( "Article_List", array( "_authorize", 'getSession' ) );
+        $oView->expects( $this->any() )->method( '_authorize' )->will( $this->returnValue( true ) );
+        $oView->expects( $this->any() )->method( 'getSession' )->will( $this->returnValue( $oSess ) );
         $oView->deleteEntry();
     }
 

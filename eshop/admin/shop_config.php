@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_config.php 26303 2010-03-04 16:11:37Z sarunas $
+ * @version   SVN: $Id: shop_config.php 27022 2010-04-06 06:48:21Z arvydas $
  */
 
 /**
@@ -143,7 +143,7 @@ class Shop_Config extends oxAdminDetails
 
         // #251A passing country list
         $oCountryList = oxNew( "oxCountryList" );
-        $oCountryList->loadActiveCountries( oxLang::getInstance()->getTplLanguage() );
+        $oCountryList->loadActiveCountries( oxLang::getInstance()->getObjectTplLanguage() );
 
         if ( isset($aConfArrs["aHomeCountry"]) && count($aConfArrs["aHomeCountry"]) && count($oCountryList)) {
             foreach ( $oCountryList as $sCountryId => $oCountry) {

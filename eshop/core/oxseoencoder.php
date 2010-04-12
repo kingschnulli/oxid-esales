@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 26071 2010-02-25 15:12:55Z sarunas $
+ * @version   SVN: $Id: oxseoencoder.php 27026 2010-04-06 07:00:32Z arvydas $
  */
 
 /**
@@ -1080,7 +1080,7 @@ class oxSeoEncoder extends oxSuperCfg
         $oDb = oxDb::getDb();
 
         $iShopId = ( !isset( $iShopId ) ) ? $this->getConfig()->getShopId():$iShopId;
-        $iLang   = ( !isset( $iLang ) ) ? oxLang::getInstance()->getTplLanguage():((int) $iLang);
+        $iLang   = ( !isset( $iLang ) ) ? oxLang::getInstance()->getObjectTplLanguage():((int) $iLang);
         $sParams = ( !isset( $sParams ) ) ? "order by oxparams" : "and oxparams=".$oDb->quote( $sParams );
 
         return $oDb->getOne( "select {$sMetaType} from oxseo where oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxshopid = " . $oDb->quote( $iShopId )." and oxlang = '{$iLang}' {$sParams}" );

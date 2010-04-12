@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: test_utils.php 26669 2010-03-19 09:40:53Z sarunas $
+ * @version   SVN: $Id: test_utils.php 27089 2010-04-07 14:28:32Z sarunas $
  */
 
 define ('MAX_LOOP_AMOUNT', 4);
@@ -724,12 +724,12 @@ class modInstances
 
     public static function addMod( $sModId, $oObject )
     {
-        self::$_aInst[$sModId.oxClassCacheKey()] = $oObject;
+        self::$_aInst[strtolower($sModId).oxClassCacheKey()] = $oObject;
     }
 
     public static function getMod( $sModId )
     {
-        return self::$_aInst[$sModId.oxClassCacheKey()];
+        return self::$_aInst[strtolower($sModId).oxClassCacheKey()];
     }
 
     public static function cleanup()

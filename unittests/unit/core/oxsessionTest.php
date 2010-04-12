@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxsessionTest.php 27104 2010-04-09 09:13:43Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -573,11 +573,24 @@ class Unit_Core_oxsessionTest extends OxidTestCase
     /**
      * oxsession::isSwappedClient() as for differnet clients
      */
-    function testIsSwappedClientAsDifferentClient()
+    function testIsSwappedClientAsDifferentUserAgent()
     {
-        oxAddClassModule('Unit_oxsessionTest_oxUtilsServer', 'oxUtilsServer');
-        $this->assertFalse( $this->oSession->UNITcheckUserAgent( 'browser1', 'browser1' ) );
-        $this->assertTrue( $this->oSession->UNITcheckUserAgent( 'browser1', 'browser2' ) );
+        $oSubj = $this->getMock("oxSession", array('_checkUserAgent'));
+        $oSubj->expects($this->any())->method('_checkUserAgent')->will($this->returnValue(true));
+        $this->assertTrue( $oSubj->UNITisSwappedClient() );
+    }
+
+    /**
+     * oxsession::isSwappedClient() as for differnet clients with correct token
+     */
+    function testIsSwappedClientAsDifferentUserAgentCorrectToken()
+    {
+        modConfig::getInstance()->setParameter('rtoken', 'test1');
+
+        $oSubj = $this->getMock("oxSession", array('_checkUserAgent'));
+        $oSubj->expects($this->any())->method('_checkUserAgent')->will($this->returnValue(true));
+        $oSubj->setVar('_rtoken', 'test1');
+        $this->assertFalse( $oSubj->UNITisSwappedClient() );
     }
 
     /**
@@ -1233,47 +1246,20 @@ class Unit_Core_oxsessionTest extends OxidTestCase
 
     function testGetRequestChallengeToken()
     {
-        oxTestModules::addFunction('oxsession', 'setpvar($k, $v)', '{$this->$k=$v;}');
-        oxTestModules::addFunction('oxsession', 'getpvar($k)', '{return $this->$k;}');
         $oSession = oxNew('oxsession');
-
-        $oSession->setpvar('_sSessionChallenge', 'knakdmdm');
-        $this->assertEquals('knakdmdm', $oSession->getRequestChallengeToken());
-        $save_SERVER = $_SERVER;
-        $save_POST   = $_POST;
-        $save_GET    = $_GET;
-        $e = null;
-        try {
-            $_POST['stoken'] = 'post_12@#dfd__';
-            $_GET['stoken'] = 'get_12@#dfd__';
-
-            $_SERVER['REQUEST_METHOD'] = 'POST';
-            $oSession->setpvar('_sSessionChallenge', '');
-            $this->assertEquals('post12dfd', $oSession->getRequestChallengeToken());
-            $this->assertEquals('post12dfd', $oSession->getpvar('_sSessionChallenge'));
-
-            $_SERVER['REQUEST_METHOD'] = 'GET';
-            $oSession->setpvar('_sSessionChallenge', '');
-            $this->assertEquals('get12dfd', $oSession->getRequestChallengeToken());
-            $this->assertEquals('get12dfd', $oSession->getpvar('_sSessionChallenge'));
-        } catch (Exception $e) {}
-
-        $_SERVER = $save_SERVER;
-        $_POST   = $save_POST;
-        $_GET    = $save_GET;
-
-        if (isset($e)) {
-            throw $e;
-        }
+        modConfig::setParameter('stoken', 'asd');
+        $this->assertEquals('asd', $oSession->getRequestChallengeToken());
+        modConfig::setParameter('stoken', 'asd#asd$$');
+        $this->assertEquals('asdasd', $oSession->getRequestChallengeToken());
     }
 
     public function testGetSessionChallengeToken()
     {
-        modSession::getInstance()->setVar('stoken', '');
+        modSession::getInstance()->setVar('sess_stoken', '');
         $oSession = $this->getMock('oxSession', array('_initNewSessionChallenge'));
-        $oSession->expects($this->once())->method('_initNewSessionChallenge')->will($this->evalFunction('{modSession::getInstance()->setVar("stoken", "newtok");}'));
+        $oSession->expects($this->once())->method('_initNewSessionChallenge')->will($this->evalFunction('{modSession::getInstance()->setVar("sess_stoken", "newtok");}'));
         $this->assertEquals('newtok', $oSession->getSessionChallengeToken());
-        modSession::getInstance()->setVar('stoken', 'asd541)$#sdf');
+        modSession::getInstance()->setVar('sess_stoken', 'asd541)$#sdf');
         $this->assertEquals('asd541sdf', $oSession->getSessionChallengeToken());
     }
 
@@ -1297,24 +1283,19 @@ class Unit_Core_oxsessionTest extends OxidTestCase
 
     public function testInitNewSessionChallenge()
     {
-        modSession::getInstance()->setVar('stoken', '');
+        modSession::getInstance()->setVar('sess_stoken', '');
         $oSession = new oxSession();
-        $this->assertEquals('', modSession::getInstance()->getVar('stoken'));
+        $this->assertEquals('', modSession::getInstance()->getVar('sess_stoken'));
         $this->assertEquals('', $oSession->getRequestChallengeToken());
 
         $oSession->UNITinitNewSessionChallenge();
-        $s1 = modSession::getInstance()->getVar('stoken');
-        $r1 = $oSession->getRequestChallengeToken();
+        $s1 = modSession::getInstance()->getVar('sess_stoken');
         $this->assertNotEquals('', $s1);
-        $this->assertNotEquals('', $r1);
 
         $oSession->UNITinitNewSessionChallenge();
-        $s2 = modSession::getInstance()->getVar('stoken');
-        $r2 = $oSession->getRequestChallengeToken();
+        $s2 = modSession::getInstance()->getVar('sess_stoken');
         $this->assertNotEquals('', $s2);
-        $this->assertNotEquals('', $r2);
         $this->assertNotEquals($s1, $s2);
-        $this->assertNotEquals($r1, $r2);
     }
 
     public function testInitNewSessionRecreatesChallengeToken()
@@ -1445,5 +1426,55 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         if ($e) {
             throw $e;
         };
+    }
+
+    public function testGetRemoteAccessToken()
+    {
+        $oSubj = new oxSession();
+        $sTestToken = $oSubj->getRemoteAccessToken();
+        $this->assertEquals(8, strlen($sTestToken));
+    }
+
+    public function testGetRemoteAccessTokenNotGenerated()
+    {
+        $oSubj = new oxSession();
+        $oSubj->deleteVar('_rtoken');
+        $sTestToken = $oSubj->getRemoteAccessToken(false);
+
+        $this->assertNull($sTestToken);
+        //generating one
+        $oSubj->getRemoteAccessToken();
+        $sTestToken = $oSubj->getRemoteAccessToken(false);
+        //expecting real tokent
+        $this->assertEquals(8, strlen($sTestToken));
+    }
+
+    public function testGetRemoteAccessTokenTwice()
+    {
+        $oSubj = new oxSession();
+        $oSubj->deleteVar('_rtoken');
+        $sToken1 = $oSubj->getRemoteAccessToken();
+        $sToken2 = $oSubj->getRemoteAccessToken();
+
+        $this->assertEquals($sToken1, $sToken2);
+        $this->assertEquals(8, strlen($sToken2));
+    }
+
+    public function testIsRemoteAccessTokenValid()
+    {
+        modConfig::setParameter('rtoken', 'test1');
+
+        $oSubj = $this->getProxyClass('oxSession');
+        $oSubj->setVar('_rtoken', 'test1');
+        $this->assertTrue($oSubj->UNITisValidRemoteAccessToken());
+    }
+
+    public function testIsTokenValidNot()
+    {
+        modConfig::setParameter('stoken', 'test1');
+
+        $oSubj = $this->getProxyClass('oxSession');
+        $oSubj->setVar('_stoken', 'test2');
+        $this->assertFalse($oSubj->UNITisValidRemoteAccessToken());
     }
 }

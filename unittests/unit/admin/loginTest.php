@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: loginTest.php 26660 2010-03-18 17:09:03Z rimvydas.paskevicius $
+ * @version   SVN: $Id: loginTest.php 27084 2010-04-07 13:47:56Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -92,19 +92,29 @@ class Unit_Admin_loginTest extends OxidTestCase
      */
     public function testGetAvailableLanguages_withoutCookies_DE()
     {
-        $oLang = new stdClass();
-        $oLang->sValue = "Deutsch";
-        $oLang->sFile = "de";
-        $oLang->blSelected = true;
+        oxTestModules::addFunction( 'oxUtilsServer', 'getOxCookie', '{ return null; }');
 
-        $aLanguages[0] = $oLang;
+        $oLang = new oxStdClass();
+        $oLang->id = 0;
+        $oLang->oxid = "de";
+        $oLang->abbr = "de";
+        $oLang->name = "Deutsch";
+        $oLang->active = 1;
+        $oLang->sort = 1;
+        $oLang->selected = 1;
 
-        $oLang = new stdClass();
-        $oLang->sValue = "English";
-        $oLang->sFile = "en";
-        $oLang->blSelected = false;
+        $aLanguages[] = $oLang;
 
-        $aLanguages[1] = $oLang;
+        $oLang = new oxStdClass();
+        $oLang->id = 1;
+        $oLang->oxid = "en";
+        $oLang->abbr = "en";
+        $oLang->name = "English";
+        $oLang->active = 1;
+        $oLang->sort = 2;
+        $oLang->selected = 0;
+
+        $aLanguages[] = $oLang;
 
         $oLogin = $this->getMock( 'login', array( '_getBrowserLanguage' ) );
         $oLogin->expects( $this->once() )->method( '_getBrowserLanguage' )->will( $this->returnValue( 'de' ) );
@@ -121,19 +131,27 @@ class Unit_Admin_loginTest extends OxidTestCase
      */
     public function testGetAvailableLanguages_withoutCookies_EN()
     {
-        $oLang = new stdClass();
-        $oLang->sValue = "Deutsch";
-        $oLang->sFile = "de";
-        $oLang->blSelected = false;
+        $oLang = new oxStdClass();
+        $oLang->id = 0;
+        $oLang->oxid = "de";
+        $oLang->abbr = "de";
+        $oLang->name = "Deutsch";
+        $oLang->active = 1;
+        $oLang->sort = 1;
+        $oLang->selected = 0;
 
-        $aLanguages[0] = $oLang;
+        $aLanguages[] = $oLang;
 
-        $oLang = new stdClass();
-        $oLang->sValue = "English";
-        $oLang->sFile = "en";
-        $oLang->blSelected = true;
+        $oLang = new oxStdClass();
+        $oLang->id = 1;
+        $oLang->oxid = "en";
+        $oLang->abbr = "en";
+        $oLang->name = "English";
+        $oLang->active = 1;
+        $oLang->sort = 2;
+        $oLang->selected = 1;
 
-        $aLanguages[1] = $oLang;
+        $aLanguages[] = $oLang;
 
         $oLogin = $this->getMock( 'login', array( '_getBrowserLanguage' ) );
         $oLogin->expects( $this->once() )->method( '_getBrowserLanguage' )->will( $this->returnValue( 'en' ) );
@@ -150,19 +168,27 @@ class Unit_Admin_loginTest extends OxidTestCase
      */
     public function testGetAvailableLanguages_withCookies_DE()
     {
-        $oLang = new stdClass();
-        $oLang->sValue = "Deutsch";
-        $oLang->sFile = "de";
-        $oLang->blSelected = true;
+        $oLang = new oxStdClass();
+        $oLang->id = 0;
+        $oLang->oxid = "de";
+        $oLang->abbr = "de";
+        $oLang->name = "Deutsch";
+        $oLang->active = 1;
+        $oLang->sort = 1;
+        $oLang->selected = 0;
 
-        $aLanguages[0] = $oLang;
+        $aLanguages[] = $oLang;
 
-        $oLang = new stdClass();
-        $oLang->sValue = "English";
-        $oLang->sFile = "en";
-        $oLang->blSelected = false;
+        $oLang = new oxStdClass();
+        $oLang->id = 1;
+        $oLang->oxid = "en";
+        $oLang->abbr = "en";
+        $oLang->name = "English";
+        $oLang->active = 1;
+        $oLang->sort = 2;
+        $oLang->selected = 1;
 
-        $aLanguages[1] = $oLang;
+        $aLanguages[] = $oLang;
 
         // browser lang does not affect selected lang when cookie is set
         $oLogin = $this->getMock( 'login', array( '_getBrowserLanguage' ) );

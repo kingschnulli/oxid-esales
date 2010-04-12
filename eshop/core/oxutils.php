@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 26909 2010-03-26 17:27:59Z tomas $
+ * @version   SVN: $Id: oxutils.php 26999 2010-04-01 12:41:33Z vilma $
  */
 
 /**
@@ -237,7 +237,7 @@ class oxUtils extends oxSuperCfg
         if (!$oActCur) {
             $oActCur = $this->getConfig()->getActShopCurrencyObject();
         }
-        $sFormated = number_format( $dValue, $oActCur->decimal, $oActCur->dec, $oActCur->thousand);
+        $sFormated = number_format( (double)$dValue, $oActCur->decimal, $oActCur->dec, $oActCur->thousand);
 
         return $sFormated;
     }

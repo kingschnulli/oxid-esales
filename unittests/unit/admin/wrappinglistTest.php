@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: wrappinglistTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: wrappinglistTest.php 27089 2010-04-07 14:28:32Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -39,7 +39,13 @@ class Unit_Admin_WrappingListTest extends OxidTestCase
     {
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return array(1);}");
         oxTestModules::addFunction("oxUtils", "checkAccessRights", "{return true;}");
-        $oView = $this->getProxyClass( "Wrapping_List" );
+
+        $oSess = $this->getMock('oxsession', array('checkSessionChallenge'));
+        $oSess->expects($this->once())->method('checkSessionChallenge')->will($this->returnValue(true));
+
+        $oView = $this->getMock($this->getProxyClassName('Wrapping_List'), array('getSession'));
+        $oView->expects($this->any())->method('getSession')->will($this->returnValue($oSess));
+
         $oView->init();
         $sWrapView = getViewName('oxwrapping');
         $this->assertEquals( "$sWrapView.oxname", $oView->getNonPublicVar( "_sDefSort" ) );

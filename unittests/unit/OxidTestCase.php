@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: OxidTestCase.php 26360 2010-03-08 09:13:22Z sarunas $
+ * @version   SVN: $Id: OxidTestCase.php 27089 2010-04-07 14:28:32Z sarunas $
  */
 
 
@@ -235,16 +235,14 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
         oxDb::getDb()->Execute($sQ);
     }
 
-
     /**
-     * Create proxy of given class. Proxy allows to test of protected class methods and to access non public members
+     * Create proxy class of given class. Proxy allows to test of protected class methods and to access non public members
      *
      * @param string $superClassName
-     * @param array|null $constructorParams parameters for contructor
      *
-     * @return object
+     * @return string
      */
-    public function getProxyClass($superClassName, array $params = null)
+    public function getProxyClassName($superClassName)
     {
         $proxyClassName = "{$superClassName}Proxy";
 
@@ -274,7 +272,20 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
                 }";
             eval($class);
         }
+        return $proxyClassName;
+    }
 
+    /**
+     * Create proxy of given class. Proxy allows to test of protected class methods and to access non public members
+     *
+     * @param string $superClassName
+     * @param array|null $constructorParams parameters for contructor
+     *
+     * @return object
+     */
+    public function getProxyClass($superClassName, array $params = null)
+    {
+        $proxyClassName = $this->getProxyClassName($superClassName);
         if (!empty($params)) {
             // Create an instance using Reflection, because constructor has parameters
             $class = new ReflectionClass($proxyClassName);

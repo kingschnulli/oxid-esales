@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 26901 2010-03-26 15:56:26Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 27029 2010-04-06 07:05:30Z arvydas $
  */
 
 
@@ -32,7 +32,7 @@ http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/editing-language-f
 */
 
 $sLangName  = "Deutsch";
-$iLangNr    = 0;
+
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------

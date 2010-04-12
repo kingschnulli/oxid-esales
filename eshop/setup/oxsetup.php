@@ -1822,8 +1822,8 @@ class oxSetupController extends oxSetupCore
         $oSession = $this->getInstance( "oxSetupSession" );
 
         //setting admin area default language
-        $iAdminLang = ( $oSession->getSessionParam('setup_lang') == 'en' ) ? 1 : 0;
-        $this->getInstance( "oxSetupUtils" )->setCookie( "oxidadminlanguage", $iAdminLang, time() + 31536000, $iExpireDate, "/" );
+        $sAdminLang = $oSession->getSessionParam('setup_lang');
+        $this->getInstance( "oxSetupUtils" )->setCookie( "oxidadminlanguage", $sAdminLang, time() + 31536000, "/" );
 
         $oView = $this->getView();
         $oView->setTitle( 'STEP_1_TITLE' );
