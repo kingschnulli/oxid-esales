@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 26930 2010-03-29 13:30:53Z alfonsas $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 27168 2010-04-12 15:38:59Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -118,6 +118,21 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         $oSysReq = $this->getMock( 'oxSysRequirements', array( 'getSystemInfo' ) );
         $oSysReq->expects( $this->once() )->method( 'getSystemInfo' );
         $this->assertTrue( $oSysReq->getSysReqStatus() );
+    }
+
+    /**
+     * Testing oxSysRequirements::getReqInfoUrl()
+     *
+     * @return null
+     */
+    public function testGetReqInfoUrl()
+    {
+        $sUrl = "http://www.oxidforge.org/wiki/Installation";
+
+        $oSubj = new oxSysRequirements();
+        $this->assertEquals( $sUrl."#PHP_version_at_least_5.2.0", $oSubj->getReqInfoUrl( "php_version") );
+        $this->assertEquals( $sUrl, $oSubj->getReqInfoUrl( "none") );
+        $this->assertEquals( $sUrl."#Zend_Optimizer", $oSubj->getReqInfoUrl( "zend_optimizer") );
     }
 
 }

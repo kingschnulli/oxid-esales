@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 27102 2010-04-09 08:02:27Z tomas $
+ * @version   SVN: $Id: oxsession.php 27167 2010-04-12 15:29:44Z tomas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -601,6 +601,11 @@ class oxSession extends oxSuperCfg
     {
         if ( $this->_oBasket === null ) {
             $sBasket = self::getVar( $this->_getBasketName() );
+
+            //init oxbasketitem class first
+            //#1746
+            oxNew('oxbasketitem');
+
             if ( $sBasket && $oBasket = unserialize( $sBasket ) ) {
                 $this->setBasket( $oBasket );
             } else {
@@ -714,9 +719,9 @@ class oxSession extends oxSuperCfg
                 $sSid = $this->sid();
             }
             if ($sSid) {
-                if ( !preg_match('/(\?|&(amp;)?)sid=/i', $sUrl) && (false === strpos($sUrl, $sSid))) {
-                    if (!preg_match('/(\?|&(amp;)?)$/', $sUrl)) {
-                        $oStr = getStr();
+                $oStr = getStr();
+                if ( !$oStr->preg_match('/(\?|&(amp;)?)sid=/i', $sUrl) && (false === $oStr->strpos($sUrl, $sSid))) {
+                    if (!$oStr->preg_match('/(\?|&(amp;)?)$/', $sUrl)) {
                         $sUrl .= ( $oStr->strstr( $sUrl, '?' ) !== false ?  '&amp;' : '?' );
                     }
                     $sUrl .= $sSid . '&amp;';
@@ -843,38 +848,6 @@ class oxSession extends oxSuperCfg
 
         return $blCheck;
     }
-
-    /**
-     * Checking by timeout ( 60 minutes inactive, then kick him )
-     * Global session Timeout in oxconfig::StartupDatabase is set to 1 hour
-     *
-     * @return bool
-     */
-    /*
-    protected function _checkByTimeOut()
-    {
-        $myConfig = $this->getConfig();
-        $iTimeStamp = oxUtilsDate::getInstance()->getTime();
-
-        // #660
-        $iSessionTimeout = null;
-        if( $this->isAdmin() )
-            $iSessionTimeout = $myConfig->getConfigParam( 'iSessionTimeoutAdmin' );
-        if ( !$this->isAdmin() || !$iSessionTimeout )
-            $iSessionTimeout = $myConfig->getConfigParam( 'iSessionTimeout' );
-        if (!$iSessionTimeout)
-            $iSessionTimeout = 60;
-
-        $iTimeout = 60 * $iSessionTimeout;
-        $iExistingTimeStamp = self::getVar( "sessiontimestamp");
-        if ( $iExistingTimeStamp && ( $iExistingTimeStamp + $iTimeout < $iTimeStamp ) ) {
-            $this->_sErrorMsg = "Shop timeout($iTimeStamp - $iExistingTimeStamp = ".($iTimeStamp - $iExistingTimeStamp)." ),
-                                                                                                creating new SID...<br>";
-            return true;
-        }
-        self::setVar("sessiontimestamp", $iTimeStamp);
-        return false;
-    }*/
 
     /**
      * Checking if this sid is old

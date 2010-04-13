@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpCurTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxcmpCurTest.php 27137 2010-04-09 14:30:39Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -28,32 +28,14 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 class Unit_Views_oxcmpCurTest extends OxidTestCase
 {
     /**
-     * Initialize the fixture.
-     *
-     * @return null
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-
-    /**
-     * Tear down the fixture.
-     *
-     * @return null
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-
-    /**
      * Checking if basket currency object is updated initialising currency
      * (M:825, M:890)
      */
-    public function testInit_updatesBasketCurrency()
+    public function testInitUpdatesBasketCurrency()
     {
+        $oParentView = new oxUBase();
         $oCurView = new oxcmp_cur();
+        $oCurView->setParent( $oParentView );
 
         $oCur = $oCurView->getSession()->getBasket()->getBasketCurrency();
         $this->assertEquals( 2, $oCur->decimal );

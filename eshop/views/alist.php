@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 26303 2010-03-04 16:11:37Z sarunas $
+ * @version   SVN: $Id: alist.php 27128 2010-04-09 13:43:18Z arvydas $
  */
 
 /**
@@ -542,7 +542,7 @@ class aList extends oxUBase
                 $sDesc = strip_tags( trim( $oStr->strtolower( $oProduct->getArticleLongDesc()->value ) ) );
 
                 //removing dots from string (they are not cleaned up during general string cleanup)
-                $sDesc = preg_replace( "/\./", " ", $sDesc );
+                $sDesc = $oStr->preg_replace( "/\./", " ", $sDesc );
 
                 if ( $oStr->strlen( $sDesc ) > $iMaxTextLength ) {
                     $sMidText = $oStr->substr( $sDesc, 0, $iMaxTextLength );

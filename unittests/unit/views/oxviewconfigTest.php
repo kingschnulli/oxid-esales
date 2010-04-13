@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxviewconfigTest.php 27109 2010-04-09 12:15:09Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -205,6 +205,16 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
              ->method('getConfig')
              ->will($this->returnValue($oCfg));
         $this->assertEquals('lalala', $oVC->getShowGiftWrapping());
+    }
+
+    public function testGetRemoteAccessToken()
+    {
+        $oSubj = new oxViewConfig();
+        $sTestToken1 = $oSubj->getRemoteAccessToken();
+        $sTestToken2 = $oSubj->getRemoteAccessToken();
+
+        $this->assertEquals($sTestToken1, $sTestToken2);
+        $this->assertEquals(8, strlen($sTestToken1));
     }
 
 }

@@ -20,7 +20,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxinputvalidator.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxinputvalidator.php 27126 2010-04-09 13:42:03Z arvydas $
  */
 
 /**
@@ -152,6 +152,7 @@ class oxInputValidator
             case "oxiddebitnote":
 
                 $blOK = false;
+                $oStr = getStr();
 
                 foreach ( $this->_aRequiredDCFields as $sFieldName ) {
                     if ( !isset( $aDynvalue[$sFieldName] ) || !trim( $aDynvalue[$sFieldName] ) ) {
@@ -164,12 +165,12 @@ class oxInputValidator
                 $aDynvalue['lsktonr'] = str_replace( ' ', '', $aDynvalue['lsktonr'] );
 
                 //if konto number is shorter than 10, add zeros in front of number
-                if ( strlen( $aDynvalue['lsktonr'] ) < 10 ) {
-                    $sNewNum = str_repeat( '0', 10 - strlen( $aDynvalue['lsktonr'] ) ).$aDynvalue['lsktonr'];
+                if ( $oStr->strlen( $aDynvalue['lsktonr'] ) < 10 ) {
+                    $sNewNum = str_repeat( '0', 10 - $oStr->strlen( $aDynvalue['lsktonr'] ) ).$aDynvalue['lsktonr'];
                     $aDynvalue['lsktonr'] = $sNewNum;
                 }
 
-                if ( preg_match( "/^\d{5,8}$/", $aDynvalue['lsblz'] ) && preg_match( "/\d{10}/", $aDynvalue['lsktonr'] ) ) {
+                if ( $oStr->preg_match( "/^\d{5,8}$/", $aDynvalue['lsblz'] ) && $oStr->preg_match( "/\d{10}/", $aDynvalue['lsktonr'] ) ) {
                     $blOK = true;
                 }
                 break;

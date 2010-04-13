@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 27016 2010-04-06 06:43:36Z arvydas $
+ * @version   SVN: $Id: oxemail.php 27121 2010-04-09 13:39:23Z arvydas $
  */
 /**
  * Includes PHP mailer class.
@@ -342,14 +342,14 @@ class oxEmail extends PHPMailer
      * returns smtp url which should be used for fsockopen
      *
      * @param string $sUrl initial smtp
-     * 
+     *
      * @return string
      */
     protected function _setSmtpProtocol($sUrl)
     {
         $sProtocol = '';
         $sSmtpHost = $sUrl;
-        if (preg_match('@^([0-9a-z]+://)?(.*)$@i', $sUrl, $m)) {
+        if ( getStr()->preg_match('@^([0-9a-z]+://)?(.*)$@i', $sUrl, $m ) ) {
             if ($m[1]) {
                 if (($m[1] == 'ssl://') || ($m[1] == 'tls://')) {
                     $this->set( "SMTPSecure", substr($m[1], 0, 3) );
@@ -406,7 +406,7 @@ class oxEmail extends PHPMailer
         $blIsSmtp = false;
         if ( $sSmtpHost ) {
             $sSmtpPort = $this->SMTP_PORT;
-            if (preg_match('@^(.*?)(:([0-9]+))?$@i', $sSmtpHost, $m)) {
+            if ( getStr()->preg_match('@^(.*?)(:([0-9]+))?$@i', $sSmtpHost, $m)) {
                 $sSmtpHost = $m[1];
                 $sSmtpPort = (int)$m[3];
                 if (!$sSmtpPort) {
@@ -1308,7 +1308,7 @@ class oxEmail extends PHPMailer
     public function setBody( $sBody = null, $blClearSid = true )
     {
         if ( $blClearSid ) {
-            $sBody = preg_replace("/sid=[A-Z0-9\.]+/i", "sid=x&amp;shp=" . $this->getConfig()->getShopId(), $sBody);
+            $sBody = getStr()->preg_replace("/sid=[A-Z0-9\.]+/i", "sid=x&amp;shp=" . $this->getConfig()->getShopId(), $sBody);
         }
 
         $this->set( "Body", $sBody );
@@ -1336,7 +1336,7 @@ class oxEmail extends PHPMailer
     public function setAltBody( $sAltBody = null, $blClearSid = true )
     {
         if ( $blClearSid ) {
-            $sAltBody = preg_replace("/sid=[A-Z0-9\.]+/i", "sid=x&amp;shp=" . $this->getConfig()->getShopId(), $sAltBody);
+            $sAltBody = getStr()->preg_replace("/sid=[A-Z0-9\.]+/i", "sid=x&amp;shp=" . $this->getConfig()->getShopId(), $sAltBody);
         }
 
         // A. alt body is used for plain text emails so we should eliminate HTML entities

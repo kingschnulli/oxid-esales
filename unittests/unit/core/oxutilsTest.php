@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxutilsTest.php 27144 2010-04-09 14:41:33Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1072,5 +1072,49 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $this->assertEquals(0, count(oxUtilsView::getInstance()->getTemplateOutputCall));
         $this->assertEquals(1, count(oxUtils::getInstance()->showMessageAndExitCall));
         $this->assertEquals("Page not found.", oxUtils::getInstance()->showMessageAndExitCall[0][0]);
+    }
+
+    public function testToPhpFileCache()
+    {
+        $sTestArray = array("testVal1", "key1" => "testVal2");
+        oxUtils::getInstance()->toPhpFileCache("testVal", $sTestArray);
+
+        $sFileName = oxUtils::getInstance()->getCacheFilePath("testVal", false, 'php');
+
+        include($sFileName);
+
+        $this->assertEquals($_aCacheContents, $sTestArray);
+
+        unlink($sFileName);
+    }
+
+    /**
+     * Test for bug #1737
+     *
+     */
+    public function testToPhpFileCacheException() {
+        $oSubj = $this->getMock("oxUtils", array("getCacheFilePath"));
+        $oSubj->expects($this->any())->method("getCacheFilePath")->will($this->returnValue(false));
+
+        modInstances::addMod("oxUtils", $oSubj);
+
+        $sTestArray = array("testVal1", "key1" => "testVal2");
+        oxUtils::getInstance()->toPhpFileCache("testVal2", $sTestArray);
+        $aCacheContents = oxUtils::getInstance()->fromPhpFileCache("testVal2");
+
+        $this->assertNull($aCacheContents);
+
+
+    }
+
+    public function testFromPhpFileCache() {
+        $sTestArray = array("testVal1", "key1" => "testVal2");
+        oxUtils::getInstance()->toPhpFileCache("testVal", $sTestArray);
+
+        $sFileName = oxUtils::getInstance()->getCacheFilePath("testVal", false, 'php');
+
+        $aCacheContents = oxUtils::getInstance()->fromPhpFileCache("testVal");
+
+        $this->assertEquals($aCacheContents, $sTestArray);
     }
 }

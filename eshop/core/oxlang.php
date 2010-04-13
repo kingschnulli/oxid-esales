@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 27105 2010-04-09 11:55:20Z arvydas $
+ * @version   SVN: $Id: oxlang.php 27120 2010-04-09 13:38:32Z arvydas $
  */
 
 /**
@@ -890,17 +890,17 @@ class oxLang extends oxSuperCfg
 
         if ( !$this->isAdmin() ) {
             $sParam = $this->getUrlLang( $iLang );
-            if (!preg_match('/(\?|&(amp;)?)lang=[0-9]+/', $sUrl)  && ($iLang != oxConfig::getInstance()->getConfigParam( 'sDefaultLang' ))) {
+            if ( !$oStr->preg_match('/(\?|&(amp;)?)lang=[0-9]+/', $sUrl)  && ($iLang != oxConfig::getInstance()->getConfigParam( 'sDefaultLang' ))) {
                 if ( $sUrl ) {
                     if ($oStr->strpos( $sUrl, '?') === false) {
                         $sUrl .= "?";
-                    } elseif (!preg_match('/(\?|&(amp;)?)$/', $sUrl)) {
+                    } elseif ( !$oStr->preg_match('/(\?|&(amp;)?)$/', $sUrl ) ) {
                         $sUrl .= "&amp;";
                     }
                 }
                 $sUrl .= $sParam."&amp;";
             } else {
-                $sUrl = preg_replace('/(\?|&(amp;)?)lang=[0-9]+/', '\1'.$sParam, $sUrl);
+                $sUrl = getStr()->preg_replace('/(\?|&(amp;)?)lang=[0-9]+/', '\1'.$sParam, $sUrl);
             }
         }
 

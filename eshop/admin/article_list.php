@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_list.php 27060 2010-04-06 14:04:44Z alfonsas $
+ * @version   SVN: $Id: article_list.php 27134 2010-04-09 13:50:28Z arvydas $
  */
 
 /**
@@ -209,9 +209,10 @@ class Article_List extends oxAdminList
         switch ($sType) {
             // add category
             case 'cat':
+                $oStr = getStr();
                 $sO2CView = getViewName( "oxobject2category" );
                 $sInsert  = "from $sTable left join $sO2CView on $sTable.oxid = $sO2CView.oxobjectid where $sO2CView.oxcatnid = ".oxDb::getDb()->quote($sValue)." and ";
-                $sSql = preg_replace( "/from\s+$sTable\s+where/i", $sInsert, $sSql);
+                $sSql = $oStr->preg_replace( "/from\s+$sTable\s+where/i", $sInsert, $sSql);
                 break;
             // add category
             case 'mnf':

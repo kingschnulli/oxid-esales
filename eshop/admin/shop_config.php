@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_config.php 27022 2010-04-06 06:48:21Z arvydas $
+ * @version   SVN: $Id: shop_config.php 27133 2010-04-09 13:48:22Z arvydas $
  */
 
 /**
@@ -295,11 +295,12 @@ class Shop_Config extends oxAdminDetails
      */
     protected function _multilineToAarray( $sMultiline )
     {
+        $oStr = getStr();
         $aArr = array();
         $aLines = explode( "\n", $sMultiline );
         foreach ( $aLines as $sLine ) {
             $sLine = trim( $sLine );
-            if ( $sLine != "" && preg_match( "/(.+)=>(.+)/", $sLine, $aRegs ) ) {
+            if ( $sLine != "" && $oStr->preg_match( "/(.+)=>(.+)/", $sLine, $aRegs ) ) {
                 $sKey = trim( $aRegs[1] );
                 $sVal = trim( $aRegs[2] );
                 if ( $sKey != "" && $sVal != "" ) {

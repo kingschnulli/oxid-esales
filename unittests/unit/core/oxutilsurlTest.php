@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsurlTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxutilsurlTest.php 27136 2010-04-09 14:26:47Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,17 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
     public function testGetInstance()
     {
         $this->assertTrue( oxUtilsUrl::getInstance() instanceof oxUtilsUrl );
+    }
+
+    /**
+     * oxUtilsUrl::cleanUrl() test case
+     * @return
+     */
+    public function testCleanUrl()
+    {
+        $oUtils = new oxUtilsUrl();
+        $this->assertEquals( "http://www.myoxideshop.com/index.php", $oUtils->cleanUrl( "http://www.myoxideshop.com/index.php?param1=value1&param2=value2" ) );
+        $this->assertEquals( "http://www.myoxideshop.com/index.php?param2=value2", $oUtils->cleanUrl( "http://www.myoxideshop.com/index.php?param1=value1&param2=value2", array( "param1" ) ) );
     }
 
 
