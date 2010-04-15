@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxuserbasketTest.php 27215 2010-04-14 14:24:54Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -69,6 +69,8 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
      */
     protected function tearDown()
     {
+        $this->cleanUpTable( 'oxuserbaskets' );
+
         $oUserBasket = new oxUserBasket();
         $oUserBasket->delete( "testUserBasket" );
         $oUserBasket->delete( "testUserBasket2" );
@@ -138,6 +140,24 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
 
         $oBasket->setIsNewBasket();
         $this->assertTrue( $oBasket->getNonPublicVar( '_blNewBasket' ) );
+    }
+
+    /**
+     * Testing if after user basket create oxcreate field contains date
+     * of creation (M:1710)
+     */
+    public function testInsert_creationTime()
+    {
+        $iTime = time();
+
+        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
+        oxUtilsDate::getInstance()->UNITSetTime( $iTime );
+
+        $oBasket = new oxUserBasket();
+        $oBasket->setId( "_testUserBasketId" );
+        $oBasket->save();
+
+        $this->assertEquals( $iTime, $oBasket->oxuserbaskets__oxcreate->value );
     }
 
     /**

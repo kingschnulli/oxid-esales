@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 26935 2010-03-29 14:44:09Z sarunas $
+ * @version   SVN: $Id: oxemailTest.php 27195 2010-04-13 13:44:06Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1344,7 +1344,7 @@ class Unit_Core_oxemailTest extends OxidTestCase
 
         $oShop = $this->getMock( 'oxShop', array( 'getNoSslImageDir' ) );
         $oShop->expects( $this->once() )->method( 'getNoSslImageDir' );
-        $oShop->loadInLang( 1, oxConfig::getinstance()->getBaseShopId() );
+        //$oShop->loadInLang( 1, oxConfig::getinstance()->getBaseShopId() );
         $oShop->oxshops__oxorderemail = new oxField( 'order@oxid-esales.com' );
         $oShop->oxshops__oxname =  new oxField( 'test shop' );
 
@@ -1364,6 +1364,7 @@ class Unit_Core_oxemailTest extends OxidTestCase
 
         $oAlarm = new oxStdClass();
         $oAlarm->oxpricealarm__oxprice = new oxField( '100' );
+        $oAlarm->oxpricealarm__oxlang = new oxField( '1' );
 
         $this->assertEquals( 'zzz', $oEmail->sendPriceAlarmNotification( $aParams, $oAlarm ) );
     }

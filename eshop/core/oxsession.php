@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 27167 2010-04-12 15:29:44Z tomas $
+ * @version   SVN: $Id: oxsession.php 27187 2010-04-13 12:11:49Z arvydas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -880,13 +880,13 @@ class oxSession extends oxSuperCfg
      */
     protected function _checkCookies( $sCookieSid, $aSessCookieSetOnce )
     {
-        $myConfig   = $this->getConfig();
-        $blSwapped  = false;
+        $blSwapped = false;
+        $myConfig  = $this->getConfig();
+        $sCurrUrl  = $myConfig->isSsl() ? $myConfig->getSslShopUrl( 0 ) : $myConfig->getShopUrl( 0 );
 
-        if ( isset( $aSessCookieSetOnce[$myConfig->getCurrentShopURL()] ) ) {
-            $blSessCookieSetOnce = $aSessCookieSetOnce[$myConfig->getCurrentShopURL()];
-        } else {
-            $blSessCookieSetOnce = false;
+        $blSessCookieSetOnce = false;
+        if ( isset( $aSessCookieSetOnce[$sCurrUrl] ) ) {
+            $blSessCookieSetOnce = $aSessCookieSetOnce[$sCurrUrl];
         }
 
         //if cookie was there once but now is gone it means we have to reset
@@ -895,14 +895,14 @@ class oxSession extends oxSuperCfg
                 $this->_sErrorMsg  = "Cookie not found, creating new SID...<br>";
                 $this->_sErrorMsg .= "Cookie: $sCookieSid<br>";
                 $this->_sErrorMsg .= "Session: $blSessCookieSetOnce<br>";
-                $this->_sErrorMsg .= "URL: ".$myConfig->getCurrentShopURL()."<br>";
+                $this->_sErrorMsg .= "URL: ".$sCurrUrl."<br>";
             }
             $blSwapped = true;
         }
 
         //if we detect the cookie then set session var for possible later use
         if ( $sCookieSid == "oxid" && !$blSessCookieSetOnce ) {
-            $aSessCookieSetOnce[$myConfig->getCurrentShopURL()] = "ox_true";
+            $aSessCookieSetOnce[$sCurrUrl] = "ox_true";
             self::setVar( "sessioncookieisset", $aSessCookieSetOnce );
         }
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 27000 2010-04-01 12:41:51Z vilma $
+ * @version   SVN: $Id: oxuserTest.php 27205 2010-04-14 12:32:25Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -987,6 +987,9 @@ class Unit_Core_oxuserTest extends OxidTestCase
         // each new created user is assigned to 1 new created address
         $sAddressId = $myDB->getOne('select oxid from oxaddress where oxuserid="'.$sUserID.'"');
         $this->assertEquals( true, isset( $oAddress[$sAddressId] ) );
+
+        $oAddress = $oUser->getUserAddresses( 'xxx' );
+        $this->assertEquals( 0, count( $oAddress ) );
     }
     // 2. fetching address info for not existing user - must return 0 address
     public function testGetUserAddressesWrongInput()

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 27120 2010-04-09 13:38:32Z arvydas $
+ * @version   SVN: $Id: oxlang.php 27197 2010-04-13 14:59:58Z tomas $
  */
 
 /**
@@ -739,7 +739,7 @@ class oxLang extends oxSuperCfg
      */
     protected function _getLangTranslationArray( $iLang = null, $blAdmin = null )
     {
-        startProfile("<b>_getLangTranslationArray</b>");
+        startProfile("_getLangTranslationArray");
 
         $blAdmin = isset( $blAdmin ) ? $blAdmin : $this->isAdmin();
         $iLang = $this->_getCacheLanguageId( $blAdmin, $iLang );
@@ -754,7 +754,7 @@ class oxLang extends oxSuperCfg
             }
         }
 
-        stopProfile("<b>_getLangTranslationArray</b>");
+        stopProfile("_getLangTranslationArray");
 
         // if language array exists ..
         return ( isset( $aLangCache[$iLang] ) ? $aLangCache[$iLang] : array() );

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletterTest.php 26923 2010-03-29 08:23:58Z arvydas $
+ * @version   SVN: $Id: newsletterTest.php 27207 2010-04-14 13:11:41Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -162,6 +162,31 @@ class Unit_Views_newsletterTest extends OxidTestCase
         $iStatus = $oTestNews->getNewsletterStatus();
 
         $this->assertEquals(1, $iStatus );
+    }
+
+    /**
+     * Test get newsletter status after send.
+     *
+     * @return null
+     */
+    public function testGetNewsletterStatusAfterSendNoDbOptIn()
+    {
+        oxTestModules::addFunction( "oxemail", "send", "{return true;}" );
+        oxTestModules::addFunction( "oxemail", "sendNewsletterDbOptInMail", "{return true;}" );
+        modConfig::getInstance()->setConfigParam( 'blOrderOptInEmail', 0 );
+
+        $oTestNews = oxNew( "NewsLetter" );
+        $aParams = array();
+        $aParams['oxuser__oxusername'] = 'test@test.de';
+        $aParams['oxuser__oxfname'] = 'test';
+        $aParams['oxuser__oxlname'] = 'test';
+        $aParams['oxuser__oxcountryid'] = 'test';
+        modConfig::setParameter( 'editval', $aParams );
+        modConfig::setParameter( 'subscribeStatus', 1 );
+        $oTestNews->send();
+        $iStatus = $oTestNews->getNewsletterStatus();
+
+        $this->assertEquals(2, $iStatus );
     }
 
     /**

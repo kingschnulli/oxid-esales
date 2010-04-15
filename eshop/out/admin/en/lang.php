@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27028 2010-04-06 07:05:15Z arvydas $
+ * @version   SVN: $Id: lang.php 27208 2010-04-14 13:19:10Z vilma $
  */
 
 /*
@@ -1242,7 +1242,7 @@ $aLang = array(
 'SHOP_CONFIG_NUMBEROFCROSSSELLARTICLES'         => 'Number of Crossselling Products and Accessories which are shown with a Product',
 'SHOP_CONFIG_ORDERFOLDER'                       => 'Folders in Order Administration',
 'SHOP_CONFIG_OVERRIDEZEROABCPRICES'             => 'Use standard Product Price if no A/B/C Price is set',
-'SHOP_CONFIG_ORDEROPTINEMAIL'                   => 'Activate Double Opt-In if Users register for Newsletter during Checkout',
+'SHOP_CONFIG_ORDEROPTINEMAIL'                   => 'Activate Double Opt-In if Users register for Newsletter',
 'SHOP_CONFIG_SHOWBIRTHDAYFIELDS'                => 'Display Input Fields for Date of Birth when Users enter their personal Data',
 'SHOP_CONFIG_SORTITEMSLIST'                     => 'Users can sort Product Lists',
 'SHOP_CONFIG_SORTFIELDS'                        => 'Database Fields Product Lists can be sorted after',

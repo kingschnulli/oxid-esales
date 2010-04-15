@@ -46,6 +46,22 @@ if ( !function_exists( 'getShopBasePath' ) ) {
     }
 }
 
+if ( !function_exists( 'getInstallPath' ) ) {
+    /**
+     * Returns shop installation directory
+     *
+     * @return string
+     */
+    function getInstallPath()
+    {
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            return getShopBasePath();
+        } else {
+            return "../";
+        }
+    }
+}
+
 if ( !function_exists( 'getSystemReqCheck' ) ) {
     /**
      * Returns class responsible for system requirements check
@@ -57,7 +73,7 @@ if ( !function_exists( 'getSystemReqCheck' ) ) {
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             include_once getShopBasePath()."core/oxsysrequirements.php";
         } else {
-            include_once "../core/oxsysrequirements.php";
+            include_once getInstallPath()."core/oxsysrequirements.php";
         }
         return new oxSysRequirements();
     }
@@ -75,25 +91,9 @@ if ( !function_exists( 'getCountryList' ) ) {
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             include getShopBasePath()."admin/shop_countries.php";
         } else {
-            include "../admin/shop_countries.php";
+            include getInstallPath()."admin/shop_countries.php";
         }
         return $aCountries;
-    }
-}
-
-if ( !function_exists( 'getInstallPath' ) ) {
-    /**
-     * Returns shop installation directory
-     *
-     * @return string
-     */
-    function getInstallPath()
-    {
-        if ( defined( 'OXID_PHP_UNIT' ) ) {
-            return getShopBasePath();
-        } else {
-            return "../";
-        }
     }
 }
 
@@ -135,7 +135,7 @@ class Config
      */
     public function __construct()
     {
-        include "../config.inc.php";;
+        include getInstallPath()."config.inc.php";;
     }
 }
 }
@@ -156,7 +156,7 @@ class Conf
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             include getShopBasePath()."core/oxconfk.php";
         } else {
-            include "../core/oxconfk.php";
+            include getInstallPath()."core/oxconfk.php";
         }
     }
 }
@@ -1490,6 +1490,7 @@ class oxSetupView extends oxSetupCore
      */
     protected $_aViewParams = array();
 
+
     /**
      * Displayes current setup step template
      *
@@ -1660,7 +1661,7 @@ class oxSetupView extends oxSetupCore
      */
     public function getImageDir()
     {
-        return '../out/admin/img';
+        return getInstallPath().'out/admin/img';
     }
 
     /**
@@ -1676,7 +1677,7 @@ class oxSetupView extends oxSetupCore
 
         if ( isset( $aSetupConfig['blDelSetupDir'] ) && $aSetupConfig['blDelSetupDir'] ) {
             // removing setup files
-            $blDeleted = $this->getInstance( "oxSetupUtils" )->removeDir( "../setup", true );
+            $blDeleted = $this->getInstance( "oxSetupUtils" )->removeDir( getInstallPath()."setup", true );
         }
         return $blDeleted;
     }

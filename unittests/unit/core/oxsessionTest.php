@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 27104 2010-04-09 09:13:43Z tomas $
+ * @version   SVN: $Id: oxsessionTest.php 27187 2010-04-13 12:11:49Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -711,6 +711,42 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $oSession = $this->getMock( 'testSession', array( '_checkCookies' ) );
         $oSession->expects( $this->never() )->method( '_checkCookies');
         $oSession->UNITisSwappedClient();
+    }
+
+    /**
+     * oxSession::_checkCookies() test case
+     *
+     * @return null
+     */
+    public function testCheckCookiesSsl()
+    {
+        $oConfig  =  $this->getMock( "oxconfig", array( "isSsl", "getSslShopUrl", "getShopUrl", "getConfigParam" ) );
+        $oConfig->expects( $this->once() )->method( 'isSsl')->will( $this->returnValue( true ) );
+        $oConfig->expects( $this->once() )->method( 'getSslShopUrl')->will( $this->returnValue( "testsslurl" ) );
+        $oConfig->expects( $this->never() )->method( 'getShopUrl');
+        $oConfig->expects( $this->never() )->method( 'getConfigParam');
+
+        $oSession = $this->getMock( "oxsession", array( "getConfig" ) );
+        $oSession->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+        $this->assertFalse( $oSession->UNITcheckCookies( false, array() ) );
+    }
+
+    /**
+     * oxSession::_checkCookies() test case
+     *
+     * @return null
+     */
+    public function testCheckCookiesNoSsl()
+    {
+        $oConfig  =  $this->getMock( "oxconfig", array( "isSsl", "getSslShopUrl", "getShopUrl", "getConfigParam" ) );
+        $oConfig->expects( $this->once() )->method( 'isSsl')->will( $this->returnValue( false ) );
+        $oConfig->expects( $this->never() )->method( 'getSslShopUrl');
+        $oConfig->expects( $this->once() )->method( 'getShopUrl')->will( $this->returnValue( "testurl" ) );
+        $oConfig->expects( $this->once() )->method( 'getConfigParam')->with( $this->equalTo( 'iDebug' ) )->will( $this->returnValue( true ) );
+
+        $oSession = $this->getMock( "oxsession", array( "getConfig" ) );
+        $oSession->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+        $this->assertTrue( $oSession->UNITcheckCookies( false, array( "testurl" => "ox_true" ) ) );
     }
 
     /**

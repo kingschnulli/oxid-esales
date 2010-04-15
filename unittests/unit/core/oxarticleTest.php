@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 26878 2010-03-26 12:44:47Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 27211 2010-04-14 13:39:28Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -6203,6 +6203,42 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals(array("_testCat2"), $oArticle->getCategoryIds(false, true));
         // #1306: Selecting active categories will not be checked if parent categories are active
         $this->assertEquals(array(), $oArticle->getCategoryIds(true, true));
+    }
+
+    /**
+     * Test get category id's - adding price categories to list.
+     *
+     * @return null
+     */
+    public function testGetCategoryIds_adsPriceCategoriesToList()
+    {
+        $sQ = "insert into oxobject2category set oxid = '_testArt1Cat', oxcatnid = '_testCat1', oxobjectid = '_testArt'";
+
+        oxDb::getDb()->execute($sQ);
+        $oObj1 = oxNew( "oxCategory" );
+        $oObj1->setId("_testCat1");
+        $oObj1->oxcategories__oxparentid = new oxField("oxrootid", oxField::T_RAW);
+        $oObj1->oxcategories__oxactive = new oxField("1", oxField::T_RAW);
+        $oObj1->save();
+
+        $oObj2 = oxNew( "oxCategory" );
+        $oObj2->setId("_testCat2");
+        $oObj2->oxcategories__oxparentid = new oxField("oxrootid", oxField::T_RAW);
+        $oObj2->oxcategories__oxactive = new oxField("1", oxField::T_RAW);
+        $oObj2->oxcategories__oxpricefrom = new oxField( 100 );
+        $oObj2->oxcategories__oxpriceto = new oxField( 200 );
+        $oObj2->save();
+
+        $oArticle = oxNew("oxarticle");
+        $oArticle->load('_testArt');
+        $oArticle->oxarticles__oxprice = new oxField( 99 );
+
+        // price cat should be skipped
+        $this->assertEquals( array( "_testCat1" ), $oArticle->getCategoryIds( false, true ) );
+
+        // price cat should be inlcuded (M:1598)
+        $oArticle->oxarticles__oxprice = new oxField( 101 );
+        $this->assertEquals( array( "_testCat1", "_testCat2" ), $oArticle->getCategoryIds( false, true ) );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 27121 2010-04-09 13:39:23Z arvydas $
+ * @version   SVN: $Id: oxemail.php 27195 2010-04-13 13:44:06Z rimvydas.paskevicius $
  */
 /**
  * Includes PHP mailer class.
@@ -1171,7 +1171,7 @@ class oxEmail extends PHPMailer
         //set mail params (from, fromName, smtp)
         $this->_setMailParams( $oShop );
 
-        $iAlarmLang = $oShop->getLanguage();
+        $iAlarmLang = $oAlarm->oxpricealarm__oxlang->value;
 
         $oArticle = oxNew( "oxarticle" );
         $oArticle->setSkipAbPrice( true );

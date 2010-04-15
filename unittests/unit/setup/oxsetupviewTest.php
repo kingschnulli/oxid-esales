@@ -178,7 +178,7 @@ class Unit_Setup_oxSetupViewTest extends OxidTestCase
     public function testGetImageDir()
     {
         $oSetupView = new oxsetupView();
-        $this->assertEquals( '../out/admin/img', $oSetupView->getImageDir() );
+        $this->assertEquals( getInstallPath().'out/admin/img', $oSetupView->getImageDir() );
     }
 
     /**
