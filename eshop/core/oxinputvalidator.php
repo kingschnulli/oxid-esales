@@ -20,13 +20,8 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxinputvalidator.php 27126 2010-04-09 13:42:03Z arvydas $
+ * @version   SVN: $Id: oxinputvalidator.php 27229 2010-04-15 11:57:07Z arvydas $
  */
-
-/**
- * Includes credit card validation class.
- */
-require_once oxConfig::getInstance()->getConfigParam( 'sCoreDir' ) . "ccval/ccval.php";
 
 /**
  * Calss for validating input
@@ -142,7 +137,8 @@ class oxInputValidator
                     break;
                 }
 
-                $blResult = ccval( $aDynvalue['kknumber'], $sType, $aDynvalue['kkmonth'].substr( $aDynvalue['kkyear'], 2, 2 ) );
+                $oCardValidator = oxNew( "oxccvalidator" );
+                $blResult = $oCardValidator->isValidCard( $aDynvalue['kknumber'], $sType, $aDynvalue['kkmonth'].substr( $aDynvalue['kkyear'], 2, 2 ) );
                 if ( $blResult ) {
                     $blOK = true;
                 }

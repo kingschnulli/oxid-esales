@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticleTest.php 26888 2010-03-26 14:25:32Z vilma $
+ * @version   SVN: $Id: oxorderarticleTest.php 27234 2010-04-15 13:18:02Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -84,9 +84,10 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( "blUseStock", 1 );
         modConfig::getInstance()->setConfigParam( "blAllowNegativeStock", 'xxx' );
 
-        $oOrderArticle = $this->getMock( "oxorderarticle", array( "updateArticleStock", "isNewOrderItem" ) );
+        $oOrderArticle = $this->getMock( "oxorderarticle", array( "updateArticleStock", "isNewOrderItem", "setIsNewOrderItem" ) );
         $oOrderArticle->expects( $this->once() )->method( 'updateArticleStock')->with( $this->equalTo( -999 ), 'xxx' );
         $oOrderArticle->expects( $this->once() )->method( 'isNewOrderItem')->will( $this->returnValue( true ) );
+        $oOrderArticle->expects( $this->once() )->method( 'setIsNewOrderItem')->with( $this->equalTo( false ) );
         $oOrderArticle->oxorderarticles__oxstorno = new oxField( 0 );
         $oOrderArticle->oxorderarticles__oxamount = new oxField( 999 );
         $oOrderArticle->save();

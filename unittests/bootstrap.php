@@ -61,7 +61,6 @@ if (getenv('CODECOVERAGE')) {
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/admin/reports/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/openid/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/adodblite/');
-    PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/ccval/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/tcpdf/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/phpmailer/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/smarty/');

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: test_utils.php 27089 2010-04-07 14:28:32Z sarunas $
+ * @version   SVN: $Id: test_utils.php 27229 2010-04-15 11:57:07Z arvydas $
  */
 
 define ('MAX_LOOP_AMOUNT', 4);
@@ -757,7 +757,6 @@ if (!function_exists('getFileArr')) {
             '/core/adodb',
             '/core/openid',
             '/core/adodblite',
-            '/core/ccval',
             '/core/emailvalidation',
             '/core/ERP',
             '/core/tcpdf',
