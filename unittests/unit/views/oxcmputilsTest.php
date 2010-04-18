@@ -37,6 +37,8 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
      */
     public function testGetArticleNoProduct()
     {
+         modConfig::getInstance()->setConfigParam( 'blAllowRemoteArticleInfo', 1 );
+
         oxTestModules::addFunction( 'oxUtils', 'showMessageAndExit', '{ throw new Exception( $aA[0] ); }' );
         oxTestModules::addFunction( 'oxarticlelist', 'loadAktionArticles', '{}' );
         oxTestModules::addFunction( 'oxarticlelist', 'current', '{}' );
@@ -61,6 +63,7 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
      */
     public function testGetArticle()
     {
+        modConfig::getInstance()->setConfigParam( 'blAllowRemoteArticleInfo', 1 );
         oxTestModules::addFunction( 'oxUtils', 'showMessageAndExit', '{ throw new Exception( $aA[0] ); }' );
 
         modConfig::setParameter( 'oxid', "1126" );
@@ -78,6 +81,37 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
             return;
         }
         $this->fail( "Error running testGetArticle()" );
+    }
+
+    /**
+     * Testing oxcmp_utils::getArticle()without config parameter. Case #1766.
+     *
+     * @return null
+     */
+    public function testGetArticleDisabled()
+    {
+        modConfig::getInstance()->setConfigParam( 'blAllowRemoteArticleInfo', false );
+        oxTestModules::addFunction( 'oxUtils', 'showMessageAndExit', '{ throw new Exception( $aA[0] ); }' );
+
+        modConfig::setParameter( 'oxid', "1126" );
+        modConfig::getInstance()->setConfigParam( "bl_perfLoadAktion", true );
+
+        try {
+            $oCmp = new oxcmp_utils();
+            $blRes = $oCmp->getArticle();
+
+            //correct case:
+            $this->assertFalse($blRes);
+            return;
+
+        } catch ( Exception $oExcp ) {
+            $sData = $oExcp->getMessage();
+            $this->assertNotNull( $sData, "Error running testGetArticle()" );
+            $aData = @unserialize( $sData );
+            $this->assertTrue( ( ( bool ) $aData ), "Error running testGetArticle()" );
+            $this->assertTrue( is_array( $aData ), "Error running testGetArticle()" );
+            return;
+        }
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: reviewTest.php 27176 2010-04-12 17:19:32Z tomas $
+ * @version   SVN: $Id: reviewTest.php 27254 2010-04-16 08:54:51Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -227,15 +227,15 @@ class Unit_Views_reviewTest extends OxidTestCase
 
     public function testInit()
     {
-        $this->markTestIncomplete();
         oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
         modConfig::setParameter( 'recommid', 'testRecommId' );
+        modConfig::setParameter( 'anid', '1126' );
 
         $oRecommList = new oxRecommList();
         $oRecommList->setId( 'testRecommId' );
 
         $oReview = $this->getMock( "review", array( "getActiveRecommList" ) );
-        $oReview->expects( $this->once() )->method( 'getActiveRecommList')->will( $this->returnValue( $oRecommList ) );
+        $oReview->expects( $this->any() )->method( 'getActiveRecommList')->will( $this->returnValue( $oRecommList ) );
         $oUbase = new oxUBase;
 
         $this->assertEquals( $oUbase->init(), $oReview->init() );
