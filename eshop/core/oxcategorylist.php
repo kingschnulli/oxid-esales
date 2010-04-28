@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylist.php 25628 2010-02-04 17:13:43Z tomas $
+ * @version   SVN: $Id: oxcategorylist.php 27356 2010-04-27 07:51:43Z alfonsas $
  */
 
 
@@ -367,7 +367,7 @@ class oxCategoryList extends oxList
     /**
      * Getter for active root category
      *
-     * @return oxcategory
+     * @return array of oxcategory
      */
     public function getClickRoot()
     {
