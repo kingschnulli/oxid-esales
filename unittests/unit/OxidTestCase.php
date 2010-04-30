@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: OxidTestCase.php 27089 2010-04-07 14:28:32Z sarunas $
+ * @version   SVN: $Id: OxidTestCase.php 27441 2010-04-29 11:05:06Z sarunas $
  */
 
 
@@ -48,6 +48,7 @@ class OxidMockStubFunc implements PHPUnit_Framework_MockObject_Stub
     {
         if (is_string($this->_func) && preg_match('/^\{.+\}$/', $this->_func)) {
             $args = $invocation->parameters;
+            $_this = $invocation->object;
             eval($this->_func);
         } else {
             return call_user_func_array($this->_func, $invocation->parameters);
