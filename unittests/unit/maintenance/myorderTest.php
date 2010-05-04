@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: myorderTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: myorderTest.php 27493 2010-05-03 08:17:16Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -161,6 +161,36 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         return $oMyOrder;
     }
 
+    /**
+     * Testing myOrder::getVats()
+     *
+     * @return null
+     */
+    public function testGetVatsGetProductVatsReturnsVatsArray()
+    {
+        // getProductVats returns VATs array
+        $aVats = array( 1, 2, 3 );
+        $oMyOrder = $this->getMock( "MyOrder", array( "getProductVats" ) );
+        $oMyOrder->expects( $this->once() )->method( 'getProductVats')->will( $this->returnValue( $aVats ));
+
+        $this->assertEquals( $aVats, $oMyOrder->getVats() );
+
+        // getProductVats does not return VATs
+    }
+
+    /**
+     * Testing myOrder::getVats()
+     *
+     * @return null
+     */
+    public function testGetVatsGetProductVatsDoesNotReturnVat()
+    {
+        // getProductVats returns VATs array
+        $oMyOrder = $this->getMock( "MyOrder", array( "getProductVats" ) );
+        $oMyOrder->expects( $this->once() )->method( 'getProductVats')->will( $this->returnValue( false ));
+
+        $this->assertEquals( array(), $oMyOrder->getVats() );
+    }
 
     /*
      * Testing PdfBlock class
