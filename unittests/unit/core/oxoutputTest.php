@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxoutputTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxoutputTest.php 27594 2010-05-06 10:51:35Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -129,6 +129,29 @@ class Unit_Core_oxoutputTest extends OxidTestCase
 
         $oOutput = new oxOutput();
         $sTest = "<head>foo</head>bar";
+        $sRes = $oOutput->addVersionTags( $sTest );
+        //reset value
+        $myConfig->getActiveShop()->oxshops__oxversion = new oxField($sVersion, oxField::T_RAW);
+
+            $this->assertNotEquals($sTest, $sRes);
+            $this->assertEquals( "<head>foo</head>\n  <!-- OXID eShop Community Edition, Version $sVersion, Shopping Cart System (c) OXID eSales AG 2003 - 2010 - http://www.oxid-esales.com -->bar", $sRes );
+
+
+    }
+
+    /**
+     * Bug #1800, fix test
+     *
+     */
+    public function testAddVersionTagsUpperCase()
+    {
+
+        $myConfig = oxConfig::getInstance();
+        $sVersion = $myConfig->getActiveShop()->oxshops__oxversion->value;
+        $sVersion = $myConfig->getActiveShop()->oxshops__oxversion = new oxField("9.9", oxField::T_RAW);
+
+        $oOutput = new oxOutput();
+        $sTest = "<head>foo</Head>bar";
         $sRes = $oOutput->addVersionTags( $sTest );
         //reset value
         $myConfig->getActiveShop()->oxshops__oxversion = new oxField($sVersion, oxField::T_RAW);

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 27207 2010-04-14 13:11:41Z vilma $
+ * @version   SVN: $Id: oxcmp_user.php 27593 2010-05-06 09:18:54Z arvydas $
  */
 
 // defining login/logout states
@@ -427,6 +427,7 @@ class oxcmp_user extends oxView
             $this->_blNewsSubscriptionStatus = $oUser->setNewsSubscription( $blOptin, $this->getConfig()->getConfigParam( 'blOrderOptInEmail' ) );
 
             $oUser->addToGroup( 'oxidnotyetordered' );
+            $oUser->addDynGroup( oxSession::getVar( 'dgr' ), $myConfig->getConfigParam( 'aDeniedDynGroups' ) );
             $oUser->logout();
 
         } catch ( oxUserException $oEx ) {
