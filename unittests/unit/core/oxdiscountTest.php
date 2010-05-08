@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxdiscountTest.php 27628 2010-05-07 11:03:21Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -896,10 +896,10 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
         $oDiscount->oxdiscount__oxaddsumtype = new oxField( 'abs', oxField::T_RAW );
         $oDiscount->oxdiscount__oxprice      = new oxField( 5, oxField::T_RAW );
 
-        $oDiscount->expects( $this->once() )->method( 'isForAmount' )->with($this->equalTo( 34 )  )->will( $this->returnValue( true ) );
+        $oDiscount->expects( $this->once() )->method( 'isForAmount' )->will( $this->returnValue( true ) );
 
         //making sure article price is calculated in pounds, and is not equal to eur34
-        $this->assertEquals(23.12, $oArticle->getPrice()->getBruttoPrice());
+        $this->assertEquals(29.12, $oArticle->getPrice()->getBruttoPrice());
 
         $oDiscount->isForBasketAmount( $oBasket );
     }

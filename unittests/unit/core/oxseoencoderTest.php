@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxseoencoderTest.php 27630 2010-05-07 12:46:18Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -107,7 +107,16 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
             $oArticle->delete( '_testArticle' );
         }
 
-        oxNew('oxseoencoder')->setSeparator('-');
+        $myConfig = oxConfig::getInstance();
+
+        // restore..
+        $oEncoder = new oxSeoEncoder();
+        $oEncoder->setSeparator( $myConfig->getConfigParam( 'sSEOSeparator' ) );
+        $oEncoder->setPrefix( $myConfig->getConfigParam( 'sSEOuprefix' ) );
+        $oEncoder->setReservedWords( $myConfig->getConfigParam( 'aSEOReservedWords' ) );
+
+        oxTestModules::addFunction("oxseoencoder", "resetInst", '{self::$_instance = null;self::$_aReservedWords = array();}');
+        oxNew('oxseoencoder')->resetInst();
 
         parent::tearDown();
     }
@@ -118,6 +127,23 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         if ($this->aRET && isset($this->aRET[count($this->aSQL)-1])) {
             return $this->aRET[count($this->aSQL)-1];
         }
+    }
+
+    /**
+     * Test case for bug entry #1748
+     *
+     * @return null
+     */
+    public function testPrepareUriForBugEntry1748()
+    {
+        $sChars = "\ + * ? [ ^ ] $ ( ) { } = ! < > | :";
+
+        $oEncoder = new oxSeoEncoder();
+        $oEncoder->setSeparator( "+" );
+        $oEncoder->setPrefix( "-" );
+        $oEncoder->setReservedWords( explode( " ", $sChars ) );
+
+        $this->assertEquals( "http/www.oxideshop.com", $oEncoder->UNITprepareUri( "http://www.oxideshop.com" ) );
     }
 
     /**

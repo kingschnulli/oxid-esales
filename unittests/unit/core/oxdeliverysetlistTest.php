@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliverysetlistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxdeliverysetlistTest.php 27626 2010-05-07 08:29:50Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -116,7 +116,7 @@ class Unit_Core_oxDeliverysetListTest extends OxidTestCase
 
         $sShipSet   = "oxidstandard";
         $sProductId = "1126";
-        $dAmount    = 29411;
+        $dAmount    = 29410;
 
         $oUser = $this->getMock( "oxUser", array( "getActiveCountry" ) );
         $oUser->expects( $this->any() )->method('getActiveCountry')->will( $this->returnValue( "a7c40f631fc920687.20179984" ) );

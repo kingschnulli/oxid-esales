@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxdeliveryTest.php 27601 2010-05-06 12:53:09Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -932,7 +932,7 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
         $oDelivery->setblFreeShipping(false);
         $oPrice = $oDelivery->getDeliveryPrice();
 
-          $this->assertEquals( 14.7, $oPrice->getBruttoPrice() );
+          $this->assertEquals( 14.33, $oPrice->getBruttoPrice() );
     }
 
     /*

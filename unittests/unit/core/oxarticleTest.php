@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 27211 2010-04-14 13:39:28Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxarticleTest.php 27601 2010-05-06 12:53:09Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3084,7 +3084,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oPrice = oxNew( 'oxPrice' );
         $oPrice->setPrice(100 );
         $this->oArticle->UNITapplyCurrency( $oPrice );
-        $this->assertEquals( 147, $oPrice->getBruttoPrice());
+        $this->assertEquals( 143.26, $oPrice->getBruttoPrice());
         oxConfig::getInstance()->setActShopCurrency(0);
     }
 
@@ -4690,7 +4690,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->oxarticles__oxvarminprice = new oxField(9, oxField::T_RAW);
         $oArticle->UNITapplyRangePrice();
         $this->assertTrue( $oArticle->_blIsRangePrice);
-        $this->assertEquals( 6.12, $oArticle->getPrice()->getBruttoPrice());
+        $this->assertEquals( 7.71, $oArticle->getPrice()->getBruttoPrice());
     }
 
 

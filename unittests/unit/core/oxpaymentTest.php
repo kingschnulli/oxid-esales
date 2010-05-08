@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpaymentTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxpaymentTest.php 27601 2010-05-06 12:53:09Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -161,7 +161,7 @@ class Unit_Core_oxpaymentTest extends OxidTestCase
         $this->assertEquals( -2, $oPayment->getPaymentValue( $dBasePrice ) );
 
         $oPayment->load( 'oxidcashondel' );
-        $this->assertEquals( 11.025, $oPayment->getPaymentValue( $dBasePrice ) );
+        $this->assertEquals( 10.7445, $oPayment->getPaymentValue( $dBasePrice ) );
 
         $oPayment->oxpayments__oxaddsum = new oxField(-105, oxField::T_RAW);
         $this->assertEquals( 100, $oPayment->getPaymentValue( $dBasePrice ) );

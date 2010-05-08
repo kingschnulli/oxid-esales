@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxselectlistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxselectlistTest.php 27601 2010-05-06 12:53:09Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -146,9 +146,9 @@ class Unit_Core_oxselectlistTest extends OxidTestCase
         $aSelList = $oSelList->getFieldList();
 
         // checking loaded data
-        $this->assertEquals( "&amp;amp;&amp;test1, 10 +14,70 CHF", $aSelList[0]->name );
-        $this->assertEquals( "test2, 10 +14,70 CHF", $aSelList[1]->name );
-        $this->assertEquals( "test3, 10 +14,70 CHF", $aSelList[2]->name );
+        $this->assertEquals( "&amp;amp;&amp;test1, 10 +14,33 CHF", $aSelList[0]->name );
+        $this->assertEquals( "test2, 10 +14,33 CHF", $aSelList[1]->name );
+        $this->assertEquals( "test3, 10 +14,33 CHF", $aSelList[2]->name );
     }
 
 }

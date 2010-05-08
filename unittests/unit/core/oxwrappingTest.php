@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrappingTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxwrappingTest.php 27601 2010-05-06 12:53:09Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -318,7 +318,7 @@ class Unit_Core_oxwrappingTest extends OxidTestCase
         $sPrice = oxLang::getInstance()->formatCurrency($oWrapping->getWrappingPrice()->getBruttoPrice() );
 
         // validating
-        $this->assertEquals('2.01', $sPrice );
+        $this->assertEquals('2.53', $sPrice );
     }
 
     public function testCalcFPriceInCHF()
@@ -340,7 +340,7 @@ class Unit_Core_oxwrappingTest extends OxidTestCase
         $sPrice = oxLang::getInstance()->formatCurrency($oWrapping->getWrappingPrice()->getBruttoPrice() );
 
         // validating
-        $this->assertEquals('4,34', $sPrice );
+        $this->assertEquals('4,23', $sPrice );
     }
 
     public function testGetWrappingListIfNotAllActive()

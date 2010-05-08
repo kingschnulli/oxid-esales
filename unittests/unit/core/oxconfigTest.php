@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 26946 2010-03-30 11:43:59Z sarunas $
+ * @version   SVN: $Id: oxconfigTest.php 27601 2010-05-06 12:53:09Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -807,7 +807,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oGbp = clone $oEur;
         $oGbp->id = 1;
         $oGbp->name = 'GBP';
-        $oGbp->rate = '0.68';
+        $oGbp->rate = '0.8565';
         $oGbp->dec = '.';
         $oGbp->thousand = '';
         $oGbp->sign = '£';
@@ -817,7 +817,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oChf = clone $oEur;
         $oChf->id = 2;
         $oChf->name = 'CHF';
-        $oChf->rate = '1.47';
+        $oChf->rate = '1.4326';
         $oChf->dec = ',';
         $oChf->thousand = '.';
         $oChf->sign = '<small>CHF</small>';
@@ -827,7 +827,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oUsd = clone $oEur;
         $oUsd->id = 3;
         $oUsd->name = 'USD';
-        $oUsd->rate = '1.33';
+        $oUsd->rate = '1.2994';
         $oUsd->dec = '.';
         $oUsd->thousand = '';
         $oUsd->sign = '$';
@@ -1442,7 +1442,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oGbp = new Oxstdclass;
         $oGbp->id = 1;
         $oGbp->name = 'GBP';
-        $oGbp->rate = '0.68';
+        $oGbp->rate = '0.8565';
         $oGbp->dec = '.';
         $oGbp->thousand = '';
         $oGbp->sign = '£';
