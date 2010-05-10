@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariant.php 27451 2010-04-29 14:45:29Z arvydas $
+ * @version   SVN: $Id: oxsimplevariant.php 27649 2010-05-10 09:03:07Z vilma $
  */
 
 /**
@@ -102,6 +102,22 @@ class oxSimpleVariant extends oxI18n implements oxIUrl
 
         return parent::__get($sName);
     }
+
+    /**
+     * Assigns to oxarticle object some base parameters/values (such as
+     * detaillink, moredetaillink, etc).
+     *
+     * @param string $aRecord Array representing current field values
+     *
+     * @return null
+     */
+    public function assign( $aRecord)
+    {
+        // load object from database
+        parent::assign( $aRecord);
+
+    }
+
 
     /**
      * Implementing (fakeing) performance friendly method from oxArticle

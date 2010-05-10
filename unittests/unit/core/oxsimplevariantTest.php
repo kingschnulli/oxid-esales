@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariantTest.php 27601 2010-05-06 12:53:09Z vilma $
+ * @version   SVN: $Id: oxsimplevariantTest.php 27649 2010-05-10 09:03:07Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,8 +37,11 @@ class Unit_Core_oxsimpleVariantTest extends OxidTestCase
         $this->cleanUpTable( 'oxdiscount' );
         oxTestModules::cleanAllModules();
         oxDiscountList::getInstance()->forceReload();
+        $this->cleanUpTable('oxarticles');
+        
         parent::tearDown();
     }
+
 
     /**
      * Resting if magic getter returns "aSelectlist" value
