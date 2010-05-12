@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylist.php 27356 2010-04-27 07:51:43Z alfonsas $
+ * @version   SVN: $Id: oxcategorylist.php 27684 2010-05-11 14:17:11Z sarunas $
  */
 
 
@@ -481,7 +481,7 @@ class oxCategoryList extends oxList
             unset($aParents['oxrootid']);
         }
         foreach (array_keys($aParents) as $sParent) {
-            if (isset($this->_aArray[$sParentId])) {
+            if (isset($this->_aArray[$sParent])) {
                 $this->_aArray[$sParent]->sortSubCats();
             }
         }

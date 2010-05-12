@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxcategorylistTest.php 27684 2010-05-11 14:17:11Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -118,6 +118,7 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
 
 
         $this->testAdmin = false;
+        $this->cleanUpTable('oxcategories');
     }
 
     /**
@@ -726,6 +727,26 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('blHideEmpty', false);
         $this->_oList->setVar('blForceFull', false);
         $this->_oList->setVar('iForceLevel', 2);
+
+        $sParentId = $this->_sActRoot;
+        $oCat1 = new oxCategory();
+        $oCat1->setId("_test1");
+        $oCat1->oxcategories__oxparentid = new oxField($sParentId);
+        $oCat1->oxcategories__oxsort = new oxField(2);
+        $oCat1->oxcategories__oxactive = new oxField(1);
+        $oCat1->save();
+        $oCat2 = new oxCategory();
+        $oCat2->setId("_test2");
+        $oCat2->oxcategories__oxparentid = new oxField($sParentId);
+        $oCat2->oxcategories__oxsort = new oxField(3);
+        $oCat2->oxcategories__oxactive = new oxField(1);
+        $oCat2->save();
+        $oCat3 = new oxCategory();
+        $oCat3->setId("_test3");
+        $oCat3->oxcategories__oxparentid = new oxField($sParentId);
+        $oCat3->oxcategories__oxsort = new oxField(1);
+        $oCat3->oxcategories__oxactive = new oxField(1);
+        $oCat3->save();
 
         $this->_oList->selectString($this->_oList->UNITgetSelectString());
         $this->_oList->UNITppBuildTree();

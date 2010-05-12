@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 27601 2010-05-06 12:53:09Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 27686 2010-05-11 14:44:38Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -5432,6 +5432,64 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle2->oxarticles__oxprice = new oxField("0", oxField::T_RAW);
         $oArticle2->UNITassignParentFieldValue('oxarticles__oxprice');
         $this->assertEquals( 15.5, $oArticle2->oxarticles__oxprice->value);
+    }
+
+    /**
+     * Test assign parent field value - when variant has his own thumbnail, icon
+     * and zoom picture.
+     *
+     * @return null
+     */
+    public function testAssignParentFieldValue_variantHasOwnImages()
+    {
+        $oParentArticle = new oxArticle();
+        $oParentArticle->oxarticles__oxicon  = new oxField('parent_ico.jpg', oxField::T_RAW);
+        $oParentArticle->oxarticles__oxthumb = new oxField('parent_thumb.jpg', oxField::T_RAW);
+        $oParentArticle->oxarticles__oxzoom1 = new oxField('parent_zoom1.jpg', oxField::T_RAW);
+
+        $oVarArticle = $this->getMock('oxarticle', array( 'getParentArticle', '_hasMasterImage' ) );
+        $oVarArticle->expects( $this->any() )->method( 'getParentArticle' )->will( $this->returnValue( $oParentArticle ) );
+        $oVarArticle->expects( $this->any() )->method( '_hasMasterImage' )->will( $this->returnValue( true ) );
+
+        $oVarArticle->oxarticles__oxicon  = new oxField('var_ico.jpg', oxField::T_RAW);
+        $oVarArticle->oxarticles__oxthumb = new oxField('var_thumb.jpg', oxField::T_RAW);
+        $oVarArticle->oxarticles__oxzoom1 = new oxField('var_zoom1.jpg', oxField::T_RAW);
+
+        $oVarArticle->UNITassignParentFieldValue( "oxicon" );
+        $this->assertEquals( "var_ico.jpg", $oVarArticle->oxarticles__oxicon->value);
+
+        $oVarArticle->UNITassignParentFieldValue( "oxthumb" );
+        $this->assertEquals( "var_thumb.jpg", $oVarArticle->oxarticles__oxthumb->value);
+
+        $oVarArticle->UNITassignParentFieldValue( "oxzoom1" );
+        $this->assertEquals( "var_zoom1.jpg", $oVarArticle->oxarticles__oxzoom1->value);
+    }
+
+    /**
+     * Test assign parent field value - when variant does not his own thumbnail, icon
+     * and zoom picture.
+     *
+     * @return null
+     */
+    public function testAssignParentFieldValue_variantDoesNotHasOwnImages()
+    {
+        $oParentArticle = new oxArticle();
+        $oParentArticle->oxarticles__oxicon  = new oxField('parent_ico.jpg', oxField::T_RAW);
+        $oParentArticle->oxarticles__oxthumb = new oxField('parent_thumb.jpg', oxField::T_RAW);
+        $oParentArticle->oxarticles__oxzoom1 = new oxField('parent_zoom1.jpg', oxField::T_RAW);
+
+        $oVarArticle = $this->getMock('oxarticle', array( 'getParentArticle', '_hasMasterImage' ) );
+        $oVarArticle->expects( $this->any() )->method( 'getParentArticle' )->will( $this->returnValue( $oParentArticle ) );
+        $oVarArticle->expects( $this->any() )->method( '_hasMasterImage' )->will( $this->returnValue( false ) );
+
+        $oVarArticle->UNITassignParentFieldValue( "oxicon" );
+        $this->assertEquals( "parent_ico.jpg", $oVarArticle->oxarticles__oxicon->value);
+
+        $oVarArticle->UNITassignParentFieldValue( "oxthumb" );
+        $this->assertEquals( "parent_thumb.jpg", $oVarArticle->oxarticles__oxthumb->value);
+
+        $oVarArticle->UNITassignParentFieldValue( "oxzoom1" );
+        $this->assertEquals( "parent_zoom1.jpg", $oVarArticle->oxarticles__oxzoom1->value);
     }
 
     /**

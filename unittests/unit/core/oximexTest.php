@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oximexTest.php 26903 2010-03-26 16:03:58Z arvydas $
+ * @version   SVN: $Id: oximexTest.php 27681 2010-05-11 10:30:29Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -176,6 +176,80 @@ class Unit_Core_oxImexTest extends OxidTestCase
                              ."<SteuersatzID></SteuersatzID>\n<Steuersatz>0.19</Steuersatz>\n<Artikelnummer>1126</Artikelnummer>\n<Anzahl>1</Anzahl>\n<Produktname>Bar-Set ABSINTH/oxselvariant</Produktname>\n"
                              ."<Rabatt>0.00</Rabatt>\n<Preis>34.00</Preis>\n</Artikel>\n<GesamtRabatt>0.00</GesamtRabatt>\n<GesamtNetto>28.57</GesamtNetto>\n"
                              ."<Lieferkosten>1.00</Lieferkosten>\n<Zahlungsartkosten>0.00</Zahlungsartkosten>\n<GesamtBrutto>34.00</GesamtBrutto>\n<Bemerkung></Bemerkung>\n</Artikelliste>\n<Zahlung>\n<Art></Art>\n</Zahlung>\n</Bestellung>\n</Bestellliste>\n", $sResult );
+    }
+
+    public function testExportLexwareOrdersDiffCurrency()
+    {
+        $myConfig = oxConfig::getInstance();
+
+        $oOrder = new oxOrder();
+        $oOrder->setId( '_testOrder' );
+        $oOrder->oxorder__oxshopid    = new oxField( $myConfig->getBaseShopId() );
+        $oOrder->oxorder__oxuserid    = new oxField( 'oxdefaultadmin' );
+        $oOrder->oxorder__oxorderdate = new oxField( '2007-02-21 00:00:00' );
+        $oOrder->oxorder__oxordernr   = new oxField( '9991' );
+        $oOrder->oxorder__oxbillnr    = new oxField( '15' );
+        $oOrder->oxorder__oxbillcompany   = new oxField( 'billcomp' );
+        $oOrder->oxorder__oxbillemail     = new oxField( 'billemail' );
+        $oOrder->oxorder__oxbillfname     = new oxField( 'billfname' );
+        $oOrder->oxorder__oxbilllname     = new oxField( 'billlname' );
+        $oOrder->oxorder__oxbillstreet    = new oxField( 'billstreet' );
+        $oOrder->oxorder__oxbillstreetnr  = new oxField( 'billstnr' );
+        $oOrder->oxorder__oxbilladdinfo   = new oxField( 'billaddinfo' );
+        $oOrder->oxorder__oxbillustid     = new oxField( 'billustid' );
+        $oOrder->oxorder__oxbillcity      = new oxField( 'billcity' );
+        $oOrder->oxorder__oxbillcountryid = new oxField( 'a7c40f631fc920687.20179984' );
+        $oOrder->oxorder__oxbillzip       = new oxField( 'billzip' );
+        $oOrder->oxorder__oxbillfon       = new oxField( 'billfon' );
+        $oOrder->oxorder__oxbillfax       = new oxField( 'billfax' );
+        $oOrder->oxorder__oxbillsal       = new oxField( 'MR' );
+        $oOrder->oxorder__oxpaymentid     = new oxField( 'oxempty' );
+        $oOrder->oxorder__oxdelcost       = new oxField( '1' );
+        $oOrder->oxorder__oxdelvat        = new oxField( '2' );
+        $oOrder->oxorder__oxpaycost       = new oxField( '3' );
+        $oOrder->oxorder__oxpayvat        = new oxField( '4' );
+        $oOrder->oxorder__oxwrapcost      = new oxField( '5' );
+        $oOrder->oxorder__oxwrapvat       = new oxField( '6' );
+
+        $oOrder->oxorder__oxdelcompany   = new oxField( 'delcomp' );
+        $oOrder->oxorder__oxdelfname     = new oxField( 'delfname' );
+        $oOrder->oxorder__oxdellname     = new oxField( 'dellname' );
+        $oOrder->oxorder__oxdelstreet    = new oxField( 'delstreet' );
+        $oOrder->oxorder__oxdelstreetnr  = new oxField( 'delstnr' );
+        $oOrder->oxorder__oxdelzip       = new oxField( 'delzip' );
+        $oOrder->oxorder__oxdelcity      = new oxField( 'delcity' );
+        $oOrder->oxorder__oxdelcountry = new oxField( 'a7c40f631fc920687.20179984' );
+
+        $oOrder->oxorder__oxcurrate       = new oxField( 2.15 );
+
+        $oOrder->save();
+
+        // one test order article
+        $oOrderArt = new oxOrderArticle();
+        $oOrderArt->setId( '_testOrderArticle' );
+        $oOrderArt->oxorderarticles__oxorderid    = new oxField( '_testOrder' );
+        $oOrderArt->oxorderarticles__oxvat        = new oxField( 19 );
+        $oOrderArt->oxorderarticles__oxartnum     = new oxField( '1126' );
+        $oOrderArt->oxorderarticles__oxamount     = new oxField( 1 );
+        $oOrderArt->oxorderarticles__oxtitle      = new oxField( 'Bar-Set ABSINTH' );
+        $oOrderArt->oxorderarticles__oxselvariant = new oxField( 'oxselvariant' );
+        $oOrderArt->oxorderarticles__oxnetprice   = new oxField( 28.57 );
+        $oOrderArt->oxorderarticles__oxbrutprice  = new oxField( 34 );
+        $oOrderArt->save();
+
+        $myConfig = oxConfig::getInstance();
+
+        $oImex = new oxImex();
+        $sResult = str_replace( array( "\r", "   " ), '', $oImex->exportLexwareOrders( 9991, 9991 ) );
+        $this->assertEquals( "<?xml version=\"1.0\" encoding=\"ISO-8859-15\"?>\n<Bestellliste>\n<Bestellung zurückgestellt=\"Nein\" bearbeitet=\"Nein\" übertragen=\"Nein\">\n"
+                             ."<Bestellnummer>9991</Bestellnummer>\n<Rechnungsnummer>15</Rechnungsnummer>\n<Standardwaehrung>978</Standardwaehrung>\n<Bestelldatum>\n<Datum>21.02.2007</Datum>\n<Zeit>00:00:00</Zeit>\n</Bestelldatum>\n<Kunde>\n<Kundennummer></Kundennummer>\n"
+                             ."<Firmenname>billcomp</Firmenname>\n<Anrede>Herr</Anrede>\n<Vorname>billfname</Vorname>\n<Name>billlname</Name>\n<Strasse>billstreet billstnr</Strasse>\n"
+                             ."<PLZ>billzip</PLZ>\n<Ort>billcity</Ort>\n<Bundesland></Bundesland>\n<Land>Deutschland</Land>\n<Email>billemail</Email>\n<Telefon>billfon</Telefon>\n<Telefon2></Telefon2>\n"
+                             ."<Fax>billfax</Fax>\n<Lieferadresse>\n<Firmenname>delcomp</Firmenname>\n<Vorname>delfname</Vorname>\n<Name>dellname</Name>\n<Strasse>delstreet delstnr</Strasse>\n<PLZ>delzip</PLZ>\n<Ort>delcity</Ort>\n<Bundesland></Bundesland>\n"
+                             ."<Land></Land>\n</Lieferadresse>\n<Matchcode>billlname, billfname</Matchcode>\n<fSteuerbar>ja</fSteuerbar>\n</Kunde>\n<Artikelliste>\n<Artikel>\n<Artikelzusatzinfo><Nettostaffelpreis></Nettostaffelpreis></Artikelzusatzinfo>\n"
+                             ."<SteuersatzID></SteuersatzID>\n<Steuersatz>0.19</Steuersatz>\n<Artikelnummer>1126</Artikelnummer>\n<Anzahl>1</Anzahl>\n<Produktname>Bar-Set ABSINTH/oxselvariant</Produktname>\n"
+                             ."<Rabatt>0.00</Rabatt>\n<Preis>15.81</Preis>\n</Artikel>\n<GesamtRabatt>0.00</GesamtRabatt>\n<GesamtNetto>13.29</GesamtNetto>\n"
+                             ."<Lieferkosten>0.47</Lieferkosten>\n<Zahlungsartkosten>0.00</Zahlungsartkosten>\n<GesamtBrutto>15.81</GesamtBrutto>\n<Bemerkung></Bemerkung>\n</Artikelliste>\n<Zahlung>\n<Art></Art>\n</Zahlung>\n</Bestellung>\n</Bestellliste>\n", $sResult );
     }
 
     public function testExportLexwareOrders_setsCorrectCharset()
