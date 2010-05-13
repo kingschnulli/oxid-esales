@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxdiscountlistTest.php 27732 2010-05-12 14:21:52Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -463,8 +463,11 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
         $aDiscounts[3]->expects( $this->once() )->method( 'isForBasket' )->will( $this->returnValue( false ) );
         $aDiscounts[3]->expects( $this->never() )->method( 'getId' )->will( $this->returnValue( 'www' ) );
 
+        $oDList = $this->getMock( 'oxList', array( 'getArray' ) );
+        $oDList->expects( $this->once() )->method( 'getArray' )->will( $this->returnValue( $aDiscounts ) );
+
         $oList = $this->getMock( 'oxdiscountlist', array( '_getList' ) );
-        $oList->expects( $this->once() )->method( '_getList' )->will( $this->returnValue( $aDiscounts ) );
+        $oList->expects( $this->once() )->method( '_getList' )->will( $this->returnValue( $oDList ) );
 
         // now proceeding to disocunt id check
         $this->assertEquals( array( 'xxx' => $aDiscounts[0], 'yyy' => $aDiscounts[1] ), $oList->getBasketDiscounts( $oBasket ) );
