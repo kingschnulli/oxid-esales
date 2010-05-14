@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27208 2010-04-14 13:19:10Z vilma $
+ * @version   SVN: $Id: lang.php 27751 2010-05-13 11:11:50Z rimvydas.paskevicius $
  */
 
 /*
@@ -442,6 +442,7 @@ $aLang = array(
 'ARTICLE_PICTURES_ZOOM2'                        => 'Zoom 2',
 'ARTICLE_PICTURES_ZOOM3'                        => 'Zoom 3',
 'ARTICLE_PICTURES_ZOOM4'                        => 'Zoom 4',
+'ARTICLE_PICTURES_UPLOADISDISABLED'             => 'This is demoshop. Uploading or deleting images was switched off due to security reasons.',
 'ARTICLE_REVIEW_DELETE'                         => 'Delete',
 'ARTICLE_REVIEW_SAVE'                           => 'Save',
 'ARTICLE_REVIEW_ACTIVE'                         => 'Active',

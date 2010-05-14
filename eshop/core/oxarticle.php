@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 27686 2010-05-11 14:44:38Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxarticle.php 27751 2010-05-13 11:11:50Z rimvydas.paskevicius $
  */
 
 // defining supported link types
@@ -4536,5 +4536,21 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         return false;
+    }
+
+    /**
+     * Return article picture file name
+     *
+     * @param string $sFieldName article picture field name
+     * @param int    $iIndex     article picture index
+     *
+     * @return string
+     */
+    public function getPictureFieldValue( $sFieldName, $iIndex = null )
+    {
+        if ( $sFieldName ) {
+            $sFieldName = "oxarticles__" . $sFieldName . $iIndex;
+            return $this->$sFieldName->value;
+        }
     }
 }

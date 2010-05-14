@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 27686 2010-05-11 14:44:38Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxarticleTest.php 27751 2010-05-13 11:11:50Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -6850,4 +6850,22 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertTrue( $oArticle->UNIThasMasterImage( 2 ) );
     }
 
+    /**
+     * Test getting article images file names
+     *
+     * @return null
+     */
+    public function testGetPictureFieldValue()
+    {
+        $oArticle = new oxArticle();
+        $oArticle->oxarticles__oxpic1  = new oxField( 'testpic.jpg' );
+        $oArticle->oxarticles__oxicon  = new oxField( 'testico.jpg' );
+        $oArticle->oxarticles__thumb   = new oxField( 'testthumb.jpg' );
+        $oArticle->oxarticles__oxzoom2 = new oxField( 'testzoom.jpg' );
+
+        $this->assertEquals( 'testpic.jpg',   $oArticle->getPictureFieldValue( "oxpic", 1 ) );
+        $this->assertEquals( 'testico.jpg',   $oArticle->getPictureFieldValue( "oxicon" ) );
+        $this->assertEquals( 'testthumb.jpg', $oArticle->getPictureFieldValue( "thumb" ) );
+        $this->assertEquals( 'testzoom.jpg',  $oArticle->getPictureFieldValue( "oxzoom", 2 ) );
+    }
 }

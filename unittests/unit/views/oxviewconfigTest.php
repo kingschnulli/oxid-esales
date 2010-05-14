@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 27109 2010-04-09 12:15:09Z tomas $
+ * @version   SVN: $Id: oxviewconfigTest.php 27755 2010-05-13 14:53:16Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -45,6 +45,16 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
 
         $oViewConfig = new oxviewconfig();
         $this->assertEquals( oxConfig::getInstance()->getShopUrl().'en/home/', $oViewConfig->getHomeLink() );
+    }
+
+    public function testGetHomeLink_defaultLanguageEn()
+    {
+        oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
+        oxTestModules::addFunction( "oxLang", "getBaseLanguage", "{return 1;}" );
+        modConfig::getInstance()->setConfigParam( "sDefaultLang", 1 );
+
+        $oViewConfig = new oxviewconfig();
+        $this->assertEquals( oxConfig::getInstance()->getShopUrl(), $oViewConfig->getHomeLink() );
     }
 
     public function testGetHomeLinkPe()

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: articlepicturesTest.php 26699 2010-03-20 12:41:56Z arvydas $
+ * @version   SVN: $Id: articlepicturesTest.php 27751 2010-05-13 11:11:50Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -543,5 +543,49 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         $this->assertEquals( "2", $oArtPic->UNITgetUploadedMasterPicIndex( "M2" ) );
         $this->assertEquals( "7", $oArtPic->UNITgetUploadedMasterPicIndex( "M7" ) );
      }
+
+    /**
+     * Article_Pictures::save() - in demo shop mode
+     *
+     * @return null
+     */
+    public function testSave_demoShopMode()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "isDemoShop" ) );
+        $oConfig->expects( $this->once() )->method( 'isDemoShop' )->will( $this->returnValue( true ) );
+
+        oxSession::deleteVar( "Errors" );
+
+        $oArtPic = $this->getProxyClass( "Article_Pictures" );
+        $oArtPic->setConfig( $oConfig );
+        $oArtPic->save();
+
+        $aEx = oxSession::getVar( "Errors" );
+        $oEx = unserialize( $aEx["default"][0] );
+
+        $this->assertEquals( "ARTICLE_PICTURES_UPLOADISDISABLED", $oEx->getOxMessage() );
+     }
+
+    /**
+     * Article_Pictures::deletePicture() - in demo shop mode
+     *
+     * @return null
+     */
+    public function testDeletePicture_demoShopMode()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "isDemoShop" ) );
+        $oConfig->expects( $this->once() )->method( 'isDemoShop' )->will( $this->returnValue( true ) );
+
+        oxSession::deleteVar( "Errors" );
+
+        $oArtPic = $this->getProxyClass( "Article_Pictures" );
+        $oArtPic->setConfig( $oConfig );
+        $oArtPic->deletePicture();
+
+        $aEx = oxSession::getVar( "Errors" );
+        $oEx = unserialize( $aEx["default"][0] );
+
+        $this->assertEquals( "ARTICLE_PICTURES_UPLOADISDISABLED", $oEx->getOxMessage() );
+    }
 
 }

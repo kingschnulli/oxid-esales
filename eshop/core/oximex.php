@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oximex.php 27681 2010-05-11 10:30:29Z sarunas $
+ * @version   SVN: $Id: oximex.php 27745 2010-05-13 08:25:12Z arvydas $
  */
 
 /**
@@ -394,17 +394,6 @@ class oxImex extends oxBase
             $sExport .= "<Lieferkosten>".$this->internPrice($dDelCost)."</Lieferkosten>$sNewLine";
             $sExport .= "<Zahlungsartkosten>0.00</Zahlungsartkosten>$sNewLine";
             $sExport .= "<GesamtBrutto>".$this->internPrice($dSumBrutPrice)."</GesamtBrutto>$sNewLine";
-
-            $oUserpayment = oxNew( "oxuserpayment" );
-            $oUserpayment->load( $oOrder->oxorder__oxpaymentid->value);
-            $sPayment = $oUserpayment->oxuserpayments__oxvalue->value;
-            $sPayment = str_replace( "__", "", $sPayment);
-            $sPayment = str_replace( "@@", ",", $sPayment);
-
-            $oPayment = oxNew( "oxpayment" );
-            $oPayment->load( $oOrder->oxorder__oxpaymenttype->value);
-
-
             $sExport .= "<Bemerkung>".strip_tags( $oOrder->oxorder__oxremark->value)."</Bemerkung>$sNewLine";
             $sRet .= $sExport;
 
