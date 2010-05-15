@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticleTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxseoencoderarticleTest.php 27759 2010-05-14 10:10:17Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -119,6 +119,75 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         if ($this->aRET && isset($this->aRET[count($this->aSQL)-1])) {
             return $this->aRET[count($this->aSQL)-1];
         }
+    }
+
+    /**
+     * oxSeoEncoderArticle::_getAltUri() test case
+     *
+     * @return null
+     */
+    public function testGetAltUriVendor()
+    {
+        $oEncoder = $this->getMock( "oxSeoEncoderArticle", array( "_getListType", "_getArticleVendorUri", "_getArticleManufacturerUri", "_getArticleTagUri", "_getArticleUri" ) );
+        $oEncoder->expects( $this->once() )->method( '_getListType' )->will( $this->returnValue( "vendor" ) );
+        $oEncoder->expects( $this->once() )->method( '_getArticleVendorUri' )->will( $this->returnValue( "vendorUri" ) );
+        $oEncoder->expects( $this->never() )->method( '_getArticleManufacturerUri' );
+        $oEncoder->expects( $this->never() )->method( '_getArticleTagUri' );
+        $oEncoder->expects( $this->never() )->method( '_getArticleUri' );
+
+        $this->assertEquals( "vendorUri", $oEncoder->UNITgetAltUri( '1126', 0 ) );
+    }
+
+    /**
+     * oxSeoEncoderArticle::_getAltUri() test case
+     *
+     * @return null
+     */
+    public function testGetAltUriManufacturer()
+    {
+        $oEncoder = $this->getMock( "oxSeoEncoderArticle", array( "_getListType", "_getArticleVendorUri", "_getArticleManufacturerUri", "_getArticleTagUri", "_getArticleUri" ) );
+        $oEncoder->expects( $this->once() )->method( '_getListType' )->will( $this->returnValue( "manufacturer" ) );
+        $oEncoder->expects( $this->never() )->method( '_getArticleVendorUri' );
+        $oEncoder->expects( $this->once() )->method( '_getArticleManufacturerUri' )->will( $this->returnValue( "manufacturerUri" ) );
+        $oEncoder->expects( $this->never() )->method( '_getArticleTagUri' );
+        $oEncoder->expects( $this->never() )->method( '_getArticleUri' );
+
+        $this->assertEquals( "manufacturerUri", $oEncoder->UNITgetAltUri( '1126', 0 ) );
+    }
+
+    /**
+     * oxSeoEncoderArticle::_getAltUri() test case
+     *
+     * @return null
+     */
+    public function testGetAltUriTag()
+    {
+        $oEncoder = $this->getMock( "oxSeoEncoderArticle", array( "_getListType", "_getArticleVendorUri", "_getArticleManufacturerUri", "_getArticleTagUri", "_getArticleUri" ) );
+        $oEncoder->expects( $this->once() )->method( '_getListType' )->will( $this->returnValue( "tag" ) );
+        $oEncoder->expects( $this->never() )->method( '_getArticleVendorUri' );
+        $oEncoder->expects( $this->never() )->method( '_getArticleManufacturerUri' );
+        $oEncoder->expects( $this->once() )->method( '_getArticleTagUri' )->will( $this->returnValue( "tagUri" ) );
+        $oEncoder->expects( $this->never() )->method( '_getArticleUri' );
+
+        $this->assertEquals( "tagUri", $oEncoder->UNITgetAltUri( '1126', 0 ) );
+    }
+
+    /**
+     * oxSeoEncoderArticle::_getAltUri() test case
+     *
+     * @return null
+     */
+    public function testGetAltUriDefault()
+    {
+        $oEncoder = $this->getMock( "oxSeoEncoderArticle", array( "_getListType", "_getArticleVendorUri", "_getArticleManufacturerUri", "_getArticleTagUri", "_getArticleUri" ) );
+        $oEncoder->expects( $this->once() )->method( '_getListType' );
+        $oEncoder->expects( $this->never() )->method( '_getArticleVendorUri' );
+        $oEncoder->expects( $this->never() )->method( '_getArticleManufacturerUri' );
+        $oEncoder->expects( $this->never() )->method( '_getArticleTagUri' );
+        $oEncoder->expects( $this->once() )->method( '_getArticleUri' )->will( $this->returnValue( "defaultUri" ) );
+
+
+        $this->assertEquals( "defaultUri", $oEncoder->UNITgetAltUri( '1126', 0 ) );
     }
 
     /**

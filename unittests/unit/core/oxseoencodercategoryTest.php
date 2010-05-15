@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercategoryTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxseoencodercategoryTest.php 27759 2010-05-14 10:10:17Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -66,6 +66,21 @@ class Unit_Core_oxSeoEncoderCategoryTest extends OxidTestCase
         if ($this->aRET && isset($this->aRET[count($this->aSQL)-1])) {
             return $this->aRET[count($this->aSQL)-1];
         }
+    }
+
+    /**
+     * oxSeoEncoderArticle::_getAltUri() test case
+     *
+     * @return null
+     */
+    public function testGetAltUriTag()
+    {
+        oxTestModules::addFunction("oxcategory", "loadInLang", "{ return true; }");
+
+        $oEncoder = $this->getMock( "oxSeoEncoderCategory", array( "getCategoryUri" ) );
+        $oEncoder->expects( $this->once() )->method( 'getCategoryUri' )->will( $this->returnValue( "categoryUri" ) );
+
+        $this->assertEquals( "categoryUri", $oEncoder->UNITgetAltUri( '1126', 0 ) );
     }
 
     /**

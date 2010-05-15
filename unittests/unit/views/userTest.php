@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: userTest.php 27763 2010-05-14 13:14:46Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -135,7 +135,7 @@ class Unit_Views_userTest extends OxidTestCase
     {
          modConfig::setParameter( 'blnewssubscribed', null );
          $oUserView = new user();
-         $this->assertTrue( $oUserView->isNewsSubscribed() );
+         $this->assertFalse( $oUserView->isNewsSubscribed() );
     }
 
     public function testIsNewsSubscribedIfUserIsLogedIn()

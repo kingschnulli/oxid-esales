@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 27630 2010-05-07 12:46:18Z arvydas $
+ * @version   SVN: $Id: oxseoencoderTest.php 27764 2010-05-14 13:27:13Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -127,6 +127,72 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         if ($this->aRET && isset($this->aRET[count($this->aSQL)-1])) {
             return $this->aRET[count($this->aSQL)-1];
         }
+    }
+
+    /**
+     * oxSeoEncoder::_getAltUri() test case
+     *
+     * @return null
+     */
+    public function testGetAltUri()
+    {
+        $oEncoder = new oxSeoEncoder();
+        $this->assertNull( $oEncoder->UNITgetAltUri( "", "" ) );
+    }
+
+    /**
+     * oxSeoEncoder::_getAltUri() test case
+     *
+     * @return null
+     */
+    public function testResetCache()
+    {
+        $oEncoder = $this->getProxyClass( "oxSeoEncoder" );
+        $oEncoder->setNonPublicVar( "_aSeoCache", "testValue" );
+        $oEncoder->resetCache();
+        $this->assertEquals( array(), $oEncoder->getNonPublicVar( "_aSeoCache" ) );
+    }
+
+    /**
+     *
+     * @return
+     */
+    public function testAddSeoEntryForGetAltUriCall()
+    {
+        $sObjectId    = '';
+        $iShopId      = '';
+        $iLang        = '';
+        $sStdUrl      = '';
+        $sSeoUrl      = false;
+        $sType        = '';
+        $blFixed      = '';
+        $sKeywords    = '';
+        $sDescription = '';
+        $sParams      = '';
+        $blExclude    = true;
+        $sAltObjectId = 'testAltId';
+
+        $oEncoder = $this->getMock( "oxSeoEncoder", array( "_processSeoUrl", "_prepareUri", "_trimUrl", "_getAltUri", "_saveToDb" ) );
+        $oEncoder->expects( $this->once() )->method( '_processSeoUrl' )->with( $this->equalTo( 'testPreparedUri' ),
+                                                                               $this->equalTo( $sObjectId ),
+                                                                               $this->equalTo( $iLang ),
+                                                                               $this->equalTo( $blExclude ) )
+                                                                       ->will( $this->returnValue( 'testProcessedSeoUrl' ) );
+        $oEncoder->expects( $this->once() )->method( '_prepareUri' )->with( $this->equalTo( 'testTrimmedUrl' ) )->will( $this->returnValue( 'testPreparedUri' ) );
+        $oEncoder->expects( $this->once() )->method( '_trimUrl' )->with( $this->equalTo( 'testAltUri' ) )->will( $this->returnValue( 'testTrimmedUrl' ) );
+        $oEncoder->expects( $this->once() )->method( '_getAltUri' )->with( $this->equalTo( $sAltObjectId ) )->will( $this->returnValue( 'testAltUri' ) );
+        $oEncoder->expects( $this->once() )->method( '_saveToDb' )->with( $this->equalTo( $sType ),
+                                                                          $this->equalTo( $sObjectId ),
+                                                                          $this->equalTo( $sStdUrl ),
+                                                                          $this->equalTo( 'testProcessedSeoUrl' ),
+                                                                          $this->equalTo( $iLang ),
+                                                                          $this->equalTo( $iShopId ),
+                                                                          $this->equalTo( $blFixed ),
+                                                                          $this->equalTo( $sKeywords ),
+                                                                          $this->equalTo( $sDescription ),
+                                                                          $this->equalTo( $sParams  ) );
+
+        $oEncoder->addSeoEntry( $sObjectId, $iShopId, $iLang, $sStdUrl, $sSeoUrl, $sType, $blFixed, $sKeywords, $sDescription, $sParams, $blExclude, $sAltObjectId );
     }
 
     /**
@@ -1141,14 +1207,14 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
     //
     public function testGetAddParams()
     {
-        modConfig::setParameter( 'currency', 1 );
         oxTestModules::addFunction( "oxConfig", "getShopId", "{return 2;}");
+        oxTestModules::addFunction( "oxUtilsUrl", "getAddUrlParams", "{return array( 'cur' => 1, 'param1' => 'value1', 'param2' => 'value2' );}");
 
         $oEncoder = new modSeoEncoder();
         $aParams  = $oEncoder->UNITgetAddParamsFnc( 1, 2 );
 
         // testing
-        $sTestParams = '?cur=1';
+        $sTestParams = '?cur=1&amp;param1=value1&amp;param2=value2';
         $this->assertEquals( $sTestParams, $aParams );
     }
 
@@ -1164,6 +1230,8 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
             $oDb->Execute('replace into oxseo (oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxexpired, oxfixed) values ("test", "test", 1, 0, "stdurl", "seourl", "static", 1, 1)');
             $oEncoder = new oxSeoEncoder();
             $this->assertTrue( $oEncoder->UNITisFixed( 'static', 'test', 0, 1 ) );
+            $oEncoder = new oxSeoEncoder();
+            $this->assertTrue( $oEncoder->UNITisFixed( 'static', 'test', 0, 1, 0, 0 ) );
             $oDb->Execute( 'delete from oxseo where oxident="test"' );
             $oEncoder = new oxSeoEncoder();
             $this->assertFalse( $oEncoder->UNITisFixed( 'static', 'test', 0, 1 ) );

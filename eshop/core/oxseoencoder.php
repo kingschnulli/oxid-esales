@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 27624 2010-05-07 08:20:37Z arvydas $
+ * @version   SVN: $Id: oxseoencoder.php 27759 2010-05-14 10:10:17Z arvydas $
  */
 
 /**
@@ -1041,13 +1041,26 @@ class oxSeoEncoder extends oxSuperCfg
      * @param string $sDescription seo description
      * @param string $sParams      additional seo params. optional (mostly used for db indexing)
      * @param bool   $blExclude    exclude language prefix while building seo url
+     * @param string $sAltObjectId alternative object id used while saving meta info (used to override object id when saving tags related info)
      *
      * @return null
      */
-    public function addSeoEntry( $sObjectId, $iShopId, $iLang, $sStdUrl, $sSeoUrl, $sType, $blFixed = 1, $sKeywords = '', $sDescription = '', $sParams = '', $blExclude = false )
+    public function addSeoEntry( $sObjectId, $iShopId, $iLang, $sStdUrl, $sSeoUrl, $sType, $blFixed = 1, $sKeywords = '', $sDescription = '', $sParams = '', $blExclude = false, $sAltObjectId = null )
     {
-        $sSeoUrl = $this->_processSeoUrl( $this->_prepareUri( $this->_trimUrl( $sSeoUrl ) ), $sObjectId, $iLang, $blExclude );
+        $sSeoUrl = $this->_processSeoUrl( $this->_prepareUri( $this->_trimUrl( $sSeoUrl ? $sSeoUrl : $this->_getAltUri( $sAltObjectId ? $sAltObjectId : $sObjectId, $iLang ) ) ), $sObjectId, $iLang, $blExclude );
         $this->_saveToDb( $sType, $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId, $blFixed, $sKeywords, $sDescription, $sParams );
+    }
+
+    /**
+     * Returns alternative uri used while updating seo
+     *
+     * @param string $sObjectId object id
+     * @param int    $iLang     language id
+     *
+     * @return null
+     */
+    protected function _getAltUri( $sObjectId, $iLang )
+    {
     }
 
     /**

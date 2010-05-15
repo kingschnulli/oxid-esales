@@ -14,7 +14,7 @@
     <br>
     <div class="dot_sep mid"></div>
 
-    <form action="[{ $oViewConf->getSelfActionLink() }]" method="post">
+    <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
       <div>
           [{ $oViewConf->getHiddenSid() }]
           [{ $oViewConf->getNavFormParams() }]

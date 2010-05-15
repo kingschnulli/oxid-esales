@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercontentTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxseoencodercontentTest.php 27759 2010-05-14 10:10:17Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -68,6 +68,30 @@ class Unit_Core_oxSeoEncoderContentTest extends OxidTestCase
         }
     }
 
+    /**
+     * oxSeoEncoderContent::_getAltUri() test case
+     *
+     * @return null
+     */
+    public function testGetAltUriTag()
+    {
+        oxTestModules::addFunction("oxcontent", "loadInLang", "{ return true; }");
+
+        $oEncoder = $this->getMock( "oxSeoEncoderContent", array( "_getContentUri" ) );
+        $oEncoder->expects( $this->once() )->method( '_getContentUri' )->will( $this->returnValue( "contentUri" ) );
+
+        $this->assertEquals( "contentUri", $oEncoder->UNITgetAltUri( '1126', 0 ) );
+    }
+
+    /**
+     * oxSeoEncoderContent::getInstance() test case
+     *
+     * @return null
+     */
+    public function testGetInstance()
+    {
+        $this->assertTrue( oxSeoEncoderContent::getInstance() instanceof oxSeoEncoderContent );
+    }
 
     /**
      * Content url getter tests
