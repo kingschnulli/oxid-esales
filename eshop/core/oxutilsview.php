@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 26071 2010-02-25 15:12:55Z sarunas $
+ * @version   SVN: $Id: oxutilsview.php 27772 2010-05-17 11:51:07Z arvydas $
  */
 
 /**
@@ -40,6 +40,13 @@ class oxUtilsView extends oxSuperCfg
      * @var smarty
      */
     protected static $_oSmarty = null;
+
+    /**
+     * Templates directories array
+     *
+     * @var array
+     */
+    protected $_aTemplateDir = array();
 
     /**
      * Utility instance getter
@@ -238,6 +245,42 @@ class oxUtilsView extends oxSuperCfg
     }
 
     /**
+     * Templates directory setter
+     *
+     * @param string $sTplDir templates path
+     *
+     * @return null
+     */
+    public function setTemplateDir( $sTplDir )
+    {
+        if ( $sTplDir && !in_array( $sTplDir, $this->_aTemplateDir ) ) {
+            $this->_aTemplateDir[] = $sTplDir;
+        }
+    }
+
+    /**
+     * Initializes and returns templates directory info array
+     *
+     * @return array
+     */
+    public function getTemplateDirs()
+    {
+        $myConfig = $this->getConfig();
+
+        //T2010-01-13
+        //#1531
+        $this->setTemplateDir( $myConfig->getTemplateDir( $this->isAdmin() ) );
+
+        if ( !$this->isAdmin() ) {
+            $this->setTemplateDir( $myConfig->getOutDir( true ) . $myConfig->getConfigParam( 'sTheme' ) . "/tpl/" );
+        }
+
+        $this->setTemplateDir( $myConfig->getOutDir( true ) . "basic/tpl/" );
+
+        return $this->_aTemplateDir;
+    }
+
+    /**
      * sets properties of smarty object
      *
      * @param object $oSmarty template processor object (smarty)
@@ -246,24 +289,7 @@ class oxUtilsView extends oxSuperCfg
      */
     protected function _fillCommonSmartyProperties( $oSmarty )
     {
-
         $myConfig = $this->getConfig();
-
-        //T2010-01-13
-        //#1531
-        $sTplDir1 = $myConfig->getTemplateDir( $this->isAdmin() );
-        $sTplDir2 = $myConfig->getOutDir() . $myConfig->getConfigParam('sTheme') . "/tpl/";
-        $aTemplateDir = array($sTplDir1);
-        if (!$this->isAdmin() && $sTplDir1 != $sTplDir2)
-            $aTemplateDir[] = $sTplDir2;
-
-
-        $aTemplateDir = array($myConfig->getTemplateDir( $this->isAdmin() ));
-        $aTemplateDir[] = "/htdocs/oxideshop/eshop/source/out/basic/tpl/";
-
-
-        $aTemplateDir = array($myConfig->getTemplateDir( $this->isAdmin() ));
-        $aTemplateDir[] = $myConfig->getOutDir()."basic/tpl/";
 
         $oSmarty->left_delimiter  = '[{';
         $oSmarty->right_delimiter = '}]';
@@ -277,7 +303,7 @@ class oxUtilsView extends oxSuperCfg
         $oSmarty->caching      = false;
         $oSmarty->compile_dir  = $myConfig->getConfigParam( 'sCompileDir' );
         $oSmarty->cache_dir    = $myConfig->getConfigParam( 'sCompileDir' );
-        $oSmarty->template_dir = $aTemplateDir;
+        $oSmarty->template_dir = $this->getTemplateDirs();
         $oSmarty->compile_id   = md5( $oSmarty->template_dir[0] );
 
         $oSmarty->default_template_handler_func = array(oxUtilsView::getInstance(),'_smartyDefaultTemplateHandler');

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: newslettersendTest.php 26670 2010-03-19 10:10:38Z arvydas $
+ * @version   SVN: $Id: newslettersendTest.php 27773 2010-05-17 12:26:37Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -104,6 +104,7 @@ class Unit_Admin_NewsletterSendTest extends OxidTestCase
         $this->assertTrue( isset( $aViewData['iStart'] ) );
         $this->assertTrue( isset( $aViewData['user'] ) );
         $this->assertTrue( isset( $aViewData['id'] ) );
+        $this->assertNotNull(oxDb::getDb()->getOne( "select oxtext from oxremark where oxparentid='_test1'" ));
     }
 
     /**

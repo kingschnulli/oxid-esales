@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsviewTest.php 26863 2010-03-26 09:43:10Z arvydas $
+ * @version   SVN: $Id: oxutilsviewTest.php 27772 2010-05-17 11:51:07Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -27,6 +27,63 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 
 class Unit_Core_oxUtilsViewTest extends OxidTestCase
 {
+    /**
+     * oxUtilsView::getTemplateDirs() test case
+     *
+     * @return null
+     */
+    public function testGetTemplateDirs()
+    {
+        $myConfig = oxConfig::getInstance();
+        $aDirs = array();
+        $aDirs[] = $myConfig->getTemplateDir( false );
+        $sDir = $myConfig->getOutDir( true ) . $myConfig->getConfigParam( 'sTheme' ) . "/tpl/";
+        if ( !in_array( $sDir, $aDirs ) ) {
+            $aDirs[] = $sDir;
+        }
+
+        $sDir = $myConfig->getOutDir( true ) . "basic/tpl/";
+        if ( !in_array( $sDir, $aDirs ) ) {
+            $aDirs[] = $sDir;
+        }
+
+        //
+        $oUtilsView = $this->getMock( "oxUtilsView", array( "isAdmin" ) );
+        $oUtilsView->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
+        $this->assertEquals( $aDirs, $oUtilsView->getTemplateDirs() );
+    }
+
+    /**
+     * oxUtilsView::setTemplateDir() test case
+     *
+     * @return null
+     */
+    public function testSetTemplateDir()
+    {
+        $myConfig = oxConfig::getInstance();
+        $aDirs[] = "testDir1";
+        $aDirs[] = "testDir2";
+        $aDirs[] = $myConfig->getTemplateDir( false );
+        $sDir = $myConfig->getOutDir( true ) . $myConfig->getConfigParam( 'sTheme' ) . "/tpl/";
+        if ( !in_array( $sDir, $aDirs ) ) {
+            $aDirs[] = $sDir;
+        }
+
+        $sDir = $myConfig->getOutDir( true ) . "basic/tpl/";
+        if ( !in_array( $sDir, $aDirs ) ) {
+            $aDirs[] = $sDir;
+        }
+
+        //
+        $oUtilsView = $this->getMock( "oxUtilsView", array( "isAdmin" ) );
+        $oUtilsView->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
+        $oUtilsView->setTemplateDir( "testDir1" );
+        $oUtilsView->setTemplateDir( "testDir2" );
+        $oUtilsView->setTemplateDir( "testDir1" );
+
+        $this->assertEquals( $aDirs, $oUtilsView->getTemplateDirs() );
+    }
+
     /**
      * Testing smarty getter + its caching
      */
@@ -148,6 +205,18 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
 
         $myConfig = oxConfig::getInstance();
 
+        $sTplDir = $myConfig->getTemplateDir( $myConfig->isAdmin() );
+
+        $aTemplatesDir = array();
+        if ( $sTplDir ) {
+            $aTemplatesDir[] = $sTplDir;
+        }
+
+        $sTplDir = $myConfig->getOutDir() . $myConfig->getConfigParam('sTheme') . "/tpl/";
+        if ( $sTplDir && !in_array( $sTplDir, $aTemplatesDir ) ) {
+            $aTemplatesDir[] = $sTplDir;
+        }
+
         $aCheck = array( 'php_handling'    => 2,
                          'security'        => true,
                          'php_handling'    => SMARTY_PHP_REMOVE,
@@ -156,7 +225,7 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
                          'caching'         => false,
                          'compile_dir'     => $myConfig->getConfigParam( 'sCompileDir' ),
                          'cache_dir'       => $myConfig->getConfigParam( 'sCompileDir' ),
-                         'template_dir'    => array($myConfig->getTemplateDir( false ), $myConfig->getOutDir() . $myConfig->getConfigParam('sTheme') . "/tpl/"),
+                         'template_dir'    => $aTemplatesDir,
                          'compile_id'      => md5($myConfig->getTemplateDir( false )),
                          'debugging'       => true,
                          'compile_check'   => true );
@@ -182,6 +251,18 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
 
         $myConfig = oxConfig::getInstance();
 
+        $sTplDir = $myConfig->getTemplateDir( $myConfig->isAdmin() );
+
+        $aTemplatesDir = array();
+        if ( $sTplDir ) {
+            $aTemplatesDir[] = $sTplDir;
+        }
+
+        $sTplDir = $myConfig->getOutDir() . $myConfig->getConfigParam('sTheme') . "/tpl/";
+        if ( $sTplDir && !in_array( $sTplDir, $aTemplatesDir ) ) {
+            $aTemplatesDir[] = $sTplDir;
+        }
+
         $aCheck = array( 'php_handling'    => 2,
                          'security'        => false,
                          'php_handling'    => (int) $myConfig->getConfigParam( 'iSmartyPhpHandling' ),
@@ -190,7 +271,7 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
                          'caching'         => false,
                          'compile_dir'     => $myConfig->getConfigParam( 'sCompileDir' ),
                          'cache_dir'       => $myConfig->getConfigParam( 'sCompileDir' ),
-                         'template_dir'    => array($myConfig->getTemplateDir( false ), $myConfig->getOutDir() . $myConfig->getConfigParam('sTheme') . "/tpl/"),
+                         'template_dir'    => $aTemplatesDir,
                          'compile_id'      => md5($myConfig->getTemplateDir( false )),
                          'debugging'       => true,
                          'compile_check'   => true );
