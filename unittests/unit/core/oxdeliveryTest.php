@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryTest.php 27601 2010-05-06 12:53:09Z vilma $
+ * @version   SVN: $Id: oxdeliveryTest.php 27784 2010-05-18 07:04:05Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -602,7 +602,7 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
         $oDelivery = oxNew( 'oxdelivery' );
         $oDelivery->oxdelivery__oxdeltype = new oxField('p', oxField::T_RAW);
 
-        $this->assertEquals( 0, $oDelivery->getDeliveryAmount($this->_oBasketItem) );
+        $this->assertEquals( 512, $oDelivery->getDeliveryAmount($this->_oBasketItem) );
         $this->assertTrue( $oDelivery->getblFreeShipping() );
     }
 
@@ -621,7 +621,7 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
         $oDelivery = oxNew( 'oxdelivery' );
         $oDelivery->oxdelivery__oxdeltype = new oxField('p', oxField::T_RAW);
 
-        $this->assertEquals( 0, $oDelivery->getDeliveryAmount($this->_oBasketItem) );
+        $this->assertEquals( 512, $oDelivery->getDeliveryAmount($this->_oBasketItem) );
         $this->assertTrue( $oDelivery->getblFreeShipping() );
     }
 
@@ -636,7 +636,7 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
         $oDelivery->oxdelivery__oxdeltype = new oxField('p', oxField::T_RAW);
 
         modConfig::getInstance()->setConfigParam( 'blExclNonMaterialFromDelivery', true );
-        $this->assertEquals( 0, $oDelivery->getDeliveryAmount($this->_oBasketItem) );
+        $this->assertEquals( 512, $oDelivery->getDeliveryAmount($this->_oBasketItem) );
         $this->assertTrue( $oDelivery->getblFreeShipping() );
     }
 
@@ -794,7 +794,7 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
             $oDelivery->getDeliveryAmount( $oBasketItem );
         }
 
-        $this->assertEquals( 512, $oDelivery->getdPrice() );
+        $this->assertEquals( 1024, $oDelivery->getdPrice() );
     }
 
     /*
