@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminlistTest.php 26851 2010-03-25 16:56:52Z arvydas $
+ * @version   SVN: $Id: oxadminlistTest.php 27816 2010-05-19 13:44:05Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -517,7 +517,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testPrepareWhereQueryWithGermanUmlauts()
     {
-        $aWhere['oxtitle'] = '%testvalueäö%';
+        $aWhere['oxtitle'] = 'das %testvalueäö% asd';
         $aWhere['oxid']    = 'testid';
 
         oxLang::getInstance()->setBaseLanguage( 1 );
@@ -529,7 +529,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         $sResultSql = strtolower( trim( $sResultSql ) );
         $sResultSql = preg_replace( "/\s+/", " ", $sResultSql );
 
-        $sSql = "and ( oxtitle like '%testvalueäö%' or oxtitle like '%testvalue&auml;&ouml;%' ) and ( oxid = 'testid' )";
+        $sSql = "and ( oxtitle = 'das' and ( oxtitle = '%testvalueäö%' or oxtitle = '%testvalue&auml;&ouml;%' ) and oxtitle = 'asd' ) and ( oxid = 'testid' )";
 
         $this->assertEquals( $sSql, $sResultSql );
     }

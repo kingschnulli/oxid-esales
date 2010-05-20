@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxubaseTest.php 27795 2010-05-18 14:03:40Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1676,4 +1676,18 @@ class Unit_Views_oxubaseTest extends OxidTestCase
 
 
 
+
+
+    public function testPrepareMinimumOrderPrice4ViewWhenEntered0()
+    {
+        modConfig::getInstance()->setConfigParam( "iMinOrderPrice", '' );
+        $oUbase1 = $this->getMock('oxubase', array('getSession'));
+        $oUbase1->expects($this->never())->method('getSession');
+        $oUbase1->prepareMinimumOrderPrice4View();
+
+        modConfig::getInstance()->setConfigParam( "iMinOrderPrice", 0 );
+        $oUbase2 = $this->getMock('oxubase', array('getSession'));
+        $oUbase2->expects($this->once())->method('getSession')->will($this->returnValue(modSession::getInstance()));
+        $oUbase2->prepareMinimumOrderPrice4View();
+    }
 }

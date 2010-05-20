@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseodecoderTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxseodecoderTest.php 27807 2010-05-19 11:37:32Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -308,5 +308,43 @@ class Unit_Core_oxSeoDecoderTest extends OxidTestCase
             }
         }
         $this->fail( 'error running testProcessSeoCallUsingSeoHistory' );
+    }
+
+    public function testGetSeoUrl()
+    {
+        $oDb = oxDb::getDb();
+
+        $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl1" ) )."', 'iShopId', '0', 'seourl1', 'NOToxarticle', 'asd' )" );
+        $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl2" ) )."', 'iShopId', '0', 'seourl2', 'NOToxarticle', 'bsd' )" );
+        $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl3" ) )."', 'iShopId', '0', 'seourl3', 'NOToxarticle', 'csd' )" );
+        $oDec = new oxSeoDecoder();
+        $this->assertEquals('seourl1', $oDec->UNITgetSeoUrl('obid', 0, 'iShopId'));
+    }
+
+    public function testGetSeoUrlForArticleNotExistingCatCfg()
+    {
+        $oDb = oxDb::getDb();
+
+        $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl1" ) )."', 'iShopId', '0', 'seourl1', 'oxarticle', 'asd' )" );
+        $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl2" ) )."', 'iShopId', '0', 'seourl2', 'oxarticle', 'bsd' )" );
+        $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl3" ) )."', 'iShopId', '0', 'seourl3', 'oxarticle', 'csd' )" );
+        $oDec = new oxSeoDecoder();
+        $this->assertEquals('seourl1', $oDec->UNITgetSeoUrl('obid', 0, 'iShopId'));
+    }
+
+    public function testGetSeoUrlForArticleWithExistingCatCfg()
+    {
+        $oDb = oxDb::getDb();
+        
+        $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl1" ) )."', 'iShopId', '0', 'seourl1', 'oxarticle', 'asd' )" );
+        $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl2" ) )."', 'iShopId', '0', 'seourl2', 'oxarticle', 'bsd' )" );
+        $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl3" ) )."', 'iShopId', '0', 'seourl3', 'oxarticle', 'csd' )" );
+
+
+        $oDb->Execute( "insert into oxobject2category ( oxid, oxobjectid, oxcatnid, oxtime ) values ( '_x1', 'obid', 'cat1', 10 )" );
+        $oDb->Execute( "insert into oxobject2category ( oxid, oxobjectid, oxcatnid, oxtime ) values ( '_x2', 'obid', 'bsd', 5 )" );
+        $oDb->Execute( "insert into oxobject2category ( oxid, oxobjectid, oxcatnid, oxtime ) values ( '_x3', 'obid', 'cat3', 15 )" );
+        $oDec = new oxSeoDecoder();
+        $this->assertEquals('seourl2', $oDec->UNITgetSeoUrl('obid', 0, 'iShopId'));
     }
 }

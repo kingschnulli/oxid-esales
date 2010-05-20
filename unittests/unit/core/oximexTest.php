@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oximexTest.php 27681 2010-05-11 10:30:29Z sarunas $
+ * @version   SVN: $Id: oximexTest.php 27794 2010-05-18 13:52:47Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -175,7 +175,7 @@ class Unit_Core_oxImexTest extends OxidTestCase
                              ."<Land></Land>\n</Lieferadresse>\n<Matchcode>billlname, billfname</Matchcode>\n<fSteuerbar>ja</fSteuerbar>\n</Kunde>\n<Artikelliste>\n<Artikel>\n<Artikelzusatzinfo><Nettostaffelpreis></Nettostaffelpreis></Artikelzusatzinfo>\n"
                              ."<SteuersatzID></SteuersatzID>\n<Steuersatz>0.19</Steuersatz>\n<Artikelnummer>1126</Artikelnummer>\n<Anzahl>1</Anzahl>\n<Produktname>Bar-Set ABSINTH/oxselvariant</Produktname>\n"
                              ."<Rabatt>0.00</Rabatt>\n<Preis>34.00</Preis>\n</Artikel>\n<GesamtRabatt>0.00</GesamtRabatt>\n<GesamtNetto>28.57</GesamtNetto>\n"
-                             ."<Lieferkosten>1.00</Lieferkosten>\n<Zahlungsartkosten>0.00</Zahlungsartkosten>\n<GesamtBrutto>34.00</GesamtBrutto>\n<Bemerkung></Bemerkung>\n</Artikelliste>\n<Zahlung>\n<Art></Art>\n</Zahlung>\n</Bestellung>\n</Bestellliste>\n", $sResult );
+                             ."<Lieferkosten>1.00</Lieferkosten>\n<Zahlungsartkosten>3.00</Zahlungsartkosten>\n<GesamtBrutto>34.00</GesamtBrutto>\n<Bemerkung></Bemerkung>\n</Artikelliste>\n<Zahlung>\n<Art></Art>\n</Zahlung>\n</Bestellung>\n</Bestellliste>\n", $sResult );
     }
 
     public function testExportLexwareOrdersDiffCurrency()
@@ -249,7 +249,7 @@ class Unit_Core_oxImexTest extends OxidTestCase
                              ."<Land></Land>\n</Lieferadresse>\n<Matchcode>billlname, billfname</Matchcode>\n<fSteuerbar>ja</fSteuerbar>\n</Kunde>\n<Artikelliste>\n<Artikel>\n<Artikelzusatzinfo><Nettostaffelpreis></Nettostaffelpreis></Artikelzusatzinfo>\n"
                              ."<SteuersatzID></SteuersatzID>\n<Steuersatz>0.19</Steuersatz>\n<Artikelnummer>1126</Artikelnummer>\n<Anzahl>1</Anzahl>\n<Produktname>Bar-Set ABSINTH/oxselvariant</Produktname>\n"
                              ."<Rabatt>0.00</Rabatt>\n<Preis>15.81</Preis>\n</Artikel>\n<GesamtRabatt>0.00</GesamtRabatt>\n<GesamtNetto>13.29</GesamtNetto>\n"
-                             ."<Lieferkosten>0.47</Lieferkosten>\n<Zahlungsartkosten>0.00</Zahlungsartkosten>\n<GesamtBrutto>15.81</GesamtBrutto>\n<Bemerkung></Bemerkung>\n</Artikelliste>\n<Zahlung>\n<Art></Art>\n</Zahlung>\n</Bestellung>\n</Bestellliste>\n", $sResult );
+                             ."<Lieferkosten>0.47</Lieferkosten>\n<Zahlungsartkosten>1.40</Zahlungsartkosten>\n<GesamtBrutto>15.81</GesamtBrutto>\n<Bemerkung></Bemerkung>\n</Artikelliste>\n<Zahlung>\n<Art></Art>\n</Zahlung>\n</Bestellung>\n</Bestellliste>\n", $sResult );
     }
 
     public function testExportLexwareOrders_setsCorrectCharset()

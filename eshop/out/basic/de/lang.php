@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27760 2010-05-14 10:23:30Z vilma $
+ * @version   SVN: $Id: lang.php 27796 2010-05-18 14:53:54Z vilma $
  */
 
 
@@ -650,7 +650,7 @@ $aLang = array(
 'INC_PRODUCTITEM_NOWONLY'                         =>"jetzt nur",
 'INC_PRODUCTITEM_ADDTOCARD'                       =>"in den Warenkorb",
 'INC_PRODUCTITEM_ARTNOMBER2'                      =>"Art.Nr.:",
-'INC_PRODUCTITEM_ARTWEIGHT'                       =>"Versandgewicht:",
+'INC_PRODUCTITEM_ARTWEIGHT'                       =>"Gewicht:",
 'INC_PRODUCTITEM_ARTWEIGHT2'                      =>"kg",
 'INC_PRODUCTITEM_MOREINFO2'                       =>"mehr Info",
 'INC_PRODUCTITEM_REMOVEFROMCOMPARELIST2'          =>"aus Vergl. entfernen",
@@ -688,7 +688,7 @@ $aLang = array(
 'INC_RIGHTITEM_HAVEPOUSEEN'                       =>"Kennen Sie schon... ?",
 'INC_RIGHTITEM_CUSTOMERWHO'                       =>"Kunden, die diesen Artikel gekauft haben, kauften auch:",
 'INC_RIGHTLIST_ARTNOMBER'                         =>"Art.Nr.:",
-'INC_RIGHTLIST_ARTWEIGHT'                         =>"Versandgewicht:",
+'INC_RIGHTLIST_ARTWEIGHT'                         =>"Gewicht:",
 'INC_RIGHTLIST_ARTWEIGHT2'                        =>"kg",
 'INC_RIGHTLIST_MOREINFO'                          =>"mehr Info",
 'INC_RIGHTLIST_REMOVEFROMCOMPARELIST'             =>"aus Vergl. entfernen",
@@ -967,7 +967,7 @@ $aLang = array(
 'REGISTER_PZLCITY2'                               => "PLZ, Ort:",
 'REGISTER_ADDITIONALINFO2'                        => "zus. Info:",
 'REGISTER_COUNTRY2'                               => "Land:",
-'REGISTER_PHONE2'                                 => "Telefon",
+'REGISTER_PHONE2'                                 => "Telefon:",
 'REGISTER_FAX2'                                   => "Telefax:",
 'REGISTER_SEND'                                   => "Absenden",
 'REGISTER_DISABLESHIPPINGADDRESS'                 => "Hier klicken, um die Lieferadresse auszublenden",

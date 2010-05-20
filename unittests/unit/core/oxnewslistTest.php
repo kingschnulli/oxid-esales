@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewslistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxnewslistTest.php 27813 2010-05-19 13:03:54Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -120,7 +120,7 @@ class Unit_Core_oxnewslistTest extends OxidTestCase
 
         $this->assertEquals( 1, $oNewsList->count() );
         $oItem = $oNewsList->current();
-        $this->assertEquals( 1, $oItem->getId() );
+        $this->assertEquals( 2, $oItem->getId() );
     }
     /**
      * Testing user setter/getter

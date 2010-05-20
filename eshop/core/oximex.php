@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oximex.php 27745 2010-05-13 08:25:12Z arvydas $
+ * @version   SVN: $Id: oximex.php 27794 2010-05-18 13:52:47Z sarunas $
  */
 
 /**
@@ -383,16 +383,18 @@ class oxImex extends oxBase
 
             $dDiscount = $oOrder->oxorder__oxvoucherdiscount->value + $oOrder->oxorder__oxdiscount->value;
             $dDelCost = $oOrder->oxorder__oxdelcost->value;
+            $dPaymentCost = $oOrder->oxorder__oxpaycost->value;
             if ($dOrderCurRate > 0) {
                 $dDiscount /= $dOrderCurRate;
                 $dSumNetPrice /= $dOrderCurRate;
                 $dDelCost /= $dOrderCurRate;
                 $dSumBrutPrice /= $dOrderCurRate;
+                $dPaymentCost /= $dOrderCurRate;
             }
             $sExport  = "<GesamtRabatt>".$this->internPrice($dDiscount)."</GesamtRabatt>$sNewLine";
             $sExport .= "<GesamtNetto>".$this->internPrice($dSumNetPrice)."</GesamtNetto>$sNewLine";
             $sExport .= "<Lieferkosten>".$this->internPrice($dDelCost)."</Lieferkosten>$sNewLine";
-            $sExport .= "<Zahlungsartkosten>0.00</Zahlungsartkosten>$sNewLine";
+            $sExport .= "<Zahlungsartkosten>".$this->internPrice($dPaymentCost)."</Zahlungsartkosten>$sNewLine";
             $sExport .= "<GesamtBrutto>".$this->internPrice($dSumBrutPrice)."</GesamtBrutto>$sNewLine";
             $sExport .= "<Bemerkung>".strip_tags( $oOrder->oxorder__oxremark->value)."</Bemerkung>$sNewLine";
             $sRet .= $sExport;

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 26319 2010-03-05 09:58:47Z sarunas $
+ * @version   SVN: $Id: oxbasket.php 27792 2010-05-18 12:35:14Z sarunas $
  */
 
 /**
@@ -988,11 +988,15 @@ class oxBasket extends oxSuperCfg
 
             // saving discount info
             $oStdDiscount->dDiscount = $oDiscount->getAbsValue( $dOldprice );
+            if ($dOldprice < $oStdDiscount->dDiscount) {
+                $oStdDiscount->dDiscount = $dOldprice;
+            }
 
-            $this->_aDiscounts[$oDiscount->getId()] = $oStdDiscount;
-
-            // substracting product price after discount
-            $dOldprice = $dOldprice - $oStdDiscount->dDiscount;
+            if ($oStdDiscount->dDiscount > 0) {
+                $this->_aDiscounts[$oDiscount->getId()] = $oStdDiscount;
+                // substracting product price after discount
+                $dOldprice = $dOldprice - $oStdDiscount->dDiscount;
+            }
         }
     }
 
@@ -2305,10 +2309,10 @@ class oxBasket extends oxSuperCfg
     public function isBelowMinOrderPrice()
     {
         $blIsBelowMinOrderPrice = false;
-        $dMinOrderPrice = oxPrice::getPriceInActCurrency( ( int ) $this->getConfig()->getConfigParam( 'iMinOrderPrice' ) );
-        if ( $dMinOrderPrice && $this->getProductsCount() &&
-             $dMinOrderPrice > $this->getDiscountedProductsBruttoPrice() ) {
-             $blIsBelowMinOrderPrice = true;
+        $sConfValue = $this->getConfig()->getConfigParam( 'iMinOrderPrice' );
+        if ( is_numeric($sConfValue) && $this->getProductsCount() ) {
+            $dMinOrderPrice = oxPrice::getPriceInActCurrency( ( int ) $sConfValue );
+            $blIsBelowMinOrderPrice = ($dMinOrderPrice > $this->getDiscountedProductsBruttoPrice());
         }
 
         return $blIsBelowMinOrderPrice;

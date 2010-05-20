@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27760 2010-05-14 10:23:30Z vilma $
+ * @version   SVN: $Id: lang.php 27796 2010-05-18 14:53:54Z vilma $
  */
 
 
@@ -649,7 +649,7 @@ $aLang = array(
 'INC_PRODUCTITEM_NOWONLY'                         =>"now only",
 'INC_PRODUCTITEM_ADDTOCARD'                       =>"add to Cart",
 'INC_PRODUCTITEM_ARTNOMBER2'                      =>"Art.No.:",
-'INC_PRODUCTITEM_ARTWEIGHT'                       =>"Shipping weight:",
+'INC_PRODUCTITEM_ARTWEIGHT'                       =>"Weight:",
 'INC_PRODUCTITEM_ARTWEIGHT2'                      =>"kg",
 'INC_PRODUCTITEM_MOREINFO2'                       =>"more Info",
 'INC_PRODUCTITEM_REMOVEFROMCOMPARELIST2'          =>"remove from compare list",
@@ -687,7 +687,7 @@ $aLang = array(
 'INC_RIGHTITEM_HAVEPOUSEEN'                       =>"Have you seen ... ?",
 'INC_RIGHTITEM_CUSTOMERWHO'                       =>"Customer who bought this product also bought:",
 'INC_RIGHTLIST_ARTNOMBER'                         =>"Art.No.:",
-'INC_RIGHTLIST_ARTWEIGHT'                         =>"Shipping weight:",
+'INC_RIGHTLIST_ARTWEIGHT'                         =>"Weight:",
 'INC_RIGHTLIST_ARTWEIGHT2'                        =>"kg",
 'INC_RIGHTLIST_MOREINFO'                          =>"more Info",
 'INC_RIGHTLIST_REMOVEFROMCOMPARELIST'             =>"remove from compare list",

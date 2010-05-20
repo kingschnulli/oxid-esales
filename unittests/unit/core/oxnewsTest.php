@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxnewsTest.php 27793 2010-05-18 13:32:24Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -188,7 +188,60 @@ class Unit_Core_oxnewsTest extends OxidTestCase
         $iErrorReporting = error_reporting( E_ALL ^ E_NOTICE );
         $e = null;
         try {
-            $sNow = date( 'Y-m-d' );
+            $oTestNews = oxNew( 'oxnews' );
+            $oTestNews->oxnews__oxdate = new oxField( "2009-05-17" );
+            $oTestNews->UNITinsert();
+
+            $oNews = oxNew( 'oxnews' );
+            if ( !$oNews->load( $oTestNews->getId() ) ) {
+                $this->fail( 'insert failed' );
+            }
+
+            $this->assertEquals( "17.05.2009", $oNews->oxnews__oxdate->value );
+        } catch ( Exception $e ){
+        }
+
+        error_reporting( $iErrorReporting );
+        if ( $e ) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Testing if insert works at all and if date is set correctly
+     */
+    public function testInsert_dateIsZero()
+    {
+        $iErrorReporting = error_reporting( E_ALL ^ E_NOTICE );
+        $e = null;
+        try {
+            $oTestNews = oxNew( 'oxnews' );
+            $oTestNews->oxnews__oxdate = new oxField( "0000-00-00" );
+            $oTestNews->UNITinsert();
+
+            $oNews = oxNew( 'oxnews' );
+            if ( !$oNews->load( $oTestNews->getId() ) ) {
+                $this->fail( 'insert failed' );
+            }
+
+            $this->assertEquals( date( "d.m.Y" ), $oNews->oxnews__oxdate->value );
+        } catch ( Exception $e ){
+        }
+
+        error_reporting( $iErrorReporting );
+        if ( $e ) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Testing if insert works at all and if date is set correctly
+     */
+    public function testInsert_dateNotEntered()
+    {
+        $iErrorReporting = error_reporting( E_ALL ^ E_NOTICE );
+        $e = null;
+        try {
             $oTestNews = oxNew( 'oxnews' );
             $oTestNews->UNITinsert();
 
@@ -197,14 +250,11 @@ class Unit_Core_oxnewsTest extends OxidTestCase
                 $this->fail( 'insert failed' );
             }
 
-            $this->assertTrue( oxUtilsDate::getInstance()->formatDBDate( $sNow ) <= $oNews->oxnews__oxdate->value );
+            $this->assertEquals( date( "d.m.Y" ), $oNews->oxnews__oxdate->value );
         } catch ( Exception $e ){
         }
 
         error_reporting( $iErrorReporting );
-        if ( $e ) {
-            throw $e;
-        }
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsdateTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxutilsdateTest.php 27809 2010-05-19 12:30:58Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -97,6 +97,22 @@ class Unit_Core_oxUtilsDateTest extends OxidTestCase
         $this->assertEquals( '2008-05-25', oxUtilsDate::getInstance()->german2English( '25.05.2008' ) );
         $this->assertEquals( '2008-05', oxUtilsDate::getInstance()->german2English( '05.2008' ) );
         $this->assertEquals( '08-05-25', oxUtilsDate::getInstance()->german2English( '25.05.08' ) );
+    }
+
+    /**
+     *  Test checking if date is empty
+     */
+    public function testIsEmptyDate()
+    {
+        $this->assertFalse( oxUtilsDate::getInstance()->isEmptyDate( '2008-05-08' ) );
+        $this->assertFalse( oxUtilsDate::getInstance()->isEmptyDate( '25.05.2008' ) );
+        $this->assertFalse( oxUtilsDate::getInstance()->isEmptyDate( '2008-06-18 00:00' ) );
+        $this->assertFalse( oxUtilsDate::getInstance()->isEmptyDate( '0000/00/00 00:01' ) );
+        $this->assertFalse( oxUtilsDate::getInstance()->isEmptyDate( 'Some Text' ) );
+        $this->assertTrue( oxUtilsDate::getInstance()->isEmptyDate( '' ) );
+        $this->assertTrue( oxUtilsDate::getInstance()->isEmptyDate( '0000-00-00' ) );
+        $this->assertTrue( oxUtilsDate::getInstance()->isEmptyDate( '0000/00/00' ) );
+        $this->assertTrue( oxUtilsDate::getInstance()->isEmptyDate( '0000-00-00 00:00:00' ) );
     }
 
 }

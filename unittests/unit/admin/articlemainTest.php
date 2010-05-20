@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: articlemainTest.php 26695 2010-03-20 11:52:45Z arvydas $
+ * @version   SVN: $Id: articlemainTest.php 27808 2010-05-19 12:30:31Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -587,5 +587,22 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
         $oView->expects( $this->atLeastOnce() )->method( '_getTitle' )->will( $this->returnValue( "testTitle" ) );
         $oView->UNITformJumpList( $oArticle, null );
         $this->assertEquals( $aData, $oView->getViewDataElement( "thisvariantlist" ) );
+    }
+
+    public function testCopyArticleSkipsRating()
+    {
+        $oArt = new oxarticle();
+        $oArt->setId("_testArtId");
+        $oArt->oxarticles__oxrating    = new oxField( 10 );
+        $oArt->oxarticles__oxratingcnt = new oxField( 110 );
+        $oArt->save();
+
+        $oV = new Article_Main();
+        $oV->copyArticle('_testArtId', '_testArtId2');
+
+        $oArt = new oxarticle();
+        $this->assertTrue($oArt->load('_testArtId2'));
+        $this->assertEquals(0, $oArt->oxarticles__oxrating->value);
+        $this->assertEquals(0, $oArt->oxarticles__oxratingcnt->value);
     }
 }

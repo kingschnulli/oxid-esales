@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfileTest.php 26867 2010-03-26 09:47:49Z arvydas $
+ * @version   SVN: $Id: oxutilsfileTest.php 27797 2010-05-18 15:34:13Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -88,8 +88,14 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
     {
         $oUtilsFile = new oxUtilsFile();
 
+        $aDetailImageSizes = array( "oxpic1" => "251*201", "oxpic2" => "252*202", "oxpic3" => "253*203" );
+        oxConfig::getInstance()->setConfigParam( "aDetailImageSizes", $aDetailImageSizes );
+
         // details img size
-        $this->assertEquals( array( 250, 200 ), $oUtilsFile->UNITgetImageSize( null, 1, 'aDetailImageSizes' ) );
+        $this->assertEquals( array( 251, 201 ), $oUtilsFile->UNITgetImageSize( null, 1, 'aDetailImageSizes' ) );
+
+        // details img size
+        $this->assertEquals( array( 253, 203 ), $oUtilsFile->UNITgetImageSize( null, 3, 'aDetailImageSizes' ) );
 
         // zoom img size
         $this->assertEquals( array( 450, 450 ), $oUtilsFile->UNITgetImageSize( null, 2, 'sZoomImageSize' ) );
@@ -160,7 +166,7 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
 
         $oUtilsFile = $this->getMock( "oxUtilsFile", array( "_getImageSize" ) );
         $oUtilsFile->expects( $this->at(0) )->method( '_getImageSize' )->with( $this->equalTo( 'P5' ), $this->equalTo( 1 ), $this->equalTo( "sIconsize" ) );
-        $oUtilsFile->expects( $this->at(1) )->method( '_getImageSize' )->with( $this->equalTo( 'P5' ), $this->equalTo( 1 ), $this->equalTo( "aDetailImageSizes" ) );
+        $oUtilsFile->expects( $this->at(1) )->method( '_getImageSize' )->with( $this->equalTo( 'P5' ), $this->equalTo( 5 ), $this->equalTo( "aDetailImageSizes" ) );
 
         $oUtilsFile->UNITprepareImage( "P5", "", "" );
     }

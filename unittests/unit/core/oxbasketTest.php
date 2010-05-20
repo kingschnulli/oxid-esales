@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxbasketTest.php 27792 2010-05-18 12:35:14Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3473,5 +3473,62 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $this->assertEquals( 3, $oBasket->getArtStockInBasket( $this->oArticle->getId()) );
         $this->assertEquals( 1, $oBasket->getArtStockInBasket( $this->oArticle->getId(), "_testItem2") );
+    }
+
+    public function testCalcBasketDiscountMinimizeDiscountIfBiggerThanTotal()
+    {
+
+        $oDiscount2 = oxNew( "oxDiscount" );
+        $oDiscount2->setId( '_testDiscountId2' );
+        $oDiscount2->oxdiscount__oxtitle = new oxField('Test discount title 123', oxField::T_RAW);
+        $oDiscount2->oxdiscount__oxaddsumtype = new oxField("abs", oxField::T_RAW);
+        $oDiscount2->oxdiscount__oxaddsum = new oxField(150, oxField::T_RAW);
+
+        $aDiscounts[] = $oDiscount2;
+
+        $oDiscountList = $this->getMock('oxDiscountList', array('getBasketDiscounts'));
+        $oDiscountList->expects($this->once())->method('getBasketDiscounts')->will($this->returnValue($aDiscounts));
+        oxTestModules::addModuleObject('oxDiscountList', $oDiscountList);
+
+        $oBasket = $this->getProxyClass( "oxBasket" );
+
+        $oPrice = oxNew( "oxPrice" );
+        $oPrice->setPrice( 20 );
+        $oPriceList = oxNew( "oxPriceList" );
+        $oPriceList->addToPriceList( $oPrice );
+
+        $aDiscounts = $oBasket->setNonPublicVar( '_oDiscountProductsPriceList', $oPriceList );
+        $oBasket->UNITcalcBasketDiscount();
+
+        $aDiscounts = $oBasket->getNonPublicVar('_aDiscounts');
+
+        $this->assertEquals( 1, count($aDiscounts) );
+
+        //asserting second discount values
+        $this->assertEquals( 'Test discount title 123', $aDiscounts['_testDiscountId2']->sDiscount );
+        $this->assertEquals( 20, $aDiscounts['_testDiscountId2']->dDiscount );
+    }
+
+
+    public function testIsBelowMinOrderPriceRecognise0AsValue()
+    {
+        modConfig::getInstance()->setConfigParam( "iMinOrderPrice", 0 );
+
+        $oBasket = $this->getMock( "oxbasket", array( "getProductsCount", "getDiscountedProductsBruttoPrice" ) );
+        $oBasket->expects( $this->once() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->once() )->method( 'getDiscountedProductsBruttoPrice')->will( $this->returnValue( -1 ) );
+
+        $this->assertTrue( $oBasket->isBelowMinOrderPrice() );
+
+
+
+
+        modConfig::getInstance()->setConfigParam( "iMinOrderPrice", '' );
+
+        $oBasket = $this->getMock( "oxbasket", array( "getProductsCount", "getDiscountedProductsBruttoPrice" ) );
+        $oBasket->expects( $this->never() )->method( 'getProductsCount');
+        $oBasket->expects( $this->never() )->method( 'getDiscountedProductsBruttoPrice');
+
+        $this->assertFalse( $oBasket->isBelowMinOrderPrice() );
     }
 }
