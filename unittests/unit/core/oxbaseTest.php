@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbaseTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxbaseTest.php 27828 2010-05-20 13:38:39Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2241,6 +2241,17 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $aExpectedFields['oxactiveto']   = 0;
 
         $this->assertEquals($aExpectedFields, $oBase->UNITgetAllFields(true));
+    }
+
+    /**
+     * A test for #1831 case
+     *
+     */
+    public function testGetAllFieldEmpty()
+    {
+        $oBase = new _oxBase();
+        //should not throw any error
+        $oBase->UNITgetAllFields();
     }
 
     /**

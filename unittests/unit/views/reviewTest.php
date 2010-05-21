@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: reviewTest.php 27254 2010-04-16 08:54:51Z tomas $
+ * @version   SVN: $Id: reviewTest.php 27824 2010-05-20 12:29:40Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -383,7 +383,7 @@ class Unit_Views_reviewTest extends OxidTestCase
         modConfig::setParameter( 'reviewuserid', 'usertest' );
         $oReview = new review();
 
-        $this->assertNotEquals( 'usertest', $oReview->getReviewUserId() );
+        $this->assertEquals( 'usertest', $oReview->getReviewUserId() );
     }
 
     public function testGetReviewUserIdIfNotSetInConfig()
@@ -399,7 +399,7 @@ class Unit_Views_reviewTest extends OxidTestCase
 
     public function testGetReviewUserIdIfSetInEmail()
     {
-        $sReviewUser = oxDb::getDB()->getOne('select md5(concat("oxid", oxpassword, oxusername )) from oxuser where oxid = "oxdefaultadmin"');
+        $sReviewUser = "oxdefaultadmin";
         modConfig::setParameter( 'reviewuser', $sReviewUser );
         modConfig::setParameter( 'reviewuserid', 'usertest' );
         $oReview = new review();

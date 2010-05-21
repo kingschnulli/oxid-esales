@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27796 2010-05-18 14:53:54Z vilma $
+ * @version   SVN: $Id: lang.php 27825 2010-05-20 12:30:34Z vilma $
  */
 
 
@@ -1042,6 +1042,7 @@ $aLang = array(
 'SUGGEST_SEND'                                    => "Send",
 'SUGGEST_ABOUTDATAPROTECTION'                     => "About Data Protection: Your data is kept strictly confidential and will not be given to any third parties.",
 'SUGGEST_VERIFICATIONCODE'                        => "Verification code:",
+'SUGGEST_COMPLETEMARKEDFIELDS2'                   => 'Please complete all fields marked with a <span class="req">*</span>',
 'TAGS'                                            => "Tags",
 'TAGS_ADD'                                        => "Add tags",
 'TAGS_SEPARATEBY'                                 => "Separate by",

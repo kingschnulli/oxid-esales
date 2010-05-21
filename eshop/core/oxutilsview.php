@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 27772 2010-05-17 11:51:07Z arvydas $
+ * @version   SVN: $Id: oxutilsview.php 27844 2010-05-20 19:47:00Z tomas $
  */
 
 /**
@@ -206,6 +206,8 @@ class oxUtilsView extends oxSuperCfg
      */
     public function parseThroughSmarty( $sDesc, $sOxid = null, $oActView = null, $blRecompile = false )
     {
+        startProfile("parseThroughSmarty");
+
         $iLang = oxLang::getInstance()->getTplLanguage();
 
         // now parse it through smarty
@@ -240,6 +242,8 @@ class oxUtilsView extends oxSuperCfg
         // restore tpl vars for continuing smarty processing if it is in one
         $oSmarty->_tpl_vars = $sTplVars;
         $oSmarty->force_compile = $blForceRecompile;
+
+        stopProfile("parseThroughSmarty");
 
         return $sRes;
     }

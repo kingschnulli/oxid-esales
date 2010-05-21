@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27796 2010-05-18 14:53:54Z vilma $
+ * @version   SVN: $Id: lang.php 27825 2010-05-20 12:30:34Z vilma $
  */
 
 
@@ -1042,6 +1042,7 @@ $aLang = array(
 'SUGGEST_SEND'                                    => "Empfehlung abschicken",
 'SUGGEST_ABOUTDATAPROTECTION'                     => "Zum Datenschutz: Ihr Name und Ihre E-Mail-Adresse sowie der Name und die E-Mail-Adresse des Empfängers werden ausschließlich zu Übertragungszwecken verwendet und um den Adressaten über den Absender zu informieren, bzw. um im Fall eines Übertragungsfehlers eine Benachrichtigung übermitteln zu können.",
 'SUGGEST_VERIFICATIONCODE'                        => "Prüfcode:",
+'SUGGEST_COMPLETEMARKEDFIELDS2'                   => 'Felder mit einem <span class="req">*</span> müssen ausgefüllt werden',
 'TAGS'                                            => "Stichworte",
 'TAGS_ADD'                                        => "Stichwort hinzufügen",
 'TAGS_SEPARATEBY'                                 => "Tags mit folgenden Zeichen trennen",

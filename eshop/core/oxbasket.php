@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 27792 2010-05-18 12:35:14Z sarunas $
+ * @version   SVN: $Id: oxbasket.php 27832 2010-05-20 15:22:54Z tomas $
  */
 
 /**
@@ -1124,47 +1124,47 @@ class oxBasket extends oxSuperCfg
         $this->_oPrice = oxNew( 'oxprice' );
         $this->_oPrice->setBruttoPriceMode();
 
-            // 0. merging basket history
-            $this->_mergeSavedBasket();
+        //  1. merging basket history
+        $this->_mergeSavedBasket();
 
-        //  0. remove all bundles
+        //  2. remove all bundles
         $this->_clearBundles();
 
-        //  1. generate bundle items
+        //  3. generate bundle items
         $this->_addBundles();
 
-        //  2. calculating item prices
+        //  4. calculating item prices
         $this->_calcItemsPrice();
 
-        //  3. calculating/applying discounts
+        //  5. calculating/applying discounts
         $this->_calcBasketDiscount();
 
-        //  4. calculating basket total discount
+        //  6. calculating basket total discount
         $this->_calcBasketTotalDiscount();
 
-        //  5. check for vouchers
+        //  7. check for vouchers
         $this->_calcVoucherDiscount();
 
-        //  6. applies all discounts to pricelist
+        //  8. applies all discounts to pricelist
         $this->_applyDiscounts();
 
-        //  7. calculating additional costs:
-        //  7.1: delivery
+        //  9. calculating additional costs:
+        //  9.1: delivery
         $this->setCost( 'oxdelivery', $this->_calcDeliveryCost() );
 
-        //  7.2: adding wrapping costs
+        //  9.2: adding wrapping costs
         $this->setCost( 'oxwrapping', $this->_calcBasketWrapping() );
 
-        //  7.3: adding payment cost
+        //  9.3: adding payment cost
         $this->setCost( 'oxpayment', $this->_calcPaymentCost() );
 
-        //  8. calculate total price
+        //  10. calculate total price
         $this->_calcTotalPrice();
 
-        //  9. setting deprecated values
+        //  11. setting deprecated values
         $this->_setDeprecatedValues();
 
-        //  10.setting to up-to-date status
+        //  12.setting to up-to-date status
         $this->afterUpdate();
     }
 
