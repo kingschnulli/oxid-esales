@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 27832 2010-05-20 15:22:54Z tomas $
+ * @version   SVN: $Id: oxbasket.php 27873 2010-05-21 16:12:47Z tomas $
  */
 
 /**
@@ -349,10 +349,10 @@ class oxBasket extends oxSuperCfg
         //calling update method
         $this->onUpdate();
 
-            // updating basket history
-            if ( !$blBundle ) {
-                $this->_addItemToSavedBasket( $sProductID, $dAmount, $aSel, $blOverride );
-            }
+        // updating basket history
+        if ( !$blBundle ) {
+            $this->_addItemToSavedBasket( $sProductID, $dAmount, $aSel, $blOverride );
+        }
 
         if ( $oEx ) {
             throw $oEx;
@@ -1571,10 +1571,10 @@ class oxBasket extends oxSuperCfg
     {
         $this->getSession()->delBasket();
 
-            // merging basket history
-            if ( !$this->getConfig()->getConfigParam( 'blPerfNoBasketSaving' ) ) {
-                $this->_deleteSavedBasket();
-            }
+        // merging basket history
+        if ( !$this->getConfig()->getConfigParam( 'blPerfNoBasketSaving' ) ) {
+            $this->_deleteSavedBasket();
+        }
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27825 2010-05-20 12:30:34Z vilma $
+ * @version   SVN: $Id: lang.php 27855 2010-05-21 11:08:42Z vilma $
  */
 
 
@@ -344,6 +344,7 @@ $aLang = array(
 'DETAILS_STAR'                                    => "Star",
 'DETAILS_STARS'                                   => "Stars",
 'DETAILS_ARTWEIGHTUNIT'                           => "kg",
+'DETAILS_ARTWEIGHT'                               => "Weight:",
 'EMAIL_NEWSLETTEROPTIN_HTML_NEWSLETTER'           => "Newsletter",
 'EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT'             => "Newsletter",
 'EMAIL_ORDER_CUST_HTML_ORDERNOMBER'               =>"Order No.",

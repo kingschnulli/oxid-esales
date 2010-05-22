@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 27792 2010-05-18 12:35:14Z sarunas $
+ * @version   SVN: $Id: oxbasketTest.php 27874 2010-05-21 16:16:30Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -105,6 +105,9 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     protected function setUp()
     {
         parent::setUp();
+
+        oxDb::getDb()->execute( 'delete from oxuserbaskets' );
+        oxDb::getDb()->execute( 'delete from oxuserbasketitems' );
 
         modConfig::getInstance()->setConfigParam( 'blPerfNoBasketSaving', true );
 
@@ -369,8 +372,10 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $this->oVariant = null;
 
-            oxDb::getDb()->execute( 'delete from oxuserbaskets' );
-            oxDb::getDb()->execute( 'delete from oxuserbasketitems' );
+
+        oxDb::getDb()->execute( 'delete from oxuserbaskets' );
+        oxDb::getDb()->execute( 'delete from oxuserbasketitems' );
+
         $sName = $this->getName();
         if ( $sName == 'testBasketCalculationWithSpecUseCaseDescribedAbove' ||
              $sName == 'testBasketCalculationWithSpecUseCaseDescribedAboveJustDiscountIsAppliedByPrice' ||
@@ -392,6 +397,10 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     protected function _prepareDataForTestBasketCalculationWithSpecUseCaseDescribedAbove()
     {
+
+        oxDb::getDb()->execute( 'delete from oxuserbaskets' );
+        oxDb::getDb()->execute( 'delete from oxuserbasketitems' );
+
         $sArtId = '1126';
             $sCatId = '8a142c3e4143562a5.46426637';
 
@@ -756,7 +765,6 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     public function testCanMergeBasketPe()
     {
-
         modConfig::getInstance()->setConfigParam( 'blPerfNoBasketSaving', false );
 
         $oBasket = $this->getMock( 'oxbasket', array( 'isAdmin' ) );
@@ -768,9 +776,8 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $this->assertTrue( $oBasket->UNITcanMergeBasket() );
     }
 
-    public function testBasketMergingOnPe()
+    public function testBasketMerging()
     {
-
         modConfig::getInstance()->setConfigParam( 'blPerfNoBasketSaving', false );
 
         $oUser = new oxuser();
@@ -778,28 +785,27 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $oBasket = new oxbasket();
         $oBasket->setBasketUser( $oUser );
-        $oBasket->addToBasket( '1964', 2 );
+        $oBasket->addToBasket( '1126', 2 );
         $oBasket->calculateBasket( true );
 
         $oBasket = new oxbasket();
         $oBasket->setBasketUser( $oUser );
-        $oBasket->addToBasket( '1849', 2 );
+        $oBasket->addToBasket( '1127', 2 );
         $oBasket->calculateBasket( true );
 
         $aContents = $oBasket->getContents();
         $this->assertEquals( 2, count( $aContents ) );
         $oItem = current( $aContents );
-        $this->assertEquals( '1849', $oItem->getArticle()->getId() );
+        $this->assertEquals( '1127', $oItem->getArticle()->getId() );
         $this->assertEquals( 2, $oItem->getAmount() );
 
         $oItem = next( $aContents );
-        $this->assertEquals( '1964', $oItem->getArticle()->getId() );
+        $this->assertEquals( '1126', $oItem->getArticle()->getId() );
         $this->assertEquals( 2, $oItem->getAmount() );
     }
 
-    public function testBasketRestoringMergedOnPe()
+    public function testBasketRestoringMerged()
     {
-
         modConfig::getInstance()->setConfigParam( 'blPerfNoBasketSaving', false );
 
         $oUser = new oxuser();
@@ -807,9 +813,9 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $oBasket = new oxbasket();
         $oBasket->setBasketUser( $oUser );
-        $oBasket->addToBasket( '1964', 2 );
+        $oBasket->addToBasket( '1126', 2 );
         $oBasket->calculateBasket( true );
-        $oBasket->addToBasket( '1849', 2 );
+        $oBasket->addToBasket( '1127', 2 );
         $oBasket->calculateBasket( true );
 
         $oBasket = new oxbasket();
@@ -819,15 +825,15 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $aContents = $oBasket->getContents();
         $this->assertEquals( 2, count( $aContents ) );
         $oItem = current( $aContents );
-        $this->assertEquals( '1964', $oItem->getArticle()->getId() );
+        $this->assertEquals( '1126', $oItem->getArticle()->getId() );
         $this->assertEquals( 2, $oItem->getAmount() );
 
         $oItem = next( $aContents );
-        $this->assertEquals( '1849', $oItem->getArticle()->getId() );
+        $this->assertEquals( '1127', $oItem->getArticle()->getId() );
         $this->assertEquals( 2, $oItem->getAmount() );
 
-        $oBasket->addToBasket( '1964', 0, null, null, true );
-        $oBasket->addToBasket( '1849', 0, null, null, true );
+        $oBasket->addToBasket( '1126', 0, null, null, true );
+        $oBasket->addToBasket( '1127', 0, null, null, true );
         $oBasket->calculateBasket( true );
 
         $aContents = $oBasket->getContents();
@@ -996,10 +1002,8 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $this->assertEquals( 0, count( $oBasket->getBasketArticles() ) );
     }
 
-    // PE. testing if item is stored in saved basket
     public function testAddToBasketSavingBasketHistory()
     {
-
         $oBasket = $this->getMock( 'oxbasket', array( '_addItemToSavedBasket' ) );
         $oBasket->expects( $this->once() )->method( '_addItemToSavedBasket');
         $oBasket->addToBasket( $this->oArticle->getId(), 10 );
@@ -1076,6 +1080,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oItem = $oBasket->addToBasket( $this->oArticle->getId(), 1, null, null, false, true );
         $this->assertEquals( array(), $oBasket->UNITgetArticleBundles( $oItem ) );
     }
+
     // has bundle article information (PE only)
     public function testGetArticleBundlesHasSomeBundle()
     {
@@ -1089,7 +1094,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     }
 
     /**
-     * Testing how correctly bungle information is loaded
+     * Testing how correctly bundle information is loaded
      */
     // basket item is bundle itself, so it does not load additional bundle information
     public function testGetItemBundlesItemIsBundle()
@@ -1098,6 +1103,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oItem = $oBasket->addToBasket( $this->oArticle->getId(), 1, null, null, false, true );
         $this->assertEquals( array(), $oBasket->UNITgetItemBundles( $oItem ) );
     }
+
     // basket item has no bundle assigned
     public function testGetItemBundlesItemHasNoBundles()
     {
@@ -1929,14 +1935,14 @@ class Unit_Core_oxbasketTest extends OxidTestCase
                                  '_calcTotalPrice',
                                  '_setDeprecatedValues',
                                  '_calcBasketWrapping',
+                                 '_mergeSavedBasket',
                                  'afterUpdate' );
-            $aMethodsToTest[] = '_mergeSavedBasket';
 
         //
         $oBasket = $this->getMock( 'oxbasket', $aMethodsToTest );
 
         $oBasket->expects( $this->once() )->method( 'isEnabled' )->will( $this->returnValue( true ) );
-            $oBasket->expects( $this->once() )->method( '_mergeSavedBasket' );
+        $oBasket->expects( $this->once() )->method( '_mergeSavedBasket' );
         $oBasket->expects( $this->once() )->method( '_clearBundles' );
         $oBasket->expects( $this->once() )->method( '_addBundles' );
         $oBasket->expects( $this->once() )->method( '_calcItemsPrice' );
@@ -2198,10 +2204,8 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     /**
      * Testing basket merging functionality
      */
-    // allready merged - functionality must be skipped (PE only)
     public function testMergeSavedBasketAllreadyMerged()
     {
-
         modConfig::getInstance()->setConfigParam( 'blPerfNoBasketSaving', false );
 
         $oBasket = $this->getMock( 'modForTestAddBundles', array( 'addToBasket', 'getBasketUser' ) );
@@ -2213,10 +2217,8 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->UNITmergeSavedBasket();
     }
 
-    // no session user - functionality must be skipped (PE only)
     public function testMergeSavedBasketNoUser()
     {
-
         $oBasket = $this->getMock( 'oxbasket', array( 'addToBasket' ) );
         $oBasket->expects( $this->never() )->method( 'addToBasket' );
         $oBasket->setBasketUser( false );
@@ -2225,10 +2227,8 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->UNITmergeSavedBasket();
     }
 
-    // everything is fine (PE only)
     public function testMergeSavedBasketAllSetup()
     {
-
         $oUserBasketItem = $this->getMock( 'oxuserbasketitem', array( 'getSelList' ) );
         $oUserBasketItem->expects( $this->once() )->method( 'getSelList' );
 
@@ -2250,11 +2250,10 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     }
 
     /**
-     * Testing item adding to saved basket (PE only)
+     * Testing item adding to saved basket
      */
     public function testAddItemToSavedBasket()
     {
-
         $oUserBasket = $this->getMock( 'oxuserbasket', array( 'addItemToBasket' ) );
         $oUserBasket->expects( $this->once() )->method( 'addItemToBasket' );
 
@@ -2267,12 +2266,10 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     }
 
     /**
-     * Testing saved basket deletion (PE only)
+     * Testing saved basket deletion
      */
-    // not disabled, will execute deletion
     public function testDeleteSavedBasket()
     {
-
         modConfig::getInstance()->setConfigParam( 'blPerfNoBasketSaving', false );
 
         $oUserBasket = $this->getMock( 'oxuserbasket', array( 'delete' ) );
@@ -2287,9 +2284,8 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     }
 
     /**
-     * Testing how correctly delivery country getter works
+     * Testing how correctly delivery country getter works. No user and no special config - must return null
      */
-    // no user and no special config - must return null
     public function testFindDelivCountryNoUserAtAll()
     {
         modConfig::getInstance()->setConfigParam( 'aHomeCountry', null );
@@ -2298,6 +2294,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->setBasketUser( false );
         $this->assertNull( $oBasket->UNITfindDelivCountry() );
     }
+
     // no user and special config for home country
     public function test_findDelivCountry_noUserIsHomeCountry()
     {
@@ -2308,6 +2305,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->setBasketUser( false );
         $this->assertEquals( '_xxx', $oBasket->UNITfindDelivCountry() );
     }
+
     // user exists and returns his country ID
     public function testFindDelivCountryAdminUserCountryId()
     {
@@ -2318,6 +2316,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->setBasketUser( $oUser );
         $this->assertEquals( $oUser->oxuser__oxcountryid->value, $oBasket->UNITfindDelivCountry() );
     }
+
     //  user exists and returns delcountryid which usually is defined dy some method
     public function testFindDelivCountry_delcountryid()
     {
@@ -2330,6 +2329,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         oxConfig::getInstance()->setGlobalParameter( 'delcountryid', '_yyy' );
         $this->assertEquals( '_yyy', $oBasket->UNITfindDelivCountry() );
     }
+
     // user exists and returns country ID my user delivery address
     public function testFindDelivCountryDeladrId()
     {
@@ -2351,7 +2351,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     {
         $oBasket = oxSession::getInstance()->getBasket();
         $oBasket->setOrderId( 'xxx' );
-            oxConfig::getInstance()->setGlobalParameter( 'blPerfNoBasketSaving', false );
+        oxConfig::getInstance()->setGlobalParameter( 'blPerfNoBasketSaving', false );
         $oBasket->deleteBasket();
 
         // now loading and testing if its the same

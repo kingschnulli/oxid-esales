@@ -39,7 +39,7 @@ class Unit_Setup_oxSetupViewTest extends OxidTestCase
     public function testGetTitle()
     {
         $oSetupView = $this->getMock( "oxsetupView", array( "getText" ) );
-        $oSetupView->expects( $this->once() )->method( "getText" )->with( $this->equalTo( null ) )->will( $this->returnValue( "getText" ) );
+        $oSetupView->expects( $this->once() )->method( "getText" )->with( $this->equalTo( null ), $this->equalTo( false ) )->will( $this->returnValue( "getText" ) );
         $this->assertEquals( "getText", $oSetupView->getTitle() );
     }
 
