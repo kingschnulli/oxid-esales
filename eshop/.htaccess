@@ -28,4 +28,4 @@ deny from all
 </FilesMatch>
 
 Options -Indexes
-DirectoryIndex index.php
+DirectoryIndex index.php index.html
