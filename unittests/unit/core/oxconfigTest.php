@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 27601 2010-05-06 12:53:09Z vilma $
+ * @version   SVN: $Id: oxconfigTest.php 27908 2010-05-25 14:54:30Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -200,6 +200,18 @@ class Unit_Core_oxconfigTest extends OxidTestCase
 
         $this->cleanUpTable('oxconfig');
         parent::tearDown();
+    }
+
+    /**
+     * oxConfig::getIconUrl() test case
+     *
+     * @return null
+     */
+    public function testGetIconUrl()
+    {
+        $oConfig = $this->getMock( 'oxconfig', array( "getPictureUrl" ) );
+        $oConfig->expects( $this->once() )->method( 'getPictureUrl')->with( $this->equalTo( "someIconFile" ), $this->equalTo( false ), $this->equalTo( null ), $this->equalTo( null ), $this->equalTo( null ), $this->equalTo( "icon/nopic_ico.jpg" ) )->will( $this->returnValue( "testIconUrl" ) );
+        $this->assertEquals( "testIconUrl", $oConfig->getIconUrl( "someIconFile" ) );
     }
 
     public function testGetStdLanguagePath()

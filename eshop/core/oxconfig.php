@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 27620 2010-05-07 07:03:13Z sarunas $
+ * @version   SVN: $Id: oxconfig.php 27908 2010-05-25 14:54:30Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1270,10 +1270,11 @@ class oxConfig extends oxSuperCfg
      * @param bool   $blSSL   Whether to force ssl
      * @param int    $iLang   Language
      * @param int    $iShopId Shop id
+     * @param string $sDefPic Default (nopic) image path ["0/nopic.jpg"]
      *
      * @return string
      */
-    public function getPictureUrl( $sFile, $blAdmin = false , $blSSL = null , $iLang = null, $iShopId = null )
+    public function getPictureUrl( $sFile, $blAdmin = false, $blSSL = null, $iLang = null, $iShopId = null, $sDefPic = "0/nopic.jpg" )
     {
         if ( $sAltUrl = $this->getConfigParam( 'sAltImageDir' ) ) {
 
@@ -1297,9 +1298,26 @@ class oxConfig extends oxSuperCfg
 
         //anything is better than empty name, because <img src=""> calls shop once more = x2 SLOW.
         if ( !$sUrl ) {
-            $sUrl = $this->getUrl( "0/nopic.jpg", $this->_sPictureDir, $blAdmin, $blSSL, $blNativeImg, $iLang, $iShopId );
+            $sUrl = $this->getUrl( $sDefPic, $this->_sPictureDir, $blAdmin, $blSSL, $blNativeImg, $iLang, $iShopId );
         }
         return $sUrl;
+    }
+
+    /**
+     * Finds and returns product, category icon file
+     *
+     * @param string $sFile   File name
+     * @param bool   $blAdmin Whether to force admin
+     * @param bool   $blSSL   Whether to force ssl
+     * @param int    $iLang   Language
+     * @param int    $iShopId Shop id
+     * @param string $sDefPic Default (nopic) image path ["icon/nopic_ico.jpg"]
+     *
+     * @return string
+     */
+    public function getIconUrl( $sFile, $blAdmin = false , $blSSL = null , $iLang = null, $iShopId = null, $sDefPic = "icon/nopic_ico.jpg" )
+    {
+        return $this->getPictureUrl( $sFile, $blAdmin, $blSSL, $iLang, $iShopId, $sDefPic );
     }
 
     /**

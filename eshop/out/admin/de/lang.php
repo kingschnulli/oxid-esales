@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27833 2010-05-20 15:26:02Z tomas $
+ * @version   SVN: $Id: lang.php 27905 2010-05-25 14:34:59Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -1527,7 +1527,7 @@ $aLang = array(
 'VOUCHERSERIE_MAIN_MINORDERPRICE'               => 'Gültig ab Einkaufswert',
 'VOUCHERSERIE_MAIN_ALLOWSAMESERIES'             => 'Gültig mit gleicher Serie',
 'VOUCHERSERIE_MAIN_ALLOWOTHERSERIES'            => 'Gültig mit anderer Serie',
-'VOUCHERSERIE_MAIN_SAMESEROTHERORDER'           => 'Gültig mit gleiche Serie bei einer anderen Bestellung',
+'VOUCHERSERIE_MAIN_SAMESEROTHERORDER'           => 'Gültig mit gleicher Serie bei einer anderen Bestellung',
 'VOUCHERSERIE_MAIN_NEWVOUCHER'                  => 'Neue Gutscheine anlegen',
 'VOUCHERSERIE_MAIN_VOUCHERSTATISTICS'           => 'Gutscheine',
 'VOUCHERSERIE_MAIN_RANDOMNUM'                   => 'Zufallsnummern erzeugen',

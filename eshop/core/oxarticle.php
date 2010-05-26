@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 27751 2010-05-13 11:11:50Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxarticle.php 27908 2010-05-25 14:54:30Z arvydas $
  */
 
 // defining supported link types
@@ -2826,7 +2826,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $sPic = $iIndex . "/" . basename( $sIconName );
         }
 
-        return $this->getConfig()->getPictureUrl( $sPic, $this->isAdmin() );
+        return $this->getConfig()->getIconUrl( $sPic, $this->isAdmin() );
     }
 
     /**

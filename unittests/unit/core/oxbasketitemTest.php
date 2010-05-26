@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitemTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxbasketitemTest.php 27911 2010-05-25 15:33:14Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -710,11 +710,14 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
      */
     public function testGetIconUrl()
     {
-        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getImageUrl', 'getIcon' ) );
-        $oBasketItem->expects( $this->once() )->method( 'getImageUrl' )->will( $this->returnValue( 'http://testlocation/' ) );
+        $sPrefix = '';
+
+        $sIconUrl = oxConfig::getInstance()->getConfigParam( "sShopURL" )."out/pictures{$sPrefix}/icon/nopic_ico.jpg";
+
+        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getIcon' ) );
         $oBasketItem->expects( $this->once() )->method( 'getIcon' )->will( $this->returnValue( 'testicon.jpg' ) );
 
-        $this->assertEquals( 'http://testlocation/testicon.jpg', $oBasketItem->getIconUrl() );
+        $this->assertEquals( $sIconUrl, $oBasketItem->getIconUrl() );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 27751 2010-05-13 11:11:50Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxarticleTest.php 27911 2010-05-25 15:33:14Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -244,6 +244,19 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->cleanUpTable('oxdiscount');
 
         parent::tearDown();
+    }
+
+    /**
+     * Test case for bugtrack report #1782
+     *
+     * @return null
+     */
+    public function testForBugReport1782()
+    {
+        $sPrefix = '';
+
+        $sIconUrl = oxConfig::getInstance()->getConfigParam( "sShopURL" )."out/pictures{$sPrefix}/icon/nopic_ico.jpg";
+        $this->assertEquals( $sIconUrl, $this->oArticle->getIconUrl() );
     }
 
     /**
