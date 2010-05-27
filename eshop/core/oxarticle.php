@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 27908 2010-05-25 14:54:30Z arvydas $
+ * @version   SVN: $Id: oxarticle.php 27938 2010-05-26 11:44:22Z sarunas $
  */
 
 // defining supported link types
@@ -110,14 +110,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     protected $_blLoadVariants = true;
 
     /**
-     * Article variants
+     * Article variants without empty stock, not orderable flagged variants
      *
      * @var array
      */
     protected $_aVariants = null;
 
     /**
-     * Article variants without
+     * Article variants with empty stock, not orderable flagged variants
      *
      * @var array
      */
@@ -135,7 +135,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
     /**
      * $_blHasVariants is set to true if article has any variants.
-     * As an opposite to $_oVariantList this works even if variants are not active
      */
     protected $_blHasVariants = false;
 
@@ -148,12 +147,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * Indicates how many variants this article has "on stock" (very large number for unlimited)
      */
     protected $_iVarStock = 0;
-
-    /**
-     * The list of article variants.
-     * @var object
-     */
-    protected $_oVariantList   = array();
 
     /**
      * If set true, then this object is on comparison list
@@ -516,7 +509,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 return $this->isOnComparisonList();
                 break;
             case 'oVariantlist' :
-                return $this->_oVariantList;
+                return $this->getVariants();
                 break;
             case 'fPricePerUnit' :
                 return $this->getPricePerUnit();
@@ -2741,11 +2734,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Returns variant lists of current product
      *
+     * @deprecated
+     * @see oxArticle::getVariants
+     *
      * @return object
      */
     public function getVariantList()
     {
-        return $this->_oVariantList;
+        return $this->getVariants();
     }
 
     /**
@@ -3712,18 +3708,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 }
 
             }
-        } elseif ( $this->oxarticles__oxid->value ) {
-            // I am not a variant but I might have some
-            //$this->_oVariantList = $this->getSimpleVariants();
-            startProfile("loadVariants");
-            $this->_oVariantList = $this->getVariants();
-            stopProfile("loadVariants");
-            // #1650M - article title with <br> tag
-            // htmlspecialchars parses only 5 characters, so i have stiped out '<' and '>'
-            /*
-            if ( !$this->isAdmin() ) {
-                $this->oxarticles__oxtitle->setValue(str_replace(array('&', "'", '"'), array('&amp;', '&#039;', '&quot;'), $this->oxarticles__oxtitle->value));
-            }*/
         }
         stopProfile('articleAssignParentInternal');
 
@@ -3881,7 +3865,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         //setting to non buyable when variant list is empty (for example not loaded or inactive) and $this is non buyable parent
-        if ($this->_blNotBuyableParent && count($this->_oVariantList) == 0) {
+        if ($this->_blNotBuyableParent && count($this->getVariants()) == 0) {
             $this->_blNotBuyable = true;
         }
     }
@@ -4290,8 +4274,10 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $aPrices[] = $this->getPrice()->getBruttoPrice();
         }
 
-        if (count($this->_oVariantList)) {
-            foreach ($this->_oVariantList as $sKey => $oVariant) {
+        $aVariants = $this->getVariants(false);
+
+        if (count($aVariants)) {
+            foreach ($aVariants as $sKey => $oVariant) {
                 $aPrices[] = $oVariant->getPrice()->getBruttoPrice();
             }
         }

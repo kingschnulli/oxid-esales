@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmediaurlTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxmediaurlTest.php 27916 2010-05-26 06:49:19Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -61,7 +61,7 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
     {
         $oMediaUrl = new oxMediaUrl();
         $oMediaUrl->load('_test1');
-        $sExpt = "<a href='/test.jpg'  >test1</a>";
+        $sExpt = "<a href=\"/test.jpg\" target=\"_blank\">test1</a>";
         $this->assertEquals($sExpt, $oMediaUrl->getHtml());
     }
 
@@ -77,7 +77,7 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
     {
         $oMediaUrl = new oxMediaUrl();
         $oMediaUrl->load('_test2');
-        $sExpt = "<a href='http://www.youtube.com/watch?v=ZN239G6aJZo'  >test2</a>";
+        $sExpt = "<a href=\"http://www.youtube.com/watch?v=ZN239G6aJZo\" target=\"_blank\">test2</a>";
         $this->assertEquals($sExpt, $oMediaUrl->getHtmlLink());
     }
 

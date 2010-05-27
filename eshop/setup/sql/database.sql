@@ -1678,7 +1678,7 @@ CREATE TABLE `oxuser` (
   `OXUSERNAME` varchar(255) NOT NULL default '',
   `OXPASSWORD` varchar(128) NOT NULL default '',
   `OXPASSSALT` char(128) character set latin1 collate latin1_general_ci NOT NULL,
-  `OXCUSTNR` int(11) NOT NULL default '0',
+  `OXCUSTNR` int(11) NOT NULL AUTO_INCREMENT,
   `OXUSTID` varchar(255) NOT NULL default '',
   `OXCOMPANY` varchar(255) NOT NULL default '',
   `OXFNAME` varchar(255) NOT NULL default '',
@@ -1708,7 +1708,8 @@ CREATE TABLE `oxuser` (
   UNIQUE `OXUSERNAME` (`OXUSERNAME`, `OXSHOPID`),
   KEY `OXPASSWORD` (`OXPASSWORD`),
   KEY `OXACTIVE` (`OXACTIVE`),
-  KEY `OXLNAME` (`OXLNAME`)
+  KEY `OXLNAME` (`OXLNAME`),
+  KEY `OXCUSTNR` (`OXCUSTNR`)
 ) TYPE=MyISAM;
 
 #

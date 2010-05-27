@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 27205 2010-04-14 12:32:25Z arvydas $
+ * @version   SVN: $Id: oxuserTest.php 27936 2010-05-26 11:27:19Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -267,7 +267,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $aActives = array( '0', '1' );
         $aRights  = array( 'user', 'malladmin' );
         $sTable   = getViewName( 'oxuser' );
-        $iLastCustNr = ( int ) $myDB->getOne( 'select max( oxcustnr ) from '.$sTable ) + 1;
+        //$iLastCustNr = ( int ) $myDB->getOne( 'select max( oxcustnr ) from '.$sTable ) + 1;
         $sCountryId  = $myDB->getOne( 'select oxid from oxcountry where oxactive = "1"' );
 
         for ( $iCnt = 0; $iCnt < 5; $iCnt++ ) {
@@ -286,7 +286,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
             $iLastCustNr++;
             $oUser->oxuser__oxusername = new oxField('test'.$iLastCustNr.'@oxid-esales.com', oxField::T_RAW);
             $oUser->oxuser__oxpassword = new oxField(crc32( 'Test'.$sRights. ''.$sShopID.'@oxid-esales.com' ), oxField::T_RAW);
-            $oUser->oxuser__oxcustnr = new oxField($iLastCustNr, oxField::T_RAW);
+            //$oUser->oxuser__oxcustnr = new oxField($iLastCustNr, oxField::T_RAW);
             $oUser->oxuser__oxcountryid = new oxField("testCountry", oxField::T_RAW);
             $oUser->save();
 
@@ -337,6 +337,40 @@ class Unit_Core_oxuserTest extends OxidTestCase
             $myDB->Execute( $sQ );
         }
 
+    }
+
+    /**
+     * Test case for bug entry #1714
+     *
+     * @return null
+     */
+    public function testCaseForBugEntry1714()
+    {
+        $iCustNr = oxDb::getDb()->getOne( "select max(oxcustnr) from oxuser" );
+
+        $oUser = new oxUser();
+        $oUser->setId( "testID" );
+        $oUser->oxuser__oxusername = new oxField( "aaa@bbb.lt", oxField::T_RAW );
+        $oUser->oxuser__oxshopid   = new oxField( oxConfig::getInstance()->getBaseShopId(), oxField::T_RAW );
+        $oUser->save();
+
+        $oUser = new oxUser();
+        $oUser->load( "testID" );
+        $this->assertEquals( $iCustNr + 1, $oUser->oxuser__oxcustnr->value );
+
+        $oUser->delete();
+
+        $oUser = new oxUser();
+        $oUser->setId( "testID" );
+        $oUser->oxuser__oxusername = new oxField( "aaa@bbb.lt", oxField::T_RAW );
+        $oUser->oxuser__oxshopid   = new oxField( oxConfig::getInstance()->getBaseShopId(), oxField::T_RAW );
+        $oUser->save();
+
+        $oUser = new oxUser();
+        $oUser->load( "testID" );
+        $this->assertEquals( $iCustNr + 2, $oUser->oxuser__oxcustnr->value );
+
+        $oUser->delete();
     }
 
     public function testSetSelectedAddressId()

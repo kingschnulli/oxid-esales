@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 27205 2010-04-14 12:32:25Z arvydas $
+ * @version   SVN: $Id: oxuser.php 27936 2010-05-26 11:27:19Z arvydas $
  */
 
 /**
@@ -1531,14 +1531,7 @@ class oxUser extends oxBase
             $this->oxuser__oxboni = new oxField($this->getBoni(), oxField::T_RAW);
         }
 
-        if ( $blInsert = parent::_insert() ) {
-            // setting customer number
-            if ( !$this->oxuser__oxcustnr->value || !$this->isAdmin() ) {
-                $this->_setRecordNumber( 'oxcustnr' );
-            }
-        }
-
-        return $blInsert;
+        return parent::_insert();
     }
 
     /**

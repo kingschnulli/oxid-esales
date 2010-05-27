@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 27911 2010-05-25 15:33:14Z arvydas $
+ * @version   SVN: $Id: oxarticleTest.php 27939 2010-05-26 11:53:19Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -528,11 +528,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oVar2->oxarticles__oxstock  = new oxField( 1 );
         $oVar2->save();
 
-        $oVariantList = $oParent->getVariants( true );
-        $this->assertEquals( 1, count( $oVariantList ) );
-
-        $oVariantList = $oParent->getVariants( false );
-        $this->assertEquals( 2, count( $oVariantList ) );
+        $this->assertEquals( 1, count( $oParent->getVariants( true ) ) );
+        $this->assertEquals( 2, count( $oParent->getVariants( false ) ) );
     }
 
 
@@ -2185,7 +2182,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         // list must contain one item
         $this->assertEquals( 1, $oVarList->count() );
-        $this->assertEquals( $this->oArticle2->getId(), $oVarList->current()->oxarticles__oxid->value );
+        $this->assertEquals( $this->oArticle2->getId(), $oVarList[$this->oArticle2->getId()]->oxarticles__oxid->value );
 
         // list must contain NO items
         $oVarList = $oParent->getVariants( true );
@@ -4203,17 +4200,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     }
 
     /**
-     * Test assign parent field values if it is parent..
-     *
-     * @return null
-     */
-    public function testAssignParentFieldValuesIfParent()
-    {
-        $this->oArticle->UNITassignParentFieldValues();
-        $this->assertNotNull( $this->oArticle->_oVariantList );
-    }
-
-    /**
      * Test assign not buyable parent flag.
      *
      * @return null
@@ -4585,7 +4571,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testApplyRangePriceSetAmountPrices()
     {
-        $oArticle = new _oxArticle();
+        $oArticle = $this->getMock('_oxArticle', array('getVariants'));
+        $oArticle->expects($this->any())->method('getVariants')->will($this->returnValue(null));
         $oArticle->load('_testArt');
         $oPrice = oxNew( 'oxPrice' );
         $oPrice->setPrice(10);
@@ -4601,7 +4588,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oAmPriceList[2] = $oT;
         $oArticle->amountpricelist = $oAmPriceList;
         $oArticle->setVar( 'blNotBuyableParent', false);
-        $oArticle->setVar( 'oVariantList', null);
         $oArticle->UNITapplyRangePrice();
         $this->assertEquals( 10, $oArticle->getPrice()->getBruttoPrice());
     }
@@ -4617,13 +4603,14 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oPrice->setPrice(10);
         $this->oArticle2->setPrice( $oPrice);
         $this->oArticle2->save();
-        $oArticle = new _oxArticle();
+
+        $oArticle = $this->getMock('_oxArticle', array('getVariants'));
+        $oArticle->expects($this->any())->method('getVariants')->will($this->returnValue(array($this->oArticle2)));
         $oArticle->load('_testArt');
         $oPrice = oxNew( 'oxPrice' );
         $oPrice->setPrice(10);
         $oArticle->setPrice( $oPrice);
         $oArticle->setVar( 'blNotBuyableParent', false);
-        $oArticle->setVar( 'oVariantList', array($this->oArticle2));
         $oArticle->UNITapplyRangePrice();
         $this->assertFalse( $oArticle->_blIsRangePrice);
         $this->assertEquals( 10, $oArticle->getPrice()->getBruttoPrice());
@@ -4637,17 +4624,19 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testApplyRangePriceForNotBuybleParent()
     {
         modConfig::getInstance()->setConfigParam( 'aMultishopArticleFields', array());
+        modConfig::getInstance()->setConfigParam( 'blLoadVariants', true);
         $oPrice = oxNew( 'oxPrice' );
         $oPrice->setPrice(20);
         $this->oArticle2->setPrice( $oPrice);
         $this->oArticle2->save();
-        $oArticle = new _oxArticle();
+
+        $oArticle = $this->getMock('_oxArticle', array('getVariants'));
+        $oArticle->expects($this->any())->method('getVariants')->will($this->returnValue(array($this->oArticle2)));
         $oArticle->load('_testArt');
         $oPrice = oxNew( 'oxPrice' );
         $oPrice->setPrice(10);
         $oArticle->setPrice( $oPrice);
         $oArticle->setVar( 'blNotBuyableParent', true);
-        $oArticle->setVar( 'oVariantList', array($this->oArticle2));
         $oArticle->UNITapplyRangePrice();
         $this->assertFalse( $oArticle->_blIsRangePrice);
         $this->assertEquals( 20, $oArticle->getPrice()->getBruttoPrice());
@@ -5372,7 +5361,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertTrue(isset($oMediaUrls['_test2']));
         $this->assertTrue(isset($oMediaUrls['_test3']));
         $this->assertEquals('test2', $oMediaUrls['_test2']->oxmediaurls__oxdesc->value);
-        $this->assertEquals("<a href='test.jpg'  >test3</a>", $oMediaUrls['_test3']->getHtml());
+        $this->assertEquals("<a href=\"test.jpg\" target=\"_blank\">test3</a>", $oMediaUrls['_test3']->getHtml());
 
         $this->cleanUpTable('oxmediaurls');
     }
@@ -5842,8 +5831,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testGetVariantList()
     {
-        $oArticle = $this->getProxyClass( "oxarticle" );
-        $oArticle->setNonPublicVar( "_oVariantList", 'variantlist' );
+        $oArticle = $this->getMock( "oxarticle", array('getVariants') );
+        $oArticle->expects($this->once())->method('getVariants')->will($this->returnValue( 'variantlist'));
         $this->assertEquals( 'variantlist', $oArticle->getVariantList() );
     }
 
