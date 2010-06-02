@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercategoryTest.php 27759 2010-05-14 10:10:17Z arvydas $
+ * @version   SVN: $Id: oxseoencodercategoryTest.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -53,6 +53,7 @@ class Unit_Core_oxSeoEncoderCategoryTest extends OxidTestCase
         modDB::getInstance()->cleanup();
         // deleting seo entries
         oxDb::getDb()->execute( 'delete from oxseo where oxtype != "static"' );
+        oxDb::getDb()->execute( 'delete from oxobject2seodata' );
         oxDb::getDb()->execute( 'delete from oxseohistory' );
 
         $this->cleanUpTable( 'oxcategories' );
@@ -371,27 +372,27 @@ class Unit_Core_oxSeoEncoderCategoryTest extends OxidTestCase
 
     public function testonDeleteCategory()
     {
-        $obj = new oxbase();
-        $obj->setId('obj_id');
+        $sShopId = oxConfig::getInstance()->getBaseShopId();
+        $oDb = oxDb::getDb();
+        $sQ = "insert into oxseo
+                   ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed, oxexpired, oxparams )
+               values
+                   ( 'obj_id', '132', '{$sShopId}', '0', '', '', 'oxcategory', '0', '0', '' )";
+        $oDb->execute( $sQ );
 
-        $sSql1 = 'update oxseo, (select oxseourl from oxseo where oxobjectid = \\\'obj_id\\\' and oxtype = \\\'oxcategory\\\') as test set oxseo.oxexpired=1 where oxseo.oxseourl like concat(test.oxseourl, \\\'%\\\') and (oxtype = \\\'oxcategory\\\' or oxtype = \\\'oxarticle\\\')';
-        $sSql2 = 'delete from oxseo where oxobjectid = \\\'obj_id\\\' and oxtype = \\\'oxcategory\\\'';
+        $sQ = "insert into oxobject2seodata ( oxobjectid, oxshopid, oxlang ) values ( 'obj_id', '{$sShopId}', '0' )";
+        $oDb->execute( $sQ );
 
-        $o = new oxSeoEncoderCategory();
-        modDB::getInstance()->addClassFunction('execute', create_function('$s', "if (\$s != '$sSql1') {throw new Exception(\"\$s \nis not equal \n\".'$sSql2');}; throw new Exception('OK');"));
-        try {
-            $o->onDeleteCategory($obj);
-        }catch (Exception $e) {
-            if ($e->getMessage() != 'OK') {
-                $this->fail($e->getMessage());
-            }
-        }
+        $this->assertTrue( (bool) $oDb->getOne( "select 1 from oxseo where oxobjectid = 'obj_id'" ) );
+        $this->assertTrue( (bool) $oDb->getOne( "select 1 from oxobject2seodata where oxobjectid = 'obj_id'" ) );
 
-        try {
-            modDB::getInstance()->addClassFunction('execute', create_function('$s', "if (\$s == '$sSql1') {return;} if (\$s != '$sSql2') {throw new Exception(\"\$s \nis not equal \n\".'$sSql2');}"));
-            $o->onDeleteCategory($obj);
-        } catch (Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $oObj = new oxbase();
+        $oObj->setId( 'obj_id' );
+
+        $oEncoder = new oxSeoEncoderCategory();
+        $oEncoder->onDeleteCategory( $oObj );
+
+        $this->assertFalse( (bool) $oDb->getOne( "select 1 from oxseo where oxobjectid = 'obj_id'" ) );
+        $this->assertFalse( (bool) $oDb->getOne( "select 1 from oxobject2seodata where oxobjectid = 'obj_id'" ) );
     }
 }

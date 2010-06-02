@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 27823 2010-05-20 08:54:25Z tomas $
+ * @version   SVN: $Id: oxcmp_user.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 // defining login/logout states
@@ -641,9 +641,6 @@ class oxcmp_user extends oxView
         if ( $blHideAddress = oxConfig::getParameter( 'blhideshipaddress' ) ) {
             $blShowShipAddress = 0;
             $blShowIt = true;
-
-            // unsetting delivery address
-            oxSession::deleteVar( 'deladdrid' );
         } else {
 
             $blShowAddress = oxConfig::getParameter( 'blshowshipaddress' )? 1 : 0;

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 27755 2010-05-13 14:53:16Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfigTest.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -200,6 +200,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
              ->will($this->returnValue($oCfg));
         $this->assertEquals('lalala', $oVC->getShowVouchers());
     }
+
     /**
      * check config params getter
      */
@@ -227,4 +228,46 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $this->assertEquals(8, strlen($sTestToken1));
     }
 
+    public function testGetLogoutLink()
+    {
+        $oCfg = $this->getMock('oxconfig', array('getShopHomeURL'));
+        $oCfg->expects($this->once())
+             ->method('getShopHomeURL')
+             ->will($this->returnValue('shopHomeUrl/'));
+        $oVC = $this->getMock('oxviewconfig', array('getConfig', 'getActionClassName', 'getActCatId', 'getActTplName'));
+        $oVC->expects($this->once())
+             ->method('getConfig')
+             ->will($this->returnValue($oCfg));
+        $oVC->expects($this->once())
+             ->method('getActionClassName')
+             ->will($this->returnValue('actionclass'));
+        $oVC->expects($this->once())
+             ->method('getActCatId')
+             ->will($this->returnValue('catid'));
+        $oVC->expects($this->once())
+             ->method('getActTplName')
+             ->will($this->returnValue('tpl'));
+
+        $this->assertEquals('shopHomeUrl/cl=actionclass&amp;cnid=catid&amp;fnc=logout&amp;tpl=tpl&amp;redirect=1', $oVC->getLogoutLink());
+    }
+
+    /**
+     * check config params getter
+     */
+    public function testGetActionClassName()
+    {
+        $oV = $this->getMock('oxview', array('getActionClassName'));
+        $oV->expects($this->once())
+             ->method('getActionClassName')
+             ->will($this->returnValue('lalala'));
+        $oCfg = $this->getMock('oxconfig', array('getActiveView'));
+        $oCfg->expects($this->once())
+             ->method('getActiveView')
+             ->will($this->returnValue($oV));
+        $oVC = $this->getMock('oxviewconfig', array('getConfig'));
+        $oVC->expects($this->once())
+             ->method('getConfig')
+             ->will($this->returnValue($oCfg));
+        $this->assertEquals('lalala', $oVC->getActionClassName());
+    }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: detailsTest.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -46,81 +46,6 @@ class Unit_Views_detailsTest extends OxidTestCase
         oxDb::getDB()->execute( 'delete from oxreviews where oxobjectid = "test"' );
         oxDb::getDB()->execute( 'delete from oxratings' );
         parent::tearDown();
-    }
-
-/**
-     * Test get seo meta parameter for vendor.
-     *
-     * @return null
- */
-
-    public function testGetMetaSeoParamVendor()
-    {
-        $oView = $this->getMock( "details", array( "getLinkType", "getVendorId" ) );
-        $oView->expects( $this->once() )->method( 'getLinkType')->will( $this->returnValue( OXARTICLE_LINKTYPE_VENDOR ) );
-        $oView->expects( $this->once() )->method( 'getVendorId')->will( $this->returnValue( "testVendorId" ) );
-        $this->assertEquals( "testVendorId", $oView->UNITgetMetaSeoParam() );
-    }
-
-    /**
-     * Test get seo meta parameter for manufacturer.
-     *
-     * @return null
-     */
-    public function testGetMetaSeoParamManufacturer()
-    {
-        $oView = $this->getMock( "details", array( "getLinkType", "getManufacturerId" ) );
-        $oView->expects( $this->once() )->method( 'getLinkType')->will( $this->returnValue( OXARTICLE_LINKTYPE_MANUFACTURER ) );
-        $oView->expects( $this->once() )->method( 'getManufacturerId')->will( $this->returnValue( "testManufacturerId" ) );
-        $this->assertEquals( "testManufacturerId", $oView->UNITgetMetaSeoParam() );
-    }
-
-    /**
-     * Test get seo meta parameter for tags.
-     *
-     * @return null
-     */
-    public function testGetMetaSeoParamTag()
-    {
-        $oTag = new oxStdClass();
-        $oTag->sTag = "testTag";
-
-        $oView = $this->getMock( "details", array( "getLinkType", "getActTag" ) );
-        $oView->expects( $this->once() )->method( 'getLinkType')->will( $this->returnValue( OXARTICLE_LINKTYPE_TAG ) );
-        $oView->expects( $this->once() )->method( 'getActTag')->will( $this->returnValue( $oTag ) );
-        $this->assertEquals( "testTag", $oView->UNITgetMetaSeoParam() );
-    }
-
-    /**
-     * Test get seo meta parameter for recommendation list.
-     *
-     * @return null
-     */
-    public function testGetMetaSeoParamRecomm()
-    {
-        $oRecomm = new oxRecommList();
-        $oRecomm->setId( "testRecommId" );
-
-        $oView = $this->getMock( "details", array( "getLinkType", "getActiveRecommList" ) );
-        $oView->expects( $this->once() )->method( 'getLinkType')->will( $this->returnValue( OXARTICLE_LINKTYPE_RECOMM ) );
-        $oView->expects( $this->once() )->method( 'getActiveRecommList')->will( $this->returnValue( $oRecomm ) );
-        $this->assertEquals( "testRecommId", $oView->UNITgetMetaSeoParam() );
-    }
-
-    /**
-     * Test get seo meta parameter for category.
-     *
-     * @return null
-     */
-    public function testGetMetaSeoParamCategory()
-    {
-        $oCat = new oxRecommList();
-        $oCat->setId( "testRecommId" );
-
-        $oView = $this->getMock( "details", array( "getLinkType", "getActCategory" ) );
-        $oView->expects( $this->once() )->method( 'getLinkType')->will( $this->returnValue( 999 ) );
-        $oView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
-        $this->assertEquals( "testRecommId", $oView->UNITgetMetaSeoParam() );
     }
 
     /**

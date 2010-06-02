@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: articleseoTest.php 26705 2010-03-20 13:20:46Z arvydas $
+ * @version   SVN: $Id: articleseoTest.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -86,10 +86,18 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
         $iLang = 0;
         $iShopId = 1;
         $sObjectId = 'testObjectId';
-        $oObject = $this->getMock( "OxStdClass", array( "getStdTagLink" ) );
+        $oObject = $this->getMock( "OxStdClass", array( "getStdTagLink", "getId" ) );
         $oObject->expects( $this->once() )->method( 'getStdTagLink' );
+        $oObject->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( "testObjectId" ) );
 
-        $sQ = "select * from oxseo where oxobjectid = 'testDynObjectId' and oxshopid = '{$iShopId}' and oxlang = $iLang";
+        $sQ = "select * from oxseo
+                   left join oxobject2seodata on
+                       oxobject2seodata.oxobjectid = 'testObjectId' and
+                       oxobject2seodata.oxshopid = oxseo.oxshopid and
+                       oxobject2seodata.oxlang = oxseo.oxlang
+                   where
+                       oxseo.oxobjectid = 'testDynObjectId'
+                       and oxseo.oxshopid = '{$iShopId}' and oxseo.oxlang = {$iLang}";
 
         $oView = $this->getMock( "Article_Seo", array( "getActCategoryLang", "getTag", "_getCategoryList", "_getVendorList", "_getManufacturerList", "_getTagList" ) );
         $oView->expects( $this->once() )->method( 'getActCategoryLang' )->will( $this->returnValue( $iLang ) );
@@ -118,6 +126,14 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
 
         $sQ = "select * from oxseo where oxobjectid = 'testObjectId' and
                    oxshopid = '{$iShopId}' and oxlang = {$iLang}  and oxparams = 'testCatId' ";
+
+        $sQ = "select * from oxseo
+               left join oxobject2seodata on
+                   oxobject2seodata.oxobjectid = oxseo.oxobjectid and
+                   oxobject2seodata.oxshopid = oxseo.oxshopid and
+                   oxobject2seodata.oxlang = oxseo.oxlang
+                where oxseo.oxobjectid = 'testObjectId'
+                and oxseo.oxshopid = '{$iShopId}' and oxseo.oxlang = {$iLang}  and oxseo.oxparams = 'testCatId' ";
 
         $oView = $this->getMock( "Article_Seo", array( "getSelectedCategoryId" ) );
         $oView->expects( $this->once() )->method( 'getSelectedCategoryId' )->will( $this->returnValue( "testCatId" ) );

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 27792 2010-05-18 12:35:14Z sarunas $
+ * @version   SVN: $Id: oxubase.php 28018 2010-05-31 08:03:12Z arvydas $
  */
 
 /**
@@ -604,7 +604,7 @@ class oxUBase extends oxView
 
             $this->_sViewId =  "ox|$iLang|$iCur";
 
-        return $this->_sViewId;
+        return $this->_sViewId."|".( (int) $this->_blForceNoIndex );
     }
 
 
@@ -1043,6 +1043,8 @@ class oxUBase extends oxView
      * Returns seo parameter to filter meta data by it e.g. article
      * meta data for active category
      *
+     * @deprecated not used any more
+     *
      * @return null
      */
     protected function _getMetaSeoParam()
@@ -1061,10 +1063,9 @@ class oxUBase extends oxView
         $sOxid  = $this->_getSeoObjectId();
         $iLang  = oxLang::getInstance()->getBaseLanguage();
         $sShop  = $this->getConfig()->getShopId();
-        $sParam = $this->_getMetaSeoParam();
 
         if ( $sOxid && oxUtils::getInstance()->seoIsActive() &&
-             ( $sKeywords = oxSeoEncoder::getInstance()->getMetaData( $sOxid, $sDataType, $sShop, $iLang, $sParam ) ) ) {
+             ( $sKeywords = oxSeoEncoder::getInstance()->getMetaData( $sOxid, $sDataType, $sShop, $iLang) ) ) {
             return $sKeywords;
         }
     }
@@ -1848,6 +1849,8 @@ class oxUBase extends oxView
 
     /**
      * Template variable getter. Returns review user id
+     *
+     * @deprecated this getter should not be used in forms, use oxUBase::getReviewUserHash() instead
      *
      * @return string
      */

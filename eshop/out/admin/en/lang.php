@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27834 2010-05-20 15:26:20Z tomas $
+ * @version   SVN: $Id: lang.php 28021 2010-05-31 08:20:21Z arvydas $
  */
 
 /*
@@ -545,6 +545,7 @@ $aLang = array(
 'CONTENT_MAIN_INSERTBEFORE'                     => 'Inserted before',
 'CONTENT_MAIN_SNIPPET'                          => 'Snippet',
 'CONTENT_MAIN_TITLE'                            => '[OXID Content Administration]',
+'CONTENT_MAIN_TERMVER'                          => 'Version',
 'CONTENT_MAIN_ERROR'                            => 'ERROR!',
 'CONTENT_MAIN_USEDIDENTCODE'                    => 'Identcode already in use!',
 'CONTENT_MAIN_CATEGORY'                         => 'Category',

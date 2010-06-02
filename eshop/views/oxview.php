@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 26071 2010-02-25 15:12:55Z sarunas $
+ * @version   SVN: $Id: oxview.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 /**
@@ -801,4 +801,16 @@ class oxView extends oxSuperCfg
     public function getErrorDestination()
     {
     }
+
+    /**
+     * Returns name of a view class, which will be active for an action
+     * (given a generic fnc, e.g. logout)
+     *
+     * @return string
+     */
+    public function getActionClassName()
+    {
+        return $this->getClassName();
+    }
+
 }

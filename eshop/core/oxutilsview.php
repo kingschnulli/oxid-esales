@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 27844 2010-05-20 19:47:00Z tomas $
+ * @version   SVN: $Id: oxutilsview.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 /**
@@ -207,6 +207,12 @@ class oxUtilsView extends oxSuperCfg
     public function parseThroughSmarty( $sDesc, $sOxid = null, $oActView = null, $blRecompile = false )
     {
         startProfile("parseThroughSmarty");
+
+        if (!is_array($sDesc) && strpos($sDesc, "[{") === false) {
+            stopProfile("parseThroughSmarty");
+            return $sDesc;
+        }
+
 
         $iLang = oxLang::getInstance()->getTplLanguage();
 

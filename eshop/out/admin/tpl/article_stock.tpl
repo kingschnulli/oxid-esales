@@ -204,7 +204,7 @@ function editThis( sID )
                     </tr>
                     <tr>
                       <td class="edittext">
-                        [{ oxmultilang ident="ARTICLE_STOCK_AMOUNTPRICE_PRICE"}]
+                        [{ oxmultilang ident="ARTICLE_STOCK_AMOUNTPRICE_PRICE"}] ([{ $oActCur->sign }])
                       </td>
                       <td class="edittext" nowrap colspan=3>
                         <select  class="edittext" name="editval[pricetype]">

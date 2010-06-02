@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27944 2010-05-26 12:30:19Z sarunas $
+ * @version   SVN: $Id: lang.php 28020 2010-05-31 08:20:05Z arvydas $
  */
 
 
@@ -912,6 +912,8 @@ $aLang = array(
 'RECOMMLIST_SAVEREVIEW'                           => "Bewertung und Kommentar speichern",
 'RECOMMLIST_STAR'                                 => "Stern",
 'RECOMMLIST_STARS'                                => "Sterne",
+'REGISTER_CONFIRMED'                              => '[tr] Your account registration is confirmed!',
+'REGISTER_ERRLINKEXPIRED'                         => '[tr] Your account confirmation link expired.',
 'REGISTER_SUCCESS_MYACCOUNT'                      => "Mein Konto",
 'REGISTER_SUCCESS_WELCOME'                        => "Herzlich willkommen als Mitglied im OXID eShop!",
 'REGISTER_SUCCESS_EMAILCONFIRMATION'              => "Sie haben eine E-Mail von uns erhalten, die Ihre Mitgliedschaft bestätigt.<br><br>Vielen Dank.",

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodervendor.php 27759 2010-05-14 10:10:17Z arvydas $
+ * @version   SVN: $Id: oxseoencodervendor.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 /**
@@ -173,8 +173,10 @@ class oxSeoEncoderVendor extends oxSeoEncoder
      */
     public function onDeleteVendor( $oVendor )
     {
-        $sIdQuoted = oxDb::getDb()->quote( $oVendor->getId() );
-        oxDb::getDb()->execute("delete from oxseo where oxobjectid = $sIdQuoted and oxtype = 'oxvendor'");
+        $oDb = oxDb::getDb();
+        $sIdQuoted = $oDb->quote($oVendor->getId());
+        $oDb->execute("delete from oxseo where oxobjectid = $sIdQuoted and oxtype = 'oxvendor'");
+        $oDb->execute("delete from oxobject2seodata where oxobjectid = $sIdQuoted");
     }
 
     /**

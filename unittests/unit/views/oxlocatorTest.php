@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlocatorTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxlocatorTest.php 28034 2010-05-31 14:42:32Z arvydas $
  */
 
 
@@ -157,6 +157,9 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
     {
         // seo off
         modConfig::getInstance()->setConfigParam( 'blSeoMode', false );
+
+            modConfig::getInstance()->setConfigParam( 'iNrofCatArticles', 10 );
+
         oxUtils::getInstance()->seoIsActive( true );
 
         $myConfig = oxConfig::getInstance();

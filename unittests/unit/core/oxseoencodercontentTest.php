@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercontentTest.php 27759 2010-05-14 10:10:17Z arvydas $
+ * @version   SVN: $Id: oxseoencodercontentTest.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -53,6 +53,7 @@ class Unit_Core_oxSeoEncoderContentTest extends OxidTestCase
         modDB::getInstance()->cleanup();
         // deleting seo entries
         oxDb::getDb()->execute( 'delete from oxseo where oxtype != "static"' );
+        oxDb::getDb()->execute( 'delete from oxobject2seodata' );
         oxDb::getDb()->execute( 'delete from oxseohistory' );
 
         $this->cleanUpTable( 'oxcategories' );
@@ -244,15 +245,25 @@ class Unit_Core_oxSeoEncoderContentTest extends OxidTestCase
 
     public function testonDeleteContent()
     {
-        $sSql = "delete from oxseo where oxobjectid = \'oid\' and oxtype = \'oxcontent\'";
-        modDB::getInstance()->addClassFunction('execute', create_function('$s', "if (\$s != '$sSql') {throw new Exception(\$s.\" \nis not equal \n\".'$sSql');}"));
+        $sShopId = oxConfig::getInstance()->getBaseShopId();
+        $oDb = oxDb::getDb();
+        $sQ = "insert into oxseo
+                   ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed, oxexpired, oxparams )
+               values
+                   ( 'oid', '132', '{$sShopId}', '0', '', '', 'oxcontent', '0', '0', '' )";
+        $oDb->execute( $sQ );
 
-        try {
-            $o = new oxSeoEncoderContent();
-            $o->onDeleteContent('oid');
-        } catch (Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $sQ = "insert into oxobject2seodata ( oxobjectid, oxshopid, oxlang ) values ( 'oid', '{$sShopId}', '0' )";
+        $oDb->execute( $sQ );
+
+        $this->assertTrue( (bool) $oDb->getOne( "select 1 from oxseo where oxobjectid = 'oid'" ) );
+        $this->assertTrue( (bool) $oDb->getOne( "select 1 from oxobject2seodata where oxobjectid = 'oid'" ) );
+
+        $oEncoder = new oxSeoEncoderContent();
+        $oEncoder->onDeleteContent( 'oid' );
+
+        $this->assertFalse( (bool) $oDb->getOne( "select 1 from oxseo where oxobjectid = 'oid'" ) );
+        $this->assertFalse( (bool) $oDb->getOne( "select 1 from oxobject2seodata where oxobjectid = 'oid'" ) );
     }
 
 }

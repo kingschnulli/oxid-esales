@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 27195 2010-04-13 13:44:06Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxemail.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 /**
  * Includes PHP mailer class.
@@ -459,7 +459,7 @@ class oxEmail extends PHPMailer
         $oSmarty->assign( "basket", $oOrder->getBasket() );
         $oSmarty->assign( "payment", $oOrder->getPayment() );
         if ( $oUser ) {
-            $oSmarty->assign( "reviewuser", $oUser->getReviewUserHash( $oUser->getId() ) );
+            $oSmarty->assign( "reviewuserhash", $oUser->getReviewUserHash( $oUser->getId() ) );
         }
         $oSmarty->assign( "paymentinfo", $myConfig->getActiveShop() );
 
@@ -940,7 +940,7 @@ class oxEmail extends PHPMailer
         //deprecated var
         $oSmarty->assign( "isreview", true);
         $oUser = oxNew( 'oxuser' );
-        $oSmarty->assign( "reviewuser", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
+        $oSmarty->assign( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
 
         $oOutputProcessor = oxNew( "oxoutput" );
         $aNewSmartyArray = $oOutputProcessor->processViewArray( $oSmarty->get_template_vars(), "oxemail" );

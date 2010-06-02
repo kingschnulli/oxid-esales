@@ -82,7 +82,7 @@
           <!--Affilinet-->
           [{assign var="discountnetprice" value=$basket->getDiscountedNettoPrice()}]
           [{assign var="currencycovindex" value=$oView->getCurrencyCovIndex()}]
-          <img src="https://partners.webmasterplan.com/registersale.asp?site=[{$oxcmp_shop->oxshops__oxaffilinetid->value }]&amp;order=[{$order->oxorder__oxordernr->value }]&amp;curr=eur&amp;price=[{$discountnetprice * $currencycovindex|string_format:"%.2f"}]" WIDTH="1" HEIGHT="1">
+          <img src="https://partners.webmasterplan.com/registersale.asp?site=[{$oxcmp_shop->oxshops__oxaffilinetid->value }]&amp;order=[{$order->oxorder__oxordernr->value }]&amp;curr=[{$order->oxorder__oxcurrency->value}]&amp;price=[{$discountnetprice * $currencycovindex|string_format:"%.2f"}]" WIDTH="1" HEIGHT="1">
           <!--Affilinet Ende-->
         [{/if}]
 

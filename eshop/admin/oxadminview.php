@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminview.php 27025 2010-04-06 06:53:48Z arvydas $
+ * @version   SVN: $Id: oxadminview.php 28031 2010-05-31 13:50:52Z rimvydas.paskevicius $
  */
 
 /**
@@ -209,6 +209,9 @@ class oxAdminView extends oxView
         //$this->_aViewData['adminlang'] = isset( $iDynInterfaceLanguage )?$iDynInterfaceLanguage:$myConfig->getConfigParam( 'iAdminLanguage' );
         $this->_aViewData['adminlang'] = isset( $iDynInterfaceLanguage )?$iDynInterfaceLanguage:$oLang->getTplLanguage();
         $this->_aViewData['charset']   = $oLang->translateString( 'charset' );
+
+        //setting active currency object
+        $this->_aViewData["oActCur"] = $myConfig->getActShopCurrencyObject();
 
         return $oShop;
     }

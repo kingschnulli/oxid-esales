@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 27760 2010-05-14 10:23:30Z vilma $
+ * @version   SVN: $Id: user.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 /**
@@ -326,7 +326,6 @@ class User extends oxUBase
                 // user decided to use paymetn address as delivery
                 oxSession::setVar( 'blshowshipaddress', 0 );
                 // unsetting delivery address
-                oxSession::deleteVar( 'deladdrid' );
                 $this->_blShowShipAddress = false;
             }
         }

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 27855 2010-05-21 11:08:42Z vilma $
+ * @version   SVN: $Id: lang.php 28020 2010-05-31 08:20:05Z arvydas $
  */
 
 
@@ -912,6 +912,8 @@ $aLang = array(
 'RECOMMLIST_SAVEREVIEW'                           => "Save rating and review",
 'RECOMMLIST_STAR'                                 => "Star",
 'RECOMMLIST_STARS'                                => "Stars",
+'REGISTER_CONFIRMED'                              => 'Your account registration is confirmed!',
+'REGISTER_ERRLINKEXPIRED'                         => 'Your account confirmation link expired.',
 'REGISTER_SUCCESS_MYACCOUNT'                      => "My Account",
 'REGISTER_SUCCESS_WELCOME'                        => "We welcome you as registered user!",
 'REGISTER_SUCCESS_EMAILCONFIRMATION'              => "We sent you an eMail confirming your registration.<br><br>Thank you.",

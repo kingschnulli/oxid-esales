@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticleTest.php 27759 2010-05-14 10:10:17Z arvydas $
+ * @version   SVN: $Id: oxseoencoderarticleTest.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -100,6 +100,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         modDB::getInstance()->cleanup();
         // deleting seo entries
         oxDb::getDb()->execute( 'delete from oxseo where oxtype != "static"' );
+        oxDb::getDb()->execute( 'delete from oxobject2seodata' );
         oxDb::getDb()->execute( 'delete from oxseohistory' );
 
         $this->cleanUpTable( 'oxcategories' );
@@ -615,7 +616,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         $oEncoder->expects( $this->once() )->method( '_getProductForLang' )->with( $this->equalTo( $oArticle ), $this->equalTo( 0 ))->will( $this->returnValue( $oArticle ) );
         $oEncoder->expects( $this->once() )->method( '_prepareArticleTitle' )->with( $this->equalTo( $oArticle ) )->will( $this->returnValue( 'testArticleTitle' ) );
         $oEncoder->expects( $this->once() )->method( '_processSeoUrl' )->with( $this->equalTo( 'testArticleTitle' ), $this->equalTo( 'testId' ), $this->equalTo( 0 ) )->will( $this->returnValue( 'testSeoUri' ) );
-        $oEncoder->expects( $this->once() )->method( '_saveToDb' )->with( $this->equalTo( 'oxarticle' ), $this->equalTo( 'testId' ), $this->equalTo( 'testStdLink' ), $this->equalTo( 'testSeoUri' ), $this->equalTo( 0 ), $this->equalTo( null ), $this->equalTo( 0 ), $this->equalTo( false ), $this->equalTo( false ), $this->equalTo( '' ));
+        $oEncoder->expects( $this->once() )->method( '_saveToDb' )->with( $this->equalTo( 'oxarticle' ), $this->equalTo( 'testId' ), $this->equalTo( 'testStdLink' ), $this->equalTo( 'testSeoUri' ), $this->equalTo( 0 ), $this->equalTo( null ), $this->equalTo( 0 ), $this->equalTo( '' ));
 
         $oEncoder->expects( $this->never() )->method( '_createArticleCategoryUri' );
 
@@ -1176,18 +1177,28 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
 
     public function testonDeleteArticle()
     {
-        $art = new oxbase();
-        $art->setId('article_id');
+        $sShopId = oxConfig::getInstance()->getBaseShopId();
+        $oDb = oxDb::getDb();
+        $sQ = "insert into oxseo
+                   ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed, oxexpired, oxparams )
+               values
+                   ( 'article_id', '132', '{$sShopId}', '0', '', '', 'oxarticle', '0', '0', '' )";
+        $oDb->execute( $sQ );
 
-        $sSql = "delete from oxseo where oxobjectid = \'article_id\' and oxtype = \'oxarticle\'";
-        modDB::getInstance()->addClassFunction('execute', create_function('$s', "if (\$s != '$sSql') {throw new Exception(\$s.\" \nis not equal \n\".'$sSql');}"));
+        $sQ = "insert into oxobject2seodata ( oxobjectid, oxshopid, oxlang ) values ( 'article_id', '{$sShopId}', '0' )";
+        $oDb->execute( $sQ );
 
-        try {
-            $o = new oxSeoEncoderArticle();
-            $o->onDeleteArticle($art);
-        } catch (Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $this->assertTrue( (bool) $oDb->getOne( "select 1 from oxseo where oxobjectid = 'article_id'" ) );
+        $this->assertTrue( (bool) $oDb->getOne( "select 1 from oxobject2seodata where oxobjectid = 'article_id'" ) );
+
+        $oArticle = new oxbase();
+        $oArticle->setId( 'article_id' );
+
+        $oEncoder = new oxSeoEncoderArticle();
+        $oEncoder->onDeleteArticle( $oArticle );
+
+        $this->assertFalse( (bool) $oDb->getOne( "select 1 from oxseo where oxobjectid = 'article_id'" ) );
+        $this->assertFalse( (bool) $oDb->getOne( "select 1 from oxobject2seodata where oxobjectid = 'article_id'" ) );
     }
 
     public function testCreateArticleCategoryUri()
@@ -1220,8 +1231,6 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
                 $this->equalTo(1),
                 $this->equalTo(null),
                 $this->equalTo(0),
-                $this->equalTo(false),
-                $this->equalTo(false),
                 $this->equalTo('catId')
             )->will($this->returnValue(null));
 

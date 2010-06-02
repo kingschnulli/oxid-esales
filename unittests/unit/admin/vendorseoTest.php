@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorseoTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: vendorseoTest.php 28029 2010-05-31 12:21:51Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -72,7 +72,14 @@ class Unit_Admin_VendorSeoTest extends OxidTestCase
      */
     public function testGetSeoDataSql()
     {
-        $sQ = "select * from oxseo where oxobjectid = 'testId' and oxshopid = '1' and oxlang = 1  and oxparams = '' ";
+        $sQ = "select * from oxseo
+               left join oxobject2seodata on
+                   oxobject2seodata.oxobjectid = oxseo.oxobjectid and
+                   oxobject2seodata.oxshopid = oxseo.oxshopid and
+                   oxobject2seodata.oxlang = oxseo.oxlang
+               where
+                   oxseo.oxobjectid = 'testId' and
+                   oxseo.oxshopid = '1' and oxseo.oxlang = 1 and oxparams = '' ";
 
         $oObject = new oxBase();
         $oObject->setId( "testId" );

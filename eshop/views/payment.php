@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 27229 2010-04-15 11:57:07Z arvydas $
+ * @version   SVN: $Id: payment.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 /**
@@ -115,12 +115,7 @@ class Payment extends oxUBase
     public function init()
     {
         $this->_filterDynData();
-
         parent::init();
-
-        if ( ( $soxAddressId = oxConfig::getParameter( 'oxaddressid' ) ) ) {
-            oxSession::setVar( 'deladdrid', $soxAddressId );
-        }
     }
 
     /**

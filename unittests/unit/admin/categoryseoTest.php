@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: categoryseoTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: categoryseoTest.php 28027 2010-05-31 11:16:38Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -77,8 +77,14 @@ class Unit_Admin_CategorySeoTest extends OxidTestCase
         $iShopId = oxConfig::getInstance()->getBaseShopId();
         $iLang   = 0;
 
-        $sQ = "select * from oxseo where oxobjectid = 'testCatId' and
-                oxshopid = '{$iShopId}' and oxlang = {$iLang}  and oxparams = '' ";
+        $sQ = "select * from oxseo
+               left join oxobject2seodata on
+                   oxobject2seodata.oxobjectid = oxseo.oxobjectid and
+                   oxobject2seodata.oxshopid = oxseo.oxshopid and
+                   oxobject2seodata.oxlang = oxseo.oxlang
+               where
+                   oxseo.oxobjectid = 'testCatId' and
+                   oxseo.oxshopid = '{$iShopId}' and oxseo.oxlang = {$iLang} and oxparams = '' ";
 
         $oView = new Category_Seo();
         $sResQ = $oView->UNITgetSeoDataSql( $oObject, $iShopId, $iLang );

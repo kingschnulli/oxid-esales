@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 27764 2010-05-14 13:27:13Z arvydas $
+ * @version   SVN: $Id: oxseoencoderTest.php 28026 2010-05-31 11:11:32Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -95,6 +95,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
     {
         // deleting seo entries
         oxDb::getDb()->execute( 'delete from oxseo where oxtype != "static"' );
+        oxDb::getDb()->execute( 'delete from oxobject2seodata' );
         oxDb::getDb()->execute( 'delete from oxseohistory' );
 
         $this->cleanUpTable( 'oxcategories' );
@@ -188,8 +189,6 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
                                                                           $this->equalTo( $iLang ),
                                                                           $this->equalTo( $iShopId ),
                                                                           $this->equalTo( $blFixed ),
-                                                                          $this->equalTo( $sKeywords ),
-                                                                          $this->equalTo( $sDescription ),
                                                                           $this->equalTo( $sParams  ) );
 
         $oEncoder->addSeoEntry( $sObjectId, $iShopId, $iLang, $sStdUrl, $sSeoUrl, $sType, $blFixed, $sKeywords, $sDescription, $sParams, $blExclude, $sAltObjectId );
@@ -595,19 +594,19 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $oEncoder = new oxSeoEncoder();
         $oEncoder->addSeoEntry( 'testid', $iShopId, 0, 'index.php?cl=std', 'seo/url/', 'oxcategory', 0, 'oxkeywords', 'oxdescription', '' );
 
-        $sQ = "select oxkeywords from oxseo where oxobjectid = 'testid' and oxshopid = '{$iShopId}' and oxlang = 0 ";
+        $sQ = "select oxkeywords from oxobject2seodata where oxobjectid = 'testid' and oxshopid = '{$iShopId}' and oxlang = 0 ";
         $this->assertEquals( 'oxkeywords', $oDb->getOne( $sQ ) );
 
-        $sQ = "select oxdescription from oxseo where oxobjectid = 'testid' and oxshopid = '{$iShopId}' and oxlang = 0 ";
+        $sQ = "select oxdescription from oxobject2seodata where oxobjectid = 'testid' and oxshopid = '{$iShopId}' and oxlang = 0 ";
         $this->assertEquals( 'oxdescription', $oDb->getOne( $sQ ) );
 
         $oEncoder = new oxSeoEncoder();
         $oEncoder->addSeoEntry( 'testid', $iShopId, 0, 'index.php?cl=std', 'seo/url/', 'oxcategory', 0, '', '', '' );
 
-        $sQ = "select oxkeywords from oxseo where oxobjectid = 'testid' and oxshopid = '{$iShopId}' and oxlang = 0 ";
+        $sQ = "select oxkeywords from oxobject2seodata where oxobjectid = 'testid' and oxshopid = '{$iShopId}' and oxlang = 0 ";
         $this->assertEquals( '', $oDb->getOne( $sQ ) );
 
-        $sQ = "select oxdescription from oxseo where oxobjectid = 'testid' and oxshopid = '{$iShopId}' and oxlang = 0 ";
+        $sQ = "select oxdescription from oxobject2seodata where oxobjectid = 'testid' and oxshopid = '{$iShopId}' and oxlang = 0 ";
         $this->assertEquals( '', $oDb->getOne( $sQ ) );
     }
 
@@ -848,8 +847,12 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $sDescription = 'superb seo stuff!';
         $sIdent = md5( strtolower( $sSeoUrl."u" ) );
 
-        $sQ = "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed, oxkeywords, oxdescription )
-               values ( '$sObjectId', '{$sIdent}', '{$iShopId}', {$iLang}, '{$sStdUrl}', '{$sSeoUrl}', '{$sType}', '{$blFixed}', '{$sKeywords}', '{$sDescription}' ) ";
+        $sQ = "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed )
+               values ( '$sObjectId', '{$sIdent}', '{$iShopId}', {$iLang}, '{$sStdUrl}', '{$sSeoUrl}', '{$sType}', '{$blFixed}' ) ";
+        oxDb::getDb()->Execute( $sQ );
+
+        $sQ = "insert into oxobject2seodata ( oxobjectid, oxshopid, oxlang, oxkeywords, oxdescription )
+               values ( '$sObjectId', '{$iShopId}', {$iLang}, '{$sKeywords}', '{$sDescription}' ) ";
         oxDb::getDb()->Execute( $sQ );
 
         $oEncoder = $this->getMock( 'oxSeoEncoder', array( '_saveToDb', '_processSeoUrl', '_prepareUri', '_trimUrl' ) );
@@ -860,9 +863,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
                     $this->equalTo( 'seourlu' ),
                     $this->equalTo( '1' ),
                     $this->equalTo( 'yyy' ),
-                    $this->equalTo( '1' ),
-                    $this->equalTo( $sKeywords ),
-                    $this->equalTo( $sDescription )
+                    $this->equalTo( '1' )
         )->will($this->returnValue(null));
         $oEncoder->expects( $this->once( ) )->method('_processSeoUrl')->with( $this->equalTo( $sSeoUrl."p" ) )->will( $this->returnValue( $sSeoUrl."u" ) );
         $oEncoder->expects( $this->once( ) )->method('_prepareUri')->will( $this->onConsecutiveCalls( $this->returnValue( $sSeoUrl."p" ), $this->returnValue( $sKeywords ) ) );
@@ -1101,7 +1102,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
                                    values ( '{$sObjectId}', '".md5( strtolower( "de/$sSeoUrl3" ) )."', '{$iShopId}', '0', '{$sStdUrl3}', '{$sSeoUrl3}', '1', 'oxarticle', '{$sRootId3}' )" );
 
         $oEncoder = new oxSeoEncoder();;
-        $oEncoder->UNITsaveToDb('oxarticle', $sObjectId, $sStdUrl3, $sSeoUrl3, 0, $iShopId, null, false, false, $sRootId3);
+        $oEncoder->UNITsaveToDb('oxarticle', $sObjectId, $sStdUrl3, $sSeoUrl3, 0, $iShopId, null, $sRootId3);
 
         $sSql = " select oxobjectid, oxparams, oxexpired from oxseo where oxobjectid= '{$sObjectId}' and oxexpired = '0' ";
         $aRows = $oDb->getAll( $sSql );
@@ -1565,7 +1566,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
 
         $iShopId = oxConfig::getInstance()->getBaseShopId();
 
-        $sQ = "select yyy from oxseo where oxobjectid = 'xxx' and oxshopid = '{$iShopId}' and oxlang = '0' order by oxparams";
+        $sQ = "select yyy from oxobject2seodata where oxobjectid = 'xxx' and oxshopid = '{$iShopId}' and oxlang = '0'";
         $this->assertEquals( $sQ, $this->aSQL[0] );
     }
 
@@ -1672,8 +1673,6 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
                          $this->equalTo( $iLang ),
                          $this->equalTo( $iShopId ),
                          $this->equalTo( 0 ),
-                         $this->equalTo( '' ),
-                         $this->equalTo( '' ),
                          $this->equalTo( $sParams ) );
 
         $this->assertEquals( $sSeoUrl, $oEncoder->UNITgetPageUri( $oObject, $sType, $sStdUrl, $sSeoUrl, $sParams ) );

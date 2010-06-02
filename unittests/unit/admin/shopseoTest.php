@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: shopseoTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: shopseoTest.php 28025 2010-05-31 11:10:04Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -199,7 +199,7 @@ class Unit_Admin_ShopSeoTest extends OxidTestCase
         $oDb = oxDb::getDb();
 
         // inserting test record
-        $oDb->getOne( "insert into oxseo values( 'testObjectId', 'testident', '1', '0', 'teststdurl', 'testseourl', 'static', '0', '', '', '0', '' )" );
+        $oDb->getOne( "insert into oxseo values( 'testObjectId', 'testident', '1', '0', 'teststdurl', 'testseourl', 'static', '0', '', '' )" );
         $this->assertEquals( 1, $oDb->getOne( "select 1 from oxseo where oxobjectid = 'testObjectId' and oxshopid = '1'" ) );
 
         // testing..

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 27795 2010-05-18 14:03:40Z sarunas $
+ * @version   SVN: $Id: oxubaseTest.php 28036 2010-06-01 06:29:22Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -338,7 +338,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $sShopID  = $myConfig->getShopId();
 
 
-            $this->assertEquals( "ox|1|1", $sId );
+            $this->assertEquals( "ox|1|1|0", $sId );
     }
 
     public function testGetMetaDescriptionForStartView()

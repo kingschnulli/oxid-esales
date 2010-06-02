@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 27593 2010-05-06 09:18:54Z arvydas $
+ * @version   SVN: $Id: oxcmpUserTest.php 28010 2010-05-28 09:23:10Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -824,7 +824,6 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     public function testSetupDelAddressCloseDelAddress()
     {
         modConfig::setParameter( 'blhideshipaddress', 1 );
-        oxSession::setVar( 'deladdrid', 'test' );
         $oView = oxNew("oxview");
         $oUserView = $this->getMock( 'oxcmp_user', array( 'getParent' ) );
         $oUserView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oView ) );
@@ -832,7 +831,6 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oViewData = $oView->getViewData();
         $this->assertEquals( 0, $oViewData['blshowshipaddress'] );
         $this->assertEquals( 0, oxSession::getVar( 'blshowshipaddress' ) );
-        $this->assertNull( oxSession::getVar( 'deladdrid' ) );
     }
 
     /**
