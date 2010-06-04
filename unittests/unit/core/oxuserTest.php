@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 27936 2010-05-26 11:27:19Z arvydas $
+ * @version   SVN: $Id: oxuserTest.php 28125 2010-06-03 11:44:01Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2054,7 +2054,8 @@ class Unit_Core_oxuserTest extends OxidTestCase
     {
         // testing
         $oUser = oxNew( 'oxuser' );
-        $this->assertEquals( false, $oUser->addDynGroup("oxidadmin", array()) );
+        $this->assertFalse( $oUser->addDynGroup( "oxidadmin", array() ) );
+        $this->assertFalse( $oUser->addDynGroup( "oxidnetprice", array() ) );
     }
     public function testAddDynGroupTryingAllreadyAdded()
     {

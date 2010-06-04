@@ -100,6 +100,16 @@ function ShowMenueFields( iVal)
                     [{ oxinputhelp ident="HELP_GENERAL_INFOLDER" }]
                   </td>
                 </tr>
+                [{if $edit->oxcontents__oxloadid->value == 'oxagb' }]
+                <tr>
+                  <td class="edittext">
+                    [{ oxmultilang ident="CONTENT_MAIN_TERMVER" }]
+                  </td>
+                  <td class="edittext">
+                  <input type="text" class="editinput" size="28" maxlength="[{$edit->oxcontents__oxtermver->fldmax_length}]" name="editval[oxcontents__oxtermver]" value="[{$edit->oxcontents__oxtermver->value}]" [{ $readonly }]>
+                  </td>
+                </tr>
+                [{/if}]
                 <tr>
                   <td class="edittext" colspan="2"><br>
                   [{include file="language_edit.tpl"}]<br>

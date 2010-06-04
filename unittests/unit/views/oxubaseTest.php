@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 28036 2010-06-01 06:29:22Z arvydas $
+ * @version   SVN: $Id: oxubaseTest.php 28071 2010-06-02 11:30:05Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1690,4 +1690,81 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oUbase2->expects($this->once())->method('getSession')->will($this->returnValue(modSession::getInstance()));
         $oUbase2->prepareMinimumOrderPrice4View();
     }
+
+
+
+    /**
+     * oxUBase::getPromoFinishedList() test case
+     *
+     * @return null
+     */
+    public function testGetPromoFinishedList()
+    {
+        $oList = $this->getMock( "oxActionList", array( "loadFinishedByCount" ) );
+        $oList->expects( $this->once() )->method( 'loadFinishedByCount' )->with( $this->equalTo( 2 ));
+        oxTestModules::addModuleObject('oxActionList', $oList);
+
+        $oView = new oxUBase();
+
+        $this->assertTrue( $oView->getPromoFinishedList() instanceof oxActionList );
+    }
+
+    /**
+     * oxUBase::getPromoCurrentList() test case
+     *
+     * @return null
+     */
+    public function testGetPromoCurrentList()
+    {
+        $oList = $this->getMock( "oxActionList", array( "loadCurrent" ) );
+        $oList->expects( $this->once() )->method( 'loadCurrent' );
+        oxTestModules::addModuleObject('oxActionList', $oList);
+
+        $oView = new oxUBase();
+
+        $this->assertTrue( $oView->getPromoCurrentList() instanceof oxActionList );
+    }
+
+    /**
+     * oxUBase::getPromoFutureList() test case
+     *
+     * @return null
+     */
+    public function testGetPromoFutureList()
+    {
+        $oList = $this->getMock( "oxActionList", array( "loadFutureByCount" ) );
+        $oList->expects( $this->once() )->method( 'loadFutureByCount' )->with( $this->equalTo( 2 ));
+        oxTestModules::addModuleObject('oxActionList', $oList);
+
+        $oView = new oxUBase();
+
+        $this->assertTrue( $oView->getPromoFutureList() instanceof oxActionList );
+    }
+
+    /**
+     * oxUBase::getShowPromotionList() test case
+     *
+     * @return null
+     */
+    public function testGetShowPromotionList()
+    {
+        $oView = $this->getMock( "oxUBase", array( "getPromoFinishedList", "getPromoCurrentList", "getPromoFutureList" ) );
+        $oView->expects( $this->once() )->method( 'getPromoFinishedList' )->will( $this->returnValue( 1 ) );
+        $oView->expects( $this->once() )->method( 'getPromoCurrentList' )->will( $this->returnValue( 1 ) );
+        $oView->expects( $this->once() )->method( 'getPromoFutureList' )->will( $this->returnValue( 1 ) );
+
+        $this->assertTrue( $oView->getShowPromotionList() );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

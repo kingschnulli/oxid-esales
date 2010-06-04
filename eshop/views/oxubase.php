@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 28018 2010-05-31 08:03:12Z arvydas $
+ * @version   SVN: $Id: oxubase.php 28071 2010-06-02 11:30:05Z sarunas $
  */
 
 /**
@@ -39,6 +39,18 @@ define( 'VIEW_INDEXSTATE_NOINDEXFOLLOW', 2 );   //  no index / follow
  */
 class oxUBase extends oxView
 {
+    /**
+     * Checks if module is enabled
+     *
+     * @param string $sModName module name
+     *
+     * @return bool
+     */
+    public function isActive( $sModName )
+    {
+        return $this->getConfig()->getConfigParam( $sModName );
+    }
+
     /**
      * Array of component objects.
      *
@@ -2891,6 +2903,65 @@ class oxUBase extends oxView
             $this->getFormId();
         }
         return $this->_blCanAcceptFormData;
+    }
+
+    /**
+     * return last finished promotion list
+     *
+     * @return oxActionList
+     */
+    public function getPromoFinishedList()
+    {
+        if (isset($this->_oPromoFinishedList)) {
+            return $this->_oPromoFinishedList;
+        }
+        $this->_oPromoFinishedList = oxNew( 'oxActionList' );
+        $this->_oPromoFinishedList->loadFinishedByCount(2);
+        return $this->_oPromoFinishedList;
+    }
+
+    /**
+     * return current promotion list
+     *
+     * @return oxActionList
+     */
+    public function getPromoCurrentList()
+    {
+        if (isset($this->_oPromoCurrentList)) {
+            return $this->_oPromoCurrentList;
+        }
+        $this->_oPromoCurrentList = oxNew( 'oxActionList' );
+        $this->_oPromoCurrentList->loadCurrent();
+        return $this->_oPromoCurrentList;
+    }
+
+    /**
+     * return future promotion list
+     *
+     * @return oxActionList
+     */
+    public function getPromoFutureList()
+    {
+        if (isset($this->_oPromoFutureList)) {
+            return $this->_oPromoFutureList;
+        }
+        $this->_oPromoFutureList = oxNew( 'oxActionList' );
+        $this->_oPromoFutureList->loadFutureByCount(2);
+        return $this->_oPromoFutureList;
+    }
+
+    /**
+     * should promotions list be shown?
+     *
+     * @return bool
+     */
+    public function getShowPromotionList()
+    {
+        if (isset($this->_blShowPromotions)) {
+            return $this->_blShowPromotions;
+        }
+        $this->_blShowPromotions = ( count( $this->getPromoFinishedList() ) + count( $this->getPromoCurrentList() ) + count( $this->getPromoFutureList() ) ) > 0;
+        return $this->_blShowPromotions;
     }
 
 }

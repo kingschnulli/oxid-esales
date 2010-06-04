@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 27810 2010-05-19 12:44:06Z vilma $
+ * @version   SVN: $Id: oxorder.php 28102 2010-06-02 14:23:19Z sarunas $
  */
 
 /**
@@ -69,7 +69,7 @@ class oxOrder extends oxBase
     /**
      * Skip update fields
      *
-     * @var unknown_type
+     * @var array
      */
     protected $_aSkipSaveFields = array( 'oxorderdate' );
 
@@ -960,26 +960,6 @@ class oxOrder extends oxBase
                     $dNewAmount = 0;
                 }
                 $oUserBasket->addItemToBasket( $sProdId, $dNewAmount, $oContent->getSelList(), true );
-            }
-        }
-    }
-
-    /**
-     * Bought item stock updater
-     *
-     * @return null
-     */
-    protected function _updateStock()
-    {
-        $myConfig = $this->getConfig();
-
-        // ordered articles
-        if ( $myConfig->getConfigParam( 'blUseStock' ) ) {
-            $oOrderArticles = $this->getOrderArticles();
-            foreach ( $oOrderArticles as $oOrderArticle ) {
-                if ( $oOrderArticle->isNewOrderItem() ) {
-                    $oOrderArticle->updateArticleStock( $oOrderArticle->oxorderarticles__oxamount->value * (-1), $myConfig->getConfigParam( 'blAllowNegativeStock' ) );
-                }
             }
         }
     }

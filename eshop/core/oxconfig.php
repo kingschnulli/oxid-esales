@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 27908 2010-05-25 14:54:30Z arvydas $
+ * @version   SVN: $Id: oxconfig.php 28125 2010-06-03 11:44:01Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1151,7 +1151,7 @@ class oxConfig extends oxSuperCfg
         }
 
         if ( !$sReturn ) {
-            // TODO: log missing paths...
+            // TODO: implement logic to log missing paths
         }
 
         // to cache
@@ -1995,5 +1995,26 @@ class oxConfig extends oxSuperCfg
     public function getLogsDir()
     {
         return $this->getConfigParam( 'sShopDir' ).'log/';
+    }
+
+    /**
+     * Returns true if shop is set as NET price:
+     *  - config option "blNetPriceShop" is checked;
+     *  - session user is in NET price group.
+     *
+     * @return bool
+     */
+    public function isNetPriceShop()
+    {
+        $blNet = false;
+
+        // checking for config option
+        if ( $this->getConfigParam( "blNetPriceShop" ) ) {
+            $blNet = true;
+        } elseif ( ( $oUser = $this->getUser() ) ) {
+            $blNet = $oUser->inGroup( "oxidnetprice" );
+        }
+
+        return $blNet;
     }
 }

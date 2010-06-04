@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxorderTest.php 28102 2010-06-02 14:23:19Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1725,7 +1725,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
                            'save',
                            '_executePayment',
                            '_setOrderStatus',
-                           //'_updateStock',
                            '_updateWishlist',
                            '_updateNoticeList',
                            '_markVouchers',
@@ -1763,7 +1762,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
                            '_setPayment',
                            'save',
                            '_setOrderStatus',
-                           //'_updateStock',
                            '_updateWishlist',
                            '_updateNoticeList',
                          );
@@ -1794,7 +1792,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
                            'save',
                            '_executePayment',
                            '_setOrderStatus',
-                           //'_updateStock',
                            '_updateWishlist',
                            '_updateNoticeList',
                            '_markVouchers',
@@ -1811,7 +1808,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $oOrder->expects($this->once())->method('save')->will($this->returnValue(true));
         $oOrder->expects($this->once())->method('_executePayment')->will($this->returnValue(true));
         $oOrder->expects($this->once())->method('_setOrderStatus')->will($this->returnValue(true));
-        //$oOrder->expects($this->once())->method('_updateStock')->will($this->returnValue(true));
         $oOrder->expects($this->once())->method('_updateWishlist')->will($this->returnValue(true));
         $oOrder->expects($this->once())->method('_markVouchers')->will($this->returnValue(true));
         $oOrder->expects($this->once())->method('_sendOrderByEmail')->will($this->returnValue(1));
@@ -2575,62 +2571,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $sSql = "select oxamount from oxuserbasketitems where oxartid = '1126' and oxbasketid = '_testUserBasketId'";
         $iRes = $oDB->getOne($sSql);
         $this->assertEquals( 2, $iRes );
-    }
-
-    public function testUpdateStock()
-    {
-        modConfig::getInstance()->setConfigParam( 'blUseStock', true );
-
-        $oArticle =  oxNew( 'oxArticle' );
-        $oArticle->setId( '_testArticleId' );
-        $oArticle->oxarticles__oxactive = new oxField('1', oxField::T_RAW);
-        $oArticle->oxarticles__oxstock = new oxField('5', oxField::T_RAW);
-        $oArticle->save();
-
-        $oOrderArticle = oxNew( 'oxOrderArticle' );
-        $oOrderArticle->setId( '_testOrderArticleId' );
-        $oOrderArticle->oxorderarticles__oxartid = new oxField('_testArticleId', oxField::T_RAW);
-        $oOrderArticle->oxorderarticles__oxamount = new oxField('2', oxField::T_RAW);
-        $oOrderArticle->setIsNewOrderItem( true );
-
-        $oOrder = $this->getMock( "oxOrder", array( "getOrderArticles" ) );
-        $oOrder->expects( $this->any())->method('getOrderArticles')->will($this->returnValue( array( $oOrderArticle ) ) );
-
-        $oOrder->UNITupdateStock();
-
-        $oDB = oxDb::getDb();
-        $sSql = "select oxstock from oxarticles where oxid = '_testArticleId'";
-        $iRes = $oDB->getOne($sSql);
-        $this->assertEquals( 3, $iRes );
-    }
-
-    public function testUpdateStockWhenStokUsageIsOff()
-    {
-        $myConfig = new oxConfig;
-        $myConfig->setConfigParam( 'blUseStock', false );
-
-        $oArticle = oxNew( 'oxArticle' );
-        $oArticle->setId( '_testArticleId' );
-        $oArticle->oxarticles__oxactive = new oxField('1', oxField::T_RAW);
-        $oArticle->oxarticles__oxstock = new oxField('5', oxField::T_RAW);
-        $oArticle->save();
-
-        $oOrderArticle = oxNew( 'oxOrderArticle' );
-        $oOrderArticle->setId( '_testOrderArticleId' );
-        $oOrderArticle->oxorderarticles__oxartid = new oxField('_testArticleId', oxField::T_RAW);
-        $oOrderArticle->oxorderarticles__oxamount = new oxField('2', oxField::T_RAW);
-        $aOrderArticles[] = $oOrderArticle;
-
-        $oOrder = $this->getProxyClass( "oxOrder" );
-        $oOrder->setConfig( $myConfig );
-        $oOrder->setNonPublicVar( '_oArticles', $aOrderArticles );
-
-        $oOrder->UNITupdateStock();
-
-        $oDB = oxDb::getDb();
-        $sSql = "select oxstock from oxarticles where oxid = '_testArticleId'";
-        $iRes = $oDB->getOne($sSql);
-        $this->assertEquals( 5, $iRes );
     }
 
     public function testMarkVouchers()

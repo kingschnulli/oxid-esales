@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28020 2010-05-31 08:20:05Z arvydas $
+ * @version   SVN: $Id: lang.php 28140 2010-06-03 13:50:15Z vilma $
  */
 
 
@@ -187,6 +187,9 @@ $aLang = array(
 'ADD_RECOMM_ADDTOLIST'                            => "In die Lieblingsliste",
 'ADD_RECOMM_ADDRECOMMLINK1'                       => "Es liegen zur Zeit keine Lieblingslisten vor. Um eine neue Lieblingsliste anzulegen, klicken Sie",
 'ADD_RECOMM_ADDRECOMMLINK2'                       => "hier",
+'BASKET_EXCLUDE_HEAD'                             => "Hauptkategorie verändert",
+'BASKET_EXCLUDE_MSG'                              => "Verweigert aufgrund Shop Regeln",
+'BASKET_EXCLUDE_INFO'                             => "Sie können zur Kasse gehen und fertig bestellen.<br>Oder Sie können auch weiterhin, aber alle Inhalte Warenkorb wird geleert",
 'BASKET_BASKET'                                   => "Warenkorb",
 'BASKET_EMPTYSHIPPINGCART'                        => "Der Warenkorb ist leer.",
 'BASKET_NEXTSTEP'                                 => "Weiter zum nächsten Schritt",
@@ -246,7 +249,7 @@ $aLang = array(
 'BASKET_MINORDERPRICE'                            => "Mindestbestellwert",
 'BASKET_WRONGAMOUNT1'                             => "Tragen Sie eine gültige Menge für Artikel ",
 'BASKET_WRONGAMOUNT2'                             => " ein.",
-'BASKET_SELECT_ALL'  	                          => "Alle auswählen",
+'BASKET_SELECT_ALL'                                => "Alle auswählen",
 'COMPARE_POPUP_TITLE'                             => "Artikelvergleich",
 'COMPARE_POPUP_ARTICELNO'                         => "Art.Nr.:",
 'COMPARE_POPUP_PRODUCTATTRIBUTES'                 => "Artikelattribute",
@@ -346,6 +349,13 @@ $aLang = array(
 'DETAILS_STARS'                                   => "Sterne",
 'DETAILS_ARTWEIGHTUNIT'                           => "kg",
 'DETAILS_ARTWEIGHT'                               => "Gewicht:",
+'DETAILS_DELIVERYTIME'                            => "Lieferzeit:",
+'DETAILS_DAY'                                     => "Tag",
+'DETAILS_MONTH'                                   => "Monat",
+'DETAILS_WEEK'                                    => "Woche",
+'DETAILS_DAYS'                                    => "Tage",
+'DETAILS_MONTHS'                                  => "Monate",
+'DETAILS_WEEKS'                                   => "Wochen",
 'EMAIL_NEWSLETTEROPTIN_HTML_NEWSLETTER'           => "Newsletter",
 'EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT'             => "Newsletter",
 'EMAIL_ORDER_CUST_HTML_ORDERNOMBER'               =>"Bestellnr.",
@@ -1242,6 +1252,42 @@ $aLang = array(
 'EXCEPTION_NOTALLOWEDTYPE'                        => 'Verbotener Dateityp. Bitte config.inc.php anpassen, um diesen Dateityp zu erlauben.',
 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" nicht gefunden',
 'EXCEPTION_RECOMMLIST_NOTITLE'                    => 'Kein Titel angegeben',
+'INC_HEADER_INVITEFRIENDS'                        => "[tr]Invite your friends",
+'INVITE_TITLE'                                    => "[tr]Invite your friends",
+'INVITE_RECOMMENDSITE'                            => "[tr]Invite your friends to our site and get bonus points for each invited users.",
+'INVITE_ENTERFRIENDSEMAILS'                       => "[tr]Please enter bellow your friends eMails and invitation letter will be sent to them.",
+'INVITE_RECIPIENTEMAIL'                           => "[tr]eMail",
+'INVITE_SENDTO'                                   => "[tr]Send invite to:",
+'INVITE_FROM'                                     => "[tr]From:",
+'INVITE_SENDERNAME'                               => "[tr]Sender's Name:",
+'INVITE_SENDEREMAIL'                              => "[tr]Sender's eMail:",
+'INVITE_CAPTION'                                  => "[tr]Caption:",
+'INVITE_SUBJECT'                                  => "[tr]Have a look at:",
+'INVITE_YOURMESSAGE'                              => "[tr]Your Message:",
+'INVITE_MESSAGE1'                                 => "[tr]Hello, I was looking at",
+'INVITE_MESSAGE2'                                 => "[tr]today and saw something that might interest you. Just click on the link bellow and you will be taken directly to the shop.",
+'INVITE_SEND'                                     => "[tr]Send",
+'INVITE_ABOUTDATAPROTECTION'                      => "[tr]About Data Protection: Your data is kept strictly confidential and will not be given to any third parties.",
+'INVITE_VERIFICATIONCODE'                         => "[tr]Verification code:",
+'INVITE_COMLETECORRECTLYFIELDS'                   => "[tr]Please complete all fields correctly!",
+'INVITE_ERRORWHILESENDINGMAIL'                    => "[tr]An error occurred sending the eMail - please check the eMail address.",
+'INVITE_INCORRECTEMAILADDRESS'                    => "[tr]Incorrect eMail address. Please check entered eMail addresses.",
+'INVITE_EMAILWASSENT'                             => "[tr]Invitation eMail was sent to your friends. Thank's for inviting your friends.",
+
+'EMAIL_INVITE_HTML_INVITETOSHOP'                  => "[tr]An invitation to visit eShop from",
+'EMAIL_INVITE_HTML_FROM'                          => "[tr]From:",
+'EMAIL_INVITE_HTML_EMAIL'                         => "[tr]eMail:",
+'EMAIL_INVITE_HTML_MENYGREETINGS'                 => "[tr]Many Greetings,",
+
+
+'PROMO_WILLENDIN_PREFIX'   => 'Endet in ',
+'PROMO_WILLENDIN_SUFFIX'   => '!',
+'PROMO_WILLSTARTIN_PREFIX' => 'Startet in ',
+'PROMO_WILLSTARTIN_SUFFIX' => '',
+'PROMO_ONEDAY'             => 'einem Tag',
+'PROMO_DAYS'               => 'Tagen',
+
+
 );
 
 /*

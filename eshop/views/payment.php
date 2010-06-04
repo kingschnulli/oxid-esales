@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: payment.php 28066 2010-06-02 09:18:55Z michael.keiluweit $
  */
 
 /**
@@ -261,8 +261,6 @@ class Payment extends oxUBase
      *
      * Session variables:
      * <b>paymentid</b>, <b>dynvalue</b>, <b>payerror</b>
-     *
-     * @todo    this function is called in templates, sure to be protected ?
      *
      * @return  mixed
      */

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxcmpUserTest.php 28046 2010-06-01 14:34:40Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -48,7 +48,6 @@ class modcmp_user extends oxcmp_user
 }
 class Unit_Views_oxcmpUserTest extends OxidTestCase
 {
-
     /**
      * Tear down the fixture.
      *
@@ -63,6 +62,209 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         oxDb::getDb()->execute( $sQ );
 
         parent::tearDown();
+    }
+
+    /**
+     * Test view render().
+     *
+     * @return null
+     */
+    public function testRenderNoUser()
+    {
+        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
+
+        $oConfig = $this->getMock( "oxConfig", array( "getShopHomeURL" ) );
+        $oConfig->expects( $this->once() )->method( 'getShopHomeURL' )->will( $this->returnValue( "testUrl" ) );
+
+        $oParent = $this->getMock( "oxUbase", array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
+
+        try {
+            // testing..
+            $oView = $this->getMock( "oxcmp_user", array( "getUser", "getConfig", "getParent" ), array(), '', false );
+            $oView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
+            $oView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
+            $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+            $oView->render();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( "testUrlcl=account", $oExcp->getMessage(), "Error in oxscloginoxcmpuser::render()" );
+            return;
+        }
+        $this->fail( "Error in oxscloginoxcmpuser::render()" );
+    }
+
+    /**
+     * Test view render().
+     *
+     * @return null
+     */
+    public function testRenderRegistration()
+    {
+        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
+        modConfig::setParameter( 'cl', 'register' );
+        $oConfig = $this->getMock( "oxConfig", array( "getShopHomeURL" ) );
+        $oConfig->expects( $this->any() )->method( 'getShopHomeURL' )->will( $this->returnValue( "testUrl" ) );
+
+        $oParent = $this->getMock( "oxUbase", array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
+
+        // testing..
+        $oView = $this->getMock( "oxcmp_user", array( "getUser", "getConfig", "getParent", "_checkTermVersion" ), array(), '', false );
+        $oView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( false ) );
+        $oView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->expects( $this->any() )->method( '_checkTermVersion' )->will( $this->throwException( new Exception( "_checkTermVersion" ) ) );
+
+        try {
+            $this->assertFalse($oView->render());
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( "_checkTermVersion", $oExcp->getMessage(), "Error in testRenderRegistration");
+            return;
+        }
+        $this->fail( "Error in testRenderRegistration" );
+    }
+
+    /**
+     * Test view render().
+     *
+     * @return null
+     */
+    public function testRenderConfirmTerms()
+    {
+        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
+        $oConfig = $this->getMock( "oxConfig", array( "getShopHomeURL", "getConfigParam" ) );
+        $oConfig->expects( $this->any() )->method( 'getShopHomeURL' )->will( $this->returnValue( "testUrl" ) );
+        $oConfig->expects( $this->any() )->method( 'getConfigParam' )->will( $this->returnValue( true ) );
+
+        $oParent = $this->getMock( "oxUbase", array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
+
+        $oUser = new oxStdClass();
+        $oUser->oxuser__oxtermver = new oxStdClass();
+        $oUser->oxuser__oxtermver->value = "2";
+        try {
+            // testing..
+            $oView = $this->getMock( "oxcmp_user", array( "getUser", "getConfig", "_checkTermVersion", "getParent" ), array(), '', false );
+            $oView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
+            $oView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
+            $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+            $oView->expects( $this->any() )->method( '_checkTermVersion' )->will( $this->returnValue( false ) );
+            $oView->render();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( "testUrlcl=account&term=1", $oExcp->getMessage(), "Error in oxscloginoxcmpuser::render()" );
+            return;
+        }
+        $this->fail( "Error in oxscloginoxcmpuser::render()" );
+    }
+
+    /**
+     * Test view _checkTermVersion().
+     *
+     * @return null
+     */
+    public function testCheckTermVersion()
+    {
+        $oUserView = $this->getMock( 'oxcmp_user', array( '_getTermVersion' ) );
+        $oUserView->expects( $this->any() )->method( '_getTermVersion' )->will( $this->returnValue( 2 ) );
+        $this->assertTrue( $oUserView->UNITcheckTermVersion(2));
+        $this->assertFalse( $oUserView->UNITcheckTermVersion(1));
+    }
+
+    /**
+     * Test view logout().
+     *
+     * @return null
+     */
+    public function testLogoutForLoginFeature()
+    {
+        oxTestModules::addFunction( "oxUser", "logout", "{ return true;}" );
+            $aMockFnc = array( '_afterLogout', '_getLogoutLink', "getParent" );
+
+        $oParent = $this->getMock( "oxUbase", array( "isActive", "getParent" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
+
+        $oUserView = $this->getMock( 'oxcmp_user', $aMockFnc );
+        $oUserView->expects( $this->once() )->method( '_afterLogout' );
+        $oUserView->expects( $this->any() )->method( '_getLogoutLink' )->will( $this->returnValue( "testurl" ) );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
+
+        $this->assertEquals( 'account', $oUserView->logout() );
+    }
+
+    /**
+     * Test view login_noredirect().
+     *
+     * @return null
+     */
+    public function testLogin_noredirect()
+    {
+        modConfig::setParameter( 'ord_agb', true );
+
+        $oUser = $this->getMock( "oxUser", array( "save" ) );
+        $oUser->expects( $this->once() )->method( 'save' );
+
+        $oParent = $this->getMock( "oxUbase", array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
+
+        $oUserView = $this->getMock( 'oxcmp_user',  array( 'login', 'getUser', "getParent" ) );
+        $oUserView->expects( $this->never() )->method( 'login' );
+        $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
+        $this->assertNull( $oUserView->login_noredirect() );
+    }
+
+    /**
+     * Test view createUser().
+     *
+     * @return null
+     */
+    public function testCreateUserForLoginFeature()
+    {
+        oxTestModules::addFunction( "oxemail", "sendRegisterEmail", "{ return true;}" );
+        modConfig::setParameter('lgn_usr', 'test@oxid-esales.com');
+        modConfig::setParameter('lgn_pwd', 'Test@oxid-esales.com');
+        modConfig::setParameter('lgn_pwd2', 'Test@oxid-esales.com');
+        modConfig::setParameter( 'ord_agb', true );
+        modConfig::setParameter( 'option', 3 );
+        $aRawVal = array('oxuser__oxfname' => 'fname',
+                         'oxuser__oxlname' => 'lname',
+                         'oxuser__oxstreetnr' => 'nr',
+                         'oxuser__oxstreet' => 'street',
+                         'oxuser__oxzip' => 'zip',
+                         'oxuser__oxcity' => 'city',
+                         'oxuser__oxcountryid' => 'a7c40f631fc920687.20179984');
+        modConfig::setParameter('invadr', $aRawVal);
+
+        $oParent = $this->getMock( "oxUbase", array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
+
+        $this->getProxyClass("oxcmp_user");
+        $oUserView = $this->getMock( 'oxcmp_userPROXY', array( '_setupDelAddress', 'login', "getParent" ) );
+        $oUserView->expects( $this->once() )->method( '_setupDelAddress' )->will( $this->returnValue( false ) );
+        $oUserView->expects( $this->any() )->method( 'login' )->will( $this->returnValue( 'payment' ) );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
+        $this->assertEquals( 'payment', $oUserView->createUser() );
+        $this->assertTrue( $oUserView->getNonPublicVar( '_blIsNewUser' ) );
+    }
+
+    /**
+     * Test view logout().
+     *
+     * @return null
+     */
+    public function testCreateUserNotConfirmedAGB()
+    {
+        $oParent = $this->getMock( "oxUbase", array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
+
+        $this->getProxyClass("oxcmp_user");
+        $oUserView = $this->getMock( 'oxcmp_userPROXY', array( '_setupDelAddress', "getParent" ) );
+        $oUserView->expects( $this->once() )->method( '_setupDelAddress' )->will( $this->returnValue( false ) );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
+        $this->assertNull( $oUserView->createUser() );
+        $aEx = oxSession::getVar( 'Errors' );
+        $oEr = unserialize($aEx['default'][0]);
+        $this->assertEquals( 'Bitte bestätigen Sie unsere Allg. Geschäftsbedingungen.', $oEr->getOxMessage() );
     }
 
     /**
@@ -91,9 +293,13 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         modConfig::setParameter( 'invadr', $aInvAdr );
         modConfig::setParameter( 'deladr', null );
 
-        $oCmp = $this->getMock( "oxcmp_user", array( "_setupDelAddress", "_afterLogin", "login" ) );
+        $oParent = $this->getMock( "oxUbase", array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( false ) );
+
+        $oCmp = $this->getMock( "oxcmp_user", array( "_setupDelAddress", "_afterLogin", "login", "getParent" ) );
         $oCmp->expects( $this->once() )->method( '_setupDelAddress' )->will( $this->returnValue( false ) );
         $oCmp->expects( $this->never() )->method( '_afterLogin' );
+        $oCmp->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
         $oCmp->expects( $this->once() )->method( 'login' )->will( $this->returnValue( 'user' ) );
         $this->assertFalse( $oCmp->createUser() );
 
@@ -248,16 +454,18 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         modConfig::setParameter('deladr', 'testdeladr');
         modConfig::setParameter('reloadaddress', false);
         modConfig::setParameter('lgn_usr', 'testuser');
-        $oView = oxNew("oxview");
+
+        $oParent = $this->getMock( "oxUbase", array( "isActive", "addTplParam" ) );
+        $oParent->expects( $this->at( 0 ) )->method( 'isActive' )->will( $this->returnValue( false ) );
+        $oParent->expects( $this->at( 1 ) )->method( 'addTplParam' )->with( $this->equalTo( 'invadr' ), $this->equalTo( 'testadr' ) );
+        $oParent->expects( $this->at( 2 ) )->method( 'addTplParam' )->with( $this->equalTo( 'deladr' ), $this->equalTo( 'testdeladr' ) );
+        $oParent->expects( $this->at( 3 ) )->method( 'addTplParam' )->with( $this->equalTo( 'lgn_usr' ), $this->equalTo( 'testuser' ) );
+
         $oUserView = $this->getMock( 'oxcmp_user', array( 'getParent', 'getUser' ) );
-        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oView ) );
+        $oUserView->expects( $this->exactly( 2 ) )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
         $oUserView->expects( $this->atLeastOnce() )->method( 'getUser' )->will( $this->returnValue( "testUser" ) );
         $this->assertEquals( 'testUser', $oUserView->render() );
-        $oViewData = $oView->getViewData();
         $this->assertEquals( 'testdgr', modSession::getInstance()->getVar( 'dgr' ) );
-        $this->assertEquals( 'testadr', $oViewData['invadr'] );
-        $this->assertEquals( 'testdeladr', $oViewData['deladr'] );
-        $this->assertEquals( 'testuser', $oViewData['lgn_usr'] );
     }
 
     /**
@@ -404,8 +612,12 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
      */
     public function testLoginNoRedirect()
     {
-        $oUserView = $this->getMock( 'oxcmp_user', array( 'login' ) );
+        $oParent = $this->getMock( "oxUbase", array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( false ) );
+
+        $oUserView = $this->getMock( 'oxcmp_user', array( 'login', "getParent" ) );
         $oUserView->expects( $this->once() )->method( 'login' )->will( $this->returnValue( "nextStep" ) );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
         $this->assertNull( $oUserView->login_noredirect() );
     }
 
@@ -446,10 +658,18 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         modConfig::setParameter('redirect', true);
         $blParam = oxConfig::getInstance()->getConfigParam('sSSLShopURL');
         oxConfig::getInstance()->setConfigParam('sSSLShopURL', true);
-            $aMockFnc = array( '_afterLogout', '_getLogoutLink' );
+
+        $oParent = $this->getMock( 'oxUbase', array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( false ) );
+
+            $aMockFnc = array( '_afterLogout', '_getLogoutLink', "getParent" );
+
         $oUserView = $this->getMock( 'oxcmp_user', $aMockFnc );
         $oUserView->expects( $this->once() )->method( '_afterLogout' );
         $oUserView->expects( $this->once() )->method( '_getLogoutLink' )->will( $this->returnValue( "testurl" ) );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
+
+
         $oUserView->logout();
         $this->assertEquals( 3, $oUserView->getLoginStatus() );
         oxConfig::getInstance()->setConfigParam('sSSLShopURL', $blParam);
@@ -539,10 +759,14 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
                          'oxuser__oxcountryid' => 'a7c40f631fc920687.20179984');
         modConfig::setParameter('invadr', $aRawVal);
 
+        $oParent = $this->getMock( 'oxUbase', array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( false ) );
+
         $this->getProxyClass("oxcmp_user");
-        $oUserView = $this->getMock( 'oxcmp_userPROXY', array( '_setupDelAddress', 'login' ) );
+        $oUserView = $this->getMock( 'oxcmp_userPROXY', array( '_setupDelAddress', 'login', "getParent" ) );
         $oUserView->expects( $this->once() )->method( '_setupDelAddress' )->will( $this->returnValue( false ) );
         $oUserView->expects( $this->once() )->method( 'login' )->will( $this->returnValue( 'payment' ) );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
         $this->assertEquals( 'payment', $oUserView->createUser() );
         $this->assertEquals( 'TestRemark', oxSession::getVar( 'ordrem' ) );
         $this->assertTrue( $oUserView->getNonPublicVar( '_blIsNewUser' ) );
@@ -565,10 +789,14 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
                          'oxuser__oxcountryid' => 'a7c40f631fc920687.20179984');
         modConfig::setParameter('invadr', $aRawVal);
 
+        $oParent = $this->getMock( 'oxUbase', array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( false ) );
+
         $this->getProxyClass("oxcmp_user");
-        $oUserView = $this->getMock( 'oxcmp_userPROXY', array( '_setupDelAddress', '_afterLogin' ) );
+        $oUserView = $this->getMock( 'oxcmp_userPROXY', array( '_setupDelAddress', '_afterLogin', "getParent" ) );
         $oUserView->expects( $this->once() )->method( '_setupDelAddress' )->will( $this->returnValue( false ) );
         $oUserView->expects( $this->once() )->method( '_afterLogin' );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
         $this->assertEquals( 'payment', $oUserView->createUser() );
         $this->assertTrue( $oUserView->getNonPublicVar( '_blIsNewUser' ) );
         $this->assertNotNull( oxSession::getVar( 'usr' ) );
@@ -582,8 +810,13 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     public function testCreateUserUserException()
     {
         oxTestModules::addFunction( "oxuser", "checkValues", "{ throw new oxUserException( 'testBlockedUser', 123 );}" );
-        $oUserView = $this->getMock( 'oxcmp_user', array( '_setupDelAddress' ) );
+
+        $oParent = $this->getMock( 'oxUbase', array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( false ) );
+
+        $oUserView = $this->getMock( 'oxcmp_user', array( '_setupDelAddress', "getParent" ) );
         $oUserView->expects( $this->once() )->method( '_setupDelAddress' )->will( $this->returnValue( false ) );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
         $this->assertFalse( $oUserView->createUser() );
     }
 
@@ -595,8 +828,13 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     public function testCreateUseroxInputException()
     {
         oxTestModules::addFunction( "oxuser", "checkValues", "{ throw new oxInputException( 'testBlockedUser', 123 );}" );
-        $oUserView = $this->getMock( 'oxcmp_user', array( '_setupDelAddress' ) );
+
+        $oParent = $this->getMock( 'oxUbase', array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( false ) );
+
+        $oUserView = $this->getMock( 'oxcmp_user', array( '_setupDelAddress', "getParent" ) );
         $oUserView->expects( $this->once() )->method( '_setupDelAddress' )->will( $this->returnValue( false ) );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
         $this->assertFalse( $oUserView->createUser() );
     }
 
@@ -608,8 +846,13 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     public function testCreateUserConnectionException()
     {
         oxTestModules::addFunction( "oxuser", "checkValues", "{ throw new oxConnectionException( 'testBlockedUser', 123 );}" );
-        $oUserView = $this->getMock( 'oxcmp_user', array( '_setupDelAddress' ) );
+
+        $oParent = $this->getMock( 'oxUbase', array( "isActive" ) );
+        $oParent->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( false ) );
+
+        $oUserView = $this->getMock( 'oxcmp_user', array( '_setupDelAddress', "getParent" ) );
         $oUserView->expects( $this->once() )->method( '_setupDelAddress' )->will( $this->returnValue( false ) );
+        $oUserView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
         $this->assertFalse( $oUserView->createUser() );
     }
 

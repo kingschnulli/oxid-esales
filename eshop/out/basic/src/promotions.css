@@ -1,0 +1,17 @@
+.promotionsRow {float:left;width:580px;position:relative;margin: 0 0 5px 0;padding:0}
+.promotionsRow .promotion {border:1px solid #ccc;float:left;width:268px;height:157px;margin:0px 5px 5px 5px;padding:5px;position:relative;background:#ffffff;overflow:hidden;}
+.promotionsRow .promotion .timeouttext{font-style:italic;position:absolute;bottom:5px;}
+.promotionsRow .promotion .activationtext{font-style:italic;position:absolute;bottom:5px;}
+
+.promotionsRow .promotionFinished .timeouttext{display:none;}
+.promotionsRow .promotionFinished .activationtext{display:none;}
+.promotionsRow .promotionCurrent .activationtext{display:none;}
+.promotionsRow .promotionFuture .timeouttext{display:none;}
+
+.promotionsRow .promotion .finishedText{display:none;right:5px;bottom:5px;}
+.promotionsRow .promotionFinished .finishedText{display:block;position:absolute;color:#222;padding:5px;}
+
+.promotionsRow .promotion .upcomingText{display:none;right:5px;}
+.promotionsRow .promotionFuture .upcomingText{display:block;position:absolute;color:#232;padding:5px;}
+
+.promotionsRow .promotionCurrent .promoTimeout {font-weight:600;}

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 27936 2010-05-26 11:27:19Z arvydas $
+ * @version   SVN: $Id: oxuser.php 28125 2010-06-03 11:44:01Z arvydas $
  */
 
 /**
@@ -945,7 +945,7 @@ class oxUser extends oxBase
         $sDynGoup = strtolower( trim( $sDynGoup ) );
 
         // setting denied groups from admin settings also
-        $aDisabledDynGroups = array_merge( array( 'oxidadmin' ), (array) $aDeniedDynGroups );
+        $aDisabledDynGroups = array_merge( array( 'oxidadmin', 'oxidnetprice' ), (array) $aDeniedDynGroups );
 
         // default state ..
         $blAdd = false;

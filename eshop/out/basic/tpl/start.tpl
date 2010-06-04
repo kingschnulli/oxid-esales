@@ -1,4 +1,4 @@
-[{include file="_header.tpl" title=$template_title location="START_TITLE"|oxmultilangassign isStart=true}]
+[{include file="_header.tpl" title=$template_title location="START_TITLE"|oxmultilangassign isStart=true usePromotionsCss=$oView->getShowPromotionList()}]
 
 [{if $oView->isDemoShop()}]
     [{include file="inc/admin_banner.tpl"}]
@@ -22,6 +22,85 @@
   [{assign var="firstarticle" value=$oView->getFirstArticle()}]
   [{include file="inc/product.tpl" size='big' showMainLink=true class='topshop' head=$oxfirststart_title head_desc=$oxfirststart_text product=$firstarticle testid="FirstArticle_"|cat:$firstarticle->oxarticles__oxid->value testHeader=FirstArticle}]
 [{/if}]
+
+[{* OXSCPROMOTIONS START *}]
+[{if $oView->getShowPromotionList()}]
+    <div class="promotionsRow">
+      [{foreach from=$oView->getPromoFinishedList() item=promo}]
+        <div class="promotion promotionFinished" id="promo[{$promo->getId()}]">
+            <div class="finishedText"><img src="[{$oViewConf->getBaseDir()}]out/basic/img/promo_soldout_[{ $oView->getActiveLangAbbr() }].png" /></div>
+            [{$promo->getLongDesc()}]
+        </div>
+      [{/foreach}]
+      [{foreach from=$oView->getPromoCurrentList() item=promo}]
+        <div class="promotion promotionCurrent" id="promo[{$promo->getId()}]">
+            <div class="finishedText"><img src="[{$oViewConf->getBaseDir()}]out/basic/img/promo_soldout_[{ $oView->getActiveLangAbbr() }].png" /></div>
+            [{$promo->getLongDesc()}]
+            [{if $promo->oxactions__oxactiveto->value && $promo->oxactions__oxactiveto->value != "0000-00-00 00:00:00"}]
+                <div class="timeouttext">
+                  [{oxmultilang ident="PROMO_WILLENDIN_PREFIX"}]
+                  [{if 86400 > $promo->getTimeLeft()}]
+                    [{assign var="_timeleft" value=$promo->getTimeLeft() }]
+                    [{math equation="x1/x2" x1=$_timeleft x2=60 assign="_minutes"}]
+                    [{math equation="x1/x2" x1=$_minutes x2=60 assign="_hours"}]
+                    [{math equation="x1%x2" x1=$_minutes x2=60 assign="_minutes"}]
+                    [{math equation="x1%x2" x1=$_timeleft x2=60 assign="_seconds"}]
+                    <span class="promoTimeout">[{$_hours|floor}]:[{$_minutes|floor}]:[{$_seconds}]</span>
+                  [{elseif 172800 > $promo->getTimeLeft()}]
+                    [{oxmultilang ident="PROMO_ONEDAY"}]
+                  [{else}]
+                    [{math equation="x1/x2" x1=$promo->getTimeLeft() x2=86400 assign="_days"}]
+                    [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}]
+                  [{/if}]
+                  [{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
+                </div>
+            [{/if}]
+        </div>
+      [{/foreach}]
+      [{foreach from=$oView->getPromoFutureList() item=promo}]
+        <div class="promotion promotionFuture" id="promo[{$promo->getId()}]">
+            <div class="finishedText"><img src="[{$oViewConf->getBaseDir()}]out/basic/img/promo_soldout_[{ $oView->getActiveLangAbbr() }].png" /></div>
+            <div class="upcomingText"><img src="[{$oViewConf->getBaseDir()}]out/basic/img/promo_upcoming_[{ $oView->getActiveLangAbbr() }].png" /></div>
+            [{$promo->getLongDesc()}]
+            [{if $promo->oxactions__oxactiveto->value && $promo->oxactions__oxactiveto->value != "0000-00-00 00:00:00"}]
+              <div class="timeouttext">[{oxmultilang ident="PROMO_WILLENDIN_PREFIX"}]
+                [{if 86400 > $promo->getTimeLeft()}]
+                  [{assign var="_timeleft" value=$promo->getTimeLeft() }]
+                  [{math equation="x1/x2" x1=$_timeleft x2=60 assign="_minutes"}]
+                  [{math equation="x1/x2" x1=$_minutes x2=60 assign="_hours"}]
+                  [{math equation="x1%x2" x1=$_timeleft x2=60 assign="_seconds"}]
+                  <span class="promoTimeout">[{$_hours|floor}]:[{$_minutes|floor}]:[{$_seconds}]</span>
+                [{elseif 172800 > $promo->getTimeLeft()}]
+                  [{oxmultilang ident="PROMO_ONEDAY"}]
+                [{else}]
+                    [{math equation="x1/x2" x1=$promo->getTimeLeft() x2=86400 assign="_days"}]
+                    [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}]
+                [{/if}]
+                [{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
+              </div>
+            [{/if}]
+            <div class="activationtext">[{oxmultilang ident="PROMO_WILLSTARTIN_PREFIX"}]
+              [{if 86400 > $promo->getTimeUntilStart()}]
+                [{assign var="_timeuntilstart" value=$promo->getTimeUntilStart() }]
+                [{math equation="x1/x2" x1=$_timeuntilstart x2=60 assign="_minutes"}]
+                [{math equation="x1/x2" x1=$_minutes x2=60 assign="_hours"}]
+                [{math equation="x1%x2" x1=$_timeuntilstart x2=60 assign="_seconds"}]
+                <span class="promoTimeout">[{$_hours|floor}]:[{$_minutes|floor}]:[{$_seconds}]</span>[{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
+              [{elseif 172800 > $promo->getTimeUntilStart()}]
+                [{oxmultilang ident="PROMO_ONEDAY"}]
+              [{else}]
+                [{math equation="x1/x2" x1=$promo->getTimeUntilStart() x2=86400 assign="_days"}]
+                [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}]
+              [{/if}]
+              [{oxmultilang ident="PROMO_WILLSTARTIN_SUFFIX"}]
+            </div>
+        </div>
+      [{/foreach}]
+    </div>
+    [{oxscript include="jquery.min.js"}]
+    [{oxscript include="promotions.js"}]
+[{/if}]
+[{* OXSCPROMOTIONS END *}]
 
 [{if ($oView->getArticleList()|@count)>0 }]
   <strong id="test_LongRunHeader" class="head2">[{ oxmultilang ident="START_LONGRUNNINGHITS"}]</strong>

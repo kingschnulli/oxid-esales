@@ -927,6 +927,26 @@ function _groupExp(el) {
 
             <dl>
                 <dt>
+                    <input type=text class="txt" name=confstrs[dPointsForInvitation] value="[{$confstrs.dPointsForInvitation}]">
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_POINTSFORINVITATION" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
+            <dl>
+                <dt>
+                    <input type=text class="txt" name=confstrs[dPointsForRegistration] value="[{$confstrs.dPointsForRegistration}]">
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_POINTSFORREGISTRATION" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
+            <dl>
+                <dt>
                     <input type=text class="txt" name=confstrs[sDecimalSeparator] value="[{$confstrs.sDecimalSeparator}]">
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_CSVDECIMALSEPARATOR" }]
                 </dt>

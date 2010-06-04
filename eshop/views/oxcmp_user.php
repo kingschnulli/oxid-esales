@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxcmp_user.php 28128 2010-06-03 12:00:14Z rimvydas.paskevicius $
  */
 
 // defining login/logout states
@@ -62,6 +62,24 @@ class oxcmp_user extends oxView
     protected $_iLoginStatus = null;
 
     /**
+     * Terms/conditions version number
+     *
+     * @var string
+     */
+    protected $_sTermsVer = null;
+
+    /**
+     * View classes accessible for not logged in customers
+     *
+     * @var array
+     */
+    protected $_aAllowedClasses = array(
+                                        'register',
+                                        'forgotpwd',
+                                        'content'
+                                        );
+
+    /**
      * Sets oxcmp_oxuser::blIsComponent = true, fetches user error
      * code and sets it to default - 0. Executes parent::init().
      *
@@ -74,6 +92,9 @@ class oxcmp_user extends oxView
     {
         // load session user
         $this->_loadSessionUser();
+
+        // get invitor ID
+        $this->getInvitor();
 
         parent::init();
     }
@@ -92,6 +113,24 @@ class oxcmp_user extends oxView
      */
     public function render()
     {
+        if ( $this->getParent()->isActive( 'login' ) ) {
+            // load session user
+            $myConfig = $this->getConfig();
+            $oUser = $this->getUser();
+
+            // no session user
+            $blRegister = oxConfig::getParameter( 'cl' );
+
+            if ( !$oUser && !in_array( $blRegister, $this->_aAllowedClasses ) ) {
+                oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() . 'cl=account' );
+            }
+            if ( !$this->_checkTermVersion( $oUser->oxuser__oxtermver->value ) &&
+                 $myConfig->getConfigParam( 'blConfirmAGB' ) &&
+                 !in_array( $blRegister, $this->_aAllowedClasses ) ) {
+                oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() . 'cl=account&term=1' );
+            }
+        }
+
         parent::render();
 
         // dyn_group feature: if you specify a groupid in URL the user
@@ -158,7 +197,7 @@ class oxcmp_user extends oxView
             oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() . 'cl=content&tpl=user_blocked.tpl' );
         }
 
-        // TODO: we need todo something with this !!!
+        // TODO: move this to a proper place
         if ( $oUser->isLoadedFromCookie() ) {
 
             // #1678 R
@@ -270,6 +309,15 @@ class oxcmp_user extends oxView
      */
     public function login_noredirect()
     {
+        if ( $this->getParent()->isActive( 'login' ) &&
+             oxConfig::getParameter( 'ord_agb' ) &&
+             $this->getConfig()->getConfigParam( 'blConfirmAGB' ) ) {
+            if ( $oUser = $this->getUser() ) {
+                $oUser->oxuser__oxtermver = new oxField( $this->_getTermVersion(), oxField::T_RAW );
+                $oUser->save();
+                return;
+            }
+        }
         $this->login();
     }
 
@@ -315,6 +363,10 @@ class oxcmp_user extends oxView
             // finalizing ..
             $this->_afterLogout();
 
+
+            if ( $this->getParent()->isActive( 'login' ) ) {
+                return 'account';
+            }
 
             // redirecting if user logs out in SSL mode
             if ( oxConfig::getParameter('redirect') && $myConfig->getConfigParam( 'sSSLShopURL' ) ) {
@@ -391,7 +443,14 @@ class oxcmp_user extends oxView
             return;
         }
 
+        $blActiveLogin = $this->getParent()->isActive( 'login' );
+
         $myConfig = $this->getConfig();
+        if ( $blActiveLogin && !oxConfig::getParameter( 'ord_agb' ) && $myConfig->getConfigParam( 'blConfirmAGB' ) ) {
+            oxUtilsView::getInstance()->addErrorToDisplay( 'ORDER_READANDCONFIRMTERMS', false, true );
+            return;
+        }
+
         $myUtils  = oxUtils::getInstance();
 
         // collecting values to check
@@ -413,10 +472,13 @@ class oxcmp_user extends oxView
 
             $oUser->checkValues( $sUser, $sPassword, $sPassword2, $aInvAdress, $aDelAdress );
 
+            $iActState = $blActiveLogin ? 0 : 1;
+
             // setting values
             $oUser->oxuser__oxusername = new oxField($sUser, oxField::T_RAW);
             $oUser->setPassword( $sPassword );
-            $oUser->oxuser__oxactive   = new oxField(1, oxField::T_RAW);
+            $oUser->oxuser__oxactive   = new oxField( $iActState, oxField::T_RAW);
+            $oUser->oxuser__oxtermver  = new oxField( $this->_getTermVersion(), oxField::T_RAW );
 
             $oUser->createUser();
             $oUser->load( $oUser->getId() );
@@ -441,25 +503,31 @@ class oxcmp_user extends oxView
             return false;
         }
 
-        if ( !$sPassword ) {
-            oxSession::setVar( 'usr', $oUser->getId() );
-            $this->_afterLogin( $oUser );
-        } elseif ( $this->login() == 'user' ) {
-            return false;
-        }
+        if ( !$blActiveLogin ) {
+            if ( !$sPassword ) {
+                oxSession::setVar( 'usr', $oUser->getId() );
+                $this->_afterLogin( $oUser );
+            } elseif ( $this->login() == 'user' ) {
+                return false;
+            }
 
-        // order remark
-        //V #427: order remark for new users
-        $sOrderRemark = oxConfig::getParameter( 'order_remark', true );
-        if ( $sOrderRemark ) {
-            oxSession::setVar( 'ordrem', $sOrderRemark );
+            // order remark
+            //V #427: order remark for new users
+            $sOrderRemark = oxConfig::getParameter( 'order_remark', true );
+            if ( $sOrderRemark ) {
+                oxSession::setVar( 'ordrem', $sOrderRemark );
+            }
         }
 
         // send register eMail
         //TODO: move into user
         if ( (int) oxConfig::getParameter( 'option' ) == 3 ) {
             $oxEMail = oxNew( 'oxemail' );
-            $oxEMail->sendRegisterEmail( $oUser );
+            if ( $blActiveLogin ) {
+                $oxEMail->sendRegisterConfirmEmail( $oUser );
+            } else {
+                $oxEMail->sendRegisterEmail( $oUser );
+            }
         }
 
         // new registered
@@ -483,6 +551,9 @@ class oxcmp_user extends oxView
         // registered new user ?
         if ( $this->createuser()!= false && $this->_blIsNewUser ) {
             if ( $this->_blNewsSubscriptionStatus === null || $this->_blNewsSubscriptionStatus ) {
+                if ($sUserId = oxConfig::getParameter("su")) {
+                    $this->setCreditPoints($sUserId);
+                }
                 return 'register?success=1';
             } else {
                 return 'register?success=1&newslettererror=4';
@@ -806,5 +877,82 @@ class oxcmp_user extends oxView
     public function getOpenId()
     {
         return oxNew( "oxOpenID" );
+    }
+
+    /**
+     * Returns invitor id
+     *
+     * @return null
+     */
+    public function getInvitor()
+    {
+        $sSu = oxSession::getVar( 'su' );
+        if ( !$sSu && ( $sSuNew = oxConfig::getParameter( 'su' ) ) ) {
+            oxSession::setVar( 'su', $sSuNew );
+        }
+    }
+
+    /**
+     * Sets credit points for user who invited and for user who accepted
+     * invitation.
+     *
+     * @param string $sUserId inviter id
+     *
+     * @return null
+     */
+    protected function setCreditPoints( $sUserId )
+    {
+        $oUser = $this->getUser();
+        $myConfig = $this->getConfig();
+        if ( $iReg = $myConfig->getConfigParam( 'dPointsForRegistration' ) ) {
+            $oUser->oxuser__oxpoints = new oxField( $iReg, oxField::T_RAW );
+            $oUser->save();
+
+            $oDb = oxDb::getDb();
+
+            // updating users statistics
+            $oDb->execute( "UPDATE oxinvitations SET oxpending = '0', oxaccepted = '1' where oxuserid = {$oDB->quote($sUserId)} " );
+
+            if ($iInv = $myConfig->getConfigParam( 'dPointsForInvitation' )) {
+                $oInvUser = oxNew( 'oxuser' );
+                if ( $oInvUser->load( $sUserId ) ) {
+                    $iNewPoints = $oInvUser->oxuser__oxpoints->value + $iInv;
+                    $oInvUser->oxuser__oxpoints = new oxField( $iNewPoints, oxField::T_RAW );
+                    $oInvUser->save();
+                }
+            }
+            oxSession::deleteVar( 'su' );
+        }
+    }
+
+    /**
+     * Checks if user has confirmed current terms and conditions version
+     *
+     * @param string $sVersion terms and conditions version saved confirmed by user
+     *
+     * @return bool
+     */
+    protected function _checkTermVersion( $sVersion )
+    {
+        if ( $sVersion != $this->_getTermVersion() ) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checks if user has confirmed current terms and conditions version
+     *
+     * @return bool
+     */
+    protected function _getTermVersion()
+    {
+        if ( $this->_sTermsVer == null ) {
+            $oContent = oxNew( "oxcontent" );
+            if ( $oContent->loadbyIdent( "oxagb" ) ) {
+                $this->_sTermsVer = $oContent->oxcontents__oxtermver->value;
+            }
+        }
+        return $this->_sTermsVer;
     }
 }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 27938 2010-05-26 11:44:22Z sarunas $
+ * @version   SVN: $Id: oxarticle.php 28108 2010-06-02 16:05:12Z tomas $
  */
 
 // defining supported link types
@@ -207,7 +207,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Indicates whether the price is "Ab" price
      *
-     * @var unknown_type
+     * @var bool
      */
     protected $_blIsRangePrice = false;
 
@@ -2218,7 +2218,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     protected function _setLongDesc($sDbValue)
     {
-        // TODO: eliminate code below
+        // TODO: eliminate the code below, assignments should go smooth without conversions
         // hack, if editor screws up text, htmledit tends to do so
         $sDbValue = str_replace( '&amp;nbsp;', '&nbsp;', $sDbValue );
         $sDbValue = str_replace( '&amp;', '&', $sDbValue );
@@ -3537,7 +3537,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $sArtID = $this->oxarticles__oxparentid->value;
         }
 
-        // echo( "TODO replace oxlist usage here _collectAmPriceList".PHP_EOL);
         $sArtID = mysql_real_escape_string($sArtID);
 
         //collecting assigned to article amount-price list

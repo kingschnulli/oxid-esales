@@ -117,8 +117,9 @@
     // IP addresses for which session/cookie id match and user agent change checks are off
     $this->aTrustedIPs = array();
 
-
     // disable using and loading the gmp extension for the OpenId library
     // as using the dl() function causes problems with suhosin.
     define('Auth_OpenID_BUGGY_GMP', true);
-    
+
+    // Basket exclude enabled
+    $this->blBasketExcludeEnabled = false;

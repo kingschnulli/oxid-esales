@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: accountTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: accountTest.php 28047 2010-06-01 14:42:50Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,49 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Views_accountTest extends OxidTestCase
 {
+    /**
+     * Test view render().
+     *
+     * @return null
+     */
+    public function testRenderConfirmTerms()
+    {
+        $oUserView = $this->getMock( 'account', array( 'confirmTerms', 'getUser', 'isActive' ) );
+        $oUserView->expects( $this->any() )->method( 'confirmTerms' )->will( $this->returnValue( true ) );
+        $oUserView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( true ) );
+        $oUserView->expects( $this->any() )->method( 'isActive' )->will( $this->returnValue( true ) );
+        $this->assertEquals( 'account_login_alt.tpl', $oUserView->render());
+    }
+
+    /**
+     * Test view render().
+     *
+     * @return null
+     */
+    public function testRenderNoTerms()
+    {
+        $oUser = new oxStdClass();
+        $oUser->oxuser__oxpassword = new oxStdClass();
+        $oUser->oxuser__oxpassword->value = "psw";
+        $oUserView = $this->getMock( 'account', array( 'confirmTerms', 'getUser', 'getOrderCnt' ) );
+        $oUserView->expects( $this->any() )->method( 'confirmTerms' )->will( $this->returnValue( false ) );
+        $oUserView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
+        $oUserView->expects( $this->any() )->method( 'getOrderCnt' );
+        $this->assertEquals( 'account_main.tpl', $oUserView->render());
+    }
+
+    /**
+     * Test confirmTerms().
+     *
+     * @return null
+     */
+    public function testConfirmTerms()
+    {
+        $oView = oxNew('account');
+        modConfig::setParameter('term', '2');
+        $this->assertEquals( '2', $oView->confirmTerms());
+    }
+
     /**
      * Test get list type.
      *
@@ -271,7 +314,7 @@ class Unit_Views_accountTest extends OxidTestCase
                                                    "getArticleId", "getSearchParam",
                                                    "getSearchParamForHtml", "getSearchCatId",
                                                    "getSearchVendor", "getSearchManufacturer",
-                                                   "getListType", "getUser", "getOrderCnt" ) );
+                                                   "getListType", "getUser", "getOrderCnt", 'isActive' ) );
 
         $oView->expects( $this->once() )->method( "redirectAfterLogin" )->will( $this->returnValue( 1 ) );
         $oView->expects( $this->once() )->method( "_loadActions" )->will( $this->returnValue( 1 ) );
@@ -283,8 +326,9 @@ class Unit_Views_accountTest extends OxidTestCase
         $oView->expects( $this->once() )->method( "getSearchManufacturer" )->will( $this->returnValue( 1 ) );
         $oView->expects( $this->once() )->method( "getListType" )->will( $this->returnValue( 1 ) );
         $oView->expects( $this->once() )->method( "getUser" )->will( $this->returnValue( false ) );
+        $oView->expects( $this->any() )->method( 'isActive' )->will( $this->returnValue( true ) );
         $oView->expects( $this->never() )->method( "getOrderCnt" );
 
-        $this->assertEquals( 'account_login.tpl', $oView->render() );
+        $this->assertEquals( 'account_login_alt.tpl', $oView->render() );
     }
 }

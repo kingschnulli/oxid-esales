@@ -41,11 +41,8 @@
                       <tr>
                         <td><input id="test_OrderConfirmAGBTop" type="checkbox" class="chk" name="ord_agb" value="1"></td>
                         <td>
-                            [{oxifcontent ident="oxagb" object="oCont"}]
-                                [{oxmultilang ident="ORDER_IAGREETOTERMS1" }] <a id="test_OrderOpenAGBTop" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open('[{ $oCont->getLink()|oxaddparams:"plain=1"}]', 'agb_popup', 'resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400');return false;">[{ oxmultilang ident="ORDER_IAGREETOTERMS2" }]</a> [{ oxmultilang ident="ORDER_IAGREETOTERMS3" }],&nbsp;
-                            [{/oxifcontent}]
-                            [{oxifcontent ident="oxrightofwithdrawal" object="oCont"}]
-                                [{ oxmultilang ident="ORDER_IAGREETORIGHTOFWITHDRAWAL1" }] <a id="test_OrderOpenWithdrawalTop" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open('[{ $oCont->getLink()|oxaddparams:"plain=1"}]', 'rightofwithdrawal_popup', 'resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400');return false;">[{ $oCont->oxcontents__oxtitle->value }]</a> [{ oxmultilang ident="ORDER_IAGREETORIGHTOFWITHDRAWAL3" }]
+                            [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
+                              [{ $oContent->oxcontents__oxcontent->value }]
                             [{/oxifcontent}]
                         </td>
                       </tr>
@@ -516,23 +513,24 @@
                       <input id="test_OrderSubmitBottom" type="submit" value="[{ oxmultilang ident="ORDER_SUBMITORDER" }]">
                   </div>
 
-                  [{if $oView->isConfirmAGBActive()}]
+                  [{if $oView->isActive('login') }]
+                    <input type="hidden" name="ord_agb" value="1">
+                  [{else}]
+                    [{if $oView->isConfirmAGBActive()}]
                     <div class="termsconfirm">
                         <input type="hidden" name="ord_agb" value="0">
                         <table>
                           <tr>
                             <td><input id="test_OrderConfirmAGBBottom" type="checkbox" class="chk" name="ord_agb" value="1"></td>
                             <td>
-                                [{oxifcontent ident="oxagb" object="oCont"}]
-                                  [{oxmultilang ident="ORDER_IAGREETOTERMS1" }] <a id="test_OrderOpenAGBBottom" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open('[{ $oCont->getLink()|oxaddparams:"plain=1"}]', 'agb_popup', 'resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400');return false;" class="fontunderline">[{ oxmultilang ident="ORDER_IAGREETOTERMS2" }]</a> [{ oxmultilang ident="ORDER_IAGREETOTERMS3" }],&nbsp;
-                                [{/oxifcontent}]
-                                [{oxifcontent ident="oxrightofwithdrawal" object="oCont"}]
-                                  [{oxmultilang ident="ORDER_IAGREETORIGHTOFWITHDRAWAL1" }] <a id="test_OrderOpenWithdrawalBottom" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open('[{ $oCont->getLink()|oxaddparams:"plain=1"}]', 'rightofwithdrawal_popup', 'resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400');return false;">[{ $oCont->oxcontents__oxtitle->value }]</a> [{ oxmultilang ident="ORDER_IAGREETORIGHTOFWITHDRAWAL3" }]
+                                [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
+                                  [{ $oContent->oxcontents__oxcontent->value }]
                                 [{/oxifcontent}]
                             </td>
                           </tr>
                         </table>
                     </div>
+                    [{/if}]
                   [{/if}]
 
               </div>

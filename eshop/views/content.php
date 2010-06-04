@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: content.php 27129 2010-04-09 13:43:47Z arvydas $
+ * @version   SVN: $Id: content.php 28043 2010-06-01 13:44:44Z arvydas $
  */
 
 /**
@@ -201,6 +201,11 @@ class Content extends oxUBase
             $this->_sContentId = false;
             $oContent = oxNew( 'oxcontent' );
             if ( $oContent->load( $sContentId ) && $oContent->oxcontents__oxactive->value ) {
+                if ( $this->isActive( 'login' ) && !$this->getUser() &&
+                     $oContent->oxcontents__oxloadid->value != "oxagb" &&
+                     $oContent->oxcontents__oxloadid->value != "oxrightofwithdrawal" ) {
+                    oxUtils::getInstance()->redirect( $this->getConfig()->getShopHomeURL() . 'cl=account' );
+                }
                 $this->_sContentId = $sContentId;
                 $this->_oContent = $oContent;
             }

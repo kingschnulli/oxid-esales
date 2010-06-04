@@ -1,5 +1,8 @@
-<div class="forms">
+[{if $oView->isDemoShop()}]
+  [{ include file="inc/admin_banner.tpl" }]
+[{/if}]
 
+<div class="forms">
     [{if $oView->showRightBasket()}]
         [{oxid_include_dynamic file="dyn/mini_basket.tpl" type="basket" extended=true testid="RightBasket"}]
     [{/if}]

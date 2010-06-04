@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: registerTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: registerTest.php 28050 2010-06-01 14:54:05Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -27,6 +27,79 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 
 class Unit_Views_registerTest extends OxidTestCase
 {
+    /**
+     * oxScLoginRegister::render() test case
+     *
+     * @return null
+     */
+    public function testRenderForLoginFeature()
+    {
+        $oView = $this->getMock( "register", array( "isConfirmed", "isActive" ) );
+        $oView->expects( $this->once() )->method( 'isConfirmed' )->will( $this->returnValue( true ) );
+        $oView->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
+        $this->assertEquals( 'register_confirm.tpl', $oView->render() );
+    }
+
+    /**
+     * oxScLoginRegister::confirmRegistration() test case
+     *
+     * @return null
+     */
+    public function testConfirmRegistrationBadUserUpdateId()
+    {
+        oxTestModules::addFunction( "oxuser", "loadUserByUpdateId", "{return false;}");
+        oxTestModules::addFunction( "oxUtilsView", "addErrorToDisplay", "{}");
+
+        $oView = $this->getMock( "register", array( "getUpdateId" ) );
+        $oView->expects( $this->once() )->method( 'getUpdateId' )->will( $this->returnValue( "testUpdateId" ) );
+        $this->assertEquals( 'account', $oView->confirmRegistration() );
+    }
+
+    /**
+     * oxScLoginRegister::confirmRegistration() test case
+     *
+     * @return null
+     */
+    public function testConfirmRegistration()
+    {
+        oxTestModules::addFunction( "oxuser", "loadUserByUpdateId", "{return true;}");
+        oxTestModules::addFunction( "oxuser", "setUpdateKey", "{return true;}");
+        oxTestModules::addFunction( "oxuser", "save", "{return true;}");
+
+        $oView = $this->getMock( "register", array( "getUpdateId" ) );
+        $oView->expects( $this->once() )->method( 'getUpdateId' )->will( $this->returnValue( "testUpdateId" ) );
+        $this->assertEquals( 'register?confirmstate=1', $oView->confirmRegistration() );
+    }
+
+    /**
+     * oxScLoginRegister::getUpdateId() test case
+     *
+     * @return null
+     */
+    public function testGetUpdateId()
+    {
+        modConfig::setParameter( 'uid', "testUid" );
+
+        $oView = new register();
+        $this->assertEquals( "testUid", $oView->getUpdateId() );
+    }
+
+    /**
+     * oxScLoginRegister::isConfirmed() test case
+     *
+     * @return null
+     */
+    public function testIsConfirmed()
+    {
+        $oView = new register();
+
+        modConfig::setParameter( "confirmstate", 0 );
+        $this->assertFalse( $oView->isConfirmed() );
+
+        modConfig::setParameter( "confirmstate", 1 );
+        $this->assertTrue( $oView->isConfirmed() );
+    }
+
     public function testGetRegistrationError()
     {
         $oRegister = $this->getProxyClass( 'register' );

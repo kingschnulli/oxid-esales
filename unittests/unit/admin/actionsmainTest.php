@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: actionsmainTest.php 26164 2010-03-02 09:29:44Z arvydas $
+ * @version   SVN: $Id: actionsmainTest.php 28069 2010-06-02 11:09:50Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -104,6 +104,80 @@ class Unit_Admin_ActionsMainTest extends OxidTestCase
         $oView = $this->getMock( "Actions_Main", array( "save" ) );
         $oView->expects( $this->once() )->method( "save" );
         $oView->saveinnlang();
+    }
+
+    /**
+     * Actions_Main::Render() test case
+     *
+     * @return null
+     */
+    public function testPromotionsRender()
+    {
+        modConfig::setParameter( "oxid", -1 );
+        modConfig::setParameter( "saved_oxid", -1 );
+
+        $oPromotion = new oxStdClass();
+        $oPromotion->oxactions__oxtype = new oxField( 1 );
+
+        // testing..
+        $oView = $this->getMock( "Actions_Main", array( "getViewDataElement", "_generateTextEditor" ) );
+        $oView->expects( $this->once() )->method( 'getViewDataElement' )->with( $this->equalTo( "edit") )->will( $this->returnValue( $oPromotion ));
+        $oView->expects( $this->once() )->method( '_generateTextEditor' )->with( $this->equalTo( "100%" ), $this->equalTo( 300 ), $this->equalTo( $oPromotion ), $this->equalTo( "oxactions__oxlongdesc" ), $this->equalTo( "details.tpl.css" ) );
+
+        $sTplName = $oView->render();
+
+        // testing view data
+        $aViewData = $oView->getViewData();
+        $this->assertEquals( '-1', $aViewData["oxid"] );
+        $this->assertEquals( '1', $aViewData["updatelist"] );
+        $this->assertEquals( "actions_main.tpl", $sTplName );
+    }
+
+    /**
+     * Actions_Main::Save() test case
+     *
+     * @return null
+     */
+    public function testPromotionsSave()
+    {
+        oxTestModules::addFunction('oxactions', 'load', '{ return true; }');
+        oxTestModules::addFunction('oxactions', 'save', '{ return true; }');
+
+        modConfig::setParameter( "oxid", "xxx" );
+        modConfig::setParameter( "editval", array( "xxx" ) );
+        modConfig::getInstance()->setConfigParam( "blAllowSharedEdit", true );
+
+        $oView = new Actions_Main();
+        $oView->save();
+
+        $aViewData = $oView->getViewData();
+        $this->assertTrue( isset( $aViewData["updatelist"] ) );
+        $this->assertEquals( 1, $aViewData["updatelist"] );
+        $this->assertNull( oxSession::getVar( "saved_oxid" ) );
+    }
+
+    /**
+     * Actions_Main::Save() test case
+     *
+     * @return null
+     */
+    public function testSaveInsertingNewPromo()
+    {
+        oxTestModules::addFunction('oxactions', 'load', '{ return true; }');
+        oxTestModules::addFunction('oxactions', 'save', '{ return true; }');
+        oxTestModules::addFunction('oxactions', 'getId', '{ return "testId"; }');
+
+        modConfig::setParameter( "oxid", "-1" );
+        modConfig::setParameter( "editval", array( "xxx" ) );
+        modConfig::getInstance()->setConfigParam( "blAllowSharedEdit", true );
+
+        $oView = new Actions_Main();
+        $oView->save();
+
+        $aViewData = $oView->getViewData();
+        $this->assertTrue( isset( $aViewData["updatelist"] ) );
+        $this->assertEquals( 1, $aViewData["updatelist"] );
+        $this->assertEquals( "testId", oxSession::getVar( "saved_oxid" ) );
     }
 
 }

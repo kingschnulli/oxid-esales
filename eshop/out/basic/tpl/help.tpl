@@ -3,7 +3,7 @@
 
 <strong id="test_helpHeader" class="boxhead">[{ oxmultilang ident="HELP_HELP" }]</strong>
 <div class="box info">
-  [{ $oView->getHelpText() }]
+  [{ oxcontent oxid=$oView->getContentId() }]
 </div>
 
 [{ insert name="oxid_tracker" title=$template_title }]

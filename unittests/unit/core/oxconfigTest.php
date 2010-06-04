@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxconfigTest.php 28125 2010-06-03 11:44:01Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -200,6 +200,38 @@ class Unit_Core_oxconfigTest extends OxidTestCase
 
         $this->cleanUpTable('oxconfig');
         parent::tearDown();
+    }
+
+    /**
+     * oxConfig::isNetPriceShop() test case
+     *
+     * @return null
+     */
+    public function testIsNetPriceShop()
+    {
+        // config option is on, user is not in net price group
+        $oConfig = $this->getMock( 'oxconfig', array( "getConfigParam", "getUser" ) );
+        $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( "blNetPriceShop" ) )->will( $this->returnValue( true ) );
+        $oConfig->expects( $this->never() )->method( 'getUser' );
+        $this->assertTrue( $oConfig->isNetPriceShop() );
+
+        // config option is off, user is in net price group
+        $oUser = $this->getMock( 'oxuser', array( "inGroup" ) );
+        $oUser->expects( $this->once() )->method( 'inGroup' )->with( $this->equalTo( "oxidnetprice" ) )->will( $this->returnValue( true ) );
+
+        $oConfig = $this->getMock( 'oxconfig', array( "getConfigParam", "getUser" ) );
+        $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( "blNetPriceShop" ) )->will( $this->returnValue( false ) );
+        $oConfig->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
+        $this->assertTrue( $oConfig->isNetPriceShop() );
+
+        // config option is off, user is not in net price group
+        $oUser = $this->getMock( 'oxuser', array( "inGroup" ) );
+        $oUser->expects( $this->once() )->method( 'inGroup' )->with( $this->equalTo( "oxidnetprice" ) )->will( $this->returnValue( false ) );
+
+        $oConfig = $this->getMock( 'oxconfig', array( "getConfigParam", "getUser" ) );
+        $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( "blNetPriceShop" ) )->will( $this->returnValue( false ) );
+        $oConfig->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
+        $this->assertFalse( $oConfig->isNetPriceShop() );
     }
 
     /**

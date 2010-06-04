@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobject.php 25471 2010-02-01 14:35:11Z alfonsas $
+ * @version   SVN: $Id: oxutilsobject.php 28101 2010-06-02 14:19:57Z michael.keiluweit $
  */
 
 /**
@@ -44,7 +44,7 @@ class oxUtilsObject extends oxSuperCfg
     /**
      * The array of already initialised instances
      *
-     * @var unknown_type
+     * @var array
      */
     protected static $_aInstanceCache = array();
 

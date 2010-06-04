@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28020 2010-05-31 08:20:05Z arvydas $
+ * @version   SVN: $Id: lang.php 28140 2010-06-03 13:50:15Z vilma $
  */
 
 
@@ -186,6 +186,9 @@ $aLang = array(
 'ADD_RECOMM_ADDTOLIST'                            => "Add to List",
 'ADD_RECOMM_ADDRECOMMLINK1'                       => "There is no Listmania lists at the moment. To create new, click",
 'ADD_RECOMM_ADDRECOMMLINK2'                       => "here",
+'BASKET_EXCLUDE_HEAD'                             => "Root category changed",
+'BASKET_EXCLUDE_MSG'                              => "Denied by shop rules.",
+'BASKET_EXCLUDE_INFO'                             => "You can proceed to checkout and finalize order.<br>Or you can continue, but all cart content will be emptied",
 'BASKET_BASKET'                                   => "View Cart",
 'BASKET_EMPTYSHIPPINGCART'                        => "The Shopping Cart is empty.",
 'BASKET_NEXTSTEP'                                 => "Continue to Next Step",
@@ -345,6 +348,13 @@ $aLang = array(
 'DETAILS_STARS'                                   => "Stars",
 'DETAILS_ARTWEIGHTUNIT'                           => "kg",
 'DETAILS_ARTWEIGHT'                               => "Weight:",
+'DETAILS_DELIVERYTIME'                            => "Delivery time:",
+'DETAILS_DAY'                                     => "Day",
+'DETAILS_MONTH'                                   => "Month",
+'DETAILS_WEEK'                                    => "Week",
+'DETAILS_DAYS'                                    => "Days",
+'DETAILS_MONTHS'                                  => "Months",
+'DETAILS_WEEKS'                                   => "Weeks",
 'EMAIL_NEWSLETTEROPTIN_HTML_NEWSLETTER'           => "Newsletter",
 'EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT'             => "Newsletter",
 'EMAIL_ORDER_CUST_HTML_ORDERNOMBER'               =>"Order No.",
@@ -1242,6 +1252,40 @@ $aLang = array(
 'EXCEPTION_NOTALLOWEDTYPE'                        => 'Not allowed file type (please, edit config.inc.php to allow this type of file)',
 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" not found',
 'EXCEPTION_RECOMMLIST_NOTITLE'                    => 'Title field is empty',
+'INC_HEADER_INVITEFRIENDS'                        => "Invite your friends",
+'INVITE_TITLE'                                    => "Invite your friends",
+'INVITE_RECOMMENDSITE'                            => "Invite your friends to our site and get bonus points for each invited users.",
+'INVITE_ENTERFRIENDSEMAILS'                       => "Please enter bellow your friends eMails and invitation letter will be sent to them.",
+'INVITE_RECIPIENTEMAIL'                           => "eMail",
+'INVITE_SENDTO'                                   => "Send invite to:",
+'INVITE_FROM'                                     => "From:",
+'INVITE_SENDERNAME'                               => "Sender's Name:",
+'INVITE_SENDEREMAIL'                              => "Sender's eMail:",
+'INVITE_CAPTION'                                  => "Caption:",
+'INVITE_SUBJECT'                                  => "Have a look at:",
+'INVITE_YOURMESSAGE'                              => "Your Message:",
+'INVITE_MESSAGE1'                                 => "Hello, I was looking at",
+'INVITE_MESSAGE2'                                 => "today and saw something that might interest you. Just click on the link bellow and you will be taken directly to the shop.",
+'INVITE_SEND'                                     => "Send",
+'INVITE_ABOUTDATAPROTECTION'                      => "About Data Protection: Your data is kept strictly confidential and will not be given to any third parties.",
+'INVITE_VERIFICATIONCODE'                         => "Verification code:",
+'INVITE_COMLETECORRECTLYFIELDS'                   => "Please complete all fields correctly!",
+'INVITE_ERRORWHILESENDINGMAIL'                    => "An error occurred sending the eMail - please check the eMail address.",
+'INVITE_INCORRECTEMAILADDRESS'                    => "Incorrect eMail address. Please check entered eMail addresses.",
+'INVITE_EMAILWASSENT'                             => "Invitation eMail was sent to your friends. Thank's for inviting your friends.",
+
+'EMAIL_INVITE_HTML_INVITETOSHOP'                  => "An invitation to visit eShop from",
+'EMAIL_INVITE_HTML_FROM'                          => "From:",
+'EMAIL_INVITE_HTML_EMAIL'                         => "eMail:",
+'EMAIL_INVITE_HTML_MENYGREETINGS'                 => "Many Greetings,",
+
+'PROMO_WILLENDIN_PREFIX'   => 'Will end in ',
+'PROMO_WILLENDIN_SUFFIX'   => '!',
+'PROMO_WILLSTARTIN_PREFIX' => 'Will start in ',
+'PROMO_WILLSTARTIN_SUFFIX' => '',
+'PROMO_ONEDAY'             => 'one day',
+'PROMO_DAYS'               => 'days',
+
 );
 
 /*

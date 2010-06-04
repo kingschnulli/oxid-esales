@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 27187 2010-04-13 12:11:49Z arvydas $
+ * @version   SVN: $Id: oxsessionTest.php 28130 2010-06-03 12:04:06Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -337,6 +337,34 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $oSession = $this->getMock( 'oxsession', array( '_forceSessionStart' )  );
         $oSession->expects( $this->once() )->method( '_forceSessionStart')->will( $this->returnValue( true ) );
         $this->assertTrue( $oSession->isSidNeeded() );
+    }
+
+    public function testForceSessionStart_notSearchEngine()
+    {
+        $oSession = $this->getProxyClass('oxSession');
+
+        oxTestModules::addFunction( "oxUtils", "isSearchEngine", "{return false;}" );
+
+        modConfig::getInstance()->setConfigParam( 'blForceSessionStart', false );
+        $this->assertFalse( $oSession->UNITforceSessionStart() );
+
+        modConfig::getInstance()->setConfigParam( 'blForceSessionStart', true );
+        $this->assertTrue( $oSession->UNITforceSessionStart() );
+
+        modConfig::getInstance()->setConfigParam( 'blForceSessionStart', false );
+        modConfig::setParameter( 'su', '123456' );
+        $this->assertTrue( $oSession->UNITforceSessionStart() );
+    }
+
+    public function testForceSessionStart_isSearchEngine()
+    {
+        $oSession = $this->getProxyClass('oxSession');
+
+        oxTestModules::addFunction( "oxUtils", "isSearchEngine", "{return true;}" );
+        modConfig::getInstance()->setConfigParam( 'blForceSessionStart', true );
+        modConfig::setParameter( 'su', '123456' );
+
+        $this->assertFalse( $oSession->UNITforceSessionStart() );
     }
 
     public function testIsSidNeededWhenSearchEngine()

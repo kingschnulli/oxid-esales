@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 27187 2010-04-13 12:11:49Z arvydas $
+ * @version   SVN: $Id: oxsession.php 28126 2010-06-03 11:58:33Z rimvydas.paskevicius $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -79,7 +79,7 @@ class oxSession extends oxSuperCfg
      * Indicates if setting of session id is executed in this script. After page transition
      * This needed to be checked as new session is not written in db until it is closed
      *
-     * @var unknown_type
+     * @var bool
      */
     protected $_blNewSession = false;
 
@@ -754,12 +754,13 @@ class oxSession extends oxSuperCfg
 
     /**
      * Returns true if its not search engine and config option blForceSessionStart = 1/true
+     * or _GET parameter "su" (suggested user id) is set.
      *
      * @return bool
      */
     protected function _forceSessionStart()
     {
-        return ( !oxUtils::getInstance()->isSearchEngine() ) && ( ( bool ) $this->getConfig()->getConfigParam( 'blForceSessionStart' ) ) ;
+        return ( !oxUtils::getInstance()->isSearchEngine() ) && ( (( bool ) $this->getConfig()->getConfigParam( 'blForceSessionStart' )) || oxConfig::getParameter( "su" ) ) ;
     }
 
     /**

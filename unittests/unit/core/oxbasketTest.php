@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 27874 2010-05-21 16:16:30Z tomas $
+ * @version   SVN: $Id: oxbasketTest.php 28060 2010-06-02 08:38:33Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3530,5 +3530,193 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->expects( $this->never() )->method( 'getDiscountedProductsBruttoPrice');
 
         $this->assertFalse( $oBasket->isBelowMinOrderPrice() );
+    }
+
+    /**
+     * oxbasket::showCatChangeWarning() & oxbasket::setCatChangeWarningState() test case
+     *
+     * @return null
+     */
+    public function testScSetCatChangeWarningState()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        $oBasket = oxNew('oxbasket');
+        $this->assertFalse( $oBasket->showCatChangeWarning() );
+
+        $oBasket->setCatChangeWarningState( true );
+        $this->assertTrue( $oBasket->showCatChangeWarning() );
+    }
+
+    /**
+     * oxbasket::isProductInRootCategory() test case
+     *
+     * @return null
+     */
+    public function testScIsProductInRootCategory()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        $oDb = oxDb::getDb();
+        $sVariantId  = $oDb->getOne( "select oxid from oxarticles where oxparentid != ''" );
+        $sProductId  = $oDb->getOne( "select oxparentid from oxarticles where oxid = '{$sVariantId}'" );
+        $sCategoryId = $oDb->getOne( "select oxcatnid from oxobject2category where oxobjectid = '{$sProductId}'" );
+
+        $sQ = "select oxcategories.oxrootid from oxobject2category
+                 left join oxcategories on oxcategories.oxid = oxobject2category.oxcatnid
+                 where oxobject2category.oxobjectid = '{$sProductId}'";
+        $sRootCatId = $oDb->getOne( $sQ );
+
+
+        $oBasket = oxNew('oxbasket');
+
+        // regular product
+        $this->assertTrue( $oBasket->UNITisProductInRootCategory( $sProductId, $sRootCatId ) );
+        $this->assertFalse( $oBasket->UNITisProductInRootCategory( $sProductId, "anycategory" ) );
+
+        // variant
+        $this->assertTrue( $oBasket->UNITisProductInRootCategory( $sVariantId, $sRootCatId ) );
+        $this->assertFalse( $oBasket->UNITisProductInRootCategory( $sVariantId, "anycategory" ) );
+    }
+
+    /**
+     * oxbasket::addToBasket() test case
+     *
+     * @return null
+     */
+    public function testScAddToBasket()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+    
+        $oBasket = $this->getMock( "oxbasket", array( "canAddProductToBasket", "setCatChangeWarningState" ) );
+        $oBasket->expects( $this->once() )->method( 'canAddProductToBasket' )->with( $this->equalTo( "1126" ) )->will( $this->returnValue( true ) );
+        $oBasket->expects( $this->once() )->method( 'setCatChangeWarningState' )->with( $this->equalTo( false ) );
+        $oBasket->addToBasket( "1126", 1 );
+
+        $oBasket = $this->getMock( "oxbasket", array( "canAddProductToBasket", "setCatChangeWarningState" ) );
+        $oBasket->expects( $this->once() )->method( 'canAddProductToBasket' )->with( $this->equalTo( "1126" ) )->will( $this->returnValue( false ) );
+        $oBasket->expects( $this->once() )->method( 'setCatChangeWarningState' )->with( $this->equalTo( true ) );
+        $oBasket->addToBasket( "1126", 1 );
+    }
+
+    /**
+     * oxbasket::canAddProductToBasket() test case
+     *
+     * @return null
+     */
+    public function testScCanAddProductToBasketEmptyBasketNoViewCategory()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        modConfig::setParameter( 'cnid', null );
+
+        $oBasket = oxNew('oxbasket');
+        $this->assertTrue( $oBasket->canAddProductToBasket( "1126" ) );
+    }
+
+    /**
+     * oxbasket::canAddProductToBasket() test case
+     *
+     * @return null
+     */
+    public function testScCanAddProductToBasketEmptyBasketFittingViewCategory()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        $oCategory = new oxCategory();
+        $oCategory->load( oxDb::getDb()->getOne( "select oxcatnid from oxobject2category where oxobjectid = '1126'" ) );
+        oxConfig::getInstance()->getActiveView()->setActCategory( $oCategory );
+
+        $oBasket = oxNew('oxbasket');
+        $this->assertTrue( $oBasket->canAddProductToBasket( "1126" ) );
+    }
+
+    /**
+     * oxbasket::canAddProductToBasket() test case
+     *
+     * @return null
+     */
+    public function testScCanAddProductToBasketEmptyBasketNotFittingViewCategory()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        $oCategory = new oxCategory();
+        $oCategory->load( oxDb::getDb()->getOne( "select oxcatnid from oxobject2category where oxobjectid != '1126'" ) );
+        oxConfig::getInstance()->getActiveView()->setActCategory( $oCategory );
+
+        $oBasket = oxNew('oxbasket');
+        $this->assertTrue( $oBasket->canAddProductToBasket( "1126" ) );
+    }
+
+    /**
+     * oxbasket::canAddProductToBasket() test case
+     *
+     * @return null
+     */
+    public function testScCanAddProductToBasketEmptyBasket()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        modConfig::setParameter( 'cnid', oxDb::getDb()->getOne( "select oxcatnid from oxobject2category where oxobjectid != '1126'" ) );
+
+        $oBasket = oxNew('oxbasket');
+        $this->assertTrue( $oBasket->canAddProductToBasket( "1126" ) );
+    }
+
+    /**
+     * oxbasket::canAddProductToBasket() test case
+     *
+     * @return null
+     */
+    public function testScCanAddProductToBasket()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        $oDb = oxDb::getDb();
+
+        $sCatId     = $oDb->getOne( "select oxcatnid, count(oxcatnid) as _cnt from oxobject2category group by oxcatnid having _cnt > 1" );
+        $sRootCatId = $oDb->getOne( "select oxrootid from oxcategories where oxid = '{$sCatId}'" );
+        modConfig::setParameter( 'cnid', $sCatId );
+
+        $sProductId1 = $oDb->getOne( "select oxobjectid from oxobject2category where oxcatnid = '{$sCatId}'" );
+        $sProductId2 = $oDb->getOne( "select oxobjectid from oxobject2category where oxcatnid = '{$sCatId}' and oxobjectid != '{$sProductId1}'" );
+        $sProductId3 = $oDb->getOne( "select oxid from oxcategories where oxrootid != '{$sRootCatId}' " );
+
+        $oBasket = oxNew('oxbasket');
+        $this->assertTrue( $oBasket->canAddProductToBasket( $sProductId1 ) );
+        $this->assertTrue( $oBasket->canAddProductToBasket( $sProductId2 ) );
+        $this->assertFalse( $oBasket->canAddProductToBasket( $sProductId3 ) );
+    }
+
+    /**
+     * oxbasket::setBasketRootCatId() test case
+     *
+     * @return null
+     */
+    public function testScSetBasketRootCatId()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        $oBasket = $this->getProxyClass( "oxbasket" );
+        $this->assertNull( $oBasket->getNonPublicVar( "_sBasketCategoryId" ));
+
+        $oBasket->setBasketRootCatId('_testExclRoot');
+        $this->assertEquals( '_testExclRoot', $oBasket->getNonPublicVar( "_sBasketCategoryId" ) );
+    }
+
+    /**
+     * oxbasket::getBasketRootCatId() test case
+     *
+     * @return null
+     */
+    public function testScGetBasketRootCatId()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        $oBasket = $this->getProxyClass( "oxbasket" );
+        $this->assertNull( $oBasket->getBasketRootCatId() );
+
+        $oBasket->setNonPublicVar( "_sBasketCategoryId",'_testExclRoot');
+        $this->assertEquals( '_testExclRoot', $oBasket->getBasketRootCatId() );
     }
 }

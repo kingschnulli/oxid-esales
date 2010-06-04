@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 27827 2010-05-20 13:38:01Z tomas $
+ * @version   SVN: $Id: oxbase.php 28106 2010-06-02 15:59:01Z tomas $
  */
 
 /**
@@ -53,7 +53,7 @@ class oxBase extends oxSuperCfg
     /**
      * Whether instance
      *
-     * @var unknown_type
+     * @var bool
      */
     protected $_blIsSimplyClonable = true;
 
@@ -1139,18 +1139,6 @@ class oxBase extends oxSuperCfg
     {
         //preparation
         $sName = strtolower($sName);
-
-        //TODO: remove this
-        //this is left only for debug as this should never happen
-        if ($sName == "oxnid") {
-            throw new Exception("oxnid added");
-        }
-
-        //TODO: remove this
-        //this is left only for debug as this should never happen
-        if (!is_int($iStatus )) {
-            throw new Exception('Non int status!');
-        }
 
         //adding field names element
         $this->_aFieldNames[$sName] = $iStatus;

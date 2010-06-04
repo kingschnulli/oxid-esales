@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28021 2010-05-31 08:20:21Z arvydas $
+ * @version   SVN: $Id: lang.php 28125 2010-06-03 11:44:01Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -463,6 +463,12 @@ $aLang = array(
 'ARTICLE_STOCK_STOCKFLAG'                       => 'Lieferstatus',
 'ARTICLE_STOCK_DELIVERY'                        => 'Wieder lieferbar am',
 'ARTICLE_STOCK_REMINDACTIV'                     => 'E-Mail schicken, falls Bestand<br>unter folg. Wert sinkt',
+'ARTICLE_STOCK_DELTIME'                         => 'Lieferzeit',
+'ARTICLE_STOCK_MINDELTIME'                      => 'Zwischen',
+'ARTICLE_STOCK_MAXDELTIME'                      => 'und',
+'ARTICLE_STOCK_DAYS'                            => 'Tage',
+'ARTICLE_STOCK_MONTHS'                          => 'Monate',
+'ARTICLE_STOCK_WEEKS'                           => 'Wochen',
 'ARTICLE_USERDEF_USERDEFRANGE'                  => 'Benutzerdefinierter Bereich - hier können Sie ihre eigenen Felder und Änderungen hinzufügen.',
 'ARTICLE_VARIANT_YOUWANTTODELETE'               => 'Wollen Sie diese Variante wirklich löschen?',
 'ARTICLE_VARIANT_EDIT'                          => 'Edit',
@@ -1231,6 +1237,9 @@ $aLang = array(
 'SHOP_CONFIG_MINORDERPRICE'                     => 'Mindestbestellwert (leer lassen, falls nicht gewünscht)',
 'SHOP_CONFIG_MUSTFILLFIELDS'                    => '"Muss"-Felder für die Registrierung des Kunden',
 'SHOP_CONFIG_NEWARTBYINSERT'                    => 'Neueste Artikel nach dem Erstellungsdatum berechnen. (Ansonsten nach Datum der letzten Änderung)',
+'SHOP_CONFIG_NETPRICESHOPOFF'                   => '[tr] Disabled',
+'SHOP_CONFIG_NETPRICESHOPON'                    => '[tr] Enabled',
+'SHOP_CONFIG_NETPRICESHOP'                      => '[tr] Net price mode',
 'SHOP_CONFIG_NROFCATARTICLES'                   => 'Anzahl der Artikel, die in einer Artikelliste pro Seite angezeigt werden können<br>Warnung: Eine große Anzahl von Artikeln pro Seite (über 100) kann erhebliche Performance-Probleme verursachen!',
 'SHOP_CONFIG_NROFCUSTOMERWHOARTICLES'           => 'Anzahl der Artikel, die bei "Kunden, die dies gekauft haben, haben auch das gekauft" angezeigt werden',
 'SHOP_CONFIG_NROFNEWCOMERARTICLES'              => 'Anzahl der Artikel, die bei "Frisch eingetroffen!" (neuste Artikel) angezeigt werden',
@@ -1827,6 +1836,19 @@ $aLang = array(
 'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'             => 'Weitere Einstellungen',
 'SHOP_OPTIONS_GROUP_VARIANTS'                   => 'Varianten',
 'SHOP_OPTIONS_GROUP_MODULES'                    => 'Module',
+
+
+'PROMOTION_USERS_SETGROUPS'                 => 'Zugeordnete Benutzergruppen',
+'PROMOTION_PRODUCTS_ALLATRICLES'            => 'Alle Artikel',
+'PROMOTION_PRODUCTS_SETARTICLES'            => 'Zugeordnete Artikel',
+'PROMOTION_LIST_ALL'                        => 'Alle',
+'PROMOTION_LIST_ACTIVE'                     => 'Aktiv',
+'PROMOTION_LIST_UPCOMING'                   => 'Demnächst',
+'PROMOTION_LIST_EXPIRED'                    => 'Abgelaufen',
+'PROMOTION_LIST_STARTTIME'                  => 'Startzeit',
+'PROMOTIONS_MAIN_TYPE0'                     => 'Aktion',
+'PROMOTIONS_MAIN_TYPE1'                     => 'Promotion',
+'TOOLTIPS_NEWPROMOTION'                     => 'Neue Promotion/Aktion',
 
 );
 

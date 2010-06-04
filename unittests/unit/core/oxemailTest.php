@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 27195 2010-04-13 13:44:06Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxemailTest.php 28042 2010-06-01 13:02:31Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -450,6 +450,24 @@ class Unit_Core_oxemailTest extends OxidTestCase
 
     /*-------------------------------------------------------------*/
 
+    /**
+     * oxEmail::sendRegisterConfirmEmail() test case
+     *
+     * @return null
+     */
+    public function testSendRegisterConfirmEmail()
+    {
+        $oUser = new oxuser();
+        $oSmarty = $this->getMock( "smarty", array( "assign" ) );
+        $oSmarty->expects( $this->at( 0 ) )->method( 'assign' )->with( $this->equalTo( "contentident" ), $this->equalTo( "oxregisteraltemail" ) );
+        $oSmarty->expects( $this->at( 1 ) )->method( 'assign' )->with( $this->equalTo( "contentplainident" ), $this->equalTo( "oxregisterplainaltemail" ) );
+
+        $oEmail = $this->getMock( "oxemail", array( "_getSmarty", "sendRegisterEmail" ) );
+        $oEmail->expects( $this->once() )->method( '_getSmarty' )->will($this->returnValue( $oSmarty ) );
+        $oEmail->expects( $this->once() )->method( 'sendRegisterEmail' )->with( $this->equalTo( $oUser ), $this->equalTo( null ) );
+
+        $oEmail->sendRegisterConfirmEmail( $oUser );
+    }
 
     /**
      * When image is taken using getter, it is not included into email by native oxid code

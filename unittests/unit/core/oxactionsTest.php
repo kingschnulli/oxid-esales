@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxactionsTest.php 28064 2010-06-02 08:59:37Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -43,6 +43,19 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->_oAction = new oxactions();
         $this->_oAction->oxactions__oxtitle = new oxField("test", oxField::T_RAW);
         $this->_oAction->save();
+
+
+        $this->oPromo = new oxActions();
+        $this->oPromo->assign(array(
+            'oxtitle'    => 'title',
+            'oxlongdesc' => 'longdesc',
+            'oxtype' => 1,
+            'oxsort' => 1,
+            'oxactive' => 1,
+        ));
+        $this->oPromo->save();
+
+        oxTestModules::addFunction('oxStr', 'setH($h)', '{oxStr::$_oHandler = $h;}');
     }
 
     /**
@@ -53,6 +66,8 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     protected function tearDown()
     {
         $this->_oAction->delete();
+        $this->oPromo->delete();
+        oxNew('oxStr')->setH(null);
         parent::tearDown();
     }
 
@@ -133,5 +148,147 @@ class Unit_Core_oxactionsTest extends OxidTestCase
             $this->fail("fail deleting");
         }
     }
+
+
+
+
+
+
+    public function testGetTimeLeft()
+    {
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
+        $this->oPromo->oxactions__oxactiveto = new oxField(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() + 10 ));
+        $this->assertEquals(10, $this->oPromo->getTimeLeft());
+    }
+
+    public function testGetTimeUntilStart()
+    {
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
+        $this->oPromo->oxactions__oxactivefrom = new oxField(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() + 10 ));
+        $this->assertEquals(10, $this->oPromo->getTimeUntilStart());
+    }
+
+    public function testStart()
+    {
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
+        $this->oPromo->oxactions__oxactiveto = new oxField( '' );
+        $this->oPromo->oxactions__oxactivefrom = new oxField( '' );
+        $this->oPromo->save();
+
+        $id = $this->oPromo->getId();
+        $this->oPromo = new oxActions();
+        $this->oPromo->load($id);
+
+        $this->assertEquals('0000-00-00 00:00:00', $this->oPromo->oxactions__oxactiveto->value);
+        $this->assertEquals('0000-00-00 00:00:00', $this->oPromo->oxactions__oxactivefrom->value);
+
+        $this->oPromo->start();
+        $iNow  = strtotime(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ));
+
+        $this->assertEquals(date( 'Y-m-d H:i:s', $iNow), $this->oPromo->oxactions__oxactivefrom->value);
+        $this->assertEquals('0000-00-00 00:00:00', $this->oPromo->oxactions__oxactiveto->value);
+
+        $id = $this->oPromo->getId();
+        $this->oPromo = new oxActions();
+        $this->oPromo->load($id);
+        $this->assertEquals(date( 'Y-m-d H:i:s', $iNow), $this->oPromo->oxactions__oxactivefrom->value);
+        $this->assertEquals('0000-00-00 00:00:00', $this->oPromo->oxactions__oxactiveto->value);
+
+
+        $this->oPromo->oxactions__oxactiveto = new oxField(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime()+10 ));
+        $sTo = $this->oPromo->oxactions__oxactiveto->value;
+        $this->oPromo->save();
+        $id = $this->oPromo->getId();
+        $this->oPromo = new oxActions();
+        $this->oPromo->load($id);
+        $this->assertEquals($sTo, $this->oPromo->oxactions__oxactiveto->value);
+
+        $this->oPromo->start();
+        $id = $this->oPromo->getId();
+        $this->oPromo = new oxActions();
+        $this->oPromo->load($id);
+        $this->assertEquals($sTo, $this->oPromo->oxactions__oxactiveto->value);
+    }
+
+    public function testStop()
+    {
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
+        $this->oPromo->stop();
+        $iNow  = strtotime(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ));
+
+        $this->assertEquals(date( 'Y-m-d H:i:s', $iNow), $this->oPromo->oxactions__oxactiveto->value);
+
+        $id = $this->oPromo->getId();
+        $this->oPromo = new oxActions();
+        $this->oPromo->load($id);
+
+        $this->assertEquals(date( 'Y-m-d H:i:s', $iNow), $this->oPromo->oxactions__oxactiveto->value);
+    }
+
+    public function testIsTestRunning()
+    {
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
+        $iNow  = strtotime(date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ));
+        $this->oPromo->oxactions__oxactivefrom = new oxField(date( 'Y-m-d H:i:s', $iNow-10));
+        $this->oPromo->oxactions__oxactiveto = new oxField(date( 'Y-m-d H:i:s', $iNow+10));
+        $this->assertTrue($this->oPromo->isRunning());
+
+        $this->oPromo->oxactions__oxactiveto = new oxField(date( 'Y-m-d H:i:s', $iNow-1));
+        $this->assertFalse($this->oPromo->isRunning());
+
+        $this->oPromo->oxactions__oxactivefrom = new oxField(date( 'Y-m-d H:i:s', $iNow+1));
+        $this->oPromo->oxactions__oxactiveto = new oxField(date( 'Y-m-d H:i:s', $iNow+10));
+        $this->assertFalse($this->oPromo->isRunning());
+
+        $this->oPromo->oxactions__oxactivefrom = new oxField(date( 'Y-m-d H:i:s', $iNow-10));
+        $this->oPromo->oxactions__oxactiveto = new oxField(date( 'Y-m-d H:i:s', $iNow+10));
+        $this->assertTrue($this->oPromo->isRunning());
+
+        $this->oPromo->oxactions__oxactivefrom = new oxField('0000-00-00 00:00:00');
+        $this->assertFalse($this->oPromo->isRunning());
+
+        $this->oPromo->oxactions__oxactivefrom = new oxField(date( 'Y-m-d H:i:s', $iNow-10));
+        $this->oPromo->oxactions__oxactiveto = new oxField(date( 'Y-m-d H:i:s', $iNow+10));
+        $this->assertTrue($this->oPromo->isRunning());
+
+        $this->oPromo->oxactions__oxtype = new oxField(0);
+        $this->assertFalse($this->oPromo->isRunning());
+
+        $this->oPromo->oxactions__oxtype = new oxField(1);
+        $this->assertTrue($this->oPromo->isRunning());
+
+        $this->oPromo->oxactions__oxactive = new oxField(0);
+        $this->assertFalse($this->oPromo->isRunning());
+    }
+
+
+    public function testGetLongDescNoTags()
+    {
+        $oUV =  $this->getMock('oxUtilsView', array('parseThroughSmarty'));
+        $oUV->expects($this->never())->method('parseThroughSmarty');
+        oxTestModules::addModuleObject('oxUtilsView', $oUV);
+
+        $oStr = $this->getMock('oxStrRegular', array('strstr'));
+        $oStr->expects($this->at(0))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('[{'))->will($this->returnValue(false));
+        $oStr->expects($this->at(1))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('<?'))->will($this->returnValue(false));
+        oxNew('oxStr')->setH($oStr);
+
+        $this->assertEquals('longdesc', $this->oPromo->getLongDesc());
+    }
+
+    public function testGetLongDescTags()
+    {
+        $oUV =  $this->getMock('oxUtilsView', array('parseThroughSmarty'));
+        $oUV->expects($this->once())->method('parseThroughSmarty')->with($this->equalTo('longdesc'))->will($this->returnValue('parsed'));
+        oxTestModules::addModuleObject('oxUtilsView', $oUV);
+
+        $oStr = $this->getMock('oxStrRegular', array('strstr'));
+        $oStr->expects($this->at(0))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('[{'))->will($this->returnValue(true));
+        $oStr->expects($this->at(1))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('<?'))->will($this->returnValue(false));
+        oxNew('oxStr')->setH($oStr);
+
+        $this->assertEquals('parsed', $this->oPromo->getLongDesc());
+    }
+
 
 }

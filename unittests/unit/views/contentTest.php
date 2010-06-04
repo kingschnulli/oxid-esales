@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: contentTest.php 28048 2010-06-01 14:52:17Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -67,6 +67,50 @@ class Unit_Views_contentTest extends OxidTestCase
     {
         $this->_oObj->delete();
         parent::tearDown();
+    }
+
+    /**
+     * Test active content id getter when content id passed with tpl param.
+     *
+     * @return null
+     */
+    public function testGetContentIdIfAgb()
+    {
+        $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oxagb' " );
+        modConfig::setParameter( 'oxcid', $sContentId );
+
+        $oView = $this->getMock( "content", array( "getUser", "isActive" ), array(), '', false );
+        $oView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
+        $oView->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
+        // testing special chars conversion
+        $this->assertEquals( $oView->getContentId(), $sContentId );
+    }
+
+    /**
+     * Test active content id getter
+     *
+     * @return null
+     */
+    public function testGetContentNoUser()
+    {
+        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
+
+        modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
+        $oConfig = $this->getMock( "oxConfig", array( "getShopHomeURL" ) );
+        $oConfig->expects( $this->once() )->method( 'getShopHomeURL' )->will( $this->returnValue( "testUrl" ) );
+
+        try {
+            // testing..
+            $oView = $this->getMock( "content", array( "getUser", "getConfig", 'isActive' ), array(), '', false );
+            $oView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
+            $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+            $oView->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
+            $oView->getContentId();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( "testUrlcl=account", $oExcp->getMessage(), "Error in oxsclogincontent::getContentId()" );
+            return;
+        }
+        $this->fail( "Error in content::getContentId()" );
     }
 
     /**
@@ -211,8 +255,10 @@ class Unit_Views_contentTest extends OxidTestCase
     public function testGetContentIdWithTplParam()
     {
         modConfig::setParameter( 'tpl', $this->_oObj->getId() );
+        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
 
-        $oObj = oxNew( "content" );
+        $oObj = $this->getMock( "content", array( "isActive" ) );
+        $oObj->expects( $this->once() )->method( 'isActive')->will( $this->returnValue( false ) );
 
         // testing special chars conversion
         $this->assertEquals( $oObj->getContentId(), $this->_oObj->getId() );
@@ -226,8 +272,10 @@ class Unit_Views_contentTest extends OxidTestCase
     public function testGetContentIdWithOxcidParam()
     {
         modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
+        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
 
-        $oObj = oxNew( "content" );
+        $oObj = $this->getMock( "content", array( "isActive" ) );
+        $oObj->expects( $this->once() )->method( 'isActive')->will( $this->returnValue( false ) );
 
         // testing special chars conversion
         $this->assertEquals( $oObj->getContentId(), $this->_oObj->getId() );
@@ -258,9 +306,12 @@ class Unit_Views_contentTest extends OxidTestCase
     public function testGetContentIdWhenNoIdSpecified()
     {
         modConfig::setParameter( 'tpl', null );
+        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
         $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
 
-        $oObj = oxNew( "content" );
+        $oObj = $this->getMock( "content", array( "isActive" ) );
+        $oObj->expects( $this->once() )->method( 'isActive')->will( $this->returnValue( false ) );
+
         $this->assertEquals( $sContentId, $oObj->getContentId() );
     }
 
@@ -272,8 +323,10 @@ class Unit_Views_contentTest extends OxidTestCase
     public function testGetContent()
     {
         modConfig::setParameter( 'tpl', $this->_oObj->getId() );
+        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
 
-        $oObj = oxNew( "content" );
+        $oObj = $this->getMock( "content", array( "isActive" ) );
+        $oObj->expects( $this->once() )->method( 'isActive')->will( $this->returnValue( false ) );
 
         // testing special chars conversion
         $this->assertEquals( $oObj->getContent()->getId(), $this->_oObj->getId() );
@@ -313,8 +366,11 @@ class Unit_Views_contentTest extends OxidTestCase
      */
     public function testRenderReturnSettedTemplateName()
     {
-       $oView = $this->getMock( 'content', array( '_getTplName' ) );
+       oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
+
+       $oView = $this->getMock( 'content', array( '_getTplName', "isActive" ) );
        $oView->expects( $this->once() )->method( '_getTplName')->will( $this->returnValue( 'test.tpl' ) );
+       $oView->expects( $this->once() )->method( 'isActive')->will( $this->returnValue( false ) );
 
        $this->assertEquals( 'test.tpl', $oView->render() );
     }

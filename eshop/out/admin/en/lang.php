@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28021 2010-05-31 08:20:21Z arvydas $
+ * @version   SVN: $Id: lang.php 28125 2010-06-03 11:44:01Z arvydas $
  */
 
 /*
@@ -222,7 +222,7 @@ $aLang = array(
 'GENERAL_ICON'                                  => 'Icon',
 'GENERAL_IDENT'                                 => 'Ident',
 'GENERAL_INGROUP'                               => 'In User Group',
-'GENERAL_INETTO'                                => 'Produt Net Price',
+'GENERAL_INETTO'                                => 'Product Net Price',
 'GENERAL_IVAT'                                  => 'VAT',
 'GENERAL_INFOLDER'                              => 'In Folder',
 'GENERAL_LIST_FIRST'                            => 'first',
@@ -468,6 +468,12 @@ $aLang = array(
 'ARTICLE_STOCK_STOCKFLAG'                       => 'Delivery Status',
 'ARTICLE_STOCK_DELIVERY'                        => 'Available on',
 'ARTICLE_STOCK_REMINDACTIV'                     => 'Send E-mail if Stock falls below Value',
+'ARTICLE_STOCK_DELTIME'                         => 'Delivery time',
+'ARTICLE_STOCK_MINDELTIME'                      => 'From',
+'ARTICLE_STOCK_MAXDELTIME'                      => 'to',
+'ARTICLE_STOCK_DAYS'                            => 'Days',
+'ARTICLE_STOCK_MONTHS'                          => 'Months',
+'ARTICLE_STOCK_WEEKS'                           => 'Weeks',
 'ARTICLE_USERDEF_USERDEFRANGE'                  => 'User-defined Area - here you can add your own fields.',
 'ARTICLE_VARIANT_YOUWANTTODELETE'               => 'Do you really want to delete this Variant ?',
 'ARTICLE_VARIANT_EDIT'                          => 'Edit',
@@ -1237,6 +1243,9 @@ $aLang = array(
 'SHOP_CONFIG_MINORDERPRICE'                     => 'Min. Order Price (leave empty to disable)',
 'SHOP_CONFIG_MUSTFILLFIELDS'                    => 'Mandatory fields in User Registration Form',
 'SHOP_CONFIG_NEWARTBYINSERT'                    => 'Calculate newest Products by Date of Creation (otherwise by Date of last Change)',
+'SHOP_CONFIG_NETPRICESHOPOFF'                   => '[tr] Disabled',
+'SHOP_CONFIG_NETPRICESHOPON'                    => '[tr] Enabled',
+'SHOP_CONFIG_NETPRICESHOP'                      => '[tr] Net price mode',
 'SHOP_CONFIG_NROFCATARTICLES'                   => 'Number of Products which can be shown in a Product List (Category Pages, Search Results)<br>Attention: A large number of products per page (above 100) can cause serious performance issues!',
 'SHOP_CONFIG_NROFCUSTOMERWHOARTICLES'           => 'Number of Products which are shown in "Customers who bought this product also purchased:"',
 'SHOP_CONFIG_NROFNEWCOMERARTICLES'              => 'Number of Products which are shown in "Just arrived!" (newest Products)',
@@ -1832,6 +1841,18 @@ $aLang = array(
 'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'                => 'Other settings',
 'SHOP_OPTIONS_GROUP_VARIANTS'                    => 'Variants',
 'SHOP_OPTIONS_GROUP_MODULES'                    => 'Modules',
+
+'PROMOTION_USERS_SETGROUPS'                 => 'Assigned User Groups',
+'PROMOTION_PRODUCTS_ALLATRICLES'            => 'All Products',
+'PROMOTION_PRODUCTS_SETARTICLES'            => 'Assigned Products',
+'PROMOTION_LIST_ALL'                        => 'All',
+'PROMOTION_LIST_ACTIVE'                     => 'Active',
+'PROMOTION_LIST_UPCOMING'                   => 'Upcoming',
+'PROMOTION_LIST_EXPIRED'                    => 'Expired',
+'PROMOTION_LIST_STARTTIME'                  => 'Start Time',
+'PROMOTIONS_MAIN_TYPE0'                     => 'Action',
+'PROMOTIONS_MAIN_TYPE1'                     => 'Promotion',
+'TOOLTIPS_NEWPROMOTION'                     => 'New Promotion/Action',
 
 
 );

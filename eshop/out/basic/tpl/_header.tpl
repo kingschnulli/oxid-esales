@@ -17,6 +17,9 @@
     [{if $canonical_url }]<link rel="canonical" href="[{ $canonical_url }]">[{/if}]
     <link rel="shortcut icon" href="[{ $oViewConf->getBaseDir() }]favicon.ico">
     <link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid.css">
+    [{if $usePromotionsCss}]
+    <link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]promotions.css">
+    [{/if}]
     <!--[if IE 8]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid_ie8.css"><![endif]-->
     <!--[if IE 7]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid_ie7.css"><![endif]-->
     <!--[if IE 6]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid_ie6.css"><![endif]-->
@@ -50,6 +53,7 @@
                         <li><a id="test_link_service_help" href="[{ oxgetseourl ident=$oViewConf->getHelpLink() }]" rel="nofollow">[{ oxmultilang ident="INC_HEADER_HELP" }]</a></li>
                         <li><a id="test_link_service_links" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=links" }]">[{ oxmultilang ident="INC_HEADER_LINKS" }]</a></li>
                         <li><a id="test_link_service_guestbook" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=guestbook" }]" rel="nofollow">[{ oxmultilang ident="INC_HEADER_GUESTBOOK" }]</a></li>
+                        <li><a id="test_link_service_invite" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=invite" }]" rel="nofollow">[{ oxmultilang ident="INC_HEADER_INVITEFRIENDS" }]</a></li>
                     </ul>
                     [{/strip}]
                 </dd>

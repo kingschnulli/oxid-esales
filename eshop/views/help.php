@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help.php 26734 2010-03-22 13:08:22Z arvydas $
+ * @version   SVN: $Id: help.php 28138 2010-06-03 13:20:44Z arvydas $
  */
 
 /**
@@ -47,6 +47,13 @@ class Help extends oxUBase
      * @var string
      */
     protected $_sDefaultPage = 'default';
+
+    /**
+     * Help content ident
+     *
+     * @var string
+     */
+    protected $_sHelpContentId = null;
 
     /**
      * Current view search engine indexing state
@@ -79,6 +86,8 @@ class Help extends oxUBase
      * @param string $sHelpPage help page name
      * @param string $sLang     help language
      *
+     * @deprecated should be used help::getContentId() instead
+     *
      * @return string | false
      */
     protected function _getHelpPageContents( $sHelpPage, $sLang )
@@ -105,6 +114,8 @@ class Help extends oxUBase
     /**
      * Template variable getter. Returns help text
      *
+     * @deprecated should be used help::getContentId() instead
+     *
      * @return string
      */
     public function getHelpText()
@@ -115,5 +126,29 @@ class Help extends oxUBase
             $this->_sHelpText = $this->_getHelpPageContents( $sHelpPage, oxLang::getInstance()->getBaseLanguage() );
         }
         return $this->_sHelpText;
+    }
+
+    /**
+     * Template variable getter. Returns active content id.
+     * If no content id specified, uses "impressum" content id
+     *
+     * @return object
+     */
+    public function getContentId()
+    {
+        if ( $this->_sHelpContentId === null ) {
+            $oDb = oxDb::getDb();
+
+            $sQ = "";
+            if ( $sIdent = oxConfig::getParameter( 'oxcid' ) ) {
+                $sQ = "select oxid from oxcontents where oxactive = 1 and oxloadid = " . $oDb->quote( $sIdent ) . " union ";
+            }
+            $sQ .= "select oxid from oxcontents where oxactive = 1 and oxloadid = 'oxhelpdefault'";
+
+            // checking if user defined content exists..
+            $this->_sHelpContentId = $oDb->getOne( $sQ );
+        }
+
+        return $this->_sHelpContentId;
     }
 }

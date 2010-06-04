@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: contentUsageTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: contentUsageTest.php 28142 2010-06-03 14:05:08Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -99,14 +99,24 @@ class Unit_Maintenance_contentUsageTest extends OxidTestCase
      */
     private function _getNotUsedInTemplates( $ftpl, $aConst, $blTpl = false )
     {
-        $aFormerCont = array( 'oxbargain' ); //used only for former tpl
+        //used only for former tpl
+        $aFormerCont = array( 'oxbargain' );
+
+        // set ident from oxemail
+        $aFormerCont[] = 'oxregisteraltemail';
+        $aFormerCont[] = 'oxregisterplainaltemail';
+
+        // set by request
+        $aFormerCont[] = 'oxhelpalist';
+        $aFormerCont[] = 'oxhelpstart';
+
         $subject = file_get_contents($ftpl);
         foreach ($aConst as $const => $value) {
             if ( in_array( $value, $aFormerCont ) ) {
                 unset( $aConst[$const]);
             }
             if ( $blTpl ) {
-                $pattern = '/ox(if)*content ident="'.$value.'"|getContentByIdent\("'.$value.'"\)/i';
+                $pattern = '/ox(if)*content ident="'.$value.'"|getContentByIdent\("'.$value.'"\)|default:"'.$value.'"/i';
             } else {
                 $pattern = "/'".$value."'/";
             }

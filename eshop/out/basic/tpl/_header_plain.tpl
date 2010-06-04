@@ -26,5 +26,5 @@
     [{/if}]
 </head>
 <body>
-   <div id="body" class="plain">
+   <div id="body" class="[{$cssclass|default:"plain"}]">
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: helpTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: helpTest.php 28141 2010-06-03 13:52:48Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -52,15 +52,7 @@ class Unit_Views_helpTest extends OxidTestCase
         modConfig::setParameter( 'tpl', 'start' );
         $oHelp = new help();
 
-        $sText = "Die Startseite<br>
-<br>
-<br>
-Hier steht jede Menge tolles Zeug !<br>
-<br>
-Das hier soll ein Hilfetext sein.<br>
-<br>";
-        $sText = str_replace("\n", "\r\n", $sText);
-        $this->assertEquals( $sText, $oHelp->getHelpText() );
+        $this->assertFalse( $oHelp->getHelpText() );
     }
 
     /**
@@ -72,14 +64,27 @@ Das hier soll ein Hilfetext sein.<br>
     {
         modConfig::setParameter( 'tpl', null );
         $oHelp = new help();
+        $this->assertFalse( $oHelp->getHelpText() );
+    }
 
-        $sText = "Default Hilfe Text<br>
-<br>
-<br>
-Dieser Standard-Hilfetext erscheint immer dann, wenn es keine spezielle Hilfe gibt. Sie können den Text in der Datei /help/0/default.inc.tpl anpassen.
-<br>
-";
-        $sText = str_replace("\n", "\r\n", $sText);
-        $this->assertEquals( $sText, $oHelp->getHelpText() );
+    /**
+     * Help::getContentId() test case
+     *
+     * @return null
+     */
+    public function testGetContentId()
+    {
+        // existing content
+        $sHelpListId = 'oxhelpalist';
+        modConfig::setParameter( "oxcid", $sHelpListId );
+
+        $oHelp = new Help();
+        $this->assertEquals( oxDb::getDb()->getOne( "select oxid from oxcontents where oxloadid = '{$sHelpListId}'" ), $oHelp->getContentId() );
+
+        // non existing content
+        modConfig::setParameter( "oxcid", 'oxhelpnone' );
+
+        $oHelp = new Help();
+        $this->assertEquals( oxDb::getDb()->getOne( "select oxid from oxcontents where oxloadid = 'oxhelpdefault'" ), $oHelp->getContentId() );
     }
 }

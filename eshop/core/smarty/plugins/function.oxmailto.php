@@ -69,6 +69,6 @@ function smarty_function_oxmailto( $aParams, &$oSmarty )
         return '<script type="text/javascript">eval(decodeURIComponent(\''.$sEncodedString.'\'))</script>';
     } else {
         include_once $oSmarty->_get_plugin_filepath( 'function', 'mailto' );
-        return smarty_function_mailto($aParams, &$oSmarty );
+        return smarty_function_mailto($aParams, $oSmarty );
     }
 }

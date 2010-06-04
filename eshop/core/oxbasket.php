@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 27873 2010-05-21 16:12:47Z tomas $
+ * @version   SVN: $Id: oxbasket.php 28089 2010-06-02 13:49:19Z michael.keiluweit $
  */
 
 /**
@@ -231,6 +231,20 @@ class oxBasket extends oxSuperCfg
     protected $_blCalcDiscounts = true;
 
     /**
+     * Basket category id
+     *
+     * @var string
+     */
+    protected $_sBasketCategoryId = null;
+
+    /**
+     * Category change warning state
+     *
+     * @var bool
+     */
+    protected $_blShowCatChangeWarning = false;
+
+    /**
      * Checks if configuration allows basket usage or if user agent is search engine
      *
      * @return bool
@@ -284,6 +298,16 @@ class oxBasket extends oxSuperCfg
         // enabled ?
         if ( !$this->isEnabled() )
             return null;
+
+        // basket exclude
+        if ( $this->getConfig()->getConfigParam( 'blBasketExcludeEnabled' ) ) {
+            if ( !$this->canAddProductToBasket( $sProductID ) ) {
+                $this->setCatChangeWarningState( true );
+                return null;
+            } else {
+                $this->setCatChangeWarningState( false );
+            }
+        }
 
         $sItemId = $this->getItemKey( $sProductID, $aSel, $aPersParam, $blBundle );
         if ( $sOldBasketItemId && ( strcmp( $sOldBasketItemId, $sItemId ) != 0 ) ) {
@@ -439,6 +463,11 @@ class oxBasket extends oxSuperCfg
     public function removeItem( $sItemKey )
     {
         unset( $this->_aBasketContents[$sItemKey] );
+
+        // basket exclude
+        if ( !count($this->_aBasketContents) && $this->getConfig()->getConfigParam( 'blBasketExcludeEnabled' ) ) {
+            $this->setBasketRootCatId(null);
+        }
     }
 
     /**
@@ -1344,7 +1373,7 @@ class oxBasket extends oxSuperCfg
      */
     protected function _setDeprecatedValues()
     {
-        // remove this
+        //TODO: the code below is redudant
         $this->dproductsprice    = $this->_oProductsPriceList->getBruttoSum(); // products brutto price
         $this->dproductsnetprice = $this->getDiscountedNettoPrice();  // products netto price();
 
@@ -1519,6 +1548,11 @@ class oxBasket extends oxSuperCfg
         // deleting basket if session user available
         if ( $oUser = $this->getBasketUser() ) {
             $oUser->getBasket( 'savedbasket' )->delete();
+        }
+
+        // basket exclude
+        if ( $this->getConfig()->getConfigParam( 'blBasketExcludeEnabled' )) {
+            $this->setBasketRootCatId(null);
         }
     }
 
@@ -2339,5 +2373,122 @@ class oxBasket extends oxSuperCfg
         }
 
         return $dArtStock;
+    }
+
+    /**
+     * Checks if product can be added to basket
+     *
+     * @param string $sProductId product id
+     *
+     * @return bool
+     */
+    public function canAddProductToBasket( $sProductId )
+    {
+        $blCanAdd = null;
+
+        // if basket category is not set..
+        if ( $this->_sBasketCategoryId === null ) {
+            $oCat = null;
+
+            // request category
+            if ( $oView = $this->getConfig()->getActiveView() ) {
+                if ( $oCat = $oView->getActCategory() ) {
+                    if ( !$this->_isProductInRootCategory( $sProductId, $oCat->oxcategories__oxrootid->value ) ) {
+                        $oCat = null;
+                    } else {
+                        $blCanAdd = true;
+                    }
+                }
+            }
+
+            // product main category
+            if ( !$oCat ) {
+                $oProduct = oxNew( "oxarticle" );
+                if ( $oProduct->load( $sProductId ) ) {
+                    $oCat = $oProduct->getCategory();
+                }
+            }
+
+            // root category id
+            if ( $oCat ) {
+                $this->setBasketRootCatId($oCat->oxcategories__oxrootid->value);
+            }
+        }
+
+        // avoiding double check..
+        if ( $blCanAdd === null ) {
+            $blCanAdd = $this->_sBasketCategoryId ? $this->_isProductInRootCategory( $sProductId, $this->getBasketRootCatId() ) : true;
+        }
+
+        return $blCanAdd;
+    }
+
+    /**
+     * Checks if product is in root category
+     *
+     * @param string $sProductId product id
+     * @param string $sRootCatId root category id
+     *
+     * @return bool
+     */
+    protected function _isProductInRootCategory( $sProductId, $sRootCatId )
+    {
+        $sO2CTable = getViewName( 'oxobject2category' );
+        $sCatTable = getViewName( 'oxcategories' );
+
+        $oDb = oxDb::getDb();
+        $sParentId  = $oDb->getOne( "select oxparentid from oxarticles where oxid = ".$oDb->quote( $sProductId ) );
+        $sProductId = $sParentId ? $sParentId : $sProductId;
+
+        $sQ = "select 1 from {$sO2CTable}
+                 left join {$sCatTable} on {$sCatTable}.oxid = {$sO2CTable}.oxcatnid
+                 where {$sO2CTable}.oxobjectid = ".$oDb->quote( $sProductId )." and
+                       {$sCatTable}.oxrootid = ".$oDb->quote( $sRootCatId );
+
+        return (bool) $oDb->getOne( $sQ );
+    }
+
+    /**
+     * Set active basket root category
+     *
+     * @param string $sRoot Root category id
+     *
+     * @return null
+     */
+    public function setBasketRootCatId($sRoot)
+    {
+        $this->_sBasketCategoryId = $sRoot;
+    }
+
+    /**
+     * Get active basket root category
+     *
+     * @return string
+     */
+    public function getBasketRootCatId()
+    {
+        return $this->_sBasketCategoryId;
+    }
+
+    /**
+     * Sets category change warn state
+     *
+     * @param bool $blShow to show warning or not
+     *
+     * @return null
+     */
+    public function setCatChangeWarningState( $blShow )
+    {
+        $this->_blShowCatChangeWarning = $blShow;
+    }
+
+    /**
+     * Tells to show category change warning
+     *
+     * @return bool
+     */
+    public function showCatChangeWarning()
+    {
+        return $this->_blShowCatChangeWarning;
     }
 }
