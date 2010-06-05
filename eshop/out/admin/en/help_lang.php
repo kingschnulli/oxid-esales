@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28125 2010-06-03 11:44:01Z arvydas $
+ * @version   SVN: $Id: help_lang.php 28154 2010-06-04 11:24:02Z arvydas $
  */
 
 /**
@@ -146,8 +146,6 @@ $aLang =  array(
                                                     '<li>If the setting is unchecked, the stock value never falls below 0, even if further units are bought.</li></ul>',
 
 'HELP_SHOP_CONFIG_NEWARTBYINSERT'  				=>	'On the front page of your eShop the newest products are shown in <span class="filename_filepath_or_italic">Just arrived!</span>. With this setting you define how the newest products are calculated: by date of creation or by date of last change.',
-
-'HELP_SHOP_CONFIG_NETPRICESHOP'                 =>  '[tr] If Net price mode is enabled net prices are displayed and used in basket calculations',
 
 'HELP_SHOP_CONFIG_LOAD_DYNAMIC_PAGES'			=>	'If this setting is checked, additional information about other oxid products is shown in the menu, e.g. about OXID eFire. Which information is loaded depends on the location of your eShop.',
 

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxviewconfig.php 28156 2010-06-04 11:33:10Z arvydas $
  */
 
 /**
@@ -49,6 +49,13 @@ class oxViewConfig extends oxSuperCfg
      * @var array
      */
     protected $_aConfigParams = array();
+
+    /**
+     * Help page link
+     *
+     * @return string
+     */
+    protected $_sHelpPageLink = null;
 
     /**
      * Returns shops home link
@@ -110,6 +117,35 @@ class oxViewConfig extends oxSuperCfg
 
     /**
      * Returns shop help link
+     *
+     * @return string
+     */
+    public function getHelpPageLink()
+    {
+        if ( $this->_sHelpPageLink === null ) {
+            $oConfig  = $this->getConfig();
+            $sClass   = $this->getActiveClassName();
+            $sLangTag = oxLang::getInstance()->getLanguageTag();
+            $sLink    = false;
+            $sAddQ    = "oxshopid = '".$oConfig->getShopId()."' and oxactive{$sLangTag} = 1 and";
+
+            // checking if there is a custom content for help page
+            $sQ  = "select oxid from oxcontents where {$sAddQ} oxloadid = 'oxhelp".strtolower( $sClass )."' union ";
+            $sQ .= "select oxid from oxcontents where {$sAddQ} oxloadid = 'oxhelpdefault'";
+
+            if ( $sContentId = oxDb::getDb()->getOne( $sQ ) ) {
+                $oContent = oxNew( "oxcontent" );
+                $oContent->load( $sContentId );
+                $sLink = $oContent->getLink();
+            }
+
+            $this->_sHelpPageLink = $sLink ? $sLink : $this->getHelpLink();
+        }
+        return $this->_sHelpPageLink;
+    }
+
+    /**
+     * Returns dynamic shop help link
      *
      * @return string
      */

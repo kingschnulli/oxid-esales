@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxviewconfigTest.php 28156 2010-06-04 11:33:10Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -36,6 +36,43 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
     {
 
         parent::tearDown();
+    }
+
+    /**
+     * oxViewConfig::getHelpPageLink() test case
+     *
+     * @return null
+     */
+    public function testGetHelpPageLink()
+    {
+        $sShopUrl = oxConfig::getInstance()->getConfigParam( "sShopURL" );
+
+        $oViewConfig = $this->getMock( "oxviewconfig", array( "getActiveClassName" ) );
+        $oViewConfig->expects( $this->once() )->method( "getActiveClassName" )->will( $this->returnValue( "start" ) );
+        $this->assertEquals( $sShopUrl . "Hilfe-Die-Startseite/", $oViewConfig->getHelpPageLink() );
+
+        $oViewConfig = $this->getMock( "oxviewconfig", array( "getActiveClassName" ) );
+        $oViewConfig->expects( $this->once() )->method( "getActiveClassName" )->will( $this->returnValue( "alist" ) );
+        $this->assertEquals( $sShopUrl . "Hilfe-Die-Produktliste/", $oViewConfig->getHelpPageLink() );
+
+        $oViewConfig = $this->getMock( "oxviewconfig", array( "getActiveClassName" ) );
+        $oViewConfig->expects( $this->once() )->method( "getActiveClassName" )->will( $this->returnValue( "details" ) );
+        $this->assertEquals( $sShopUrl . "Hilfe-Main/", $oViewConfig->getHelpPageLink() );
+    }
+
+    /**
+     * oxViewConfig::getHelpPageLink() test case
+     *
+     * @return null
+     */
+    public function testGetHelpPageLinkInactiveContents()
+    {
+        modDB::getInstance()->addClassFunction( 'getOne', create_function('$x', 'return false;' ) );
+
+        $oViewConfig = $this->getMock( "oxviewconfig", array( "getActiveClassName", "getHelpLink" ) );
+        $oViewConfig->expects( $this->once() )->method( "getActiveClassName" )->will( $this->returnValue( "start" ) );
+        $oViewConfig->expects( $this->once() )->method( "getHelpLink" );
+        $oViewConfig->getHelpPageLink();
     }
 
     public function testGetHomeLinkEng()

@@ -469,6 +469,19 @@ function _groupExp(el) {
                 <div class="spacer"></div>
             </dl>
 
+            <dl>
+                <dt>
+                    <select name=confbools[blNetPriceShop] class="txt" style="width:100">
+                      <option value="false" [{ $readonly}]>[{ oxmultilang ident="SHOP_CONFIG_NETPRICESHOPOFF" }]</option>
+                      <option value="true" [{if ($confbools.blNetPriceShop)}]selected[{/if}] [{ $readonly}]>[{ oxmultilang ident="SHOP_CONFIG_NETPRICESHOPON" }]</option>
+                    </select>
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_NETPRICESHOP" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
 
          </div>
     </div>

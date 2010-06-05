@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28125 2010-06-03 11:44:01Z arvydas $
+ * @version   SVN: $Id: lang.php 28154 2010-06-04 11:24:02Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -158,6 +158,9 @@ $aLang = array(
 'GENERAL_ARTICLE_OXRRBUY'                       => 'Ausschließlich kaufbar',
 'GENERAL_ARTICLE_OXORDERINFO'                   => 'Bestell. Info',
 'GENERAL_ARTICLE_OXSEOID'                       => 'SEOID',
+'GENERAL_ARTICLE_OXMINDELTIME'                  => 'Min. Lieferzeit',
+'GENERAL_ARTICLE_OXMAXDELTIME'                  => 'Max. Lieferzeit',
+'GENERAL_ARTICLE_OXDELTIMEUNIT'                 => 'Lieferzeit Einheit',
 
 'GENERAL_ARTICLE_OXBUNDLEID'                    => 'Bundle Identnr.',
 'GENERAL_ARTICLE_OXVARSTOCK'                    => 'Varianten Lagerbestand',
@@ -1237,9 +1240,9 @@ $aLang = array(
 'SHOP_CONFIG_MINORDERPRICE'                     => 'Mindestbestellwert (leer lassen, falls nicht gewünscht)',
 'SHOP_CONFIG_MUSTFILLFIELDS'                    => '"Muss"-Felder für die Registrierung des Kunden',
 'SHOP_CONFIG_NEWARTBYINSERT'                    => 'Neueste Artikel nach dem Erstellungsdatum berechnen. (Ansonsten nach Datum der letzten Änderung)',
-'SHOP_CONFIG_NETPRICESHOPOFF'                   => '[tr] Disabled',
-'SHOP_CONFIG_NETPRICESHOPON'                    => '[tr] Enabled',
-'SHOP_CONFIG_NETPRICESHOP'                      => '[tr] Net price mode',
+'SHOP_CONFIG_NETPRICESHOPOFF'                   => 'Inaktiv',
+'SHOP_CONFIG_NETPRICESHOPON'                    => 'Aktiv',
+'SHOP_CONFIG_NETPRICESHOP'                      => 'Nettopreis-Modus',
 'SHOP_CONFIG_NROFCATARTICLES'                   => 'Anzahl der Artikel, die in einer Artikelliste pro Seite angezeigt werden können<br>Warnung: Eine große Anzahl von Artikeln pro Seite (über 100) kann erhebliche Performance-Probleme verursachen!',
 'SHOP_CONFIG_NROFCUSTOMERWHOARTICLES'           => 'Anzahl der Artikel, die bei "Kunden, die dies gekauft haben, haben auch das gekauft" angezeigt werden',
 'SHOP_CONFIG_NROFNEWCOMERARTICLES'              => 'Anzahl der Artikel, die bei "Frisch eingetroffen!" (neuste Artikel) angezeigt werden',
@@ -1288,6 +1291,8 @@ $aLang = array(
 'SHOP_CONFIG_SHOWVOUCHERS'                      => 'Gutscheine aktivieren',
 'SHOP_CONFIG_SHOWOPENID'                        => 'Open ID Login aktivieren',
 'SHOP_CONFIG_SHOWGIFTWRAPPING'                  => 'Geschenkverpackungen aktivieren',
+'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Anzahl der Credit-Punkte für eingeladene und registrierte Benutzer',
+'SHOP_CONFIG_POINTSFORINVITATION'               => 'Anzahl der Credit-Punkte für die Einladenden, wenn seine eingeladene Benutzer registriert',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Prozentsatz gleicher Attribute, damit Artikel ähnlich sind',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Bildqualität - von 0 (schlechteste Qualität, kleine Dateigröße) bis 100 (beste Qualität, große Dateigröße)',
@@ -1490,6 +1495,7 @@ $aLang = array(
 'USER_EXTEND_NEWSLETTER'                        => 'Newsletter',
 'USER_EXTEND_EMAILFAILED'                       => 'E-Mail Adr. ungültig',
 'USER_EXTEND_DISABLEAUTOGROUP'                  => 'Keine automatische Benutzergruppen-Zuordnung',
+'USER_EXTEND_CREDITPOINTS'                      => 'Credit-Punkte',
 'USER_EXTEND_BONI'                              => 'Bonität',
 'USER_LIST_ZIP'                                 => 'PLZ',
 'USER_LIST_PLACE'                               => 'Ort',

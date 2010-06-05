@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28125 2010-06-03 11:44:01Z arvydas $
+ * @version   SVN: $Id: help_lang.php 28154 2010-06-04 11:24:02Z arvydas $
  */
 
 /**
@@ -147,8 +147,6 @@ $aLang =  array(
                                                     '<li>Wenn die Einstellung nicht aktiv ist, fällt der Lagerbestand eines Artikels nie unter 0. Auch dann nicht, wenn der Artikel bereits ausverkauft ist und noch weitere Exemplare bestellt werden.</li></ul>',
 
 'HELP_SHOP_CONFIG_NEWARTBYINSERT'               =>  'Auf der Startseite Ihres eShops werden die unter <span class="filename_filepath_or_italic">Frisch eingetroffen!</span> die neusten Artikel in Ihrem eShop angezeigt. Sie können die Artikel, die hier angezeigt werden, manuell einstellen oder automatisch berechnen lassen. Mit dieser Einstellung wählen Sie, wie die neusten Artikel berechnet werden sollen: Nach dem Datum, an dem die Artikel erstellt wurden, oder nach dem Datum der letzten Änderung.',
-
-'HELP_SHOP_CONFIG_NETPRICESHOP'                 =>  '[tr] If Net price mode is enabled net prices are displayed and used in basket calculations',
 
 'HELP_SHOP_CONFIG_LOAD_DYNAMIC_PAGES'           =>  'Wenn diese Einstellung aktiv ist, werden zusätzliche Informationen zu anderen OXID-Produkten im Administrationsbereich angezeigt, z. B. zu OXID eFire. Welche Informationen geladen werden, hängt vom Standort ihres eShops ab.',
 

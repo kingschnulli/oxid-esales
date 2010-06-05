@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help.php 28138 2010-06-03 13:20:44Z arvydas $
+ * @version   SVN: $Id: help.php 28152 2010-06-04 09:08:15Z arvydas $
  */
 
 /**
@@ -137,13 +137,15 @@ class Help extends oxUBase
     public function getContentId()
     {
         if ( $this->_sHelpContentId === null ) {
-            $oDb = oxDb::getDb();
+            $oDb      = oxDb::getDb();
+            $sLangTag = oxLang::getInstance()->getLanguageTag();
+            $sAddQ    = "oxshopid = '".$this->getConfig()->getShopId()."' and oxactive{$sLangTag} = 1 and";
 
             $sQ = "";
             if ( $sIdent = oxConfig::getParameter( 'oxcid' ) ) {
-                $sQ = "select oxid from oxcontents where oxactive = 1 and oxloadid = " . $oDb->quote( $sIdent ) . " union ";
+                $sQ = "select oxid from oxcontents where {$sAddQ} oxloadid = " . $oDb->quote( $sIdent ) . " union ";
             }
-            $sQ .= "select oxid from oxcontents where oxactive = 1 and oxloadid = 'oxhelpdefault'";
+            $sQ .= "select oxid from oxcontents where {$sAddQ} oxloadid = 'oxhelpdefault'";
 
             // checking if user defined content exists..
             $this->_sHelpContentId = $oDb->getOne( $sQ );

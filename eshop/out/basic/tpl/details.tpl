@@ -194,7 +194,9 @@
         </div>
     [{/oxhasrights}]
 
-    [{include file="inc/del_time.tpl"}]
+    [{if $product->isBuyable() }]
+        [{include file="inc/del_time.tpl"}]
+    [{/if}]
 
     [{if $product->oxarticles__oxweight->value }]
     <div id="test_product_weight" class="pperunit">

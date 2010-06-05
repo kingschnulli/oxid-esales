@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28125 2010-06-03 11:44:01Z arvydas $
+ * @version   SVN: $Id: lang.php 28154 2010-06-04 11:24:02Z arvydas $
  */
 
 /*
@@ -163,6 +163,9 @@ $aLang = array(
 'GENERAL_ARTICLE_OXRRBUY'                       => 'Exclusive buyable',
 'GENERAL_ARTICLE_OXORDERINFO'                   => 'Bestell. Info',
 'GENERAL_ARTICLE_OXSEOID'                       => 'SEOID',
+'GENERAL_ARTICLE_OXMINDELTIME'                  => 'Min. delivery time',
+'GENERAL_ARTICLE_OXMAXDELTIME'                  => 'Max. delivery time',
+'GENERAL_ARTICLE_OXDELTIMEUNIT'                 => 'Delivery time unit',
 
 'GENERAL_ARTICLE_OXBUNDLEID'                    => 'Bundle Identno',
 'GENERAL_ARTICLE_OXVARSTOCK'                    => 'Variant Stock',
@@ -1243,9 +1246,9 @@ $aLang = array(
 'SHOP_CONFIG_MINORDERPRICE'                     => 'Min. Order Price (leave empty to disable)',
 'SHOP_CONFIG_MUSTFILLFIELDS'                    => 'Mandatory fields in User Registration Form',
 'SHOP_CONFIG_NEWARTBYINSERT'                    => 'Calculate newest Products by Date of Creation (otherwise by Date of last Change)',
-'SHOP_CONFIG_NETPRICESHOPOFF'                   => '[tr] Disabled',
-'SHOP_CONFIG_NETPRICESHOPON'                    => '[tr] Enabled',
-'SHOP_CONFIG_NETPRICESHOP'                      => '[tr] Net price mode',
+'SHOP_CONFIG_NETPRICESHOPOFF'                   => 'Disabled',
+'SHOP_CONFIG_NETPRICESHOPON'                    => 'Enabled',
+'SHOP_CONFIG_NETPRICESHOP'                      => 'Net price mode',
 'SHOP_CONFIG_NROFCATARTICLES'                   => 'Number of Products which can be shown in a Product List (Category Pages, Search Results)<br>Attention: A large number of products per page (above 100) can cause serious performance issues!',
 'SHOP_CONFIG_NROFCUSTOMERWHOARTICLES'           => 'Number of Products which are shown in "Customers who bought this product also purchased:"',
 'SHOP_CONFIG_NROFNEWCOMERARTICLES'              => 'Number of Products which are shown in "Just arrived!" (newest Products)',
@@ -1294,6 +1297,8 @@ $aLang = array(
 'SHOP_CONFIG_SHOWVOUCHERS'                      => 'Use vouchers',
 'SHOP_CONFIG_SHOWOPENID'                        => 'Use Open ID',
 'SHOP_CONFIG_SHOWGIFTWRAPPING'                  => 'Use gift wrapping',
+'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Number of credit points for invited and registered user',
+'SHOP_CONFIG_POINTSFORINVITATION'               => 'Number of credit points for inviter, if his invited user registered',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Number of equal Attributes for similar Products (%)',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Picture Quality - from 0 (poor Quality, small File Size) to 100 (best Quality, large File Size)',
@@ -1497,6 +1502,7 @@ $aLang = array(
 'USER_EXTEND_EMAILFAILED'                       => 'E-mail Adr. is Invalid',
 'USER_EXTEND_DISABLEAUTOGROUP'                  => 'Deactivate automatic User Group Assignment',
 'USER_EXTEND_BONI'                              => 'Credit Rating',
+'USER_EXTEND_CREDITPOINTS'                      => 'Credit points',
 'USER_LIST_ZIP'                                 => 'ZIP',
 'USER_LIST_PLACE'                               => 'City',
 'USER_LIST_CUSTOMERNUM'                         => 'Cust No.',
