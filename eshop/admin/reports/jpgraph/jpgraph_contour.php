@@ -207,7 +207,7 @@ class Contour {
      * @param $aCol Column of edge
      * @param $aEdgeDir Determine if this is a horizontal or vertical edge
      * @param $ib The isobar value
-     * @return array
+     * @return unknown_type
      */
     function getCrossingCoord($aRow,$aCol,$aEdgeDir,$aIsobarVal) {
 

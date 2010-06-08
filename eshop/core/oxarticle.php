@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 28108 2010-06-02 16:05:12Z tomas $
+ * @version   SVN: $Id: oxarticle.php 28187 2010-06-07 13:57:36Z sarunas $
  */
 
 // defining supported link types
@@ -1886,6 +1886,31 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
+     * reduce article stock. return the affected amount
+     *
+     * @param double $dAmount              amount to reduce
+     * @param bool   $blAllowNegativeStock are negative stocks allowed?
+     *
+     * @return double
+     */
+    public function reduceStock($dAmount, $blAllowNegativeStock = false)
+    {
+        $this->beforeUpdate();
+
+        $iStockCount = $this->oxarticles__oxstock->value - $dAmount;
+        if (!$blAllowNegativeStock && ($iStockCount < 0)) {
+            $dAmount += $iStockCount;
+            $iStockCount = 0;
+        }
+        $this->oxarticles__oxstock = new oxField($iStockCount);
+
+        $oDb = oxDb::getDb();
+        $oDb->execute( 'update oxarticles set oxarticles.oxstock = '.$oDb->quote( $iStockCount ).' where oxarticles.oxid = '.$oDb->quote( $this->getId() ) );
+        $this->onChange( ACTION_UPDATE_STOCK );
+        return $dAmount;
+    }
+
+    /**
      * Recursive function. Updates quantity of sold articles.
      * Return true on success
      *
@@ -2148,15 +2173,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 return true;
             }
             if ( !$myConfig->getConfigParam( 'blAllowUnevenAmounts' ) ) {
-                //2007-09-04 MK this if is NEVER true, because upper return in if $iStockFlag == 1 or $iStockFlag == 4
-                /* if ( $iStockFlag == 1 || $iStockFlag == 4 ) {
-                    $iOnStock = ceil( $iOnStock );
-                 } else {*/
-                    $iOnStock = floor( $iOnStock );
-                //}
+                $iOnStock = floor( $iOnStock );
             }
         }
-
+        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+            $iOnStock += $this->getSession()->getBasketReservations()->getReservedAmount($this->getId());
+        }
         if ( $iOnStock >= $dAmount ) {
             return true;
         } else {
@@ -2218,7 +2240,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     protected function _setLongDesc($sDbValue)
     {
-        // TODO: eliminate the code below, assignments should go smooth without conversions
+        // TODO: the code below is redundant, optimize it, assignments should go smooth without conversions
         // hack, if editor screws up text, htmledit tends to do so
         $sDbValue = str_replace( '&amp;nbsp;', '&nbsp;', $sDbValue );
         $sDbValue = str_replace( '&amp;', '&', $sDbValue );

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpgenimportTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxerpgenimportTest.php 28184 2010-06-07 12:40:28Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -123,6 +123,22 @@ class Unit_Core_oxErpGenImportTest extends OxidTestCase
         $oImport->setNonPublicVar( '_aCsvFileFieldsOrder', $aCsvFileFieldsOrder );
 
         $aMapped = array( 'oxid' => 'aa', 'oxname' => 'cc' );
+
+        $this->assertEquals( $aMapped, $oImport->UNITmapFields( $aValues, null) );
+    }
+
+    /*
+     * Test method _mapFields() correctly maps data if there are fields with 'NULL' value
+     * (M:1872)
+     */
+    public function testMapFieldsWithNullFields()
+    {
+        $oImport = $this->getProxyClass( "oxErpGenImport" );
+        $aValues = array( 'aa', 'bb', 'NULL' );
+        $aCsvFileFieldsOrder = array( 'OXID'=>'oxid', 'OXNAME'=>'oxname', 'OXVAT'=>'oxvat' );
+        $oImport->setNonPublicVar( '_aCsvFileFieldsOrder', $aCsvFileFieldsOrder );
+
+        $aMapped = array( 'oxid' => 'aa', 'oxname' => 'bb', 'oxvat' => null );
 
         $this->assertEquals( $aMapped, $oImport->UNITmapFields( $aValues, null) );
     }

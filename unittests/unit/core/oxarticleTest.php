@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 27939 2010-05-26 11:53:19Z arvydas $
+ * @version   SVN: $Id: oxarticleTest.php 28187 2010-06-07 13:57:36Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3997,6 +3997,60 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
         $this->oArticle->save();
         $this->assertEquals( 2, $this->oArticle->checkForStock(4));
+    }
+
+    /**
+     * Test check for stock .
+     *
+     * @return null
+     */
+    public function testCheckForStockWithBasketReservation()
+    {
+        modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', false );
+        modConfig::getInstance()->setConfigParam( 'blBasketReservationEnabled', true );
+        $this->oArticle->oxarticles__oxstock = new oxField(2, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
+        $this->oArticle->save();
+        $oBR = $this->getMock('oxBasketReservation', array('getReservedAmount'));
+        $oBR->expects($this->once())->method('getReservedAmount')->with($this->equalTo('_testArt'))->will($this->returnValue(5));
+        $oS = $this->getMock('oxSession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oBR));
+        $oA = $this->getMock('oxarticle', array('getSession'));
+        $oA->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+        $oA->load($this->oArticle->getId());
+        $this->assertEquals( 7, $oA->checkForStock(9));
+    }
+
+    /**
+     * test stock reducing, when negative values are ok
+     */
+    public function testReduceStockNegativeOk()
+    {
+        $this->oArticle->oxarticles__oxstock = new oxField(2, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
+        $this->oArticle->save();
+        $this->assertEquals( 10, $this->oArticle->reduceStock(10, true));
+        $this->assertEquals( -8, $this->oArticle->oxarticles__oxstock->value);
+
+        $oA = new oxarticle();
+        $oA->load($this->oArticle->getId());
+        $this->assertEquals( -8, $oA->oxarticles__oxstock->value);
+    }
+
+    /**
+     * test stock reducing, when negative values are NOT ok
+     */
+    public function testReduceStockNegativeNotOk()
+    {
+        $this->oArticle->oxarticles__oxstock = new oxField(2, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
+        $this->oArticle->save();
+        $this->assertEquals( 2, $this->oArticle->reduceStock(10, false));
+        $this->assertEquals( 0, $this->oArticle->oxarticles__oxstock->value);
+
+        $oA = new oxarticle();
+        $oA->load($this->oArticle->getId());
+        $this->assertEquals( 0, $oA->oxarticles__oxstock->value);
     }
 
     /**

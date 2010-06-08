@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 28156 2010-06-04 11:33:10Z arvydas $
+ * @version   SVN: $Id: oxviewconfig.php 28194 2010-06-07 15:10:53Z rimvydas.paskevicius $
  */
 
 /**
@@ -1130,6 +1130,16 @@ class oxViewConfig extends oxSuperCfg
     public function getActionClassName()
     {
         return $this->getConfig()->getActiveView()->getActionClassName();
+    }
+
+    /**
+     * Returns facebook application key value
+     *
+     * @return string
+     */
+    public function getFbAppKey()
+    {
+        return $this->getConfig()->getConfigParam( 'sFbAppKey' );
     }
 
 }

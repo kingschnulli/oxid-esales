@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 28130 2010-06-03 12:04:06Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxsessionTest.php 28175 2010-06-07 11:24:04Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1540,5 +1540,12 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $oSubj = $this->getProxyClass('oxSession');
         $oSubj->setVar('_stoken', 'test2');
         $this->assertFalse($oSubj->UNITisValidRemoteAccessToken());
+    }
+
+    public function testGetBasketReservations()
+    {
+        $this->assertTrue(oxSession::getInstance()->getBasketReservations() instanceof oxBasketReservation);
+        // test cache
+        $this->assertSame(oxSession::getInstance()->getBasketReservations(), oxSession::getInstance()->getBasketReservations());
     }
 }

@@ -50,7 +50,7 @@ window.onload = function ()
 </tr>
 
 <tr>
-    <td class="listheader first" height="15" colspan="2"><a href="Javascript:document.search.sort.value='oxgroups.oxtitle';document.search.submit();" class="listheader">[{ oxmultilang ident="GENERAL_NAME" }]</a></td>
+    <td class="listheader first" height="15" colspan="2"><a href="Javascript:document.search.sort.value='oxtitle';document.search.submit();" class="listheader">[{ oxmultilang ident="GENERAL_NAME" }]</a></td>
 </tr>
 
 [{assign var="blWhite" value=""}]

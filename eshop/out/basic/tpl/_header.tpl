@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html[{if $oView->getActiveLangAbbr()}] lang="[{ $oView->getActiveLangAbbr() }]"[{/if}]>
+<html[{if $oView->getActiveLangAbbr()}] lang="[{ $oView->getActiveLangAbbr() }]"[{/if}] xmlns="http://www.w3.org/1999/xhtml" [{if $oViewConf->getFbAppKey()}]xmlns:fb="http://www.facebook.com/2008/fbml"[{/if}]>
 <head>
     [{assign var="_titlesuffix" value=$_titlesuffix|default:$oView->getTitleSuffix()}]
     [{assign var="_titleprefix" value=$_titleprefix|default:$oView->getTitlePrefix() }]

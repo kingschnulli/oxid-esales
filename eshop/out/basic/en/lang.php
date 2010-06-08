@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28140 2010-06-03 13:50:15Z vilma $
+ * @version   SVN: $Id: lang.php 28195 2010-06-07 15:11:17Z rimvydas.paskevicius $
  */
 
 
@@ -1279,12 +1279,21 @@ $aLang = array(
 'EMAIL_INVITE_HTML_EMAIL'                         => "eMail:",
 'EMAIL_INVITE_HTML_MENYGREETINGS'                 => "Many Greetings,",
 
-'PROMO_WILLENDIN_PREFIX'   => 'Will end in ',
-'PROMO_WILLENDIN_SUFFIX'   => '!',
-'PROMO_WILLSTARTIN_PREFIX' => 'Will start in ',
-'PROMO_WILLSTARTIN_SUFFIX' => '',
-'PROMO_ONEDAY'             => 'one day',
-'PROMO_DAYS'               => 'days',
+'PROMO_WILLENDIN_PREFIX'                          => 'Will end in ',
+'PROMO_WILLENDIN_SUFFIX'                          => '!',
+'PROMO_WILLSTARTIN_PREFIX'                        => 'Will start in ',
+'PROMO_WILLSTARTIN_SUFFIX'                        => '',
+'PROMO_ONEDAY'                                    => 'one day',
+'PROMO_DAYS'                                      => 'days',
+
+'FACEBOOK_LOCALE'                                 => 'en_US',
+'FACEBOOK_COMMENTS'                               => 'Facebook comments',
+'FACEBOOK_CHAT'                                   => 'Facebook chat',
+'FACEBOOK_INVITE'                                 => 'Facebook invite',
+'FACEBOOK_FACEPILE'                               => 'Facebook facepile',
+'FACEBOOK_INVITEHEADER'                           => 'Invite your Friends',
+'FACEBOOK_INVITETEXT'                             => 'Check this out. Simply click on the button below to go recommended product.',
+'FACEBOOK_INVITEBUTTONTEXT'                       => 'Open website',
 
 );
 

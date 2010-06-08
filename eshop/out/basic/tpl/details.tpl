@@ -292,6 +292,11 @@
     </div>
 
     [{include file="inc/bookmarks.tpl"}]
+
+    [{ include file="inc/facebook/fb_share.tpl" }]
+    [{ include file="inc/facebook/fb_like.tpl" }]
+
+
 </div>
 </div>
 
@@ -332,6 +337,12 @@
     </table>
 </div>
 [{/if}]
+
+[{include file="inc/facebook/fb_comments.tpl"}]
+
+[{include file="inc/facebook/fb_invite.tpl"}]
+
+[{include file="inc/facebook/fb_chat.tpl"}]
 
 [{include file="inc/media.tpl"}]
 

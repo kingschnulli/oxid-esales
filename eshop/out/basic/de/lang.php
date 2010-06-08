@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28140 2010-06-03 13:50:15Z vilma $
+ * @version   SVN: $Id: lang.php 28195 2010-06-07 15:11:17Z rimvydas.paskevicius $
  */
 
 
@@ -1286,6 +1286,15 @@ $aLang = array(
 'PROMO_WILLSTARTIN_SUFFIX' => '',
 'PROMO_ONEDAY'             => 'einem Tag',
 'PROMO_DAYS'               => 'Tagen',
+
+'FACEBOOK_LOCALE'                                 => 'de_DE',
+'FACEBOOK_COMMENTS'                               => '[tr]Facebook comments',
+'FACEBOOK_CHAT'                                   => '[tr]Facebook chat',
+'FACEBOOK_INVITE'                                 => '[tr]Facebook invite',
+'FACEBOOK_FACEPILE'                               => '[tr]Facebook facepile',
+'FACEBOOK_INVITEHEADER'                           => '[tr]Invite your Friends',
+'FACEBOOK_INVITETEXT'                             => '[tr]Check this out. Simply click on the button below to go recommended product.',
+'FACEBOOK_INVITEBUTTONTEXT'                       => '[tr]Open website',
 
 
 );

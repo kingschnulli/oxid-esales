@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 28089 2010-06-02 13:49:19Z michael.keiluweit $
+ * @version   SVN: $Id: oxbasket.php 28168 2010-06-07 08:07:29Z michael.keiluweit $
  */
 
 /**
@@ -1373,7 +1373,7 @@ class oxBasket extends oxSuperCfg
      */
     protected function _setDeprecatedValues()
     {
-        //TODO: the code below is redudant
+        //TODO: the code below is redundant
         $this->dproductsprice    = $this->_oProductsPriceList->getBruttoSum(); // products brutto price
         $this->dproductsnetprice = $this->getDiscountedNettoPrice();  // products netto price();
 

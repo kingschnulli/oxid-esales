@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: test_utils.php 27229 2010-04-15 11:57:07Z arvydas $
+ * @version   SVN: $Id: test_utils.php 28198 2010-06-07 15:29:32Z michael.keiluweit $
  */
 
 define ('MAX_LOOP_AMOUNT', 4);
@@ -583,7 +583,7 @@ class modSession extends modOXID
    /**
      * Keeps test session vars
      *
-     * @var unknown_type
+     * @var array
      */
     protected  $_aSessionVars = array();
 

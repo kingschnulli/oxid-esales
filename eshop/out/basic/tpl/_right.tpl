@@ -121,3 +121,5 @@
         <div>[{include file="inc/rightlist.tpl" list=$oView->getAlsoBoughtTheseProducts() altproduct=$product test_Type=customerwho}]</div>
     </div>
 [{ /if }]
+
+[{ include file="inc/facebook/fb_facepile.tpl" }]

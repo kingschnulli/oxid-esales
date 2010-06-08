@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: helpTest.php 28141 2010-06-03 13:52:48Z arvydas $
+ * @version   SVN: $Id: helpTest.php 28177 2010-06-07 11:35:27Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -65,26 +65,5 @@ class Unit_Views_helpTest extends OxidTestCase
         modConfig::setParameter( 'tpl', null );
         $oHelp = new help();
         $this->assertFalse( $oHelp->getHelpText() );
-    }
-
-    /**
-     * Help::getContentId() test case
-     *
-     * @return null
-     */
-    public function testGetContentId()
-    {
-        // existing content
-        $sHelpListId = 'oxhelpalist';
-        modConfig::setParameter( "oxcid", $sHelpListId );
-
-        $oHelp = new Help();
-        $this->assertEquals( oxDb::getDb()->getOne( "select oxid from oxcontents where oxloadid = '{$sHelpListId}'" ), $oHelp->getContentId() );
-
-        // non existing content
-        modConfig::setParameter( "oxcid", 'oxhelpnone' );
-
-        $oHelp = new Help();
-        $this->assertEquals( oxDb::getDb()->getOne( "select oxid from oxcontents where oxloadid = 'oxhelpdefault'" ), $oHelp->getContentId() );
     }
 }

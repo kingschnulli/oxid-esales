@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: OxidTestCase.php 27441 2010-04-29 11:05:06Z sarunas $
+ * @version   SVN: $Id: OxidTestCase.php 28198 2010-06-07 15:29:32Z michael.keiluweit $
  */
 
 
@@ -225,7 +225,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
     /**
      * Cleans up table
      *
-     * @param unknown_type $sTable
+     * @param string $sTable
      */
     public function cleanUpTable($sTable, $sColName = null)
     {
@@ -320,8 +320,9 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
     /**
      * Converts a string to UTF format.
      *
-     * @param unknown_type $s
-     * @return unknown
+     * @param string $sVal
+     *      
+     * @return string
      */
     protected function _2Utf($sVal)
     {

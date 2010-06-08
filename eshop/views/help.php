@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help.php 28152 2010-06-04 09:08:15Z arvydas $
+ * @version   SVN: $Id: help.php 28177 2010-06-07 11:35:27Z arvydas $
  */
 
 /**
@@ -27,6 +27,8 @@
  * Arranges shop help information window, with help texts. (Help
  * text may be changed in file (shop directory) -> help ->
  * default.inc.tpl ). OXID eShop -> HELP.
+ *
+ * @deprecated this class is deprecated, help pages are now managed by CMS
  */
 class Help extends oxUBase
 {
@@ -47,13 +49,6 @@ class Help extends oxUBase
      * @var string
      */
     protected $_sDefaultPage = 'default';
-
-    /**
-     * Help content ident
-     *
-     * @var string
-     */
-    protected $_sHelpContentId = null;
 
     /**
      * Current view search engine indexing state
@@ -86,8 +81,6 @@ class Help extends oxUBase
      * @param string $sHelpPage help page name
      * @param string $sLang     help language
      *
-     * @deprecated should be used help::getContentId() instead
-     *
      * @return string | false
      */
     protected function _getHelpPageContents( $sHelpPage, $sLang )
@@ -114,8 +107,6 @@ class Help extends oxUBase
     /**
      * Template variable getter. Returns help text
      *
-     * @deprecated should be used help::getContentId() instead
-     *
      * @return string
      */
     public function getHelpText()
@@ -126,31 +117,5 @@ class Help extends oxUBase
             $this->_sHelpText = $this->_getHelpPageContents( $sHelpPage, oxLang::getInstance()->getBaseLanguage() );
         }
         return $this->_sHelpText;
-    }
-
-    /**
-     * Template variable getter. Returns active content id.
-     * If no content id specified, uses "impressum" content id
-     *
-     * @return object
-     */
-    public function getContentId()
-    {
-        if ( $this->_sHelpContentId === null ) {
-            $oDb      = oxDb::getDb();
-            $sLangTag = oxLang::getInstance()->getLanguageTag();
-            $sAddQ    = "oxshopid = '".$this->getConfig()->getShopId()."' and oxactive{$sLangTag} = 1 and";
-
-            $sQ = "";
-            if ( $sIdent = oxConfig::getParameter( 'oxcid' ) ) {
-                $sQ = "select oxid from oxcontents where {$sAddQ} oxloadid = " . $oDb->quote( $sIdent ) . " union ";
-            }
-            $sQ .= "select oxid from oxcontents where {$sAddQ} oxloadid = 'oxhelpdefault'";
-
-            // checking if user defined content exists..
-            $this->_sHelpContentId = $oDb->getOne( $sQ );
-        }
-
-        return $this->_sHelpContentId;
     }
 }

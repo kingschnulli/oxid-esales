@@ -59,6 +59,9 @@
 [{oxid_include_dynamic file="dyn/newbasketitem_popup.tpl"}]
 [{if $scRootCatChanged}][{include file="inc/popup_scbasketexcl.tpl"}][{/if}]
 [{oxscript include="oxid.js"}]
+
+[{ include file="inc/facebook/fb_init.tpl" sFbAppKey=$oViewConf->getFbAppKey() }]
+
 [{oxscript}][{oxid_include_dynamic file="dyn/oxscript.tpl" }]
 <!--[if lt IE 7]><script type="text/javascript">oxid.popup.addShim();</script><![endif]-->
 </body>

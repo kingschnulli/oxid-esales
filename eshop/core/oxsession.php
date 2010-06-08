@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 28126 2010-06-03 11:58:33Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxsession.php 28175 2010-06-07 11:24:04Z sarunas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -96,6 +96,13 @@ class oxSession extends oxSuperCfg
      * @var object
      */
     protected $_oBasket = null;
+
+    /**
+     * Basket reservations object
+     *
+     * @var object
+     */
+    protected $_oBasketReservations = null;
 
     /**
      * Array of Classes => methods, which requires forced cookies support
@@ -1047,5 +1054,18 @@ class oxSession extends oxSuperCfg
         $blValid = $sInputToken && $blTokenEqual;
 
         return $blValid;
+    }
+
+    /**
+     * return basket reservations handler object
+     * 
+     * @return oxBasketReservation
+     */
+    public function getBasketReservations()
+    {
+        if (!$this->_oBasketReservations) {
+            $this->_oBasketReservations = oxNew('oxBasketReservation');
+        }
+        return $this->_oBasketReservations;
     }
 }
