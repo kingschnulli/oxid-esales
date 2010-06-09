@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28154 2010-06-04 11:24:02Z arvydas $
+ * @version   SVN: $Id: help_lang.php 28217 2010-06-08 12:14:23Z rimvydas.paskevicius $
  */
 
 /**
@@ -157,6 +157,10 @@ $aLang =  array(
                                                     'Wenn die Prüfung ausgeschaltet ist, wird immer die für das entsprechende Land eingestelle Umsatzsteuer berechnet.',
 
 'HELP_SHOP_CONFIG_ALTVATIDCHECKINTERFACEWSDL'   =>  'Hier können Sie eine alternative URL für die Online UST-ID Prüfung eingeben.',
+
+'HELP_SHOP_CONFIG_POINTSFORINVITATION'          =>  '[tr]The amount of credit points gets user who invited somebody to shop. User gets credit points only if invited user registers into shop.',
+
+'HELP_SHOP_CONFIG_POINTSFORREGISTRATION'        =>  '[tr]The amount of credit points gets user who was invited by already registered user. Invited user must register to get these points.',
 
 'HELP_SHOP_MALL_MALLMODE'                       =>  'Hier stellen Sie ein, was auf der Startseite dieses eShops angezeigt werden soll: '.
                                                     '<ul><li><span class="navipath_or_inputname">Shop-Auswahlseite</span>: Eine Seite wird angezeigt, auf der Kunden zwischen den verschiedenen Shops wählen können.</li>' .

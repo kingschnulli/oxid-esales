@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: details.php 28209 2010-06-08 08:42:03Z arvydas $
  */
 
 /**
@@ -1328,9 +1328,11 @@ class Details extends oxUBase
         if ( ( $oProduct = $this->getProduct() ) ) {
             $oUtils = oxUtilsUrl::getInstance();
             if ( oxUtils::getInstance()->seoIsActive() ) {
-                return $oUtils->processUrl( $oProduct->getBaseSeoLink( $oProduct->getLanguage(), true ) );
+                $sUrl = $oUtils->prepareCanonicalUrl( $oProduct->getBaseSeoLink( $oProduct->getLanguage(), true ) );
+            } else {
+                $sUrl = $oUtils->prepareCanonicalUrl( $oProduct->getBaseStdLink( $oProduct->getLanguage() ) );
             }
-            return $oUtils->processUrl( $oProduct->getBaseStdLink( $oProduct->getLanguage()  ) );
+            return $sUrl;
         }
     }
 

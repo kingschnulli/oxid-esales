@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfield.php 28107 2010-06-02 15:59:10Z tomas $
+ * @version   SVN: $Id: oxfield.php 28225 2010-06-08 12:32:23Z sarunas $
  */
 
 /**
@@ -145,7 +145,7 @@ class oxField // extends oxSuperCfg
      */
     public function __toString()
     {
-        return $this->value;
+        return (string)$this->value;
     }
 
     /**

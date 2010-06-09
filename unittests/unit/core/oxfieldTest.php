@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfieldTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxfieldTest.php 28225 2010-06-08 12:32:23Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -145,5 +145,11 @@ class Unit_Core_oxfieldTest extends OxidTestCase
         $oField->setValue("ssss<\n>", oxField::T_RAW);
         $this->assertEquals("ssss<\n>", $oField->value);
         $this->assertEquals("ssss<\n>", $oField->getRawValue());
+    }
+
+    public function testToString()
+    {
+        $oField = new oxField(451);
+        $this->assertSame("451", (string)$oField);
     }
 }

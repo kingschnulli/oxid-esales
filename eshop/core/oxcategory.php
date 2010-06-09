@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategory.php 27908 2010-05-25 14:54:30Z arvydas $
+ * @version   SVN: $Id: oxcategory.php 28204 2010-06-08 06:36:11Z michael.keiluweit $
  */
 
 /**
@@ -147,7 +147,7 @@ class oxCategory extends oxI18n implements oxIUrl
      *
      * @param string $sName name of variable to get
      *
-     * @return unknown
+     * @return string
      */
     public function __get( $sName )
     {

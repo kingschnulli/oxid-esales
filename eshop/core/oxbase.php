@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 28106 2010-06-02 15:59:01Z tomas $
+ * @version   SVN: $Id: oxbase.php 28204 2010-06-08 06:36:11Z michael.keiluweit $
  */
 
 /**
@@ -625,7 +625,7 @@ class oxBase extends oxSuperCfg
      *
      * @param string $sSelect SQL statement
      *
-     * @return unknown
+     * @return bool
      */
     public function assignRecord( $sSelect)
     {

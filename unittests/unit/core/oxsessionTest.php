@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 28175 2010-06-07 11:24:04Z sarunas $
+ * @version   SVN: $Id: oxsessionTest.php 28200 2010-06-07 15:40:54Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,7 +30,7 @@ class Unit_oxsessionTest_oxUtilsServer extends oxUtilsServer
     /**
      * $_COOKIE alternative for testing
      *
-     * @var unknown_type
+     * @var array
      */
     protected $_aCookieVars = array();
 
@@ -66,7 +66,7 @@ class Unit_oxsessionTest_oxUtilsObject extends oxUtilsObject
     /**
      * Overriding original oxUtilsObject::generateUID()
      *
-     * @return unknown
+     * @return string
      */
     public function generateUid()
     {
@@ -82,7 +82,7 @@ class testSession extends oxSession
     /**
      * Keeps test session vars
      *
-     * @var unknown_type
+     * @var array
      */
     static protected  $_aSessionVars = array();
 
@@ -102,7 +102,8 @@ class testSession extends oxSession
      * Gets session var for testing
      *
      * @param string $sVar
-     * @return unknown
+     *      
+     * @return string 
      */
     static public function getVar($sVar)
     {
@@ -165,7 +166,7 @@ class Unit_Core_oxsessionTest extends OxidTestCase
     /**
      * Original oxConfig instance
      *
-     * @var unknown_type
+     * @var object
      */
     protected $_oOriginalConfig = null;
 

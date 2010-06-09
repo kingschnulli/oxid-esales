@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28154 2010-06-04 11:24:02Z arvydas $
+ * @version   SVN: $Id: lang.php 28218 2010-06-08 12:14:47Z rimvydas.paskevicius $
  */
 
 $sLangName  = 'Deutsch';
@@ -1293,6 +1293,7 @@ $aLang = array(
 'SHOP_CONFIG_SHOWGIFTWRAPPING'                  => 'Geschenkverpackungen aktivieren',
 'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Anzahl der Credit-Punkte für eingeladene und registrierte Benutzer',
 'SHOP_CONFIG_POINTSFORINVITATION'               => 'Anzahl der Credit-Punkte für die Einladenden, wenn seine eingeladene Benutzer registriert',
+'SHOP_CONFIG_FACEBOOKAPPID'                    => '[tr]Facebook Application ID',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Prozentsatz gleicher Attribute, damit Artikel ähnlich sind',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Bildqualität - von 0 (schlechteste Qualität, kleine Dateigröße) bis 100 (beste Qualität, große Dateigröße)',

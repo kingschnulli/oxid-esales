@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxopenidsessionTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxopenidsessionTest.php 28201 2010-06-07 15:41:47Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -33,7 +33,7 @@ class modOpenidSession extends oxSession
     /**
      * Keeps test session vars
      *
-     * @var unknown_type
+     * @var array
      */
     static protected  $_aSessionVars = array();
 
@@ -53,7 +53,8 @@ class modOpenidSession extends oxSession
      * Gets session var for testing
      *
      * @param string $sVar
-     * @return unknown
+     *      
+     * @return string
      */
     static public function getVar($sVar)
     {

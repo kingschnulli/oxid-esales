@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: startTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: startTest.php 28209 2010-06-08 08:42:03Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -55,6 +55,14 @@ class Unit_Views_startTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'getViewConfig')->will( $this->returnValue( $oViewConfig ));
 
         $this->assertEquals( 'testHomeLink', $oView->getCanonicalUrl() );
+    }
+
+    public function testGetRealSeoCanonicalUrl()
+    {
+        oxTestModules::addFunction( "oxutils", "seoIsActive", "{return true;}" );
+
+        $oView = new start();
+        $this->assertEquals( oxConfig::getInstance()->getConfigParam( "sShopURL" ), $oView->getCanonicalUrl() );
     }
 
     public function testGetArticleList()

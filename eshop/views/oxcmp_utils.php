@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_utils.php 27252 2010-04-16 08:52:31Z tomas $
+ * @version   SVN: $Id: oxcmp_utils.php 28214 2010-06-08 12:06:29Z sarunas $
  */
 
 /**
@@ -192,7 +192,7 @@ class oxcmp_utils extends oxView
     }
 
     /**
-     * Adds chosen product to defined user list
+     * Adds chosen product to defined user list. if amount is 0, item is removed from the list
      *
      * @param string $sListType  user product list type
      * @param string $sProductId product id
@@ -218,7 +218,7 @@ class oxcmp_utils extends oxView
             }
 
             $oBasket = $oUser->getBasket( $sListType );
-            $oBasket->addItemToBasket( $sProductId, abs( $dAmount ), $aSel );
+            $oBasket->addItemToBasket( $sProductId, abs( $dAmount ), $aSel, ($dAmount == 0) );
 
             // recalculate basket count
             $oBasket->getItemCount( true );

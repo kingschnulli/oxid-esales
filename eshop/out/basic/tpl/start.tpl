@@ -1,9 +1,5 @@
 [{include file="_header.tpl" title=$template_title location="START_TITLE"|oxmultilangassign isStart=true usePromotionsCss=$oView->getShowPromotionList()}]
 
-[{if $oView->isDemoShop()}]
-    [{include file="inc/admin_banner.tpl"}]
-[{/if}]
-
 [{oxifcontent ident="oxstartwelcome" object="oCont"}]
 <div class="welcome">[{$oCont->oxcontents__oxcontent->value}]</div>
 [{/oxifcontent}]

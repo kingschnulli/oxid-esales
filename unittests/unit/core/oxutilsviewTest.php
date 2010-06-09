@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsviewTest.php 27772 2010-05-17 11:51:07Z arvydas $
+ * @version   SVN: $Id: oxutilsviewTest.php 28223 2010-06-08 12:28:06Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -228,7 +228,38 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
                          'template_dir'    => $aTemplatesDir,
                          'compile_id'      => md5($myConfig->getTemplateDir( false )),
                          'debugging'       => true,
-                         'compile_check'   => true );
+                         'compile_check'   => true,
+                         'security_settings' => array (
+                                                  'PHP_HANDLING' => false,
+                                                  'IF_FUNCS' =>
+                                                  array (
+                                                    0 => 'array',
+                                                    1 => 'list',
+                                                    2 => 'isset',
+                                                    3 => 'empty',
+                                                    4 => 'count',
+                                                    5 => 'sizeof',
+                                                    6 => 'in_array',
+                                                    7 => 'is_array',
+                                                    8 => 'true',
+                                                    9 => 'false',
+                                                    10 => 'null',
+                                                    11 => 'XML_ELEMENT_NODE',
+                                                  ),
+                                                  'INCLUDE_ANY' => false,
+                                                  'PHP_TAGS' => false,
+                                                  'MODIFIER_FUNCS' =>
+                                                  array (
+                                                    0 => 'count',
+                                                    1 => 'round',
+                                                    2 => 'floor',
+                                                    3 => 'trim',
+                                                    4 => 'is_array',
+                                                  ),
+                                                  'ALLOW_CONSTANTS' => true,
+                                                  'ALLOW_SUPER_GLOBALS' => true,
+                                                )
+                );
 
 
         $oSmarty = $this->getMock( 'smarty', array( 'register_resource' ) );

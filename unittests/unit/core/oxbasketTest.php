@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 28060 2010-06-02 08:38:33Z alfonsas $
+ * @version   SVN: $Id: oxbasketTest.php 28211 2010-06-08 08:58:41Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1050,6 +1050,31 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     }
 
     /**
+     * Testing if article removal from reserved basket really works
+     */
+    public function testRemoveItemReserved()
+    {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        $oBR = $this->getMock('oxBasketReservation', array('discardArticleReservation'));
+        $oBR->expects($this->once())->method('discardArticleReservation')->with($this->equalTo($this->oArticle->getId()))->will($this->returnValue(null));
+        $oS = $this->getMock('oxSession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oBR));
+        $oBasket = $this->getMock('oxbasket', array('getSession'));
+        $oBasket->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $oItem = $oBasket->addToBasket( $this->oArticle->getId(), 10, null, null, false, true );
+        $sKey  = key( $oBasket->getContents() );
+
+        // testing if THIS item was added
+        $this->assertEquals( $this->oArticle->getId(), $oItem->getProductId() );
+
+        $oBasket->removeItem( $sKey );
+
+        // testing if it was removed
+        $this->assertEquals( array(), $oBasket->getContents() );
+    }
+
+    /**
      * Testing if bundle article removal from basket really works
      */
     public function testClearBundles()
@@ -1936,10 +1961,63 @@ class Unit_Core_oxbasketTest extends OxidTestCase
                                  '_setDeprecatedValues',
                                  '_calcBasketWrapping',
                                  '_mergeSavedBasket',
-                                 'afterUpdate' );
+                                 'afterUpdate',
+                                 'getSession' );
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+        $oS = $this->getMock('oxSession', array('getBasketReservations'));
+        $oS->expects($this->never())->method('getBasketReservations');
+        $oBasket = $this->getMock('oxbasket', $aMethodsToTest);
+        $oBasket->expects($this->any())->method('getSession')->will($this->returnValue($oS));
 
-        //
-        $oBasket = $this->getMock( 'oxbasket', $aMethodsToTest );
+        $oBasket->expects( $this->once() )->method( 'isEnabled' )->will( $this->returnValue( true ) );
+        $oBasket->expects( $this->once() )->method( '_mergeSavedBasket' );
+        $oBasket->expects( $this->once() )->method( '_clearBundles' );
+        $oBasket->expects( $this->once() )->method( '_addBundles' );
+        $oBasket->expects( $this->once() )->method( '_calcItemsPrice' );
+        $oBasket->expects( $this->once() )->method( '_calcBasketDiscount' );
+        $oBasket->expects( $this->once() )->method( '_calcBasketTotalDiscount' );
+        $oBasket->expects( $this->once() )->method( '_calcVoucherDiscount' );
+        $oBasket->expects( $this->once() )->method( '_applyDiscounts' );
+        $oBasket->expects( $this->exactly( 3 ) )->method( 'setCost' );
+        $oBasket->expects( $this->once() )->method( '_calcTotalPrice' );
+        $oBasket->expects( $this->once() )->method( '_setDeprecatedValues' );
+        $oBasket->expects( $this->once() )->method( 'afterUpdate' );
+        $oBasket->expects( $this->once() )->method( '_calcBasketWrapping' );
+
+        $oBasket->calculateBasket( false );
+    }
+
+    /**
+     * Testing final basket calculator
+     */
+    public function testCalculateBasketReserveBasket()
+    {
+        modConfig::getInstance()->setConfigParam( 'blCalcVATForDelivery', false );
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', true );
+        modConfig::getInstance()->setConfigParam( 'blPerfNoBasketSaving', false );
+
+        $aMethodsToTest = array( 'isEnabled',
+                                 '_clearBundles',
+                                 '_addBundles',
+                                 '_calcItemsPrice',
+                                 '_calcBasketDiscount',
+                                 '_calcBasketTotalDiscount',
+                                 '_calcVoucherDiscount',
+                                 '_applyDiscounts',
+                                 'setCost',
+                                 '_calcTotalPrice',
+                                 '_setDeprecatedValues',
+                                 '_calcBasketWrapping',
+                                 '_mergeSavedBasket',
+                                 'afterUpdate',
+                                 'getSession' );
+        $oBasket = $this->getMock('oxbasket', $aMethodsToTest);
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        $oBR = $this->getMock('oxBasketReservation', array('reserveBasket'));
+        $oBR->expects($this->once())->method('reserveBasket')->with($this->equalTo($oBasket))->will($this->returnValue(null));
+        $oS = $this->getMock('oxSession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oBR));
+        $oBasket->expects($this->any())->method('getSession')->will($this->returnValue($oS));
 
         $oBasket->expects( $this->once() )->method( 'isEnabled' )->will( $this->returnValue( true ) );
         $oBasket->expects( $this->once() )->method( '_mergeSavedBasket' );
@@ -2347,9 +2425,36 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     /**
      * Testing if basket deletion really destroys session basket
      */
-    public function testDeleteBasket()
+    public function testDeleteBasketNotReserved()
     {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+        $oS = $this->getMock('oxSession', array('getBasketReservations'));
+        $oS->expects($this->never())->method('getBasketReservations');
+        $oBasket = $this->getMock('oxbasket', array('getSession'));
+        $oBasket->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $oBasket->setOrderId( 'xxx' );
+        oxConfig::getInstance()->setGlobalParameter( 'blPerfNoBasketSaving', false );
+        $oBasket->deleteBasket();
+
+        // now loading and testing if its the same
         $oBasket = oxSession::getInstance()->getBasket();
+        $this->assertNull( $oBasket->getOrderId() );
+    }
+
+    /**
+     * Testing if basket deletion really destroys session basket
+     */
+    public function testDeleteBasketReserved()
+    {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        $oBR = $this->getMock('oxBasketReservation', array('discardReservations'));
+        $oBR->expects($this->once())->method('discardReservations')->will($this->returnValue(null));
+        $oS = $this->getMock('oxSession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oBR));
+        $oBasket = $this->getMock('oxbasket', array('getSession'));
+        $oBasket->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
         $oBasket->setOrderId( 'xxx' );
         oxConfig::getInstance()->setGlobalParameter( 'blPerfNoBasketSaving', false );
         $oBasket->deleteBasket();

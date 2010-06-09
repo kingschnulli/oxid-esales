@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28186 2010-06-07 13:31:13Z arvydas $
+ * @version   SVN: $Id: lang.php 28218 2010-06-08 12:14:47Z rimvydas.paskevicius $
  */
 
 /*
@@ -1299,6 +1299,7 @@ $aLang = array(
 'SHOP_CONFIG_SHOWGIFTWRAPPING'                  => 'Use gift wrapping',
 'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Number of credit points for invited and registered user',
 'SHOP_CONFIG_POINTSFORINVITATION'               => 'Number of credit points for inviter, if his invited user registered',
+'SHOP_CONFIG_FACEBOOKAPPID'                     => 'Facebook Application ID',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Number of equal Attributes for similar Products (%)',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Picture Quality - from 0 (poor Quality, small File Size) to 100 (best Quality, large File Size)',

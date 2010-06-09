@@ -1,4 +1,4 @@
-        [{if $oViewConf->getFbAppKey()}]
+        [{if $oViewConf->getFbAppId()}]
         <br><br><br>
         <fb:share-button type="button"></fb:share-button>
         [{/if}]

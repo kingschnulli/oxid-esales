@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 28125 2010-06-03 11:44:01Z arvydas $
+ * @version   SVN: $Id: oxuserTest.php 28199 2010-06-07 15:39:25Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -88,7 +88,7 @@ class Unit_oxuserTest_oxUtilsServer2 extends oxUtilsServer
     /**
      * $_COOKIE alternative for testing
      *
-     * @var unknown_type
+     * @var array
      */
     protected $_aCookieVars = array();
 

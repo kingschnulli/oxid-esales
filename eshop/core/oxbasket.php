@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 28168 2010-06-07 08:07:29Z michael.keiluweit $
+ * @version   SVN: $Id: oxbasket.php 28211 2010-06-08 08:58:41Z sarunas $
  */
 
 /**
@@ -462,6 +462,16 @@ class oxBasket extends oxSuperCfg
      */
     public function removeItem( $sItemKey )
     {
+        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+            if (isset($this->_aBasketContents[$sItemKey])) {
+                $sArticleId = $this->_aBasketContents[$sItemKey]->getProductId();
+                if ($sArticleId) {
+                    $this->getSession()
+                            ->getBasketReservations()
+                            ->discardArticleReservation($sArticleId);
+                }
+            }
+        }
         unset( $this->_aBasketContents[$sItemKey] );
 
         // basket exclude
@@ -1162,6 +1172,11 @@ class oxBasket extends oxSuperCfg
         //  3. generate bundle items
         $this->_addBundles();
 
+        // reserve active basket
+        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+            $this->getSession()->getBasketReservations()->reserveBasket($this);
+        }
+
         //  4. calculating item prices
         $this->_calcItemsPrice();
 
@@ -1604,6 +1619,10 @@ class oxBasket extends oxSuperCfg
     public function deleteBasket()
     {
         $this->getSession()->delBasket();
+
+        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+            $this->getSession()->getBasketReservations()->discardReservations();
+        }
 
         // merging basket history
         if ( !$this->getConfig()->getConfigParam( 'blPerfNoBasketSaving' ) ) {

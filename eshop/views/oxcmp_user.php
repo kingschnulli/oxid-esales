@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 28128 2010-06-03 12:00:14Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxcmp_user.php 28222 2010-06-08 12:25:20Z rimvydas.paskevicius $
  */
 
 // defining login/logout states
@@ -911,7 +911,7 @@ class oxcmp_user extends oxView
             $oDb = oxDb::getDb();
 
             // updating users statistics
-            $oDb->execute( "UPDATE oxinvitations SET oxpending = '0', oxaccepted = '1' where oxuserid = {$oDB->quote($sUserId)} " );
+            $oDb->execute( "UPDATE oxinvitations SET oxpending = '0', oxaccepted = '1' where oxuserid = {$oDb->quote($sUserId)} " );
 
             if ($iInv = $myConfig->getConfigParam( 'dPointsForInvitation' )) {
                 $oInvUser = oxNew( 'oxuser' );

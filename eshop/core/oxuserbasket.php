@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasket.php 27215 2010-04-14 14:24:54Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxuserbasket.php 28214 2010-06-08 12:06:29Z sarunas $
  */
 
 /**
@@ -86,8 +86,9 @@ class oxUserBasket extends oxBase
             $this->oxuserbaskets__oxpublic = new oxField(1, oxField::T_RAW);
         }
 
-        // set oxcreate
-        $this->oxuserbaskets__oxcreate = new oxField( oxUtilsDate::getInstance()->getTime() );
+        $iTime = oxUtilsDate::getInstance()->getTime();
+        $this->oxuserbaskets__oxcreate = new oxField( $iTime );
+        $this->oxuserbaskets__oxupdate = new oxField( $iTime );
 
         return parent::_insert();
     }
@@ -285,26 +286,27 @@ class oxUserBasket extends oxBase
         }
 
         if ( ( $oUserBasketItem = $this->getItem( $sProductId, $aSel ) ) ) {
+            // updating object info and adding (if not yet added) item into basket items array
+            if ( !$blOverride && !empty($oUserBasketItem->oxuserbasketitems__oxamount->value) ) {
+                $dAmount += $oUserBasketItem->oxuserbasketitems__oxamount->value;
+            }
 
-            // if amount = 0 the means remove it
             if ( !$dAmount ) {
-
+                // if amount = 0 the means remove it
                 $oUserBasketItem->delete();
                 if ( isset($this->_aBasketItems[$this->_getItemKey($sProductId, $aSel)])) {
                     unset( $this->_aBasketItems[$this->_getItemKey($sProductId, $aSel)] );
                 }
-
             } else {
-                // updating object info and adding (if not yet added) item into basket items array
-                if ( !$blOverride && !empty($oUserBasketItem->oxuserbasketitems__oxamount->value) ) {
-                    $dAmount += $oUserBasketItem->oxuserbasketitems__oxamount->value;
-                }
-
                 $oUserBasketItem->oxuserbasketitems__oxamount = new oxField($dAmount, oxField::T_RAW);
                 $oUserBasketItem->save();
 
                 $this->_aBasketItems[$this->_getItemKey($sProductId, $aSel)] = $oUserBasketItem;
             }
+
+            //update timestamp
+            $this->oxuserbaskets__oxupdate = new oxField(oxUtilsDate::getInstance()->getTime());
+            $this->save();
 
             return $dAmount;
         }

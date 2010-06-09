@@ -944,6 +944,7 @@ function _groupExp(el) {
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_POINTSFORINVITATION" }]
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_POINTSFORINVITATION" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>
@@ -954,6 +955,7 @@ function _groupExp(el) {
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_POINTSFORREGISTRATION" }]
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_POINTSFORREGISTRATION" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>
@@ -1031,6 +1033,17 @@ function _groupExp(el) {
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_MWSTSETTING" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
+            <dl>
+                <dt>
+                    <input type=text class="txt" style="width: 250px;" name=confstrs[sFbAppId] value="[{$confstrs.sFbAppId}]">
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_FACEBOOKAPPID" }]
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKAPPID" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>

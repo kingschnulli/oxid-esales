@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxutilsview.php 28223 2010-06-08 12:28:06Z sarunas $
  */
 
 /**
@@ -332,6 +332,7 @@ class oxUtilsView extends oxSuperCfg
             $oSmarty->security     = true;
             $oSmarty->security_settings['IF_FUNCS'][] = 'XML_ELEMENT_NODE';
             $oSmarty->security_settings['MODIFIER_FUNCS'][] = 'round';
+            $oSmarty->security_settings['MODIFIER_FUNCS'][] = 'floor';
             $oSmarty->security_settings['MODIFIER_FUNCS'][] = 'trim';
             $oSmarty->security_settings['MODIFIER_FUNCS'][] = 'is_array';
             $oSmarty->security_settings['ALLOW_CONSTANTS'] = true;

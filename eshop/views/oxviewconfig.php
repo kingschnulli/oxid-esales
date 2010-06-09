@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 28194 2010-06-07 15:10:53Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfig.php 28219 2010-06-08 12:15:19Z rimvydas.paskevicius $
  */
 
 /**
@@ -70,7 +70,6 @@ class oxViewConfig extends oxSuperCfg
             $oLang    = oxLang::getInstance();
 
             $sValue = null;
-
 
             $iLang = $oLang->getBaseLanguage();
             if ( $myUtils->seoIsActive() && !$sValue && ( $iLang != $myConfig->getConfigParam( 'sDefaultLang' ) ) ) {
@@ -1137,9 +1136,9 @@ class oxViewConfig extends oxSuperCfg
      *
      * @return string
      */
-    public function getFbAppKey()
+    public function getFbAppId()
     {
-        return $this->getConfig()->getConfigParam( 'sFbAppKey' );
+        return $this->getConfig()->getConfigParam( 'sFbAppId' );
     }
 
 }

@@ -294,6 +294,7 @@ CREATE TABLE `oxuserbaskets` (
   `OXTITLE` varchar(255) NOT NULL default '',
   `OXCREATE` timestamp(14) NOT NULL,
   `OXPUBLIC` tinyint(1) DEFAULT '1' NOT NULL,
+  `OXUPDATE` INT NOT NULL default 0,
   PRIMARY KEY  (`OXID`)
 ) TYPE=InnoDB;
 
@@ -520,7 +521,7 @@ INSERT INTO `oxconfig` VALUES ('7a59f9000f39e5d9549a5d1e29c076a0', 'oxbaseshop',
 INSERT INTO `oxconfig` VALUES ('7a59f9000f39e5d9549a5d1e29c076a2', 'oxbaseshop', 'blOrderOptInEmail', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES ('bd3e73e699331eb92c557113bac02fc4', 'oxbaseshop', 'dPointsForInvitation', 'str', 0x07c4);
 INSERT INTO `oxconfig` VALUES ('bd320d322fa2f638086787c512329eec', 'oxbaseshop', 'dPointsForRegistration', 'str', 0x07c4);
-INSERT INTO `oxconfig` VALUES ('56400ed94d100c5e97667c58f184974a', 'oxbaseshop', 'sFbAppKey', 'str', '');
+INSERT INTO `oxconfig` VALUES ('56400ed94d100c5e97667c58f184974a', 'oxbaseshop', 'sFbAppId', 'str', '');
 
 
 

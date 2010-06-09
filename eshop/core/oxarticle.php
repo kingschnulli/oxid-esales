@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 28187 2010-06-07 13:57:36Z sarunas $
+ * @version   SVN: $Id: oxarticle.php 28204 2010-06-08 06:36:11Z michael.keiluweit $
  */
 
 // defining supported link types
@@ -2560,7 +2560,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Return article media URL
      *
-     * @return unknown
+     * @return array
      */
     public function getMediaUrls()
     {

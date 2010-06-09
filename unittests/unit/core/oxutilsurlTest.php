@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsurlTest.php 27136 2010-04-09 14:26:47Z arvydas $
+ * @version   SVN: $Id: oxutilsurlTest.php 28210 2010-06-08 08:54:31Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -27,14 +27,46 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 
 class Unit_Core_oxUtilsUrlTest extends OxidTestCase
 {
+    /**
+     * Tear down the fixture.
+     *
+     * @return null
+     */
+    protected function tearDown()
+    {
+
+        parent::tearDown();
+    }
+
     public function testGetInstance()
     {
         $this->assertTrue( oxUtilsUrl::getInstance() instanceof oxUtilsUrl );
     }
 
     /**
+     * oxUtilsUrl::prepareCanonicalUrl() test case
+     *
+     * @return null
+     */
+    public function testPrepareCanonicalUrl()
+    {
+        oxTestModules::addFunction('oxUtils', 'seoIsActive', '{return false;}');
+        modConfig::getInstance()->setConfigParam( "sDefaultLang", 9 );
+        $iLang = oxLang::getInstance()->getBaseLanguage();
+
+        $sExpUrl = "shop.com/index.php?param1=value1";
+
+
+        $sExpUrl .= "&amp;lang={$iLang}";
+
+        $oUtils = new oxUtilsUrl();
+        $this->assertEquals( $sExpUrl, $oUtils->prepareCanonicalUrl( "shop.com/index.php?param1=value1&amp;sid=1234" ) );
+    }
+
+    /**
      * oxUtilsUrl::cleanUrl() test case
-     * @return
+     *
+     * @return null
      */
     public function testCleanUrl()
     {

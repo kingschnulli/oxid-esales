@@ -137,6 +137,36 @@ class oxUtilsUrl extends oxSuperCfg
     }
 
     /**
+     * Prepares canonical url
+     *
+     * @param string $sUrl given url
+     *
+     * @access public
+     * @return string
+     */
+    public function prepareCanonicalUrl( $sUrl )
+    {
+        $oConfig = $this->getConfig();
+        $oStr = getStr();
+
+        // cleaning up session id..
+        $sUrl = $oStr->preg_replace( '/(force_)?(admin_)?sid=[a-z0-9\._]*&?(amp;)?/i', '', $sUrl );
+        $sUrl = $oStr->preg_replace( '/(&amp;|\?)$/', '', $sUrl );
+        $sSep = ( $oStr->strpos( $sUrl, '?' ) === false ) ? '?' : '&amp;';
+
+
+        if ( !oxUtils::getInstance()->seoIsActive() ) {
+            // non seo url has no language identifier..
+            $iLang = oxLang::getInstance()->getBaseLanguage();
+            if ( !$oStr->preg_match( '/[&?](amp;)?lang=[0-9]+/i', $sUrl ) && $iLang != $oConfig->getConfigParam( 'sDefaultLang' ) ) {
+                $sUrl .= "{$sSep}lang=".$iLang;
+            }
+        }
+
+        return $sUrl;
+    }
+
+    /**
      * Appends url with given parameters
      *
      * @param atring $sUrl       url to append

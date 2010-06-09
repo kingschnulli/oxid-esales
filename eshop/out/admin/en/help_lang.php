@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28154 2010-06-04 11:24:02Z arvydas $
+ * @version   SVN: $Id: help_lang.php 28217 2010-06-08 12:14:23Z rimvydas.paskevicius $
  */
 
 /**
@@ -156,6 +156,10 @@ $aLang =  array(
                                                     'If the check is disabled, the normal VAT for the according country is always calculated.',
 
 'HELP_SHOP_CONFIG_ALTVATIDCHECKINTERFACEWSDL'   =>  'Here you can enter an alternative URL for the online VAT ID check.',
+
+'HELP_SHOP_CONFIG_POINTSFORINVITATION'          =>  'The amount of credit points gets user who invited somebody to shop. User gets credit points only if invited user registers into shop.',
+
+'HELP_SHOP_CONFIG_POINTSFORREGISTRATION'        =>  'The amount of credit points gets user who was invited by already registered user. Invited user must register to get these points.',
 
 'HELP_SHOP_MALL_MALLMODE'                       =>  'Here you can set what is shown as front page of this eShop:' .
                                                     '<ul><li><span class="navipath_or_inputname">Show shop selector</span>: A page where the different eShops can be selected is shown.</li>' .

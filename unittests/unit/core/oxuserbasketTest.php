@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketTest.php 27215 2010-04-14 14:24:54Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxuserbasketTest.php 28214 2010-06-08 12:06:29Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -122,7 +122,7 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $oBasket = new OxUserBasket();
         $oBasket->load( "testUserBasket" );
         $oBasket->oxuserbaskets__oxpublic = new oxField(1, oxField::T_RAW);
-        $oBasket->addItemToBasket( '2000', 0 );
+        $oBasket->addItemToBasket( '2000', 0, null, true );
 
         $oOldBasket = new OxUserBasket();
         $oOldBasket->load( "testUserBasket" );
@@ -148,7 +148,7 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
      */
     public function testInsert_creationTime()
     {
-        $iTime = time();
+        $iTime = 999991;
 
         oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
         oxUtilsDate::getInstance()->UNITSetTime( $iTime );
@@ -158,6 +158,7 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $oBasket->save();
 
         $this->assertEquals( $iTime, $oBasket->oxuserbaskets__oxcreate->value );
+        $this->assertEquals( $iTime, $oBasket->oxuserbaskets__oxupdate->value );
     }
 
     /**
@@ -320,6 +321,7 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $dAmount = 3;
         $aSel    = array("A");
 
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return 99999;}');
         $oBasket = new oxUserBasket();
         $oBasket->load( "testUserBasket" );
         $oBasket->setIsNewBasket();
@@ -328,11 +330,13 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $this->assertEquals( 3, $oBasket->addItemToBasket( $sArtId, $dAmount, $aSel ) );
         $this->assertEquals( 6, $oBasket->addItemToBasket( $sArtId, $dAmount, $aSel ) );
 
-        $this->assertEquals( 0, $oBasket->addItemToBasket( $sArtId, 0, $aSel ) );
-        $this->assertEquals( 0, $oBasket->addItemToBasket( $sArtId, 0, null ) );
+        $this->assertEquals( 0, $oBasket->addItemToBasket( $sArtId, 0, $aSel, true ) );
+        $this->assertEquals( 0, $oBasket->addItemToBasket( $sArtId, 0, null,  true ) );
 
+        $this->assertEquals( 99999, $oBasket->oxuserbaskets__oxupdate->value );
         $oBasket = new oxUserBasket();
         $oBasket->load( "testUserBasket" );
+        $this->assertEquals( 99999, $oBasket->oxuserbaskets__oxupdate->value );
 
         // basket is not removed any more after it is emptied, because on deletion we will loose
         // its visibility status
