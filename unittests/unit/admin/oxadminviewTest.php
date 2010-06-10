@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 26851 2010-03-25 16:56:52Z arvydas $
+ * @version   SVN: $Id: oxadminviewTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -366,7 +366,7 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
         $oSess->expects( $this->once() )->method( 'checkSessionChallenge' )->will( $this->returnValue( false ) );
         $oAView = $this->getMock( 'oxAdminView', array( 'getSession' ) );
         $oAView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSess ) );
-       $this->assertEquals(false, $oAView->UNITauthorize());
+        $this->assertEquals(false, $oAView->UNITauthorize());
     }
 
 

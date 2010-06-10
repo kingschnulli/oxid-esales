@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 28222 2010-06-08 12:25:20Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxcmp_user.php 28234 2010-06-09 08:00:12Z arvydas $
  */
 
 // defining login/logout states
@@ -76,7 +76,7 @@ class oxcmp_user extends oxView
     protected $_aAllowedClasses = array(
                                         'register',
                                         'forgotpwd',
-                                        'content'
+                                        'content',
                                         );
 
     /**
@@ -947,7 +947,7 @@ class oxcmp_user extends oxView
      */
     protected function _getTermVersion()
     {
-        if ( $this->_sTermsVer == null ) {
+        if ( $this->_sTermsVer == null && $this->getParent()->isActive( 'login' ) ) {
             $oContent = oxNew( "oxcontent" );
             if ( $oContent->loadbyIdent( "oxagb" ) ) {
                 $this->_sTermsVer = $oContent->oxcontents__oxtermver->value;

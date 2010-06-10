@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 28071 2010-06-02 11:30:05Z sarunas $
+ * @version   SVN: $Id: oxubase.php 28258 2010-06-09 14:53:07Z sarunas $
  */
 
 /**
@@ -2960,7 +2960,10 @@ class oxUBase extends oxView
         if (isset($this->_blShowPromotions)) {
             return $this->_blShowPromotions;
         }
-        $this->_blShowPromotions = ( count( $this->getPromoFinishedList() ) + count( $this->getPromoCurrentList() ) + count( $this->getPromoFutureList() ) ) > 0;
+        $this->_blShowPromotions = false;
+        if (oxNew('oxActionList')->areAnyActivePromotions()) {
+            $this->_blShowPromotions = ( count( $this->getPromoFinishedList() ) + count( $this->getPromoCurrentList() ) + count( $this->getPromoFutureList() ) ) > 0;
+        }
         return $this->_blShowPromotions;
     }
 

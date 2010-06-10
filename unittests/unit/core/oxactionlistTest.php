@@ -160,4 +160,14 @@ class Unit_Core_oxActionListTest extends OxidTestCase
 
         $this->assertEquals( $sQ, $oList->UNITgetUserGroupFilter() );
     }
+
+    public function testAreAnyActivePromotions()
+    {
+        modDB::getInstance()->addClassFunction('getOne', create_function('$sql', 'return $sql === "select 1 from oxactions where oxtype=1 and oxactive=1 limit 1";'));
+        $oAL = new oxActionList();
+        $this->assertTrue($oAL->areAnyActivePromotions());
+        modDB::getInstance()->addClassFunction('getOne', create_function('$sql', 'return $sql !== "select 1 from oxactions where oxtype=1 and oxactive=1 limit 1";'));
+        $oAL = new oxActionList();
+        $this->assertFalse($oAL->areAnyActivePromotions());
+    }
 }

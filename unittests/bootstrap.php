@@ -32,7 +32,7 @@ if (getenv('oxPATH')) {
 
 require_once 'unit/test_config.inc.php';
 
-define('oxADMIN_LOGIN',  oxDb::getDb()->getOne("select OXUSERNAME from oxuser where oxid='oxdefaultadmin'"));
+define('oxADMIN_LOGIN', oxDb::getDb()->getOne("select OXUSERNAME from oxuser where oxid='oxdefaultadmin'"));
 if (getenv('oxADMIN_PASSWD')) {
     define('oxADMIN_PASSWD', getenv('oxADMIN_PASSWD'));
 } else {
@@ -56,9 +56,9 @@ if (getenv('CODECOVERAGE')) {
     PHPUnit_Util_Filter::addDirectoryToWhitelist(oxPATH.'/views/');
 
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/admin/inc/');
-    PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/admin/dtaus/');
-    PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/admin/reports/jpgraph/');
-    PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/admin/reports/');
+        PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/admin/dtaus/');
+        PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/admin/reports/jpgraph/');
+        PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/admin/reports/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/openid/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/adodblite/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/tcpdf/');

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: actions_main.php 28064 2010-06-02 08:59:37Z sarunas $
+ * @version   SVN: $Id: actions_main.php 28254 2010-06-09 13:51:04Z sarunas $
  */
 
 /**
@@ -104,7 +104,7 @@ class Actions_Main extends oxAdminDetails
                             $sPopup = 'oxscpromotions_products';
                             break;*/
                         case 2:
-                            $sPopup = 'oxscpromotions_groups';
+                            $sPopup = 'actions_groups';
                             break;
                     }
 

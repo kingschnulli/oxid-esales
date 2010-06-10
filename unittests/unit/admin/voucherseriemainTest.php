@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: voucherseriemainTest.php 26641 2010-03-18 09:10:17Z arvydas $
+ * @version   SVN: $Id: voucherseriemainTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -33,7 +33,7 @@ class Unit_Admin_VoucherSerieMainTest extends OxidTestCase
     /**
      * Cleanup
      *
-     * @return
+     * @return null
      */
     public function tearDown()
     {

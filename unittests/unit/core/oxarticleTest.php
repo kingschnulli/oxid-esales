@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 28187 2010-06-07 13:57:36Z sarunas $
+ * @version   SVN: $Id: oxarticleTest.php 28251 2010-06-09 12:42:29Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -244,6 +244,41 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->cleanUpTable('oxdiscount');
 
         parent::tearDown();
+    }
+
+    /**
+     * Test case for bugtrack report #1887
+     *
+     * @return null
+     */
+    public function testForBugReport1887()
+    {
+        $oParent = new oxArticle();
+        $oParent->setId( "_testParentId" );
+        $oParent->oxarticles__oxstock     = new oxField( 0 );
+        $oParent->oxarticles__oxstockflag = new oxField( 3 );
+        $oParent->oxarticles__oxactive    = new oxField( 1 );
+        $oParent->save();
+
+        $oVar1 = new oxArticle();
+        $oVar1->setId( "_testVar1" );
+        $oVar1->oxarticles__oxparentid  = new oxField( "_testParentId" );
+        $oVar1->oxarticles__oxstock     = new oxField( 10 );
+        $oVar1->oxarticles__oxstockflag = new oxField( 3 );
+        $oVar1->oxarticles__oxactive    = new oxField( 1 );
+        $oVar1->save();
+
+        $oVar2 = new oxArticle();
+        $oVar2->setId( "_testVar2" );
+        $oVar2->oxarticles__oxparentid  = new oxField( "_testParentId" );
+        $oVar2->oxarticles__oxstock     = new oxField( 10 );
+        $oVar2->oxarticles__oxstockflag = new oxField( 3 );
+        $oVar2->oxarticles__oxactive    = new oxField( 1 );
+        $oVar2->save();
+
+        $oProduct = new oxArticle();
+        $this->assertTrue( $oProduct->load( "_testParentId" ) );
+        $this->assertFalse( $oProduct->isNotBuyable() );
     }
 
     /**
@@ -4487,13 +4522,12 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', false);
         $oArticle = new _oxArticle();
         $oArticle->load('_testArt');
-        $oArticle->setVar( 'iVarStock', 1);
         $oArticle->oxarticles__oxstock = new oxField(0, oxField::T_RAW);
         $oArticle->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
         $oArticle->UNITassignNotBuyableParent();
         $oArticle->UNITassignStock();
         $this->assertEquals( -1, $oArticle->getStockStatus());
-        $this->assertFalse( $oArticle->_blNotBuyable);
+        $this->assertTrue( $oArticle->_blNotBuyable);
         $this->assertTrue( $oArticle->_blNotBuyableParent);
     }
 

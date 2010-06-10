@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminlistTest.php 28073 2010-06-02 11:41:06Z sarunas $
+ * @version   SVN: $Id: oxadminlistTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -206,9 +206,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
 
 
     /**
-     *  Test delete entry.
+     * Test delete entry.
      *
-     *  @return null
+     * @return null
      */
     public function testDeleteEntry()
     {
@@ -246,9 +246,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test current list position
+     * Test current list position
      *
-     *  @return null
+     * @return null
      */
     public function testSetCurrentListPosition()
     {
@@ -287,9 +287,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test builing sql oder by query
+     * Test builing sql oder by query
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareOrderByQuery()
     {
@@ -309,9 +309,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test builing sql oder by query - multiple sort
+     * Test builing sql oder by query - multiple sort
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareOrderByQueryMultipleSort()
     {
@@ -332,10 +332,10 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test builing sql oder by query - setting order by internal param _sDefSort
+     * Test builing sql oder by query - setting order by internal param _sDefSort
      *  when order fields are not posted
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareOrderByQueryByInternalParam()
     {
@@ -353,9 +353,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test builing sql oder by query - when order fields are not posted
+     * Test builing sql oder by query - when order fields are not posted
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareOrderWithoutAnyParam()
     {
@@ -370,9 +370,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test builing sql oder by query - adding ASC/DESC order to query
+     * Test builing sql oder by query - adding ASC/DESC order to query
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareOrderWithOrderType()
     {
@@ -392,9 +392,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test builing sql oder by query - handling multilanguage fields
+     * Test builing sql oder by query - handling multilanguage fields
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareOrderMultilanguageField()
     {
@@ -415,9 +415,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test builing sql oder by query - when order table is defined
+     * Test builing sql oder by query - when order table is defined
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareOrderByWithDefinedOrderTable()
     {
@@ -436,9 +436,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test builing sql query - sql must return selecting all fields without "where" query
+     * Test builing sql query - sql must return selecting all fields without "where" query
      *
-     *  @return null
+     * @return null
      */
     public function testBuildSelectString()
     {
@@ -454,9 +454,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test builing sql query withoug passing list object
+     * Test builing sql query withoug passing list object
      *
-     *  @return null
+     * @return null
      */
     public function testBuildSelectStringWithoutParams()
     {
@@ -467,9 +467,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test prepearing sql query from $aWhere array
+     * Test prepearing sql query from $aWhere array
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareWhereQuery()
     {
@@ -489,9 +489,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test prepearing sql query from $aWhere array with multiple search in one field
+     * Test prepearing sql query from $aWhere array with multiple search in one field
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareWhereQueryWithMulipleSearchInOneField()
     {
@@ -511,9 +511,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test prepearing sql query with german umluats in search string
+     * Test prepearing sql query with german umluats in search string
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareWhereQueryWithGermanUmlauts()
     {
@@ -535,9 +535,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test prepearing sql query from $aWhere array with empty search
+     * Test prepearing sql query from $aWhere array with empty search
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareWhereQueryWithEmptySearch()
     {
@@ -556,9 +556,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test prepearing sql query from $aWhere array with zero value
+     * Test prepearing sql query from $aWhere array with zero value
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareWhereQueryWithZeroSearch()
     {
@@ -577,11 +577,11 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test building sql where with specified "folder" param for table oxorders
+     * Test building sql where with specified "folder" param for table oxorders
      *  If table is oxorder and folder name not specified, takes first member of
      *  orders folders array
      *
-     *  @return null
+     * @return null
      */
     public function testPrepareWhereQueryWithOrderWhenFolderNotSpecified()
     {
@@ -597,9 +597,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test change select.
+     * Test change select.
      *
-     *  @return null
+     * @return null
      */
     public function testChangeselect()
     {
@@ -609,9 +609,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
 
 
     /**
-     *  Test building sql where array adds multilang fields is array
+     * Test building sql where array adds multilang fields is array
      *
-     *  @return null
+     * @return null
      */
     public function testBuildWhereMultiLang()
     {
@@ -632,10 +632,10 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test building sql where with specified "folder" param
+     * Test building sql where with specified "folder" param
      *  for oxarticles, oxorder, oxcontents tables
      *
-     *  @return null
+     * @return null
      */
     public function testBuildWhereWithSpecifiedFolderParam()
     {
@@ -656,10 +656,10 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test building sql where with specified "folder" param for table oxcontents
+     * Test building sql where with specified "folder" param for table oxcontents
      *  when folder name contains 'CMSFOLDER_NONE'
      *
-     *  @return null
+     * @return null
      */
     public function testBuildWhereWhenFolderParamSpecifiesNoUsageOfFolderName()
     {
@@ -675,9 +675,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test building sql where array when no params are setted
+     * Test building sql where array when no params are setted
      *
-     *  @return null
+     * @return null
      */
     public function testBuildWhereWithoutListObject()
     {
@@ -686,9 +686,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test building sql where array
+     * Test building sql where array
      *
-     *  @return null
+     * @return null
      */
     public function testBuildWhereWithoutParams()
     {
@@ -701,9 +701,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test building sql where array
+     * Test building sql where array
      *
-     *  @return null
+     * @return null
      */
     public function testBuildWhereWithParams()
     {
@@ -729,9 +729,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test building sql where array when searching in differnet tables
+     * Test building sql where array when searching in differnet tables
      *
-     *  @return null
+     * @return null
      */
     public function testBuildWhereWithParamsFromDifferentTables()
     {
@@ -757,7 +757,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     /**
      *  Selected Data scheme is not applied for Search fields (#1260)
      *
-     *  @return null
+     * @return null
      */
     public function testBuildWhereWithDate()
     {
@@ -787,9 +787,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test set list navigation parameters.
+     * Test set list navigation parameters.
      *
-     *  @return null
+     * @return null
      */
     public function testSetListNavigationParams()
     {
@@ -821,9 +821,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test setup navigation.
+     * Test setup navigation.
      *
-     *  @return null
+     * @return null
      */
     public function testSetupNavigation()
     {
@@ -842,9 +842,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test set list navigation resets active tab id on creating new item.
+     * Test set list navigation resets active tab id on creating new item.
      *
-     *  @return null
+     * @return null
      */
     public function testSetupNavigationResetsActiveTabIdOnCreatingNewItem()
     {
@@ -864,9 +864,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     }
 
     /**
-     *  Test render getting search where parameters.
+     * Test render getting search where parameters.
      *
-     *  @return null
+     * @return null
      */
     public function testRenderGettingSearchWhereParams()
     {

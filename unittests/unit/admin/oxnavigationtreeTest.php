@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnavigationtreeTest.php 26678 2010-03-19 14:30:27Z arvydas $
+ * @version   SVN: $Id: oxnavigationtreeTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -78,6 +78,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         return parent::tearDown();
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testAddDynLinks()
     {
         oxTestModules::addFunction( "oxUtilsFile", "checkFile", "{ return true; }" );
@@ -146,6 +151,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
 
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetDomXml()
     {
         $aTestMethods = array( "_getInitialDom", "_checkGroups", "_checkRights", "_checkDemoShopDenials", "_cleanEmptyParents" );
@@ -162,6 +172,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $oNavTree->getDomXml();
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetDynMenuUrl()
     {
         $iLang = 0;
@@ -175,6 +190,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( $sDynscreenLocalUrl, $oNavTree->UNITgetDynMenuUrl( $iLang, false ) );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testHasGroup()
     {
         $oUser = $this->getMock( "oxuser", array( "inGroup" ) );
@@ -185,6 +205,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertTrue( $oNavTree->UNIThasGroup( "testGroupId" ) );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testHasRights()
     {
         $oUser = new oxuser();
@@ -195,6 +220,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertTrue( $oNavTree->UNIThasRights( "testRights" ) );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetEditUrl()
     {
         $sXml = '<?xml version="1.0" encoding="ISO-8859-15"?>
@@ -211,6 +241,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( "cl=testTabClass2&testTabParam2", $oNavTree->getEditUrl( "testClass", 1 ) );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetEditUrlExternal()
     {
         $sXml = '<?xml version="1.0" encoding="ISO-8859-15"?>
@@ -227,6 +262,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( "testExternalUrl", $oNavTree->getEditUrl( "testClass", 1 ) );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetListUrl()
     {
         $sXml = '<?xml version="1.0" encoding="ISO-8859-15"?>
@@ -241,6 +281,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( "cl=testClass&testClassParam", $oNavTree->getListUrl( "testClass" ) );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetListNodes()
     {
         $sXml = '<?xml version="1.0" encoding="ISO-8859-15"?>
@@ -312,6 +357,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( "1", $oNode->getAttribute( "active" ) );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetBtn()
     {
         $sXml = '<?xml version="1.0" encoding="ISO-8859-15"?>
@@ -336,6 +386,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( 1, $oBtnList->testBtn2 );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetActiveTab()
     {
         $oTab = $this->getMock( "oxStdClass", array( "getAttribute" ) );
@@ -351,6 +406,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( "testClassName", $oNavTree->getActiveTab( "testClass", 1 ) );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetTabs()
     {
         $sXml = '<?xml version="1.0" encoding="ISO-8859-15"?>
@@ -379,6 +439,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
 
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testCopyAttributes()
     {
         $oAttr1 = new oxStdClass();
@@ -400,6 +465,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $oNavTree->UNITcopyAttributes( $oDomElemTo, $oDomElemFrom );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testCheckGroups()
     {
         $sXml = '<?xml version="1.0" encoding="ISO-8859-15"?>
@@ -425,6 +495,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( str_replace( array( "\t" , " ", "\n", "\r"), "", $sResXml), str_replace( array( "\t" , " ", "\n", "\r"), "", $oDom->saveXML() ) );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testCheckRights()
     {
         $sXml = '<?xml version="1.0" encoding="ISO-8859-15"?>
@@ -450,8 +525,12 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( str_replace( array( "\t" , " ", "\n", "\r"), "", $sResXml), str_replace( array( "\t" , " ", "\n", "\r"), "", $oDom->saveXML() ) );
     }
 
-    // testing new functionality
-    // dyn file must not be created if content is not valid or even empty
+    /**
+     * testing new functionality
+     * dyn file must not be created if content is not valid or even empty
+     * 
+     * @return null
+     */
     public function testCheckDynFileFileDoesNotExist()
     {
         $sFilePath = oxConfig::getInstance()->getConfigParam( 'sCompileDir' )."xxx.file";
@@ -459,12 +538,24 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertNull( $oNavTree->UNITcheckDynFile( $sFilePath ) );
 
     }
+
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testCheckDynFileWrongFileContent()
     {
         $sFilePath = oxConfig::getInstance()->getConfigParam( 'sCompileDir' )."{$this->_sWrongDynfile}";
         $oNavTree = new oxnavigationtree();
         $this->assertNull( $oNavTree->UNITcheckDynFile( $sFilePath ) );
     }
+
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testCheckDynFileFileIsValidXml()
     {
         $sFilePath = oxConfig::getInstance()->getConfigParam( 'sCompileDir' )."{$this->_sValidDynfile}";
@@ -472,6 +563,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( $sFilePath, $oNavTree->UNITcheckDynFile( $sFilePath ) );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     protected function _checkDemoShopDenialsInMenuXml($oDom, $iNeedCnt)
     {
         $oXPath    = new DomXPath( $oDom );
@@ -487,6 +583,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals($iNeedCnt, $iFoundCnt);
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testcheckDemoShopDenialsDefaultMenuXml()
     {
         $oNavTree = oxNew('oxNavigationTree');
@@ -495,6 +596,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->_checkDemoShopDenialsInMenuXml($oDom, 4);
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testcheckDemoShopDenialsDefaultNormal()
     {
         $oNavTree = oxNew('oxNavigationTree');
@@ -517,7 +623,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->_checkDemoShopDenialsInMenuXml($oDom, 4);
     }
 
-
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testcheckDemoShopDenialsDefaultDemo()
     {
         $oNavTree = oxNew('oxNavigationTree');
@@ -539,6 +649,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->_checkDemoShopDenialsInMenuXml($oDom, 0);
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testcheckDemoShopDenialsInverseNormal()
     {
         $oNavTree = oxNew('oxNavigationTree');
@@ -560,7 +675,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->_checkDemoShopDenialsInMenuXml($oDom, 0);
     }
 
-
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testcheckDemoShopDenialsInverseDemo()
     {
         $oNavTree = oxNew('oxNavigationTree');
@@ -582,6 +701,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->_checkDemoShopDenialsInMenuXml($oDom, 0);
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     protected function _getDomXml()
     {
         $sFullAdminDir = getShopBasePath() . '/admin';
@@ -609,6 +733,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->fail("menu.xml not found bad");
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testCleanEmptyParents()
     {
         $oDom = $this->_getDomXml();
@@ -630,6 +759,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals(0, $oNodeList->length);
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetClassIdTakesFromOriginalXml()
     {
         modConfig::getInstance()->setConfigParam( "blUseRightsRoles", true );
@@ -653,6 +787,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals('mxcoresett', $oNavTree->getClassId('shop'));
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetAdminUrl1()
     {
         modConfig::getInstance()->setConfigParam( "sAdminSSLURL", "testAdminSslUrl" );
@@ -661,6 +800,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals( "testAdminSslUrl/index.php?", $oNavTree->UNITgetAdminUrl() );
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testGetAdminUrl()
     {
         $oSess = $this->getMock( 'oxSession', array( 'url' ) );
@@ -672,9 +816,14 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals('sess:url?', $o->UNITgetAdminUrl());
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testProcessCachedFile()
     {
-    $sString = 'http://url/lala?stoken=ASDddddd2454&amp;amp;&amp;lala';
+        $sString = 'http://url/lala?stoken=ASDddddd2454&amp;amp;&amp;lala';
 
         $o = $this->getMock('oxNavigationTree', array('_getAdminUrl'));
         $o->expects( $this->once() )->method( '_getAdminUrl' )->will( $this->returnValue( 'http://url/lala?stoken=NEWTOKEN111454&amp;' ) );
@@ -682,6 +831,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $this->assertEquals('http://url/lala?stoken=NEWTOKEN111454&amp;amp;&amp;lala', $o->UNITprocessCachedFile($sString));
     }
 
+    /**
+     * Enter description here...
+     *
+     * @return null
+     */
     public function testSessionizeLocalUrls()
     {
         $oDom = new DOMDocument();
@@ -713,6 +867,8 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
 
     /**
      * OxNavigationTree::_mergeNodes() test case
+     * 
+     * @return null
      */
     public function testMergeNodes()
     {
@@ -758,6 +914,8 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
 
     /**
      * OxNavigationTree::getShopVersionNr() test case
+     * 
+     * @return null
      */
     public function testGetShopVersionNr()
     {
@@ -770,6 +928,8 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
 
     /**
      * OxNavigationTree::init() test case
+     * 
+     * @return null
      */
     public function testInit()
     {

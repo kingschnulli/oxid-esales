@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 28071 2010-06-02 11:30:05Z sarunas $
+ * @version   SVN: $Id: oxubaseTest.php 28258 2010-06-09 14:53:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1748,6 +1748,10 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     public function testGetShowPromotionList()
     {
+        $oList = $this->getMock( "oxActionList", array( "areAnyActivePromotions" ) );
+        $oList->expects( $this->once() )->method( 'areAnyActivePromotions' )->will($this->returnValue(true));
+        oxTestModules::addModuleObject('oxActionList', $oList);
+
         $oView = $this->getMock( "oxUBase", array( "getPromoFinishedList", "getPromoCurrentList", "getPromoFutureList" ) );
         $oView->expects( $this->once() )->method( 'getPromoFinishedList' )->will( $this->returnValue( 1 ) );
         $oView->expects( $this->once() )->method( 'getPromoCurrentList' )->will( $this->returnValue( 1 ) );
@@ -1756,15 +1760,24 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $this->assertTrue( $oView->getShowPromotionList() );
     }
 
+    /**
+     * oxUBase::getShowPromotionList() performance test case
+     *
+     * @return null
+     */
+    public function testGetShowPromotionListPerformanceIfNoPromotionsActive()
+    {
+        $oList = $this->getMock( "oxActionList", array( "areAnyActivePromotions" ) );
+        $oList->expects( $this->once() )->method( 'areAnyActivePromotions' )->will($this->returnValue(false));
+        oxTestModules::addModuleObject('oxActionList', $oList);
 
+        $oView = $this->getMock( "oxUBase", array( "getPromoFinishedList", "getPromoCurrentList", "getPromoFutureList" ) );
+        $oView->expects( $this->never() )->method( 'getPromoFinishedList' );
+        $oView->expects( $this->never() )->method( 'getPromoCurrentList' );
+        $oView->expects( $this->never() )->method( 'getPromoFutureList' );
 
-
-
-
-
-
-
-
+        $this->assertFalse( $oView->getShowPromotionList() );
+    }
 
 
 }

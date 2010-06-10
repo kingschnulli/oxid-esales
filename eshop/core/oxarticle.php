@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 28204 2010-06-08 06:36:11Z michael.keiluweit $
+ * @version   SVN: $Id: oxarticle.php 28251 2010-06-09 12:42:29Z arvydas $
  */
 
 // defining supported link types
@@ -142,11 +142,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * $_blHasVariants is set to true if article has multidimensional variants.
      */
     protected $_blHasMdVariants = false;
-
-    /**
-     * Indicates how many variants this article has "on stock" (very large number for unlimited)
-     */
-    protected $_iVarStock = 0;
 
     /**
      * If set true, then this object is on comparison list
@@ -1263,7 +1258,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $oVariants->getBaseObject()->modifyCacheKey( '_variants' );
         }
 
-        $this->_iVarStock = $this->oxarticles__oxvarstock->value;
         if ( $this->_blHasVariants = $this->_hasAnyVariant( $blForceCoreTable ) ) {
 
             startProfile("selectVariants");
@@ -3872,7 +3866,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         //exceptional handling for variant parent stock:
-        if ($this->_blNotBuyable && $this->_iVarStock) {
+        if ($this->_blNotBuyable && $this->oxarticles__oxvarstock->value ) {
             $this->_blNotBuyable = false;
             //but then at least setting notBuaybleParent to true
             $this->_blNotBuyableParent = true;

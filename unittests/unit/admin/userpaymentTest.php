@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: userpaymentTest.php 26254 2010-03-03 15:25:21Z arvydas $
+ * @version   SVN: $Id: userpaymentTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -202,9 +202,9 @@ class Unit_Admin_userPaymentTest extends OxidTestCase
         $oPaymentList = $oUserView->getPaymentTypes();
         $blIsLoaded = false;
         foreach ($oPaymentList as $oPayment) {
-           if ( $oPayment->oxpayments__oxdesc->value = 'Invoice' ) {
-               $blIsLoaded = true;
-           }
+            if ( $oPayment->oxpayments__oxdesc->value = 'Invoice' ) {
+                $blIsLoaded = true;
+            }
         }
         $this->assertTrue( $blIsLoaded );
     }
@@ -248,9 +248,9 @@ class Unit_Admin_userPaymentTest extends OxidTestCase
         $this->assertEquals( 1, $oPaymentList->count() );
         $blIsLoaded = false;
         foreach ($oPaymentList as $oPayment) {
-           if ( $oPayment->oxpayments__oxdesc->value = 'Rechnung' ) {
-               $blIsLoaded = true;
-           }
+            if ( $oPayment->oxpayments__oxdesc->value = 'Rechnung' ) {
+                $blIsLoaded = true;
+            }
         }
         $this->assertTrue( $blIsLoaded );
     }
@@ -276,9 +276,9 @@ class Unit_Admin_userPaymentTest extends OxidTestCase
         $oPaymentList = $oUserView->getUserPayments();
         $blIsLoaded = false;
         foreach ($oPaymentList as $oPayment) {
-           if ( $oPayment->oxpayments__oxdesc->value = 'Invoice' ) {
-               $blIsLoaded = true;
-           }
+            if ( $oPayment->oxpayments__oxdesc->value = 'Invoice' ) {
+                $blIsLoaded = true;
+            }
         }
         $this->assertTrue( $blIsLoaded );
     }

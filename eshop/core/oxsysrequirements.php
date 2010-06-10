@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 27693 2010-05-12 08:45:21Z sarunas $
+ * @version   SVN: $Id: oxsysrequirements.php 28247 2010-06-09 11:47:58Z vilma $
  */
 
 /**
@@ -454,6 +454,9 @@ class oxSysRequirements
                 }
             } elseif (version_compare($sClientVersion, '5.0.36', '>=') && version_compare($sClientVersion, '5.0.38', '<')) {
                 // mantis#0001003: Problems with MySQL version 5.0.37
+                $iModStat = 0;
+            } elseif (version_compare($sClientVersion, '5.0.40', '>') && version_compare($sClientVersion, '5.0.42', '<')) {
+                // mantis#0001877: Exclude MySQL 5.0.41 from system requirements as not fitting 
                 $iModStat = 0;
             }
             if (strpos($sClientVersion, 'mysqlnd') !== false) {

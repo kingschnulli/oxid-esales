@@ -148,4 +148,14 @@ class oxActionList extends oxList
 
         return $sQ;
     }
+
+    /**
+     * return true if there are any active promotions
+     *
+     * @return boolean
+     */
+    public function areAnyActivePromotions()
+    {
+        return (bool) oxDb::getDb()->getOne("select 1 from ".getViewName( 'oxactions' )." where oxtype=1 and oxactive=1 limit 1");
+    }
 }

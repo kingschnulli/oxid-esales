@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: articlemainTest.php 27808 2010-05-19 12:30:31Z sarunas $
+ * @version   SVN: $Id: articlemainTest.php 28257 2010-06-09 14:46:17Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -589,6 +589,11 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
         $this->assertEquals( $aData, $oView->getViewDataElement( "thisvariantlist" ) );
     }
 
+    /**
+     * Testing if rating set to 0 when article will copied;
+     * 
+     * @return null
+     */
     public function testCopyArticleSkipsRating()
     {
         $oArt = new oxarticle();

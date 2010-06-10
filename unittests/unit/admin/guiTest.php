@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: guiTest.php 26795 2010-03-24 12:10:56Z alfonsas $
+ * @version   SVN: $Id: guiTest.php 28257 2010-06-09 14:46:17Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,17 +30,32 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class _Gui extends Gui
 {
-    public function __construct(){}
+    /**
+     * class constructor, do nothing
+     * 
+     * @return null
+     */
+    public function __construct()
+    {
+    }
 
-    public function _authorize(){
+    /**
+     * Overriding this method helps to skip additional of deeper functions
+     *
+     * @return bool
+     */
+    public function _authorize()
+    {
         return true;
     }
-/*
+
+    /*
     public function _loadGuiFiles()
     {
         $this->_blLoaded = true;
     }
-*/
+    */
+    
     /**
      * Get private field value.
      *
@@ -137,9 +152,9 @@ class Unit_Admin_GuiTest extends OxidTestCase
         $oThemesDom->preserveWhiteSpace = false;
         $this->AssertTrue($oThemesDom->loadXML( $this->sThemeXml ));
 
-        $this->oGui->setVar('oGuiDom',$oGuiDom);
-        $this->oGui->setVar('oThemesDom',$oThemesDom);
-        $this->oGui->setVar('blLoaded',true);
+        $this->oGui->setVar('oGuiDom', $oGuiDom);
+        $this->oGui->setVar('oThemesDom', $oThemesDom);
+        $this->oGui->setVar('blLoaded', true);
     }
 
 
@@ -153,7 +168,7 @@ class Unit_Admin_GuiTest extends OxidTestCase
         $oCfg = $this->getMock( "oxconfig", array( "getResourceDir" ));
         $oCfg->expects($this->once())->method('getResourceDir')->with($this->equalTo(false))->will($this->returnValue('shopdir/src/'));
 
-        $oGui = $this->getMock('_Gui',array( "getConfig" ));
+        $oGui = $this->getMock('_Gui', array( "getConfig" ));
         $oGui->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
 
         $oGui->init();
@@ -173,7 +188,7 @@ class Unit_Admin_GuiTest extends OxidTestCase
         $sTheme = 'ce';
         modConfig::setParameter('t', $sTheme);
 
-        $sDir = tempnam('/tmp/','gui_');
+        $sDir = tempnam('/tmp/', 'gui_');
         $sTplFile = 'test.tpl.css';
         touch($sDir.$sTplFile);
 
@@ -193,7 +208,7 @@ class Unit_Admin_GuiTest extends OxidTestCase
         oxTestModules::addFunction( 'oxUtils', 'showMessageAndExit', '{ $this->_sMessage = $aA[0];}');
         oxTestModules::addFunction( 'oxUtils', 'getMessage', '{ return $this->_sMessage;}');
 
-        $oGui = $this->getMock('_Gui',array( "Gif","saveUserSettings","getUserColors","getUserStyles"));
+        $oGui = $this->getMock('_Gui', array( "Gif","saveUserSettings","getUserColors","getUserStyles"));
         $oGui->expects($this->any())->method('Gif');
         $oGui->expects($this->any())->method('saveUserSettings');
         $oGui->expects($this->any())->method('getUserColors')->will($this->returnValue(array()));
@@ -208,77 +223,91 @@ class Unit_Admin_GuiTest extends OxidTestCase
         $oThemesDom->preserveWhiteSpace = false;
         $oThemesDom->loadXML( $this->sThemeXml );
 
-        $oGui->setVar('oGuiDom',$oGuiDom);
-        $oGui->setVar('oThemesDom',$oThemesDom);
-        $oGui->setVar('blLoaded',true);
-        $oGui->setVar('sSrcDir',$sDir);
-        $oGui->setVar('sGuiDir',$sDir);
+        $oGui->setVar('oGuiDom', $oGuiDom);
+        $oGui->setVar('oThemesDom', $oThemesDom);
+        $oGui->setVar('blLoaded', true);
+        $oGui->setVar('sSrcDir', $sDir);
+        $oGui->setVar('sGuiDir', $sDir);
 
         $oGui->save();
-        $this->assertEquals('' ,oxUtils::getInstance()->getMessage());
+        $this->assertEquals('', oxUtils::getInstance()->getMessage());
 
         // test write errors ...
-        $sNoDir = tempnam('/tmp/','gui_non_existing_dir_').'/';
-        $oGui->setVar('sSrcDir',$sNoDir);
+        $sNoDir = tempnam('/tmp/', 'gui_non_existing_dir_').'/';
+        $oGui->setVar('sSrcDir', $sNoDir);
 
         $oGui->save();
-        $this->assertEquals('Could not write to : '.$sNoDir.$sGifFile."\n".'Could not write to : '.$sNoDir.$sCssFile ,oxUtils::getInstance()->getMessage());
+        $this->assertEquals('Could not write to : '.$sNoDir.$sGifFile."\n".'Could not write to : '.$sNoDir.$sCssFile, oxUtils::getInstance()->getMessage());
 
         unlink($sDir.$sTplFile);
         unlink($sDir.$sCssFile);
         unlink($sDir.$sGifFile);
     }
 
-
+    /**
+     * Gui::saveUserSettings() test case
+     *
+     * @return null
+     */
     public function testSaveUserSetting()
     {
-        $sDir = tempnam('/tmp/','gui_');
+        $sDir = tempnam('/tmp/', 'gui_');
         $sFile = 'usergui.php';
 
         touch($sDir.$sFile);
         @chmod($sDir.$sFile, 0555);
 
         $sTheme  = "th";
-        $aColors =array(1,2,3);
-        $aStyles =array(4,5,6);
+        $aColors = array(1, 2, 3);
+        $aStyles = array(4, 5, 6);
 
-        $this->oGui->setVar('sSrcDir',$sDir);
-        $this->oGui->saveUserSettings($sTheme,$aColors,$aStyles);
+        $this->oGui->setVar('sSrcDir', $sDir);
+        $this->oGui->saveUserSettings($sTheme, $aColors, $aStyles);
 
         $sCnt = "<?php \n";
         $sCnt.= "/* OXID look&feel generated file */\n\n";
         $sCnt.= '$sTheme  = "th";'."\n\n";
-        $sCnt.= '$aColors = '.var_export( (array) array(1,2,3), true).";\n\n";
-        $sCnt.= '$aStyles = '.var_export( (array) array(4,5,6), true).";\n\n";
+        $sCnt.= '$aColors = '.var_export( (array) array(1, 2, 3), true).";\n\n";
+        $sCnt.= '$aStyles = '.var_export( (array) array(4, 5, 6), true).";\n\n";
 
         $this->assertEquals($sCnt, file_get_contents($sDir.$sFile));
 
         unlink($sDir.$sFile);
     }
 
+    /**
+     * Gui::loadUserSettings() test case
+     *
+     * @return null
+     */
     public function testLoadUserSetting()
     {
-        $sDir = tempnam('/tmp/','gui_');
+        $sDir = tempnam('/tmp/', 'gui_');
         $sFile = 'usergui.php';
 
         $sCnt = "<?php \n";
         $sCnt.= "/* OXID look&feel generated file */\n\n";
         $sCnt.= '$sTheme  = "th";'."\n\n";
-        $sCnt.= '$aColors = '.var_export( (array) array(1,2,3), true).";\n\n";
-        $sCnt.= '$aStyles = '.var_export( (array) array(4,5,6), true).";\n\n";
+        $sCnt.= '$aColors = '.var_export( (array) array(1, 2, 3), true).";\n\n";
+        $sCnt.= '$aStyles = '.var_export( (array) array(4, 5, 6), true).";\n\n";
 
-        file_put_contents($sDir.$sFile,$sCnt);
+        file_put_contents($sDir.$sFile, $sCnt);
 
-        $this->oGui->setVar('sSrcDir',$sDir);
-        $this->oGui->loadUserSettings(&$sTheme,&$aColors,&$aStyles);
+        $this->oGui->setVar('sSrcDir', $sDir);
+        $this->oGui->loadUserSettings(&$sTheme, &$aColors, &$aStyles);
 
         $this->assertEquals('th', $sTheme);
-        $this->assertEquals(array(1,2,3), $aColors);
-        $this->assertEquals(array(4,5,6), $aStyles);
+        $this->assertEquals(array(1, 2, 3), $aColors);
+        $this->assertEquals(array(4, 5, 6), $aStyles);
 
         unlink($sDir.$sFile);
     }
 
+    /**
+     * Gui::_loadGuiFiles() test case
+     *
+     * @return null
+     */
     public function testLoadGuiFiles()
     {
         $this->oGui->init();
@@ -289,7 +318,6 @@ class Unit_Admin_GuiTest extends OxidTestCase
         $this->assertTrue($this->oGui->getVar('blLoaded'));
     }
 
-
     /**
      * Gui::Render() test case
      *
@@ -297,7 +325,7 @@ class Unit_Admin_GuiTest extends OxidTestCase
      */
     public function testRender()
     {
-        $this->oGui->setVar('blLoaded',true);
+        $this->oGui->setVar('blLoaded', true);
 
         $this->assertEquals( 'gui.tpl', $this->oGui->render() );
     }
@@ -309,7 +337,7 @@ class Unit_Admin_GuiTest extends OxidTestCase
      */
     public function testRenderError()
     {
-        $this->oGui->setVar('blLoaded',false);
+        $this->oGui->setVar('blLoaded', false);
 
         $this->assertEquals( 'gui_error.tpl', $this->oGui->render() );
     }
@@ -321,7 +349,7 @@ class Unit_Admin_GuiTest extends OxidTestCase
      */
     public function testPreviewCss()
     {
-        $sDir = tempnam('/tmp/','gui_');
+        $sDir = tempnam('/tmp/', 'gui_');
         $sTplFile = 'test.tpl.css';
         touch($sDir.$sTplFile);
 
@@ -338,8 +366,8 @@ class Unit_Admin_GuiTest extends OxidTestCase
         //$this->oGui->init();
         $this->oGui->previewCss();
 
-        $this->assertEquals('Content-type: text/css',oxUtils::getInstance()->getHeaders());
-        $this->assertEquals('/* OXID GUI generated file css file */',oxUtils::getInstance()->getMessage());
+        $this->assertEquals('Content-type: text/css', oxUtils::getInstance()->getHeaders());
+        $this->assertEquals('/* OXID GUI generated file css file */', oxUtils::getInstance()->getMessage());
 
         unlink($sDir.$sTplFile);
     }
@@ -355,7 +383,7 @@ class Unit_Admin_GuiTest extends OxidTestCase
 
         oxTestModules::addFunction( 'oxUtils', 'showMessageAndExit', '{}');
 
-        $oGui = $this->getMock('_Gui',array( "Gif"));
+        $oGui = $this->getMock('_Gui', array( "Gif"));
         $oGui->expects($this->any())->method('Gif');
 
         $oGui->previewGif();
@@ -369,10 +397,10 @@ class Unit_Admin_GuiTest extends OxidTestCase
     public function testGif()
     {
         $sTpl = 'bd.tpl.gif';
-        $aColors = array('#aaa','#bbb');
+        $aColors = array('#aaa', '#bbb');
 
         $sDir = '/tmp/';
-        $sFile = basename(tempnam($sDir,'gif_'));
+        $sFile = basename(tempnam($sDir, 'gif_'));
 
         oxTestModules::addFunction( 'oxUtils', 'setHeader', '{ $this->_aHeaderData = $aA[0]; }');
         oxTestModules::addFunction( 'oxUtils', 'getHeaders', '{ return $this->_aHeaderData; }');
@@ -380,12 +408,12 @@ class Unit_Admin_GuiTest extends OxidTestCase
         $this->oGui->init();
 
         ob_start();
-        $this->oGui->gif( $sTpl , $aColors );
+        $this->oGui->gif( $sTpl, $aColors );
         ob_end_clean();
 
-        $this->assertEquals('Content-type: image/gif',oxUtils::getInstance()->getHeaders());
+        $this->assertEquals('Content-type: image/gif', oxUtils::getInstance()->getHeaders());
 
-        $this->oGui->gif( $sTpl , $aColors, $sFile, $sDir );
+        $this->oGui->gif( $sTpl, $aColors, $sFile, $sDir );
         $this->assertTrue(is_readable($sDir.$sFile));
 
         unlink($sDir.$sFile);
@@ -399,9 +427,9 @@ class Unit_Admin_GuiTest extends OxidTestCase
     public function testGetUserColors()
     {
         modConfig::setParameter('t', 'ce');
-        modConfig::setParameter('c', array('#123','#456'));
+        modConfig::setParameter('c', array('#123', '#456'));
 
-        $this->assertEquals(array('#123','#456','#aaa','#bbb','#ccc','#ddd','#eee'), $this->oGui->getUserColors());
+        $this->assertEquals(array('#123', '#456', '#aaa', '#bbb', '#ccc', '#ddd', '#eee'), $this->oGui->getUserColors());
     }
 
     /**
@@ -412,9 +440,9 @@ class Unit_Admin_GuiTest extends OxidTestCase
     public function testGetUserStyles()
     {
         modConfig::setParameter('t', 'ce');
-        modConfig::setParameter('s', array('oxCssColor1'=>'#aaa','oxCssColor2'=>'#bbb'));
+        modConfig::setParameter('s', array('oxCssColor1'=>'#aaa', 'oxCssColor2'=>'#bbb'));
 
-        $this->assertEquals(array('oxCssColor1'=>'#aaa','oxCssColor2'=>'#bbb','oxCssColor3'=>1,'oxCssColor4'=>2), $this->oGui->getUserStyles());
+        $this->assertEquals(array('oxCssColor1'=>'#aaa', 'oxCssColor2'=>'#bbb', 'oxCssColor3'=>1, 'oxCssColor4'=>2), $this->oGui->getUserStyles());
     }
 
     /**
@@ -425,10 +453,10 @@ class Unit_Admin_GuiTest extends OxidTestCase
     public function testFillColors()
     {
         // defining parameters
-        $aStyles = array('const1' => 'index1','const2' => 'index2','const3' => 'index3','const4' => 'index4','const5' => '#fff');
+        $aStyles = array('const1' => 'index1', 'const2' => 'index2', 'const3' => 'index3', 'const4' => 'index4', 'const5' => '#fff');
         $aColors = array('index1' => 'color1', 'index2' => 'color2', 'index3' => 'color3', 'index4' => 'color4');
 
-        $aFilled = array('const1' => 'color1','const2' => 'color2','const3' => 'color3','const4' => 'color4','const5' => '#fff');
+        $aFilled = array('const1' => 'color1', 'const2' => 'color2', 'const3' => 'color3', 'const4' => 'color4', 'const5' => '#fff');
 
         $this->assertEquals( $aFilled, $this->oGui->fillColors( $aStyles, $aColors) );
     }
@@ -441,8 +469,8 @@ class Unit_Admin_GuiTest extends OxidTestCase
     {
         $aThemes = $this->oGui->getThemes();
 
-        $this->assertEquals( 3,count($aThemes) );
-        $this->assertEquals( array('ee' => 'theme 1','pe' => 'theme 2','ce' => 'theme 3'),$aThemes);
+        $this->assertEquals( 3, count($aThemes) );
+        $this->assertEquals( array('ee' => 'theme 1', 'pe' => 'theme 2', 'ce' => 'theme 3'), $aThemes);
     }
 
     /**
@@ -454,8 +482,8 @@ class Unit_Admin_GuiTest extends OxidTestCase
     {
         $aColors = $this->oGui->getColors('ee');
 
-        $this->assertEquals( 5,count($aColors) );
-        $this->assertEquals( array('#000','#111','#222','#333','#444'),$aColors );
+        $this->assertEquals( 5, count($aColors) );
+        $this->assertEquals( array('#000', '#111', '#222', '#333', '#444'), $aColors );
     }
 
     /**
@@ -467,8 +495,8 @@ class Unit_Admin_GuiTest extends OxidTestCase
     {
         $aStyles = $this->oGui->getStyles();
 
-        $this->assertEquals( 4,count($aStyles) );
-        $this->assertEquals( array('oxCssColor1'=>1,'oxCssColor2'=>2,'oxCssColor3'=>1,'oxCssColor4'=>2),$aStyles );
+        $this->assertEquals( 4, count($aStyles) );
+        $this->assertEquals( array('oxCssColor1'=>1, 'oxCssColor2'=>2, 'oxCssColor3'=>1, 'oxCssColor4'=>2), $aStyles );
     }
 
     /**
@@ -492,8 +520,8 @@ class Unit_Admin_GuiTest extends OxidTestCase
     {
         $aColors = $this->oGui->getResColors( 'gif', 'test.tpl.gif');
 
-        $this->assertEquals( 2,count($aColors) );
-        $this->assertEquals( array('oxGifColor1'=>0,'oxGifColor2'=>1),$aColors );
+        $this->assertEquals( 2, count($aColors) );
+        $this->assertEquals( array('oxGifColor1'=>0, 'oxGifColor2'=>1), $aColors );
     }
 
     /**
@@ -503,7 +531,7 @@ class Unit_Admin_GuiTest extends OxidTestCase
      */
     public function testGetImageColors()
     {
-        $aColors = $this->oGui->getImageColors('oxTestGif',array('oxGifColor1'=>'#111', 'oxGifColor2'=>'#222'));
+        $aColors = $this->oGui->getImageColors('oxTestGif', array('oxGifColor1'=>'#111', 'oxGifColor2'=>'#222'));
 
         $this->assertEquals(2, count($aColors));
         $this->assertEquals(array('#111', '#222'), $aColors);
@@ -528,10 +556,10 @@ class Unit_Admin_GuiTest extends OxidTestCase
      */
     public function testHex2rgb()
     {
-        $this->assertEquals( array(0, 0, 0),       $this->oGui->hex2rgb('#000000') );
+        $this->assertEquals( array(0, 0, 0), $this->oGui->hex2rgb('#000000') );
         $this->assertEquals( array(255, 255, 255), $this->oGui->hex2rgb('#fff')    );
-        $this->assertEquals( array(15, 80, 163),   $this->oGui->hex2rgb('#0f50a3') );
-        $this->assertEquals( array(0, 255, 85),    $this->oGui->hex2rgb('#0f5')    );
-        $this->assertEquals( array(15, 15, 163),   $this->oGui->hex2rgb('#gfsfa3') );
+        $this->assertEquals( array(15, 80, 163), $this->oGui->hex2rgb('#0f50a3') );
+        $this->assertEquals( array(0, 255, 85), $this->oGui->hex2rgb('#0f5')    );
+        $this->assertEquals( array(15, 15, 163), $this->oGui->hex2rgb('#gfsfa3') );
     }
 }
