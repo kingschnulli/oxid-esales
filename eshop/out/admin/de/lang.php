@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28218 2010-06-08 12:14:47Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 28266 2010-06-10 12:52:34Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -1291,9 +1291,23 @@ $aLang = array(
 'SHOP_CONFIG_SHOWVOUCHERS'                      => 'Gutscheine aktivieren',
 'SHOP_CONFIG_SHOWOPENID'                        => 'Open ID Login aktivieren',
 'SHOP_CONFIG_SHOWGIFTWRAPPING'                  => 'Geschenkverpackungen aktivieren',
-'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Anzahl der Credit-Punkte für eingeladene und registrierte Benutzer',
-'SHOP_CONFIG_POINTSFORINVITATION'               => 'Anzahl der Credit-Punkte für die Einladenden, wenn seine eingeladene Benutzer registriert',
-'SHOP_CONFIG_FACEBOOKAPPID'                    => '[tr]Facebook Application ID',
+'SHOP_CONFIG_PSLOGIN'                           => 'Private Sales Login',
+'SHOP_CONFIG_DISABLE'                           => 'Disable',
+'SHOP_CONFIG_ENABLE'                            => 'Enable',
+'SHOP_CONFIG_BASKETEXCLUDE'                     => 'Basket exclusion',
+'SHOP_CONFIG_BASKETRESERVATION'                 => 'Basket expiration',
+'SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'          => 'Basket expiration timeout',
+'SHOP_CONFIG_INVITATION'                        => 'Invitation',
+'SHOP_CONFIG_POINTSFORINVITATION'               => 'Credit points for user registered after invitation',
+'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Credit points for inviting user',
+'SHOP_CONFIG_FACEBOOKAPPID'                     => 'Application ID',
+'SHOP_CONFIG_FBSECRETKEY'                       => 'Application Secret Key',
+'SHOP_CONFIG_FBCOMMENTS'                        => 'Comments',
+'SHOP_CONFIG_FBFACEPILE'                        => 'Facepile',
+'SHOP_CONFIG_FBCHAT'                            => 'Chat',
+'SHOP_CONFIG_FBINVITE'                          => 'Invite',
+'SHOP_CONFIG_FBSHARE'                           => 'Share',
+'SHOP_CONFIG_FBLIKE'                            => 'Like',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Prozentsatz gleicher Attribute, damit Artikel ähnlich sind',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Bildqualität - von 0 (schlechteste Qualität, kleine Dateigröße) bis 100 (beste Qualität, große Dateigröße)',
@@ -1843,6 +1857,10 @@ $aLang = array(
 'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'             => 'Weitere Einstellungen',
 'SHOP_OPTIONS_GROUP_VARIANTS'                   => 'Varianten',
 'SHOP_OPTIONS_GROUP_MODULES'                    => 'Module',
+'SHOP_OPTIONS_GROUP_PRIVATESALES'               => 'Private Verkäufe',
+'SHOP_OPTIONS_GROUP_INVITATIONS'                => 'Einladungen',
+'SHOP_OPTIONS_GROUP_FACEBOOK'                   => 'Facebook',
+
 
 
 'PROMOTION_USERS_SETGROUPS'                 => 'Zugeordnete Benutzergruppen',

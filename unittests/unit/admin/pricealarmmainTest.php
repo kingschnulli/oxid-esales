@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmmainTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
+ * @version   SVN: $Id: pricealarmmainTest.php 28265 2010-06-10 12:21:38Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -31,10 +31,10 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 class Unit_Admin_PriceAlarmMainTest_smarty
 {
     /**
-     * Enter description here...
+     * Logging call data
      *
-     * @param string $sName   Enter description here...
-     * @param array  $aParams Enter description here...
+     * @param string $sName   called method
+     * @param array  $aParams parameters
      * 
      * @return null
      */

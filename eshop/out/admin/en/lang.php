@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28218 2010-06-08 12:14:47Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 28266 2010-06-10 12:52:34Z vilma $
  */
 
 /*
@@ -1297,9 +1297,23 @@ $aLang = array(
 'SHOP_CONFIG_SHOWVOUCHERS'                      => 'Use vouchers',
 'SHOP_CONFIG_SHOWOPENID'                        => 'Use Open ID',
 'SHOP_CONFIG_SHOWGIFTWRAPPING'                  => 'Use gift wrapping',
-'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Number of credit points for invited and registered user',
-'SHOP_CONFIG_POINTSFORINVITATION'               => 'Number of credit points for inviter, if his invited user registered',
-'SHOP_CONFIG_FACEBOOKAPPID'                     => 'Facebook Application ID',
+'SHOP_CONFIG_PSLOGIN'                           => 'Private Sales Login',
+'SHOP_CONFIG_DISABLE'                           => 'Disable',
+'SHOP_CONFIG_ENABLE'                            => 'Enable',
+'SHOP_CONFIG_BASKETEXCLUDE'                     => 'Basket exclusion',
+'SHOP_CONFIG_BASKETRESERVATION'                 => 'Basket expiration',
+'SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'          => 'Basket expiration timeout',
+'SHOP_CONFIG_INVITATION'                        => 'Invitation',
+'SHOP_CONFIG_POINTSFORINVITATION'               => 'Credit points for user registered after invitation',
+'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Credit points for inviting user',
+'SHOP_CONFIG_FACEBOOKAPPID'                     => 'Application ID',
+'SHOP_CONFIG_FBSECRETKEY'                       => 'Application Secret Key',
+'SHOP_CONFIG_FBCOMMENTS'                        => 'Comments',
+'SHOP_CONFIG_FBFACEPILE'                        => 'Facepile',
+'SHOP_CONFIG_FBCHAT'                            => 'Chat',
+'SHOP_CONFIG_FBINVITE'                          => 'Invite',
+'SHOP_CONFIG_FBSHARE'                           => 'Share',
+'SHOP_CONFIG_FBLIKE'                            => 'Like',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Number of equal Attributes for similar Products (%)',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Picture Quality - from 0 (poor Quality, small File Size) to 100 (best Quality, large File Size)',
@@ -1835,19 +1849,22 @@ $aLang = array(
 'serial_added'                                  => 'License key has beend added',
 'serial_updated'                                => 'License key has been updated',
 
-'SHOP_OPTIONS_GROUP_GLOBAL'                        => 'Global',
-'SHOP_OPTIONS_GROUP_SEARCH'                        => 'Search',
-'SHOP_OPTIONS_GROUP_STOCK'                        => 'Stock',
-'SHOP_OPTIONS_GROUP_ARTICLES'                    => 'Products',
-'SHOP_OPTIONS_GROUP_ORDER'                        => 'Order',
+'SHOP_OPTIONS_GROUP_GLOBAL'                     => 'Global',
+'SHOP_OPTIONS_GROUP_SEARCH'                     => 'Search',
+'SHOP_OPTIONS_GROUP_STOCK'                      => 'Stock',
+'SHOP_OPTIONS_GROUP_ARTICLES'                   => 'Products',
+'SHOP_OPTIONS_GROUP_ORDER'                      => 'Order',
 'SHOP_OPTIONS_GROUP_VAT'                        => 'VAT',
-'SHOP_OPTIONS_GROUP_LANGUAGE'                    => 'Language',
-'SHOP_OPTIONS_GROUP_PICTURES'                    => 'Pictures',
-'SHOP_OPTIONS_GROUP_SHOP_FRONTEND'                => 'Shop frontend',
-'SHOP_OPTIONS_GROUP_ADMINISTRATION'                => 'Administration',
-'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'                => 'Other settings',
-'SHOP_OPTIONS_GROUP_VARIANTS'                    => 'Variants',
+'SHOP_OPTIONS_GROUP_LANGUAGE'                   => 'Language',
+'SHOP_OPTIONS_GROUP_PICTURES'                   => 'Pictures',
+'SHOP_OPTIONS_GROUP_SHOP_FRONTEND'              => 'Shop frontend',
+'SHOP_OPTIONS_GROUP_ADMINISTRATION'             => 'Administration',
+'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'             => 'Other settings',
+'SHOP_OPTIONS_GROUP_VARIANTS'                   => 'Variants',
 'SHOP_OPTIONS_GROUP_MODULES'                    => 'Modules',
+'SHOP_OPTIONS_GROUP_PRIVATESALES'               => 'Private Sales',
+'SHOP_OPTIONS_GROUP_INVITATIONS'                => 'Invitations',
+'SHOP_OPTIONS_GROUP_FACEBOOK'                   => 'Facebook',
 
 'PROMOTION_USERS_SETGROUPS'                 => 'Assigned User Groups',
 'PROMOTION_PRODUCTS_ALLATRICLES'            => 'All Products',

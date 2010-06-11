@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 28204 2010-06-08 06:36:11Z michael.keiluweit $
+ * @version   SVN: $Id: oxconfig.php 28264 2010-06-10 12:01:37Z arvydas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1115,38 +1115,38 @@ class oxConfig extends oxSuperCfg
         }
 
         //test lang level ..
-        if ( !$sReturn && !$blAdmin && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath ) ) ) ) {
+        if ( !$sReturn && !$blAdmin && is_readable( $sAbsBase.$sPath ) ) {
             $sReturn = $sBase . $sPath;
         }
 
         //test shop level ..
         $sPath = "$sTheme/$iShop/$sDir/$sFile";
-        if ( !$sReturn && !$blAdmin && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath ) ) ) ) {
+        if ( !$sReturn && !$blAdmin && is_readable( $sAbsBase.$sPath ) ) {
             $sReturn = $sBase . $sPath;
         }
 
 
         //test theme language level ..
         $sPath = "$sTheme/$sLang/$sDir/$sFile";
-        if ( !$sReturn && $iLang !== false && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath )) ) ) {
+        if ( !$sReturn && $iLang !== false && is_readable( $sAbsBase.$sPath ) ) {
             $sReturn = $sBase . $sPath;
         }
 
         //test theme level ..
         $sPath = "$sTheme/$sDir/$sFile";
-        if ( !$sReturn && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath )) ) ) {
+        if ( !$sReturn && is_readable( $sAbsBase.$sPath ) ) {
             $sReturn = $sBase . $sPath;
         }
 
         //test out language level ..
         $sPath = "$sLang/$sDir/$sFile";
-        if ( !$sReturn &&  $iLang !== false && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath )) ) ) {
+        if ( !$sReturn &&  $iLang !== false && is_readable( $sAbsBase.$sPath ) ) {
             $sReturn = $sBase . $sPath;
         }
 
         //test out level ..
         $sPath = "$sDir/$sFile";
-        if ( !$sReturn && ( is_readable( $sAbsBase.$sPath ) || is_dir( realpath( $sAbsBase.$sPath )) ) ) {
+        if ( !$sReturn && is_readable( $sAbsBase.$sPath ) ) {
             $sReturn = $sBase . $sPath;
         }
 
