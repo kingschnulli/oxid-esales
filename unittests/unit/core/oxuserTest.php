@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 28199 2010-06-07 15:39:25Z michael.keiluweit $
+ * @version   SVN: $Id: oxuserTest.php 28277 2010-06-10 15:10:39Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -183,6 +183,8 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $myDB->execute( 'delete from oxuser where oxusername="aaa@bbb.lt" ' );
         $myDB->execute( 'delete from oxconfig where oxshopid != "'.oxConfig::getInstance()->getBaseShopId().'" ' );
         $myDB->execute( 'delete from oxaddress where oxid like "test%" ' );
+        $myDB->execute( 'delete from oxacceptedterms' );
+
         // resetting globally admin mode
         $oUser = new oxuser();
         $oUser->setAdminMode( null );
@@ -337,6 +339,46 @@ class Unit_Core_oxuserTest extends OxidTestCase
             $myDB->Execute( $sQ );
         }
 
+    }
+
+    /**
+     * oxUser::isTermsAccepted() test case
+     *
+     * @return null
+     */
+    public function testIsTermsAccepted()
+    {
+        $sShopId = oxConfig::getInstance()->getShopId();
+        oxDb::getDb()->execute( "insert into oxacceptedterms (`OXUSERID`, `OXSHOPID`, `OXTERMVERSION`) values ( 'testUserId', '{$sShopId}', '0' )" );
+
+        $oUser = $this->getMock( "oxuser", array( "getId" ) );
+        $oUser->expects( $this->once() )->method( 'getId' )->will($this->returnValue( 'testUserId' ));
+        $this->assertTrue( $oUser->isTermsAccepted() );
+    }
+
+    /**
+     * oxUser::acceptTerms() test case
+     *
+     * @return null
+     */
+    public function testAcceptTerms()
+    {
+        $oDb = oxDb::getDb();
+
+        $this->assertFalse( (bool)$oDb->getOne( "select 1 from oxacceptedterms where oxuserid='oxdefaultadmin'" ) );
+
+        $oUser = new oxUser();
+        $oUser->load( "oxdefaultadmin" );
+        $oUser->acceptTerms();
+
+        $this->assertTrue( (bool)$oDb->getOne( "select 1 from oxacceptedterms where oxuserid='oxdefaultadmin' and oxtermversion='1'" ) );
+
+        $oDb->getOne( "update oxacceptedterms set oxtermversion='0'" );
+        $this->assertTrue( (bool)$oDb->getOne( "select 1 from oxacceptedterms where oxuserid='oxdefaultadmin' and oxtermversion='0'" ) );
+        $this->assertFalse( (bool)$oDb->getOne( "select 1 from oxacceptedterms where oxuserid='oxdefaultadmin' and oxtermversion='1'" ) );
+
+        $oUser->acceptTerms();
+        $this->assertTrue( (bool)$oDb->getOne( "select 1 from oxacceptedterms where oxuserid='oxdefaultadmin' and oxtermversion='1'" ) );
     }
 
     /**

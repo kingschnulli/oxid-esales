@@ -1,5 +1,5 @@
 [{assign var="template_title" value="REGISTER_MYACCOUNT"|oxmultilangassign}]
-[{if $oView->isActive('login') }]
+[{if $oView->isActive('PsLogin') }]
     [{include file="_header_plain.tpl" title=$template_title location=$template_title cssclass="body"}]
     [{include file="inc/error.tpl" Errorlist=$Errors.default}]
 [{else}]
@@ -46,7 +46,7 @@
                     <span class="fs10">[{ oxmultilang ident="REGISTER_NEWSLETTER_MESSAGE" }]</span>
                 </td>
             </tr>
-            [{if $oView->isActive('login') }]
+            [{if $oView->isActive('PsLogin') }]
             <tr class="td_sep">
                 <td>[{oxifcontent ident="oxagb" object="oCont"}]
                                   [{oxmultilang ident="ORDER_IAGREETOTERMS1" }] <a id="test_OrderOpenAGBBottom" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open('[{ $oCont->getLink()|oxaddparams:"plain=1"}]', 'agb_popup', 'resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400');return false;" class="fontunderline">[{ oxmultilang ident="ORDER_IAGREETOTERMS2" }]</a> [{ oxmultilang ident="ORDER_IAGREETOTERMS3" }],&nbsp;
@@ -271,7 +271,7 @@
         <div class="right"><input type="submit" value="[{ oxmultilang ident="REGISTER_SEND" }]"></div>
     </div>
 </form>
-[{if $oView->isActive('login') }]
+[{if $oView->isActive('PsLogin') }]
     [{include file="_footer_plain.tpl" }]
 [{else}]
     [{ insert name="oxid_tracker" title=$template_title }]

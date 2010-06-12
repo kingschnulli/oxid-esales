@@ -106,7 +106,7 @@ function ShowMenueFields( iVal)
                     [{ oxmultilang ident="CONTENT_MAIN_TERMVER" }]
                   </td>
                   <td class="edittext">
-                  <input type="text" class="editinput" size="28" maxlength="[{$edit->oxcontents__oxtermver->fldmax_length}]" name="editval[oxcontents__oxtermver]" value="[{$edit->oxcontents__oxtermver->value}]" [{ $readonly }]>
+                  <input type="text" class="editinput" size="28" maxlength="[{$edit->oxcontents__oxtermversion->fldmax_length}]" name="editval[oxcontents__oxtermversion]" value="[{$edit->oxcontents__oxtermversion->value}]" [{ $readonly }]>
                   </td>
                 </tr>
                 [{/if}]

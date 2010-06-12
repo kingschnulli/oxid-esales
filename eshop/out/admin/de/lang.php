@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28266 2010-06-10 12:52:34Z vilma $
+ * @version   SVN: $Id: lang.php 28269 2010-06-10 13:58:14Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -1294,17 +1294,17 @@ $aLang = array(
 'SHOP_CONFIG_PSLOGIN'                           => 'Private Sales Login',
 'SHOP_CONFIG_DISABLE'                           => 'Disable',
 'SHOP_CONFIG_ENABLE'                            => 'Enable',
-'SHOP_CONFIG_BASKETEXCLUDE'                     => 'Basket exclusion',
-'SHOP_CONFIG_BASKETRESERVATION'                 => 'Basket expiration',
-'SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'          => 'Basket expiration timeout',
-'SHOP_CONFIG_INVITATION'                        => 'Invitation',
-'SHOP_CONFIG_POINTSFORINVITATION'               => 'Credit points for user registered after invitation',
-'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Credit points for inviting user',
+'SHOP_CONFIG_BASKETEXCLUDE'                     => 'Warenkorb leeren',
+'SHOP_CONFIG_BASKETRESERVATION'                 => 'Warenkorb läuft ab',
+'SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'          => 'Sekunden bis Warenkorb abläuft',
+'SHOP_CONFIG_INVITATION'                        => 'Einladung',
+'SHOP_CONFIG_POINTSFORINVITATION'               => 'Bonuspunkte für neu geworbene Kunden',
+'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Bonuspunkte für den Einladenden pro neu geworbenem Kunden',
 'SHOP_CONFIG_FACEBOOKAPPID'                     => 'Application ID',
 'SHOP_CONFIG_FBSECRETKEY'                       => 'Application Secret Key',
 'SHOP_CONFIG_FBCOMMENTS'                        => 'Comments',
 'SHOP_CONFIG_FBFACEPILE'                        => 'Facepile',
-'SHOP_CONFIG_FBCHAT'                            => 'Chat',
+'SHOP_CONFIG_FBCHAT'                            => 'Live Stream',
 'SHOP_CONFIG_FBINVITE'                          => 'Invite',
 'SHOP_CONFIG_FBSHARE'                           => 'Share',
 'SHOP_CONFIG_FBLIKE'                            => 'Like',
@@ -1857,7 +1857,7 @@ $aLang = array(
 'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'             => 'Weitere Einstellungen',
 'SHOP_OPTIONS_GROUP_VARIANTS'                   => 'Varianten',
 'SHOP_OPTIONS_GROUP_MODULES'                    => 'Module',
-'SHOP_OPTIONS_GROUP_PRIVATESALES'               => 'Private Verkäufe',
+'SHOP_OPTIONS_GROUP_PRIVATESALES'               => 'Private Sales',
 'SHOP_OPTIONS_GROUP_INVITATIONS'                => 'Einladungen',
 'SHOP_OPTIONS_GROUP_FACEBOOK'                   => 'Facebook',
 

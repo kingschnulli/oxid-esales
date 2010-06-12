@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
-    <title>[{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP" }] [{ $shop->oxshops__oxname->value }]</title>
+    <title>[{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP" }] [{$userinfo->send_name|oxescape}], [{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP2" }] [{ $shop->oxshops__oxname->value }] [{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP3" }]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]">
   </head>
   <body marginwidth="0" marginheight="0">
@@ -14,7 +14,7 @@
               <td>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding-top : 10px; padding-bottom : 10px; padding-left : 10px;  padding-right : 10px;">
                   <tr>
-                    <td bgcolor="#ffffff" align="left"><font face="Arial" size="4" color="#808080">&nbsp;&nbsp;[{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP" }]  [{ $shop->oxshops__oxname->value }]</font></td>
+                    <td bgcolor="#ffffff" align="left"><font face="Arial" size="4" color="#808080">&nbsp;&nbsp;[{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP" }] [{$userinfo->send_name|oxescape}], [{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP2" }] [{ $shop->oxshops__oxname->value }] [{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP3" }]</font></td>
                     <td bgcolor="#ffffff" align="right"><img src="[{$oViewConf->getNoSslImageDir()}]/logo_white.gif" border="0" hspace="0" vspace="0" alt="[{ $shop->oxshops__oxname->value }]" align="texttop"></td>
                   </tr>
                 </table>

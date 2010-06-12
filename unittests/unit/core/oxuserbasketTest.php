@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketTest.php 28214 2010-06-08 12:06:29Z sarunas $
+ * @version   SVN: $Id: oxuserbasketTest.php 28304 2010-06-11 12:20:28Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -195,6 +195,28 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $this->assertEquals( 'testitem', $oItem->getId() );
         $this->assertEquals( '2000', $oArticle->getId() );
         $this->assertEquals( $oItem->getSelList(), null );
+    }
+    public function testGetItemsWithActiveArticleCheck()
+    {
+        $oA = $this->getMock('oxarticle', array('getSqlActiveSnippet'));
+        $oA->expects($this->once())->method('getSqlActiveSnippet')->will($this->returnValue('1'));
+
+        oxTestModules::addModuleObject('oxarticle', $oA);
+
+        $oBasket = new oxUserBasket();
+        $oBasket->load( "testUserBasket" );
+        $aItems = $oBasket->getItems();
+    }
+    public function testGetItemsWithoutActiveArticleCheck()
+    {
+        $oA = $this->getMock('oxarticle', array('getSqlActiveSnippet'));
+        $oA->expects($this->never())->method('getSqlActiveSnippet');
+
+        oxTestModules::addModuleObject('oxarticle', $oA);
+
+        $oBasket = new oxUserBasket();
+        $oBasket->load( "testUserBasket" );
+        $aItems = $oBasket->getItems(true, false);
     }
     public function testGetItemsCached()
     {
@@ -450,5 +472,22 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $oBasket->expects( $this->once() )->method( 'getItemCount' )->will( $this->returnValue( 1 ) );
 
         $this->assertFalse( $oBasket->isEmpty() );
+    }
+
+
+    /**
+     * Checking if user basket with items is not empty
+     *
+     * return null
+     */
+    public function testSetIsNewBasket()
+    {
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return 3333;}');
+        $oBasket = new oxUserBasket();
+        $oBasket->setIsNewBasket();
+
+        $this->assertTrue( $oBasket->isNewBasket() );
+        $this->assertEquals( 3333, $oBasket->oxuserbaskets__oxcreate->value );
+        $this->assertEquals( 3333, $oBasket->oxuserbaskets__oxupdate->value );
     }
 }

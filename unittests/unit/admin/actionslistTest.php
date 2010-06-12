@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: actionslistTest.php 28069 2010-06-02 11:09:50Z sarunas $
+ * @version   SVN: $Id: actionslistTest.php 28294 2010-06-11 09:54:44Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -83,15 +83,15 @@ class Unit_Admin_ActionsListTest extends OxidTestCase
 
         $oView = new Actions_List();
 
-        $sQ = " and ( {$sTable}.oxactive = 1 or ( {$sTable}.oxactivefrom < '{$sNow}' and {$sTable}.oxactiveto > '{$sNow}' ) ) ";
+        $sQ = " and $sTable.oxactivefrom < '$sNow' and $sTable.oxactiveto > '$sNow' ";
         modConfig::setParameter( 'displaytype', 1 );
         $this->assertEquals( $sQ, $oView->UNITprepareWhereQuery( array(), "" ) );
 
-        $sQ = " and {$sTable}.oxactiveto < '{$sNow}' and {$sTable}.oxactiveto != '0000-00-00 00:00:00' ";
+        $sQ = " and $sTable.oxactivefrom > '$sNow' ";
         modConfig::setParameter( 'displaytype', 2 );
         $this->assertEquals( $sQ, $oView->UNITprepareWhereQuery( array(), "" ) );
 
-        $sQ = " and {$sTable}.oxactivefrom > '{$sNow}' and {$sTable}.oxactivefrom != '0000-00-00 00:00:00' ";
+        $sQ = " and $sTable.oxactiveto < '$sNow' and $sTable.oxactiveto != '0000-00-00 00:00:00' ";
         modConfig::setParameter( 'displaytype', 3 );
         $this->assertEquals( $sQ, $oView->UNITprepareWhereQuery( array(), "" ) );
     }

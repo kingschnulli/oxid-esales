@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28195 2010-06-07 15:11:17Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 28289 2010-06-11 08:33:39Z sarunas $
  */
 
 
@@ -1047,13 +1047,13 @@ $aLang = array(
 'SUGGEST_FROM'                                    => "Von:",
 'SUGGEST_SENDERNAME'                              => "Name des Absenders:",
 'SUGGEST_SENDEREMAIL'                             => "E-Mail des Absenders:",
-'SUGGEST_CAPTION'                                 => "Überschrift:",
+'SUGGEST_CAPTION'                                 => "Betreff:",
 'SUGGEST_SUBJECT'                                 => "Schau dir das mal an:",
 'SUGGEST_YOURMESSAGE'                             => "Ihre Nachricht:",
-'SUGGEST_MESSAGE1'                                => "Hallo, ich war heute bei",
-'SUGGEST_MESSAGE2'                                => "unterwegs und habe dabei etwas Interessantes gefunden, auf das ich Dich gerne aufmerksam machen möchte. Klicke einfach auf das Bild oder auf die Beschreibung und Du landest direkt im Shop.",
+'SUGGEST_MESSAGE1'                                => "Hallo, Heute habe ich den interessanten Shop",
+'SUGGEST_MESSAGE2'                                => "für dich gefunden. Einfach auf den Link unten klicken, und du gelangst direkt zum Shop.",
 'SUGGEST_SEND'                                    => "Empfehlung abschicken",
-'SUGGEST_ABOUTDATAPROTECTION'                     => "Zum Datenschutz: Ihr Name und Ihre E-Mail-Adresse sowie der Name und die E-Mail-Adresse des Empfängers werden ausschließlich zu Übertragungszwecken verwendet und um den Adressaten über den Absender zu informieren, bzw. um im Fall eines Übertragungsfehlers eine Benachrichtigung übermitteln zu können.",
+'SUGGEST_ABOUTDATAPROTECTION'                     => "Lesen Sie Details zum",
 'SUGGEST_VERIFICATIONCODE'                        => "Prüfcode:",
 'SUGGEST_COMPLETEMARKEDFIELDS2'                   => 'Felder mit einem <span class="req">*</span> müssen ausgefüllt werden',
 'TAGS'                                            => "Stichworte",
@@ -1252,32 +1252,34 @@ $aLang = array(
 'EXCEPTION_NOTALLOWEDTYPE'                        => 'Verbotener Dateityp. Bitte config.inc.php anpassen, um diesen Dateityp zu erlauben.',
 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" nicht gefunden',
 'EXCEPTION_RECOMMLIST_NOTITLE'                    => 'Kein Titel angegeben',
-'INC_HEADER_INVITEFRIENDS'                        => "[tr]Invite your friends",
-'INVITE_TITLE'                                    => "[tr]Invite your friends",
-'INVITE_RECOMMENDSITE'                            => "[tr]Invite your friends to our site and get bonus points for each invited users.",
-'INVITE_ENTERFRIENDSEMAILS'                       => "[tr]Please enter bellow your friends eMails and invitation letter will be sent to them.",
-'INVITE_RECIPIENTEMAIL'                           => "[tr]eMail",
-'INVITE_SENDTO'                                   => "[tr]Send invite to:",
-'INVITE_FROM'                                     => "[tr]From:",
-'INVITE_SENDERNAME'                               => "[tr]Sender's Name:",
-'INVITE_SENDEREMAIL'                              => "[tr]Sender's eMail:",
-'INVITE_CAPTION'                                  => "[tr]Caption:",
-'INVITE_SUBJECT'                                  => "[tr]Have a look at:",
-'INVITE_YOURMESSAGE'                              => "[tr]Your Message:",
-'INVITE_MESSAGE1'                                 => "[tr]Hello, I was looking at",
-'INVITE_MESSAGE2'                                 => "[tr]today and saw something that might interest you. Just click on the link bellow and you will be taken directly to the shop.",
-'INVITE_SEND'                                     => "[tr]Send",
-'INVITE_ABOUTDATAPROTECTION'                      => "[tr]About Data Protection: Your data is kept strictly confidential and will not be given to any third parties.",
-'INVITE_VERIFICATIONCODE'                         => "[tr]Verification code:",
-'INVITE_COMLETECORRECTLYFIELDS'                   => "[tr]Please complete all fields correctly!",
-'INVITE_ERRORWHILESENDINGMAIL'                    => "[tr]An error occurred sending the eMail - please check the eMail address.",
-'INVITE_INCORRECTEMAILADDRESS'                    => "[tr]Incorrect eMail address. Please check entered eMail addresses.",
-'INVITE_EMAILWASSENT'                             => "[tr]Invitation eMail was sent to your friends. Thank's for inviting your friends.",
+'INC_HEADER_INVITEFRIENDS'                        => "Freunde einladen",
+'INVITE_TITLE'                                    => "Freunde einladen",
+'INVITE_RECOMMENDSITE'                            => "Laden Sie Ihre Freunde ein und erhalten Sie Bonuspunkte für jede neue Registrierung.",
+'INVITE_ENTERFRIENDSEMAILS'                       => "Trage Sie die E-Mail-Adressen Ihrer Freunde unten ein und sie erhalten eine Einladung.",
+'INVITE_RECIPIENTEMAIL'                           => "E-Mail",
+'INVITE_SENDTO'                                   => "Einladung schicken an:",
+'INVITE_FROM'                                     => "From:",
+'INVITE_SENDERNAME'                               => "Name des Absenders:",
+'INVITE_SENDEREMAIL'                              => "E_Mail des Absenders:",
+'INVITE_CAPTION'                                  => "Betreff:",
+'INVITE_SUBJECT'                                  => "Für dich gefunden!",
+'INVITE_YOURMESSAGE'                              => "Ihre Nachricht:",
+'INVITE_MESSAGE1'                                 => "Hallo! Heute habe ich den interessanten Shop",
+'INVITE_MESSAGE2'                                 => "für dich gefunden. Einfach auf den Link unten klicken, und du gelangst direkt zum Shop.",
+'INVITE_SEND'                                     => "Einladung abschicken",
+'INVITE_ABOUTDATAPROTECTION'                      => "Lesen Sie Details zum",
+'INVITE_VERIFICATIONCODE'                         => "Prüfcode:",
+'INVITE_COMLETECORRECTLYFIELDS'                   => 'Felder mit einem <span class="req">*</span> müssen ausgefüllt werden',
+'INVITE_ERRORWHILESENDINGMAIL'                    => "Es ist ein Fehler beim Versenden der E-Mails aufgetreten. Bitte überprüfen Sie die E-Mail-Adressen.",
+'INVITE_INCORRECTEMAILADDRESS'                    => "Ungültige E-Mail-Adresse. Bitte überprüfen Sie die E-Mail-Adressen.",
+'INVITE_EMAILWASSENT'                             => "Die Einladungen wurden versendet. Danke!",
 
-'EMAIL_INVITE_HTML_INVITETOSHOP'                  => "[tr]An invitation to visit eShop from",
-'EMAIL_INVITE_HTML_FROM'                          => "[tr]From:",
-'EMAIL_INVITE_HTML_EMAIL'                         => "[tr]eMail:",
-'EMAIL_INVITE_HTML_MENYGREETINGS'                 => "[tr]Many Greetings,",
+'EMAIL_INVITE_HTML_INVITETOSHOP'                  => "Eine Einladung von",
+'EMAIL_INVITE_HTML_INVITETOSHOP2'                 => "",
+'EMAIL_INVITE_HTML_INVITETOSHOP3'                 => "zu besuchen.",
+'EMAIL_INVITE_HTML_FROM'                          => "Von:",
+'EMAIL_INVITE_HTML_EMAIL'                         => "E-Mail:",
+'EMAIL_INVITE_HTML_MENYGREETINGS'                 => "Viele Grüße,",
 
 
 'PROMO_WILLENDIN_PREFIX'   => 'Endet in ',
@@ -1289,13 +1291,14 @@ $aLang = array(
 
 'FACEBOOK_LOCALE'                                 => 'de_DE',
 'FACEBOOK_COMMENTS'                               => '[tr]Facebook comments',
-'FACEBOOK_CHAT'                                   => '[tr]Facebook chat',
+'FACEBOOK_CHAT'                                   => '[tr]Facebook Live Stream',
 'FACEBOOK_INVITE'                                 => '[tr]Facebook invite',
 'FACEBOOK_FACEPILE'                               => '[tr]Facebook facepile',
 'FACEBOOK_INVITEHEADER'                           => '[tr]Invite your Friends',
 'FACEBOOK_INVITETEXT'                             => '[tr]Check this out. Simply click on the button below to go recommended product.',
 'FACEBOOK_INVITEBUTTONTEXT'                       => '[tr]Open website',
 
+'INC_CMP_BASKET_TIMEOUT'                          => '[tr] Expires in',
 
 );
 

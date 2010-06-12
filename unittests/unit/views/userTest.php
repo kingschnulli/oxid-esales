@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 27763 2010-05-14 13:14:46Z vilma $
+ * @version   SVN: $Id: userTest.php 28287 2010-06-11 08:17:06Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -273,4 +273,33 @@ class Unit_Views_userTest extends OxidTestCase
         $this->assertEquals( 'user.tpl', $oUserView->render() );
     }
 
+
+
+    public function testRenderDoesNotCleanReservationsIfOff()
+    {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations'));
+        $oS->expects($this->never())->method('getBasketReservations');
+
+        $oU = $this->getMock('user', array('getSession'));
+        $oU->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $oU->render();
+    }
+    public function testRenderDoesCleanReservationsIfOn()
+    {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+
+        $oR = $this->getMock('stdclass', array('renewExpiration'));
+        $oR->expects($this->once())->method('renewExpiration')->will($this->returnValue(null));
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oR));
+
+        $oU = $this->getMock('user', array('getSession'));
+        $oU->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $oU->render();
+    }
 }

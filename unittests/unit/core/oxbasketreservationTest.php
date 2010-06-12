@@ -199,6 +199,17 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
         $this->assertEquals(array('2000'=>2, '1126'=>3), $oR->UNITgetReservedItems());
     }
 
+    public function testGetReservedItems_skipsArticleActiveCheck()
+    {
+        $oBasket = $this->getMock('oxUserBasket', array('getItems'));
+        $oBasket->expects($this->once())->method('getItems')->with($this->equalTo(false), $this->equalTo(false))->will($this->returnValue(array()));
+
+        $oR = $this->getMock('oxBasketReservation', array('getReservations'));
+        $oR->expects($this->exactly(1))->method('getReservations')->will($this->returnValue($oBasket));
+
+        $this->assertEquals(array(), $oR->UNITgetReservedItems());
+    }
+
     public function testGetReservedAmount()
     {
         $oR = $this->getMock('oxBasketReservation', array('_getReservedItems'));
@@ -230,7 +241,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
     public function testReserveArticles()
     {
         $oUB = $this->getMock('stdclass', array('addItemToBasket'));
-        $oUB->expects($this->exactly(1))->method('addItemToBasket')->with($this->equalTo('2000'), $this->equalTo(5))->will($this->returnValue(null));
+        $oUB->expects($this->exactly(1))->method('addItemToBasket')->with($this->equalTo('2000'), $this->equalTo(8))->will($this->returnValue(null));
 
         $oR = $this->getMock('oxBasketReservation', array('getReservations'));
         $oR->expects($this->exactly(1))->method('getReservations')->will($this->returnValue($oUB));
@@ -287,15 +298,92 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
 
     public function testDiscardReservations()
     {
-        $oR = $this->getMock('oxBasketReservation', array('_getReservedItems', 'discardArticleReservation'));
+        $oUB = $this->getMock('oxUserBasket', array('delete'));
+        $oUB->expects($this->once())->method('delete')->will($this->returnValue(null));
+
+        $oR = $this->getMock(
+                oxTestModules::addFunction('oxBasketReservation', 'setR($r)', '{$this->_oReservations = $r;}'),
+                array('_getReservedItems', 'discardArticleReservation')
+            );
+        $oR->setR($oUB);
         $oR->expects($this->at(0))->method('_getReservedItems')->will($this->returnValue(array('a1'=>3, 'a2'=>5)));
         $oR->expects($this->at(1))->method('discardArticleReservation')->with($this->equalTo('a1'))->will($this->returnValue(null));
         $oR->expects($this->at(2))->method('discardArticleReservation')->with($this->equalTo('a2'))->will($this->returnValue(null));
+
         $oR->discardReservations();
+
+        $this->assertSame(null, $oR->UNIToReservations);
+        $this->assertSame(null, $oR->UNITaCurrentlyReserved);
     }
 
     public function testDiscardUnusedReservations()
     {
-        $this->markTestIncomplete();
+        modConfig::getInstance()->setConfigParam( 'iBasketReservationTimeout', 0 );
+
+        $oArticle = new oxarticle();
+        $oArticle->load('2000');
+        $initial = $oArticle->oxarticles__oxstock->value;
+
+        $oBR = $this->getMock('oxBasketReservation', array('_getReservationsId'));
+        $oBR->expects($this->any())->method('_getReservationsId')->will($this->returnValue('testID'));
+        $oBR->getReservations()->addItemToBasket( '2000', 5 );
+
+        $this->assertTrue((bool)oxDb::getDb()->getOne("select 1 from oxuserbaskets where oxuserid = 'testID'"));
+        $this->assertTrue((bool)oxDb::getDb()->getOne("select 1 from oxuserbasketitems where oxbasketid = '".$oBR->getReservations()->getId()."'"));
+
+        $oBR->discardUnusedReservations(50);
+
+        $oArticle = new oxarticle();
+        $oArticle->load('2000');
+        $this->assertEquals($initial+5, $oArticle->oxarticles__oxstock->value);
+
+        $this->assertFalse((bool)oxDb::getDb()->getOne("select 1 from oxuserbaskets where oxuserid = 'testID'"));
+        $this->assertFalse((bool)oxDb::getDb()->getOne("select 1 from oxuserbasketitems where oxbasketid = '".$oBR->getReservations()->getId()."'"));
+
+    }
+
+
+    /**
+     * TEST IF return time left (in seconds) for basket before expiration
+     */
+    public function testGetTimeLeft()
+    {
+        modConfig::getInstance()->setConfigParam( 'iBasketReservationTimeout', 50 );
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return 8484;}');
+
+        $oUB = new stdClass();
+
+        $oR = $this->getMock('oxBasketReservation', array('getReservations'));
+        $oR->expects($this->any())->method('getReservations')->will($this->returnValue($oUB));
+
+        $oUB->oxuserbaskets__oxupdate = new oxField("8464");
+        $this->assertEquals(30, $oR->getTimeLeft());
+
+        $oUB->oxuserbaskets__oxupdate = new oxField("8474");
+        $this->assertEquals(40, $oR->getTimeLeft());
+
+        $oUB->oxuserbaskets__oxupdate = new oxField("8494");
+        $this->assertEquals(60, $oR->getTimeLeft());
+
+        $oUB->oxuserbaskets__oxupdate = new oxField("8424");
+        $this->assertEquals(0, $oR->getTimeLeft());
+    }
+
+    /**
+     * TEST IF renews expiration timer to maximum value
+     */
+    public function testRenewExpiration()
+    {
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return 84887;}');
+
+        $oUB = $this->getMock('oxbase', array('save'));
+        $oUB->expects($this->once())->method('save')->will($this->returnValue(null));
+
+        $oR = $this->getMock('oxBasketReservation', array('getReservations'));
+        $oR->expects($this->any())->method('getReservations')->will($this->returnValue($oUB));
+
+        $oR->renewExpiration();
+
+        $this->assertEquals(84887, $oUB->oxuserbaskets__oxupdate->value);
     }
 }

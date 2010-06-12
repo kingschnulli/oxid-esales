@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 28251 2010-06-09 12:42:29Z arvydas $
+ * @version   SVN: $Id: oxarticle.php 28267 2010-06-10 13:38:53Z sarunas $
  */
 
 // defining supported link types
@@ -884,9 +884,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         // stock flags
-        if ( $myConfig->getConfigParam( 'blUseStock' ) && $this->oxarticles__oxstockflag->value == 2 &&
-           ( $this->oxarticles__oxstock->value + $this->oxarticles__oxvarstock->value ) <= 0 ) {
-            return false;
+        if ( $myConfig->getConfigParam( 'blUseStock' ) && $this->oxarticles__oxstockflag->value == 2) {
+            $iOnStock = $this->oxarticles__oxstock->value + $this->oxarticles__oxvarstock->value;
+            if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+                $iOnStock += $this->getSession()->getBasketReservations()->getReservedAmount($this->getId());
+            }
+            if ( $iOnStock <= 0 ) {
+                return false;
+            }
         }
 
         return true;
@@ -3861,8 +3866,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
 
         // stock
-        if ( $myConfig->getConfigParam( 'blUseStock' ) && $this->oxarticles__oxstock->value <= 0 && ($this->oxarticles__oxstockflag->value == 3 || $this->oxarticles__oxstockflag->value == 2)) {
-            $this->_blNotBuyable = true;
+        if ( $myConfig->getConfigParam( 'blUseStock' ) && ($this->oxarticles__oxstockflag->value == 3 || $this->oxarticles__oxstockflag->value == 2)) {
+            $iOnStock = $this->oxarticles__oxstock->value;
+            if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+                $iOnStock += $this->getSession()->getBasketReservations()->getReservedAmount($this->getId());
+            }
+            if ($iOnStock <= 0) {
+                $this->_blNotBuyable = true;
+            }
         }
 
         //exceptional handling for variant parent stock:

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 28066 2010-06-02 09:18:55Z michael.keiluweit $
+ * @version   SVN: $Id: payment.php 28287 2010-06-11 08:17:06Z sarunas $
  */
 
 /**
@@ -136,6 +136,10 @@ class Payment extends oxUBase
      */
     public function render()
     {
+        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+            $this->getSession()->getBasketReservations()->renewExpiration();
+        }
+
         parent::render();
 
         $myConfig  = $this->getConfig();

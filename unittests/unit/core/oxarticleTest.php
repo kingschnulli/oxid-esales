@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 28251 2010-06-09 12:42:29Z arvydas $
+ * @version   SVN: $Id: oxarticleTest.php 28282 2010-06-11 07:32:50Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3957,6 +3957,29 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     }
 
     /**
+     * Test is visible when out of stock.
+     *
+     * @return null
+     */
+    public function testIsVisibleNoStockButReserved()
+    {
+        modConfig::getInstance()->setConfigParam( 'blBasketReservationEnabled', true );
+        modConfig::getInstance()->setConfigParam( 'blUseStock', true );
+
+        $oBR = $this->getMock('oxBasketReservation', array('getReservedAmount'));
+        $oBR->expects($this->once())->method('getReservedAmount')->with($this->equalTo($this->oArticle->getId()))->will($this->returnValue(5));
+        $oS = $this->getMock('oxSession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oBR));
+        $oA = $this->getMock('oxarticle', array('getSession'));
+        $oA->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+        $oA->load($this->oArticle->getId());
+        
+        $oA->oxarticles__oxstock = new oxField(-1, oxField::T_RAW);
+        $oA->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
+        $this->assertTrue($oA->isVisible());
+    }
+
+    /**
      * Test get custom VAT.
      *
      * @return null
@@ -4046,13 +4069,16 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle->oxarticles__oxstock = new oxField(2, oxField::T_RAW);
         $this->oArticle->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
         $this->oArticle->save();
+
         $oBR = $this->getMock('oxBasketReservation', array('getReservedAmount'));
         $oBR->expects($this->once())->method('getReservedAmount')->with($this->equalTo('_testArt'))->will($this->returnValue(5));
         $oS = $this->getMock('oxSession', array('getBasketReservations'));
         $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oBR));
-        $oA = $this->getMock('oxarticle', array('getSession'));
+        $oA = $this->getMock('oxarticle', array('getSession', '_assignStock'));
         $oA->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+        $oA->expects($this->any())->method('_assignStock')->will($this->returnValue(null));
         $oA->load($this->oArticle->getId());
+
         $this->assertEquals( 7, $oA->checkForStock(9));
     }
 
@@ -4529,6 +4555,36 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals( -1, $oArticle->getStockStatus());
         $this->assertTrue( $oArticle->_blNotBuyable);
         $this->assertTrue( $oArticle->_blNotBuyableParent);
+    }
+
+    /**
+     * Test assign stock if red.
+     *
+     * @return null
+     */
+    public function testAssignStockWhenStockEmptyButReserved()
+    {
+        modConfig::getInstance()->setConfigParam( 'blBasketReservationEnabled', true );
+        modConfig::getInstance()->setConfigParam( 'blUseStock', true);
+        modConfig::getInstance()->setConfigParam( 'sStockWarningLimit', 5);
+        modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', false);
+
+        $oBR = $this->getMock('oxBasketReservation', array('getReservedAmount'));
+        $oBR->expects($this->once())->method('getReservedAmount')->with($this->equalTo($this->oArticle->getId()))->will($this->returnValue(5));
+        $oS = $this->getMock('oxSession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oBR));
+        $oA = $this->getMock('oxarticle', array('getSession'));
+        $oA->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+        $oA->load($this->oArticle->getId());
+
+        $oA->load('_testArt');
+        $oA->oxarticles__oxstock = new oxField(0, oxField::T_RAW);
+        $oA->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
+        $oA->UNITassignNotBuyableParent();
+        $oA->UNITassignStock();
+        $this->assertEquals( -1, $oA->getStockStatus());
+        $this->assertFalse( $oA->_blNotBuyable);
+        $this->assertTrue( $oA->_blNotBuyableParent);
     }
 
     /**

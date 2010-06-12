@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 28234 2010-06-09 08:00:12Z arvydas $
+ * @version   SVN: $Id: oxcmp_user.php 28277 2010-06-10 15:10:39Z arvydas $
  */
 
 // defining login/logout states
@@ -113,7 +113,7 @@ class oxcmp_user extends oxView
      */
     public function render()
     {
-        if ( $this->getParent()->isActive( 'login' ) ) {
+        if ( $this->getParent()->isActive( 'PsLogin' ) ) {
             // load session user
             $myConfig = $this->getConfig();
             $oUser = $this->getUser();
@@ -124,7 +124,7 @@ class oxcmp_user extends oxView
             if ( !$oUser && !in_array( $blRegister, $this->_aAllowedClasses ) ) {
                 oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() . 'cl=account' );
             }
-            if ( !$this->_checkTermVersion( $oUser->oxuser__oxtermver->value ) &&
+            if ( $oUser && !$oUser->isTermsAccepted() &&
                  $myConfig->getConfigParam( 'blConfirmAGB' ) &&
                  !in_array( $blRegister, $this->_aAllowedClasses ) ) {
                 oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() . 'cl=account&term=1' );
@@ -309,16 +309,12 @@ class oxcmp_user extends oxView
      */
     public function login_noredirect()
     {
-        if ( $this->getParent()->isActive( 'login' ) &&
-             oxConfig::getParameter( 'ord_agb' ) &&
-             $this->getConfig()->getConfigParam( 'blConfirmAGB' ) ) {
-            if ( $oUser = $this->getUser() ) {
-                $oUser->oxuser__oxtermver = new oxField( $this->_getTermVersion(), oxField::T_RAW );
-                $oUser->save();
-                return;
-            }
+        if ( $this->getParent()->isActive( 'PsLogin' ) && oxConfig::getParameter( 'ord_agb' ) &&
+             $this->getConfig()->getConfigParam( 'blConfirmAGB' ) && ( $oUser = $this->getUser() ) ) {
+            $oUser->acceptTerms();
+        } else {
+            $this->login();
         }
-        $this->login();
     }
 
     /**
@@ -364,7 +360,7 @@ class oxcmp_user extends oxView
             $this->_afterLogout();
 
 
-            if ( $this->getParent()->isActive( 'login' ) ) {
+            if ( $this->getParent()->isActive( 'PsLogin' ) ) {
                 return 'account';
             }
 
@@ -443,7 +439,7 @@ class oxcmp_user extends oxView
             return;
         }
 
-        $blActiveLogin = $this->getParent()->isActive( 'login' );
+        $blActiveLogin = $this->getParent()->isActive( 'PsLogin' );
 
         $myConfig = $this->getConfig();
         if ( $blActiveLogin && !oxConfig::getParameter( 'ord_agb' ) && $myConfig->getConfigParam( 'blConfirmAGB' ) ) {
@@ -478,11 +474,11 @@ class oxcmp_user extends oxView
             $oUser->oxuser__oxusername = new oxField($sUser, oxField::T_RAW);
             $oUser->setPassword( $sPassword );
             $oUser->oxuser__oxactive   = new oxField( $iActState, oxField::T_RAW);
-            $oUser->oxuser__oxtermver  = new oxField( $this->_getTermVersion(), oxField::T_RAW );
 
             $oUser->createUser();
             $oUser->load( $oUser->getId() );
             $oUser->changeUserData( $oUser->oxuser__oxusername->value, $sPassword, $sPassword, $aInvAdress, $aDelAdress );
+            $oUser->acceptTerms();
 
             // assigning to newsletter
             $blOptin = oxConfig::getParameter( 'blnewssubscribed' );
@@ -923,36 +919,5 @@ class oxcmp_user extends oxView
             }
             oxSession::deleteVar( 'su' );
         }
-    }
-
-    /**
-     * Checks if user has confirmed current terms and conditions version
-     *
-     * @param string $sVersion terms and conditions version saved confirmed by user
-     *
-     * @return bool
-     */
-    protected function _checkTermVersion( $sVersion )
-    {
-        if ( $sVersion != $this->_getTermVersion() ) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Checks if user has confirmed current terms and conditions version
-     *
-     * @return bool
-     */
-    protected function _getTermVersion()
-    {
-        if ( $this->_sTermsVer == null && $this->getParent()->isActive( 'login' ) ) {
-            $oContent = oxNew( "oxcontent" );
-            if ( $oContent->loadbyIdent( "oxagb" ) ) {
-                $this->_sTermsVer = $oContent->oxcontents__oxtermver->value;
-            }
-        }
-        return $this->_sTermsVer;
     }
 }

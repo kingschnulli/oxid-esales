@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28195 2010-06-07 15:11:17Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 28289 2010-06-11 08:33:39Z sarunas $
  */
 
 
@@ -271,8 +271,8 @@ $aLang = array(
 'CONTACT_EMAIL'                                   => "eMail:",
 'CONTACT_CONTACT'                                 => "Contact",
 'CONTACT_TITLE'                                   => "Title",
-'CONTACT_FIRSTNAME'                               => "First Name:",
-'CONTACT_LASTNAME'                                => "Last Name:",
+'CONTACT_FIRSTNAME'                               => "First name:",
+'CONTACT_LASTNAME'                                => "Last name:",
 'CONTACT_EMAIL2'                                  => "eMail:",
 'CONTACT_SUBJECT'                                 => "Subject:",
 'CONTACT_MESSAGE'                                 => "Message:",
@@ -1042,18 +1042,18 @@ $aLang = array(
 'SUGGEST_ENTERYOURADDRESSANDMESSAGE'              => "Enter your address data and personal message.",
 'SUGGEST_CLICKONSEND'                             => 'Click on "Send Recommendation" to send the eMail.',
 'SUGGEST_CARDTO'                                  => "Card to:",
-'SUGGEST_RECIPIENTNAME'                           => "Recipient's Name:",
+'SUGGEST_RECIPIENTNAME'                           => "Recipient's name:",
 'SUGGEST_RECIPIENTEMAIL'                          => "Recipient's eMail:",
 'SUGGEST_FROM'                                    => "From:",
-'SUGGEST_SENDERNAME'                              => "Sender's Name:",
+'SUGGEST_SENDERNAME'                              => "Sender's name:",
 'SUGGEST_SENDEREMAIL'                             => "Sender's eMail:",
 'SUGGEST_CAPTION'                                 => "Caption:",
-'SUGGEST_SUBJECT'                                 => "Have a look at:",
-'SUGGEST_YOURMESSAGE'                             => "Your Message:",
+'SUGGEST_SUBJECT'                                 => "Have a look!",
+'SUGGEST_YOURMESSAGE'                             => "Message:",
 'SUGGEST_MESSAGE1'                                => "Hello, I was looking at",
-'SUGGEST_MESSAGE2'                                => "today and saw something that might interest you. Just click on the picture or the description and you will be taken directly to the shop.",
+'SUGGEST_MESSAGE2'                                => "today and found something that might be interesting for you. Just click on the link below and you will be directed to the shop.",
 'SUGGEST_SEND'                                    => "Send",
-'SUGGEST_ABOUTDATAPROTECTION'                     => "About Data Protection: Your data is kept strictly confidential and will not be given to any third parties.",
+'SUGGEST_ABOUTDATAPROTECTION'                     => "Read our",
 'SUGGEST_VERIFICATIONCODE'                        => "Verification code:",
 'SUGGEST_COMPLETEMARKEDFIELDS2'                   => 'Please complete all fields marked with a <span class="req">*</span>',
 'TAGS'                                            => "Tags",
@@ -1255,26 +1255,28 @@ $aLang = array(
 'INC_HEADER_INVITEFRIENDS'                        => "Invite your friends",
 'INVITE_TITLE'                                    => "Invite your friends",
 'INVITE_RECOMMENDSITE'                            => "Invite your friends to our site and get bonus points for each invited users.",
-'INVITE_ENTERFRIENDSEMAILS'                       => "Please enter bellow your friends eMails and invitation letter will be sent to them.",
+'INVITE_ENTERFRIENDSEMAILS'                       => "Please enter your friend's eMail address below and invitation letter will be sent to them.",
 'INVITE_RECIPIENTEMAIL'                           => "eMail",
 'INVITE_SENDTO'                                   => "Send invite to:",
 'INVITE_FROM'                                     => "From:",
-'INVITE_SENDERNAME'                               => "Sender's Name:",
+'INVITE_SENDERNAME'                               => "Sender's name:",
 'INVITE_SENDEREMAIL'                              => "Sender's eMail:",
 'INVITE_CAPTION'                                  => "Caption:",
-'INVITE_SUBJECT'                                  => "Have a look at:",
-'INVITE_YOURMESSAGE'                              => "Your Message:",
+'INVITE_SUBJECT'                                  => "Have a look!",
+'INVITE_YOURMESSAGE'                              => "Message:",
 'INVITE_MESSAGE1'                                 => "Hello, I was looking at",
-'INVITE_MESSAGE2'                                 => "today and saw something that might interest you. Just click on the link bellow and you will be taken directly to the shop.",
+'INVITE_MESSAGE2'                                 => "today and found something that might be interesting for you. Just click on the link below and you will be directed to the shop.",
 'INVITE_SEND'                                     => "Send",
-'INVITE_ABOUTDATAPROTECTION'                      => "About Data Protection: Your data is kept strictly confidential and will not be given to any third parties.",
+'INVITE_ABOUTDATAPROTECTION'                      => "Read our",
 'INVITE_VERIFICATIONCODE'                         => "Verification code:",
 'INVITE_COMLETECORRECTLYFIELDS'                   => "Please complete all fields correctly!",
 'INVITE_ERRORWHILESENDINGMAIL'                    => "An error occurred sending the eMail - please check the eMail address.",
 'INVITE_INCORRECTEMAILADDRESS'                    => "Incorrect eMail address. Please check entered eMail addresses.",
-'INVITE_EMAILWASSENT'                             => "Invitation eMail was sent to your friends. Thank's for inviting your friends.",
+'INVITE_EMAILWASSENT'                             => "Invitation eMail was sent to your friends. Thank you for inviting your friends.",
 
-'EMAIL_INVITE_HTML_INVITETOSHOP'                  => "An invitation to visit eShop from",
+'EMAIL_INVITE_HTML_INVITETOSHOP'                  => "An invitation from",
+'EMAIL_INVITE_HTML_INVITETOSHOP2'                 => "to visit",
+'EMAIL_INVITE_HTML_INVITETOSHOP3'                 => "",
 'EMAIL_INVITE_HTML_FROM'                          => "From:",
 'EMAIL_INVITE_HTML_EMAIL'                         => "eMail:",
 'EMAIL_INVITE_HTML_MENYGREETINGS'                 => "Many Greetings,",
@@ -1288,13 +1290,14 @@ $aLang = array(
 
 'FACEBOOK_LOCALE'                                 => 'en_US',
 'FACEBOOK_COMMENTS'                               => 'Facebook comments',
-'FACEBOOK_CHAT'                                   => 'Facebook chat',
+'FACEBOOK_CHAT'                                   => 'Facebook live stream',
 'FACEBOOK_INVITE'                                 => 'Facebook invite',
 'FACEBOOK_FACEPILE'                               => 'Facebook facepile',
 'FACEBOOK_INVITEHEADER'                           => 'Invite your Friends',
 'FACEBOOK_INVITETEXT'                             => 'Check this out. Simply click on the button below to go recommended product.',
 'FACEBOOK_INVITEBUTTONTEXT'                       => 'Open website',
 
+'INC_CMP_BASKET_TIMEOUT'                          => 'Expires in',
 );
 
 /*

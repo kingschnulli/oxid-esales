@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 28213 2010-06-08 09:05:45Z arvydas $
+ * @version   SVN: $Id: oxviewconfigTest.php 28289 2010-06-11 08:33:39Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -306,5 +306,59 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
              ->method('getConfig')
              ->will($this->returnValue($oCfg));
         $this->assertEquals('lalala', $oVC->getActionClassName());
+    }
+
+    public function testGetShowBasketTimeoutWhenFunctionalityIsOnAndTimeLeft()
+    {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+
+        $oR = $this->getMock('stdclass', array('getTimeLeft'));
+        $oR->expects($this->once())->method('getTimeLeft')->will($this->returnValue(5));
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oR));
+
+        $oVC = $this->getMock('oxViewConfig', array('getSession'));
+        $oVC->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $this->assertEquals(true, $oVC->getShowBasketTimeout());
+    }
+    public function testGetShowBasketTimeoutWhenFunctionalityIsOnAndTimeExpired()
+    {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+
+        $oR = $this->getMock('stdclass', array('getTimeLeft'));
+        $oR->expects($this->once())->method('getTimeLeft')->will($this->returnValue(0));
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oR));
+
+        $oVC = $this->getMock('oxViewConfig', array('getSession'));
+        $oVC->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $this->assertEquals(false, $oVC->getShowBasketTimeout());
+    }
+    public function testGetShowBasketTimeoutWhenFunctionalityIsOff()
+    {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+
+        $oVC = $this->getMock('oxViewConfig', array('getSession'));
+        $oVC->expects($this->never())->method('getSession');
+
+        $this->assertEquals(false, $oVC->getShowBasketTimeout());
+    }
+
+    public function testGetBasketTimeLeft()
+    {
+        $oR = $this->getMock('stdclass', array('getTimeLeft'));
+        $oR->expects($this->once())->method('getTimeLeft')->will($this->returnValue(954));
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oR));
+
+        $oVC = $this->getMock('oxViewConfig', array('getSession'));
+        $oVC->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $this->assertEquals(954, $oVC->getBasketTimeLeft());
     }
 }

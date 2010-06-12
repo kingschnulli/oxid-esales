@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcontentTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxcontentTest.php 28277 2010-06-10 15:10:39Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -68,7 +68,40 @@ class Unit_Core_oxcontentTest extends OxidTestCase
         parent::tearDown();
     }
 
-    /*
+    /**
+     * oxContent::save() test case
+     *
+     * @return null
+     */
+    public function testSaveAgb()
+    {
+        $sShopId  = oxConfig::getInstance()->getShopId();
+
+        $oDb = oxDb::getDb();
+        $oDb->execute( "insert into oxacceptedterms (`OXUSERID`, `OXSHOPID`, `OXTERMVERSION`) values ('testuser', '{$sShopId}', '0')" );
+        $this->assertTrue( (bool)$oDb->getOne( "select 1 from oxacceptedterms" ) );
+
+        $oContent = new oxContent();
+        $oContent->loadByIdent( "oxagb" );
+        $oContent->save();
+
+        $this->assertFalse( (bool)$oDb->getOne( "select 1 from oxacceptedterms" ) );
+    }
+
+    /**
+     * oxContent::getTermsVersion() test case
+     *
+     * @return null
+     */
+    public function testGetTermsVersion()
+    {
+        $oContent = $this->getMock( "oxContent", array( "loadByIdent" ) );
+        $oContent->oxcontents__oxtermversion = new oxField( "testVersion" );
+        $oContent->expects($this->once())->method( 'loadByIdent' )->with($this->equalTo( 'oxagb' ) )->will( $this->returnValue( true ));
+        $this->assertEquals( "testVersion", $oContent->getTermsVersion() );
+    }
+
+    /**
      * Test assigning oxcontent values
      */
     public function testAssign()

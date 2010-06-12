@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasket.php 28214 2010-06-08 12:06:29Z sarunas $
+ * @version   SVN: $Id: oxuserbasket.php 28304 2010-06-11 12:20:28Z sarunas $
  */
 
 /**
@@ -102,6 +102,9 @@ class oxUserBasket extends oxBase
     public function setIsNewBasket()
     {
         $this->_blNewBasket = true;
+        $iTime = oxUtilsDate::getInstance()->getTime();
+        $this->oxuserbaskets__oxcreate = new oxField( $iTime );
+        $this->oxuserbaskets__oxupdate = new oxField( $iTime );
     }
 
     /**
@@ -149,11 +152,12 @@ class oxUserBasket extends oxBase
     /**
      * Returns list of basket items
      *
-     * @param bool $blReload if TRUE forces to reload list
+     * @param bool $blReload      if TRUE forces to reload list
+     * @param bool $blActiveCheck should articles be checked for active state?
      *
      * @return array of oxUserBasketItems
      */
-    public function getItems( $blReload = false )
+    public function getItems( $blReload = false, $blActiveCheck = true )
     {
         // cached ?
         if ( $this->_aBasketItems !== null && !$blReload ) {
@@ -168,7 +172,9 @@ class oxUserBasket extends oxBase
         $sViewName = $oArticle->getViewName();
 
         $sSelect  = "select oxuserbasketitems.* from oxuserbasketitems left join $sViewName on oxuserbasketitems.oxartid = $sViewName.oxid ";
-        $sSelect .= 'and '.$oArticle->getSqlActiveSnippet().' ';
+        if ($blActiveCheck) {
+            $sSelect .= 'and '.$oArticle->getSqlActiveSnippet().' ';
+        }
         $sSelect .= "where oxuserbasketitems.oxbasketid = '".$this->getId()."' and $sViewName.oxid is not null ";
 
         $oItems = oxNew( 'oxlist' );

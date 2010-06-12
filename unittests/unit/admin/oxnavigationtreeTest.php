@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnavigationtreeTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
+ * @version   SVN: $Id: oxnavigationtreeTest.php 28293 2010-06-11 09:12:39Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -79,7 +79,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::_addDynLinks() test case
      *
      * @return null
      */
@@ -152,7 +152,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::getDomXml() test case
      *
      * @return null
      */
@@ -173,7 +173,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::_getDynMenuUrl() test case
      *
      * @return null
      */
@@ -191,7 +191,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::_hasGroup() test case
      *
      * @return null
      */
@@ -206,7 +206,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::_hasRights() test case
      *
      * @return null
      */
@@ -221,7 +221,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::getEditUrl() test case
      *
      * @return null
      */
@@ -242,7 +242,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * check if the external url read out correct
      *
      * @return null
      */
@@ -263,7 +263,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::getListUrl() test case
      *
      * @return null
      */
@@ -282,7 +282,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::getListNodes() test case
      *
      * @return null
      */
@@ -312,7 +312,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Testing oxnavigationtree::markNodeActive()
+     * OxNavigationTree::markNodeActive() test case
      *
      * @return null
      */
@@ -343,7 +343,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $oNavTree->expects( $this->once() )->method( 'getDomXml' )->will( $this->returnValue( $oDom ) );
         $oNavTree->markNodeActive( "testClass1" );
 
-        // checking if attribute is set correctly
+        // checking if attribute is set correct
         $oXPath = new DOMXPath( $oDom );
         $oNodeList = $oXPath->query( "//*[@cl='testClass1' or @list='testClass1']" );
 
@@ -358,7 +358,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::getBtn() test case
      *
      * @return null
      */
@@ -387,7 +387,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::getActiveTab() test case
      *
      * @return null
      */
@@ -407,7 +407,8 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::getTabs() test case
+     * test if the returned value of tabs equals the expected amount.
      *
      * @return null
      */
@@ -440,7 +441,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::_copyAttributes() test case
      *
      * @return null
      */
@@ -466,7 +467,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::_checkGroups() test case
      *
      * @return null
      */
@@ -496,7 +497,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::_checkRights() test case
      *
      * @return null
      */
@@ -526,8 +527,9 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
+     * OxNavigationTree::_checkDynFile() test case
      * testing new functionality
-     * dyn file must not be created if content is not valid or even empty
+     * dyn file must not be created if content is empty
      * 
      * @return null
      */
@@ -540,7 +542,8 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::_checkDynFile() test case
+     * dyn file must not be created if content is not valid
      *
      * @return null
      */
@@ -552,7 +555,8 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::_checkDynFile() test case
+     * wheter content is a valid xml file, same content will return
      *
      * @return null
      */
@@ -564,8 +568,11 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if the method find all denial link in menu xml
      *
+     * @param object $oDom     XML Dom Object
+     * @param int    $iNeedCnt amount of 'to remove links'
+     * 
      * @return null
      */
     protected function _checkDemoShopDenialsInMenuXml($oDom, $iNeedCnt)
@@ -584,7 +591,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * call the test method Unit_Admin_oxNavigationTreeTest::_checkDemoShopDenialsInMenuXml()
      *
      * @return null
      */
@@ -597,7 +604,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if not all denial links removed when it isn't a demoshop
      *
      * @return null
      */
@@ -606,7 +613,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $oNavTree = oxNew('oxNavigationTree');
         $oDom = $this->_getDomXml();
 
-        $oXPath    = new DomXPath( $oDom );
+        $oXPath = new DomXPath( $oDom );
         foreach ( $oXPath->query( "//*[@disableForDemoShop]" ) as $oNode ) {
             $oNode->setAttribute('disableForDemoShop', '1');
         }
@@ -624,7 +631,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if not all denial links are removed when it is a demoshop
      *
      * @return null
      */
@@ -650,7 +657,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if no link is removed when it isn't a demoshop
      *
      * @return null
      */
@@ -676,7 +683,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if no link is removed when it is a demoshop
      *
      * @return null
      */
@@ -702,9 +709,10 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if its possible to load the menu_xx.xml.
+     * if all is ok, the method returns a dom object, else return nothing.
      *
-     * @return null
+     * @return object | null
      */
     protected function _getDomXml()
     {
@@ -734,7 +742,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if empty node can removed.
      *
      * @return null
      */
@@ -760,7 +768,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if the right class id will read out from a node
      *
      * @return null
      */
@@ -788,7 +796,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if the admin URL will read out correct from config 
      *
      * @return null
      */
@@ -801,7 +809,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if the admin URL will read out correct from session 
      *
      * @return null
      */
@@ -817,7 +825,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * OxNavigationTree::_processCachedFile() test case
      *
      * @return null
      */
@@ -832,7 +840,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * Enter description here...
+     * test if parameter add correct to URL
      *
      * @return null
      */

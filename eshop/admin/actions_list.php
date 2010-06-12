@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: actions_list.php 28064 2010-06-02 08:59:37Z sarunas $
+ * @version   SVN: $Id: actions_list.php 28294 2010-06-11 09:54:44Z sarunas $
  */
 
 /**
@@ -89,13 +89,13 @@ class Actions_List extends oxAdminList
 
             switch ( $sDisplayType ) {
                 case 1: // active
-                    $sQ .= " and ( {$sTable}.oxactive = 1 or ( {$sTable}.oxactivefrom < '{$sNow}' and {$sTable}.oxactiveto > '{$sNow}' ) ) ";
+                    $sQ .= " and {$sTable}.oxactivefrom < '{$sNow}' and {$sTable}.oxactiveto > '{$sNow}' ";
                     break;
                 case 2: // upcoming
-                    $sQ .= " and {$sTable}.oxactiveto < '{$sNow}' and {$sTable}.oxactiveto != '0000-00-00 00:00:00' ";
+                    $sQ .= " and {$sTable}.oxactivefrom > '{$sNow}' ";
                     break;
                 case 3: // expired
-                    $sQ .= " and {$sTable}.oxactivefrom > '{$sNow}' and {$sTable}.oxactivefrom != '0000-00-00 00:00:00' ";
+                    $sQ .= " and {$sTable}.oxactiveto < '{$sNow}' and {$sTable}.oxactiveto != '0000-00-00 00:00:00' ";
                     break;
             }
         }

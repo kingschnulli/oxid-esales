@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 28211 2010-06-08 08:58:41Z sarunas $
+ * @version   SVN: $Id: oxbasket.php 28270 2010-06-10 13:59:12Z sarunas $
  */
 
 /**
@@ -1154,6 +1154,13 @@ class oxBasket extends oxSuperCfg
             return;
         }
 
+        // reserve active basket
+        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+            if (!$this->getSession()->getBasketReservations()->getTimeLeft()) {
+                $this->deleteBasket();
+            }
+        }
+
         if ( !$this->_blUpdateNeeded && !$blForceUpdate ) {
             return;
         }
@@ -1618,6 +1625,7 @@ class oxBasket extends oxSuperCfg
      */
     public function deleteBasket()
     {
+        $this->_aBasketContents = array();
         $this->getSession()->delBasket();
 
         if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {

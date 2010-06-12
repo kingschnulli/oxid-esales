@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: basket.php 26071 2010-02-25 15:12:55Z sarunas $
+ * @version   SVN: $Id: basket.php 28287 2010-06-11 08:17:06Z sarunas $
  */
 
 /**
@@ -99,6 +99,10 @@ class Basket extends oxUBase
      */
     public function render()
     {
+        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+            $this->getSession()->getBasketReservations()->renewExpiration();
+        }
+
         parent::render();
 
         // checks if current http client is SE and skips basket preview on success

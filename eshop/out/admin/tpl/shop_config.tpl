@@ -8,6 +8,30 @@ function _groupExp(el) {
     if (_cur.className == "exp") _cur.className = "";
       else _cur.className = "exp";
 }
+function showBasketReserved()
+{
+  if( document.getElementById('basketreserved').value == 1)
+  {
+    document.getElementById('basketreservedtime').style.display = 'block';
+  }
+  else
+  {
+    document.getElementById('basketreservedtime').style.display = 'none';
+  }
+}
+function showInvitations()
+{
+  if( document.getElementById('invitations').value == 1)
+  {
+    document.getElementById('pointsforinvitation').style.display = 'block';
+    document.getElementById('pointsforregistration').style.display = 'block';
+  }
+  else
+  {
+    document.getElementById('pointsforinvitation').style.display = 'none';
+    document.getElementById('pointsforregistration').style.display = 'none';
+  }
+}
 //-->
 </script>
 
@@ -700,7 +724,7 @@ function _groupExp(el) {
 
             <dl>
                 <dt>
-                    <select class="select" name=confstrs[blBasketReservationEnabled] [{ $readonly }]>
+                    <select class="select" id="basketreserved" name=confstrs[blBasketReservationEnabled] onchange="javascript:showBasketReserved();" [{ $readonly }]>
                         <option value="0"  [{if !$confstrs.blBasketReservationEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
                         <option value="1"  [{if $confstrs.blBasketReservationEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
@@ -712,9 +736,9 @@ function _groupExp(el) {
                 <div class="spacer"></div>
             </dl>
 
-            <dl>
+            <dl [{if !$confstrs.blBasketReservationEnabled }]style="display: none;"[{/if}] id="basketreservedtime">
                 <dt>
-                    <input type=text class="txt" style="width:70" name=confstrs[iBasketReservationTimeout] value="[{$confstrs.iBasketReservationTimeout}]" [{ $readonly}]>
+                    <input type=text class="txt" style="width:70" name=confstrs[iBasketReservationTimeout] value="[{if $confstrs.iBasketReservationTimeout}][{$confstrs.iBasketReservationTimeout}][{else}]1200[{/if}]" [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_BASKETRESERVATIONTIMEOUT" }]
                 </dt>
                 <dd>
@@ -731,7 +755,7 @@ function _groupExp(el) {
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_INVITATIONS" }]</b></a>
             <dl>
                 <dt>
-                    <select class="select" name=confstrs[blEnableInvitation] [{ $readonly }]>
+                    <select class="select" id="invitations" name=confstrs[blEnableInvitation] onchange="javascript:showInvitations();" [{ $readonly }]>
                         <option value="0"  [{if !$confstrs.blEnableInvitation }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
                         <option value="1"  [{if $confstrs.blEnableInvitation }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
@@ -743,7 +767,7 @@ function _groupExp(el) {
                 <div class="spacer"></div>
             </dl>
 
-            <dl>
+            <dl [{if !$confstrs.blEnableInvitation }]style="display: none;"[{/if}] id="pointsforinvitation">
                 <dt>
                     <input type=text class="txt" style="width:70" name=confstrs[dPointsForInvitation] value="[{$confstrs.dPointsForInvitation}]" [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_POINTSFORINVITATION" }]
@@ -754,7 +778,7 @@ function _groupExp(el) {
                 <div class="spacer"></div>
             </dl>
 
-            <dl>
+            <dl [{if !$confstrs.blEnableInvitation }]style="display: none;"[{/if}] id="pointsforregistration">
                 <dt>
                     <input type=text class="txt" style="width:70" name=confstrs[dPointsForRegistration] value="[{$confstrs.dPointsForRegistration}]" [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_POINTSFORREGISTRATION" }]
@@ -1147,28 +1171,6 @@ function _groupExp(el) {
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_CSVSEPARATOR" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
-            <dl>
-                <dt>
-                    <input type=text class="txt" name=confstrs[dPointsForInvitation] value="[{$confstrs.dPointsForInvitation}]">
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_POINTSFORINVITATION" }]
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_POINTSFORINVITATION" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
-            <dl>
-                <dt>
-                    <input type=text class="txt" name=confstrs[dPointsForRegistration] value="[{$confstrs.dPointsForRegistration}]">
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_POINTSFORREGISTRATION" }]
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_POINTSFORREGISTRATION" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>

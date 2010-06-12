@@ -513,7 +513,7 @@
                       <input id="test_OrderSubmitBottom" type="submit" value="[{ oxmultilang ident="ORDER_SUBMITORDER" }]">
                   </div>
 
-                  [{if $oView->isActive('login') }]
+                  [{if $oView->isActive('PsLogin') }]
                     <input type="hidden" name="ord_agb" value="1">
                   [{else}]
                     [{if $oView->isConfirmAGBActive()}]

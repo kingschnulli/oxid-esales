@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28217 2010-06-08 12:14:23Z rimvydas.paskevicius $
+ * @version   SVN: $Id: help_lang.php 28269 2010-06-10 13:58:14Z vilma $
  */
 
 /**
@@ -157,9 +157,54 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_ALTVATIDCHECKINTERFACEWSDL'   =>  'Here you can enter an alternative URL for the online VAT ID check.',
 
-'HELP_SHOP_CONFIG_POINTSFORINVITATION'          =>  'The amount of credit points gets user who invited somebody to shop. User gets credit points only if invited user registers into shop.',
+'HELP_SHOP_CONFIG_PSLOGIN'                      =>  'Private sales (PS) login module transforms regular shop into members ' .
+                                                    'only shop. This helps to develop customer communities with similar interests. ' .
+                                                    'Standard PS module restricts full shop access.',
 
-'HELP_SHOP_CONFIG_POINTSFORREGISTRATION'        =>  'The amount of credit points gets user who was invited by already registered user. Invited user must register to get these points.',
+'HELP_SHOP_CONFIG_BASKETEXCLUDE'                =>  'Allows to insert products only from one (root) category, if category change is ' .
+                                                    'detected user is asked to finalize order (go to checkout) or continue shopping ' .
+                                                    '(basket is cleaned in this case).',
+
+'HELP_SHOP_CONFIG_BASKETRESERVATION'            =>  'Enables basket reservation and expiration functionality. ' .
+                                                    'Normally eShop reduces article stock when order is made. ' .
+                                                    'With this option enabled this functionality changes to reduce ' .
+                                                    'article stock and reserve it when the article is added to basket.',
+
+'HELP_SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'     =>  'Basket reservation timeout in seconds. After this timeout the reserved' .
+                                                    ' articles are returned to stock and active user basket is cleared.',
+
+'HELP_SHOP_CONFIG_INVITATION'                   =>  'Enable or disable invitation usage. Invitation is used for inviting your ' .
+                                                    'friends to website and getting credit points for inviting.',
+
+'HELP_SHOP_CONFIG_POINTSFORINVITATION'          =>  'The amount of credit points gets user who invited somebody to shop. ' .
+                                                    'User gets credit points only if invited user registers into shop.',
+
+'HELP_SHOP_CONFIG_POINTSFORREGISTRATION'        =>  'The amount of credit points gets user who was invited by already ' .
+                                                    'registered user. Invited user must register to get these points.',
+
+'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKAPPID'    =>  'To connect your website to facebook you need enter Application ID. ' .
+                                                    'How to connect your website to Facebook, you can read ' .
+                                                    '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank" target="_blank">here</a>.',
+
+'HELP_SHOP_CONFIG_SHOP_CONFIG_FBSECRETKEY'      =>  'To ensure secure connection between your ste and facebook, you must ' .
+                                                    'enter Secure Key which you get  when registering your website to ' .
+                                                    'Facebook. How to connect your website to Facebook, you can read ' .
+                                                     '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank" target="_blank">here</a>.',
+
+'HELP_SHOP_CONFIG_FBCOMMENTS'                   =>  "The Comments Box easily enables your users to comment on your site's content.",
+
+'HELP_SHOP_CONFIG_FBFACEPILE'                   =>  "The Facepile plugin shows profile pictures of the user's friends who " .
+                                                    "have already signed up for your site.",
+
+'HELP_SHOP_CONFIG_FBCHAT'                       =>  'The Live Stream plugin lets users visiting your site or application ' .
+                                                    'share activity and comments in real time.',
+
+'HELP_SHOP_CONFIG_FBINVITE'                     =>  'Shows your friends list and allows you to invite friends to your website.',
+
+'HELP_SHOP_CONFIG_FBSHARE'                      =>  'Shows Facebook share button to share your website content.',
+
+'HELP_SHOP_CONFIG_FBLIKE'                       =>  'The Like button enables users to make connections to your pages and share content back to their friends on Facebook with one click.',
+
 
 'HELP_SHOP_MALL_MALLMODE'                       =>  'Here you can set what is shown as front page of this eShop:' .
                                                     '<ul><li><span class="navipath_or_inputname">Show shop selector</span>: A page where the different eShops can be selected is shown.</li>' .

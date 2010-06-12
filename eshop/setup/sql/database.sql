@@ -552,7 +552,7 @@ CREATE TABLE `oxcontents` (
   `OXCONTENT_3` text NOT NULL,
   `OXCATID` varchar(32) character set latin1 collate latin1_general_ci default NULL,
   `OXFOLDER` varchar(32) NOT NULL default '',
-  `OXTERMVER` char(32) NOT NULL default '',
+  `OXTERMVERSION` char(32) NOT NULL default '',
   PRIMARY KEY  (`OXID`),
   UNIQUE KEY `OXLOADID` (`OXLOADID`),
   INDEX `cat_search` ( `OXTYPE` , `OXSHOPID` , `OXSNIPPET` , `OXCATID` )
@@ -1748,7 +1748,6 @@ CREATE TABLE `oxuser` (
   `OXUPDATEKEY` char( 32 ) NOT NULL default '',
   `OXUPDATEEXP` int(11) NOT NULL default '0',
   `OXISOPENID` tinyint(1) NOT NULL default '0',
-  `OXTERMVER` char(32) NOT NULL default '',
   `OXPOINTS` double NOT NULL default '0',
   PRIMARY KEY  (`OXID`),
   UNIQUE `OXUSERNAME` (`OXUSERNAME`, `OXSHOPID`),
@@ -1762,7 +1761,7 @@ CREATE TABLE `oxuser` (
 # Data for table `oxuser`
 #
 
-INSERT INTO `oxuser` VALUES ('oxdefaultadmin', 1, 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Your Company Name', 'John', 'Doe', 'Maple Street', '2425', '', 'Any City', 'a7c40f631fc920687.20179984', 'BW', '9041', '217-8918712', '217-8918713', 'MR', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', 0, '', 0, 0, '', 0);
+INSERT INTO `oxuser` VALUES ('oxdefaultadmin', 1, 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Your Company Name', 'John', 'Doe', 'Maple Street', '2425', '', 'Any City', 'a7c40f631fc920687.20179984', 'BW', '9041', '217-8918712', '217-8918713', 'MR', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', 0, '', 0, 0, 0);
 
 #
 # Table structure for table `oxuserpayments`
@@ -2227,12 +2226,28 @@ INSERT INTO `oxstates` VALUES ('AP', '8f241f11096877ac0.98748826', 'Armed Forces
 DROP TABLE IF EXISTS `oxinvitations`;
 
 CREATE TABLE IF NOT EXISTS `oxinvitations` (
-   `oxuserid` char(32) collate latin1_general_ci NOT NULL,
-   `oxdate` date NOT NULL,
-   `oxemail` varchar(255) collate latin1_general_ci NOT NULL,
-   `oxpending` mediumint(9) NOT NULL,
-   `oxaccepted` mediumint(9) NOT NULL,
-   `oxtype` tinyint(4) NOT NULL default '1',
-    KEY `oxuserid` (`oxuserid`),
-    KEY `oxdate` (`oxdate`)
+   `OXUSERID` char(32) collate latin1_general_ci NOT NULL,
+   `OXDATE` date NOT NULL,
+   `OXEMAIL` varchar(255) collate latin1_general_ci NOT NULL,
+   `OXPENDING` mediumint(9) NOT NULL,
+   `OXACCEPTED` mediumint(9) NOT NULL,
+   `OXTYPE` tinyint(4) NOT NULL default '1',
+    KEY `OXUSERID` (`OXUSERID`),
+    KEY `OXDATE` (`OXDATE`)
 ) ENGINE=MYISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+#
+# Table structure for table `oxacceptedterms`
+# for storing information user accepted terms version
+# created 2010-06-10
+#
+
+DROP TABLE IF EXISTS `oxacceptedterms`;
+
+CREATE TABLE `oxacceptedterms` (
+  `OXUSERID` char(32) character set latin1 collate latin1_general_ci NOT NULL,
+  `OXSHOPID` char( 32 ) NOT NULL default '',
+  `OXTERMVERSION` char(32) NOT NULL default '',
+  `OXACCEPTEDTIME` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY (`OXUSERID`, `OXSHOPID`)
+) TYPE=MyISAM;

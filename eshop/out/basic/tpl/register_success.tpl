@@ -1,5 +1,5 @@
 [{assign var="template_title" value="REGISTER_SUCCESS_MYACCOUNT"|oxmultilangassign}]
-[{if $oView->isActive('login') }]
+[{if $oView->isActive('PsLogin') }]
     [{include file="_header_plain.tpl" title=$template_title location=$template_title cssclass="body"}]
     [{include file="inc/error.tpl" Errorlist=$Errors.default}]
 [{else}]
@@ -32,7 +32,7 @@
       </div>
     </form>
 </div>
-[{if $oView->isActive('login') }]
+[{if $oView->isActive('PsLogin') }]
     [{include file="_footer_plain.tpl" }]
 [{else}]
     [{ insert name="oxid_tracker" title=$template_title }]

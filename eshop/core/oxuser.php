@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 28125 2010-06-03 11:44:01Z arvydas $
+ * @version   SVN: $Id: oxuser.php 28277 2010-06-10 15:10:39Z arvydas $
  */
 
 /**
@@ -2327,4 +2327,29 @@ class oxUser extends oxBase
         return $this->oxuser__oxstateid->value;
     }
 
+    /**
+     * Checks if user accepted latest shopping terms and conditions version
+     *
+     * @return bool
+     */
+    public function isTermsAccepted()
+    {
+        $sShopId = $this->getConfig()->getShopId();
+        $sUserId = $this->getId();
+        return (bool) oxDb::getDb()->getOne( "select 1 from oxacceptedterms where oxuserid='{$sUserId}' and oxshopid='{$sShopId}'" );
+    }
+
+    /**
+     * Writes terms acceptance info to db
+     *
+     * @return null
+     */
+    public function acceptTerms()
+    {
+        $sUserId  = $this->getId();
+        $sShopId  = $this->getConfig()->getShopId();
+        $sVersion = oxNew( "oxcontent" )->getTermsVersion();
+
+        oxDb::getDb()->execute( "replace oxacceptedterms set oxuserid='{$sUserId}', oxshopid='{$sShopId}', oxtermversion='{$sVersion}'" );
+    }
 }

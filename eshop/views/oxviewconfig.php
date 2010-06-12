@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 28219 2010-06-08 12:15:19Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfig.php 28289 2010-06-11 08:33:39Z sarunas $
  */
 
 /**
@@ -1139,6 +1139,27 @@ class oxViewConfig extends oxSuperCfg
     public function getFbAppId()
     {
         return $this->getConfig()->getConfigParam( 'sFbAppId' );
+    }
+
+    /**
+     * should basket timeout counter be shown?
+     *
+     * @return bool
+     */
+    public function getShowBasketTimeout()
+    {
+        return $this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )
+            && ($this->getSession()->getBasketReservations()->getTimeLeft() > 0);
+    }
+
+    /**
+     * return the seconds left until basket expiration
+     *
+     * @return int
+     */
+    public function getBasketTimeLeft()
+    {
+        return $this->getSession()->getBasketReservations()->getTimeLeft();
     }
 
 }

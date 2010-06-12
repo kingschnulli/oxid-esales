@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: paymentTest.php 28296 2010-06-11 10:34:42Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -561,5 +561,44 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->assertNull( $_GET["dynvalue[kkyear]"]);
         $this->assertNull( $_GET["dynvalue[kkpruef]"]);
 
+    }
+
+
+    public function testRenderDoesNotCleanReservationsIfOff()
+    {
+        oxTestModules::addFunction('oxUtils', 'redirect', '{throw new Exception("REDIRECT");}');
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations'));
+        $oS->expects($this->never())->method('getBasketReservations');
+
+        $oP = $this->getMock('payment', array('getSession'));
+        $oP->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        try {
+            $oP->render();
+        } catch (Exception $e) {
+            $this->assertEquals("REDIRECT", $e->getMessage());
+        }
+    }
+    public function testRenderDoesCleanReservationsIfOn()
+    {
+        oxTestModules::addFunction('oxUtils', 'redirect', '{throw new Exception("REDIRECT");}');
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+
+        $oR = $this->getMock('stdclass', array('renewExpiration'));
+        $oR->expects($this->once())->method('renewExpiration')->will($this->returnValue(null));
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oR));
+
+        $oP = $this->getMock('payment', array('getSession'));
+        $oP->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        try {
+            $oP->render();
+        } catch (Exception $e) {
+            $this->assertEquals("REDIRECT", $e->getMessage());
+        }
     }
 }

@@ -107,7 +107,7 @@ class oxBasketReservation extends oxSuperCfg
         }
 
         $this->_aCurrentlyReserved = array();
-        foreach ( $oReserved->getItems() as $oItem ) {
+        foreach ( $oReserved->getItems(false, false) as $oItem ) {
             if (!isset($this->_aCurrentlyReserved[$oItem->oxuserbasketitems__oxartid->value])) {
                 $this->_aCurrentlyReserved[$oItem->oxuserbasketitems__oxartid->value] = 0;
             }
@@ -173,8 +173,8 @@ class oxBasketReservation extends oxSuperCfg
             if ($dAmount != 0) {
                 $oArticle = oxNew('oxarticle');
                 if ($oArticle->load($sId)) {
-                    $dReducedAmount = $oArticle->reduceStock(-$dAmount, $blAllowNegativeStock);
-                    $oReserved->addItemToBasket( $sId, $dReducedAmount );
+                    $oArticle->reduceStock(-$dAmount, $blAllowNegativeStock);
+                    $oReserved->addItemToBasket( $sId, -$dAmount );
                 }
             }
         }
@@ -190,6 +190,7 @@ class oxBasketReservation extends oxSuperCfg
      */
     public function reserveBasket(oxBasket $oBasket)
     {
+        $this->discardUnusedReservations(200);
         $this->_reserveArticles( $this->_basketDifference($oBasket) );
     }
 
@@ -251,17 +252,78 @@ class oxBasketReservation extends oxSuperCfg
         foreach ( array_keys($this->_getReservedItems()) as $sArticleId) {
             $this->discardArticleReservation($sArticleId);
         }
+        if ($this->_oReservations) {
+            $this->_oReservations->delete();
+            $this->_oReservations = null;
+            $this->_aCurrentlyReserved = null;
+        }
     }
 
     /**
-     * periodic cleanup: discards timed out reservations
+     * periodic cleanup: discards timed out reservations even if they are not
+     * for the current user
      *
-     * @param int $iTimeout timout in seconds
+     * @param int $iLimit limit for discarding (performance related)
      *
      * @return null
      */
-    public function discardUnusedReservations($iTimeout)
+    public function discardUnusedReservations($iLimit)
     {
-//TODO
+        $oDb = oxDb::getDb(true);
+        $iStartTime = oxUtilsDate::getInstance()->getTime() - (int) $this->getConfig()->getConfigParam( 'iBasketReservationTimeout' );
+        $oRs = $oDb->execute("select oxid from oxuserbaskets where oxtitle = 'reservations' and oxupdate <= $iStartTime limit $iLimit");
+        if ($oRs->EOF) {
+            return;
+        }
+        $aFinished = array();
+        while (!$oRs->EOF) {
+            $aFinished[] = $oDb->quote($oRs->fields['oxid']);
+            $oRs->MoveNext();
+        }
+        $oRs = $oDb->execute("select oxartid, oxamount from oxuserbasketitems where oxbasketid in (".implode(",", $aFinished).")");
+        while (!$oRs->EOF) {
+            $oArticle = oxNew('oxarticle');
+            if ($oArticle->load($oRs->fields['oxartid'])) {
+                $oArticle->reduceStock(-$oRs->fields['oxamount'], true);
+            }
+            $oRs->MoveNext();
+        }
+        $oDb->execute("delete from oxuserbasketitems where oxbasketid in (".implode(",", $aFinished).")");
+        $oDb->execute("delete from oxuserbaskets where oxid in (".implode(",", $aFinished).")");
+        $this->_aCurrentlyReserved = null;
+    }
+
+    /**
+     * return time left (in seconds) for basket before expiration
+     *
+     * @return int
+     */
+    public function getTimeLeft()
+    {
+        $iTimeout = $this->getConfig()->getConfigParam( 'iBasketReservationTimeout' );
+        if ($iTimeout > 0) {
+            if ($oRev = $this->getReservations()) {
+                $iTimeout -= (oxUtilsDate::getInstance()->getTime() - $oRev->oxuserbaskets__oxupdate->value);
+                if ($iTimeout < 0) {
+                    return 0;
+                }
+                return $iTimeout;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * renews expiration timer to maximum value
+     *
+     * @return null
+     */
+    public function renewExpiration()
+    {
+        if ($oReserved = $this->getReservations()) {
+            $iTime = oxUtilsDate::getInstance()->getTime();
+            $oReserved->oxuserbaskets__oxupdate = new oxField( $iTime );
+            $oReserved->save();
+        }
     }
 }
