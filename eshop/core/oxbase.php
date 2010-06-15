@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 28204 2010-06-08 06:36:11Z michael.keiluweit $
+ * @version   SVN: $Id: oxbase.php 28308 2010-06-11 13:06:53Z alfonsas $
  */
 
 /**
@@ -205,7 +205,7 @@ class oxBase extends oxSuperCfg
         $this->$sName = $sValue;
         if ( $this->_blUseLazyLoading && strpos( $sName, $this->_sCoreTable . "__" ) === 0 ) {
             $sFieldName = str_replace( $this->_sCoreTable . "__", '', $sName );
-            if ($sFieldName != 'oxnid' && !$this->_aFieldNames[$sFieldName]) {
+            if ($sFieldName != 'oxnid' && !isset($this->_aFieldNames[$sFieldName])) {
                 $aAllFields = $this->_getAllFields(true);
                 if (isset($aAllFields[strtolower($sFieldName)])) {
                     $iFieldStatus = $this->_getFieldStatus($sFieldName);

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 28275 2010-06-10 14:31:24Z sarunas $
+ * @version   SVN: $Id: oxbasketTest.php 28314 2010-06-11 15:20:51Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2016,9 +2016,9 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
         $oBR = $this->getMock('oxBasketReservation', array('reserveBasket', 'getTimeLeft'));
         $oBR->expects($this->once())->method('reserveBasket')->with($this->equalTo($oBasket))->will($this->returnValue(null));
-        $oBR->expects($this->once())->method('getTimeLeft')->with()->will($this->returnValue(4));
+        $oBR->expects($this->never())->method('getTimeLeft');
         $oS = $this->getMock('oxSession', array('getBasketReservations'));
-        $oS->expects($this->exactly(2))->method('getBasketReservations')->will($this->returnValue($oBR));
+        $oS->expects($this->exactly(1))->method('getBasketReservations')->will($this->returnValue($oBR));
         $oBasket->expects($this->any())->method('getSession')->will($this->returnValue($oS));
 
         $oBasket->expects( $this->once() )->method( 'isEnabled' )->will( $this->returnValue( true ) );
@@ -2039,60 +2039,6 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $oBasket->calculateBasket( false );
     }
-
-    /**
-     * Testing final basket calculator
-     */
-    public function testCalculateBasketReservationExpired()
-    {
-        modConfig::getInstance()->setConfigParam( 'blCalcVATForDelivery', false );
-        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', true );
-        modConfig::getInstance()->setConfigParam( 'blPerfNoBasketSaving', false );
-
-        $aMethodsToTest = array( 'isEnabled',
-                                 '_clearBundles',
-                                 '_addBundles',
-                                 '_calcItemsPrice',
-                                 '_calcBasketDiscount',
-                                 '_calcBasketTotalDiscount',
-                                 '_calcVoucherDiscount',
-                                 '_applyDiscounts',
-                                 'setCost',
-                                 '_calcTotalPrice',
-                                 '_setDeprecatedValues',
-                                 '_calcBasketWrapping',
-                                 '_mergeSavedBasket',
-                                 'afterUpdate',
-                                 'getSession',
-                                 'deleteBasket' );
-        $oBasket = $this->getMock('oxbasket', $aMethodsToTest);
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
-        $oBR = $this->getMock('oxBasketReservation', array('reserveBasket', 'getTimeLeft'));
-        $oBR->expects($this->once())->method('reserveBasket')->with($this->equalTo($oBasket))->will($this->returnValue(null));
-        $oBR->expects($this->once())->method('getTimeLeft')->with()->will($this->returnValue(0));
-        $oS = $this->getMock('oxSession', array('getBasketReservations'));
-        $oS->expects($this->exactly(2))->method('getBasketReservations')->will($this->returnValue($oBR));
-        $oBasket->expects($this->any())->method('getSession')->will($this->returnValue($oS));
-
-        $oBasket->expects( $this->once() )->method( 'isEnabled' )->will( $this->returnValue( true ) );
-        $oBasket->expects( $this->once() )->method( '_mergeSavedBasket' );
-        $oBasket->expects( $this->once() )->method( '_clearBundles' );
-        $oBasket->expects( $this->once() )->method( '_addBundles' );
-        $oBasket->expects( $this->once() )->method( '_calcItemsPrice' );
-        $oBasket->expects( $this->once() )->method( '_calcBasketDiscount' );
-        $oBasket->expects( $this->once() )->method( '_calcBasketTotalDiscount' );
-        $oBasket->expects( $this->once() )->method( '_calcVoucherDiscount' );
-        $oBasket->expects( $this->once() )->method( '_applyDiscounts' );
-        $oBasket->expects( $this->exactly( 3 ) )->method( 'setCost' );
-        $oBasket->expects( $this->once() )->method( '_calcTotalPrice' );
-        $oBasket->expects( $this->once() )->method( '_setDeprecatedValues' );
-        $oBasket->expects( $this->once() )->method( 'afterUpdate' );
-        $oBasket->expects( $this->once() )->method( '_calcBasketWrapping' );
-        $oBasket->expects( $this->once() )->method( 'deleteBasket' );
-
-        $oBasket->calculateBasket( false );
-    }
-
 
     /**
      * Testing update status markers onUpdate/afterUpdate

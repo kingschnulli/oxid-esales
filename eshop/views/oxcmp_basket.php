@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_basket.php 26611 2010-03-17 12:02:26Z sarunas $
+ * @version   SVN: $Id: oxcmp_basket.php 28314 2010-06-11 15:20:51Z sarunas $
  */
 
 /**
@@ -53,6 +53,26 @@ class oxcmp_basket extends oxView
                                      'searchrecomm',// search recomendation
                                      'recommid'     // recomm. list id
                                     );
+
+    /**
+     * Initiates component.
+     *
+     * @return null
+     */
+    public function init()
+    {
+        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+            if ($oReservations = $this->getSession()->getBasketReservations()) {
+                if (!$oReservations->getTimeLeft()) {
+                    if ( $oBasket = $this->getSession()->getBasket() ) {
+                        $oBasket->deleteBasket();
+                    }
+                }
+                $oReservations->discardUnusedReservations(200);
+            }
+        }
+        return parent::init();
+    }
 
     /**
      * Loads basket ($oBasket = $mySession->getBasket()), calls oBasket->calculateBasket,

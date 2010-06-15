@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: accountTest.php 28047 2010-06-01 14:42:50Z arvydas $
+ * @version   SVN: $Id: accountTest.php 28315 2010-06-11 15:34:43Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,10 +37,11 @@ class Unit_Views_accountTest extends OxidTestCase
      */
     public function testRenderConfirmTerms()
     {
-        $oUserView = $this->getMock( 'account', array( 'confirmTerms', 'getUser', 'isActive' ) );
+        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
+
+        $oUserView = $this->getMock( 'account', array( 'confirmTerms', 'getUser' ) );
         $oUserView->expects( $this->any() )->method( 'confirmTerms' )->will( $this->returnValue( true ) );
         $oUserView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( true ) );
-        $oUserView->expects( $this->any() )->method( 'isActive' )->will( $this->returnValue( true ) );
         $this->assertEquals( 'account_login_alt.tpl', $oUserView->render());
     }
 
@@ -306,6 +307,7 @@ class Unit_Views_accountTest extends OxidTestCase
     public function testRenderNoUser()
     {
         modConfig::setParameter( 'aid', 'testanid' );
+        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
 
         $oUser = new oxuser();
         $oUser->oxuser__oxpassword = new oxField( 1 );

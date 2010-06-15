@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 28277 2010-06-10 15:10:39Z arvydas $
+ * @version   SVN: $Id: oxuser.php 28315 2010-06-11 15:34:43Z arvydas $
  */
 
 /**
@@ -2351,5 +2351,55 @@ class oxUser extends oxBase
         $sVersion = oxNew( "oxcontent" )->getTermsVersion();
 
         oxDb::getDb()->execute( "replace oxacceptedterms set oxuserid='{$sUserId}', oxshopid='{$sShopId}', oxtermversion='{$sVersion}'" );
+    }
+
+    /**
+     * Assigns registration points for invited user and
+     * its inviter (calls oxUser::setInvitationCreditPoints())
+     *
+     * @param string $sUserId inviter user id
+     *
+     * @return bool
+     */
+    public function setCreditPointsForRegistrant( $sUserId )
+    {
+        $blSet   = false;
+        $iPoints = $this->getConfig()->getConfigParam( 'dPointsForRegistration' );
+        if ( $iPoints ) {
+            $this->oxuser__oxpoints = new oxField( $iPoints, oxField::T_RAW );
+            if ( $blSet = $this->save() ) {
+                $oDb = oxDb::getDb();
+
+                // updating users statistics
+                $oDb->execute( "UPDATE oxinvitations SET oxpending = '0', oxaccepted = '1' where oxuserid = ". $oDb->quote( $sUserId ) );
+
+                $oInvUser = oxNew( "oxuser" );
+                if ( $oInvUser->load( $sUserId ) ) {
+                    $blSet = $oInvUser->setCreditPointsForInviter();
+                }
+            }
+
+            oxSession::deleteVar( 'su' );
+        }
+
+        return $blSet;
+    }
+
+    /**
+     * Assigns credit points to inviter
+     *
+     * @return bool
+     */
+    public function setCreditPointsForInviter()
+    {
+        $blSet   = false;
+        $iPoints = $this->getConfig()->getConfigParam( 'dPointsForInvitation' );
+        if ( $iPoints ) {
+            $iNewPoints = $this->oxuser__oxpoints->value + $iPoints;
+            $this->oxuser__oxpoints = new oxField( $iNewPoints, oxField::T_RAW );
+            $blSet = $this->save();
+        }
+
+        return $blSet;
     }
 }

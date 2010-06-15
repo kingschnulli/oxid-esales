@@ -109,7 +109,7 @@ div#body.plain {margin: 0; padding: 0; width: auto;}
 
 div.bar.oxid        {background:oxHeaderBg;}
 div.bar.oxid .logo  {padding:18px 0;float:left;}
-div.bar.oxid dl.box {min-height: 107px;min-width:150px;margin:0 0 1px 2px;}
+div.bar.oxid dl.box {min-height: 107px;min-width:150px;margin:0 0 1px 2px; padding-bottom: 5px;}
 
 dl.box           {background:oxHeaderBoxBdBg;border:1px solid oxHeaderBoxBdBr;width:150px;}
 dl.box dt        {background:oxHeaderBoxHdBg;color:oxHeaderBoxHdCl;}

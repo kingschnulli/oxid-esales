@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: register.php 28277 2010-06-10 15:10:39Z arvydas $
+ * @version   SVN: $Id: register.php 28315 2010-06-11 15:34:43Z arvydas $
  */
 
 /**
@@ -73,7 +73,7 @@ class Register extends User
         parent::render();
 
         // checking registration status
-        if ( $this->isActive( 'PsLogin' ) && $this->isConfirmed() ) {
+        if ( $this->getConfig()->getConfigParam( 'blPsLoginEnabled' ) && $this->isConfirmed() ) {
             $sTemplate = $this->_sConfirmTemplate;
         } elseif ( $this->getRegistrationStatus() ) {
             //for older templates

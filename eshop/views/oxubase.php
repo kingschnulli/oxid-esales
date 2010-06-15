@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 28258 2010-06-09 14:53:07Z sarunas $
+ * @version   SVN: $Id: oxubase.php 28315 2010-06-11 15:34:43Z arvydas $
  */
 
 /**
@@ -40,15 +40,15 @@ define( 'VIEW_INDEXSTATE_NOINDEXFOLLOW', 2 );   //  no index / follow
 class oxUBase extends oxView
 {
     /**
-     * Checks if module is enabled
+     * Checks if feature is enabled
      *
-     * @param string $sModName module name
+     * @param string $sName feature name
      *
      * @return bool
      */
-    public function isActive( $sModName )
+    public function isActive( $sName )
     {
-        return $this->getConfig()->getConfigParam( $sModName );
+        return $this->getConfig()->getConfigParam( "bl".$sName."Enabled" );
     }
 
     /**

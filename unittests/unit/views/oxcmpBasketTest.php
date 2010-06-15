@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpBasketTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxcmpBasketTest.php 28314 2010-06-11 15:20:51Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -849,4 +849,57 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
             oxSession::getVar('aLastcall'));
     }
 
+    public function testInitNormalShop()
+    {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations', 'getBasket'));
+        $oS->expects($this->never())->method('getBasketReservations');
+        $oS->expects($this->never())->method('getBasket');
+
+        $oCB = $this->getMock('oxcmp_basket', array('getSession'));
+        $oCB->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $oCB->init();
+    }
+
+    public function testInitReservationNotTimeouted()
+    {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+
+        $oBR = $this->getMock('stdclass', array('getTimeLeft', 'discardUnusedReservations'));
+        $oBR->expects($this->once())->method('getTimeLeft')->will($this->returnValue(2));
+        $oBR->expects($this->once())->method('discardUnusedReservations')->with($this->equalTo(200));
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations', 'getBasket'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oBR));
+        $oS->expects($this->never())->method('getBasket');
+
+        $oCB = $this->getMock('oxcmp_basket', array('getSession'));
+        $oCB->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $oCB->init();
+    }
+
+
+    public function testInitReservationTimeouted()
+    {
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+
+        $oB = $this->getMock('stdclass', array('deleteBasket'));
+        $oB->expects($this->once())->method('deleteBasket')->will($this->returnValue(0));
+
+        $oBR = $this->getMock('stdclass', array('getTimeLeft', 'discardUnusedReservations'));
+        $oBR->expects($this->once())->method('getTimeLeft')->will($this->returnValue(0));
+        $oBR->expects($this->once())->method('discardUnusedReservations')->with($this->equalTo(200));
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations', 'getBasket'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oBR));
+        $oS->expects($this->once())->method('getBasket')->will($this->returnValue($oB));
+
+        $oCB = $this->getMock('oxcmp_basket', array('getSession'));
+        $oCB->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $oCB->init();
+    }
 }

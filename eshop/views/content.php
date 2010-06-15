@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: content.php 28277 2010-06-10 15:10:39Z arvydas $
+ * @version   SVN: $Id: content.php 28315 2010-06-11 15:34:43Z arvydas $
  */
 
 /**
@@ -185,6 +185,7 @@ class Content extends oxUBase
     public function getContentId()
     {
         if ( $this->_sContentId === null ) {
+            $oConfig    = $this->getConfig();
             $sContentId = oxConfig::getParameter( 'oxcid' );
 
             if ( !$sContentId ) {
@@ -201,10 +202,10 @@ class Content extends oxUBase
             $this->_sContentId = false;
             $oContent = oxNew( 'oxcontent' );
             if ( $oContent->load( $sContentId ) && $oContent->oxcontents__oxactive->value ) {
-                if ( $this->isActive( 'PsLogin' ) && !$this->getUser() &&
+                if ( $oConfig->getConfigParam( 'blPsLoginEnabled' ) && !$this->getUser() &&
                      $oContent->oxcontents__oxloadid->value != "oxagb" &&
                      $oContent->oxcontents__oxloadid->value != "oxrightofwithdrawal" ) {
-                    oxUtils::getInstance()->redirect( $this->getConfig()->getShopHomeURL() . 'cl=account' );
+                    oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account' );
                 }
                 $this->_sContentId = $sContentId;
                 $this->_oContent = $oContent;

@@ -755,9 +755,9 @@ function showInvitations()
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_INVITATIONS" }]</b></a>
             <dl>
                 <dt>
-                    <select class="select" id="invitations" name=confstrs[blEnableInvitation] onchange="javascript:showInvitations();" [{ $readonly }]>
-                        <option value="0"  [{if !$confstrs.blEnableInvitation }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
-                        <option value="1"  [{if $confstrs.blEnableInvitation }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
+                    <select class="select" id="invitations" name=confstrs[blInvitationsEnabled] onchange="javascript:showInvitations();" [{ $readonly }]>
+                        <option value="0"  [{if !$confstrs.blInvitationsEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
+                        <option value="1"  [{if $confstrs.blInvitationsEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_INVITATION" }]
                 </dt>
@@ -767,7 +767,7 @@ function showInvitations()
                 <div class="spacer"></div>
             </dl>
 
-            <dl [{if !$confstrs.blEnableInvitation }]style="display: none;"[{/if}] id="pointsforinvitation">
+            <dl [{if !$confstrs.blInvitationsEnabled }]style="display: none;"[{/if}] id="pointsforinvitation">
                 <dt>
                     <input type=text class="txt" style="width:70" name=confstrs[dPointsForInvitation] value="[{$confstrs.dPointsForInvitation}]" [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_POINTSFORINVITATION" }]
@@ -778,7 +778,7 @@ function showInvitations()
                 <div class="spacer"></div>
             </dl>
 
-            <dl [{if !$confstrs.blEnableInvitation }]style="display: none;"[{/if}] id="pointsforregistration">
+            <dl [{if !$confstrs.blInvitationsEnabled }]style="display: none;"[{/if}] id="pointsforregistration">
                 <dt>
                     <input type=text class="txt" style="width:70" name=confstrs[dPointsForRegistration] value="[{$confstrs.dPointsForRegistration}]" [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_POINTSFORREGISTRATION" }]

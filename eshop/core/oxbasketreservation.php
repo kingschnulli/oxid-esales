@@ -190,7 +190,6 @@ class oxBasketReservation extends oxSuperCfg
      */
     public function reserveBasket(oxBasket $oBasket)
     {
-        $this->discardUnusedReservations(200);
         $this->_reserveArticles( $this->_basketDifference($oBasket) );
     }
 

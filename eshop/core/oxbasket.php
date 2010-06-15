@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 28270 2010-06-10 13:59:12Z sarunas $
+ * @version   SVN: $Id: oxbasket.php 28314 2010-06-11 15:20:51Z sarunas $
  */
 
 /**
@@ -1152,13 +1152,6 @@ class oxBasket extends oxSuperCfg
     {
         if ( !$this->isEnabled() ) {
             return;
-        }
-
-        // reserve active basket
-        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
-            if (!$this->getSession()->getBasketReservations()->getTimeLeft()) {
-                $this->deleteBasket();
-            }
         }
 
         if ( !$this->_blUpdateNeeded && !$blForceUpdate ) {

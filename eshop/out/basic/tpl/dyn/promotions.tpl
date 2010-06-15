@@ -14,14 +14,13 @@
                 <div class="timeouttext">
                   [{oxmultilang ident="PROMO_WILLENDIN_PREFIX"}]
                   [{if 86400 > $promo->getTimeLeft()}]
-                    <span class="promoTimeout">[{$promo->getTimeLeft()|oxformattime}]</span>
+                    <span class="promoTimeout">[{$promo->getTimeLeft()|oxformattime}]</span>[{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
                   [{elseif 172800 > $promo->getTimeLeft()}]
-                    [{oxmultilang ident="PROMO_ONEDAY"}]
+                    [{oxmultilang ident="PROMO_ONEDAY"}][{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
                   [{else}]
                     [{math equation="x1/x2" x1=$promo->getTimeLeft() x2=86400 assign="_days"}]
-                    [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}]
-                  [{/if}]
-                  [{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
+                    [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}][{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
+                  [{/if}]                  
                 </div>
             [{/if}]
         </div>
@@ -34,26 +33,24 @@
             [{if $promo->oxactions__oxactiveto->value && $promo->oxactions__oxactiveto->value != "0000-00-00 00:00:00"}]
               <div class="timeouttext">[{oxmultilang ident="PROMO_WILLENDIN_PREFIX"}]
                 [{if 86400 > $promo->getTimeLeft()}]
-                  <span class="promoTimeout">[{$promo->getTimeLeft()|oxformattime}]</span>
+                  <span class="promoTimeout">[{$promo->getTimeLeft()|oxformattime}]</span>[{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
                 [{elseif 172800 > $promo->getTimeLeft()}]
-                  [{oxmultilang ident="PROMO_ONEDAY"}]
+                  [{oxmultilang ident="PROMO_ONEDAY"}][{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
                 [{else}]
                     [{math equation="x1/x2" x1=$promo->getTimeLeft() x2=86400 assign="_days"}]
-                    [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}]
-                [{/if}]
-                [{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
+                    [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}][{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
+                [{/if}]                
               </div>
             [{/if}]
             <div class="activationtext">[{oxmultilang ident="PROMO_WILLSTARTIN_PREFIX"}]
               [{if 86400 > $promo->getTimeUntilStart()}]
-                <span class="promoTimeout">[{$promo->getTimeUntilStart()|oxformattime}]</span>[{oxmultilang ident="PROMO_WILLENDIN_SUFFIX"}]
+                <span class="promoTimeout">[{$promo->getTimeUntilStart()|oxformattime}]</span>[{oxmultilang ident="PROMO_WILLSTARTIN_SUFFIX"}]
               [{elseif 172800 > $promo->getTimeUntilStart()}]
-                [{oxmultilang ident="PROMO_ONEDAY"}]
+                [{oxmultilang ident="PROMO_ONEDAY"}][{oxmultilang ident="PROMO_WILLSTARTIN_SUFFIX"}]
               [{else}]
                 [{math equation="x1/x2" x1=$promo->getTimeUntilStart() x2=86400 assign="_days"}]
-                [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}]
-              [{/if}]
-              [{oxmultilang ident="PROMO_WILLSTARTIN_SUFFIX"}]
+                [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}][{oxmultilang ident="PROMO_WILLSTARTIN_SUFFIX"}]
+              [{/if}]              
             </div>
         </div>
       [{/foreach}]

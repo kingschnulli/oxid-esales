@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS `oxactions`;
 
 CREATE TABLE `oxactions` (
   `OXID` char(32) character set latin1 collate latin1_general_ci NOT NULL,
+  `OXSHOPID` varchar(32) character set latin1 collate latin1_general_ci NOT NULL default '',
   `OXTYPE` tinyint( 1 ) NOT NULL,
   `OXTITLE` char(128) NOT NULL default '',
   `OXTITLE_1` char(128) NOT NULL default '',
@@ -62,14 +63,14 @@ CREATE TABLE IF NOT EXISTS `oxobject2action` (
 # Data for table `oxactions`
 #
 
-INSERT INTO `oxactions` VALUES ('oxstart', 0, 'Startseite unten', 'Start page bottom', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
-INSERT INTO `oxactions` VALUES ('oxtopstart', 0, 'Topangebot Startseite', 'Top offer start page', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
-INSERT INTO `oxactions` VALUES ('oxfirststart', 0, 'Groﬂes Angebot Startseite', 'Big offer start page', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
-INSERT INTO `oxactions` VALUES ('oxbargain', 0, 'Schn‰ppchen', 'Bargain', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
-INSERT INTO `oxactions` VALUES ('oxtop5', 0, 'Topseller', 'Top seller', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
-INSERT INTO `oxactions` VALUES ('oxcatoffer', 0, 'Kategorien-Topangebot', 'Top offer in categories', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
-INSERT INTO `oxactions` VALUES ('oxnewest', 0, 'Frisch eingetroffen', 'Just arrived', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
-INSERT INTO `oxactions` VALUES ('oxnewsletter', 0, 'Newsletter', 'Newsletter', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
+INSERT INTO `oxactions` VALUES ('oxstart', 'oxbaseshop', 0, 'Startseite unten', 'Start page bottom', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
+INSERT INTO `oxactions` VALUES ('oxtopstart', 'oxbaseshop', 0, 'Topangebot Startseite', 'Top offer start page', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
+INSERT INTO `oxactions` VALUES ('oxfirststart', 'oxbaseshop', 0, 'Groﬂes Angebot Startseite', 'Big offer start page', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
+INSERT INTO `oxactions` VALUES ('oxbargain', 'oxbaseshop', 0, 'Schn‰ppchen', 'Bargain', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
+INSERT INTO `oxactions` VALUES ('oxtop5', 'oxbaseshop', 0, 'Topseller', 'Top seller', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
+INSERT INTO `oxactions` VALUES ('oxcatoffer', 'oxbaseshop', 0, 'Kategorien-Topangebot', 'Top offer in categories', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
+INSERT INTO `oxactions` VALUES ('oxnewest', 'oxbaseshop', 0, 'Frisch eingetroffen', 'Just arrived', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
+INSERT INTO `oxactions` VALUES ('oxnewsletter', 'oxbaseshop', 0, 'Newsletter', 'Newsletter', '', '', '', '', '', '', '1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
 
 #
 # Table structure for table `oxaddress`

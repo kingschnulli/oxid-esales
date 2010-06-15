@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html[{if $oView->getActiveLangAbbr()}] lang="[{ $oView->getActiveLangAbbr() }]"[{/if}] xmlns="http://www.w3.org/1999/xhtml" [{if $oViewConf->getFbAppKey()}]xmlns:fb="http://www.facebook.com/2008/fbml"[{/if}]>
+<html[{if $oView->getActiveLangAbbr()}] lang="[{ $oView->getActiveLangAbbr() }]"[{/if}] xmlns="http://www.w3.org/1999/xhtml" [{if $oViewConf->getFbAppId()}]xmlns:fb="http://www.facebook.com/2008/fbml"[{/if}]>
 <head>
     [{assign var="_titlesuffix" value=$_titlesuffix|default:$oView->getTitleSuffix()}]
     [{assign var="_titleprefix" value=$_titleprefix|default:$oView->getTitlePrefix() }]
@@ -53,7 +53,9 @@
                         <li><a id="test_link_service_help" href="[{ $oViewConf->getHelpPageLink() }]" rel="nofollow">[{ oxmultilang ident="INC_HEADER_HELP" }]</a></li>
                         <li><a id="test_link_service_links" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=links" }]">[{ oxmultilang ident="INC_HEADER_LINKS" }]</a></li>
                         <li><a id="test_link_service_guestbook" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=guestbook" }]" rel="nofollow">[{ oxmultilang ident="INC_HEADER_GUESTBOOK" }]</a></li>
+                        [{if $oView->isActive('Invitations') }]
                         <li><a id="test_link_service_invite" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=invite" }]" rel="nofollow">[{ oxmultilang ident="INC_HEADER_INVITEFRIENDS" }]</a></li>
+                        [{/if}]
                     </ul>
                     [{/strip}]
                 </dd>

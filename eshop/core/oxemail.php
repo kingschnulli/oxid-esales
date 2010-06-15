@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 28126 2010-06-03 11:58:33Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxemail.php 28320 2010-06-14 08:51:25Z rimvydas.paskevicius $
  */
 /**
  * Includes PHP mailer class.
@@ -944,7 +944,7 @@ class oxEmail extends PHPMailer
         $sArticleUrl = $oProduct->getLink();
 
         //setting recommended user id
-        if ( $oActiveUser = $oShop->getUser() ) {
+        if ( $myConfig->getActiveView()->isActive('Invitations') && $oActiveUser = $oShop->getUser() ) {
             $sArticleUrl  = oxUtilsUrl::getInstance()->appendParamSeparator( $sArticleUrl );
             $sArticleUrl .= "su=" . $oActiveUser->getId();
         }
@@ -1002,7 +1002,7 @@ class oxEmail extends PHPMailer
         $sHomeUrl = $oShop->getHomeLink();
 
         //setting recommended user id
-        if ( $oActiveUser = $oShop->getUser() ) {
+        if ( $myConfig->getActiveView()->isActive('Invitations') && $oActiveUser = $oShop->getUser() ) {
             $sHomeUrl  = oxUtilsUrl::getInstance()->appendParamSeparator( $sHomeUrl );
             $sHomeUrl .= "su=" . $oActiveUser->getId();
         }

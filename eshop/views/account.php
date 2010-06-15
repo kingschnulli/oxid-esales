@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: account.php 28277 2010-06-10 15:10:39Z arvydas $
+ * @version   SVN: $Id: account.php 28315 2010-06-11 15:34:43Z arvydas $
  */
 
 /**
@@ -153,7 +153,7 @@ class Account extends oxUBase
         // is logged in ?
         $oUser = $this->getUser();
         if ( !$oUser || ( $oUser && !$oUser->oxuser__oxpassword->value ) ||
-             ( $this->isActive( 'PsLogin' ) && $oUser && $this->confirmTerms() ) ) {
+             ( $this->getConfig()->getConfigParam( 'blPsLoginEnabled' ) && $oUser && $this->confirmTerms() ) ) {
             $this->_sThisTemplate = $this->_getLoginTemplate();
         } else {
             // calculating amount of orders made by user
@@ -172,7 +172,7 @@ class Account extends oxUBase
      */
     protected function _getLoginTemplate()
     {
-        return $this->isActive( 'PsLogin' ) ? $this->_sThisAltLoginTemplate : $this->_sThisLoginTemplate;
+        return $this->getConfig()->getConfigParam( 'blPsLoginEnabled' ) ? $this->_sThisAltLoginTemplate : $this->_sThisLoginTemplate;
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 28258 2010-06-09 14:53:07Z sarunas $
+ * @version   SVN: $Id: oxubaseTest.php 28315 2010-06-11 15:34:43Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -102,6 +102,18 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oUBase->getSession()->setBasket( null );
 
         parent::tearDown();
+    }
+
+    /**
+     * oxUbase::isActive() test case
+     * @return
+     */
+    public function testIsActive()
+    {
+        modConfig::getInstance()->setConfigParam( "blSomethingEnabled", true );
+        $oView = new oxUbase();
+        $this->assertTrue( $oView->isActive( "Something" ) );
+        $this->assertNull( $oView->isActive( "Nothing" ) );
     }
 
     /**

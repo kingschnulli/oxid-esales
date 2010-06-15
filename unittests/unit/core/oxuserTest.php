@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 28277 2010-06-10 15:10:39Z arvydas $
+ * @version   SVN: $Id: oxuserTest.php 28315 2010-06-11 15:34:43Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -338,7 +338,37 @@ class Unit_Core_oxuserTest extends OxidTestCase
             $sQ = 'insert into oxuserpayments ( oxid, oxuserid, oxpaymentsid, oxvalue ) values ( "'.$sId.'", "'.$oUser->oxuser__oxid->value.'", "oxidcreditcard", "'.$sDynValues.'" ) ';
             $myDB->Execute( $sQ );
         }
+    }
 
+    /**
+     * oxUser::setCreditPointsForRegistrant() test case
+     *
+     * @return null
+     */
+    public function testSetCreditPointsForRegistrant()
+    {
+        modConfig::getInstance()->setConfigParam( "dPointsForRegistration", 10 );
+        modConfig::getInstance()->setConfigParam( "dPointsForInvitation", false );
+        modSession::getInstance()->setVar( 'su', true );
+
+        $oUser = $this->getMock( "oxuser", array( "save" ) );
+        $oUser->expects( $this->once() )->method( 'save' )->will($this->returnValue( true ) );
+        $this->assertFalse( $oUser->setCreditPointsForRegistrant( "oxdefaultadmin" ));
+        $this->assertNull( oxSession::getVar( 'su' ) );
+    }
+
+    /**
+     * oxUser::setCreditPointsForInviter() test case
+     *
+     * @return null
+     */
+    public function testSetCreditPointsForInviter()
+    {
+        modConfig::getInstance()->setConfigParam( "dPointsForInvitation", 10 );
+
+        $oUser = $this->getMock( "oxuser", array( "save" ) );
+        $oUser->expects( $this->once() )->method( 'save' )->will($this->returnValue( true ) );
+        $this->assertTrue( $oUser->setCreditPointsForInviter() );
     }
 
     /**

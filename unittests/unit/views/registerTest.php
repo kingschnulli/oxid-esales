@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: registerTest.php 28050 2010-06-01 14:54:05Z arvydas $
+ * @version   SVN: $Id: registerTest.php 28315 2010-06-11 15:34:43Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -34,9 +34,10 @@ class Unit_Views_registerTest extends OxidTestCase
      */
     public function testRenderForLoginFeature()
     {
-        $oView = $this->getMock( "register", array( "isConfirmed", "isActive" ) );
+        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
+
+        $oView = $this->getMock( "register", array( "isConfirmed" ) );
         $oView->expects( $this->once() )->method( 'isConfirmed' )->will( $this->returnValue( true ) );
-        $oView->expects( $this->once() )->method( 'isActive' )->will( $this->returnValue( true ) );
         $this->assertEquals( 'register_confirm.tpl', $oView->render() );
     }
 

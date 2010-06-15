@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28289 2010-06-11 08:33:39Z sarunas $
+ * @version   SVN: $Id: lang.php 28316 2010-06-14 07:02:39Z sarunas $
  */
 
 
@@ -1297,7 +1297,7 @@ $aLang = array(
 'FACEBOOK_INVITETEXT'                             => 'Check this out. Simply click on the button below to go recommended product.',
 'FACEBOOK_INVITEBUTTONTEXT'                       => 'Open website',
 
-'INC_CMP_BASKET_TIMEOUT'                          => 'Expires in',
+'INC_CMP_BASKET_TIMEOUT'                          => 'Expires in:',
 );
 
 /*
