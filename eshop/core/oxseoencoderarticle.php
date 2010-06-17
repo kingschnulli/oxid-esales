@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticle.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxseoencoderarticle.php 28369 2010-06-16 11:35:32Z sarunas $
  */
 
 /**
@@ -46,7 +46,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
     /**
      * Singleton method
      *
-     * @return oxseoencoder
+     * @return oxSeoEncoderArticle
      */
     public static function getInstance()
     {

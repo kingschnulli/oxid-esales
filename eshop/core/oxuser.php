@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 28315 2010-06-11 15:34:43Z arvydas $
+ * @version   SVN: $Id: oxuser.php 28383 2010-06-16 12:41:35Z rimvydas.paskevicius $
  */
 
 /**
@@ -453,6 +453,12 @@ class oxUser extends oxBase
         // processing birth date which came from output as array
         if ( is_array( $this->oxuser__oxbirthdate->value ) ) {
             $this->oxuser__oxbirthdate = new oxField($this->convertBirthday( $this->oxuser__oxbirthdate->value ), oxField::T_RAW);
+        }
+
+        // checking if user Facebook ID should be updated
+        $oFb = oxFb::getInstance();
+        if ( $oFb->isConnected() && $oFb->getUser() ) {
+             $this->oxuser__oxfbid = new oxField( $oFb->getUser() );
         }
 
         $blRet = parent::save();
@@ -1280,6 +1286,60 @@ class oxUser extends oxBase
     }
 
     /**
+     * Performs user login by username and password. Fetches user data from DB.
+     * Registers in session. Returns true on success, FALSE otherwise.
+     *
+     * @param string $sUser User username
+     *
+     * @throws oxConnectionException, oxUserException
+     *
+     * @return bool
+     */
+    /*
+    public function facebookLogin( $iUserId )
+    {
+        if ( !$iUserId ) {
+            $oEx = oxNew( 'oxUserException' );
+            $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
+            throw $oEx;
+        }
+
+        $myConfig = $this->getConfig();
+        $sShopID = $myConfig->getShopId();
+        $oDb = oxDb::getDb();
+
+        $sUserSelect = "oxuser.oxfbid = " . $oDb->quote( $iUserId );
+        $sShopSelect = "";
+
+
+        $sSelect =  "select oxid from oxuser where oxuser.oxactive = 1 and {$sUserSelect} {$sShopSelect} ";
+
+        // load from DB
+        $aData = $oDb->getAll( $sSelect );
+        $sOXID = @$aData[0][0];
+        if ( isset( $sOXID ) && $sOXID ) {
+
+            if ( !$this->load( $sOXID ) ) {
+                $oEx = oxNew( 'oxUserException' );
+                $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
+                throw $oEx;
+            }
+        }
+
+        //login successfull?
+        if ( $this->oxuser__oxid->value ) {
+            // yes, successful login
+            oxSession::setVar( 'usr', $this->oxuser__oxid->value );
+            return true;
+        } else {
+            $oEx = oxNew( 'oxUserException' );
+            $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
+            throw $oEx;
+        }
+    }
+    */
+
+    /**
      * Logs out session user. Returns true on success
      *
      * @return bool
@@ -1358,6 +1418,20 @@ class oxUser extends oxBase
                         $rs->moveNext();
                     }
                 }
+            }
+        }
+
+        // Checking if user is connected via Facebook connect.
+        // If yes, trying to login user using user Facebook ID
+        if ( !$sUserID ) {
+            $oFb = oxFb::getInstance();
+            if ( $oFb->isConnected() && $oFb->getUser() ) {
+                $sUserSelect = "oxuser.oxfbid = " . $oDB->quote( $oFb->getUser() );
+                $sShopSelect = "";
+
+
+                $sSelect =  "select oxid from oxuser where oxuser.oxactive = 1 and {$sUserSelect} {$sShopSelect} ";
+                $sUserID = $oDB->getOne( $sSelect );
             }
         }
 
@@ -2401,5 +2475,23 @@ class oxUser extends oxBase
         }
 
         return $blSet;
+    }
+
+    /**
+     * Updates user Facebook ID
+     *
+     * @return null
+     */
+    public function updateFbId()
+    {
+        $oFb = oxFb::getInstance();
+        $blRet = false;
+
+        if ( $oFb->isConnected() && $oFb->getUser() ) {
+             $this->oxuser__oxfbid = new oxField( $oFb->getUser() );
+             $blRet = $this->save();
+        }
+
+        return $blRet;
     }
 }

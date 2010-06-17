@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 28296 2010-06-11 10:34:42Z sarunas $
+ * @version   SVN: $Id: paymentTest.php 28326 2010-06-14 13:38:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -600,5 +600,32 @@ class Unit_Views_paymentTest extends OxidTestCase
         } catch (Exception $e) {
             $this->assertEquals("REDIRECT", $e->getMessage());
         }
+    }
+    public function testRenderReturnsToBasketIfReservationOnAndBasketEmpty()
+    {
+        oxTestModules::addFunction('oxUtils', 'redirect($url)', '{throw new Exception($url);}');
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::setParameter( 'sslredirect', 'forced' );
+
+        $oR = $this->getMock('stdclass', array('renewExpiration'));
+        $oR->expects($this->once())->method('renewExpiration')->will($this->returnValue(null));
+
+        $oB = $this->getMock('oxbasket', array('getProductsCount'));
+        $oB->expects($this->once())->method('getProductsCount')->will($this->returnValue(0));
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations', 'getBasket'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oR));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
+
+        $oO = $this->getMock('payment', array('getSession'));
+        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        try {
+            $oO->render();
+        } catch (Exception $e) {
+            $this->assertEquals(oxConfig::getInstance()->getShopHomeURL().'cl=basket', $e->getMessage());
+            return;
+        }
+        $this->fail("no Exception thrown in redirect");
     }
 }

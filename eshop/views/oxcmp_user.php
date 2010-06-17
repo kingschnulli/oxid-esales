@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 28315 2010-06-11 15:34:43Z arvydas $
+ * @version   SVN: $Id: oxcmp_user.php 28377 2010-06-16 12:23:51Z rimvydas.paskevicius $
  */
 
 // defining login/logout states
@@ -231,12 +231,30 @@ class oxcmp_user extends oxView
         $sPassword = oxConfig::getParameter( 'lgn_pwd' );
         $sCookie   = oxConfig::getParameter( 'lgn_cook' );
         $sOpenId   = oxConfig::getParameter( 'lgn_openid' );
+        //$blFbLogin = oxConfig::getParameter( 'fblogin' );
 
         $this->setLoginStatus( USER_LOGIN_FAIL );
 
         // trying to login user
         try {
             $oUser = oxNew( 'oxuser' );
+            /*
+            if ( $this->getViewConfig()->getShowFacebookConnect() && $blFbLogin ) {
+                $oFb = oxFb::getInstance();
+                if ( $oFb->isConnected() ) {
+                   try {
+                      $oUser->facebookLogin( $oFb->getUser() );
+                   } catch ( oxUserException $oEx ) {
+                         // showing no error as user connected using facebook connect
+                         // but does not have an account (or no relations between user FB ID and
+                         // existing account)
+                         return;
+                   }
+                } else {
+                    return;
+                }
+            } else
+            */
             if ( $this->getViewConfig()->getShowOpenIdLogin() && $sOpenId ) {
                 $iOldErrorReproting = error_reporting();
                 error_reporting($iOldErrorReproting & ~E_STRICT);
@@ -315,6 +333,24 @@ class oxcmp_user extends oxView
             $oUser->acceptTerms();
         } else {
             $this->login();
+        }
+    }
+
+    /**
+     * Executes oxcmp_user::login() and updates logged in user Facebook User ID (if user was
+     * connected using Facebook Connect)
+     *
+     * @return null
+     */
+    public function login_updateFbId()
+    {
+        $this->login();
+
+        if ( $oUser = $this->getUser() ) {
+            //updating user Facebook ID
+            if ( $oUser->updateFbId() ) {
+                oxSession::setVar( '_blFbUserIdUpdated', true );
+            }
         }
     }
 

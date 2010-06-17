@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_categories.php 28060 2010-06-02 08:38:33Z alfonsas $
+ * @version   SVN: $Id: oxcmp_categories.php 28345 2010-06-15 11:38:32Z alfonsas $
  */
 
 /**
@@ -277,11 +277,6 @@ class oxcmp_categories extends oxView
                 $oParentView->addTplParam( 'navcatmore', $oParentView->getCatMore() );
             }
 
-            // Basket exclude
-            if ( $myConfig->getConfigParam( 'blBasketExcludeEnabled' ) ) {
-                $oParentView->addTplParam( 'scRootCatChanged', $this->isRootCatChanged() );
-            }
-
             return $oCategoryTree;
         }
     }
@@ -410,52 +405,5 @@ class oxcmp_categories extends oxView
         }
 
         return array( $sListType, $sActCat );
-    }
-
-    /**
-     * Returns true if active root category was changed
-     *
-     * @return bool
-     */
-    public function isRootCatChanged()
-    {
-        // in Basket
-        $oBasket = $this->getSession()->getBasket();
-        if ( $oBasket->showCatChangeWarning() ) {
-            $oBasket->setCatChangeWarningState( false );
-            return true;
-        }
-
-        // in Category, only then category is empty ant not equal to default category
-        $sDefCat = oxConfig::getInstance()->getActiveShop()->oxshops__oxdefcat->value;
-        $sActCat = $this->_getActCat();
-        $oActCat = oxnew('oxcategory');
-        if ($sActCat && $sActCat!=$sDefCat && $oActCat->load($sActCat) ) {
-            $sActRoot = $oActCat->oxcategories__oxrootid->value;
-            if ( $oBasket->getBasketRootCatId() && $sActRoot != $oBasket->getBasketRootCatId() ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Executes user choice:
-     *
-     * - if user clicked on "Proceed to checkout" - redirects to basket,
-     * - if clicked "Continue shopping" - clear basket
-     *
-     * @return mixed
-     */
-    public function executeUserChoice()
-    {
-        // redirect to basket
-        if ( oxConfig::getParameter( "tobasket" ) ) {
-            return "basket";
-        } else {
-            // clear basket
-            $this->getSession()->getBasket()->deleteBasket();
-        }
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: orderTest.php 28287 2010-06-11 08:17:06Z sarunas $
+ * @version   SVN: $Id: orderTest.php 28326 2010-06-14 13:38:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -949,7 +949,7 @@ class Unit_Views_orderTest extends OxidTestCase
         try {
             $oO->render();
         } catch (Exception $e) {
-            $this->assertEquals(oxConfig::getInstance()->getShopHomeURL(), $e->getMessage());
+            $this->assertEquals(oxConfig::getInstance()->getShopHomeURL().'cl=basket', $e->getMessage());
         }
     }
 }

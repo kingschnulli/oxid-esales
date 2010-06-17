@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminlistTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
+ * @version   SVN: $Id: oxadminlistTest.php 28324 2010-06-14 12:27:02Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -448,7 +448,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         $oAdminList = $this->getProxyClass( 'oxadminlist' );
         $sResultSql = $oAdminList->UNITbuildSelectString( $oListObject );
 
-        $sSql = "select oxactions.oxid, oxactions.oxtype, oxactions.oxtitle, oxactions.oxtitle_1, oxactions.oxtitle_2, oxactions.oxtitle_3, oxactions.oxlongdesc, oxactions.oxlongdesc_1, oxactions.oxlongdesc_2, oxactions.oxlongdesc_3, oxactions.oxactive, oxactions.oxactivefrom, oxactions.oxactiveto, oxactions.oxsort from oxactions where 1 ";
+        $sSql = "select oxactions.oxid, oxactions.oxshopid, oxactions.oxtype, oxactions.oxtitle, oxactions.oxtitle_1, oxactions.oxtitle_2, oxactions.oxtitle_3, oxactions.oxlongdesc, oxactions.oxlongdesc_1, oxactions.oxlongdesc_2, oxactions.oxlongdesc_3, oxactions.oxactive, oxactions.oxactivefrom, oxactions.oxactiveto, oxactions.oxsort from oxactions where 1 ";
 
         $this->assertEquals( $sSql, $sResultSql );
     }

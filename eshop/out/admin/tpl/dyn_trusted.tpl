@@ -47,6 +47,66 @@
     		</tr>
             [{/foreach}]
             <tr>
+              <td align="left">
+                [{ oxmultilang ident="DYN_TRUSTED_USER" }]
+              </td>
+              <td valign="left" class="edittext">
+                 <input type=text class="editinput" style="width:270px" name="tsUser" value="[{$tsUser}]" maxlength="40" [{ $readonly }]>
+              </td>
+            </tr>
+            <tr>
+              <td align="left">
+                [{ oxmultilang ident="DYN_TRUSTED_PASSWORD" }]
+              </td>
+              <td valign="left" class="edittext">
+                 <input type=text class="editinput" style="width:270px" name="tsPassword" value="[{$tsPassword}]" maxlength="40" [{ $readonly }]>
+              </td>
+            </tr>
+            <tr>
+              <td align="left">
+                [{ oxmultilang ident="DYN_TRUSTED_TESTMODUS" }]
+              </td>
+              <td valign="left" class="edittext">
+                 <input type=hidden name="tsTestMode" value=false>
+                 <input type=checkbox name="tsTestMode" value=true  [{if $tsTestMode}]checked[{/if}]>
+              </td>
+            </tr>
+            <tr>
+              <td align="left">
+                [{ oxmultilang ident="DYN_TRUSTED_ACTIVE" }]
+                 <br><br>
+              </td>
+              <td valign="left" class="edittext">
+                 <input type=hidden name="tsSealActive" value=false>
+                 <input type=checkbox name="tsSealActive" value=true  [{if $tsSealActive}]checked[{/if}]>
+                 <br><br>
+              </td>
+            </tr>
+            <tr>
+              <td align="left">
+                [{ oxmultilang ident="DYN_TRUSTED_SHOPPAYMENT" }]
+              </td>
+              <td valign="left">
+                 [{ oxmultilang ident="DYN_TRUSTED_TSPAYMENT" }]
+              </td>
+            </tr>
+            [{foreach from=$shoppaymenttypes item=payment}]
+            <tr>
+              <td align="left">
+                [{ $payment->oxpayments__oxdesc->value }]
+              </td>
+              <td valign="left" class="edittext">
+                 <select name="paymentids[[{$payment->oxpayments__oxid->value}]]" class="editinput" [{ $readonly}]>
+                    [{foreach from=$tspaymenttypes item=tspayment}]
+                    [{assign var="ident" value=DYN_TRUSTED_$tspayment}]
+                    [{assign var="ident" value=$ident|oxupper }]
+                    <option value="[{$tspayment}]" [{if $payment->oxpayments__oxtspaymentid->value == $tspayment }]SELECTED[{/if}]>[{ oxmultilang ident=$ident }]</option>
+                    [{/foreach}]
+                 </select>
+              </td>
+            </tr>
+            [{/foreach}]
+            <tr>
               <td class="edittext">
               </td>
               <td class="edittext"><br>

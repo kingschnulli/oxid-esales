@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 28287 2010-06-11 08:17:06Z sarunas $
+ * @version   SVN: $Id: userTest.php 28346 2010-06-15 11:46:36Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -292,7 +292,7 @@ class Unit_Views_userTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
 
         $oR = $this->getMock('stdclass', array('renewExpiration'));
-        $oR->expects($this->once())->method('renewExpiration')->will($this->returnValue(null));
+        $oR->expects($this->once())->method('renewExpiration')->will($this->evalFunction('{throw new Exception("call is ok");}'));
 
         $oS = $this->getMock('oxsession', array('getBasketReservations'));
         $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oR));
@@ -300,6 +300,41 @@ class Unit_Views_userTest extends OxidTestCase
         $oU = $this->getMock('user', array('getSession'));
         $oU->expects($this->any())->method('getSession')->will($this->returnValue($oS));
 
-        $oU->render();
+        try {
+            $oU->render();
+        } catch (Exception $e) {
+            $this->assertEquals('call is ok', $e->getMessage());
+            return;
+        }
+        $this->fail("exception should have been thrown");
+    }
+    public function testRenderReturnsToBasketIfReservationOnAndBasketEmpty()
+    {
+        oxTestModules::addFunction('oxutils', 'redirect($url)', '{throw new Exception($url);}');
+        modInstances::addMod('oxutils', oxNew('oxutils'));
+
+        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::setParameter( 'sslredirect', 'forced' );
+
+        $oR = $this->getMock('stdclass', array('renewExpiration'));
+        $oR->expects($this->once())->method('renewExpiration')->will($this->returnValue(null));
+
+        $oB = $this->getMock('oxbasket', array('getProductsCount'));
+        $oB->expects($this->once())->method('getProductsCount')->will($this->returnValue(0));
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations', 'getBasket'));
+        $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oR));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
+
+        $oO = $this->getMock('user', array('getSession'));
+        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        try {
+            $oO->render();
+        } catch (Exception $e) {
+            $this->assertEquals(oxConfig::getInstance()->getShopHomeURL().'cl=basket', $e->getMessage());
+            return;
+        }
+        $this->fail("no Exception thrown in redirect");
     }
 }

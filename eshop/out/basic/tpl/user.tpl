@@ -5,7 +5,7 @@
 [{include file="inc/steps_item.tpl" highlight=2 }]
 [{assign var="_blshownoregopt" value=$oView->getShowNoRegOption()}]
 
-  [{ if !$oxcmp_user && !$oView->getLoginOption() }]
+  [{ if !$oxcmp_user && !$oView->getLoginOption() && !$oView->isConnectedWithFb() }]
     [{if $_blshownoregopt }]
       <div class="left">
           <strong class="useroptboxhead">[{ oxmultilang ident="USER_OPTION1" }]</strong>
@@ -119,9 +119,32 @@
 
       [{include file="inc/error.tpl" Errorlist=$Errors.user}]
 
-      [{if $oView->getLoginOption() == 3}]
+      [{if $oView->getLoginOption() == 3 || (!$oxcmp_user && $oView->isConnectedWithFb())}]
         <strong class="boxhead">[{ oxmultilang ident="USER_LOGIN3" }]</strong>
         <div class="box info">
+
+          [{if !$oxcmp_user && $oView->isConnectedWithFb()}]
+          [{ oxmultilang ident="USER_FB_UPDATEACCOUNTMSG" }]
+          <br>
+          <br>
+
+          <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
+            <div>
+                [{ $oViewConf->getHiddenSid() }]
+                [{ $oViewConf->getNavFormParams() }]
+                <input type="hidden" name="fnc" value="">
+                <input type="hidden" name="cl" value="user">
+                <input type="hidden" name="option" value="2">
+                <input type="hidden" name="lgn_cook" value="0">
+                <input type="hidden" name="fblogin" value="1">
+                <input type="hidden" name="CustomError" value='user'>
+                <span class="btn"><input id="test_UsrOpt2Update" type="submit" name="send" value="[{ oxmultilang ident="USER_UPDATE_ACCOUNT" }]" class="btn"></span><br><br>
+             </div>
+          </form>
+          <hr>
+          <br>
+          [{/if}]
+
             [{ oxmultilang ident="USER_ENTEREMAILANDPWD" }]<br>
             [{ oxmultilang ident="USER_RECEIVECONFIRMATION" }]
             <div class="dot_sep"></div>

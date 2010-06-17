@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 28289 2010-06-11 08:33:39Z sarunas $
+ * @version   SVN: $Id: oxviewconfig.php 28377 2010-06-16 12:23:51Z rimvydas.paskevicius $
  */
 
 /**
@@ -1159,7 +1159,79 @@ class oxViewConfig extends oxSuperCfg
      */
     public function getBasketTimeLeft()
     {
-        return $this->getSession()->getBasketReservations()->getTimeLeft();
+        if (!isset($this->_dBasketTimeLeft)) {
+            $this->_dBasketTimeLeft = $this->getSession()->getBasketReservations()->getTimeLeft();
+        }
+        return $this->_dBasketTimeLeft;
     }
 
+    /**
+     * Returns config param "bl_showFbConnect" value
+     *
+     * @return bool
+     */
+    public function getShowFbConnect()
+    {
+        return $this->getConfig()->getConfigParam( 'bl_showFbConnect' );
+    }
+
+    /**
+     * Returns config param "blFbEnableComments" value
+     *
+     * @return bool
+     */
+    public function getShowFbComments()
+    {
+        return $this->getConfig()->getConfigParam( 'blFbEnableComments' );
+    }
+
+    /**
+     * Returns config param "blFbEnableFacepile" value
+     *
+     * @return bool
+     */
+    public function getShowFbFacepile()
+    {
+        return $this->getConfig()->getConfigParam( 'blFbEnableFacepile' );
+    }
+
+    /**
+     * Returns config param "blFbEnableChat" value
+     *
+     * @return bool
+     */
+    public function getShowFbLiveStream()
+    {
+        return $this->getConfig()->getConfigParam( 'blFbEnableChat' );
+    }
+
+    /**
+     * Returns config param "blFbEnableInvite" value
+     *
+     * @return bool
+     */
+    public function getShowFbInvite()
+    {
+        return $this->getConfig()->getConfigParam( 'blFbEnableInvite' );
+    }
+
+    /**
+     * Returns config param "blFbEnableShare" value
+     *
+     * @return bool
+     */
+    public function getShowFbShare()
+    {
+        return $this->getConfig()->getConfigParam( 'blFbEnableShare' );
+    }
+
+    /**
+     * Returns config param "blFbEnableLike" value
+     *
+     * @return bool
+     */
+    public function getShowFbLike()
+    {
+        return $this->getConfig()->getConfigParam( 'blFbEnableLike' );
+    }
 }

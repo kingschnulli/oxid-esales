@@ -46,7 +46,7 @@ class oxActionList extends oxList
     public function loadFinishedByCount($iCount)
     {
         $sDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
-        $sQ = "select * from oxactions where oxtype=1 and oxactive=1 and oxactiveto>0 and oxactiveto < ".oxDb::getDb()->quote($sDate)."
+        $sQ = "select * from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$this->getConfig()->getShopId()."' and oxactiveto>0 and oxactiveto < ".oxDb::getDb()->quote($sDate)."
                ".$this->_getUserGroupFilter()."
                order by oxactiveto desc, oxactivefrom desc limit ".(int)$iCount;
         $this->selectString( $sQ );
@@ -64,7 +64,7 @@ class oxActionList extends oxList
     {
         $sDateTo   = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
         $sDateFrom = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime()-$iTimespan );
-        $sQ = "select * from oxactions where oxtype=1 and oxactive=1 and oxactiveto < ".oxDb::getDb()->quote($sDateTo)." and oxactiveto > ".oxDb::getDb()->quote($sDateFrom)."
+        $sQ = "select * from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$this->getConfig()->getShopId()."' and oxactiveto < ".oxDb::getDb()->quote($sDateTo)." and oxactiveto > ".oxDb::getDb()->quote($sDateFrom)."
                ".$this->_getUserGroupFilter()."
                order by oxactiveto, oxactivefrom";
         $this->selectString( $sQ );
@@ -78,7 +78,7 @@ class oxActionList extends oxList
     public function loadCurrent()
     {
         $sDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
-        $sQ = "select * from oxactions where oxtype=1 and oxactive=1 and (oxactiveto > ".oxDb::getDb()->quote($sDate)." or oxactiveto=0) and oxactivefrom != 0 and oxactivefrom < ".oxDb::getDb()->quote($sDate)."
+        $sQ = "select * from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$this->getConfig()->getShopId()."' and (oxactiveto > ".oxDb::getDb()->quote($sDate)." or oxactiveto=0) and oxactivefrom != 0 and oxactivefrom < ".oxDb::getDb()->quote($sDate)."
                ".$this->_getUserGroupFilter()."
                order by oxactiveto, oxactivefrom";
         $this->selectString( $sQ );
@@ -94,7 +94,7 @@ class oxActionList extends oxList
     public function loadFutureByCount($iCount)
     {
         $sDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
-        $sQ = "select * from oxactions where oxtype=1 and oxactive=1 and (oxactiveto > ".oxDb::getDb()->quote($sDate)." or oxactiveto=0) and oxactivefrom > ".oxDb::getDb()->quote($sDate)."
+        $sQ = "select * from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$this->getConfig()->getShopId()."' and (oxactiveto > ".oxDb::getDb()->quote($sDate)." or oxactiveto=0) and oxactivefrom > ".oxDb::getDb()->quote($sDate)."
                ".$this->_getUserGroupFilter()."
                order by oxactiveto, oxactivefrom limit ".(int)$iCount;
         $this->selectString( $sQ );
@@ -111,7 +111,7 @@ class oxActionList extends oxList
     {
         $sDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
         $sDateTo = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime()+$iTimespan );
-        $sQ = "select * from oxactions where oxtype=1 and oxactive=1 and (oxactiveto > ".oxDb::getDb()->quote($sDate)." or oxactiveto=0) and oxactivefrom > ".oxDb::getDb()->quote($sDate)." and oxactivefrom < ".oxDb::getDb()->quote($sDateTo)."
+        $sQ = "select * from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$this->getConfig()->getShopId()."' and (oxactiveto > ".oxDb::getDb()->quote($sDate)." or oxactiveto=0) and oxactivefrom > ".oxDb::getDb()->quote($sDate)." and oxactivefrom < ".oxDb::getDb()->quote($sDateTo)."
                ".$this->_getUserGroupFilter()."
                order by oxactiveto, oxactivefrom";
         $this->selectString( $sQ );
@@ -156,6 +156,6 @@ class oxActionList extends oxList
      */
     public function areAnyActivePromotions()
     {
-        return (bool) oxDb::getDb()->getOne("select 1 from ".getViewName( 'oxactions' )." where oxtype=1 and oxactive=1 limit 1");
+        return (bool) oxDb::getDb()->getOne("select 1 from ".getViewName( 'oxactions' )." where oxtype=2 and oxactive=1 and oxshopid='".$this->getConfig()->getShopId()."' limit 1");
     }
 }

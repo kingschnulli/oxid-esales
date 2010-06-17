@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28269 2010-06-10 13:58:14Z vilma $
+ * @version   SVN: $Id: lang.php 28363 2010-06-16 08:31:10Z vilma $
  */
 
 /*
@@ -445,7 +445,7 @@ $aLang = array(
 'ARTICLE_PICTURES_ZOOM2'                        => 'Zoom 2',
 'ARTICLE_PICTURES_ZOOM3'                        => 'Zoom 3',
 'ARTICLE_PICTURES_ZOOM4'                        => 'Zoom 4',
-'ARTICLE_PICTURES_UPLOADISDISABLED'             => 'This is demoshop. Uploading or deleting images was switched off due to security reasons.',
+'ARTICLE_PICTURES_UPLOADISDISABLED'             => 'This is a demoshop. Uploading or deleting images has been switched off due to security reasons.',
 'ARTICLE_REVIEW_DELETE'                         => 'Delete',
 'ARTICLE_REVIEW_SAVE'                           => 'Save',
 'ARTICLE_REVIEW_ACTIVE'                         => 'Active',
@@ -660,6 +660,30 @@ $aLang = array(
 'DYN_SUPERCLIX_SUPERCLICKSID'                   => 'SuperClix Partner ID',
 'DYN_TRUSTED_TRUSTEDSHOP'                       => 'Trusted Shops ID',
 'DYN_TRUSTED_TRUSTEDSHOP_ERROR'                 => 'Invalid Trusted Shops ID. Contact Trusted Shops for your valid ID.',
+'DYN_TRUSTED_USER'                              => 'User name (wsUser)',
+'DYN_TRUSTED_PASSWORD'                          => 'Password (wsPassword)',
+'DYN_TRUSTED_TESTMODUS'                         => 'Test mode active',
+'DYN_TRUSTED_ACTIVE'                            => 'Show Trusted Shops seal',
+'DYN_TRUSTED_SHOPPAYMENT'                       => 'Payment method in Shop',
+'DYN_TRUSTED_TSPAYMENT'                         => 'Payment method by Trusted Shops',
+'DYN_TRUSTED_DIRECT_DEBIT'                      => 'Lastschrift/Bankeinzug',
+'DYN_TRUSTED_CREDIT_CARD'                       => 'Kreditkarte',
+'DYN_TRUSTED_INVOICE'                           => 'Rechnung',
+'DYN_TRUSTED_CASH_ON_DELIVERY'                  => 'Nachnahme',
+'DYN_TRUSTED_PREPAYMENT'                        => 'Vorauskasse / Überweisung',
+'DYN_TRUSTED_CHEQUE'                            => 'Verrechnungsscheck',
+'DYN_TRUSTED_PAYBOX'                            => 'Paybox',
+'DYN_TRUSTED_PAYPAL'                            => 'PayPal',
+'DYN_TRUSTED_CASH_ON_PICKUP'                    => 'Zahlung bei Abholung',
+'DYN_TRUSTED_FINANCING'                         => 'Finanzierung',
+'DYN_TRUSTED_LEASING'                           => 'Leasing',
+'DYN_TRUSTED_T_PAY'                             => 'T-Pay',
+'DYN_TRUSTED_CLICKANDBUY'                       => 'Click&Buy (Firstgate)',
+'DYN_TRUSTED_GIROPAY'                           => 'Giropay',
+'DYN_TRUSTED_GOOGLE_CHECKOUT'                   => 'Google Checkout',
+'DYN_TRUSTED_SHOP_CARD'                         => 'Online Shop Zahlungskarte',
+'DYN_TRUSTED_DIRECT_E_BANKING'                  => 'Sofortüberweisung.de',
+'DYN_TRUSTED_OTHER'                             => 'Andere Zahlungsart',
 'DYNBASE_ADDCATTOCAMPAIGN'                      => 'Add category to campaign parameter',
 'DYNBASE_DO_SUCCESS'                            => 'Success! Your Export File can be downloaded',
 'DYNBASE_DO_HERE'                               => 'here',
@@ -1314,6 +1338,7 @@ $aLang = array(
 'SHOP_CONFIG_FBINVITE'                          => 'Invite',
 'SHOP_CONFIG_FBSHARE'                           => 'Share',
 'SHOP_CONFIG_FBLIKE'                            => 'Like',
+'SHOP_CONFIG_FACEBOOKCONNECT'                   => 'Show Facebook connect',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Number of equal Attributes for similar Products (%)',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Picture Quality - from 0 (poor Quality, small File Size) to 100 (best Quality, large File Size)',
@@ -1866,17 +1891,17 @@ $aLang = array(
 'SHOP_OPTIONS_GROUP_INVITATIONS'                => 'Invitations',
 'SHOP_OPTIONS_GROUP_FACEBOOK'                   => 'Facebook',
 
-'PROMOTION_USERS_SETGROUPS'                 => 'Assigned User Groups',
-'PROMOTION_PRODUCTS_ALLATRICLES'            => 'All Products',
-'PROMOTION_PRODUCTS_SETARTICLES'            => 'Assigned Products',
-'PROMOTION_LIST_ALL'                        => 'All',
-'PROMOTION_LIST_ACTIVE'                     => 'Active',
-'PROMOTION_LIST_UPCOMING'                   => 'Upcoming',
-'PROMOTION_LIST_EXPIRED'                    => 'Expired',
-'PROMOTION_LIST_STARTTIME'                  => 'Start Time',
-'PROMOTIONS_MAIN_TYPE0'                     => 'Action',
-'PROMOTIONS_MAIN_TYPE1'                     => 'Promotion',
-'TOOLTIPS_NEWPROMOTION'                     => 'New Promotion/Action',
+'PROMOTION_USERS_SETGROUPS'                     => 'Assigned User Groups',
+'PROMOTION_PRODUCTS_ALLATRICLES'                => 'All Products',
+'PROMOTION_PRODUCTS_SETARTICLES'                => 'Assigned Products',
+'PROMOTION_LIST_ALL'                            => 'All',
+'PROMOTION_LIST_ACTIVE'                         => 'Active',
+'PROMOTION_LIST_UPCOMING'                       => 'Upcoming',
+'PROMOTION_LIST_EXPIRED'                        => 'Expired',
+'PROMOTION_LIST_STARTTIME'                      => 'Start Time',
+'PROMOTIONS_MAIN_TYPE_ACTION'                   => 'Action',
+'PROMOTIONS_MAIN_TYPE_PROMO'                    => 'Promotion',
+'TOOLTIPS_NEWPROMOTION'                         => 'New Promotion/Action',
 
 
 );

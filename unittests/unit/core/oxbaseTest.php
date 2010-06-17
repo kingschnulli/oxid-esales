@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbaseTest.php 28085 2010-06-02 13:11:58Z sarunas $
+ * @version   SVN: $Id: oxbaseTest.php 28328 2010-06-14 14:48:10Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -812,7 +812,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oBase->oxactions__oxid = new oxField("test1", oxField::T_RAW);
         $oBase->oxactions__oxtitle = new oxField("title1", oxField::T_RAW);
 
-        $sGetUpdateFields = "oxid = 'test1',oxtype = '',oxtitle = 'title1',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '',oxlongdesc = '',oxlongdesc_1 = '',oxlongdesc_2 = '',oxlongdesc_3 = '',oxactive = '',oxactivefrom = '',oxactiveto = '',oxsort = ''";
+        $sGetUpdateFields = "oxid = 'test1',oxshopid = '',oxtype = '',oxtitle = 'title1',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '',oxlongdesc = '',oxlongdesc_1 = '',oxlongdesc_2 = '',oxlongdesc_3 = '',oxactive = '',oxactivefrom = '',oxactiveto = '',oxsort = ''";
 
         $this->assertEquals($sGetUpdateFields, $oBase->UNITgetUpdateFields());
     }
@@ -831,7 +831,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
 
         $oBase->setClassVar( '_aSkipSaveFields', array('oxtitle') );
 
-        $sGetUpdateFields = "oxid = 'test1',oxtype = '',oxtitle = 'title1',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '',oxlongdesc = '',oxlongdesc_1 = '',oxlongdesc_2 = '',oxlongdesc_3 = '',oxactive = '',oxactivefrom = '',oxactiveto = '',oxsort = ''";
+        $sGetUpdateFields = "oxid = 'test1',oxshopid = '',oxtype = '',oxtitle = 'title1',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '',oxlongdesc = '',oxlongdesc_1 = '',oxlongdesc_2 = '',oxlongdesc_3 = '',oxactive = '',oxactivefrom = '',oxactiveto = '',oxsort = ''";
 
         $this->assertEquals($sGetUpdateFields, $oBase->UNITgetUpdateFields(false));
     }
@@ -850,7 +850,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
 
         $oBase->setClassVar( '_aSkipSaveFields', array('oxtitle') );
 
-        $sGetUpdateFields = "oxid = 'test1',oxtype = '',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '',oxlongdesc = '',oxlongdesc_1 = '',oxlongdesc_2 = '',oxlongdesc_3 = '',oxactive = '',oxactivefrom = '',oxactiveto = '',oxsort = ''";
+        $sGetUpdateFields = "oxid = 'test1',oxshopid = '',oxtype = '',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '',oxlongdesc = '',oxlongdesc_1 = '',oxlongdesc_2 = '',oxlongdesc_3 = '',oxactive = '',oxactivefrom = '',oxactiveto = '',oxsort = ''";
 
         $this->assertEquals($sGetUpdateFields, $oBase->UNITgetUpdateFields());
     }
@@ -1310,7 +1310,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $sSelect = $oBase->buildSelectString(array("oxactions.oxid" => "oxstart"));
         $sSelect = str_replace("  ", " ", $sSelect);
 
-        $this->assertEquals("select oxactions.oxid, oxactions.oxtype, oxactions.oxtitle, oxactions.oxtitle_1, oxactions.oxtitle_2, oxactions.oxtitle_3, oxactions.oxlongdesc, oxactions.oxlongdesc_1, oxactions.oxlongdesc_2, oxactions.oxlongdesc_3, oxactions.oxactive, oxactions.oxactivefrom, oxactions.oxactiveto, oxactions.oxsort from oxactions where 1 and oxactions.oxid = 'oxstart'", $sSelect);
+        $this->assertEquals("select oxactions.oxid, oxactions.oxshopid, oxactions.oxtype, oxactions.oxtitle, oxactions.oxtitle_1, oxactions.oxtitle_2, oxactions.oxtitle_3, oxactions.oxlongdesc, oxactions.oxlongdesc_1, oxactions.oxlongdesc_2, oxactions.oxlongdesc_3, oxactions.oxactive, oxactions.oxactivefrom, oxactions.oxactiveto, oxactions.oxsort from oxactions where 1 and oxactions.oxid = 'oxstart'", $sSelect);
     }
 
     /**
@@ -1394,7 +1394,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oBase = new _oxBase();
         $oBase->init('oxactions');
 
-        $this->assertEquals("oxactions.oxid, oxactions.oxtype, oxactions.oxtitle, oxactions.oxtitle_1, oxactions.oxtitle_2, oxactions.oxtitle_3, oxactions.oxlongdesc, oxactions.oxlongdesc_1, oxactions.oxlongdesc_2, oxactions.oxlongdesc_3, oxactions.oxactive, oxactions.oxactivefrom, oxactions.oxactiveto, oxactions.oxsort", $oBase->getSelectFields());
+        $this->assertEquals("oxactions.oxid, oxactions.oxshopid, oxactions.oxtype, oxactions.oxtitle, oxactions.oxtitle_1, oxactions.oxtitle_2, oxactions.oxtitle_3, oxactions.oxlongdesc, oxactions.oxlongdesc_1, oxactions.oxlongdesc_2, oxactions.oxlongdesc_3, oxactions.oxactive, oxactions.oxactivefrom, oxactions.oxactiveto, oxactions.oxsort", $oBase->getSelectFields());
     }
 
     /**
@@ -2157,9 +2157,11 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oField1->has_default = false;
 
         $oField2 = new ADOFieldObject();
-        $oField2->name = 'OXTYPE';
-        $oField2->max_length = '1';
-        $oField2->type = 'tinyint';
+        $oField2->name = 'OXSHOPID';
+        $oField2->max_length = '11';
+        $oField2->type = 'int';
+            $oField2->max_length = '32';
+            $oField2->type = 'varchar';
         $oField2->scale = null;
         $oField2->not_null = true;
         $oField2->primary_key = false;
@@ -2169,9 +2171,9 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oField2->has_default = false;
 
         $oField3 = new ADOFieldObject();
-        $oField3->name = 'OXTITLE';
-        $oField3->max_length = '128';
-        $oField3->type = 'char';
+        $oField3->name = 'OXTYPE';
+        $oField3->max_length = '1';
+        $oField3->type = 'tinyint';
         $oField3->scale = null;
         $oField3->not_null = true;
         $oField3->primary_key = false;
@@ -2180,16 +2182,28 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oField3->unsigned = false;
         $oField3->has_default = false;
 
-        $oField31 = clone $oField3;
-        $oField31->name = 'OXTITLE_1';
+        $oField4 = new ADOFieldObject();
+        $oField4->name = 'OXTITLE';
+        $oField4->max_length = '128';
+        $oField4->type = 'char';
+        $oField4->scale = null;
+        $oField4->not_null = true;
+        $oField4->primary_key = false;
+        $oField4->auto_increment = false;
+        $oField4->binary = false;
+        $oField4->unsigned = false;
+        $oField4->has_default = false;
 
-        $oField32 = clone $oField3;
-        $oField32->name = 'OXTITLE_2';
+        $oField41 = clone $oField4;
+        $oField41->name = 'OXTITLE_1';
 
-        $oField33 = clone $oField3;
-        $oField33->name = 'OXTITLE_3';
+        $oField42 = clone $oField4;
+        $oField42->name = 'OXTITLE_2';
 
-        $aExpectedFields = array($oField1, $oField2, $oField3, $oField31, $oField32, $oField33);
+        $oField43 = clone $oField4;
+        $oField43->name = 'OXTITLE_3';
+
+        $aExpectedFields = array($oField1, $oField2, $oField3, $oField4, $oField41, $oField42, $oField43);
 
         $oField5 = new ADOFieldObject();
         $oField5->name = 'OXLONGDESC';
@@ -2285,7 +2299,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
     {
         $oBase = new _oxBase();
         $oBase->init('oxactions');
-        $aExpectedFields = array('oxid' => 0, 'oxtype'=>0, 'oxtitle' => 0, 'oxtitle_1' => 0, 'oxtitle_2' => 0, 'oxtitle_3' => 0, 'oxlongdesc' => 0, 'oxlongdesc_1' => 0, 'oxlongdesc_2' => 0, 'oxlongdesc_3' => 0, 'oxactive'=>0, 'oxactivefrom'=>0, 'oxactiveto'=>0, 'oxsort'=>0);
+        $aExpectedFields = array('oxid' => 0, 'oxshopid'=>0, 'oxtype'=>0, 'oxtitle' => 0, 'oxtitle_1' => 0, 'oxtitle_2' => 0, 'oxtitle_3' => 0, 'oxlongdesc' => 0, 'oxlongdesc_1' => 0, 'oxlongdesc_2' => 0, 'oxlongdesc_3' => 0, 'oxactive'=>0, 'oxactivefrom'=>0, 'oxactiveto'=>0, 'oxsort'=>0);
 
         $this->assertEquals($aExpectedFields, $oBase->UNITgetAllFields(true));
     }

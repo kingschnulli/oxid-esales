@@ -12,24 +12,24 @@ function showBasketReserved()
 {
   if( document.getElementById('basketreserved').value == 1)
   {
-    document.getElementById('basketreservedtime').style.display = 'block';
+    document.getElementById('basketreservedtime').className = 'rowexp';
   }
   else
   {
-    document.getElementById('basketreservedtime').style.display = 'none';
+    document.getElementById('basketreservedtime').className = 'rowhide';
   }
 }
 function showInvitations()
 {
   if( document.getElementById('invitations').value == 1)
   {
-    document.getElementById('pointsforinvitation').style.display = 'block';
-    document.getElementById('pointsforregistration').style.display = 'block';
+    document.getElementById('pointsforinvitation').className = 'rowexp';
+    document.getElementById('pointsforregistration').className = 'rowexp';
   }
   else
   {
-    document.getElementById('pointsforinvitation').style.display = 'none';
-    document.getElementById('pointsforregistration').style.display = 'none';
+    document.getElementById('pointsforinvitation').className = 'rowhide';
+    document.getElementById('pointsforregistration').className = 'rowhide';
   }
 }
 //-->
@@ -736,7 +736,7 @@ function showInvitations()
                 <div class="spacer"></div>
             </dl>
 
-            <dl [{if !$confstrs.blBasketReservationEnabled }]style="display: none;"[{/if}] id="basketreservedtime">
+            <dl [{if !$confstrs.blBasketReservationEnabled }]class="rowhide"[{/if}] id="basketreservedtime">
                 <dt>
                     <input type=text class="txt" style="width:70" name=confstrs[iBasketReservationTimeout] value="[{if $confstrs.iBasketReservationTimeout}][{$confstrs.iBasketReservationTimeout}][{else}]1200[{/if}]" [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_BASKETRESERVATIONTIMEOUT" }]
@@ -767,7 +767,7 @@ function showInvitations()
                 <div class="spacer"></div>
             </dl>
 
-            <dl [{if !$confstrs.blInvitationsEnabled }]style="display: none;"[{/if}] id="pointsforinvitation">
+            <dl [{if !$confstrs.blInvitationsEnabled }]class="rowhide"[{/if}] id="pointsforinvitation">
                 <dt>
                     <input type=text class="txt" style="width:70" name=confstrs[dPointsForInvitation] value="[{$confstrs.dPointsForInvitation}]" [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_POINTSFORINVITATION" }]
@@ -778,7 +778,7 @@ function showInvitations()
                 <div class="spacer"></div>
             </dl>
 
-            <dl [{if !$confstrs.blInvitationsEnabled }]style="display: none;"[{/if}] id="pointsforregistration">
+            <dl [{if !$confstrs.blInvitationsEnabled }]class="rowhide"[{/if}] id="pointsforregistration">
                 <dt>
                     <input type=text class="txt" style="width:70" name=confstrs[dPointsForRegistration] value="[{$confstrs.dPointsForRegistration}]" [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_POINTSFORREGISTRATION" }]
@@ -795,6 +795,17 @@ function showInvitations()
     <div class="groupExp">
         <div>
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_FACEBOOK" }]</b></a>
+            <dl>
+                <dt>
+                    <input type=text class="txt" style="width: 250px;" name=confstrs[bl_showFbConnect] value="[{$confstrs.bl_showFbConnect}]">
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_FACEBOOKCONNECT" }]
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
             <dl>
                 <dt>
                     <input type=text class="txt" style="width: 250px;" name=confstrs[sFbAppId] value="[{$confstrs.sFbAppId}]">

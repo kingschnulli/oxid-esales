@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 28289 2010-06-11 08:33:39Z sarunas $
+ * @version   SVN: $Id: oxviewconfigTest.php 28349 2010-06-15 14:22:38Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -359,6 +359,8 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oVC = $this->getMock('oxViewConfig', array('getSession'));
         $oVC->expects($this->any())->method('getSession')->will($this->returnValue($oS));
 
+        $this->assertEquals(954, $oVC->getBasketTimeLeft());
+        // return cached
         $this->assertEquals(954, $oVC->getBasketTimeLeft());
     }
 }

@@ -795,8 +795,8 @@ div.fbMsg.on.popup { width: 400px; height: 200px; margin-top: -100px; margin-lef
 div.on.popup span.btn{background: transparent url(bg/buttons_ce_.gif) right -150px no-repeat;padding: 0 1px 0 0;height:18px;line-height:18px;display:-moz-inline-stack;display:inline-block;margin:0;outline:0;}
 div.on.popup span.btn input, span.btn a{width: auto; border:none;height:18px;line-height:10px;outline:0;position:relative;display:block;padding:2px 7px;margin:0;color:#ffffff;font-weight: bold;cursor:pointer;background: transparent url(bg/buttons_ce_.gif) no-repeat left -150px;}
 div.on.popup span.btn a{padding:3px 8px 2px; position:relative;}
-div.fbMsg.on.popup .popupMsg { padding-bottom: 10px; border-bottom: 1px solid #ccc; margin-bottom: 10px;}
-
+div.fbMsg.on.popup .popupMsg { font-size: 11px; padding-bottom: 10px; border-bottom: 1px solid #ccc; margin-bottom: 5px;}
+div.fbMsg.on.popup .popupFooter { position: absolute; bottom: 10px; left: 10px; }
 
 #zoom {padding:0;overflow:auto;min-width:250px;min-height: 150px;background:#e2e2e2;border-color:#000000;}
 #zoom ul.tabs{padding:0;margin:0;background:#ffffff;height: 28px;width:100%;}
@@ -864,3 +864,23 @@ div.fbMsg.on.popup .popupMsg { padding-bottom: 10px; border-bottom: 1px solid #c
 #body .recomlistdesc {float: left; width: 415px;}
 
 .verification_code {border: 1px solid #000; color: #000; padding: 2px; text-align:center; width:80px;}
+
+.promotionsRow {float:left;width:580px;position:relative;margin: 0 0 5px 0;padding:0}
+.promotionsRow .promotion {border:1px solid #ccc;float:left;width:268px;height:157px;margin:0px 5px 5px 5px;padding:5px;position:relative;background:#ffffff;overflow:hidden;}
+.promotionsRow .promotion .timeouttext{font-style:italic;position:absolute;bottom:5px;}
+.promotionsRow .promotion .activationtext{font-style:italic;position:absolute;bottom:5px;}
+
+.promotionsRow .promotionFinished .timeouttext{display:none;}
+.promotionsRow .promotionFinished .activationtext{display:none;}
+.promotionsRow .promotionCurrent .activationtext{display:none;}
+.promotionsRow .promotionFuture .timeouttext{display:none;}
+
+.promotionsRow .promotion .finishedText{display:none;top:0;left:0;width:100%;height:100%;position:absolute;}
+.promotionsRow .promotion .finishedText img{display:block; bottom:7px;right:7px;position:absolute;}
+.promotionsRow .promotionFinished .finishedText{display:block;z-index:500;visibility: visible;background-image:url('bg/transparent.gif');}
+
+.promotionsRow .promotion .upcomingText{display:none;top:0;left:0;width:100%;height:100%;position:absolute;}
+.promotionsRow .promotion .upcomingText img{display:block; top:7px;right:7px;position:absolute;}
+.promotionsRow .promotionFuture .upcomingText{display:block;z-index:500;visibility: visible;background-image:url('bg/transparent.gif');}
+
+.promotionsRow .promotionCurrent .promoTimeout {font-weight:600;}

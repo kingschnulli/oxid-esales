@@ -39,7 +39,8 @@ CREATE TABLE `oxactions` (
   `OXACTIVETO` datetime NOT NULL default '0000-00-00 00:00:00',
   `OXSORT` int( 5 ) NOT NULL DEFAULT '0',
   PRIMARY KEY  (`OXID`),
-  index(`oxsort`)
+  index(`oxsort`),
+  index(`OXTYPE`, `OXACTIVE`, `OXACTIVETO`, `OXACTIVEFROM`)
 ) TYPE=MyISAM;
 
 
@@ -296,7 +297,8 @@ CREATE TABLE `oxuserbaskets` (
   `OXCREATE` timestamp(14) NOT NULL,
   `OXPUBLIC` tinyint(1) DEFAULT '1' NOT NULL,
   `OXUPDATE` INT NOT NULL default 0,
-  PRIMARY KEY  (`OXID`)
+  PRIMARY KEY  (`OXID`),
+  index(`OXUPDATE`)
 ) TYPE=InnoDB;
 
 #
@@ -1353,6 +1355,8 @@ CREATE TABLE `oxorder` (
   `OXLANG` int(2) NOT NULL default '0',
   `OXINVOICENR` int(11) NOT NULL default '0',
   `OXDELTYPE` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
+  `OXTSPROTECTID` char(64) character set latin1 collate latin1_general_ci NOT NULL default '',
+  `OXTSPROTECTCOSTS` double NOT NULL default '0',
   PRIMARY KEY  (`OXID`),
   KEY `MAINIDX` (`OXSHOPID`,`OXSTORNO`,`OXORDERDATE`)
 ) TYPE=InnoDB;
@@ -1441,6 +1445,7 @@ CREATE TABLE `oxpayments` (
   `OXLONGDESC_2` varchar(255) NOT NULL default '',
   `OXLONGDESC_3` varchar(255) NOT NULL default '',
   `OXSORT` int(5) NOT NULL default 0,
+  `OXTSPAYMENTID` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
   PRIMARY KEY  (`OXID`),
   KEY `OXACTIVE` (`OXACTIVE`)
 ) TYPE=MyISAM;
@@ -1449,12 +1454,12 @@ CREATE TABLE `oxpayments` (
 # Data for table `oxpayments`
 #
 
-INSERT INTO `oxpayments` VALUES ('oxidcashondel', 1, 'Nachnahme', 7.5, 'abs', 0, 0, 1000000, '', 1, 'COD (Cash on Delivery)', '', '', '', '', '', '', '', '', '', 0);
-INSERT INTO `oxpayments` VALUES ('oxidcreditcard', 1, 'Kreditkarte', 20.9, 'abs', 500, 0, 1000000, 'kktype__@@kknumber__@@kkmonth__@@kkyear__@@kkname__@@kkpruef__@@', 1, 'Credit Card', 'kktype__@@kknumber__@@kkmonth__@@kkyear__@@kkname__@@kkpruef__@@', '', '', '', '', 'Die Belastung Ihrer Kreditkarte erfolgt mit dem Abschluss der Bestellung.', 'Your Credit Card will be charged when you submit the order.', '', '', 0);
-INSERT INTO `oxpayments` VALUES ('oxiddebitnote', 1, 'Bankeinzug/Lastschrift', 0, 'abs', 0, 0, 1000000, 'lsbankname__@@lsblz__@@lsktonr__@@lsktoinhaber__@@', 0, 'Direct Debit', 'lsbankname__@@lsblz__@@lsktonr__@@lsktoinhaber__@@', '', '', '', '', 'Die Belastung Ihres Kontos erfolgt mit dem Versand der Ware.', 'Your bank account will be charged when the order is shipped.', '', '', 0);
-INSERT INTO `oxpayments` VALUES ('oxidpayadvance', 1, 'Vorauskasse 2% Skonto', -2, '%', 0, 0, 1000000, '', 1, 'Cash in advance - 2% cash discount', '', '', '', '', '', '', '', '', '', 0);
-INSERT INTO `oxpayments` VALUES ('oxidinvoice', 1, 'Rechnung', 0, 'abs', 800, 0, 1000000, '', 0, 'Invoice', '', '', '', '', '', '', '', '', '', 0);
-INSERT INTO `oxpayments` VALUES ('oxempty', 1, 'Empty', 0, 'abs', 0, 0, 0, '', 0, 'Empty', '', '', '', '', '', 'for other countries', 'An example. Maybe for use with other countries', '', '', 0);
+INSERT INTO `oxpayments` VALUES ('oxidcashondel', 1, 'Nachnahme', 7.5, 'abs', 0, 0, 1000000, '', 1, 'COD (Cash on Delivery)', '', '', '', '', '', '', '', '', '', 0, '');
+INSERT INTO `oxpayments` VALUES ('oxidcreditcard', 1, 'Kreditkarte', 20.9, 'abs', 500, 0, 1000000, 'kktype__@@kknumber__@@kkmonth__@@kkyear__@@kkname__@@kkpruef__@@', 1, 'Credit Card', 'kktype__@@kknumber__@@kkmonth__@@kkyear__@@kkname__@@kkpruef__@@', '', '', '', '', 'Die Belastung Ihrer Kreditkarte erfolgt mit dem Abschluss der Bestellung.', 'Your Credit Card will be charged when you submit the order.', '', '', 0, '');
+INSERT INTO `oxpayments` VALUES ('oxiddebitnote', 1, 'Bankeinzug/Lastschrift', 0, 'abs', 0, 0, 1000000, 'lsbankname__@@lsblz__@@lsktonr__@@lsktoinhaber__@@', 0, 'Direct Debit', 'lsbankname__@@lsblz__@@lsktonr__@@lsktoinhaber__@@', '', '', '', '', 'Die Belastung Ihres Kontos erfolgt mit dem Versand der Ware.', 'Your bank account will be charged when the order is shipped.', '', '', 0, '');
+INSERT INTO `oxpayments` VALUES ('oxidpayadvance', 1, 'Vorauskasse 2% Skonto', -2, '%', 0, 0, 1000000, '', 1, 'Cash in advance - 2% cash discount', '', '', '', '', '', '', '', '', '', 0, '');
+INSERT INTO `oxpayments` VALUES ('oxidinvoice', 1, 'Rechnung', 0, 'abs', 800, 0, 1000000, '', 0, 'Invoice', '', '', '', '', '', '', '', '', '', 0, '');
+INSERT INTO `oxpayments` VALUES ('oxempty', 1, 'Empty', 0, 'abs', 0, 0, 0, '', 0, 'Empty', '', '', '', '', '', 'for other countries', 'An example. Maybe for use with other countries', '', '', 0, '');
 
 #
 # Table structure for table `oxprice2article`
@@ -1750,6 +1755,7 @@ CREATE TABLE `oxuser` (
   `OXUPDATEEXP` int(11) NOT NULL default '0',
   `OXISOPENID` tinyint(1) NOT NULL default '0',
   `OXPOINTS` double NOT NULL default '0',
+  `OXFBID` bigint unsigned NOT NULL default '0',
   PRIMARY KEY  (`OXID`),
   UNIQUE `OXUSERNAME` (`OXUSERNAME`, `OXSHOPID`),
   KEY `OXPASSWORD` (`OXPASSWORD`),
@@ -1762,7 +1768,7 @@ CREATE TABLE `oxuser` (
 # Data for table `oxuser`
 #
 
-INSERT INTO `oxuser` VALUES ('oxdefaultadmin', 1, 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Your Company Name', 'John', 'Doe', 'Maple Street', '2425', '', 'Any City', 'a7c40f631fc920687.20179984', 'BW', '9041', '217-8918712', '217-8918713', 'MR', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', 0, '', 0, 0, 0);
+INSERT INTO `oxuser` VALUES ('oxdefaultadmin', 1, 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Your Company Name', 'John', 'Doe', 'Maple Street', '2425', '', 'Any City', 'a7c40f631fc920687.20179984', 'BW', '9041', '217-8918712', '217-8918713', 'MR', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', 0, '', 0, 0, 0, 0);
 
 #
 # Table structure for table `oxuserpayments`

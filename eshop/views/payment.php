@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 28287 2010-06-11 08:17:06Z sarunas $
+ * @version   SVN: $Id: payment.php 28326 2010-06-14 13:38:07Z sarunas $
  */
 
 /**
@@ -136,13 +136,13 @@ class Payment extends oxUBase
      */
     public function render()
     {
-        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+        $myConfig  = $this->getConfig();
+
+        if ($myConfig->getConfigParam( 'blBasketReservationEnabled' )) {
             $this->getSession()->getBasketReservations()->renewExpiration();
         }
 
         parent::render();
-
-        $myConfig  = $this->getConfig();
 
         //if it happens that you are not in SSL
         //then forcing to HTTPS
@@ -159,8 +159,11 @@ class Payment extends oxUBase
 
         //additional check if we really really have a user now
         //and the basket is not empty
-        $oUser = $this->getUser();
         $oBasket = $this->getSession()->getBasket();
+        if ( $myConfig->getConfigParam( 'blBasketReservationEnabled' ) && (!$oBasket || ( $oBasket && !$oBasket->getProductsCount() )) ) {
+            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() .'cl=basket' );
+        }
+        $oUser = $this->getUser();
         if ( !$oBasket || !$oUser || ( $oBasket && !$oBasket->getProductsCount() ) ) {
             oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() .'cl=start' );
         }

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: actions_main.php 28254 2010-06-09 13:51:04Z sarunas $
+ * @version   SVN: $Id: actions_main.php 28344 2010-06-15 11:32:21Z sarunas $
  */
 
 /**
@@ -94,7 +94,7 @@ class Actions_Main extends oxAdminDetails
         
         
         if ( ( $oPromotion = $this->getViewDataElement( "edit" ) ) ) {
-            if ( $oPromotion->oxactions__oxtype->value != 0 ) {
+            if ( $oPromotion->oxactions__oxtype->value == 2 ) {
                 $this->_aViewData["editor"] = $this->_generateTextEditor( "100%", 300, $oPromotion, "oxactions__oxlongdesc", "details.tpl.css" );
 
                 if ( $iAoc = oxConfig::getParameter( "oxscpromotionsaoc" ) ) {

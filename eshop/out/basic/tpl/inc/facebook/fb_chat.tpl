@@ -1,8 +1,8 @@
-        [{if $oViewConf->getFbAppId()}]
+        [{if $oViewConf->getShowFbLiveStream() && $oViewConf->getFbAppId()}]
         [{assign var="product" value=$oView->getProduct() }]
 
         <strong id="test_facebookInviteHead" class="boxhead">[{ oxmultilang ident="FACEBOOK_CHAT" }]</strong>
         <div class="box">
-            <fb:live-stream app_id="$oViewConf->getFbAppKey()" width="550" height="500"></fb:live-stream>
+            <fb:live-stream app_id="$oViewConf->getFbAppId()" width="550" height="500"></fb:live-stream>
         </div>
         [{/if}]

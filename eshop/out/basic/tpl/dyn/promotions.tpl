@@ -2,13 +2,13 @@
     <div class="promotionsRow">
       [{foreach from=$oView->getPromoFinishedList() item=promo}]
         <div class="promotion promotionFinished" id="promo[{$promo->getId()}]">
-            <div class="finishedText"><img src="[{$oViewConf->getImageUrl()}]promo_soldout_[{ $oView->getActiveLangAbbr() }].png" /></div>
+            <div class="finishedText"><img alt="[{oxmultilang ident="PROMO_SOLDOUT"}]" src="[{$oViewConf->getImageUrl()}]promo_soldout_[{ $oView->getActiveLangAbbr() }].png" /></div>
             [{$promo->getLongDesc()}]
         </div>
       [{/foreach}]
       [{foreach from=$oView->getPromoCurrentList() item=promo}]
         <div class="promotion promotionCurrent" id="promo[{$promo->getId()}]">
-            <div class="finishedText"><img src="[{$oViewConf->getImageUrl()}]promo_soldout_[{ $oView->getActiveLangAbbr() }].png" /></div>
+            <div class="finishedText"><img alt="[{oxmultilang ident="PROMO_SOLDOUT"}]" src="[{$oViewConf->getImageUrl()}]promo_soldout_[{ $oView->getActiveLangAbbr() }].png" /></div>
             [{$promo->getLongDesc()}]
             [{if $promo->oxactions__oxactiveto->value && $promo->oxactions__oxactiveto->value != "0000-00-00 00:00:00"}]
                 <div class="timeouttext">
@@ -27,8 +27,8 @@
       [{/foreach}]
       [{foreach from=$oView->getPromoFutureList() item=promo}]
         <div class="promotion promotionFuture" id="promo[{$promo->getId()}]">
-            <div class="finishedText"><img src="[{$oViewConf->getImageUrl()}]promo_soldout_[{ $oView->getActiveLangAbbr() }].png" /></div>
-            <div class="upcomingText"><img src="[{$oViewConf->getImageUrl()}]promo_upcoming_[{ $oView->getActiveLangAbbr() }].png" /></div>
+            <div class="finishedText"><img alt="[{oxmultilang ident="PROMO_SOLDOUT"}]" src="[{$oViewConf->getImageUrl()}]promo_soldout_[{ $oView->getActiveLangAbbr() }].png" /></div>
+            <div class="upcomingText"><img alt="[{oxmultilang ident="PROMO_UPCOMING"}]" src="[{$oViewConf->getImageUrl()}]promo_upcoming_[{ $oView->getActiveLangAbbr() }].png" /></div>
             [{$promo->getLongDesc()}]
             [{if $promo->oxactions__oxactiveto->value && $promo->oxactions__oxactiveto->value != "0000-00-00 00:00:00"}]
               <div class="timeouttext">[{oxmultilang ident="PROMO_WILLENDIN_PREFIX"}]

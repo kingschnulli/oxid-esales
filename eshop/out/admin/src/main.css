@@ -133,7 +133,8 @@ a.pagenavigationactive {font-weight: bold;}
 .groupExp .exp a.rc b {background: url(bg/grouping.gif) no-repeat 0 -42px ;padding-left:15px;}
 .groupExp .exp dl {display:block;}
 .groupExp div.spacer {clear: both; height: 1px; overflow: hidden;}
-
+.groupExp .exp dl.rowexp {display:block;}
+.groupExp .exp dl.rowhide {display:none;}
 .groupExp dt .txt {width: 70px;}
 .groupExp dt .txtfield {width: 250px; height: 75px; margin: 0;}
 .groupExp dt .select {width: 130px;}

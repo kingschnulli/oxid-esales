@@ -1,4 +1,4 @@
-        [{if $oViewConf->getFbAppId()}]
+        [{if $oViewConf->getShowFbInvite() && $oViewConf->getFbAppId()}]
         [{assign var="product" value=$oView->getProduct() }]
 
         <strong id="test_facebookInviteHead" class="boxhead">[{ oxmultilang ident="FACEBOOK_INVITE" }]</strong>

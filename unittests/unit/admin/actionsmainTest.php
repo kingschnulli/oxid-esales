@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: actionsmainTest.php 28069 2010-06-02 11:09:50Z sarunas $
+ * @version   SVN: $Id: actionsmainTest.php 28344 2010-06-15 11:32:21Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -117,7 +117,7 @@ class Unit_Admin_ActionsMainTest extends OxidTestCase
         modConfig::setParameter( "saved_oxid", -1 );
 
         $oPromotion = new oxStdClass();
-        $oPromotion->oxactions__oxtype = new oxField( 1 );
+        $oPromotion->oxactions__oxtype = new oxField( 2 );
 
         // testing..
         $oView = $this->getMock( "Actions_Main", array( "getViewDataElement", "_generateTextEditor" ) );

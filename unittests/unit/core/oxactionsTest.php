@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 28064 2010-06-02 08:59:37Z sarunas $
+ * @version   SVN: $Id: oxactionsTest.php 28344 2010-06-15 11:32:21Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -49,7 +49,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->oPromo->assign(array(
             'oxtitle'    => 'title',
             'oxlongdesc' => 'longdesc',
-            'oxtype' => 1,
+            'oxtype' => 2,
             'oxsort' => 1,
             'oxactive' => 1,
         ));
@@ -255,6 +255,9 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->assertFalse($this->oPromo->isRunning());
 
         $this->oPromo->oxactions__oxtype = new oxField(1);
+        $this->assertFalse($this->oPromo->isRunning());
+
+        $this->oPromo->oxactions__oxtype = new oxField(2);
         $this->assertTrue($this->oPromo->isRunning());
 
         $this->oPromo->oxactions__oxactive = new oxField(0);

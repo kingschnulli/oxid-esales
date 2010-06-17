@@ -1,4 +1,4 @@
-[{include file="_header.tpl" title=$template_title location="START_TITLE"|oxmultilangassign isStart=true usePromotionsCss=$oView->getShowPromotionList()}]
+[{include file="_header.tpl" title=$template_title location="START_TITLE"|oxmultilangassign isStart=true}]
 
 [{oxifcontent ident="oxstartwelcome" object="oCont"}]
 <div class="welcome">[{$oCont->oxcontents__oxcontent->value}]</div>

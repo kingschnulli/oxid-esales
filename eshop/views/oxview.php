@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxview.php 28377 2010-06-16 12:23:51Z rimvydas.paskevicius $
  */
 
 /**
@@ -813,4 +813,15 @@ class oxView extends oxSuperCfg
         return $this->getClassName();
     }
 
+    /**
+     * Checks if user is connected via Facebook connect
+     *
+     * @return string
+     */
+    public function isConnectedWithFb()
+    {
+        $oFb = oxFb::getInstance();
+
+        return $oFb->isConnected();
+    }
 }

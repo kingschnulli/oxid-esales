@@ -34,10 +34,11 @@ class Unit_Core_oxActionListTest extends OxidTestCase
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
         $sNow  = (date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ));
+        $sShopId = modConfig::getInstance()->getShopId();
 
         $oL = $this->getMock('oxActionList', array('selectString', '_getUserGroupFilter'));
         $oL->expects($this->once())->method('_getUserGroupFilter')->will($this->returnValue('(user group filter)'));
-        $oL->expects($this->once())->method('selectString')->with("select * from oxactions where oxtype=1 and oxactive=1 and oxactiveto>0 and oxactiveto < '$sNow'
+        $oL->expects($this->once())->method('selectString')->with("select * from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$sShopId."' and oxactiveto>0 and oxactiveto < '$sNow'
                (user group filter)
                order by oxactiveto desc, oxactivefrom desc limit 5")->will($this->evalFunction('{$invocation->object->assign(array("asd", "dsa", "aaa"));}'));
         $oL->loadFinishedByCount(5);
@@ -52,10 +53,11 @@ class Unit_Core_oxActionListTest extends OxidTestCase
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
         $sNow  = (date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ));
         $sDateFrom = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime()-50 );
+        $sShopId = modConfig::getInstance()->getShopId();
 
         $oL = $this->getMock('oxActionList', array('selectString', '_getUserGroupFilter'));
         $oL->expects($this->once())->method('_getUserGroupFilter')->will($this->returnValue('(user group filter)'));
-        $oL->expects($this->once())->method('selectString')->with("select * from oxactions where oxtype=1 and oxactive=1 and oxactiveto < '$sNow' and oxactiveto > '$sDateFrom'
+        $oL->expects($this->once())->method('selectString')->with("select * from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$sShopId."' and oxactiveto < '$sNow' and oxactiveto > '$sDateFrom'
                (user group filter)
                order by oxactiveto, oxactivefrom");
         $oL->loadFinishedByTimespan(50);
@@ -66,10 +68,11 @@ class Unit_Core_oxActionListTest extends OxidTestCase
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
         $sNow  = (date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ));
+        $sShopId = modConfig::getInstance()->getShopId();
 
         $oL = $this->getMock('oxActionList', array('selectString', '_getUserGroupFilter'));
         $oL->expects($this->once())->method('_getUserGroupFilter')->will($this->returnValue('(user group filter)'));
-        $oL->expects($this->once())->method('selectString')->with("select * from oxactions where oxtype=1 and oxactive=1 and (oxactiveto > '$sNow' or oxactiveto=0) and oxactivefrom != 0 and oxactivefrom < '$sNow'
+        $oL->expects($this->once())->method('selectString')->with("select * from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$sShopId."' and (oxactiveto > '$sNow' or oxactiveto=0) and oxactivefrom != 0 and oxactivefrom < '$sNow'
                (user group filter)
                order by oxactiveto, oxactivefrom");
         $oL->loadCurrent(50);
@@ -79,10 +82,11 @@ class Unit_Core_oxActionListTest extends OxidTestCase
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
         $sNow  = (date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ));
+        $sShopId = modConfig::getInstance()->getShopId();
 
         $oL = $this->getMock('oxActionList', array('selectString', '_getUserGroupFilter'));
         $oL->expects($this->once())->method('_getUserGroupFilter')->will($this->returnValue('(user group filter)'));
-        $oL->expects($this->once())->method('selectString')->with("select * from oxactions where oxtype=1 and oxactive=1 and (oxactiveto > '$sNow' or oxactiveto=0) and oxactivefrom > '$sNow'
+        $oL->expects($this->once())->method('selectString')->with("select * from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$sShopId."' and (oxactiveto > '$sNow' or oxactiveto=0) and oxactivefrom > '$sNow'
                (user group filter)
                order by oxactiveto, oxactivefrom limit 50");
         $oL->loadFutureByCount(50);
@@ -92,10 +96,11 @@ class Unit_Core_oxActionListTest extends OxidTestCase
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
         $sFut  = (date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime()+50 ));
         $sNow  = (date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() ));
+        $sShopId = modConfig::getInstance()->getShopId();
 
         $oL = $this->getMock('oxActionList', array('selectString', '_getUserGroupFilter'));
         $oL->expects($this->once())->method('_getUserGroupFilter')->will($this->returnValue('(user group filter)'));
-        $oL->expects($this->once())->method('selectString')->with("select * from oxactions where oxtype=1 and oxactive=1 and (oxactiveto > '$sNow' or oxactiveto=0) and oxactivefrom > '$sNow' and oxactivefrom < '$sFut'
+        $oL->expects($this->once())->method('selectString')->with("select * from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$sShopId."' and (oxactiveto > '$sNow' or oxactiveto=0) and oxactivefrom > '$sNow' and oxactivefrom < '$sFut'
                (user group filter)
                order by oxactiveto, oxactivefrom");
         $oL->loadFutureByTimespan(50);
@@ -163,10 +168,12 @@ class Unit_Core_oxActionListTest extends OxidTestCase
 
     public function testAreAnyActivePromotions()
     {
-        modDB::getInstance()->addClassFunction('getOne', create_function('$sql', 'return $sql === "select 1 from oxactions where oxtype=1 and oxactive=1 limit 1";'));
+        $sShopId = modConfig::getInstance()->getShopId();
+        $sSql = "select 1 from oxactions where oxtype=2 and oxactive=1 and oxshopid='".$sShopId."' limit 1";
+        modDB::getInstance()->addClassFunction('getOne', create_function('$sql', 'return $sql === "'.$sSql.'";'));
         $oAL = new oxActionList();
         $this->assertTrue($oAL->areAnyActivePromotions());
-        modDB::getInstance()->addClassFunction('getOne', create_function('$sql', 'return $sql !== "select 1 from oxactions where oxtype=1 and oxactive=1 limit 1";'));
+        modDB::getInstance()->addClassFunction('getOne', create_function('$sql', 'return $sql !== "'.$sSql.'";'));
         $oAL = new oxActionList();
         $this->assertFalse($oAL->areAnyActivePromotions());
     }

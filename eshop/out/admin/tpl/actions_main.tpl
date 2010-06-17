@@ -52,12 +52,12 @@
         </tr>
         <tr>
           <td class="edittext">
-          [{ oxmultilang ident="GENERAL_ACTIVFROMTILL" }]&nbsp;
+          [{ if $edit->oxactions__oxtype->value < 2 }][{ oxmultilang ident="GENERAL_ACTIVFROMTILL" }][{/if}]&nbsp;
           </td>
           <td class="edittext">
           <input type="text" class="editinput" size="27" name="editval[oxactions__oxactivefrom]" value="[{$edit->oxactions__oxactivefrom|oxformdate}]" [{include file="help.tpl" helpid=article_vonbis}] [{ $readonly }]> ([{ oxmultilang ident="GENERAL_FROM" }])<br>
           <input type="text" class="editinput" size="27" name="editval[oxactions__oxactiveto]" value="[{$edit->oxactions__oxactiveto|oxformdate}]" [{include file="help.tpl" helpid=article_vonbis}] [{ $readonly }]> ([{ oxmultilang ident="GENERAL_TILL" }])
-          [{ oxinputhelp ident="HELP_GENERAL_ACTIVFROMTILL" }]
+          [{ if $edit->oxactions__oxtype->value < 2 }][{ oxinputhelp ident="HELP_GENERAL_ACTIVFROMTILL" }][{/if}]
           </td>
         </tr>
         [{ if $oxid == "-1" }]
@@ -67,8 +67,8 @@
             </td>
           <td class="edittext">
             <select class="editinput" name="editval[oxactions__oxtype]">
-              <option value="0">[{ oxmultilang ident="PROMOTIONS_MAIN_TYPE0" }]</option>
-              <option value="1">[{ oxmultilang ident="PROMOTIONS_MAIN_TYPE1" }]</option>
+              <option value="1">[{ oxmultilang ident="PROMOTIONS_MAIN_TYPE_ACTION" }]</option>
+              <option value="2">[{ oxmultilang ident="PROMOTIONS_MAIN_TYPE_PROMO" }]</option>
             </select>
           </td>
         </tr>
@@ -89,7 +89,7 @@
 
             [{ if $oxid != "-1"}]
 
-                [{ if $edit->oxactions__oxtype->value == 0 }]
+                [{ if $edit->oxactions__oxtype->value < 2 }]
                 <input type="button" value="[{ oxmultilang ident="GENERAL_ASSIGNARTICLES" }]" class="edittext" onclick="JavaScript:showDialog('&cl=actions_main&aoc=1&oxid=[{ $oxid }]');" [{ $readonly }]>
                 [{else}]
                 <input type="button" value="[{ oxmultilang ident="GENERAL_ASSIGNGROUPS" }]" class="edittext" onclick="JavaScript:showDialog('&cl=actions_main&oxscpromotionsaoc=2&oxid=[{ $oxid }]');" [{ $readonly }]>

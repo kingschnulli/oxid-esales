@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28316 2010-06-14 07:02:39Z sarunas $
+ * @version   SVN: $Id: lang.php 28388 2010-06-16 15:10:20Z rimvydas.paskevicius $
  */
 
 
@@ -586,6 +586,7 @@ $aLang = array(
 'INC_CMP_NEWSLETTER_EMAIL'                        =>"eMail:",
 'INC_CMP_NEWSLETTER_SUBSCRIBE'                    =>"Subscribe",
 'INC_COMPARE_LOCATOR_PAGE'                        =>"Page",
+'INC_CMP_FBCONNECT_YOUARELOGGEDINAS'              =>"You are logged in as",
 'INC_COMPARE_LOCATOR_DISPLAYPOPUP'                =>"Print Preview",
 'INC_DETAILS_LOCATOR_PRODUCT'                     =>"Product",
 'INC_DETAILS_LOCATOR_BACKTOOVERVIEW'              =>"Back to Overview",
@@ -705,6 +706,7 @@ $aLang = array(
 'INC_RIGHTLIST_COMPARE'                           =>"compare",
 'INC_RIGHTLIST_ORDERNOW'                          =>"Order now!",
 'INC_RIGHTITEM_OPENID'                            =>"OpenID",
+'INC_RIGHTITEM_FBCONNECT'                         =>"Facebook connect",
 'INC_SEARCHLEFTITEM_ALLCATEGORIES'                =>"- all categories -",
 'INC_SEARCHLEFTITEM_ALLMANUFACTURERS'             =>"- all manufacturers -",
 'INC_SEARCHLEFTITEM_ALLDISTRIBUTORS'              =>"- all distributors -",
@@ -1174,6 +1176,8 @@ $aLang = array(
 'USER_OPENID'                                     => "OpenID:",
 'USER_DISABLESHIPPINGADDRESS'                     => "Click here to hide different shipping address",
 'USER_SELECTSHIPPINGADDRESS'                      => "Select",
+'USER_UPDATE_ACCOUNT'                             => "Update account",
+'USER_FB_UPDATEACCOUNTMSG'                        => "You already connected using Facebook connect. If you already have an account, please update your account and in future connect to your account using Facebook connect.",
 'VAT_MESSAGE_ID_VALID'                            => "The VAT id is valid",
 'VAT_MESSAGE_ID_NOT_VALID'                        => "Error: The VAT id is not valid",
 'VAT_MESSAGE_INVALID_INPUT'                       => "The provided CountryCode is invalid or the VAT number is empty",
@@ -1287,6 +1291,8 @@ $aLang = array(
 'PROMO_WILLSTARTIN_SUFFIX'                        => '',
 'PROMO_ONEDAY'                                    => 'one day',
 'PROMO_DAYS'                                      => 'days',
+'PROMO_SOLDOUT'                                   => 'sold out',
+'PROMO_UPCOMING'                                  => 'upcoming',
 
 'FACEBOOK_LOCALE'                                 => 'en_US',
 'FACEBOOK_COMMENTS'                               => 'Facebook comments',
@@ -1296,6 +1302,17 @@ $aLang = array(
 'FACEBOOK_INVITEHEADER'                           => 'Invite your Friends',
 'FACEBOOK_INVITETEXT'                             => 'Check this out. Simply click on the button below to go recommended product.',
 'FACEBOOK_INVITEBUTTONTEXT'                       => 'Open website',
+
+'FACEBOOK_POPUP_HEADER'                           => "Account data update",
+'FACEBOOK_POPUP_UPDATETEXT'                       => "You have connected using Facebook connect. If you already have an account in
+                                                      eShop, please enter login data to connect your Facebook account with your
+                                                      existing account. Next time when you will login using Facebook connect, you'll be automaticly
+                                                      connected to your existing account.",
+'FACEBOOK_POPUP_UPDATEBTN'                        => "Update account",
+'FACEBOOK_POPUP_CANCELBTN'                        => "Cancel",
+'FACEBOOK_POPUP_CLOSEBTN'                         => "Close",
+'FACEBOOK_POPUP_UPDATEDONETEXT'                   => "Your account was updated successfully. Now when you connect using Facebook Connect, you will
+                                                     be automaticly logged in with your existing account.",
 
 'INC_CMP_BASKET_TIMEOUT'                          => 'Expires in:',
 );

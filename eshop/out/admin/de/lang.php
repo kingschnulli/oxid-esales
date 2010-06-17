@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28269 2010-06-10 13:58:14Z vilma $
+ * @version   SVN: $Id: lang.php 28363 2010-06-16 08:31:10Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -440,7 +440,7 @@ $aLang = array(
 'ARTICLE_PICTURES_ZOOM2'                        => 'Zoom 2',
 'ARTICLE_PICTURES_ZOOM3'                        => 'Zoom 3',
 'ARTICLE_PICTURES_ZOOM4'                        => 'Zoom 4',
-'ARTICLE_PICTURES_UPLOADISDISABLED'             => 'Dies ist demoshop. Das Hochladen/Löschen von Bildern wurde aus Sicherheitsgründen abgeschaltet.',
+'ARTICLE_PICTURES_UPLOADISDISABLED'             => 'Dies ist eine Demonstration. Das Hochladen/Löschen von Bildern wurde aus Sicherheitsgründen abgeschaltet.',
 'ARTICLE_REVIEW_DELETE'                         => 'Löschen',
 'ARTICLE_REVIEW_SAVE'                           => 'Speichern',
 'ARTICLE_REVIEW_ACTIVE'                         => 'Aktiv',
@@ -654,6 +654,30 @@ $aLang = array(
 'DYN_SUPERCLIX_SUPERCLICKSID'                   => 'Superclix-Partner-ID',
 'DYN_TRUSTED_TRUSTEDSHOP'                       => 'Trusted Shops ID',
 'DYN_TRUSTED_TRUSTEDSHOP_ERROR'                 => 'Ungültige Trusted Shops ID. Bitte wenden Sie sich an Ihren Ansprechpartner bei Trusted Shops, um eine gültige Trusted Shops ID zu erhalten.',
+'DYN_TRUSTED_USER'                              => 'Benutzername (wsUser)',
+'DYN_TRUSTED_PASSWORD'                          => 'Passwort (wsPassword)',
+'DYN_TRUSTED_TESTMODUS'                         => 'Testmodus aktiv',
+'DYN_TRUSTED_ACTIVE'                            => 'Trusted Shops Siegel anzeigen',
+'DYN_TRUSTED_SHOPPAYMENT'                       => 'Zahlart im Shop',
+'DYN_TRUSTED_TSPAYMENT'                         => 'Zahlart bei Trusted Shops',
+'DYN_TRUSTED_DIRECT_DEBIT'                      => 'Lastschrift/Bankeinzug',
+'DYN_TRUSTED_CREDIT_CARD'                       => 'Kreditkarte',
+'DYN_TRUSTED_INVOICE'                           => 'Rechnung',
+'DYN_TRUSTED_CASH_ON_DELIVERY'                  => 'Nachnahme',
+'DYN_TRUSTED_PREPAYMENT'                        => 'Vorauskasse / Überweisung',
+'DYN_TRUSTED_CHEQUE'                            => 'Verrechnungsscheck',
+'DYN_TRUSTED_PAYBOX'                            => 'Paybox',
+'DYN_TRUSTED_PAYPAL'                            => 'PayPal',
+'DYN_TRUSTED_CASH_ON_PICKUP'                    => 'Zahlung bei Abholung',
+'DYN_TRUSTED_FINANCING'                         => 'Finanzierung',
+'DYN_TRUSTED_LEASING'                           => 'Leasing',
+'DYN_TRUSTED_T_PAY'                             => 'T-Pay',
+'DYN_TRUSTED_CLICKANDBUY'                       => 'Click&Buy (Firstgate)',
+'DYN_TRUSTED_GIROPAY'                           => 'Giropay',
+'DYN_TRUSTED_GOOGLE_CHECKOUT'                   => 'Google Checkout',
+'DYN_TRUSTED_SHOP_CARD'                         => 'Online Shop Zahlungskarte',
+'DYN_TRUSTED_DIRECT_E_BANKING'                  => 'Sofortüberweisung.de',
+'DYN_TRUSTED_OTHER'                             => 'Andere Zahlungsart',
 'DYNBASE_ADDCATTOCAMPAIGN'                      => 'Hauptkategorie zum Kampagnenparameter hinzufügen',
 'DYNBASE_DO_SUCCESS'                            => 'Erfolg! Sie können Ihre Exportdatei ',
 'DYNBASE_DO_HERE'                               => 'hier',
@@ -1292,14 +1316,14 @@ $aLang = array(
 'SHOP_CONFIG_SHOWOPENID'                        => 'Open ID Login aktivieren',
 'SHOP_CONFIG_SHOWGIFTWRAPPING'                  => 'Geschenkverpackungen aktivieren',
 'SHOP_CONFIG_PSLOGIN'                           => 'Private Sales Login',
-'SHOP_CONFIG_DISABLE'                           => 'Disable',
-'SHOP_CONFIG_ENABLE'                            => 'Enable',
+'SHOP_CONFIG_DISABLE'                           => 'Deaktiviert',
+'SHOP_CONFIG_ENABLE'                            => 'Aktiviert',
 'SHOP_CONFIG_BASKETEXCLUDE'                     => 'Warenkorb leeren',
 'SHOP_CONFIG_BASKETRESERVATION'                 => 'Warenkorb läuft ab',
 'SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'          => 'Sekunden bis Warenkorb abläuft',
 'SHOP_CONFIG_INVITATION'                        => 'Einladung',
 'SHOP_CONFIG_POINTSFORINVITATION'               => 'Bonuspunkte für neu geworbene Kunden',
-'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Bonuspunkte für den Einladenden pro neu geworbenem Kunden',
+'SHOP_CONFIG_POINTSFORREGISTRATION'             => 'Bonuspunkte für den Eingeladenen für die Registrierung',
 'SHOP_CONFIG_FACEBOOKAPPID'                     => 'Application ID',
 'SHOP_CONFIG_FBSECRETKEY'                       => 'Application Secret Key',
 'SHOP_CONFIG_FBCOMMENTS'                        => 'Comments',
@@ -1308,6 +1332,7 @@ $aLang = array(
 'SHOP_CONFIG_FBINVITE'                          => 'Invite',
 'SHOP_CONFIG_FBSHARE'                           => 'Share',
 'SHOP_CONFIG_FBLIKE'                            => 'Like',
+'SHOP_CONFIG_FACEBOOKCONNECT'                   => '[tr]Show Facebook connect',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Prozentsatz gleicher Attribute, damit Artikel ähnlich sind',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Bildqualität - von 0 (schlechteste Qualität, kleine Dateigröße) bis 100 (beste Qualität, große Dateigröße)',
@@ -1510,7 +1535,7 @@ $aLang = array(
 'USER_EXTEND_NEWSLETTER'                        => 'Newsletter',
 'USER_EXTEND_EMAILFAILED'                       => 'E-Mail Adr. ungültig',
 'USER_EXTEND_DISABLEAUTOGROUP'                  => 'Keine automatische Benutzergruppen-Zuordnung',
-'USER_EXTEND_CREDITPOINTS'                      => 'Credit-Punkte',
+'USER_EXTEND_CREDITPOINTS'                      => 'Bonuspunkte',
 'USER_EXTEND_BONI'                              => 'Bonität',
 'USER_LIST_ZIP'                                 => 'PLZ',
 'USER_LIST_PLACE'                               => 'Ort',
@@ -1863,17 +1888,17 @@ $aLang = array(
 
 
 
-'PROMOTION_USERS_SETGROUPS'                 => 'Zugeordnete Benutzergruppen',
-'PROMOTION_PRODUCTS_ALLATRICLES'            => 'Alle Artikel',
-'PROMOTION_PRODUCTS_SETARTICLES'            => 'Zugeordnete Artikel',
-'PROMOTION_LIST_ALL'                        => 'Alle',
-'PROMOTION_LIST_ACTIVE'                     => 'Aktiv',
-'PROMOTION_LIST_UPCOMING'                   => 'Demnächst',
-'PROMOTION_LIST_EXPIRED'                    => 'Abgelaufen',
-'PROMOTION_LIST_STARTTIME'                  => 'Startzeit',
-'PROMOTIONS_MAIN_TYPE0'                     => 'Aktion',
-'PROMOTIONS_MAIN_TYPE1'                     => 'Promotion',
-'TOOLTIPS_NEWPROMOTION'                     => 'Neue Promotion/Aktion',
+'PROMOTION_USERS_SETGROUPS'                     => 'Zugeordnete Benutzergruppen',
+'PROMOTION_PRODUCTS_ALLATRICLES'                => 'Alle Artikel',
+'PROMOTION_PRODUCTS_SETARTICLES'                => 'Zugeordnete Artikel',
+'PROMOTION_LIST_ALL'                            => 'Alle',
+'PROMOTION_LIST_ACTIVE'                         => 'Aktiv',
+'PROMOTION_LIST_UPCOMING'                       => 'Demnächst',
+'PROMOTION_LIST_EXPIRED'                        => 'Abgelaufen',
+'PROMOTION_LIST_STARTTIME'                      => 'Startzeit',
+'PROMOTIONS_MAIN_TYPE_ACTION'                   => 'Aktion',
+'PROMOTIONS_MAIN_TYPE_PROMO'                    => 'Promotion',
+'TOOLTIPS_NEWPROMOTION'                         => 'Neue Promotion/Aktion',
 
 );
 

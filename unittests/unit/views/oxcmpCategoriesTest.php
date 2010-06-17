@@ -984,30 +984,4 @@ class Unit_Views_oxcmpCategoriesTest extends OxidTestCase
         $oCmp->expects( $this->once())->method( "getParent" )->will( $this->returnValue( $oParent ) );
         $this->assertEquals( "testVendorId", $oCmp->UNITaddAdditionalParams( $oProduct, null, null, null, null, null ) );
     }
-
-    /**
-     * Testing oxcmp_categories::isRootCatChanged() test case used for bascet exclude
-     *
-     * @return null
-     */
-    public function testIsRootCatChanged_clean()
-    {
-        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
-
-        $oCmp = oxNew('oxcmp_categories');
-        $this->assertFalse( $oCmp->isRootCatChanged() );
-    }
-
-    /**
-     * Testing oxcmp_categories::isRootCatChanged() test case used for bascet exclude
-     *
-     * @return null
-     */
-    public function testIsRootCatChanged_unchanged_session()
-    {
-        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
-
-        $oCmp = oxNew('oxcmp_categories');
-        $this->assertFalse( $oCmp->isRootCatChanged() );
-    }
 }

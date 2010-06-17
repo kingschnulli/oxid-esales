@@ -55,12 +55,16 @@
 </div>
 </div>
 <div id="mask"></div>
+
 [{if $popup}][{include file=$popup}][{/if}]
 [{oxid_include_dynamic file="dyn/newbasketitem_popup.tpl"}]
+[{ insert name="oxid_fblogin"}]
+
 [{if $scRootCatChanged}][{include file="inc/popup_scbasketexcl.tpl"}][{/if}]
 [{oxscript include="oxid.js"}]
 
-[{ include file="inc/facebook/fb_init.tpl" sFbAppKey=$oViewConf->getFbAppKey() }]
+[{ include file="inc/facebook/fb_init.tpl" }]
+
 
 [{oxscript}][{oxid_include_dynamic file="dyn/oxscript.tpl" }]
 <!--[if lt IE 7]><script type="text/javascript">oxid.popup.addShim();</script><![endif]-->

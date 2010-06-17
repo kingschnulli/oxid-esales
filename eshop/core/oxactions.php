@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactions.php 28064 2010-06-02 08:59:37Z sarunas $
+ * @version   SVN: $Id: oxactions.php 28344 2010-06-15 11:32:21Z sarunas $
  */
 
 /**
@@ -176,7 +176,7 @@ class oxActions extends oxI18n
     public function isRunning()
     {
         if (!($this->oxactions__oxactive->value
-                && $this->oxactions__oxtype->value == 1
+                && $this->oxactions__oxtype->value == 2
                 && $this->oxactions__oxactivefrom->value != '0000-00-00 00:00:00'
             )) {
             return false;

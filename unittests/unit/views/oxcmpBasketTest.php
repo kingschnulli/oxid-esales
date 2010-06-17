@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpBasketTest.php 28314 2010-06-11 15:20:51Z sarunas $
+ * @version   SVN: $Id: oxcmpBasketTest.php 28345 2010-06-15 11:38:32Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -849,6 +849,34 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
             oxSession::getVar('aLastcall'));
     }
 
+
+    /**
+     * Testing oxcmp_categories::isRootCatChanged() test case used for bascet exclude
+     *
+     * @return null
+     */
+    public function testIsRootCatChanged_clean()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        $oCmp = oxNew('oxcmp_basket');
+        $this->assertFalse( $oCmp->isRootCatChanged() );
+    }
+
+    /**
+     * Testing oxcmp_categories::isRootCatChanged() test case used for bascet exclude
+     *
+     * @return null
+     */
+    public function testIsRootCatChanged_unchanged_session()
+    {
+        modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
+
+        $oCmp = oxNew('oxcmp_basket');
+        $this->assertFalse( $oCmp->isRootCatChanged() );
+    }
+
+    
     public function testInitNormalShop()
     {
         modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
@@ -902,4 +930,5 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
 
         $oCB->init();
     }
+
 }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 28287 2010-06-11 08:17:06Z sarunas $
+ * @version   SVN: $Id: user.php 28377 2010-06-16 12:23:51Z rimvydas.paskevicius $
  */
 
 /**
@@ -86,8 +86,14 @@ class User extends oxUBase
      */
     public function render()
     {
-        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+        $myConfig  = $this->getConfig();
+        if ($myConfig->getConfigParam( 'blBasketReservationEnabled' )) {
             $this->getSession()->getBasketReservations()->renewExpiration();
+        }
+
+        $oBasket = $this->getSession()->getBasket();
+        if ( $myConfig->getConfigParam( 'blBasketReservationEnabled' ) && (!$oBasket || ( $oBasket && !$oBasket->getProductsCount() )) ) {
+            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() .'cl=basket' );
         }
 
         parent::render();
@@ -110,6 +116,10 @@ class User extends oxUBase
         $this->_aViewData['blshownoregopt'] = $this->getShowNoRegOption();
 
         $this->_aViewData['aMustFillFields'] = $this->getMustFillFields();
+
+        if ( !$oUser ) {
+             $this->fillFormWithFacebookData();
+        }
 
         return $this->_sThisTemplate;
     }
@@ -369,4 +379,24 @@ class User extends oxUBase
         return $this->_oDelAddress;
     }
 
+    /**
+     * Fills user form with date taken from Facebook
+     *
+     * @return int
+     */
+    public function fillFormWithFacebookData()
+    {
+        // Create our Application instance.
+        $oFacebook = oxFb::getInstance();
+
+        if ( $oFacebook->isConnected() ) {
+            //$uid = $oFacebook->getUser();
+            //$me  = $oFacebook->api('/me');
+
+            $aInvAdr["oxuser__oxfname"] = $me["first_name"];
+            $aInvAdr["oxuser__oxlname"] = $me["last_name"];
+
+            $this->_aViewData['invadr'] = $aInvAdr;
+        }
+    }
 }

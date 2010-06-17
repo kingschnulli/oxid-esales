@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28316 2010-06-14 07:02:39Z sarunas $
+ * @version   SVN: $Id: lang.php 28388 2010-06-16 15:10:20Z rimvydas.paskevicius $
  */
 
 
@@ -586,6 +586,7 @@ $aLang = array(
 'INC_CMP_NEWS_CONTINUE'                           =>"Weiter",
 'INC_CMP_NEWSLETTER_EMAIL'                        =>"E-Mail:",
 'INC_CMP_NEWSLETTER_SUBSCRIBE'                    =>"Abonnieren",
+'INC_CMP_FBCONNECT_YOUARELOGGEDINAS'              =>"[tr]You are logged in as",
 'INC_COMPARE_LOCATOR_PAGE'                        =>"Seite",
 'INC_COMPARE_LOCATOR_DISPLAYPOPUP'                =>"Druckansicht öffnen",
 'INC_DETAILS_LOCATOR_PRODUCT'                     =>"Artikel",
@@ -706,6 +707,7 @@ $aLang = array(
 'INC_RIGHTLIST_COMPARE'                           =>"vergleichen",
 'INC_RIGHTLIST_ORDERNOW'                          =>"Jetzt bestellen!",
 'INC_RIGHTITEM_OPENID'                            =>"OpenID",
+'INC_RIGHTITEM_FBCONNECT'                         =>"[tr]Facebook connect",
 'INC_SEARCHLEFTITEM_ALLCATEGORIES'                =>"- alle Kategorien -",
 'INC_SEARCHLEFTITEM_ALLMANUFACTURERS'             =>"- alle Hersteller -",
 'INC_SEARCHLEFTITEM_ALLDISTRIBUTORS'              =>"- alle Lieferanten -",
@@ -1174,6 +1176,8 @@ $aLang = array(
 'USER_OPENID'                                     => "OpenID",
 'USER_DISABLESHIPPINGADDRESS'                     => "Hier klicken, um die Lieferadresse auszublenden",
 'USER_SELECTSHIPPINGADDRESS'                      => "Auswählen",
+'USER_UPDATE_ACCOUNT'                             => "[tr]Update account",
+'USER_FB_UPDATEACCOUNTMSG'                        => "[tr]You already connected using Facebook connect. If you already have an account, please update your account and in future connect to your account using Facebook connect.",
 'VAT_MESSAGE_ID_VALID'                            => "Die angegebene Umsatzsteuer-Identnummer ist gültig",
 'VAT_MESSAGE_ID_NOT_VALID'                        => "Fehler: Die angegebene Umsatzsteuer-Identnummer ist ungültig",
 'VAT_MESSAGE_INVALID_INPUT'                       => "Der angegebene Ländercode ist ungültig oder die Umsatzsteuer-Identnummer ist leer",
@@ -1282,12 +1286,14 @@ $aLang = array(
 'EMAIL_INVITE_HTML_MENYGREETINGS'                 => "Viele Grüße,",
 
 
-'PROMO_WILLENDIN_PREFIX'   => 'Endet in ',
-'PROMO_WILLENDIN_SUFFIX'   => '!',
-'PROMO_WILLSTARTIN_PREFIX' => 'Startet in ',
-'PROMO_WILLSTARTIN_SUFFIX' => '',
-'PROMO_ONEDAY'             => 'einem Tag',
-'PROMO_DAYS'               => 'Tagen',
+'PROMO_WILLENDIN_PREFIX'                          => 'Endet in ',
+'PROMO_WILLENDIN_SUFFIX'                          => '!',
+'PROMO_WILLSTARTIN_PREFIX'                        => 'Startet in ',
+'PROMO_WILLSTARTIN_SUFFIX'                        => '',
+'PROMO_ONEDAY'                                    => 'einem Tag',
+'PROMO_DAYS'                                      => 'Tagen',
+'PROMO_SOLDOUT'                                   => 'ausverkauft',
+'PROMO_UPCOMING'                                  => 'demnächst',
 
 'FACEBOOK_LOCALE'                                 => 'de_DE',
 'FACEBOOK_COMMENTS'                               => '[tr]Facebook comments',
@@ -1298,7 +1304,19 @@ $aLang = array(
 'FACEBOOK_INVITETEXT'                             => '[tr]Check this out. Simply click on the button below to go recommended product.',
 'FACEBOOK_INVITEBUTTONTEXT'                       => '[tr]Open website',
 
-'INC_CMP_BASKET_TIMEOUT'                          => 'Wird gelöscht in:',
+'FACEBOOK_POPUP_HEADER'                           => "[tr]Account data update",
+'FACEBOOK_POPUP_UPDATETEXT'                       => "[tr]You have connected using Facebook connect. If you already have an account in
+                                                      eShop, please enter login data to connect your Facebook account with your
+                                                      existing account. Next time when you will login using Facebook connect, you'll be automaticly
+                                                      connected to your existing account.",
+'FACEBOOK_POPUP_UPDATEBTN'                        => "[tr]Update account",
+'FACEBOOK_POPUP_CANCELBTN'                        => "[tr]Cancel",
+'FACEBOOK_POPUP_CLOSEBTN'                         => "[tr]Close",
+'FACEBOOK_POPUP_UPDATEDONETEXT'                   => "[tr]Your account was updated successfully. Now when you connect using Facebook Connect, you will
+                                                     be automaticly logged in with your existing account.",
+
+
+'INC_CMP_BASKET_TIMEOUT'                          => 'Läuft ab in:',
 
 );
 
