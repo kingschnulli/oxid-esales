@@ -797,7 +797,10 @@ function showInvitations()
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_FACEBOOK" }]</b></a>
             <dl>
                 <dt>
-                    <input type=text class="txt" style="width: 250px;" name=confstrs[bl_showFbConnect] value="[{$confstrs.bl_showFbConnect}]">
+                    <select class="select" id="fbconnect" name=confstrs[bl_showFbConnect] [{ $readonly }]>
+                        <option value="0"  [{if !$confstrs.bl_showFbConnect }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
+                        <option value="1"  [{if $confstrs.bl_showFbConnect }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
+                    </select>
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_FACEBOOKCONNECT" }]

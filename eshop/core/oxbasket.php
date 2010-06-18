@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 28314 2010-06-11 15:20:51Z sarunas $
+ * @version   SVN: $Id: oxbasket.php 28409 2010-06-17 12:00:45Z vilma $
  */
 
 /**
@@ -243,6 +243,13 @@ class oxBasket extends oxSuperCfg
      * @var bool
      */
     protected $_blShowCatChangeWarning = false;
+
+    /**
+     * Trusted shops protection product ID
+     *
+     * @var string
+     */
+    protected $_sTsProductId = null;
 
     /**
      * Checks if configuration allows basket usage or if user agent is search engine
@@ -887,6 +894,12 @@ class oxBasket extends oxSuperCfg
         if ( isset( $this->_aCosts['oxpayment'] ) ) {
             $this->_oPrice->add( $this->_aCosts['oxpayment']->getBruttoPrice() );
         }
+
+        // 2.6 add TS protection price
+        if ( isset( $this->_aCosts['oxtsprotection'] ) ) {
+            $this->_oPrice->add( $this->_aCosts['oxtsprotection']->getBruttoPrice() );
+        }
+
     }
 
     /**
@@ -1128,6 +1141,29 @@ class oxBasket extends oxSuperCfg
     }
 
     /**
+     * TS Protection cost calculation.
+     * Returns oxprice object.
+     *
+     * @return object oxPrice
+     */
+    protected function _calcTsProtectionCost()
+    {
+        // resetting values
+        $oProtectionPrice = oxNew( 'oxPrice' );
+        $oProtectionPrice->setBruttoPriceMode();
+
+        // payment
+        if ( ( $this->_sTsProductId = $this->getTsProductId() ) ) {
+
+            $oTsProtection = oxNew('oxtsprotection');
+            $oTsProduct = $oTsProtection->getTsProduct( $this->_sTsProductId );
+
+            $oProtectionPrice = $oTsProduct->oPrice;
+        }
+        return $oProtectionPrice;
+    }
+
+    /**
      * Sets basket additional costs
      *
      * @param string $sCostName additional costs
@@ -1201,6 +1237,9 @@ class oxBasket extends oxSuperCfg
 
         //  9.3: adding payment cost
         $this->setCost( 'oxpayment', $this->_calcPaymentCost() );
+
+        //  9.4: adding TS protection cost
+        $this->setCost( 'oxtsprotection', $this->_calcTsProtectionCost() );
 
         //  10. calculate total price
         $this->_calcTotalPrice();
@@ -2511,4 +2550,41 @@ class oxBasket extends oxSuperCfg
     {
         return $this->_blShowCatChangeWarning;
     }
+
+    /**
+     * Trusted shops protection product ID setter
+     *
+     * @param string $sProductId product id
+     *
+     * @return null
+     */
+    public function setTsProductId( $sProductId )
+    {
+        $this->_sTsProductId = $sProductId;
+    }
+
+    /**
+     * Trusted shops protection product ID getter
+     *
+     * @return string
+     */
+    public function getTsProductId()
+    {
+        return $this->_sTsProductId;
+    }
+
+    /**
+     * Returns if exists formatted TS protection costs
+     *
+     * @return string | bool
+     */
+    public function getFTsProtectionCosts()
+    {
+        $oProtectionCost = $this->getCosts( 'oxtsprotection' );
+        if ( $oProtectionCost && $oProtectionCost->getBruttoPrice() ) {
+            return oxLang::getInstance()->formatCurrency( $oProtectionCost->getBruttoPrice(), $this->getBasketCurrency() );
+        }
+        return false;
+    }
+
 }

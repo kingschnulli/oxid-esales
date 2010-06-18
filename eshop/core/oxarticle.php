@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 28267 2010-06-10 13:38:53Z sarunas $
+ * @version   SVN: $Id: oxarticle.php 28410 2010-06-17 12:59:25Z alfonsas $
  */
 
 // defining supported link types
@@ -475,13 +475,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                     break;
                 }
             case 'ftprice':
-                if ( $oPrice = $this->getTPrice() ) {
-                    return oxLang::getInstance()->formatCurrency( $myUtils->fRound($oPrice->getBruttoPrice()) );
-                    break;
-                } else {
-                    return null;
-                    break;
-                }
+                return $this->getFTPrice();
+                break;
+
             case 'oxarticles__oxlongdesc':
                 return $this->getArticleLongDesc($this->getId());
                 break;
@@ -2692,8 +2688,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getFTPrice()
     {
         if ( $oPrice = $this->getTPrice() ) {
-            if ( $oPrice->getBruttoPrice() ) {
-                return oxLang::getInstance()->formatCurrency( oxUtils::getInstance()->fRound($oPrice->getBruttoPrice()));
+            if ( $this->getConfig()->isNetPriceShop() ) {
+                $dPrice = $oPrice->getNettoPrice();
+            } else {
+                $dPrice = $oPrice->getBruttoPrice();
+            }
+            if ($dPrice) {
+                return oxLang::getInstance()->formatCurrency( oxUtils::getInstance()->fRound($dPrice));
             }
         }
     }
@@ -2706,7 +2707,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getFPrice()
     {
         if ( $oPrice = $this->getPrice() ) {
-            return $this->getPriceFromPrefix().oxLang::getInstance()->formatCurrency( $oPrice->getBruttoPrice() );
+            if ( $this->getConfig()->isNetPriceShop() ) {
+                $dPrice = $oPrice->getNettoPrice();
+            } else {
+                $dPrice = $oPrice->getBruttoPrice();
+            }
+
+            return $this->getPriceFromPrefix().oxLang::getInstance()->formatCurrency( $dPrice );
         }
     }
 
@@ -3258,9 +3265,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function applyVats( oxPrice $oPrice )
     {
-        $this->_applyVAT($oPrice,
-                         $this->getArticleVat()
-                        );
+        $this->_applyVAT($oPrice, $this->getArticleVat() );
     }
 
     /**

@@ -120,3 +120,16 @@
     // disable using and loading the gmp extension for the OpenId library
     // as using the dl() function causes problems with suhosin.
     define('Auth_OpenID_BUGGY_GMP', true);
+
+    /**
+     * Works only if basket reservations feature is enabled in admin.
+     *
+     * The number specifies how many expired basket reservations are
+     * cleaned per one request (to the eShop).
+     * Cleaning a reservation basically means returning the reserved
+     * stock to the articles.
+     *
+     * Keeping this number too low may cause article stock being returned too
+     * slowly, while too high value may have spiking impact on the performance.
+     */
+    $this->iBasketReservationCleanPerRequest = 200;

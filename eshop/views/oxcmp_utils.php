@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_utils.php 28214 2010-06-08 12:06:29Z sarunas $
+ * @version   SVN: $Id: oxcmp_utils.php 28407 2010-06-17 10:53:43Z alfonsas $
  */
 
 /**
@@ -80,14 +80,13 @@ class oxcmp_utils extends oxView
             }
 
             $oPrice  = $oProduct->getPrice();
-            $oTPrice = $oProduct->getTPrice();
 
             $aExport['vatPercent'] = $oPrice->getVat();
             $aExport['netPrice']   = $myUtils->fRound( $oPrice->getNettoPrice() );
             $aExport['brutPrice']  = $myUtils->fRound( $oPrice->getBruttoPrice() );
             $aExport['vat']        = $oPrice->getVatValue();
             $aExport['fprice']     = $oProduct->getFPrice();
-            $aExport['ftprice']    = oxLang::getInstance()->formatCurrency( $myUtils->fRound( $oTPrice->getBruttoPrice() ) );
+            $aExport['ftprice']    = $oProduct->getFTPrice();
 
             $aExport['oxdetaillink']     = $oProduct->getLink();
             $aExport['oxmoredetaillink'] = $oProduct->getMoreDetailLink();

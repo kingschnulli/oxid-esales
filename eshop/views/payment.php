@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 28326 2010-06-14 13:38:07Z sarunas $
+ * @version   SVN: $Id: payment.php 28409 2010-06-17 12:00:45Z vilma $
  */
 
 /**
@@ -106,6 +106,12 @@ class Payment extends oxUBase
      * @var bool
      */
     protected $_blIsOrderStep = true;
+
+    /**
+     * TS protection product array
+     * @var array
+     */
+    protected $_aTsProducts = null;
 
     /**
      * Executes parent method parent::init().
@@ -314,6 +320,14 @@ class Payment extends oxUBase
         if ( $blOK ) {
             oxSession::setVar( 'paymentid', $sPaymentId );
             oxSession::setVar( 'dynvalue', $aDynvalue );
+            if ( oxConfig::getParameter( 'bltsprotection' ) ) {
+                $sTsProductId = oxConfig::getParameter( 'stsprotection' );
+                $oBasket->setTsProductId($sTsProductId);
+                oxSession::setVar( 'stsprotection', $sTsProductId );
+            } else {
+                oxSession::deleteVar( 'stsprotection' );
+                $oBasket->setTsProductId(null);
+            }
             $oBasket->setShipping($sShipSetId);
             oxSession::deleteVar( '_selected_paymentid' );
             return 'order';
@@ -323,6 +337,8 @@ class Payment extends oxUBase
             //#1308C - delete paymentid from session, and save selected it just for view
             oxSession::deleteVar( 'paymentid' );
             oxSession::setVar( '_selected_paymentid', $sPaymentId );
+            oxSession::deleteVar( 'stsprotection' );
+            $oBasket->setTsProductId(null);
             return;
         }
     }
@@ -617,6 +633,39 @@ class Payment extends oxUBase
         unset($_GET["dynvalue"]["kkyear"]);
         unset($_GET["dynvalue"]["kkpruef"]);
 
+    }
+
+    /**
+     * Template variable getter. Returns payment list count
+     *
+     * @return integer
+     */
+    public function getTsProtections()
+    {
+        if ( $this->_aTsProducts === null ) {
+            $oBasket = $this->getSession()->getBasket();
+            if ( $dPrice = $oBasket->getPrice()->getBruttoPrice() ) {
+                $oTsProtection = oxNew('oxtsprotection');
+                $this->_aTsProducts = $oTsProtection->getTsProducts($dPrice);
+            }
+        }
+        return $this->_aTsProducts;
+    }
+
+    /**
+     * Template variable getter. Returns payment list count
+     *
+     * @return integer
+     */
+    public function getCheckedTsProductId()
+    {
+        if ( $this->_sCheckedProductId === null ) {
+            $this->_sCheckedProductId = false;
+            if ( $sId = oxConfig::getParameter( 'stsprotection' ) ) {
+                $this->_sCheckedProductId = $sId;
+            }
+        }
+        return $this->_sCheckedProductId;
     }
 
 }

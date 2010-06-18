@@ -1,21 +1,5 @@
 var oxid = {
 
-    /* Show DIV */
-    showDiv: function (divID) {
-        var e = document.getElementById(divID);
-        if (!e) return false;
-        e.style.visibility = "visible";
-        e.style.display = "block";
-    },
-
-    /* Hide the DIV */
-    hideDiv: function (divID) {
-        var e = document.getElementById(divID);
-        if (!e) return false;
-        e.style.visibility ="hidden";
-        e.style.display ="none";
-    },
-
     // Generall navigation with timeout
     nav: {
 
@@ -49,6 +33,7 @@ var oxid = {
         },
 
         setclass : function(id,add) {
+            if (!id){return;}
             var el = document.getElementById(id);
             if( el ) {
                 if(add){
@@ -563,12 +548,7 @@ var oxid = {
              }
             }
 
-            if (states != null && states.length > 0) {
-              oxid.showDiv(divId);
-            } else {
-              oxid.hideDiv(divId);
-            }
-
+            oxid.showhideblock(divId, states != null && states.length > 0);
         }
     }
 };

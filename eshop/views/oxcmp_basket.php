@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_basket.php 28345 2010-06-15 11:38:32Z alfonsas $
+ * @version   SVN: $Id: oxcmp_basket.php 28399 2010-06-17 08:30:18Z sarunas $
  */
 
 /**
@@ -61,14 +61,19 @@ class oxcmp_basket extends oxView
      */
     public function init()
     {
-        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+        $oConfig = $this->getConfig();
+        if ($oConfig->getConfigParam( 'blBasketReservationEnabled' )) {
             if ($oReservations = $this->getSession()->getBasketReservations()) {
                 if (!$oReservations->getTimeLeft()) {
                     if ( $oBasket = $this->getSession()->getBasket() ) {
                         $oBasket->deleteBasket();
                     }
                 }
-                $oReservations->discardUnusedReservations(200);
+                $iLimit = (int) $oConfig->getConfigParam( 'iBasketReservationCleanPerRequest' );
+                if (!$iLimit) {
+                    $iLimit = 200;
+                }
+                $oReservations->discardUnusedReservations($iLimit);
             }
         }
         return parent::init();

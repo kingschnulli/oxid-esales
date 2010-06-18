@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 28326 2010-06-14 13:38:07Z sarunas $
+ * @version   SVN: $Id: paymentTest.php 28409 2010-06-17 12:00:45Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -628,4 +628,35 @@ class Unit_Views_paymentTest extends OxidTestCase
         }
         $this->fail("no Exception thrown in redirect");
     }
+
+    public function testGetTsProtections()
+    {
+        $oP = $this->getMock('oxprice', array('getBruttoPrice'));
+        $oP->expects($this->once())->method('getBruttoPrice')->will($this->returnValue(50));
+        $oB = $this->getMock('oxbasket', array('getPrice'));
+        $oB->expects($this->once())->method('getPrice')->will($this->returnValue($oP));
+        $oS = $this->getMock('oxsession', array('getBasket'));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
+        $oPayment = $this->getMock('payment', array('getSession'));
+        $oPayment->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $oProduct = new oxStdClass();
+        $oProduct->oPrice = oxNew( 'oxPrice' );
+        $oProduct->oPrice->setNettoPriceMode();
+        $oProduct->oPrice->setPrice( 0.82, 19 );
+        $oProduct->sTsId = 'TS080501_500_30_EUR';
+        $oProduct->iAmount = 500;
+        $oProduct->fPrice = 0.98;
+
+        $this->assertEquals( array($oProduct), $oPayment->getTsProtections() );
+    }
+
+    public function testGetCheckedTsProductId()
+    {
+        modConfig::setParameter('stsprotection', 'testId');
+        $oPayment = $this->getProxyClass( "payment" );
+
+        $this->assertEquals( 'testId', $oPayment->getCheckedTsProductId() );
+    }
+
 }

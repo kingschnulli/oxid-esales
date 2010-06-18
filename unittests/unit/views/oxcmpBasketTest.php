@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpBasketTest.php 28345 2010-06-15 11:38:32Z alfonsas $
+ * @version   SVN: $Id: oxcmpBasketTest.php 28399 2010-06-17 08:30:18Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -894,10 +894,11 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
     public function testInitReservationNotTimeouted()
     {
         modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::getInstance()->setConfigParam('iBasketReservationCleanPerRequest', 320);
 
         $oBR = $this->getMock('stdclass', array('getTimeLeft', 'discardUnusedReservations'));
         $oBR->expects($this->once())->method('getTimeLeft')->will($this->returnValue(2));
-        $oBR->expects($this->once())->method('discardUnusedReservations')->with($this->equalTo(200));
+        $oBR->expects($this->once())->method('discardUnusedReservations')->with($this->equalTo(320));
 
         $oS = $this->getMock('oxsession', array('getBasketReservations', 'getBasket'));
         $oS->expects($this->once())->method('getBasketReservations')->will($this->returnValue($oBR));
@@ -913,6 +914,8 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
     public function testInitReservationTimeouted()
     {
         modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        // also check the default (hardcoded) value is 200, if iBasketReservationCleanPerRequest is 0
+        modConfig::getInstance()->setConfigParam('iBasketReservationCleanPerRequest', 0);
 
         $oB = $this->getMock('stdclass', array('deleteBasket'));
         $oB->expects($this->once())->method('deleteBasket')->will($this->returnValue(0));

@@ -339,6 +339,15 @@
       [{/if }]
     [{/if }]
 
+    [{if $oxcmp_basket->getFTsProtectionCosts() }]
+      <tr class="sumrow">
+        <td class="brd"></td>
+        <td colspan="5" class="sumdesc">[{ oxmultilang ident="BASKET_TSPROTECTION" }]</td>
+        <td align="right">[{ $oxcmp_basket->getFTsProtectionCosts() }]&nbsp;[{ $currency->sign }]</td>
+        <td></td>
+      </tr>
+    [{/if }]
+
     [{ if $oViewConf->getShowGiftWrapping() && $oxcmp_basket->getWrappCostNet() }]
         <tr class="sumrow">
           <td class="brd"></td>

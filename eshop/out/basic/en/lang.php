@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28388 2010-06-16 15:10:20Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 28409 2010-06-17 12:00:45Z vilma $
  */
 
 
@@ -249,6 +249,7 @@ $aLang = array(
 'BASKET_WRONGAMOUNT1'                             => "Please enter valid quantity for product ",
 'BASKET_WRONGAMOUNT2'                             => ".",
 'BASKET_SELECT_ALL'                               => "Select all",
+'BASKET_TSPROTECTION'                             => "[tr]Trusted Shops Käuferschutz",
 'COMPARE_POPUP_TITLE'                             => "Product Comparison",
 'COMPARE_POPUP_ARTICELNO'                         => "Art.No.:",
 'COMPARE_POPUP_PRODUCTATTRIBUTES'                 => "Product Attributes",
@@ -894,6 +895,15 @@ $aLang = array(
 'PAYMENT_EMPTY_TEXT'                              => '<p>Currently we have no delivery method set up for this country.</p>
                                                       <p>We are aiming to find a possible delivery method and we will inform you as soon as possible via eMail about the result, including further information about delivery costs.</p>
                                                       <p>If you agree to this procedure, please select "move on to next step"</p>',
+'PAYMENT_PROTECTION'                              => "[tr]Käuferschutz",
+'PAYMENT_TSPROTECTION'                            => "[tr]Trusted Shops Käuferschutz",
+'PAYMENT_TSPROTECTIONFOR'                         => "[tr]Käuferschutz bis",
+'PAYMENT_TSPROTECTIONTEXT'                        => "[tr]Der Trusted Shops Käuferschutz sichert Ihren Online-Kauf ab. Mit der Übermittlung und",
+'PAYMENT_TSPROTECTIONTEXT2'                       => "[tr]Speicherung",
+'PAYMENT_TSPROTECTIONTEXT3'                       => "[tr]meiner E-Mail-Adresse zur Abwicklung des Käuferschutzes durch Trusted Shops bin ich einverstanden.",
+'PAYMENT_TSPROTECTIONTEXT4'                       => "[tr]Bedingungen",
+'PAYMENT_TSPROTECTIONTEXT5'                       => "[tr]für den Käuferschutz.",
+'PAYMENT_INCLUDEVAT'                              => "[tr]inkl. MwSt.",
 'PRICEALARM_TITLE'                                => "Price Alert",
 'PRICEALARM_THANKYOUMESSAGE1'                     => "Thank you.",
 'PRICEALARM_THANKYOUMESSAGE2'                     => "appreciates your comments.",

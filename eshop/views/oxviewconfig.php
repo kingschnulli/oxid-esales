@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 28377 2010-06-16 12:23:51Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfig.php 28403 2010-06-17 10:14:48Z alfonsas $
  */
 
 /**
@@ -870,6 +870,18 @@ class oxViewConfig extends oxSuperCfg
     public function getStockOnDefaultMessage()
     {
         return $this->getConfig()->getConfigParam( 'blStockOnDefaultMessage' );
+    }
+
+
+
+    /**
+     * Returns config isNetPriceShop value
+     *
+     * @return bool
+     */
+    public function isNetPriceShop()
+    {
+        return $this->getConfig()->isNetPriceShop();
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 28314 2010-06-11 15:20:51Z sarunas $
+ * @version   SVN: $Id: oxbasketTest.php 28409 2010-06-17 12:00:45Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1978,7 +1978,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->expects( $this->once() )->method( '_calcBasketTotalDiscount' );
         $oBasket->expects( $this->once() )->method( '_calcVoucherDiscount' );
         $oBasket->expects( $this->once() )->method( '_applyDiscounts' );
-        $oBasket->expects( $this->exactly( 3 ) )->method( 'setCost' );
+        $oBasket->expects( $this->exactly( 4 ) )->method( 'setCost' );
         $oBasket->expects( $this->once() )->method( '_calcTotalPrice' );
         $oBasket->expects( $this->once() )->method( '_setDeprecatedValues' );
         $oBasket->expects( $this->once() )->method( 'afterUpdate' );
@@ -2030,7 +2030,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->expects( $this->once() )->method( '_calcBasketTotalDiscount' );
         $oBasket->expects( $this->once() )->method( '_calcVoucherDiscount' );
         $oBasket->expects( $this->once() )->method( '_applyDiscounts' );
-        $oBasket->expects( $this->exactly( 3 ) )->method( 'setCost' );
+        $oBasket->expects( $this->exactly( 4 ) )->method( 'setCost' );
         $oBasket->expects( $this->once() )->method( '_calcTotalPrice' );
         $oBasket->expects( $this->once() )->method( '_setDeprecatedValues' );
         $oBasket->expects( $this->once() )->method( 'afterUpdate' );
@@ -2649,7 +2649,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->addToBasket( $this->oArticle->getId(), 2 );
         $oBasket->addToBasket( $this->oVariant->getId(), 11 );
         $oBasket->calculateBasket( false );
-        $this->assertEquals( array( 'oxdelivery', 'oxwrapping', 'oxpayment' ), array_keys( $oBasket->getCosts() ) );
+        $this->assertEquals( array( 'oxdelivery', 'oxwrapping', 'oxpayment', 'oxtsprotection' ), array_keys( $oBasket->getCosts() ) );
     }
 
     /**
@@ -3834,4 +3834,50 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->setNonPublicVar( "_sBasketCategoryId",'_testExclRoot');
         $this->assertEquals( '_testExclRoot', $oBasket->getBasketRootCatId() );
     }
+
+    /**
+     * oxbasket::getFTsProtectionCosts() test case
+     *
+     * @return null
+     */
+    public function testGetFTsProtectionCosts()
+    {
+        $oPrice = $this->getMock( 'oxprice', array( 'getBruttoPrice' ) );
+        $oPrice->expects( $this->any() )->method( 'getBruttoPrice' )->will( $this->returnValue( 0.98 ) );
+
+        $oBasket = $this->getMock( 'oxbasket', array( 'getCosts' ) );
+        $oBasket->expects( $this->once() )->method( 'getCosts' )->will( $this->returnValue( $oPrice ) );
+
+        $this->assertEquals( '0,98', $oBasket->getFTsProtectionCosts() );
+    }
+
+    /**
+     * oxbasket::setTsProductId() and oxbasket::getTsProductId() test case
+     *
+     * @return null
+     */
+    public function testSetGetTsProductId()
+    {
+        $oBasket = $this->getProxyClass( "oxbasket" );
+        $oBasket->setTsProductId( 'xxx' );
+        $this->assertEquals( 'xxx', $oBasket->getTsProductId() );
+    }
+
+    /**
+     * Testing TS protection costs calculation
+     */
+    public function testCalcTsProtectionCost()
+    {
+        $oBasket = new oxbasket();
+        $oBasket->addToBasket( $this->oArticle->getId(), 2 );
+        $oBasket->calculateBasket( false );
+        $oBasket->setTsProductId( 'TS080501_500_30_EUR' );
+
+        $oPayCost = $oBasket->UNITcalcTsProtectionCost();
+
+        $this->assertEquals( 0.98, $oPayCost->getBruttoPrice() );
+        $this->assertEquals( 0.82, $oPayCost->getNettoPrice() );
+        $this->assertEquals( 19, $oPayCost->getVat() );
+    }
+
 }
