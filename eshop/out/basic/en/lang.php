@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28409 2010-06-17 12:00:45Z vilma $
+ * @version   SVN: $Id: lang.php 28425 2010-06-18 10:51:31Z arvydas $
  */
 
 
@@ -410,6 +410,7 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_ACCOUNTNOMBER'             =>"Account No.:",
 'EMAIL_ORDER_CUST_HTML_BIC'                       =>"BIC:",
 'EMAIL_ORDER_CUST_HTML_IBAN'                      =>"IBAN:",
+'EMAIL_ORDER_CUST_HTML_TS_RATINGS_RATEUS'         =>"[tr] Tell what you this about us and rate our shop!",
 'EMAIL_ORDER_OWNER_HTML_ATENTIONGREETINGCARD'     =>"Attention Greeting Card:",
 'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT1'             =>"plus VAT",
 'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT2'             =>"% Amount:",
@@ -708,6 +709,9 @@ $aLang = array(
 'INC_RIGHTLIST_ORDERNOW'                          =>"Order now!",
 'INC_RIGHTITEM_OPENID'                            =>"OpenID",
 'INC_RIGHTITEM_FBCONNECT'                         =>"Facebook connect",
+'INC_RIGHTITEM_TS_RATINGS_BOX'                    =>"[tr] Trusted Shops Rating",
+'INC_RIGHTITEM_TS_INFO_URL_TITLE'                 =>"[tr] Kundenbewertungen",
+'INC_RIGHTITEM_TS_WIDGET_ALT'                     =>"[tr] Kundenbewertungen",
 'INC_SEARCHLEFTITEM_ALLCATEGORIES'                =>"- all categories -",
 'INC_SEARCHLEFTITEM_ALLMANUFACTURERS'             =>"- all manufacturers -",
 'INC_SEARCHLEFTITEM_ALLDISTRIBUTORS'              =>"- all distributors -",
@@ -1095,6 +1099,10 @@ $aLang = array(
 'THANKYOU_SEALOFAPPROVAL'                         => "Trusted Shops seal of approval - Click to verify.",
 'THANKYOU_TRUSTEDSHOPMESSAGE'                     => "As an additional service we offer you the Trusted Shops Buyer Protection. We cover all costs for this guarantee. You only have to register!",
 'THANKYOU_LOGGIN'                                 => "Register for Trusted Shops Buyer Protection",
+'TS_RATINGS_URL_TITLE'                            => "[tr] Shop rating",
+'TS_RATINGS_BUTTON_ALT'                           => "[tr] Rate our shop!",
+'TS_RATINGS'                                      => "[tr] Trusted Shops Rating",
+'TS_RATINGS_RATEUS'                               => "[tr] Tell us what you think about us and rate our shop!",
 'USER_BLOCHED_TITLE'                              => "Access denied",
 'USER_LOGINTITLE'                                 => "Login",
 'USER_OPTION1'                                    => "Option 1",

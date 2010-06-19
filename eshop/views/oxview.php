@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 28377 2010-06-16 12:23:51Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxview.php 28452 2010-06-18 14:02:33Z rimvydas.paskevicius $
  */
 
 /**
@@ -820,8 +820,24 @@ class oxView extends oxSuperCfg
      */
     public function isConnectedWithFb()
     {
-        $oFb = oxFb::getInstance();
+        $myConfig = $this->getConfig();
 
-        return $oFb->isConnected();
+        if ( $myConfig->getConfigParam( "bl_showFbConnect" ) ) {
+            $oFb = oxFb::getInstance();
+            return $oFb->isConnected();
+        }
+    }
+
+    /**
+     * Gets get Facebook user id
+     *
+     * @return int
+     */
+    public function getFbUserId()
+    {
+        if ( $this->getConfig()->getConfigParam( "bl_showFbConnect" ) ) {
+            $oFb = oxFb::getInstance();
+            return $oFb->getUser();
+        }
     }
 }

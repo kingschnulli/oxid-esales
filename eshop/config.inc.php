@@ -133,3 +133,21 @@
      * slowly, while too high value may have spiking impact on the performance.
      */
     $this->iBasketReservationCleanPerRequest = 200;
+
+    // Trusted Shops Ratings configuration array
+    $this->aTsConfig = array( "blTestMode"   => false, // set TRUE to enable testing mode
+                              "sTsUrl"       => "https://www.trustedshops.com", // Trusted Shops Rating main url
+                              "sTsTestUrl"   => "https://qa.trustedshops.com",  // Trusted Shops Rating test url
+                              "sTsWidgetUri" => array( "bewertung/widget/widgets/%s.gif" ), // rating widget url
+                              "sTsInfoUri"   => array( "de" => "bewertung/info_%s.html",  // DE rating info url
+                                                       "en" => "buyerrating/info_%s.html" // EN rating info url
+                                                     ),
+                              "sTsRatingUri" => array( "de" => "bewertung/bewerten_%s.html", // DE rating url
+                                                       "en" => "buyerrating/rate_%s.html"    // EN rating url
+                                                     )
+                             );
+    // Trusted Shops Ratings service wsdl
+    $this->sTsServiceWsdl = "https://www.trustedshops.de/ts/services/TsRating?wsdl";
+
+    // Trusted Shops Ratings test service wsdl
+    $this->sTsServiceTestWsdl = "https://qa.trustedshops.de/ts/services/TsRating?wsdl";

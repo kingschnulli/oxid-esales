@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28409 2010-06-17 12:00:45Z vilma $
+ * @version   SVN: $Id: lang.php 28425 2010-06-18 10:51:31Z arvydas $
  */
 
 
@@ -411,6 +411,7 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_ACCOUNTNOMBER'             =>"Kto.Nr.:",
 'EMAIL_ORDER_CUST_HTML_BIC'                       =>"BIC:",
 'EMAIL_ORDER_CUST_HTML_IBAN'                      =>"IBAN:",
+'EMAIL_ORDER_CUST_HTML_TS_RATINGS_RATEUS'         =>"[tr] Tell what you this about us and rate our shop!",
 'EMAIL_ORDER_OWNER_HTML_ATENTIONGREETINGCARD'     =>"ACHTUNG Grußkarte:",
 'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT1'             =>"Versand. MwSt.",
 'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT2'             =>"% Betrag:",
@@ -709,6 +710,9 @@ $aLang = array(
 'INC_RIGHTLIST_ORDERNOW'                          =>"Jetzt bestellen!",
 'INC_RIGHTITEM_OPENID'                            =>"OpenID",
 'INC_RIGHTITEM_FBCONNECT'                         =>"[tr]Facebook connect",
+'INC_RIGHTITEM_TS_RATINGS_BOX'                    =>"[tr] Trusted Shops Rating",
+'INC_RIGHTITEM_TS_INFO_URL_TITLE'                 =>"[tr] Kundenbewertungen",
+'INC_RIGHTITEM_TS_WIDGET_ALT'                     =>"[tr] Kundenbewertungen",
 'INC_SEARCHLEFTITEM_ALLCATEGORIES'                =>"- alle Kategorien -",
 'INC_SEARCHLEFTITEM_ALLMANUFACTURERS'             =>"- alle Hersteller -",
 'INC_SEARCHLEFTITEM_ALLDISTRIBUTORS'              =>"- alle Lieferanten -",
@@ -1095,6 +1099,10 @@ $aLang = array(
 'THANKYOU_SEALOFAPPROVAL'                         => "Trusted Shops Gütesiegel - Bitte hier Gültigkeit prüfen!",
 'THANKYOU_TRUSTEDSHOPMESSAGE'                     => "Als zusätzlichen Service bieten wir Ihnen den Trusted Shops Käuferschutz an. Wir übernehmen alle Kosten dieser Garantie, Sie müssen sich lediglich anmelden.",
 'THANKYOU_LOGGIN'                                 => "Anmeldung zum Trusted Shops Käuferschutz",
+'TS_RATINGS_URL_TITLE'                            => "[tr] Shop rating",
+'TS_RATINGS_BUTTON_ALT'                           => "[tr] Rate our shop!",
+'TS_RATINGS'                                      => "[tr] Trusted Shops Rating",
+'TS_RATINGS_RATEUS'                               => "[tr] Tell us what you think about us and rate our shop!",
 'USER_BLOCHED_TITLE'                              => "Zugang verweigert",
 'USER_LOGINTITLE'                                 => "Anmelden",
 'USER_OPTION1'                                    => "Option 1",

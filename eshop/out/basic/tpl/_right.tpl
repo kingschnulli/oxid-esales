@@ -32,6 +32,11 @@
         [{/if}]
     [{/if}]
 
+    [{if $oViewConf->showTs("WIDGET") && $oViewConf->getTsId() }]
+        <strong class="h2"><a id="test_RightSideTsHeader" rel="nofollow">[{ oxmultilang ident="INC_RIGHTITEM_TS_RATINGS_BOX" }]</a></strong>
+        <div class="box">[{include file="dyn/ts_ratings.tpl" }]</div>
+    [{/if}]
+
     [{if $oView->showNewsletter()}]
         <strong class="h2"><a id="test_RightSideNewsLetterHeader" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=newsletter" }]">[{ oxmultilang ident="INC_RIGHTITEM_NEWSLETTER" }]</a></strong>
         <div class="box">[{include file="inc/cmp_newsletter.tpl" }]</div>

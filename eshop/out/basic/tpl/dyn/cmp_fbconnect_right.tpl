@@ -2,7 +2,7 @@
     <div id="loggedFbUserBox">
         <div style="margin-top: 5px;">[{ oxmultilang ident="INC_CMP_FBCONNECT_YOUARELOGGEDINAS" }]:</div>
         <div style="margin: 10px; 0">
-            <fb:profile-pic uid="loggedinuser" linked="true" width="30" height="30" size="square" facebook-logo="true"></fb:profile-pic> <fb:name uid="loggedinuser" useyou="false"></fb:name>
+            <fb:profile-pic uid="[{$oView->getFbUserId()}]" linked="true" width="30" height="30" size="square" facebook-logo="true"></fb:profile-pic> <fb:name uid="[{$oView->getFbUserId()}]" useyou="false"></fb:name>
         </div>
         <hr>
     </div>

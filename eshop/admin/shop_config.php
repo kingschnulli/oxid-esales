@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_config.php 27133 2010-04-09 13:48:22Z arvydas $
+ * @version   SVN: $Id: shop_config.php 28430 2010-06-18 11:22:12Z rimvydas.paskevicius $
  */
 
 /**
@@ -153,6 +153,9 @@ class Shop_Config extends oxAdminDetails
         }
 
         $this->_aViewData["countrylist"] = $oCountryList;
+
+        // checking if cUrl is enabled
+        $this->_aViewData["blCurlIsActive"] = ( !function_exists('curl_init') ) ? false : true;
 
         return $this->_sThisTemplate;
     }

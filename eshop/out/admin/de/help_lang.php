@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28363 2010-06-16 08:31:10Z vilma $
+ * @version   SVN: $Id: help_lang.php 28424 2010-06-18 10:50:51Z arvydas $
  */
 
 /**
@@ -546,4 +546,14 @@ $aLang =  array(
 
 
 'HELP_WRAPPING_MAIN_PICTURE'                    =>  'Bei <span class="navipath_or_inputname">Bild</span> und <span class="navipath_or_inputname">Bild hochladen</span> können Sie ein Bild für die Geschenkverpackung hochladen. Wählen Sie bei <span class="navipath_or_inputname">Bild hochladen</span> das Bild aus, das Sie hochladen möchten. Wenn Sie auf Speichern klicken, wird das Bild hochgeladen. Nachdem das Bild hochgeladen ist, wird der Dateiname des Bildes in <span class="navipath_or_inputname">Bild</span> angezeigt.',
+
+
+
+'HELP_DYN_TRUSTED_RATINGS_USER'                 => '[tr] Trusted Shops user login name',
+'HELP_DYN_TRUSTED_RATINGS_PASS'                 => '[tr] Trusted Shops user password',
+'HELP_DYN_TRUSTED_RATINGS_ID'                   => '[tr] Trusted Shops ID (for language). Green marker shows that language widget is enabled and verified',
+'HELP_DYN_TRUSTED_RATINGS_WIDGET'               => '[tr] To enable Trusted Shop widget switch this option on.',
+'HELP_DYN_TRUSTED_RATINGS_THANKYOU'             => '[tr] If switched on "Order Complete" ("Thankyou") page will contain rating button leading to Trusted Shop page',
+'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'           => '[tr] If switched on "Order Confirmation" email will contain rating button leading to Trusted Shop page',
+'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'       => '[tr] If switched on "Order Send" email will contain rating button leading to Trusted Shop page',
 );

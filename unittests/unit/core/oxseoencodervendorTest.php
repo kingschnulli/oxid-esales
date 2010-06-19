@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodervendorTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxseoencodervendorTest.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -193,7 +193,7 @@ class Unit_Core_oxSeoEncoderVendorTest extends OxidTestCase
         $oVendor->oxvendor__oxtitle = new oxField('root', oxField::T_RAW);
 
         $oEncoder = $this->getMock( 'oxSeoEncoderVendor', array( '_saveToDb' ) );
-        $oEncoder->expects( $this->once() )->method('_saveToDb')->with( $this->equalTo( 'oxvendor'), $this->equalTo( 'root' ), $this->equalTo( $oVendor->getStdLink() ), $this->equalTo( 'en/root/' ), $this->equalTo( $oVendor->getLanguage() ) );
+        $oEncoder->expects( $this->once() )->method('_saveToDb')->with( $this->equalTo( 'oxvendor'), $this->equalTo( 'root' ), $this->equalTo( $oVendor->getBaseStdLink(1) ), $this->equalTo( 'en/root/' ), $this->equalTo( $oVendor->getLanguage() ) );
 
         $sUrl    = 'en/root/';
         $sSeoUrl = $oEncoder->getVendorUri( $oVendor );
@@ -279,7 +279,7 @@ class Unit_Core_oxSeoEncoderVendorTest extends OxidTestCase
         $oVendor->oxvendor__oxtitle = new oxField('root', oxField::T_RAW);
 
         $oEncoder = $this->getMock( 'oxSeoEncoderVendor', array( '_saveToDb' ) );
-        $oEncoder->expects( $this->once() )->method('_saveToDb')->with( $this->equalTo( 'oxvendor' ), $this->equalTo( 'root' ), $this->equalTo( $oVendor->getStdLink(1) ), $this->equalTo( 'en/By-Distributor/' ), $this->equalTo( 1 ) );
+        $oEncoder->expects( $this->once() )->method('_saveToDb')->with( $this->equalTo( 'oxvendor' ), $this->equalTo( 'root' ), $this->equalTo( $oVendor->getBaseStdLink(1) ), $this->equalTo( 'en/By-Distributor/' ), $this->equalTo( 1 ) );
 
         $sUrl    = 'en/By-Distributor/';
         $sSeoUrl = $oEncoder->getVendorUri( $oVendor, 1 );

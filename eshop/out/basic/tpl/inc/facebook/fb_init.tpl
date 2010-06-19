@@ -31,7 +31,10 @@
         }
 
         function fbLogout() {
-           document.location.href = unescape("[{ $oViewConf->getLogoutLink() }]");
+           sUrl = "[{ $oViewConf->getLogoutLink() }]";
+           sUrl = sUrl.toString().replace(/&amp;/g,"&");
+
+           document.location.href = sUrl;
         }
 
         function addUrlParam(search, key, val) {

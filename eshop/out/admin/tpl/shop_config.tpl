@@ -797,7 +797,7 @@ function showInvitations()
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_FACEBOOK" }]</b></a>
             <dl>
                 <dt>
-                    <select class="select" id="fbconnect" name=confstrs[bl_showFbConnect] [{ $readonly }]>
+                    <select class="select" id="fbconnect" name=confstrs[bl_showFbConnect] [{ $readonly }] [{if !$blCurlIsActive}]disabled[{/if}]>
                         <option value="0"  [{if !$confstrs.bl_showFbConnect }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
                         <option value="1"  [{if $confstrs.bl_showFbConnect }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
@@ -805,6 +805,10 @@ function showInvitations()
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_FACEBOOKCONNECT" }]
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT" }]
+                    [{if !$blCurlIsActive}]
+                        <br><br>
+                        <span class="err">[{ oxmultilang ident="SHOP_CONFIG_FACEBOOKCONNECTDISABLED" }]</span>
+                    [{/if}]
                 </dd>
                 <div class="spacer"></div>
             </dl>

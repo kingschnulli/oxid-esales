@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 28377 2010-06-16 12:23:51Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxcmp_user.php 28433 2010-06-18 11:27:10Z rimvydas.paskevicius $
  */
 
 // defining login/logout states
@@ -238,23 +238,6 @@ class oxcmp_user extends oxView
         // trying to login user
         try {
             $oUser = oxNew( 'oxuser' );
-            /*
-            if ( $this->getViewConfig()->getShowFacebookConnect() && $blFbLogin ) {
-                $oFb = oxFb::getInstance();
-                if ( $oFb->isConnected() ) {
-                   try {
-                      $oUser->facebookLogin( $oFb->getUser() );
-                   } catch ( oxUserException $oEx ) {
-                         // showing no error as user connected using facebook connect
-                         // but does not have an account (or no relations between user FB ID and
-                         // existing account)
-                         return;
-                   }
-                } else {
-                    return;
-                }
-            } else
-            */
             if ( $this->getViewConfig()->getShowOpenIdLogin() && $sOpenId ) {
                 $iOldErrorReproting = error_reporting();
                 error_reporting($iOldErrorReproting & ~E_STRICT);

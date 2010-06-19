@@ -365,6 +365,16 @@
   [{/if}]
 
   [{ oxcontent ident="oxuserorderemailend" }]
+
+  [{if $oViewConf->showTs("ORDEREMAIL") && $oViewConf->getTsId() }]
+  <br><br>
+  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TS_RATINGS_RATEUS" }]<br><br>
+  <a href="[{ $oViewConf->getTsRatingUrl() }]" target="_blank" title="[{ oxmultilang ident="TS_RATINGS_URL_TITLE" }]">
+    <img src="https://www.trustedshops.com/bewertung/widget/img/bewerten_de.gif" border="0" alt="[{ oxmultilang ident="TS_RATINGS_BUTTON_ALT" }]" align="middle">
+  </a>
+  [{/if}]
+
+
     <br><br>
     [{ oxcontent ident="oxemailfooter" }]
 

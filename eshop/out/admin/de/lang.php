@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28363 2010-06-16 08:31:10Z vilma $
+ * @version   SVN: $Id: lang.php 28446 2010-06-18 12:25:46Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -678,6 +678,20 @@ $aLang = array(
 'DYN_TRUSTED_SHOP_CARD'                         => 'Online Shop Zahlungskarte',
 'DYN_TRUSTED_DIRECT_E_BANKING'                  => 'Sofortüberweisung.de',
 'DYN_TRUSTED_OTHER'                             => 'Andere Zahlungsart',
+'DYN_TRUSTED_RATINGS_USER'                      => '[tr] Trusted Shops User name',
+'DYN_TRUSTED_RATINGS_PASS'                      => '[tr] Trusted Shops Password',
+'DYN_TRUSTED_RATINGS_ID'                        => '[tr] Trusted Shops ID',
+'DYN_TRUSTED_RATINGS_WIDGET'                    => '[tr] Enable Trusted Shops ratings widget',
+'DYN_TRUSTED_RATINGS_ID_COMMENT'                => '[tr] Fugen Sie hier die Trusted Shops ID ein, um die Kundenbewertungen in Ihrem Shop zu<br>aktivieren. Sie erhalten die ID von Ihrem Trusted Shops Mitarbeiter per E-Mail.',
+'DYN_TRUSTED_RATINGS'                           => '[tr] Enable rating button in',
+'DYN_TRUSTED_RATINGS_THANKYOU'                  => '[tr] "Order completed" page',
+'DYN_TRUSTED_RATINGS_ORDEREMAIL'                => '[tr] Order email',
+'DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'            => '[tr] Order send notification email',
+'DYN_TRUSTED_RATINGS_COMMENT'                   => '[tr] Entscheiden Sie, an welchen Stellen Sie Kundenfeedback einholen.',
+'DYN_TRUSTED_RATINGS_ERR_INVALID_TSID'          => '[tr] Falsche oder ungültige TS-ID wurde eingegeben.',
+'DYN_TRUSTED_RATINGS_ERR_WRONG_WSUSERNAME_WSPASSWORD'      => '[tr] Der Shop besitzt zwar eine gültige TSID, er hat sich aber noch nicht explizit für TrustedRating angemeldet.',
+'DYN_TRUSTED_RATINGS_ERR_NOT_REGISTERED_FOR_TRUSTEDRATING' => '[tr] Aufruf des Webservices mit falschem Username oder falschem Passwort.',
+'DYN_TRUSTED_RATINGS_CONFIGFILE'                => '[tr] NOTICE: config.inc.php file contains additional configuration options. In case you need to customize Trusted Shops Ratings or add additional language support (default configuration supports DE and EN) please adjust your config file.',
 'DYNBASE_ADDCATTOCAMPAIGN'                      => 'Hauptkategorie zum Kampagnenparameter hinzufügen',
 'DYNBASE_DO_SUCCESS'                            => 'Erfolg! Sie können Ihre Exportdatei ',
 'DYNBASE_DO_HERE'                               => 'hier',
@@ -723,6 +737,7 @@ $aLang = array(
 'EMAIL_SENDEDNOW_HTML_ORDERGOSTO'               => 'Die Sendung geht an',
 'EMAIL_SENDEDNOW_HTML_ORDERNUM'                 => 'Ihre Bestellnr.',
 'EMAIL_SENDEDNOW_HTML_RATE'                     => 'bewerten',
+'EMAIL_SENDEDNOW_HTML_TS_RATINGS_RATEUS'        =>"[tr] Tell what you this about us and rate our shop!",
 'EXCEPTION_USER_NOVALIDLOGIN'                   => 'Falsche E-Mail oder Passwort!',
 'EXCEPTION_USER_USEREXISTS'                     => 'Dieser Benutzer existiert bereits!',
 'EXCEPTION_CONNECTION_NODB'                     => 'Keine Verbindung zur Datenbank möglich!',
@@ -1333,6 +1348,7 @@ $aLang = array(
 'SHOP_CONFIG_FBSHARE'                           => 'Share',
 'SHOP_CONFIG_FBLIKE'                            => 'Like',
 'SHOP_CONFIG_FACEBOOKCONNECT'                   => '[tr]Show Facebook connect',
+'SHOP_CONFIG_FACEBOOKCONNECTDISABLED'           => '[tr]Facebook connect <b>is disabled</b> as it requires cURL extension to be installed in your server.',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                 => 'Prozentsatz gleicher Attribute, damit Artikel ähnlich sind',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'               => 'Bildqualität - von 0 (schlechteste Qualität, kleine Dateigröße) bis 100 (beste Qualität, große Dateigröße)',
@@ -1528,6 +1544,8 @@ $aLang = array(
 'TOOLTIPS_RESETNROFARTICLESINMAN'               => 'Artikelanzahl in den Herstellern zurücksetzen',
 'TOOLTIPS_TIMEFORMAT'                           => 'Zeit Format: ',
 'TOOLTIPS_VALDESC'                              => 'Eintrag1__@@Eintrag2__@@ usw.',
+'TS_RATINGS_URL_TITLE'                          => '[tr] Shop rating',
+'TS_RATINGS_BUTTON_ALT'                         => '[tr] Rate our shop!',
 'USER_ADDRESS_DELIVERYADDRESS'                  => 'Lieferadressen',
 'USER_ARTICLE_QUANTITY'                         => 'Anzahl',
 'USER_EXTEND_PRIVATFON'                         => 'Telefon privat',

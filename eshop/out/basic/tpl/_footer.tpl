@@ -58,7 +58,10 @@
 
 [{if $popup}][{include file=$popup}][{/if}]
 [{oxid_include_dynamic file="dyn/newbasketitem_popup.tpl"}]
+
+[{if !$oxcmp_user}]
 [{ insert name="oxid_fblogin"}]
+[{/if}]
 
 [{if $scRootCatChanged}][{include file="inc/popup_scbasketexcl.tpl"}][{/if}]
 [{oxscript include="oxid.js"}]

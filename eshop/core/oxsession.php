@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 28175 2010-06-07 11:24:04Z sarunas $
+ * @version   SVN: $Id: oxsession.php 28448 2010-06-18 12:52:09Z sarunas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -666,7 +666,7 @@ class oxSession extends oxSuperCfg
      */
     public function isSidNeeded( $sUrl = null )
     {
-        if ( $blUseCookies && $this->_getCookieSid() ) {
+        if ( $this->_getSessionUseCookies() && $this->_getCookieSid() ) {
             // switching from ssl to non ssl or vice versa?
             if ( ( strpos( $sUrl, "https:" ) === 0 && !$this->getConfig()->isSsl() ) ||
                  ( strpos( $sUrl, "http:" ) === 0 && $this->getConfig()->isSsl() ) ) {

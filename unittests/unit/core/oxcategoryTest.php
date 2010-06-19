@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategoryTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxcategoryTest.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -171,6 +171,17 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
 
         $sTestUrl = oxConfig::getInstance()->getConfig()->getShopHomeUrl( $iLang, false ) . "cl=alist&amp;cnid=".$oCategory->getId();
         $this->assertEquals( $sTestUrl, $oCategory->getBaseStdLink( $iLang ) );
+    }
+
+    public function testGetBaseStdLinkExt()
+    {
+        $iLang = 0;
+
+        $oCategory = new oxcategory();
+        $oCategory->setId( "testCategoryId" );
+        $oCategory->oxcategories__oxextlink = new oxField("trestssa");
+
+        $this->assertEquals( "trestssa", $oCategory->getBaseStdLink( $iLang ) );
     }
 
     public function testIsPriceCategory()

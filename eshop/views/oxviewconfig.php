@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 28403 2010-06-17 10:14:48Z alfonsas $
+ * @version   SVN: $Id: oxviewconfig.php 28452 2010-06-18 14:02:33Z rimvydas.paskevicius $
  */
 
 /**
@@ -68,12 +68,20 @@ class oxViewConfig extends oxSuperCfg
             $myConfig = $this->getConfig();
             $myUtils  = oxUtils::getInstance();
             $oLang    = oxLang::getInstance();
+            $iLang = $oLang->getBaseLanguage();
 
             $sValue = null;
 
-            $iLang = $oLang->getBaseLanguage();
-            if ( $myUtils->seoIsActive() && !$sValue && ( $iLang != $myConfig->getConfigParam( 'sDefaultLang' ) ) ) {
+            $blAddStartCl = $myUtils->seoIsActive() && ( $iLang != $myConfig->getConfigParam( 'sDefaultLang' ) );
+
+
+            if ( $blAddStartCl ) {
                 $sValue = oxSeoEncoder::getInstance()->getStaticUrl( $this->getSelfLink() . 'cl=start', $iLang );
+                $sValue = oxUtilsUrl::getInstance()->appendUrl(
+                        $sValue,
+                        oxUtilsUrl::getInstance()->getBaseAddUrlParams()
+                    );
+                $sValue = getStr()->preg_replace('/(\?|&(amp;)?)$/', '', $sValue);
             }
 
             if ( !$sValue ) {
@@ -1178,13 +1186,22 @@ class oxViewConfig extends oxSuperCfg
     }
 
     /**
-     * Returns config param "bl_showFbConnect" value
+     * Checks if Facebook connect is on. If yes, also checks if Facebook application id
+     * and secure key are entered in config table.
      *
      * @return bool
      */
     public function getShowFbConnect()
     {
-        return $this->getConfig()->getConfigParam( 'bl_showFbConnect' );
+        $myConfig = $this->getConfig();
+
+        if ( $myConfig->getConfigParam( 'bl_showFbConnect' ) ) {
+            if ( $myConfig->getConfigParam( "sFbAppId" ) && $myConfig->getConfigParam( "sFbSecretKey" ) ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1246,4 +1263,142 @@ class oxViewConfig extends oxSuperCfg
     {
         return $this->getConfig()->getConfigParam( 'blFbEnableLike' );
     }
+
+    /**
+     * Returns Trusted shops domain name (includes "http://")
+     *
+     * @return string
+     */
+    public function getTsDomain()
+    {
+        $sDomain = false;
+        $aTsConfig = $this->getConfig()->getConfigParam( "aTsConfig" );
+        if ( is_array( $aTsConfig ) ) {
+            $sDomain = $aTsConfig["blTestMode"] ? $aTsConfig["sTsTestUrl"] : $aTsConfig["sTsUrl"];
+        }
+        return $sDomain;
+    }
+
+    /**
+     * Returns Trusted Shops Widget image url
+     *
+     * @return string
+     */
+    public function getTsWidgetUrl()
+    {
+        $sUrl = false;
+        if ( $sTsId = $this->getTsId() ) {
+            $sTsUrl = $this->getTsDomain();
+
+            $aTsConfig = $this->getConfig()->getConfigParam( "aTsConfig" );
+            $sTsWidgetUri = isset( $aTsConfig["sTsWidgetUri"] ) ? current( $aTsConfig["sTsWidgetUri"] ) : false;
+
+            if ( $sTsUrl && $sTsWidgetUri ) {
+                //$sLocal = $this->getConfig()->getImageDir()."{$sTsId}.gif";
+                $sUrl = sprintf( "{$sTsUrl}/{$sTsWidgetUri}", $sTsId );
+                //if ( $sImgName = oxUtils::getInstance()->getRemoteCachePath( $sUrl, $sLocal ) ) {
+                //    $sUrl = $this->getImageUrl().basename( $sImgName );
+                //}
+            }
+        }
+
+        return $sUrl;
+    }
+
+    /**
+     * Trusted Shops widget info url
+     *
+     * @return string | bool
+     */
+    public function getTsInfoUrl()
+    {
+        $sUrl = false;
+        if ( $sTsId = $this->getTsId() ) {
+            $sTsUrl = $this->getTsDomain();
+
+            $sLangId = oxLang::getInstance()->getLanguageAbbr();
+            $aTsConfig = $this->getConfig()->getConfigParam( "aTsConfig" );
+            $sTsInfoUri = ( isset( $aTsConfig["sTsInfoUri"] ) && isset( $aTsConfig["sTsInfoUri"][$sLangId] ) ) ? $aTsConfig["sTsInfoUri"][$sLangId] : false;
+
+            if ( $sTsUrl && $sTsInfoUri ) {
+                $sUrl = sprintf( "{$sTsUrl}/{$sTsInfoUri}", $sTsId );
+            }
+        }
+
+        return $sUrl;
+    }
+
+    /**
+     * Trusted Shops ratings url
+     *
+     * @return string | bool
+     */
+    public function getTsRatingUrl()
+    {
+        $sUrl = false;
+        if ( $sTsId = $this->getTsId() ) {
+            $sTsUrl = $this->getTsDomain();
+
+            $sLangId = oxLang::getInstance()->getLanguageAbbr();
+            $aTsConfig = $this->getConfig()->getConfigParam( "aTsConfig" );
+            $sTsRateUri = ( isset( $aTsConfig["sTsRatingUri"] ) && isset( $aTsConfig["sTsRatingUri"][$sLangId] ) ) ? $aTsConfig["sTsRatingUri"][$sLangId] : false;
+
+            if ( $sTsUrl && $sTsRateUri ) {
+                $sUrl = sprintf( "{$sTsUrl}/{$sTsRateUri}", $sTsId );
+            }
+        }
+
+        return $sUrl;
+    }
+
+    /**
+     * Returns true if Trusted Shops feature is On
+     *
+     * @param string $sType type of element to check
+     *
+     * @return bool
+     */
+    public function showTs( $sType )
+    {
+        $blShow = false;
+        switch ( $sType ) {
+            case "WIDGET":
+                $blShow = (bool) $this->getConfig()->getConfigParam( "blTsWidget" );
+                break;
+            case "THANKYOU":
+                $blShow = (bool) $this->getConfig()->getConfigParam( "blTsThankyouReview" );
+                break;
+            case "ORDEREMAIL":
+                $blShow = (bool) $this->getConfig()->getConfigParam( "blTsOrderEmailReview" );
+                break;
+            case "ORDERCONFEMAIL":
+                $blShow = (bool) $this->getConfig()->getConfigParam( "blTsOrderSendEmailReview" );
+                break;
+        }
+        return $blShow;
+    }
+
+    /**
+     * Returns Trusted Shops id
+     *
+     * @return string
+     */
+    public function getTsId()
+    {
+        $sTsId = false;
+        $oConfig = $this->getConfig();
+        $aLangIds = $oConfig->getConfigParam( "aTsLangIds" );
+        $aActInfo = $oConfig->getConfigParam( "aTsActiveLangIds" );
+
+        // mapping with language id
+        $sLangId = oxLang::getInstance()->getLanguageAbbr();
+        if ( isset( $aActInfo[$sLangId] ) && $aActInfo[$sLangId] &&
+             isset( $aLangIds[$sLangId] ) && $aLangIds[$sLangId]
+           ) {
+            $sTsId = $aLangIds[$sLangId];
+        }
+
+        return $sTsId;
+    }
+
 }

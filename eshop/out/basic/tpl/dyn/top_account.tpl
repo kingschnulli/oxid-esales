@@ -27,7 +27,11 @@
     <dd>
         [{ oxmultilang ident="INC_CMP_LOGIN_RIGHT_LOGGEDINAS" }]<br>
         <b>[{ $oxcmp_user->oxuser__oxfname->value}] [{$oxcmp_user->oxuser__oxlname->value}]</b><br>
+        [{if $oView->isConnectedWithFb()}]
+        <fb:login-button size="small" autologoutlink="true" length="short"></fb:login-button>
+        [{else}]
         <span class="btn"><a id="test_TopAccLogout" href="[{ $oViewConf->getLogoutLink() }]" rel="nofollow">[{ oxmultilang ident="INC_HEADER_LOGOUT" }]</a></span>
+        [{/if}]
     </dd>
 </dl>
 [{oxscript add="oxid.topnav('tm.account.dt','tm.account.dd');" }]

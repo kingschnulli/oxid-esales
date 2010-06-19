@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: articleseoTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: articleseoTest.php 28423 2010-06-18 10:19:22Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -649,7 +649,7 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
     public function testGetStdUrlVendor()
     {
         oxTestModules::addFunction( 'oxarticle', 'loadInLang', '{ return true; }');
-        oxTestModules::addFunction( 'oxarticle', 'getBaseStdLink', '{ return "baseStdLink"; }');
+        oxTestModules::addFunction( 'oxarticle', 'getBaseStdLink( $iLang, $blAddId = true, $blFull = true )', '{ return "baseStdLink"; }');
 
         $oView = $this->getMock( "Article_Seo", array( "getListType", "getSelectedCategoryId", "getActCatType", "getTag" ) );
         $oView->expects( $this->once() )->method( "getActCatType" )->will( $this->returnValue( "oxvendor" ) );
@@ -668,7 +668,7 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
     public function testGetStdUrlManufacturer()
     {
         oxTestModules::addFunction( 'oxarticle', 'loadInLang', '{ return true; }');
-        oxTestModules::addFunction( 'oxarticle', 'getBaseStdLink', '{ return "baseStdLink"; }');
+        oxTestModules::addFunction( 'oxarticle', 'getBaseStdLink( $iLang, $blAddId = true, $blFull = true )', '{ return "baseStdLink"; }');
 
         $oView = $this->getMock( "Article_Seo", array( "getListType", "getSelectedCategoryId", "getActCatType", "getTag" ) );
         $oView->expects( $this->once() )->method( "getActCatType" )->will( $this->returnValue( "oxmanufacturer" ) );
@@ -687,7 +687,7 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
     public function testGetStdUrlTag()
     {
         oxTestModules::addFunction( 'oxarticle', 'loadInLang', '{ return true; }');
-        oxTestModules::addFunction( 'oxarticle', 'getBaseStdLink', '{ return "baseStdLink"; }');
+        oxTestModules::addFunction( 'oxarticle', 'getBaseStdLink( $iLang, $blAddId = true, $blFull = true )', '{ return "baseStdLink"; }');
 
         $oView = $this->getMock( "Article_Seo", array( "getListType", "getSelectedCategoryId", "getActCatType", "getTag" ) );
         $oView->expects( $this->once() )->method( "getActCatType" )->will( $this->returnValue( "oxtag" ) );
@@ -706,7 +706,7 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
     public function testGetStdUrlDefault()
     {
         oxTestModules::addFunction( 'oxarticle', 'loadInLang', '{ return true; }');
-        oxTestModules::addFunction( 'oxarticle', 'getBaseStdLink', '{ return "baseStdLink"; }');
+        oxTestModules::addFunction( 'oxarticle', 'getBaseStdLink( $iLang, $blAddId = true, $blFull = true )', '{ return "baseStdLink"; }');
 
         $oView = $this->getMock( "Article_Seo", array( "getListType", "getSelectedCategoryId", "getActCatType", "getTag" ) );
         $oView->expects( $this->once() )->method( "getActCatType" )->will( $this->returnValue( "oxany" ) );

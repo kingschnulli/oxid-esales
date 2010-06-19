@@ -130,4 +130,9 @@
 
 [{ oxcontent ident="oxuserorderemailendplain" }]
 
+[{if $oViewConf->showTs("ORDEREMAIL") && $oViewConf->getTsId() }]
+[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TS_RATINGS_RATEUS" }]
+[{ $oViewConf->getTsRatingUrl() }]
+[{/if}]
+
 [{ oxcontent ident="oxemailfooterplain" }]

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticle.php 28369 2010-06-16 11:35:32Z sarunas $
+ * @version   SVN: $Id: oxseoencoderarticle.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 /**
@@ -124,7 +124,19 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 $sSeoUri = $this->_processSeoUrl( $sSeoUri . $sTitle, $oArticle->getId(), $iLang );
 
                 $aStdParams = array( 'recommid' => $oRecomm->getId(), 'listtype' => $this->_getListType() );
-                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink( $iLang, $aStdParams ), $sSeoUri, $iLang, null, 0, $oRecomm->getId() );
+                $this->_saveToDb( 
+                            'oxarticle',
+                            $oArticle->getId(),
+                            oxUtilsUrl::getInstance()->appendUrl(
+                                    $oArticle->getBaseStdLink( $iLang ),
+                                    $aStdParams
+                            ),
+                            $sSeoUri,
+                            $iLang,
+                            null,
+                            0,
+                            $oRecomm->getId()
+                        );
             }
         }
         return $sSeoUri;
@@ -225,7 +237,19 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                             $oArticle->getId(), $iLang
                         );
         $sCatId = $oCategory->getId();
-        $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink( $iLang, array( 'cnid' => $sCatId ) ), $sSeoUri, $iLang, null, 0, $sCatId);
+        $this->_saveToDb(
+                    'oxarticle',
+                    $oArticle->getId(),
+                    oxUtilsUrl::getInstance()->appendUrl(
+                            $oArticle->getBaseStdLink( $iLang ),
+                            array( 'cnid' => $sCatId )
+                    ),
+                    $sSeoUri,
+                    $iLang,
+                    null,
+                    0,
+                    $sCatId
+                );
 
         stopProfile(__FUNCTION__);
 
@@ -323,7 +347,16 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 $sSeoUri = $this->_processSeoUrl( $this->_prepareArticleTitle( $oArticle ), $oArticle->getId(), $iLang );
 
                 // save default article url
-                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink( $iLang ), $sSeoUri, $iLang, null, 0, '' );
+                $this->_saveToDb(
+                        'oxarticle',
+                        $oArticle->getId(),
+                        $oArticle->getBaseStdLink( $iLang ),
+                        $sSeoUri,
+                        $iLang,
+                        null,
+                        0,
+                        ''
+                    );
             }
         }
 
@@ -399,7 +432,19 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 $sSeoUri = $this->_processSeoUrl( $sSeoUri . $sTitle, $oArticle->getId(), $iLang );
 
                 $aStdParams = array( 'cnid' => "v_".$oVendor->getId(), 'listtype' => $this->_getListType() );
-                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink( $iLang, $aStdParams ), $sSeoUri, $iLang, null, 0, $oVendor->getId() );
+                $this->_saveToDb(
+                        'oxarticle',
+                        $oArticle->getId(),
+                        oxUtilsUrl::getInstance()->appendUrl(
+                                $oArticle->getBaseStdLink( $iLang ),
+                                $aStdParams
+                        ),
+                        $sSeoUri,
+                        $iLang,
+                        null,
+                        0,
+                        $oVendor->getId()
+                    );
             }
 
             stopProfile(__FUNCTION__);
@@ -463,7 +508,19 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 $sSeoUri = $this->_processSeoUrl( $sSeoUri . $sTitle, $oArticle->getId(), $iLang );
 
                 $aStdParams = array( 'mnid' => $oManufacturer->getId(), 'listtype' => $this->_getListType() );
-                $this->_saveToDb( 'oxarticle', $oArticle->getId(), $oArticle->getStdLink( $iLang, $aStdParams ), $sSeoUri, $iLang, null, 0, $oManufacturer->getId() );
+                $this->_saveToDb(
+                        'oxarticle',
+                        $oArticle->getId(),
+                        oxUtilsUrl::getInstance()->appendUrl(
+                                $oArticle->getBaseStdLink( $iLang ),
+                                $aStdParams
+                        ),
+                        $sSeoUri,
+                        $iLang,
+                        null,
+                        0,
+                        $oManufacturer->getId()
+                    );
             }
 
             stopProfile(__FUNCTION__);

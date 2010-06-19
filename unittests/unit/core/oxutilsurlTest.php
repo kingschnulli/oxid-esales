@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsurlTest.php 28210 2010-06-08 08:54:31Z arvydas $
+ * @version   SVN: $Id: oxutilsurlTest.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -136,23 +136,32 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         $aBaseUrlParams = array( "param1" => "value1", "param2" => "value2" );
 
         $oUtils = new oxUtilsUrl();
+        $this->assertEquals( '?param1=value1&amp;param2=value2&amp;', $oUtils->appendUrl( $sTestUrl, $aBaseUrlParams ) );
+    }
+
+    public function testAppendUrlProtected()
+    {
+        $sTestUrl = '';
+        $aBaseUrlParams = array( "param1" => "value1", "param2" => "value2" );
+
+        $oUtils = new oxUtilsUrl();
         $this->assertEquals( '?param1=value1&amp;param2=value2&amp;', $oUtils->UNITappendUrl( $sTestUrl, $aBaseUrlParams ) );
     }
 
     public function testProcessUrl()
     {
-        $oUtils = $this->getMock( "oxUtilsUrl", array( "_appendUrl", "getBaseAddUrlParams" ) );
+        $oUtils = $this->getMock( "oxUtilsUrl", array( "appendUrl", "getBaseAddUrlParams" ) );
         $oUtils->expects( $this->once() )->method( 'getBaseAddUrlParams' );
-        $oUtils->expects( $this->once() )->method( '_appendUrl' )->will( $this->returnValue( "appendedUrl" ) );
+        $oUtils->expects( $this->once() )->method( 'appendUrl' )->will( $this->returnValue( "appendedUrl" ) );
 
         $this->assertEquals( "appendedUrl", $oUtils->processUrl( "" ) );
     }
 
     public function testProcessSeoUrl()
     {
-        $oUtils = $this->getMock( "oxUtilsUrl", array( "_appendUrl", "getAddUrlParams" ) );
+        $oUtils = $this->getMock( "oxUtilsUrl", array( "appendUrl", "getAddUrlParams" ) );
         $oUtils->expects( $this->once() )->method( 'getAddUrlParams' );
-        $oUtils->expects( $this->once() )->method( '_appendUrl' )->will( $this->returnValue( "appendedUrl" ) );
+        $oUtils->expects( $this->once() )->method( 'appendUrl' )->will( $this->returnValue( "appendedUrl" ) );
 
         $this->assertEquals( "appendedUrl", $oUtils->processSeoUrl( "" ) );
     }
@@ -163,9 +172,9 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         $aBaseUrlParams = array( "param1" => "value1", "param2" => "value2" );
         $aAddParams = array( "param3" => "value3" );
 
-        $oUtils = $this->getMock( "oxUtilsUrl", array( "_appendUrl", "getAddUrlParams" ) );
+        $oUtils = $this->getMock( "oxUtilsUrl", array( "appendUrl", "getAddUrlParams" ) );
         $oUtils->expects( $this->once() )->method( 'getAddUrlParams' )->will( $this->returnValue( $aAddParams ) );
-        $oUtils->expects( $this->once() )->method( '_appendUrl' )->with( $this->equalTo( "" ), $this->equalTo( array_merge( $aAddParams, $aBaseUrlParams ) ) )->will( $this->returnValue( "appendedUrl" ) );
+        $oUtils->expects( $this->once() )->method( 'appendUrl' )->with( $this->equalTo( "" ), $this->equalTo( array_merge( $aAddParams, $aBaseUrlParams ) ) )->will( $this->returnValue( "appendedUrl" ) );
 
         $this->assertEquals( "appendedUrl?lang=1", $oUtils->processStdUrl( "", $aBaseUrlParams, 1, true ) );
     }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodermanufacturerTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxseoencodermanufacturerTest.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -193,7 +193,15 @@ class Unit_Core_oxSeoEncoderManufacturerTest extends OxidTestCase
         $oManufacturer->oxmanufacturers__oxtitle = new oxField('root', oxField::T_RAW);
 
         $oEncoder = $this->getMock( 'oxSeoEncoderManufacturer', array( '_saveToDb' ) );
-        $oEncoder->expects( $this->once() )->method('_saveToDb')->with( $this->equalTo( 'oxmanufacturer'), $this->equalTo( 'root' ), $this->equalTo( $oManufacturer->getStdLink() ), $this->equalTo( 'en/root/' ), $this->equalTo( $oManufacturer->getLanguage() ) );
+        $oEncoder->expects( $this->once() )
+                ->method('_saveToDb')
+                ->with(
+                        $this->equalTo( 'oxmanufacturer'),
+                        $this->equalTo( 'root' ),
+                        $this->equalTo( $oManufacturer->getBaseStdLink(1) ),
+                        $this->equalTo( 'en/root/' ),
+                        $this->equalTo( $oManufacturer->getLanguage() )
+                );
 
         $sUrl    = 'en/root/';
         $sSeoUrl = $oEncoder->getManufacturerUri( $oManufacturer );
@@ -281,7 +289,15 @@ class Unit_Core_oxSeoEncoderManufacturerTest extends OxidTestCase
         $oManufacturer->oxmanufacturers__oxtitle = new oxField('root', oxField::T_RAW);
 
         $oEncoder = $this->getMock( 'oxSeoEncoderManufacturer', array( '_saveToDb' ) );
-        $oEncoder->expects( $this->once() )->method('_saveToDb')->with( $this->equalTo( 'oxmanufacturer' ), $this->equalTo( 'root' ), $this->equalTo( $oManufacturer->getStdLink(1) ), $this->equalTo( 'en/By-Brand-Manufacturer/' ), $this->equalTo( 1 ) );
+        $oEncoder->expects( $this->once() )
+                ->method('_saveToDb')
+                ->with(
+                        $this->equalTo( 'oxmanufacturer' ),
+                        $this->equalTo( 'root' ),
+                        $this->equalTo( $oManufacturer->getBaseStdLink(1) ),
+                        $this->equalTo( 'en/By-Brand-Manufacturer/' ),
+                        $this->equalTo( 1 )
+                );
 
         $sUrl    = 'en/By-Brand-Manufacturer/';
         $sSeoUrl = $oEncoder->getManufacturerUri( $oManufacturer, 1 );

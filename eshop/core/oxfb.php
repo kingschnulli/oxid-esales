@@ -22,7 +22,14 @@
  * @version   SVN: $Id: oxopenid.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
-require_once "facebook/facebook.php";
+
+try {
+    include_once getShopBasePath() . "core/facebook/facebook.php";
+} catch ( Exception $oEx ) {
+    // skipping class includion if curl or json is not active
+    oxConfig::getInstance()->setConfigParam( "bl_showFbConnect", false );
+    return;
+}
 
 error_reporting($iOldErrorReproting);
 

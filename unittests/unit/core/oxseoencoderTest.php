@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 28026 2010-05-31 11:11:32Z arvydas $
+ * @version   SVN: $Id: oxseoencoderTest.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1435,20 +1435,20 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $oE->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
 
         $this->assertEquals( 'aa?a=2', $oE->UNITtrimUrl( $sBaseUrl . 'aa?sid=as23.&a=2', 0 ) );
-        $this->assertEquals( 'aa?', $oE->UNITtrimUrl( $sBaseUrl . 'aa?sid=as23.', 1 ) );
-        $this->assertEquals( 'aa?', $oE->UNITtrimUrl( $sBaseUrl .'aa?sid=as23.&', 1 ) );
+        $this->assertEquals( 'aa', $oE->UNITtrimUrl( $sBaseUrl . 'aa?sid=as23.', 1 ) );
+        $this->assertEquals( 'aa', $oE->UNITtrimUrl( $sBaseUrl .'aa?sid=as23.&', 1 ) );
 
         $this->assertEquals( 'aa?a=2', $oE->UNITtrimUrl( $sBaseUrl . 'aa?force_sid=as23.&a=2', 0 ) );
-        $this->assertEquals( 'aa?', $oE->UNITtrimUrl( $sBaseUrl . 'aa?force_sid=as23.', 1 ) );
-        $this->assertEquals( 'aa?', $oE->UNITtrimUrl( $sBaseUrl .'aa?force_sid=as23.&', 1 ) );
-        $this->assertEquals( 'aa?force_something=1&', $oE->UNITtrimUrl( $sBaseUrl .'aa?force_something=1&sid=as23.&', 1 ) );
+        $this->assertEquals( 'aa', $oE->UNITtrimUrl( $sBaseUrl . 'aa?force_sid=as23.', 1 ) );
+        $this->assertEquals( 'aa', $oE->UNITtrimUrl( $sBaseUrl .'aa?force_sid=as23.&', 1 ) );
+        $this->assertEquals( 'aa?force_something=1', $oE->UNITtrimUrl( $sBaseUrl .'aa?force_something=1&sid=as23.&', 1 ) );
         $this->assertEquals( 'index.php?cl=details&amp;anid=762b1c44c95cd81dd1396b089982a568', $oE->UNITtrimUrl( $sBaseUrl .'index.php?force_sid=as23&cl=details&amp;anid=762b1c44c95cd81dd1396b089982a568', 1 ) );
         //#M1423: Problems with article seo url, if admin is ssl
         $this->assertEquals( 'index.php?cl=details&amp;anid=762b1c44c95cd81dd1396b089982a568', $oE->UNITtrimUrl( $sBaseUrl .'index.php?force_admin_sid=as23&cl=details&amp;anid=762b1c44c95cd81dd1396b089982a568', 1 ) );
 
         $this->assertEquals( 'aa?a=2', $oE->UNITtrimUrl( $sSslUrl . 'aa?sid=as23.&a=2', 0 ) );
-        $this->assertEquals( 'aa?', $oE->UNITtrimUrl( $sSslUrl . 'aa?sid=as23.', 1 ) );
-        $this->assertEquals( 'aa?', $oE->UNITtrimUrl( $sSslUrl .'aa?sid=as23.&', 1 ) );
+        $this->assertEquals( 'aa', $oE->UNITtrimUrl( $sSslUrl . 'aa?sid=as23.', 1 ) );
+        $this->assertEquals( 'aa', $oE->UNITtrimUrl( $sSslUrl .'aa?sid=as23.&', 1 ) );
     }
 
     public function testSaveToDbCreatesGoodMd5()

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 28383 2010-06-16 12:41:35Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxuser.php 28452 2010-06-18 14:02:33Z rimvydas.paskevicius $
  */
 
 /**
@@ -439,6 +439,7 @@ class oxUser extends oxBase
      */
     public function save()
     {
+        $myConfig  = oxConfig::getInstance();
 
         $blAddRemark = false;
         if ( $this->oxuser__oxpassword->value && $this->oxuser__oxregister->value < 1 ) {
@@ -456,9 +457,11 @@ class oxUser extends oxBase
         }
 
         // checking if user Facebook ID should be updated
-        $oFb = oxFb::getInstance();
-        if ( $oFb->isConnected() && $oFb->getUser() ) {
-             $this->oxuser__oxfbid = new oxField( $oFb->getUser() );
+        if ( $myConfig->getConfigParam( "bl_showFbConnect" ) ) {
+            $oFb = oxFb::getInstance();
+            if ( $oFb->isConnected() && $oFb->getUser() ) {
+                 $this->oxuser__oxfbid = new oxField( $oFb->getUser() );
+            }
         }
 
         $blRet = parent::save();
@@ -1423,7 +1426,7 @@ class oxUser extends oxBase
 
         // Checking if user is connected via Facebook connect.
         // If yes, trying to login user using user Facebook ID
-        if ( !$sUserID ) {
+        if ( $myConfig->getConfigParam( "bl_showFbConnect") && !$sUserID ) {
             $oFb = oxFb::getInstance();
             if ( $oFb->isConnected() && $oFb->getUser() ) {
                 $sUserSelect = "oxuser.oxfbid = " . $oDB->quote( $oFb->getUser() );

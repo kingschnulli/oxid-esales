@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 28200 2010-06-07 15:40:54Z michael.keiluweit $
+ * @version   SVN: $Id: oxsessionTest.php 28448 2010-06-18 12:52:09Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -244,7 +244,22 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $oConfig = $this->getMock( "oxconfig", array( "isCurrentUrl" ) );
         $oConfig->expects( $this->once() )->method( 'isCurrentUrl')->with( $this->equalTo( $sUrl ) )->will( $this->returnValue( false ) );
 
-        $oSession = $this->getMock( "oxSession", array( "getConfig" ) );
+        $oSession = $this->getMock( "oxSession", array( "getConfig", '_getSessionUseCookies' ) );
+        $oSession->expects( $this->once() )->method( '_getSessionUseCookies')->will( $this->returnValue( false ) );
+        $oSession->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+        $this->assertTrue( $oSession->isSidNeeded( $sUrl ) );
+    }
+
+    public function testIsSidNeededPassingCustomUrlChangeSsl()
+    {
+        $sUrl = "https://someurl";
+
+        $oConfig = $this->getMock( "oxconfig", array( "isSsl" ) );
+        $oConfig->expects( $this->once() )->method( 'isSsl')->will( $this->returnValue( false ) );
+
+        $oSession = $this->getMock( "oxSession", array( "getConfig", '_getSessionUseCookies', '_getCookieSid' ) );
+        $oSession->expects( $this->once() )->method( '_getSessionUseCookies')->will( $this->returnValue( true ) );
+        $oSession->expects( $this->once() )->method( '_getCookieSid')->will( $this->returnValue( true ) );
         $oSession->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
         $this->assertTrue( $oSession->isSidNeeded( $sUrl ) );
     }

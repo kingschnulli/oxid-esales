@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercontent.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxseoencodercontent.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 /**
@@ -110,7 +110,7 @@ class oxSeoEncoderContent extends oxSeoEncoder
             $sSeoUrl .= $this->_prepareTitle( $oCont->oxcontents__oxtitle->value ) . '/';
             $sSeoUrl  = $this->_processSeoUrl( $sSeoUrl, $oCont->getId(), $iLang );
 
-            $this->_saveToDb( 'oxcontent', $oCont->getId(), $oCont->getStdLink(), $sSeoUrl, $iLang );
+            $this->_saveToDb( 'oxcontent', $oCont->getId(), $oCont->getBaseStdLink($iLang), $sSeoUrl, $iLang );
         }
         return $sSeoUrl;
     }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticleTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxseoencoderarticleTest.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -605,9 +605,9 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
 
     public function testGetArticleMainUriHasNoCategory()
     {
-        $oArticle = $this->getMock( "oxarticle", array( "getId", "getStdLink" ));
+        $oArticle = $this->getMock( "oxarticle", array( "getId", "getBaseStdLink" ));
         $oArticle->expects( $this->atLeastOnce() )->method( 'getId' )->will( $this->returnValue( 'testId' ) );
-        $oArticle->expects( $this->once() )->method( 'getStdLink' )->with( $this->equalTo( 0 ) )->will( $this->returnValue( 'testStdLink' ) );
+        $oArticle->expects( $this->once() )->method( 'getBaseStdLink' )->with( $this->equalTo( 0 ) )->will( $this->returnValue( 'testBaseStdLink' ) );
 
         $oEncoder = $this->getMock( "oxseoencoderarticle", array( "_loadFromDb", "_getProductForLang", "_createArticleCategoryUri",
                                                                   "_processSeoUrl", "_prepareArticleTitle", "_saveToDb") );
@@ -616,7 +616,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         $oEncoder->expects( $this->once() )->method( '_getProductForLang' )->with( $this->equalTo( $oArticle ), $this->equalTo( 0 ))->will( $this->returnValue( $oArticle ) );
         $oEncoder->expects( $this->once() )->method( '_prepareArticleTitle' )->with( $this->equalTo( $oArticle ) )->will( $this->returnValue( 'testArticleTitle' ) );
         $oEncoder->expects( $this->once() )->method( '_processSeoUrl' )->with( $this->equalTo( 'testArticleTitle' ), $this->equalTo( 'testId' ), $this->equalTo( 0 ) )->will( $this->returnValue( 'testSeoUri' ) );
-        $oEncoder->expects( $this->once() )->method( '_saveToDb' )->with( $this->equalTo( 'oxarticle' ), $this->equalTo( 'testId' ), $this->equalTo( 'testStdLink' ), $this->equalTo( 'testSeoUri' ), $this->equalTo( 0 ), $this->equalTo( null ), $this->equalTo( 0 ), $this->equalTo( '' ));
+        $oEncoder->expects( $this->once() )->method( '_saveToDb' )->with( $this->equalTo( 'oxarticle' ), $this->equalTo( 'testId' ), $this->equalTo( 'testBaseStdLink' ), $this->equalTo( 'testSeoUri' ), $this->equalTo( 0 ), $this->equalTo( null ), $this->equalTo( 0 ), $this->equalTo( '' ));
 
         $oEncoder->expects( $this->never() )->method( '_createArticleCategoryUri' );
 
@@ -1204,13 +1204,19 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
     public function testCreateArticleCategoryUri()
     {
         oxTestModules::addFunction('oxSeoEncoderCategory', 'getCategoryUri($c, $l)', '{return "caturl".$c->getId().$l;}');
-        $oA   = $this->getMock('oxarticle', array('getLanguage', 'getId', 'getStdLink'));
+        $oA   = $this->getMock('oxarticle', array('getLanguage', 'getId', 'getBaseStdLink'));
         $oA->expects($this->never())->method('getLanguage');
         $oA->expects($this->any())->method('getId')->will($this->returnValue('articleId'));
-        $oA->expects($this->any())->method('getStdLink')->with(
-                $this->equalTo(1),
+        $oA->expects($this->any())->method('getBaseStdLink')->with(
+                $this->equalTo(1)
+            )->will($this->returnValue('articleBaseStdLink'));
+
+        $oUtilsUrl = $this->getMock('oxutilsurl', array('appendUrl'));
+        $oUtilsUrl->expects($this->any())->method('appendUrl')->with(
+                $this->equalTo('articleBaseStdLink'),
                 $this->equalTo(array('cnid'=>'catId'))
             )->will($this->returnValue('articleStdLink'));
+        oxTestModules::addModuleObject('oxUtilsUrl', $oUtilsUrl);
 
         $oC   = $this->getMock('oxcategory', array('getId'));
         $oC->expects($this->any())->method('getId')->will($this->returnValue('catId'));

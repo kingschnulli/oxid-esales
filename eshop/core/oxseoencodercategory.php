@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercategory.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxseoencodercategory.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 /**
@@ -161,7 +161,7 @@ class oxSeoEncoderCategory extends oxSeoEncoder
                 }
 
                 $aCacheMap[$oCat->getId()] = $sTitle;
-                $aStdLinks[$oCat->getId()] = $oCat->getStdLink();
+                $aStdLinks[$oCat->getId()] = $oCat->getBaseStdLink($iLang);
 
                 // load parent
                 $oCat = $oCat->getParentCategory();
@@ -196,7 +196,7 @@ class oxSeoEncoderCategory extends oxSeoEncoder
         if (!isset($iLang)) {
             $iLang = $oCategory->getLanguage();
         }
-        $sStdUrl = $oCategory->getStdLink() . '&amp;pgNr=' . $iPage;
+        $sStdUrl = $oCategory->getBaseStdLink($iLang) . '&amp;pgNr=' . $iPage;
         $sParams = (int) ($iPage + 1);
 
         $sStdUrl = $this->_trimUrl( $sStdUrl, $iLang );

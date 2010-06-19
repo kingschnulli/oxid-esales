@@ -174,7 +174,7 @@ class oxUtilsUrl extends oxSuperCfg
      *
      * @return string
      */
-    protected function _appendUrl( $sUrl, $aAddParams )
+    public function appendUrl( $sUrl, $aAddParams )
     {
         $oStr = getStr();
         $sSep = '&amp;';
@@ -191,6 +191,22 @@ class oxUtilsUrl extends oxSuperCfg
             }
         }
         return $sUrl ? $sUrl.$sSep : '';
+    }
+
+    /**
+     * Appends url with given parameters
+     *
+     * @param atring $sUrl       url to append
+     * @param array  $aAddParams parameters to append
+     *
+     * @deprecated
+     * @see oxUtilsUrl::appendUrl()
+     *
+     * @return string
+     */
+    protected function _appendUrl( $sUrl, $aAddParams )
+    {
+        return $this->appendUrl( $sUrl, $aAddParams );
     }
 
     /**
@@ -234,7 +250,7 @@ class oxUtilsUrl extends oxSuperCfg
 
         $ret = oxSession::getInstance()->processUrl(
                     oxLang::getInstance()->processUrl(
-                        $this->_appendUrl(
+                        $this->appendUrl(
                                 $sUrl,
                                 $aAddParams
                         ),
@@ -257,7 +273,7 @@ class oxUtilsUrl extends oxSuperCfg
      */
     public function processSeoUrl( $sUrl )
     {
-        $ret = $this->getSession()->processUrl( $this->_appendUrl( $sUrl, $this->getAddUrlParams() ) );
+        $ret = $this->getSession()->processUrl( $this->appendUrl( $sUrl, $this->getAddUrlParams() ) );
         $ret = getStr()->preg_replace('/(\?|&(amp;)?)$/', '', $ret);
         return $ret;
     }

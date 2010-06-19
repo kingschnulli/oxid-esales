@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodervendor.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxseoencodervendor.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 /**
@@ -116,7 +116,7 @@ class oxSeoEncoderVendor extends oxSeoEncoder
             $sSeoUrl  = $this->_processSeoUrl( $sSeoUrl, $oVendor->getId(), $iLang );
 
             // save to db
-            $this->_saveToDb( 'oxvendor', $oVendor->getId(), $oVendor->getStdLink(), $sSeoUrl, $iLang );
+            $this->_saveToDb( 'oxvendor', $oVendor->getId(), $oVendor->getBaseStdLink($iLang), $sSeoUrl, $iLang );
         }
         return $sSeoUrl;
     }
@@ -136,7 +136,7 @@ class oxSeoEncoderVendor extends oxSeoEncoder
         if (!isset($iLang)) {
             $iLang = $oVendor->getLanguage();
         }
-        $sStdUrl = $oVendor->getStdLink() . '&amp;pgNr=' . $iPage;
+        $sStdUrl = $oVendor->getBaseStdLink($iLang) . '&amp;pgNr=' . $iPage;
         $sParams = (int) ($iPage + 1);
 
         $sStdUrl = $this->_trimUrl( $sStdUrl, $iLang );

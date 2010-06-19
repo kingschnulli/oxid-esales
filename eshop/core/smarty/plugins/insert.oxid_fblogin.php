@@ -41,7 +41,7 @@ function smarty_insert_oxid_fblogin($params, &$smarty)
     $myConfig  = oxConfig::getInstance();
     $oView = $myConfig->getActiveView();
 
-    if ( !$myConfig->getParameter( "fblogin") ) {
+    if ( !$myConfig->getConfigParam( "bl_showFbConnect") || !$myConfig->getParameter( "fblogin") ) {
         return;
     }
 

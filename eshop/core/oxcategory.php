@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategory.php 28204 2010-06-08 06:36:11Z michael.keiluweit $
+ * @version   SVN: $Id: oxcategory.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 /**
@@ -598,6 +598,10 @@ class oxCategory extends oxI18n implements oxIUrl
      */
     public function getBaseStdLink( $iLang, $blAddId = true, $blFull = true )
     {
+        if ( isset( $this->oxcategories__oxextlink ) && $this->oxcategories__oxextlink->value ) {
+            return  $this->oxcategories__oxextlink->value;
+        }
+
         $sUrl = '';
         if ( $blFull ) {
             //always returns shop url, not admin

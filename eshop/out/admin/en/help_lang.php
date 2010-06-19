@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28363 2010-06-16 08:31:10Z vilma $
+ * @version   SVN: $Id: help_lang.php 28424 2010-06-18 10:50:51Z arvydas $
  */
 
 /**
@@ -537,4 +537,14 @@ $aLang =  array(
 'HELP_VOUCHERSERIE_MAIN_VOUCHERNUM'             =>  'Here you can enter a coupon number. This number is used when creating new coupons if <span class="navipath_or_inputname">Random Numbers</span> is deactivated. All Coupons get the same coupon number.',
 
 'HELP_WRAPPING_MAIN_PICTURE'                    =>  'With <span class="navipath_or_inputname">Picture</span> and <span class="navipath_or_inputname">Upload Picture</span> you can upload a picture for the gift wrapping. In <span class="navipath_or_inputname">Upload Picture</span>, select the picture to upload. When clicking on <span class="navipath_or_inputname">Save</span>, the picture is uploaded. After uploading, the filename is shown in <span class="navipath_or_inputname">Picture</span>.',
+
+
+
+'HELP_DYN_TRUSTED_RATINGS_USER'                 => '[tr] Trusted Shops user login name',
+'HELP_DYN_TRUSTED_RATINGS_PASS'                 => '[tr] Trusted Shops user password',
+'HELP_DYN_TRUSTED_RATINGS_ID'                   => '[tr] Trusted Shops ID (for language). Green marker shows that language widget is enabled and verified',
+'HELP_DYN_TRUSTED_RATINGS_WIDGET'               => '[tr] To enable Trusted Shop widget switch this option on.',
+'HELP_DYN_TRUSTED_RATINGS_THANKYOU'             => '[tr] If switched on "Order Complete" ("Thankyou") page will contain rating button leading to Trusted Shop page',
+'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'           => '[tr] If switched on "Order Confirmation" email will contain rating button leading to Trusted Shop page',
+'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'       => '[tr] If switched on "Order Send" email will contain rating button leading to Trusted Shop page',
 );

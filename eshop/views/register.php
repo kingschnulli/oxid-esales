@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: register.php 28377 2010-06-16 12:23:51Z rimvydas.paskevicius $
+ * @version   SVN: $Id: register.php 28452 2010-06-18 14:02:33Z rimvydas.paskevicius $
  */
 
 /**
@@ -85,7 +85,10 @@ class Register extends User
             $sTemplate = $this->_sThisTemplate;
         }
 
-        $this->fillFormWithFacebookData();
+
+        if ( $this->getConfig()->getConfigParam( "bl_showFbConnect" ) ) {
+            $this->_fillFormWithFacebookData();
+        }
 
         return $sTemplate;
     }
@@ -218,19 +221,18 @@ class Register extends User
     /**
      * Fills user form with date taken from Facebook
      *
-     * @return int
+     * @return null
      */
-    public function fillFormWithFacebookData()
+    protected function _fillFormWithFacebookData()
     {
         // Create our Application instance.
         $oFacebook = oxFb::getInstance();
 
         if ( $oFacebook->isConnected() ) {
-            $uid = $oFacebook->getUser();
-            $me  = $oFacebook->api('/me');
+            $aMe  = $oFacebook->api('/me');
 
-            $aInvAdr["oxuser__oxfname"] = $me["first_name"];
-            $aInvAdr["oxuser__oxlname"] = $me["last_name"];
+            $aInvAdr["oxuser__oxfname"] = $aMe["first_name"];
+            $aInvAdr["oxuser__oxlname"] = $aMe["last_name"];
 
             $this->_aViewData['invadr'] = $aInvAdr;
         }

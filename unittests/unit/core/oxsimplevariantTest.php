@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariantTest.php 27649 2010-05-10 09:03:07Z vilma $
+ * @version   SVN: $Id: oxsimplevariantTest.php 28421 2010-06-18 08:54:27Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -56,6 +56,24 @@ class Unit_Core_oxsimpleVariantTest extends OxidTestCase
         $oVariant->expects( $this->once() )->method( 'getSelectLists' )->will( $this->returnValue( "testSelLists" ) );
 
         $this->assertEquals( "testSelLists", $oVariant->aSelectlist );
+    }
+
+    /**
+     * oxSimpleVariant::getStdLink() test case
+     *
+     * @return
+     */
+    public function testGetBaseStdLink()
+    {
+        $oArticle = new oxArticle();
+        $oArticle->setId( "testArticle" );
+
+        $oVariant = new oxSimpleVariant();
+        $oVariant->setId( "testArticle" );
+
+        $this->assertEquals( $oArticle->getBaseStdLink( 0 ), $oVariant->getBaseStdLink( 0 ) );
+        $this->assertEquals( $oArticle->getBaseStdLink( 1 ), $oVariant->getBaseStdLink( 1 ) );
+        $this->assertEquals( $oArticle->getBaseStdLink( 2, false, false ), $oVariant->getBaseStdLink( 2, false, false ) );
     }
 
     /**
