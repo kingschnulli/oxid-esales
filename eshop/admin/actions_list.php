@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: actions_list.php 28294 2010-06-11 09:54:44Z sarunas $
+ * @version   SVN: $Id: actions_list.php 28470 2010-06-19 12:49:59Z arvydas $
  */
 
 /**
@@ -50,8 +50,6 @@ class Actions_List extends oxAdminList
      * @var string
      */
     protected $_sDefSort = 'oxactions.oxtitle';
-    
-    
 
     /**
      * Calls parent::render() and returns name of template to render
@@ -80,11 +78,11 @@ class Actions_List extends oxAdminList
     {
         $sQ = parent::_prepareWhereQuery( $aWhere, $sqlFull );
         $sDisplayType = (int) oxConfig::getParameter( 'displaytype' );
+        $sTable = getViewName( "oxactions" );
 
         //searchong for empty oxfolder fields
         if ( $sDisplayType ) {
 
-            $sTable = getViewName( "oxactions" );
             $sNow   = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
 
             switch ( $sDisplayType ) {
@@ -100,6 +98,7 @@ class Actions_List extends oxAdminList
             }
         }
 
+
         return $sQ;
-    }    
+    }
 }

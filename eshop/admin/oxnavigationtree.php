@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnavigationtree.php 28290 2010-06-11 08:40:01Z michael.keiluweit $
+ * @version   SVN: $Id: oxnavigationtree.php 28471 2010-06-19 12:50:54Z arvydas $
  */
 
 /**

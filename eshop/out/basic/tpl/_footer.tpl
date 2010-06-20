@@ -1,7 +1,7 @@
         <div class="clear"></div>
         </div>
 
-    <div id="footer">
+        <div id="footer">
         <div class="bar copy">
             <div class="left" id="delivery_link">
                 [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
@@ -63,11 +63,10 @@
 [{ insert name="oxid_fblogin"}]
 [{/if}]
 
-[{if $scRootCatChanged}][{include file="inc/popup_scbasketexcl.tpl"}][{/if}]
+[{oxid_include_dynamic file="dyn/popup_scbasketexcl.tpl"}]
 [{oxscript include="oxid.js"}]
 
 [{ include file="inc/facebook/fb_init.tpl" }]
-
 
 [{oxscript}][{oxid_include_dynamic file="dyn/oxscript.tpl" }]
 <!--[if lt IE 7]><script type="text/javascript">oxid.popup.addShim();</script><![endif]-->

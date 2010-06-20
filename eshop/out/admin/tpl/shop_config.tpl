@@ -499,6 +499,7 @@ function showInvitations()
                       <option value="false" [{ $readonly}]>[{ oxmultilang ident="SHOP_CONFIG_NETPRICESHOPOFF" }]</option>
                       <option value="true" [{if ($confbools.blNetPriceShop)}]selected[{/if}] [{ $readonly}]>[{ oxmultilang ident="SHOP_CONFIG_NETPRICESHOPON" }]</option>
                     </select>
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_NETPRICESHOP" }]
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_NETPRICESHOP" }]

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: searchTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: searchTest.php 28473 2010-06-19 13:40:35Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,8 +37,15 @@ class Unit_Views_searchTest extends OxidTestCase
         $this->assertTrue( $oSearch->isEmptySearch() );
     }
 
-    public function testProcessListArticles()
+    /**
+     * search::_processListArticles() when seo is off
+     *
+     * @return null
+     */
+    public function testProcessListArticlesSeoOff()
     {
+        oxTestModules::addFunction('oxUtils', 'seoIsActive', '{ return false; }');
+
         $oArticle = $this->getMock( 'oxarticle', array( "appendStdLink", "appendLink" ) );
         $oArticle->expects( $this->once() )->method( 'appendStdLink')->with( $this->equalto( 'testStdParams' ) );
         $oArticle->expects( $this->once() )->method( 'appendLink')->with( $this->equalto( 'testStdParams' ) );
@@ -46,6 +53,32 @@ class Unit_Views_searchTest extends OxidTestCase
 
         $oArticle = $this->getMock( 'oxarticle', array( "appendStdLink", "appendLink" ) );
         $oArticle->expects( $this->once() )->method( 'appendStdLink')->with( $this->equalto( 'testStdParams' ) );
+        $oArticle->expects( $this->once() )->method( 'appendLink')->with( $this->equalto( 'testStdParams' ) );
+        $aArticleList[] = $oArticle;
+
+        $oSearchView = $this->getMock( 'search', array( 'getArticleList', "getAddUrlParams" ) );
+        $oSearchView->expects( $this->once() )->method( 'getArticleList')->will( $this->returnValue( $aArticleList ) );
+        $oSearchView->expects( $this->once() )->method( 'getAddUrlParams')->will( $this->returnValue( 'testStdParams' ) );
+
+        $oSearchView->UNITprocessListArticles();
+    }
+
+    /**
+     * search::_processListArticles() when seo is on
+     *
+     * @return null
+     */
+    public function testProcessListArticlesSeoOn()
+    {
+        oxTestModules::addFunction('oxUtils', 'seoIsActive', '{ return true; }');
+
+        $oArticle = $this->getMock( 'oxarticle', array( "appendStdLink", "appendLink" ) );
+        $oArticle->expects( $this->never() )->method( 'appendStdLink');
+        $oArticle->expects( $this->once() )->method( 'appendLink')->with( $this->equalto( 'testStdParams' ) );
+        $aArticleList[] = $oArticle;
+
+        $oArticle = $this->getMock( 'oxarticle', array( "appendStdLink", "appendLink" ) );
+        $oArticle->expects( $this->never() )->method( 'appendStdLink');
         $oArticle->expects( $this->once() )->method( 'appendLink')->with( $this->equalto( 'testStdParams' ) );
         $aArticleList[] = $oArticle;
 
@@ -152,7 +185,7 @@ class Unit_Views_searchTest extends OxidTestCase
         $n = $this->getMock('search', array(
             'isEmptySearch',
             'getArticleList',
-            'getSimilarRecommLists', 
+            'getSimilarRecommLists',
             'getSearchParamForHtml',
             'getSearchParam',
             'getSearchCatId',
@@ -271,7 +304,7 @@ class Unit_Views_searchTest extends OxidTestCase
         $this->assertEquals(false, oxNew('search')->UNITisSearchClass());
         modConfig::setParameter('cl', 'search');
         $this->assertEquals(true, oxNew('search')->UNITisSearchClass());
-        
+
     }
 
     public function testGetSearchManufacturer()

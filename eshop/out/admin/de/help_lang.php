@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28424 2010-06-18 10:50:51Z arvydas $
+ * @version   SVN: $Id: help_lang.php 28460 2010-06-19 07:24:07Z arvydas $
  */
 
 /**
@@ -203,6 +203,8 @@ $aLang =  array(
 'HELP_SHOP_CONFIG_FBLIKE'                       =>  'Zeigt Facebooks \'Like button\' mit dem die Besucher Ihres Shops in Facebook bekannt geben, dass Sie Ihren Shop mögen.',
 
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT'  =>  '[tr]Show Facebook connect box which allows users to log in into eShop using theirs Facebook accunt data.',
+
+'HELP_SHOP_CONFIG_NETPRICESHOP'                 =>  'Aktivieren der Option schaltet die Nettopreisanzeige im Shop ein und ändert die Anordnung der Zeilen im Warenkorb.',
 
 'HELP_SHOP_MALL_MALLMODE'                       =>  'Hier stellen Sie ein, was auf der Startseite dieses eShops angezeigt werden soll: '.
                                                     '<ul><li><span class="navipath_or_inputname">Shop-Auswahlseite</span>: Eine Seite wird angezeigt, auf der Kunden zwischen den verschiedenen Shops wählen können.</li>' .

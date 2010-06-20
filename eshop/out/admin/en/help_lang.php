@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28424 2010-06-18 10:50:51Z arvydas $
+ * @version   SVN: $Id: help_lang.php 28460 2010-06-19 07:24:07Z arvydas $
  */
 
 /**
@@ -208,6 +208,8 @@ $aLang =  array(
 'HELP_SHOP_CONFIG_FBLIKE'                       =>  'Enables users to make connections to your pages and share content back to their friends on Facebook with one click.',
 
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT'  =>  'Show Facebook connect box which allows users to log in into eShop using theirs Facebook accunt data.',
+
+'HELP_SHOP_CONFIG_NETPRICESHOP'                 =>  'Enabled option switches prices shown in shop to netprices and changes basket layout.',
 
 'HELP_SHOP_MALL_MALLMODE'                       =>  'Here you can set what is shown as front page of this eShop:' .
                                                     '<ul><li><span class="navipath_or_inputname">Show shop selector</span>: A page where the different eShops can be selected is shown.</li>' .

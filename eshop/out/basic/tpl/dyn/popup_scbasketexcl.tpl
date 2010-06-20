@@ -1,4 +1,4 @@
-[{if $oxcmp_basket->getContents()}]
+[{if $scRootCatChanged && $oxcmp_basket->getContents()}]
 <div id="popup" class="popup">
 
     <strong>[{ oxmultilang ident="BASKET_EXCLUDE_HEAD" }]</strong>
