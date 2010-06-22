@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28460 2010-06-19 07:24:07Z arvydas $
+ * @version   SVN: $Id: help_lang.php 28511 2010-06-21 15:56:26Z rimvydas.paskevicius $
  */
 
 /**
@@ -207,7 +207,7 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_FBLIKE'                       =>  'Enables users to make connections to your pages and share content back to their friends on Facebook with one click.',
 
-'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT'  =>  'Show Facebook connect box which allows users to log in into eShop using theirs Facebook accunt data.',
+'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT'  =>  'Show Facebook connect box which allows users to log in into eShop using theirs Facebook accunt data. If user is logged in to his Facebook account he also will be automaticly logged in to eShop (if has an account there).',
 
 'HELP_SHOP_CONFIG_NETPRICESHOP'                 =>  'Enabled option switches prices shown in shop to netprices and changes basket layout.',
 
@@ -470,7 +470,7 @@ $aLang =  array(
 
 'HELP_GENIMPORT_REPEATIMPORT'                   =>  'If this setting is active, step one is shown after successful import so you can start the next import immediately.',
 
-
+'HELP_LANGUAGE_DEFAULT'                         => 'Default language is used when shop is unable to detect language in other ways: language id is not defined by URL, can\'t be detected by browser, is not defined in session etc. Default language can only be disabled, deleting it is <u>not possible</u>.',
 
 'HELP_PAYMENT_MAIN_SORT'                        =>  'In <span class="navipath_or_inputname">Sorting</span> you can specify the order in which the payment methods are to be displayed to users: The payment method with the lowest sort number is displayed on top.',
 
@@ -549,4 +549,10 @@ $aLang =  array(
 'HELP_DYN_TRUSTED_RATINGS_THANKYOU'             => '[tr] If switched on "Order Complete" ("Thankyou") page will contain rating button leading to Trusted Shop page',
 'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'           => '[tr] If switched on "Order Confirmation" email will contain rating button leading to Trusted Shop page',
 'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'       => '[tr] If switched on "Order Send" email will contain rating button leading to Trusted Shop page',
+'HELP_DYN_TRUSTED_TSID'                         => 'Trusted Shops ID of the online shop (for language).',
+'HELP_DYN_TRUSTED_USER'                         => 'Trusted Shops Webservice-Login',
+'HELP_DYN_TRUSTED_PASSWORD'                     => 'Trusted Shops Webservice-Password',
+'HELP_DYN_TRUSTED_TESTMODUS'                    => 'Test environment ("Sandbox") on. After completion of the certification Trusted Shops will send you login details by e-mail.',
+'HELP_DYN_TRUSTED_ACTIVE'                       => 'Check this option to display the Trusted Shops Seal on shop.',
+'HELP_DYN_TRUSTED_TSPAYMENT'                    => 'Assign the shop offered payment types at the appropriate payment to Trusted Store.',
 );

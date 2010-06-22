@@ -31,6 +31,29 @@ require_once getShopBasePath().'/setup/oxsetup.php';
  */
 class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
 {
+    protected $_sPathTranslated = null;
+    protected $_sScriptFilename = null;
+    protected $_sHttpReferer = null;
+    protected $_sHttpHost    = null;
+    protected $_sScriptName  = null;
+
+    /**
+     * Test setup
+     *
+     * @return nul;
+     */
+    protected function setUp()
+    {
+        // backup..
+        $this->_sPathTranslated = isset( $_SERVER['PATH_TRANSLATED']) ? $_SERVER['PATH_TRANSLATED'] : null;
+        $this->_sScriptFilename = isset( $_SERVER['SCRIPT_FILENAME'] ) ? $_SERVER['SCRIPT_FILENAME'] : null;
+        $this->_sHttpReferer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : null;
+        $this->_sHttpHost    = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : null;
+        $this->_sScriptName  = isset( $_SERVER['SCRIPT_NAME'] ) ? $_SERVER['SCRIPT_NAME'] : null;
+
+        parent::setUp();
+    }
+
     /**
      * Test teardown
      *
@@ -45,6 +68,13 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
         if ( isset( $_GET["testGetVarName"] ) ) {
             unset( $_GET["testGetVarName"] );
         }
+
+        // restore
+        $_SERVER['PATH_TRANSLATED'] = $this->_sPathTranslated;
+        $_SERVER['SCRIPT_FILENAME'] = $this->_sScriptFilename;
+        $_SERVER['HTTP_REFERER'] = $this->_sHttpReferer;
+        $_SERVER['HTTP_HOST']    = $this->_sHttpHost;
+        $_SERVER['SCRIPT_NAME']  = $this->_sScriptName;
 
         parent::tearDown();
     }
@@ -143,39 +173,16 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
      */
     public function testGetDefaultPathParams()
     {
-         $aParams['sShopDir'] = "";
-        $aParams['sShopURL'] = "";
+        $_SERVER['PATH_TRANSLATED'] = null;
+        $_SERVER['HTTP_REFERER']    = null;
+        $_SERVER['SCRIPT_FILENAME'] = "/var/www/ee440setup/setup/index.php";
+        $_SERVER['SCRIPT_NAME']     = "/ee440setup/setup/index.php";
+        $_SERVER['HTTP_HOST']       = "127.0.0.1:1001";
 
-        // try path translated
-        if ( isset( $_SERVER['PATH_TRANSLATED'])) {
-            $sFilepath = $_SERVER['PATH_TRANSLATED'];
-        } else {
-            $sFilepath = $_SERVER['SCRIPT_FILENAME'];
-        }
-
-        $aTemp = preg_split( "/\\\|\//", $sFilepath );
-        foreach ( $aTemp as $sDir ) {
-            if ( stristr( $sDir, "setup" ) ) {
-                break;
-            }
-            $aParams['sShopDir'] .= str_replace('\\', '/', $sDir) . "/";
-        }
+        // paths
+        $aParams['sShopDir'] = "/var/www/ee440setup/";
         $aParams['sCompileDir'] = $aParams['sShopDir'] . "tmp/";
-
-        // try referer
-        $sFilepath = @$_SERVER['HTTP_REFERER'];
-        if ( !isset( $sFilepath ) || !$sFilepath ) {
-            $sFilepath = "http://" . @$_SERVER['HTTP_HOST'] . @$_SERVER['SCRIPT_NAME'];
-        }
-
-        $aTemp = explode( "/", $sFilepath);
-        foreach ( $aTemp as $sDir) {
-            if ( stristr( $sDir, "setup" ) ) {
-                break;
-            }
-            $aParams['sShopURL'] .= $sDir . "/";
-        }
-
+        $aParams['sShopURL'] = "http://127.0.0.1:1001/ee440setup/";
 
         $oUtils = new oxSetupUtils();
         $this->assertEquals( $aParams, $oUtils->getDefaultPathParams() );

@@ -8,5 +8,5 @@
     </div>
   [{/if}]
   <div align="center" style="margin: 10px 0 5px 0;">
-      <fb:login-button size="medium" autologoutlink="true" length="short"></fb:login-button>
+      <fb:login-button size="medium" autologoutlink="true" length="short">[{if $oView->isConnectedWithFb() }][{ oxmultilang ident="INC_CMP_FBCONNECT_LOGOUTBTNTEXT" }][{else}][{ oxmultilang ident="INC_CMP_FBCONNECT_LOGINBTNTEXT" }][{/if}]</fb:login-button>
   </div>

@@ -36,11 +36,12 @@ class Unit_Core_oxtsprotectionTest extends OxidTestCase
      */
     public function testGetProduct()
     {
+        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
         $oTsProtection = oxNew('oxtsprotection');
         $oProduct = new oxStdClass();
         $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setNettoPriceMode();
-        $oProduct->oPrice->setPrice( 0.82, 19 );
+        $oProduct->oPrice->setPrice( 0.98, 19 );
         $oProduct->sTsId = 'TS080501_500_30_EUR';
         $oProduct->iAmount = 500;
         $oProduct->fPrice = 0.98;
@@ -54,11 +55,12 @@ class Unit_Core_oxtsprotectionTest extends OxidTestCase
      */
     public function testGetTsProduct()
     {
+        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
         $oTsProtection = oxNew('oxtsprotection');
         $oProduct = new oxStdClass();
         $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setNettoPriceMode();
-        $oProduct->oPrice->setPrice( 0.82, 19 );
+        $oProduct->oPrice->setPrice( 0.98, 19 );
         $oProduct->sTsId = 'TS080501_500_30_EUR';
         $oProduct->iAmount = 500;
         $oProduct->fPrice = 0.98;
@@ -72,11 +74,11 @@ class Unit_Core_oxtsprotectionTest extends OxidTestCase
      */
     public function testGetTsProducts()
     {
+        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
         $oTsProtection = oxNew('oxtsprotection');
         $oProduct = new oxStdClass();
         $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setNettoPriceMode();
-        $oProduct->oPrice->setPrice( 0.82, 19 );
+        $oProduct->oPrice->setPrice( 0.98, 19 );
         $oProduct->sTsId = 'TS080501_500_30_EUR';
         $oProduct->iAmount = 500;
         $oProduct->fPrice = 0.98;
@@ -90,25 +92,24 @@ class Unit_Core_oxtsprotectionTest extends OxidTestCase
      */
     public function testGetTsProductsWithBiggerPrice()
     {
+        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
         $oTsProtection = oxNew('oxtsprotection');
         $oProduct = new oxStdClass();
         $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setNettoPriceMode();
-        $oProduct->oPrice->setPrice( 0.82, 19 );
+        $oProduct->oPrice->setPrice( 0.98, 19 );
         $oProduct->sTsId = 'TS080501_500_30_EUR';
         $oProduct->iAmount = 500;
         $oProduct->fPrice = 0.98;
         $oProduct2 = new oxStdClass();
         $oProduct2->oPrice = oxNew( 'oxPrice' );
-        $oProduct2->oPrice->setNettoPriceMode();
-        $oProduct2->oPrice->setPrice( 2.47, 19 );
+        $oProduct2->oPrice->setPrice( 2.94, 19 );
         $oProduct2->sTsId = 'TS080501_1500_30_EUR';
         $oProduct2->iAmount = 1500;
         $oProduct2->fPrice = 2.94;
         $oProduct3 = new oxStdClass();
         $oProduct3->oPrice = oxNew( 'oxPrice' );
-        $oProduct3->oPrice->setNettoPriceMode();
-        $oProduct3->oPrice->setPrice( 4.12, 19 );
+        $oProduct3->oPrice->setPrice( 4.9, 19 );
         $oProduct3->sTsId = 'TS080501_2500_30_EUR';
         $oProduct3->iAmount = 2500;
         $oProduct3->fPrice = 4.9;

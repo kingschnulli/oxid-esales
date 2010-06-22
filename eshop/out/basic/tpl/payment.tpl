@@ -49,7 +49,9 @@
     <br><div class="errorbox">[{ oxmultilang ident="PAYMENT_UNAVAILABLESHIPPING" }]</div>
   [{ elseif $iPayError == 5 }]
     <br><div class="errorbox">[{ oxmultilang ident="PAYMENT_UNAVAILABLEPAYMENT" }]</div>
-  [{ elseif $iPayError > 5 }]
+  [{ elseif $iPayError == 6 }]
+    <br><div class="errorbox">[{ oxmultilang ident="PAYMENT_UNAVAILABLETSPROTECTION" }]</div>
+  [{ elseif $iPayError > 6 }]
     <!--Add custom error message here-->
     <br><div class="errorbox">[{ oxmultilang ident="PAYMENT_UNAVAILABLEPAYMENT" }]</div>
   [{ elseif $iPayError == -1}]
@@ -235,6 +237,7 @@
                 </select>
                 [{else}]
                     [{assign var="oTsProduct" value=$aTsProtections[0] }]
+                    <input type="hidden" name="stsprotection" value="[{$oTsProduct->sTsId}]">
                     [{ oxmultilang ident="PAYMENT_TSPROTECTIONFOR" }] [{ $oTsProduct->iAmount }] [{ $currency->sign}] ([{ $oTsProduct->fPrice }] [{ $currency->sign}] [{ oxmultilang ident="PAYMENT_INCLUDEVAT" }]) 
                 [{/if}]
               <br>

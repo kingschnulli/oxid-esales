@@ -80,9 +80,12 @@ class oxVariantHandler extends oxSuperCfg
             foreach ( $aNames as $sNameKey => $sName ) {
                 $aNames[$sNameKey] = trim($sName);
             }
+
+            $dPrice = $oVariant->getPrice()->getModePrice();
+
             $oMdVariants->addNames( $sKey,
                                     $aNames,
-                                    $oVariant->getPrice()->getBruttoPrice(),
+                                    $dPrice,
                                     $oVariant->getLink() );
         }
 

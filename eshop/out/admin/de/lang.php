@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28446 2010-06-18 12:25:46Z arvydas $
+ * @version   SVN: $Id: lang.php 28479 2010-06-21 11:24:05Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -1133,6 +1133,7 @@ $aLang = array(
 'ORDER_OVERVIEW_PDF_BANKCODE'                   => 'BLZ : ',
 'ORDER_OVERVIEW_PDF_SELPAYMENT'                 => 'Ihre gewählte Zahlungsweise : ',
 'ORDER_OVERVIEW_PDF_DELIVNOTE'                  => 'Lieferschein Nr.',
+'ORDER_OVERVIEW_PROTECTION'                     => 'Trusted Shops Käuferschutz',
 'ORDER_PACKAGE_TITLE'                           => 'OXID PACKLISTE',
 'ORDER_PACKAGE_SHOWPACKLIST'                    => 'Packliste ausdrucken',
 'ORDER_PACKAGE_PACKLIST'                        => 'P A C K L I S T E',

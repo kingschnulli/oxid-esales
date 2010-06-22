@@ -43,6 +43,7 @@
               </td>
               <td valign="left" class="edittext">
       			 <input type=text class="editinput" style="width:270px" name="aShopID_TrustedShops[[{$lang}]]" value="[{$aShopID_TrustedShops.$lang}]" maxlength="40" [{ $readonly }]>
+      		     [{ oxinputhelp ident="HELP_DYN_TRUSTED_TSID" }]
       		  </td>
     		</tr>
             [{/foreach}]
@@ -52,6 +53,7 @@
               </td>
               <td valign="left" class="edittext">
                  <input type=text class="editinput" style="width:270px" name="tsUser" value="[{$tsUser}]" maxlength="40" [{ $readonly }]>
+                 [{ oxinputhelp ident="HELP_DYN_TRUSTED_USER" }]
               </td>
             </tr>
             <tr>
@@ -60,6 +62,7 @@
               </td>
               <td valign="left" class="edittext">
                  <input type=text class="editinput" style="width:270px" name="tsPassword" value="[{$tsPassword}]" maxlength="40" [{ $readonly }]>
+                 [{ oxinputhelp ident="HELP_DYN_TRUSTED_PASSWORD" }]
               </td>
             </tr>
             <tr>
@@ -69,6 +72,7 @@
               <td valign="left" class="edittext">
                  <input type=hidden name="tsTestMode" value=false>
                  <input type=checkbox name="tsTestMode" value=true  [{if $tsTestMode}]checked[{/if}]>
+                 [{ oxinputhelp ident="HELP_DYN_TRUSTED_TESTMODUS" }]
               </td>
             </tr>
             <tr>
@@ -79,6 +83,7 @@
               <td valign="left" class="edittext">
                  <input type=hidden name="tsSealActive" value=false>
                  <input type=checkbox name="tsSealActive" value=true  [{if $tsSealActive}]checked[{/if}]>
+                 [{ oxinputhelp ident="HELP_DYN_TRUSTED_ACTIVE" }]
                  <br><br>
               </td>
             </tr>
@@ -88,6 +93,7 @@
               </td>
               <td valign="left">
                  [{ oxmultilang ident="DYN_TRUSTED_TSPAYMENT" }]
+                 [{ oxinputhelp ident="HELP_DYN_TRUSTED_TSPAYMENT" }]
               </td>
             </tr>
             [{foreach from=$shoppaymenttypes item=payment}]

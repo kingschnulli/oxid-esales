@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 28409 2010-06-17 12:00:45Z vilma $
+ * @version   SVN: $Id: paymentTest.php 28519 2010-06-21 18:30:27Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -631,6 +631,8 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetTsProtections()
     {
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
+        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
         $oP = $this->getMock('oxprice', array('getBruttoPrice'));
         $oP->expects($this->once())->method('getBruttoPrice')->will($this->returnValue(50));
         $oB = $this->getMock('oxbasket', array('getPrice'));
@@ -642,8 +644,7 @@ class Unit_Views_paymentTest extends OxidTestCase
 
         $oProduct = new oxStdClass();
         $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setNettoPriceMode();
-        $oProduct->oPrice->setPrice( 0.82, 19 );
+        $oProduct->oPrice->setPrice( 0.98, 19 );
         $oProduct->sTsId = 'TS080501_500_30_EUR';
         $oProduct->iAmount = 500;
         $oProduct->fPrice = 0.98;

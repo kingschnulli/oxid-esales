@@ -5,7 +5,7 @@
         <div class="bar copy">
             <div class="left" id="delivery_link">
                 [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-                <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_INCLTAXANDPLUSSHIPPING" }]</a>
+                <a href="[{ $oCont->getLink() }]" rel="nofollow">[{if $oViewConf->isNetPriceShop()}][{ oxmultilang ident="INC_FOOTER_PLUSTAXANDPLUSSHIPPING" }][{else}][{ oxmultilang ident="INC_FOOTER_INCLTAXANDPLUSSHIPPING" }][{/if}]</a>
                 [{/oxifcontent}]
             </div>
             <div class="right">
@@ -59,7 +59,7 @@
 [{if $popup}][{include file=$popup}][{/if}]
 [{oxid_include_dynamic file="dyn/newbasketitem_popup.tpl"}]
 
-[{if !$oxcmp_user}]
+[{if $oView->showFbConnectToAccountMsg()}]
 [{ insert name="oxid_fblogin"}]
 [{/if}]
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 28409 2010-06-17 12:00:45Z vilma $
+ * @version   SVN: $Id: oxbasketTest.php 28515 2010-06-21 17:42:59Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3846,7 +3846,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oPrice->expects( $this->any() )->method( 'getBruttoPrice' )->will( $this->returnValue( 0.98 ) );
 
         $oBasket = $this->getMock( 'oxbasket', array( 'getCosts' ) );
-        $oBasket->expects( $this->once() )->method( 'getCosts' )->will( $this->returnValue( $oPrice ) );
+        $oBasket->expects( $this->any() )->method( 'getCosts' )->will( $this->returnValue( $oPrice ) );
 
         $this->assertEquals( '0,98', $oBasket->getFTsProtectionCosts() );
     }
@@ -3868,6 +3868,8 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testCalcTsProtectionCost()
     {
+        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
         $oBasket = new oxbasket();
         $oBasket->addToBasket( $this->oArticle->getId(), 2 );
         $oBasket->calculateBasket( false );
@@ -3876,7 +3878,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oPayCost = $oBasket->UNITcalcTsProtectionCost();
 
         $this->assertEquals( 0.98, $oPayCost->getBruttoPrice() );
-        $this->assertEquals( 0.82, $oPayCost->getNettoPrice() );
+        $this->assertEquals( 0.82, round($oPayCost->getNettoPrice(),2) );
         $this->assertEquals( 19, $oPayCost->getVat() );
     }
 

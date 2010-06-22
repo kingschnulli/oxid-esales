@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 28452 2010-06-18 14:02:33Z rimvydas.paskevicius $
+ * @version   SVN: $Id: user.php 28508 2010-06-21 15:04:54Z rimvydas.paskevicius $
  */
 
 /**
@@ -79,7 +79,9 @@ class User extends oxUBase
     /**
      * Loads customer basket object form session (oxsession::getBasket()),
      * passes action article/basket/country list to template engine. If
-     * available - loads user delivery address data (oxaddress). Returns
+     * available - loads user delivery address data (oxaddress). If user
+     * is connected using Facebook connect calls user::_fillFormWithFacebookData to
+     * prefill form data with data taken from user Facebook account. Returns
      * name template file to render user::_sThisTemplate.
      *
      * @return  string  $this->_sThisTemplate   current template file name
@@ -117,7 +119,7 @@ class User extends oxUBase
 
         $this->_aViewData['aMustFillFields'] = $this->getMustFillFields();
 
-        if ( $myConfig->getConfigParam( "bl_showFbConnect" ) && !$oUser ) {
+        if ( $myConfig->getConfigParam( "bl_showFbConnect" ) && !$this->getUser() ) {
              $this->_fillFormWithFacebookData();
         }
 
@@ -392,8 +394,15 @@ class User extends oxUBase
         if ( $oFacebook->isConnected() ) {
             $aMe  = $oFacebook->api('/me');
 
-            $aInvAdr["oxuser__oxfname"] = $aMe["first_name"];
-            $aInvAdr["oxuser__oxlname"] = $aMe["last_name"];
+            $aInvAdr = $this->_aViewData['invadr'];
+
+            if ( !$aInvAdr["oxuser__oxfname"] ) {
+                $aInvAdr["oxuser__oxfname"] = $aMe["first_name"];
+            }
+
+            if ( !$aInvAdr["oxuser__oxlname"] ) {
+                $aInvAdr["oxuser__oxlname"] = $aMe["last_name"];
+            }
 
             $this->_aViewData['invadr'] = $aInvAdr;
         }

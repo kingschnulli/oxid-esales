@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 28410 2010-06-17 12:59:25Z alfonsas $
+ * @version   SVN: $Id: oxarticle.php 28523 2010-06-21 22:11:10Z alfonsas $
  */
 
 // defining supported link types
@@ -2688,12 +2688,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getFTPrice()
     {
         if ( $oPrice = $this->getTPrice() ) {
-            if ( $this->getConfig()->isNetPriceShop() ) {
-                $dPrice = $oPrice->getNettoPrice();
-            } else {
-                $dPrice = $oPrice->getBruttoPrice();
-            }
-            if ($dPrice) {
+            if ($dPrice = $oPrice->getModePrice()) {
                 return oxLang::getInstance()->formatCurrency( oxUtils::getInstance()->fRound($dPrice));
             }
         }
@@ -2707,12 +2702,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getFPrice()
     {
         if ( $oPrice = $this->getPrice() ) {
-            if ( $this->getConfig()->isNetPriceShop() ) {
-                $dPrice = $oPrice->getNettoPrice();
-            } else {
-                $dPrice = $oPrice->getBruttoPrice();
-            }
-
+            $dPrice = $oPrice->getModePrice();
             return $this->getPriceFromPrefix().oxLang::getInstance()->formatCurrency( $dPrice );
         }
     }
@@ -3916,9 +3906,10 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         // compute price
-        $dPrice = $this->getPrice()->getBruttoPrice();
+        $dPrice = $this->getPrice()->getModePrice();
 
         $oCur = $myConfig->getActShopCurrencyObject();
+
         //price per unit handling
         if ((double) $this->oxarticles__oxunitquantity->value && $this->oxarticles__oxunitname->value) {
             $this->_fPricePerUnit = oxLang::getInstance()->formatCurrency($dPrice / (double) $this->oxarticles__oxunitquantity->value, $oCur);

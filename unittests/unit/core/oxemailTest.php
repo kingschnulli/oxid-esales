@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 28042 2010-06-01 13:02:31Z arvydas $
+ * @version   SVN: $Id: oxemailTest.php 28496 2010-06-21 14:01:13Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -170,6 +170,13 @@ class modOxOrderEmail extends oxOrder
         $oParentPayment = oxNew( "oxPayment" );
         $oParentPayment->load( "oxidcashondel" );
         return $oParentPayment;
+    }
+
+    public function getTsProtectionCosts()
+    {
+        $oPrice = oxNew( "oxPayment" );
+        $oPrice->setPrice( 12 );
+        return $oPrice;
     }
 }
 
@@ -600,6 +607,7 @@ class Unit_Core_oxemailTest extends OxidTestCase
         $oOrder->oxorder__oxbillstreet = new oxField( '' );
         $oOrder->oxorder__oxbillcity = new oxField( '' );
         $oOrder->oxorder__oxbillcountry = new oxField( '' );
+        $oOrder->oxorder__oxtsprotectcosts = new oxField( '12' );
         $oOrder->oxorder__oxdeltype = new oxField( "oxidstandard" );
         $oOrder->setUser($this->_oUser);
         $oOrder->setBasket($oBasket);
@@ -652,6 +660,7 @@ class Unit_Core_oxemailTest extends OxidTestCase
         $oOrder->oxorder__oxbillstreet = new oxField( '' );
         $oOrder->oxorder__oxbillcity = new oxField( '' );
         $oOrder->oxorder__oxbillcountry = new oxField( '' );
+        $oOrder->oxorder__oxtsprotectcosts = new oxField( '12' );
         $oOrder->oxorder__oxdeltype = new oxField( "oxidstandard" );
         $oOrder->setUser($this->_oUser);
         $oOrder->setBasket($oBasket);

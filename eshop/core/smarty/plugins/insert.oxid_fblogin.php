@@ -41,7 +41,7 @@ function smarty_insert_oxid_fblogin($params, &$smarty)
     $myConfig  = oxConfig::getInstance();
     $oView = $myConfig->getActiveView();
 
-    if ( !$myConfig->getConfigParam( "bl_showFbConnect") || !$myConfig->getParameter( "fblogin") ) {
+    if ( !$myConfig->getConfigParam( "bl_showFbConnect") ) {
         return;
     }
 
@@ -53,8 +53,6 @@ function smarty_insert_oxid_fblogin($params, &$smarty)
 
         //name of template
         $sTemplate = 'inc/popup_fblogin.tpl';
-
-        $aErrors = $oView->getViewDataElement["Errors"];
 
         // checking, if Facebeook User Id was successfully added
         if ( oxSession::getVar( '_blFbUserIdUpdated' ) ) {

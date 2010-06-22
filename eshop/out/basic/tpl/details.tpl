@@ -189,7 +189,7 @@
                 <big class="price pricerange" id="test_product_price">[{ $product->getFPrice() }] [{ $currency->sign}]</big>
             [{/if}]
             [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-            <sup class="dinfo">[{ oxmultilang ident="DETAILS_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PLUSSHIPPING2" }]</a></sup>
+            <sup class="dinfo">[{if $oViewConf->isNetPriceShop()}][{ oxmultilang ident="DETAILS_PLUSVAT" }][{else}][{ oxmultilang ident="DETAILS_PLUSSHIPPING" }][{/if}]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_PLUSSHIPPING2" }]</a></sup>
             [{/oxifcontent}]
         </div>
     [{/oxhasrights}]

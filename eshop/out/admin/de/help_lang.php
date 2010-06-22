@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28460 2010-06-19 07:24:07Z arvydas $
+ * @version   SVN: $Id: help_lang.php 28496 2010-06-21 14:01:13Z vilma $
  */
 
 /**
@@ -473,7 +473,7 @@ $aLang =  array(
 
 'HELP_GENIMPORT_REPEATIMPORT'                   =>  'Wenn Sie diese Einstellung aktivieren, wird nach erfolgreichem Import automatisch wieder Schritt 1 angezeigt, damit sie den nächsten Import machen können.',
 
-
+'HELP_LANGUAGE_DEFAULT'                         => 'Die Standardsprache wird verwendet, wenn OXID eShop die zu verwendete Sprache nicht anderweitig ermitteln kann: Die gewünschte Sprache ist nicht in der URL angegeben, kann nicht über den Browser ermittelt werden und ist nicht in der aktuellen Session gespeichert. Die Standardsprache kann deaktiviert, aber nicht gelöscht werden.',
 
 'HELP_PAYMENT_MAIN_SORT'                        =>  'Mit <span class="navipath_or_inputname">Sortierung</span> können Sie einstellen, in welcher Reihenfolge die Zahlungsarten den Benutzern angezeigt werden:<br>' .
                                                     '<ul><li>Die Zahlungsart mit der niedrigsten Zahl wird an erster Stelle angezeigt.</li>' .
@@ -558,4 +558,10 @@ $aLang =  array(
 'HELP_DYN_TRUSTED_RATINGS_THANKYOU'             => '[tr] If switched on "Order Complete" ("Thankyou") page will contain rating button leading to Trusted Shop page',
 'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'           => '[tr] If switched on "Order Confirmation" email will contain rating button leading to Trusted Shop page',
 'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'       => '[tr] If switched on "Order Send" email will contain rating button leading to Trusted Shop page',
+'HELP_DYN_TRUSTED_TSID'                         => 'Trusted Shops ID des Online Shops',
+'HELP_DYN_TRUSTED_USER'                         => 'Trusted Shops Webservice-Login',
+'HELP_DYN_TRUSTED_PASSWORD'                     => 'Trusted Shops Webservice-Passwort',
+'HELP_DYN_TRUSTED_TESTMODUS'                    => 'Testumgebung ("Sandbox") einschalten. Nach Abschluss der Zertifizierung sendet Ihnen Ihr Ansprechpartner bei Trusted Shops die Zugangsdaten per E-Mail.',
+'HELP_DYN_TRUSTED_ACTIVE'                       => 'Aktivieren Sie diese Option, um das Trusted Shops Siegel im shop anzuzeigen.',
+'HELP_DYN_TRUSTED_TSPAYMENT'                    => 'Ordnen Sie den im Shop angebotenen Zahlungsarten die entsprechende Zahlungsart bei Trusted Shop zu.',
 );

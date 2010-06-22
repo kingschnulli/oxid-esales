@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 28409 2010-06-17 12:00:45Z vilma $
+ * @version   SVN: $Id: oxbasket.php 28510 2010-06-21 15:46:11Z alfonsas $
  */
 
 /**
@@ -2312,6 +2312,29 @@ class oxBasket extends oxSuperCfg
         return oxLang::getInstance()->formatCurrency( $this->getPrice()->getBruttoPrice(), $this->getBasketCurrency() );
     }
 
+
+    /**
+     * Returns formatted basket total VAT price
+     *
+     * ProductVats + DelCostVat + PayCostVat + WrappCostVat
+     *
+     * @return string
+     */
+    public function getFVatPrice()
+    {
+        // getProductVats + getDelCostVat + getPayCostVat + getTsProtectionVat + getWrappCostVat
+        $dVAT = 0;
+        if ($this->_aDiscountedVats) {
+            $dVAT+= array_sum($this->_aDiscountedVats);
+        }
+        $dVAT+= $this->getCosts( 'oxdelivery' )->getVatValue();
+        $dVAT+= $this->getCosts( 'oxpayment' )->getVatValue();
+        $dVAT+= $this->getCosts( 'oxtsprotection' )->getVatValue();
+        $dVAT+= $this->getCosts( 'oxwrapping' )->getVatValue();
+
+        return oxLang::getInstance()->formatCurrency( $dVAT, $this->getBasketCurrency() );
+    }
+
     /**
      * Returns if exists formatted delivery costs
      *
@@ -2583,6 +2606,54 @@ class oxBasket extends oxSuperCfg
         $oProtectionCost = $this->getCosts( 'oxtsprotection' );
         if ( $oProtectionCost && $oProtectionCost->getBruttoPrice() ) {
             return oxLang::getInstance()->formatCurrency( $oProtectionCost->getBruttoPrice(), $this->getBasketCurrency() );
+        }
+        return false;
+    }
+
+    /**
+     * Returns VAT of TS protection costs
+     *
+     * @return string | bool
+     */
+    public function getTsProtectionVatPercent()
+    {
+        return $this->getCosts( 'oxtsprotection' )->getVat();
+    }
+
+    /**
+     * Returns formatted VAT of TS protection costs
+     *
+     * @return string
+     */
+    public function getTsProtectionVat()
+    {
+        $dProtectionVAT = $this->getCosts( 'oxtsprotection' )->getVatValue();
+        if ( $dProtectionVAT > 0 ) {
+            return oxLang::getInstance()->formatCurrency( $dProtectionVAT, $this->getBasketCurrency() );
+        }
+        return false;
+    }
+
+    /**
+     * Returns formatted netto price of TS protection costs
+     *
+     * @return string
+     */
+    public function getTsProtectionNet()
+    {
+        return oxLang::getInstance()->formatCurrency( $this->getCosts( 'oxtsprotection' )->getNettoPrice(), $this->getBasketCurrency() );
+    }
+
+    /**
+     * Returns TS protection costs brutto value
+     *
+     * @return double
+     */
+    public function getTsProtectionCosts()
+    {
+        $oProtection = $this->getCosts( 'oxtsprotection' );
+        if ( $oProtection ) {
+            return $oProtection->getBruttoPrice();
         }
         return false;
     }

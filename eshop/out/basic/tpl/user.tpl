@@ -88,6 +88,31 @@
 
   [{else}]
     [{assign var="currency" value=$oView->getActCurrency() }]
+
+    [{if !$oxcmp_user && $oView->isConnectedWithFb()}]
+      <strong class="boxhead">[{ oxmultilang ident="USER_LOGIN3" }]</strong>
+      <div class="box info">
+          [{ oxmultilang ident="USER_FB_UPDATEACCOUNTMSG" }]
+          <br>
+          <br>
+
+          <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
+            <div>
+                [{ $oViewConf->getHiddenSid() }]
+                [{ $oViewConf->getNavFormParams() }]
+                <input type="hidden" name="fnc" value="">
+                <input type="hidden" name="cl" value="user">
+                <input type="hidden" name="option" value="2">
+                <input type="hidden" name="lgn_cook" value="0">
+                <input type="hidden" name="fblogin" value="1">
+                <input type="hidden" name="CustomError" value='popup'>
+                <span class="btn"><input id="test_UsrOpt2UpdateAccount" type="submit" name="send" value="[{ oxmultilang ident="USER_UPDATE_ACCOUNT" }]" class="btn"></span><br><br>
+             </div>
+          </form>
+      </div>
+    [{/if}]
+
+
     <form action="[{ $oViewConf->getSslSelfLink() }]" name="order" method="post">
       <div>
           [{ $oViewConf->getHiddenSid() }]
@@ -116,34 +141,11 @@
         </div>
       [{/if}]
 
-
       [{include file="inc/error.tpl" Errorlist=$Errors.user}]
 
-      [{if $oView->getLoginOption() == 3 || (!$oxcmp_user && $oView->isConnectedWithFb())}]
+      [{if $oView->getLoginOption() == 3 || (!$oxcmp_user && $oView->isConnectedWithFb()) }]
         <strong class="boxhead">[{ oxmultilang ident="USER_LOGIN3" }]</strong>
         <div class="box info">
-
-          [{if !$oxcmp_user && $oView->isConnectedWithFb()}]
-          [{ oxmultilang ident="USER_FB_UPDATEACCOUNTMSG" }]
-          <br>
-          <br>
-
-          <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
-            <div>
-                [{ $oViewConf->getHiddenSid() }]
-                [{ $oViewConf->getNavFormParams() }]
-                <input type="hidden" name="fnc" value="">
-                <input type="hidden" name="cl" value="user">
-                <input type="hidden" name="option" value="2">
-                <input type="hidden" name="lgn_cook" value="0">
-                <input type="hidden" name="fblogin" value="1">
-                <input type="hidden" name="CustomError" value='user'>
-                <span class="btn"><input id="test_UsrOpt2Update" type="submit" name="send" value="[{ oxmultilang ident="USER_UPDATE_ACCOUNT" }]" class="btn"></span><br><br>
-             </div>
-          </form>
-          <hr>
-          <br>
-          [{/if}]
 
             [{ oxmultilang ident="USER_ENTEREMAILANDPWD" }]<br>
             [{ oxmultilang ident="USER_RECEIVECONFIRMATION" }]
@@ -177,7 +179,7 @@
             <colgroup>
                 <col width="145">
             </colgroup>
-            [{ if !$oxcmp_user->oxuser__oxpassword->value && $oView->getLoginOption() != 3}]
+            [{ if !$oxcmp_user->oxuser__oxpassword->value && $oView->getLoginOption() != 3 && !$oView->isConnectedWithFb() }]
               <tr>
                 <td><label>[{ oxmultilang ident="USER_EMAILADDRESS2" }]</label></td>
                 <td>

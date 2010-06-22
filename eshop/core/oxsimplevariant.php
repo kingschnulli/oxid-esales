@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariant.php 28421 2010-06-18 08:54:27Z sarunas $
+ * @version   SVN: $Id: oxsimplevariant.php 28523 2010-06-21 22:11:10Z alfonsas $
  */
 
 /**
@@ -266,11 +266,7 @@ class oxSimpleVariant extends oxI18n implements oxIUrl
     {
         $sPrice = null;
         if ( $oPrice = $this->getPrice() ) {
-            if ( $this->getConfig()->isNetPriceShop() ) {
-                $dPrice = $oPrice->getNettoPrice();
-            } else {
-                $dPrice = $oPrice->getBruttoPrice();
-            }
+            $dPrice = $oPrice->getModePrice();
             return oxLang::getInstance()->formatCurrency($dPrice);
         }
     }

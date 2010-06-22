@@ -10,7 +10,7 @@
 [{if $is_start}]
     [{assign var="_path_space" value=" " }][{ $_path_space }]
     [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-        <a rel="nofollow" class="dinfo" href="[{ $oCont->getLink() }]">[{ oxmultilang ident="INC_HEADER_INCLTAXPLUSSHIPPING" }]</a>
+        <a rel="nofollow" class="dinfo" href="[{ $oCont->getLink() }]">[{if $oViewConf->isNetPriceShop()}][{ oxmultilang ident="INC_HEADER_PLUSTAXPLUSSHIPPING" }][{else}][{ oxmultilang ident="INC_HEADER_INCLTAXPLUSSHIPPING" }][{/if}]</a>
     [{/oxifcontent}]
 [{/if}]
 [{/strip}]

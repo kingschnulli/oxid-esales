@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxviewTest.php 28496 2010-06-21 14:01:13Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -441,6 +441,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
     public function testGetTrustedShopIdNotValid()
     {
         $oView = $this->getProxyClass( 'oxview' );
+        modConfig::getInstance()->setConfigParam( 'tsSealActive', 1 );
         modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', array (0=>'aaa') );
 
         $this->assertFalse( $oView->getTrustedShopId() );
@@ -449,6 +450,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
     public function testGetTrustedShopIdIfNotMultilanguage()
     {
         $oView = $this->getProxyClass( 'oxview' );
+        modConfig::getInstance()->setConfigParam( 'tsSealActive', 1 );
         modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', 'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' );
         $this->assertEquals( 'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', $oView->getTrustedShopId() );
     }
@@ -456,6 +458,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
     public function testGetTrustedShopIdIfNotMultilanguageNotValid()
     {
         $oView = $this->getProxyClass( 'oxview' );
+        modConfig::getInstance()->setConfigParam( 'tsSealActive', 1 );
         modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', 'XXX' );
         $this->assertFalse( $oView->getTrustedShopId() );
     }
@@ -463,9 +466,18 @@ class Unit_Views_oxviewTest extends OxidTestCase
     public function testGetTrustedShopId()
     {
         $oView = $this->getProxyClass( 'oxview' );
+        modConfig::getInstance()->setConfigParam( 'tsSealActive', 1 );
         modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', array (0=>'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') );
 
         $this->assertEquals( 'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', $oView->getTrustedShopId() );
+    }
+
+    public function testGetTrustedShopIdNotActive()
+    {
+        $oView = $this->getProxyClass( 'oxview' );
+        modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', array (0=>'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') );
+
+        $this->assertFalse( $oView->getTrustedShopId() );
     }
 
     public function testGetCharSet()
@@ -583,4 +595,96 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $this->assertEquals( 'className', $oView->getActionClassName() );
     }
 
+    /**
+     * Testing getter for checking if user is connected using Facebook connect
+     *
+     * return null
+     */
+    public function testIsConnectedWithFb()
+    {
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
+
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "bl_showFbConnect", false );
+
+        $oView = new oxView();
+        $this->assertFalse( $oView->isConnectedWithFb() );
+
+        $myConfig->setConfigParam( "bl_showFbConnect", true );
+        $this->assertTrue( $oView->isConnectedWithFb() );
+
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
+        $this->assertFalse( $oView->isConnectedWithFb() );
+    }
+
+    /**
+     * Testing getting connected with Facebook connect user id
+     *
+     * return null
+     */
+    public function testGetFbUserId()
+    {
+        oxTestModules::addFunction( "oxFb", "getUser", "{return 123;}" );
+
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "bl_showFbConnect", false );
+
+        $oView = new oxView();
+        $this->assertNull( $oView->getFbUserId() );
+
+        $myConfig->setConfigParam( "bl_showFbConnect", true );
+        $this->assertEquals( "123", $oView->getFbUserId() );
+    }
+
+    /**
+     * Testing getting true or false for showing popup after user
+     * connected using Facebook connect - FB connect is disabled
+     *
+     * return null
+     */
+    public function testShowFbConnectToAccountMsg_FbConnectIsOff()
+    {
+        $myConfig = modConfig::getInstance();
+        $myConfig->setParameter( "fblogin", false );
+
+        $oView = new oxView();
+        $this->assertFalse( $oView->showFbConnectToAccountMsg() );
+    }
+
+    /**
+     * Testing getting true or false for showing popup after user
+     * connected using Facebook connect - FB connect is enabled
+     * user connected using FB, but does not has account in shop
+     *
+     * return null
+     */
+    public function testShowFbConnectToAccountMsg_FbOn_NoAccount()
+    {
+        $myConfig = modConfig::getInstance();
+        $myConfig->setParameter( "fblogin", true );
+
+        $oView = $this->getMock( 'oxview', array( 'getUser' ) );
+        $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( null ) );
+
+        $this->assertTrue( $oView->showFbConnectToAccountMsg() );
+    }
+
+    /**
+     * Testing getting true or false for showing popup after user
+     * connected using Facebook connect - FB connect is enabled
+     * user connected using FB and has account in shop
+     *
+     * return null
+     */
+    public function testShowFbConnectToAccountMsg_FbOn_AccountOn()
+    {
+        $myConfig = modConfig::getInstance();
+        $myConfig->setParameter( "fblogin", true );
+        $oUser = new oxUser();
+
+        $oView = $this->getMock( 'oxview', array( 'getUser' ) );
+        $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
+
+        $this->assertFalse( $oView->showFbConnectToAccountMsg() );
+    }
 }

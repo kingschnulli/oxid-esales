@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 28102 2010-06-02 14:23:19Z sarunas $
+ * @version   SVN: $Id: oxorder.php 28479 2010-06-21 11:24:05Z vilma $
  */
 
 /**
@@ -65,6 +65,12 @@ class oxOrder extends oxBase
      * @var int
      */
     const ORDER_STATE_INVALIDPAYMENT = 5;
+
+    /**
+     * Protection parameters used for some data in order are invalid
+     * @var int
+     */
+    const ORDER_STATE_INVALIDTSPROTECTION = 6;
 
     /**
      * Skip update fields
@@ -149,6 +155,13 @@ class oxOrder extends oxBase
      * @var oxprice
      */
     protected $_oPaymentPrice = null;
+
+    /**
+     * Order TS protection costs price object
+     *
+     * @var oxprice
+     */
+    protected $_oTsProtectionPrice = null;
 
     /**
      * Current class name
@@ -360,6 +373,23 @@ class oxOrder extends oxBase
     }
 
     /**
+     * Returns order TS protection price object
+     *
+     * @return oxprice
+     */
+    public function getOrderTsProtectionPrice()
+    {
+        if ( $this->_oTsProtectionPrice != null ) {
+            return $this->_oTsProtectionPrice;
+        }
+
+        $this->_oTsProtectionPrice = oxNew( 'oxprice' );
+        $this->_oTsProtectionPrice->setBruttoPriceMode();
+        $this->_oTsProtectionPrice->setPrice( $this->oxorder__oxtsprotectcosts->value, $this->getConfig()->getConfigParam( 'dDefaultVAT' ) );
+        return $this->_oTsProtectionPrice;
+    }
+
+    /**
      * Returns order netto sum (total price, including delivery, payment etc - VAT)
      * (A. this is very unprecise :())
      *
@@ -440,6 +470,14 @@ class oxOrder extends oxBase
         // in case when recalcualting order, payment execution is skipped
         if ( !$blRecalculatingOrder ) {
             $blRet = $this->_executePayment( $oBasket, $oUserPayment );
+            if ( $blRet !== true ) {
+                return $blRet;
+            }
+        }
+
+        // executing TS protection
+        if ( !$blRecalculatingOrder && $oBasket->getTsProductId()) {
+            $blRet = $this->_executeTsProtection( $oBasket );
             if ( $blRet !== true ) {
                 return $blRet;
             }
@@ -579,6 +617,9 @@ class oxOrder extends oxBase
 
         // copies wrapping info
         $this->_setWrapping( $oBasket );
+
+        // copies TS protection info
+        $this->_setTsProtection( $oBasket );
     }
 
     /**
@@ -1933,4 +1974,51 @@ class oxOrder extends oxBase
             return self::ORDER_STATE_INVALIDPAYMENT;
         }
     }
+
+    /**
+     * Assigns Trusted Shops Protection product id and costs
+     *
+     * @param oxBasket $oBasket basket object
+     *
+     * @return null
+     */
+    protected function _setTsProtection( oxBasket $oBasket )
+    {
+        // protection price
+        if ( ( $oTsProtectionCost = $oBasket->getCosts( 'oxtsprotection' ) ) ) {
+            $this->oxorder__oxtsprotectcosts = new oxField($oTsProtectionCost->getBruttoPrice(), oxField::T_RAW);
+        }
+
+        // protection protduct id
+        $this->oxorder__oxtsprotectid = new oxField($oBasket->getTsProductId(), oxField::T_RAW);
+    }
+
+    /**
+     * Executes Trusted shops protection order. On failure -
+     * deletes order and returns error code or 6.
+     *
+     * @param oxBasket $oBasket basket object
+     *
+     * @return mixed
+     */
+    protected function _executeTsProtection( oxBasket $oBasket )
+    {
+        $aValues['tsProductId'] = $this->oxorder__oxtsprotectid->value;
+        $aValues['amount'] = $oBasket->getPrice()->getBruttoPrice();
+        $oCur = $this->getConfig()->getActShopCurrencyObject();
+        $aValues['currency'] = $oCur->name;
+        $aValues['buyerEmail'] = $this->oxorder__oxbillemail->value;
+        $aValues['shopCustomerID'] = $this->oxorder__oxuserid->value;
+        $aValues['shopOrderID'] = $this->oxorder__oxordernr->value;
+        $aValues['orderDate'] = $this->oxorder__oxorderdate->value;
+        $sPaymentId = $oBasket->getPaymentId();
+        $oTsProtection = oxNew('oxtsprotection');
+        $blRes = $oTsProtection->requestForTsProtection( $aValues, $sPaymentId );
+        if ( !$blRes ) {
+            $this->delete();
+            return self::ORDER_STATE_INVALIDTSPROTECTION;
+        }
+        return true; // everything fine
+    }
+
 }

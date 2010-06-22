@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: myorderTest.php 27493 2010-05-03 08:17:16Z arvydas $
+ * @version   SVN: $Id: myorderTest.php 28522 2010-06-21 21:09:04Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -361,7 +361,9 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         $oPdf = new testPdfClass;
         $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
-        $oPdfArtSum->UNITsetTotalCostsWithoutDiscount( 1 );
+
+        $iStartPos = 1;
+        $oPdfArtSum->UNITsetTotalCostsWithoutDiscount( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 
@@ -383,7 +385,9 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         $oPdf = new testPdfClass;
         $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
-        $oPdfArtSum->UNITsetTotalCostsWithDiscount( 1 );
+
+        $iStartPos = 1;
+        $oPdfArtSum->UNITsetTotalCostsWithDiscount( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 
@@ -409,7 +413,9 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         $oPdf = new testPdfClass;
         $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
-        $oPdfArtSum->UNITsetVoucherInfo( 1 );
+
+        $iStartPos = 1;
+        $oPdfArtSum->UNITsetVoucherInfo( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 
@@ -429,7 +435,9 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         $oPdf = new testPdfClass;
         $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
-        $oPdfArtSum->UNITsetDeliveryInfo( 1 );
+
+        $iStartPos = 1;
+        $oPdfArtSum->UNITsetDeliveryInfo( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 
@@ -453,7 +461,9 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         $oPdf = new testPdfClass;
         $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
-        $oPdfArtSum->UNITsetWrappingInfo( 1 );
+
+        $iStartPos = 1;
+        $oPdfArtSum->UNITsetWrappingInfo( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 
@@ -477,7 +487,9 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         $oPdf = new testPdfClass;
         $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
-        $oPdfArtSum->UNITsetPaymentInfo( 1 );
+
+        $iStartPos = 1;
+        $oPdfArtSum->UNITsetPaymentInfo( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 
@@ -501,7 +513,9 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         $oPdf = new testPdfClass;
         $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
-        $oPdfArtSum->UNITsetGrandTotalPriceInfo( 1 );
+
+        $iStartPos = 1;
+        $oPdfArtSum->UNITsetGrandTotalPriceInfo( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 
@@ -523,7 +537,9 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         $oPdf = new testPdfClass;
         $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
-        $oPdfArtSum->UNITsetPaymentMethodInfo( 1 );
+
+        $iStartPos = 1;
+        $oPdfArtSum->UNITsetPaymentMethodInfo( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 
@@ -544,8 +560,8 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         $oPdf = new testPdfClass;
         $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
 
-
-        $oPdfArtSum->UNITsetPaymentMethodInfo( 1 );
+        $iStartPos = 1;
+        $oPdfArtSum->UNITsetPaymentMethodInfo( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 
@@ -564,7 +580,9 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         $oPdf = new testPdfClass;
         $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
-        $oPdfArtSum->UNITsetPayUntilInfo( 1 );
+
+        $iStartPos = 1;
+        $oPdfArtSum->UNITsetPayUntilInfo( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 

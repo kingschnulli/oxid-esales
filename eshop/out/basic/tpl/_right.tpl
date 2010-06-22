@@ -17,10 +17,12 @@
     [{/if}]
 
     [{if $oViewConf->getShowFbConnect()}]
-    <strong class="h2"><a id="test_RightSideNewsLetterHeader" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account"}]">[{ oxmultilang ident="INC_RIGHTITEM_FBCONNECT" }]</a></strong>
-    <div class="box">
-        [{oxid_include_dynamic file="dyn/cmp_fbconnect_right.tpl" type="login" pgnr=$pageNavigation->actPage tpl=$tpl additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
-    </div>
+        [{if !$oxcmp_user || ($oxcmp_user && $oView->isConnectedWithFb()) }]
+        <strong class="h2"><a id="test_RightSideNewsLetterHeader" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account"}]">[{ oxmultilang ident="INC_RIGHTITEM_FBCONNECT" }]</a></strong>
+        <div class="box">
+            [{oxid_include_dynamic file="dyn/cmp_fbconnect_right.tpl" type="login" pgnr=$pageNavigation->actPage tpl=$tpl additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
+        </div>
+        [{/if}]
     [{/if}]
 
     [{if !$oView->isConnectedWithFb()}]
