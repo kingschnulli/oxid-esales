@@ -56,7 +56,7 @@ class Unit_Admin_dyntrustedratingsTest extends OxidTestCase
         modConfig::setParameter( "confstrs", array( "sTsUser" => "testUser", "sTsPass" => "testPass") );
         modConfig::setParameter( "confbools", array( "blTsWidget" => "true" ) );
         modConfig::setParameter( "oxid", "testShopId" );
-        $sPkg = "OXID eShop ".$myConfig->getEdition()." ".$myConfig->getVersion();
+        $sPkg = "OXID_ESALES";
 
         $oConfig = $this->getMock( "oxConfig", array( "saveShopConfVar" ) );
         $oConfig->expects( $this->at( 0 ) )->method( 'saveShopConfVar' )->with( $this->equalTo( "arr" ), $this->equalTo( "aTsActiveLangIds" ), $this->equalTo( array( $sLangAbbr => true ) ), $this->equalTo( "testShopId" ) );

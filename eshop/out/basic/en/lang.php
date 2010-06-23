@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28524 2010-06-22 00:09:49Z alfonsas $
+ * @version   SVN: $Id: lang.php 28562 2010-06-22 15:29:22Z rimvydas.paskevicius $
  */
 
 
@@ -418,7 +418,7 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_ACCOUNTNOMBER'             =>"Account No.:",
 'EMAIL_ORDER_CUST_HTML_BIC'                       =>"BIC:",
 'EMAIL_ORDER_CUST_HTML_IBAN'                      =>"IBAN:",
-'EMAIL_ORDER_CUST_HTML_TS_RATINGS_RATEUS'         =>"[tr] Tell what you this about us and rate our shop!",
+'EMAIL_ORDER_CUST_HTML_TS_RATINGS_RATEUS'         =>"Please take a minute to rate our shop.",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTION'              =>"Trusted Shops buyer protection",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX1'    =>"plus VAT",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX2'    =>"% Amount:",
@@ -723,10 +723,10 @@ $aLang = array(
 'INC_RIGHTLIST_COMPARE'                           =>"compare",
 'INC_RIGHTLIST_ORDERNOW'                          =>"Order now!",
 'INC_RIGHTITEM_OPENID'                            =>"OpenID",
-'INC_RIGHTITEM_FBCONNECT'                         =>"Facebook connect",
-'INC_RIGHTITEM_TS_RATINGS_BOX'                    =>"[tr] Trusted Shops Rating",
-'INC_RIGHTITEM_TS_INFO_URL_TITLE'                 =>"[tr] Kundenbewertungen",
-'INC_RIGHTITEM_TS_WIDGET_ALT'                     =>"[tr] Kundenbewertungen",
+'INC_RIGHTITEM_FBCONNECT'                         =>"Facebook Connect",
+'INC_RIGHTITEM_TS_RATINGS_BOX'                    =>"Customer Ratings",
+'INC_RIGHTITEM_TS_INFO_URL_TITLE'                 =>"Trusted Shops Customer Ratings",
+'INC_RIGHTITEM_TS_WIDGET_ALT'                     =>"Trusted Shops Customer Ratings",
 'INC_SEARCHLEFTITEM_ALLCATEGORIES'                =>"- all categories -",
 'INC_SEARCHLEFTITEM_ALLMANUFACTURERS'             =>"- all manufacturers -",
 'INC_SEARCHLEFTITEM_ALLDISTRIBUTORS'              =>"- all distributors -",
@@ -963,7 +963,7 @@ $aLang = array(
 'RECOMMLIST_SAVEREVIEW'                           => "Save rating and review",
 'RECOMMLIST_STAR'                                 => "Star",
 'RECOMMLIST_STARS'                                => "Stars",
-'REGISTER_CONFIRMED'                              => 'Your account registration is confirmed!',
+'REGISTER_CONFIRMED'                              => 'Your account registration is confirmed.',
 'REGISTER_ERRLINKEXPIRED'                         => 'Your account confirmation link expired.',
 'REGISTER_SUCCESS_MYACCOUNT'                      => "My Account",
 'REGISTER_SUCCESS_WELCOME'                        => "We welcome you as registered user!",
@@ -1124,10 +1124,10 @@ $aLang = array(
 'THANKYOU_SEALOFAPPROVAL'                         => "Trusted Shops seal of approval - Click to verify.",
 'THANKYOU_TRUSTEDSHOPMESSAGE'                     => "As an additional service we offer you the Trusted Shops Buyer Protection. We cover all costs for this guarantee. You only have to register!",
 'THANKYOU_LOGGIN'                                 => "Register for Trusted Shops Buyer Protection",
-'TS_RATINGS_URL_TITLE'                            => "[tr] Shop rating",
-'TS_RATINGS_BUTTON_ALT'                           => "[tr] Rate our shop!",
-'TS_RATINGS'                                      => "[tr] Trusted Shops Rating",
-'TS_RATINGS_RATEUS'                               => "[tr] Tell us what you think about us and rate our shop!",
+'TS_RATINGS_URL_TITLE'                            => "Trusted Shops Customer Ratings",
+'TS_RATINGS_BUTTON_ALT'                           => "Write a review!",
+'TS_RATINGS'                                      => "Trusted Shops Customer Rating",
+'TS_RATINGS_RATEUS'                               => "Please take a minute to rate our shop.",
 'USER_BLOCHED_TITLE'                              => "Access denied",
 'USER_LOGINTITLE'                                 => "Login",
 'USER_OPTION1'                                    => "Option 1",
@@ -1338,18 +1338,18 @@ $aLang = array(
 'PROMO_UPCOMING'                                  => 'upcoming',
 
 'FACEBOOK_LOCALE'                                 => 'en_US',
-'FACEBOOK_COMMENTS'                               => 'Facebook comments',
-'FACEBOOK_CHAT'                                   => 'Facebook live stream',
-'FACEBOOK_INVITE'                                 => 'Facebook invite',
-'FACEBOOK_FACEPILE'                               => 'Facebook facepile',
+'FACEBOOK_COMMENTS'                               => 'Facebook Comments',
+'FACEBOOK_CHAT'                                   => 'Facebook Live Stream',
+'FACEBOOK_INVITE'                                 => 'Facebook Invite',
+'FACEBOOK_FACEPILE'                               => 'Facebook Facepile',
 'FACEBOOK_INVITEHEADER'                           => 'Invite your Friends',
 'FACEBOOK_INVITETEXT'                             => 'Check this out. Simply click on the button below to check recommended product.',
 'FACEBOOK_INVITEBUTTONTEXT'                       => 'Open website',
 
 'FACEBOOK_POPUP_HEADER'                           => "Account data update",
-'FACEBOOK_POPUP_UPDATETEXT'                       => "You have connected using Facebook connect. If you already have an account in
+'FACEBOOK_POPUP_UPDATETEXT'                       => "You have connected using Facebook Connect. If you already have an account in
                                                       eShop, please enter login data to connect your Facebook account with your
-                                                      existing account. Next time when you will login using Facebook connect, you'll be automaticly
+                                                      existing account. Next time when you will login using Facebook Connect, you'll be automaticly
                                                       connected to your existing account.",
 'FACEBOOK_POPUP_UPDATEBTN'                        => "Update account",
 'FACEBOOK_POPUP_CANCELBTN'                        => "Cancel",

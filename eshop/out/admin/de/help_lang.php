@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28496 2010-06-21 14:01:13Z vilma $
+ * @version   SVN: $Id: help_lang.php 28562 2010-06-22 15:29:22Z rimvydas.paskevicius $
  */
 
 /**
@@ -202,7 +202,7 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_FBLIKE'                       =>  'Zeigt Facebooks \'Like button\' mit dem die Besucher Ihres Shops in Facebook bekannt geben, dass Sie Ihren Shop mögen.',
 
-'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT'  =>  '[tr]Show Facebook connect box which allows users to log in into eShop using theirs Facebook accunt data.',
+'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT'  =>  'Facebook Connect anzeigen damit Anwender sich mit ihren Facebook-Profildaten im Shop anmelden können.',
 
 'HELP_SHOP_CONFIG_NETPRICESHOP'                 =>  'Aktivieren der Option schaltet die Nettopreisanzeige im Shop ein und ändert die Anordnung der Zeilen im Warenkorb.',
 
@@ -551,13 +551,11 @@ $aLang =  array(
 
 
 
-'HELP_DYN_TRUSTED_RATINGS_USER'                 => '[tr] Trusted Shops user login name',
-'HELP_DYN_TRUSTED_RATINGS_PASS'                 => '[tr] Trusted Shops user password',
-'HELP_DYN_TRUSTED_RATINGS_ID'                   => '[tr] Trusted Shops ID (for language). Green marker shows that language widget is enabled and verified',
-'HELP_DYN_TRUSTED_RATINGS_WIDGET'               => '[tr] To enable Trusted Shop widget switch this option on.',
-'HELP_DYN_TRUSTED_RATINGS_THANKYOU'             => '[tr] If switched on "Order Complete" ("Thankyou") page will contain rating button leading to Trusted Shop page',
-'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'           => '[tr] If switched on "Order Confirmation" email will contain rating button leading to Trusted Shop page',
-'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'       => '[tr] If switched on "Order Send" email will contain rating button leading to Trusted Shop page',
+'HELP_DYN_TRUSTED_RATINGS_ID'                   => 'Sie erhalten Ihre Trusted Shops ID für die Kundenbewertungen per E-Mail in Ihrer Auftragsbestätigung von Trusted Shops. Soweit Sie bereits Mitglied bei Trusted Shops sind, verwenden Sie bitte Ihre bekannte Trusted Shops ID. Das grüne Licht zeigt Ihnen an, dass die Trusted Shops Kundenbewertung geprüft und aktiviert wurden, nachdem Sie die Eingabe gespeichert haben.',
+'HELP_DYN_TRUSTED_RATINGS_WIDGET'               => 'Aktivieren Sie diese Option, um das Bewertungs-Widget in Ihrem Shop anzuzeigen.',
+'HELP_DYN_TRUSTED_RATINGS_THANKYOU'             => 'Aktivieren Sie diese Option, um den Button "Bewerten Sie uns!" auf der Bestätigungsseite "Bestellung abgeschlossen" im direkten Anschluss an eine Bestellung anzuzeigen.',
+'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'           => 'Aktivieren Sie diese Option, um den Button "Bewerten Sie uns!" in der Bestellbestätigungsmail im direkten Anschluss an eine Bestellung anzuzeigen.',
+'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'       => 'Aktivieren Sie diese Option, um den Button "Bewerten Sie uns!" in der Benachrichtigung "Bestellung wurde versandt" per E-Mail anzuzeigen.',
 'HELP_DYN_TRUSTED_TSID'                         => 'Trusted Shops ID des Online Shops',
 'HELP_DYN_TRUSTED_USER'                         => 'Trusted Shops Webservice-Login',
 'HELP_DYN_TRUSTED_PASSWORD'                     => 'Trusted Shops Webservice-Passwort',

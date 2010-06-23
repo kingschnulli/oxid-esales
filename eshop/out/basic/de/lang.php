@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28524 2010-06-22 00:09:49Z alfonsas $
+ * @version   SVN: $Id: lang.php 28562 2010-06-22 15:29:22Z rimvydas.paskevicius $
  */
 
 
@@ -419,7 +419,7 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_ACCOUNTNOMBER'             =>"Kto.Nr.:",
 'EMAIL_ORDER_CUST_HTML_BIC'                       =>"BIC:",
 'EMAIL_ORDER_CUST_HTML_IBAN'                      =>"IBAN:",
-'EMAIL_ORDER_CUST_HTML_TS_RATINGS_RATEUS'         =>"[tr] Tell what you this about us and rate our shop!",
+'EMAIL_ORDER_CUST_HTML_TS_RATINGS_RATEUS'         =>"Bitte nehmen Sie sich eine Minute, um unseren Shop zu bewerten.",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTION'              =>"Trusted Shops Käuferschutz",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX1'    =>"zzgl. Mwst.",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX2'    =>"% Betrag:",
@@ -601,7 +601,7 @@ $aLang = array(
 'INC_CMP_NEWSLETTER_SUBSCRIBE'                    =>"Abonnieren",
 'INC_CMP_FBCONNECT_LOGINBTNTEXT'                  =>"Login",
 'INC_CMP_FBCONNECT_LOGOUTBTNTEXT'                 =>"Logout",
-'INC_CMP_FBCONNECT_YOUARELOGGEDINAS'              =>"[tr]You are logged in as",
+'INC_CMP_FBCONNECT_YOUARELOGGEDINAS'              =>"Sie sind eingeloggt als",
 'INC_COMPARE_LOCATOR_PAGE'                        =>"Seite",
 'INC_COMPARE_LOCATOR_DISPLAYPOPUP'                =>"Druckansicht öffnen",
 'INC_DETAILS_LOCATOR_PRODUCT'                     =>"Artikel",
@@ -724,10 +724,10 @@ $aLang = array(
 'INC_RIGHTLIST_COMPARE'                           =>"vergleichen",
 'INC_RIGHTLIST_ORDERNOW'                          =>"Jetzt bestellen!",
 'INC_RIGHTITEM_OPENID'                            =>"OpenID",
-'INC_RIGHTITEM_FBCONNECT'                         =>"[tr]Facebook connect",
-'INC_RIGHTITEM_TS_RATINGS_BOX'                    =>"[tr] Trusted Shops Rating",
-'INC_RIGHTITEM_TS_INFO_URL_TITLE'                 =>"[tr] Kundenbewertungen",
-'INC_RIGHTITEM_TS_WIDGET_ALT'                     =>"[tr] Kundenbewertungen",
+'INC_RIGHTITEM_FBCONNECT'                         =>"Facebook Connect",
+'INC_RIGHTITEM_TS_RATINGS_BOX'                    =>"Kundenbewertungen",
+'INC_RIGHTITEM_TS_INFO_URL_TITLE'                 =>"Trusted Shops Kundenbewertungen",
+'INC_RIGHTITEM_TS_WIDGET_ALT'                     =>"Trusted Shops Kundenbewertungen",
 'INC_SEARCHLEFTITEM_ALLCATEGORIES'                =>"- alle Kategorien -",
 'INC_SEARCHLEFTITEM_ALLMANUFACTURERS'             =>"- alle Hersteller -",
 'INC_SEARCHLEFTITEM_ALLDISTRIBUTORS'              =>"- alle Lieferanten -",
@@ -963,8 +963,8 @@ $aLang = array(
 'RECOMMLIST_SAVEREVIEW'                           => "Bewertung und Kommentar speichern",
 'RECOMMLIST_STAR'                                 => "Stern",
 'RECOMMLIST_STARS'                                => "Sterne",
-'REGISTER_CONFIRMED'                              => '[tr] Your account registration is confirmed!',
-'REGISTER_ERRLINKEXPIRED'                         => '[tr] Your account confirmation link expired.',
+'REGISTER_CONFIRMED'                              => 'Der Account wurde eröffnet.',
+'REGISTER_ERRLINKEXPIRED'                         => 'Der Bestätigungslink ist abgelaufen.',
 'REGISTER_SUCCESS_MYACCOUNT'                      => "Mein Konto",
 'REGISTER_SUCCESS_WELCOME'                        => "Herzlich willkommen als Mitglied im OXID eShop!",
 'REGISTER_SUCCESS_EMAILCONFIRMATION'              => "Sie haben eine E-Mail von uns erhalten, die Ihre Mitgliedschaft bestätigt.<br><br>Vielen Dank.",
@@ -1124,10 +1124,10 @@ $aLang = array(
 'THANKYOU_SEALOFAPPROVAL'                         => "Trusted Shops Gütesiegel - Bitte hier Gültigkeit prüfen!",
 'THANKYOU_TRUSTEDSHOPMESSAGE'                     => "Als zusätzlichen Service bieten wir Ihnen den Trusted Shops Käuferschutz an. Wir übernehmen alle Kosten dieser Garantie, Sie müssen sich lediglich anmelden.",
 'THANKYOU_LOGGIN'                                 => "Anmeldung zum Trusted Shops Käuferschutz",
-'TS_RATINGS_URL_TITLE'                            => "[tr] Shop rating",
-'TS_RATINGS_BUTTON_ALT'                           => "[tr] Rate our shop!",
-'TS_RATINGS'                                      => "[tr] Trusted Shops Rating",
-'TS_RATINGS_RATEUS'                               => "[tr] Tell us what you think about us and rate our shop!",
+'TS_RATINGS_URL_TITLE'                            => "Trusted Shops Kundenbewertungen",
+'TS_RATINGS_BUTTON_ALT'                           => "Bewerten Sie unseren Shop!",
+'TS_RATINGS'                                      => "Trusted Shops Kundenbewertung",
+'TS_RATINGS_RATEUS'                               => "Bitte nehmen Sie sich eine Minute, um unseren Shop zu bewerten.",
 'USER_BLOCHED_TITLE'                              => "Zugang verweigert",
 'USER_LOGINTITLE'                                 => "Anmelden",
 'USER_OPTION1'                                    => "Option 1",
@@ -1219,8 +1219,8 @@ $aLang = array(
 'USER_OPENID'                                     => "OpenID",
 'USER_DISABLESHIPPINGADDRESS'                     => "Hier klicken, um die Lieferadresse auszublenden",
 'USER_SELECTSHIPPINGADDRESS'                      => "Auswählen",
-'USER_UPDATE_ACCOUNT'                             => "[tr]Update account",
-'USER_FB_UPDATEACCOUNTMSG'                        => "[tr]You already connected using Facebook connect. If you already have an account, please update your account and in future connect to your account using Facebook connect.",
+'USER_UPDATE_ACCOUNT'                             => "Kontoinformationen aktualisieren",
+'USER_FB_UPDATEACCOUNTMSG'                        => "Sie haben sich in diesem Shop früher schon einmal mit Facebook Connect angemeldet. Falls Sie ein Kundenkonto im Shop haben, aktualisieren Sie dieses und verbinden Sie es mit Facebook, damit das Login in diesen Shop zukünftig noch bequemer für Sie wird.",
 'VAT_MESSAGE_ID_VALID'                            => "Die angegebene Umsatzsteuer-Identnummer ist gültig",
 'VAT_MESSAGE_ID_NOT_VALID'                        => "Fehler: Die angegebene Umsatzsteuer-Identnummer ist ungültig",
 'VAT_MESSAGE_INVALID_INPUT'                       => "Der angegebene Ländercode ist ungültig oder die Umsatzsteuer-Identnummer ist leer",
@@ -1339,24 +1339,23 @@ $aLang = array(
 'PROMO_UPCOMING'                                  => 'demnächst',
 
 'FACEBOOK_LOCALE'                                 => 'de_DE',
-'FACEBOOK_COMMENTS'                               => '[tr]Facebook comments',
-'FACEBOOK_CHAT'                                   => '[tr]Facebook Live Stream',
-'FACEBOOK_INVITE'                                 => '[tr]Facebook invite',
-'FACEBOOK_FACEPILE'                               => '[tr]Facebook facepile',
-'FACEBOOK_INVITEHEADER'                           => '[tr]Invite your Friends',
-'FACEBOOK_INVITETEXT'                             => '[tr]Check this out. Simply click on the button below to go recommended product.',
-'FACEBOOK_INVITEBUTTONTEXT'                       => '[tr]Open website',
+'FACEBOOK_COMMENTS'                               => 'Facebook comments',
+'FACEBOOK_CHAT'                                   => 'Facebook Live Stream',
+'FACEBOOK_INVITE'                                 => 'Facebook Invite',
+'FACEBOOK_FACEPILE'                               => 'Facebook Facepile',
+'FACEBOOK_INVITEHEADER'                           => 'Freunde einladen',
+'FACEBOOK_INVITETEXT'                             => 'Einfach auf den Button unten klicken um zur Empfehlung zu belangen.',
+'FACEBOOK_INVITEBUTTONTEXT'                       => 'Shop besuchen',
 
-'FACEBOOK_POPUP_HEADER'                           => "[tr]Account data update",
-'FACEBOOK_POPUP_UPDATETEXT'                       => "[tr]You have connected using Facebook connect. If you already have an account in
-                                                      eShop, please enter login data to connect your Facebook account with your
-                                                      existing account. Next time when you will login using Facebook connect, you'll be automaticly
-                                                      connected to your existing account.",
-'FACEBOOK_POPUP_UPDATEBTN'                        => "[tr]Update account",
-'FACEBOOK_POPUP_CANCELBTN'                        => "[tr]Cancel",
-'FACEBOOK_POPUP_CLOSEBTN'                         => "[tr]Close",
-'FACEBOOK_POPUP_UPDATEDONETEXT'                   => "[tr]Your account was updated successfully. Now when you connect using Facebook Connect, you will
-                                                     be automaticly logged in with your existing account.",
+'FACEBOOK_POPUP_HEADER'                           => "Kundenkonto aktualisieren",
+'FACEBOOK_POPUP_UPDATETEXT'                       => "Sie haben sich im Shop über Facebook Connect angemeldet. Falls Sie früher bereits ein
+                                                      Kundenkonto bei uns im Shop eröffnet hatten, melden Sie sich bitte nochmals mit Ihren
+                                                      Logindaten an und verknüpfen dadurch Ihr Facebook Profil mit Ihrem Kundenkonto. So wird
+                                                      die Anmeldung hier im Shop zukünftig noch einfacher.",
+'FACEBOOK_POPUP_UPDATEBTN'                        => "Kundenkonto verknüpfen",
+'FACEBOOK_POPUP_CANCELBTN'                        => "Abbrechen",
+'FACEBOOK_POPUP_CLOSEBTN'                         => "Schließen",
+'FACEBOOK_POPUP_UPDATEDONETEXT'                   => "Ihr Kundenkonto wurde erfolgreich aktualisiert. Zukünftig können Sie sich ganz einfach per Facebook Connect einloggen.",
 
 
 'INC_CMP_BASKET_TIMEOUT'                          => 'Läuft ab in:',

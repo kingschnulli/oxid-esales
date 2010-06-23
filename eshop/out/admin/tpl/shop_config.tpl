@@ -796,31 +796,14 @@ function showInvitations()
     <div class="groupExp">
         <div>
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_FACEBOOK" }]</b></a>
-            <dl>
-                <dt>
-                    <select class="select" id="fbconnect" name=confstrs[bl_showFbConnect] [{ $readonly }] [{if !$blCurlIsActive}]disabled[{/if}]>
-                        <option value="0"  [{if !$confstrs.bl_showFbConnect }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
-                        <option value="1"  [{if $confstrs.bl_showFbConnect }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
-                    </select>
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_FACEBOOKCONNECT" }]
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT" }]
-                    [{if !$blCurlIsActive}]
-                        <br><br>
-                        <span class="err">[{ oxmultilang ident="SHOP_CONFIG_FACEBOOKCONNECTDISABLED" }]</span>
-                    [{/if}]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
 
             <dl>
                 <dt>
                     <input type=text class="txt" style="width: 250px;" name=confstrs[sFbAppId] value="[{$confstrs.sFbAppId}]">
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKAPPID" }]
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_FACEBOOKAPPID" }]
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKAPPID" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>
@@ -828,10 +811,28 @@ function showInvitations()
             <dl>
                 <dt>
                     <input type=text class="txt" style="width: 250px;" name=confstrs[sFbSecretKey] value="[{$confstrs.sFbSecretKey}]">
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHOP_CONFIG_FBSECRETKEY" }]
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_FBSECRETKEY" }]
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHOP_CONFIG_FBSECRETKEY" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
+            <dl>
+                <dt>
+                    <select class="select" id="fbconnect" name=confstrs[bl_showFbConnect] [{ $readonly }] [{if !$blCurlIsActive}]disabled[{/if}]>
+                        <option value="0"  [{if !$confstrs.bl_showFbConnect }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
+                        <option value="1"  [{if $confstrs.bl_showFbConnect }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
+                    </select>
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT" }]
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_FACEBOOKCONNECT" }]
+                    [{if !$blCurlIsActive}]
+                        <br><br>
+                        <span class="err">[{ oxmultilang ident="SHOP_CONFIG_FACEBOOKCONNECTDISABLED" }]</span>
+                    [{/if}]
                 </dd>
                 <div class="spacer"></div>
             </dl>

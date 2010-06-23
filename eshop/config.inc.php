@@ -138,7 +138,7 @@
     $this->sTsProtectionUrl = "https://protection.trustedshops.com/ts/protectionservices/ApplicationRequestService?wsdl";
     // This is only needed for testing during integration
     $this->sTsTestProtectionUrl = "https://protection-qa.trustedshops.com/ts/protectionservices/ApplicationRequestService?wsdl";
-    
+
     $this->sTsProtectProducts = array( "TS080501_500_30_EUR"   => array( "netto" => "0.82", "amount" => "500" ),
                                        "TS080501_1500_30_EUR"  => array( "netto" => "2.47", "amount" => "1500" ),
                                        "TS080501_2500_30_EUR"  => array( "netto" => "4.12", "amount" => "2500" ),
@@ -147,6 +147,9 @@
                                        "TS080501_20000_30_EUR" => array( "netto" => "32.94", "amount" => "20000" )
                                 ); // Buyer protection products
 
+    // Trusted Shops Ratings login info
+    $this->sTsUser = null;
+    $this->sTsPass = null;
     // Trusted Shops Ratings configuration array
     $this->aTsConfig = array( "blTestMode"   => false, // set TRUE to enable testing mode
                               "sTsUrl"       => "https://www.trustedshops.com", // Trusted Shops Rating main url

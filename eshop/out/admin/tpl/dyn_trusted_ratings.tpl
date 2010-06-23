@@ -35,30 +35,6 @@
     <tr>
       <td colspan="3">&nbsp;</td>
     </tr>
-    <tr>
-      <td align="left">
-        [{ oxmultilang ident="DYN_TRUSTED_RATINGS_USER" }]
-      </td>
-      <td valign="left" class="edittext">
-        <input type="text" class="editinput" style="width:270px" name="confstrs[sTsUser]" value="[{$confstrs.sTsUser}]" maxlength="40" [{ $readonly }]>
-        [{ oxinputhelp ident="HELP_DYN_TRUSTED_RATINGS_USER" }]
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td align="left">
-        [{ oxmultilang ident="DYN_TRUSTED_RATINGS_PASS" }]
-      </td>
-      <td valign="left" class="edittext">
-        <input type="password" class="editinput" style="width:270px" name="confstrs[sTsPass]" value="[{$confstrs.sTsPass}]" maxlength="40" [{ $readonly }]>
-        [{ oxinputhelp ident="HELP_DYN_TRUSTED_RATINGS_PASS" }]
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td colspan="3">&nbsp;</td>
-    </tr>
-
     [{foreach from=$alllang key=lang item=language}]
     [{assign var="abbr" value=$language->abbr }]
     <tr>

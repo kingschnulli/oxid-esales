@@ -72,7 +72,7 @@ class dyn_trusted_ratings extends Shop_Config
         if ( is_array( $aConfAArs['aTsLangIds'] ) ) {
 
             $blActive = ( isset( $aConfBools["blTsWidget"] ) && $aConfBools["blTsWidget"] == "true" ) ? true : false;
-            $sPkg = "OXID eShop ".$myConfig->getEdition()." ".$myConfig->getVersion();
+            $sPkg = "OXID_ESALES";
 
             $aActiveLangs = array();
             foreach ( $aConfAArs['aTsLangIds'] as $sLangId => $sId ) {

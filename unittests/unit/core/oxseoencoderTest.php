@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 28421 2010-06-18 08:54:27Z sarunas $
+ * @version   SVN: $Id: oxseoencoderTest.php 28543 2010-06-22 11:43:36Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -208,7 +208,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $oEncoder->setPrefix( "-" );
         $oEncoder->setReservedWords( explode( " ", $sChars ) );
 
-        $this->assertEquals( "http/www.oxideshop.com", $oEncoder->UNITprepareUri( "http://www.oxideshop.com" ) );
+        $this->assertEquals( "http/www+oxideshop+com", $oEncoder->UNITprepareUri( "http://www!oxideshop~com" ) );
     }
 
     /**

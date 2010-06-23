@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28511 2010-06-21 15:56:26Z rimvydas.paskevicius $
+ * @version   SVN: $Id: help_lang.php 28562 2010-06-22 15:29:22Z rimvydas.paskevicius $
  */
 
 /**
@@ -207,7 +207,7 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_FBLIKE'                       =>  'Enables users to make connections to your pages and share content back to their friends on Facebook with one click.',
 
-'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT'  =>  'Show Facebook connect box which allows users to log in into eShop using theirs Facebook accunt data. If user is logged in to his Facebook account he also will be automaticly logged in to eShop (if has an account there).',
+'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT'  =>  'Show Facebook Connect box which allows users to log in into eShop using theirs Facebook accunt data.',
 
 'HELP_SHOP_CONFIG_NETPRICESHOP'                 =>  'Enabled option switches prices shown in shop to netprices and changes basket layout.',
 
@@ -542,13 +542,11 @@ $aLang =  array(
 
 
 
-'HELP_DYN_TRUSTED_RATINGS_USER'                 => '[tr] Trusted Shops user login name',
-'HELP_DYN_TRUSTED_RATINGS_PASS'                 => '[tr] Trusted Shops user password',
-'HELP_DYN_TRUSTED_RATINGS_ID'                   => '[tr] Trusted Shops ID (for language). Green marker shows that language widget is enabled and verified',
-'HELP_DYN_TRUSTED_RATINGS_WIDGET'               => '[tr] To enable Trusted Shop widget switch this option on.',
-'HELP_DYN_TRUSTED_RATINGS_THANKYOU'             => '[tr] If switched on "Order Complete" ("Thankyou") page will contain rating button leading to Trusted Shop page',
-'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'           => '[tr] If switched on "Order Confirmation" email will contain rating button leading to Trusted Shop page',
-'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'       => '[tr] If switched on "Order Send" email will contain rating button leading to Trusted Shop page',
+'HELP_DYN_TRUSTED_RATINGS_ID'                   => 'You will receive your Trusted Shops ID for Customer Ratings in the order conformation email. If you are already a member of Trusted Shops, please use your known Trusted Shops ID. The green light indicates that the Customer Ratings have been verified and enabled after saving your settings.',
+'HELP_DYN_TRUSTED_RATINGS_WIDGET'               => 'Enable the Customer Ratings Widget by switching this option on.',
+'HELP_DYN_TRUSTED_RATINGS_THANKYOU'             => 'Enable the button "Write a review!" on "Order completed" page subsequent to an order by switching this option on.',
+'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'           => 'Enable the button "Write a review!" in "Order confirmation" email subsequent to an order by switching this option on.',
+'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'       => 'Enable the button "Write a review!" in "Order sent" email after dispatch of the order.',
 'HELP_DYN_TRUSTED_TSID'                         => 'Trusted Shops ID of the online shop (for language).',
 'HELP_DYN_TRUSTED_USER'                         => 'Trusted Shops Webservice-Login',
 'HELP_DYN_TRUSTED_PASSWORD'                     => 'Trusted Shops Webservice-Password',
