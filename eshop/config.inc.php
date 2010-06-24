@@ -148,8 +148,10 @@
                                 ); // Buyer protection products
 
     // Trusted Shops Ratings login info
-    $this->sTsUser = null;
-    $this->sTsPass = null;
+    // Do not change credentials unless instructed otherwise by Trusted Shops!
+    $this->sTsUser = "oxid_esales";
+    $this->sTsPass = "V1AoGEXm";
+
     // Trusted Shops Ratings configuration array
     $this->aTsConfig = array( "blTestMode"   => false, // set TRUE to enable testing mode
                               "sTsUrl"       => "https://www.trustedshops.com", // Trusted Shops Rating main url

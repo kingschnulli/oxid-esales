@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: dyn_trusted.php 28362 2010-06-16 08:07:55Z vilma $
+ * @version   SVN: $Id: dyn_trusted.php 28599 2010-06-23 13:04:59Z vilma $
  */
 
 
@@ -51,8 +51,8 @@ class dyn_trusted extends Shop_Config
         }
 
         $this->_aViewData["aShopID_TrustedShops"] = $aIds;
-        $this->_aViewData['tsUser'] = $this->_aViewData["confstrs"]['tsUser'];
-        $this->_aViewData['tsPassword'] = $this->_aViewData["confstrs"]['tsPassword'];
+        $this->_aViewData['aTsUser'] = $this->_aViewData["confaarrs"]['aTsUser'];
+        $this->_aViewData['aTsPassword'] = $this->_aViewData["confaarrs"]['aTsPassword'];
         $this->_aViewData['tsTestMode'] = $this->_aViewData["confbools"]['tsTestMode'];
         $this->_aViewData['tsSealActive'] = $this->_aViewData["confbools"]['tsSealActive'];
         $this->_aViewData["alllang"] = oxLang::getInstance()->getLanguageNames();
@@ -69,24 +69,21 @@ class dyn_trusted extends Shop_Config
      */
     public function save()
     {
+        $this->_saveTsPaymentId();
+
         $aConfStr = oxConfig::getParameter( "aShopID_TrustedShops" );
-        $aPaymentIds = oxConfig::getParameter( "paymentids" );
-        
-        if ( $aPaymentIds ) {
-            foreach ( $aPaymentIds as $sShopPayId => $sTsPayId ) {
-                $aPayment = oxNew("oxpayment");
-                if ( $aPayment->load($sShopPayId) ) {
-                    $aPayment->oxpayments__oxtspaymentid = new oxField($sTsPayId);
-                    $aPayment->save();
-                }
-            }
-        }
         $blSave = true;
         $blNotEmpty = false;
         foreach ( $aConfStr as $sConfStrs ) {
             if ( $sConfStrs ) {
                 $blNotEmpty = true;
-                if ( strlen( $sConfStrs ) != 33 || substr( $sConfStrs, 0, 1 ) != 'X' ) {
+                $oResults = $this->_checkTsId( $sConfStrs );
+                if ( $oResults && ($oResults->stateEnum == "PRODUCTION" || $oResults->stateEnum == "TEST")) {
+                    $sTsType = $oResults->typeEnum;
+                } else {
+                    if ( $oResults ) {
+                        $sErrorMessage = $oResults->stateEnum;
+                    }
                     $blSave = false;
                 }
             }
@@ -101,13 +98,15 @@ class dyn_trusted extends Shop_Config
             $myConfig = $this->getConfig();
             $sShopId = $myConfig->getShopId();
             $myConfig->saveShopConfVar( "aarr", 'iShopID_TrustedShops', $aConfStr, $sShopId );
-            $myConfig->saveShopConfVar( "str", 'tsUser', oxConfig::getParameter( "tsUser" ), $sShopId );
-            $myConfig->saveShopConfVar( "str", 'tsPassword', oxConfig::getParameter( "tsPassword" ), $sShopId );
+            $myConfig->saveShopConfVar( "aarr", 'aTsUser', oxConfig::getParameter( "aTsUser" ), $sShopId );
+            $myConfig->saveShopConfVar( "aarr", 'aTsPassword', oxConfig::getParameter( "aTsPassword" ), $sShopId );
             $myConfig->saveShopConfVar( "bool", 'tsTestMode', oxConfig::getParameter( "tsTestMode" ), $sShopId );
             $myConfig->saveShopConfVar( "bool", 'tsSealActive', oxConfig::getParameter( "tsSealActive" ), $sShopId );
+            $myConfig->saveShopConfVar( "str", 'tsSealType', $sTsType, $sShopId );
         } else {
             // displaying error..
             $this->_aViewData["errorsaving"] = 1;
+            $this->_aViewData["errormessage"] = $sErrorMessage;
             $this->_aViewData["aShopID_TrustedShops"] = null;
         }
     }
@@ -139,6 +138,43 @@ class dyn_trusted extends Shop_Config
             $this->_oPaymentTypes->getList();
         }
         return $this->_oPaymentTypes;
+    }
+
+    /**
+     * Returns checked TS Id
+     *
+     * @param string $sConfStrs Trusted shop id
+     *
+     * @return object
+     */
+    protected function _checkTsId( $sConfStrs )
+    {
+        if ( strlen( $sConfStrs ) != 33 || substr( $sConfStrs, 0, 1 ) != 'X' ) {
+            $blSave = false;
+        }
+        $oTsProtection = oxNew("oxtsprotection");
+        $oResults = $oTsProtection->checkCertificate( $sConfStrs, oxConfig::getParameter( "tsTestMode" ) );
+        return $oResults;
+    }
+
+    /**
+     * Saves payment Id returned from trusted shops
+     *
+     * @return null
+     */
+    protected function _saveTsPaymentId()
+    {
+        $aPaymentIds = oxConfig::getParameter( "paymentids" );
+        
+        if ( $aPaymentIds ) {
+            foreach ( $aPaymentIds as $sShopPayId => $sTsPayId ) {
+                $aPayment = oxNew("oxpayment");
+                if ( $aPayment->load($sShopPayId) ) {
+                    $aPayment->oxpayments__oxtspaymentid = new oxField($sTsPayId);
+                    $aPayment->save();
+                }
+            }
+        }
     }
 
 }

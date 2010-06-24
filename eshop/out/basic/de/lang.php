@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28562 2010-06-22 15:29:22Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 28596 2010-06-23 12:03:15Z vilma $
  */
 
 
@@ -197,7 +197,7 @@ $aLang = array(
 'BASKET_ARTICEL'                                  => "Artikel",
 'BASKET_QUANTITY'                                 => "Anzahl",
 'BASKET_UNITPRICE'                                => "Einzelpreis",
-'BASKET_TAX'                                      => "MwSt.",
+'BASKET_TAX'                                      => "MwSt",
 'BASKET_TOTAL'                                    => "Gesamt",
 'BASKET_ARTNOMBER'                                => "ArtNr.:",
 'BASKET_UPDATE'                                   => "aktualisieren",
@@ -215,7 +215,6 @@ $aLang = array(
 'BASKET_NOMBER'                                   => "Nr.",
 'BASKET_REMOVE2'                                  => "entfernen",
 'BASKET_SHIPPINGNET'                              => "Versandkosten (netto):",
-'BASKET_SHIPPINGTAX'                              => "Versandkosten MwSt.",
 'BASKET_PLUSTAX1'                                 => "zzgl. MwSt.",
 'BASKET_PLUSTAX2'                                 => "% Betrag:",
 'BASKET_SHIPPING'                                 => "Versandkosten",
@@ -223,10 +222,8 @@ $aLang = array(
 'BASKET_PAYMENT'                                  => "Aufschlag",
 'BASKET_CHARGE2'                                  => "Abschlag",
 'BASKET_DISCOUNT3'                                => "Zahlungsart:",
-'BASKET_PAYMENTTAX'                               => "Aufsch. Zahl. MwSt.",
 'BASKET_PAYMENTTAX1'                              => "Aufsch. Zahl. MwSt.",
 'BASKET_PAYMENTTAX2'                              => "% Betrag:",
-'BASKET_VATTOTAL'                                 => "Mwst. Summe:",
 'BASKET_GRANDTOTAL'                               => "Gesamtsumme:",
 'BASKET_DISCOUNTS_NOT_APPLIED_FOR_ARTICLES'       => "Diesen Artikeln ist kein Rabatt zugeordnet",
 'BASKET_REDEEMCOUPON'                             => "Gutschein einlösen",
@@ -254,8 +251,6 @@ $aLang = array(
 'BASKET_WRONGAMOUNT2'                             => " ein.",
 'BASKET_SELECT_ALL'                               => "Alle auswählen",
 'BASKET_TSPROTECTION'                             => "Trusted Shops Käuferschutz",
-'BASKET_TSPROTECTIONNET'                          => "Trusted Shops Käuferschutz (netto)",
-'BASKET_TSPROTECTIONCHARGETAX'                    => "Trusted Shops Käuferschutz Mwst.",
 'BASKET_TSPROTECTIONCHARGETAX1'                   => "zzgl. Mwst..",
 'BASKET_TSPROTECTIONCHARGETAX2'                   => "% Betrag:",
 'COMPARE_POPUP_TITLE'                             => "Artikelvergleich",
@@ -304,7 +299,6 @@ $aLang = array(
 'DETAILS_REDUCEDFROM'                             => "Statt",
 'DETAILS_REDUCEDTEXT'                             => "(Unser regulärer Preis.)",
 'DETAILS_NOWONLY'                                 => "jetzt nur",
-'DETAILS_PLUSVAT'                                 => "plus MwSt., zzgl. ",
 'DETAILS_PLUSSHIPPING'                            => "inkl. MwSt., zzgl. ",
 'DETAILS_PLUSSHIPPING2'                           => "Versandkosten.",
 'DETAILS_VPE_MESSAGE_1'                           => "Dieser Artikel kann nur in Verpackungseinheiten zu je ",
@@ -609,7 +603,6 @@ $aLang = array(
 'INC_DETAILS_LOCATOR_PREVIUOSPRODUCT'             =>"Artikel zurück",
 'INC_DETAILS_LOCATOR_NEXTPRODUCT'                 =>"nächster Artikel ",
 'INC_FOOTER_INCLTAXANDPLUSSHIPPING'               =>"* Alle Preise inkl. MwSt., zzgl. Versandkosten.",
-'INC_FOOTER_PLUSTAXANDPLUSSHIPPING'               =>"* Alle Preise zzgl. MwSt., zzgl. Versandkosten.",
 'INC_FOOTER_SOFTWAREFROMOXIDESALES'               =>"Shop Software von OXID eSales",
 'INC_FOOTER_HOME'                                 =>"Home",
 'INC_FOOTER_CONTACT'                              =>"Kontakt",
@@ -638,7 +631,6 @@ $aLang = array(
 'INC_HEADER_CART'                                 =>"Warenkorb",
 'INC_HEADER_YOUAREHERE'                           =>"Sie sind hier:",
 'INC_HEADER_INCLTAXPLUSSHIPPING'                  =>"Alle Preise inkl. MwSt., zzgl. Versandkosten.",
-'INC_HEADER_PLUSTAXPLUSSHIPPING'                  =>"Alle Preise zzgl. MwSt., zzgl. Versandkosten.",
 'INC_HEADER_URLMORE'                              =>"mehr",
 'INC_HEADER_TITLEPAGE'                            =>"Seite ",
 'INC_INFOBOX_NEWSLETTER'                          =>"Newsletter",
@@ -829,7 +821,6 @@ $aLang = array(
 'ORDER_COUPON'                                    => "Gutschein",
 'ORDER_NOMBER'                                    => "(Nr.",
 'ORDER_SHIPPINGNET'                               => "Versandkosten (netto):",
-'ORDER_SHIPPINGTAX'                               => "Versandkosten MwSt.",
 'ORDER_PLUSSHIPPINGTAX1'                          => "zzgl. MwSt.",
 'ORDER_PLUSSHIPPINGTAX2'                          => "% Betrag:",
 'ORDER_SHIPPINGGROSS1'                            => "Versandkosten",
@@ -837,16 +828,13 @@ $aLang = array(
 'ORDER_PAYMENT1'                                  => "Aufschlag",
 'ORDER_PAYMENT2'                                  => "Abschlag",
 'ORDER_PAYMENT3'                                  => "Zahlungsart:",
-'ORDER_PAYMENTCHARGETAX'                          => "Aufsch. Zahl. MwSt.",
 'ORDER_PAYMENTCHARGETAX1'                         => "Aufsch. Zahl. MwSt.",
 'ORDER_PAYMENTCHARGETAX2'                         => "% Betrag:",
 'ORDER_WRAPPINGNET'                               => "Geschenkverpackung/Grußkarte (netto):",
-'ORDER_WRAPPINGTAX'                               => "Geschenkverpackung/Grußkarte Mwst.",
 'ORDER_WRAPPINGTAX1'                              => "zzgl. Mwst.",
 'ORDER_WRAPPINGTAX2'                              => "% Betrag:",
 'ORDER_WRAPPINGGROSS1'                            => "Geschenkverpackung/Grußkarte",
 'ORDER_WRAPPINGGROSS2'                            => "(brutto)",
-'ORDER_VATTOTAL'                                  => "Mwst. Summe:",
 'ORDER_GRANDTOTAL'                                => "Gesamtsumme:",
 'ORDER_DISCOUNTS_NOT_APPLIED_FOR_ARTICLES'        => "Diesen Artikeln ist kein Rabatt zugeordnet",
 'ORDER_USEDCOUPONS'                               => "Folgende Gutscheine werden benutzt",
@@ -886,8 +874,6 @@ $aLang = array(
 'ORDER_OTHERINTRESTINGARTICLES'                   => "Weitere interessante Artikel für Sie:",
 'ORDER_INFO_TITLE'                                => "Wie Bestellen?",
 'ORDER_TSPROTECTION'                              => "Trusted Shops Käuferschutz",
-'ORDER_TSPROTECTIONNET'                           => "Trusted Shops Käuferschutz (netto):",
-'ORDER_TSPROTECTIONCHARGETAX'                     => "rusted Shops Käuferschutz Mwst.",
 'ORDER_TSPROTECTIONCHARGETAX1'                    => "zzgl. Mwst..",
 'ORDER_TSPROTECTIONCHARGETAX2'                    => "% Betrag:",
 'PAYMENT_TITLE'                                   => "Bezahlen",
@@ -923,9 +909,8 @@ $aLang = array(
 'PAYMENT_EMPTY_TEXT'                              => '<p>Derzeit ist keine Versandart für dieses Land definiert.</p>
                                                       <p>Wir werden versuchen, Liefermöglichkeiten zu finden und Sie über die Versandkosten informieren.</p>
                                                       <p>Falls Sie hiermit einverstanden sind, wählen Sie "Weiter zum nächsten Schritt".</p>',
-'PAYMENT_PROTECTION'                              => "Käuferschutz",
 'PAYMENT_TSPROTECTION'                            => "Trusted Shops Käuferschutz",
-'PAYMENT_TSPROTECTIONFOR'                         => "Käuferschutz bis",
+'PAYMENT_TSPROTECTIONFOR'                         => "Käuferschutz von",
 'PAYMENT_TSPROTECTIONTEXT'                        => "Der Trusted Shops Käuferschutz sichert Ihren Online-Kauf ab. Mit der Übermittlung und",
 'PAYMENT_TSPROTECTIONTEXT2'                       => "Speicherung",
 'PAYMENT_TSPROTECTIONTEXT3'                       => "meiner E-Mail-Adresse zur Abwicklung des Käuferschutzes durch Trusted Shops bin ich einverstanden.",
@@ -1328,7 +1313,6 @@ $aLang = array(
 'EMAIL_INVITE_HTML_EMAIL'                         => "E-Mail:",
 'EMAIL_INVITE_HTML_MENYGREETINGS'                 => "Viele Grüße,",
 
-
 'PROMO_WILLENDIN_PREFIX'                          => 'Endet in ',
 'PROMO_WILLENDIN_SUFFIX'                          => '!',
 'PROMO_WILLSTARTIN_PREFIX'                        => 'Startet in ',
@@ -1357,9 +1341,7 @@ $aLang = array(
 'FACEBOOK_POPUP_CLOSEBTN'                         => "Schließen",
 'FACEBOOK_POPUP_UPDATEDONETEXT'                   => "Ihr Kundenkonto wurde erfolgreich aktualisiert. Zukünftig können Sie sich ganz einfach per Facebook Connect einloggen.",
 
-
 'INC_CMP_BASKET_TIMEOUT'                          => 'Läuft ab in:',
-
 );
 
 /*

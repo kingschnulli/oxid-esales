@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 28523 2010-06-21 22:11:10Z alfonsas $
+ * @version   SVN: $Id: oxarticle.php 28590 2010-06-23 11:03:50Z alfonsas $
  */
 
 // defining supported link types
@@ -475,9 +475,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                     break;
                 }
             case 'ftprice':
-                return $this->getFTPrice();
-                break;
-
+                if ( $oPrice = $this->getTPrice() ) {
+                    return oxLang::getInstance()->formatCurrency( $myUtils->fRound($oPrice->getBruttoPrice()) );
+                    break;
+                } else {
+                    return null;
+                    break;
+                }
             case 'oxarticles__oxlongdesc':
                 return $this->getArticleLongDesc($this->getId());
                 break;
@@ -882,7 +886,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         // stock flags
         if ( $myConfig->getConfigParam( 'blUseStock' ) && $this->oxarticles__oxstockflag->value == 2) {
             $iOnStock = $this->oxarticles__oxstock->value + $this->oxarticles__oxvarstock->value;
-            if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+            if ($this->getConfig()->getConfigParam( 'blPsBasketReservationEnabled' )) {
                 $iOnStock += $this->getSession()->getBasketReservations()->getReservedAmount($this->getId());
             }
             if ( $iOnStock <= 0 ) {
@@ -2171,7 +2175,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 $iOnStock = floor( $iOnStock );
             }
         }
-        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+        if ($this->getConfig()->getConfigParam( 'blPsBasketReservationEnabled' )) {
             $iOnStock += $this->getSession()->getBasketReservations()->getReservedAmount($this->getId());
         }
         if ( $iOnStock >= $dAmount ) {
@@ -2688,8 +2692,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getFTPrice()
     {
         if ( $oPrice = $this->getTPrice() ) {
-            if ($dPrice = $oPrice->getModePrice()) {
-                return oxLang::getInstance()->formatCurrency( oxUtils::getInstance()->fRound($dPrice));
+            if ( $oPrice->getBruttoPrice() ) {
+                return oxLang::getInstance()->formatCurrency( oxUtils::getInstance()->fRound($oPrice->getBruttoPrice()));
             }
         }
     }
@@ -2702,8 +2706,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getFPrice()
     {
         if ( $oPrice = $this->getPrice() ) {
-            $dPrice = $oPrice->getModePrice();
-            return $this->getPriceFromPrefix().oxLang::getInstance()->formatCurrency( $dPrice );
+            return $this->getPriceFromPrefix().oxLang::getInstance()->formatCurrency( $oPrice->getBruttoPrice() );
         }
     }
 
@@ -3863,7 +3866,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         // stock
         if ( $myConfig->getConfigParam( 'blUseStock' ) && ($this->oxarticles__oxstockflag->value == 3 || $this->oxarticles__oxstockflag->value == 2)) {
             $iOnStock = $this->oxarticles__oxstock->value;
-            if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+            if ($this->getConfig()->getConfigParam( 'blPsBasketReservationEnabled' )) {
                 $iOnStock += $this->getSession()->getBasketReservations()->getReservedAmount($this->getId());
             }
             if ($iOnStock <= 0) {
@@ -3906,10 +3909,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         // compute price
-        $dPrice = $this->getPrice()->getModePrice();
+        $dPrice = $this->getPrice()->getBruttoPrice();
 
         $oCur = $myConfig->getActShopCurrencyObject();
-
         //price per unit handling
         if ((double) $this->oxarticles__oxunitquantity->value && $this->oxarticles__oxunitname->value) {
             $this->_fPricePerUnit = oxLang::getInstance()->formatCurrency($dPrice / (double) $this->oxarticles__oxunitquantity->value, $oCur);

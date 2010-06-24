@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 28515 2010-06-21 17:42:59Z vilma $
+ * @version   SVN: $Id: oxbasketTest.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1054,7 +1054,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testRemoveItemReserved()
     {
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
         $oBR = $this->getMock('oxBasketReservation', array('discardArticleReservation'));
         $oBR->expects($this->once())->method('discardArticleReservation')->with($this->equalTo($this->oArticle->getId()))->will($this->returnValue(null));
         $oS = $this->getMock('oxSession', array('getBasketReservations'));
@@ -1963,7 +1963,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
                                  '_mergeSavedBasket',
                                  'afterUpdate',
                                  'getSession' );
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
         $oS = $this->getMock('oxSession', array('getBasketReservations'));
         $oS->expects($this->never())->method('getBasketReservations');
         $oBasket = $this->getMock('oxbasket', $aMethodsToTest);
@@ -2013,7 +2013,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
                                  'getSession',
                                  'deleteBasket' );
         $oBasket = $this->getMock('oxbasket', $aMethodsToTest);
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
         $oBR = $this->getMock('oxBasketReservation', array('reserveBasket', 'getTimeLeft'));
         $oBR->expects($this->once())->method('reserveBasket')->with($this->equalTo($oBasket))->will($this->returnValue(null));
         $oBR->expects($this->never())->method('getTimeLeft');
@@ -2430,7 +2430,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testDeleteBasketNotReserved()
     {
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
         $oS = $this->getMock('oxSession', array('getBasketReservations'));
         $oS->expects($this->never())->method('getBasketReservations');
         $oBasket = $this->getMock(
@@ -2457,7 +2457,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testDeleteBasketReserved()
     {
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
         $oBR = $this->getMock('oxBasketReservation', array('discardReservations'));
         $oBR->expects($this->once())->method('discardReservations')->will($this->returnValue(null));
         $oS = $this->getMock('oxSession', array('getBasketReservations'));

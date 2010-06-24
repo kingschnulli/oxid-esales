@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticleTest.php 28180 2010-06-07 12:06:26Z sarunas $
+ * @version   SVN: $Id: oxorderarticleTest.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -83,7 +83,7 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
     {
         modConfig::getInstance()->setConfigParam( "blUseStock", 1 );
         modConfig::getInstance()->setConfigParam( "blAllowNegativeStock", 'xxx' );
-        modConfig::getInstance()->setConfigParam( "blBasketReservationEnabled", 0 );
+        modConfig::getInstance()->setConfigParam( "blPsBasketReservationEnabled", 0 );
 
         $oOrderArticle = $this->getMock( "oxorderarticle", array( "updateArticleStock", "isNewOrderItem", "setIsNewOrderItem" ) );
         $oOrderArticle->expects( $this->once() )->method( 'updateArticleStock')->with( $this->equalTo( -999 ), 'xxx' );
@@ -98,7 +98,7 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
     {
         modConfig::getInstance()->setConfigParam( "blUseStock", 1 );
         modConfig::getInstance()->setConfigParam( "blAllowNegativeStock", 'xxx' );
-        modConfig::getInstance()->setConfigParam( "blBasketReservationEnabled", 1 );
+        modConfig::getInstance()->setConfigParam( "blPsBasketReservationEnabled", 1 );
 
         $oBR = $this->getMock('oxBasketReservation', array('commitArticleReservation'));
         $oBR->expects($this->once())->method('commitArticleReservation')->with($this->equalTo('asd'), $this->equalTo(20));

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 28496 2010-06-21 14:01:13Z vilma $
+ * @version   SVN: $Id: oxviewTest.php 28599 2010-06-23 13:04:59Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -475,7 +475,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
     public function testGetTrustedShopIdNotActive()
     {
         $oView = $this->getProxyClass( 'oxview' );
-        modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', array (0=>'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') );
+        modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', null );
 
         $this->assertFalse( $oView->getTrustedShopId() );
     }

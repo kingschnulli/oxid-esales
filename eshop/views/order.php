@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: order.php 28326 2010-06-14 13:38:07Z sarunas $
+ * @version   SVN: $Id: order.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 /**
@@ -160,7 +160,7 @@ class order extends oxUBase
     {
         $myConfig = $this->getConfig();
         $oBasket = $this->getBasket();
-        if ($myConfig->getConfigParam( 'blBasketReservationEnabled' )) {
+        if ($myConfig->getConfigParam( 'blPsBasketReservationEnabled' )) {
             
             $this->getSession()->getBasketReservations()->renewExpiration();
 

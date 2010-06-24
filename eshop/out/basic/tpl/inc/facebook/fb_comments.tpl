@@ -1,4 +1,4 @@
-        [{if $oViewConf->getShowFbComments() && $oViewConf->getFbAppId()}]
+        [{if $oView->isActive('FbComments') && $oViewConf->getFbAppId()}]
         [{assign var="product" value=$oView->getProduct() }]
 
         <strong id="test_facebookCommentsHead" class="boxhead">[{ oxmultilang ident="FACEBOOK_COMMENTS" }]</strong>

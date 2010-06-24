@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticle.php 28179 2010-06-07 11:52:31Z sarunas $
+ * @version   SVN: $Id: oxorderarticle.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 /**
@@ -690,7 +690,7 @@ class oxOrderArticle extends oxBase implements oxIArticle
        if ( ( $blSave = parent::save() ) && $this->isNewOrderItem() ) {
            $myConfig = $this->getConfig();
            if ( $myConfig->getConfigParam( 'blUseStock' ) ) {
-               if ($myConfig->getConfigParam( 'blBasketReservationEnabled' )) {
+               if ($myConfig->getConfigParam( 'blPsBasketReservationEnabled' )) {
                    $this->getSession()
                            ->getBasketReservations()
                            ->commitArticleReservation(

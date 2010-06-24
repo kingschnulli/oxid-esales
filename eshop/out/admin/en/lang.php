@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28562 2010-06-22 15:29:22Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 28589 2010-06-23 10:49:08Z vilma $
  */
 
 /*
@@ -684,6 +684,10 @@ $aLang = array(
 'DYN_TRUSTED_SHOP_CARD'                         => 'Online Shop Zahlungskarte',
 'DYN_TRUSTED_DIRECT_E_BANKING'                  => 'Sofortüberweisung.de',
 'DYN_TRUSTED_OTHER'                             => 'Andere Zahlungsart',
+'DYN_TRUSTED_INVALID_TS_ID'                     => 'The certificate does not exist',
+'DYN_TRUSTED_CANCELLED'                         => 'The certificate has expired',
+'DYN_TRUSTED_DISABLED'                          => 'The certificate is locked',
+'DYN_TRUSTED_INTEGRATION'                       => 'Shop is under the certification',
 'DYN_TRUSTED_RATINGS_ID'                        => 'Trusted Shops ID for language ',
 'DYN_TRUSTED_RATINGS_WIDGET'                    => 'Display Rating Widget in eShop frontend',
 'DYN_TRUSTED_RATINGS_ID_COMMENT'                => 'Insert your Trusted Shops ID for Customer Ratings in your OXID eShop. You will receive the Trusted Shops ID from Trusted Shops by email.',
@@ -1285,9 +1289,6 @@ $aLang = array(
 'SHOP_CONFIG_MINORDERPRICE'                     => 'Min. Order Price (leave empty to disable)',
 'SHOP_CONFIG_MUSTFILLFIELDS'                    => 'Mandatory fields in User Registration Form',
 'SHOP_CONFIG_NEWARTBYINSERT'                    => 'Calculate newest Products by Date of Creation (otherwise by Date of last Change)',
-'SHOP_CONFIG_NETPRICESHOPOFF'                   => 'Disabled',
-'SHOP_CONFIG_NETPRICESHOPON'                    => 'Enabled',
-'SHOP_CONFIG_NETPRICESHOP'                      => 'Net price mode',
 'SHOP_CONFIG_NROFCATARTICLES'                   => 'Number of Products which can be shown in a Product List (Category Pages, Search Results)<br>Attention: A large number of products per page (above 100) can cause serious performance issues!',
 'SHOP_CONFIG_NROFCUSTOMERWHOARTICLES'           => 'Number of Products which are shown in "Customers who bought this product also purchased:"',
 'SHOP_CONFIG_NROFNEWCOMERARTICLES'              => 'Number of Products which are shown in "Just arrived!" (newest Products)',
@@ -1349,7 +1350,7 @@ $aLang = array(
 'SHOP_CONFIG_FBSECRETKEY'                       => 'Application Secret Key',
 'SHOP_CONFIG_FBCOMMENTS'                        => 'Comments',
 'SHOP_CONFIG_FBFACEPILE'                        => 'Facepile',
-'SHOP_CONFIG_FBCHAT'                            => 'Live Stream',
+'SHOP_CONFIG_FBLIVESTREAM'                      => 'Live Stream',
 'SHOP_CONFIG_FBINVITE'                          => 'Invite',
 'SHOP_CONFIG_FBSHARE'                           => 'Share',
 'SHOP_CONFIG_FBLIKE'                            => 'Like',
@@ -1380,8 +1381,8 @@ $aLang = array(
 'SHOP_SYSTEM_VARIANTPARENTBUYABLE'              => '"Parent" Products can be purchased',
 'SHOP_SYSTEM_VARIANTINHERITAMOUNTPRICE'         => 'Variants inherit Scale Prices from "Parent" Product',
 'SHOP_SYSTEM_USEMULTIDIMENSIONVARIANTS'         => 'Use multidimensional variants',
-'SHOP_SYSTEM_BLLOGGING'                         => 'Activate Logging for Statistics',
 'SHOP_SYSTEM_INLINEIMGEMAIL'                    => 'Send E-mails with inline Images',
+'SHOP_SYSTEM_BLLOGGING'                         => 'Activate Logging for Statistics',
 'SHOP_SYSTEM_LOGSKIPTAGS'                       => 'Exclusions for Admin log',
 'SHOP_SYSTEM_SMARTYPHPHANDLING'                 => 'How to handle PHP code embedded in templates',
 'SHOP_SYSTEM_SMARTYPHPHANDLING_REMOVE'          => 'Output code in HTML source (not displayed)',

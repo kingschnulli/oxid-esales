@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: basket.php 28287 2010-06-11 08:17:06Z sarunas $
+ * @version   SVN: $Id: basket.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 /**
@@ -99,7 +99,7 @@ class Basket extends oxUBase
      */
     public function render()
     {
-        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+        if ($this->getConfig()->getConfigParam( 'blPsBasketReservationEnabled' )) {
             $this->getSession()->getBasketReservations()->renewExpiration();
         }
 

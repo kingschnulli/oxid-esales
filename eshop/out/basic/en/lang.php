@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28562 2010-06-22 15:29:22Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 28596 2010-06-23 12:03:15Z vilma $
  */
 
 
@@ -32,6 +32,7 @@ http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/editing-language-f
 */
 
 $sLangName  = "English";
+
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
@@ -214,7 +215,6 @@ $aLang = array(
 'BASKET_NOMBER'                                   => "No.",
 'BASKET_REMOVE2'                                  => "remove",
 'BASKET_SHIPPINGNET'                              => "Shipping (net):",
-'BASKET_SHIPPINGTAX'                              => "Shipping VAT",
 'BASKET_PLUSTAX1'                                 => "plus VAT",
 'BASKET_PLUSTAX2'                                 => "% Amount:",
 'BASKET_SHIPPING'                                 => "Shipping cost",
@@ -222,10 +222,8 @@ $aLang = array(
 'BASKET_PAYMENT'                                  => "Surcharge",
 'BASKET_CHARGE2'                                  => "Deduction",
 'BASKET_DISCOUNT3'                                => "Type of Payment:",
-'BASKET_PAYMENTTAX'                               => "Payment Charge VAT",
 'BASKET_PAYMENTTAX1'                              => "Surcharge VAT",
 'BASKET_PAYMENTTAX2'                              => "% Amount:",
-'BASKET_VATTOTAL'                                 => "VAT Total:",
 'BASKET_GRANDTOTAL'                               => "Grand Total:",
 'BASKET_DISCOUNTS_NOT_APPLIED_FOR_ARTICLES'       => "Discounts are not applied to these articles",
 'BASKET_REDEEMCOUPON'                             => "Redeem Coupon",
@@ -253,8 +251,6 @@ $aLang = array(
 'BASKET_WRONGAMOUNT2'                             => ".",
 'BASKET_SELECT_ALL'                               => "Select all",
 'BASKET_TSPROTECTION'                             => "Trusted Shops buyer protection",
-'BASKET_TSPROTECTIONNET'                          => "Trusted Shops buyer protection (net)",
-'BASKET_TSPROTECTIONCHARGETAX'                    => "Trusted Shops buyer protection VAT",
 'BASKET_TSPROTECTIONCHARGETAX1'                   => "plus VAT",
 'BASKET_TSPROTECTIONCHARGETAX2'                   => "% Amount:",
 'COMPARE_POPUP_TITLE'                             => "Product Comparison",
@@ -303,7 +299,6 @@ $aLang = array(
 'DETAILS_REDUCEDFROM'                             => "Reduced from",
 'DETAILS_REDUCEDTEXT'                             => "(Our normal price.)",
 'DETAILS_NOWONLY'                                 => "now only",
-'DETAILS_PLUSVAT'                                 => "plus VAT, plus ",
 'DETAILS_PLUSSHIPPING'                            => "incl. VAT, plus ",
 'DETAILS_PLUSSHIPPING2'                           => "Shipping",
 'DETAILS_VPE_MESSAGE_1'                           => "This product can only be ordered in packaging units of ",
@@ -497,11 +492,11 @@ $aLang = array(
 'FORGOTPWD_NEWPASSWORD'                           => "New password:",
 'FORGOTPWD_CONFIRMPASSWORD'                       => "Confirm password:",
 'FORGOTPWD_UPDATEPASSWORD'                        => "Change password",
-'FORGOTPWD_BACKTOSHOP'                            => "Back to Shop",
 'FORGOTPWD_ERRPASSWORDTOSHORT'                    => "Error: Your Password is too short.",
 'FORGOTPWD_ERRPASSWDONOTMATCH'                    => "Error: Passwords don't match.",
 'FORGOTPWD_ERRLINKEXPIRED'                        => "Password update page expired. Please use the Forgot Password function again.",
 'FORGOTPWD_ERRUNABLETOSEND'                       => "The e-mail address you have entered is invalid. Please enter a valid e-mail address.",
+'FORGOTPWD_BACKTOSHOP'                            => "Back to Shop",
 'GUESTBOOK_LOGIN_LOGIN'                           =>"Login",
 'GUESTBOOK_TITLE'                                 =>"Guestbook",
 'GUESTBOOK_WRITEENTRY'                            =>"Write entry",
@@ -598,17 +593,16 @@ $aLang = array(
 'INC_CMP_NEWS_CONTINUE'                           =>"Continue",
 'INC_CMP_NEWSLETTER_EMAIL'                        =>"eMail:",
 'INC_CMP_NEWSLETTER_SUBSCRIBE'                    =>"Subscribe",
-'INC_COMPARE_LOCATOR_PAGE'                        =>"Page",
 'INC_CMP_FBCONNECT_LOGINBTNTEXT'                  =>"Login",
 'INC_CMP_FBCONNECT_LOGOUTBTNTEXT'                 =>"Logout",
 'INC_CMP_FBCONNECT_YOUARELOGGEDINAS'              =>"You are logged in as",
+'INC_COMPARE_LOCATOR_PAGE'                        =>"Page",
 'INC_COMPARE_LOCATOR_DISPLAYPOPUP'                =>"Print Preview",
 'INC_DETAILS_LOCATOR_PRODUCT'                     =>"Product",
 'INC_DETAILS_LOCATOR_BACKTOOVERVIEW'              =>"Back to Overview",
 'INC_DETAILS_LOCATOR_PREVIUOSPRODUCT'             =>"Previous Product",
 'INC_DETAILS_LOCATOR_NEXTPRODUCT'                 =>"Next Product",
 'INC_FOOTER_INCLTAXANDPLUSSHIPPING'               =>"* All prices incl. VAT, plus Shipping",
-'INC_FOOTER_PLUSTAXANDPLUSSHIPPING'               =>"* All prices plus VAT, plus Shipping",
 'INC_FOOTER_SOFTWAREFROMOXIDESALES'               =>"Shop software from OXID eSales",
 'INC_FOOTER_HOME'                                 =>"Home",
 'INC_FOOTER_CONTACT'                              =>"Contact",
@@ -637,7 +631,6 @@ $aLang = array(
 'INC_HEADER_CART'                                 =>"Cart",
 'INC_HEADER_YOUAREHERE'                           =>"You are here:",
 'INC_HEADER_INCLTAXPLUSSHIPPING'                  =>"All prices incl. VAT, plus Shipping",
-'INC_HEADER_PLUSTAXPLUSSHIPPING'                  =>"All prices plus VAT, plus Shipping",
 'INC_HEADER_URLMORE'                              =>"more",
 'INC_HEADER_TITLEPAGE'                            =>"Page ",
 'INC_INFOBOX_NEWSLETTER'                          =>"Newsletter",
@@ -828,7 +821,6 @@ $aLang = array(
 'ORDER_COUPON'                                    => "Coupon",
 'ORDER_NOMBER'                                    => "(No.",
 'ORDER_SHIPPINGNET'                               => "Shipping (net):",
-'ORDER_SHIPPINGTAX'                               => "Shipping VAT",
 'ORDER_PLUSSHIPPINGTAX1'                          => "plus VAT",
 'ORDER_PLUSSHIPPINGTAX2'                          => "% Amount:",
 'ORDER_SHIPPINGGROSS1'                            => "Shipping",
@@ -836,16 +828,13 @@ $aLang = array(
 'ORDER_PAYMENT1'                                  => "Surcharge",
 'ORDER_PAYMENT2'                                  => "Deduction",
 'ORDER_PAYMENT3'                                  => "Type of Payment:",
-'ORDER_PAYMENTCHARGETAX'                          => "Payment Charge VAT",
 'ORDER_PAYMENTCHARGETAX1'                         => "Payment Charge VAT",
 'ORDER_PAYMENTCHARGETAX2'                         => "% Amount:",
 'ORDER_WRAPPINGNET'                               => "Gift Wrapping/Greeting Card (net):",
-'ORDER_WRAPPINGTAX'                               => "Gift Wrapping/Greeting Card VAT",
 'ORDER_WRAPPINGTAX1'                              => "plus VAT",
 'ORDER_WRAPPINGTAX2'                              => "% Amount:",
 'ORDER_WRAPPINGGROSS1'                            => "Gift Wrapping/Greeting Card",
 'ORDER_WRAPPINGGROSS2'                            => "(gross)",
-'ORDER_VATTOTAL'                                  => "VAT Total:",
 'ORDER_GRANDTOTAL'                                => "Grand Total:",
 'ORDER_DISCOUNTS_NOT_APPLIED_FOR_ARTICLES'        => "Discounts are not applied for these articles",
 'ORDER_USEDCOUPONS'                               => "Following Coupons are used",
@@ -886,8 +875,6 @@ $aLang = array(
 'ORDER_OTHERINTRESTINGARTICLES'                   => "Other products that may interest you:",
 'ORDER_INFO_TITLE'                                => "How to order?",
 'ORDER_TSPROTECTION'                              => "Trusted Shops buyer protection",
-'ORDER_TSPROTECTIONNET'                           => "Trusted Shops buyer protection (net)",
-'ORDER_TSPROTECTIONCHARGETAX'                     => "Trusted Shops buyer protection VAT",
 'ORDER_TSPROTECTIONCHARGETAX1'                    => "plus VAT",
 'ORDER_TSPROTECTIONCHARGETAX2'                    => "% Amount:",
 'PAYMENT_TITLE'                                   => "Pay",
@@ -923,9 +910,8 @@ $aLang = array(
 'PAYMENT_EMPTY_TEXT'                              => '<p>Currently we have no delivery method set up for this country.</p>
                                                       <p>We are aiming to find a possible delivery method and we will inform you as soon as possible via eMail about the result, including further information about delivery costs.</p>
                                                       <p>If you agree to this procedure, please select "move on to next step"</p>',
-'PAYMENT_PROTECTION'                              => "Buyer protection",
 'PAYMENT_TSPROTECTION'                            => "Trusted Shops buyer protection",
-'PAYMENT_TSPROTECTIONFOR'                         => "Buyer protection up to",
+'PAYMENT_TSPROTECTIONFOR'                         => "Buyer protection from",
 'PAYMENT_TSPROTECTIONTEXT'                        => "The Trusted Shops buyer protection secures your online purchase. I agree with the transfer and",
 'PAYMENT_TSPROTECTIONTEXT2'                       => "saving",
 'PAYMENT_TSPROTECTIONTEXT3'                       => "of my email address for the buyer protection handling by Trusted Shops.",

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 28452 2010-06-18 14:02:33Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfig.php 28588 2010-06-23 10:45:49Z rimvydas.paskevicius $
  */
 
 /**
@@ -880,18 +880,6 @@ class oxViewConfig extends oxSuperCfg
         return $this->getConfig()->getConfigParam( 'blStockOnDefaultMessage' );
     }
 
-
-
-    /**
-     * Returns config isNetPriceShop value
-     *
-     * @return bool
-     */
-    public function isNetPriceShop()
-    {
-        return $this->getConfig()->isNetPriceShop();
-    }
-
     /**
      * Returns config param "blStockOnDefaultMessage" value
      *
@@ -1168,7 +1156,7 @@ class oxViewConfig extends oxSuperCfg
      */
     public function getShowBasketTimeout()
     {
-        return $this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )
+        return $this->getConfig()->getConfigParam( 'blPsBasketReservationEnabled' )
             && ($this->getSession()->getBasketReservations()->getTimeLeft() > 0);
     }
 
@@ -1202,66 +1190,6 @@ class oxViewConfig extends oxSuperCfg
         }
 
         return false;
-    }
-
-    /**
-     * Returns config param "blFbEnableComments" value
-     *
-     * @return bool
-     */
-    public function getShowFbComments()
-    {
-        return $this->getConfig()->getConfigParam( 'blFbEnableComments' );
-    }
-
-    /**
-     * Returns config param "blFbEnableFacepile" value
-     *
-     * @return bool
-     */
-    public function getShowFbFacepile()
-    {
-        return $this->getConfig()->getConfigParam( 'blFbEnableFacepile' );
-    }
-
-    /**
-     * Returns config param "blFbEnableChat" value
-     *
-     * @return bool
-     */
-    public function getShowFbLiveStream()
-    {
-        return $this->getConfig()->getConfigParam( 'blFbEnableChat' );
-    }
-
-    /**
-     * Returns config param "blFbEnableInvite" value
-     *
-     * @return bool
-     */
-    public function getShowFbInvite()
-    {
-        return $this->getConfig()->getConfigParam( 'blFbEnableInvite' );
-    }
-
-    /**
-     * Returns config param "blFbEnableShare" value
-     *
-     * @return bool
-     */
-    public function getShowFbShare()
-    {
-        return $this->getConfig()->getConfigParam( 'blFbEnableShare' );
-    }
-
-    /**
-     * Returns config param "blFbEnableLike" value
-     *
-     * @return bool
-     */
-    public function getShowFbLike()
-    {
-        return $this->getConfig()->getConfigParam( 'blFbEnableLike' );
     }
 
     /**

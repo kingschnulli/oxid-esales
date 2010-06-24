@@ -35,8 +35,7 @@
     [{/if}]
 
     [{if $oViewConf->showTs("WIDGET") && $oViewConf->getTsId() }]
-        <strong class="h2"><a id="test_RightSideTsHeader" rel="nofollow">[{ oxmultilang ident="INC_RIGHTITEM_TS_RATINGS_BOX" }]</a></strong>
-        <div class="box">[{include file="dyn/ts_ratings.tpl" }]</div>
+        [{include file="inc/ts_ratings.tpl" }]
     [{/if}]
 
     [{if $oView->showNewsletter()}]

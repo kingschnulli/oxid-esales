@@ -138,12 +138,11 @@ class oxtsprotection extends oxSuperCfg
      */
     public function requestForTsProtection( $aValues, $sPaymentId )
     {
-        return true;
         $oConfig = $this->getConfig();
         $iLangId = (int) oxLang::getInstance()->getBaseLanguage();
         $blTsTestMode = $oConfig->getConfigParam( 'tsTestMode' );
-        $blTsUser = $oConfig->getConfigParam( 'tsUser' );
-        $blTsPassword = $oConfig->getConfigParam( 'tsPassword' );
+        $aTsUser = $oConfig->getConfigParam( 'aTsUser' );
+        $aTsPassword = $oConfig->getConfigParam( 'aTsPassword' );
         $aTrustedShopIds = $oConfig->getConfigParam( 'iShopID_TrustedShops' );
         if ( $aTrustedShopIds && $aTrustedShopIds[$iLangId] ) {
             try {
@@ -159,8 +158,8 @@ class oxtsprotection extends oxSuperCfg
                 $aValues['tsId']    = $aTrustedShopIds[$iLangId];
                 $aValues['paymentType'] = $sTsPaymentId;
                 $aValues['shopSystemVersion'] = $sEdition . " " . $sVersion;
-                $aValues['wsUser'] = $blTsUser;
-                $aValues['wsPassword'] = $blTsPassword;
+                $aValues['wsUser'] = $aTsUser[$iLangId];
+                $aValues['wsPassword'] = $aTsPassword[$iLangId];
                 $aValues['orderDate'] = str_replace(" ", "T", $aValues['orderDate']);
                 $oSoap = new SoapClient($sSoapUrl);
                 $aResults = $oSoap->{$sFunction}($aValues['tsId'],$aValues['tsProductId'],$aValues['amount'],$aValues['currency'],$aValues['paymentType'],
@@ -187,6 +186,38 @@ class oxtsprotection extends oxSuperCfg
 
     }
 
+    /**
+     * Executes TS certificate check
+     *
+     * @param integer $iTrustedShopId Trusted shop Id
+     * @param bool    $blTsTestMode   if test mode is on
+     *
+     * @return object
+     */
+    public function checkCertificate( $iTrustedShopId, $blTsTestMode )
+    {
+        if ( $iTrustedShopId ) {
+            try {
+                if ( $blTsTestMode ) {
+                    $sSoapUrl = 'https://qa.trustedshops.de/ts/services/TsProtection?wsdl';
+                } else {
+                    $sSoapUrl = 'https://www.trustedshops.de/ts/services/TsProtection?wsdl';
+                }
+                $sFunction = 'checkCertificate';
+                $aValues['tsId']    = $iTrustedShopId;
+                $oSoap = new SoapClient($sSoapUrl);
+                $aResults = $oSoap->{$sFunction}($aValues['tsId']);
+                if ( isset($aResults) ) {
+                    return $aResults;
+                }
+            } catch( Exception $eException ) {
+                oxUtils::getInstance()->logger( "Soap-Error: " . $eException->faultstring );
+                return false;
+            }
+        }
+        return null;
+
+    }
     /**
      * Returns TS payment id by shop payment id
      *

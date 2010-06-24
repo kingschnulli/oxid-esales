@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 28409 2010-06-17 12:00:45Z vilma $
+ * @version   SVN: $Id: payment.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 /**
@@ -144,7 +144,7 @@ class Payment extends oxUBase
     {
         $myConfig  = $this->getConfig();
 
-        if ($myConfig->getConfigParam( 'blBasketReservationEnabled' )) {
+        if ($myConfig->getConfigParam( 'blPsBasketReservationEnabled' )) {
             $this->getSession()->getBasketReservations()->renewExpiration();
         }
 
@@ -166,7 +166,7 @@ class Payment extends oxUBase
         //additional check if we really really have a user now
         //and the basket is not empty
         $oBasket = $this->getSession()->getBasket();
-        if ( $myConfig->getConfigParam( 'blBasketReservationEnabled' ) && (!$oBasket || ( $oBasket && !$oBasket->getProductsCount() )) ) {
+        if ( $myConfig->getConfigParam( 'blPsBasketReservationEnabled' ) && (!$oBasket || ( $oBasket && !$oBasket->getProductsCount() )) ) {
             oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() .'cl=basket' );
         }
         $oUser = $this->getUser();

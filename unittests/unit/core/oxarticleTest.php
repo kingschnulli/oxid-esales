@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 28282 2010-06-11 07:32:50Z sarunas $
+ * @version   SVN: $Id: oxarticleTest.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3963,7 +3963,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testIsVisibleNoStockButReserved()
     {
-        modConfig::getInstance()->setConfigParam( 'blBasketReservationEnabled', true );
+        modConfig::getInstance()->setConfigParam( 'blPsBasketReservationEnabled', true );
         modConfig::getInstance()->setConfigParam( 'blUseStock', true );
 
         $oBR = $this->getMock('oxBasketReservation', array('getReservedAmount'));
@@ -4065,7 +4065,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testCheckForStockWithBasketReservation()
     {
         modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', false );
-        modConfig::getInstance()->setConfigParam( 'blBasketReservationEnabled', true );
+        modConfig::getInstance()->setConfigParam( 'blPsBasketReservationEnabled', true );
         $this->oArticle->oxarticles__oxstock = new oxField(2, oxField::T_RAW);
         $this->oArticle->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
         $this->oArticle->save();
@@ -4564,7 +4564,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testAssignStockWhenStockEmptyButReserved()
     {
-        modConfig::getInstance()->setConfigParam( 'blBasketReservationEnabled', true );
+        modConfig::getInstance()->setConfigParam( 'blPsBasketReservationEnabled', true );
         modConfig::getInstance()->setConfigParam( 'blUseStock', true);
         modConfig::getInstance()->setConfigParam( 'sStockWarningLimit', 5);
         modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', false);

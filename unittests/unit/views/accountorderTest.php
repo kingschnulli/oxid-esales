@@ -31,6 +31,18 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 class Unit_Views_accountOrderTest extends OxidTestCase
 {
     /**
+     * Account_Order::getPageNavigation() test case
+     *
+     * @return  null
+     */
+    public function testGetPageNavigation()
+    {
+        $oView = $this->getMock( "Account_Order", array( "generatePageNavigation" ) );
+        $oView->expects( $this->once() )->method( 'generatePageNavigation');
+        $this->assertNull( $oView->getPageNavigation() );
+    }
+
+    /**
      * Testing Account_Order::getOrderArticleList()
      *
      * @return null
@@ -78,8 +90,9 @@ class Unit_Views_accountOrderTest extends OxidTestCase
      */
     public function testGetOrderList()
     {
-        $oUser = $this->getMock( "oxStdClass", array( "getOrders" ) );
+        $oUser = $this->getMock( "oxStdClass", array( "getOrders", "getOrderCount" ) );
         $oUser->expects( $this->once() )->method( 'getOrders')->will( $this->returnValue( "testOrders" ) );
+        $oUser->expects( $this->once() )->method( 'getOrderCount')->will( $this->returnValue( 1 ) );
 
         $oView = $this->getMock( "Account_Order", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: orderTest.php 28326 2010-06-14 13:38:07Z sarunas $
+ * @version   SVN: $Id: orderTest.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -918,7 +918,7 @@ class Unit_Views_orderTest extends OxidTestCase
 
     public function testRenderDoesNotCleanReservationsIfOff()
     {
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
 
         $oS = $this->getMock('oxsession', array('getBasketReservations'));
         $oS->expects($this->never())->method('getBasketReservations');
@@ -935,7 +935,7 @@ class Unit_Views_orderTest extends OxidTestCase
     }
     public function testRenderDoesCleanReservationsIfOn()
     {
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
 
         $oR = $this->getMock('stdclass', array('renewExpiration'));
         $oR->expects($this->once())->method('renewExpiration')->will($this->returnValue(null));

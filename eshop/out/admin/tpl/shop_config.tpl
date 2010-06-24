@@ -493,20 +493,6 @@ function showInvitations()
                 <div class="spacer"></div>
             </dl>
 
-            <dl>
-                <dt>
-                    <select name=confbools[blNetPriceShop] class="txt" style="width:100">
-                      <option value="false" [{ $readonly}]>[{ oxmultilang ident="SHOP_CONFIG_NETPRICESHOPOFF" }]</option>
-                      <option value="true" [{if ($confbools.blNetPriceShop)}]selected[{/if}] [{ $readonly}]>[{ oxmultilang ident="SHOP_CONFIG_NETPRICESHOPON" }]</option>
-                    </select>
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_NETPRICESHOP" }]
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_NETPRICESHOP" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
 
          </div>
     </div>
@@ -725,9 +711,9 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <select class="select" id="basketreserved" name=confstrs[blBasketReservationEnabled] onchange="javascript:showBasketReserved();" [{ $readonly }]>
-                        <option value="0"  [{if !$confstrs.blBasketReservationEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
-                        <option value="1"  [{if $confstrs.blBasketReservationEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
+                    <select class="select" id="basketreserved" name=confstrs[blPsBasketReservationEnabled] onchange="javascript:showBasketReserved();" [{ $readonly }]>
+                        <option value="0"  [{if !$confstrs.blPsBasketReservationEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
+                        <option value="1"  [{if $confstrs.blPsBasketReservationEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_BASKETRESERVATION" }]
                 </dt>
@@ -737,9 +723,9 @@ function showInvitations()
                 <div class="spacer"></div>
             </dl>
 
-            <dl [{if !$confstrs.blBasketReservationEnabled }]class="rowhide"[{/if}] id="basketreservedtime">
+            <dl [{if !$confstrs.blPsBasketReservationEnabled }]class="rowhide"[{/if}] id="basketreservedtime">
                 <dt>
-                    <input type=text class="txt" style="width:70" name=confstrs[iBasketReservationTimeout] value="[{if $confstrs.iBasketReservationTimeout}][{$confstrs.iBasketReservationTimeout}][{else}]1200[{/if}]" [{ $readonly}]>
+                    <input type=text class="txt" style="width:70" name=confstrs[iPsBasketReservationTimeout] value="[{if $confstrs.iPsBasketReservationTimeout}][{$confstrs.iPsBasketReservationTimeout}][{else}]1200[{/if}]" [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_BASKETRESERVATIONTIMEOUT" }]
                 </dt>
                 <dd>
@@ -825,7 +811,7 @@ function showInvitations()
                         <option value="0"  [{if !$confstrs.bl_showFbConnect }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
                         <option value="1"  [{if $confstrs.bl_showFbConnect }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT" }]
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_FACEBOOKCONNECT" }]
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_FACEBOOKCONNECT" }]
@@ -839,9 +825,9 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <select class="select" name=confstrs[blFbEnableComments] [{ $readonly }]>
-                        <option value="0"  [{if !$confstrs.blFbEnableComments }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
-                        <option value="1"  [{if $confstrs.blFbEnableComments }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
+                    <select class="select" name=confstrs[blFbCommentsEnabled] [{ $readonly }]>
+                        <option value="0"  [{if !$confstrs.blFbCommentsEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
+                        <option value="1"  [{if $confstrs.blFbCommentsEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_FBCOMMENTS" }]
                 </dt>
@@ -853,9 +839,9 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <select class="select" name=confstrs[blFbEnableFacepile] [{ $readonly }]>
-                        <option value="0"  [{if !$confstrs.blFbEnableFacepile }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
-                        <option value="1"  [{if $confstrs.blFbEnableFacepile }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
+                    <select class="select" name=confstrs[blFbFacepileEnabled] [{ $readonly }]>
+                        <option value="0"  [{if !$confstrs.blFbFacepileEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
+                        <option value="1"  [{if $confstrs.blFbFacepileEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_FBFACEPILE" }]
                 </dt>
@@ -867,23 +853,23 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <select class="select" name=confstrs[blFbEnableChat] [{ $readonly }]>
-                        <option value="0"  [{if !$confstrs.blFbEnableChat }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
-                        <option value="1"  [{if $confstrs.blFbEnableChat }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
+                    <select class="select" name=confstrs[blFbLiveStreamEnabled] [{ $readonly }]>
+                        <option value="0"  [{if !$confstrs.blFbLiveStreamEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
+                        <option value="1"  [{if $confstrs.blFbLiveStreamEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_FBCHAT" }]
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_FBLIVESTREAM" }]
                 </dt>
                 <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_FBCHAT" }]
+                    [{ oxmultilang ident="SHOP_CONFIG_FBLIVESTREAM" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>
 
             <dl>
                 <dt>
-                    <select class="select" name=confstrs[blFbEnableInvite] [{ $readonly }]>
-                        <option value="0"  [{if !$confstrs.blFbEnableInvite }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
-                        <option value="1"  [{if $confstrs.blFbEnableInvite }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
+                    <select class="select" name=confstrs[blFbInviteEnabled] [{ $readonly }]>
+                        <option value="0"  [{if !$confstrs.blFbInviteEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
+                        <option value="1"  [{if $confstrs.blFbInviteEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_FBINVITE" }]
                 </dt>
@@ -895,9 +881,9 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <select class="select" name=confstrs[blFbEnableShare] [{ $readonly }]>
-                        <option value="0"  [{if !$confstrs.blFbEnableShare }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
-                        <option value="1"  [{if $confstrs.blFbEnableShare }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
+                    <select class="select" name=confstrs[blFbShareEnabled] [{ $readonly }]>
+                        <option value="0"  [{if !$confstrs.blFbShareEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
+                        <option value="1"  [{if $confstrs.blFbShareEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_FBSHARE" }]
                 </dt>
@@ -909,9 +895,9 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <select class="select" name=confstrs[blFbEnableLike] [{ $readonly }]>
-                        <option value="0"  [{if !$confstrs.blFbEnableLike }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
-                        <option value="1"  [{if $confstrs.blFbEnableLike }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
+                    <select class="select" name=confstrs[blFbLikeEnabled] [{ $readonly }]>
+                        <option value="0"  [{if !$confstrs.blFbLikeEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_DISABLE" }]</option>
+                        <option value="1"  [{if $confstrs.blFbLikeEnabled }]selected[{/if}]>[{ oxmultilang ident="SHOP_CONFIG_ENABLE" }]</option>
                     </select>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_FBLIKE" }]
                 </dt>

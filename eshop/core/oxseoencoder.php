@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 28421 2010-06-18 08:54:27Z sarunas $
+ * @version   SVN: $Id: oxseoencoder.php 28604 2010-06-23 13:39:50Z tomas $
  */
 
 /**
@@ -334,7 +334,8 @@ class oxSeoEncoder extends oxSuperCfg
     protected function _getFullUrl( $sSeoUrl, $iLang = null, $blSsl = false )
     {
         $sFullUrl = ( $blSsl ? $this->getConfig()->getSslShopUrl( $iLang ) : $this->getConfig()->getShopUrl( $iLang ) ) . $sSeoUrl;
-        return oxUtilsUrl::getInstance()->processSeoUrl( $sFullUrl );
+        $sProcessedUrl =  oxUtilsUrl::getInstance()->processSeoUrl( $sFullUrl );
+        return $sProcessedUrl;
     }
 
     /**
@@ -1017,10 +1018,18 @@ class oxSeoEncoder extends oxSuperCfg
             $iLang   = oxLang::getInstance()->getEditLanguage();
         }
 
+        if ( isset($this->_aStaticUrlCache[$sStdUrl][$iLang][$iShopId])) {
+            return $this->_aStaticUrlCache[$sStdUrl][$iLang][$iShopId];
+        }
+
         $sFullUrl = '';
         if ( ( $sSeoUrl = $this->_getStaticUri( $sStdUrl, $iShopId, $iLang ) ) ) {
             $sFullUrl = $this->_getFullUrl( $sSeoUrl, $iLang, strpos( $sStdUrl, "https:" ) === 0 );
         }
+
+
+        $this->_aStaticUrlCache[$sStdUrl][$iLang][$iShopId] = $sFullUrl;
+
         return $sFullUrl;
     }
 
@@ -1135,7 +1144,10 @@ class oxSeoEncoder extends oxSuperCfg
      */
     public function getDynamicUrl( $sStdUrl, $sSeoUrl, $iLang )
     {
-        return $this->_getFullUrl( $this->_getDynamicUri( $sStdUrl, $sSeoUrl, $iLang ), strpos( $sStdUrl, "https:" ) === 0 );
+        startProfile("getDynamicUrl");
+        $sDynUrl = $this->_getFullUrl( $this->_getDynamicUri( $sStdUrl, $sSeoUrl, $iLang ), strpos( $sStdUrl, "https:" ) === 0 );
+        stopProfile("getDynamicUrl");
+        return $sDynUrl;
     }
 
     /**

@@ -318,7 +318,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
 
     public function testDiscardUnusedReservations()
     {
-        modConfig::getInstance()->setConfigParam( 'iBasketReservationTimeout', 0 );
+        modConfig::getInstance()->setConfigParam( 'iPsBasketReservationTimeout', 0 );
 
         $oArticle = new oxarticle();
         $oArticle->load('2000');
@@ -348,7 +348,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
      */
     public function testGetTimeLeft()
     {
-        modConfig::getInstance()->setConfigParam( 'iBasketReservationTimeout', 50 );
+        modConfig::getInstance()->setConfigParam( 'iPsBasketReservationTimeout', 50 );
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return 8484;}');
 
         $oUB = new stdClass();

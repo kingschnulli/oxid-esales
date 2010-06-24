@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28562 2010-06-22 15:29:22Z rimvydas.paskevicius $
+ * @version   SVN: $Id: help_lang.php 28588 2010-06-23 10:45:49Z rimvydas.paskevicius $
  */
 
 /**
@@ -194,7 +194,7 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_FBFACEPILE'                   =>  'Zeigt Ihren Shopbesuchern wer von deren Freunden in Facebook ein Freund Ihres Shops ist.',
 
-'HELP_SHOP_CONFIG_FBCHAT'                       =>  'Lässt die Besucher Ihres Shops miteinander in Echtzeit über Produkte Ihres Shops diskutieren',
+'HELP_SHOP_CONFIG_FBLIVESTREAM'                 =>  'Lässt die Besucher Ihres Shops miteinander in Echtzeit über Produkte Ihres Shops diskutieren',
 
 'HELP_SHOP_CONFIG_FBINVITE'                     =>  'Erlaubt Ihren Besuchern, Freunde über Facebook einladen',
 
@@ -202,9 +202,7 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_FBLIKE'                       =>  'Zeigt Facebooks \'Like button\' mit dem die Besucher Ihres Shops in Facebook bekannt geben, dass Sie Ihren Shop mögen.',
 
-'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT'  =>  'Facebook Connect anzeigen damit Anwender sich mit ihren Facebook-Profildaten im Shop anmelden können.',
-
-'HELP_SHOP_CONFIG_NETPRICESHOP'                 =>  'Aktivieren der Option schaltet die Nettopreisanzeige im Shop ein und ändert die Anordnung der Zeilen im Warenkorb.',
+'HELP_SHOP_CONFIG_FACEBOOKCONNECT'              =>  'Facebook Connect anzeigen damit Anwender sich mit ihren Facebook-Profildaten im Shop anmelden können.',
 
 'HELP_SHOP_MALL_MALLMODE'                       =>  'Hier stellen Sie ein, was auf der Startseite dieses eShops angezeigt werden soll: '.
                                                     '<ul><li><span class="navipath_or_inputname">Shop-Auswahlseite</span>: Eine Seite wird angezeigt, auf der Kunden zwischen den verschiedenen Shops wählen können.</li>' .

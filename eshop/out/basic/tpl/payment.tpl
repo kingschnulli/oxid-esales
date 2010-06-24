@@ -216,7 +216,7 @@
 
             </div>
             [{if $oView->getTrustedShopId()}]
-		    <strong id="test_TsProtectionHeader" class="boxhead paymentboxhead">[{ oxmultilang ident="PAYMENT_PROTECTION" }]</strong>
+		    <strong id="test_TsProtectionHeader" class="boxhead paymentboxhead">[{ oxmultilang ident="PAYMENT_TSPROTECTION" }]</strong>
 		    <div class="box info">
 		      <div class="etrustlogocol">
 		        <a href="https://www.trustedshops.com/shop/certificate.php?shop_id=[{$oView->getTrustedShopId()}]" target="_blank">
@@ -225,9 +225,6 @@
 		      </div>
 		      <div class="etrustdescocol">
 		        <input type="checkbox" name="bltsprotection" value="1" [{if $oView->getCheckedTsProductId()}]checked[{/if}]>
-		        [{ oxmultilang ident="PAYMENT_TSPROTECTION" }]
-		      <br>
-		      <br>
 		        [{assign var="aTsProtections" value=$oView->getTsProtections() }]
 		        [{if count($aTsProtections) > 1 }]
                 <select name="stsprotection">

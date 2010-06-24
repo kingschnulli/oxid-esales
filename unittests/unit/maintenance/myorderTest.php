@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: myorderTest.php 28522 2010-06-21 21:09:04Z alfonsas $
+ * @version   SVN: $Id: myorderTest.php 28598 2010-06-23 12:46:00Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -359,11 +359,13 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
     {
         $oMyOrder = $this->_getTestMyOrder();
 
+        $sClass = oxTestModules::addFunction('PdfArticleSummary', 'getNonPublicVar( $sName )', '{return $this->$sName;}');
+        $sClass = oxTestModules::addFunction($sClass, 'p_setTotalCostsWithoutDiscount( &$iStartPos )', '{return $this->_setTotalCostsWithoutDiscount( $iStartPos );}');
         $oPdf = new testPdfClass;
-        $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
+        $oPdfArtSum = new $sClass( $oMyOrder, $oPdf );
 
         $iStartPos = 1;
-        $oPdfArtSum->UNITsetTotalCostsWithoutDiscount( $iStartPos );
+        $oPdfArtSum->p_setTotalCostsWithoutDiscount( $iStartPos );
 
         $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
 

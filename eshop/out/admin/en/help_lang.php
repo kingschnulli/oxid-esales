@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28562 2010-06-22 15:29:22Z rimvydas.paskevicius $
+ * @version   SVN: $Id: help_lang.php 28588 2010-06-23 10:45:49Z rimvydas.paskevicius $
  */
 
 /**
@@ -199,7 +199,7 @@ $aLang =  array(
 'HELP_SHOP_CONFIG_FBFACEPILE'                   =>  "Facepile shows profile pictures of shops's visitor's friends who " .
                                                     "have already signed up in Facebook for your site.",
 
-'HELP_SHOP_CONFIG_FBCHAT'                       =>  'Live stream lets users visiting your shop share activity and comments in real time.',
+'HELP_SHOP_CONFIG_FBLIVESTREAM'                 =>  'Live stream lets users visiting your shop share activity and comments in real time.',
 
 'HELP_SHOP_CONFIG_FBINVITE'                     =>  'Shows visitor\'s friends list and allows them to invite friends to your eShop.',
 
@@ -207,9 +207,7 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_FBLIKE'                       =>  'Enables users to make connections to your pages and share content back to their friends on Facebook with one click.',
 
-'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONNECT'  =>  'Show Facebook Connect box which allows users to log in into eShop using theirs Facebook accunt data.',
-
-'HELP_SHOP_CONFIG_NETPRICESHOP'                 =>  'Enabled option switches prices shown in shop to netprices and changes basket layout.',
+'HELP_SHOP_CONFIG_FACEBOOKCONNECT'              =>  'Show Facebook Connect box which allows users to log in into eShop using theirs Facebook accunt data.',
 
 'HELP_SHOP_MALL_MALLMODE'                       =>  'Here you can set what is shown as front page of this eShop:' .
                                                     '<ul><li><span class="navipath_or_inputname">Show shop selector</span>: A page where the different eShops can be selected is shown.</li>' .

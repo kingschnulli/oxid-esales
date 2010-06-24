@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxprice.php 28523 2010-06-21 22:11:10Z alfonsas $
+ * @version   SVN: $Id: oxprice.php 28590 2010-06-23 11:03:50Z alfonsas $
  */
 
 /**
@@ -432,19 +432,5 @@ class oxPrice extends oxSuperCfg
     {
         $oCur = oxConfig::getInstance()->getActShopCurrencyObject();
         return ( ( double ) $dPrice ) * $oCur->rate;
-    }
-
-    /**
-     * Returns brutton or netto price depending on shop mode
-     *
-     * @return double
-     */
-    public function getModePrice()
-    {
-        if ( $this->getConfig()->isNetPriceShop() ) {
-            return $this->getNettoPrice();
-        } else {
-            return $this->getBruttoPrice();
-        }
     }
 }

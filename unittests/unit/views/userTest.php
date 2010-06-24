@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 28509 2010-06-21 15:22:41Z rimvydas.paskevicius $
+ * @version   SVN: $Id: userTest.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -277,7 +277,7 @@ class Unit_Views_userTest extends OxidTestCase
 
     public function testRenderDoesNotCleanReservationsIfOff()
     {
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
 
         $oS = $this->getMock('oxsession', array('getBasketReservations'));
         $oS->expects($this->never())->method('getBasketReservations');
@@ -289,7 +289,7 @@ class Unit_Views_userTest extends OxidTestCase
     }
     public function testRenderDoesCleanReservationsIfOn()
     {
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
 
         $oR = $this->getMock('stdclass', array('renewExpiration'));
         $oR->expects($this->once())->method('renewExpiration')->will($this->evalFunction('{throw new Exception("call is ok");}'));
@@ -313,7 +313,7 @@ class Unit_Views_userTest extends OxidTestCase
         oxTestModules::addFunction('oxutils', 'redirect($url)', '{throw new Exception($url);}');
         modInstances::addMod('oxutils', oxNew('oxutils'));
 
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
         modConfig::setParameter( 'sslredirect', 'forced' );
 
         $oR = $this->getMock('stdclass', array('renewExpiration'));

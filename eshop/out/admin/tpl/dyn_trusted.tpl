@@ -23,7 +23,11 @@
                 <tr>
                   <td colspan="2">
                     [{ if $errorsaving eq 1 }]
-                    <div class="error">[{ oxmultilang ident="DYN_TRUSTED_TRUSTEDSHOP_ERROR" }]</div>
+                      [{ if $errormessage }]
+                        <div class="error">[{ oxmultilang ident="DYN_TRUSTED_"|cat:$errormessage }]</div>
+                      [{else}]
+                        <div class="error">[{ oxmultilang ident="DYN_TRUSTED_TRUSTEDSHOP_ERROR" }]</div>
+                      [{/if}]
                     [{/if}]
                   </td>
                 </tr>
@@ -46,25 +50,25 @@
       		     [{ oxinputhelp ident="HELP_DYN_TRUSTED_TSID" }]
       		  </td>
     		</tr>
-            [{/foreach}]
-            <tr>
+    		<tr>
               <td align="left">
-                [{ oxmultilang ident="DYN_TRUSTED_USER" }]
+                &nbsp;&nbsp;&nbsp;&nbsp;[{ oxmultilang ident="DYN_TRUSTED_USER" }]
               </td>
               <td valign="left" class="edittext">
-                 <input type=text class="editinput" style="width:270px" name="tsUser" value="[{$tsUser}]" maxlength="40" [{ $readonly }]>
+                 <input type=text class="editinput" style="width:270px" name="aTsUser[[{$lang}]]" value="[{$aTsUser.$lang}]" maxlength="40" [{ $readonly }]>
                  [{ oxinputhelp ident="HELP_DYN_TRUSTED_USER" }]
               </td>
             </tr>
             <tr>
               <td align="left">
-                [{ oxmultilang ident="DYN_TRUSTED_PASSWORD" }]
+                &nbsp;&nbsp;&nbsp;&nbsp;[{ oxmultilang ident="DYN_TRUSTED_PASSWORD" }]
               </td>
               <td valign="left" class="edittext">
-                 <input type=text class="editinput" style="width:270px" name="tsPassword" value="[{$tsPassword}]" maxlength="40" [{ $readonly }]>
+                 <input type=text class="editinput" style="width:270px" name="aTsPassword[[{$lang}]]" value="[{$aTsPassword.$lang}]" maxlength="40" [{ $readonly }]>
                  [{ oxinputhelp ident="HELP_DYN_TRUSTED_PASSWORD" }]
               </td>
             </tr>
+            [{/foreach}]
             <tr>
               <td align="left">
                 [{ oxmultilang ident="DYN_TRUSTED_TESTMODUS" }]

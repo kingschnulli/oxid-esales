@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 28447 2010-06-18 12:28:30Z sarunas $
+ * @version   SVN: $Id: oxviewconfigTest.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -426,7 +426,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
 
     public function testGetShowBasketTimeoutWhenFunctionalityIsOnAndTimeLeft()
     {
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
 
         $oR = $this->getMock('stdclass', array('getTimeLeft'));
         $oR->expects($this->once())->method('getTimeLeft')->will($this->returnValue(5));
@@ -441,7 +441,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
     }
     public function testGetShowBasketTimeoutWhenFunctionalityIsOnAndTimeExpired()
     {
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', true);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
 
         $oR = $this->getMock('stdclass', array('getTimeLeft'));
         $oR->expects($this->once())->method('getTimeLeft')->will($this->returnValue(0));
@@ -456,7 +456,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
     }
     public function testGetShowBasketTimeoutWhenFunctionalityIsOff()
     {
-        modConfig::getInstance()->setConfigParam('blBasketReservationEnabled', false);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
 
         $oVC = $this->getMock('oxViewConfig', array('getSession'));
         $oVC->expects($this->never())->method('getSession');

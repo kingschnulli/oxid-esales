@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_basket.php 28399 2010-06-17 08:30:18Z sarunas $
+ * @version   SVN: $Id: oxcmp_basket.php 28585 2010-06-23 09:23:38Z sarunas $
  */
 
 /**
@@ -62,7 +62,7 @@ class oxcmp_basket extends oxView
     public function init()
     {
         $oConfig = $this->getConfig();
-        if ($oConfig->getConfigParam( 'blBasketReservationEnabled' )) {
+        if ($oConfig->getConfigParam( 'blPsBasketReservationEnabled' )) {
             if ($oReservations = $this->getSession()->getBasketReservations()) {
                 if (!$oReservations->getTimeLeft()) {
                     if ( $oBasket = $this->getSession()->getBasket() ) {

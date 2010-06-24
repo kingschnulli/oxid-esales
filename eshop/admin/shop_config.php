@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_config.php 28430 2010-06-18 11:22:12Z rimvydas.paskevicius $
+ * @version   SVN: $Id: shop_config.php 28589 2010-06-23 10:49:08Z vilma $
  */
 
 /**
@@ -31,7 +31,7 @@
 class Shop_Config extends oxAdminDetails
 {
     protected $_sThisTemplate = 'shop_config.tpl';
-    protected $_aSkipMultiline = array('aHomeCountry', 'iShopID_TrustedShops');
+    protected $_aSkipMultiline = array('aHomeCountry', 'iShopID_TrustedShops', 'aTsUser', 'aTsPassword');
 
     /**
      * Executes parent method parent::render(), passes shop configuration parameters

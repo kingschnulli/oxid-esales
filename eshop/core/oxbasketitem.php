@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitem.php 28523 2010-06-21 22:11:10Z alfonsas $
+ * @version   SVN: $Id: oxbasketitem.php 28590 2010-06-23 11:03:50Z alfonsas $
  */
 
 /**
@@ -970,9 +970,7 @@ class oxBasketItem extends oxSuperCfg
      */
     public function getFUnitPrice()
     {
-        $dPrice = $this->getUnitPrice()->getModePrice();
-
-        return oxLang::getInstance()->formatCurrency( $dPrice );
+        return oxLang::getInstance()->formatCurrency( $this->getUnitPrice()->getBruttoPrice() );
     }
 
     /**
@@ -982,9 +980,7 @@ class oxBasketItem extends oxSuperCfg
      */
     public function getFTotalPrice()
     {
-        $dPrice = $this->getPrice()->getModePrice();
-
-        return oxLang::getInstance()->formatCurrency( $dPrice );
+        return oxLang::getInstance()->formatCurrency( $this->getPrice()->getBruttoPrice() );
     }
 
     /**

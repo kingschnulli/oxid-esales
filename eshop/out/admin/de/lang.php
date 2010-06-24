@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28562 2010-06-22 15:29:22Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 28589 2010-06-23 10:49:08Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -678,6 +678,10 @@ $aLang = array(
 'DYN_TRUSTED_SHOP_CARD'                         => 'Online Shop Zahlungskarte',
 'DYN_TRUSTED_DIRECT_E_BANKING'                  => 'Sofortüberweisung.de',
 'DYN_TRUSTED_OTHER'                             => 'Andere Zahlungsart',
+'DYN_TRUSTED_INVALID_TS_ID'                     => 'Das Zertifikat existiert nicht',
+'DYN_TRUSTED_CANCELLED'                         => 'Das Zertifikat ist abgelaufen',
+'DYN_TRUSTED_DISABLED'                          => 'Das Zertifikat ist gesperrt',
+'DYN_TRUSTED_INTEGRATION'                       => 'Shop befindet sich in der Zertifizierung',
 'DYN_TRUSTED_RATINGS_ID'                        => 'Trusted Shops ID für Sprache ',
 'DYN_TRUSTED_RATINGS_WIDGET'                    => 'Bewertungs-Widget im eShop-Frontend anzeigen',
 'DYN_TRUSTED_RATINGS_ID_COMMENT'                => 'Fügen Sie hier die Trusted Shops ID ein, um die Kundenbewertungen in Ihrem Shop zu aktivieren. Sie erhalten die ID von Trusted Shops per E-Mail.',
@@ -1279,9 +1283,6 @@ $aLang = array(
 'SHOP_CONFIG_MINORDERPRICE'                     => 'Mindestbestellwert (leer lassen, falls nicht gewünscht)',
 'SHOP_CONFIG_MUSTFILLFIELDS'                    => '"Muss"-Felder für die Registrierung des Kunden',
 'SHOP_CONFIG_NEWARTBYINSERT'                    => 'Neueste Artikel nach dem Erstellungsdatum berechnen. (Ansonsten nach Datum der letzten Änderung)',
-'SHOP_CONFIG_NETPRICESHOPOFF'                   => 'Inaktiv',
-'SHOP_CONFIG_NETPRICESHOPON'                    => 'Aktiv',
-'SHOP_CONFIG_NETPRICESHOP'                      => 'Nettopreis-Modus',
 'SHOP_CONFIG_NROFCATARTICLES'                   => 'Anzahl der Artikel, die in einer Artikelliste pro Seite angezeigt werden können<br>Warnung: Eine große Anzahl von Artikeln pro Seite (über 100) kann erhebliche Performance-Probleme verursachen!',
 'SHOP_CONFIG_NROFCUSTOMERWHOARTICLES'           => 'Anzahl der Artikel, die bei "Kunden, die dies gekauft haben, haben auch das gekauft" angezeigt werden',
 'SHOP_CONFIG_NROFNEWCOMERARTICLES'              => 'Anzahl der Artikel, die bei "Frisch eingetroffen!" (neuste Artikel) angezeigt werden',
@@ -1343,7 +1344,7 @@ $aLang = array(
 'SHOP_CONFIG_FBSECRETKEY'                       => 'Application Secret Key',
 'SHOP_CONFIG_FBCOMMENTS'                        => 'Comments',
 'SHOP_CONFIG_FBFACEPILE'                        => 'Facepile',
-'SHOP_CONFIG_FBCHAT'                            => 'Live Stream',
+'SHOP_CONFIG_FBLIVESTREAM'                      => 'Live Stream',
 'SHOP_CONFIG_FBINVITE'                          => 'Invite',
 'SHOP_CONFIG_FBSHARE'                           => 'Share',
 'SHOP_CONFIG_FBLIKE'                            => 'Like',
@@ -1374,8 +1375,8 @@ $aLang = array(
 'SHOP_SYSTEM_VARIANTPARENTBUYABLE'              => 'Varianten-"Vater" ist kaufbar',
 'SHOP_SYSTEM_VARIANTINHERITAMOUNTPRICE'         => 'Varianten erben Staffelpreise vom "Vater"',
 'SHOP_SYSTEM_USEMULTIDIMENSIONVARIANTS'         => 'Multidimensionale Varianten einschalten',
-'SHOP_SYSTEM_BLLOGGING'                         => 'Mitloggen für Statistik einschalten',
 'SHOP_SYSTEM_INLINEIMGEMAIL'                    => 'E-Mails mitsamt Bildern versenden',
+'SHOP_SYSTEM_BLLOGGING'                         => 'Mitloggen für Statistik einschalten',
 'SHOP_SYSTEM_LOGSKIPTAGS'                       => 'Diese Änderungen im Administrationsbereich nicht mitloggen',
 'SHOP_SYSTEM_SMARTYPHPHANDLING'                 => 'Was soll mit PHP-Code in Templates gemacht werden',
 'SHOP_SYSTEM_SMARTYPHPHANDLING_REMOVE'          => 'Code in HTML-Quelltext ausgeben (wird nicht angezeigt)',

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 28494 2010-06-21 13:57:10Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxview.php 28589 2010-06-23 10:49:08Z vilma $
  */
 
 /**
@@ -568,7 +568,7 @@ class oxView extends oxSuperCfg
     }
 
     /**
-     * Returns shop id in trusted shops
+     * Returns shop id in classic trusted shops
      *
      * @return string
      */
@@ -577,7 +577,9 @@ class oxView extends oxSuperCfg
         if ( $this->_sTrustedShopId == null ) {
             $this->_sTrustedShopId = false;
             $oConfig = $this->getConfig();
-            if ( $oConfig->getConfigParam( 'tsSealActive' ) && $aTrustedShopIds = $oConfig->getConfigParam( 'iShopID_TrustedShops' ) ) {
+            $sTsType   = $oConfig->getConfigParam( 'tsSealType' );
+            $aTrustedShopIds = $oConfig->getConfigParam( 'iShopID_TrustedShops' );
+            if ( $aTrustedShopIds && ( !$sTsType || $sTsType == 'CLASSIC' ) ) {
                 $iLangId = (int) oxLang::getInstance()->getBaseLanguage();
                 // compatibility to old data
                 if ( !is_array( $aTrustedShopIds ) && $iLangId == 0 ) {
@@ -589,6 +591,27 @@ class oxView extends oxSuperCfg
                 if ( strlen( $this->_sTrustedShopId ) != 33 || substr( $this->_sTrustedShopId, 0, 1 ) != 'X' ) {
                     $this->_sTrustedShopId = false;
                 }
+            }
+        }
+        return $this->_sTrustedShopId;
+    }
+
+    /**
+     * Returns shop id in trusted shops if excellence product is ordered
+     *
+     * @return string
+     */
+    public function getTSExcellenceId()
+    {
+        if ( $this->_sTrustedShopId == null ) {
+            $this->_sTrustedShopId = false;
+            $oConfig   = $this->getConfig();
+            $sTsType   = $oConfig->getConfigParam( 'tsSealType' );
+            $sTsActive = $oConfig->getConfigParam( 'tsSealActive' );
+            $aTrustedShopIds = $oConfig->getConfigParam( 'iShopID_TrustedShops' );
+            if ( $sTsActive && $aTrustedShopIds && $sTsType == 'EXCELLENCE' ) {
+                $iLangId = (int) oxLang::getInstance()->getBaseLanguage();
+                $this->_sTrustedShopId = $aTrustedShopIds[$iLangId];
             }
         }
         return $this->_sTrustedShopId;

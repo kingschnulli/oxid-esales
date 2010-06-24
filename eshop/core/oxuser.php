@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 28452 2010-06-18 14:02:33Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxuser.php 28610 2010-06-23 14:27:48Z arvydas $
  */
 
 /**
@@ -615,13 +615,20 @@ class oxUser extends oxBase
     /**
      * Returns object with ordering information (order articles list).
      *
+     * @param int $iLimit how many entries to load
+     * @param int $iPage  which page to start
+     *
      * @return object
      */
-    public function getOrders()
+    public function getOrders( $iLimit = false, $iPage = 0 )
     {
         $myConfig = $this->getConfig();
         $oOrders = oxNew( 'oxlist' );
         $oOrders->init( 'oxorder' );
+
+        if ( $iLimit !== false ) {
+            $oOrders->setSqlLimit( $iLimit * $iPage, $iLimit );
+        }
 
         //P
         // Lists does not support loading from two tables, so orders
@@ -954,7 +961,7 @@ class oxUser extends oxBase
         $sDynGoup = strtolower( trim( $sDynGoup ) );
 
         // setting denied groups from admin settings also
-        $aDisabledDynGroups = array_merge( array( 'oxidadmin', 'oxidnetprice' ), (array) $aDeniedDynGroups );
+        $aDisabledDynGroups = array_merge( array( 'oxidadmin' ), (array) $aDeniedDynGroups );
 
         // default state ..
         $blAdd = false;

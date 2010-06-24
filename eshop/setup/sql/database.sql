@@ -1005,7 +1005,6 @@ INSERT INTO `oxgroups` VALUES ('oxidpricec', 1, 'Preis C', 'Price C', '', '');
 INSERT INTO `oxgroups` VALUES ('oxidblocked', 1, 'BLOCKED', 'BLOCKED', '', '');
 INSERT INTO `oxgroups` VALUES ('oxidcustomer', 1, 'Kunde', 'Customer', '', '');
 INSERT INTO `oxgroups` VALUES ('oxidnotyetordered', 1, 'Noch nicht gekauft', 'Not Yet Purchased', '', '');
-INSERT INTO `oxgroups` VALUES ('oxidnetprice', 1, 'Net Preis', 'Net Price', '', '');
 
 #
 # Table structure for table `oxlinks`

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 28315 2010-06-11 15:34:43Z arvydas $
+ * @version   SVN: $Id: oxuserTest.php 28610 2010-06-23 14:27:48Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -338,6 +338,56 @@ class Unit_Core_oxuserTest extends OxidTestCase
             $sQ = 'insert into oxuserpayments ( oxid, oxuserid, oxpaymentsid, oxvalue ) values ( "'.$sId.'", "'.$oUser->oxuser__oxid->value.'", "oxidcreditcard", "'.$sDynValues.'" ) ';
             $myDB->Execute( $sQ );
         }
+    }
+
+    /**
+     * oxUser::getOrders() test case when paging is on
+     *
+     * @return null
+     */
+    public function testGetOrdersWhenPagingIsOn()
+    {
+        $myUtils  = oxUtilsObject::getInstance();
+        $myDB     = oxDb::getDB();
+
+        $aUsers  = current( $this->_aUsers );
+        $sUserId = current( $aUsers );
+
+        $oUser = new oxuser();
+        $oUser->load( $sUserId );
+
+        $sShopID = $oUser->getShopId();
+
+        $sArticleID = $myDB->getOne( "select oxid from oxarticles where oxshopid='{$sShopID}' order by rand()" );
+
+        // adding some more orders..
+        for ( $i = 0; $i < 21; $i++ ) {
+            $sId = $myUtils->generateUID();
+
+            $sQ = 'insert into oxorder ( oxid, oxshopid, oxuserid, oxorderdate ) values ( "'.$sId.'", "'.$sShopID.'", "'.$oUser->getId().'", "'.date( 'Y-m-d  H:i:s', time() + 3600 ).'" ) ';
+            $myDB->Execute( $sQ );
+
+            // adding article to order
+            $sArticleID = $myDB->getOne( 'select oxid from oxarticles order by rand() ' );
+            $sQ = 'insert into oxorderarticles ( oxid, oxorderid, oxamount, oxartid, oxartnum ) values ( "'.$sId.'", "'.$sId.'", 1, "'.$sArticleID.'", "'.$sArticleID.'" ) ';
+            $myDB->Execute( $sQ );
+        }
+
+        $iTotal = $myDB->getOne( "select count(*) from oxorder where oxshopid = '{$sShopID}' and oxuserid = '{$sUserId}'" );
+
+        $oOrders = $oUser->getOrders( 10, 0 );
+        $this->assertEquals( 10, $oOrders->count() );
+        $iTotal -= 10;
+
+        $oOrders = $oUser->getOrders( 10, 1 );
+        $this->assertEquals( 10, $oOrders->count() );
+        $iTotal -= 10;
+
+        $oOrders = $oUser->getOrders( 10, 2 );
+        $this->assertEquals( $iTotal, $oOrders->count() );
+
+        $oOrders = $oUser->getOrders( 10, 3 );
+        $this->assertEquals( 0, $oOrders->count() );
     }
 
     /**
@@ -2127,7 +2177,6 @@ class Unit_Core_oxuserTest extends OxidTestCase
         // testing
         $oUser = oxNew( 'oxuser' );
         $this->assertFalse( $oUser->addDynGroup( "oxidadmin", array() ) );
-        $this->assertFalse( $oUser->addDynGroup( "oxidnetprice", array() ) );
     }
     public function testAddDynGroupTryingAllreadyAdded()
     {

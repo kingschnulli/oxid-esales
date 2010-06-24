@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrapping.php 28523 2010-06-21 22:11:10Z alfonsas $
+ * @version   SVN: $Id: oxwrapping.php 28590 2010-06-23 11:03:50Z alfonsas $
  */
 
 /**
@@ -186,9 +186,7 @@ class oxWrapping extends oxI18n
      */
     public function getFPrice()
     {
-        $dPrice = $this->getWrappingPrice()->getModePrice();
-
-        return oxLang::getInstance()->formatCurrency( $dPrice, $this->getConfig()->getActShopCurrencyObject() );
+        return oxLang::getInstance()->formatCurrency( $this->getWrappingPrice()->getBruttoPrice(), $this->getConfig()->getActShopCurrencyObject() );
     }
 
     /**

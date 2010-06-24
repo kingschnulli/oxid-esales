@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 28510 2010-06-21 15:46:11Z alfonsas $
+ * @version   SVN: $Id: oxbasket.php 28590 2010-06-23 11:03:50Z alfonsas $
  */
 
 /**
@@ -469,7 +469,7 @@ class oxBasket extends oxSuperCfg
      */
     public function removeItem( $sItemKey )
     {
-        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+        if ($this->getConfig()->getConfigParam( 'blPsBasketReservationEnabled' )) {
             if (isset($this->_aBasketContents[$sItemKey])) {
                 $sArticleId = $this->_aBasketContents[$sItemKey]->getProductId();
                 if ($sArticleId) {
@@ -1209,7 +1209,7 @@ class oxBasket extends oxSuperCfg
         $this->_addBundles();
 
         // reserve active basket
-        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+        if ($this->getConfig()->getConfigParam( 'blPsBasketReservationEnabled' )) {
             $this->getSession()->getBasketReservations()->reserveBasket($this);
         }
 
@@ -1427,7 +1427,6 @@ class oxBasket extends oxSuperCfg
      */
     protected function _setDeprecatedValues()
     {
-        //TODO: the code below is redundant
         $this->dproductsprice    = $this->_oProductsPriceList->getBruttoSum(); // products brutto price
         $this->dproductsnetprice = $this->getDiscountedNettoPrice();  // products netto price();
 
@@ -1660,7 +1659,7 @@ class oxBasket extends oxSuperCfg
         $this->_aBasketContents = array();
         $this->getSession()->delBasket();
 
-        if ($this->getConfig()->getConfigParam( 'blBasketReservationEnabled' )) {
+        if ($this->getConfig()->getConfigParam( 'blPsBasketReservationEnabled' )) {
             $this->getSession()->getBasketReservations()->discardReservations();
         }
 
@@ -2310,29 +2309,6 @@ class oxBasket extends oxSuperCfg
     public function getFPrice()
     {
         return oxLang::getInstance()->formatCurrency( $this->getPrice()->getBruttoPrice(), $this->getBasketCurrency() );
-    }
-
-
-    /**
-     * Returns formatted basket total VAT price
-     *
-     * ProductVats + DelCostVat + PayCostVat + WrappCostVat
-     *
-     * @return string
-     */
-    public function getFVatPrice()
-    {
-        // getProductVats + getDelCostVat + getPayCostVat + getTsProtectionVat + getWrappCostVat
-        $dVAT = 0;
-        if ($this->_aDiscountedVats) {
-            $dVAT+= array_sum($this->_aDiscountedVats);
-        }
-        $dVAT+= $this->getCosts( 'oxdelivery' )->getVatValue();
-        $dVAT+= $this->getCosts( 'oxpayment' )->getVatValue();
-        $dVAT+= $this->getCosts( 'oxtsprotection' )->getVatValue();
-        $dVAT+= $this->getCosts( 'oxwrapping' )->getVatValue();
-
-        return oxLang::getInstance()->formatCurrency( $dVAT, $this->getBasketCurrency() );
     }
 
     /**

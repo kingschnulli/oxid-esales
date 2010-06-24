@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariant.php 28523 2010-06-21 22:11:10Z alfonsas $
+ * @version   SVN: $Id: oxsimplevariant.php 28590 2010-06-23 11:03:50Z alfonsas $
  */
 
 /**
@@ -265,10 +265,10 @@ class oxSimpleVariant extends oxI18n implements oxIUrl
     public function getFPrice()
     {
         $sPrice = null;
-        if ( $oPrice = $this->getPrice() ) {
-            $dPrice = $oPrice->getModePrice();
-            return oxLang::getInstance()->formatCurrency($dPrice);
+        if ( ( $oPrice = $this->getPrice() ) ) {
+            $sPrice = oxLang::getInstance()->formatCurrency( $oPrice->getBruttoPrice() );
         }
+        return $sPrice;
     }
 
     /**

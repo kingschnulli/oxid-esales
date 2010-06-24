@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 28109 2010-06-02 16:29:29Z tomas $
+ * @version   SVN: $Id: oxutils.php 28566 2010-06-22 16:57:35Z tomas $
  */
 
 /**
@@ -612,7 +612,10 @@ class oxUtils extends oxSuperCfg
 
             // read the file
             $sFilePath = $this->getCacheFilePath( $sKey );
-            if ( file_exists( $sFilePath ) && is_readable( $sFilePath ) ) {
+
+            $blFileExists = file_exists( $sFilePath ) && is_readable( $sFilePath );
+
+            if ( $blFileExists ) {
                 // read it
                 $sRes = file_get_contents( $sFilePath );
                 $sRes = $sRes ? unserialize( $sRes ) : null;
