@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 28585 2010-06-23 09:23:38Z sarunas $
+ * @version   SVN: $Id: oxarticleTest.php 28649 2010-06-28 10:50:24Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -51,7 +51,7 @@ class _oxArticle extends oxArticle
     public $iMaxSimilarForCacheReset = 100;
 
     /**
-     * Consuctor
+     * Constructor
      *
      * @param array $aParams Parameters
      *
@@ -133,7 +133,18 @@ class modUtilsObject_oxarticle extends oxUtilsObject
  */
 class Unit_Core_oxarticleTest extends OxidTestCase
 {
+    /**
+     * A object of a test article 1
+     *
+     * @var object
+     */
     public $oArticle  = null;
+
+    /**
+     * A object of a test article 2
+     *
+     * @var object
+     */
     public $oArticle2 = null;
 
     /**
@@ -566,7 +577,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals( 1, count( $oParent->getVariants( true ) ) );
         $this->assertEquals( 2, count( $oParent->getVariants( false ) ) );
     }
-
 
 
     /**
@@ -4084,6 +4094,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
     /**
      * test stock reducing, when negative values are ok
+     * 
+     * @return null
      */
     public function testReduceStockNegativeOk()
     {
@@ -4100,6 +4112,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
     /**
      * test stock reducing, when negative values are NOT ok
+     * 
+     * @return null
      */
     public function testReduceStockNegativeNotOk()
     {
@@ -4484,7 +4498,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals( "2/1126_p2.jpg", $oArticle->oxarticles__oxpic2->value );
         $this->assertEquals( "3/nopic.jpg", $oArticle->oxarticles__oxpic3->value );
     }
-
 
     /**
      * Test assign stock if green.

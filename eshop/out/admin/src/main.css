@@ -169,7 +169,7 @@ ul.req li.clear{clear:left;diplay:none;border:none;visibility:collapse;height:0p
 /* Input fields help button and help text panel */
 .helpPanelText {display: none;}
 #helpTextContainer .yui-panel .bd {line-height: 120%;}
-.btnShowHelpPanel {background: url(bg/ico_help.gif) no-repeat; border:0 none; color:transparent; cursor:pointer; width:21px; height:20px;}
+.btnShowHelpPanel {background: url(bg/ico_help.gif) no-repeat; border:0 none; color:transparent; cursor:pointer; width:21px; height:19px;}
 
 td.edittext {white-space: nowrap; padding: 1px 0px 1px 5px; line-height: 110%;}
 .wrap {white-space: normal !important;}

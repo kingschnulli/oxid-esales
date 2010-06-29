@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxattributeTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxattributeTest.php 28650 2010-06-28 10:54:14Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -173,5 +173,4 @@ class Unit_Core_oxattributeTest extends OxidTestCase
         $aId = $oAttr->getAttributeAssigns('test_oxid');
         $this->assertEquals( 1, count($aId) );
     }
-
 }

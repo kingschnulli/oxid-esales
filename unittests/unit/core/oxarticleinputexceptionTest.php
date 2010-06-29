@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleinputexceptionTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxarticleinputexceptionTest.php 28647 2010-06-28 10:05:35Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -33,7 +33,7 @@ class Unit_Core_oxarticleinputexceptionTest extends OxidTestCase
     /**
      * Test set string.
      *
-     * We check on class name and message only - rest is not checked ye.
+     * We check on class name and message only - rest is not checked yet.
      *
      * @return null
      */
@@ -49,5 +49,4 @@ class Unit_Core_oxarticleinputexceptionTest extends OxidTestCase
         $this->assertContains('oxArticleInputException', $sStringOut);  // Exception class name
         $this->assertContains($sArticle, $sStringOut);                  // Article nr
     }
-
 }

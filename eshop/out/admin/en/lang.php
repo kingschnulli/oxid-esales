@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28589 2010-06-23 10:49:08Z vilma $
+ * @version   SVN: $Id: lang.php 28618 2010-06-25 08:13:55Z ralf.trapp $
  */
 
 /*
@@ -470,7 +470,7 @@ $aLang = array(
 'ARTICLE_STOCK_STOCK'                           => 'Stock',
 'ARTICLE_STOCK_STOCKFLAG'                       => 'Delivery Status',
 'ARTICLE_STOCK_DELIVERY'                        => 'Available on',
-'ARTICLE_STOCK_REMINDACTIV'                     => 'Send E-mail if Stock falls below Value',
+'ARTICLE_STOCK_REMINDACTIV'                     => 'Send E-mail if stock falls below value',
 'ARTICLE_STOCK_DELTIME'                         => 'Delivery time',
 'ARTICLE_STOCK_MINDELTIME'                      => 'From',
 'ARTICLE_STOCK_MAXDELTIME'                      => 'to',

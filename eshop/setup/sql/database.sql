@@ -224,7 +224,7 @@ CREATE TABLE `oxarticles` (
   `OXRATINGCNT` int(11) NOT NULL default '0',
   `OXMINDELTIME` int(11) NOT NULL default '0',
   `OXMAXDELTIME` int(11) NOT NULL default '0',
-  `OXDELTIMEUNIT` varchar(255) NOT NULL default '',
+  `OXDELTIMEUNIT` varchar(255) character set latin1 collate latin1_general_ci NOT NULL default '',
   PRIMARY KEY  (`OXID`),
   KEY `OXCOUNT` (`OXPARENTID`,`OXSHOPID`),
   KEY `OXSORT` (`OXSORT`),
@@ -525,8 +525,6 @@ INSERT INTO `oxconfig` VALUES ('7a59f9000f39e5d9549a5d1e29c076a2', 'oxbaseshop',
 INSERT INTO `oxconfig` VALUES ('bd3e73e699331eb92c557113bac02fc4', 'oxbaseshop', 'dPointsForInvitation', 'str', 0x07c4);
 INSERT INTO `oxconfig` VALUES ('bd320d322fa2f638086787c512329eec', 'oxbaseshop', 'dPointsForRegistration', 'str', 0x07c4);
 
-
-
 #
 # Table structure for table `oxcontents`
 #
@@ -554,7 +552,7 @@ CREATE TABLE `oxcontents` (
   `OXCONTENT_3` text NOT NULL,
   `OXCATID` varchar(32) character set latin1 collate latin1_general_ci default NULL,
   `OXFOLDER` varchar(32) NOT NULL default '',
-  `OXTERMVERSION` char(32) NOT NULL default '',
+  `OXTERMVERSION` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
   PRIMARY KEY  (`OXID`),
   UNIQUE KEY `OXLOADID` (`OXLOADID`),
   INDEX `cat_search` ( `OXTYPE` , `OXSHOPID` , `OXSNIPPET` , `OXCATID` )
@@ -1757,9 +1755,9 @@ CREATE TABLE `oxuser` (
   PRIMARY KEY  (`OXID`),
   UNIQUE `OXUSERNAME` (`OXUSERNAME`, `OXSHOPID`),
   KEY `OXPASSWORD` (`OXPASSWORD`),
+  KEY `OXCUSTNR` (`OXCUSTNR`),
   KEY `OXACTIVE` (`OXACTIVE`),
-  KEY `OXLNAME` (`OXLNAME`),
-  KEY `OXCUSTNR` (`OXCUSTNR`)
+  KEY `OXLNAME` (`OXLNAME`)
 ) TYPE=MyISAM;
 
 #
@@ -2028,7 +2026,6 @@ INSERT INTO `oxseo` (`OXOBJECTID`, `OXIDENT`, `OXSHOPID`, `OXLANG`, `OXSTDURL`, 
 ('e5340b054530ea779fb1802e93c8183e', '02b4c1e4049b1baffba090c95a7edbf7', 'oxbaseshop', 0, 'index.php?cl=invite', 0x4c6164656e2d5369652d496872652d467265756e64652f, 'static', 0, 0, ''),
 ('e5340b054530ea779fb1802e93c8183e', 'a6b775aec57d06b46a958efbafdc7875', 'oxbaseshop', 1, 'index.php?cl=invite', 0x656e2f496e766974652d796f75722d667269656e64732f, 'static', 0, 0, '');
 
-
 #
 # Table structure for table `oxobject2seodata`
 # For storing SEO meta data
@@ -2251,8 +2248,8 @@ DROP TABLE IF EXISTS `oxacceptedterms`;
 
 CREATE TABLE `oxacceptedterms` (
   `OXUSERID` char(32) character set latin1 collate latin1_general_ci NOT NULL,
-  `OXSHOPID` char( 32 ) NOT NULL default '',
-  `OXTERMVERSION` char(32) NOT NULL default '',
+  `OXSHOPID` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
+  `OXTERMVERSION` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
   `OXACCEPTEDTIME` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY (`OXUSERID`, `OXSHOPID`)
 ) TYPE=MyISAM;

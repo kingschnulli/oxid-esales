@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 28344 2010-06-15 11:32:21Z sarunas $
+ * @version   SVN: $Id: oxactionsTest.php 28637 2010-06-28 08:39:05Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,11 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Core_oxactionsTest extends OxidTestCase
 {
+    /**
+     * Contains a object of oxactions() 
+     *
+     * @var object
+     */
     protected $_oAction = null;
 
     /**
@@ -72,6 +77,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     }
 
     /**
+     * oxActions::addArticle() test case
      * Testing action article adding.
      *
      * @return null
@@ -88,6 +94,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     }
 
     /**
+     * oxActions::removeArticle() test case
      * Testing action article removal.
      *
      * @return null
@@ -105,6 +112,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     }
 
     /**
+     * oxActions::removeArticle() test case
      * Testing non existing action article removal.
      *
      * @return null
@@ -116,8 +124,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     }
 
     /**
-     * Testing action deletion
-     *
+     * oxActions::removeArticle() test case
      * Trying to delete not existing action, deletion must return false
      *
      * @return null
@@ -130,8 +137,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     }
 
     /**
-     * Testing action deletion
-     *
+     * oxActions::delete() test case
      * Deleting existing action, everything must go fine
      *
      * @return null
@@ -150,10 +156,12 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     }
 
 
-
-
-
-
+    /**
+     * oxActions::getTimeLeft() test case
+     * Test if the setted timeleft in database equals what we expect
+     * 
+     * @return null
+     */
     public function testGetTimeLeft()
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
@@ -161,6 +169,12 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->assertEquals(10, $this->oPromo->getTimeLeft());
     }
 
+    /**
+     * oxActions::getTimeUntilStart() test case
+     * Test if promo starts at the setted time we expect
+     * 
+     * @return null
+     */
     public function testGetTimeUntilStart()
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
@@ -168,6 +182,13 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->assertEquals(10, $this->oPromo->getTimeUntilStart());
     }
 
+    /**
+     * oxActions::start() test case
+     * Create a new promo action and check if they are active until our setted date.
+     * Save the date into the db and read it with the id of the promo out.
+     *
+     * @return null
+     */
     public function testStart()
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
@@ -210,6 +231,12 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->assertEquals($sTo, $this->oPromo->oxactions__oxactiveto->value);
     }
 
+    /**
+     * oxActions::stop() test case
+     * stops the current promo action and test if oxactiveto equals the current date.
+     * 
+     * @return null
+     */
     public function testStop()
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
@@ -225,6 +252,12 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->assertEquals(date( 'Y-m-d H:i:s', $iNow), $this->oPromo->oxactions__oxactiveto->value);
     }
 
+    /**
+     * oxActions::isRunning() test case
+     * check if actions are active or not
+     *
+     * @return null
+     */
     public function testIsTestRunning()
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
@@ -264,7 +297,12 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->assertFalse($this->oPromo->isRunning());
     }
 
-
+    /**
+     * oxActions::getLongDesc() test case
+     * test getted long description without smarty tags
+     *
+     * @return null
+     */
     public function testGetLongDescNoTags()
     {
         $oUV =  $this->getMock('oxUtilsView', array('parseThroughSmarty'));
@@ -279,6 +317,12 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->assertEquals('longdesc', $this->oPromo->getLongDesc());
     }
 
+    /**
+     * oxActions::getLongDesc() test case
+     * test getted long description with smarty tags
+     *
+     * @return null
+     */
     public function testGetLongDescTags()
     {
         $oUV =  $this->getMock('oxUtilsView', array('parseThroughSmarty'));
@@ -292,6 +336,4 @@ class Unit_Core_oxactionsTest extends OxidTestCase
 
         $this->assertEquals('parsed', $this->oPromo->getLongDesc());
     }
-
-
 }

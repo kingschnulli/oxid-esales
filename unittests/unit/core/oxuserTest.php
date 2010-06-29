@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 28610 2010-06-23 14:27:48Z arvydas $
+ * @version   SVN: $Id: oxuserTest.php 28658 2010-06-28 13:31:09Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3436,4 +3436,124 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oSubj->oxuser__oxstateid = new oxField('TTT');
         $this->assertEquals('TTT', $oSubj->getState());
     }
+
+    /**
+     * Testing saving updating user facebook ID if user is connete via Facebook connect
+     */
+    public function testSaveUpdatesFacebookId()
+    {
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
+        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", false );
+
+        $aUsers  = current( $this->_aUsers );
+        $sUserId = current( $aUsers );
+
+        // FB connect is disabled so no value should be saved
+        $oUser = new oxUser();
+        $oUser->load( $sUserId );
+        $oUser->save();
+
+        $this->assertEquals( 0, oxDb::getDb()->getOne("select oxfbid from oxuser where oxid='$sUserId' ")  );
+
+        // FB connect is eanbled, FB ID is expected
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
+        $oUser->save();
+
+        $this->assertEquals( 123456, oxDb::getDb()->getOne("select oxfbid from oxuser where oxid='$sUserId' ")  );
+    }
+
+    /**
+     * Testing saving updating user facebook ID - user is not connected via Facebook
+     */
+    public function testSaveUpdatesFacebookId_notConnected()
+    {
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
+        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
+
+        $aUsers  = current( $this->_aUsers );
+        $sUserId = current( $aUsers );
+
+        // FB connect is disabled so no value should be saved
+        $oUser = new oxUser();
+        $oUser->load( $sUserId );
+        $oUser->save();
+
+        $this->assertEquals( 0, oxDb::getDb()->getOne("select oxfbid from oxuser where oxid='$sUserId' ")  );
+    }
+
+    /**
+     * oxuser::laodActiveUser() test loading active user if use is connected
+     * via facebook connect
+     */
+    public function testLoadActiveUser_loggedInViaFacebookConnect()
+    {
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
+        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
+
+        $aUsers  = current( $this->_aUsers );
+        $sUserId = current( $aUsers );
+
+        oxDb::getDb()->execute( "update oxuser set oxactive = 1 where oxid='$sUserId' " );
+
+        //user does not has Facebook ID
+        $testUser = new oxuser();
+        $this->assertFalse( $testUser->loadActiveUser() );
+
+        // Saving user Facebook ID
+        oxDb::getDb()->execute( "update oxuser set oxfbid='123456' where oxid='$sUserId' " );
+
+        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
+        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+
+        $this->assertTrue( $testUser->loadActiveUser() );
+        $this->assertEquals( $sUserId, $testUser->getId() );
+    }
+
+    /**
+     * oxuser::laodActiveUser() test loading active user if facebook connect
+     * is disabled
+     */
+    public function testLoadActiveUser_FacebookConnectDisabled()
+    {
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
+        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", false );
+
+        $aUsers  = current( $this->_aUsers );
+        $sUserId = current( $aUsers );
+
+        // Saving user Facebook ID
+        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
+
+        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
+        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+
+        $this->assertFalse( $testUser->loadActiveUser() );
+    }
+
+    /**
+     * oxuser::laodActiveUser() test loading active user if facebook connect
+     * is disabled
+     */
+    public function testLoadActiveUser_FacebookConnectNotLoggedIn()
+    {
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
+        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
+
+        $aUsers  = current( $this->_aUsers );
+        $sUserId = current( $aUsers );
+
+        // Saving user Facebook ID
+        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
+
+        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
+        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+
+        $this->assertFalse( $testUser->loadActiveUser() );
+    }
+
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleexceptionTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxarticleexceptionTest.php 28646 2010-06-28 10:03:57Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,8 +30,25 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Core_oxarticleexceptionTest extends OxidTestCase
 {
+    /**
+     * Contains a test object of oxarticleexception
+     *
+     * @var object
+     */
     private $_oTestObject = null;
+    
+    /**
+     * a mock message
+     *
+     * @var string
+     */
     private $_sMsg = 'Erik was here..';
+    
+    /**
+     * a mock article number
+     *
+     * @var string
+     */
     private $_sArticle = 'sArticleNumber';
 
     /**

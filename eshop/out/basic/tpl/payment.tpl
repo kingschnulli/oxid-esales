@@ -215,11 +215,11 @@
                 </table>
 
             </div>
-            [{if $oView->getTrustedShopId()}]
+            [{if $oView->getTSExcellenceId()}]
 		    <strong id="test_TsProtectionHeader" class="boxhead paymentboxhead">[{ oxmultilang ident="PAYMENT_TSPROTECTION" }]</strong>
 		    <div class="box info">
 		      <div class="etrustlogocol">
-		        <a href="https://www.trustedshops.com/shop/certificate.php?shop_id=[{$oView->getTrustedShopId()}]" target="_blank">
+		        <a href="https://www.trustedshops.com/shop/certificate.php?shop_id=[{$oView->getTSExcellenceId()}]" target="_blank">
                   <img style="border:0px none;" src="[{$oViewConf->getImageUrl()}]/trustedshops_m.gif" title="[{ oxmultilang ident="INC_TRUSTEDSHOPS_ITEM_IMGTITLE" }]">
                 </a>
 		      </div>
@@ -239,8 +239,8 @@
                 [{/if}]
               <br>
               <br>
-                [{ oxmultilang ident="PAYMENT_TSPROTECTIONTEXT" }] <a href="http://www.trustedshops.com/shop/data_privacy.php?shop_id=[{$oView->getTrustedShopId()}]" target="_blank">[{ oxmultilang ident="PAYMENT_TSPROTECTIONTEXT2" }]</a>
-                [{ oxmultilang ident="PAYMENT_TSPROTECTIONTEXT3" }] <a href="http://www.trustedshops.com/shop/protection_conditions.php?shop_id=[{$oView->getTrustedShopId()}]" target="_blank">[{ oxmultilang ident="PAYMENT_TSPROTECTIONTEXT4" }]</a> [{ oxmultilang ident="PAYMENT_TSPROTECTIONTEXT5" }]
+                [{ oxmultilang ident="PAYMENT_TSPROTECTIONTEXT" }] <a href="http://www.trustedshops.com/shop/data_privacy.php?shop_id=[{$oView->getTSExcellenceId()}]" target="_blank">[{ oxmultilang ident="PAYMENT_TSPROTECTIONTEXT2" }]</a>
+                [{ oxmultilang ident="PAYMENT_TSPROTECTIONTEXT3" }] <a href="http://www.trustedshops.com/shop/protection_conditions.php?shop_id=[{$oView->getTSExcellenceId()}]" target="_blank">[{ oxmultilang ident="PAYMENT_TSPROTECTIONTEXT4" }]</a> [{ oxmultilang ident="PAYMENT_TSPROTECTIONTEXT5" }]
               </div>
 		    </div>
 		    [{/if}]

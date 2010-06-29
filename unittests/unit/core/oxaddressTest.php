@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxaddressTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxaddressTest.php 28639 2010-06-28 08:41:41Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -120,5 +120,4 @@ class Unit_Core_oxAddressTest extends OxidTestCase
         $oSubj->oxaddress__oxstateid = new oxField('TTT');
         $this->assertEquals('TTT', $oSubj->getState());
     }
-
 }

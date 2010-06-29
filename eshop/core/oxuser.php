@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 28610 2010-06-23 14:27:48Z arvydas $
+ * @version   SVN: $Id: oxuser.php 28659 2010-06-28 13:32:01Z rimvydas.paskevicius $
  */
 
 /**
@@ -1296,60 +1296,6 @@ class oxUser extends oxBase
     }
 
     /**
-     * Performs user login by username and password. Fetches user data from DB.
-     * Registers in session. Returns true on success, FALSE otherwise.
-     *
-     * @param string $sUser User username
-     *
-     * @throws oxConnectionException, oxUserException
-     *
-     * @return bool
-     */
-    /*
-    public function facebookLogin( $iUserId )
-    {
-        if ( !$iUserId ) {
-            $oEx = oxNew( 'oxUserException' );
-            $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
-            throw $oEx;
-        }
-
-        $myConfig = $this->getConfig();
-        $sShopID = $myConfig->getShopId();
-        $oDb = oxDb::getDb();
-
-        $sUserSelect = "oxuser.oxfbid = " . $oDb->quote( $iUserId );
-        $sShopSelect = "";
-
-
-        $sSelect =  "select oxid from oxuser where oxuser.oxactive = 1 and {$sUserSelect} {$sShopSelect} ";
-
-        // load from DB
-        $aData = $oDb->getAll( $sSelect );
-        $sOXID = @$aData[0][0];
-        if ( isset( $sOXID ) && $sOXID ) {
-
-            if ( !$this->load( $sOXID ) ) {
-                $oEx = oxNew( 'oxUserException' );
-                $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
-                throw $oEx;
-            }
-        }
-
-        //login successfull?
-        if ( $this->oxuser__oxid->value ) {
-            // yes, successful login
-            oxSession::setVar( 'usr', $this->oxuser__oxid->value );
-            return true;
-        } else {
-            $oEx = oxNew( 'oxUserException' );
-            $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
-            throw $oEx;
-        }
-    }
-    */
-
-    /**
      * Logs out session user. Returns true on success
      *
      * @return bool
@@ -1433,7 +1379,7 @@ class oxUser extends oxBase
 
         // Checking if user is connected via Facebook connect.
         // If yes, trying to login user using user Facebook ID
-        if ( $myConfig->getConfigParam( "bl_showFbConnect") && !$sUserID ) {
+        if ( $myConfig->getConfigParam( "bl_showFbConnect") && !$sUserID && !$blAdmin ) {
             $oFb = oxFb::getInstance();
             if ( $oFb->isConnected() && $oFb->getUser() ) {
                 $sUserSelect = "oxuser.oxfbid = " . $oDB->quote( $oFb->getUser() );

@@ -8,6 +8,7 @@
 
 [{if $oView->isActive('PsLogin') }]
     [{include file="_header_plain.tpl" title=$template_title location=$template_title cssclass="body"}]
+    <div class="psLoginPlainBox">
     [{include file="inc/error.tpl" Errorlist=$Errors.default}]
 [{else}]
     [{include file="_header.tpl" title=$template_title location=$template_title}]
@@ -116,6 +117,7 @@
 [{/if}]
 
 [{if $oView->isActive('PsLogin') }]
+    </div>
     [{include file="_footer_plain.tpl" }]
 [{else}]
     [{ insert name="oxid_tracker" title=$template_title }]

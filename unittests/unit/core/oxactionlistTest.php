@@ -30,6 +30,12 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Core_oxActionListTest extends OxidTestCase
 {
+    /**
+     * oxActionList::loadFinishedByCount() test case
+     * test if the actions will load in right sequence.
+     *
+     * @return null
+     */
     public function testLoadFinishedByCount()
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
@@ -46,8 +52,12 @@ class Unit_Core_oxActionListTest extends OxidTestCase
         $this->assertEquals(array(2, 1, 0), array_keys($oL->getArray()));
     }
 
-
-
+    /**
+     * oxActionList::loadFinishedByTimespan() test case
+     * test the load of last finished promotions after given timespan
+     *
+     * @return null
+     */
     public function testLoadFinishedByTimespan()
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
@@ -63,7 +73,12 @@ class Unit_Core_oxActionListTest extends OxidTestCase
         $oL->loadFinishedByTimespan(50);
     }
 
-
+    /**
+     * oxActionList::loadCurrent() test case
+     * test the load of current promotions
+     *
+     * @return null
+     */
     public function testLoadCurrent()
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
@@ -78,6 +93,12 @@ class Unit_Core_oxActionListTest extends OxidTestCase
         $oL->loadCurrent(50);
     }
 
+    /**
+     * oxActionList::loadFutureByCount() test case
+     * test the loads of next not yet started promotions by count
+     *
+     * @return null
+     */
     public function testLoadFutureByCount()
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
@@ -91,6 +112,13 @@ class Unit_Core_oxActionListTest extends OxidTestCase
                order by oxactiveto, oxactivefrom limit 50");
         $oL->loadFutureByCount(50);
     }
+
+    /**
+     * oxActionList::loadFutureByTimespan() test case
+     * test the loads of next not yet started promotions before the given timespan
+     *
+     * @return null
+     */
     public function testLoadFutureByTimespan()
     {
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return '.time().';}');
@@ -108,6 +136,7 @@ class Unit_Core_oxActionListTest extends OxidTestCase
 
     /**
      * oxActionList::getUserGroupFilter() test case
+     * test if part of user group filter query returns correctly.
      *
      * @return null
      */
@@ -144,6 +173,7 @@ class Unit_Core_oxActionListTest extends OxidTestCase
 
     /**
      * oxActionList::getUserGroupFilter() test case
+     * test if part of user group filter query returns correctly without user object.
      *
      * @return null
      */
@@ -166,6 +196,12 @@ class Unit_Core_oxActionListTest extends OxidTestCase
         $this->assertEquals( $sQ, $oList->UNITgetUserGroupFilter() );
     }
 
+    /**
+     * oxActionList::areAnyActivePromotions() test case
+     * test if return value is in the true case "true" and the other way around
+     *
+     * @return null
+     */
     public function testAreAnyActivePromotions()
     {
         $sShopId = modConfig::getInstance()->getShopId();

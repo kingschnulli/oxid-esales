@@ -882,3 +882,5 @@ div.fbMsg.on.popup .popupFooter { position: absolute; bottom: 10px; left: 10px; 
 .promotionsRow .promotionFuture .upcomingText{display:block;z-index:500;visibility: visible;background-image:url('bg/transparent.gif');}
 
 .promotionsRow .promotionCurrent .promoTimeout {font-weight:600;}
+
+.psLoginPlainBox {position: absolute; width: 580px; left: 50%; margin-left: -290px; padding: 5px 0; background: #eee; border: 1px solid #ddd;}
