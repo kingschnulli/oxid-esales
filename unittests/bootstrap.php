@@ -65,6 +65,7 @@ if (getenv('CODECOVERAGE')) {
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/phpmailer/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/smarty/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/utils/');
+    PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/facebook/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/out/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/tmp/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/objects/');

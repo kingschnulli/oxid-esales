@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28588 2010-06-23 10:45:49Z rimvydas.paskevicius $
+ * @version   SVN: $Id: help_lang.php 28679 2010-06-29 07:39:55Z ralf.trapp $
  */
 
 /**
@@ -546,8 +546,8 @@ $aLang =  array(
 'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'           => 'Enable the button "Write a review!" in "Order confirmation" email subsequent to an order by switching this option on.',
 'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'       => 'Enable the button "Write a review!" in "Order sent" email after dispatch of the order.',
 'HELP_DYN_TRUSTED_TSID'                         => 'Trusted Shops ID of the online shop (for language).',
-'HELP_DYN_TRUSTED_USER'                         => 'Trusted Shops Webservice-Login',
-'HELP_DYN_TRUSTED_PASSWORD'                     => 'Trusted Shops Webservice-Password',
+'HELP_DYN_TRUSTED_USER'                         => 'A user name (wsUser) for the Trusted Shops webservice is required if you offer the Trusted Shops Buyer Protection Excellence to your customers. Buyer Protection Classic does not require a user name.',
+'HELP_DYN_TRUSTED_PASSWORD'                     => 'A password (wsPassword) for the Trusted Shops webservice is required if you offer the Trusted Shops Buyer Protection Excellence to your customers. Buyer Protection Classic does not require a password.',
 'HELP_DYN_TRUSTED_TESTMODUS'                    => 'Test environment ("Sandbox") on. After completion of the certification Trusted Shops will send you login details by e-mail.',
 'HELP_DYN_TRUSTED_ACTIVE'                       => 'Check this option to display the Trusted Shops Seal on shop.',
 'HELP_DYN_TRUSTED_TSPAYMENT'                    => 'Assign the shop offered payment types at the appropriate payment to Trusted Store.',

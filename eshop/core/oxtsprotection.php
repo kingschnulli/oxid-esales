@@ -57,6 +57,32 @@ class oxtsprotection extends oxSuperCfg
     protected $_aProductAmounts = null;
 
     /**
+     * Buyer protection products
+     *
+     * @var array
+     */
+    protected $_sTsProtectProducts = array( "TS080501_500_30_EUR"   => array( "netto" => "0.82", "amount" => "500" ),
+                                       "TS080501_1500_30_EUR"  => array( "netto" => "2.47", "amount" => "1500" ),
+                                       "TS080501_2500_30_EUR"  => array( "netto" => "4.12", "amount" => "2500" ),
+                                       "TS080501_5000_30_EUR"  => array( "netto" => "8.24", "amount" => "5000" ),
+                                       "TS080501_10000_30_EUR" => array( "netto" => "16.47", "amount" => "10000" ),
+                                       "TS080501_20000_30_EUR" => array( "netto" => "32.94", "amount" => "20000" )
+                                );
+
+    /**
+     * Buyer protection products
+     *
+     * @var array
+     */
+    protected $_sTsCurrencyProducts = array( "TS080501_500_30_EUR"   => array( "GBP" => "TS100629_500_30_GBP", "CHF" => "TS100629_1500_30_GBP", "USD" => "TS080501_500_30_USD" ),
+                                       "TS080501_1500_30_EUR"  => array( "GBP" => "TS100629_1500_30_GBP", "CHF" => "TS100629_1500_30_CHF", "USD" => "TS100629_1500_30_USD" ),
+                                       "TS080501_2500_30_EUR"  => array( "GBP" => "TS100629_2500_30_GBP", "CHF" => "TS100629_2500_30_CHF", "USD" => "TS100629_2500_30_USD" ),
+                                       "TS080501_5000_30_EUR"  => array( "GBP" => "TS100629_5000_30_GBP", "CHF" => "TS100629_5000_30_CHF", "USD" => "TS100629_5000_30_USD" ),
+                                       "TS080501_10000_30_EUR" => array( "GBP" => "TS100629_1000_30_GBP", "CHF" => "TS100629_10000_30_CHF", "USD" => "TS100629_10000_30_USD" ),
+                                       "TS080501_20000_30_EUR" => array( "GBP" => "TS100629_2000_30_GBP", "CHF" => "TS100629_20000_30_CHF", "USD" => "TS100629_20000_30_USD" )
+                                );
+
+    /**
      * Class constructor, loads base objects.
      *
      * @return null
@@ -155,6 +181,7 @@ class oxtsprotection extends oxSuperCfg
                 $sVersion = $this->getConfig()->getVersion();
                 $sEdition = $this->getConfig()->getFullEdition();
                 $sTsPaymentId = $this->_getTsPaymentId($sPaymentId);
+                $tsProductId = $this->_getTsProductCurrId($aValues['tsProductId'], $aValues['currency']);
                 $aValues['tsId']    = $aTrustedShopIds[$iLangId];
                 $aValues['paymentType'] = $sTsPaymentId;
                 $aValues['shopSystemVersion'] = $sEdition . " " . $sVersion;
@@ -162,7 +189,7 @@ class oxtsprotection extends oxSuperCfg
                 $aValues['wsPassword'] = $aTsPassword[$iLangId];
                 $aValues['orderDate'] = str_replace(" ", "T", $aValues['orderDate']);
                 $oSoap = new SoapClient($sSoapUrl);
-                $aResults = $oSoap->{$sFunction}($aValues['tsId'],$aValues['tsProductId'],$aValues['amount'],$aValues['currency'],$aValues['paymentType'],
+                $aResults = $oSoap->{$sFunction}($aValues['tsId'],$tsProductId,$aValues['amount'],$aValues['currency'],$aValues['paymentType'],
                 $aValues['buyerEmail'],$aValues['shopCustomerID'],$aValues['shopOrderID'],$aValues['orderDate'],$aValues['shopSystemVersion'],
                 $aValues['wsUser'],$aValues['wsPassword']);
 
@@ -218,6 +245,7 @@ class oxtsprotection extends oxSuperCfg
         return null;
 
     }
+
     /**
      * Returns TS payment id by shop payment id
      *
@@ -297,11 +325,29 @@ class oxtsprotection extends oxSuperCfg
     {
         if ($this->_aProducts == null) {
             $this->_aProducts = false;
-            if ( $aTsProducts = $this->getConfig()->getConfigParam( 'sTsProtectProducts' )) {
+            if ( $aTsProducts = $this->_sTsProtectProducts) {
                 $this->_aProducts = $aTsProducts;
             }
         }
         return $this->_aProducts;
+    }
+
+    /**
+     * Returns TS protection product id by currency
+     *
+     * @param string $sTsId product id
+     * @param string $sCurr active currency
+     *
+     * @return array
+     */
+    protected function _getTsProductCurrId( $sTsId, $sCurr )
+    {
+        $sTsCurrId = $sTsId;
+        if ($sCurr != 'EUR') {
+            $aTsCurrId = $this->_sTsCurrencyProducts[$sTsId];
+            $sTsCurrId = $aTsCurrId[$sCurr];
+        }
+        return $sTsCurrId;
     }
 
 }

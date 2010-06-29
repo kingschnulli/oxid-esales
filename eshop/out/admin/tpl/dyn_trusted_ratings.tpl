@@ -35,6 +35,11 @@
     <tr>
       <td colspan="3">&nbsp;</td>
     </tr>
+    <tr>
+      <td align="left" colspan="3">
+        <p>[{ oxmultilang ident="DYN_TRUSTED_RATINGS_ID_COMMENT" }]</p>
+      </td>
+    </tr>
     [{foreach from=$alllang key=lang item=language}]
     [{assign var="abbr" value=$language->abbr }]
     <tr>
@@ -50,7 +55,6 @@
       </td>
     </tr>
     [{/foreach}]
-
     <tr>
       <td align="left">
         [{ oxmultilang ident="DYN_TRUSTED_RATINGS_WIDGET" }]
@@ -62,16 +66,15 @@
       </td>
       <td></td>
     </tr>
-    <tr>
-      <td align="left" colspan="3" style="color:#BEBEBE">
-        [{ oxmultilang ident="DYN_TRUSTED_RATINGS_ID_COMMENT" }]
-      </td>
-    </tr>
 
     <tr>
       <td colspan="3">&nbsp;</td>
     </tr>
-
+    <tr>
+      <td align="left" colspan="3">
+        <p>[{ oxmultilang ident="DYN_TRUSTED_RATINGS_COMMENT" }]</p>
+      </td>
+    </tr>
     <tr>
       <td align="left" colspan="3">
         [{ oxmultilang ident="DYN_TRUSTED_RATINGS" }]
@@ -109,11 +112,6 @@
         [{ oxinputhelp ident="HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL" }]
       </td>
       <td></td>
-    </tr>
-    <tr>
-      <td align="left" colspan="3" style="color:#BEBEBE">
-        [{ oxmultilang ident="DYN_TRUSTED_RATINGS_COMMENT" }]
-      </td>
     </tr>
     <tr>
       <td class="edittext">

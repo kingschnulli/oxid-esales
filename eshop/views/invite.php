@@ -94,7 +94,7 @@ class Invite extends oxUBase
     {
         parent::render();
 
-        //captcha
+        //getting captcha
         $this->_aViewData['oCaptcha'] = $this->getCaptcha();
 
         $this->_aViewData['editval'] = $this->getInviteData();
@@ -135,7 +135,7 @@ class Invite extends oxUBase
         if ( !$oCaptcha->pass($sMac, $sMacHash ) ) {
             // even if there is no exception, use this as a default display method
             oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_NOTALLFIELDS' );
-            return false;
+            return;
         }
 
         $oUtilsView = oxUtilsView::getInstance();
@@ -182,7 +182,7 @@ class Invite extends oxUBase
             return;
         }
 
-        // sending suggest email
+        // sending invite email
         $oEmail = oxNew( 'oxemail' );
 
         if ( $oEmail->sendInviteMail( $oParams ) ) {
@@ -214,7 +214,7 @@ class Invite extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns active object's reviews
+     * Template variable getter.
      *
      * @return array
      */

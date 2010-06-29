@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28631 2010-06-28 08:09:30Z vilma $
+ * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
 
 
@@ -917,7 +917,7 @@ $aLang = array(
 'PAYMENT_TSPROTECTIONTEXT4'                       => "Bedingungen",
 'PAYMENT_TSPROTECTIONTEXT5'                       => "für den Käuferschutz.",
 'PAYMENT_INCLUDEVAT'                              => "inkl. MwSt.",
-'PAYMENT_UNAVAILABLETSPROTECTION'                 => "Aufgrund technischer Hindernisse ist es zurzeit nicht möglich, Trusted Shops Käuferschutz zu bestellen. Kaufen Sie ohne Käuferschutz weiter ein, oder wenden Sie sich an den Shopbetreiber.",
+'PAYMENT_UNAVAILABLETSPROTECTION'                 => "Aufgrund technischer Probleme ist es nicht möglich, den Trusted Shops Käuferschutz zu buchen. Sie können Ihren Einkauf ohne Käuferschutz abschließen. Bitte wenden Sie sich bei Fragen an service@trustedshops.de.",
 'PRICEALARM_TITLE'                                => "Preisalarm",
 'PRICEALARM_THANKYOUMESSAGE1'                     => "Vielen Dank für Ihre Nachricht an",
 'PRICEALARM_THANKYOUMESSAGE2'                     => ".",

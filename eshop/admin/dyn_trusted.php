@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: dyn_trusted.php 28599 2010-06-23 13:04:59Z vilma $
+ * @version   SVN: $Id: dyn_trusted.php 28697 2010-06-29 11:09:58Z vilma $
  */
 
 
@@ -74,12 +74,16 @@ class dyn_trusted extends Shop_Config
         $aConfStr = oxConfig::getParameter( "aShopID_TrustedShops" );
         $blSave = true;
         $blNotEmpty = false;
-        foreach ( $aConfStr as $sConfStrs ) {
+        foreach ( $aConfStr as $sKey => $sConfStrs ) {
             if ( $sConfStrs ) {
                 $blNotEmpty = true;
+                $sConfStrs = trim($sConfStrs);
                 $oResults = $this->_checkTsId( $sConfStrs );
                 if ( $oResults && ($oResults->stateEnum == "PRODUCTION" || $oResults->stateEnum == "TEST")) {
-                    $sTsType = $oResults->typeEnum;
+                    $sTsType[$sKey] = $oResults->typeEnum;
+                } else if ( $oResults && $oResults->stateEnum == "INTEGRATION" ) {
+                    $sErrorMessage = $oResults->stateEnum;
+                    $sTsType[$sKey] = $oResults->typeEnum;
                 } else {
                     if ( $oResults ) {
                         $sErrorMessage = $oResults->stateEnum;
@@ -102,7 +106,7 @@ class dyn_trusted extends Shop_Config
             $myConfig->saveShopConfVar( "aarr", 'aTsPassword', oxConfig::getParameter( "aTsPassword" ), $sShopId );
             $myConfig->saveShopConfVar( "bool", 'tsTestMode', oxConfig::getParameter( "tsTestMode" ), $sShopId );
             $myConfig->saveShopConfVar( "bool", 'tsSealActive', oxConfig::getParameter( "tsSealActive" ), $sShopId );
-            $myConfig->saveShopConfVar( "str", 'tsSealType', $sTsType, $sShopId );
+            $myConfig->saveShopConfVar( "aarr", 'tsSealType', $sTsType, $sShopId );
         } else {
             // displaying error..
             $this->_aViewData["errorsaving"] = 1;

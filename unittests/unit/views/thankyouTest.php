@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: thankyouTest.php 28496 2010-06-21 14:01:13Z vilma $
+ * @version   SVN: $Id: thankyouTest.php 28695 2010-06-29 10:25:10Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -105,6 +105,7 @@ class Unit_Views_thankyouTest extends OxidTestCase
     public function testGetTrustedShopId()
     {
         modConfig::getInstance()->setConfigParam( 'tsSealActive', 1);
+        modConfig::getInstance()->setConfigParam( 'tsSealType', array( 0 => 'CLASSIC'));
         modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', array ( 0 => 'XASASASASASASASASASASASASASASASAS' ) );
         $oThankyou = $this->getProxyClass( 'thankyou' );
         $this->assertEquals( 'XASASASASASASASASASASASASASASASAS', $oThankyou->getTrustedShopId());

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 28588 2010-06-23 10:45:49Z rimvydas.paskevicius $
+ * @version   SVN: $Id: help_lang.php 28678 2010-06-29 07:30:12Z ralf.trapp $
  */
 
 /**
@@ -555,8 +555,8 @@ $aLang =  array(
 'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'           => 'Aktivieren Sie diese Option, um den Button "Bewerten Sie uns!" in der Bestellbestätigungsmail im direkten Anschluss an eine Bestellung anzuzeigen.',
 'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'       => 'Aktivieren Sie diese Option, um den Button "Bewerten Sie uns!" in der Benachrichtigung "Bestellung wurde versandt" per E-Mail anzuzeigen.',
 'HELP_DYN_TRUSTED_TSID'                         => 'Trusted Shops ID des Online Shops',
-'HELP_DYN_TRUSTED_USER'                         => 'Trusted Shops Webservice-Login',
-'HELP_DYN_TRUSTED_PASSWORD'                     => 'Trusted Shops Webservice-Passwort',
+'HELP_DYN_TRUSTED_USER'                         => 'Ein Benutzername (wsUser) für den Trusted Shops Webservice ist erforderlich, wenn Sie Ihren Kunden den kostenpflichtigen Käuferschutz Trusted Shops Excellence anbieten. Der Käuferschutz Classic erfordert keine Eingabe eines Benutzernamens.',
+'HELP_DYN_TRUSTED_PASSWORD'                     => 'Ein Passwort (wsPasswort) für den Trusted Shops Webservice ist erforderlich, wenn Sie Ihren Kunden den kostenpflichtigen Käuferschutz Trusted Shops Excellence anbieten. Der Käuferschutz Classic erfordert keine Eingabe eines Passworts.',
 'HELP_DYN_TRUSTED_TESTMODUS'                    => 'Testumgebung ("Sandbox") einschalten. Nach Abschluss der Zertifizierung sendet Ihnen Ihr Ansprechpartner bei Trusted Shops die Zugangsdaten per E-Mail.',
 'HELP_DYN_TRUSTED_ACTIVE'                       => 'Aktivieren Sie diese Option, um das Trusted Shops Siegel im shop anzuzeigen.',
 'HELP_DYN_TRUSTED_TSPAYMENT'                    => 'Ordnen Sie den im Shop angebotenen Zahlungsarten die entsprechende Zahlungsart bei Trusted Shop zu.',

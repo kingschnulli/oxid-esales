@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 28599 2010-06-23 13:04:59Z vilma $
+ * @version   SVN: $Id: oxviewTest.php 28695 2010-06-29 10:25:10Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -451,6 +451,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
     {
         $oView = $this->getProxyClass( 'oxview' );
         modConfig::getInstance()->setConfigParam( 'tsSealActive', 1 );
+        modConfig::getInstance()->setConfigParam( 'tsSealType', array( 0 => 'CLASSIC'));
         modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', 'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' );
         $this->assertEquals( 'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', $oView->getTrustedShopId() );
     }
@@ -467,6 +468,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
     {
         $oView = $this->getProxyClass( 'oxview' );
         modConfig::getInstance()->setConfigParam( 'tsSealActive', 1 );
+        modConfig::getInstance()->setConfigParam( 'tsSealType', array( 0 => 'CLASSIC'));
         modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', array (0=>'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') );
 
         $this->assertEquals( 'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', $oView->getTrustedShopId() );

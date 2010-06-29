@@ -78,8 +78,10 @@ class dyn_trusted_ratings extends Shop_Config
             foreach ( $aConfAArs['aTsLangIds'] as $sLangId => $sId ) {
                 $aActiveLangs[$sLangId] = false;
                 if ( $sId ) {
+                    $sTsUser = $myConfig->getConfigParam( 'sTsUser' );
+                    $sTsPass = $myConfig->getConfigParam( 'sTsPass' );
                     // validating and switching on/off
-                    $sResult = $this->_validateId( $sId, (bool) $blActive, $aConfStrs['sTsUser'], $aConfStrs['sTsPass'], $sPkg );
+                    $sResult = $this->_validateId( $sId, (bool) $blActive, $sTsUser, $sTsPass, $sPkg );
 
                     // keeping activation state
                     $aActiveLangs[$sLangId] = $sResult == "OK" ? true : false;

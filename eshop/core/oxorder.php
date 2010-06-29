@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 28479 2010-06-21 11:24:05Z vilma $
+ * @version   SVN: $Id: oxorder.php 28669 2010-06-29 06:08:31Z vilma $
  */
 
 /**
@@ -485,6 +485,7 @@ class oxOrder extends oxBase
 
         // deleting remark info only when order is finished
         oxSession::deleteVar( 'ordrem' );
+        oxSession::deleteVar( 'stsprotection' );
 
         // updating order trans status (success status)
         $this->_setOrderStatus( 'OK' );
