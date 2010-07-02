@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitemTest.php 27911 2010-05-25 15:33:14Z arvydas $
+ * @version   SVN: $Id: oxbasketitemTest.php 28736 2010-07-01 09:38:08Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -94,8 +94,12 @@ class modFortestSetAsDiscountArticle extends oxbasketitem
  */
 class Unit_Core_oxbasketitemTest extends OxidTestCase
 {
+    /**
+     * contain a article object to test
+     *
+     * @var object
+     */
     public $oArticle = null;
-    public $aConfigParams = array();
 
     /**
      * Initialize the fixture.
@@ -177,9 +181,9 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     }
 
     /**
-     *  Checking for stock control - stock in DB is positive.
+     * Checking for stock control - stock in DB is positive.
      *
-     *  @return null
+     * @return null
      */
     public function testInitProductIsNotBuyable()
     {
@@ -197,7 +201,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Checking for stock control - stock in DB is positive.
      *
-     *  @return null
+     * @return null
      */
     public function testSetAmountStockIsCritical()
     {
@@ -219,7 +223,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Test init from order article.
      *
-     *  @return null
+     * @return null
      */
     public function testInitFromOrderArticle()
     {
@@ -240,7 +244,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Test set from order article.
      *
-     *  @return null
+     * @return null
      */
     public function testSetFromOrderArticle()
     {
@@ -263,7 +267,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Stock status getter check.
      *
-     *  @return null
+     * @return null
      */
     public function testStockStatusGetterCheck()
     {
@@ -277,7 +281,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Stock status setter check.
      *
-     *  @return null
+     * @return null
      */
     public function testStockStatusSetterCheck()
     {
@@ -292,7 +296,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing init call
      *
-     *  @return null
+     * @return null
      */
     public function testInit()
     {
@@ -314,7 +318,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing discount marker
      *
-     *  @return null
+     * @return null
      */
     public function testSetAsDiscountArticle()
     {
@@ -327,7 +331,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing amount setter
      *
-     *  @return null
+     * @return null
      */
     public function testSetAmount()
     {
@@ -426,7 +430,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing price setter
      *
-     *  @return null
+     * @return null
      */
     public function testSetPrice()
     {
@@ -439,7 +443,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing if image dir getter returns correct pathes
      *
-     *  @return null
+     * @return null
      */
     public function testGetImageDir()
     {
@@ -462,7 +466,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
      *
      * if no product id is set - exception must be thrown
      *
-     *  @return null
+     * @return null
      */
     public function testGetArticleNoArticleSet()
     {
@@ -480,7 +484,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
      *
      * if article is set during init
      *
-     *  @return null
+     * @return null
      */
     public function testGetArticleArticleIsSetDuringInit()
     {
@@ -498,7 +502,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
      *
      * #M773 Do not use article lazy loading on order save
      *
-     *  @return null
+     * @return null
      */
     public function testGetArticleForSavingOrder()
     {
@@ -515,7 +519,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing if method throws an exeption such article does not exists
      *
-     *  @return null
+     * @return null
      */
     public function testGetArticle_noSuchArticle()
     {
@@ -533,7 +537,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing if method throws an exception if article is not buyable
      *
-     *  @return null
+     * @return null
      */
     public function testGetArticle_notBuyableArticle()
     {
@@ -552,7 +556,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * #1115: Usability Problem during checkout with products without stock
      *
-     *  @return null
+     * @return null
      */
     public function testGetArticle_notVisibleArticle_doNotCheck()
     {
@@ -565,7 +569,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing if method throws an exception if article is not visible (M:1286)
      *
-     *  @return null
+     * @return null
      */
     public function testGetArticle_notVisibleArticle()
     {
@@ -616,7 +620,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing price getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetPrice()
     {
@@ -632,7 +636,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing price getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetUnitPrice()
     {
@@ -654,7 +658,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing amount getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetAmount()
     {
@@ -666,7 +670,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing weight getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetWeight()
     {
@@ -678,7 +682,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing title getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetTitle()
     {
@@ -693,7 +697,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing icon getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetIcon()
     {
@@ -723,7 +727,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing details link getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetLink()
     {
@@ -737,7 +741,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Returns original product shop id
      *
-     *  @return null
+     * @return null
      */
     public function testGetShopId()
     {
@@ -749,7 +753,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing select list gerrer
      *
-     *  @return null
+     * @return null
      */
     public function testGetSelList()
     {
@@ -763,7 +767,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing select list gerrer
      *
-     *  @return null
+     * @return null
      */
     public function testGetChosenSelList()
     {
@@ -782,7 +786,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing bundle status getter
      *
-     *  @return null
+     * @return null
      */
     public function testIsBundle()
     {
@@ -794,7 +798,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing discount article status getter
      *
-     *  @return null
+     * @return null
      */
     public function testIsDiscountArticle()
     {
@@ -808,7 +812,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing skip discounts marker getter
      *
-     *  @return null
+     * @return null
      */
     public function testIsSkipDiscount()
     {
@@ -824,7 +828,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
      *
      * NOTICE: this mehtod is deprecated
      *
-     *  @return null
+     * @return null
      */
     public function testSetDeprecatedValues()
     {
@@ -875,7 +879,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
      *
      * setting not existing article, expecting exception
      *
-     *  @return null
+     * @return null
      */
     public function testSetArticleSettingNotExisting()
     {
@@ -892,7 +896,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing article setter
      *
-     *  @return null
+     * @return null
      */
     public function testSetArticleSettingExisting()
     {
@@ -918,7 +922,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing select lists setter
      *
-     *  @return null
+     * @return null
      */
     public function testSetSelectList()
     {
@@ -931,7 +935,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing select lists setter passing as param empty array
      *
-     *  @return null
+     * @return null
      */
     public function testSetSelectListWithEmptyArrayAsParam()
     {
@@ -944,7 +948,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing persistent params getters
      *
-     *  @return null
+     * @return null
      */
     public function testSetPersParams()
     {
@@ -956,7 +960,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing bundle marker setter
      *
-     *  @return null
+     * @return null
      */
     public function testSetBundle()
     {
@@ -968,7 +972,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing skip discounts marker setter
      *
-     *  @return null
+     * @return null
      */
     public function testSetSkipDiscounts()
     {
@@ -980,7 +984,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing product id getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetProductId()
     {
@@ -992,7 +996,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing wich article info setter/getter
      *
-     *  @return null
+     * @return null
      */
     public function testSetWishArticleIdAndgetWishArticleId()
     {
@@ -1004,7 +1008,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing user wishinfo setter/getter
      *
-     *  @return null
+     * @return null
      */
     public function testSetWishIdAndgetWishId()
     {
@@ -1016,7 +1020,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing wrap object getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetWrappingAndSetWrappingAndGetWrappingId()
     {
@@ -1035,7 +1039,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing unit price getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetFUnitPrice()
     {
@@ -1049,7 +1053,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing unit price getter
      *
-     *  @return null
+     * @return null
      */
     public function testGetFTotalPrice()
     {
@@ -1063,7 +1067,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     /**
      * Testing set article and #M1141
      *
-     *  @return null
+     * @return null
      */
     public function testSetArticle()
     {

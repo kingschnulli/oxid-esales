@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbaseTest.php 28328 2010-06-14 14:48:10Z vilma $
+ * @version   SVN: $Id: oxbaseTest.php 28731 2010-07-01 07:20:11Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2307,6 +2307,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
     /**
      * A test for #1831 case
      *
+     * @return null
      */
     public function testGetAllFieldEmpty()
     {
@@ -2532,5 +2533,4 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oSubj->setNonPublicVar("_blIsInList", true);
         $this->assertTrue($oSubj->UNITisInList());
     }
-
 }

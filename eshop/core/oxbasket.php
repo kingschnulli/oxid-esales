@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 28590 2010-06-23 11:03:50Z alfonsas $
+ * @version   SVN: $Id: oxbasket.php 28754 2010-07-01 14:45:42Z vilma $
  */
 
 /**
@@ -953,6 +953,7 @@ class oxBasket extends oxSuperCfg
 
                         // collecting formatted for preview
                         $oStdVoucher->fVoucherdiscount = $oLang->formatCurrency( $dVoucherdiscount, $this->getBasketCurrency() );
+                        $oStdVoucher->dVoucherdiscount = $dVoucherdiscount;
 
                         // substracting voucher discount
                         $dPrice -= $dVoucherdiscount;
@@ -1044,7 +1045,7 @@ class oxBasket extends oxSuperCfg
                 $oStdDiscount->dDiscount = $dOldprice;
             }
 
-            if ($oStdDiscount->dDiscount > 0) {
+            if ($oStdDiscount->dDiscount != 0) {
                 $this->_aDiscounts[$oDiscount->getId()] = $oStdDiscount;
                 // substracting product price after discount
                 $dOldprice = $dOldprice - $oStdDiscount->dDiscount;
