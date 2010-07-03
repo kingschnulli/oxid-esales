@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 28754 2010-07-01 14:45:42Z vilma $
+ * @version   SVN: $Id: oxbasketTest.php 28769 2010-07-02 14:08:02Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3970,6 +3970,34 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     }
 
     /**
+     * Testing getting basket price for payment costs calculations
+     * (M:1905) not discounted products should be included in payment 
+     * amount calculation
+     * 
+     * @return null
+     */
+    public function testGetPriceForPaymentIfWithNotDiskcountedArticles()
+    {
+        $oProductsPrice = $this->getMock( 'oxPriceList', array( 'getBruttoSum' ) );
+        $oProductsPrice->expects( $this->any() )->method( 'getBruttoSum' )->will( $this->returnValue( 100 ) );
+
+        $oVoucher = $this->getMock( 'oxPrice', array( 'getBruttoPrice' ) );
+        $oVoucher->expects( $this->once() )->method( 'getBruttoPrice' )->will( $this->returnValue( 40 ) );
+
+        $oBasket = $this->getMock( 'oxBasket', array( 'getDiscountProductsPrice', 'getVoucherDiscount', 'getNotDiscountProductsPrice' ) );
+        $oBasket->expects( $this->once() )->method( 'getDiscountProductsPrice' )->will( $this->returnValue( $oProductsPrice ) );
+        $oBasket->expects( $this->once() )->method( 'getVoucherDiscount' )->will( $this->returnValue( $oVoucher ) );
+        $oBasket->expects( $this->once() )->method( 'getNotDiscountProductsPrice' )->will( $this->returnValue( $oProductsPrice ) );
+
+        $oBasket->setCost('oxpayment', new oxPrice( 30 ) );
+        $oBasket->setCost('oxdelivery', new oxPrice( 25 ) );
+
+        //final price  = products price - voucher + delivery cost (100 - 40 + 25 + 100)
+        //payment costs should not be included
+        $this->assertEquals( 185, $oBasket->getPriceForPayment() );
+    }
+
+    /**
      * Testing getting formatted payment cost
      * 
      * @return null
@@ -4421,6 +4449,18 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $this->assertEquals( 0.98, $oPayCost->getBruttoPrice() );
         $this->assertEquals( 0.82, round($oPayCost->getNettoPrice(),2) );
         $this->assertEquals( 19, $oPayCost->getVat() );
+    }
+
+    /**
+     * Testing oxbasket::_oNotDiscountedProductsPriceList getter
+     * 
+     * @return null
+     */
+    public function testGetNotDiscountProductsPrice()
+    {
+        $oBasket = $this->getProxyClass( "oxbasket" );
+        $this->assertNull( $oBasket->setNonPublicVar( "_oNotDiscountedProductsPriceList", "testPrice" ));
+        $this->assertEquals( "testPrice", $oBasket->getNotDiscountProductsPrice() );
     }
 
 }

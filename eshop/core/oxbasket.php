@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 28754 2010-07-01 14:45:42Z vilma $
+ * @version   SVN: $Id: oxbasket.php 28768 2010-07-02 13:53:17Z vilma $
  */
 
 /**
@@ -1790,7 +1790,7 @@ class oxBasket extends oxSuperCfg
     }
 
     /**
-     * Returns discount articles products price object
+     * Returns pricelist object of discounted products
      *
      * @return oxprice
      */
@@ -2362,6 +2362,10 @@ class oxBasket extends oxSuperCfg
     public function getPriceForPayment()
     {
         $dPrice = $this->getDiscountedProductsBruttoPrice();
+        //#1905 not discounted products should be included in payment amount calculation
+        if ( $oPriceList = $this->getNotDiscountProductsPrice() ) {
+            $dPrice += $oPriceList->getBruttoSum();
+        }
 
         // adding delivery price to final price
         if ( $oDeliveryPrice = $this->_aCosts['oxdelivery'] ) {
@@ -2633,6 +2637,16 @@ class oxBasket extends oxSuperCfg
             return $oProtection->getBruttoPrice();
         }
         return false;
+    }
+
+    /**
+     * Returns pricelist object of not discounted products
+     *
+     * @return oxprice
+     */
+    public function getNotDiscountProductsPrice()
+    {
+        return $this->_oNotDiscountedProductsPriceList;
     }
 
 }
