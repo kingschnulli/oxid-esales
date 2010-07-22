@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
+ * @version   SVN: $Id: oxadminviewTest.php 28904 2010-07-21 08:56:35Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -377,6 +377,23 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
      */
     public function testGetCountryByCode()
     {
+        $oSubj = $this->getProxyClass("oxadminView");
+        $sTestCode = "de";
+        $this->assertEquals("germany", $oSubj->UNITgetCountryByCode($sTestCode));
+    }
+
+    /**
+     * Tests oxAdminView::_getCountryByCode()
+     * when english language is deleted (bug #0001979)
+     *
+     * @return null
+     */
+    public function testGetCountryByCodeNoEng()
+    {
+        $oLang = $this->getMock('oxlang', array('getLanguageIds'));
+        $oLang->expects($this->once())->method('getLanguageIds')->will($this->returnValue(array('de')));
+        modInstances::addMod('oxLang', $oLang);
+
         $oSubj = $this->getProxyClass("oxadminView");
         $sTestCode = "de";
         $this->assertEquals("germany", $oSubj->UNITgetCountryByCode($sTestCode));

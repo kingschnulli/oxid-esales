@@ -80,7 +80,7 @@ class Unit_Views_accountOrderTest extends OxidTestCase
     {
         $oView = $this->getMock( "Account_Order", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( false ) );
-        $this->assertFalse( $oView->getOrderList() );
+        $this->assertEquals( 0, count($oView->getOrderList()) );
     }
 
     /**

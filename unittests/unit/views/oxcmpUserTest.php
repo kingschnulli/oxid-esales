@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 28315 2010-06-11 15:34:43Z arvydas $
+ * @version   SVN: $Id: oxcmpUserTest.php 28903 2010-07-21 08:23:28Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -140,9 +140,13 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oUser = $this->getMock( "oxcmp_user", array( "isTermsAccepted" ) );
         $oUser->expects( $this->any() )->method( 'isTermsAccepted' )->will( $this->throwException( new Exception( "isTermsAccepted" ) ) );
 
+        $oParent = $this->getMock( "oxUbase", array( "getClassName" ) );
+        $oParent->expects( $this->once() )->method( 'getClassName' )->will( $this->returnValue( "test" ) );
+
         // testing..
-        $oView = $this->getMock( "oxcmp_user", array( "getUser", "getConfig", "_checkTermVersion" ), array(), '', false );
+        $oView = $this->getMock( "oxcmp_user", array( "getUser", "getConfig", "_checkTermVersion", "getParent" ), array(), '', false );
         $oView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
+        $oView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
         $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
 
         try {
@@ -171,10 +175,14 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oUser = $this->getMock( "oxcmp_user", array( "isTermsAccepted" ) );
         $oUser->expects( $this->any() )->method( 'isTermsAccepted' )->will( $this->returnValue( false ) );
 
+        $oParent = $this->getMock( "oxUbase", array( "getClassName" ) );
+        $oParent->expects( $this->once() )->method( 'getClassName' )->will( $this->returnValue( "test" ) );
+
         try {
             // testing..
-            $oView = $this->getMock( "oxcmp_user", array( "getUser", "getConfig" ), array(), '', false );
+            $oView = $this->getMock( "oxcmp_user", array( "getUser", "getConfig", "getParent" ), array(), '', false );
             $oView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
+            $oView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
             $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
             $oView->render();
         } catch ( Exception $oExcp ) {
