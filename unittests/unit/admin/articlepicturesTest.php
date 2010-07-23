@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: articlepicturesTest.php 27751 2010-05-13 11:11:50Z rimvydas.paskevicius $
+ * @version   SVN: $Id: articlepicturesTest.php 28928 2010-07-22 14:19:41Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -67,18 +67,16 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( 'iPicCount', 0 );
 
         $aTasks = array();
-        $aTasks[] = "_deleteMasterPicture";
-        $aTasks[] = "_updateGeneratedPicsAmount";
-        $aTasks[] = "_cleanupZoomFields";
-        $aTasks[] = "_getMinUploadedMasterPicIndex";
+        $aTasks[] = "_getUploadedMasterPicIndexes";
         $aTasks[] = "_resetMasterPicture";
 
         $oView = $this->getMock( "Article_Pictures", $aTasks );
-        $oView->expects( $this->once() )->method( '_deleteMasterPicture' );
-        $oView->expects( $this->once() )->method( '_updateGeneratedPicsAmount' );
-        $oView->expects( $this->once() )->method( '_cleanupZoomFields' );
-        $oView->expects( $this->once() )->method( '_getMinUploadedMasterPicIndex' )->will( $this->returnValue( 0 ));
-        $oView->expects( $this->once() )->method( '_resetMasterPicture' );
+
+        $iCnt = 7;
+        modConfig::getInstance()->setConfigParam( 'iPicCount', $iCnt );
+
+        $oView->expects( $this->once() )->method( '_getUploadedMasterPicIndexes' )->will( $this->returnValue( array( 1 ) ));
+        $oView->expects( $this->exactly( $iCnt ) )->method( '_resetMasterPicture' );
         $oView->save();
     }
 
@@ -262,8 +260,8 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         modConfig::setParameter( "oxid", "_testArtId" );
         modConfig::setParameter( "masterPicIndex", "2" );
 
-        $oArtPic = $this->getMock( "Article_Pictures", array( "_deleteMasterPicture" ) );
-        $oArtPic->expects( $this->once() )->method( '_deleteMasterPicture' );
+        $oArtPic = $this->getMock( "Article_Pictures", array( "_resetMasterPicture" ) );
+        $oArtPic->expects( $this->exactly( oxConfig::getInstance()->getConfigParam( 'iPicCount' ) - 1 ) )->method( '_resetMasterPicture' );
 
         $this->_oArticle->oxarticles__oxpicsgenerated = new oxField( 2 );
         $this->_oArticle->save();
@@ -280,7 +278,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
      *
      * @return null
      */
-    public function testDeleteMasterPicture()
+    /*public function testDeleteMasterPicture()
     {
         $this->_oArticle->oxarticles__oxpic2 = new oxField( "testPic2.jpg" );
         $this->_oArticle->save();
@@ -294,7 +292,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         $oArtPic->UNITdeleteMasterPicture( $this->_oArticle, 2 );
 
         $this->assertEquals( "", $this->_oArticle->oxarticles__oxpic2->value );
-    }
+    }*/
 
     /**
      * Article_Pictures::deleteMasterPicture() - calling cleanup method if
@@ -302,7 +300,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
      *
      * @return null
      */
-    public function testDeleteMasterPicture_makesCleanupOnFields()
+    /*public function testDeleteMasterPicture_makesCleanupOnFields()
     {
         $this->_oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
         $this->_oArticle->oxarticles__oxpic2 = new oxField( "testPic2.jpg" );
@@ -320,7 +318,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         $oArtPic = $this->getMock( "Article_Pictures", array( "_cleanupCustomFields" ) );
         $oArtPic->expects( $this->once() )->method( '_cleanupCustomFields' );
         $oArtPic->UNITdeleteMasterPicture( $this->_oArticle, 1 );
-    }
+    }*/
 
     /**
      * Article_Pictures::_deleteMainIcon()
@@ -414,7 +412,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
      *
      * @return null
      */
-    public function testUpdateGeneratedPicsAmount()
+    /*public function testUpdateGeneratedPicsAmount()
     {
         $this->_oArticle->oxarticles__oxpicsgenerated = new oxField( "5" );
         $this->_oArticle->save();
@@ -427,7 +425,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         $oArticle = new oxArticle();
         $oArticle->load( "_testArtId" );
         $this->assertEquals( "2", $oArticle->oxarticles__oxpicsgenerated->value );
-    }
+    }*/
 
     /**
      * Article_Pictures::_updateGeneratedPicsAmount() - when uploaded image
@@ -435,7 +433,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
      *
      * @return null
      */
-    public function testUpdateGeneratedPicsAmount_withGreaterIndex()
+    /*public function testUpdateGeneratedPicsAmount_withGreaterIndex()
     {
         $this->_oArticle->oxarticles__oxpicsgenerated = new oxField( "5" );
         $this->_oArticle->save();
@@ -448,7 +446,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         $oArticle = new oxArticle();
         $oArticle->load( "_testArtId" );
         $this->assertEquals( "5", $oArticle->oxarticles__oxpicsgenerated->value );
-    }
+    }*/
 
     /**
      * Article_Pictures::_getMinUploadedMasterPicIndex()
@@ -463,7 +461,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
 
         $oArtPic = $this->getProxyClass( "Article_Pictures" );
 
-        $this->assertEquals( "2", $oArtPic->UNITgetMinUploadedMasterPicIndex() );
+        $this->assertEquals( array( "2", "3", "7" ), $oArtPic->UNITgetUploadedMasterPicIndexes() );
     }
 
     /**
@@ -471,7 +469,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
      *
      * @return null
      */
-    public function testCleanupZoomFields()
+    /*public function testCleanupZoomFields()
     {
         $this->_oArticle->oxarticles__oxzoom2 = new oxField( "zoom2.jpg" );
         $this->_oArticle->oxarticles__oxzoom3 = new oxField( "zoom3.jpg" );
@@ -487,7 +485,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
 
         $this->assertEquals( "", $this->_oArticle->oxarticles__oxzoom2->value );
         $this->assertEquals( "", $this->_oArticle->oxarticles__oxzoom3->value );
-    }
+    }*/
 
     /**
      * Article_Pictures::_cleanupCustomFields()
@@ -536,13 +534,13 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetUploadedMasterPicIndex()
+    /*public function testGetUploadedMasterPicIndex()
     {
         $oArtPic = $this->getProxyClass( "Article_Pictures" );
 
         $this->assertEquals( "2", $oArtPic->UNITgetUploadedMasterPicIndex( "M2" ) );
         $this->assertEquals( "7", $oArtPic->UNITgetUploadedMasterPicIndex( "M7" ) );
-     }
+     }*/
 
     /**
      * Article_Pictures::save() - in demo shop mode
