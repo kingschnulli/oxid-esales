@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariantTest.php 28421 2010-06-18 08:54:27Z sarunas $
+ * @version   SVN: $Id: oxsimplevariantTest.php 28935 2010-07-23 13:03:14Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -431,5 +431,15 @@ class Unit_Core_oxsimpleVariantTest extends OxidTestCase
 
         $this->assertEquals( $sLink, $oSubj->getLink(1) );
     }*/
+
+
+    public function testSetLongDesc()
+    {
+        modConfig::getInstance()->setConfigParam('bl_perfParseLongDescinSmarty', 1);
+        
+        $oSubj = $this->getProxyClass("oxSimpleVariant");
+        $oSubj->UNITsetLongDesc( '[{if 1}]ads[{/if}]dsa' );
+        $this->assertEquals( '', $oSubj->oxarticles__oxlongdesc->value);
+    }
 
 }

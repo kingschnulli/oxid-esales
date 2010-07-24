@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbaseTest.php 26863 2010-03-26 09:43:10Z arvydas $
+ * @version   SVN: $Id: dynexportbaseTest.php 28929 2010-07-23 07:06:06Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -641,8 +641,9 @@ class Unit_Admin_DynExportBaseTest extends OxidTestCase
     {
         modDb::getInstance()->addClassFunction('selectLimit', create_function('$s, $i, $c', 'throw new Exception($s.$i.$c);'));
         $oView = new DynExportBase();
+        $blClose = true;
         try {
-            $oView->UNITinitArticle( "testdynexportbasetable", 0 );
+            $oView->UNITinitArticle( "testdynexportbasetable", 0, $blClose );
         } catch ( Exception $oExcp ) {
             $this->assertEquals( "select oxid from testdynexportbasetable10", $oExcp->getMessage(), "Error in DynExportBase::InitArticle()" );
             return;
@@ -672,7 +673,8 @@ class Unit_Admin_DynExportBaseTest extends OxidTestCase
         $oDb->execute( "INSERT INTO `{$sHeapTable}` values ( '{$sProdId}' )" );
 
         $oView = new DynExportBase();
-        $oArticle = $oView->UNITinitArticle( "testdynexportbasetable", 0 );
+        $blClose = true;
+        $oArticle = $oView->UNITinitArticle( "testdynexportbasetable", 0, $blClose );
         $this->assertNotNull( $oArticle );
         $this->assertTrue( $oArticle instanceof oxarticle );
         $this->assertEquals( $oParent->oxarticles__oxtitle->value." ".$sTitle, $oArticle->oxarticles__oxtitle->value );
