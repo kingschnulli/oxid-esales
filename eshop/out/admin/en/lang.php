@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 28788 2010-07-07 14:19:36Z vilma $
+ * @version   SVN: $Id: lang.php 29138 2010-07-28 12:55:28Z ralf.trapp $
  */
 
 /*
@@ -1033,8 +1033,8 @@ $aLang = array(
 'NAVIGATION_FAVORITES_EDIT'                     => '[ edit ]',
 'FAVORITES_DESC'                                => 'favorites description ....',
 'NAVIGATION_HISTORY'                            => 'History',
-'NAVIGATION_SYSREQ_MESSAGE'                     => "Your system doesn't fit the system requirements. More information can be found in the ",
-'NAVIGATION_SYSREQ_MESSAGE2'                    => "system requirements check.",
+'NAVIGATION_SYSREQ_MESSAGE'                     => "System healthcheck shows setup/server setup of this OXID eShop might be broken. Probably this OXID eShop behaves strange in some cases. Please fix this as soon as possible. Support for fixing find in ",
+'NAVIGATION_SYSREQ_MESSAGE2'                    => "system healthcheck.",
 
 'NEWSLETTER_DONE_NEWSSEND'                      => 'Your Newsletter has been sent.',
 'NEWSLETTER_DONE_GOTONEWSLETTER'                => 'go to Newsletter ',
@@ -1446,7 +1446,7 @@ $aLang = array(
 'STASTISTIC_SERVICE_OLDER'                      => 'older than',
 'STASTISTIC_SERVICE_DELETE'                     => 'Delete Entries',
 'SYSREQ_LIST_MENUITEM'                          => 'Service',
-'SYSREQ_LIST_MENUSUBITEM'                       => 'System Requirements',
+'SYSREQ_LIST_MENUSUBITEM'                       => 'System health',
 'SYSREQ_PHP_EXTENNSIONS'                        => 'PHP extensions',
 'SYSREQ_PHP_CONFIG'                             => 'PHP configuration',
 'SYSREQ_SERVER_CONFIG'                          => 'Server configuration',
@@ -1473,12 +1473,12 @@ $aLang = array(
 'SYSREQ_CURL'                                   => 'cURL',
 'SYSREQ_UNICODE_SUPPORT'                        => 'UTF-8 support',
 'SYSREQ_MEMORY_LIMIT'                           => 'PHP Memory limit (min. 14MB, 30MB recommended)',
-'SYSREQ_DESCRIPTION_PASS'                       => 'Your system fits the requirement.',
-'SYSREQ_DESCRIPTION_PMIN'                       => 'The requirement is not or only partly fit. The OXID eShop will work anyway and can be installed.',
-'SYSREQ_DESCRIPTION_FAIL'                       => 'Your system doesn\'t fit the requirement. The OXID eShop will not work without it and cannot be installed.',
-'SYSREQ_DESCRIPTION_NULL'                       => 'The requirement could  not be checked.',
+'SYSREQ_DESCRIPTION_PASS'                       => 'System health is good.',
+'SYSREQ_DESCRIPTION_PMIN'                       => 'System health might be broken.',
+'SYSREQ_DESCRIPTION_FAIL'                       => 'System health is definetely broken. This OXID eShop will not work properly in all cases.',
+'SYSREQ_DESCRIPTION_NULL'                       => 'System health is not able not be checked.',
 'SYSREQ_DESCRIPTION_COLL'                       => 'Collations in some columns do not match',
-'SYSREQ_DESCRIPTION_REQ'                        => 'Check if your system fits the requirements',
+'SYSREQ_DESCRIPTION_REQ'                        => 'State of system health',
 'TOOLS_LIST_TITLE'                              => '[OXID Tools]',
 'TOOLS_LIST_SECCESS'                            => 'Backup data mailed successfully.',
 'TOOLS_LIST_ACTIONEND'                          => 'Action completed',
@@ -1738,7 +1738,7 @@ $aLang = array(
 'mxshippingset'                                 => 'Shipping Methods',
 'mxshopsett'                                    => 'Shop Settings',
 'mxsysinfo'                                     => 'System Info',
-'mxsysreq'                                      => 'System Requirements',
+'mxsysreq'                                      => 'System health',
 'mxtools'                                       => 'Tools',
 'mxuadmin'                                      => 'Administer Users',
 'mxurls'                                        => 'Links',
