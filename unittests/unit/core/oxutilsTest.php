@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 27144 2010-04-09 14:41:33Z tomas $
+ * @version   SVN: $Id: oxutilsTest.php 29167 2010-07-29 13:04:46Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -80,6 +80,20 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         }
 
         parent::tearDown();
+    }
+
+    /**
+     *
+     * @return unknown_type
+     */
+    public function testExtractDomain()
+    {
+        $oUtils = new oxUtils();
+        $this->assertEquals( "oxid-esales.com", $oUtils->extractDomain( "www.oxid-esales.com" ) );
+        $this->assertEquals( "oxid-esales.com", $oUtils->extractDomain( "oxid-esales.com" ) );
+        $this->assertEquals( "127.0.0.1", $oUtils->extractDomain( "127.0.0.1" ) );
+        $this->assertEquals( "oxid-esales.com", $oUtils->extractDomain( "ssl.oxid-esales.com" ) );
+        $this->assertEquals( "oxid-esales", $oUtils->extractDomain( "oxid-esales" ) );
     }
 
     public function testShowMessageAndExit()

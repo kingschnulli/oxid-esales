@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbaseTest.php 28929 2010-07-23 07:06:06Z vilma $
+ * @version   SVN: $Id: dynexportbaseTest.php 29169 2010-07-29 13:58:46Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,10 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class _DynExportBase extends DynExportBase
 {
+    public function initArticle( $sHeapTable, $iCnt, & $blContinue ) {
+        return $this->_initArticle( $sHeapTable, $iCnt, $blContinue );
+    }
+
     /**
      * Get private variable.
      *
@@ -658,6 +662,7 @@ class Unit_Admin_DynExportBaseTest extends OxidTestCase
      */
     public function testInitArticle()
     {
+        $blContinue = true;
         modConfig::setParameter( "sExportMinPrice", "1" );
         $sProdId   = '8a142c4113f3b7aa3.13470399';
         $sParentId = '2077';
@@ -672,9 +677,8 @@ class Unit_Admin_DynExportBaseTest extends OxidTestCase
         $oDb->execute( "CREATE TABLE `{$sHeapTable}` (`oxid` varchar( 32 ) NOT NULL) ENGINE = MYISAM" );
         $oDb->execute( "INSERT INTO `{$sHeapTable}` values ( '{$sProdId}' )" );
 
-        $oView = new DynExportBase();
-        $blClose = true;
-        $oArticle = $oView->UNITinitArticle( "testdynexportbasetable", 0, $blClose );
+        $oView = new _DynExportBase();
+        $oArticle = $oView->initArticle( "testdynexportbasetable", 0, $blContinue );
         $this->assertNotNull( $oArticle );
         $this->assertTrue( $oArticle instanceof oxarticle );
         $this->assertEquals( $oParent->oxarticles__oxtitle->value." ".$sTitle, $oArticle->oxarticles__oxtitle->value );

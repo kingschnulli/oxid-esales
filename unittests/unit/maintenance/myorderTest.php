@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: myorderTest.php 28598 2010-06-23 12:46:00Z sarunas $
+ * @version   SVN: $Id: myorderTest.php 29168 2010-07-29 13:24:45Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -52,6 +52,48 @@ class testPdfClass
 
 require_once getShopBasePath() . 'modules/invoicepdf/myorder.php';
 require_once getShopBasePath() . 'core/oxpdf.php';
+
+/**
+ * myOrder parrent chain class.
+ */
+class myOrder_PdfArticleSummary extends PdfArticleSummary
+{
+    public function setTotalCostsWithDiscount( &$iStartPos ) {
+        $this->_setTotalCostsWithDiscount( $iStartPos );
+    }
+
+    public function setVoucherInfo( &$iStartPos ) {
+        $this->_setVoucherInfo( $iStartPos );
+    }
+
+    public function setDeliveryInfo( &$iStartPos ) {
+        $this->_setDeliveryInfo( $iStartPos );
+    }
+
+    public function setWrappingInfo( &$iStartPos ) {
+        $this->_setWrappingInfo( $iStartPos );
+    }
+
+    public function setPaymentInfo( &$iStartPos ) {
+        $this->_setPaymentInfo( $iStartPos );
+    }
+
+    public function setGrandTotalPriceInfo( &$iStartPos ) {
+        $this->_setGrandTotalPriceInfo( $iStartPos );
+    }
+
+    public function setPayUntilInfo( &$iStartPos ) {
+        $this->_setPayUntilInfo( $iStartPos );
+    }
+
+    public function setPaymentMethodInfo( &$iStartPos ) {
+        $this->_setPaymentMethodInfo( $iStartPos );
+    }
+
+    public function getVar( $sVar ) {
+        return $this->$sVar;
+    }
+}
 
 /**
  * Testing myorder module for printing pdf's
@@ -386,12 +428,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         $oMyOrder = $this->_getTestMyOrder();
 
         $oPdf = new testPdfClass;
-        $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
+        $oPdfArtSum = new myOrder_PdfArticleSummary( $oMyOrder, $oPdf );
 
         $iStartPos = 1;
-        $oPdfArtSum->UNITsetTotalCostsWithDiscount( $iStartPos );
+        $oPdfArtSum->setTotalCostsWithDiscount( $iStartPos );
 
-        $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
+        $aCache = $oPdfArtSum->getVar('_aCache');
 
         //checking values
         $this->assertEquals( 'ORDER_OVERVIEW_PDF_ALLPRICEBRUTTO', $aCache[1]->aParams[2] );
@@ -414,12 +456,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         $oMyOrder = $this->_getTestMyOrder();
 
         $oPdf = new testPdfClass;
-        $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
+        $oPdfArtSum = new myOrder_PdfArticleSummary( $oMyOrder, $oPdf );
 
         $iStartPos = 1;
-        $oPdfArtSum->UNITsetVoucherInfo( $iStartPos );
+        $oPdfArtSum->setVoucherInfo( $iStartPos );
 
-        $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
+        $aCache = $oPdfArtSum->getVar('_aCache');
 
         //checking values
         $this->assertEquals( 'ORDER_OVERVIEW_PDF_VOUCHER', $aCache[0]->aParams[2] );
@@ -436,12 +478,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         $oMyOrder = $this->_getTestMyOrder();
 
         $oPdf = new testPdfClass;
-        $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
+        $oPdfArtSum = new myOrder_PdfArticleSummary( $oMyOrder, $oPdf );
 
         $iStartPos = 1;
-        $oPdfArtSum->UNITsetDeliveryInfo( $iStartPos );
+        $oPdfArtSum->setDeliveryInfo( $iStartPos );
 
-        $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
+        $aCache = $oPdfArtSum->getVar('_aCache');
 
         //checking values
         $this->assertEquals( 'ORDER_OVERVIEW_PDF_SHIPCOST ORDER_OVERVIEW_PDF_NETTO', $aCache[0]->aParams[2] );
@@ -462,12 +504,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         $oMyOrder = $this->_getTestMyOrder();
 
         $oPdf = new testPdfClass;
-        $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
+        $oPdfArtSum = new myOrder_PdfArticleSummary( $oMyOrder, $oPdf );
 
         $iStartPos = 1;
-        $oPdfArtSum->UNITsetWrappingInfo( $iStartPos );
+        $oPdfArtSum->setWrappingInfo( $iStartPos );
 
-        $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
+        $aCache = $oPdfArtSum->getVar('_aCache');
 
         //checking values
         $this->assertEquals( 'ORDER_OVERVIEW_PDF_WRAPPING ORDER_OVERVIEW_PDF_NETTO', $aCache[0]->aParams[2] );
@@ -488,12 +530,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         $oMyOrder = $this->_getTestMyOrder();
 
         $oPdf = new testPdfClass;
-        $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
+        $oPdfArtSum = new myOrder_PdfArticleSummary( $oMyOrder, $oPdf );
 
         $iStartPos = 1;
-        $oPdfArtSum->UNITsetPaymentInfo( $iStartPos );
+        $oPdfArtSum->setPaymentInfo( $iStartPos );
 
-        $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
+        $aCache = $oPdfArtSum->getVar('_aCache');
 
         //checking values
         $this->assertEquals( 'ORDER_OVERVIEW_PDF_PAYMENTIMPACT ORDER_OVERVIEW_PDF_NETTO', $aCache[0]->aParams[2] );
@@ -514,12 +556,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         $oMyOrder = $this->_getTestMyOrder();
 
         $oPdf = new testPdfClass;
-        $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
+        $oPdfArtSum = new myOrder_PdfArticleSummary( $oMyOrder, $oPdf );
 
         $iStartPos = 1;
-        $oPdfArtSum->UNITsetGrandTotalPriceInfo( $iStartPos );
+        $oPdfArtSum->setGrandTotalPriceInfo( $iStartPos );
 
-        $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
+        $aCache = $oPdfArtSum->getVar('_aCache');
 
         //checking values
         $this->assertEquals( 'ORDER_OVERVIEW_PDF_ALLSUM_NET', $aCache[1]->aParams[2] );
@@ -538,12 +580,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         $oMyOrder = $this->_getTestMyOrder();
 
         $oPdf = new testPdfClass;
-        $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
+        $oPdfArtSum = new myOrder_PdfArticleSummary( $oMyOrder, $oPdf );
 
         $iStartPos = 1;
-        $oPdfArtSum->UNITsetPaymentMethodInfo( $iStartPos );
+        $oPdfArtSum->setPaymentMethodInfo( $iStartPos );
 
-        $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
+        $aCache = $oPdfArtSum->getVar('_aCache');
 
         //checking values
         $this->assertEquals( 'ORDER_OVERVIEW_PDF_SELPAYMENTNachnahme', $aCache[1]->aParams[2] );
@@ -560,12 +602,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         $oMyOrder->setNonPublicVar( '_iSelectedLang', 1 );
 
         $oPdf = new testPdfClass;
-        $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
+        $oPdfArtSum = new myOrder_PdfArticleSummary( $oMyOrder, $oPdf );
 
         $iStartPos = 1;
-        $oPdfArtSum->UNITsetPaymentMethodInfo( $iStartPos );
+        $oPdfArtSum->setPaymentMethodInfo( $iStartPos );
 
-        $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
+        $aCache = $oPdfArtSum->getVar('_aCache');
 
         //checking values
         $this->assertEquals( 'ORDER_OVERVIEW_PDF_SELPAYMENTCOD (Cash on Delivery)', $aCache[1]->aParams[2] );
@@ -581,12 +623,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
         $oMyOrder = $this->_getTestMyOrder();
 
         $oPdf = new testPdfClass;
-        $oPdfArtSum = $this->getProxyClass( "PdfArticleSummary", array( $oMyOrder, $oPdf ) );
+        $oPdfArtSum = new myOrder_PdfArticleSummary( $oMyOrder, $oPdf );
 
         $iStartPos = 1;
-        $oPdfArtSum->UNITsetPayUntilInfo( $iStartPos );
+        $oPdfArtSum->setPayUntilInfo( $iStartPos );
 
-        $aCache = $oPdfArtSum->getNonPublicVar('_aCache');
+        $aCache = $oPdfArtSum->getVar('_aCache');
 
         //checking values
         $this->assertEquals( 'ORDER_OVERVIEW_PDF_PAYUPTO'.date( 'd.m.Y', mktime( 0, 0, 0, date ( 'm' ), date ( 'd' ) + 7, date( 'Y' ) )), $aCache[1]->aParams[2] );
