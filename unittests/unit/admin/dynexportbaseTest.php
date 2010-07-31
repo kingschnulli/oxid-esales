@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbaseTest.php 29169 2010-07-29 13:58:46Z vilma $
+ * @version   SVN: $Id: dynexportbaseTest.php 29181 2010-07-30 08:27:24Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -31,7 +31,11 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 class _DynExportBase extends DynExportBase
 {
     public function initArticle( $sHeapTable, $iCnt, & $blContinue ) {
-        return $this->_initArticle( $sHeapTable, $iCnt, $blContinue );
+        try {
+            return $this->_initArticle( $sHeapTable, $iCnt, $blContinue );
+        } catch ( Exception $oExcp ) {
+            throw $oExcp;
+        }
     }
 
     /**
@@ -644,10 +648,10 @@ class Unit_Admin_DynExportBaseTest extends OxidTestCase
     public function testInitArticleProductIsNotAwailable()
     {
         modDb::getInstance()->addClassFunction('selectLimit', create_function('$s, $i, $c', 'throw new Exception($s.$i.$c);'));
-        $oView = new DynExportBase();
+        $oView = new _DynExportBase();
         $blClose = true;
         try {
-            $oView->UNITinitArticle( "testdynexportbasetable", 0, $blClose );
+            $oView->initArticle( "testdynexportbasetable", 0, $blClose );
         } catch ( Exception $oExcp ) {
             $this->assertEquals( "select oxid from testdynexportbasetable10", $oExcp->getMessage(), "Error in DynExportBase::InitArticle()" );
             return;

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 27105 2010-04-09 11:55:20Z arvydas $
+ * @version   SVN: $Id: oxlangTest.php 29183 2010-07-30 10:02:08Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1230,7 +1230,7 @@ class Unit_Core_oxLangTest extends OxidTestCase
         modConfig::setParameter( 'aLanguageURLs', null );
 
         $oUtilsServer = $this->getMock( 'oxUtilsServer', array( 'getOxCookie' ) );
-        $oUtilsServer->expects( $this->once() )->method( 'getOxCookie')->with( $this->equalTo( 'language' ) )->will( $this->returnValue( 1 ) );
+        $oUtilsServer->expects( $this->exactly( 2 ) )->method( 'getOxCookie')->with( $this->equalTo( 'language' ) )->will( $this->returnValue( 1 ) );
 
         modInstances::addMod( "oxUtilsServer", $oUtilsServer );
 

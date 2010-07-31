@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 28925 2010-07-22 11:52:37Z sarunas $
+ * @version   SVN: $Id: oxsysrequirements.php 29184 2010-07-30 11:33:41Z arvydas $
  */
 
 /**
@@ -297,7 +297,8 @@ class oxSysRequirements
         $iModStat = null;
         $sHost   = $_SERVER['HTTP_HOST'];
         $sScript = $_SERVER['SCRIPT_NAME'];
-        if ( $sScript && $rFp = @fsockopen( $sHost, 80, $iErrNo, $sErrStr, 10 ) ) {
+        $iPort = isset( $_SERVER['SERVER_PORT'] ) ? $_SERVER['SERVER_PORT'] : 80;
+        if ( $sScript && $rFp = @fsockopen( $sHost, $iPort, $iErrNo, $sErrStr, 10 ) ) {
             if ( isAdmin() ) {
                 $sScript = oxConfig::getInstance()->getConfigParam( 'sShopURL' ).'oxseo.php?mod_rewrite_module_is=off';
             } else {

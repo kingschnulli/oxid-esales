@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 28658 2010-06-28 13:31:09Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxuserTest.php 29183 2010-07-30 10:02:08Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -92,7 +92,7 @@ class Unit_oxuserTest_oxUtilsServer2 extends oxUtilsServer
      */
     protected $_aCookieVars = array();
 
-    public function setOxCookie( $sVar, $sVal = "", $iExpire = 0, $sPath = '/', $sDomain = null )
+    public function setOxCookie( $sVar, $sVal = "", $iExpire = 0, $sPath = '/', $sDomain = null, $blToSession = true )
     {
         //unsetting cookie
         if (!isset($sVar) && !isset($sVal)) {

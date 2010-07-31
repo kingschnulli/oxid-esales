@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 28448 2010-06-18 12:52:09Z sarunas $
+ * @version   SVN: $Id: oxsession.php 29173 2010-07-30 07:58:43Z arvydas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -269,13 +269,17 @@ class oxSession extends oxSuperCfg
             }
 
             //checking for swapped client
-            if ( !self::$_blIsNewSession && $this->_isSwappedClient() ) {
+            $blSwapped = $this->_isSwappedClient();
+            if ( !self::$_blIsNewSession && $blSwapped ) {
                 $this->initNewSession();
 
                 // passing notification about session problems
                 if ( $this->_sErrorMsg && $myConfig->getConfigParam( 'iDebug' ) ) {
                     oxUtilsView::getInstance()->addErrorToDisplay( new oxException( $this->_sErrorMsg ) );
                 }
+            } elseif ( !$blSwapped ) {
+                // transferring cookies between hosts
+                oxUtilsServer::getInstance()->loadSessionCookies();
             }
         }
     }
@@ -1058,7 +1062,7 @@ class oxSession extends oxSuperCfg
 
     /**
      * return basket reservations handler object
-     * 
+     *
      * @return oxBasketReservation
      */
     public function getBasketReservations()

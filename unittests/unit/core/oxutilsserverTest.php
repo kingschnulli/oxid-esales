@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsserverTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxutilsserverTest.php 29171 2010-07-30 07:10:44Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,6 +37,111 @@ class Unit_Core_oxUtilsServerTest extends OxidTestCase
         oxConfig::getInstance()->setConfigParam( "aTrustedIPs", array() );
         parent::tearDown();
     }
+
+    /**
+     * oxUtilsServer::setOxCookie() test case
+     *
+     * @return null
+     */
+    public function testSetOxCookieForSaveSessionCookie()
+    {
+        $oUtilsServer = $this->getMock( "oxUtilsServer", array( "_saveSessionCookie" ));
+        $oUtilsServer->expects( $this->once() )->method( '_saveSessionCookie' );
+        $oUtilsServer->setOxCookie( "testName1", $sValue );
+        $oUtilsServer->setOxCookie( "testName2", "", 0, '/', null, false );
+    }
+
+    /**
+     * oxUtilsServer::_mustSaveToSession() test case
+     *
+     * @return null
+     */
+    public function testMustSaveToSessionNoSslUrl()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getSslShopUrl" ));
+        $oConfig->expects( $this->once() )->method( 'getSslShopUrl' )->will( $this->returnValue( false ) );
+
+        $oUtilsServer = $this->getMock( "oxUtilsServer", array( "getConfig" ) );
+        $oUtilsServer->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $this->assertFalse( $oUtilsServer->UNITmustSaveToSession() );
+    }
+
+    /**
+     * oxUtilsServer::_mustSaveToSession() test case
+     *
+     * @return null
+     */
+    public function testMustSaveToSession()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getSslShopUrl", "getShopUrl" ));
+        $oConfig->expects( $this->once() )->method( 'getSslShopUrl' )->will( $this->returnValue( "https://ssl.oxid.com" ) );
+        $oConfig->expects( $this->once() )->method( 'getShopUrl' )->will( $this->returnValue( "http://www.oxid.com" ) );
+
+        $oUtilsServer = $this->getMock( "oxUtilsServer", array( "getConfig" ) );
+        $oUtilsServer->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $this->assertFalse( $oUtilsServer->UNITmustSaveToSession() );
+    }
+
+    /**
+     * oxUtilsServer::_mustSaveToSession() test case
+     *
+     * @return null
+     */
+    public function testGetSessionCookieKey()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "isSsl" ));
+        $oConfig->expects( $this->at( 0 ) )->method( 'isSsl' )->will( $this->returnValue( true ) );
+        $oConfig->expects( $this->at( 1 ) )->method( 'isSsl' )->will( $this->returnValue( false ) );
+        $oConfig->expects( $this->at( 2 ) )->method( 'isSsl' )->will( $this->returnValue( true ) );
+        $oConfig->expects( $this->at( 3 ) )->method( 'isSsl' )->will( $this->returnValue( false ) );
+
+        $oUtilsServer = $this->getMock( "oxUtilsServer", array( "getConfig" ) );
+        $oUtilsServer->expects( $this->exactly( 4 ) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $this->assertEquals( 'ssl', $oUtilsServer->UNITgetSessionCookieKey( true ) );
+        $this->assertEquals( 'nossl', $oUtilsServer->UNITgetSessionCookieKey( true ) );
+        $this->assertEquals( 'nossl', $oUtilsServer->UNITgetSessionCookieKey( false ) );
+        $this->assertEquals( 'ssl', $oUtilsServer->UNITgetSessionCookieKey( false ) );
+    }
+
+    /**
+     * oxUtilsServer::_saveSessionCookie() test case
+     *
+     * @return null
+     */
+    public function testSaveSessionCookie()
+    {
+        $oUtilsServer = $this->getMock( "oxUtilsServer", array( "_mustSaveToSession", "_getSessionCookieKey" ) );
+        $oUtilsServer->expects( $this->any() )->method( '_mustSaveToSession' )->will( $this->returnValue( true ) );
+        $oUtilsServer->expects( $this->any() )->method( '_getSessionCookieKey' )->will( $this->returnValue( "key" ) );
+        $oUtilsServer->UNITsaveSessionCookie( "var1", "val1", 123, "path1", "domain1" );
+        $oUtilsServer->UNITsaveSessionCookie( "var2", "val2", 321, "path2", "domain2" );
+
+        $aVal = array( "key" => array( "var1" => array( "value" => "val1", "expire" => 123, "path" => "path1", "domain" => "domain1" ),
+                                       "var2" => array( "value" => "val2", "expire" => 321, "path" => "path2", "domain" => "domain2" ) ) );
+        $this->assertEquals( $aVal, modSession::getInstance()->getVar( "aSessionCookies" ) );
+    }
+
+    /**
+     * oxUtilsServer::loadSessionCookies() test case
+     *
+     * @return null
+     */
+    public function testLoadSessionCookies()
+    {
+        $aVal = array( "key" => array( "var1" => array( "value" => "val1", "expire" => 123, "path" => "path1", "domain" => "domain1" ),
+                                       "var2" => array( "value" => "val2", "expire" => 321, "path" => "path2", "domain" => "domain2" ) ) );
+
+        modSession::getInstance()->setVar( 'aSessionCookies', $aVal );
+
+        $oUtilsServer = $this->getMock( "oxUtilsServer", array( "_getSessionCookieKey", "setOxCookie" ) );
+        $oUtilsServer->expects( $this->at( 0 ) )->method( '_getSessionCookieKey' )->will( $this->returnValue( "key" ) );
+        $oUtilsServer->expects( $this->at( 1 ) )->method( 'setOxCookie' )->with( $this->equalTo( "var1" ), $this->equalTo( "val1" ), $this->equalTo( 123 ), $this->equalTo( "path1" ), $this->equalTo( "domain1" ), $this->equalTo( false ) );
+        $oUtilsServer->expects( $this->at( 2 ) )->method( 'setOxCookie' )->with( $this->equalTo( "var2" ), $this->equalTo( "val2" ), $this->equalTo( 321 ), $this->equalTo( "path2" ), $this->equalTo( "domain2" ), $this->equalTo( false ) );
+        $oUtilsServer->loadSessionCookies();
+
+        $this->assertEquals( array(), oxSession::getVar( 'aSessionCookies' ) );
+    }
+
     public function testIsTrustedClientIp()
     {
         $oUtilsServer = new oxUtilsServer();

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliverylistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxdeliverylistTest.php 29187 2010-07-30 13:01:22Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -905,12 +905,22 @@ class Unit_Core_oxdeliverylistTest extends OxidTestCase
         $oObject2Delivery->oxobject2delivery__oxobjectid = new oxField('_testCategoryId', oxField::T_RAW);
         $oObject2Delivery->oxobject2delivery__oxtype = new oxField('oxcategories', oxField::T_RAW);
         $oObject2Delivery->save();
-        $oObject2Delivery->setId('_testO2DelId2');
-        $oObject2Delivery->oxobject2delivery__oxdeliveryid = new oxField('_testDeliveryId2', oxField::T_RAW);
+        $oObject2Delivery->setId('_testO2DelId21');
+        $oObject2Delivery->oxobject2delivery__oxdeliveryid = new oxField('_testDeliveryId1', oxField::T_RAW);
         $oObject2Delivery->oxobject2delivery__oxobjectid = new oxField('1126', oxField::T_RAW);
         $oObject2Delivery->oxobject2delivery__oxtype = new oxField('oxarticles', oxField::T_RAW);
         $oObject2Delivery->save();
         $oObject2Delivery->setId('_testO2DelId3');
+        $oObject2Delivery->oxobject2delivery__oxdeliveryid = new oxField('_testDeliveryId2', oxField::T_RAW);
+        $oObject2Delivery->oxobject2delivery__oxobjectid = new oxField('1126', oxField::T_RAW);
+        $oObject2Delivery->oxobject2delivery__oxtype = new oxField('oxarticles', oxField::T_RAW);
+        $oObject2Delivery->save();
+        $oObject2Delivery->setId('_testO2DelId2');
+        $oObject2Delivery->oxobject2delivery__oxdeliveryid = new oxField('_testDeliveryId2', oxField::T_RAW);
+        $oObject2Delivery->oxobject2delivery__oxobjectid = new oxField('_testArticleId1', oxField::T_RAW);
+        $oObject2Delivery->oxobject2delivery__oxtype = new oxField('oxarticles', oxField::T_RAW);
+        $oObject2Delivery->save();
+        $oObject2Delivery->setId('_testO2DelId4');
         $oObject2Delivery->oxobject2delivery__oxdeliveryid = new oxField('_testDeliveryId3', oxField::T_RAW);
         $oObject2Delivery->oxobject2delivery__oxobjectid = new oxField('112asd6', oxField::T_RAW);
         $oObject2Delivery->save();
