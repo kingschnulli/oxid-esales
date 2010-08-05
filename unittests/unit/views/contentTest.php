@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 28315 2010-06-11 15:34:43Z arvydas $
+ * @version   SVN: $Id: contentTest.php 29224 2010-08-04 14:21:37Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -70,6 +70,27 @@ class Unit_Views_contentTest extends OxidTestCase
     }
 
     /**
+     * Content::_canShowContent() test case
+     *
+     * @return unknown_type
+     */
+    public function testCanShowContent()
+    {
+        modConfig::getInstance()->setConfigParam( 'blPsLoginEnabled', true );
+
+        $oView = $this->getMock( "content", array( "getUser" ), array(), '', false );
+        $oView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( false ) );
+
+        $this->assertTrue( $oView->UNITcanShowContent( "oxagb" ) );
+        $this->assertTrue( $oView->UNITcanShowContent( "oxrightofwithdrawal" ) );
+        $this->assertTrue( $oView->UNITcanShowContent( "oximpressum" ) );
+        $this->assertFalse( $oView->UNITcanShowContent( "testcontentident" ) );
+
+        modConfig::getInstance()->setConfigParam( 'blPsLoginEnabled', false );
+        $this->assertTrue( $oView->UNITcanShowContent( "testcontentident" ) );
+    }
+
+    /**
      * Test active content id getter when content id passed with tpl param.
      *
      * @return null
@@ -80,39 +101,8 @@ class Unit_Views_contentTest extends OxidTestCase
         modConfig::setParameter( 'oxcid', $sContentId );
         modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
 
-        $oView = $this->getMock( "content", array( "getUser" ), array(), '', false );
-        $oView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
-        // testing special chars conversion
+        $oView = new content();
         $this->assertEquals( $oView->getContentId(), $sContentId );
-    }
-
-    /**
-     * Test active content id getter
-     *
-     * @return null
-     */
-    public function testGetContentNoUser()
-    {
-        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
-
-        modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
-        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
-
-        $oConfig = $this->getMock( "oxConfig", array( "getShopHomeURL", 'getConfigParam' ) );
-        $oConfig->expects( $this->once() )->method( 'getShopHomeURL' )->will( $this->returnValue( "testUrl" ) );
-        $oConfig->expects( $this->once() )->method( 'getConfigParam' )->will( $this->returnValue( true ) );
-
-        try {
-            // testing..
-            $oView = $this->getMock( "content", array( "getUser", "getConfig" ), array(), '', false );
-            $oView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
-            $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
-            $oView->getContentId();
-        } catch ( Exception $oExcp ) {
-            $this->assertEquals( "testUrlcl=account", $oExcp->getMessage(), "Error in oxsclogincontent::getContentId()" );
-            return;
-        }
-        $this->fail( "Error in content::getContentId()" );
     }
 
     /**
@@ -166,6 +156,30 @@ class Unit_Views_contentTest extends OxidTestCase
         $oContentView->expects( $this->atLeastOnce() )->method( 'getContent' );
         $oContentView->expects( $this->atLeastOnce() )->method( 'showPlainTemplate' )->will( $this->returnValue( 'true' ) );
         $this->assertEquals( 'content_plain.tpl', $oContentView->render() );
+    }
+
+    /**
+     * Test active content id getter
+     *
+     * @return null
+     */
+    public function testRenderPsOn()
+    {
+        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception("redirect"); }');
+
+        modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
+        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
+
+        try {
+            // testing..
+            $oView = $this->getMock( "content", array( "_canShowContent" ), array(), '', false );
+            $oView->expects( $this->once() )->method( '_canShowContent' )->will( $this->returnValue( false ) );
+            $oView->render();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( "redirect", $oExcp->getMessage(), "Error in oxsclogincontent::getContentId()" );
+            return;
+        }
+        $this->fail( "Error in content::getContentId()" );
     }
 
     /**
@@ -240,12 +254,32 @@ class Unit_Views_contentTest extends OxidTestCase
      */
     public function testShowPlainTemplate()
     {
+        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", false );
         modConfig::setParameter( 'plain', 0 );
         $oView = new content();
         $this->assertFalse( $oView->showPlainTemplate() );
 
         modConfig::setParameter( 'plain', 1 );
         $oView = new content();
+        $this->assertTrue( $oView->showPlainTemplate() );
+    }
+
+    /**
+     * Test show plain template.
+     *
+     * @return null
+     */
+    public function testShowPlainTemplatePsOn()
+    {
+        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
+        modConfig::setParameter( 'plain', 0 );
+        $oView = new content();
+        $this->assertFalse( $oView->showPlainTemplate() );
+
+        modConfig::setParameter( 'plain', 1 );
+
+        $oView = $this->getMock( 'content', array( 'getUser' ) );
+        $oView->expects( $this->once() )->method( 'getUser')->will( $this->returnValue( false ) );
         $this->assertTrue( $oView->showPlainTemplate() );
     }
 
