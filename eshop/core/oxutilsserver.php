@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsserver.php 29171 2010-07-30 07:10:44Z arvydas $
+ * @version   SVN: $Id: oxutilsserver.php 29251 2010-08-06 12:41:44Z arvydas $
  */
 
 /**
@@ -383,5 +383,20 @@ class oxUtilsServer extends oxSuperCfg
         }
 
         return $blTrusted;
+    }
+
+    /**
+     * Removes MSIE(\s)?(\S)*(\s) from browser agent information
+     *
+     * @param string $sAgent browser user agent idenfitier
+     *
+     * @return string
+     */
+    public function processUserAgentInfo( $sAgent )
+    {
+        if ( $sAgent ) {
+            $sAgent = getStr()->preg_replace( "/MSIE(\s)?(\S)*(\s)/", "", (string) $sAgent );
+        }
+        return $sAgent;
     }
 }

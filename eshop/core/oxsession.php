@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 29173 2010-07-30 07:58:43Z arvydas $
+ * @version   SVN: $Id: oxsession.php 29251 2010-08-06 12:41:44Z arvydas $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -851,6 +851,12 @@ class oxSession extends oxSuperCfg
     protected function _checkUserAgent( $sAgent, $sExistingAgent )
     {
         $blCheck = false;
+
+        // processing
+        $oUtils = oxUtilsServer::getInstance();
+        $sAgent = $oUtils->processUserAgentInfo( $sAgent );
+        $sExistingAgent = $oUtils->processUserAgentInfo( $sExistingAgent );
+
         if ( $sAgent && $sAgent !== $sExistingAgent ) {
             if ( $sExistingAgent ) {
                 $this->_sErrorMsg = "Different browser ({$sExistingAgent}, {$sAgent}), creating new SID...<br>";

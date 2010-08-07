@@ -117,4 +117,19 @@ class Unit_Core_oxtsprotectionTest extends OxidTestCase
         $this->assertEquals( array($oProduct, $oProduct2, $oProduct3), $oTsProtection->getTsProducts(2000) );
     }
 
+    /**
+     * Tests whether oxtsprotection::checkCertificate() is correctly envoked
+     *
+     */
+    public function testCheckCertificate()
+    {
+        $sSoapUrl = 'https://www.trustedshops.de/ts/services/TsProtection?wsdl';
+        $sFunction = 'checkCertificate';
+        $iTrustedShopId = 'AAAA';
+        $oTsProtection = $this->getMock( "oxtsprotection", array( "executeSoap" ) );
+        $oTsProtection->expects( $this->any() )->method( 'executeSoap' )->with( $this->equalTo( $sSoapUrl ), $this->equalTo( $sFunction ), $this->equalTo( $iTrustedShopId ) )->will( $this->returnValue( true ) );
+
+        $this->assertTrue( $oTsProtection->checkCertificate($iTrustedShopId, false) );
+    }
+
 }

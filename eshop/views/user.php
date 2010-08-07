@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 28585 2010-06-23 09:23:38Z sarunas $
+ * @version   SVN: $Id: user.php 29252 2010-08-06 13:40:48Z arvydas $
  */
 
 /**
@@ -88,14 +88,17 @@ class User extends oxUBase
      */
     public function render()
     {
-        $myConfig  = $this->getConfig();
-        if ($myConfig->getConfigParam( 'blPsBasketReservationEnabled' )) {
-            $this->getSession()->getBasketReservations()->renewExpiration();
-        }
+        $myConfig = $this->getConfig();
 
-        $oBasket = $this->getSession()->getBasket();
-        if ( $myConfig->getConfigParam( 'blPsBasketReservationEnabled' ) && (!$oBasket || ( $oBasket && !$oBasket->getProductsCount() )) ) {
-            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() .'cl=basket' );
+        if ( $this->getIsOrderStep() ) {
+            if ($myConfig->getConfigParam( 'blPsBasketReservationEnabled' )) {
+                $this->getSession()->getBasketReservations()->renewExpiration();
+            }
+
+            $oBasket = $this->getSession()->getBasket();
+            if ( $this->_blIsOrderStep && $myConfig->getConfigParam( 'blPsBasketReservationEnabled' ) && (!$oBasket || ( $oBasket && !$oBasket->getProductsCount() )) ) {
+                oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() .'cl=basket' );
+            }
         }
 
         parent::render();
