@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 29224 2010-08-04 14:21:37Z arvydas $
+ * @version   SVN: $Id: contentTest.php 29274 2010-08-10 08:54:58Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -151,9 +151,13 @@ class Unit_Views_contentTest extends OxidTestCase
      */
     public function testRender()
     {
-        $oContentView = $this->getMock( 'content', array( 'getContentId', 'getContent', 'showPlainTemplate' ) );
-        $oContentView->expects( $this->atLeastOnce() )->method( 'getContentId' )->will( $this->returnValue( 'testVal' ) );
-        $oContentView->expects( $this->atLeastOnce() )->method( 'getContent' );
+        $oContent = new oxContent();
+        $oContent->setId( "testContent" );
+
+        $oContentView = $this->getMock( 'content', array( '_canShowContent', 'getContent', 'showPlainTemplate', '_getTplName' ) );
+        $oContentView->expects( $this->atLeastOnce() )->method( '_getTplName' )->will( $this->returnValue( false ) );
+        $oContentView->expects( $this->atLeastOnce() )->method( '_canShowContent' )->will( $this->returnValue( true ) );
+        $oContentView->expects( $this->atLeastOnce() )->method( 'getContent' )->will( $this->returnValue( $oContent ) );
         $oContentView->expects( $this->atLeastOnce() )->method( 'showPlainTemplate' )->will( $this->returnValue( 'true' ) );
         $this->assertEquals( 'content_plain.tpl', $oContentView->render() );
     }
@@ -274,13 +278,27 @@ class Unit_Views_contentTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
         modConfig::setParameter( 'plain', 0 );
         $oView = new content();
-        $this->assertFalse( $oView->showPlainTemplate() );
+        $this->assertTrue( $oView->showPlainTemplate() );
 
         modConfig::setParameter( 'plain', 1 );
+        $oView = new content();
+        $this->assertTrue( $oView->showPlainTemplate() );
+
+        modConfig::setParameter( 'plain', 0 );
 
         $oView = $this->getMock( 'content', array( 'getUser' ) );
-        $oView->expects( $this->once() )->method( 'getUser')->will( $this->returnValue( false ) );
+        $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( false ) );
         $this->assertTrue( $oView->showPlainTemplate() );
+
+        modConfig::setParameter( 'plain', 0 );
+
+        $oUser = $this->getMock( 'oxuser', array( 'isTermsAccepted' ) );
+        $oUser->expects( $this->any() )->method( 'isTermsAccepted')->will( $this->returnValue( true ) );
+
+        $oView = $this->getMock( 'content', array( 'getUser' ) );
+        $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
+        $this->assertFalse( $oView->showPlainTemplate() );
+
     }
 
     /**

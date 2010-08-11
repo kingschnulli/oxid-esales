@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: content.php 29224 2010-08-04 14:21:37Z arvydas $
+ * @version   SVN: $Id: content.php 29274 2010-08-10 08:54:58Z arvydas $
  */
 
 /**
@@ -90,18 +90,21 @@ class Content extends oxUBase
     {
         parent::render();
 
-        if ( !$this->_canShowContent( $this->getContentId() ) ) {
+        $oContent = $this->getContent();
+        if ( $oContent && !$this->_canShowContent( $oContent->oxcontents__oxloadid->value ) ) {
             oxUtils::getInstance()->redirect( $this->getConfig()->getShopHomeURL() . 'cl=account' );
         }
 
+        $sTpl = false;
         if ( $sTplName = $this->_getTplName() ) {
             $this->_sThisTemplate = $sTpl = $sTplName;
-        } else {
-            $this->_aViewData['oxcid'] = $sTpl = $this->getContentId();
-            if ( !$sTpl ) {
-                error_404_handler();
-            }
-            $this->_aViewData['oContent'] = $this->getContent();
+        } elseif ( $oContent ) {
+            $this->_aViewData['oxcid'] = $sTpl = $oContent->getId();
+            $this->_aViewData['oContent'] = $oContent;
+        }
+
+        if ( !$sTpl ) {
+            error_404_handler();
         }
 
         // sometimes you need to display plain templates (e.g. when showing popups)
@@ -192,14 +195,15 @@ class Content extends oxUBase
     public function showPlainTemplate()
     {
         $blPlain = (bool) oxConfig::getParameter( 'plain' );
-        if ( $blPlain != false ) {
-            $oUser   = $this->getUser();
+        if ( $blPlain === false ) {
+            $oUser = $this->getUser();
             if ( $this->getConfig()->getConfigParam( 'blPsLoginEnabled' ) &&
                  ( !$oUser || ( $oUser && !$oUser->isTermsAccepted() ) ) ) {
                 $blPlain = true;
-            }	
+            }
         }
-        return $blPlain;
+
+        return (bool) $blPlain;
     }
 
     /**
