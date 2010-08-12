@@ -128,17 +128,17 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
         $sPictureDir = oxConfig::getInstance()->getPictureDir( false );
         $sMasterPicPath = $sPictureDir . "master/1/1126_p1.jpg";
 
-        $aFiles_pic['myfile']['name']     = array( "P1@oxarticles__oxpic1" => "testNewPic1.jpg" );
-        $aFiles_pic['myfile']['tmp_name'] = array( "P1@oxarticles__oxpic1" => $sMasterPicPath );
+        $aFiles['myfile']['name']["P1@oxarticles__oxpic1"] = "testNewPic1.jpg";
+        $aFiles['myfile']['tmp_name']["P1@oxarticles__oxpic1"] = $sMasterPicPath;
 
-        $aFiles_zoom['myfile']['name']     = array( "Z1@oxarticles__oxzoom1" => "testNewPic1.jpg" );
-        $aFiles_zoom['myfile']['tmp_name'] = array( "Z1@oxarticles__oxzoom1" => $sMasterPicPath );
+        $aFiles['myfile']['name']["Z1@oxarticles__oxzoom1"] = "testNewPic1.jpg";
+        $aFiles['myfile']['tmp_name']["Z1@oxarticles__oxzoom1"] = $sMasterPicPath;
 
-        $aFiles_th['myfile']['name']     = array( "TH@oxarticles__oxthumb" => "testNewPic1.jpg" );
-        $aFiles_th['myfile']['tmp_name'] = array( "TH@oxarticles__oxthumb" => $sMasterPicPath );
+        $aFiles['myfile']['name']["TH@oxarticles__oxthumb"] = "testNewPic1.jpg";
+        $aFiles['myfile']['tmp_name']["TH@oxarticles__oxthumb"] = $sMasterPicPath;
 
-        $aFiles_ico['myfile']['name']     = array( "ICO@oxarticles__oxicon" => "testNewPic1.jpg" );
-        $aFiles_ico['myfile']['tmp_name'] = array( "ICO@oxarticles__oxicon" => $sMasterPicPath );
+        $aFiles['myfile']['name']["ICO@oxarticles__oxicon"] = "testNewPic1.jpg";
+        $aFiles['myfile']['tmp_name']["ICO@oxarticles__oxicon"] = $sMasterPicPath;
 
         //test article
         $oArticle = $this->getMock( 'oxArticle', array( 'updateAmountOfGeneratedPictures' ) );
@@ -149,10 +149,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
 
         // testing functions calls
         $oUtilsFile = $this->getMock( 'oxUtilsFile', array( 'processFiles' ) );
-        $oUtilsFile->expects( $this->at( 0 ) )->method( 'processFiles' )->with( $this->isInstanceOf( 'oxArticle' ), $this->equalTo( $aFiles_pic ), $this->equalTo( true ) );
-        $oUtilsFile->expects( $this->at( 1 ) )->method( 'processFiles' )->with( $this->isInstanceOf( 'oxArticle' ), $this->equalTo( $aFiles_zoom ), $this->equalTo( true ) );
-        $oUtilsFile->expects( $this->at( 2 ) )->method( 'processFiles' )->with( $this->isInstanceOf( 'oxArticle' ), $this->equalTo( $aFiles_th ), $this->equalTo( true )   );
-        $oUtilsFile->expects( $this->at( 3 ) )->method( 'processFiles' )->with( $this->isInstanceOf( 'oxArticle' ), $this->equalTo( $aFiles_ico ), $this->equalTo( true )  );
+        $oUtilsFile->expects( $this->once() )->method( 'processFiles' )->with( $this->isInstanceOf( 'oxArticle' ), $this->equalTo( $aFiles ), $this->equalTo( true ) );
 
         modInstances::addMod( "oxUtilsFile", $oUtilsFile );
 
@@ -177,7 +174,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
 
         // testing functions calls
         $oUtilsFile = $this->getMock( 'oxUtilsFile', array( 'processFiles' ) );
-        $oUtilsFile->expects( $this->exactly( 2 ) )->method( 'processFiles' );
+        $oUtilsFile->expects( $this->once() )->method( 'processFiles' );
 
         modInstances::addMod( "oxUtilsFile", $oUtilsFile );
 

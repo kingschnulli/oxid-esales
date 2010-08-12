@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_pictures.php 28928 2010-07-22 14:19:41Z arvydas $
+ * @version   SVN: $Id: article_pictures.php 29303 2010-08-11 11:36:48Z arvydas $
  */
 
 /**
@@ -91,16 +91,13 @@ class Article_Pictures extends oxAdminDetails
 
         // deleting master and all related images
         $aIndexes = $this->_getUploadedMasterPicIndexes();
-        $iMin = min( $aIndexes );
-        $iMin = $iMin < 1 ? 1 : $iMin;
-
-        for ( $i = $iMin; $i <= $this->getConfig()->getConfigParam( 'iPicCount' ); $i++ ) {
-            $this->_resetMasterPicture( $oArticle, $iIndex, in_array( $i, $aIndexes ) );
+        foreach ( $aIndexes as $iIndex ) {
+            $this->_resetMasterPicture( $oArticle, $iIndex, true );
         }
 
         $oArticle->assign( $aParams );
         $oArticle = oxUtilsFile::getInstance()->processFiles( $oArticle );
-        $oArticle->updateAmountOfGeneratedPictures( $iMin - 1 );
+        $oArticle->updateAmountOfGeneratedPictures( 0 );
         $oArticle->save();
     }
 
@@ -141,13 +138,7 @@ class Article_Pictures extends oxAdminDetails
             if ( $iIndex > 0 ) {
                 // deleting master picture
                 $this->_resetMasterPicture( $oArticle, $iIndex, true );
-
-                // reseting others following master image
-                for ( $i = $iIndex + 1; $i <= $this->getConfig()->getConfigParam( 'iPicCount' ); $i++ ) {
-                    $this->_resetMasterPicture( $oArticle, $iIndex );
-                }
-
-                $oArticle->updateAmountOfGeneratedPictures( $iIndex - 1 );
+                $oArticle->updateAmountOfGeneratedPictures( 0 );
             }
         }
 

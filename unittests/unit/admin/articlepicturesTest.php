@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: articlepicturesTest.php 28928 2010-07-22 14:19:41Z arvydas $
+ * @version   SVN: $Id: articlepicturesTest.php 29303 2010-08-11 11:36:48Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -76,7 +76,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( 'iPicCount', $iCnt );
 
         $oView->expects( $this->once() )->method( '_getUploadedMasterPicIndexes' )->will( $this->returnValue( array( 1 ) ));
-        $oView->expects( $this->exactly( $iCnt ) )->method( '_resetMasterPicture' );
+        $oView->expects( $this->once() )->method( '_resetMasterPicture' );
         $oView->save();
     }
 
@@ -261,7 +261,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         modConfig::setParameter( "masterPicIndex", "2" );
 
         $oArtPic = $this->getMock( "Article_Pictures", array( "_resetMasterPicture" ) );
-        $oArtPic->expects( $this->exactly( oxConfig::getInstance()->getConfigParam( 'iPicCount' ) - 1 ) )->method( '_resetMasterPicture' );
+        $oArtPic->expects( $this->once() )->method( '_resetMasterPicture' );
 
         $this->_oArticle->oxarticles__oxpicsgenerated = new oxField( 2 );
         $this->_oArticle->save();
@@ -269,8 +269,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         $oArtPic->deletePicture();
 
         $this->_oArticle->load( "_testArtId" );
-        $this->assertEquals( "1", $this->_oArticle->oxarticles__oxpicsgenerated->value );
-
+        $this->assertEquals( 0, $this->_oArticle->oxarticles__oxpicsgenerated->value );
     }
 
     /**
