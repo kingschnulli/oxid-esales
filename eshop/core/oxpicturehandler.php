@@ -90,7 +90,7 @@ class oxPictureHandler extends oxSuperCfg
 
                         // main product picture
                         $sType = "P" . $iNr . "@oxarticles__oxpic" . $iNr;
-                        $aFiles['myfile']['name'][$sType] = $sNewName;
+                        $aFiles['myfile']['name'][$sType] = $oObject->{"oxarticles__oxpic".$iNr}->value;;
                         $aFiles['myfile']['tmp_name'][$sType] = $sMasterPictureSource;
 
                         // zoom picture

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 29184 2010-07-30 11:33:41Z arvydas $
+ * @version   SVN: $Id: oxsysrequirements.php 29333 2010-08-12 13:07:10Z arvydas $
  */
 
 /**
@@ -568,48 +568,11 @@ class oxSysRequirements
      */
     public function checkZendOptimizer()
     {
-        $iMinStat = 0;
-        $iModStat = (extension_loaded( 'Zend Optimizer' ) || (function_exists('zend_loader_enabled') && zend_loader_enabled())) ? 2 : $iMinStat;
-        $sHost   = $_SERVER['HTTP_HOST'];
-        $sScript = $_SERVER['SCRIPT_NAME'];
-        if ( $iModStat > $iMinStat && $sScript && $rFp = @fsockopen( $sHost, 80, $iErrNo, $sErrStr, 10 ) ) {
-            $sScript = str_replace( basename($sScript), '../admin/index.php', $sScript );
-
-            $sReq  = "POST $sScript HTTP/1.1\r\n";
-            $sReq .= "Host: $sHost\r\n";
-            $sReq .= "User-Agent: oxid setup\r\n";
-            $sReq .= "Content-Type: application/x-www-form-urlencoded\r\n";
-            $sReq .= "Content-Length: 0\r\n"; // empty post
-            $sReq .= "Connection: close\r\n\r\n";
-
-            $sOut = '';
-            fwrite( $rFp, $sReq );
-            while ( !feof( $rFp ) ) {
-                $sOut .= fgets( $rFp, 100 );
-            }
-
-            $iModStat = ( strpos( $sOut, 'Zend Optimizer not installed' ) !== false ) ? $iMinStat : 2;
-            fclose( $rFp );
-        }
-        if ( $iModStat > $iMinStat && $sScript && $rFp = @fsockopen( $sHost, 80, $iErrNo, $sErrStr, 10 ) ) {
-            $sScript = str_replace( basename($sScript), '../index.php', $sScript );
-
-            $sReq  = "POST $sScript HTTP/1.1\r\n";
-            $sReq .= "Host: $sHost\r\n";
-            $sReq .= "User-Agent: oxid setup\r\n";
-            $sReq .= "Content-Type: application/x-www-form-urlencoded\r\n";
-            $sReq .= "Content-Length: 0\r\n"; // empty post
-            $sReq .= "Connection: close\r\n\r\n";
-
-            $sOut = '';
-            fwrite( $rFp, $sReq );
-            while ( !feof( $rFp ) ) {
-                $sOut .= fgets( $rFp, 100 );
-            }
-            $iModStat = ( strpos( $sOut, 'Zend Optimizer not installed' ) !== false ) ? $iMinStat : 2;
-            fclose( $rFp );
-        }
-        return $iModStat;
+        /**
+         * Just for displaying "green" light, because if ZEND Optimizer/Guard loader is not
+         * installed you will see some info screen instead of default setup.
+         */
+        return 2;
     }
 
     /**
