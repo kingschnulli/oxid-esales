@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 28768 2010-07-02 13:53:17Z vilma $
+ * @version   SVN: $Id: oxbasket.php 29374 2010-08-16 20:22:29Z vilma $
  */
 
 /**
@@ -382,7 +382,7 @@ class oxBasket extends oxSuperCfg
 
         // updating basket history
         if ( !$blBundle ) {
-            $this->_addItemToSavedBasket( $sProductID, $dAmount, $aSel, $blOverride );
+            $this->_addItemToSavedBasket( $sProductID, $dAmount, $aSel, $blOverride, $aPersParam );
         }
 
         if ( $oEx ) {
@@ -1556,7 +1556,7 @@ class oxBasket extends oxSuperCfg
             $aSavedItems = $oBasket->getItems();
             foreach ( $aSavedItems as $oItem ) {
                 try {
-                    $this->addToBasket( $oItem->oxuserbasketitems__oxartid->value, $oItem->oxuserbasketitems__oxamount->value, $oItem->getSelList(), null, true );
+                    $this->addToBasket( $oItem->oxuserbasketitems__oxartid->value, $oItem->oxuserbasketitems__oxamount->value, $oItem->getSelList(), $oItem->getPersParams(), true );
                 } catch( oxArticleException $oEx ) {
                     // caught and ignored
                 }
@@ -1564,7 +1564,7 @@ class oxBasket extends oxSuperCfg
 
             // refreshing history
             foreach ( $this->_aBasketContents as $oBasketItem ) {
-                $oBasket->addItemToBasket( $oBasketItem->getProductId(), $oBasketItem->getAmount(), $oBasketItem->getSelList(), true );
+                $oBasket->addItemToBasket( $oBasketItem->getProductId(), $oBasketItem->getAmount(), $oBasketItem->getSelList(), true, $oBasketItem->getPersParams() );
             }
 
             // marking basked as saved
@@ -1579,14 +1579,15 @@ class oxBasket extends oxSuperCfg
      * @param double $dAmount    item amount
      * @param array  $aSel       article select lists
      * @param bool   $blOverride override item amount or not
+     * @param array  $aPersParam product persistent parameters (default null)
      *
      * @return null
      */
-    protected function _addItemToSavedBasket( $sProductId , $dAmount, $aSel, $blOverride = false )
+    protected function _addItemToSavedBasket( $sProductId , $dAmount, $aSel, $blOverride = false, $aPersParam = null )
     {
         // updating basket history
         if ( $oUser = $this->getBasketUser() ) {
-            $oUser->getBasket( 'savedbasket' )->addItemToBasket( $sProductId, $dAmount, $aSel, $blOverride );
+            $oUser->getBasket( 'savedbasket' )->addItemToBasket( $sProductId, $dAmount, $aSel, $blOverride, $aPersParam );
         }
     }
 

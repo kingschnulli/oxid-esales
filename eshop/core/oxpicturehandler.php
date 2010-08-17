@@ -107,16 +107,21 @@ class oxPictureHandler extends oxSuperCfg
                             $sType = "TH@oxarticles__oxthumb";
                             $aFiles['myfile']['name'][$sType] = $sNewName;
                             $aFiles['myfile']['tmp_name'][$sType] = $sMasterPictureSource;
-                            $oObject->oxarticles__oxthumb = new oxField();
 
                             // Icon
                             $sType = "ICO@oxarticles__oxicon";
                             $aFiles['myfile']['name'][$sType] = $sNewName;
                             $aFiles['myfile']['tmp_name'][$sType] = $sMasterPictureSource;
-                            $oObject->oxarticles__oxicon = new oxField();
                         }
 
                         $oUtilsFile->processFiles( $oObject, $aFiles, true, false );
+
+                        if ( $iNr == 1 ) {
+                            // resetting..
+                            $oObject->oxarticles__oxthumb = new oxField();
+                            $oObject->oxarticles__oxicon  = new oxField();
+                        }
+
                         $iTotalGenerated++;
                     }
                 }

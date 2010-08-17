@@ -313,6 +313,7 @@ CREATE TABLE `oxuserbasketitems` (
   `OXARTID` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
   `OXAMOUNT` char(32) NOT NULL default '',
   `OXSELLIST` varchar(255) NOT NULL default '',
+  `OXPERSPARAM` text NOT NULL,
   PRIMARY KEY  (`OXID`),
   KEY `OXBASKETID` (`OXBASKETID`),
   KEY `OXARTID` (`OXARTID`)

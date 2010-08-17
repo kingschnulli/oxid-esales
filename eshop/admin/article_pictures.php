@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_pictures.php 29303 2010-08-11 11:36:48Z arvydas $
+ * @version   SVN: $Id: article_pictures.php 29365 2010-08-16 11:57:18Z sarunas $
  */
 
 /**
@@ -84,7 +84,6 @@ class Article_Pictures extends oxAdminDetails
 
         $soxId   = oxConfig::getParameter( "oxid");
         $aParams = oxConfig::getParameter( "editval");
-        $aParams['oxarticles__oxshopid'] = oxSession::getVar( "actshop" );
 
         $oArticle = oxNew( "oxarticle");
         $oArticle->load( $soxId );
@@ -225,16 +224,13 @@ class Article_Pictures extends oxAdminDetails
     {
         $aIndexes = array();
         if ( isset( $_FILES['myfile']['name'] ) ) {
-            $iIndex = $this->getConfig()->getConfigParam( 'iPicCount' );
             $oStr = getStr();
 
             while ( list( $sKey, $sValue ) = each( $_FILES['myfile']['name'] ) ) {
                 if ( $sValue ) {
                     $oStr->preg_match( "/^M(\d+)/", $sKey, $aMatches );
-                    $iPicIndex = isset( $aMatches[1] ) ? (int) $aMatches[1] : 1;
-                    $iPicIndex = ( $iPicIndex > $iIndex  ) ? $iIndex : $iPicIndex;
-                    if ( !in_array( $iPicIndex, $aIndexes ) ) {
-                        $aIndexes[] = $iPicIndex;
+                    if ( isset( $aMatches[1] ) && !in_array( $aMatches[1], $aIndexes ) ) {
+                        $aIndexes[] = $aMatches[1];
                     }
                 }
             }

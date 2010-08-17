@@ -189,6 +189,28 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
     }
 
     /**
+     * test for bug #0002043: System requirements check for "Files/folders access rights" always fails
+     *
+     * @return null
+     */
+    public function testGetDefaultPathParamsIfPathTranslatedIsEmpty()
+    {
+        $_SERVER['PATH_TRANSLATED'] = '';
+        $_SERVER['HTTP_REFERER']    = null;
+        $_SERVER['SCRIPT_FILENAME'] = "/var/www/ee440setup/setup/index.php";
+        $_SERVER['SCRIPT_NAME']     = "/ee440setup/setup/index.php";
+        $_SERVER['HTTP_HOST']       = "127.0.0.1:1001";
+
+        // paths
+        $aParams['sShopDir'] = "/var/www/ee440setup/";
+        $aParams['sCompileDir'] = $aParams['sShopDir'] . "tmp/";
+        $aParams['sShopURL'] = "http://127.0.0.1:1001/ee440setup/";
+
+        $oUtils = new oxSetupUtils();
+        $this->assertEquals( $aParams, $oUtils->getDefaultPathParams() );
+    }
+
+    /**
      * Testing oxSetupUtils::getEnvVar()
      *
      * @return null

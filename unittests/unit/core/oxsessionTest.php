@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 29173 2010-07-30 07:58:43Z arvydas $
+ * @version   SVN: $Id: oxsessionTest.php 29342 2010-08-13 10:55:22Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -141,6 +141,15 @@ class testSession extends oxSession
     protected function _sessionStart()
     {
         //return @session_start();
+    }
+
+    /**
+     * Ends the current session and store session data.
+     *
+     * @return null
+     */
+    public function freeze()
+    {
     }
 }
 
@@ -457,13 +466,14 @@ class Unit_Core_oxsessionTest extends OxidTestCase
      */
     public function testStartAdmin()
     {
-        $this->oSession = $this->getMock( 'testSession', array( 'isAdmin' ) );
-        $this->oSession->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( true ) );
-        $this->assertNull($this->oSession->getId());
-        $this->assertEquals($this->oSession->getName(), 'sid');
-        $this->oSession->start();
-        $this->assertNotNull($this->oSession->getId());
-        $this->assertEquals($this->oSession->getName(), 'admin_sid');
+        $oSession = $this->getMock( 'testSession', array( 'isAdmin', "_getNewSessionId" ) );
+        $oSession->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( true ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );
+        $this->assertNull( $oSession->getId());
+        $this->assertEquals( $oSession->getName(), 'sid' );
+        $oSession->start();
+        $this->assertNotNull( $oSession->getId() );
+        $this->assertEquals( $oSession->getName(), 'admin_sid' );
         //oxConfig::getInstance()->blAdmin = false;
     }
 
@@ -473,14 +483,15 @@ class Unit_Core_oxsessionTest extends OxidTestCase
      */
     public function testStartNonAdmin()
     {
-        $this->oSession = $this->getMock( 'testSession', array( 'isAdmin', '_allowSessionStart' ) );
-        $this->oSession->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-        $this->oSession->expects( $this->any() )->method( '_allowSessionStart')->will( $this->returnValue( true ) );
-        $this->assertNull($this->oSession->getId());
-        $this->assertEquals($this->oSession->getName(), 'sid');
-        $this->oSession->start();
-        $this->assertNotNull($this->oSession->getId());
-        $this->assertEquals($this->oSession->getName(), 'sid');
+        $oSession = $this->getMock( 'testSession', array( 'isAdmin', '_allowSessionStart', "_getNewSessionId" ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );
+        $oSession->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+        $oSession->expects( $this->any() )->method( '_allowSessionStart')->will( $this->returnValue( true ) );
+        $this->assertNull($oSession->getId());
+        $this->assertEquals($oSession->getName(), 'sid');
+        $oSession->start();
+        $this->assertNotNull($oSession->getId());
+        $this->assertEquals($oSession->getName(), 'sid');
     }
 
     /**
@@ -552,14 +563,15 @@ class Unit_Core_oxsessionTest extends OxidTestCase
     public function testStartCookiesNotAvailable()
     {
         oxAddClassModule('Unit_oxsessionTest_oxUtilsServer', 'oxUtilsServer');
-        $this->oSession = $this->getMock( 'testSession', array( 'isAdmin', '_getCookieSid', '_isSwappedClient', '_allowSessionStart' ) );
-        $this->oSession->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-        $this->oSession->expects( $this->any() )->method( '_getCookieSid')->will( $this->returnValue( false ) );
-        $this->oSession->expects( $this->any() )->method( '_isSwappedClient')->will( $this->returnValue( true ) );
-        $this->oSession->expects( $this->any() )->method( '_allowSessionStart')->will( $this->returnValue( true ) );
+        $oSession = $this->getMock( 'testSession', array( 'isAdmin', '_getCookieSid', '_isSwappedClient', '_allowSessionStart', "_getNewSessionId" ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );
+        $oSession->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+        $oSession->expects( $this->any() )->method( '_getCookieSid')->will( $this->returnValue( false ) );
+        $oSession->expects( $this->any() )->method( '_isSwappedClient')->will( $this->returnValue( true ) );
+        $oSession->expects( $this->any() )->method( '_allowSessionStart')->will( $this->returnValue( true ) );
         modConfig::setParameter('force_sid', 'testSid3');
-        $this->oSession->start();
-        $this->assertNotEquals($this->oSession->getId(), 'testSid3');
+        $oSession->start();
+        $this->assertNotEquals($oSession->getId(), 'testSid3');
     }
 
     /**
@@ -799,44 +811,44 @@ class Unit_Core_oxsessionTest extends OxidTestCase
     function testInitNewSession()
     {
         $myConfig  = oxConfig::getInstance();
-       //init ID generator
-        oxAddClassModule('Unit_oxsessionTest_oxUtilsObject', 'oxUtilsObject');
-        $sMyHash = md5('testsession');
 
-        $this->oSession->setVar('someVar1', true);
-        $this->oSession->setVar('someVar2', 15);
-        $this->oSession->setVar('actshop', 5);
-        $this->oSession->setVar('lang', 3);
-        $this->oSession->setVar('currency', 3);
-        $this->oSession->setVar('language', 12);
-        $this->oSession->setVar('tpllanguage', 12);
+        $oSession = $this->getMock( 'testSession', array( "_getNewSessionId" ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );
 
-        $sOldSid = $this->oSession->getId();
+        $oSession->setVar('someVar1', true);
+        $oSession->setVar('someVar2', 15);
+        $oSession->setVar('actshop', 5);
+        $oSession->setVar('lang', 3);
+        $oSession->setVar('currency', 3);
+        $oSession->setVar('language', 12);
+        $oSession->setVar('tpllanguage', 12);
 
-        $this->oSession->InitNewSession();
+        $sOldSid = $oSession->getId();
+
+        $oSession->initNewSession();
 
         //most sense is to perform this check
         //if session id was changed
-        $this->assertNotEquals($sOldSid, $this->oSession->getId());
+        $this->assertNotEquals($sOldSid, $oSession->getId());
 
         //checking if new id is correct (md5($newid))
-        $this->assertEquals($this->oSession->getId(), $sMyHash);
+        $this->assertEquals( "newSessionId", $oSession->getId() );
 
         //$this->assertNotEquals($this->oSession->getVar('someVar1'), true);
         //$this->assertNotEquals($this->oSession->getVar('someVar2'), 15);
-        $this->assertEquals($this->oSession->getVar('actshop'), 5);
-        $this->assertEquals($this->oSession->getVar('lang'), 3);
-        $this->assertEquals($this->oSession->getVar('currency'), 3);
-        $this->assertEquals($this->oSession->getVar('language'), 12);
-        $this->assertEquals($this->oSession->getVar('tpllanguage'), 12);
+        $this->assertEquals($oSession->getVar('actshop'), 5);
+        $this->assertEquals($oSession->getVar('lang'), 3);
+        $this->assertEquals($oSession->getVar('currency'), 3);
+        $this->assertEquals($oSession->getVar('language'), 12);
+        $this->assertEquals($oSession->getVar('tpllanguage'), 12);
 
-        $this->oSession->setVar('someVar1', null);
-        $this->oSession->setVar('someVar2', null);
-        $this->oSession->setVar('actshop', null);
-        $this->oSession->setVar('lang', null);
-        $this->oSession->setVar('currency', null);
-        $this->oSession->setVar('language', $myConfig->sDefaultLang);
-        $this->oSession->setVar('tpllanguage', null);
+        $oSession->setVar('someVar1', null);
+        $oSession->setVar('someVar2', null);
+        $oSession->setVar('actshop', null);
+        $oSession->setVar('lang', null);
+        $oSession->setVar('currency', null);
+        $oSession->setVar('language', $myConfig->sDefaultLang);
+        $oSession->setVar('tpllanguage', null);
     }
 
     /**
@@ -845,44 +857,42 @@ class Unit_Core_oxsessionTest extends OxidTestCase
     function testInitNewSessionWithPersParams()
     {
         $myConfig  = oxConfig::getInstance();
-       //init ID generator
-        oxAddClassModule('Unit_oxsessionTest_oxUtilsObject', 'oxUtilsObject');
-        $sMyHash = md5('testsession');
 
-        $this->oSession->setVar('someVar1', true);
-        $this->oSession->setVar('someVar2', 15);
-        $this->oSession->setVar('actshop', 5);
-        $this->oSession->setVar('lang', 3);
-        $this->oSession->setVar('currency', 3);
-        $this->oSession->setVar('language', 12);
-        $this->oSession->setVar('tpllanguage', 12);
+        $oSession = $this->getMock( 'testSession', array( "_getNewSessionId" ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );
 
-        $sOldSid = $this->oSession->getId();
+        $oSession->setVar('someVar1', true);
+        $oSession->setVar('someVar2', 15);
+        $oSession->setVar('actshop', 5);
+        $oSession->setVar('lang', 3);
+        $oSession->setVar('currency', 3);
+        $oSession->setVar('language', 12);
+        $oSession->setVar('tpllanguage', 12);
 
-        $this->oSession->InitNewSession();
+        $sOldSid = $oSession->getId();
+
+        $oSession->initNewSession();
 
         //most sense is to perform this check
         //if session id was changed
-        $this->assertNotEquals($sOldSid, $this->oSession->getId());
+        $this->assertNotEquals($sOldSid, $oSession->getId());
 
         //checking if new id is correct (md5($newid))
-        $this->assertEquals($this->oSession->getId(), $sMyHash);
+        $this->assertEquals( "newSessionId", $oSession->getId() );
 
-        //$this->assertNotEquals($this->oSession->getVar('someVar1'), true);
-        //$this->assertNotEquals($this->oSession->getVar('someVar2'), 15);
-        $this->assertEquals($this->oSession->getVar('actshop'), 5);
-        $this->assertEquals($this->oSession->getVar('lang'), 3);
-        $this->assertEquals($this->oSession->getVar('currency'), 3);
-        $this->assertEquals($this->oSession->getVar('language'), 12);
-        $this->assertEquals($this->oSession->getVar('tpllanguage'), 12);
+        $this->assertEquals( $oSession->getVar('actshop'), 5 );
+        $this->assertEquals( $oSession->getVar('lang'), 3 );
+        $this->assertEquals( $oSession->getVar('currency'), 3 );
+        $this->assertEquals( $oSession->getVar('language'), 12 );
+        $this->assertEquals( $oSession->getVar('tpllanguage'), 12 );
 
-        $this->oSession->setVar('someVar1', null);
-        $this->oSession->setVar('someVar2', null);
-        $this->oSession->setVar('actshop', null);
-        $this->oSession->setVar('lang', null);
-        $this->oSession->setVar('currency', null);
-        $this->oSession->setVar('language', $myConfig->sDefaultLang);
-        $this->oSession->setVar('tpllanguage', null);
+        $oSession->setVar('someVar1', null);
+        $oSession->setVar('someVar2', null);
+        $oSession->setVar('actshop', null);
+        $oSession->setVar('lang', null);
+        $oSession->setVar('currency', null);
+        $oSession->setVar('language', $myConfig->sDefaultLang);
+        $oSession->setVar('tpllanguage', null);
     }
 
     /**
@@ -893,18 +903,21 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         oxTestModules::addFunction( "oxUtilsServer", "getOxCookie", "{return true;}" );
         modConfig::getInstance()->setConfigParam( 'blForceSessionStart', 0 );
 
-        $this->assertFalse($this->oSession->isNewSession());
+        $oSession = $this->getMock( 'testSession', array( "_getNewSessionId" ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );
 
-        $this->oSession->start();
-        $this->assertEquals($this->oSession->getName(), 'sid');
-        $this->oSession->UNITsetSessionId('testSid');
+        $this->assertFalse($oSession->isNewSession());
 
-        $this->assertEquals( $this->oSession->getId(), 'testSid');
-        $this->assertTrue( $this->oSession->isNewSession() );
+        $oSession->start();
+        $this->assertEquals($oSession->getName(), 'sid');
+        $oSession->UNITsetSessionId('testSid');
+
+        $this->assertEquals( $oSession->getId(), 'testSid');
+        $this->assertTrue( $oSession->isNewSession() );
 
         //reset session
-        $this->oSession->initNewSession();
-        $this->assertNotEquals( 'testSid', $this->oSession->getId() );
+        $oSession->initNewSession();
+        $this->assertNotEquals( 'testSid', $oSession->getId() );
     }
 
     function testSetSessionIdSkipCookies()
@@ -926,19 +939,22 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         oxAddClassModule('Unit_oxsessionTest_oxUtilsServer', 'oxUtilsServer');
         modConfig::getInstance()->setConfigParam( 'blForceSessionStart', 1 );
 
-        $this->assertFalse($this->oSession->isNewSession());
+        $oSession = $this->getMock( 'testSession', array( "_getNewSessionId" ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );
 
-        $this->oSession->start();
-        $this->assertEquals($this->oSession->getName(), 'sid');
-        $this->oSession->UNITsetSessionId('testSid');
+        $this->assertFalse($oSession->isNewSession());
 
-        $this->assertEquals($this->oSession->getId(), 'testSid');
-        $this->assertTrue($this->oSession->isNewSession());
-        $this->assertEquals(oxUtilsServer::getInstance()->getOxCookie($this->oSession->getName()), 'testSid');
+        $oSession->start();
+        $this->assertEquals($oSession->getName(), 'sid');
+        $oSession->UNITsetSessionId('testSid');
+
+        $this->assertEquals($oSession->getId(), 'testSid');
+        $this->assertTrue($oSession->isNewSession());
+        $this->assertEquals(oxUtilsServer::getInstance()->getOxCookie($oSession->getName()), 'testSid');
 
         //reset session
-        $this->oSession->InitNewSession();
-        $this->assertNotEquals( 'testSid', $this->oSession->getId() );
+        $oSession->InitNewSession();
+        $this->assertNotEquals( 'testSid', $oSession->getId() );
     }
 
     /**
@@ -948,7 +964,9 @@ class Unit_Core_oxsessionTest extends OxidTestCase
     {
         oxTestModules::addFunction( "oxUtilsServer", "getOxCookie", "{return true;}" );
 
-        $oSession = $this->getMock( 'testSession', array( 'isAdmin', '_sessionStart' ) );
+        $oSession = $this->getMock( 'testSession', array( 'isAdmin', '_sessionStart', "_getNewSessionId" ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );
+
         $oSession->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( true ) );
         $oSession->expects( $this->any() )->method( '_sessionStart')->will( $this->returnValue( true ) );
         $this->assertFalse($oSession->isNewSession());
@@ -973,23 +991,28 @@ class Unit_Core_oxsessionTest extends OxidTestCase
      */
     function testSetSessionIdSearchEngines()
     {
-        oxAddClassModule('Unit_oxsessionTest_oxUtilsServer', 'oxUtilsServer');
         oxConfig::getInstance()->setGlobalParameter( 'blIsSearchEngine', true );
 
-        $this->assertFalse($this->oSession->isNewSession());
+        $oSession = $this->getMock( "oxsession", array( "_getNewSessionId", "_allowSessionStart" ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId');
+        $oSession->expects( $this->any() )->method( '_allowSessionStart')->will( $this->returnValue( true ) );
 
-        $this->oSession->start();
-        $this->assertEquals($this->oSession->getName(), 'sid');
-        $this->oSession->UNITsetSessionId('testSid');
+        $this->assertFalse( $oSession->isNewSession() );
 
-        $this->assertEquals($this->oSession->getId(), 'testSid');
-        $this->assertTrue($this->oSession->isNewSession());
+        $oSession->start();
+
+        $this->assertEquals( $oSession->getName(), 'sid' );
+        $oSession->UNITsetSessionId( 'testSid' );
+
+        $this->assertEquals( $oSession->getId(), 'testSid' );
+        $this->assertTrue( $oSession->isNewSession() );
+
         //have no cookie as search engine
-        $this->assertEquals(oxUtilsServer::getInstance()->getOxCookie($this->oSession->getName()), null);
+        $this->assertEquals( oxUtilsServer::getInstance()->getOxCookie( $oSession->getName() ) , null );
 
         //reset session
-        $this->oSession->InitNewSession();
-        $this->assertNotEquals($this->oSession->getId(), 'testSid');
+        $oSession->initNewSession();
+        $this->assertNotEquals( $oSession->getId(), 'testSid');
 
         //teardown
         oxConfig::getInstance()->setGlobalParameter( 'blIsSearchEngine', false );
@@ -1380,7 +1403,8 @@ class Unit_Core_oxsessionTest extends OxidTestCase
 
     public function testInitNewSessionRecreatesChallengeToken()
     {
-        $oSession = $this->getMock( 'oxsession', array( '_initNewSessionChallenge' ) );
+        $oSession = $this->getMock( 'oxsession', array( '_initNewSessionChallenge', "_getNewSessionId" ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );
         $oSession->expects( $this->once() )->method( '_initNewSessionChallenge');
         $oSession->initNewSession();
     }

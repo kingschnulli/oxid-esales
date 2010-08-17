@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: articlepicturesTest.php 29303 2010-08-11 11:36:48Z arvydas $
+ * @version   SVN: $Id: articlepicturesTest.php 29365 2010-08-16 11:57:18Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -583,6 +583,25 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         $oEx = unserialize( $aEx["default"][0] );
 
         $this->assertEquals( "ARTICLE_PICTURES_UPLOADISDISABLED", $oEx->getOxMessage() );
+    }
+
+    /**
+     * test for bug#0002041: editing inherited product pictures in subshop changes default shop for product
+     */
+    public function testSubshopStaysSame()
+    {
+        $oArticle = $this->getMock('oxarticle', array('load', 'save', 'updateAmountOfGeneratedPictures', 'assign'));
+        $oArticle->expects($this->once())->method('load')->with($this->equalTo('asdasdasd'))->will($this->returnValue(null));
+        $oArticle->expects($this->once())->method('assign')->with($this->equalTo( array('s'=>'test')))->will($this->returnValue(null));
+        $oArticle->expects($this->once())->method('save')->will($this->returnValue(null));
+        $oArticle->expects($this->once())->method('updateAmountOfGeneratedPictures')->will($this->returnValue(null));
+
+        oxTestModules::addModuleObject('oxarticle', $oArticle);
+
+        modConfig::setParameter('oxid', 'asdasdasd');
+        modConfig::setParameter('editval', array('s'=>'test'));
+        $oArtPic = $this->getProxyClass( "Article_Pictures" );
+        $oArtPic->save();
     }
 
 }
