@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: voucherseriemainTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
+ * @version   SVN: $Id: voucherseriemainTest.php 29390 2010-08-17 14:31:01Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -39,6 +39,7 @@ class Unit_Admin_VoucherSerieMainTest extends OxidTestCase
     {
         // cleanup
         $this->cleanUpTable( "oxvouchers" );
+        $this->cleanUpTable( "oxvoucherseries" );
 
         parent::tearDown();
     }
@@ -59,7 +60,6 @@ class Unit_Admin_VoucherSerieMainTest extends OxidTestCase
         $aViewData = $oView->getViewData();
         $this->assertTrue( isset( $aViewData['edit'] ) );
         $this->assertTrue( $aViewData['edit'] instanceof oxvoucherserie );
-        $this->assertEquals( array( "total" => 0, "used" => 0, "available" => 0 ), $aViewData['status'] );
     }
 
     /**
@@ -104,66 +104,79 @@ class Unit_Admin_VoucherSerieMainTest extends OxidTestCase
 
 
     /**
-     * VoucherSerie_Main::Save() test case
+     * VoucherSerie_Main::prepareExport() test case
      *
      * @return null
      */
-    public function testSaveNewSerie()
+    public function testPrepareExport()
     {
-        modConfig::setParameter( "oxid", "-1" );
-        modConfig::setParameter( "voucherAmount", 1 );
-        modSession::getInstance()->setVar( "randomVoucherNr", "randomVoucherNr" );
-        modSession::getInstance()->setVar( "randomNr", "randomNr" );
-
-        oxTestModules::addFunction( 'oxvoucherserie', 'save', '{ $this->oxvoucherseries__oxid = new oxField( "testvoucherserieid" ); return true; }');
-        oxTestModules::addFunction( 'oxvoucherserie', 'getVoucherList', '{ $oVoucher = oxNew( "oxvoucher" ); return array( $oVoucher ); }');
-        oxTestModules::addFunction( 'oxvoucher', 'save', '{ return true; }');
-
-        // testing..
         $oView = new VoucherSerie_Main();
-        $oView->save();
-
-        $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['updatelist'] ) );
-        $this->assertEquals( 1, $aViewData['updatelist'] );
-        $this->assertNull( oxSession::getVar( "randomVoucherNr" ) );
-        $this->assertNull( oxSession::getVar( "randomNr" ) );
-        $this->assertEquals( "testvoucherserieid", oxSession::getVar( "saved_oxid" ) );
+        $this->assertNull( $oView->prepareExport() );
     }
 
     /**
-     * VoucherSerie_Main::Export() test case
+     * VoucherSerie_Main::getStatus() test case
      *
      * @return null
      */
-    public function testExport()
+    public function testGetStatus()
     {
-        oxTestModules::addFunction( 'oxUtils', 'setHeader', '{ if ( !isset( $this->_aHeaderData ) ) { $this->_aHeaderData = array();} $this->_aHeaderData[] = $aA[0]; }');
-        oxTestModules::addFunction( 'oxUtils', 'getHeaders', '{ return $this->_aHeaderData; }');
-        oxTestModules::addFunction( 'oxUtils', 'showMessageAndExit', '{ $this->_aHeaderData[] = $aA[0]; }');
-        oxTestModules::addFunction( 'oxvoucherserie', 'load', '{ $this->oxvoucherseries__oxid = new oxField( "testId" ); return true; }');
+        // no series..
+        $oView = $this->getMock( "VoucherSerie_Main", array( "_getVoucherSerie" ) );
+        $oView->expects( $this->once() )->method( '_getVoucherSerie' )->will( $this->returnValue( false ) );
+        $this->assertNull( $oView->getStatus() );
 
-        // inserting demo record..
-        $oVoucher = new oxBase();
-        $oVoucher->init( "oxvouchers" );
-        $oVoucher->setId( "_testVoucherId" );
-        $oVoucher->oxvouchers__oxvoucherserieid = new oxField( "testId" );
-        $oVoucher->oxvouchers__oxdiscount  = new oxField( 10 );
-        $oVoucher->oxvouchers__oxvouchernr = new oxField( 10 );
-        $oVoucher->oxvouchers__oxreserved  = new oxField( 0 );
-        $oVoucher->oxvouchers__oxuserid    = new oxField( "oxdefaultadmin" );
-        $oVoucher->save();
+        // with serie..
+        $oSerie = $this->getMock( "oxStdClass", array( "countVouchers" ) );
+        $oSerie->expects( $this->once() )->method( 'countVouchers' )->will( $this->returnValue( "testCountVouchers" ) );
 
-        // testing..
+        $oView = $this->getMock( "VoucherSerie_Main", array( "_getVoucherSerie" ) );
+        $oView->expects( $this->once() )->method( '_getVoucherSerie' )->will( $this->returnValue( $oSerie ) );
+        $this->assertEquals( "testCountVouchers", $oView->getStatus() );
+    }
+
+    /**
+     * VoucherSerie_Main::prepareExport() test case
+     *
+     * @return null
+     */
+    public function testStart()
+    {
+        modConfig::setParameter( "voucherid", "testvoucherid" );
+        modConfig::setParameter( "voucherAmount", "testvoucherAmount" );
+        modConfig::setParameter( "randomVoucherNr", "testrandomVoucherNr" );
+        modConfig::setParameter( "voucherNr", "testvoucherNr" );
+
         $oView = new VoucherSerie_Main();
-        $oView->export();
+        $oView->start();
 
-        $aHeaders = oxUtils::getInstance()->getHeaders();
-        $this->assertEquals( "Pragma: public", $aHeaders[0] );
-        $this->assertEquals( "Cache-Control: must-revalidate, post-check=0, pre-check=0", $aHeaders[1] );
-        $this->assertEquals( "Expires: 0", $aHeaders[2] );
-        $this->assertEquals( "Content-Disposition: attachment; filename=vouchers.csv", $aHeaders[3] );
-        $this->assertEquals( "Content-Type: application/csv", $aHeaders[4] );
-        $this->assertEquals( "Gutschein\n10\n", $aHeaders[5] );
+        $oSession = modSession::getInstance();
+
+        $this->assertEquals( $oSession->getVar( "voucherid" ), "testvoucherid" );
+        $this->assertEquals( $oSession->getVar( "voucherAmount" ), 0 );
+        $this->assertEquals( $oSession->getVar( "randomVoucherNr" ), "testrandomVoucherNr" );
+        $this->assertEquals( $oSession->getVar( "voucherNr" ), "testvoucherNr" );
+    }
+
+        /**
+     * VoucherSerie_Main::prepareExport() test case
+     *
+     * @return null
+     */
+    public function testGetVoucherSerie()
+    {
+        // inserting demo voucher
+        $oVoucherSerie = oxNew( "oxvoucherserie" );
+        $oVoucherSerie->setId( "_testvoucherserie" );
+        $oVoucherSerie->save();
+
+        modConfig::setParameter( "voucherid", "_testvoucherserie" );
+
+        $oView = new VoucherSerie_Main();
+        $oVoucherSerie = $oView->UNITgetVoucherSerie();
+
+        $this->assertNotNull( $oVoucherSerie );
+        $this->assertEquals( "_testvoucherserie", $oVoucherSerie->getId() );
+
     }
 }

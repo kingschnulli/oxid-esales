@@ -128,17 +128,17 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
         $sPictureDir = oxConfig::getInstance()->getPictureDir( false );
         $sMasterPicPath = $sPictureDir . "master/1/1126_p1.jpg";
 
-        $aFiles['myfile']['name']["P1@oxarticles__oxpic1"] = "1126_p1.jpg";
-        $aFiles['myfile']['tmp_name']["P1@oxarticles__oxpic1"] = $sMasterPicPath;
+        $aFiles1['myfile']['name']["P1@oxarticles__oxpic1"] = "1126_p1.jpg";
+        $aFiles1['myfile']['tmp_name']["P1@oxarticles__oxpic1"] = $sMasterPicPath;
 
-        $aFiles['myfile']['name']["Z1@oxarticles__oxzoom1"] = "testNewPic1.jpg";
-        $aFiles['myfile']['tmp_name']["Z1@oxarticles__oxzoom1"] = $sMasterPicPath;
+        $aFiles1['myfile']['name']["Z1@oxarticles__oxzoom1"] = "testNewPic1.jpg";
+        $aFiles1['myfile']['tmp_name']["Z1@oxarticles__oxzoom1"] = $sMasterPicPath;
 
-        $aFiles['myfile']['name']["TH@oxarticles__oxthumb"] = "testNewPic1.jpg";
-        $aFiles['myfile']['tmp_name']["TH@oxarticles__oxthumb"] = $sMasterPicPath;
+        $aFiles2['myfile']['name']["TH@oxarticles__oxthumb"] = "testNewPic1.jpg";
+        $aFiles2['myfile']['tmp_name']["TH@oxarticles__oxthumb"] = $sMasterPicPath;
 
-        $aFiles['myfile']['name']["ICO@oxarticles__oxicon"] = "testNewPic1.jpg";
-        $aFiles['myfile']['tmp_name']["ICO@oxarticles__oxicon"] = $sMasterPicPath;
+        $aFiles2['myfile']['name']["ICO@oxarticles__oxicon"] = "testNewPic1.jpg";
+        $aFiles2['myfile']['tmp_name']["ICO@oxarticles__oxicon"] = $sMasterPicPath;
 
         //test article
         $oArticle = $this->getMock( 'oxArticle', array( 'updateAmountOfGeneratedPictures' ) );
@@ -149,7 +149,8 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
 
         // testing functions calls
         $oUtilsFile = $this->getMock( 'oxUtilsFile', array( 'processFiles' ) );
-        $oUtilsFile->expects( $this->once() )->method( 'processFiles' )->with( $this->isInstanceOf( 'oxArticle' ), $this->equalTo( $aFiles ), $this->equalTo( true ) );
+        $oUtilsFile->expects( $this->at(0) )->method( 'processFiles' )->with( $this->isInstanceOf( 'oxArticle' ), $this->equalTo( $aFiles1 ), $this->equalTo( true ) );
+        $oUtilsFile->expects( $this->at(1) )->method( 'processFiles' )->with( $this->equalTo( null ), $this->equalTo( $aFiles2 ), $this->equalTo( true ) );
 
         modInstances::addMod( "oxUtilsFile", $oUtilsFile );
 

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: article_pictures.php 29365 2010-08-16 11:57:18Z sarunas $
+ * @version   SVN: $Id: article_pictures.php 29411 2010-08-18 14:23:09Z sarunas $
  */
 
 /**
@@ -96,7 +96,7 @@ class Article_Pictures extends oxAdminDetails
 
         $oArticle->assign( $aParams );
         $oArticle = oxUtilsFile::getInstance()->processFiles( $oArticle );
-        $oArticle->updateAmountOfGeneratedPictures( 0 );
+        $oArticle->oxarticles__oxpicsgenerated = new oxField( 0 );
         $oArticle->save();
     }
 
@@ -137,7 +137,7 @@ class Article_Pictures extends oxAdminDetails
             if ( $iIndex > 0 ) {
                 // deleting master picture
                 $this->_resetMasterPicture( $oArticle, $iIndex, true );
-                $oArticle->updateAmountOfGeneratedPictures( 0 );
+                $oArticle->oxarticles__oxpicsgenerated = new oxField( 0 );
             }
         }
 
@@ -158,8 +158,10 @@ class Article_Pictures extends oxAdminDetails
     {
         if ( $oArticle->{"oxarticles__oxpic".$iIndex}->value ) {
 
-            $oPicHandler = oxPictureHandler::getInstance();
-            $oPicHandler->deleteArticleMasterPicture( $oArticle, $iIndex, $blDeleteMaster );
+            if ( !$oArticle->isDerived() ) {
+                $oPicHandler = oxPictureHandler::getInstance();
+                $oPicHandler->deleteArticleMasterPicture( $oArticle, $iIndex, $blDeleteMaster );
+            }
 
             if ( $blDeleteMaster ) {
                 //reseting master picture field
@@ -188,8 +190,10 @@ class Article_Pictures extends oxAdminDetails
     {
         if ( $oArticle->oxarticles__oxicon->value ) {
 
-            $oPicHandler = oxPictureHandler::getInstance();
-            $oPicHandler->deleteMainIcon( $oArticle );
+            if ( !$oArticle->isDerived() ) {
+                $oPicHandler = oxPictureHandler::getInstance();
+                $oPicHandler->deleteMainIcon( $oArticle );
+            }
 
             //reseting field
             $oArticle->oxarticles__oxicon = new oxField();
@@ -207,8 +211,10 @@ class Article_Pictures extends oxAdminDetails
     {
         if ( $oArticle->oxarticles__oxthumb->value ) {
 
-            $oPicHandler = oxPictureHandler::getInstance();
-            $oPicHandler->deleteThumbnail( $oArticle );
+            if ( !$oArticle->isDerived() ) {
+                $oPicHandler = oxPictureHandler::getInstance();
+                $oPicHandler->deleteThumbnail( $oArticle );
+            }
 
             //reseting field
             $oArticle->oxarticles__oxthumb = new oxField();

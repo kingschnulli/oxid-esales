@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 29138 2010-07-28 12:55:28Z ralf.trapp $
+ * @version   SVN: $Id: lang.php 29391 2010-08-17 15:53:26Z ralf.trapp $
  */
 
 $sLangName  = 'Deutsch';
@@ -1592,7 +1592,6 @@ $aLang = array(
 'VENDOR_MAIN_ALLITEMS'                          => 'Alle verfügbaren Artikel',
 'VENDOR_MAIN_ITEMSWITHVENDOR'                   => 'Artikel von diesem Lieferanten',
 'VENDOR_MAIN_ICONUPLOAD'                        => 'Icon hochladen',
-'VOUCHERSERIE_EXPORT_EXPORT'                    => 'Exportieren',
 'VOUCHERSERIE_GROUPS_INGROUP'                   => 'Verfügbar für Benutzergruppen',
 'VOUCHERSERIE_LIST_SERIALNUM'                   => 'Name',
 'VOUCHERSERIE_LIST_MINVALUE'                    => 'Ab Einkaufswert',
@@ -1611,6 +1610,17 @@ $aLang = array(
 'VOUCHERSERIE_MAIN_USED'                        => 'Benutzt',
 'VOUCHERSERIE_MAIN_DISCOUNT'                    => 'Rabatt',
 'VOUCHERSERIE_MAIN_CALCULATEONCE'               => 'Nur einmalig berechnen (gültig nur bei zugewiesenen Gutscheinen)',
+
+'VOUCHERSERIE_MAIN_GENERATE'                    => 'Generieren',
+'VOUCHERSERIE_MAIN_EXPORT'                      => 'Export',
+'VOUCHERSERIE_GENERATING'                       => 'Generiere Gutscheine ...',
+'VOUCHERSERIE_GENERATED'                        => 'Anzahl Gutscheine generiert: ',
+'VOUCHERSERIE_GENERATEDONE'                     => 'Gutscheingenerierung abgeschlossen.',
+'VOUCHERSERIE_EXPORTING'                        => 'Exportiere Gutscheine ...',
+'VOUCHERSERIE_EXPORTED'                         => 'Gutscheine exportiert: ',
+'VOUCHERSERIE_EXPORTDONE'                       => 'Gutscheinexport abgeschlossen.',
+'VOUCHERSERIE_EXPORTDOWNLOAD'                   => 'Download',
+
 'WRAPPING_LIST_PICTURE'                         => 'Bild',
 'WRAPPING_LIST_PRESENTPACKUNG'                  => 'Geschenkverpackung',
 'WRAPPING_LIST_MENUITEM'                        => 'Shopeinstellungen',
@@ -1667,7 +1677,7 @@ $aLang = array(
 'SHOP_PERF_SHOWTOPBASKET'                       => 'Warenkorb oben anzeigen',
 'SHOP_PERF_DISBASKETSAVING'                     => 'Warenkörbe von angemeldeten Benutzern <strong>nicht</strong> speichern',
 'DYNSCREEN_LOCAL_TITLE'                         => 'eCommerce Services',
-'DYNSCREEN_LOCAL_TEXT'                          => 'Some general info about eCommerce services...',
+'DYNSCREEN_LOCAL_TEXT'                          => 'Some general info about eCommerce services ...',
 
 'GENIMPORT_MENUITEM'                            => 'Service',
 'GENIMPORT_MENUSUBITEM'                         => 'Gener. Import',

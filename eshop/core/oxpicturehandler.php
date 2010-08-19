@@ -88,6 +88,8 @@ class oxPictureHandler extends oxSuperCfg
                     if ( file_exists( $sMasterPictureSource ) ) {
                         $sNewName = $this->_getArticleMasterPictureName( $oObject, $iNr );
 
+                        $aFiles = array();
+
                         // main product picture
                         $sType = "P" . $iNr . "@oxarticles__oxpic" . $iNr;
                         $aFiles['myfile']['name'][$sType] = $oObject->{"oxarticles__oxpic".$iNr}->value;;
@@ -99,10 +101,12 @@ class oxPictureHandler extends oxSuperCfg
                         $aFiles['myfile']['name'][$sType] = $sNewName;
                         $aFiles['myfile']['tmp_name'][$sType] = $sMasterPictureSource ;
 
+                        $oUtilsFile->processFiles( $oObject, $aFiles, true, false );
+
                         // if this is picture with number #1, also generating
                         // thumbnail and icon
                         if ( $iNr == 1 ) {
-
+                            $aFiles = array();
                             // Thumbnail
                             $sType = "TH@oxarticles__oxthumb";
                             $aFiles['myfile']['name'][$sType] = $sNewName;
@@ -112,14 +116,8 @@ class oxPictureHandler extends oxSuperCfg
                             $sType = "ICO@oxarticles__oxicon";
                             $aFiles['myfile']['name'][$sType] = $sNewName;
                             $aFiles['myfile']['tmp_name'][$sType] = $sMasterPictureSource;
-                        }
 
-                        $oUtilsFile->processFiles( $oObject, $aFiles, true, false );
-
-                        if ( $iNr == 1 ) {
-                            // resetting..
-                            $oObject->oxarticles__oxthumb = new oxField();
-                            $oObject->oxarticles__oxicon  = new oxField();
+                            $oUtilsFile->processFiles( null, $aFiles, true, false );
                         }
 
                         $iTotalGenerated++;
