@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketitemTest.php 29374 2010-08-16 20:22:29Z vilma $#
+ * @version   SVN: $Id: oxuserbasketitemTest.php 29487 2010-08-23 07:55:25Z tomas $#
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -133,23 +133,6 @@ class Unit_Core_oxuserbasketitemTest extends OxidTestCase
 
         // chekcing direct value
         $this->assertEquals( serialize( $aData ), $oUserBasketItem->oxuserbasketitems__oxsellist->value );
-    }
-
-    public function testPersParamSetterGetter()
-    {
-        $aData = array( "p" );
-
-        $oUserBasketItem = new oxuserbasketitem();
-
-        // no data for empty object
-        $this->assertNull( $oUserBasketItem->getPersParams() );
-
-        // setting some list data
-        $oUserBasketItem->setPersParams( $aData );
-        $this->assertEquals( $aData, $oUserBasketItem->getPersParams() );
-
-        // chekcing direct value
-        $this->assertEquals( serialize( $aData ), $oUserBasketItem->oxuserbasketitems__oxpersparam->value );
     }
 
     /**

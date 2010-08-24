@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketTest.php 29374 2010-08-16 20:22:29Z vilma $
+ * @version   SVN: $Id: oxuserbasketTest.php 29487 2010-08-23 07:55:25Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -194,8 +194,7 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
 
         $this->assertEquals( 'testitem', $oItem->getId() );
         $this->assertEquals( '2000', $oArticle->getId() );
-        $this->assertNull( $oItem->getSelList() );
-        $this->assertNull( $oItem->getPersParams());
+        $this->assertEquals( $oItem->getSelList(), null );
     }
     public function testGetItemsWithActiveArticleCheck()
     {
@@ -282,19 +281,6 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $this->assertEquals( serialize( array( '1' ) ), $oItem->oxuserbasketitems__oxsellist->value );
         $this->assertEquals( array( '1' ), $oItem->getSelList() );
     }
-    public function testCreateItemWithPersParam()
-    {
-        $sArtId = "2000";
-
-        $oBasket = new oxUserBasket();
-        $oBasket->load( "testUserBasket" );
-        $oItem = $oBasket->UNITcreateItem( $sArtId, null, array('param'=>'test') );
-
-        $this->assertEquals( $sArtId, $oItem->oxuserbasketitems__oxartid->value );
-        $this->assertEquals( "testUserBasket", $oItem->oxuserbasketitems__oxbasketid->value );
-        $this->assertEquals( serialize( array('param'=>'test') ), $oItem->oxuserbasketitems__oxpersparam->value );
-        $this->assertEquals( array('param'=>'test'), $oItem->getPersParams() );
-    }
 
     /**
      * Testing basket item getter
@@ -320,9 +306,9 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
 
         $oBasket = $this->getMock( 'oxuserbasket', array( 'getItems', '_getItemKey' ) );
         $oBasket->expects( $this->once() )->method( 'getItems' )->will( $this->returnValue( $oItems ) );
-        $oBasket->expects( $this->once() )->method( '_getItemKey' )->with( $this->equalTo( '123' ), $this->equalTo( 'testsellist' ), $this->equalTo( 'testparam' ) );
+        $oBasket->expects( $this->once() )->method( '_getItemKey' )->with( $this->equalTo( '123' ), $this->equalTo( 'testsellist' ) );
 
-        $oItem = $oBasket->getItem( '123', 'testsellist', 'testparam' );
+        $oItem = $oBasket->getItem( '123', 'testsellist' );
 
         $this->assertEquals( '321', $oItem );
     }
@@ -334,8 +320,8 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
     {
         $oBasket = new oxUserBasket();
 
-        $this->assertEquals( md5( "123".'|'.serialize( array( 0=>'0') ).'|'.serialize( null ) ), $oBasket->UNITgetItemKey( "123" ) );
-        $this->assertEquals( md5( "123".'|'.serialize( array( "b" ) ).'|'.serialize( 'xxx' ) ), $oBasket->UNITgetItemKey( "123", array( "b" ), 'xxx' ) );
+        $this->assertEquals( md5( "123".'|'.serialize( array( 0=>'0') ) ), $oBasket->UNITgetItemKey( "123" ) );
+        $this->assertEquals( md5( "123".'|'.serialize( array( "b" ) ) ), $oBasket->UNITgetItemKey( "123", array( "b" ) ) );
     }
 
     public function testGetItemCount()
@@ -356,7 +342,6 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $sArtId  = "2000";
         $dAmount = 3;
         $aSel    = array("A");
-        $aParam  = array("B");
 
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return 99999;}');
         $oBasket = new oxUserBasket();
@@ -364,8 +349,8 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $oBasket->setIsNewBasket();
 
         $this->assertNull( $oBasket->addItemToBasket() );
-        $this->assertEquals( 3, $oBasket->addItemToBasket( $sArtId, $dAmount, $aSel, false, $aParam ) );
-        $this->assertEquals( 6, $oBasket->addItemToBasket( $sArtId, $dAmount, $aSel, false, $aParam ) );
+        $this->assertEquals( 3, $oBasket->addItemToBasket( $sArtId, $dAmount, $aSel ) );
+        $this->assertEquals( 6, $oBasket->addItemToBasket( $sArtId, $dAmount, $aSel ) );
 
         $this->assertEquals( 0, $oBasket->addItemToBasket( $sArtId, 0, $aSel, true ) );
         $this->assertEquals( 0, $oBasket->addItemToBasket( $sArtId, 0, null,  true ) );

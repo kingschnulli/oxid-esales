@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: loginTest.php 27084 2010-04-07 13:47:56Z arvydas $
+ * @version   SVN: $Id: loginTest.php 29435 2010-08-19 11:48:02Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -249,10 +249,13 @@ class Unit_Admin_loginTest extends OxidTestCase
     {
         oxTestModules::addFunction( 'oxuser', 'login', '{ throw new oxUserException(); }');
 
+        modConfig::setParameter('user', '\'"<^%&*aaa>');
+        modConfig::setParameter('pwd', '<^%&*aaa>\'"');
+        modConfig::setParameter('profile', '<^%&*aaa>\'"');
         $oView = $this->getMock( "Login", array( "addTplParam" ) );
-        $oView->expects( $this->at( 0 ) )->method( 'addTplParam' )->with( $this->equalTo( "user" ) );
-        $oView->expects( $this->at( 1 ) )->method( 'addTplParam' )->with( $this->equalTo( "pwd" ) );
-        $oView->expects( $this->at( 2 ) )->method( 'addTplParam' )->with( $this->equalTo( "profile" ) );
+        $oView->expects( $this->at( 0 ) )->method( 'addTplParam' )->with( $this->equalTo( "user" ), $this->equalTo( '&#039;&quot;&lt;^%&amp;*aaa&gt;' ) );
+        $oView->expects( $this->at( 1 ) )->method( 'addTplParam' )->with( $this->equalTo( "pwd" ), $this->equalTo( '&lt;^%&amp;*aaa&gt;&#039;&quot;' ) );
+        $oView->expects( $this->at( 2 ) )->method( 'addTplParam' )->with( $this->equalTo( "profile" ), $this->equalTo( '&lt;^%&amp;*aaa&gt;&#039;&quot;' ) );
         $this->assertNull( $oView->checklogin() );
     }
 
@@ -265,10 +268,13 @@ class Unit_Admin_loginTest extends OxidTestCase
     {
         oxTestModules::addFunction( 'oxuser', 'login', '{ throw new oxCookieException(); }');
 
+        modConfig::setParameter('user', '\'"<^%&*aaa>');
+        modConfig::setParameter('pwd', '<^%&*aaa>\'"');
+        modConfig::setParameter('profile', '<^%&*aaa>\'"');
         $oView = $this->getMock( "Login", array( "addTplParam" ) );
-        $oView->expects( $this->at( 0 ) )->method( 'addTplParam' )->with( $this->equalTo( "user" ) );
-        $oView->expects( $this->at( 1 ) )->method( 'addTplParam' )->with( $this->equalTo( "pwd" ) );
-        $oView->expects( $this->at( 2 ) )->method( 'addTplParam' )->with( $this->equalTo( "profile" ) );
+        $oView->expects( $this->at( 0 ) )->method( 'addTplParam' )->with( $this->equalTo( "user" ), $this->equalTo( '&#039;&quot;&lt;^%&amp;*aaa&gt;' ) );
+        $oView->expects( $this->at( 1 ) )->method( 'addTplParam' )->with( $this->equalTo( "pwd" ), $this->equalTo( '&lt;^%&amp;*aaa&gt;&#039;&quot;' ) );
+        $oView->expects( $this->at( 2 ) )->method( 'addTplParam' )->with( $this->equalTo( "profile" ), $this->equalTo( '&lt;^%&amp;*aaa&gt;&#039;&quot;' ) );
         $this->assertNull( $oView->checklogin() );
     }
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 29183 2010-07-30 10:02:08Z arvydas $
+ * @version   SVN: $Id: oxuserTest.php 29440 2010-08-19 14:10:50Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2708,6 +2708,33 @@ class Unit_Core_oxuserTest extends OxidTestCase
 
         $this->assertTrue( $oUser->setNewsSubscription( true, true ) );
     }
+
+    public function testSetNewsSubscriptionSubscribesWithOptInEmail_sendsOnlyOnce()
+    {
+        // email should be sent only once
+        $oEmail = $this->getMock( 'oxemail', array( 'sendNewsletterDBOptInMail') );
+        $oEmail->expects( $this->once() )->method( 'sendNewsletterDBOptInMail')->will( $this->returnValue( true ) );
+
+        oxTestModules::addModuleObject( "oxemail", $oEmail );
+
+        $oConfig = $this->getMock( 'oxconfig');
+        $oConfig->setConfigParam( 'blOrderOptInEmail', true );
+
+        $oSubscription = $this->getMock( 'oxnewssubscribed', array( 'getOptInStatus', 'setOptInStatus' ) );
+        $oSubscription->expects( $this->any() )->method( 'getOptInStatus')->will( $this->returnValue( 0 ) );
+        $oSubscription->expects( $this->any() )->method( 'setOptInStatus')->with( $this->equalTo( 2 ) );
+
+        $oUser = $this->getMock( 'oxuser', array( 'getNewsSubscription', 'addToGroup', 'removeFromGroup' ) );
+        $oUser->expects( $this->any() )->method( 'getNewsSubscription')->will( $this->returnValue( $oSubscription ) );
+        $oUser->setConfig( $oConfig );
+
+        // first call, mail should be sent
+        $this->assertTrue( $oUser->setNewsSubscription( true, true ) );
+
+        // second call, mail should not be sent
+        $this->assertTrue( $oUser->setNewsSubscription( true, true ) );
+    }
+
     public function testSetNewsSubscriptionUnsubscribes()
     {
         oxAddClassModule( 'oxuserTestEmail', 'oxemail' );

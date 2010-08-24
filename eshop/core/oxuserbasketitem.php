@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketitem.php 29374 2010-08-16 20:22:29Z vilma $
+ * @version   SVN: $Id: oxuserbasketitem.php 29487 2010-08-23 07:55:25Z tomas $
  */
 
 /**
@@ -56,13 +56,6 @@ class oxUserBasketItem extends oxBase
      * @var array
      */
     protected $_aSelList = null;
-
-    /**
-     * Basket item persistent parameters
-     *
-     * @var array
-     */
-    protected $_aPersParam = null;
 
     /**
      * Class constructor, initiates parent constructor (parent::oxBase()).
@@ -191,32 +184,6 @@ class oxUserBasketItem extends oxBase
     }
 
     /**
-     * Basket item persistent parameters getter
-     *
-     * @return array
-     */
-    public function getPersParams()
-    {
-        if ( $this->_aPersParam == null && $this->oxuserbasketitems__oxpersparam->value ) {
-            $this->_aPersParam = unserialize( $this->oxuserbasketitems__oxpersparam->value );
-        }
-
-        return $this->_aPersParam;
-    }
-
-    /**
-     * Basket item persistent parameters setter
-     *
-     * @param string $sPersParams persistent parameters
-     *
-     * @return null
-     */
-    public function setPersParams( $sPersParams )
-    {
-        $this->oxuserbasketitems__oxpersparam = new oxField(serialize($sPersParams), oxField::T_RAW);
-    }
-
-    /**
      * Sets data field value
      *
      * @param string $sFieldName index OR name (eg. 'oxarticles__oxtitle') of a data field to set
@@ -227,8 +194,7 @@ class oxUserBasketItem extends oxBase
      */
     protected function _setFieldData( $sFieldName, $sValue, $iDataType = oxField::T_TEXT)
     {
-        if ('oxsellist' === strtolower($sFieldName) || 'oxuserbasketitems__oxsellist' === strtolower($sFieldName)
-            || 'oxpersparam' === strtolower($sFieldName) || 'oxuserbasketitems__oxpersparam' === strtolower($sFieldName)) {
+        if ('oxsellist' === strtolower($sFieldName) || 'oxuserbasketitems__oxsellist' === strtolower($sFieldName)) {
             $iDataType = oxField::T_RAW;
         }
         return parent::_setFieldData($sFieldName, $sValue, $iDataType);

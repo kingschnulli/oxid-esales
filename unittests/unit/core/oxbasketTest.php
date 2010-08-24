@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 29374 2010-08-16 20:22:29Z vilma $
+ * @version   SVN: $Id: oxbasketTest.php 29487 2010-08-23 07:55:25Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -599,7 +599,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * test if basket regard min order price
-     *
+     * 
      * @return null
      */
     public function testIsBelowMinOrderPrice()
@@ -1300,7 +1300,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oItem = $oBasket->addToBasket( $this->oArticle->getId(), 1 );
         $this->assertEquals( array(), $oBasket->UNITgetItemBundles( $oItem ) );
     }
-
+    
     /**
      * Testing how correctly bundle information is loaded
      * basket item has some bundled items
@@ -2054,7 +2054,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $this->assertEquals( array( '7' => '21,60', '19' => '34,20'), $oBasket->getProductVats() );
         $this->assertEquals( 55.2, $oBasket->getDiscountedNettoPrice() );
     }
-
+        
     /**
      * testing if the one cent rounding problem in basket doesn't appear.
      *
@@ -2618,14 +2618,13 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * test _mergeSavedBasket and if all methods are called.
-     *
+     * 
      * @return null
      */
     public function testMergeSavedBasketAllSetup()
     {
-        $oUserBasketItem = $this->getMock( 'oxuserbasketitem', array( 'getSelList', 'getPersParams' ) );
+        $oUserBasketItem = $this->getMock( 'oxuserbasketitem', array( 'getSelList' ) );
         $oUserBasketItem->expects( $this->once() )->method( 'getSelList' );
-        $oUserBasketItem->expects( $this->once() )->method( 'getPersParams' );
 
         $oUserBasket = $this->getMock( 'oxuserbasket', array( 'addItemToBasket', 'getItems' ) );
         $oUserBasket->expects( $this->once() )->method( 'addItemToBasket' );
@@ -2892,7 +2891,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing discount products price getter
-     *
+     * 
      * @return null
      */
     public function testGetDiscountProductsPrice()
@@ -2911,7 +2910,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing total products price getter
-     *
+     * 
      * @return null
      */
     public function testGetProductsPrice()
@@ -2937,7 +2936,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing total products price getter
-     *
+     * 
      * @return null
      */
     public function testGetProductsPriceIfNotSet()
@@ -2949,7 +2948,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing total basket price getter
-     *
+     * 
      * @return null
      */
     public function testGetPrice()
@@ -2973,7 +2972,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing total basket price getter
-     *
+     * 
      * @return null
      */
     public function testGetPriceIfNotSet()
@@ -2985,7 +2984,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing order id setter/getter
-     *
+     * 
      * @return null
      */
     public function testSetOrderIdAndGetOrderId()
@@ -2997,7 +2996,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing if costs getter returns all default costs
-     *
+     * 
      * @return null
      */
     public function testGetCosts()
@@ -3016,7 +3015,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing voucher info getter
-     *
+     * 
      * @return null
      */
     public function testGetVouchers()
@@ -3043,7 +3042,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing basket products count getter
-     *
+     * 
      * @return null
      */
     public function testGetProductsCount()
@@ -3061,7 +3060,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing item count getter
-     *
+     * 
      * @return null
      */
     public function testGetItemsCount()
@@ -3079,7 +3078,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing basket total weight getter
-     *
+     * 
      * @return null
      */
     public function testGetWeight()
@@ -3097,7 +3096,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing basket items array getter
-     *
+     * 
      * @return null
      */
     public function testGetContents()
@@ -3115,7 +3114,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing products VAT getter
-     *
+     * 
      * @return null
      */
     public function testGetProductVats()
@@ -3142,7 +3141,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing products VAT getter
-     *
+     * 
      * @return null
      */
     public function testGetProductVatsIfPriceNotSet()
@@ -3153,7 +3152,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing products discounted net price getter
-     *
+     * 
      * @return null
      */
     public function testDiscountedNettoPrice()
@@ -3170,7 +3169,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing products discounted net price getter
-     *
+     * 
      * @return null
      */
     public function testDiscountedNettoPriceIfNotSet()
@@ -3181,7 +3180,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing gift card message getter/setter
-     *
+     * 
      * @return null
      */
     public function testSetCardMessageAndGetCardMessage()
@@ -3193,7 +3192,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing gift card setter and getter
-     *
+     * 
      * @return null
      */
     public function testGetCard()
@@ -3212,7 +3211,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing discounts getter
-     *
+     * 
      * @return null
      */
     public function testGetDiscounts()
@@ -3236,7 +3235,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing discounts getter
-     *
+     * 
      * @return null
      */
     public function testGetDiscountsIfZeroDiscount()
@@ -3254,7 +3253,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing discounts getter
-     *
+     * 
      * @return null
      */
     public function testGetDiscountsIfItemDiscount()
@@ -3276,7 +3275,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing voucher discount getter
-     *
+     * 
      * @return null
      */
     public function testGetVoucherDiscount()
@@ -3298,7 +3297,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     /**
      * Testing voucher discount getter - when voucher is value is percent.
      * Voucher discount value should be calculated after applying general discount
-     *
+     * 
      * @return null
      */
     public function testGetVoucherDiscountWithPercentageVoucher()
@@ -3328,7 +3327,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing basket currency setter and getter
-     *
+     * 
      * @return null
      */
     public function testSetAndGetBasketCurrency()
@@ -3345,7 +3344,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing basket currency getter by default return active shop currency object
-     *
+     * 
      * @return null
      */
     public function testGetBasketCurrencyByDefaultReturnsActiveShopCurrencyObject()
@@ -3358,7 +3357,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing setter for skipping vouchers availability checking
-     *
+     * 
      * @return null
      */
     public function testSetSkipVouchersChecking()
@@ -3374,7 +3373,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing basket discount calculation
-     *
+     * 
      * @return null
      */
     public function testCalcBasketDiscount()
@@ -3402,7 +3401,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing basket discount calculation FS#1675
-     *
+     * 
      * @return null
      */
     public function testCalcBasketDiscountWithSpecialPrice()
@@ -3430,7 +3429,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing basket discount calculation when no discounts exists
-     *
+     * 
      * @return null
      */
     public function testCalcBasketDiscountWithNoDiscounts()
@@ -3452,7 +3451,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing total basket discount calculation
-     *
+     * 
      * @return null
      */
     public function testCalcBasketTotalDiscount()
@@ -3482,7 +3481,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * M#884 Testing total basket discount calculation before and after discount list update
-     *
+     * 
      * @return null
      */
     public function testCalcBasketTotalDiscountAfterUpdate()
@@ -3517,7 +3516,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * M#884 Testing skipp of total basket discount calculation in Admin, after discount list was updated
-     *
+     * 
      * @return null
      */
     public function testCalcBasketTotalDiscountAfterUpdateInAdminMode()
@@ -3543,7 +3542,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing total basket discount calculation with no discount
-     *
+     * 
      * @return null
      */
     public function testCalcBasketTotalDiscountWithNoDiscounts()
@@ -3561,7 +3560,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing if method _changeBasketItemKey() was called in addToBasket()
-     *
+     * 
      * @return null
      */
     public function testIfChangeBasketItemKeyCalledInAddToBasket()
@@ -3582,7 +3581,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing method _changeBasketItemKey()
-     *
+     * 
      * @return null
      */
     public function testChangeBasketItemKey()
@@ -3600,7 +3599,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing if reset functionality executes all dep. methods
-     *
+     * 
      * @return null
      */
     public function testResetUserInfo()
@@ -3613,7 +3612,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing skip discounts marker setter/getter
-     *
+     * 
      * @return null
      */
     public function testSetGetSkipDiscounts()
@@ -3625,7 +3624,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing products net price getter
-     *
+     * 
      * @return null
      */
     public function testGetProductsNetPrice()
@@ -3637,7 +3636,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted products price getter
-     *
+     * 
      * @return null
      */
     public function testGetFProductsPrice()
@@ -3651,7 +3650,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted products price getter
-     *
+     * 
      * @return null
      */
     public function testGetFProductsPriceIfPriceNotSet()
@@ -3662,7 +3661,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing delivery cost Vat getter
-     *
+     * 
      * @return null
      */
     public function testGetDelCostVatPercent()
@@ -3676,7 +3675,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted delivery vat value getter
-     *
+     * 
      * @return null
      */
     public function testGetDelCostVat()
@@ -3690,7 +3689,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted delivery netto price getter
-     *
+     * 
      * @return null
      */
     public function testGetDelCostNet()
@@ -3705,7 +3704,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted delivery netto price getter
-     *
+     * 
      * @return null
      */
     public function testGetDelCostNetWithoutUser()
@@ -3721,7 +3720,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted delivery netto price getter
-     *
+     * 
      * @return null
      */
     public function testGetDelCostNetCalculateWithoutUser()
@@ -3737,7 +3736,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing payment cost Vat getter
-     *
+     * 
      * @return null
      */
     public function testGetPayCostVatPercent()
@@ -3751,7 +3750,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted payment vat value getter
-     *
+     * 
      * @return null
      */
     public function testGetPayCostVat()
@@ -3765,7 +3764,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted payment netto price getter
-     *
+     * 
      * @return null
      */
     public function testGetPayCostNet()
@@ -3779,7 +3778,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing payment brutto price getter
-     *
+     * 
      * @return null
      */
     public function testGetPaymentCosts()
@@ -3793,7 +3792,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing voucher discount getter
-     *
+     * 
      * @return null
      */
     public function testGetVoucherDiscValue()
@@ -3807,7 +3806,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing voucher discount getter
-     *
+     * 
      * @return null
      */
     public function testGetVoucherDiscValueIfNotSet()
@@ -3818,7 +3817,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing wrapping cost Vat getter
-     *
+     * 
      * @return null
      */
     public function testGetWrappCostVatPercent()
@@ -3832,7 +3831,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted wrapping vat value getter
-     *
+     * 
      * @return null
      */
     public function testGetWrappCostVat()
@@ -3846,7 +3845,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted wrapping netto price getter
-     *
+     * 
      * @return null
      */
     public function testGetWrappCostNet()
@@ -3860,7 +3859,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted basket total price
-     *
+     * 
      * @return null
      */
     public function testGetFPrice()
@@ -3874,7 +3873,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted delivery price getter
-     *
+     * 
      * @return null
      */
     public function testGetFDeliveryCosts()
@@ -3888,7 +3887,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted delivery price getter
-     *
+     * 
      * @return null
      */
     public function testGetFDeliveryCostsSetToZero()
@@ -3902,7 +3901,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing formatted delivery price getter
-     *
+     * 
      * @return null
      */
     public function testGetFDeliveryCostsIfNotSet()
@@ -3913,7 +3912,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing delivery price getter
-     *
+     * 
      * @return null
      */
     public function testGetDeliveryCosts()
@@ -3932,7 +3931,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing total discount getter
-     *
+     * 
      * @return null
      */
     public function testGetTotalDiscount()
@@ -3947,7 +3946,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     /**
      * Testing getting basket price for payment costs calculations
      * (M:1190, M:1145)
-     *
+     * 
      * @return null
      */
     public function testGetPriceForPayment()
@@ -3972,9 +3971,9 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing getting basket price for payment costs calculations
-     * (M:1905) not discounted products should be included in payment
+     * (M:1905) not discounted products should be included in payment 
      * amount calculation
-     *
+     * 
      * @return null
      */
     public function testGetPriceForPaymentIfWithNotDiskcountedArticles()
@@ -4000,7 +3999,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing getting formatted payment cost
-     *
+     * 
      * @return null
      */
     public function testGetFPaymentCosts()
@@ -4016,7 +4015,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing getting formatted payment cost when cost is not setted
-     *
+     * 
      * @return null
      */
     public function testGetFPaymentCosts_noCost()
@@ -4029,7 +4028,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing getting formatted payment cost when cost = 0
-     *
+     * 
      * @return null
      */
     public function testGetFPaymentCosts_zeroValue()
@@ -4045,7 +4044,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing getting formatted wrapping cost
-     *
+     * 
      * @return null
      */
     public function testGetFWrappingCosts()
@@ -4061,7 +4060,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing getting formatted wrapping cost when cost is not setted
-     *
+     * 
      * @return null
      */
     public function testGetFWrappingCosts_noCost()
@@ -4074,7 +4073,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing getting formatted wrapping cost when cost = 0
-     *
+     * 
      * @return null
      */
     public function testGetFWrappingCosts_zeroValue()
@@ -4090,7 +4089,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing getting formatted wrapping cost
-     *
+     * 
      * @return null
      */
     public function testGetArtStockInBasket()
@@ -4111,7 +4110,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     /**
      * Testing calcBasketDiscount() and checking if minimize discount if it bigger than total price.
      * #1818
-     *
+     * 
      * @return null
      */
     public function testCalcBasketDiscountMinimizeDiscountIfBiggerThanTotal()
@@ -4151,7 +4150,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     /**
      * Testing calcBasketDiscount() and checking if discount is minus (-10)
      * #1934
-     *
+     * 
      * @return null
      */
     public function testCalcBasketDiscountIfDiscountIsMinus()
@@ -4190,7 +4189,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Check if method isBelowMinOrderPrice() works correctly
-     *
+     * 
      * @return null
      */
     public function testIsBelowMinOrderPriceRecognise0AsValue()
@@ -4270,7 +4269,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     public function testScAddToBasket()
     {
         modConfig::getInstance()->setConfigParam( "blBasketExcludeEnabled", true );
-
+    
         $oBasket = $this->getMock( "oxbasket", array( "canAddProductToBasket", "setCatChangeWarningState" ) );
         $oBasket->expects( $this->once() )->method( 'canAddProductToBasket' )->with( $this->equalTo( "1126" ) )->will( $this->returnValue( true ) );
         $oBasket->expects( $this->once() )->method( 'setCatChangeWarningState' )->with( $this->equalTo( false ) );
@@ -4433,7 +4432,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing TS protection costs calculation
-     *
+     * 
      * @return null
      */
     public function testCalcTsProtectionCost()
@@ -4454,7 +4453,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
     /**
      * Testing oxbasket::_oNotDiscountedProductsPriceList getter
-     *
+     * 
      * @return null
      */
     public function testGetNotDiscountProductsPrice()
