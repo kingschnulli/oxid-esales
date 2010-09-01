@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 28315 2010-06-11 15:34:43Z arvydas $
+ * @version   SVN: $Id: oxubaseTest.php 29553 2010-08-27 14:48:10Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1378,6 +1378,18 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView = $this->getMock( 'oxubase', array( 'getClassName', 'getFncName' ) );
         $oView->expects( $this->any() )->method( 'getClassName' )->will( $this->returnValue( 'testclass' ) );
         $oView->expects( $this->any() )->method( 'getFncName' )->will( $this->returnValue( 'tobasket' ) );
+        modConfig::setParameter('cnid', 'catid');
+        modConfig::setParameter('mnid', 'manId');
+
+        $sExpUrl = 'cl=testclass&amp;cnid=catid&amp;mnid=manId';
+        $this->assertEquals( $sExpUrl, $oView->UNITgetRequestParams() );
+    }
+
+    public function testGetRequestParamsSkipFnc2()
+    {
+        $oView = $this->getMock( 'oxubase', array( 'getClassName', 'getFncName' ) );
+        $oView->expects( $this->any() )->method( 'getClassName' )->will( $this->returnValue( 'testclass' ) );
+        $oView->expects( $this->any() )->method( 'getFncName' )->will( $this->returnValue( 'moveleft' ) );
         modConfig::setParameter('cnid', 'catid');
         modConfig::setParameter('mnid', 'manId');
 

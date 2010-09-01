@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: pluginsmartyoxcontentTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: pluginsmartyoxcontentTest.php 29602 2010-08-31 14:03:21Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -83,7 +83,7 @@ class Unit_Maintenance_pluginSmartyOxContentTest extends OxidTestCase
         $aParams['assign'] = true;
 
         $oSmarty = $this->getMock( "smarty", array( "fetch", "assign" ) );
-        $oSmarty->expects( $this->once() )->method( 'fetch')->will( $this->returnValue( 'testvalue' ) );
+        $oSmarty->expects( $this->once() )->method( 'fetch')->with($this->equalTo('ox:f41427a099a603773.44301043oxcontent00'))->will( $this->returnValue( 'testvalue' ) );
         $oSmarty->expects( $this->once() )->method( 'assign')->with( $this->equalTo( $sText ) );
 
         smarty_function_oxcontent( $aParams, $oSmarty );

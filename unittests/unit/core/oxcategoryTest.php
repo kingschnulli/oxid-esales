@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategoryTest.php 28421 2010-06-18 08:54:27Z sarunas $
+ * @version   SVN: $Id: oxcategoryTest.php 29594 2010-08-31 11:39:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -398,7 +398,7 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $aAtrr = $oObj->getAttributes();
         $sVal = $aAtrr[$this->_sAttributeD];
         oxSession::setVar( "session_attrfilter", null );
-        $this->assertEquals(1, count($aAtrr));
+            $this->assertEquals(1, count($aAtrr));
         $this->assertTrue($aAtrr[$this->_sAttributeD]->aValues[md5( $sAttValue )]->blSelected);
     }
 

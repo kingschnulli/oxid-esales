@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 29440 2010-08-19 14:10:50Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxuserTest.php 29549 2010-08-27 13:08:11Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2989,6 +2989,23 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertNull( oxSession::getVar( 'auth' ) );
         $this->assertFalse( $oUser->getUser() );
     }
+
+    /**
+     * oxuser::login() test, tests if basket loading is called after successful login
+     * Bug #2039
+     *
+     */
+    /*
+    public function testLoginBasketLoaded()
+    {
+        $oBasket = $this->getMock("oxbasket", array("load"));
+        $oBasket->expects($this->once())->method("load");
+
+        oxTestModules::addModuleObject( "oxbasket", $oBasket );
+
+        $oUser = new oxuser();
+        $oUser->login(oxADMIN_LOGIN, oxADMIN_PASSWD);
+    }*/
 
     /**
      * oxuser::login() and oxuser::logout() test

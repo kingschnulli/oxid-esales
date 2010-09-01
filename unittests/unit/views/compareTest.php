@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: compareTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: compareTest.php 29553 2010-08-27 14:48:10Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -83,6 +83,19 @@ class Unit_Views_compareTest extends OxidTestCase
     }
 
     /**
+     * bug #0001566
+     */
+    public function testMoveLeftSkipsIfNoAnid()
+    {
+        modConfig::setParameter( 'aid', "" );
+
+        $oView = $this->getMock( "compare", array( "getCompareItems", "setCompareItems" ) );
+        $oView->expects( $this->never() )->method( 'getCompareItems');
+        $oView->expects( $this->never() )->method( 'setCompareItems');
+        $oView->moveLeft();
+    }
+
+    /**
      * compare::moveRight() test case
      *
      * @return null
@@ -96,6 +109,19 @@ class Unit_Views_compareTest extends OxidTestCase
         $oView = $this->getMock( "compare", array( "getCompareItems", "setCompareItems" ) );
         $oView->expects( $this->once() )->method( 'getCompareItems')->will( $this->returnValue( $aItems ) );
         $oView->expects( $this->once() )->method( 'setCompareItems')->with( $this->equalTo( $aResult ) );
+        $oView->moveRight();
+    }
+
+    /**
+     * bug #0001566
+     */
+    public function testMoveRightSkipsIfNoAnid()
+    {
+        modConfig::setParameter( 'aid', "" );
+
+        $oView = $this->getMock( "compare", array( "getCompareItems", "setCompareItems" ) );
+        $oView->expects( $this->never() )->method( 'getCompareItems');
+        $oView->expects( $this->never() )->method( 'setCompareItems');
         $oView->moveRight();
     }
 
