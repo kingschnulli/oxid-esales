@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylistTest.php 27684 2010-05-11 14:17:11Z sarunas $
+ * @version   SVN: $Id: oxcategorylistTest.php 29612 2010-09-01 12:10:44Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -783,6 +783,7 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('iForceLevel', 0);
 
         $this->_oList->selectString($this->_oList->UNITgetSelectString(false));
+        $this->_oList->UNITppBuildTree();
         $this->_oList->UNITppAddDepthInformation();
 
         //Check depth info
@@ -792,6 +793,38 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
             $iPrefixCur = substr($this->_oList[$sId]->oxcategories__oxtitle->value, 0, strlen($sPrefixStr));
             $this->assertEquals($sPrefixStr, $iPrefixCur);
             $iDepth ++;
+        }
+    }
+
+    /**
+     * Test list post processing, add depth information.
+     *
+     * @return null
+     */
+    public function test_addDepthInfo()
+    {
+        $aTree = array();
+        $oCat = new oxCategory();
+        $oCat->setId("_test1");
+        $oCat->oxcategories__oxparentid = new oxField("_test2");
+        $oCat->oxcategories__oxsort = new oxField(2);
+        $oCat->oxcategories__oxactive = new oxField(1);
+        $oCat->oxcategories__oxtitle = new oxField("_test");
+        $oCat->save();
+        $oCat2 = $this->getMock( 'oxCategory', array( 'getSubCats' ) );
+        $oCat2->expects( $this->any() )->method( 'getSubCats' )->will( $this->returnValue( array($oCat) ) );
+        $oCat2->setId("_test2");
+        $oCat2->oxcategories__oxparentid = new oxField("oxrootid");
+        $oCat2->oxcategories__oxsort = new oxField(2);
+        $oCat2->oxcategories__oxactive = new oxField(1);
+        $oCat2->oxcategories__oxtitle = new oxField("_test");
+        $oCat2->save();
+
+        $aNewTree = $this->_oList->UNITaddDepthInfo($aTree, $oCat2);
+        $sDepth = "";
+        foreach ($aNewTree as $oCat) {
+            $sDepth .= "-";
+            $this->assertEquals($sDepth." _test", $oCat->oxcategories__oxtitle->value);
         }
     }
 
