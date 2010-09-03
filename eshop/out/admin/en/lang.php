@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 29395 2010-08-18 07:18:21Z arvydas $
+ * @version   SVN: $Id: lang.php 29634 2010-09-02 12:54:46Z vilma $
  */
 
 /*
@@ -935,6 +935,7 @@ $aLang = array(
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Error: language with such abbervation already exists!',
 'LANGUAGE_EMPTYLANGUAGENAME_ERROR'              => 'Please enter language name!',
 'SETUP_DIRNOTDELETED_WARNING'                   => 'Please delete directory: setup!',
+'UPDATEAPP_DIRNOTDELETED_WARNING'               => 'Please delete directory: updateApp!',
 'SETUP_CONFIGPERMISSIONS_WARNING'               => 'Due to security reasons put your config.inc.php file to read-only mode!',
 'LOGIN_TITLE'                                   => 'OXID eSales Login',
 'LOGIN_ERROR'                                   => 'Error! Incorrect username and/or password!',

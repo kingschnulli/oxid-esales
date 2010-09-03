@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxarticlelistTest.php 29635 2010-09-02 13:08:09Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1219,6 +1219,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oArticle = new oxarticle();
 
         modConfig::getInstance()->setConfigParam( 'iNrofNewcomerArticles', 4 );
+        modConfig::getInstance()->setConfigParam( 'blNewArtByInsert', 0 );
 
         $sExpt  = "select * from $sArticleTable where oxparentid = ''";
         $sExpt .= " and ".$oArticle->getSqlActiveSnippet()." and oxissearch = 1";

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 29391 2010-08-17 15:53:26Z ralf.trapp $
+ * @version   SVN: $Id: lang.php 29634 2010-09-02 12:54:46Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -929,6 +929,7 @@ $aLang = array(
 'LANGUAGE_ALREADYEXISTS_ERROR'                  => 'Fehler: Eine Sprache mit diesem Sprachkürzel existiert bereits',
 'LANGUAGE_EMPTYLANGUAGENAME_ERROR'              => 'Bitte geben Sie den Namen der Sprache ein!',
 'SETUP_DIRNOTDELETED_WARNING'                   => 'Bitte löschen Sie das Setup-Verzeichnis',
+'UPDATEAPP_DIRNOTDELETED_WARNING'               => 'Bitte löschen Sie das updateApp-Verzeichnis',
 'SETUP_CONFIGPERMISSIONS_WARNING'               => 'WICHTIG: Aus Sicherheitsgründen setzen Sie Ihre config.inc.php Datei auf read-only-Modus!',
 'LOGIN_TITLE'                                   => 'OXID eShop Login',
 'LOGIN_ERROR'                                   => 'Fehler! Falscher Benutzername und/oder Passwort.',

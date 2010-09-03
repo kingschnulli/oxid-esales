@@ -525,7 +525,7 @@ INSERT INTO `oxconfig` VALUES ('7a59f9000f39e5d9549a5d1e29c076a0', 'oxbaseshop',
 INSERT INTO `oxconfig` VALUES ('7a59f9000f39e5d9549a5d1e29c076a2', 'oxbaseshop', 'blOrderOptInEmail', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES ('bd3e73e699331eb92c557113bac02fc4', 'oxbaseshop', 'dPointsForInvitation', 'str', 0x07c4);
 INSERT INTO `oxconfig` VALUES ('bd320d322fa2f638086787c512329eec', 'oxbaseshop', 'dPointsForRegistration', 'str', 0x07c4);
-
+INSERT INTO `oxconfig` VALUES ('99065ff58e9d2c1b2e362e54c0bb54f3', 'oxbaseshop', 'blNewArtByInsert', 'bool', 0x07);
 #
 # Table structure for table `oxcontents`
 #
