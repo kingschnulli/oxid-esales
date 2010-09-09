@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 29635 2010-09-02 13:08:09Z vilma $
+ * @version   SVN: $Id: oxarticlelistTest.php 29758 2010-09-07 15:58:06Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1013,11 +1013,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt = "select$sArticleTable.oxidfrom".$sArticleTable."where ";
-        $sExpt.= "$sArticleTable.oxidin(selectif(oxparentid='',oxid,oxparentid)asidfrom";
-        $sExpt.= $sArticleTable."whereoxprice>=0andoxprice<=15groupbyidhavingmin(oxprice)>=12)and";
+        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=12andoxvarminprice<=15and";
         $sExpt.= $oArticle->getSqlActiveSnippet()."and$sArticleTable.oxissearch=1orderby";
-        $sExpt.= "$sArticleTable.oxpriceasc,$sArticleTable.oxid";
+        $sExpt.= "$sArticleTable.oxvarminpriceasc,$sArticleTable.oxid";
 
         $sRes = $oTest->UNITgetPriceSelect($iPrice1, $iPrice2);
         $sExpt = str_replace(array("\n","\r"," "), "", $sExpt);
@@ -1043,11 +1041,11 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt = "select$sArticleTable.oxidfrom".$sArticleTable."where ";
-        $sExpt.= "$sArticleTable.oxidin(selectif(oxparentid='',oxid,oxparentid)asidfrom";
-        $sExpt.= $sArticleTable."whereoxprice>=0andoxprice<=15groupbyidhavingmin(oxprice)>=12)and";
+        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=12andoxvarminprice<=15and";
         $sExpt.= $oArticle->getSqlActiveSnippet()."and$sArticleTable.oxissearch=1orderby";
         $sExpt.= "oxtitledesc,$sArticleTable.oxid";
+
+
 
         $sRes = $oTest->UNITgetPriceSelect($iPrice1, $iPrice2);
         $sExpt = str_replace(array("\n","\r"," "), "", $sExpt);

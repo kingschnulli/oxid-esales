@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 28649 2010-06-28 10:50:24Z michael.keiluweit $
+ * @version   SVN: $Id: oxarticleTest.php 29768 2010-09-08 15:44:38Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3831,19 +3831,16 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         $this->oArticle2->oxarticles__oxstock = new oxField(2, oxField::T_RAW);
         $this->oArticle2->oxarticles__oxactive = new oxField(1, oxField::T_RAW);
-        $this->oArticle2->oxarticles__oxprice = new oxField(10000.76, oxField::T_RAW);
+        $this->oArticle2->oxarticles__oxprice = new oxField(1000.76, oxField::T_RAW);
         $this->oArticle2->save();
 
-        $cfg = $this->getMock('oxconfig', array( 'getConfigParam' ), array(), '', false );
-        $cfg->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo('blVariantParentBuyable') )->will( $this->returnValue( true ) );
-
-        $oArticle = $this->getMock('oxarticle', array( 'getSqlActiveSnippet' ));
-        $oArticle->expects( $this->once() )->method( 'getSqlActiveSnippet' )->will( $this->returnValue( ' oxid = "'.$this->oArticle2->getId().'"' ) );
-
+        $oArticle = new oxArticle();
         $oArticle->load('_testArt');
+        $oArticle->oxarticles__oxactive = new oxField(0);
         $oArticle->setConfig($cfg);
         $oArticle->UNITonChangeUpdateMinVarPrice('_testArt');
-        $this->assertEquals( 10000.76, oxDb::getDB()->getOne("select oxvarminprice from oxarticles where oxid = '_testArt'") );
+
+        $this->assertEquals( 1000.76, oxDb::getDB()->getOne("select oxvarminprice from oxarticles where oxid = '_testArt'") );
 
     }
 
@@ -3983,7 +3980,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oA = $this->getMock('oxarticle', array('getSession'));
         $oA->expects($this->any())->method('getSession')->will($this->returnValue($oS));
         $oA->load($this->oArticle->getId());
-        
+
         $oA->oxarticles__oxstock = new oxField(-1, oxField::T_RAW);
         $oA->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
         $this->assertTrue($oA->isVisible());
@@ -4094,7 +4091,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
     /**
      * test stock reducing, when negative values are ok
-     * 
+     *
      * @return null
      */
     public function testReduceStockNegativeOk()
@@ -4112,7 +4109,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
     /**
      * test stock reducing, when negative values are NOT ok
-     * 
+     *
      * @return null
      */
     public function testReduceStockNegativeNotOk()
