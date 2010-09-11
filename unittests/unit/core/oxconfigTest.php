@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 29355 2010-08-16 07:18:58Z arvydas $
+ * @version   SVN: $Id: oxconfigTest.php 29791 2010-09-10 13:23:35Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1292,6 +1292,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig = new modForTestGetBaseTemplateDirAdminSsl();
         $oConfig->init();
         $oConfig->setConfigParam( 'sAltImageDir', 'http://www.example.com' );
+        $oConfig->setConfigParam( 'sSSLAltImageDir', 'https://www.example.com' );
         $this->assertEquals( 'https://www.example.com', $oConfig->getDynImageDir() );
     }
     // alternative path, SSL mode
