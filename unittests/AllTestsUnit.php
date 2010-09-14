@@ -51,9 +51,18 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
         $oSuite = new PHPUnit_Framework_TestSuite( 'PHPUnit' );
         $sFilter = getenv("PREG_FILTER");
         //foreach ( array( oxTESTSUITEDIR, oxTESTSUITEDIR.'/admin', oxTESTSUITEDIR.'/core', oxTESTSUITEDIR.'/views', oxTESTSUITEDIR.'/maintenance', oxTESTSUITEDIR.'/setup' ) as $sDir ) {
-        foreach ( array( oxTESTSUITEDIR, oxTESTSUITEDIR.'/core', oxTESTSUITEDIR.'/maintenance', oxTESTSUITEDIR.'/views', oxTESTSUITEDIR.'/admin', oxTESTSUITEDIR.'/setup' ) as $sDir ) {
+        $aTestDirs = array('', 'core', 'maintenance', 'views', 'admin', 'setup');
+        if (getenv('TEST_DIRS')) {
+            $aTestDirs = explode('%', getenv('TEST_DIRS'));
+        }
+        foreach ($aTestDirs as $sDir ) {
+            if ($sDir == '_root_') {
+                $sDir = '';
+            }
+            $sDir = rtrim(oxTESTSUITEDIR.'/'.$sDir, '/');
             //adding UNIT Tests
             foreach ( glob( "$sDir/*Test.php" ) as $sFilename) {
+                $sFilename = trim($sFilename, '/');
                 if (!$sFilter || preg_match("&$sFilter&i", $sFilename)) {
                     error_reporting( (E_ALL ^ E_NOTICE) | E_STRICT );
                     ini_set('display_errors', true);
