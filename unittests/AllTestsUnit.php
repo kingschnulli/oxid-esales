@@ -61,8 +61,8 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
             }
             $sDir = rtrim(oxTESTSUITEDIR.'/'.$sDir, '/');
             //adding UNIT Tests
+            echo "Adding unit tests from $sDir/*Test.php\n";
             foreach ( glob( "$sDir/*Test.php" ) as $sFilename) {
-                $sFilename = trim($sFilename, '/');
                 if (!$sFilter || preg_match("&$sFilter&i", $sFilename)) {
                     error_reporting( (E_ALL ^ E_NOTICE) | E_STRICT );
                     ini_set('display_errors', true);
