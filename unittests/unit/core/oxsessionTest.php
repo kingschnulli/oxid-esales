@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 29342 2010-08-13 10:55:22Z arvydas $
+ * @version   SVN: $Id: oxsessionTest.php 29867 2010-09-16 14:09:36Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1046,6 +1046,7 @@ class Unit_Core_oxsessionTest extends OxidTestCase
     {
         //noting to test here as oxSession::freeze() includes only PHP session functionality
         //testing at least if this method exists by just calling it
+        session_id( "testSessId" );
         $testSession = new oxSession();
         $testSession->freeze();
     }
