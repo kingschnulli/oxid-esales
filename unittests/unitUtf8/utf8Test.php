@@ -987,7 +987,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
                           'oxorder__oxdelzip', 'oxorder__oxdelfon',
                           'oxorder__oxdelfax', 'oxorder__oxdelsal', 'oxorder__oxbillnr',
                           'oxorder__oxtrackcode', 'oxorder__oxremark', 'oxorder__oxcurrency',
-                          'oxorder__oxpident', 'oxorder__oxtransid', 'oxorder__oxcardtext',
+                          'oxorder__oxtransid', 'oxorder__oxcardtext',
                           'oxorder__oxxid', 'oxorder__oxip', 'oxorder__oxtransstatus' );
 
         $oOrder = oxNew( 'oxorder' );

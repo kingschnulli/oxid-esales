@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: test_utils.php 28202 2010-06-07 15:44:25Z michael.keiluweit $
+ * @version   SVN: $Id: test_utils.php 29902 2010-09-17 15:40:37Z sarunas $
  */
 
 define ('MAX_LOOP_AMOUNT', 4);
@@ -235,11 +235,11 @@ class oxTestModules
      * @param mixed $fnc
      * @static
      * @access public
-     * @return void
+     * @return string
      */
     public static function publicize($class, $fnc)
     {
-        self::addFunction($class, preg_replace('/^_/', 'p_', $fnc), "array(\$this, '$fnc')");
+        return self::addFunction($class, preg_replace('/^_/', 'p_', $fnc), "array(\$this, '$fnc')");
     }
 
     /**
@@ -630,7 +630,7 @@ class modSession extends modOXID
      * Gets session var for testing
      *
      * @param string $sVar
-     *      
+     *
      * @return string
      */
     public function getVar($sVar)

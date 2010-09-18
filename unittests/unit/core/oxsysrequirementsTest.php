@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 27696 2010-05-12 10:19:20Z sarunas $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 29902 2010-09-17 15:40:37Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -132,6 +132,125 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         $this->assertEquals( $sUrl."#PHP_version_at_least_5.2.0", $oSubj->getReqInfoUrl( "php_version") );
         $this->assertEquals( $sUrl, $oSubj->getReqInfoUrl( "none") );
         $this->assertEquals( $sUrl."#Zend_Optimizer", $oSubj->getReqInfoUrl( "zend_optimizer") );
+    }
+
+    /**
+     * Testing oxSysRequirements::_getShopHostInfoFromConfig()
+     *
+     * @return null
+     */
+    public function testGetShopHostInfoFromConfig()
+    {
+        modConfig::getInstance()->setConfigParam('sShopURL', 'http://www.testshopurl.lt/testsubdir1/insideit2/');
+        $cl = oxTestModules::publicize('oxSysRequirements', '_getShopHostInfoFromConfig');
+        $o = new $cl();
+        $this->assertEquals(
+            array(
+                'host' => 'www.testshopurl.lt',
+                'port' => 80,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => false,
+            ),
+            $o->p_getShopHostInfoFromConfig()
+        );
+        modConfig::getInstance()->setConfigParam('sShopURL', 'https://www.testshopurl.lt/testsubdir1/insideit2/');
+        $this->assertEquals(
+            array(
+                'host' => 'www.testshopurl.lt',
+                'port' => 443,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => true,
+            ),
+            $o->p_getShopHostInfoFromConfig()
+        );
+        modConfig::getInstance()->setConfigParam('sShopURL', 'https://51.1586.51.15:21/testsubdir1/insideit2/');
+        $this->assertEquals(
+            array(
+                'host' => '51.1586.51.15',
+                'port' => 21,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => true,
+            ),
+            $o->p_getShopHostInfoFromConfig()
+        );
+        modConfig::getInstance()->setConfigParam('sShopURL', '51.1586.51.15:21/testsubdir1/insideit2/');
+        $this->assertEquals(
+            array(
+                'host' => '51.1586.51.15',
+                'port' => 21,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => false,
+            ),
+            $o->p_getShopHostInfoFromConfig()
+        );
+
+    }
+
+    /**
+     * Testing oxSysRequirements::_getShopHostInfoFromServerVars()
+     *
+     * @return null
+     */
+    public function testGetShopHostInfoFromServerVars()
+    {
+        $_SERVER['SCRIPT_NAME'] = '/testsubdir1/insideit2/setup/index.php';
+        $_SERVER['HTTPS'] = null;
+        $_SERVER['SERVER_PORT'] = null;
+        $_SERVER['HTTP_HOST'] = 'www.testshopurl.lt';
+
+        $cl = oxTestModules::publicize('oxSysRequirements', '_getShopHostInfoFromServerVars');
+        $o = new $cl();
+        $this->assertEquals(
+            array(
+                'host' => 'www.testshopurl.lt',
+                'port' => 80,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => false,
+            ),
+            $o->p_getShopHostInfoFromServerVars()
+        );
+
+        $_SERVER['SCRIPT_NAME'] = '/testsubdir1/insideit2/setup/index.php';
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['SERVER_PORT'] = null;
+        $_SERVER['HTTP_HOST'] = 'www.testshopurl.lt';
+        $this->assertEquals(
+            array(
+                'host' => 'www.testshopurl.lt',
+                'port' => 443,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => true,
+            ),
+            $o->p_getShopHostInfoFromServerVars()
+        );
+
+        $_SERVER['SCRIPT_NAME'] = '/testsubdir1/insideit2/setup/index.php';
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['SERVER_PORT'] = 21;
+        $_SERVER['HTTP_HOST'] = '51.1586.51.15';
+        $this->assertEquals(
+            array(
+                'host' => '51.1586.51.15',
+                'port' => 21,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => true,
+            ),
+            $o->p_getShopHostInfoFromServerVars()
+        );
+
+        $_SERVER['SCRIPT_NAME'] = '/testsubdir1/insideit2/setup/index.php';
+        $_SERVER['HTTPS'] = null;
+        $_SERVER['SERVER_PORT'] = '21';
+        $_SERVER['HTTP_HOST'] = '51.1586.51.15';
+        $this->assertEquals(
+            array(
+                'host' => '51.1586.51.15',
+                'port' => 21,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => false,
+            ),
+            $o->p_getShopHostInfoFromServerVars()
+        );
     }
 
 }

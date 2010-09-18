@@ -73,6 +73,10 @@ class Unit_Views_inviteTest extends OxidTestCase
     public function testUpdateStatistics()
     {
         $oView = $this->getProxyClass( 'invite' );
+        
+        $oUtilsDate = $this->getMock('oxUtilsDate', array('formatDBDate'));
+        $oUtilsDate->expects($this->once())->method('formatDBDate')->will($this->returnValue("2015-10-11"));
+        oxTestModules::addModuleObject('oxUtilsDate', $oUtilsDate);        
 
         $aRecEmails = array( "test1@oxid-esales.com", "test2@oxid-esales.com" );
         $sUserId = "_testUserId";
@@ -83,14 +87,14 @@ class Unit_Views_inviteTest extends OxidTestCase
 
         $this->assertEquals( $sUserId, $aRec[0]["OXUSERID"] );
         $this->assertEquals( "test1@oxid-esales.com", $aRec[0]["OXEMAIL"] );
-        $this->assertEquals( date("Y-m-d"), $aRec[0]["OXDATE"] );
+        $this->assertEquals( "2015-10-11", $aRec[0]["OXDATE"] );
         $this->assertEquals( "1", $aRec[0]["OXPENDING"] );
         $this->assertEquals( "0", $aRec[0]["OXACCEPTED"] );
         $this->assertEquals( "1", $aRec[0]["OXTYPE"] );
 
         $this->assertEquals( $sUserId, $aRec[1]["OXUSERID"] );
         $this->assertEquals( "test2@oxid-esales.com", $aRec[1]["OXEMAIL"] );
-        $this->assertEquals( date("Y-m-d"), $aRec[1]["OXDATE"] );
+        $this->assertEquals( "2015-10-11", $aRec[1]["OXDATE"] );
         $this->assertEquals( "1", $aRec[1]["OXPENDING"] );
         $this->assertEquals( "0", $aRec[1]["OXACCEPTED"] );
         $this->assertEquals( "1", $aRec[1]["OXTYPE"] );

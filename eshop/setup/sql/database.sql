@@ -1341,7 +1341,6 @@ CREATE TABLE `oxorder` (
   `OXCURRENCY` varchar(32) NOT NULL default '',
   `OXCURRATE` double NOT NULL default '0',
   `OXFOLDER` varchar(32) NOT NULL default '',
-  `OXPIDENT` varchar(128) NOT NULL default '',
   `OXTRANSID` varchar(64) NOT NULL default '',
   `OXPAYID` varchar(64) character set latin1 collate latin1_general_ci NOT NULL default '',
   `OXXID` varchar(64) NOT NULL default '',

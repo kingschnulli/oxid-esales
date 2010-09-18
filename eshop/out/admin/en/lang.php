@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 29634 2010-09-02 12:54:46Z vilma $
+ * @version   SVN: $Id: lang.php 29882 2010-09-17 08:52:37Z vilma $
  */
 
 /*
@@ -260,7 +260,6 @@ $aLang = array(
 'GENERAL_OUTOFBOUNDS'                           => 'out of bounds',
 'GENERAL_PASSWORD'                              => 'Password',
 'GENERAL_PAYCOST'                               => 'Charge Payment Method',
-'GENERAL_PIDENT'                                => 'ZIP',
 'GENERAL_PRICE'                                 => 'Price',
 'GENERAL_RETURN'                                => 'Revenue last year, last month, last week',
 'GENERAL_REVIEW'                                => 'Overview',
