@@ -19,7 +19,7 @@
  * @package   main
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseo.php 26071 2010-02-25 15:12:55Z sarunas $
+ * @version   SVN: $Id: oxseo.php 29905 2010-09-20 07:20:27Z alfonsas $
  */
 
 // mod_rewrite check
