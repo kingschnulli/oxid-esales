@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 28102 2010-06-02 14:23:19Z sarunas $
+ * @version   SVN: $Id: oxorderTest.php 29954 2010-09-23 14:08:00Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -489,7 +489,9 @@ class Unit_Core_oxorderTest extends OxidTestCase
 
         $iDiscount = $iTotalBrut - $iTotalProdBrutSum;
         $iDelCost  = 12.9;
-        $iPaycost  = round( ( ($iTotalProdBrutSum + $iDelCost) / 100 * 2 ) * -1, 2 );
+        //$iPaycost  = round( ( ($iTotalProdBrutSum + $iDelCost) / 100 * 2 ) * -1, 2 );
+        #2083 fix
+        $iPaycost = 0;
         $iTotalOrder = $iTotalProdBrutSum + $iDelCost + $iPaycost;
 
         // checking values

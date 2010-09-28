@@ -19,12 +19,17 @@
  * @package   main
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseo.php 29905 2010-09-20 07:20:27Z alfonsas $
+ * @version   SVN: $Id: oxseo.php 29951 2010-09-23 13:53:59Z alfonsas $
  */
 
 // mod_rewrite check
 if ( isset( $_REQUEST['mod_rewrite_module_is'] ) ) {
-    die( "mod_rewrite_".$_REQUEST['mod_rewrite_module_is'] );
+    $sMode = $_REQUEST['mod_rewrite_module_is'];
+    if ($sMode == 'on') {
+        die("mod_rewrite_on");
+    } else {
+        die("mod_rewrite_off");
+    }
 }
 
 /**

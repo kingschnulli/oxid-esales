@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategoryTest.php 29594 2010-08-31 11:39:45Z sarunas $
+ * @version   SVN: $Id: oxcategoryTest.php 29954 2010-09-23 14:08:00Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -370,6 +370,7 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
 
     public function testGetAttributeWithSort()
     {
+        //$this->_sCategory = 'testCat1';
         $myDB = oxDb::getDb();
         $myDB->Execute('insert into oxcategory2attribute (oxid, oxobjectid, oxattrid, oxsort) values ("test1","'.$this->_sCategory.'","'.$this->_sAttributeB.'", "111"), ("test2","'.$this->_sCategory.'","'.$this->_sAttributeC.'", "222")');
         $oObj = oxNew( "oxcategory");

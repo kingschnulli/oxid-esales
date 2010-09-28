@@ -1413,9 +1413,19 @@ class UnitUtf8_oxemailTest extends OxidTestCase
      */
     public function testClearSidFromBody()
     {
-        $this->_oEmail->setBody( 'testBody sid=123456789 blabla', true );
+            $sShopId = 'oxbaseshop';
 
-            $this->assertEquals( 'testBody sid=x&amp;shp=oxbaseshop blabla', $this->_oEmail->getBody() );
+        $this->_oEmail->setBody( 'testBody index.php?bonusid=111&sid=123456789 blabla', true );
+        $this->assertEquals( 'testBody index.php?bonusid=111&sid=x&amp;shp='.$sShopId.' blabla', $this->_oEmail->getBody() );
+
+        $this->_oEmail->setBody( 'testBody index.php?bonusid=111&force_sid=123456789 blabla', true );
+        $this->assertEquals( 'testBody index.php?bonusid=111&force_sid=x&amp;shp='.$sShopId.' blabla', $this->_oEmail->getBody() );
+
+        $this->_oEmail->setBody( 'testBody index.php?bonusid=111&admin_sid=123456789 blabla', true );
+        $this->assertEquals( 'testBody index.php?bonusid=111&admin_sid=x&amp;shp='.$sShopId.' blabla', $this->_oEmail->getBody() );
+
+        $this->_oEmail->setBody( 'testBody index.php?bonusid=111&force_admin_sid=123456789 blabla', true );
+        $this->assertEquals( 'testBody index.php?bonusid=111&force_admin_sid=x&amp;shp='.$sShopId.' blabla', $this->_oEmail->getBody() );
     }
 
     /*
@@ -1430,12 +1440,21 @@ class UnitUtf8_oxemailTest extends OxidTestCase
     /*
      * Test clearing sid from alt body
      */
-    public function testClearSidFromAltBody()
+        public function testClearSidFromAltBody()
     {
-        $this->_oEmail->setAltBody( 'testAltBody sid=123456789 blabla', true );
+            $sShopId = 'oxbaseshop';
 
+        $this->_oEmail->setAltBody( 'testAltBody index.php?bonusid=111&sid=123456789 blabla', true );
+        $this->assertEquals( 'testAltBody index.php?bonusid=111&sid=x&shp='.$sShopId.' blabla', $this->_oEmail->getAltBody() );
 
-            $this->assertEquals( 'testAltBody sid=x&shp=oxbaseshop blabla', $this->_oEmail->getAltBody() );
+        $this->_oEmail->setAltBody( 'testAltBody index.php?bonusid=111&force_sid=123456789 blabla', true );
+        $this->assertEquals( 'testAltBody index.php?bonusid=111&force_sid=x&shp='.$sShopId.' blabla', $this->_oEmail->getAltBody() );
+
+        $this->_oEmail->setAltBody( 'testAltBody index.php?bonusid=111&admin_sid=123456789 blabla', true );
+        $this->assertEquals( 'testAltBody index.php?bonusid=111&admin_sid=x&shp='.$sShopId.' blabla', $this->_oEmail->getAltBody() );
+
+        $this->_oEmail->setAltBody( 'testAltBody index.php?bonusid=111&force_admin_sid=123456789 blabla', true );
+        $this->assertEquals( 'testAltBody index.php?bonusid=111&force_admin_sid=x&shp='.$sShopId.' blabla', $this->_oEmail->getAltBody() );
     }
 
     /*

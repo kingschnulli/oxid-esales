@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstartTest.php 26941 2010-03-30 10:11:59Z sarunas $
+ * @version   SVN: $Id: oxstartTest.php 29936 2010-09-23 06:18:52Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -178,8 +178,6 @@ class Unit_Views_oxstartTest extends OxidTestCase
         $sRes = $oStart->render();
         $this->assertEquals('start.tpl', $sRes);
     }
-
-
 
 
 

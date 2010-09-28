@@ -251,8 +251,9 @@ class Invite extends oxUBase
         if ( $sUserId && is_array( $aRecEmail ) && count( $aRecEmail ) > 0 ) {
             //iserting statistics about invitation
             $sDate = oxUtilsDate::getInstance()->formatDBDate( date("Y-m-d"), true );
+            $aRecEmail = oxDb::getInstance()->quoteArray( $aRecEmail );
             foreach ( $aRecEmail as $sRecEmail ) {
-                $sSql = " INSERT INTO oxinvitations SET oxuserid = '$sUserId', oxemail = '$sRecEmail',  oxdate='$sDate', oxpending = '1', oxaccepted = '0', oxtype = '1' ";
+                $sSql = " INSERT INTO oxinvitations SET oxuserid = '$sUserId', oxemail = $sRecEmail,  oxdate='$sDate', oxpending = '1', oxaccepted = '0', oxtype = '1' ";
                 $oDb->execute( $sSql );
             }
         }

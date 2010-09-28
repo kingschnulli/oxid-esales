@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 28904 2010-07-21 08:56:35Z sarunas $
+ * @version   SVN: $Id: oxadminviewTest.php 29970 2010-09-24 12:25:11Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -120,7 +120,7 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
         $oAdminView->expects( $this->once() )->method( '_getCountryByCode' )->will( $this->returnValue( "testcountrycode" ) );
         $oAdminView->expects( $this->once() )->method( '_getShopVersionNr' )->will( $this->returnValue( "testshopversion" ) );
 
-        $sTestUrl = "testprotocol://admin.oxid-esales.com/$sPref/testshopversion/testcountrycode/testlangabbr/";
+        $sTestUrl = "testprotocol://admin.oxid-esales.com/$sPref/testshopversion/testcountrycode/en/";
         $this->assertEquals( $sTestUrl, $oAdminView->getServiceUrl( "testlangabbr" ) );
     }
 

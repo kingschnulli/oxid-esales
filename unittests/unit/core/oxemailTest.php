@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 28496 2010-06-21 14:01:13Z vilma $
+ * @version   SVN: $Id: oxemailTest.php 29935 2010-09-22 22:34:57Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1438,9 +1438,19 @@ class Unit_Core_oxemailTest extends OxidTestCase
      */
     public function testClearSidFromBody()
     {
-        $this->_oEmail->setBody( 'testBody sid=123456789 blabla', true );
+            $sShopId = 'oxbaseshop';
 
-            $this->assertEquals( 'testBody sid=x&amp;shp=oxbaseshop blabla', $this->_oEmail->getBody() );
+        $this->_oEmail->setBody( 'testBody index.php?bonusid=111&sid=123456789 blabla', true );
+        $this->assertEquals( 'testBody index.php?bonusid=111&sid=x&amp;shp='.$sShopId.' blabla', $this->_oEmail->getBody() );
+
+        $this->_oEmail->setBody( 'testBody index.php?bonusid=111&force_sid=123456789 blabla', true );
+        $this->assertEquals( 'testBody index.php?bonusid=111&force_sid=x&amp;shp='.$sShopId.' blabla', $this->_oEmail->getBody() );
+
+        $this->_oEmail->setBody( 'testBody index.php?bonusid=111&admin_sid=123456789 blabla', true );
+        $this->assertEquals( 'testBody index.php?bonusid=111&admin_sid=x&amp;shp='.$sShopId.' blabla', $this->_oEmail->getBody() );
+
+        $this->_oEmail->setBody( 'testBody index.php?bonusid=111&force_admin_sid=123456789 blabla', true );
+        $this->assertEquals( 'testBody index.php?bonusid=111&force_admin_sid=x&amp;shp='.$sShopId.' blabla', $this->_oEmail->getBody() );
     }
 
     /*
@@ -1457,10 +1467,19 @@ class Unit_Core_oxemailTest extends OxidTestCase
      */
     public function testClearSidFromAltBody()
     {
-        $this->_oEmail->setAltBody( 'testAltBody sid=123456789 blabla', true );
+            $sShopId = 'oxbaseshop';
 
+        $this->_oEmail->setAltBody( 'testAltBody index.php?bonusid=111&sid=123456789 blabla', true );
+        $this->assertEquals( 'testAltBody index.php?bonusid=111&sid=x&shp='.$sShopId.' blabla', $this->_oEmail->getAltBody() );
 
-            $this->assertEquals( 'testAltBody sid=x&shp=oxbaseshop blabla', $this->_oEmail->getAltBody() );
+        $this->_oEmail->setAltBody( 'testAltBody index.php?bonusid=111&force_sid=123456789 blabla', true );
+        $this->assertEquals( 'testAltBody index.php?bonusid=111&force_sid=x&shp='.$sShopId.' blabla', $this->_oEmail->getAltBody() );
+
+        $this->_oEmail->setAltBody( 'testAltBody index.php?bonusid=111&admin_sid=123456789 blabla', true );
+        $this->assertEquals( 'testAltBody index.php?bonusid=111&admin_sid=x&shp='.$sShopId.' blabla', $this->_oEmail->getAltBody() );
+
+        $this->_oEmail->setAltBody( 'testAltBody index.php?bonusid=111&force_admin_sid=123456789 blabla', true );
+        $this->assertEquals( 'testAltBody index.php?bonusid=111&force_admin_sid=x&shp='.$sShopId.' blabla', $this->_oEmail->getAltBody() );
     }
 
     /*

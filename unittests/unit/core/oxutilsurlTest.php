@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsurlTest.php 28421 2010-06-18 08:54:27Z sarunas $
+ * @version   SVN: $Id: oxutilsurlTest.php 29935 2010-09-22 22:34:57Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -54,13 +54,13 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( "sDefaultLang", 9 );
         $iLang = oxLang::getInstance()->getBaseLanguage();
 
-        $sExpUrl = "shop.com/index.php?param1=value1";
+        $sExpUrl = "shop.com/index.php?param1=value1&amp;bonusid=111";
 
 
         $sExpUrl .= "&amp;lang={$iLang}";
 
         $oUtils = new oxUtilsUrl();
-        $this->assertEquals( $sExpUrl, $oUtils->prepareCanonicalUrl( "shop.com/index.php?param1=value1&amp;sid=1234" ) );
+        $this->assertEquals( $sExpUrl, $oUtils->prepareCanonicalUrl( "shop.com/index.php?param1=value1&amp;bonusid=111&amp;sid=1234" ) );
     }
 
     /**
@@ -122,6 +122,10 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         $this->assertEquals('sdf?a&lang=1'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?force_sid=111&a&lang=1'));
         $this->assertEquals('sdf?a&amp;lang=1'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?force_sid=111&a&amp;lang=1'));
         $this->assertEquals('sdf?a&&amp;lang=3'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?force_sid=111&a&'));
+
+        $this->assertEquals('sdf?bonusid=111&amp;lang=3'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?bonusid=111'));
+        $this->assertEquals('sdf?a=1&bonusid=111&amp;lang=3'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?a=1&bonusid=111'));
+        $this->assertEquals('sdf?a=1&amp;bonusid=111&amp;&amp;lang=3'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?a=1&amp;bonusid=111&amp;force_admin_sid=111'));
 
         modConfig::getInstance()->setParameter('currency', 2);
         $this->assertEquals('sdf?lang=3&amp;cur=2'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf'));

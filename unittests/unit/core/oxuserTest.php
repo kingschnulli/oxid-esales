@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 29549 2010-08-27 13:08:11Z tomas $
+ * @version   SVN: $Id: oxuserTest.php 29968 2010-09-24 11:32:59Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
