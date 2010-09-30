@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 28209 2010-06-08 08:42:03Z arvydas $
+ * @version   SVN: $Id: details.php 30064 2010-09-29 14:31:24Z vilma $
  */
 
 /**
@@ -527,8 +527,7 @@ class Details extends oxUBase
             $this->_blCanRate = false;
             $myConfig = $this->getConfig();
 
-            if ( $myConfig->getConfigParam( 'bl_perfLoadReviews' ) &&
-                 $oUser = $this->getUser() ) {
+            if ( $oUser = $this->getUser() ) {
 
                 $oRating = oxNew( 'oxrating' );
                 $this->_blCanRate = $oRating->allowRating( $oUser->getId(), 'oxarticle', $this->getProduct()->getId() );

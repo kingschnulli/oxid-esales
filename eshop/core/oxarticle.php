@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 29757 2010-09-07 15:02:08Z tomas $
+ * @version   SVN: $Id: oxarticle.php 30064 2010-09-29 14:31:24Z vilma $
  */
 
 // defining supported link types
@@ -990,7 +990,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getArticleRatingAverage()
     {
-        return round( $this->oxarticles__oxrating->value, 1);
+        if ( $this->getConfig()->getConfigParam( 'bl_perfLoadReviews' ) ) {
+            return round( $this->oxarticles__oxrating->value, 1);
+        } else {
+            $this->oxarticles__oxratingcnt->setValue(0);
+            return 0;
+        }
     }
 
     /**
