@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: tagTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: tagTest.php 30110 2010-10-05 14:33:36Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -45,8 +45,11 @@ class Unit_Views_tagTest extends OxidTestCase
 
     public function testRender()
     {
+        $oArticleList = $this->getMock( "oxArticleList", array( "count" ) );
+        $oArticleList->expects( $this->any() )->method( 'count')->will( $this->returnValue(1) );
+        
         $oView = $this->getMock( "tag", array( "getArticleList", "getTitle", "getTemplateLocation", "getTag", "getPageNavigation", "getActiveCategory", "_processListArticles" ) );
-        $oView->expects( $this->atLeastOnce() )->method( 'getArticleList');
+        $oView->expects( $this->atLeastOnce() )->method( 'getArticleList')->will( $this->returnValue($oArticleList) );
         $oView->expects( $this->atLeastOnce() )->method( 'getTitle');
         $oView->expects( $this->atLeastOnce() )->method( 'getTemplateLocation');
         $oView->expects( $this->atLeastOnce() )->method( 'getTag');
@@ -56,6 +59,24 @@ class Unit_Views_tagTest extends OxidTestCase
 
         $this->assertEquals( "list.tpl", $oView->render() );
     }
+    
+    /**
+     * Testing if render method calls output of 404 error if articles list is empty 
+     */
+    public function testRender_noArticlesForTag()
+    {
+        $oUtils = $this->getMock('oxUtils', array('handlePageNotFoundError'));
+        $oUtils->expects( $this->once() )->method('handlePageNotFoundError');
+        oxTestModules::addModuleObject('oxUtils', $oUtils);        
+            
+        $oArticleList = $this->getMock( "oxArticleList", array( "count" ) );
+        $oArticleList->expects( $this->any() )->method( 'count')->will( $this->returnValue(0) );
+        
+        $oView = $this->getMock( "tag", array( "getArticleList" ) );
+        $oView->expects( $this->any() )->method( 'getArticleList')->will( $this->returnValue($oArticleList) );
+
+        $oView->render();
+    }    
 
     public function testGetAddUrlParams()
     {
