@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 27197 2010-04-13 14:59:58Z tomas $
+ * @version   SVN: $Id: oxlang.php 30222 2010-10-11 08:48:17Z alfonsas $
  */
 
 /**
@@ -538,7 +538,9 @@ class oxLang extends oxSuperCfg
 
         if ( !isset( $aLanguages[$iLang] ) && is_array( $aLanguages ) ) {
             $oLang = current( $aLanguages );
-            $iLang = $oLang->id;
+            if (isset($oLang->id)) {
+                $iLang = $oLang->id;
+            }
         }
 
         return $iLang;

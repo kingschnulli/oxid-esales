@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 30064 2010-09-29 14:31:24Z vilma $
+ * @version   SVN: $Id: oxarticle.php 30224 2010-10-11 08:57:31Z rimvydas.paskevicius $
  */
 
 // defining supported link types
@@ -533,8 +533,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 }
                 return;
                 break;
-            /*case 'oxarticles__oxnid':
-                return $this->getId();*/
+        }
+
+        //checking for zoom picture
+        if ( strpos($sName, "oxarticles__oxzoom") === 0 ) {
+            $this->_assignZoomPictureValues( $sName );
+            return $this->$sName;
         }
 
         $this->$sName = parent::__get($sName);
@@ -543,7 +547,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         //checking for picture information
-        if ($sName == "oxarticles__oxthumb" || $sName == "oxarticles__oxicon" || (strpos($sName, "oxarticles__oxpic") === 0 && $sName != "oxarticles__oxpicsgenerated") || strpos($sName, "oxarticles__oxzoom") === 0) {
+        if ( $sName == "oxarticles__oxthumb" || $sName == "oxarticles__oxicon" || (strpos($sName, "oxarticles__oxpic") === 0 && $sName != "oxarticles__oxpicsgenerated") ) {
             $this->_assignPictureValues( $sName );
             return $this->$sName;
         }
@@ -3763,17 +3767,51 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $this->_assignPictureValues( "oxarticles__oxthumb" );
 
         $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
+        
         for ( $i=1; $i<= $iPicCount; $i++ ) {
             $this->_assignPictureValues( "oxarticles__oxpic".$i );
         }
 
         if ( $iZoomPicCount = $myConfig->getConfigParam( 'iZoomPicCount' ) ) {
             for ( $i=1; $i<= $iZoomPicCount; $i++ ) {
-                $this->_assignPictureValues( "oxarticles__oxzoom".$i );
+                $this->_assignZoomPictureValues( "oxarticles__oxzoom".$i );
             }
         }
     }
 
+    /**
+     * Assigns picture values to article.
+     *
+     * @param string $sName field name
+     *
+     * @return null
+     */
+    protected function _assignZoomPictureValues( $sName='' )
+    {
+        if ( $this->isAdmin() ) {
+            return;
+        }
+
+        $sFieldName = substr_replace( $sName, "", 0, 12);
+
+        $aAllFields = $this->_getAllFields( true );
+        
+        if ( isset( $aAllFields[$sFieldName] ) ) {
+            $this->$sName = parent::__get( $sName );
+            $this->$sName->value;
+        }
+
+        $this->_assignParentFieldValue( $sName );
+        
+        $iIndex = (int) str_ireplace( "oxzoom", "", $sFieldName );
+
+        if ( isset($this->_aFieldNames[$sFieldName]) || isset($this->_aFieldNames["oxpic".$iIndex]) ) {
+            if ( $iIndex > 0 ) {
+                $this->$sName = new oxField( 'z' . $iIndex.'/'.$this->_getZoomPictureName($iIndex) );
+            }
+        }
+    }
+        
     /**
      * Assigns picture values to article.
      *
@@ -3802,7 +3840,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
-
         if ( strpos($sFieldName, "oxpic") === 0 && isset($this->_aFieldNames[$sFieldName] ) ) {
 
             $iIndex = (int) str_ireplace( "oxpic", "", $sFieldName );
@@ -3811,19 +3848,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 $this->$sName = new oxField( $iIndex . '/'.$this->_getPictureName($iIndex) );
                 $this->{$sName.'_ico'} = new oxField( $iIndex . '/'.$this->_getIconName($iIndex) );
                 return;
-            }
-        }
-
-        if ( strpos($sFieldName, "oxzoom") === 0 ) {
-
-            $iIndex = (int) str_ireplace( "oxzoom", "", $sFieldName );
-
-            // if oxzoom or oxpic field with same index is setted, loading field values
-            if ( isset($this->_aFieldNames[$sFieldName]) || isset($this->_aFieldNames["oxpic".$iIndex]) ) {
-                if ( $iIndex > 0 && $iIndex < $iPicCount ) {
-                    $this->$sName = new oxField( 'z' . $iIndex.'/'.$this->_getZoomPictureName($iIndex) );
-                    return;
-                }
             }
         }
     }

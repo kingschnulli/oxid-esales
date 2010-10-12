@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 30064 2010-09-29 14:31:24Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 30224 2010-10-11 08:57:31Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -4363,6 +4363,40 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle->UNITassignNotBuyableParent();
         $this->assertFalse( $this->oArticle->_blNotBuyableParent );
     }
+    
+    /**
+     * Test assign zoom picture values in non admin mode.
+     *
+     * @return null
+     */
+    public function testAssignZoomPictureValues_NotAdminMode()
+    {
+        $oArticle = $this->getMock( 'oxarticle', array( 'isAdmin', '_getThumbnailName', '_getZoomPictureName' ) );
+        $oArticle->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+        $oArticle->expects( $this->once() )->method( '_getZoomPictureName' )->will( $this->returnValue( "testZoom1.jpg" ) );
+
+        $oArticle->disableLazyLoading();
+
+        $oArticle->UNITassignZoomPictureValues( "oxarticles__oxzoom1" );
+
+        $this->assertEquals( "z1/testZoom1.jpg", $oArticle->oxarticles__oxzoom1->value );
+    }    
+
+    /**
+     * Test assign zoom picture values in admin mode.
+     *
+     * @return null
+     */
+    public function testAssignZoomPictureValues_adminMode()
+    {
+        $oArticle = $this->getMock( 'oxarticle', array( 'isAdmin', '_getThumbnailName', '_getZoomPictureName' ) );
+        $oArticle->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( true ) );
+        $oArticle->expects( $this->never() )->method( '_getZoomPictureName' );
+
+        $oArticle->disableLazyLoading();
+
+        $oArticle->UNITassignZoomPictureValues( "oxarticles__oxzoom1" );
+    }    
 
     /**
      * Test assign picture values in admin mode. No additional pictures fields proccessing
@@ -4997,12 +5031,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         $oArticle = new _oxArticle();
         $oArticle->load("1126");
-
+        $oArticle->zz = true;
+        
         $this->assertFalse(isset($oArticle->oxarticles__oxpic1));
         $this->assertFalse(isset($oArticle->oxarticles__oxzoom1));
 
         //first time access
-        $sPic = $oArticle->oxarticles__oxpic1->value;
+        $sPic     = $oArticle->oxarticles__oxpic1->value;
         $sZoomPic = $oArticle->oxarticles__oxzoom1->value;
 
         $this->assertTrue(isset($oArticle->oxarticles__oxpic1));
@@ -5647,9 +5682,10 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oParentArticle->oxarticles__oxthumb = new oxField('parent_thumb.jpg', oxField::T_RAW);
         $oParentArticle->oxarticles__oxzoom1 = new oxField('parent_zoom1.jpg', oxField::T_RAW);
 
-        $oVarArticle = $this->getMock('oxarticle', array( 'getParentArticle', '_hasMasterImage' ) );
+        $oVarArticle = $this->getMock('oxarticle', array( 'getParentArticle', '_hasMasterImage', '_assignZoomPictureValues' ) );
         $oVarArticle->expects( $this->any() )->method( 'getParentArticle' )->will( $this->returnValue( $oParentArticle ) );
         $oVarArticle->expects( $this->any() )->method( '_hasMasterImage' )->will( $this->returnValue( false ) );
+        $oVarArticle->expects( $this->any() )->method( '_assignZoomPictureValues' )->will( $this->returnValue( new oxField() ) );
 
         $oVarArticle->UNITassignParentFieldValue( "oxicon" );
         $this->assertEquals( "parent_ico.jpg", $oVarArticle->oxarticles__oxicon->value);
@@ -5657,7 +5693,9 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oVarArticle->UNITassignParentFieldValue( "oxthumb" );
         $this->assertEquals( "parent_thumb.jpg", $oVarArticle->oxarticles__oxthumb->value);
 
+        $oVarArticle->rrr = 1;
         $oVarArticle->UNITassignParentFieldValue( "oxzoom1" );
+
         $this->assertEquals( "parent_zoom1.jpg", $oVarArticle->oxarticles__oxzoom1->value);
     }
 

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 29791 2010-09-10 13:23:35Z vilma $
+ * @version   SVN: $Id: oxconfig.php 30222 2010-10-11 08:48:17Z alfonsas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1744,7 +1744,7 @@ class oxConfig extends oxSuperCfg
     }
 
     /**
-     * Returns shops version number (eg. '4.0.0.0')
+     * Returns shops version number (eg. '4.4.2')
      *
      * @return string
      */
