@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 29882 2010-09-17 08:52:37Z vilma $
+ * @version   SVN: $Id: lang.php 30302 2010-10-13 14:00:14Z vilma $
  */
 
 /*
@@ -1471,6 +1471,7 @@ $aLang = array(
 'SYSREQ_ZEND_PLATFORM_OR_SERVER'                => 'Zend Platform or Zend Server installed',
 'SYSREQ_MB_STRING'                              => 'mbstring',
 'SYSREQ_CURL'                                   => 'cURL',
+'SYSREQ_OPEN_SSL'                               => 'OpenSSL',
 'SYSREQ_UNICODE_SUPPORT'                        => 'UTF-8 support',
 'SYSREQ_MEMORY_LIMIT'                           => 'PHP Memory limit (min. 14MB, 30MB recommended)',
 'SYSREQ_DESCRIPTION_PASS'                       => 'System health is good.',

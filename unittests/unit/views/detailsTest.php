@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 30064 2010-09-29 14:31:24Z vilma $
+ * @version   SVN: $Id: detailsTest.php 30346 2010-10-15 14:13:28Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1058,31 +1058,6 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testSaveReview()
     {
-        modConfig::setParameter( 'rvw_txt', 'review test' );
-        modConfig::setParameter( 'artrating', '4' );
-        modConfig::setParameter( 'anid', 'test' );
-        modSession::getInstance()->setVar( 'usr', 'oxdefaultadmin' );
-        $oProduct = $this->getMock( 'oxarticle', array( 'getId', 'addToRatingAverage' ) );
-        $oProduct->expects( $this->any() )->method( 'getId')->will( $this->returnValue( 'test' ) );
-        $oProduct->expects( $this->any() )->method( 'addToRatingAverage');
-
-        $oDetails = $this->getMock( 'details', array( 'getProduct', 'canAcceptFormData' ) );
-        $oDetails->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
-        $oDetails->expects( $this->any() )->method( 'canAcceptFormData')->will( $this->returnValue( true ) );
-        $oDetails->saveReview();
-
-        $this->assertEquals( "test", oxDb::getDB()->getOne('select oxobjectid from oxreviews where oxobjectid = "test"') );
-        $this->assertEquals( "test", oxDb::getDB()->getOne('select oxobjectid from oxratings where oxobjectid = "test"') );
-    }
-
-    /**
-     * Test review saving.
-     *
-     * @return null
-     */
-    public function testSaveReviewIfReviewLoadDisabled()
-    {
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadReviews', false );
         modConfig::setParameter( 'rvw_txt', 'review test' );
         modConfig::setParameter( 'artrating', '4' );
         modConfig::setParameter( 'anid', 'test' );

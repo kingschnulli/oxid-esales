@@ -93,6 +93,7 @@ class oxPictureHandler extends oxSuperCfg
                         // main product picture
                         $sType = "P" . $iNr . "@oxarticles__oxpic" . $iNr;
                         $aFiles['myfile']['name'][$sType] = $sNewName;
+                        //$aFiles['myfile']['name'][$sType] = $oObject->{"oxarticles__oxpic".$iNr}->value;;
                         $aFiles['myfile']['tmp_name'][$sType] = $sMasterPictureSource;
 
                         // zoom picture
@@ -111,11 +112,13 @@ class oxPictureHandler extends oxSuperCfg
                             $sType = "TH@oxarticles__oxthumb";
                             $aFiles['myfile']['name'][$sType] = $sNewName;
                             $aFiles['myfile']['tmp_name'][$sType] = $sMasterPictureSource;
+                           
 
                             // Icon
                             $sType = "ICO@oxarticles__oxicon";
                             $aFiles['myfile']['name'][$sType] = $sNewName;
                             $aFiles['myfile']['tmp_name'][$sType] = $sMasterPictureSource;
+                            
 
                             $oUtilsFile->processFiles( null, $aFiles, true, false );
                         }

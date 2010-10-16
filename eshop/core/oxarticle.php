@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 30224 2010-10-11 08:57:31Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxarticle.php 30346 2010-10-15 14:13:28Z vilma $
  */
 
 // defining supported link types
@@ -994,12 +994,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getArticleRatingAverage()
     {
-        if ( $this->getConfig()->getConfigParam( 'bl_perfLoadReviews' ) ) {
-            return round( $this->oxarticles__oxrating->value, 1);
-        } else {
-            $this->oxarticles__oxratingcnt->setValue(0);
-            return 0;
-        }
+        return round( $this->oxarticles__oxrating->value, 1);
     }
 
     /**
@@ -2550,19 +2545,26 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function addTag($sTag)
     {
+        $oDb = oxDb::getDb();
         $sTag = mysql_real_escape_string($sTag);
 
         $oTagCloud = oxNew('oxtagcloud');
         $oTagCloud->resetTagCache();
         $sTag = $oTagCloud->prepareTags($sTag);
         $sTagSeparator = $this->getConfig()->getConfigParam('sTagSeparator');
-        $sTailTag = $sTagSeparator.$sTag;
+        
+        $sField = "oxartextends.OXTAGS" . oxLang::getInstance()->getLanguageTag();
 
-        $sField = "oxartextends.OXTAGS".oxLang::getInstance()->getLanguageTag();
+        if ( $oDb->getOne( "select $sField from oxartextends where oxartextends.OXID = '{$this->getId()}'" ) ) {
+            $sTailTag = $sTagSeparator . $sTag;
+        } else {
+            $sTailTag = $sTag;
+        }
+
         $sQ = "insert into oxartextends (oxartextends.OXID, $sField) values ('".$this->getId()."', '{$sTag}')
                        ON DUPLICATE KEY update $sField = CONCAT(TRIM($sField), '$sTailTag') ";
 
-        return oxDb::getDb()->Execute($sQ);
+        return $oDb->Execute($sQ);
     }
 
     /**
@@ -3767,7 +3769,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $this->_assignPictureValues( "oxarticles__oxthumb" );
 
         $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
-        
+
         for ( $i=1; $i<= $iPicCount; $i++ ) {
             $this->_assignPictureValues( "oxarticles__oxpic".$i );
         }
@@ -3795,14 +3797,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $sFieldName = substr_replace( $sName, "", 0, 12);
 
         $aAllFields = $this->_getAllFields( true );
-        
+
         if ( isset( $aAllFields[$sFieldName] ) ) {
             $this->$sName = parent::__get( $sName );
             $this->$sName->value;
         }
 
         $this->_assignParentFieldValue( $sName );
-        
+
         $iIndex = (int) str_ireplace( "oxzoom", "", $sFieldName );
 
         if ( isset($this->_aFieldNames[$sFieldName]) || isset($this->_aFieldNames["oxpic".$iIndex]) ) {
@@ -3811,7 +3813,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             }
         }
     }
-        
+
     /**
      * Assigns picture values to article.
      *

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 29758 2010-09-07 15:58:06Z tomas $
+ * @version   SVN: $Id: oxarticlelistTest.php 30344 2010-10-15 13:21:28Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1937,7 +1937,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
 
         $sQ = "select yyy from oxartextends inner join xxx on ".
               "xxx.oxid = oxartextends.oxid where match ( oxartextends.oxtags_5 ) ".
-              "against( 'zzz_' IN BOOLEAN MODE ) and 1";
+              "against( ".oxDb::getDb()->quote('"zzz_"')." IN BOOLEAN MODE ) and 1";
 
         $oBaseObject = $this->getMock( 'oxArticle', array( 'getViewName', 'getSelectFields', 'getSqlActiveSnippet' ) );
         $oBaseObject->expects( $this->once() )->method( 'getViewName' )->will( $this->returnValue( 'xxx' ) );

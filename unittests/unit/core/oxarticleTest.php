@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 30224 2010-10-11 08:57:31Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxarticleTest.php 30346 2010-10-15 14:13:28Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1577,19 +1577,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle->oxarticles__oxrating = new oxField(3.52345, oxField::T_RAW);
 
         $this->assertEquals( 3.5, $this->oArticle->getArticleRatingAverage());
-    }
-
-    /**
-     * Test get article rating average.
-     *
-     * @return null
-     */
-    public function testGetArticleRatingAverageReviewsDisabled()
-    {
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadReviews', false );
-        $this->oArticle->oxarticles__oxrating = new oxField(3.52345, oxField::T_RAW);
-
-        $this->assertEquals( 0, $this->oArticle->getArticleRatingAverage());
     }
 
     /**

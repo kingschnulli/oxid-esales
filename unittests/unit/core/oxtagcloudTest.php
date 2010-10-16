@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloudTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxtagcloudTest.php 30339 2010-10-15 12:32:54Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -472,6 +472,9 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $this->assertEquals('t t_', $oTagCloud->prepareTags('t t'));
         $this->assertEquals('', $oTagCloud->prepareTags(' '));
         $this->assertEquals('tag1,ta__,tag2,t___', $oTagCloud->prepareTags('tag1,,,,ta, tag2,t'));
+        $this->assertEquals('bar_-set_', $oTagCloud->prepareTags('bar-set'));
+        $this->assertEquals('bar_-sett', $oTagCloud->prepareTags('bar-sett'));
+        $this->assertEquals('barr-sett', $oTagCloud->prepareTags('barr-sett'));
     }
 
     public function testTrimTags()
@@ -484,9 +487,12 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $this->assertEquals('TAG1,tag2', $oTagCloud->trimTags('TAG1__,tag2'));
         $this->assertEquals('ta', $oTagCloud->trimTags('ta__'));
         $this->assertEquals('t,t', $oTagCloud->trimTags('t___,t____'));
-        $this->assertEquals('', $oTagCloud->trimTags('____ '));
+        $this->assertEquals('____', $oTagCloud->trimTags('____'));
         $this->assertEquals('tag1,ta,tag2,t', $oTagCloud->trimTags('tag1, ta__,tag2 ,t___'));
         $this->assertEquals('tag1 ta__ tag2 t', $oTagCloud->trimTags('tag1 ta__ tag2 t___'));
+        $this->assertEquals('bar-set', $oTagCloud->trimTags('bar_-set_'));
+        $this->assertEquals('barr-set', $oTagCloud->trimTags('barr-set_'));
+        $this->assertEquals('barr', $oTagCloud->trimTags(',barr,'));
     }
 
     public function testTagCache()
