@@ -175,7 +175,7 @@ class oxPictureHandler extends oxSuperCfg
 
         $aDelPics = array();
         $sAbsDynImageDir = $myConfig->getAbsDynImageDir();
-        $sMasterImage = $oObject->{"oxarticles__oxpic".$iIndex}->value;
+        $sMasterImage = basename( $oObject->{"oxarticles__oxpic".$iIndex}->value );
 
         if ( !$sMasterImage || $sMasterImage == "nopic.jpg" ) {
             return;

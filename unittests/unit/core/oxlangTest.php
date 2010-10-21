@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 29183 2010-07-30 10:02:08Z arvydas $
+ * @version   SVN: $Id: oxlangTest.php 30436 2010-10-20 15:18:37Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -392,15 +392,30 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oLang = new oxLang();
 
         $this->assertEquals( 1, $oLang->getBaseLanguage() );
-
         modConfig::setParameter( 'changelang', null );
         modConfig::setParameter( 'lang', null );
         modConfig::setParameter( 'tpllanguage', null );
         modConfig::setParameter( 'language', null );
+        modConfig::getInstance()->setConfigParam( 'sDefaultLang', 1 );
         $oLang = new oxLang();
 
-        modConfig::getInstance()->setConfigParam( 'sDefaultLang', 1 );
+        $this->assertEquals( 1, $oLang->getBaseLanguage() );
 
+
+        modConfig::getInstance()->cleanup();
+        modConfig::setParameter( 'changelang', null );
+        modConfig::setParameter( 'lang', null );
+        modConfig::setParameter( 'tpllanguage', null );
+        modConfig::setParameter( 'language', null );
+        modConfig::getInstance()->setConfigParam( 'aLanguageURLs', "" );
+        modConfig::getInstance()->setConfigParam( 'sDefaultLang', null );
+
+        $oConfig = $this->getMock( 'modConfig', array( 'getShopConfVar' ) );
+        $oConfig->expects( $this->once() )->method( 'getShopConfVar')->with( $this->equalTo('sDefaultLang'))->will( $this->returnValue( 1 ) );
+
+        $oLang = $this->getMock( 'oxLang', array( 'getConfig' ) );
+        $oLang->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+        
         $this->assertEquals( 1, $oLang->getBaseLanguage() );
     }
 
@@ -966,6 +981,17 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $this->assertEquals( 0, $oLang->validateLanguage( 'xxx' ) );
     }
 
+    /**
+     * Testing validating language id - empty language array
+     */
+    public function testValidateLanguage_emptyLangArray()
+    {
+        $oLang = $this->getMock( 'oxLang', array( 'getLanguageArray' ) );
+        $oLang->expects( $this->once() )->method( 'getLanguageArray')->will( $this->returnValue( array() ) );
+
+        $this->assertEquals( 0, $oLang->validateLanguage( '1' ) );
+    }
+    
     public function testGetLanguageNames()
     {
         $this->assertEquals(array(0=>'Deutsch',1=>'English'), oxLang::getInstance()->getLanguageNames());
@@ -1327,4 +1353,5 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $this->assertEquals( array( $oLt, $oLv, $oDe, $oEn     ), $oLang->getAdminTplLanguageArray() );
     }
 }
+
 

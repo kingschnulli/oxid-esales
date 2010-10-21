@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 30302 2010-10-13 14:00:14Z vilma $
+ * @version   SVN: $Id: lang.php 30393 2010-10-19 12:41:04Z vilma $
  */
 
 $aLang = array(
@@ -92,6 +92,7 @@ $aLang = array(
 'MOD_MB_STRING'                                   => 'mbstring',
 'MOD_CURL'                                        => 'cURL',
 'MOD_OPEN_SSL'                                    => 'OpenSSL',
+'MOD_SOAP'                                        => 'SOAP',
 'MOD_UNICODE_SUPPORT'                             => 'UTF-8 support',
 
 'STEP_0_ERROR_TEXT'                               => 'Your system does not fit system requirements',

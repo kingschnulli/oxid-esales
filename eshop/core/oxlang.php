@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 30222 2010-10-11 08:48:17Z alfonsas $
+ * @version   SVN: $Id: oxlang.php 30436 2010-10-20 15:18:37Z rimvydas.paskevicius $
  */
 
 /**
@@ -176,6 +176,10 @@ class oxLang extends oxSuperCfg
 
             if ( is_null( $this->_iBaseLanguageId ) ) {
                 $this->_iBaseLanguageId = $myConfig->getConfigParam( 'sDefaultLang' );
+            }
+
+            if ( is_null( $this->_iBaseLanguageId ) ) {
+                $this->_iBaseLanguageId = $myConfig->getShopConfVar( 'sDefaultLang' );
             }
 
             $this->_iBaseLanguageId = (int) $this->_iBaseLanguageId;
@@ -536,10 +540,14 @@ class oxLang extends oxSuperCfg
         // checking if this language is valid
         $aLanguages = $this->getLanguageArray();
 
-        if ( !isset( $aLanguages[$iLang] ) && is_array( $aLanguages ) ) {
-            $oLang = current( $aLanguages );
-            if (isset($oLang->id)) {
-                $iLang = $oLang->id;
+        if ( is_array( $aLanguages ) && !isset( $aLanguages[$iLang] ) ) {
+            if ( !empty( $aLanguages ) ) {    
+                $oLang = current( $aLanguages );
+                if (isset($oLang->id)) {
+                    $iLang = $oLang->id;
+                }
+            } else {
+                $iLang = 0;
             }
         }
 

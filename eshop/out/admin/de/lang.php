@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 30302 2010-10-13 14:00:14Z vilma $
+ * @version   SVN: $Id: lang.php 30403 2010-10-19 14:57:37Z arvydas $
  */
 
 $sLangName  = 'Deutsch';
@@ -1466,6 +1466,7 @@ $aLang = array(
 'SYSREQ_MB_STRING'                              => 'mbstring',
 'SYSREQ_CURL'                                   => 'cURL',
 'SYSREQ_OPEN_SSL'                               => 'OpenSSL',
+'SYSREQ_SOAP'                                   => 'SOAP',
 'SYSREQ_UNICODE_SUPPORT'                        => 'UTF-8 Unterstützung',
 'SYSREQ_MEMORY_LIMIT'                           => 'PHP Memory limit (min. 14MB, 30MB empfohlen)',
 'SYSREQ_DESCRIPTION_PASS'                       => 'Erfüllt.',
@@ -1755,6 +1756,7 @@ $aLang = array(
 'mxwrapping'                                    => 'Geschenkverpackung',
 'mxlooknfeel'                                   => 'Look&Feel',
 'mxdynscreenlocal'                              => 'General information',
+'mxoxexchange'                                  => 'OXID eXchange',
 'mxnewsletter'                                  => 'Newsletter',
 'mxorderovw'                                    => 'Bestellübersicht',
 'mxpacklist'                                    => 'Packliste',

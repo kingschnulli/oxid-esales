@@ -414,6 +414,36 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
     }
 
     /**
+     * Testing deleting article master picture uses basename of master picture filename
+     */
+    public function testDeleteArticleMasterPicture_usesBasename()
+    {
+        $sAbsImageDir = oxConfig::getInstance()->getAbsDynImageDir();
+
+        $aDelPics[0] = array("sField"    => "oxpic1",
+                            "sDir"      => "master/1/",
+                            "sFileName" => "testPic1.jpg");
+
+        //test article
+        $oArticle = new oxArticle();
+        $oArticle->oxarticles__oxpic1 = new oxField( "1/testPic1.jpg" );
+
+        // testing functions calls
+        $oUtilsPic = $this->getMock( 'oxUtilsPic', array( 'safePictureDelete' ) );
+        $oUtilsPic->expects( $this->at( 0 ) )->method( 'safePictureDelete' )->with( $this->equalTo( $aDelPics[0]["sFileName"] ), $this->equalTo( $sAbsImageDir.$aDelPics[0]["sDir"] ), $this->equalTo( "oxarticles" ), $this->equalTo( $aDelPics[0]["sField"] ) );
+
+        modInstances::addMod( "oxUtilsPic", $oUtilsPic );
+
+        $oPicHandler = $this->getMock( 'oxPictureHandler', array( 'getZoomName', 'getMainIconName', 'getThumbName' ) );
+        $oPicHandler->expects( $this->any() )->method( 'getZoomName' )->will( $this->returnValue( "testZoomPic1.jpg" ) );
+        $oPicHandler->expects( $this->any() )->method( 'getMainIconName' )->will( $this->returnValue( "testIco1.jpg" ) );
+        $oPicHandler->expects( $this->any() )->method( 'getThumbName' )->will( $this->returnValue( "testThumb1.jpg" ) );
+
+        $oPicHandler->deleteArticleMasterPicture( $oArticle, 1, true );
+    }
+
+
+    /**
      * Testing deleting article main icon
      */
     public function testDeleteMainIcon()
