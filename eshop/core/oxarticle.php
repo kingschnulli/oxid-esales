@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 30346 2010-10-15 14:13:28Z vilma $
+ * @version   SVN: $Id: oxarticle.php 30455 2010-10-21 12:14:56Z vilma $
  */
 
 // defining supported link types
@@ -365,7 +365,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                                              'oxarticles__oxtimestamp',
                                              'oxarticles__oxnid',
                                              'oxarticles__oxid',
-                                             'oxarticles__oxparentid');
+                                             'oxarticles__oxparentid',
+                                             'oxarticles__oxpicsgenerated');
 
     /**
      * Override certain parent fields to variant
@@ -2552,7 +2553,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $oTagCloud->resetTagCache();
         $sTag = $oTagCloud->prepareTags($sTag);
         $sTagSeparator = $this->getConfig()->getConfigParam('sTagSeparator');
-        
+
         $sField = "oxartextends.OXTAGS" . oxLang::getInstance()->getLanguageTag();
 
         if ( $oDb->getOne( "select $sField from oxartextends where oxartextends.OXID = '{$this->getId()}'" ) ) {
@@ -4539,8 +4540,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function updateAmountOfGeneratedPictures( $iTotalGenerated )
     {
-        $this->oxarticles__oxpicsgenerated = new oxField( $iTotalGenerated );
-        $this->save();
+        $oDb = oxDb::getDb();
+        $sIdQuoted = $oDb->quote($this->getId());
+
+        $sQ = 'update oxarticles set oxpicsgenerated = '.$iTotalGenerated.' where oxid = '.$sIdQuoted;
+        $oDb->execute( $sQ );
     }
 
     /**
@@ -4572,6 +4576,10 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $sPicName = basename($this->{"oxarticles__oxpic" . $iIndex}->value);
 
         if ( $sPicName == "nopic.jpg" ) {
+            return false;
+        }
+
+        if ( $this->isVariant() && $this->getParentArticle()->{"oxarticles__oxpic".$iIndex}->value == $this->{"oxarticles__oxpic".$iIndex}->value ) {
             return false;
         }
 

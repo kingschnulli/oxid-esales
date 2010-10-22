@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 30346 2010-10-15 14:13:28Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 30445 2010-10-21 07:56:57Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -4350,7 +4350,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle->UNITassignNotBuyableParent();
         $this->assertFalse( $this->oArticle->_blNotBuyableParent );
     }
-    
+
     /**
      * Test assign zoom picture values in non admin mode.
      *
@@ -4367,7 +4367,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->UNITassignZoomPictureValues( "oxarticles__oxzoom1" );
 
         $this->assertEquals( "z1/testZoom1.jpg", $oArticle->oxarticles__oxzoom1->value );
-    }    
+    }
 
     /**
      * Test assign zoom picture values in admin mode.
@@ -4383,7 +4383,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->disableLazyLoading();
 
         $oArticle->UNITassignZoomPictureValues( "oxarticles__oxzoom1" );
-    }    
+    }
 
     /**
      * Test assign picture values in admin mode. No additional pictures fields proccessing
@@ -5019,7 +5019,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle = new _oxArticle();
         $oArticle->load("1126");
         $oArticle->zz = true;
-        
+
         $this->assertFalse(isset($oArticle->oxarticles__oxpic1));
         $this->assertFalse(isset($oArticle->oxarticles__oxzoom1));
 
@@ -6969,8 +6969,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle->oxarticles__oxpicsgenerated = new oxField( 0 );
         $this->oArticle->updateAmountOfGeneratedPictures( 3 );
 
-        $this->assertEquals( 3, $this->oArticle->oxarticles__oxpicsgenerated->value );
-
         $sQ = "SELECT oxpicsgenerated FROM oxarticles WHERE oxid = '".$this->oArticle->getId()."'";
         $this->assertEquals( 3, oxDb::getDb()->getOne($sQ) );
     }
@@ -7042,6 +7040,30 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $this->assertTrue( $oArticle->UNIThasMasterImage( 1 ) );
         $this->assertTrue( $oArticle->UNIThasMasterImage( 2 ) );
+    }
+
+    /**
+     * Test checking if variant article has upladed master picture
+     *
+     * @return null
+     */
+    public function testHasMasterImage_IfParentHasImage()
+    {
+        $oConfig = $this->getMock( "oxconfig", array( "getMasterPicturePath" ) );
+        $oConfig->expects( $this->any() )->method( 'getMasterPicturePath' )->will( $this->returnValue( true ) );
+
+        $oArticle = $this->getProxyClass( "oxarticle" );
+        $oArticle->setConfig( $oConfig );
+        $oArticle->oxarticles__oxpic1 = new oxField( 'testPic1.jpg', oxField::T_RAW );
+
+        $this->getProxyClass( "oxarticle" );
+        $oArticle2 = $this->getMock( "oxarticlePROXY", array( "isVariant", "getParentArticle" ) );
+        $oArticle2->expects( $this->any() )->method( 'isVariant' )->will( $this->returnValue( true ) );
+        $oArticle2->expects( $this->any() )->method( 'getParentArticle' )->will( $this->returnValue( $oArticle ) );
+        $oArticle2->setConfig( $oConfig );
+        $oArticle2->oxarticles__oxpic1 = new oxField( 'testPic1.jpg' );
+
+        $this->assertFalse( $oArticle2->UNIThasMasterImage( 1 ) );
     }
 
     /**

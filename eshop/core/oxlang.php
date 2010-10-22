@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 30436 2010-10-20 15:18:37Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxlang.php 30457 2010-10-21 12:31:49Z rimvydas.paskevicius $
  */
 
 /**
@@ -547,7 +547,7 @@ class oxLang extends oxSuperCfg
                     $iLang = $oLang->id;
                 }
             } else {
-                $iLang = 0;
+               return $this->getConfig()->getShopConfVar( 'sDefaultLang' );
             }
         }
 
