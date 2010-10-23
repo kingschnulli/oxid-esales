@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 30457 2010-10-21 12:31:49Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxlang.php 30482 2010-10-22 08:59:38Z rimvydas.paskevicius $
  */
 
 /**
@@ -175,10 +175,6 @@ class oxLang extends oxSuperCfg
             }
 
             if ( is_null( $this->_iBaseLanguageId ) ) {
-                $this->_iBaseLanguageId = $myConfig->getConfigParam( 'sDefaultLang' );
-            }
-
-            if ( is_null( $this->_iBaseLanguageId ) ) {
                 $this->_iBaseLanguageId = $myConfig->getShopConfVar( 'sDefaultLang' );
             }
 
@@ -270,7 +266,7 @@ class oxLang extends oxSuperCfg
      * Returns array of available languages.
      *
      * @param integer $iLanguage    Number if current language (default null)
-     * @param bool    $blOnlyActive load only current language or all
+     * @param bool    $blOnlyActive load only active languages
      * @param bool    $blSort       enable sorting or not
      *
      * @return array
@@ -286,6 +282,15 @@ class oxLang extends oxSuperCfg
         $aLanguages = array();
         $aConfLanguages = $myConfig->getConfigParam( 'aLanguages' );
         $aLangParams    = $myConfig->getConfigParam( 'aLanguageParams' );
+
+        // if languages not yet loaded in config, getting them directly from DB
+        if ( empty($aConfLanguages) ) {
+            $aConfLanguages = $myConfig->getShopConfVar( 'aLanguages' );
+        }
+
+        if ( empty($aLangParams) ) {
+            $aLangParams = $myConfig->getShopConfVar( 'aLanguageParams' );
+        }
 
         if ( is_array( $aConfLanguages ) ) {
             $i = 0;

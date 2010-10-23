@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 30436 2010-10-20 15:18:37Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxlangTest.php 30482 2010-10-22 08:59:38Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -367,6 +367,7 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oLang->resetBaseLanguage();
         $this->assertEquals( 1, $oLang->getBaseLanguage() );
     }
+    
     /**
      * Testing getBaseLanguage() - testing if all request given parameters are used
      */
@@ -390,28 +391,18 @@ class Unit_Core_oxLangTest extends OxidTestCase
         modConfig::setParameter( 'tpllanguage', null );
         modConfig::setParameter( 'language', 1 );
         $oLang = new oxLang();
-
+        
         $this->assertEquals( 1, $oLang->getBaseLanguage() );
-        modConfig::setParameter( 'changelang', null );
-        modConfig::setParameter( 'lang', null );
-        modConfig::setParameter( 'tpllanguage', null );
-        modConfig::setParameter( 'language', null );
-        modConfig::getInstance()->setConfigParam( 'sDefaultLang', 1 );
-        $oLang = new oxLang();
+    }
 
-        $this->assertEquals( 1, $oLang->getBaseLanguage() );
-
-
-        modConfig::getInstance()->cleanup();
-        modConfig::setParameter( 'changelang', null );
-        modConfig::setParameter( 'lang', null );
-        modConfig::setParameter( 'tpllanguage', null );
-        modConfig::setParameter( 'language', null );
-        modConfig::getInstance()->setConfigParam( 'aLanguageURLs', "" );
-        modConfig::getInstance()->setConfigParam( 'sDefaultLang', null );
-
-        $oConfig = $this->getMock( 'modConfig', array( 'getShopConfVar' ) );
+    /**
+     * Testing getBaseLanguage() - testing getting default language value
+     */
+    public function testGetBaseLanguage_getDefaultLang()
+    {
+        $oConfig = $this->getMock( 'modConfig', array( 'getShopConfVar', 'isCurrentUrl' ) );
         $oConfig->expects( $this->once() )->method( 'getShopConfVar')->with( $this->equalTo('sDefaultLang'))->will( $this->returnValue( 1 ) );
+        $oConfig->expects( $this->any() )->method( 'isCurrentUrl')->will( $this->returnValue( false ) );
 
         $oLang = $this->getMock( 'oxLang', array( 'getConfig' ) );
         $oLang->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );

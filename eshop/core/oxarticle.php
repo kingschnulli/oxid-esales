@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 30455 2010-10-21 12:14:56Z vilma $
+ * @version   SVN: $Id: oxarticle.php 30485 2010-10-22 11:02:12Z vilma $
  */
 
 // defining supported link types
@@ -365,8 +365,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                                              'oxarticles__oxtimestamp',
                                              'oxarticles__oxnid',
                                              'oxarticles__oxid',
-                                             'oxarticles__oxparentid',
-                                             'oxarticles__oxpicsgenerated');
+                                             'oxarticles__oxparentid');
 
     /**
      * Override certain parent fields to variant
@@ -3675,14 +3674,17 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 }
             } elseif ( stristr($sCopyFieldName, '_oxzoom') ) {
                 // for zoom images checking master image with specified index
-                $iIndex = (int) str_ireplace( "oxzoom", "", $sFieldName );
-                if ( $this->_isFieldEmpty( $sCopyFieldName ) && !$this->_hasMasterImage( $iIndex ) ) {
+                // assign from parent only if no pictures to variant are added
+                $iIndex = (int) str_ireplace( "oxarticles__oxzoom", "", $sFieldName );
+                if ( $this->_isFieldEmpty( $sCopyFieldName ) && !$this->_hasMasterImage( $iIndex ) && !$this->_hasMasterImage( 1 ) ) {
                     $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
                 }
+            } elseif ( stristr($sCopyFieldName, '_oxpicsgenerated') && $this->{$sCopyFieldName}->value == 0 ) {
+                // if no pics generated for variants, load all from
+                $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
             } elseif ($this->_isFieldEmpty($sCopyFieldName) || in_array( $sCopyFieldName, $this->_aCopyParentField ) ) {
                 $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
             }
-
         }
     }
 
@@ -4540,6 +4542,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function updateAmountOfGeneratedPictures( $iTotalGenerated )
     {
+        $this->oxarticles__oxpicsgenerated = new oxField( $iTotalGenerated );
         $oDb = oxDb::getDb();
         $sIdQuoted = $oDb->quote($this->getId());
 
@@ -4578,7 +4581,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         if ( $sPicName == "nopic.jpg" ) {
             return false;
         }
-
         if ( $this->isVariant() && $this->getParentArticle()->{"oxarticles__oxpic".$iIndex}->value == $this->{"oxarticles__oxpic".$iIndex}->value ) {
             return false;
         }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 30445 2010-10-21 07:56:57Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 30486 2010-10-22 11:21:46Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -5654,6 +5654,41 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oVarArticle->UNITassignParentFieldValue( "oxzoom1" );
         $this->assertEquals( "var_zoom1.jpg", $oVarArticle->oxarticles__oxzoom1->value);
+    }
+
+    /**
+     * Test assign parent field value - when variant has his own thumbnail, icon
+     * and zoom picture.
+     *
+     * @return null
+     */
+    public function testAssignParentFieldValue_variantHasOwnMasterImage()
+    {
+        $oParentArticle = new oxArticle();
+        $oParentArticle->oxarticles__oxicon  = new oxField('parent_ico.jpg', oxField::T_RAW);
+        $oParentArticle->oxarticles__oxthumb = new oxField('parent_thumb.jpg', oxField::T_RAW);
+        $oParentArticle->oxarticles__oxzoom1 = new oxField('parent_zoom1.jpg', oxField::T_RAW);
+        $oParentArticle->oxarticles__oxpicsgenerated = new oxField( 2, oxField::T_RAW);
+
+        $oVarArticle = $this->getMock('oxarticle', array( 'getParentArticle', '_hasMasterImage' ) );
+        $oVarArticle->expects( $this->any() )->method( 'getParentArticle' )->will( $this->returnValue( $oParentArticle ) );
+        $oVarArticle->expects( $this->any() )->method( '_hasMasterImage' )->will( $this->returnValue( true ) );
+
+        $oVarArticle->oxarticles__oxpic1  = new oxField('var_pic1.jpg', oxField::T_RAW);
+        $oVarArticle->oxarticles__oxpicsgenerated = new oxField( 1, oxField::T_RAW);
+
+        $oVarArticle->UNITassignParentFieldValue( "oxicon" );
+        $this->assertEquals( "icon/var_pic1_ico.jpg", $oVarArticle->oxarticles__oxicon->value);
+
+        $oVarArticle->UNITassignParentFieldValue( "oxthumb" );
+        $this->assertEquals( "0/var_pic1_th.jpg", $oVarArticle->oxarticles__oxthumb->value);
+
+        $oVarArticle->UNITassignParentFieldValue( "oxzoom1" );
+        $this->assertEquals( "z1/var_pic1_z1.jpg", $oVarArticle->oxarticles__oxzoom1->value);
+
+        $oVarArticle->UNITassignParentFieldValue( "oxpicsgenerated" );
+        $this->assertEquals( 1, $oVarArticle->oxarticles__oxpicsgenerated->value);
+
     }
 
     /**

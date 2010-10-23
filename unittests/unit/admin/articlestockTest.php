@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: articlestockTest.php 26650 2010-03-18 13:26:53Z arvydas $
+ * @version   SVN: $Id: articlestockTest.php 30487 2010-10-22 12:17:49Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,17 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Admin_ArticleStockTest extends OxidTestCase
 {
+    /**
+     * Tear down the fixture.
+     *
+     * @return null
+     */
+    protected function tearDown()
+    {
+        $this->cleanUpTable( 'oxprice2article' );
+        parent::tearDown();
+    }
+
     /**
      * Article_Stock::Render() test case
      *
@@ -104,19 +115,25 @@ class Unit_Admin_ArticleStockTest extends OxidTestCase
      */
     public function testDeleteprice()
     {
-        modDB::getInstance()->addClassFunction( 'execute', create_function('$x', 'throw new Exception($x);' ) );
+        $oDb = oxDb::getDb(); 
+        $oDb->execute("insert into oxprice2article set oxid='_testId', oxartid='_testArtId' ");
+        
+            $oView = new Article_Stock();
 
-        // testing..
-        try {
-                $oView = new Article_Stock();
 
-
-            $oView->deleteprice();
-        } catch ( Exception $oExcp ) {
-            $this->assertEquals( "delete from oxprice2article where oxid = '' and oxartid = ''", $oExcp->getMessage(), "error in Article_Stock::deleteprice()" );
-            return;
-        }
-        $this->fail( "error in Article_Stock::save()" );
+        modConfig::setParameter('oxid', '_testArtId');
+        $oView->deleteprice();
+        $this->assertEquals( "1", $oDb->getOne("select 1 from oxprice2article where oxid='_testId'" ) );
+        
+        modConfig::setParameter('oxid', '');
+        modConfig::setParameter('priceid', '_testId');
+        $oView->deleteprice();
+        $this->assertEquals( "1", $oDb->getOne("select 1 from oxprice2article where oxid='_testId'" ) );
+        
+        modConfig::setParameter('oxid', '_testArtId');
+        modConfig::setParameter('priceid', '_testId');
+        $oView->deleteprice();
+        $this->assertFalse( $oDb->getOne("select 1 from oxprice2article where oxid='_testId'" ) );
     }
 
 }
