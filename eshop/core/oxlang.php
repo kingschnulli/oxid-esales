@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 30482 2010-10-22 08:59:38Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxlang.php 30538 2010-10-26 08:13:43Z rimvydas.paskevicius $
  */
 
 /**
@@ -175,7 +175,7 @@ class oxLang extends oxSuperCfg
             }
 
             if ( is_null( $this->_iBaseLanguageId ) ) {
-                $this->_iBaseLanguageId = $myConfig->getShopConfVar( 'sDefaultLang' );
+                $this->_iBaseLanguageId = $myConfig->getConfigParam( 'sDefaultLang' );
             }
 
             $this->_iBaseLanguageId = (int) $this->_iBaseLanguageId;
@@ -266,7 +266,7 @@ class oxLang extends oxSuperCfg
      * Returns array of available languages.
      *
      * @param integer $iLanguage    Number if current language (default null)
-     * @param bool    $blOnlyActive load only active languages
+     * @param bool    $blOnlyActive load only current language or all
      * @param bool    $blSort       enable sorting or not
      *
      * @return array
@@ -282,15 +282,6 @@ class oxLang extends oxSuperCfg
         $aLanguages = array();
         $aConfLanguages = $myConfig->getConfigParam( 'aLanguages' );
         $aLangParams    = $myConfig->getConfigParam( 'aLanguageParams' );
-
-        // if languages not yet loaded in config, getting them directly from DB
-        if ( empty($aConfLanguages) ) {
-            $aConfLanguages = $myConfig->getShopConfVar( 'aLanguages' );
-        }
-
-        if ( empty($aLangParams) ) {
-            $aLangParams = $myConfig->getShopConfVar( 'aLanguageParams' );
-        }
 
         if ( is_array( $aConfLanguages ) ) {
             $i = 0;
@@ -545,14 +536,10 @@ class oxLang extends oxSuperCfg
         // checking if this language is valid
         $aLanguages = $this->getLanguageArray();
 
-        if ( is_array( $aLanguages ) && !isset( $aLanguages[$iLang] ) ) {
-            if ( !empty( $aLanguages ) ) {    
-                $oLang = current( $aLanguages );
-                if (isset($oLang->id)) {
-                    $iLang = $oLang->id;
-                }
-            } else {
-               return $this->getConfig()->getShopConfVar( 'sDefaultLang' );
+        if ( !isset( $aLanguages[$iLang] ) && is_array( $aLanguages ) ) {
+            $oLang = current( $aLanguages );
+            if (isset($oLang->id)) {
+                $iLang = $oLang->id;
             }
         }
 
