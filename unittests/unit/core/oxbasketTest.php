@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 29541 2010-08-27 08:49:18Z tomas $
+ * @version   SVN: $Id: oxbasketTest.php 30589 2010-10-27 12:48:23Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -4526,4 +4526,65 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $this->assertEquals( "testPrice", $oBasket->getNotDiscountProductsPrice() );
     }
 
+
+    /**
+     * #0002163: itm discount option "multiple" is not working if several products/categires are assigned to discount
+     *
+     * @return null
+     */
+    public function testForBugEntry2163()
+    {
+        // cleaning up
+        $this->tearDown();
+
+        $sShopId = oxConfig::getInstance()->getBaseShopId();
+
+        // create new discount
+        $oDiscount = new oxDiscount();
+        $oDiscount->setId( '_testDiscount' );
+        $oDiscount->oxdiscount__oxshopid      = new oxField( $sShopId );
+        $oDiscount->oxdiscount__oxactive      = new oxField( 1 );
+        $oDiscount->oxdiscount__oxtitle       = new oxField( "Item discount" );
+        $oDiscount->oxdiscount__oxamount      = new oxField( 3 );
+        $oDiscount->oxdiscount__oxamountto    = new oxField( 9999 );
+        $oDiscount->oxdiscount__oxprice       = new oxField( 0 );
+        $oDiscount->oxdiscount__oxpriceto     = new oxField( 0 );
+        $oDiscount->oxdiscount__oxaddsum      = new oxField( 0 );
+        $oDiscount->oxdiscount__oxaddsumtype  = new oxField( "itm" );
+        $oDiscount->oxdiscount__oxitmartid    = new oxField( '1142' );
+        $oDiscount->oxdiscount__oxitmamount   = new oxField( 1 );
+        $oDiscount->oxdiscount__oxitmmultiple = new oxField( 1 );
+        $oDiscount->save();
+
+        $oO2D = new oxbase();
+        $oO2D->init( "oxobject2discount" );
+        $oO2D->setId( '_testo2d1' );
+        $oO2D->oxobject2discount__oxdiscountid = new oxField( '_testDiscount' );
+        $oO2D->oxobject2discount__oxobjectid   = new oxField( '1126' );
+        $oO2D->oxobject2discount__oxtype       = new oxField( "oxarticles" );
+        $oO2D->save();
+
+        $oO2D = new oxbase();
+        $oO2D->init( "oxobject2discount" );
+        $oO2D->setId( '_testo2d2' );
+        $oO2D->oxobject2discount__oxdiscountid = new oxField( '_testDiscount' );
+        $oO2D->oxobject2discount__oxobjectid   = new oxField( '1131' );
+        $oO2D->oxobject2discount__oxtype       = new oxField( "oxarticles" );
+        $oO2D->save();
+
+        $oBasket = $this->getMock( "oxBasket", array( "load" ) );
+        $oBasket->addToBasket( '1126', 6 );
+        $oBasket->addToBasket( '1131', 3 );
+        $oBasket->calculateBasket();
+
+        $aContents = $oBasket->getContents();
+        $aInfo = array( '1142' => 3, '1126' => 6, '1131' => 3 );
+
+        $this->assertEquals( 3, count( $aContents ) );
+        foreach ( $aContents as $oContent ) {
+            $sId = $oContent->getProductId();
+            $this->assertTrue( isset( $aInfo[$sId] ) );
+            $this->assertEquals( $aInfo[$sId], $oContent->getAmount() );
+        }
+    }
 }

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: delivery_articles.inc.php 29962 2010-09-24 08:43:23Z tomas $
+ * @version   SVN: $Id: delivery_articles.inc.php 30634 2010-10-28 13:18:34Z alfonsas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -63,7 +63,7 @@ class ajaxComponent extends ajaxListComponent
 
         $sDelId      = oxConfig::getParameter( 'oxid' );
         $sSynchDelId = oxConfig::getParameter( 'synchoxid' );
-
+        
         // category selected or not ?
         if ( !$sDelId) {
             // dodger performance
