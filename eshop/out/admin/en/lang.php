@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 30403 2010-10-19 14:57:37Z arvydas $
+ * @version   SVN: $Id: lang.php 30822 2010-11-10 12:26:24Z vilma $
  */
 
 /*
@@ -1477,7 +1477,7 @@ $aLang = array(
 'SYSREQ_MEMORY_LIMIT'                           => 'PHP Memory limit (min. 14MB, 30MB recommended)',
 'SYSREQ_DESCRIPTION_PASS'                       => 'System health is good.',
 'SYSREQ_DESCRIPTION_PMIN'                       => 'System health might be broken.',
-'SYSREQ_DESCRIPTION_FAIL'                       => 'System health is definetely broken. This OXID eShop will not work properly in all cases.',
+'SYSREQ_DESCRIPTION_FAIL'                       => 'System health is broken or security is compromised. This OXID eShop will not work properly in all cases and might beave strange.',
 'SYSREQ_DESCRIPTION_NULL'                       => 'System health is not able not be checked.',
 'SYSREQ_DESCRIPTION_COLL'                       => 'Collations in some columns do not match',
 'SYSREQ_DESCRIPTION_REQ'                        => 'State of system health',

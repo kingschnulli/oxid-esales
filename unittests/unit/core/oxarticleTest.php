@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 30486 2010-10-22 11:21:46Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 30823 2010-11-10 12:32:06Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -256,6 +256,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         parent::tearDown();
     }
+
 
     /**
      * Test case for bugtrack report #1887
