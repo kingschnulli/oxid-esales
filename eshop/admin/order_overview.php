@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: order_overview.php 30840 2010-11-11 09:46:47Z arvydas $
+ * @version   SVN: $Id: order_overview.php 30860 2010-11-11 15:27:37Z arvydas $
  */
 
 /**
@@ -182,7 +182,7 @@ class Order_Overview extends oxAdminDetails
             $sSubject   = oxLang::getInstance()->translateString( "order" );
 
             // can't be called with oxnew, as it only supports single constructor parameter
-            $oDtaus = new oxDtausBuilder( $sCompany, $sRoutingNr, $sAccountNr );
+            $oDtaus = oxNew( "oxDtausBuilder", $sCompany, $sRoutingNr, $sAccountNr );
             foreach ( $oOrderList as $oOrder ) {
                 $oUserPayment->load( $oOrder->oxorder__oxpaymentid->value );
                 $aDynValues = $oUtils->assignValuesFromText( $oUserPayment->oxuserpayments__oxvalue->value );

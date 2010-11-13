@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobjectTest.php 29957 2010-09-24 07:28:04Z tomas $
+ * @version   SVN: $Id: oxutilsobjectTest.php 30861 2010-11-11 15:27:49Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -38,6 +38,27 @@ class modOxUtilsObject_oxUtilsObject extends oxUtilsObject
         return parent::$_aInstanceCache;
     }
 
+}
+
+/**
+ * Test class for Unit_Core_oxutilsobjectTest::testGetObject() test case
+ */
+class _oxutils_test
+{
+    /**
+     * Does nothing
+     *
+     * @param bool $a [optional]
+     * @param bool $b [optional]
+     * @param bool $c [optional]
+     * @param bool $d [optional]
+     * @param bool $e [optional]
+     *
+     * @return null
+     */
+    public function __construct( $a = false, $b = false, $c = false, $d = false, $e = false )
+    {
+    }
 }
 
 class Unit_Core_oxutilsobjectTest extends OxidTestCase
@@ -59,6 +80,29 @@ class Unit_Core_oxutilsobjectTest extends OxidTestCase
 
         parent::tearDown();
     }
+
+    /**
+     * Testing oxUtilsObject::_getObject();
+     *
+     * @return null
+     */
+    public function testGetObject()
+    {
+        $this->assertTrue( oxNew( '_oxutils_test' ) instanceof _oxutils_test );
+        $this->assertTrue( oxNew( '_oxutils_test', 1 ) instanceof _oxutils_test );
+        $this->assertTrue( oxNew( '_oxutils_test', 1, 2 ) instanceof _oxutils_test );
+        $this->assertTrue( oxNew( '_oxutils_test', 1, 2, 3 ) instanceof _oxutils_test );
+        $this->assertTrue( oxNew( '_oxutils_test', 1, 2, 3, 4 ) instanceof _oxutils_test );
+        $this->assertTrue( oxNew( '_oxutils_test', 1, 2, 3, 4, 5 ) instanceof _oxutils_test );
+
+        try {
+            $oArticle = oxNew( '_oxutils_test', 1, 2, 3, 4, 5, 6 );
+        } catch ( oxSystemComponentException $oExcp ) {
+            return;
+        }
+        $this->fail( "oxNew() now supports > 5 constructor parameters?!" );
+    }
+
     public function testOxNew()
     {
         $myConfig = oxConfig::getInstance();

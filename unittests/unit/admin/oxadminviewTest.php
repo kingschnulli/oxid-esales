@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 29970 2010-09-24 12:25:11Z vilma $
+ * @version   SVN: $Id: oxadminviewTest.php 30923 2010-11-12 15:52:01Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -322,7 +322,7 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
     }
 
     /**
-     * Checking reseting counters cache when reset on logout is enabled
+     * Checking reseting article seo urls
      *
      * @return null
      */
@@ -333,6 +333,27 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
         $oAdminView = oxNew( 'oxAdminView' );
         $oAdminView->resetArtSeoUrl('_testArt');
         $this->assertEquals( 1, $myDB->getOne("select oxexpired from oxseo where oxobjectid='_testArt'") );
+    }
+
+    /**
+     * Checking reseting seo urls - reset should be not called if param is empty
+     *
+     * @return null
+     */
+    public function testResetArtSeoUrl_paramIsEmpty()
+    {
+        $myDB = oxDb::getDB();
+        $myDB->execute("insert into oxseo set oxobjectid = '_testArt', oxident = MD5('_testArt'), oxshopid = '1', oxlang = '1'");
+
+        // testing functions calls
+        $oSeoEncoder = $this->getMock( 'oxSeoEncoder', array( 'markAsExpired' ) );
+        $oSeoEncoder->expects( $this->never() )->method( 'markAsExpired' );
+        modInstances::addMod( "oxSeoEncoder", $oSeoEncoder );
+
+        $oAdminView = oxNew( 'oxAdminView' );
+        $oAdminView->resetArtSeoUrl( null );
+        $oAdminView->resetArtSeoUrl( '' );
+        $oAdminView->resetArtSeoUrl( array() );
     }
 
     public function testAddGlobalParamsAddsSid()

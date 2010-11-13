@@ -199,9 +199,14 @@ class oxPictureHandler extends oxSuperCfg
             $this->deleteZoomPicture( $oObject, $iIndex );
 
             $aDelPics = array();
-            $aDelPics[] = array("sField"    => "oxpic".$iIndex,
-                                "sDir"      => $oUtilsFile->getImageDirByType( "P".$iIndex ),
-                                "sFileName" => $sMasterImage);
+
+            if ( $blDeleteMasterPicture ) {
+                //deleting general picture
+                $aDelPics[] = array("sField"    => "oxpic".$iIndex,
+                                    "sDir"      => $oUtilsFile->getImageDirByType( "P".$iIndex ),
+                                    "sFileName" => $sMasterImage);
+            }
+
             if ( $iIndex == 1 ) {
                 // deleting generated main icon picture if custom main icon
                 // file name not equal with generated from master picture
@@ -314,6 +319,17 @@ class oxPictureHandler extends oxSuperCfg
         $iZoomPicCount = (int) $this->getConfig()->getConfigParam( 'iZoomPicCount' );
 
         if ( $iIndex > $iZoomPicCount || !$oDbHandler->fieldExists( "oxzoom".$iIndex, "oxarticles" ) ) {
+            if ( $sZoomPicName = $this->getZoomName( $oObject->{"oxarticles__oxpic".$iIndex}->value, $iIndex ) ) {
+                $sFieldToCheck = "oxpic".$iIndex;
+            } else {
+                return;
+            }
+        } else {
+            $sZoomPicName = basename( $oObject->{"oxarticles__oxzoom".$iIndex}->value );
+            $sFieldToCheck = "oxzoom".$iIndex;
+        }
+
+        if ( $sZoomPicName == "nopic.jpg") {
             return;
         }
 
@@ -324,7 +340,6 @@ class oxPictureHandler extends oxSuperCfg
 
         $aDelPics = array();
         $sAbsDynImageDir = $myConfig->getAbsDynImageDir();
-        $sZoomPicName = basename($oObject->{"oxarticles__oxzoom".$iIndex}->value);
 
         if ( !$sZoomPicName ) {
             return;
@@ -333,7 +348,7 @@ class oxPictureHandler extends oxSuperCfg
         $aDelPics = array();
 
         // deleting zoom picture
-        $aPic = array("sField"    => "oxzoom".$iIndex,
+        $aPic = array("sField"    => $sFieldToCheck,
                       "sDir"      => $oUtilsFile->getImageDirByType( "Z".$iIndex ),
                       "sFileName" => $sZoomPicName);
 
