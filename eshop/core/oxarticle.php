@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 30823 2010-11-10 12:32:06Z arvydas $
+ * @version   SVN: $Id: oxarticle.php 30960 2010-11-15 14:22:02Z vilma $
  */
 
 // defining supported link types
@@ -4572,7 +4572,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         $sPicName = basename($this->{"oxarticles__oxpic" . $iIndex}->value);
 
-        if ( $sPicName == "nopic.jpg" ) {
+        if ( $sPicName == "nopic.jpg" || $sPicName == "" ) {
             return false;
         }
         if ( $this->isVariant() && $this->getParentArticle()->{"oxarticles__oxpic".$iIndex}->value == $this->{"oxarticles__oxpic".$iIndex}->value ) {

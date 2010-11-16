@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 30823 2010-11-10 12:32:06Z arvydas $
+ * @version   SVN: $Id: oxarticleTest.php 30960 2010-11-15 14:22:02Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -7054,6 +7054,24 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle = $this->getProxyClass( "oxarticle" );
         $oArticle->setConfig( $oConfig );
         $oArticle->oxarticles__oxpic1 = new oxField( 'nopic.jpg' );
+
+        $this->assertFalse( $oArticle->UNIThasMasterImage( 1 ) );
+    }
+
+    /**
+     * #2192 Test checking if article has upladed master picture when pic value is
+     * ""
+     *
+     * @return null
+     */
+    public function testHasMasterImage_withEmptyImageValue()
+    {
+        $oConfig = $this->getMock( "oxconfig", array( "getMasterPicturePath" ) );
+        $oConfig->expects( $this->never() )->method( 'getMasterPicturePath' );
+
+        $oArticle = $this->getProxyClass( "oxarticle" );
+        $oArticle->setConfig( $oConfig );
+        $oArticle->oxarticles__oxpic1 = new oxField( '' );
 
         $this->assertFalse( $oArticle->UNIThasMasterImage( 1 ) );
     }
