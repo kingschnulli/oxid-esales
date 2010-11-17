@@ -1099,13 +1099,12 @@ YAHOO.oxid.aoc = function( elContainer , aColumnDefs , sDataSource , oConfigs )
             if ( col.sortable != null )
                 blSortable = col.sortable;
 
-            aViewCols[iCtr] = { key: col.key,
-                                sortable: blSortable,
-                                resizeable: true,
-                                label: col.label,
-                                visible: col.visible,
-                                width: col.width,
-                                formatter: sFormatters };
+            col.sortable   = blSortable;
+            col.formatter  = sFormatters;
+            col.resizeable = true;
+
+            aViewCols[iCtr] = col;
+
             if (!col.visible) {
                 this.aColsTohide[iHiddenColCtr] = i;
                 iHiddenColCtr++;

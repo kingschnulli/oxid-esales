@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 29582 2010-08-30 17:27:29Z tomas $
+ * @version   SVN: $Id: oxuser.php 30980 2010-11-16 13:02:53Z arvydas $
  */
 
 /**
@@ -1454,12 +1454,11 @@ class oxUser extends oxBase
      */
     protected function _ldapLogin( $sUser, $sPassword, $sShopID, $sShopSelect)
     {
-        include "oxldap.php";
         $myConfig = $this->getConfig();
         $oDb = oxDb::getDb();
         //$throws oxConnectionException
         $aLDAPParams = $myConfig->getConfigParam( 'aLDAPParams' );
-        $oLDAP = new oxLDAP( $aLDAPParams['HOST'], $aLDAPParams['PORT'] );
+        $oLDAP = oxNew( "oxLDAP", $aLDAPParams['HOST'], $aLDAPParams['PORT'] );
         // maybe this is LDAP user but supplied email Address instead of LDAP login
         $sLDAPKey = $oDb->getOne("select oxldapkey from oxuser where oxuser.oxactive = 1 and oxuser.oxusername = ".$oDb->quote($sUser)." $sShopSelect");
         if ( isset( $sLDAPKey) && $sLDAPKey) {
