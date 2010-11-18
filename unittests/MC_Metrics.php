@@ -9,7 +9,8 @@
  *
  * @link http://www.oxid-esales.com
  * @package ModuleCertification
- * @copyright © OXID eSales AG 2003-2009
+ * @copyright (C) OXID eSales AG 2003-2010
+ * @version OXID eShop CE
  */
 
 
@@ -62,6 +63,43 @@ class Metrics
         $this->_oMetrics = new SimpleXMLElement($sFileName, null, true);
     }
 
+    protected function _readFunction($sClass, $oFunction)
+    {
+        $sFunc  = (string) $oFunction['name'];
+        $iCC   = (int) $oFunction['coverage'];  // Code Coverage
+        $iCcn   = (int) $oFunction['ccn'];
+        //$iCrap  = (int) $oFunction['crap'];
+        $iNpath = (int) $oFunction['npath'];
+        $iLoc   = (int) $oFunction['locExecutable'];
+        $iCrap  = (int) getCrapIndex($iCcn, $iCC);
+
+        // Per method
+        $this->_aStats[$sClass]['method'][$sFunc]['ccn'] = $iCcn;
+        $this->_aStats[$sClass]['method'][$sFunc]['crap'] =$iCrap;
+        $this->_aStats[$sClass]['method'][$sFunc]['npath'] =$iNpath;
+        $this->_aStats[$sClass]['method'][$sFunc]['locExecutable'] = $iLoc;
+        // Sums
+        $this->_aStats[$sClass]['sum']['cnn'] += (int) $iCcn * $iLoc;
+        $this->_aStats[$sClass]['sum']['crap'] += (int) $iCrap * $iLoc;
+        $this->_aStats[$sClass]['sum']['npath'] += (int) $iNpath * $iLoc;
+        $this->_aStats[$sClass]['sum']['locExecutable'] += $iLoc;
+        // Max
+        $this->_aStats[$sClass]['max']['cnn'] = $this->_aStats[$sClass]['max']['cnn'] < $iCcn ? $iCcn : $this->_aStats[$sClass]['max']['cnn'];
+        $this->_aStats[$sClass]['max']['crap'] = $this->_aStats[$sClass]['max']['crap'] < $iCrap ? $iCrap : $this->_aStats[$sClass]['max']['crap'];
+        $this->_aStats[$sClass]['max']['npath'] = $this->_aStats[$sClass]['max']['npath'] < $iNpath ? $iNpath : $this->_aStats[$sClass]['max']['npath'];
+        $this->_aStats[$sClass]['max']['locExecutable'] = $this->_aStats[$sClass]['max']['locExecutable'] < $iLoc ? $iLoc : $this->_aStats[$sClass]['max']['locExecutable'];
+        // Global sums
+        $this->_iTotalCnn   += (int) $iCcn * $iLoc;
+        $this->_iTotalCrap  += (int) $iCrap * $iLoc;
+        $this->_iTotalNpath += (int) $iNpath * $iLoc;
+        $this->_iLocExec    += $iLoc;
+        // Global Max
+        $this->_iMaxCnn = $this->_iMaxCnn < $iCcn ? $iCcn : $this->_iMaxCnn;
+        $this->_iMaxCrap = $this->_iMaxCrap < $iCrap ? $iCrap : $this->_iMaxCrap;
+        $this->_iMaxNpath = $this->_iMaxNpath < $iNpath ? $iNpath : $this->_iMaxNpath;
+        $this->_iMaxExec = $this->_iMaxExec < $iLoc ? $iLoc : $this->_iMaxExec;
+    }
+
     /**
      * Enter description here...
      * 
@@ -76,47 +114,30 @@ class Metrics
 
         foreach ( $this->_oMetrics as $oFile ) {
             foreach ( $oFile as $oClass ) {
-                $sClass = (string) $oClass['name'];
-                foreach ( $oClass as $oFunction ) {
-                    $sFunc  = (string) $oFunction['name'];
-                    $iCC   = (int) $oFunction['coverage'];  // Code Coverage
-                    $iCcn   = (int) $oFunction['ccn'];
-                    //$iCrap  = (int) $oFunction['crap'];
-                    $iNpath = (int) $oFunction['npath'];
-                    $iLoc   = (int) $oFunction['locExecutable'];
-                    $iCrap  = (int) getCrapIndex($iCcn, $iCC);
-
-                    // Per method
-                    $this->_aStats[$sClass]['method'][$sFunc]['ccn'] = $iCcn;
-                    $this->_aStats[$sClass]['method'][$sFunc]['crap'] =$iCrap;
-                    $this->_aStats[$sClass]['method'][$sFunc]['npath'] =$iNpath;
-                    $this->_aStats[$sClass]['method'][$sFunc]['locExecutable'] = $iLoc;
-                    // Sums
-                    $this->_aStats[$sClass]['sum']['cnn'] += (int) $iCcn * $iLoc;
-                    $this->_aStats[$sClass]['sum']['crap'] += (int) $iCrap * $iLoc;
-                    $this->_aStats[$sClass]['sum']['npath'] += (int) $iNpath * $iLoc;
-                    $this->_aStats[$sClass]['sum']['locExecutable'] += $iLoc;
-                    // Max
-                    $this->_aStats[$sClass]['max']['cnn'] = $this->_aStats[$sClass]['max']['cnn'] < $iCcn ? $iCcn : $this->_aStats[$sClass]['max']['cnn'];
-                    $this->_aStats[$sClass]['max']['crap'] = $this->_aStats[$sClass]['max']['crap'] < $iCrap ? $iCrap : $this->_aStats[$sClass]['max']['crap'];
-                    $this->_aStats[$sClass]['max']['npath'] = $this->_aStats[$sClass]['max']['npath'] < $iNpath ? $iNpath : $this->_aStats[$sClass]['max']['npath'];
-                    $this->_aStats[$sClass]['max']['locExecutable'] = $this->_aStats[$sClass]['max']['locExecutable'] < $iLoc ? $iLoc : $this->_aStats[$sClass]['max']['locExecutable'];
-                    // Global sums
-                    $this->_iTotalCnn   += (int) $iCcn * $iLoc;
-                    $this->_iTotalCrap  += (int) $iCrap * $iLoc;
-                    $this->_iTotalNpath += (int) $iNpath * $iLoc;
-                    $this->_iLocExec    += $iLoc;
-                    // Global Max
-                    $this->_iMaxCnn = $this->_iMaxCnn < $iCcn ? $iCcn : $this->_iMaxCnn;
-                    $this->_iMaxCrap = $this->_iMaxCrap < $iCrap ? $iCrap : $this->_iMaxCrap;
-                    $this->_iMaxNpath = $this->_iMaxNpath < $iNpath ? $iNpath : $this->_iMaxNpath;
-                    $this->_iMaxExec = $this->_iMaxExec < $iLoc ? $iLoc : $this->_iMaxExec;
+                $sClass = '';
+                switch ($oClass->getName()) {
+                    case 'class':
+                        $sClass = (string) $oClass['name'];
+                        foreach ( $oClass as $oFunction ) {
+                            $this->_readFunction($sClass, $oFunction);
+                        }
+                        break;
+                    case 'function':
+                        $sClass = '_GLOBAL_FUNCTIONS_';
+                        $this->_readFunction($sClass, $oClass);
+                        break;
                 }
                 $iLocSum = $this->_aStats[$sClass]['sum']['locExecutable'];
                 // Statistic
-                $this->_aStats[$sClass]['stat']['cnn'] = $this->_aStats[$sClass]['sum']['cnn'] / $iLocSum;
-                $this->_aStats[$sClass]['stat']['crap'] = $this->_aStats[$sClass]['sum']['crap'] / $iLocSum;
-                $this->_aStats[$sClass]['stat']['npath'] = $this->_aStats[$sClass]['sum']['npath'] / $iLocSum;
+                if ($iLocSum) {
+                    $this->_aStats[$sClass]['stat']['cnn']   = $this->_aStats[$sClass]['sum']['cnn'] / $iLocSum;
+                    $this->_aStats[$sClass]['stat']['crap']  = $this->_aStats[$sClass]['sum']['crap'] / $iLocSum;
+                    $this->_aStats[$sClass]['stat']['npath'] = $this->_aStats[$sClass]['sum']['npath'] / $iLocSum;
+                } else {
+                    $this->_aStats[$sClass]['stat']['cnn']   = '-';
+                    $this->_aStats[$sClass]['stat']['crap']  = '-';
+                    $this->_aStats[$sClass]['stat']['npath'] = '-';
+                }
             }
         }
         // Calculate total stats
@@ -193,7 +214,7 @@ function getCrapIndex($cyclomatic_complexity, $code_coverage)
         // comp(m)
         return $cyclomatic_complexity;
     } else {
-        // comp(m)^2 * (1 â€“ cov(m)/100)^3 + comp(m)
+        // comp(m)^2 * (1 - cov(m)/100)^3 + comp(m)
         if (function_exists('gmp_pow')) {
             return gmp_mul( gmp_pow($cyclomatic_complexity, 2), ( gmp_pow( ( gmp_sub(1, $code_coverage/100) ), 3) + $cyclomatic_complexity ) );
         } else if (function_exists('bcpow')) {
