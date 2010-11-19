@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 30344 2010-10-15 13:21:28Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxarticlelistTest.php 31032 2010-11-18 09:35:33Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -267,6 +267,11 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTestList = $this->getProxyClass('oxArticleList');
         $oTestList->setCustomSorting('testSorting');
         $this->assertEquals('testSorting', $oTestList->getNonPublicVar('_sCustomSorting'));
+
+        $oTestList->setCustomSorting('testTable.testSorting desc');
+        $this->assertEquals('testTable.testSorting desc', $oTestList->getNonPublicVar('_sCustomSorting'));
+
+
     }
 
     /**
@@ -280,6 +285,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTestList = $this->getProxyClass('oxArticleList');
         $oTestList->setCustomSorting('oxtitle desc');
         $this->assertEquals('oxtitle_1 desc', $oTestList->getNonPublicVar('_sCustomSorting'));
+
+        $oTestList->setCustomSorting('testTable.oxtitle desc');
+        $this->assertEquals('testTable.oxtitle_1 desc', $oTestList->getNonPublicVar('_sCustomSorting'));
     }
 
 
@@ -2021,7 +2029,13 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
             $sTag = "wanduhr";
             $oTest = new oxArticleList();
+
+            // echo "mano: ". $oTest->getBaseObject()->getViewName().'.oxtitle desc';
+
             $oTest->setCustomSorting($oTest->getBaseObject()->getViewName().'.oxtitle desc');
+
+
+
             $oTest->loadTagArticles($sTag, 0);
             //print_r($oTest);
                 $aExpArrayKeys = array(1354,2000,1771);

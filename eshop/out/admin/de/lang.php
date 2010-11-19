@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 30403 2010-10-19 14:57:37Z arvydas $
+ * @version   SVN: $Id: lang.php 31036 2010-11-18 12:03:47Z linas.kukulskis $
  */
 
 $sLangName  = 'Deutsch';
@@ -409,7 +409,7 @@ $aLang = array(
 'ARTICLE_OVERVIEW_TOTALORDERCNT'                => 'Gesamtanzahl bestellt',
 'ARTICLE_OVERVIEW_SOLDCNT'                      => 'Verkäufe gesamt',
 'ARTICLE_OVERVIEW_CANCELEDCNT'                  => 'Storniert gesamt',
-'ARTICLE_OVERVIEW_LEFTORDERCNT'                 => 'Total',
+'ARTICLE_OVERVIEW_LEFTORDERCNT'                 => 'Anzahl der offenen Bestellungen',
 'ARTICLE_PICTURES_PIC1UPLOAD'                   => 'Bild 1 hochladen: ',
 'ARTICLE_PICTURES_PIC2UPLOAD'                   => 'Bild 2 hochladen: ',
 'ARTICLE_PICTURES_PIC3UPLOAD'                   => 'Bild 3 hochladen: ',
