@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobjectTest.php 30861 2010-11-11 15:27:49Z arvydas $
+ * @version   SVN: $Id: oxutilsobjectTest.php 31053 2010-11-19 16:52:01Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -93,14 +93,6 @@ class Unit_Core_oxutilsobjectTest extends OxidTestCase
         $this->assertTrue( oxNew( '_oxutils_test', 1, 2 ) instanceof _oxutils_test );
         $this->assertTrue( oxNew( '_oxutils_test', 1, 2, 3 ) instanceof _oxutils_test );
         $this->assertTrue( oxNew( '_oxutils_test', 1, 2, 3, 4 ) instanceof _oxutils_test );
-        $this->assertTrue( oxNew( '_oxutils_test', 1, 2, 3, 4, 5 ) instanceof _oxutils_test );
-
-        try {
-            $oArticle = oxNew( '_oxutils_test', 1, 2, 3, 4, 5, 6 );
-        } catch ( oxSystemComponentException $oExcp ) {
-            return;
-        }
-        $this->fail( "oxNew() now supports > 5 constructor parameters?!" );
     }
 
     public function testOxNew()

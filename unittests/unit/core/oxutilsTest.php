@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 29167 2010-07-29 13:04:46Z arvydas $
+ * @version   SVN: $Id: oxutilsTest.php 31051 2010-11-19 16:02:53Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -62,6 +62,8 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     protected function tearDown()
     {
         oxUtils::getInstance()->commitFileCache();
+
+        clearstatcache();
         //removing test files from tmp dir
         $sFilePath = oxConfig::getInstance()->getConfigParam( 'sCompileDir' ) . "*testFileCache*.txt";
         $aPathes   = glob( $sFilePath);
@@ -77,6 +79,17 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         }
         if ( file_exists( 'tmp_testCacheName' ) ) {
             unlink('tmp_testCacheName');
+        }
+
+        $oUtils = oxUtils::getInstance();
+        $sFileName = $oUtils->getCacheFilePath("testVal", false, 'php');
+        if ( file_exists( $sFileName ) ) {
+            unlink( $sFileName );
+        }
+
+        $sFileName = $oUtils->UNITgetCacheFilePath('testCache1');
+        if ( file_exists( $sFileName ) ) {
+            unlink( $sFileName );
         }
 
         parent::tearDown();
@@ -117,6 +130,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
         $this->_sTestLogFileName = oxConfig::getInstance()->getConfigParam( 'sShopDir' ).'log/'.$sLogFileName;
 
+        clearstatcache();
         $this->assertTrue( file_exists( $this->_sTestLogFileName ) );
         $this->assertEquals( $sLogMessage, file_get_contents( $this->_sTestLogFileName ) );
     }
@@ -586,7 +600,6 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $oUtils->toFileCache( $sName1, $sInput1);
         $oUtils->toFileCache( $sName2, $sInput2);
         $oUtils->commitFileCache();
-        $oUtils->setNonPublicVar('_aFileCacheContents', null);
         $this->assertEquals( $sInput1, $oUtils->fromFileCache( $sName1 ) );
         $this->assertEquals( $sInput2, $oUtils->fromFileCache( $sName2 ) );
     }
@@ -603,9 +616,11 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $sFilePath = $myUtilsTest->UNITgetCacheFilePath("test");
         $sCacheFilePrefix = preg_replace("/.*\/(ox[^_]*)_.*/", "$1", $sFilePath);
 
+        $oUtils = oxUtils::getInstance();
         for ($iMax = 0; $iMax < 10; $iMax++) {
-            oxUtils::getInstance()->toFileCache($sName."_".$iMax, $sInput."_".$iMax);
+            $oUtils->toFileCache($sName."_".$iMax, $sInput."_".$iMax);
         }
+        $oUtils->commitFileCache();
 
         //checking if test files were written to temp dir
         $sFilePath = $myConfig->getConfigParam( 'sCompileDir' ) . "/{$sCacheFilePrefix}_testFileCache*.txt";
@@ -613,7 +628,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $this->assertEquals( 10, count($aPathes), "Error writing test files to cache dir" );
 
         //actual test
-        $this->assertNull(oxUtils::getInstance()->oxResetFileCache());
+        $this->assertNull( $oUtils->oxResetFileCache());
 
         $sFilePath = $myConfig->getConfigParam( 'sCompileDir' ) . "/{$sCacheFilePrefix}_testFileCache*.txt";
         $aPathes   = glob( $sFilePath);
@@ -632,15 +647,19 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $sCacheFilePrefix = preg_replace("/.*\/(ox[^_]*)_.*/", "$1", $sFilePath);
 
         //this file must be skipped
-        oxUtils::getInstance()->toFileCache("fieldnames_testTest", "testCacheValue");
+        $oUtils = oxUtils::getInstance();
+        $oUtils->toFileCache("fieldnames_testTest", "testCacheValue");
+        $oUtils->commitFileCache();
 
         //checking if test file were written to temp dir
         $sFilePath = $myConfig->getConfigParam( 'sCompileDir' ) . "/{$sCacheFilePrefix}_fieldnames_testTest.txt";
+        clearstatcache();
         $this->assertTrue( file_exists($sFilePath), "Error writing test files to cache dir" );
 
         for ($iMax = 0; $iMax < 10; $iMax++) {
-            oxUtils::getInstance()->toFileCache($sName."_".$iMax, $sInput."_".$iMax);
+            $oUtils->toFileCache($sName."_".$iMax, $sInput."_".$iMax);
         }
+        $oUtils->commitFileCache();
 
         //checking if test files were written to temp dir
         $sFilePath = $myConfig->getConfigParam( 'sCompileDir' ) . "/{$sCacheFilePrefix}_testFileCache*.txt";
@@ -648,7 +667,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $this->assertEquals( 10, count($aPathes), "Error writing test files to cache dir: ".count($aPathes) );
 
         //actual test
-        $this->assertNull(oxUtils::getInstance()->oxResetFileCache());
+        $this->assertNull( $oUtils->oxResetFileCache());
 
         $sFilePath = $myConfig->getConfigParam( 'sCompileDir' ) . "/{$sCacheFilePrefix}_fieldnames_testTest.txt";
         $aPathes   = glob( $sFilePath);
@@ -998,18 +1017,18 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
     public function testCacheRaceConditions0Size()
     {
-        $oUtils = $this->getProxyClass('oxutils');
+        $oUtils = new oxutils();
         $sFileName = $oUtils->UNITgetCacheFilePath('testCache1');
         @unlink($sFileName);
         $oUtils->toFileCache('testCache1', 'teststs');
-        $sFileContents = file_get_contents($sFileName);
-        $this->assertEquals("", $sFileContents);
+        $oUtils->commitFileCache();
+        $this->assertEquals( serialize('teststs'), file_get_contents($sFileName) );
         unlink($sFileName);
     }
 
     public function testCacheRaceConditionsNon0Size()
     {
-        $oUtils = $this->getProxyClass('oxutils');
+        $oUtils = new oxutils();
         $sFileName = $oUtils->UNITgetCacheFilePath('testCache2');
         @unlink($sFileName);
         $oUtils->toFileCache('testCache2', 'teststs');
@@ -1021,8 +1040,8 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
     public function testCacheRaceConditionsIgnoredBySisterProcess()
     {
-        $oUtils1 = $this->getProxyClass('oxutils');
-        $oUtils2 = $this->getProxyClass('oxutils');
+        $oUtils1 = new oxutils();
+        $oUtils2 = new oxutils();
         $sFileName = $oUtils1->UNITgetCacheFilePath('testCache3');
         @unlink($sFileName);
         $oUtils1->toFileCache('testCache3', 'instance1111');
@@ -1035,24 +1054,30 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     }
     public function testCachingLockRelease()
     {
-        $oUtils1 = $this->getProxyClass('oxutils');
-        $oUtils2 = $this->getProxyClass('oxutils');
-
+        clearstatcache();
+        $oUtils1 = new oxutils();
         $sFileName = $oUtils1->UNITgetCacheFilePath('testCache3');
         @unlink($sFileName);
         $this->assertFalse(file_exists($sFileName));
 
         $oUtils1->toFileCache('testCache3', 'instance1111');
+        clearstatcache();
         $this->assertTrue(file_exists($sFileName));
         $this->assertEquals(0, filesize($sFileName));
+
         $oUtils1->commitFileCache();
+        clearstatcache();
         $this->assertEquals(serialize('instance1111'), file_get_contents($sFileName));
         $this->assertNotEquals(0, filesize($sFileName));
 
+        $oUtils2 = new oxutils();
         $oUtils2->toFileCache('testCache3', 'instance2222');
+        clearstatcache();
         $this->assertTrue(file_exists($sFileName));
         $this->assertEquals(0, filesize($sFileName));
+
         $oUtils2->commitFileCache();
+        clearstatcache();
         $this->assertEquals(serialize('instance2222'), file_get_contents($sFileName));
         $this->assertNotEquals(0, filesize($sFileName));
 
@@ -1091,22 +1116,25 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     public function testToPhpFileCache()
     {
         $sTestArray = array("testVal1", "key1" => "testVal2");
-        oxUtils::getInstance()->toPhpFileCache("testVal", $sTestArray);
+
+        $oUtils = oxUtils::getInstance();
+        $oUtils->toPhpFileCache("testVal", $sTestArray);
+        $oUtils->commitFileCache();
 
         $sFileName = oxUtils::getInstance()->getCacheFilePath("testVal", false, 'php');
 
-        include($sFileName);
+        include( $sFileName );
 
         $this->assertEquals($_aCacheContents, $sTestArray);
-
-        unlink($sFileName);
+        unlink( $sFileName );
     }
 
     /**
      * Test for bug #1737
      *
      */
-    public function testToPhpFileCacheException() {
+    public function testToPhpFileCacheException()
+    {
         $oSubj = $this->getMock("oxUtils", array("getCacheFilePath"));
         $oSubj->expects($this->any())->method("getCacheFilePath")->will($this->returnValue(false));
 
@@ -1121,14 +1149,85 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
     }
 
-    public function testFromPhpFileCache() {
+    public function testFromPhpFileCache()
+    {
         $sTestArray = array("testVal1", "key1" => "testVal2");
-        oxUtils::getInstance()->toPhpFileCache("testVal", $sTestArray);
 
-        $sFileName = oxUtils::getInstance()->getCacheFilePath("testVal", false, 'php');
+        $oUtils = oxUtils::getInstance();
+        $oUtils->toPhpFileCache( "testVal", $sTestArray );
+        $oUtils->commitFileCache();
 
-        $aCacheContents = oxUtils::getInstance()->fromPhpFileCache("testVal");
+        $this->assertEquals( $oUtils->fromPhpFileCache( "testVal" ), $sTestArray );
+    }
 
-        $this->assertEquals($aCacheContents, $sTestArray);
+    /**
+     * oxUtils::getCacheMeta() & oxUtils::setCacheMeta() test case
+     *
+     * @return null
+     */
+    public function testGetCacheMetaSetCacheMeta()
+    {
+        $oUtils = new oxUtils();
+        $oUtils->setCacheMeta( "xxx", "yyy" );
+
+        $this->assertFalse( $oUtils->getCacheMeta( "yyy" ) );
+        $this->assertEquals( "yyy", $oUtils->getCacheMeta( "xxx" ) );
+    }
+
+    /**
+     * oxUtils::_readFile() test case
+     *
+     * @return null
+     */
+    public function testReadFile()
+    {
+        $sFilePath = oxUtils::getInstance()->getCacheFilePath("testVal", false, 'php');
+        if ( ( $hFile = @fopen( $sFilePath, "w" ) ) !== false ) {
+            fwrite( $hFile, serialize( "test" ) );
+            fclose( $hFile );
+
+            $oUtils = new oxUtils();
+            $this->assertEquals( "test", $oUtils->UNITreadFile( $sFilePath ) );
+
+            return;
+        }
+
+        $this->markTestSkipped( "Unable to create file {$sFilePath}" );
+    }
+
+    /**
+     * oxUtils::_includeFile() test case
+     *
+     * @return null
+     */
+    public function testIncludeFile()
+    {
+        $sFilePath = oxUtils::getInstance()->getCacheFilePath("testVal", false, 'php');
+        if ( ( $hFile = @fopen( $sFilePath, "w" ) ) !== false ) {
+            fwrite( $hFile, '<?php $_aCacheContents = "test123";' );
+            fclose( $hFile );
+
+            $oUtils = new oxUtils();
+            $this->assertEquals( "test123", $oUtils->UNITincludeFile( $sFilePath ) );
+
+            return;
+        }
+
+        $this->markTestSkipped( "Unable to create file {$sFilePath}" );
+    }
+
+    /**
+     * oxUtils::_processCache() test case
+     *
+     * @return null
+     */
+    public function testProcessCache()
+    {
+        $oUtils = $this->getMock( "oxutils", array( "getCacheMeta" ) );
+        $oUtils->expects( $this->at( 0 ) )->method( 'getCacheMeta')->will( $this->returnValue( false ) );
+        $oUtils->expects( $this->at( 1 ) )->method( 'getCacheMeta')->will( $this->returnValue( array( "serialize" => false ) ) );
+
+        $this->assertEquals( serialize( 123 ), $oUtils->UNITprocessCache( 123, 123 ) );
+        $this->assertNotEquals( serialize( 123 ), $oUtils->UNITprocessCache( 123, 123 ) );
     }
 }

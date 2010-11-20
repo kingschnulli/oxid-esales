@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobject.php 30859 2010-11-11 15:27:22Z arvydas $
+ * @version   SVN: $Id: oxutilsobject.php 31053 2010-11-19 16:52:01Z arvydas $
  */
 
 /**
@@ -144,6 +144,7 @@ class oxUtilsObject extends oxSuperCfg
      */
     protected function _getObject( $sClassName, $iArgCnt, $aParams )
     {
+        // dynamic creation (if parameter count < 4) gives more performance for regular objects
         switch( $iArgCnt ) {
             case 0:
                 $oObj = new $sClassName();
@@ -157,18 +158,19 @@ class oxUtilsObject extends oxSuperCfg
             case 3:
                 $oObj = new $sClassName( $aParams[0], $aParams[1], $aParams[2] );
                 break;
-            case 4:
-                $oObj = new $sClassName( $aParams[0], $aParams[1], $aParams[2], $aParams[3] );
-                break;
-            case 5:
-                $oObj = new $sClassName( $aParams[0], $aParams[1], $aParams[2], $aParams[3], $aParams[4] );
-                break;
             default:
-                $oEx = new oxSystemComponentException();
-                $oEx->setMessage( 'EXCEPTION_SYSTEMCOMPONENT_UNSUPPORTEDCONSTRUCTORPARAMSCOUNT' );
-                $oEx->setComponent( $sClassName );
-                $oEx->debugOut();
-                throw $oEx;
+                try {
+                    // unlimited constructor arguments support
+                    $oRo = new ReflectionClass( $sClassName );
+                    $oObj = $oRo->newInstanceArgs( $aParams );
+                } catch ( ReflectionException $oRefExcp ) {
+                    // something went wrong?
+                    $oEx = new oxSystemComponentException();
+                    $oEx->setMessage( $oRefExcp->getMessage() );
+                    $oEx->setComponent( $sClassName );
+                    $oEx->debugOut();
+                    throw $oEx;
+                }
         }
 
         return $oObj;
