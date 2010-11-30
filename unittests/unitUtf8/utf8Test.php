@@ -198,7 +198,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
     public function testOxArticleSetAndGetTags()
     {
-        $sValue  = 'nekilnojamojo turto agentūrų verslo sėkme Литовские европарламентарии, срок полномочий которых в 2009 году подходит к концу Der Umstieg war für uns ein voller Erfolg. OXID eShop ist flexibel und benutzerfreundlich';
+        $sValue  = 'nekilnojamojo turto agentūrų verslo sėkme Литовские европарламентарии, срок полномочий которых в 2009 году подходит к концу Der Umstieg war für uns ein voller erfolg. OXID eShop ist flexibel und benutzerfreundlich';
         $sResult = 'nekilnojamojo turto agentūrų verslo sėkme литовские европарламентарии,срок полномочий которых в 2009 году подходит к концу der umstieg war für uns ein voller erfolg. oxid eshop ist flexibel und benutzerfreundlich,sėkme литовские für';
 
         $oArticle = new oxarticle();

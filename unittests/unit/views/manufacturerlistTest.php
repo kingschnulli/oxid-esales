@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: manufacturerlistTest.php 31083 2010-11-23 08:02:22Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -129,10 +129,12 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
     public function testAddPageNrParamSeoOn()
     {
         oxTestModules::addFunction( 'oxUtils', 'seoIsActive', '{ return true; }');
-        oxTestModules::addFunction( 'oxSeoEncoderManufacturer', 'getManufacturerPageUrl', '{ return "testLink"; }');
+
+        $oManufacturer = $this->getMock( "oxmanufacturer", array( "getBaseSeoLink" ) );
+        $oManufacturer->expects( $this->once() )->method( 'getBaseSeoLink')->will( $this->returnValue( "testLink" ));
 
         $oView = $this->getMock( "manufacturerlist", array( "getActManufacturer" ) );
-        $oView->expects( $this->once() )->method( 'getActManufacturer')->will( $this->returnValue( true ) );
+        $oView->expects( $this->once() )->method( 'getActManufacturer')->will( $this->returnValue( $oManufacturer ) );
         $this->assertEquals( "testLink", $oView->UNITaddPageNrParam( "testUrl", 1 ) );
     }
 

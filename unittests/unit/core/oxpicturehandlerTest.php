@@ -128,7 +128,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
         $sPictureDir = oxConfig::getInstance()->getPictureDir( false );
         $sMasterPicPath = $sPictureDir . "master/1/1126_p1.jpg";
 
-        $aFiles1['myfile']['name']["P1@oxarticles__oxpic1"] = "testNewPic1.jpg";
+        $aFiles1['myfile']['name']["P1@oxarticles__oxpic1"] = "1126_p1.jpg";
         $aFiles1['myfile']['tmp_name']["P1@oxarticles__oxpic1"] = $sMasterPicPath;
 
         $aFiles1['myfile']['name']["Z1@oxarticles__oxzoom1"] = "testNewPic1.jpg";

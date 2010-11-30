@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticleTest.php 28421 2010-06-18 08:54:27Z sarunas $
+ * @version   SVN: $Id: oxseoencoderarticleTest.php 31086 2010-11-23 08:07:20Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -629,12 +629,16 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         $oArticle->load( '1126' );
 
         $oSeoEncoderArticle = $this->getMock( "oxSeoEncoderArticle", array( "_getTag" ) );
-        $oSeoEncoderArticle->expects( $this->any() )->method('_getTag')->will( $this->returnValue( 'sTag' ) );
 
-        $this->assertEquals( 'tag/sTag/Bar-Set-ABSINTH.html', $oSeoEncoderArticle->UNITgetArticleTagUri( $oArticle, 0 ) );
+            $sTag = 'absinth';
+            $sTagUrl = "tag/{$sTag}/Bar-Set-ABSINTH.html";
+
+        $oSeoEncoderArticle->expects( $this->any() )->method('_getTag')->will( $this->returnValue( $sTag ) );
+
+        $this->assertEquals( $sTagUrl, $oSeoEncoderArticle->UNITgetArticleTagUri( $oArticle, 0 ) );
 
         // chache works ?
-        $this->assertEquals( 'tag/sTag/Bar-Set-ABSINTH.html', $oSeoEncoderArticle->UNITgetArticleTagUri( $oArticle, 0 ) );
+        $this->assertEquals( $sTagUrl, $oSeoEncoderArticle->UNITgetArticleTagUri( $oArticle, 0 ) );
     }
 
     public function testGetProductForLang()

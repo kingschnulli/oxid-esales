@@ -86,14 +86,14 @@ class oxPictureHandler extends oxSuperCfg
                     $sMasterPictureSource = $oConfig->getMasterPictureDir() . $iNr . "/" . basename($oObject->$sField->value);
 
                     if ( file_exists( $sMasterPictureSource ) ) {
+
                         $sNewName = $this->_getArticleMasterPictureName( $oObject, $iNr );
 
                         $aFiles = array();
 
                         // main product picture
                         $sType = "P" . $iNr . "@oxarticles__oxpic" . $iNr;
-                        $aFiles['myfile']['name'][$sType] = $sNewName;
-                        //$aFiles['myfile']['name'][$sType] = $oObject->{"oxarticles__oxpic".$iNr}->value;;
+                        $aFiles['myfile']['name'][$sType] = basename($oObject->{"oxarticles__oxpic".$iNr}->value);
                         $aFiles['myfile']['tmp_name'][$sType] = $sMasterPictureSource;
 
                         // zoom picture

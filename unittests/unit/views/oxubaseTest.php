@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 29553 2010-08-27 14:48:10Z sarunas $
+ * @version   SVN: $Id: oxubaseTest.php 31084 2010-11-23 08:03:36Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -169,13 +169,15 @@ class Unit_Views_oxubaseTest extends OxidTestCase
 
     public function testGetActTagSeo()
     {
+            $sTag = "liebliche";
+
         oxTestModules::addFunction("oxutils", "seoIsActive", "{return true;}");
         oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
-        modConfig::setParameter( 'searchtag', 'someTag' );
+        modConfig::setParameter( 'searchtag', $sTag );
 
         $oTag = new Oxstdclass();
-        $oTag->sTag = 'someTag';
-        $oTag->link = oxConfig::getInstance()->getShopUrl(). "tag/someTag/";
+        $oTag->sTag = $sTag;
+        $oTag->link = oxConfig::getInstance()->getShopUrl(). "tag/{$sTag}/";
 
         $oUbase = new oxUBase();
         $this->assertEquals( $oTag, $oUbase->getActTag() );

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 30979 2010-11-16 13:02:11Z vilma $
+ * @version   SVN: $Id: lang.php 31150 2010-11-25 08:18:37Z linas.kukulskis $
  */
 
 /*
@@ -1262,7 +1262,6 @@ $aLang = array(
 'SHOP_CONFIG_AUTOSEARCHONCAT'                   => 'Start Search automatically if User selects a Category',
 'SHOP_CONFIG_AUTOICONS'                         => 'Generate Icons automatically from Thumbnails (might slow down your server)',
 'SHOP_CONFIG_ALLOWUNEVENAMOUNTS'                => 'Allow fraction Quantities (e.g. 1.5)',
-'SHOP_CONFIG_ATTENTION'                         => 'Caution: Even if encryption is used, Credit Card contracts usually prohibit this strictly!',
 'SHOP_CONFIG_BIDIRECTCROSS'                     => 'Enable bidirectional Crosselling',
 'SHOP_CONFIG_CONFIRMAGB'                        => 'Users have to Confirm General Terms and Conditions during Check-Out',
 'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'           => 'Show an additional "Submit Order" Button at the Top in 4th Order Step (By default "Submit Order" Button is shown only on the Bottom of the Page).',

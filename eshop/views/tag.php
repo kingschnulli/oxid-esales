@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: tag.php 31080 2010-11-23 07:55:13Z arvydas $
+ * @version   SVN: $Id: tag.php 31277 2010-11-26 13:20:08Z alfonsas $
  */
 
 /**
@@ -321,7 +321,7 @@ class Tag extends aList
 
             $aPath[1] = oxNew( "oxcategory" );
             $aPath[1]->setLink( false );
-            $aPath[1]->oxcategories__oxtitle = new oxField( $oStr->htmlspecialchars( $oStr->ucfirst( $sTag ) ) );
+            $aPath[1]->oxcategories__oxtitle = new oxField( $oStr->ucfirst( $sTag ) );
             return $aPath;
         }
     }

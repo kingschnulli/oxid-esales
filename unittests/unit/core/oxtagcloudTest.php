@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloudTest.php 30339 2010-10-15 12:32:54Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxtagcloudTest.php 31305 2010-11-29 12:10:06Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -120,8 +120,10 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         oxTestModules::addFunction( "oxUtils", "seoIsActive", "{return true;}" );
 
         $oTagCloud = new oxTagCloud();
-        $this->assertEquals( oxConfig::getInstance()->getConfigParam("sShopURL")."tag/testTag/", $oTagCloud->getTagLink( "testTag" ) );
 
+
+            $this->assertEquals( oxConfig::getInstance()->getConfigParam("sShopURL")."tag/zauber/", $oTagCloud->getTagLink( "zauber" ) );
+            $this->assertEquals( oxConfig::getInstance()->getConfigParam("sShopURL")."index.php?cl=tag&amp;searchtag=testTag&amp;lang=0", $oTagCloud->getTagLink( "testTag" ) );
     }
 
     /**
@@ -197,7 +199,7 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $this->assertFalse( $oTagCloud->getTagCloud() );
     }
 
-    public function testGetTagCloud()
+    public function testGetTagCloud123()
     {
         oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
         $sUrl = oxConfig::getInstance()->getShopUrl();
@@ -332,7 +334,7 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         try {
             $oTagCloud = new oxTagCloud();
             $sTag = $oTagCloud->getTagCloud('2000');
-            $this->assertTrue(strpos($sTag, "index.php?cl=tag&amp;searchtag=a%26addaa%26%23%25%3Cb%3Eaa%3C%2Fb%3E&amp;lang=0'>a&amp;addaa&amp;#%&lt;b&gt;aa&lt;/b&gt;</a>") > 0);
+            $this->assertTrue(strpos($sTag, "index.php?cl=tag&amp;searchtag=a%26addaa%26%23%25%3Cb%3Eaa%3C%2Fb%3E_&amp;lang=0'>a&amp;addaa&amp;#%&lt;b&gt;aa&lt;/b&gt;_</a>") > 0);
         } catch(Exception $e) {
             // notihng for now
         }
@@ -457,6 +459,22 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $this->markTestIncomplete();
     }*/
 
+    public function testStripMetaChars()
+    {
+        $oTagCloud = new oxTagCloud();
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a+-><()~*"\\b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a+b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a-b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a>b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a<b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a(b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a)b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a~b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a*b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a"b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a\\b'));
+    }
+
     public function testPrepareTags()
     {
         $oTagCloud = new oxTagCloud();
@@ -469,29 +487,31 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $this->assertEquals('tag1,tag2', $oTagCloud->prepareTags('TAG1,tag2'));
         $this->assertEquals('ta__', $oTagCloud->prepareTags('ta'));
         $this->assertEquals('t___,t___', $oTagCloud->prepareTags('t,t'));
-        $this->assertEquals('t t_', $oTagCloud->prepareTags('t t'));
+        $this->assertEquals('t___ t___', $oTagCloud->prepareTags('t t'));
         $this->assertEquals('', $oTagCloud->prepareTags(' '));
         $this->assertEquals('tag1,ta__,tag2,t___', $oTagCloud->prepareTags('tag1,,,,ta, tag2,t'));
-        $this->assertEquals('bar_-set_', $oTagCloud->prepareTags('bar-set'));
-        $this->assertEquals('bar_-sett', $oTagCloud->prepareTags('bar-sett'));
-        $this->assertEquals('barr-sett', $oTagCloud->prepareTags('barr-sett'));
+        $this->assertEquals('bar_ set_', $oTagCloud->prepareTags('bar-set'));
+        $this->assertEquals('bar_ sett', $oTagCloud->prepareTags('bar-sett'));
+        $this->assertEquals('barr sett', $oTagCloud->prepareTags('barr-sett'));
+        $this->assertEquals('foo_ bar_', $oTagCloud->prepareTags('"foo-bar"'));
+        $this->assertEquals('foo_', $oTagCloud->prepareTags('\\foo\\'));
     }
 
     public function testTrimTags()
     {
         $oTagCloud = new oxTagCloud();
-        $this->assertEquals('tag1,tag2', $oTagCloud->trimTags('tag1__,tag2 '));
-        $this->assertEquals('tag1,tag2', $oTagCloud->trimTags('tag1__,,, ,tag2 '));
+        $this->assertEquals('tag1__,tag2', $oTagCloud->trimTags('tag1__,tag2 '));
+        $this->assertEquals('tag1__,tag2', $oTagCloud->trimTags('tag1__,,, ,tag2 '));
         $this->assertEquals('tag1__  tag2', $oTagCloud->trimTags('tag1__  tag2 '));
         $this->assertEquals('tag1_tag2', $oTagCloud->trimTags('tag1_tag2 '));
-        $this->assertEquals('TAG1,tag2', $oTagCloud->trimTags('TAG1__,tag2'));
+        $this->assertEquals('TAG1__,tag2', $oTagCloud->trimTags('TAG1__,tag2'));
         $this->assertEquals('ta', $oTagCloud->trimTags('ta__'));
-        $this->assertEquals('t,t', $oTagCloud->trimTags('t___,t____'));
-        $this->assertEquals('____', $oTagCloud->trimTags('____'));
+        $this->assertEquals('t,t____', $oTagCloud->trimTags('t___,t____'));
+        $this->assertEquals('', $oTagCloud->trimTags('____'));
         $this->assertEquals('tag1,ta,tag2,t', $oTagCloud->trimTags('tag1, ta__,tag2 ,t___'));
-        $this->assertEquals('tag1 ta__ tag2 t', $oTagCloud->trimTags('tag1 ta__ tag2 t___'));
-        $this->assertEquals('bar-set', $oTagCloud->trimTags('bar_-set_'));
-        $this->assertEquals('barr-set', $oTagCloud->trimTags('barr-set_'));
+        $this->assertEquals('tag1 ta tag2 t', $oTagCloud->trimTags('tag1 ta__ tag2 t___'));
+        $this->assertEquals('bar set', $oTagCloud->trimTags('bar_ set_'));
+        $this->assertEquals('barr set', $oTagCloud->trimTags('barr set_'));
         $this->assertEquals('barr', $oTagCloud->trimTags(',barr,'));
     }
 

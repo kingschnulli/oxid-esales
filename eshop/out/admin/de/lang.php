@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 31036 2010-11-18 12:03:47Z linas.kukulskis $
+ * @version   SVN: $Id: lang.php 31242 2010-11-25 15:08:13Z linas.kukulskis $
  */
 
 $sLangName  = 'Deutsch';
@@ -1256,7 +1256,6 @@ $aLang = array(
 'SHOP_CONFIG_AUTOSEARCHONCAT'                   => 'Die Suche automatisch starten, sobald der Kunde eine Kategorie ausgewählt hat',
 'SHOP_CONFIG_AUTOICONS'                         => 'Icons automatisch generieren aus Thumbnail (kann u.U. das System stark verlangsamen)',
 'SHOP_CONFIG_ALLOWUNEVENAMOUNTS'                => 'Nicht ganzzahlige Eingaben bei Artikelmengen erlauben (z.B. 1,5)',
-'SHOP_CONFIG_ATTENTION'                         => 'ACHTUNG! Üblicherweise ist in den Verträgen mit MasterCard und VISA die Speicherung der Daten ausdrücklich verboten.',
 'SHOP_CONFIG_BIDIRECTCROSS'                     => 'Bidirektionales Crossselling aktivieren',
 'SHOP_CONFIG_CONFIRMAGB'                        => 'Kunden müssen die AGB bestätigen, um bestellen zu können',
 'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'           => 'Im 4ten Bestellschritt einen zusätzlichen "Bestellung absenden" Button oben anzeigen (Wenn die Einstellung nicht aktiv ist, wird nur der "Bestellung absenden" Button weiter unten angezeigt).',

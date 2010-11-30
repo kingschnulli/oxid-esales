@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 30960 2010-11-15 14:22:02Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 31134 2010-11-24 11:48:33Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -5427,6 +5427,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oArticle->saveTags($sBackup);
     }
+
 
     /**
      * Test get tags (raw test).

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 30960 2010-11-15 14:22:02Z vilma $
+ * @version   SVN: $Id: oxarticle.php 31159 2010-11-25 10:04:19Z sarunas $
  */
 
 // defining supported link types
@@ -2520,14 +2520,20 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function saveTags($sTags)
     {
-        $sTags = mysql_real_escape_string($sTags);
+        //do not allow derived update
+        if ( !$this->allowDerivedUpdate() ) {
+            return false;
+        }
+
+
         $oTagCloud = oxNew('oxtagcloud');
         $oTagCloud->resetTagCache();
         $sTags = $oTagCloud->prepareTags($sTags);
+        $sTags = mysql_real_escape_string($sTags);
+
         $sTagField = "oxtags".oxLang::getInstance()->getLanguageTag($this->getLanguage());
         $sQ = "update oxartextends set $sTagField = '$sTags'  where oxid = '".$this->getId()."'";
         return oxDb::getDb()->execute($sQ);
-
     }
 
     /**

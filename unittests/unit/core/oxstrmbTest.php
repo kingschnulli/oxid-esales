@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstrmbTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxstrmbTest.php 31131 2010-11-24 09:32:06Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -139,6 +139,18 @@ class Unit_Core_oxstrMbTest extends OxidTestCase
         $aRes = array();
         $this->_oSubj->preg_match('/Bau/', $this->_2Utf($this->_sStrHaystack), $aRes);
         $this->assertEquals(array('Bau'), $aRes);
+    }
+
+    /**
+     * oxStrMb::preg_match_all() test case
+     *
+     * @return null
+     */
+    public function testPregMatchAll()
+    {
+        $aRez = array( array( 'a', 'b', 'c' ) );
+        $this->assertEquals( 3, $this->_oSubj->preg_match_all( "/[^\-]+/", $this->_2Utf( "a-b-c" ), $aMatches ) );
+        $this->assertEquals( $aRez, $aMatches );
     }
 
  /*   public function testUcfirst()

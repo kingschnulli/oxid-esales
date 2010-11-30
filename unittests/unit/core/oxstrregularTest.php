@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstrregularTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxstrregularTest.php 31131 2010-11-24 09:32:06Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -79,6 +79,18 @@ class Unit_Core_oxstrRegularTest extends OxidTestCase
     {
         $this->assertEquals(26,
                             $this->_oSubj->strpos($this->_sStrHaystack, "Höhen"));
+    }
+
+    /**
+     * oxStrMb::preg_match_all() test case
+     *
+     * @return null
+     */
+    public function testPregMatchAll()
+    {
+        $aRez = array( array( 'a', 'b', 'c' ) );
+        $this->assertEquals( 3, $this->_oSubj->preg_match_all( "/[^\-]+/", $this->_2Utf( "a-b-c" ), $aMatches ) );
+        $this->assertEquals( $aRez, $aMatches );
     }
 /*
     public function testStrpos3Params()

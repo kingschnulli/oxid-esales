@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 30093 2010-10-04 14:32:02Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxemailTest.php 31274 2010-11-26 12:53:11Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1687,13 +1687,29 @@ class Unit_Core_oxemailTest extends OxidTestCase
         $oEmail->expects( $this->at(0) )->method( 'getRecipient' )->will( $this->returnValue( 1 ) );
         $oEmail->expects( $this->at(1) )->method( 'getMailer' )->will( $this->returnValue( "smtp" ) );
         $oEmail->expects( $this->at(2) )->method( '_sendMail' )->will( $this->returnValue( false ) );
-        $oEmail->expects( $this->at(3) )->method( '_sendMail' )->will( $this->returnValue( true ) );
+        $oEmail->expects( $this->at(3) )->method( '_sendMailErrorMsg' );
+        $oEmail->expects( $this->at(4) )->method( '_sendMail' )->will( $this->returnValue( true ) );
         $oEmail->expects( $this->exactly(2) )->method( '_sendMail' );
-        $oEmail->expects( $this->once() )->method( '_sendMailErrorMsg' );
+        $oEmail->expects( $this->exactly(1) )->method( '_sendMailErrorMsg' );
 
         $this->assertTrue( $oEmail->send() );
     }
 
+    /*
+     * Test sending error message to shop owner when only mailing by "mail" fails
+     */
+    public function testSendMailErrorMsg_failsMail()
+    {
+        $oEmail = $this->getMock( "oxEmail", array("getRecipient", "getMailer", "_sendMail", "_sendMailErrorMsg") );
+        $oEmail->expects( $this->at(0) )->method( 'getRecipient' )->will( $this->returnValue( 1 ) );
+        $oEmail->expects( $this->at(1) )->method( 'getMailer' )->will( $this->returnValue( "mail" ) );
+        $oEmail->expects( $this->at(2) )->method( '_sendMail' )->will( $this->returnValue( false ) );
+        $oEmail->expects( $this->at(3) )->method( '_sendMailErrorMsg' );
+        $oEmail->expects( $this->exactly(1) )->method( '_sendMail' );
+        $oEmail->expects( $this->exactly(1) )->method( '_sendMailErrorMsg' );
+
+        $this->assertFalse( $oEmail->send() );
+    }
 
     /*
      * Test hook up method
