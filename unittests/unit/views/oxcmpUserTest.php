@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 28903 2010-07-21 08:23:28Z arvydas $
+ * @version   SVN: $Id: oxcmpUserTest.php 31377 2010-12-01 15:11:05Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1320,6 +1320,31 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oUserView->loginOid();
         $sQ = 'select oxisopenid from oxuser where oxusername = \'test@oxid-esales.com\'';
         $this->assertEquals( 1, $myDB->getOne( $sQ ) );
+    }
+
+    /**
+     * Test checking private sales login - if redirecting is done without checking
+     * if redirection already was done (#2040)
+     *
+     * @return null
+     */
+    public function testCheckPsState()
+    {
+        $oConfig = modConfig::getInstance();
+        $sPageUrl = $oConfig->getShopHomeURL()."cl=account";
+        $oConfig->setConfigParam( "blPsLoginEnabled", true );
+
+        $oUtils =  $this->getMock('oxUtils', array('redirect'));
+        $oUtils->expects($this->once())->method('redirect')->with($this->equalTo( $sPageUrl ), $this->equalTo( false ));
+        oxTestModules::addModuleObject('oxUtils', $oUtils);
+
+        $oTestView = oxNew( "account" );
+
+        $oView = $this->getMock( 'oxcmp_user', array( 'getUser', 'getParent' ) );
+        $oView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( null ) );
+        $oView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oTestView ) );
+
+        $oView->UNITcheckPsState();
     }
 
 }

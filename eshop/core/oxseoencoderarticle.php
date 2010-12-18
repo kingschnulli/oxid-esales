@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticle.php 31086 2010-11-23 08:07:20Z arvydas $
+ * @version   SVN: $Id: oxseoencoderarticle.php 31343 2010-11-30 15:56:34Z linas.kukulskis $
  */
 
 /**
@@ -473,6 +473,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 $oVendor = oxNew( "oxVendor" );
             }
             if ( $oVendor->getId() !== $sActVendorId ) {
+                $oVendor = oxNew( "oxVendor" );
                 if ( !$oVendor->loadInLang( $iLang, $sActVendorId ) ) {
                     $oVendor = null;
                 }
@@ -542,12 +543,15 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         $oManufacturer = null;
         if ( $sActManufacturerId = $oArticle->oxarticles__oxmanufacturerid->value ) {
             $oView = $this->getConfig()->getActiveView();
+
             if ( $oView instanceof oxView && ( $oActManufacturer = $oView->getActManufacturer() ) ) {
                 $oManufacturer = $oActManufacturer;
             } else {
                 $oManufacturer = oxNew( "oxManufacturer" );
             }
+
             if ( $oManufacturer->getId() !== $sActManufacturerId || $oManufacturer->getLanguage() != $iLang ) {
+                $oManufacturer = oxNew( "oxManufacturer" );
                 if ( !$oManufacturer->loadInLang( $iLang, $sActManufacturerId ) ) {
                     $oManufacturer = null;
                 }

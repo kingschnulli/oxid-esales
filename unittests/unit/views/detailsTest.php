@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 30346 2010-10-15 14:13:28Z vilma $
+ * @version   SVN: $Id: detailsTest.php 31360 2010-12-01 08:43:27Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -277,6 +277,31 @@ class Unit_Views_detailsTest extends OxidTestCase
 
         try {
             $oDetailsView = new details();
+            $oDetailsView->getProduct();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( oxConfig::getInstance()->getShopHomeURL(), $oExcp->getMessage(), 'result does not match' );
+            return;
+        }
+        $this->fail( 'product should not be returned' );
+    }
+
+    /**
+     * Test case for #0002223: variant page works even if parent article is inactive
+     *
+     * @return null
+     */
+    public function testForBugEntry0002223()
+    {
+        $sQ = "select oxid from oxarticles where oxparentid!='' and oxactive = 1";
+        modConfig::setParameter( 'anid', oxDb::getDb()->getOne( $sQ ) );
+        oxTestModules::addFunction( "oxUtils", "redirect", "{ throw new Exception( \$aA[0] ); }" );
+
+        $oParentProduct = $this->getMock( "oxStdClass", array( "isVisible" ) );
+        $oParentProduct->expects( $this->once() )->method( 'isVisible')->will( $this->returnValue( false ) );
+
+        try {
+            $oDetailsView = $this->getMock( "details", array( "_getParentProduct" ) );
+            $oDetailsView->expects( $this->once() )->method( '_getParentProduct')->will( $this->returnValue( $oParentProduct ) );
             $oDetailsView->getProduct();
         } catch ( Exception $oExcp ) {
             $this->assertEquals( oxConfig::getInstance()->getShopHomeURL(), $oExcp->getMessage(), 'result does not match' );

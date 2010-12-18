@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 28903 2010-07-21 08:23:28Z arvydas $
+ * @version   SVN: $Id: oxcmp_user.php 31377 2010-12-01 15:11:05Z rimvydas.paskevicius $
  */
 
 // defining login/logout states
@@ -77,6 +77,7 @@ class oxcmp_user extends oxView
                                         'register',
                                         'forgotpwd',
                                         'content',
+                                        'account',
                                         );
 
     /**
@@ -188,13 +189,13 @@ class oxcmp_user extends oxView
 
             // no session user
             if ( !$oUser && !in_array( $sClass, $this->_aAllowedClasses ) ) {
-                oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account' );
+                oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account', false );
             }
 
             if ( $oUser && !$oUser->isTermsAccepted() &&
                  $oConfig->getConfigParam( 'blConfirmAGB' ) &&
                  !in_array( $sClass, $this->_aAllowedClasses ) ) {
-                oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account&term=1' );
+                oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account&term=1', false );
             }
         }
     }

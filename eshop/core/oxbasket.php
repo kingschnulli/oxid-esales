@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2010
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 30585 2010-10-27 08:56:55Z arvydas $
+ * @version   SVN: $Id: oxbasket.php 31648 2010-12-09 16:43:37Z tomas $
  */
 
 /**
@@ -1951,7 +1951,7 @@ class oxBasket extends oxSuperCfg
     }
 
     /**
-     * Returns products netto price with applied discounts and vouschers
+     * Returns product netto price with applied discounts and vouchers
      *
      * @return double
      */
