@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 30923 2010-11-12 15:52:01Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxadminviewTest.php 32511 2011-01-14 13:54:24Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -328,8 +328,9 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
      */
     public function testResetArtSeoUrl()
     {
+        $sShopId = oxConfig::getInstance()->getShopId();
         $myDB = oxDb::getDB();
-        $myDB->execute("insert into oxseo set oxobjectid = '_testArt', oxident = MD5('_testArt'), oxshopid = '1', oxlang = '1'");
+        $myDB->execute("insert into oxseo set oxobjectid = '_testArt', oxident = MD5('_testArt'), oxshopid = '{$sShopId}', oxlang = '1', oxtype='oxarticle' ");
         $oAdminView = oxNew( 'oxAdminView' );
         $oAdminView->resetArtSeoUrl('_testArt');
         $this->assertEquals( 1, $myDB->getOne("select oxexpired from oxseo where oxobjectid='_testArt'") );

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxajax.php 30923 2010-11-12 15:52:01Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxajax.php 32511 2011-01-14 13:54:24Z arvydas.vapsva $
  */
 
 // shop path for includes
@@ -566,8 +566,9 @@ class ajaxListComponent extends oxSuperCfg
             $aArtIds = array( $aArtIds );
         }
 
+        $sShopId = $this->getConfig()->getShopId();
         foreach ( $aArtIds as $sArtId ) {
-           oxSeoEncoder::getInstance()->markAsExpired( $sArtId );
+           oxSeoEncoder::getInstance()->markAsExpired( $sArtId, $sShopId, 1, null, "oxtype='oxarticle'" );
         }
     }
 
