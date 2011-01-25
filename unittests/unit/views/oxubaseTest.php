@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 31084 2010-11-23 08:03:36Z arvydas $
+ * @version   SVN: $Id: oxubaseTest.php 32636 2011-01-20 16:34:06Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -324,11 +324,11 @@ class Unit_Views_oxubaseTest extends OxidTestCase
 
             $oView = new oxubase();
             $sId = $oView->getViewId();
-            $this->assertEquals( "ox|0|0", $oView->getViewId() );
+            $this->assertEquals( "ox|0|0|0", $oView->getViewId() );
 
             // and caching
             oxLang::getInstance()->setBaseLanguage( 1 );
-            $this->assertEquals( "ox|0|0", $oView->getViewId() );
+            $this->assertEquals( "ox|0|0|0", $oView->getViewId() );
     }
 
 
@@ -1804,6 +1804,5 @@ class Unit_Views_oxubaseTest extends OxidTestCase
 
         $this->assertFalse( $oView->getShowPromotionList() );
     }
-
 
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 31134 2010-11-24 11:48:33Z sarunas $
+ * @version   SVN: $Id: oxarticleTest.php 32612 2011-01-20 15:22:37Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -5461,11 +5461,17 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->load('1651');
         $sExisting = $oArticle->getTags();
 
-        $sAddTag = "tag3";
+        $sAddTag = "tag3\\\\'";
+        $oArticle->addTag($sAddTag);
+        $sAddTag = "tag3\\\'";
+        $oArticle->addTag($sAddTag);
+        $sAddTag = "tag3\\\"";
+        $oArticle->addTag($sAddTag);
+        $sAddTag = "tag4";
         $oArticle->addTag($sAddTag);
         $sGotTags = $oArticle->getTags();
 
-        $sExpt = "$sExisting,tag3";
+        $sExpt = "$sExisting,tag3,tag3,tag3,tag4";
 
         $this->assertEquals($sExpt, $sGotTags);
 

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 31377 2010-12-01 15:11:05Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxcmp_user.php 32587 2011-01-20 10:35:07Z vilma $
  */
 
 // defining login/logout states
@@ -333,9 +333,13 @@ class oxcmp_user extends oxView
      */
     public function login_noredirect()
     {
-        if ( $this->getConfig()->getConfigParam( 'blPsLoginEnabled' ) && oxConfig::getParameter( 'ord_agb' ) &&
-             $this->getConfig()->getConfigParam( 'blConfirmAGB' ) && ( $oUser = $this->getUser() ) ) {
-            $oUser->acceptTerms();
+        $blAgb = oxConfig::getParameter( 'ord_agb' );
+        $oConfig = $this->getConfig();
+        if ( $oConfig->getConfigParam( 'blPsLoginEnabled' ) && $blAgb !== null &&
+             $oConfig->getConfigParam( 'blConfirmAGB' ) && ( $oUser = $this->getUser() ) ) {
+            if ( $blAgb ) {
+                $oUser->acceptTerms();
+            }
         } else {
             $this->login();
         }

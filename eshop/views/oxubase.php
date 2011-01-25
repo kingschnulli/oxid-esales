@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 31084 2010-11-23 08:03:36Z arvydas $
+ * @version   SVN: $Id: oxubase.php 32617 2011-01-20 15:23:58Z sarunas $
  */
 
 /**
@@ -616,7 +616,9 @@ class oxUBase extends oxView
 
             $this->_sViewId =  "ox|$iLang|$iCur";
 
-        return $this->_sViewId."|".( (int) $this->_blForceNoIndex );
+        $this->_sViewId .= "|".( (int) $this->_blForceNoIndex );
+
+        return $this->_sViewId;
     }
 
 

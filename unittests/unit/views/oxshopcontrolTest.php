@@ -246,6 +246,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oControl->UNITprocess( "info", null );
     }
 
+
     /**
      * Testing oxShopControl::_startMonitor() & oxShopControl::_stopMonitor()
      *

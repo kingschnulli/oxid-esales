@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloudTest.php 31305 2010-11-29 12:10:06Z alfonsas $
+ * @version   SVN: $Id: oxtagcloudTest.php 32612 2011-01-20 15:22:37Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -472,6 +472,7 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $this->assertEquals('a b', $oTagCloud->stripMetaChars('a~b'));
         $this->assertEquals('a b', $oTagCloud->stripMetaChars('a*b'));
         $this->assertEquals('a b', $oTagCloud->stripMetaChars('a"b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a\'b'));
         $this->assertEquals('a b', $oTagCloud->stripMetaChars('a\\b'));
     }
 

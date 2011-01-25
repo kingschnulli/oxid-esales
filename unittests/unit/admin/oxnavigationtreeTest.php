@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnavigationtreeTest.php 28293 2010-06-11 09:12:39Z michael.keiluweit $
+ * @version   SVN: $Id: oxnavigationtreeTest.php 32618 2011-01-20 15:24:18Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -107,28 +107,28 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $sRezXml = '<?xml version="1.0" encoding="ISO-8859-15"?>
                  <OXMENU type="dyn">
                    <MAINMENU id="dyn_menu">
-                     <SUBMENU cl="login" clparam="loginParam" list="dynscreen_list" listparam="menu=login" link="_cl=dynscreen&amp;menu=login&amp;loginParam">
+                     <SUBMENU cl="login" clparam="loginParam" list="dynscreen_list" listparam="menu=login" link="index.php?cl=dynscreen&amp;menu=login&amp;loginParam">
                        <TAB external="true" location="pages/login_about.php" id="dyn_about" />
                        <TAB external="true" location="pages/login_technics.php" id="dyn_interface" />
                        <TAB id="dyn_interface" cl="login" />
                      </SUBMENU>
                    </MAINMENU>
                    <MAINMENU id="dyn_menu">
-                     <SUBMENU cl="oxadminview" clparam="oxadminviewParam" list="dynscreen_list" listparam="menu=oxadminview" link="_cl=dynscreen&amp;menu=oxadminview&amp;oxadminviewParam">
+                     <SUBMENU cl="oxadminview" clparam="oxadminviewParam" list="dynscreen_list" listparam="menu=oxadminview" link="index.php?cl=dynscreen&amp;menu=oxadminview&amp;oxadminviewParam">
                        <TAB external="true" location="pages/oxadminview_about.php" id="dyn_about" />
                        <TAB external="true" location="pages/oxadminview_technics.php" id="dyn_interface" />
                        <TAB id="dyn_interface" cl="oxadminview" />
                      </SUBMENU>
                    </MAINMENU>
                    <MAINMENU id="dyn_menu">
-                     <SUBMENU cl="oxadmindetails" clparam="oxadmindetailsParam" list="dynscreen_list" listparam="menu=oxadmindetails" link="_cl=dynscreen&amp;menu=oxadmindetails&amp;oxadmindetailsParam">
+                     <SUBMENU cl="oxadmindetails" clparam="oxadmindetailsParam" list="dynscreen_list" listparam="menu=oxadmindetails" link="index.php?cl=dynscreen&amp;menu=oxadmindetails&amp;oxadmindetailsParam">
                        <TAB external="true" location="pages/oxadmindetails_about.php" id="dyn_about" />
                        <TAB external="true" location="pages/oxadmindetails_technics.php" id="dyn_interface" />
                        <TAB id="dyn_interface" cl="oxadmindetails" />
                      </SUBMENU>
                    </MAINMENU>
                    <MAINMENU id="dyn_menu">
-                     <SUBMENU cl="oxadminlist" clparam="oxadminlistParam" list="dynscreen_list" listparam="menu=oxadminlist" link="_cl=dynscreen&amp;menu=oxadminlist&amp;oxadminlistParam">
+                     <SUBMENU cl="oxadminlist" clparam="oxadminlistParam" list="dynscreen_list" listparam="menu=oxadminlist" link="index.php?cl=dynscreen&amp;menu=oxadminlist&amp;oxadminlistParam">
                        <TAB external="true" location="pages/oxadminlist_about.php" id="dyn_about" />
                        <TAB external="true" location="pages/oxadminlist_technics.php" id="dyn_interface" />
                        <TAB id="dyn_interface" cl="oxadminlist" />
@@ -145,7 +145,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $oRezDom->loadXML( $sRezXml );
 
         $oNavTree = $this->getMock( "oxnavigationtree", array( "_getAdminUrl" ) );
-        $oNavTree->expects( $this->once() )->method( '_getAdminUrl' )->will( $this->returnValue( "_" ) );
+        $oNavTree->expects( $this->never() )->method( '_getAdminUrl' );
         $oNavTree->UNITaddDynLinks( $oDom );
         $this->assertEquals( str_replace( array( "\t" , " ", "\n", "\r"), "", $oRezDom->saveXML()), str_replace( array( "\t" , " ", "\n", "\r"), "", $oDom->saveXML()) );
 
@@ -530,7 +530,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
      * OxNavigationTree::_checkDynFile() test case
      * testing new functionality
      * dyn file must not be created if content is empty
-     * 
+     *
      * @return null
      */
     public function testCheckDynFileFileDoesNotExist()
@@ -572,7 +572,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
      *
      * @param object $oDom     XML Dom Object
      * @param int    $iNeedCnt amount of 'to remove links'
-     * 
+     *
      * @return null
      */
     protected function _checkDemoShopDenialsInMenuXml($oDom, $iNeedCnt)
@@ -796,7 +796,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * test if the admin URL will read out correct from config 
+     * test if the admin URL will read out correct from config
      *
      * @return null
      */
@@ -809,7 +809,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
     }
 
     /**
-     * test if the admin URL will read out correct from session 
+     * test if the admin URL will read out correct from session
      *
      * @return null
      */
@@ -834,9 +834,9 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
         $sString = 'http://url/lala?stoken=ASDddddd2454&amp;amp;&amp;lala';
 
         $o = $this->getMock('oxNavigationTree', array('_getAdminUrl'));
-        $o->expects( $this->once() )->method( '_getAdminUrl' )->will( $this->returnValue( 'http://url/lala?stoken=NEWTOKEN111454&amp;' ) );
+        $o->expects( $this->never() )->method( '_getAdminUrl' );
 
-        $this->assertEquals('http://url/lala?stoken=NEWTOKEN111454&amp;amp;&amp;lala', $o->UNITprocessCachedFile($sString));
+        $this->assertEquals($sString, $o->UNITprocessCachedFile($sString));
     }
 
     /**
@@ -875,7 +875,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
 
     /**
      * OxNavigationTree::_mergeNodes() test case
-     * 
+     *
      * @return null
      */
     public function testMergeNodes()
@@ -922,7 +922,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
 
     /**
      * OxNavigationTree::getShopVersionNr() test case
-     * 
+     *
      * @return null
      */
     public function testGetShopVersionNr()
@@ -936,7 +936,7 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
 
     /**
      * OxNavigationTree::init() test case
-     * 
+     *
      * @return null
      */
     public function testInit()
