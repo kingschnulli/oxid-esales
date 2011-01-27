@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 32511 2011-01-14 13:54:24Z arvydas.vapsva $
+ * @version   SVN: $Id: oxadminviewTest.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -131,22 +131,9 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
      */
     public function testGetPreviewId()
     {
-        $sAdminSid = oxUtilsServer::getInstance()->getOxCookie( 'admin_sid' );
-        $oUser = $this->getMock( 'oxuser', array( 'getId' ) );
-        $oUser->expects( $this->atLeastOnce() )->method( 'getId' )->will( $this->returnValue( 'testuserid' ) );
-
-        $oUser->oxuser__oxpassword = $this->getMock( 'oxField', array( '__get' ) );
-        $oUser->oxuser__oxpassword->expects( $this->atLeastOnce() )->method( '__get')->will( $this->returnValue( 'testpass' ) );
-
-        $oUser->oxuser__oxrights = $this->getMock( 'oxField', array( '__get' ) );
-        $oUser->oxuser__oxrights->expects( $this->atLeastOnce() )->method( '__get')->will( $this->returnValue( 'testright' ) );
-
-        $sIdent = md5( $sAdminSid . $oUser->getId() . $oUser->oxuser__oxpassword->value . $oUser->oxuser__oxrights->value );
-
-        $oAdminView = $this->getMock( 'oxadminview', array( 'getUser' ) );
-        $oAdminView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
-
-        $this->assertEquals( $sIdent, $oAdminView->getPreviewId() );
+        oxTestModules::addFunction('oxUtils', 'getPreviewId', '{ return "123"; }');
+        $oAdminView = new oxadminview();
+        $this->assertEquals( "123", $oAdminView->getPreviewId() );
     }
 
     /**

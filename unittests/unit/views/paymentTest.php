@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 28585 2010-06-23 09:23:38Z sarunas $
+ * @version   SVN: $Id: paymentTest.php 32752 2011-01-26 09:55:13Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -538,10 +538,12 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->assertNull(modSession::getInstance()->getVar("kkyear"));
         $this->assertNull(modSession::getInstance()->getVar("kkpruef"));
 
-        $this->assertFalse(in_array($sTNumber, $_REQUEST));
-        $this->assertFalse(in_array($sTNumber, $_POST));
-        $this->assertFalse(in_array($sTNumber, $_GET));
-        $this->assertFalse(in_array($sTNumber, $_SERVER));
+        $this->assertFalse($this->_checkInArrayRecursive($sTNumber, $_REQUEST));
+        $this->assertFalse($this->_checkInArrayRecursive($sTNumber, $_POST));
+        $this->assertFalse($this->_checkInArrayRecursive($sTNumber, $_GET));
+        if (is_array($_SERVER)) {
+            $this->assertFalse($this->_checkInArrayRecursive($sTNumber, $_SERVER));
+        }
 
         $this->assertNull( $_REQUEST["dynvalue[kknumber]"]);
         $this->assertNull( $_REQUEST["dynvalue[kkname]"]);
@@ -563,6 +565,17 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     }
 
+    protected function _checkInArrayRecursive($needle, $haystack)
+    {
+        foreach ($haystack as $v) {
+                if ($needle == $v) {
+                    return true;
+                } elseif (is_array($v)) {
+                    return $this->_checkInArrayRecursive($needle, $v);
+                }
+        }
+        return false;
+    }
 
     public function testRenderDoesNotCleanReservationsIfOff()
     {

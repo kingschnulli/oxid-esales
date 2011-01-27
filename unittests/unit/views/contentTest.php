@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 29274 2010-08-10 08:54:58Z arvydas $
+ * @version   SVN: $Id: contentTest.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -76,17 +76,18 @@ class Unit_Views_contentTest extends OxidTestCase
      */
     public function testCanShowContent()
     {
-        modConfig::getInstance()->setConfigParam( 'blPsLoginEnabled', true );
-
-        $oView = $this->getMock( "content", array( "getUser" ), array(), '', false );
+        $oView = $this->getMock( "content", array( "getUser", "isEnabledPrivateSales" ), array(), '', false );
         $oView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( false ) );
+        $oView->expects( $this->any() )->method( 'isEnabledPrivateSales' )->will( $this->returnValue( true ) );
 
         $this->assertTrue( $oView->UNITcanShowContent( "oxagb" ) );
         $this->assertTrue( $oView->UNITcanShowContent( "oxrightofwithdrawal" ) );
         $this->assertTrue( $oView->UNITcanShowContent( "oximpressum" ) );
         $this->assertFalse( $oView->UNITcanShowContent( "testcontentident" ) );
 
-        modConfig::getInstance()->setConfigParam( 'blPsLoginEnabled', false );
+        $oView = $this->getMock( "content", array( "getUser", "isEnabledPrivateSales" ), array(), '', false );
+        $oView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( false ) );
+        $oView->expects( $this->any() )->method( 'isEnabledPrivateSales' )->will( $this->returnValue( false ) );
         $this->assertTrue( $oView->UNITcanShowContent( "testcontentident" ) );
     }
 

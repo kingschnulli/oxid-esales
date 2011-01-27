@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: accountTest.php 28315 2010-06-11 15:34:43Z arvydas $
+ * @version   SVN: $Id: accountTest.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -55,10 +55,11 @@ class Unit_Views_accountTest extends OxidTestCase
         $oUser = new oxStdClass();
         $oUser->oxuser__oxpassword = new oxStdClass();
         $oUser->oxuser__oxpassword->value = "psw";
-        $oUserView = $this->getMock( 'account', array( 'confirmTerms', 'getUser', 'getOrderCnt' ) );
+        $oUserView = $this->getMock( 'account', array( 'confirmTerms', 'getUser', 'getOrderCnt', "isEnabledPrivateSales" ) );
         $oUserView->expects( $this->any() )->method( 'confirmTerms' )->will( $this->returnValue( false ) );
         $oUserView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
         $oUserView->expects( $this->any() )->method( 'getOrderCnt' );
+        $oUserView->expects( $this->any() )->method( 'isEnabledPrivateSales' )->will( $this->returnValue( false ) );
         $this->assertEquals( 'account_main.tpl', $oUserView->render());
     }
 
@@ -282,7 +283,7 @@ class Unit_Views_accountTest extends OxidTestCase
                                                    "getArticleId", "getSearchParam",
                                                    "getSearchParamForHtml", "getSearchCatId",
                                                    "getSearchVendor", "getSearchManufacturer",
-                                                   "getListType", "getUser", "getOrderCnt" ) );
+                                                   "getListType", "getUser", "getOrderCnt", "isEnabledPrivateSales" ) );
 
         $oView->expects( $this->once() )->method( "redirectAfterLogin" )->will( $this->returnValue( 1 ) );
         $oView->expects( $this->once() )->method( "_loadActions" )->will( $this->returnValue( 1 ) );
@@ -295,6 +296,7 @@ class Unit_Views_accountTest extends OxidTestCase
         $oView->expects( $this->once() )->method( "getListType" )->will( $this->returnValue( 1 ) );
         $oView->expects( $this->once() )->method( "getUser" )->will( $this->returnValue( $oUser ) );
         $oView->expects( $this->once() )->method( "getOrderCnt" )->will( $this->returnValue( 1 ) );
+        $oView->expects( $this->any() )->method( 'isEnabledPrivateSales' )->will( $this->returnValue( false ) );
 
         $this->assertEquals( 'account_main.tpl', $oView->render() );
     }

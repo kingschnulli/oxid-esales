@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 31051 2010-11-19 16:02:53Z arvydas $
+ * @version   SVN: $Id: oxutilsTest.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1082,6 +1082,53 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $this->assertNotEquals(0, filesize($sFileName));
 
         unlink($sFileName);
+    }
+
+    /**
+     *
+     */
+    public function testCanPreview()
+    {
+        modConfig::setParameter( "preview", null );
+        $oUtils = new oxUtils();
+        $this->assertNull( $oUtils->canPreview() );
+
+        modConfig::setParameter( "preview", "132" );
+        oxTestModules::addFunction( 'oxUtilsServer', 'getOxCookie', '{ return "123"; }');
+        $this->assertFalse( $oUtils->canPreview() );
+
+        $oUser = new oxUser();
+        $oUser->load( "oxdefaultadmin" );
+
+        $oUtils = $this->getMock( "oxUtils", array( "getUser" ) );
+        $oUtils->expects( $this->any() )->method("getUser")->will( $this->returnValue( $oUser ) );
+
+        modConfig::setParameter( "preview", $oUtils->getPreviewId() );
+        oxTestModules::addFunction( 'oxUtilsServer', 'getOxCookie', '{ return "123"; }');
+
+        $this->assertTrue( $oUtils->canPreview() );
+    }
+
+    /**
+     * oxUtils::getPreviewId() test case
+     *
+     * @return null
+     */
+    public function testGetPreviewId()
+    {
+
+        $sAdminSid = oxUtilsServer::getInstance()->getOxCookie( 'admin_sid' );
+        $sCompare = md5( $sAdminSid . "testID" . "testPass" . "tesrRights" );
+
+        $oUser = $this->getMock( "oxUser", array( "getId" ) );
+        $oUser->expects( $this->once() )->method("getId")->will( $this->returnValue( "testID" ) );
+        $oUser->oxuser__oxpassword = new oxField( "testPass" );
+        $oUser->oxuser__oxrights   = new oxField( "tesrRights" );
+
+        $oUtils = $this->getMock( "oxUtils", array( "getUser" ) );
+        $oUtils->expects( $this->once() )->method("getUser")->will( $this->returnValue( $oUser ) );
+
+        $this->assertEquals( $sCompare, $oUtils->getPreviewId() );
     }
 
     public function testHandlePageNotFoundError()

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 32636 2011-01-20 16:34:06Z sarunas $
+ * @version   SVN: $Id: oxubaseTest.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1805,4 +1805,32 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $this->assertFalse( $oView->getShowPromotionList() );
     }
 
+
+    /**
+     * oxUbase::isEnabledPrivateSales() test case
+     *
+     * @return null
+     */
+    public function testIsEnabledPrivateSales()
+    {
+        // disabled
+        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", false );
+
+        $oView = new oxUbase();
+        $this->assertFalse( $oView->isEnabledPrivateSales() );
+
+        // enabled, but preview is ON
+        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
+        oxTestModules::addFunction("oxutils", "canPreview", "{return true;}");
+
+        $oView = new oxUbase();
+        $this->assertFalse( $oView->isEnabledPrivateSales() );
+
+        // enabled
+        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
+        oxTestModules::addFunction("oxutils", "canPreview", "{return null;}");
+
+        $oView = new oxUbase();
+        $this->assertTrue( $oView->isEnabledPrivateSales() );
+    }
 }

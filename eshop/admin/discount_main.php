@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: discount_main.php 29955 2010-09-23 15:36:31Z vilma $
+ * @version   SVN: $Id: discount_main.php 32715 2011-01-25 16:26:06Z arvydas.vapsva $
  */
 
 /**
@@ -44,7 +44,7 @@ class Discount_Main extends oxAdminDetails
         $sOxId = oxConfig::getParameter( "oxid");
         // check if we right now saved a new entry
         $sSavedID = oxConfig::getParameter( "saved_oxid");
-        if ( ($sOxId == "-1" || !isset( $sOxId)) && isset( $sSavedID) ) {
+        if ( ($sOxId == "-1" || !isset( $sOxId ) ) && isset( $sSavedID ) ) {
             $sOxId = $sSavedID;
             //$myConfig->delParameter( "saved_oxid");
             oxSession::deleteVar( "saved_oxid");
@@ -52,8 +52,6 @@ class Discount_Main extends oxAdminDetails
             // for reloading upper frame
             $this->_aViewData["updatelist"] =  "1";
         }
-
-        $sITMDisp = "none";
 
         if ( $sOxId != "-1" && isset( $sOxId)) {
             // load object
@@ -63,7 +61,7 @@ class Discount_Main extends oxAdminDetails
             $oOtherLang = $oDiscount->getAvailableInLangs();
             if (!isset($oOtherLang[$this->_iEditLang])) {
                 // echo "language entry doesn't exist! using: ".key($oOtherLang);
-                $oDiscount->loadInLang( key($oOtherLang), $sOxId );
+                $oDiscount->loadInLang( key( $oOtherLang ), $sOxId );
             }
 
             $this->_aViewData["edit"] =  $oDiscount;
@@ -72,8 +70,9 @@ class Discount_Main extends oxAdminDetails
             // remove already created languages
             $aLang = array_diff ( oxLang::getInstance()->getLanguageNames(), $oOtherLang );
 
-            if ( count( $aLang))
+            if ( count( $aLang ) ) {
                 $this->_aViewData["posslang"] = $aLang;
+            }
 
             foreach ( $oOtherLang as $id => $language) {
                 $oLang= new oxStdClass();
@@ -81,29 +80,46 @@ class Discount_Main extends oxAdminDetails
                 $oLang->selected = ($id == $this->_iEditLang);
                 $this->_aViewData["otherlang"][$id] = clone $oLang;
             }
-
-            if ( $oDiscount->oxdiscount__oxaddsumtype->value == "itm")
-                $sITMDisp = "";
-
-            // ITM load articles from chosen categorie
-            $sITMChosenArtCat = oxConfig::getParameter( "itmartcat");
-            $this->_aViewData["itmarttree"] = $this->_loadArticleList( $oDiscount->oxdiscount__oxitmartid->value, $sITMChosenArtCat);
-            // generating category tree for artikel choose select list
-            $this->_getCategoryTree( "artcattree", $sITMChosenArtCat);
         }
 
-        // ITM display ?
-        $this->_aViewData["itm_disp"]  =  $sITMDisp;
-
-        if ( oxConfig::getParameter("aoc") ) {
-
+        if ( ( $iAoc = oxConfig::getParameter("aoc") ) ) {
             $aColumns = array();
-            include_once 'inc/'.strtolower(__CLASS__).'.inc.php';
-            $this->_aViewData['oxajax'] = $aColumns;
+            if ( $iAoc == "1" ) {
+                include_once 'inc/'.strtolower(__CLASS__).'.inc.php';
+                $this->_aViewData['oxajax'] = $aColumns;
+                return "popups/discount_main.tpl";
+            } elseif ( $iAoc == "2" ) {
+                // generating category tree for artikel choose select list
+                $this->_getCategoryTree( "artcattree", null );
 
-            return "popups/discount_main.tpl";
+                include_once 'inc/discount_item.inc.php';
+                $this->_aViewData['oxajax'] = $aColumns;
+                return "popups/discount_item.tpl";
+            }
         }
         return "discount_main.tpl";
+    }
+
+    /**
+     * Returns item discount product title
+     *
+     * @return string
+     */
+    public function getItemDiscountProductTitle()
+    {
+        $sTitle = false;
+        $sOxId = oxConfig::getParameter( "oxid");
+        if ( $sOxId != "-1" && isset( $sOxId)) {
+            $sViewName = getViewName( "oxarticles" );
+
+            $oDb = oxDb::getDb();
+            $sQ = "select concat( $sViewName.oxartnum, ' ', $sViewName.oxtitle ) from oxdiscount
+                   left join $sViewName on $sViewName.oxid=oxdiscount.oxitmartid
+                   where oxdiscount.oxitmartid != '' and oxdiscount.oxid=" . $oDb->quote( $sOxId );
+            $sTitle = $oDb->getOne( $sQ );
+        }
+
+        return $sTitle ? $sTitle : " -- ";
     }
 
     /**
