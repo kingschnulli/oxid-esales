@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 28588 2010-06-23 10:45:49Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfig.php 32844 2011-02-01 13:09:16Z linas.kukulskis $
  */
 
 /**
@@ -727,13 +727,13 @@ class oxViewConfig extends oxSuperCfg
     }
 
     /**
-     * Returns config param "bl_showCompareList" value
+     * Returns config param "bl_perfLoadCompare" value
      *
      * @return bool
      */
     public function getShowCompareList()
     {
-        return $this->getConfig()->getConfigParam( 'bl_showCompareList' );
+        return $this->getConfig()->getConfigParam( 'bl_perfLoadCompare' );
     }
 
     /**
