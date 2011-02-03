@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategory.php 32795 2011-01-28 09:07:02Z linas.kukulskis $
+ * @version   SVN: $Id: oxcategory.php 32866 2011-02-02 14:16:14Z linas.kukulskis $
  */
 
 /**
@@ -717,39 +717,53 @@ class oxCategory extends oxI18n implements oxIUrl
 
         $aSessionFilter = oxSession::getVar( 'session_attrfilter' );
 
-        $oDb = oxDb::getDb();
-        $sActCatQuoted = $oDb->quote($sActCat);
-        $sAttTbl = getViewName('oxattribute');
-        $sO2ATbl = getViewName('oxobject2attribute');
-        $sC2ATbl = getViewName('oxcategory2attribute');
-        $sLngSuf = oxLang::getInstance()->getLanguageTag($this->getLanguage());
+        $oArtList = oxNew( "oxarticlelist");
+        $oArtList->loadCategoryIDs( $sActCat, $aSessionFilter );
 
-        $sSelect = "SELECT DISTINCT att.oxid, att.oxtitle{$sLngSuf}, o2a.oxvalue{$sLngSuf} ".
-                   "FROM $sAttTbl as att, $sO2ATbl as o2a ,$sC2ATbl as c2a ".
-                   "WHERE att.oxid = o2a.oxattrid AND c2a.oxobjectid = $sActCatQuoted AND c2a.oxattrid = o2a.oxattrid AND o2a.oxvalue{$sLngSuf} !=''".
-                   "ORDER BY c2a.oxsort , att.oxpos, att.oxtitle{$sLngSuf}, o2a.oxvalue{$sLngSuf}";
-
-        $rs = $oDb->execute( $sSelect );
-        if ($rs != false && $rs->recordCount() > 0) {
-            $oStr = getStr();
-            while ( !$rs->EOF && list($sAttId,$sAttTitle, $sAttValue) = $rs->fields ) {
-                if ( !isset( $aAttributes[$sAttId])) {
-                    $oAttribute           = new stdClass();
-                    $oAttribute->title    = $sAttTitle;
-                    $oAttribute->aValues  = array();
-                    $aAttributes[$sAttId] = $oAttribute;
+        // Only if we have articles
+        if (count($oArtList) > 0 ) {
+            $oDb = oxDb::getDb();
+            $sArtIds = '';
+            foreach (array_keys($oArtList->getArray()) as $sId ) {
+                if ($sArtIds) {
+                    $sArtIds .= ',';
                 }
-                $oValue             = new stdClass();
-                $oValue->id         = $oStr->htmlspecialchars( $sAttValue );
-                $oValue->value      = $oStr->htmlspecialchars( $sAttValue );
-                $oValue->blSelected = isset($aSessionFilter[$sActCat][$sAttId]) && $aSessionFilter[$sActCat][$sAttId] == $sAttValue;
-
-                $sAttValueId = md5( $sAttValue );
-
-                $blActiveFilter = $blActiveFilter || $oValue->blSelected;
-                $aAttributes[$sAttId]->aValues[$sAttValueId] = $oValue;
-                $rs->moveNext();
+                $sArtIds .= $oDb->quote($sId);
             }
+            $sActCatQuoted = $oDb->quote($sActCat);
+            $sAttTbl = getViewName('oxattribute');
+            $sO2ATbl = getViewName('oxobject2attribute');
+            $sC2ATbl = getViewName('oxcategory2attribute');
+            $sLngSuf = oxLang::getInstance()->getLanguageTag($this->getLanguage());
+
+            $sSelect = "SELECT DISTINCT att.oxid, att.oxtitle{$sLngSuf}, o2a.oxvalue{$sLngSuf} ".
+                       "FROM $sAttTbl as att, $sO2ATbl as o2a ,$sC2ATbl as c2a ".
+                       "WHERE att.oxid = o2a.oxattrid AND c2a.oxobjectid = $sActCatQuoted AND c2a.oxattrid = att.oxid AND o2a.oxvalue{$sLngSuf} !='' AND o2a.oxobjectid IN ($sArtIds) ".
+                       "ORDER BY c2a.oxsort , att.oxpos, att.oxtitle{$sLngSuf}, o2a.oxvalue{$sLngSuf}";
+
+            $rs = $oDb->execute( $sSelect );
+            if ($rs != false && $rs->recordCount() > 0) {
+                $oStr = getStr();
+                while ( !$rs->EOF && list($sAttId,$sAttTitle, $sAttValue) = $rs->fields ) {
+                    if ( !isset( $aAttributes[$sAttId])) {
+                        $oAttribute           = new stdClass();
+                        $oAttribute->title    = $sAttTitle;
+                        $oAttribute->aValues  = array();
+                        $aAttributes[$sAttId] = $oAttribute;
+                    }
+                    $oValue             = new stdClass();
+                    $oValue->id         = $oStr->htmlspecialchars( $sAttValue );
+                    $oValue->value      = $oStr->htmlspecialchars( $sAttValue );
+                    $oValue->blSelected = isset($aSessionFilter[$sActCat][$sAttId]) && $aSessionFilter[$sActCat][$sAttId] == $sAttValue;
+
+                    $sAttValueId = md5( $sAttValue );
+
+                    $blActiveFilter = $blActiveFilter || $oValue->blSelected;
+                    $aAttributes[$sAttId]->aValues[$sAttValueId] = $oValue;
+                    $rs->moveNext();
+                }
+            }
+
         }
 
         if ( is_array($aSessionFilter[$sActCat]) && !$blActiveFilter ) {

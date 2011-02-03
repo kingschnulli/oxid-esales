@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 32844 2011-02-01 13:09:16Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewconfigTest.php 32868 2011-02-02 14:18:51Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -312,7 +312,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oCfg = $this->getMock('oxconfig', array('getConfigParam'));
         $oCfg->expects($this->once())
              ->method('getConfigParam')
-             ->with($this->equalTo('bl_perfLoadCompare'))
+             ->with($this->equalTo('bl_showCompareList'))
              ->will($this->returnValue('lalala'));
         $oVC = $this->getMock('oxviewconfig', array('getConfig'));
         $oVC->expects($this->once())

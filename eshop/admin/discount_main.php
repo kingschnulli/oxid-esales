@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: discount_main.php 32715 2011-01-25 16:26:06Z arvydas.vapsva $
+ * @version   SVN: $Id: discount_main.php 32858 2011-02-02 12:22:03Z arvydas.vapsva $
  */
 
 /**
@@ -112,8 +112,10 @@ class Discount_Main extends oxAdminDetails
         if ( $sOxId != "-1" && isset( $sOxId)) {
             $sViewName = getViewName( "oxarticles" );
 
+            $sLang = oxLang::getInstance()->getLanguageTag($this->_iEditLang);
+
             $oDb = oxDb::getDb();
-            $sQ = "select concat( $sViewName.oxartnum, ' ', $sViewName.oxtitle ) from oxdiscount
+            $sQ = "select concat( $sViewName.oxartnum, ' ', $sViewName.oxtitle$sLang ) from oxdiscount
                    left join $sViewName on $sViewName.oxid=oxdiscount.oxitmartid
                    where oxdiscount.oxitmartid != '' and oxdiscount.oxid=" . $oDb->quote( $sOxId );
             $sTitle = $oDb->getOne( $sQ );
@@ -195,63 +197,5 @@ class Discount_Main extends oxAdminDetails
         // set oxid if inserted
         if ( $sOxId == "-1")
             oxSession::setVar( "saved_oxid", $oAttr->oxdiscount__oxid->value );
-    }
-
-    /**
-     * Loads articlelist from chosen categorie
-     *
-     * @param string $sItmartid        discount itm article id
-     * @param string $sITMChosenArtCat chosen category id
-     *
-     * @return array $aList
-     */
-    protected function _loadArticleList( $sItmartid, $sITMChosenArtCat)
-    {
-        $oDB = oxDb::getDb();
-
-        $sArticleTable = getViewName("oxarticles");
-        $sO2CView = getViewName('oxobject2category');
-        $sSuffix = oxLang::getInstance()->getLanguageTag();
-        $sTitle = "$sArticleTable.oxtitle$sSuffix";
-        if ( $this->getConfig()->getConfigParam( 'blVariantsSelection' ) ) {
-            $sTitle = " IF( $sArticleTable.oxparentid = '', $sArticleTable.oxtitle$sSuffix, CONCAT((select oxart.oxtitle$sSuffix from $sArticleTable as oxart where oxart.oxid = $sArticleTable.oxparentid),', ',$sArticleTable.oxvarselect$sSuffix) ) ";
-        }
-        $sSelect = "select $sArticleTable.oxid, $sArticleTable.oxartnum, $sTitle from $sArticleTable ";
-        if ( !isset( $sITMChosenArtCat) || !$sITMChosenArtCat || $sITMChosenArtCat == "oxrootid") {
-            $sSelect .= "where $sArticleTable.oxid = ".$oDB->quote( $sItmartid ) ." ";
-        } elseif ( $sITMChosenArtCat != "-1" && $sITMChosenArtCat != "oxrootid") {
-            $oArticle = oxNew( 'oxarticle' );
-            $sSelect .= "left join $sO2CView as oxobject2category on ";
-            $sSelect .= $this->getConfig()->getConfigParam( 'blVariantsSelection' )?" ( $sArticleTable.oxid=oxobject2category.oxobjectid or $sArticleTable.oxparentid=oxobject2category.oxobjectid) ":" $sArticleTable.oxid=oxobject2category.oxobjectid ";
-            $sSelect .= " where oxobject2category.oxcatnid = ".$oDB->quote( $sITMChosenArtCat ) ." and ".$oArticle->getSqlActiveSnippet()." order by oxobject2category.oxpos";
-        } else {
-            $sSelect .= "left join $sO2CView as oxobject2category on $sArticleTable.oxid=oxobject2category.oxobjectid where oxobject2category.oxcatnid is null AND $sArticleTable.oxparentid = '' ";
-        }
-        // We do NOT use Shop Framework here as we do have to much overhead
-        // this list can be up to 1000 entries
-        $aList = array();
-        $oArt = new stdClass();
-        $oArt->oxarticles__oxid     = new oxField("");
-        $oArt->oxarticles__oxartnum = new oxField("");
-        $oArt->oxarticles__oxtitle  = new oxField(" -- ");
-        $aList[] = $oArt;
-        $rs = $oDB->selectLimit( $sSelect, 1000, 0);
-        if ($rs != false && $rs->recordCount() > 0) {
-            while (!$rs->EOF) {
-                $oArt = new stdClass(); // #663
-                $oArt->oxarticles__oxid     = new oxField($rs->fields[0]);
-                $oArt->oxarticles__oxnid    = new oxField($rs->fields[0]);
-                $oArt->oxarticles__oxartnum = new oxField($rs->fields[1]);
-                $oArt->oxarticles__oxtitle  = new oxField($rs->fields[2]);
-                if ( $oArt->oxarticles__oxid == $sItmartid)
-                    $oArt->selected = 1;
-                else
-                    $oArt->selected = 0;
-                $aList[] = $oArt;
-                $rs->moveNext();
-            }
-        }
-
-        return $aList;
     }
 }

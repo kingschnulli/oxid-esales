@@ -59,6 +59,7 @@ class ajaxComponent extends ajaxListComponent
         $sArticleTable = getViewName('oxarticles');
         $sCatTable     = getViewName('oxcategories');
         $sO2CView      = getViewName('oxobject2category');
+        $sDiscTable    = getViewName('oxdiscount');
 
         $sOxid      = oxConfig::getParameter( 'oxid' );
         $sSynchOxid = oxConfig::getParameter( 'synchoxid' );
@@ -77,15 +78,15 @@ class ajaxComponent extends ajaxListComponent
                 // resetting
                 $sId = null;
             } else {
-                $sQAdd  = " from oxdiscount left join $sArticleTable on $sArticleTable.oxid=oxdiscount.oxitmartid ";
-                $sQAdd .= " where oxdiscount.oxid = '$sOxid' and oxdiscount.oxitmartid != '' ";
+                $sQAdd  = " from $sDiscTable left join $sArticleTable on $sArticleTable.oxid=$sDiscTable.oxitmartid ";
+                $sQAdd .= " where $sDiscTable.oxid = '$sOxid' and $sDiscTable.oxitmartid != '' ";
             }
         }
 
         if ( $sSynchOxid && $sSynchOxid != $sOxid) {
             // dodger performance
-            $sSubSelect .= " select $sArticleTable.oxid from oxdiscount, $sArticleTable where $sArticleTable.oxid=oxdiscount.oxitmartid ";
-            $sSubSelect .= " and oxdiscount.oxid = '$sSynchOxid' ";
+            $sSubSelect .= " select $sArticleTable.oxid from $sDiscTable, $sArticleTable where $sArticleTable.oxid=$sDiscTable.oxitmartid ";
+            $sSubSelect .= " and $sDiscTable.oxid = '$sSynchOxid' ";
 
             if ( stristr( $sQAdd, 'where' ) === false )
                 $sQAdd .= ' where ';
