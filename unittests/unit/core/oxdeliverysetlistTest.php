@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliverysetlistTest.php 29187 2010-07-30 13:01:22Z vilma $
+ * @version   SVN: $Id: oxdeliverysetlistTest.php 32997 2011-02-07 15:40:19Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -192,12 +192,24 @@ class Unit_Core_oxDeliverysetListTest extends OxidTestCase
     }
 
     /**
-     * Preparing data
+     * Test case
+     * Article 1 => Deliverycost 1 => Deliveryset 1
+     * Article 1 & Article 2 => Deliverycost 2 => Deliveryset 2
      *
-     * @return null
+     * Article 1 in basket => order process "step 3" => only Deliveryset 1 available => right
+     * Article 2 in basket => order process "step 3" => only Deliveryset 2 available => right
+     *
+     * Article 1 & Article 2 in basket => order process "step 3" => Deliveryset 1 and Deliveryset 2 available => wrong, there should only be deliveryset 2
      */
-    protected function _prepareData()
+    public function testGetDeliverySetListForTestCase()
     {
+        $iActShop = oxConfig::getInstance()->getBaseShopId();
+        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", 1 );
+
+        /**
+         * Preparing data
+         */
+
         // Deliverycost 1
         $oDel1 = new oxDelivery();
         $oDel1->setId( '_testdelivery1' );
@@ -268,7 +280,7 @@ class Unit_Core_oxDeliverysetListTest extends OxidTestCase
 
         $oO2D3 = new oxbase();
         $oO2D3->init( 'oxobject2delivery' );
-        $oO2D3->setId( '_testoxobject2delivery3' );
+        $oO2D3->setId( '_testoxobject2delivery2' );
         $oO2D3->oxobject2delivery__oxdeliveryid = new oxField($oDel2->getId(), oxField::T_RAW);
         $oO2D3->oxobject2delivery__oxobjectid = new oxField('1127', oxField::T_RAW);
         $oO2D3->oxobject2delivery__oxtype = new oxField('oxarticles', oxField::T_RAW);
@@ -305,24 +317,6 @@ class Unit_Core_oxDeliverysetListTest extends OxidTestCase
         $oP2DelSet2->oxobject2payment__oxobjectid = new oxField($oDelSet2->getId(), oxField::T_RAW);
         $oP2DelSet2->oxobject2payment__oxtype = new oxField("oxdelset", oxField::T_RAW);
         $oP2DelSet2->save();
-    }
-
-    /**
-     * Test case
-     * Article 1 => Deliverycost 1 => Deliveryset 1
-     * Article 1 & Article 2 => Deliverycost 2 => Deliveryset 2
-     *
-     * Article 1 in basket => order process "step 3" => only Deliveryset 1 available => right
-     * Article 2 in basket => order process "step 3" => only Deliveryset 2 available => right
-     *
-     * Article 1 & Article 2 in basket => order process "step 3" => Deliveryset 1 and Deliveryset 2 available => wrong, there should only be deliveryset 2
-     */
-    public function testGetDeliverySetListForTestCase()
-    {
-        $iActShop = oxConfig::getInstance()->getBaseShopId();
-        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", 1 );
-
-        $this->_prepareData();
 
         /**
          * Preparing input
@@ -372,7 +366,7 @@ class Unit_Core_oxDeliverysetListTest extends OxidTestCase
         $oBasket->setBasketUser( $oUser );
 
         $oDeliverySetList = new oxDeliverySetList();
-        list( , $sActShipSet, ) = $oDeliverySetList->getDeliverySetData( '_testdeliveryset1', $oUser, $oBasket );
+        list( , $sActShipSet, ) = $oDeliverySetList->getDeliverySetData( null, $oUser, $oBasket );
         $this->assertEquals( '_testdeliveryset1', $sActShipSet );
 
         /**
@@ -391,12 +385,8 @@ class Unit_Core_oxDeliverysetListTest extends OxidTestCase
          * changing amounts
          * act. delivery set must be "Test deliveryset2" ('_testdeliveryset2')
          */
-        $oDel1 = new oxDelivery();
-        $oDel1->load( '_testdelivery1' );
         $oDel1->oxdelivery__oxsort = new oxField(1, oxField::T_RAW);
         $oDel1->save();
-        $oDel2 = new oxDelivery();
-        $oDel2->load( '_testdelivery2' );
         $oDel2->oxdelivery__oxsort = new oxField(2, oxField::T_RAW);
         $oDel2->save();
 

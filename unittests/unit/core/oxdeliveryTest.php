@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryTest.php 29187 2010-07-30 13:01:22Z vilma $
+ * @version   SVN: $Id: oxdeliveryTest.php 32997 2011-02-07 15:40:19Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -305,21 +305,20 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
         $oBasket = new oxBasket();
         modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );
         modConfig::getInstance()->setConfigParam( 'blExclNonMaterialFromDelivery', true );
+        $oBasket->addToBasket( '1354', 15 );
+        $oBasket->calculateBasket();
+
+        $this->assertFalse( $oDelivery->isForBasket( $oBasket ) );
+
         $oBasket->addToBasket( '1126', 15 );
         $oBasket->calculateBasket();
 
         $this->assertTrue( $oDelivery->isForBasket( $oBasket ) );
 
-        // #M1659: if one of baket items is not valid for this delivery, it will be not dusplayed.
         $oBasket->addToBasket( '2000', 15 );
         $oBasket->calculateBasket();
 
-        $this->assertFalse( $oDelivery->isForBasket( $oBasket ) );
-
-        $oBasket->addToBasket( '1354', 15 );
-        $oBasket->calculateBasket();
-
-        $this->assertFalse( $oDelivery->isForBasket( $oBasket ) );
+        $this->assertTrue( $oDelivery->isForBasket( $oBasket ) );
     }
 
     public function testIsForBasketDeliverySetUpForCategoryOncePerArticle()
