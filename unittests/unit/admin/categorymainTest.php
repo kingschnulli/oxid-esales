@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: categorymainTest.php 26710 2010-03-20 15:12:20Z arvydas $
+ * @version   SVN: $Id: categorymainTest.php 33195 2011-02-11 08:45:38Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -138,5 +138,19 @@ class Unit_Admin_CategoryMainTest extends OxidTestCase
 
         $this->assertEquals( "1", $oView->getViewDataElement( "updatelist" ) );
         $this->assertEquals( "testId", oxSession::getVar( "saved_oxid" ) );
+    }
+    
+    /**
+     * Test get sortable fields.
+     *
+     * @return null
+     */
+    public function testGetSortableFields()
+    {
+        $oCatMain = new Category_Main();
+
+        $aFields = $oCatMain->getSortableFields();
+        $this->assertTrue(in_array( 'OXTITLE', $aFields));
+        $this->assertFalse(in_array( 'OXAMITEMID', $aFields));
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 31096 2010-11-23 11:34:39Z arvydas $
+ * @version   SVN: $Id: oxseoencoderTest.php 33228 2011-02-14 09:31:23Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -740,8 +740,8 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $sIdent    = md5( strtolower( '' . $sSeoUrl ) );
         $sType     = 'dynamic';
 
-        $sQ = "insert into oxseo (oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype)
-               values ('$sObjectId', '$sIdent', '$sShopId', '$iLang', '$sStdUrl', '$sSeoUrl', '$sType')";
+        $sQ = "insert into oxseo (oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxexpired)
+               values ('$sObjectId', '$sIdent', '$sShopId', '$iLang', '$sStdUrl', '$sSeoUrl', '$sType', 1)";
         oxDb::getDb()->execute( $sQ );
 
         $oEncoder = new oxSeoEncoder();
@@ -1027,8 +1027,8 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $sIdent = md5( strtolower( $sSeoUrl ) );
 
         // inserting test SEO url
-        $sQ = "INSERT INTO `oxseo` (`OXOBJECTID`, `OXIDENT`, `OXSHOPID`, `OXLANG`, `OXSTDURL`, `OXSEOURL`, `OXTYPE`)
-               VALUES ('{$sObjectId}', '{$sIdent}', {$iShopId}, {$iLang}, '{$sStdUrl}', '{$sSeoUrl}', 'static') ";
+        $sQ = "INSERT INTO `oxseo` (`OXOBJECTID`, `OXIDENT`, `OXSHOPID`, `OXLANG`, `OXSTDURL`, `OXSEOURL`, `OXTYPE`, `oxexpired`)
+               VALUES ('{$sObjectId}', '{$sIdent}', {$iShopId}, {$iLang}, '{$sStdUrl}', '{$sSeoUrl}', 'static', '1') ";
          $oDB->Execute( $sQ );
 
          $aStaticUrl = array( 'oxseo__oxstdurl'   => $sStdUrl . '&amp;something=something',
@@ -1132,8 +1132,8 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
     public function testcopyToHistory()
     {
         $oDB = oxDb::getDb();
-        $oDB->Execute('insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype )
-                                  values ( "999", "999", 999, 999, "stdurl", "seourl", "oxarticle" )' );
+        $oDB->Execute('insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxexpired )
+                                  values ( "999", "999", 999, 999, "stdurl", "seourl", "oxarticle", "1" )' );
 
         $oEncoder = new oxSeoEncoder();
         $oEncoder->UNITcopyToHistory( '999', '999', '999' );
