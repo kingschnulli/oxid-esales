@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvendorTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxvendorTest.php 32882 2011-02-03 11:45:48Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -261,21 +261,24 @@ class Unit_Core_oxvendorTest extends OxidTestCase
         $this->assertEquals( oxConfig::getInstance()->getShopHomeURL().'cl=vendorlist&amp;cnid=v_xxx&amp;lang=1', $oVendor->getLink(1) );
     }
 
-    public function testGetRootVendor()
+    public function testLoadRootVendor()
     {
-        oxTestModules::addFunction('oxVendor', 'setRootV', '{oxVendor::$_aRootVendor[$aA[1]] = $aA[0];}');
-        $oV = oxVendor::getRootVendor();
+        $oV = new oxVendor();
+        $oV->load('root');
         $this->assertTrue($oV instanceof oxVendor);
         $this->assertEquals('root', $oV->getId());
-        $oV = oxNew('oxvendor');
-        $oV->test = 'sdf';
-        $oV->setRootV($oV, oxLang::getInstance()->getBaseLanguage());
-        $oV = oxVendor::getRootVendor();
-        $this->assertEquals('sdf', $oV->test);
 
-        $this->assertEquals(0, oxVendor::getRootVendor( 0 )->getLanguage());
-        $this->assertEquals(1, oxVendor::getRootVendor( 1 )->getLanguage());
-        $this->assertEquals(oxLang::getInstance()->getBaseLanguage(), oxVendor::getRootVendor( )->getLanguage());
+        $oV = new oxVendor();
+        $oV->loadInLang(0, 'root');
+        $this->assertEquals(0, $oV->getLanguage());
+
+        $oV = new oxVendor();
+        $oV->loadInLang(1, 'root');
+        $this->assertEquals(1, $oV->getLanguage());
+
+        $oV = new oxVendor();
+        $oV->load('root');
+        $this->assertEquals(oxLang::getInstance()->getBaseLanguage(), $oV->getLanguage());
     }
 
     public function testGetNrOfArticles()
@@ -335,6 +338,7 @@ class Unit_Core_oxvendorTest extends OxidTestCase
 
         $this->assertEquals( 'iconUrl', $oVendor->getIconUrl() );
     }
+
     public function testDelete()
     {
         oxTestModules::addFunction('oxSeoEncoderVendor', 'onDeleteVendor', '{$this->onDelete[] = $aA[0];}');
@@ -358,6 +362,14 @@ class Unit_Core_oxvendorTest extends OxidTestCase
         $oVendor = new oxvendor();
         $oVendor->setId( 'xxx' );
         $this->assertEquals( oxConfig::getInstance()->getShopHomeURL().'cl=vendorlist&amp;cnid=v_xxx&amp;foo=bar&amp;lang=1', $oVendor->getStdLink(1, array('foo'=>'bar')) );
+    }
+
+    public function testGetThumbUrl()
+    {
+        $oVendor = new oxvendor();
+        $oVendor->setId( 'xxx' );
+
+        $this->assertFalse($oVendor->getThumbUrl());
     }
 
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseodecoderTest.php 27807 2010-05-19 11:37:32Z sarunas $
+ * @version   SVN: $Id: oxseodecoderTest.php 32136 2010-12-21 13:57:36Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -41,8 +41,17 @@ class Unit_Core_oxSeoDecoderTest extends OxidTestCase
         // restoring table structure
         $blRemove = true;
         try {
-            $oDb->execute( "ALTER TABLE `oxarticles` DROP `OXSEOID`" );
-            $oDb->execute( "ALTER TABLE `oxarticles` DROP `OXSEOID_1`" );
+
+            $sCustomColumn = $oDb->getOne( "show columns from oxv_oxarticles_de where field = 'oxseoid'");
+
+            if($sCustomColumn == 'OXSEOID'){
+                $oDb->execute( "ALTER TABLE `oxarticles` DROP `OXSEOID`" );
+                $oDb->execute( "ALTER TABLE `oxarticles` DROP `OXSEOID_1`" );
+                    $oDb->execute( "CREATE OR REPLACE VIEW oxv_oxarticles AS SELECT oxarticles.* FROM oxarticles" );
+                    $oDb->execute( "CREATE OR REPLACE VIEW oxv_oxarticles_de AS SELECT OXID,OXSHOPID,OXPARENTID,OXACTIVE,OXACTIVEFROM,OXACTIVETO,OXARTNUM,OXEAN,OXDISTEAN,OXMPN,OXTITLE,OXSHORTDESC,OXPRICE,OXBLFIXEDPRICE,OXPRICEA,OXPRICEB,OXPRICEC,OXBPRICE,OXTPRICE,OXUNITNAME,OXUNITQUANTITY,OXEXTURL,OXURLDESC,OXURLIMG,OXVAT,OXTHUMB,OXICON,OXPICSGENERATED,OXPIC1,OXPIC2,OXPIC3,OXPIC4,OXPIC5,OXPIC6,OXPIC7,OXPIC8,OXPIC9,OXPIC10,OXPIC11,OXPIC12,OXWEIGHT,OXSTOCK,OXSTOCKFLAG,OXSTOCKTEXT,OXNOSTOCKTEXT,OXDELIVERY,OXINSERT,OXTIMESTAMP,OXLENGTH,OXWIDTH,OXHEIGHT,OXFILE,OXSEARCHKEYS,OXTEMPLATE,OXQUESTIONEMAIL,OXISSEARCH,OXISCONFIGURABLE,OXVARNAME,OXVARSTOCK,OXVARCOUNT,OXVARSELECT,OXVARMINPRICE,OXBUNDLEID,OXFOLDER,OXSUBCLASS,OXSORT,OXSOLDAMOUNT,OXNONMATERIAL,OXFREESHIPPING,OXREMINDACTIVE,OXREMINDAMOUNT,OXAMITEMID,OXAMTASKID,OXVENDORID,OXMANUFACTURERID,OXSKIPDISCOUNTS,OXRATING,OXRATINGCNT,OXMINDELTIME,OXMAXDELTIME,OXDELTIMEUNIT FROM oxarticles" );
+                    $oDb->execute( "CREATE OR REPLACE VIEW oxv_oxarticles_en AS SELECT OXID,OXSHOPID,OXPARENTID,OXACTIVE,OXACTIVEFROM,OXACTIVETO,OXARTNUM,OXEAN,OXDISTEAN,OXMPN,OXTITLE_1 AS OXTITLE,OXSHORTDESC_1 AS OXSHORTDESC,OXPRICE,OXBLFIXEDPRICE,OXPRICEA,OXPRICEB,OXPRICEC,OXBPRICE,OXTPRICE,OXUNITNAME,OXUNITQUANTITY,OXEXTURL,OXURLDESC_1 AS OXURLDESC,OXURLIMG,OXVAT,OXTHUMB,OXICON,OXPICSGENERATED,OXPIC1,OXPIC2,OXPIC3,OXPIC4,OXPIC5,OXPIC6,OXPIC7,OXPIC8,OXPIC9,OXPIC10,OXPIC11,OXPIC12,OXWEIGHT,OXSTOCK,OXSTOCKFLAG,OXSTOCKTEXT_1 AS OXSTOCKTEXT,OXNOSTOCKTEXT_1 AS OXNOSTOCKTEXT,OXDELIVERY,OXINSERT,OXTIMESTAMP,OXLENGTH,OXWIDTH,OXHEIGHT,OXFILE,OXSEARCHKEYS_1 AS OXSEARCHKEYS,OXTEMPLATE,OXQUESTIONEMAIL,OXISSEARCH,OXISCONFIGURABLE,OXVARNAME_1 AS OXVARNAME,OXVARSTOCK,OXVARCOUNT,OXVARSELECT_1 AS OXVARSELECT,OXVARMINPRICE,OXBUNDLEID,OXFOLDER,OXSUBCLASS,OXSORT,OXSOLDAMOUNT,OXNONMATERIAL,OXFREESHIPPING,OXREMINDACTIVE,OXREMINDAMOUNT,OXAMITEMID,OXAMTASKID,OXVENDORID,OXMANUFACTURERID,OXSKIPDISCOUNTS,OXRATING,OXRATINGCNT,OXMINDELTIME,OXMAXDELTIME,OXDELTIMEUNIT FROM oxarticles" );
+            }
+
         } catch ( Exception $oEx ) {
             // avoiding exceptions while removing columns ..
         }
@@ -61,6 +70,17 @@ class Unit_Core_oxSeoDecoderTest extends OxidTestCase
         $this->assertEquals( md5( strtolower( $sEnUrl ) ), $oDecoder->UNITgetIdent( $sEnUrl ) );
         $this->assertEquals( md5( strtolower( $sDeAltUrl ) ), $oDecoder->UNITgetIdent( $sDeAltUrl ) );
         $this->assertEquals( md5( strtolower( $sDeAltUrl ) ), $oDecoder->UNITgetIdent( $sDeAltUrl, true ) );
+    }
+
+
+    protected function _regenerateViews($iShop)
+    {
+        $oShop = new oxshop();
+        $oShop->load($iShop);
+
+        $aMultiShopTables = oxConfig::getInstance()->getConfigParam( 'aMultiShopTables' );
+        $oShop->setMultiShopTables($aMultiShopTables);
+        $oShop->generateViews();
     }
 
     /**
@@ -158,8 +178,6 @@ class Unit_Core_oxSeoDecoderTest extends OxidTestCase
     }
     public function testGetObjectUrl()
     {
-        // disablign views
-        modConfig::getInstance()->setConfigParam( 'blSkipViewUsage', true );
         oxTestModules::addFunction( "oxUtils", "seoIsActive", "{ return true;}" );
         oxTestModules::addFunction( "oxUtils", "isSearchEngine", "{return false;}" );
 
@@ -183,6 +201,17 @@ class Unit_Core_oxSeoDecoderTest extends OxidTestCase
         // adding data
         $oDb->execute( "UPDATE `oxarticles` SET `OXSEOID` = 'someid1' WHERE `OXID` = '1126' " );
         $oDb->execute( "UPDATE `oxarticles` SET `OXSEOID_1` = 'someid2' WHERE `OXID` = '1127' " );
+
+        // update views
+             $oDb->execute( "CREATE OR REPLACE VIEW oxv_oxarticles AS SELECT oxarticles.* FROM oxarticles" );
+             $oDb->execute( "CREATE OR REPLACE VIEW oxv_oxarticles_de AS SELECT OXSEOID,OXID,OXSHOPID,OXPARENTID,OXACTIVE,OXACTIVEFROM,OXACTIVETO,OXARTNUM,OXEAN,OXDISTEAN,OXMPN,OXTITLE,OXSHORTDESC,OXPRICE,OXBLFIXEDPRICE,OXPRICEA,OXPRICEB,OXPRICEC,OXBPRICE,OXTPRICE,OXUNITNAME,OXUNITQUANTITY,OXEXTURL,OXURLDESC,OXURLIMG,OXVAT,OXTHUMB,OXICON,OXPICSGENERATED,OXPIC1,OXPIC2,OXPIC3,OXPIC4,OXPIC5,OXPIC6,OXPIC7,OXPIC8,OXPIC9,OXPIC10,OXPIC11,OXPIC12,OXWEIGHT,OXSTOCK,OXSTOCKFLAG,OXSTOCKTEXT,OXNOSTOCKTEXT,OXDELIVERY,OXINSERT,OXTIMESTAMP,OXLENGTH,OXWIDTH,OXHEIGHT,OXFILE,OXSEARCHKEYS,OXTEMPLATE,OXQUESTIONEMAIL,OXISSEARCH,OXISCONFIGURABLE,OXVARNAME,OXVARSTOCK,OXVARCOUNT,OXVARSELECT,OXVARMINPRICE,OXBUNDLEID,OXFOLDER,OXSUBCLASS,OXSORT,OXSOLDAMOUNT,OXNONMATERIAL,OXFREESHIPPING,OXREMINDACTIVE,OXREMINDAMOUNT,OXAMITEMID,OXAMTASKID,OXVENDORID,OXMANUFACTURERID,OXSKIPDISCOUNTS,OXRATING,OXRATINGCNT,OXMINDELTIME,OXMAXDELTIME,OXDELTIMEUNIT FROM oxarticles" );
+             $oDb->execute( "CREATE OR REPLACE VIEW oxv_oxarticles_en AS SELECT OXSEOID_1 as OXSEOID,OXID,OXSHOPID,OXPARENTID,OXACTIVE,OXACTIVEFROM,OXACTIVETO,OXARTNUM,OXEAN,OXDISTEAN,OXMPN,OXTITLE_1 AS OXTITLE,OXSHORTDESC_1 AS OXSHORTDESC,OXPRICE,OXBLFIXEDPRICE,OXPRICEA,OXPRICEB,OXPRICEC,OXBPRICE,OXTPRICE,OXUNITNAME,OXUNITQUANTITY,OXEXTURL,OXURLDESC_1 AS OXURLDESC,OXURLIMG,OXVAT,OXTHUMB,OXICON,OXPICSGENERATED,OXPIC1,OXPIC2,OXPIC3,OXPIC4,OXPIC5,OXPIC6,OXPIC7,OXPIC8,OXPIC9,OXPIC10,OXPIC11,OXPIC12,OXWEIGHT,OXSTOCK,OXSTOCKFLAG,OXSTOCKTEXT_1 AS OXSTOCKTEXT,OXNOSTOCKTEXT_1 AS OXNOSTOCKTEXT,OXDELIVERY,OXINSERT,OXTIMESTAMP,OXLENGTH,OXWIDTH,OXHEIGHT,OXFILE,OXSEARCHKEYS_1 AS OXSEARCHKEYS,OXTEMPLATE,OXQUESTIONEMAIL,OXISSEARCH,OXISCONFIGURABLE,OXVARNAME_1 AS OXVARNAME,OXVARSTOCK,OXVARCOUNT,OXVARSELECT_1 AS OXVARSELECT,OXVARMINPRICE,OXBUNDLEID,OXFOLDER,OXSUBCLASS,OXSORT,OXSOLDAMOUNT,OXNONMATERIAL,OXFREESHIPPING,OXREMINDACTIVE,OXREMINDAMOUNT,OXAMITEMID,OXAMTASKID,OXVENDORID,OXMANUFACTURERID,OXSKIPDISCOUNTS,OXRATING,OXRATINGCNT,OXMINDELTIME,OXMAXDELTIME,OXDELTIMEUNIT FROM oxarticles" );
+
+        $sColumnAdded = $oDb->getOne( "show columns from oxarticles where field = 'oxseoid'");
+        $this->assertEquals( 'OXSEOID', $sColumnAdded );
+
+        $sColumnAdded = $oDb->getOne( "show columns from oxarticles where field = 'oxseoid_1'");
+        $this->assertEquals( 'OXSEOID_1', $sColumnAdded );
 
             $sUrl1 = 'Geschenke/Bar-Equipment/Bar-Set-ABSINTH.html';
             $sUrl2 = 'en/Gifts/Bar-Equipment/Ice-Cubes-FLASH.html';
@@ -335,7 +364,7 @@ class Unit_Core_oxSeoDecoderTest extends OxidTestCase
     public function testGetSeoUrlForArticleWithExistingCatCfg()
     {
         $oDb = oxDb::getDb();
-        
+
         $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl1" ) )."', 'iShopId', '0', 'seourl1', 'oxarticle', 'asd' )" );
         $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl2" ) )."', 'iShopId', '0', 'seourl2', 'oxarticle', 'bsd' )" );
         $oDb->Execute( "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxseourl, oxtype, oxparams ) values ( 'obid', '".md5( strtolower( "seourl3" ) )."', 'iShopId', '0', 'seourl3', 'oxarticle', 'csd' )" );

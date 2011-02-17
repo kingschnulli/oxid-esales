@@ -126,9 +126,9 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
         // fixtures for file uploading
 
         $sPictureDir = oxConfig::getInstance()->getPictureDir( false );
-        $sMasterPicPath = $sPictureDir . "master/1/1126_p1.jpg";
+        $sMasterPicPath = $sPictureDir . "master/1/1672_p1.jpg";
 
-        $aFiles1['myfile']['name']["P1@oxarticles__oxpic1"] = "1126_p1.jpg";
+        $aFiles1['myfile']['name']["P1@oxarticles__oxpic1"] = "1672_p1.jpg";
         $aFiles1['myfile']['tmp_name']["P1@oxarticles__oxpic1"] = $sMasterPicPath;
 
         $aFiles1['myfile']['name']["Z1@oxarticles__oxzoom1"] = "testNewPic1.jpg";
@@ -145,7 +145,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
         $oArticle->expects( $this->once() )->method( 'updateAmountOfGeneratedPictures' )->with( $this->equalTo( 1 ) );
 
         $oArticle->oxarticles__oxpicsgenerated = new oxField( 0 );
-        $oArticle->oxarticles__oxpic1 = new oxField( "1126_p1.jpg" );
+        $oArticle->oxarticles__oxpic1 = new oxField( "1672_p1.jpg" );
 
         // testing functions calls
         $oUtilsFile = $this->getMock( 'oxUtilsFile', array( 'processFiles' ) );
@@ -171,7 +171,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
         $oArticle->expects( $this->once() )->method( 'updateAmountOfGeneratedPictures' )->with( $this->equalTo( 2 ) );
 
         $oArticle->oxarticles__oxpicsgenerated = new oxField( 1 );
-        $oArticle->oxarticles__oxpic2 = new oxField( "1126_p2.jpg" );
+        $oArticle->oxarticles__oxpic2 = new oxField( "p1170222_1.jpg" );
 
         // testing functions calls
         $oUtilsFile = $this->getMock( 'oxUtilsFile', array( 'processFiles' ) );
@@ -196,7 +196,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
         $oArticle->expects( $this->never() )->method( 'updateAmountOfGeneratedPictures' );
 
         $oArticle->oxarticles__oxpicsgenerated = new oxField( 2 );
-        $oArticle->oxarticles__oxpic2 = new oxField( "1126_p2.jpg" );
+        $oArticle->oxarticles__oxpic2 = new oxField( "1672_p2.jpg" );
 
         // testing functions calls
         $oUtilsFile = $this->getMock( 'oxUtilsFile', array( 'processFiles' ) );
@@ -240,7 +240,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
      */
     public function testDeleteArticleMasterPicture()
     {
-        $sAbsImageDir = oxConfig::getInstance()->getAbsDynImageDir();
+        $sAbsImageDir = oxConfig::getInstance()->getPictureDir(false);
 
         $aDelPics[0] = array("sField"    => "oxpic1",
                             "sDir"      => "master/1/",
@@ -285,7 +285,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
      */
     public function testDeleteArticleMasterPicture_skipsMasterPicture()
     {
-        $sAbsImageDir = oxConfig::getInstance()->getAbsDynImageDir();
+        $sAbsImageDir = oxConfig::getInstance()->getPictureDir(false);
 
         $aDelPics[0] = array("sField"    => "oxpic1",
                             "sDir"      => "1/",
@@ -325,7 +325,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
      */
     public function testDeleteArticleMasterPicture_skipsIfDefinedCustomFields()
     {
-        $sAbsImageDir = oxConfig::getInstance()->getAbsDynImageDir();
+        $sAbsImageDir = oxConfig::getInstance()->getPictureDir(false);
 
         $aDelPics[0] = array("sField"    => "oxpic1",
                              "sDir"      => "1/",
@@ -379,7 +379,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
      */
     public function testDeleteArticleMasterPicture_emptyPic()
     {
-        $sAbsImageDir = oxConfig::getInstance()->getAbsDynImageDir();
+        $sAbsImageDir = oxConfig::getInstance()->getPictureDir(false);
 
         //test article
         $oArticle = new oxArticle();
@@ -403,7 +403,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
      */
     public function testDeleteArticleMasterPicture_usesBasename()
     {
-        $sAbsImageDir = oxConfig::getInstance()->getAbsDynImageDir();
+        $sAbsImageDir = oxConfig::getInstance()->getPictureDir(false);
 
         $aDelPics[0] = array("sField"    => "oxpic1",
                             "sDir"      => "master/1/",
@@ -433,7 +433,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
      */
     public function testDeleteMainIcon()
     {
-        $sAbsImageDir = oxConfig::getInstance()->getAbsDynImageDir();
+        $sAbsImageDir = oxConfig::getInstance()->getPictureDir(false);
 
         $aDelPics[0] = array("sField"    => "oxicon",
                             "sDir"      => "icon/",
@@ -482,7 +482,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
      */
     public function testDeleteThumbnail()
     {
-        $sAbsImageDir = oxConfig::getInstance()->getAbsDynImageDir();
+        $sAbsImageDir = oxConfig::getInstance()->getPictureDir(false);
 
         $aDelPics[0] = array("sField"    => "oxthumb",
                             "sDir"      => "0/",
@@ -531,7 +531,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
      */
     public function testDeleteZoomPicture_dbFieldExists()
     {
-        $sAbsImageDir = oxConfig::getInstance()->getAbsDynImageDir();
+        $sAbsImageDir = oxConfig::getInstance()->getPictureDir(false);
         oxTestModules::addFunction('oxDbMetaDataHandler', 'fieldExists', '{ return true; }');
 
         $aDelPics[0] = array("sField"    => "oxzoom2",
@@ -603,7 +603,7 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
      */
     public function testDeleteZoomPicture_usingMasterImage()
     {
-        $sAbsImageDir = oxConfig::getInstance()->getAbsDynImageDir();
+        $sAbsImageDir = oxConfig::getInstance()->getPictureDir(false);
         oxTestModules::addFunction('oxDbMetaDataHandler', 'fieldExists', '{ return false; }');
 
         $aDelPics[0] = array("sField"    => "oxpic2",

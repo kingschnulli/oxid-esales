@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlepicturesTest.php 29412 2010-08-18 14:56:36Z sarunas $
+ * @version   SVN: $Id: articlepicturesTest.php 32881 2011-02-03 11:45:36Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -113,7 +113,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
 
         $myConfig = oxConfig::getInstance();
 
-        $sAbsDynImageDir = $myConfig->getAbsDynImageDir();
+        $sAbsDynImageDir = $myConfig->getPictureDir(false);
         $sActShopId = $myConfig->getBaseShopId();
         modSession::getInstance()->setVar( "actshop", $sActShopId );
 

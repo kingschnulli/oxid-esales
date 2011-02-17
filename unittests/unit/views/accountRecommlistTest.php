@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: accountRecommlistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: accountRecommlistTest.php 32932 2011-02-04 16:24:54Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -447,7 +447,7 @@ class Unit_Views_accountRecommlistTest extends OxidTestCase
     {
         $oView = $this->getMock( 'account_recommlist', array( 'getUser' ));
         $oView->expects( $this->any() )->method( 'getUser')->will($this->returnValue( false ) );
-        $this->assertEquals( 'account_login.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/login.tpl', $oView->render() );
     }
 
     /**
@@ -464,12 +464,22 @@ class Unit_Views_accountRecommlistTest extends OxidTestCase
         $oLists = $this->getMock( 'oxStdClass', array( 'count' ));
         $oLists->expects( $this->once() )->method( 'count')->will( $this->returnValue( 1 ) );
 
-        $oView = $this->getMock( 'account_recommlist', array( 'getUser', "getRecommLists", "getActiveRecommItems", "getActiveRecommList", "getPageNavigation" ));
+        $oView = $this->getMock( 'account_recommlist', array( 'getUser', "getRecommLists", "getActiveRecommList" ));
         $oView->expects( $this->any() )->method( 'getUser')->will($this->returnValue( $oUser ) );
         $oView->expects( $this->once() )->method( 'getRecommLists')->will($this->returnValue( $oLists ) );
         $oView->expects( $this->once() )->method( 'getActiveRecommList')->will($this->returnValue( false ) );
-        $oView->expects( $this->once() )->method( 'getActiveRecommItems');
-        $oView->expects( $this->once() )->method( 'getPageNavigation');
-        $this->assertEquals( 'account_recommlist.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/recommendationlist.tpl', $oView->render() );
+    }
+
+    /**
+     * Testing Account_RecommList::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oAccRecommList = new Account_Recommlist();
+
+        $this->assertEquals(2, count($oAccRecommList->getBreadCrumb()));
     }
 }

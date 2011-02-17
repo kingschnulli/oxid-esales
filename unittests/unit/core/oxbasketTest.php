@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 30589 2010-10-27 12:48:23Z arvydas $
+ * @version   SVN: $Id: oxbasketTest.php 33096 2011-02-09 14:33:14Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -712,8 +712,9 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testAddOrderArticleToBasketAmountIsZero()
     {
-        $oOrderAtrticle = new oxOrderArticle();
-        $oOrderAtrticle->oxorderarticles__oxamount = new oxField( 0 );
+        $oOrderArticle = new oxorderarticle();
+        $oOrderArticle->oxorderarticles__oxamount   = new oxField( 0 );
+        $oOrderArticle->oxorderarticles__oxisbundle = new oxField( 0 );
 
         $oBasket = new oxbasket();
         $this->assertNull( $oBasket->addOrderArticleToBasket( $oOrderArticle ) );
@@ -2611,13 +2612,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     {
 
         modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', true );
-        $aTestVals = array('dproductsprice', 'dproductsnetprice', 'dVAT', 'fproductsprice', 'fproductsnetprice',
-                           'fVAT', 'ddeliverycost', 'ddeliverynetcost', 'dDelVAT', 'fDelVATPercent',
-                           'fdeliverycost', 'fdeliverynetcost', 'fDelVAT', 'dWrappingPrice', 'dWrappingNetto',
-                           'dWrappingVAT', 'fWrappingPrice', 'fWrappingNetto', 'fWrappingVAT', 'fWrappingVATPercent',
-                           'dAddPaymentSum', 'dAddPaymentSumVAT', 'fAddPaymentSum', 'fAddPaymentSumVAT', 'fAddPaymentSumVATPercent',
-                           'fAddPaymentNetSum', 'dprice', 'fprice', 'iCntProducts', 'dCntItems', 'aVATs', 'aBasketContents',
-                           'giftmessage', 'chosencard', 'oCard', 'dDiscount', 'aDiscounts', 'dVoucherDiscount', 'fVoucherDiscount', 'dSkippedDiscount');
+        $aTestVals = array( 'aDiscounts' );
 
         // deleting discounts to ignore bundle problems
         foreach ( $this->aDiscounts as $oDiscount ) {
@@ -2819,7 +2814,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->setBasketUser( $oUser );
 
         oxConfig::getInstance()->setGlobalParameter( 'delcountryid', null );
-        modConfig::setParameter( 'deladrid', $this->oDelAdress->getId() );
+        modSession::getInstance()->setVar( 'deladrid', $this->oDelAdress->getId() );
         $this->assertEquals( '_xxx', $oBasket->UNITfindDelivCountry() );
     }
 
@@ -2884,7 +2879,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     public function testSetPaymentAndGetPaymentId()
     {
         // testing if value is taken from request
-        modConfig::setParameter( 'paymentid', 'xxx' );
+        modSession::getInstance()->setVar( 'paymentid', 'xxx' );
         $oBasket = new oxbasket();
         $this->assertEquals( 'xxx', $oBasket->getPaymentId() );
 
@@ -2905,7 +2900,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $this->assertEquals( 'oxidstandard', $oBasket->getShippingId() );
 
         // testing if value is taken from request
-        modConfig::setParameter( 'sShipSet', 'xxx' );
+        modSession::getInstance()->setVar( 'sShipSet', 'xxx' );
         $oBasket = new oxbasket();
         $this->assertEquals( 'xxx', $oBasket->getShippingId() );
 

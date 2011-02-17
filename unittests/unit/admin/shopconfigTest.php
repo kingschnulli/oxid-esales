@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shopconfigTest.php 25334 2010-01-22 07:14:37Z alfonsas $
+ * @version   SVN: $Id: shopconfigTest.php 30855 2010-11-11 11:56:44Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -50,23 +50,71 @@ class Unit_Admin_ShopConfigTest extends OxidTestCase
     public function testSaveConfVars()
     {
         modConfig::setParameter( "oxid", "testId" );
-        modConfig::setParameter( "confbools", array( "bool" => true ) );
-        modConfig::setParameter( "confstrs", array( "str" => "string" ) );
-        modConfig::setParameter( "confarrs", array( "arr" => "a\nb\nc" ) );
-        modConfig::setParameter( "confaarrs", array( "aarr" => "a => b\nc => d" ) );
+        modConfig::setParameter( "confbools",   array( "varnamebool" => true ) );
+        modConfig::setParameter( "confstrs",    array( "varnamestr"  => "string" ) );
+        modConfig::setParameter( "confarrs",    array( "varnamearr"  => "a\nb\nc" ) );
+        modConfig::setParameter( "confaarrs",   array( "varnameaarr" => "a => b\nc => d" ) );
+        modConfig::setParameter( "confselects", array( "varnamesel"  => "a" ) );
 
         $aTasks[] = "getConfig";
+        $aTasks[] = "_getModuleForConfigVars";
 
         $oConfig = $this->getMock( "oxconfig", array( "saveShopConfVar" ) );
-        $oConfig->expects( $this->at( 0 ) )->method( 'saveShopConfVar' )->with( $this->equalTo( "bool" ), $this->equalTo( "bool" ), $this->equalTo( true ), $this->equalTo( "testId" ) );
-        $oConfig->expects( $this->at( 1 ) )->method( 'saveShopConfVar' )->with( $this->equalTo( "str" ), $this->equalTo( "str" ), $this->equalTo( "string" ), $this->equalTo( "testId" ) );
-        $oConfig->expects( $this->at( 2 ) )->method( 'saveShopConfVar' )->with( $this->equalTo( "arr" ), $this->equalTo( "arr" ), $this->equalTo( array( "a", "b", "c" ) ), $this->equalTo( "testId" ) );
-        $oConfig->expects( $this->at( 3 ) )->method( 'saveShopConfVar' )->with( $this->equalTo( "aarr" ), $this->equalTo( "aarr" ), $this->equalTo( array( "a" => "b", "c" => "d" ) ), $this->equalTo( "testId" ) );
+        $oConfig->expects( $this->at( 0 ) )->method( 'saveShopConfVar' )
+                ->with(
+                        $this->equalTo( "bool" ),
+                        $this->equalTo( "varnamebool" ),
+                        $this->equalTo( true ),
+                        $this->equalTo( "testId" ),
+                        $this->equalTo( 'theme:mytheme' )
+                );
+        $oConfig->expects( $this->at( 1 ) )->method( 'saveShopConfVar' )
+                ->with(
+                        $this->equalTo( "str" ),
+                        $this->equalTo( "varnamestr" ),
+                        $this->equalTo( "string" ),
+                        $this->equalTo( "testId" ),
+                        $this->equalTo( 'theme:mytheme' )
+                );
+        $oConfig->expects( $this->at( 2 ) )->method( 'saveShopConfVar' )
+                ->with(
+                        $this->equalTo( "arr" ),
+                        $this->equalTo( "varnamearr" ),
+                        $this->equalTo( array( "a", "b", "c" ) ),
+                        $this->equalTo( "testId" ),
+                        $this->equalTo( 'theme:mytheme' )
+                );
+        $oConfig->expects( $this->at( 3 ) )->method( 'saveShopConfVar' )
+                ->with(
+                        $this->equalTo( "aarr" ),
+                        $this->equalTo( "varnameaarr" ),
+                        $this->equalTo( array( "a" => "b", "c" => "d" ) ),
+                        $this->equalTo( "testId" ),
+                        $this->equalTo( 'theme:mytheme' )
+                );
+        $oConfig->expects( $this->at( 4 ) )->method( 'saveShopConfVar' )
+                ->with(
+                        $this->equalTo( "select" ),
+                        $this->equalTo( "varnamesel" ),
+                        $this->equalTo( "a" ),
+                        $this->equalTo( "testId" ),
+                        $this->equalTo( 'theme:mytheme' )
+                );
 
         // testing..
         $oView = $this->getMock( "Shop_Config", $aTasks, array(), '', false );
         $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->expects( $this->once() )->method( '_getModuleForConfigVars' )
+                ->will( $this->returnValue( 'theme:mytheme' ) );
+
         $oView->saveConfVars();
+    }
+
+    public function testGetModuleForConfigVars()
+    {
+        $sCl = oxTestModules::publicize('Shop_Config', '_getModuleForConfigVars');
+        $oTest = new $sCl;
+        $this->assertEquals('', $oTest->p_getModuleForConfigVars());
     }
 
     /**
@@ -151,5 +199,57 @@ class Unit_Admin_ShopConfigTest extends OxidTestCase
         // testing..
         $oView = new Shop_Config();
         $this->assertEquals( array( "a" => "b", "c" => "d" ), $oView->UNITmultilineToAarray( $sMultiline ) );
+    }
+
+    /**
+     * _parseConstraint test
+     *
+     * @return null
+     */
+    public function testParseConstraint()
+    {
+        $sCl = oxTestModules::publicize('Shop_Config', '_parseConstraint');
+        $oTest = new $sCl;
+        $this->assertEquals('', $oTest->p_parseConstraint('sometype', 'asdd'));
+        $this->assertEquals('', $oTest->p_parseConstraint('bool', 'asdd'));
+        $this->assertEquals('', $oTest->p_parseConstraint('string', 'asdd'));
+        $this->assertEquals(array('a', 'bc', 'd'), $oTest->p_parseConstraint('select', 'a|bc|d'));
+    }
+
+    /**
+     * _serializeConstraint test
+     *
+     * @return null
+     */
+    public function testSerializeConstraint()
+    {
+        $sCl = oxTestModules::publicize('Shop_Config', '_serializeConstraint');
+        $oTest = new $sCl;
+        $this->assertEquals('', $oTest->p_serializeConstraint('sometype', 'asdd'));
+        $this->assertEquals('', $oTest->p_serializeConstraint('bool', 'asdd'));
+        $this->assertEquals('', $oTest->p_serializeConstraint('string', 'asdd'));
+        $this->assertEquals('a|bc|d', $oTest->p_serializeConstraint('select', array('a', 'bc', 'd')));
+    }
+
+
+    /**
+     * _loadConfVars test
+     *
+     * @return null
+     */
+    public function testLoadConfVars()
+    {
+        $sCl = oxTestModules::publicize('Shop_Config', '_loadConfVars');
+        $oTest = new $sCl;
+        $aDbConfig = $oTest->p_loadConfVars(oxConfig::getInstance()->getShopId(), '');
+
+        $this->assertEquals(
+            array('vars', 'constraints', 'grouping'),
+            array_keys($aDbConfig)
+        );
+
+        $iVarSum = array_sum(array_map('count', $aDbConfig['vars']));
+        $this->assertGreaterThan(100, $iVarSum);
+        $this->assertEquals($iVarSum, count($aDbConfig['constraints']));
     }
 }

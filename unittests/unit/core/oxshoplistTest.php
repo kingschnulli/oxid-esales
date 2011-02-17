@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshoplistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxshoplistTest.php 32010 2010-12-17 15:10:51Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -52,9 +52,6 @@ class Unit_Core_oxshoplistTest extends OxidTestCase
      */
     protected function tearDown()
     {
-        $sQ = "delete from oxshops where oxid > '1'";
-        oxDb::getDb( true)->Execute( $sQ );
-
         parent::tearDown();
     }
 

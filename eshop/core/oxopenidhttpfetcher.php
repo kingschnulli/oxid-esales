@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxopenidhttpfetcher.php 29114 2010-07-27 13:45:03Z vilma $
+ * @version   SVN: $Id: oxopenidhttpfetcher.php 29921 2010-09-21 12:18:02Z sarunas $
  */
 
 require_once "Auth/Yadis/HTTPFetcher.php";

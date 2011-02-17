@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcountrylistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxcountrylistTest.php 32008 2010-12-17 15:10:36Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -83,7 +83,8 @@ class Unit_Core_oxCountryListTest extends OxidTestCase
     public function testSelectString()
     {
         $oCountryList = oxNew("oxcountrylist");
-        $sSelect = "SELECT oxid, oxtitle$sSufix as oxtitle FROM oxcountry WHERE oxtitle like 'oxCountryListTest%' ORDER BY oxorder, oxtitle$sSufix" ;
+        $sVN = $oCountryList->getBaseObject()->getViewName();
+        $sSelect = "SELECT oxid, oxtitle FROM $sVN WHERE oxtitle like 'oxCountryListTest%' ORDER BY oxorder, oxtitle$sSufix" ;
         $oCountryList->selectString( $sSelect );
 
         $aList = array( '_testCountryId5', '_testCountryId1', '_testCountryId2', '_testCountryId0', '_testCountryId4', '_testCountryId3' );

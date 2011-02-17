@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 30393 2010-10-19 12:41:04Z vilma $
+ * @version   SVN: $Id: lang.php 32506 2011-01-14 09:59:45Z arvydas.vapsva $
  */
 
 $aLang = array(
@@ -66,6 +66,10 @@ $aLang = array(
 'ERROR_PASSWORDS_DO_NOT_MATCH'                    => "Passwords do not match!",
 'ERROR_USER_NAME_DOES_NOT_MATCH_PATTERN'          => "Please enter a valid e-mail address!",
 'ERROR_MYSQL_VERSION_DOES_NOT_FIT_REQUIREMENTS'   => "MySQL version does not fit system requiremens",
+
+'ERROR_VIEWS_CANT_CREATE'                         => "[tr] ERROR: Cant create views. Please check your database user privileges.",
+'ERROR_VIEWS_CANT_SELECT'                         => "[tr] ERROR: Can't select from view. Please check your database user privileges.",
+'ERROR_VIEWS_CANT_DROP'                           => "[tr] ERROR: Cant drop views. Please check your database user privileges.",
 
 'MOD_PHP_EXTENNSIONS'                             => 'PHP extensions',
 'MOD_PHP_CONFIG'                                  => 'PHP configuration',

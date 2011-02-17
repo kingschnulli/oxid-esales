@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 32614 2011-01-20 15:23:11Z sarunas $
+ * @version   SVN: $Id: oxview.php 33046 2011-02-08 14:02:03Z rimvydas.paskevicius $
  */
 
 /**
@@ -209,25 +209,8 @@ class oxView extends oxSuperCfg
      */
     public function addGlobalParams( $oShop = null)
     {
-        //deprecated template vars
-
-        $this->_aViewData['isdtaus'] = true;
-        $this->_aViewData['isstaffelpreis'] = true;
-        $this->_aViewData['belboon'] = $this->getBelboonParam();
-
         // by default we allways display newsletter bar
         $this->_iNewsStatus = 1;
-
-        $this->_aViewData['charset']       = $this->getCharSet();
-        $this->_aViewData['version']       = $this->getShopVersion();
-        $this->_aViewData['revision']      = $this->getRevision();
-        $this->_aViewData['edition']       = $this->getShopEdition();
-        $this->_aViewData['fulledition']   = $this->getShopFullEdition();
-        $this->_aViewData['isdemoversion'] = $this->isDemoVersion();
-
-
-        // set additional params
-        $this->_aViewData["additionalparams"] = $this->getAdditionalParams();
 
         // assigning shop to view config ..
         $oViewConf = $this->getViewConfig();
@@ -238,9 +221,6 @@ class oxView extends oxSuperCfg
         //sending all view to smarty
         $this->_aViewData['oView'] = $this;
         $this->_aViewData['oViewConf'] = $this->getViewConfig();
-
-        // @deprecated
-        $this->_aViewData['shop'] = $this->getViewConfig();
 
         return $oViewConf;
     }
@@ -888,4 +868,15 @@ class oxView extends oxSuperCfg
 
         return false;
     }
+
+    /**
+     * Returns if shop is mall
+     *
+     * @return bool
+     */
+    public function isMall()
+    {
+            return false;
+    }
+
 }

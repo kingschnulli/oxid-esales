@@ -6,8 +6,8 @@
     [{assign var="readonly" value=""}]
 [{/if}]
 
-<form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
-    [{ $shop->hiddensid }]
+<form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
+    [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="oxid" value="[{ $oxid }]">
     <input type="hidden" name="cl" value="order_overview">
 </form>
@@ -181,8 +181,8 @@
             [{ if $edit }]
             <b>[{ oxmultilang ident="GENERAL_ORDERNUM" }]: </b>[{ $edit->oxorder__oxordernr->value }]<br>
             <br>
-                <form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post">
-                [{ $shop->hiddensid }]
+                <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">
+                [{ $oViewConf->getHiddenSid() }]
                 <input type="hidden" name="cl" value="order_overview">
                 <input type="hidden" name="fnc" value="changefolder">
                 <input type="hidden" name="oxid" value="[{ $oxid }]">
@@ -240,8 +240,8 @@
         <br>
         [{ if $edit }]
         <table cellspacing="0" cellpadding="0" border="0">
-        <form name="sendorder" id="sendorder" action="[{ $shop->selflink }]" method="post">
-        [{ $shop->hiddensid }]
+        <form name="sendorder" id="sendorder" action="[{ $oViewConf->getSelfLink() }]" method="post">
+        [{ $oViewConf->getHiddenSid() }]
         <input type="hidden" name="cl" value="order_overview">
         <input type="hidden" name="fnc" value="sendorder">
         <input type="hidden" name="oxid" value="[{ $oxid }]">
@@ -262,8 +262,8 @@
             <b>[{ oxmultilang ident="GENERAL_SENDON" }]</b> <b>[{$edit->oxorder__oxsenddate|oxformdate:'datetime':true }]</b>
             </td>
         </tr>
-        <form name="resetorder" id="resetorder" action="[{ $shop->selflink }]" method="post">
-        [{ $shop->hiddensid }]
+        <form name="resetorder" id="resetorder" action="[{ $oViewConf->getSelfLink() }]" method="post">
+        [{ $oViewConf->getHiddenSid() }]
         <input type="hidden" name="cl" value="order_overview">
         <input type="hidden" name="fnc" value="resetorder">
         <input type="hidden" name="oxid" value="[{ $oxid }]">
@@ -284,8 +284,8 @@
         <td valign="top" class="edittext" align="right">
 
               <table cellspacing="0" cellpadding="0" style="padding-top: 5px; padding-left: 5px; padding-right: 5px; border : 1px #A9A9A9; border-style : solid solid solid solid;" width="220">
-              <form name="myedit2" id="myedit2" action="[{ $shop->selflink }]" method="post" >
-              [{ $shop->hiddensid }]
+              <form name="myedit2" id="myedit2" action="[{ $oViewConf->getSelfLink() }]" method="post" >
+              [{ $oViewConf->getHiddenSid() }]
               <input type="hidden" name="cl" value="order_overview">
               <input type="hidden" name="fnc" value="exportlex">
               <input type="hidden" name="oxid" value="[{ $oxid }]">
@@ -307,14 +307,14 @@
               [{ if $edit && $oView->canExport() }]
               <br>
               <table cellspacing="0" cellpadding="0" style="padding-top: 5px; padding-left: 5px; padding-right: 5px; padding-bottom: 5px; border : 1px #A9A9A9; border-style : solid solid solid solid;" width="220">
-              <form name="myedit2" id="myedit2" action="[{ $shop->selflink }]" method="post" target="expPDF">
-              [{ $shop->hiddensid }]
+              <form name="myedit2" id="myedit2" action="[{ $oViewConf->getSelfLink() }]" method="post" target="expPDF">
+              [{ $oViewConf->getHiddenSid() }]
               <input type="hidden" name="cl" value="order_overview">
               <input type="hidden" name="fnc" value="createPDF">
               <input type="hidden" name="oxid" value="[{ $oxid }]">
               <tr>
                 <td rowspan="3">
-                  <img src="[{$shop->imagedir}]/pdf_icon.gif" width="41" height="38" alt="" border="0" hspace="0" vspace="0" align="absmiddle">
+                  <img src="[{$oViewConf->getImageUrl()}]/pdf_icon.gif" width="41" height="38" alt="" border="0" hspace="0" vspace="0" align="absmiddle">
                 </td>
                 <td valign="top" class="edittext" align="right">
                   [{ oxmultilang ident="ORDER_OVERVIEW_PDF_TYPE" }]:&nbsp;<select name="pdftype" class="editinput" style="width:80px;">
@@ -342,17 +342,16 @@
               </form>
               [{ /if}]
 
-              [{ if $isdtaus }]
               <br>
               <table cellspacing="0" cellpadding="0" style="padding-top: 5px; padding-left: 5px; padding-right: 5px; padding-bottom: 5px; border : 1px #A9A9A9; border-style : solid solid solid solid;" width="220">
-              <form name="myedit2" id="myedit2" action="[{ $shop->selflink }]" method="post" >
-              [{ $shop->hiddensid }]
+              <form name="myedit2" id="myedit2" action="[{ $oViewConf->getSelfLink() }]" method="post" >
+              [{ $oViewConf->getHiddenSid() }]
               <input type="hidden" name="cl" value="order_overview">
               <input type="hidden" name="fnc" value="exportDTAUS">
               <input type="hidden" name="oxid" value="[{ $oxid }]">
               <tr>
                 <td valign="top">
-                  <img src="[{$shop->imagedir}]/dtaus_logo.jpg" width="71" height="40" alt="" border="0" hspace="0" vspace="0" align="absmiddle">
+                  <img src="[{$oViewConf->getImageUrl()}]/dtaus_logo.jpg" width="71" height="40" alt="" border="0" hspace="0" vspace="0" align="absmiddle">
                 </td>
                 <td valign="top" class="edittext">
                   [{ oxmultilang ident="ORDER_OVERVIEW_FROMORDERNUM" }]<br>
@@ -362,7 +361,6 @@
               </tr>
               </table>
               </form>
-            [{/if}]
         </td>
     </tr>
     </table>

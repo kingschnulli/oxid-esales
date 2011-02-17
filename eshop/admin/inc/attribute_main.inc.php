@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_main.inc.php 29956 2010-09-23 15:51:52Z tomas $
+ * @version   SVN: $Id: attribute_main.inc.php 32370 2011-01-05 13:00:45Z rimvydas.paskevicius $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -49,6 +49,13 @@ $aColumns = array( 'container1' => array(    // field , table,         visible, 
 class ajaxComponent extends ajaxListComponent
 {
     /**
+     * If true extended column selection will be build
+     *
+     * @var bool
+     */
+    protected $_blAllowExtColumns = true;
+
+    /**
      * Returns SQL query for data to fetc
      *
      * @return string
@@ -58,8 +65,9 @@ class ajaxComponent extends ajaxListComponent
         $myConfig = $this->getConfig();
         $oDb      = oxDb::getDb();
 
-        $sArticleTable = getViewName('oxarticles');
-        $sO2CView      = getViewName('oxobject2category');
+        $sArticleTable    = getViewName('oxarticles');
+        $sO2CategoryView  = getViewName('oxobject2category');
+        $sO2AttributeView = getViewName('oxobject2attribute');
 
         $sDelId      = oxConfig::getParameter( 'oxid' );
         $sSynchDelId = oxConfig::getParameter( 'synchoxid' );
@@ -72,17 +80,17 @@ class ajaxComponent extends ajaxListComponent
         } else {
             // selected category ?
             if ( $sSynchDelId && $sDelId != $sSynchDelId ) {
-                $sQAdd  = " from $sO2CView as oxobject2category left join $sArticleTable on ";
+                $sQAdd  = " from $sO2CategoryView as oxobject2category left join $sArticleTable on ";
                 $sQAdd .= $myConfig->getConfigParam( 'blVariantsSelection' )?" ( $sArticleTable.oxid=oxobject2category.oxobjectid or $sArticleTable.oxparentid=oxobject2category.oxobjectid)":" $sArticleTable.oxid=oxobject2category.oxobjectid ";
                 $sQAdd .= " where oxobject2category.oxcatnid = " . $oDb->quote( $sDelId ) . " ";
             } else {
-                $sQAdd  = " from oxobject2attribute left join $sArticleTable on $sArticleTable.oxid=oxobject2attribute.oxobjectid ";
-                $sQAdd .= " where oxobject2attribute.oxattrid = " . $oDb->quote( $sDelId ) . " and $sArticleTable.oxid is not null ";
+                $sQAdd  = " from $sO2AttributeView left join $sArticleTable on $sArticleTable.oxid=$sO2AttributeView.oxobjectid ";
+                $sQAdd .= " where $sO2AttributeView.oxattrid = " . $oDb->quote( $sDelId ) . " and $sArticleTable.oxid is not null ";
             }
         }
 
         if ( $sSynchDelId && $sSynchDelId != $sDelId ) {
-            $sQAdd .= " and $sArticleTable.oxid not in ( select oxobject2attribute.oxobjectid from oxobject2attribute where oxobject2attribute.oxattrid = " . $oDb->quote( $sSynchDelId ) . " ) ";
+            $sQAdd .= " and $sArticleTable.oxid not in ( select $sO2AttributeView.oxobjectid from $sO2AttributeView where $sO2AttributeView.oxattrid = " . $oDb->quote( $sSynchDelId ) . " ) ";
         }
 
         return $sQAdd;
@@ -120,8 +128,9 @@ class ajaxComponent extends ajaxListComponent
     {
         $aChosenCat = $this->_getActionIds( 'oxobject2attribute.oxid' );
         if ( oxConfig::getParameter( 'all' ) ) {
+            $sO2AttributeView = getViewName('oxobject2attribute');
 
-            $sQ = parent::_addFilter( "delete oxobject2attribute.* ".$this->_getQuery() );
+            $sQ = parent::_addFilter( "delete $sO2AttributeView.* ".$this->_getQuery() );
             oxDb::getDb()->Execute( $sQ );
 
         } elseif ( is_array( $aChosenCat ) ) {
@@ -159,47 +168,4 @@ class ajaxComponent extends ajaxListComponent
             }
         }
     }
-
-    /**
-     * Formats and returns chunk of SQL query string with definition of
-     * fields to load from DB. Adds subselect to get variant title from parent article
-     *
-     * @return string
-     */
-    protected function _getQueryCols()
-    {
-        $myConfig = $this->getConfig();
-        $sLangTag = oxLang::getInstance()->getLanguageTag();
-
-        $sQ = '';
-        $blSep = false;
-        $aVisiblecols = $this->_getVisibleColNames();
-        foreach ( $aVisiblecols as $iCnt => $aCol ) {
-            if ( $blSep )
-                $sQ .= ', ';
-            $sViewTable = getViewName( $aCol[1] );
-            // multilanguage
-            $sCol = $aCol[3]?$aCol[0].$sLangTag:$aCol[0];
-            if ( $myConfig->getConfigParam( 'blVariantsSelection' ) && $aCol[0] == 'oxtitle' ) {
-                $sVarSelect = "$sViewTable.oxvarselect".$sLangTag;
-                $sQ .= " IF( $sViewTable.$sCol != '', $sViewTable.$sCol, CONCAT((select oxart.$sCol from $sViewTable as oxart where oxart.oxid = $sViewTable.oxparentid),', ',$sVarSelect)) as _" . $iCnt;
-            } else {
-                $sQ  .= $sViewTable . '.' . $sCol . ' as _' . $iCnt;
-            }
-            $blSep = true;
-        }
-
-        $aIdentCols = $this->_getIdentColNames();
-        foreach ( $aIdentCols as $iCnt => $aCol ) {
-            if ( $blSep )
-                $sQ .= ', ';
-
-            // multilanguage
-            $sCol = $aCol[3]?$aCol[0].$sLangTag:$aCol[0];
-            $sQ  .= getViewName( $aCol[1] ) . '.' . $sCol . ' as _' . $iCnt;
-        }
-
-        return " $sQ ";
-    }
-
 }

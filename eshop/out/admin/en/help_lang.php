@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 31373 2010-12-01 10:02:42Z linas.kukulskis $
+ * @version   SVN: $Id: help_lang.php 33200 2011-02-11 09:16:52Z arvydas.vapsva $
  */
 
 /**
@@ -76,23 +76,11 @@ $aLang =  array(
 
 
 
-'HELP_SHOP_CONFIG_TOPNAVILAYOUT'                =>  'Usually, the category navigation is shown on the left. If this setting is checked, the category navigation is shown at top instead.',
-
 'HELP_SHOP_CONFIG_ORDEROPTINEMAIL'              =>  'If double-opt-in is active, users get an e-mail with a confirmation link when they register for the newsletter. Only if this confirmation link is used the user is registered for the newsletter.<br>' .
                                                     'Double-opt-in protects users from unwanted registrations. Without double-opt-in, any e-mail address can be registered for the newsletter. With double-opt-in, the owner of the e-mail address has to confirm the registration.',
 
 'HELP_SHOP_CONFIG_BIDIRECTCROSS'                =>  'With crossselling you can offer fitting products for a product: If e.g. to a car tires are assigned as crossselling product, the tires are shown with the car.<br>' .
                                                     'If bidirectional crossselling is activated, it works in both directions: The car is shown with the tires, too.',
-
-'HELP_SHOP_CONFIG_ICONSIZE'                     =>  'Icons are the smallest pictures of a product. Icons are used: <br>' .
-                                                    '<ul><li>in the shopping cart.</li>' .
-                                                    '<li>if products are shown in the right menu (e.g. in <span class="filename_filepath_or_italic">TOP of the Shop</span> and <span class="filename_filepath_or_italic">Bargain</span>).</li></ul>' .
-                                                    'For avoiding design problems caused by too big icons the icons are resized. You can enter the max. size for icons here.' ,
-
-'HELP_SHOP_CONFIG_THUMBNAILSIZE'                =>  'Thumbnails are small product pictures. Thumbnails are used:<br>' .
-                                                    '<ul><li>in product lists.</li>' .
-                                                    '<li>in Promotions displayed in the middle of the front page, e. g. <span class="filename_filepath_or_italic">Just arrived!</span>.</li></ul>' .
-                                                    'For avoiding design problems caused by too big thumbnails the thumbnails are resized. You can enter the max. size for thumbnails here.',
 
 'HELP_SHOP_CONFIG_STOCKONDEFAULTMESSAGE'        =>  'For each product you can set up a message if the product is on stock.<br>' .
                                                     'If this setting is active, a message is shown if no specific message for for a product is entered. The default message <span class="filename_filepath_or_italic">Ready for shipping</span> is shown.',
@@ -390,6 +378,7 @@ $aLang =  array(
 'HELP_CATEGORY_MAIN_SORT'                       =>  'You can use <span class="navipath_or_inputname">Sorting</span> to define the order in which categories are displayed: The category with the lowest number is displayed at the top, and the category with the highest number at the bottom.',
 
 'HELP_CATEGORY_MAIN_THUMB'                      =>  'With <span class="navipath_or_inputname">Picture</span> and <span class="navipath_or_inputname">Upload Picture</span> you can upload a picture for this category. The picture is shown at top of the category is viewed. Select the picture in <span class="navipath_or_inputname">Upload Picture</span>. When clicking on <span class="navipath_or_inputname">Save</span>, th picture is uploaded. After uploading, the filename of the picture is shown in <span class="navipath_or_inputname">Picture</span>.',
+'HELP_CATEGORY_MAIN_PROMOTION_ICON'             =>  'With <span class="navipath_or_inputname">promotion icon</span> and <span class="navipath_or_inputname">upload icon</span> you can upload a category picture for promotion on start page. For displaying category promotion see <span class="navipath_or_inputname">Master Settings -> Customer Info -> Top offer in categories</span>',
 
 'HELP_CATEGORY_MAIN_SKIPDISCOUNTS'              =>  '<li>If <span class="navipath_or_inputname">Skip all negative discounts</span> is active, negative allowances will not be calculated for any products in this category.',
 
@@ -473,7 +462,7 @@ $aLang =  array(
 
 'HELP_LANGUAGE_DEFAULT'                         => 'Default language is used when shop is unable to detect language in other ways: language id is not defined by URL, can\'t be detected by browser, is not defined in session etc. Default language can only be disabled, deleting it is <u>not possible</u>.',
 
-'HELP_LANGUAGE_ACTIVE'							=> "This option defines language availability in eShop's frontend: if it is activated - language is available in frontend. For working in admin area this language is always available; even if it is disabled for frontend.",
+'HELP_LANGUAGE_ACTIVE'                            => "This option defines language availability in eShop's frontend: if it is activated - language is available in frontend. For working in admin area this language is always available; even if it is disabled for frontend.",
 
 'HELP_PAYMENT_MAIN_SORT'                        =>  'In <span class="navipath_or_inputname">Sorting</span> you can specify the order in which the payment methods are to be displayed to users: The payment method with the lowest sort number is displayed on top.',
 
@@ -488,6 +477,7 @@ $aLang =  array(
                                                     '<ul><li>With <span class="userinput_or_code">abs</span> the price is entered for the payment method (e.g.: if you enter <span class="userinput_or_code">7.50</span> a price of EUR 7.50 is calculated.)</li>' .
                                                     '<li>With <span class="userinput_or_code">%</span>, the price is calculated relative to the purchase price (e.g.: if you enter <span class="userinput_or_code">2</span>, the price is 2 percent of the purchase price)</li></ul>',
 
+'HELP_PAYMENT_MAIN_ADDSUMRULES'                 => '[tr] Rules defines what basket costs must be included while calculating payment Surcharge/Discount (none selected = <b>1</b>-<b>4</b> selected)',
 
 'HELP_SELECTLIST_MAIN_TITLEIDENT'               =>  'In <span class="navipath_or_inputname">Working Title</span>, you can enter an additional name that is not displayed to users of your eShop. You can use the working title to differentiate between similar selection lists (e.g., Sizes for trousers and Sizes for shirts).',
 
@@ -556,4 +546,8 @@ $aLang =  array(
 'HELP_DYN_TRUSTED_TESTMODUS'                    => 'Test environment ("Sandbox") on. After completion of the certification Trusted Shops will send you login details by e-mail.',
 'HELP_DYN_TRUSTED_ACTIVE'                       => 'Check this option to display the Trusted Shops Seal on shop.',
 'HELP_DYN_TRUSTED_TSPAYMENT'                    => 'Assign the shop offered payment types at the appropriate payment to Trusted Store.',
+
+'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'         => 'Upload banner image and enter banner URL which will be used when clicking on banner. If article is assigned to banner and URL is not entered, link to assigned article will be used when clicking on banner.',
+
+
 );

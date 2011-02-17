@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: listuserTest.php 25334 2010-01-22 07:14:37Z alfonsas $
+ * @version   SVN: $Id: listuserTest.php 31990 2010-12-17 14:04:40Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -44,27 +44,6 @@ class Unit_Admin_ListUserTest extends OxidTestCase
     }
 
     /**
-     * List_User::Init() test case
-     *
-     * @return null
-     */
-    public function testInit()
-    {
-        // testing..
-        $oView = $this->getMock( "List_User", array( "buildWhere", "_authorize" ) );
-        $oView->expects( $this->once() )->method( 'buildWhere' )->will( $this->throwException( new Exception( "buildWhere" ) ) );
-        $oView->expects( $this->once() )->method( '_authorize' )->will( $this->returnValue( true ) );
-
-        try {
-            $oView->init();
-        } catch ( Exception $oExcp ) {
-            $this->assertEquals( "buildWhere", $oExcp->getMessage(), "Error in List_User::Init()" );
-            return;
-        }
-        $this->fail( "Error in List_User::Init()" );
-    }
-
-    /**
      * List_User::Render() test case
      *
      * @return null
@@ -77,18 +56,5 @@ class Unit_Admin_ListUserTest extends OxidTestCase
         $oView = $this->getMock( "List_User", array( "getNavigation" ));
         $oView->expects( $this->at( $iCnt++ ) )->method( 'getNavigation' )->will( $this->returnValue( $oNavTree ) );
         $this->assertEquals( "list_user.tpl", $oView->render() );
-    }
-
-    /**
-     * List_User::PrepareOrderByQuery() test case
-     *
-     * @return null
-     */
-    public function testPrepareOrderByQuery()
-    {
-        modConfig::setParameter( "sort", "testSort" );
-
-        $oAdminList = new List_User();
-        $this->assertEquals( " order by testSort ", $oAdminList->UNITprepareOrderByQuery( "" ) );
     }
 }

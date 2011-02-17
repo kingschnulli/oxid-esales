@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 29252 2010-08-06 13:40:48Z arvydas $
+ * @version   SVN: $Id: payment.php 32991 2011-02-07 14:23:27Z vilma $
  */
 
 /**
@@ -99,7 +99,7 @@ class Payment extends oxUBase
      * Current class template name.
      * @var string
      */
-    protected $_sThisTemplate = 'payment.tpl';
+    protected $_sThisTemplate = 'page/checkout/payment.tpl';
 
     /**
      * Order step marker
@@ -132,11 +132,6 @@ class Payment extends oxUBase
      * to configuration in admin, user profile data loads delivery sets,
      * and possible payment methods. Returns name of template to render
      * payment::_sThisTemplate.
-     *
-     * Template variables:
-     * <b>allShipsetsCnt</b>, <b>allShipsets</b>, <b>payments</b>,
-     * <b>payerror</b>, <b>payerrortext</b>, <b>dynvalue</b>,
-     * <b>defpaymentid</b>, <b>basket</b>, <b>deladr</b>
      *
      * @return  string  current template file name
      */
@@ -178,13 +173,6 @@ class Payment extends oxUBase
             }
         }
 
-        // passing payments to view
-        $this->_aViewData[ 'payments' ] = $this->getPaymentList();
-
-        // #955A. must recalculate count
-        $this->_aViewData['allShipsetsCnt'] = $this->getAllSetsCnt();
-        $this->_aViewData['allShipsets']    = $this->getAllSets();
-
         if ( !$this->getAllSetsCnt() ) {
             // no fitting shipping set found, setting default empty payment
             $this->_setDefaultEmptyPayment();
@@ -192,19 +180,6 @@ class Payment extends oxUBase
         }
 
         $this->_unsetPaymentErrors();
-
-        $this->_aViewData['oxemptypayment'] = $this->getEmptyPayment();
-        $this->_aViewData['payerror']       = $this->getPaymentError();
-        $this->_aViewData['payerrortext']   = $this->getPaymentErrorText();
-
-        $this->_aViewData['dynvalue']  = $this->getDynValue();
-
-        // get checked payment ID
-        $this->_aViewData['defpaymentid'] = $this->getCheckedPaymentId();
-        $this->_aViewData['paymencnt']    = $this->getPaymentCnt();
-
-        //add a array with current years for the credit card drop down box
-        $this->_aViewData['creditYears'] = $this->getCreditYears();
 
         return $this->_sThisTemplate;
     }
@@ -670,6 +645,23 @@ class Payment extends oxUBase
             }
         }
         return $this->_sCheckedProductId;
+    }
+
+    /**
+     * Returns Bread Crumb - you are here page1/page2/page3...
+     *
+     * @return array
+     */
+    public function getBreadCrumb()
+    {
+        $aPaths = array();
+        $aPath = array();
+
+
+        $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_CHECKOUT_PAY', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPaths[] = $aPath;
+
+        return $aPaths;
     }
 
 }

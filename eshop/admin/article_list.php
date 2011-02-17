@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_list.php 27134 2010-04-09 13:50:28Z arvydas $
+ * @version   SVN: $Id: article_list.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
  */
 
 /**
@@ -55,15 +55,13 @@ class Article_List extends oxAdminList
     {
         $myConfig = $this->getConfig();
         $sPwrSearchFld = oxConfig::getParameter( "pwrsearchfld" );
-        if ( !isset( $sPwrSearchFld ) ) {
-            $sPwrSearchFld  = "oxtitle";
-        }
+        $sPwrSearchFld = $sPwrSearchFld ? strtolower( $sPwrSearchFld ) : "oxtitle";
 
         $oArticle = null;
         $oList = $this->getItemList();
         if ( $oList) {
             foreach ( $oList as $key => $oArticle ) {
-                $sFieldName = "oxarticles__".strtolower( $sPwrSearchFld );
+                $sFieldName = "oxarticles__{$sPwrSearchFld}";
 
                 // formatting view
                 if ( !$myConfig->getConfigParam( 'blSkipFormatConversion' ) ) {
@@ -89,11 +87,9 @@ class Article_List extends oxAdminList
         $this->_aViewData["pwrsearchfields"] = $oArticle ? $oArticle->getSearchableFields() : null;
         $this->_aViewData["pwrsearchfld"]    = strtoupper( $sPwrSearchFld );
 
-        if ( isset( $this->_aViewData["where"] ) ) {
-            $sFieldName = "oxarticles__".strtoupper( $sPwrSearchFld );
-            if ( isset( $this->_aViewData["where"]->$sFieldName ) ) {
-                $this->_aViewData["pwrsearchinput"] = $this->_aViewData["where"]->$sFieldName;
-            }
+        $aFilter = $this->getListFilter();
+        if ( isset( $aFilter["oxarticles"][$sPwrSearchFld] ) ) {
+            $this->_aViewData["pwrsearchinput"] = $aFilter["oxarticles"][$sPwrSearchFld];
         }
 
         $sType  = '';
@@ -205,7 +201,7 @@ class Article_List extends oxAdminList
             list($sType, $sValue) = explode("@@", $sArtCat);
         }
 
-        $sTable   = getViewName( "oxarticles" );
+        $sTable = getViewName( "oxarticles" );
         switch ($sType) {
             // add category
             case 'cat':
@@ -234,13 +230,12 @@ class Article_List extends oxAdminList
     public function buildWhere()
     {
         // we override this to select only parent articles
-        $this->_aWhere = ( array ) parent::buildWhere();
+        $this->_aWhere = parent::buildWhere();
 
         // adding folder check
         $sFolder = oxConfig::getParameter( 'folder' );
         if ( $sFolder && $sFolder != '-1' ) {
-            $sViewName = getViewName( 'oxarticles' );
-            $this->_aWhere["$sViewName.oxfolder"] = $sFolder;
+            $this->_aWhere[getViewName( "oxarticles" ).".oxfolder"] = $sFolder;
         }
 
         return $this->_aWhere;
@@ -268,7 +263,7 @@ class Article_List extends oxAdminList
      */
     public function deleteEntry()
     {
-        $sOxId = oxConfig::getParameter( "oxid" );
+        $sOxId = $this->getEditObjectId();
         $oArticle = oxNew( "oxarticle");
         if ( $sOxId && $oArticle->load( $sOxId ) ) {
             parent::deleteEntry();

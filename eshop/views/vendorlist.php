@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorlist.php 31079 2010-11-23 07:54:24Z arvydas $
+ * @version   SVN: $Id: vendorlist.php 32968 2011-02-07 12:51:20Z vilma $
  */
 
 /**
@@ -95,10 +95,6 @@ class VendorList extends aList
      * metatags info (oxubase::_convertForMetaTags()) and returns name of
      * template to render.
      *
-     * Template variables:
-     * <b>articlelist</b>, <b>pageNavigation</b>, <b>subcatlist</b>,
-     * <b>meta_keywords</b>, <b>meta_description</b>
-     *
      * @return  string  $this->_sThisTemplate   current template file name
      */
     public function render()
@@ -122,17 +118,6 @@ class VendorList extends aList
                 }
             }
         }
-        $this->_aViewData['hasVisibleSubCats'] = $this->hasVisibleSubCats();
-        $this->_aViewData['subcatlist']        = $this->getSubCatList();
-        $this->_aViewData['articlelist']       = $this->getArticleList();
-        $this->_aViewData['similarrecommlist'] = $this->getSimilarRecommLists();
-
-        $this->_aViewData['title']             = $this->getTitle();
-        $this->_aViewData['template_location'] = $this->getTemplateLocation();
-        $this->_aViewData['actCategory']       = $this->getActiveCategory();
-        $this->_aViewData['actCatpath']        = $this->getCatTreePath();
-
-        $this->_aViewData['pageNavigation'] = $this->getPageNavigation();
 
         // processing list articles
         $this->_processListArticles();
@@ -327,24 +312,6 @@ class VendorList extends aList
     }
 
     /**
-     * Template variable getter. Returns template location
-     *
-     * @deprecated use vendorList::getTreePath() and adjust template
-     *
-     * @return string
-     */
-    public function getTemplateLocation()
-    {
-        if ( $this->_sTplLocation === null ) {
-            $this->_sTplLocation = false;
-            if ( ( $oVendorTree = $this->getVendorTree() ) ) {
-                $this->_sTplLocation = $oVendorTree->getHtmlPath();
-            }
-        }
-        return $this->_sTplLocation;
-    }
-
-    /**
      * Template variable getter. Returns category path array
      *
      * @return array
@@ -457,5 +424,30 @@ class VendorList extends aList
             $sAddParams .= "&amp;cnid=v_" . $oVendor->getId();
         }
         return $sAddParams;
+    }
+
+    /**
+     * Returns Bread Crumb - you are here page1/page2/page3...
+     *
+     * @return array
+     */
+    public function getBreadCrumb()
+    {
+        $aPaths = array();
+
+        $oCatTree = $this->getVendorTree()->getPath();
+
+        if ( $oCatTree ) {
+            foreach ( $oCatTree as $oCat ) {
+                $aCatPath = array();
+
+                $aCatPath['link'] = $oCat->getLink();
+                $aCatPath['title'] = $oCat->oxcategories__oxtitle->value;
+
+                $aPaths[] = $aCatPath;
+            }
+        }
+
+        return $aPaths;
     }
 }

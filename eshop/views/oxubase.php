@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
+ * @version   SVN: $Id: oxubase.php 33142 2011-02-10 12:16:17Z linas.kukulskis $
  */
 
 /**
@@ -78,6 +78,20 @@ class oxUBase extends oxView
      * @var string
      */
     protected $_sListType = null;
+
+    /**
+     * Possible list display types
+     *
+     * @var array
+     */
+    protected $_aListDisplayTypes = array( 'grid', 'line', 'infogrid' );
+
+    /**
+     * List display type
+     *
+     * @var string
+     */
+    protected $_sListDisplayType = null;
 
     /**
      * Active articles category object.
@@ -389,15 +403,6 @@ class oxUBase extends oxView
     protected $_blLowOrderPrice = null;
 
     /**
-     * If order price to low
-     *
-     * @deprecated
-     *
-     * @var integer
-     */
-    protected $_iLowOrderPrice  = null;
-
-    /**
      * Min order price
      * @var string
      */
@@ -470,12 +475,6 @@ class oxUBase extends oxView
     protected $_blNewsSubscribed = null;
 
     /**
-     * Show shipping address
-     * @var bool
-     */
-    protected $_blShowShipAddress = null;
-
-    /**
      * Delivery address
      * @var object
      */
@@ -497,7 +496,7 @@ class oxUBase extends oxView
      * Sign if to load and show top5articles action
      * @var bool
      */
-    protected $_blTop5Action = false;
+    protected $_blTop5Action = true;
 
     /**
      * Sign if to load and show bargain action
@@ -511,6 +510,30 @@ class oxUBase extends oxView
      * @var array
      */
     protected $_aMustFillFields = null;
+
+    /**
+     * Show tags cloud
+     * @var bool
+     */
+    protected $_blShowTagCloud = true;
+
+    /**
+     * If active root category was changed
+     * @var bool
+     */
+    protected $_blRootCatChanged = false;
+
+    /**
+     * User address
+     * @var array
+     */
+    protected $_aInvoiceAddress = null;
+
+    /**
+     * Logged in user name
+     * @var string
+     */
+    protected $_sActiveUsername = null;
 
     /**
      * In non admin mode checks if request was NOT processed by seo handler.
@@ -598,10 +621,6 @@ class oxUBase extends oxView
         if ( $this->showSorting() ) {
             $this->prepareSortColumns();
         }
-        $this->_aViewData['showsorting']    = $this->isSortingActive();
-        $this->_aViewData["allsortcolumns"] = $this->getSortColumns();
-        $this->_aViewData['listorderby']    = $this->getListOrderBy();
-        $this->_aViewData['listorder']      = $this->getListOrderDirection();
     }
 
     /**
@@ -616,8 +635,9 @@ class oxUBase extends oxView
             return $this->_sViewId;
         }
 
+        $myConfig = $this->getConfig();
         $iLang = oxLang::getInstance()->getBaseLanguage();
-        $iCur  = (int) oxConfig::getParameter( 'currency' );
+        $iCur  = (int) $myConfig->getShopCurrency();
 
 
             $this->_sViewId =  "ox|$iLang|$iCur";
@@ -742,6 +762,26 @@ class oxUBase extends oxView
             }
         }
         return $this->_sListType;
+    }
+
+    /**
+     * Returns list type
+     *
+     * @return string
+     */
+    public function getListDisplayType()
+    {
+        if ( $this->_sListDisplayType == null ) {
+            $this->_sListDisplayType = oxConfig::getParameter( 'ldtype' );
+            if ( !$this->_sListDisplayType ) {
+                $this->_sListDisplayType = $this->getConfig()->getConfigParam( 'sDefaultListDisplayType' );
+            }
+            $this->_sListDisplayType = in_array( ( string ) $this->_sListDisplayType, $this->_aListDisplayTypes ) ? $this->_sListDisplayType : 'infogrid';
+
+            // writing to session
+            oxSession::setVar( 'ldtype', $this->_sListDisplayType );
+        }
+        return $this->_sListDisplayType;
     }
 
     /**
@@ -972,13 +1012,29 @@ class oxUBase extends oxView
     }
 
     /**
+     * Returns sorted column parameter name
+     *
+     * @return string
+     */
+    public function getSortOrderByParameterName()
+    {
+        return 'listorderby';
+    }
+    
+     /**
+     * Returns sorted column direction parameter name
+     *
+     * @return string
+     */
+    public function getSortOrderParameterName()
+    {
+        return 'listorder';
+    }
+
+    /**
      * Retrieves from session or gets new sorting parameters for
      * search and category lists. Sets new sorting parameters
      * (reverse or new column sort) to session.
-     *
-     * Template variables:
-     * <b>showsorting</b>, <b>listorderby</b>, <b>listorder</b>,
-     * <b>allsortcolumns</b>
      *
      * Session variables:
      * <b>listorderby</b>, <b>listorder</b>
@@ -995,8 +1051,8 @@ class oxUBase extends oxView
 
             $sCnid = oxConfig::getParameter( 'cnid' );
 
-            $sSortBy  = oxConfig::getParameter( 'listorderby' );
-            $sSortDir = oxConfig::getParameter( 'listorder' );
+            $sSortBy  = oxConfig::getParameter( $this->getSortOrderByParameterName() );
+            $sSortDir = oxConfig::getParameter( $this->getSortOrderParameterName() );
 
             if ( !$sSortBy && $aSorting = $this->getSorting( $sCnid ) ) {
                 $sSortBy  = $aSorting['sortby'];
@@ -1057,18 +1113,6 @@ class oxUBase extends oxView
     public function setMetaKeywords( $sKeywords )
     {
         return $this->_sMetaKeywords = $sKeywords;
-    }
-
-    /**
-     * Returns seo parameter to filter meta data by it e.g. article
-     * meta data for active category
-     *
-     * @deprecated not used any more
-     *
-     * @return null
-     */
-    protected function _getMetaSeoParam()
-    {
     }
 
     /**
@@ -1183,7 +1227,7 @@ class oxUBase extends oxView
      */
     public function getCompareItemsCnt()
     {
-        return $this->_iCompItemsCnt;
+        return (int)$this->_iCompItemsCnt;
     }
 
     /**
@@ -1329,14 +1373,23 @@ class oxUBase extends oxView
     protected function _setNrOfArtPerPage()
     {
         $myConfig  = $this->getConfig();
-        $aViewData = array();
 
         //setting default values to avoid possible errors showing article list
         $iNrofCatArticles = $myConfig->getConfigParam( 'iNrofCatArticles' );
-        $iNrofCatArticles = ( $iNrofCatArticles) ? $iNrofCatArticles : 10;
+
+        $iNrofCatArticles = ( $iNrofCatArticles ) ? $iNrofCatArticles : 10;
 
         // checking if all needed data is set
-        $aNrofCatArticles = $myConfig->getConfigParam( 'aNrofCatArticles' );
+        switch ( $this->getListDisplayType() ) {
+            case 'grid':
+                $aNrofCatArticles = $myConfig->getConfigParam( 'aNrofCatArticlesInGrid' );
+                break;
+            case 'line':
+            case 'infogrid':
+            default:
+                $aNrofCatArticles = $myConfig->getConfigParam( 'aNrofCatArticles' );
+        }
+
         if ( !is_array( $aNrofCatArticles ) || !isset( $aNrofCatArticles[0] ) ) {
             $myConfig->setConfigParam( 'aNrofCatArticles', array( $iNrofCatArticles ) );
         } else {
@@ -1361,8 +1414,6 @@ class oxUBase extends oxView
 
         //setting number of articles per page to config value
         $myConfig->setConfigParam( 'iNrofCatArticles', $iNrofCatArticles );
-
-        $this->_aViewData = array_merge( $this->_aViewData, $aViewData );
     }
 
     /**
@@ -1699,6 +1750,16 @@ class oxUBase extends oxView
     }
 
     /**
+     * Template variable getter. Returns search parameter for Html
+     * So far this method is implemented in search (search.php) view.
+     *
+     * @return null
+     */
+    public function getSearchParamForHtml()
+    {
+    }
+
+    /**
      * collects _GET parameters used by eShop and returns uri
      *
      * @param bool $blAddPageNr if TRUE - page number will be added
@@ -1867,17 +1928,6 @@ class oxUBase extends oxView
     }
 
     /**
-     * Template variable getter. Returns review user id
-     *
-     * @deprecated this getter should not be used in forms, use oxUBase::getReviewUserHash() instead
-     *
-     * @return string
-     */
-    public function getReviewUserId()
-    {
-    }
-
-    /**
      * Template variable getter. Returns payment id
      *
      * @return string
@@ -1927,17 +1977,6 @@ class oxUBase extends oxView
      * @return object
      */
     public function getSimilarProducts()
-    {
-    }
-
-    /**
-     * Template variable getter. Returns list of customer also bought thies products
-     *
-     * @deprecated use thankyou::getAlsoBoughtTheseProducts()
-     *
-     * @return object
-     */
-    public function getAlsoBoughtThiesProducts()
     {
     }
 
@@ -2006,71 +2045,15 @@ class oxUBase extends oxView
     /**
      * Sets and caches default parameters for shop object and returns it.
      *
-     * Template variables:
-     * <b>isdemoversion</b>, <b>shop</b>, <b>isdemoversion</b>,
-     * <b>version</b>,
-     * <b>iShopID_TrustedShops</b>,
-     * <b>urlsign</b>
-     *
      * @param oxShop $oShop current shop object
      *
      * @return object $oShop current shop object
      */
     public function addGlobalParams( $oShop = null)
     {
-        $myConfig = $this->getConfig();
-
         $oViewConf = parent::addGlobalParams( $oShop );
 
-        $this->_aViewData['isfiltering'] = true;
-        $this->_aViewData['isnewsletter'] = true;
-        $this->_aViewData['isvarianten'] = true;
-        $this->_aViewData['isreview'] = true;
-        $this->_aViewData['isaddsales'] = true;
-        $this->_aViewData['isvoucher'] = true;
-        $this->_aViewData['ispricealarm'] = true;
-        $this->_aViewData['iswishlist'] = true;
-        $this->_aViewData['isipayment'] = true;
-        $this->_aViewData['istrusted'] = true;
-        $this->_aViewData['isfiltering'] = true;
-        $this->_aViewData['isgooglestats'] = true;
-        $this->_aViewData['iswishlist'] = true;
-
-
-        // show baskets
-        $this->_aViewData['bl_perfShowLeftBasket']  = $this->showLeftBasket();
-        $this->_aViewData['bl_perfShowRightBasket'] = $this->showRightBasket();
-        $this->_aViewData['bl_perfShowTopBasket']   = $this->showTopBasket();
-
-        // allow currency swiching
-        $this->_aViewData['bl_perfLoadCurrency'] = $this->loadCurrency();
-
-        // show/hide vendors
-        $this->_aViewData['bl_perfLoadVendorTree'] = $this->loadVendorTree();
-
-        // show/hide Manufacturers
-        $this->_aViewData['bl_perfLoadManufacturerTree'] = $this->loadManufacturerTree();
-
-        // show/hide empty categories
-        $this->_aViewData['blDontShowEmptyCategories'] = $this->dontShowEmptyCategories();
-
-        $this->_aViewData['iShopID_TrustedShops'] = $this->getTrustedShopId();
-
-        // used for compatibility with older templates
-        $this->_aViewData['fixedwidth'] = $myConfig->getConfigParam( 'blFixedWidthLayout' );
-        $this->_aViewData['urlsign']    = '&';
-        $this->_aViewData['wishid']    = oxConfig::getParameter( 'wishid' );
-        $this->_aViewData['shownewbasketmessage'] = oxUtils::getInstance()->isSearchEngine()?0:$myConfig->getConfigParam( 'iNewBasketItemMessage' );
-
-        $this->_aViewData['sListType'] = $this->getListType();
-        $this->_aViewData['bl_perfLoadLanguage'] = $this->isLanguageLoaded();
-
-        // new navigation ?
-        $this->_aViewData['showtopcatnavigation']   = $this->showTopCatNavigation();
-        $this->_aViewData['topcatnavigationitmcnt'] = $this->getTopNavigationCatCnt();
-
         $this->_setNrOfArtPerPage();
-
 
         return $oViewConf;
     }
@@ -2143,21 +2126,90 @@ class oxUBase extends oxView
     }
 
     /**
+     * Template variable getter. Returns page navigation
+     *
+     * @return null
+     */
+    public function getPageNavigation()
+    {
+
+    }
+
+    /**
+     * Template variable getter. Returns page navigation with 7 positions
+     *
+     * @return object
+     */
+    public function getPageNavigationLimitedTop()
+    {
+
+        $this->_oPageNavigation = $this->generatePageNavigation( 7 );
+
+        return $this->_oPageNavigation;
+    }
+
+    /**
+     * Template variable getter. Returns page navigation with 11 positions
+     *
+     * @return object
+     */
+    public function getPageNavigationLimitedBottom()
+    {
+
+        $this->_oPageNavigation = $this->generatePageNavigation( 11 );
+
+        return $this->_oPageNavigation;
+    }
+
+
+    /**
      * Generates variables for page navigation
+     *
+     * @param int $iPositionCount - paging possitions count ( 0 - unlimited )
      *
      * @return  stdClass    $pageNavigation Object with pagenavigation data
      */
-    public function generatePageNavigation()
+    public function generatePageNavigation( $iPositionCount = 0 )
     {
         startProfile('generatePageNavigation');
-        // generate the page navigation
+
         $pageNavigation = new stdClass();
+
         $pageNavigation->NrOfPages = $this->_iCntPages;
         $pageNavigation->iArtCnt   = $this->_iAllArtCnt;
         $iActPage = $this->getActPage();
         $pageNavigation->actPage   = $iActPage + 1;
-
         $sUrl = $this->generatePageNavigationUrl();
+
+        if ( $iPositionCount == 0 || ($iPositionCount >= $pageNavigation->NrOfPages) ) {
+             $iStartNo = 2;
+             $iFinishNo = $pageNavigation->NrOfPages;
+             $bStart = false;
+             $bFinish =false;
+        } else {
+            $iTmpVal = $iPositionCount - 3;
+            $iTmpVal2 = floor( ( $iPositionCount - 4 ) / 2 );
+
+            // actual page is at the start
+            if ( $pageNavigation->actPage <= $iTmpVal ) {
+                $iStartNo = 2;
+                $iFinishNo = $iTmpVal + 1;
+                $bStart = false;
+                $bFinish = true;
+            // actual page is at the end
+            } elseif ( $pageNavigation->actPage >= $pageNavigation->NrOfPages - $iTmpVal ) {
+                $iStartNo = $pageNavigation->NrOfPages - $iTmpVal;
+                $iFinishNo = $pageNavigation->NrOfPages - 1;
+                $bStart = true;
+                $bFinish = false;
+            // actual page is in the midle
+            } else {
+                $iStartNo = $pageNavigation->actPage - $iTmpVal2;
+                $iFinishNo = $pageNavigation->actPage + $iTmpVal2;
+                $bStart = true;
+                $bFinish = true;
+            }
+        }
 
         if ( $iActPage > 0) {
             $pageNavigation->previousPage = $this->_addPageNrParam( $sUrl, $iActPage - 1 );
@@ -2168,14 +2220,15 @@ class oxUBase extends oxView
         }
 
         if ( $pageNavigation->NrOfPages > 1 ) {
+
             for ( $i=1; $i < $pageNavigation->NrOfPages + 1; $i++ ) {
-                $page = new Oxstdclass();
-                $page->url = $this->_addPageNrParam( $sUrl, $i - 1 );
-                $page->selected = 0;
-                if ( $i == $pageNavigation->actPage ) {
-                    $page->selected = 1;
+
+                if ( $i == 1 || $i == $pageNavigation->NrOfPages || ( $i >= $iStartNo && $i <= $iFinishNo ) ) {
+                    $page = new Oxstdclass();
+                    $page->url = $this->_addPageNrParam( $sUrl, $i - 1 );
+                    $page->selected = ( $i == $pageNavigation->actPage ) ? 1 : 0;
+                    $pageNavigation->changePage[$i] = $page;
                 }
-                $pageNavigation->changePage[$i] = $page;
             }
 
             // first/last one
@@ -2189,33 +2242,13 @@ class oxUBase extends oxView
     }
 
     /**
-     * performs setup of aViewData according to iMinOrderPrice admin setting
+     * Article count getter
      *
-     * @deprecated
-     *
-     * @return null
+     * @return int
      */
-    public function prepareMinimumOrderPrice4View()
+    public function getArticleCount()
     {
-        $myConfig = $this->getConfig();
-        $iMinOrderPrice = $myConfig->getConfigParam( 'iMinOrderPrice' );
-        if ( isset( $iMinOrderPrice ) && is_numeric($iMinOrderPrice)) {
-            $oBasket = $this->getSession()->getBasket();
-            if ( !$oBasket || ( $oBasket && !$oBasket->getProductsCount() ) ) {
-                return;
-            }
-            $oCur    = $myConfig->getActShopCurrencyObject();
-            $dMinOrderPrice = $iMinOrderPrice * $oCur->rate;
-            // Coupons and discounts should be considered in "Min order price" check
-            $dVoucherDiscount = 0;
-            if ( ( $oVoucherPrice = $oBasket->getVoucherDiscount() ) ) {
-                $dVoucherDiscount = $oVoucherPrice->getBruttoPrice();
-            }
-            if ( $dMinOrderPrice > ( $oBasket->getDiscountProductsPrice()->getBruttoSum() - $oBasket->getTotalDiscount()->getBruttoPrice() - $dVoucherDiscount) ) {
-                $this->_iLowOrderPrice = 1;
-                $this->_sMinOrderPrice = oxLang::getInstance()->formatCurrency( $dMinOrderPrice, $oCur );
-            }
-        }
+        return $this->_iAllArtCnt;
     }
 
     /**
@@ -2238,29 +2271,11 @@ class oxUBase extends oxView
             if ( $this->getConfig()->getConfigParam( 'blDisableNavBars' ) ) {
                 $this->_iNewsRealStatus = 1;
                 $this->setShowNewsletter( 0 );
-                // for old tpl. will be removed later
-                $this->_aViewData['isnewsletter'] = 0;
                 $this->setShowRightBasket( 0 );
                 $this->setShowLeftBasket( 0 );
                 $this->setShowTopBasket( 0 );
             }
-            $this->_aViewData['loworderprice'] = $this->isLowOrderPrice();
-            $this->_aViewData['minorderprice'] = $this->getMinOrderPrice();
         }
-
-        // meta data
-        $this->_aViewData['meta_description'] = $this->getMetaDescription();
-        $this->_aViewData['meta_keywords']    = $this->getMetaKeywords();
-
-        // show baskets
-        $this->_aViewData['bl_perfShowLeftBasket']  = $this->showLeftBasket();
-        $this->_aViewData['bl_perfShowRightBasket'] = $this->showRightBasket();
-        $this->_aViewData['bl_perfShowTopBasket']   = $this->showTopBasket();
-
-        $this->_aViewData['isnewsletter_truth'] = $this->getNewsRealStatus();
-
-        $this->_aViewData['noindex'] = $this->noIndex();
-
         return $this->_sThisTemplate;
     }
 
@@ -2424,18 +2439,6 @@ class oxUBase extends oxView
     }
 
     /**
-     * Returns active recommlist object which is used to mount navigation info
-     *
-     * @deprecated dublicated, use oxUBase::getActiveRecommList()
-     *
-     * @return object
-     */
-    public function getActRecommList()
-    {
-        return $this->getActiveRecommList();
-    }
-
-    /**
      * Returns category tree (if it is loaded)
      *
      * @return oxcategorylist
@@ -2499,20 +2502,6 @@ class oxUBase extends oxView
     public function setManufacturerTree( $oManufacturerTree )
     {
         $this->_oManufacturerTree = $oManufacturerTree;
-    }
-    /**
-     * Loads article actions: top articles, bargain - right side and top 5 articles
-     *
-     * Template variables:
-     *
-     * <b>articlebargainlist</b>, <b>aTop5Articles</b>
-     *
-     * @return null
-     */
-    protected function _loadActions()
-    {
-        $this->_aViewData['articlebargainlist'] = $this->getBargainArticleList();
-        $this->_aViewData['aTop5Articles']      = $this->getTop5ArticleList();
     }
 
     /**
@@ -2783,6 +2772,16 @@ class oxUBase extends oxView
      *
      * @return object
      */
+    public function getCatMoreUrl()
+    {
+        return $this->getConfig()->getShopHomeURL().'cnid=oxmore';
+    }
+
+    /**
+     * Template variable getter. Returns more category
+     *
+     * @return object
+     */
     public function getCatMore()
     {
         return $this->_oCatMore;
@@ -2988,6 +2987,156 @@ class oxUBase extends oxView
             }
         }
         return $this->_blEnabledPrivateSales;
+    }
+
+    /**
+     * Returns tag cloud manager class
+     *
+     * @return oxTagCloud
+     */
+    public function getTagCloudManager()
+    {
+        if ( $this->_blShowTagCloud ) {
+            return oxNew( "oxTagCloud" );
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Returns input field validation error array (if available)
+     *
+     * @return array
+     */
+    public function getFieldValidationErrors()
+    {
+        return oxInputValidator::getInstance()->getFieldValidationErrors();
+    }
+
+    /**
+     * Returns Bread Crumb - you are here page1/page2/page3...
+     *
+     * @return null
+     */
+    public function getBreadCrumb()
+    {
+        return null;
+    }
+
+    /**
+     * Sets if active root category was changed
+     *
+     * @param bool $blRootCatChanged root category changed
+     *
+     * @return null
+     */
+    public function setRootCatChanged( $blRootCatChanged )
+    {
+        $this->_blRootCatChanged = $blRootCatChanged;
+    }
+
+    /**
+     * Template variable getter. Returns true if active root category was changed
+     *
+     * @return bool
+     */
+    public function isRootCatChanged()
+    {
+        return $this->_blRootCatChanged;
+    }
+
+    /**
+     * Template variable getter. Returns user address
+     *
+     * @return array
+     */
+    public function getInvoiceAddress()
+    {
+        if ( $this->_aInvoiceAddress == null ) {
+            $aAddress = oxConfig::getParameter( 'invadr');
+            if ( $aAddress ) {
+                $this->_aInvoiceAddress = $aAddress;
+            }
+        }
+        return $this->_aInvoiceAddress;
+    }
+
+    /**
+     * Template variable setter. Sets user address
+     *
+     * @param array $aAddress user address
+     *
+     * @return null
+     */
+    public function setInvoiceAddress( $aAddress )
+    {
+        $this->_aInvoiceAddress = $aAddress;
+    }
+
+    /**
+     * Template variable getter. Returns logged in user name
+     *
+     * @return string
+     */
+    public function getActiveUsername()
+    {
+        if ( $this->_sActiveUsername == null ) {
+            $this->_sActiveUsername = false;
+            $sUsername = oxConfig::getParameter( 'lgn_usr' );
+            if ( $sUsername ) {
+                $this->_sActiveUsername = $sUsername;
+            } elseif ( $oUser = $this->getUser() ) {
+                $this->_sActiveUsername = $oUser->oxuser__oxusername->value;
+            }
+        }
+        return $this->_sActiveUsername;
+    }
+
+    /**
+     * Template variable getter. Returns user id from wishlist
+     *
+     * @return string
+     */
+    public function getWishlistUserId()
+    {
+        return oxConfig::getParameter( 'wishid' );
+    }
+
+    /**
+     * Template variable getter. Returns searched category id
+     *
+     * @return string
+     */
+    public function getSearchCatId()
+    {
+    }
+
+    /**
+     * Template variable getter. Returns searched vendor id
+     *
+     * @return string
+     */
+    public function getSearchVendor()
+    {
+    }
+
+    /**
+     * Template variable getter. Returns searched Manufacturer id
+     *
+     * @return string
+     */
+    public function getSearchManufacturer()
+    {
+    }
+
+     /**
+     * Template variable getter. Returns last seen products
+     *
+     * @return array
+     */
+    public function getLastProducts()
+    {
+
     }
 
 }

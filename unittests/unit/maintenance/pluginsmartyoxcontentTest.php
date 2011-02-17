@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pluginsmartyoxcontentTest.php 29602 2010-08-31 14:03:21Z sarunas $
+ * @version   SVN: $Id: pluginsmartyoxcontentTest.php 32082 2010-12-20 14:08:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -64,13 +64,13 @@ class Unit_Maintenance_pluginSmartyOxContentTest extends OxidTestCase
         $aParams['ident'] = 'oxsecurityinfo';
         $oSmarty = $this->getMock( "smarty", array( "fetch" ) );
         $oSmarty->expects( $this->once() )->method( 'fetch')
-            ->with( $this->equalTo( 'ox:oxsecurityinfooxcontent21' ) )
+            ->with( $this->equalTo( 'ox:oxsecurityinfooxcontent12' ) )
             ->will( $this->returnValue( 'testvalue' ) );
 
         $sText = "<b>content not found ! check ident(".$aParams['ident'].") !</b>";
 
-        oxTestModules::addFunction('oxLang', 'getBaseLanguage', '{return 2;}');
-        modConfig::getInstance()->setParameter('currency', 1);
+        oxTestModules::addFunction('oxLang', 'getBaseLanguage', '{return 1;}');
+        modConfig::getInstance()->setParameter('currency', 2);
 
         $this->assertEquals( 'testvalue', smarty_function_oxcontent( $aParams, $oSmarty ) );
     }

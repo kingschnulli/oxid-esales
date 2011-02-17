@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 30393 2010-10-19 12:41:04Z vilma $
+ * @version   SVN: $Id: oxsysrequirements.php 32582 2011-01-19 16:04:17Z sarunas $
  */
 
 /**
@@ -853,5 +853,71 @@ class oxSysRequirements
         }
 
         return $sBytes;
+    }
+
+    /**
+     * check if given template contains the given block
+     *
+     * @param string $sTemplate  template file name
+     * @param string $sBlockName block name
+     *
+     * @see getMissingTemplateBlocks
+     *
+     * @return bool
+     */
+    protected function _checkTemplateBlock($sTemplate, $sBlockName)
+    {
+        $oConfig = oxConfig::getInstance();
+
+        $sTplFile = $oConfig->getTemplateFile($sTemplate, false);
+        if (!$sTplFile || !file_exists($sTplFile)) {
+            return false;
+        }
+
+        $sFile = file_get_contents($sTplFile);
+        $sBlockNameQuoted = preg_quote($sBlockName, '/');
+        return (bool)preg_match('/\[\{\s*block\s+name\s*=\s*([\'"])'.$sBlockNameQuoted.'\1\s*\}\]/is', $sFile);
+    }
+
+    /**
+     * returns array of missing template block files:
+     *  1. checks db for registered blocks
+     *  2. checks each block if it exists in currently used theme templates
+     * returned array components are of form array(module name, block name, template file)
+     * only active (oxactive==1) blocks are checked
+     *
+     * @return array
+     */
+    public function getMissingTemplateBlocks()
+    {
+        $aCache = array();
+        $oConfig = oxConfig::getInstance();
+
+        $sShpIdParam = oxDb::getDb()->quote($oConfig->getShopId());
+        $sSql = "select * from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam";
+        $rs = oxDb::getDb(true)->execute($sSql);
+        $aRet = array();
+        if ($rs != false && $rs->recordCount() > 0) {
+            while (!$rs->EOF) {
+                $blStatus = false;
+                if (isset($aCache[$rs->fields['OXTEMPLATE']]) && isset($aCache[$rs->fields['OXTEMPLATE']][$rs->fields['OXBLOCKNAME']])) {
+                    $blStatus = $aCache[$rs->fields['OXTEMPLATE']][$rs->fields['OXBLOCKNAME']];
+                } else {
+                    $blStatus = $this->_checkTemplateBlock($rs->fields['OXTEMPLATE'], $rs->fields['OXBLOCKNAME']);
+                    $aCache[$rs->fields['OXTEMPLATE']][$rs->fields['OXBLOCKNAME']] = $blStatus;
+                }
+
+                if (!$blStatus) {
+                    $aRet[] = array(
+                                'module'   => $rs->fields['OXMODULE'],
+                                'block'    => $rs->fields['OXBLOCKNAME'],
+                                'template' => $rs->fields['OXTEMPLATE'],
+                            );
+                }
+                $rs->moveNext();
+            }
+        }
+
+        return $aRet;
     }
 }

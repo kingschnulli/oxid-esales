@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_system.php 27021 2010-04-06 06:47:37Z arvydas $
+ * @version   SVN: $Id: shop_system.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
  */
 
 /**
@@ -57,7 +57,7 @@ class Shop_System extends Shop_Config
         // loading shop location countries list (defines in which country shop exists)
         include "shop_countries.php";
 
-        $soxId = oxConfig::getParameter( "oxid");
+        $soxId = $this->getEditObjectId();
         if ( !$soxId)
             $soxId = $myConfig->getShopId();
 

@@ -1,0 +1,1 @@
+<fb:comments publish_feed=0 width="543"></fb:comments>

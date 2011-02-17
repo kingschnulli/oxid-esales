@@ -106,7 +106,8 @@ class oxVariantHandler extends oxSuperCfg
         $aConfLanguages = $myLang->getLanguageIds();
 
         foreach ($aSels as $sSelId) {
-            $oSel = oxNew("oxbase");
+            $oSel = oxNew("oxi18n");
+            $oSel->setEnableMultilang( false );
             $oSel->init( 'oxselectlist' );
             $oSel->load( $sSelId );
             $sVarNameUpdate = "";
@@ -184,7 +185,7 @@ class oxVariantHandler extends oxSuperCfg
                         $aParams['oxarticles__oxsort'] = $oSimpleVariant->oxarticles__oxsort->value*10 + 10*$iCounter;
                         $aParams['oxarticles__oxstock'] = 0;
                         $aParams['oxarticles__oxstockflag'] = $oSimpleVariant->oxarticles__oxstockflag->value;
-                        $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
+                        $sVarId = $this->_createNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
                         if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
                             $oAttrList = oxNew('oxattribute');
                             $aIds = $oAttrList->getAttributeAssigns( $oSimpleVariant->oxarticles__oxid->value);
@@ -209,7 +210,7 @@ class oxVariantHandler extends oxSuperCfg
                 $aParams['oxarticles__oxsort'] = 5000 + $iCounter * 1000;
                 $aParams['oxarticles__oxstock'] = 0;
                 $aParams['oxarticles__oxstockflag'] = $oArticle->oxarticles__oxstockflag->value;
-                $sVarId = $this->_craeteNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
+                $sVarId = $this->_createNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
                 if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
                     $aMDVariants[$sVarId] = $aValues[$i];
                 }
@@ -253,7 +254,7 @@ class oxVariantHandler extends oxSuperCfg
      *
      * @return null
      */
-    protected function _craeteNewVariant( $aParams = null, $sParentId = null)
+    protected function _createNewVariant( $aParams = null, $sParentId = null)
     {
         // checkbox handling
         $aParams['oxarticles__oxactive'] = 0;
@@ -265,7 +266,8 @@ class oxVariantHandler extends oxSuperCfg
         // varianthandling
         $aParams['oxarticles__oxparentid'] = $sParentId;
 
-        $oArticle = oxNew("oxbase");
+        $oArticle = oxNew("oxi18n");
+        $oArticle->setEnableMultilang(false);
         $oArticle->init( 'oxarticles' );
         $oArticle->assign( $aParams);
 

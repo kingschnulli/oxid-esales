@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_basket.php 30898 2010-11-12 14:50:13Z vilma $
+ * @version   SVN: $Id: oxcmp_basket.php 32923 2011-02-04 14:35:22Z vilma $
  */
 
 /**
@@ -100,7 +100,7 @@ class oxcmp_basket extends oxView
 
         // Basket exclude
         if ( $this->getConfig()->getConfigParam( 'blBasketExcludeEnabled' ) ) {
-            $this->getParent()->addTplParam( 'scRootCatChanged', $this->isRootCatChanged() );
+            $this->getParent()->setRootCatChanged( $this->isRootCatChanged() );
         }
 
         parent::render();

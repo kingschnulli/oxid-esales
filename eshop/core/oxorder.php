@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 32568 2011-01-18 16:32:21Z linas.kukulskis $
+ * @version   SVN: $Id: oxorder.php 33134 2011-02-10 10:59:31Z arvydas.vapsva $
  */
 
 /**
@@ -257,9 +257,6 @@ class oxOrder extends oxBase
         // convert date's to international format
         $this->oxorder__oxorderdate = new oxField( $oUtilsDate->formatDBDate( $this->oxorder__oxorderdate->value));
         $this->oxorder__oxsenddate  = new oxField( $oUtilsDate->formatDBDate( $this->oxorder__oxsenddate->value));
-
-        //settting deprecated template variables
-        $this->_setDeprecatedValues();
     }
 
     /**
@@ -802,6 +799,9 @@ class oxOrder extends oxBase
             // items shop id
             $oOrderArticle->oxorderarticles__oxordershopid = new oxField( $oContent->getShopId(), oxField::T_RAW );
 
+            // bundle?
+            $oOrderArticle->oxorderarticles__oxisbundle = new oxField( $oContent->isBundle() );
+
             // add information for eMail
             //P
             //TODO: check if this assign is needed at all
@@ -1012,8 +1012,6 @@ class oxOrder extends oxBase
      *
      * @param oxBasket $oBasket basket object
      * @param oxUser   $oUser   user object
-     *
-     * @deprecated sets deprecated values for usage in mail templates
      *
      * @return null
      */
@@ -1674,24 +1672,6 @@ class oxOrder extends oxBase
     }
 
     /**
-     * Make select list array from oxorderarticles__oxselvariant string.
-     * This select list array is used when recalculating order and adding
-     * items to basket (oxBasket::addToBaske())
-     *
-     * @param string $sArtId           order article ID
-     * @param string $sOrderArtSelList select list string stored in oxorderarticles__oxselvariant
-     *
-     * @deprecated use oxOrderArticle::getOrderArticleSelectList
-     *
-     * @return array()
-     */
-    protected function _makeSelListArray( $sArtId = null, $sOrderArtSelList = null )
-    {
-        $oOrder = oxNew( 'oxorderArticle' );
-        return $oOrder->getOrderArticleSelectList( $sArtId, $sOrderArtSelList );
-    }
-
-    /**
      * Adds order articles back to virtual basket. Needed for recalculating order.
      *
      * @param oxBasket $oBasket        basket object
@@ -1731,41 +1711,6 @@ class oxOrder extends oxBase
                 $oBasket->addToBasket( $oArticle->oxorderarticles__oxartid->value,
                                        $oArticle->oxorderarticles__oxamount->value,
                                        $aSel, $aPersParam );
-            }
-        }
-    }
-
-    /**
-     * Sets deprecate values
-     *
-     * @deprecated This method as well as all deprecated class variables is deprecated
-     *
-     * @return null
-     */
-    protected function _setDeprecatedValues()
-    {
-        if ( $this->oxorder__oxstorno->value != 1 ) {
-            $oCur = $this->getConfig()->getActShopCurrencyObject();
-            $oLang = oxLang::getInstance();
-
-            $this->totalnetsum   = $this->oxorder__oxtotalnetsum->value;
-            $this->totalbrutsum  = $this->oxorder__oxtotalbrutsum->value;
-            $this->totalorder    = $this->oxorder__oxtotalordersum->value;
-            $this->ftotalnetsum  = $oLang->formatCurrency( $this->oxorder__oxtotalnetsum->value, $oCur );
-            $this->ftotalbrutsum = $oLang->formatCurrency( $this->oxorder__oxtotalbrutsum->value, $oCur );
-            $this->fdelcost      = $oLang->formatCurrency( $this->oxorder__oxdelcost->value, $oCur );
-            $this->fpaycost      = $oLang->formatCurrency( $this->oxorder__oxpaycost->value, $oCur );
-            $this->fwrapcost     = $oLang->formatCurrency( $this->oxorder__oxwrapcost->value, $oCur );
-            $this->ftotalorder   = $this->getTotalOrderSum();
-            $this->totalvouchers = 0;
-
-            if ( $this->oxorder__oxvoucherdiscount->value ) {
-                $this->totalvouchers  = $oLang->formatCurrency( $this->oxorder__oxvoucherdiscount->value, $oCur );
-            }
-
-            if ( $this->oxorder__oxdiscount->value ) {
-                $this->discount  = $this->oxorder__oxdiscount->value;
-                $this->fdiscount = $oLang->formatCurrency( $this->oxorder__oxdiscount->value, $oCur );
             }
         }
     }

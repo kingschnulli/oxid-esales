@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: adminguestbooklistTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: adminguestbooklistTest.php 31988 2010-12-17 14:04:27Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -45,7 +45,7 @@ class Unit_Admin_AdminGuestbookListTest extends OxidTestCase
 
         // testing..
         $oView = $this->getMock( "AdminGuestbook_List", array( "getItemList" ) );
-        $oView->expects( $this->once() )->method( 'getItemList' )->will( $this->returnValue( $oList ) );
+        $oView->expects( $this->any() )->method( 'getItemList' )->will( $this->returnValue( $oList ) );
         $sTplName = $oView->render();
         $this->assertEquals( 'adminguestbook_list.tpl', $sTplName );
 

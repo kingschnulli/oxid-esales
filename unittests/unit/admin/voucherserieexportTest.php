@@ -54,7 +54,7 @@ class Unit_Admin_VoucherSerieExportTest extends OxidTestCase
         $myConfig = modConfig::getInstance();
 
         $myConfig->setConfigParam( "sAdminSSLURL", "sAdminSSLURL" );
-        $sUrl = oxSession::getInstance()->url( 'sAdminSSLURL/index.php' );
+        $sUrl = oxUtilsUrl::getInstance()->processUrl( 'sAdminSSLURL/index.php' );
 
         // ssl
         $oView = new VoucherSerie_Export();
@@ -62,7 +62,7 @@ class Unit_Admin_VoucherSerieExportTest extends OxidTestCase
 
         $myConfig->setConfigParam( "sAdminSSLURL", null );
         $sUrl = $myConfig->getConfigParam( 'sShopURL' ). $myConfig->getConfigParam( 'sAdminDir' );
-        $sUrl = oxSession::getInstance()->url( $sUrl.'/index.php' );
+        $sUrl = oxUtilsUrl::getInstance()->processUrl( $sUrl.'/index.php' );
 
         // non ssl
         $oView = new VoucherSerie_Export();

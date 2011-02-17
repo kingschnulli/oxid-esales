@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 33228 2011-02-14 09:31:23Z arvydas.vapsva $
+ * @version   SVN: $Id: oxseoencoder.php 33252 2011-02-14 15:40:42Z sarunas $
  */
 
 /**
@@ -210,68 +210,6 @@ class oxSeoEncoder extends oxSuperCfg
     }
 
     /**
-     * Returns string for SEO url with specific parameters (language,
-     * currency and active shop)
-     *
-     * @deprecated use oxUtilsUrl::getAddUrlParams()
-     *
-     * @return string
-     */
-    protected function _getAddParams()
-    {
-        // performance
-        if ( $this->_sAddParams === null ) {
-            $this->_sAddParams = $this->_getAddParamsFnc( oxConfig::getParameter('currency'), $this->getConfig()->getShopId() );
-        }
-        return $this->_sAddParams;
-    }
-
-    /**
-     * Returns string for SEO url with specific parameters (language,
-     * currency and active shop)
-     *
-     * @param integer $iCur     shop currency
-     * @param mixed   $iActShop active shop id
-     *
-     * @deprecated use oxUtilsUrl::getAddUrlParams()
-     *
-     * @return string
-     */
-    protected function _getAddParamsFnc( $iCur, $iActShop )
-    {
-        $sParams = '';
-        if ( count( $aParams = oxUtilsUrl::getInstance()->getAddUrlParams() ) ) {
-            foreach ( $aParams as $sName => $sValue ) {
-                if ( $sValue ) {
-                    if ( $sParams ) {
-                        $sParams .= "&amp;";
-                    }
-                    $sParams .= $sName . "=" . $sValue;
-                }
-            }
-            if ( $sParams ) {
-                $sParams = '?'.$sParams;
-            }
-        }
-        return $sParams;
-    }
-
-    /**
-     * Generates dynamic url object id (calls oxseoencoder::_getStaticObjectId)
-     *
-     * @param int    $iShopId shop id
-     * @param string $sStdUrl standard (dynamic) url
-     *
-     * @deprecated user oxseoencoder::getDynamicObjectId() instead
-     *
-     * @return string
-     */
-    protected function _getDynamicObjectId( $iShopId, $sStdUrl )
-    {
-        return $this->getDynamicObjectId( $iShopId, $sStdUrl );
-    }
-
-    /**
      * Generates dynamic url object id (calls oxseoencoder::_getStaticObjectId)
      *
      * @param int    $iShopId shop id
@@ -326,32 +264,30 @@ class oxSeoEncoder extends oxSuperCfg
      * Returns SEO url with shop's path + additional params ( oxseoencoder:: _getAddParams)
      *
      * @param string $sSeoUrl seo URL
-     * @param int    $iLang   active language (deprecated - does nothing)
+     * @param int    $iLang   active language
      * @param bool   $blSsl   forces to build ssl url
      *
      * @return string
      */
     protected function _getFullUrl( $sSeoUrl, $iLang = null, $blSsl = false )
     {
-        $sProcessedUrl = false;
         if ( $sSeoUrl ) {
             $sFullUrl = ( $blSsl ? $this->getConfig()->getSslShopUrl( $iLang ) : $this->getConfig()->getShopUrl( $iLang ) ) . $sSeoUrl;
-            $sProcessedUrl =  oxUtilsUrl::getInstance()->processSeoUrl( $sFullUrl );
+            return oxUtilsUrl::getInstance()->processSeoUrl( $sFullUrl );
         }
-        return $sProcessedUrl;
+        return false;
     }
 
     /**
      * _getSeoIdent returns seo ident for db search
      *
      * @param string $sSeoUrl seo url
-     * @param int    $iLang   active language (deprecated - does nothing)
      *
      * @access protected
      *
      * @return string
      */
-    protected function _getSeoIdent( $sSeoUrl, $iLang = null )
+    protected function _getSeoIdent( $sSeoUrl )
     {
         return md5( strtolower( $sSeoUrl ) );
     }
@@ -736,7 +672,7 @@ class oxSeoEncoder extends oxSuperCfg
      * Removes shop path part and session id from given url
      *
      * @param string $sUrl  url to clean bad chars
-     * @param int    $iLang active language (deprecated - does nothing)
+     * @param int    $iLang active language
      *
      * @access protected
      *

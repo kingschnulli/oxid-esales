@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvarianthandlerTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxvarianthandlerTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -180,15 +180,18 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
                          'oxarticles__oxid'          => "_testVar"
                          );
         $oVariantHandler = oxNew("oxVariantHandler");
-        $sVariantId = $oVariantHandler->UNITcraeteNewVariant( $aParams, "_testArt" );
+        $sVariantId = $oVariantHandler->UNITcreateNewVariant( $aParams, "_testArt" );
         $oVariant = oxNew("oxarticle");
         $oVariant->load($sVariantId);
         $this->assertEquals( "_testVar", $sVariantId);
         $this->assertEquals( "_testVar", $oVariant->oxarticles__oxvarselect->value);
-        $this->assertEquals( "_testVar_1", $oVariant->oxarticles__oxvarselect_1->value);
         $this->assertEquals( "_testArt", $oVariant->oxarticles__oxparentid->value);
         $this->assertEquals( "123", $oVariant->oxarticles__oxartnum->value);
         $this->assertEquals( "10", $oVariant->oxarticles__oxprice->value);
+
+        $oVariant = oxNew("oxarticle");
+        $oVariant->loadInLang( 1, $sVariantId );
+        $this->assertEquals( "_testVar_1", $oVariant->oxarticles__oxvarselect->value);
     }
 
     /**

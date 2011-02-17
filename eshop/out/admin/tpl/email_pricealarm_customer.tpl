@@ -12,10 +12,10 @@
 <br>
 [{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_HAVEPRICEALARM" }] [{ $shop->oxshops__oxname->value }]!<br>
 <br>
-[{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_ITEM1" }] [{ $product->oxarticles__oxtitle->value }] [{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_ITEM2" }] [{ $bidprice }] [{ $currency->sign}]
-[{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_ITEM3" }] [{ $product->fprice }] [{ $currency->sign }] [{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_ITEM4" }]<br>
+[{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_ITEM1" }] [{ $oPriceAlarm->getTitle() }] [{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_ITEM2" }] [{ $oPriceAlarm->getFProposedPrice() }] [{ $currency->sign}]
+[{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_ITEM3" }] [{ $oPriceAlarm->getFPrice() }] [{ $currency->sign }] [{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_ITEM4" }]<br>
 <br>
-[{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_CLICKHERE1" }]<a href="[{$shop->basedir}]index.php?cl=details&anid=[{ $product->oxarticles__oxid->value }]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;"><b>[{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_CLICKHERE2" }]</b></a>.
+[{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_CLICKHERE1" }]<a href="[{$oViewConf->getBaseDir()}]index.php?cl=details&anid=[{ $product->oxarticles__oxid->value }]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;"><b>[{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_CLICKHERE2" }]</b></a>.
 <br>
 <br>
 [{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_TEAM1" }] [{ $shop->oxshops__oxname->value }] [{ oxmultilang ident="EMAIL_PRICEALARM_CUSTOMER_TEAM2" }]<br>

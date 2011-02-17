@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsviewTest.php 28223 2010-06-08 12:28:06Z sarunas $
+ * @version   SVN: $Id: oxutilsviewTest.php 32931 2011-02-04 16:23:01Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -27,6 +27,82 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 
 class Unit_Core_oxUtilsViewTest extends OxidTestCase
 {
+    /**
+     * setup test data
+     */
+    public function setUp(){
+        parent::setUp();
+        if (strpos($this->getName(), 'testGetTemplateBlocks') === 0) {
+            oxDb::getDb()->Execute("insert into oxtplblocks values (
+                                       'test_1',
+                                       '1',
+                                       '15',
+                                       'filename.tpl',
+                                       'blockname1',
+                                       1,
+                                       'contentfile1',
+                                       'module1'
+                                    )"
+            );
+            oxDb::getDb()->Execute("insert into oxtplblocks values (
+                                       'test_2',
+                                       '1',
+                                       '15',
+                                       'filename.tpl',
+                                       'blockname2',
+                                       2,
+                                       'contentfile2',
+                                       'module2'
+                                    )"
+            );
+            oxDb::getDb()->Execute("insert into oxtplblocks values (
+                                       'test_3',
+                                       '1',
+                                       '15',
+                                       'filename.tpl',
+                                       'blockname2',
+                                       0,
+                                       'contentfile3',
+                                       'module2'
+                                    )"
+            );
+            // one non active - to be sure it is not loaded
+            oxDb::getDb()->Execute("insert into oxtplblocks values (
+                                       'test_4',
+                                       '0',
+                                       '15',
+                                       'filename.tpl',
+                                       'blockname3',
+                                       3,
+                                       'contentfile3',
+                                       'module2'
+                                    )"
+            );
+            oxDb::getDb()->Execute("insert into oxtplblocks values (
+                                       'test_5',
+                                       '1',
+                                       '15',
+                                       'inc/filename.tpl',
+                                       'blockname99',
+                                       4,
+                                       'contentfile99',
+                                       'module99'
+                                    )"
+            );
+        }
+    }
+
+    /**
+     * remove test data
+     */
+    public function  tearDown()
+    {
+        if (strpos($this->getName(), 'testGetTemplateBlocks') === 0) {
+            oxDb::getDb()->Execute("delete from oxtplblocks where oxid like 'test_%'");
+        }
+        parent::tearDown();
+    }
+
     /**
      * oxUtilsView::getTemplateDirs() test case
      *
@@ -42,7 +118,7 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
             $aDirs[] = $sDir;
         }
 
-        $sDir = $myConfig->getOutDir( true ) . "basic/tpl/";
+        $sDir = $myConfig->getOutDir( true ) . "azure/tpl/";
         if ( !in_array( $sDir, $aDirs ) ) {
             $aDirs[] = $sDir;
         }
@@ -69,7 +145,7 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
             $aDirs[] = $sDir;
         }
 
-        $sDir = $myConfig->getOutDir( true ) . "basic/tpl/";
+        $sDir = $myConfig->getOutDir( true ) . "azure/tpl/";
         if ( !in_array( $sDir, $aDirs ) ) {
             $aDirs[] = $sDir;
         }
@@ -126,7 +202,15 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
 
     public function testAddErrorToDisplayCustomDestinationFromParam()
     {
-        oxUtilsView::getInstance()->addErrorToDisplay("testMessage", false, true, "myDest");
+        $oSession = $this->getMock( 'oxSession', array( 'getId' ) );
+        $oSession->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( true ) );
+
+        $oxUtilsView = $this->getMock( 'oxUtilsView', array( 'getSession' ) );
+        $oxUtilsView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
+
+        $oxUtilsView->addErrorToDisplay("testMessage", false, true, "myDest");
+
+
         $aErrors = oxSession::getVar('Errors');
         $oEx = unserialize($aErrors['myDest'][0]);
         $this->assertEquals("testMessage", $oEx->getOxMessage());
@@ -137,7 +221,13 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
         $myConfig = oxConfig::getInstance();
         modConfig::setParameter('CustomError', 'myDest');
 
-        oxUtilsView::getInstance()->addErrorToDisplay("testMessage", false, true, "");
+        $oSession = $this->getMock( 'oxSession', array( 'getId' ) );
+        $oSession->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( true ) );
+
+        $oxUtilsView = $this->getMock( 'oxUtilsView', array( 'getSession' ) );
+        $oxUtilsView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
+
+        $oxUtilsView->addErrorToDisplay("testMessage", false, true, "");
         $aErrors = oxSession::getVar('Errors');
         $oEx = unserialize($aErrors['myDest'][0]);
         $this->assertEquals("testMessage", $oEx->getOxMessage());
@@ -145,7 +235,13 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
 
     public function testAddErrorToDisplayDefaultDestination()
     {
-        oxUtilsView::getInstance()->addErrorToDisplay("testMessage", false, true, "");
+        $oSession = $this->getMock( 'oxSession', array( 'getId' ) );
+        $oSession->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( true ) );
+
+        $oxUtilsView = $this->getMock( 'oxUtilsView', array( 'getSession' ) );
+        $oxUtilsView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
+
+        $oxUtilsView->addErrorToDisplay("testMessage", false, true, "");
         $aErrors = oxSession::getVar('Errors');
         $oEx = unserialize($aErrors['default'][0]);
         $this->assertEquals("testMessage", $oEx->getOxMessage());
@@ -156,7 +252,14 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
         $aTest = array();
         $oTest = oxNew('oxException');
         $oTest->setMessage("testMessage");
-        oxUtilsView::getInstance()->addErrorToDisplay($oTest, false, false, "");
+
+        $oSession = $this->getMock( 'oxSession', array( 'getId' ) );
+        $oSession->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( true ) );
+
+        $oxUtilsView = $this->getMock( 'oxUtilsView', array( 'getSession' ) );
+        $oxUtilsView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
+
+        $oxUtilsView->addErrorToDisplay($oTest, false, false, "");
 
         $aErrors = oxSession::getVar('Errors');
         $oEx = unserialize($aErrors['default'][0]);
@@ -165,12 +268,32 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
 
     public function testAddErrorToDisplayIfNotSet()
     {
-        oxUtilsView::getInstance()->addErrorToDisplay(null, false, false, "");
+        $oSession = $this->getMock( 'oxSession', array( 'getId' ) );
+        $oSession->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( true ) );
+
+        $oxUtilsView = $this->getMock( 'oxUtilsView', array( 'getSession' ) );
+        $oxUtilsView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
+
+        $oxUtilsView->addErrorToDisplay(null, false, false, "");
 
         $aErrors = oxSession::getVar('Errors');
         //$oEx = unserialize($aErrors['default'][0]);
         //$this->assertEquals("", $oEx->getOxMessage());
         $this->assertFalse( isset( $aErrors['default'][0] ) );
+    }
+
+    public function testAddErrorToDisplay_startsSessionIfNotStarted()
+    {
+        $oSession = $this->getMock( 'oxSession', array( 'getId', 'isHeaderSent', 'setForceNewSession', 'start' ) );
+        $oSession->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( false ) );
+        $oSession->expects( $this->once() )->method( 'isHeaderSent' )->will( $this->returnValue( false ) );
+        $oSession->expects( $this->once() )->method( 'setForceNewSession' );
+        $oSession->expects( $this->once() )->method( 'start' );
+
+        $oxUtilsView = $this->getMock( 'oxUtilsView', array( 'getSession' ) );
+        $oxUtilsView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
+
+        $oxUtilsView->addErrorToDisplay(null, false, false, "");
     }
 
     /**
@@ -262,8 +385,21 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
                 );
 
 
-        $oSmarty = $this->getMock( 'smarty', array( 'register_resource' ) );
-        $oSmarty->expects( $this->once() )->method( 'register_resource' );
+        $oSmarty = $this->getMock( 'smarty', array( 'register_resource', 'register_prefilter' ) );
+        $oSmarty->expects( $this->once() )->method( 'register_resource' )
+                ->with(
+                        $this->equalTo('ox'),
+                        $this->equalTo(
+                                array(
+                                    'ox_get_template',
+                                    'ox_get_timestamp',
+                                    'ox_get_secure',
+                                    'ox_get_trusted',
+                                )
+                        )
+                );
+        $oSmarty->expects( $this->once() )->method( 'register_prefilter' )
+                ->with($this->equalTo('smarty_prefilter_oxblock'));
 
         $oUtilsView = new oxutilsview();
         $oUtilsView->UNITfillCommonSmartyProperties( $oSmarty );
@@ -339,4 +475,136 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
         $this->assertEquals('bbb', $text2);
     }
 
+    /**
+     * base test
+     */
+    public function testGetTemplateBlock()
+    {
+        $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
+
+        $oCfg = $this->getMock('oxConfig', array('getConfigParam'));
+        $oCfg->expects($this->any())->method('getConfigParam')->with($this->equalTo('sShopDir'))->will($this->returnValue($sMdir));
+
+        $oUV = $this->getMock(
+                oxTestModules::publicize('oxUtilsView', '_getTemplateBlock'),
+                array('getConfig')
+            );
+        $oUV->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
+
+        $this->assertEquals('*this is module test block*', $oUV->p_getTemplateBlock('test1', 'test2'));
+
+        try {
+            $oUV->p_getTemplateBlock('__sModule__', '__sFile__');
+            $this->fail("no exception");
+        } catch (oxException $oE) {
+            $this->assertEquals("Template block file (__basepath__/modules/__sModule__/blocks/__sFile__.tpl) not found for '__sModule__' module.", str_replace($sMdir, '__basepath__', $oE->getMessage()));
+        }
+    }
+
+    /**
+     * base test
+     */
+    public function testGetTemplateBlocks()
+    {
+        $oCfg = $this->getMock('oxConfig', array('getShopId'));
+        $oCfg->expects($this->at(0))->method('getShopId')->will($this->returnValue('15'));
+        $oCfg->expects($this->at(1))->method('getShopId')->will($this->returnValue('25'));
+
+        $o = $this->getMock('oxUtilsView', array('getConfig', '_getTemplateBlock'));
+        $o->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
+        $o->expects($this->at(1))->method('_getTemplateBlock')
+                                    ->with($this->equalTo('module2'), $this->equalTo('contentfile3'))
+                                    ->will($this->returnValue('content3'));
+        $o->expects($this->at(2))->method('_getTemplateBlock')
+                                    ->with($this->equalTo('module1'), $this->equalTo('contentfile1'))
+                                    ->will($this->returnValue('content1'));
+        $o->expects($this->at(3))->method('_getTemplateBlock')
+                                    ->with($this->equalTo('module2'), $this->equalTo('contentfile2'))
+                                    ->will($this->returnValue('content2'));
+
+        $this->assertEquals(
+                array(
+                    'blockname1' => array(
+                                        'content1',
+                                    ),
+                    'blockname2' => array(
+                                        'content3',
+                                        'content2',
+                                    ),
+                ),
+                $o->getTemplateBlocks('filename.tpl')
+        );
+
+        $this->assertEquals(
+                array(),
+                $o->getTemplateBlocks('filename.tpl')
+        );
+    }
+
+    /**
+     * exception log test
+     */
+    public function testGetTemplateBlocksLogsExceptions()
+    {
+        $oCfg = $this->getMock('oxConfig', array('getShopId'));
+        $oCfg->expects($this->at(0))->method('getShopId')->will($this->returnValue('15'));
+        $oCfg->expects($this->at(1))->method('getShopId')->will($this->returnValue('25'));
+
+        $oE = $this->getMock('oxException', array('debugOut'));
+        $oE->expects($this->once())->method('debugOut');
+
+        $o = $this->getMock('oxUtilsView', array('getConfig', '_getTemplateBlock'));
+        $o->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
+        $o->expects($this->at(1))->method('_getTemplateBlock')
+                                    ->with($this->equalTo('module2'), $this->equalTo('contentfile3'))
+                                    ->will($this->throwException($oE));
+        $o->expects($this->at(2))->method('_getTemplateBlock')
+                                    ->with($this->equalTo('module1'), $this->equalTo('contentfile1'))
+                                    ->will($this->returnValue('content1'));
+        $o->expects($this->at(3))->method('_getTemplateBlock')
+                                    ->with($this->equalTo('module2'), $this->equalTo('contentfile2'))
+                                    ->will($this->returnValue('content2'));
+
+        $this->assertEquals(
+                array(
+                    'blockname1' => array(
+                                        'content1',
+                                    ),
+                    'blockname2' => array(
+                                        'content2',
+                                    ),
+                ),
+                $o->getTemplateBlocks('filename.tpl')
+        );
+
+        $this->assertEquals(
+                array(),
+                $o->getTemplateBlocks('filename.tpl')
+        );
+    }
+
+
+    /**
+     * file filtering test
+     */
+    public function testGetTemplateBlocksFileFilter()
+    {
+        $oCfg = $this->getMock('oxConfig', array('getShopId'));
+        $oCfg->expects($this->at(0))->method('getShopId')->will($this->returnValue('15'));
+
+        $o = $this->getMock('oxUtilsView', array('getConfig', '_getTemplateBlock'));
+        $o->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
+        $o->expects($this->at(1))->method('_getTemplateBlock')
+                                    ->with($this->equalTo('module99'), $this->equalTo('contentfile99'))
+                                    ->will($this->returnValue('content99'));
+
+        $this->assertEquals(
+                array(
+                    'blockname99' => array(
+                                        'content99',
+                                    ),
+                ),
+                $o->getTemplateBlocks('inc/filename.tpl')
+        );
+    }
 }

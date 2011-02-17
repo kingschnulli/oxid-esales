@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account_password.php 26149 2010-03-01 14:56:56Z arvydas $
+ * @version   SVN: $Id: account_password.php 32923 2011-02-04 14:35:22Z vilma $
  */
 
 
@@ -38,7 +38,7 @@ class Account_Password extends Account
      *
      * @var string
      */
-    protected $_sThisTemplate = 'account_password.tpl';
+    protected $_sThisTemplate = 'page/account/password.tpl';
 
     /**
      * Whether the password had been changed.
@@ -63,10 +63,8 @@ class Account_Password extends Account
      */
     public function render()
     {
+
         parent::render();
-        //T2008-07-30
-        //to maintain compatibility we still set the old template variable using new getter in render
-        $this->_aViewData['blpasswordchanged'] = $this->isPasswordChanged();
 
         // is logged in ?
         $oUser = $this->getUser();
@@ -75,6 +73,7 @@ class Account_Password extends Account
         }
 
         return $this->_sThisTemplate;
+
     }
 
     /**
@@ -93,9 +92,7 @@ class Account_Password extends Account
         $sNewPass  = oxConfig::getParameter( 'password_new' );
         $sConfPass = oxConfig::getParameter( 'password_new_confirm' );
 
-        try {
-            $oUser->checkPassword( $sNewPass, $sConfPass, true );
-        } catch ( Exception $oExcp ) {
+        if ( ( $oExcp = $oUser->checkPassword( $sNewPass, $sConfPass, true ) ) ) {
             switch ( $oExcp->getMessage() ) {
                 case 'EXCEPTION_INPUT_EMPTYPASS':
                 case 'EXCEPTION_INPUT_PASSTOOSHORT':
@@ -142,5 +139,24 @@ class Account_Password extends Account
             }
         }
         return $this->_blHasPassword;
+    }
+
+    /**
+     * Returns Bread Crumb - you are here page1/page2/page3...
+     *
+     * @return array
+     */
+    public function getBreadCrumb()
+    {
+        $aPaths = array();
+        $aPath = array();
+
+        $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_MY_ACCOUNT', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPaths[] = $aPath;
+
+        $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_PASSWORD_PERSONALSETTINGS', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPaths[] = $aPath;
+
+        return $aPaths;
     }
 }

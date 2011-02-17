@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrappingTest.php 27601 2010-05-06 12:53:09Z vilma $
+ * @version   SVN: $Id: oxwrappingTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -163,16 +163,6 @@ class Unit_Core_oxwrappingTest extends OxidTestCase
         parent::tearDown();
     }
 
-    public function testGetter()
-    {
-        $oWrapping = $this->getMock( 'oxwrapping', array( 'getFPrice', 'getId' ) );
-        $oWrapping->expects( $this->once() )->method( 'getFPrice' )->will( $this->returnValue( 'getFPrice' ) );
-        $oWrapping->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( 'getId' ) );
-
-        $this->assertEquals( 'getFPrice', $oWrapping->fprice );
-        $this->assertEquals( 'getId', $oWrapping->sOXID );
-    }
-
     public function testGetWrappingCount()
     {
         $oWrap = oxNew( 'oxwrapping' );
@@ -186,8 +176,16 @@ class Unit_Core_oxwrappingTest extends OxidTestCase
      */
     public function testGetNoSslDynImageDir()
     {
-        $oConfig = $this->getMock( 'oxconfig', array( 'getDynImageDir' ) );
-        $oConfig->expects( $this->once() )->method( 'getDynImageDir' )->with( $this->equalTo( '123' ), $this->equalTo( true ) )->will( $this->returnValue( 'testDynPath' ) );
+        $oConfig = $this->getMock( 'oxconfig', array( 'getPictureUrl' ) );
+        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )
+                ->with(
+                        $this->equalTo( null ),
+                        $this->equalTo( false ),
+                        $this->equalTo( false ),
+                        $this->equalTo( null ),
+                        $this->equalTo( '123' )
+                )
+                ->will( $this->returnValue( 'testDynPath' ) );
 
         $oWrapping = $this->getMock( 'oxwrapping', array( 'getConfig' ), array(), '', false );
         $oWrapping->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
@@ -353,9 +351,9 @@ class Unit_Core_oxwrappingTest extends OxidTestCase
         $this->assertEquals( 4, $oWrapList->count());
         foreach ( $oWrapList as $oWrapping ) {
             if ( $oWrapping->getId() == '_testWrap3' ) {
-                $this->assertEquals( '0,00', $oWrapping->fprice );
+                $this->assertEquals( '0,00', $oWrapping->getFPrice() );
             } else {
-                $this->assertEquals( '2,95', $oWrapping->fprice );
+                $this->assertEquals( '2,95', $oWrapping->getFPrice() );
             }
         }
 
@@ -363,11 +361,11 @@ class Unit_Core_oxwrappingTest extends OxidTestCase
 
         foreach ( $oCardList as $oCard ) {
             if ( $oCard->getId() == '_testCard3' ) {
-                $this->assertEquals( '0,00', $oCard->fprice );
+                $this->assertEquals( '0,00', $oCard->getFPrice() );
             } elseif ( $oCard->getId() == '81b40cf0cd383d3a9.70988998' ) {
-                $this->assertEquals( '3,00', $oCard->fprice );
+                $this->assertEquals( '3,00', $oCard->getFPrice() );
             } else {
-                $this->assertEquals( '2,50', $oCard->fprice );
+                $this->assertEquals( '2,50', $oCard->getFPrice() );
             }
         }
 
@@ -403,7 +401,7 @@ class Unit_Core_oxwrappingTest extends OxidTestCase
     public function testGetPictureUrl()
     {
         $oWrap = oxNew( 'oxwrapping' );
-        $this->assertEquals( modConfig::getInstance()->getDynImageDir( 1 ), $oWrap->getPictureUrl() );
+        $this->assertEquals( modConfig::getInstance()->getPictureUrl(null, false, null, null, 1 ), $oWrap->getPictureUrl() );
     }
 
 }

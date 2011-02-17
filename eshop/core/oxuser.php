@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 31066 2010-11-22 13:16:38Z arvydas $
+ * @version   SVN: $Id: oxuser.php 32880 2011-02-03 11:45:17Z sarunas $
  */
 
 /**
@@ -249,7 +249,8 @@ class oxUser extends oxBase
             $sCountryId = $this->oxuser__oxcountryid->value;
         }
 
-        $sQ = "select oxtitle".oxLang::getInstance()->getLanguageTag( $iLang )." from oxcountry where oxid = " . $oDb->quote( $sCountryId ) . " ";
+        $sViewName = getViewName( 'oxcountry', $iLang );
+        $sQ = "select oxtitle from {$sViewName} where oxid = " . $oDb->quote( $sCountryId ) . " ";
         $this->oxuser__oxcountry = new oxField( $oDb->getOne( $sQ ), oxField::T_RAW);
 
         return $this->oxuser__oxcountry;
@@ -265,7 +266,7 @@ class oxUser extends oxBase
     public function getUserCountryId( $sCountry = null )
     {
         $oDb = oxDb::getDb();
-        $sQ = "select oxid from oxcountry where oxactive = '1' and oxisoalpha2 = " . $oDb->quote( $sCountry ) . " ";
+        $sQ = "select oxid from ".getviewName( "oxcountry" )." where oxactive = '1' and oxisoalpha2 = " . $oDb->quote( $sCountry ) . " ";
         $sCountryId = $oDb->getOne( $sQ );
 
         return $sCountryId;
@@ -289,11 +290,10 @@ class oxUser extends oxBase
             $sOXID = $this->getId();
         }
 
+        $sViewName = getViewName( "oxgroups" );
         $this->_oGroups = oxNew( 'oxlist', 'oxgroups' );
-        //$this->oGroups->Init( 'oxbase' );
-        //$this->oGroups->oLstoTpl->Init( array( 'oxgroups', 'oxobject2group' ) );
-        $sSelect  = 'select oxgroups.* from oxgroups left join oxobject2group on oxobject2group.oxgroupsid = oxgroups.oxid ';
-        $sSelect .= 'where oxobject2group.oxobjectid = ' . oxDb::getDb()->quote( $sOXID ) . ' ';
+        $sSelect  = "select {$sViewName}.* from {$sViewName} left join oxobject2group on oxobject2group.oxgroupsid = {$sViewName}.oxid
+                     where oxobject2group.oxobjectid = " . oxDb::getDb()->quote( $sOXID );
         $this->_oGroups->selectString( $sSelect );
         return $this->_oGroups;
     }
@@ -309,19 +309,18 @@ class oxUser extends oxBase
     {
         $sUserId = isset( $sUserId ) ? $sUserId : $this->getId();
         if ( !isset( $this->_aAddresses[$sUserId] ) ) {
-            $sSelect = "select * from oxaddress where oxaddress.oxuserid = " . oxDb::getDb()->quote( $sUserId ) . "";
+            $sSelect = "select * from oxaddress where oxaddress.oxuserid = " . oxDb::getDb()->quote( $sUserId );
 
             //P
-            $this->_aAddresses[$sUserId] = oxNew( 'oxlist' );
+            $this->_aAddresses[$sUserId] = oxNew( "oxlist" );
             $this->_aAddresses[$sUserId]->init( "oxaddress" );
             $this->_aAddresses[$sUserId]->selectString( $sSelect );
 
             // marking selected
             if ( $sAddressId = $this->getSelectedAddressId() ) {
                 foreach ( $this->_aAddresses[$sUserId] as $oAddress ) {
-                    $oAddress->selected = 0;
                     if ( $oAddress->getId() === $sAddressId ) {
-                        $oAddress->selected = 1;
+                        $oAddress->setSelected();
                         break;
                     }
                 }
@@ -992,10 +991,13 @@ class oxUser extends oxBase
      * @param array  $aInvAddress array of user profile data
      * @param array  $aDelAddress array of user profile data
      *
+     * @todo currently this method calls oxUser class methods responsible for
+     * input validation. In next major release these should be replaced by direct
+     * oxInputValidation calls
+     *
      * @throws oxUserException, oxInputException
      *
      * @return null
-     *
      */
     public function checkValues( $sLogin, $sPassword, $sPassword2, $aInvAddress, $aDelAddress )
     {
@@ -1016,6 +1018,12 @@ class oxUser extends oxBase
 
         // 6. vat id check.
             $this->_checkVatId( $aInvAddress );
+
+
+        // throwing first validation error
+        if ( $oError = oxInputValidator::getInstance()->getFirstValidationError( $this->getId() ) ) {
+            throw $oError;
+        }
     }
 
     /**
@@ -1092,7 +1100,6 @@ class oxUser extends oxBase
      */
     public function changeUserData( $sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress )
     {
-
         // validating values before saving. If validation fails - exception is thrown
         $this->checkValues( $sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress );
 
@@ -1156,7 +1163,7 @@ class oxUser extends oxBase
      */
     protected function _assignAddress( $aDelAddress )
     {
-        if (isset($aDelAddress) && count($aDelAddress)) {
+        if ( is_array( $aDelAddress ) && count( $aDelAddress ) ) {
             $sAddressId = oxConfig::getParameter( 'oxaddressid' );
             $sMyAddressId = ( $sAddressId === null || $sAddressId == -1 || $sAddressId == -2 ) ?  null : $sAddressId;
             $aDelAddress['oxaddress__oxid'] = $sMyAddressId;
@@ -1243,6 +1250,10 @@ class oxUser extends oxBase
         //login successfull?
         if ( $this->oxuser__oxid->value ) {
             // yes, successful login
+
+            //reseting active user
+            $this->setUser( null );
+
             if ( $this->isAdmin() ) {
                 oxSession::setVar( 'auth', $this->oxuser__oxid->value );
             } else {
@@ -1626,47 +1637,14 @@ class oxUser extends oxBase
      * @param string $sLogin      user preferred login name
      * @param array  $aInvAddress user information
      *
-     * @throws oxUserException, oxInputException
+     * @depracated use oxInputValidator::checkLogin() instead
      *
      * @return string login name
      */
     protected function _checkLogin( $sLogin, $aInvAddress )
     {
-        $myConfig = $this->getConfig();
-
-        $sLogin   = ( isset( $aInvAddress['oxuser__oxusername'] ) )?$aInvAddress['oxuser__oxusername']:$sLogin;
-
-        // check only for users with password during registration
-        // if user wants to change user name - we must check if passwords are ok before changing
-        if ( $this->oxuser__oxpassword->value && $sLogin != $this->oxuser__oxusername->value ) {
-
-            // on this case password must be taken directly from request
-            $sNewPass = (isset( $aInvAddress['oxuser__oxpassword']) && $aInvAddress['oxuser__oxpassword'] )?$aInvAddress['oxuser__oxpassword']:oxConfig::getParameter( 'user_password' );
-            if ( !$sNewPass ) {
-
-                // 1. user forgot to enter password
-                $oEx = oxNew( 'oxInputException' );
-                $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS');
-                throw $oEx;
-            } else {
-
-                // 2. entered wrong password
-                if ( !$this->isSamePassword( $sNewPass ) ) {
-                    $oEx = oxNew( 'oxUserException' );
-                    $oEx->setMessage('EXCEPTION_USER_PWDDONTMATCH');
-                    throw $oEx;
-                }
-            }
-        }
-
-        if ( $this->checkIfEmailExists( $sLogin ) ) {
-            //if exists then we do now allow to do that
-            $oEx = oxNew( 'oxUserException' );
-            $oLang = oxLang::getInstance();
-            $oEx->setMessage( sprintf( $oLang->translateString( 'EXCEPTION_USER_USEREXISTS', $oLang->getTplLanguage() ), $sLogin ) );
-            throw $oEx;
-        }
-
+        $sLogin = ( isset( $aInvAddress['oxuser__oxusername'] ) )?$aInvAddress['oxuser__oxusername'] : $sLogin;
+        oxInputValidator::getInstance()->checkLogin( $this, $sLogin, $aInvAddress );
         return $sLogin;
     }
 
@@ -1783,23 +1761,13 @@ class oxUser extends oxBase
      *
      * @param string $sEmail user email/login
      *
+     * @depracated use oxInputValidator::checkEmail() instead
+     *
      * @return null
      */
     protected function _checkEmail( $sEmail )
     {
-        // missing email address (user login name) ?
-        if ( !$sEmail ) {
-            $oEx = oxNew( 'oxInputException' );
-            $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS');
-            throw $oEx;
-        }
-
-        // invalid email address ?
-        if ( !oxUtils::getInstance()->isValidEmail( $sEmail ) ) {
-            $oEx = oxNew( 'oxInputException' );
-            $oEx->setMessage( 'EXCEPTION_INPUT_NOVALIDEMAIL' );
-            throw $oEx;
-        }
+        oxInputValidator::getInstance()->checkEmail( $this, $sEmail );
     }
 
     /**
@@ -1814,11 +1782,11 @@ class oxUser extends oxBase
      *
      * @deprecated use public oxuser::checkPassword() instead
      *
-     * @return null
+     * @return mixed
      */
     protected function _checkPassword( $sNewPass, $sConfPass, $blCheckLenght = false )
     {
-        $this->checkPassword( $sNewPass, $sConfPass, $blCheckLenght );
+        return $this->checkPassword( $sNewPass, $sConfPass, $blCheckLenght );
     }
 
     /**
@@ -1829,32 +1797,13 @@ class oxUser extends oxBase
      * @param string $sConfPass     retyped user password
      * @param bool   $blCheckLenght option to check password lenght
      *
-     * @throws oxUserException, oxInputException
+     * @depracated use oxInputValidator::checkPassword() instead
      *
-     * @return null
+     * @return mixed
      */
     public function checkPassword( $sNewPass, $sConfPass, $blCheckLenght = false )
     {
-        //  no password at all
-        if ( $blCheckLenght && getStr()->strlen( $sNewPass ) == 0 ) {
-            $oEx = oxNew( 'oxInputException' );
-            $oEx->setMessage('EXCEPTION_INPUT_EMPTYPASS');
-            throw $oEx;
-        }
-
-        //  password is too short ?
-        if ( $blCheckLenght &&  getStr()->strlen( $sNewPass ) < 6 ) {
-            $oEx = oxNew( 'oxInputException' );
-            $oEx->setMessage('EXCEPTION_INPUT_PASSTOOSHORT');
-            throw $oEx;
-        }
-
-        //  passwords do not match ?
-        if ( $sNewPass != $sConfPass ) {
-            $oEx = oxNew( 'oxUserException' );
-            $oEx->setMessage('EXCEPTION_USER_PWDDONTMATCH');
-            throw $oEx;
-        }
+        return oxInputValidator::getInstance()->checkPassword( $this, $sNewPass, $sConfPass, $blCheckLenght );
     }
 
     /**
@@ -1863,32 +1812,13 @@ class oxUser extends oxBase
      * @param array $aInvAddress billing address info
      * @param array $aDelAddress delivery address info
      *
-     * @throws oxInputException
+     * @depracated use oxInputValidator::checkCountries() instead
      *
      * @return null
      */
     protected function _checkCountries( $aInvAddress, $aDelAddress )
     {
-        $sBillCtry = isset( $aInvAddress['oxuser__oxcountryid'] ) ? $aInvAddress['oxuser__oxcountryid'] : null;
-        $sDelCtry  = isset( $aDelAddress['oxaddress__oxcountryid'] ) ? $aDelAddress['oxaddress__oxcountryid'] : null;
-
-        if ( $sBillCtry || $sDelCtry ) {
-            $oDb = oxDb::getDb();
-
-            if ( ( $sBillCtry == $sDelCtry ) || ( !$sBillCtry && $sDelCtry ) || ( $sBillCtry && !$sDelCtry ) ) {
-                $sBillCtry = $sBillCtry ? $sBillCtry : $sDelCtry;
-                $sQ = "select oxactive from oxcountry where oxid = ".$oDb->quote( $sBillCtry )." ";
-            } else {
-                $sQ = "select ( select oxactive from oxcountry where oxid = ".$oDb->quote( $sBillCtry )." ) and
-                              ( select oxactive from oxcountry where oxid = ".$oDb->quote( $sDelCtry )." ) ";
-            }
-
-            if ( !$oDb->getOne( $sQ ) ) {
-                $oEx = oxNew( 'oxUserException' );
-                $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS' );
-                throw $oEx;
-            }
-        }
+        oxInputValidator::getInstance()->checkCountries( $this, $aInvAddress, $aDelAddress );
     }
 
     /**
@@ -1898,77 +1828,28 @@ class oxUser extends oxBase
      * @param array $aInvAddress billing address
      * @param array $aDelAddress delivery address
      *
-     * @throws oxInputExcpetion exception
+     * @depracated use oxInputValidator::checkRequiredFields() instead
      *
      * @return null
      */
     protected function _checkRequiredFields( $aInvAddress, $aDelAddress )
     {
-        // collecting info about required fields
-        $aMustFields = array( 'oxuser__oxfname',
-                              'oxuser__oxlname',
-                              'oxuser__oxstreetnr',
-                              'oxuser__oxstreet',
-                              'oxuser__oxzip',
-                              'oxuser__oxcity' );
-
-        // config shoud override default fields
-        $aMustFillFields = $this->getConfig()->getConfigParam( 'aMustFillFields' );
-        if ( is_array( $aMustFillFields ) ) {
-            $aMustFields = $aMustFillFields;
-        }
-
-        // assuring data to check
-        $aInvAddress = is_array( $aInvAddress )?$aInvAddress:array();
-        $aDelAddress = is_array( $aDelAddress )?$aDelAddress:array();
-
-        // collecting fields
-        $aFields = array_merge( $aInvAddress, $aDelAddress );
-
-
-        // check delivery address ?
-        $blCheckDel = false;
-        if ( count( $aDelAddress ) ) {
-            $blCheckDel = true;
-        }
-
-        // checking
-        foreach ( $aMustFields as $sMustField ) {
-
-            // A. not nice, but we keep all fields info in one config array, and must support baskwards compat.
-            if ( !$blCheckDel && strpos( $sMustField, 'oxaddress__' ) === 0 ) {
-                continue;
-            }
-
-            if ( isset( $aFields[$sMustField] ) && is_array( $aFields[$sMustField] ) ) {
-                $this->_checkRequiredArrayFields( $sMustField, $aFields[$sMustField] );
-            } elseif ( !isset( $aFields[$sMustField] ) || !trim( $aFields[$sMustField] ) ) {
-                   $oEx = oxNew( 'oxInputException' );
-                   $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS');
-                   throw $oEx;
-            }
-        }
+        oxInputValidator::getInstance()->checkRequiredFields( $this, $aInvAddress, $aDelAddress );
     }
 
     /**
      * Checks if all values are filled up
      *
-     * @param strinf $sFieldName   checking field name
+     * @param string $sFieldName   checking field name
      * @param array  $aFieldValues field values
      *
-     * @throws oxInputExcpetion exception
+     * @depracated use oxInputValidator::checkRequiredArrayFields() instead
      *
      * @return null
      */
     protected function _checkRequiredArrayFields( $sFieldName, $aFieldValues )
     {
-        foreach ( $aFieldValues as $sValue ) {
-            if ( !trim( $sValue ) ) {
-                $oEx = oxNew( 'oxInputException' );
-                $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS');
-                throw $oEx;
-            }
-        }
+        oxInputValidator::getInstance()->checkRequiredArrayFields( $this, $sFieldName, $aFieldValues );
     }
 
     /**
@@ -1977,30 +1858,13 @@ class oxUser extends oxBase
      *
      * @param array $aInvAddress user input array
      *
-     * @throws oxInputException, oxConnectionException
+     * @depracated use oxInputValidator::checkVatId() instead
      *
      * @return null
      */
     protected function _checkVatId( $aInvAddress )
     {
-        if ( $aInvAddress['oxuser__oxustid'] ) {
-
-            if (!($sCountryId = $aInvAddress['oxuser__oxcountryid'])) {
-                // no country
-                return;
-            }
-            $oCountry = oxNew('oxcountry');
-            if (!$oCountry->load($sCountryId)) {
-                throw new oxObjectException();
-            }
-            if ($oCountry->isForeignCountry() && $oCountry->isInEU()) {
-                    if (strncmp($aInvAddress['oxuser__oxustid'], $oCountry->oxcountry__oxisoalpha2->value, 2)) {
-                        $oEx = oxNew( 'oxInputException' );
-                        $oEx->setMessage( 'VAT_MESSAGE_ID_NOT_VALID' );
-                        throw $oEx;
-                    }
-            }
-        }
+        oxInputValidator::getInstance()->checkVatId( $this, $aInvAddress );
     }
 
     /**

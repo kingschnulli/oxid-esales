@@ -1,0 +1,1 @@
+<fb:live-stream app_id="$oViewConf->getFbAppId()" width="550" height="500"></fb:live-stream>

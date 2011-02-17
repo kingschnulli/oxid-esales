@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oximex.php 28090 2010-06-02 13:50:29Z michael.keiluweit $
+ * @version   SVN: $Id: oximex.php 31954 2010-12-17 13:33:40Z sarunas $
  */
 
 /**
@@ -65,7 +65,7 @@ class oxImex extends oxBase
                 $oArticle->load( $rs->fields['OXID']);
                 $this->setAdminMode( $blAdmin );
 
-                $sSelect = "select oxtitle from oxarticles where oxid = " . $oDB->quote( $oArticle->oxarticles__oxparentid->value );
+                $sSelect = "select oxtitle from ".$oArticle->getViewName()." where oxid = " . $oDB->quote( $oArticle->oxarticles__oxparentid->value );
                 $oTitle = $oDB->getOne( $sSelect);
                 if ($oTitle != false && strlen ($oTitle)) {
                     $nTitle = $this->interForm($oTitle);

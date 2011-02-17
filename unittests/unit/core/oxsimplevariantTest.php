@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariantTest.php 28935 2010-07-23 13:03:14Z sarunas $
+ * @version   SVN: $Id: oxsimplevariantTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -38,7 +38,7 @@ class Unit_Core_oxsimpleVariantTest extends OxidTestCase
         oxTestModules::cleanAllModules();
         oxDiscountList::getInstance()->forceReload();
         $this->cleanUpTable('oxarticles');
-        
+
         parent::tearDown();
     }
 
@@ -320,21 +320,6 @@ class Unit_Core_oxsimpleVariantTest extends OxidTestCase
         $this->assertEquals(5, $oSubj->getParent());
     }
 
-    public function testGetParentPriceIsDerived()
-    {
-        $oSubj = $this->getProxyClass("oxSimpleVariant");
-        $oParent = new oxArticle();
-        $oParent->oxarticles__oxprice = new oxField(10);
-        $oSubj->setParent($oParent);
-        $this->assertEquals(10, $oSubj->UNITgetParentPrice());
-    }
-
-    public function testGetParentPriceIsZero()
-    {
-        $oSubj = $this->getProxyClass("oxSimpleVariant");
-        $this->assertTrue(0 === $oSubj->UNITgetParentPrice());
-    }
-
     public function testApplyCurrency()
     {
         $oSubj = $this->getProxyClass("oxSimpleVariant");
@@ -436,7 +421,7 @@ class Unit_Core_oxsimpleVariantTest extends OxidTestCase
     public function testSetLongDesc()
     {
         modConfig::getInstance()->setConfigParam('bl_perfParseLongDescinSmarty', 1);
-        
+
         $oSubj = $this->getProxyClass("oxSimpleVariant");
         $oSubj->UNITsetLongDesc( '[{if 1}]ads[{/if}]dsa' );
         $this->assertEquals( '', $oSubj->oxarticles__oxlongdesc->value);

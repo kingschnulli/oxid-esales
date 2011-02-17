@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: gui.php 32667 2011-01-21 15:30:34Z rimvydas.paskevicius $
+ * @version   SVN: $Id: gui.php 32672 2011-01-24 08:17:43Z rimvydas.paskevicius $
  */
 
 /**

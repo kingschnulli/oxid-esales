@@ -65,8 +65,8 @@ function StornoThisArticle( sID)
 
 [{assign var="oCurr" value=$edit->getOrderCurrency() }]
 
-<form name="DeleteThisArticle" id="DeleteThisArticle" action="[{ $shop->selflink }]" method="post">
-    [{ $shop->hiddensid }]
+<form name="DeleteThisArticle" id="DeleteThisArticle" action="[{ $oViewConf->getSelfLink() }]" method="post">
+    [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="cur" value="[{ $oCurr->id }]">
     <input type="hidden" name="oxid" value="[{ $oxid }]">
     <input type="hidden" name="sArtID" value="">
@@ -74,8 +74,8 @@ function StornoThisArticle( sID)
     <input type="hidden" name="fnc" value="DeleteThisArticle">
 </form>
 
-<form name="transfer" id="transfer" action="[{ $shop->selflink }]" method="post">
-    [{ $shop->hiddensid }]
+<form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
+    [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="cur" value="[{ $oCurr->id }]">
     <input type="hidden" name="oxid" value="[{ $oxid }]">
     <input type="hidden" name="cl" value="order_article">
@@ -83,8 +83,8 @@ function StornoThisArticle( sID)
 
 
 <table cellspacing="0" cellpadding="0" border="0" width="98%">
-<form name="search" id="search" action="[{ $shop->selflink }]" method="post">
-    [{ $shop->hiddensid }]
+<form name="search" id="search" action="[{ $oViewConf->getSelfLink() }]" method="post">
+    [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="cur" value="[{ $oCurr->id }]">
     <input type="hidden" name="cl" value="order_article">
     <input type="hidden" name="oxid" value="[{ $oxid }]">
@@ -109,7 +109,7 @@ function StornoThisArticle( sID)
     [{else}]
         [{assign var="listclass" value=listitem$blWhite }]
     [{/if}]
-    <td valign="top" class="[{ $listclass}]">[{ if $listitem->oxorderarticles__oxstorno->value != 1 }]<input type="text" name="aOrderArticles[[{$listitem->getId()}]][oxamount]" value="[{ $listitem->oxorderarticles__oxamount->value }]" class="listedit">[{else}][{ $listitem->oxorderarticles__oxamount->value }][{/if}]</td>
+    <td valign="top" class="[{ $listclass}]">[{ if $listitem->oxorderarticles__oxstorno->value != 1 && !$listitem->isBundle() }]<input type="text" name="aOrderArticles[[{$listitem->getId()}]][oxamount]" value="[{ $listitem->oxorderarticles__oxamount->value }]" class="listedit">[{else}][{ $listitem->oxorderarticles__oxamount->value }][{/if}]</td>
     <td valign="top" class="[{ $listclass}]" height="15">[{if $listitem->oxarticles__oxid->value}]<a href="Javascript:editThis('[{ $listitem->oxarticles__oxid->value}]');" class="[{ $listclass}]">[{/if}][{ $listitem->oxorderarticles__oxartnum->value }]</a></td>
     <td valign="top" class="[{ $listclass}]">[{if $listitem->oxarticles__oxid->value}]<a href="Javascript:editThis('[{ $listitem->oxarticles__oxid->value }]');" class="[{ $listclass}]">[{/if}][{ $listitem->oxorderarticles__oxtitle->value|oxtruncate:20:""|strip_tags }]</a></td>
     <td valign="top" class="[{ $listclass}]">[{ $listitem->oxorderarticles__oxselvariant->value }]</td>
@@ -125,8 +125,8 @@ function StornoThisArticle( sID)
     <td valign="top" class="[{ $listclass}]">[{ $listitem->fbrutprice }] <small>[{ $edit->oxorder__oxcurrency->value }]</small></td>
     <td valign="top" class="[{ $listclass}]">[{ $listitem->ftotbrutprice }] <small>[{ $edit->oxorder__oxcurrency->value }]</small></td>
     <td valign="top" class="[{ $listclass}]">[{ $listitem->oxorderarticles__oxvat->value}]</td>
-    <td valign="top" class="[{ $listclass}]"><a href="Javascript:DeleteThisArticle('[{ $listitem->oxorderarticles__oxid->value }]');" class="delete" [{if $readonly }]onclick="JavaScript:return false;"[{/if}] [{include file="help.tpl" helpid=item_delete}]></a></td>
-    <td valign="top" class="[{ $listclass}]"><a href="Javascript:StornoThisArticle('[{ $listitem->oxorderarticles__oxid->value }]');" class="pause" [{if $readonly }]onclick="JavaScript:return false;"[{/if}] [{include file="help.tpl" helpid=item_storno}]></a></td>
+    <td valign="top" class="[{ $listclass}]">[{if !$listitem->isBundle()}]<a href="Javascript:DeleteThisArticle('[{ $listitem->oxorderarticles__oxid->value }]');" class="delete" [{if $readonly }]onclick="JavaScript:return false;"[{/if}] [{include file="help.tpl" helpid=item_delete}]></a>[{/if}]</td>
+    <td valign="top" class="[{ $listclass}]">[{if !$listitem->isBundle()}]<a href="Javascript:StornoThisArticle('[{ $listitem->oxorderarticles__oxid->value }]');" class="pause" [{if $readonly }]onclick="JavaScript:return false;"[{/if}] [{include file="help.tpl" helpid=item_storno}]></a>[{/if}]</td>
 </tr>
 [{if $blWhite == "2"}]
 [{assign var="blWhite" value=""}]
@@ -206,8 +206,8 @@ function StornoThisArticle( sID)
 <br />
 
 
-    <form method="POST" name="searchForProduct" id="searchForProduct" action="[{ $shop->selflink }]">
-      [{ $shop->hiddensid }]
+    <form method="POST" name="searchForProduct" id="searchForProduct" action="[{ $oViewConf->getSelfLink() }]">
+      [{ $oViewConf->getHiddenSid() }]
       <input type="hidden" name="oxid" value="[{ $oxid }]">
       <input type="hidden" name="cl" value="order_article">
       <input type="hidden" name="cur" value="[{ $oCurr->id }]">
@@ -232,8 +232,8 @@ function StornoThisArticle( sID)
     [{if $oSearchProd }]
     [{assign var="oMainProd" value=$oView->getMainProduct() }]
 
-    <form method="POST" name="AddThisArticle" id="AddThisArticle" action="[{ $shop->selflink }]">
-    [{ $shop->hiddensid }]
+    <form method="POST" name="AddThisArticle" id="AddThisArticle" action="[{ $oViewConf->getSelfLink() }]">
+    [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="cur" value="[{ $oCurr->id }]">
     <input type="hidden" name="oxid" value="[{ $oxid }]">
     <input type="hidden" name="cl" value="order_article">

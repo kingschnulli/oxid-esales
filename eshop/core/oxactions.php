@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactions.php 28344 2010-06-15 11:32:21Z sarunas $
+ * @version   SVN: $Id: oxactions.php 31596 2010-12-08 13:27:20Z rimvydas.paskevicius $
  */
 
 /**
@@ -28,6 +28,13 @@
  */
 class oxActions extends oxI18n
 {
+    /**
+     * Promotions images upload dir name
+     *
+     * @var string
+     */
+    const PROMO_PICTURE_DIR = 'promo';
+
     /**
      * Current class name
      *
@@ -105,8 +112,8 @@ class oxActions extends oxI18n
 
         return parent::delete( $sOxId );
     }
-    
-    
+
+
 
 
 
@@ -214,5 +221,64 @@ class oxActions extends oxI18n
         }
         return $sDbValue;
     }
-    
+
+    /**
+     * return assigned banner article
+     *
+     * @return oxArticle
+     */
+    public function getBannerArticle()
+    {
+        $oDb = oxDb::getDb();
+        $sArtId = $oDb->getOne(
+            'select oxobjectid from oxobject2action '
+          . 'where oxactionid='.$oDb->quote($this->getId())
+          . ' and oxclass="oxarticle"'
+        );
+
+        if ( $sArtId ) {
+            $oArticle = oxNew( 'oxarticle' );
+
+            if ( $this->isAdmin() ) {
+                $oArticle->setLanguage( oxLang::getInstance()->getEditLanguage() );
+            }
+
+            if ( $oArticle->load($sArtId) ) {
+                return $oArticle;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Returns assigned banner article picture url
+     *
+     * @return string
+     */
+    public function getBannerPictureUrl()
+    {
+        if ( isset( $this->oxactions__oxpic ) && $this->oxactions__oxpic->value ) {
+            $sPromoDir = oxUtilsFile::getInstance()->normalizeDir( oxActions::PROMO_PICTURE_DIR );
+            return $this->getConfig()->getPictureUrl( $sPromoDir.$this->oxactions__oxpic->value, false );
+        }
+    }
+
+    /**
+     * Returns assigned banner link. If no link is defined and article is
+     * assigned to banner, article link will be returned.
+     *
+     * @return string
+     */
+    public function getBannerLink()
+    {
+        if ( isset( $this->oxactions__oxlink ) && $this->oxactions__oxlink->value ) {
+            return  oxUtilsUrl::getInstance()->processUrl( $this->oxactions__oxlink->value );
+        } else {
+            // if article is assinged to banner, getting article link
+            if ( $oArticle = $this->getBannerArticle() ) {
+                return $oArticle->getLink();
+            }
+        }
+    }
 }

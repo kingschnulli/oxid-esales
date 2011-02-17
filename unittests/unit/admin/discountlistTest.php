@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: discountlistTest.php 27089 2010-04-07 14:28:32Z sarunas $
+ * @version   SVN: $Id: discountlistTest.php 31986 2010-12-17 14:03:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -50,7 +50,7 @@ class Unit_Admin_DiscountListTest extends OxidTestCase
 
         $this->assertEquals( "oxdiscount", $oView->getNonPublicVar( "_sListClass" ) );
         $this->assertEquals( "oxdiscountlist", $oView->getNonPublicVar( "_sListType" ) );
-        $this->assertEquals( getViewName('oxdiscount').".oxtitle", $oView->getNonPublicVar( "_sDefSort" ) );
+        $this->assertEquals( array('oxdiscount' => array( "oxtitle" => "asc" ) ), $oView->getListSorting() );
         $this->assertEquals( 'discount_list.tpl', $oView->render() );
     }
 }

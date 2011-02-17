@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: categorylistTest.php 27089 2010-04-07 14:28:32Z sarunas $
+ * @version   SVN: $Id: categorylistTest.php 31986 2010-12-17 14:03:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -47,9 +47,7 @@ class Unit_Admin_CategoryListTest extends OxidTestCase
         $oView->expects($this->any())->method('getSession')->will($this->returnValue($oSess));
 
         $oView->init();
-
-        $sCatView = getViewName('oxcategories');
-        $this->assertEquals( "$sCatView.oxrootid desc, $sCatView.oxleft", $oView->getNonPublicVar( "_sDefSort" ) );
+        $this->assertEquals( array( "oxcategories" => array( "oxrootid" => "desc", "oxleft" => "asc" ) ), $oView->getListSorting() );
     }
 
     /**

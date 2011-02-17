@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorlistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: vendorlistTest.php 32968 2011-02-07 12:51:20Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -156,7 +156,7 @@ class Unit_Views_vendorlistTest extends OxidTestCase
         $oVendor->render();
         $aViewData = $oVendor->getNonPublicVar( '_aViewData' );
 
-        $this->assertEquals( 3, count($aViewData['aVendorlist']) );
+        $this->assertEquals( 3, count($oVendor->getVendorlist()) );
     }
 
     public function testGetPageNavigation()
@@ -212,20 +212,6 @@ class Unit_Views_vendorlistTest extends OxidTestCase
         $oVendorList->setNonPublicVar( "_oActVendor", $oVendor );
 
         $this->assertEquals( $oVendor->oxvendor__oxtitle->value, $oVendorList->getTitle() );
-    }
-
-    public function testGetTemplateLocation()
-    {
-        oxTestModules::addFunction('oxUtilsServer', 'getServerVar', '{ if ( $aA[0] == "HTTP_HOST") { return "shop.com/"; } else { return "test.php";} }');
-        modConfig::setParameter( 'cnid', 'v_root' );
-        $oVendorTree = new oxvendorlist();
-        $oVendorTree->buildVendorTree( 'vendorlist', 'v_root', oxConfig::getInstance()->getShopHomeURL() );
-
-        $oVendor = $this->getProxyClass( "vendorlist" );
-        $oVendor->setVendorTree( $oVendorTree );
-        $oVendor->init();
-
-        $this->assertEquals( $oVendorTree->getHtmlPath(), $oVendor->getTemplateLocation() );
     }
 
     public function testGetActiveCategory()
@@ -382,6 +368,30 @@ class Unit_Views_vendorlistTest extends OxidTestCase
         $oVendorList->setItemSorting('v_aaa', 'oxprice', 'desc');
         $aSort = array("sortby"=>"oxprice","sortdir"=>"desc");
         $this->assertEquals( $aSort, $oVendorList->getSorting('v_aaa') );
+    }
+
+    /**
+     * Testing allist::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oCat1 = $this->getMock( 'oxvendor', array( 'getLink' ));
+        $oCat1->expects( $this->once() )->method( 'getLink')->will($this->returnValue( 'linkas1' ) );
+        $oCat1->oxcategories__oxtitle = new oxField('title1');
+
+        $oCat2 = $this->getMock( 'oxvendor', array( 'getLink' ));
+        $oCat2->expects( $this->once() )->method( 'getLink')->will($this->returnValue( 'linkas2' ) );
+        $oCat2->oxcategories__oxtitle = new oxField('title2');
+
+        $oCategoryList = $this->getMock( 'oxvendorlist', array( 'getPath' ));
+        $oCategoryList->expects( $this->once() )->method( 'getPath')->will($this->returnValue( array($oCat1, $oCat2 ) ) );
+
+        $oView = $this->getMock( "vendorlist", array( "getVendorTree" ) );
+        $oView->expects( $this->once() )->method( 'getVendorTree')->will( $this->returnValue( $oCategoryList ) );
+
+        $this->assertTrue( count($oView->getBreadCrumb()) >= 1 );
     }
 
 }

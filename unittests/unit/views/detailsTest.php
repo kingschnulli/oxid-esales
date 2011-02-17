@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 32617 2011-01-20 15:23:58Z sarunas $
+ * @version   SVN: $Id: detailsTest.php 32929 2011-02-04 15:47:40Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -384,7 +384,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetTagCloudAfterAddTags()
+    public function testGetTagCloudManagerAfterAddTags()
     {
         oxTestModules::addFunction('oxSeoEncoderTag', '_saveToDb', '{return null;}');
         oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
@@ -397,40 +397,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oDetails = $this->getProxyClass( 'details' );
         $oDetails->setNonPublicVar( "_oProduct", $oArt );
         $oDetails->addTags();
-        $sTag = $oDetails->getTagCloud();
-        $this->assertTrue(strpos($sTag, "tag/newtag/'>newtag</a>") > 0);
-    }
-
-    /**
-     * Test get tag cloud.
-     *
-     * @return null
-     */
-    public function testGetTagCloud()
-    {
-        oxTestModules::addFunction('oxSeoEncoderTag', '_saveToDb', '{return null;}');
-        oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
-        oxTestModules::addFunction( "oxutils", "seoIsActive", "{return true;}" );
-        $oArt = new oxarticle();
-        $oArt->load('2000');
-        $oDetails = $this->getProxyClass( 'details' );
-        $oDetails->setNonPublicVar( "_oProduct", $oArt );
-        $sTag = $oDetails->getTagCloud();
-        $this->assertTrue(strpos($sTag, "tag/wanduhr/'>wanduhr</a>") > 0);
-        $this->assertTrue(strpos($sTag, "tag/coolen/'>coolen</a>") > 0);
-    }
-
-    /**
-     * Test get login form from anchor.
-     *
-     * @return null
-     */
-    public function testGetLoginFormAnchor()
-    {
-        modConfig::setParameter( 'anchor', 'review' );
-        $oDetails = $this->getProxyClass( 'details' );
-        $oDetails->showLogin();
-        $this->assertEquals('review', $oDetails->getLoginFormAnchor());
+        $this->assertTrue( $oDetails->getTagCloudManager() instanceof oxTagCloud );
     }
 
     /**
@@ -542,6 +509,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oDetails = $this->getProxyClass( 'details' );
         $oDetails->init();
         $oDetails->render();
+        $oDetails->getLastProducts();
 
         modConfig::setParameter( 'anid', '2000' );
         $oDetails = $this->getProxyClass( 'details' );
@@ -690,7 +658,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testGetPictureGallery()
     {
-            $sArtID = "1126";
+            $sArtID = "1672";
 
         $oArticle = new oxarticle();
         $oArticle->load($sArtID);
@@ -923,8 +891,6 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
         $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oArticle ) );
 
-        // TODO: fix spelling error in getter
-        $this->assertEquals( "aaa", $oDetails->getAlsoBoughtThiesProducts() );
         $this->assertEquals( "aaa", $oDetails->getAlsoBoughtTheseProducts() );
     }
 
@@ -992,9 +958,7 @@ class Unit_Views_detailsTest extends OxidTestCase
 
         $oSubj->render();
 
-        $aViewData = $oSubj->getNonPublicVar('_aViewData');
-        $sViewMetaKeywords = $aViewData['meta_keywords'];
-        $this->assertTrue(strlen($sViewMetaKeywords) > 0);
+        $this->assertTrue(strlen($oSubj->getMetaKeywords()) > 0);
     }
 
     /**
@@ -1301,6 +1265,41 @@ class Unit_Views_detailsTest extends OxidTestCase
         oxTestModules::addFunction('oxrecommlist', 'load', '{throw new Exception("should not come here");}');
 
         $this->assertSame(null, $oRecomm->addToRecomm());
+    }
+
+    /**
+     * Testing Details::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+
+        $oDetails = new Details();
+
+        modConfig::setParameter( 'listtype', 'search' );
+
+        $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
+
+
+        modConfig::setParameter( 'listtype', 'tag' );
+
+        $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
+
+        modConfig::setParameter( 'listtype', 'aaa' );
+
+        $oCat1 = $this->getMock( 'oxcategory', array( 'getLink' ));
+        $oCat1->expects( $this->once() )->method( 'getLink')->will($this->returnValue( 'linkas1' ) );
+        $oCat1->oxcategories__oxtitle = new oxField('title1');
+
+        $oCat2 = $this->getMock( 'oxcategory', array( 'getLink' ));
+        $oCat2->expects( $this->once() )->method( 'getLink')->will($this->returnValue( 'linkas2' ) );
+        $oCat2->oxcategories__oxtitle = new oxField('title2');
+
+        $oView = $this->getMock( "details", array( "getCatTreePath" ) );
+        $oView->expects( $this->once() )->method( 'getCatTreePath')->will( $this->returnValue( array($oCat1, $oCat2 ) ) );
+
+        $this->assertTrue( count($oView->getBreadCrumb()) >= 1 );
     }
 
 }

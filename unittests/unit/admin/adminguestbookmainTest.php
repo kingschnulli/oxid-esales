@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: adminguestbookmainTest.php 26691 2010-03-20 08:01:52Z arvydas $
+ * @version   SVN: $Id: adminguestbookmainTest.php 33187 2011-02-10 15:54:30Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -72,8 +72,6 @@ class Unit_Admin_AdminguestbookMainTest extends OxidTestCase
         $this->assertFalse( isset( $aViewData["edit"] ) );
         $this->assertTrue( isset( $aViewData["oxid"] ) );
         $this->assertEquals( "-1", $aViewData["oxid"] );
-        $this->assertTrue( isset( $aViewData["updatelist"] ) );
-        $this->assertEquals( "1", $aViewData["updatelist"] );
         $this->assertEquals( modConfig::getInstance()->getConfigParam( "blGBModerate" ), $aViewData["blShowActBox"] );
 
         $this->assertEquals( 'adminguestbook_main.tpl', $sTplName );
@@ -118,6 +116,5 @@ class Unit_Admin_AdminguestbookMainTest extends OxidTestCase
         $aViewData = $oView->getViewData();
         $this->assertTrue( isset( $aViewData["updatelist"] ) );
         $this->assertEquals( 1, $aViewData["updatelist"] );
-        $this->assertEquals( "testId", oxSession::getVar( 'saved_oxid' ) );
     }
 }

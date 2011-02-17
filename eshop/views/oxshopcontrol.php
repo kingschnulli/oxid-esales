@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshopcontrol.php 32617 2011-01-20 15:23:58Z sarunas $
+ * @version   SVN: $Id: oxshopcontrol.php 32893 2011-02-03 14:05:35Z sarunas $
  */
 
 /**
@@ -90,20 +90,20 @@ class oxShopControl extends oxSuperCfg
             oxSession::setVar( 'cl', $sClass );
         }
 
-        // baseshop always active if there is no mall
-        if ( !oxSession::getVar( 'actshop' ) ) {
-            oxSession::setVar( 'actshop', $myConfig->getShopId() );
-        }
-
         try {
             $this->_process( $sClass, $sFunction );
         } catch( oxSystemComponentException $oEx ) {
             //possible reason: class does not exist etc. --> just redirect to start page
-            oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+            if ( $this->_isDebugMode() ) {
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+            }
+            $oEx->debugOut();
             oxUtils::getInstance()->redirect( $myConfig->getShopHomeUrl() .'cl=start' );
         } catch ( oxCookieException $oEx ) {
             // redirect to start page and display the error
-            oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+            if ( $this->_isDebugMode() ) {
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+            }
             oxUtils::getInstance()->redirect( $myConfig->getShopHomeUrl() .'cl=start' );
         }
     }
@@ -151,7 +151,7 @@ class oxShopControl extends oxSuperCfg
      */
     protected function _startMonitor()
     {
-        if ( !$this->isAdmin() && $this->getConfig()->getConfigParam( 'iDebug' ) ) {
+        if ( $this->_isDebugMode() ) {
             list ( $sUsec, $sSec ) = explode( ' ', microtime() );
             $this->_dTimeStart = ( ( float ) $sUsec + ( float ) $sSec );
         }
@@ -303,7 +303,7 @@ class oxShopControl extends oxSuperCfg
             if ( !file_exists( $sTemplateFile)) {
                 $oEx = oxNew( 'oxSystemComponentException' );
                 $oLang = oxLang::getInstance();
-                $oEx->setMessage( sprintf($oLang->translateString( 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND', $oLang->getBaseLanguage() ), $sTemplateFile) );
+                $oEx->setMessage( 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND' );
                 $oEx->setComponent( $sTemplateName );
                 throw $oEx;
             }
@@ -414,5 +414,19 @@ class oxShopControl extends oxSuperCfg
 
             oxSession::setVar( 'blRunOnceExecuted', true );
         }
+    }
+
+    /**
+     * Checks if shop is in debug mode
+     *
+     * @return bool
+     */
+    protected function _isDebugMode()
+    {
+        if ( !$this->isAdmin() && $this->getConfig()->getConfigParam( 'iDebug' ) ) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlocatorTest.php 28034 2010-05-31 14:42:32Z arvydas $
+ * @version   SVN: $Id: oxlocatorTest.php 32947 2011-02-07 09:12:37Z vilma $
  */
 
 
@@ -177,10 +177,9 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oCategory = new oxcategory();
         $oCategory->load( $sActCat );
 
-        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'addTplParam', 'setCatTreePath', 'getCatTreePath', 'getActCategory', 'getCategoryTree', 'showSorting' ) );
+        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActCategory', 'getCategoryTree', 'showSorting' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( $sActCat ) )->will( $this->returnValue( 'oxid' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'prepareSortColumns' );
-        $oLocatorTarget->expects( $this->exactly( 2 ) )->method( 'addTplParam' );
         $oLocatorTarget->expects( $this->any() )->method( 'setCatTreePath' );
         $oLocatorTarget->expects( $this->any() )->method( 'getCatTreePath' );
         $oLocatorTarget->expects( $this->once() )->method( 'getActCategory' )->will( $this->returnValue( $oCategory ) );
@@ -223,10 +222,9 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oCategory = new oxcategory();
         $oCategory->load( $sActCat );
 
-        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'addTplParam', 'setCatTreePath', 'getCatTreePath', 'getActCategory', 'getCategoryTree', 'showSorting' ) );
+        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActCategory', 'getCategoryTree', 'showSorting' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( $sActCat ) )->will( $this->returnValue( 'oxid' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'prepareSortColumns' );
-        $oLocatorTarget->expects( $this->exactly(2) )->method( 'addTplParam' );
         $oLocatorTarget->expects( $this->any() )->method( 'setCatTreePath' );
         $oLocatorTarget->expects( $this->any() )->method( 'getCatTreePath' );
         $oLocatorTarget->expects( $this->once() )->method( 'getActCategory' )->will( $this->returnValue( $oCategory ) );
@@ -281,10 +279,9 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oVendor = new oxvendor();
         $oVendor->load( str_replace( 'v_', '', $sActCat ) );
 
-        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'addTplParam', 'setCatTreePath', 'getCatTreePath', 'getActVendor', 'getVendorTree', 'showSorting' ) );
+        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActVendor', 'getVendorTree', 'showSorting' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( $oVendor->getId().":vendor" ) )->will( $this->returnValue( 'oxid' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'prepareSortColumns' );
-        $oLocatorTarget->expects( $this->exactly(2) )->method( 'addTplParam' );
         $oLocatorTarget->expects( $this->any() )->method( 'setCatTreePath' );
         $oLocatorTarget->expects( $this->any() )->method( 'getCatTreePath' );
         $oLocatorTarget->expects( $this->once() )->method( 'getActVendor' )->will( $this->returnValue( $oVendor ) );
@@ -327,10 +324,9 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oVendor = new oxvendor();
         $oVendor->load( str_replace( 'v_', '', $sActCat ) );
 
-        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'addTplParam', 'setCatTreePath', 'getCatTreePath', 'getActVendor', 'getVendorTree', 'showSorting' ) );
+        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActVendor', 'getVendorTree', 'showSorting' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( $oVendor->getId().":vendor" ) )->will( $this->returnValue( 'oxid' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'prepareSortColumns' );
-        $oLocatorTarget->expects( $this->exactly(2) )->method( 'addTplParam' );
         $oLocatorTarget->expects( $this->any() )->method( 'setCatTreePath' );
         $oLocatorTarget->expects( $this->any() )->method( 'getCatTreePath' );
         $oLocatorTarget->expects( $this->once() )->method( 'getActVendor' )->will( $this->returnValue( $oVendor ) );
@@ -378,10 +374,9 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oManufacturer = new oxmanufacturer();
         $oManufacturer->load( $sActCat );
 
-        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'addTplParam', 'setCatTreePath', 'getCatTreePath', 'getActManufacturer', 'getManufacturerTree', 'showSorting' ) );
+        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActManufacturer', 'getManufacturerTree', 'showSorting' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( $oManufacturer->getId().":manufacturer" ) )->will( $this->returnValue( 'oxid' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'prepareSortColumns' );
-        $oLocatorTarget->expects( $this->exactly(2) )->method( 'addTplParam' );
         $oLocatorTarget->expects( $this->any() )->method( 'setCatTreePath' );
         $oLocatorTarget->expects( $this->any() )->method( 'getCatTreePath' );
         $oLocatorTarget->expects( $this->once() )->method( 'getActManufacturer' )->will( $this->returnValue( $oManufacturer ) );
@@ -424,10 +419,9 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oManufacturer = new oxmanufacturer();
         $oManufacturer->load( $sActCat );
 
-        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'addTplParam', 'setCatTreePath', 'getCatTreePath', 'getActManufacturer', 'getManufacturerTree', 'showSorting' ) );
+        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActManufacturer', 'getManufacturerTree', 'showSorting' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( $oManufacturer->getId().":manufacturer" ) )->will( $this->returnValue( 'oxid' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'prepareSortColumns' );
-        $oLocatorTarget->expects( $this->exactly(2) )->method( 'addTplParam' );
         $oLocatorTarget->expects( $this->any() )->method( 'setCatTreePath' );
         $oLocatorTarget->expects( $this->any() )->method( 'getCatTreePath' );
         $oLocatorTarget->expects( $this->once() )->method( 'getActManufacturer' )->will( $this->returnValue( $oManufacturer ) );
@@ -443,7 +437,7 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
 
             $this->assertEquals( 1, $oManufacturer->iProductPos );
             $this->assertEquals( 1, $oManufacturer->iCntOfProd );
-            $sToListLink   = $sShopUrl . 'Nach-Marke-Hersteller/Bush/';
+            $sToListLink   = $sShopUrl . 'Nach-Marke/Bush/';
             $sPrevProdLink = null;
             $sNextProdLink = null;
 
@@ -458,8 +452,8 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         oxUtils::getInstance()->seoIsActive( true );
 
         $myConfig = oxConfig::getInstance();
-        $sPrevLink = $myConfig->getShopHomeUrl()."cl=details&amp;anid=1651&amp;searchparam=Bier";
-        $sNextLink = $myConfig->getShopHomeUrl()."cl=details&amp;anid=2357&amp;searchparam=Bier";
+        $sPrevLink = $myConfig->getShopHomeUrl()."cl=details&amp;anid=1651&amp;searchparam=Bier&amp;listtype=search";
+        $sNextLink = $myConfig->getShopHomeUrl()."cl=details&amp;anid=2357&amp;searchparam=Bier&amp;listtype=search";
         $sArtId = '1889';
             $sArtId = '1651';
             $sPrevLink = '';
@@ -488,7 +482,7 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
             $this->assertEquals( 1, $oSearch->iCntOfProd );
             $sPgNr = '';
 
-        $this->assertEquals( $myConfig->getShopHomeUrl()."cl=search{$sPgNr}&amp;searchparam=Bier", $oSearch->toListLink );
+        $this->assertEquals( $myConfig->getShopHomeUrl()."cl=search{$sPgNr}&amp;searchparam=Bier&amp;listtype=search", $oSearch->toListLink );
         $this->assertEquals( $sNextLink, $oSearch->nextProductLink );
         $this->assertEquals( $sPrevLink, $oSearch->prevProductLink );
     }
@@ -537,9 +531,9 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
             $this->assertEquals( 5, $oSearch->iCntOfProd );
             $iPgNr = 1;
 
-        $this->assertEquals( $myConfig->getShopHomeUrl()."cl=search&amp;pgNr={$iPgNr}&amp;searchparam=a&amp;searchvendor={$sSearchVendor}", $oSearch->toListLink );
-        $this->assertEquals( $myConfig->getShopHomeUrl()."cl=details&amp;anid={$sNextId}&amp;searchparam=a&amp;searchvendor={$sSearchVendor}", $oSearch->nextProductLink );
-        $this->assertEquals( $myConfig->getShopHomeUrl()."cl=details&amp;anid={$sPrevId}&amp;searchparam=a&amp;searchvendor={$sSearchVendor}", $oSearch->prevProductLink );
+        $this->assertEquals( $myConfig->getShopHomeUrl()."cl=search&amp;pgNr={$iPgNr}&amp;searchparam=a&amp;listtype=search&amp;searchvendor={$sSearchVendor}", $oSearch->toListLink );
+        $this->assertEquals( $myConfig->getShopHomeUrl()."cl=details&amp;anid={$sNextId}&amp;searchparam=a&amp;listtype=search&amp;searchvendor={$sSearchVendor}", $oSearch->nextProductLink );
+        $this->assertEquals( $myConfig->getShopHomeUrl()."cl=details&amp;anid={$sPrevId}&amp;searchparam=a&amp;listtype=search&amp;searchvendor={$sSearchVendor}", $oSearch->prevProductLink );
     }
 
     public function testSetSearchLocatorDataFromCat()
@@ -563,7 +557,7 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
 
 
         $sSearchCat = '30e44ab841af13e46.42570689';
-        $sNextLink = $myConfig->getShopHomeUrl()."cl=details&amp;anid=2357&amp;searchparam=Bier&amp;searchcnid=$sSearchCat";
+        $sNextLink = $myConfig->getShopHomeUrl()."cl=details&amp;anid=2357&amp;searchparam=Bier&amp;listtype=search&amp;searchcnid=$sSearchCat";
             $sSearchCat = '8a142c3e4143562a5.46426637';
             $sNextLink = '';
 
@@ -580,7 +574,7 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
             $this->assertEquals( 1, $oSearch->iProductPos );
             $this->assertEquals( 1, $oSearch->iCntOfProd );
 
-        $this->assertEquals( $myConfig->getShopHomeUrl()."cl=search&amp;searchparam=Bier&amp;searchcnid=$sSearchCat", $oSearch->toListLink );
+        $this->assertEquals( $myConfig->getShopHomeUrl()."cl=search&amp;searchparam=Bier&amp;listtype=search&amp;searchcnid=$sSearchCat", $oSearch->toListLink );
         $this->assertEquals( $sNextLink, $oSearch->nextProductLink );
         $this->assertNull( $oSearch->prevProductLink );
     }
@@ -773,7 +767,7 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oIdList = $oLocator->UNITloadIdsInList( $oCategory, new oxarticle(), 'oxid' );
         $this->assertEquals( '1651', $oIdList['1651']);
 
-            $this->assertEquals( 23, count($oIdList));
+            $this->assertEquals( 24, count($oIdList));
     }
 
     public function testLoadIdsInListForPriceCatNonExistingArticle()
@@ -795,7 +789,7 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oIdList = $oLocator->UNITloadIdsInList( $oCategory, new oxarticle(), 'oxid' );
         $this->assertEquals( '1651', $oIdList['1651']);
 
-            $this->assertEquals( 23, count($oIdList));
+            $this->assertEquals( 24, count($oIdList));
     }
 
     public function testGetPageNumber()

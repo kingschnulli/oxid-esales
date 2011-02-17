@@ -1,5 +1,7 @@
 <div id="zoom" [{if $popup}]class="popup"[{/if}]>
     <ul class="tabs">
+        [{assign var="aZoomPics" value=$oView->getZoomPics() }]
+        [{assign var="iZoomPic" value=$oView->getActZoomPic() }]
         [{if $aZoomPics|@count > 1}]
         [{foreach from=$aZoomPics item=_zoomPic}]
         <li><a href="[{ $oViewConf->getSelfLink() }]cl=moredetails&amp;actpicid=[{$_zoomPic.id}]&amp;anid=[{ $product->oxarticles__oxnid->value }]" onclick="oxid.image('zoom_img','[{$_zoomPic.file}]');return false;">[{$_zoomPic.id}]</a></li>

@@ -68,15 +68,13 @@ class Unit_Views_oxCmpShopTest extends OxidTestCase
     public function testRenderPE()
     {
 
-        $sLogoPath = oxConfig::getInstance()->getConfigParam( "sShopDir" )."/out/basic/img/";
+        $sLogoPath = oxConfig::getInstance()->getConfigParam( "sShopDir" )."/out/azure/img/";
 
         $oShop = new oxShop();
         $oShop->oxshops__oxactive = new oxField( 1 );
 
-        $oParent = $this->getMock( "oxStdClass", array( "setShopLogo", "addTplParam", "getShopLogo" ) );
+        $oParent = $this->getMock( "oxStdClass", array( "setShopLogo" ) );
         $oParent->expects( $this->once() )->method('setShopLogo');
-        $oParent->expects( $this->once() )->method('addTplParam');
-        $oParent->expects( $this->once() )->method('getShopLogo');
 
         $oConfig = $this->getMock( "oxStdClass", array( "getConfigParam", "getAbsImageDir", "getActiveShop" ) );
         $oConfig->expects( $this->at( 0 ) )->method('getConfigParam')->with( $this->equalTo( "sShopLogo" ) )->will( $this->returnValue( "stars.jpg" ) );

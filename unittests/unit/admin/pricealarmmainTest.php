@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmmainTest.php 28265 2010-06-10 12:21:38Z michael.keiluweit $
+ * @version   SVN: $Id: pricealarmmainTest.php 33190 2011-02-10 15:56:27Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -35,7 +35,7 @@ class Unit_Admin_PriceAlarmMainTest_smarty
      *
      * @param string $sName   called method
      * @param array  $aParams parameters
-     * 
+     *
      * @return null
      */
     public function __call( $sName, $aParams )
@@ -166,14 +166,11 @@ class Unit_Admin_PriceAlarmMainTest extends OxidTestCase
     public function testRenderNoRealObjectId()
     {
         modConfig::setParameter( "oxid", "-1" );
-        modConfig::setParameter( "saved_oxid", "-1" );
 
         // testing..
         $oView = new PriceAlarm_Main();
         $this->assertEquals( 'pricealarm_main.tpl', $oView->render() );
         $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['updatelist'] ) );
-        $this->assertEquals( "1", $aViewData['updatelist'] );
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );
     }

@@ -676,6 +676,37 @@ class OxSetupDb extends oxSetupCore
     }
 
     /**
+     * Testing if no error occurs while creating views
+     *
+     * @throws Exception exception is thrown if error occured during view creation
+     *
+     * @return null
+     */
+    public function testCreateView()
+    {
+        // testing creation
+        $sQ = "create or replace view oxviewtest as select 1";
+        $rReturn = mysql_query( $sQ, $this->getConnection() );
+        if ( $rReturn === false ) {
+            throw new Exception( $this->getInstance( "oxSetupLang" )->getText('ERROR_VIEWS_CANT_CREATE' ) . " " . mysql_error( $this->getConnection() ) . "\n" );
+        }
+
+        // testing data selection
+        $sQ = "select * from oxviewtest";
+        $rReturn = mysql_query( $sQ, $this->getConnection() );
+        if ( $rReturn === false ) {
+            throw new Exception( $this->getInstance( "oxSetupLang" )->getText('ERROR_VIEWS_CANT_SELECT' ) . " " . mysql_error( $this->getConnection() ) . "\n" );
+        }
+
+        // testing view dropping
+        $sQ = "drop view oxviewtest";
+        $rReturn = mysql_query( $sQ, $this->getConnection() );
+        if ( $rReturn === false ) {
+            throw new Exception( $this->getInstance( "oxSetupLang" )->getText('ERROR_VIEWS_CANT_DROP' ) . " " . mysql_error( $this->getConnection() ) . "\n" );
+        }
+    }
+
+    /**
      * Executes queries stored in passed file
      *
      * @param string $sFilename file name where queries are stored
@@ -1955,6 +1986,16 @@ class oxSetupController extends oxSetupCore
         $oDb = $this->getInstance( "oxSetupDb" );
         $oDb->openDatabase( $aDB );
 
+        // testing if views can be created
+        try {
+            $oDb->testCreateView();
+        } catch ( Exception $oExcp ) {
+            // Views can not be created
+            $oView->setMessage( $oExcp->getMessage() );
+            $oSetup->setNextStep( $oSetup->getStep( 'STEP_DB_INFO' ) );
+            return "default.php";
+        }
+
         // check if DB is already UP and running
         if ( !$blOverwrite ) {
 
@@ -2349,7 +2390,10 @@ class oxSetupAps extends oxSetupCore
     {
         // cleanup and remove tmp folder
         $oUtils = $this->getInstance( "oxSetupUtils" );
-        $oUtils->removeDir( getInstallPath()."tmp/", true );
+        
+        $sCompileDir = getInstallPath()."tmp/";
+        
+        $oUtils->removeDir( $sCompileDir, true );
 
         // seems like APS removes rest of files/db itself
         return;

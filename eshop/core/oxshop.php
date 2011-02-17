@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshop.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxshop.php 32914 2011-02-04 09:21:19Z alfonsas $
  */
 
 /**
@@ -70,6 +70,93 @@ class oxShop extends oxI18n
     public function setMultiShopTables( $aMultiShopTables )
     {
         $this->_aMultiShopTables = $aMultiShopTables;
+    }
+
+
+    /**
+     * (Re)generates shop views
+     *
+     * @param bool  $blMultishopInherit config option blMultishopInherit
+     * @param array $aMallInherit       array of config options blMallInherit
+     *
+     * @return null
+     */
+    public function generateViews( $blMultishopInherit = false, $aMallInherit = null )
+    {
+        $oDB        = oxDb::getDb();
+        $aLanguages = oxLang::getInstance()->getLanguageIds();
+
+        $aTables = $aMultilangTables = getMultilangTables();
+
+        $aQ = array();
+
+        // Generate multitable views
+        foreach ( $aTables as $sTable ) {
+            $aQ[] = 'CREATE OR REPLACE VIEW oxv_'.$sTable.' AS SELECT * FROM '.$sTable.' '.$this->_getViewJoinAll($sTable);
+
+            if (in_array($sTable, $aMultilangTables)) {
+                foreach ($aLanguages as $iLang => $sLang) {
+                    $aQ[] = 'CREATE OR REPLACE VIEW oxv_'.$sTable.'_'.$sLang.' AS SELECT '.$this->_getViewSelect($sTable, $iLang).' FROM '.$sTable.' '.$this->_getViewJoinLang($sTable, $iLang);
+                }
+            }
+        }
+
+        foreach ($aQ as $sQ) {
+            $oDB->execute( $sQ ); // echo $sQ.';'.PHP_EOL;
+        }
+    }
+
+    /**
+     * Returns table field name mapping sql section for single language views
+     *
+     * @param string $sTable table name
+     * @param array  $iLang  language id
+     *
+     * @return string $sSQL
+     */
+    protected function _getViewSelect($sTable,$iLang)
+    {
+        $oMetaData = oxnew('oxDbMetaDataHandler');
+        $aFields = $oMetaData->getSinglelangFields($sTable, $iLang);
+        foreach ($aFields as $sCoreField => $sField) {
+            if ($sCoreField !== $sField) {
+                $aFields[$sCoreField] = $sField.' AS '.$sCoreField;
+            }
+        }
+
+        return implode(',', $aFields);
+    }
+
+    /**
+     * Returns all language table view JOIN section
+     *
+     * @param string $sTable table name
+     *
+     * @return string $sSQL
+     */
+    protected function _getViewJoinAll($sTable)
+    {
+        $oMetaData = oxnew('oxDbMetaDataHandler');
+        $aTables = $oMetaData->getAllMultiTables($sTable);
+        if (count($aTables)) {
+           return 'JOIN ('.implode(',', $aTables).') USING (OXID)';
+        }
+    }
+
+    /**
+     * Returns language table view JOIN section
+     *
+     * @param string $sTable table name
+     * @param array  $iLang  language id
+     *
+     * @return string $sSQL
+     */
+    protected function _getViewJoinLang($sTable,$iLang)
+    {
+        $sLangTable = getLangTableName($sTable, $iLang);
+        if ($sLangTable && $sLangTable !== $sTable) {
+            return 'JOIN ('.$sLangTable.') USING (OXID)';
+        }
     }
 
 }

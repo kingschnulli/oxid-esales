@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_main.php 31235 2010-11-25 13:53:04Z alfonsas $
+ * @version   SVN: $Id: article_main.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
  */
 
 /**
@@ -31,12 +31,6 @@
  */
 class Article_Main extends oxAdminDetails
 {
-    /**
-     * Saved/active product id
-     *
-     * @var string
-     */
-    protected $_sSavedId = null;
 
     /**
      * Loads article parameters and passes them to Smarty engine, returns
@@ -51,7 +45,7 @@ class Article_Main extends oxAdminDetails
 
         $this->_aViewData['edit'] = $oArticle = oxNew( 'oxarticle' );
 
-        $soxId  = oxConfig::getParameter( "oxid" );
+        $soxId = $this->getEditObjectId();
         $svoxId = oxConfig::getParameter( "voxid" );
         $soxparentId = oxConfig::getParameter( "oxparentid" );
 
@@ -63,14 +57,6 @@ class Article_Main extends oxAdminDetails
             $this->_aViewData["oxparentid"] = $soxparentId;
 
             $this->_aViewData["oxid"] =  $soxId = "-1";
-        }
-
-        // check if we right now saved a new entry
-        if ( $this->_sSavedId ) {
-            $this->_aViewData["oxid"] = $soxId = $this->_sSavedId;;
-
-            // for reloading upper frame
-            $this->_aViewData["updatelist"] =  "1";
         }
 
         if (  $soxId && $soxId != "-1") {
@@ -130,8 +116,8 @@ class Article_Main extends oxAdminDetails
         $myConfig  = $this->getConfig();
         $myUtilsCount = oxUtilsCount::getInstance();
 
-        $soxId      = oxConfig::getParameter( "oxid" );
-        $aParams    = oxConfig::getParameter( "editval" );
+        $soxId = $this->getEditObjectId();
+        $aParams = oxConfig::getParameter( "editval" );
 
 
         // checkbox handling
@@ -230,7 +216,6 @@ class Article_Main extends oxAdminDetails
 
         // set oxid if inserted
         if ( $soxId == "-1") {
-            $this->_sSavedId = $oArticle->getId();
             $sFastCat = oxConfig::getParameter( "art_category");
             if ( $sFastCat != "-1") {
                 $this->addToCategory($sFastCat, $oArticle->getId());
@@ -238,14 +223,13 @@ class Article_Main extends oxAdminDetails
         }
 
 
-        $this->_aViewData["updatelist"] = "1";
-
         //saving tags
         $sTags = $aParams['tags'];
         if (!trim($sTags)) {
             $sTags = $oArticle->oxarticles__oxsearchkeys->value;
         }
         $oArticle->saveTags($sTags);
+        $this->setEditObjectId( $oArticle->getId() );
     }
 
     /**
@@ -285,7 +269,7 @@ class Article_Main extends oxAdminDetails
     {
         $myConfig = $this->getConfig();
 
-        $sOldId = $sOldId ? $sOldId : oxConfig::getParameter( 'oxid' );
+        $sOldId = $sOldId ? $sOldId : $this->getEditObjectId();
         $sNewId = $sNewId ? $sNewId : oxUtilsObject::getInstance()->generateUID();
 
         $oArticle = oxNew( 'oxbase' );
@@ -358,7 +342,7 @@ class Article_Main extends oxAdminDetails
             // only for top articles
             if ( !$sParentId ) {
 
-                $this->_sSavedId = $oArticle->getId();
+                $this->setEditObjectId( $oArticle->getId() );
 
                 //article number handling, warns for artnum dublicates
                 if ( $myConfig->getConfigParam( 'blWarnOnSameArtNums' ) &&
@@ -561,7 +545,7 @@ class Article_Main extends oxAdminDetails
      */
     public function saveinnlang()
     {
-        $soxId   = oxConfig::getParameter( "oxid" );
+        $soxId   = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval" );
 
         // checkbox handling
@@ -644,9 +628,7 @@ class Article_Main extends oxAdminDetails
         oxSession::setVar( "new_lang", $sNewLanguage );
 
         // set oxid if inserted
-        if ( $soxId == "-1" ) {
-            $this->_sSavedId = $oArticle->getId();
-        }
+        $this->setEditObjectId( $oArticle->getId() );
     }
 
     /**

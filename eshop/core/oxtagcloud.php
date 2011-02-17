@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloud.php 32612 2011-01-20 15:22:37Z sarunas $
+ * @version   SVN: $Id: oxtagcloud.php 32880 2011-02-03 11:45:17Z sarunas $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -294,17 +294,16 @@ class oxTagCloud extends oxSuperCfg
             $iAmount = OXTAGCLOUD_STARTPAGECOUNT;
         }
 
+        $sArtView  = getViewName( 'oxarticles', $iLang );
+        $sViewName = getViewName( 'oxartextends', $iLang );
+
         $sArticleSelect = " 1 ";
         if ( $sArtId ) {
             $sArticleSelect = " oxarticles.oxid = ".$oDb->quote( $sArtId )." ";
             $iAmount = 0;
         }
 
-        $sField = "oxartextends.oxtags".oxLang::getInstance()->getLanguageTag( $iLang );
-
-        $sArtView = getViewName('oxarticles');
-        $sQ = "select $sField as oxtags from $sArtView as oxarticles left join oxartextends on oxarticles.oxid=oxartextends.oxid where oxarticles.oxactive=1 AND $sArticleSelect";
-        //$sQ = "select $sField from oxartextends where $sArticleSelect";
+        $sQ = "select {$sViewName}.oxtags as oxtags from $sArtView as oxarticles left join {$sViewName} on oxarticles.oxid={$sViewName}.oxid where oxarticles.oxactive=1 AND $sArticleSelect";
         $rs = $oDb->execute( $sQ );
         $aTags = array();
         while ( $rs && $rs->recordCount() && !$rs->EOF ) {
@@ -348,11 +347,10 @@ class oxTagCloud extends oxSuperCfg
                 $sSubQ .= 'select '.$oDb->quote( $sKey ).' as _oxsort, '.$oDb->quote( $sTag ).' as _oxval';
             }
 
-            $sField = "oxartextends.oxtags".oxLang::getInstance()->getLanguageTag( $iLang );
+            $sViewName = getViewName( "oxartextends", $iLang );
 
             // forcing collation
-            $sSubQ = "select {$sField} as _oxsort, 'ox_skip' as _oxval from oxartextends limit 1 union $sSubQ";
-
+            $sSubQ = "select {$sViewName}.oxtags as _oxsort, 'ox_skip' as _oxval from {$sViewName} limit 1 union $sSubQ";
             $sQ = "select _oxtable._oxsort, _oxtable._oxval from ( {$sSubQ} ) as _oxtable order by _oxtable._oxsort desc";
 
             $aTags = array();
@@ -365,66 +363,6 @@ class oxTagCloud extends oxSuperCfg
             }
         }
         return $aTags;
-    }
-
-    /**
-     * Returns HTML formated Tag Cloud
-     *
-     * @param string $sArtId     article id
-     * @param bool   $blExtended if can extend tags
-     * @param int    $iLang      preferred language [optional]
-     *
-     * @deprecated should ne used oxTagCloud::getCloudArray()
-     *
-     * @return string
-     */
-    public function getTagCloud($sArtId = null, $blExtended = false, $iLang = null )
-    {
-        $myUtils = oxUtils::getInstance();
-
-        $sTagCloud = null;
-        $sCacheKey = $this->_getCacheKey($blExtended, $iLang );
-        if ( $this->_sCacheKey && !$sArtId ) {
-            $sTagCloud = $myUtils->fromFileCache( $sCacheKey );
-        }
-
-        if ( !is_null($sTagCloud) ) {
-            return $sTagCloud;
-        }
-
-        $aTags = $this->getTags($sArtId, $blExtended, $iLang);
-        if (!count($aTags)) {
-            if ($this->_sCacheKey && !$sArtId) {
-                $sTagCloud = false;
-                $myUtils->toFileCache($sCacheKey, $sTagCloud);
-            }
-            return $sTagCloud;
-        }
-
-        $iMaxHit = max( $aTags);
-        $blSeoIsActive = $myUtils->seoIsActive();
-        $oSeoEncoderTag = oxSeoEncoderTag::getInstance();
-
-        $iLang = ( $iLang !== null ) ? $iLang : oxLang::getInstance()->getBaseLanguage();
-        $sUrl = $this->getConfig()->getShopUrl();
-        $oStr = getStr();
-
-        $sTagCloud = false;
-        foreach ( $aTags as $sTag => $sRelevance ) {
-            $sLink = false;
-            if ( $blSeoIsActive ) {
-                $sLink = $oSeoEncoderTag->getTagUrl( $sTag, $iLang );
-            }
-            $sLink = $sLink ? $sLink : $sUrl . $oSeoEncoderTag->getStdTagUri( $sTag ) . "&amp;lang=" . $iLang;
-            $iFontSize = $this->_getFontSize( $sRelevance, $iMaxHit );
-            $sTagCloud .= "<a style='font-size:". $iFontSize ."%;' class='tagitem_". $iFontSize . "' href='$sLink'>".$oStr->htmlentities($sTag)."</a> ";
-        }
-
-        if ( $this->_sCacheKey && !$sArtId ) {
-            $myUtils->toFileCache( $sCacheKey, $sTagCloud );
-        }
-
-        return $sTagCloud;
     }
 
     /**

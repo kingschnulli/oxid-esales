@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contactTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: contactTest.php 32932 2011-02-04 16:24:54Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,13 +37,8 @@ class Unit_Views_contactTest extends OxidTestCase
      */
     public function testRender()
     {
-        $oContentView = $this->getMock( 'Contact', array( 'getUserData', 'getContactSubject', 'getContactMessage', 'getCaptcha', 'getContactSendStatus' ) );
-        $oContentView->expects( $this->atLeastOnce() )->method( 'getUserData' );
-        $oContentView->expects( $this->atLeastOnce() )->method( 'getContactSubject' );
-        $oContentView->expects( $this->atLeastOnce() )->method( 'getContactMessage' );
-        $oContentView->expects( $this->atLeastOnce() )->method( 'getCaptcha' );
-        $oContentView->expects( $this->atLeastOnce() )->method( 'getContactSendStatus' );
-        $this->assertEquals( 'contact.tpl', $oContentView->render() );
+        $oContact = oxNew( 'Contact' );
+        $this->assertEquals( 'page/info/contact.tpl', $oContact->render() );
     }
 
     /**
@@ -199,6 +194,18 @@ class Unit_Views_contactTest extends OxidTestCase
         $oObj = $this->getProxyClass( 'Contact' );
         $oObj->setNonPublicVar( '_blContactSendStatus', true );
         $this->assertTrue($oObj->getContactSendStatus());
+    }
+
+     /**
+     * Testing Contact::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oContact = new Contact();
+
+        $this->assertEquals(1, count($oContact->getBreadCrumb()));
     }
 
 }

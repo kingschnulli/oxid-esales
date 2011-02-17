@@ -11,7 +11,7 @@
     [{if !$oView->isConnectedWithFb()}]
     <strong class="h2"><a id="test_RightSideAccountHeader" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" }]">[{ oxmultilang ident="INC_RIGHTITEM_MYACCOUNT" }]</a></strong>
     <div class="box">
-        [{oxid_include_dynamic file="dyn/cmp_login_right.tpl" type="login" pgnr=$pageNavigation->actPage tpl=$tpl additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
+        [{oxid_include_dynamic file="dyn/cmp_login_right.tpl" type="login" pgnr=$oView->getActPage() tpl=$oViewConf->getActTplName() additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
         [{oxid_include_dynamic file="dyn/cmp_login_links.tpl" type="login_links"}]
     </div>
     [{/if}]
@@ -20,7 +20,7 @@
         [{if !$oxcmp_user || ($oxcmp_user && $oView->isConnectedWithFb()) }]
         <strong class="h2"><a id="test_RightSideNewsLetterHeader" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account"}]">[{ oxmultilang ident="INC_RIGHTITEM_FBCONNECT" }]</a></strong>
         <div class="box">
-            [{oxid_include_dynamic file="dyn/cmp_fbconnect_right.tpl" type="login" pgnr=$pageNavigation->actPage tpl=$tpl additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
+            [{oxid_include_dynamic file="dyn/cmp_fbconnect_right.tpl" type="login" pgnr=$oView->getActPage() tpl=$oViewConf->getActTplName() additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
         </div>
         [{/if}]
     [{/if}]
@@ -29,7 +29,7 @@
         [{if !$oxcmp_user->oxuser__oxpassword->value && $oViewConf->getShowOpenIdLogin() }]
             <strong class="h2"><a id="test_RightSideOpenIdHeader" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account"}]">[{ oxmultilang ident="INC_RIGHTITEM_OPENID" }]</a></strong>
             <div class="box">
-                [{oxid_include_dynamic file="dyn/cmp_openidlogin_right.tpl" type="login" pgnr=$pageNavigation->actPage tpl=$tpl additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
+                [{oxid_include_dynamic file="dyn/cmp_openidlogin_right.tpl" type="login" pgnr=$oView->getActPage() tpl=$oViewConf->getActTplName() additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
             </div>
         [{/if}]
     [{/if}]
@@ -114,7 +114,7 @@
 [{ if $oView->getAccessoires() }]
     <strong class="h2" id="test_RightSideAccessoiresHeader">[{ oxmultilang ident="INC_RIGHTITEM_ACCESSORIES" }]</strong>
     <div class="box">
-        <div>[{include file="inc/rightlist.tpl" list=$oView->getAccessoires() altproduct=$product test_Type=accessoire}]</div>
+        <div>[{include file="inc/rightlist.tpl" list=$oView->getAccessoires() altproduct=$oView->getProduct() test_Type=accessoire}]</div>
     </div>
 [{ /if }]
 
@@ -122,21 +122,21 @@
 [{ if $oView->getSimilarProducts() }]
     <strong class="h2" id="test_RightSideSimilListHeader">[{ oxmultilang ident="INC_RIGHTITEM_SIMILARPRODUCTS" }]</strong>
     <div class="box">
-        <div>[{include file="inc/rightlist.tpl" list=$oView->getSimilarProducts() altproduct=$product test_Type=similarlist}]</div>
+        <div>[{include file="inc/rightlist.tpl" list=$oView->getSimilarProducts() altproduct=$oView->getProduct() test_Type=similarlist}]</div>
     </div>
 [{ /if }]
 
 [{ if $oView->getCrossSelling()}]
     <strong class="h2" id="test_RightSideCrossListHeader">[{ oxmultilang ident="INC_RIGHTITEM_HAVEPOUSEEN" }]</strong>
     <div class="box">
-        <div>[{include file="inc/rightlist.tpl" list=$oView->getCrossSelling() altproduct=$product test_Type=cross}]</div>
+        <div>[{include file="inc/rightlist.tpl" list=$oView->getCrossSelling() altproduct=$oView->getProduct() test_Type=cross}]</div>
     </div>
 [{ /if }]
 
 [{ if $oView->getAlsoBoughtTheseProducts() }]
     <strong class="h2" id="test_RightSideCustWhoHeader">[{ oxmultilang ident="INC_RIGHTITEM_CUSTOMERWHO" }]</strong>
     <div class="box">
-        <div>[{include file="inc/rightlist.tpl" list=$oView->getAlsoBoughtTheseProducts() altproduct=$product test_Type=customerwho}]</div>
+        <div>[{include file="inc/rightlist.tpl" list=$oView->getAlsoBoughtTheseProducts() altproduct=$oView->getProduct() test_Type=customerwho}]</div>
     </div>
 [{ /if }]
 

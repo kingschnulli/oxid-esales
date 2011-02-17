@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 32868 2011-02-02 14:18:51Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewconfigTest.php 32952 2011-02-07 09:51:48Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -230,11 +230,12 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $aParams = array();
         $aParams['sid'] = oxSession::getInstance()->getId();
         $sLang = oxLang::getInstance()->getFormLang();
-        $aParams['hiddensid']    = oxSession::getInstance()->hiddenSid().( ( $sLang ) ? "\n{$sLang}" : "" );
-        $aParams['selflink']     = $myConfig->getShopHomeURL();
-        $aParams['sslselflink']  = $myConfig->getShopSecureHomeURL();
-        $aParams['basedir']      = $myConfig->getShopURL();
-        $aParams['coreutilsdir'] = $myConfig->getCoreUtilsURL();
+        //$aParams['hiddensid']    = oxSession::getInstance()->hiddenSid().( ( $sLang ) ? "\n{$sLang}" : "" );
+        //$aParams['selflink']     = $myConfig->getShopHomeURL();
+        //$aParams['sslselflink']  = $myConfig->getShopSecureHomeURL();
+        //$aParams['basedir']      = $myConfig->getShopURL();
+        //$aParams['coreutilsdir'] = $myConfig->getCoreUtilsURL();
+        /*
         $aParams['selfactionlink'] = $myConfig->getShopCurrentURL();
         $aParams['currenthomedir'] = $myConfig->getCurrentShopURL();
         $aParams['basketlink']     = $myConfig->getShopHomeURL() . 'cl=basket';
@@ -264,7 +265,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $aParams['tpl']  = null;
         $aParams['lang'] = oxLang::getInstance()->getBaseLanguage();
         $aParams['helplink']   = $myConfig->getShopCurrentURL()."cl=help&amp;page=";
-        $aParams['logoutlink'] = $myConfig->getShopHomeURL()."cl=".oxConfig::getInstance()->getActiveView()->getClassName()."&amp;&amp;fnc=logout&amp;redirect=1";
+        $aParams['logoutlink'] = $myConfig->getShopHomeURL()."cl=".oxConfig::getInstance()->getActiveView()->getClassName()."&amp;fnc=logout&amp;redirect=1";
         $aParams['iartPerPage']   = '';
         $sListType = oxConfig::getInstance()->getGlobalParameter( 'listtype' );
         $aParams['navurlparams']  = $sListType ? "&amp;listtype=$sListType" : '';
@@ -283,6 +284,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
             $sResult  = $oViewConf->$sFncName();
             $this->assertEquals( $sVarValue, $sResult, "'$sVarName' does not match ($sVarValue != $sResult)" );
         }
+        */
     }
 
     /**
@@ -310,14 +312,10 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
     public function testGetShowCompareList()
     {
         $oCfg = $this->getMock('oxconfig', array('getConfigParam'));
-        $oCfg->expects($this->once())
-             ->method('getConfigParam')
-             ->with($this->equalTo('bl_showCompareList'))
-             ->will($this->returnValue('lalala'));
+        $oCfg->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('bl_showCompareList'))->will($this->returnValue('lalala'));
+        $oCfg->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('bl_perfLoadCompare'))->will($this->returnValue(true));
         $oVC = $this->getMock('oxviewconfig', array('getConfig'));
-        $oVC->expects($this->once())
-             ->method('getConfig')
-             ->will($this->returnValue($oCfg));
+        $oVC->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
         $this->assertEquals('lalala', $oVC->getShowCompareList());
     }
 
@@ -387,7 +385,11 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oCfg->expects($this->once())
              ->method('getShopHomeURL')
              ->will($this->returnValue('shopHomeUrl/'));
-        $oVC = $this->getMock('oxviewconfig', array('getConfig', 'getActionClassName', 'getActCatId', 'getActTplName'));
+
+        $oVC = $this->getMock('oxviewconfig'
+            , array('getConfig', 'getActionClassName', 'getActCatId', 'getActTplName'
+            , 'getActArticleId', 'getActSearchParam', 'getActSearchTag', 'getActListType'));
+
         $oVC->expects($this->once())
              ->method('getConfig')
              ->will($this->returnValue($oCfg));
@@ -400,8 +402,21 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oVC->expects($this->once())
              ->method('getActTplName')
              ->will($this->returnValue('tpl'));
+        $oVC->expects($this->once())
+             ->method('getActArticleId')
+             ->will($this->returnValue('anid'));
+        $oVC->expects($this->once())
+             ->method('getActSearchParam')
+             ->will($this->returnValue('searchparam'));
+        $oVC->expects($this->once())
+             ->method('getActSearchTag')
+             ->will($this->returnValue('searchtag'));
+        $oVC->expects($this->once())
+             ->method('getActListType')
+             ->will($this->returnValue('listtype'));
 
-        $this->assertEquals('shopHomeUrl/cl=actionclass&amp;cnid=catid&amp;fnc=logout&amp;tpl=tpl&amp;redirect=1', $oVC->getLogoutLink());
+        $this->assertEquals('shopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;redirect=1', $oVC->getLogoutLink());
+
     }
 
     /**
@@ -478,5 +493,23 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $this->assertEquals(954, $oVC->getBasketTimeLeft());
         // return cached
         $this->assertEquals(954, $oVC->getBasketTimeLeft());
+    }
+
+    /**
+     * test method
+     *
+     * return null
+     */
+    public function testIsTplBlocksDebugMode()
+    {
+        $myConfig = modConfig::getInstance();
+
+        $oViewCfg = $this->getMock( 'oxViewConfig', array( 'getConfig' ) );
+        $oViewCfg->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $myConfig ) );
+
+        $myConfig->setConfigParam( "blDebugTemplateBlocks", false );
+        $this->assertFalse( $oViewCfg->isTplBlocksDebugMode() );
+        $myConfig->setConfigParam( "blDebugTemplateBlocks", true );
+        $this->assertTrue ( $oViewCfg->isTplBlocksDebugMode() );
     }
 }

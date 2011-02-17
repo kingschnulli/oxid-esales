@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmsendTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: pricealarmsendTest.php 33224 2011-02-14 09:06:55Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -76,11 +76,7 @@ class Unit_Admin_PriceAlarmSendTest extends OxidTestCase
      */
     public function testSendeMail()
     {
-        oxTestModules::addFunction( 'oxemail', 'send', '{ return true; }');
-        oxTestModules::addFunction( 'oxemail', 'setBody', '{ return true; }');
-        oxTestModules::addFunction( 'oxemail', 'setSubject', '{ return true; }');
-        oxTestModules::addFunction( 'oxemail', 'addAddress', '{ return true; }');
-        oxTestModules::addFunction( 'oxemail', 'addReplyTo', '{ return true; }');
+        oxTestModules::addFunction( 'oxemail', 'sendPricealarm', '{ return true; }');
         oxTestModules::addFunction( 'oxpricealarm', 'save', '{ throw new Exception( "save" ); }');
         oxTestModules::addFunction( 'oxpricealarm', 'load', '{ return true; }');
 

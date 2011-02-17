@@ -19,23 +19,11 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxlistTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
-
-class testClass
-{
-    static public function testFunc( $oObj )
-    {
-        $oObj->sTest = 'test';
-    }
-    static public function testFunc2( $oObj )
-    {
-        $oObj->oxactions__oxtitle->setValue($oObj->oxactions__oxtitle->value.'_test');
-    }
-}
 
 class testElement extends oxI18n
 {
@@ -226,55 +214,6 @@ class Unit_Core_oxlistTest extends OxidTestCase
         $this->assertEquals( '1', count($oList));
     }
 
-    public function testSelectStringWithCallbackPrepend()
-    {
-        $oAction = oxNew( "oxbase");
-        $oAction->init('oxactions');
-        $oAction->setId('_test1');
-        $oAction->oxactions__oxtitle = new oxField('action1', oxField::T_RAW);
-        $oAction->save();
-
-        $oAction = oxNew( "oxbase");
-        $oAction->init('oxactions');
-        $oAction->setId('_test2');
-        $oAction->oxactions__oxtitle = new oxField('action2', oxField::T_RAW);
-        $oAction->save();
-
-        $oList = oxNew( "oxlist");
-        $oList->init("oxBase", "oxactions");
-        $oList->setAssignCallbackPrepend( array(new testClass(), "testFunc") );
-
-        $oList->selectString( 'select * from oxactions where oxid like "\_%"' );
-
-        $this->assertEquals( '2', count($oList));
-        $oItem = $oList->current();
-        $this->assertEquals( 'test', $oItem->sTest);
-    }
-
-    public function testSelectStringWithCallback()
-    {
-        $oAction = oxNew( "oxbase");
-        $oAction->init('oxactions');
-        $oAction->setId('_test1');
-        $oAction->oxactions__oxtitle = new oxField('action1', oxField::T_RAW);
-        $oAction->save();
-
-        $oAction = oxNew( "oxbase");
-        $oAction->init('oxactions');
-        $oAction->setId('_test2');
-        $oAction->oxactions__oxtitle = new oxField('action2', oxField::T_RAW);
-        $oAction->save();
-
-        $oList = oxNew( "oxlist");
-        $oList->init("oxBase", "oxactions");
-        $oList->setAssignCallback( array(new testClass(), "testFunc2") );
-
-        $oList->selectString( 'select * from oxactions where oxid like "\_%"' );
-
-        $this->assertEquals( '2', count($oList));
-        $this->assertEquals( 'action1_test', $oList['_test1']->oxactions__oxtitle->value);
-    }
-
     public function testSelectStringEmpty()
     {
         $oList = oxNew( "oxlist");
@@ -356,20 +295,6 @@ class Unit_Core_oxlistTest extends OxidTestCase
         $oList->assign( $aArray );
 
         $this->assertEquals( $aArray = array( 'b' => 'b1','a' => 'a1'), $oList->reverse() );
-    }
-
-    public function testSetAssignCallbackPrepend()
-    {
-        $oList = $this->getProxyClass( 'oxlist' );
-        $oList->setAssignCallbackPrepend( array('aaa') );
-        $this->assertEquals( array('aaa'), $oList->getNonPublicVar( '_aAssignCallbackPrepend' ) );
-    }
-
-    public function testSetAssignCallback()
-    {
-        $oList = $this->getProxyClass( 'oxlist' );
-        $oList->setAssignCallback( array('aaa') );
-        $this->assertEquals( array('aaa'), $oList->getNonPublicVar( '_aAssignCallback' ) );
     }
 
     public function testSetsInListAttritbue()

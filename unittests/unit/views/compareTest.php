@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: compareTest.php 29553 2010-08-27 14:48:10Z sarunas $
+ * @version   SVN: $Id: compareTest.php 33071 2011-02-09 09:14:01Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -132,25 +132,10 @@ class Unit_Views_compareTest extends OxidTestCase
      */
     public function testRender()
     {
-        $oView = $this->getMock( "compare", array( "getCompareItemsCnt", "getCompArtList", "getAttributeList", "getPageNavigation", "getActPage", "getSimilarRecommLists", "getOrderCnt", "_loadActions" ) );
-        $oView->expects( $this->once() )->method( 'getCompareItemsCnt')->will( $this->returnValue( "getCompareItemsCnt" ) );
-        $oView->expects( $this->atLeastOnce() )->method( 'getCompArtList')->will( $this->returnValue( "getCompArtList" ) );
-        $oView->expects( $this->once() )->method( 'getAttributeList')->will( $this->returnValue( "getAttributeList" ) );
-        $oView->expects( $this->once() )->method( 'getPageNavigation')->will( $this->returnValue( "getPageNavigation" ) );
-        $oView->expects( $this->once() )->method( 'getActPage')->will( $this->returnValue( "getActPage" ) );
-        $oView->expects( $this->once() )->method( 'getSimilarRecommLists')->will( $this->returnValue( "getSimilarRecommLists" ) );
-        $oView->expects( $this->once() )->method( 'getOrderCnt')->will( $this->returnValue( "getOrderCnt" ) );
-        $oView->expects( $this->once() )->method( '_loadActions');
+        $oView = new compare();
 
-        $this->assertEquals( "compare.tpl", $oView->render() );
-        $aViewData = $oView->getViewData();
-        $this->assertEquals( "getCompareItemsCnt", $aViewData["oxcmp_compare"] );
-        $this->assertEquals( "getCompArtList", $aViewData["articlelist"] );
-        $this->assertEquals( "getAttributeList", $aViewData["allartattr"] );
-        $this->assertEquals( "getPageNavigation", $aViewData["pageNavigation"] );
-        $this->assertEquals( "getActPage", $aViewData["pgNr"] );
-        $this->assertEquals( "getSimilarRecommLists", $aViewData["similarrecommlist"] );
-        $this->assertEquals( "getOrderCnt", $aViewData["iordersmade"] );
+        $this->assertEquals( "page/compare/compare.tpl", $oView->render() );
+
     }
 
     /**
@@ -160,26 +145,11 @@ class Unit_Views_compareTest extends OxidTestCase
      */
     public function testRenderInPopup()
     {
-        $oView = $this->getMock( "compare", array( "getCompareItemsCnt", "getCompArtList", "getAttributeList", "getPageNavigation", "getActPage", "getSimilarRecommLists", "getOrderCnt", "_loadActions" ) );
-        $oView->expects( $this->once() )->method( 'getCompareItemsCnt')->will( $this->returnValue( "getCompareItemsCnt" ) );
-        $oView->expects( $this->atLeastOnce() )->method( 'getCompArtList')->will( $this->returnValue( "getCompArtList" ) );
-        $oView->expects( $this->once() )->method( 'getAttributeList')->will( $this->returnValue( "getAttributeList" ) );
-        $oView->expects( $this->once() )->method( 'getPageNavigation')->will( $this->returnValue( "getPageNavigation" ) );
-        $oView->expects( $this->once() )->method( 'getActPage')->will( $this->returnValue( "getActPage" ) );
-        $oView->expects( $this->once() )->method( 'getSimilarRecommLists')->will( $this->returnValue( "getSimilarRecommLists" ) );
-        $oView->expects( $this->once() )->method( 'getOrderCnt')->will( $this->returnValue( "getOrderCnt" ) );
-        $oView->expects( $this->once() )->method( '_loadActions');
+        $oView = new compare();
 
         $oView->inPopup();
         $this->assertEquals( "compare_popup.tpl", $oView->render() );
-        $aViewData = $oView->getViewData();
-        $this->assertEquals( "getCompareItemsCnt", $aViewData["oxcmp_compare"] );
-        $this->assertEquals( "getCompArtList", $aViewData["articlelist"] );
-        $this->assertEquals( "getAttributeList", $aViewData["allartattr"] );
-        $this->assertEquals( "getPageNavigation", $aViewData["pageNavigation"] );
-        $this->assertEquals( "getActPage", $aViewData["pgNr"] );
-        $this->assertEquals( "getSimilarRecommLists", $aViewData["similarrecommlist"] );
-        $this->assertEquals( "getOrderCnt", $aViewData["iordersmade"] );
+
     }
 
     /**
@@ -304,4 +274,48 @@ class Unit_Views_compareTest extends OxidTestCase
 
         $this->assertSame(false, $oRecomm->getSimilarRecommLists());
     }
+
+    /**
+     * Test paging off
+     *
+     * @return null
+     */
+    public function testSetNoPaging()
+    {
+        $oCompare = $this->getMock( 'compare', array( '_setArticlesPerPage' ));
+
+        $oCompare->expects( $this->once() )->method('_setArticlesPerPage')->with( $this->equalTo(0) );
+        $oCompare->setNoPaging();
+    }
+
+    /**
+     * Test number of item in compare list
+     *
+     * @return null
+     */
+    public function testSetArticlesPerPage()
+    {
+        $cl = oxTestModules::addFunction('compare', '_getArticlesPerPage', '{return $this->_iArticlesPerPage;}');
+        $oCompare = new $cl;
+
+        $oCompare->UNITsetArticlesPerPage(5);
+        $this->assertEquals(5, $oCompare->_getArticlesPerPage());
+        $oCompare->UNITsetArticlesPerPage(50);
+        $this->assertEquals(50, $oCompare->_getArticlesPerPage());
+        $oCompare->UNITsetArticlesPerPage(-50);
+        $this->assertEquals(-50, $oCompare->_getArticlesPerPage());
+
+    }
+
+    public function testGetBreadCrumb()
+    {
+        $oCompare = new Compare();
+
+        $aResutlt[]['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_MY_ACCOUNT', 0, false );
+        $aResutlt[]['title'] = oxLang::getInstance()->translateString( 'PAGE_PRODUCT_COMPARE_TITLE', 0, false );
+
+
+        $this->assertEquals( $aResutlt, $oCompare->getBreadCrumb() );
+    }
+
 }

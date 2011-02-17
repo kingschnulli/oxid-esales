@@ -39,7 +39,7 @@ class Unit_Views_accountWishlistTest extends OxidTestCase
     {
         $oView = $this->getMock( "Account_Wishlist", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( false ) );
-        $this->assertEquals( 'account_login.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/login.tpl', $oView->render() );
     }
 
     /**
@@ -54,7 +54,7 @@ class Unit_Views_accountWishlistTest extends OxidTestCase
 
         $oView = $this->getMock( "Account_Wishlist", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
-        $this->assertEquals( 'account_wishlist.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/wishlist.tpl', $oView->render() );
     }
 
     /**
@@ -270,5 +270,17 @@ class Unit_Views_accountWishlistTest extends OxidTestCase
 
         $this->assertTrue( $oView->getWishListUsers() instanceof oxuserlist );
         $this->assertEquals( "searchParam", $oView->getWishListSearchParam() );
+    }
+
+	/**
+     * Testing Account_RecommList::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oAccWishList = new Account_Wishlist();
+
+        $this->assertEquals(2, count($oAccWishList->getBreadCrumb()));
     }
 }

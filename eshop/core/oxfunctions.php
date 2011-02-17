@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfunctions.php 31569 2010-12-08 12:17:56Z sarunas $
+ * @version   SVN: $Id: oxfunctions.php 31959 2010-12-17 13:58:54Z sarunas $
  */
 
 /**
@@ -388,18 +388,85 @@ function ox_get_trusted( $sTplName, $oSmarty )
     // not used for templates
 }
 
-if ( !function_exists( 'getViewName' ) ) {
+if ( !function_exists( 'getLangTableName' ) ) {
 
     /**
-     * return the view name of the given table if a view exists, otherwise the table name itself
+     * Returns language table name
      *
      * @param string $sTable  table name
-     * @param string $sShopId optional the shop id, otherwise config->myshopid is used
+     * @param int    $iLangId language id
      *
      * @return string
      */
-    function getViewName( $sTable, $sShopId = null )
+    function getLangTableName( $sTable, $iLangId )
     {
+        $iLangPerTable = oxConfig::getInstance()->getConfigParam( "iLangPerTable" );
+        $iLangPerTable = $iLangPerTable ? $iLangPerTable : 8;
+
+        $iTableIdx = (int) ( $iLangId / $iLangPerTable );
+        if ( $iTableIdx ) {
+            $sLangTableSuffix = oxConfig::getInstance()->getConfigParam( "sLangTableSuffix" );
+            $sLangTableSuffix = $sLangTableSuffix ? $sLangTableSuffix : "_set";
+
+            $sTable .= $sLangTableSuffix . $iTableIdx;
+        }
+
+        return $sTable;
+    }
+}
+
+if ( !function_exists( 'getMultilangTables' ) ) {
+    /**
+     * Returns multilanguage tables array
+     *
+     * @return array
+     */
+    function getMultilangTables()
+    {
+        $aTables = array( "oxarticles", "oxartextends", "oxattribute",
+                          "oxcategories", "oxcontents", "oxcountry",
+                          "oxdelivery", "oxdiscount", "oxgroups",
+                          "oxlinks", "oxnews", "oxobject2attribute",
+                          "oxpayments", "oxselectlist", "oxshops",
+                          "oxactions", "oxwrapping", "oxdeliveryset",
+                          "oxvendor", "oxmanufacturers", "oxmediaurls",
+                          "oxstates" );
+
+        return $aTables;
+    }
+}
+
+if ( !function_exists( 'getViewName' ) ) {
+
+    /**
+     * Return the view name of the given table if a view exists, otherwise the table name itself
+     *
+     * @param string $sTable  table name
+     * @param int    $iLangId language id [optional]
+     * @param string $sShopId shop id, otherwise config->myshopid is used [optional]
+     *
+     * @return string
+     */
+    function getViewName( $sTable, $iLangId = null, $sShopId = null )
+    {
+        $myConfig = oxConfig::getInstance();
+        if ( !$myConfig->getConfigParam( 'blSkipViewUsage' ) ) {
+            $sViewSfx = '';
+
+
+            $blIsMultiLang = in_array( $sTable, getMultilangTables() );
+            if ( $iLangId != -1 && $blIsMultiLang ) {
+                $oLang = oxLang::getInstance();
+                $iLangId = $iLangId !== null ? $iLangId : oxLang::getInstance()->getBaseLanguage();
+                $sAbbr = $oLang->getLanguageAbbr( $iLangId );
+                $sViewSfx .= "_{$sAbbr}";
+            }
+
+            if ( $sViewSfx || (($iLangId == -1 || $sShopId == -1 ) && $blIsMultiLang)) {
+                return "oxv_{$sTable}{$sViewSfx}";
+            }
+
+        }
 
         return $sTable;
     }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: orderTest.php 28585 2010-06-23 09:23:38Z sarunas $
+ * @version   SVN: $Id: orderTest.php 32967 2011-02-07 12:44:54Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -211,7 +211,7 @@ class Unit_Views_orderTest extends OxidTestCase
         $this->assertEquals( false, $myConfig->getConfigParam('bl_perfCalcVatOnlyForBasketOrder') );
 
         //test template var
-        $this->assertEquals("order.tpl", $oOrder->getTemplateName());
+        $this->assertEquals("page/checkout/order.tpl", $oOrder->getTemplateName());
     }
 
 
@@ -400,7 +400,7 @@ class Unit_Views_orderTest extends OxidTestCase
         $sResult = $oOrder->render();
 
         //checking return value
-        $this->assertEquals( 'order.tpl', $sResult );
+        $this->assertEquals( 'page/checkout/order.tpl', $sResult );
 
         //checking view data
         $this->assertEquals( 'oxidcashondel', $oOrder->getPayment()->getId() );
@@ -528,6 +528,8 @@ class Unit_Views_orderTest extends OxidTestCase
      */
     public function testExecuteWithWrongStock()
     {
+        oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{throw $aA[0];}');
+
         $myConfig  = oxConfig::getInstance();
         $mySession = oxSession::getInstance();;
 
@@ -569,13 +571,13 @@ class Unit_Views_orderTest extends OxidTestCase
         $oOrder->expects( $this->any() )->method('getUser')->will($this->returnValue( $oUser ));
         $oOrder->expects( $this->any() )->method('getPayment')->will($this->returnValue( true ));
 
-        // no next step
-        $this->assertNull( $oOrder->execute() );
-
-        //check if occured exeption was saved to session
-        $aEx = oxSession::getVar( 'Errors' );
-        $oEx = unserialize($aEx['basket'][0]);
-        $this->assertEquals( 'oxOutOfStockException', $oEx->getErrorClassType() );
+        try {
+            // no next step
+            $this->assertNull( $oOrder->execute() );
+        } catch ( oxOutOfStockException $oEx ) {
+            return;
+        }
+        $this->fail( "error runing testExecuteWithWrongStock()" );
     }
 
     /**
@@ -951,5 +953,17 @@ class Unit_Views_orderTest extends OxidTestCase
         } catch (Exception $e) {
             $this->assertEquals(oxConfig::getInstance()->getShopHomeURL().'cl=basket', $e->getMessage());
         }
+    }
+
+    /**
+     * Testing Order::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oOrder = new Order();
+
+        $this->assertEquals(1, count($oOrder->getBreadCrumb()));
     }
 }

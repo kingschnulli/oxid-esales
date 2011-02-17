@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlist.php 31083 2010-11-23 08:02:22Z arvydas $
+ * @version   SVN: $Id: manufacturerlist.php 32923 2011-02-04 14:35:22Z vilma $
  */
 
 /**
@@ -95,10 +95,6 @@ class ManufacturerList extends aList
      * metatags info (oxubase::_convertForMetaTags()) and returns name of
      * template to render.
      *
-     * Template variables:
-     * <b>articlelist</b>, <b>pageNavigation</b>, <b>subcatlist</b>,
-     * <b>meta_keywords</b>, <b>meta_description</b>
-     *
      * @return  string  $this->_sThisTemplate   current template file name
      */
     public function render()
@@ -122,8 +118,6 @@ class ManufacturerList extends aList
                 }
             }
         }
-
-        $this->_aViewData['pageNavigation'] = $this->getPageNavigation();
 
         // processing list articles
         $this->_processListArticles();
@@ -321,24 +315,6 @@ class ManufacturerList extends aList
     }
 
     /**
-     * Template variable getter. Returns template location
-     *
-     * @deprecated use manufacturerList::getTreePath() and adjust template
-     *
-     * @return string
-     */
-    public function getTemplateLocation()
-    {
-        if ( $this->_sTplLocation === null ) {
-            $this->_sTplLocation = false;
-            if ( ( $oManufacturerTree = $this->getManufacturerTree() ) ) {
-                $this->_sTplLocation = $oManufacturerTree->getHtmlPath();
-            }
-        }
-        return $this->_sTplLocation;
-    }
-
-    /**
      * Template variable getter. Returns category path array
      *
      * @return array
@@ -456,5 +432,29 @@ class ManufacturerList extends aList
             $sAddParams .= "&amp;mnid=" . $oManufacturer->getId();
         }
         return $sAddParams;
+    }
+
+    /**
+     * Returns Bread Crumb - you are here page1/page2/page3...
+     *
+     * @return array
+     */
+    public function getBreadCrumb()
+    {
+        $aPaths = array();
+
+        $oCatTree = $this->getManufacturerTree()->getPath();
+
+        if ( $oCatTree ) {
+            foreach ( $oCatTree as $oCat ) {
+                $aCatPath = array();
+                $aCatPath['link'] = $oCat->getLink();
+                $aCatPath['title'] = $oCat->oxmanufacturers__oxtitle->value;
+
+                $aPaths[] = $aCatPath;
+            }
+        }
+
+        return $aPaths;
     }
 }

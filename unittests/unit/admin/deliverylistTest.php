@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: deliverylistTest.php 27089 2010-04-07 14:28:32Z sarunas $
+ * @version   SVN: $Id: deliverylistTest.php 31986 2010-12-17 14:03:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -40,8 +40,6 @@ class Unit_Admin_DeliveryListTest extends OxidTestCase
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return array(1);}");
         oxTestModules::addFunction("oxUtils", "checkAccessRights", "{return true;}");
 
-        $sViewName = getViewName('oxdelivery');
-
         $oSess = $this->getMock('oxsession', array('checkSessionChallenge'));
         $oSess->expects($this->once())->method('checkSessionChallenge')->will($this->returnValue(true));
 
@@ -52,7 +50,7 @@ class Unit_Admin_DeliveryListTest extends OxidTestCase
 
         $this->assertEquals( 'oxdelivery', $oView->getNonPublicVar( "_sListClass" ) );
         $this->assertEquals( 'oxdeliverylist', $oView->getNonPublicVar( "_sListType" ) );
-        $this->assertEquals( "$sViewName.oxsort", $oView->getNonPublicVar( "_sDefSort" ) );
+        $this->assertEquals( array( "oxdelivery" => array( "oxsort" => "asc" ) ), $oView->getListSorting() );
         $this->assertEquals( 'delivery_list.tpl', $oView->render() );
     }
 

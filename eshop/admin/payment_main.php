@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: payment_main.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: payment_main.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
  */
 
 /**
@@ -52,19 +52,9 @@ class Payment_Main extends oxAdminDetails
             // all usergroups
             $oGroups = oxNew( "oxlist" );
             $oGroups->init( "oxgroups");
-            $oGroups->selectString( "select * from oxgroups" );
+            $oGroups->selectString( "select * from ".getViewName( "oxgroups", $this->_iEditLang ) );
 
-        $soxId = oxConfig::getParameter( "oxid");
-        // check if we right now saved a new entry
-        $sSavedID = oxConfig::getParameter( "saved_oxid");
-        if ( ($soxId == "-1" || !isset( $soxId ) ) && isset( $sSavedID ) ) {
-            $soxId = $sSavedID;
-            oxSession::deleteVar( "saved_oxid");
-            $this->_aViewData["oxid"] =  $soxId;
-            // for reloading upper frame
-            $this->_aViewData["updatelist"] =  "1";
-        }
-
+        $soxId = $this->_aViewData["oxid"] = $this->getEditObjectId();
         if ( $soxId != "-1" && isset( $soxId)) {
             // load object
             $oPayment = oxNew( "oxpayment" );
@@ -112,7 +102,7 @@ class Payment_Main extends oxAdminDetails
     public function save()
     {
 
-        $soxId      = oxConfig::getParameter( "oxid");
+        $soxId = $this->getEditObjectId();
         $aParams    = oxConfig::getParameter( "editval");
         // checkbox handling
         if ( !isset( $aParams['oxpayments__oxactive']))
@@ -131,6 +121,10 @@ class Payment_Main extends oxAdminDetails
         $oPayment->setLanguage(0);
         $oPayment->assign( $aParams);
 
+        // setting add sum calculation rules
+        $aRules = (array) oxConfig::getParameter( "oxpayments__oxaddsumrules" );
+        $oPayment->oxpayments__oxaddsumrules = new oxField( array_sum( $aRules ) );
+
         //#708
         if ( !is_array( $this->_aFieldArray))
             $this->_aFieldArray = oxUtils::getInstance()->assignValuesFromText( $oPayment->oxpayments__oxvaldesc->value );
@@ -142,11 +136,9 @@ class Payment_Main extends oxAdminDetails
         $oPayment->oxpayments__oxvaldesc = new oxField( $sValdesc, oxField::T_RAW );
         $oPayment->setLanguage($this->_iEditLang);
         $oPayment->save();
-        $this->_aViewData["updatelist"] = "1";
 
         // set oxid if inserted
-        if ( $soxId == "-1")
-            oxSession::setVar( "saved_oxid", $oPayment->oxpayments__oxid->value);
+        $this->setEditObjectId( $oPayment->getId() );
     }
 
     /**
@@ -157,7 +149,7 @@ class Payment_Main extends oxAdminDetails
     public function saveinnlang()
     {
 
-        $soxId      = oxConfig::getParameter( "oxid");
+        $soxId = $this->getEditObjectId();
         $aParams    = oxConfig::getParameter( "editval");
 
             // shopid
@@ -178,14 +170,12 @@ class Payment_Main extends oxAdminDetails
         $sNewLanguage = oxConfig::getParameter( "new_lang");
         $oObj->setLanguage( $sNewLanguage);
         $oObj->save();
-        $this->_aViewData["updatelist"] = "1";
 
         // set for reload
         oxSession::setVar( "new_lang", $sNewLanguage);
 
         // set oxid if inserted
-        if ( $soxId == "-1")
-            oxSession::setVar( "saved_oxid", $oObj->oxpayments__oxid->value);
+        $this->setEditObjectId( $oObj->getId() );
     }
 
     /**
@@ -197,7 +187,7 @@ class Payment_Main extends oxAdminDetails
     {
 
         $oPayment = oxNew( "oxpayment" );
-        if ( $oPayment->loadInLang( $this->_iEditLang, oxConfig::getParameter( "oxid") ) ) {
+        if ( $oPayment->loadInLang( $this->_iEditLang, $this->getEditObjectId() ) ) {
 
             $aDelFields = oxConfig::getParameter( "aFields" );
             $this->_aFieldArray = oxUtils::getInstance()->assignValuesFromText( $oPayment->oxpayments__oxvaldesc->value );
@@ -225,7 +215,7 @@ class Payment_Main extends oxAdminDetails
     {
 
         $oPayment = oxNew( "oxpayment" );
-        if ( $oPayment->loadInLang( $this->_iEditLang, oxConfig::getParameter( "oxid" ) ) ) {
+        if ( $oPayment->loadInLang( $this->_iEditLang, $this->getEditObjectId() ) ) {
 
             $this->_aFieldArray = oxUtils::getInstance()->assignValuesFromText( $oPayment->oxpayments__oxvaldesc->value );
 

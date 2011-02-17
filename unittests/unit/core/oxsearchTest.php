@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsearchTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxsearchTest.php 32008 2010-12-17 15:10:36Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -543,8 +543,9 @@ class Unit_Core_oxsearchTest extends OxidTestCase
     public function testGetWhere()
     {
         $this->cleanTmpDir();
-        $sArticleTable = getViewName( 'oxarticles' );
-        $sFix = " and ( (  $sArticleTable.oxtitle_1 like '%a%' or  $sArticleTable.oxshortdesc_1 like '%a%' or  $sArticleTable.oxsearchkeys_1 like '%a%' or  $sArticleTable.oxartnum like '%a%' or  oxartextends.oxtags_1 like '%a%' )  ) ";
+        $sArticleTable = getViewName( 'oxarticles', 1 );
+        $sAETable = getViewName( 'oxartextends', 1 );
+        $sFix = " and ( (  $sArticleTable.oxtitle like '%a%' or  $sArticleTable.oxshortdesc like '%a%' or  $sArticleTable.oxsearchkeys like '%a%' or  $sArticleTable.oxartnum like '%a%' or  $sAETable.oxtags like '%a%' )  ) ";
 
         $oSearch = new oxsearch();
         $oSearch->setLanguage( 1 );
@@ -677,8 +678,9 @@ class Unit_Core_oxsearchTest extends OxidTestCase
 
         $sSearchDate = date( 'Y-m-d H:i:s', $iCurrTime );
         $sArticleTable = $sTable = getViewName( 'oxarticles' );
+        $sAETable = getViewName( 'oxartextends' );
 
-        $sQ = "select $sArticleTable.oxid from $sArticleTable left join oxartextends on $sArticleTable.oxid=oxartextends.oxid where (  ( $sArticleTable.oxactive = 1 or ( $sArticleTable.oxactivefrom < '$sSearchDate' and
+        $sQ = "select $sArticleTable.oxid from $sArticleTable left join $sAETable on $sArticleTable.oxid=$sAETable.oxid where (  ( $sArticleTable.oxactive = 1 or ( $sArticleTable.oxactivefrom < '$sSearchDate' and
                $sArticleTable.oxactiveto > '$sSearchDate' ) )  and ( $sArticleTable.oxstockflag != 2 or ( $sArticleTable.oxstock +
                $sArticleTable.oxvarstock ) > 0  )  ";
         if ( !modConfig::getInstance()->getConfigParam( 'blVariantParentBuyable' ) ) {
@@ -686,7 +688,7 @@ class Unit_Core_oxsearchTest extends OxidTestCase
            $sQ.= "and IF( $sTable.oxvarcount = 0, 1, ( select 1 from $sTable as art where art.oxparentid=$sTable.oxid and ( art.oxactive = 1 $sTimeCheckQ ) and ( art.oxstockflag != 2 or art.oxstock > 0 ) limit 1 ) ) ";
         }
         $sQ.= ")  and $sArticleTable.oxparentid = '' and $sArticleTable.oxissearch = 1  and
-                ( (  oxartextends.oxlongdesc like '%xxx%' )  ) ";
+                ( (  $sAETable.oxlongdesc like '%xxx%' )  ) ";
 
         $oSearch = new oxSearch();
         $sFix = $oSearch->UNITgetSearchSelect( 'xxx' );
@@ -713,8 +715,9 @@ class Unit_Core_oxsearchTest extends OxidTestCase
 
         $sSearchDate = date( 'Y-m-d H:i:s', $iCurrTime );
         $sArticleTable = $sTable = getViewName( 'oxarticles' );
+        $sAETable = getViewName( 'oxartextends' );
 
-        $sQ = "select $sArticleTable.oxid from $sArticleTable LEFT JOIN oxartextends ON $sArticleTable.oxid=oxartextends.oxid where (  ( $sArticleTable.oxactive = 1 or ( $sArticleTable.oxactivefrom < '$sSearchDate' and
+        $sQ = "select $sArticleTable.oxid from $sArticleTable LEFT JOIN $sAETable ON $sArticleTable.oxid=$sAETable.oxid where (  ( $sArticleTable.oxactive = 1 or ( $sArticleTable.oxactivefrom < '$sSearchDate' and
                $sArticleTable.oxactiveto > '$sSearchDate' ) )  and ( $sArticleTable.oxstockflag != 2 or ( $sArticleTable.oxstock +
                $sArticleTable.oxvarstock ) > 0  )  ";
         if ( !modConfig::getInstance()->getConfigParam( 'blVariantParentBuyable' ) ) {
@@ -725,7 +728,7 @@ class Unit_Core_oxsearchTest extends OxidTestCase
 
         }
         $sQ.= ")  and $sArticleTable.oxparentid = '' and $sArticleTable.oxissearch = 1  and
-                ( (  oxartextends.oxtags like '%xxx%' )  ) ";
+                ( (  $sAETable.oxtags like '%xxx%' )  ) ";
 
         $oSearch = new oxSearch();
         $sFix = $oSearch->UNITgetSearchSelect( 'xxx' );
@@ -742,8 +745,9 @@ class Unit_Core_oxsearchTest extends OxidTestCase
     {
         // forcing config
         modConfig::getInstance()->setConfigParam( 'aSearchCols', array( 'oxlongdesc' ) );
+        $sAETable = $sTable = getViewName( 'oxartextends', 1);
 
-        $sQ = " and ( (  oxartextends.oxlongdesc_1 like '%xxx%' )  ) ";
+        $sQ = " and ( (  $sAETable.oxlongdesc like '%xxx%' )  ) ";
 
         $oSearch = new oxSearch();
 

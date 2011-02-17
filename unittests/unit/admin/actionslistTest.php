@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: actionslistTest.php 28469 2010-06-19 12:49:33Z arvydas $
+ * @version   SVN: $Id: actionslistTest.php 31986 2010-12-17 14:03:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -43,8 +43,7 @@ class Unit_Admin_ActionsListTest extends OxidTestCase
         $aViewData = $oView->getViewData();
 
         $this->assertEquals( 'oxactions', $oView->getNonPublicVar( "_sListClass" ) );
-        $this->assertTrue( isset( $aViewData['sort'] ) );
-        $this->assertEquals( 'oxactions.oxtitle', $aViewData['sort'] );
+        $this->assertEquals( array( 'oxactions' => array( 'oxtitle' => 'asc' ) ), $oView->getListSorting() );
         $this->assertEquals( 'actions_list.tpl', $sTplName );
     }
 
@@ -63,8 +62,7 @@ class Unit_Admin_ActionsListTest extends OxidTestCase
         $aViewData = $oView->getViewData();
 
         $this->assertEquals( 'oxactions', $oView->getNonPublicVar( "_sListClass" ) );
-        $this->assertTrue( isset( $aViewData['sort'] ) );
-        $this->assertEquals( 'oxactions.oxtitle', $aViewData['sort'] );
+        $this->assertEquals( array( 'oxactions' => array( 'oxtitle' => 'asc' ) ), $oView->getListSorting() );
         $this->assertEquals( 'testType', $aViewData['displaytype'] );
         $this->assertEquals( 'actions_list.tpl', $sTplName );
     }

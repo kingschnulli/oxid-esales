@@ -54,7 +54,7 @@ class Unit_Views_accountPasswordTest extends OxidTestCase
         oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{ return "EXCEPTION_INPUT_EMPTYPASS"; }' );
 
         $oUser = $this->getMock( "oxStdClass", array( "checkPassword" ) );
-        $oUser->expects( $this->any() )->method( 'checkPassword')->will( $this->throwException( new Exception( "EXCEPTION_INPUT_EMPTYPASS" ) ) );
+        $oUser->expects( $this->any() )->method( 'checkPassword')->will( $this->returnValue( new Exception( "EXCEPTION_INPUT_EMPTYPASS" ) ) );
 
         $oView = $this->getMock( "Account_Password", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
@@ -72,7 +72,7 @@ class Unit_Views_accountPasswordTest extends OxidTestCase
         oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{ return "EXCEPTION_INPUT_PASSTOOSHORT"; }' );
 
         $oUser = $this->getMock( "oxStdClass", array( "checkPassword" ) );
-        $oUser->expects( $this->any() )->method( 'checkPassword')->will( $this->throwException( new Exception( "EXCEPTION_INPUT_PASSTOOSHORT" ) ) );
+        $oUser->expects( $this->any() )->method( 'checkPassword')->will( $this->returnValue( new Exception( "EXCEPTION_INPUT_PASSTOOSHORT" ) ) );
 
         $oView = $this->getMock( "Account_Password", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
@@ -90,7 +90,7 @@ class Unit_Views_accountPasswordTest extends OxidTestCase
         oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{ return "ACCOUNT_PASSWORD_ERRPASSWDONOTMATCH"; }' );
 
         $oUser = $this->getMock( "oxStdClass", array( "checkPassword" ) );
-        $oUser->expects( $this->any() )->method( 'checkPassword')->will( $this->throwException( new Exception( "ACCOUNT_PASSWORD_ERRPASSWDONOTMATCH" ) ) );
+        $oUser->expects( $this->any() )->method( 'checkPassword')->will( $this->returnValue( new Exception( "ACCOUNT_PASSWORD_ERRPASSWDONOTMATCH" ) ) );
 
         $oView = $this->getMock( "Account_Password", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
@@ -184,7 +184,7 @@ class Unit_Views_accountPasswordTest extends OxidTestCase
     {
         $oView = $this->getMock( "Account_Password", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( false ) );
-        $this->assertEquals( 'account_login.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/login.tpl', $oView->render() );
     }
 
     /**
@@ -199,6 +199,18 @@ class Unit_Views_accountPasswordTest extends OxidTestCase
 
         $oView = $this->getMock( "Account_Password", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
-        $this->assertEquals( 'account_password.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/password.tpl', $oView->render() );
+    }
+
+	/**
+     * Testing Account_Password::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oAccPaswd = new Account_Password();
+
+        $this->assertEquals(2, count($oAccPaswd->getBreadCrumb()));
     }
 }

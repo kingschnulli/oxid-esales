@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlemainTest.php 28257 2010-06-09 14:46:17Z michael.keiluweit $
+ * @version   SVN: $Id: articlemainTest.php 32004 2010-12-17 15:10:08Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -39,6 +39,8 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
     {
         $oArt = oxNew( 'oxarticle' );
         $oArt->delete('_testArtId');
+
+        $oArt = oxNew( 'oxarticle' );
         $oArt->delete('_testArtId2');
         parent::tearDown();
     }
@@ -591,7 +593,7 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
 
     /**
      * Testing if rating set to 0 when article will copied;
-     * 
+     *
      * @return null
      */
     public function testCopyArticleSkipsRating()

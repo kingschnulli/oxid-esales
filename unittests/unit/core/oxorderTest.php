@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 29954 2010-09-23 14:08:00Z tomas $
+ * @version   SVN: $Id: oxorderTest.php 33134 2011-02-10 10:59:31Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -502,43 +502,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $this->assertEquals( $iTotalOrder, $oOrder->oxorder__oxtotalordersum->value, '', 0.0001 );
     }
 
-    public function testMakeSelListArray()
-    {
-        $myDB = oxDb::getDb();
-
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadSelectLists', true );
-
-        $oSelList = oxNew( 'oxselectlist' );
-        $oSelList->setId( '_testSelListId1' );
-        $oSelList->oxselectlist__oxtitle = new oxField('Color', oxField::T_RAW);
-        $oSelList->oxselectlist__oxvaldesc = new oxField('red!P!10__@@blue!P!10__@@green!P!10__@@', oxField::T_RAW);
-        $oSelList->save();
-
-        $oSelList->setId( '_testSelListId2' );
-        $oSelList->oxselectlist__oxtitle = new oxField('Size', oxField::T_RAW);
-        $oSelList->oxselectlist__oxvaldesc = new oxField('big!P!10__@@middle!P!10__@@small!P!10__@@', oxField::T_RAW);
-        $oSelList->save();
-
-        $sQ1 = 'insert into oxobject2selectlist values ("_testO2SlId1", "1126", "_testSelListId1", 1); ';
-        $sQ2 = 'insert into oxobject2selectlist values ("_testO2SlId2", "1126", "_testSelListId2", 2); ';
-        $myDB->Execute( $sQ1 );
-        $myDB->Execute( $sQ2 );
-
-        // test getting correct list and correct handling of letters case
-        $sFields = "Color : BluE, size: small ";
-        $oOrder = new oxOrder();
-        $this->assertEquals( array( 0 => 1, 1 => 2 ), $oOrder->UNITmakeSelListArray( '1126', $sFields ) );
-
-        // just one list must be returned
-        $sFields = "Size : middle ";
-        $this->assertEquals( array( 1 => 1 ), $oOrder->UNITmakeSelListArray( '1126', $sFields ) );
-
-        // only existing list returned
-        $sFields = "Color : red, Material : wood ";
-        $this->assertEquals( array( 0=> 0 ), $oOrder->UNITmakeSelListArray( '1126', $sFields ) );
-
-    }
-
     public function testUpdateNoticeList()
     {
         modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", 1 );
@@ -579,47 +542,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $oOrder = new oxOrder();
         $oOrder->setOrderArticleList( $aOrderArticleList );
         $this->assertEquals( $aOrderArticleList, $oOrder->getOrderArticles( null ) );
-    }
-
-    public function testSetDeprecatedValuesWhenOrderIsCanceled()
-    {
-        $oOrder = new oxorder();
-        $oOrder->oxorder__oxstorno = new oxField( 1 );
-        $oOrder->UNITsetDeprecatedValues();
-
-        $this->assertFalse( isset( $oOrder->totalnetsum ) );
-        $this->assertFalse( isset( $oOrder->fdelcost ) );
-        $this->assertFalse( isset( $oOrder->ftotalorder ) );
-        $this->assertFalse( isset( $oOrder->fdiscount ) );
-    }
-
-    public function testSetDeprecatedValues()
-    {
-        $oOrder = new oxorder();
-        $oOrder->oxorder__oxtotalnetsum     = new oxField( 100 );
-        $oOrder->oxorder__oxtotalbrutsum    = new oxField( 200 );
-        $oOrder->oxorder__oxdelcost         = new oxField( 300 );
-        $oOrder->oxorder__oxpaycost         = new oxField( 400 );
-        $oOrder->oxorder__oxwrapcost        = new oxField( 500 );
-        $oOrder->oxorder__oxvoucherdiscount = new oxField( 600 );
-        $oOrder->oxorder__oxdiscount        = new oxField( 700 );
-        $oOrder->oxorder__oxtotalordersum   = new oxField( 800 );
-
-        $oOrder->UNITsetDeprecatedValues();
-
-        $this->assertEquals( 100, $oOrder->totalnetsum );
-        $this->assertEquals( 200, $oOrder->totalbrutsum );
-        $this->assertEquals( 800, $oOrder->totalorder );
-        $this->assertEquals( '100,00', $oOrder->ftotalnetsum );
-        $this->assertEquals( '200,00', $oOrder->ftotalbrutsum );
-        $this->assertEquals( '300,00', $oOrder->fdelcost );
-        $this->assertEquals( '400,00', $oOrder->fpaycost );
-        $this->assertEquals( '500,00', $oOrder->fwrapcost );
-        $this->assertEquals( '800.00', $oOrder->ftotalorder );
-        $this->assertEquals( '600,00', $oOrder->totalvouchers );
-        $this->assertEquals( 700, $oOrder->discount );
-        $this->assertEquals( '700,00', $oOrder->fdiscount );
-
     }
 
     /**
@@ -1488,7 +1410,7 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $this->assertEquals( $sSendDate, $oOrder->oxorder__oxsenddate->value );
         $this->assertEquals( 'Deutschland', $oOrder->oxorder__oxbillcountry->value );
         $this->assertEquals( 'Deutschland', $oOrder->oxorder__oxdelcountry->value );
-        $this->assertEquals( 999, $oOrder->totalorder );
+        $this->assertEquals( 999, $oOrder->getTotalOrderSum() );
     }
 
     // #FS1967
@@ -3426,4 +3348,96 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $this->assertEquals( 'Schweiz', $oOrder->getDelCountry()->value );
     }
 
+    /**
+     * Test case for #0002255: Item Discounts add multiple times when editing Orders
+     *
+     * @return null
+     */
+    public function testForBugEntry2255()
+    {
+        $sShopId = oxConfig::getInstance()->getBaseShopId();
+
+        // bundle type discount
+        $oDiscount = new oxDiscount();
+        $oDiscount->setId( "_testDiscountId" );
+        $oDiscount->oxdiscount__oxshopid   = new oxField( $sShopId );
+        $oDiscount->oxdiscount__oxshopincl = new oxField( 1 );
+        $oDiscount->oxdiscount__oxactive   = new oxField( 1 );
+        $oDiscount->oxdiscount__oxtitle    = new oxField( "Test discount" );
+        $oDiscount->oxdiscount__oxamount   = new oxField( 1 );
+        $oDiscount->oxdiscount__oxamountto = new oxField( 9999 );
+        $oDiscount->oxdiscount__oxaddsumtype  = new oxField( 'itm' );
+        $oDiscount->oxdiscount__oxaddsum      = new oxField( 0 );
+        $oDiscount->oxdiscount__oxitmartid    = new oxField( '1126' );
+        $oDiscount->oxdiscount__oxitmamount   = new oxField( 1 );
+        $oDiscount->oxdiscount__oxitmmultiple = new oxField( 0 );
+        $oDiscount->save();
+
+        $oOrder = new oxOrder();
+        $oOrder->setId( "_testOrderId" );
+        $oOrder->oxorder__oxshopid        = new oxField( $sShopId );
+        $oOrder->oxorder__oxuserid        = new oxField( "oxdefaultadmin" );
+        $oOrder->oxorder__oxorderdate     = new oxField( "2011-01-17 14:04:49" );
+        $oOrder->oxorder__oxordernr       = new oxField( ); ///
+        $oOrder->oxorder__oxbillcompany   = new oxField( "Your Company Name" );
+        $oOrder->oxorder__oxbillemail     = new oxField( "admin@oxid-esales.com" );
+        $oOrder->oxorder__oxbillfname     = new oxField( "John" );
+        $oOrder->oxorder__oxbilllname     = new oxField( "Doe" );
+        $oOrder->oxorder__oxbillstreet    = new oxField( "Maple Street" );
+        $oOrder->oxorder__oxbillstreetnr  = new oxField( 10 );
+        $oOrder->oxorder__oxbillustidstatus = new oxField( 1 );
+        $oOrder->oxorder__oxbillcity      = new oxField( "Any City" );
+        $oOrder->oxorder__oxbillcountryid = new oxField( "a7c40f631fc920687.20179984" );
+        $oOrder->oxorder__oxbillstateid   = new oxField( "BW" );
+        $oOrder->oxorder__oxbillzip       = new oxField( "9041" );
+        $oOrder->oxorder__oxbillfon       = new oxField( "217-8918712" );
+        $oOrder->oxorder__oxbillfax       = new oxField( "217-8918713" );
+        $oOrder->oxorder__oxbillsal       = new oxField( "MR" );
+        $oOrder->oxorder__oxpaymentid     = new oxField( "k2ef91eeaa104dd9fa65de08a71cfc83" );
+        $oOrder->oxorder__oxpaymenttype   = new oxField( "oxidcashondel" );
+        $oOrder->oxorder__oxtotalnetsum   = new oxField( "46.81" );
+        $oOrder->oxorder__oxtotalbrutsum  = new oxField( "55.7" );
+        $oOrder->oxorder__oxtotalordersum = new oxField( "67.1" );
+        $oOrder->oxorder__oxartvat1       = new oxField( 19 );
+        $oOrder->oxorder__oxartvatprice1  = new oxField( 8.89 );
+        $oOrder->oxorder__oxartvat2       = new oxField( 0 );
+        $oOrder->oxorder__oxartvatprice2  = new oxField( 0 );
+        $oOrder->oxorder__oxdelcost       = new oxField( 3.9 );
+        $oOrder->oxorder__oxdelvat        = new oxField( 19 );
+        $oOrder->oxorder__oxpaycost       = new oxField( 7.5 );
+        $oOrder->oxorder__oxpayvat        = new oxField( 19 );
+        $oOrder->oxorder__oxcurrency      = new oxField( "EUR" );
+        $oOrder->oxorder__oxcurrate       = new oxField( 1 );
+        $oOrder->oxorder__oxtransstatus   = new oxField( "OK" );
+        $oOrder->oxorder__oxdeltype       = new oxField( "oxidstandard" );
+        $oOrder->save();
+
+        $oOrderArticle = new oxOrderArticle();
+        $oOrderArticle->setId( "_testOrderArticleId" );
+        $oOrderArticle->oxorderarticles__oxorderid      = new oxField( "_testOrderId" );
+        $oOrderArticle->oxorderarticles__oxamount       = new oxField( 2 );
+        $oOrderArticle->oxorderarticles__oxartid        = new oxField( "2275-01" );
+        $oOrderArticle->oxorderarticles__oxartnum       = new oxField( "2275-01" );
+        $oOrderArticle->oxorderarticles__oxtitle        = new oxField( "BBQ Grill TONNE" );
+        $oOrderArticle->oxorderarticles__oxnetprice     = new oxField( 46.806722689076 );
+        $oOrderArticle->oxorderarticles__oxbrutprice    = new oxField( 55.7 );
+        $oOrderArticle->oxorderarticles__oxvatprice     = new oxField( 8.8932773109244 );
+        $oOrderArticle->oxorderarticles__oxvat          = new oxField( 19 );
+        $oOrderArticle->oxorderarticles__oxprice        = new oxField( 27.85 );
+        $oOrderArticle->oxorderarticles__oxnprice       = new oxField( 27.85 );
+        $oOrderArticle->oxorderarticles__oxordershopid  = new oxField( 23.403361344538 );
+        $oOrderArticle->save();
+
+        modConfig::setParameter( 'oxid', "_testOrderId" );
+        modConfig::setParameter( 'aOrderArticles', array( "_testOrderArticleId" ) );
+
+        $oView = new order_article();
+        $oView->updateOrder();
+        $oView->updateOrder();
+        $oView->updateOrder();
+
+        // checking how many order articles after update
+        $this->assertEquals( 2, oxDb::getDb()->getOne( "select count(*) from oxorderarticles where oxorderid = '_testOrderId'" ) );
+        $this->assertEquals( 3, oxDb::getDb()->getOne( "select sum(oxamount) from oxorderarticles where oxorderid = '_testOrderId'" ) );
+    }
 }

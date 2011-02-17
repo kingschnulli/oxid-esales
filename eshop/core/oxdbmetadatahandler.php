@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandler.php 33226 2011-02-14 09:24:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxdbmetadatahandler.php 33251 2011-02-14 15:40:39Z sarunas $
  */
 
 /**
@@ -118,6 +118,25 @@ class oxDbMetaDataHandler extends oxSuperCfg
         }
 
         return $this->_aTables;
+    }
+
+    /**
+     * return all DB tables for the language sets
+     *
+     * @param string $sTable table name to check
+     *
+     * @return array
+     */
+    public function getAllMultiTables($sTable)
+    {
+        $aMLTables = array();
+        foreach (array_keys(oxLang::getInstance()->getLanguageIds()) as $iLangId) {
+            $sLangTable = getLangTableName($sTable, $iLangId );
+            if ($sTable != $sLangTable) {
+                $aMLTables[$sLangTable] = 1;
+            }
+        }
+        return array_keys($aMLTables);
     }
 
     /**
@@ -264,6 +283,32 @@ class oxDbMetaDataHandler extends oxSuperCfg
         }
 
         return $aMultiLangFields;
+    }
+
+    /**
+     * Get single language fields
+     *
+     * @param string $sTableName table name
+     * @param int    $iLang      languane id
+     *
+     * @return array
+     */
+    public function getSinglelangFields( $sTableName, $iLang )
+    {
+        $aFields = $this->getFields( $sTableName );
+        $aSingleLangFields = array();
+
+        foreach ( $aFields as $sFieldName ) {
+            if ( preg_match("/(.+)_([0-9]+)$/", $sFieldName, $aMatches) ) {
+                if ($aMatches[2] == $iLang) {
+                    $aSingleLangFields[$aMatches[1]] = $sFieldName;
+                }
+            } else {
+                $aSingleLangFields[$sFieldName] = $sFieldName;
+            }
+        }
+
+        return $aSingleLangFields;
     }
 
     /**

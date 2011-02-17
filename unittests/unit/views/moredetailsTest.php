@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: moredetailsTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: moredetailsTest.php 32218 2010-12-22 12:23:44Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -77,7 +77,7 @@ class Unit_Views_moredetailsTest extends OxidTestCase
     public function testGetActPictureId()
     {
         $oMoreDetails = $this->getProxyClass( 'moredetails' );
-        modConfig::setParameter( 'anid', '1651' );
+        modConfig::setParameter( 'anid', '1672' );
         $oMoreDetails->init();
 
         $this->assertEquals( '1', $oMoreDetails->getActPictureId() );

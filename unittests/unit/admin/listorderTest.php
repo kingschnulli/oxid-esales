@@ -67,13 +67,13 @@ class Unit_Admin_ListOrderTest extends OxidTestCase
     public function testPrepareWhereQuery()
     {
         $aWhere = array( "testField" => "testValue" );
-        $sSqlFull = "SELECT * FROM oxarticles WHERE 1";
+        $sSqlFull = "SELECT * FROM oxorderarticles WHERE 1";
 
         $oAdminList = oxNew( "oxAdminList" );
         $sWhere = $oAdminList->UNITprepareWhereQuery($aWhere, $sSqlFull);
 
         $oView = new List_Order();
-        $this->assertEquals( $sWhere, $oView->UNITprepareWhereQuery($aWhere, $sSqlFull) );
+        $this->assertEquals( $sWhere . " group by oxorderarticles.oxartnum", $oView->UNITprepareWhereQuery($aWhere, $sSqlFull) );
     }
 
     /**
@@ -112,17 +112,19 @@ class Unit_Admin_ListOrderTest extends OxidTestCase
      */
     public function testPrepareOrderByQuery()
     {
-        modConfig::setParameter( "sort", "testSort" );
+        modConfig::setParameter( "sort", array( 0 => array( "oxorderamount" => "asc" ) ) );
         $sSql = "select * from oxorder, oxorderarticles";
 
         $oView = new List_Order();
-
-        $sResultSql = "select * from oxorder, oxorderarticles group by oxorderarticles.oxartnum order by testSort";
+        $sResultSql = "select * from oxorder, oxorderarticles order by oxorderamount";
         $this->assertEquals( $sResultSql, trim($oView->UNITprepareOrderByQuery( $sSql )) );
 
-        modConfig::setParameter( "sort", "oxorder.oxorderdate" );
-        $sResultSql = "select * from oxorder, oxorderarticles group by oxorderarticles.oxartnum order by max(oxorder.oxorderdate) DESC";
-        $this->assertEquals( $sResultSql, trim($oView->UNITprepareOrderByQuery( $sSql )) );
+        modConfig::setParameter( "sort", array( 0 => array( "oxorderdate" => "asc" ) ) );
+
+        $oView = new List_Order();
+        $sResultSql = "select * from oxorder, oxorderarticles group by oxorderarticles.oxartnum order by max(oxorder.oxorderdate) desc";
+        $sSql = $oView->UNITprepareWhereQuery( array(), $sSql );
+        $this->assertEquals( $sResultSql, trim( $oView->UNITprepareOrderByQuery( $sSql ) ) );
     }
 
 }

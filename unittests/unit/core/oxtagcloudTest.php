@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloudTest.php 32612 2011-01-20 15:22:37Z sarunas $
+ * @version   SVN: $Id: oxtagcloudTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -178,184 +178,6 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
 
         $this->assertEquals( 400, $oTagCloud->getTagSize( "tag2" ) );
     }
-
-    public function testGetTagCloudFoundInCache()
-    {
-        $sCache = time();
-        oxTestModules::addFunction( "oxUtils", "fromFileCache", "{return {$sCache};}" );
-
-        $oTagCloud = new oxTagCloud();
-        $this->assertEquals( $sCache, $oTagCloud->getTagCloud() );
-    }
-
-    public function testGetTagCloudNoTagsCachingEmptyValue()
-    {
-        $sCache = time();
-        oxTestModules::addFunction( "oxUtils", "toFileCache", "{return {$sCache};}" );
-
-        $oTagCloud = $this->getMock( 'oxTagCloud', array( 'getTags' ) );
-        $oTagCloud->expects( $this->once() )->method( 'getTags' )->will( $this->returnValue( array() ) );
-
-        $this->assertFalse( $oTagCloud->getTagCloud() );
-    }
-
-    public function testGetTagCloud123()
-    {
-        oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
-        $sUrl = oxConfig::getInstance()->getShopUrl();
-
-            $sRes = "<a style='font-size:160%;' class='tagitem_160' href='{$sUrl}tag/wanduhr/'>wanduhr</a> ".
-                    "<a style='font-size:220%;' class='tagitem_220' href='{$sUrl}tag/shirt/'>shirt</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}tag/schale/'>schale</a> ".
-                    "<a style='font-size:220%;' class='tagitem_220' href='{$sUrl}tag/pima/'>pima</a> ".
-                    "<a style='font-size:160%;' class='tagitem_160' href='{$sUrl}tag/material/'>material</a> ".
-                    "<a style='font-size:160%;' class='tagitem_160' href='{$sUrl}tag/locker/'>locker</a> ".
-                    "<a style='font-size:160%;' class='tagitem_160' href='{$sUrl}tag/laessig/'>l&auml;ssig</a> ".
-                    "<a style='font-size:400%;' class='tagitem_400' href='{$sUrl}tag/kuyichi/'>kuyichi</a> ".
-                    "<a style='font-size:280%;' class='tagitem_280' href='{$sUrl}tag/jeans/'>jeans</a> ".
-                    "<a style='font-size:220%;' class='tagitem_220' href='{$sUrl}tag/hoehe/'>h&ouml;he</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}tag/holz/'>holz</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}tag/gefrierfach/'>gefrierfach</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}tag/einfach/'>einfach</a> ".
-                    "<a style='font-size:160%;' class='tagitem_160' href='{$sUrl}tag/durchmesser/'>durchmesser</a> ".
-                    "<a style='font-size:220%;' class='tagitem_220' href='{$sUrl}tag/dunkel/'>dunkel</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}tag/dolchkollektion/'>dolchkollektion</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}tag/designed/'>designed</a> ".
-                    "<a style='font-size:160%;' class='tagitem_160' href='{$sUrl}tag/design/'>design</a> ".
-                    "<a style='font-size:220%;' class='tagitem_220' href='{$sUrl}tag/cm/'>cm</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}tag/boris/'>boris</a> ";
-
-
-        oxTestModules::addFunction( "oxutils", "seoIsActive", "{return true;}" );
-
-        $oTagCloud = new oxTagCloud();
-
-        $this->assertEquals( $sRes, $oTagCloud->getTagCloud() );
-    }
-
-    public function testGetTagCloudEn()
-    {
-        $oTagCloud = new oxTagCloud();
-        $sUrl = oxConfig::getInstance()->getShopUrl();
-            $sRes = "<a style='font-size:233%;' class='tagitem_233' href='{$sUrl}en/tag/wall-clock/'>wall-clock</a> ".
-                    "<a style='font-size:167%;' class='tagitem_167' href='{$sUrl}en/tag/shirt/'>shirt</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}en/tag/popcorn/'>popcorn</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}en/tag/plate/'>plate</a> ".
-                    "<a style='font-size:167%;' class='tagitem_167' href='{$sUrl}en/tag/pima/'>pima</a> ".
-                    "<a style='font-size:233%;' class='tagitem_233' href='{$sUrl}en/tag/party/'>party</a> ".
-                    "<a style='font-size:233%;' class='tagitem_233' href='{$sUrl}en/tag/living/'>living</a> ".
-                    "<a style='font-size:267%;' class='tagitem_267' href='{$sUrl}en/tag/kuyichi/'>kuyichi</a> ".
-                    "<a style='font-size:133%;' class='tagitem_133' href='{$sUrl}en/tag/kitchen/'>kitchen</a> ".
-                    "<a style='font-size:200%;' class='tagitem_200' href='{$sUrl}en/tag/jeans/'>jeans</a> ".
-                    "<a style='font-size:133%;' class='tagitem_133' href='{$sUrl}en/tag/ice-cubes/'>ice-cubes</a> ".
-                    "<a style='font-size:400%;' class='tagitem_400' href='{$sUrl}en/tag/gift/'>gift</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}en/tag/design/'>design</a> ".
-                    "<a style='font-size:167%;' class='tagitem_167' href='{$sUrl}en/tag/dark/'>dark</a> ".
-                    "<a style='font-size:167%;' class='tagitem_167' href='{$sUrl}en/tag/dagger/'>dagger</a> ".
-                    "<a style='font-size:133%;' class='tagitem_133' href='{$sUrl}en/tag/cool/'>cool</a> ".
-                    "<a style='font-size:133%;' class='tagitem_133' href='{$sUrl}en/tag/cocktail/'>cocktail</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}en/tag/champagne/'>champagne</a> ".
-                    "<a style='font-size:133%;' class='tagitem_133' href='{$sUrl}en/tag/casual/'>casual</a> ".
-                    "<a style='font-size:267%;' class='tagitem_267' href='{$sUrl}en/tag/bar/'>bar</a> ";
-        $this->assertEquals( $sRes, $oTagCloud->getTagCloud( null, false, 1 ) );
-    }
-
-    public function testGetTagExtended()
-    {
-        oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
-        oxTestModules::addFunction( "oxutils", "seoIsActive", "{return true;}" );
-        $oTagCloud = new oxTagCloud();
-        $sTag = $oTagCloud->getTagCloud(null, true);
-
-            $this->assertTrue(strpos($sTag, "tag/25wbezugshinweis/'>25wbezugshinweis</a>") > 0);
-
-    }
-
-    public function testGetTagExtendedEn()
-    {
-        $oTagCloud = new oxTagCloud();
-        $sUrl = oxConfig::getInstance()->getShopUrl();
-            $sRes = "<a style='font-size:233%;' class='tagitem_233' href='{$sUrl}en/tag/wall-clock/'>wall-clock</a> ".
-                    "<a style='font-size:167%;' class='tagitem_167' href='{$sUrl}en/tag/shirt/'>shirt</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}en/tag/popcorn/'>popcorn</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}en/tag/plate/'>plate</a> ".
-                    "<a style='font-size:167%;' class='tagitem_167' href='{$sUrl}en/tag/pima/'>pima</a> ".
-                    "<a style='font-size:233%;' class='tagitem_233' href='{$sUrl}en/tag/party/'>party</a> ".
-                    "<a style='font-size:233%;' class='tagitem_233' href='{$sUrl}en/tag/living/'>living</a> ".
-                    "<a style='font-size:267%;' class='tagitem_267' href='{$sUrl}en/tag/kuyichi/'>kuyichi</a> ".
-                    "<a style='font-size:133%;' class='tagitem_133' href='{$sUrl}en/tag/kitchen/'>kitchen</a> ".
-                    "<a style='font-size:200%;' class='tagitem_200' href='{$sUrl}en/tag/jeans/'>jeans</a> ".
-                    "<a style='font-size:133%;' class='tagitem_133' href='{$sUrl}en/tag/ice-cubes/'>ice-cubes</a> ".
-                    "<a style='font-size:400%;' class='tagitem_400' href='{$sUrl}en/tag/gift/'>gift</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}en/tag/design/'>design</a> ".
-                    "<a style='font-size:167%;' class='tagitem_167' href='{$sUrl}en/tag/dark/'>dark</a> ".
-                    "<a style='font-size:167%;' class='tagitem_167' href='{$sUrl}en/tag/dagger/'>dagger</a> ".
-                    "<a style='font-size:133%;' class='tagitem_133' href='{$sUrl}en/tag/cool/'>cool</a> ".
-                    "<a style='font-size:133%;' class='tagitem_133' href='{$sUrl}en/tag/cocktail/'>cocktail</a> ".
-                    "<a style='font-size:100%;' class='tagitem_100' href='{$sUrl}en/tag/champagne/'>champagne</a> ".
-                    "<a style='font-size:133%;' class='tagitem_133' href='{$sUrl}en/tag/casual/'>casual</a> ".
-                    "<a style='font-size:267%;' class='tagitem_267' href='{$sUrl}en/tag/bar/'>bar</a> ";
-        $this->assertEquals( $sRes, $oTagCloud->getTagCloud( null, false, 1 ) );
-    }
-
-    //M68 - Problems when number is entered as tag
-    public function testGetTagExtendedIfNumberAdded()
-    {
-        oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
-        oxTestModules::addFunction( "oxutils", "seoIsActive", "{return true;}" );
-        $oArticle = new oxArticle();
-        $oArticle->load('2000');
-        $sExisting = $oArticle->getTags();
-
-        try {
-            $sAddTag = "1";
-            $oArticle->addTag($sAddTag);
-            $oTagCloud = new oxTagCloud();
-            $oTagCloud->resetTagCache();
-            $sTag = $oTagCloud->getTagCloud('2000', true);
-            $this->assertTrue(strpos($sTag, "tag/1/'>1</a>") !== false);
-        } catch (Exception $e) {
-        }
-        $oArticle->saveTags($sExisting);
-        $oTagCloud->resetTagCache();
-        if ($e) {
-            throw $e;
-        }
-    }
-
-    public function testGetTagCloudIfSeoIsOff()
-    {
-        oxTestModules::addFunction( "oxutils", "seoIsActive", "{return false;}" );
-
-        $oldTags = oxDb::getDb()->getOne('select OXTAGS from oxartextends where oxid="2000"');
-        oxDb::getDb()->Execute('update oxartextends set OXTAGS = "a&addaa&#%<b>aa</b>_" where oxid="2000"');
-
-        $e = null;
-        try {
-            $oTagCloud = new oxTagCloud();
-            $sTag = $oTagCloud->getTagCloud('2000');
-            $this->assertTrue(strpos($sTag, "index.php?cl=tag&amp;searchtag=a%26addaa%26%23%25%3Cb%3Eaa%3C%2Fb%3E_&amp;lang=0'>a&amp;addaa&amp;#%&lt;b&gt;aa&lt;/b&gt;_</a>") > 0);
-        } catch(Exception $e) {
-            // notihng for now
-        }
-
-        oxDb::getDb()->Execute("update oxartextends set OXTAGS = '".mysql_real_escape_string($oldTags)."' where oxid='2000'");
-
-        if ($e) {
-            throw $e;
-        }
-    }
-
-    public function testGetTagCloudArticle()
-    {
-        oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
-        oxTestModules::addFunction( "oxutils", "seoIsActive", "{return true;}" );
-        $oTagCloud = new oxTagCloud();
-        $sTag = $oTagCloud->getTagCloud('2000');
-        $this->assertTrue(strpos($sTag, "tag/wanduhr/'>wanduhr</a>") > 0);
-        $this->assertTrue(strpos($sTag, "tag/coolen/'>coolen</a>") > 0);
-    }
-
 
     public function testGetTags()
     {
@@ -524,8 +346,8 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
 
         //remove older files
         $oUtils = $this->getProxyClass("oxutils");
-        $sFile1 = $oUtils->UNITgetCacheFilePath($sCacheKey1);
-        $sFile2 = $oUtils->UNITgetCacheFilePath($sCacheKey2);
+        $sFile1 = $oUtils->getCacheFilePath($sCacheKey1);
+        $sFile2 = $oUtils->getCacheFilePath($sCacheKey2);
         @unlink($sFile1);
         @unlink($sFile2);
 

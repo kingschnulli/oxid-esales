@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 31281 2010-11-26 14:33:46Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsfile.php 32881 2011-02-03 11:45:36Z sarunas $
  */
 
 /**
@@ -55,6 +55,8 @@ class oxUtilsFile extends oxSuperCfg
      */
     protected $_aTypeToPath = array( 'ICO'  => 'icon',
                                      'CICO' => 'icon',
+                                     'PICO' => 'icon',
+                                     'MICO' => 'icon',
                                      'TH'   => '0',
                                      'TC'   => '0',
                                      'M1'   => 'master/1',
@@ -92,7 +94,8 @@ class oxUtilsFile extends oxSuperCfg
                                      'Z9'   => 'z9',
                                      'Z10'  => 'z10',
                                      'Z11'  => 'z11',
-                                     'Z12'  => 'z12'
+                                     'Z12'  => 'z12',
+                                     'PROMO'=> oxActions::PROMO_PICTURE_DIR,
                                    );
 
     /**
@@ -312,7 +315,7 @@ class oxUtilsFile extends oxSuperCfg
     protected function _getImagePath( $sType )
     {
         $sFolder = array_key_exists( $sType, $this->_aTypeToPath ) ? $this->_aTypeToPath[ $sType ] : '0';
-        $sPath = $this->normalizeDir( $this->getConfig()->getAbsDynImageDir() ) . "{$sFolder}/";
+        $sPath = $this->normalizeDir( $this->getConfig()->getPictureDir(false) ) . "{$sFolder}/";
         return $sPath;
     }
 
@@ -382,7 +385,25 @@ class oxUtilsFile extends oxSuperCfg
             case 'TC':
                 $aSize = $this->_getImageSize( $sType, $iPicNum, 'sCatThumbnailsize' );
                 break;
+            case 'MICO':
+                $sManufacturerIconsize = $this->getConfig()->getConfigParam( 'sManufacturerIconsize' );
+                if ( isset( $sManufacturerIconsize ) ) {
+                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sManufacturerIconsize' );
+                } else {
+                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' );
+                }
+                break;
+            case 'PICO':
+                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sCatPromotionsize' );
+                break;
             case 'CICO':
+                $sCatIconsize = $this->getConfig()->getConfigParam( 'sCatIconsize' );
+                if ( isset( $sCatIconsize ) ) {
+                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sCatIconsize' );
+                } else {
+                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' );
+                }
+                break;
             case 'ICO':
                 $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' );
                 break;
@@ -401,7 +422,8 @@ class oxUtilsFile extends oxSuperCfg
             case 'M':
             case 'WP':
             case 'FL':
-                // just copy non image file to target folder
+            case 'PROMO':
+                // just copy file to target folder
                 $this->_copyFile($sSource, $sTarget);
                 break;
             case 'Z':
@@ -457,8 +479,6 @@ class oxUtilsFile extends oxSuperCfg
         if ( $sSource === $sTarget ) {
             $blDone = true;
         } else {
-
-
             $blDone = move_uploaded_file( $sSource, $sTarget );
         }
 
@@ -520,7 +540,6 @@ class oxUtilsFile extends oxSuperCfg
 
                 // checking file type and building final file name
                 if ( $sSource && ( $sValue = $this->_prepareImageName( $sValue, $sType, $blDemo, $sImagePath, $blUnique ) ) ) {
-
                     // moving to tmp folder for processing as safe mode or spec. open_basedir setup
                     // usually does not allow file modification in php's temp folder
                     $sProcessPath = $sTmpFolder . basename( $sSource );

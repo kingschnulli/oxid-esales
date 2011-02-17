@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
+ * @version   SVN: $Id: oxutilsTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -87,7 +87,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
             unlink( $sFileName );
         }
 
-        $sFileName = $oUtils->UNITgetCacheFilePath('testCache1');
+        $sFileName = $oUtils->getCacheFilePath('testCache1');
         if ( file_exists( $sFileName ) ) {
             unlink( $sFileName );
         }
@@ -350,20 +350,6 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $this->assertNotEquals($sShouldNotBeResult, $sResult);
     }
 
-    public function testFormatCurrency()
-    {
-        $oActCur = null;
-        $sFormatted = oxUtils::getInstance()->formatCurrency(10322.324, $oActCur);
-        $this->assertEquals($sFormatted, "10.322,32");
-        $oActCur = oxConfig::getInstance()->getActShopCurrencyObject();
-        $sFormatted = oxUtils::getInstance()->formatCurrency(10322.324, $oActCur);
-        $this->assertEquals($sFormatted, "10.322,32");
-        $sFormatted = oxUtils::getInstance()->formatCurrency(10322.325, $oActCur);
-        $this->assertEquals($sFormatted, "10.322,33");
-        $sFormatted = oxUtils::getInstance()->formatCurrency(10322.326, $oActCur);
-        $this->assertEquals($sFormatted, "10.322,33");
-    }
-
     public function testCurrency2Float()
     {
         $oActCur = oxConfig::getInstance()->getActShopCurrencyObject();
@@ -613,7 +599,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
         //getting cached files prefix
         $myUtilsTest = $this->getProxyClass("oxUtils");
-        $sFilePath = $myUtilsTest->UNITgetCacheFilePath("test");
+        $sFilePath = $myUtilsTest->getCacheFilePath("test");
         $sCacheFilePrefix = preg_replace("/.*\/(ox[^_]*)_.*/", "$1", $sFilePath);
 
         $oUtils = oxUtils::getInstance();
@@ -643,7 +629,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
         //getting cached files prefix
         $myUtilsTest = $this->getProxyClass("oxUtils");
-        $sFilePath = $myUtilsTest->UNITgetCacheFilePath("test");
+        $sFilePath = $myUtilsTest->getCacheFilePath("test");
         $sCacheFilePrefix = preg_replace("/.*\/(ox[^_]*)_.*/", "$1", $sFilePath);
 
         //this file must be skipped
@@ -950,56 +936,6 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $oUtils->redirect( 'url?param1=1&param2=2&amp;param3=3' );
     }
 
-    public function testPrepareUrlForNoSession()
-    {
-        oxTestModules::addFunction('oxUtils', 'seoIsActive', '{return false;}');
-        modConfig::getInstance()->addClassFunction('isMall', create_function('', 'return false;'));
-
-        oxTestModules::addFunction('oxLang', 'getBaseLanguage', '{return 3;}');
-        $this->assertEquals('sdf?lang=1', oxUtils::getInstance()->prepareUrlForNoSession('sdf?sid=111&lang=1'));
-        $this->assertEquals('sdf?a&lang=1', oxUtils::getInstance()->prepareUrlForNoSession('sdf?sid=111&a&lang=1'));
-        $this->assertEquals('sdf?a&amp;lang=1', oxUtils::getInstance()->prepareUrlForNoSession('sdf?sid=111&a&amp;lang=1'));
-        $this->assertEquals('sdf?a&&amp;lang=3', oxUtils::getInstance()->prepareUrlForNoSession('sdf?sid=111&a&'));
-        $this->assertEquals('sdf?lang=3', oxUtils::getInstance()->prepareUrlForNoSession('sdf'));
-
-        modConfig::getInstance()->addClassFunction('isMall', create_function('', 'return true;'));
-        modConfig::getInstance()->addClassFunction('getShopId', create_function('', 'return 5;'));
-
-        $sShopId = '';
-
-        $this->assertEquals('sdf?lang=3'.$sShopId, oxUtils::getInstance()->prepareUrlForNoSession('sdf?sid=asd'));
-        $this->assertEquals('sdf?lang=2'.$sShopId, oxUtils::getInstance()->prepareUrlForNoSession('sdf?sid=das&lang=2'));
-        $this->assertEquals('sdf?lang=2&shp=3', oxUtils::getInstance()->prepareUrlForNoSession('sdf?lang=2&sid=fs&amp;shp=3'));
-        $this->assertEquals('sdf?shp=2&amp;lang=2', oxUtils::getInstance()->prepareUrlForNoSession('sdf?shp=2&amp;lang=2'));
-        $this->assertEquals('sdf?shp=2&amp;lang=3', oxUtils::getInstance()->prepareUrlForNoSession('sdf?shp=2'));
-
-        $this->assertEquals('sdf?lang=1'.$sShopId, oxUtils::getInstance()->prepareUrlForNoSession('sdf?force_sid=111&lang=1'));
-        $this->assertEquals('sdf?a&lang=1'.$sShopId, oxUtils::getInstance()->prepareUrlForNoSession('sdf?force_sid=111&a&lang=1'));
-        $this->assertEquals('sdf?a&amp;lang=1'.$sShopId, oxUtils::getInstance()->prepareUrlForNoSession('sdf?force_sid=111&a&amp;lang=1'));
-        $this->assertEquals('sdf?a&&amp;lang=3'.$sShopId, oxUtils::getInstance()->prepareUrlForNoSession('sdf?force_sid=111&a&'));
-
-
-        modConfig::getInstance()->setParameter('currency', 2);
-        $this->assertEquals('sdf?lang=3&amp;cur=2'.$sShopId, oxUtils::getInstance()->prepareUrlForNoSession('sdf'));
-
-        oxTestModules::addFunction('oxUtils', 'seoIsActive', '{return true;}');
-        $this->assertEquals('sdf', oxUtils::getInstance()->prepareUrlForNoSession('sdf'));
-    }
-
-
-    /**
-     * Test for bug #1482
-     *
-     */
-    public function testPrepareUrlForNoSessionForceAdminTest()
-    {
-        oxTestModules::addFunction('oxUtils', 'seoIsActive', '{return false;}');
-        $sShopId = '';
-        $this->assertEquals('sdf?lang=1'.$sShopId, oxUtils::getInstance()->prepareUrlForNoSession('sdf?force_sid=111&lang=1'));
-        $this->assertEquals('sdf?lang=1'.$sShopId, oxUtils::getInstance()->prepareUrlForNoSession('sdf?force_admin_sid=111&lang=1'));
-        $this->assertEquals('sdf?lang=1'.$sShopId, oxUtils::getInstance()->prepareUrlForNoSession('sdf?admin_sid=111&lang=1'));
-    }
-
     public function testFromFileCacheEmpty()
     {
         $oUtils = new oxutils();
@@ -1018,7 +954,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     public function testCacheRaceConditions0Size()
     {
         $oUtils = new oxutils();
-        $sFileName = $oUtils->UNITgetCacheFilePath('testCache1');
+        $sFileName = $oUtils->getCacheFilePath('testCache1');
         @unlink($sFileName);
         $oUtils->toFileCache('testCache1', 'teststs');
         $oUtils->commitFileCache();
@@ -1029,7 +965,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     public function testCacheRaceConditionsNon0Size()
     {
         $oUtils = new oxutils();
-        $sFileName = $oUtils->UNITgetCacheFilePath('testCache2');
+        $sFileName = $oUtils->getCacheFilePath('testCache2');
         @unlink($sFileName);
         $oUtils->toFileCache('testCache2', 'teststs');
         $oUtils->commitFileCache();
@@ -1042,7 +978,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     {
         $oUtils1 = new oxutils();
         $oUtils2 = new oxutils();
-        $sFileName = $oUtils1->UNITgetCacheFilePath('testCache3');
+        $sFileName = $oUtils1->getCacheFilePath('testCache3');
         @unlink($sFileName);
         $oUtils1->toFileCache('testCache3', 'instance1111');
         $oUtils2->toFileCache('testCache3', 'instance2222');
@@ -1056,7 +992,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     {
         clearstatcache();
         $oUtils1 = new oxutils();
-        $sFileName = $oUtils1->UNITgetCacheFilePath('testCache3');
+        $sFileName = $oUtils1->getCacheFilePath('testCache3');
         @unlink($sFileName);
         $this->assertFalse(file_exists($sFileName));
 

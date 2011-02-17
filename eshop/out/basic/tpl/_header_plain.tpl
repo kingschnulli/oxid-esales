@@ -5,7 +5,7 @@
     [{assign var="_titleprefix" value=$_titleprefix|default:$oView->getTitlePrefix() }]
     [{assign var="title" value=$title|default:$oView->getTitle() }]
     <title>[{ $_titleprefix }][{if $title && $_titleprefix }] | [{/if}][{$title|strip_tags}][{if $_titlesuffix}] | [{$_titlesuffix}][{/if}][{if $titlepagesuffix}] | [{$titlepagesuffix}][{/if}]</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]">
+    <meta http-equiv="Content-Type" content="text/html; charset=[{$oView->getCharSet()}]">
     [{if $oView->noIndex() == 1 }]
     <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
     [{elseif $oView->noIndex() == 2 }]

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 31082 2010-11-23 07:57:28Z arvydas $
+ * @version   SVN: $Id: alist.php 33071 2011-02-09 09:14:01Z linas.kukulskis $
  */
 
 /**
@@ -46,13 +46,13 @@ class aList extends oxUBase
      * Current class default template name.
      * @var string
      */
-    protected $_sThisTemplate = 'list.tpl';
+    protected $_sThisTemplate = 'page/list/list.tpl';
 
     /**
      * New layout list template
      * @var string
      */
-    protected $_sThisMoreTemplate = 'list_more.tpl';
+    protected $_sThisMoreTemplate = 'page/list/morecategories.tpl';
 
     /**
      * Category path string
@@ -77,12 +77,6 @@ class aList extends oxUBase
      * @var array
      */
     protected $_aCatArtList = null;
-
-    /**
-     * Category tree html path
-     * @var string
-     */
-    protected $_sCatTreeHtmlPath = null;
 
     /**
      * If category has subcategories
@@ -121,10 +115,17 @@ class aList extends oxUBase
     protected $_sCatTitle = null;
 
     /**
-     * Category seo url state
+     * Sign if to load and show top5articles action
      * @var bool
      */
-    protected $_blFixedUrl = null;
+    protected $_blTop5Action = false;
+
+    /**
+     * Show tags cloud
+     * @var bool
+     */
+    protected $_blShowTagCloud = false;
+
 
     /**
      * Generates (if not generated yet) and returns view ID (for
@@ -138,10 +139,12 @@ class aList extends oxUBase
             $sCatId   = oxConfig::getParameter( 'cnid' );
             $iActPage = $this->getActPage();
             $iArtPerPage = oxConfig::getParameter( '_artperpage' );
+            $sListDisplayType = oxConfig::getParameter( 'ldtype' );
+
             $sParentViewId = parent::getViewId();
 
             // shorten it
-                $this->_sViewId = md5( $sParentViewId.'|'.$sCatId.'|'.$iActPage.'|'.$iArtPerPage );
+                $this->_sViewId = md5( $sParentViewId.'|'.$sCatId.'|'.$iActPage.'|'.$iArtPerPage.'|'.$sListDisplayType );
 
         }
 
@@ -157,10 +160,6 @@ class aList extends oxUBase
      * metatags info (oxubase::_convertForMetaTags()) and returns name of
      * template to render.
      *
-     * Template variables:
-     * <b>articlelist</b>, <b>filterattributes</b>, <b>pageNavigation</b>,
-     * <b>subcatlist</b>, <b>meta_keywords</b>, <b>meta_description</b>
-     *
      * @return  string  $this->_sThisTemplate   current template file name
      */
     public function render()
@@ -172,13 +171,16 @@ class aList extends oxUBase
         $this->_blIsCat = false;
 
         // A. checking for fake "more" category
-        if ( 'oxmore' == oxConfig::getParameter( 'cnid' ) && $myConfig->getConfigParam( 'blTopNaviLayout' ) ) {
-
+        if ( 'oxmore' == oxConfig::getParameter( 'cnid' ) ) {
             // overriding some standard value and parameters
             $this->_sThisTemplate = $this->_sThisMoreTemplate;
             $oCategory = oxNew( 'oxcategory' );
             $oCategory->oxcategories__oxactive = new oxField( 1, oxField::T_RAW );
             $this->setActCategory( $oCategory );
+
+            $this->_blTop5Action   = true;
+            $this->_blShowTagCloud = true;
+
         } elseif ( ( $oCategory = $this->getActCategory() ) ) {
             $blContinue = ( bool ) $oCategory->oxcategories__oxactive->value;
             $this->_blIsCat = true;
@@ -190,34 +192,11 @@ class aList extends oxUBase
             oxUtils::getInstance()->redirect( $myConfig->getShopURL().'index.php' );
         }
 
-        $this->_aViewData['filterattributes'] = $this->getAttributes();
-
-        $this->_aViewData['articlelist']       = $this->getArticleList();
-        $this->_aViewData['similarrecommlist'] = $this->getSimilarRecommLists();
-
-        // loading actions
-        $this->_aViewData['articlebargainlist'] = $this->getBargainArticleList();
-        $this->_aViewData['aTop5Articles']      = $this->getTop5ArticleList();
-
-        $this->_aViewData['pageNavigation'] = $this->getPageNavigation();
-
-        $this->_aViewData['actCatpath']        = $this->getCatTreePath();
-        $this->_aViewData['template_location'] = $this->getTemplateLocation();
-
-        // add to the parent view
-        $this->_aViewData['actCategory'] = $this->getActCategory();
-
         $oCat = $this->getActCategory();
         if ($oCat && $myConfig->getConfigParam( 'bl_rssCategories' )) {
             $oRss = oxNew('oxrssfeed');
             $this->addRssFeed($oRss->getCategoryArticlesTitle($oCat), $oRss->getCategoryArticlesUrl($oCat), 'activeCategory');
         }
-
-        //Gets subcategory tree from category tree
-        $this->_aViewData['hasVisibleSubCats'] = $this->hasVisibleSubCats();
-        $this->_aViewData['subcatlist']        = $this->getSubCatList();
-
-        $this->_aViewData['title'] = $this->getTitle();
 
         parent::render();
 
@@ -313,8 +292,10 @@ class aList extends oxUBase
         // store this into session
         $aFilter = oxConfig::getParameter( 'attrfilter', 1 );
         $sActCat = oxConfig::getParameter( 'cnid' );
+
         $aSessionFilter = oxSession::getVar( 'session_attrfilter' );
         $aSessionFilter[$sActCat] = $aFilter;
+
         oxSession::setVar( 'session_attrfilter', $aSessionFilter );
     }
 
@@ -406,10 +387,10 @@ class aList extends oxUBase
     protected function _prepareMetaDescription( $sMeta, $iLength = 1024, $blDescTag = false )
     {
         // using language constant ..
-        $sDescription = oxLang::getInstance()->translateString( 'INC_HEADER_YOUAREHERE' );
+        $sDescription = oxLang::getInstance()->translateString( 'ALIST_META_DESCRIPTION_PREFIX' );
 
         // appending parent title
-        if ( $oCategory = $this->_getCategory() ) {
+        if ( $oCategory = $this->getActCategory() ) {
             if ( ( $oParent = $oCategory->getParentCategory() ) ) {
                 $sDescription .= " {$oParent->oxcategories__oxtitle->value} -";
             }
@@ -608,27 +589,6 @@ class aList extends oxUBase
     }
 
     /**
-     * Returns category seo url status (fixed or not)
-     *
-     * @param oxcategory $oCategory active category
-     *
-     * @deprecated is not used any more
-     *
-     * @return bool
-     */
-    protected function _isFixedUrl( $oCategory )
-    {
-        if ( $this->_blFixedUrl == null ) {
-            $oDb = oxDb::getDb();
-            $sIdQuoted = $oDb->quote( $oCategory->getId() );
-            $iLang = $oCategory->getLanguage();
-            $sShopId = $this->getConfig()->getShopId();
-            $this->_blFixedUrl = $oDb->getOne( "select oxfixed from oxseo where oxobjectid = {$sIdQuoted} and oxshopid = '{$sShopId}' and oxlang = '{$iLang}' and oxparams = '' " );
-        }
-        return $this->_blFixedUrl;
-    }
-
-    /**
      * Returns true if we have category
      *
      * @return bool
@@ -636,18 +596,6 @@ class aList extends oxUBase
     protected function _isActCategory()
     {
         return $this->_blIsCat;
-    }
-
-    /**
-     * Template variable getter. Returns active category
-     *
-     * @deprecated
-     *
-     * @return bool
-     */
-    protected function _getCategory()
-    {
-        return $this->getActCategory();
     }
 
     /**
@@ -730,7 +678,6 @@ class aList extends oxUBase
      */
     public function getAttributes()
     {
-        // #657 gather all attribute values we do have here in this category
         $this->_aAttributes = false;
         if ( ( $oCategory = $this->getActCategory() ) ) {
             $aAttributes = $oCategory->getAttributes();
@@ -738,6 +685,7 @@ class aList extends oxUBase
                 $this->_aAttributes = $aAttributes;
             }
         }
+
         return $this->_aAttributes;
     }
 
@@ -756,6 +704,7 @@ class aList extends oxUBase
                 }
             }
         }
+
         return $this->_aArticleList;
     }
 
@@ -798,25 +747,6 @@ class aList extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns category html path
-     *
-     * @deprecated use aList::getTreePath() and adjust template
-     *
-     * @return string
-     */
-    public function getTemplateLocation()
-    {
-        if ( $this->_sCatTreeHtmlPath === null ) {
-             $this->_sCatTreeHtmlPath = false;
-            // category path
-            if ( $oCatTree = $this->getCategoryTree() ) {
-                $this->_sCatTreeHtmlPath = $oCatTree->getHtmlPath();
-            }
-        }
-        return $this->_sCatTreeHtmlPath;
-    }
-
-    /**
      * Template variable getter. Returns category path array
      *
      * @return array
@@ -826,6 +756,36 @@ class aList extends oxUBase
         if ( $oCatTree = $this->getCategoryTree() ) {
             return $oCatTree->getPath();
         }
+    }
+
+    /**
+     * Returns Bread Crumb - you are here page1/page2/page3...
+     *
+     * @return array
+     */
+    public function getBreadCrumb()
+    {
+        $aPaths = array();
+
+        if ( 'oxmore' == oxConfig::getParameter( 'cnid' ) ) {
+            
+            $aPaths[]['title'] = oxLang::getInstance()->translateString( 'PAGE_PRODUCT_MORECATEGORIES', oxLang::getInstance()->getBaseLanguage(), false );
+
+            return $aPaths;
+        }
+
+        if ( ($oCatTree = $this->getCategoryTree()) && ($oCatPath = $oCatTree->getPath()) ) {
+            foreach ( $oCatPath as $oCat ) {
+                $aCatPath = array();
+
+                $aCatPath['link'] = $oCat->getLink();
+                $aCatPath['title'] = $oCat->oxcategories__oxtitle->value;
+
+                $aPaths[] = $aCatPath;
+            }
+        }
+
+        return $aPaths;
     }
 
     /**
@@ -858,6 +818,7 @@ class aList extends oxUBase
                 $this->_aSubCatList = $oClickCat->getSubCats();
             }
         }
+
         return $this->_aSubCatList;
     }
 
@@ -897,7 +858,7 @@ class aList extends oxUBase
      */
     public function getTop5ArticleList()
     {
-        if ( $this->_aTop5ArticleList === null ) {
+        if ( $this->_aTop5ArticleList === null && $this->_blTop5Action ) {
             $this->_aTop5ArticleList = false;
             $myConfig = $this->getConfig();
             if ( $myConfig->getConfigParam( 'bl_perfLoadAktion' ) && $this->_isActCategory() ) {
@@ -958,5 +919,15 @@ class aList extends oxUBase
             }
             return $sUrl;
         }
+    }
+
+    /**
+     * Returns cofig prameters blShowListDisplayType value
+     *
+     * @return boolean
+     */
+    public function canSelectDisplayType()
+    {
+        return $this->getConfig()->getConfigParam( 'blShowListDisplayType' );
     }
 }

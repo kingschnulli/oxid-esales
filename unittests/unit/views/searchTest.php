@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: searchTest.php 28473 2010-06-19 13:40:35Z arvydas $
+ * @version   SVN: $Id: searchTest.php 33003 2011-02-07 15:49:58Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -183,43 +183,12 @@ class Unit_Views_searchTest extends OxidTestCase
     {
         modConfig::getInstance()->setConfigParam('bl_rssSearch', false);
         $n = $this->getMock('search', array(
-            'isEmptySearch',
-            'getArticleList',
-            'getSimilarRecommLists',
-            'getSearchParamForHtml',
-            'getSearchParam',
-            'getSearchCatId',
-            'getSearchVendor',
-            'getSearchManufacturer',
-            'getPageNavigation',
-            'getActiveCategory',
-            '_processListArticles',
+            '_processListArticles'
             )
         );
-        $n->expects($this->once())->method('isEmptySearch')->will($this->returnValue('xisEmptySearch'));
-        $n->expects($this->once())->method('getArticleList')->will($this->returnValue('xgetArticleList'));
-        $n->expects($this->once())->method('getSimilarRecommLists')->will($this->returnValue('xgetSimilarRecommLists'));
-        $n->expects($this->once())->method('getSearchParamForHtml')->will($this->returnValue('xgetSearchParamForHtml'));
-        $n->expects($this->once())->method('getSearchParam')->will($this->returnValue('xgetSearchParam'));
-        $n->expects($this->once())->method('getSearchCatId')->will($this->returnValue('xgetSearchCatId'));
-        $n->expects($this->once())->method('getSearchVendor')->will($this->returnValue('xgetSearchVendor'));
-        $n->expects($this->once())->method('getSearchManufacturer')->will($this->returnValue('xgetSearchManufacturer'));
-        $n->expects($this->once())->method('getPageNavigation')->will($this->returnValue('xgetPageNavigation'));
-        $n->expects($this->once())->method('getActiveCategory')->will($this->returnValue('xgetActiveCategory'));
         $n->expects($this->once())->method('_processListArticles');
 
-        $this->assertEquals('search.tpl', $n->render());
-        $aVD = $n->getViewData();
-        $this->assertEquals('xisEmptySearch', $aVD['emptysearch']);
-        $this->assertEquals('xgetArticleList', $aVD['articlelist']);
-        $this->assertEquals('xgetSimilarRecommLists', $aVD['similarrecommlist']);
-        $this->assertEquals('xgetSearchParamForHtml', $aVD['searchparamforhtml']);
-        $this->assertEquals('xgetSearchParam', $aVD['searchparam']);
-        $this->assertEquals('xgetSearchCatId', $aVD['searchcnid']);
-        $this->assertEquals('xgetSearchVendor', $aVD['searchvendor']);
-        $this->assertEquals('xgetSearchManufacturer', $aVD['searchmanufacturer']);
-        $this->assertEquals('xgetPageNavigation', $aVD['pageNavigation']);
-        $this->assertEquals('xgetActiveCategory', $aVD['actCategory']);
+        $this->assertEquals('page/search/search.tpl', $n->render());
     }
 
     public function testRenderRss()
@@ -248,45 +217,14 @@ class Unit_Views_searchTest extends OxidTestCase
         modConfig::setParameter('searchmanufacturer', 'ysearchmanufacturer');
 
         $n = $this->getMock('search', array(
-            'isEmptySearch',
-            'getArticleList',
-            'getSimilarRecommLists',
-            'getSearchParamForHtml',
-            'getSearchParam',
-            'getSearchCatId',
-            'getSearchVendor',
-            'getSearchManufacturer',
-            'getPageNavigation',
-            'getActiveCategory',
             '_processListArticles',
             'addRssFeed'
             )
         );
-        $n->expects($this->once())->method('isEmptySearch')->will($this->returnValue('xisEmptySearch'));
-        $n->expects($this->once())->method('getArticleList')->will($this->returnValue('xgetArticleList'));
-        $n->expects($this->once())->method('getSimilarRecommLists')->will($this->returnValue('xgetSimilarRecommLists'));
-        $n->expects($this->once())->method('getSearchParamForHtml')->will($this->returnValue('xgetSearchParamForHtml'));
-        $n->expects($this->once())->method('getSearchParam')->will($this->returnValue('xgetSearchParam'));
-        $n->expects($this->once())->method('getSearchCatId')->will($this->returnValue('xgetSearchCatId'));
-        $n->expects($this->once())->method('getSearchVendor')->will($this->returnValue('xgetSearchVendor'));
-        $n->expects($this->once())->method('getSearchManufacturer')->will($this->returnValue('xgetSearchManufacturer'));
-        $n->expects($this->once())->method('getPageNavigation')->will($this->returnValue('xgetPageNavigation'));
-        $n->expects($this->once())->method('getActiveCategory')->will($this->returnValue('xgetActiveCategory'));
         $n->expects($this->once())->method('_processListArticles');
         $n->expects($this->once())->method('addRssFeed')->with($this->equalTo('rss1title'), $this->equalTo('rss1url'), $this->equalTo('searchArticles'));
 
-        $this->assertEquals('search.tpl', $n->render());
-        $aVD = $n->getViewData();
-        $this->assertEquals('xisEmptySearch', $aVD['emptysearch']);
-        $this->assertEquals('xgetArticleList', $aVD['articlelist']);
-        $this->assertEquals('xgetSimilarRecommLists', $aVD['similarrecommlist']);
-        $this->assertEquals('xgetSearchParamForHtml', $aVD['searchparamforhtml']);
-        $this->assertEquals('xgetSearchParam', $aVD['searchparam']);
-        $this->assertEquals('xgetSearchCatId', $aVD['searchcnid']);
-        $this->assertEquals('xgetSearchVendor', $aVD['searchvendor']);
-        $this->assertEquals('xgetSearchManufacturer', $aVD['searchmanufacturer']);
-        $this->assertEquals('xgetPageNavigation', $aVD['pageNavigation']);
-        $this->assertEquals('xgetActiveCategory', $aVD['actCategory']);
+        $this->assertEquals('page/search/search.tpl', $n->render());
     }
 
     public function testGetAddUrlParams()
@@ -314,6 +252,7 @@ class Unit_Views_searchTest extends OxidTestCase
         modConfig::setParameter('searchmanufacturer', 'gsearchmanufacturer&');
         $this->assertSame('gsearchmanufacturer&', $oSearch->getSearchManufacturer());
     }
+
     public function testGetSearchManufacturerNotInSearch()
     {
         $oSearch = $this->getMock( "search", array( "_isSearchClass" ) );
@@ -322,4 +261,26 @@ class Unit_Views_searchTest extends OxidTestCase
         $this->assertSame(false, $oSearch->getSearchManufacturer());
     }
 
+    public function testGetBreadCrumb()
+    {
+        $oSearch = new Search();
+
+        $this->assertEquals(1, count($oSearch->getBreadCrumb()));
+    }
+
+    /**
+     * Test can display type selector getter
+     *
+     * @return null
+     */
+    public function testCanSelectDisplayType()
+    {
+        $oConfig = $this->getMock( 'oxConfig', array( 'getConfigParam' ));
+        $oConfig->expects( $this->once() )->method( 'getConfigParam' )->will( $this->returnValue( true ) );
+
+        $oSubj = $this->getMock( 'alist', array( 'getConfig' ));
+        $oSubj->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( true, $oSubj->canSelectDisplayType() );
+    }
 }

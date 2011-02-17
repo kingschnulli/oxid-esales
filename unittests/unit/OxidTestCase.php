@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: OxidTestCase.php 29858 2010-09-16 11:05:24Z rimvydas.paskevicius $
+ * @version   SVN: $Id: OxidTestCase.php 31972 2010-12-17 14:00:57Z sarunas $
  */
 
 
@@ -47,9 +47,9 @@ class OxidMockStubFunc implements PHPUnit_Framework_MockObject_Stub
     public function invoke(PHPUnit_Framework_MockObject_Invocation $invocation)
     {
         if (is_string($this->_func) && preg_match('/^\{.+\}$/', $this->_func)) {
-            $args = $invocation->parameters;
+            $args  = $invocation->parameters;
             $_this = $invocation->object;
-            eval($this->_func);
+            return eval($this->_func);
         } else {
             return call_user_func_array($this->_func, $invocation->parameters);
         }
@@ -98,6 +98,10 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
      */
     public static function tearDownAfterClass()
     {
+        modSession::getInstance()->cleanup();
+        modDb::getInstance()->cleanup();
+        modConfig::getInstance()->cleanup();
+
         self::checkDbChecksums();
         if (function_exists('memory_get_usage')) {
             echo "\n".round(memory_get_usage(1) / 1024 / 1024) .'M ('.round(memory_get_peak_usage(1) / 1024 / 1024) .'M)'."\n";

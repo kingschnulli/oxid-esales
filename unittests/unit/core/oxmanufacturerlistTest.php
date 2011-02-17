@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmanufacturerlistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxmanufacturerlistTest.php 31930 2010-12-17 09:45:14Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -229,7 +229,7 @@ class Unit_Core_oxManufacturerlistTest extends OxidTestCase
 
         $sHtmlPath = $oManufacturerTree->getHtmlPath();
         $sShopUrl = oxConfig::getInstance()->getShopUrl();
-        $sExpt = " <a href='".$sShopUrl."Nach-Marke-Hersteller/'>Nach Marke/Hersteller</a>";
+        $sExpt = " <a href='".$sShopUrl."Nach-Marke/'>Nach Marke</a>";
         //substringing due to special chars in the link (should be fixed by seo)
         //anyway we check something else
         $this->assertEquals( $sExpt, $sHtmlPath);
@@ -246,8 +246,8 @@ class Unit_Core_oxManufacturerlistTest extends OxidTestCase
         $sHtmlPath = $oManufacturerTree->getHtmlPath();
         $sShopUrl = oxConfig::getInstance()->getShopUrl();
 
-        $sExpt = " <a href='".$sShopUrl."Nach-Marke-Hersteller/'>Nach Marke/Hersteller</a> / <a href='".$sShopUrl."Nach-Marke-Hersteller/Hersteller-1/'>Hersteller 1</a>";
-            $sExpt = " <a href='".$sShopUrl."Nach-Marke-Hersteller/'>Nach Marke/Hersteller</a> / <a href='".$sShopUrl."Nach-Marke-Hersteller/Haller-Stahlwaren/'>Haller Stahlwaren</a>";
+        $sExpt = " <a href='".$sShopUrl."Nach-Marke/'>Nach Marke</a> / <a href='".$sShopUrl."Nach-Marke/Hersteller-1/'>Hersteller 1</a>";
+            $sExpt = " <a href='".$sShopUrl."Nach-Marke/'>Nach Marke</a> / <a href='".$sShopUrl."Nach-Marke/Haller-Stahlwaren/'>Haller Stahlwaren</a>";
         $this->assertEquals( $sExpt, $sHtmlPath);
     }
 
@@ -261,8 +261,8 @@ class Unit_Core_oxManufacturerlistTest extends OxidTestCase
         $sHtmlPath = $oManufacturerTree->getHtmlPath();
         $sShopUrl = oxConfig::getInstance()->getShopHomeUrl();
 
-        $sExpt = " <a href='".$sShopUrl."cl=manufacturerlist&amp;mnid=root'>Nach Marke/Hersteller</a> / <a href='".$sShopUrl."cl=manufacturerlist&amp;mnid=".$sVendId."'>Hersteller 1</a>";
-            $sExpt = " <a href='".$sShopUrl."cl=manufacturerlist&amp;mnid=root'>Nach Marke/Hersteller</a> / <a href='".$sShopUrl."cl=manufacturerlist&amp;mnid=".$sVendId."'>Haller Stahlwaren</a>";
+        $sExpt = " <a href='".$sShopUrl."cl=manufacturerlist&amp;mnid=root'>Nach Marke</a> / <a href='".$sShopUrl."cl=manufacturerlist&amp;mnid=".$sVendId."'>Hersteller 1</a>";
+            $sExpt = " <a href='".$sShopUrl."cl=manufacturerlist&amp;mnid=root'>Nach Marke</a> / <a href='".$sShopUrl."cl=manufacturerlist&amp;mnid=".$sVendId."'>Haller Stahlwaren</a>";
         $this->assertEquals( $sExpt, $sHtmlPath);
     }
 

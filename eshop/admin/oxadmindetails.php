@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadmindetails.php 29639 2010-09-02 14:04:02Z vilma $
+ * @version   SVN: $Id: oxadmindetails.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
  */
 
 /**
@@ -145,13 +145,8 @@ class oxAdminDetails extends oxAdminView
 
                 // parse for styles and add them
                 $this->setAdminMode( false );
-                if ( $myConfig->getConfigParam( "blFormerTplSupport" ) ) {
-                    $sCSSPath = $myConfig->getResourcePath("styles/{$sStylesheet}", false );
-                    $sCSSUrl  = $myConfig->getResourceUrl("styles/{$sStylesheet}", false );
-                } else {
-                    $sCSSPath = $myConfig->getResourcePath("{$sStylesheet}", false );
-                    $sCSSUrl  = $myConfig->getResourceUrl("{$sStylesheet}", false );
-                }
+                $sCSSPath = $myConfig->getResourcePath("{$sStylesheet}", false );
+                $sCSSUrl  = $myConfig->getResourceUrl("{$sStylesheet}", false );
 
                 $aCSSPaths = array();
                 $this->setAdminMode( true );
@@ -390,7 +385,7 @@ class oxAdminDetails extends oxAdminView
         }
 
         $oObject = oxNew( $sFolderClass );
-        if ( $oObject->load( oxConfig::getParameter( 'oxid' ) ) ) {
+        if ( $oObject->load( $this->getEditObjectId() ) ) {
             $oObject->{$oObject->getCoreTableName() . '__oxfolder'} = new oxField($sFolder);
             $oObject->save();
         }

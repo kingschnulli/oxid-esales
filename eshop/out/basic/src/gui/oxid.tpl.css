@@ -782,7 +782,7 @@ a.rss{display:block;position:absolute;right:0;bottom:0; width:14px;height:14px; 
 div.popup{visibility: hidden;display:none;}
 div.popup strong{display: block; margin: 9px 0; font-size: 11px;}
 div.on.popup{visibility: visible;display:block;position:fixed;top:50%;left:50%;width:270px;height: 150px;background: oxBasketPopupBg;z-index: 2000;margin-top:-75px;margin-left:-135px;border:1px solid oxBasketPopupBr;padding:10px;}
-div.on.popup.load {background: #fff url(bg/ajax-loader.gif) center center no-repeat;}
+div.on.popup.load, div#wait.popup {background: #fff url(bg/ajax-loader.gif) center center no-repeat;}
 div.on.popup table {width:100%;}
 div.on.popup input {color:oxBasketPopupBtnCl;background:oxBasketPopupBtnBg;border:1px solid oxBasketPopupBtnBr;font-weight: bold;padding:2px;width:130px;}
 div.on.popup input.disabled {color:#cbcbcb;background:#fff;border:1px solid #cbcbcb;font-weight: bold;padding:2px;width:130px;}

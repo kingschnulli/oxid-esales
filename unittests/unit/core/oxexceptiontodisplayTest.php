@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxexceptiontodisplayTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxexceptiontodisplayTest.php 32877 2011-02-03 09:25:45Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -72,6 +72,15 @@ class Unit_Core_oxexceptionToDisplayTest extends OxidTestCase
         $this->assertEquals( "TEST_EXCEPTION", $oTestObject->getOxMessage() );
     }
 
+    public function testSetGetMessage_withStringArguments()
+    {
+        $oTestObject = oxNew( 'oxExceptionToDisplay' );
+        $oTestObject->setMessageArgs(100, "200", "mineralinis");
+        $oTestObject->setMessage( "TEST %d ERROR %s STRING %s" );
+
+        $this->assertEquals( "TEST 100 ERROR 200 STRING mineralinis", $oTestObject->getOxMessage() );
+    }
+
     public function testSetGetMessageIfDebugOn()
     {
         $oTestObject = oxNew( 'oxExceptionToDisplay' );
@@ -94,6 +103,14 @@ class Unit_Core_oxexceptionToDisplayTest extends OxidTestCase
         $sRet .= "2 => test2\n";
         //nothing should happen in unittests
         $this->assertEquals( $sRet, $oTestObject->__toString() );
+    }
+
+    public function testSetMessageArgs()
+    {
+        $oTestObject = $this->getProxyClass( "oxExceptionToDisplay" );
+        $oTestObject->setMessageArgs(100, "200", "testString");
+
+        $this->assertEquals(array(100, "200", "testString"), $oTestObject->getNonPublicVar('_aMessageArgs'));
     }
 
 }

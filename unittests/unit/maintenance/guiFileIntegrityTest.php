@@ -30,6 +30,31 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Maintenance_guiFileIntegrityTest extends OxidTestCase
 {
+
+    /**
+     * Initialize the fixture.
+     *
+     * @return null
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+//        modConfig::getInstance()->sTheme = false;
+        $this->_sOrigTheme = modConfig::getInstance()->getRealInstance()->getConfigParam('sTheme');
+        modConfig::getInstance()->getRealInstance()->setConfigParam('sTheme', 'basic');
+    }
+
+    /**
+     * Tear down the fixture.
+     *
+     * @return null
+     */
+    protected function tearDown()
+    {
+        modConfig::getInstance()->getRealInstance()->setConfigParam('sTheme', $this->_sOrigTheme);
+    }
+
     /**
      * Test css files matches generated with gui.
      *

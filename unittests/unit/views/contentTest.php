@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
+ * @version   SVN: $Id: contentTest.php 32763 2011-01-27 11:00:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -160,7 +160,7 @@ class Unit_Views_contentTest extends OxidTestCase
         $oContentView->expects( $this->atLeastOnce() )->method( '_canShowContent' )->will( $this->returnValue( true ) );
         $oContentView->expects( $this->atLeastOnce() )->method( 'getContent' )->will( $this->returnValue( $oContent ) );
         $oContentView->expects( $this->atLeastOnce() )->method( 'showPlainTemplate' )->will( $this->returnValue( 'true' ) );
-        $this->assertEquals( 'content_plain.tpl', $oContentView->render() );
+        $this->assertEquals( 'page/info/content_plain.tpl', $oContentView->render() );
     }
 
     /**
@@ -461,5 +461,17 @@ class Unit_Views_contentTest extends OxidTestCase
            return;
        }
        $this->fail("no exception");
+    }
+
+    /**
+     * Testing Contact::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oContent = new Content();
+
+        $this->assertEquals(1, count($oContent->getBreadCrumb()));
     }
 }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnews.php 27793 2010-05-18 13:32:24Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxnews.php 31954 2010-12-17 13:33:40Z sarunas $
  */
 
 /**
@@ -88,9 +88,10 @@ class oxNews extends oxI18n
         if ( $this->_oGroups == null && $sOxid = $this->getId() ) {
             // usergroups
             $this->_oGroups = oxNew( 'oxlist', 'oxgroups' );
-            $sSelect  = "select oxgroups.* from oxgroups, oxobject2group ";
+            $sViewName = getViewName( "oxgroups", $this->getLanguage() );
+            $sSelect  = "select {$sViewName}.* from {$sViewName}, oxobject2group ";
             $sSelect .= "where oxobject2group.oxobjectid='$sOxid' ";
-            $sSelect .= "and oxobject2group.oxgroupsid=oxgroups.oxid ";
+            $sSelect .= "and oxobject2group.oxgroupsid={$sViewName}.oxid ";
             $this->_oGroups->selectString( $sSelect );
         }
 

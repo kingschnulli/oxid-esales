@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 31354 2010-11-30 16:23:35Z linas.kukulskis $
+ * @version   SVN: $Id: lang.php 32877 2011-02-03 09:25:45Z rimvydas.paskevicius $
  */
 
 
@@ -195,6 +195,7 @@ $aLang = array(
 'BASKET_NEXTSTEP'                                 => "Continue to Next Step",
 'BASKET_CONTINUESHOPPING'                         => "Continue Shopping",
 'BASKET_ARTICEL'                                  => "Product",
+'BASKET_DETAILS'                                  => "Details",
 'BASKET_QUANTITY'                                 => "Quantity",
 'BASKET_UNITPRICE'                                => "Unit Price",
 'BASKET_TAX'                                      => "VAT",
@@ -300,6 +301,7 @@ $aLang = array(
 'DETAILS_REDUCEDTEXT'                             => "(Our normal price.)",
 'DETAILS_NOWONLY'                                 => "now only",
 'DETAILS_PLUSSHIPPING'                            => "incl. VAT, plus ",
+'DETAILS_PLUSSHIPPING_PLUS'                      =>  "plus ",
 'DETAILS_PLUSSHIPPING2'                           => "Shipping",
 'DETAILS_VPE_MESSAGE_1'                           => "This product can only be ordered in packaging units of ",
 'DETAILS_VPE_MESSAGE_2'                           => "",
@@ -644,6 +646,7 @@ $aLang = array(
 'INC_LIST_LOCATOR_PAGE'                           =>"Page",
 'INC_LIST_LOCATOR_ARTICLESPERPAGE'                =>"Products per page:",
 'INC_LIST_LOCATOR_RECOMLISTSPERPAGE'              =>"Lists per page:",
+'INC_LIST_LOCATOR_ORDERSPERPAGE'                  =>"Orders per page:",
 'INC_NEWBASKETITEM_ADDEDTOBASKET1'                =>"Product",
 'INC_NEWBASKETITEM_ADDEDTOBASKET2'                =>"was added to the",
 'INC_NEWBASKETITEM_ADDEDTOBASKET3'                =>"Cart",
@@ -731,6 +734,9 @@ $aLang = array(
 'INC_SEARCH_PRODUCT_ITEM_ADDTOBASKET'             =>"add to Cart",
 'INC_SORT_TITLE'                                  =>"Title",
 'INC_SORT_PRICE'                                  =>"Price",
+'INC_SORT_ARTNUM'                                 =>"[Tr] Product number",
+'INC_SORT_RATING'                                 =>"[Tr] Rating",
+'INC_SORT_STOCK'                                  =>"[Tr] Stock",
 'INC_SORT_SORTBY'                                 =>"Sort by:",
 'INC_SORT_GUESTBOOK_DATE'                         =>"Date",
 'INC_SORT_GUESTBOOK_AUTHOR'                       =>"Author",
@@ -783,7 +789,7 @@ $aLang = array(
 'NEWSLETTER_COMPLETEMARKEDFIELEDS'                => 'Please complete all fields marked with a <span class="req">*</span>',
 'NEWSLETTER_SUBSCRIBE'                            => "Subscribe",
 'NEWSLETTER_UNSUBSCRIBE'                          => "Unsubscribe",
-'NEWSLETTER_EMAIL_NOT_EXIST'					  => "The specified eMail address is not subscribed to our newsletter.",
+'NEWSLETTER_EMAIL_NOT_EXIST'                      => "The specified eMail address is not subscribed to our newsletter.",
 'NEWSLETTER_THANKYOU'                             => "thank you for subscribing to our newsletter.",
 'NEWSLETTER_YOUHAVEBEENSENTCONFIRMATION'          => "You have just been sent a confirmation eMail, with which you can activate your subscription.",
 'NEWSLETTER_CONGRATULATIONS'                      => "Congratulations and Welcome!",
@@ -801,6 +807,7 @@ $aLang = array(
 'ORDER_MODIFYQUANTITY3'                           => "Cart",
 'ORDER_BASKETEMPTY'                               => "The Shopping Cart is empty.",
 'ORDER_ARTICLE'                                   => "Product",
+'ORDER_DETAILS'                                   => "Details",
 'ORDER_GIFTOPTION'                                => "Gift option",
 'ORDER_UNITPRICE'                                 => "Unit Price",
 'ORDER_QUANTITY'                                  => "Quantity",
@@ -1011,7 +1018,7 @@ $aLang = array(
 'REGISTER_PHONE2'                                 => "Phone:",
 'REGISTER_FAX2'                                   => "Fax:",
 'REGISTER_SEND'                                   => "Send",
-'REGISTER_DISABLESHIPPINGADDRESS'                 => "Click here to hide different shipping address",
+'REGISTER_DISABLESHIPPINGADDRESS'                 => "Use Billing Address for Shipping",
 'REVIEW_LOGIN_TITLE'                              => "Login",
 'REVIEW_ARTNUMBER'                                => "Art.No.:",
 'REVIEW_REVIEW'                                   => "Your Review",
@@ -1204,7 +1211,7 @@ $aLang = array(
 'USER_FAX2'                                       => "Fax:",
 'USER_CONTINUENEXTSTEP'                           => "Continue to Next Step",
 'USER_OPENID'                                     => "OpenID:",
-'USER_DISABLESHIPPINGADDRESS'                     => "Click here to hide different shipping address",
+'USER_DISABLESHIPPINGADDRESS'                     => "Use Billing Address for Shipping",
 'USER_SELECTSHIPPINGADDRESS'                      => "Select",
 'USER_UPDATE_ACCOUNT'                             => "Update account",
 'USER_FB_UPDATEACCOUNTMSG'                        => "You already connected using Facebook connect. If you already have an account, please update your account and in future connect to your account using Facebook connect.",
@@ -1285,6 +1292,7 @@ $aLang = array(
 'EXCEPTION_NOFILE'                                => 'No uploaded file',
 'EXCEPTION_NOTALLOWEDTYPE'                        => 'Not allowed file type (please, edit config.inc.php to allow this type of file)',
 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" not found',
+'EXCEPTION_SYSTEMCOMPONENT_CLASSNOTFOUND'         => 'Class "%s" not found',
 'EXCEPTION_RECOMMLIST_NOTITLE'                    => 'Title field is empty',
 'INC_HEADER_INVITEFRIENDS'                        => "Invite your friends",
 'INVITE_TITLE'                                    => "Invite your friends",
@@ -1344,7 +1352,18 @@ $aLang = array(
 'FACEBOOK_POPUP_UPDATEDONETEXT'                   => "Your account was updated successfully. Now when you connect using Facebook Connect, you will
                                                      be automaticly logged in with your existing account.",
 
+'FORM_WISHLIST_SUGGEST_ERRCOMLETEFIELDSCORRECTLY'                => "Please complete all fields correctly!",
+'FORM_WISHLIST_SUGGEST_ERRWRONGEMAIL'                            => "An error occured sending the eMail - please check the eMail address.",
 'INC_CMP_BASKET_TIMEOUT'                          => 'Expires in:',
+'EXCEPTION_GUESTBOOKENTRY_ERRLOGGINTOWRITEENTRY'  => "Error: You have to be logged in to write a guestbook entry.",
+'EXCEPTION_GUESTBOOKENTRY_ERRUNDEFINEDSHOP'       => "Error: Undefined Shop",
+'EXCEPTION_GUESTBOOKENTRY_ERRREVIEWCONTAINSNOTEXT'=> "Error: Your review contains no text.",
+'EXCEPTION_GUESTBOOKENTRY_ERRMAXIMUMNOMBEREXCEEDED'=> "Error: You exceeded the maximum number of reviews per day.",
+'EXCEPTION_INVITE_COMLETECORRECTLYFIELDS'         => "Please complete all fields correctly!",
+'EXCEPTION_INVITE_ERRORWHILESENDINGMAIL'          => "An error occurred sending the eMail - please check the eMail address.",
+'EXCEPTION_INVITE_INCORRECTEMAILADDRESS'          => "Incorrect eMail address. Please check entered eMail addresses.",
+
+'ALIST_META_DESCRIPTION_PREFIX'                   =>"You are here:",
 );
 
 /*

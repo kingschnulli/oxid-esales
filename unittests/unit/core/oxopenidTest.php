@@ -19,13 +19,16 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxopenidTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxopenidTest.php 33239 2011-02-14 14:08:13Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
 $iOldErrorReproting = error_reporting();
 error_reporting($iOldErrorReproting & ~E_STRICT);
+if ( defined( 'E_DEPRECATED' ) ) {
+    error_reporting( error_reporting() & ~E_DEPRECATED );
+}
 $sPathExtra = getShopBasePath()."core/openid";
 $sPath = ini_get('include_path');
 $sPath = $sPathExtra . ':' . $sPath;

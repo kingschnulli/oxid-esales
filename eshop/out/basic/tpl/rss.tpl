@@ -1,4 +1,4 @@
-[{$xmldef.start}] version="1.0" encoding="[{$charset}]"[{$xmldef.end}]
+[{$xmldef.start}] version="1.0" encoding="[{$oView->getCharSet()}]"[{$xmldef.end}]
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
         <title>[{$channel.title}]</title>

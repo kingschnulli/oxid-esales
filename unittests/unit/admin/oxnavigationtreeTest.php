@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnavigationtreeTest.php 32618 2011-01-20 15:24:18Z sarunas $
+ * @version   SVN: $Id: oxnavigationtreeTest.php 32915 2011-02-04 11:39:29Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -815,11 +815,13 @@ class Unit_Admin_oxNavigationTreeTest extends OxidTestCase
      */
     public function testGetAdminUrl()
     {
-        $oSess = $this->getMock( 'oxSession', array( 'url' ) );
-        $oSess->expects( $this->exactly(1) )->method( 'url' )->will( $this->returnValue( 'sess:url' ) );
+        $oUU = $this->getMock( 'oxUtilsUrl', array( 'processUrl' ) );
+        $oUU->expects( $this->any() )->method( 'processUrl' )
+                ->with(  $this->anything(), $this->equalTo( false ) )
+                ->will( $this->returnValue( 'sess:url?' ) );
+        modInstances::addMod('oxUtilsUrl', $oUU);
 
-        $o = $this->getMock('oxNavigationTree', array('getSession'));
-        $o->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSess ) );
+        $o = new oxNavigationTree();
 
         $this->assertEquals('sess:url?', $o->UNITgetAdminUrl());
     }

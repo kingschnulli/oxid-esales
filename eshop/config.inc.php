@@ -34,14 +34,10 @@
         $this->sCompileDir  = '<sCompileDir_ce>';
 
     // Template theme name, a directory in out/ folder containing all needed resources
-    $this->sTheme = 'basic';
+    // $this->sTheme = 'azure';
 
     // Custom  theme, a directory in out/ folder containing only modified template files
-    $this->sCustomTheme = null;
-
-    // Uncoment only for former (pre version 4) template compatibility
-    // $this->blFormerTplSupport = true;
-    // $this->blFixedWidthLayout = true;
+    // $this->sCustomTheme = null;
 
     // UTF-8 mode in shop 0 - off, 1 - on
     $this->iUtfMode  = '<iUtfMode>';
@@ -161,3 +157,9 @@
 
     // Trusted Shops Ratings test service wsdl
     $this->sTsServiceTestWsdl = "https://qa.trustedshops.de/ts/services/TsRating?wsdl";
+
+    /**
+     * should template blocks be highlighted in frontend ?
+     * this is mainly intended for module writers in non productive environment
+     */
+    $this->blDebugTemplateBlocks = false;

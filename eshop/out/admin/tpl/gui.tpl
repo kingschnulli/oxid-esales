@@ -4,25 +4,25 @@
     <title>[{ oxmultilang ident="GUI_TITLE" }]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]">
 
-    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]yui/build/reset-fonts/reset-fonts.css">
-    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]yui/build/base/base-min.css">
-    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]yui/build/assets/skins/sam/skin.css">
+    <link rel="stylesheet" type="text/css" href="[{$oViewConf->getResourceUrl()}]yui/build/reset-fonts/reset-fonts.css">
+    <link rel="stylesheet" type="text/css" href="[{$oViewConf->getResourceUrl()}]yui/build/base/base-min.css">
+    <link rel="stylesheet" type="text/css" href="[{$oViewConf->getResourceUrl()}]yui/build/assets/skins/sam/skin.css">
 
-    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/utilities/utilities.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/button/button-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/slider/slider-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/colorpicker/colorpicker-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/container/container-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/tabview/tabview-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/treeview/treeview-min.js"></script>
-    <script type="text/javascript" src="[{$shop->basetpldir}]yui/build/stylesheet/stylesheet-min.js"></script>
+    <script type="text/javascript" src="[{$oViewConf->getResourceUrl()}]yui/build/utilities/utilities.js"></script>
+    <script type="text/javascript" src="[{$oViewConf->getResourceUrl()}]yui/build/button/button-min.js"></script>
+    <script type="text/javascript" src="[{$oViewConf->getResourceUrl()}]yui/build/slider/slider-min.js"></script>
+    <script type="text/javascript" src="[{$oViewConf->getResourceUrl()}]yui/build/colorpicker/colorpicker-min.js"></script>
+    <script type="text/javascript" src="[{$oViewConf->getResourceUrl()}]yui/build/container/container-min.js"></script>
+    <script type="text/javascript" src="[{$oViewConf->getResourceUrl()}]yui/build/tabview/tabview-min.js"></script>
+    <script type="text/javascript" src="[{$oViewConf->getResourceUrl()}]yui/build/treeview/treeview-min.js"></script>
+    <script type="text/javascript" src="[{$oViewConf->getResourceUrl()}]yui/build/stylesheet/stylesheet-min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="[{$shop->basetpldir}]gui.css">
-    <script type="text/javascript" src="[{$shop->basetpldir}]yui/oxid-gui.js" ></script>
+    <link rel="stylesheet" type="text/css" href="[{$oViewConf->getResourceUrl()}]gui.css">
+    <script type="text/javascript" src="[{$oViewConf->getResourceUrl()}]yui/oxid-gui.js" ></script>
 
      <!--[if lt IE 7]>
      <style type="text/css">
-        #gui-picker .yui-picker-bg {background-image: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='[{$shop->basetpldir}]yui/build/colorpicker/assets/picker_mask.png', sizingMethod='scale');}
+        #gui-picker .yui-picker-bg {background-image: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='[{$oViewConf->getResourceUrl()}]yui/build/colorpicker/assets/picker_mask.png', sizingMethod='scale');}
      </style>
      <![endif]-->
 
@@ -144,7 +144,7 @@
         var gui;
 
         YAHOO.util.Event.onDOMReady(function() {
-            gui = new YAHOO.oxid.gui( 'gui-dialog', 'gui-tabs', 'gui-picker', 'gui-tree', 'gui-preview', '[{ $shop->selflink }]', '[{ $shop->basetpldir }]', '[{$sAddData}]');
+            gui = new YAHOO.oxid.gui( 'gui-dialog', 'gui-tabs', 'gui-picker', 'gui-tree', 'gui-preview', '[{ $oViewConf->getSelfLink()|replace:"&amp;":"&" }]', '[{ $oViewConf->getResourceUrl() }]', '[{$sAddData}]');
             gui.render();
             gui.show();
         });

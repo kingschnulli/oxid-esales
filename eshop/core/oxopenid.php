@@ -19,11 +19,14 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxopenid.php 29103 2010-07-27 12:44:06Z vilma $
+ * @version   SVN: $Id: oxopenid.php 33239 2011-02-14 14:08:13Z arvydas.vapsva $
  */
 
 $iOldErrorReproting = error_reporting();
-error_reporting($iOldErrorReproting & ~E_STRICT);
+error_reporting( $iOldErrorReproting & ~E_STRICT & ~E_DEPRECATED );
+if ( defined( 'E_DEPRECATED' ) ) {
+    error_reporting( error_reporting() & ~E_DEPRECATED );
+}
 
 $sPathExtra = getShopBasePath()."core/openid";
 $sPath = ini_get('include_path');

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_category.inc.php 25640 2010-02-05 06:42:24Z alfonsas $
+ * @version   SVN: $Id: attribute_category.inc.php 31954 2010-12-17 13:33:40Z sarunas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -52,7 +52,6 @@ class ajaxComponent extends ajaxListComponent
     protected function _getQuery()
     {
         $myConfig = $this->getConfig();
-        $sLangTag = oxLang::getInstance()->getLanguageTag();
         $oDb      = oxDb::getDb();
 
         $sCatTable = getViewName('oxcategories');
@@ -62,17 +61,17 @@ class ajaxComponent extends ajaxListComponent
         // category selected or not ?
         if ( !$sDiscountId) {
             $sQAdd  = " from $sCatTable where $sCatTable.oxshopid = '".$myConfig->getShopId()."' ";
-            $sQAdd .= " and $sCatTable.oxactive{$sLangTag} = '1' ";
+            $sQAdd .= " and $sCatTable.oxactive = '1' ";
         } else {
             $sQAdd  = " from $sCatTable left join oxcategory2attribute on $sCatTable.oxid=oxcategory2attribute.oxobjectid ";
             $sQAdd .= " where oxcategory2attribute.oxattrid = " . $oDb->quote( $sDiscountId ) . " and $sCatTable.oxshopid = '".$myConfig->getShopId()."' ";
-            $sQAdd .= " and $sCatTable.oxactive{$sLangTag} = '1' ";
+            $sQAdd .= " and $sCatTable.oxactive = '1' ";
         }
 
         if ( $sSynchDiscountId && $sSynchDiscountId != $sDiscountId) {
             $sQAdd .= " and $sCatTable.oxid not in ( select $sCatTable.oxid from $sCatTable left join oxcategory2attribute on $sCatTable.oxid=oxcategory2attribute.oxobjectid ";
             $sQAdd .= " where oxcategory2attribute.oxattrid = " . $oDb->quote( $sSynchDiscountId ) . " and $sCatTable.oxshopid = '".$myConfig->getShopId()."' ";
-            $sQAdd .= " and $sCatTable.oxactive{$sLangTag} = '1' ) ";
+            $sQAdd .= " and $sCatTable.oxactive = '1' ) ";
         }
 
         return $sQAdd;

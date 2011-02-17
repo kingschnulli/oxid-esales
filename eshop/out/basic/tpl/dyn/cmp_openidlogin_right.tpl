@@ -7,7 +7,7 @@
         [{$_login_additional_form_parameters}]
         <input type="hidden" name="fnc" value="login_noredirect">
         <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
-        <input type="hidden" name="pgNr" value="[{$_login_pgnr-1}]">
+        <input type="hidden" name="pgNr" value="[{$_login_pgnr}]">
         <input type="hidden" name="tpl" value="[{$_login_tpl}]">
         <input type="hidden" name="CustomError" value='dyn_cmp_openidlogin_right'>
         [{if $oView->getProduct()}]

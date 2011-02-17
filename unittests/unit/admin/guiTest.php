@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: guiTest.php 28257 2010-06-09 14:46:17Z michael.keiluweit $
+ * @version   SVN: $Id: guiTest.php 31925 2010-12-17 09:13:34Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -141,6 +141,9 @@ class Unit_Admin_GuiTest extends OxidTestCase
     {
         parent::setUp();
 
+        $this->_sOrigTheme = modConfig::getInstance()->getRealInstance()->getConfigParam('sTheme');
+        modConfig::getInstance()->getRealInstance()->setConfigParam('sTheme', 'basic');
+
         $this->oGui = $this->getProxyClass('_Gui');
 
         $oGuiDom = new DomDocument();
@@ -155,6 +158,13 @@ class Unit_Admin_GuiTest extends OxidTestCase
         $this->oGui->setVar('oGuiDom', $oGuiDom);
         $this->oGui->setVar('oThemesDom', $oThemesDom);
         $this->oGui->setVar('blLoaded', true);
+    }
+
+    public function tearDown()
+    {
+        modConfig::getInstance()->getRealInstance()->setConfigParam('sTheme', $this->_sOrigTheme);
+
+        parent::tearDown();
     }
 
 

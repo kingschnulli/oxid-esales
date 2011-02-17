@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account_recommlist.php 26162 2010-03-02 08:35:15Z arvydas $
+ * @version   SVN: $Id: account_recommlist.php 32923 2011-02-04 14:35:22Z vilma $
  */
 
 /**
@@ -35,7 +35,7 @@ class Account_Recommlist extends Account
      *
      * @var string
      */
-    protected $_sThisTemplate = 'account_recommlist.tpl';
+    protected $_sThisTemplate = 'page/account/recommendationlist.tpl';
 
     /**
      * Is recomendation list entry was saved this marker gets value TRUE. Default is FALSE
@@ -84,9 +84,6 @@ class Account_Recommlist extends Account
      * the last article in list loaded by oxarticle::GetSimilarProducts() and
      * returns name of template to render account_wishlist::_sThisTemplate
      *
-     * Template variables:
-     * <b>blshowsuggest</b>, <b>wishlist</b>
-     *
      * @return  string  $_sThisTemplate current template file name
      */
     public function render()
@@ -98,9 +95,8 @@ class Account_Recommlist extends Account
             return $this->_sThisTemplate = $this->_sThisLoginTemplate;
         }
 
-        $this->_aViewData['recommlists']    = $oLists   = $this->getRecommLists();
-        $this->_aViewData['actvrecommlist'] = $oActList = $this->getActiveRecommList();
-        $this->_aViewData['itemList']       = $this->getActiveRecommItems();
+        $oLists   = $this->getRecommLists();
+        $oActList = $this->getActiveRecommList();
 
         // list of found oxrecommlists
         if ( !$oActList && $oLists->count() ) {
@@ -110,7 +106,6 @@ class Account_Recommlist extends Account
             $this->_iCntPages  = round( $this->_iAllArtCnt / $iNrofCatArticles + 0.49 );
         }
 
-        $this->_aViewData['pageNavigation'] = $this->getPageNavigation();
         return $this->_sThisTemplate;
     }
 
@@ -274,6 +269,8 @@ class Account_Recommlist extends Account
              ( $oRecommList = $this->getActiveRecommList() ) ) {
             $oRecommList->delete();
             $this->setActiveRecommList( false );
+        } else {
+            $this->_sThisTemplate = 'page/recommendations/edit.tpl';
         }
     }
 
@@ -292,6 +289,7 @@ class Account_Recommlist extends Account
              ( $oRecommList = $this->getActiveRecommList() ) ) {
             $oRecommList->removeArticle( $sArtId );
         }
+        $this->_sThisTemplate = 'page/recommendations/edit.tpl';
     }
 
     /**
@@ -309,4 +307,24 @@ class Account_Recommlist extends Account
         }
         return $this->_oPageNavigation;
     }
+
+    /**
+     * Returns Bread Crumb - you are here page1/page2/page3...
+     *
+     * @return array
+     */
+    public function getBreadCrumb()
+    {
+        $aPaths = array();
+        $aPath = array();
+
+        $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_MY_ACCOUNT', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPaths[] = $aPath;
+
+        $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_RECOMMENDATIONLIST_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPaths[] = $aPath;
+
+        return $aPaths;
+    }
+
 }

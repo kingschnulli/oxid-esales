@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: wishlist.php 25466 2010-02-01 14:12:07Z alfonsas $
+ * @version   SVN: $Id: wishlist.php 33100 2011-02-09 14:47:36Z linas.kukulskis $
  */
 
 /**
@@ -32,7 +32,7 @@ class Wishlist extends oxUBase
      * Current class template name.
      * @var string
      */
-    protected $_sThisTemplate = 'wishlist.tpl';
+    protected $_sThisTemplate = 'page/wishlist/wishlist.tpl';
 
     /**
      * user object list
@@ -73,36 +73,6 @@ class Wishlist extends oxUBase
      * @var bool
      */
     protected $_blBargainAction = true;
-
-    /**
-     * If passed wishlist ID - loads wishlist owner object, then it's
-     * wishlist (oxuser::GetBasket()) and then loads each stored article.
-     * Returns name of template file to render wishlist::_sThisTemplate.
-     *
-     * Template variables:
-     * <b>wishuser</b>, <b>wishlist</b>
-     *
-     * Session variables:
-     * <b>wishid</b>
-     *
-     * @return  string  $this->_sThisTemplate   current template file name
-     */
-    public function render()
-    {
-        parent::render();
-
-        // loading actions
-        $this->_loadActions();
-
-        //for older templates
-        $this->_aViewData['wishuser'] = $this->getWishUser();
-        $this->_aViewData['wishlist'] = $this->getWishList();
-
-        $this->_aViewData['wish_result'] = $this->getWishListUsers();
-        $this->_aViewData['search']      = $this->getWishListSearchParam();
-        return $this->_sThisTemplate;
-    }
-
 
     /**
      * return the user which is owner of the wish list

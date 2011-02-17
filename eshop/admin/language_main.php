@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: language_main.php 28092 2010-06-02 14:00:36Z michael.keiluweit $
+ * @version   SVN: $Id: language_main.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
  */
 
 /**
@@ -72,17 +72,7 @@ class Language_Main extends oxAdminDetails
 
         parent::render();
 
-        $sOxId = oxConfig::getParameter( "oxid");
-        // check if we right now saved a new entry
-        $sSavedID = oxConfig::getParameter( "saved_oxid");
-        if ( isset( $sSavedID) ) {
-            $sOxId = $sSavedID;
-            oxSession::deleteVar( "saved_oxid");
-            $this->_aViewData["oxid"] =  $sOxId;
-            // for reloading upper frame
-            $this->_aViewData["updatelist"] =  "1";
-        }
-
+        $sOxId = $this->_aViewData["oxid"] = $this->getEditObjectId();
         //loading languages info from config
         $this->_aLangData = $this->_getLanguages();
 
@@ -108,7 +98,7 @@ class Language_Main extends oxAdminDetails
         $myConfig  = $this->getConfig();
 
 
-        $sOxId   = oxConfig::getParameter( "oxid");
+        $sOxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval" );
 
         if ( !isset( $aParams['active'])) {
@@ -134,14 +124,14 @@ class Language_Main extends oxAdminDetails
         if ( $sOxId != -1 && $sOxId  != $aParams['abbr'] ) {
             $this->_updateAbbervation( $sOxId, $aParams['abbr'] );
             $sOxId = $aParams['abbr'];
-            oxSession::setVar( "saved_oxid", $sOxId);
+            $this->setEditObjectId( $sOxId );
         }
 
         // if adding new language, setting lang id to abbervation
         if ( $sOxId == -1 ) {
             $sOxId = $aParams['abbr'];
             $this->_aLangData['params'][$sOxId]['baseId'] = $this->_getAvailableLangBaseId();
-            oxSession::setVar( "saved_oxid", $sOxId);
+            $this->setEditObjectId( $sOxId );
 
             //checking if added language already has created multilang fields
             //with new base ID - if not, creating new fields
@@ -473,7 +463,7 @@ class Language_Main extends oxAdminDetails
     {
         $blResult = true;
 
-        $sOxId   = oxConfig::getParameter( "oxid");
+        $sOxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval" );
 
         // if creating new language, checking if language already exists with

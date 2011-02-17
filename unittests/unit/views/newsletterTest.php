@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletterTest.php 27207 2010-04-14 13:11:41Z vilma $
+ * @version   SVN: $Id: newsletterTest.php 32923 2011-02-04 14:35:22Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -353,14 +353,13 @@ class Unit_Views_newsletterTest extends OxidTestCase
         $oTestNews->expects( $this->once() )->method( 'getNewsletterStatus' )->will( $this->returnValue(4) );
         $oTestNews->expects( $this->once() )->method( 'getRegParams' )->will( $this->returnValue(5) );
 
-        $this->assertEquals( 'newsletter.tpl', $oTestNews->render() );
+        $this->assertEquals( 'page/info/newsletter.tpl', $oTestNews->render() );
 
-        $aViewData = $oTestNews->getViewData();
-        $this->assertEquals( '1', $aViewData['toparticle'] );
-        $this->assertEquals( '2', $aViewData['toparticlelist'] );
-        $this->assertEquals( '3', $aViewData['homecountryid'] );
-        $this->assertEquals( '4', $aViewData['success'] );
-        $this->assertEquals( '5', $aViewData['aRegParams'] );
+        $this->assertEquals( '1', $oTestNews->getTopStartArticle());
+        $this->assertEquals( '2', $oTestNews->getTopStartActionArticles() );
+        $this->assertEquals( '3', $oTestNews->getHomeCountryId() );
+        $this->assertEquals( '4', $oTestNews->getNewsletterStatus() );
+        $this->assertEquals( '5', $oTestNews->getRegParams() );
     }
 
     /**

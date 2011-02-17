@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlist.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxlist.php 32880 2011-02-03 11:45:17Z sarunas $
  */
 
 /**
@@ -262,24 +262,6 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
     protected $_sShopID = null;
 
     /**
-     * Holds a name of the method to be called on list object before executing assign()
-     *
-     * @var array/string
-     *
-     * @deprecated
-     */
-    protected $_aAssignCallbackPrepend  = null;
-
-    /**
-     * Holds a name of the method to be called on list object after executing assign()
-     *
-     * @var array/string
-     *
-     * @deprecated
-     */
-    protected $_aAssignCallback = null;
-
-    /**
      * @var array SQL Limit, 0 => Start, 1 => Records
      */
     protected $_aSqlLimit = array();
@@ -346,34 +328,6 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
     }
 
     /**
-     * Sets function to be called on list object before loading it
-     *
-     * @param array $aAssignCallbackPrepend callback array
-     *
-     * @deprecated
-     *
-     * @return null
-     */
-    public function setAssignCallbackPrepend($aAssignCallbackPrepend)
-    {
-        $this->_aAssignCallbackPrepend = $aAssignCallbackPrepend;
-    }
-
-    /**
-     * Sets function to be called on list object before loading it
-     *
-     * @param array $aAssignCallBack callback array
-     *
-     * @deprecated
-     *
-     * @return null
-     */
-    public function setAssignCallback( $aAssignCallBack)
-    {
-        $this->_aAssignCallback = $aAssignCallBack;
-    }
-
-    /**
      * Initializes or returns existing list template object.
      *
      * @return oxBase
@@ -408,24 +362,12 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
 
         $oSaved = clone $this->getBaseObject();
 
-        // this code is deprecated and will be removed:
-        if ( $this->_aAssignCallbackPrepend && is_callable($this->_aAssignCallbackPrepend)) {
-            call_user_func( $this->_aAssignCallbackPrepend, $oSaved);
-        }
-        // end of deprecated code
-
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
 
                 $oListObject = clone $oSaved;
 
                 $this->_assignElement($oListObject, $rs->fields);
-
-                // this code is deprecated and will be removed:
-                if ( $this->_aAssignCallback ) {
-                    call_user_func( $this->_aAssignCallback, $oListObject );
-                }
-                // end of deprecated code
 
                 if ($oListObject->getId()) {
                     $this->_aArray[$oListObject->getId()] = $oListObject;

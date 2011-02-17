@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 30393 2010-10-19 12:41:04Z vilma $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 30423 2010-10-20 13:02:51Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -252,4 +252,118 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         );
     }
 
+    /**
+     * base functionality test
+     */
+    public function testCheckTemplateBlock()
+    {
+        $oCfg = $this->getMock('oxconfig', array('getTemplateFile'));
+        $oCfg->expects($this->at(0))->method('getTemplateFile')
+                ->with($this->equalTo('test0'), $this->equalTo(false))
+                ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl_nonexisting.tpl'));
+        $oCfg->expects($this->at(1))->method('getTemplateFile')
+                ->with($this->equalTo('test1'), $this->equalTo(false))
+                ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
+        $oCfg->expects($this->at(2))->method('getTemplateFile')
+                ->with($this->equalTo('test1'), $this->equalTo(false))
+                ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
+        $oCfg->expects($this->at(3))->method('getTemplateFile')
+                ->with($this->equalTo('test1'), $this->equalTo(false))
+                ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
+
+        modConfig::getInstance()->modAttach($oCfg);
+
+        $sCName = oxTestModules::publicize('oxSysRequirements', '_checkTemplateBlock');
+        $oSR = new $sCName;
+        $this->assertEquals(false, $oSR->p_checkTemplateBlock('test0', 'nonimportanthere'));
+        $this->assertEquals(true,  $oSR->p_checkTemplateBlock('test1', 'block1'));
+        $this->assertEquals(true,  $oSR->p_checkTemplateBlock('test1', 'block2'));
+        $this->assertEquals(false, $oSR->p_checkTemplateBlock('test1', 'block3'));
+    }
+
+    /**
+     * base functionality test
+     */
+    public function testGetMissingTemplateBlocksIfNotFound()
+    {
+        $oCfg = $this->getMock('oxconfig', array('getShopId'));
+        $oCfg->expects($this->exactly(1))->method('getShopId')
+                ->will($this->returnValue(15));
+        modConfig::getInstance()->modAttach($oCfg);
+
+        $oRs = $this->getMock('stdclass', array('moveNext', 'recordCount'));
+        $oRs->expects($this->exactly(1))->method('moveNext')
+                ->will($this->evalFunction('{$_this->EOF = true;}'));
+        $oRs->expects($this->exactly(1))->method('recordCount')
+                ->will($this->returnValue(1));
+        $oRs->fields = array(
+                    'OXTEMPLATE'=>'_OXTEMPLATE_',
+                    'OXBLOCKNAME'=>'_OXBLOCKNAME_',
+                    'OXMODULE'=>'_OXMODULE_',
+            );
+
+        $oDb = $this->getMock('stdclass', array('execute', 'quote'));
+        $oDb->expects($this->exactly(1))->method('execute')
+                ->with($this->equalTo("select * from oxtplblocks where oxactive=1 and oxshopid='15'"))
+                ->will($this->returnValue($oRs));
+        $oDb->expects($this->exactly(1))->method('quote')
+                ->with($this->equalTo(15))
+                ->will($this->returnValue("'15'"));
+        modDB::getInstance()->modAttach($oDb);
+
+        $oSR = $this->getMock('oxSysRequirements', array('_checkTemplateBlock'));
+        $oSR->expects($this->exactly(1))->method('_checkTemplateBlock')
+                ->with($this->equalTo("_OXTEMPLATE_"), $this->equalTo("_OXBLOCKNAME_"))
+                ->will($this->returnValue(false));
+
+        $this->assertEquals(
+                array(array(
+                    'module'   => '_OXMODULE_',
+                    'block'    => '_OXBLOCKNAME_',
+                    'template' => '_OXTEMPLATE_',
+                )),
+                $oSR->getMissingTemplateBlocks()
+            );
+    }
+
+    /**
+     * base functionality test
+     */
+    public function testGetMissingTemplateBlocksIfFound()
+    {
+        $oCfg = $this->getMock('oxconfig', array('getShopId'));
+        $oCfg->expects($this->exactly(1))->method('getShopId')
+                ->will($this->returnValue(15));
+        modConfig::getInstance()->modAttach($oCfg);
+
+        $oRs = $this->getMock('stdclass', array('moveNext', 'recordCount'));
+        $oRs->expects($this->exactly(1))->method('moveNext')
+                ->will($this->evalFunction('{$_this->EOF = true;}'));
+        $oRs->expects($this->exactly(1))->method('recordCount')
+                ->will($this->returnValue(1));
+        $oRs->fields = array(
+                    'OXTEMPLATE'=>'_OXTEMPLATE_',
+                    'OXBLOCKNAME'=>'_OXBLOCKNAME_',
+                    'OXMODULE'=>'_OXMODULE_',
+            );
+
+        $oDb = $this->getMock('stdclass', array('execute', 'quote'));
+        $oDb->expects($this->exactly(1))->method('execute')
+                ->with($this->equalTo("select * from oxtplblocks where oxactive=1 and oxshopid='15'"))
+                ->will($this->returnValue($oRs));
+        $oDb->expects($this->exactly(1))->method('quote')
+                ->with($this->equalTo(15))
+                ->will($this->returnValue("'15'"));
+        modDB::getInstance()->modAttach($oDb);
+
+        $oSR = $this->getMock('oxSysRequirements', array('_checkTemplateBlock'));
+        $oSR->expects($this->exactly(1))->method('_checkTemplateBlock')
+                ->with($this->equalTo("_OXTEMPLATE_"), $this->equalTo("_OXBLOCKNAME_"))
+                ->will($this->returnValue(true));
+
+        $this->assertEquals(
+                array(),
+                $oSR->getMissingTemplateBlocks()
+            );
+    }
 }

@@ -35,7 +35,7 @@ class Unit_Views_wrappingTest extends OxidTestCase
     public function testRender()
     {
         $oView = new Wrapping();
-        $this->assertEquals( 'wrapping.tpl', $oView->render() );
+        $this->assertEquals( 'page/checkout/wrapping.tpl', $oView->render() );
     }
 
     /**

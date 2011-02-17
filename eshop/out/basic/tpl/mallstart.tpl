@@ -1,5 +1,5 @@
 [{assign var="template_title" value="MALLSTART_TITLE"|oxmultilangassign}]
-[{include file="_header_plain.tpl" title=$template_title location=$template_title allowindexing=true meta_description=$meta_description meta_keywords=$meta_keywords}]
+[{include file="_header_plain.tpl" title=$template_title location=$template_title allowindexing=true meta_description=$oView->getMetaDescription() meta_keywords=$oView->getMetaKeywords()}]
 
     <div class="mallbox">
 

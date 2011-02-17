@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentUsageTest.php 28142 2010-06-03 14:05:08Z arvydas $
+ * @version   SVN: $Id: contentUsageTest.php 32076 2010-12-20 13:50:34Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -80,6 +80,36 @@ class Unit_Maintenance_contentUsageTest extends OxidTestCase
         }
         // includable templates
         foreach (glob($dir."/out/basic/tpl/inc/*.tpl") as $tpl) {
+            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        }
+        foreach (glob($dir."/out/basic/tpl/page/shop/*.tpl") as $tpl) {
+            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        }
+        foreach (glob($dir."/out/basic/tpl/page/checkout/*.tpl") as $tpl) {
+            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        }
+        foreach (glob($dir."/out/basic/tpl/page/account/*.tpl") as $tpl) {
+            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        }
+        foreach (glob($dir."/out/basic/tpl/page/details/*.tpl") as $tpl) {
+            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        }
+        foreach (glob($dir."/out/basic/tpl/page/info/*.tpl") as $tpl) {
+            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        }
+        foreach (glob($dir."/out/basic/tpl/page/products/*.tpl") as $tpl) {
+            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        }
+        foreach (glob($dir."/out/basic/tpl/page/recommendations/*.tpl") as $tpl) {
+            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        }
+        foreach (glob($dir."/out/basic/tpl/page/wishlist/*.tpl") as $tpl) {
+            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        }
+        foreach (glob($dir."/out/basic/tpl/email/html/*.tpl") as $tpl) {
+            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        }
+        foreach (glob($dir."/out/basic/tpl/email/plain/*.tpl") as $tpl) {
             $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
         }
         foreach (glob($dir."/views/*.php") as $php) {

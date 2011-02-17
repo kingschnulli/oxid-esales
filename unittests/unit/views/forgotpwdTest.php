@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: forgotpwdTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: forgotpwdTest.php 32117 2010-12-21 12:48:06Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -192,4 +192,18 @@ class Unit_Views_forgotpwdTest extends OxidTestCase
         $oView = new forgotpwd();
         $this->assertEquals( 'forgotpwd?success=1', $oView->updatePassword() );
     }
+
+	/**
+     * Testing Account_Newsletter::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oF = new ForgotPwd();
+
+        $this->assertEquals(1, count($oF->getBreadCrumb()));
+    }
+
+
 }

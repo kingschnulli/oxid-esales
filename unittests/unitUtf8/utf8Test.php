@@ -28,8 +28,25 @@ require_once 'unit/test_config.inc.php';
 
 class UnitUtf8_utf8Test extends OxidTestCase
 {
+
+
+    /**
+     * Sets up test
+     *
+     * @return null
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->_sOrigTheme = modConfig::getInstance()->getRealInstance()->getConfigParam('sTheme');
+        modConfig::getInstance()->getRealInstance()->setConfigParam('sTheme', 'basic');
+    }
+
     protected function tearDown()
     {
+        modConfig::getInstance()->getRealInstance()->setConfigParam('sTheme', $this->_sOrigTheme);
+
         $this->cleanUpTable( 'oxarticles' );
         $this->cleanUpTable( 'oxaddress' );
         $this->cleanUpTable( 'oxcategories' );
@@ -554,18 +571,12 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oO2a->oxcategory2attribute__oxattrid = new oxField( '_testAttribute1' );
         $oO2a->save();
 
-
         // finally testing
         $oCat = new oxcategory();
         $oCat->load( $sCatId );
         $aAttr = $oCat->getAttributes();
-
-        $oValue = new stdClass();
-        $oValue->id = 'für-';
-        $oValue->value = 'für-';
-        $oValue->blSelected = false;
-        $this->assertEquals( 'für', $aAttr['_testAttribute1']->title);
-        $this->assertEquals( $oValue, $aAttr['_testAttribute1']->aValues[md5('für-')]);
+        $oAttr = $aAttr->offsetGet('_testAttribute1');
+        $this->assertEquals( 'für', $oAttr->getTitle());
     }
 
     public function testOxCategorylistSortSubCats()
@@ -574,13 +585,8 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $sActRoot = '8a142c3e4143562a5.46426637';
         $oObj = $this->getProxyClass( "oxCategorylist" );
         $oObj->setNonPublicVar('sShopID', null);
-        $oObj->setNonPublicVar('sActCat', $sActCat);
-        $oObj->setNonPublicVar('blHideEmpty', false);
-        $oObj->setNonPublicVar('blForseFull', false);
-        $oObj->setNonPublicVar('iForseLevel', 2);
 
-        $oObj->selectString($oObj->UNITgetSelectString());
-        $oObj->UNITppBuildTree();
+        $oObj->buildTree($sActCat, 0, 0, 1);
 
         //Check root order
         $aCurRootOrder = array();
@@ -661,6 +667,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
         $oContent = new oxcontent();
         $oContent->setId( '_testContent' );
+        $oContent->oxcontents__oxloadid  = new oxField( "_testLoadId" );
         $oContent->oxcontents__oxtitle   = new oxField( $sValue );
         $oContent->oxcontents__oxcontent = new oxField( $sValue );
         $oContent->oxcontents__oxfolder  = new oxField( $sValue );
@@ -1005,37 +1012,6 @@ class UnitUtf8_utf8Test extends OxidTestCase
         }
     }
 
-    public function testOxOrderMakeSelListArray()
-    {
-        $sValue = 'agentūrų Литовские für';
-
-        // assigning select list
-        $oSelList = new oxselectlist();
-        $oSelList->setId( '_testSelList' );
-        $oSelList->oxselectlist__oxtitle   = new oxField( $sValue );
-        $oSelList->oxselectlist__oxident   = new oxField( $sValue );
-        $oSelList->oxselectlist__oxvaldesc = new oxField( "{$sValue}1__@@{$sValue}2__@@{$sValue}3__@@" );
-        $oSelList->save();
-
-        // inserting test article for sellist
-        $oTestArticle = new oxarticle();
-        $oTestArticle->setId( '_testArticle' );
-        $oTestArticle->oxarticles__oxtitle  = new oxField( $sValue );
-        $oTestArticle->oxarticles__oxactive = new oxField( 1 );
-        $oTestArticle->save();
-
-        // assigning selllist to test article
-        $oS2A = new oxbase();
-        $oS2A->init( 'oxobject2selectlist' );
-        $oS2A->setId( '_testo2sel' );
-        $oS2A->oxobject2selectlist__oxobjectid = new oxField( $oTestArticle->getId() );
-        $oS2A->oxobject2selectlist__oxselnid = new oxField( $oSelList->getId() );
-        $oS2A->save();
-
-        $oOrder = new oxorder();
-        $this->assertEquals( array( 1 ), $oOrder->UNITmakeSelListArray( $oTestArticle->getId(), 'agentūrų Литовские fÜr:agentūrų Литовские fÜr2,:,:' ) );
-    }
-
     public function testOxOrderSetPaymentWithDynValues()
     {
         $sValue = 'agentūrų Литовские für';
@@ -1233,7 +1209,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
     public function testOxRssFeedGetArticleItems()
     {
         $sValue = 'agentūrų Литовские für';
-        oxTestModules::addFunction('oxutils', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
         $oCfg = $this->getMock( 'oxconfig', array( 'getActShopCurrencyObject' ) );
 
         $oActCur = new stdClass();
@@ -1342,7 +1318,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         // forcing config
         modConfig::getInstance()->setConfigParam( 'aSearchCols', array( 'oxlongdesc' ) );
 
-        $sQ = " and ( (  oxartextends.oxlongdesc_1 like '%$sValue%' )  ) ";
+        $sQ = " and ( (  oxv_oxartextends_en.oxlongdesc like '%$sValue%' )  ) ";
 
         $oSearch = new oxSearch();
 
@@ -1474,17 +1450,6 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $this->assertEquals( $sTagsToReturn, $oTagCloud->trimTags( $sTagsToProcess ) );
     }
 
-    public function testOxTagCloudGetTagCloud()
-    {
-        oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
-        oxTestModules::addFunction( "oxutils", "seoIsActive", "{return true;}" );
-
-        $oTagCloud = new oxTagCloud();
-        $sTag = $oTagCloud->getTagCloud();
-            $this->assertTrue(mb_strpos($sTag, "tag/hoehe/'>h&ouml;he</a>") > 0);
-        $this->assertFalse(mb_strpos($sTag, "tag/funktionales/'>funktionales</a>") > 0);
-    }
-
     public function testOxTagCloudGetTagsArticle()
     {
         $oTestArticle = new oxarticle();
@@ -1545,6 +1510,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
     public function testOxUserCheckPassword()
     {
+        oxTestModules::addFunction( "oxInputValidator", "checkPassword", "{ throw new oxInputException('EXCEPTION_INPUT_EMPTYPASS'); }");
         $sValue = 'ūЛü';
 
         $oUser = oxNew( 'oxuser' );
@@ -1554,6 +1520,15 @@ class UnitUtf8_utf8Test extends OxidTestCase
             return;
         }
         $this->fail( 'Error in _checkPassword function' );
+    }
+
+    public function testOxInputValidatorCheckPassword()
+    {
+        $sValue = 'ūЛü';
+
+        $oValidator = $this->getMock( 'oxInputValidator', array( "_addValidationError" ) );
+        $oValidator->expects( $this->once() )->method( '_addValidationError')->with( $this->equalTo( "oxuser__oxpassword" ) );
+        $oValidator->checkPassword( new oxUser(), $sValue, $sValue, true );
     }
 
     public function testOxUserBasketSaveAndLoad()
@@ -1862,8 +1837,8 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oActCat->oxcategories__oxtitle = $this->getMock( 'oxField', array( '__get' ) );
         $oActCat->oxcategories__oxtitle->expects( $this->once() )->method( '__get')->will( $this->returnValue( $sValue ) );
 
-        $oListView = $this->getMock( 'alist', array( '_getCategory' ) );
-        $oListView->expects( $this->any() )->method( '_getCategory')->will( $this->returnValue( $oActCat ) );
+        $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
+        $oListView->expects( $this->any() )->method( 'getActCategory')->will( $this->returnValue( $oActCat ) );
 
         $sDescription = $sDescription . " agentūЛитовfür     . " . oxConfig::getInstance()->getActiveShop()->oxshops__oxstarttitle->value;
 
@@ -1950,7 +1925,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oView = $this->getMock( 'details', array( 'getProduct' ) );
         $oView->expects( $this->any() )->method( 'getProduct' )->will( $this->returnValue( $oArt ) );
         $oView->addTags();
-        $this->assertTrue(mb_strpos($oView->getTagCloud(), "tag/agent-fuer/'>agentūлитовf&uuml;r</a>") > 0);
+        $this->assertEquals($oView->getTagCloudManager()->getCloudArray("_testArt"), array('agentūлитовfür' => 1));
     }
 
     /*

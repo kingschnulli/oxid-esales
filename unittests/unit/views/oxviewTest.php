@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 28695 2010-06-29 10:25:10Z vilma $
+ * @version   SVN: $Id: oxviewTest.php 32947 2011-02-07 09:12:37Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -131,86 +131,18 @@ class Unit_Views_oxviewTest extends OxidTestCase
     }
 
     /*
-     * Test adding global params to view data sets session data
-     */
-    /* nothing is set to session any more, as on most cases there is no reason for that ..
-    public function testAddGlobalParamsAddsViewDataParametersToSession()
-    {
-        $myConfig  = oxConfig::getInstance();
-
-        $oView = $this->getMock('oxView', array('_getVarName'));
-
-        $oView->expects($this->any())
-             ->method('_getVarName')
-             ->will($this->returnValue('testSessVarName'));
-
-        $oView->addGlobalParams();
-
-        //check if some view data is storred in session
-        $aViewData = oxSession::getVar( 'testSessVarName' );
-        $this->assertEquals( $aViewData['charset'], oxLang::getInstance()->translateString( 'charset' ) );
-        $this->assertEquals( $aViewData['version'], $myConfig->detectVersion() );
-        $this->assertEquals( $aViewData['shop']->selflink, $myConfig->getShopHomeURL() );
-    }*/
-
-    /*
-     * Test adding global params to view data sets session data and merge it with view data
-     */
-    /* nothing si sett into session any more ...
-    public function testAddGlobalParamsMergeViewSessionDataAndViewData()
-    {
-        $myConfig  = oxConfig::getInstance();
-
-        $oView = $this->getMock('oxView', array('_getVarName'));
-
-        $oView->expects($this->any())
-             ->method('_getVarName')
-             ->will($this->returnValue('testSessVarName'));
-
-        $oView->addGlobalParams();
-
-        //check if some view data is storred in session
-        $aSessData = oxSession::getVar( 'testSessVarName' );
-        $aViewData = $oView->getViewData();
-
-        $charset  = oxLang::getInstance()->translateString( 'charset' );
-        $version  = $myConfig->detectVersion();
-        $selflink = $myConfig->getShopHomeURL();
-
-        $this->assertTrue( ($aViewData['charset'] == $charset && $aSessData['charset'] == $charset) );
-        $this->assertTrue( ($aViewData['version'] == $version && $aSessData['version'] == $version) );
-        $this->assertTrue( ($aViewData['shop']->selflink == $selflink && $aSessData['shop']->selflink == $selflink) );
-    }
-    */
-
-    /*
      * Test adding global params to view data
      */
     public function testAddGlobalParams()
     {
         $myConfig = oxConfig::getInstance();
 
-        $oView = $this->getMock( 'oxView', array( 'getCharSet', 'getShopVersion', 'getShopEdition', 'getShopFullEdition', 'isDemoVersion', 'getAdditionalParams' ) );
-        $oView->expects( $this->once() )->method( 'getCharSet' )->will( $this->returnValue( true ) );
-        $oView->expects( $this->once() )->method( 'getShopVersion' )->will( $this->returnValue( true ) );
-        $oView->expects( $this->once() )->method( 'getShopEdition' )->will( $this->returnValue( true ) );
-        $oView->expects( $this->once() )->method( 'getShopFullEdition' )->will( $this->returnValue( true ) );
-        $oView->expects( $this->once() )->method( 'isDemoVersion' )->will( $this->returnValue( true ) );
-        $oView->expects( $this->once() )->method( 'getAdditionalParams' )->will( $this->returnValue( true ) );
+        $oView = oxNew( 'oxView' );
 
         $oView->addGlobalParams();
 
         $aViewData = $oView->getViewData();
 
-
-        $this->assertTrue( $aViewData['isdtaus'] );
-        $this->assertTrue( $aViewData['isstaffelpreis'] );
-        $this->assertTrue( $aViewData['charset'] );
-        $this->assertTrue( $aViewData['version'] );
-        $this->assertTrue( $aViewData['edition'] );
-        $this->assertTrue( $aViewData['fulledition'] );
-        $this->assertTrue( $aViewData['isdemoversion'] );
-        $this->assertTrue( $aViewData["additionalparams"] );
 
         $this->assertEquals( $aViewData['oView'], $oView );
         $this->assertEquals( $aViewData['oViewConf'], $oView->getViewConfig() );
@@ -689,4 +621,14 @@ class Unit_Views_oxviewTest extends OxidTestCase
 
         $this->assertFalse( $oView->showFbConnectToAccountMsg() );
     }
+
+    /**
+     * Testing mall mode getter
+     */
+    public function testIsMall()
+    {
+        $oView = new oxview();
+            $this->assertFalse( $oView->isMall() );
+    }
+
 }

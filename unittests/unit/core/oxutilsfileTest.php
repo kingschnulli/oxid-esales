@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfileTest.php 27797 2010-05-18 15:34:13Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxutilsfileTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -78,10 +78,10 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
 
     public function testGetUniqueFileName()
     {
-        $sFilePath = oxConfig::getInstance()->getAbsDynImageDir() . "/1/";
+        $sFilePath = oxConfig::getInstance()->getPictureDir(false) . "/1/";
 
         $oUtilsFile = new oxUtilsFile();
-        $this->assertEquals( "1127_p1(1).jpg", $oUtilsFile->UNITgetUniqueFileName( $sFilePath, "1127_p1", "jpg" ) );
+        $this->assertEquals( "1672_p1(1).jpg", $oUtilsFile->UNITgetUniqueFileName( $sFilePath, "1672_p1", "jpg" ) );
     }
 
     public function testGetImageSize()
@@ -90,6 +90,8 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
 
         $aDetailImageSizes = array( "oxpic1" => "251*201", "oxpic2" => "252*202", "oxpic3" => "253*203" );
         oxConfig::getInstance()->setConfigParam( "aDetailImageSizes", $aDetailImageSizes );
+        oxConfig::getInstance()->setConfigParam( "sZoomImageSize", '450*450' );
+        oxConfig::getInstance()->setConfigParam( "sThumbnailsize", '100*100' );
 
         // details img size
         $this->assertEquals( array( 251, 201 ), $oUtilsFile->UNITgetImageSize( null, 1, 'aDetailImageSizes' ) );
@@ -137,20 +139,29 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
         oxTestModules::addFunction('oxUtilspic', 'resizeImage', '{ return $aA[0]."-".$aA[1]."-".$aA[2]."-".$aA[3]; }');
         $sSource = 'testSource';
         $sTarget = 'testTarget';
+        $oConfig = $this->getMock( 'oxConfig', array( 'getConfigParam' ) );
+        $oConfig->expects( $this->at(0) )->method( 'getConfigParam' )->with( $this->equalTo( 'sThumbnailsize' ))->will( $this->returnValue( '100*100' ) );
+        $oConfig->expects( $this->at(1) )->method( 'getConfigParam' )->with( $this->equalTo( 'sCatThumbnailsize' ))->will( $this->returnValue( '555*200' ) );
+        $oConfig->expects( $this->at(2) )->method( 'getConfigParam' )->with( $this->equalTo( 'sCatIconsize' ))->will( $this->returnValue( '168*100' ) );
+        $oConfig->expects( $this->at(3) )->method( 'getConfigParam' )->with( $this->equalTo( 'sCatIconsize' ))->will( $this->returnValue( '168*100' ) );
+        $oConfig->expects( $this->at(4) )->method( 'getConfigParam' )->with( $this->equalTo( 'sIconsize' ))->will( $this->returnValue( '56*42' ) );
+        $oConfig->expects( $this->at(5) )->method( 'getConfigParam' )->with( $this->equalTo( 'sIconsize' ))->will( $this->returnValue( '56*42' ) );
+        $oConfig->expects( $this->at(6) )->method( 'getConfigParam' )->with( $this->equalTo( 'aDetailImageSizes' ))->will( $this->returnValue( array('oxpic1' => '250*200',
+                                                                                                                                                'oxpic2' => '250*200' ) ) );
+        $oConfig->expects( $this->at(7) )->method( 'getConfigParam' )->with( $this->equalTo( 'sDetailImageSize' ))->will( $this->returnValue( '250*200' ) );
+        $oConfig->expects( $this->at(8) )->method( 'getConfigParam' )->with( $this->equalTo( 'sZoomImageSize' ))->will( $this->returnValue( '450*450' ) );
+        $oConfig->expects( $this->at(9) )->method( 'getConfigParam' )->with( $this->equalTo( 'sManufacturerIconsize' ))->will( $this->returnValue( '100*100' ) );
+        $oConfig->expects( $this->at(10) )->method( 'getConfigParam' )->with( $this->equalTo( 'sManufacturerIconsize' ))->will( $this->returnValue( '100*100' ) );
 
         $oUtilsFile = new oxUtilsFile();
+        $oUtilsFile->setConfig( $oConfig );
         $this->assertEquals( "testSource-testTarget-100-100", $oUtilsFile->UNITprepareImage( "TH", $sSource, $sTarget ) );
         $this->assertEquals( "testSource-testTarget-555-200", $oUtilsFile->UNITprepareImage( "TC", $sSource, $sTarget ) );
-        $this->assertEquals( "testSource-testTarget-56-42", $oUtilsFile->UNITprepareImage( "CICO", $sSource, $sTarget ) );
+        $this->assertEquals( "testSource-testTarget-168-100", $oUtilsFile->UNITprepareImage( "CICO", $sSource, $sTarget ) );
         $this->assertEquals( "testSource-testTarget-56-42", $oUtilsFile->UNITprepareImage( "ICO", $sSource, $sTarget ) );
-
-        for ( $i = 1; $i < 13; $i++ ) {
-            $this->assertEquals( "testSource-testTarget-250-200", $oUtilsFile->UNITprepareImage( "P{$i}", $sSource, $sTarget ) );
-        }
-
-        for ( $i = 1; $i < 5; $i++ ) {
-            $this->assertEquals( "testSource-testTarget-450-450", $oUtilsFile->UNITprepareImage( "Z{$i}", $sSource, $sTarget ) );
-        }
+        $this->assertEquals( "testSource-testTarget-250-200", $oUtilsFile->UNITprepareImage( "P1", $sSource, $sTarget ) );
+        $this->assertEquals( "testSource-testTarget-450-450", $oUtilsFile->UNITprepareImage( "Z1", $sSource, $sTarget ) );
+        $this->assertEquals( "testSource-testTarget-100-100", $oUtilsFile->UNITprepareImage( "MICO", $sSource, $sTarget ) );
     }
 
     /**
@@ -217,8 +228,8 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
         $_FILES['myfile']['name']     = array( 'P1@oxarticles__oxpic1' => 'testname.gif' );
         $_FILES['myfile']['tmp_name'] = array( 'P1@oxarticles__oxpic1' => 'testimagesource' );
 
-        $oConfig = $this->getMock( 'oxConfig', array( 'getAbsDynImageDir' ) );
-        $oConfig->expects( $this->once() )->method( 'getAbsDynImageDir' )->will( $this->returnValue( getTestsBasePath().'/unit/out/pictures' ) );
+        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureDir' ) );
+        $oConfig->expects( $this->once() )->method( 'getPictureDir' )->will( $this->returnValue( getTestsBasePath().'/unit/out/pictures' ) );
 
         $oUtilsFile = $this->getMock( "oxUtilsFile", array( "_moveImage", "_removeTempImage" ) );
         $oUtilsFile->expects( $this->once() )->method( '_moveImage' )->will( $this->returnValue( true ) );
@@ -234,8 +245,8 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
         $_FILES['myfile']['name']     = array( 'FL@oxarticles__oxfile' => 'testname.pdf' );
         $_FILES['myfile']['tmp_name'] = array( 'FL@oxarticles__oxfile' => 'testpdfsource' );
 
-        $oConfig = $this->getMock( 'oxConfig', array( 'getAbsDynImageDir' ) );
-        $oConfig->expects( $this->once() )->method( 'getAbsDynImageDir' )->will( $this->returnValue( getTestsBasePath().'/unit/out/pictures' ) );
+        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureDir' ) );
+        $oConfig->expects( $this->once() )->method( 'getPictureDir' )->will( $this->returnValue( getTestsBasePath().'/unit/out/pictures' ) );
 
         $oUtilsFile = $this->getMock( "oxUtilsFile", array( "_moveImage", "_copyFile", "_removeTempImage" ) );
         $oUtilsFile->expects( $this->once() )->method( '_moveImage' )->will( $this->returnValue( true ) );

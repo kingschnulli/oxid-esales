@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: countrylistTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: countrylistTest.php 31986 2010-12-17 14:03:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -62,7 +62,7 @@ class Unit_Admin_CountryListTest extends OxidTestCase
         // testing..
         $oView = $this->getProxyClass( "Country_List" );
         $this->assertEquals( false, $oView->getNonPublicVar( "_blDesc" ) );
-        $this->assertEquals( 'oxcountry.oxactive', $oView->getNonPublicVar( "_sDefSort" ) );
+        $this->assertEquals( array( 'oxcountry' => array( 'oxactive' => "asc" ) ), $oView->getListSorting() );
         $this->assertEquals( "oxcountry", $oView->getNonPublicVar( "_sListClass" ) );
         $this->assertEquals( 'country_list.tpl', $oView->render() );
     }

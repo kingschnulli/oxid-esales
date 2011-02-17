@@ -55,7 +55,7 @@ class Metrics
      * Enter description here...
      *
      * @param string $sFileName Enter description here...
-     * 
+     *
      * @return null
      */
     public function __construct( $sFileName )
@@ -102,7 +102,7 @@ class Metrics
 
     /**
      * Enter description here...
-     * 
+     *
      * @return null
      */
     public function read()

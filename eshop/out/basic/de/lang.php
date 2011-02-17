@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 31354 2010-11-30 16:23:35Z linas.kukulskis $
+ * @version   SVN: $Id: lang.php 32877 2011-02-03 09:25:45Z rimvydas.paskevicius $
  */
 
 
@@ -195,6 +195,7 @@ $aLang = array(
 'BASKET_NEXTSTEP'                                 => "Weiter zum nächsten Schritt",
 'BASKET_CONTINUESHOPPING'                         => "Weiter shoppen",
 'BASKET_ARTICEL'                                  => "Artikel",
+'BASKET_DETAILS'                                  => "Beschriftung",
 'BASKET_QUANTITY'                                 => "Anzahl",
 'BASKET_UNITPRICE'                                => "Einzelpreis",
 'BASKET_TAX'                                      => "MwSt",
@@ -300,6 +301,7 @@ $aLang = array(
 'DETAILS_REDUCEDTEXT'                             => "(Unser regulärer Preis.)",
 'DETAILS_NOWONLY'                                 => "jetzt nur",
 'DETAILS_PLUSSHIPPING'                            => "inkl. MwSt., zzgl. ",
+'DETAILS_PLUSSHIPPING_PLUS'                       => "zzgl. ",
 'DETAILS_PLUSSHIPPING2'                           => "Versandkosten.",
 'DETAILS_VPE_MESSAGE_1'                           => "Dieser Artikel kann nur in Verpackungseinheiten zu je ",
 'DETAILS_VPE_MESSAGE_2'                           => " erworben werden.",
@@ -644,6 +646,7 @@ $aLang = array(
 'INC_LIST_LOCATOR_PAGE'                           =>"Seite",
 'INC_LIST_LOCATOR_ARTICLESPERPAGE'                =>"Artikel pro Seite:",
 'INC_LIST_LOCATOR_RECOMLISTSPERPAGE'              =>"Listen pro Seite:",
+'INC_LIST_LOCATOR_ORDERSPERPAGE'                  =>"Bestellungen pro Seite:",
 'INC_NEWBASKETITEM_ADDEDTOBASKET1'                =>"Artikel",
 'INC_NEWBASKETITEM_ADDEDTOBASKET2'                =>"wurde in den",
 'INC_NEWBASKETITEM_ADDEDTOBASKET3'                =>"Warenkorb",
@@ -731,6 +734,9 @@ $aLang = array(
 'INC_SEARCH_PRODUCT_ITEM_ADDTOBASKET'             =>"in den Warenkorb",
 'INC_SORT_TITLE'                                  =>"Titel",
 'INC_SORT_PRICE'                                  =>"Preis",
+'INC_SORT_ARTNUM'                                 =>"[Tr] Artikelnummern",
+'INC_SORT_RATING'                                 =>"[Tr] Bewertung",
+'INC_SORT_STOCK'                                  =>"[Tr] Lagerbestand",
 'INC_SORT_SORTBY'                                 =>"Sortieren nach:",
 'INC_SORT_GUESTBOOK_DATE'                         =>'Datum',
 'INC_SORT_GUESTBOOK_AUTHOR'                       =>'Autor',
@@ -783,7 +789,7 @@ $aLang = array(
 'NEWSLETTER_COMPLETEMARKEDFIELEDS'                => 'Felder mit einem <span class="req">*</span> müssen ausgefüllt werden',
 'NEWSLETTER_SUBSCRIBE'                            => "Abonnieren",
 'NEWSLETTER_UNSUBSCRIBE'                          => "Stornieren",
-'NEWSLETTER_EMAIL_NOT_EXIST'					  => "Die eingegebene E-Mail-Adresse ist kein Abonnent des Newsletters.",
+'NEWSLETTER_EMAIL_NOT_EXIST'                      => "Die eingegebene E-Mail-Adresse ist kein Abonnent des Newsletters.",
 'NEWSLETTER_THANKYOU'                             => "Vielen Dank für das Abonnement unseres Newsletters.",
 'NEWSLETTER_YOUHAVEBEENSENTCONFIRMATION'          => "Sie haben soeben eine E-Mail erhalten, mit der Sie unseren Newsletter freischalten können.",
 'NEWSLETTER_CONGRATULATIONS'                      => "Herzlichen Glückwunsch!",
@@ -801,6 +807,7 @@ $aLang = array(
 'ORDER_MODIFYQUANTITY3'                           => "Warenkorb",
 'ORDER_BASKETEMPTY'                               => "Der Warenkorb ist leer.",
 'ORDER_ARTICLE'                                   => "Artikel",
+'ORDER_DETAILS'                                   => "Beschriftung",
 'ORDER_GIFTOPTION'                                => "Geschenkoption",
 'ORDER_UNITPRICE'                                 => "Einz.Preis",
 'ORDER_QUANTITY'                                  => "Anzahl",
@@ -1010,7 +1017,7 @@ $aLang = array(
 'REGISTER_PHONE2'                                 => "Telefon:",
 'REGISTER_FAX2'                                   => "Telefax:",
 'REGISTER_SEND'                                   => "Absenden",
-'REGISTER_DISABLESHIPPINGADDRESS'                 => "Hier klicken, um die Lieferadresse auszublenden",
+'REGISTER_DISABLESHIPPINGADDRESS'                 => "Rechnungsadresse als Lieferadresse verwenden",
 'REVIEW_LOGIN_TITLE'                              => "Anmeldung",
 'REVIEW_ARTNUMBER'                                => "Art.Nr.:",
 'REVIEW_REVIEW'                                   => "Ihre Bewertung",
@@ -1203,7 +1210,7 @@ $aLang = array(
 'USER_FAX2'                                       => "Telefax:",
 'USER_CONTINUENEXTSTEP'                           => "Weiter zum nächsten Schritt",
 'USER_OPENID'                                     => "OpenID",
-'USER_DISABLESHIPPINGADDRESS'                     => "Hier klicken, um die Lieferadresse auszublenden",
+'USER_DISABLESHIPPINGADDRESS'                     => "Rechnungsadresse als Lieferadresse verwenden",
 'USER_SELECTSHIPPINGADDRESS'                      => "Auswählen",
 'USER_UPDATE_ACCOUNT'                             => "Kontoinformationen aktualisieren",
 'USER_FB_UPDATEACCOUNTMSG'                        => "Sie haben sich in diesem Shop früher schon einmal mit Facebook Connect angemeldet. Falls Sie ein Kundenkonto im Shop haben, aktualisieren Sie dieses und verbinden Sie es mit Facebook, damit das Login in diesen Shop zukünftig noch bequemer für Sie wird.",
@@ -1284,6 +1291,7 @@ $aLang = array(
 'EXCEPTION_NOFILE'                                => 'Keine Datei hochgeladen',
 'EXCEPTION_NOTALLOWEDTYPE'                        => 'Verbotener Dateityp. Bitte config.inc.php anpassen, um diesen Dateityp zu erlauben.',
 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'      => 'Template "%s" nicht gefunden',
+'EXCEPTION_SYSTEMCOMPONENT_CLASSNOTFOUND'         => 'Class "%s" nicht gefunden',
 'EXCEPTION_RECOMMLIST_NOTITLE'                    => 'Kein Titel angegeben',
 'INC_HEADER_INVITEFRIENDS'                        => "Freunde einladen",
 'INVITE_TITLE'                                    => "Freunde einladen",
@@ -1342,7 +1350,18 @@ $aLang = array(
 'FACEBOOK_POPUP_CLOSEBTN'                         => "Schließen",
 'FACEBOOK_POPUP_UPDATEDONETEXT'                   => "Ihr Kundenkonto wurde erfolgreich aktualisiert. Zukünftig können Sie sich ganz einfach per Facebook Connect einloggen.",
 
+'FORM_WISHLIST_SUGGEST_ERRCOMLETEFIELDSCORRECTLY'                => "Bitte alle Felder ausfüllen, sonst kann der Wunschzettel nicht zugestellt werden.",
+'FORM_WISHLIST_SUGGEST_ERRWRONGEMAIL'                            => "Fehler beim Versenden - bitte E-Mail-Adresse überprüfen.",
 'INC_CMP_BASKET_TIMEOUT'                          => 'Läuft ab in:',
+'EXCEPTION_GUESTBOOKENTRY_ERRLOGGINTOWRITEENTRY'  => "Fehler: Um einen Gästebuch Eintrag zu schreiben, müssen sie eingeloggt sein.",
+'EXCEPTION_GUESTBOOKENTRY_ERRUNDEFINEDSHOP'       => "Fehler: Unbekannter Shop.",
+'EXCEPTION_GUESTBOOKENTRY_ERRREVIEWCONTAINSNOTEXT'=> "Fehler: Es gibt keinen Text in Ihrem Eintrag.",
+'EXCEPTION_GUESTBOOKENTRY_ERRMAXIMUMNOMBEREXCEEDED' => "Fehler: Flood Protection aktiv. Sie können heute keinen Eintrag mehr schreiben.",
+'EXCEPTION_INVITE_COMLETECORRECTLYFIELDS'         => 'Felder mit einem <span class="req">*</span> müssen ausgefüllt werden',
+'EXCEPTION_INVITE_ERRORWHILESENDINGMAIL'          => "Es ist ein Fehler beim Versenden der E-Mails aufgetreten. Bitte überprüfen Sie die E-Mail-Adressen.",
+'EXCEPTION_INVITE_INCORRECTEMAILADDRESS'          => "Ungültige E-Mail-Adresse. Bitte überprüfen Sie die E-Mail-Adressen.",
+
+'ALIST_META_DESCRIPTION_PREFIX'                   =>"Sie sind hier:",
 );
 
 /*

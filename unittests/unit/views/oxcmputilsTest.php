@@ -122,6 +122,7 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
     public function testToCompareListAdding()
     {
         modConfig::getInstance()->setConfigParam( "bl_showCompareList", true );
+        modConfig::getInstance()->setConfigParam( "bl_perfLoadCompare", true );
         oxTestModules::addFunction( 'oxUtils', 'isSearchEngine', '{ return false; }' );
 
         modConfig::setParameter( "addcompare", true );
@@ -148,6 +149,7 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
     public function testToCompareListRemoving()
     {
         modConfig::getInstance()->setConfigParam( "bl_showCompareList", true );
+        modConfig::getInstance()->setConfigParam( "bl_perfLoadCompare", true );
         oxTestModules::addFunction( 'oxUtils', 'isSearchEngine', '{ return false; }' );
 
         modConfig::setParameter( "addcompare", null );
@@ -227,18 +229,13 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
      */
     public function testRenderCompareIsOff()
     {
-        modConfig::getInstance()->setConfigParam( "bl_perfLoadCompare", false );
+        modConfig::getInstance()->setConfigParam( "bl_showCompareList", false );
         modConfig::setParameter( 'wishid', "testWishId" );
         oxTestModules::addFunction( 'oxuser', 'load', '{ return true; }' );
 
-        $oParentView = $this->getMock( "oxStdClass", array( "setWishlistName", "addTplParam", "getWishlistName", "setMenueList", "getMenueList" ) );
+        $oParentView = $this->getMock( "oxStdClass", array( "setWishlistName", "setMenueList" ) );
         $oParentView->expects( $this->at( 0 ) )->method('setWishlistName');
-        $oParentView->expects( $this->at( 1 ) )->method('getWishlistName');
-        $oParentView->expects( $this->at( 2 ) )->method('addTplParam')->with( $this->equalTo( "ShowWishlistName" ) );
-        $oParentView->expects( $this->at( 3 ) )->method('setMenueList');
-        $oParentView->expects( $this->at( 4 ) )->method('getMenueList');
-        $oParentView->expects( $this->at( 5 ) )->method('addTplParam')->with( $this->equalTo( "aMenueList" ) );
-        $oParentView->expects( $this->at( 6 ) )->method('addTplParam')->with( $this->equalTo( "isfiltering" ), $this->equalTo( false ) );
+        $oParentView->expects( $this->at( 1 ) )->method('setMenueList');
 
         $oCmp = $this->getMock( "oxcmp_utils", array( "getUser", "getParent" ) );
         $oCmp->expects( $this->once() )->method('getUser')->will( $this->returnValue( true ) );
@@ -253,7 +250,7 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
      */
     public function testRender()
     {
-        modConfig::getInstance()->setConfigParam( "bl_perfLoadCompare", true );
+        modConfig::getInstance()->setConfigParam( "bl_showCompareList", true );
         modConfig::getInstance()->setConfigParam( "blDisableNavBars", false );
 
         modConfig::setParameter( 'wishid', "testWishId" );
@@ -261,16 +258,10 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
 
         oxTestModules::addFunction( 'oxuser', 'load', '{ return true; }' );
 
-        $oParentView = $this->getMock( "oxStdClass", array( "setWishlistName", "addTplParam", "getWishlistName", "setMenueList", "getMenueList", "setCompareItemsCnt", "getCompareItemsCnt" ) );
+        $oParentView = $this->getMock( "oxStdClass", array( "setWishlistName", "setMenueList", "setCompareItemsCnt" ) );
         $oParentView->expects( $this->at( 0 ) )->method( 'setWishlistName' );
-        $oParentView->expects( $this->at( 1 ) )->method( 'getWishlistName' );
-        $oParentView->expects( $this->at( 2 ) )->method( 'addTplParam' )->with( $this->equalTo( "ShowWishlistName" ) );
-        $oParentView->expects( $this->at( 3 ) )->method( 'setMenueList' );
-        $oParentView->expects( $this->at( 4 ) )->method( 'getMenueList' );
-        $oParentView->expects( $this->at( 5 ) )->method( 'addTplParam' )->with( $this->equalTo( "aMenueList" ) );
-        $oParentView->expects( $this->at( 6 ) )->method( 'setCompareItemsCnt' );
-        $oParentView->expects( $this->at( 7 ) )->method( 'getCompareItemsCnt' );
-        $oParentView->expects( $this->at( 8 ) )->method( 'addTplParam' )->with( $this->equalTo( "oxcmp_compare" ) );
+        $oParentView->expects( $this->at( 1 ) )->method( 'setMenueList' );
+        $oParentView->expects( $this->at( 2 ) )->method( 'setCompareItemsCnt' );
 
         $oCmp = $this->getMock( "oxcmp_utils", array( "getUser", "getParent" ) );
         $oCmp->expects( $this->once() )->method('getUser')->will( $this->returnValue( true ) );

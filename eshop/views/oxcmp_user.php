@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcmp_user.php 32923 2011-02-04 14:35:22Z vilma $
  */
 
 // defining login/logout states
@@ -110,6 +110,12 @@ class oxcmp_user extends oxView
      */
     public function init()
     {
+        // saving show/hide delivery address state
+        $blShow = oxConfig::getParameter( 'blshowshipaddress' ) ? true : false;
+        // @deprecated, remove this code line when basic theme support discontinued
+        $blShow = oxConfig::getParameter( 'blhideshipaddress' ) ? false : $blShow;
+        oxSession::setVar( 'blshowshipaddress', $blShow );
+
         // load session user
         $this->_loadSessionUser();
 
@@ -124,9 +130,6 @@ class oxcmp_user extends oxView
     /**
      * Executes parent::render(), oxcmp_user::_loadSessionUser(), loads user delivery
      * info. Returns user object oxcmp_user::oUser.
-     *
-     * Template variables:
-     *  <b>invadr</b>, <b>lgn_usr</b>, <b>deladr</b>,
      *
      * Session variables:
      * <b>dgr</b>
@@ -144,19 +147,6 @@ class oxcmp_user extends oxView
         // will automatically be added to this group later
         if ( $sDynGoup = oxConfig::getParameter( 'dgr' ) ) {
             oxSession::setVar( 'dgr', $sDynGoup );
-        }
-
-        $oParentView = $this->getParent();
-        if ( $aInvAdress = oxConfig::getParameter( 'invadr') ) {
-            $oParentView->addTplParam( 'invadr', $aInvAdress );
-        }
-
-        if ( ( $aDelAdress = oxConfig::getParameter( 'deladr') ) && !oxConfig::getParameter( 'reloadaddress' ) ) {
-               $oParentView->addTplParam( 'deladr', $aDelAdress );
-        }
-
-        if ( $sUser = oxConfig::getParameter( 'lgn_usr' ) ) {
-            $oParentView->addTplParam( 'lgn_usr', $sUser );
         }
 
         return $this->getUser();
@@ -428,7 +418,7 @@ class oxcmp_user extends oxView
             return;
         }
 
-        $blUserRegistered = $this->_changeUser_noRedirect( );
+        $blUserRegistered = $this->_changeUser_noRedirect();
 
         if ( $blUserRegistered === true ) {
             return 'payment';
@@ -682,7 +672,7 @@ class oxcmp_user extends oxView
     protected function _getDelAddressData()
     {
         // if user company name, user name and additional info has special chars
-        $aDelAdress = $aDeladr = oxConfig::getParameter( 'deladr', $this->_aRawShippingFields );
+        $aDelAdress = $aDeladr = oxConfig::getParameter( 'blshowshipaddress' ) ? oxConfig::getParameter( 'deladr', $this->_aRawShippingFields ) : array();
 
         if ( is_array( $aDeladr ) ) {
             // checking if data is filled
@@ -732,33 +722,13 @@ class oxcmp_user extends oxView
      * Template variables:
      * <b>blshowshipaddress</b>
      *
+     * @deprecated, remove this code line when basic theme support discontinued
+     *
      * @return null
      */
     protected function _setupDelAddress()
     {
-        $blShowIt = false;
-        $blShowShipAddress = $blSessShowAddress = (int) oxSession::getVar( 'blshowshipaddress' );
-
-        // user clicked on button to hide
-        if ( $blHideAddress = oxConfig::getParameter( 'blhideshipaddress' ) ) {
-            $blShowShipAddress = 0;
-            $blShowIt = true;
-        } else {
-
-            $blShowAddress = oxConfig::getParameter( 'blshowshipaddress' )? 1 : 0;
-            // user clicked on button to show
-            if ( $blShowAddress != $blSessShowAddress ) {
-                $blShowShipAddress = 1;
-                $blShowIt = true;
-            }
-        }
-
-        oxSession::setVar( 'blshowshipaddress', $blShowShipAddress );
-        if ($this->getParent()) {
-            $this->getParent()->addTplParam( 'blshowshipaddress', $blShowShipAddress );
-        }
-
-        return $blShowIt;
+        return oxConfig::getParameter( 'blhideshipaddress' ) !== null && oxConfig::getParameter( 'userform' ) === null;
     }
 
     /**

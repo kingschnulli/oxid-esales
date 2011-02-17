@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: wishlistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: wishlistTest.php 33100 2011-02-09 14:47:36Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -167,19 +167,9 @@ class Unit_Views_wishlistTest extends OxidTestCase
      */
     public function testRender()
     {
-        $oTestNews = $this->getMock( 'Wishlist', array( 'getWishUser', 'getWishList', 'getWishListUsers', 'getWishListSearchParam' ) );
-        $oTestNews->expects( $this->once() )->method( 'getWishUser' )->will( $this->returnValue(1) );
-        $oTestNews->expects( $this->once() )->method( 'getWishList' )->will( $this->returnValue(2) );
-        $oTestNews->expects( $this->once() )->method( 'getWishListUsers' )->will( $this->returnValue(3) );
-        $oTestNews->expects( $this->once() )->method( 'getWishListSearchParam' )->will( $this->returnValue(4) );
+        $oWishList = $this->getProxyClass("Wishlist");
 
-        $this->assertEquals( 'wishlist.tpl', $oTestNews->render() );
-
-        $aViewData = $oTestNews->getViewData();
-        $this->assertEquals( '1', $aViewData['wishuser'] );
-        $this->assertEquals( '2', $aViewData['wishlist'] );
-        $this->assertEquals( '3', $aViewData['wish_result'] );
-        $this->assertEquals( '4', $aViewData['search'] );
+        $this->assertEquals( 'page/wishlist/wishlist.tpl', $oWishList->render() );
     }
 
 

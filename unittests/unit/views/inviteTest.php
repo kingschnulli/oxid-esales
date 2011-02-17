@@ -66,6 +66,19 @@ class Unit_Views_inviteTest extends OxidTestCase
     }
 
     /**
+     * Testing method getInviteSendStatus()
+     *
+     * @return null
+     */
+    public function testGetInviteSendStatus()
+    {
+        $oView = $this->getProxyClass( "invite" );
+        $oView->setNonPublicVar( "_iMailStatus", 1 );
+
+        $this->assertTrue( $oView->getInviteSendStatus() );
+    }
+
+    /**
      * Testing method _updateStatistics()
      *
      * @return null
@@ -73,10 +86,10 @@ class Unit_Views_inviteTest extends OxidTestCase
     public function testUpdateStatistics()
     {
         $oView = $this->getProxyClass( 'invite' );
-        
+
         $oUtilsDate = $this->getMock('oxUtilsDate', array('formatDBDate'));
         $oUtilsDate->expects($this->once())->method('formatDBDate')->will($this->returnValue("2015-10-11"));
-        oxTestModules::addModuleObject('oxUtilsDate', $oUtilsDate);        
+        oxTestModules::addModuleObject('oxUtilsDate', $oUtilsDate);
 
         $aRecEmails = array( "test1@oxid-esales.com", "test2@oxid-esales.com" );
         $sUserId = "_testUserId";
@@ -233,16 +246,9 @@ class Unit_Views_inviteTest extends OxidTestCase
      */
     public function testRender()
     {
-        $oView = $this->getMock( "invite", array( "getCaptcha", 'getInviteData' ) );
-        $oView->expects( $this->once() )->method( 'getCaptcha')->will($this->returnValue( 'testCaptcha' ) );
-        $oView->expects( $this->once() )->method( 'getInviteData')->will($this->returnValue( 'testInviteData' ) );
+        $oView = $this->getProxyClass( 'invite' );
 
-        $this->assertEquals( 'invite.tpl', $oView->render() );
-
-        $aViewData = $oView->getViewData();
-        $this->assertEquals( 'testCaptcha', $aViewData['oCaptcha'] );
-        $this->assertEquals( 'testInviteData', $aViewData['editval'] );
-        $this->assertNull( $aViewData['success'] );
+        $this->assertEquals( 'page/privatesales/invite.tpl', $oView->render() );
     }
 
     /**
@@ -256,8 +262,7 @@ class Unit_Views_inviteTest extends OxidTestCase
         $oView->setNonPublicVar( "_iMailStatus", 1 );
         $oView->render();
 
-        $aViewData = $oView->getViewData();
-        $this->assertTrue( $aViewData['success'] );
+        $this->assertTrue( $oView->getInviteSendStatus() );
     }
 
 }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: register.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
+ * @version   SVN: $Id: register.php 32992 2011-02-07 14:29:18Z vilma $
  */
 
 /**
@@ -33,21 +33,21 @@ class Register extends User
      *
      * @var string
      */
-    protected $_sThisTemplate = 'register.tpl';
+    protected $_sThisTemplate = 'page/account/register.tpl';
 
     /**
      * Successful registration confirmation template
      *
      * @var string
      */
-    protected $_sSuccessTemplate = 'register_success.tpl';
+    protected $_sSuccessTemplate = 'page/account/register_success.tpl';
 
     /**
      * Successful Confirmation state template name
      *
      * @var string
      */
-    protected $_sConfirmTemplate = 'register_confirm.tpl';
+    protected $_sConfirmTemplate = 'page/account/register_confirm.tpl';
 
     /**
      * Order step marker
@@ -76,12 +76,8 @@ class Register extends User
         if ( $this->isEnabledPrivateSales() && $this->isConfirmed() ) {
             $sTemplate = $this->_sConfirmTemplate;
         } elseif ( $this->getRegistrationStatus() ) {
-            //for older templates
-            $this->_aViewData['error']   = $this->getRegistrationError();
-            $this->_aViewData['success'] = $this->getRegistrationStatus();
             $sTemplate = $this->_sSuccessTemplate;
         } else {
-            $this->_aViewData['aMustFillFields'] = $this->getMustFillFields();
             $sTemplate = $this->_sThisTemplate;
         }
 
@@ -129,17 +125,6 @@ class Register extends User
         }
 
         return $this->_oDelAddress;
-    }
-
-    /**
-     * Generats facke address for selection
-     *
-     * @param object $oAddresses user address list
-     *
-     * @return null
-     */
-    protected function _addFakeAddress( $oAddresses )
-    {
     }
 
     /**
@@ -212,5 +197,22 @@ class Register extends User
     {
          return (bool) oxConfig::getParameter( "confirmstate" );
     }
+
+    /**
+     * Returns Bread Crumb - you are here page1/page2/page3...
+     *
+     * @return array
+     */
+    public function getBreadCrumb()
+    {
+        $aPaths = array();
+        $aPath = array();
+
+        $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_REGISTER_REGISTER', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPaths[] = $aPath;
+
+        return $aPaths;
+    }
+
 
 }

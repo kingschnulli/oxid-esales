@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcmpUserTest.php 32944 2011-02-07 08:31:57Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -517,10 +517,7 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         modConfig::setParameter('lgn_usr', 'testuser');
         modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", false );
 
-        $oParent = $this->getMock( "oxUbase", array( "addTplParam" ) );
-        $oParent->expects( $this->at( 0 ) )->method( 'addTplParam' )->with( $this->equalTo( 'invadr' ), $this->equalTo( 'testadr' ) );
-        $oParent->expects( $this->at( 1 ) )->method( 'addTplParam' )->with( $this->equalTo( 'deladr' ), $this->equalTo( 'testdeladr' ) );
-        $oParent->expects( $this->at( 2 ) )->method( 'addTplParam' )->with( $this->equalTo( 'lgn_usr' ), $this->equalTo( 'testuser' ) );
+        $oParent = new oxUbase();
 
         $oUserView = $this->getMock( 'oxcmp_user', array( 'getParent', 'getUser' ) );
         $oUserView->expects( $this->atLeastOnce() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
@@ -1093,8 +1090,10 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
                  'oxaddress__oxcity' => 'city',
                  'oxaddress__oxsal' => 'MSR',
                  'oxaddress__oxcountryid' => 'a7c40f631fc920687.20179984');
-        modConfig::setParameter('deladr', $aRawVal);
-        $oUserView = $this->getProxyClass("oxcmp_user");
+
+        modConfig::setParameter( 'deladr', $aRawVal );
+        modConfig::setParameter( 'blshowshipaddress', true );
+        $oUserView = $this->getProxyClass( "oxcmp_user" );
         $this->assertEquals( $aRawVal, $oUserView->UNITgetDelAddressData() );
     }
 
@@ -1118,31 +1117,15 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
      */
     public function testSetupDelAddress()
     {
-        modConfig::setParameter( 'blshowshipaddress', 1 );
-        $oView = oxNew("oxview");
-        $oUserView = $this->getMock( 'oxcmp_user', array( 'getParent' ) );
-        $oUserView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oView ) );
-        $this->assertTrue( $oUserView->UNITsetupDelAddress() );
-        $oViewData = $oView->getViewData();
-        $this->assertEquals( 1, $oViewData['blshowshipaddress'] );
-        $this->assertEquals( 1, oxSession::getVar( 'blshowshipaddress' ) );
-    }
+        $oUserView = new oxcmp_user();
 
-    /**
-     * Test _setupDelAddress().
-     *
-     * @return null
-     */
-    public function testSetupDelAddressCloseDelAddress()
-    {
         modConfig::setParameter( 'blhideshipaddress', 1 );
-        $oView = oxNew("oxview");
-        $oUserView = $this->getMock( 'oxcmp_user', array( 'getParent' ) );
-        $oUserView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oView ) );
+        modConfig::setParameter( 'userform', null );
         $this->assertTrue( $oUserView->UNITsetupDelAddress() );
-        $oViewData = $oView->getViewData();
-        $this->assertEquals( 0, $oViewData['blshowshipaddress'] );
-        $this->assertEquals( 0, oxSession::getVar( 'blshowshipaddress' ) );
+
+        modConfig::setParameter( 'blhideshipaddress', null );
+        modConfig::setParameter( 'userform', null );
+        $this->assertFalse( $oUserView->UNITsetupDelAddress() );
     }
 
     /**

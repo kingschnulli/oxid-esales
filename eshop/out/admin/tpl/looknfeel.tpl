@@ -15,16 +15,16 @@
 
     <table cellspacing="0" cellpadding="0" border="0" width="100%">
     <tr>
-        <td [{if $istab==1 }] class="tab_active" [{else}] class="tab_inactive" style="background-image: url([{ $shop->imagedir }]/whitedot.gif);"[{/if}] nowrap ><a href="[{$shop->selflink}]&cl=looknfeel&amp;istab=1">[{ oxmultilang ident="LOOKNFEEL_TAB_LOOKNFEEL" }]</a></td>
-        <td [{if $istab==2 }] class="tab_active" [{else}] class="tab_inactive" style="background-image: url([{ $shop->imagedir }]/whitedot.gif);"[{/if}] nowrap ><a href="[{$shop->selflink}]&cl=looknfeel&amp;istab=2">[{ oxmultilang ident="LOOKNFEEL_TAB_COLORS" }]</a></td>
-        <td [{if $istab==3 }] class="tab_active" [{else}] class="tab_inactive" style="background-image: url([{ $shop->imagedir }]/whitedot.gif);"[{/if}] nowrap ><a href="[{$shop->selflink}]&cl=looknfeel&amp;istab=3">[{ oxmultilang ident="LOOKNFEEL_TAB_EXTENDED }]</a></td>
+        <td [{if $istab==1 }] class="tab_active" [{else}] class="tab_inactive" style="background-image: url([{ $oViewConf->getImageUrl() }]/whitedot.gif);"[{/if}] nowrap ><a href="[{$oViewConf->getSelfLink()}]&cl=looknfeel&amp;istab=1">[{ oxmultilang ident="LOOKNFEEL_TAB_LOOKNFEEL" }]</a></td>
+        <td [{if $istab==2 }] class="tab_active" [{else}] class="tab_inactive" style="background-image: url([{ $oViewConf->getImageUrl() }]/whitedot.gif);"[{/if}] nowrap ><a href="[{$oViewConf->getSelfLink()}]&cl=looknfeel&amp;istab=2">[{ oxmultilang ident="LOOKNFEEL_TAB_COLORS" }]</a></td>
+        <td [{if $istab==3 }] class="tab_active" [{else}] class="tab_inactive" style="background-image: url([{ $oViewConf->getImageUrl() }]/whitedot.gif);"[{/if}] nowrap ><a href="[{$oViewConf->getSelfLink()}]&cl=looknfeel&amp;istab=3">[{ oxmultilang ident="LOOKNFEEL_TAB_EXTENDED }]</a></td>
         <td class="tab_line">&nbsp;</td>
     </tr>
     <tr><td colspan="4" class="tab_panel">
 
-    <form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post" onSubmit="return chkInsert()" enctype="multipart/form-data">
+    <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post" onSubmit="return chkInsert()" enctype="multipart/form-data">
     <input type="hidden" name="MAX_FILE_SIZE" value="[{$iMaxUploadFileSize}]">
-    [{ $shop->hiddensid }]
+    [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="cl" value="looknfeel">
     <input type="hidden" name="fnc" value="">
     <input type="hidden" name="istab" value="[{ $istab }]">
@@ -124,7 +124,7 @@
 </table>
 
 </td><td width="80%" valign="top">
-  <iframe name="preview" class="design_frame" frameborder="1" src="[{$shop->selflink}]&cl=looknfeel_preview" ></iframe>
+  <iframe name="preview" class="design_frame" frameborder="1" src="[{$oViewConf->getSelfLink()}]&cl=looknfeel_preview" ></iframe>
 </td></tr></table>
 
 </body>

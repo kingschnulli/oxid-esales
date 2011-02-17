@@ -108,7 +108,7 @@ class Unit_Views_accountOrderTest extends OxidTestCase
     {
         $oView = $this->getMock( "Account_Order", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( false ) );
-        $this->assertEquals( 'account_login.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/login.tpl', $oView->render() );
     }
 
     /**
@@ -123,6 +123,18 @@ class Unit_Views_accountOrderTest extends OxidTestCase
 
         $oView = $this->getMock( "Account_Order", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
-        $this->assertEquals( 'account_order.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/order.tpl', $oView->render() );
+    }
+
+	/**
+     * Testing Account_Orders::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oAccOrder = new Account_Order();
+
+        $this->assertEquals(2, count($oAccOrder->getBreadCrumb()));
     }
 }

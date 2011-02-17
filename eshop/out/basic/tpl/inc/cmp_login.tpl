@@ -8,7 +8,7 @@
         [{ $oViewConf->getNavFormParams() }]
         <input type="hidden" name="fnc" value="login_noredirect">
         <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
-        <input type="hidden" name="tpl" value="[{$tpl}]">
+        <input type="hidden" name="tpl" value="[{$oViewConf->getActTplName()}]">
         [{if $oView->getArticleId()}]
           <input type="hidden" name="aid" value="[{$oView->getArticleId()}]">
         [{/if}]
@@ -50,7 +50,7 @@
         [{ $oViewConf->getNavFormParams() }]
         <input type="hidden" name="fnc" value="login_noredirect">
         <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
-        <input type="hidden" name="tpl" value="[{$tpl}]">
+        <input type="hidden" name="tpl" value="[{$oViewConf->getActTplName()}]">
         [{if $oView->getArticleId()}]
           <input type="hidden" name="aid" value="[{$oView->getArticleId()}]">
         [{/if}]

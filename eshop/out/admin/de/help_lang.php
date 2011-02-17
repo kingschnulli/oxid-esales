@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 31375 2010-12-01 12:16:02Z linas.kukulskis $
+ * @version   SVN: $Id: help_lang.php 33200 2011-02-11 09:16:52Z arvydas.vapsva $
  */
 
 /**
@@ -75,23 +75,11 @@ $aLang =  array(
 
 
 
-'HELP_SHOP_CONFIG_TOPNAVILAYOUT'                =>  'Die Kategorien-Navigation wird normalerweise links angezeigt. Wenn Sie diese Einstellung aktivieren, wird die Kategorien-Navigation anstatt links oben angezeigt.',
-
 'HELP_SHOP_CONFIG_ORDEROPTINEMAIL'              =>  'Wenn Double-Opt-In aktiviert ist, erhalten die Benutzer eine E-Mail mit einem Bestätigungs-Link, wenn sie sich für den Newsletter registrieren. Erst, wenn sie diesen Link besuchen, sind sie für den Newsletter angemeldet.<br>' .
                                                     'Double-Opt-In schützt vor Anmeldungen, die nicht gewollt sind. Ohne Double-Opt-In können beliebige E-Mail Adressen für den Newsletter angemeldet werden. Dies wird z. B. auch von Spam-Robotern gemacht. Durch Double-Opt-In kann der Besitzer der E-Mail Adresse bestätigen, dass er den Newsletter wirklich empfangen will.',
 
 'HELP_SHOP_CONFIG_BIDIRECTCROSS'                =>  'Durch Crossselling können zu einem Artikel passende Artikel angeboten werden. Crossselling-Artikel werden im eShop bei <span class="filename_filepath_or_italic">Kennen Sie schon?</span> angezeigt.<br>' .
                                                     'Wenn z. B. einem Auto als Crossselling-Artikel Winterreifen zugeordnet sind, werden beim Auto die Winterreifen angezeigt. Wenn Bidirektionales Crossselling aktiviert ist, funktioniert Crossselling in beide Richtungen: bei den Winterreifen wird das Auto angezeigt.',
-
-'HELP_SHOP_CONFIG_ICONSIZE'                     =>  'Icons sind die kleinsten Bilder eines Artikels. Icons werden z. B. <br>' .
-                                                    '<ul><li>im Warenkorb angezeigt.</li>' .
-                                                    '<li>angezeigt, wenn Artikel in der rechten Leiste aufgelistet werden (z.B. bei den Aktionen <span class="filename_filepath_or_italic">Top of the Shop</span> und <span class="filename_filepath_or_italic">Schnäppchen</span>).</li></ul>' .
-                                                    'Damit das Design des eShops nicht durch zu große Icons gestört wird, werden zu große Icons automatisch verkleinert. Die maximale Größe können Sie hier eingeben.<br>' ,
-
-'HELP_SHOP_CONFIG_THUMBNAILSIZE'                =>  'Thumbnails sind kleine Bilder eines Artikels. Thumbnails werden z. B. <br>' .
-                                                    '<ul><li>in Artikellisten angezeigt. Artikellisten sind z. B. Kategorieansichten (alle Artikel in einer Kategorie werden aufgelistet) und die Suchergebnisse.</li>' .
-                                                    '<li>in Aktionen angezeigt, die in der Mitte der Startseite angezeigt werden, z. B. <span class="filename_filepath_or_italic">Die Dauerbrenner</span> und <span class="filename_filepath_or_italic">Frisch eingetroffen!</span>.</li></ul>' .
-                                                    'Damit das Design des eShops nicht durch zu große Thumbnails gestört wird, werden zu große Thumbnails automatisch verkleinert. Die maximale Größe können Sie hier eingeben.',
 
 'HELP_SHOP_CONFIG_STOCKONDEFAULTMESSAGE'        =>  'Bei jedem Artikel können Sie einrichten, welche Meldung den Benutzern angezeigt wird, wenn der Artikel auf Lager ist. ' .
                                                     'Wenn diese Einstellung aktiv ist, wird den Benutzern auch dann eine Meldung angezeigt, wenn bei einem Artikel keine eigene Meldung hinterlegt ist. Dann die Standardmeldung <span class="filename_filepath_or_italic">sofort lieferbar</span> angezeigt.<br>' .
@@ -391,7 +379,8 @@ $aLang =  array(
 'HELP_CATEGORY_MAIN_THUMB'                      =>  'Bei <span class="navipath_or_inputname">Bild</span> und <span class="navipath_or_inputname">Bild hochladen</span> können Sie ein Bild für die Kategorie hochladen, dieses Bild wird dann in der Kategorienansicht oben angezeigt. <br>' .
                                                     'Wählen Sie bei <span class="navipath_or_inputname">Bild hochladen</span> das entsprechende Bild aus. Wenn Sie auf Speichern klicken, wird das Bild hochgeladen. Nachdem das Bild hochgeladen ist, wird der Dateiname des Bildes in <span class="navipath_or_inputname">Bild</span> angezeigt.',
 
-'HELP_CATEGORY_MAIN_SKIPDISCOUNTS'              =>  'Wenn<span class="navipath_or_inputname"> Alle neg. Nachlässe ignorieren</span> aktiv ist, werden für alle Artikel in dieser Kategorie keine negativen Nachlässe berechnet.',
+'HELP_CATEGORY_MAIN_PROMOTION_ICON'             =>  'Das Bild für die Startseite wird angezeigt, wenn diese Kategorie auf der Startseite beworben wird. Siehe auch <span class="navipath_or_inputname">Kundeninformationen -> Aktionen verwalten -> Kategorien-Topangebot</span>.',
+'HELP_CATEGORY_MAIN_SKIPDISCOUNTS'              =>  'Wenn <span class="navipath_or_inputname">Alle neg. Nachlässe ignorieren</span> aktiv ist, werden für alle Artikel in dieser Kategorie keine negativen Nachlässe berechnet.',
 'HELP_CATEGORY_SEO_FIXED'                       =>  'Sie können die SEO URLs vom eShop neu berechnen lassen. Eine Kategorie bekommt z. B. eine neue SEO URL, wenn Sie den Titel der Kategorie ändern. Die Einstellung <span class="navipath_or_inputname">URL fixiert</span> unterbindet das: Wenn sie aktiv ist, wird die alte SEO URL beibehalten und keine neue SEO URL berechnet.',
 
 'HELP_CATEGORY_SEO_SHOWSUFFIX'                  =>  'Diese Einstellung bestimmt, ob das Suffix für den Fenstertitel angezeigt wird, wenn die Kategorieseite im eShop aufgerufen wird. Das Titel Suffix können Sie unter <span class="navipath_or_inputname">Stammdaten -> Grundeinstellungen -> SEO -> Titel Suffix</span> einstellen.',
@@ -475,7 +464,7 @@ $aLang =  array(
 
 'HELP_LANGUAGE_DEFAULT'                         => 'Die Standardsprache wird verwendet, wenn OXID eShop die zu verwendete Sprache nicht anderweitig ermitteln kann: Die gewünschte Sprache ist nicht in der URL angegeben, kann nicht über den Browser ermittelt werden und ist nicht in der aktuellen Session gespeichert. Die Standardsprache kann deaktiviert, aber nicht gelöscht werden.',
 
-'HELP_LANGUAGE_ACTIVE'							=> 'Aktivieren Sie diese Einstellung, um die Sprache für das eShop Frontend zu aktivieren. Die Sprache ist stets im Admin verfügbar, selbst wenn sie für das Frontend inaktiv ist.',
+'HELP_LANGUAGE_ACTIVE'                            => 'Aktivieren Sie diese Einstellung, um die Sprache für das eShop Frontend zu aktivieren. Die Sprache ist stets im Admin verfügbar, selbst wenn sie für das Frontend inaktiv ist.',
 
 'HELP_PAYMENT_MAIN_SORT'                        =>  'Mit <span class="navipath_or_inputname">Sortierung</span> können Sie einstellen, in welcher Reihenfolge die Zahlungsarten den Benutzern angezeigt werden:<br>' .
                                                     '<ul><li>Die Zahlungsart mit der niedrigsten Zahl wird an erster Stelle angezeigt.</li>' .
@@ -494,6 +483,8 @@ $aLang =  array(
                                                     '<li>Mit <span class="userinput_or_code">%</span> wird der Preis relativ zum Einkaufspreis berechnet (z. B.: Wenn Sie <span class="userinput_or_code">2</span> eingeben, werden 2 Prozent des Einkaufspreises berechnet).</li>' .
                                                     '</ul>' .
                                                     'Sie können auch negative Werte eingeben. Dadurch wird der eingegebene Wert abgezogen: Wenn Sie z. B. <span class="userinput_or_code">-2</span> eingeben und <span class="userinput_or_code">%</span> auswählen, werden 2% des Einkaufswerts abgezogen.',
+
+'HELP_PAYMENT_MAIN_ADDSUMRULES'                 => '[tr] Rules defines what basket costs must be included while calculating payment Surcharge/Discount (none selected = <b>1</b>-<b>4</b> selected)',
 
 
 'HELP_SELECTLIST_MAIN_TITLEIDENT'               =>  'Bei <span class="navipath_or_inputname">Arbeitstitel</span> können Sie einen zusätzlichen Titel eingeben, der den Benutzern Ihres eShops nicht angezeigt wird. Sie können den Arbeitstitel dazu verwenden, um ähnliche Auswahllisten zu unterscheiden (z. B. <span class="filename_filepath_or_italic">Größe für Hosen</span> und <span class="filename_filepath_or_italic">Größe für Hemden</span>).',
@@ -564,4 +555,7 @@ $aLang =  array(
 'HELP_DYN_TRUSTED_TESTMODUS'                    => 'Testumgebung ("Sandbox") einschalten. Nach Abschluss der Zertifizierung sendet Ihnen Ihr Ansprechpartner bei Trusted Shops die Zugangsdaten per E-Mail.',
 'HELP_DYN_TRUSTED_ACTIVE'                       => 'Aktivieren Sie diese Option, um das Trusted Shops Siegel im shop anzuzeigen.',
 'HELP_DYN_TRUSTED_TSPAYMENT'                    => 'Ordnen Sie den im Shop angebotenen Zahlungsarten die entsprechende Zahlungsart bei Trusted Shop zu.',
+
+'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'         => 'Laden Sie ein Bild für den großen Startseitenbanner hoch und geben die URL für den Klick auf den Banner an. Falls ein Artikel zugeordnet wird, wird dessen URL automatisch als Banner-URL verwendet.',
+
 );

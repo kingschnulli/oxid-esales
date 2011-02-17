@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 29342 2010-08-13 10:55:22Z arvydas $
+ * @version   SVN: $Id: oxsession.php 32931 2011-02-04 16:23:01Z rimvydas.paskevicius $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -84,6 +84,13 @@ class oxSession extends oxSuperCfg
     protected $_blNewSession = false;
 
     /**
+     * Forces session to be started and skips checking if session is allowed
+     *
+     * @var bool
+     */
+    protected $_blForceNewSession = false;
+
+    /**
      * Error message, used for debug purposes only
      *
      * @var string
@@ -103,16 +110,6 @@ class oxSession extends oxSuperCfg
      * @var object
      */
     protected $_oBasketReservations = null;
-
-    /**
-     * Array of Classes => methods, which requires forced cookies support
-     *
-     * @var array
-     *
-     * @deprecated
-     * @see $_aRequireSessionWithParams
-     */
-    protected $_aRequireCookiesInFncs = array();
 
     /**
      * Force session start by defined parameter rules.
@@ -525,48 +522,6 @@ class oxSession extends oxSuperCfg
     }
 
     /**
-     * Append URL with session information parameter.
-     *
-     * @param string $sUrl Current url
-     *
-     * @deprecated
-     * @see oxUtilsUrl::processUrl()
-     *
-     * @return string
-     */
-    public function url( $sUrl )
-    {
-        $myConfig = $this->getConfig();
-        $blUseCookies = $this->_getSessionUseCookies();
-        $sSeparator = getStr()->strstr( $sUrl, "?" ) !== false ?  "&amp;" : "?";
-        $sUrl .= $sSeparator;
-
-        if ( $blUseCookies && $this->_getCookieSid() ) {
-            // switching from ssl to non ssl or vice versa?
-            if ( ( strpos( $sUrl, "https:" ) === 0 && !$myConfig->isSsl() ) ||
-                 ( strpos( $sUrl, "http:" ) === 0 && $myConfig->isSsl() ) ) {
-                $sUrl .= $this->getForcedName(). '=' . $this->getId() . "&amp;";
-            }
-            if ($this->isAdmin()) {
-                // admin mode always has to have token
-                $sUrl .= 'stoken='.$this->getSessionChallengeToken().'&amp;';
-            }
-        } elseif ( oxUtils::getInstance()->isSearchEngine() ) {
-            //adding lang parameter for search engines
-            $sLangParam = (int) oxConfig::getParameter( "lang" );
-            $sConfLang  = (int) $myConfig->getConfigParam( "sDefaultLang" );
-            if ( $sLangParam != $sConfLang ) {
-                $sUrl   .= "lang={$sLangParam}&amp;";
-            }
-        } elseif ( ( $sIcludeParams = $this->sid() ) ) {
-            //cookies are not supported or this is first time visit
-            $sUrl .= "{$sIcludeParams}&amp;";
-        }
-
-        return $sUrl;
-    }
-
-    /**
      * Returns string prefix to URL with session ID parameter. In some cases
      * (if client is robot, such as Google) adds parameter shp, to identify,
      * witch shop is currently running.
@@ -669,6 +624,17 @@ class oxSession extends oxSuperCfg
     }
 
     /**
+     * Forces starting session and skips checking if session is allowed to start
+     * when calling oxSession::start();
+     *
+     * @return bool
+     */
+    public function setForceNewSession()
+    {
+        $this->_blForceNewSession = true;
+    }
+
+    /**
      * Checks if cookies are not available. Returns TRUE of sid needed
      *
      * @param string $sUrl if passed domain does not match current - returns true (optional)
@@ -728,22 +694,14 @@ class oxSession extends oxSuperCfg
      */
     public function processUrl( $sUrl )
     {
-        if (!$this->isAdmin()) {
-            $sSid = '';
-            if ( $this->isSidNeeded( $sUrl ) ) {
-                // only if sid is not yet set and we have something to append
-                $sSid = $this->sid( true );
-            } else {
-                $sSid = $this->sid();
-            }
-            if ($sSid) {
-                $oStr = getStr();
-                if ( !$oStr->preg_match('/(\?|&(amp;)?)sid=/i', $sUrl) && (false === $oStr->strpos($sUrl, $sSid))) {
-                    if (!$oStr->preg_match('/(\?|&(amp;)?)$/', $sUrl)) {
-                        $sUrl .= ( $oStr->strstr( $sUrl, '?' ) !== false ?  '&amp;' : '?' );
-                    }
-                    $sUrl .= $sSid . '&amp;';
+        $sSid = $this->sid( $this->isSidNeeded( $sUrl ) );
+        if ($sSid) {
+            $oStr = getStr();
+            if ( !$oStr->preg_match('/(\?|&(amp;)?)sid=/i', $sUrl) && (false === $oStr->strpos($sUrl, $sSid))) {
+                if (!$oStr->preg_match('/(\?|&(amp;)?)$/', $sUrl)) {
+                    $sUrl .= ( $oStr->strstr( $sUrl, '?' ) !== false ?  '&amp;' : '?' );
                 }
+                $sUrl .= $sSid . '&amp;';
             }
         }
         return $sUrl;
@@ -778,7 +736,7 @@ class oxSession extends oxSuperCfg
      */
     protected function _forceSessionStart()
     {
-        return ( !oxUtils::getInstance()->isSearchEngine() ) && ( (( bool ) $this->getConfig()->getConfigParam( 'blForceSessionStart' )) || oxConfig::getParameter( "su" ) ) ;
+        return ( !oxUtils::getInstance()->isSearchEngine() ) && ( (( bool ) $this->getConfig()->getConfigParam( 'blForceSessionStart' )) || oxConfig::getParameter( "su" ) || $this->_blForceNewSession );
     }
 
     /**
@@ -1023,15 +981,6 @@ class oxSession extends oxSuperCfg
      */
     protected function _isSessionRequiredAction()
     {
-        // deprecated functionality for backwards compatibility
-        $sFunction = oxConfig::getParameter( 'fnc' );
-        $sClass = oxConfig::getParameter( 'cl' );
-
-        if (( $sFunction && in_array( strtolower( $sFunction ), $this->_aRequireCookiesInFncs ) ) ||
-               ( $sClass && array_key_exists( strtolower( $sClass ), $this->_aRequireCookiesInFncs ) )) {
-            return true;
-        }
-        // end of deprecated functionality for backwards compatibility
         foreach ($this->_getRequireSessionWithParams() as $sParam => $aValues) {
             $sValue = oxConfig::getParameter( $sParam );
             if (isset($sValue)) {
@@ -1085,4 +1034,15 @@ class oxSession extends oxSuperCfg
         }
         return $this->_oBasketReservations;
     }
+
+    /**
+     * Checks if headers were already outputed
+     *
+     * @return bool
+     */
+    public function isHeaderSent()
+    {
+        return headers_sent();
+    }
+
 }

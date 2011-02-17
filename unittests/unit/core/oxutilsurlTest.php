@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsurlTest.php 29935 2010-09-22 22:34:57Z alfonsas $
+ * @version   SVN: $Id: oxutilsurlTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -104,7 +104,7 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         $this->assertEquals('sdf?lang=1', oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?sid=111&lang=1'));
         $this->assertEquals('sdf?a&lang=1', oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?sid=111&a&lang=1'));
         $this->assertEquals('sdf?a&amp;lang=1', oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?sid=111&a&amp;lang=1'));
-        $this->assertEquals('sdf?a&&amp;lang=3', oxUtils::getInstance()->prepareUrlForNoSession('sdf?sid=111&a&'));
+        $this->assertEquals('sdf?a&&amp;lang=3', oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?sid=111&a&'));
         $this->assertEquals('sdf?lang=3', oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf'));
 
         modConfig::getInstance()->addClassFunction('isMall', create_function('', 'return true;'));
@@ -143,15 +143,6 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         $this->assertEquals( '?param1=value1&amp;param2=value2&amp;', $oUtils->appendUrl( $sTestUrl, $aBaseUrlParams ) );
     }
 
-    public function testAppendUrlProtected()
-    {
-        $sTestUrl = '';
-        $aBaseUrlParams = array( "param1" => "value1", "param2" => "value2" );
-
-        $oUtils = new oxUtilsUrl();
-        $this->assertEquals( '?param1=value1&amp;param2=value2&amp;', $oUtils->UNITappendUrl( $sTestUrl, $aBaseUrlParams ) );
-    }
-
     public function testProcessUrl()
     {
         $oUtils = $this->getMock( "oxUtilsUrl", array( "appendUrl", "getBaseAddUrlParams" ) );
@@ -169,20 +160,6 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
 
         $this->assertEquals( "appendedUrl", $oUtils->processSeoUrl( "" ) );
     }
-
-    public function testProcessStdUrl()
-    {
-        oxTestModules::addFunction('oxUtils', 'seoIsActive', '{return false;}');
-        $aBaseUrlParams = array( "param1" => "value1", "param2" => "value2" );
-        $aAddParams = array( "param3" => "value3" );
-
-        $oUtils = $this->getMock( "oxUtilsUrl", array( "appendUrl", "getAddUrlParams" ) );
-        $oUtils->expects( $this->once() )->method( 'getAddUrlParams' )->will( $this->returnValue( $aAddParams ) );
-        $oUtils->expects( $this->once() )->method( 'appendUrl' )->with( $this->equalTo( "" ), $this->equalTo( array_merge( $aAddParams, $aBaseUrlParams ) ) )->will( $this->returnValue( "appendedUrl" ) );
-
-        $this->assertEquals( "appendedUrl?lang=1", $oUtils->processStdUrl( "", $aBaseUrlParams, 1, true ) );
-    }
-
 
     public function testAppendParamSeparator()
     {

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: infoTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: infoTest.php 32923 2011-02-04 14:35:22Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -101,7 +101,7 @@ class Unit_Views_infoTest extends OxidTestCase
     {
         $oInfo = $this->getProxyClass( 'info' );
         $oInfo->info();
-        $this->assertEquals( 'content.tpl', $oInfo->render() );
+        $this->assertEquals( 'page/info/content.tpl', $oInfo->render() );
     }
 
     /**
@@ -109,18 +109,16 @@ class Unit_Views_infoTest extends OxidTestCase
      *
      * @return null
      */
-    public function testRenderIfTemplateNameIsNotSetLoadsCorrectContent()
+    public function testGetContentIfTemplateNameIsNotSetLoadsCorrectContent()
     {
         $oInfo = $this->getProxyClass( 'info' );
         $oInfo->info();
-        $oInfo->render();
+        $oContent = $oInfo->getContent();
 
         $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
         $oContent = oxNew( 'oxcontent' );
         $oContent->load( $sContentId );
 
-        $aViewData = $oInfo->getNonPublicVar( '_aViewData' );
-        $this->assertEquals( $sContentId, $aViewData['tpl'] );
-        $this->assertEquals( 'oximpressum', $aViewData['oContent']->oxcontents__oxloadid->value );
+        $this->assertEquals( 'oximpressum', $oContent->oxcontents__oxloadid->value );
     }
 }

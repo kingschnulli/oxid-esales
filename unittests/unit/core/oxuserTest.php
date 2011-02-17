@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 31066 2010-11-22 13:16:38Z arvydas $
+ * @version   SVN: $Id: oxuserTest.php 31889 2010-12-16 13:26:53Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -505,9 +505,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
 
     public function testCheckCountriesWrongCountries()
     {
-        $oUser = new oxuser();
+        oxTestModules::addFunction( "oxInputValidator", "checkCountries", "{ throw new oxUserException; }");
 
         try {
+            $oUser = new oxuser();
             $oUser->UNITcheckCountries( array( "oxuser__oxcountryid" => "xxx" ), array( "oxaddress__oxcountryid" => "yyy" ) );
         } catch ( oxUserException $oExcp ) {
             return;
@@ -517,9 +518,8 @@ class Unit_Core_oxuserTest extends OxidTestCase
 
     public function testCheckCountriesGoodCountries()
     {
-        $oUser = new oxuser();
-
         try {
+            $oUser = new oxuser();
             $oUser->UNITcheckCountries( array( "oxuser__oxcountryid" => "a7c40f631fc920687.20179984" ), array( "oxaddress__oxcountryid" => "a7c40f6320aeb2ec2.72885259" ) );
         } catch ( oxUserException $oExcp ) {
             $this->fail( "error in oxUser::_checkCountries()" );
@@ -536,6 +536,8 @@ class Unit_Core_oxuserTest extends OxidTestCase
 
     public function testCheckRequiredArrayFieldsEmptyField()
     {
+        oxTestModules::addFunction( "oxInputValidator", "checkRequiredArrayFields", "{ throw new oxInputException; }");
+
         try {
             $oUser = new oxuser();
             $oUser->UNITcheckRequiredArrayFields( 'xxx', array( 'aaa' => ' ' ) );
@@ -2230,13 +2232,16 @@ class Unit_Core_oxuserTest extends OxidTestCase
 
         $aInvAdress['oxuser__oxusername'] = $oUser->oxuser__oxusername->value;
 
+        $oLang = oxLang::getInstance();
+        $sMsg = sprintf( $oLang->translateString( 'EXCEPTION_USER_USEREXISTS', $oLang->getTplLanguage() ), $aInvAdress['oxuser__oxusername'] );
+        oxTestModules::addFunction( "oxInputValidator", "checkLogin", "{ throw new oxUserException('{$sMsg}'); }");
+
         //
         try {
             $oUser = $this->getProxyClass("oxUser");
             $oUser->UNITcheckLogin( '', $aInvAdress );
         } catch ( oxUserException $oEx){
-            $oLang = oxLang::getInstance();
-            $this->assertEquals( sprintf( $oLang->translateString( 'EXCEPTION_USER_USEREXISTS', $oLang->getTplLanguage() ), $aInvAdress['oxuser__oxusername'] ), $oEx->getMessage() );
+            $this->assertEquals( $sMsg, $oEx->getMessage() );
             return;
         }
         $this->fail( 'failed test__checkLogin_userWithouPassDublicateLogin test ' );
@@ -2244,7 +2249,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
     // 2. if user tries to change login password must be entered ...
     public function testCheckLoginNewLoginNoPass()
     {
-
+        oxTestModules::addFunction( "oxInputValidator", "checkLogin", "{ throw new oxInputException('EXCEPTION_INPUT_NOTALLFIELDS'); }");
         //
         try {
             $oUser =  $this->getProxyClass("oxUser");
@@ -2264,7 +2269,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
     // 3. if user tries to change login CORRECT password must be entered ...
     public function testCheckLoginNewLoginWrongPass()
     {
-
+        oxTestModules::addFunction( "oxInputValidator", "checkLogin", "{ throw new oxUserException('EXCEPTION_USER_PWDDONTMATCH'); }");
         //
         try {
             $oUser =  $this->getProxyClass("oxUser");
@@ -2284,6 +2289,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
     // 4. if user deletes his name and saves...
     public function testCheckLoginDeleteUserName()
     {
+        oxTestModules::addFunction( "oxInputValidator", "checkLogin", "{ throw new oxInputException('EXCEPTION_INPUT_NOTALLFIELDS'); }");
         $myUtils   = oxUtils::getInstance();
 
         // loading some demo user to test if dublicates possible
@@ -2334,6 +2340,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
     // 1. user forgot to pass user login - must fail
     public function testCheckEmailNoEmail()
     {
+        oxTestModules::addFunction( "oxInputValidator", "checkEmail", "{ throw new oxInputException('EXCEPTION_INPUT_NOTALLFIELDS'); }");
         try {
             $oUser = $this->getProxyClass("oxuser");
             $oUser->UNITcheckEmail( '', 1 );
@@ -2347,6 +2354,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
     public function testCheckEmailEmailValidation()
     {
         oxAddClassModule( 'Unit_oxuserTest_oxutils2', 'oxUtils' );
+        oxTestModules::addFunction( "oxInputValidator", "checkEmail", "{ throw new oxInputException('EXCEPTION_INPUT_NOVALIDEMAIL'); }");
 
         try {
             $oUser = $this->getProxyClass("oxuser");
@@ -2371,9 +2379,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
     // 2. for user without password - and check if it is empty on
     public function testCheckPasswordUserWithoutPassword()
     {
+        oxTestModules::addFunction( "oxInputValidator", "checkPassword", "{ throw new oxInputException('EXCEPTION_INPUT_EMPTYPASS'); }");
         try {
-        $oUser = $this->getProxyClass("oxuser");
-        $oUser->UNITcheckPassword( '', '', true );
+            $oUser = $this->getProxyClass("oxuser");
+            $oUser->UNITcheckPassword( '', '', true );
         } catch ( oxInputException $oEx ) {
             $this->assertEquals( $oEx->getMessage(), 'EXCEPTION_INPUT_EMPTYPASS');
             return;
@@ -2383,9 +2392,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
     // 3. for user without password - no checks
     public function testCheckPasswordPassTooShort()
     {
+        oxTestModules::addFunction( "oxInputValidator", "checkPassword", "{ throw new oxInputException('EXCEPTION_INPUT_PASSTOOSHORT'); }");
         try {
-        $oUser = $this->getProxyClass("oxuser");
-        $oUser->UNITcheckPassword( 'xxx', '', true );
+            $oUser = $this->getProxyClass("oxuser");
+            $oUser->UNITcheckPassword( 'xxx', '', true );
         } catch ( oxInputException $oEx ) {
             $this->assertEquals( $oEx->getMessage(), 'EXCEPTION_INPUT_PASSTOOSHORT');
             return;
@@ -2395,9 +2405,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
     // 4. for user without password - no checks
     public function testCheckPasswordPassDoNotMatch()
     {
+        oxTestModules::addFunction( "oxInputValidator", "checkPassword", "{ throw new oxUserException('EXCEPTION_USER_PWDDONTMATCH'); }");
         try {
-        $oUser = $this->getProxyClass("oxuser");
-        $oUser->UNITcheckPassword( 'xxxxxx', 'yyyyyy', $blCheckLenght = false  );
+            $oUser = $this->getProxyClass("oxuser");
+            $oUser->UNITcheckPassword( 'xxxxxx', 'yyyyyy', $blCheckLenght = false  );
         } catch ( oxUserException $oEx ) {
             $this->assertEquals( $oEx->getMessage(), 'EXCEPTION_USER_PWDDONTMATCH');
             return;
@@ -2422,6 +2433,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
                                   'oxaddress__oxcountryid'
                                   );
 
+        oxTestModules::addFunction( "oxInputValidator", "checkRequiredFields", "{ throw new oxInputException('EXCEPTION_INPUT_NOTALLFIELDS'); }");
         modConfig::getInstance()->setConfigParam( 'aMustFillFields', $aMustFillFields );
 
         try {
@@ -2482,21 +2494,11 @@ class Unit_Core_oxuserTest extends OxidTestCase
      */
     public function testCheckVatIdWithBadCountryId()
     {
-        $oUser = $this->getProxyClass("oxUser");
-
         try {
-            $oUser->UNITcheckVatId( array('oxuser__oxustid' => 1, 'oxuser__oxcountryid' => null) );
+            $oUser = $this->getProxyClass("oxUser");
+            $oUser->UNITcheckVatId( array( 'oxuser__oxustid' => 1, 'oxuser__oxcountryid' => null ) );
         } catch ( Exception $oException ) {
             $this->fail( 'Vat Id should not be checked without country id' );
-        }
-
-        try {
-            $oUser->UNITcheckVatId( array('oxuser__oxustid' => 1, 'oxuser__oxcountryid' => 'not valid') );
-            $this->fail( 'No checking of loading country' );
-        } catch ( oxObjectException $oException ) {
-            //Ok
-        } catch ( Exception $oException ) {
-            $this->fail();
         }
     }
 
@@ -2536,12 +2538,12 @@ class Unit_Core_oxuserTest extends OxidTestCase
      */
     public function testCheckVatIdWithForeignCountryIdAndBadVatId()
     {
-
-        $oUser = $this->getProxyClass("oxUser");
+        oxTestModules::addFunction('oxInputValidator', 'checkVatId', '{$oEx = oxNew("oxInputException"); $oEx->setMessage("VAT_MESSAGE_ID_NOT_VALID"); throw $oEx;}');
 
         $sForeignCountryId = "a7c40f6320aeb2ec2.72885259"; //Austria
 
         try {
+            $oUser = oxNew( "oxUser" );
             $oUser->UNITcheckVatId( array('oxuser__oxustid' => 1, 'oxuser__oxcountryid' => $sForeignCountryId) );
             $this->fail( "while trying to check foreign country business user with bad vat id" );
         } catch ( oxInputException $oException ) {
@@ -2572,7 +2574,6 @@ class Unit_Core_oxuserTest extends OxidTestCase
      */
     public function testCheckValues()
     {
-
         $oUser = $this->getMock("oxUser", array("_checkLogin", "_checkEmail", "_checkPassword", "_checkRequiredFields", "_checkCountries", "_checkVatId"));
         $oUser->expects($this->once())->method("_checkLogin");
         $oUser->expects($this->once())->method("_checkEmail");
@@ -2988,6 +2989,17 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertNull( oxSession::getVar( 'usr' ) );
         $this->assertNull( oxSession::getVar( 'auth' ) );
         $this->assertFalse( $oUser->getUser() );
+    }
+
+    /**
+     * oxuser::login() - restets active user on login
+     */
+    public function testLogin_resetsActiveUser()
+    {
+        $oUser = $this->getMock("oxuser", array("setUser"));
+        $oUser->expects($this->once())->method("setUser")->with( $this->equalTo(null) );
+
+        $oUser->login(oxADMIN_LOGIN, oxADMIN_PASSWD);
     }
 
     /**

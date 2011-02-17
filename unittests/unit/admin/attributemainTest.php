@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: attributemainTest.php 26706 2010-03-20 13:37:49Z arvydas $
+ * @version   SVN: $Id: attributemainTest.php 33187 2011-02-10 15:54:30Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -56,14 +56,11 @@ class Unit_Admin_AttributeMainTest extends OxidTestCase
     public function testRenderNoRealObjectId()
     {
         modConfig::setParameter( "oxid", "-1" );
-        modConfig::setParameter( "saved_oxid", "-1" );
 
         // testing..
         $oView = new Attribute_Main();
         $this->assertEquals( 'attribute_main.tpl', $oView->render() );
         $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['updatelist'] ) );
-        $this->assertEquals( "1", $aViewData['updatelist'] );
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );
     }
@@ -103,8 +100,6 @@ class Unit_Admin_AttributeMainTest extends OxidTestCase
         $oView->save();
 
         $this->assertEquals( "1", $oView->getViewDataElement( "updatelist" ) );
-        $this->assertEquals( "testId", oxSession::getVar( "saved_oxid" ) );
-
     }
 
     /**
@@ -144,6 +139,5 @@ class Unit_Admin_AttributeMainTest extends OxidTestCase
 
         $this->assertEquals( "1", $oView->getViewDataElement( "updatelist" ) );
         $this->assertEquals( "999", oxSession::getVar( "new_lang" ) );
-        $this->assertEquals( "testId", oxSession::getVar( "saved_oxid" ) );
     }
 }

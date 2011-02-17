@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 32752 2011-01-26 09:55:13Z sarunas $
+ * @version   SVN: $Id: paymentTest.php 32765 2011-01-27 11:01:14Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -671,6 +671,18 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment = $this->getProxyClass( "payment" );
 
         $this->assertEquals( 'testId', $oPayment->getCheckedTsProductId() );
+    }
+
+	/**
+     * Testing Payment::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oPayment = new Payment();
+
+        $this->assertEquals(1, count($oPayment->getBreadCrumb()));
     }
 
 }

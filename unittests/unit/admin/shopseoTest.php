@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shopseoTest.php 28025 2010-05-31 11:10:04Z arvydas $
+ * @version   SVN: $Id: shopseoTest.php 33234 2011-02-14 12:45:37Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -61,7 +61,9 @@ class Unit_Admin_ShopSeoTest extends OxidTestCase
     public function testRender()
     {
         // testing..
-        $oView = new Shop_Seo();
+            $sShop = 'oxbaseshop';
+        $oView = $this->getProxyClass( "Shop_Seo" );
+        $oView->setNonPublicVar( "_sEditObjectId", $sShop );
         $this->assertEquals( 'shop_seo.tpl', $oView->render() );
     }
 
