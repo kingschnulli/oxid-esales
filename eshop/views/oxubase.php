@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 33142 2011-02-10 12:16:17Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 33286 2011-02-15 15:47:38Z arvydas.vapsva $
  */
 
 /**
@@ -1020,7 +1020,7 @@ class oxUBase extends oxView
     {
         return 'listorderby';
     }
-    
+
      /**
      * Returns sorted column direction parameter name
      *

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlist.php 32923 2011-02-04 14:35:22Z vilma $
+ * @version   SVN: $Id: manufacturerlist.php 33263 2011-02-15 12:34:45Z arvydas.vapsva $
  */
 
 /**
@@ -181,7 +181,7 @@ class ManufacturerList extends aList
         $iNrofCatArticles = $iNrofCatArticles?$iNrofCatArticles:1;
 
         $oArtList = oxNew( 'oxarticlelist' );
-        $oArtList->setSqlLimit( $iNrofCatArticles * $this->getActPage(), $iNrofCatArticles );
+        $oArtList->setSqlLimit( $iNrofCatArticles * $this->_getRequestPageNr(), $iNrofCatArticles );
         $oArtList->setCustomSorting( $this->getSortingSql( $sManufacturerId ) );
 
         // load the articles

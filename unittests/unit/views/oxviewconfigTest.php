@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 32952 2011-02-07 09:51:48Z vilma $
+ * @version   SVN: $Id: oxviewconfigTest.php 33291 2011-02-15 15:58:08Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -304,19 +304,22 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $this->assertEquals('lalala', $oVC->getShowWishlist());
     }
 
-
-
     /**
      * check config params getter
      */
     public function testGetShowCompareList()
     {
-        $oCfg = $this->getMock('oxconfig', array('getConfigParam'));
-        $oCfg->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('bl_showCompareList'))->will($this->returnValue('lalala'));
-        $oCfg->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('bl_perfLoadCompare'))->will($this->returnValue(true));
+        $oView = $this->getMock( 'oxview', array( 'getIsOrderStep' ) );
+        $oView->expects( $this->once() )->method( 'getIsOrderStep' )->will( $this->returnValue( true ) );
+
+        $oCfg = $this->getMock( 'oxconfig', array( 'getConfigParam', 'getActiveView' ) );
+        $oCfg->expects( $this->at( 0 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'bl_showCompareList' ) )->will( $this->returnValue( true ) );
+        $oCfg->expects( $this->at( 1 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'blDisableNavBars' ) )->will( $this->returnValue( true ) );
+        $oCfg->expects( $this->at( 2 ) )->method( 'getActiveView' )->will( $this->returnValue( $oView ) );
+
         $oVC = $this->getMock('oxviewconfig', array('getConfig'));
         $oVC->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
-        $this->assertEquals('lalala', $oVC->getShowCompareList());
+        $this->assertFalse( $oVC->getShowCompareList() );
     }
 
     /**

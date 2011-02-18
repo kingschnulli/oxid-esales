@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 33224 2011-02-14 09:06:55Z vilma $
+ * @version   SVN: $Id: oxemail.php 33274 2011-02-15 13:54:33Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -246,6 +246,13 @@ class oxEmail extends PHPMailer
      * @var smarty
      */
     protected $_aViewData = array();
+
+    /**
+     * Shop object
+     *
+     * @var object
+     */
+    protected $_oShop = null;
 
     /**
      * Class constructor.
@@ -835,7 +842,7 @@ class oxEmail extends PHPMailer
     {
         // shop info
         $oShop = $this->_getShop();
-var_dump($oShop->oxshops__oxorderemail->value);
+
         //set mail params (from, fromName, smtp)
         $this->_setMailParams( $oShop );
 
@@ -1259,13 +1266,13 @@ var_dump($oShop->oxshops__oxorderemail->value);
         $oShop = oxNew( "oxshop" );
         $oShop->load( $oAlarm->oxpricealarm__oxshopid->value);
         $oShop = $this->addGlobalParams( $oShop);
+        $this->setShop( $oShop );
 
         //set mail params (from, fromName, smtp)
         $this->_setMailParams( $oShop );
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "shop", $oShop );
         $oSmarty->assign( "product", $oAlarm->getArticle() );
         $oSmarty->assign( "oPriceAlarm", $oAlarm );
         $oSmarty->assign( "bidprice", $oAlarm->getFProposedPrice() );
@@ -1866,10 +1873,11 @@ var_dump($oShop->oxshops__oxorderemail->value);
      * If is set language parameter, load shop in given language
      *
      * @param int $iLangId language id
+     * @param int $iShopId shop id
      *
      * @return oxShop
      */
-    protected function _getShop( $iLangId = null )
+    protected function _getShop( $iLangId = null, $iShopId = null )
     {
         $myConfig = $this->getConfig();
 
@@ -1985,9 +1993,24 @@ var_dump($oShop->oxshops__oxorderemail->value);
      */
     public function getShop()
     {
-        return $this->_getShop();
+        if ( $this->_oShop == null ) {
+            return $this->_getShop();
+        } else {
+            return $this->_oShop;
+        }
     }
 
+    /**
+     * Set shop object
+     *
+     * @param oxShop $oShop shop object
+     *
+     * @return null
+     */
+    public function setShop( $oShop )
+    {
+        $this->_oShop = $oShop;
+    }
     /**
      * Gets viewConfig object
      *

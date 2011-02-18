@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_cur.php 32923 2011-02-04 14:35:22Z vilma $
+ * @version   SVN: $Id: oxcmp_cur.php 33259 2011-02-15 12:15:33Z arvydas.vapsva $
  */
 
 /**
@@ -93,14 +93,6 @@ class oxcmp_cur extends oxView
             $oBasket = $this->getSession()->getBasket();
         }
         $oBasket->setBasketCurrency( $this->_oActCur );
-
-        $oUrlUtils = oxUtilsUrl::getInstance();
-        $sUrl = $oUrlUtils->cleanUrl( $this->getParent()->getLink(), array( "cur" ) );
-        reset( $this->aCurrencies );
-        while ( list( , $oItem ) = each( $this->aCurrencies ) ) {
-            $oItem->link = $oUrlUtils->processUrl( $sUrl, true, array( "cur" => $oItem->id ) );
-        }
-
         parent::init();
     }
 
@@ -118,6 +110,14 @@ class oxcmp_cur extends oxView
         parent::render();
         $oParentView = $this->getParent();
         $oParentView->setActCurrency( $this->_oActCur );
+
+        $oUrlUtils = oxUtilsUrl::getInstance();
+        $sUrl = $oUrlUtils->cleanUrl( $this->getParent()->getLink(), array( "cur" ) );
+        reset( $this->aCurrencies );
+        while ( list( , $oItem ) = each( $this->aCurrencies ) ) {
+            $oItem->link = $oUrlUtils->processUrl( $sUrl, true, array( "cur" => $oItem->id ) );
+        }
+
         return $this->aCurrencies;
     }
 }

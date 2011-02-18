@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: tagTest.php 33007 2011-02-07 16:02:53Z vilma $
+ * @version   SVN: $Id: tagTest.php 33265 2011-02-15 12:35:35Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -52,7 +52,7 @@ class Unit_Views_tagTest extends OxidTestCase
         $oView->expects( $this->atLeastOnce() )->method( 'getArticleList')->will( $this->returnValue($oArticleList) );
         $oView->expects( $this->atLeastOnce() )->method( '_processListArticles');
 
-        $this->assertEquals( "page/product/list.tpl", $oView->render() );
+        $this->assertEquals( "page/list/list.tpl", $oView->render() );
     }
 
     /**

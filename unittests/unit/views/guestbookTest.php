@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: guestbookTest.php 33148 2011-02-10 12:39:31Z linas.kukulskis $
+ * @version   SVN: $Id: guestbookTest.php 33284 2011-02-15 15:17:07Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -71,20 +71,14 @@ class Unit_Views_GuestbookTest extends OxidTestCase
     public function testRender()
     {
         $oView = $this->getMock( "guestbook", array( "floodProtection", "getSortColumns", "getGbSortBy", "getGbSortDir", "getEntries", "getPageNavigation" ) );
-        $oView->expects( $this->once() )->method( 'floodProtection')->will( $this->returnValue( "floodProtection" ) );
-        $oView->expects( $this->once() )->method( 'getSortColumns')->will( $this->returnValue( "getSortColumns" ) );
-        $oView->expects( $this->once() )->method( 'getGbSortBy')->will( $this->returnValue( "getGbSortBy" ) );
-        $oView->expects( $this->once() )->method( 'getGbSortDir')->will( $this->returnValue( "getGbSortDir" ) );
-        $oView->expects( $this->once() )->method( 'getEntries')->will( $this->returnValue( "getEntries" ) );
-        $oView->expects( $this->once() )->method( 'getPageNavigation')->will( $this->returnValue( "getPageNavigation" ) );
+        $oView->expects( $this->never() )->method( 'floodProtection');
+        $oView->expects( $this->never() )->method( 'getSortColumns');
+        $oView->expects( $this->never() )->method( 'getGbSortBy');
+        $oView->expects( $this->never() )->method( 'getGbSortDir');
+        $oView->expects( $this->once() )->method( 'getEntries');
+        $oView->expects( $this->never() )->method( 'getPageNavigation');
 
         $this->assertEquals( "page/guestbook/guestbook.tpl", $oView->render() );
-        $this->assertEquals( "floodProtection", $oView->floodProtection() );
-        $this->assertEquals( "getSortColumns", $oView->getSortColumns() );
-        $this->assertEquals( "getGbSortBy", $oView->getGbSortBy() );
-        $this->assertEquals( "getGbSortDir", $oView->getGbSortDir() );
-        $this->assertEquals( "getEntries", $oView->getEntries() );
-        $this->assertEquals( "getPageNavigation", $oView->getPageNavigation() );
     }
 
     /**

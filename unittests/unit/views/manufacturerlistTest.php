@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlistTest.php 32952 2011-02-07 09:51:48Z vilma $
+ * @version   SVN: $Id: manufacturerlistTest.php 33262 2011-02-15 12:34:30Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -71,7 +71,7 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'setMetaDescription' );
         $oView->expects( $this->once() )->method( 'setMetaKeywords' );
 
-        $this->assertEquals( "page/product/list.tpl", $oView->render() );
+        $this->assertEquals( "page/list/list.tpl", $oView->render() );
     }
 
     /**

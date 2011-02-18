@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: guestbook.php 33147 2011-02-10 12:31:59Z linas.kukulskis $
+ * @version   SVN: $Id: guestbook.php 33284 2011-02-15 15:17:07Z arvydas.vapsva $
  */
 
 /**
@@ -110,9 +110,6 @@ class GuestBook extends oxUBase
      */
     public function render()
     {
-        
-        $this->getEntries();
-        
         parent::render();
 
         // #774C no user mail and password check in guesbook
@@ -121,6 +118,7 @@ class GuestBook extends oxUBase
             return $this->_sThisLoginTemplate;
         }
 
+        $this->getEntries();
         return $this->_sThisTemplate;
     }
 
@@ -166,20 +164,14 @@ class GuestBook extends oxUBase
             $iNrofCatArticles = (int) $this->getConfig()->getConfigParam( 'iNrofCatArticles' );
             $iNrofCatArticles = $iNrofCatArticles ? $iNrofCatArticles : 10;
 
-           
-
             // loading only if there is some data
             $oEntries = oxNew( 'oxgbentry' );
-            
-             
             if ( $iCnt = $oEntries->getEntryCount() ) {
-                
                 $this->_iCntPages = round( $iCnt / $iNrofCatArticles + 0.49 );
                 $this->_aEntries  = $oEntries->getAllEntries( $this->getActPage() * $iNrofCatArticles, $iNrofCatArticles, $this->getSortingSql( 'oxgb' ) );
             }
         }
-        
-        
+
         return $this->_aEntries;
     }
 
@@ -198,7 +190,6 @@ class GuestBook extends oxUBase
 
             $oEntries = oxNew( 'oxgbentry' );
             $this->_blFloodProtection = $oEntries->floodProtection( $this->getConfig()->getShopId(), $sUserId );
-
         }
         return $this->_blFloodProtection;
     }
@@ -212,7 +203,7 @@ class GuestBook extends oxUBase
     {
         return 'gborderby';
     }
-    
+
      /**
      * Returns sorted column direction parameter name
      *
@@ -347,5 +338,4 @@ class GuestBook extends oxUBase
 
         return $aPaths;
     }
-
 }

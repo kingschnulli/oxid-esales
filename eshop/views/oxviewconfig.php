@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 33043 2011-02-08 12:18:28Z alfonsas $
+ * @version   SVN: $Id: oxviewconfig.php 33291 2011-02-15 15:58:08Z arvydas.vapsva $
  */
 
 /**
@@ -736,7 +736,7 @@ class oxViewConfig extends oxSuperCfg
     public function getShowCompareList()
     {
         $myConfig = $this->getConfig();
-        $blShowCompareList = $myConfig->getConfigParam( 'bl_showCompareList' );
+        $blShowCompareList = true;
 
         if ( !$myConfig->getConfigParam( 'bl_showCompareList' ) ||
             ( $myConfig->getConfigParam( 'blDisableNavBars' ) && $myConfig->getActiveView()->getIsOrderStep() ) ) {

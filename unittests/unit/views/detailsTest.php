@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 32929 2011-02-04 15:47:40Z vilma $
+ * @version   SVN: $Id: detailsTest.php 33299 2011-02-17 08:07:09Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -356,9 +356,12 @@ class Unit_Views_detailsTest extends OxidTestCase
     {
         $oArt = new oxarticle();
         $oArt->load('2000');
-        $oDetails = $this->getProxyClass( 'details' );
-        $oDetails->setNonPublicVar( "_oProduct", $oArt );
+
+        $oDetails = $this->getMock( 'details', array( 'getUser', 'getProduct' ) );
+        $oDetails->expects( $this->once() )->method( 'getUser')->will( $this->returnValue( true ) );
+        $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oArt ) );
         $oDetails->editTags();
+
         $aTags = $oDetails->getTags();
         $this->assertTrue(isset($aTags['coolen']));
             $this->assertEquals(5, count($aTags));
@@ -373,8 +376,11 @@ class Unit_Views_detailsTest extends OxidTestCase
     {
         $oArt = new oxarticle();
         $oArt->load('2000');
-        $oDetails = $this->getProxyClass( 'details' );
-        $oDetails->setNonPublicVar( "_oProduct", $oArt );
+
+        $oDetails = $this->getMock( 'details', array( 'getUser', 'getProduct' ) );
+        $oDetails->expects( $this->once() )->method( 'getUser')->will( $this->returnValue( true ) );
+        $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oArt ) );
+
         $oDetails->editTags();
         $this->assertTrue($oDetails->getEditTags());
     }
@@ -648,7 +654,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oDetails->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
         $oDetails->expects( $this->any() )->method( '_getParentProduct')->will( $this->returnValue( $oProduct ) );
 
-        $this->assertEquals( $oProduct->oxdetaillink, $oDetails->getParentUrl() );
+        $this->assertEquals( $oProduct->getLink(), $oDetails->getParentUrl() );
     }
 
     /**

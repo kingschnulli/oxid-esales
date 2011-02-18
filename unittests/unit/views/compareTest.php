@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: compareTest.php 33071 2011-02-09 09:14:01Z linas.kukulskis $
+ * @version   SVN: $Id: compareTest.php 33281 2011-02-15 15:04:44Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -170,7 +170,7 @@ class Unit_Views_compareTest extends OxidTestCase
 
     public function testSetCompareItemsgetCompareItems()
     {
-        modConfig::setParameter( 'aFiltcompproducts', array( "testItems1" ) );
+        modSession::getInstance()->setVar( 'aFiltcompproducts', array( "testItems1" ) );
         $oView = new compare();
         $this->assertEquals( array( "testItems1" ), $oView->getCompareItems() );
 

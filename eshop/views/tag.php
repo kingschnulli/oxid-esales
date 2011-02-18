@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: tag.php 33007 2011-02-07 16:02:53Z vilma $
+ * @version   SVN: $Id: tag.php 33307 2011-02-17 10:31:11Z sarunas $
  */
 
 /**
@@ -135,7 +135,7 @@ class Tag extends aList
         $iNrofCatArticles = (int) $this->getConfig()->getConfigParam( 'iNrofCatArticles' );
         $iNrofCatArticles = $iNrofCatArticles?$iNrofCatArticles:1;
         $oArtList = oxNew( 'oxarticlelist' );
-        $oArtList->setSqlLimit( $iNrofCatArticles * $this->getActPage(), $iNrofCatArticles );
+        $oArtList->setSqlLimit( $iNrofCatArticles * $this->_getRequestPageNr(), $iNrofCatArticles );
         $oArtList->setCustomSorting( $this->getSortingSql( 'oxtags' ) );
 
         // load the articles
@@ -360,7 +360,7 @@ class Tag extends aList
         $aCatPath['title'] = oxLang::getInstance()->translateString( 'TAGS', oxLang::getInstance()->getBaseLanguage(), false );
         $aPaths[] = $aCatPath;
 
-        $aCatPath['title'] = oxConfig::getParameter( 'searchtag' );
+        $aCatPath['title'] = $this->getTitle();
         $aPaths[] = $aCatPath;
 
         return $aPaths;

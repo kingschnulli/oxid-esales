@@ -17,7 +17,7 @@
         [{/if}]
 
         [{ if $product && $oxcmp_user}]
-        <form name="basket" action="[{$product->detailslink}]#tags" method="post">
+        <form name="basket" action="[{$product->getLink()}]#tags" method="post">
             <div>
             [{ $oViewConf->getHiddenSid() }]
             [{ $oViewConf->getNavFormParams() }]

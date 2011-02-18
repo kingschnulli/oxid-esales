@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorlist.php 32968 2011-02-07 12:51:20Z vilma $
+ * @version   SVN: $Id: vendorlist.php 33264 2011-02-15 12:34:55Z arvydas.vapsva $
  */
 
 /**
@@ -177,7 +177,7 @@ class VendorList extends aList
         $iNrofCatArticles = $iNrofCatArticles?$iNrofCatArticles:1;
 
         $oArtList = oxNew( 'oxarticlelist' );
-        $oArtList->setSqlLimit( $iNrofCatArticles * $this->getActPage(), $iNrofCatArticles );
+        $oArtList->setSqlLimit( $iNrofCatArticles * $this->_getRequestPageNr(), $iNrofCatArticles );
         $oArtList->setCustomSorting( $this->getSortingSql( $sVendorId ) );
 
         // load the articles

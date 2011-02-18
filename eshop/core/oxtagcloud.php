@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloud.php 32880 2011-02-03 11:45:17Z sarunas $
+ * @version   SVN: $Id: oxtagcloud.php 33272 2011-02-15 13:51:28Z vilma $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -518,6 +518,24 @@ class oxTagCloud extends oxSuperCfg
     protected function _getCacheKey( $blExtended, $iLang = null )
     {
         return $this->_sCacheKey."_".$this->getConfig()->getShopId()."_".( ( $iLang !== null ) ? $iLang : oxLang::getInstance()->getBaseLanguage() ) ."_".$blExtended;
+    }
+
+    /**
+     * Checks if tags was already tagged for the same product
+     *
+     * @param string $sTagTitle given tag
+     *
+     * @return bool
+     */
+    public function canBeTagged( $sTagTitle )
+    {
+        $aProducts = oxSession::getVar("aTaggedProducts");
+        if ( isset($aProducts) && $aTags = $aProducts[$this->getProductId()]) {
+            if ( $aTags[$sTagTitle] == 1 ) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

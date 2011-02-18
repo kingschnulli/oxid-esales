@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 33236 2011-02-14 13:56:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxlang.php 33290 2011-02-15 15:57:43Z arvydas.vapsva $
  */
 
 /**
@@ -133,7 +133,7 @@ class oxLang extends oxSuperCfg
     public function getBaseLanguage()
     {
         if ( $this->_iBaseLanguageId === null ) {
-          
+
             $myConfig = $this->getConfig();
             $blAdmin = $this->isAdmin();
 
@@ -187,7 +187,7 @@ class oxLang extends oxSuperCfg
             // setting language to cookie
             oxUtilsServer::getInstance()->setOxCookie( 'language', $this->_iBaseLanguageId );
         }
-        
+
         return $this->_iBaseLanguageId;
     }
 
@@ -562,11 +562,8 @@ class oxLang extends oxSuperCfg
     {
         $iLang = (int) $iLang;
 
-        $blAdmin = $this->isAdmin();
-
         // checking if this language is valid
-        $aLanguages = $this->getLanguageArray(null, !$blAdmin);
-
+        $aLanguages = $this->getLanguageArray( null, !$this->isAdmin() );
         if ( !isset( $aLanguages[$iLang] ) && is_array( $aLanguages ) ) {
             $oLang = current( $aLanguages );
             if (isset($oLang->id)) {

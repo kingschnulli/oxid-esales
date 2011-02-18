@@ -634,4 +634,88 @@ $(function(){
             oWishList.attr('href', oWishList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
         }
     });
+    $(".tagCloud #tagText").click(highTag);
+    $("#saveTag").click(saveTag);
+    $("#cancelTag").click(cancelTag);
+    $("#editTag").click(editTag);
+
+    function highTag(){
+        var oSelf = $(this);
+        $(".tagError").hide();
+
+        url = '', data = {};
+        $.each($('#tagsForm').serializeArray(), function(i, f) {data[f.name] = f.value;});
+        data['highTags'] = oSelf.prev().text();
+        url = $('#tagsForm').attr('action');
+        $.ajax({
+            url: url, type: 'post', data: data,
+            success: function() {
+                oSelf.prev().addClass('taggedText');
+                oSelf.hide();
+            }
+        });
+        return false;
+    };
+
+    function saveTag(){
+        var oSelf = $(this);
+        $(".tagError").hide();
+
+        url = '', data = {};
+        $.each($('#tagsForm').serializeArray(), function(i, f) {data[f.name] = f.value;});
+        url = $('#tagsForm').attr('action');
+        data["blAjax"] = "1";
+        $.ajax({
+            url: url, type: 'post', data: data,
+            success: function(response) {
+                if ( response ) {
+                    $(".tagCloud").append("<span class='taggedText'>" + data["newTags"] + "</span> ");
+                } else {
+                    $(".tagError").show();
+                }
+            }
+        });
+        return false;
+    };
+
+    function cancelTag(){
+        var oSelf = $(this);
+
+        url = '', data = {};
+        $.each($('#tagsForm').serializeArray(), function(i, f) {data[f.name] = f.value;});
+        url = $('#tagsForm').attr('action');
+        data["blAjax"] = "1";
+        data["fnc"] = "cancelTags";
+        $.ajax({
+            url: url, type: 'post', data: data,
+            success: function(response) {
+                if ( response ) {
+                    $('#tags').html(response);
+                    $("#tags #editTag").click(editTag);
+                }
+            }
+        });
+        return false;
+    };
+
+    function editTag(){
+        var oSelf = $(this);
+        url = '', data = {};
+        $.each($('#tagsForm').serializeArray(), function(i, f) {data[f.name] = f.value;});
+        url = $('#tagsForm').attr('action');
+        data["blAjax"] = "1";
+        $.ajax({
+            url: url, type: 'post', data: data,
+            success: function(response) {
+                if ( response ) {
+                    $('#tags').html(response);
+                    $("#tags #tagText").click(highTag);
+                    $('#tags #saveTag').click(saveTag);
+                    $('#tags #cancelTag').click(cancelTag);
+                }
+            }
+        });
+        return false;
+    };
+
 });

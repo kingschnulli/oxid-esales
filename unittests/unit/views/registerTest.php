@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: registerTest.php 32992 2011-02-07 14:29:18Z vilma $
+ * @version   SVN: $Id: registerTest.php 33292 2011-02-15 16:01:38Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -133,14 +133,8 @@ class Unit_Views_registerTest extends OxidTestCase
 
     public function testRenderNoRStat()
     {
-        $oRegister = $this->getMock( 'register', array( 'getRegistrationStatus', 'getMustFillFields' ) );
-        $oRegister->expects( $this->once() )->method( 'getRegistrationStatus' )->will( $this->returnValue( false ) );
-        $oRegister->expects( $this->any() )->method( 'getMustFillFields' )->will( $this->returnValue( 'xaMustFillFields' ) );
-
+        $oRegister = new register();
         $this->assertEquals('page/account/register.tpl', $oRegister->render() );
-        $oVD = $oRegister->getViewData();
-        $this->assertEquals('xaMustFillFields', $oVD['aMustFillFields'] );
-
     }
 
     public function testRenderRStat()

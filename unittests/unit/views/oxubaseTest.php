@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 33011 2011-02-07 16:35:45Z vilma $
+ * @version   SVN: $Id: oxubaseTest.php 33286 2011-02-15 15:47:38Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -886,36 +886,10 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     public function testAddGlobalParamsCallsSetNrOfArtPerPage()
     {
-        $oView = $this->getMock('oxubase', array('_setNrOfArtPerPage'));
-
-        $oView->expects($this->once())
-              ->method('_setNrOfArtPerPage');
+        $oView = $this->getMock( 'oxubase', array( '_setNrOfArtPerPage') );
+        $oView->expects( $this->once() )->method( '_setNrOfArtPerPage' );
 
         $oView->addGlobalParams( new Oxstdclass );
-    }
-
-    /*
-     * Test adding global params to view data
-     */
-    public function testAddGlobalParams()
-    {
-        $myConfig = oxConfig::getInstance();
-        modConfig::setParameter( 'listorderby', 'oxprice' );
-        modConfig::setParameter( 'listorder', 'asc' );
-
-        $oView = oxNew( 'oxubase' );
-        $oView->addGlobalParams();
-
-        $aViewData = $oView->getViewData();
-
-        //checking some view data values
-        $this->assertEquals( $oView->loadCurrency(), $myConfig->getConfigParam( 'bl_perfLoadCurrency' ) );
-        $this->assertEquals( $oView->loadVendorTree(), $myConfig->getConfigParam( 'bl_perfLoadVendorTree' ) );
-
-
-        $this->assertEquals( $aViewData['oView'], $oView );
-        $this->assertEquals( $aViewData['oViewConf'], $oView->getViewConfig() );
-        $this->assertEquals( $aViewData['shop'], $oView->getViewConfig() );
     }
 
     public function testShowSearch()

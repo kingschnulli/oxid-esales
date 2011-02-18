@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 33071 2011-02-09 09:14:01Z linas.kukulskis $
+ * @version   SVN: $Id: alist.php 33261 2011-02-15 12:31:55Z arvydas.vapsva $
  */
 
 /**
@@ -315,7 +315,7 @@ class aList extends oxUBase
 
         // load only articles which we show on screen
         $oArtList = oxNew( 'oxarticlelist' );
-        $oArtList->setSqlLimit( $iNrofCatArticles * $this->getActPage(), $iNrofCatArticles );
+        $oArtList->setSqlLimit( $iNrofCatArticles * $this->_getRequestPageNr(), $iNrofCatArticles );
         $oArtList->setCustomSorting( $this->getSortingSql( $oCategory->getId() ) );
 
         if ( $oCategory->isPriceCategory() ) {
@@ -333,6 +333,41 @@ class aList extends oxUBase
         $this->_iCntPages = round( $this->_iAllArtCnt/$iNrofCatArticles + 0.49 );
 
         return $oArtList;
+    }
+
+    /**
+     * Loads article list to check if page number passed by request is valid.
+     * In case page number is invalid -  error_404_handler() is called.
+     *
+     * @todo this function is a temporary solution and should be rmeoved as
+     * soon product list loading is refactored
+     *
+     * @return int
+     */
+    public function getActPage()
+    {
+        // loading product list
+        $this->getArticleList();
+        $iActPage = $this->_getRequestPageNr();
+
+        if ( $this->_iCntPages < $iActPage ) {
+            error_404_handler();
+        }
+
+        return $iActPage;
+    }
+
+    /**
+     * Calls parent::getActPage();
+     *
+     * @todo this function is a temporary solution and should be rmeoved as
+     * soon product list loading is refactored
+     *
+     * @return int
+     */
+    protected function _getRequestPageNr()
+    {
+        return parent::getActPage();
     }
 
     /**
@@ -697,7 +732,7 @@ class aList extends oxUBase
     public function getArticleList()
     {
         if ( $this->_aArticleList === null ) {
-            if ( $this->_isActCategory() && ( $oCategory = $this->getActCategory() ) ) {
+            if ( /*$this->_isActCategory() &&*/ ( $oCategory = $this->getActCategory() ) ) {
                 $aArticleList = $this->_loadArticles( $oCategory );
                 if ( count( $aArticleList ) ) {
                     $this->_aArticleList = $aArticleList;
@@ -768,7 +803,7 @@ class aList extends oxUBase
         $aPaths = array();
 
         if ( 'oxmore' == oxConfig::getParameter( 'cnid' ) ) {
-            
+
             $aPaths[]['title'] = oxLang::getInstance()->translateString( 'PAGE_PRODUCT_MORECATEGORIES', oxLang::getInstance()->getBaseLanguage(), false );
 
             return $aPaths;

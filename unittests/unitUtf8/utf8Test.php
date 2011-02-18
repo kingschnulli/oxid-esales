@@ -1980,14 +1980,14 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $this->assertEquals( $sResult, $oView->getTitle() );
     }
 
-    public function testTagGetTemplateLocation()
+    public function testTagGetBreadCrumb()
     {
         $sValue = 'литов';
         $sResult = 'Литов';
 
         $oView = $this->getProxyClass( 'tag' );
         $oView->setNonPublicVar( "_sTag", $sValue );
-        $this->assertEquals( 'Stichworte / '.$sResult, $oView->getTemplateLocation());
+        $this->assertEquals( array(array('title'=>'Stichworte'),array('title'=>$sResult)), $oView->getBreadCrumb());
     }
 
     public function testOxEmailIncludeImages()

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 33056 2011-02-08 16:05:32Z sarunas $
+ * @version   SVN: $Id: details.php 33296 2011-02-15 17:06:18Z vilma $
  */
 
 /**
@@ -490,6 +490,20 @@ class Details extends oxUBase
     }
 
     /**
+     * Checks if rating runctionality is on and allwed to user
+     *
+     * @return bool
+     */
+    public function canChangeTags()
+    {
+        if ( $oUser = $this->getUser() ) {
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Saves user ratings and review text (oxreview object)
      *
      * @return null
@@ -564,10 +578,30 @@ class Details extends oxUBase
         if ( !$sTag && !$sHighTag) {
             return;
         }
-        $sTag .= " ".getStr()->html_entity_decode( $sHighTag );
+        if ( $sHighTag ) {
+            $sTag = getStr()->html_entity_decode( $sHighTag );
+        }
 
+        //can tag only once per product and tags
+        $aTags = array();
         $oProduct = $this->getProduct();
-        $oProduct->addTag( $sTag );
+        $aTaggedProducts = oxSession::getVar("aTaggedProducts");
+        if ( $aTaggedProducts ) {
+            $aTags = $aTaggedProducts[$oProduct->getId()];
+        }
+        $blAddedTag = false;
+        //Checks if user already tagged it
+        if ( $aTags[$sTag] != 1 ) {
+            $oProduct->addTag( $sTag );
+            $aTags[$sTag] = 1;
+            $aTaggedProducts[$oProduct->getId()] = $aTags;
+            oxSession::setVar( 'aTaggedProducts', $aTaggedProducts);
+            $blAddedTag = true;
+        }
+        // for ajax call
+        if ($this->getConfig()->getParameter('blAjax', true )) {
+            die($blAddedTag);
+        }
     }
 
     /**
@@ -577,9 +611,44 @@ class Details extends oxUBase
      */
     public function editTags()
     {
+        if ( !$this->getUser() ) {
+            return;
+        }
         $oTagCloud = oxNew("oxTagCloud");
         $this->_aTags = $oTagCloud->getTags( $this->getProduct()->getId() );
         $this->_blEditTags = true;
+
+        // for ajax call
+        if ($this->getConfig()->getParameter('blAjax', true )) {
+            oxUtils::getInstance()->setHeader( "Content-Type: text/html; charset=".oxLang::getInstance()->translateString( 'charset' ) );
+            $oActView = oxNew( 'oxubase' );
+            $oSmarty = oxUtilsView::getInstance()->getSmarty();
+            $oSmarty->assign('oView', $this );
+            $oSmarty->assign('oViewConf', $this->getViewConfig() );
+            die($oSmarty->fetch( 'page/details/inc/editTags.tpl', $this->getViewId() ));
+        }
+    }
+
+    /**
+     * Cancels tags editing mode
+     *
+     * @return null
+     */
+    public function cancelTags()
+    {
+        $oTagCloud = oxNew("oxTagCloud");
+        $this->_aTags = $oTagCloud->getTags( $this->getProduct()->getId() );
+        $this->_blEditTags = false;
+
+        // for ajax call
+        if ($this->getConfig()->getParameter('blAjax', true )) {
+            oxUtils::getInstance()->setHeader( "Content-Type: text/html; charset=".oxLang::getInstance()->translateString( 'charset' ) );
+            $oActView = oxNew( 'oxubase' );
+            $oSmarty = oxUtilsView::getInstance()->getSmarty();
+            $oSmarty->assign('oView', $this );
+            $oSmarty->assign('oViewConf', $this->getViewConfig() );
+            die($oSmarty->fetch( 'page/details/inc/tags.tpl', $this->getViewId() ));
+        }
     }
 
     /**

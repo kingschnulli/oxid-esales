@@ -62,9 +62,6 @@ class Unit_Admin_StatisticsMainTest extends OxidTestCase
         modConfig::setParameter("saved_oxid", "testId");
 
         $this->assertEquals( 'statistic_main.tpl', $oSubj->render() );
-
-        $aViewData = $oSubj->getNonPublicVar("_aViewData");
-        $this->assertEquals($aViewData["updatelist"], 1);
     }
 
     public function testSave()

@@ -8,7 +8,7 @@
         [{oxifcontent ident="oxsecurityinfo" object="oCont"}]
             <p>[{ oxmultilang ident="PAGE_PRIVATESALES_INVITE_ABOUTDATAPROTECTION" }] <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ $oCont->oxcontents__oxtitle->value }]</a></p>
         [{/oxifcontent}]
-        [{include file="form/invite.tpl"}]
+        [{include file="form/privatesales/invite.tpl"}]
     [{else}]
         [{ oxmultilang ident="PAGE_PRIVATESALES_INVITE_EMAILWASSENT" }]<br><br>
     [{/if}]

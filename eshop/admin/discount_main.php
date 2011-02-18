@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: discount_main.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: discount_main.php 33306 2011-02-17 09:41:55Z sarunas $
  */
 
 /**
@@ -99,12 +99,9 @@ class Discount_Main extends oxAdminDetails
         $sTitle = false;
         $sOxId = $this->getEditObjectId();
         if ( $sOxId != "-1" && isset( $sOxId)) {
-            $sViewName = getViewName( "oxarticles" );
-
-            $sLang = oxLang::getInstance()->getLanguageTag($this->_iEditLang);
-
+            $sViewName = getViewName( "oxarticles", $this->_iEditLang );
             $oDb = oxDb::getDb();
-            $sQ = "select concat( $sViewName.oxartnum, ' ', $sViewName.oxtitle$sLang ) from oxdiscount
+            $sQ = "select concat( $sViewName.oxartnum, ' ', $sViewName.oxtitle ) from oxdiscount
                    left join $sViewName on $sViewName.oxid=oxdiscount.oxitmartid
                    where oxdiscount.oxitmartid != '' and oxdiscount.oxid=" . $oDb->quote( $sOxId );
             $sTitle = $oDb->getOne( $sQ );

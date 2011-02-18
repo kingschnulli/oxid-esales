@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 32931 2011-02-04 16:23:01Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxutilsview.php 33269 2011-02-15 13:31:20Z arvydas.vapsva $
  */
 
 /**
@@ -178,6 +178,7 @@ class oxUtilsView extends oxSuperCfg
         if ( $oEr instanceof oxException ) {
              $oEx = oxNew( 'oxExceptionToDisplay' );
              $oEx->setMessage( $oEr->getMessage() );
+             $oEx->setExceptionType( get_class( $oEr ) );
 
              if ( $oEr instanceof oxSystemComponentException ) {
                 $oEx->setMessageArgs( $oEr->getComponent() );

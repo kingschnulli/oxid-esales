@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitemTest.php 33243 2011-02-14 15:31:01Z vilma $
+ * @version   SVN: $Id: oxbasketitemTest.php 33319 2011-02-17 12:24:17Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -689,10 +689,24 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     {
         $this->oArticle->oxarticles__oxvarselect = new oxField('xxx', oxField::T_RAW);
         $this->oArticle->save();
+        
         $oBasketItem = new oxbasketitem();
         $oBasketItem->init( $this->oArticle->getId(), 6 );
         $sTitle = $this->oArticle->oxarticles__oxtitle->value.', '.$this->oArticle->oxarticles__oxvarselect->value;
         $this->assertEquals( $sTitle, $oBasketItem->getTitle() );
+        
+        //language is changed
+        $this->oArticle->oxarticles__oxtitle = new oxField('title2', oxField::T_RAW);
+        $this->oArticle->oxarticles__oxvarselect = new oxField('var2', oxField::T_RAW);
+        $this->oArticle->save();
+        
+        $oBasketItem->setLanguageId(2);
+        oxLang::getInstance()->setBaseLanguage(1);
+        
+        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getArticle' ) );
+        $oBasketItem->expects( $this->any() )->method( 'getArticle' )->will( $this->returnValue( $this->oArticle ) );
+        
+        $this->assertEquals( "title2, var2", $oBasketItem->getTitle() );
     }
 
     /**
@@ -1025,7 +1039,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
         $this->oArticle->oxarticles__oxvarselect = new oxField('var1', oxField::T_RAW);
         $this->oArticle->save();
         $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getArticle' ) );
-        $oBasketItem->expects( $this->once() )->method( 'getArticle' )->will( $this->returnValue( $this->oArticle ) );
+        $oBasketItem->expects( $this->any() )->method( 'getArticle' )->will( $this->returnValue( $this->oArticle ) );
         $oBasketItem->UNITsetArticle($this->oArticle->getId());
 
         $this->assertEquals( "title, var1", $oBasketItem->getTitle() );
@@ -1035,4 +1049,51 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
         $this->assertEquals( $this->oArticle->getLink(), $oBasketItem->getLink() );
         $this->assertEquals( oxConfig::getInstance()->getShopId(), $oBasketItem->getShopId() );
     }
+    
+    /**
+     * Test set languade id value.
+     *
+     * @return null
+     */
+    public function testSetLanguageId()
+    {
+        $oBasketItem = new oxBasketItem();
+        $oBasketItem->setLanguageId( '13' );
+        $this->assertEquals( '13', $oBasketItem->getLanguageId() );
+    }
+    
+    
+    
+    /**
+     * Testing set article and #M1141
+     *
+     * @return null
+     */
+    public function testGetVarSelect()
+    {
+        
+        $this->oArticle->oxarticles__oxvarselect = new oxField('xxx', oxField::T_RAW);
+        $this->oArticle->save();
+        
+        $oBasketItem = new oxbasketitem();
+        $oBasketItem->init( $this->oArticle->getId(), 6 );
+        $sTitle = $this->oArticle->oxarticles__oxvarselect->value;
+        $this->assertEquals( $sTitle, $oBasketItem->GetVarSelect() );
+        
+        //language is changed
+        $this->oArticle->oxarticles__oxvarselect = new oxField('var2', oxField::T_RAW);
+        $this->oArticle->save();
+        
+        $oBasketItem->setLanguageId(2);
+        oxLang::getInstance()->setBaseLanguage(1);
+        
+        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getArticle' ) );
+        $oBasketItem->expects( $this->any() )->method( 'getArticle' )->will( $this->returnValue( $this->oArticle ) );
+        
+        $this->assertEquals( "var2", $oBasketItem->GetVarSelect() );
+    }
+    
+    
+    
+    
 }

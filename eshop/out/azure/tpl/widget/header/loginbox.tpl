@@ -1,7 +1,7 @@
 [{assign var="bIsError" value=0 }]
 [{capture name=loginErrors}]
     [{foreach from=$Errors.loginBoxErrors item=oEr key=key }]
-    <p class="errorMsg">[{ $oEr->getOxMessage()}]</>
+    <p id="errorBadLogin" class="errorMsg">[{ $oEr->getOxMessage()}]</>
         [{assign var="bIsError" value=1 }]
 [{/foreach}]
 [{/capture}]
@@ -32,7 +32,6 @@
                 <p>
                     <input id="loginEmail" type="text" name="lgn_usr" value="[{ oxmultilang ident="WIDGET_LOGINBOX_EMAIL_ADDRESS" }]" class="textbox innerLabel ">
                 </p>
-                    <p id="errorBadLogin" class="errorMsg" style="display: none;">[{ oxmultilang ident="EXCEPTION_INPUT_NOVALIDEMAIL" }]</p>
                 <p>
                     <input type="password" name="lgn_pwd" class="textbox passwordbox innerLabel" value="[{ oxmultilang ident="WIDGET_LOGINBOX_PASSWORD" }]"><strong><a id="forgotPasswordOpener" href="#" title="[{ oxmultilang ident="WIDGET_LOGINBOX_FORGOT_PASSWORD" }]">?</a></strong>
                 </p>

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarm_main.php 33219 2011-02-14 07:25:08Z vilma $
+ * @version   SVN: $Id: pricealarm_main.php 33277 2011-02-15 14:00:24Z arvydas.vapsva $
  */
 
 /**
@@ -104,7 +104,7 @@ class PriceAlarm_Main extends oxAdminDetails
 
             $this->_aViewData["editor"]  = $this->_generateTextEditor( "100%", 300, $oLetter, "oxpricealarm__oxlongdesc", "details.tpl.css");
             $this->_aViewData["edit"]    = $oPricealarm;
-            $this->_aViewData["actshop"] = $oShop->getShopId();
+            $this->_aViewData["actshop"] = $myConfig->getShopId();
         }
 
         parent::render();

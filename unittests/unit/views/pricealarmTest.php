@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: pricealarmTest.php 33309 2011-02-17 11:45:09Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -99,25 +99,29 @@ class Unit_Views_pricealarmTest extends OxidTestCase
 
     public function testAddme_savesAndSendsPriceAlarm()
     {
-        $oDb = oxDb::getDb( true );
-
         $oPriceAlarm = $this->getProxyClass( 'pricealarm' );
         oxTestModules::addFunction('oxCaptcha', 'pass', '{return true;}');
         oxTestModules::addFunction('oxEmail', 'sendPricealarmNotification', '{return 999;}');
 
-        oxSession::setVar( 'usr', "testUserId" );
+        modSession::getInstance()->setVar( 'usr', "testUserId" );
         $aParams["email"] = "goodemail@ladyGagaFans.lt";
         $aParams["aid"] = "_testArtId";
         $aParams["price"] = "10";
+        
+        $aParams["mano"] = "101";
 
         modConfig::setParameter( "pa", $aParams );
-
         $oPriceAlarm->addme();
+        
         $this->assertEquals( 999, $oPriceAlarm->getNonPublicVar( "_iPriceAlarmStatus" ) );
 
         $sSql = "select * from oxpricealarm";
+        
+        $oDb = oxDb::getDb( true );
         $aAlarm = $oDb->getRow( $sSql );
-
+        
+        print_r($aAlarm);
+        
         $this->assertEquals( $aParams["email"], $aAlarm["OXEMAIL"] );
         $this->assertEquals( $aParams["aid"], $aAlarm["OXARTID"] );
         $this->assertEquals( $aParams["price"], $aAlarm["OXPRICE"] );
@@ -134,7 +138,7 @@ class Unit_Views_pricealarmTest extends OxidTestCase
         oxTestModules::addFunction('oxCaptcha', 'pass', '{return true;}');
         oxTestModules::addFunction('oxEmail', 'sendPricealarmNotification', '{return 999;}');
 
-        oxSession::setVar( 'usr', "testUserId" );
+        modSession::getInstance()->setVar( 'usr', "testUserId" );
         $aParams["email"] = "goodemail@ladyGagaFans.lt";
 
         oxLang::getInstance()->setBaseLanguage( 1 );
