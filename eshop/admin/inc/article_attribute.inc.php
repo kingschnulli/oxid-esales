@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_attribute.inc.php 32124 2010-12-21 12:57:46Z sarunas $
+ * @version   SVN: $Id: article_attribute.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -49,8 +49,8 @@ class ajaxComponent extends ajaxListComponent
         $sArtId      = oxConfig::getParameter( 'oxid' );
         $sSynchArtId = oxConfig::getParameter( 'synchoxid' );
 
-        $sAttrViewName = getViewName('oxattribute');
-        $sO2AViewName  = getViewName('oxobject2attribute');
+        $sAttrViewName = $this->_getViewName('oxattribute');
+        $sO2AViewName  = $this->_getViewName('oxobject2attribute');
         if ( $sArtId ) {
             // all categories article is in
             $sQAdd  = " from $sO2AViewName left join $sAttrViewName on $sAttrViewName.oxid=$sO2AViewName.oxattrid ";
@@ -73,7 +73,7 @@ class ajaxComponent extends ajaxListComponent
         $aChosenArt = $this->_getActionIds( 'oxobject2attribute.oxid' );
         $sOxid = oxConfig::getParameter( 'oxid' );
         if ( oxConfig::getParameter( 'all' ) ) {
-            $sO2AViewName  = getViewName('oxobject2attribute');
+            $sO2AViewName  = $this->_getViewName('oxobject2attribute');
             $sQ = $this->_addFilter( "delete $sO2AViewName.* ".$this->_getQuery() );
             oxDb::getDb()->Execute( $sQ );
 
@@ -94,7 +94,7 @@ class ajaxComponent extends ajaxListComponent
         $soxId   = oxConfig::getParameter( 'synchoxid');
 
         if ( oxConfig::getParameter( 'all' ) ) {
-            $sAttrViewName = getViewName('oxattribute');
+            $sAttrViewName = $this->_getViewName('oxattribute');
             $aAddCat = $this->_getAll( $this->_addFilter( "select $sAttrViewName.oxid ".$this->_getQuery() ) );
         }
 
@@ -132,7 +132,7 @@ class ajaxComponent extends ajaxListComponent
             if ( isset( $this->sAttributeOXID) && ("" != $this->sAttributeOXID)) {
                 $oGroups = oxNew( "oxlist" );
                 $oGroups->init( "oxi18n", "oxobject2attribute" );
-                $sO2AViewName = getViewName("oxobject2attribute");
+                $sO2AViewName = $this->_getViewName("oxobject2attribute");
                 $sSelect  = "select * from $sO2AViewName where $sO2AViewName.oxobjectid= " . $oDb->quote( $oArticle->oxarticles__oxid->value ) . " and ";
                 $sSelect .= "$sO2AViewName.oxattrid= " . $oDb->quote( $this->sAttributeOXID );
                 $oGroups->selectString( $sSelect );

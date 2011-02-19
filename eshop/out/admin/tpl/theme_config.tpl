@@ -21,7 +21,7 @@ function _groupExp(el) {
 
 <form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
     [{ $oViewConf->getHiddenSid() }]
-    <input type="hidden" name="oxid" value="[{$aTheme.id}]">
+    <input type="hidden" name="oxid" value="[{$oTheme->getInfo('id')}]">
     <input type="hidden" name="cl" value="theme_config">
     <input type="hidden" name="fnc" value="">
     <input type="hidden" name="actshop" value="[{$oViewConf->getActiveShopId()}]">
@@ -33,12 +33,12 @@ function _groupExp(el) {
 [{ $oViewConf->getHiddenSid() }]
 <input type="hidden" name="cl" value="theme_config">
 <input type="hidden" name="fnc" value="save">
-<input type="hidden" name="oxid" value="[{$aTheme.id}]">
+<input type="hidden" name="oxid" value="[{$oTheme->getInfo('id')}]">
 <input type="hidden" name="editval[oxshops__oxid]" value="[{ $oxid }]">
 
 [{cycle assign="_clear_" values=",2" }]
 
-    <b>[{$aTheme.title}]</b><br><br>
+    <b>[{$oTheme->getInfo('title')}]</b><br><br>
 
     [{foreach from=$var_grouping item=var_list key=var_group}]
         <div class="groupExp">

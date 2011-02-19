@@ -1,8 +1,11 @@
+[{ assign var="shop"     value=$oEmailView->getShop() }]
+[{ assign var="oViewConf" value=$oEmailView->getViewConfig() }]
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
   <title>[{$subject}]</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]">
+  <meta http-equiv="Content-Type" content="text/html; charset=[{$oEmailView->getCharset()}]">
   </head>
   <body bgcolor="#FFFFFF" link="#355222" alink="#355222" vlink="#355222" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;">
     <br>

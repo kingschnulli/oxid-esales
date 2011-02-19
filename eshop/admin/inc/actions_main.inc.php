@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: actions_main.inc.php 32599 2011-01-20 13:15:15Z sarunas $
+ * @version   SVN: $Id: actions_main.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -66,8 +66,8 @@ class ajaxComponent extends ajaxListComponent
         $myConfig = $this->getConfig();
 
         // looking for table/view
-        $sArtTable = getViewName('oxarticles');
-        $sO2CView  = getViewName('oxobject2category');
+        $sArtTable = $this->_getViewName('oxarticles');
+        $sO2CView  = $this->_getViewName('oxobject2category');
 
         $sSelId      = oxConfig::getParameter( 'oxid' );
         $sSynchSelId = oxConfig::getParameter( 'synchoxid' );
@@ -112,7 +112,7 @@ class ajaxComponent extends ajaxListComponent
 
         // display variants or not ?
         if ( $this->getConfig()->getConfigParam( 'blVariantsSelection' ) ) {
-            $sQ .= ' group by '.getViewName( 'oxarticles' ).'.oxid ';
+            $sQ .= ' group by '.$this->_getViewName( 'oxarticles' ).'.oxid ';
 
             $oStr = getStr();
             if ( $oStr->strpos( $sQ, "select count( * ) " ) === 0 ) {
@@ -164,11 +164,11 @@ class ajaxComponent extends ajaxListComponent
         $soxId     = oxConfig::getParameter( 'synchoxid' );
 
         if ( oxConfig::getParameter( 'all' ) ) {
-            $sArtTable = getViewName('oxarticles');
+            $sArtTable = $this->_getViewName('oxarticles');
             $aArticles = $this->_getAll( $this->_addFilter( "select $sArtTable.oxid ".$this->_getQuery() ) );
         }
 
-        $sArtTable = getViewName('oxarticles');
+        $sArtTable = $this->_getViewName('oxarticles');
         $sQ = "select max(oxactions2article.oxsort) from oxactions2article join $sArtTable on $sArtTable.oxid=oxactions2article.oxartid
                where oxactions2article.oxactionid = '".$soxId."' and oxactions2article.oxshopid = '".$myConfig->getShopId()."'
                and $sArtTable.oxid is not null";
@@ -196,7 +196,7 @@ class ajaxComponent extends ajaxListComponent
     public function setSorting()
     {
         $myConfig  = $this->getConfig();
-        $sArtTable = getViewName('oxarticles');
+        $sArtTable = $this->_getViewName('oxarticles');
         $sSelId  = oxConfig::getParameter( 'oxid' );
         $sSelect  = "select * from $sArtTable left join oxactions2article on $sArtTable.oxid=oxactions2article.oxartid ";
         $sSelect .= "where oxactions2article.oxactionid = " . oxDb::getDb()->quote( $sSelId ) . " and oxactions2article.oxshopid = '".$myConfig->getShopID()."' ".$this->_getSorting();

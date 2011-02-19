@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_main.inc.php 32370 2011-01-05 13:00:45Z rimvydas.paskevicius $
+ * @version   SVN: $Id: attribute_main.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -65,9 +65,9 @@ class ajaxComponent extends ajaxListComponent
         $myConfig = $this->getConfig();
         $oDb      = oxDb::getDb();
 
-        $sArticleTable    = getViewName('oxarticles');
-        $sO2CategoryView  = getViewName('oxobject2category');
-        $sO2AttributeView = getViewName('oxobject2attribute');
+        $sArticleTable    = $this->_getViewName('oxarticles');
+        $sO2CategoryView  = $this->_getViewName('oxobject2category');
+        $sO2AttributeView = $this->_getViewName('oxobject2attribute');
 
         $sDelId      = oxConfig::getParameter( 'oxid' );
         $sSynchDelId = oxConfig::getParameter( 'synchoxid' );
@@ -109,7 +109,7 @@ class ajaxComponent extends ajaxListComponent
 
         // display variants or not ?
         if ( $this->getConfig()->getConfigParam( 'blVariantsSelection' ) ) {
-            $sQ .= ' group by '.getViewName( 'oxarticles' ).'.oxid ';
+            $sQ .= ' group by '.$this->_getViewName( 'oxarticles' ).'.oxid ';
 
             $oStr = getStr();
             if ( $oStr->strpos( $sQ, "select count( * ) " ) === 0 ) {
@@ -128,7 +128,7 @@ class ajaxComponent extends ajaxListComponent
     {
         $aChosenCat = $this->_getActionIds( 'oxobject2attribute.oxid' );
         if ( oxConfig::getParameter( 'all' ) ) {
-            $sO2AttributeView = getViewName('oxobject2attribute');
+            $sO2AttributeView = $this->_getViewName('oxobject2attribute');
 
             $sQ = parent::_addFilter( "delete $sO2AttributeView.* ".$this->_getQuery() );
             oxDb::getDb()->Execute( $sQ );
@@ -151,7 +151,7 @@ class ajaxComponent extends ajaxListComponent
 
         // adding
         if ( oxConfig::getParameter( 'all' ) ) {
-            $sArticleTable = getViewName( 'oxarticles' );
+            $sArticleTable = $this->_getViewName( 'oxarticles' );
             $aAddArticle = $this->_getAll( $this->_addFilter( "select $sArticleTable.oxid ".$this->_getQuery() ) );
         }
 

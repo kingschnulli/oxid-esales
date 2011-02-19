@@ -53,8 +53,8 @@ class ajaxComponent extends ajaxListComponent
     {
         $myConfig      = $this->getConfig();
         $oDb           = oxDb::getDb();
-        $sArticleTable = getViewName( 'oxarticles' );
-        $sO2CView      = getViewName( 'oxobject2category' );
+        $sArticleTable = $this->_getViewName( 'oxarticles' );
+        $sO2CView      = $this->_getViewName( 'oxobject2category' );
 
         $sSelId      = oxConfig::getParameter( 'oxid' );
         $sSynchSelId = oxConfig::getParameter( 'synchoxid' );
@@ -89,7 +89,7 @@ class ajaxComponent extends ajaxListComponent
      */
     protected function _addFilter( $sQ )
     {
-        $sArtTable = getViewName('oxarticles');
+        $sArtTable = $this->_getViewName('oxarticles');
         $sQ = parent::_addFilter( $sQ );
 
         // display variants or not ?

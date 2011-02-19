@@ -1,25 +1,25 @@
-[{ assign var="oShop"     value=$oEmailView->getShop() }]
+[{ assign var="shop"     value=$oEmailView->getShop() }]
 [{ assign var="oViewConf" value=$oEmailView->getViewConfig() }]
-[{ assign var="oCurrency" value=$oEmailView->getCurrency() }]
-[{ assign var="oUser"     value=$oEmailView->getUser() }]
-[{ assign var="oDelSet"   value=$oOrder->getDelSet() }]
-[{ assign var="oBasket"   value=$oOrder->getBasket() }]
-[{ assign var="oPayment"  value=$oOrder->getPayment() }]
+[{ assign var="currency" value=$oEmailView->getCurrency() }]
+[{ assign var="user"     value=$oEmailView->getUser() }]
+[{ assign var="oDelSet"   value=$order->getDelSet() }]
+[{ assign var="basket"   value=$order->getBasket() }]
+[{ assign var="payment"  value=$order->getPayment() }]
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
-    <title>[{ $oShop->oxshops__oxordersubject->value }]</title>
+    <title>[{ $shop->oxshops__oxordersubject->value }]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=[{$oEmailView->getCharset()}]">
   </head>
   <body bgcolor="#FFFFFF" link="#355222" alink="#355222" vlink="#355222" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;">
-    <img src="[{$oViewConf->getImageUrl()}]logo_white.gif" border="0" hspace="0" vspace="0" alt="[{ $oShop->oxshops__oxname->value }]" align="texttop"><br><br>
-    [{if $oPayment->oxuserpayments__oxpaymentsid->value == "oxempty"}]
+    <img src="[{$oViewConf->getImageUrl()}]logo_white.gif" border="0" hspace="0" vspace="0" alt="[{ $shop->oxshops__oxname->value }]" align="texttop"><br><br>
+    [{if $payment->oxuserpayments__oxpaymentsid->value == "oxempty"}]
       [{oxcontent ident="oxuserordernpemail"}]
     [{else}]
       [{oxcontent ident="oxuserorderemail"}]
     [{/if}]
-    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNOMBER" }] <b>[{ $oOrder->oxorder__oxordernr->value }]</b><br><br>
+    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNOMBER" }] <b>[{ $order->oxorder__oxordernr->value }]</b><br><br>
     <table border="0" cellspacing="0" cellpadding="0" width="600">
       <tr>
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; background-color: #494949; color: #FFFFFF;" height="15" width="100">
@@ -44,32 +44,33 @@
           [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PRODUCTREVIEW" }]
         </td>
       </tr>
-    [{assign var="basketitemlist" value=$oBasket->getBasketArticles() }]
-    [{foreach key=basketindex from=$oBasket->getContents() item=basketitem}]
+    [{assign var="basketitemlist" value=$basket->getBasketArticles() }]
+    [{foreach key=basketindex from=$basket->getContents() item=basketitem}]
     [{assign var="basketproduct" value=$basketitemlist.$basketindex }]
       <tr>
         <td valign="top" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;">
           <img src="[{$basketproduct->getThumbnailUrl() }]" border="0" hspace="0" vspace="0" alt="[{ $basketproduct->oxarticles__oxtitle->value|strip_tags }]" align="texttop">
             [{if $oViewConf->getShowGiftWrapping() }]
-            <br><b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_WRAPPING" }]&nbsp;</b>[{ if !$basketitem->wrapping }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_NONE" }][{else}][{$basketitem->oWrap->oxwrapping__oxname->value}][{/if}]
+                [{assign var="oWrapping" value=$basketitem->getWrapping() }]
+                <br><b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_WRAPPING" }]&nbsp;</b>[{ if !$basketitem->getWrappingId() }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_NONE" }][{else}][{$oWrapping->oxwrapping__oxname->value}][{/if}]
             [{/if}]
         </td>
         <td valign="top" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;">
           <b>[{ $basketproduct->oxarticles__oxtitle->value }][{ if $basketproduct->oxarticles__oxvarselect->value}], [{ $basketproduct->oxarticles__oxvarselect->value}][{/if}]</b>
-          [{ if $basketitem->chosen_selectlist }],
-            [{foreach from=$basketitem->chosen_selectlist item=oList}]
+          [{ if $basketitem->getChosenSelList() }],
+            [{foreach from=$basketitem->getChosenSelList() item=oList}]
               [{ $oList->name }] [{ $oList->value }]&nbsp;
             [{/foreach}]
           [{/if}]
-          [{ if $basketitem->aPersParam }]
-            [{foreach key=sVar from=$basketitem->aPersParam item=aParam}]
+          [{ if $basketitem->getPersParams() }]
+            [{foreach key=sVar from=$basketitem->getPersParams() item=aParam}]
               ,&nbsp;<em>[{$sVar}] : [{$aParam}]</em>
             [{/foreach}]
           [{/if}]
           <br>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ARTNOMBER" }] [{ $basketproduct->oxarticles__oxartnum->value }]
         </td>
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
-          <b>[{if $basketitem->getFUnitPrice() }][{ $basketitem->getFUnitPrice() }] [{ $oCurrency->sign}][{/if}]</b>
+          <b>[{if $basketitem->getFUnitPrice() }][{ $basketitem->getFUnitPrice() }] [{ $currency->sign}][{/if}]</b>
           [{if $basketitem->aDiscounts}]<br><br>
             <em style="font-size: 7pt;font-weight: normal;">[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_DISCOUNT" }]
             [{foreach from=$basketitem->aDiscounts item=oDiscount}]
@@ -82,16 +83,16 @@
           [{/if}]
         </td>
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
-          [{$basketitem->dAmount}]
+          [{$basketitem->getAmount()}]
         </td>
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
           [{$basketitem->getVatPercent() }]%
         </td>
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
-          <b>[{ $basketitem->getFTotalPrice() }] [{ $oCurrency->sign}]</b>
+          <b>[{ $basketitem->getFTotalPrice() }] [{ $currency->sign}]</b>
         </td>
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
-          <a href="[{ $oViewConf->getBaseDir() }]index.php?shp=[{$oShop->oxshops__oxid->value}]&amp;anid=[{ $basketproduct->oxarticles__oxid->value }]&amp;cl=review&amp;reviewuserhash=[{$oUser->getReviewUserHash( $oUser->getId())}]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" target="_blank">[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_REVIEW" }]</a>
+          <a href="[{ $oViewConf->getBaseDir() }]index.php?shp=[{$shop->oxshops__oxid->value}]&amp;anid=[{ $basketproduct->oxarticles__oxid->value }]&amp;cl=review&amp;reviewuserhash=[{$user->getReviewUserHash($user->getId())}]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" target="_blank">[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_REVIEW" }]</a>
         </td>      </tr>
     [{/foreach}]
     <tr>
@@ -106,16 +107,17 @@
   </table>
   <br>
 
-  [{if $oViewConf->getShowGiftWrapping() && $oBasket->oCard }]
+  [{if $oViewConf->getShowGiftWrapping() && $basket->getCard() }]
+    [{assign var="oCard" value=$basket->getCard() }]
     <table border="0" cellspacing="0" cellpadding="2" width="600">
       <tr>
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top">
           <b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_YOURGREETINGCARD" }]</b><br>
-          <img src="[{$oBasket->oCard->nossl_dimagedir}]/0/[{$oBasket->oCard->oxwrapping__oxpic->value}]" alt="[{$oBasket->oCard->oxwrapping__oxname->value}]" hspace="0" vspace="0" border="0" align="top"><br><br>
+          <img src="[{$oCard->nossl_dimagedir}]/0/[{$oCard->oxwrapping__oxpic->value}]" alt="[{$oCard->oxwrapping__oxname->value}]" hspace="0" vspace="0" border="0" align="top"><br><br>
         </td>
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top">
           [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_YOURMESSAGE" }]<br><br>
-          [{$oBasket->giftmessage}]
+          [{$basket->getCardMessage()}]
         </td>
       </tr>
     </table>
@@ -127,7 +129,7 @@
     <tr>
       <td width="50%" valign="top">
         <table border="0" cellspacing="0" cellpadding="0">
-          [{if $oViewConf->getShowVouchers() && $oBasket->dVoucherDiscount }]
+          [{if $oViewConf->getShowVouchers() && $basket->getVoucherDiscValue() }]
             <tr>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top">
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_USEDCOUPONS" }]<br>
@@ -137,13 +139,13 @@
               </td>
             </tr>
           [{/if}]
-          [{ foreach from=$oOrder->getVoucherList() item=voucher}]
+          [{ foreach from=$order->getVoucherList() item=voucher}]
             <tr>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top">
                 [{$voucher->oxmodvouchers__oxvouchernr->value}]
               </td>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top">
-                [{$voucher->oxmodvouchers__oxdiscount->value}] [{ if $voucher->oxmodvouchers__oxdiscounttype->value == "absolute"}][{ $oCurrency->sign}][{else}]%[{/if}]
+                [{$voucher->oxmodvouchers__oxdiscount->value}] [{ if $voucher->oxmodvouchers__oxdiscounttype->value == "absolute"}][{ $currency->sign}][{else}]%[{/if}]
               </td>
             </tr>
           [{/foreach }]
@@ -151,24 +153,24 @@
       </td>
       <td width="50%" valign="top">
         <table border="0" cellspacing="0" cellpadding="2" width="300">
-        [{if !$oBasket->aDiscounts}]
+        [{if !$basket->getDiscounts()}]
           [{* netto price *}]
           <tr>
             <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
               [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TOTALNET" }]
             </td>
             <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right" width="60">
-              [{ $oBasket->fproductsnetprice }] [{ $oCurrency->sign}]
+              [{ $basket->getProductsNetPrice() }] [{ $currency->sign}]
             </td>
           </tr>
           [{* VATs *}]
-          [{foreach from=$oBasket->aVATs item=VATitem key=key}]
+          [{foreach from=$basket->getProductVats() item=VATitem key=key}]
             <tr>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PLUSTAX1" }] [{ $key }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PLUSTAX2" }]
               </td>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                [{ $VATitem }] [{ $oCurrency->sign}]
+                [{ $VATitem }] [{ $currency->sign}]
               </td>
             </tr>
           [{/foreach}]
@@ -181,19 +183,19 @@
               [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TOTALGROSS" }]
             </td>
             <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-              [{ $oBasket->fproductsprice }] [{ $oCurrency->sign}]
+              [{ $basket->getFProductsPrice() }] [{ $currency->sign}]
             </td>
           </tr>
           [{* applied discounts *}]
-          [{if $oBasket->aDiscounts}]
+          [{if $basket->getDiscounts()}]
             <tr><td height="1"></td><td height="1" bgcolor="#BEBEBE"></td></tr>
-            [{foreach from=$oBasket->aDiscounts item=oDiscount}]
+            [{foreach from=$basket->getDiscounts() item=oDiscount}]
               <tr>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
                   [{if $oDiscount->dDiscount < 0 }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_CHARGE" }][{else}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_DICOUNT" }][{/if}] <em>[{ $oDiscount->sDiscount }]</em> :
                 </td>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{if $oDiscount->dDiscount < 0 }][{ $oDiscount->fDiscount|replace:"-":"" }][{else}]-[{ $oDiscount->fDiscount }][{/if}] [{ $oCurrency->sign}]
+                  [{if $oDiscount->dDiscount < 0 }][{ $oDiscount->fDiscount|replace:"-":"" }][{else}]-[{ $oDiscount->fDiscount }][{/if}] [{ $currency->sign}]
                 </td>
               </tr>
             [{/foreach}]
@@ -204,30 +206,30 @@
                     [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TOTALNET" }]
                 </td>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right" width="60">
-                    [{ $oBasket->fproductsnetprice }] [{ $oCurrency->sign}]
+                    [{ $basket->getProductsNetPrice() }] [{ $currency->sign}]
                 </td>
               </tr>
             [{* VATs *}]
-            [{foreach from=$oBasket->aVATs item=VATitem key=key}]
+            [{foreach from=$basket->getProductVats() item=VATitem key=key}]
               <tr>
                   <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
                   [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PLUSTAX1" }] [{ $key }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PLUSTAX2" }]
                 </td>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ $VATitem }] [{ $oCurrency->sign}]
+                  [{ $VATitem }] [{ $currency->sign}]
                 </td>
               </tr>
             [{/foreach}]
           [{/if}]
           <tr><td height="1"></td><td height="1" bgcolor="#BEBEBE"></td></tr>
           [{* voucher discounts *}]
-          [{if $oViewConf->getShowVouchers() && $oBasket->dVoucherDiscount }]
+          [{if $oViewConf->getShowVouchers() && $basket->getVoucherDiscValue() }]
             <tr>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_COUPON" }]
               </td>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                [{ if $oBasket->fVoucherDiscount > 0 }]-[{/if}][{ $oBasket->fVoucherDiscount|replace:"-":"" }] [{ $oCurrency->sign}]
+                [{ if $basket->getVoucherDiscValue() > 0 }]-[{/if}][{ $basket->getFVoucherDiscountValue()}]
               </td>
             </tr>
 
@@ -235,101 +237,101 @@
           [{/if}]
           [{* delivery costs *}]
           [{* delivery VAT (if available) *}]
-          [{if $oBasket->dDelVAT > 0}]
+          [{if $basket->getDelCostVat() > 0}]
             <tr>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGNET" }]
               </td>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                [{ $oBasket->fdeliverynetcost }] [{ $oCurrency->sign}]
+                [{ $basket->getDelCostNet() }] [{ $currency->sign}]
               </td>
             </tr>
             <tr>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TAX1" }] [{ $oBasket->fDelVATPercent*100 }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TAX2" }]
+                [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TAX1" }] [{ $basket->getDelCostVatPercent() }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TAX2" }]
               </td>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                [{ $oBasket->fDelVAT }] [{ $oCurrency->sign}]
+                [{ $basket->getDelCostVat() }] [{ $currency->sign}]
               </td>
             </tr>
           [{/if}]
           <tr>
             <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-              [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGGROSS1" }] [{if $oBasket->dDelVAT > 0}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGGROSS2" }] [{/if}]:
+              [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGGROSS1" }] [{if $basket->getDelCostVat() > 0}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGGROSS2" }] [{/if}]:
             </td>
             <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-              [{ $oBasket->fdeliverycost }] [{ $oCurrency->sign}]
+              [{ $basket->getFDeliveryCosts() }] [{ $currency->sign}]
             </td>
           </tr>
           [{* payment sum *}]
-          [{ if $oBasket->dAddPaymentSum }]
+          [{ if $basket->getPaymentCosts() }]
             <tr>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                [{if $oBasket->dAddPaymentSum >= 0}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEDISCOUNT1" }][{else}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEDISCOUNT2" }][{/if}] [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEDISCOUNT3" }]
+                [{if $basket->getPaymentCosts() >= 0}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEDISCOUNT1" }][{else}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEDISCOUNT2" }][{/if}] [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEDISCOUNT3" }]
               </td>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                [{ $oBasket->fAddPaymentNetSum }] [{ $oCurrency->sign}]
+                [{ $basket->getPayCostNet() }] [{ $currency->sign}]
               </td>
             </tr>
             [{* payment sum VAT (if available) *}]
-            [{ if $oBasket->dAddPaymentSumVAT }]
+            [{ if $basket->getDelCostVat() }]
               <tr>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEVAT1" }] [{ $oBasket->fAddPaymentSumVATPercent}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEVAT2" }]
+                  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEVAT1" }] [{ $basket->getPayCostVatPercent()}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEVAT2" }]
                 </td>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ $oBasket->fAddPaymentSumVAT }] [{ $oCurrency->sign}]
+                  [{ $basket->getPayCostVat() }] [{ $currency->sign}]
                 </td>
               </tr>
             [{/if}]
           [{/if}]
 
-          [{ if $oBasket->getTsProtectionCosts() }]
+          [{ if $basket->getTsProtectionCosts() }]
             <tr>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TSPROTECTION" }]
               </td>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                [{ $oBasket->getTsProtectionNet() }] [{ $oCurrency->sign}]
+                [{ $basket->getTsProtectionNet() }] [{ $currency->sign}]
               </td>
             </tr>
-            [{ if $oBasket->getTsProtectionVat() }]
+            [{ if $basket->getTsProtectionVat() }]
               <tr>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX1" }] [{ $oBasket->getTsProtectionVatPercent()}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX2" }]
+                  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX1" }] [{ $basket->getTsProtectionVatPercent()}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX2" }]
                 </td>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ $oBasket->getTsProtectionVat() }]&nbsp;[{ $oCurrency->sign}]
+                  [{ $basket->getTsProtectionVat() }]&nbsp;[{ $currency->sign}]
                 </td>
               </tr>
             [{/if}]
           [{/if}]
 
-          [{ if $oViewConf->getShowGiftWrapping() && $oBasket->dWrappingPrice }]
-            [{if $oBasket->fWrappingVAT}]
+          [{ if $oViewConf->getShowGiftWrapping() && $basket->getFWrappingCosts() }]
+            [{if $basket->getWrappCostVat()}]
               <tr>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
                   [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_WRAPPINGNET" }]
                 </td>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ $oBasket->fWrappingNetto }] [{ $oCurrency->sign}]
+                  [{ $basket->getWrappCostNet() }] [{ $currency->sign}]
                 </td>
               </tr>
               <tr>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PLUSTAX21" }] [{ $oBasket->fWrappingVATPercent }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PLUSTAX22" }]
+                  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PLUSTAX21" }] [{ $basket->getWrappCostVatPercent() }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PLUSTAX22" }]
                 </td>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ $oBasket->fWrappingVAT }] [{ $oCurrency->sign}]
+                  [{ $basket->getWrappCostVat() }] [{ $currency->sign}]
                 </td>
               </tr>
             [{/if}]
             <tr>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_WRAPPINGANDGREETINGCARD1" }][{if $oBasket->fWrappingVAT}] [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_WRAPPINGANDGREETINGCARD2" }][{/if}] :
+                  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_WRAPPINGANDGREETINGCARD1" }][{if $basket->getWrappCostVat()}] [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_WRAPPINGANDGREETINGCARD2" }][{/if}] :
               </td>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ $oBasket->fWrappingPrice }] [{ $oCurrency->sign}]
+                  [{ $basket->getFWrappingCosts() }] [{ $currency->sign}]
               </td>
             </tr>
           [{/if}]
@@ -341,7 +343,7 @@
               <b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_GRANDTOTAL" }]</b>
             </td>
             <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-              <b>[{ $oBasket->fprice }] [{ $oCurrency->sign}]</b>
+              <b>[{ $basket->getFPrice() }] [{ $currency->sign}]</b>
             </td>
           </tr>
           [{* *}]
@@ -350,46 +352,46 @@
     </tr>
   </table>
 
-  [{ if $oOrder->oxorder__oxremark->value }]
-    <br><b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_YOURMESSAGE" }] </b>[{ $oOrder->oxorder__oxremark->value|oxescape }]<br>
+  [{ if $order->oxorder__oxremark->value }]
+    <br><b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_YOURMESSAGE" }] </b>[{ $order->oxorder__oxremark->value|oxescape }]<br>
   [{/if}]
 
   <br>
-  [{if $oPayment->oxuserpayments__oxpaymentsid->value != "oxempty"}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD" }] <b>[{ $oPayment->oxpayments__oxdesc->value }] [{ if $oBasket->dAddPaymentSum }]([{ $oBasket->fAddPaymentSum }] [{ $oCurrency->sign}])[{/if}]</b><br>
-  [{ $oPayment->oxpayments__oxlongdesc->value }]<br>
+  [{if $payment->oxuserpayments__oxpaymentsid->value != "oxempty"}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD" }] <b>[{ $payment->oxpayments__oxdesc->value }] [{ if $basket->getPaymentCosts() }]([{ $basket->getFPaymentCosts() }] [{ $currency->sign}])[{/if}]</b><br>
+  [{ $payment->oxpayments__oxlongdesc->value }]<br>
   [{/if}]<br>
-  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_EMAILADDRESS" }] [{ $oUser->oxuser__oxusername->value }]<br>
+  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_EMAILADDRESS" }] [{ $user->oxuser__oxusername->value }]<br>
   <br>
   [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_BILLINGADDRESS" }]  <br>
-  [{ $oOrder->oxorder__oxbillcompany->value }]<br>
-  [{ $oOrder->oxorder__oxbillsal->value|oxmultilangsal}] [{ $oOrder->oxorder__oxbillfname->value }] [{ $oOrder->oxorder__oxbilllname->value }]<br>
-  [{if $oOrder->oxorder__oxbilladdinfo->value }][{ $oOrder->oxorder__oxbilladdinfo->value }]<br>[{/if}]
-  [{ $oOrder->oxorder__oxbillstreet->value }] [{ $oOrder->oxorder__oxbillstreetnr->value }]<br>
-  [{ $oOrder->oxorder__oxbillstateid->value }]
-  [{ $oOrder->oxorder__oxbillzip->value }] [{ $oOrder->oxorder__oxbillcity->value }]<br>
-  [{ $oOrder->oxorder__oxbillcountry->value }]<br>
-  [{if $oOrder->oxorder__oxbillustid->value}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_VATIDNOMBER" }] [{ $oOrder->oxorder__oxbillustid->value }]<br>[{/if}]
-  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PHONE" }] [{ $oOrder->oxorder__oxbillfon->value }]<br><br>
+  [{ $order->oxorder__oxbillcompany->value }]<br>
+  [{ $order->oxorder__oxbillsal->value|oxmultilangsal}] [{ $order->oxorder__oxbillfname->value }] [{ $order->oxorder__oxbilllname->value }]<br>
+  [{if $order->oxorder__oxbilladdinfo->value }][{ $order->oxorder__oxbilladdinfo->value }]<br>[{/if}]
+  [{ $order->oxorder__oxbillstreet->value }] [{ $order->oxorder__oxbillstreetnr->value }]<br>
+  [{ $order->oxorder__oxbillstateid->value }]
+  [{ $order->oxorder__oxbillzip->value }] [{ $order->oxorder__oxbillcity->value }]<br>
+  [{ $order->oxorder__oxbillcountry->value }]<br>
+  [{if $order->oxorder__oxbillustid->value}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_VATIDNOMBER" }] [{ $order->oxorder__oxbillustid->value }]<br>[{/if}]
+  [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PHONE" }] [{ $order->oxorder__oxbillfon->value }]<br><br>
 
-  [{ if $oOrder->oxorder__oxdellname->value }]
+  [{ if $order->oxorder__oxdellname->value }]
     [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGADDRESS" }]  <br>
-    [{ $oOrder->oxorder__oxdelcompany->value }]<br>
-    [{ $oOrder->oxorder__oxdelsal->value|oxmultilangsal }] [{ $oOrder->oxorder__oxdelfname->value }] [{ $oOrder->oxorder__oxdellname->value }]<br>
-    [{if $oOrder->oxorder__oxdeladdinfo->value }][{ $oOrder->oxorder__oxdeladdinfo->value }]<br>[{/if}]
-    [{ $oOrder->oxorder__oxdelstreet->value }] [{ $oOrder->oxorder__oxdelstreetnr->value }]<br>
-    [{ $oOrder->oxorder__oxdelstateid->value }]
-    [{ $oOrder->oxorder__oxdelzip->value }] [{ $oOrder->oxorder__oxdelcity->value }]<br>
-    [{ $oOrder->oxorder__oxdelcountry->value }]<br>
+    [{ $order->oxorder__oxdelcompany->value }]<br>
+    [{ $order->oxorder__oxdelsal->value|oxmultilangsal }] [{ $order->oxorder__oxdelfname->value }] [{ $order->oxorder__oxdellname->value }]<br>
+    [{if $order->oxorder__oxdeladdinfo->value }][{ $order->oxorder__oxdeladdinfo->value }]<br>[{/if}]
+    [{ $order->oxorder__oxdelstreet->value }] [{ $order->oxorder__oxdelstreetnr->value }]<br>
+    [{ $order->oxorder__oxdelstateid->value }]
+    [{ $order->oxorder__oxdelzip->value }] [{ $order->oxorder__oxdelcity->value }]<br>
+    [{ $order->oxorder__oxdelcountry->value }]<br>
   [{/if}]
 
-  [{if $oPayment->oxuserpayments__oxpaymentsid->value != "oxempty"}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGCARRIER" }] <strong>[{ $oDelSet->oxdeliveryset__oxtitle->value }]</strong><br>[{/if}]
+  [{if $payment->oxuserpayments__oxpaymentsid->value != "oxempty"}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGCARRIER" }] <strong>[{ $oDelSet->oxdeliveryset__oxtitle->value }]</strong><br>[{/if}]
 
-  [{if $oPayment->oxuserpayments__oxpaymentsid->value == "oxidpayadvance"}]
-    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_BANK" }] [{$oShop->oxshops__oxbankname->value}]<br>
-    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ROUTINGNOMBER" }] [{$oShop->oxshops__oxbankcode->value}]<br>
-    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ACCOUNTNOMBER" }] [{$oShop->oxshops__oxbanknumber->value}]<br>
-    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_BIC" }] [{$oShop->oxshops__oxbiccode->value}]<br>
-    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_IBAN" }] [{$oShop->oxshops__oxibannumber->value}]
+  [{if $payment->oxuserpayments__oxpaymentsid->value == "oxidpayadvance"}]
+    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_BANK" }] [{$shop->oxshops__oxbankname->value}]<br>
+    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ROUTINGNOMBER" }] [{$shop->oxshops__oxbankcode->value}]<br>
+    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ACCOUNTNOMBER" }] [{$shop->oxshops__oxbanknumber->value}]<br>
+    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_BIC" }] [{$shop->oxshops__oxbiccode->value}]<br>
+    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_IBAN" }] [{$shop->oxshops__oxibannumber->value}]
   [{/if}]
 
   [{ oxcontent ident="oxuserorderemailend" }]

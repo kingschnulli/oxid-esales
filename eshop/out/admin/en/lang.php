@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 33200 2011-02-11 09:16:52Z arvydas.vapsva $
+ * @version   SVN: $Id: lang.php 33361 2011-02-18 15:12:39Z sarunas $
  */
 
 /*
@@ -756,18 +756,23 @@ $aLang = array(
 'EXCEPTION_ACCESSRIGHT_ACCESSDENIED'            => 'Access denied, no sufficient rights!',
 'EXCEPTION_NOFILE'                              => 'No uploaded file',
 'EXCEPTION_FILENAMEINVALIDCHARS'                => 'Invalid chars in file name',
-'EXCEPTION_FILEUPLOADERROR_1'                    => 'The uploaded file exceeds maximum allowed size', // message is taken from php docu
-'EXCEPTION_FILEUPLOADERROR_2'                    => 'The uploaded file exceeds maximum allowed size', // message is taken from php docu
-'EXCEPTION_FILEUPLOADERROR_3'                    => 'The uploaded file was only partially uploaded', // message is taken from php docu
-'EXCEPTION_FILEUPLOADERROR_4'                    => 'No file was uploaded', // message is taken from php docu
-'EXCEPTION_FILEUPLOADERROR_6'                    => 'Missing a temporary folder', // message is taken from php docu
-'EXCEPTION_FILEUPLOADERROR_7'                    => 'Failed to write file to disk', // message is taken from php docu
-'EXCEPTION_FILEUPLOADERROR_8'                    => 'File upload stopped by extension', // message is taken from php docu
+'EXCEPTION_FILEUPLOADERROR_1'                   => 'The uploaded file exceeds maximum allowed size', // message is taken from php docu
+'EXCEPTION_FILEUPLOADERROR_2'                   => 'The uploaded file exceeds maximum allowed size', // message is taken from php docu
+'EXCEPTION_FILEUPLOADERROR_3'                   => 'The uploaded file was only partially uploaded', // message is taken from php docu
+'EXCEPTION_FILEUPLOADERROR_4'                   => 'No file was uploaded', // message is taken from php docu
+'EXCEPTION_FILEUPLOADERROR_6'                   => 'Missing a temporary folder', // message is taken from php docu
+'EXCEPTION_FILEUPLOADERROR_7'                   => 'Failed to write file to disk', // message is taken from php docu
+'EXCEPTION_FILEUPLOADERROR_8'                   => 'File upload stopped by extension', // message is taken from php docu
 'EXCEPTION_NOTALLOWEDTYPE'                      => 'Not allowed file type (please, edit config.inc.php to allow this type of file)',
 'EXCEPTION_NODESCRIPTIONADDED'                  => 'Please enter description',
 'EXCEPTION_NOMEDIAADDED'                        => 'Please enter existing media URL or upload the file',
 'EXCEPTION_COULDNOTWRITETOFILE'                 => 'Could not write to file',
 'EXCEPTION_FILENOTFOUND'                        => 'File not found (see log file for details)',
+'EXCEPTION_THEME_NOT_LOADED'                    => 'Theme could not be loaded',
+'EXCEPTION_PARENT_VERSION_UNSPECIFIED'          => 'Parent theme did not specify version',
+'EXCEPTION_UNSPECIFIED_PARENT_VERSIONS'         => 'Compatible parent theme versions not specified',
+'EXCEPTION_PARENT_VERSION_MISMATCH'             => 'Parent theme version is not compatible',
+'EXCEPTION_PARENT_THEME_NOT_FOUND'              => 'Cannot find parent theme',
 
 'GUI_LIST_MENUITEM'                             => 'Master Settings',
 'GUI_LIST_MENUSUBITEM'                          => 'Look & Feel',
@@ -928,6 +933,8 @@ $aLang = array(
 'THEME_AUTHOR'                                  => 'Author',
 'THEME_VERSION'                                 => 'Version',
 'THEME_ACTIVATE'                                => 'Activate',
+'THEME_PARENT_THEME_TITLE'                      => 'Parent theme',
+'THEME_PARENT_VERSIONS'                         => 'Comapatible parent theme versions',
 'LANGUAGE_ACTIVE'                               => 'Active in frontend',
 'LANGUAGE_LIST_MENUITEM'                        => 'Master Settings',
 'LANGUAGE_LIST_MENUSUBITEM'                     => 'Languages',

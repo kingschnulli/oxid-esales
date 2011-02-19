@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.inc.php 31954 2010-12-17 13:33:40Z sarunas $
+ * @version   SVN: $Id: category_main.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -64,8 +64,8 @@ class ajaxComponent extends ajaxListComponent
     {
         $myConfig = $this->getConfig();
 
-        $sArticleTable = getViewName('oxarticles');
-        $sO2CView      = getViewName('oxobject2category');
+        $sArticleTable = $this->_getViewName('oxarticles');
+        $sO2CView      = $this->_getViewName('oxobject2category');
 
         $sOxid      = oxConfig::getParameter( 'oxid' );
         $sSynchOxid = oxConfig::getParameter( 'synchoxid' );
@@ -109,7 +109,7 @@ class ajaxComponent extends ajaxListComponent
      */
     protected function _addFilter( $sQ )
     {
-        $sArtTable = getViewName('oxarticles');
+        $sArtTable = $this->_getViewName('oxarticles');
         $sQ = parent::_addFilter( $sQ );
 
         // display variants or not ?
@@ -134,7 +134,7 @@ class ajaxComponent extends ajaxListComponent
         $sCategoryID = oxConfig::getParameter( 'synchoxid');
         $sShopID     = $myConfig->getShopId();
         $oDb         = oxDb::getDb();
-        $sArticleTable = getViewName( 'oxarticles' );
+        $sArticleTable = $this->_getViewName( 'oxarticles' );
 
         // adding
         if ( oxConfig::getParameter( 'all' ) ) {
@@ -144,7 +144,7 @@ class ajaxComponent extends ajaxListComponent
         if ( is_array($aArticles)) {
 
 
-            $sO2CView = getViewName('oxobject2category');
+            $sO2CView = $this->_getViewName('oxobject2category');
 
             $oNew = oxNew( 'oxbase' );
             $oNew->init( 'oxobject2category' );
@@ -185,7 +185,7 @@ class ajaxComponent extends ajaxListComponent
         // adding
         if ( oxConfig::getParameter( 'all' ) ) {
 
-            $sO2CView = getViewName('oxobject2category');
+            $sO2CView = $this->_getViewName('oxobject2category');
             $sQ = $this->_addFilter( "delete $sO2CView.* ".$this->_getQuery() );
             $oDb->Execute( $sQ );
 

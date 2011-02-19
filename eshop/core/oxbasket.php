@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 33096 2011-02-09 14:33:14Z arvydas.vapsva $
+ * @version   SVN: $Id: oxbasket.php 33349 2011-02-18 13:06:56Z rimvydas.paskevicius $
  */
 
 /**
@@ -2085,6 +2085,7 @@ class oxBasket extends oxSuperCfg
     public function getDelCostVat()
     {
         $dDelVAT = $this->getCosts( 'oxdelivery' )->getVatValue();
+
         if ( $dDelVAT > 0 ) {
             return oxLang::getInstance()->formatCurrency( $dDelVAT, $this->getBasketCurrency() );
         }
@@ -2175,6 +2176,22 @@ class oxBasket extends oxSuperCfg
         }
         return false;
     }
+
+    /**
+     * Returns formated voucher discount
+     *
+     * @return string | bool
+     */
+    public function getFVoucherDiscountValue()
+    {
+        if ( $oVoucherDiscount = $this->getVoucherDiscount() ) {
+            if ( $oVoucherDiscount->getBruttoPrice() ) {
+                return oxLang::getInstance()->formatCurrency( $oVoucherDiscount->getBruttoPrice(), $this->getBasketCurrency() );
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Returns VAT of wrapping costs

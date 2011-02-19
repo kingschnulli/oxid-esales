@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_accessories.inc.php 31954 2010-12-17 13:33:40Z sarunas $
+ * @version   SVN: $Id: article_accessories.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -66,8 +66,8 @@ class ajaxComponent extends ajaxListComponent
         $sSynchSelId = oxConfig::getParameter( 'synchoxid' );
         $oDb         = oxDb::getDb();
 
-        $sArticleTable = getViewName('oxarticles');
-        $sO2CView      = getViewName('oxobject2category');
+        $sArticleTable = $this->_getViewName('oxarticles');
+        $sO2CView      = $this->_getViewName('oxobject2category');
 
         // category selected or not ?
         if ( !$sSelId ) {
@@ -105,7 +105,7 @@ class ajaxComponent extends ajaxListComponent
      */
     protected function _addFilter( $sQ )
     {
-        $sArtTable = getViewName('oxarticles');
+        $sArtTable = $this->_getViewName('oxarticles');
         $sQ = parent::_addFilter( $sQ );
 
         // display variants or not ?
@@ -147,7 +147,7 @@ class ajaxComponent extends ajaxListComponent
 
         // adding
         if ( oxConfig::getParameter( 'all' ) ) {
-            $sArtTable = getViewName('oxarticles');
+            $sArtTable = $this->_getViewName('oxarticles');
             $aChosenArt = $this->_getAll( $this->_addFilter( "select $sArtTable.oxid ".$this->_getQuery() ) );
         }
 

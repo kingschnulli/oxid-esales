@@ -1,3 +1,7 @@
+[{ assign var="shop"     value=$oEmailView->getShop() }]
+[{ assign var="oViewConf" value=$oEmailView->getViewConfig() }]
+[{ assign var="user"     value=$oEmailView->getUser() }]
+
 [{ oxmultilang ident="EMAIL_SUGGEST_HTML_PRODUCTPOSTCARDFROM" }] [{ $shop->oxshops__oxname->getRawValue() }]
 
 [{ oxmultilang ident="EMAIL_SUGGEST_HTML_FROM" }] [{$userinfo->send_name}]

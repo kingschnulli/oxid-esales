@@ -50,26 +50,28 @@ class Theme_Config extends Shop_Config
             $sTheme = $this->_sTheme = $this->getConfig()->getConfigParam('sTheme');
         }
 
-        try {
-            oxLang::getInstance()->registerAdditionalLangFile(
-                $this->_getTemplateOptionsLanguageFile()
-            );
-        } catch (oxException $oEx) {
-            oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
-            $oEx->debugOut();
-        }
-
         $oTheme = oxNew('oxTheme');
-        $aTheme = $oTheme->load($sTheme);
-        $this->_aViewData["aTheme"] =  $aTheme;
+        if ($oTheme->load($sTheme)) {
+            $this->_aViewData["oTheme"] =  $oTheme;
 
-        $aDbVariables = $this->_loadConfVars($sShopId, $this->_getModuleForConfigVars());
-        $this->_aViewData["var_constraints"] = $aDbVariables['constraints'];
-        $this->_aViewData["var_grouping"]    = $aDbVariables['grouping'];
-        foreach ($this->_aConfParams as $sType => $sParam) {
-            $this->_aViewData[$sParam] = $aDbVariables['vars'][$sType];
+            try {
+                oxLang::getInstance()->registerAdditionalLangFile(
+                    $this->_getTemplateOptionsLanguageFile()
+                );
+
+                $aDbVariables = $this->_loadConfVars($sShopId, $this->_getModuleForConfigVars());
+                $this->_aViewData["var_constraints"] = $aDbVariables['constraints'];
+                $this->_aViewData["var_grouping"]    = $aDbVariables['grouping'];
+                foreach ($this->_aConfParams as $sType => $sParam) {
+                    $this->_aViewData[$sParam] = $aDbVariables['vars'][$sType];
+                }
+            } catch (oxException $oEx) {
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+                $oEx->debugOut();
+            }
+        } else {
+            oxUtilsView::getInstance()->addErrorToDisplay( new oxException('EXCEPTION_THEME_NOT_LOADED') );
         }
-
         return 'theme_config.tpl';
     }
 

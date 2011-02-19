@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_category.inc.php 31954 2010-12-17 13:33:40Z sarunas $
+ * @version   SVN: $Id: attribute_category.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -54,7 +54,7 @@ class ajaxComponent extends ajaxListComponent
         $myConfig = $this->getConfig();
         $oDb      = oxDb::getDb();
 
-        $sCatTable = getViewName('oxcategories');
+        $sCatTable = $this->_getViewName('oxcategories');
         $sDiscountId      = oxConfig::getParameter( 'oxid' );
         $sSynchDiscountId = oxConfig::getParameter( 'synchoxid' );
 
@@ -111,7 +111,7 @@ class ajaxComponent extends ajaxListComponent
         $oAttribute   = oxNew( "oxattribute" );
         // adding
         if ( oxConfig::getParameter( 'all' ) ) {
-            $sCatTable = getViewName('oxcategories');
+            $sCatTable = $this->_getViewName('oxcategories');
             $aAddCategory = $this->_getAll( $this->_addFilter( "select $sCatTable.oxid ".$this->_getQuery() ) );
         }
 

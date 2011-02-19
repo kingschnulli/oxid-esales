@@ -1,8 +1,12 @@
+[{ assign var="shop"     value=$oEmailView->getShop() }]
+[{ assign var="oViewConf" value=$oEmailView->getViewConfig() }]
+[{ assign var="user"     value=$oEmailView->getUser() }]
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
     <title>[{ oxmultilang ident="EMAIL_SUGGEST_HTML_PRODUCTPOSTCARDFROM" }] [{ $shop->oxshops__oxname->value }]</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]">
+    <meta http-equiv="Content-Type" content="text/html; charset=[{$oEmailView->getCharset()}]">
   </head>
   <body marginwidth="0" marginheight="0">
 
@@ -42,25 +46,25 @@
                         </tr>
                         <tr>
                           <td bgcolor="#FFFFFF" width="10%"><font face="Verdana,Arial" size="1"><b>[{ oxmultilang ident="EMAIL_SUGGEST_HTML_FROM" }]</b></font></td>
-                          <td bgcolor="#FFFFFF" align="left"><font face="Verdana,Arial" size="1">[{$userinfo->send_name|oxescape}]<br></font></td>
+                          <td bgcolor="#FFFFFF" align="left"><font face="Verdana,Arial" size="1">[{$user->send_name|oxescape}]<br></font></td>
                         </tr>
                         <tr>
                           <td bgcolor="#FFFFFF" width="10%"><font face="Verdana,Arial" size="1"><b>[{ oxmultilang ident="EMAIL_SUGGEST_HTML_EMAIL" }]</b></font></td>
-                          <td bgcolor="#FFFFFF" align="left"><font face="Verdana,Arial" size="1">[{$userinfo->send_email|oxescape}]</font></td>
+                          <td bgcolor="#FFFFFF" align="left"><font face="Verdana,Arial" size="1">[{$user->send_email|oxescape}]</font></td>
                         </tr>
                         <tr>
                           <td bgcolor="#FFFFFF" width="10%"><font face="Verdana,Arial" size="1"><b>[{ oxmultilang ident="EMAIL_SUGGEST_HTML_TO" }]</b></font></td>
-                          <td bgcolor="#FFFFFF" align="left"><font face="Verdana,Arial" size="1">[{$userinfo->rec_name|oxescape}]</font></td>
+                          <td bgcolor="#FFFFFF" align="left"><font face="Verdana,Arial" size="1">[{$user->rec_name|oxescape}]</font></td>
                         </tr>
                         <tr>
                           <td bgcolor="#FFFFFF" width="10%"><font face="Verdana,Arial" size="1"><b>[{ oxmultilang ident="EMAIL_SUGGEST_HTML_EMAIL2" }]</b></font></td>
-                          <td bgcolor="#FFFFFF" align="left"><font face="Verdana,Arial" size="1">[{$userinfo->rec_email|oxescape}]</font></td>
+                          <td bgcolor="#FFFFFF" align="left"><font face="Verdana,Arial" size="1">[{$user->rec_email|oxescape}]</font></td>
                         </tr>
                         <tr>
-                          <td bgcolor="#FFFFFF" colspan="2"><font face="Verdana,Arial" size="1">[{$userinfo->send_message|oxescape|nl2br}]</font></td>
+                          <td bgcolor="#FFFFFF" colspan="2"><font face="Verdana,Arial" size="1">[{$user->send_message|oxescape|nl2br}]</font></td>
                         </tr>
                         <tr>
-                          <td bgcolor="#FFFFFF" colspan="2"><font face="Verdana,Arial" size="1">[{ oxmultilang ident="EMAIL_SUGGEST_HTML_MENYGREETINGS" }] [{$userinfo->send_name|oxescape}]</font></td>
+                          <td bgcolor="#FFFFFF" colspan="2"><font face="Verdana,Arial" size="1">[{ oxmultilang ident="EMAIL_SUGGEST_HTML_MENYGREETINGS" }] [{$user->send_name|oxescape}]</font></td>
                         </tr>
                       </table>
                     </td>

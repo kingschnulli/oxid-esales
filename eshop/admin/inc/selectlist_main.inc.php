@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: selectlist_main.inc.php 31954 2010-12-17 13:33:40Z sarunas $
+ * @version   SVN: $Id: selectlist_main.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -72,9 +72,9 @@ class ajaxComponent extends ajaxListComponent
         $myConfig = $this->getConfig();
 
         // looking for table/view
-        $sArtTable = getViewName('oxarticles');
-        $sCatTable = getViewName('oxcategories');
-        $sO2CView  = getViewName('oxobject2category');
+        $sArtTable = $this->_getViewName('oxarticles');
+        $sCatTable = $this->_getViewName('oxcategories');
+        $sO2CView  = $this->_getViewName('oxobject2category');
 
         $sSelId      = oxConfig::getParameter( 'oxid' );
         $sSynchSelId = oxConfig::getParameter( 'synchoxid' );
@@ -114,7 +114,7 @@ class ajaxComponent extends ajaxListComponent
      */
     protected function _addFilter( $sQ )
     {
-        $sArtTable = getViewName('oxarticles');
+        $sArtTable = $this->_getViewName('oxarticles');
         $sQ = parent::_addFilter( $sQ );
 
         // display variants or not ?
@@ -152,7 +152,7 @@ class ajaxComponent extends ajaxListComponent
         $soxId       = oxConfig::getParameter( 'synchoxid');
 
         if ( oxConfig::getParameter( 'all' ) ) {
-            $sArtTable = getViewName('oxarticles');
+            $sArtTable = $this->_getViewName('oxarticles');
             $aAddArticle = $this->_getAll( $this->_addFilter( "select $sArtTable.oxid ".$this->_getQuery() ) );
         }
 

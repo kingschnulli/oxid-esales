@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxajax.php 32600 2011-01-20 13:15:26Z sarunas $
+ * @version   SVN: $Id: oxajax.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
  */
 
 // shop path for includes
@@ -306,7 +306,7 @@ class ajaxListComponent extends oxSuperCfg
                 $sQ .= ', ';
             }
 
-            $sViewTable = getViewName( $aCol[1] );
+            $sViewTable = $this->_getViewName( $aCol[1] );
             if ( !$blIdentCols && $this->_isExtendedColumn( $aCol[0] ) ) {
                 $sQ .= $this->_getExtendedColQuery( $sViewTable, $aCol[0], $iCnt );
             } else {
@@ -418,7 +418,7 @@ class ajaxListComponent extends oxSuperCfg
                     // possibility to search in the middle ..
                     $sValue = $oStr->preg_replace( '/^\*/', '%', $sValue );
 
-                    $sQ .= getViewName( $aCols[ $iCol ][1] ) . '.' . $aCols[ $iCol ][0];
+                    $sQ .= $this->_getViewName( $aCols[ $iCol ][1] ) . '.' . $aCols[ $iCol ][0];
                     $sQ .= ' like ' . $oDb->Quote( $sValue . '%' ). ' ';
                 }
 
@@ -555,6 +555,18 @@ class ajaxListComponent extends oxSuperCfg
         echo $sOut;
     }
 
+     /**
+     * Return the view name of the given table if a view exists, otherwise the table name itself
+     *
+     * @param string $sTable table name
+     *
+     * @return string
+     */
+    protected function _getViewName( $sTable )
+    {
+        return getViewName( $sTable, oxConfig::getParameter('editlanguage'));
+    }
+
     /**
      * Formats data array which later will be processed by _outputResponse method
      *
@@ -633,6 +645,8 @@ class ajaxListComponent extends oxSuperCfg
                 oxUtils::getInstance()->oxResetFileCache();
             }
     }
+
+
 
     /**
      * Resets counters values from cache. Resets price category articles, category articles,

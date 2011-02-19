@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 33200 2011-02-11 09:16:52Z arvydas.vapsva $
+ * @version   SVN: $Id: lang.php 33361 2011-02-18 15:12:39Z sarunas $
  */
 
 $sLangName  = 'Deutsch';
@@ -762,6 +762,11 @@ $aLang = array(
 'EXCEPTION_NOMEDIAADDED'                        => 'Bitte Medien URL angeben',
 'EXCEPTION_COULDNOTWRITETOFILE'                 => 'Kann die Datei nicht schreiben',
 'EXCEPTION_FILENOTFOUND'                        => 'Datei nicht gefunden (bitte Logfile für Details prüfen)',
+'EXCEPTION_THEME_NOT_LOADED'                    => '[tr] Theme could not be loaded',
+'EXCEPTION_PARENT_VERSION_UNSPECIFIED'          => '[tr] Parent theme did not specify version',
+'EXCEPTION_UNSPECIFIED_PARENT_VERSIONS'         => '[tr] Compatible parent theme versions not specified',
+'EXCEPTION_PARENT_VERSION_MISMATCH'             => '[tr] Parent theme version is not compatible',
+'EXCEPTION_PARENT_THEME_NOT_FOUND'              => '[tr] Cannot find parent theme',
 
 'GUI_LIST_MENUITEM'                             => 'Stammdaten',
 'GUI_LIST_MENUSUBITEM'                          => 'Look & Feel',
@@ -922,6 +927,8 @@ $aLang = array(
 'THEME_AUTHOR'                                  => 'Autor',
 'THEME_VERSION'                                 => 'Version',
 'THEME_ACTIVATE'                                => 'Aktivieren',
+'THEME_PARENT_THEME_TITLE'                      => '[tr] Parent theme',
+'THEME_PARENT_VERSIONS'                         => '[tr] Comapatible parent theme versions',
 'LANGUAGE_ACTIVE'                               => 'Im Frontend aktiv',
 'LANGUAGE_LIST_MENUITEM'                        => 'Stammdaten',
 'LANGUAGE_LIST_MENUSUBITEM'                     => 'Sprachen',

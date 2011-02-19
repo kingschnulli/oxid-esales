@@ -1,3 +1,6 @@
+[{ assign var="shop"      value=$oEmailView->getShop() }]
+[{ assign var="oViewConf" value=$oEmailView->getViewConfig() }]
+
 [{ oxcontent ident="oxordersendplainemail" }]
 
 [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_ORDERSHIPPEDTO" }]

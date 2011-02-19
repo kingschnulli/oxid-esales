@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_main.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: shop_main.php 33363 2011-02-18 15:24:27Z linas.kukulskis $
  */
 
 
@@ -84,6 +84,7 @@ class Shop_Main extends oxAdminDetails
 
         $myConfig = $this->getConfig();
         $soxId = $this->getEditObjectId();
+
         $aParams  = oxConfig::getParameter( "editval");
 
 
@@ -118,6 +119,7 @@ class Shop_Main extends oxAdminDetails
         $oShop->save();
 
         $this->_aViewData["updatelist"] =  "1";
+
 
         oxSession::setVar( "actshop", $soxId);
     }

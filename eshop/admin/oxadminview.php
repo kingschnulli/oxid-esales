@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminview.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: oxadminview.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
  */
 
 /**
@@ -200,8 +200,8 @@ class oxAdminView extends oxView
         }
 
         $oViewConf = $this->getViewConfig();
-        $oViewConf->setViewConfigParam( 'selflink', oxUtilsUrl::getInstance()->processUrl($sURL.'index.php', false) );
-        $oViewConf->setViewConfigParam( 'ajaxlink', str_replace( '&amp;', '&', oxUtilsUrl::getInstance()->processUrl( $sURL.'oxajax.php', false ) ) );
+        $oViewConf->setViewConfigParam( 'selflink', oxUtilsUrl::getInstance()->processUrl($sURL.'index.php?editlanguage='.$this->_iEditLang, false) );
+        $oViewConf->setViewConfigParam( 'ajaxlink', str_replace( '&amp;', '&', oxUtilsUrl::getInstance()->processUrl( $sURL.'oxajax.php?editlanguage='.$this->_iEditLang, false ) ) );
         $oViewConf->setViewConfigParam( 'sServiceUrl', $this->getServiceUrl() );
         $oViewConf->setViewConfigParam( 'blLoadDynContents', $myConfig->getConfigParam( 'blLoadDynContents' ) );
         $oViewConf->setViewConfigParam( 'sShopCountry', $myConfig->getConfigParam( 'sShopCountry' ) );

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 33274 2011-02-15 13:54:33Z vilma $
+ * @version   SVN: $Id: oxemail.php 33352 2011-02-18 13:18:40Z rimvydas.paskevicius $
  */
 /**
  * Includes PHP mailer class.
@@ -241,9 +241,9 @@ class oxEmail extends PHPMailer
     protected $_oSmarty = null;
 
     /**
-     * Smarty instance
+     * Email view data
      *
-     * @var smarty
+     * @var array
      */
     protected $_aViewData = array();
 
@@ -253,6 +253,13 @@ class oxEmail extends PHPMailer
      * @var object
      */
     protected $_oShop = null;
+
+    /**
+     * Email charset
+     *
+     * @var string
+     */
+    protected $_sCharSet = null;
 
     /**
      * Class constructor.
@@ -505,7 +512,7 @@ class oxEmail extends PHPMailer
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "oOrder", $oOrder);
+        $oSmarty->assign( "order", $oOrder);
 
         // Process view data array through oxoutput processor
         $this->_processViewArray();
@@ -575,7 +582,7 @@ class oxEmail extends PHPMailer
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "oOrder", $oOrder );
+        $oSmarty->assign( "order", $oOrder );
 
         // Process view data array through oxoutput processor
         $this->_processViewArray();
@@ -1585,7 +1592,12 @@ class oxEmail extends PHPMailer
      */
     public function setCharSet( $sCharSet = null )
     {
-        $this->set( "CharSet", $sCharSet ? $sCharSet : oxLang::getInstance()->translateString( "charset" ) );
+        if ( $sCharSet ) {
+            $this->_sCharSet = $sCharSet;
+        } else {
+            $this->_sCharSet = oxLang::getInstance()->translateString( "charset" );
+        }
+        $this->set( "CharSet", $this->_sCharSet );
     }
 
     /**
@@ -1879,6 +1891,11 @@ class oxEmail extends PHPMailer
      */
     protected function _getShop( $iLangId = null, $iShopId = null )
     {
+/*
+        if ( isset( $this->_oShop ) ) {
+            return $this->_oShop;
+        }
+*/
         $myConfig = $this->getConfig();
 
         if ( $iLangId === null ) {
@@ -1888,7 +1905,7 @@ class oxEmail extends PHPMailer
             $oShop->loadInLang( $iLangId, $myConfig->getShopId() );
         }
 
-        return $oShop;
+        return $this->_oShop = $oShop;
     }
 
     /**
@@ -1983,7 +2000,11 @@ class oxEmail extends PHPMailer
      */
     public function getCharset()
     {
-        return oxLang::getInstance()->translateString("charset");
+        if ( !$this->_sCharSet ) {
+            return oxLang::getInstance()->translateString("charset");
+        } else {
+            return $this->CharSet;
+        }
     }
 
     /**
@@ -1993,11 +2014,7 @@ class oxEmail extends PHPMailer
      */
     public function getShop()
     {
-        if ( $this->_oShop == null ) {
-            return $this->_getShop();
-        } else {
-            return $this->_oShop;
-        }
+        return $this->_getShop();
     }
 
     /**
@@ -2011,6 +2028,7 @@ class oxEmail extends PHPMailer
     {
         $this->_oShop = $oShop;
     }
+
     /**
      * Gets viewConfig object
      *

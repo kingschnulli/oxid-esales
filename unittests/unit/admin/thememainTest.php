@@ -42,8 +42,25 @@ class Unit_Admin_ThemeMainTest extends OxidTestCase
         $this->assertEquals( 'theme_main.tpl', $oView->render() );
 
         $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['aTheme'] ) );
-        $this->assertTrue( is_array($aViewData['aTheme']) );
-        $this->assertEquals('azure', $aViewData['aTheme']['id'] );
+        $this->assertTrue( isset( $aViewData['oTheme'] ) );
+        $this->assertTrue( $aViewData['oTheme'] instanceof oxTheme );
+        $this->assertEquals('azure', $aViewData['oTheme']->getInfo('id') );
+    }
+
+
+    public function testSetTheme()
+    {
+        $oTM = $this->getMock('Theme_Main', array('getEditObjectId'));
+        $oTM->expects($this->any())->method('getEditObjectId')->will($this->returnValue('basic'));
+
+        oxTestModules::addFunction('oxTheme', 'load($name)', '{if ($name != "basic") throw new Exception("FAIL TO LOAD"); return true;}');
+        oxTestModules::addFunction('oxTheme', 'activate', '{throw new Exception("OK");}');
+
+        try {
+            $oTM->setTheme();
+            $this->fail('should have called overriden activate');
+        } catch (Exception $e) {
+            $this->assertEquals('OK', $e->getMessage());
+        }
     }
 }

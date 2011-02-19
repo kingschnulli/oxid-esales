@@ -56,17 +56,17 @@ window.onload = function ()
 [{foreach from=$mylist item=listitem}]
 <tr id="row.[{counter}]">
     [{cycle values="listitem,listitem2" assign="zebra"}]
-    [{ if $listitem.id == $oxid }]
+    [{ if $listitem->getInfo('id') == $oxid }]
         [{assign var="zebra" value=listitem4 }]
     [{ /if}]
-    <td valign="top" class="[{$zebra}][{ if $listitem.active}] active[{/if}]" height="15">
+    <td valign="top" class="[{$zebra}][{ if $listitem->getInfo('active')}] active[{/if}]" height="15">
         <div class="listitemfloating">
-            <a href="Javascript:top.oxid.admin.editThis('[{ $listitem.id }]');">&nbsp;</a></div></td>
+            <a href="Javascript:top.oxid.admin.editThis('[{ $listitem->getInfo('id') }]');">&nbsp;</a></div></td>
         </div>
     </td>
     <td valign="top" class="[{$zebra}]" height="15">
         <div class="listitemfloating">
-            <a href="Javascript:top.oxid.admin.editThis('[{ $listitem.id }]');">[{ $listitem.title }]</a>
+            <a href="Javascript:top.oxid.admin.editThis('[{ $listitem->getInfo('id') }]');">[{ $listitem->getInfo('title') }]</a>
         </div>
     </td>
 </tr>

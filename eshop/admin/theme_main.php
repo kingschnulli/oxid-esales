@@ -42,14 +42,17 @@ class Theme_Main extends oxAdminDetails
     {
         $soxId = $this->getEditObjectId();
 
-        if (!isset( $soxId ) ) {
-            $soxId = $this->getConfig()->getConfigParam('sTheme');
-        }
-
         $oTheme = oxNew('oxTheme');
 
-        $aTheme = $oTheme->load($soxId);
-        $this->_aViewData["aTheme"] =  $aTheme;
+        if (!$soxId) {
+            $soxId = $oTheme->getActiveThemeId();
+        }
+
+        if ($oTheme->load($soxId)) {
+            $this->_aViewData["oTheme"] =  $oTheme;
+        } else {
+            oxUtilsView::getInstance()->addErrorToDisplay( new oxException('EXCEPTION_THEME_NOT_LOADED') );
+        }
 
         parent::render();
 
@@ -66,6 +69,15 @@ class Theme_Main extends oxAdminDetails
     {
         $sTheme = $this->getEditObjectId();
         $oTheme = oxNew('oxtheme');
-        $oTheme->setTheme($sTheme);
+        if (!$oTheme->load($sTheme)) {
+            oxUtilsView::getInstance()->addErrorToDisplay( new oxException('EXCEPTION_THEME_NOT_LOADED') );
+            return;
+        }
+        try {
+            $oTheme->activate();
+        } catch (oxException $oEx) {
+            oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+            $oEx->debugOut();
+        }
     }
 }
