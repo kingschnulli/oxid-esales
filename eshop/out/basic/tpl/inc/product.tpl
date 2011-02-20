@@ -48,7 +48,7 @@
 
     <div [{if $test_Cntr}]id="test_cntr_[{$test_Cntr}]"[{/if}] class="actions">
         <a id="test_details_[{$testid}]" href="[{ $_productLink }]"[{if $oView->noIndex() }] rel="nofollow"[{/if}]>[{ oxmultilang ident="INC_PRODUCTITEM_MOREINFO2" }]</a>
-        [{if $hidefiltering && $oViewConf->getShowCompareList()}]
+        [{if $oViewConf->getShowCompareList()}]
             [{oxid_include_dynamic file="dyn/compare_links.tpl" testid="_`$testid`" type="compare" aid=$product->oxarticles__oxid->value anid=$altproduct in_list=$product->isOnComparisonList() page=$pageNavigation->actPage-1 text_to_id="INC_PRODUCTITEM_COMPARE2" text_from_id="INC_PRODUCTITEM_REMOVEFROMCOMPARELIST2"}]
         [{/if}]
     </div>

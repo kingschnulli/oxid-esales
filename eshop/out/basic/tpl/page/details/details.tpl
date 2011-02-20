@@ -442,7 +442,7 @@
         [{/if}]
 
         [{$variants_head}]
-        [{include file="inc/product.tpl" product=$variant_product size="thinest" altproduct=$product->getId() hidefiltering=true class=$details_variants_class testid="Variant_"|cat:$variant_product->oxarticles__oxid->value}]
+        [{include file="inc/product.tpl" product=$variant_product size="thinest" altproduct=$product->getId() class=$details_variants_class testid="Variant_"|cat:$variant_product->oxarticles__oxid->value}]
         [{assign var="details_variants_head" value=""}]
     [{/foreach}]
 
@@ -514,7 +514,7 @@
 </div>
 
 
-[{ include file="inc/product.tpl" product=$product size="thin" hidefiltering=true head="DETAILS_CURRENTPRODUCT"|oxmultilangassign testid="current"}]
+[{ include file="inc/product.tpl" product=$product size="thin" head="DETAILS_CURRENTPRODUCT"|oxmultilangassign testid="current"}]
 
 
 

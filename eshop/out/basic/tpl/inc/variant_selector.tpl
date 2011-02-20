@@ -2,11 +2,11 @@
   <div style="display: none">
   [{foreach from=$oView->getVariantList() name=variants item=variant_product}]
     <div id=mdvariant_[{$variant_product->getId()}]>
-      [{include file="inc/product.tpl" product=$variant_product size="thinest" altproduct=$product->getId() hidefiltering=true class=lastinlist testid="Variant_"|cat:$variant_product->oxarticles__oxid->value}]
+      [{include file="inc/product.tpl" product=$variant_product size="thinest" altproduct=$product->getId() class=lastinlist testid="Variant_"|cat:$variant_product->oxarticles__oxid->value}]
     </div>
   [{/foreach}]
     <div id=mdvariant_[{$product->getId()}]>
-      [{include file="inc/product.tpl" product=$product size="thinest" altproduct=$product->getId() hidefiltering=true class=lastinlist testid="Variant_"|cat:$variant_product->oxarticles__oxid->value}]
+      [{include file="inc/product.tpl" product=$product size="thinest" altproduct=$product->getId() class=lastinlist testid="Variant_"|cat:$variant_product->oxarticles__oxid->value}]
     </div>
   </div>
 

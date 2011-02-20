@@ -72,7 +72,3 @@
         </li>
     [{/if}]
 </ul>
-[{oxscript include='js/superfish/hoverIntent.js'}]
-[{oxscript include='js/superfish/supersubs.js'}]
-[{oxscript include='js/superfish/superfish.js'}]
-[{oxscript include='js/topmenu.js'}]

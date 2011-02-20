@@ -52,6 +52,18 @@ class Unit_Views_inviteTest extends OxidTestCase
         $this->assertEquals( "testData", $oView->getNonPublicVar( "_aInviteData" ) );
     }
 
+     /**
+     * Testing Invite::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oInvite = new Invite();
+
+        $this->assertEquals(1, count($oInvite->getBreadCrumb()));
+    }
+
     /**
      * Testing method getInviteData()
      *

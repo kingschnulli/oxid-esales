@@ -78,6 +78,11 @@
     [{oxscript include="js/gui.js" priority=9}]
     [{oxscript include="js/oxid.js" priority=1}]
 
+    [{oxscript include='js/superfish/hoverIntent.js'}]
+    [{oxscript include='js/superfish/supersubs.js'}]
+    [{oxscript include='js/superfish/superfish.js'}]
+    [{oxscript include='js/topmenu.js'}]
+
     [{if $oViewConf->isTplBlocksDebugMode()}]
         [{oxscript include="js/block-debug.js"}]
     [{/if}]

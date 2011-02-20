@@ -1004,7 +1004,7 @@ $aLang = array(
 'FORM_LOGIN_ACCOUNT_KEEPLOGGEDIN'                              => "Eingeloggt bleiben:",
 'FORM_LOGIN_ACCOUNT_LOGIN'                                     => "Anmelden",
 'FORM_LOGIN_ACCOUNT_OPENACCOUNT'                               => "Konto eröffnen",
-'FORM_LOGIN_ACCOUNT_FORGOTPWD'                                 => "Passwort vergessen",
+'FORM_LOGIN_ACCOUNT_FORGOTPWD'                                 => "Passwort vergessen ?",
 'FORM_LOGIN_ACCOUNT_FOROPENID'                                 => "Login über OpenID",
 'FORM_LOGIN_ACCOUNT_OPENID'                                    => "OpenID:",
 
@@ -1064,6 +1064,8 @@ $aLang = array(
 'PAGE_DETAILS_DELIVERYTIME_DAYS'                                    => "Tage",
 'PAGE_DETAILS_DELIVERYTIME_MONTHS'                                  => "Monate",
 'PAGE_DETAILS_DELIVERYTIME_WEEKS'                                   => "Wochen",
+
+'PAGE_SHOP_MALLSTART_PLEASECHOOSE'                        => "Bitte wählen Sie:",
 
 
 );

@@ -53,7 +53,7 @@
             [{/if}]
           </div>
 
-          [{include file="inc/product.tpl" product=$product size="small" hidefiltering=true testid="cmp_`$product->oxarticles__oxid->value`_`$smarty.foreach.comparelist.iteration`"}]
+          [{include file="inc/product.tpl" product=$product size="small" testid="cmp_`$product->oxarticles__oxid->value`_`$smarty.foreach.comparelist.iteration`"}]
         </td>
       [{/foreach}]
     </tr>
