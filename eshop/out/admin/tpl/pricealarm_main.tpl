@@ -46,7 +46,7 @@ function editThis( sID, sListType)
 
         <table cellspacing="0" cellpadding="0" border="0" width="98%">
         [{if $edit}]
-        [{assign var="oArticle" value="$edit->getArticle()"}]
+        [{assign var="oArticle" value=$edit->getArticle()}]
         <tr>
           <td valign="top" class="edittext" valign="top" style="padding-top:10px;padding-left:10px;">
             <table cellspacing="0" cellpadding="0" border="0" width="100%">

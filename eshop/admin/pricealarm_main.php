@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarm_main.php 33277 2011-02-15 14:00:24Z arvydas.vapsva $
+ * @version   SVN: $Id: pricealarm_main.php 33421 2011-02-22 08:08:51Z rimvydas.paskevicius $
  */
 
 /**
@@ -89,16 +89,22 @@ class PriceAlarm_Main extends oxAdminDetails
             if ( isset( $aParams['oxpricealarm__oxlongdesc'] ) && $aParams['oxpricealarm__oxlongdesc'] ) {
                 $oLetter->oxpricealarm__oxlongdesc = new oxField( stripslashes( $aParams['oxpricealarm__oxlongdesc'] ), oxField::T_RAW );
             } else {
+/*
                 $smarty = oxUtilsView::getInstance()->getSmarty();
                 $smarty->assign( "shop", $oShop );
                 $smarty->assign( "product", $oPricealarm->getArticle() );
                 $smarty->assign( "bidprice", $oPricealarm->getFProposedPrice());
-                $smarty->assign( "shopImageDir", $myConfig->getImageUrl( false, false ) );
                 $smarty->assign( "currency", $oPricealarm->getPriceAlarmCurrency() );
+                $smarty->assign( "currency", $oPricealarm->getPriceAlarmCurrency() );
+*/
+
+
+                $oEmail = oxNew( "oxEmail" );
+                $sDesc  = $oEmail->sendPricealarmToCustomer( $oPricealarm->oxpricealarm__oxemail->value, $oPricealarm, null, true );
 
                 $iOldLang = $oLang->getTplLanguage();
                 $oLang->setTplLanguage( $iLang );
-                $oLetter->oxpricealarm__oxlongdesc = new oxField( $smarty->fetch( "email_pricealarm_customer.tpl" ), oxField::T_RAW );
+                $oLetter->oxpricealarm__oxlongdesc = new oxField( $sDesc, oxField::T_RAW );
                 $oLang->setTplLanguage( $iOldLang );
             }
 
@@ -126,28 +132,19 @@ class PriceAlarm_Main extends oxAdminDetails
             $oPricealarm = oxNew( "oxpricealarm" );
             $oPricealarm->load( $sOxid );
 
-            // Send Email
-            $oShop = oxNew( "oxshop" );
-            $oShop->load( $oPricealarm->oxpricealarm__oxshopid->value );
-
-            //arranging user email
-            $oEmail = oxNew( "oxemail" );
-            $oEmail->setFrom( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
-            $oEmail->setSmtp( $oShop );
-
             $aParams = oxConfig::getParameter( "editval" );
-            $sContent = isset( $aParams['oxpricealarm__oxlongdesc'] ) ? stripslashes( $aParams['oxpricealarm__oxlongdesc'] ) : '';
-            if ( $sContent ) {
-                $sContent = oxUtilsView::getInstance()->parseThroughSmarty( $sContent, $oPricealarm->getId() );
+            $sMailBody = isset( $aParams['oxpricealarm__oxlongdesc'] ) ? stripslashes( $aParams['oxpricealarm__oxlongdesc'] ) : '';
+            if ( $sMailBody ) {
+                $sMailBody = oxUtilsView::getInstance()->parseThroughSmarty( $sMailBody, $oPricealarm->getId() );
             }
 
-            $oEmail->setBody( $sContent );
-            $oEmail->setSubject( $oShop->oxshops__oxname->getRawValue() );
-            $oEmail->setRecipient( $oPricealarm->oxpricealarm__oxemail->value, $oPricealarm->oxpricealarm__oxemail->value );
-            $oEmail->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
+            $sRecipient = $oPricealarm->oxpricealarm__oxemail->value;
+
+            $oEmail = oxNew( 'oxemail' );
+            $blSuccess = (int) $oEmail->sendPricealarmToCustomer( $sRecipient, $oAlarm, $sMailBody );
 
             // setting result message
-            if ( $oEmail->send() ) {
+            if ( $blSuccess ) {
                 $oPricealarm->oxpricealarm__oxsended->setValue( date( "Y-m-d H:i:s" ) );
                 $oPricealarm->save();
                 $blError = false;

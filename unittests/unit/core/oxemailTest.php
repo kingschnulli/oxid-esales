@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 33398 2011-02-21 11:09:27Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxemailTest.php 33418 2011-02-21 16:19:54Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1264,7 +1264,7 @@ class Unit_Core_oxemailTest extends OxidTestCase
             $aParams['email'] = 'username@useremail.nl';
             $aParams['aid']   = '_testArticleId';
 
-            $oAlarm = & oxNew( "oxpricealarm");
+            $oAlarm = oxNew( "oxpricealarm");
             $oAlarm->oxpricealarm__oxprice = new oxField('123', oxField::T_RAW);
 
             $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop", "_getUseInlineImages" ) );
@@ -1338,6 +1338,38 @@ class Unit_Core_oxemailTest extends OxidTestCase
         $oAlarm->oxpricealarm__oxlang = new oxField( '1' );
 
         $this->assertEquals( 'zzz', $oEmail->sendPriceAlarmNotification( $aParams, $oAlarm ) );
+    }
+
+    /*
+     * Test sending a notification to the customer that pricealarm was subscribed
+     */
+    public function testSendPriceAlarmToCustomer()
+    {
+        $oAlarm = oxNew( "oxpricealarm");
+        $oAlarm->oxpricealarm__oxprice = new oxField('123', oxField::T_RAW);
+        $oAlarm->oxpricealarm__oxcurrency = new oxField('EUR');
+
+        oxTestModules::addModuleObject( "oxShop", $this->_oShop );
+
+        $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop", "_getUseInlineImages" ) );
+        $oEmail->expects( $this->once() )->method( '_sendMail')->will( $this->returnValue( true ));
+        $oEmail->expects( $this->any() )->method( '_getShop')->will( $this->returnValue( $this->_oShop ));
+        $oEmail->expects( $this->any() )->method( '_getUseInlineImages')->will( $this->returnValue( true ));
+
+        $blRet = $oEmail->sendPriceAlarmToCustomer( 'username@useremail.nl', $oAlarm );
+        $this->assertTrue( $blRet, 'Price alarm mail was not sent to user' );
+
+        // check mail fields
+        $aFields['sRecipient']     = 'username@useremail.nl';
+        $aFields['sRecipientName'] = 'username@useremail.nl';
+        $aFields['sSubject']       = $this->_oShop->oxshops__oxname->value;
+        $aFields['sFrom']          = 'orderemail@orderemail.nl';
+        $aFields['sReplyTo']       = 'orderemail@orderemail.nl';
+
+        // check mail fields
+        if ( !$this->checkMailFields($aFields, $oEmail) ) {
+            $this->fail('Incorect mail fields');
+        }
     }
 
     /*

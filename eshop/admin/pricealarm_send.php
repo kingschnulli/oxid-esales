@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarm_send.php 33224 2011-02-14 09:06:55Z vilma $
+ * @version   SVN: $Id: pricealarm_send.php 33418 2011-02-21 16:19:54Z rimvydas.paskevicius $
  */
 
 /**
@@ -132,7 +132,7 @@ class PriceAlarm_Send extends oxAdminList
         $oLang->setTplLanguage( $iLang );
 
         $oEmail = oxNew( 'oxemail' );
-        $blSuccess = (int) $oEmail->sendPricealarm( $sEMail, $oAlarm );
+        $blSuccess = (int) $oEmail->sendPricealarmToCustomer( $sEMail, $oAlarm );
 
         $oLang->setTplLanguage( $iOldLangId );
 

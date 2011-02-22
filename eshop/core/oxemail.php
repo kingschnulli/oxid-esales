@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 33398 2011-02-21 11:09:27Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxemail.php 33418 2011-02-21 16:19:54Z rimvydas.paskevicius $
  */
 /**
  * Includes PHP mailer class.
@@ -199,6 +199,13 @@ class oxEmail extends PHPMailer
     protected $_sOwnerPricealarmTemplate    = "email/html/pricealarm_owner.tpl";
 
     /**
+     * Price alarm e-mail for shop owner template
+     *
+     * @var string
+     */
+    protected $_sPricealamrCustomerTemplate    = "email_pricealarm_customer.tpl";
+
+    /**
      * Language specific viewconfig object array containing view data, view confic and shop object
      *
      * @var array
@@ -279,6 +286,8 @@ class oxEmail extends PHPMailer
 
         $this->isHtml( true );
         $this->setLanguage( "en", $myConfig->getConfigParam( 'sShopDir' )."/core/phpmailer/language/");
+
+        $this->_getSmarty();
     }
 
     /**
@@ -1267,41 +1276,56 @@ class oxEmail extends PHPMailer
      * Sends pricealarm to customer.
      * Returns true on success.
      *
-     * @param string       $sEMail email
-     * @param oxpricealarm $oAlarm oxPriceAlarm object
+     * @param string       $sRecipient      email
+     * @param oxpricealarm $oAlarm          oxPriceAlarm object
+     * @param string       $sBody           optional mail body
+     * @param bool         $sReturnMailBody returns mail body instead of sending
      *
      * @return bool
      */
-    public function sendPriceAlarm( $sEMail, $oAlarm )
+    public function sendPricealarmToCustomer( $sRecipient, $oAlarm, $sBody = null, $sReturnMailBody = null )
     {
         $this->_clearMailer();
-        // Send Email
-        $oShop = oxNew( "oxshop" );
-        $oShop->load( $oAlarm->oxpricealarm__oxshopid->value);
-        $oShop = $this->addGlobalParams( $oShop);
-        $this->setShop( $oShop );
+
+        $oShop = $this->_getShop();
+
+        if ( $oShop->getId() != $oAlarm->oxpricealarm__oxshopid->value) {
+            $oShop = oxNew( "oxshop" );
+            $oShop->load( $oAlarm->oxpricealarm__oxshopid->value);
+            $this->setShop( $oShop );
+        }
 
         //set mail params (from, fromName, smtp)
         $this->_setMailParams( $oShop );
 
         // create messages
         $oSmarty = $this->_getSmarty();
+
         $this->setViewData( "product", $oAlarm->getArticle() );
         $this->setViewData( "oPriceAlarm", $oAlarm );
         $this->setViewData( "bidprice", $oAlarm->getFProposedPrice() );
         $this->setViewData( "currency", $oAlarm->getPriceAlarmCurrency() );
-        $this->setViewData( "shopImageDir", $myConfig->getImageUrl( false, false ) );
 
         // Process view data array through oxoutput processor
         $this->_processViewArray();
 
-        $this->setRecipient( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
+        $this->setRecipient( $sRecipient, $sRecipient );
         $this->setSubject( $oShop->oxshops__oxname->value );
-        $this->setBody( $oSmarty->fetch( "email_pricealarm_customer.tpl" ) );
-        $this->addAddress( $sEMail, $sEMail );
+
+        if ( $sBody === null ) {
+            $sBody  = $oSmarty->fetch( $this->getConfig()->getTemplatePath( $this->_sPricealamrCustomerTemplate, true ) );
+        }
+
+        $this->setBody( $sBody );
+
+        $this->addAddress( $sRecipient, $sRecipient );
         $this->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
 
-        return $this->send();
+        if ( $sReturnMailBody ) {
+            return $this->getBody();
+        } else {
+            return $this->send();
+        }
     }
 
     /**
@@ -1900,11 +1924,11 @@ class oxEmail extends PHPMailer
      */
     protected function _getShop( $iLangId = null, $iShopId = null )
     {
-/*
+
         if ( isset( $this->_oShop ) ) {
             return $this->_oShop;
         }
-*/
+
         $myConfig = $this->getConfig();
 
         if ( $iLangId === null ) {
@@ -1993,13 +2017,14 @@ class oxEmail extends PHPMailer
     protected function _processViewArray()
     {
         $oSmarty = $this->_getSmarty();
+        $oOutputProcessor = oxNew( "oxoutput" );
 
-        // assigning to smarty all setted view data
+        // processing all setted view data
         foreach ( $this->_aViewData as $sKey => $sValue ) {
             $oSmarty->assign( $sKey, $sValue );
         }
 
-        $oOutputProcessor = oxNew( "oxoutput" );
+        // processing assigned smarty variables
         $aNewSmartyArray  = $oOutputProcessor->processViewArray( $oSmarty->get_template_vars(), "oxemail" );
 
         foreach ( $aNewSmartyArray as $key => $val ) {
@@ -2096,6 +2121,20 @@ class oxEmail extends PHPMailer
     public function getViewData()
     {
         return $this->_aViewData;
+    }
+
+    /**
+     * Get view data item
+     *
+     * @param string $sKey view data array key
+     *
+     * @return misc
+     */
+    public function getViewDataItem( $sKey )
+    {
+        if ( isset($this->_aViewData[$sKey]) ) {
+            return $this->_aViewData;
+        }
     }
 
     /**
