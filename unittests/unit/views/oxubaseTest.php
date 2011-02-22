@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 33286 2011-02-15 15:47:38Z arvydas.vapsva $
+ * @version   SVN: $Id: oxubaseTest.php 33408 2011-02-21 13:43:35Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1874,6 +1874,14 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         modConfig::setParameter( 'invadr', 'testAddress' );
 
         $this->assertEquals( 'testAddress', $oUbase->getInvoiceAddress() );
+    }
+
+    public function testGetDeliveryAddress()
+    {
+        $oUbase = $this->getProxyClass( 'oxubase' );
+        modConfig::setParameter( 'deladr', 'testAddress' );
+
+        $this->assertEquals( 'testAddress', $oUbase->getDeliveryAddress() );
     }
 
     public function testSetGetInvoiceAddress()

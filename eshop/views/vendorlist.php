@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorlist.php 33264 2011-02-15 12:34:55Z arvydas.vapsva $
+ * @version   SVN: $Id: vendorlist.php 33397 2011-02-21 09:47:15Z arvydas.vapsva $
  */
 
 /**
@@ -107,20 +107,14 @@ class VendorList extends aList
         if ( ( $oVendorTree = $this->getVendorTree() ) ) {
             if ( ( $oVendor = $this->getActVendor() ) ) {
                 if ( $oVendor->getId() != 'root' ) {
-                    // load only articles which we show on screen
-                    $iNrofCatArticles = (int) $this->getConfig()->getConfigParam( 'iNrofCatArticles' );
-                    $iNrofCatArticles = $iNrofCatArticles ? $iNrofCatArticles : 1;
-
                     // load the articles
                     $this->getArticleList();
-                    $this->_iCntPages  = round( $this->_iAllArtCnt / $iNrofCatArticles + 0.49 );
 
+                    // processing list articles
+                    $this->_processListArticles();
                 }
             }
         }
-
-        // processing list articles
-        $this->_processListArticles();
 
         return $this->_sThisTemplate;
     }
@@ -174,16 +168,19 @@ class VendorList extends aList
 
         // load only articles which we show on screen
         $iNrofCatArticles = (int) $this->getConfig()->getConfigParam( 'iNrofCatArticles' );
-        $iNrofCatArticles = $iNrofCatArticles?$iNrofCatArticles:1;
+        $iNrofCatArticles = $iNrofCatArticles ? $iNrofCatArticles : 1;
 
         $oArtList = oxNew( 'oxarticlelist' );
         $oArtList->setSqlLimit( $iNrofCatArticles * $this->_getRequestPageNr(), $iNrofCatArticles );
         $oArtList->setCustomSorting( $this->getSortingSql( $sVendorId ) );
 
         // load the articles
-        $iArtCnt = $oArtList->loadVendorArticles( $sVendorId, $oVendor );
+        $this->_iAllArtCnt = $oArtList->loadVendorArticles( $sVendorId, $oVendor );
 
-        return array( $oArtList, $iArtCnt );
+        // counting pages
+        $this->_iCntPages = round( $this->_iAllArtCnt / $iNrofCatArticles + 0.49 );
+
+        return array( $oArtList, $this->_iAllArtCnt );
     }
 
     /**
@@ -283,8 +280,8 @@ class VendorList extends aList
             $this->_aArticleList = array();
             if ( ( $oVendorTree = $this->getVendorTree() ) ) {
                 if ( ( $oVendor = $this->getActVendor() ) && ( $oVendor->getId() != 'root' ) ) {
-                    list( $aArticleList, $this->_iAllArtCnt ) = $this->_loadArticles( $oVendor );
-                    if ( $this->_iAllArtCnt ) {
+                    list( $aArticleList, $iAllArtCnt ) = $this->_loadArticles( $oVendor );
+                    if ( $iAllArtCnt ) {
                         $this->_aArticleList = $aArticleList;
                     }
                 }

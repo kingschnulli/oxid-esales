@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpricealarm.php 33217 2011-02-11 16:06:47Z vilma $
+ * @version   SVN: $Id: oxpricealarm.php 33411 2011-02-21 14:24:44Z vilma $
  */
 
 /**
@@ -198,7 +198,6 @@ class oxPricealarm extends oxBase
         if ( $this->_oCurrency == null ) {
             $this->_oCurrency = false;
             $myConfig = $this->getConfig();
-            $myLang   = oxLang::getInstance();
             $oThisCurr = $myConfig->getCurrencyObject( $this->oxpricealarm__oxcurrency->value );
 
             // #869A we should perform currency conversion

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 33352 2011-02-18 13:18:40Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxemail.php 33398 2011-02-21 11:09:27Z rimvydas.paskevicius $
  */
 /**
  * Includes PHP mailer class.
@@ -512,7 +512,7 @@ class oxEmail extends PHPMailer
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "order", $oOrder);
+        $this->setViewData( "order", $oOrder);
 
         // Process view data array through oxoutput processor
         $this->_processViewArray();
@@ -582,7 +582,7 @@ class oxEmail extends PHPMailer
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "order", $oOrder );
+        $this->setViewData( "order", $oOrder );
 
         // Process view data array through oxoutput processor
         $this->_processViewArray();
@@ -635,9 +635,9 @@ class oxEmail extends PHPMailer
     public function sendRegisterConfirmEmail( $oUser, $sSubject = null )
     {
         // setting content ident
-        $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "contentident", "oxregisteraltemail" );
-        $oSmarty->assign( "contentplainident", "oxregisterplainaltemail" );
+
+        $this->setViewData( "contentident", "oxregisteraltemail" );
+        $this->setViewData( "contentplainident", "oxregisterplainaltemail" );
 
         // sending email
         return $this->sendRegisterEmail( $oUser, $sSubject );
@@ -799,7 +799,7 @@ class oxEmail extends PHPMailer
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "subscribeLink", $this->_getNewsSubsLink($oUser->oxuser__oxid->value) );
+        $this->setViewData( "subscribeLink", $this->_getNewsSubsLink($oUser->oxuser__oxid->value) );
         $this->setUser( $oUser );
 
         // Process view data array through oxoutput processor
@@ -903,8 +903,7 @@ class oxEmail extends PHPMailer
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "product", $oProduct );
-
+        $this->setViewData( "product", $oProduct );
         $this->setUser( $oParams );
 
         $sArticleUrl = $oProduct->getLink();
@@ -915,7 +914,7 @@ class oxEmail extends PHPMailer
             $sArticleUrl .= "su=" . $oActiveUser->getId();
         }
 
-        $oSmarty->assign( "sArticleUrl", $sArticleUrl );
+        $this->setViewData( "sArticleUrl", $sArticleUrl );
 
         // Process view data array through oxoutput processor
         $this->_processViewArray();
@@ -964,7 +963,7 @@ class oxEmail extends PHPMailer
             $sHomeUrl .= "su=" . $oActiveUser->getId();
         }
 
-        $oSmarty->assign( "sHomeUrl", $sHomeUrl );
+        $this->setViewData( "sHomeUrl", $sHomeUrl );
 
         // Process view data array through oxoutput processor
         $this->_processViewArray();
@@ -1014,11 +1013,11 @@ class oxEmail extends PHPMailer
         //create messages
         $oLang = oxLang::getInstance();
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "order", $oOrder );
+        $this->setViewData( "order", $oOrder );
 
         //deprecated var
         $oUser = oxNew( 'oxuser' );
-        $oSmarty->assign( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
+        $this->setViewData( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
 
         // Process view data array through oxoutput processor
         $this->_processViewArray();
@@ -1165,7 +1164,10 @@ class oxEmail extends PHPMailer
             $oLang = oxLang::getInstance();
 
             $oSmarty = $this->_getSmarty();
-            $oSmarty->assign( "articles", $oArticleList );
+            $this->setViewData( "articles", $oArticleList );
+
+            // Process view data array through oxoutput processor
+            $this->_processViewArray();
 
             $this->setRecipient( $oShop->oxshops__oxowneremail->value, $oShop->oxshops__oxname->getRawValue() );
             $this->setFrom( $oShop->oxshops__oxowneremail->value, $oShop->oxshops__oxname->getRawValue() );
@@ -1202,9 +1204,10 @@ class oxEmail extends PHPMailer
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "oViewConf", $oShop );
-
         $this->setUser( $oParams );
+
+        // Process view data array through oxoutput processor
+        $this->_processViewArray();
 
         $this->setBody( $oSmarty->fetch( $this->_sWishListTemplate ) );
         $this->setAltBody( $oSmarty->fetch( $this->_sWishListTemplatePlain ) );
@@ -1244,9 +1247,12 @@ class oxEmail extends PHPMailer
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "product", $oArticle );
-        $oSmarty->assign( "email", $aParams['email']);
-        $oSmarty->assign( "bidprice", $oLang->formatCurrency( $oAlarm->oxpricealarm__oxprice->value, $oCur ) );
+        $this->setViewData( "product", $oArticle );
+        $this->setViewData( "email", $aParams['email']);
+        $this->setViewData( "bidprice", $oLang->formatCurrency( $oAlarm->oxpricealarm__oxprice->value, $oCur ) );
+
+        // Process view data array through oxoutput processor
+        $this->_processViewArray();
 
         $this->setRecipient( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
         $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oLang->translateString( 'EMAIL_PRICEALARM_OWNER_SUBJECT', $iAlarmLang ) . " " . $oArticle->oxarticles__oxtitle->getRawValue() );
@@ -1280,11 +1286,14 @@ class oxEmail extends PHPMailer
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $oSmarty->assign( "product", $oAlarm->getArticle() );
-        $oSmarty->assign( "oPriceAlarm", $oAlarm );
-        $oSmarty->assign( "bidprice", $oAlarm->getFProposedPrice() );
-        $oSmarty->assign( "currency", $oAlarm->getPriceAlarmCurrency() );
-        $oSmarty->assign( "shopImageDir", $myConfig->getImageUrl( false, false ) );
+        $this->setViewData( "product", $oAlarm->getArticle() );
+        $this->setViewData( "oPriceAlarm", $oAlarm );
+        $this->setViewData( "bidprice", $oAlarm->getFProposedPrice() );
+        $this->setViewData( "currency", $oAlarm->getPriceAlarmCurrency() );
+        $this->setViewData( "shopImageDir", $myConfig->getImageUrl( false, false ) );
+
+        // Process view data array through oxoutput processor
+        $this->_processViewArray();
 
         $this->setRecipient( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
         $this->setSubject( $oShop->oxshops__oxname->value );
@@ -1985,6 +1994,11 @@ class oxEmail extends PHPMailer
     {
         $oSmarty = $this->_getSmarty();
 
+        // assigning to smarty all setted view data
+        foreach ( $this->_aViewData as $sKey => $sValue ) {
+            $oSmarty->assign( $sKey, $sValue );
+        }
+
         $oOutputProcessor = oxNew( "oxoutput" );
         $aNewSmartyArray  = $oOutputProcessor->processViewArray( $oSmarty->get_template_vars(), "oxemail" );
 
@@ -2059,6 +2073,29 @@ class oxEmail extends PHPMailer
         $oConfig = oxConfig::getInstance();
 
         return $oConfig->getActShopCurrencyObject();
+    }
+
+    /**
+     * Set view data to email view.
+     *
+     * @param string $sKey   key value
+     * @param object $sValue item value
+     *
+     * @return null
+     */
+    public function setViewData( $sKey, $sValue )
+    {
+        $this->_aViewData[$sKey] = $sValue;
+    }
+
+    /**
+     * Get view data
+     *
+     * @return array
+     */
+    public function getViewData()
+    {
+        return $this->_aViewData;
     }
 
     /**

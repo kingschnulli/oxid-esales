@@ -60,7 +60,7 @@
                 <td valign="top" class="edittext">&nbsp;[{ $listitem->oxorderarticles__oxartnum->value }]</td>
                 <td valign="top" class="edittext">&nbsp;[{ $listitem->oxorderarticles__oxtitle->getRawValue()|oxtruncate:20:""|strip_tags }][{if $listitem->oxwrapping__oxname->value}]&nbsp;([{$listitem->oxwrapping__oxname->value}])&nbsp;[{/if}]</td>
                 <td valign="top" class="edittext">&nbsp;[{ $listitem->oxorderarticles__oxselvariant->value }]</td>
-                <td valign="top" class="edittext">&nbsp;&nbsp;[{ $listitem->ftotbrutprice }] [{ $edit->oxorder__oxcurrency->value }]</td>
+                <td valign="top" class="edittext">&nbsp;&nbsp;[{ $listitem->getTotalBrutPriceFormated() }] [{ $edit->oxorder__oxcurrency->value }]</td>
                 [{ if $listitem->aPersParam }]
                 <td valign="top" class="edittext">
                     [{foreach key=sVar from=$listitem->aPersParam item=aParam}]
@@ -80,17 +80,17 @@
             <table border="0" cellspacing="0" cellpadding="0" id="order.info">
             <tr>
             <td class="edittext" height="15">[{ oxmultilang ident="GENERAL_IBRUTTO" }]</td>
-            <td class="edittext" align="right"><b>[{ $edit->ftotalbrutsum }]</b></td>
+            <td class="edittext" align="right"><b>[{ $edit->getTotalBrutSumFormated() }]</b></td>
             <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] [{ $currency->name}] [{/if}]</b></td>
             </tr>
             <tr>
             <td class="edittext" height="15">[{ oxmultilang ident="GENERAL_DISCOUNT" }]&nbsp;&nbsp;</td>
-            <td class="edittext" align="right"><b>- [{ $edit->fdiscount }]</b></td>
+            <td class="edittext" align="right"><b>- [{ $edit->getDiscountFormated() }]</b></td>
             <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] [{ $currency->name}] [{/if}]</b></td>
             </tr>
             <tr>
             <td class="edittext" height="15">[{ oxmultilang ident="GENERAL_INETTO" }]</td>
-            <td class="edittext" align="right"><b>[{ $edit->ftotalnetsum }]</b></td>
+            <td class="edittext" align="right"><b>[{ $edit->getTotalNetSumFormated() }]</b></td>
             <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] [{ $currency->name}] [{/if}]</b></td>
             </tr>
             [{foreach key=iVat from=$aProductVats item=dVatPrice}]
@@ -103,24 +103,24 @@
             [{if $edit->totalvouchers}]
             <tr>
             <td class="edittext" height="15">[{ oxmultilang ident="GENERAL_VOUCHERS" }]</td>
-            <td class="edittext" align="right"><b>- [{ $edit->totalvouchers }]</b></td>
+            <td class="edittext" align="right"><b>- [{ $edit->getTotalVouchersFormated() }]</b></td>
             <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] [{ $currency->name}] [{/if}]</b></td>
             </tr>
             [{/if}]
             <tr>
             <td class="edittext" height="15">[{ oxmultilang ident="GENERAL_DELIVERYCOST" }]&nbsp;&nbsp;</td>
-            <td class="edittext" align="right"><b>[{ $edit->fdelcost }]</b></td>
+            <td class="edittext" align="right"><b>[{ $edit->getDeliveryCostFormated() }]</b></td>
             <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] [{ $currency->name}] [{/if}]</b></td>
             </tr>
             <tr>
             <td class="edittext" height="15">[{ oxmultilang ident="GENERAL_PAYCOST" }]&nbsp;&nbsp;</td>
-            <td class="edittext" align="right"><b>[{ $edit->fpaycost }]</b></td>
+            <td class="edittext" align="right"><b>[{ $edit->getPayCostFormated() }]</b></td>
             <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] [{ $currency->name}] [{/if}]</b></td>
             </tr>
             [{if $edit->oxorder__oxwrapcost->value }]
             <tr>
             <td class="edittext" height="15">[{ oxmultilang ident="GENERAL_CARD" }]&nbsp;[{if $giftCard}]([{$giftCard->oxwrapping__oxname->value}])[{/if}]&nbsp;</td>
-            <td class="edittext" align="right"><b>[{ $edit->fwrapcost }]</b></td>
+            <td class="edittext" align="right"><b>[{ $edit->getWrapCostFormated() }]</b></td>
             <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] [{ $currency->name}] [{/if}]</b></td>
             </tr>
             [{/if}]
@@ -133,7 +133,7 @@
             [{/if}]
             <tr>
             <td class="edittext" height="25">[{ oxmultilang ident="GENERAL_SUMTOTAL" }]&nbsp;&nbsp;</td>
-            <td class="edittext" align="right"><b>[{ $edit->ftotalorder }]</b></td>
+            <td class="edittext" align="right"><b>[{ $edit->getTotalOrderSum() }]</b></td>
             <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] [{ $currency->name}] [{/if}]</b></td>
             </tr>
             </table>

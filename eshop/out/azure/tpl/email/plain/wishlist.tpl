@@ -1,3 +1,8 @@
+[{ assign var="shop"      value=$oEmailView->getShop() }]
+[{ assign var="oViewConf" value=$oEmailView->getViewConfig() }]
+[{ assign var="user"      value=$oEmailView->getUser() }]
+
+
 [{ oxmultilang ident="EMAIL_WISHLIST_HTML_MYWISHLISTBY" }] [{ $shop->oxshops__oxname->getRawValue() }]
 
 [{$userinfo->send_message}]

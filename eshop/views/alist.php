@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 33261 2011-02-15 12:31:55Z arvydas.vapsva $
+ * @version   SVN: $Id: alist.php 33397 2011-02-21 09:47:15Z arvydas.vapsva $
  */
 
 /**
@@ -40,7 +40,7 @@ class aList extends oxUBase
      * Number of possible pages.
      * @var integer
      */
-    protected $_iCntPages = null;
+    protected $_iCntPages = 0;
 
     /**
      * Current class default template name.

@@ -1,8 +1,7 @@
-[{ assign var="shop"     value=$oEmailView->getShop() }]
+[{ assign var="shop"      value=$oEmailView->getShop() }]
 [{ assign var="oViewConf" value=$oEmailView->getViewConfig() }]
-[{ assign var="currency" value=$oEmailView->getCurrency() }]
-[{ assign var="user"     value=$oEmailView->getUser() }]
-
+[{ assign var="currency"  value=$oEmailView->getCurrency() }]
+[{ assign var="user"      value=$oEmailView->getUser() }]
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>

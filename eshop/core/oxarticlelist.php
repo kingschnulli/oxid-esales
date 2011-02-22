@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 32386 2011-01-06 08:39:59Z arvydas $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 33388 2011-02-21 08:01:47Z linas.kukulskis $
  */
 
 /**
@@ -599,15 +599,11 @@ class oxArticleList extends oxList
      */
     public function loadPriceArticles( $dPriceFrom, $dPriceTo, $oCategory = null)
     {
-        $sArticleTable = getViewName('oxarticles');
-
         $sSelect =  $this->_getPriceSelect( $dPriceFrom, $dPriceTo );
 
         startProfile("loadPriceArticles");
         $this->selectString( $sSelect);
         stopProfile("loadPriceArticles");
-
-        //echo( $sSelect);
 
         if ( !$oCategory ) {
             return $this->count();
@@ -615,9 +611,12 @@ class oxArticleList extends oxList
 
         // #858A
         $iNumOfArticles = $oCategory->getNrOfArticles();
+
         if ( !isset($iNumOfArticles) || $iNumOfArticles == -1) {
+
             return oxUtilsCount::getInstance()->getPriceCatArticleCount($oCategory->getId(), $dPriceFrom, $dPriceTo );
         } else {
+
             return $oCategory->getNrOfArticles();
         }
     }

@@ -1,3 +1,4 @@
+[{assign var="invadr" value=$oView->getInvoiceAddress()}]
     <li>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_TITLE" }][{if $oView->isFieldRequired(oxuser__oxsal) }]<span class="req">*</span>[{/if}]</label>
         [{include file="form/fieldset/salutation.tpl" name="invadr[oxuser__oxsal]" value=$oxcmp_user->oxuser__oxsal->value }]

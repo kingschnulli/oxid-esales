@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticle.php 32880 2011-02-03 11:45:17Z sarunas $
+ * @version   SVN: $Id: oxorderarticle.php 33402 2011-02-21 12:25:32Z linas.kukulskis $
  */
 
 /**
@@ -668,4 +668,38 @@ class oxOrderArticle extends oxBase implements oxIArticle
     {
         return ( bool ) $this->oxorderarticles__oxisbundle->value;
     }
+
+    /**
+     * Get Total brut price formated
+     *
+     * @return string
+     */
+    public function getTotalBrutPriceFormated()
+    {
+        $oLang = oxLang::getInstance();
+        return $oLang->formatCurrency( $this->oxorderarticles__oxbrutprice->value );
+    }
+
+    /**
+     * Get  brut price formated
+     *
+     * @return string
+     */
+    public function getBrutPriceFormated()
+    {
+        $oLang = oxLang::getInstance();
+        return $oLang->formatCurrency(  $this->oxorderarticles__oxbprice->value );
+    }
+
+    /**
+     * Get Net price formated
+     *
+     * @return string
+     */
+    public function getNetPriceFormated()
+    {
+        $oLang = oxLang::getInstance();
+        return $oLang->formatCurrency(  $this->oxorderarticles__oxnprice->value );
+    }
+
 }

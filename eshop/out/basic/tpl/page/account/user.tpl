@@ -1,5 +1,6 @@
 [{assign var="template_title" value="ACCOUNT_USERTITLE"|oxmultilangassign }]
 [{include file="_header.tpl" title=$template_title location="ACCOUNT_USER_LOCATION"|oxmultilangassign|cat:$template_title}]
+[{assign var="invadr" value=$oView->getInvoiceAddress()}]
 
 [{include file="inc/account_header.tpl" active_link=3 }]<br>
 <strong id="test_addressSettingsHeader" class="boxhead">[{ $template_title }]</strong>
@@ -161,6 +162,7 @@
               <span class="btn"><input id="test_accUserSaveTop" type="submit" name="save" class="btn" value="[{ oxmultilang ident="ACCOUNT_USER_SAVE" }]"></span>
             </td>
           </tr>
+          [{assign var="delivadr" value=$oView->getDeliveryAddress()}]
           <tr class="th_sep">
             <th class="mid" colspan="2">
               [{ oxmultilang ident="ACCOUNT_USER_SHIPPINGADDRESSES" }]
@@ -264,6 +266,7 @@
           </tr>
           <tr>
             <td colspan="2" align="right">
+              <input type="hidden" name="blshowshipaddress" value="1">
               <span class="btn"><input id="test_accUserSaveBottom" type="submit" class="btn" name="save" value="[{ oxmultilang ident="ACCOUNT_USER_SAVE2" }]"></span>
             </td>
           </tr>

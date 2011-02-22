@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 32923 2011-02-04 14:35:22Z vilma $
+ * @version   SVN: $Id: oxcmp_user.php 33390 2011-02-21 08:32:21Z sarunas $
  */
 
 // defining login/logout states
@@ -111,9 +111,9 @@ class oxcmp_user extends oxView
     public function init()
     {
         // saving show/hide delivery address state
-        $blShow = oxConfig::getParameter( 'blshowshipaddress' ) ? true : false;
-        // @deprecated, remove this code line when basic theme support discontinued
-        $blShow = oxConfig::getParameter( 'blhideshipaddress' ) ? false : $blShow;
+        // @deprecated, remove blhideshipaddress checking when basic theme support discontinued
+        $blShow = (oxConfig::getParameter( 'blshowshipaddress' ) || oxSession::getVar( 'blshowshipaddress' )) && !(oxConfig::getParameter( 'blhideshipaddress' ) || oxSession::getVar( 'blhideshipaddress' ));
+
         oxSession::setVar( 'blshowshipaddress', $blShow );
 
         // load session user
@@ -672,7 +672,7 @@ class oxcmp_user extends oxView
     protected function _getDelAddressData()
     {
         // if user company name, user name and additional info has special chars
-        $aDelAdress = $aDeladr = oxConfig::getParameter( 'blshowshipaddress' ) ? oxConfig::getParameter( 'deladr', $this->_aRawShippingFields ) : array();
+        $aDelAdress = $aDeladr = (oxConfig::getParameter( 'blshowshipaddress' ) || oxSession::getVar( 'blshowshipaddress' )) ? oxConfig::getParameter( 'deladr', $this->_aRawShippingFields ) : array();
 
         if ( is_array( $aDeladr ) ) {
             // checking if data is filled

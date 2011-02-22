@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 33286 2011-02-15 15:47:38Z arvydas.vapsva $
+ * @version   SVN: $Id: oxubase.php 33405 2011-02-21 13:29:42Z vilma $
  */
 
 /**
@@ -528,6 +528,12 @@ class oxUBase extends oxView
      * @var array
      */
     protected $_aInvoiceAddress = null;
+
+    /**
+     * User delivery address
+     * @var array
+     */
+    protected $_aDeliveryAddress = null;
 
     /**
      * Logged in user name
@@ -3059,6 +3065,22 @@ class oxUBase extends oxView
             }
         }
         return $this->_aInvoiceAddress;
+    }
+
+    /**
+     * Template variable getter. Returns user delivery address
+     *
+     * @return array
+     */
+    public function getDeliveryAddress()
+    {
+        if ( $this->_aDeliveryAddress == null ) {
+            $aAddress = oxConfig::getParameter( 'deladr');
+            if ( $aAddress ) {
+                $this->_aDeliveryAddress = $aAddress;
+            }
+        }
+        return $this->_aDeliveryAddress;
     }
 
     /**

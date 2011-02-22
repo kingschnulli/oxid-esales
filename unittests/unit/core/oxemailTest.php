@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 33350 2011-02-18 13:11:46Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxemailTest.php 33398 2011-02-21 11:09:27Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -235,15 +235,15 @@ class Unit_Core_oxemailTest extends OxidTestCase
     public function testSendRegisterConfirmEmail()
     {
         $oUser = new oxuser();
-        $oSmarty = $this->getMock( "smarty", array( "assign" ) );
-        $oSmarty->expects( $this->at( 0 ) )->method( 'assign' )->with( $this->equalTo( "contentident" ), $this->equalTo( "oxregisteraltemail" ) );
-        $oSmarty->expects( $this->at( 1 ) )->method( 'assign' )->with( $this->equalTo( "contentplainident" ), $this->equalTo( "oxregisterplainaltemail" ) );
 
-        $oEmail = $this->getMock( "oxemail", array( "_getSmarty", "sendRegisterEmail" ) );
-        $oEmail->expects( $this->once() )->method( '_getSmarty' )->will($this->returnValue( $oSmarty ) );
+        $oEmail = $this->getMock( "oxemail", array( "sendRegisterEmail" ) );
         $oEmail->expects( $this->once() )->method( 'sendRegisterEmail' )->with( $this->equalTo( $oUser ), $this->equalTo( null ) );
 
         $oEmail->sendRegisterConfirmEmail( $oUser );
+
+        $aViewData = $oEmail->getViewData();
+        $this->assertEquals( $aViewData["contentident"], "oxregisteraltemail" );
+        $this->assertEquals( $aViewData["contentplainident"], "oxregisterplainaltemail" );
     }
 
     /**

@@ -1,8 +1,9 @@
+[{assign var="delivadr" value=$oView->getDeliveryAddress()}]
     <li>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_ADDRESSES" }]</label>
         <input type="hidden" name="changeClass" value="[{$onChangeClass|default:'account_user'}]">
         <select id="oxaddressid" name="oxaddressid">
-			<option value="-1">[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_NEWADDRESS" }]</option>
+            <option value="-1">[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_NEWADDRESS" }]</option>
             [{if $oxcmp_user }]
                 [{foreach from=$oxcmp_user->getUserAddresses() item=address }]
                     <option value="[{$address->oxaddress__oxid->value}]" [{if $address->isSelected()}][{assign var="delivadr" value=$address}]SELECTED[{/if}]>[{$address}]</option>

@@ -1,8 +1,12 @@
+[{ assign var="shop"     value=$oEmailView->getShop() }]
+[{ assign var="oViewConf" value=$oEmailView->getViewConfig() }]
+[{ assign var="user"     value=$oEmailView->getUser() }]
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
     <title>[{ oxmultilang ident="EMAIL_WISHLIST_HTML_WISHLISTBY" }] [{ $shop->oxshops__oxname->value }]</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]">
+    <meta http-equiv="Content-Type" content="text/html; charset=[{$oEmailView->getCharset()}]">
   </head>
   <body marginwidth="0" marginheight="0">
 
@@ -29,10 +33,10 @@
       <tr>
         <td bgcolor="#CECCCD" width="1" rowspan="2"><img src="[{$oViewConf->getImageUrl()}]leer.gif" width="1" border="0" hspace="0" vspace="0" alt=""></td>
         <td bgcolor="#FFFFFF"><font face="Verdana,Arial" size="2">
-          [{$userinfo->send_message|oxescape}]<br><br>
-          [{ oxmultilang ident="EMAIL_WISHLIST_HTML_TOMYWISHLISTCLICKHERE1" }] <a href="[{ $oViewConf->getBaseDir() }]index.php?cl=wishlist&wishid=[{$userinfo->send_id}]"><font face="Verdana,Arial" size="2"><b>[{ oxmultilang ident="EMAIL_WISHLIST_HTML_TOMYWISHLISTCLICKHERE2" }]</b></font></a><br><br>
+          [{$user->send_message|oxescape}]<br><br>
+          [{ oxmultilang ident="EMAIL_WISHLIST_HTML_TOMYWISHLISTCLICKHERE1" }] <a href="[{ $oViewConf->getBaseDir() }]index.php?cl=wishlist&wishid=[{$user->send_id}]"><font face="Verdana,Arial" size="2"><b>[{ oxmultilang ident="EMAIL_WISHLIST_HTML_TOMYWISHLISTCLICKHERE2" }]</b></font></a><br><br>
           [{ oxmultilang ident="EMAIL_WISHLIST_HTML_WITHLOVE" }]<br><br>
-          [{$userinfo->send_name|oxescape}]</font>
+          [{$user->send_name|oxescape}]</font>
         </td>
         <td bgcolor="#CECCCD" width="1" rowspan="2"><img src="[{$oViewConf->getImageUrl()}]leer.gif" width="1" border="0" hspace="0" vspace="0" alt=""></td>
       </tr>

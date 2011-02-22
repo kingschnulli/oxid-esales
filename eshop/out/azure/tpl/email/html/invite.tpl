@@ -1,8 +1,12 @@
+[{ assign var="shop"     value=$oEmailView->getShop() }]
+[{ assign var="oViewConf" value=$oEmailView->getViewConfig() }]
+[{ assign var="userinfo" value=$oEmailView->getUser() }]
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
     <title>[{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP" }] [{$userinfo->send_name|oxescape}], [{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP2" }] [{ $shop->oxshops__oxname->value }] [{ oxmultilang ident="EMAIL_INVITE_HTML_INVITETOSHOP3" }]</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=[{$charset}]">
+    <meta http-equiv="Content-Type" content="text/html; charset=[{$oEmailView->getCharset()}]">
   </head>
   <body marginwidth="0" marginheight="0">
 

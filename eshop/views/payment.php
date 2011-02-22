@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 32991 2011-02-07 14:23:27Z vilma $
+ * @version   SVN: $Id: payment.php 33382 2011-02-19 16:13:00Z sarunas $
  */
 
 /**
@@ -214,18 +214,16 @@ class Payment extends oxUBase
      */
     protected function _unsetPaymentErrors()
     {
-        $iPayError     = oxConfig::getParameter( 'payerror' );
-        $iPayErrorText = oxConfig::getParameter( 'payerrortext' );
+        $iPayError     = oxSession::getVar( 'payerror' );
+        $iPayErrorText = oxSession::getVar( 'payerrortext' );
 
         if ( $iPayError ) {
             oxSession::deleteVar( 'payerror' );
             $this->_sPaymentError = $iPayError;
-            //QWERTY
         }
         if ( $iPayErrorText ) {
             oxSession::deleteVar( 'payerrortext' );
             $this->_sPaymentErrorText = $iPayErrorText;
-            //QWERTY
         }
     }
 
@@ -239,10 +237,10 @@ class Payment extends oxUBase
     {
         $mySession = $this->getSession();
 
-        oxSession::setVar( 'sShipSet', oxConfig::getParameter( 'sShipSet' ) );
         $oBasket = $mySession->getBasket();
         $oBasket->setShipping( null );
         $oBasket->onUpdate();
+        oxSession::setVar( 'sShipSet', oxConfig::getParameter( 'sShipSet' ) );
     }
 
     /**
@@ -272,8 +270,12 @@ class Payment extends oxUBase
         if (! ($sShipSetId = oxConfig::getParameter( 'sShipSet' ))) {
             $sShipSetId = oxSession::getVar('sShipSet');
         }
-        $sPaymentId = oxConfig::getParameter( 'paymentid' );
-        $aDynvalue  = oxConfig::getParameter( 'dynvalue' );
+        if (! ($sPaymentId = oxConfig::getParameter( 'paymentid' ))) {
+            $sPaymentId = oxSession::getVar('paymentid');
+        }
+        if (! ($aDynvalue = oxConfig::getParameter( 'dynvalue' ))) {
+            $aDynvalue = oxSession::getVar('dynvalue');
+        }
 
         // A. additional protection
         if ( !$myConfig->getConfigParam( 'blOtherCountryOrder' ) && $sPaymentId == 'oxempty' ) {
@@ -333,12 +335,15 @@ class Payment extends oxUBase
             $this->_oPaymentList = false;
 
             $sActShipSet = oxConfig::getParameter( 'sShipSet' );
+            if ( !$sActShipSet ) {
+                 $sActShipSet = oxSession::getVar( 'sShipSet' );
+            }
+
             $oBasket = $this->getSession()->getBasket();
 
             // load sets, active set, and active set payment list
             list( $aAllSets, $sActShipSet, $aPaymentList ) = oxDeliverySetList::getInstance()->getDeliverySetData( $sActShipSet, $this->getUser(), $oBasket );
 
-            oxSession::setVar( 'sShipSet', $sActShipSet );
             $oBasket->setShipping( $sActShipSet );
 
             // calculating payment expences for preview for each payment
@@ -448,7 +453,7 @@ class Payment extends oxUBase
         if ( $this->_aDynValue === null ) {
             $this->_aDynValue = false;
 
-            // #1217 R
+            // flyspray#1217 (sarunas)
             if ( ( $aDynValue = oxSession::getVar( 'dynvalue' ) ) ) {
                 $this->_aDynValue  = $aDynValue;
             } else {
@@ -498,7 +503,10 @@ class Payment extends oxUBase
     public function getCheckedPaymentId()
     {
         if ( $this->_sCheckedPaymentId === null ) {
-            if ( ( $sPaymentID = oxConfig::getParameter( 'paymentid' ) ) ) {
+            if (! ($sPaymentID = oxConfig::getParameter( 'paymentid' ))) {
+                $sPaymentID = oxSession::getVar('paymentid');
+            }
+            if ( $sPaymentID ) {
                 $sCheckedId = $sPaymentID;
             } elseif ( ( $sSelectedPaymentID = oxSession::getVar( '_selected_paymentid' ) ) ) {
                 $sCheckedId = $sSelectedPaymentID;
