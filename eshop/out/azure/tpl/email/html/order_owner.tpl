@@ -153,7 +153,7 @@
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TOTALNET" }]
               </td>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                [{ $basket->getProductsNetPrice() }] [{ $currency->sign}]
+              [{ $basket->getProductsNetPrice() }] [{ $currency->sign}]
               </td>
             </tr>
             [{* VATs *}]
@@ -198,7 +198,7 @@
                   [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TOTALNET" }]
                 </td>
                 <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                  [{ $basket->getProductsNetPrice() }] [{ $currency->sign}]
+                [{ $basket->getProductsNetPrice() }] [{ $currency->sign}]
                 </td>
               </tr>
               [{* VATs *}]

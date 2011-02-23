@@ -848,6 +848,12 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_TSPROTECTION'              =>"Trusted Shops Käuferschutz",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX1'    =>"zzgl. Mwst.",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX2'    =>"% Betrag:",
+'EMAIL_ORDER_OWNER_HTML_ATENTIONGREETINGCARD'     =>"ACHTUNG Grußkarte:",
+'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT1'             =>"Versand. MwSt.",
+'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT2'             =>"% Betrag:",
+'EMAIL_ORDER_OWNER_HTML_MESSAGE'                  =>"Mitteilung:",
+'EMAIL_ORDER_OWNER_HTML_PAYMENTINFO'              =>"Bezahlinformation:",
+'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'           =>"<b>BEZAHLINFORMATIONEN AUSGESCHALTET</b> - um diese einzuschalten bitte email_order_owner_html.tpl aendern.",
 
 'ADD_RECOMM_SELECTLIST'                           => "Wählen Sie die Lieblingsliste",
 'ADD_RECOMM_ALLLISTS'                             => "alle Lieblingslisten",

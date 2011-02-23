@@ -22,7 +22,7 @@
 
         <div class="listDetails">
             <div class="titleBox">
-                <a href="[{$_productLink}]" class="title fx-shadow-top fn" title="[{ $product->oxarticles__oxtitle->value}]">
+                <a id="[{$testid}]" href="[{$_productLink}]" class="title fx-shadow-top fn" title="[{ $product->oxarticles__oxtitle->value}]">
                     [{ $product->oxarticles__oxtitle->value }]
                 </a>
             </div>
@@ -33,9 +33,8 @@
                     [{if $product->hasMdVariants() || $product->getDispSelList()}]
                         <a href="[{ $_productLink }]" >[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>
                     [{else}]
-                        [{assign var="actCategory" value=$oView->getActiveCategory()}]
                         [{assign var="listType" value=$oView->getListType()}]
-                        <a href="[{$actCategory->getLink()|oxaddparams:"listtype=`$listType`&amp;fnc=tobasket&amp;aid=`$product->oxarticles__oxid->value`&amp;am=1" }]" class="toCart" title="[{oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ADDTOCART" }]">[{oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ADDTOCART" }]</a>
+                        <a href="[{$oView->getLink()|oxaddparams:"listtype=`$listType`&amp;fnc=tobasket&amp;aid=`$product->oxarticles__oxid->value`&amp;am=1" }]" class="toCart" title="[{oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ADDTOCART" }]">[{oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ADDTOCART" }]</a>
                     [{/if}]
                     [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
                             <span class="deliveryInfo">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2" }]</a></span>
@@ -65,7 +64,7 @@
     [{/capture}]
 
 
-    <a href="[{$_productLink}]" class="gridPicture">
+    <a id="[{$testid}]" href="[{$_productLink}]" class="gridPicture">
         <img src="[{$product->getThumbnailUrl()}]" alt="[{ $product->oxarticles__oxtitle->value }]">
     </a>
 
@@ -125,13 +124,13 @@
 [{elseif $type eq "line"}]
     <form name="tobasket.[{$testid}]" action="[{ $oViewConf->getSelfActionLink() }]" method="post">
         <div class="pictureBox">
-            <a href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}]">
+            <a id="[{$testid}]" href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}]">
                 <img src="[{$product->getThumbnailUrl()}]" alt="[{ $product->oxarticles__oxtitle->value}]">
             </a>
         </div>
         <div class="infoBox">
             <div class="info">
-                <a href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}]">[{ $product->oxarticles__oxtitle->value }]</a>
+                <a id="[{$testid}]" href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}]">[{ $product->oxarticles__oxtitle->value }]</a>
                 <span class="productNr">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_NR" }] [{ $product->oxarticles__oxartnum->value }]</span>
                 [{if $recommid }]
                     <div>[{ $product->text }]</div>

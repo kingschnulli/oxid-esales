@@ -741,9 +741,9 @@ $aLang = array(
 'PAGE_DETAILS_TAGS_SUBMIT'                         => "Submit",
 
 'PAGE_DETAILS_DELIVERYTIME_DELIVERYTIME'           => "Delivery time:",
-'PAGE_DETAILS_DELIVERYTIME_DAY'                    => "days",
-'PAGE_DETAILS_DELIVERYTIME_WEEK'                   => "weeks",
-'PAGE_DETAILS_DELIVERYTIME_MONTH'                  => "months",
+'PAGE_DETAILS_DELIVERYTIME_DAY'                    => "day",
+'PAGE_DETAILS_DELIVERYTIME_WEEK'                   => "week",
+'PAGE_DETAILS_DELIVERYTIME_MONTH'                  => "month",
 
 'PAGE_DETAILS_PERSPARAM_LABEL'                     => "Label:",
 'PAGE_DETAILS_CUSTOMERS_ALSO_BOUGHT'               => "Customer who bought this product also bought:",
@@ -856,6 +856,14 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_TSPROTECTION'              =>"Trusted Shops buyer protection",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX1'    =>"plus VAT",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX2'    =>"% Amount:",
+'EMAIL_ORDER_OWNER_HTML_ATENTIONGREETINGCARD'     =>"Attention Greeting Card:",
+'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT1'             =>"plus VAT",
+'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT2'             =>"% Amount:",
+'EMAIL_ORDER_OWNER_HTML_MESSAGE'                  =>"Message:",
+'EMAIL_ORDER_OWNER_HTML_PAYMENTINFO'              =>"",
+'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'           =>"",
+
+
 
 'ADD_RECOMM_SELECTLIST'                           => "Select Listmania list",
 'ADD_RECOMM_ALLLISTS'                             => "all Listmania",
@@ -1066,11 +1074,12 @@ $aLang = array(
 
 'FORM_FIELDSET_STATE_PROMTSTRING'                         => "Please select a state",
 
-
-'PAGE_DETAILS_DELIVERYTIME_DAYS'                                    => "Days",
-'PAGE_DETAILS_DELIVERYTIME_MONTHS'                                  => "Months",
-'PAGE_DETAILS_DELIVERYTIME_WEEKS'                                   => "Weeks",
+'PAGE_DETAILS_DELIVERYTIME_DAYS'                            => "days",
+'PAGE_DETAILS_DELIVERYTIME_MONTHS'                          => "months",
+'PAGE_DETAILS_DELIVERYTIME_WEEKS'                           => "weeks",
 
 'PAGE_SHOP_MALLSTART_PLEASECHOOSE'                        => "Please choose:",
+
+
 
 );

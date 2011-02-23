@@ -28,7 +28,7 @@
 [{ if $basketitem->getPersParams() }][{foreach key=sVar from=$basketitem->getPersParams() item=aParam}][{$sVar}] : [{$aParam}][{/foreach}][{/if}]
 [{if $oViewConf->getShowGiftWrapping() }]
 [{assign var="oWrapping" value=$basketitem->getWrapping() }]
-[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_WRAPPING" }] [{ if !$basketitem->getWrappingId() }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_NONE" }][{else}][{$oWrapping->oxwrapping__oxname->value()}][{/if}]
+[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_WRAPPING" }] [{ if !$basketitem->getWrappingId() }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_NONE" }][{else}][{$oWrapping->oxwrapping__oxname->value}][{/if}]
 [{/if}]
 [{ if $basketproduct->oxarticles__oxorderinfo->value }][{ $basketproduct->oxarticles__oxorderinfo->getRawValue() }][{/if}]
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_UNITPRICE" }] [{ $basketitem->getFUnitPrice() }] [{ $currency->name}]

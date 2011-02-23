@@ -178,6 +178,8 @@
     </form>
     [{/if}]
 
+
+
     [{if $removeFunction && $recommid }]
     <form action="[{ $oViewConf->getSelfActionLink() }]" method="post">
       <div>

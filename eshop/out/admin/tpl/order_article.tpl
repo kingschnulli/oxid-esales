@@ -114,8 +114,8 @@ function StornoThisArticle( sID)
     <td valign="top" class="[{ $listclass}]">[{if $listitem->oxarticles__oxid->value}]<a href="Javascript:editThis('[{ $listitem->oxarticles__oxid->value }]');" class="[{ $listclass}]">[{/if}][{ $listitem->oxorderarticles__oxtitle->value|oxtruncate:20:""|strip_tags }]</a></td>
     <td valign="top" class="[{ $listclass}]">[{ $listitem->oxorderarticles__oxselvariant->value }]</td>
     <td valign="top" class="[{ $listclass}]">
-        [{ if $listitem->aPersParam }]
-            [{foreach key=sVar from=$listitem->aPersParam item=aParam}]
+        [{ if $listitem->getPersParams() }]
+            [{foreach key=sVar from=$listitem->getPersParams() item=aParam}]
                      &nbsp;&nbsp;,&nbsp;<em>[{$sVar}] : [{$aParam}]</em>
             [{/foreach}]
         [{/if}]

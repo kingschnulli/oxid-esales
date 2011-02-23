@@ -50,7 +50,7 @@
 </div>
 
 [{if $actvrecommlist }]
-  [{if $oView->getActiveRecommItems() }]
+  [{if $oView->getArticleList() }]
     [{include file="inc/recommlist.tpl" removeFunction="removeArticle" recommid=$actvrecommlist->getId()}]
   [{/if}]
 [{/if}]

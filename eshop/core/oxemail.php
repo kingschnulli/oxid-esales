@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 33418 2011-02-21 16:19:54Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxemail.php 33444 2011-02-22 16:17:59Z linas.kukulskis $
  */
 /**
  * Includes PHP mailer class.

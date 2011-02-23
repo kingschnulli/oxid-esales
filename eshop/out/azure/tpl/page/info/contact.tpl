@@ -1,7 +1,8 @@
 [{capture append="oxidBlock_content"}]
     [{if $oView->getContactSendStatus() }]
-        [{assign var="_statusMessage" value="PAGE_INFO_CONTACT_THANKYOU1"|oxmultilangassign|cat:" "|cat:$oxcmp_shop->oxshops__oxname->value|cat:" "|cat:"PAGE_INFO_CONTACT_THANKYOU2"|oxmultilangassign}]
-        [{include file="message/notice.tpl" statusMessage=$_statusMessage}]
+        [{assign var="_statusMessage" value="PAGE_INFO_CONTACT_THANKYOU1"|oxmultilangassign|cat:" "|cat:$oxcmp_shop->oxshops__oxname->value|cat:" "}]
+        [{assign var="_statusMessageSuffix" value="PAGE_INFO_CONTACT_THANKYOU2"|oxmultilangassign}]
+        [{include file="message/notice.tpl" statusMessage=$_statusMessage|cat:$_statusMessageSuffix}]
     [{/if }]
     <h1 class="pageHead">[{ $oxcmp_shop->oxshops__oxcompany->value }]</h1>
     <ul>

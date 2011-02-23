@@ -61,9 +61,9 @@
                 <td valign="top" class="edittext">&nbsp;[{ $listitem->oxorderarticles__oxtitle->getRawValue()|oxtruncate:20:""|strip_tags }][{if $listitem->oxwrapping__oxname->value}]&nbsp;([{$listitem->oxwrapping__oxname->value}])&nbsp;[{/if}]</td>
                 <td valign="top" class="edittext">&nbsp;[{ $listitem->oxorderarticles__oxselvariant->value }]</td>
                 <td valign="top" class="edittext">&nbsp;&nbsp;[{ $listitem->getTotalBrutPriceFormated() }] [{ $edit->oxorder__oxcurrency->value }]</td>
-                [{ if $listitem->aPersParam }]
+                [{ if $listitem->getPersParams() }]
                 <td valign="top" class="edittext">
-                    [{foreach key=sVar from=$listitem->aPersParam item=aParam}]
+                    [{foreach key=sVar from=$listitem->getPersParams() item=aParam}]
                              &nbsp;&nbsp;,&nbsp;<em>[{$sVar}] : [{$aParam}]</em>
                     [{/foreach}]
                 </td>

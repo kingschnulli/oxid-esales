@@ -7,7 +7,6 @@
         [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxusername}]
     </p>
 </li>
-
 <li class="oxValidate_pwd[{if $aErrors}] oxError[{/if}][{if $aErrors.oxuser__oxpassword}] oxInValid[{/if}]" [{if !$aErrors.oxuser__oxpassword}]style="display:none;"[{/if}]>
     <label>[{oxmultilang ident="FORM_FIELDSET_USER_BILLING_PWD"}] <span class="req">*</span></label>
     <input class="oxValidate oxValidate_notEmpty textbox" type="password" size="37" name="user_password">

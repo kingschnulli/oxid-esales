@@ -4,13 +4,13 @@
     <div class="listmaniaView clear">
         [{include file="form/recommendation_edit.tpl" actvrecommlist=$_actvrecommlist}]
     </div>
-    [{if $oView->getActiveRecommList() && $oView->getActiveRecommItems()}]
+    [{if $oView->getActiveRecommList() && $oView->getArticleList()}]
         [{assign var="blEdit" value=true }]
-        [{include file="widget/product/list.tpl" type="line" listId="recommendProductList" products=$oView->getActiveRecommItems() recommid=$_actvrecommlist->getId() removeFunction="removeArticle"}]
+        [{include file="widget/product/list.tpl" type="line" listId="recommendProductList" products=$oView->getArticleList() recommid=$_actvrecommlist->getId() removeFunction="removeArticle"}]
         [{include file="widget/locator/listlocator.tpl" locator=$oView->getPageNavigation() place="bottom"}]
     [{else}]
         [{assign var="blEdit" value=true }]
-        [{include file="page/recommendations/list.tpl"}]
+        [{include file="page/recommendations/inc/list.tpl"}]
     [{/if}]
 [{/capture}]
 [{capture append="oxidBlock_sidebar"}]

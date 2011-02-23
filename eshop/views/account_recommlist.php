@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account_recommlist.php 32923 2011-02-04 14:35:22Z vilma $
+ * @version   SVN: $Id: account_recommlist.php 33445 2011-02-22 16:18:46Z linas.kukulskis $
  */
 
 /**
@@ -148,7 +148,7 @@ class Account_Recommlist extends Account
      *
      * @return null
      */
-    public function getActiveRecommItems()
+    public function getArticleList()
     {
         if ( $this->_oActRecommListArticles === null ) {
             $this->_oActRecommListArticles = false;

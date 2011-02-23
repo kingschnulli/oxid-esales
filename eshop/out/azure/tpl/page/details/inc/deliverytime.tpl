@@ -1,5 +1,5 @@
 [{if $oDetailsProduct->oxarticles__oxmindeltime->value || $oDetailsProduct->oxarticles__oxmaxdeltime->value}]
-<span id="productDeltime">
+<span id="productDeliveryTime">
 [{oxmultilang ident="PAGE_DETAILS_DELIVERYTIME_DELIVERYTIME"}]
 [{if $oDetailsProduct->oxarticles__oxmindeltime->value && $oDetailsProduct->oxarticles__oxmindeltime->value != $oDetailsProduct->oxarticles__oxmaxdeltime->value}]
     [{$oDetailsProduct->oxarticles__oxmindeltime->value}] -

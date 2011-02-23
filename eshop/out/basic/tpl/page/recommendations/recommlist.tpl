@@ -46,7 +46,7 @@
       [{include file="inc/list_locator.tpl" PageLoc="Bottom" where="Bottom"}]
     [{/if}]
       [{if $oView->getArticleList() }]
-        [{include file="inc/recommlist.tpl" recommid=$_actvrecommlist->getId()}]
+        [{include file="inc/recommlist.tpl" removeFunction="removeFunction" recommid=$_actvrecommlist->getId()}]
       [{/if }]
     [{if $oView->getArticleCount() }]
       [{include file="inc/list_locator.tpl" PageLoc="Bottom" where="Bottom"}]

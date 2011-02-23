@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: accountRecommlistTest.php 32932 2011-02-04 16:24:54Z vilma $
+ * @version   SVN: $Id: accountRecommlistTest.php 33442 2011-02-22 16:14:37Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -285,14 +285,14 @@ class Unit_Views_accountRecommlistTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetActiveRecommItems()
+    public function testGetArticleList()
     {
         modConfig::setParameter( 'recommid', 'testlist' );
         $oRecomm = $this->getProxyClass( "account_recommlist" );
         $oRecommtList = new oxRecommList();
         $oRecommtList->load('testlist');
         $oRecomm->setNonPublicVar( "_oActRecommList", $oRecommtList );
-        $this->assertEquals( 1, count( $oRecomm->getActiveRecommItems() ) );
+        $this->assertEquals( 1, count( $oRecomm->getArticleList() ) );
     }
 
     /**
