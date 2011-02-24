@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 33388 2011-02-21 08:01:47Z linas.kukulskis $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 33480 2011-02-23 14:43:14Z arvydas.vapsva $
  */
 
 /**
@@ -47,13 +47,6 @@ class oxArticleList extends oxList
      * @var bool
      */
     protected $_blLoadSelectLists = false;
-
-    /**
-     * Set to true if article price should be loaded
-     *
-     * @var bool
-     */
-    protected $_blLoadPrice = true;
 
     /**
      * Set Custom Sorting, simply an order by....
@@ -95,10 +88,6 @@ class oxArticleList extends oxList
      */
     public function selectString( $sSelect )
     {
-        if ( !$this->isAdmin() ) {
-            $this->_aAssignCallbackPrepend = ( !$this->_blLoadPrice )?array( oxNew("oxarticle"), 'disablePriceLoad'):null;
-        }
-
         startProfile("loadinglists");
         $oRes = parent::selectString( $sSelect );
         stopProfile("loadinglists");
@@ -232,7 +221,7 @@ class oxArticleList extends oxList
         $myConfig = $this->getConfig();
 
         if ( !$myConfig->getConfigParam( 'bl_perfLoadPriceForAddList' ) ) {
-            $this->_blLoadPrice = false;
+            $this->getBaseObject()->disablePriceLoad();
         }
 
         $this->_aArray = array();
@@ -275,7 +264,7 @@ class oxArticleList extends oxList
         $myConfig = $this->getConfig();
 
         if ( !$myConfig->getConfigParam( 'bl_perfLoadPriceForAddList' ) ) {
-            $this->_blLoadPrice = false;
+            $this->getBaseObject()->disablePriceLoad();
         }
 
         switch( $myConfig->getConfigParam( 'iTop5Mode' ) ) {

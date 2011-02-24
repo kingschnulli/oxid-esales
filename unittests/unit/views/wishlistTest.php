@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: wishlistTest.php 33100 2011-02-09 14:47:36Z linas.kukulskis $
+ * @version   SVN: $Id: wishlistTest.php 33449 2011-02-23 07:34:29Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -172,5 +172,16 @@ class Unit_Views_wishlistTest extends OxidTestCase
         $this->assertEquals( 'page/wishlist/wishlist.tpl', $oWishList->render() );
     }
 
+    /**
+     * Testing Account_RecommList::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oWishList = new Wishlist();
+
+        $this->assertEquals(1, count($oWishList->getBreadCrumb()));
+    }
 
 }

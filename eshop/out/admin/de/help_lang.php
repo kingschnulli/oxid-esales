@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 33200 2011-02-11 09:16:52Z arvydas.vapsva $
+ * @version   SVN: $Id: help_lang.php 33460 2011-02-23 08:10:23Z alfonsas $
  */
 
 /**
@@ -484,7 +484,7 @@ $aLang =  array(
                                                     '</ul>' .
                                                     'Sie können auch negative Werte eingeben. Dadurch wird der eingegebene Wert abgezogen: Wenn Sie z. B. <span class="userinput_or_code">-2</span> eingeben und <span class="userinput_or_code">%</span> auswählen, werden 2% des Einkaufswerts abgezogen.',
 
-'HELP_PAYMENT_MAIN_ADDSUMRULES'                 => '[tr] Rules defines what basket costs must be included while calculating payment Surcharge/Discount (none selected = <b>1</b>-<b>4</b> selected)',
+'HELP_PAYMENT_MAIN_ADDSUMRULES'                 => '[tr]Zur Berechnung von Rabatten oder Aufschlägen wird der Warenkorbwert als Basissumme verwendet. Stellen Sie ein, welche Werte in die Berechung hierfür in den Warenkorbwerts einbezogen werden (none selected = <b>1</b>-<b>4</b> selected)',
 
 
 'HELP_SELECTLIST_MAIN_TITLEIDENT'               =>  'Bei <span class="navipath_or_inputname">Arbeitstitel</span> können Sie einen zusätzlichen Titel eingeben, der den Benutzern Ihres eShops nicht angezeigt wird. Sie können den Arbeitstitel dazu verwenden, um ähnliche Auswahllisten zu unterscheiden (z. B. <span class="filename_filepath_or_italic">Größe für Hosen</span> und <span class="filename_filepath_or_italic">Größe für Hemden</span>).',

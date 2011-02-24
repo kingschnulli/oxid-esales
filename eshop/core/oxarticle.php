@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 33248 2011-02-14 15:40:31Z sarunas $
+ * @version   SVN: $Id: oxarticle.php 33480 2011-02-23 14:43:14Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -602,13 +602,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Disables article price loading. Should be called before assign(), or load()
      *
-     * @param objetc $oArticle article object
-     *
      * @return null
      */
-    public function disablePriceLoad( $oArticle )
+    public function disablePriceLoad()
     {
-        $oArticle->_blLoadPrice = false;
+        $this->_blLoadPrice = false;
     }
 
     /**

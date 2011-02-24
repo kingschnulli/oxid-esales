@@ -5,8 +5,9 @@
     [{/if }]
     [{assign var="editval" value=$oView->getEnteredData() }]
     [{if $oView->isWishListEmailSent() }]
-        [{assign var="_statusMessage" value="PAGE_ACCOUNT_WISHLIST_SENDSUCCESSFULLY1"|oxmultilangassign|cat:" "|cat:$editval->rec_email|cat:" "|cat:"PAGE_ACCOUNT_WISHLIST_SENDSUCCESSFULLY2"|oxmultilangassign}]
-        [{include file="message/notice.tpl" statusMessage=$_statusMessage}]
+        [{assign var="_statusMessage" value="PAGE_ACCOUNT_WISHLIST_SENDSUCCESSFULLY1"|oxmultilangassign|cat:" "|cat:$editval->rec_email|cat:" "}]
+        [{assign var="_statusMessageSuffix" value="PAGE_ACCOUNT_WISHLIST_SENDSUCCESSFULLY2"|oxmultilangassign}]
+        [{include file="message/notice.tpl" statusMessage=$_statusMessage|cat:$_statusMessageSuffix}]
     [{/if }]
     <h1 class="pageHead">[{ oxmultilang ident="PAGE_ACCOUNT_WISHLIST_TITLE" }]</h1>
     <div class="wishlistView clear">

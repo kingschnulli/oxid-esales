@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 33405 2011-02-21 13:29:42Z vilma $
+ * @version   SVN: $Id: oxubase.php 33471 2011-02-23 12:00:40Z sarunas $
  */
 
 /**
@@ -1561,6 +1561,8 @@ class oxUBase extends oxView
         $aParams['mnid'] = oxConfig::getParameter( 'mnid' );
 
         $aParams['listtype'] = $this->getListType();
+        $aParams['ldtype'] = $this->getListDisplayType();
+
         $aParams['recommid'] = oxConfig::getParameter( 'recommid' );
 
         $aParams['searchrecomm'] = oxConfig::getParameter( 'searchrecomm', true );

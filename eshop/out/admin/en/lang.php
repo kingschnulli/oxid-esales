@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 33361 2011-02-18 15:12:39Z sarunas $
+ * @version   SVN: $Id: lang.php 33448 2011-02-22 16:51:18Z ralf.trapp $
  */
 
 /*
@@ -187,7 +187,7 @@ $aLang = array(
 'GENERAL_CATEGORYSELECT'                        => 'Please select Category',
 'GENERAL_CLICKFORDETAILS'                       => '(Click for Details)',
 'GENERAL_COMPANY'                               => 'Company',
-'GENERAL_CHANGEPRODUCT'                         => '[tr] Change',
+'GENERAL_CHANGEPRODUCT'                         => 'Change',
 'GENERAL_COUNTRY'                               => 'Country',
 'GENERAL_DATE'                                  => 'Date',
 'GENERAL_DELETE'                                => 'Delete',
@@ -767,7 +767,7 @@ $aLang = array(
 'EXCEPTION_NODESCRIPTIONADDED'                  => 'Please enter description',
 'EXCEPTION_NOMEDIAADDED'                        => 'Please enter existing media URL or upload the file',
 'EXCEPTION_COULDNOTWRITETOFILE'                 => 'Could not write to file',
-'EXCEPTION_FILENOTFOUND'                        => 'File not found (see log file for details)',
+'EXCEPTION_FILENOTFOUND'                        => 'File not found (see EXCEPTION_LOG.txt for details)',
 'EXCEPTION_THEME_NOT_LOADED'                    => 'Theme could not be loaded',
 'EXCEPTION_PARENT_VERSION_UNSPECIFIED'          => 'Parent theme did not specify version',
 'EXCEPTION_UNSPECIFIED_PARENT_VERSIONS'         => 'Compatible parent theme versions not specified',
@@ -1180,12 +1180,12 @@ $aLang = array(
 'PAYMENT_LIST_MENUITEM'                         => 'Shop Settings',
 'PAYMENT_LIST_MENUSUBITEM'                      => 'Payment Methods',
 'PAYMENT_MAIN_ADDPRICE'                         => 'Price Surcharge/Discount',
-'PAYMENT_MAIN_ADDSUMRULES'                      => '[tr] Calculate Price<br>Surcharge/Discount on',
-'PAYMENT_MAIN_ADDSUMRULES_ALLGOODS'             => '[tr] 1. Value of all goods in basket',
-'PAYMENT_MAIN_ADDSUMRULES_DISCOUNTS'            => '[tr] 2. Discounts',
-'PAYMENT_MAIN_ADDSUMRULES_VOUCHERS'             => '[tr] 3. Vouchers',
-'PAYMENT_MAIN_ADDSUMRULES_SHIPCOSTS'            => '[tr] 4. Shipping costs',
-'PAYMENT_MAIN_ADDSUMRULES_GIFTS'                => '[tr] 5. Gift Wrapping/Greeting Card',
+'PAYMENT_MAIN_ADDSUMRULES'                      => 'Calculate price<br>surcharge/discount on',
+'PAYMENT_MAIN_ADDSUMRULES_ALLGOODS'             => '1. Value of all goods in basket',
+'PAYMENT_MAIN_ADDSUMRULES_DISCOUNTS'            => '2. Discounts',
+'PAYMENT_MAIN_ADDSUMRULES_VOUCHERS'             => '3. Vouchers',
+'PAYMENT_MAIN_ADDSUMRULES_SHIPCOSTS'            => '4. Shipping costs',
+'PAYMENT_MAIN_ADDSUMRULES_GIFTS'                => '5. Gift Wrapping/Greeting Card',
 'PAYMENT_MAIN_NAME'                             => 'Name',
 'PAYMENT_MAIN_FROMBONI'                         => 'min. Credit Rating',
 'PAYMENT_MAIN_AMOUNT'                           => 'Purchase Price',

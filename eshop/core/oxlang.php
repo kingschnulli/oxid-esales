@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 33290 2011-02-15 15:57:43Z arvydas.vapsva $
+ * @version   SVN: $Id: oxlang.php 33474 2011-02-23 13:29:51Z arvydas.vapsva $
  */
 
 /**
@@ -232,35 +232,25 @@ class oxLang extends oxSuperCfg
      */
     public function getEditLanguage()
     {
-        if ( $this->_iEditLanguageId !== null ) {
-            return $this->_iEditLanguageId;
-        }
+        if ( $this->_iEditLanguageId === null ) {
 
-        if ( !$this->isAdmin() ) {
-            $this->_iEditLanguageId = $this->getBaseLanguage();
-        } else {
-
-            $this->_iEditLanguageId = oxConfig::getParameter( 'editlanguage' );
-
-            // check if we really need to set the new language
-            if ( "saveinnlang" == $this->getConfig()->getActiveView()->getFncName() ) {
-                $iNewLanguage = oxConfig::getParameter( "new_lang");
-            }
-
-            if ( isset( $iNewLanguage ) ) {
-                $this->_iEditLanguageId = $iNewLanguage;
-                oxSession::deleteVar( "new_lang" );
-            }
-
-            if ( is_null( $this->_iEditLanguageId ) ) {
-
+            if ( !$this->isAdmin() ) {
                 $this->_iEditLanguageId = $this->getBaseLanguage();
+            } else {
+
+                // choosing language ident
+                $iLang = oxConfig::getParameter( 'new_lang' );
+                $iLang = ( $iLang === null ) ? oxConfig::getParameter( 'editlanguage' ) : $iLang;
+                $iLang = ( $iLang === null ) ? oxSession::getVar( 'editlanguage' ) : $iLang;
+                $iLang = ( $iLang === null ) ? $this->getBaseLanguage() : $iLang;
+
+                // validating language
+                $this->_iEditLanguageId = $this->validateLanguage( $iLang );
+
+                // writing to session
+                oxSession::setVar( 'editlanguage', $this->_iEditLanguageId );
             }
         }
-
-        // validating language
-        $this->_iEditLanguageId = $this->validateLanguage( $this->_iEditLanguageId );
-
         return $this->_iEditLanguageId;
     }
 

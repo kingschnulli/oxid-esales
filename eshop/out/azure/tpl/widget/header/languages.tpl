@@ -9,7 +9,7 @@
         [{/if}]
             <li><a class="flag [{$_lng->abbr }] [{if $_lng->selected}]selected[{/if}]" href="[{$_lng->link|oxaddparams:$oView->getDynUrlParams()}]" hreflang="[{$_lng->abbr }]"><span>[{$_lng->name}]</span></a></li>
         [{/foreach}]
-    [{/capture}]  
+    [{/capture}]
     <p id="languageTrigger" class="selectedValue">
         [{$smarty.capture.languageSelected}]
     </p>

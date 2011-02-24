@@ -1394,7 +1394,7 @@ a.readMore:hover {
     border: 1px solid #676767;
     width: 318px;
     position: absolute;
-    z-index: 11;
+    z-index: 111;
     right: -7px;
     top: -30px;
     padding: 7px 0 10px 0;

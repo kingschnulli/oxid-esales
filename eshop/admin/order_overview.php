@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order_overview.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: order_overview.php 33467 2011-02-23 11:40:19Z arvydas.vapsva $
  */
 
 /**
@@ -74,7 +74,6 @@ class Order_Overview extends oxAdminDetails
         $this->_aViewData["afolder"] = $myConfig->getConfigParam( 'aOrderfolder' );
         $this->_aViewData["sfolder"] = $myConfig->getConfigParam( 'aOrderfolder' );
             $this->_aViewData["alangs"] = $oLang->getLanguageNames();
-
 
         $this->_aViewData["currency"] = $oCur;
 

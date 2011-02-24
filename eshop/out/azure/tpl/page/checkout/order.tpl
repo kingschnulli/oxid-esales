@@ -104,7 +104,7 @@
     </dl>
 
     <div>
-        [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_WHATIWANTEDTOSAY" }]: [{ $oView->getOrderRemark() }]
+        [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_WHATIWANTEDTOSAY" }] [{ $oView->getOrderRemark() }]
     </div>
     </div>
 

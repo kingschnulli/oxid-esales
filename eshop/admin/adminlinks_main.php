@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: adminlinks_main.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: adminlinks_main.php 33474 2011-02-23 13:29:51Z arvydas.vapsva $
  */
 
 /**
@@ -154,8 +154,7 @@ class Adminlinks_Main extends oxAdminDetails
         $oLinks->assign( $aParams);
 
         // apply new language
-        $sNewLanguage = oxConfig::getParameter( "new_lang");
-        $oLinks->setLanguage( $sNewLanguage);
+        $oLinks->setLanguage( oxConfig::getParameter( "new_lang" ) );
         $oLinks->save();
 
         // set oxid if inserted

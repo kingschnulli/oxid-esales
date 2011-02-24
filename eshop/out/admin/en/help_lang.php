@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 33200 2011-02-11 09:16:52Z arvydas.vapsva $
+ * @version   SVN: $Id: help_lang.php 33448 2011-02-22 16:51:18Z ralf.trapp $
  */
 
 /**
@@ -477,7 +477,7 @@ $aLang =  array(
                                                     '<ul><li>With <span class="userinput_or_code">abs</span> the price is entered for the payment method (e.g.: if you enter <span class="userinput_or_code">7.50</span> a price of EUR 7.50 is calculated.)</li>' .
                                                     '<li>With <span class="userinput_or_code">%</span>, the price is calculated relative to the purchase price (e.g.: if you enter <span class="userinput_or_code">2</span>, the price is 2 percent of the purchase price)</li></ul>',
 
-'HELP_PAYMENT_MAIN_ADDSUMRULES'                 => '[tr] Rules defines what basket costs must be included while calculating payment Surcharge/Discount (none selected = <b>1</b>-<b>4</b> selected)',
+'HELP_PAYMENT_MAIN_ADDSUMRULES'                 => '[tr] When calculating surcharge or discount, basket value is being used as base. Define what costs will be included when calculating surcharge or discount, based on basket value (none selected = <b>1</b>-<b>4</b> selected)',
 
 'HELP_SELECTLIST_MAIN_TITLEIDENT'               =>  'In <span class="navipath_or_inputname">Working Title</span>, you can enter an additional name that is not displayed to users of your eShop. You can use the working title to differentiate between similar selection lists (e.g., Sizes for trousers and Sizes for shirts).',
 

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: wishlist.php 33100 2011-02-09 14:47:36Z linas.kukulskis $
+ * @version   SVN: $Id: wishlist.php 33449 2011-02-23 07:34:29Z linas.kukulskis $
  */
 
 /**
@@ -167,5 +167,21 @@ class Wishlist extends oxUBase
     public function getWishListSearchParam()
     {
         return $this->_sSearchParam;
+    }
+
+    /**
+     * Returns Bread Crumb - you are here page1/page2/page3...
+     *
+     * @return array
+     */
+    public function getBreadCrumb()
+    {
+        $aPaths = array();
+        $aPath = array();
+
+        $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_WISHLIST_PRODUCTS_WELCOME', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPaths[] = $aPath;
+
+        return $aPaths;
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: attributemainTest.php 33187 2011-02-10 15:54:30Z arvydas.vapsva $
+ * @version   SVN: $Id: attributemainTest.php 33474 2011-02-23 13:29:51Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -138,6 +138,6 @@ class Unit_Admin_AttributeMainTest extends OxidTestCase
         $oView->saveinnlang();
 
         $this->assertEquals( "1", $oView->getViewDataElement( "updatelist" ) );
-        $this->assertEquals( "999", oxSession::getVar( "new_lang" ) );
+        $this->assertEquals( 999, oxConfig::getParameter( "new_lang" ) );
     }
 }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 33402 2011-02-21 12:25:32Z linas.kukulskis $
+ * @version   SVN: $Id: oxorder.php 33467 2011-02-23 11:40:19Z arvydas.vapsva $
  */
 
 /**
@@ -302,11 +302,7 @@ class oxOrder extends oxBase
 
             // is value was not set, just returning it
             return $oArticles;
-
         }
-
-
-
         return $this->_oArticles;
     }
 
@@ -1974,89 +1970,83 @@ class oxOrder extends oxBase
         return true; // everything fine
     }
 
-     /**
-     * Get total net sum formated
+    /**
+     * Get total net sum formatted
      *
      * @return string
      */
-    public function getTotalNetSumFormated()
+    public function getFormattedTotalNetSum()
     {
-        $oCur = $this->getConfig()->getActShopCurrencyObject();
-        $oLang = oxLang::getInstance();
-        return $oLang->formatCurrency( $this->oxorder__oxtotalnetsum->value, $oCur );
-    }
-
-     /**
-     * Get total brut sum formated
-     *
-     * @return string
-     */
-    public function getTotalBrutSumFormated()
-    {
-        $oCur = $this->getConfig()->getActShopCurrencyObject();
-        $oLang = oxLang::getInstance();
-        return $oLang->formatCurrency( $this->oxorder__oxtotalbrutsum->value, $oCur );
+        return oxLang::getInstance()->formatCurrency( $this->oxorder__oxtotalnetsum->value, $this->getOrderCurrency() );
     }
 
     /**
-     * Get Delivery cost sum formated
+     * Get total brut sum formatted
      *
      * @return string
      */
-    public function getDeliveryCostFormated()
+    public function getFormattedTotalBrutSum()
     {
-        $oCur = $this->getConfig()->getActShopCurrencyObject();
-        $oLang = oxLang::getInstance();
-        return $oLang->formatCurrency( $this->oxorder__oxdelcost->value, $oCur );
+        return oxLang::getInstance()->formatCurrency( $this->oxorder__oxtotalbrutsum->value, $this->getOrderCurrency() );
     }
 
     /**
-     * Get pay cost sum formated
+     * Get Delivery cost sum formatted
      *
      * @return string
      */
-    public function getPayCostFormated()
+    public function getFormattedeliveryCost()
     {
-        $oCur = $this->getConfig()->getActShopCurrencyObject();
-        $oLang = oxLang::getInstance();
-        return $oLang->formatCurrency( $this->oxorder__oxpaycost->value, $oCur );
-    }
-
-     /**
-     * Get wrap cost sum formated
-     *
-     * @return string
-     */
-    public function getWrapCostFormated()
-    {
-        $oCur = $this->getConfig()->getActShopCurrencyObject();
-        $oLang = oxLang::getInstance();
-        return $oLang->formatCurrency( $this->oxorder__oxwrapcost->value, $oCur );
+        return oxLang::getInstance()->formatCurrency( $this->oxorder__oxdelcost->value, $this->getOrderCurrency() );
     }
 
     /**
-     * Get total vouchers formated
+     * Get pay cost sum formatted
      *
      * @return string
      */
-    public function getTotalVouchersFormated()
+    public function getFormattedPayCost()
     {
-        $oCur = $this->getConfig()->getActShopCurrencyObject();
-        $oLang = oxLang::getInstance();
-        return $oLang->formatCurrency( $this->oxorder__oxvoucherdiscount->value, $oCur );
+       return oxLang::getInstance()->formatCurrency( $this->oxorder__oxpaycost->value, $this->getOrderCurrency() );
     }
 
     /**
-     * Get Discount formated
+     * Get wrap cost sum formatted
      *
      * @return string
      */
-    public function getDiscountFormated()
+    public function getFormattedWrapCost()
     {
-        $oCur = $this->getConfig()->getActShopCurrencyObject();
-        $oLang = oxLang::getInstance();
-        return $oLang->formatCurrency( $this->oxorder__oxdiscount->value, $oCur );
+        return oxLang::getInstance()->formatCurrency( $this->oxorder__oxwrapcost->value, $this->getOrderCurrency() );
     }
 
+    /**
+     * Get total vouchers formatted
+     *
+     * @return string
+     */
+    public function getFormattedTotalVouchers()
+    {
+        return oxLang::getInstance()->formatCurrency( $this->oxorder__oxvoucherdiscount->value, $this->getOrderCurrency() );
+    }
 
+    /**
+     * Get Discount formatted
+     *
+     * @return string
+     */
+    public function getFormattedDiscount()
+    {
+        return oxLang::getInstance()->formatCurrency( $this->oxorder__oxdiscount->value, $this->getOrderCurrency() );
+    }
+
+    /**
+     * Get formatted total sum from last order
+     *
+     * @return string
+     */
+    public function getFormattedTotalOrderSum()
+    {
+        return oxLang::getInstance()->formatCurrency( $this->oxorder__oxtotalordersum->value, $this->getOrderCurrency() );
+    }
 }

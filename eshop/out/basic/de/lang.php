@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 32877 2011-02-03 09:25:45Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 33448 2011-02-22 16:51:18Z ralf.trapp $
  */
 
 
@@ -734,9 +734,9 @@ $aLang = array(
 'INC_SEARCH_PRODUCT_ITEM_ADDTOBASKET'             =>"in den Warenkorb",
 'INC_SORT_TITLE'                                  =>"Titel",
 'INC_SORT_PRICE'                                  =>"Preis",
-'INC_SORT_ARTNUM'                                 =>"[Tr] Artikelnummern",
-'INC_SORT_RATING'                                 =>"[Tr] Bewertung",
-'INC_SORT_STOCK'                                  =>"[Tr] Lagerbestand",
+'INC_SORT_ARTNUM'                                 =>"Artikelnummer",
+'INC_SORT_RATING'                                 =>"Bewertung",
+'INC_SORT_STOCK'                                  =>"Lagerbestand",
 'INC_SORT_SORTBY'                                 =>"Sortieren nach:",
 'INC_SORT_GUESTBOOK_DATE'                         =>'Datum',
 'INC_SORT_GUESTBOOK_AUTHOR'                       =>'Autor',

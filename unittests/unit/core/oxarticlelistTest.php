@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxarticlelistTest.php 33480 2011-02-23 14:43:14Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1195,12 +1195,14 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadNewestArticlesNoneDoNotLoadPrice()
     {
-        $oTest = $this->getProxyClass('oxArticleList');
         modConfig::getInstance()->setConfigParam( 'bl_perfLoadPriceForAddList', 0 );
         modConfig::getInstance()->setConfigParam( 'iNewestArticlesMode', 0 );
+        $oTest = new oxArticleList();
         $oTest->loadNewestArticles();
         $this->assertEquals( 0, $oTest->count() );
-        $this->assertFalse( $oTest->getNonPublicVar( '_blLoadPrice' ) );
+
+        $oBase = $oTest->getBaseObject();
+        $this->assertNull( $oBase->getBasePrice() );
     }
 
     /**
@@ -1315,12 +1317,15 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadTop5ArticlesNone()
     {
-        $oTest = $this->getProxyClass('oxArticleList');
         modConfig::getInstance()->setConfigParam( 'bl_perfLoadPriceForAddList', 0 );
         modConfig::getInstance()->setConfigParam( 'iTop5Mode', 0 );
+
+        $oTest = new oxArticleList();
         $oTest->loadTop5Articles();
         $this->assertEquals( 0, $oTest->count() );
-        $this->assertFalse( $oTest->getNonPublicVar( '_blLoadPrice' ) );
+
+        $oBase = $oTest->getBaseObject();
+        $this->assertNull( $oBase->getBasePrice() );
     }
 
     /**
@@ -1663,19 +1668,6 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest->assign(array('z'=>'dasds', 'y'=>'dsa'));
         $oTest->UNITsortByIds(array('y', 'x'));
         $this->assertSame(array('y'=>'dsa', 'z'=>'dasds'), $oTest->getArray());
-    }
-
-    /**
-     * Test select string load price.
-     *
-     * @return null
-     */
-    public function testSelectStringLoadPrice()
-    {
-        $oTest = $this->getProxyClass("oxArticleList");
-        $oTest->setNonPublicVar("_blLoadPrice", false);
-        $oTest->selectString("select * from oxarticles where 0");
-        $this->assertEquals(array( oxNew('oxarticle'), "disablePriceLoad"), $oTest->getNonPublicVar("_aAssignCallbackPrepend"));
     }
 
     /**

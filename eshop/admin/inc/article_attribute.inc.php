@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_attribute.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
+ * @version   SVN: $Id: article_attribute.inc.php 33454 2011-02-23 07:48:59Z arvydas.vapsva $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -119,7 +119,7 @@ class ajaxComponent extends ajaxListComponent
         $oDb = oxDb::getDb();
 
         $soxId = oxConfig::getParameter( "oxid");
-        $this->sAttributeOXID = oxConfig::getParameter( "attr_oxid");
+        $sAttributeId = oxConfig::getParameter( "attr_oxid");
         $sAttributeValue      = oxConfig::getParameter( "attr_value");
         if (!$this->getConfig()->isUtf()) {
             $sAttributeValue = iconv( 'UTF-8', oxLang::getInstance()->translateString("charset"), $sAttributeValue );
@@ -129,17 +129,16 @@ class ajaxComponent extends ajaxListComponent
         if ( $oArticle->load( $soxId ) ) {
 
 
-            if ( isset( $this->sAttributeOXID) && ("" != $this->sAttributeOXID)) {
-                $oGroups = oxNew( "oxlist" );
-                $oGroups->init( "oxi18n", "oxobject2attribute" );
-                $sO2AViewName = $this->_getViewName("oxobject2attribute");
-                $sSelect  = "select * from $sO2AViewName where $sO2AViewName.oxobjectid= " . $oDb->quote( $oArticle->oxarticles__oxid->value ) . " and ";
-                $sSelect .= "$sO2AViewName.oxattrid= " . $oDb->quote( $this->sAttributeOXID );
-                $oGroups->selectString( $sSelect );
-                foreach ($oGroups as $oGroup) {
-                    // sets new value
-                    $oGroup->oxobject2attribute__oxvalue->setValue( $sAttributeValue );
-                    $oGroup->save();
+            if ( isset( $sAttributeId) && ("" != $sAttributeId ) ) {
+                $sO2AViewName = $this->_getViewName( "oxobject2attribute" );
+                $sSelect = "select * from $sO2AViewName where $sO2AViewName.oxobjectid= " . $oDb->quote( $oArticle->oxarticles__oxid->value ) . " and
+                            $sO2AViewName.oxattrid= " . $oDb->quote( $sAttributeId );
+                $oO2A = oxNew( "oxi18n" );
+                $oO2A->setLanguage( oxConfig::getParameter( 'editlanguage' ) );
+                $oO2A->init( "oxobject2attribute" );
+                if ( $oO2A->assignRecord( $sSelect ) ) {
+                    $oO2A->oxobject2attribute__oxvalue->setValue( $sAttributeValue );
+                    $oO2A->save();
                 }
             }
         }

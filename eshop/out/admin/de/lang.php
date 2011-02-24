@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 33361 2011-02-18 15:12:39Z sarunas $
+ * @version   SVN: $Id: lang.php 33464 2011-02-23 09:34:57Z alfonsas $
  */
 
 $sLangName  = 'Deutsch';
@@ -182,7 +182,7 @@ $aLang = array(
 'GENERAL_CATEGORYSELECT'                        => 'Bitte Kategorien wählen',
 'GENERAL_CLICKFORDETAILS'                       => '(Anklicken für Details)',
 'GENERAL_COMPANY'                               => 'Firma',
-'GENERAL_CHANGEPRODUCT'                         => '[tr] Change',
+'GENERAL_CHANGEPRODUCT'                         => 'Ändern',
 'GENERAL_COUNTRY'                               => 'Land',
 'GENERAL_DATE'                                  => 'Datum',
 'GENERAL_DELETE'                                => 'Löschen',
@@ -761,12 +761,12 @@ $aLang = array(
 'EXCEPTION_NODESCRIPTIONADDED'                  => 'Bitte Beschreibung angeben',
 'EXCEPTION_NOMEDIAADDED'                        => 'Bitte Medien URL angeben',
 'EXCEPTION_COULDNOTWRITETOFILE'                 => 'Kann die Datei nicht schreiben',
-'EXCEPTION_FILENOTFOUND'                        => 'Datei nicht gefunden (bitte Logfile für Details prüfen)',
-'EXCEPTION_THEME_NOT_LOADED'                    => '[tr] Theme could not be loaded',
-'EXCEPTION_PARENT_VERSION_UNSPECIFIED'          => '[tr] Parent theme did not specify version',
-'EXCEPTION_UNSPECIFIED_PARENT_VERSIONS'         => '[tr] Compatible parent theme versions not specified',
-'EXCEPTION_PARENT_VERSION_MISMATCH'             => '[tr] Parent theme version is not compatible',
-'EXCEPTION_PARENT_THEME_NOT_FOUND'              => '[tr] Cannot find parent theme',
+'EXCEPTION_FILENOTFOUND'                        => 'Datei nicht gefunden (bitte EXCEPTION_LOG.txt für Details prüfen)',
+'EXCEPTION_THEME_NOT_LOADED'                    => 'Theme kann nicht geladen werden',
+'EXCEPTION_PARENT_VERSION_UNSPECIFIED'          => 'Eltern-Theme stellt keine Version(ierung) zur Verfügung',
+'EXCEPTION_UNSPECIFIED_PARENT_VERSIONS'         => 'Kompabitble Versionsnummer des Eltern-Themes konnte nicht gefunden werden',
+'EXCEPTION_PARENT_VERSION_MISMATCH'             => 'Eltern-Theme Version ist nicht kompatibel',
+'EXCEPTION_PARENT_THEME_NOT_FOUND'              => 'Eltern-Theme kann wurde nicht gefunden',
 
 'GUI_LIST_MENUITEM'                             => 'Stammdaten',
 'GUI_LIST_MENUSUBITEM'                          => 'Look & Feel',
@@ -927,8 +927,8 @@ $aLang = array(
 'THEME_AUTHOR'                                  => 'Autor',
 'THEME_VERSION'                                 => 'Version',
 'THEME_ACTIVATE'                                => 'Aktivieren',
-'THEME_PARENT_THEME_TITLE'                      => '[tr] Parent theme',
-'THEME_PARENT_VERSIONS'                         => '[tr] Comapatible parent theme versions',
+'THEME_PARENT_THEME_TITLE'                      => 'Eltern-Theme',
+'THEME_PARENT_VERSIONS'                         => 'Kompatible Eltern-Theme Version(en)',
 'LANGUAGE_ACTIVE'                               => 'Im Frontend aktiv',
 'LANGUAGE_LIST_MENUITEM'                        => 'Stammdaten',
 'LANGUAGE_LIST_MENUSUBITEM'                     => 'Sprachen',
@@ -1174,12 +1174,12 @@ $aLang = array(
 'PAYMENT_LIST_MENUITEM'                         => 'Shopeinstellungen',
 'PAYMENT_LIST_MENUSUBITEM'                      => 'Zahlungsarten',
 'PAYMENT_MAIN_ADDPRICE'                         => 'Preis Auf-/Abschlag',
-'PAYMENT_MAIN_ADDSUMRULES'                      => '[tr] Calculate Price<br>Surcharge/Discount on',
-'PAYMENT_MAIN_ADDSUMRULES_ALLGOODS'             => '[tr] 1. Value of all goods in basket',
-'PAYMENT_MAIN_ADDSUMRULES_DISCOUNTS'            => '[tr] 2. Discounts',
-'PAYMENT_MAIN_ADDSUMRULES_VOUCHERS'             => '[tr] 3. Vouchers',
-'PAYMENT_MAIN_ADDSUMRULES_SHIPCOSTS'            => '[tr] 4. Shipping costs',
-'PAYMENT_MAIN_ADDSUMRULES_GIFTS'                => '[tr] 5. Gift Wrapping/Greeting Card',
+'PAYMENT_MAIN_ADDSUMRULES'                      => 'Basispreis für Aufschlag/Rabatt<br />enthält',
+'PAYMENT_MAIN_ADDSUMRULES_ALLGOODS'             => '1. Warenwert der  im Warenkorb',
+'PAYMENT_MAIN_ADDSUMRULES_DISCOUNTS'            => '2. Rabatte',
+'PAYMENT_MAIN_ADDSUMRULES_VOUCHERS'             => '3. Gutscheine',
+'PAYMENT_MAIN_ADDSUMRULES_SHIPCOSTS'            => '4. Versandkosten',
+'PAYMENT_MAIN_ADDSUMRULES_GIFTS'                => '5. Geschenkverpackung/Grußkarte',
 'PAYMENT_MAIN_NAME'                             => 'Name',
 'PAYMENT_MAIN_FROMBONI'                         => 'Ab Bonitätsindex',
 'PAYMENT_MAIN_AMOUNT'                           => 'Einkaufswert',

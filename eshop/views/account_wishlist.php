@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account_wishlist.php 32923 2011-02-04 14:35:22Z vilma $
+ * @version   SVN: $Id: account_wishlist.php 33449 2011-02-23 07:34:29Z linas.kukulskis $
  */
 
 /**
@@ -342,7 +342,7 @@ class Account_Wishlist extends Account
         return $this->_sSearchParam;
     }
 
-/**
+    /**
      * Returns Bread Crumb - you are here page1/page2/page3...
      *
      * @return array

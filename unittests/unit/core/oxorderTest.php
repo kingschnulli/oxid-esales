@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 33134 2011-02-10 10:59:31Z arvydas.vapsva $
+ * @version   SVN: $Id: oxorderTest.php 33467 2011-02-23 11:40:19Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3439,5 +3439,109 @@ class Unit_Core_oxorderTest extends OxidTestCase
         // checking how many order articles after update
         $this->assertEquals( 2, oxDb::getDb()->getOne( "select count(*) from oxorderarticles where oxorderid = '_testOrderId'" ) );
         $this->assertEquals( 3, oxDb::getDb()->getOne( "select sum(oxamount) from oxorderarticles where oxorderid = '_testOrderId'" ) );
+    }
+
+    /**
+     * Testing formatted total net sum getter
+     *
+     * @return null
+     */
+    public function testGetFormattedTotalNetSum()
+    {
+        $oOrder = new oxorder();
+        $oOrder->oxorder__oxcurrency = new oxField( "EUR" );
+        $oOrder->oxorder__oxtotalnetsum = new oxField( 100 );
+        return $this->assertEquals( "100,00", $oOrder->getFormattedTotalNetSum() );
+    }
+
+    /**
+     * Testing formatted total brut sum getter
+     *
+     * @return null
+     */
+    public function testGetFormattedTotalBrutSum()
+    {
+        $oOrder = new oxorder();
+        $oOrder->oxorder__oxcurrency = new oxField( "EUR" );
+        $oOrder->oxorder__oxtotalbrutsum = new oxField( 100 );
+        return $this->assertEquals( "100,00", $oOrder->getFormattedTotalBrutSum() );
+    }
+
+    /**
+     * Testing formatted Delivery cost sum getter
+     *
+     * @return null
+     */
+    public function testGetFormattedeliveryCost()
+    {
+        $oOrder = new oxorder();
+        $oOrder->oxorder__oxcurrency = new oxField( "EUR" );
+        $oOrder->oxorder__oxdelcost = new oxField( 100 );
+        return $this->assertEquals( "100,00", $oOrder->getFormattedeliveryCost() );
+    }
+
+    /**
+     * Testing formatted pay cost sum getter
+     *
+     * @return null
+     */
+    public function testGetFormattedPayCost()
+    {
+        $oOrder = new oxorder();
+        $oOrder->oxorder__oxcurrency = new oxField( "EUR" );
+        $oOrder->oxorder__oxpaycost = new oxField( 100 );
+       return $this->assertEquals( "100,00", $oOrder->getFormattedPayCost() );
+    }
+
+    /**
+     * Testing formatted wrap cost sum getter
+     *
+     * @return null
+     */
+    public function testGetFormattedWrapCost()
+    {
+        $oOrder = new oxorder();
+        $oOrder->oxorder__oxcurrency = new oxField( "EUR" );
+        $oOrder->oxorder__oxwrapcost = new oxField( 100 );
+        return $this->assertEquals( "100,00", $oOrder->getFormattedWrapCost() );
+    }
+
+    /**
+     * Testing formatted total vouchers getter
+     *
+     * @return null
+     */
+    public function testGetFormattedTotalVouchers()
+    {
+        $oOrder = new oxorder();
+        $oOrder->oxorder__oxcurrency = new oxField( "EUR" );
+        $oOrder->oxorder__oxvoucherdiscount = new oxField( 100 );
+        return $this->assertEquals( "100,00", $oOrder->getFormattedTotalVouchers() );
+    }
+
+    /**
+     * Testing formatted Discount getter
+     *
+     * @return null
+     */
+    public function testGetFormattedDiscount()
+    {
+        $oOrder = new oxorder();
+        $oOrder->oxorder__oxcurrency = new oxField( "EUR" );
+        $oOrder->oxorder__oxdiscount = new oxField( 100 );
+        return $this->assertEquals( "100,00", $oOrder->getFormattedDiscount() );
+    }
+
+    /**
+     * Testing formatted total sum from last order getter
+     *
+     * @return null
+     */
+    public function testGetFormattedTotalOrderSum()
+    {
+        $oOrder = new oxorder();
+        $oOrder->oxorder__oxcurrency = new oxField( "EUR" );
+        $oOrder->oxorder__oxtotalordersum = new oxField( 100 );
+        return $this->assertEquals( "100,00", $oOrder->getFormattedTotalOrderSum() );
     }
 }

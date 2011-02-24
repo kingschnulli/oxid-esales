@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_main.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: attribute_main.php 33474 2011-02-23 13:29:51Z arvydas.vapsva $
  */
 
 /**
@@ -144,12 +144,8 @@ class Attribute_Main extends oxAdminDetails
         $oAttr->assign( $aParams);
 
         // apply new language
-        $sNewLanguage = oxConfig::getParameter( "new_lang");
-        $oAttr->setLanguage( $sNewLanguage);
+        $oAttr->setLanguage( oxConfig::getParameter( "new_lang" ) );
         $oAttr->save();
-
-        // set for reload
-        oxSession::setVar( "new_lang", $sNewLanguage);
 
         // set oxid if inserted
         $this->setEditObjectId( $oAttr->getId() );

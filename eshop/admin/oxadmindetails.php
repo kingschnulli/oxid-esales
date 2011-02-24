@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadmindetails.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: oxadmindetails.php 33456 2011-02-23 07:49:47Z arvydas.vapsva $
  */
 
 /**
@@ -330,6 +330,11 @@ class oxAdminDetails extends oxAdminView
         if ( !isset( $this->oCatTree ) || $blForceNonCache ) {
             $this->oCatTree = oxNew( 'oxCategoryList' );
             $this->oCatTree->setShopID( $iTreeShopId );
+
+            // setting language
+            $oBase = $this->oCatTree->getBaseObject();
+            $oBase->setLanguage( $this->_iEditLang );
+
             $this->oCatTree->buildList( $this->getConfig()->getConfigParam( 'bl_perfLoadCatTree' ) );
         }
 

@@ -662,14 +662,14 @@ $aLang = array(
 'PAGE_SHOP_START_WEEKSPECIAL'                              => "Angebot der Woche",
 'PAGE_SHOP_START_VIEW_ALL'                                 => "Alle Produkte ansehen",
 
-'WIDGET_LOCATOR_SORT_oxtitle'                                => "Name",
-'WIDGET_LOCATOR_SORT_oxprice'                                => "Preis",
-'WIDGET_LOCATOR_SORT_oxvarminprice'                          => "Preis",
-'WIDGET_LOCATOR_SORT_oxartnum'                               => "[Tr] Artikelnummern",
-'WIDGET_LOCATOR_SORT_oxrating'                               => "[Tr] Bewertung",
-'WIDGET_LOCATOR_SORT_oxstock'                                => "[Tr] Lagerbestand",
-'WIDGET_LOCATOR_SORT_oxgbentries.oxcreate'                   => "Datum",
-'WIDGET_LOCATOR_SORT_oxuser.oxusername'                      => "Autor",
+'WIDGET_LOCATOR_SORT_oxtitle'                              => "Name",
+'WIDGET_LOCATOR_SORT_oxprice'                              => "Preis",
+'WIDGET_LOCATOR_SORT_oxvarminprice'                        => "Preis",
+'WIDGET_LOCATOR_SORT_oxartnum'                             => "Artikelnummer",
+'WIDGET_LOCATOR_SORT_oxrating'                             => "Bewertung",
+'WIDGET_LOCATOR_SORT_oxstock'                              => "Lagerbestand",
+'WIDGET_LOCATOR_SORT_oxgbentries.oxcreate'                 => "Datum",
+'WIDGET_LOCATOR_SORT_oxuser.oxusername'                    => "Autor",
 'WIDGET_LOCATOR_SORT_SORTBY'                               => "Sortierung:",
 
 
