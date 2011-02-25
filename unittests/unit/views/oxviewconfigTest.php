@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 33291 2011-02-15 15:58:08Z arvydas.vapsva $
+ * @version   SVN: $Id: oxviewconfigTest.php 33489 2011-02-24 08:42:27Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -515,4 +515,34 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $myConfig->setConfigParam( "blDebugTemplateBlocks", true );
         $this->assertTrue ( $oViewCfg->isTplBlocksDebugMode() );
     }
+
+    /**
+     * test method "getNrOfCatArticles()"
+     *
+     * return null
+     */
+    public function testGetNrOfCatArticles()
+    {
+        $aNrofCatArticlesInGrid = array(1,2,3);
+        $aNrofCatArticles = array(4,5,6);
+
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "aNrofCatArticlesInGrid", $aNrofCatArticlesInGrid );
+        $myConfig->setConfigParam( "aNrofCatArticles", $aNrofCatArticles );
+
+        $oViewCfg = $this->getMock( 'oxViewConfig', array( 'getConfig' ) );
+        $oViewCfg->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $myConfig ) );
+
+        $oSession = modSession::getInstance();
+
+        $oSession->setVar( "ldtype", "grid" );
+        $this->assertEquals( $aNrofCatArticlesInGrid, $oViewCfg->getNrOfCatArticles() );
+
+        $oSession->setVar( "ldtype", "line" );
+        $this->assertEquals( $aNrofCatArticles, $oViewCfg->getNrOfCatArticles() );
+
+        $oSession->setVar( "ldtype", "infogrid" );
+        $this->assertEquals( $aNrofCatArticles, $oViewCfg->getNrOfCatArticles() );
+    }
+
 }

@@ -65,7 +65,7 @@
                         [{if $basketproduct->getDispSelList() }]
                             <div>
                                 [{foreach key=iSel from=$basketproduct->getDispSelList() item=oList }]
-                                    <select name="aproducts[[{ $basketindex }]][sel][[{ $iSel }]]">
+                                    <select name="aproducts[[{ $basketindex }]][sel][[{ $iSel }]]" [{if !$editable }]disabled[{/if}]>
                                         [{foreach key=iSelIdx from=$oList item=oSelItem }]
                                             [{if $oSelItem->name }]
                                                 <option value="[{ $iSelIdx }]"[{if $oSelItem->selected }]SELECTED[{/if }]>[{ $oSelItem->name }]</option>

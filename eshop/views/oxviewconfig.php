@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 33291 2011-02-15 15:58:08Z arvydas.vapsva $
+ * @version   SVN: $Id: oxviewconfig.php 33489 2011-02-24 08:42:27Z rimvydas.paskevicius $
  */
 
 /**
@@ -707,7 +707,7 @@ class oxViewConfig extends oxSuperCfg
     public function getNrOfCatArticles()
     {
         // checking if all needed data is set
-        switch (oxConfig::getParameter( 'ldtype' )) {
+        switch (oxSession::getVar( 'ldtype' )) {
             case 'grid':
                 return $this->getConfig()->getConfigParam( 'aNrofCatArticlesInGrid' );
                 break;

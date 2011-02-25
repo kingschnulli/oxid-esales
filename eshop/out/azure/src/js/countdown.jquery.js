@@ -28,7 +28,7 @@ jQuery.fn.countdown = function(callback, start) {
                         rs = rs_new;
                     }
                 }
-                if(sc>1){
+                if(sc>=1){
                     sc--;
                     dt.setTime(sc*1000);
                     var hh = dt.getUTCHours();   if(hh < 10){hh = '0'+hh;}

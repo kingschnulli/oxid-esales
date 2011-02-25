@@ -19,7 +19,7 @@
     <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" }]" rel="nofollow">[{ oxmultilang ident="WIDGET_SERVICES_ACCOUNT" }]</a></li>
     <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_noticelist" }]" rel="nofollow">[{ oxmultilang ident="WIDGET_SERVICES_NOTICELIST" }]</a></li>
     [{if $oViewConf->getShowWishlist()}]
-        <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_wishlist" }]" rel="nofollow">[{ oxmultilang ident="WIDGET_SERVICES_WISHLIST" }]</a></li>
+        <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_wishlist" }]" rel="nofollow">[{ oxmultilang ident="WIDGET_SERVICES_MYWISHLIST" }]</a></li>
         <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wishlist" params="wishid="|cat:$oView->getWishlistUserId() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_SERVICES_PUBLICWISHLIST" }]</a></li>
     [{/if}]
     [{oxifcontent ident="oxsecurityinfo" object="oCont"}]

@@ -177,7 +177,9 @@ $(function(){
         $("#countdown").countdown(
             function(count, element, container) {
                 if (count <= 1) {
-                    $(element).parents(".basketBox").hide();
+                    $(element).parents("#basketFlyout").hide();
+                    $("#countValue").replaceWith("0");
+                    $("#minibasket img.minibasketIcon").unbind('mouseenter mouseleave');
                     return container.not(element);
                 }
             }

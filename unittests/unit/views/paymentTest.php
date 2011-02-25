@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 32765 2011-01-27 11:01:14Z sarunas $
+ * @version   SVN: $Id: paymentTest.php 33511 2011-02-24 15:06:14Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -655,14 +655,12 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment = $this->getMock('payment', array('getSession'));
         $oPayment->expects($this->any())->method('getSession')->will($this->returnValue($oS));
 
-        $oProduct = new oxStdClass();
-        $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setPrice( 0.98, 19 );
-        $oProduct->sTsId = 'TS080501_500_30_EUR';
-        $oProduct->iAmount = 500;
-        $oProduct->fPrice = 0.98;
+        $oProducts = $oPayment->getTsProtections();
+        $oProduct = current($oProducts);
 
-        $this->assertEquals( array($oProduct), $oPayment->getTsProtections() );
+        $this->assertEquals( "0,98", $oProduct->getFPrice() );
+        $this->assertEquals( 'TS080501_500_30_EUR', $oProduct->getTsId() );
+        $this->assertEquals( 500, $oProduct->getAmount() );
     }
 
     public function testGetCheckedTsProductId()
@@ -673,7 +671,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->assertEquals( 'testId', $oPayment->getCheckedTsProductId() );
     }
 
-	/**
+    /**
      * Testing Payment::getBreadCrumb()
      *
      * @return null

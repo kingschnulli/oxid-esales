@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxattributelist.php 33005 2011-02-07 15:57:35Z linas.kukulskis $
+ * @version   SVN: $Id: oxattributelist.php 33500 2011-02-24 12:48:37Z linas.kukulskis $
  */
 
 /**
@@ -116,22 +116,20 @@ class oxAttributeList extends oxList
             $this->selectString( $sSelect );
         }
     }
-    
+
      /**
      * get category attributes by category Id
      *
-     * @param string  $sCategoryId category Id 
+     * @param string  $sCategoryId category Id
      * @param integer $iLang       language No
      *
      * @return object;
      */
-    
+
     public function getCategoryAttributes( $sCategoryId, $iLang )
     {
         $aSessionFilter = oxSession::getVar( 'session_attrfilter' );
-        
-        //$oDb = oxDb::getDb();
-        
+
         $oArtList = oxNew( "oxarticlelist");
         $oArtList->loadCategoryIDs( $sCategoryId, $aSessionFilter );
 
@@ -145,44 +143,44 @@ class oxAttributeList extends oxList
                 }
                 $sArtIds .= $oDb->quote($sId);
             }
-        
+
             $sActCatQuoted = $oDb->quote( $sCategoryId );
             $sAttTbl = getViewName( 'oxattribute', $iLang );
             $sO2ATbl = getViewName( 'oxobject2attribute', $iLang );
             $sC2ATbl = getViewName( 'oxcategory2attribute', $iLang );
-    
+
             $sSelect = "SELECT DISTINCT att.oxid, att.oxtitle, o2a.oxvalue ".
                        "FROM $sAttTbl as att, $sO2ATbl as o2a ,$sC2ATbl as c2a ".
                        "WHERE att.oxid = o2a.oxattrid AND c2a.oxobjectid = $sActCatQuoted AND c2a.oxattrid = att.oxid AND o2a.oxvalue !='' AND o2a.oxobjectid IN ($sArtIds) ".
                        "ORDER BY c2a.oxsort , att.oxpos, att.oxtitle, o2a.oxvalue";
-            
-            
+
+
             $rs = $oDb->execute( $sSelect );
-            
-            if ( $rs != false && $rs->recordCount() > 0 ) {               
+
+            if ( $rs != false && $rs->recordCount() > 0 ) {
                 while ( !$rs->EOF && list( $sAttId, $sAttTitle, $sAttValue ) = $rs->fields ) {
-                    
+
                     if ( !$this->offsetExists( $sAttId ) ) {
-    
+
                         $oAttribute = oxNew( "oxattribute" );
                         $oAttribute->setTitle( $sAttTitle );
-                 
+
                         $this->offsetSet( $sAttId, $oAttribute );
-    
+
                         if ( isset( $aSessionFilter[$sCategoryId][$sAttId] ) ) {
                             $oAttribute->setActiveValue( $aSessionFilter[$sCategoryId][$sAttId] );
                         }
-                                                                       
+
                     } else {
                         $oAttribute = $this->offsetGet( $sAttId );
                     }
-                    
-                    $oAttribute->addValue( $sAttValue );                    
+
+                    $oAttribute->addValue( $sAttValue );
                     $rs->moveNext();
                 }
-            } 
+            }
         }
-         
+
         return $this;
     }
 }

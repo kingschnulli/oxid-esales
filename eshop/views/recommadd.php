@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: recommadd.php 31468 2010-12-03 07:59:48Z rimvydas.paskevicius $
+ * @version   SVN: $Id: recommadd.php 33496 2011-02-24 09:41:50Z linas.kukulskis $
  */
 
 /**
@@ -34,7 +34,7 @@ class RecommAdd extends Details
      *
      * @var string
      */
-    protected $_sThisTemplate = 'page/recommendations/add.tpl';
+    protected $_sThisTemplate = 'page/account/recommendationadd.tpl';
 
     /**
      * User recommendation lists

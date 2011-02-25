@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 33071 2011-02-09 09:14:01Z linas.kukulskis $
+ * @version   SVN: $Id: alistTest.php 33489 2011-02-24 08:42:27Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -413,9 +413,11 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testGetViewIdPE()
     {
 
+        $oSession = modSession::getInstance();
+
         modConfig::setParameter( 'cnid', 'xxx' );
-        modConfig::setParameter( '_artperpage', '100' );
-        modConfig::setParameter( 'ldtype', 'grid' );
+        $oSession->setVar( '_artperpage', '100' );
+        $oSession->setVar( 'ldtype', 'grid' );
 
         $oView = new oxUBase();
         $sViewId = md5( $oView->getViewId().'|xxx|999|100|grid' );

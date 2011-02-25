@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: wishlistTest.php 33449 2011-02-23 07:34:29Z linas.kukulskis $
+ * @version   SVN: $Id: wishlistTest.php 33512 2011-02-24 15:06:26Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -180,8 +180,9 @@ class Unit_Views_wishlistTest extends OxidTestCase
     public function testGetBreadCrumb()
     {
         $oWishList = new Wishlist();
+        $aResult[]["title"] = oxLang::getInstance()->translateString( 'PAGE_WISHLIST_PRODUCTS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
 
-        $this->assertEquals(1, count($oWishList->getBreadCrumb()));
+        $this->assertEquals($aResult, $oWishList->getBreadCrumb());
     }
 
 }

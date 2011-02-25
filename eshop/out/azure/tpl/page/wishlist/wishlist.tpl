@@ -4,7 +4,7 @@
         [{assign var="_statusMessage" value="PAGE_ACCOUNT_WISHLIST_SORRYNOWISHLIST"|oxmultilangassign}]
         [{include file="message/error.tpl" statusMessage=$_statusMessage}]
     [{/if }]
-    <h1 class="pageHead">[{ oxmultilang ident="PAGE_WISHLIST_PRODUCTS_WELCOME" }] [{$wishuser->oxuser__oxfname->value}] [{$wishuser->oxuser__oxlname->value}]</h1>
+    <h1 class="pageHead">[{if $wishuser}][{ oxmultilang ident="PAGE_WISHLIST_PRODUCTS_WELCOME" }] [{$wishuser->oxuser__oxfname->value}] [{$wishuser->oxuser__oxlname->value}][{else}][{ oxmultilang ident="PAGE_WISHLIST_PRODUCTS_TITLE" }][{/if}]</h1>
     <div class="wishlistView clear bottomRound">
         [{include file="form/wishlist_search.tpl" searchClass="wishlist"}]
         [{if $oView->getWishList()}]

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account_recommlist.php 33445 2011-02-22 16:18:46Z linas.kukulskis $
+ * @version   SVN: $Id: account_recommlist.php 33496 2011-02-24 09:41:50Z linas.kukulskis $
  */
 
 /**
@@ -270,7 +270,7 @@ class Account_Recommlist extends Account
             $oRecommList->delete();
             $this->setActiveRecommList( false );
         } else {
-            $this->_sThisTemplate = 'page/recommendations/edit.tpl';
+            $this->_sThisTemplate = 'page/account/recommendationedit.tpl';
         }
     }
 
@@ -289,7 +289,7 @@ class Account_Recommlist extends Account
              ( $oRecommList = $this->getActiveRecommList() ) ) {
             $oRecommList->removeArticle( $sArtId );
         }
-        $this->_sThisTemplate = 'page/recommendations/edit.tpl';
+        $this->_sThisTemplate = 'page/account/recommendationedit.tpl';
     }
 
     /**

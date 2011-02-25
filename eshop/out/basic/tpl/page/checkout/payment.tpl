@@ -231,13 +231,13 @@
                 [{if count($aTsProtections) > 1 }]
                 <select name="stsprotection">
                   [{foreach from=$aTsProtections item=oTsProduct}]
-                    <option value="[{$oTsProduct->sTsId}]" [{if $oView->getCheckedTsProductId() == $oTsProduct->sTsId}]SELECTED[{/if}]>[{ oxmultilang ident="PAYMENT_TSPROTECTIONFOR" }] [{ $oTsProduct->iAmount }] [{ $currency->sign}] ([{ $oTsProduct->getFPrice() }] [{ $currency->sign}] [{ oxmultilang ident="PAYMENT_INCLUDEVAT" }]) </option>
+                    <option value="[{$oTsProduct->getTsId()}]" [{if $oView->getCheckedTsProductId() == $oTsProduct->getTsId()}]SELECTED[{/if}]>[{ oxmultilang ident="PAYMENT_TSPROTECTIONFOR" }] [{ $oTsProduct->getAmount() }] [{ $currency->sign}] ([{ $oTsProduct->getFPrice() }] [{ $currency->sign}] [{ oxmultilang ident="PAYMENT_INCLUDEVAT" }]) </option>
                   [{/foreach}]
                 </select>
                 [{else}]
                     [{assign var="oTsProduct" value=$aTsProtections[0] }]
-                    <input type="hidden" name="stsprotection" value="[{$oTsProduct->sTsId}]">
-                    [{ oxmultilang ident="PAYMENT_TSPROTECTIONFOR" }] [{ $oTsProduct->iAmount }] [{ $currency->sign}] ([{ $oTsProduct->getFPrice() }] [{ $currency->sign}] [{ oxmultilang ident="PAYMENT_INCLUDEVAT" }])
+                    <input type="hidden" name="stsprotection" value="[{$oTsProduct->getTsId()}]">
+                    [{ oxmultilang ident="PAYMENT_TSPROTECTIONFOR" }] [{ $oTsProduct->getTsId() }] [{ $currency->sign}] ([{ $oTsProduct->getFPrice() }] [{ $currency->sign}] [{ oxmultilang ident="PAYMENT_INCLUDEVAT" }])
                 [{/if}]
               <br>
               <br>

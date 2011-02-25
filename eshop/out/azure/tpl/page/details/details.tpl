@@ -190,14 +190,14 @@
 
 
                 <div class="tobasketFunction clear">
-
-                    <label id="productPrice" class="price">
-                        [{if $oDetailsProduct->getFTPrice()}]
-                            [{oxmultilang ident="DETAILS_NOWONLY"}]
-                        [{/if}]
-                        <strong>[{$oDetailsProduct->getFPrice()}] [{$currency->sign}]</strong>
-                    </label>
-
+                    [{if $oDetailsProduct->getFTPrice()}]
+                        <label id="productPrice" class="price">
+                            [{if $oDetailsProduct->getFTPrice()}]
+                                [{oxmultilang ident="DETAILS_NOWONLY"}]
+                            [{/if}]
+                            <strong>[{$oDetailsProduct->getFPrice()}] [{$currency->sign}]</strong>
+                        </label>
+                    [{/if}]
                     [{oxhasrights ident="SHOWARTICLEPRICE"}]
                         [{if $oDetailsProduct->loadAmountPriceInfo()}]
                             <a class="selector corners FXgradBlueDark" href="#priceinfo" id="amountPrice"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" longdesc="[{$oViewConf->getImageUrl()}]selectbutton-on.png" alt="Select"></a>

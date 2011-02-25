@@ -122,7 +122,6 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
     public function testToCompareListAdding()
     {
         modConfig::getInstance()->setConfigParam( "bl_showCompareList", true );
-        modConfig::getInstance()->setConfigParam( "bl_perfLoadCompare", true );
         oxTestModules::addFunction( 'oxUtils', 'isSearchEngine', '{ return false; }' );
 
         modConfig::setParameter( "addcompare", true );
@@ -149,7 +148,6 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
     public function testToCompareListRemoving()
     {
         modConfig::getInstance()->setConfigParam( "bl_showCompareList", true );
-        modConfig::getInstance()->setConfigParam( "bl_perfLoadCompare", true );
         oxTestModules::addFunction( 'oxUtils', 'isSearchEngine', '{ return false; }' );
 
         modConfig::setParameter( "addcompare", null );

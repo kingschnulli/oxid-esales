@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 33096 2011-02-09 14:33:14Z arvydas.vapsva $
+ * @version   SVN: $Id: oxbasketTest.php 33511 2011-02-24 15:06:14Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1649,7 +1649,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      *
      * @return null
      */
-    public function testCalculateBasketSetDiscountsAndBundles()
+   /* public function testCalculateBasketSetDiscountsAndBundles()
     {
         $this->aDiscounts[0]->oxdiscount__oxaddsumtype = new oxField("abs", oxField::T_RAW);
         $this->aDiscounts[0]->oxdiscount__oxaddsum = new oxField("5", oxField::T_RAW);

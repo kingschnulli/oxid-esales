@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 33471 2011-02-23 12:00:40Z sarunas $
+ * @version   SVN: $Id: oxubase.php 33498 2011-02-24 11:27:10Z sarunas $
  */
 
 /**
@@ -648,7 +648,7 @@ class oxUBase extends oxView
 
             $this->_sViewId =  "ox|$iLang|$iCur";
 
-        $this->_sViewId .= "|".( (int) $this->_blForceNoIndex );
+        $this->_sViewId .= "|".( (int) $this->_blForceNoIndex ).'|'.((int)$this->isRootCatChanged());
 
         return $this->_sViewId;
     }
@@ -779,13 +779,21 @@ class oxUBase extends oxView
     {
         if ( $this->_sListDisplayType == null ) {
             $this->_sListDisplayType = oxConfig::getParameter( 'ldtype' );
+
+            if ( !$this->_sListDisplayType ) {
+                $this->_sListDisplayType = oxSession::getVar( 'ldtype' );
+            }
+
             if ( !$this->_sListDisplayType ) {
                 $this->_sListDisplayType = $this->getConfig()->getConfigParam( 'sDefaultListDisplayType' );
             }
+
             $this->_sListDisplayType = in_array( ( string ) $this->_sListDisplayType, $this->_aListDisplayTypes ) ? $this->_sListDisplayType : 'infogrid';
 
             // writing to session
-            oxSession::setVar( 'ldtype', $this->_sListDisplayType );
+            if ( oxConfig::getParameter( 'ldtype' ) ) {
+                oxSession::setVar( 'ldtype', $this->_sListDisplayType );
+            }
         }
         return $this->_sListDisplayType;
     }

@@ -8,7 +8,7 @@
 
 <h1 id="productComparisonHeader" class="pageHead">[{$template_title}]</h1>
 <div>
-[{if $articleList }]
+[{if $oView->getCompareItemsCnt() > 1 }]
     [{oxscript include="js/scrollpane/jquery.jscrollpane.min.js"}]
     [{oxscript include="js/scrollpane/jquery.mousewheel.js"}]
     [{oxscript include="js/scrollpane/mwheelIntent.js"}]

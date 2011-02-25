@@ -120,7 +120,7 @@
             [{if $edit->oxorder__oxwrapcost->value }]
             <tr>
             <td class="edittext" height="15">[{ oxmultilang ident="GENERAL_CARD" }]&nbsp;[{if $giftCard}]([{$giftCard->oxwrapping__oxname->value}])[{/if}]&nbsp;</td>
-            <td class="edittext" align="right"><b>[{* $edit->getFormattedWrapCost() *}]</b></td>
+            <td class="edittext" align="right"><b>[{ $edit->getFormattedWrapCost() }]</b></td>
             <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] [{ $currency->name}] [{/if}]</b></td>
             </tr>
             [{/if}]
@@ -133,7 +133,7 @@
             [{/if}]
             <tr>
             <td class="edittext" height="25">[{ oxmultilang ident="GENERAL_SUMTOTAL" }]&nbsp;&nbsp;</td>
-            <td class="edittext" align="right"><b>[{* $edit->getFormattedTotalOrderSum() *}]</b></td>
+            <td class="edittext" align="right"><b>[{ $edit->getFormattedTotalOrderSum() }]</b></td>
             <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] [{ $currency->name}] [{/if}]</b></td>
             </tr>
             </table>

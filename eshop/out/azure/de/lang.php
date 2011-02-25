@@ -237,7 +237,7 @@ $aLang = array(
 'WIDGET_SERVICES_BASKET'                                            => "Warenkorb",
 'WIDGET_SERVICES_ACCOUNT'                                           => "Konto",
 'WIDGET_SERVICES_NOTICELIST'                                        => "Merkzettel",
-'WIDGET_SERVICES_WISHLIST'                                          => "Wunschzettel",
+'WIDGET_SERVICES_MYWISHLIST'                                        => "Mein Wunschzettel",
 'WIDGET_SERVICES_PUBLICWISHLIST'                                    => "Öffentlicher Wunschzettel",
 'WIDGET_SERVICES_NEWSLETTER'                                        => "Newsletter",
 
@@ -870,6 +870,7 @@ $aLang = array(
 'PAGE_RECOMMENDATIONS_LIST_REMOVE'                    => "entfernen",
 'PAGE_RECOMMENDATIONS_LIST_EDIT'                      => "bearbeiten",
 
+'PAGE_WISHLIST_PRODUCTS_TITLE'                        => "Öffentlicher Wunschzettel",
 'PAGE_WISHLIST_PRODUCTS_WELCOME'                      => "Herzlich willkommen zum Wunschzettel von",
 'PAGE_WISHLIST_PRODUCTS_WISHLISTEMPTY'                => "Der Wunschzettel ist leer.",
 'PAGE_WISHLIST_PRODUCTS_PRODUCTS1'                    => "Diese Artikel hat sich",

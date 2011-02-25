@@ -6,6 +6,7 @@
 [{else}]
     [{include file="_header.tpl" title=$template_title location=$template_title}]
 [{/if}]
+[{assign var="invadr" value=$oView->getInvoiceAddress()}]
 
 <form action="[{ $oViewConf->getSslSelfLink() }]" name="order" method="post">
 

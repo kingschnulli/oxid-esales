@@ -30,91 +30,47 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Core_oxtsprotectionTest extends OxidTestCase
 {
-    /**
-     * Tests whether oxVatSelector::_getVatCountry() is correctly envoked
-     *
-     */
-    public function testGetProduct()
-    {
-        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
-        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
-        $oTsProtection = oxNew('oxtsprotection');
-        $oProduct = new oxStdClass();
-        $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setPrice( 0.98, 19 );
-        $oProduct->sTsId = 'TS080501_500_30_EUR';
-        $oProduct->iAmount = 500;
-        $oProduct->fPrice = 0.98;
-
-        $this->assertEquals( $oProduct, $oTsProtection->getProduct(0) );
-    }
 
     /**
-     * Tests whether oxVatSelector::_getVatCountry() is correctly envoked
+     * Tests oxtsprotection::getTsProduct()
      *
      */
     public function testGetTsProduct()
     {
-        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
-        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
         $oTsProtection = oxNew('oxtsprotection');
-        $oProduct = new oxStdClass();
-        $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setPrice( 0.98, 19 );
-        $oProduct->sTsId = 'TS080501_500_30_EUR';
-        $oProduct->iAmount = 500;
-        $oProduct->fPrice = 0.98;
+        $oProduct = $oTsProtection->getTsProduct('TS080501_500_30_EUR');
 
-        $this->assertEquals( $oProduct, $oTsProtection->getTsProduct('TS080501_500_30_EUR') );
+        $this->assertEquals( 'TS080501_500_30_EUR', $oProduct->getTsId() );
+        $this->assertEquals( 500, $oProduct->getAmount() );
+        $this->assertEquals( '0,98', $oProduct->getFPrice() );
     }
 
     /**
-     * Tests whether oxVatSelector::_getVatCountry() is correctly envoked
+     * Tests oxtsprotection::getTsProducts()
      *
      */
     public function testGetTsProducts()
     {
         modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
         $oTsProtection = oxNew('oxtsprotection');
-        $oProduct = new oxStdClass();
-        $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setPrice( 0.98, 19 );
-        $oProduct->sTsId = 'TS080501_500_30_EUR';
-        $oProduct->iAmount = 500;
-        $oProduct->fPrice = 0.98;
+        $oProducts = $oTsProtection->getTsProducts(50);
+        $oProduct = current($oProducts);
 
-        $this->assertEquals( array($oProduct), $oTsProtection->getTsProducts(50) );
+        $this->assertEquals( 'TS080501_500_30_EUR', $oProduct->getTsId() );
+        $this->assertEquals( 500, $oProduct->getAmount() );
+        $this->assertEquals( '0,98', $oProduct->getFPrice() );
     }
 
     /**
-     * Tests whether oxVatSelector::_getVatCountry() is correctly envoked
+     * Tests oxtsprotection::getTsProducts()
      *
      */
     public function testGetTsProductsWithBiggerPrice()
     {
-        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
-        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
         $oTsProtection = oxNew('oxtsprotection');
-        $oProduct = new oxStdClass();
-        $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setPrice( 0.98, 19 );
-        $oProduct->sTsId = 'TS080501_500_30_EUR';
-        $oProduct->iAmount = 500;
-        $oProduct->fPrice = 0.98;
-        $oProduct2 = new oxStdClass();
-        $oProduct2->oPrice = oxNew( 'oxPrice' );
-        $oProduct2->oPrice->setPrice( 2.94, 19 );
-        $oProduct2->sTsId = 'TS080501_1500_30_EUR';
-        $oProduct2->iAmount = 1500;
-        $oProduct2->fPrice = 2.94;
-        $oProduct3 = new oxStdClass();
-        $oProduct3->oPrice = oxNew( 'oxPrice' );
-        $oProduct3->oPrice->setPrice( 4.9, 19 );
-        $oProduct3->sTsId = 'TS080501_2500_30_EUR';
-        $oProduct3->iAmount = 2500;
-        $oProduct3->fPrice = 4.9;
+        $oProducts = $oTsProtection->getTsProducts(2000);
 
-        $this->assertEquals( array($oProduct, $oProduct2, $oProduct3), $oTsProtection->getTsProducts(2000) );
+        $this->assertEquals( 3, count($oProducts) );
     }
 
     /**
@@ -130,6 +86,18 @@ class Unit_Core_oxtsprotectionTest extends OxidTestCase
         $oTsProtection->expects( $this->any() )->method( 'executeSoap' )->with( $this->equalTo( $sSoapUrl ), $this->equalTo( $sFunction ), $this->equalTo( $iTrustedShopId ) )->will( $this->returnValue( true ) );
 
         $this->assertTrue( $oTsProtection->checkCertificate($iTrustedShopId, false) );
+    }
+
+    /**
+     * Tests oxtsprotection::_getTsProductCurrId()
+     *
+     */
+    public function testGetTsProductCurrId()
+    {
+        $oTsProtection = oxNew('oxtsprotection');
+        $sId = $oTsProtection->UNITgetTsProductCurrId('TS080501_500_30_EUR', 'GBP');
+
+        $this->assertEquals( 'TS100629_500_30_GBP', $sId );
     }
 
 }

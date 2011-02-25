@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 33390 2011-02-21 08:32:21Z sarunas $
+ * @version   SVN: $Id: oxbasket.php 33509 2011-02-24 14:30:17Z vilma $
  */
 
 /**
@@ -1155,7 +1155,7 @@ class oxBasket extends oxSuperCfg
             $oTsProtection = oxNew('oxtsprotection');
             $oTsProduct = $oTsProtection->getTsProduct( $this->_sTsProductId );
 
-            $oProtectionPrice = $oTsProduct->oPrice;
+            $oProtectionPrice = $oTsProduct->getPrice();
         }
         return $oProtectionPrice;
     }

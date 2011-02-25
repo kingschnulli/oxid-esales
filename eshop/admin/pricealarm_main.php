@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarm_main.php 33421 2011-02-22 08:08:51Z rimvydas.paskevicius $
+ * @version   SVN: $Id: pricealarm_main.php 33488 2011-02-24 08:39:39Z rimvydas.paskevicius $
  */
 
 /**
@@ -141,7 +141,7 @@ class PriceAlarm_Main extends oxAdminDetails
             $sRecipient = $oPricealarm->oxpricealarm__oxemail->value;
 
             $oEmail = oxNew( 'oxemail' );
-            $blSuccess = (int) $oEmail->sendPricealarmToCustomer( $sRecipient, $oAlarm, $sMailBody );
+            $blSuccess = (int) $oEmail->sendPricealarmToCustomer( $sRecipient, $oPricealarm, $sMailBody );
 
             // setting result message
             if ( $blSuccess ) {

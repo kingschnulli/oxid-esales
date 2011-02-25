@@ -40,12 +40,15 @@
           [{/capture}]
       [{/if}]
 
-      [{capture append="oxidBlock_footer" if=$oxcmp_categories|count}]
-      <dl class="categories" id="footerCategories">
-        <dt>[{oxmultilang ident="FOOTER_CATEGORIES" }]</dt>
-        <dd>[{include file="widget/footer/categorieslist.tpl" categories=$oxcmp_categories}]</dd>
-      </dl>
-      [{/capture}]
+      [{if $oxcmp_categories }]
+          [{capture append="oxidBlock_footer"}]
+          <dl class="categories" id="footerCategories">
+            <dt>[{oxmultilang ident="FOOTER_CATEGORIES" }]</dt>
+            <dd>[{include file="widget/footer/categorieslist.tpl" categories=$oxcmp_categories}]</dd>
+          </dl>
+          [{/capture}]
+      [{/if}]
+
     [{foreach from=$oxidBlock_footer item="_block"}]
         [{$_block}]
     [{/foreach}]
@@ -59,7 +62,7 @@
       [{/oxifcontent}]
     </div>
 </div>
-[{if $scRootCatChanged && $oxcmp_basket->getContents()}]
+[{if $oView->isRootCatChanged()}]
     [{oxscript add="$( '#scRootCatChanged' ).oxModalPopup({ target: '#scRootCatChanged', openDialog: true});"}]
     <div id="scRootCatChanged" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
         [{include file="form/privatesales/basketexcl.tpl"}]

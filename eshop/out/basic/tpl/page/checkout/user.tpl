@@ -87,6 +87,7 @@
       </div>
 
   [{else}]
+    [{assign var="invadr" value=$oView->getInvoiceAddress()}]
     [{assign var="currency" value=$oView->getActCurrency() }]
 
     [{if !$oxcmp_user && $oView->isConnectedWithFb()}]

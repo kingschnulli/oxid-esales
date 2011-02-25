@@ -241,8 +241,8 @@ $aLang = array(
 'WIDGET_SERVICES_BASKET'                                            => "Basket",
 'WIDGET_SERVICES_ACCOUNT'                                           => "Account",
 'WIDGET_SERVICES_NOTICELIST'                                        => "NoticeList",
-'WIDGET_SERVICES_WISHLIST'                                          => "WishList",
-'WIDGET_SERVICES_PUBLICWISHLIST'                                    => "Public WishList",
+'WIDGET_SERVICES_MYWISHLIST'                                        => "My Gift Registry",
+'WIDGET_SERVICES_PUBLICWISHLIST'                                    => "Public Gift Registries",
 'WIDGET_SERVICES_NEWSLETTER'                                        => "Newsletter",
 
 'FACEBOOK_LOCALE'     => 'en_US',
@@ -880,6 +880,7 @@ $aLang = array(
 'PAGE_RECOMMENDATIONS_LIST_REMOVE'                     => "remove",
 'PAGE_RECOMMENDATIONS_LIST_EDIT'                       => "edit",
 
+'PAGE_WISHLIST_PRODUCTS_TITLE'                         => "Public Gift Registries",
 'PAGE_WISHLIST_PRODUCTS_WELCOME'                       => "Welcome to the gift registry of",
 'PAGE_WISHLIST_PRODUCTS_WISHLISTEMPTY'                 => "The Gift Registry is empty.",
 'PAGE_WISHLIST_PRODUCTS_PRODUCTS1'                     => "These products are on the wish list of",

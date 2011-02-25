@@ -82,7 +82,7 @@ class oxVariantHandler extends oxSuperCfg
             }
             $oMdVariants->addNames( $sKey,
                                     $aNames,
-                                    $oVariant->getPrice()->getBruttoPrice(),
+                                    ( $this->getConfig()->getConfigParam( 'bl_perfLoadPrice' ) ) ? $oVariant->getPrice()->getBruttoPrice() : null,
                                     $oVariant->getLink() );
         }
 

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 33390 2011-02-21 08:32:21Z sarunas $
+ * @version   SVN: $Id: oxcmp_user.php 33523 2011-02-24 22:39:13Z alfonsas $
  */
 
 // defining login/logout states
@@ -112,7 +112,8 @@ class oxcmp_user extends oxView
     {
         // saving show/hide delivery address state
         // @deprecated, remove blhideshipaddress checking when basic theme support discontinued
-        $blShow = (oxConfig::getParameter( 'blshowshipaddress' ) || oxSession::getVar( 'blshowshipaddress' )) && !(oxConfig::getParameter( 'blhideshipaddress' ) || oxSession::getVar( 'blhideshipaddress' ));
+        $blShow = (oxConfig::getParameter( 'blshowshipaddress' ) || oxSession::getVar( 'blshowshipaddress' )) &&
+                 !(oxConfig::getParameter( 'blhideshipaddress' ) || oxSession::getVar( 'blhideshipaddress' ));
 
         oxSession::setVar( 'blshowshipaddress', $blShow );
 
@@ -716,19 +717,18 @@ class oxcmp_user extends oxView
     }
 
     /**
-     * Checks if shipping address fields must be displayed and
-     * sets into session.
+     * Checks if shipping address fields must be displayed.
      *
      * Template variables:
      * <b>blshowshipaddress</b>
      *
-     * @deprecated, remove this code line when basic theme support discontinued
+     * @todo Make depracated and  remove this function after basic theme support is discontinued
      *
      * @return null
      */
     protected function _setupDelAddress()
     {
-        return oxConfig::getParameter( 'blhideshipaddress' ) !== null && oxConfig::getParameter( 'userform' ) === null;
+        return (oxConfig::getParameter( 'blshowshipaddress' ) !== null || oxConfig::getParameter( 'blhideshipaddress' ) !== null) && oxConfig::getParameter( 'userform' ) === null;
     }
 
     /**

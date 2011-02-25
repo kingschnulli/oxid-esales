@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxsessionTest.php 33489 2011-02-24 08:42:27Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1309,6 +1309,7 @@ class Unit_Core_oxsessionTest extends OxidTestCase
                                 'tocomparelist' => true,
                             ),
                        '_artperpage' => true,
+                       'ldtype'      => true,
                        'listorderby' => true,
                     )
                 , $oSess->UNITgetRequireSessionWithParams()
@@ -1347,6 +1348,7 @@ class Unit_Core_oxsessionTest extends OxidTestCase
                       '_param' => true,
                       '_ddd' => array('yyy'=>1),
                       '_artperpage' => true,
+                      'ldtype'      => true,
                       'listorderby' => true,
                     )
                 , $oSess->UNITgetRequireSessionWithParams()

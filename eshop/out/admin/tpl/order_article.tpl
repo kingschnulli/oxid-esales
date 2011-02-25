@@ -197,7 +197,7 @@ function StornoThisArticle( sID)
     [{/if}]
     <tr>
     <td class="edittext" height="25">[{ oxmultilang ident="GENERAL_SUMTOTAL" }]&nbsp;&nbsp;</td>
-    <td class="edittext" align="right"><b>[{ $edit->getTotalOrderSum() }]</b></td>
+    <td class="edittext" align="right"><b>[{ $edit->getFormattedTotalOrderSum() }]</b></td>
     <td class="edittext">&nbsp;<b>[{if $edit->oxorder__oxcurrency->value}] [{$edit->oxorder__oxcurrency->value}] [{else}] &euro; [{/if}]</b></td>
     </tr>
     </table>

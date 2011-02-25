@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 33397 2011-02-21 09:47:15Z arvydas.vapsva $
+ * @version   SVN: $Id: alist.php 33500 2011-02-24 12:48:37Z linas.kukulskis $
  */
 
 /**
@@ -138,9 +138,8 @@ class aList extends oxUBase
         if ( !isset( $this->_sViewId ) ) {
             $sCatId   = oxConfig::getParameter( 'cnid' );
             $iActPage = $this->getActPage();
-            $iArtPerPage = oxConfig::getParameter( '_artperpage' );
-            $sListDisplayType = oxConfig::getParameter( 'ldtype' );
-
+            $iArtPerPage = oxSession::getVar( '_artperpage' );
+            $sListDisplayType = oxSession::getVar( 'ldtype' );
             $sParentViewId = parent::getViewId();
 
             // shorten it
@@ -293,10 +292,11 @@ class aList extends oxUBase
         $aFilter = oxConfig::getParameter( 'attrfilter', 1 );
         $sActCat = oxConfig::getParameter( 'cnid' );
 
-        $aSessionFilter = oxSession::getVar( 'session_attrfilter' );
-        $aSessionFilter[$sActCat] = $aFilter;
-
-        oxSession::setVar( 'session_attrfilter', $aSessionFilter );
+        if ( !empty( $aFilter ) ) {
+            $aSessionFilter = oxSession::getVar( 'session_attrfilter' );
+            $aSessionFilter[$sActCat] = $aFilter;
+            oxSession::setVar( 'session_attrfilter', $aSessionFilter );
+        }
     }
 
     /**

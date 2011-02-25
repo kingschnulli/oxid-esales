@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: function.oxscript.php 32817 2011-01-31 08:53:55Z rimvydas.paskevicius $
+ * @version   SVN: $Id: function.oxscript.php 33497 2011-02-24 11:27:05Z sarunas $
  */
 
 /**
@@ -61,10 +61,16 @@ function smarty_function_oxscript($params, &$smarty)
         $sInclude = $params['include'];
 
         $iPriority = ( $params['priority'] ) ? $params['priority'] : $iDefaultPriority;
-        $aInclude[$iPriority][] = $myConfig->getResourceUrl($sInclude);
-        $aInclude[$iPriority]   = array_unique($aInclude[$iPriority]);
-        $myConfig->setGlobalParameter($sIncludes, $aInclude);
-
+        $sUrl = $myConfig->getResourceUrl($sInclude);
+        if (!$sUrl) {
+            if ($myConfig->getConfigParam( 'iDebug' ) != 0) {
+                return "<div style='color:red;'>WARNING: javascript resource not found: ".  htmlspecialchars($sInclude).'</div>';
+            }
+        } else {
+            $aInclude[$iPriority][] = $sUrl;
+            $aInclude[$iPriority]   = array_unique($aInclude[$iPriority]);
+            $myConfig->setGlobalParameter($sIncludes, $aInclude);
+        }
     } else {
         ksort( $aInclude );
 

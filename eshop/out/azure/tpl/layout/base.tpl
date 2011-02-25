@@ -81,7 +81,6 @@
     [{oxscript include='js/superfish/hoverIntent.js'}]
     [{oxscript include='js/superfish/supersubs.js'}]
     [{oxscript include='js/superfish/superfish.js'}]
-    [{oxscript include='js/topmenu.js'}]
 
     [{if $oViewConf->isTplBlocksDebugMode()}]
         [{oxscript include="js/block-debug.js"}]
