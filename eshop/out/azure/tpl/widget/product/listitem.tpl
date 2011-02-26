@@ -124,7 +124,7 @@
 [{elseif $type eq "line"}]
     <form name="tobasket.[{$testid}]" action="[{ $oViewConf->getSelfActionLink() }]" method="post">
         <div class="pictureBox">
-            <a id="[{$testid}]" href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}]">
+            <a href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}]">
                 <img src="[{$product->getThumbnailUrl()}]" alt="[{ $product->oxarticles__oxtitle->value}]">
             </a>
         </div>

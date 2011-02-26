@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 32763 2011-01-27 11:00:58Z sarunas $
+ * @version   SVN: $Id: contentTest.php 33539 2011-02-25 11:39:38Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -412,7 +412,7 @@ class Unit_Views_contentTest extends OxidTestCase
     {
        modConfig::setParameter( 'tpl', 'test.tpl' );
        $oObj = $this->getProxyClass("content");
-       $this->assertEquals( 'test.tpl', $oObj->UNITgetTplName() );
+       $this->assertEquals( 'message/test.tpl', $oObj->UNITgetTplName() );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 33444 2011-02-22 16:17:59Z linas.kukulskis $
+ * @version   SVN: $Id: oxemail.php 33545 2011-02-25 13:17:37Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -964,7 +964,7 @@ class oxEmail extends PHPMailer
         $oSmarty = oxUtilsView::getInstance()->getSmarty();
         $this->setUser( $oParams );
 
-        $sHomeUrl = $oShop->getHomeLink();
+        $sHomeUrl = $this->getViewConfig()->getHomeLink();
 
         //setting recommended user id
         if ( $myConfig->getActiveView()->isActive('Invitations') && $oActiveUser = $oShop->getUser() ) {

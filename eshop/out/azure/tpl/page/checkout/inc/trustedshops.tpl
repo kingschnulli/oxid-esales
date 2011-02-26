@@ -17,9 +17,8 @@
         </select>
         [{else}]
             [{assign var="oTsProduct" value=$aTsProtections[0] }]
-            <input type="hidden" name="stsprotection" value="[{$oTsProduct->getTsId()}]">
-                [{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_TSPROTECTIONFOR" }] [{ $oTsProduct->getAmount() }] [{ $currency->sign}] ([{ $oTsProduct->getFPrice() }] [{ $currency->sign}] [{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_INCLUDEVAT" }])
-            [{/if}]
+            <input type="hidden" name="stsprotection" value="[{$oTsProduct->getTsId()}]">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_TSPROTECTIONFOR" }] [{ $oTsProduct->getAmount() }] [{ $currency->sign}] ([{ $oTsProduct->getFPrice() }] [{ $currency->sign}] [{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_INCLUDEVAT" }])
+        [{/if}]
           <br>
           <br>
         [{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_TSPROTECTIONTEXT" }] <a href="http://www.trustedshops.com/shop/data_privacy.php?shop_id=[{$oView->getTSExcellenceId()}]" target="_blank">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_TSPROTECTIONTEXT2" }]</a>

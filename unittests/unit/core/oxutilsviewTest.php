@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsviewTest.php 32931 2011-02-04 16:23:01Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxutilsviewTest.php 33539 2011-02-25 11:39:38Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -377,7 +377,8 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
                                                     1 => 'round',
                                                     2 => 'floor',
                                                     3 => 'trim',
-                                                    4 => 'is_array',
+                                                    4 => 'implode',
+                                                    5 => 'is_array',
                                                   ),
                                                   'ALLOW_CONSTANTS' => true,
                                                   'ALLOW_SUPER_GLOBALS' => true,

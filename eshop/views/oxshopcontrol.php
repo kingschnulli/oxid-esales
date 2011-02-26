@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshopcontrol.php 32893 2011-02-03 14:05:35Z sarunas $
+ * @version   SVN: $Id: oxshopcontrol.php 33532 2011-02-25 11:04:14Z sarunas $
  */
 
 /**
@@ -401,7 +401,7 @@ class oxShopControl extends oxSuperCfg
             $sTpl = false;
             // perform stuff - check if setup is still there
             if ( file_exists( $myConfig->getConfigParam( 'sShopDir' ) . '/setup/index.php' ) ) {
-                $sTpl = 'err_setup.tpl';
+                $sTpl = 'message/err_setup.tpl';
             }
 
             if ( $sTpl ) {

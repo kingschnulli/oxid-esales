@@ -237,7 +237,7 @@
                 [{else}]
                     [{assign var="oTsProduct" value=$aTsProtections[0] }]
                     <input type="hidden" name="stsprotection" value="[{$oTsProduct->getTsId()}]">
-                    [{ oxmultilang ident="PAYMENT_TSPROTECTIONFOR" }] [{ $oTsProduct->getTsId() }] [{ $currency->sign}] ([{ $oTsProduct->getFPrice() }] [{ $currency->sign}] [{ oxmultilang ident="PAYMENT_INCLUDEVAT" }])
+                    [{ oxmultilang ident="PAYMENT_TSPROTECTIONFOR" }] [{ $oTsProduct->getAmount() }] [{ $currency->sign}] ([{ $oTsProduct->getFPrice() }] [{ $currency->sign}] [{ oxmultilang ident="PAYMENT_INCLUDEVAT" }])
                 [{/if}]
               <br>
               <br>

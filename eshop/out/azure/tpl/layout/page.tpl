@@ -1,7 +1,7 @@
 [{capture append="oxidBlock_pageBody"}]
     <div id="page" class="pageLayout[{if $sidebar}] sidebar[{$sidebar}][{/if}]">
     [{include file="layout/header.tpl"}]
-    [{if $oView->getClassName() ne "start"}]
+    [{if $oView->getClassName() ne "start" && !$blHideBreadcrumb}]
         <div id="breadCrumb">[{ include file="widget/breadcrumb.tpl"}]</div>
     [{/if}]
     [{if $sidebar}]
