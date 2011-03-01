@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 32940 2011-02-07 08:19:53Z linas.kukulskis $
+ * @version   SVN: $Id: oxconfigTest.php 33563 2011-02-28 12:44:14Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -450,10 +450,10 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->init();
         $sShopId = $oConfig->getBaseShopId();
 
-        $sQ = 'select oxvarname from oxconfig where oxvartype="bool" and oxshopid="'.$sShopId.'" order by rand()';
+        $sQ = 'select oxvarname from oxconfig where oxvartype="bool" and oxshopid="'.$sShopId.'" and oxmodule="" order by rand()';
         $sVar = oxDb::getDb()->getOne( $sQ );
 
-        $sQ = 'select DECODE( oxvarvalue, "'.$oConfig->getConfigParam( 'sConfigKey' ).'") from oxconfig where oxshopid="'.$sShopId.'" and oxvarname="'.$sVar.'"';
+        $sQ = 'select DECODE( oxvarvalue, "'.$oConfig->getConfigParam( 'sConfigKey' ).'") from oxconfig where oxshopid="'.$sShopId.'" and oxvarname="'.$sVar.'" and oxmodule=""';
         $sVal = oxDb::getDb()->getOne( $sQ );
 
         $oConfig->UNITloadVarsFromDB( $sShopId, array( $sVar ) );
@@ -467,10 +467,10 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->init();
         $sShopId = $oConfig->getBaseShopId();
 
-        $sQ = 'select oxvarname from oxconfig where oxvartype="arr" and oxshopid="'.$sShopId.'" order by rand()';
+        $sQ = 'select oxvarname from oxconfig where oxvartype="arr" and oxshopid="'.$sShopId.'"  and oxmodule="" order by rand()';
         $sVar = oxDb::getDb()->getOne( $sQ );
 
-        $sQ = 'select DECODE( oxvarvalue, "'.$oConfig->getConfigParam( 'sConfigKey' ).'") from oxconfig where oxshopid="'.$sShopId.'" and oxvarname="'.$sVar.'"';
+        $sQ = 'select DECODE( oxvarvalue, "'.$oConfig->getConfigParam( 'sConfigKey' ).'") from oxconfig where oxshopid="'.$sShopId.'" and oxvarname="'.$sVar.'" and oxmodule=""';
         $sVal = oxDb::getDb()->getOne( $sQ );
 
         $oConfig->UNITloadVarsFromDB( $sShopId, array( $sVar ) );
@@ -484,10 +484,10 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->init();
         $sShopId = $oConfig->getBaseShopId();
 
-        $sQ = 'select oxvarname from oxconfig where (oxmodule="" or oxmodule="theme:azure") and oxvartype not in ( "bool", "arr", "aarr" )  and oxshopid="'.$sShopId.'" order by rand()';
+        $sQ = 'select oxvarname from oxconfig where (oxmodule="" or oxmodule="theme:azure") and oxvartype not in ( "bool", "arr", "aarr" )  and oxshopid="'.$sShopId.'"  and oxmodule="" order by rand()';
         $sVar = oxDb::getDb()->getOne( $sQ );
 
-        $sQ = 'select DECODE( oxvarvalue, "'.$oConfig->getConfigParam( 'sConfigKey' ).'") from oxconfig where (oxmodule="" or oxmodule="theme:azure") and oxshopid="'.$sShopId.'" and oxvarname="'.$sVar.'"';
+        $sQ = 'select DECODE( oxvarvalue, "'.$oConfig->getConfigParam( 'sConfigKey' ).'") from oxconfig where oxshopid="'.$sShopId.'" and oxvarname="'.$sVar.'" and oxmodule=""';
         $sVal = oxDb::getDb()->getOne( $sQ );
 
         $oConfig->UNITloadVarsFromDB( $sShopId, array( $sVar ) );

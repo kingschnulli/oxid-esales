@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_main.php 33363 2011-02-18 15:24:27Z linas.kukulskis $
+ * @version   SVN: $Id: shop_main.php 33570 2011-02-28 14:27:51Z vilma $
  */
 
 
@@ -156,20 +156,21 @@ class Shop_Main extends oxAdminDetails
 
         $aNonCopyVars = $this->_getNonCopyConfigVars();
 
-        $sSelect = "select oxvarname, oxvartype, DECODE( oxvarvalue, ".$oDB->quote( $myConfig->getConfigParam( 'sConfigKey' ) ) .") as oxvarvalue from oxconfig where oxshopid = '1'";
+        $sSelect = "select oxvarname, oxvartype, DECODE( oxvarvalue, ".$oDB->quote( $myConfig->getConfigParam( 'sConfigKey' ) ) .") as oxvarvalue, oxmodule from oxconfig where oxshopid = '1'";
         $rs = $oDB->execute( $sSelect );
         if ($rs != false && $rs->recordCount() > 0) {
                     while (!$rs->EOF) {
                         $sVarName = $rs->fields[0];
                         if (!in_array($sVarName, $aNonCopyVars)) {
                             $sID = $myUtilsObject->generateUID();
-                            $sInsert = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue) values ( '$sID', ".$oDB->quote( $oShop->getId() )
+                            $sInsert = "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue, oxmodule) values ( '$sID', ".$oDB->quote( $oShop->getId() )
                                             .", ".$oDB->quote( $rs->fields[0] )
                                             .", ".$oDB->quote( $rs->fields[1] )
                                             .",  ENCODE( ".$oDB->quote( $rs->fields[2] )
                                             .", '".$myConfig->getConfigParam( 'sConfigKey' )
-                                            ."')   )";
-                            $oDB->execute( $sInsert );
+                                            ."')"
+                                            .", ".$oDB->quote( $rs->fields[3] ) . " )";
+                                            $oDB->execute( $sInsert );
                         }
                         $rs->moveNext();
                     }

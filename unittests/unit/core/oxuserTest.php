@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserTest.php 31889 2010-12-16 13:26:53Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxuserTest.php 33551 2011-02-25 16:13:04Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -243,6 +243,8 @@ class Unit_Core_oxuserTest extends OxidTestCase
 
             $this->cleanUpTable( 'oxobject2group' );
         }
+
+        oxSession::deleteVar('deladrid');
 
         parent::tearDown();
     }
@@ -1751,7 +1753,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $sUserID = $this->_aUsers[ $this->_aShops[ rand(0, count( $this->_aShops ) - 1 ) ] ][ rand( 0, count( $this->_aUsers[ 0 ] ) - 1 ) ];
         $sQ = 'select oxid from oxaddress where oxuserid = "'.$sUserID.'"';
         $sAddessId = $myDB->getOne( $sQ );
-        modConfig::getInstance()->setParameter( 'deladrid', $sAddessId );
+        oxSession::setVar('deladrid', $sAddessId );
 
         // loading user
         $oUser = oxNew( 'oxuser' );

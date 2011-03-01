@@ -1,9 +1,9 @@
 [{assign var="bIsError" value=0 }]
 [{capture name=loginErrors}]
     [{foreach from=$Errors.loginBoxErrors item=oEr key=key }]
-    <p id="errorBadLogin" class="errorMsg">[{ $oEr->getOxMessage()}]</>
+        <p id="errorBadLogin" class="errorMsg">[{ $oEr->getOxMessage()}]</>
         [{assign var="bIsError" value=1 }]
-[{/foreach}]
+    [{/foreach}]
 [{/capture}]
 
 [{if !$oxcmp_user->oxuser__oxpassword->value}]
@@ -12,7 +12,6 @@
         <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
         [{include file="form/forgotpwd_email.tpl"}]
     </div>
-
     <a href="#" class="trigger" title="[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</a>
     <form id="login" name="login" action="[{ $oViewConf->getSslSelfLink() }]" method="post">
         <div id="loginBox" class="loginBox popBox" [{if $bIsError}]style="display: block;"[{/if}]>
@@ -21,13 +20,12 @@
             <input type="hidden" name="fnc" value="login_noredirect">
             <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
             <input type="hidden" name="pgNr" value="[{$oView->getActPage()}]">
-            <input type="hidden" name="CustomError" value='loginBoxErrors'>
+            <input type="hidden" name="CustomError" value="loginBoxErrors">
             [{if $oView->getProduct()}]
                 [{assign var="product" value=$oView->getProduct() }]
                 <input type="hidden" name="anid" value="[{ $product->oxarticles__oxnid->value }]">
             [{/if}]
             <div class="loginForm corners fx-gradient-bg">
-
                 <h4>[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</h4>
                 <p>
                     <input id="loginEmail" type="text" name="lgn_usr" value="[{ oxmultilang ident="WIDGET_LOGINBOX_EMAIL_ADDRESS" }]" class="textbox innerLabel ">
@@ -35,7 +33,7 @@
                 <p>
                     <input type="password" name="lgn_pwd" class="textbox passwordbox innerLabel" value="[{ oxmultilang ident="WIDGET_LOGINBOX_PASSWORD" }]"><strong><a id="forgotPasswordOpener" href="#" title="[{ oxmultilang ident="WIDGET_LOGINBOX_FORGOT_PASSWORD" }]">?</a></strong>
                 </p>
-                    [{$smarty.capture.loginErrors}]
+                [{$smarty.capture.loginErrors}]
                 <p class="checkFields clear">
                     <input type="checkbox" class="checkbox" value="1" name="lgn_cook" id="remember"><label for="remember">[{ oxmultilang ident="WIDGET_LOGINBOX_REMEMBER_ME" }]</label>
                 </p>
@@ -64,7 +62,7 @@
         [{ $oxcmp_user->oxuser__oxusername->value|oxtruncate:25:"...":true }]
     [{/if}]
     </a>
-    <a class="logoutLink" href="[{ $oViewConf->getLogoutLink() }]" title="[{ oxmultilang ident="WIDGET_LOGINBOX_LOGOUT" }]">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGOUT" }]</a>
+    <a id="logoutLink" class="logoutLink" href="[{ $oViewConf->getLogoutLink() }]" title="[{ oxmultilang ident="WIDGET_LOGINBOX_LOGOUT" }]">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGOUT" }]</a>
 [{/if}]
 [{if !$oView->isConnectedWithFb()}]
     [{if !$oxcmp_user->oxuser__oxpassword->value && $oViewConf->getShowOpenIdLogin() }]

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliverysetlistTest.php 33244 2011-02-14 15:40:18Z sarunas $
+ * @version   SVN: $Id: oxdeliverysetlistTest.php 33553 2011-02-28 07:42:43Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -81,7 +81,7 @@ class Unit_Core_oxDeliverysetListTest extends OxidTestCase
         $oAdress->oxaddress__oxaddressuserid = new oxField($this->_oUser->getId(), oxField::T_RAW);
         $oAdress->oxaddress__oxcountryid = new oxField('a7c40f6323c4bfb36.59919433', oxField::T_RAW); //italien
         $oAdress->save();
-        modConfig::setParameter( 'deladrid', '_testAddressId' );
+        oxSession::setVar( 'deladrid', '_testAddressId' );
         modOxDeliverySetList_paymentList::$dBasketPrice = null;
     }
 
@@ -101,6 +101,9 @@ class Unit_Core_oxDeliverysetListTest extends OxidTestCase
         $this->cleanUpTable( 'oxdelivery' );
         $this->cleanUpTable( 'oxobject2delivery' );
         $this->cleanUpTable( 'oxdel2delset' );
+
+        oxSession::deleteVar('deladrid');
+
         parent::tearDown();
     }
 
@@ -324,7 +327,7 @@ class Unit_Core_oxDeliverysetListTest extends OxidTestCase
 
         $oUser = new oxuser();
         $oUser->load( 'oxdefaultadmin' );
-        modConfig::setParameter( 'deladrid', null );
+        oxSession::deleteVar('deladrid');
 
         $oBasket = new oxBasket();
         modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );

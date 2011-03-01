@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 33498 2011-02-24 11:27:10Z sarunas $
+ * @version   SVN: $Id: oxubase.php 33572 2011-02-28 14:42:32Z rimvydas.paskevicius $
  */
 
 /**
@@ -2477,7 +2477,7 @@ class oxUBase extends oxView
     }
 
     /**
-     * Returns vendor tree (if it is loaded0
+     * Returns vendor tree (if it is loaded)
      *
      * @return oxvendorlist
      */

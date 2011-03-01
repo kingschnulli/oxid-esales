@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: wishlist.php 33512 2011-02-24 15:06:26Z rimvydas.paskevicius $
+ * @version   SVN: $Id: wishlist.php 33564 2011-02-28 12:44:18Z vilma $
  */
 
 /**
@@ -85,15 +85,16 @@ class Wishlist extends oxUBase
         if ( $this->_oWishUser === null) {
             $this->_oWishUser = false;
 
-            if ( $sUserID = oxConfig::getParameter( 'wishid' ) ) {
+            $sUserId = oxConfig::getParameter( 'wishid') ? oxConfig::getParameter( 'wishid' ): oxSession::getVar( 'wishid');
+            if ( $sUserId ) {
                 $oUser = oxNew( 'oxuser' );
-                if ( $oUser->load( $sUserID ) ) {
+                if ( $oUser->load( $sUserId ) ) {
 
                     // passing wishlist information
                     $this->_oWishUser = $oUser;
 
                     // store this one to session
-                    oxSession::setVar( 'wishid', $sUserID );
+                    oxSession::setVar( 'wishid', $sUserId );
                 }
             }
         }

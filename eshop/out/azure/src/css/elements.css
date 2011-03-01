@@ -783,6 +783,10 @@ a.submitButton {
     color: #ff0000;
 }
 
+.openIDLogin p.errorMsg {
+    color: #ff0000;
+}
+
 .loginForm p.checkFields {
     margin-bottom: 4px;
 }

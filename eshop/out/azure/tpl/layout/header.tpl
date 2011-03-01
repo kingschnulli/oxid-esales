@@ -10,7 +10,7 @@
         <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_password" params=$oViewConf->getNavUrlParams() }]">[{oxmultilang ident="WIDGET_SERVICES_ACCOUNT"}]</a></li>
     [{/if}]
     [{if !$oxcmp_user}]
-        <li><a href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=register" }]" title="[{oxmultilang ident="PAGE_ACCOUNT_REGISTER_REGISTER"}]">[{oxmultilang ident="PAGE_ACCOUNT_REGISTER_REGISTER"}]</a></li>
+        <li><a id="registerLink" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=register" }]" title="[{oxmultilang ident="PAGE_ACCOUNT_REGISTER_REGISTER"}]">[{oxmultilang ident="PAGE_ACCOUNT_REGISTER_REGISTER"}]</a></li>
     [{/if}]
   </ul>
   <a id="logo" href="[{$oViewConf->getHomeLink()}]" title="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"><img src="[{$oViewConf->getImageUrl()}]logo.png" alt="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"></a>

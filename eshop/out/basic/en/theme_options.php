@@ -29,43 +29,42 @@ $aLang = array(
 'SHOP_THEME_GROUP_features'                       => 'Features',
 'SHOP_THEME_GROUP_display'                        => 'Display',
 
-'SHOP_THEME_sIconsize'                            => 'Größe des Icons in Pixeln (Breite*Höhe)',//SHOP_CONFIG_ICONSIZE
-'HELP_SHOP_THEME_sIconsize'                       => 'Icons sind die kleinsten Bilder eines Artikels. Sie werden z. B. <br>' .
-                                                     '<ul><li>im Warenkorb angezeigt</li>' .
-                                                     '<li>angezeigt, wenn Artikel in der Seitenleiste aufgelistet werden (z.B. bei den Aktionen <span class="filename_filepath_or_italic">Top of the Shop</span> und <span class="filename_filepath_or_italic">Schnäppchen</span>).</li></ul>' .
-                                                     'Damit die Harmonie des eShops nicht durch zu große Icons gestört wird, werden zu große Icons automatisch verkleinert. Die maximale Größe können Sie hier eingeben.<br>' ,
+'SHOP_THEME_sIconsize'                            => 'Icon size (width*height)',//SHOP_CONFIG_ICONSIZE
+'HELP_SHOP_THEME_sIconsize'                       => 'Icons are the smallest pictures of a product. They are used: <br>' .
+                                                     '<ul><li>in the shopping cart.</li>' .
+                                                     '<li>if products are shown in the right menu (e.g. in <span class="filename_filepath_or_italic">TOP of the Shop</span> and <span class="filename_filepath_or_italic">Bargain</span>).</li></ul>' .
+                                                     'For avoiding design issues caused by too big icons the icons are resized. Enter the maximum size for icons here.',
 
-'SHOP_THEME_sThumbnailsize'                       => 'Größe des Thumbnails in Pixeln (Breite*Höhe)',//SHOP_CONFIG_THUMBNAILSIZE
-'HELP_SHOP_THEME_sThumbnailsize'                  => 'Thumbnails sind kleine Bilder eines Artikels. Sie werden z. B. <br>' .
-                                                     '<ul><li>in Artikellisten angezeigt. Artikellisten sind z. B. Kategorieansichten (alle Artikel in einer Kategorie werden aufgelistet) und die Suchergebnisse.</li>' .
-                                                     '<li>in Aktionen angezeigt, die in der Mitte der Startseite angezeigt werden, z. B. <span class="filename_filepath_or_italic">Die Dauerbrenner</span> und <span class="filename_filepath_or_italic">Frisch eingetroffen!</span>.</li></ul>' .
-                                                     'Damit das Design des eShops nicht durch zu große Thumbnails gestört wird, werden zu große Thumbnails automatisch verkleinert. Die maximale Größe können Sie hier eingeben.',
+'SHOP_THEME_sThumbnailsize'                       => 'Thumbnail size (width*height)',//SHOP_CONFIG_THUMBNAILSIZE
+'HELP_SHOP_THEME_sThumbnailsize'                  => 'Thumbnails are small product pictures. They are used:<br>' .
+                                                     '<ul><li>in product lists.</li>' .
+                                                     '<li>in promotions displayed in the middle of the front page, e. g. <span class="filename_filepath_or_italic">Just arrived!</span>.</li></ul>' .
+                                                     'For avoiding design issues caused by too big thumbnails the thumbnails are resized. Enter the maximum size for thumbnails here.',
 
-'SHOP_THEME_sZoomImageSize'                       => 'Größe der Zoom-Bilder (Zoom 1-4) in Pixeln (Breite*Höhe)',//SHOP_CONFIG_ZOOMIMAGESIZE
-'SHOP_THEME_sCatThumbnailsize'                    => 'Größe des Kategoriebildes in Pixeln (Breite*Höhe)',//SHOP_CONFIG_CATEGORYTHUMBNAILSIZE
-'SHOP_THEME_aDetailImageSizes'                    => 'Größe der Artikelbilder  (Bild 1-12) in Pixeln (Breite*Höhe)',//SHOP_CONFIG_DETAILIMAGESIZE
+'SHOP_THEME_sZoomImageSize'                       => 'Zoom picture size (width*height)',//SHOP_CONFIG_ZOOMIMAGESIZE
+'SHOP_THEME_sCatThumbnailsize'                    => 'Category picture size (width*height)',//SHOP_CONFIG_CATEGORYTHUMBNAILSIZE
+'SHOP_THEME_aDetailImageSizes'                    => 'Product picture size (width*height)',//SHOP_CONFIG_DETAILIMAGESIZE
 
-'SHOP_THEME_bl_showOpenId'                        => 'Open ID Login aktivieren',//SHOP_CONFIG_SHOWOPENID
-'SHOP_THEME_bl_showGiftWrapping'                  => 'Geschenkverpackungen aktivieren',//SHOP_CONFIG_SHOWGIFTWRAPPING
-'SHOP_THEME_bl_showVouchers'                      => 'Gutscheine aktivieren',//SHOP_CONFIG_SHOWVOUCHERS
-'SHOP_THEME_bl_showWishlist'                      => 'Wunschzettel aktivieren',//SHOP_CONFIG_SHOWWISHLIST
-'SHOP_THEME_bl_showCompareList'                   => 'Artikelvergleich aktivieren',//SHOP_CONFIG_SHOWCOMPARELIST
-'SHOP_THEME_bl_showListmania'                     => 'Lieblingslisten aktivieren',//SHOP_CONFIG_SHOWLISTMANIA
-'SHOP_THEME_bl_perfShowLeftBasket'                => 'Warenkorb links anzeigen',//SHOP_PERF_SHOWLEFTBASKET
-'SHOP_THEME_bl_perfShowRightBasket'               => 'Warenkorb rechts anzeigen',//SHOP_PERF_SHOWRIGHTBASKET
-'SHOP_THEME_bl_perfShowTopBasket'                 => 'Warenkorb oben anzeigen',//SHOP_PERF_SHOWTOPBASKET
-'SHOP_THEME_blShowBirthdayFields'                 => 'Eingabefeld für das Geburtsdatum anzeigen, wenn Benutzer ihre Daten eingeben',//SHOP_CONFIG_SHOWBIRTHDAYFIELDS
-'SHOP_THEME_blTopNaviLayout'                      => 'Kategorien-Navigation oben anzeigen',//SHOP_CONFIG_TOPNAVILAYOUT
-'HELP_SHOP_THEME_blTopNaviLayout'                 => 'Die Kategorien-Navigation wird normalerweise links angezeigt. Wenn Sie diese Einstellung aktivieren, wird die Kategorien-Navigation anstatt links oben angezeigt.',
+'SHOP_THEME_bl_showOpenId'                        => 'Use Open ID',         //SHOP_CONFIG_SHOWOPENID
+'SHOP_THEME_bl_showGiftWrapping'                  => 'Use gift wrapping',   //SHOP_CONFIG_SHOWGIFTWRAPPING
+'SHOP_THEME_bl_showVouchers'                      => 'Use vouchers',        //SHOP_CONFIG_SHOWVOUCHERS
+'SHOP_THEME_bl_showWishlist'                      => 'Use gift registry',   //SHOP_CONFIG_SHOWWISHLIST
+'SHOP_THEME_bl_showCompareList'                   => 'Use compare list',    //SHOP_CONFIG_SHOWCOMPARELIST
+'SHOP_THEME_bl_showListmania'                     => 'Use listmania',       //SHOP_CONFIG_SHOWLISTMANIA
+'SHOP_THEME_bl_perfShowLeftBasket'                => 'Display cart on left side',//SHOP_PERF_SHOWLEFTBASKET
+'SHOP_THEME_bl_perfShowRightBasket'               => 'Display cart on right side',//SHOP_PERF_SHOWRIGHTBASKET
+'SHOP_THEME_bl_perfShowTopBasket'                 => 'Display cart at top',//SHOP_PERF_SHOWTOPBASKET
+'SHOP_THEME_blShowBirthdayFields'                 => 'Display input fields for date of birth when users enter their personal data',//SHOP_CONFIG_SHOWBIRTHDAYFIELDS
+'SHOP_THEME_blTopNaviLayout'                      => 'Display category navigation at top',//SHOP_CONFIG_TOPNAVILAYOUT
+'HELP_SHOP_THEME_blTopNaviLayout'                 => 'Usually, the category navigation is shown on the left. If this setting is checked, the category navigation is shown at top instead.',
 
-'SHOP_THEME_iTopNaviCatCount'                     => 'Anzahl der Kategorien, die oben angezeigt werden (weitere Kategorien werden ebenfalls oben unter "mehr" aufgelistet)',//SHOP_CONFIG_TOPNAVICATCOUNT
-'SHOP_THEME_blShowFinalStep'                      => 'Bestellbestätigung anzeigen, wenn die Bestellung abgeschlossen ist (fünfter Bestellschritt)',//SHOP_SYSTEM_SHOWFINALSTEP
-'SHOP_THEME_iNewBasketItemMessage'                => 'Meldung ausgeben, wenn ein Artikel in den Warenkorb gelegt wurde',//SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE
-'HELP_SHOP_THEME_iNewBasketItemMessage'           => 'Wenn Konsumenten ein Produkt in den Warenkorb legen, kann der OXID eShop unterschiedliche Feedback-Aktionen durchführen.',//SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE
-'SHOP_THEME_iNewBasketItemMessage_0'              => 'Keine',
-'SHOP_THEME_iNewBasketItemMessage_1'              => 'Meldung ausgeben',
-'SHOP_THEME_iNewBasketItemMessage_2'              => 'Popup öffnen',
-'SHOP_THEME_iNewBasketItemMessage_3'              => 'Warenkorb öffnen',
-'SHOP_THEME_aNrofCatArticles'                     => 'Number of Products which can be shown in a Product List (Category Pages, Search Results)<br>Attention: A large number of products per page (above 100) can cause serious performance issues!',
+'SHOP_THEME_iTopNaviCatCount'                     => 'Amount of categories that is displayed at top',//SHOP_CONFIG_TOPNAVICATCOUNT
+'SHOP_THEME_blShowFinalStep'                      => 'Show order confirmation after order is finished (5th Step in Checkout)',//SHOP_SYSTEM_SHOWFINALSTEP
+'SHOP_THEME_iNewBasketItemMessage'                => 'Select action when product is added to cart',//SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE
+'HELP_SHOP_THEME_iNewBasketItemMessage'           => 'When customer adds products to cart, OXID eShop can behave differently. Set up what shall happen to give proper feedback to customer.',//SHOP_SYSTEM_SHOWNEWBASKETITEMMESSAGE
+'SHOP_THEME_iNewBasketItemMessage_0'              => 'None',
+'SHOP_THEME_iNewBasketItemMessage_1'              => 'Display message',
+'SHOP_THEME_iNewBasketItemMessage_2'              => 'Open popup',
+'SHOP_THEME_iNewBasketItemMessage_3'              => 'Open basket',
 
 );

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 33500 2011-02-24 12:48:37Z linas.kukulskis $
+ * @version   SVN: $Id: alist.php 33574 2011-02-28 16:24:58Z rimvydas.paskevicius $
  */
 
 /**
@@ -157,7 +157,8 @@ class aList extends oxUBase
      * dependent (oxarticlelist::LoadPriceArticles()). Generates page navigation data
      * such as previous/next window URL, number of available pages, generates
      * metatags info (oxubase::_convertForMetaTags()) and returns name of
-     * template to render.
+     * template to render. Also checks if actual pages count does not exceed real
+     * articles page count. If yes - calls error_404_handler().
      *
      * @return  string  $this->_sThisTemplate   current template file name
      */
@@ -195,6 +196,13 @@ class aList extends oxUBase
         if ($oCat && $myConfig->getConfigParam( 'bl_rssCategories' )) {
             $oRss = oxNew('oxrssfeed');
             $this->addRssFeed($oRss->getCategoryArticlesTitle($oCat), $oRss->getCategoryArticlesUrl($oCat), 'activeCategory');
+        }
+
+        //checking if actual pages count does not exceed real articles page count
+        $this->getArticleList();
+
+        if ( $this->getPageCount() < $this->getActPage() ) {
+            error_404_handler();
         }
 
         parent::render();
@@ -336,25 +344,13 @@ class aList extends oxUBase
     }
 
     /**
-     * Loads article list to check if page number passed by request is valid.
-     * In case page number is invalid -  error_404_handler() is called.
-     *
-     * @todo this function is a temporary solution and should be rmeoved as
-     * soon product list loading is refactored
+     * Get actual page number.
      *
      * @return int
      */
     public function getActPage()
     {
-        // loading product list
-        $this->getArticleList();
-        $iActPage = $this->_getRequestPageNr();
-
-        if ( $this->_iCntPages < $iActPage ) {
-            error_404_handler();
-        }
-
-        return $iActPage;
+        return $this->_getRequestPageNr();
     }
 
     /**
@@ -964,5 +960,15 @@ class aList extends oxUBase
     public function canSelectDisplayType()
     {
         return $this->getConfig()->getConfigParam( 'blShowListDisplayType' );
+    }
+
+    /**
+     * Get list articles pages count
+     *
+     * @return int
+     */
+    public function getPageCount()
+    {
+        return $this->_iCntPages;
     }
 }

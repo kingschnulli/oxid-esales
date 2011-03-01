@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 33390 2011-02-21 08:32:21Z sarunas $
+ * @version   SVN: $Id: oxuser.php 33549 2011-02-25 15:31:29Z sarunas $
  */
 
 /**
@@ -706,7 +706,8 @@ class oxUser extends oxBase
     public function getActiveCountry()
     {
         $sDeliveryCountry = '';
-        if ( $soxAddressId = oxConfig::getParameter( 'deladrid' ) ) {
+        $soxAddressId = oxSession::getVar( 'deladrid' );
+        if ( $soxAddressId ) {
             $oDelAddress = oxNew( 'oxaddress' );
             $oDelAddress->load( $soxAddressId );
             $sDeliveryCountry = $oDelAddress->oxaddress__oxcountryid->value;

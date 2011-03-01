@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_utils.php 32995 2011-02-07 15:33:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxcmp_utils.php 33562 2011-02-28 12:29:42Z vilma $
  */
 
 /**
@@ -239,9 +239,9 @@ class oxcmp_utils extends oxView
         $oParentView = $this->getParent();
 
         if ( ( $oUser = $this->getUser() ) ) {
-
             // calculating user friends wishlist item count
-            if ( ( $sUserId = oxConfig::getParameter( 'wishid' ) ) ) {
+            $sUserId = oxConfig::getParameter( 'wishid') ? oxConfig::getParameter( 'wishid' ): oxSession::getVar( 'wishid');
+            if ( $sUserId ) {
                 $oWishUser = oxNew( 'oxuser' );
                 if ( $oWishUser->load( $sUserId ) ) {
                     $oParentView->setWishlistName( $oWishUser->oxuser__oxfname->value );

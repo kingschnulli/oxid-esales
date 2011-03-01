@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 33296 2011-02-15 17:06:18Z vilma $
+ * @version   SVN: $Id: details.php 33560 2011-02-28 12:06:14Z linas.kukulskis $
  */
 
 /**
@@ -1432,7 +1432,8 @@ class Details extends oxUBase
             $aCatPath['title'] = oxLang::getInstance()->translateString( 'TAGS', oxLang::getInstance()->getBaseLanguage(), false );
             $aPaths[] = $aCatPath;
 
-            $aCatPath['title'] = oxConfig::getParameter( 'searchtag' );
+            $oStr = getStr();
+            $aCatPath['title'] = $oStr->ucfirst(oxConfig::getParameter( 'searchtag' ));
             $aPaths[] = $aCatPath;
 
         } elseif ( 'recommlist' == oxConfig::getParameter( 'listtype' ) ) {

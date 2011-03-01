@@ -26,7 +26,6 @@
                  [{ oxmultilang ident="ACCOUNT_WISHLIST_WISHLISTOFF" }] [{ $wishres->oxuser__oxfname->value }]&nbsp;[{ $wishres->oxuser__oxlname->value }]
                </a>
             </div>
-        </tr>
         [{/foreach }]
     [{else }]
         [{if $oView->getWishListSearchParam() }]

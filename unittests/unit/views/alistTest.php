@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 33489 2011-02-24 08:42:27Z rimvydas.paskevicius $
+ * @version   SVN: $Id: alistTest.php 33574 2011-02-28 16:24:58Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -298,6 +298,35 @@ class Unit_Views_alistTest extends OxidTestCase
         }
 
         $this->fail( 'failed redirect on inactive category' );
+    }
+
+    /**
+     * Test render actual page count exceeds real page count
+     *
+     * @return null
+     */
+    public function testRender_pageCountIsIncorrect()
+    {
+        oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
+
+        $oCat = $this->getMock( "oxcategory", array( 'canView' ) );
+        $oCat->expects( $this->any() )->method( 'canView')->will( $this->returnValue( true ) );
+        $oCat->oxcategories__oxactive = new oxField( 1, oxField::T_RAW );
+
+        $oListView = $this->getMock( "aList", array( 'getActCategory', 'getArticleList', 'getActPage', 'getPageCount' ) );
+        $oListView->expects( $this->atLeastOnce() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
+        $oListView->expects( $this->once() )->method( 'getActPage')->will( $this->returnValue( 12 ) );
+        $oListView->expects( $this->once() )->method( 'getPageCount')->will( $this->returnValue( 10 ) );
+        $oListView->expects( $this->atLeastOnce() )->method( 'getArticleList' );
+
+        try {
+            $oListView->render();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( 'OK', $oExcp->getMessage() );
+            return;
+        }
+
+        $this->fail( 'failed redirect when page count is incorrect' );
     }
 
     /**
@@ -943,5 +972,31 @@ class Unit_Views_alistTest extends OxidTestCase
         $oSubj->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
 
         $this->assertEquals( true, $oSubj->canSelectDisplayType() );
+    }
+
+    /**
+     * Test get active page nr
+     *
+     * @return null
+     */
+    public function testGetActPage()
+    {
+        $oList = $this->getMock( 'alist', array( '_getRequestPageNr' ));
+        $oList->expects( $this->once() )->method( '_getRequestPageNr' )->will( $this->returnValue( "10" ) );
+
+        $this->assertEquals( 10, $oList->getActPage() );
+    }
+
+    /**
+     * Test get list pages count
+     *
+     * @return null
+     */
+    public function testGetPageCount()
+    {
+        $oList = $this->getProxyClass( "aList" );
+        $oList->setNonPublicVar( "_iCntPages", 10 );
+
+        $this->assertEquals( 10, $oList->getPageCount() );
     }
 }

@@ -17,14 +17,13 @@
         </div>
         <ul class="clear">
             <li>
-                <input type="checkbox" name="ord_agb" value="1">
-                <label>[{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
+                <input id="orderConfirmAGB" type="checkbox" name="ord_agb" value="1">
+                <label id="confirmLabel">[{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
                     [{ $oContent->oxcontents__oxcontent->value }]
                     [{/oxifcontent}]</label>
             </li>
-
             <li class="formSubmit">
-                <button type="submit" class="submitButton largeButton">[{ oxmultilang ident="FORM_LOGIN_ACCOUNT_LOGIN" }]</button>
+                <button id="confirmButton" type="submit" class="submitButton largeButton">[{ oxmultilang ident="FORM_LOGIN_ACCOUNT_LOGIN" }]</button>
             </li>
         </ul>
     </form>
