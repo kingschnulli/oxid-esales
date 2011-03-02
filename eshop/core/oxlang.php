@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 33474 2011-02-23 13:29:51Z arvydas.vapsva $
+ * @version   SVN: $Id: oxlang.php 33605 2011-03-01 16:08:13Z vilma $
  */
 
 /**
@@ -160,6 +160,9 @@ class oxLang extends oxSuperCfg
 
             if ( is_null( $this->_iBaseLanguageId ) ) {
                 $this->_iBaseLanguageId = oxConfig::getParameter( 'language' );
+                if (!isset($this->_iBaseLanguageId)) {
+                    $this->_iBaseLanguageId = oxSession::getVar('language');
+                }
             }
 
             // if language still not setted and not search engine browsing,
@@ -239,7 +242,10 @@ class oxLang extends oxSuperCfg
             } else {
 
                 // choosing language ident
-                $iLang = oxConfig::getParameter( 'new_lang' );
+                // check if we really need to set the new language
+                if ( "saveinnlang" == $this->getConfig()->getActiveView()->getFncName() ) {
+                    $iLang = oxConfig::getParameter( "new_lang");
+                }
                 $iLang = ( $iLang === null ) ? oxConfig::getParameter( 'editlanguage' ) : $iLang;
                 $iLang = ( $iLang === null ) ? oxSession::getVar( 'editlanguage' ) : $iLang;
                 $iLang = ( $iLang === null ) ? $this->getBaseLanguage() : $iLang;

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 33523 2011-02-24 22:39:13Z alfonsas $
+ * @version   SVN: $Id: oxcmp_user.php 33604 2011-03-01 15:48:03Z sarunas $
  */
 
 // defining login/logout states
@@ -111,9 +111,14 @@ class oxcmp_user extends oxView
     public function init()
     {
         // saving show/hide delivery address state
+        $blShow = oxConfig::getParameter( 'blshowshipaddress' );
+        if (!isset($blShow)) {
+            $blShow = oxSession::getVar( 'blshowshipaddress' );
+        }
         // @deprecated, remove blhideshipaddress checking when basic theme support discontinued
-        $blShow = (oxConfig::getParameter( 'blshowshipaddress' ) || oxSession::getVar( 'blshowshipaddress' )) &&
-                 !(oxConfig::getParameter( 'blhideshipaddress' ) || oxSession::getVar( 'blhideshipaddress' ));
+        if (oxConfig::getParameter( 'blhideshipaddress' ) || oxSession::getVar( 'blhideshipaddress' )) {
+            $blShow = false;
+        }
 
         oxSession::setVar( 'blshowshipaddress', $blShow );
 

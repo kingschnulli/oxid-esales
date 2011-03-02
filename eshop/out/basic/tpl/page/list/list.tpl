@@ -1,5 +1,4 @@
 [{include file="_header.tpl" tree_path=$oView->getTreePath() titlepagesuffix=$oView->getTitlePageSuffix()}]
-[{assign var="pageNavigation" value=$oView->getPageNavigation()}]
 
     <div class="boxhead">
         <h1 id="test_catTitle">[{$oView->getTitle()}]</h1>
@@ -21,7 +20,7 @@
             [{/if}]
         [{/if}]
 
-        [{assign var="oCategoryAttributes" value=$oView->getAttributes()}]    
+        [{assign var="oCategoryAttributes" value=$oView->getAttributes()}]
         [{if $oCategoryAttributes }]
             <form method="post" action="[{ $oViewConf->getSelfActionLink() }]" name="_filterlist" id="_filterlist">
             <div class="catfilter">

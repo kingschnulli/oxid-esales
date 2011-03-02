@@ -4,7 +4,7 @@
 [{include file="inc/account_header.tpl" active_link=4 }]<br>
 
 <!-- page locator -->
-[{include file="inc/list_locator.tpl" sLocatorCaption="INC_LIST_LOCATOR_ORDERSPERPAGE"|oxmultilangassign pageNavigation=$oView->getPageNavigation()}]
+[{include file="inc/list_locator.tpl" sLocatorCaption="INC_LIST_LOCATOR_ORDERSPERPAGE"|oxmultilangassign }]
 
 <strong class="boxhead" id="test_accOrderHistoryHeader">[{ $template_title }]</strong>
 <div class="box info">
@@ -88,7 +88,7 @@
               <td colspan="3"></td>
             </tr>
             [{assign var=oArticleList value=$oView->getOrderArticleList()}]
-            
+
             [{foreach from=$order->getOrderArticles() item=orderitem name=testOrderItem}]
             [{assign var=sArticleId value=$orderitem->oxorderarticles__oxartid->value }]
             [{assign var=oArticle value=$oArticleList[$sArticleId] }]
@@ -131,7 +131,7 @@
 </div>
 
 <!-- page locator -->
-[{include file="inc/list_locator.tpl" sLocatorCaption="INC_LIST_LOCATOR_ORDERSPERPAGE"|oxmultilangassign pageNavigation=$oView->getPageNavigation() }]
+[{include file="inc/list_locator.tpl" sLocatorCaption="INC_LIST_LOCATOR_ORDERSPERPAGE"|oxmultilangassign }]
 
 <div class="bar prevnext">
     <form action="[{ $oViewConf->getSelfActionLink() }]" name="order" method="post">

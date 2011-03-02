@@ -41,6 +41,3 @@
       <option name="promtString" value="">[{oxmultilang ident="FORM_FIELDSET_STATE_PROMTSTRING"}]</option>
   </select>
 </span>
-<noscript>
-  <input type=text name="[{$stateSelectName}]">
-</noscript>

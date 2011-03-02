@@ -1248,7 +1248,7 @@ INSERT INTO `oxdelivery` VALUES ('1b842e738970d31e3.71258328', 'oxbaseshop', 1, 
 #
 
 INSERT INTO `oxdiscount` VALUES ('9fc3e801d40332ae4.08296552', 'oxbaseshop', 0, '2003-03-29 00:00:00', '2003-03-30 00:00:00', '15% auf den gesamten Shop an einem Tag', '15% on everything for one day', '', '', 0, 999999, 999999, 0, '%', 15, '', 0, 0);
-INSERT INTO `oxdiscount` VALUES ('9fc3e801da9cdd0b2.74513077', 'oxbaseshop', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '10% ab 200 Euro Einkaufswert', '10% on orders over $200', '', '', 0, 999999, 999999, 200, '%', 10, '', 0, 0);
+INSERT INTO `oxdiscount` VALUES ('9fc3e801da9cdd0b2.74513077', 'oxbaseshop', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '10% Rabatt für Warenkörbe > 200 Warenwert', '10% on orders over 200 of basket value', '', '', 0, 999999, 999999, 200, '%', 10, '', 0, 0);
 INSERT INTO `oxdiscount` VALUES ('4e542e4e8dd127836.00288451', 'oxbaseshop', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Aktion Schnäppchen', 'Current Bargain', '', '', 1, 99999, 0, 0, '%', 10, '', 0, 0);
 
 #

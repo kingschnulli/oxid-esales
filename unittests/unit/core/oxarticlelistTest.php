@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 33480 2011-02-23 14:43:14Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticlelistTest.php 33601 2011-03-01 14:34:42Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1157,22 +1157,38 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     }
 
     /**
-     * Test load price articles from category if article count set.
+     * Test counting price category articles
      *
      * @return null
      */
-    public function testLoadPriceArticlesFromCategoryIfArtCntSet()
+    public function testLoadPriceArticles_totalArticlesCount()
     {
-        $iPrice1 = 5;
-        $iPrice2 = 10;
+        $oUtilsCount = $this->getMock( 'oxUtilsCount', array( "getPriceCatArticleCount" ) );
+        $oUtilsCount->expects($this->once())->method( "getPriceCatArticleCount" )->will( $this->returnValue( 25 ) );
 
-        $oCat = $this->getMock( 'oxCategory', array( "getNrOfArticles" ) );
-        $oCat->expects($this->any())->method( "getNrOfArticles" )->will( $this->returnValue( 15 ) );
-        $oTest = new oxArticleList();
-        $iRes = $oTest->loadPriceArticles( $iPrice1, $iPrice2, $oCat );
+        oxTestModules::addModuleObject( "oxUtilsCount", $oUtilsCount );
 
-        $this->assertEquals( 15, $iRes );
-        $this->assertNotEquals( 15, $oTest->count() );
+        $oCat = oxNew( 'oxCategory' );
+        
+        $oArticleList = new oxArticleList();
+        $iRes = $oArticleList->loadPriceArticles( 1, 2, $oCat );
+
+        $this->assertEquals( 25, $iRes );
+    }
+
+    /**
+     * Test counting price category articles
+     *
+     * @return null
+     */
+    public function testLoadPriceArticles_totalArticlesCount_noCategory()
+    {
+        $oArticleList = $this->getMock( 'oxArticleList', array( "count" ) );
+        $oArticleList->expects($this->once())->method( "count" )->will( $this->returnValue( 25 ) );
+
+        $iRes = $oArticleList->loadPriceArticles( 1, 2 );
+
+        $this->assertEquals( 25, $iRes );
     }
 
     /**

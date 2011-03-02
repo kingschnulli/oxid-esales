@@ -12,6 +12,7 @@
     <input type="hidden" name="oxidCopy" value="[{ $oxid }]">
     <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
     <input type="hidden" name="language" value="[{ $actlang }]">
+    <input type="hidden" name="editlanguage" value="[{ $editlanguage }]">
 </form>
 
 

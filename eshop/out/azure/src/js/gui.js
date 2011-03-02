@@ -603,6 +603,7 @@ $(function(){
     });
 
     $('#oxaddressid').change(function() {
+        $( ".oxValidate" ).unbind('submit');
         var reload = '2';
         var selectValue = $(this).val();
         if (selectValue === '-1') {
@@ -619,9 +620,8 @@ $(function(){
             $("input:text").filter(function() {
                 return this.name.match(/address__/);
             }).val("");
-            $("select").filter(function() {
-                return this.name.match(/address__/);
-            }).eq("").attr("selected", "selected");
+            $("select[name='deladr[oxaddress__oxcountryid]']").children("option").attr("selected", null);
+            $("select[name='deladr[oxaddress__oxstateid]']").children("option[name='promtString']").attr("selected", "selected");
         }
     });
 

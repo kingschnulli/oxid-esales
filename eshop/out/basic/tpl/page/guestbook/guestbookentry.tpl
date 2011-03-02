@@ -2,7 +2,7 @@
 [{include file="_header.tpl" title=$template_title location=$template_title }]
 
 <!-- page locator -->
-[{include file="inc/guestbook_locator.tpl"}]
+[{include file="inc/guestbook_locator.tpl" }]
 [{if !$oView->floodProtection()}]
   <strong class="boxhead">[{ oxmultilang ident="GUESTBOOKENTRY_WRITEENTRY" }]</strong>
   <div class="box">
@@ -48,7 +48,7 @@
   [{/if}]
 </div>
 <!-- page locator -->
-[{include file="inc/guestbook_locator.tpl"}]
+[{include file="inc/guestbook_locator.tpl" }]
 
 [{ insert name="oxid_tracker" title=$template_title }]
 [{include file="_footer.tpl" }]

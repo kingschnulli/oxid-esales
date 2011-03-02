@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbase.php 33056 2011-02-08 16:05:32Z sarunas $
+ * @version   SVN: $Id: dynexportbase.php 33602 2011-03-01 14:49:47Z linas.kukulskis $
  */
 
 /**
@@ -620,8 +620,8 @@ class DynExportBase extends oxAdminDetails
     {
         $oDB = oxDb::getDb();
 
-        $sO2CView = getViewName('oxobject2category');
-        $sArticleTable = getViewName( "oxarticles", 0 );
+        $sO2CView = getViewName( 'oxobject2category' );
+        $sArticleTable = getViewName( "oxarticles" );
 
         $sSelect  = "insert into {$sHeapTable} select {$sArticleTable}.oxid from {$sArticleTable}, {$sO2CView} as oxobject2category where ";
         $sSelect .= oxNew( 'oxarticle' )->getSqlActiveSnippet();

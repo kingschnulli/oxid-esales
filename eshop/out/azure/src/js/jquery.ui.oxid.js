@@ -391,15 +391,12 @@
                     el      = self.element;
 
                 el.delegate("."+options.metodValidate, "blur", function() {
-
                     if ( $( this ).is(options.visible) ) {
                         self.inputValidation(this, true);
                     }
-
                 });
 
                 self._bindSpecialListener( el );
-
                 el.bind( "submit", function() {
                     return self.submitValidation(this);
                 });

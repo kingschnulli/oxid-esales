@@ -7,7 +7,7 @@
 
 [{if $oView->getCompArtList() }]
   <!-- page locator -->
-  [{include file="inc/compare_locator.tpl" where="Top" pageNavigation=$oView->getPageNavigation()}]
+  [{include file="inc/compare_locator.tpl" where="Top" }]
 [{/if}]
 
   <strong id="test_productComparisonHeader" class="boxhead">[{$template_title}]</strong>
@@ -125,7 +125,7 @@
 
 [{if $oView->getCompArtList() }]
   <!-- page locator -->
-  [{include file="inc/compare_locator.tpl" where="Bottom" pageNavigation=$oView->getPageNavigation()}]
+  [{include file="inc/compare_locator.tpl" where="Bottom" }]
 [{/if}]
 
 <div class="bar prevnext">

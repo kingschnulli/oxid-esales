@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 33480 2011-02-23 14:43:14Z arvydas.vapsva $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 33601 2011-03-01 14:34:42Z rimvydas.paskevicius $
  */
 
 /**
@@ -598,16 +598,9 @@ class oxArticleList extends oxList
             return $this->count();
         }
 
-        // #858A
-        $iNumOfArticles = $oCategory->getNrOfArticles();
+        $iTotalCount = oxUtilsCount::getInstance()->getPriceCatArticleCount($oCategory->getId(), $dPriceFrom, $dPriceTo );
 
-        if ( !isset($iNumOfArticles) || $iNumOfArticles == -1) {
-
-            return oxUtilsCount::getInstance()->getPriceCatArticleCount($oCategory->getId(), $dPriceFrom, $dPriceTo );
-        } else {
-
-            return $oCategory->getNrOfArticles();
-        }
+        return $iTotalCount;
     }
 
     /**
