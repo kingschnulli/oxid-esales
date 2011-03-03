@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategoryTest.php 33610 2011-03-01 17:04:38Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxcategoryTest.php 33619 2011-03-02 10:36:02Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -307,14 +307,15 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
 
     public function testAssignCountArt()
     {
-        $this->markTestIncomplete();
         $oObj = new oxcategory();
         $this->assertEquals(0, $oObj->getNrOfArticles());
         modConfig::getInstance()->setConfigParam( 'bl_perfShowActionCatArticleCnt', true );
         $sCat = '30e44ab83fdee7564.23264141';
             $sCat = '8a142c3e4143562a5.46426637';
-        oxUtilsCount::getInstance()->resetCatArticleCount($oObj->getId());
+
         $oObj->load($sCat);
+        oxUtilsCount::getInstance()->resetCatArticleCount($oObj->getId());
+
             $this->assertEquals(32, $oObj->getNrOfArticles());
     }
 
@@ -812,12 +813,11 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
 
     public function testGetNrOfArticlesDoNotShowCatArtCnt()
     {
-        $this->markTestIncomplete();
-
         modConfig::getInstance()->setConfigParam( 'bl_perfShowActionCatArticleCnt', false );
         modConfig::getInstance()->setConfigParam( 'blDontShowEmptyCategories', true );
         $oCategory = $this->getProxyClass( "oxcategory" );
             $oCategory->load( '8a142c3e60a535f16.78077188' );
+            oxUtilsCount::getInstance()->resetCatArticleCount($oCategory->getId());
             $this->assertEquals( 6, $oCategory->getNrOfArticles() );
     }
 

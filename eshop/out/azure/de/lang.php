@@ -787,13 +787,6 @@ $aLang = array(
 'PAGE_ACCOUNT_ORDER_ERPSTATUS_NLB'                     => "Nicht lieferbar",
 'PAGE_ACCOUNT_ORDERHISTORY_QNT'                        => "stk.",
 
-'EMAIL_INVITE_HTML_INVITETOSHOP'                       => "Eine Einladung von",
-'EMAIL_INVITE_HTML_INVITETOSHOP2'                      => "",
-'EMAIL_INVITE_HTML_INVITETOSHOP3'                      => "zu besuchen.",
-'EMAIL_INVITE_HTML_FROM'                               => "Von:",
-'EMAIL_INVITE_HTML_EMAIL'                              => "E-Mail:",
-'EMAIL_INVITE_HTML_MENYGREETINGS'                      => "Viele Grüße,",
-
 'EMAIL_ORDER_CUST_HTML_ORDERNOMBER'               =>"Bestellnr.",
 'EMAIL_ORDER_CUST_HTML_PRODUCT'                   =>"Artikel",
 'EMAIL_ORDER_CUST_HTML_UNITPRICE'                 =>"Einzelpreis",
@@ -851,13 +844,52 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_TSPROTECTION'              =>"Trusted Shops Käuferschutz",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX1'    =>"zzgl. Mwst.",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX2'    =>"% Betrag:",
+
 'EMAIL_ORDER_OWNER_HTML_ATENTIONGREETINGCARD'     =>"ACHTUNG Grußkarte:",
 'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT1'             =>"Versand. MwSt.",
 'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT2'             =>"% Betrag:",
 'EMAIL_ORDER_OWNER_HTML_MESSAGE'                  =>"Mitteilung:",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFO'              =>"Bezahlinformation:",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'           =>"<b>BEZAHLINFORMATIONEN AUSGESCHALTET</b> - um diese einzuschalten bitte email_order_owner_html.tpl aendern.",
+    
+'EMAIL_OWNER_REMINDER_HTML_STOCKLOW'              =>"Lagerbestand niedrig: Dieser Artikel hat die eing. Lagerbestandsgrenze erreicht.",
+'EMAIL_OWNER_REMINDER_HTML_PRODUCT'               =>"Artikel",
+'EMAIL_OWNER_REMINDER_HTML_QUANTITY'              =>"Anzahl total",
+'EMAIL_OWNER_REMINDER_HTML_ARTNOMBER'             =>"Art.Nr.:",
 
+'EMAIL_NEWSLETTEROPTIN_HTML_NEWSLETTER'           => "Newsletter",
+'EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT'             => "Newsletter",
+
+'EMAIL_PRICEALARM_OWNER_PRICEALARM'               =>"Preisalarm im",
+'EMAIL_PRICEALARM_OWNER_SUBJECT'                  =>"Preisalarm fuer Artikel",
+
+'EMAIL_STOCKREMINDER_SUBJECT'                     =>"Lagerbestand niedrig",
+
+'EMAIL_SUGGEST_HTML_PRODUCTPOSTCARDFROM'          =>"Artikel-Postkarte von",
+'EMAIL_SUGGEST_HTML_POSTCARDFROM'                 =>"Eine Postkarte von",
+'EMAIL_SUGGEST_HTML_FROM'                         =>"Von:",
+'EMAIL_SUGGEST_HTML_EMAIL'                        =>"E-Mail:",
+'EMAIL_SUGGEST_HTML_TO'                           =>"An:",
+'EMAIL_SUGGEST_HTML_EMAIL2'                       =>"E-Mail:",
+'EMAIL_SUGGEST_HTML_MENYGREETINGS'                =>"Viele Grüsse,",
+'EMAIL_SUGGEST_PLAIN_RECOMMENDED'                 =>"Meine Artikelempfehlung:",
+'EMAIL_SUGGEST_PLAIN_CHECK'                       =>"Siehe",
+    
+'EMAIL_WISHLIST_HTML_WISHLISTBY'                  =>"Wunschzettel bei",
+'EMAIL_WISHLIST_HTML_MYWISHLISTBY'                =>"Mein Wunschzettel bei",
+'EMAIL_WISHLIST_HTML_TOMYWISHLISTCLICKHERE1'      =>"Um zu meinem Wunschzettel zu kommen, bitte",
+'EMAIL_WISHLIST_HTML_TOMYWISHLISTCLICKHERE2'      =>"hier klicken.",
+'EMAIL_WISHLIST_HTML_WITHLOVE'                    =>"Alles Liebe,",
+
+'EMAIL_INVITE_HTML_INVITETOSHOP'                       => "Eine Einladung von",
+'EMAIL_INVITE_HTML_INVITETOSHOP2'                      => "",
+'EMAIL_INVITE_HTML_INVITETOSHOP3'                      => "zu besuchen.",
+'EMAIL_INVITE_HTML_FROM'                               => "Von:",
+'EMAIL_INVITE_HTML_EMAIL'                              => "E-Mail:",
+'EMAIL_INVITE_HTML_MENYGREETINGS'                      => "Viele Grüße,",
+
+'CONTACT_FROM'                                    => "Nachricht von",
+    
 'ADD_RECOMM_SELECTLIST'                           => "Wählen Sie die Lieblingsliste",
 'ADD_RECOMM_ALLLISTS'                             => "alle Lieblingslisten",
 'ADD_RECOMM_YOURCOMMENT'                          => "Ihre Nachricht",

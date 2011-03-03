@@ -1296,6 +1296,7 @@ a.readMore:hover {
     width: 187px;
     text-align: center;
     line-height: 150px;
+    height: 150px;
 }
 
 .infogridView .gridPicture img {

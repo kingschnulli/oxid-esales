@@ -795,13 +795,6 @@ $aLang = array(
 'PAGE_ACCOUNT_ORDER_ERPSTATUS_NLB'                     => "Undeliverable",
 'PAGE_ACCOUNT_ORDERHISTORY_QNT'                        => "qty.",
 
-'EMAIL_INVITE_HTML_INVITETOSHOP'                       => "An invitation from",
-'EMAIL_INVITE_HTML_INVITETOSHOP2'                      => "to visit",
-'EMAIL_INVITE_HTML_INVITETOSHOP3'                      => "",
-'EMAIL_INVITE_HTML_FROM'                               => "From:",
-'EMAIL_INVITE_HTML_EMAIL'                              => "eMail:",
-'EMAIL_INVITE_HTML_MENYGREETINGS'                      => "Many Greetings,",
-
 'EMAIL_ORDER_CUST_HTML_ORDERNOMBER'               =>"Order No.",
 'EMAIL_ORDER_CUST_HTML_PRODUCT'                   =>"Product",
 'EMAIL_ORDER_CUST_HTML_UNITPRICE'                 =>"Unit Price",
@@ -859,6 +852,7 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_TSPROTECTION'              =>"Trusted Shops buyer protection",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX1'    =>"plus VAT",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX2'    =>"% Amount:",
+
 'EMAIL_ORDER_OWNER_HTML_ATENTIONGREETINGCARD'     =>"Attention Greeting Card:",
 'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT1'             =>"plus VAT",
 'EMAIL_ORDER_OWNER_HTML_SHIPPINGVAT2'             =>"% Amount:",
@@ -866,7 +860,43 @@ $aLang = array(
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFO'              =>"",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'           =>"",
 
+'EMAIL_OWNER_REMINDER_HTML_STOCKLOW'              =>"Stock low: This Product has reached the specified stock limit.",
+'EMAIL_OWNER_REMINDER_HTML_PRODUCT'               =>"Product",
+'EMAIL_OWNER_REMINDER_HTML_QUANTITY'              =>"Total quantity",
+'EMAIL_OWNER_REMINDER_HTML_ARTNOMBER'             =>"Art No.:",
 
+'EMAIL_NEWSLETTEROPTIN_HTML_NEWSLETTER'           => "Newsletter",
+'EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT'             => "Newsletter",
+
+'EMAIL_PRICEALARM_OWNER_PRICEALARM'               =>"Price alert at",
+'EMAIL_PRICEALARM_OWNER_SUBJECT'                  =>"Price alert for article",
+
+'EMAIL_STOCKREMINDER_SUBJECT'                     =>"Stock low",
+
+'EMAIL_SUGGEST_HTML_PRODUCTPOSTCARDFROM'          =>"A Product Postcard from",
+'EMAIL_SUGGEST_HTML_POSTCARDFROM'                 =>"A Postcard from",
+'EMAIL_SUGGEST_HTML_FROM'                         =>"From:",
+'EMAIL_SUGGEST_HTML_EMAIL'                        =>"eMail:",
+'EMAIL_SUGGEST_HTML_TO'                           =>"To:",
+'EMAIL_SUGGEST_HTML_EMAIL2'                       =>"eMail:",
+'EMAIL_SUGGEST_HTML_MENYGREETINGS'                =>"Many Greetings,",
+'EMAIL_SUGGEST_PLAIN_RECOMMENDED'                 =>"Recommended Product:",
+'EMAIL_SUGGEST_PLAIN_CHECK'                       =>"Check",
+
+'EMAIL_WISHLIST_HTML_WISHLISTBY'                  =>"Wishlist by",
+'EMAIL_WISHLIST_HTML_MYWISHLISTBY'                =>"My wishlist by",
+'EMAIL_WISHLIST_HTML_TOMYWISHLISTCLICKHERE1'      =>"To go to my wishlist",
+'EMAIL_WISHLIST_HTML_TOMYWISHLISTCLICKHERE2'      =>"click here.",
+'EMAIL_WISHLIST_HTML_WITHLOVE'                    =>"With love,",
+
+'EMAIL_INVITE_HTML_INVITETOSHOP'                       => "An invitation from",
+'EMAIL_INVITE_HTML_INVITETOSHOP2'                      => "to visit",
+'EMAIL_INVITE_HTML_INVITETOSHOP3'                      => "",
+'EMAIL_INVITE_HTML_FROM'                               => "From:",
+'EMAIL_INVITE_HTML_EMAIL'                              => "eMail:",
+'EMAIL_INVITE_HTML_MENYGREETINGS'                      => "Many Greetings,",
+
+'CONTACT_FROM'                                    => "Message from",
 
 'ADD_RECOMM_SELECTLIST'                           => "Select Listmania list",
 'ADD_RECOMM_ALLLISTS'                             => "all Listmania",
