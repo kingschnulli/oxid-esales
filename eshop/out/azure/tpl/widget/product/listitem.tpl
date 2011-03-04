@@ -30,7 +30,7 @@
                 [{oxhasrights ident="TOBASKET"}]
                 [{ if !$product->isNotBuyable()}]
                     [{$smarty.capture.product_price}]
-                    [{if $product->hasMdVariants() || $product->getDispSelList()}]
+                    [{if $product->hasMdVariants() || $product->getDispSelList() || $product->getVariantList()}]
                         <a href="[{ $_productLink }]" >[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>
                     [{else}]
                         [{assign var="listType" value=$oView->getListType()}]
@@ -105,7 +105,7 @@
                         [{$smarty.capture.product_price}]
                         [{oxhasrights ident="TOBASKET"}]
                 [{ if !$product->isNotBuyable()}]
-                    [{ if $product->hasMdVariants() || $product->getDispSelList() }]
+                    [{ if $product->hasMdVariants() || $product->getDispSelList() || $product->getVariantList() }]
                         <a class="submitButton" href="[{ $_productLink }]" >[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>
                     [{else}]
                         <button type="submit" class="submitButton largeButton">[{oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ADDTOCART" }]</button>

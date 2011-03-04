@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: rss.php 33127 2011-02-10 10:27:52Z arvydas.vapsva $
+ * @version   SVN: $Id: rss.php 33634 2011-03-03 12:44:17Z linas.kukulskis $
  */
 
 /**
@@ -89,7 +89,7 @@ class Rss extends oxUBase
         oxUtils::getInstance()->setHeader( "Content-Type: text/xml; charset=".oxLang::getInstance()->translateString( "charset" ) );
         oxUtils::getInstance()->showMessageAndExit(
                     $this->_processOutput(
-                            $oSmarty->fetch('rss.tpl', $this->getViewId())
+                            $oSmarty->fetch($this->_sThisTemplate, $this->getViewId())
                     )
                 );
     }

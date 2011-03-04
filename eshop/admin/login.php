@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: login.php 29921 2010-09-21 12:18:02Z sarunas $
+ * @version   SVN: $Id: login.php 33633 2011-03-03 11:43:12Z sarunas $
  */
 
 /**
@@ -100,6 +100,12 @@ class Login extends oxAdminView
         try { // trying to login
             $oUser = oxNew( "oxuser" );
             $oUser->login( $sUser, $sPass );
+            $iSubshop = (int)$oUser->oxuser__oxrights->value;
+            if ($iSubshop) {
+                oxSession::setVar( "shp", $iSubshop );
+                oxSession::setVar( 'currentadminshop', $iSubshop );
+                oxConfig::getInstance()->setShopId($iSubshop);
+            }
         } catch ( oxUserException $oEx ) {
             $myUtilsView->addErrorToDisplay('LOGIN_ERROR');
             $oStr = getStr();

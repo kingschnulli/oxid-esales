@@ -742,6 +742,9 @@ $aLang = array(
 'PAGE_DETAILS_TAGS_HIGHLIHGT_INSTRUCTIONS'         => "Highlight existing tags or add new",
 'PAGE_DETAILS_TAGS_ADD'                            => "Add tags:",
 'PAGE_DETAILS_TAGS_SUBMIT'                         => "Submit",
+'PAGE_DETAILS_TAGS_NOTAGS'                         => "There are no tags at the moment",
+'PAGE_DETAILS_TAGS_ALREADYADDEDTAG'                => "You already tagged this text",
+'PAGE_DETAILS_TAGS_CANCEL'                         => "Cancel",
 
 'PAGE_DETAILS_DELIVERYTIME_DELIVERYTIME'           => "Delivery time:",
 'PAGE_DETAILS_DELIVERYTIME_DAY'                    => "day",

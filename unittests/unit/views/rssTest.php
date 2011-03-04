@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: rssTest.php 32960 2011-02-07 11:50:05Z vilma $
+ * @version   SVN: $Id: rssTest.php 33635 2011-03-03 13:12:20Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -74,7 +74,7 @@ class Unit_Views_rssTest extends OxidTestCase
     {
         $oSmarty = $this->getMock('stdclass', array('assign_by_ref', 'assign', 'fetch'));
         $oSmarty->expects($this->any())->method('assign_by_ref');
-        $oSmarty->expects($this->once())->method('fetch')->with($this->equalTo('rss.tpl'), $this->equalTo('viewid'))->will($this->returnValue('smarty processed xml'));
+        $oSmarty->expects($this->once())->method('fetch')->with($this->equalTo('widget/rss.tpl'), $this->equalTo('viewid'))->will($this->returnValue('smarty processed xml'));
         $oUtilsView = $this->getMock('oxUtilsView', array('getSmarty'));
         $oUtilsView->expects($this->once())->method('getSmarty')->will($this->returnValue($oSmarty));
 

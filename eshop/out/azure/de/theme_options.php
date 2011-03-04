@@ -77,7 +77,7 @@ $aLang = array(
 'SHOP_THEME_iNewBasketItemMessage_3'              => 'Warenkorb öffnen',
 
 'SHOP_THEME_blShowListDisplayType'                => 'Produktlisten Typ in Produktlisten anzeigen',
-'HELP_SHOP_THEME_blShowListDisplayType'           => 'Ermöglicht Konsumenten, den den Produktlistentyp (Galerie, Liste) einzustellen.',
+'HELP_SHOP_THEME_blShowListDisplayType'           => 'Darf der Besucher Ihres Online-Shops die Art der Listenansicht auswählen? Falls diese Option nicht aktiviert ist, werden die Listenansichten so angezeigt wie in der Dropbox "Produktlistentyp" eingestellt.',
 'SHOP_THEME_sDefaultListDisplayType'              => 'Standard Produktlistentyp',
 'SHOP_THEME_sDefaultListDisplayType_grid'         => 'Galerie',
 'SHOP_THEME_sDefaultListDisplayType_line'         => 'Liste',

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_list.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: article_list.php 33636 2011-03-03 13:53:12Z vilma $
  */
 
 /**
@@ -99,6 +99,7 @@ class Article_List extends oxAdminList
         if ( $sArtCat && strstr( $sArtCat, "@@" ) !== false ) {
             list( $sType, $sValue ) = explode( "@@", $sArtCat );
         }
+        $this->_aViewData["art_category"] = $sArtCat;
 
         // parent categorie tree
         $this->_aViewData["cattree"] = $this->getCategoryList($sType, $sValue);

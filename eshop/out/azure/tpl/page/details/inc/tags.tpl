@@ -1,7 +1,10 @@
 [{assign var="oDetailsProduct" value=$oView->getProduct()}]
-[{if $oView->getTagCloudManager() || ( ( $oView->getTagCloudManager() || $oxcmp_user) && $oDetailsProduct )}]
+[{if $oView->getTagCloudManager() || ( $oxcmp_user && $oDetailsProduct )}]
     <p class="tagCloud">
         [{assign var="oCloudManager" value=$oView->getTagCloudManager()}]
+        [{if $oCloudManager->getCloudArray()|count < 0}]
+            [{oxmultilang ident="PAGE_DETAILS_TAGS_NOTAGS"}]
+        [{/if}]
         [{foreach from=$oCloudManager->getCloudArray() item=iCount key=sTagTitle}]
             <a class="tagitem_[{$oCloudManager->getTagSize($sTagTitle)}]" href="[{$oCloudManager->getTagLink($sTagTitle)}]">[{$oCloudManager->getTagTitle($sTagTitle)}]</a>
         [{/foreach}]

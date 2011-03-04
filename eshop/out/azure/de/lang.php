@@ -734,6 +734,9 @@ $aLang = array(
 'PAGE_DETAILS_TAGS_HIGHLIHGT_INSTRUCTIONS'         => "Existierende Tags hervorheben oder neue einfügen",
 'PAGE_DETAILS_TAGS_ADD'                            => "Tags hinzufügen:",
 'PAGE_DETAILS_TAGS_SUBMIT'                         => "Absenden",
+'PAGE_DETAILS_TAGS_NOTAGS'                         => "Zurzeit keine Tags verfügbar",
+'PAGE_DETAILS_TAGS_ALREADYADDEDTAG'                => "Tag wurde bereits einmal vergeben",
+'PAGE_DETAILS_TAGS_CANCEL'                         => "Beenden",
 
 'PAGE_DETAILS_DELIVERYTIME_DELIVERYTIME'           => "Lieferzeit:",
 'PAGE_DETAILS_DELIVERYTIME_DAY'                    => "Tage",
@@ -755,7 +758,7 @@ $aLang = array(
 
 'WIDGET_PRODUCT_RELATED_PRODUCTS_SIMILAR_HEADER'     => "Ähnliche Produkte",
 'WIDGET_PRODUCT_RELATED_PRODUCTS_CROSSSELING_HEADER' => "Schon gesehen?",
-'WIDGET_PRODUCT_RELATED_PRODUCTS_ACCESSORIES_HEADER' => "Zubeör",
+'WIDGET_PRODUCT_RELATED_PRODUCTS_ACCESSORIES_HEADER' => "Zubehör",
 
 'WIDGET_COUNTDOWN_BASKET_TIMEOUT'                      => 'Läuft ab in:',
 
@@ -851,7 +854,7 @@ $aLang = array(
 'EMAIL_ORDER_OWNER_HTML_MESSAGE'                  =>"Mitteilung:",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFO'              =>"Bezahlinformation:",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'           =>"<b>BEZAHLINFORMATIONEN AUSGESCHALTET</b> - um diese einzuschalten bitte email_order_owner_html.tpl aendern.",
-    
+
 'EMAIL_OWNER_REMINDER_HTML_STOCKLOW'              =>"Lagerbestand niedrig: Dieser Artikel hat die eing. Lagerbestandsgrenze erreicht.",
 'EMAIL_OWNER_REMINDER_HTML_PRODUCT'               =>"Artikel",
 'EMAIL_OWNER_REMINDER_HTML_QUANTITY'              =>"Anzahl total",
@@ -874,7 +877,7 @@ $aLang = array(
 'EMAIL_SUGGEST_HTML_MENYGREETINGS'                =>"Viele Grüsse,",
 'EMAIL_SUGGEST_PLAIN_RECOMMENDED'                 =>"Meine Artikelempfehlung:",
 'EMAIL_SUGGEST_PLAIN_CHECK'                       =>"Siehe",
-    
+
 'EMAIL_WISHLIST_HTML_WISHLISTBY'                  =>"Wunschzettel bei",
 'EMAIL_WISHLIST_HTML_MYWISHLISTBY'                =>"Mein Wunschzettel bei",
 'EMAIL_WISHLIST_HTML_TOMYWISHLISTCLICKHERE1'      =>"Um zu meinem Wunschzettel zu kommen, bitte",
@@ -889,7 +892,7 @@ $aLang = array(
 'EMAIL_INVITE_HTML_MENYGREETINGS'                      => "Viele Grüße,",
 
 'CONTACT_FROM'                                    => "Nachricht von",
-    
+
 'ADD_RECOMM_SELECTLIST'                           => "Wählen Sie die Lieblingsliste",
 'ADD_RECOMM_ALLLISTS'                             => "alle Lieblingslisten",
 'ADD_RECOMM_YOURCOMMENT'                          => "Ihre Nachricht",

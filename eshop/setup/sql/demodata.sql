@@ -1371,5 +1371,5 @@ INSERT INTO `oxactions` (`OXID`, `OXSHOPID`, `OXTYPE`, `OXTITLE`, `OXTITLE_1`, `
 ('b5639c6431b26687321f6ce654878fa5', 'oxbaseshop', 3, 'Banner 1', 'Banner 1', '', '', '', '', '', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'surfer_wave_promo.jpg', 'surfer_wave(1)_promo.jpg', '', '', '', '', '', '', 0),
 ('b56a097dedf5db44e20ed56ac6defaa8', 'oxbaseshop', 3, 'Banner 2', 'Banner 2', '', '', '', '', '', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'longboard_startpage(3)_promo.jpg', 'longboard_startpage(2)_promo.jpg', '', '', '', '', '', '', 0),
 ('b56efaf6c93664b6dca5b1cee1f87057', 'oxbaseshop', 3, 'Banner 3', 'Banner 3', '', '', '', '', '', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'cabrinha_startpage(1)_promo.jpg', 'cabrinha_startpage_promo.jpg', '', '', '', '', '', '', 0),
-('cb34f86f56162d0c95890b5985693710', 'oxbaseshop', 3, 'Banner 4', 'Banner 4', '', '', '', '', '', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'banner4de(1)_promo.jpg', 'banner4en_promo.jpg', '', '', '/demodata/Wakeboarding/Wakeboards/Wakeboard-S4.html', '', '', '', 0);
+('cb34f86f56162d0c95890b5985693710', 'oxbaseshop', 3, 'Banner 4', 'Banner 4', '', '', '', '', '', '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'banner4de(1)_promo.jpg', 'banner4en_promo.jpg', '', '', '/Wakeboarding/Wakeboards/Wakeboard-S4.html', '', '', '', 0);
 
