@@ -44,13 +44,13 @@
                         <td>
                             <ul id="wrapp-[{$smarty.foreach.wrappArt.iteration}]">
                                 <li>
-                                    <input class="radiobox" type="radio" name="wrapping[[{$basketindex}]]" value="0" [{ if !$basketitem->wrapping}]CHECKED[{/if}]>
+                                    <input class="radiobox" type="radio" name="wrapping[[{$basketindex}]]" value="0" [{ if !$basketitem->getWrappingId()}]CHECKED[{/if}]>
                                     <label>[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_NONE" }]</label><strong>0,00 [{ $currency->sign}]</strong>
                                 </li>
                                 [{assign var="ictr" value="1"}]
                                 [{foreach from=$oView->getWrappingList() item=wrapping name=Wraps}]
                                     <li>
-                                        <input class="radiobox" type="radio" name="wrapping[[{$basketindex}]]" value="[{$wrapping->oxwrapping__oxid->value}]" [{ if $basketitem->wrapping == $wrapping->oxwrapping__oxid->value}]CHECKED[{/if}]>
+                                        <input class="radiobox" type="radio" name="wrapping[[{$basketindex}]]" value="[{$wrapping->oxwrapping__oxid->value}]" [{ if $basketitem->getWrappingId() == $wrapping->oxwrapping__oxid->value}]CHECKED[{/if}]>
                                         <span><img src="[{$wrapping->getPictureUrl()}]0/[{$wrapping->oxwrapping__oxpic->value}]" alt="[{$wrapping->oxwrapping__oxname->value}]"></span>
                                         <label>[{$wrapping->oxwrapping__oxname->value}]</label>
                                         <strong>[{$wrapping->getFPrice()}] [{ $currency->sign}]</strong>

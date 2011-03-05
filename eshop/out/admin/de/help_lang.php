@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 33460 2011-02-23 08:10:23Z alfonsas $
+ * @version   SVN: $Id: help_lang.php 33650 2011-03-04 09:43:06Z linas.kukulskis $
  */
 
 /**
@@ -537,8 +537,6 @@ $aLang =  array(
 'HELP_VOUCHERSERIE_MAIN_RANDOMNUM'              =>  'Wenn Sie diese Einstellung aktivieren, wird für jeden Gutschein eine Zufallsnummer erzeugt.',
 
 'HELP_VOUCHERSERIE_MAIN_VOUCHERNUM'             =>  'Hier können Sie eine Gutscheinnummer eingeben. Diese wird verwendet wenn, Sie neue Gutscheine anlegen. Wenn Sie mehrere Gutscheine anlegen, erhalten alle Gutscheine die gleiche Nummer.',
-
-
 
 'HELP_WRAPPING_MAIN_PICTURE'                    =>  'Bei <span class="navipath_or_inputname">Bild</span> und <span class="navipath_or_inputname">Bild hochladen</span> können Sie ein Bild für die Geschenkverpackung hochladen. Wählen Sie bei <span class="navipath_or_inputname">Bild hochladen</span> das Bild aus, das Sie hochladen möchten. Wenn Sie auf Speichern klicken, wird das Bild hochgeladen. Nachdem das Bild hochgeladen ist, wird der Dateiname des Bildes in <span class="navipath_or_inputname">Bild</span> angezeigt.',
 
