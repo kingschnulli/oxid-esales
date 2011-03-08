@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 32612 2011-01-20 15:22:37Z sarunas $
+ * @version   SVN: $Id: oxarticleTest.php 33670 2011-03-07 13:26:08Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -4884,6 +4884,32 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals( 7.71, $oArticle->getPrice()->getBruttoPrice());
     }
 
+    /**
+     * #2509 Test apply range price for not buyable parent without loaded variants if netto prices are added.
+     *
+     * @return null
+     */
+    public function testApplyRangePriceForNotBuybleParentAndVariantsAreNotLoadedInNetto()
+    {
+        modConfig::getInstance()->setConfigParam( 'aMultishopArticleFields', array());
+        modConfig::getInstance()->setConfigParam( 'blLoadVariants', false);
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', true );
+        $oPrice = oxNew( 'oxPrice' );
+        $oPrice->setPrice(8);
+        $this->oArticle2->setPrice( $oPrice);
+        $this->oArticle2->save();
+        $oArticle = new _oxArticle();
+        $oArticle->load('_testArt');
+        $oPrice = oxNew( 'oxPrice' );
+        $oPrice->setPrice(10);
+        $oArticle->setPrice( $oPrice);
+        $oArticle->setVar( 'blNotBuyableParent', true);
+        $oArticle->setVar( 'oVariantList', array($this->oArticle2));
+        $oArticle->oxarticles__oxvarminprice = new oxField(9, oxField::T_RAW);
+        $oArticle->UNITapplyRangePrice();
+        $this->assertTrue( $oArticle->_blIsRangePrice);
+        $this->assertEquals( 10.71, $oArticle->getPrice()->getBruttoPrice());
+    }
 
     /**
      * Testing apply basket discounts.
