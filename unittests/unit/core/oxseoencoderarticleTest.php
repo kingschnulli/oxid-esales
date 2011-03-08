@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticleTest.php 31921 2010-12-17 08:43:03Z sarunas $
+ * @version   SVN: $Id: oxseoencoderarticleTest.php 33661 2011-03-07 09:50:28Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1121,11 +1121,11 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         $oArticle = new oxarticle();
 
             $oArticle->loadInLang( 0, '1127' );
-            $sExp = "Blinkende-Eiswuerfel-FLASH.html";
+            $sExp = "Blinkende-Eiswuerfel-FLASH";
 
         $oEncoder = oxSeoEncoderArticle::getInstance();
         $oEncoder->setSeparator();
-        $this->assertEquals( $sExp, $oEncoder->UNITprepareTitle( $oArticle->oxarticles__oxtitle->value.".html" ) );
+        $this->assertEquals( $sExp, $oEncoder->UNITprepareTitle( $oArticle->oxarticles__oxtitle->value ) );
     }
 
 
