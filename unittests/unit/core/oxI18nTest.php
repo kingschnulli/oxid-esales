@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxI18nTest.php 32040 2010-12-20 09:42:21Z sarunas $
+ * @version   SVN: $Id: oxI18nTest.php 33685 2011-03-08 08:19:37Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -86,6 +86,31 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $oArticle->save();
 
         $this->assertTrue( '1' == oxDb::getDb()->getOne( 'select oxexpired from oxseo where oxobjectid = "testa"' ) );
+    }
+
+    public function testUpdateAndSeoIsOnMock()
+    {
+
+        $oSeo = $this->getMock('oxseoencoder', array('markAsExpired'));
+        $oSeo->expects($this->once())->method('markAsExpired')->with(
+                    $this->equalTo('testa'),
+                    $this->equalTo(null),
+                    $this->equalTo(1),
+                    $this->equalTo(0)
+                )->will($this->returnValue(null));
+        oxTestModules::addFunction("oxutils", "seoIsActive", "{return true;}");
+
+        $oArticle = new oxarticle();
+        $oArticle->setId( 'testa' );
+        $oArticle->save();
+        $oArticle->getLink();
+
+        modInstances::addMod('oxSeoEncoder', $oSeo);
+
+        $oArticle = new oxArticle();
+        $oArticle->setAdminMode( true );
+        $oArticle->load( 'testa' );
+        $oArticle->save();
     }
 
     public function testSetLanguage()

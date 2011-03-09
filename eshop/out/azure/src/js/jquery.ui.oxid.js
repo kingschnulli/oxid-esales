@@ -1084,6 +1084,8 @@
 
                 self.hideControls(oAnythingSlider);
 
+                $("a[class^='panel']", oAnythingSlider).attr("rel", 'nofolow');
+
                 var blOnNav = false;
 
                 $(options.classPromotionText, el).each(function(){

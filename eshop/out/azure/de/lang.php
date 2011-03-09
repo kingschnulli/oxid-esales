@@ -312,6 +312,9 @@ $aLang = array(
 'PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTION'                             => "Trusted Shops Käuferschutz",
 'PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTIONCHARGETAX1'                   => "zzgl. Mwst..",
 'PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTIONCHARGETAX2'                   => "% Betrag:",
+'PAGE_CHECKOUT_BASKETCONTENTS_GREETINGCARD'                              => "Grußkarte",
+'PAGE_CHECKOUT_BASKETCONTENTS_YOURMESSAGE'                               => "Ihr Text:",
+
 'PAGE_CHECKOUT_STEPS_BASKET'                                             => "1. Warenkorb",
 'PAGE_CHECKOUT_STEPS_SEND'                                               => "2. Versenden",
 'PAGE_CHECKOUT_STEPS_PAY'                                                => "3. Bezahlen",

@@ -84,8 +84,8 @@
                 </td>
 
                 [{* product wrapping *}]
-                [{if $oView->isWrapping() }]
-                    <td>
+                 [{if $oView->isWrapping() }]
+                <td>
                         [{ if !$basketitem->getWrappingId() }]
                             [{if $editable }]
                                 [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_NONE" }]
@@ -102,7 +102,7 @@
                                 [{$oWrap->oxwrapping__oxname->value}]
                             [{/if}]
                         [{/if}]
-                    </td>
+                </td>
                 [{/if}]
 
                 [{* product quantity manager *}]
@@ -152,6 +152,30 @@
                     [{/if}]
                 </td>
             </tr>
+
+          [{if $oViewConf->getShowGiftWrapping() }]
+              [{assign var="oCard" value=$oxcmp_basket->getCard() }]
+              [{ if $oCard }]
+                <tr>
+                  [{if $editable }]<td></td>[{/if}]
+                  <td id="orderCardTitle" colspan="4"><b class="fs10">[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_GREETINGCARD" }] "[{ $oCard->oxwrapping__oxname->value }]"</b></td>
+                  <td id="orderCardPrice" class="orderprice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
+                  <td class="vat_order">[{if $oxcmp_basket->getWrappCostVat() }][{ $oxcmp_basket->getWrappCostVatPercent() }]%[{/if}]</td>
+                  <td id="orderCardTotalPrice" align="right" class="totalprice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
+                </tr>
+                <tr>
+                  [{if $editable }]<td></td>[{/if}]
+                  <td colspan="4"><b>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_YOURMESSAGE" }]</b></td>
+                  <td></td><td></td><td></td>
+                </tr>
+                <tr>
+                  [{if $editable }]<td></td>[{/if}]
+                  <td colspan="4"><div id="orderCardText">[{ $oxcmp_basket->getCardMessage()|nl2br }]</div></td>
+                  <td></td><td></td><td></td>
+                </tr>
+              [{/if}]
+          [{/if}]
+
 
             [{* packing unit *}]
 

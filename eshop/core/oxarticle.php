@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 33480 2011-02-23 14:43:14Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 33688 2011-03-08 08:51:48Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -4275,7 +4275,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         if ( $this->isParentNotBuyable() && !$this->getConfig()->getConfigParam( 'blLoadVariants' )) {
-            $this->getPrice()->setBruttoPriceMode();
+            //#2509 we cannot force brutto price here, as netto price can be added to DB
+            // $this->getPrice()->setBruttoPriceMode();
             $this->getPrice()->setPrice($this->oxarticles__oxvarminprice->value);
             $this->_blIsRangePrice = true;
             $this->_calculatePrice( $this->getPrice() );

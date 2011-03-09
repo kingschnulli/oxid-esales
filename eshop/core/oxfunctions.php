@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfunctions.php 31959 2010-12-17 13:58:54Z sarunas $
+ * @version   SVN: $Id: oxfunctions.php 33688 2011-03-08 08:51:48Z arvydas.vapsva $
  */
 
 /**
@@ -431,6 +431,7 @@ if ( !function_exists( 'getMultilangTables' ) ) {
                           "oxactions", "oxwrapping", "oxdeliveryset",
                           "oxvendor", "oxmanufacturers", "oxmediaurls",
                           "oxstates" );
+
 
         return $aTables;
     }
