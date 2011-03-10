@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 33670 2011-03-07 13:26:08Z vilma $
+ * @version   SVN: $Id: oxarticle.php 33710 2011-03-09 13:36:43Z vilma $
  */
 
 // defining supported link types
@@ -1861,10 +1861,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
 
+        // #2339 delete first variants before deleting parent product
+        $this->_deleteVariantRecords( $sOXID );
         $this->load( $sOXID );
         $this->_deletePics();
         $this->_onChangeResetCounts( $sOXID, $this->oxarticles__oxvendorid->value, $this->oxarticles__oxmanufacturerid->value );
-        $this->_deleteVariantRecords( $sOXID );
+
         $rs = $this->_deleteRecords( $sOXID );
 
         oxSeoEncoderArticle::getInstance()->onDeleteArticle($this);

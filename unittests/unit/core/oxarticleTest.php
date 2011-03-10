@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 33670 2011-03-07 13:26:08Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 33712 2011-03-09 15:15:36Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3245,15 +3245,21 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
     /**
      * Test article delete also deletes variants.
+     * #2339 Articles with variants are not removed from oxseo when deleted
      *
      * @return null
      */
     public function testDeleteParentArt()
     {
+        $sQtedObjectId = $this->oArticle->getId();
+        $iQtedShopId = oxConfig::getInstance()->getBaseShopId();
+        oxDb::getDB()->execute("insert into oxseo (oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed, oxexpired, oxparams)
+                values ( '$sQtedObjectId', '$sQtedObjectId', '$iQtedShopId', '0', 'url', 'url', 'oxarticle', '1', '0', '' )");
         $this->oArticle->delete();
         $oArticle = new oxarticle();
         $this->assertFalse( $oArticle->load('_testArt'));
         $this->assertFalse( $oArticle->load('_testVar'));
+        $this->assertFalse( oxDb::getDB()->getOne("select oxobjectid from oxseo where oxobjectid = '_testArt'") );
     }
 
     /**
@@ -3808,14 +3814,12 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle2->oxarticles__oxprice = new oxField(17.5, oxField::T_RAW);
         $this->oArticle2->save();
 
-        $cfg = $this->getMock('oxconfig', array( 'getConfigParam' ), array(), '', false );
-        $cfg->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo('blVariantParentBuyable') )->will( $this->returnValue( true ) );
+        modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', true );
 
         $oArticle = $this->getMock('oxarticle', array( 'getSqlActiveSnippet' ));
         $oArticle->expects( $this->once() )->method( 'getSqlActiveSnippet' )->will( $this->returnValue( '1' ) );
 
         $oArticle->load('_testArt');
-        $oArticle->setConfig($cfg);
         $oArticle->UNITonChangeUpdateMinVarPrice('_testArt');
         $this->assertEquals( 15.5, oxDb::getDB()->getOne("select oxvarminprice from oxarticles where oxid = '_testArt'") );
 
