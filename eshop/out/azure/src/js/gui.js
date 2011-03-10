@@ -145,6 +145,13 @@ function deleteCookie(name) {
 }
 
 $(function(){
+        if ($.browser.msie) {
+            $("ul.sf-menu li:not(:has(ul))").hover(function(){
+                $(this).addClass("sfHover");
+            }, function(){
+                $("ul.sf-menu li:not(:has(ul))").removeClass("sfHover");
+            });
+        }
 
         //Categories menu init
         $("ul.sf-menu").supersubs({
