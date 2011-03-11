@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 33572 2011-02-28 14:42:32Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxubase.php 33719 2011-03-10 08:40:42Z sarunas $
  */
 
 /**
@@ -554,7 +554,7 @@ class oxUBase extends oxView
         $myUtils = oxUtils::getInstance();
 
         // non admin, request is not empty and was not processed by seo engine
-        if ( $myUtils->seoIsActive() && !isSearchEngineUrl() && ( $sStdUrl = getRequestUrl( '', true ) ) ) {
+        if ( !isSearchEngineUrl() && $myUtils->seoIsActive() && ( $sStdUrl = getRequestUrl( '', true ) ) ) {
 
             // fetching standard url and looking for it in seo table
             if ( $this->_canRedirect() && ( $sRedirectUrl = oxSeoEncoder::getInstance()->fetchSeoUrl( $sStdUrl ) ) ) {

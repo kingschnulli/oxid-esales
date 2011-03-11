@@ -131,10 +131,18 @@
         <div class="infoBox">
             <div class="info">
                 <a id="[{$testid}]" href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}]">[{ $product->oxarticles__oxtitle->value }]</a>
-                <span class="productNr">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_NR" }] [{ $product->oxarticles__oxartnum->value }]</span>
-                [{if $recommid }]
-                    <div>[{ $product->text }]</div>
-                [{/if}]
+                <span class="productNr">
+                     [{if $product->getPricePerUnit()}]
+                        <div id="test_product_price_unit" class="pperunit">
+                            [{$product->oxarticles__oxunitquantity->value}] [{$product->oxarticles__oxunitname->value}] | [{$product->getPricePerUnit()}] [{ $currency->sign}]/[{$product->oxarticles__oxunitname->value}]
+                        </div>
+                    [{elseif $product->oxarticles__oxweight->value  }]
+                        <span class="type" title="weight">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ARTWEIGHT" }]</span>
+                        <span class="value">[{ $product->oxarticles__oxweight->value }] [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2" }]</span>
+                    [{else}]
+                        [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_NR" }] [{ $product->oxarticles__oxartnum->value }]
+                    [{/if}]
+                </span>
                 <div class="variants">
                     [{oxhasrights ident="TOBASKET"}]
                         [{ if !$product->isNotBuyable()}]
@@ -198,9 +206,14 @@
                 </div>
             </div>
             <div class="description">
-                [{oxhasrights ident="SHOWSHORTDESCRIPTION"}]
-                [{$product->oxarticles__oxshortdesc->value|truncate:160:"..."}]
+                [{if $recommid }]
+                    <div>[{ $product->text|truncate:160:"..." }]</div>
+                [{else}]
+                    [{oxhasrights ident="SHOWSHORTDESCRIPTION"}]
+                    [{$product->oxarticles__oxshortdesc->value|truncate:160:"..."}]
                 [{/oxhasrights}]
+                [{/if}]
+
             </div>
         </div>
         <div class="functions">

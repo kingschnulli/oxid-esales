@@ -254,6 +254,8 @@ $aLang = array(
 'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING'                               => "incl. VAT, plus ",
 'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2'                              => "Shipping",
 'WIDGET_PRODUCT_PRODUCT_MOREINFO'                                   => "more Info",
+'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT'                                  => "Weight:",
+'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2'                                 => "kg",
 
 'TOP_CATEGORIES_HOME' => 'Home',
 'TOP_CATEGORIES_MORE' => 'More',

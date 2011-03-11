@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfunctions.php 33688 2011-03-08 08:51:48Z arvydas.vapsva $
+ * @version   SVN: $Id: oxfunctions.php 33719 2011-03-10 08:40:42Z sarunas $
  */
 
 /**
@@ -511,6 +511,3 @@ if ( !function_exists( 'getRequestUrl' ) ) {
 
 //registering oxAutoload() as autoload handler
 spl_autoload_register("oxAutoload");
-
-//strips magics quote if any
-oxUtils::getInstance()->stripGpcMagicQuotes();

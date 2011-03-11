@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 33574 2011-02-28 16:24:58Z rimvydas.paskevicius $
+ * @version   SVN: $Id: alistTest.php 33722 2011-03-10 09:47:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -871,7 +871,7 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testGetBargainArticleList()
     {
         $oObj = $this->getProxyClass( "alist" );
-        $oObj->setNonPublicVar( "_blIsCat", true );
+        $oObj->setNonPublicVar( "_blBargainAction", true );
 
         $aList = $oObj->getBargainArticleList();
             $this->assertEquals(4, $aList->count());

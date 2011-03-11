@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 33574 2011-02-28 16:24:58Z rimvydas.paskevicius $
+ * @version   SVN: $Id: alist.php 33722 2011-03-10 09:47:45Z sarunas $
  */
 
 /**
@@ -126,6 +126,12 @@ class aList extends oxUBase
      */
     protected $_blShowTagCloud = false;
 
+    /**
+     * Sign if to load and show bargain action
+     * @var bool
+     */
+    protected $_blBargainAction = false;
+
 
     /**
      * Generates (if not generated yet) and returns view ID (for
@@ -184,6 +190,7 @@ class aList extends oxUBase
         } elseif ( ( $oCategory = $this->getActCategory() ) ) {
             $blContinue = ( bool ) $oCategory->oxcategories__oxactive->value;
             $this->_blIsCat = true;
+            $this->_blBargainAction = true;
         }
 
 
@@ -880,48 +887,6 @@ class aList extends oxUBase
             }
         }
         return $this->_sCatTitle;
-    }
-
-    /**
-     * Template variable getter. Returns Top 5 article list
-     *
-     * @return array
-     */
-    public function getTop5ArticleList()
-    {
-        if ( $this->_aTop5ArticleList === null && $this->_blTop5Action ) {
-            $this->_aTop5ArticleList = false;
-            $myConfig = $this->getConfig();
-            if ( $myConfig->getConfigParam( 'bl_perfLoadAktion' ) && $this->_isActCategory() ) {
-                // top 5 articles
-                $oArtList = oxNew( 'oxarticlelist' );
-                $oArtList->loadTop5Articles();
-                if ( $oArtList->count() ) {
-                    $this->_aTop5ArticleList = $oArtList;
-                }
-            }
-        }
-        return $this->_aTop5ArticleList;
-    }
-
-    /**
-     * Template variable getter. Returns bargain article list
-     *
-     * @return array
-     */
-    public function getBargainArticleList()
-    {
-        if ( $this->_aBargainArticleList === null ) {
-            $this->_aBargainArticleList = array();
-            if ( $this->getConfig()->getConfigParam( 'bl_perfLoadAktion' ) && $this->_isActCategory() ) {
-                $oArtList = oxNew( 'oxarticlelist' );
-                $oArtList->loadAktionArticles( 'OXBARGAIN' );
-                if ( $oArtList->count() ) {
-                    $this->_aBargainArticleList = $oArtList;
-                }
-            }
-        }
-        return $this->_aBargainArticleList;
     }
 
     /**

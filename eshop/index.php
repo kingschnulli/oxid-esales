@@ -19,7 +19,7 @@
  * @package   main
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: index.php 26911 2010-03-26 17:29:31Z tomas $
+ * @version   SVN: $Id: index.php 33719 2011-03-10 08:40:42Z sarunas $
  */
 
 // Setting error reporting mode
@@ -76,6 +76,9 @@ require_once getShopBasePath() . 'core/oxfunctions.php';
 
 // initializes singleton config class
 $myConfig = oxConfig::getInstance();
+
+//strips magics quote if any
+oxUtils::getInstance()->stripGpcMagicQuotes();
 
 // reset it so it is done with oxnew
 $iDebug = $myConfig->getConfigParam('iDebug');

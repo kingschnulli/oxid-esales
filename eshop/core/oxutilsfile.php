@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 32881 2011-02-03 11:45:36Z sarunas $
+ * @version   SVN: $Id: oxutilsfile.php 33719 2011-03-10 08:40:42Z sarunas $
  */
 
 /**
@@ -27,6 +27,13 @@
  */
 class oxUtilsFile extends oxSuperCfg
 {
+    /**
+     * Promotions images upload dir name
+     *
+     * @var string
+     */
+    const PROMO_PICTURE_DIR = 'promo';
+
     /**
      * oxUtils class instance.
      *
@@ -95,7 +102,7 @@ class oxUtilsFile extends oxSuperCfg
                                      'Z10'  => 'z10',
                                      'Z11'  => 'z11',
                                      'Z12'  => 'z12',
-                                     'PROMO'=> oxActions::PROMO_PICTURE_DIR,
+                                     'PROMO'=> self::PROMO_PICTURE_DIR,
                                    );
 
     /**

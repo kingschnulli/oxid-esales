@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxi18n.php 33685 2011-03-08 08:19:37Z sarunas $
+ * @version   SVN: $Id: oxi18n.php 33719 2011-03-10 08:40:42Z sarunas $
  */
 
 /**
@@ -321,19 +321,14 @@ class oxI18n extends oxBase
      */
     protected function _getFieldLang($sFieldName)
     {
-        startProfile('_getFieldLang');
-        $oStr = getStr();
-        if ( !$oStr->strstr($sFieldName, '_')) {
+        if ( false === strpos($sFieldName, '_')) {
             return 0;
         }
         if (preg_match('/_(\d{1,2})$/', $sFieldName, $aRegs)) {
-            $sRes = $aRegs[1];
+            return $aRegs[1];
         } else {
-            $sRes = 0;
+            return 0;
         }
-
-        stopProfile('_getFieldLang');
-        return $sRes;
     }
 
     /**

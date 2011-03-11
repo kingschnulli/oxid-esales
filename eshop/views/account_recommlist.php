@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account_recommlist.php 33496 2011-02-24 09:41:50Z linas.kukulskis $
+ * @version   SVN: $Id: account_recommlist.php 33725 2011-03-10 12:05:29Z vilma $
  */
 
 /**
@@ -241,6 +241,7 @@ class Account_Recommlist extends Account
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true, 'user' );
             }
         }
+        $this->_sThisTemplate = 'page/account/recommendationedit.tpl';
     }
 
     /**

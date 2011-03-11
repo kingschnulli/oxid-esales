@@ -709,6 +709,8 @@ $aLang = array(
 'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING'                                                   => "inkl. MwSt., zzgl. ",
 'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2'                                                  => "Versandkosten.",
 'WIDGET_PRODUCT_PRODUCT_MOREINFO'                   =>"mehr Info",
+'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT'                       =>"Gewicht:",
+'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2'                      =>"kg",
 
 'WIDGET_BREADCRUMB_YOUAREHERE'                     => "Sie sind hier",
 

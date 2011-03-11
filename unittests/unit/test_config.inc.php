@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: test_config.inc.php 26863 2010-03-26 09:43:10Z arvydas $
+ * @version   SVN: $Id: test_config.inc.php 33719 2011-03-10 08:40:42Z sarunas $
  */
 
 // DO NOT TOUCH THIS _ INSTEAD FIX NOTICES - DODGER
@@ -43,6 +43,7 @@ require_once 'test_utils.php';
 // Generic utility method file.
 require_once getShopBasePath() . 'core/oxfunctions.php';
 
+oxConfig::getInstance();
 
 /**
  * Useful for defining custom time

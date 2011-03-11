@@ -23,12 +23,16 @@
         <a id="test_title_[{$testid}]" class="fn" href="[{ $_productLink }]" rel="product[{if $oView->noIndex() }] nofollow[{/if}]">[{$product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]</a>
         <br>
         <tt class="identifier" id="test_no_[{$testid}]">
-            [{if $product->oxarticles__oxweight->value }]
-            <span class="type" title="weight">[{ oxmultilang ident="INC_PRODUCTITEM_ARTWEIGHT" }]</span>
-            <span class="value">[{ $product->oxarticles__oxweight->value }] [{ oxmultilang ident="INC_PRODUCTITEM_ARTWEIGHT2" }]</span>
+            [{if $product->getPricePerUnit()}]
+                <div id="test_product_price_unit" class="pperunit">
+                    [{$product->oxarticles__oxunitquantity->value}] [{$product->oxarticles__oxunitname->value}] | [{$product->getPricePerUnit()}] [{ $currency->sign}]/[{$product->oxarticles__oxunitname->value}]
+                </div>
+            [{elseif $product->oxarticles__oxweight->value  }]
+                <span class="type" title="weight">[{ oxmultilang ident="INC_PRODUCTITEM_ARTWEIGHT" }]</span>
+                <span class="value">[{ $product->oxarticles__oxweight->value }] [{ oxmultilang ident="INC_PRODUCTITEM_ARTWEIGHT2" }]</span>
             [{else}]
-            <span class="type" title="sku">[{ oxmultilang ident="INC_PRODUCTITEM_ARTNOMBER2" }]</span>
-            <span class="value">[{ $product->oxarticles__oxartnum->value }]</span>
+                <span class="type" title="sku">[{ oxmultilang ident="INC_PRODUCTITEM_ARTNOMBER2" }]</span>
+                <span class="value">[{ $product->oxarticles__oxartnum->value }]</span>
             [{/if}]
         </tt>
 
@@ -68,6 +72,7 @@
             [{else}]
               <big>&nbsp;</big>
             [{/if}]
+
         </div>
     [{/oxhasrights}]
     [{/capture}]

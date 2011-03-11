@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactions.php 31596 2010-12-08 13:27:20Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxactions.php 33719 2011-03-10 08:40:42Z sarunas $
  */
 
 /**
@@ -28,13 +28,6 @@
  */
 class oxActions extends oxI18n
 {
-    /**
-     * Promotions images upload dir name
-     *
-     * @var string
-     */
-    const PROMO_PICTURE_DIR = 'promo';
-
     /**
      * Current class name
      *
@@ -259,7 +252,7 @@ class oxActions extends oxI18n
     public function getBannerPictureUrl()
     {
         if ( isset( $this->oxactions__oxpic ) && $this->oxactions__oxpic->value ) {
-            $sPromoDir = oxUtilsFile::getInstance()->normalizeDir( oxActions::PROMO_PICTURE_DIR );
+            $sPromoDir = oxUtilsFile::getInstance()->normalizeDir( oxUtilsFile::PROMO_PICTURE_DIR );
             return $this->getConfig()->getPictureUrl( $sPromoDir.$this->oxactions__oxpic->value, false );
         }
     }

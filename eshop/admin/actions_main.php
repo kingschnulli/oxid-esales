@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: actions_main.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: actions_main.php 33719 2011-03-10 08:40:42Z sarunas $
  */
 
 /**
@@ -140,7 +140,7 @@ class Actions_Main extends oxAdminDetails
         if ( $soxId != "-1" ) {
             $oPromotion->load( $soxId );
 
-                oxUtilsPic::getInstance()->overwritePic( $oPromotion, 'oxactions', 'oxpic', 'PROMO', oxActions::PROMO_PICTURE_DIR, $aParams, $myConfig->getPictureDir(false));
+                oxUtilsPic::getInstance()->overwritePic( $oPromotion, 'oxactions', 'oxpic', 'PROMO', oxUtilsFile::PROMO_PICTURE_DIR, $aParams, $myConfig->getPictureDir(false));
 
         } else {
             $aParams['oxactions__oxid']   = null;

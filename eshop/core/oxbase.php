@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 32048 2010-12-20 11:34:09Z sarunas $
+ * @version   SVN: $Id: oxbase.php 33719 2011-03-10 08:40:42Z sarunas $
  */
 
 /**
@@ -1189,8 +1189,7 @@ class oxBase extends oxSuperCfg
             return $sFieldName;
         }
 
-        $sLongName = $this->_sCoreTable."__".strtolower( $sFieldName);
-        return $sLongName;
+        return $this->_sCoreTable."__".strtolower( $sFieldName);
     }
 
     /**
