@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategoryTest.php 33619 2011-03-02 10:36:02Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxcategoryTest.php 33731 2011-03-10 14:39:37Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -287,7 +287,7 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $this->_oCategory->save();
         $oObj3 = oxNew( "oxcategory");
         $oObj3->load( $this->_oCategory->getId());
-        $this->assertEquals('aazz', $oObj3->oxcategories__oxlongdesc->value);
+        $this->assertEquals('aazz', $oObj3->getLongDesc() );
     }
 
     public function testAssignParseLongDescInList()
@@ -998,20 +998,20 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $this->assertEquals($oCategory->getPictureUrl() . 'icon/' . $sExistingIcon
             , $oCategory->getPromotionIconUrl());
     }
-    
+
     public function testGetAttributes()
     {
         $oAttrList = new oxAttributeList();
         $oAttr = new oxAttribute();
         $oAttrList->offsetSet(1, $oAttr);
-        
+
         $oCAttrList = $this->getMock( 'oxattributelist', array( 'getCategoryAttributes' ));
         $oCAttrList->expects( $this->any() )->method( 'getCategoryAttributes')->will( $this->returnValue( $oAttrList ) );
 
         $oCategory = $this->getMock( 'oxcategory', array( 'getAttributes' ));
-        $oCategory->expects( $this->any() )->method( 'getAttributes')->will( $this->returnValue( $oCAttrList ) );   
-        
+        $oCategory->expects( $this->any() )->method( 'getAttributes')->will( $this->returnValue( $oCAttrList ) );
+
         $this->assertEquals( $oCAttrList->getArray() , $oCategory->getAttributes()->getArray() );
     }
-    
+
 }

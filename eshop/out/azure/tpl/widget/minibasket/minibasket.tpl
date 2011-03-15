@@ -46,7 +46,11 @@
             <hr>
             [{include file="widget/minibasket/countdown.tpl"}]
             <p class="functions clear">
-                <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=basket" }]" class="submitButton largeButton">[{ oxmultilang ident="WIDGET_MINIBASKET_CHECKOUT" }]</a>
+               [{if $oxcmp_user}]
+                    <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=payment" }]" class="submitButton largeButton">[{ oxmultilang ident="WIDGET_MINIBASKET_CHECKOUT" }]</a>
+               [{else}]
+                    <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=user" }]" class="submitButton largeButton">[{ oxmultilang ident="WIDGET_MINIBASKET_CHECKOUT" }]</a>
+               [{/if}]
                <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=basket" }]" class="textButton">[{ oxmultilang ident="WIDGET_MINIBASKET_DISPLAY_BASKET" }]</a>
             </p>
         </div>

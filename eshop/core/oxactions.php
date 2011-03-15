@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactions.php 33719 2011-03-10 08:40:42Z sarunas $
+ * @version   SVN: $Id: oxactions.php 33731 2011-03-10 14:39:37Z arvydas.vapsva $
  */
 
 /**
@@ -106,15 +106,6 @@ class oxActions extends oxI18n
         return parent::delete( $sOxId );
     }
 
-
-
-
-
-
-
-
-
-
     /**
      * return time left until finished
      *
@@ -197,9 +188,10 @@ class oxActions extends oxI18n
         return true;
     }
 
-
     /**
      * get long description, parsed through smarty
+     *
+     * @deprecated since 2011.03.10, use [{oxeval val=.. raw=1}] in template
      *
      * @return string
      */

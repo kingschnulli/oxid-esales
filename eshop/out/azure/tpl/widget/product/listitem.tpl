@@ -139,8 +139,6 @@
                     [{elseif $product->oxarticles__oxweight->value  }]
                         <span class="type" title="weight">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ARTWEIGHT" }]</span>
                         <span class="value">[{ $product->oxarticles__oxweight->value }] [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2" }]</span>
-                    [{else}]
-                        [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_NR" }] [{ $product->oxarticles__oxartnum->value }]
                     [{/if}]
                 </span>
                 <div class="variants">

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnews.php 31954 2010-12-17 13:33:40Z sarunas $
+ * @version   SVN: $Id: oxnews.php 33731 2011-03-10 14:39:37Z arvydas.vapsva $
  */
 
 /**
@@ -71,11 +71,6 @@ class oxNews extends oxI18n
 
         // convert date's to international format
         $this->oxnews__oxdate->setValue( oxUtilsDate::getInstance()->formatDBDate( $this->oxnews__oxdate->value ) );
-
-        // #1030C run through smarty
-        if ( !$this->isAdmin() && $this->getConfig()->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
-            $this->oxnews__oxlongdesc->setValue(oxUtilsView::getInstance()->parseThroughSmarty( $this->oxnews__oxlongdesc->value, $this->getId() ), oxField::T_RAW);
-        }
     }
 
     /**

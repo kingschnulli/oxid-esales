@@ -102,6 +102,14 @@
     padding: 10px;
 }
 
+#newsBox.box li {
+    padding-top: 7px;
+}
+
+#newsBox.box li:first-child {
+    padding-top: 0;
+}
+
 .featuredList a {
     padding: 7px 10px;
     display: block;

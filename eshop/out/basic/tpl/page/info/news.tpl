@@ -9,7 +9,7 @@
             <a name="[{ $oNews->oxnews__oxid->value}]">[{ $oNews->oxnews__oxdate->value|date_format:"%d.%m.%Y" }] - [{ $oNews->oxnews__oxshortdesc->value}]</a>
         </dt>
         <dd>
-            [{ $oNews->oxnews__oxlongdesc->value}]
+            [{oxeval var=$oNews->oxnews__oxlongdesc}]
         </dd>
     [{/foreach}]
     </dl>

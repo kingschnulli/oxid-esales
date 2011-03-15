@@ -176,8 +176,8 @@ class UnitUtf8_utf8Test extends OxidTestCase
                        'oxarticles__oxsearchkeys'  => 'ministrų „žvalgybos создании Жемайтийской Zubehörprodukte',
                        'oxarticles__oxvarname'     => 'Žemkalniui звездой Gästebuch',
                        'oxarticles__oxvarselect'   => 'agentū безрабо. Veröffentlicht',
-                       'oxarticles__oxlongdesc'    => 'Nekilnojamojo turto agentūrų verslo sėkme Литовские европарламентарии, срок полномочий которых в 2009 году подходит к концу Der Umstieg war für uns ein voller Erfolg. OXID eShop ist flexibel und benutzerfreundlich',
                       );
+        $sLongDesc = 'Nekilnojamojo turto agentūrų verslo sėkme Литовские европарламентарии, срок полномочий которых в 2009 году подходит к концу Der Umstieg war für uns ein voller Erfolg. OXID eShop ist flexibel und benutzerfreundlich';
 
         $oArticle = new oxarticle();
         $oArticle->setId( '_testArticle' );
@@ -186,6 +186,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
             $oArticle->$sField = new oxField( $sValue );
         }
 
+        $oArticle->setArticleLongDesc( $sLongDesc );
         $oArticle->save();
 
         $oArticle = new oxarticle();
@@ -194,6 +195,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         foreach ( $aData as $sField => $sValue ) {
             $this->assertTrue( strcmp( $oArticle->{$sField}->value, $sValue ) === 0, $oArticle->{$sField}->value." != $sValue" );
         }
+        $this->assertEquals( $sLongDesc, $oArticle->getArticleLongDesc()->value );
     }
 
     public function testOxArticleLongDescriptionSmartyProcess()
@@ -205,12 +207,12 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
         $oArticle = new oxarticle();
         $oArticle->setId( '_testArticle' );
-        $oArticle->oxarticles__oxlongdesc = new oxField( $sValue );
+        $oArticle->setArticleLongDesc( $sValue );
         $oArticle->save();
 
         $oArticle = new oxarticle();
         $oArticle->load( '_testArticle' );
-        $this->assertTrue( strcmp( $oArticle->oxarticles__oxlongdesc->value, $sResult ) === 0, $oArticle->oxarticles__oxlongdesc->value." != $sResult" );
+        $this->assertEquals( $sResult, $oArticle->getLongDesc() );
     }
 
     public function testOxArticleSetAndGetTags()
@@ -220,7 +222,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
         $oArticle = new oxarticle();
         $oArticle->setId( '_testArticle' );
-        $oArticle->oxarticles__oxlongdesc = new oxField( $sValue );
+        $oArticle->setArticleLongDesc( $sValue );
         $oArticle->save();
 
         $oArticle->saveTags( $sValue );
@@ -528,7 +530,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
         $oCat = new oxcategory();
         $oCat->load( '_testCat2' );
-        $this->assertTrue( strcmp( $oCat->oxcategories__oxlongdesc->value, $sResult ) === 0, $oCat->oxcategories__oxlongdesc->value." != $sResult" );
+        $this->assertEquals( $sResult, $oCat->getLongDesc() );
     }
 
     public function testOxCategoryLoadCategoryIds()
@@ -893,30 +895,6 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oMedia->load( '_testMan2' );
         $sExpt = $sValue.'<br><object type="application/x-shockwave-flash" data="http://www.youtube.com/v/ZN239G6aJZo" width="425" height="344"><param name="movie" value="http://www.youtube.com/v/ZN239G6aJZo"></object>';
         $this->assertEquals($sExpt, $oMedia->getHtml());
-    }
-
-    public function testOxNewsSaveAndLoad()
-    {
-        modConfig::getInstance()->setConfigParam( 'bl_perfParseLongDescinSmarty', 1 );
-
-        $oActView = oxNew( 'oxubase' );
-        $oActView->addGlobalParams();
-        oxConfig::getInstance()->setActiveView( $oActView );
-
-        $sValue  = '[{ $oViewConf->getImageUrl() }] Nekilnojamojo turto agentūrų verslo sėkme Литовские европарламентарии, срок полномочий которых в 2009 году подходит к концу Der Umstieg war für uns ein voller Erfolg. OXID eShop ist flexibel und benutzerfreundlich';
-        $sResult = oxConfig::getInstance()->getImageUrl( false ).' Nekilnojamojo turto agentūrų verslo sėkme Литовские европарламентарии, срок полномочий которых в 2009 году подходит к концу Der Umstieg war für uns ein voller Erfolg. OXID eShop ist flexibel und benutzerfreundlich';
-
-        $oNews = new oxnews();
-        $oNews->setId( '_testNews' );
-        $oNews->oxnews__oxdate = new oxField( null );
-        $oNews->oxnews__oxshortdesc = new oxField( 'agentūrų verslo sėkme Литовские für uns' );
-        $oNews->oxnews__oxlongdesc = new oxField( $sValue );
-        $oNews->save();
-
-        $oNews = new oxnews();
-        $oNews->load( '_testNews' );
-        $this->assertTrue( strcmp( $oNews->oxnews__oxlongdesc->value, $sResult ) === 0, $oNews->oxnews__oxlongdesc->value." != $sResult" );
-        $this->assertEquals( 'agentūrų verslo sėkme Литовские für uns', $oNews->oxnews__oxshortdesc->value );
     }
 
     public function testOxNewsletterSetParamsPlusSaveLoadFor()
@@ -1883,7 +1861,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $sResult = 'agentū литовfür test best nest fest';
 
         $oArt = new oxArticle();
-        $oArt->oxarticles__oxlongdesc = new oxField( $sValue );
+        $oArt->setArticleLongDesc( $sValue );
         $oArtList = new oxlist();
         $oArtList->offsetSet( 0, $oArt );
         $oView = $this->getMock( 'alist', array( 'getArticleList', '_prepareMetaDescription', '_getCatPathString' ) );
@@ -1900,7 +1878,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
         $oArt = new oxArticle();
         $oArt->oxarticles__oxtitle = new oxField( $sValue, oxField::T_RAW );
-        $oArt->oxarticles__oxlongdesc = new oxField( $sValue, oxField::T_RAW );
+        $oArt->setArticleLongDesc( $sValue );
         $oArt->oxarticles__oxsearchkeys = new oxField( $sValue, oxField::T_RAW );
 
         $sMetaKeywParam = ( $oArt->oxarticles__oxsearchkeys->value ) ? $oArt->oxarticles__oxsearchkeys->value." ".$sMetaKeywParam:$sMetaKeywParam;

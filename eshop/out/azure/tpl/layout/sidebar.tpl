@@ -4,7 +4,7 @@
 [{/capture}]
 [{/if}]
 
-[{if $oView->getTop5ArticleList()}]
+[{if $oView->getClassName() eq "start" }]
 [{capture append="oxidBlock_sidebar" }]
     [{include file="widget/product/boxproducts.tpl" _boxId="topBox" _oBoxProducts=$oView->getTop5ArticleList() _sHeaderIdent="BOX_TOPOFTHESHOP_HEADER"}]
 [{/capture}]

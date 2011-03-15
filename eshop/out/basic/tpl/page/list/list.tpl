@@ -79,9 +79,9 @@
             </ul>
         [{/if}]
 
-        [{if $actCategory->oxcategories__oxlongdesc->value }]
+        [{if $actCategory->oxcategories__oxlongdesc->value}]
             <hr>
-            <span id="test_catLongDesc">[{ $actCategory->oxcategories__oxlongdesc->value }]</span>
+            <span id="test_catLongDesc">[{oxeval var=$actCategory->oxcategories__oxlongdesc}]</span>
         [{/if}]
     [{/capture}]
 

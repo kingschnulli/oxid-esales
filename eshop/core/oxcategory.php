@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategory.php 32881 2011-02-03 11:45:36Z sarunas $
+ * @version   SVN: $Id: oxcategory.php 33731 2011-03-10 14:39:37Z arvydas.vapsva $
  */
 
 /**
@@ -198,21 +198,8 @@ class oxCategory extends oxI18n implements oxIUrl
      */
     public function assign( $dbRecord )
     {
-
-        parent::assign( $dbRecord );
-
-        // workaround for firefox showing &lang= as &9001;= entity, mantis#0001272
-        $this->oxcategories__oxlongdesc = new oxField( str_replace( '&lang=', '&amp;lang=', $this->oxcategories__oxlongdesc->value ), oxField::T_RAW);
-
-        // #1030C run through smarty
-        $myConfig = $this->getConfig();
-        if (!$this->_isInList() && !$this->isAdmin() && $myConfig->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
-            startProfile("parseThroughSmarty");
-            $this->oxcategories__oxlongdesc = new oxField( oxUtilsView::getInstance()->parseThroughSmarty( $this->oxcategories__oxlongdesc->value, $this->getId() ), oxField::T_RAW );
-            stopProfile("parseThroughSmarty");
-        }
-
         $this->_iNrOfArticles = null;
+        return parent::assign( $dbRecord );
     }
 
     /**
@@ -713,7 +700,6 @@ class oxCategory extends oxI18n implements oxIUrl
         $this->_blHasVisibleSubCats = $blHasVisibleSubcats;
     }
 
-    
     /**
      * Loads and returns attribute list associated with this category
      *
@@ -1070,5 +1056,16 @@ class oxCategory extends oxI18n implements oxIUrl
     public function isPriceCategory()
     {
         return (bool) ( $this->oxcategories__oxpricefrom->value || $this->oxcategories__oxpriceto->value );
+    }
+
+    /**
+     * Returns long description, parsed through smarty. should only be used by exports or so.
+     * In templates use [{oxeval var=$oCategory->oxcategories__oxlongdesc->getRawValue()}]
+     *
+     * @return string
+     */
+    public function getLongDesc()
+    {
+        return oxUtilsView::getInstance()->parseThroughSmarty( $this->oxcategories__oxlongdesc->getRawValue(), $this->getId() );
     }
 }

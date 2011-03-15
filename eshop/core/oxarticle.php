@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 33708 2011-03-09 13:04:38Z vilma $
+ * @version   SVN: $Id: oxarticle.php 33754 2011-03-14 15:38:56Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -384,6 +384,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     protected $_oMdVariants = null;
 
     /**
+     * Product long description field
+     *
+     * @var oxField
+     */
+    protected $_oLongDesc = null;
+
+    /**
      * Class constructor, sets shop ID for article (oxconfig::getShopId()),
      * initiates parent constructor (parent::oxI18n()).
      *
@@ -405,23 +412,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Magic isset, deals with article long description
-     *
-     * @param string $sName Variable name
-     *
-     * @return string
-     */
-    public function __isset( $sName )
-    {
-        if ( $sName == 'oxarticles__oxlongdesc' ) {
-            //get empty oxlongdesc field
-            $this->getArticleLongDesc();
-            return true;
-        }
-        return isset( $this->$sName );
-    }
-
-    /**
      * Magic getter, deals with deprecated values and long description which is loaded on demand.
      * Additionally it sets default value for unknown picture fields
      *
@@ -432,10 +422,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function __get($sName)
     {
         $myUtils = oxUtils::getInstance();
-        switch ($sName) {
-            case 'oxarticles__oxlongdesc':
-                return $this->getArticleLongDesc($this->getId());
-                break;
+        // deprecated since 2011.03.10, should be used getArticleLongDesc() / getLongDesc()
+        if ( strpos( $sName, 'oxarticles__oxlongdesc' ) === 0 ) {
+            return $this->getArticleLongDesc();
         }
 
         //checking for zoom picture
@@ -457,6 +446,25 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         return $this->$sName;
+    }
+
+    /**
+     * Sets article parameter
+     *
+     * @param string $sName  name of parameter to set
+     * @param mixed  $sValue parameter value
+     *
+     * @return null
+     */
+    public function __set( $sName, $sValue )
+    {
+        // deprecated since 2011.03.14, should be used setArticleLongDesc()
+        if ( strpos( $sName, 'oxarticles__oxlongdesc' ) === 0 ) {
+            $sValue = ( $sValue instanceof oxField ) ? $sValue->getRawValue() : $sValue;
+            $this->setArticleLongDesc( $sValue );
+        } else {
+            parent::__set( $sName, $sValue );
+        }
     }
 
     /**
@@ -1855,13 +1863,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             }
         }
 
-        $blRet = parent::save();
+        if ( ( $blRet = parent::save() ) ) {
 
-        // save article long description
-        $this->setArticleLongDesc();
+            // saving long descrition
+            $this->_saveArtLongDesc();
 
-        // load article images after save
-        $this->_assignAllPictureValues();
+            // load article images after save
+            $this->_assignAllPictureValues();
+        }
 
         return $blRet;
     }
@@ -2076,38 +2085,27 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Get article long description
      *
-     * @param string $sOXID Article ID
+     * @param string $sOxid Article ID
      *
      * @return object $oField field object
      */
-    public function getArticleLongDesc($sOXID = null)
+    public function getArticleLongDesc( $sOxid = null )
     {
+        if ( $this->_oLongDesc === null ) {
 
-        if ( !$sOXID ) {
-            $sOXID = $this->oxarticles__oxid->value;
-        }
+            // initializing
+            $this->_oLongDesc = new oxField();
 
-        if ($sOXID == $this->oxarticles__oxid->value) {
-            if (isset($this->oxarticles__oxlongdesc) && ($this->oxarticles__oxlongdesc instanceof oxField) && $this->oxarticles__oxlongdesc->value) {
-                return $this->oxarticles__oxlongdesc;
+
+            // choosing which to get..
+            $sOxid = $sOxid === null ? $this->getId() : $sOxid;
+            $sViewName = getViewName( 'oxartextends', $this->getLanguage() );
+            if ( ( $sDbValue = oxDb::getDb()->getOne( "select oxlongdesc from {$sViewName} where oxid = ?", array( $sOxid ) ) ) !== false ) {
+                $this->_oLongDesc->setValue( $sDbValue, oxField::T_RAW );
             }
         }
 
-        $myConfig = $this->getConfig();
-
-        if ( $sOXID ) {
-            $sViewName = getViewName( 'oxartextends', $this->getLanguage() );
-            $oDb = oxDb::getDb();
-            $this->_setLongDesc($oDb->getOne( "select oxlongdesc from {$sViewName} where oxid = ".$oDb->quote($sOXID) ));
-        } else {
-            // TODO: check if keeping fldname is needed in non-admin mode
-            $this->oxarticles__oxlongdesc = new oxField();
-            $this->oxarticles__oxlongdesc->fldname = 'oxlongdesc';
-            $this->oxarticles__oxlongdesc->table   = 'oxarticles';
-            $this->oxarticles__oxlongdesc->fldtype = 'text';
-        }
-
-        return $this->oxarticles__oxlongdesc;
+        return $this->_oLongDesc;
     }
 
     /**
@@ -2115,69 +2113,43 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      *
      * @param string $sDbValue value to set
      *
+     * @deprecated since 2011.03.10
+     *
      * @return null
      */
-    protected function _setLongDesc($sDbValue)
+    protected function _setLongDesc( $sDbValue )
     {
-        // TODO: the code below is redundant, optimize it, assignments should go smooth without conversions
-        // hack, if editor screws up text, htmledit tends to do so
-        $sDbValue = str_replace( '&amp;nbsp;', '&nbsp;', $sDbValue );
-        $sDbValue = str_replace( '&amp;', '&', $sDbValue );
-        $sDbValue = str_replace( '&quot;', '"', $sDbValue );
-        $sDbValue = str_replace( '&lang=', '&amp;lang=', $sDbValue);
-        //
+        $this->setArticleLongDesc( $sDbValue );
+    }
 
-        $oStr = getStr();
-        $blHasSmarty = $oStr->strstr( $sDbValue, '[{' );
-        $blHasPhp = $oStr->strstr( $sDbValue, '<?' );
-        $myConfig = oxConfig::getInstance();
-        if ( ( $blHasSmarty || $blHasPhp ) && ($myConfig->getConfigParam( 'blExport' ) || !$this->isAdmin() ) && $myConfig->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
-            $sDbValue = oxUtilsView::getInstance()->parseThroughSmarty( $sDbValue, $this->getId() );
-        }
-        $this->oxarticles__oxlongdesc = new oxField($sDbValue, oxField::T_RAW);
-        // TODO: check if keeping fldname is needed in non-admin mode
-        $this->oxarticles__oxlongdesc->fldname = 'oxlongdesc';
-        $this->oxarticles__oxlongdesc->table   = 'oxarticles';
-        $this->oxarticles__oxlongdesc->fldtype = 'text';
+    /**
+     * get long description, parsed through smarty. should only be used by exports or so.
+     * In templates use [{oxeval var=$oProduct->getArticleLongDesc()->getRawValue()}]
+     *
+     * @return string
+     */
+    public function getLongDesc()
+    {
+        return oxUtilsView::getInstance()->parseThroughSmarty( $this->getArticleLongDesc()->getRawValue(), $this->getId() );
     }
 
     /**
      * Save article long description to oxartext table
      *
+     * @param string $sDesc      description to set
+     * @param string $sOrigValue base shop value, will be stored in oxField->orignalValue [optional]
+     *
      * @return null
      */
-    public function setArticleLongDesc()
+    public function setArticleLongDesc( $sDesc, $sOrigValue = null )
     {
 
-        if ( $this->_blEmployMultilanguage ) {
-            // update or insert article long description
-            if ($this->oxarticles__oxlongdesc instanceof oxField) {
-                $sLongDesc = $this->oxarticles__oxlongdesc->getRawValue();
-            } else {
-                $sLongDesc = $this->oxarticles__oxlongdesc->value;
-            }
-            $this->_saveArtLongDesc($this->getLanguage(), $sLongDesc);
-        } else {
-            $oArtExt = oxNew('oxi18n');
-            $oArtExt->init('oxartextends');
-            $aObjFields = $oArtExt->_getAllFields(true);
-            foreach ($aObjFields as $sKey => $sValue ) {
-                if ( preg_match('/^oxlongdesc(_(\d{1,2}))?$/', $sKey) ) {
-                    $sField = $this->_getFieldLongName($sKey);
-                    if (isset($this->$sField)) {
-                        $iLang = $oArtExt->_getFieldLang($sKey);
-                        $sLongDesc = null;
-                        if ($this->$sField instanceof oxField) {
-                            $sLongDesc = $this->$sField->getRawValue();
-                        } elseif (is_object($this->$sField)) {
-                            $sLongDesc = $this->$sField->value;
-                        }
-                        if (isset($sLongDesc)) {
-                            $this->_saveArtLongDesc($iLang, $sLongDesc);
-                        }
-                    }
-                }
-            }
+        // setting current value
+        $this->_oLongDesc = new oxField( $sDesc, oxField::T_RAW );
+
+        // setting original value?
+        if ( $sOrigValue ) {
+            $this->_oLongDesc->orignalValue = $sOrigValue;
         }
     }
 
@@ -2410,10 +2382,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $oTagCloud->resetTagCache();
         $sTags = mysql_real_escape_string( $oTagCloud->prepareTags( $sTags ) );
 
-
-
         $sViewName = getViewName( 'oxartextends', $this->getLanguage() );
-        $sQ = "update {$sViewName} set oxtags = '{$sTags}' where oxid = '".$this->getId()."'";
+        $sQ = "insert into {$sViewName} (oxid, oxtags) value ('".$this->getId()."', '{$sTags}')
+               on duplicate key update oxtags = '{$sTags}'";
         return oxDb::getDb()->execute( $sQ );
     }
 
@@ -2901,22 +2872,22 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * inserts article long description to artextends table
      *
-     * @param int    $iLang  language
-     * @param string $sValue long description
-     *
      * @return null
      */
-    protected function _saveArtLongDesc($iLang, $sValue)
+    protected function _saveArtLongDesc()
     {
-        $oDB = oxDb::getDb();
-        $iLang = (int) $iLang;
-        $sLangField = ($iLang > '0') ? '_'.$iLang : '';
-        $sLongDesc = $oDB->quote($sValue);
-        $sLongDescSQL = "insert into oxartextends (oxartextends.OXID, oxartextends.OXLONGDESC{$sLangField})
-                       VALUES ('".$this->getId()."', {$sLongDesc})
-                       ON DUPLICATE KEY update oxartextends.OXLONGDESC{$sLangField} = {$sLongDesc} ";
+        $myConfig = $this->getConfig();
+        $sShopId = $myConfig->getShopID();
 
-        $oDB->execute($sLongDescSQL);
+        $sValue = $this->getArticleLongDesc()->getRawValue();
+        $blSave = $sValue !== null;
+
+        if ( $blSave ) {
+            $sLangField = oxLang::getInstance()->getLanguageTag( (int) $this->getLanguage() );
+            $sLongDescSQL = "insert into oxartextends (oxartextends.oxid, oxartextends.oxlongdesc{$sLangField})
+                             values ('".$this->getId()."', ?) on duplicate key update oxartextends.oxlongdesc{$sLangField} = ? ";
+            oxDb::getDb()->execute( $sLongDescSQL, array( $sValue, $sValue ) );
+        }
     }
 
     /**
@@ -3624,24 +3595,22 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * @return null;
      */
     protected function _assignParentFieldValues()
-    {   startProfile('articleAssignParentInternal');
-        if ( $this->oxarticles__oxparentid->value) {
+    {
+        startProfile('articleAssignParentInternal');
+        if ( $this->oxarticles__oxparentid->value ) {
             // yes, we are in fact a variant
-            if ( !$this->isAdmin() || ($this->_blLoadParentData && $this->isAdmin() ) ) {
-                foreach ($this->_aFieldNames as $sFieldName => $sVal) {
-                    $this->_assignParentFieldValue($sFieldName);
+            if ( !$this->isAdmin() || ( $this->_blLoadParentData && $this->isAdmin() ) ) {
+                foreach ( $this->_aFieldNames as $sFieldName => $sVal ) {
+                    $this->_assignParentFieldValue( $sFieldName );
                 }
 
                 //assing long description
-                $oParentArticle = $this->getParentArticle();
-                if ( !$this->oxarticles__oxlongdesc->value ) {
-                    $this->oxarticles__oxlongdesc = $oParentArticle->oxarticles__oxlongdesc;
+                if ( $this->getArticleLongDesc()->getRawValue() === null ) {
+                    $this->setArticleLongDesc( $this->getParentArticle()->getArticleLongDesc()->getRawValue() );
                 }
-
             }
         }
         stopProfile('articleAssignParentInternal');
-
     }
 
     /**

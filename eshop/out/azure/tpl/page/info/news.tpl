@@ -7,8 +7,7 @@
                 <h3>
                     <span class="date">[{ $oNews->oxnews__oxdate->value|date_format:"%d.%m.%Y" }] - </span> [{ $oNews->oxnews__oxshortdesc->value}]
                 </h3>
-
-                [{ $oNews->oxnews__oxlongdesc->value}]
+                [{oxeval var=$oNews->oxnews__oxlongdesc}]
             </div>
         [{/foreach}]
     </div>

@@ -12,9 +12,9 @@
         [{/if}]
 
         [{if $actCategory->oxcategories__oxlongdesc->value }]
-            <div id="catLongDesc" class="categoryDescription">[{ $actCategory->oxcategories__oxlongdesc->value }]</div>
+            <div id="catLongDesc" class="categoryDescription">[{oxeval var=$actCategory->oxcategories__oxlongdesc}]</div>
         [{/if}]
-        
+
         [{if $oView->hasVisibleSubCats()}]
             [{assign var="iSubCategoriesCount" value=0}]
             <ul class="subcatList clear">
@@ -87,7 +87,7 @@
             </ul>
         [{/if}]
     [{if $oView->getArticleList()|@count > 0}]
-        <h1 class="pageHead">[{$oView->getTitle()}] 
+        <h1 class="pageHead">[{$oView->getTitle()}]
             [{ if $rsslinks.activeCategory}]
                 <a class="rss external" id="rss.activeCategory" href="[{$rsslinks.activeCategory.link}]" title="[{$rsslinks.activeCategory.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.activeCategory.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.activeCategory.title}]</span></a>
             [{/if }]

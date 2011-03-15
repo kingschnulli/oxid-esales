@@ -46,7 +46,7 @@ class Unit_Core_oxthemeTest extends OxidTestCase
 
     public function testGetList()
     {
-        $iCount = 3;
+        $iCount = 2;
         $aKeys = array('id','title','description','thumbnail','version','author','active');
 
         $aThemeList = $this->getProxyClass('oxTheme')->getList();
@@ -180,14 +180,14 @@ class Unit_Core_oxthemeTest extends OxidTestCase
         $oTheme->expects($this->any())->method('getInfo')->with($this->equalTo('id'))->will($this->returnValue(''));
         $this->assertEquals('EXCEPTION_THEME_NOT_LOADED', $oTheme->checkForActivationErrors());
 
-        
+
         $oTheme = $this->getMock('oxTheme', array('getInfo', 'getParent'));
         $oTheme->expects($this->at(0))->method('getInfo')->with($this->equalTo('id'))->will($this->returnValue('asd'));
         $oTheme->expects($this->at(1))->method('getParent')->will($this->returnValue(null));
         $oTheme->expects($this->at(2))->method('getInfo')->with($this->equalTo('parentTheme'))->will($this->returnValue('asd'));
         $this->assertEquals('EXCEPTION_PARENT_THEME_NOT_FOUND', $oTheme->checkForActivationErrors());
 
-        
+
         $oTheme = $this->getMock('oxTheme', array('getInfo', 'getParent'));
         $oTheme->expects($this->at(0))->method('getInfo')->with($this->equalTo('id'))->will($this->returnValue('asd'));
         $oTheme->expects($this->at(1))->method('getParent')->will($this->returnValue(null));

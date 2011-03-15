@@ -6,9 +6,6 @@
     <li class="login flyout[{if $oxcmp_user->oxuser__oxpassword->value}] logged[{/if}]">
        [{include file="widget/header/loginbox.tpl"}]
     </li>
-    [{if $oxcmp_user->oxuser__oxpassword->value}]
-        <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_password" params=$oViewConf->getNavUrlParams() }]">[{oxmultilang ident="WIDGET_SERVICES_ACCOUNT"}]</a></li>
-    [{/if}]
     [{if !$oxcmp_user}]
         <li><a id="registerLink" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=register" }]" title="[{oxmultilang ident="PAGE_ACCOUNT_REGISTER_REGISTER"}]">[{oxmultilang ident="PAGE_ACCOUNT_REGISTER_REGISTER"}]</a></li>
     [{/if}]

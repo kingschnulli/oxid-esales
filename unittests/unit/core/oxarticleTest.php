@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 33711 2011-03-09 15:07:51Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 33754 2011-03-14 15:38:56Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -254,6 +254,19 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         parent::tearDown();
     }
 
+    /**
+     * Testing if deprecated oxlongdesc setting still works
+     */
+    public function testDeprecatedLongDescSetting()
+    {
+        $oArticle = new oxArticle();
+        $oArticle->oxarticles__oxlongdesc = new oxField( "test" );
+
+        $oDesc = $oArticle->getArticleLongDesc();
+        $this->assertTrue( $oDesc instanceof oxField );
+        $this->assertEquals( "test", $oDesc->value );
+    }
+
 
     /**
      * Test case for bugtrack report #1887
@@ -457,7 +470,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $sQ = " and ( $sTable.oxstockflag != 2 or ( $sTable.oxstock + $sTable.oxvarstock ) > 0  ) ";
         $sQ = " $sQ and IF( $sTable.oxvarcount = 0, 1, ( select 1 from $sTable as art where art.oxparentid=$sTable.oxid and ( art.oxactive = 1 $sTimeCheckQ ) and ( art.oxstockflag != 2 or art.oxstock > 0 ) limit 1 ) ) ";
 
-        $this->assertEquals( $sQ, $oArticle->getStockCheckQuery() );
+        $this->assertEquals( str_replace( array(" ", "\n", "\t", "\r" ), "", $sQ ), str_replace( array(" ", "\n", "\t", "\r" ), "", $oArticle->getStockCheckQuery() ) );
     }
 
     /**
@@ -811,7 +824,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->expects( $this->once() )->method( '_addField' );
         $oArticle->oxarticles__oxid = 'addcalled';
         $oArticle->oxarticles__oxlongdesc = 'asd';
-        $this->assertEquals( 'asd', $oArticle->oxarticles__oxlongdesc );
+        $this->assertEquals( 'asd', $oArticle->oxarticles__oxlongdesc->value );
     }
 
 
@@ -856,21 +869,21 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $sRes2 = "best {$sLink} best";
 
         $oArticle = new oxarticle();
-        $oArticle->setId( '_currTestArticle' );
-        $oArticle->oxarticles__oxlongdesc = new oxField( 'test [{ $oViewConf->getImageUrl() }] test' );
+        $oArticle->setId( '_testArt' );
+        $oArticle->setArticleLongDesc( 'test [{ $oViewConf->getImageUrl() }] test' );
         $oArticle->save();
 
         $oArticle = new oxarticle();
-        $oArticle->load( '_currTestArticle' );
-        $this->assertEquals( trim( $sRes1 ), trim( $oArticle->getArticleLongDesc( '_currTestArticle' ) ) );
-        $oArticle->oxarticles__oxlongdesc = new oxField( 'best [{ $oViewConf->getImageUrl() }] best' );
+        $oArticle->load( '_testArt' );
+        $this->assertEquals( trim( $sRes1 ), trim( $oArticle->getLongDesc() ) );
+        $oArticle->setArticleLongDesc( 'best [{ $oViewConf->getImageUrl() }] best' );
         $oArticle->save();
 
         oxUtils::getInstance()->oxResetFileCache();
 
         $oArticle = new oxarticle();
-        $oArticle->load( '_currTestArticle' );
-        $this->assertEquals( trim( $sRes2 ), trim( $oArticle->getArticleLongDesc( '_currTestArticle' ) ) );
+        $oArticle->load( '_testArt' );
+        $this->assertEquals( trim( $sRes2 ), trim( $oArticle->getLongDesc() ) );
     }
 
     /**
@@ -1991,7 +2004,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         }
         $sExpSelect  = "(  $sTable.oxactive = 1   and ( $sTable.oxstockflag != 2 or ( $sTable.oxstock + $sTable.oxvarstock ) > 0  ) $sInsert ) ";
         $sSelect = $this->oArticle->getSqlActiveSnippet();
-        $this->assertEquals( $sExpSelect, $sSelect);
+        $this->assertEquals( str_replace( array(" ", "\n", "\t", "\r" ), "", $sExpSelect ), str_replace( array(" ", "\n", "\t", "\r" ), "", $sSelect ) );
     }
 
     /**
@@ -3267,11 +3280,12 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $iQtedShopId = oxConfig::getInstance()->getBaseShopId();
         oxDb::getDB()->execute("insert into oxseo (oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed, oxexpired, oxparams)
                 values ( '$sQtedObjectId', '$sQtedObjectId', '$iQtedShopId', '0', 'url', 'url', 'oxarticle', '1', '0', '' )");
+
         $this->oArticle->delete();
         $oArticle = new oxarticle();
         $this->assertFalse( $oArticle->load('_testArt'));
         $this->assertFalse( $oArticle->load('_testVar'));
-        $this->assertFalse( oxDb::getDB()->getOne("select oxobjectid from oxseo where oxobjectid = '_testArt'") );
+        $this->assertFalse( oxDb::getDB()->getOne("select 1 from oxseo where oxobjectid = '_testArt'") );
     }
 
     /**
@@ -3618,8 +3632,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testSetArticleLongDesc()
     {
-        $this->oArticle->oxarticles__oxlongdesc = new oxField("LongDesc", oxField::T_RAW);
-        $this->oArticle->setArticleLongDesc();
+        $this->oArticle->setArticleLongDesc( "LongDesc" );
+        $this->oArticle->save();
         $this->assertEquals( "LongDesc", oxDb::getDB()->getOne("select oxlongdesc from oxartextends where oxid = '_testArt'") );
     }
 
@@ -4163,8 +4177,9 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testGetArticleLongDesc()
     {
-        oxDb::getDB()->execute("update oxartextends set oxlongdesc = 'test &amp;' where oxid = '_testArt'");
-        $this->assertEquals( 'test &', $this->oArticle->getArticleLongDesc()->value);
+        oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', 'test &amp;')");
+        $oArticle = new oxArticle();
+        $this->assertEquals( 'test &amp;', $oArticle->getArticleLongDesc( '_testArt' )->value);
     }
 
     /**
@@ -4174,9 +4189,12 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testGetArticleLongDescInOtherLang()
     {
-        oxDb::getDB()->execute("update oxartextends set oxlongdesc_1 = 'lang 1 test &amp;' where oxid = '_testArt'");
-        $this->oArticle->setLanguage( 1 );
-        $this->assertEquals( 'lang 1 test &', $this->oArticle->getArticleLongDesc()->value);
+        oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc_1) values ( '_testArt', 'lang 1 test &amp;')");
+
+        $oArticle = new oxArticle();
+        $oArticle->setLanguage( 1 );
+        $oArticle->aaa = true;
+        $this->assertEquals( 'lang 1 test &amp;', $oArticle->getArticleLongDesc( '_testArt' )->value);
     }
 
     /**
@@ -4190,8 +4208,12 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         modConfig::getInstance()->setConfigParam( 'bl_perfParseLongDescinSmarty', true );
         $sDesc = 'aa[{* smarty comment *}]zz';
-        oxDb::getDB()->execute("update oxartextends set oxlongdesc = '$sDesc' where oxid = '_testArt'");
-        $this->assertEquals( 'aazz', $this->oArticle->getArticleLongDesc()->value);
+
+        oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', '$sDesc')");
+
+        $oArticle = new oxArticle();
+        $oArticle->load( $this->oArticle->getId() );
+        $this->assertEquals( 'aazz', $oArticle->getLongDesc());
     }
 
     /**
@@ -4201,9 +4223,11 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testGetArticleLongDescCached()
     {
-        $this->oArticle->oxarticles__oxlongdesc = new oxField('aaaad');
-        $this->assertEquals( 'aaaad', $this->oArticle->getArticleLongDesc()->value);
-        $this->assertEquals( '', $this->oArticle->getArticleLongDesc('asdasd')->value);
+        oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', 'aaaad')");
+
+        $oArticle = new oxArticle();
+        $oArticle->load( $this->oArticle->getId() );
+        $this->assertEquals( 'aaaad', $oArticle->getArticleLongDesc()->value);
     }
 
     /**
@@ -4337,13 +4361,12 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         $oArticle = new oxArticle();
         $oArticle->load('_testArt');
-        $oArticle->oxarticles__oxlongdesc->setValue('testLongDesc');
+        $oArticle->setArticleLongDesc('testLongDesc');
         $oArticle->save();
+
         $oArticle2 = new _oxArticle();
-        $oArticle2->oxarticles__oxlongdesc->value;
         $oArticle2->load('_testVar');
-        $oArticle2->UNITassignParentFieldValues();
-        $this->assertEquals( $oArticle2->oxarticles__oxlongdesc->value, 'testLongDesc');
+        $this->assertEquals( $oArticle2->getArticleLongDesc()->value, 'testLongDesc');
     }
 
     /**

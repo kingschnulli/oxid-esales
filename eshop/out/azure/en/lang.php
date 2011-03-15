@@ -1014,7 +1014,6 @@ $aLang = array(
 
 'ORDER_READANDCONFIRMTERMS'                                    => "Please read and confirm our terms and conditions.",
 
-'LAYOUT_HEADER_SERVICES_LINK'                                  => "Service",
 'LAYOUT_HEADER_ACCOUNT_LINK'                                   => "My account",
 'LAYOUT_HEADER_COMPARE_LINK'                                   => "My Product Compare",
 'LAYOUT_HEADER_NOTICELIST_LINK'                                => "My Wish List",

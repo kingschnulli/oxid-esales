@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlemainTest.php 33474 2011-02-23 13:29:51Z arvydas.vapsva $
+ * @version   SVN: $Id: articlemainTest.php 33740 2011-03-10 16:17:03Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -238,31 +238,9 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
      */
     public function testSaveinnlang()
     {
-        oxTestModules::addFunction( 'oxarticle', 'setLanguage', '{ return true; }');
-        oxTestModules::addFunction( 'oxarticle', 'load', '{ return true; }');
-        oxTestModules::addFunction( 'oxarticle', 'assign', '{ return true; }');
-        oxTestModules::addFunction( 'oxarticle', 'save', '{ return true; }');
-        oxTestModules::addFunction( 'oxarticle', 'getId', '{ return "testId"; }');
-
-        modConfig::setParameter( "new_lang", 999 );
-        modConfig::setParameter( "oxid", "-1" );
-        modConfig::setParameter( "oxparentid", "testPArentId" );
-        modConfig::setParameter( "editval", array( 'oxarticles__oxvat' => '', 'oxarticles__oxprice' => 999 ) );
-
-        // testing..
-        $aTasks = array();
-            $aTasks[] = 'resetCounter';
-            $aTasks[] = '_resetCounts';
-
-
-        $oView = $this->getMock( "Article_Main", $aTasks );
-
-            $oView->expects( $this->once() )->method( 'resetCounter' );
-            $oView->expects( $this->once() )->method( '_resetCounts' );
-
-
+        $oView = $this->getMock( "Article_Main", array( "save" ) );
+        $oView->expects( $this->once() )->method( 'save' );
         $oView->saveinnlang();
-        $this->assertEquals( 999, oxConfig::getParameter( "new_lang" ) );
     }
 
     /**

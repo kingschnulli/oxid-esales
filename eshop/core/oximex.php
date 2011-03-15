@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oximex.php 31954 2010-12-17 13:33:40Z sarunas $
+ * @version   SVN: $Id: oximex.php 33731 2011-03-10 14:39:37Z arvydas.vapsva $
  */
 
 /**
@@ -124,7 +124,7 @@ class oxImex extends oxBase
                 .";"                           // Bestellte Menge
                 .";"                           // Stückliste
                 .";1"                              // Internet
-                .";".$this->interForm( $oArticle->oxarticles__oxshortdesc->value.$oArticle->oxarticles__oxlongdesc->value)// Text
+                .";".$this->interForm( $oArticle->oxarticles__oxshortdesc->value.$oArticle->getLongDesc())// Text
                 .";";
                 $sToFile .= "\r\n";
 

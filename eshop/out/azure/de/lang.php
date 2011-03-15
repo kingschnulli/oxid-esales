@@ -1011,7 +1011,6 @@ $aLang = array(
 
 'ORDER_READANDCONFIRMTERMS'                                    => "Bitte bestätigen Sie unsere Allg. Geschäftsbedingungen.",
 
-'LAYOUT_HEADER_SERVICES_LINK'                                  => "Service",
 'LAYOUT_HEADER_ACCOUNT_LINK'                                   => "Mein Konto",
 'LAYOUT_HEADER_COMPARE_LINK'                                   => "Mein Artikelvergleich",
 'LAYOUT_HEADER_NOTICELIST_LINK'                                => "Mein Merkzettel",

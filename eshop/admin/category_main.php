@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.php 33474 2011-02-23 13:29:51Z arvydas.vapsva $
+ * @version   SVN: $Id: category_main.php 33736 2011-03-10 15:36:39Z arvydas.vapsva $
  */
 
 /**
@@ -146,6 +146,7 @@ class Category_Main extends oxAdminDetails
 
             // shopid
             $aParams['oxcategories__oxshopid'] = oxSession::getVar( "actshop" );
+
         $oCategory = oxNew( "oxcategory" );
 
         if ( $soxId != "-1") {
@@ -163,12 +164,13 @@ class Category_Main extends oxAdminDetails
             $aParams['oxcategories__oxactive'] = 1;
             $aParams['oxcategories__oxid'] = null;
         }
-        //$aParams = $oCategory->ConvertNameArray2Idx( $aParams);
 
 
         $oCategory->setLanguage(0);
-        $oCategory->assign( $aParams);
-
+        if ( isset( $aParams["oxcategories__oxlongdesc"] ) ) {
+            $aParams["oxcategories__oxlongdesc"] = $this->_processLongDesc( $aParams["oxcategories__oxlongdesc"] );
+        }
+        $oCategory->assign( $aParams );
         $oCategory->setLanguage($this->_iEditLang);
 
         $oCategory = oxUtilsFile::getInstance()->processFiles( $oCategory );
@@ -178,46 +180,25 @@ class Category_Main extends oxAdminDetails
     }
 
     /**
+     * Fixes html broken by html editor
+     *
+     * @param string $sValue value to fix
+     *
+     * @return string
+     */
+    protected function _processLongDesc( $sValue )
+    {
+        // workaround for firefox showing &lang= as &9001;= entity, mantis#0001272
+        return str_replace( '&lang=', '&amp;lang=', $sValue );
+    }
+
+    /**
      * Saves article category data to different language (eg. english).
      *
      * @return null
      */
     public function saveinnlang()
     {
-
-        $soxId = $this->getEditObjectId();
-        $aParams = oxConfig::getParameter( "editval");
-        // checkbox handling
-        if ( !isset( $aParams['oxcategories__oxactive']))
-            $aParams['oxcategories__oxactive'] = 0;
-        if ( !isset( $aParams['oxcategories__oxdefsortmode']))
-            $aParams['oxcategories__oxdefsortmode'] = 0;
-
-        // null values
-        if ($aParams['oxcategories__oxvat'] === '')
-            $aParams['oxcategories__oxvat'] = null;
-
-            // shopid
-            $aParams['oxcategories__oxshopid'] = oxSession::getVar( "actshop" );
-
-        $oCategory = oxNew( "oxcategory" );
-
-        if ( $soxId != "-1") {
-            $oCategory->loadInLang( $this->_iEditLang, $soxId );
-        } else {
-            $aParams['oxcategories__oxid'] = null;
-        }
-
-
-        //$aParams = $oCategory->ConvertNameArray2Idx( $aParams);
-        $oCategory->setLanguage(0);
-        $oCategory->assign( $aParams);
-
-        // apply new language
-        $oCategory->setLanguage( oxConfig::getParameter( "new_lang" ) );
-        $oCategory->save();
-
-        // set oxid if inserted
-        $this->setEditObjectId( $oCategory->getId() );
+        $this->save();
     }
 }

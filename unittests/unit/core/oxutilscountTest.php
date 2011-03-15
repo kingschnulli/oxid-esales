@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscountTest.php 32247 2010-12-22 14:59:40Z sarunas $
+ * @version   SVN: $Id: oxutilscountTest.php 33754 2011-03-14 15:38:56Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -126,9 +126,7 @@ class Unit_Core_oxUtilsCountTest extends OxidTestCase
 
         $oArticle->saveTags( "wanduhr" );
 
-
         $this->assertEquals( $iCnt, oxUtilsCount::getInstance()->getTagArticleCount( $sTag, 0 ));
-
     }
 
     public function testGetCatArticleCount()

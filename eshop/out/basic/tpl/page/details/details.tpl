@@ -319,7 +319,7 @@
     <div class="longdesc">
         <strong class="h3" id="test_productFullTitle">[{ $product->oxarticles__oxtitle->value }][{if $product->oxarticles__oxvarselect->value}] [{ $product->oxarticles__oxvarselect->value }][{/if}]</strong>
         [{oxhasrights ident="SHOWLONGDESCRIPTION"}]
-         <div id="test_product_longdesc">[{ $product->oxarticles__oxlongdesc->value }]</div>
+            <div id="test_product_longdesc">[{oxeval var=$product->getArticleLongDesc()}]</div>
         [{/oxhasrights}]
 
         <div class="question">
