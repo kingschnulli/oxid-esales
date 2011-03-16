@@ -532,7 +532,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertEquals("You are here: / Search", $this->getText("path"));
         $this->assertTrue($this->isElementPresent("//a[@id='rss.searchArticles']"));
         $this->assertEquals("1 Hits for \"šųößлы1000\"", $this->getText("test_smallHeader"));
-        $this->assertEquals("Weight: 24 kg", $this->getText("test_no_Search_1000"));
+        $this->assertEquals("2 kg | 25,00 €/kg", $this->getText("test_no_Search_1000"));
         $this->assertEquals("Test product 0 short desc [EN] šųößлы", $this->getText("test_shortDesc_Search_1000"));
         $this->assertEquals("50,00 €*", $this->getText("test_price_Search_1000"));
         $this->assertEquals("Test product 0 [EN] šųößлы", $this->getText("test_title_Search_1000"));

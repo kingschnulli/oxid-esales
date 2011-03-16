@@ -94,6 +94,7 @@
             </div>
         [{else}]
             <div class="lineBox clear">
+                <a href="[{ oxgetseourl ident=$oViewConf->getOrderLink() }]" class="submitButton largeButton" id="paymentBackStepBottom">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_BACKSTEP" }]</a>
                 <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_NEXTSTEP" }]</button>
             </div>
         [{/if}]

@@ -166,6 +166,7 @@
                 [{/if}]
             </div>
             <div class="lineBox clear">
+                <a href="[{ oxgetseourl ident=$oViewConf->getPaymentLink() }]" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_BACKSTEP" }]</a>
                 <button type="submit" class="submitButton nextStep largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_SUBMITORDER" }]</button>
             </div>
         </form>

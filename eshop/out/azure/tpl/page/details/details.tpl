@@ -85,6 +85,9 @@
 
 
             [{* Actions select list: to listmania and etc. *}]
+            [{if $smarty.cookies.showlinksonce ne "1"}]
+                <div id="showlinksonce"></div>
+            [{/if}]
             <a class="selector corners FXgradBlueDark" href="#priceinfo" id="productLinks"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" longdesc="[{$oViewConf->getImageUrl()}]selectbutton-on.png" alt="Select"></a>
             <ul class="actionLinks corners shadow">
                 [{if $oViewConf->getShowCompareList() }]

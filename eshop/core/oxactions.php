@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactions.php 33731 2011-03-10 14:39:37Z arvydas.vapsva $
+ * @version   SVN: $Id: oxactions.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
  */
 
 /**
@@ -191,20 +191,11 @@ class oxActions extends oxI18n
     /**
      * get long description, parsed through smarty
      *
-     * @deprecated since 2011.03.10, use [{oxeval val=.. raw=1}] in template
-     *
      * @return string
      */
     public function getLongDesc()
     {
-        $sDbValue = $this->oxactions__oxlongdesc->getRawValue();
-        $oStr = getStr();
-        $blHasSmarty = $oStr->strstr( $sDbValue, '[{' );
-        $blHasPhp = $oStr->strstr( $sDbValue, '<?' );
-        if ( $blHasSmarty || $blHasPhp) {
-            $sDbValue = oxUtilsView::getInstance()->parseThroughSmarty( $sDbValue, "promotion_".$this->getId() );
-        }
-        return $sDbValue;
+        return oxUtilsView::getInstance()->parseThroughSmarty( $this->oxactions__oxlongdesc->getRawValue(), $this->getId().$this->getLanguage() );
     }
 
     /**

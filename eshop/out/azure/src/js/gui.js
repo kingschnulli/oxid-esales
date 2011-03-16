@@ -521,33 +521,50 @@ $(function(){
         });
 
         var arrowSrc = $(".selector img").attr("src");
+        var arrow = $("#productLinks").children("img");
+        function showLinks() {
+            var arrowOnSrc = arrow.attr("longdesc");
+            $(".actionLinks").slideDown("normal", function(){
+                arrow.attr("src", arrowOnSrc);
+            });
+        }
+        function hideLinks() {
+            $(".actionLinks").animate({
+                height: 0,
+                opacity: 0.1
+            }, 300, function(){
+                $(".actionLinks").hide().css({
+                    height: 'auto',
+                    opacity: '1'
+                });
+                arrow.attr("src", arrowSrc);
+            });
+        }
+
         $("#productLinks").css({
             "top": $("#productTitle").position().top - 3,
             "left": targetWidth + $("#productTitle").position().left + 10
         }).click(function(){
-            var arrow = $(this).children("img");
-
-            var arrowOnSrc = arrow.attr("longdesc");
             $(this).toggleClass("selected");
             if ($(this).hasClass("selected")) {
-                $(".actionLinks").slideDown("normal", function(){
-                    arrow.attr("src", arrowOnSrc);
-                });
+                showLinks();
             }
             else {
-                $(".actionLinks").animate({
-                    height: 0,
-                    opacity: 0.1
-                }, 300, function(){
-                    $(".actionLinks").hide().css({
-                        height: 'auto',
-                        opacity: '1'
-                    });
-                    arrow.attr("src", arrowSrc);
-                });
+                hideLinks();
             }
             return false;
         });
+        $("#productLinks").hover(function() {
+            showLinks();
+        });
+        $(".actionLinks").mouseleave( function() {
+            hideLinks();
+        });
+        if ($("#showlinksonce").length > 0) {
+            $(".actionLinks").slideDown('normal').delay(1000).slideUp('normal', function(){
+                 setCookie('showlinksonce', 1);
+            });
+        }
     }
 
     if ($("#amountPrice").length > 0) {

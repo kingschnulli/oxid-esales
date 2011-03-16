@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 33754 2011-03-14 15:38:56Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -2130,7 +2130,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getLongDesc()
     {
-        return oxUtilsView::getInstance()->parseThroughSmarty( $this->getArticleLongDesc()->getRawValue(), $this->getId() );
+        return oxUtilsView::getInstance()->parseThroughSmarty( $this->getArticleLongDesc()->getRawValue(), $this->getId().$this->getLanguage() );
     }
 
     /**

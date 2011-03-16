@@ -37,11 +37,11 @@
 function smarty_function_oxeval( $aParams, &$oSmarty )
 {
     if ( $aParams['var'] && ( $aParams['var'] instanceof oxField ) ) {
-        $aParams['var'] = $sValue->getRawValue();
+        $aParams['var'] = $aParams['var']->getRawValue();
     }
 
     // processign only if enabled
-    if ( oxConfig::getInstance()->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
+    if ( oxConfig::getInstance()->getConfigParam( 'bl_perfParseLongDescinSmarty' ) || isset( $aParams['force'] ) ) {
         include_once $oSmarty->_get_plugin_filepath( 'function', 'eval' );
         return smarty_function_eval( $aParams, $oSmarty );
     }

@@ -258,6 +258,7 @@ $aLang = array(
 'TOP_CATEGORIES_MORE' => 'Mehr',
 'PAGE_CHECKOUT_BASKET_EMPTYSHIPPINGCART'                            => "Der Warenkorb ist leer.",
 'PAGE_CHECKOUT_BASKET_NEXTSTEP'                                     => "Weiter zum nächsten Schritt",
+'PAGE_CHECKOUT_BASKET_BACKSTEP'                                     => "Zurück",
 'PAGE_CHECKOUT_BASKET_MINORDERPRICE'                                => "Mindestbestellwert",
 'PAGE_CHECKOUT_BASKET_CONTINUESHOPPING'                             => "Weiter shoppen",
 'PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM'                            => "Details:",
@@ -316,7 +317,7 @@ $aLang = array(
 'PAGE_CHECKOUT_BASKETCONTENTS_YOURMESSAGE'                               => "Ihr Text:",
 
 'PAGE_CHECKOUT_STEPS_BASKET'                                             => "1. Warenkorb",
-'PAGE_CHECKOUT_STEPS_SEND'                                               => "2. Versenden",
+'PAGE_CHECKOUT_STEPS_SEND'                                               => "2. Adresse",
 'PAGE_CHECKOUT_STEPS_PAY'                                                => "3. Bezahlen",
 'PAGE_CHECKOUT_STEPS_ORDER'                                              => "4. Bestellen",
 'PAGE_CHECKOUT_STEPS_LASTSTEP'                                           => "5. Fertig",
@@ -350,6 +351,7 @@ $aLang = array(
 'PAGE_CHECKOUT_ORDER_SUBMITORDER'                                        => "Bestellung absenden",
 'PAGE_CHECKOUT_ORDER_BASKET'                                             => "Warenkorb",
 'PAGE_CHECKOUT_ORDER_MODIFY4'                                            => "ändern",
+'PAGE_CHECKOUT_ORDER_BACKSTEP'                                           => "Zurück",
 'PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS'                                => "Bitte bestätigen Sie unsere Allg. Geschäftsbedingungen.",
 
 'PAGE_CHECKOUT_USER_OPTION_NEXT'                                => "Weiter",
@@ -397,6 +399,7 @@ $aLang = array(
 'PAGE_CHECKOUT_PAYMENT_ACCOUNTNUMBER'                           => "Kontonummer:",
 'PAGE_CHECKOUT_PAYMENT_ACCOUNTHOLDER2'                          => "Kontoinhaber:",
 'PAGE_CHECKOUT_PAYMENT_NEXTSTEP'                                => "Weiter zum nächsten Schritt",
+'PAGE_CHECKOUT_PAYMENT_BACKSTEP'                                => "Zurück",
 'PAGE_CHECKOUT_PAYMENT_INFO'                                    => "Bezahlinformation",
 'PAGE_CHECKOUT_PAYMENT_EMPTY_TEXT'                              => '<p>Derzeit ist keine Versandart für dieses Land definiert.</p>
                                                       <p>Wir werden versuchen, Liefermöglichkeiten zu finden und Sie über die Versandkosten informieren.</p>

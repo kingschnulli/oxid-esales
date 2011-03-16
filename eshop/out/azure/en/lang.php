@@ -272,6 +272,7 @@ $aLang = array(
 
 'PAGE_CHECKOUT_BASKET_EMPTYSHIPPINGCART'                                 => "The Shopping Cart is empty.",
 'PAGE_CHECKOUT_BASKET_NEXTSTEP'                                          => "Continue to Next Step",
+'PAGE_CHECKOUT_BASKET_BACKSTEP'                                          => "Previous Step",
 'PAGE_CHECKOUT_BASKET_MINORDERPRICE'                                     => "Minimum order price",
 'PAGE_CHECKOUT_BASKET_CONTINUESHOPPING'                                  => "Continue Shopping",
 'PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM'                                 => "Details:",
@@ -360,6 +361,7 @@ $aLang = array(
 'PAGE_CHECKOUT_ORDER_SUBMITORDER'                                        => "Submit Order",
 'PAGE_CHECKOUT_ORDER_BASKET'                                             => "Basket",
 'PAGE_CHECKOUT_ORDER_MODIFY4'                                            => "modify",
+'PAGE_CHECKOUT_ORDER_BACKSTEP'                                           => "Previous Step",
 'PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS'                                => "Please read and confirm our terms and conditions.",
 
 'PAGE_CHECKOUT_USER_OPTION_NEXT'                                => "Next",
@@ -407,6 +409,7 @@ $aLang = array(
 'PAGE_CHECKOUT_PAYMENT_ACCOUNTNUMBER'                           => "Account No.:",
 'PAGE_CHECKOUT_PAYMENT_ACCOUNTHOLDER2'                          => "Account Holder:",
 'PAGE_CHECKOUT_PAYMENT_NEXTSTEP'                                => "Continue to Next Step",
+'PAGE_CHECKOUT_PAYMENT_BACKSTEP'                                => "Previous Step",
 'PAGE_CHECKOUT_PAYMENT_INFO'                                    => "Payment Information",
 'PAGE_CHECKOUT_PAYMENT_EMPTY_TEXT'                              => '<p>Currently we have no delivery method set up for this country.</p>
                                                       <p>We are aiming to find a possible delivery method and we will inform you as soon as possible via eMail about the result, including further information about delivery costs.</p>

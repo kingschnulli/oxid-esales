@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnews.php 33731 2011-03-10 14:39:37Z arvydas.vapsva $
+ * @version   SVN: $Id: oxnews.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
  */
 
 /**
@@ -185,5 +185,15 @@ class oxNews extends oxI18n
                 break;
         }
         return parent::_setFieldData($sFieldName, $sValue, $iDataType);
+    }
+
+    /**
+     * get long description, parsed through smarty
+     *
+     * @return string
+     */
+    public function getLongDesc()
+    {
+        return oxUtilsView::getInstance()->parseThroughSmarty( $this->oxnews__oxlongdesc->getRawValue(), $this->getId().$this->getLanguage() );
     }
 }

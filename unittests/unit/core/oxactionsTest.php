@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 31597 2010-12-08 13:27:37Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxactionsTest.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -301,41 +301,13 @@ class Unit_Core_oxactionsTest extends OxidTestCase
 
     /**
      * oxActions::getLongDesc() test case
-     * test getted long description without smarty tags
-     *
-     * @return null
-     */
-    public function testGetLongDescNoTags()
-    {
-        $oUV =  $this->getMock('oxUtilsView', array('parseThroughSmarty'));
-        $oUV->expects($this->never())->method('parseThroughSmarty');
-        oxTestModules::addModuleObject('oxUtilsView', $oUV);
-
-        $oStr = $this->getMock('oxStrRegular', array('strstr'));
-        $oStr->expects($this->at(0))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('[{'))->will($this->returnValue(false));
-        $oStr->expects($this->at(1))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('<?'))->will($this->returnValue(false));
-        oxNew('oxStr')->setH($oStr);
-
-        $this->assertEquals('longdesc', $this->oPromo->getLongDesc());
-    }
-
-    /**
-     * oxActions::getLongDesc() test case
      * test getted long description with smarty tags
      *
      * @return null
      */
     public function testGetLongDescTags()
     {
-        $oUV =  $this->getMock('oxUtilsView', array('parseThroughSmarty'));
-        $oUV->expects($this->once())->method('parseThroughSmarty')->with($this->equalTo('longdesc'))->will($this->returnValue('parsed'));
-        oxTestModules::addModuleObject('oxUtilsView', $oUV);
-
-        $oStr = $this->getMock('oxStrRegular', array('strstr'));
-        $oStr->expects($this->at(0))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('[{'))->will($this->returnValue(true));
-        $oStr->expects($this->at(1))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('<?'))->will($this->returnValue(false));
-        oxNew('oxStr')->setH($oStr);
-
+        $this->oPromo->oxactions__oxlongdesc = new oxField( "[{* *}]parsed" );
         $this->assertEquals('parsed', $this->oPromo->getLongDesc());
     }
 
