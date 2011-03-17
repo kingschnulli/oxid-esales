@@ -67,5 +67,7 @@ $aLang = array(
 'SHOP_THEME_iNewBasketItemMessage_2'              => 'Open popup',
 'SHOP_THEME_iNewBasketItemMessage_3'              => 'Open basket',
 'SHOP_THEME_aNrofCatArticles'                     => 'Number of products which can be shown in a product lists (category pages, search results)<br><br>Attention: A large number of products per page (above 100) can cause performance loss!',
+'SHOP_THEME_blDisableNavBars'                     => 'Don\'t display most Navigation Elements during Checkout',
+'HELP_SHOP_THEME_blDisableNavBars'                => 'If this setting is checked, most navigation elements aren\'t shown during checkout. Thereby users aren\'t distracted unnecessarily during checkout.',
 
 );

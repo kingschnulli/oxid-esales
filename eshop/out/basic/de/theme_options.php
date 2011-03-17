@@ -66,4 +66,6 @@ $aLang = array(
 'SHOP_THEME_iNewBasketItemMessage_2'              => 'Popup öffnen',
 'SHOP_THEME_iNewBasketItemMessage_3'              => 'Warenkorb öffnen',
 'SHOP_THEME_aNrofCatArticles'                     => 'Anzahl der Artikel, die in einer Artikelliste pro Seite angezeigt werden können<br>Warnung: Eine große Anzahl von Artikeln pro Seite (über 100) kann erhebliche Performance-Probleme verursachen!',
+'SHOP_THEME_blDisableNavBars'                     => 'Einige Navigationselemente während des Bestellprozesses ausblenden',
+'HELP_SHOP_THEME_blDisableNavBars'                => 'Wenn Sie diese Einstellung aktivieren, werden die meisten Navigationselemente im Bestellprozess ausgeblendet. Dadurch werden die Benutzer beim Bestellen nicht unnötig abgelenkt.',
 );

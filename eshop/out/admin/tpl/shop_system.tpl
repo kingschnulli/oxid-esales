@@ -54,18 +54,6 @@ function _groupExp(el) {
 
             <dl>
                 <dt>
-                    <input [{ $readonly }] type=hidden name=confbools[blDisableNavBars] value=false>
-                    <input type=checkbox name=confbools[blDisableNavBars] value=true  [{if ($confbools.blDisableNavBars)}]checked[{/if}] [{ $readonly }]>
-                    [{ oxinputhelp ident="HELP_SHOP_SYSTEM_DISABLENAVBARS" }]
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_SYSTEM_DISABLENAVBARS" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
-            <dl>
-                <dt>
                     <input type=hidden name=confbools[blStoreIPs] value=false>
                     <input type=checkbox name=confbools[blStoreIPs] value=true  [{if ($confbools.blStoreIPs)}]checked[{/if}] [{ $readonly }]>
                     [{ oxinputhelp ident="HELP_SHOP_SYSTEM_STOREIPS" }]

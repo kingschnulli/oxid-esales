@@ -497,7 +497,6 @@ INSERT INTO `oxconfig` VALUES('2e4452b5763e03c74.88240349', 'oxbaseshop', '', 'b
 INSERT INTO `oxconfig` VALUES('fde4559837789b3c7.26965372', 'oxbaseshop', '', 'aCMSfolder', 'aarr', 0x4dbace29724a5131411d93d207fd82ee70b3e465e8c18e1b60a35eb597a1f3bad1e50ee52570c9ca486b4755b08cea9d0a17892b1e7628a152af0ab842c7c310547016f7c53a9ad0d62060ca7fc75f2bf6892a6f9987d014c0418d2b1e7a6defd8e0d2f5b189c89b886c5d130a72f1dcb7b55c4455b720ce73743f3ed559cda8621a523aa1021ed09f9a1f0177fc9e7ab5920621aa55a368bfeb28ae782c3456362aee);
 INSERT INTO `oxconfig` VALUES('6f8453f77d174e0a0.31854175', 'oxbaseshop', '', 'blOtherCountryOrder', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('0a5455450f97fdec9.37454802', 'oxbaseshop', '', 'blAllowNegativeStock', 'bool', '');
-INSERT INTO `oxconfig` VALUES('omc4555952125c3c2.98253113', 'oxbaseshop', '', 'blDisableNavBars', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('b0b4d221756c80afdad8904c0b91b877', 'oxbaseshop', '', 'iRssItemsCount', 'str', 0xb6c7);
 INSERT INTO `oxconfig` VALUES('9fa5abe1bd51b6bbe97f95d8199660e5', 'oxbaseshop', '', 'aSeoReplaceChars', 'aarr', 0x4dba422a71495232a5777b11e101a218a65b6b8b54eb9139b44875f08d1f732c8b944cff73f2854633a67da52ac4258fecbd4331beae8950ab6d7a407e73fddcddc272e7bb6d190b8cb03718368f899425b48d2108358c2e40c08d0f808894c323ba6240f4d0b7fb5aa4bab1938cc98a9d2045789d6fc428547da6cb0d);
 INSERT INTO `oxconfig` VALUES('8b831f739c5d16cf4571b14a76006568', 'oxbaseshop', '', 'aSEOReservedWords', 'arr', 0x4dba422a71e248f1c8d0aa4c153fcde9eec56a0fcc7c8947b718d1dff30f2db6d7a60c59398fb5e1aa5999cfde45071ab225fba4d72b3ba9c23a4b0adb75314b1e7a2de97adee42d81197c0b48d4621740313f9df1ad63f693b7c47aa031ed88093c0e12eb85a75de769ede4f57823a56c6576106fb7);
@@ -546,6 +545,7 @@ INSERT INTO `oxconfig` VALUES('01296159b7641d31b93423972af6150b', 'oxbaseshop', 
 INSERT INTO `oxconfig` VALUES('073455b29d0db9ee774b788731623955', 'oxbaseshop', 'theme:basic', 'blShowFinalStep', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('0ec42a395d0595ee7741091898848474', 'oxbaseshop', 'theme:basic', 'iNewBasketItemMessage', 'select', 0xb6);
 INSERT INTO `oxconfig` VALUES('0545423fe8ce213a06.20230295', 'oxbaseshop', 'theme:basic', 'aNrofCatArticles', 'arr', 0x4dbace2972e14bf2cbd3a9a4113b83ad1c8f7b704f710ba39fd1ecd29b438b41809712e316c6f4fdc92741f7876cc6fca127d78994e604dcc99519);
+INSERT INTO `oxconfig` VALUES('omc4555952125c3c2.98253113', 'oxbaseshop', 'theme:basic', 'blDisableNavBars', 'bool', 0x07);
 
 
 -- data for azure theme
@@ -613,7 +613,8 @@ INSERT INTO `oxconfigdisplay` VALUES('01296159b2341d31b93423972af6150b', 'theme:
 INSERT INTO `oxconfigdisplay` VALUES('01296159b7641d31b93423972af6150b', 'theme:basic', 'iTopNaviCatCount',       'display',  '', 17);
 INSERT INTO `oxconfigdisplay` VALUES('073455b29d0db9ee774b788731623955', 'theme:basic', 'blShowFinalStep',        'display',  '', 18);
 INSERT INTO `oxconfigdisplay` VALUES('0ec42a395d0595ee7741091898848474', 'theme:basic', 'iNewBasketItemMessage',  'display',  '0|1|2|3', 19);
-INSERT INTO `oxconfigdisplay` VALUES('0545423fe8ce213a06.20230295', 'theme:basic', 'aNrofCatArticles', 'display',   '', 20);
+INSERT INTO `oxconfigdisplay` VALUES('0545423fe8ce213a06.20230295',      'theme:basic', 'aNrofCatArticles',       'display',   '', 20);
+INSERT INTO `oxconfigdisplay` VALUES('omc4555952125c3c2.98253113',       'theme:basic', 'blDisableNavBars',       'display',   '', 21);
 
 
 INSERT INTO `oxconfigdisplay` VALUES('1ec4235c2aee774aa45d772875437919', 'theme:azure', 'sIconsize',              'images',   '', 1);
@@ -1886,7 +1887,7 @@ CREATE TABLE `oxuser` (
 # Data for table `oxuser`
 #
 
-INSERT INTO `oxuser` VALUES ('oxdefaultadmin', 1, 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Your Company Name', 'John', 'Doe', 'Maple Street', '2425', '', 'Any City', 'a7c40f631fc920687.20179984', 'BW', '9041', '217-8918712', '217-8918713', 'MR', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', 0, '', 0, 0, 0, 0);
+INSERT INTO `oxuser` VALUES ('oxdefaultadmin', 1, 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Your Company Name', 'John', 'Doe', 'Maple Street', '2425', '', 'Any City', 'a7c40f631fc920687.20179984', '', '9041', '217-8918712', '217-8918713', 'MR', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', 0, '', 0, 0, 0, 0);
 
 #
 # Table structure for table `oxuserpayments`
@@ -2251,22 +2252,6 @@ CREATE TABLE `oxstates` (
 # Data for table `oxstates`
 #
 
-INSERT INTO `oxstates` VALUES ('BB', 'a7c40f631fc920687.20179984', 'Brandenburg', 'BB', 'Brandenburg', '', '');
-INSERT INTO `oxstates` VALUES ('BE', 'a7c40f631fc920687.20179984', 'Berlin', 'BE', 'Berlin', '', '');
-INSERT INTO `oxstates` VALUES ('BW', 'a7c40f631fc920687.20179984', 'Baden-Württemberg', 'BW', 'Baden-Wurttemberg', '', '');
-INSERT INTO `oxstates` VALUES ('BY', 'a7c40f631fc920687.20179984', 'Bayern', 'BY', 'Bavaria', '', '');
-INSERT INTO `oxstates` VALUES ('HB', 'a7c40f631fc920687.20179984', 'Bremen', 'HB', 'Bremen', '', '');
-INSERT INTO `oxstates` VALUES ('HE', 'a7c40f631fc920687.20179984', 'Hessen', 'HE', 'Hesse', '', '');
-INSERT INTO `oxstates` VALUES ('HH', 'a7c40f631fc920687.20179984', 'Hamburg', 'HH', 'Hamburg', '', '');
-INSERT INTO `oxstates` VALUES ('MV', 'a7c40f631fc920687.20179984', 'Mecklenburg-Vorpommern', 'MV', 'Mecklenburg-Western Pomerania', '', '');
-INSERT INTO `oxstates` VALUES ('NI', 'a7c40f631fc920687.20179984', 'Niedersachsen', 'NI', 'Lower Saxony', '', '');
-INSERT INTO `oxstates` VALUES ('NW', 'a7c40f631fc920687.20179984', 'Nordrhein-Westfalen', 'NW', 'North Rhine-Westphalia', '', '');
-INSERT INTO `oxstates` VALUES ('RP', 'a7c40f631fc920687.20179984', 'Rheinland-Pfalz', 'RP', 'Rhineland-Palatinate', '', '');
-INSERT INTO `oxstates` VALUES ('SH', 'a7c40f631fc920687.20179984', 'Schleswig-Holstein', 'SH', 'Schleswig-Holstein', '', '');
-INSERT INTO `oxstates` VALUES ('SL', 'a7c40f631fc920687.20179984', 'Saarland', 'SL', 'Saarland', '', '');
-INSERT INTO `oxstates` VALUES ('SN', 'a7c40f631fc920687.20179984', 'Sachsen', 'SN', 'Saxony', '', '');
-INSERT INTO `oxstates` VALUES ('ST', 'a7c40f631fc920687.20179984', 'Sachsen-Anhalt', 'ST', 'Saxony-Anhalt', '', '');
-INSERT INTO `oxstates` VALUES ('TH', 'a7c40f631fc920687.20179984', 'Thüringen', 'TH', 'Thuringia', '', '');
 INSERT INTO `oxstates` VALUES ('MB', '8f241f11095649d18.02676059', 'Manitoba', 'MB', 'Manitoba', '', '');
 INSERT INTO `oxstates` VALUES ('NB', '8f241f11095649d18.02676059', 'Neubraunschweig', 'NB', 'New Brunswick', '', '');
 INSERT INTO `oxstates` VALUES ('NF', '8f241f11095649d18.02676059', 'Neufundland und Labrador', 'NF', 'Newfoundland and Labrador', '', '');
