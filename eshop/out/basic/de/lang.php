@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 33448 2011-02-22 16:51:18Z ralf.trapp $
+ * @version   SVN: $Id: lang.php 33799 2011-03-16 16:51:42Z vilma $
  */
 
 
@@ -576,7 +576,6 @@ $aLang = array(
 'INC_CMP_LOGIN_RIGHT_MYPRODUCTCOMPARISON'         =>"Mein Artikelvergleich",
 'INC_CMP_LOGIN_RIGHT_PRODUCT3'                    =>"Artikel:",
 'INC_CMP_LOGIN_RIGHT_DETAILS3'                    =>"Details",
-'INC_CMP_LOGIN_RIGHT_OPENID'                      =>"OpenID:",
 'INC_CMP_LOGIN_ERRINVALIDEMAILORPWD'              =>"<b>Fehler:</b> <br>Falsche E-Mail oder Passwort!",
 'INC_CMP_LOGIN_EMAIL'                             =>"E-Mail:",
 'INC_CMP_LOGIN_PWD'                               =>"Passwort:",
@@ -586,8 +585,6 @@ $aLang = array(
 'INC_CMP_LOGIN_FORGOTPWD'                         =>"Passwort vergessen",
 'INC_CMP_LOGIN_ALREADYCUSTOMER'                   =>"Falls Sie schon Kunde bei uns sind, melden Sie sich bitte hier mit Ihrer E-Mail-Adresse und Ihrem Passwort an:",
 'INC_CMP_LOGIN_LOGIN2'                            =>"Anmeldung",
-'INC_CMP_LOGIN_FOROPENID'                         =>"Login über OpenID",
-'INC_CMP_LOGIN_OPENID'                            =>"OpenID:",
 'INC_CMP_MINI_BASKET_PRODUCT'                     =>"Artikel:",
 'INC_CMP_MINI_BASKET_QUANTITY'                    =>"Anzahl:",
 'INC_CMP_MINI_BASKET_SHIPPING'                    =>"Versand:",
@@ -718,7 +715,6 @@ $aLang = array(
 'INC_RIGHTLIST_REMOVEFROMCOMPARELIST'             =>"aus Vergl. entfernen",
 'INC_RIGHTLIST_COMPARE'                           =>"vergleichen",
 'INC_RIGHTLIST_ORDERNOW'                          =>"Jetzt bestellen!",
-'INC_RIGHTITEM_OPENID'                            =>"OpenID",
 'INC_RIGHTITEM_FBCONNECT'                         =>"Facebook Connect",
 'INC_RIGHTITEM_TS_RATINGS_BOX'                    =>"Kundenbewertungen",
 'INC_RIGHTITEM_TS_INFO_URL_TITLE'                 =>"Trusted Shops Kundenbewertungen",
@@ -1209,7 +1205,6 @@ $aLang = array(
 'USER_PHONE2'                                     => "Telefon:",
 'USER_FAX2'                                       => "Telefax:",
 'USER_CONTINUENEXTSTEP'                           => "Weiter zum nächsten Schritt",
-'USER_OPENID'                                     => "OpenID",
 'USER_DISABLESHIPPINGADDRESS'                     => "Rechnungsadresse als Lieferadresse verwenden",
 'USER_SELECTSHIPPINGADDRESS'                      => "Auswählen",
 'USER_UPDATE_ACCOUNT'                             => "Kontoinformationen aktualisieren",
@@ -1258,9 +1253,6 @@ $aLang = array(
 'EXCEPTION_USER_USERCREATIONFAILED'               => 'Fehler beim Anlegen des Benutzers!',
 'EXCEPTION_USER_PWDDONTMATCH'                     => 'Passwörter stimmen nicht überein!',
 'EXCEPTION_USER_NOVALUES'                         => 'E-Mail und Passwort müssen ausgefüllt sein!',
-'EXCEPTION_USER_NOVALIDOPENID'                    => 'Bitte eine gültige OpenID eingeben.',
-'EXCEPTION_USER_OPENIDCANCELED'                   => 'Authentifizierung abgebrochen',
-'EXCEPTION_USER_OPENIDVALIDFAILED'                => 'OpenID Authentifizierung fehlgeschlagen: %s',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                    => 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
 'EXCEPTION_INPUT_NOTALLFIELDS'                    => 'Bitte füllen Sie alle Felder mit "*" aus!',
 'EXCEPTION_PAGE_TITLE'                            => 'Fehler',

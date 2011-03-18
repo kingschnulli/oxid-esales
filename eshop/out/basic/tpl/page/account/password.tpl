@@ -8,7 +8,7 @@
      <div>
       [{ oxmultilang ident="ACCOUNT_PASSWORD_PASSWORDCHANGED" }]
      </div>
-    [{elseif $oView->hasPassword() }]
+    [{else}]
       <form action="[{ $oViewConf->getSelfActionLink() }]" name="changepassword" method="post">
         <div class="account">
             [{ $oViewConf->getHiddenSid() }]
@@ -41,10 +41,6 @@
             <br><br>
         </div>
        </form>
-    [{else }]
-      <div>
-        <a id="test_LoginLostPwd" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=forgotpwd" }]" class="link" rel="nofollow">[{ oxmultilang ident="ACCOUNT_PASSWORD_CHANGEPASSWORD" }]</a>
-      </div>
     [{/if }]
 </div>
 

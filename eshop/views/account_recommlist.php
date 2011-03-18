@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account_recommlist.php 33725 2011-03-10 12:05:29Z vilma $
+ * @version   SVN: $Id: account_recommlist.php 33826 2011-03-17 15:29:35Z vilma $
  */
 
 /**
@@ -223,6 +223,8 @@ class Account_Recommlist extends Account
                 $oRecommList = oxNew( 'oxrecommlist' );
                 $oRecommList->oxrecommlists__oxuserid = new oxField( $oUser->getId());
                 $oRecommList->oxrecommlists__oxshopid = new oxField( $this->getConfig()->getShopId() );
+            } else {
+                $this->_sThisTemplate = 'page/account/recommendationedit.tpl';
             }
 
             $sTitle  = trim( ( string ) oxConfig::getParameter( 'recomm_title', 1 ) );
@@ -236,12 +238,12 @@ class Account_Recommlist extends Account
             try {
                 // marking entry as saved
                 $this->_blSavedEntry = (bool) $oRecommList->save();
+                $this->setActiveRecommList( $this->_blSavedEntry ? $oRecommList : false );
             } catch (oxObjectException $oEx ) {
                 //add to display at specific position
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true, 'user' );
             }
         }
-        $this->_sThisTemplate = 'page/account/recommendationedit.tpl';
     }
 
     /**

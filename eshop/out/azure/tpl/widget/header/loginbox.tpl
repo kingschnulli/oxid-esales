@@ -41,13 +41,10 @@
                     <button type="submit" class="submitButton">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</button>
                 </p>
             </div>
-            [{if $oViewConf->getShowFbConnect() || $oViewConf->getShowOpenIdLogin()}]
+            [{if $oViewConf->getShowFbConnect()}]
                 <div class="altLoginBox corners fx-gradient-bg clear">
                     <span>[{ oxmultilang ident="WIDGET_LOGINBOX_WITH" }]</span>
                     <fb:login-button size="medium" autologoutlink="true" length="short"></fb:login-button>
-                    [{if !$oView->isConnectedWithFb() && $oViewConf->getShowOpenIdLogin() }]
-                        <img id="openidTrigger" src="[{$oViewConf->getImageUrl()}]login-openid.png" alt="[{ oxmultilang ident="WIDGET_LOGINBOX_OPENID" }]">
-                    [{/if}]
                 </div>
             [{/if}]
         </div>
@@ -63,9 +60,4 @@
     [{/if}]
     </a>
     <a id="logoutLink" class="logoutLink" href="[{ $oViewConf->getLogoutLink() }]" title="[{ oxmultilang ident="WIDGET_LOGINBOX_LOGOUT" }]">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGOUT" }]</a>
-[{/if}]
-[{if !$oView->isConnectedWithFb()}]
-    [{if !$oxcmp_user->oxuser__oxpassword->value && $oViewConf->getShowOpenIdLogin() }]
-        [{oxid_include_dynamic file="widget/header/openidlogin.tpl" type="login" pgnr=$oView->getActPage() tpl=$oViewConf->getActTplName() additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
-    [{/if}]
 [{/if}]

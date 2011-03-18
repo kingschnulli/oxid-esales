@@ -51,39 +51,3 @@
 </div>
 
 <div class="clear"></div>
-
-[{if $oViewConf->getShowOpenIdLogin() }]
-
-  <h3 class="blockHead">[{ oxmultilang ident="FORM_LOGIN_ACCOUNT_FOROPENID" }]</h3>
-
-  <form name="login" class="oxValidate" action="[{ $oViewConf->getSslSelfLink() }]" method="post">
-    <div>
-        [{ $oViewConf->getHiddenSid() }]
-        [{ $oViewConf->getNavFormParams() }]
-        <input type="hidden" name="fnc" value="login_noredirect">
-        <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
-        <input type="hidden" name="tpl" value="[{$oViewConf->getActTplName()}]">
-        [{if $oView->getArticleId()}]
-          <input type="hidden" name="aid" value="[{$oView->getArticleId()}]">
-        [{/if}]
-        [{if $oView->getProduct()}]
-          [{assign var="product" value=$oView->getProduct() }]
-          <input type="hidden" name="anid" value="[{ $product->oxarticles__oxnid->value }]">
-        [{/if}]
-    </div>
-    <ul class="form clear">
-        <li [{if $aErrors}]class="oxError"[{/if}]>
-            <label>[{ oxmultilang ident="FORM_LOGIN_ACCOUNT_OPENID" }]<span class="req">*</span></label>
-            <input class="oxValidate oxValidate_notEmpty" type="text" name="lgn_openid" value="" size="37" >
-            <p class="oxValidateError">
-                <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
-                [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxusername}]
-            </p>
-        </li>
-        <li class="formSubmit">
-            <button type="submit" class="submitButton largeButton">[{ oxmultilang ident="FORM_LOGIN_ACCOUNT_LOGIN" }]</button>
-        </li>
-    </ul>
-  </form>
-
-[{/if}]

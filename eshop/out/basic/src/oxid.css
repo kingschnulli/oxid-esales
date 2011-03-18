@@ -56,7 +56,6 @@ input.btn.hl {border-color:#f90;color:#f90;}
 input.chbox {vertical-align:middle; margin-top: 0px;}
 input.chk {margin: 1px 5px 1px 0px !important; padding: 0 !important;}
 textarea.fullsize {width: 100%;}
-input.openid {background: #fff url(bg/openid-icon-small.gif) no-repeat 0 50%; border:1px solid activeCaption; padding:2px 1px 2px 18px;}
 
 /* Tables .....*/
 table {border-collapse: collapse;}
@@ -234,7 +233,6 @@ ul.tree li a.exp.act{background-position: 0 -225px;}
 #right div.box p{padding:7px 10px;}
 #right .form label {color:#555555;display:block;margin:0 0 3px;}
 #right .form input.txt {width: 176px; margin:0 0 3px;}
-#right .form input.txt.openid{width: 159px;}
 #right .form span.btn input {width: 179px;}
 #right .form a.link {display:block;margin:0 0 3px;}
 

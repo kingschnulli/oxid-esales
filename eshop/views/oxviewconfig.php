@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 33489 2011-02-24 08:42:27Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfig.php 33799 2011-03-16 16:51:42Z vilma $
  */
 
 /**
@@ -754,16 +754,6 @@ class oxViewConfig extends oxSuperCfg
     public function getShowListmania()
     {
         return $this->getConfig()->getConfigParam( 'bl_showListmania' );
-    }
-
-    /**
-     * Returns config param "bl_showOpenId" value
-     *
-     * @return bool
-     */
-    public function getShowOpenIdLogin()
-    {
-        return $this->getConfig()->getConfigParam( 'bl_showOpenId' );
     }
 
     /**

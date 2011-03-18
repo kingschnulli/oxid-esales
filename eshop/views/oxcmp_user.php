@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 33604 2011-03-01 15:48:03Z sarunas $
+ * @version   SVN: $Id: oxcmp_user.php 33799 2011-03-16 16:51:42Z vilma $
  */
 
 // defining login/logout states
@@ -241,7 +241,6 @@ class oxcmp_user extends oxView
         $sUser     = oxConfig::getParameter( 'lgn_usr' );
         $sPassword = oxConfig::getParameter( 'lgn_pwd' );
         $sCookie   = oxConfig::getParameter( 'lgn_cook' );
-        $sOpenId   = oxConfig::getParameter( 'lgn_openid' );
         //$blFbLogin = oxConfig::getParameter( 'fblogin' );
 
         $this->setLoginStatus( USER_LOGIN_FAIL );
@@ -249,15 +248,7 @@ class oxcmp_user extends oxView
         // trying to login user
         try {
             $oUser = oxNew( 'oxuser' );
-            if ( $this->getViewConfig()->getShowOpenIdLogin() && $sOpenId ) {
-                $iOldErrorReproting = error_reporting();
-                error_reporting($iOldErrorReproting & ~E_STRICT);
-                $oOpenId = oxNew( "oxOpenID" );
-                $oOpenId->authenticateOid( $sOpenId, $this->_getReturnUrl() );
-                error_reporting($iOldErrorReproting);
-            } else {
-                $oUser->login( $sUser, $sPassword, $sCookie );
-            }
+            $oUser->login( $sUser, $sPassword, $sCookie );
             $this->setLoginStatus( USER_LOGIN_SUCCESS );
         } catch ( oxUserException $oEx ) {
             // for login component send excpetion text to a custom component (if defined)
@@ -737,120 +728,6 @@ class oxcmp_user extends oxView
     }
 
     /**
-     * Collects user information posted from openid server. If user do not exists creates
-     * new user and executes oxuser::openIdLogin().
-     *
-     * @return null
-     */
-    public function loginOid()
-    {
-        if (!$this->getViewConfig()->getShowOpenIdLogin()) {
-            return;
-        }
-        $this->setLoginStatus( USER_LOGIN_FAIL );
-
-        $iOldErrorReproting = error_reporting();
-        //for 3rd part library disabling our E_STRICT error reporting
-        error_reporting($iOldErrorReproting & ~E_STRICT);
-        try {
-            $oOpenId = $this->getOpenId();
-            $aData = $oOpenId->getOidResponse( $this->_getReturnUrl() );
-        } catch ( oxUserException $oEx ) {
-            // for login component send excpetion text to a custom component (if defined)
-            oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
-        }
-        error_reporting($iOldErrorReproting);
-        if ( count( $aData ) < 1 ) {
-            oxUtils::getInstance()->redirect($this->getConfig()->getShopHomeURL().'cl=register');
-        }
-        if ( $aData['email'] ) {
-            $oUser = oxNew( 'oxuser' );
-            $oUser->oxuser__oxusername = new oxField($aData['email'], oxField::T_RAW);
-
-            // if such user does not exist - creating it
-            if ( !$oUser->exists() ) {
-                $oUser->oxuser__oxpassword = new oxField($oUser->getOpenIdPassword(), oxField::T_RAW);
-                $oUser->oxuser__oxactive   = new oxField(1, oxField::T_RAW);
-                $oUser->oxuser__oxrights   = new oxField('user', oxField::T_RAW);
-                $oUser->oxuser__oxshopid   = new oxField($this->getConfig()->getShopId(), oxField::T_RAW);
-                list ($sFName, $sLName)    = explode(' ', $aData['fullname']);
-                $oUser->oxuser__oxfname    = new oxField($sFName, oxField::T_RAW);
-                $oUser->oxuser__oxlname    = new oxField($sLName, oxField::T_RAW);
-
-                $oUser->oxuser__oxsal      = new oxField($this->_getUserTitle($aData['gender']), oxField::T_RAW);
-                $oUser->oxuser__oxisopenid = new oxField(1, oxField::T_RAW);
-                if ( $sCountryId = $oUser->getUserCountryId( $aData['country'] ) ) {
-                    $oUser->oxuser__oxcountryid = new oxField( $sCountryId, oxField::T_RAW );
-                }
-                if ( $aData['postcode'] ) {
-                    $oUser->oxuser__oxzip = new oxField( $aData['postcode'], oxField::T_RAW );
-                }
-                $oUser->save();
-            } else {
-                $oUser->load( $oUser->getId() );
-                //if existing user loggins first time with openid
-                if ( $oUser->oxuser__oxisopenid->value == 0 ) {
-                    if ( !$oUser->oxuser__oxpassword->value ) {
-                        $oUser->oxuser__oxisopenid = new oxField(1, oxField::T_RAW);
-                        $oUser->oxuser__oxpassword = new oxField($oUser->getOpenIdPassword(), oxField::T_RAW);
-                    } else {
-                        $oUser->oxuser__oxisopenid = new oxField(2, oxField::T_RAW);
-                    }
-                    $oUser->save();
-                }
-            }
-
-            try {
-                $oUser->openIdLogin( $oUser->oxuser__oxusername->value );
-                $this->setLoginStatus( USER_LOGIN_SUCCESS );
-            } catch ( oxUserException $oEx ) {
-                // for login component send excpetion text to a custom component (if defined)
-                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false, true );
-            }
-
-            // finalizing ..
-            $this->_afterLogin( $oUser );
-            $this->getParent()->setFncName( null );
-            oxUtils::getInstance()->redirect($this->getParent()->getLink());
-        }
-    }
-
-    /**
-     * Returns gender for database
-     *
-     * @param string $sGender F(femail) or M(mail)
-     *
-     * @return string
-     */
-    protected function _getUserTitle( $sGender )
-    {
-        if ( $sGender == "F" ) {
-            return 'MRS';
-        } else {
-            return 'MR';
-        }
-    }
-
-    /**
-     * Returns return url for openid.
-     *
-     * @return string $sReturnUrl
-     */
-    protected function _getReturnUrl()
-    {
-        $this->getParent()->setFncName( 'loginOid' );
-        $sReturnUrl = str_replace( '&amp;', '&', $this->getParent()->getLink() );
-        if ( !strpos( $sReturnUrl, 'loginOid' ) ) {
-            if ( strpos( $sReturnUrl, '?' ) ) {
-                $sReturnUrl = $sReturnUrl . "&fnc=loginOid";
-            } else {
-                $sReturnUrl = $sReturnUrl . "?fnc=loginOid";
-            }
-        }
-        return $sReturnUrl;
-    }
-
-    /**
      * Sets user login state
      *
      * @param int $iStatus login state (USER_LOGIN_SUCCESS/USER_LOGIN_FAIL/USER_LOGOUT)
@@ -873,16 +750,6 @@ class oxcmp_user extends oxView
     public function getLoginStatus()
     {
         return $this->_iLoginStatus;
-    }
-
-    /**
-     * Returns oxOpenId class
-     *
-     * @return oxOpenId
-     */
-    public function getOpenId()
-    {
-        return oxNew( "oxOpenID" );
     }
 
     /**

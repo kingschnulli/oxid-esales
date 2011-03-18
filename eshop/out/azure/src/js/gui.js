@@ -309,13 +309,6 @@ $(function(){
             $("#loginBox").hide();
         });
 
-        $("#openidTrigger").click(function(){
-            $("#loginBox").hide();
-            $(".openIDLogin").show();
-        });
-
-
-
         /*
          * Show/hide list dropdowns
          */

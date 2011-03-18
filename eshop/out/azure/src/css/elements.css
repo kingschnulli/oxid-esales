@@ -791,10 +791,6 @@ a.submitButton {
     color: #ff0000;
 }
 
-.openIDLogin p.errorMsg {
-    color: #ff0000;
-}
-
 .loginForm p.checkFields {
     margin-bottom: 4px;
 }
@@ -1387,20 +1383,6 @@ a.readMore:hover {
     top: 7px;
     cursor: pointer;
 }
-
-.openIDLogin {
-    top: -2px;
-    right: 0px;
-    z-index:20;
-}
-
-.openIDLogin .textbox{
-    width: 182px;
-    margin: 9px 0 5px 0;
-}
-
-#openidTrigger {cursor: pointer;}
-
 
 .basketFlyout {
     display: none;

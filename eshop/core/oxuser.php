@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 33549 2011-02-25 15:31:29Z sarunas $
+ * @version   SVN: $Id: oxuser.php 33799 2011-03-16 16:51:42Z vilma $
  */
 
 /**
@@ -1285,52 +1285,6 @@ class oxUser extends oxBase
     }
 
     /**
-     * Performs user login by username and password. Fetches user data from DB.
-     * Registers in session. Returns true on success, FALSE otherwise.
-     *
-     * @param string $sUser User username
-     *
-     * @throws oxConnectionException, oxUserException
-     *
-     * @return bool
-     */
-    public function openIdLogin( $sUser )
-    {
-        $myConfig = $this->getConfig();
-        $sShopID = $myConfig->getShopId();
-        $oDb = oxDb::getDb();
-
-        $sUserSelect = "oxuser.oxusername = " . $oDb->quote( $sUser );
-        $sShopSelect = "";
-
-
-        $sSelect =  "select oxid from oxuser where oxuser.oxactive = 1 and {$sUserSelect} {$sShopSelect} ";
-
-        // load from DB
-        $aData = $oDb->getAll( $sSelect );
-        $sOXID = @$aData[0][0];
-        if ( isset( $sOXID ) && $sOXID ) {
-
-            if ( !$this->load( $sOXID ) ) {
-                $oEx = oxNew( 'oxUserException' );
-                $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
-                throw $oEx;
-            }
-        }
-
-        //login successfull?
-        if ( $this->oxuser__oxid->value ) {
-            // yes, successful login
-            oxSession::setVar( 'usr', $this->oxuser__oxid->value );
-            return true;
-        } else {
-            $oEx = oxNew( 'oxUserException' );
-            $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
-            throw $oEx;
-        }
-    }
-
-    /**
      * Logs out session user. Returns true on success
      *
      * @return bool
@@ -2153,9 +2107,6 @@ class oxUser extends oxBase
             if ( strpos( $this->oxuser__oxpassword->value, 'ox_' ) === 0 ) {
                 // decodable pass ?
                 $this->setPassword( oxUtils::getInstance()->strRem( $this->oxuser__oxpassword->value ) );
-            } elseif ( ( strlen( $this->oxuser__oxpassword->value ) < 32 ) && ( strpos( $this->oxuser__oxpassword->value, 'openid_' ) !== 0 ) ) {
-                // plain pass ?
-                $this->setPassword( $this->oxuser__oxpassword->value );
             }
             $sHash = $this->oxuser__oxpassword->value;
         }
@@ -2193,19 +2144,6 @@ class oxUser extends oxBase
         } else {
             return false;
         }
-    }
-
-    /**
-     * Generates random password for new openid users
-     *
-     * @param integer $iLength random password length
-     *
-     * @return string
-     */
-    public function getOpenIdPassword( $iLength = 25 )
-    {
-        $sPassword= "openid_".substr( oxUtilsObject::getInstance()->generateUId(), 0, $iLength);
-        return $sPassword;
     }
 
     /**

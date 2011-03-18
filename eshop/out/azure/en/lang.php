@@ -138,9 +138,6 @@ $aLang = array(
 'EXCEPTION_USER_USERCREATIONFAILED'               => 'Error while creating user!',
 'EXCEPTION_USER_PWDDONTMATCH'                     => "Passwords don't match!",
 'EXCEPTION_USER_NOVALUES'                         => 'e-mail and password have to be filled!',
-'EXCEPTION_USER_NOVALIDOPENID'                    => 'Please enter a valid OpenID',
-'EXCEPTION_USER_OPENIDCANCELED'                   => 'Verification Cancelled by user',
-'EXCEPTION_USER_OPENIDVALIDFAILED'                => 'OpenID authentication failed: %s',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                    => 'Please enter a valid e-mail address',
 'EXCEPTION_INPUT_NOTALLFIELDS'                    => 'Specify a value for this required field.',
 'EXCEPTION_PAGE_TITLE'                            => 'Error',
@@ -700,10 +697,6 @@ $aLang = array(
 'WIDGET_PRODUCT_LOCATOR_NEXT'                      => "Next",
 'WIDGET_PRODUCT_LOCATOR_NEWLIST'                   => "New Listmania list",
 
-'WIDGET_OPENIDLOGIN_SUBMIT'                        => "Login",
-'WIDGET_OPENIDLOGIN_LABEL'                         => "OpenID:",
-'WIDGET_OPENIDLOGIN_CANCEL'                        => "Cancel",
-
 'WIDGET_FACEBOOK_FACEPILE_HEADER'                  => "Facebook Facepile",
 
 'WIDGET_NEWS_HEADER'                               => "News",
@@ -769,7 +762,6 @@ $aLang = array(
 'WIDGET_LOGINBOX_FORGOT_PASSWORD'                  => "Forgot password?",
 'WIDGET_LOGINBOX_EMAIL_ADDRESS'                    => "Email address",
 'WIDGET_LOGINBOX_PASSWORD'                         => "Password",
-'WIDGET_LOGINBOX_OPENID'                           => "OpenID",
 
 'WIDGET_PRODUCT_RELATED_PRODUCTS_SIMILAR_HEADER'     => "Similar Products",
 'WIDGET_PRODUCT_RELATED_PRODUCTS_CROSSSELING_HEADER' => "Have you seen ... ?",
@@ -1057,8 +1049,6 @@ $aLang = array(
 'FORM_LOGIN_ACCOUNT_LOGIN'                                     => "Login",
 'FORM_LOGIN_ACCOUNT_OPENACCOUNT'                               => "Open account",
 'FORM_LOGIN_ACCOUNT_FORGOTPWD'                                 => "Forgot Password ?",
-'FORM_LOGIN_ACCOUNT_FOROPENID'                                 => "Login with OpenID",
-'FORM_LOGIN_ACCOUNT_OPENID'                                    => "OpenID:",
 
 // constant for template location getter Tag::getBreadCrumb()
 'TAGS'                                                         => "Tags",

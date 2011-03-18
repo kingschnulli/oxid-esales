@@ -139,9 +139,6 @@ $aLang = array(
 'EXCEPTION_USER_USERCREATIONFAILED'               => 'Fehler beim Anlegen des Benutzers!',
 'EXCEPTION_USER_PWDDONTMATCH'                     => 'Passwˆrter stimmen nicht ¸berein!',
 'EXCEPTION_USER_NOVALUES'                         => 'E-Mail und Passwort m¸ssen ausgef¸llt sein!',
-'EXCEPTION_USER_NOVALIDOPENID'                    => 'Bitte eine g¸ltige OpenID eingeben.',
-'EXCEPTION_USER_OPENIDCANCELED'                   => 'Authentifizierung abgebrochen',
-'EXCEPTION_USER_OPENIDVALIDFAILED'                => 'OpenID Authentifizierung fehlgeschlagen: %s',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                    => 'Bitte geben Sie eine g¸ltige E-Mail-Adresse ein',
 'EXCEPTION_INPUT_NOTALLFIELDS'                    => 'Bitte Wert angeben!',
 'EXCEPTION_PAGE_TITLE'                            => 'Fehler',
@@ -687,10 +684,6 @@ $aLang = array(
 'WIDGET_PRODUCT_LOCATOR_NEXT'                      => "N‰chstes",
 'WIDGET_PRODUCT_LOCATOR_NEWLIST'                   => "Neue Lieblingsliste",
 
-'WIDGET_OPENIDLOGIN_SUBMIT'                        => "Login",
-'WIDGET_OPENIDLOGIN_LABEL'                         => "OpenID:",
-'WIDGET_OPENIDLOGIN_CANCEL'                        => "Abbrechen",
-
 'WIDGET_FACEBOOK_FACEPILE_HEADER'                  => "Facebook Facepile",
 
 'WIDGET_NEWS_HEADER'                               => "News",
@@ -762,7 +755,6 @@ $aLang = array(
 'WIDGET_LOGINBOX_FORGOT_PASSWORD'                  => "Passwort vergessen?",
 'WIDGET_LOGINBOX_EMAIL_ADDRESS'                    => "E-Mail-Adresse",
 'WIDGET_LOGINBOX_PASSWORD'                         => "Passwort",
-'WIDGET_LOGINBOX_OPENID'                           => "OpenID",
 
 'WIDGET_PRODUCT_RELATED_PRODUCTS_SIMILAR_HEADER'     => "ƒhnliche Produkte",
 'WIDGET_PRODUCT_RELATED_PRODUCTS_CROSSSELING_HEADER' => "Schon gesehen?",
@@ -1057,8 +1049,6 @@ $aLang = array(
 'FORM_LOGIN_ACCOUNT_LOGIN'                                     => "Anmelden",
 'FORM_LOGIN_ACCOUNT_OPENACCOUNT'                               => "Konto erˆffnen",
 'FORM_LOGIN_ACCOUNT_FORGOTPWD'                                 => "Passwort vergessen ?",
-'FORM_LOGIN_ACCOUNT_FOROPENID'                                 => "Login ¸ber OpenID",
-'FORM_LOGIN_ACCOUNT_OPENID'                                    => "OpenID:",
 
 'SHOP_VERSION_MSG'                                             => "Willkommen zur Betaversion 2 von OXID eShop 4.5.0. h‰ufig gestellte Fragen und Antworten sind in der <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">Beta-FAQ</a> gelistet.",
 'SHOP_VERSION_MSG_DISMISS'                                     => "Schlieﬂen",

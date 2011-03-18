@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 32944 2011-02-07 08:31:57Z vilma $
+ * @version   SVN: $Id: oxcmpUserTest.php 33799 2011-03-16 16:51:42Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -487,23 +487,6 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     }
 
     /**
-     * Test oxViewConfig::getShowOpenIdLogin() affection
-     *
-     * @return null
-     */
-    public function testLoginOidIfOpenIdDisabled()
-    {
-        $oCfg = $this->getMock( "stdClass", array( "getShowOpenIdLogin" ) );
-        $oCfg->expects( $this->once() )->method( 'getShowOpenIdLogin')->will($this->returnValue( false ) );
-
-        $oTg = $this->getMock( "oxcmp_user", array( "getViewConfig", 'setLoginStatus' ) );
-        $oTg->expects( $this->once() )->method( 'getViewConfig')->will($this->returnValue( $oCfg ) );
-        $oTg->expects( $this->never() )->method( 'setLoginStatus');
-
-        $this->assertSame(null, $oTg->loginOid());
-    }
-
-    /**
      * Test view render.
      *
      * @return null
@@ -601,22 +584,6 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
 
         $oUserView = new oxcmp_user();
         $this->assertEquals( 'user', $oUserView->login() );
-    }
-
-    /**
-     * Test login.
-     *
-     * @return null
-     */
-    public function testLoginOpenId()
-    {
-        oxTestModules::addFunction( "oxOpenID", "authenticateOid", "{ return true;}" );
-        modConfig::setParameter('lgn_openid', 'testuser');
-
-        $oUserView = $this->getMock( 'oxcmp_user', array( '_afterLogin', '_getReturnUrl' ) );
-        $oUserView->expects( $this->atLeastOnce() )->method( '_afterLogin' )->will( $this->returnValue( "nextStep" ) );
-        $oUserView->expects( $this->atLeastOnce() )->method( '_getReturnUrl' )->will( $this->returnValue( "nextStep" ) );
-        $this->assertEquals( 'nextStep', $oUserView->login() );
     }
 
     /**
@@ -1129,48 +1096,6 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     }
 
     /**
-     * Test _getUserTitle().
-     *
-     * @return null
-     */
-    public function testGetUserTitle()
-    {
-        $oUserView = $this->getProxyClass("oxcmp_user");
-        $this->assertEquals( 'MRS', $oUserView->UNITgetUserTitle('F') );
-        $this->assertEquals( 'MR', $oUserView->UNITgetUserTitle('M') );
-    }
-
-    /**
-     * Test _getReturnUrl().
-     *
-     * @return null
-     */
-    public function testGetReturnUrl()
-    {
-        $oView = $this->getMock( 'oxview', array( 'setFncName', 'getLink' ) );
-        $oView->expects( $this->any() )->method( 'setFncName' );
-        $oView->expects( $this->any() )->method( 'getLink' )->will( $this->returnValue( 'testurl' ) );
-        $oUserView = $this->getMock( 'oxcmp_user', array( 'getParent' ) );
-        $oUserView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oView ) );
-        $this->assertEquals( 'testurl?fnc=loginOid', $oUserView->UNITgetReturnUrl() );
-    }
-
-    /**
-     * Test _getReturnUrl().
-     *
-     * @return null
-     */
-    public function testGetReturnUrl2()
-    {
-        $oView = $this->getMock( 'oxview', array( 'setFncName', 'getLink' ) );
-        $oView->expects( $this->any() )->method( 'setFncName' );
-        $oView->expects( $this->any() )->method( 'getLink' )->will( $this->returnValue( 'testurl?cl=details' ) );
-        $oUserView = $this->getMock( 'oxcmp_user', array( 'getParent' ) );
-        $oUserView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oView ) );
-        $this->assertEquals( 'testurl?cl=details&fnc=loginOid', $oUserView->UNITgetReturnUrl() );
-    }
-
-    /**
      * Test init().
      *
      * @return null
@@ -1182,170 +1107,6 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oUserView = $this->getMock( 'oxcmp_user', array(  '_loadSessionUser' ) );
         $oUserView->expects( $this->any() )->method( '_loadSessionUser' );
         $oUserView->init();
-    }
-
-    /**
-     * Test login with open id.
-     *
-     * @return null
-     */
-    public function testLoginOid()
-    {
-        oxTestModules::addFunction( "oxUtils", "redirect", "{ return true;}" );
-        oxTestModules::addFunction( "oxuser", "openIdLogin", "{ return true;}" );
-
-        $aData = array('email' => 'test@oxid-esales.com',
-                       'fullname' => 'fname lname',
-                       'gender' => 'F',
-                       'country' => 'DE',
-                       'postcode' => '123');
-        $oOpenId = $this->getMock( 'oxOpenID', array( 'getOidResponse' ) );
-        $oOpenId->expects( $this->atLeastOnce() )->method( 'getOidResponse' )->will( $this->returnValue( $aData ) );
-        $oView = $this->getMock( 'oxview', array( 'setFncName', 'getLink' ) );
-        $oView->expects( $this->any() )->method( 'setFncName' );
-        $oView->expects( $this->any() )->method( 'getLink' )->will( $this->returnValue( 'testurl' ) );
-        $oUserView = $this->getMock( 'oxcmp_user', array( '_afterLogin', 'getOpenId', 'getParent', '_getReturnUrl' ) );
-        $oUserView->expects( $this->atLeastOnce() )->method( '_afterLogin' );
-        $oUserView->expects( $this->atLeastOnce() )->method( 'getOpenId' )->will( $this->returnValue( $oOpenId ) );
-        $oUserView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oView ) );
-        $oUserView->expects( $this->any() )->method( '_getReturnUrl' )->will( $this->returnValue( "url" ) );
-        $oUserView->loginOid();
-        $myDB     = oxDb::getDB();
-        $sQ = 'select oxisopenid from oxuser where oxusername = \'test@oxid-esales.com\'';
-        $this->assertEquals( 1, $myDB->getOne( $sQ ) );
-    }
-
-    /**
-     * Test login with open id.
-     *
-     * @return null
-     */
-    public function testLoginOidWrongOpenId()
-    {
-        oxTestModules::addFunction( "oxUtils", "redirect", "{ return true;}" );
-        oxTestModules::addFunction( "oxOpenID", "getOidResponse", "{ throw new oxUserException( 'testLoginOidWrongOpenId', 21 );}" );
-
-        $oUserView = $this->getMock( 'oxcmp_user', array( '_afterLogin', 'getOpenId', 'getParent', '_getReturnUrl' ) );
-        $oUserView->expects( $this->never() )->method( '_afterLogin' );
-        $oUserView->expects( $this->atLeastOnce() )->method( 'getOpenId' )->will( $this->returnValue( oxNew( "oxOpenID" ) ) );
-        $oUserView->expects( $this->never() )->method( 'getParent' );
-        $oUserView->expects( $this->any() )->method( '_getReturnUrl' )->will( $this->returnValue( "url" ) );
-        $oUserView->loginOid();
-        $this->assertEquals( 2, $oUserView->getLoginStatus() );
-    }
-
-    /**
-     * Test login with open id.
-     *
-     * @return null
-     */
-    public function testLoginOidErrorOnLogin()
-    {
-        oxTestModules::addFunction( "oxUtils", "redirect", "{ return true;}" );
-        oxTestModules::addFunction( "oxuser", "openIdLogin", "{ throw new oxUserException( 'testLoginOidErrorOnLogin', 22 );}" );
-
-        $aData = array('email' => 'test@oxid-esales.com',
-                       'fullname' => 'fname lname',
-                       'gender' => 'F',
-                       'country' => 'Deutschland',
-                       'postcode' => '123');
-        $oOpenId = $this->getMock( 'oxOpenID', array( 'getOidResponse' ) );
-        $oOpenId->expects( $this->atLeastOnce() )->method( 'getOidResponse' )->will( $this->returnValue( $aData ) );
-        $oView = $this->getMock( 'oxview', array( 'setFncName', 'getLink' ) );
-        $oView->expects( $this->any() )->method( 'setFncName' );
-        $oView->expects( $this->any() )->method( 'getLink' )->will( $this->returnValue( 'testurl' ) );
-        $oUserView = $this->getMock( 'oxcmp_user', array( '_afterLogin', 'getOpenId', 'getParent', '_getReturnUrl' ) );
-        $oUserView->expects( $this->atLeastOnce() )->method( '_afterLogin' );
-        $oUserView->expects( $this->atLeastOnce() )->method( 'getOpenId' )->will( $this->returnValue( $oOpenId ) );
-        $oUserView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oView ) );
-        $oUserView->expects( $this->any() )->method( '_getReturnUrl' )->will( $this->returnValue( "url" ) );
-        $oUserView->loginOid();
-        $this->assertEquals( 2, $oUserView->getLoginStatus() );
-    }
-
-    /**
-     * Test login with open id.
-     *
-     * @return null
-     */
-    public function testLoginOidUserExists()
-    {
-        $myDB     = oxDb::getDB();
-        $sTable   = getViewName( 'oxuser' );
-        $iLastCustNr = ( int ) $myDB->getOne( 'select max( oxcustnr ) from '.$sTable ) + 1;
-        $oUser = oxNew( 'oxuser' );
-        $oUser->oxuser__oxshopid = new oxField(modConfig::getInstance()->getShopId(), oxField::T_RAW);
-        $oUser->oxuser__oxactive = new oxField(1, oxField::T_RAW);
-        $oUser->oxuser__oxrights = new oxField('user', oxField::T_RAW);
-        $oUser->oxuser__oxusername = new oxField('test@oxid-esales.com', oxField::T_RAW);
-        $oUser->oxuser__oxpassword = new oxField(crc32( 'Test@oxid-esales.com' ), oxField::T_RAW);
-        $oUser->oxuser__oxcustnr    = new oxField($iLastCustNr+1, oxField::T_RAW);
-        $oUser->oxuser__oxcountryid = new oxField("testCountry", oxField::T_RAW);
-        $oUser->save();
-
-        oxTestModules::addFunction( "oxUtils", "redirect", "{ return true;}" );
-        oxTestModules::addFunction( "oxuser", "openIdLogin", "{ return true;}" );
-
-        $aData = array('email' => 'test@oxid-esales.com',
-                       'fullname' => 'fname lname',
-                       'gender' => 'F',
-                       'country' => 'Deutschland',
-                       'postcode' => '123');
-        $oOpenId = $this->getMock( 'oxOpenID', array( 'getOidResponse' ) );
-        $oOpenId->expects( $this->atLeastOnce() )->method( 'getOidResponse' )->will( $this->returnValue( $aData ) );
-        $oView = $this->getMock( 'oxview', array( 'setFncName', 'getLink' ) );
-        $oView->expects( $this->any() )->method( 'setFncName' );
-        $oView->expects( $this->any() )->method( 'getLink' )->will( $this->returnValue( 'testurl' ) );
-        $oUserView = $this->getMock( 'oxcmp_user', array( '_afterLogin', 'getOpenId', 'getParent', '_getReturnUrl' ) );
-        $oUserView->expects( $this->atLeastOnce() )->method( '_afterLogin' );
-        $oUserView->expects( $this->atLeastOnce() )->method( 'getOpenId' )->will( $this->returnValue( $oOpenId ) );
-        $oUserView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oView ) );
-        $oUserView->expects( $this->any() )->method( '_getReturnUrl' )->will( $this->returnValue( "url" ) );
-        $oUserView->loginOid();
-        $sQ = 'select oxisopenid from oxuser where oxusername = \'test@oxid-esales.com\'';
-        $this->assertEquals( 2, $myDB->getOne( $sQ ) );
-    }
-
-    /**
-     * Test login with open id.
-     *
-     * @return null
-     */
-    public function testLoginOidUserExistsWithoutPassword()
-    {
-        $myDB     = oxDb::getDB();
-        $sTable   = getViewName( 'oxuser' );
-        $iLastCustNr = ( int ) $myDB->getOne( 'select max( oxcustnr ) from '.$sTable ) + 1;
-        $oUser = oxNew( 'oxuser' );
-        $oUser->oxuser__oxshopid = new oxField(modConfig::getInstance()->getShopId(), oxField::T_RAW);
-        $oUser->oxuser__oxactive = new oxField(1, oxField::T_RAW);
-        $oUser->oxuser__oxrights = new oxField('user', oxField::T_RAW);
-        $oUser->oxuser__oxusername = new oxField('test@oxid-esales.com', oxField::T_RAW);
-        $oUser->oxuser__oxcustnr    = new oxField($iLastCustNr+1, oxField::T_RAW);
-        $oUser->oxuser__oxcountryid = new oxField("testCountry", oxField::T_RAW);
-        $oUser->save();
-
-        oxTestModules::addFunction( "oxUtils", "redirect", "{ return true;}" );
-        oxTestModules::addFunction( "oxuser", "openIdLogin", "{ return true;}" );
-
-        $aData = array('email' => 'test@oxid-esales.com',
-                       'fullname' => 'fname lname',
-                       'gender' => 'F',
-                       'country' => 'Deutschland',
-                       'postcode' => '123');
-        $oOpenId = $this->getMock( 'oxOpenID', array( 'getOidResponse' ) );
-        $oOpenId->expects( $this->atLeastOnce() )->method( 'getOidResponse' )->will( $this->returnValue( $aData ) );
-        $oView = $this->getMock( 'oxview', array( 'setFncName', 'getLink' ) );
-        $oView->expects( $this->any() )->method( 'setFncName' );
-        $oView->expects( $this->any() )->method( 'getLink' )->will( $this->returnValue( 'testurl' ) );
-        $oUserView = $this->getMock( 'oxcmp_user', array( '_afterLogin', 'getOpenId', 'getParent', '_getReturnUrl' ) );
-        $oUserView->expects( $this->atLeastOnce() )->method( '_afterLogin' );
-        $oUserView->expects( $this->atLeastOnce() )->method( 'getOpenId' )->will( $this->returnValue( $oOpenId ) );
-        $oUserView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oView ) );
-        $oUserView->expects( $this->any() )->method( '_getReturnUrl' )->will( $this->returnValue( "url" ) );
-        $oUserView->loginOid();
-        $sQ = 'select oxisopenid from oxuser where oxusername = \'test@oxid-esales.com\'';
-        $this->assertEquals( 1, $myDB->getOne( $sQ ) );
     }
 
     /**

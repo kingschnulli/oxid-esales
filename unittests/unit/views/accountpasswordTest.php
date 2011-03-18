@@ -156,26 +156,6 @@ class Unit_Views_accountPasswordTest extends OxidTestCase
     }
 
     /**
-     * Testing Account_Newsletter::hasPassword()
-     *
-     * @return null
-     */
-    public function testHasPassword()
-    {
-        $oView = $this->getMock( "Account_Password", array( "getUser" ) );
-        $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( false ) );
-        $this->assertTrue( $oView->hasPassword() );
-
-        $oUser = new oxStdClass();
-        $oUser->oxuser__oxisopenid = new oxField( 1 );
-        $oUser->oxuser__oxpassword = new oxField( "openid_something" );
-
-        $oView = $this->getMock( "Account_Password", array( "getUser" ) );
-        $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
-        $this->assertFalse( $oView->hasPassword() );
-    }
-
-    /**
      * Testing Account_Newsletter::render()
      *
      * @return null
@@ -202,7 +182,7 @@ class Unit_Views_accountPasswordTest extends OxidTestCase
         $this->assertEquals( 'page/account/password.tpl', $oView->render() );
     }
 
-	/**
+    /**
      * Testing Account_Password::getBreadCrumb()
      *
      * @return null

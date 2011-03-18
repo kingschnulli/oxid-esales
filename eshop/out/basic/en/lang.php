@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 33448 2011-02-22 16:51:18Z ralf.trapp $
+ * @version   SVN: $Id: lang.php 33799 2011-03-16 16:51:42Z vilma $
  */
 
 
@@ -576,7 +576,6 @@ $aLang = array(
 'INC_CMP_LOGIN_RIGHT_MYPRODUCTCOMPARISON'         =>"My Product Comparison",
 'INC_CMP_LOGIN_RIGHT_PRODUCT3'                    =>"Product:",
 'INC_CMP_LOGIN_RIGHT_DETAILS3'                    =>"Details",
-'INC_CMP_LOGIN_RIGHT_OPENID'                      =>"OpenID:",
 'INC_CMP_LOGIN_ERRINVALIDEMAILORPWD'              =>"<b>Error:</b> <br>Incorrect eMail address or password!",
 'INC_CMP_LOGIN_EMAIL'                             =>"eMail:",
 'INC_CMP_LOGIN_PWD'                               =>"Password:",
@@ -586,8 +585,6 @@ $aLang = array(
 'INC_CMP_LOGIN_FORGOTPWD'                         =>"Forgot Password",
 'INC_CMP_LOGIN_ALREADYCUSTOMER'                   =>"If you are already our customer, please login using your eMail address and password:",
 'INC_CMP_LOGIN_LOGIN2'                            =>"Login",
-'INC_CMP_LOGIN_FOROPENID'                         =>"Login with OpenID",
-'INC_CMP_LOGIN_OPENID'                            =>"OpenID:",
 'INC_CMP_MINI_BASKET_PRODUCT'                     =>"Product:",
 'INC_CMP_MINI_BASKET_QUANTITY'                    =>"Quantity:",
 'INC_CMP_MINI_BASKET_SHIPPING'                    =>"Shipping:",
@@ -718,7 +715,6 @@ $aLang = array(
 'INC_RIGHTLIST_REMOVEFROMCOMPARELIST'             =>"remove from compare list",
 'INC_RIGHTLIST_COMPARE'                           =>"compare",
 'INC_RIGHTLIST_ORDERNOW'                          =>"Order now!",
-'INC_RIGHTITEM_OPENID'                            =>"OpenID",
 'INC_RIGHTITEM_FBCONNECT'                         =>"Facebook Connect",
 'INC_RIGHTITEM_TS_RATINGS_BOX'                    =>"Customer Ratings",
 'INC_RIGHTITEM_TS_INFO_URL_TITLE'                 =>"Trusted Shops Customer Ratings",
@@ -1210,7 +1206,6 @@ $aLang = array(
 'USER_PHONE2'                                     => "Phone",
 'USER_FAX2'                                       => "Fax:",
 'USER_CONTINUENEXTSTEP'                           => "Continue to Next Step",
-'USER_OPENID'                                     => "OpenID:",
 'USER_DISABLESHIPPINGADDRESS'                     => "Use Billing Address for Shipping",
 'USER_SELECTSHIPPINGADDRESS'                      => "Select",
 'USER_UPDATE_ACCOUNT'                             => "Update account",
@@ -1259,9 +1254,6 @@ $aLang = array(
 'EXCEPTION_USER_USERCREATIONFAILED'               => 'Error while creating user!',
 'EXCEPTION_USER_PWDDONTMATCH'                     => "Passwords don't match!",
 'EXCEPTION_USER_NOVALUES'                         => 'e-mail and password have to be filled!',
-'EXCEPTION_USER_NOVALIDOPENID'                    => 'Please enter a valid OpenID',
-'EXCEPTION_USER_OPENIDCANCELED'                   => 'Verification Cancelled by user',
-'EXCEPTION_USER_OPENIDVALIDFAILED'                => 'OpenID authentication failed: %s',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                    => 'Please enter a valid e-mail address',
 'EXCEPTION_INPUT_NOTALLFIELDS'                    => 'Please complete all fields marked with a <span class="req">*</span>',
 'EXCEPTION_PAGE_TITLE'                            => 'Error',

@@ -347,6 +347,9 @@ CREATE TABLE `oxcategories` (
   `OXDESC` varchar(255) NOT NULL default '',
   `OXLONGDESC` text NOT NULL,
   `OXTHUMB` varchar(128) NOT NULL default '',
+  `OXTHUMB_1` VARCHAR(128) NOT NULL DEFAULT '',
+  `OXTHUMB_2` VARCHAR(128) NOT NULL DEFAULT '',
+  `OXTHUMB_3` VARCHAR(128) NOT NULL DEFAULT '',
   `OXEXTLINK` varchar(255) NOT NULL default '',
   `OXTEMPLATE` varchar(128) NOT NULL default '',
   `OXDEFSORT` varchar(64) NOT NULL default '',
@@ -535,7 +538,6 @@ INSERT INTO `oxconfig` VALUES('08acb2f595da54b5f865e54aa5cdb967', 'oxbaseshop', 
 INSERT INTO `oxconfig` VALUES('08a12329124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'theme:basic', 'bl_showWishlist', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('08a23429124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'theme:basic', 'bl_showVouchers', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('08a34529124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'theme:basic', 'bl_showGiftWrapping', 'bool', 0x07);
-INSERT INTO `oxconfig` VALUES('08a45629124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'theme:basic', 'bl_showOpenId', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('069425a324684b6c089769ee77426393', 'oxbaseshop', 'theme:basic', 'bl_perfShowLeftBasket', 'bool', '');
 INSERT INTO `oxconfig` VALUES('069425a324685ee7745199.098323559', 'oxbaseshop', 'theme:basic', 'bl_perfShowRightBasket', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('069425a32468ee77455199.098243559', 'oxbaseshop', 'theme:basic', 'bl_perfShowTopBasket', 'bool', 0x07);
@@ -559,7 +561,6 @@ INSERT INTO `oxconfig` VALUES('18acb2f595da54b5f865e54aa5cdb967', 'oxbaseshop', 
 INSERT INTO `oxconfig` VALUES('18a12329124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'theme:azure', 'bl_showWishlist', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('18a23429124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'theme:azure', 'bl_showVouchers', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('18a34529124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'theme:azure', 'bl_showGiftWrapping', 'bool', 0x07);
-INSERT INTO `oxconfig` VALUES('18a45629124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'theme:azure', 'bl_showOpenId', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('169425a324684b6c089769ee77426393', 'oxbaseshop', 'theme:azure', 'bl_perfShowLeftBasket', 'bool', '');
 INSERT INTO `oxconfig` VALUES('169425a324685ee7745199.098323559', 'oxbaseshop', 'theme:azure', 'bl_perfShowRightBasket', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('169425a32468ee77455199.098243559', 'oxbaseshop', 'theme:azure', 'bl_perfShowTopBasket', 'bool', 0x07);
@@ -604,7 +605,6 @@ INSERT INTO `oxconfigdisplay` VALUES('08acb2f595da54b5f865e54aa5cdb967', 'theme:
 INSERT INTO `oxconfigdisplay` VALUES('08a12329124850cd8f63cda6e8e7b4e1', 'theme:basic', 'bl_showWishlist',        'features', '', 8);
 INSERT INTO `oxconfigdisplay` VALUES('08a23429124850cd8f63cda6e8e7b4e1', 'theme:basic', 'bl_showVouchers',        'features', '', 8);
 INSERT INTO `oxconfigdisplay` VALUES('08a34529124850cd8f63cda6e8e7b4e1', 'theme:basic', 'bl_showGiftWrapping',    'features', '', 10);
-INSERT INTO `oxconfigdisplay` VALUES('08a45629124850cd8f63cda6e8e7b4e1', 'theme:basic', 'bl_showOpenId',          'features', '', 11);
 INSERT INTO `oxconfigdisplay` VALUES('069425a324684b6c089769ee77426393', 'theme:basic', 'bl_perfShowLeftBasket',  'display',  '', 12);
 INSERT INTO `oxconfigdisplay` VALUES('069425a324685ee7745199.098323559', 'theme:basic', 'bl_perfShowRightBasket', 'display',  '', 13);
 INSERT INTO `oxconfigdisplay` VALUES('069425a32468ee77455199.098243559', 'theme:basic', 'bl_perfShowTopBasket',   'display',  '', 14);
@@ -627,7 +627,6 @@ INSERT INTO `oxconfigdisplay` VALUES('18acb2f595da54b5f865e54aa5cdb967', 'theme:
 INSERT INTO `oxconfigdisplay` VALUES('18a12329124850cd8f63cda6e8e7b4e1', 'theme:azure', 'bl_showWishlist',        'features', '', 8);
 INSERT INTO `oxconfigdisplay` VALUES('18a23429124850cd8f63cda6e8e7b4e1', 'theme:azure', 'bl_showVouchers',        'features', '', 8);
 INSERT INTO `oxconfigdisplay` VALUES('18a34529124850cd8f63cda6e8e7b4e1', 'theme:azure', 'bl_showGiftWrapping',    'features', '', 10);
-INSERT INTO `oxconfigdisplay` VALUES('18a45629124850cd8f63cda6e8e7b4e1', 'theme:azure', 'bl_showOpenId',          'features', '', 11);
 INSERT INTO `oxconfigdisplay` VALUES('169425a324684b6c089769ee77426393', 'theme:azure', 'bl_perfShowLeftBasket',  'display',  '', 12);
 INSERT INTO `oxconfigdisplay` VALUES('169425a324685ee7745199.098323559', 'theme:azure', 'bl_perfShowRightBasket', 'display',  '', 13);
 INSERT INTO `oxconfigdisplay` VALUES('169425a32468ee77455199.098243559', 'theme:azure', 'bl_perfShowTopBasket',   'display',  '', 14);
@@ -1872,7 +1871,6 @@ CREATE TABLE `oxuser` (
   `OXDISABLEAUTOGRP` tinyint(1) NOT NULL default '0',
   `OXUPDATEKEY` char( 32 ) NOT NULL default '',
   `OXUPDATEEXP` int(11) NOT NULL default '0',
-  `OXISOPENID` tinyint(1) NOT NULL default '0',
   `OXPOINTS` double NOT NULL default '0',
   `OXFBID` bigint unsigned NOT NULL default '0',
   PRIMARY KEY  (`OXID`),
@@ -1887,7 +1885,7 @@ CREATE TABLE `oxuser` (
 # Data for table `oxuser`
 #
 
-INSERT INTO `oxuser` VALUES ('oxdefaultadmin', 1, 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Your Company Name', 'John', 'Doe', 'Maple Street', '2425', '', 'Any City', 'a7c40f631fc920687.20179984', '', '9041', '217-8918712', '217-8918713', 'MR', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', 0, '', 0, 0, 0, 0);
+INSERT INTO `oxuser` VALUES ('oxdefaultadmin', 1, 'malladmin', 'oxbaseshop', 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '61646D696E', 1, '', 'Your Company Name', 'John', 'Doe', 'Maple Street', '2425', '', 'Any City', 'a7c40f631fc920687.20179984', '', '9041', '217-8918712', '217-8918713', 'MR', 1000, '2003-01-01 00:00:00', '2003-01-01 00:00:00', '', '', '0000-00-00', '', 0, '', 0, 0, 0);
 
 #
 # Table structure for table `oxuserpayments`
@@ -2398,7 +2396,7 @@ CREATE OR REPLACE VIEW oxv_oxattribute_en AS SELECT OXID,OXSHOPID,OXTITLE_1 AS O
 
 CREATE OR REPLACE VIEW oxv_oxcategories AS SELECT oxcategories.* FROM oxcategories;
 CREATE OR REPLACE VIEW oxv_oxcategories_de AS SELECT OXID,OXPARENTID,OXLEFT,OXRIGHT,OXROOTID,OXSORT,OXACTIVE,OXHIDDEN,OXSHOPID,OXTITLE,OXDESC,OXLONGDESC,OXTHUMB,OXEXTLINK,OXTEMPLATE,OXDEFSORT,OXDEFSORTMODE,OXPRICEFROM,OXPRICETO,OXICON,OXPROMOICON,OXVAT,OXSKIPDISCOUNTS,OXSHOWSUFFIX FROM oxcategories;
-CREATE OR REPLACE VIEW oxv_oxcategories_en AS SELECT OXID,OXPARENTID,OXLEFT,OXRIGHT,OXROOTID,OXSORT,OXACTIVE_1 AS OXACTIVE,OXHIDDEN,OXSHOPID,OXTITLE_1 AS OXTITLE,OXDESC_1 AS OXDESC,OXLONGDESC_1 AS OXLONGDESC,OXTHUMB,OXEXTLINK,OXTEMPLATE,OXDEFSORT,OXDEFSORTMODE,OXPRICEFROM,OXPRICETO,OXICON,OXPROMOICON,OXVAT,OXSKIPDISCOUNTS,OXSHOWSUFFIX FROM oxcategories;
+CREATE OR REPLACE VIEW oxv_oxcategories_en AS SELECT OXID,OXPARENTID,OXLEFT,OXRIGHT,OXROOTID,OXSORT,OXACTIVE_1 AS OXACTIVE,OXHIDDEN,OXSHOPID,OXTITLE_1 AS OXTITLE,OXDESC_1 AS OXDESC,OXLONGDESC_1 AS OXLONGDESC,OXTHUMB_1 AS OXTHUMB,OXEXTLINK,OXTEMPLATE,OXDEFSORT,OXDEFSORTMODE,OXPRICEFROM,OXPRICETO,OXICON,OXPROMOICON,OXVAT,OXSKIPDISCOUNTS,OXSHOWSUFFIX FROM oxcategories;
 
 CREATE OR REPLACE VIEW oxv_oxcontents AS SELECT oxcontents.* FROM oxcontents;
 CREATE OR REPLACE VIEW oxv_oxcontents_de AS SELECT OXID,OXLOADID,OXSHOPID,OXSNIPPET,OXTYPE,OXACTIVE,OXPOSITION,OXTITLE,OXCONTENT,OXCATID,OXFOLDER,OXTERMVERSION FROM oxcontents;

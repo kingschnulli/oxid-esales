@@ -49,16 +49,8 @@
     </form>
 </div>
 
-[{if $actvrecommlist }]
-  [{if $oView->getArticleList() }]
-    [{include file="inc/recommlist.tpl" removeFunction="removeArticle" recommid=$actvrecommlist->getId()}]
-  [{/if}]
-[{/if}]
-
-[{if !$actvrecommlist }]
   [{assign var="blEdit" value=true }]
   [{include file="inc/recomm_lists.tpl" blEdit=$blEdit template_title=$template_title }]
-[{/if}]
 <br>
 
 

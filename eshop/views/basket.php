@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: basket.php 33716 2011-03-09 16:18:39Z linas.kukulskis $
+ * @version   SVN: $Id: basket.php 33818 2011-03-17 13:41:37Z arvydas.vapsva $
  */
 
 /**
@@ -355,6 +355,7 @@ class Basket extends oxUBase
 
             $oBasket->setCardMessage( oxConfig::getParameter( 'giftmessage' ) );
             $oBasket->setCardId( oxConfig::getParameter( 'chosencard' ) );
+            $oBasket->onUpdate();
         }
 
         return 'basket';

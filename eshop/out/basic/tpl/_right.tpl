@@ -25,15 +25,6 @@
         [{/if}]
     [{/if}]
 
-    [{if !$oView->isConnectedWithFb()}]
-        [{if !$oxcmp_user->oxuser__oxpassword->value && $oViewConf->getShowOpenIdLogin() }]
-            <strong class="h2"><a id="test_RightSideOpenIdHeader" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account"}]">[{ oxmultilang ident="INC_RIGHTITEM_OPENID" }]</a></strong>
-            <div class="box">
-                [{oxid_include_dynamic file="dyn/cmp_openidlogin_right.tpl" type="login" pgnr=$oView->getActPage() tpl=$oViewConf->getActTplName() additional_form_parameters="`$AdditionalFormParameters`"|cat:$oViewConf->getNavFormParams() }]
-            </div>
-        [{/if}]
-    [{/if}]
-
     [{if $oViewConf->showTs("WIDGET") && $oViewConf->getTsId() }]
         [{include file="inc/ts_ratings.tpl" }]
     [{/if}]

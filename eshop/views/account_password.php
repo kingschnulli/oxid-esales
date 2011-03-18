@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account_password.php 32923 2011-02-04 14:35:22Z vilma $
+ * @version   SVN: $Id: account_password.php 33799 2011-03-16 16:51:42Z vilma $
  */
 
 
@@ -46,13 +46,6 @@ class Account_Password extends Account
      * @var bool
      */
     protected $_blPasswordChanged = false;
-
-    /**
-     * If user has password (for openid).
-     *
-     * @var bool
-     */
-    protected $_blHasPassword = null;
 
     /**
      * If user is not logged in - returns name of template account_user::_sThisLoginTemplate,
@@ -121,24 +114,6 @@ class Account_Password extends Account
     public function isPasswordChanged()
     {
         return $this->_blPasswordChanged;
-    }
-
-    /**
-     * Template variable getter. Returns true if user has password.
-     *
-     * @return bool
-     */
-    public function hasPassword()
-    {
-        if ( $this->_blHasPassword === null ) {
-            $this->_blHasPassword = true;
-            if ( ( $oUser = $this->getUser() ) ) {
-                if ( $oUser->oxuser__oxisopenid->value == 1 && strpos( $oUser->oxuser__oxpassword->value, 'openid_' ) === 0 ) {
-                    $this->_blHasPassword = false;
-                }
-            }
-        }
-        return $this->_blHasPassword;
     }
 
     /**

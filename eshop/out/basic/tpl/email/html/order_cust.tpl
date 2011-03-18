@@ -229,7 +229,7 @@
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_COUPON" }]
               </td>
               <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top" align="right">
-                [{ if $basket->getVoucherDiscValue() > 0 }]-[{/if}][{ $basket->getFVoucherDiscountValue()}]
+                [{ if $basket->getFVoucherDiscValue() > 0 }]-[{/if}][{ $basket->getFVoucherDiscountValue()}]
               </td>
             </tr>
 
