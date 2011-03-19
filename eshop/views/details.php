@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 33560 2011-02-28 12:06:14Z linas.kukulskis $
+ * @version   SVN: $Id: details.php 33835 2011-03-18 10:48:58Z sarunas $
  */
 
 /**
@@ -343,7 +343,7 @@ class Details extends oxUBase
             return $this->_sViewId;
         }
 
-            $sViewId = parent::getViewId().'|'.oxConfig::getParameter( 'anid' ).'|'.count( $this->getVariantList() ).'|';
+            $sViewId = parent::getViewId().'|'.oxConfig::getParameter( 'anid' ).'|';
 
 
         return $this->_sViewId = $sViewId;

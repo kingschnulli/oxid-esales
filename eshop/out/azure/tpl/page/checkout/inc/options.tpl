@@ -34,6 +34,6 @@
     <div class="lineBox option" id="optionLogin">
         <h3>[{ oxmultilang ident="PAGE_CHECKOUT_USER_OPTION_LOGIN" }]</h3>
         <p>[{ oxmultilang ident="PAGE_CHECKOUT_USER_OPTION_LOGIN_DESCRIPTION" }]</p>
-        [{include file="form/login.tpl"}]
+        [{ include file="form/login.tpl"}]
     </div>
 </div>

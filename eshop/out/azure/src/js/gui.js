@@ -479,6 +479,38 @@ $(function(){
         return false;
      });
 
+    $("#zoom_img").click(function(){
+
+        var oPaging     = $(".zoomPager");
+        var iImgCount   = $(".zoomPager li").size();
+        var iCurImgNo   = $(".selected", oPaging).text();
+
+        if ( $(".selected", oPaging).length == 0 ) {
+            iCurImgNo = 1;
+            $(".zoomPager li:first").children("a").addClass('selected');
+        }
+
+        var sFirstImage = $(".zoomPager li:first").children("a").attr("href");
+        var sNextImage  = $(".selected", oPaging).parent().next().children("a").attr("href");
+        var oCurPage    = $(".selected", oPaging);
+        var oNextPage   = $(".selected", oPaging).parent().next().children();
+        var oLastPage   = $(".zoomPager li:last").children("a");
+        var oFirstPage  = $(".zoomPager li:first").children("a");
+
+        if( iCurImgNo == iImgCount ) {
+            $("#zoom_img").attr("src", sFirstImage);
+            oLastPage.removeClass('selected');
+            oFirstPage.addClass('selected');
+        } else {
+            $("#zoom_img").attr("src", sNextImage);
+            oCurPage.removeClass('selected');
+            oNextPage.addClass('selected');
+        }
+
+        return false;
+     });
+
+
      /* Vertical box positioning*/
     $(".specBoxInfo").hover(function(){
         var boxHeight = $(".hoverBox", $(this)).height();

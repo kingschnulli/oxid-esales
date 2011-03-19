@@ -15,7 +15,7 @@
                 </div>
                 [{/if}]
                 [{if $product->getFPrice()}]
-                  <strong>[{ $product->getFPrice() }] [{ $currency->sign}]</strong>
+                  <strong>[{ $product->getFPrice() }] [{ $currency->sign}] *</strong>
                 [{/if}]
             [{/oxhasrights}]
         [{/capture}]
@@ -36,9 +36,6 @@
                         [{assign var="listType" value=$oView->getListType()}]
                         <a href="[{$oView->getLink()|oxaddparams:"listtype=`$listType`&amp;fnc=tobasket&amp;aid=`$product->oxarticles__oxid->value`&amp;am=1" }]" class="toCart" title="[{oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ADDTOCART" }]">[{oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ADDTOCART" }]</a>
                     [{/if}]
-                    [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-                            <span class="deliveryInfo">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2" }]</a></span>
-                    [{/oxifcontent}]
                 [{/if}]
                 [{/oxhasrights}]
             </div>
@@ -58,7 +55,7 @@
             </div>
             [{/if}]
             [{if $product->getFPrice()}]
-                <strong>[{ $product->getFPrice() }] [{ $currency->sign}]</strong>
+                <strong>[{ $product->getFPrice() }] [{ $currency->sign}] *</strong>
             [{/if}]
         [{/oxhasrights}]
     [{/capture}]
@@ -110,11 +107,6 @@
                     [{else}]
                         <button type="submit" class="submitButton largeButton">[{oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ADDTOCART" }]</button>
                     [{/if}]
-
-                    [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-                        <br>
-                        <span class="deliveryInfo">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2" }]</a></span>
-                    [{/oxifcontent}]
                 [{/if}]
                         [{/oxhasrights}]
             </div>
@@ -229,7 +221,7 @@
                         [{if $product->getFTPrice()}]
                             [{oxmultilang ident="DETAILS_NOWONLY"}]
                         [{/if}]
-                        <strong>[{$product->getFPrice()}] [{$currency->sign}]</strong>
+                        <strong>[{$product->getFPrice()}] [{$currency->sign}] *</strong>
                     </label>
                     [{/oxhasrights}]
                     [{oxhasrights ident="TOBASKET"}]

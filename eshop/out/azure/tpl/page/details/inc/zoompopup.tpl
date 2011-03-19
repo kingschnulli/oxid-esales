@@ -18,7 +18,7 @@
             [{foreach from=$aZoomPics key=iPicNr item=_zoomPic}]
             [{assign var="_sZoomPic" value=$aZoomPics[$iPicNr].file}]
                 <li>
-                    <a class="ox-zoompic ox-picnr-[{$iPicNr}]" href="[{$_sZoomPic}]">
+                    <a class="ox-zoompic ox-picnr-[{$iPicNr}] [{if $iPicNr == 1}]selected[{/if}]" href="[{$_sZoomPic}]">
                         <span class="marker"><img src="[{$oViewConf->getImageUrl()}]marker.png" alt=""></span>
                         [{$_zoomPic.id}]
                     </a>

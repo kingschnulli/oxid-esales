@@ -2781,6 +2781,12 @@ span.verificationCode {
     line-height: 18px;
 }
 
+.form label.short {
+    width: 90px;
+    padding-right: 5px;
+    line-height: 18px;
+}
+
 .form li.checkFields {
     padding-left: 150px;
 }
@@ -3552,6 +3558,13 @@ span.dismiss a{
     padding-top: 35px;
 }
 
+#incVatMessage{
+    position:fixed;
+    bottom:0;
+    right:0;
+    background:orange;
+    padding:10px;
+}
 
 /* Plain errors*/
 .errorBox {width: auto; font-size:10px; font-weight:bold; color:#D81F01; margin: 20px; padding: 0; border: none; width: 500px;}

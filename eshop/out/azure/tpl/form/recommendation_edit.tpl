@@ -7,6 +7,9 @@
         [{if $actvrecommlist}]
             <input type="hidden" name="recommid" value="[{$actvrecommlist->getId()}]">
         [{/if}]
+        [{if $actvrecommlist && $oView->isSavedList()}]
+            [{ oxmultilang ident="PAGE_RECOMMENDATIONS_EDIT_LISTSAVED" }]
+        [{/if}]
         <ul class="form clear">
             <li>
                 <label>[{ oxmultilang ident="FORM_RECOMMENDATION_EDIT_LISTTITLE" }]:<span class="req">*</span></label>
