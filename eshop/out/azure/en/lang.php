@@ -1052,7 +1052,7 @@ $aLang = array(
 
 // constant for template location getter Tag::getBreadCrumb()
 'TAGS'                                                         => "Tags",
-'SHOP_VERSION_MSG'                                             => "Welcome to beta version 2 for OXID eShop 4.5.0. Please refer to our <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">FAQ</a> if you have any questions.",
+'SHOP_VERSION_MSG'                                             => "Welcome to beta version 4 for OXID eShop 4.5.0. Please refer to our <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">FAQ</a> if you have any questions.",
 'SHOP_VERSION_MSG_DISMISS'                                     => "Dismiss message",
 
 'MESSAGE_ERR_404TITLE'                                         => 'Error',

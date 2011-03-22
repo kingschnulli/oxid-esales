@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlocator.php 32923 2011-02-04 14:35:22Z vilma $
+ * @version   SVN: $Id: oxlocator.php 33870 2011-03-21 16:09:01Z sarunas $
  */
 
 /**
@@ -527,6 +527,7 @@ class oxLocator extends oxSuperCfg
 
             if ( array_key_exists( $iPos-1, $aIds ) ) {
                 $oBackProduct = oxNew( 'oxarticle' );
+                $oBackProduct->modifyCacheKey('_locator');
                 $oBackProduct->setNoVariantLoading( true );
                 if ( $oBackProduct->load( $aIds[$iPos-1] ) ) {
                     $oBackProduct->setLinkType( $oLocatorTarget->getLinkType() );
@@ -536,6 +537,7 @@ class oxLocator extends oxSuperCfg
 
             if ( array_key_exists( $iPos+1, $aIds ) ) {
                 $oNextProduct = oxNew( 'oxarticle' );
+                $oNextProduct->modifyCacheKey('_locator');
                 $oNextProduct->setNoVariantLoading( true );
                 if ( $oNextProduct->load( $aIds[$iPos+1] ) ) {
                     $oNextProduct->setLinkType( $oLocatorTarget->getLinkType() );

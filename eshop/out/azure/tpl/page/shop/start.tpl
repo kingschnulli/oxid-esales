@@ -30,7 +30,7 @@
     [{/if}]
     [{include file="widget/manufacturersslider.tpl" }]
     [{if $oView->getNewestArticles() }]
-        [{include file="widget/product/list.tpl" type="infogrid" head="PAGE_SHOP_START_JUSTARRIVED"|oxmultilangassign listId="newItems" products=$oView->getNewestArticles() rsslink=$rsslinks.newestArticles rssId="rss.newestArticles"}]
+        [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() head="PAGE_SHOP_START_JUSTARRIVED"|oxmultilangassign listId="newItems" products=$oView->getNewestArticles() rsslink=$rsslinks.newestArticles rssId="rss.newestArticles"}]
     [{/if}]
 [{/capture}]
 [{include file="layout/page.tpl" sidebar="Right"}]

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlist.php 32880 2011-02-03 11:45:17Z sarunas $
+ * @version   SVN: $Id: oxlist.php 33859 2011-03-21 12:43:22Z sarunas $
  */
 
 /**
@@ -360,9 +360,10 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
             $rs = oxDb::getDb(true)->Execute( $sSql);
         }
 
-        $oSaved = clone $this->getBaseObject();
-
         if ($rs != false && $rs->recordCount() > 0) {
+
+            $oSaved = clone $this->getBaseObject();
+
             while (!$rs->EOF) {
 
                 $oListObject = clone $oSaved;

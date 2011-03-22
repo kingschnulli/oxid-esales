@@ -1024,10 +1024,16 @@ a.submitButton {
 }
 
 .searchBox .textbox {
-    width: 132px;
+    width: 122px;
     padding-left: 4px;
     color: #b4b8b8;
-    background: url(../../img/search-icon.png) no-repeat 100% 3px;
+    /*background: url(../../img/search-icon.png) no-repeat 100% 3px;*/
+}
+
+.searchBox .searchSubmit {
+    background: url(../../img/search-icon.png) no-repeat 3px;
+    border: none;
+    cursor: pointer;
 }
 
 .searchBox .textbox:focus {

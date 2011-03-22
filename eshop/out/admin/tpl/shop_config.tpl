@@ -191,16 +191,6 @@ function showInvitations()
     <div class="groupExp">
         <div>
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_ARTICLES" }]</b></a>
-            <dl>
-                <dt>
-                    <textarea class="txtfield" name=confarrs[aNrofCatArticles] [{ $readonly}]>[{$confarrs.aNrofCatArticles}]</textarea>
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_NROFCATARTICLES" }]
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_NROFCATARTICLES" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
 
             <dl>
                 <dt>

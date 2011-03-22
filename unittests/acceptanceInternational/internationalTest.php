@@ -514,7 +514,7 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->assertEquals("1 Hits for \"šųößлы1000\"", $this->getHeadingText("//h1"));
         $this->selectDropDown("viewOptions", "Line");
         $this->assertEquals("Test product 0 short desc [EN] šųößлы", $this->clearString($this->getText("//ul[@id='searchList']/li[1]//div[2]/div[2]")));
-        $this->assertEquals("50,00 €", $this->clearString($this->getText("//ul[@id='searchList']/li[1]//strong[text()='50,00 €']")));
+        $this->assertEquals("50,00 € *", $this->clearString($this->getText("productPrice-searchList-1")));
         $this->assertEquals("Test product 0 [EN] šųößлы", $this->clearString($this->getText("//ul[@id='searchList']/li[1]//div[2]//a")));
         $this->assertEquals("0", $this->getText("//div[@id='minibasket']/span"));
         $this->type("amountToBasket-searchList-1", "3");

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 33719 2011-03-10 08:40:42Z sarunas $
+ * @version   SVN: $Id: oxubase.php 33870 2011-03-21 16:09:01Z sarunas $
  */
 
 /**
@@ -331,8 +331,8 @@ class oxUBase extends oxView
      */
     protected $_aComponentNames = array(
                                     'oxcmp_user'       => 1, // 0 means dont init if cached
-                                    'oxcmp_lang'       => 1,
-                                    'oxcmp_cur'        => 1,
+                                    'oxcmp_lang'       => 0,
+                                    'oxcmp_cur'        => 0,
                                     'oxcmp_shop'       => 1,
                                     'oxcmp_categories' => 0,
                                     'oxcmp_utils'      => 1,

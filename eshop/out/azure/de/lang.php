@@ -1050,7 +1050,7 @@ $aLang = array(
 'FORM_LOGIN_ACCOUNT_OPENACCOUNT'                               => "Konto eröffnen",
 'FORM_LOGIN_ACCOUNT_FORGOTPWD'                                 => "Passwort vergessen ?",
 
-'SHOP_VERSION_MSG'                                             => "Willkommen zur Betaversion 2 von OXID eShop 4.5.0. häufig gestellte Fragen und Antworten sind in der <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">Beta-FAQ</a> gelistet.",
+'SHOP_VERSION_MSG'                                             => "Willkommen zur Betaversion 4 von OXID eShop 4.5.0. häufig gestellte Fragen und Antworten sind in der <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">Beta-FAQ</a> gelistet.",
 'SHOP_VERSION_MSG_DISMISS'                                     => "Schließen",
 
 'MESSAGE_ERR_404TITLE'                                         => 'Fehler',

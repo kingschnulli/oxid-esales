@@ -49,8 +49,8 @@ $aLang = array(
 'SHOP_THEME_sManufacturerIconsize'                => 'Manufacturer\'s/brand logo size', // Check if this is really manufacturer or if it is more like "brand"
 'HELP_SHOP_THEME_sManufacturerIconsize'           => 'Manufacturer\'s/brand logo is shown on start page in manufacturer\'s slider.',
 
-'SHOP_THEME_sCatIconsize'                         => '[Tr]Category picture size (width*height)',
-'HELP_SHOP_THEME_sCatIconsize'                    => '[Tr]Category pictures are shown in list of subcategories as teaser for those subcategories.',
+'SHOP_THEME_sCatIconsize'                         => 'Size of preview picture for category (width*height)',
+'HELP_SHOP_THEME_sCatIconsize'                    => 'Previews of category pictures are shown in category list as teaser for its subcategories.',
 
 'SHOP_THEME_sCatPromotionsize'                    => 'Category picture size for promotion on startpage (width*height)',
 'HELP_SHOP_THEME_sCatPromotionsize'               => 'Category promotion on start page needs special size for category pictures. Define size of those pictures here.',

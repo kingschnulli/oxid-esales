@@ -263,7 +263,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor" );
 
         $oControl = $this->getMock( "oxShopControl", $aTasks, array(), '', false );
-        $oControl->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oControl->expects( $this->exactly(2) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
 
         try {
@@ -297,12 +297,13 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", "_output" );
 
         $oControl = $this->getMock( "oxShopControl", $aTasks, array(), '', false );
-        $oControl->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oControl->expects( $this->exactly(2) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
         $oControl->expects( $this->once() )->method( '_output' );
 
         $oControl->UNITprocess( "info", null );
     }
+
 
 
     /**

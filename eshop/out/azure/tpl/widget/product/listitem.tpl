@@ -5,17 +5,15 @@
     [{assign var='_productLink' value=$product->getLink()}]
 [{/if}]
 [{if $type eq "grid"}]
-
         [{capture name=product_price}]
             [{oxhasrights ident="SHOWARTICLEPRICE"}]
                 [{if $product->getFTPrice()}]
                 <div class="old-price ">
                     <span class="old">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REDUCEDFROM" }] <del>[{ $product->getFTPrice()}] [{ $currency->sign}]</del></span>
-                    [{*<span class="only">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_NOWONLY" }]</span>*}]
                 </div>
                 [{/if}]
                 [{if $product->getFPrice()}]
-                  <strong>[{ $product->getFPrice() }] [{ $currency->sign}] *</strong>
+                  <strong>[{ $product->getFPrice() }] [{ $currency->sign}] [{if !($product->hasMdVariants() || $product->getDispSelList() || $product->getVariantList())}]*[{/if}]</strong>
                 [{/if}]
             [{/oxhasrights}]
         [{/capture}]
@@ -55,7 +53,7 @@
             </div>
             [{/if}]
             [{if $product->getFPrice()}]
-                <strong>[{ $product->getFPrice() }] [{ $currency->sign}] *</strong>
+                <strong>[{ $product->getFPrice() }] [{ $currency->sign}] [{if !($product->hasMdVariants() || $product->getDispSelList() || $product->getVariantList())}]*[{/if}]</strong>
             [{/if}]
         [{/oxhasrights}]
     [{/capture}]
@@ -221,7 +219,7 @@
                         [{if $product->getFTPrice()}]
                             [{oxmultilang ident="DETAILS_NOWONLY"}]
                         [{/if}]
-                        <strong>[{$product->getFPrice()}] [{$currency->sign}] *</strong>
+                        <strong>[{$product->getFPrice()}] [{$currency->sign}] [{if !($product->hasMdVariants() || $product->getDispSelList() || $product->getVariantList())}]*[{/if}]</strong>
                     </label>
                     [{/oxhasrights}]
                     [{oxhasrights ident="TOBASKET"}]

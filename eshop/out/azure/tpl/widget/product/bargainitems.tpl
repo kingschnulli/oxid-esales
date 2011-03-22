@@ -14,14 +14,10 @@
                   [{oxhasrights ident="SHOWARTICLEPRICE"}]
                   [{if $_product->getFPrice()}]
                     [{assign var="currency" value=$oView->getActCurrency() }]
-                       <span class="priceValue">[{ $_product->getFPrice() }] [{ $currency->sign}]<a href="#delivery_link" rel="nofollow">*</a></span>
+                       <span class="priceValue">[{ $_product->getFPrice() }] [{ $currency->sign}]<a href="#delivery_link" rel="nofollow"> [{ if !$_product->isNotBuyable() || !$_product->hasMdVariants() }]*[{/if}]</a></span>
                   [{/if}]
                     [{ if !$_product->isNotBuyable() || !$_product->hasMdVariants() }]
                         <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=start" params="fnc=tobasket&amp;aid=`$_product->oxarticles__oxid->value`&amp;am=1" }]" class="toCart" title="[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]">[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]</a>
-                        [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-                        <span class="deliveryInfo">[{ oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_PLUSSHIPPING2" }]</a></span>
-                        [{/oxifcontent}]
-
                     [{/if}]
                     [{/oxhasrights}]
                 </div>
