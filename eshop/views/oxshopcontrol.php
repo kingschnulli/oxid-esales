@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshopcontrol.php 33848 2011-03-21 08:30:53Z sarunas $
+ * @version   SVN: $Id: oxshopcontrol.php 33881 2011-03-22 12:58:15Z alfonsas $
  */
 
 /**
@@ -296,7 +296,7 @@ class oxShopControl extends oxSuperCfg
 
 
         // #M1047 Firefox duplicated GET fix
-        $myUtils->setHeader( "Content-Type: text/html; charset=".oxLang::getInstance()->translateString( 'charset' ) );
+        $myUtils->setHeader( "Content-Type: text/html; charset=".$oViewObject->getCharSet() );
 
         // show output
         $this->_output( $sOutput );
