@@ -8,16 +8,16 @@
         <input type="hidden" id="passwordLength" value="[{$oViewConf->getPasswordLength()}]">
     <ul class="form clear">
         <li [{if $aErrors}]class="oxError"[{/if}]>
-            <label for="password_old">[{ oxmultilang ident="FORM_USER_PASSWORD_OLDPASSWORD" }]</label>
-            <input type="password" id="password_old" name="password_old" class="oxValidate oxValidate_notEmpty textbox">
+            <label for="passwordOld">[{ oxmultilang ident="FORM_USER_PASSWORD_OLDPASSWORD" }]</label>
+            <input type="password" id="passwordOld" name="password_old" class="oxValidate oxValidate_notEmpty textbox">
             <p class="oxValidateError">
                 <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
                 [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxpassword}]
             </p>
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
-            <label for="password_new">[{ oxmultilang ident="FORM_USER_PASSWORD_NEWPASSWORD" }]</label>
-            <input type="password" id="password_new" name="password_new" class="oxValidate oxValidate_notEmpty oxValidate_length oxValidate_match textbox">
+            <label for="passwordNew">[{ oxmultilang ident="FORM_USER_PASSWORD_NEWPASSWORD" }]</label>
+            <input type="password" id="passwordNew" name="password_new" class="oxValidate oxValidate_notEmpty oxValidate_length oxValidate_match textbox">
             <p class="oxValidateError">
                 <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
                 <span class="oxError_length">[{ oxmultilang ident="EXCEPTION_INPUT_PASSTOOSHORT" }]</span>
@@ -26,8 +26,8 @@
             </p>
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
-            <label for="password_new_confirm">[{ oxmultilang ident="FORM_USER_PASSWORD_CONFIRMPASSWORD" }]</label>
-            <input type="password" id="password_new_confirm" name="password_new_confirm" class="oxValidate oxValidate_notEmpty oxValidate_length oxValidate_match textbox">
+            <label for="passwordNewConfirm">[{ oxmultilang ident="FORM_USER_PASSWORD_CONFIRMPASSWORD" }]</label>
+            <input type="password" id="passwordNewConfirm" name="password_new_confirm" class="oxValidate oxValidate_notEmpty oxValidate_length oxValidate_match textbox">
             <p class="oxValidateError">
                 <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
                 <span class="oxError_length">[{ oxmultilang ident="EXCEPTION_INPUT_PASSTOOSHORT" }]</span>

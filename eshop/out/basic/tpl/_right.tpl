@@ -40,8 +40,8 @@
     <strong class="h2" id="test_RightSideTop5Header">
         [{ oxmultilang ident="INC_RIGHTITEM_TOPOFTHESHOP" }]
         [{if $rsslinks.topArticles}]
-            <a class="rss" id="rss.topArticles" href="[{$rsslinks.topArticles.link}]" title="[{$rsslinks.topArticles.title}]"></a>
-            [{oxscript add="oxid.blank('rss.topArticles');"}]
+            <a class="rss" id="rssTopProducts" href="[{$rsslinks.topArticles.link}]" title="[{$rsslinks.topArticles.title}]"></a>
+            [{oxscript add="oxid.blank('rssTopProducts');"}]
         [{/if}]
     </strong>
     <div class="box">
@@ -53,8 +53,8 @@
     <strong class="h2" id="test_RightSideBarGainHeader">
         [{ oxmultilang ident="INC_RIGHTITEM_BARGAIN" }]
         [{if $rsslinks.bargainArticles}]
-            <a class="rss" id="rss.bargainArticles" href="[{$rsslinks.bargainArticles.link}]" title="[{$rsslinks.bargainArticles.title}]"></a>
-            [{oxscript add="oxid.blank('rss.bargainArticles');"}]
+            <a class="rss" id="rssBargainProducts" href="[{$rsslinks.bargainArticles.link}]" title="[{$rsslinks.bargainArticles.title}]"></a>
+            [{oxscript add="oxid.blank('rssBargainProducts');"}]
         [{/if}]
     </strong>
     <div class="box">
@@ -67,8 +67,8 @@
         <strong class="h2" id="test_RightSideRecommlistHeader">
             [{ oxmultilang ident="INC_RIGHTITEM_RECOMMLIST" }]
             [{if $rsslinks.recommlists}]
-                <a class="rss" id="rss.recommlists" href="[{$rsslinks.recommlists.link}]" title="[{$rsslinks.recommlists.title}]"></a>
-                [{oxscript add="oxid.blank('rss.recommlists');"}]
+                <a class="rss" id="rssRecommLists" href="[{$rsslinks.recommlists.link}]" title="[{$rsslinks.recommlists.title}]"></a>
+                [{oxscript add="oxid.blank('rssRecommLists');"}]
             [{/if}]
         </strong>
         <div class="box">
@@ -79,7 +79,7 @@
               <div>
                   [{ $oViewConf->getHiddenSid() }]
                   <input type="hidden" name="cl" value="recommlist">
-                  <input type="text" name="searchrecomm" id="searchrecomm" value="[{$oView->getRecommSearch()}]" class="search_input">
+                  <input type="text" name="searchrecomm" id="searchRecomm" value="[{$oView->getRecommSearch()}]" class="search_input">
                   <span class="btn"><input id="test_searchRecommlist" type="submit" value="GO!" class="btn"></span>
               </div>
             </form>

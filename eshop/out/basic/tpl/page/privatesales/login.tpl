@@ -90,11 +90,11 @@
             [{else}]
             [{include file="inc/error.tpl" Errorlist=$Errors.default}]
             <div class="loginBoxBody">
-                <label for="lgn_usr">[{ oxmultilang ident="INC_CMP_LOGIN_EMAIL" }]</label>
-                <input id="test_LoginEmail" type="text" name="lgn_usr" value="" size="49" class="txt"><br>
+                <label for="userLoginName">[{ oxmultilang ident="INC_CMP_LOGIN_EMAIL" }]</label>
+                <input id="test_LoginEmail" type="text" id="userLoginName" name="lgn_usr" value="" size="49" class="txt"><br>
 
-                <label for="lgn_pwd">[{ oxmultilang ident="INC_CMP_LOGIN_PWD" }]</label>
-                <input id="test_LoginPwd" type="password" name="lgn_pwd" value="" size="49" class="txt"><br>
+                <label for="userPassword">[{ oxmultilang ident="INC_CMP_LOGIN_PWD" }]</label>
+                <input id="userPassword" type="password" name="lgn_pwd" value="" size="49" class="txt"><br>
 
                 <input id="test_LoginKeepLoggedIn" class="chbox" type="checkbox" name="lgn_cook" value="1"><span class="chboxDesc">[{ oxmultilang ident="INC_CMP_LOGIN_KEEPLOGGEDIN" }]</span>
 

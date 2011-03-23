@@ -4,7 +4,7 @@ var sCompareListElement =
 '<table id="compare" cellspacing="0" cellpadding="0" border="0" >'+
 '<tr>'+
   '<td valign="top">'+
-   ' <div id="firstcol" style="overflow: hidden;">'+
+   ' <div id="compareFirstCol" style="overflow: hidden;">'+
       '<table width="200px" cellspacing="0" cellpadding="0" border="1" >'+
         '<tr><td class="tableFirstCol">First Col row1 </td></tr>'+
         '<tr><td class="tableFirstCol">First Col row2</td></tr>'+
@@ -16,7 +16,7 @@ var sCompareListElement =
     '</div>'+
   '</td>'+
   '<td valign="top">'+
-    '<div id="data_div"  style="overflow-x: scroll; width:300px; position:relative">'+
+    '<div id="compareDataDiv"  style="overflow-x: scroll; width:300px; position:relative">'+
       '<table width="500px" cellspacing="0" cellpadding="0" border="1" >'+
         '<tr id="firstTr">'+
           '<td>Row1Col1</td>'+
@@ -68,72 +68,72 @@ var sCompareListElement =
 
 test('getColumnHeight()', function() {
 
-	var oBody = $('#fixture');
-	var oElement = $( sCompareListElement );
-	var oColumn;
+    var oBody = $('#fixture');
+    var oElement = $( sCompareListElement );
+    var oColumn;
 
-	oBody.html(oElement);
+    oBody.html(oElement);
 
-	oColumn = oxCompareList.getOtherColumn(5, 3);
+    oColumn = oxCompareList.getOtherColumn(5, 3);
 
-	var rH = oColumn.outerHeight();
-	equals( oxCompareList.getColumnHeight('mozilla', oColumn) , rH, "height 22");
+    var rH = oColumn.outerHeight();
+    equals( oxCompareList.getColumnHeight('mozilla', oColumn) , rH, "height 22");
 
-	oColumn = oxCompareList.getOtherColumn(5, 5);
-	rH = oColumn.outerHeight();
-	equals( oxCompareList.getColumnHeight('mozilla', oColumn) , rH, "height 22");
+    oColumn = oxCompareList.getOtherColumn(5, 5);
+    rH = oColumn.outerHeight();
+    equals( oxCompareList.getColumnHeight('mozilla', oColumn) , rH, "height 22");
 
-	oBody.html("");
+    oBody.html("");
 
 });
 
 test('setColumnHeight()', function() {
 
-	var oBody = $('#fixture');
-	var oElement = $( sCompareListElement );
+    var oBody = $('#fixture');
+    var oElement = $( sCompareListElement );
 
-	oBody.html(oElement);
+    oBody.html(oElement);
 
-	 var oColumn = oxCompareList.getOtherColumn(5, 3);
+     var oColumn = oxCompareList.getOtherColumn(5, 3);
 
-	 oColumn = oxCompareList.setColumnHeight(oColumn, 150);
-	 equals( jQuery.trim(oColumn.attr('style')) , 'height: 150px;', "height - 150");
+     oColumn = oxCompareList.setColumnHeight(oColumn, 150);
+     equals( jQuery.trim(oColumn.attr('style')) , 'height: 150px;', "height - 150");
 
-	 oColumn = oxCompareList.setColumnHeight(oColumn, 250);
-	 equals( jQuery.trim(oColumn.attr('style')) , 'height: 250px;', "height - 250");
+     oColumn = oxCompareList.setColumnHeight(oColumn, 250);
+     equals( jQuery.trim(oColumn.attr('style')) , 'height: 250px;', "height - 250");
 
-	 oColumn = oxCompareList.setColumnHeight(oColumn, 0);
-	 equals( jQuery.trim(oColumn.attr('style')) , 'height: 0px;', "height - 0");
+     oColumn = oxCompareList.setColumnHeight(oColumn, 0);
+     equals( jQuery.trim(oColumn.attr('style')) , 'height: 0px;', "height - 0");
 
-	 oBody.html("");
+     oBody.html("");
 });
 
 test('getOtherColumn()', function() {
 
-	var oBody = $('#fixture');
-	var oElement = $( sCompareListElement );
+    var oBody = $('#fixture');
+    var oElement = $( sCompareListElement );
 
-	oBody.html(oElement);
+    oBody.html(oElement);
 
-	equals(oxCompareList.getOtherColumn(5, 3).is('td'), true, "is column");
-	equals(oxCompareList.getOtherColumn(5, 2).is('td'), true, "is column");
-	equals(oxCompareList.getOtherColumn(5, 7).is('td'), false, "not column");
-	equals(oxCompareList.getOtherColumn(5, 6).is('td'), false, "not column");
+    equals(oxCompareList.getOtherColumn(5, 3).is('td'), true, "is column");
+    equals(oxCompareList.getOtherColumn(5, 2).is('td'), true, "is column");
+    equals(oxCompareList.getOtherColumn(5, 7).is('td'), false, "not column");
+    equals(oxCompareList.getOtherColumn(5, 6).is('td'), false, "not column");
 
-	oBody.html("");
+    oBody.html("");
 
 });
 
 test('getColumnCount()', function() {
 
-	var oBody = $('#fixture');
-	var oElement = $( sCompareListElement );
+    var oBody = $('#fixture');
+    var oElement = $( sCompareListElement );
 
-	oBody.html(oElement);
+    oBody.html(oElement);
 
-	equals(oxCompareList.getColumnCount(oBody), 5, "5 data columns");
+    equals(oxCompareList.getColumnCount(oBody), 5, "5 data columns");
 
-	oBody.html("");
+    oBody.html("");
 
 });
 

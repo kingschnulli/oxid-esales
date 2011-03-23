@@ -57,7 +57,7 @@
             <td></td>
             <td>
               <br>
-              <span class="btn"><input id="test_newsLetter_submit" class="btn" type="submit" value="[{ oxmultilang ident="NEWSLETTER_SUBSCRIBE" }]"></span>
+              <span class="btn"><input id="newsLetterSubmit" class="btn" type="submit" value="[{ oxmultilang ident="NEWSLETTER_SUBSCRIBE" }]"></span>
             </td>
           </tr>
       </table>

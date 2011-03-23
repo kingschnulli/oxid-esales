@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 33489 2011-02-24 08:42:27Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxsession.php 33895 2011-03-22 16:20:52Z arvydas.vapsva $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -388,15 +388,38 @@ class oxSession extends oxSuperCfg
     }
 
     /**
+     * Regenerates session id
+     *
+     * @return null
+     */
+    public function regenerateSessionId()
+    {
+        // starting session only if it was not started yet
+        if ( self::$_blIsNewSession ) {
+            $this->_sessionStart();
+
+            // (re)setting actual user agent when initiating new session
+            self::setVar( "sessionagent", oxUtilsServer::getInstance()->getServerVar( 'HTTP_USER_AGENT' ) );
+        }
+
+        $this->_setSessionId( $this->_getNewSessionId( false ) );
+        $this->_initNewSessionChallenge();
+    }
+
+    /**
      * Update the current session id with a newly generated one, deletes the
      * old associated session file, frees all session variables and
      *
+     * @param bool $blUnset if true, calls session_unset [optional]
+     *
      * @return string
      */
-    protected function _getNewSessionId()
+    protected function _getNewSessionId( $blUnset = true )
     {
         session_regenerate_id( true );
-        session_unset();
+        if ( $blUnset ) {
+            session_unset();
+        }
         return session_id();
     }
 

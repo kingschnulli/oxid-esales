@@ -24,7 +24,7 @@
         <br>
         <tt class="identifier" id="test_no_[{$testid}]">
             [{if $product->getPricePerUnit()}]
-                <div id="test_product_price_unit" class="pperunit">
+                <div id="test_product_price_unit_[{$testid}]" class="pperunit">
                     [{$product->oxarticles__oxunitquantity->value}] [{$product->oxarticles__oxunitname->value}] | [{$product->getPricePerUnit()}] [{ $currency->sign}]/[{$product->oxarticles__oxunitname->value}]
                 </div>
             [{elseif $product->oxarticles__oxweight->value  }]
@@ -122,7 +122,7 @@
             [{/foreach}]
             </select>
         [{else}]
-            <select id="test_varSelect_[{$testid}]" name="aid">
+            <select id="varSelect_[{$testid}]" name="aid">
             [{ if !$product->isParentNotBuyable()}]
                 <option value="[{$product->getId()}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]*[{/oxhasrights}]</option>
             [{/if}]
@@ -134,7 +134,7 @@
     [{elseif $product->getDispSelList()}]
         [{foreach key=iSel from=$product->getDispSelList() item=oList}]
         <label>[{ $oList.name }] :</label>
-        <select id="test_sellist_[{$testid}]_[{$iSel}]" name="sel[[{$iSel}]]" onchange="oxid.sellist.set(this.name,this.value);">
+        <select id="selectList_[{$testid}]_[{$iSel}]" name="sel[[{$iSel}]]" onchange="oxid.sellist.set(this.name,this.value);">
           [{foreach key=iSelIdx from=$oList item=oSelItem}]
             [{ if $oSelItem->name }]
               <option value="[{$iSelIdx}]"[{if $oSelItem->selected }]SELECTED[{/if }]>[{ $oSelItem->name }]</option>

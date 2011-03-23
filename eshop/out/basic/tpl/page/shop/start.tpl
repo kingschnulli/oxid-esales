@@ -35,8 +35,8 @@
     [{ oxmultilang ident="START_JUSTARRIVED"}]
 
     [{if $rsslinks.newestArticles}]
-        <a class="rss" id="rss.newestArticles" href="[{$rsslinks.newestArticles.link}]" title="[{$rsslinks.newestArticles.title}]"></a>
-        [{oxscript add="oxid.blank('rss.newestArticles');"}]
+        <a class="rss" id="rssNewestProducts" href="[{$rsslinks.newestArticles.link}]" title="[{$rsslinks.newestArticles.title}]"></a>
+        [{oxscript add="oxid.blank('rssNewestProducts');"}]
     [{/if}]
   </strong>
   [{foreach from=$oView->getNewestArticles() item=actionproduct}]

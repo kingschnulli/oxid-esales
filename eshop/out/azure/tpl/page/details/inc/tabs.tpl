@@ -37,18 +37,18 @@
 
 
 [{if $oView->isActive('FbComments') && $oViewConf->getFbAppId()}]
-    [{capture append="FBtabs"}]<a href="#productfbcomments">[{oxmultilang ident="FACEBOOK_COMMENTS"}]</a>[{/capture}]
-    [{capture append="FBtabsContent"}]<div id="productfbcomments" class="tabcontent">[{include file="widget/facebook/comments.tpl"}]</div>[{/capture}]
+    [{capture append="FBtabs"}]<a href="#productFbComments">[{oxmultilang ident="FACEBOOK_COMMENTS"}]</a>[{/capture}]
+    [{capture append="FBtabsContent"}]<div id="productFbComments" class="tabcontent">[{include file="widget/facebook/comments.tpl"}]</div>[{/capture}]
 [{/if}]
 
 [{if $oView->isActive('FbInvite') && $oViewConf->getFbAppId()}]
-    [{capture append="FBtabs"}]<a href="#productfbinvite">[{oxmultilang ident="FACEBOOK_INVITE"}]</a>[{/capture}]
-    [{capture append="FBtabsContent"}]<div id="productfbinvite" class="tabcontent">[{include file="widget/facebook/invite.tpl"}]</div>[{/capture}]
+    [{capture append="FBtabs"}]<a href="#productFbInvite">[{oxmultilang ident="FACEBOOK_INVITE"}]</a>[{/capture}]
+    [{capture append="FBtabsContent"}]<div id="productFbInvite" class="tabcontent">[{include file="widget/facebook/invite.tpl"}]</div>[{/capture}]
 [{/if}]
 
 [{if $oView->isActive('FbLiveStream') && $oViewConf->getFbAppId()}]
-    [{capture append="FBtabs"}]<a href="#productfblivestream">[{oxmultilang ident="FACEBOOK_CHAT"}]</a>[{/capture}]
-    [{capture append="FBtabsContent"}]<div id="productfblivestream" class="tabcontent">[{include file="widget/facebook/livestream.tpl"}]</div>[{/capture}]
+    [{capture append="FBtabs"}]<a href="#productFbLiveStream">[{oxmultilang ident="FACEBOOK_CHAT"}]</a>[{/capture}]
+    [{capture append="FBtabsContent"}]<div id="productFbLiveStream" class="tabcontent">[{include file="widget/facebook/livestream.tpl"}]</div>[{/capture}]
 [{/if}]
 
 [{if $tabs}]
@@ -68,7 +68,7 @@
 
 [{if $FBtabs}]
 <div class="tabbedWidgetBox clear" style="min-height:50px;">
-    <ul id="itemFBTabs" class="tabs clear">
+    <ul id="itemFbTabs" class="tabs clear">
     [{foreach from=$FBtabs item="FBtab"}]
         <li>[{$FBtab}]</li>
     [{/foreach}]

@@ -59,7 +59,7 @@
             </a>
             </div>
             <div class="etrustdescocol">
-                <form id="formTShops" name="formTShops" method="post" action="https://www.trustedshops.com/shop/protection.php" target="_blank">
+                <form id="formTsShops" name="formTShops" method="post" action="https://www.trustedshops.com/shop/protection.php" target="_blank">
                   <div>
                       <input type="hidden" name="_charset_">
                       <input name="shop_id" type=hidden value="[{$oView->getTrustedShopId()}]">

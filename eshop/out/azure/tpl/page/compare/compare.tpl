@@ -18,7 +18,7 @@
     <table id="compareList">
         <tr>
             <td style="vertical-align:top;">
-                <div id="firstcol" style="overflow: hidden;">
+                <div id="compareFirstCol" style="overflow: hidden;">
                     <table width="200px">
                         <tr id="firstDataTr">
                             <td class="firstCol">&nbsp;</td>
@@ -35,18 +35,18 @@
                 </div>
             </td>
             <td style="vertical-align:top;">
-                <div id="data_div" style="overflow:hidden; width:[{if $oxcmp_user}]545px;[{else}]740px;[{/if}] position:relative">
+                <div id="compareDataDiv" style="overflow:hidden; width:[{if $oxcmp_user}]545px;[{else}]740px;[{/if}] position:relative">
                     <table>
                         <tr id="firstTr">
                             [{foreach key=iProdNr from=$articleList item=product name=comparelist}]
                             <td valign="top">
                                 <div class="lineBox clear">
                                 [{if !$product->hidePrev}]
-                                    <a id="cmp_left_[{ $product->oxarticles__oxid->value }]" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="fnc=moveleft&amp;aid=`$product->oxarticles__oxnid->value`&amp;pgNr="|cat:$oView->getActPage() }]" class="navigation movePrev">&laquo;</a>
+                                    <a id="compareLeft_[{ $product->oxarticles__oxid->value }]" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="fnc=moveleft&amp;aid=`$product->oxarticles__oxnid->value`&amp;pgNr="|cat:$oView->getActPage() }]" class="navigation movePrev">&laquo;</a>
                                 [{/if}]
                                 <span>[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_MOVE" }]</span>
                                 [{if !$product->hideNext}]
-                                    <a id="cmp_right_[{ $product->oxarticles__oxid->value }]" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="fnc=moveright&amp;aid=`$product->oxarticles__oxnid->value`&amp;pgNr="|cat:$oView->getActPage() }]" class="navigation moveNext">&raquo;</a>
+                                    <a id="compareRight_[{ $product->oxarticles__oxid->value }]" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="fnc=moveright&amp;aid=`$product->oxarticles__oxnid->value`&amp;pgNr="|cat:$oView->getActPage() }]" class="navigation moveNext">&raquo;</a>
                                 [{/if}]
                                 </div>
                                   [{include file="page/compare/inc/compareitem.tpl" product=$product}]
@@ -74,7 +74,7 @@
                                       <input type="hidden" name="am" value="1">
                                       <input type="hidden" name="removecompare" value="1">
                                       [{oxhasrights ident="TOBASKET"}]
-                                         <button class="submitButton" id="remove-cmp-[{ $product->oxarticles__oxid->value }]" type="submit" title="[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_REMOVE" }]" name="send">[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_REMOVE" }]</button>
+                                         <button class="submitButton" id="remove_cmp_[{ $product->oxarticles__oxid->value }]" type="submit" title="[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_REMOVE" }]" name="send">[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_REMOVE" }]</button>
                                       [{/oxhasrights}]
                                   </div>
                                 </form>

@@ -78,7 +78,7 @@
 
               [{foreach key=iSel from=$product->getDispSelList() item=oList}]
                 <label>[{ $oList.name }] :</label>
-                <select id="sellist_[{$testid}]_[{$iSel}]" name="sel[[{$iSel}]]">
+                <select id="selectList_[{$testid}]_[{$iSel}]" name="sel[[{$iSel}]]">
                   [{foreach key=iSelIdx from=$oList item=oSelItem}]
                     [{ if $oSelItem->name }]
                       <option value="[{$iSelIdx}]"[{if $oSelItem->selected }]SELECTED[{/if }]>[{ $oSelItem->name }]</option>

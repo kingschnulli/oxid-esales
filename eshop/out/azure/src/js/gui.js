@@ -61,7 +61,7 @@ var oxid = {
         },
 
         getMdSelectNameById: function(id){
-            var name = 'mdvariantselect_' + id;
+            var name = 'mdVariantSelect_' + id;
             return name;
         },
 
@@ -109,10 +109,10 @@ var oxid = {
         },
 
         showMdRealVariant: function(){
-            document.getElementById('md_variant_box').innerHTML = '';
+            document.getElementById('mdVariantBox').innerHTML = '';
             var selectedId = oxid.mdVariants.getSelectedMdRealVariant();
-            if (selectedId && document.getElementById('mdvariant_' + selectedId)) {
-                document.getElementById('md_variant_box').innerHTML = document.getElementById('mdvariant_' + selectedId).innerHTML;
+            if (selectedId && document.getElementById('mdVariant_' + selectedId)) {
+                document.getElementById('mdVariantBox').innerHTML = document.getElementById('mdVariant_' + selectedId).innerHTML;
             }
 
         }
@@ -186,7 +186,7 @@ $(function(){
                 if (count <= 1) {
                     $(element).parents("#basketFlyout").hide();
                     $("#countValue").replaceWith("0");
-                    $("#minibasket img.minibasketIcon").unbind('mouseenter mouseleave');
+                    $("#miniBasket img.minibasketIcon").unbind('mouseenter mouseleave');
                     return container.not(element);
                 }
             }
@@ -274,8 +274,8 @@ $(function(){
         * Minibasket flyout
         */
         var timeout;
-        if ($("#minibasket ul").length > 0) {
-            $("#minibasket img.minibasketIcon").hover(function(){
+        if ($("#miniBasket ul").length > 0) {
+            $("#miniBasket img.minibasketIcon").hover(function(){
                 timeout = setTimeout(function(){
                     $(".basketFlyout").show();
                     if ($(".scrollable ul").length > 0) {
@@ -290,8 +290,8 @@ $(function(){
             });
         }
 
-        if ($("#data_div").length) {
-            $("#data_div").jScrollPane({
+        if ($("#compareDataDiv").length) {
+            $("#compareDataDiv").jScrollPane({
                                 showArrows: true,
                                 horizontalGutter: 0
             });
@@ -471,7 +471,7 @@ $(function(){
      });
 
      $("#zoomModal li a").click(function(){
-        $("#zoom_img").attr("src", $(this).attr("href"));
+        $("#zoomImg").attr("src", $(this).attr("href"));
         return false;
      });
 
@@ -479,7 +479,7 @@ $(function(){
         return false;
      });
 
-    $("#zoom_img").click(function(){
+    $("#zoomImg").click(function(){
 
         var oPaging     = $(".zoomPager");
         var iImgCount   = $(".zoomPager li").size();
@@ -498,11 +498,11 @@ $(function(){
         var oFirstPage  = $(".zoomPager li:first").children("a");
 
         if( iCurImgNo == iImgCount ) {
-            $("#zoom_img").attr("src", sFirstImage);
+            $("#zoomImg").attr("src", sFirstImage);
             oLastPage.removeClass('selected');
             oFirstPage.addClass('selected');
         } else {
-            $("#zoom_img").attr("src", sNextImage);
+            $("#zoomImg").attr("src", sNextImage);
             oCurPage.removeClass('selected');
             oNextPage.addClass('selected');
         }
@@ -519,11 +519,11 @@ $(function(){
         boxTarget.css("padding-top", addHoverPadding);
     });
 
-    if($("#newitemMsg").length > 0){
+    if($("#newItemMsg").length > 0){
         $("#countValue").hide();
-        $("#newitemMsg").delay(3000).fadeTo("fast", 0, function(){
+        $("#newItemMsg").delay(3000).fadeTo("fast", 0, function(){
             $("#countValue").fadeTo("fast", 1);
-            $("#newitemMsg").remove()
+            $("#newItemMsg").remove()
         });
     }
 
@@ -585,7 +585,7 @@ $(function(){
         $(".actionLinks").mouseleave( function() {
             hideLinks();
         });
-        if ($("#showlinksonce").length > 0) {
+        if ($("#showLinksOnce").length > 0) {
             $(".actionLinks").slideDown('normal').delay(1000).slideUp('normal', function(){
                  setCookie('showlinksonce', 1);
             });
@@ -651,7 +651,7 @@ $(function(){
         $tabs.tabs('select', '#pricealarm');
     });
 
-    $('#oxaddressid').change(function() {
+    $('#addressId').change(function() {
         $( ".oxValidate" ).unbind('submit');
         var reload = '2';
         var selectValue = $(this).val();
@@ -676,11 +676,11 @@ $(function(){
 
     $('select[id^=sellist]').change (function() {
         var oSelf = $(this);
-        var oNoticeList = $('#slist');
+        var oNoticeList = $('#linkToNoticeList');
         if ( oNoticeList ) {
             oNoticeList.attr('href', oNoticeList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
         }
-        var oWishList = $('#wlist');
+        var oWishList = $('#linkToWishList');
         if ( oWishList ) {
             oWishList.attr('href', oWishList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
         }

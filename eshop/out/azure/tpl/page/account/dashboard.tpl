@@ -4,22 +4,22 @@
 
         <div class="col">
             <dl>
-                <dt><a id="test_link_account_password" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account_password" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_PERSONALSETTINGS" }]</a></dt>
+                <dt><a id="linkAccountPassword" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account_password" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_PERSONALSETTINGS" }]</a></dt>
                 <dd>[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_CHANGEPWD" }]</dd>
             </dl>
 
             <dl>
-                <dt><a id="test_link_account_newsletter" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account_newsletter" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_NEWSLETTERSETTINGS" }]</a></dt>
+                <dt><a id="linkAccountNewsletter" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account_newsletter" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_NEWSLETTERSETTINGS" }]</a></dt>
                 <dd>[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_NEWSLETTERSUBSCRIBE" }]</dd>
             </dl>
 
             <dl>
-                <dt><a id="test_link_account_billship" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account_user" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_BILLINGSHIPPINGSET" }]</a></dt>
+                <dt><a id="linkAccountBillship" href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account_user" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_BILLINGSHIPPINGSET" }]</a></dt>
                 <dd>[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_UPDATEYOURBILLINGSHIPPINGSET" }]</dd>
             </dl>
 
             <dl class="lastInCol">
-                <dt><a id="test_link_account_order" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_order" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_ORDERHISTORY" }]</a></dt>
+                <dt><a id="linkAccountOrder" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_order" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_ORDERHISTORY" }]</a></dt>
                 <dd>[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_ORDERS" }] [{ $oView->getOrderCnt() }]</dd>
             </dl>
         </div>

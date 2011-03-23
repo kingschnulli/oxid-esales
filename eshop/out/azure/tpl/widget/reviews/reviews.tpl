@@ -4,8 +4,8 @@
     <form action="[{$oViewConf->getSelfActionLink()}]" method="post" id="rating">
       <div id="writeReview">
         [{if $oView->canRate()}]
-          <input id="artrating" type="hidden" name="artrating" value="0">
-          <input id="recommlistrating" type="hidden" name="recommlistrating" value="0">
+          <input id="productRating" type="hidden" name="artrating" value="0">
+          <input id="recommListRating" type="hidden" name="recommlistrating" value="0">
           <ul id="reviewRating" class="rating">
             <li id="reviewCurrentRating" class="currentRate">
               <a title="[{$_star_title}]"></a>
@@ -41,7 +41,7 @@
   <dl class="hreview">
   [{if $oView->getReviews()}]
     [{foreach from=$oView->getReviews() item=review name=ReviewsCounter}]
-    <dt id="reviewName-[{$smarty.foreach.ReviewsCounter.iteration}]" class="clear item">
+    <dt id="reviewName_[{$smarty.foreach.ReviewsCounter.iteration}]" class="clear item">
 
       <span>[{$review->oxuser__oxfname->value}] [{oxmultilang ident="DETAILS_WRITES"}] <span class="dtreviewed">[{$review->oxreviews__oxcreate->value|date_format:"%d.%m.%Y"}]<span></span></span>
       [{if $review->oxreviews__oxrating->value}]
@@ -50,11 +50,11 @@
       [{/if}]
     </dt>
     <dd>
-      <div id="reviewText-[{$smarty.foreach.ReviewsCounter.iteration}]" class="description">[{$review->oxreviews__oxtext->value}]</div>
+      <div id="reviewText_[{$smarty.foreach.ReviewsCounter.iteration}]" class="description">[{$review->oxreviews__oxtext->value}]</div>
     </dd>
     [{/foreach}]
   [{else}]
-    <dt id="reviewName-[{$smarty.foreach.ReviewsCounter.iteration}]">
+    <dt id="reviewName_[{$smarty.foreach.ReviewsCounter.iteration}]">
       [{oxmultilang ident="DETAILS_REVIEWNOTAVAILABLE"}]
     </dt>
   [{/if}]

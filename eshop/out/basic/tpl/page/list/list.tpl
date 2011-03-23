@@ -6,8 +6,8 @@
         [{assign var="actCategory" value=$oView->getActiveCategory()}]
         [{if $actCategory && $actCategory->oxcategories__oxdesc->value }]<small id="test_catDesc">[{$actCategory->oxcategories__oxdesc->value}]</small>[{/if}]
         [{if $rsslinks.activeCategory}]
-            <a class="rss" id="rss.activeCategory" href="[{$rsslinks.activeCategory.link}]" title="[{$rsslinks.activeCategory.title}]"></a>
-            [{oxscript add="oxid.blank('rss.activeCategory');"}]
+            <a class="rss" id="rssActiveCategory" href="[{$rsslinks.activeCategory.link}]" title="[{$rsslinks.activeCategory.title}]"></a>
+            [{oxscript add="oxid.blank('rssActiveCategory');"}]
         [{/if}]
     </div>
 
@@ -22,7 +22,7 @@
 
         [{assign var="oCategoryAttributes" value=$oView->getAttributes()}]
         [{if $oCategoryAttributes }]
-            <form method="post" action="[{ $oViewConf->getSelfActionLink() }]" name="_filterlist" id="_filterlist">
+            <form method="post" action="[{ $oViewConf->getSelfActionLink() }]" name="_filterlist" id="filterList">
             <div class="catfilter">
                 [{ $oViewConf->getHiddenSid() }]
                 [{ $oViewConf->getNavFormParams() }]
@@ -37,7 +37,7 @@
                             <label id="test_attrfilterTitle_[{$sAttrID}]_[{$smarty.foreach.testAttr.iteration}]">[{ $oFilterAttr->getTitle() }]:</label>
                         </td>
                         <td>
-                           <select name="attrfilter[[{ $sAttrID }]]" onchange="oxid.form.send('_filterlist');">
+                           <select name="attrfilter[[{ $sAttrID }]]" onchange="oxid.form.send('filterList');">
                                <option value="" selected>[{ oxmultilang ident="LIST_PLEASECHOOSE" }]</option>
                                [{foreach from=$oFilterAttr->getValues() item=sValue}]
                                <option value="[{ $sValue }]" [{ if $oFilterAttr->getActiveValue() == $sValue }]selected[{/if}]>[{ $sValue }]</option>

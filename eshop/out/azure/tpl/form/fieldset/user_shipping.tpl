@@ -2,7 +2,7 @@
     <li>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_ADDRESSES" }]</label>
         <input type="hidden" name="changeClass" value="[{$onChangeClass|default:'account_user'}]">
-        <select id="oxaddressid" name="oxaddressid">
+        <select id="addressId" name="oxaddressid">
             <option value="-1">[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_NEWADDRESS" }]</option>
             [{if $oxcmp_user }]
                 [{foreach from=$oxcmp_user->getUserAddresses() item=address }]
@@ -80,7 +80,7 @@
     </li>
     <li [{if $aErrors}]class="oxError"[{/if}]>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_COUNTRY2" }][{if $oView->isFieldRequired(oxaddress__oxcountryid) }]<span class="req">*</span>[{/if}]</label>
-          <select [{if $oView->isFieldRequired(oxaddress__oxcountryid) }] class="oxValidate oxValidate_notEmpty" [{/if }] id="del_country_select" name="deladr[oxaddress__oxcountryid]">
+          <select [{if $oView->isFieldRequired(oxaddress__oxcountryid) }] class="oxValidate oxValidate_notEmpty" [{/if }] id="delCountrySelect" name="deladr[oxaddress__oxcountryid]">
             <option value="">-</option>
             [{foreach from=$oView->getCountryList() item=country key=country_id }]
               <option value="[{ $country->oxcountry__oxid->value }]" [{if isset( $deladr.oxaddress__oxcountryid ) && $deladr.oxaddress__oxcountryid == $country->oxcountry__oxid->value }]selected[{elseif $delivadr->oxaddress__oxcountry->value == $country->oxcountry__oxtitle->value or $delivadr->oxaddress__oxcountry->value == $country->oxcountry__oxid->value or $delivadr->oxaddress__oxcountryid->value == $country->oxcountry__oxid->value }]selected[{/if }]>[{ $country->oxcountry__oxtitle->value }]</option>
@@ -95,7 +95,7 @@
     </li>
     <li class="stateBox">
           [{include file="form/fieldset/state.tpl"
-                countrySelectId="del_country_select"
+                countrySelectId="delCountrySelect"
                 stateSelectName="deladr[oxaddress__oxstateid]"
                 selectedStateIdPrim=$deladr.oxaddress__oxstateid
                 selectedStateId=$delivadr->oxaddress__oxstateid->value

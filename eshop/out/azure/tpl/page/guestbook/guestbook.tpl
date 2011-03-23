@@ -16,7 +16,7 @@
                     </dd>
                 [{/foreach}]
             [{else}]
-                <dt id="reviewName-[{$smarty.foreach.ReviewsCounter.iteration}]">
+                <dt id="reviewName_[{$smarty.foreach.ReviewsCounter.iteration}]">
                     [{oxmultilang ident="PAGE_GUESTBOOK_LIST_NOENTRYAVAILABLE"}]
                 </dt>
             [{/if}]

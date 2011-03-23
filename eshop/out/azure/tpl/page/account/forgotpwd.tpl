@@ -34,7 +34,7 @@
         [{ $oViewConf->getHiddenSid() }]
         <input type="hidden" name="cl" value="start">
         <div class="right">
-          <input id="test_BackToShop" type="submit" value="[{ oxmultilang ident="PAGE_ACCOUNT_FORGOTPWD_BACKTOSHOP" }]">
+          <input id="backToShop" type="submit" value="[{ oxmultilang ident="PAGE_ACCOUNT_FORGOTPWD_BACKTOSHOP" }]">
         </div>
       </div>
     </form>
@@ -52,7 +52,7 @@
           [{ $oViewConf->getHiddenSid() }]
           <input type="hidden" name="cl" value="start">
           <div class="right">
-            <input id="test_BackToShop" type="submit" value="[{ oxmultilang ident="PAGE_ACCOUNT_FORGOTPWD_BACKTOSHOP" }]">
+            <input id="backToShop" type="submit" value="[{ oxmultilang ident="PAGE_ACCOUNT_FORGOTPWD_BACKTOSHOP" }]">
           </div>
         </div>
       </form>

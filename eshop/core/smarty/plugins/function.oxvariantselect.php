@@ -82,7 +82,7 @@ function oxvariantselect_addSubvariants($oMdVariants, $iLevel, &$aSelectBoxes, &
         $blVisible = false;
         $sSelectedVariant = null;
         foreach ($oMdVariants as $sKey => $oVariant) {
-            $sSelectBoxName = "mdvariantselect_".$oVariant->getParentId();
+            $sSelectBoxName = "mdVariantSelect_".$oVariant->getParentId();
             $aSelectBoxes[$iLevel][] = $sSelectBoxName;
             $aOptions[$oVariant->getId()] = $oVariant->getName();
             if ($oVariant->hasArticleId($sArtId)) {

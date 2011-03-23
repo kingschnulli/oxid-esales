@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 33799 2011-03-16 16:51:42Z vilma $
+ * @version   SVN: $Id: oxcmpUserTest.php 33895 2011-03-22 16:20:52Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -596,14 +596,18 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         modConfig::setParameter('blPerfNoBasketSaving', true);
         $oBasket = $this->getMock( 'oxBasket', array( 'onUpdate' ) );
         $oBasket->expects( $this->once() )->method( 'onUpdate');
-        $oSession = $this->getMock( 'oxSession', array( 'getBasket' ) );
+
+        $oSession = $this->getMock( 'oxSession', array( 'getBasket', "regenerateSessionId" ) );
         $oSession->expects( $this->once() )->method( 'getBasket')->will( $this->returnValue( $oBasket ) );
+        $oSession->expects( $this->once() )->method( 'regenerateSessionId');
+
         $oUser = $this->getMock( 'oxcmp_user', array( 'inGroup', 'addDynGroup' ) );
         $oUser->expects( $this->once() )->method( 'inGroup' )->will( $this->returnValue( false ) );
         $oUser->expects( $this->once() )->method( 'addDynGroup' );
-            $aMockFnc = array( 'getSession' );
+            $aMockFnc = array( 'getSession', "getLoginStatus" );
         $oUserView = $this->getMock( 'oxcmp_user', $aMockFnc );
         $oUserView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
+        $oUserView->expects( $this->once() )->method( 'getLoginStatus' )->will( $this->returnValue( 1 ) );
         $this->assertEquals( 'payment', $oUserView->UNITafterLogin( $oUser ) );
             $this->assertEquals( 1, modConfig::getInstance()->getGlobalParameter( 'blUserChanged' ) );
     }

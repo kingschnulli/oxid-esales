@@ -29,7 +29,7 @@
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
             <label>[{ oxmultilang ident="FORM_CONTACT_EMAIL2" }]<span class="req">*</span></label>
-            <input id="test_contactEmail" type="text" name="editval[oxuser__oxusername]"  size=70 maxlength=40 value="[{$editval.oxuser__oxusername}]" class="oxValidate oxValidate_notEmpty oxValidate_email">
+            <input id="contactEmail" type="text" name="editval[oxuser__oxusername]"  size=70 maxlength=40 value="[{$editval.oxuser__oxusername}]" class="oxValidate oxValidate_notEmpty oxValidate_email">
             <p class="oxValidateError">
                 <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>

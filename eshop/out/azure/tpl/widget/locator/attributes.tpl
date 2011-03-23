@@ -1,5 +1,5 @@
 [{if $attributes }]
-    <form method="post" action="[{ $oViewConf->getSelfActionLink() }]" name="_filterlist" id="_filterlist">
+    <form method="post" action="[{ $oViewConf->getSelfActionLink() }]" name="_filterlist" id="filterList">
     <div class="listFilter fnSubmit clear">
         [{ $oViewConf->getHiddenSid() }]
         [{ $oViewConf->getNavFormParams() }]
@@ -8,7 +8,7 @@
         <input type="hidden" name="fnc" value="executefilter">
         <input type="hidden" name="fname" value="">
         [{foreach from=$attributes item=oFilterAttr key=sAttrID name=attr}]
-            <div class="dropDown" id="attrfilter[[{ $sAttrID }]]">
+            <div class="dropDown" id="attributeFilter[[{ $sAttrID }]]">
                 <p>
                     <label>[{ $oFilterAttr->getTitle() }]: </label>
                     <span>

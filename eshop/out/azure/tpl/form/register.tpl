@@ -5,7 +5,7 @@
 <input type="hidden" name="fnc" value="registeruser">
 <input type="hidden" name="cl" value="register">
 <input type="hidden" name="lgn_cook" value="0">
-<input type="hidden" id="reloadaddress" name="reloadaddress" value="">
+<input type="hidden" id="reloadAddress" name="reloadaddress" value="">
 <input type="hidden" name="option" value="3">
     <h3 class="blockHead">[{ oxmultilang ident="FORM_REGISTER_ACCOUNTINFO" }]</h3>
     <ul class="form">
@@ -15,21 +15,21 @@
                 <span>
                     [{oxifcontent ident="oxagb" object="oCont"}]
                         [{assign var="sLink" value=$oCont->getLink()|replace:'&amp;':'&' }]
-                        [{oxscript add="$( '#orderOpenAGBBottom' ).oxModalPopup({target: '#popup', loadUrl: '$sLink&plain=1'});"}]
-                        [{oxmultilang ident="FORM_REGISTER_IAGREETOTERMS1" }] 
-                        <a id="orderOpenAGBBottom" rel="nofollow" href="[{ $oCont->getLink() }]"  class="fontunderline">[{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }]</a>
+                        [{oxscript add="$( '#orderOpenAgbBottom' ).oxModalPopup({target: '#popup', loadUrl: '$sLink&plain=1'});"}]
+                        [{oxmultilang ident="FORM_REGISTER_IAGREETOTERMS1" }]
+                        <a id="orderOpenAgbBottom" rel="nofollow" href="[{ $oCont->getLink() }]"  class="fontunderline">[{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }]</a>
                         [{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS3" }],&nbsp;
                     [{/oxifcontent}]
                     [{oxifcontent ident="oxrightofwithdrawal" object="oCont"}]
                         [{assign var="sLink" value=$oCont->getLink()|replace:'&amp;':'&' }]
                         [{oxscript add="$( '#orderOpenWithdrawalBottom' ).oxModalPopup({target: '#popup', loadUrl: '$sLink&plain=1'});"}]
-                        [{oxmultilang ident="FORM_REGISTER_IAGREETORIGHTOFWITHDRAWAL1" }] 
+                        [{oxmultilang ident="FORM_REGISTER_IAGREETORIGHTOFWITHDRAWAL1" }]
                         <a id="orderOpenWithdrawalBottom" rel="nofollow" href="[{ $oCont->getLink() }]">[{ $oCont->oxcontents__oxtitle->value }]</a>
                         [{ oxmultilang ident="FORM_REGISTER_IAGREETORIGHTOFWITHDRAWAL3" }]
                     [{/oxifcontent}]
                 </span>
                 <input type="hidden" name="ord_agb" value="0">
-                <input id="test_OrderConfirmAGBBottom" type="checkbox" class="chk" name="ord_agb" value="1">
+                <input id="orderConfirmAgbBottom" type="checkbox" class="chk" name="ord_agb" value="1">
             </li>
         [{/if}]
     </ul>

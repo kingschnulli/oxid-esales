@@ -3,9 +3,9 @@
 [{ if $_oRecommendationList || $oView->getRecommSearch() }]
 <div class="box" id="recommendationsBox">
     <h3>[{ oxmultilang ident="WIDGET_RECOMMENDATIONLIST_HEADER" }]
-    
+
     [{if $rsslinks.recommlists}]
-        <a class="rss external" id="rss.recommlists" href="[{$rsslinks.recommlists.link}]" title="[{$rsslinks.recommlists.title}]">
+        <a class="rss external" id="rssRecommLists" href="[{$rsslinks.recommlists.link}]" title="[{$rsslinks.recommlists.title}]">
             <img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.recommlists.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.recommlists.title}]</span>
         </a>
     [{/if}]
@@ -14,10 +14,13 @@
     <div>
     [{ if $_oRecommendationList }]
         [{$_oRecommendationList->rewind()}]
-
         [{if $_oRecommendationList->current()}]
-               [{assign var="_oFirstRecommendationList" value=$_oRecommendationList->current()}]
-            [{include file="widget/product/boxtopproduct.tpl" _oBoxTopProduct=$_oFirstRecommendationList->getFirstArticle()}]
+            [{assign var="_oFirstRecommendationList" value=$_oRecommendationList->current()}]
+            [{assign var="_oBoxTopProduct" value=$_oFirstRecommendationList->getFirstArticle()}]
+            [{assign var="_sTitle" value="`$_oBoxTopProduct->oxarticles__oxtitle->value` `$_oBoxTopProduct->oxarticles__oxvarselect->value`"|strip_tags}]
+            <a href="[{$_oBoxTopProduct->getMainLink()}]" class="featured" title="[{$_sTitle}]">
+                <img src="[{$_oBoxTopProduct->getIconUrl()}]" alt="[{$_sTitle}]">
+            </a>
         [{/if}]
     [{/if}]
         <ul class="featuredList">
@@ -37,7 +40,7 @@
                         [{ $oViewConf->getHiddenSid() }]
                     </div>
                     <label class="onTop">[{ oxmultilang ident="WIDGET_RECOMMENDATIONLIST_SEARCHFORLISTS" }]</label>
-                    <input type="text" name="searchrecomm" id="searchrecomm" value="[{$oView->getRecommSearch()}]" class="searchInput">
+                    <input type="text" name="searchrecomm" id="searchRecomm" value="[{$oView->getRecommSearch()}]" class="searchInput">
                     <button class="submitButton largeButton" type="submit">[{ oxmultilang ident="WIDGET_RECOMMENDATIONLIST_SEARCHBUTTON" }]</button>
                 </form>
             </li>

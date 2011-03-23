@@ -692,7 +692,7 @@ $aLang = array(
 'WIDGET_TAGS_HEADER'                               => "Tags",
 'WIDGET_TAGS_LINKMORE'                             => "Weiter...",
 
-'WIDGET_LOCATOR_CHOOSE'                    => "Wälen",
+'WIDGET_LOCATOR_CHOOSE'                    => "Wählen",
 
 'BOX_TOPOFTHESHOP_HEADER'                          => "Top of the shop",
 

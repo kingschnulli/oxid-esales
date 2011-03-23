@@ -1,4 +1,4 @@
-<div id="minibasket" class="basketBox">
+<div id="miniBasket" class="basketBox">
 [{if $oxcmp_basket->getProductsCount()}]
     [{oxhasrights ident="TOBASKET"}]
     [{if $oxcmp_basket->getProductsCount() gte 8}]

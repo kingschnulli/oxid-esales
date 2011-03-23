@@ -177,8 +177,8 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->type("editval[oxaddress__oxfax]", "666999");
         $this->clickAndWait("save");
         //deleting addresses
-        $this->selectAndWait("oxaddressid", "-");
-        $this->selectAndWait("oxaddressid", "label=name2 last name 2, street2, city2");
+        $this->selectAndWait("addressId", "-");
+        $this->selectAndWait("addressId", "label=name2 last name 2, street2, city2");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("name2", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("last name 2", $this->getValue("editval[oxaddress__oxlname]"));
@@ -191,7 +191,7 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->assertEquals("Portugal", $this->getSelectedLabel("editval[oxaddress__oxcountryid]"));
         $this->assertEquals("999666", $this->getValue("editval[oxaddress__oxfon]"));
         $this->assertEquals("666999", $this->getValue("editval[oxaddress__oxfax]"));
-        $this->selectAndWait("oxaddressid", "label=shipping name_šųößлы shipping surname_šųößлы, shipping street_šųößлы, shipping city_šųößлы");
+        $this->selectAndWait("addressId", "label=shipping name_šųößлы shipping surname_šųößлы, shipping street_šųößлы, shipping city_šųößлы");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("shipping name_šųößлы", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("shipping surname_šųößлы", $this->getValue("editval[oxaddress__oxlname]"));
@@ -205,9 +205,9 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->assertEquals("7778788", $this->getValue("editval[oxaddress__oxfon]"));
         $this->assertEquals("8887877", $this->getValue("editval[oxaddress__oxfax]"));
         $this->clickAndWait("//input[@value='Delete']");
-        $this->assertTrue($this->isElementPresent("oxaddressid"), "Failed to delete address in Admin: Users -> Addresses tab");
-        $this->assertEquals("- name2 last name 2, street2, city2", $this->clearString($this->getText("oxaddressid")));
-        $this->selectAndWait("oxaddressid", "label=name2 last name 2, street2, city2");
+        $this->assertTrue($this->isElementPresent("addressId"), "Failed to delete address in Admin: Users -> Addresses tab");
+        $this->assertEquals("- name2 last name 2, street2, city2", $this->clearString($this->getText("addressId")));
+        $this->selectAndWait("addressId", "label=name2 last name 2, street2, city2");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("name2", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("last name 2", $this->getValue("editval[oxaddress__oxlname]"));
@@ -326,9 +326,9 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         //creating user
         $this->openShop();
         $this->clickAndWait("//ul[@id='topMenu']//a[text()='Register']");
-        $this->type("lgn_usr", "birute01@nfq.lt");
-        $this->type("lgn_pwd", "user11");
-        $this->type("lgn_pwd2", "user11");
+        $this->type("userLoginName", "birute01@nfq.lt");
+        $this->type("userPassword", "user11");
+        $this->type("userPasswordConfirm", "user11");
         $this->assertEquals("off", $this->getValue("//input[@name='blnewssubscribed' and @value='1']"));
       //  $this->uncheck("document.order.blnewssubscribed[1]");
         $this->type("invadr[oxuser__oxfname]", "user1 name_šųößлы");
@@ -351,9 +351,9 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         //TODO: is possibility to enter shipping address during registration is removed from azure?
         /*
         $this->clickAndWait("blshowshipaddress");
-        $this->assertEquals("birute01@nfq.lt", $this->getValue("test_lgn_usr"));
-        $this->assertEquals("", $this->getValue("test_lgn_pwd"));
-        $this->assertEquals("", $this->getValue("test_lgn_pwd2"));
+        $this->assertEquals("birute01@nfq.lt", $this->getValue("userLoginName"));
+        $this->assertEquals("", $this->getValue("userPassword"));
+        $this->assertEquals("", $this->getValue("userPasswordConfirm"));
         $this->assertEquals("off", $this->getValue("document.order.blnewssubscribed[1]"));
         $this->assertEquals("user1 name_šųößлы", $this->getValue("invadr[oxuser__oxfname]"));
         $this->assertEquals("user1 last name_šųößлы", $this->getValue("invadr[oxuser__oxlname]"));
@@ -372,8 +372,8 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->assertEquals("11", $this->getValue("invadr[oxuser__oxbirthdate][day]"));
         $this->assertEquals("11", $this->getValue("invadr[oxuser__oxbirthdate][month]"));
         $this->assertEquals("1981", $this->getValue("invadr[oxuser__oxbirthdate][year]"));
-        $this->type("test_lgn_pwd", "user11");
-        $this->type("test_lgn_pwd2", "user11");
+        $this->type("userPassword", "user11");
+        $this->type("userPasswordConfirm", "user11");
         $this->assertTrue($this->isVisible("deladr[oxaddress__oxfname]"));
         $this->type("deladr[oxaddress__oxfname]", "user1_2 name_šųößлы");
         $this->type("deladr[oxaddress__oxlname]", "user1_2 last name_šųößлы");
@@ -423,7 +423,7 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         /*
         $this->frame("list");
         $this->openTab("link=Addresses");
-        $this->selectAndWait("oxaddressid", "label=user1_2 name_šųößлы user1_2 last name_šųößлы, user1_2 street_šųößлы, user1_2 city_šųößлы");
+        $this->selectAndWait("addressId", "label=user1_2 name_šųößлы user1_2 last name_šųößлы, user1_2 street_šųößлы, user1_2 city_šųößлы");
         $this->assertEquals("Mr", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("user1_2 name_šųößлы", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("user1_2 last name_šųößлы", $this->getValue("editval[oxaddress__oxlname]"));
@@ -510,16 +510,16 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         //searching for 1 product (using product search field value)
         $this->searchFor("šųößлы1000");
         $this->assertEquals("You are here: / Search", $this->getText("breadCrumb"));
-        $this->assertTrue($this->isElementPresent("rss.searchArticles"));
+        $this->assertTrue($this->isElementPresent("rssSearchProducts"));
         $this->assertEquals("1 Hits for \"šųößлы1000\"", $this->getHeadingText("//h1"));
         $this->selectDropDown("viewOptions", "Line");
         $this->assertEquals("Test product 0 short desc [EN] šųößлы", $this->clearString($this->getText("//ul[@id='searchList']/li[1]//div[2]/div[2]")));
-        $this->assertEquals("50,00 € *", $this->clearString($this->getText("productPrice-searchList-1")));
+        $this->assertEquals("50,00 €", $this->clearString($this->getText("//ul[@id='searchList']/li[1]//strong[text()='50,00 €']")));
         $this->assertEquals("Test product 0 [EN] šųößлы", $this->clearString($this->getText("//ul[@id='searchList']/li[1]//div[2]//a")));
-        $this->assertEquals("0", $this->getText("//div[@id='minibasket']/span"));
-        $this->type("amountToBasket-searchList-1", "3");
-        $this->clickAndWait("toBasket-searchList-1");
-        $this->assertEquals("3", $this->getText("//div[@id='minibasket']/span"));
+        $this->assertEquals("0", $this->getText("//div[@id='miniBasket']/span"));
+        $this->type("amountToBasket_searchList_1", "3");
+        $this->clickAndWait("toBasket_searchList_1");
+        $this->assertEquals("3", $this->getText("//div[@id='miniBasket']/span"));
 
          //checking if all product links in relusts are working
 
@@ -563,14 +563,14 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->assertEquals("Personal Settings", $this->getText("//h1"));
 
         //entered diff new passwords
-        $this->type("password_old", "useruser");
+        $this->type("passwordOld", "useruser");
         $this->type("password_new", "user1user");
         $this->type("password_new_confirm", "useruser");
         $this->click("savePass");
         $this->waitForText("Passwords don't match!");
 
         //new pass is too short
-        $this->type("password_old", "useruser");
+        $this->type("passwordOld", "useruser");
         $this->type("password_new", "user");
         $this->type("password_new_confirm", "user");
         $this->click("savePass");
@@ -578,7 +578,7 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->waitForText("Passwords don't match!");
 
         //correct new pass
-        $this->type("password_old", "useruser");
+        $this->type("passwordOld", "useruser");
         $this->type("password_new", "user1userįÄк");
         $this->type("password_new_confirm", "user1userįÄк");
         $this->clickAndWait("savePass");
@@ -608,19 +608,19 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->searchFor("100");
                 $this->searchFor("100");
         $this->selectDropDown("viewOptions", "Line");
-        $this->select("sellist-searchList-2_0", "index=2");
-        $this->clickAndWait("toBasket-searchList-2");
+        $this->select("selList_searchList_2_0", "index=2");
+        $this->clickAndWait("toBasket_searchList_2");
 //TODO: remove when bug will be fixed
 $this->selectDropDown("viewOptions", "Line");
-        $this->select("varSelect-searchList-3", "index=1");
-        $this->clickAndWait("toBasket-searchList-3");
+        $this->select("varSelect-searchList_3", "index=1");
+        $this->clickAndWait("toBasket_searchList_3");
 //TODO: remove when bug will be fixed
 $this->selectDropDown("viewOptions", "Line");
-        $this->type("amountToBasket-searchList-4", "6");
-        $this->clickAndWait("toBasket-searchList-4");
+        $this->type("amountToBasket_searchList_4", "6");
+        $this->clickAndWait("toBasket_searchList_4");
 //TODO: remove when bug will be fixed
 $this->selectDropDown("viewOptions", "Line");
-        $this->clickAndWait("toBasket-searchList-1");
+        $this->clickAndWait("toBasket_searchList_1");
 
         $this->openBasket();
         $this->assertEquals("You are here: / View cart", $this->getText("breadCrumb"));
@@ -632,45 +632,45 @@ $this->selectDropDown("viewOptions", "Line");
         $this->type("voucherNr", "111111");
         $this->clickAndWait("//button[text()='Submit Coupon']");
         //Order Step1
-        $this->assertEquals("Test product 1 [EN] šųößлы", $this->getText("//tr[@id='cartItem-1']/td[3]//a"));
-        $this->assertEquals("Test product 2 [EN] šųößлы, var2 [EN] šųößлы", $this->getText("//tr[@id='cartItem-2']/td[3]//a"));
-        $this->assertEquals("Test product 3 [EN] šųößлы", $this->getText("//tr[@id='cartItem-3']/td[3]//a"));
-        $this->assertEquals("Test product 0 [EN] šųößлы", $this->getText("//tr[@id='cartItem-4']/td[3]//a"));
-        $this->assertEquals("Art.No.: 1001", $this->getText("//tr[@id='cartItem-1']/td[3]/div[2]"));
-        $this->assertEquals("Art.No.: 1002-2", $this->getText("//tr[@id='cartItem-2']/td[3]/div[2]"));
-        $this->assertEquals("Art.No.: 1003", $this->getText("//tr[@id='cartItem-3']/td[3]/div[2]"));
-        $this->assertEquals("Art.No.: 1000", $this->getText("//tr[@id='cartItem-4']/td[3]/div[2]"));
+        $this->assertEquals("Test product 1 [EN] šųößлы", $this->getText("//tr[@id='cartItem_1']/td[3]//a"));
+        $this->assertEquals("Test product 2 [EN] šųößлы, var2 [EN] šųößлы", $this->getText("//tr[@id='cartItem_2']/td[3]//a"));
+        $this->assertEquals("Test product 3 [EN] šųößлы", $this->getText("//tr[@id='cartItem_3']/td[3]//a"));
+        $this->assertEquals("Test product 0 [EN] šųößлы", $this->getText("//tr[@id='cartItem_4']/td[3]//a"));
+        $this->assertEquals("Art.No.: 1001", $this->getText("//tr[@id='cartItem_1']/td[3]/div[2]"));
+        $this->assertEquals("Art.No.: 1002-2", $this->getText("//tr[@id='cartItem_2']/td[3]/div[2]"));
+        $this->assertEquals("Art.No.: 1003", $this->getText("//tr[@id='cartItem_3']/td[3]/div[2]"));
+        $this->assertEquals("Art.No.: 1000", $this->getText("//tr[@id='cartItem_4']/td[3]/div[2]"));
         //testing product with selection list
-        $this->assertEquals("selvar3 [EN] įÄк -2,00 €", $this->getSelectedLabel("//tr[@id='cartItem-1']/td[3]//select"));
-        $this->assertEquals("98,00 €", $this->getText("//tr[@id='cartItem-1']/td[6]"));
-        $this->assertEquals("10%", $this->getText("//tr[@id='cartItem-1']/td[7]"));
-        $this->assertEquals("98,00 €", $this->getText("//tr[@id='cartItem-1']/td[8]"));
-        $this->select("//tr[@id='cartItem-1']/td[3]//select", "index=1");
+        $this->assertEquals("selvar3 [EN] įÄк -2,00 €", $this->getSelectedLabel("//tr[@id='cartItem_1']/td[3]//select"));
+        $this->assertEquals("98,00 €", $this->getText("//tr[@id='cartItem_1']/td[6]"));
+        $this->assertEquals("10%", $this->getText("//tr[@id='cartItem_1']/td[7]"));
+        $this->assertEquals("98,00 €", $this->getText("//tr[@id='cartItem_1']/td[8]"));
+        $this->select("//tr[@id='cartItem_1']/td[3]//select", "index=1");
         $this->clickAndWait("basketUpdate");
-        $this->assertEquals("100,00 €", $this->getText("//tr[@id='cartItem-1']/td[6]"));
-        $this->assertEquals("10%", $this->getText("//tr[@id='cartItem-1']/td[7]"));
-        $this->assertEquals("100,00 €", $this->getText("//tr[@id='cartItem-1']/td[8]"));
-        $this->select("//tr[@id='cartItem-1']/td[3]//select", "index=3");
+        $this->assertEquals("100,00 €", $this->getText("//tr[@id='cartItem_1']/td[6]"));
+        $this->assertEquals("10%", $this->getText("//tr[@id='cartItem_1']/td[7]"));
+        $this->assertEquals("100,00 €", $this->getText("//tr[@id='cartItem_1']/td[8]"));
+        $this->select("//tr[@id='cartItem_1']/td[3]//select", "index=3");
         $this->clickAndWait("basketUpdate");
-        $this->assertEquals("102,00 €", $this->getText("//tr[@id='cartItem-1']/td[6]"));
-        $this->assertEquals("10%", $this->getText("//tr[@id='cartItem-1']/td[7]"));
-        $this->assertEquals("102,00 €", $this->getText("//tr[@id='cartItem-1']/td[8]"));
-        $this->select("//tr[@id='cartItem-1']/td[3]//select", "index=0");
+        $this->assertEquals("102,00 €", $this->getText("//tr[@id='cartItem_1']/td[6]"));
+        $this->assertEquals("10%", $this->getText("//tr[@id='cartItem_1']/td[7]"));
+        $this->assertEquals("102,00 €", $this->getText("//tr[@id='cartItem_1']/td[8]"));
+        $this->select("//tr[@id='cartItem_1']/td[3]//select", "index=0");
         $this->clickAndWait("basketUpdate");
-        $this->assertEquals("101,00 €", $this->getText("//tr[@id='cartItem-1']/td[6]"));
-        $this->assertEquals("10%", $this->getText("//tr[@id='cartItem-1']/td[7]"));
-        $this->assertEquals("101,00 €", $this->getText("//tr[@id='cartItem-1']/td[8]"));
+        $this->assertEquals("101,00 €", $this->getText("//tr[@id='cartItem_1']/td[6]"));
+        $this->assertEquals("10%", $this->getText("//tr[@id='cartItem_1']/td[7]"));
+        $this->assertEquals("101,00 €", $this->getText("//tr[@id='cartItem_1']/td[8]"));
         //testing product with staffelpreis
-            $this->assertEquals("60,00 €", $this->getText("//tr[@id='cartItem-3']/td[6]"));
-            $this->assertEquals("19%", $this->getText("//tr[@id='cartItem-3']/td[7]"));
-            $this->assertEquals("360,00 €", $this->getText("//tr[@id='cartItem-3']/td[8]"));
-            $this->assertEquals("6", $this->getValue("am-3"));
-            $this->type("am-3", "1");
+            $this->assertEquals("60,00 €", $this->getText("//tr[@id='cartItem_3']/td[6]"));
+            $this->assertEquals("19%", $this->getText("//tr[@id='cartItem_3']/td[7]"));
+            $this->assertEquals("360,00 €", $this->getText("//tr[@id='cartItem_3']/td[8]"));
+            $this->assertEquals("6", $this->getValue("am_3"));
+            $this->type("am_3", "1");
             $this->clickAndWait("basketUpdate");
-            $this->assertEquals("75,00 €", $this->getText("//tr[@id='cartItem-3']/td[6]"));
-            $this->assertEquals("19%", $this->getText("//tr[@id='cartItem-3']/td[7]"));
-            $this->assertEquals("75,00 €", $this->getText("//tr[@id='cartItem-3']/td[8]"));
-            $this->type("am-3", "6");
+            $this->assertEquals("75,00 €", $this->getText("//tr[@id='cartItem_3']/td[6]"));
+            $this->assertEquals("19%", $this->getText("//tr[@id='cartItem_3']/td[7]"));
+            $this->assertEquals("75,00 €", $this->getText("//tr[@id='cartItem_3']/td[8]"));
+            $this->type("am_3", "6");
             $this->clickAndWait("basketUpdate");
 
         //discounts
@@ -693,8 +693,8 @@ $this->selectDropDown("viewOptions", "Line");
         $this->clickAndWait("//button[text()='Submit Coupon']");
 
         //removing few articles
-        $this->check("//tr[@id='cartItem-4']/td[1]//input");
-        $this->check("//tr[@id='cartItem-3']/td[1]//input");
+        $this->check("//tr[@id='cartItem_4']/td[1]//input");
+        $this->check("//tr[@id='cartItem_3']/td[1]//input");
         $this->clickAndWait("basketRemove");
 
         //basket calculation
@@ -737,30 +737,30 @@ $this->selectDropDown("viewOptions", "Line");
         $this->clickAndWait("//button[text()='Continue to Next Step']");
         //Order Step4
         //rights of withdrawal
-        $this->assertTrue($this->isElementPresent("//form[@id='orderConfirmAGBBottom']//a[text()='Terms and Conditions']"));
-        $this->assertTrue($this->isElementPresent("//form[@id='orderConfirmAGBBottom']//a[text()='Right to Cancel']"));
-        $this->assertTrue($this->isElementPresent("//form[@id='orderConfirmAGBTop']//a[text()='Terms and Conditions']"));
-        $this->assertTrue($this->isElementPresent("//form[@id='orderConfirmAGBTop']//a[text()='Right to Cancel']"));
+        $this->assertTrue($this->isElementPresent("//form[@id='orderConfirmAgbBottom']//a[text()='Terms and Conditions']"));
+        $this->assertTrue($this->isElementPresent("//form[@id='orderConfirmAgbBottom']//a[text()='Right to Cancel']"));
+        $this->assertTrue($this->isElementPresent("//form[@id='orderConfirmAgbTop']//a[text()='Terms and Conditions']"));
+        $this->assertTrue($this->isElementPresent("//form[@id='orderConfirmAgbTop']//a[text()='Right to Cancel']"));
         //testing links to products
-        $this->clickAndWait("//tr[@id='cartItem-1']/td/a");
+        $this->clickAndWait("//tr[@id='cartItem_1']/td/a");
         $this->assertEquals("Test product 1 [EN] šųößлы", $this->getText("//h1"));
         $this->openBasket();
         $this->clickAndWait("//button[text()='Continue to Next Step']");
         $this->clickAndWait("//button[text()='Continue to Next Step']");
         $this->clickAndWait("//button[text()='Continue to Next Step']");
 
-        $this->clickAndWait("//tr[@id='cartItem-2']/td[2]//a");
+        $this->clickAndWait("//tr[@id='cartItem_2']/td[2]//a");
         $this->assertEquals("Test product 2 [EN] šųößлы var2 [EN] šųößлы", $this->getText("//h1"));
         $this->openBasket();
         $this->clickAndWait("//button[text()='Continue to Next Step']");
         $this->clickAndWait("//button[text()='Continue to Next Step']");
         $this->clickAndWait("//button[text()='Continue to Next Step']");
         //submit without checkbox
-        $this->clickAndWait("//form[@id='orderConfirmAGBTop']//button");
+        $this->clickAndWait("//form[@id='orderConfirmAgbTop']//button");
         $this->assertTrue($this->isTextPresent("Please read and confirm our terms and conditions."));
         //successful submit
-        $this->check("//form[@id='orderConfirmAGBBottom']//input[@name='ord_agb' and @value='1']");
-        $this->clickAndWait("//form[@id='orderConfirmAGBBottom']//button");
+        $this->check("//form[@id='orderConfirmAgbBottom']//input[@name='ord_agb' and @value='1']");
+        $this->clickAndWait("//form[@id='orderConfirmAgbBottom']//button");
         //testing info in 5th page
         $this->assertEquals("You are here: / Order Completed", $this->getText("breadCrumb"));
         $this->assertTrue($this->isTextPresent("We registered your order under the number: 12"));
@@ -769,8 +769,8 @@ $this->selectDropDown("viewOptions", "Line");
         $this->clickAndWait("orderHistory");
         $this->assertEquals("You are here: / My Account / Order History", $this->getText("breadCrumb"));
         $this->assertEquals("Order History", $this->getText("//h1"));
-        $this->assertEquals("Test product 1 [EN] šųößлы test selection list [EN] šųößлы : selvar1 [EN] įÄк +1,00 € - 1 qty.", $this->clearString($this->getText("//tr[@id='accOrderAmount-12_1']/td")));
-        $this->assertEquals("Test product 2 [EN] šųößлы var2 [EN] šųößлы - 1 qty.", $this->clearString($this->getText("//tr[@id='accOrderAmount-12_2']/td")));
+        $this->assertEquals("Test product 1 [EN] šųößлы test selection list [EN] šųößлы : selvar1 [EN] įÄк +1,00 € - 1 qty.", $this->clearString($this->getText("//tr[@id='accOrderAmount_12_1']/td")));
+        $this->assertEquals("Test product 2 [EN] šųößлы var2 [EN] šųößлы - 1 qty.", $this->clearString($this->getText("//tr[@id='accOrderAmount_12_2']/td")));
      }
 
     /*

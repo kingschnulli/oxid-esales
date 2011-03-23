@@ -4,7 +4,7 @@
       <li class="label ox-select">
         <span>[{ $oList.name }]:</span>
         <a class="ox-select-link" href="#sel-[{$iSel}]">[{ $oFirstSelItem->name }]</a>
-        <select id="sellist_[{$oDetailsProduct->oxarticles__oxid->value}]_[{$iSel}]" name="sel[[{$iSel}]]">
+        <select id="selectList_[{$oDetailsProduct->oxarticles__oxid->value}]_[{$iSel}]" name="sel[[{$iSel}]]">
             [{foreach key=iSelIdx from=$oList item=oSelItem}]
               [{ if $oSelItem->name }]
                 <option value="[{$iSelIdx}]">[{ $oSelItem->name }]</option>

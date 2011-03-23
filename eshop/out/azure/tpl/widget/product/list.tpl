@@ -13,7 +13,7 @@
 [{if $products|@count gt 0}]
     <ul class="[{$type}]View clear" id="[{$listId}]">
         [{foreach from=$products item=_product name=productlist}]
-            <li>[{include file="widget/product/listitem.tpl" type=$type product=$_product testid=$listId|cat:"-"|cat:$smarty.foreach.productlist.iteration}]</li>
+            <li>[{include file="widget/product/listitem.tpl" type=$type product=$_product testid=$listId|cat:"_"|cat:$smarty.foreach.productlist.iteration}]</li>
         [{/foreach}]
-	</ul>
+    </ul>
 [{/if}]

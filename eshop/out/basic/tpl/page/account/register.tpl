@@ -18,7 +18,7 @@
         <input type="hidden" name="fnc" value="registeruser">
         <input type="hidden" name="cl" value="register">
         <input type="hidden" name="lgn_cook" value="0">
-        <input type="hidden" id="reloadaddress" name="reloadaddress" value="">
+        <input type="hidden" id="reloadAddress" name="reloadaddress" value="">
         <input type="hidden" name="option" value="3">
         <table class="form" width="100%">
             <colgroup>
@@ -34,11 +34,11 @@
             </tr>
             <tr>
                 <td><label>[{ oxmultilang ident="REGISTER_PWD" }]</label></td>
-                <td><input id="test_lgn_pwd" type="password" name="lgn_pwd" value="[{$lgn_pwd}]" size="37"> <span class="req">*</span></td>
+                <td><input id="userPassword" type="password" name="lgn_pwd" value="[{$lgn_pwd}]" size="37"> <span class="req">*</span></td>
             </tr>
             <tr>
                 <td><label>[{ oxmultilang ident="REGISTER_CONFIRMPWD" }]</label></td>
-                <td><input id="test_lgn_pwd2" type="password" name="lgn_pwd2" value="[{$lgn_pwd2}]" size="37"> <span class="req">*</span></td>
+                <td><input id="userPasswordConfirm" type="password" name="lgn_pwd2" value="[{$lgn_pwd2}]" size="37"> <span class="req">*</span></td>
             </tr>
             <tr class="td_sep">
                 <td><label>[{ oxmultilang ident="REGISTER_NEWSLETTER" }]</label></td>
@@ -115,7 +115,7 @@
             <tr>
                 <td><label>[{ oxmultilang ident="REGISTER_COUNTRY" }]</label></td>
                 <td>
-                    <select id="inv_country_select" name="invadr[oxuser__oxcountryid]" >
+                    <select id="invCountrySelect" name="invadr[oxuser__oxcountryid]" >
                         <option value="">-</option>
                         [{foreach from=$oView->getCountryList() item=country key=country_id}]
                           <option value="[{$country->oxcountry__oxid->value}]"[{if isset( $invadr.oxuser__oxcountryid ) && $invadr.oxuser__oxcountryid == $country->oxcountry__oxid->value}] selected[{elseif $oxcmp_user->oxuser__oxcountryid->value == $country->oxcountry__oxid->value}] selected[{/if}]>[{$country->oxcountry__oxtitle->value}]</option>
@@ -128,7 +128,7 @@
                 <td></td>
                 <td>
                     [{include file="inc/state_selector.snippet.tpl"
-                        countrySelectId="inv_country_select"
+                        countrySelectId="invCountrySelect"
                         stateSelectName="invadr[oxuser__oxstateid]"
                         selectedStateIdPrim=$invadr.oxuser__oxstateid
                         selectedStateId=$oxcmp_user->oxuser__oxstateid->value
@@ -183,7 +183,7 @@
             <tr>
                 <td><label>[{ oxmultilang ident="REGISTER_ADDRESSES" }]</label></td>
                 <td>
-                    <select name="oxaddressid" onchange="oxid.form.set('reloadaddress', this.value === '-1' ? 1 : 2);oxid.form.reload(this.value === '-1','order','user','');oxid.form.clear(this.value !== '-1','order',/oxaddress__/);">
+                    <select name="oxaddressid" onchange="oxid.form.set('reloadAddress', this.value === '-1' ? 1 : 2);oxid.form.reload(this.value === '-1','order','user','');oxid.form.clear(this.value !== '-1','order',/oxaddress__/);">
                         <option value="-1" SELECTED>[{ oxmultilang ident="REGISTER_NEWADDRESSES" }]</option>
                         [{if $oxcmp_user }]
                             [{foreach from=$oxcmp_user->getUserAddresses() item=address}]

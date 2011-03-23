@@ -177,8 +177,8 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->type("editval[oxaddress__oxfax]", "666999");
         $this->clickAndWait("save");
         //deleting addresses
-        $this->selectAndWait("oxaddressid", "-");
-        $this->selectAndWait("oxaddressid", "label=name2 last name 2, street2, city2");
+        $this->selectAndWait("addressId", "-");
+        $this->selectAndWait("addressId", "label=name2 last name 2, street2, city2");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("name2", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("last name 2", $this->getValue("editval[oxaddress__oxlname]"));
@@ -191,7 +191,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertEquals("Portugal", $this->getSelectedLabel("editval[oxaddress__oxcountryid]"));
         $this->assertEquals("999666", $this->getValue("editval[oxaddress__oxfon]"));
         $this->assertEquals("666999", $this->getValue("editval[oxaddress__oxfax]"));
-        $this->selectAndWait("oxaddressid", "label=shipping name_šųößлы shipping surname_šųößлы, shipping street_šųößлы, shipping city_šųößлы");
+        $this->selectAndWait("addressId", "label=shipping name_šųößлы shipping surname_šųößлы, shipping street_šųößлы, shipping city_šųößлы");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("shipping name_šųößлы", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("shipping surname_šųößлы", $this->getValue("editval[oxaddress__oxlname]"));
@@ -205,9 +205,9 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertEquals("7778788", $this->getValue("editval[oxaddress__oxfon]"));
         $this->assertEquals("8887877", $this->getValue("editval[oxaddress__oxfax]"));
         $this->clickAndWait("//input[@value='Delete']");
-        $this->assertTrue($this->isElementPresent("oxaddressid"), "Failed to delete address in Admin: Users -> Addresses tab");
-        $this->assertEquals("- name2 last name 2, street2, city2", $this->clearString($this->getText("oxaddressid")));
-        $this->selectAndWait("oxaddressid", "label=name2 last name 2, street2, city2");
+        $this->assertTrue($this->isElementPresent("addressId"), "Failed to delete address in Admin: Users -> Addresses tab");
+        $this->assertEquals("- name2 last name 2, street2, city2", $this->clearString($this->getText("addressId")));
+        $this->selectAndWait("addressId", "label=name2 last name 2, street2, city2");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("name2", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("last name 2", $this->getValue("editval[oxaddress__oxlname]"));
@@ -327,9 +327,9 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         //creating user
         $this->openShop();
         $this->clickAndWait("test_RightLogin_Register");
-        $this->type("test_lgn_usr", "birute01@nfq.lt");
-        $this->type("test_lgn_pwd", "user11");
-        $this->type("test_lgn_pwd2", "user11");
+        $this->type("userLoginName", "birute01@nfq.lt");
+        $this->type("userPassword", "user11");
+        $this->type("userPasswordConfirm", "user11");
         $this->assertEquals("off", $this->getValue("document.order.blnewssubscribed[1]"));
         $this->uncheck("document.order.blnewssubscribed[1]");
         $this->type("invadr[oxuser__oxfname]", "user1 name_šųößлы");
@@ -350,10 +350,10 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->type("invadr[oxuser__oxbirthdate][month]", "11");
         $this->type("invadr[oxuser__oxbirthdate][year]", "1981");
         $this->clickAndWait("blshowshipaddress");
-        $this->assertTrue($this->isElementPresent("test_lgn_usr"), "form fields for delivery address is not shown");
-        $this->assertEquals("birute01@nfq.lt", $this->getValue("test_lgn_usr"));
-        $this->assertEquals("", $this->getValue("test_lgn_pwd"));
-        $this->assertEquals("", $this->getValue("test_lgn_pwd2"));
+        $this->assertTrue($this->isElementPresent("userLoginName"), "form fields for delivery address is not shown");
+        $this->assertEquals("birute01@nfq.lt", $this->getValue("userLoginName"));
+        $this->assertEquals("", $this->getValue("userPassword"));
+        $this->assertEquals("", $this->getValue("userPasswordConfirm"));
         $this->assertEquals("off", $this->getValue("document.order.blnewssubscribed[1]"));
         $this->assertEquals("user1 name_šųößлы", $this->getValue("invadr[oxuser__oxfname]"));
         $this->assertEquals("user1 last name_šųößлы", $this->getValue("invadr[oxuser__oxlname]"));
@@ -372,8 +372,8 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertEquals("11", $this->getValue("invadr[oxuser__oxbirthdate][day]"));
         $this->assertEquals("11", $this->getValue("invadr[oxuser__oxbirthdate][month]"));
         $this->assertEquals("1981", $this->getValue("invadr[oxuser__oxbirthdate][year]"));
-        $this->type("test_lgn_pwd", "user11");
-        $this->type("test_lgn_pwd2", "user11");
+        $this->type("userPassword", "user11");
+        $this->type("userPasswordConfirm", "user11");
         $this->assertTrue($this->isVisible("deladr[oxaddress__oxfname]"));
         $this->type("deladr[oxaddress__oxfname]", "user1_2 name_šųößлы");
         $this->type("deladr[oxaddress__oxlname]", "user1_2 last name_šųößлы");
@@ -418,7 +418,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertEquals("111-111111", $this->getValue("editval[oxuser__oxmobfon]"));
         $this->frame("list");
         $this->openTab("link=Addresses");
-        $this->selectAndWait("oxaddressid", "label=user1_2 name_šųößлы user1_2 last name_šųößлы, user1_2 street_šųößлы, user1_2 city_šųößлы");
+        $this->selectAndWait("addressId", "label=user1_2 name_šųößлы user1_2 last name_šųößлы, user1_2 street_šųößлы, user1_2 city_šųößлы");
         $this->assertEquals("Mr", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("user1_2 name_šųößлы", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("user1_2 last name_šųößлы", $this->getValue("editval[oxaddress__oxlname]"));
@@ -530,7 +530,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->type("//input[@id='f.search.param']", "šųößлы1000");
         $this->clickAndWait("test_searchGo");
         $this->assertEquals("You are here: / Search", $this->getText("path"));
-        $this->assertTrue($this->isElementPresent("//a[@id='rss.searchArticles']"));
+        $this->assertTrue($this->isElementPresent("//a[@id='rssSearchProducts']"));
         $this->assertEquals("1 Hits for \"šųößлы1000\"", $this->getText("test_smallHeader"));
         $this->assertEquals("2 kg | 25,00 €/kg", $this->getText("test_no_Search_1000"));
         $this->assertEquals("Test product 0 short desc [EN] šųößлы", $this->getText("test_shortDesc_Search_1000"));
@@ -666,19 +666,19 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertTrue($this->isTextPresent("Change Password"));
         $this->assertTrue($this->isTextPresent("Note:The Password minimum length is 6 characters."));
         //entered diff new passwords
-        $this->type("password_old", "useruser");
+        $this->type("passwordOld", "useruser");
         $this->type("password_new", "user1user");
         $this->type("password_new_confirm", "useruser");
         $this->clickAndWait("test_savePass");
         $this->assertTrue($this->isTextPresent("Error: Passwords don't match."));
         //new pass is too short
-        $this->type("password_old", "useruser");
+        $this->type("passwordOld", "useruser");
         $this->type("password_new", "user");
         $this->type("password_new_confirm", "user");
         $this->clickAndWait("test_savePass");
         $this->assertTrue($this->isTextPresent("Error: Your Password is too short."));
         //correct new pass
-        $this->type("password_old", "useruser");
+        $this->type("passwordOld", "useruser");
         $this->type("password_new", "user1userįÄк");
         $this->type("password_new_confirm", "user1userįÄк");
         $this->clickAndWait("test_savePass");
@@ -707,9 +707,9 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         //adding products to the basket
         $this->type("//input[@id='f.search.param']", "100");
         $this->clickAndWait("test_searchGo");
-        $this->select("test_sellist_Search_1001_0", "index=2");
+        $this->select("selectList_Search_1001_0", "index=2");
         $this->clickAndWait("test_toBasket_Search_1001");
-        $this->select("test_varSelect_Search_1002", "index=1");
+        $this->select("varSelect-Search_1002", "index=1");
         $this->clickAndWait("test_toBasket_Search_1002");
         $this->type("test_am_Search_1003", "6");
         $this->clickAndWait("test_toBasket_Search_1003");
@@ -781,9 +781,9 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         //adding products to the basket
         $this->type("//input[@id='f.search.param']", "100");
         $this->clickAndWait("test_searchGo");
-        $this->select("test_sellist_Search_1001_0", "index=0");
+        $this->select("selectList_Search_1001_0", "index=0");
         $this->clickAndWait("test_toBasket_Search_1001");
-        $this->select("test_varSelect_Search_1002", "index=1");
+        $this->select("varSelect-Search_1002", "index=1");
         $this->clickAndWait("test_toBasket_Search_1002");
         $this->clickAndWait("link=Cart");
         $this->type("test_RightLogin_Email", "birute_test@nfq.lt");
@@ -823,7 +823,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->clickAndWait("test_orderChangeShipAdress");
         $this->assertEquals("You are here: / Login", $this->getText("path"));
         $this->clickAndWait("blshowshipaddress");
-        $this->select("oxaddressid", "label=New Address");
+        $this->select("addressId", "label=New Address");
         sleep(1);
         $this->checkForErrors();
         $this->type("deladr[oxaddress__oxfname]", "firstįÄк");

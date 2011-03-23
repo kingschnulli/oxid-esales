@@ -42,12 +42,12 @@
         [{assign var="aZoomPics" value=$oView->getZoomPics() }]
         [{assign var="iZoomPic" value=$oView->getActZoomPic() }]
         [{assign var="sZoomPopup" value="inc/popup_zoom.tpl" }]
-        <a id="test_zoom" rel="nofollow" href="[{$product->getMoreDetailLink()}]" onmouseover="" onclick="oxid.popup.zoom();oxid.image('zoom_img','[{$aZoomPics[$iZoomPic].file}]');return false;"><b>[{ oxmultilang ident="DETAILS_ZOOM" }]</b></a>
+        <a id="test_zoom" rel="nofollow" href="[{$product->getMoreDetailLink()}]" onmouseover="" onclick="oxid.popup.zoom();oxid.image('zoomImg','[{$aZoomPics[$iZoomPic].file}]');return false;"><b>[{ oxmultilang ident="DETAILS_ZOOM" }]</b></a>
     [{/if}]
 
     [{if $product->oxarticles__oxfile->value}]
-        <a id="product_file" href="[{$product->getFileUrl()}][{ $product->oxarticles__oxfile->value }]"><b>[>] [{ $product->oxarticles__oxfile->value }]</b></a>
-        [{oxscript add="oxid.blank('product_file');"}]
+        <a id="productFile" href="[{$product->getFileUrl()}][{ $product->oxarticles__oxfile->value }]"><b>[>] [{ $product->oxarticles__oxfile->value }]</b></a>
+        [{oxscript add="oxid.blank('productFile');"}]
     [{/if}]
 
     [{if $product->oxarticles__oxexturl->value}]
@@ -206,7 +206,7 @@
     [{/if}]
 
     [{if $product->oxarticles__oxweight->value }]
-    <div id="test_product_weight" class="pperunit">
+    <div id="productWeight" class="pperunit">
         ([{ oxmultilang ident="DETAILS_ARTWEIGHT" }] [{$product->oxarticles__oxweight->value}] [{ oxmultilang ident="DETAILS_ARTWEIGHTUNIT" }])
     </div>
     [{/if}]
@@ -284,14 +284,14 @@
         [{ /if}]
 
         [{if $oxcmp_user }]
-            <a id="slist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`&amp;fnc=tonoticelist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_ADDTONOTICELIST" }]</a>
+            <a id="linkToNoticeList" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`&amp;fnc=tonoticelist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_ADDTONOTICELIST" }]</a>
         [{else}]
             <a id="test_LoginToNotice" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_LOGGINTOACCESSNOTICELIST" }]</a>
         [{/if}]
 
         [{if $oViewConf->getShowWishlist()}]
             [{if $oxcmp_user }]
-                <a id="wlist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&anid=`$product->oxarticles__oxnid->value`&amp;fnc=towishlist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_ADDTOWISHLIST" }]</a>
+                <a id="linkToWishList" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&anid=`$product->oxarticles__oxnid->value`&amp;fnc=towishlist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_ADDTOWISHLIST" }]</a>
             [{else}]
                 <a id="test_LoginToWish" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$product->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="DETAILS_LOGGINTOACCESSWISHLIST" }]</a>
             [{/if}]

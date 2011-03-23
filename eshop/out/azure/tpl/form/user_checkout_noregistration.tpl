@@ -10,7 +10,7 @@
 <input type="hidden" name="fnc" value="changeuser">
 <input type="hidden" name="lgn_cook" value="0">
 [{/if}]
-<input type="hidden" id="reloadaddress" name="reloadaddress" value="">
+<input type="hidden" id="reloadAddress" name="reloadaddress" value="">
 <input type="hidden" name="blshowshipaddress" value="1">
 
 <div class="lineBox clear">

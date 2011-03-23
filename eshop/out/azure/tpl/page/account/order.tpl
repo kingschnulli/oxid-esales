@@ -12,12 +12,12 @@
         <td valign="top">
     <dl>
         <dt title="[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_DATE" }]">
-            <strong id="accOrderDate-[{$order->oxorder__oxordernr->value}]">[{ $order->oxorder__oxorderdate->value|date_format:"%B %e, %Y" }]</strong>
+            <strong id="accOrderDate_[{$order->oxorder__oxordernr->value}]">[{ $order->oxorder__oxorderdate->value|date_format:"%B %e, %Y" }]</strong>
             <span>[{ $order->oxorder__oxorderdate->value|date_format:"%H:%M:%S" }]</span>
         </dt>
         <dd>
             <strong>[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_STATUS" }]</strong>
-            <span id="accOrderStatus-[{$order->oxorder__oxordernr->value}]">
+            <span id="accOrderStatus_[{$order->oxorder__oxordernr->value}]">
             [{if $order->oxorder__oxstorno->value}]
                 <span class="note">[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_STORNO" }]</span>
             [{elseif $order->oxorder__oxsenddate->value !="-" }]
@@ -29,19 +29,19 @@
         </dd>
         <dd>
             <strong>[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_ORDERNO" }]</strong>
-            <span id="accOrderNo-[{$order->oxorder__oxordernr->value}]">[{ $order->oxorder__oxordernr->value }]</span>
+            <span id="accOrderNo_[{$order->oxorder__oxordernr->value}]">[{ $order->oxorder__oxordernr->value }]</span>
         </dd>
         [{if $order->oxorder__oxtrackcode->value }]
         <dd>
             <strong>[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_TRACKINGID" }]</strong>
-            <span id="accOrderTrack-[{$order->oxorder__oxordernr->value}]">
+            <span id="accOrderTrack_[{$order->oxorder__oxordernr->value}]">
                 <a href="http://www.dpd.de/cgi-bin/delistrack?typ=1&amp;lang=de&amp;pknr=[{ $order->oxorder__oxtrackcode->value }]">[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_TRACKSHIPMENT" }]</a>
             </span>
         </dd>
         [{/if }]
         <dd>
             <strong>[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_SHIPMENTTO" }]</strong>
-            <span id="accOrderName-[{$order->oxorder__oxordernr->value}]">
+            <span id="accOrderName_[{$order->oxorder__oxordernr->value}]">
             [{if $order->oxorder__oxdellname->value }]
                 [{ $order->oxorder__oxdelfname->value }]
                 [{ $order->oxorder__oxdellname->value }]
@@ -66,30 +66,30 @@
             [{foreach from=$order->getOrderArticles() item=orderitem name=testOrderItem}]
                 [{assign var=sArticleId value=$orderitem->oxorderarticles__oxartid->value }]
                 [{assign var=oArticle value=$oArticleList[$sArticleId] }]
-            <tr id="accOrderAmount-[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]">
-              <td> 
+            <tr id="accOrderAmount_[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]">
+              <td>
                 [{ if $oArticle->oxarticles__oxid->value && $oArticle->isVisible() }]
-                <a  id="accOrderLink-[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]" href="[{ $oArticle->getLink() }]" class="artlink">
+                <a  id="accOrderLink_[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]" href="[{ $oArticle->getLink() }]" class="artlink">
                 [{/if }]
-                
+
                 [{ $orderitem->oxorderarticles__oxtitle->value }] [{ $orderitem->oxorderarticles__oxselvariant->value }] <span class="amount"> - [{ $orderitem->oxorderarticles__oxamount->value }] [{oxmultilang ident="PAGE_ACCOUNT_ORDERHISTORY_QNT"}]</span>
-                
+
                 [{ if $oArticle->oxarticles__oxid->value && $oArticle->isVisible() }]</a>[{/if }]
 
                 [{foreach key=sVar from=$orderitem->getPersParams() item=aParam}]
-                	[{if $aParam }]
+                    [{if $aParam }]
                     <br />[{ oxmultilang ident="ORDER_DETAILS" }]: [{$aParam}]
                     [{/if }]
                 [{/foreach}]
 
-			</td>
+            </td>
               <td align="right">
                 [{* Commented due to Trusted Shops precertification. Enable if needed *}]
                 [{*
                 [{oxhasrights ident="TOBASKET"}]
                 [{if $oArticle->isBuyable() }]
                   [{if $oArticle->oxarticles__oxid->value }]
-                    <a id="accOrderToBasket-[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_order" params="fnc=tobasket&amp;aid=`$oArticle->oxarticles__oxid->value`&amp;am=1" }]" class="tocart" rel="nofollow"></a>
+                    <a id="accOrderToBasket_[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_order" params="fnc=tobasket&amp;aid=`$oArticle->oxarticles__oxid->value`&amp;am=1" }]" class="tocart" rel="nofollow"></a>
                   [{/if }]
                 [{/if }]
                 [{/oxhasrights}]
@@ -114,6 +114,6 @@
 
 
 [{capture append="oxidBlock_sidebar"}]
-	[{include file="page/account/inc/account_menu.tpl" active_link="orderhistory"}]
+    [{include file="page/account/inc/account_menu.tpl" active_link="orderhistory"}]
 [{/capture}]
 [{include file="layout/page.tpl" sidebar="Left"}]

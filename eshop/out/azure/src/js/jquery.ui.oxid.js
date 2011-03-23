@@ -1269,7 +1269,7 @@
             browserIE        : "msie",
             propertyHeight  : "height",
             classFirstCol     : ".firstCol",
-            idDataTable     : "#data_div",
+            idDataTable     : "#compareDataDiv",
             elementTd         : "td",
             idFirstTr         : "#firstTr"
         },
@@ -1390,8 +1390,8 @@
     oxRating = {
         options: {
             reviewButton        : "writeNewReview",
-            articleRatingValue    : "artrating",
-            listManiaRatingValue: "recommlistrating",
+            articleRatingValue    : "productRating",
+            listManiaRatingValue: "recommListRating",
             currentRating        : "reviewCurrentRating",
             reviewForm             : "writeReview",
             reviewDiv             : "review",
@@ -1485,6 +1485,37 @@
      */
     $.widget("ui.oxRating", oxRating );
 
+
+    oxArticleBox = {
+
+        _create: function(){
+
+            //hide all
+            $('.articleImage').hide();
+
+            //open first
+            $('.articleImage:first').show();
+            $('.articleImage:first').addClass('showImage');
+
+            $('.articleTitle').mouseover(function() {
+
+                //if not opened
+                if ($(this).prev().is(':hidden') == true) {
+
+                    //closing opened
+                    $('.articleTitle').removeClass('titleOn');
+                    $('.showImage').slideUp('normal');
+
+                    //obening selected
+                    $(this).addClass('titleOn');
+                    $(this).prev().addClass('showImage')
+                    $(this).prev().slideDown('normal');
+                }
+            });
+        }
+    }
+
+    $.widget( "ui.oxArticleBox", oxArticleBox );
 
     /**
      * Tree navigation

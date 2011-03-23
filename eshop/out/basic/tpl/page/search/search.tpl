@@ -16,8 +16,8 @@
     [{assign var="search_head" value=$oView->getArticleCount()|cat:" "|cat:$search_head|cat:" &quot;"|cat:$oView->getSearchParamForHtml()|cat:"&quot;"}]
 
     [{if $rsslinks.searchArticles}]
-        [{assign var="search_head" value="`$search_head` <a class=\"rss\" id=\"rss.searchArticles\" href=\"`$rsslinks.searchArticles.link`\" title=\"`$rsslinks.searchArticles.title`\"></a>"}]
-        [{oxscript add="oxid.blank('rss.searchArticles');"}]
+        [{assign var="search_head" value="`$search_head` <a class=\"rss\" id=\"rssSearchProducts\" href=\"`$rsslinks.searchArticles.link`\" title=\"`$rsslinks.searchArticles.title`\"></a>"}]
+        [{oxscript add="oxid.blank('rssSearchProducts');"}]
     [{/if}]
 
     [{foreach from=$oView->getArticleList() name=search item=product}]

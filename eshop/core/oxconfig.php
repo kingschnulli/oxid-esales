@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 33133 2011-02-10 10:32:59Z arvydas.vapsva $
+ * @version   SVN: $Id: oxconfig.php 33878 2011-03-22 11:41:42Z sarunas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -403,6 +403,10 @@ class oxConfig extends oxSuperCfg
             // load now
             $this->_loadVarsFromDb( $sShopID );
             $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_THEME_PREFIX . $this->getConfigParam('sTheme') );
+            $sCustomTheme = $this->getConfigParam('sCustomTheme');
+            if ($sCustomTheme) {
+                $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_THEME_PREFIX . $sCustomTheme );
+            }
 
 
             //starting up the session

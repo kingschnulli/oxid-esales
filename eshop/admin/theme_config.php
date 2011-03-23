@@ -105,12 +105,16 @@ class Theme_Config extends Shop_Config
      */
     protected function _getTemplateOptionsLanguageFile()
     {
-        $sFile = $this->getConfig()->getLanguagePath(
-            "theme_options.php",
-            false,
-            oxLang::getInstance()->getTplLanguage(),
-            null,
-            $this->_sTheme
+        $iLang = oxLang::getInstance()->getTplLanguage();
+        $sFile = $this->getConfig()->getDir(
+                "theme_options.php",
+                oxLang::getInstance()->getLanguageAbbr( $iLang ),
+                false,
+                $iLang,
+                null,
+                $this->_sTheme,
+                true,
+                true
         );
         if (!$sFile) {
             $oErr = new oxFileException('EXCEPTION_FILENOTFOUND');

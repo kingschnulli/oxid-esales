@@ -85,7 +85,7 @@
           <tr>
             <td><label>[{ oxmultilang ident="ACCOUNT_USER_COUNTRY" }]</label></td>
             <td>
-              <select id="inv_country_select" name="invadr[oxuser__oxcountryid]">
+              <select id="invCountrySelect" name="invadr[oxuser__oxcountryid]">
                 <option value="">-</option>
                 [{foreach from=$oView->getCountryList() item=country key=country_id }]
                   <option value="[{ $country->oxcountry__oxid->value }]"  [{if $oxcmp_user->oxuser__oxcountryid->value == $country->oxcountry__oxid->value }]selected[{/if }]>[{ $country->oxcountry__oxtitle->value }]</option>
@@ -98,7 +98,7 @@
             <td></td>
             <td>
               [{include file="inc/state_selector.snippet.tpl"
-                        countrySelectId="inv_country_select"
+                        countrySelectId="invCountrySelect"
                         stateSelectName="invadr[oxuser__oxstateid]"
                         selectedStateIdPrim=$invadr.oxuser__oxstateid
                         selectedStateId=$oxcmp_user->oxuser__oxstateid->value
@@ -230,7 +230,7 @@
           <tr>
             <td><label>[{ oxmultilang ident="ACCOUNT_USER_COUNTRY2" }]</label></td>
             <td>
-              <select id="del_country_select" name="deladr[oxaddress__oxcountryid]">
+              <select id="delCountrySelect" name="deladr[oxaddress__oxcountryid]">
                 <option value="">-</option>
                 [{foreach from=$oView->getCountryList() item=country key=country_id }]
                   <option value="[{ $country->oxcountry__oxid->value }]" [{if isset( $deladr.oxaddress__oxcountryid ) && $deladr.oxaddress__oxcountryid == $country->oxcountry__oxid->value }]selected[{elseif $delivadr->oxaddress__oxcountry->value == $country->oxcountry__oxtitle->value or $delivadr->oxaddress__oxcountry->value == $country->oxcountry__oxid->value or $delivadr->oxaddress__oxcountryid->value == $country->oxcountry__oxid->value }]selected[{/if }]>[{ $country->oxcountry__oxtitle->value }]</option>
@@ -243,7 +243,7 @@
             <td></td>
             <td>
               [{include file="inc/state_selector.snippet.tpl"
-                        countrySelectId="del_country_select"
+                        countrySelectId="delCountrySelect"
                         stateSelectName="deladr[oxaddress__oxstateid]"
                         selectedStateIdPrim=$deladr.oxaddress__oxstateid
                         selectedStateId=$delivadr->oxaddress__oxstateid->value

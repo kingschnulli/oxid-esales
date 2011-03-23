@@ -16,7 +16,7 @@
         <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
         <input type="hidden" name="aid" value="[{$oDetailsProduct->oxarticles__oxid->value}]">
         <input type="hidden" name="anid" value="[{$oDetailsProduct->oxarticles__oxnid->value}]">
-        <input type="hidden" id="tags.input" name="highTags">
+        <input type="hidden" id="tagsInput" name="highTags">
         <input type="hidden" name="fnc" value="addTags">
         <label for="newTags">[{oxmultilang ident="PAGE_DETAILS_TAGS_ADD"}]</label>
         <input class="input" type="text" name="newTags" id="newTags">

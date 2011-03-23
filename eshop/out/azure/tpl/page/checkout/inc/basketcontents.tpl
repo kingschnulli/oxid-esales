@@ -39,7 +39,7 @@
         [{assign var="basketitemlist" value=$oView->getBasketArticles() }]
         [{foreach key=basketindex from=$oxcmp_basket->getContents() item=basketitem name=basketContents}]
             [{assign var="basketproduct" value=$basketitemlist.$basketindex }]
-            <tr id="cartItem-[{$smarty.foreach.basketContents.iteration}]">
+            <tr id="cartItem_[{$smarty.foreach.basketContents.iteration}]">
                 [{if $editable }]
                     <td class="checkbox">
                         <input type="checkbox" name="aproducts[[{ $basketindex }]][remove]" value="1">
@@ -120,7 +120,7 @@
                                 <p><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> <input class="textbox persParam" type="text" name="aproducts[[{ $basketindex }]][persparam][[{ $sVar }]]" value="[{ $aParam }]"></p>
                             [{/foreach }]
                             <p>
-                                <input id="am-[{$smarty.foreach.basketContents.iteration}]" type="text" class="textbox" name="aproducts[[{ $basketindex }]][am]" value="[{ $basketitem->getAmount() }]" size="2">
+                                <input id="am_[{$smarty.foreach.basketContents.iteration}]" type="text" class="textbox" name="aproducts[[{ $basketindex }]][am]" value="[{ $basketitem->getAmount() }]" size="2">
                             </p>
                         [{/if}]
                     [{else}]

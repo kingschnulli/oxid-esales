@@ -1,7 +1,7 @@
      <input type="hidden" id="passwordLength" value="[{$oViewConf->getPasswordLength()}]">
     <li [{if $aErrors}]class="oxError"[{/if}]>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_ACCOUNT_EMAIL" }]<span class="req">*</span></label>
-        <input id="lgn_usr" class="oxValidate oxValidate_notEmpty oxValidate_email" type="text" name="lgn_usr" value="[{ $oView->getActiveUsername() }]" size="37" >
+        <input id="userLoginName" class="oxValidate oxValidate_notEmpty oxValidate_email" type="text" name="lgn_usr" value="[{ $oView->getActiveUsername() }]" size="37" >
         <p class="oxValidateError">
             <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             <span class="oxError_email">[{ oxmultilang ident="EXCEPTION_INPUT_NOVALIDEMAIL" }]</span>

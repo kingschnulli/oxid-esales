@@ -14,10 +14,12 @@
                   [{oxhasrights ident="SHOWARTICLEPRICE"}]
                   [{if $_product->getFPrice()}]
                     [{assign var="currency" value=$oView->getActCurrency() }]
-                       <span class="priceValue">[{ $_product->getFPrice() }] [{ $currency->sign}]<a href="#delivery_link" rel="nofollow"> [{ if !$_product->isNotBuyable() || !$_product->hasMdVariants() }]*[{/if}]</a></span>
+                       <span class="priceValue">[{ $_product->getFPrice() }] [{ $currency->sign}] [{ if !( $_product->hasMdVariants() || $_product->getDispSelList() || $_product->getVariantList() ) }]*[{/if}]</span>
                   [{/if}]
-                    [{ if !$_product->isNotBuyable() || !$_product->hasMdVariants() }]
+                    [{ if !( $_product->hasMdVariants() || $_product->getDispSelList() || $_product->getVariantList() ) }]
                         <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=start" params="fnc=tobasket&amp;aid=`$_product->oxarticles__oxid->value`&amp;am=1" }]" class="toCart" title="[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]">[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]</a>
+                    [{else}]
+                        <a href="[{ $_product->getLink() }]" class="toCart">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>
                     [{/if}]
                     [{/oxhasrights}]
                 </div>
@@ -29,7 +31,7 @@
     <h3>
         <strong>[{ oxmultilang ident="PAGE_SHOP_START_WEEKSPECIAL" }]</strong>
         [{if $rsslinks.bargainArticles}]
-            <a class="rss external" id="rss.bargainArticles" href="[{$rsslinks.bargainArticles.link}]" title="[{$rsslinks.bargainArticles.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.bargainArticles.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.bargainArticles.title}]</span></a>
+            <a class="rss external" id="rssBargainProducts" href="[{$rsslinks.bargainArticles.link}]" title="[{$rsslinks.bargainArticles.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.bargainArticles.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.bargainArticles.title}]</span></a>
         [{/if}]
     </h3>
     [{$smarty.capture.bargainTitle}]

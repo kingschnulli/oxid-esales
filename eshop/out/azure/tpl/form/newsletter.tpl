@@ -32,7 +32,7 @@
             <input id="newsletterSubscribeOff" class="radiobox" type="radio" name="subscribeStatus" value="0"><label for="newsletterSubscribeOff">[{ oxmultilang ident="FORM_NEWSLETTER_UNSUBSCRIBE" }]</label>
         </li>
         <li class="formSubmit">
-            <button id="newsLetter_submit" class="submitButton largeButton" type="submit">[{ oxmultilang ident="FORM_NEWSLETTER_SUBSCRIBE" }]</button>
+            <button id="newsLetterSubmit" class="submitButton largeButton" type="submit">[{ oxmultilang ident="FORM_NEWSLETTER_SUBSCRIBE" }]</button>
         </li>
     </ul>
 </form>

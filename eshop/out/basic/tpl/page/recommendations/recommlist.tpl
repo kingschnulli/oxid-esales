@@ -8,8 +8,8 @@
     <strong id="test_recommlistHeaderAuthor" class="head">
         [{$_actvrecommlist->oxrecommlists__oxtitle->value}] <span class="recomm_author">([{ oxmultilang ident="RECOMMLIST_LISTBY" }] [{ $_actvrecommlist->oxrecommlists__oxauthor->value }])</span>
         [{if $rsslinks.recommlistarts}]
-            <a class="rss" id="rss.recommlistarts" href="[{$rsslinks.recommlistarts.link}]" title="[{$rsslinks.recommlistarts.title}]"></a>
-            [{oxscript add="oxid.blank('rss.recommlistarts');"}]
+            <a class="rss" id="rssRecommListProducts" href="[{$rsslinks.recommlistarts.link}]" title="[{$rsslinks.recommlistarts.title}]"></a>
+            [{oxscript add="oxid.blank('rssRecommListProducts');"}]
         [{/if}]
     </strong>
     <div class="box info">

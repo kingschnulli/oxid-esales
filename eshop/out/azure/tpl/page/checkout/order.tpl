@@ -23,7 +23,7 @@
         [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_MINORDERPRICE" }] [{ $oView->getMinOrderPrice() }] [{ $currency->sign }]
     [{elseif $oView->showOrderButtonOnTop()}]
         <div class="lineBox clear">
-            <form action="[{ $oViewConf->getSslSelfLink() }]" method="post" id="orderConfirmAGBTop">
+            <form action="[{ $oViewConf->getSslSelfLink() }]" method="post" id="orderConfirmAgbTop">
                 [{ $oViewConf->getHiddenSid() }]
                 [{ $oViewConf->getNavFormParams() }]
                 <input type="hidden" name="cl" value="order">
@@ -142,7 +142,7 @@
     [{if $oView->isLowOrderPrice() }]
         [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_MINORDERPRICE" }] [{ $oView->getMinOrderPrice() }] [{ $currency->sign }]
     [{else}]
-        <form action="[{ $oViewConf->getSslSelfLink() }]" method="post" id="orderConfirmAGBBottom">
+        <form action="[{ $oViewConf->getSslSelfLink() }]" method="post" id="orderConfirmAgbBottom">
             [{ $oViewConf->getHiddenSid() }]
             [{ $oViewConf->getNavFormParams() }]
             <input type="hidden" name="cl" value="order">

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 33489 2011-02-24 08:42:27Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxsessionTest.php 33895 2011-03-22 16:20:52Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -210,6 +210,54 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $this->oSession->freeze();
 
         parent::tearDown();
+    }
+
+    /**
+     * Test case for oxSession::regenerateSessionId()
+     *
+     * @return null
+     */
+    public function testRegenerateSessionId()
+    {
+        $myConfig  = oxConfig::getInstance();
+
+        $oSession = $this->getMock( 'testSession', array( "_getNewSessionId" ) );
+        $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );
+
+        $oSession->setVar('someVar1', true);
+        $oSession->setVar('someVar2', 15);
+        $oSession->setVar('actshop', 5);
+        $oSession->setVar('lang', 3);
+        $oSession->setVar('currency', 3);
+        $oSession->setVar('language', 12);
+        $oSession->setVar('tpllanguage', 12);
+
+        $sOldSid = $oSession->getId();
+
+        $oSession->regenerateSessionId();
+
+        //most sense is to perform this check
+        //if session id was changed
+        $this->assertNotEquals($sOldSid, $oSession->getId());
+
+        //checking if new id is correct (md5($newid))
+        $this->assertEquals( "newSessionId", $oSession->getId() );
+
+        $this->assertEquals($oSession->getVar('someVar1'), true);
+        $this->assertEquals($oSession->getVar('someVar2'), 15);
+        $this->assertEquals($oSession->getVar('actshop'), 5);
+        $this->assertEquals($oSession->getVar('lang'), 3);
+        $this->assertEquals($oSession->getVar('currency'), 3);
+        $this->assertEquals($oSession->getVar('language'), 12);
+        $this->assertEquals($oSession->getVar('tpllanguage'), 12);
+
+        $oSession->setVar('someVar1', null);
+        $oSession->setVar('someVar2', null);
+        $oSession->setVar('actshop', null);
+        $oSession->setVar('lang', null);
+        $oSession->setVar('currency', null);
+        $oSession->setVar('language', $myConfig->sDefaultLang);
+        $oSession->setVar('tpllanguage', null);
     }
 
     /**

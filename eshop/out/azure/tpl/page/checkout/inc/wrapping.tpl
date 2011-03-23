@@ -42,7 +42,7 @@
                         </td>
 
                         <td>
-                            <ul id="wrapp-[{$smarty.foreach.wrappArt.iteration}]">
+                            <ul id="wrapp_[{$smarty.foreach.wrappArt.iteration}]">
                                 <li>
                                     <input class="radiobox" type="radio" name="wrapping[[{$basketindex}]]" value="0" [{ if !$basketitem->getWrappingId()}]CHECKED[{/if}]>
                                     <label>[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_NONE" }]</label><strong>0,00 [{ $currency->sign}]</strong>

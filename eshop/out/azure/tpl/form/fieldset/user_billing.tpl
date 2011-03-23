@@ -77,7 +77,7 @@
     </li>
     <li [{if $aErrors}]class="oxError"[{/if}]>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_COUNTRY" }][{if $oView->isFieldRequired(oxuser__oxcountryid) }]<span class="req">*</span>[{/if}]</label>
-          <select [{if $oView->isFieldRequired(oxuser__oxcountryid) }] class="oxValidate oxValidate_notEmpty" [{/if}] id="inv_country_select" name="invadr[oxuser__oxcountryid]">
+          <select [{if $oView->isFieldRequired(oxuser__oxcountryid) }] class="oxValidate oxValidate_notEmpty" [{/if}] id="invCountrySelect" name="invadr[oxuser__oxcountryid]">
                <option value="">-</option>
             [{foreach from=$oView->getCountryList() item=country key=country_id }]
                 <option value="[{ $country->oxcountry__oxid->value }]" [{if isset( $invadr.oxuser__oxcountryid ) && $invadr.oxuser__oxcountryid == $country->oxcountry__oxid->value}] selected[{elseif $oxcmp_user->oxuser__oxcountryid->value == $country->oxcountry__oxid->value}] selected[{/if}]>[{ $country->oxcountry__oxtitle->value }]</option>
@@ -92,7 +92,7 @@
     </li>
     <li class="stateBox">
           [{include file="form/fieldset/state.tpl"
-                countrySelectId="inv_country_select"
+                countrySelectId="invCountrySelect"
                 stateSelectName="invadr[oxuser__oxstateid]"
                 selectedStateIdPrim=$invadr.oxuser__oxstateid
                 selectedStateId=$oxcmp_user->oxuser__oxstateid->value
@@ -159,7 +159,7 @@
     <li>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SUBSCRIBENEWSLETTER" }]</label>
         <input type="hidden" name="blnewssubscribed" value="0">
-        <input id="test_newsReg" type="checkbox" name="blnewssubscribed" value="1" [{if $oView->isNewsSubscribed()}]checked[{/if}]>
+        <input id="subscribeNewsletter" type="checkbox" name="blnewssubscribed" value="1" [{if $oView->isNewsSubscribed()}]checked[{/if}]>
         <br>
         <div class="note">[{ oxmultilang ident="FORM_FIELDSET_USER_SUBSCRIBENEWSLETTER_MESSAGE" }]</div>
     </li>

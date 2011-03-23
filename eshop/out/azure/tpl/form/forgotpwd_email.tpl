@@ -8,7 +8,7 @@
   <ul class="form clear">
     <li>
         <label>[{ oxmultilang ident="PAGE_ACCOUNT_FORGOTPWD_YOUREMAIL" }]</label>
-        <input id="test_lgn_usr" type="text" name="lgn_usr" value="[{$oView->getActiveUsername()}]" class="oxValidate oxValidate_notEmpty oxValidate_email">
+        <input id="userLoginName" type="text" name="lgn_usr" value="[{$oView->getActiveUsername()}]" class="oxValidate oxValidate_notEmpty oxValidate_email">
         <p class="oxValidateError">
             <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             <span class="oxError_email">[{ oxmultilang ident="EXCEPTION_INPUT_NOVALIDEMAIL" }]</span>

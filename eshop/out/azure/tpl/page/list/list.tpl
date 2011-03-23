@@ -89,7 +89,7 @@
     [{if $oView->getArticleList()|@count > 0}]
         <h1 class="pageHead">[{$oView->getTitle()}]
             [{ if $rsslinks.activeCategory}]
-                <a class="rss external" id="rss.activeCategory" href="[{$rsslinks.activeCategory.link}]" title="[{$rsslinks.activeCategory.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.activeCategory.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.activeCategory.title}]</span></a>
+                <a class="rss external" id="rssActiveCategory" href="[{$rsslinks.activeCategory.link}]" title="[{$rsslinks.activeCategory.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.activeCategory.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.activeCategory.title}]</span></a>
             [{/if }]
         </h1>
         <div class="listRefine clear bottomRound">

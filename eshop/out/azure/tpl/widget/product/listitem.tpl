@@ -123,7 +123,7 @@
                 <a id="[{$testid}]" href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}]">[{ $product->oxarticles__oxtitle->value }]</a>
                 <span class="productNr">
                      [{if $product->getPricePerUnit()}]
-                        <div id="test_product_price_unit" class="pperunit">
+                        <div id="productPricePerUnit" class="pperunit">
                             [{$product->oxarticles__oxunitquantity->value}] [{$product->oxarticles__oxunitname->value}] | [{$product->getPricePerUnit()}] [{ $currency->sign}]/[{$product->oxarticles__oxunitname->value}]
                         </div>
                     [{elseif $product->oxarticles__oxweight->value  }]
@@ -170,7 +170,7 @@
                                 [{/foreach}]
                             </select>
                         [{else}]
-                            <select id="varSelect-[{$testid}]" name="aid">
+                            <select id="varSelect_[{$testid}]" name="aid">
                                 [{if !$product->isParentNotBuyable()}]
                                     <option value="[{$product->getId()}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]*[{/oxhasrights}]</option>
                                 [{/if}]
@@ -182,7 +182,7 @@
                     [{elseif $product->getDispSelList()}]
                         [{foreach key=iSel from=$product->getDispSelList() item=oList}]
                             <label>[{ $oList.name }]:</label>
-                            <select id="sellist-[{$testid}]_[{$iSel}]" name="sel[[{$iSel}]]">
+                            <select id="selList_[{$testid}]_[{$iSel}]" name="sel[[{$iSel}]]">
                                 [{foreach key=iSelIdx from=$oList item=oSelItem}]
                                     [{ if $oSelItem->name }]
                                         <option value="[{$iSelIdx}]"[{if $oSelItem->selected }]SELECTED[{/if }]>[{ $oSelItem->name }]</option>
@@ -215,7 +215,7 @@
                 [{/oxhasrights}]
                 <div class="tobasketFunction clear">
                     [{oxhasrights ident="SHOWARTICLEPRICE"}]
-                    <label id="productPrice-[{$testid}]" class="price">
+                    <label id="productPrice_[{$testid}]" class="price">
                         [{if $product->getFTPrice()}]
                             [{oxmultilang ident="DETAILS_NOWONLY"}]
                         [{/if}]
@@ -228,23 +228,23 @@
                             [{if $product->hasMdVariants()}]
                                 <a class="submitButton" href="[{ $_productLink }]" >[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>
                             [{else}]
-                                <input id="amountToBasket-[{$testid}]" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
-                                <button id="toBasket-[{$testid}]" type="submit" class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
+                                <input id="amountToBasket_[{$testid}]" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
+                                <button id="toBasket_[{$testid}]" type="submit" class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
                             [{/if}]
                         [{else}]
-                            <input id="amountToBasket-[{$testid}]" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
-                            <button id="toBasket-[{$testid}]" type="submit" class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
+                            <input id="amountToBasket_[{$testid}]" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
+                            <button id="toBasket_[{$testid}]" type="submit" class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
                         [{/if}]
                     [{/if}]
                     [{/oxhasrights}]
                     [{if $removeFunction && (($owishid && ($owishid==$oxcmp_user->oxuser__oxid->value)) || (($wishid==$oxcmp_user->oxuser__oxid->value)) || $recommid) }]
-                        <button triggerForm="remove-[{$removeFunction}][{$testid}]" type="submit" class="submitButton largeButton removeButton" title="[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REMOVE" }]"><span>[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REMOVE" }]</span></button>
+                        <button triggerForm="remove_[{$removeFunction}][{$testid}]" type="submit" class="submitButton largeButton removeButton" title="[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REMOVE" }]"><span>[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REMOVE" }]</span></button>
                     [{/if}]
                 </div>
                 </div>
     </form>
     [{if $removeFunction && (($owishid && ($owishid==$oxcmp_user->oxuser__oxid->value)) || (($wishid==$oxcmp_user->oxuser__oxid->value)) || $recommid) }]
-        <form action="[{ $oViewConf->getSelfActionLink() }]" method="post" id="remove-[{$removeFunction}][{$testid}]">
+        <form action="[{ $oViewConf->getSelfActionLink() }]" method="post" id="remove_[{$removeFunction}][{$testid}]">
             <div>
                 [{ $oViewConf->getHiddenSid() }]
                 <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">

@@ -1,7 +1,7 @@
      <input type="hidden" id="passwordLength" value="[{$oViewConf->getPasswordLength()}]">
     <li [{if $aErrors}]class="oxError"[{/if}]>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_ACCOUNT_EMAIL" }]<span class="req">*</span></label>
-        <input id="lgn_usr" class="oxValidate oxValidate_notEmpty oxValidate_email" type="text" name="lgn_usr" value="[{ $oView->getActiveUsername()}]" size="37" >
+        <input id="userLoginName" class="oxValidate oxValidate_notEmpty oxValidate_email" type="text" name="lgn_usr" value="[{ $oView->getActiveUsername()}]" size="37" >
         <p class="oxValidateError">
             <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             <span class="oxError_email">[{ oxmultilang ident="EXCEPTION_INPUT_NOVALIDEMAIL" }]</span>
@@ -10,7 +10,7 @@
     </li>
     <li>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_ACCOUNT_PWD" }]<span class="req">*</span></label>
-        <input class="textbox" id="lgn_pwd" class="oxValidate oxValidate_notEmpty oxValidate_length oxValidate_match" type="password" name="lgn_pwd" value="[{$lgn_pwd}]" size="37">
+        <input class="textbox" id="userPassword" class="oxValidate oxValidate_notEmpty oxValidate_length oxValidate_match" type="password" name="lgn_pwd" value="[{$lgn_pwd}]" size="37">
         <p class="oxValidateError">
             <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             <span class="oxError_length">[{ oxmultilang ident="EXCEPTION_INPUT_PASSTOOSHORT" }]</span>
@@ -19,7 +19,7 @@
     </li>
     <li [{if $aErrors}]class="oxError"[{/if}]>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_ACCOUNT_CONFIRMPWD" }]<span class="req">*</span></label>
-        <input class="textbox" id="lgn_pwd2" class="oxValidate oxValidate_notEmpty oxValidate_length oxValidate_match" type="password" name="lgn_pwd2" value="[{$lgn_pwd2}]" size="37">
+        <input class="textbox" id="userPasswordConfirm" class="oxValidate oxValidate_notEmpty oxValidate_length oxValidate_match" type="password" name="lgn_pwd2" value="[{$lgn_pwd2}]" size="37">
         <p class="oxValidateError">
             <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             <span class="oxError_length">[{ oxmultilang ident="EXCEPTION_INPUT_PASSTOOSHORT" }]</span>

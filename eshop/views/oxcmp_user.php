@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 33799 2011-03-16 16:51:42Z vilma $
+ * @version   SVN: $Id: oxcmp_user.php 33895 2011-03-22 16:20:52Z arvydas.vapsva $
  */
 
 // defining login/logout states
@@ -281,6 +281,13 @@ class oxcmp_user extends oxView
      */
     protected function _afterLogin( $oUser )
     {
+        $oSession = $this->getSession();
+
+        // generating new session id after login
+        if ( $this->getLoginStatus() === USER_LOGIN_SUCCESS ) {
+            $oSession->regenerateSessionId();
+        }
+
         $myConfig = $this->getConfig();
 
         // this user is blocked, deny him
@@ -292,7 +299,7 @@ class oxcmp_user extends oxView
         $oUser->addDynGroup(oxSession::getVar( 'dgr' ), $myConfig->getConfigParam( 'aDeniedDynGroups' ));
 
         // recalc basket
-        if ( $oBasket = $this->getSession()->getBasket() ) {
+        if ( $oBasket = $oSession->getBasket() ) {
             $oBasket->onUpdate();
         }
 
