@@ -34,6 +34,7 @@
   <strong id="test_FreshInHeader" class="head2">
     [{ oxmultilang ident="START_JUSTARRIVED"}]
 
+    [{assign var='rsslinks' value=$oView->getRssLinks() }]
     [{if $rsslinks.newestArticles}]
         <a class="rss" id="rssNewestProducts" href="[{$rsslinks.newestArticles.link}]" title="[{$rsslinks.newestArticles.title}]"></a>
         [{oxscript add="oxid.blank('rssNewestProducts');"}]

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: registerTest.php 33292 2011-02-15 16:01:38Z arvydas.vapsva $
+ * @version   SVN: $Id: registerTest.php 33901 2011-03-22 17:06:57Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -146,20 +146,6 @@ class Unit_Views_registerTest extends OxidTestCase
         $this->assertEquals('page/account/register_success.tpl', $oRegister->render() );
         $this->assertEquals('rst', $oRegister->getRegistrationStatus() );
         $this->assertEquals('rer', $oRegister->getRegistrationError() );
-    }
-
-    public function testGetDelAddress()
-    {
-
-        $oDelAddr = $this->getMock( 'stdclass', array( 'load' ) );
-        $oDelAddr->expects( $this->once() )->method( 'load' )->with( $this->equalTo( 'xsAddressId' ) );
-        $oUser = $this->getMock( 'stdclass', array( 'getSelectedAddress' ) );
-        $oUser->expects( $this->once() )->method( 'getSelectedAddress' )->will( $this->returnValue( 'xsAddressId' ) );
-        $oRegister = $this->getMock( 'register', array( 'getUser' ) );
-        $oRegister->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
-        oxTestModules::addModuleObject('oxaddress', $oDelAddr);
-
-        $this->assertSame($oDelAddr, $oRegister->getDelAddress() );
     }
 
     public function testGetBreadCrumb()

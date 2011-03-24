@@ -4,6 +4,7 @@
         [{assign var="_actvrecommlist" value=$oView->getActiveRecommList() }]
         [{assign var="recommendation_head" value="PAGE_RECOMMENDATIONS_PRODUCTS_LISTBY"|oxmultilangassign}]
         [{assign var="recommendation_head" value=$_actvrecommlist->oxrecommlists__oxtitle->value|cat:" <span>("|cat:$recommendation_head|cat:" "|cat:$_actvrecommlist->oxrecommlists__oxauthor->value|cat:")</span>"}]
+        [{assign var='rsslinks' value=$oView->getRssLinks() }]
         [{if $rsslinks.recommlistarts}]
             [{assign var="recommendation_head" value="`$recommendation_head` <a class=\"rss external\" id=\"rssRecommListProducts\" href=\"`$rsslinks.recommlistarts.link`\" title=\"`$rsslinks.recommlistarts.title`\"></a>"}]
         [{/if}]

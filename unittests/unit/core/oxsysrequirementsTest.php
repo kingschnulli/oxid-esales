@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 30423 2010-10-20 13:02:51Z sarunas $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 33938 2011-03-23 16:11:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -257,17 +257,17 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
      */
     public function testCheckTemplateBlock()
     {
-        $oCfg = $this->getMock('oxconfig', array('getTemplateFile'));
-        $oCfg->expects($this->at(0))->method('getTemplateFile')
+        $oCfg = $this->getMock('oxconfig', array('getTemplatePath'));
+        $oCfg->expects($this->at(0))->method('getTemplatePath')
                 ->with($this->equalTo('test0'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl_nonexisting.tpl'));
-        $oCfg->expects($this->at(1))->method('getTemplateFile')
+        $oCfg->expects($this->at(1))->method('getTemplatePath')
                 ->with($this->equalTo('test1'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
-        $oCfg->expects($this->at(2))->method('getTemplateFile')
+        $oCfg->expects($this->at(2))->method('getTemplatePath')
                 ->with($this->equalTo('test1'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
-        $oCfg->expects($this->at(3))->method('getTemplateFile')
+        $oCfg->expects($this->at(3))->method('getTemplatePath')
                 ->with($this->equalTo('test1'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
 

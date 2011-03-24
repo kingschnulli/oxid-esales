@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 33799 2011-03-16 16:51:42Z vilma $
+ * @version   SVN: $Id: oxuser.php 33914 2011-03-23 08:59:05Z vilma $
  */
 
 /**
@@ -129,14 +129,35 @@ class oxUser extends oxBase
      *
      * @var string
      */
-     protected $_sUpdateKey = null;
+    protected $_sUpdateKey = null;
 
     /**
      * User loaded from cookie
      *
      * @var bool
      */
-     protected $_blLoadedFromCookie  = null;
+    protected $_blLoadedFromCookie  = null;
+
+     /**
+     * User selected shipping address id
+     *
+     * @var string
+     */
+    protected $_sSelAddressId = null;
+
+     /**
+     * User selected shipping address
+     *
+     * @var object
+     */
+    protected $_oSelAddress = null;
+
+     /**
+     * Id of wishlist user
+     *
+     * @var string
+     */
+    protected $_sWishId = null;
 
     /**
      * Class constructor, initiates parent constructor (parent::oxBase()).
@@ -360,44 +381,70 @@ class oxUser extends oxBase
     }
 
     /**
+     * Checks if product from wishlist is added
+     *
+     * @return $sWishId
+     */
+    protected function _getWishListId()
+    {
+        $this->_sWishId = null;
+        // check if we have to set it here
+        $oBasket = $this->getSession()->getBasket();
+        foreach ( $oBasket->getContents() as $oBasketItem ) {
+            if ( $this->_sWishId = $oBasketItem->getWishId() ) {
+                // stop on first found
+                break;
+            }
+        }
+        return $this->_sWishId;
+    }
+
+    /**
      * Sets in the array oxuser::_aAddresses selected address.
      * Returns user selected Address id.
      *
      * @param bool $sWishId wishlist user id
      *
-     * @return string $sAddressId
+     * @return object $oSelectedAddress
      */
     public function getSelectedAddress( $sWishId = false )
     {
+        if ( $this->_oSelAddress !== null ) {
+            return $this->_oSelAddress;
+        }
+
+        $oSelectedAddress = null;
         $oAddresses = $this->getUserAddresses();
         if ( $oAddresses->count() ) {
             if ( $sAddressId = $this->getSelectedAddressId() ) {
                 foreach ( $oAddresses as $oAddress ) {
-                    if ( $oAddress->selected == 1 ) {
-                        $sAddressId = $oAddress->getId();
+                    if ( $oAddress->getId() == $sAddressId ) {
+                        $oAddress->selected = 1;
+                        $oSelectedAddress = $oAddress;
                         break;
                     }
                 }
-            } elseif ( $sWishId ) {
+            } elseif ( $sWishId = $this->_getWishListId() ) {
                 foreach ( $oAddresses as $oAddress ) {
                     $oAddress->selected = 0;
                     if ( $oAddress->oxaddress__oxaddressuserid->value == $sWishId ) {
                         $oAddress->selected = 1;
                         $sAddressId = $oAddress->getId();
+                        $oSelectedAddress = $oAddress;
                     }
                 }
             }
 
             // in case none is set - setting first one
-            if ( !$sAddressId ) {
+            if ( !$oSelectedAddress ) {
                 $oAddresses->rewind();
                 $oAddress = $oAddresses->current();
                 $oAddress->selected = 1;
-                $sAddressId = $oAddress->getId();
+                $oSelectedAddress = $oAddress;
             }
         }
-
-        return $sAddressId;
+        $this->_oSelAddress = $oSelectedAddress;
+        return $oSelectedAddress;
     }
 
     /**
@@ -2107,6 +2154,9 @@ class oxUser extends oxBase
             if ( strpos( $this->oxuser__oxpassword->value, 'ox_' ) === 0 ) {
                 // decodable pass ?
                 $this->setPassword( oxUtils::getInstance()->strRem( $this->oxuser__oxpassword->value ) );
+            } elseif ( strlen( $this->oxuser__oxpassword->value ) < 32 ) {
+                // plain pass ?
+                $this->setPassword( $this->oxuser__oxpassword->value );
             }
             $sHash = $this->oxuser__oxpassword->value;
         }

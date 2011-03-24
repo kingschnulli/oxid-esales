@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 33799 2011-03-16 16:51:42Z vilma $
+ * @version   SVN: $Id: oxviewconfig.php 33900 2011-03-22 17:06:44Z vilma $
  */
 
 /**
@@ -56,6 +56,13 @@ class oxViewConfig extends oxSuperCfg
      * @return string
      */
     protected $_sHelpPageLink = null;
+
+    /**
+     * returns Country.
+     *
+     * @var oxcountrylist
+     */
+    protected $_oCountryList = null;
 
     /**
      * Returns shops home link
@@ -1174,5 +1181,19 @@ class oxViewConfig extends oxSuperCfg
         return $iPasswordLength;
     }
 
+    /**
+     * Return country list
+     *
+     * @return oxcountrylist
+     */
+    public function getCountryList()
+    {
+        if ( $this->_oCountryList === null ) {
+            // passing country list
+            $this->_oCountryList = oxNew( 'oxcountrylist' );
+            $this->_oCountryList->loadActiveCountries();
+        }
+        return $this->_oCountryList;
+    }
 
 }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 33011 2011-02-07 16:35:45Z vilma $
+ * @version   SVN: $Id: user.php 33900 2011-03-22 17:06:44Z vilma $
  */
 
 /**
@@ -111,25 +111,6 @@ class User extends oxUBase
     }
 
     /**
-     * Checks if product from wishlist is added
-     *
-     * @return $sWishId
-     */
-    protected function _getWishListId()
-    {
-        $this->_sWishId = null;
-        // check if we have to set it here
-        $oBasket = $this->getSession()->getBasket();
-        foreach ( $oBasket->getContents() as $oBasketItem ) {
-            if ( $this->_sWishId = $oBasketItem->getWishId() ) {
-                // stop on first found
-                break;
-            }
-        }
-        return $this->_sWishId;
-    }
-
-    /**
      * Template variable getter. Returns reverse option blOrderDisWithoutReg
      *
      * @return bool
@@ -163,6 +144,8 @@ class User extends oxUBase
 
     /**
      * Template variable getter. Returns country list
+     *
+     * @deprecated will be removed in future: use oxViewConfig::getCountryList()
      *
      * @return object
      */
@@ -261,6 +244,16 @@ class User extends oxUBase
 
             $this->setInvoiceAddress( $aInvAdr );
         }
+    }
+
+    /**
+     * Return true if user wants to change his billing address
+     *
+     * @return bool
+     */
+    public function modifyBillAddress()
+    {
+        return oxConfig::getParameter( 'blnewssubscribed' );
     }
 
     /**

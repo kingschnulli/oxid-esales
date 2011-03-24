@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 33489 2011-02-24 08:42:27Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfigTest.php 33901 2011-03-22 17:06:57Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -543,6 +543,17 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
 
         $oSession->setVar( "ldtype", "infogrid" );
         $this->assertEquals( $aNrofCatArticles, $oViewCfg->getNrOfCatArticles() );
+    }
+
+    /**
+     * Testing oxViewConfig::getCountryList()
+     *
+     * @return null
+     */
+    public function testGetCountryList()
+    {
+        $oView = new oxViewConfig();
+        $this->assertTrue( $oView->getCountryList() instanceof oxcountrylist );
     }
 
 }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 33874 2011-03-22 07:56:01Z sarunas $
+ * @version   SVN: $Id: oxubase.php 33897 2011-03-22 17:02:50Z vilma $
  */
 
 /**
@@ -1021,8 +1021,6 @@ class oxUBase extends oxView
         } else {
             $this->_aRssLinks[$key] = array('title'=>$sTitle, 'link' => $sUrl);
         }
-
-        $this->_aViewData['rsslinks'] = $this->getRssLinks();
     }
 
     /**

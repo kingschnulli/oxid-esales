@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 33011 2011-02-07 16:35:45Z vilma $
+ * @version   SVN: $Id: userTest.php 33901 2011-03-22 17:06:57Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -109,14 +109,6 @@ class Unit_Views_userTest extends OxidTestCase
          $this->assertEquals( 0, $oUserView->getLoginOption() );
     }
 
-    public function testGetCountryList()
-    {
-         $oUserView = new user();
-         $oCountryList = oxNew( 'oxcountrylist' );
-         $oCountryList->loadActiveCountries();
-         $this->assertEquals( $oCountryList, $oUserView->getCountryList() );
-    }
-
     public function testGetOrderRemark()
     {
          modSession::getInstance()->setVar( 'ordrem', "test" );
@@ -159,19 +151,6 @@ class Unit_Views_userTest extends OxidTestCase
         modSession::getInstance()->setVar( 'blshowshipaddress', true );
         $this->assertTrue( $oUserView->showShipAddress() );
 
-    }
-
-    public function testGetWishListId()
-    {
-        $oBasketItem = $this->getMock( 'oxBasketItem', array( 'getWishId' ) );
-        $oBasketItem->expects( $this->once() )->method( 'getWishId')->will( $this->returnValue( "testwishid" ) );
-        $oBasket = $this->getMock( 'oxBasket', array( 'getContents' ) );
-        $oBasket->expects( $this->once() )->method( 'getContents')->will( $this->returnValue( array($oBasketItem) ) );
-        $oSession = $this->getMock( 'oxSession', array( 'getBasket' ) );
-        $oSession->expects( $this->once() )->method( 'getBasket')->will( $this->returnValue( $oBasket ) );
-        $oUserView = $this->getMock( 'user', array( 'getSession' ) );
-        $oUserView->expects( $this->once() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
-        $this->assertEquals( "testwishid", $oUserView->UNITgetWishListId() );
     }
 
     /**

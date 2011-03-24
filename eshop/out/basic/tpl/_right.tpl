@@ -35,7 +35,7 @@
     [{/if}]
 
 </div>
-
+[{assign var='rsslinks' value=$oView->getRssLinks() }]
 [{ if $oView->getTop5ArticleList() }]
     <strong class="h2" id="test_RightSideTop5Header">
         [{ oxmultilang ident="INC_RIGHTITEM_TOPOFTHESHOP" }]

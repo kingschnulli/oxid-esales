@@ -1490,26 +1490,29 @@
 
         _create: function(){
 
+            var self = this;
+            var el   = self.element;
+
             //hide all
-            $('.articleImage').hide();
+            $('.articleImage', el).hide();
 
             //open first
-            $('.articleImage:first').show();
-            $('.articleImage:first').addClass('showImage');
+            $('.articleImage:first', el).show();
+            $('.articleImage:first', el).addClass('showImage');
 
-            $('.articleTitle').mouseover(function() {
+            $('.articleTitle', el).mouseover(function() {
 
                 //if not opened
                 if ($(this).prev().is(':hidden') == true) {
 
                     //closing opened
-                    $('.articleTitle').removeClass('titleOn');
-                    $('.showImage').slideUp('normal');
+                    $('.articleTitle', el).removeClass('titleOn');
+                    $('.showImage', el).slideUp(500);
 
                     //obening selected
                     $(this).addClass('titleOn');
                     $(this).prev().addClass('showImage')
-                    $(this).prev().slideDown('normal');
+                    $(this).prev().slideDown(500);
                 }
             });
         }

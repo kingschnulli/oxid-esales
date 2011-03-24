@@ -58,17 +58,6 @@ class Unit_Views_accountUserTest extends OxidTestCase
     }
 
     /**
-     * Testing Account_User::getCountryList()
-     *
-     * @return null
-     */
-    public function testGetCountryList()
-    {
-        $oView = new Account_User();
-        $this->assertTrue( $oView->getCountryList() instanceof oxcountrylist );
-    }
-
-    /**
      * Testing Account_User::getBreadCrumb()
      *
      * @return null

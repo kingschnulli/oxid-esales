@@ -49,7 +49,7 @@
                                     <a id="compareRight_[{ $product->oxarticles__oxid->value }]" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="fnc=moveright&amp;aid=`$product->oxarticles__oxnid->value`&amp;pgNr="|cat:$oView->getActPage() }]" class="navigation moveNext">&raquo;</a>
                                 [{/if}]
                                 </div>
-                                  [{include file="page/compare/inc/compareitem.tpl" product=$product}]
+                                  [{include file="page/compare/inc/compareitem.tpl" product=$product testid=$smarty.foreach.comparelist.iteration}]
                             </td>
                             [{/foreach}]
                         </tr>

@@ -215,6 +215,7 @@ $aLang = array(
 'FOOTER_DISTRIBUTORS'                             => 'LIEFERANTEN',
 'FOOTER_MANUFACTURERS'                            => 'MARKE',
 'FOOTER_SERVICES'                                 => 'SERVICE',
+'FOOTER_INFORMATION'                              => 'INFORMATIONEN',
 'FOOTER_INCLTAXANDPLUSSHIPPING'                   => '* Alle Preise inkl. MwSt., zzgl. Versandkosten.',
 
 'SEARCH_TITLE'        => 'Suche',
@@ -258,6 +259,7 @@ $aLang = array(
 'PAGE_CHECKOUT_BASKET_BACKSTEP'                                     => "Zur¸ck",
 'PAGE_CHECKOUT_BASKET_MINORDERPRICE'                                => "Mindestbestellwert",
 'PAGE_CHECKOUT_BASKET_CONTINUESHOPPING'                             => "Weiter shoppen",
+'PAGE_CHECKOUT_BASKET_CHANGE'                                       => "ƒndern",
 'PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM'                            => "Details:",
 'PAGE_CHECKOUT_BASKETCONTENTS_PRODUCT'                              => "Artikel",
 'PAGE_CHECKOUT_BASKETCONTENTS_WRAPPING'                             => "Verpackung",
@@ -317,7 +319,7 @@ $aLang = array(
 'PAGE_CHECKOUT_STEPS_SEND'                                               => "2. Adresse",
 'PAGE_CHECKOUT_STEPS_PAY'                                                => "3. Bezahlen",
 'PAGE_CHECKOUT_STEPS_ORDER'                                              => "4. Bestellen",
-'PAGE_CHECKOUT_STEPS_LASTSTEP'                                           => "5. Fertig",
+'PAGE_CHECKOUT_STEPS_LASTSTEP'                                           => "Fertig!",
 'PAGE_CHECKOUT_WRAPPING_GIFTOPTION'                                      => "Geschenkoption",
 'PAGE_CHECKOUT_WRAPPING_ADDWRAPPING'                                     => "Als Geschenk verpacken",
 'PAGE_CHECKOUT_WRAPPING_PERSONALMESSAGE'                                 => "Wir verpacken Ihr Geschenk sehr gerne mit unserem schˆnen Geschenkpapier, oder lassen Sie uns eine Karte mit Ihrer persˆnlichen Nachricht beilegen.",
@@ -350,6 +352,7 @@ $aLang = array(
 'PAGE_CHECKOUT_ORDER_MODIFY4'                                            => "‰ndern",
 'PAGE_CHECKOUT_ORDER_BACKSTEP'                                           => "Zur¸ck",
 'PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS'                                => "Bitte best‰tigen Sie unsere Allg. Gesch‰ftsbedingungen.",
+'PAGE_CHECKOUT_ORDER_TITLE2'                                             => "[Tr] Senden sie ihre bestellung am unteren ende dieser ¸bersicht ab",
 
 'PAGE_CHECKOUT_USER_OPTION_NEXT'                                => "Weiter",
 'PAGE_CHECKOUT_USER_OPTION_NOREGISTRATION'                      => "Bestellen ohne Registrierung",
@@ -1048,7 +1051,7 @@ $aLang = array(
 'FORM_LOGIN_ACCOUNT_KEEPLOGGEDIN'                              => "Eingeloggt bleiben:",
 'FORM_LOGIN_ACCOUNT_LOGIN'                                     => "Anmelden",
 'FORM_LOGIN_ACCOUNT_OPENACCOUNT'                               => "Konto erˆffnen",
-'FORM_LOGIN_ACCOUNT_FORGOTPWD'                                 => "Passwort vergessen ?",
+'FORM_LOGIN_ACCOUNT_FORGOTPWD'                                 => "Passwort vergessen?",
 
 'SHOP_VERSION_MSG'                                             => "Willkommen zur Betaversion 4 von OXID eShop 4.5.0. h‰ufig gestellte Fragen und Antworten sind in der <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">Beta-FAQ</a> gelistet.",
 'SHOP_VERSION_MSG_DISMISS'                                     => "Schlieﬂen",

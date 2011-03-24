@@ -30,6 +30,7 @@
 <div class="specBoxTitles rightShadow">
     <h3>
         <strong>[{ oxmultilang ident="PAGE_SHOP_START_WEEKSPECIAL" }]</strong>
+        [{assign var='rsslinks' value=$oView->getRssLinks() }]
         [{if $rsslinks.bargainArticles}]
             <a class="rss external" id="rssBargainProducts" href="[{$rsslinks.bargainArticles.link}]" title="[{$rsslinks.bargainArticles.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.bargainArticles.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.bargainArticles.title}]</span></a>
         [{/if}]

@@ -3,7 +3,7 @@
 [{ if $_oRecommendationList || $oView->getRecommSearch() }]
 <div class="box" id="recommendationsBox">
     <h3>[{ oxmultilang ident="WIDGET_RECOMMENDATIONLIST_HEADER" }]
-
+    [{assign var='rsslinks' value=$oView->getRssLinks() }]
     [{if $rsslinks.recommlists}]
         <a class="rss external" id="rssRecommLists" href="[{$rsslinks.recommlists.link}]" title="[{$rsslinks.recommlists.title}]">
             <img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.recommlists.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.recommlists.title}]</span>
@@ -14,8 +14,9 @@
     <div>
     [{ if $_oRecommendationList }]
         [{$_oRecommendationList->rewind()}]
+
         [{if $_oRecommendationList->current()}]
-            [{assign var="_oFirstRecommendationList" value=$_oRecommendationList->current()}]
+               [{assign var="_oFirstRecommendationList" value=$_oRecommendationList->current()}]
             [{assign var="_oBoxTopProduct" value=$_oFirstRecommendationList->getFirstArticle()}]
             [{assign var="_sTitle" value="`$_oBoxTopProduct->oxarticles__oxtitle->value` `$_oBoxTopProduct->oxarticles__oxvarselect->value`"|strip_tags}]
             <a href="[{$_oBoxTopProduct->getMainLink()}]" class="featured" title="[{$_sTitle}]">

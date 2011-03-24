@@ -5,6 +5,7 @@
         [{if $oView->getArticleCount() }]<em id="test_catArtCnt">([{ $oView->getArticleCount() }])</em>[{/if}]
         [{assign var="actCategory" value=$oView->getActiveCategory()}]
         [{if $actCategory && $actCategory->oxcategories__oxdesc->value }]<small id="test_catDesc">[{$actCategory->oxcategories__oxdesc->value}]</small>[{/if}]
+        [{assign var='rsslinks' value=$oView->getRssLinks() }]
         [{if $rsslinks.activeCategory}]
             <a class="rss" id="rssActiveCategory" href="[{$rsslinks.activeCategory.link}]" title="[{$rsslinks.activeCategory.title}]"></a>
             [{oxscript add="oxid.blank('rssActiveCategory');"}]

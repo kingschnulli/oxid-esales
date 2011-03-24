@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: register.php 32992 2011-02-07 14:29:18Z vilma $
+ * @version   SVN: $Id: register.php 33900 2011-03-22 17:06:44Z vilma $
  */
 
 /**
@@ -106,6 +106,8 @@ class Register extends User
 
     /**
      * Return deliver address
+     *
+     * @deprecated will be removed in future: use oxUser::getSelectedAddress()
      *
      * @return oxbase | false
      */

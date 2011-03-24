@@ -15,10 +15,18 @@
         </div>
       </div>
       [{/capture}]
+
       [{capture append="oxidBlock_footer"}]
       <dl class="services" id="footerServices">
         <dt>[{oxmultilang ident="FOOTER_SERVICES" }]</dt>
         <dd>[{include file="widget/footer/services.tpl"}]</dd>
+      </dl>
+      [{/capture}]
+
+      [{capture append="oxidBlock_footer"}]
+      <dl class="services" id="footerServices">
+        <dt>[{oxmultilang ident="FOOTER_INFORMATION" }]</dt>
+        <dd>[{include file="widget/footer/info.tpl"}]</dd>
       </dl>
       [{/capture}]
 

@@ -123,7 +123,7 @@
                 <a id="[{$testid}]" href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}]">[{ $product->oxarticles__oxtitle->value }]</a>
                 <span class="productNr">
                      [{if $product->getPricePerUnit()}]
-                        <div id="productPricePerUnit" class="pperunit">
+                        <div id="productPricePerUnit_[{$testid}]" class="pperunit">
                             [{$product->oxarticles__oxunitquantity->value}] [{$product->oxarticles__oxunitname->value}] | [{$product->getPricePerUnit()}] [{ $currency->sign}]/[{$product->oxarticles__oxunitname->value}]
                         </div>
                     [{elseif $product->oxarticles__oxweight->value  }]

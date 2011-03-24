@@ -60,10 +60,10 @@ $aLang = array(
 
 'DETAILS_ZOOM'                                    => "Zoom",
 'DETAILS_REDUCEDFROM'                             => "Reduced from",
-'DETAILS_REDUCEDTEXT'                             => "(Our normal price.)",
+'DETAILS_REDUCEDTEXT'                             => "(Our regular price.)",
 'DETAILS_NOWONLY'                                 => "now only",
 'DETAILS_PLUSSHIPPING'                            => "incl. VAT, plus ",
-'DETAILS_PLUSSHIPPING2'                           => "Shipping",
+'DETAILS_PLUSSHIPPING2'                           => "shipping",
 'DETAILS_NOTONSTOCK'                              => "This item is not in stock and must be reordered.",
 'DETAILS_AVAILABLEON'                             => "Available on",
 'DETAILS_LOWSTOCK'                                => "Low stock - order quickly !",
@@ -218,6 +218,7 @@ $aLang = array(
 'FOOTER_DISTRIBUTORS'                             => 'DISTRIBUTORS',
 'FOOTER_MANUFACTURERS'                            => 'BRANDS',
 'FOOTER_SERVICES'                                 => 'SERVICE',
+'FOOTER_INFORMATION'                              => 'INFORMATION',
 'FOOTER_INCLTAXANDPLUSSHIPPING'                   => '* All prices incl. VAT, plus Shipping',
 
 'SEARCH_TITLE'        => 'Search',
@@ -249,7 +250,7 @@ $aLang = array(
 'WIDGET_PRODUCT_PRODUCT_NOWONLY'                                    => "Now only",
 'WIDGET_PRODUCT_PRODUCT_ADDTOCART'                                  => "To cart",
 'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING'                               => "incl. VAT, plus ",
-'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2'                              => "Shipping",
+'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2'                              => "shipping",
 'WIDGET_PRODUCT_PRODUCT_MOREINFO'                                   => "more Info",
 'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT'                                  => "Weight:",
 'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2'                                 => "kg",
@@ -272,6 +273,7 @@ $aLang = array(
 'PAGE_CHECKOUT_BASKET_BACKSTEP'                                          => "Previous Step",
 'PAGE_CHECKOUT_BASKET_MINORDERPRICE'                                     => "Minimum order price",
 'PAGE_CHECKOUT_BASKET_CONTINUESHOPPING'                                  => "Continue Shopping",
+'PAGE_CHECKOUT_BASKET_CHANGE'                                            => "Change",
 'PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM'                                 => "Details:",
 'PAGE_CHECKOUT_BASKETCONTENTS_QUANTITY'                                  => "Quantity",
 'PAGE_CHECKOUT_BASKETCONTENTS_UNITPRICE'                                 => "Unit Price",
@@ -327,7 +329,7 @@ $aLang = array(
 'PAGE_CHECKOUT_STEPS_SEND'                                               => "2. Address",
 'PAGE_CHECKOUT_STEPS_PAY'                                                => "3. Pay",
 'PAGE_CHECKOUT_STEPS_ORDER'                                              => "4. Order",
-'PAGE_CHECKOUT_STEPS_LASTSTEP'                                           => "5. Ready",
+'PAGE_CHECKOUT_STEPS_LASTSTEP'                                           => "Ready!",
 'PAGE_CHECKOUT_WRAPPING_GIFTOPTION'                                      => "Gift options",
 'PAGE_CHECKOUT_WRAPPING_ADDWRAPPING'                                     => "Add gift wrap",
 'PAGE_CHECKOUT_WRAPPING_PERSONALMESSAGE'                                 => "We're happy to wrap your gift or to add a gift card with your personal message.",
@@ -348,7 +350,7 @@ $aLang = array(
 'PAGE_CHECKOUT_ORDER_MODIFYADDRESS'                                      => "modify",
 'PAGE_CHECKOUT_ORDER_EMAIL'                                              => "eMail:",
 'PAGE_CHECKOUT_ORDER_PHONE'                                              => "Phone:",
-'PAGE_CHECKOUT_ORDER_SHIPPINGADDRESS'                                    => "Shipping Address",
+'PAGE_CHECKOUT_ORDER_SHIPPINGADDRESS'                                    => "Shipping address",
 'PAGE_CHECKOUT_ORDER_PHONE2'                                             => "Phone:",
 'PAGE_CHECKOUT_ORDER_WHATIWANTEDTOSAY'                                   => "What I wanted to say ...:",
 'PAGE_CHECKOUT_ORDER_SHIPPINGCARRIER'                                    => "Shipping Carrier",
@@ -360,6 +362,7 @@ $aLang = array(
 'PAGE_CHECKOUT_ORDER_MODIFY4'                                            => "modify",
 'PAGE_CHECKOUT_ORDER_BACKSTEP'                                           => "Previous Step",
 'PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS'                                => "Please read and confirm our terms and conditions.",
+'PAGE_CHECKOUT_ORDER_TITLE2'                                              => "[Tr] Senden sie ihre bestellung am unteren ende dieser übersicht ab",
 
 'PAGE_CHECKOUT_USER_OPTION_NEXT'                                => "Next",
 'PAGE_CHECKOUT_USER_OPTION_NOREGISTRATION'                      => "Purchase without Registration",
@@ -379,8 +382,8 @@ $aLang = array(
 
 'PAGE_CHECKOUT_PAYMENT_TITLE'                                   => "Pay",
 'PAGE_CHECKOUT_PAYMENT_SELECTSHIPPING'                          => "Please select your shipping method",
-'PAGE_CHECKOUT_PAYMENT_SELECTEDSHIPPING'                        => "Selected Shipping Carrier is:",
-'PAGE_CHECKOUT_PAYMENT_UPDATESHIPPING'                          => "Update Shipping Carrier",
+'PAGE_CHECKOUT_PAYMENT_SELECTEDSHIPPING'                        => "Selected shipping carrier is:",
+'PAGE_CHECKOUT_PAYMENT_UPDATESHIPPING'                          => "Update shipping carrier",
 'PAGE_CHECKOUT_PAYMENT_CHARGE'                                  => "Charges:",
 'PAGE_CHECKOUT_PAYMENT_COMLETEALLFIELDS'                        => "Please complete all fields correctly!",
 'PAGE_CHECKOUT_PAYMENT_AUTHORIZATIONFAILED'                     => "The payment authorization failed. Please verify your input.",
@@ -492,7 +495,7 @@ $aLang = array(
 'FORM_FIELDSET_USER_BILLING_SAVE'                               => "Save",
 'FORM_FIELDSET_USER_BILLING_PWD'                                =>"Password:",
 
-'FORM_USER_SHIPPINGADDRESSES'                                    => "Shipping Addresses",
+'FORM_USER_SHIPPINGADDRESSES'                                    => "Shipping addresses",
 'FORM_FIELDSET_USER_SHIPPING_ADDRESSES'                          => "Addresses",
 'FORM_FIELDSET_USER_SHIPPING_NEWADDRESS'                         => "New Address",
 'FORM_FIELDSET_USER_SHIPPING_TITLE2'                             => "Title:",
@@ -564,7 +567,7 @@ $aLang = array(
 'PAGE_ACCOUNT_NEWSLETTER_SETTINGS'                     => "Newsletter Settings",
 'PAGE_ACCOUNT_NEWSLETTER_SUBSCRIPTIONSUCCESS'          => "The Newsletter subscription was successful.",
 'PAGE_ACCOUNT_NEWSLETTER_SUBSCRIPTIONREJECT'           => "The Newsletter subscription has been canceled.",
-'PAGE_ACCOUNT_USER_USERTITLE'                          => "Billings and Shipping Settings",
+'PAGE_ACCOUNT_USER_USERTITLE'                          => "Billings and shipping settings",
 'PAGE_ACCOUNT_PASSWORD_CHANGEPASSWORD'                 => "Create Password",
 
 'PAGE_ACCOUNT_REGISTER_OPENACCOUNT'                            => "Open account",
@@ -764,7 +767,7 @@ $aLang = array(
 'WIDGET_LOGINBOX_PASSWORD'                         => "Password",
 
 'WIDGET_PRODUCT_RELATED_PRODUCTS_SIMILAR_HEADER'     => "Similar Products",
-'WIDGET_PRODUCT_RELATED_PRODUCTS_CROSSSELING_HEADER' => "Have you seen ... ?",
+'WIDGET_PRODUCT_RELATED_PRODUCTS_CROSSSELING_HEADER' => "Have you seen ...?",
 'WIDGET_PRODUCT_RELATED_PRODUCTS_ACCESSORIES_HEADER' => "Accessories",
 
 'WIDGET_COUNTDOWN_BASKET_TIMEOUT'                      => 'Expires in:',
@@ -1018,11 +1021,11 @@ $aLang = array(
 'WIDGET_NEWBASKETITEMMSG'                                      => "New item was added to cart",
 
 'WIDGET_BARGAIN_ITEMS_PRODUCT_PLUSSHIPPING'                    => "incl. VAT, plus ",
-'WIDGET_BARGAIN_ITEMS_PRODUCT_PLUSSHIPPING2'                   => "Shipping",
+'WIDGET_BARGAIN_ITEMS_PRODUCT_PLUSSHIPPING2'                   => "shipping",
 'WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART'                       => "To cart",
 
-'PAGE_ACCOUNT_FORGOTPWD_TITLE'                                 => "Forgot Password ?",
-'PAGE_ACCOUNT_FORGOTPWD_FORGOTPWD'                             => "Have you forgotten your Password ?",
+'PAGE_ACCOUNT_FORGOTPWD_TITLE'                                 => "Forgot password?",
+'PAGE_ACCOUNT_FORGOTPWD_FORGOTPWD'                             => "Have you forgotten your password?",
 'PAGE_ACCOUNT_FORGOTPWD_WEWILLSENDITTOYOU'                     => "No problem, here you can set up a new password.",
 'PAGE_ACCOUNT_FORGOTPWD_YOUREMAIL'                             => "Your eMail Address:",
 'PAGE_ACCOUNT_FORGOTPWD_PWDWASSEND'                            => "Password was sent to:",
@@ -1048,7 +1051,7 @@ $aLang = array(
 'FORM_LOGIN_ACCOUNT_KEEPLOGGEDIN'                              => "Keep me logged-in:",
 'FORM_LOGIN_ACCOUNT_LOGIN'                                     => "Login",
 'FORM_LOGIN_ACCOUNT_OPENACCOUNT'                               => "Open account",
-'FORM_LOGIN_ACCOUNT_FORGOTPWD'                                 => "Forgot Password ?",
+'FORM_LOGIN_ACCOUNT_FORGOTPWD'                                 => "Forgot password?",
 
 // constant for template location getter Tag::getBreadCrumb()
 'TAGS'                                                         => "Tags",

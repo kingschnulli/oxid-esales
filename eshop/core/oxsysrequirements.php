@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 32582 2011-01-19 16:04:17Z sarunas $
+ * @version   SVN: $Id: oxsysrequirements.php 33938 2011-03-23 16:11:45Z sarunas $
  */
 
 /**
@@ -869,7 +869,7 @@ class oxSysRequirements
     {
         $oConfig = oxConfig::getInstance();
 
-        $sTplFile = $oConfig->getTemplateFile($sTemplate, false);
+        $sTplFile = $oConfig->getTemplatePath($sTemplate, false);
         if (!$sTplFile || !file_exists($sTplFile)) {
             return false;
         }

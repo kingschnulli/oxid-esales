@@ -15,7 +15,7 @@
         [{/if}]
     </div>
     [{if $oView->getWishList()}]
-        [{include file="widget/product/list.tpl" type="line" title="" listId="wishlistProductList" products=$oView->getWishList() toBasketFunction="wl_tobasket" owishid=$oxcmp_user->oxuser__oxid->value}]
+        [{include file="widget/product/list.tpl" type="line" title="" listId="wishlistProductList" products=$oView->getWishList() toBasketFunction="wl_tobasket" owishid=$wishuser->oxuser__oxid->value}]
     [{else }]
         [{ oxmultilang ident="PAGE_WISHLIST_PRODUCTS_WISHLISTEMPTY" }]
     [{/if }]

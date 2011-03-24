@@ -62,7 +62,13 @@ function smarty_prefilter_oxblock($sSource, &$oSmartyCompiler)
             $sAppend .= '[{/__smartyblock__}]';
         }
         if ($blDebugTemplateBlocks) {
-            $sDbgName = basename($oSmartyCompiler->_current_file).'-&gt;'.$sBlockName;
+            $sTplDir = trim(oxConfig::getInstance()->getConfigParam('_sTemplateDir'), '/\\');
+            $sFile = str_replace(array('\\', '//'), '/', $oSmartyCompiler->_current_file);
+            if (preg_match('@/'.preg_quote($sTplDir, '@').'/(.*)$@', $sFile, $m)) {
+                $sFile = $m[1];
+            }
+
+            $sDbgName = $sFile.'-&gt;'.$sBlockName;
             $sPrepend = '[{capture name="_dbg_blocks"}]'.$sPrepend;
             $sDbgId = 'block_'.sprintf("%u", crc32($sDbgName)).'_[{$_dbg_block_idr1}][{$_dbg_block_idr2}]';
             $sAppend .= '[{/capture}][{math equation="rand()" assign="_dbg_block_idr1"}][{math equation="rand()" assign="_dbg_block_idr2"}]'

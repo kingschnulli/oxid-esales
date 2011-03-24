@@ -43,6 +43,7 @@
         a.link:hover { text-decoration: underline; }
 
     </style>
+    [{assign var='rsslinks' value=$oView->getRssLinks() }]
     [{if $rsslinks}]
       [{foreach from=$rsslinks item='rssentry'}]
         <link rel="alternate" type="application/rss+xml" title="[{$rssentry.title|strip_tags}]" href="[{$rssentry.link}]">

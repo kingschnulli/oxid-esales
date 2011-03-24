@@ -2,13 +2,16 @@
 [{capture append="oxidBlock_content"}]
 [{* ordering steps *}]
 [{include file="page/checkout/inc/steps.tpl" active=4 }]
+<div class="lineBox clear">
+    <span class="title">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_TITLE2" }]<span>
+</div>
 <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
 <h3 class="section">
-    <strong>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_BASKET" }]</strong>
+   <strong>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_BASKET" }]</strong>
     [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="cl" value="basket">
     <input type="hidden" name="fnc" value="">
-    <button type="submit" class="submitButton largeButton nextStep">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_MODIFY4" }]</button>
+    <button type="submit" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_MODIFY4" }]</button>
 </h3>
 </form>
 [{ if $oView->isConfirmAGBActive() && $oView->isConfirmAGBError() == 1 }]
@@ -148,23 +151,26 @@
             <input type="hidden" name="cl" value="order">
             <input type="hidden" name="fnc" value="[{$oView->getExecuteFnc()}]">
             <input type="hidden" name="challenge" value="[{$challenge}]">
-            <div>
 
-                [{if $oView->isActive('PsLogin') }]
-                    <input type="hidden" name="ord_agb" value="1">
-                [{else}]
-                    [{if $oView->isConfirmAGBActive()}]
-                    <h3 class="section">
-                        <strong>AGB</strong>
-                    </h3>
-                    <input type="hidden" name="ord_agb" value="0">
-                    <input class="checkbox" type="checkbox" name="ord_agb" value="1">
-                    [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
-                    [{ $oContent->oxcontents__oxcontent->value }]
-                    [{/oxifcontent}]
+            <input type="hidden" name="ord_agb" value="1">
+            [{*
+                <div>
+                    [{if $oView->isActive('PsLogin') }]
+                        <input type="hidden" name="ord_agb" value="1">
+                    [{else}]
+                        [{if $oView->isConfirmAGBActive()}]
+                        <h3 class="section">
+                            <strong>AGB</strong>
+                        </h3>
+                        <input type="hidden" name="ord_agb" value="0">
+                        <input class="checkbox" type="checkbox" name="ord_agb" value="1">
+                        [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
+                        [{ $oContent->oxcontents__oxcontent->value }]
+                        [{/oxifcontent}]
+                        [{/if}]
                     [{/if}]
-                [{/if}]
-            </div>
+                </div>
+            *}]
             <div class="lineBox clear">
                 <a href="[{ oxgetseourl ident=$oViewConf->getPaymentLink() }]" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_BACKSTEP" }]</a>
                 <button type="submit" class="submitButton nextStep largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_SUBMITORDER" }]</button>

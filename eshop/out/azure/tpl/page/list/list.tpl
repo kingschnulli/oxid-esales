@@ -88,6 +88,7 @@
         [{/if}]
     [{if $oView->getArticleList()|@count > 0}]
         <h1 class="pageHead">[{$oView->getTitle()}]
+            [{assign var='rsslinks' value=$oView->getRssLinks() }]
             [{ if $rsslinks.activeCategory}]
                 <a class="rss external" id="rssActiveCategory" href="[{$rsslinks.activeCategory.link}]" title="[{$rsslinks.activeCategory.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.activeCategory.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.activeCategory.title}]</span></a>
             [{/if }]

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account_wishlist.php 33449 2011-02-23 07:34:29Z linas.kukulskis $
+ * @version   SVN: $Id: account_wishlist.php 33897 2011-03-22 17:02:50Z vilma $
  */
 
 /**
@@ -210,9 +210,6 @@ class Account_Wishlist extends Account
     /**
      * Sends wishlist mail to recipient. On errors returns false.
      *
-     * Template variables:
-     * <b>editval</b>, <b>error</b>, <b>success</b>
-     *
      * @return bool
      */
     public function sendWishList()
@@ -238,9 +235,6 @@ class Account_Wishlist extends Account
                         return oxUtilsView::getInstance()->addErrorToDisplay( 'FORM_WISHLIST_SUGGEST_ERRWRONGEMAIL', false, true );
                     }
                 }
-
-                $this->_aViewData['success'] = $this->isWishListEmailSent();
-                $this->_aViewData['editval'] = $this->getEnteredData();
             }
         }
     }
@@ -298,9 +292,6 @@ class Account_Wishlist extends Account
      * Searches for wishlist of another user. Returns false if no
      * searching conditions set (no login name defined).
      *
-     * Template variables:
-     * <b>wish_result</b>, <b>search</b>
-     *
      * @return bool
      */
     public function searchForWishList()
@@ -316,9 +307,6 @@ class Account_Wishlist extends Account
 
             $this->_sSearchParam = $sSearch;
         }
-
-        $this->_aViewData['search'] = $this->getWishListSearchParam();
-        $this->_aViewData['wish_result'] = $this->getWishListUsers();
     }
 
     /**

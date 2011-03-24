@@ -40,7 +40,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
      * @group admin
      * @group create
      */
-    public function testCreateUserUtf8()
+    public function testCreateUserInternational()
     {
         //Main tab
         $this->loginAdmin("Administer Users", "Users", "btn.new");
@@ -177,8 +177,8 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->type("editval[oxaddress__oxfax]", "666999");
         $this->clickAndWait("save");
         //deleting addresses
-        $this->selectAndWait("addressId", "-");
-        $this->selectAndWait("addressId", "label=name2 last name 2, street2, city2");
+        $this->selectAndWait("oxaddressid", "-");
+        $this->selectAndWait("oxaddressid", "label=name2 last name 2, street2, city2");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("name2", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("last name 2", $this->getValue("editval[oxaddress__oxlname]"));
@@ -191,7 +191,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertEquals("Portugal", $this->getSelectedLabel("editval[oxaddress__oxcountryid]"));
         $this->assertEquals("999666", $this->getValue("editval[oxaddress__oxfon]"));
         $this->assertEquals("666999", $this->getValue("editval[oxaddress__oxfax]"));
-        $this->selectAndWait("addressId", "label=shipping name_šųößлы shipping surname_šųößлы, shipping street_šųößлы, shipping city_šųößлы");
+        $this->selectAndWait("oxaddressid", "label=shipping name_šųößлы shipping surname_šųößлы, shipping street_šųößлы, shipping city_šųößлы");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("shipping name_šųößлы", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("shipping surname_šųößлы", $this->getValue("editval[oxaddress__oxlname]"));
@@ -205,9 +205,9 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertEquals("7778788", $this->getValue("editval[oxaddress__oxfon]"));
         $this->assertEquals("8887877", $this->getValue("editval[oxaddress__oxfax]"));
         $this->clickAndWait("//input[@value='Delete']");
-        $this->assertTrue($this->isElementPresent("addressId"), "Failed to delete address in Admin: Users -> Addresses tab");
-        $this->assertEquals("- name2 last name 2, street2, city2", $this->clearString($this->getText("addressId")));
-        $this->selectAndWait("addressId", "label=name2 last name 2, street2, city2");
+        $this->assertTrue($this->isElementPresent("oxaddressid"), "Failed to delete address in Admin: Users -> Addresses tab");
+        $this->assertEquals("- name2 last name 2, street2, city2", $this->clearString($this->getText("oxaddressid")));
+        $this->selectAndWait("oxaddressid", "label=name2 last name 2, street2, city2");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("name2", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("last name 2", $this->getValue("editval[oxaddress__oxlname]"));
@@ -268,7 +268,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
      * @group admin
      * @group seo
      */
-    public function testSeoCoreSettingsUtf8()
+    public function testSeoCoreSettingsInternational()
     {
         $this->loginAdmin("Master Settings", "Core Settings");
         $this->openTab("link=SEO");
@@ -322,12 +322,12 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
      * simple user account opening
      * @group user
      */
-    public function testStandardUserRegistrationUtf8()
+    public function testStandardUserRegistrationInternational()
     {
         //creating user
         $this->openShop();
         $this->clickAndWait("test_RightLogin_Register");
-        $this->type("userLoginName", "birute01@nfq.lt");
+        $this->type("test_lgn_usr", "birute01@nfq.lt");
         $this->type("userPassword", "user11");
         $this->type("userPasswordConfirm", "user11");
         $this->assertEquals("off", $this->getValue("document.order.blnewssubscribed[1]"));
@@ -418,7 +418,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertEquals("111-111111", $this->getValue("editval[oxuser__oxmobfon]"));
         $this->frame("list");
         $this->openTab("link=Addresses");
-        $this->selectAndWait("addressId", "label=user1_2 name_šųößлы user1_2 last name_šųößлы, user1_2 street_šųößлы, user1_2 city_šųößлы");
+        $this->selectAndWait("addressid", "label=user1_2 name_šųößлы user1_2 last name_šųößлы, user1_2 street_šųößлы, user1_2 city_šųößлы");
         $this->assertEquals("Mr", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("user1_2 name_šųößлы", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("user1_2 last name_šųößлы", $this->getValue("editval[oxaddress__oxlname]"));
@@ -437,7 +437,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
      * Checking Tags functionality
      * @group navigation
      */
-    public function testFrontendTagsUtf8()
+    public function testFrontendTagsInternational()
     {
         $this->clearTmp();
         $this->openShop();
@@ -523,7 +523,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
      * Search in frontend
      * @group navigation
      */
-    public function testFrontendSearchUtf8()
+    public function testFrontendSearchInternational()
     {
         $this->openShop();
         //searching for 1 product (using product search field value)
@@ -650,7 +650,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
      * @group navigation
      * @group user
      */
-    public function testFrontendMyAccountPassUtf8()
+    public function testFrontendMyAccountPassInternational()
     {
         $this->openShop();
         $this->type("test_RightLogin_Email", "birute_test@nfq.lt");
@@ -666,19 +666,19 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertTrue($this->isTextPresent("Change Password"));
         $this->assertTrue($this->isTextPresent("Note:The Password minimum length is 6 characters."));
         //entered diff new passwords
-        $this->type("passwordOld", "useruser");
+        $this->type("password_old", "useruser");
         $this->type("password_new", "user1user");
         $this->type("password_new_confirm", "useruser");
         $this->clickAndWait("test_savePass");
         $this->assertTrue($this->isTextPresent("Error: Passwords don't match."));
         //new pass is too short
-        $this->type("passwordOld", "useruser");
+        $this->type("password_old", "useruser");
         $this->type("password_new", "user");
         $this->type("password_new_confirm", "user");
         $this->clickAndWait("test_savePass");
         $this->assertTrue($this->isTextPresent("Error: Your Password is too short."));
         //correct new pass
-        $this->type("passwordOld", "useruser");
+        $this->type("password_old", "useruser");
         $this->type("password_new", "user1userįÄк");
         $this->type("password_new_confirm", "user1userįÄк");
         $this->clickAndWait("test_savePass");
@@ -701,7 +701,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
      * @group user
      * @group navigation
      */
-    public function testFrontendOrderStep1Utf8()
+    public function testFrontendOrderStep1International()
     {
         $this->openShop();
         //adding products to the basket
@@ -709,7 +709,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->clickAndWait("test_searchGo");
         $this->select("selectList_Search_1001_0", "index=2");
         $this->clickAndWait("test_toBasket_Search_1001");
-        $this->select("varSelect-Search_1002", "index=1");
+        $this->select("varSelect_Search_1002", "index=1");
         $this->clickAndWait("test_toBasket_Search_1002");
         $this->type("test_am_Search_1003", "6");
         $this->clickAndWait("test_toBasket_Search_1003");
@@ -775,7 +775,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
      * @group user
      * @group navigation
      */
-    public function testFrontendOrderSteps4And5Utf8()
+    public function testFrontendOrderSteps4And5International()
     {
         $this->openShop();
         //adding products to the basket
@@ -783,7 +783,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->clickAndWait("test_searchGo");
         $this->select("selectList_Search_1001_0", "index=0");
         $this->clickAndWait("test_toBasket_Search_1001");
-        $this->select("varSelect-Search_1002", "index=1");
+        $this->select("varSelect_Search_1002", "index=1");
         $this->clickAndWait("test_toBasket_Search_1002");
         $this->clickAndWait("link=Cart");
         $this->type("test_RightLogin_Email", "birute_test@nfq.lt");
@@ -823,7 +823,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->clickAndWait("test_orderChangeShipAdress");
         $this->assertEquals("You are here: / Login", $this->getText("path"));
         $this->clickAndWait("blshowshipaddress");
-        $this->select("addressId", "label=New Address");
+        $this->select("addressid", "label=New Address");
         sleep(1);
         $this->checkForErrors();
         $this->type("deladr[oxaddress__oxfname]", "firstįÄк");
@@ -860,7 +860,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
      * Checking Top Menu Navigation
      * @group navigation
      */
-    public function testFrontendTopMenuUtf8()
+    public function testFrontendTopMenuInternational()
     {
         $this->openShop();
         $this->assertFalse($this->isElementPresent("root2"));

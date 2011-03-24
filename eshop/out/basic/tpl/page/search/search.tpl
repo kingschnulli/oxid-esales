@@ -14,7 +14,7 @@
   [{if $oView->getArticleList() }]
     [{assign var="search_head" value="SEARCH_HITSFOR"|oxmultilangassign}]
     [{assign var="search_head" value=$oView->getArticleCount()|cat:" "|cat:$search_head|cat:" &quot;"|cat:$oView->getSearchParamForHtml()|cat:"&quot;"}]
-
+    [{assign var='rsslinks' value=$oView->getRssLinks() }]
     [{if $rsslinks.searchArticles}]
         [{assign var="search_head" value="`$search_head` <a class=\"rss\" id=\"rssSearchProducts\" href=\"`$rsslinks.searchArticles.link`\" title=\"`$rsslinks.searchArticles.title`\"></a>"}]
         [{oxscript add="oxid.blank('rssSearchProducts');"}]

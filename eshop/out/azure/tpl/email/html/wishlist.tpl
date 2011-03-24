@@ -19,7 +19,7 @@
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding-top : 10px; padding-bottom : 10px; padding-left : 10px;  padding-right : 10px;">
                   <tr>
                     <td bgcolor="#ffffff" align="left"><font face="Arial" size="4" color="#808080">&nbsp;&nbsp;[{ oxmultilang ident="EMAIL_WISHLIST_HTML_MYWISHLISTBY" }] </font></td>
-                    <td bgcolor="#ffffff" align="right"><img src="[{$oViewConf->getImageUrl()}]logo_white.gif" border="0" hspace="0" vspace="0" alt="[{ $shop->oxshops__oxname->value }]" align="texttop"></td>
+                    <td bgcolor="#ffffff" align="right"><img src="[{$oViewConf->getImageUrl()}]logo.png" border="0" hspace="0" vspace="0" alt="[{ $shop->oxshops__oxname->value }]" align="texttop"></td>
                   </tr>
                 </table>
               </td>

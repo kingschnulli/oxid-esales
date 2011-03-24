@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account_user.php 32923 2011-02-04 14:35:22Z vilma $
+ * @version   SVN: $Id: account_user.php 33900 2011-03-22 17:06:44Z vilma $
  */
 
 /**
@@ -37,23 +37,7 @@ class Account_User extends Account
      *
      * @var string
      */
-
-
     protected $_sThisTemplate = 'page/account/user.tpl';
-
-    /**
-     * returns Deliver Adress.
-     *
-     * @var oxbase
-     */
-    protected $_oDelAddress = null;
-
-    /**
-     * returns Country.
-     *
-     * @var oxcountrylist
-     */
-    protected $_oCountryList = null;
 
     /**
      * If user is not logged in - returns name of template account_user::_sThisLoginTemplate,
@@ -87,6 +71,8 @@ class Account_User extends Account
 
     /**
      * Return country list
+     *
+     * @deprecated will be removed in future: use oxViewConfig::getCountryList()
      *
      * @return oxcountrylist
      */

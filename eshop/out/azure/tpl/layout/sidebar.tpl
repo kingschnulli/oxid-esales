@@ -1,3 +1,7 @@
+[{if $oView->isDemoShop()}]
+  [{ include file="widget/sidebar/adminbanner.tpl" }]
+[{/if}]
+
 [{if $oxcmp_categories }]
 [{capture append="oxidBlock_sidebar" }]
     [{include file="widget/sidebar/categoriestree.tpl" categories=$oxcmp_categories->getClickRoot() act=$oxcmp_categories->getClickCat() deepLevel=0}]

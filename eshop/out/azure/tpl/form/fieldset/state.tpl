@@ -18,7 +18,7 @@
   var allStateIds = new Array();
   var allCountryIds = new Object();
   var cCount = 0;
-  [{foreach from=$oView->getCountryList() item=country key=country_id }]
+  [{foreach from=$oViewConf->getCountryList() item=country key=country_id }]
 
     var states = new Array();
     var ids = new Array();

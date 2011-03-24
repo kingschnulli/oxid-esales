@@ -21,6 +21,7 @@
     <!--[if IE 7]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid_ie7.css"><![endif]-->
     <!--[if IE 6]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid_ie6.css"><![endif]-->
 
+    [{assign var='rsslinks' value=$oView->getRssLinks() }]
     [{if $rsslinks}]
       [{foreach from=$rsslinks item='rssentry'}]
         <link rel="alternate" type="application/rss+xml" title="[{$rssentry.title|strip_tags}]" href="[{$rssentry.link}]">

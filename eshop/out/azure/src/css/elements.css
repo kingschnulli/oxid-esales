@@ -658,6 +658,30 @@ button {
     text-transform: uppercase;
 }
 
+div.lineBox .largeButton {
+    font-size: 11px;
+    text-transform: uppercase;
+    height: 32px;
+}
+
+div.lineBox a.largeButton {
+    display:inline-block;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 28px;
+    line-height:28px;
+}
+
+div.lineBox span.title {
+    float: right;
+    text-shadow: 0 -1px 0 #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    color: #1A7990;
+    text-transform: uppercase;
+}
+
 .submitButton:hover {
     line-height: 17px;
     text-decoration: none;
@@ -2031,8 +2055,16 @@ a.next {
     margin-right:0;
 }
 
-.lineBox {border:1px solid #999; padding:9px 10px 10px 10px; margin: 20px 0; background:#d9dfe1 url(../../img/line-innershadow.png) no-repeat 0 0;}
-.lineBox .importantSubmit {float:right;}
+.lineBox {
+    border: 1px solid #999;
+    padding: 9px 10px 10px 10px;
+    margin: 20px 0;
+    background:#d9dfe1 url(../../img/line-innershadow.png) no-repeat 0 0;
+}
+
+.lineBox .importantSubmit {
+    float:right;
+}
 
 
 .couponBox {
@@ -3578,3 +3610,7 @@ span.dismiss a{
 .errorBox a:hover {color:#666;}
 .errorBox .errHead {background: #D81F01; color: #fff; padding: 5px 15px;}
 .errorBox .errBody {border: 1px solid #D81F01; padding: 15px;}
+
+li.articleImage{
+    height: 90px;
+}

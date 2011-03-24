@@ -13,7 +13,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=[{$oEmailView->getCharset()}]">
   </head>
   <body bgcolor="#FFFFFF" link="#355222" alink="#355222" vlink="#355222" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;">
-    <img src="[{$oViewConf->getImageUrl()}]logo_white.gif" border="0" hspace="0" vspace="0" alt="[{ $shop->oxshops__oxname->value }]" align="texttop"><br><br>
+    <img src="[{$oViewConf->getImageUrl()}]logo.png" border="0" hspace="0" vspace="0" alt="[{ $shop->oxshops__oxname->value }]" align="texttop"><br><br>
     [{if $payment->oxuserpayments__oxpaymentsid->value == "oxempty"}]
       [{oxcontent ident="oxuserordernpemail"}]
     [{else}]
@@ -40,9 +40,9 @@
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; background-color: #494949; color: #FFFFFF;" align="right" width="70">
           <b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TOTAL" }]</b>
         </td>
-        <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; background-color: #494949; color: #FFFFFF;" align="right" width="70">
+        <!-- <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; background-color: #494949; color: #FFFFFF;" align="right" width="70">
           [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PRODUCTREVIEW" }]
-        </td>
+        </td> -->
       </tr>
     [{assign var="basketitemlist" value=$basket->getBasketArticles() }]
     [{foreach key=basketindex from=$basket->getContents() item=basketitem}]
@@ -91,9 +91,9 @@
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
           <b>[{ $basketitem->getFTotalPrice() }] [{ $currency->sign}]</b>
         </td>
-        <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
+       <!-- <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
           <a href="[{ $oViewConf->getBaseDir() }]index.php?shp=[{$shop->oxshops__oxid->value}]&amp;anid=[{ $basketproduct->oxarticles__oxid->value }]&amp;cl=review&amp;reviewuserhash=[{$user->getReviewUserHash($user->getId())}]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" target="_blank">[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_REVIEW" }]</a>
-        </td>      </tr>
+        </td>  -->    </tr>
     [{/foreach}]
     <tr>
       <td height="1" bgcolor="#BEBEBE"></td>

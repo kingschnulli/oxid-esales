@@ -1,16 +1,24 @@
-[{assign var="delivadr" value=$oView->getDeliveryAddress()}]
-    <li>
-        <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_ADDRESSES" }]</label>
-        <input type="hidden" name="changeClass" value="[{$onChangeClass|default:'account_user'}]">
-        <select id="addressId" name="oxaddressid">
-            <option value="-1">[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_NEWADDRESS" }]</option>
-            [{if $oxcmp_user }]
-                [{foreach from=$oxcmp_user->getUserAddresses() item=address }]
-                    <option value="[{$address->oxaddress__oxid->value}]" [{if $address->isSelected()}][{assign var="delivadr" value=$address}]SELECTED[{/if}]>[{$address}]</option>
-                [{/foreach }]
-            [{/if}]
-        </select>
-    </li>
+[{assign var="delivadr" value=$oxcmp_user->getSelectedAddress()}]
+<li>
+    <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_ADDRESSES" }]</label>
+    <input type="hidden" name="changeClass" value="[{$onChangeClass|default:'account_user'}]">
+    <select id="addressId" name="oxaddressid">
+        <option value="-1">[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_NEWADDRESS" }]</option>
+        [{if $oxcmp_user }]
+            [{foreach from=$oxcmp_user->getUserAddresses() item=address }]
+                <option value="[{$address->oxaddress__oxid->value}]" [{if $address->isSelected()}]SELECTED[{/if}]>[{$address}]</option>
+            [{/foreach }]
+        [{/if}]
+    </select>
+</li>
+<li class="form" id="shippingAddressText">
+    [{if $delivadr }]
+        [{ include file="widget/address/shipping_address.tpl" delivadr=$delivadr}]
+        <button id="userChangeShippingAddress" class="submitButton largeButton" name="changeShippingAddress" type="submit">[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_CHANGE" }]</button>
+        [{oxscript add="$('#userChangeShippingAddress').click( function() { $('#shippingAddressForm').show();$('#shippingAddressText').hide();return false;});"}]
+    [{/if}]
+</li>
+<ol id="shippingAddressForm" [{if $delivadr }]style="display: none;"[{/if}]>
     <li>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_TITLE2" }][{if $oView->isFieldRequired(oxaddress__oxsal) }]<span class="req">*</span>[{/if }]</label>
           [{include file="form/fieldset/salutation.tpl" name="deladr[oxaddress__oxsal]" value=$delivadr->oxaddress__oxsal->value value2=$deladr.oxaddress__oxsal }]
@@ -82,7 +90,7 @@
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_COUNTRY2" }][{if $oView->isFieldRequired(oxaddress__oxcountryid) }]<span class="req">*</span>[{/if}]</label>
           <select [{if $oView->isFieldRequired(oxaddress__oxcountryid) }] class="oxValidate oxValidate_notEmpty" [{/if }] id="delCountrySelect" name="deladr[oxaddress__oxcountryid]">
             <option value="">-</option>
-            [{foreach from=$oView->getCountryList() item=country key=country_id }]
+            [{foreach from=$oViewConf->getCountryList() item=country key=country_id }]
               <option value="[{ $country->oxcountry__oxid->value }]" [{if isset( $deladr.oxaddress__oxcountryid ) && $deladr.oxaddress__oxcountryid == $country->oxcountry__oxid->value }]selected[{elseif $delivadr->oxaddress__oxcountry->value == $country->oxcountry__oxtitle->value or $delivadr->oxaddress__oxcountry->value == $country->oxcountry__oxid->value or $delivadr->oxaddress__oxcountryid->value == $country->oxcountry__oxid->value }]selected[{/if }]>[{ $country->oxcountry__oxtitle->value }]</option>
             [{/foreach }]
           </select>
@@ -121,9 +129,10 @@
         </p>
          [{/if }]
     </li>
-    [{if !$noFormSubmit}]
+</ol>
+[{if !$noFormSubmit}]
     <li class="formNote">[{ oxmultilang ident="FORM_USER_COMPLETEMARKEDFIELDS" }]</li>
     <li class="formSubmit">
         <button id="accUserSaveBottom" type="submit" class="submitButton" name="save" title="[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_SAVE2" }]">[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_SAVE2" }]</button>
     </li>
-    [{/if}]
+[{/if}]

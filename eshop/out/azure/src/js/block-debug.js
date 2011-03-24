@@ -1,23 +1,31 @@
-$(function(){
+$(window).load(function(){
     $("hr.debugBlocksStart").each(function(){
         var blockTitle = $(this).attr("title");
         var blockId    = $(this).attr("id");
         var endBlock   = $("hr.debugBlocksEnd[title="+blockId+"]");
 
         var _firstElement = $(this).next();
-        var _lastElement  = endBlock.prev();
         while (_firstElement.hasClass('debugBlocksStart')) {
-            _firstElement  = _firstElement.prev();
+            _firstElement  = _firstElement.next();
         }
-        while (_lastElement.hasClass('debugBlocksEnd')) {
-            _lastElement  = _lastElement.prev();
-        }
-        console.log(_firstElement);
-        var divLeft    = Math.min(_firstElement.offset().left, _lastElement.offset().left);
-        var divTop     = Math.min(_firstElement.offset().top, _lastElement.offset().top+_lastElement.outerHeight());
-        var divHeight  = Math.max(_firstElement.offset().top, (_lastElement.offset().top+_lastElement.outerHeight())) - divTop;
-        var divWidth   = Math.max(_firstElement.offset().left+_firstElement.outerWidth(), _lastElement.offset().left+_lastElement.outerWidth()) - divLeft;
-        var blockDiv   = $("<div class='tplDebugBlock' style='z-index:1;background-color:rgba(200, 200, 200, 0.2)'>").html("<span id='"+blockId+"_title' style='z-index:3;color:#fff;background-color:#444;background-color:rgba(0, 0, 0, 0.7);padding:2px 6px;'>Block: "+blockTitle+"</span>");
+
+        var divLeft    = _firstElement.offset().left;
+        var divRight   = _firstElement.offset().left+_firstElement.outerWidth();
+        var divTop     = Math.min($(this).offset().top, endBlock.offset().top);
+        var divBottom  = Math.max($(this).offset().top, endBlock.offset().top);
+
+        var walker = function() {
+            divLeft    = Math.min(divLeft,   $(this).offset().left);
+            divRight   = Math.max(divRight,  $(this).offset().left+$(this).outerWidth());
+            divTop     = Math.min(divTop,    $(this).offset().top);
+            divBottom  = Math.max(divBottom, $(this).offset().top+$(this).outerHeight());
+            $(this).children(':visible').each(walker);
+        };
+        $(this).nextUntil("hr.debugBlocksEnd[title="+blockId+"]").filter(":visible").each(walker);
+
+        var divWidth   = divRight - divLeft;
+        var divHeight  = divBottom - divTop;
+        var blockDiv   = $("<div class='tplDebugBlock' style='z-index:1001;background-color:rgba(200, 200, 200, 0.2)'>").html("<span id='"+blockId+"_title' style='z-index:1003;color:#fff;background-color:#444;background-color:rgba(0, 0, 0, 0.7);padding:2px 6px;'>Block: "+blockTitle+"</span>");
 
         blockDiv.attr('id', blockId+"_border");
         blockDiv.css({
@@ -32,15 +40,15 @@ $(function(){
         $("body").append(blockDiv);
 
         $("#"+blockId+"_title").hover(function(){
-            $(this).css('z-index',4);
+            $(this).css('z-index',1004);
             $(this).css('background-color', '#000');
             $("#"+blockId+"_border").css({
                 'border':'2px solid #f00',
                 'padding':'1px 0',
-                'z-index': 2
+                'z-index': 1002
             });
         },function(){
-            $(this).css('z-index',3);
+            $(this).css('z-index',1003);
             try{
                 $(this).css('background-color', 'rgba(0, 0, 0, 0.7)');
             }catch(err){
@@ -50,7 +58,7 @@ $(function(){
             $("#"+blockId+"_border").css({
                 'border':'1px dashed #a33',
                 'padding':'2px 1px',
-                'z-index': 1
+                'z-index': 1001
             });
         });
 
@@ -67,7 +75,7 @@ $(function(){
             'padding'    : '3px 10px',
             'cursor'     : 'pointer',
             'width'      : '230px',
-            'z-index'    : 4
+            'z-index'    : 1005
         })
         .click(function(){
             $('div.tplDebugBlock').toggle();

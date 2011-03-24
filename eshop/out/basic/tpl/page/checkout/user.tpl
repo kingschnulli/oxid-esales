@@ -246,7 +246,7 @@
               <td>
                 <select id="invCountrySelect" name="invadr[oxuser__oxcountryid]">
                   <option value="">-</option>
-                  [{foreach from=$oView->getCountryList() item=country key=country_id}]
+                  [{foreach from=$oViewConf->getCountryList() item=country key=country_id}]
                     <option value="[{$country->oxcountry__oxid->value}]"[{if isset( $invadr.oxuser__oxcountryid ) && $invadr.oxuser__oxcountryid == $country->oxcountry__oxid->value}] selected[{ elseif $oxcmp_user->oxuser__oxcountryid->value == $country->oxcountry__oxid->value }] selected[{/if}]>[{$country->oxcountry__oxtitle->value}]</option>
                   [{/foreach}]
                 </select>
@@ -413,7 +413,7 @@
                  <td>
                   <select id="delCountrySelect" name="deladr[oxaddress__oxcountryid]">
                     <option value="">-</option>
-                    [{foreach from=$oView->getCountryList() item=country key=country_id}]
+                    [{foreach from=$oViewConf->getCountryList() item=country key=country_id}]
                       <option value="[{$country->oxcountry__oxid->value}]" [{if isset( $deladr.oxaddress__oxcountryid ) && $deladr.oxaddress__oxcountryid == $country->oxcountry__oxid->value}]selected[{elseif $delivadr->oxaddress__oxcountryid->value == $country->oxcountry__oxid->value}]selected[{/if}]>[{$country->oxcountry__oxtitle->value}]</option>
                     [{/foreach}]
                   </select>

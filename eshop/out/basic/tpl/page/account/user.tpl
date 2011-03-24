@@ -87,7 +87,7 @@
             <td>
               <select id="invCountrySelect" name="invadr[oxuser__oxcountryid]">
                 <option value="">-</option>
-                [{foreach from=$oView->getCountryList() item=country key=country_id }]
+                [{foreach from=$oViewConf->getCountryList() item=country key=country_id }]
                   <option value="[{ $country->oxcountry__oxid->value }]"  [{if $oxcmp_user->oxuser__oxcountryid->value == $country->oxcountry__oxid->value }]selected[{/if }]>[{ $country->oxcountry__oxtitle->value }]</option>
                 [{/foreach }]
               </select>
@@ -162,7 +162,7 @@
               <span class="btn"><input id="test_accUserSaveTop" type="submit" name="save" class="btn" value="[{ oxmultilang ident="ACCOUNT_USER_SAVE" }]"></span>
             </td>
           </tr>
-          [{assign var="delivadr" value=$oView->getDeliveryAddress()}]
+          [{assign var="delivadr" value=$oxcmp_user->getSelectedAddress()}]
           <tr class="th_sep">
             <th class="mid" colspan="2">
               [{ oxmultilang ident="ACCOUNT_USER_SHIPPINGADDRESSES" }]
@@ -174,7 +174,7 @@
               <select name="oxaddressid" onchange="oxid.form.reload(this.value === '-1','order','account_user','');oxid.form.clear(this.value !== '-1','order',/oxaddress__/);">
                 <option value="-1">[{ oxmultilang ident="ACCOUNT_USER_NEWADDRESS" }]</option>
                 [{foreach from=$oxcmp_user->getUserAddresses() item=address }]
-                  <option value="[{ $address->oxaddress__oxid->value }]" [{if $address->isSelected()}][{assign var="delivadr" value=$address}]SELECTED[{/if }]>[{$address}]</option>
+                  <option value="[{ $address->oxaddress__oxid->value }]" [{if $address->isSelected()}]SELECTED[{/if }]>[{$address}]</option>
                 [{/foreach }]
               </select>
               <noscript>
@@ -232,7 +232,7 @@
             <td>
               <select id="delCountrySelect" name="deladr[oxaddress__oxcountryid]">
                 <option value="">-</option>
-                [{foreach from=$oView->getCountryList() item=country key=country_id }]
+                [{foreach from=$oViewConf->getCountryList() item=country key=country_id }]
                   <option value="[{ $country->oxcountry__oxid->value }]" [{if isset( $deladr.oxaddress__oxcountryid ) && $deladr.oxaddress__oxcountryid == $country->oxcountry__oxid->value }]selected[{elseif $delivadr->oxaddress__oxcountry->value == $country->oxcountry__oxtitle->value or $delivadr->oxaddress__oxcountry->value == $country->oxcountry__oxid->value or $delivadr->oxaddress__oxcountryid->value == $country->oxcountry__oxid->value }]selected[{/if }]>[{ $country->oxcountry__oxtitle->value }]</option>
                 [{/foreach }]
               </select>
