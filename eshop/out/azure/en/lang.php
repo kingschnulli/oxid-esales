@@ -267,6 +267,7 @@ $aLang = array(
 'PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGNET'                               => "Gift Wrapping/Greeting Card (net):",
 'PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGTAX1'                              => "plus VAT",
 'PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGTAX2'                              => "% Amount:",
+'PAGE_CHECKOUT_BASKETCONTENTS_VPE_MESSAGE'                              => "Only in packaging units of ",
 
 'PAGE_CHECKOUT_BASKET_EMPTYSHIPPINGCART'                                 => "The Shopping Cart is empty.",
 'PAGE_CHECKOUT_BASKET_NEXTSTEP'                                          => "Continue to Next Step",

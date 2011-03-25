@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 33467 2011-02-23 11:40:19Z arvydas.vapsva $
+ * @version   SVN: $Id: oxorderTest.php 33967 2011-03-24 11:25:33Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3543,5 +3543,23 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $oOrder->oxorder__oxcurrency = new oxField( "EUR" );
         $oOrder->oxorder__oxtotalordersum = new oxField( 100 );
         return $this->assertEquals( "100,00", $oOrder->getFormattedTotalOrderSum() );
+    }
+
+    /**
+     * Testing oxORder::getShipmentTrackingUrl()
+     *
+     * @return null
+     */
+    public function testGetShipmentTrackingUrl()
+    {
+        $oOrder = new oxOrder();
+        $oOrder->oxorder__oxtrackcode = new oxField( false );
+        $this->assertNull( $oOrder->getShipmentTrackingUrl() );
+
+        $sExpected = "http://www.dpd.de/cgi-bin/delistrack?typ=1&amp;lang=de&amp;pknr=123";
+
+        $oOrder = new oxOrder();
+        $oOrder->oxorder__oxtrackcode = new oxField( 123 );
+        $this->assertEquals( $sExpected, $oOrder->getShipmentTrackingUrl() );
     }
 }

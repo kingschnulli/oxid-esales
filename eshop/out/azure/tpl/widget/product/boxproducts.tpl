@@ -14,7 +14,9 @@
             [{ assign var="_sTitle" value="`$_oBoxProduct->oxarticles__oxtitle->value` `$_oBoxProduct->oxarticles__oxvarselect->value`"|strip_tags}]
             <li class="articleImage" [{if !$smarty.foreach._sProdList.first}] style="display:none;" [{/if}]>
                 <div align="center">
-                   <img src="[{$_oBoxProduct->getIconUrl()}]" alt="[{$_sTitle}]">
+                    <a class="articleBoxImage" href="[{ $_oBoxProduct->getMainLink() }]">
+                        <img src="[{$_oBoxProduct->getIconUrl()}]" alt="[{$_sTitle}]">
+                    </a>
                 </div>
             </li>
             <li class="articleTitle">

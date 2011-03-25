@@ -1,4 +1,6 @@
-[{assign var="delivadr" value=$oxcmp_user->getSelectedAddress()}]
+[{if $oxcmp_user}]
+    [{assign var="delivadr" value=$oxcmp_user->getSelectedAddress()}]
+[{/if}]
 <li>
     <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_ADDRESSES" }]</label>
     <input type="hidden" name="changeClass" value="[{$onChangeClass|default:'account_user'}]">

@@ -31,11 +31,11 @@
             <strong>[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_ORDERNO" }]</strong>
             <span id="accOrderNo_[{$order->oxorder__oxordernr->value}]">[{ $order->oxorder__oxordernr->value }]</span>
         </dd>
-        [{if $order->oxorder__oxtrackcode->value }]
+        [{if $order->getShipmentTrackingUrl()}]
         <dd>
             <strong>[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_TRACKINGID" }]</strong>
             <span id="accOrderTrack_[{$order->oxorder__oxordernr->value}]">
-                <a href="http://www.dpd.de/cgi-bin/delistrack?typ=1&amp;lang=de&amp;pknr=[{ $order->oxorder__oxtrackcode->value }]">[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_TRACKSHIPMENT" }]</a>
+                <a href="[{$order->getShipmentTrackingUrl()}]">[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_TRACKSHIPMENT" }]</a>
             </span>
         </dd>
         [{/if }]

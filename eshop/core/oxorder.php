@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 33467 2011-02-23 11:40:19Z arvydas.vapsva $
+ * @version   SVN: $Id: oxorder.php 33967 2011-03-24 11:25:33Z arvydas.vapsva $
  */
 
 /**
@@ -2048,5 +2048,19 @@ class oxOrder extends oxBase
     public function getFormattedTotalOrderSum()
     {
         return oxLang::getInstance()->formatCurrency( $this->oxorder__oxtotalordersum->value, $this->getOrderCurrency() );
+    }
+
+    /**
+     * Returns DPD shipment tracking url if oxorder__oxtrackcode is supplied
+     *
+     * @return string
+     */
+    public function getShipmentTrackingUrl()
+    {
+        if ( $this->_sShipTrackUrl === null && $this->oxorder__oxtrackcode->value ) {
+            $this->_sShipTrackUrl = "http://www.dpd.de/cgi-bin/delistrack?typ=1&amp;lang=de&amp;pknr=".$this->oxorder__oxtrackcode->value;
+        }
+
+        return $this->_sShipTrackUrl;
     }
 }

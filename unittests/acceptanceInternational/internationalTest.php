@@ -177,8 +177,8 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->type("editval[oxaddress__oxfax]", "666999");
         $this->clickAndWait("save");
         //deleting addresses
-        $this->selectAndWait("addressId", "-");
-        $this->selectAndWait("addressId", "label=name2 last name 2, street2, city2");
+        $this->selectAndWait("oxaddressid", "-");
+        $this->selectAndWait("oxaddressid", "label=name2 last name 2, street2, city2");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("name2", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("last name 2", $this->getValue("editval[oxaddress__oxlname]"));
@@ -191,7 +191,7 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->assertEquals("Portugal", $this->getSelectedLabel("editval[oxaddress__oxcountryid]"));
         $this->assertEquals("999666", $this->getValue("editval[oxaddress__oxfon]"));
         $this->assertEquals("666999", $this->getValue("editval[oxaddress__oxfax]"));
-        $this->selectAndWait("addressId", "label=shipping name_šųößлы shipping surname_šųößлы, shipping street_šųößлы, shipping city_šųößлы");
+        $this->selectAndWait("oxaddressid", "label=shipping name_šųößлы shipping surname_šųößлы, shipping street_šųößлы, shipping city_šųößлы");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("shipping name_šųößлы", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("shipping surname_šųößлы", $this->getValue("editval[oxaddress__oxlname]"));
@@ -205,9 +205,9 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->assertEquals("7778788", $this->getValue("editval[oxaddress__oxfon]"));
         $this->assertEquals("8887877", $this->getValue("editval[oxaddress__oxfax]"));
         $this->clickAndWait("//input[@value='Delete']");
-        $this->assertTrue($this->isElementPresent("addressId"), "Failed to delete address in Admin: Users -> Addresses tab");
-        $this->assertEquals("- name2 last name 2, street2, city2", $this->clearString($this->getText("addressId")));
-        $this->selectAndWait("addressId", "label=name2 last name 2, street2, city2");
+        $this->assertTrue($this->isElementPresent("oxaddressid"), "Failed to delete address in Admin: Users -> Addresses tab");
+        $this->assertEquals("- name2 last name 2, street2, city2", $this->clearString($this->getText("oxaddressid")));
+        $this->selectAndWait("oxaddressid", "label=name2 last name 2, street2, city2");
         $this->assertEquals("Mrs", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("name2", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("last name 2", $this->getValue("editval[oxaddress__oxlname]"));
@@ -423,7 +423,7 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         /*
         $this->frame("list");
         $this->openTab("link=Addresses");
-        $this->selectAndWait("addressId", "label=user1_2 name_šųößлы user1_2 last name_šųößлы, user1_2 street_šųößлы, user1_2 city_šųößлы");
+        $this->selectAndWait("oxaddressid", "label=user1_2 name_šųößлы user1_2 last name_šųößлы, user1_2 street_šųößлы, user1_2 city_šųößлы");
         $this->assertEquals("Mr", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("user1_2 name_šųößлы", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("user1_2 last name_šųößлы", $this->getValue("editval[oxaddress__oxlname]"));
@@ -514,7 +514,7 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->assertEquals("1 Hits for \"šųößлы1000\"", $this->getHeadingText("//h1"));
         $this->selectDropDown("viewOptions", "Line");
         $this->assertEquals("Test product 0 short desc [EN] šųößлы", $this->clearString($this->getText("//ul[@id='searchList']/li[1]//div[2]/div[2]")));
-        $this->assertEquals("50,00 €", $this->clearString($this->getText("//ul[@id='searchList']/li[1]//strong[text()='50,00 €']")));
+        $this->assertTrue($this->isElementPresent("//ul[@id='searchList']/li[1]//strong[text()='50,00 € *']"));
         $this->assertEquals("Test product 0 [EN] šųößлы", $this->clearString($this->getText("//ul[@id='searchList']/li[1]//div[2]//a")));
         $this->assertEquals("0", $this->getText("//div[@id='miniBasket']/span"));
         $this->type("amountToBasket_searchList_1", "3");
@@ -606,28 +606,22 @@ class AcceptanceInternational_internationalTest extends oxidAdditionalSeleniumFu
         $this->openShop();
         //adding products to the basket
         $this->searchFor("100");
-                $this->searchFor("100");
         $this->selectDropDown("viewOptions", "Line");
         $this->select("selList_searchList_2_0", "index=2");
         $this->clickAndWait("toBasket_searchList_2");
-//TODO: remove when bug will be fixed
-$this->selectDropDown("viewOptions", "Line");
-        $this->select("varSelect-searchList_3", "index=1");
+
+        $this->select("varSelect_searchList_3", "index=1");
         $this->clickAndWait("toBasket_searchList_3");
-//TODO: remove when bug will be fixed
-$this->selectDropDown("viewOptions", "Line");
         $this->type("amountToBasket_searchList_4", "6");
         $this->clickAndWait("toBasket_searchList_4");
-//TODO: remove when bug will be fixed
-$this->selectDropDown("viewOptions", "Line");
         $this->clickAndWait("toBasket_searchList_1");
 
         $this->openBasket();
         $this->assertEquals("You are here: / View cart", $this->getText("breadCrumb"));
         $this->type("voucherNr", "222222");
         $this->clickAndWait("//button[text()='Submit Coupon']");
-//        $this->assertTrue($this->isTextPresent("Your Coupon “222222” couldn't be accepted."));
-//        $this->assertTrue($this->isTextPresent("The coupon is not valid for your user group!"));
+        $this->assertTrue($this->isTextPresent("Your Coupon “222222” couldn't be accepted."));
+        $this->assertTrue($this->isTextPresent("The coupon is not valid for your user group!"));
         $this->loginInFrontend("birute_test@nfq.lt", "useruser");
         $this->type("voucherNr", "111111");
         $this->clickAndWait("//button[text()='Submit Coupon']");
@@ -722,8 +716,6 @@ $this->selectDropDown("viewOptions", "Line");
         $this->selectDropDown("viewOptions", "Line");
         $this->select("//ul[@id='searchList']/li[2]//select", "index=0");
         $this->clickAndWait("//ul[@id='searchList']/li[2]//button");
-//TODO: remove when bug will be fixed
-$this->selectDropDown("viewOptions", "Line");
         $this->select("//ul[@id='searchList']/li[3]//select", "index=1");
         $this->clickAndWait("//ul[@id='searchList']/li[3]//button");
         $this->openBasket();

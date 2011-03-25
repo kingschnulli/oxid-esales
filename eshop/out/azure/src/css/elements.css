@@ -651,6 +651,13 @@ button {
     cursor: pointer;
     width: auto;
     overflow: visible;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+a.submitButton {
+    height: 21px;
+    font-weight: bold;
 }
 
 .largeButton {
@@ -1058,6 +1065,7 @@ a.submitButton {
     background: url(../../img/search-icon.png) no-repeat 3px;
     border: none;
     cursor: pointer;
+    width: 20px;
 }
 
 .searchBox .textbox:focus {
@@ -1990,6 +1998,7 @@ a.next {
     margin: 0;
     overflow: hidden;
     border-left: 1px solid #999;
+    border-right: 1px solid #999;
 }
 
 .checkoutSteps li{
@@ -1997,7 +2006,6 @@ a.next {
     padding: 0;
     float: left;
     height: 29px;
-    width: 20%;
     text-transform: uppercase;
     line-height: 29px;
     position: relative;
@@ -2007,12 +2015,32 @@ a.next {
     background: url(../../img/steps.png) no-repeat 100% 0;
 }
 
+
+
+
 .checkoutSteps li.active {
     background-position: 100% -29px;
     color: #fff;
 }
 
+.checkoutSteps li.activeLast {
+    background-position: 0px -29px;
+    color: #fff;
+}
+.checkoutSteps li.defaultLast {
+    background-position: 0px 0px;
+}
+
+.checkoutSteps li.passed {
+    background-position: 100% -58px;
+    color: #fff;
+}
+
 .checkoutSteps li.active a {
+    color: #fff;
+}
+
+.checkoutSteps li.passed a {
     color: #fff;
 }
 
@@ -2026,22 +2054,27 @@ a.next {
 
 .checkoutSteps li.step1 {
    z-index: 5;
+   width: 210px;
 }
 
 .checkoutSteps li.step2 {
     z-index: 4;
+    width: 210px;
 }
 
 .checkoutSteps li.step3 {
     z-index: 3;
+    width: 210px;
 }
 
 .checkoutSteps li.step4 {
     z-index: 2;
+    width: 210px;
 }
 
 .checkoutSteps li.step5 {
     z-index: 1;
+    width: 98px;
 }
 
 .checkoutOptions .option{
@@ -3611,6 +3644,14 @@ span.dismiss a{
 .errorBox .errHead {background: #D81F01; color: #fff; padding: 5px 15px;}
 .errorBox .errBody {border: 1px solid #D81F01; padding: 15px;}
 
+
+/* article box */
 li.articleImage{
-    height: 90px;
+    height: 100px;
 }
+
+.featuredList a.articleBoxImage:hover {
+    background: transparent;
+}
+
+
