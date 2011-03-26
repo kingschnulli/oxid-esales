@@ -32,10 +32,15 @@
                 <input type="hidden" name="cl" value="order">
                 <input type="hidden" name="fnc" value="[{$oView->getExecuteFnc()}]">
                 <input type="hidden" name="challenge" value="[{$challenge}]">
-                [{if $oView->isConfirmAGBActive() }]
+                [{if $oView->isConfirmAGBActive()}]
                     <input type="hidden" name="ord_agb" value="0">
-                    <input type="checkbox" name="ord_agb" value="1">
+                    <input class="checkbox" type="checkbox" name="ord_agb" value="1">
                     [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
+                        [{ $oContent->oxcontents__oxcontent->value }]
+                    [{/oxifcontent}]
+                [{else}]
+                    <input type="hidden" name="ord_agb" value="1">
+                    [{oxifcontent ident="oxrighttocancellegend2" object="oContent"}]
                         [{ $oContent->oxcontents__oxcontent->value }]
                     [{/oxifcontent}]
                 [{/if}]
@@ -151,26 +156,29 @@
             <input type="hidden" name="cl" value="order">
             <input type="hidden" name="fnc" value="[{$oView->getExecuteFnc()}]">
             <input type="hidden" name="challenge" value="[{$challenge}]">
-
             <input type="hidden" name="ord_agb" value="1">
-            [{*
                 <div>
                     [{if $oView->isActive('PsLogin') }]
                         <input type="hidden" name="ord_agb" value="1">
                     [{else}]
-                        [{if $oView->isConfirmAGBActive()}]
                         <h3 class="section">
                             <strong>AGB</strong>
                         </h3>
-                        <input type="hidden" name="ord_agb" value="0">
-                        <input class="checkbox" type="checkbox" name="ord_agb" value="1">
-                        [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
-                        [{ $oContent->oxcontents__oxcontent->value }]
-                        [{/oxifcontent}]
+                        [{if $oView->isConfirmAGBActive()}]
+                            <input type="hidden" name="ord_agb" value="0">
+                            <input class="checkbox" type="checkbox" name="ord_agb" value="1">
+                            [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
+                                [{ $oContent->oxcontents__oxcontent->value }]
+                            [{/oxifcontent}]
+                        [{else}]
+                            <input type="hidden" name="ord_agb" value="1">
+                            [{oxifcontent ident="oxrighttocancellegend2" object="oContent"}]
+                                [{ $oContent->oxcontents__oxcontent->value }]
+                            [{/oxifcontent}]
                         [{/if}]
+
                     [{/if}]
                 </div>
-            *}]
             <div class="lineBox clear">
                 <a href="[{ oxgetseourl ident=$oViewConf->getPaymentLink() }]" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_BACKSTEP" }]</a>
                 <button type="submit" class="submitButton nextStep largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_SUBMITORDER" }]</button>

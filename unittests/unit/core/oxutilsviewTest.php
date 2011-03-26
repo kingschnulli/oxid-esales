@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsviewTest.php 33539 2011-02-25 11:39:38Z sarunas $
+ * @version   SVN: $Id: oxutilsviewTest.php 34014 2011-03-25 14:06:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -498,7 +498,7 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
             $oUV->p_getTemplateBlock('__sModule__', '__sFile__');
             $this->fail("no exception");
         } catch (oxException $oE) {
-            $this->assertEquals("Template block file (__basepath__/modules/__sModule__/blocks/__sFile__.tpl) not found for '__sModule__' module.", str_replace($sMdir, '__basepath__', $oE->getMessage()));
+            $this->assertEquals("Template block file (__basepath__/modules/__sModule__/out/blocks/__sFile__.tpl) not found for '__sModule__' module.", str_replace($sMdir, '__basepath__', $oE->getMessage()));
         }
     }
 

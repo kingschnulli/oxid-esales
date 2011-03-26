@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: test_config.inc.php 33719 2011-03-10 08:40:42Z sarunas $
+ * @version   SVN: $Id: test_config.inc.php 34014 2011-03-25 14:06:07Z sarunas $
  */
 
 // DO NOT TOUCH THIS _ INSTEAD FIX NOTICES - DODGER
@@ -28,8 +28,19 @@ ini_set('display_errors', true);
 
 define ('OXID_PHP_UNIT', true);
 
+$_sOverridenShopBasePath = null;
+function overrideGetShopBasePath($sPath)
+{
+    global $_sOverridenShopBasePath;
+    $_sOverridenShopBasePath = $sPath;
+}
+
 function getShopBasePath()
 {
+    global $_sOverridenShopBasePath;
+    if (isset($_sOverridenShopBasePath)) {
+        return $_sOverridenShopBasePath;
+    }
     return oxPATH;
 }
 

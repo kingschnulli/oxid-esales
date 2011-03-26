@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 33900 2011-03-22 17:06:44Z vilma $
+ * @version   SVN: $Id: oxviewconfig.php 34014 2011-03-25 14:06:07Z sarunas $
  */
 
 /**
@@ -1196,4 +1196,48 @@ class oxViewConfig extends oxSuperCfg
         return $this->_oCountryList;
     }
 
+
+    /**
+     * return path to the requested module file
+     *
+     * @param string $sModule module name (directory name in modules dir)
+     * @param string $sFile   file name to lookup
+     *
+     * @throws oxFileException
+     *
+     * @return string
+     */
+    public function getModulePath($sModule, $sFile = '')
+    {
+        if (!$sFile || ($sFile[0] != '/')) {
+            $sFile = '/'.$sFile;
+        }
+        $sFile = rtrim(getShopBasePath(), '/').'/modules/'.basename($sModule).$sFile;
+        if (file_exists($sFile) || is_dir($sFile)) {
+            return $sFile;
+        }
+        $oEx = new oxFileException("Requested file not found for module $sModule ($sFile)");
+        $oEx->debugOut();
+        throw $oEx;
+    }
+
+    /**
+     * return url to the requested module file
+     *
+     * @param string $sModule module name (directory name in modules dir)
+     * @param string $sFile   file name to lookup
+     *
+     * @throws oxFileException
+     *
+     * @return string
+     */
+    public function getModuleUrl($sModule, $sFile = '')
+    {
+        if (!$sFile || ($sFile[0] != '/')) {
+            $sFile = '/'.$sFile;
+        }
+        // check if file exists
+        $this->getModulePath($sModule, $sFile);
+        return rtrim($this->getConfig()->getCurrentShopUrl(), '/').'/modules/'.basename($sModule).$sFile;
+    }
 }

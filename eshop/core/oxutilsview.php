@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 33532 2011-02-25 11:04:14Z sarunas $
+ * @version   SVN: $Id: oxutilsview.php 34004 2011-03-25 12:50:15Z sarunas $
  */
 
 /**
@@ -407,7 +407,7 @@ class oxUtilsView extends oxSuperCfg
      */
     protected function _getTemplateBlock($sModule, $sFile)
     {
-        $sFileName = $this->getConfig()->getConfigParam( 'sShopDir' )."/modules/$sModule/blocks/$sFile.tpl";
+        $sFileName = $this->getConfig()->getConfigParam( 'sShopDir' )."/modules/$sModule/out/blocks/$sFile.tpl";
         if (file_exists($sFileName) && is_readable($sFileName)) {
             return file_get_contents($sFileName);
         } else {

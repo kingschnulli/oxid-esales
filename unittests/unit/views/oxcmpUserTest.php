@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 33895 2011-03-22 16:20:52Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcmpUserTest.php 34012 2011-03-25 14:05:34Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -221,6 +221,7 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
      */
     public function testLoginNoredirectAlt()
     {
+        oxConfig::getInstance()->setConfigParam( 'blConfirmAGB', true );
         modConfig::setParameter( 'ord_agb', true );
 
         $oUser = $this->getMock( "oxUser", array( "acceptTerms" ) );
@@ -314,6 +315,8 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
      */
     public function testCreateUserNotConfirmedAGB()
     {
+        oxConfig::getInstance()->setConfigParam( 'blConfirmAGB', true );
+
         $oParent = $this->getMock( 'oxubase', array( "isEnabledPrivateSales" ) );
         $oParent->expects( $this->once() )->method( 'isEnabledPrivateSales' )->will( $this->returnValue( true ) );
 

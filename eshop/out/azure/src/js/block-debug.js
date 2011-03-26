@@ -2,7 +2,6 @@ $(window).load(function(){
     $("hr.debugBlocksStart").each(function(){
         var blockTitle = $(this).attr("title");
         var blockId    = $(this).attr("id");
-        var endBlock   = $("hr.debugBlocksEnd[title="+blockId+"]");
 
         var _firstElement = $(this).next();
         while (_firstElement.hasClass('debugBlocksStart')) {
@@ -11,15 +10,17 @@ $(window).load(function(){
 
         var divLeft    = _firstElement.offset().left;
         var divRight   = _firstElement.offset().left+_firstElement.outerWidth();
-        var divTop     = Math.min($(this).offset().top, endBlock.offset().top);
-        var divBottom  = Math.max($(this).offset().top, endBlock.offset().top);
+        var divTop     = _firstElement.offset().top;
+        var divBottom  = _firstElement.offset().top+_firstElement.outerHeight();
 
         var walker = function() {
-            divLeft    = Math.min(divLeft,   $(this).offset().left);
-            divRight   = Math.max(divRight,  $(this).offset().left+$(this).outerWidth());
-            divTop     = Math.min(divTop,    $(this).offset().top);
-            divBottom  = Math.max(divBottom, $(this).offset().top+$(this).outerHeight());
-            $(this).children(':visible').each(walker);
+            if (!($(this).hasClass('debugBlocksStart') || $(this).hasClass('debugBlocksEnd'))) {
+                divLeft    = Math.min(divLeft,   $(this).offset().left);
+                divRight   = Math.max(divRight,  $(this).offset().left+$(this).outerWidth());
+                divTop     = Math.min(divTop,    $(this).offset().top);
+                divBottom  = Math.max(divBottom, $(this).offset().top+$(this).outerHeight());
+                $(this).children(':visible').each(walker);
+            }
         };
         $(this).nextUntil("hr.debugBlocksEnd[title="+blockId+"]").filter(":visible").each(walker);
 

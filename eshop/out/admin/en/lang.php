@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 33448 2011-02-22 16:51:18Z ralf.trapp $
+ * @version   SVN: $Id: lang.php 34007 2011-03-25 13:04:22Z sarunas $
  */
 
 /*
@@ -187,7 +187,7 @@ $aLang = array(
 'GENERAL_CATEGORYSELECT'                        => 'Please select Category',
 'GENERAL_CLICKFORDETAILS'                       => '(Click for Details)',
 'GENERAL_COMPANY'                               => 'Company',
-'GENERAL_CHANGEPRODUCT'                         => 'Change',
+'GENERAL_CHANGEPRODUCT'                         => 'Choose product',
 'GENERAL_COUNTRY'                               => 'Country',
 'GENERAL_DATE'                                  => 'Date',
 'GENERAL_DELETE'                                => 'Delete',

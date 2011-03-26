@@ -52,7 +52,10 @@ function smarty_function_oxstyle($params, &$smarty)
 
     $sOutput  = '';
     if ( $params['include'] ) {
-        $sStyle = $params['include'];//$myConfig->getResourceUrl($params['include']);
+        $sStyle = $params['include'];
+        if (!preg_match('#^https?://#', $sStyle)) {
+            $sStyle = $myConfig->getResourceUrl($sStyle);
+        }
         if ($params['if']) {
             $aCtyles[$sStyle] = $params['if'];
             $myConfig->setGlobalParameter($sCtyles, $aCtyles);
@@ -62,12 +65,11 @@ function smarty_function_oxstyle($params, &$smarty)
             $myConfig->setGlobalParameter($sStyles, $aStyles);
         }
     } else {
-        //$sOutput .= '<link rel="stylesheet" type="text/css" href="'.$myConfig->getResourceUrl('css.php').'?files='.implode(',', $aStyles).'">'.PHP_EOL;
         foreach ($aStyles as $sSrc) {
-            $sOutput .= '<link rel="stylesheet" type="text/css" href="'.$myConfig->getResourceUrl($sSrc).'">'.PHP_EOL;
+            $sOutput .= '<link rel="stylesheet" type="text/css" href="'.$sSrc.'">'.PHP_EOL;
         }
         foreach ($aCtyles as $sSrc => $sCondition) {
-            $sOutput .= '<!--[if '.$sCondition.']><link rel="stylesheet" type="text/css" href="'.$myConfig->getResourceUrl($sSrc).'"><![endif]-->'.PHP_EOL;
+            $sOutput .= '<!--[if '.$sCondition.']><link rel="stylesheet" type="text/css" href="'.$sSrc.'"><![endif]-->'.PHP_EOL;
         }
     }
 

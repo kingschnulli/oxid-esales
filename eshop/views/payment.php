@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 33382 2011-02-19 16:13:00Z sarunas $
+ * @version   SVN: $Id: payment.php 34000 2011-03-25 12:50:06Z sarunas $
  */
 
 /**
@@ -214,16 +214,21 @@ class Payment extends oxUBase
      */
     protected function _unsetPaymentErrors()
     {
-        $iPayError     = oxSession::getVar( 'payerror' );
-        $iPayErrorText = oxSession::getVar( 'payerrortext' );
+        $iPayError     = oxConfig::getParameter( 'payerror' );
+        $sPayErrorText = oxConfig::getParameter( 'payerrortext' );
+
+        if (!($iPayError || $sPayErrorText)) {
+            $iPayError     = oxSession::getVar( 'payerror' );
+            $sPayErrorText = oxSession::getVar( 'payerrortext' );
+        }
 
         if ( $iPayError ) {
             oxSession::deleteVar( 'payerror' );
             $this->_sPaymentError = $iPayError;
         }
-        if ( $iPayErrorText ) {
+        if ( $sPayErrorText ) {
             oxSession::deleteVar( 'payerrortext' );
-            $this->_sPaymentErrorText = $iPayErrorText;
+            $this->_sPaymentErrorText = $sPayErrorText;
         }
     }
 

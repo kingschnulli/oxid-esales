@@ -114,14 +114,15 @@
 
         <!-- Ende Tracking-Code fuer Partnerprogramme -->
     [{/if}]
-
-
     [{if $oView->showFinalStep()}]
         [{if $oView->getAlsoBoughtTheseProducts()}]
-            [{include file="widget/product/list.tpl" type="grid" listId="alsoBoughtThankyou" header="light" head="PAGE_CHECKOUT_THANKYOU_ALSOBOUGHT"|oxmultilangassign products=$oView->getAlsoBoughtTheseProducts()}]
+            <br><br>
+            <h1 class="pageHead">
+                 [{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_ALSOBOUGHT" }]
+            </h1>
+            [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() listId="alsoBoughtThankyou" products=$oView->getAlsoBoughtTheseProducts()}]
         [{/if}]
     [{/if}]
-
 </div>
 
 [{insert name="oxid_tracker" title=$template_title }]

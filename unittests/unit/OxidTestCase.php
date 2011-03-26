@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: OxidTestCase.php 31972 2010-12-17 14:00:57Z sarunas $
+ * @version   SVN: $Id: OxidTestCase.php 34014 2011-03-25 14:06:07Z sarunas $
  */
 
 
@@ -116,6 +116,8 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        overrideGetShopBasePath(null);
+
         oxTestsStaticCleaner::clean('oxSeoEncoder', '_instance');
         oxTestsStaticCleaner::clean('oxSeoEncoderArticle', '_instance');
         oxTestsStaticCleaner::clean('oxSeoEncoderCategory', '_instance');

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: orderTest.php 32967 2011-02-07 12:44:54Z arvydas.vapsva $
+ * @version   SVN: $Id: orderTest.php 34011 2011-03-25 13:59:46Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -838,7 +838,9 @@ class Unit_Views_orderTest extends OxidTestCase
     {
         $oOrder = $this->getProxyClass("order");
 
+        oxConfig::getInstance()->setConfigParam( 'blConfirmAGB', true );
         $this->assertTrue( $oOrder->isConfirmAGBActive() );
+
     }
 
     /**

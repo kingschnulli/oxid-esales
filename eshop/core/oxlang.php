@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 33605 2011-03-01 16:08:13Z vilma $
+ * @version   SVN: $Id: oxlang.php 34004 2011-03-25 12:50:15Z sarunas $
  */
 
 /**
@@ -660,6 +660,11 @@ class oxLang extends oxSuperCfg
                 $aLangFiles[] = $sCustPath . "lang.php";
             }
             $aLangFiles = array_merge( $aLangFiles, glob( $sCustPath."*_lang.php" ) );
+        }
+
+        $aModuleFiles = glob(getShopBasePath().'/modules/*/out/lang/'.oxLang::getInstance()->getLanguageAbbr( $iLang ).'/*_lang.php');
+        if (is_array($aModuleFiles) && count($aModuleFiles)) {
+            $aLangFiles = array_merge( $aLangFiles, $aModuleFiles );
         }
 
         return count( $aLangFiles ) ? $aLangFiles : false;

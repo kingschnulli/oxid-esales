@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 33901 2011-03-22 17:06:57Z vilma $
+ * @version   SVN: $Id: oxviewconfigTest.php 34014 2011-03-25 14:06:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -46,6 +46,8 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
      */
     protected function tearDown()
     {
+        overrideGetShopBasePath(null);
+
 
         parent::tearDown();
     }
@@ -556,4 +558,48 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $this->assertTrue( $oView->getCountryList() instanceof oxcountrylist );
     }
 
+    public function testGetModulePath()
+    {
+        $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
+
+        $oVC = new oxViewConfig();
+        overrideGetShopBasePath($sMdir);
+
+        $this->assertEquals("$sMdir/modules/test1/out", $oVC->getModulePath('test1', 'out'));
+        $this->assertEquals("$sMdir/modules/test1/out/", $oVC->getModulePath('test1', '/out/'));
+
+        $this->assertEquals("$sMdir/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', 'out/blocks/test2.tpl'));
+        $this->assertEquals("$sMdir/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', '/out/blocks/test2.tpl'));
+
+        // check exception throwing
+        try {
+            $oVC->getModulePath('test1', '/out/blocks/test1.tpl');
+            $this->fail("should have thrown");
+        } catch (oxFileException $e) {
+            $this->assertEquals("Requested file not found for module test1 ($sMdir/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
+        }
+    }
+
+    public function testGetModuleUrl()
+    {
+        $sBaseUrl  = oxConfig::getInstance()->getCurrentShopUrl();
+        $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
+
+        $oVC = new oxViewConfig();
+        overrideGetShopBasePath($sMdir);
+
+        $this->assertEquals("{$sBaseUrl}modules/test1/out", $oVC->getModuleUrl('test1', 'out'));
+        $this->assertEquals("{$sBaseUrl}modules/test1/out/", $oVC->getModuleUrl('test1', '/out/'));
+
+        $this->assertEquals("{$sBaseUrl}modules/test1/out/blocks/test2.tpl", $oVC->getModuleUrl('test1', 'out/blocks/test2.tpl'));
+        $this->assertEquals("{$sBaseUrl}modules/test1/out/blocks/test2.tpl", $oVC->getModuleUrl('test1', '/out/blocks/test2.tpl'));
+
+        // check exception throwing
+        try {
+            $oVC->getModuleUrl('test1', '/out/blocks/test1.tpl');
+            $this->fail("should have thrown");
+        } catch (oxFileException $e) {
+            $this->assertEquals("Requested file not found for module test1 ($sMdir/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
+        }
+    }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 33511 2011-02-24 15:06:14Z vilma $
+ * @version   SVN: $Id: paymentTest.php 34014 2011-03-25 14:06:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -231,7 +231,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->assertEquals( -2, $oPayment->getPaymentError() );
     }
 
-    public function testGetPaymentError()
+    public function testGetPaymentErrorFromSession()
     {
         modSession::getInstance()->setVar('payerror', 'test');
 
@@ -242,9 +242,31 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->assertEquals( 'test', $oPayment->getPaymentError() );
     }
 
-    public function testGetPaymentErrorText()
+    public function testGetPaymentErrorTextFromSession()
     {
         modSession::getInstance()->setVar('payerrortext', 'test');
+
+        $oPayment = new Payment();
+        $oPayment->UNITunsetPaymentErrors();
+        $oEmptyPayment = $oPayment->getPaymentErrorText();
+
+        $this->assertEquals( 'test', $oPayment->getPaymentErrorText() );
+    }
+
+    public function testGetPaymentErrorFromRequest()
+    {
+        modConfig::setParameter('payerror', 'test');
+
+        $oPayment = new Payment();
+        $oPayment->UNITunsetPaymentErrors();
+        $oEmptyPayment = $oPayment->getPaymentError();
+
+        $this->assertEquals( 'test', $oPayment->getPaymentError() );
+    }
+
+    public function testGetPaymentErrorTextFromRequest()
+    {
+        modConfig::setParameter('payerrortext', 'test');
 
         $oPayment = new Payment();
         $oPayment->UNITunsetPaymentErrors();

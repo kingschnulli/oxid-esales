@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 31939 2010-12-17 11:35:22Z sarunas $
+ * @version   SVN: $Id: oxlangTest.php 34014 2011-03-25 14:06:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -160,6 +160,25 @@ class Unit_Core_oxLangTest extends OxidTestCase
 
         $oLang = $this->getMock( "oxLang", array( "getConfig") );
         $oLang->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $this->assertEquals( $aPathArray, $oLang->UNITgetLangFilesPathArray( false, 0 ) );
+    }
+
+    public function testGetLangFilesPathForModules()
+    {
+        $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
+
+        $sPath = oxConfig::getInstance()->getStdLanguagePath( "", false, 0 );
+        $aPathArray = array( $sPath . "lang.php", $sPath . "cust_lang.php", "$sMdir/modules/test1/out/lang/de/test_lang.php" );
+
+        $oConfig = $this->getMock( "oxConfig", array( "getStdLanguagePath", "getLanguagePath" ) );
+        $oConfig->expects( $this->any() )->method( 'getStdLanguagePath' )->will( $this->returnValue( false ) );
+        $oConfig->expects( $this->any() )->method( 'getLanguagePath' )->will( $this->returnValue( $sPath ) );
+
+        $oLang = $this->getMock( "oxLang", array( "getConfig") );
+        $oLang->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+
+        overrideGetShopBasePath($sMdir);
+
         $this->assertEquals( $aPathArray, $oLang->UNITgetLangFilesPathArray( false, 0 ) );
     }
 
