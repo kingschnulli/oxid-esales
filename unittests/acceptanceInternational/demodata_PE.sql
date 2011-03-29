@@ -361,6 +361,7 @@ UPDATE `oxconfig` SET `OXVARVALUE` = 0x7900fdf51e WHERE `OXVARNAME` = 'blCheckTe
 UPDATE `oxconfig` SET `OXVARVALUE` = 0x93ea1218   WHERE `OXVARNAME` = 'blDisableNavBars';
 UPDATE `oxconfig` SET `OXVARVALUE` = 0x93ea1218   WHERE `OXVARNAME` = 'blAllowUnevenAmounts';
 UPDATE `oxconfig` SET `OXVARVALUE` = 0x7900fdf51e WHERE `OXVARNAME` = 'blTopNaviLayout';
+UPDATE `oxconfig` SET `OXVARVALUE` = 0x07         WHERE `OXVARNAME` = 'blConfirmAGB';
 INSERT INTO `oxconfig` (`OXID`, `OXSHOPID`, `OXVARNAME`, `OXVARTYPE`, `OXVARVALUE`) VALUES ('fb547ac17e4a10201.92066345', 'oxbaseshop', 'perf_LoadFullVariantsInLists',  'bool', 0x7900fdf51e);
 INSERT INTO `oxconfig` (`OXID`, `OXSHOPID`, `OXVARNAME`, `OXVARTYPE`, `OXVARVALUE`) VALUES ('fb547ac17e4a5ba72.64297620', 'oxbaseshop', 'bl_perfLoadSelectListsInAList', 'bool', 0x93ea1218);
 INSERT INTO `oxconfig` (`OXID`, `OXSHOPID`, `OXVARNAME`, `OXVARTYPE`, `OXVARVALUE`) VALUES ('fb547ac17e4a910c8.33968384', 'oxbaseshop', 'blLoadSelectBoxAlways',         'bool', 0x93ea1218);

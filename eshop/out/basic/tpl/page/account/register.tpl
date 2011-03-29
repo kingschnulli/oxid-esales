@@ -179,7 +179,9 @@
                 </td>
             </tr>
             [{if $oView->showShipAddress()}]
-            [{assign var="delivadr" value=$oxcmp_user->getSelectedAddress()}]
+            [{if $oxcmp_user}]
+                [{assign var="delivadr" value=$oxcmp_user->getSelectedAddress()}]
+            [{/if}]
             <tr>
                 <td><label>[{ oxmultilang ident="REGISTER_ADDRESSES" }]</label></td>
                 <td>

@@ -823,7 +823,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->clickAndWait("test_orderChangeShipAdress");
         $this->assertEquals("You are here: / Login", $this->getText("path"));
         $this->clickAndWait("blshowshipaddress");
-        $this->select("addressid", "label=New Address");
+        $this->select("oxaddressid", "label=New Address");
         sleep(1);
         $this->checkForErrors();
         $this->type("deladr[oxaddress__oxfname]", "firstįÄк");
