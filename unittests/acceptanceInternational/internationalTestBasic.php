@@ -350,8 +350,8 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->type("invadr[oxuser__oxbirthdate][month]", "11");
         $this->type("invadr[oxuser__oxbirthdate][year]", "1981");
         $this->clickAndWait("blshowshipaddress");
-        $this->assertTrue($this->isElementPresent("userLoginName"), "form fields for delivery address is not shown");
-        $this->assertEquals("birute01@nfq.lt", $this->getValue("userLoginName"));
+        $this->assertTrue($this->isElementPresent("test_lgn_usr"), "form fields for delivery address is not shown");
+        $this->assertEquals("birute01@nfq.lt", $this->getValue("test_lgn_usr"));
         $this->assertEquals("", $this->getValue("userPassword"));
         $this->assertEquals("", $this->getValue("userPasswordConfirm"));
         $this->assertEquals("off", $this->getValue("document.order.blnewssubscribed[1]"));
@@ -418,7 +418,7 @@ class AcceptanceInternational_internationalTestBasic extends oxidAdditionalSelen
         $this->assertEquals("111-111111", $this->getValue("editval[oxuser__oxmobfon]"));
         $this->frame("list");
         $this->openTab("link=Addresses");
-        $this->selectAndWait("addressid", "label=user1_2 name_šųößлы user1_2 last name_šųößлы, user1_2 street_šųößлы, user1_2 city_šųößлы");
+        $this->selectAndWait("oxaddressid", "label=user1_2 name_šųößлы user1_2 last name_šųößлы, user1_2 street_šųößлы, user1_2 city_šųößлы");
         $this->assertEquals("Mr", $this->getSelectedLabel("editval[oxaddress__oxsal]"));
         $this->assertEquals("user1_2 name_šųößлы", $this->getValue("editval[oxaddress__oxfname]"));
         $this->assertEquals("user1_2 last name_šųößлы", $this->getValue("editval[oxaddress__oxlname]"));
