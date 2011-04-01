@@ -310,4 +310,111 @@ class oxVariantHandler extends oxSuperCfg
         return false;
     }
 
+    /**
+     * Creates array/matrix with variant selections
+     *
+     * @param oxArticleList $oVariantList variant list
+     * @param int           $iVarSelCnt   possible variant selection count
+     *
+     * @return array
+     */
+    protected function _fillVariantSelections( $oVariantList, $iVarSelCnt )
+    {
+        $aSelections = array();
+
+        // filling selections
+        foreach ( $oVariantList as $oVariant ) {
+
+            $aNames = explode( $this->_sMdSeparator, $oVariant->oxarticles__oxvarselect->getRawValue() );
+            for ( $i = 0; $i < $iVarSelCnt; $i++ ) {
+                $sName = isset( $aNames[$i] ) ? $aNames[$i] : '';
+                $aSelections[$oVariant->getId()][] = array( 'name' => $sName, 'disabled' => $sName ? false : true, 'active' => false, 'hash' => md5( trim( $sName ) ) );
+            }
+        }
+
+        return $aSelections;
+    }
+
+    /**
+     * Applies filter on variant selection array
+     *
+     * @param array $aSelections selections
+     * @param array $aFilter     filter
+     *
+     * @return array
+     */
+    protected function _applyVariantSelectionsFilter( $aSelections, $aFilter )
+    {
+        // applying filters, disabling/activating items
+        if ( is_array( $aFilter ) && count( $aFilter ) ) {
+            foreach ( $aFilter as $iKey => $sVal ) {
+                if ( $sVal ) {
+                    foreach ( $aSelections as $iLineNr => & $aLineSelections ) {
+
+                        // active?
+                        if ( strcmp( $aLineSelections[$iKey]['hash'], $sVal ) == 0 ) {
+                            $aLineSelections[$iKey]['active'] = true;
+                            continue;
+                        } else {
+
+                            // disabling inactive
+                            foreach ( $aLineSelections as $iPos => & $aVarSelection ) {
+                                if ( $iPos != $iKey ) {
+                                    $aVarSelection['disabled'] = true;
+                                }
+                            }
+
+                            // cleanup
+                            unset( $aVarSelection );
+                        }
+                    }
+
+                    // cleanup
+                    unset( $aLineSelections );
+                }
+            }
+        }
+
+        return $aSelections;
+    }
+
+    /**
+     * Builds variant selection list
+     *
+     * @param string        $sVarName     product (parent product) oxvarname value
+     * @param oxarticlelist $oVariantList variant list
+     * @param array         $aFilter      variant filter
+     *
+     * @return Ambigous false | array
+     */
+    public function buildVariantSelections( $sVarName, $oVariantList, $aFilter )
+    {
+        $aReturn = false;
+
+        // assigning variants
+        $aVarSelects = explode( $this->_sMdSeparator, $sVarName );
+        if ( ( $iVarSelCnt = count( $aVarSelects ) ) ) {
+
+            // filling selections
+            $aRawVariantSelections = $this->_fillVariantSelections( $oVariantList, $iVarSelCnt );
+
+            // applying filters, disabling/activating items
+            $aSelections = $this->_applyVariantSelectionsFilter( $aRawVariantSelections, $aFilter );
+
+            // creating selection lists
+            foreach ( $aVarSelects as $iKey => $sLabel ) {
+                $aVariantSelections[$iKey] = oxNew( "oxVariantSelectionList", $sLabel, $iKey );
+            }
+
+            // building variant selections
+            foreach ( $aSelections as $aLineSelections ) {
+                foreach ( $aLineSelections as $oPos => $aLine ) {
+                    $aVariantSelections[$oPos]->addVariant( $aLine['name'], $aLine['hash'], $aLine['disabled'], $aLine['active'] );
+                }
+            }
+
+            $aReturn = array( 'selections' => $aVariantSelections, 'rawselections' => $aRawVariantSelections );
+        }
+        return $aReturn;
+    }
 }

@@ -13,7 +13,10 @@
 [{if $products|@count gt 0}]
     <ul class="[{$type}]View clear" id="[{$listId}]">
         [{foreach from=$products item=_product name=productlist}]
-            <li>[{include file="widget/product/listitem.tpl" type=$type product=$_product testid=$listId|cat:"_"|cat:$smarty.foreach.productlist.iteration}]</li>
+            <li class="productData">[{include file="widget/product/listitem.tpl" type=$type product=$_product testid=$listId|cat:"_"|cat:$smarty.foreach.productlist.iteration}]</li>
+            [{if ($type eq "infogrid" AND ($smarty.foreach.productlist.last) AND ($smarty.foreach.productlist.iteration % 2 != 0 )) }]
+                <li class="productData"></li>
+            [{/if}]
         [{/foreach}]
     </ul>
 [{/if}]

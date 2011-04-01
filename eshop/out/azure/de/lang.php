@@ -702,10 +702,10 @@ $aLang = array(
 
 'WIDGET_PRODUCT_PRODUCT_NR'                        => "Art.No.:",
 'WIDGET_PRODUCT_PRODUCT_REMOVE'                    => "entfernen",
-'WIDGET_PRODUCT_PRODUCT_REDUCEDFROM'                                                    => "Statt",
+'WIDGET_PRODUCT_PRODUCT_REDUCEDFROM'                                                    => "UVP",
 'WIDGET_PRODUCT_PRODUCT_REDUCEDTEXT'                                                    => "",
 'WIDGET_PRODUCT_PRODUCT_NOWONLY'                                                        => "jetzt nur",
-'WIDGET_PRODUCT_PRODUCT_ADDTOCART'                                                      => "Warenkorb",
+'WIDGET_PRODUCT_PRODUCT_ADDTOCART'                                                      => "In den warenkorb",
 'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING'                                                   => "inkl. MwSt., zzgl. ",
 'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2'                                                  => "Versandkosten.",
 'WIDGET_PRODUCT_PRODUCT_MOREINFO'                   =>"mehr Info",

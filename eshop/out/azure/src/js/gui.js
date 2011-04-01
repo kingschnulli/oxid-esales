@@ -316,6 +316,9 @@ $(function(){
 
             hideDropdown();
             targetObj = $(this);
+
+
+            targetObj.removeClass('underlined');
             sublist = targetObj.nextAll("ul.drop");
 
             sublist.prepend("<li class='value'></li>");
@@ -327,6 +330,7 @@ $(function(){
                 sublist.slideToggle("fast");
                 targetObj.toggleClass("selected");
             }
+
         }
 
 
@@ -334,6 +338,7 @@ $(function(){
             $("ul.drop").hide();
             $("ul.drop li.value").remove();
             $(".dropDown p").removeClass("selected");
+            $(".dropDown p").addClass("underlined");
         }
 
         $(".dropDown p").click(showDropdown);
@@ -343,6 +348,7 @@ $(function(){
             if($(clickTarget).parents().hasClass("dropDown")){
             }else{
                 $(".drop").hide();
+                $(".dropDown p").addClass("underlined");
             }
         });
 
@@ -770,5 +776,41 @@ $(function(){
         });
         return false;
     };
+
+    function __do()
+    {
+        var sVariantId = false;
+
+        // choosing active variant
+        var aVarSelections = $( ".oxProductForm input[name^=varselid]" );
+        var iSelections = aVarSelections.length;
+
+        $iMaxFitCount = 0;
+        for (var oSelection in oxVariantSelections ) {
+            var $iFitCount = 0;
+            for (var i = 0; i < iSelections; i++) {
+                var sActSelection = $( aVarSelections[i] ).attr( "value" );
+                if ( sActSelection && sActSelection == oxVariantSelections[oSelection][i] ) {
+                    $iFitCount += 1;
+                }
+            }
+
+            if ( $iFitCount > $iMaxFitCount ) {
+                $iMaxFitCount = $iFitCount;
+                sVariantId = oSelection;
+            }
+        }
+
+        if ( sVariantId != false ) {
+            //var oVarNameField = $( ".oxProductForm input[name=anid]" );
+            //oVarNameField.attr( "value", sVariantId );
+
+            //
+            var oVarNameField = $( ".oxProductForm input[name=panid]" );
+            oVarNameField.attr( "value", sVariantId );
+        }
+    }
+
+    $(".oxProductForm").submit(__do);
 
 });

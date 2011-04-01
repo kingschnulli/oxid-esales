@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 33513 2011-02-24 15:07:06Z sarunas $
+ * @version   SVN: $Id: oxubaseTest.php 34087 2011-03-31 07:04:56Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -351,7 +351,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
 
     public function testGetMetaDescriptionForStartView()
     {
-        $sVal = 'Witzige und originelle Geschenke. Online Versand für Trend-Produkte, Lifestyle-Artikel und Accessoires. Geschenkideen für alle Anlässe günstig online kaufen.';
+        $sVal = 'Alles zum Thema Wassersport, Sportbekleidung und Mode. Umfangreiches Produktsortiment mit den neusten Trendprodukten. Blitzschneller Versand.';
         $oView = new start();
 
         $this->assertEquals( $sVal, $oView->getMetaDescription() );
@@ -363,7 +363,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oContent->loadByIdent( 'oxstartmetakeywords' );
 
         $oView = new start();
-        $this->assertEquals( strip_tags($oContent->oxcontents__oxcontent->value), $oView->getMetaKeywords() );
+        $this->assertEquals( strip_tags($oContent->oxcontents__oxcontent->value), strip_tags($oView->getMetaKeywords()) );
     }
 
     /*

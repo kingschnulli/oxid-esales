@@ -124,7 +124,7 @@
     padding-left: 0;
 }
 
-.featuredList a:hover, .featuredList a:hover strong {
+.featuredList a:hover, .featuredList a:hover strong, .featuredList li.articleImage:hover + li.articleTitle > a {
     color: #fff;
     text-decoration: none;
     text-shadow: none;
@@ -248,10 +248,10 @@
 }
 
 .specBox .price {
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
-.specBoxInfo:hover .price, .specBoxTitles a.title:hover .specBox .price {
+.specBox:hover .price, .specBoxTitles a.title:hover .specBox .price {
     visibility: visible;
 }
 
@@ -641,7 +641,7 @@ button {
     text-align: center;
 }
 
-.submitButton {
+.submitButton, {
     text-shadow: 0px -1px 0px #000;
     /*padding: 0 17px 1px 17px;*/
     padding: 0 10px 1px 10px;
@@ -654,6 +654,7 @@ button {
     font-weight: bold;
     text-transform: uppercase;
 }
+
 
 a.submitButton {
     height: 21px;
@@ -1221,58 +1222,89 @@ a.readMore:hover {
 }
 
 .gridView li{
-    width: 187px;
-    height: 150px;
+    width: 185px;
+    height: 230px;
     overflow: hidden;
     float:left;
     position: relative;
     list-style: none;
     padding: 0;
     list-style: none;
-    text-align: center;
+    margin:1px;
 }
 
-.gridView .listDetails{
-    position: absolute;
-    left: 0;
-    top: 50%;
-    margin-top: -43px;
-    line-height: 14px;
-    display: none;
-    z-index: 2;
-    text-align: left;
+.gridView li .titleBlock{
+    height: 30px;
+    padding:5px 10px;
+    color:#29373c;
+    background:#eee;
+    text-decoration:none;
+    text-shadow: 0 1px 1px #fff;
+    font-weight: 700;
+    display:block;
 }
 
-.gridView .listDetails,
-.gridView .listDetails a{
+.gridView li .titleBlock .gridPicture{
+   display:block;
+   margin:0px -10px 0;
+   position:absolute;
+   top:40px;
+   width: 185px;
+   height: 150px;
+   text-align: center;
+}
+
+.gridView li:hover .titleBlock{
     color:#fff;
-    text-shadow: 0px -1px 0px #000;
-    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.7);
-
+    text-shadow: 0px -1px 1px #652b00;
+    background:transparent url(../bg/fx-grad-darkblue.png) bottom center no-repeat;
 }
 
-.gridView .listDetails .deliveryInfo,
-.gridView .listDetails .deliveryInfo a {
- text-shadow: none;
+.gridView li:hover .titleBlock:hover{
+    background:transparent url(../bg/fx-grad-orange.png) top center no-repeat;
 }
 
-.gridView .listDetails .deliveryInfo a {
- text-decoration: underline;
+.gridView li .priceBlock{
+    height: 30px;
+    width:165px;
+    position:absolute;
+    bottom:0;
+    left:0;
+    padding:5px 10px;
+    background:#fff;
+}
+.gridView li .priceBlock .button{
+    display: block;
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    padding:1px 10px;
+    visibility: hidden;
+    text-decoration:none;
+}
+.gridView li:hover .priceBlock{
+    height: 60px;
+    padding-top:30px;
+    color:#fff;
+    text-shadow:0 -1px 1px #397F90;
+
+    background:transparent url(../bg/fx-grad-darkblue-spiked.png) top center no-repeat;
+}
+.gridView li:hover .priceBlock .button{
+    visibility: visible;
+    color:#fff;
+    text-shadow:0 -1px 1px #397F90;
+    border:1px solid #fff;
+    background:transparent;
 }
 
-.gridView .listDetails .deliveryInfo{
- display: block;
- font-size: 11px;
-}
-
-.gridView .listDetails a:hover {
- text-decoration:none;
+.gridView li:hover .priceBlock:hover .button{
+    background:#ec6105;
 }
 
 .titleBox{
  width: 187px;
 }
-
 
 .titleBox a{
  display: block;
@@ -1303,35 +1335,96 @@ a.readMore:hover {
     padding: 0;
 }
 
-.infogridView li{
+.infogridView li.productData{
     margin: 0;
     padding: 0;
     list-style: none;
-    width: 374px;
     float: left;
+    border-top: 5px solid #eceff0;
+}
+
+.infogridView li.productData:nth-child(0n+1) {
+    border: medium none;
+}
+
+.infogridView li.productData:nth-child(0n+2) {
+    border: medium none;
+}
+
+.infogridView li.productData:nth-child(2n+1) {
+    border-right: 5px solid #eceff0;
+    width: 368px;
+}
+
+.infogridView li.productData:nth-child(2n+2) {
+    padding-left: 10px;
+    width: 358px;
 }
 
 .infogridView .listDetails {
     float: left;
     position: relative;
     height: 150px;
+    width: 170px;
+    padding-top:10px;
+
 }
 
 .infogridView .titleBox,
+.infogridView .variantBox,
+.infogridView .buttonBox,
 .infogridView .priceBox {
     background: none;
-    width: 180px;
+    width: 170px;
+    padding: 0;
+}
+
+.infogridView .titleBox {
+    height: 40px;
+}
+
+.infogridView .variantBox {
+    height: 40px;
+    padding-left: 10px;
 }
 
 .infogridView .priceBox {
-    position: absolute;
-    bottom: 5px;
+    height: 50px;
+    padding-left: 10px;
+}
+
+.infogridView .buttonBox {
+    height: 20px;
+    padding-left: 10px;
 }
 
 .infogridView .titleBox a {
-    padding-top: 15px;
+    padding-top: 10px;
 }
 
+.infogridView  a.compare {
+    font-size: 11px;
+    color: #1d7e96;
+    font-weight: bold;
+}
+
+.infogridView .priceBox .oldPrice {
+     font-size: 9px;
+}
+.infogridView .priceBox .price {
+     font-size: 14px;
+     font-weight: bold;
+}
+.infogridView .priceBox .pricePerUnit {
+     font-size: 9px;
+     white-space:nowrap;
+}
+
+.infogridView .priceBox .content {
+    position: absolute;
+    bottom: 23px;
+    line-height: 10px;
+}
 
 .infogridView .gridPicture {
     float: left;
@@ -1339,6 +1432,7 @@ a.readMore:hover {
     text-align: center;
     line-height: 150px;
     height: 150px;
+    padding:10px 0 10px 0px;
 }
 
 .infogridView .gridPicture img {
@@ -1354,13 +1448,21 @@ a.readMore:hover {
     font-size: 11px;
 }
 
+.infogridView .title {
+    font-size: 12px;
+}
+.infogridView .title:hover {
+    color: #eb6005;
+    text-decoration: none;
+}
 
+/* line view */
 .lineView {
     margin: 0;
 }
 
-.lineView li {
-    padding: 0;
+.lineView li.productData {
+    padding: 10px 0 10px 0;
     list-style: none;
     position: relative;
     border-top: 5px solid #eceff0;
@@ -1379,6 +1481,12 @@ a.readMore:hover {
     text-decoration: none;
 }
 
+.lineView  a.compare {
+    font-size: 11px;
+    color: #1d7e96;
+    font-weight: bold;
+}
+
 .lineView .pictureBox,
 .lineView .info,
 .lineView .description{
@@ -1390,17 +1498,31 @@ a.readMore:hover {
     padding-bottom: 5px;
 }
 
-.infoBox {width: 558px; position: relative;}
-.lineView .info {width: 260px;    float: left;    padding: 10px 0 0 10px;}
-.lineView .description {width: 268px;    padding: 7px 0 0 20px;    font-size: 14px;    line-height: 18px;}
-.lineView .functions {padding: 0 0 0px 10px; position: absolute; bottom: 10px; clear: right; float:left; left: 190px;}
+.lineView .functions .oldPrice {
+     font-size: 10px;
+}
 
-.lineView .info .title {display:block; padding-bottom: 5px; margin-bottom: 20px;}
+.lineView .functions .price {
+     font-size: 18px;
+     font-weight: bold;
+     line-height: 23px;
+}
+.lineView .functions .pricePerUnit {
+     font-size: 9px;
+     white-space:nowrap;
+}
+
+.infoBox {width: 558px; position: relative;}
+.lineView .info {width: 260px; height: 50px;   float: left;    padding: 10px 0 0 10px;}
+.lineView .description {width: 268px;    padding: 7px 0 0 20px;    font-size: 14px;    line-height: 18px;}
+.lineView .functions {padding: 0 0 0px 10px; position: absolute; bottom: 10px; clear: right; float:left; left: 190px; width:550px;}
+
+/*.lineView .info .title {display:block;}*/
 .pictureBox { width: 190px; height:150px; float: left; text-align: center; line-height:150px; overflow: hidden;}
 .pictureBox img {
     vertical-align: middle;
 }
-.productNr {color:#515353; margin-bottom: 20px; display: block;}
+/*.productNr {color:#515353; margin-bottom: 20px; display: block;}*/
 .lineView .info .title + .productNr {margin-top:-20px; }
 
 .popBox {
@@ -1796,8 +1918,12 @@ a.readMore:hover {
 }
 
 .dropDown p label {
-    font-weight: 700;
+    /*font-weight: 700; */
     text-transform: uppercase;
+}
+
+.dropDown p span {
+    font-weight: 700;
 }
 
 .dropDown .value {
@@ -2506,10 +2632,6 @@ a.fb_button_simple {
     margin: 1px 10px 0 0;
 }
 
-.lineView .oldPrice {
-    font-size: 12px;
-    margin-bottom: 3px;
-}
 
 
 /* Ratings */
@@ -3132,12 +3254,14 @@ span.verificationCode {
     display: none;
     position: absolute;
     left: 0;
-    top: 58px;
-    height: 30px;
+    bottom: 0;
+    height: 35px;
     z-index: 5;
     opacity: 1;
     padding-right: 5px;
+    padding-top:25px;
     filter: alpha(opacity = 100);
+    background:transparent url(../bg/fx-grad-orange-spiked.png) -30px 0px no-repeat;
 }
 
 
@@ -3650,8 +3774,102 @@ li.articleImage{
     height: 100px;
 }
 
-.featuredList a.articleBoxImage:hover {
-    background: transparent;
+.featuredList a.articleBoxImage {
+    height: 87px;
+    min-width:148px;
+    background: #fff;
+    text-align: center;
+    display: block;
+    vertical-align: middle;
 }
 
+/* MD Variant Selects in details */
+.variantSelecors {
+    background: none;
+    padding: 10px 10px 0px 0px;
+    font-size: 11px;
+}
 
+.variantSelecors .dropDown {
+    margin-bottom: 10px;
+    min-width: 200px;
+}
+
+.variantSelecors .dropDown li.disabled a {
+    color: #b4b8b8;
+}
+
+.variantSelecors p.underlined {
+    border-bottom: 1px solid #29373c;
+}
+
+.selectorLabel label {
+    min-width: 60px;
+    display: inline-block;
+}
+
+/* MD Variant Selects in infoGrid */
+.listDetails .variantSelecors {
+    background: none;
+    padding: 10px 10px 0px 0px;
+    font-size: 11px;
+}
+
+.listDetails .variantSelecors .dropDown {
+    margin-bottom: 10px;
+    min-width: 150px;
+}
+
+.listDetails .variantSelecors .dropDown li.disabled a {
+    color: #b4b8b8;
+}
+
+.listDetails .variantSelecors p.underlined {
+    border-bottom: 1px solid #29373c;
+}
+
+.listDetails .selectorLabel label {
+    min-width: 45px;
+    display: inline-block;
+}
+
+/* MD Variant Selects for line */
+.infoBox .variantSelecors {
+    background: none;
+    padding: 10px 10px 0px 0px;
+    font-size: 11px;
+}
+
+.infoBox .variantSelecors .dropDown {
+    margin-bottom: 10px;
+    min-width: 200px;
+}
+
+.infoBox .variantSelecors .dropDown li.disabled a {
+    color: #b4b8b8;
+}
+
+.infoBox .variantSelecors p.underlined {
+    border-bottom: 1px solid #29373c;
+}
+
+.infoBox .selectorLabel label {
+    min-width: 50px;
+    display: inline-block;
+}
+
+/* AGB conditions links */
+.agb a {
+    color: #1d7e96;
+}
+
+.agb a:hover {
+    color: #ec6105;
+    text-decoration:none;
+}
+
+button[disabled].submitButton, button[disabled].submitButton:hover  {
+    background: #cccccc;
+    color:#fff;
+    text-shadow:none;
+}

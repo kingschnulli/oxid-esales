@@ -16,7 +16,7 @@
     [{/capture}]
 [{/if }]
 
-[{ if $oxidBlock_productbar}]  
+[{ if $oxidBlock_productbar}]
     <div id="relProducts" class="relatedProducts">
       [{foreach from=$oxidBlock_productbar item="_block"}]
         [{$_block}]

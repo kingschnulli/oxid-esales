@@ -3,7 +3,7 @@
         [{if $oManufacturer->oxmanufacturers__oxicon->value }]
         [{counter assign="slideCount"}]
             <li>
-                <a href="[{ $oManufacturer->getLink() }]" class="viewAllHover glowShadow">
+                <a href="[{ $oManufacturer->getLink() }]" class="viewAllHover">
                     <span>[{ oxmultilang ident="WIDGET_MANUFACTURERS_SLIDER_VIEWALL" }]</span>
                 </a>
                 <a class="sliderHover" href="[{ $oManufacturer->getLink() }]"></a>

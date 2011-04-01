@@ -49,20 +49,37 @@
     </div>
 </div>
 
+[{assign var="aVariantSelections" value=$oView->getVariantSelections()}]
 
-    [{oxhasrights ident="TOBASKET"}]
+[{oxhasrights ident="TOBASKET"}]
 [{if !$oDetailsProduct->isNotBuyable()}]
-    <form class="loadVariant" action="[{$oViewConf->getSelfActionLink()}]" method="post">
+    <form class="loadVariant oxProductForm" action="[{$oViewConf->getSelfActionLink()}]" method="post">
+
+    [{if $aVariantSelections && $aVariantSelections.rawselections}]
+    <script>
+        var oxVariantSelections = new Array();
+        [{foreach from=$aVariantSelections.rawselections item=oSelectionList key=iKey}]
+            oxVariantSelections["[{$iKey}]"] = new Array();
+            [{foreach from=$oSelectionList item=oListItem key=iPos}]
+                oxVariantSelections["[{$iKey}]"][[{$iPos}]] = [{if $oListItem.name}]"[{$oListItem.hash}]"[{else}]false[{/if}];
+            [{/foreach}]
+        [{/foreach}]
+    </script>
+    [{/if}]
+
     <div>
         [{$oViewConf->getHiddenSid()}]
         [{$oViewConf->getNavFormParams()}]
         <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
-        <input type="hidden" name="fnc" value="tobasket">
         <input type="hidden" name="aid" value="[{$oDetailsProduct->oxarticles__oxid->value}]">
         <input type="hidden" name="anid" value="[{$oDetailsProduct->oxarticles__oxnid->value}]">
+        <input type="hidden" name="parentid" value="[{$oDetailsProduct->oxarticles__oxparentid->value}]">
+
+        <input type="hidden" name="panid" value="[{$oDetailsProduct->oxarticles__oxnid->value}]">
+
     </div>
 [{/if}]
-    [{/oxhasrights}]
+[{/oxhasrights}]
 
     <div class="detailsInfo clear">
 
@@ -149,21 +166,40 @@
             [{/if}]
             [{/oxhasrights}]
 
+            [{assign var="blCanBuy" value=true}]
             [{* variants | md variants *}]
-            [{if $oView->getVariantList()}]
+            [{if $aVariantSelections && $aVariantSelections.selections }]
+                <div id="variants" class="variantSelecors fnSubmit clear">
 
-                <div id="variants">
-                    <div id="mdVariantBox"></div>
+                    [{foreach from=$aVariantSelections.selections item=oSelectionList key=iKey}]
+                        [{assign var="blCanBuy" value=$oSelectionList->allowsToBuy($blCanBuy)}]
+                        <div class="dropDown">
 
-                    [{oxscript add="oxid.mdVariants.mdAttachAll();"}]
-                    [{oxscript add="oxid.mdVariants.showMdRealVariant();" }]
+                            <p class="selectorLabel underlined">
+                                <label>[{$oSelectionList->getLabel()}]:</label>
+                                [{assign var="oActiveSelection" value=$oSelectionList->getActiveSelection()}]
+                                [{if $oActiveSelection }]
+                                    <span>[{$oActiveSelection->getName()}]</span>
+                                [{else}]
+                                    <span>[{ oxmultilang ident="WIDGET_PRODUCT_ATTRIBUTES_PLEASECHOOSE" }]</span>
+                                [{/if}]
+                            </p>
 
-                    [{ oxscript add="$( '.md_select_variant' ).oxLoadArticleVariant();" }]
+                            <input type="hidden" name="varselid[[{$iKey}]]" value="[{if $oActiveSelection }][{$oActiveSelection->getValue()}][{/if}]">
+                            <ul class="drop FXgradGreyLight shadow">
+                                <li><a rel="" href="#">[{ oxmultilang ident="WIDGET_PRODUCT_ATTRIBUTES_PLEASECHOOSE" }]</a></li>
+                                [{assign var="aSelections" value=$oSelectionList->getSelections()}]
+                                [{foreach from=$aSelections item=oSelection}]
+                                    <li class="[{if $oSelection->isDisabled()}]disabled[{/if}]">
+                                        <a rel="[{$oSelection->getValue()}]" href="#" class="[{if $oSelection->isActive()}]selected[{/if}]">[{$oSelection->getName()}]</a>
+                                    </li>
+                                [{/foreach}]
+                            </ul>
 
-                    <label>[{ $oDetailsProduct->oxarticles__oxvarname->value }]:</label><br>
-                    [{oxvariantselect value=$oDetailsProduct->getMdVariants() separator=" " artid=$oDetailsProduct->getId()}]
+                        </div>
+                    [{/foreach}]
+
                 </div>
-
             [{/if}]
 
             [{* selection lists *}]
@@ -198,7 +234,16 @@
                                 [{if $oDetailsProduct->getFTPrice()}]
                                     [{oxmultilang ident="DETAILS_NOWONLY"}]
                                 [{/if}]
-                                <strong>[{$oDetailsProduct->getFPrice()}] [{$currency->sign}]</strong>
+
+                                [{assign var="fPrice" value=$oDetailsProduct->getFPrice()}]
+                                [{if !$blCanBuy }]
+                                    [{assign var="oParentProduct" value=$oDetailsProduct->getParentArticle()}]
+                                    [{if $oParentProduct}]
+                                        [{assign var="fPrice" value=$oParentProduct->getFPrice()}]
+                                    [{/if}]
+                                [{/if}]
+
+                                <strong>[{$fPrice}] [{$currency->sign}]</strong>
                             </label>
                         [{/if}]
                         [{if $oDetailsProduct->loadAmountPriceInfo()}]
@@ -210,7 +255,7 @@
                     [{oxhasrights ident="TOBASKET"}]
                     [{if !$oDetailsProduct->isNotBuyable()}]
                         <input id="amountToBasket" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
-                        <button id="toBasket" type="submit" class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
+                        <button id="toBasket" type="submit" name="fnc" value="tobasket" [{if !$blCanBuy}]disabled="disabled"[{/if}] class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
                         [{if $oDetailsProduct->loadAmountPriceInfo()}]
                             [{oxscript add="$( '.ox-details-amount' ).oxSuggest();"}]
                         [{/if}]

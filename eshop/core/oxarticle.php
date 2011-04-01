@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 34106 2011-03-31 15:09:05Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -389,6 +389,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * @var oxField
      */
     protected $_oLongDesc = null;
+
+    /**
+     * Variant selections array
+     * @var array
+     */
+    protected $_aVariantSelections = null;
 
     /**
      * Class constructor, sets shop ID for article (oxconfig::getShopId()),
@@ -1111,6 +1117,22 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function hasMdVariants()
     {
         return $this->_blHasMdVariants;
+    }
+
+    /**
+     * Returns variants selections lists array
+     *
+     * @param array $aFilterIds ids of active selections
+     *
+     * @return array
+     */
+    public function getVariantSelections( $aFilterIds = null )
+    {
+        if ( $this->_aVariantSelections === null ) {
+            $oVariantHandler = oxNew( "oxVariantHandler" );
+            $this->_aVariantSelections = $oVariantHandler->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $this->getVariants(), $aFilterIds );
+        }
+        return $this->_aVariantSelections;
     }
 
     /**

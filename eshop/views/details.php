@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 33835 2011-03-18 10:48:58Z sarunas $
+ * @version   SVN: $Id: details.php 34100 2011-03-31 14:51:52Z arvydas.vapsva $
  */
 
 /**
@@ -1539,4 +1539,19 @@ class Details extends oxUBase
         return $this->_sBidPrice;
     }
 
+    /**
+     * Returns variant selection
+     *
+     * @return oxVariantSelectionList
+     */
+    public function getVariantSelections()
+    {
+        // finding parent
+        $oProduct = $this->getProduct();
+        if ( ( $oParent = $this->_getParentProduct( $oProduct->oxarticles__oxparentid->value ) ) ) {
+            $oProduct = $oParent;
+        }
+
+        return $oProduct->getVariantSelections( oxConfig::getParameter( "varselid" ) );
+    }
 }

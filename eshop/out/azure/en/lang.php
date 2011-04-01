@@ -245,7 +245,7 @@ $aLang = array(
 
 'FACEBOOK_LOCALE'     => 'en_US',
 
-'WIDGET_PRODUCT_PRODUCT_REDUCEDFROM'                                => "Reduced from",
+'WIDGET_PRODUCT_PRODUCT_REDUCEDFROM'                                => "RRP",
 'WIDGET_PRODUCT_PRODUCT_REDUCEDTEXT'                                => "",
 'WIDGET_PRODUCT_PRODUCT_NOWONLY'                                    => "Now only",
 'WIDGET_PRODUCT_PRODUCT_ADDTOCART'                                  => "To cart",
