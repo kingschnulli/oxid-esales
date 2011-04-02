@@ -112,6 +112,8 @@ $aLang = array(
 'DETAILS_QUESTIONSSUBJECT'                        => "Questions about this product?",
 'DETAILS_SOCIAL_BOOKMARKS'                        => "Social Bookmarks",
 'DETAILS_QUANTITY'                                => "Quantity:",
+'DETAILS_VARIANTS_RESETSELECTION'                 => "Reset selection",
+'DETAILS_VARIANTS_SELECTEDCOMBINATION'            => "SELECTED COMBINATION:",
 
 'PAGE_DETAILS_COMPARE'                            => "compare",
 'PAGE_DETAILS_REMOVEFROMCOMPARELIST'              => "remove from compare list",
@@ -364,6 +366,7 @@ $aLang = array(
 'PAGE_CHECKOUT_ORDER_BACKSTEP'                                           => "Previous Step",
 'PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS'                                => "Please read and confirm our terms and conditions.",
 'PAGE_CHECKOUT_ORDER_TITLE2'                                              => "[Tr] Senden sie ihre bestellung am unteren ende dieser übersicht ab",
+'PAGE_CHECKOUT_ORDER_TERMS_TITLE'                                       => "[Tr] Terms and Conditions",
 
 'PAGE_CHECKOUT_USER_OPTION_NEXT'                                => "Next",
 'PAGE_CHECKOUT_USER_OPTION_NOREGISTRATION'                      => "Purchase without Registration",
@@ -381,6 +384,7 @@ $aLang = array(
 'PAGE_CHECKOUT_USER_OPTION_LOGIN'                               => "I am already customer",
 'PAGE_CHECKOUT_USER_OPTION_LOGIN_DESCRIPTION'                   => "Please login using your eMail address or customer number and your password.",
 
+'PAGE_CHECKOUT_PAYMENT_MINORDERPRICE'                            => "Minimum order price",
 'PAGE_CHECKOUT_PAYMENT_TITLE'                                   => "Pay",
 'PAGE_CHECKOUT_PAYMENT_SELECTSHIPPING'                          => "Please select your shipping method",
 'PAGE_CHECKOUT_PAYMENT_SELECTEDSHIPPING'                        => "Selected shipping carrier is:",

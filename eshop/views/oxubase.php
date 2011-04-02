@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 33897 2011-03-22 17:02:50Z vilma $
+ * @version   SVN: $Id: oxubase.php 34114 2011-04-01 08:32:47Z sarunas $
  */
 
 /**
@@ -57,13 +57,6 @@ class oxUBase extends oxView
      * @var object
      */
     protected $_oaComponents = array();
-
-    /**
-     * Cache sign to enable/disable use of cache.
-     *
-     * @var bool
-     */
-    protected $_blIsCallForCache = false;
 
     /**
      * Flag if current view is an order view
@@ -729,28 +722,6 @@ class oxUBase extends oxView
     public function getActiveCategory()
     {
         return $this->_oActCategory;
-    }
-
-    /**
-     * Set cache sign to enable/disable use of cache
-     *
-     * @param bool $blIsCallForCache cache sign to enable/disable use of cache
-     *
-     * @return null
-     */
-    public function setIsCallForCache( $blIsCallForCache = null )
-    {
-        $this->_blIsCallForCache = $blIsCallForCache;
-    }
-
-    /**
-     * Get cache sign to enable/disable use of cache
-     *
-     * @return bool
-     */
-    public function getIsCallForCache()
-    {
-        return $this->_blIsCallForCache;
     }
 
     /**

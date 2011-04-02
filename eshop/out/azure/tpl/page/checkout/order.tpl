@@ -164,7 +164,7 @@
                         <input type="hidden" name="ord_agb" value="1">
                     [{else}]
                         <h3 class="section">
-                            <strong>AGB</strong>
+                            <strong>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_TERMS_TITLE" }]</strong>
                         </h3>
                         [{if $oView->isConfirmAGBActive()}]
                             <input type="hidden" name="ord_agb" value="0">

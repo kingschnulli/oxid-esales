@@ -90,7 +90,7 @@
 
         [{if $oView->isLowOrderPrice()}]
             <div class="lineBox clear">
-                <div><b>[{ oxmultilang ident="BASKET_MINORDERPRICE" }] [{ $oView->getMinOrderPrice() }] [{ $currency->sign }]</b></div>
+                <div><b>[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_MINORDERPRICE" }] [{ $oView->getMinOrderPrice() }] [{ $currency->sign }]</b></div>
             </div>
         [{else}]
             <div class="lineBox clear">

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 33287 2011-02-15 15:50:34Z arvydas.vapsva $
+ * @version   SVN: $Id: oxviewTest.php 34114 2011-04-01 08:32:47Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -628,6 +628,13 @@ class Unit_Views_oxviewTest extends OxidTestCase
     {
         $oView = new oxview();
             $this->assertFalse( $oView->isMall() );
+    }
+
+    public function testIsCallForCache()
+    {
+        $oView = new oxview();
+        $oView->setIsCallForCache( '123456789' );
+        $this->assertEquals( '123456789', $oView->getIsCallForCache() );
     }
 
 }

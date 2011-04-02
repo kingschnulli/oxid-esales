@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 33046 2011-02-08 14:02:03Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxview.php 34114 2011-04-01 08:32:47Z sarunas $
  */
 
 /**
@@ -160,6 +160,13 @@ class oxView extends oxSuperCfg
     protected $_oClickCat = null;
 
     /**
+     * Cache sign to enable/disable use of cache.
+     *
+     * @var bool
+     */
+    protected $_blIsCallForCache = false;
+
+    /**
      * Initiates all components stored, executes oxview::addGlobalParams.
      *
      * @return null
@@ -173,6 +180,28 @@ class oxView extends oxSuperCfg
             // assume that cached components does not affect this method ...
             $this->addGlobalParams();
         }
+    }
+
+    /**
+     * Set cache sign to enable/disable use of cache
+     *
+     * @param bool $blIsCallForCache cache sign to enable/disable use of cache
+     *
+     * @return null
+     */
+    public function setIsCallForCache( $blIsCallForCache = null )
+    {
+        $this->_blIsCallForCache = $blIsCallForCache;
+    }
+
+    /**
+     * Get cache sign to enable/disable use of cache
+     *
+     * @return bool
+     */
+    public function getIsCallForCache()
+    {
+        return $this->_blIsCallForCache;
     }
 
     /**

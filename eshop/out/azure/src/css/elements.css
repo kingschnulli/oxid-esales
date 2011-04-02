@@ -151,6 +151,12 @@
     top: -10px;
 }
 
+.box .subcatPic a{
+    background:#fff;
+    display:block;
+    height: 100px;
+}
+
 .box .catPicOnly {
     padding: 0;
 }
@@ -158,6 +164,11 @@
 .box .catPicOnly .subcatPic {
     left: 0;
     top: 0;
+}
+
+.box .catPicOnly .subcatPic img{
+    display:block;
+    margin:0 auto;
 }
 
 .subcatList .box li.subcatPic {
@@ -405,6 +416,10 @@
 
 .box h2 {
     font-size: 14px;
+}
+
+.box h3 a {
+    white-space: nowrap;
 }
 
 h2.sectionHead {
@@ -3808,6 +3823,27 @@ li.articleImage{
     display: inline-block;
 }
 
+.variantReset {
+    padding-bottom: 10px;
+    font-size: 11px;
+}
+
+.variantReset label {
+    text-transform: uppercase;
+}
+
+.variantReset  a.reset {
+    color: #1d7e96;
+    font-weight: bold;
+    display: block;
+    padding-bottom: 10px;
+}
+
+.variantReset  a.reset:hover {
+    text-decoration:none;
+    color: #EB6005;
+}
+
 /* MD Variant Selects in infoGrid */
 .listDetails .variantSelecors {
     background: none;
@@ -3872,4 +3908,17 @@ button[disabled].submitButton, button[disabled].submitButton:hover  {
     background: #cccccc;
     color:#fff;
     text-shadow:none;
+}
+
+.loadingfade {
+    background: #fff;
+    z-index : 5000;
+}
+.loadingiconbg {
+    background: url(../../img/loading_bg.png) no-repeat center center;
+    z-index : 5001;
+}
+.loadingicon {
+    background: url(../../img/loading.gif) no-repeat center center;
+    z-index : 5002;
 }

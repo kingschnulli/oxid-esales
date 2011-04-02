@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstrregularTest.php 31210 2010-11-25 12:12:07Z sarunas $
+ * @version   SVN: $Id: oxstrregularTest.php 34141 2011-04-01 14:59:12Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -92,7 +92,7 @@ class Unit_Core_oxstrRegularTest extends OxidTestCase
         $this->assertEquals( 3, $this->_oSubj->preg_match_all( "/[^\-]+/", $this->_2Utf( "a-b-c" ), $aMatches ) );
         $this->assertEquals( $aRez, $aMatches );
     }
-/*
+
     public function testStrpos3Params()
     {
         $this->assertEquals(33,
@@ -200,5 +200,11 @@ class Unit_Core_oxstrRegularTest extends OxidTestCase
     public function testCleanStrLeavsDots()
     {
         $this->assertEquals( '.  ', $this->_oSubj->cleanStr( ". ;" ) );
-    }*/
+    }
+
+    public function testJsonEncode()
+    {
+        $this->assertEquals( '[". ;","asdasd",{"asd":"asdasd","0":"asda"}]', $this->_oSubj->jsonEncode( array(". ;", 'asdasd', array('asd'=>'asdasd', 'asda')) ) );
+        $this->assertEquals( '[". ;","asdasd",{"asd":"as\n\t\\\\d\\\\a\\\\\'\"[]{sd","0":"asda"}]', $this->_oSubj->jsonEncode( array(". ;", 'asdasd', array('asd'=>"as\n\t\\d\a\'\"[]{sd", 'asda')) ) );
+    }
 }

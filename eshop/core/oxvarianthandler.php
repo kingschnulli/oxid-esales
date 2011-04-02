@@ -379,6 +379,31 @@ class oxVariantHandler extends oxSuperCfg
     }
 
     /**
+     * Builds variant selections list - array containing oxVariantSelectionList
+     *
+     * @param array $aVarSelects variant selection titles
+     * @param array $aSelections variant selections
+     *
+     * @return array
+     */
+    protected function _buildVariantSelectionsList( $aVarSelects, $aSelections )
+    {
+        // creating selection lists
+        foreach ( $aVarSelects as $iKey => $sLabel ) {
+            $aVariantSelections[$iKey] = oxNew( "oxVariantSelectionList", $sLabel, $iKey );
+        }
+
+        // building variant selections
+        foreach ( $aSelections as $aLineSelections ) {
+            foreach ( $aLineSelections as $oPos => $aLine ) {
+                $aVariantSelections[$oPos]->addVariant( $aLine['name'], $aLine['hash'], $aLine['disabled'], $aLine['active'] );
+            }
+        }
+
+        return $aVariantSelections;
+    }
+
+    /**
      * Builds variant selection list
      *
      * @param string        $sVarName     product (parent product) oxvarname value
@@ -402,16 +427,7 @@ class oxVariantHandler extends oxSuperCfg
             $aSelections = $this->_applyVariantSelectionsFilter( $aRawVariantSelections, $aFilter );
 
             // creating selection lists
-            foreach ( $aVarSelects as $iKey => $sLabel ) {
-                $aVariantSelections[$iKey] = oxNew( "oxVariantSelectionList", $sLabel, $iKey );
-            }
-
-            // building variant selections
-            foreach ( $aSelections as $aLineSelections ) {
-                foreach ( $aLineSelections as $oPos => $aLine ) {
-                    $aVariantSelections[$oPos]->addVariant( $aLine['name'], $aLine['hash'], $aLine['disabled'], $aLine['active'] );
-                }
-            }
+            $aVariantSelections = $this->_buildVariantSelectionsList( $aVarSelects, $aSelections );
 
             $aReturn = array( 'selections' => $aVariantSelections, 'rawselections' => $aRawVariantSelections );
         }

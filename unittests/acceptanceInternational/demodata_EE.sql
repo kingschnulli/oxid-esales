@@ -18,15 +18,15 @@ INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDE
 INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('1001',   '<p>Test product 1 long description [EN] šųößлы</p>', '<p>Test product 1 long description [DE]</p>', '', '', '[EN],1___,tag_,šųößлы', 'tag_,1___,[DE]', '', '');
 INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('1002',   '<p>Test product 2 long description [EN] šųößлы</p>', '<p>Test product 2 long description [DE]</p>', '', '', '[EN],2___,tag_,šųößлы', 'tag_,2___,[DE]', '', '');
 INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('1003',   '<p>Test product 3 long description [EN] šųößлы</p>', '<p>Test product 3 long description [DE]</p>', '', '', '[EN],3___,tag_,šųößлы', 'tag_,3___,[DE]', '', '');
-INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('1002-1', '', '', '', '', '', '', '', '');
-INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('1002-2', '', '', '', '', '', '', '', '');
-INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10010',  '', '', '', '', '', '', '', '');
-INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10011',  '', '', '', '', '', '', '', '');
-INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10012',  '', '', '', '', '', '', '', '');
-INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10013',  '', '', '', '', '', '', '', '');
-INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10014',  '', '', '', '', '', '', '', '');
-INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10015',  '', '', '', '', '', '', '', '');
-INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10016',  '', '', '', '', '', '', '', '');
+INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('1002-1', '', '', '', '', 'tag_,šųößлы', '', '', '');
+INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('1002-2', '', '', '', '', 'tag_,šųößлы', '', '', '');
+INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10010',  '', '', '', '', 'tag_,šųößлы', '', '', '');
+INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10011',  '', '', '', '', 'tag_,šųößлы', '', '', '');
+INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10012',  '', '', '', '', 'tag_,šųößлы', '', '', '');
+INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10013',  '', '', '', '', 'tag_,šųößлы', '', '', '');
+INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10014',  '', '', '', '', 'tag_,šųößлы', '', '', '');
+INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10015',  '', '', '', '', 'tag_,šųößлы', '', '', '');
+INSERT INTO oxartextends (OXID, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXTAGS, OXTAGS_1, OXTAGS_2, OXTAGS_3) VALUES('10016',  '', '', '', '', 'tag_,šųößлы', '', '', '');
 
 INSERT INTO oxaccessoire2article (OXID, OXOBJECTID, OXARTICLENID, OXSORT) VALUES('40847c5649f785c04.64102769', '1002', '1000', 0);
 

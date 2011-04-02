@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvarianthandlerTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxvarianthandlerTest.php 34139 2011-04-01 14:55:38Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -236,5 +236,144 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
 
         $oVariantHandler = oxNew("oxVariantHandler");
         $oVariantHandler->buildMdVariants( $oVariants, "testParentId" );
+    }
+
+    /**
+     * oxVariantHandler::_fillVariantSelections() test case
+     *
+     * @return null
+     */
+    public function testFillVariantSelections()
+    {
+        // empty variant list
+        $oHandler = new oxVariantHandler();
+        $this->assertEquals( array(), $oHandler->UNITfillVariantSelections( array(), 100 ) );
+
+        // filled variant list
+        $oVariant1 = new oxbase();
+        $oVariant1->setId( "test1" );
+        $oVariant1->oxarticles__oxvarselect = new oxField( "a | b | c" );
+
+        $oVariant2 = new oxbase();
+        $oVariant2->setId( "test2" );
+        $oVariant2->oxarticles__oxvarselect = new oxField( "a | b" );
+
+        $oVariant3 = new oxbase();
+        $oVariant3->setId( "test2" );
+        $oVariant3->oxarticles__oxvarselect = new oxField( "a" );
+
+        $aArray[$oVariant1->getId()][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray[$oVariant1->getId()][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+
+        $aArray[$oVariant2->getId()][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray[$oVariant2->getId()][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+
+        $aArray[$oVariant3->getId()][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray[$oVariant3->getId()][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+
+        // checking
+        $oHandler = new oxVariantHandler();
+        $this->assertEquals( $aArray, $oHandler->UNITfillVariantSelections( array( $oVariant1, $oVariant2, $oVariant3 ), 2 ) );
+    }
+
+    /**
+     * oxVariantHandler::_applyVariantSelectionsFilter() test case
+     *
+     * @return null
+     */
+    public function testApplyVariantSelectionsFilter()
+    {
+        // test data
+        $aArray["test1"][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray["test1"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+
+        $aArray["test2"][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray["test2"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+
+        $aArray["test3"][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray["test3"][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+
+        // expected result
+        $aResult["test1"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
+        $aResult["test1"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+
+        $aResult["test2"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
+        $aResult["test2"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+
+        $aResult["test3"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
+        $aResult["test3"][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+
+        // filter data
+        $aFilter = array( md5( 'a' ), '' );
+
+        $oHandler = new oxVariantHandler();
+
+        // no filter
+        $this->assertEquals( $aArray, $oHandler->UNITapplyVariantSelectionsFilter( $aArray, array() ) );
+
+        // filter
+        $this->assertEquals( $aResult, $oHandler->UNITapplyVariantSelectionsFilter( $aArray, $aFilter ) );
+    }
+
+    /**
+     * oxVariantHandler::buildVariantSelections() test case
+     *
+     * @return null
+     */
+    public function testBuildVariantSelectionsList()
+    {
+        $aVarSelects = array( "test1", "test2" );
+
+        // expected result
+        $aSelections["test1"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
+        $aSelections["test1"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+
+        $aSelections["test2"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
+        $aSelections["test2"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+
+        $aSelections["test3"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
+        $aSelections["test3"][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+
+        $oHandler = new oxVariantHandler();
+        $aList = $oHandler->UNITbuildVariantSelectionsList( $aVarSelects, $aSelections );
+
+        // testing
+        $this->assertNotNull( $aList );
+        $this->assertEquals( 2, count( $aList ) );
+
+        $this->assertEquals( 1, count( $aList[0] ) );
+        $this->assertEquals( 1, count( $aList[1] ) );
+
+        $oSel1 = current( $aList[0]->getSelections() );
+        $oSel2 = current( $aList[1]->getSelections() );
+
+        $this->assertNotNull( $oSel1 );
+        $this->assertEquals( 'a', $oSel1->getName() );
+        $this->assertEquals( md5( 'a' ), $oSel1->getValue() );
+        $this->assertFalse( $oSel1->isDisabled() );
+        $this->assertTrue( $oSel1->isActive() );
+
+
+        $this->assertNotNull( $oSel2 );
+        $this->assertEquals( 'b', $oSel2->getName() );
+        $this->assertEquals( md5( 'b' ), $oSel2->getValue() );
+        $this->assertFalse( $oSel2->isDisabled() );
+        $this->assertFalse( $oSel2->isActive() );
+    }
+
+    /**
+     * oxVariantHandler::buildVariantSelections() test case
+     *
+     * @return null
+     */
+    public function testBuildVariantSelections()
+    {
+        $oHandler = $this->getMock( "oxVariantHandler", array( "_fillVariantSelections", "_applyVariantSelectionsFilter", "_buildVariantSelectionsList" ) );
+        $oHandler->expects( $this->once() )->method( '_fillVariantSelections')->will( $this->returnValue( "rawselections" ) );
+        $oHandler->expects( $this->once() )->method( '_applyVariantSelectionsFilter');
+        $oHandler->expects( $this->once() )->method( '_buildVariantSelectionsList')->will( $this->returnValue( "selections" ) );
+
+        $aSelections = $oHandler->buildVariantSelections( "test", array(), array() );
+        $this->assertEquals( array( "selections" => "selections", "rawselections" => "rawselections"), $aSelections );
     }
 }

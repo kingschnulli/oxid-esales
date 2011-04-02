@@ -5,7 +5,8 @@
             <a class="tagitem_[{ $oTagsManager->getTagSize($sTagTitle) }]" href="[{ $oTagsManager->getTagLink($sTagTitle) }]">[{ $oTagsManager->getTagTitle($sTagTitle) }]</a>
         [{/foreach}]
         [{if $oView->isMoreTagsVisible()}]
-            <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=tags" }]" class="link">[{ oxmultilang ident="WIDGET_TAGS_LINKMORE" }]</a>
+            <br>
+            <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=tags" }]" class="readMore">[{ oxmultilang ident="WIDGET_TAGS_LINKMORE" }]</a>
         [{/if}]
     </div>
 </div>

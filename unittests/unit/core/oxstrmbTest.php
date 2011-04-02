@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstrmbTest.php 31210 2010-11-25 12:12:07Z sarunas $
+ * @version   SVN: $Id: oxstrmbTest.php 34141 2011-04-01 14:59:12Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -153,7 +153,7 @@ class Unit_Core_oxstrMbTest extends OxidTestCase
         $this->assertEquals( $aRez, $aMatches );
     }
 
- /*   public function testUcfirst()
+    public function testUcfirst()
     {
         $this->assertEquals($this->_2Utf('Öl'), $this->_oSubj->ucfirst($this->_2Utf('öl')));
     }
@@ -221,5 +221,11 @@ class Unit_Core_oxstrMbTest extends OxidTestCase
     public function testCleanStrLeavesDots()
     {
         $this->assertEquals( '.  ', $this->_oSubj->cleanStr( ". ;" ) );
-    }*/
+    }
+
+    public function testJsonEncode()
+    {
+        $this->assertEquals( '[". ;","asdasd",{"asd":"asdasd","0":"asda"}]', $this->_oSubj->jsonEncode( array(". ;", 'asdasd', array('asd'=>'asdasd', 'asda')) ) );
+        $this->assertEquals( '[". ;","asdasd",{"asd":"as\n\t\\\\d\\\\a\\\\\'\"[]{sd","0":"asda"}]', $this->_oSubj->jsonEncode( array(". ;", 'asdasd', array('asd'=>"as\n\t\\d\a\'\"[]{sd", 'asda')) ) );
+    }
 }

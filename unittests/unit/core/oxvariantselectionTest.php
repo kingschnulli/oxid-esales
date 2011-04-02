@@ -16,41 +16,36 @@
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.oxid-esales.com
- * @package   core
+ * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxidisplayerror.php 26071 2010-02-25 15:12:55Z sarunas $
+ * @version   SVN: $Id: oxvarianthandlerTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
-/**
- * DisplayError interface
- *
- * @package core
- */
-interface oxIDisplayError
+require_once realpath( "." ).'/unit/OxidTestCase.php';
+require_once realpath( "." ).'/unit/test_config.inc.php';
+
+class Unit_Core_oxvariantselectionTest extends OxidTestCase
 {
-   /**
-     * This method should return a localized message for displaying
-     *
-     * @return a string to display to the user
-     */
-    public function getOxMessage();
-
     /**
-     * Returns a type of the error, e.g. the class of the exception or whatever class
-     * implemented this interface
+     * Testing constructor and setters
      *
-     * @return String of Error Type
+     * @return null
      */
-    public function getErrorClassType();
+    public function testConstructorAndSetters()
+    {
+        $oSelection = new oxVariantSelection( "test", "test", true, true );
 
-    /**
-     * Possibility to access additional values
-     *
-     * @param string $sName Value name
-     *
-     * @return an additional value (string) by its name
-     */
-    public function getValue($sName);
+        //
+        $this->assertEquals( "test", $oSelection->getValue() );
+        $this->assertEquals( "test", $oSelection->getName() );
+        $this->assertTrue( $oSelection->isActive() );
+        $this->assertTrue( $oSelection->isDisabled() );
 
+        //
+        $oSelection->setActiveState( false );
+        $oSelection->setDisabled( false );
+        $this->assertFalse( $oSelection->isActive() );
+        $this->assertFalse( $oSelection->isDisabled() );
+    }
 }

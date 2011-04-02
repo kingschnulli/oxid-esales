@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34107 2011-03-31 15:18:40Z juergen.busch $
+ * @version   SVN: $Id: lang.php 34118 2011-04-01 09:34:38Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -1459,7 +1459,7 @@ $aLang = array(
 'SYSREQ_I_CONV'                                            => 'ICONV',
 'SYSREQ_TOKENIZER'                                         => 'Tokenizer',
 'SYSREQ_BC_MATH'                                           => 'BCMath',
-'SYSREQ_MYSQL_CONNECT'                                     => 'MySQL Modul für MySQL 5',
+'SYSREQ_MYSQL_CONNECT'                                     => 'MySQL Client Connector für MySQL 5',
 'SYSREQ_MYSQL_VERSION'                                     => 'MySQL Version 5',
 'SYSREQ_GD_INFO'                                           => 'GDlib v2 [v1] incl. JPEG Unterstützung',
 'SYSREQ_INI_SET'                                           => 'ini_set erlaubt',

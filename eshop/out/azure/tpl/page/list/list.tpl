@@ -39,16 +39,16 @@
                         [{assign var="iconUrl" value=$category->getIconUrl()}]
                             <div class="box">
                                 <h3>
-                                <a id="moreSubCat_[{$smarty.foreach.MoreSubCat.iteration}]" href="[{ $category->getLink() }]">
-                                    [{$category->oxcategories__oxtitle->value }][{ if $category->getNrOfArticles() > 0 }] ([{ $category->getNrOfArticles() }])[{/if}]
-                                </a>
+                                    <a id="moreSubCat_[{$smarty.foreach.MoreSubCat.iteration}]" href="[{ $category->getLink() }]">
+                                        [{$category->oxcategories__oxtitle->value }][{ if $category->getNrOfArticles() > 0 }] ([{ $category->getNrOfArticles() }])[{/if}]
+                                    </a>
                                 </h3>
                                 [{if $category->getSubCats() || $category->getContentCats()}]
                                     <ul class="content">
                                         [{if $iconUrl}]
                                             <li class="subcatPic">
                                                 <a href="[{ $category->getLink() }]">
-                                                    <img src="[{$category->getIconUrl() }]" alt="[{ $category->oxcategories__oxtitle->value }]" height="100" width="168">
+                                                    <img src="[{$category->getIconUrl() }]" alt="[{ $category->oxcategories__oxtitle->value }]">
                                                 </a>
                                             </li>
                                         [{/if}]
@@ -70,7 +70,7 @@
                                         [{if $iconUrl}]
                                             <div class="subcatPic">
                                                 <a href="[{ $category->getLink() }]">
-                                                    <img src="[{$category->getIconUrl() }]" alt="[{ $category->oxcategories__oxtitle->value }]" height="100" width="168">
+                                                    <img src="[{$category->getIconUrl() }]" alt="[{ $category->oxcategories__oxtitle->value }]">
                                                 </a>
                                             </div>
                                         [{/if}]

@@ -112,6 +112,8 @@ $aLang = array(
 'DETAILS_QUESTIONSSUBJECT'                        => "Fragen zu Artikel",
 'DETAILS_SOCIAL_BOOKMARKS'                        => "Social Bookmarks",
 'DETAILS_QUANTITY'                                => "Menge:",
+'DETAILS_VARIANTS_RESETSELECTION'                 => "Auswahl zurücksetzen",
+'DETAILS_VARIANTS_SELECTEDCOMBINATION'            => "AUSGEWÄHLTE KOMBINATION:",
 
 'PAGE_DETAILS_COMPARE'                            => "vergleichen",
 'PAGE_DETAILS_REMOVEFROMCOMPARELIST'              => "aus Vergl. entfernen",
@@ -354,6 +356,7 @@ $aLang = array(
 'PAGE_CHECKOUT_ORDER_BACKSTEP'                                           => "Zurück",
 'PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS'                                => "Bitte bestätigen Sie unsere Allg. Geschäftsbedingungen.",
 'PAGE_CHECKOUT_ORDER_TITLE2'                                             => "[Tr] Senden sie ihre bestellung am unteren ende dieser übersicht ab",
+'PAGE_CHECKOUT_ORDER_TERMS_TITLE'                                        => "[Tr] Terms and Conditions",
 
 'PAGE_CHECKOUT_USER_OPTION_NEXT'                                => "Weiter",
 'PAGE_CHECKOUT_USER_OPTION_NOREGISTRATION'                      => "Bestellen ohne Registrierung",
@@ -370,7 +373,7 @@ $aLang = array(
 'PAGE_CHECKOUT_USER_OPTION_LOGIN'                               => "Ich bin bereits Kunde",
 'PAGE_CHECKOUT_USER_OPTION_LOGIN_DESCRIPTION'                   => "Bitte mit E-Mail-Adresse/Kundennummer und Passwort einloggen.",
 
-
+'PAGE_CHECKOUT_PAYMENT_MINORDERPRICE'                            => "Mindestbestellwert",
 'PAGE_CHECKOUT_PAYMENT_TITLE'                                   => "Bezahlen",
 'PAGE_CHECKOUT_PAYMENT_SELECTSHIPPING'                          => "Bitte wählen Sie Ihre Versandart",
 'PAGE_CHECKOUT_PAYMENT_SELECTEDSHIPPING'                        => "Der Versand erfolgt mit:",
@@ -618,7 +621,7 @@ $aLang = array(
 'WIDGET_MINIBASKET_TOTAL'                          => "Gesamt",
 'WIDGET_MINIBASKET_ITEMS_IN_BASKET'                => "Artikel im Warenkorb:",
 'WIDGET_MINIBASKET_CHECKOUT'                       => "Zur Kasse",
-'WIDGET_MINIBASKET_DISPLAY_BASKET'                 => "Warenkorb speichern",
+'WIDGET_MINIBASKET_DISPLAY_BASKET'                 => "Warenkorb zeigen",
 
 'WIDGET_LOGINBOX_GREETING'                         => "Hallo, ",
 

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 34100 2011-03-31 14:51:52Z arvydas.vapsva $
+ * @version   SVN: $Id: details.php 34133 2011-04-01 12:41:59Z arvydas.vapsva $
  */
 
 /**
@@ -394,16 +394,28 @@ class Details extends oxUBase
 
         parent::render();
 
-        // #785A loads and sets locator data
-        $oLocator = oxNew( 'oxlocator', $this->getListType() );
-        $oLocator->setLocatorData( $oProduct, $this );
+        $sPartial = oxConfig::getParameter('renderPartial');
+        $this->addTplParam('sRenderPartial', $sPartial);
 
-        if ($myConfig->getConfigParam( 'bl_rssRecommLists' ) && $this->getSimilarRecommLists()) {
-            $oRss = oxNew('oxrssfeed');
-            $this->addRssFeed($oRss->getRecommListsTitle( $oProduct ), $oRss->getRecommListsUrl( $oProduct ), 'recommlists');
+        switch ($sPartial) {
+            case "productInfo":
+                return 'page/details/productinfo.tpl';
+                break;
+            case "detailsMain":
+                return 'page/details/detailsmain.tpl';
+                break;
+            default:
+                // #785A loads and sets locator data
+                $oLocator = oxNew( 'oxlocator', $this->getListType() );
+                $oLocator->setLocatorData( $oProduct, $this );
+
+                if ($myConfig->getConfigParam( 'bl_rssRecommLists' ) && $this->getSimilarRecommLists()) {
+                    $oRss = oxNew('oxrssfeed');
+                    $this->addRssFeed($oRss->getRecommListsTitle( $oProduct ), $oRss->getRecommListsUrl( $oProduct ), 'recommlists');
+                }
+
+                return $this->_sThisTemplate;
         }
-
-        return $this->_sThisTemplate;
     }
 
     /**
@@ -987,7 +999,7 @@ class Details extends oxUBase
     {
         if ( $this->_aPicGallery === null ) {
             //get picture gallery
-            $this->_aPicGallery = $this->getProduct()->getPictureGallery();
+            $this->_aPicGallery = $this->getPicturesProduct()->getPictureGallery();
         }
         return $this->_aPicGallery;
     }
@@ -1553,5 +1565,23 @@ class Details extends oxUBase
         }
 
         return $oProduct->getVariantSelections( oxConfig::getParameter( "varselid" ) );
+    }
+
+    /**
+     * Returns pictures product object
+     *
+     * @return oxarticle
+     */
+    public function getPicturesProduct()
+    {
+        $oProduct = $this->getProduct();
+        //
+        if ( ( $sId = oxConfig::getParameter( "panid" ) ) && $sId != $oProduct->getId() ) {
+            $oVariantList = $oProduct->getVariants( false );
+            if ( $oVariantList && $oVariantList->offsetExists( $sId ) ) {
+                $oProduct = $oVariantList->offsetGet( $sId );
+            }
+        }
+        return $oProduct;
     }
 }

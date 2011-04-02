@@ -263,7 +263,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor" );
 
         $oControl = $this->getMock( "oxShopControl", $aTasks, array(), '', false );
-        $oControl->expects( $this->exactly(2) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oControl->expects( $this->exactly(3) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
 
         try {
@@ -294,12 +294,102 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'getTemplatePath' )->will( $this->returnValue( $sTplPath ) );
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'pageClose' );
 
-        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", "_output" );
+        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", '_getOutputManager' );
+
+        $oOut = $this->getMock( "oxOutput", array('output', 'flushOutput', 'sendHeaders') );
+        $oOut->expects( $this->once() )->method( 'output' )->with($this->equalTo('content'));
+        $oOut->expects( $this->once() )->method( 'flushOutput' )->will( $this->returnValue( null ) );
+        $oOut->expects( $this->once() )->method( 'sendHeaders' )->will( $this->returnValue( null ) );
 
         $oControl = $this->getMock( "oxShopControl", $aTasks, array(), '', false );
-        $oControl->expects( $this->exactly(2) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oControl->expects( $this->exactly(3) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
-        $oControl->expects( $this->once() )->method( '_output' );
+        $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
+
+        $oControl->UNITprocess( "info", null );
+    }
+
+    public function testProcessJson()
+    {
+        oxTestModules::addFunction( 'oxUtils', 'isSearchEngine', '{ return false; }' );
+        oxTestModules::addFunction( 'oxUtils', 'setHeader', '{}' );
+
+        modConfig::setParameter('renderPartial', 'asd');
+
+        $sTplPath  = modConfig::getInstance()->getConfigParam( 'sShopDir' )."/out/";
+        $sTplPath .= modConfig::getInstance()->getConfigParam( 'sTheme' )."/tpl/page/checkout/basket.tpl";
+
+        $iAt = 0;
+        $oConfig = $this->getMock( "oxStdClass", array( "setActiveView", "getTemplatePath", "getConfigParam", "pageClose" ) );
+        $oConfig->expects( $this->at( $iAt++ ) )->method( 'getConfigParam' )->with( $this->equalTo( "blLogging" ))->will( $this->returnValue( true ) );
+        $oConfig->expects( $this->at( $iAt++ ) )->method( 'setActiveView' );
+        $oConfig->expects( $this->at( $iAt++ ) )->method( 'getTemplatePath' )->will( $this->returnValue( $sTplPath ) );
+        $oConfig->expects( $this->at( $iAt++ ) )->method( 'pageClose' );
+
+        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", '_getOutputManager', '_getErrors' );
+
+        $oOut = $this->getMock( "oxOutput", array('output', 'flushOutput', 'sendHeaders', 'setOutputFormat') );
+        $oOut->expects( $this->at(0) )->method( 'setOutputFormat' )->with( $this->equalTo( oxOutput::OUTPUT_FORMAT_JSON ) );
+        $oOut->expects( $this->at(1) )->method( 'sendHeaders' )->will( $this->returnValue( null ) );
+        $oOut->expects( $this->at(3) )->method( 'output' )->with($this->equalTo('content'), $this->anything());
+        $oOut->expects( $this->at(4) )->method( 'flushOutput' )->will( $this->returnValue( null ) );
+
+        $oControl = $this->getMock( "oxShopControl", $aTasks, array(), '', false );
+        $oControl->expects( $this->exactly(3) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
+        $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
+        $oControl->expects( $this->any() )->method( '_getErrors' )->will( $this->returnValue( array() ) );
+
+        $oControl->UNITprocess( "info", null );
+    }
+
+    public function testProcessJsonWithErrors()
+    {
+        oxTestModules::addFunction( 'oxUtils', 'isSearchEngine', '{ return false; }' );
+        oxTestModules::addFunction( 'oxUtils', 'setHeader', '{}' );
+
+        modConfig::setParameter('renderPartial', 'asd');
+
+        $sTplPath  = modConfig::getInstance()->getConfigParam( 'sShopDir' )."/out/";
+        $sTplPath .= modConfig::getInstance()->getConfigParam( 'sTheme' )."/tpl/page/checkout/basket.tpl";
+
+        $iAt = 0;
+        $oConfig = $this->getMock( "oxStdClass", array( "setActiveView", "getTemplatePath", "getConfigParam", "pageClose" ) );
+        $oConfig->expects( $this->at( $iAt++ ) )->method( 'getConfigParam' )->with( $this->equalTo( "blLogging" ))->will( $this->returnValue( true ) );
+        $oConfig->expects( $this->at( $iAt++ ) )->method( 'setActiveView' );
+        $oConfig->expects( $this->at( $iAt++ ) )->method( 'getTemplatePath' )->will( $this->returnValue( $sTplPath ) );
+        $oConfig->expects( $this->at( $iAt++ ) )->method( 'pageClose' );
+
+        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", '_getOutputManager', '_getErrors' );
+
+        $oOut = $this->getMock( "oxOutput", array('output', 'flushOutput', 'sendHeaders', 'setOutputFormat') );
+        $oOut->expects( $this->at(0) )->method( 'setOutputFormat' )->with( $this->equalTo( oxOutput::OUTPUT_FORMAT_JSON ) );
+        $oOut->expects( $this->at(1) )->method( 'output' )->with($this->equalTo('errors'), $this->equalTo(
+                array(
+                    'other'=>array('test1', 'test3'),
+                    'default'=>array('test2', 'test4'),
+                )
+                ));
+        $oOut->expects( $this->at(2) )->method( 'sendHeaders' )->will( $this->returnValue( null ) );
+        $oOut->expects( $this->at(3) )->method( 'output' )->with($this->equalTo('content'), $this->anything());
+        $oOut->expects( $this->at(4) )->method( 'flushOutput' )->will( $this->returnValue( null ) );
+
+        $oControl = $this->getMock( "oxShopControl", $aTasks, array(), '', false );
+        $oControl->expects( $this->exactly(3) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
+        $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
+        $aErrors = array();
+        $oDE = new oxDisplayError();
+        $oDE->setMessage('test1');
+        $aErrors['other'][]   = serialize($oDE);
+        $oDE->setMessage('test2');
+        $aErrors['default'][] = serialize($oDE);
+        $oDE->setMessage('test3');
+        $aErrors['other'][]   = serialize($oDE);
+        $oDE->setMessage('test4');
+        $aErrors['default'][] = serialize($oDE);
+
+        $oControl->expects( $this->any() )->method( '_getErrors' )->will( $this->returnValue($aErrors));
 
         $oControl->UNITprocess( "info", null );
     }
@@ -316,15 +406,21 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( "blUseContentCaching", true );
         modConfig::getInstance()->setConfigParam( "iDebug", 4 );
 
-        $oControl = $this->getMock( "oxShopControl", array( "isAdmin", "_output" ), array(), '', false );
+        $oOut = $this->getMock( "oxOutput", array('output'));
+        $oOut->expects( $this->never() )->method( 'output' );
+
+        $oControl = $this->getMock( "oxShopControl", array( "isAdmin", '_getOutputManager' ), array(), '', false );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
-        $oControl->expects( $this->never() )->method( '_output' );
+        $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
         $oControl->UNITstartMonitor();
         $oControl->UNITstopMonitor();
 
-        $oControl = $this->getMock( "oxShopControl", array( "isAdmin", "_output" ), array(), '', false );
+        $oOut = $this->getMock( "oxOutput", array('output'));
+        $oOut->expects( $this->once() )->method( 'output' )->with($this->equalTo('debuginfo'));
+
+        $oControl = $this->getMock( "oxShopControl", array( "isAdmin", '_getOutputManager' ), array(), '', false );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
-        $oControl->expects( $this->once() )->method( '_output' );
+        $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
         $oControl->UNITstartMonitor();
         $oControl->UNITstopMonitor();
     }
@@ -354,7 +450,6 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
      */
     public function testIsDebugMode_adminMode()
     {
-
         $oControl = $this->getMock( "oxShopControl", array( "isAdmin" ), array(), '', false );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
 
@@ -364,5 +459,36 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( "iDebug", 0 );
         $this->assertFalse( $oControl->UNITisDebugMode() );
     }
+
+    public function testGetErrors()
+    {
+        modSession::getInstance()->setVar('Errors', null);
+        $oControl = new oxShopControl();
+        $this->assertEquals(array(), $oControl->UNITgetErrors());
+        $this->assertEquals(array(), modSession::getInstance()->getVar('Errors'));
+        $this->assertEquals(array(), $oControl->UNITgetErrors());
+
+        modSession::getInstance()->setVar('Errors', array());
+        $oControl = new oxShopControl();
+        $this->assertEquals(array(), $oControl->UNITgetErrors());
+        $this->assertEquals(array(), modSession::getInstance()->getVar('Errors'));
+        $this->assertEquals(array(), $oControl->UNITgetErrors());
+
+        modSession::getInstance()->setVar('Errors', array('asd'=>'asd'));
+        $oControl = new oxShopControl();
+        $this->assertEquals(array('asd'=>'asd'), $oControl->UNITgetErrors());
+        $this->assertEquals(array(), modSession::getInstance()->getVar('Errors'));
+        $this->assertEquals(array('asd'=>'asd'), $oControl->UNITgetErrors());
+    }
+
+    public function testGetOutputManager()
+    {
+        $oControl = new oxShopControl();
+        $oOut = $oControl->UNITgetOutputManager();
+        $this->assertTrue($oOut instanceof oxOutput);
+        $oOut1 = $oControl->UNITgetOutputManager();
+        $this->assertSame($oOut, $oOut1);
+   }
+
 
 }

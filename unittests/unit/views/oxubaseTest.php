@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 34087 2011-03-31 07:04:56Z vilma $
+ * @version   SVN: $Id: oxubaseTest.php 34114 2011-04-01 08:32:47Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -959,16 +959,6 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView = $this->getProxyClass( 'oxubase' );
         $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
         $this->assertEquals( $sContentId, $oView->getContentId() );
-    }
-
-    /*
-     * Test set/get sort by
-     */
-    public function testIsCallForCache()
-    {
-        $oView = new oxubase();
-        $oView->setIsCallForCache( '123456789' );
-        $this->assertEquals( '123456789', $oView->getIsCallForCache() );
     }
 
     /*

@@ -9,7 +9,8 @@
                         [{ if $blEdit }]
                             [{assign var="editclass" value="cl=account_recommlist&amp;fnc=editList"}]
                         [{/if}]
-                        <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$editclass params="recommid=`$recommlist->oxrecommlists__oxid->value`&amp;searchrecomm=`$searchrecomm`" }]" class="title" title="[{ $recommlist->oxrecommlists__oxtitle->value}]">[{ $recommlist->oxrecommlists__oxtitle->value }]</a></b>: [{ oxmultilang ident="PAGE_RECOMMENDATIONS_PRODUCTS_LISTBY" }] [{ $recommlist->oxrecommlists__oxauthor->value }]
+                        <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:$editclass params="recommid=`$recommlist->oxrecommlists__oxid->value`&amp;searchrecomm=`$searchrecomm`" }]" class="title" title="[{ $recommlist->oxrecommlists__oxtitle->value}]">[{ $recommlist->oxrecommlists__oxtitle->value }]</a></b>
+                        : [{ oxmultilang ident="PAGE_RECOMMENDATIONS_PRODUCTS_LISTBY" }] [{ $recommlist->oxrecommlists__oxauthor->value }]
                         <div class="editButtons">
                             [{ if $blEdit }]
                                 <form action="[{ $oViewConf->getSelfActionLink() }]" method="post">

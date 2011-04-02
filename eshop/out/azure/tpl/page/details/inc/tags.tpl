@@ -10,7 +10,7 @@
         [{/foreach}]
     </p>
     [{if $oDetailsProduct && $oView->canChangeTags()}]
-      <form action="[{$oDetailsProduct->getLink()}]#tags" method="post" id="tagsForm" >
+      <form action="[{$oViewConf->getSelfActionLink()}]#tags" method="post" id="tagsForm" >
         <div class="tagAdd">
           [{$oViewConf->getHiddenSid()}]
           [{$oViewConf->getNavFormParams()}]

@@ -116,16 +116,607 @@ var oxid = {
             }
 
         }
+    },
+
+    loadingScreen: {
+        start : function (target) {
+            var loadingScreens = Array();
+            $(target).each(function() {
+                var overlayKeeper = document.createElement("div");
+                overlayKeeper.innerHTML = '<div class="loadingfade"></div><div class="loadingicon"></div><div class="loadingiconbg"></div>';
+                $('div', overlayKeeper).css({
+                        'position' : 'absolute',
+                        'left'     : $(this).offset().left-10,
+                        'top'      : $(this).offset().top-10,
+                        'width'    : $(this).width()+20,
+                        'height'   : $(this).height()+20
+                    });
+                $('div.loadingfade', overlayKeeper)
+                    .css({'opacity' : 0})
+                    .animate({
+                        opacity: 0.55
+                    }, 200
+                    );
+                $("body").append(overlayKeeper);
+                loadingScreens.push(overlayKeeper);
+            });
+            return loadingScreens;
+        },
+        stop : function (loadingScreens) {
+          $.each(loadingScreens, function(i, el) {
+              $('div', el).not('.loadingfade').remove();
+              $('div.loadingfade', el)
+                  .stop(true, true)
+                  .animate({
+                      opacity: 0
+                  }, 100, function(){
+                      $(el).remove();
+                  });
+          });
+        }
+    },
+
+    updatePageErrors : function(errors) {
+        if (errors.length) {
+            var errlist = $("#content > .status.error");
+            if (errlist.length == 0) {
+                $("#content").prepend("<div class='status error corners'>");
+                errlist = $("#content > .status.error");
+            }
+            if (errlist) {
+                errlist.children().remove();
+                var i;
+                for (i=0; i<errors.length; i++) {
+                    var p = document.createElement('p');
+                    $(p).append(document.createTextNode(errors[i]));
+                    errlist.append(p);
+                }
+            }
+        } else {
+            $("#content > .status.error").remove();
+        }
+    },
+
+    ajax : function(activator, params) {
+        // activator: form or link element
+        // params: targetEl, onSuccess, onError, additionalData
+        var inputs = {};
+        var action = "";
+        var type   = "";
+        if (activator[0].tagName == 'FORM') {
+            $("input", activator).each(function() {
+                inputs[this.name] = this.value;
+            });
+            action = activator.attr("action");
+            type   = activator.attr("method");
+        } else if (activator[0].tagName == 'A') {
+            action = activator.attr("href");
+        }
+
+        if (params['additionalData']) {
+            $.each(params['additionalData'], function(i, f) {inputs[i] = f;});
+        }
+
+        var loadingScreen = null;
+        if (params['targetEl']) {
+            loadingScreen = oxid.loadingScreen.start(params['targetEl']);
+        }
+
+        if (!type) {
+            type = "get";
+        }
+
+        jQuery.ajax({
+            data: inputs,
+            url: action,
+            type: type,
+            timeout: 30000,
+            error: function(jqXHR, textStatus, errorThrown) {
+                if (loadingScreen) {
+                    oxid.loadingScreen.stop(loadingScreen);
+                }
+                if (params['onError']) {
+                    params['onError'](jqXHR, textStatus, errorThrown);
+                }
+            },
+            success: function(r) {
+                if (loadingScreen) {
+                    oxid.loadingScreen.stop(loadingScreen);
+                }
+                if (r['debuginfo'] != undefined && r['debuginfo']) {
+                    $("body").append(r['debuginfo']);
+                }
+                if   (r['errors'] != undefined
+                   && r['errors']['default'] != undefined) {
+                    oxid.updatePageErrors(r['errors']['default']);
+                } else {
+                    oxid.updatePageErrors([]);
+                }
+                if (params['onSuccess']) {
+                    params['onSuccess'](r, inputs);
+                }
+            }
+        });
+    },
+
+    evalScripts : function(container){
+        $("script", container).each(function(){
+            eval(this.innerHTML);
+            $(this).remove();
+        });
+    },
+
+    initDetailsMain : function () {
+        if ($("#productTitle").length > 0) {
+            var targetWidth = $("#productTitle span").width();
+            if (targetWidth > 220) {
+                var linkboxWidth = $("#productTitle span").width();
+            }
+            else {
+                var linkboxWidth = 220;
+            }
+            var targetHeight = $("#productTitle span").height();
+
+             /* More pictures marker*/
+
+             $(".otherPictures li a").click(function(){
+                $(".otherPictures li a").removeClass("selected");
+                $(this).addClass("selected");
+                return false;
+             });
+
+             $("#zoomModal li a").click(function(){
+                $("#zoomImg").attr("src", $(this).attr("href"));
+                return false;
+             });
+
+             $(".cloud-zoom").click(function(){
+                return false;
+             });
+
+            $("#zoomImg").click(function(){
+
+                var oPaging     = $(".zoomPager");
+                var iImgCount   = $(".zoomPager li").size();
+                var iCurImgNo   = $(".selected", oPaging).text();
+
+                if ( $(".selected", oPaging).length == 0 ) {
+                    iCurImgNo = 1;
+                    $(".zoomPager li:first").children("a").addClass('selected');
+                }
+
+                var sFirstImage = $(".zoomPager li:first").children("a").attr("href");
+                var sNextImage  = $(".selected", oPaging).parent().next().children("a").attr("href");
+                var oCurPage    = $(".selected", oPaging);
+                var oNextPage   = $(".selected", oPaging).parent().next().children();
+                var oLastPage   = $(".zoomPager li:last").children("a");
+                var oFirstPage  = $(".zoomPager li:first").children("a");
+
+                if( iCurImgNo == iImgCount ) {
+                    $("#zoomImg").attr("src", sFirstImage);
+                    oLastPage.removeClass('selected');
+                    oFirstPage.addClass('selected');
+                } else {
+                    $("#zoomImg").attr("src", sNextImage);
+                    oCurPage.removeClass('selected');
+                    oNextPage.addClass('selected');
+                }
+
+                return false;
+             });
+
+
+
+            $(".actionLinks").css({
+                "top": $("#productTitle").position().top - 7,
+                "left": $("#productTitle").position().left - 10,
+                "padding-top": targetHeight + 10,
+                "width": linkboxWidth + 50
+            });
+
+            var arrowSrc = $(".selector img").attr("src");
+            var arrow = $("#productLinks").children("img");
+            function showLinks() {
+                var arrowOnSrc = arrow.attr("longdesc");
+                $(".actionLinks").slideDown("normal", function(){
+                    arrow.attr("src", arrowOnSrc);
+                });
+            }
+            function hideLinks() {
+                $(".actionLinks").animate({
+                    height: 0,
+                    opacity: 0.1
+                }, 300, function(){
+                    $(".actionLinks").hide().css({
+                        height: 'auto',
+                        opacity: '1'
+                    });
+                    arrow.attr("src", arrowSrc);
+                });
+            }
+
+            $("#productLinks").css({
+                "top": $("#productTitle").position().top - 3,
+                "left": targetWidth + $("#productTitle").position().left + 10
+            }).click(function(){
+                $(this).toggleClass("selected");
+                if ($(this).hasClass("selected")) {
+                    showLinks();
+                }
+                else {
+                    hideLinks();
+                }
+                return false;
+            });
+            $("#productLinks").hover(function() {
+                showLinks();
+            });
+            $(".actionLinks").mouseleave( function() {
+                hideLinks();
+            });
+            if ($("#showLinksOnce").length > 0) {
+                $(".actionLinks").slideDown('normal').delay(1000).slideUp('normal', function(){
+                     setCookie('showlinksonce', 1);
+                });
+            }
+        }
+
+        if ($("#amountPrice").length > 0) {
+            $(".pricePopup").css({
+                "top": $("#amountPrice").position().top - 7,
+                "left": $("#amountPrice").position().left - 10,
+                "width": 220
+            });
+
+            var arrowSrc = $(".selector img").attr("src");
+
+            $("#amountPrice").click(function(){
+                var arrow = $(this).children("img");
+
+                var arrowOnSrc = arrow.attr("longdesc");
+                $(this).toggleClass("selected");
+                if ($(this).hasClass("selected")) {
+                    $("#priceinfo").slideDown("normal", function(){
+                        arrow.attr("src", arrowOnSrc);
+                    });
+                    $(".tobasketFunction .selector").css({
+                        "left": $("#amountPrice").position().left,
+                        "position": "absolute"
+                    });
+                }
+                else {
+                    $("#priceinfo").animate({
+                        height: 0,
+                        opacity: 0.1
+                    }, 300, function(){
+                        $("#priceinfo").hide().css({
+                            height: 'auto',
+                            opacity: '1'
+                        });
+                        arrow.attr("src", arrowSrc);
+                    });
+                    $(".tobasketFunction .selector").css({
+                        "position": "static"
+                    });
+                }
+                return false;
+            });
+        }
+
+        $(".priceAlarmLink").click(function() {
+            var $tabs = $('.tabbedWidgetBox').tabs();
+            $tabs.tabs('select', '#pricealarm');
+            return false;
+        });
+
+        $('select[id^=sellist]').change (function() {
+            var oSelf = $(this);
+            var oNoticeList = $('#linkToNoticeList');
+            if ( oNoticeList ) {
+                oNoticeList.attr('href', oNoticeList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
+            }
+            var oWishList = $('#linkToWishList');
+            if ( oWishList ) {
+                oWishList.attr('href', oWishList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
+            }
+        });
+
+        /**
+         * Unbinding previous event
+         */
+        $('ul.vardrop a').unbind( "click" );
+
+        /**
+         * Variant selection dropdown
+         */
+        $("ul.vardrop a").bind( "click", function(){
+
+            var obj = $( this );
+
+            // resetting
+            if ( obj.parents().hasClass("oxdisabled") ) {
+                oxid.variantSelection.resetVariantSelections();
+            } else {
+                $( ".oxProductForm input[name=anid]" ).attr( "value", $( ".oxProductForm input[name=parentid]" ).attr( "value" ) );
+            }
+
+            // setting new selection
+            var objFnIdent = obj.parents().hasClass("fnSubmit");
+            if ( objFnIdent ){
+                obj.parent('li').parent('ul').prev('input').attr( "value", obj.attr("rel") );
+
+                //
+                oxid.variantSelection.findClosestVariant();
+
+                obj.closest("form").submit();
+                return false;
+            }
+
+            return false;
+        });
+
+        /**
+         * variant reset link
+         */
+        $('div.variantReset a').click( function () {
+            oxid.variantSelection.resetVariantSelections();
+            var obj = $( this );
+            obj.closest("form").submit();
+            return false;
+        } );
+
+        function reloadProductPartially(activator,renderPart,highlightTargets,contentTarget) {
+            oxid.ajax(
+                activator,
+                {//targetEl, onSuccess, onError, additionalData
+                    'targetEl'  : highlightTargets,
+                    'additionalData' : {'renderPartial' : renderPart},
+                    'onSuccess' : function(r) {
+                        contentTarget.innerHTML = r['content'];
+                        oxid.evalScripts(contentTarget);
+                    }
+                }
+            );
+            return false;
+        }
+
+
+        $(".oxProductForm").submit(function () {
+            if (!$("input[name='fnc']", this).val()) {
+                // return reloadProductPartially($(".oxProductForm"),'detailsMain',$("#detailsMain"),$("#detailsMain")[0]);
+                return reloadProductPartially($(".oxProductForm"),'productInfo',$("#productinfo"),$("#productinfo")[0]);
+            }
+        });
+    },
+
+    initDetailsRelated : function () {
+
+        $(".tabbedWidgetBox").tabs();
+
+        $(".tagCloud #tagText").click(oxid.highTag);
+        $("#saveTag").click(oxid.saveTag);
+        $("#cancelTag").click(oxid.cancelTag);
+        $("#editTag").click(oxid.editTag);
+
+
+        $("#writeNewReview").click(function(){
+            $("#writeReview").slideToggle();
+            $("#writeNewReview").hide();
+            return false;
+        });
+
+    },
+
+    highTag : function() {
+        var oSelf = $(this);
+        $(".tagError").hide();
+
+        oxid.ajax(
+            $("#tagsForm"),
+            {//targetEl, onSuccess, onError, additionalData
+                'targetEl' : $("#tags"),
+                'additionalData' : {'highTags' : oSelf.prev().text()},
+                'onSuccess' : function(response, params) {
+                    oSelf.prev().addClass('taggedText');
+                    oSelf.hide();
+                }
+            }
+        );
+        return false;
+    },
+
+    saveTag : function() {
+        $(".tagError").hide();
+
+        oxid.ajax(
+            $("#tagsForm"),
+            {//targetEl, onSuccess, onError, additionalData
+                'targetEl' : $("#tags"),
+                'additionalData' : {'blAjax' : '1'},
+                'onSuccess' : function(response, params) {
+                    if ( response ) {
+                        $(".tagCloud").append("<span class='taggedText'>" + params["newTags"] + "</span> ");
+                    } else {
+                        $(".tagError").show();
+                    }
+                }
+            }
+        );
+        return false;
+    },
+
+    cancelTag : function () {
+        oxid.ajax(
+            $("#tagsForm"),
+            {//targetEl, onSuccess, onError, additionalData
+                'targetEl' : $("#tags"),
+                'additionalData' : {'blAjax' : '1', 'fnc' : 'cancelTags'},
+                'onSuccess' : function(response, params) {
+                    if ( response ) {
+                        $('#tags').html(response);
+                        $("#tags #editTag").click(oxid.editTag);
+                    }
+                }
+            }
+        );
+        return false;
+    },
+
+    editTag : function() {
+        oxid.ajax(
+            $("#tagsForm"),
+            {//targetEl, onSuccess, onError, additionalData
+                'targetEl' : $("#tags"),
+                'additionalData' : {'blAjax' : '1'},
+                'onSuccess' : function(response, params) {
+                    if ( response ) {
+                        $('#tags').html(response);
+                        $("#tags #tagText").click(oxid.highTag);
+                        $('#tags #saveTag').click(oxid.saveTag);
+                        $('#tags #cancelTag').click(oxid.cancelTag);
+                    }
+                }
+            }
+        );
+        return false;
+    },
+
+    initDetailsPagePartial : function () {
+        $(".cloud-zoom, .cloud-zoom-gallery").CloudZoom();
+        oxid.initDropDowns();
+    },
+
+    showDropdown : function () {
+        oxid.hideDropdown();
+        targetObj = $(this);
+
+        targetObj.removeClass('underlined');
+        sublist = targetObj.nextAll("ul.drop");
+
+        sublist.prepend("<li class='value'></li>");
+        targetObj.clone().appendTo(".value", sublist);
+        sublist.css("width", targetObj.parent().outerWidth());
+
+        if (sublist.length) {
+            sublist.slideToggle("fast");
+            targetObj.toggleClass("selected");
+        }
+
+    },
+
+    hideDropdown: function () {
+        $("ul.drop").hide();
+        $("ul.drop li.value").remove();
+        $(".dropDown p").removeClass("selected");
+        $(".dropDown p").addClass("underlined");
+    },
+
+    initDropDowns : function () {
+        $(document).click( function(e){
+            var clickTarget = e.target;
+            if($(clickTarget).parents().hasClass("dropDown")){
+            }else{
+                $(".drop").hide();
+                $(".dropDown p").addClass("underlined");
+            }
+        });
+
+        $(".dropDown p").click(oxid.showDropdown);
+
+        $(".dropDown p").hover(function(){
+            $(this).toggleClass("selected");
+        });
+
+        $("ul.drop a").click(function(){
+            var obj = $(this);
+            var objFnIdent = obj.parents().hasClass("fnSubmit");
+            if ( objFnIdent ){
+                obj.parent('li').parent('ul').prev('input').attr( "value", obj.attr("rel") );
+                obj.closest("form").submit();
+                return false;
+            }
+            return null;
+        })
+    },
+
+    variantSelection : {
+
+        /**
+         * Resets variant selections
+         */
+        resetVariantSelections : function()
+        {
+            var aVarSelections = $( ".oxProductForm input[name^=varselid]" );
+            for (var i = 0; i < aVarSelections.length; i++) {
+                $( aVarSelections[i] ).attr( "value", "" );
+            }
+
+            //
+            $( ".oxProductForm input[name=anid]" ).attr( "value", $( ".oxProductForm input[name=parentid]" ).attr( "value" ) );
+        },
+
+        /**
+         * Finds closes variant which image should be loaded or even vull variant must be loaded
+         */
+        findClosestVariant : function ()
+        {
+            var sVariantId = false;
+
+            // choosing active variant
+            var aVarSelections = $( ".oxProductForm input[name^=varselid]" );
+            var iSelections = aVarSelections.length;
+            var blLoadVariant = false;
+
+            var iMaxFitCount = 0;
+            for (var oSelection in oxVariantSelections ) {
+                var iFitCount = 0;
+                var blFitsAll = true;
+                for (var i = 0; i < iSelections; i++) {
+                    var sActSelection = $( aVarSelections[i] ).attr( "value" );
+                    if ( oxVariantSelections[oSelection][i] ) {
+
+                        blFitsAll = blFitsAll & sActSelection == oxVariantSelections[oSelection][i];
+
+                        if ( sActSelection && sActSelection == oxVariantSelections[oSelection][i] ) {
+                            iFitCount += 1;
+                            blFitsAll = blFitsAll & blFitsAll;
+                        }
+                    }
+                }
+
+                if ( iFitCount > iMaxFitCount ) {
+                    iMaxFitCount = iFitCount;
+                    sVariantId = oSelection;
+                }
+
+                if ( blFitsAll ) {
+                    blLoadVariant = true;
+                    break;
+                }
+            }
+
+            if ( sVariantId != false ) {
+                // overriding product
+                if ( blLoadVariant ) {
+                    var oVarNameField = $( ".oxProductForm input[name=anid]" );
+                    oVarNameField.attr( "value", sVariantId );
+                } else {
+                    var oVarNameField = $( ".oxProductForm input[name=panid]" );
+                    oVarNameField.attr( "value", sVariantId );
+                }
+            }
+        }
     }
+
 }
 
 function setCookie(name,value,days) {
+    var expires = "";
     if (days) {
         var date = new Date();
         date.setTime(date.getTime()+(days*24*60*60*1000));
-        var expires = "; expires="+date.toGMTString();
+        expires = "; expires="+date.toGMTString();
     }
-    else var expires = "";
     document.cookie = name+"="+value+expires+"; path=/";
 }
 
@@ -189,6 +780,7 @@ $(function(){
                     $("#miniBasket img.minibasketIcon").unbind('mouseenter mouseleave');
                     return container.not(element);
                 }
+                return null;
             }
         );
         $(".external").attr("target", "_blank");
@@ -309,62 +901,6 @@ $(function(){
             $("#loginBox").hide();
         });
 
-        /*
-         * Show/hide list dropdowns
-         */
-        function showDropdown(){
-
-            hideDropdown();
-            targetObj = $(this);
-
-
-            targetObj.removeClass('underlined');
-            sublist = targetObj.nextAll("ul.drop");
-
-            sublist.prepend("<li class='value'></li>");
-            targetObj.clone().appendTo(".value", sublist);
-            sublist.css("width", targetObj.parent().outerWidth());
-
-            if (sublist.length) {
-                //console.log(sublist.length);
-                sublist.slideToggle("fast");
-                targetObj.toggleClass("selected");
-            }
-
-        }
-
-
-        function hideDropdown(){
-            $("ul.drop").hide();
-            $("ul.drop li.value").remove();
-            $(".dropDown p").removeClass("selected");
-            $(".dropDown p").addClass("underlined");
-        }
-
-        $(".dropDown p").click(showDropdown);
-
-        $(document).click( function(e){
-            var clickTarget = e.target;
-            if($(clickTarget).parents().hasClass("dropDown")){
-            }else{
-                $(".drop").hide();
-                $(".dropDown p").addClass("underlined");
-            }
-        });
-
-        $(".dropDown p").hover(function(){
-            $(this).toggleClass("selected");
-        });
-
-        $("ul.drop a").click(function(){
-            var obj = $(this);
-            var objFnIdent = obj.parents().hasClass("fnSubmit");
-            if ( objFnIdent ){
-                obj.parent('li').parent('ul').prev('input').attr( "value", obj.attr("rel") );
-                obj.closest("form").submit();
-                return false;
-            }
-        })
 
         /*
          * Show/hide item details on grid list
@@ -397,6 +933,7 @@ $(function(){
          });
 
 
+         oxid.initDropDowns();
          /*
           * Wraping selection, overlayPopup window
           */
@@ -410,14 +947,6 @@ $(function(){
             initOverlay(".wrapping", 687);
             return false;
         });*/
-
-        $(".tabbedWidgetBox").tabs();
-
-        $("#writeNewReview").click(function(){
-            $("#writeReview").slideToggle();
-            $("#writeNewReview").hide();
-            return false;
-        });
 
         /*
          * Remove item from list
@@ -455,8 +984,28 @@ $(function(){
         equalHeight($(".subcatList li .content"));
         equalHeight($(".checkoutOptions .option"));
 
+        /*
+         * Trim title and add ellipsis ...
+         */
+        function trimTitles(group) {
+            group.each(function(){
+                var thisWidth  = $(this).width();
+                var thisText   = jQuery.trim($(this).text());
+                var parentWidth = $(this).parent().width();
+                if (thisWidth > parentWidth) {
+                    var thisLength  = thisText.length;
+                    while (thisWidth > parentWidth)
+                    {
+                        thisLength--;
+                        $(this).html(thisText.substr(0,thisLength)+'&hellip;');
+                        var thisWidth = $(this).width();
+                    }
+                    $(this).attr('title',thisText);
+                }
+            });
+        }
 
-
+        trimTitles($(".box h3 a"));
 
        /* Show all items hover */
       $(".linkAll").hover(function(){
@@ -467,55 +1016,6 @@ $(function(){
       }, function(){
           $(".viewAllHover").hide();
       });
-
-     /* More pictures marker*/
-
-     $(".otherPictures li a").click(function(){
-        $(".otherPictures li a").removeClass("selected");
-        $(this).addClass("selected");
-        return false;
-     });
-
-     $("#zoomModal li a").click(function(){
-        $("#zoomImg").attr("src", $(this).attr("href"));
-        return false;
-     });
-
-     $(".cloud-zoom").click(function(){
-        return false;
-     });
-
-    $("#zoomImg").click(function(){
-
-        var oPaging     = $(".zoomPager");
-        var iImgCount   = $(".zoomPager li").size();
-        var iCurImgNo   = $(".selected", oPaging).text();
-
-        if ( $(".selected", oPaging).length == 0 ) {
-            iCurImgNo = 1;
-            $(".zoomPager li:first").children("a").addClass('selected');
-        }
-
-        var sFirstImage = $(".zoomPager li:first").children("a").attr("href");
-        var sNextImage  = $(".selected", oPaging).parent().next().children("a").attr("href");
-        var oCurPage    = $(".selected", oPaging);
-        var oNextPage   = $(".selected", oPaging).parent().next().children();
-        var oLastPage   = $(".zoomPager li:last").children("a");
-        var oFirstPage  = $(".zoomPager li:first").children("a");
-
-        if( iCurImgNo == iImgCount ) {
-            $("#zoomImg").attr("src", sFirstImage);
-            oLastPage.removeClass('selected');
-            oFirstPage.addClass('selected');
-        } else {
-            $("#zoomImg").attr("src", sNextImage);
-            oCurPage.removeClass('selected');
-            oNextPage.addClass('selected');
-        }
-
-        return false;
-     });
-
 
      /* Vertical box positioning*/
     $(".specBoxInfo").hover(function(){
@@ -533,112 +1033,6 @@ $(function(){
         });
     }
 
-    if ($("#productTitle").length > 0) {
-        var targetWidth = $("#productTitle span").width();
-        if (targetWidth > 220) {
-            var linkboxWidth = $("#productTitle span").width();
-        }
-        else {
-            var linkboxWidth = 220;
-        }
-        var targetHeight = $("#productTitle span").height();
-
-
-        $(".actionLinks").css({
-            "top": $("#productTitle").position().top - 7,
-            "left": $("#productTitle").position().left - 10,
-            "padding-top": targetHeight + 10,
-            "width": linkboxWidth + 50
-        });
-
-        var arrowSrc = $(".selector img").attr("src");
-        var arrow = $("#productLinks").children("img");
-        function showLinks() {
-            var arrowOnSrc = arrow.attr("longdesc");
-            $(".actionLinks").slideDown("normal", function(){
-                arrow.attr("src", arrowOnSrc);
-            });
-        }
-        function hideLinks() {
-            $(".actionLinks").animate({
-                height: 0,
-                opacity: 0.1
-            }, 300, function(){
-                $(".actionLinks").hide().css({
-                    height: 'auto',
-                    opacity: '1'
-                });
-                arrow.attr("src", arrowSrc);
-            });
-        }
-
-        $("#productLinks").css({
-            "top": $("#productTitle").position().top - 3,
-            "left": targetWidth + $("#productTitle").position().left + 10
-        }).click(function(){
-            $(this).toggleClass("selected");
-            if ($(this).hasClass("selected")) {
-                showLinks();
-            }
-            else {
-                hideLinks();
-            }
-            return false;
-        });
-        $("#productLinks").hover(function() {
-            showLinks();
-        });
-        $(".actionLinks").mouseleave( function() {
-            hideLinks();
-        });
-        if ($("#showLinksOnce").length > 0) {
-            $(".actionLinks").slideDown('normal').delay(1000).slideUp('normal', function(){
-                 setCookie('showlinksonce', 1);
-            });
-        }
-    }
-
-    if ($("#amountPrice").length > 0) {
-        $(".pricePopup").css({
-            "top": $("#amountPrice").position().top - 7,
-            "left": $("#amountPrice").position().left - 10,
-            "width": 220
-        });
-
-        var arrowSrc = $(".selector img").attr("src");
-
-        $("#amountPrice").click(function(){
-            var arrow = $(this).children("img");
-
-            var arrowOnSrc = arrow.attr("longdesc");
-            $(this).toggleClass("selected");
-            if ($(this).hasClass("selected")) {
-                $("#priceinfo").slideDown("normal", function(){
-                    arrow.attr("src", arrowOnSrc);
-                });
-                $(".tobasketFunction .selector").css({
-                    "left": $("#amountPrice").position().left,
-                    "position": "absolute"
-                });
-            }
-            else {
-                $("#priceinfo").animate({
-                    height: 0,
-                    opacity: 0.1
-                }, 300, function(){
-                    $("#priceinfo").hide().css({
-                        height: 'auto',
-                        opacity: '1'
-                    });
-                    arrow.attr("src", arrowSrc);
-                });
-                $(".tobasketFunction .selector").css({
-                    "position": "static"
-                });
-            }
-            return false;
-        });
-    }
     var msgCookie = 'msgstatus';
     if (getCookie(msgCookie) != '1') {
         setCookie(msgCookie);
@@ -649,12 +1043,6 @@ $(function(){
             $(this).remove();
         });
         setCookie(msgCookie, 1);
-    });
-
-
-    $(".priceAlarmLink").click(function(){
-        var $tabs = $('.tabbedWidgetBox').tabs();
-        $tabs.tabs('select', '#pricealarm');
     });
 
     $('#addressId').change(function() {
@@ -681,136 +1069,4 @@ $(function(){
             $("select[name='deladr[oxaddress__oxstateid]']").children("option[name='promtString']").attr("selected", "selected");
         }
     });
-
-    $('select[id^=sellist]').change (function() {
-        var oSelf = $(this);
-        var oNoticeList = $('#linkToNoticeList');
-        if ( oNoticeList ) {
-            oNoticeList.attr('href', oNoticeList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
-        }
-        var oWishList = $('#linkToWishList');
-        if ( oWishList ) {
-            oWishList.attr('href', oWishList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
-        }
-    });
-    $(".tagCloud #tagText").click(highTag);
-    $("#saveTag").click(saveTag);
-    $("#cancelTag").click(cancelTag);
-    $("#editTag").click(editTag);
-
-    function highTag(){
-        var oSelf = $(this);
-        $(".tagError").hide();
-
-        url = '', data = {};
-        $.each($('#tagsForm').serializeArray(), function(i, f) {data[f.name] = f.value;});
-        data['highTags'] = oSelf.prev().text();
-        url = $('#tagsForm').attr('action');
-        $.ajax({
-            url: url, type: 'post', data: data,
-            success: function() {
-                oSelf.prev().addClass('taggedText');
-                oSelf.hide();
-            }
-        });
-        return false;
-    };
-
-    function saveTag(){
-        var oSelf = $(this);
-        $(".tagError").hide();
-
-        url = '', data = {};
-        $.each($('#tagsForm').serializeArray(), function(i, f) {data[f.name] = f.value;});
-        url = $('#tagsForm').attr('action');
-        data["blAjax"] = "1";
-        $.ajax({
-            url: url, type: 'post', data: data,
-            success: function(response) {
-                if ( response ) {
-                    $(".tagCloud").append("<span class='taggedText'>" + data["newTags"] + "</span> ");
-                } else {
-                    $(".tagError").show();
-                }
-            }
-        });
-        return false;
-    };
-
-    function cancelTag(){
-        var oSelf = $(this);
-
-        url = '', data = {};
-        $.each($('#tagsForm').serializeArray(), function(i, f) {data[f.name] = f.value;});
-        url = $('#tagsForm').attr('action');
-        data["blAjax"] = "1";
-        data["fnc"] = "cancelTags";
-        $.ajax({
-            url: url, type: 'post', data: data,
-            success: function(response) {
-                if ( response ) {
-                    $('#tags').html(response);
-                    $("#tags #editTag").click(editTag);
-                }
-            }
-        });
-        return false;
-    };
-
-    function editTag(){
-        var oSelf = $(this);
-        url = '', data = {};
-        $.each($('#tagsForm').serializeArray(), function(i, f) {data[f.name] = f.value;});
-        url = $('#tagsForm').attr('action');
-        data["blAjax"] = "1";
-        $.ajax({
-            url: url, type: 'post', data: data,
-            success: function(response) {
-                if ( response ) {
-                    $('#tags').html(response);
-                    $("#tags #tagText").click(highTag);
-                    $('#tags #saveTag').click(saveTag);
-                    $('#tags #cancelTag').click(cancelTag);
-                }
-            }
-        });
-        return false;
-    };
-
-    function __do()
-    {
-        var sVariantId = false;
-
-        // choosing active variant
-        var aVarSelections = $( ".oxProductForm input[name^=varselid]" );
-        var iSelections = aVarSelections.length;
-
-        $iMaxFitCount = 0;
-        for (var oSelection in oxVariantSelections ) {
-            var $iFitCount = 0;
-            for (var i = 0; i < iSelections; i++) {
-                var sActSelection = $( aVarSelections[i] ).attr( "value" );
-                if ( sActSelection && sActSelection == oxVariantSelections[oSelection][i] ) {
-                    $iFitCount += 1;
-                }
-            }
-
-            if ( $iFitCount > $iMaxFitCount ) {
-                $iMaxFitCount = $iFitCount;
-                sVariantId = oSelection;
-            }
-        }
-
-        if ( sVariantId != false ) {
-            //var oVarNameField = $( ".oxProductForm input[name=anid]" );
-            //oVarNameField.attr( "value", sVariantId );
-
-            //
-            var oVarNameField = $( ".oxProductForm input[name=panid]" );
-            oVarNameField.attr( "value", sVariantId );
-        }
-    }
-
-    $(".oxProductForm").submit(__do);
-
 });
