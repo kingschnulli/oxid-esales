@@ -28,7 +28,7 @@ $sLangName  = "English";
 // -------------------------------
 $aLang = array(
 
-'charset'                                       => 'ISO-8859-15'
+'charset' => 'ISO-8859-15'
 );
 
 /*
