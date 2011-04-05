@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 34133 2011-04-01 12:41:59Z arvydas.vapsva $
+ * @version   SVN: $Id: details.php 34220 2011-04-04 14:51:15Z arvydas.vapsva $
  */
 
 /**
@@ -1561,7 +1561,7 @@ class Details extends oxUBase
         // finding parent
         $oProduct = $this->getProduct();
         if ( ( $oParent = $this->_getParentProduct( $oProduct->oxarticles__oxparentid->value ) ) ) {
-            $oProduct = $oParent;
+            return $oParent->getVariantSelections( oxConfig::getParameter( "varselid" ), $oProduct->getId() );
         }
 
         return $oProduct->getVariantSelections( oxConfig::getParameter( "varselid" ) );
@@ -1579,7 +1579,7 @@ class Details extends oxUBase
         if ( ( $sId = oxConfig::getParameter( "panid" ) ) && $sId != $oProduct->getId() ) {
             $oVariantList = $oProduct->getVariants( false );
             if ( $oVariantList && $oVariantList->offsetExists( $sId ) ) {
-                $oProduct = $oVariantList->offsetGet( $sId );
+                return $oVariantList->offsetGet( $sId );
             }
         }
         return $oProduct;

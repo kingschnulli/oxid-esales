@@ -1,5 +1,6 @@
 [{capture append="oxidBlock_content"}]
   [{assign var="oDetailsProduct" value=$oView->getProduct()}]
+  [{assign var="oPictureProduct" value=$oView->getPicturesProduct()}]
   [{assign var="currency" value=$oView->getActCurrency()}]
   [{capture append="oxidBlock_pagePopup"}]
     <div>

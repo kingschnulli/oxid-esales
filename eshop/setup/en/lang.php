@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34164 2011-04-02 09:42:17Z juergen.busch $
+ * @version   SVN: $Id: lang.php 34202 2011-04-04 12:01:50Z juergen.busch $
  */
 
 $aLang = array(
@@ -50,7 +50,7 @@ $aLang = array(
 'ERROR_NOT_AVAILABLE'                           => "ERROR: %s not found!",
 'ERROR_NOT_WRITABLE'                            => "ERROR: %s not writeable!",
 'ERROR_DB_CONNECT'                              => "ERROR: No database connection possible!",
-'ERROR_OPENING_SQL_FILE'                        => "ERROR: Cannot open SQL file %s!",
+'ERROR_OPENING_SQL_FILE'                        => "ERROR: Can not open SQL file %s!",
 'ERROR_FILL_ALL_FIELDS'                         => "ERROR: Please fill in all needed fields!",
 'ERROR_COULD_NOT_CREATE_DB'                     => "ERROR: Database not available and also cannot be created!",
 'ERROR_DB_ALREADY_EXISTS'                       => "ERROR: Seems there is already OXID eShop installed in database %s. Please delete it prior continuing!",
@@ -67,9 +67,9 @@ $aLang = array(
 'ERROR_USER_NAME_DOES_NOT_MATCH_PATTERN'        => "Please enter a valid e-mail address!",
 'ERROR_MYSQL_VERSION_DOES_NOT_FIT_REQUIREMENTS' => "MySQL version does not fit system requiremens",
 
-'ERROR_VIEWS_CANT_CREATE'                       => "[tr] ERROR: Cant create views. Please check your database user privileges.",
-'ERROR_VIEWS_CANT_SELECT'                       => "[tr] ERROR: Can't select from view. Please check your database user privileges.",
-'ERROR_VIEWS_CANT_DROP'                         => "[tr] ERROR: Cant drop views. Please check your database user privileges.",
+'ERROR_VIEWS_CANT_CREATE'                       => "ERROR: Can't create views. Please check your database user privileges.",
+'ERROR_VIEWS_CANT_SELECT'                       => "ERROR: Can't select from views. Please check your database user privileges.",
+'ERROR_VIEWS_CANT_DROP'                         => "ERROR: Can't drop views. Please check your database user privileges.",
 
 'MOD_PHP_EXTENNSIONS'                           => 'PHP extensions',
 'MOD_PHP_CONFIG'                                => 'PHP configuration',
@@ -87,7 +87,7 @@ $aLang = array(
 'MOD_I_CONV'                                    => 'ICONV',
 'MOD_TOKENIZER'                                 => 'Tokenizer',
 'MOD_BC_MATH'                                   => 'BCMath',
-'MOD_MYSQL_CONNECT'                             => 'MySQL module for MySQL 5',
+'MOD_MYSQL_CONNECT'                             => 'MySQL client connector for MySQL 5',
 'MOD_GD_INFO'                                   => 'GDlib v2 [v1] incl. JPEG support',
 'MOD_INI_SET'                                   => 'ini_set allowed',
 'MOD_REGISTER_GLOBALS'                          => 'register_globals must be off',

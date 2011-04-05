@@ -19,11 +19,19 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvarianthandlerTest.php 34139 2011-04-01 14:55:38Z arvydas.vapsva $
+ * @version   SVN: $Id: oxvarianthandlerTest.php 34220 2011-04-04 14:51:15Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
+
+class oxVariantHandlerForOxvarianthandlerTest extends oxVariantHandler
+{
+    public function fillVariantSelections( $oVariantList, $iVarSelCnt, &$aFilter, $sActVariantId )
+    {
+        return parent::_fillVariantSelections( $oVariantList, $iVarSelCnt, $aFilter, $sActVariantId );
+    }
+}
 
 class Unit_Core_oxvarianthandlerTest extends OxidTestCase
 {
@@ -245,9 +253,11 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
      */
     public function testFillVariantSelections()
     {
+        $aFilter = array();
+
         // empty variant list
-        $oHandler = new oxVariantHandler();
-        $this->assertEquals( array(), $oHandler->UNITfillVariantSelections( array(), 100 ) );
+        $oHandler = new oxVariantHandlerForOxvarianthandlerTest();
+        $this->assertEquals( array(), $oHandler->fillVariantSelections( array(), 100, $aFilter, "" ) );
 
         // filled variant list
         $oVariant1 = new oxbase();
@@ -262,8 +272,8 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
         $oVariant3->setId( "test2" );
         $oVariant3->oxarticles__oxvarselect = new oxField( "a" );
 
-        $aArray[$oVariant1->getId()][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
-        $aArray[$oVariant1->getId()][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+        $aArray[$oVariant1->getId()][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
+        $aArray[$oVariant1->getId()][] = array( 'name' => 'b', 'disabled' => false, 'active' => true, 'hash' => md5( 'b' ) );
 
         $aArray[$oVariant2->getId()][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
         $aArray[$oVariant2->getId()][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
@@ -272,8 +282,8 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
         $aArray[$oVariant3->getId()][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
 
         // checking
-        $oHandler = new oxVariantHandler();
-        $this->assertEquals( $aArray, $oHandler->UNITfillVariantSelections( array( $oVariant1, $oVariant2, $oVariant3 ), 2 ) );
+        $oHandler = new oxVariantHandlerForOxvarianthandlerTest();
+        $this->assertEquals( $aArray, $oHandler->fillVariantSelections( array( $oVariant1, $oVariant2, $oVariant3 ), 2, $aFilter, "test1" ) );
     }
 
     /**
@@ -373,7 +383,7 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
         $oHandler->expects( $this->once() )->method( '_applyVariantSelectionsFilter');
         $oHandler->expects( $this->once() )->method( '_buildVariantSelectionsList')->will( $this->returnValue( "selections" ) );
 
-        $aSelections = $oHandler->buildVariantSelections( "test", array(), array() );
+        $aSelections = $oHandler->buildVariantSelections( "test", array(), array(), "" );
         $this->assertEquals( array( "selections" => "selections", "rawselections" => "rawselections"), $aSelections );
     }
 }

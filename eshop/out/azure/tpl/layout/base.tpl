@@ -56,14 +56,6 @@
     [{oxstyle}]
 </head>
 <body>
-    [{if $smarty.cookies.msgstatus ne "1"}]
-    <div id="versionNote">
-        <div class="notify">
-            [{ oxmultilang ident="SHOP_VERSION_MSG" }]
-            <span class="dismiss"><a href="#" title="[{ oxmultilang ident="SHOP_VERSION_MSG_DISMISS" }]">x</a></span>
-        </div>
-    </div>
-    [{/if}]
     [{foreach from=$oxidBlock_pageBody item="_block"}]
         [{$_block}]
     [{/foreach}]

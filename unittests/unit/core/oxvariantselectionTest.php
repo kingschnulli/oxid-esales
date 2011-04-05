@@ -39,6 +39,7 @@ class Unit_Core_oxvariantselectionTest extends OxidTestCase
         //
         $this->assertEquals( "test", $oSelection->getValue() );
         $this->assertEquals( "test", $oSelection->getName() );
+        $this->assertEquals( "#", $oSelection->getLink() );
         $this->assertTrue( $oSelection->isActive() );
         $this->assertTrue( $oSelection->isDisabled() );
 

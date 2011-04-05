@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34118 2011-04-01 09:34:38Z juergen.busch $
+ * @version   SVN: $Id: lang.php 34207 2011-04-04 12:26:03Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -1188,6 +1188,7 @@ $aLang = array(
 'PAYMENT_MAIN_SELECTED'                                    => 'Ausgewählt',
 'PAYMENT_MAIN_AVAILIBLEINGROUP'                            => 'Zugeordnete Benutzergruppen',
 'PAYMENT_MAIN_NOTAVAILIBLEINGROUP'                         => 'Alle Benutzergruppen',
+'PAYMENT_MAIN_LONGDESC'                                    => 'Beschreibung der Zahlungsart',
 'PAYMENT_OVERVIEW_HOWMANYPAYMENTS'                         => 'Wieviel Einkäufe wurden mit dieser Zahlungsart gemacht',
 'PRICEALARM_DONE_SENDEMAIL'                                => 'Preisalarm E-Mails versendet.',
 'PRICEALARM_DONE_GOTOPRICEALARM'                           => 'gehen Sie zu Preisalarm ',

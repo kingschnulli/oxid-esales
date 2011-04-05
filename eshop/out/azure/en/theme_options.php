@@ -42,15 +42,15 @@ $aLang = array(
                                                  'For avoiding design issues caused by too big thumbnails the thumbnails are resized. Enter the maximum size for thumbnails here.',
 
 'SHOP_THEME_sZoomImageSize'                   => 'Zoom picture size (width*height)',//SHOP_CONFIG_ZOOMIMAGESIZE
-'SHOP_THEME_sCatThumbnailsize'                => '[Tr] Category picture size (width*height)',//SHOP_CONFIG_CATEGORYTHUMBNAILSIZE
-'HELP_SHOP_THEME_sCatThumbnailsize'           => '[Tr] Category picture size (width*height)',//SHOP_CONFIG_CATEGORYTHUMBNAILSIZE
+'SHOP_THEME_sCatThumbnailsize'                => 'Category picture size (width*height)',//SHOP_CONFIG_CATEGORYTHUMBNAILSIZE
+'HELP_SHOP_THEME_sCatThumbnailsize'           => 'In category view, the picture of the selected category is displayed in the defined size.',//SHOP_CONFIG_CATEGORYTHUMBNAILSIZE
 'SHOP_THEME_aDetailImageSizes'                => 'Product picture size (width*height)',//SHOP_CONFIG_DETAILIMAGESIZE
 
 'SHOP_THEME_sManufacturerIconsize'            => 'Manufacturer\'s/brand logo size', // Check if this is really manufacturer or if it is more like "brand"
 'HELP_SHOP_THEME_sManufacturerIconsize'       => 'Manufacturer\'s/brand logo is shown on start page in manufacturer\'s slider.',
 
-'SHOP_THEME_sCatIconsize'                     => 'Size of preview picture for category (width*height)',
-'HELP_SHOP_THEME_sCatIconsize'                => 'Previews of category pictures are shown in category list as teaser for its subcategories.',
+'SHOP_THEME_sCatIconsize'                     => 'Size of a subcategory\'s picture (width*height)',
+'HELP_SHOP_THEME_sCatIconsize'                => 'In category view, the category pictures of subcategories are displayed in the defined size.',
 
 'SHOP_THEME_sCatPromotionsize'                => 'Category picture size for promotion on startpage (width*height)',
 'HELP_SHOP_THEME_sCatPromotionsize'           => 'Category promotion on start page needs special size for category pictures. Define size of those pictures here.',

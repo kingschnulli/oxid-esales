@@ -355,8 +355,8 @@ $aLang = array(
 'PAGE_CHECKOUT_ORDER_MODIFY4'                                     => "ändern",
 'PAGE_CHECKOUT_ORDER_BACKSTEP'                                    => "Zurück",
 'PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS'                         => "Bitte bestätigen Sie unsere Allg. Geschäftsbedingungen.",
-'PAGE_CHECKOUT_ORDER_TITLE2'                                      => "[Tr] Senden sie ihre bestellung am unteren ende dieser übersicht ab",
-'PAGE_CHECKOUT_ORDER_TERMS_TITLE'                                 => "[Tr] Terms and Conditions",
+'PAGE_CHECKOUT_ORDER_TITLE2'                                      => "Senden Sie Ihre Bestellung am unteren Ende dieser Übersicht ab",
+'PAGE_CHECKOUT_ORDER_TERMS_TITLE'                                 => "AGB",
 
 'PAGE_CHECKOUT_USER_OPTION_NEXT'                                  => "Weiter",
 'PAGE_CHECKOUT_USER_OPTION_NOREGISTRATION'                        => "Bestellen ohne Registrierung",
@@ -675,14 +675,14 @@ $aLang = array(
 'PAGE_SHOP_START_WEEKSPECIAL'                                     => "Angebot der Woche",
 'PAGE_SHOP_START_VIEW_ALL'                                        => "Alle Produkte ansehen",
 
-'WIDGET_LOCATOR_SORT_oxtitle'                                     => "Name",
-'WIDGET_LOCATOR_SORT_oxprice'                                     => "Preis",
-'WIDGET_LOCATOR_SORT_oxvarminprice'                               => "Preis",
-'WIDGET_LOCATOR_SORT_oxartnum'                                    => "Artikelnummer",
-'WIDGET_LOCATOR_SORT_oxrating'                                    => "Bewertung",
-'WIDGET_LOCATOR_SORT_oxstock'                                     => "Lagerbestand",
-'WIDGET_LOCATOR_SORT_oxgbentries.oxcreate'                        => "Datum",
-'WIDGET_LOCATOR_SORT_oxuser.oxusername'                           => "Autor",
+'WIDGET_LOCATOR_SORT_OXTITLE'                                     => "Name",
+'WIDGET_LOCATOR_SORT_OXPRICE'                                     => "Preis",
+'WIDGET_LOCATOR_SORT_OXVARMINPRICE'                               => "Preis",
+'WIDGET_LOCATOR_SORT_OXARTNUM'                                    => "Artikelnummer",
+'WIDGET_LOCATOR_SORT_OXRATING'                                    => "Bewertung",
+'WIDGET_LOCATOR_SORT_OXSTOCK'                                     => "Lagerbestand",
+'WIDGET_LOCATOR_SORT_OXGBENTRIES.OXCREATE'                        => "Datum",
+'WIDGET_LOCATOR_SORT_OXUSER.OXUSERNAME'                           => "Autor",
 'WIDGET_LOCATOR_SORT_SORTBY'                                      => "Sortierung:",
 
 
@@ -1056,9 +1056,6 @@ $aLang = array(
 'FORM_LOGIN_ACCOUNT_LOGIN'                                        => "Anmelden",
 'FORM_LOGIN_ACCOUNT_OPENACCOUNT'                                  => "Konto eröffnen",
 'FORM_LOGIN_ACCOUNT_FORGOTPWD'                                    => "Passwort vergessen ?",
-
-'SHOP_VERSION_MSG'                                                => "Willkommen zur Betaversion 4 von OXID eShop 4.5.0. häufig gestellte Fragen und Antworten sind in der <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">Beta-FAQ</a> gelistet.",
-'SHOP_VERSION_MSG_DISMISS'                                        => "Schließen",
 
 'MESSAGE_ERR_404TITLE'                                            => 'Fehler',
 'MESSAGE_ERR_404'                                                 => 'Die angeforderte Seite konnte nicht gefunden werden.',

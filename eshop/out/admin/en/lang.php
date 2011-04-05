@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34119 2011-04-01 09:35:44Z juergen.busch $
+ * @version   SVN: $Id: lang.php 34208 2011-04-04 12:26:25Z juergen.busch $
  */
 
 /*
@@ -1194,6 +1194,7 @@ $aLang = array(
 'PAYMENT_MAIN_SELECTED'                                    => 'Selected',
 'PAYMENT_MAIN_AVAILIBLEINGROUP'                            => 'Available in User Groups',
 'PAYMENT_MAIN_NOTAVAILIBLEINGROUP'                         => 'Not available in User Groups',
+'PAYMENT_MAIN_LONGDESC'                                    => 'Payment Description',
 'PAYMENT_OVERVIEW_HOWMANYPAYMENTS'                         => 'How many purchases were paid with this payment method',
 'PRICEALARM_DONE_SENDEMAIL'                                => 'Sent Price Alert E-mails.',
 'PRICEALARM_DONE_GOTOPRICEALARM'                           => 'go to Price Alert ',

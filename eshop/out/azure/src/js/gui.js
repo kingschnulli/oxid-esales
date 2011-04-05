@@ -482,8 +482,10 @@ var oxid = {
 
 
         $(".oxProductForm").submit(function () {
-            if (!$("input[name='fnc']", this).val()) {
-                // return reloadProductPartially($(".oxProductForm"),'detailsMain',$("#detailsMain"),$("#detailsMain")[0]);
+            if (!$("button[name='fnc']", this).val()) {
+                if ( $( "input[name=panid]", this ).attr( "value" ) ) {
+                    return reloadProductPartially($(".oxProductForm"),'detailsMain',$("#detailsMain"),$("#detailsMain")[0]);
+                }
                 return reloadProductPartially($(".oxProductForm"),'productInfo',$("#productinfo"),$("#productinfo")[0]);
             }
         });
@@ -498,6 +500,9 @@ var oxid = {
         $("#cancelTag").click(oxid.cancelTag);
         $("#editTag").click(oxid.editTag);
 
+    },
+
+    initNewReview : function () {
 
         $("#writeNewReview").click(function(){
             $("#writeReview").slideToggle();
@@ -639,6 +644,9 @@ var oxid = {
         })
     },
 
+    /**
+     * Variant selection handler
+     */
     variantSelection : {
 
         /**
@@ -1032,18 +1040,6 @@ $(function(){
             $("#newItemMsg").remove()
         });
     }
-
-    var msgCookie = 'msgstatus';
-    if (getCookie(msgCookie) != '1') {
-        setCookie(msgCookie);
-    }
-
-    $(".dismiss").click(function(){
-        $("#versionNote").fadeOut("slow", function(){
-            $(this).remove();
-        });
-        setCookie(msgCookie, 1);
-    });
 
     $('#addressId').change(function() {
         $( ".oxValidate" ).unbind('submit');

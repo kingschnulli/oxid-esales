@@ -3341,9 +3341,10 @@ a.sliderHover {
 }
 
 .categoryDescription {
-    margin-bottom: 20px;
-    font-size: 14px;
-    line-height: 18px;
+    background: #f2f4f5;
+    padding: 10px 10px 10px 10px;
+    font-size: 11px;
+    border-bottom: 1px solid #B4B8B8;
 }
 
 .categoryPicture {
@@ -3721,51 +3722,6 @@ a.sliderHover {
 .accountLoginView .col {
    float: left;
    width: 50%;
-}
-
-
-#versionNote {
-    position:fixed;
-    top:0px;
-    left:0px;
-    width:100%;
-    z-index:105;
-    text-align:left;
-    font-weight:normal;
-    font-size:16px;
-    color: #fff;
-    background-color:#f77704;
-    opacity: 0.9;
-    filter: alpha(opacity = 90);
-    padding:8px 0 8px 0;
-    text-align: center;
-    border-bottom: 1px solid #d36706;
-}
-
-
-
-#versionNote span.dismiss {
-    cursor:pointer;
-    position: absolute;
-    right: 10px;
-}
-
-span.dismiss a{
-    width: 18px;
-    height: 18px;
-    display: block;
-    text-indent: -9999px;
-    background: url(../../img/close.png) no-repeat 0 0;
-}
-
-#versionNote a {
-    color: #fff;
-    text-decoration:underline;
-    font-weight:bold
-}
-
-#versionNote+#page {
-    padding-top: 35px;
 }
 
 #incVatMessage{

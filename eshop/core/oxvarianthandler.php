@@ -313,12 +313,14 @@ class oxVariantHandler extends oxSuperCfg
     /**
      * Creates array/matrix with variant selections
      *
-     * @param oxArticleList $oVariantList variant list
-     * @param int           $iVarSelCnt   possible variant selection count
+     * @param oxArticleList $oVariantList  variant list
+     * @param int           $iVarSelCnt    possible variant selection count
+     * @param array         &$aFilter      active filter array
+     * @param string        $sActVariantId active variant id
      *
      * @return array
      */
-    protected function _fillVariantSelections( $oVariantList, $iVarSelCnt )
+    protected function _fillVariantSelections( $oVariantList, $iVarSelCnt, &$aFilter, $sActVariantId )
     {
         $aSelections = array();
 
@@ -326,9 +328,14 @@ class oxVariantHandler extends oxSuperCfg
         foreach ( $oVariantList as $oVariant ) {
 
             $aNames = explode( $this->_sMdSeparator, $oVariant->oxarticles__oxvarselect->getRawValue() );
+            $blActive = ( $sActVariantId && $sActVariantId === $oVariant->getId() ) ? true : false;
             for ( $i = 0; $i < $iVarSelCnt; $i++ ) {
                 $sName = isset( $aNames[$i] ) ? $aNames[$i] : '';
-                $aSelections[$oVariant->getId()][] = array( 'name' => $sName, 'disabled' => $sName ? false : true, 'active' => false, 'hash' => md5( trim( $sName ) ) );
+                $sHash = md5( trim( $sName ) );
+                if ( $blActive ) {
+                    $aFilter[$i] = $sHash;
+                }
+                $aSelections[$oVariant->getId()][] = array( 'name' => $sName, 'disabled' => $sName ? false : true, 'active' => $blActive, 'hash' => $sHash );
             }
         }
 
@@ -406,13 +413,14 @@ class oxVariantHandler extends oxSuperCfg
     /**
      * Builds variant selection list
      *
-     * @param string        $sVarName     product (parent product) oxvarname value
-     * @param oxarticlelist $oVariantList variant list
-     * @param array         $aFilter      variant filter
+     * @param string        $sVarName      product (parent product) oxvarname value
+     * @param oxarticlelist $oVariantList  variant list
+     * @param array         $aFilter       variant filter
+     * @param string        $sActVariantId active variant id
      *
      * @return Ambigous false | array
      */
-    public function buildVariantSelections( $sVarName, $oVariantList, $aFilter )
+    public function buildVariantSelections( $sVarName, $oVariantList, $aFilter, $sActVariantId )
     {
         $aReturn = false;
 
@@ -421,7 +429,7 @@ class oxVariantHandler extends oxSuperCfg
         if ( ( $iVarSelCnt = count( $aVarSelects ) ) ) {
 
             // filling selections
-            $aRawVariantSelections = $this->_fillVariantSelections( $oVariantList, $iVarSelCnt );
+            $aRawVariantSelections = $this->_fillVariantSelections( $oVariantList, $iVarSelCnt, $aFilter, $sActVariantId );
 
             // applying filters, disabling/activating items
             $aSelections = $this->_applyVariantSelectionsFilter( $aRawVariantSelections, $aFilter );

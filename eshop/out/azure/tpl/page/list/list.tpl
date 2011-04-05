@@ -7,14 +7,6 @@
             [{/if}]
         [{/if}]
 
-        [{if $actCategory && $actCategory->oxcategories__oxdesc->value }]
-            <div id="catDesc" class="categoryDescription">[{$actCategory->oxcategories__oxdesc->value}]</div>
-        [{/if}]
-
-        [{if $actCategory->oxcategories__oxlongdesc->value }]
-            <div id="catLongDesc" class="categoryDescription">[{oxeval var=$actCategory->oxcategories__oxlongdesc}]</div>
-        [{/if}]
-
         [{if $oView->hasVisibleSubCats()}]
             [{assign var="iSubCategoriesCount" value=0}]
             <ul class="subcatList clear">
@@ -86,6 +78,7 @@
             </li>
             </ul>
         [{/if}]
+
     [{if $oView->getArticleList()|@count > 0}]
         <h1 class="pageHead">[{$oView->getTitle()}]
             [{assign var='rsslinks' value=$oView->getRssLinks() }]
@@ -94,6 +87,15 @@
             [{/if }]
         </h1>
         <div class="listRefine clear bottomRound">
+
+            [{if $actCategory && $actCategory->oxcategories__oxdesc->value }]
+                <div id="catDesc" class="categoryDescription">[{$actCategory->oxcategories__oxdesc->value}]</div>
+            [{/if}]
+
+            [{if $actCategory->oxcategories__oxlongdesc->value }]
+                <div id="catLongDesc" class="categoryDescription">[{oxeval var=$actCategory->oxcategories__oxlongdesc}]</div>
+            [{/if}]
+
             [{include file="widget/locator/listlocator.tpl" locator=$oView->getPageNavigationLimitedTop() attributes=$oView->getAttributes() listDisplayType=true itemsPerPage=true sort=true }]
         </div>
         [{* List types: grid|line|infogrid *}]

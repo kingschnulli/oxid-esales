@@ -11,9 +11,12 @@
 [{/if}]
 
   <h1 class="pageHead">[{$search_head}]</h1>
+  [{block name="search_results"}]
   [{if $oView->getArticleCount() }]
     <div class="listRefine clear bottomRound">
+        [{block name="search_top_listlocator"}]
         [{include file="widget/locator/listlocator.tpl"  locator=$oView->getPageNavigationLimitedTop() listDisplayType=true itemsPerPage=true sort=true }]
+        [{/block}]
     </div>
   [{else}]
     <div class="msg">[{ oxmultilang ident="PAGE_SEARCH_SEARCH_NOITEMSFOUND" }]</div>
@@ -26,6 +29,7 @@
   [{if $oView->getArticleCount() }]
     [{include file="widget/locator/listlocator.tpl" locator=$oView->getPageNavigationLimitedBottom() place="bottom"}]
   [{/if}]
+  [{/block}]
 [{ insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 [{assign var="template_title" value="PAGE_SEARCH_SEARCH_TITLE"|oxmultilangassign}]

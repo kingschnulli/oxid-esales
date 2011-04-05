@@ -43,17 +43,17 @@ $aLang = array(
 
 'SHOP_THEME_sZoomImageSize'                   => 'Größe der Zoom-Bilder (Zoom 1-4) in Pixeln (Breite*Höhe)',//SHOP_CONFIG_ZOOMIMAGESIZE
 'SHOP_THEME_sCatThumbnailsize'                => 'Größe des Kategoriebildes in Pixeln (Breite*Höhe)',//SHOP_CONFIG_CATEGORYTHUMBNAILSIZE
-'HELP_SHOP_THEME_sCatThumbnailsize'           => 'Definieren Sie hier die Größe des Kategoriebildes in Pixeln (Breite*Höhe)',//SHOP_CONFIG_CATEGORYTHUMBNAILSIZE
+'HELP_SHOP_THEME_sCatThumbnailsize'           => 'In der Kategorieübersicht wird das Bild der ausgewählten Kategorie in der hier definierten Größe angezeigt.',//SHOP_CONFIG_CATEGORYTHUMBNAILSIZE
 'SHOP_THEME_aDetailImageSizes'                => 'Größe der Artikelbilder  (Bild 1-12) in Pixeln (Breite*Höhe)',//SHOP_CONFIG_DETAILIMAGESIZE
 
 'SHOP_THEME_sManufacturerIconsize'            => 'Größe des Hersteller-/Markenlogos in Pixeln (Breite*Höhe)', // Check if this is really manufacturer or if it is more like "brand"
 'HELP_SHOP_THEME_sManufacturerIconsize'       => 'Dieses Logo wird auf der Startseite in der Markenlogo-übersicht angezeigt.',
 
-'SHOP_THEME_sCatIconsize'                     => 'Größe des Vorschau-Kategoriebildes in Pixeln (Breite*Höhe)',
-'HELP_SHOP_THEME_sCatIconsize'                => 'Vorschau-Kategoriebilder werden angezeigt, wenn der Konsument in eine Kategorie navigiert, die ihrerseits wieder Unterkategorien entält.',
+'SHOP_THEME_sCatIconsize'                     => 'Größe des Kategoriebildes einer Unterkategorie in Pixeln (Breite*Höhe)',
+'HELP_SHOP_THEME_sCatIconsize'                => 'In der Kategorieübersicht werden die Kategoriebilder von Unterkategorien in der hier definierten Größe angezeigt.',
 
 'SHOP_THEME_sCatPromotionsize'                => 'Größe des Kategoriebildes für die Startseite in Pixeln (Breite*Höhe)',
-'HELP_SHOP_THEME_sCatPromotionsize'           => 'Kategorien, die auf der Startseite beworben werden, benötigen eine eigens dafür vorgesehe Größgenangabe. Stellen Sie diese hier ein.',
+'HELP_SHOP_THEME_sCatPromotionsize'           => 'Kategorien, die auf der Startseite beworben werden, benötigen eine eigens dafür vorgesehene Größgenangabe. Stellen Sie diese hier ein.',
 
 'SHOP_THEME_bl_showGiftWrapping'              => 'Geschenkverpackungen aktivieren',//SHOP_CONFIG_SHOWGIFTWRAPPING
 'SHOP_THEME_bl_showVouchers'                  => 'Gutscheine aktivieren',//SHOP_CONFIG_SHOWVOUCHERS

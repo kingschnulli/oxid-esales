@@ -8,7 +8,7 @@
             <a class="ox-zoom-close zoom-close" href="#zoom"><span></span></a>
         </div>
         <div class="zoomed">
-            <img class="ox-zoomimg" src="[{$aZoomPics[$iZoomPic].file}]" alt="[{$oDetailsProduct->oxarticles__oxtitle->value|strip_tags}] [{$oDetailsProduct->oxarticles__oxvarselect->value|default:''}]" id="zoomImg">
+            <img class="ox-zoomimg" src="[{$aZoomPics[$iZoomPic].file}]" alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|default:''}]" id="zoomImg">
         </div>
         [{if $aZoomPics|@count > 1}]
         <div class="otherPictures">

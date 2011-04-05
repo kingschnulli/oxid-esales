@@ -59,4 +59,5 @@
     </dt>
   [{/if}]
   </dl>
+  [{oxscript add="$(function(){oxid.initNewReview();});"}]
 </div>

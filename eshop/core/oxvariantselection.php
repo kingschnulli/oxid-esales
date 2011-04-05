@@ -134,4 +134,14 @@ class oxVariantSelection
     {
         $this->_blDisabled = $blDisabled;
     }
+
+    /**
+     * Returns selection link (currently returns "#")
+     *
+     * @return string
+     */
+    public function getLink()
+    {
+        return "#";
+    }
 }

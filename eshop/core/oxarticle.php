@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 34106 2011-03-31 15:09:05Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 34210 2011-04-04 12:57:58Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -1122,15 +1122,18 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Returns variants selections lists array
      *
-     * @param array $aFilterIds ids of active selections
+     * @param array  $aFilterIds    ids of active selections [optional]
+     * @param string $sActVariantId active variant id [optional]
      *
      * @return array
      */
-    public function getVariantSelections( $aFilterIds = null )
+    public function getVariantSelections( $aFilterIds = null, $sActVariantId = null )
     {
-        if ( $this->_aVariantSelections === null ) {
-            $oVariantHandler = oxNew( "oxVariantHandler" );
-            $this->_aVariantSelections = $oVariantHandler->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $this->getVariants(), $aFilterIds );
+        if ( $this->_aVariantSelections === null  ) {
+            $this->_aVariantSelections = false;
+            if ( ( $oVariantList = $this->getVariants() ) ) {
+                $this->_aVariantSelections = oxNew( "oxVariantHandler" )->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $oVariantList, $aFilterIds, $sActVariantId );
+            }
         }
         return $this->_aVariantSelections;
     }

@@ -8,15 +8,18 @@
     <form class="loadVariant oxProductForm" action="[{$oViewConf->getSelfActionLink()}]" method="post">
 
     [{if $aVariantSelections && $aVariantSelections.rawselections}]
-    <script>
-        var oxVariantSelections = new Array();
+        [{oxscript add="var oxVariantSelections = new Array();"}]
         [{foreach from=$aVariantSelections.rawselections item=oSelectionList key=iKey}]
-            oxVariantSelections["[{$iKey}]"] = new Array();
+            [{oxscript add="oxVariantSelections['`$iKey`'] = new Array();"}]
             [{foreach from=$oSelectionList item=oListItem key=iPos}]
-                oxVariantSelections["[{$iKey}]"][[{$iPos}]] = [{if $oListItem.name}]"[{$oListItem.hash}]"[{else}]false[{/if}];
+                [{if $oListItem.name}]
+                    [{assign var="sSelectionValue" value=$oListItem.hash}]
+                [{else}]
+                    [{assign var="sSelectionValue" value=false}]
+                [{/if}]
+                [{oxscript add="oxVariantSelections['`$iKey`'][`$iPos`] = '`$sSelectionValue`';"}]
             [{/foreach}]
         [{/foreach}]
-    </script>
     [{/if}]
 
     <div>
@@ -40,8 +43,8 @@
         [{/if}]
 
         <div class="picture">
-            <a href="[{$oDetailsProduct->getMasterZoomPictureUrl(1)}]" class="cloud-zoom" id="zoom1" rel="adjustY:-2, zoomWidth:'354', fixZoomWindow:'390', loadingText:'[{oxmultilang ident="PAGE_DETAILS_ZOOM_LOADING"}]'">
-                <img src="[{$oView->getActPicture()}]"  alt="[{$oDetailsProduct->oxarticles__oxtitle->value|strip_tags}] [{$oDetailsProduct->oxarticles__oxvarselect->value|strip_tags}]">
+            <a href="[{$oPictureProduct->getMasterZoomPictureUrl(1)}]" class="cloud-zoom" id="zoom1" rel="adjustY:-2, zoomWidth:'354', fixZoomWindow:'390', loadingText:'[{oxmultilang ident="PAGE_DETAILS_ZOOM_LOADING"}]'">
+                <img src="[{$oView->getActPicture()}]"  alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">
             </a>
         </div>
 
@@ -145,7 +148,7 @@
                                 [{assign var="aSelections" value=$oSelectionList->getSelections()}]
                                 [{foreach from=$aSelections item=oSelection}]
                                     <li class="[{if $oSelection->isDisabled()}]oxdisabled disabled[{/if}]">
-                                        <a rel="[{$oSelection->getValue()}]" href="#" class="[{if $oSelection->isActive()}]selected[{/if}]">[{$oSelection->getName()}]</a>
+                                        <a rel="[{$oSelection->getValue()}]" href="[{$oSelection->getLink()}]" class="[{if $oSelection->isActive()}]selected[{/if}]">[{$oSelection->getName()}]</a>
                                     </li>
                                 [{/foreach}]
                             </ul>
@@ -291,9 +294,11 @@
 [{/oxhasrights}]
 
 [{include file="page/details/inc/morepics.tpl"}]
-
 [{if "detailsMain" == $sRenderPartial}]
     [{oxscript add="$(function(){oxid.initDetailsPagePartial();});"}]
-    [{oxscript}]
 [{/if}]
 [{oxscript add="$(function(){oxid.initDetailsMain();});"}]
+
+[{if "detailsMain" == $sRenderPartial}]
+    [{oxscript}]
+[{/if}]

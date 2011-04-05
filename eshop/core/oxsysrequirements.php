@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 33938 2011-03-23 16:11:45Z sarunas $
+ * @version   SVN: $Id: oxsysrequirements.php 34205 2011-04-04 12:22:57Z dainius.bigelis $
  */
 
 /**
@@ -122,7 +122,7 @@ class oxSysRequirements
                                      "j_son"              => "JSON",
                                      "i_conv"             => "ICONV",
                                      "tokenizer"          => "Tokenizer",
-                                     "mysql_connect"      => "MySQL_module_for_MySQL_5",
+                                     "mysql_connect"      => "MySQL_client_connector_for_MySQL_5",
                                      "gd_info"            => "GDlib_v2_.5Bv1.5D_incl._JPEG_support",
                                      "mb_string"          => "mbstring",
                                      "bc_math"            => "BCMath",

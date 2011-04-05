@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: payment_main.php 33474 2011-02-23 13:29:51Z arvydas.vapsva $
+ * @version   SVN: $Id: payment_main.php 34171 2011-04-04 07:07:20Z sarunas $
  */
 
 /**
@@ -91,6 +91,9 @@ class Payment_Main extends oxAdminDetails
 
             return "popups/payment_main.tpl";
         }
+
+        $this->_aViewData["editor"] = $this->_generateTextEditor( "100%", 300, $oPayment, "oxpayments__oxlongdesc");
+
         return "payment_main.tpl";
     }
 

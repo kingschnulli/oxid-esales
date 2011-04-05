@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 34114 2011-04-01 08:32:47Z sarunas $
+ * @version   SVN: $Id: oxubase.php 34200 2011-04-04 11:56:38Z linas.kukulskis $
  */
 
 /**
@@ -1034,6 +1034,7 @@ class oxUBase extends oxView
 
             $sCnid = oxConfig::getParameter( 'cnid' );
 
+
             $sSortBy  = oxConfig::getParameter( $this->getSortOrderByParameterName() );
             $sSortDir = oxConfig::getParameter( $this->getSortOrderParameterName() );
 
@@ -1061,6 +1062,13 @@ class oxUBase extends oxView
      */
     public function getListOrderBy()
     {
+        //if column is with table name split it
+        $aColums = explode('.', $this->_sListOrderBy);
+
+        if ( is_array($aColums) && count($aColums) > 1 ) {
+           return $aColums[1];
+        }
+
         return $this->_sListOrderBy;
     }
 
@@ -1564,6 +1572,7 @@ class oxUBase extends oxView
      */
     public function setItemSorting( $sCnid, $sSortBy, $sSortDir = null )
     {
+
         $aSorting = oxSession::getVar( 'aSorting' );
         $aSorting[$sCnid]['sortby']  = $sSortBy;
         $aSorting[$sCnid]['sortdir'] = $sSortDir?$sSortDir:null;
@@ -1581,6 +1590,7 @@ class oxUBase extends oxView
     public function getSorting( $sCnid )
     {
         $aSorting = oxSession::getVar( 'aSorting' );
+
         if ( isset( $aSorting[$sCnid] ) ) {
             return $aSorting[$sCnid];
         }

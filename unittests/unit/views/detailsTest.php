@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 33299 2011-02-17 08:07:09Z arvydas.vapsva $
+ * @version   SVN: $Id: detailsTest.php 34220 2011-04-04 14:51:15Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -668,10 +668,12 @@ class Unit_Views_detailsTest extends OxidTestCase
 
         $oArticle = new oxarticle();
         $oArticle->load($sArtID);
-        $oDetails = $this->getProxyClass( 'details' );
-        $oDetails->setNonPublicVar( "_oProduct", $oArticle );
-        $aPicGallery = $oDetails->getPictureGallery();
         $sActPic =  oxConfig::getInstance()->getPictureUrl(null).$oArticle->oxarticles__oxpic1->value;
+
+        $oDetails = $this->getMock( 'details', array( "getPicturesProduct" ) );
+        $oDetails->expects( $this->once() )->method( 'getPicturesProduct')->will( $this->returnValue( $oArticle ) );
+        $aPicGallery = $oDetails->getPictureGallery();
+
         $this->assertEquals($sActPic, $aPicGallery['ActPic']);
     }
 
@@ -1308,4 +1310,72 @@ class Unit_Views_detailsTest extends OxidTestCase
         $this->assertTrue( count($oView->getBreadCrumb()) >= 1 );
     }
 
+
+    /**
+     * details::getVariantSelections() test case
+     *
+     * @return null
+     */
+    public function testGetVariantSelections()
+    {
+        $oProduct = $this->getMock( "oxarticle", array( "getVariantSelections" ) );
+        $oProduct->expects( $this->once() )->method( "getVariantSelections" )->will( $this->returnValue( "varselections" ) );
+        //$oProduct->expects( $this->never() )->method( "getId" );
+
+        // no parent
+        $oView = $this->getMock( "details", array( "getProduct", "_getParentProduct" ) );
+        $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+        $oView->expects( $this->once() )->method( '_getParentProduct')->will( $this->returnValue( false ) );
+
+        $this->assertEquals( "varselections", $oView->getVariantSelections() );
+
+        $oProduct = $this->getMock( "oxarticle", array( "getVariantSelections" ) );
+        $oProduct->expects( $this->never() )->method( 'getVariantSelections')->will( $this->returnValue( "varselections" ) );
+        //$oProduct->expects( $this->once() )->method( 'getId');
+
+        $oParent = $this->getMock( "oxarticle", array( "getVariantSelections" ) );
+        $oParent->expects( $this->once() )->method( 'getVariantSelections')->will( $this->returnValue( "parentselections" ) );
+
+        // has parent
+        $oView = $this->getMock( "details", array( "getProduct", "_getParentProduct" ) );
+        $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+        $oView->expects( $this->once() )->method( '_getParentProduct')->will( $this->returnValue( $oParent ) );
+
+        $this->assertEquals( "parentselections", $oView->getVariantSelections() );
+    }
+
+    /**
+     * details::getPicturesProduct() test case
+     *
+     * @return null
+     */
+    public function testGetPicturesProduct()
+    {
+        modConfig::setParameter( "panid", false );
+
+        $oProduct = $this->getMock( "details", array( "getId" ) );
+        $oProduct->expects( $this->never() )->method( 'getId');
+
+        // no picture product id
+        $oView = $this->getMock( "details", array( "getProduct" ) );
+        $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+        $oView->getPicturesProduct();
+
+        modConfig::setParameter( "panid", "testid" );
+
+        $oVariants = $this->getMock( "oxStdClass", array( "offsetExists", "offsetGet" ) );
+        $oVariants->expects( $this->once() )->method( 'offsetExists')->will( $this->returnValue( true ) );
+        $oVariants->expects( $this->once() )->method( 'offsetGet')->will( $this->returnValue( "variant" ) );
+
+        $oProduct = $this->getMock( "details", array( "getId", "getVariants" ) );
+        $oProduct->expects( $this->once() )->method( 'getId')->will( $this->returnValue( "someid" ) );
+        $oProduct->expects( $this->once() )->method( 'getVariants')->will( $this->returnValue( $oVariants ) );
+
+        // passing picture product id
+        $oView = $this->getMock( "details", array( "getProduct" ) );
+        $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+
+        $this->assertEquals( "variant", $oView->getPicturesProduct() );
+
+    }
 }

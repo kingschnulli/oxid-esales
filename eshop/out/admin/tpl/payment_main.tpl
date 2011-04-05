@@ -14,12 +14,13 @@
     <input type="hidden" name="editlanguage" value="[{ $editlanguage }]">
 </form>
 
-<form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">
+<form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post" onSubmit="copyLongDesc( 'oxpayments__oxlongdesc' );">
 [{ $oViewConf->getHiddenSid() }]
 <input type="hidden" name="cl" value="payment_main">
 <input type="hidden" name="fnc" value="">
 <input type="hidden" name="oxid" value="[{ $oxid }]">
 <input type="hidden" name="editval[oxpayments__oxid]" value="[{ $oxid }]">
+<input type="hidden" name="editval[oxpayments__oxlongdesc]" value="">
 
 <table cellspacing="0" cellpadding="0" border="0" width="98%">
 
@@ -114,15 +115,6 @@
             [{ oxinputhelp ident="HELP_PAYMENT_MAIN_SORT" }]
             </td>
         </tr>
-        <tr>
-            <td class="edittext">
-            [{ oxmultilang ident="GENERAL_SHORTDESC" }]
-            </td>
-            <td class="edittext">
-            <input type="text" class="editinput" size="25" maxlength="[{$edit->oxpayments__oxlongdesc->fldmax_length}]" name="editval[oxpayments__oxlongdesc]" value="[{$edit->oxpayments__oxlongdesc->value}]" [{ $readonly }]>
-            [{ oxinputhelp ident="HELP_GENERAL_SHORTDESC" }]
-            </td>
-        </tr>
 
         <tr>
             <td class="edittext" valign="top">
@@ -176,11 +168,17 @@
     </td>
     <!-- Anfang rechte Seite -->
     <td valign="top" class="edittext" align="left" width="50%">
-    [{ if $oxid != "-1"}]
+        [{ if $oxid != "-1"}]
+            <input [{ $readonly }] type="button" value="[{ oxmultilang ident="GENERAL_ASSIGNGROUPS" }]" class="edittext" style="margin-bottom:30px;" onclick="JavaScript:showDialog('&cl=payment_main&aoc=1&oxid=[{ $oxid }]');">
+        [{ /if}]
 
-        <input [{ $readonly }] type="button" value="[{ oxmultilang ident="GENERAL_ASSIGNGROUPS" }]" class="edittext" onclick="JavaScript:showDialog('&cl=payment_main&aoc=1&oxid=[{ $oxid }]');">
-
-    [{ /if}]
+        [{oxhasrights object=$edit field='oxlongdesc' readonly=$readonly }]
+            <div>
+                [{ oxmultilang ident="PAYMENT_MAIN_LONGDESC" }]
+                [{ $editor }]
+                <div class="messagebox">[{ oxmultilang ident="EDITOR_PLAINTEXT_HINT" }]</div>
+            </div>
+        [{/oxhasrights}]
     </td>
 
     </tr>
