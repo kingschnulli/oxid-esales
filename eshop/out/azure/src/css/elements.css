@@ -708,6 +708,7 @@ div.lineBox span.title {
 .submitButton:hover {
     line-height: 17px;
     text-decoration: none;
+    cursor:pointer;
     text-shadow: 0px -1px 0px #aa6826;
 }
 
@@ -2344,8 +2345,13 @@ h3.section button {
     text-decoration: none;
     color: #fff;
 }
+.social{
+    padding-top:10px;
+    margin-bottom:0;
+    height:25px;
+}
 
-.actionLinks .social label {
+.social label {
     display: block;
     text-transform: none;
     padding: 3px 0 5px 0;
@@ -2353,28 +2359,29 @@ h3.section button {
     text-shadow: 0px 1px 1px #fff;
 }
 
-.actionLinks .social a{
+.social a{
     display: block;
     border: 0;
     padding: 0;
 }
 
-.actionLinks .social span {
+.social span {
     float: left;
 }
 
 .fb_share_count_hidden {
-    margin: 3px 7px 0 0;
-    float:left;
+    margin: 3px 7px 0 0px;
+    display:inline-block;
 }
 
 a.fb_button_simple {
     width: 14px;
     height: 14px;
     overflow: hidden;
+    display:inline-block;
 }
 
-.actionLinks li.social:hover {
+.social:hover {
     background: none;
 }
 
@@ -2388,8 +2395,8 @@ a.fb_button_simple {
 }
 
 .detailsInfo {
-    padding-bottom: 20px;
     position: relative;
+    height:321px;
 }
 
 .detailsInfo .picture {
@@ -2404,9 +2411,16 @@ a.fb_button_simple {
     vertical-align: middle;
 }
 
+.hasBrand {
+    float:left;
+    width:258px;
+}
+
 .detailsInfo .information {
     float: right;
     width: 358px;
+    height:340px;
+    position: relative;
     padding: 0 0 0 10px;
 }
 
@@ -2468,6 +2482,7 @@ a.fb_button_simple {
 }
 
 .shortDescription {
+    clear:both;
     font-size: 14px;
     margin-bottom: 10px;
 }
@@ -2486,7 +2501,7 @@ a.fb_button_simple {
 }
 
 .additionalInfo span:first-child {
-    padding-left: 0;
+    padding-left: 20px;
     border: none;
 }
 
@@ -2624,7 +2639,11 @@ a.fb_button_simple {
 
 .oldPrice {
     font-size: 14px;
-    margin-bottom: 10px;
+    margin-bottom: 3px;
+}
+
+.information .oldPrice {
+    font-size:11px;
 }
 
 .tobasketFunction .price {
@@ -2645,6 +2664,10 @@ a.fb_button_simple {
 
 .tobasketFunction label {
     margin: 1px 10px 0 0;
+}
+
+.information .tobasket{
+    position: absolute; bottom:5px;
 }
 
 
@@ -3726,10 +3749,14 @@ a.sliderHover {
 
 #incVatMessage{
     position:fixed;
-    bottom:0;
-    right:0;
-    background:orange;
-    padding:10px;
+    bottom:-3px;
+    right:-5px;
+    font-size:11px;
+    padding:4px 20px 6px 17px;
+    background:url(../../img/vatmsg-bg.png) no-repeat 0 0;
+    opacity:0.6;
+    filter:alpha(opacity=60);
+    z-index:9999;
 }
 
 /* Plain errors*/
@@ -3756,6 +3783,7 @@ li.articleImage{
 
 /* MD Variant Selects in details */
 .variantSelecors {
+    clear:both;
     background: none;
     padding: 10px 10px 0px 0px;
     font-size: 11px;
@@ -3877,4 +3905,9 @@ button[disabled].submitButton, button[disabled].submitButton:hover  {
 .loadingicon {
     background: url(../../img/loading.gif) no-repeat center center;
     z-index : 5002;
+}
+/* shop lupe */
+
+.shoplupe {
+    text-align: center;
 }

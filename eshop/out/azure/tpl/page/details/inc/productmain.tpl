@@ -1,6 +1,3 @@
-[{if !$oDetailsProduct}] [{assign var="oDetailsProduct" value=$oView->getProduct()}] [{/if}]
-[{if !$currency}]        [{assign var="currency" value=$oView->getActCurrency()}]    [{/if}]
-
 [{assign var="aVariantSelections" value=$oView->getVariantSelections()}]
 
 [{oxhasrights ident="TOBASKET"}]
@@ -30,6 +27,7 @@
         <input type="hidden" name="anid" value="[{$oDetailsProduct->oxarticles__oxnid->value}]">
         <input type="hidden" name="parentid" value="[{if !$oDetailsProduct->oxarticles__oxparentid->value}][{$oDetailsProduct->oxarticles__oxid->value}][{else}][{$oDetailsProduct->oxarticles__oxparentid->value}][{/if}]">
         <input type="hidden" name="panid" value="">
+        <input type="hidden" name="fnc" value="tobasket">
     </div>
 [{/if}]
 [{/oxhasrights}]
@@ -43,7 +41,7 @@
         [{/if}]
 
         <div class="picture">
-            <a href="[{$oPictureProduct->getMasterZoomPictureUrl(1)}]" class="cloud-zoom" id="zoom1" rel="adjustY:-2, zoomWidth:'354', fixZoomWindow:'390', loadingText:'[{oxmultilang ident="PAGE_DETAILS_ZOOM_LOADING"}]'">
+            <a href="[{$oPictureProduct->getMasterZoomPictureUrl(1)}]" class="cloud-zoom" id="zoom1" rel="adjustY:-2, zoomWidth:'354', fixZoomWindow:'390', trImg:'[{$oViewConf->getImageUrl()}]dot.png', loadingText:'[{oxmultilang ident="PAGE_DETAILS_ZOOM_LOADING"}]'">
                 <img src="[{$oView->getActPicture()}]"  alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">
             </a>
         </div>
@@ -51,6 +49,9 @@
         [{* article main info block *}]
         <div class="information">
             [{* Product title *}]
+
+        [{ assign var="oManufacturer" value=$oView->getManufacturer()}]
+            <div class="productMainInfo[{if $oManufacturer->oxmanufacturers__oxicon->value}] hasBrand[{/if}]">
             <h1 id="productTitle"><span>[{$oDetailsProduct->oxarticles__oxtitle->value}] [{$oDetailsProduct->oxarticles__oxvarselect->value}]</span></h1>
 
 
@@ -95,13 +96,6 @@
                     <li><a id="priceAlarmLink" class="priceAlarmLink" rel="nofollow" href="[{ $oDetailsProduct->getLink()|cat:'#itemTabs'}]">[{oxmultilang ident="DETAILS_PRICEALARM"}]</a></li>
                  [{/if}]
                 [{/oxhasrights}]
-
-                <li class="social clear">
-                        <label>[{oxmultilang ident="DETAILS_SOCIAL_BOOKMARKS"}]</label>
-                        [{include file="widget/facebook/share.tpl"}]
-                        [{include file="widget/facebook/like.tpl" width="45"}]
-                  </li>
-
             </ul>
 
             [{* artickle number *}]
@@ -111,6 +105,10 @@
             <div class="rating clear">
                 [{include file="widget/reviews/rating.tpl" itemid="anid=`$oDetailsProduct->oxarticles__oxnid->value`" sRateUrl=$oDetailsProduct->getLink() }]
             </div>
+            </div>
+            [{if $oManufacturer->oxmanufacturers__oxicon->value}]
+                <img class="brandLogo" src="[{$oManufacturer->getIconUrl()}]" alt="[{ $oManufacturer->oxmanufacturers__oxtitle->value}]">
+            [{/if}]
 
             [{* short description *}]
             [{oxhasrights ident="SHOWSHORTDESCRIPTION"}]
@@ -202,7 +200,6 @@
                     [{if $oDetailsProduct->getFTPrice()}]
                         <p class="oldPrice">
                             <strong>[{oxmultilang ident="DETAILS_REDUCEDFROM"}] <del>[{$oDetailsProduct->getFTPrice()}] [{$currency->sign}]</del></strong>
-                            <span>[{oxmultilang ident="DETAILS_REDUCEDTEXT"}]</span>
                         </p>
                     [{/if}]
                 [{/oxhasrights}]
@@ -211,9 +208,6 @@
                     [{oxhasrights ident="SHOWARTICLEPRICE"}]
                         [{if $oDetailsProduct->getFPrice()}]
                             <label id="productPrice" class="price">
-                                [{if $oDetailsProduct->getFTPrice()}]
-                                    [{oxmultilang ident="DETAILS_NOWONLY"}]
-                                [{/if}]
 
                                 [{assign var="fPrice" value=$oDetailsProduct->getFPrice()}]
                                 [{if !$blCanBuy }]
@@ -223,7 +217,7 @@
                                     [{/if}]
                                 [{/if}]
 
-                                <strong>[{$fPrice}] [{$currency->sign}]</strong>
+                                <strong>[{$fPrice}] [{$currency->sign}] *</strong>
                             </label>
                         [{/if}]
                         [{if $oDetailsProduct->loadAmountPriceInfo()}]
@@ -235,7 +229,7 @@
                     [{oxhasrights ident="TOBASKET"}]
                     [{if !$oDetailsProduct->isNotBuyable()}]
                         <input id="amountToBasket" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
-                        <button id="toBasket" type="submit" name="fnc" value="tobasket" [{if !$blCanBuy}]disabled="disabled"[{/if}] class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
+                        <button id="toBasket" type="submit" [{if !$blCanBuy}]disabled="disabled"[{/if}] class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
                         [{if $oDetailsProduct->loadAmountPriceInfo()}]
                             [{oxscript add="$( '.ox-details-amount' ).oxSuggest();"}]
                         [{/if}]
@@ -243,16 +237,11 @@
                     [{/oxhasrights}]
 
                 </div>
-            </div>
-
             [{* additional info *}]
             <div class="additionalInfo clear">
                 [{if $oDetailsProduct->getPricePerUnit()}]
                     <span id="productPriceUnit">[{$oDetailsProduct->getPricePerUnit()}] [{$currency->sign}]/[{$oDetailsProduct->oxarticles__oxunitname->value}]</span>
                 [{/if}]
-                [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-                    <span>[{oxmultilang ident="DETAILS_PLUSSHIPPING"}] [{oxmultilang ident="DETAILS_PLUSSHIPPING2"}]</span>
-                [{/oxifcontent}]
                 [{if $oDetailsProduct->getStockStatus() == -1}]
                     <span class="stockFlag notOnStock">
                         [{if $oDetailsProduct->oxarticles__oxnostocktext->value}]
@@ -284,6 +273,11 @@
                     <span id="productWeight">[{oxmultilang ident="DETAILS_ARTWEIGHT"}] [{$oDetailsProduct->oxarticles__oxweight->value}] [{oxmultilang ident="DETAILS_ARTWEIGHTUNIT"}]</span>
                 [{/if}]
               </div>
+              <p class="social">
+                  [{include file="widget/facebook/like.tpl" width="90"}]
+                  [{include file="widget/facebook/share.tpl"}]
+              </p>
+            </div>
           </div>
     </div>
 
@@ -294,11 +288,6 @@
 [{/oxhasrights}]
 
 [{include file="page/details/inc/morepics.tpl"}]
-[{if "detailsMain" == $sRenderPartial}]
-    [{oxscript add="$(function(){oxid.initDetailsPagePartial();});"}]
-[{/if}]
+
 [{oxscript add="$(function(){oxid.initDetailsMain();});"}]
 
-[{if "detailsMain" == $sRenderPartial}]
-    [{oxscript}]
-[{/if}]

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvarianthandlerTest.php 34220 2011-04-04 14:51:15Z arvydas.vapsva $
+ * @version   SVN: $Id: oxvarianthandlerTest.php 34281 2011-04-05 18:32:53Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -272,14 +272,14 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
         $oVariant3->setId( "test2" );
         $oVariant3->oxarticles__oxvarselect = new oxField( "a" );
 
-        $aArray[$oVariant1->getId()][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
-        $aArray[$oVariant1->getId()][] = array( 'name' => 'b', 'disabled' => false, 'active' => true, 'hash' => md5( 'b' ) );
+        $aArray[$oVariant1->getId()][] = array( 'name' => 'a', 'disabled' => null, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray[$oVariant1->getId()][] = array( 'name' => 'b', 'disabled' => null, 'active' => false, 'hash' => md5( 'b' ) );
 
-        $aArray[$oVariant2->getId()][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
-        $aArray[$oVariant2->getId()][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+        $aArray[$oVariant2->getId()][] = array( 'name' => 'a', 'disabled' => null, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray[$oVariant2->getId()][] = array( 'name' => 'b', 'disabled' => null, 'active' => false, 'hash' => md5( 'b' ) );
 
-        $aArray[$oVariant3->getId()][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
-        $aArray[$oVariant3->getId()][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+        $aArray[$oVariant3->getId()][] = array( 'name' => 'a', 'disabled' => null, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray[$oVariant3->getId()][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
 
         // checking
         $oHandler = new oxVariantHandlerForOxvarianthandlerTest();
@@ -294,14 +294,14 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
     public function testApplyVariantSelectionsFilter()
     {
         // test data
-        $aArray["test1"][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
-        $aArray["test1"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+        $aArray["test1"][] = array( 'name' => 'a', 'disabled' => null, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray["test1"][] = array( 'name' => 'b', 'disabled' => null, 'active' => false, 'hash' => md5( 'b' ) );
 
-        $aArray["test2"][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
-        $aArray["test2"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+        $aArray["test2"][] = array( 'name' => 'a', 'disabled' => null, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray["test2"][] = array( 'name' => 'b', 'disabled' => null, 'active' => false, 'hash' => md5( 'b' ) );
 
-        $aArray["test3"][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
-        $aArray["test3"][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+        $aArray["test3"][] = array( 'name' => 'a', 'disabled' => null, 'active' => false, 'hash' => md5( 'a' ) );
+        $aArray["test3"][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
 
         // expected result
         $aResult["test1"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
@@ -311,7 +311,7 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
         $aResult["test2"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
 
         $aResult["test3"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
-        $aResult["test3"][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+        $aResult["test3"][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
 
         // filter data
         $aFilter = array( md5( 'a' ), '' );

@@ -222,17 +222,6 @@
 
             <tr>
              <td valign="top" class="conftext">
-                <input type=hidden name=confbools[bl_perfLoadVendorTree] value=false>
-                <input type=checkbox class="confinput" name=confbools[bl_perfLoadVendorTree] value=true  [{if ($confbools.bl_perfLoadVendorTree)}]checked[{/if}] [{ $readonly }]>
-                [{ oxinputhelp ident="HELP_SHOP_PERF_LOADVENDORTREE" }]
-             </td>
-             <td valign="top" class="conftext" width="100%" >
-               [{ oxmultilang ident="SHOP_PERF_LOADVENDORTREE" }]
-             </td>
-            </tr>
-
-            <tr>
-             <td valign="top" class="conftext">
                 <input type=hidden name=confbools[bl_perfLoadManufacturerTree] value=false>
                 <input type=checkbox class="confinput" name=confbools[bl_perfLoadManufacturerTree] value=true  [{if ($confbools.bl_perfLoadManufacturerTree)}]checked[{/if}] [{ $readonly }]>
                 [{ oxinputhelp ident="HELP_SHOP_PERF_LOADMANUFACTURERTREE" }]

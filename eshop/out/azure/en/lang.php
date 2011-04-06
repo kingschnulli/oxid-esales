@@ -59,7 +59,7 @@ $aLang = array(
 'ALIST_META_DESCRIPTION_PREFIX'                                   => "You are here:",
 
 'DETAILS_ZOOM'                                                    => "Zoom",
-'DETAILS_REDUCEDFROM'                                             => "Reduced from",
+'DETAILS_REDUCEDFROM'                                             => "RRP",
 'DETAILS_REDUCEDTEXT'                                             => "(Our regular price.)",
 'DETAILS_NOWONLY'                                                 => "now only",
 'DETAILS_PLUSSHIPPING'                                            => "incl. VAT, plus ",
@@ -735,6 +735,7 @@ $aLang = array(
 'PAGE_CHECKOUT_BASKETCONTENTS_PRODUCT'                            => "Product",
 'PAGE_CHECKOUT_BASKETCONTENTS_WRAPPING'                           => "Wrapping",
 'PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGGROSS1'                     => "Gift Wrapping/Greeting Card",
+'PAGE_CHECKOUT_BASKETCONTENTS_SELECT_ALL'                         => "All",
 'PAGE_CHECKOUT_BASKET_COUPONNOTACCEPTED1'                         => "Your Coupon",
 'PAGE_CHECKOUT_BASKET_COUPONNOTACCEPTED2'                         => "couldn't be accepted.",
 'PAGE_CHECKOUT_BASKET_REASON'                                     => "Reason:",
@@ -983,6 +984,9 @@ $aLang = array(
 'WIDGET_TRUSTEDSHOPS_ITEM_PROFILELINK'                            => "http://www.trustedshops.com/profile/",
 'WIDGET_TRUSTEDSHOPS_RATINGS_INFO_URL_TITLE'                      => "Trusted Shops Customer Ratings",
 'WIDGET_TRUSTEDSHOPS_RATINGS_ALT'                                 => "Trusted Shops Customer Rating",
+
+'WIDGET_SHOPLUPE_RATINGS_INFO_URL_TITLE'                      => "[Tr] Shop lupe",
+'WIDGET_SHOPLUPE_RATINGS_ALT'                                 => "[Tr] Shop lupe",
 
 'PAGE_INFO_NEWS_TITLE'                                            => "Latest News and Updates",
 'PAGE_INFO_NEWS_LATESTNEWSBY'                                     => "Latest News and Updates at",

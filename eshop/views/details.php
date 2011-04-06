@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 34220 2011-04-04 14:51:15Z arvydas.vapsva $
+ * @version   SVN: $Id: details.php 34279 2011-04-05 15:54:26Z sarunas $
  */
 
 /**
@@ -399,10 +399,10 @@ class Details extends oxUBase
 
         switch ($sPartial) {
             case "productInfo":
-                return 'page/details/productinfo.tpl';
+                return 'page/details/ajax/fullproductinfo.tpl';
                 break;
             case "detailsMain":
-                return 'page/details/detailsmain.tpl';
+                return 'page/details/ajax/productmain.tpl';
                 break;
             default:
                 // #785A loads and sets locator data

@@ -1,12 +1,5 @@
-[{if !$oDetailsProduct}] [{assign var="oDetailsProduct" value=$oView->getProduct()}] [{/if}]
-[{if !$currency}]        [{assign var="currency" value=$oView->getActCurrency()}]    [{/if}]
-
-[{if "productInfo" == $sRenderPartial}]
-    [{oxscript add="$(function(){oxid.initDetailsPagePartial();});"}]
-[{/if}]
-
 <div id="detailsMain">
-    [{include file="page/details/detailsmain.tpl"}]
+    [{include file="page/details/inc/productmain.tpl"}]
 </div>
 <div id="detailsRelated" class="detailsRelated clear">
     <div class="relatedInfo[{if !$oView->getSimilarProducts() && !$oView->getCrossSelling() && !$oView->getAccessoires()}] relatedInfoFull[{/if}]">
@@ -23,7 +16,3 @@
 
     [{oxscript add="$(function(){oxid.initDetailsRelated();});"}]
 </div>
-
-[{if "productInfo" == $sRenderPartial}]
-    [{oxscript}]
-[{/if}]

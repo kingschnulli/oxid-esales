@@ -119,7 +119,7 @@ var oxid = {
     },
 
     loadingScreen: {
-        start : function (target) {
+        start : function (target, iconPositionElement) {
             var loadingScreens = Array();
             $(target).each(function() {
                 var overlayKeeper = document.createElement("div");
@@ -131,6 +131,26 @@ var oxid = {
                         'width'    : $(this).width()+20,
                         'height'   : $(this).height()+20
                     });
+                if (iconPositionElement && iconPositionElement.length) {
+                    var x = Math.round(
+                        iconPositionElement.offset().left // my left
+                        - 10 - $(this).offset().left      // relativeness
+                        + iconPositionElement.width()/2   // plus half of width to center
+                    );
+                    var offsetTop = iconPositionElement.offset().top;
+                    var y = Math.round(
+                        offsetTop                         //my top
+                        - 10 - $(this).offset().top       // relativeness
+                        + (                               // this requires, that last element in collection, would be the bottom one
+                                                          // as it computes last element offset from the first one plus its height
+                            iconPositionElement.last().offset().top - offsetTop + iconPositionElement.last().height()
+                        )/2
+                    );
+
+                    $('div.loadingiconbg,div.loadingicon', overlayKeeper).css({
+                        'background-position' : x + "px "+y+"px"
+                    });
+                }
                 $('div.loadingfade', overlayKeeper)
                     .css({'opacity' : 0})
                     .animate({
@@ -179,7 +199,7 @@ var oxid = {
 
     ajax : function(activator, params) {
         // activator: form or link element
-        // params: targetEl, onSuccess, onError, additionalData
+        // params: targetEl, iconPosEl, onSuccess, onError, additionalData
         var inputs = {};
         var action = "";
         var type   = "";
@@ -199,13 +219,12 @@ var oxid = {
 
         var loadingScreen = null;
         if (params['targetEl']) {
-            loadingScreen = oxid.loadingScreen.start(params['targetEl']);
+            loadingScreen = oxid.loadingScreen.start(params['targetEl'], params['iconPosEl']);
         }
 
         if (!type) {
             type = "get";
         }
-
         jQuery.ajax({
             data: inputs,
             url: action,
@@ -240,10 +259,18 @@ var oxid = {
     },
 
     evalScripts : function(container){
-        $("script", container).each(function(){
-            eval(this.innerHTML);
-            $(this).remove();
-        });
+        try {
+            $("script", container).each(function(){
+                try {
+                    eval(this.innerHTML);
+                } catch (e) {
+                    // console.error(e);
+                }
+                $(this).remove();
+            });
+        } catch (e) {
+            // console.error(e);
+        }
     },
 
     initDetailsMain : function () {
@@ -447,8 +474,9 @@ var oxid = {
 
                 //
                 oxid.variantSelection.findClosestVariant();
-
-                obj.closest("form").submit();
+                var form = obj.closest("form");
+                $('input[name=fnc]', form).val("");
+                form.submit();
                 return false;
             }
 
@@ -461,7 +489,9 @@ var oxid = {
         $('div.variantReset a').click( function () {
             oxid.variantSelection.resetVariantSelections();
             var obj = $( this );
-            obj.closest("form").submit();
+            var form = obj.closest("form");
+            $('input[name=fnc]', form).val("");
+            form.submit();
             return false;
         } );
 
@@ -470,6 +500,7 @@ var oxid = {
                 activator,
                 {//targetEl, onSuccess, onError, additionalData
                     'targetEl'  : highlightTargets,
+                    'iconPosEl' : $("#variants .dropDown"),
                     'additionalData' : {'renderPartial' : renderPart},
                     'onSuccess' : function(r) {
                         contentTarget.innerHTML = r['content'];
@@ -480,10 +511,16 @@ var oxid = {
             return false;
         }
 
-
         $(".oxProductForm").submit(function () {
-            if (!$("button[name='fnc']", this).val()) {
-                if ( $( "input[name=panid]", this ).attr( "value" ) ) {
+            if (!$("input[name='fnc']", this).val()) {
+                if (
+                    ( $( "input[name=panid]", this ).attr( "value" )
+                      || ($( "input[name=anid]", this ).val() == $( "input[name=parentid]", this ).val() )
+                    )
+                    && ($( "input[name=aid]", this ).val() == $( "input[name=parentid]", this ).val() )
+                ) {
+                    // if picture is changed [panid check] and currently loaded not full variant
+                    // OR if article to select is parent and currently loaded not full variant
                     return reloadProductPartially($(".oxProductForm"),'detailsMain',$("#detailsMain"),$("#detailsMain")[0]);
                 }
                 return reloadProductPartially($(".oxProductForm"),'productInfo',$("#productinfo"),$("#productinfo")[0]);
@@ -587,6 +624,9 @@ var oxid = {
     },
 
     initDetailsPagePartial : function () {
+        if (window.fbAsyncInit) {
+            window.fbAsyncInit();
+        }
         $(".cloud-zoom, .cloud-zoom-gallery").CloudZoom();
         oxid.initDropDowns();
     },
@@ -682,12 +722,10 @@ var oxid = {
                 for (var i = 0; i < iSelections; i++) {
                     var sActSelection = $( aVarSelections[i] ).attr( "value" );
                     if ( oxVariantSelections[oSelection][i] ) {
-
-                        blFitsAll = blFitsAll & sActSelection == oxVariantSelections[oSelection][i];
-
-                        if ( sActSelection && sActSelection == oxVariantSelections[oSelection][i] ) {
+                        if ( sActSelection && (sActSelection == oxVariantSelections[oSelection][i] )) {
                             iFitCount += 1;
-                            blFitsAll = blFitsAll & blFitsAll;
+                        } else {
+                            blFitsAll = false
                         }
                     }
                 }
@@ -706,11 +744,9 @@ var oxid = {
             if ( sVariantId != false ) {
                 // overriding product
                 if ( blLoadVariant ) {
-                    var oVarNameField = $( ".oxProductForm input[name=anid]" );
-                    oVarNameField.attr( "value", sVariantId );
+                    $( ".oxProductForm input[name=anid]" ).attr( "value", sVariantId );
                 } else {
-                    var oVarNameField = $( ".oxProductForm input[name=panid]" );
-                    oVarNameField.attr( "value", sVariantId );
+                    $( ".oxProductForm input[name=panid]" ).attr( "value", sVariantId );
                 }
             }
         }

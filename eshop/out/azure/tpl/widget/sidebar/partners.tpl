@@ -5,4 +5,5 @@
             [{include file="widget/trustedshops/info.tpl" }]
         [{/block}]
     </div>
+    [{include file="widget/shoplupe/ratings.tpl" }]
 </div>

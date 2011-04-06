@@ -252,6 +252,7 @@ $aLang = array(
 'PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGNET'                        => "Geschenkverpackung/Grußkarte (netto):",
 'PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGTAX1'                       => "zzgl. Mwst.",
 'PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGTAX2'                       => "% Betrag:",
+'PAGE_CHECKOUT_BASKETCONTENTS_SELECT_ALL'                         => "Alle",
 
 
 'TOP_CATEGORIES_HOME'                                             => 'Startseite',
@@ -981,6 +982,9 @@ $aLang = array(
 'WIDGET_TRUSTEDSHOPS_ITEM_PROFILELINK'                            => "http://www.trustedshops.de/profil/",
 'WIDGET_TRUSTEDSHOPS_RATINGS_INFO_URL_TITLE'                      => "Trusted Shops Kundenbewertungen",
 'WIDGET_TRUSTEDSHOPS_RATINGS_ALT'                                 => "Trusted Shops Kundenbewertungen",
+
+'WIDGET_SHOPLUPE_RATINGS_INFO_URL_TITLE'                          => "[Tr] Shop lupe",
+'WIDGET_SHOPLUPE_RATINGS_ALT'                                     => "[Tr] Shop lupe",
 
 'PAGE_INFO_NEWS_TITLE'                                            => "Neuigkeiten bei uns",
 'PAGE_INFO_NEWS_LATESTNEWSBY'                                     => "Neuigkeiten bei",

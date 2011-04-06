@@ -328,18 +328,41 @@ class oxVariantHandler extends oxSuperCfg
         foreach ( $oVariantList as $oVariant ) {
 
             $aNames = explode( $this->_sMdSeparator, $oVariant->oxarticles__oxvarselect->getRawValue() );
-            $blActive = ( $sActVariantId && $sActVariantId === $oVariant->getId() ) ? true : false;
+            $blActive = ( $sActVariantId === $oVariant->getId() ) ? true : false;
             for ( $i = 0; $i < $iVarSelCnt; $i++ ) {
                 $sName = isset( $aNames[$i] ) ? $aNames[$i] : '';
                 $sHash = md5( trim( $sName ) );
-                if ( $blActive ) {
+
+                // filling up filter
+                if ( $blActive && $sName ) {
                     $aFilter[$i] = $sHash;
                 }
-                $aSelections[$oVariant->getId()][] = array( 'name' => $sName, 'disabled' => $sName ? false : true, 'active' => $blActive, 'hash' => $sHash );
+                $aSelections[$oVariant->getId()][] = array( 'name' => $sName, 'disabled' => null, 'active' => false, 'hash' => $sHash );
             }
         }
 
         return $aSelections;
+    }
+
+    /**
+     * Cleans up user given filter. If filter was empty - returns false
+     *
+     * @param array $aFilter user given filter
+     *
+     * @return array | bool
+     */
+    protected function _cleanFilter( $aFilter )
+    {
+        $aCleanFilter = false;
+        if ( is_array( $aFilter ) && count( $aFilter ) ) {
+            foreach ( $aFilter as $iKey => $sFilter ) {
+                if ( $sFilter ) {
+                    $aCleanFilter[$iKey] = $sFilter;
+                }
+            }
+        }
+
+        return $aCleanFilter;
     }
 
     /**
@@ -353,32 +376,28 @@ class oxVariantHandler extends oxSuperCfg
     protected function _applyVariantSelectionsFilter( $aSelections, $aFilter )
     {
         // applying filters, disabling/activating items
-        if ( is_array( $aFilter ) && count( $aFilter ) ) {
+        if ( ( $aFilter = $this->_cleanFilter( $aFilter ) ) ) {
+
+            $iSelCnt = count( current( $aSelections ) );
             foreach ( $aFilter as $iKey => $sVal ) {
-                if ( $sVal ) {
-                    foreach ( $aSelections as $iLineNr => & $aLineSelections ) {
 
-                        // active?
-                        if ( strcmp( $aLineSelections[$iKey]['hash'], $sVal ) == 0 ) {
-                            $aLineSelections[$iKey]['active'] = true;
-                            continue;
-                        } else {
-
-                            // disabling inactive
-                            foreach ( $aLineSelections as $iPos => & $aVarSelection ) {
-                                if ( $iPos != $iKey ) {
-                                    $aVarSelection['disabled'] = true;
-                                }
+                foreach ( $aSelections as & $aLineSelections ) {
+                    if ( strcmp( $aLineSelections[$iKey]['hash'], $sVal ) === 0 ) {
+                        $aLineSelections[$iKey]['active'] = true;
+                        for ( $i = 0; $i < $iSelCnt; $i++ ) {
+                            $aLineSelections[$i]['disabled'] = false;
+                        }
+                    } else {
+                        for ( $i = 0; $i < $iSelCnt; $i++ ) {
+                            if ( $i != $iKey ) {
+                                $aLineSelections[$i]['disabled'] = true;
                             }
-
-                            // cleanup
-                            unset( $aVarSelection );
                         }
                     }
-
-                    // cleanup
-                    unset( $aLineSelections );
                 }
+
+                //
+                unset( $aLineSelections );
             }
         }
 

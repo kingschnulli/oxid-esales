@@ -51,7 +51,7 @@
         </div>
 
         <div id="productinfo">
-            [{include file="page/details/productinfo.tpl"}]
+            [{include file="page/details/inc/fullproductinfo.tpl"}]
         </div>
     </div>
 [{/capture}]

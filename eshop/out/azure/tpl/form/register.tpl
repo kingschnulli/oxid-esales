@@ -35,7 +35,7 @@
     </ul>
     <h3 class="blockHead">[{ oxmultilang ident="FORM_REGISTER_BILLINGADDRESS" }]</h3>
     <ul class="form">[{ include file="form/fieldset/user_billing.tpl" }]</ul>
-</form>`
+</form>
  <div id="popup" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
      <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
 </div>
