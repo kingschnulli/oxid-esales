@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34201 2011-04-04 12:00:43Z juergen.busch $
+ * @version   SVN: $Id: lang.php 34284 2011-04-06 07:19:12Z vilma $
  */
 
 $aLang = array(
@@ -190,6 +190,8 @@ $aLang = array(
 
 'SELECT_SETUP_LANG'                             => "Sprache für die Installation",
 'SELECT_COUNTRY_LANG'                           => "Ihr Standort",
+'SELECT_SELIVERY_COUNTRY'                       => "[tr] Main delivery country",
+'SELECT_DELIVERY_COUNTRY_HINT'                  => "[tr] You can  add more languages/countries simply by activating them in admin",
 'SELECT_SETUP_LANG_SUBMIT'                      => "Auswählen",
 'USE_DYNAMIC_PAGES'                             => "Um Ihren Geschäftserfolg zu vergrößern, laden Sie weitere Informationen vom OXID Server nach. <br>Mehr Informationen in unserern ",
 'PRIVACY_POLICY'                                => "Datenschutzerläuterungen",

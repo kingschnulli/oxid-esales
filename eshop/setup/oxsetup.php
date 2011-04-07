@@ -97,6 +97,24 @@ if ( !function_exists( 'getCountryList' ) ) {
     }
 }
 
+if ( !function_exists( 'getLocation' ) ) {
+    /**
+     * Includes country list for setup
+     *
+     * @return null
+     */
+    function getLocation()
+    {
+        $aCountries = array();
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            include getShopBasePath()."admin/shop_countries.php";
+        } else {
+            include getInstallPath()."admin/shop_countries.php";
+        }
+        return $aLocationCountries;
+    }
+}
+
 if ( !function_exists( 'getDefaultFileMode' ) ) {
     /**
      * Returns mode which must be set for files or folders
@@ -559,6 +577,12 @@ class OxSetupSession extends oxSetupCore
             }
 
             //storring country value settings to session
+            $sLocationLang = $oUtils->getRequestVar( "location_lang", "post" );
+            if ( isset( $sLocationLang ) ) {
+                $this->setSessionParam( 'location_lang', $sLocationLang );
+            }
+
+            //storring country value settings to session
             $sCountryLang = $oUtils->getRequestVar( "country_lang", "post" );
             if ( isset( $sCountryLang ) ) {
                 $this->setSessionParam( 'country_lang', $sCountryLang );
@@ -831,15 +855,19 @@ class OxSetupDb extends oxSetupCore
 
             $sBaseOut = 'oxbaseshop';
             // disabling usage of dynamic pages if shop country is international
-            if ( $oSession->getSessionParam( 'country_lang') === null ) {
+            if ( $oSession->getSessionParam( 'location_lang') === null ) {
                 $oSession->setSessionParam( 'use_dynamic_pages', 'false' );
             }
 
         $blUseDynPages = isset( $aParams["use_dyn_pages"] ) ? $aParams["use_dyn_pages"] : $oSession->getSessionParam( 'use_dynamic_pages' );
-        $sCountryLang  = isset( $aParams["country_lang"] ) ? $aParams["country_lang"] : $oSession->getSessionParam( 'country_lang' );
+        $sLocationLang  = isset( $aParams["location_lang"] ) ? $aParams["location_lang"] : $oSession->getSessionParam( 'location_lang' );
         $blCheckForUpdates = isset( $aParams["check_for_updates"] ) ? $aParams["check_for_updates"] : $oSession->getSessionParam( 'check_for_updates' );
+        $sCountryLang  = isset( $aParams["country_lang"] ) ? $aParams["country_lang"] : $oSession->getSessionParam( 'country_lang' );
 
         $sBaseShopId = $this->getInstance( "oxSetup" )->getShopId();
+
+        $this->execSql( "update oxcountry set oxactive = '0'" );
+        $this->execSql( "update oxcountry set oxactive = '1' where oxid = '$sCountryLang'" );
 
         $this->execSql( "delete from oxconfig where oxvarname = 'blLoadDynContents'" );
         $this->execSql( "delete from oxconfig where oxvarname = 'sShopCountry'" );
@@ -851,7 +879,7 @@ class OxSetupDb extends oxSetupCore
 
         $sID2 = $oUtils->generateUid();
         $this->execSql( "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
-                                 values('$sID2', '$sBaseShopId', 'sShopCountry', 'str', ENCODE( '$sCountryLang', '".$oConfk->sConfigKey."'))" );
+                                 values('$sID2', '$sBaseShopId', 'sShopCountry', 'str', ENCODE( '$sLocationLang', '".$oConfk->sConfigKey."'))" );
 
         $sID3 = $oUtils->generateUid();
         $this->execSql( "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
@@ -1830,7 +1858,9 @@ class oxSetupController extends oxSetupCore
         $oView = $this->getView();
         $oView->setTitle( 'STEP_1_TITLE' );
         $oView->setViewParam( "aCountries", getCountryList() );
+        $oView->setViewParam( "aLocations", getLocation() );
         $oView->setViewParam( "sSetupLang", $this->getInstance( "oxSetupLang" )->getSetupLang() );
+        $oView->setViewParam( "sLocationLang", $oSession->getSessionParam('location_lang') );
         $oView->setViewParam( "sCountryLang", $oSession->getSessionParam('country_lang') );
         return "welcome.php";
     }
@@ -2039,7 +2069,7 @@ class oxSetupController extends oxSetupCore
         }
 
         //swap database to english
-        if ( $oSession->getSessionParam('country_lang') != "de" ) {
+        if ( $oSession->getSessionParam('location_lang') != "de" ) {
             try {
                 $oDb->queryFile( "$sqlDir/en.sql" );
             } catch ( Exception $oExcp ) {
@@ -2324,7 +2354,7 @@ class oxSetupAps extends oxSetupCore
         $aParams["check_for_updates"] = $oUtils->getEnvVar( "SETTINGS_check_for_updates" );
 
         // default country language
-        $aParams["country_lang"] = $oUtils->getEnvVar( "SETTINGS_country_lang" );
+        $aParams["location_lang"] = $oUtils->getEnvVar( "SETTINGS_location_lang" );
 
         // enable dyn content?
         $aParams["use_dyn_pages"] = (int) $oUtils->getEnvVar( "SETTINGS_use_dynamic_pages" );
@@ -2350,7 +2380,7 @@ class oxSetupAps extends oxSetupCore
         }
 
         //swap database to english
-        if ( $aParams["country_lang"] != "de" ) {
+        if ( $aParams["location_lang"] != "de" ) {
             $oDb->queryFile( "en.sql" );
         }
 
@@ -2390,9 +2420,9 @@ class oxSetupAps extends oxSetupCore
     {
         // cleanup and remove tmp folder
         $oUtils = $this->getInstance( "oxSetupUtils" );
-        
+
         $sCompileDir = getInstallPath()."tmp/";
-        
+
         $oUtils->removeDir( $sCompileDir, true );
 
         // seems like APS removes rest of files/db itself

@@ -266,12 +266,13 @@ class Unit_Setup_oxSetupDbTest extends OxidTestCase
         $iAt = 0;
         $oSession = $this->getMock( "oxStdClass", array( "setSessionParam", "getSessionParam" ) );
 
-            $oSession->expects( $this->at( $iAt++ ) )->method( "getSessionParam" )->with( $this->equalTo( "country_lang" ) )->will( $this->returnValue( null ) );
+            $oSession->expects( $this->at( $iAt++ ) )->method( "getSessionParam" )->with( $this->equalTo( "location_lang" ) )->will( $this->returnValue( null ) );
             $oSession->expects( $this->at( $iAt++ ) )->method( "setSessionParam" )->with( $this->equalTo( "use_dynamic_pages" ), $this->equalTo( "false" ) );
 
         $oSession->expects( $this->at( $iAt++ ) )->method( "getSessionParam" )->with( $this->equalTo( "use_dynamic_pages" ) );
-        $oSession->expects( $this->at( $iAt++ ) )->method( "getSessionParam" )->with( $this->equalTo( "country_lang" ) );
+        $oSession->expects( $this->at( $iAt++ ) )->method( "getSessionParam" )->with( $this->equalTo( "location_lang" ) );
         $oSession->expects( $this->at( $iAt++ ) )->method( "getSessionParam" )->with( $this->equalTo( "check_for_updates" ) );
+        $oSession->expects( $this->at( $iAt++ ) )->method( "getSessionParam" )->with( $this->equalTo( "country_lang" ) );
 
         $oSetup = $this->getMock( "oxStdClass", array( "getShopId" ) );
         $oSetup->expects( $this->any() )->method( "getShopId" );
@@ -281,6 +282,8 @@ class Unit_Setup_oxSetupDbTest extends OxidTestCase
         $oDb->expects( $this->at( $iAt++ ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupUtils" ) )->will( $this->returnValue( $oUtils ) );
         $oDb->expects( $this->at( $iAt++ ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupSession" ) )->will( $this->returnValue( $oSession ) );
         $oDb->expects( $this->at( $iAt++ ) )->method( "getInstance" )->with( $this->equalTo( "oxSetup" ) )->will( $this->returnValue( $oSetup ) );
+        $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "update oxcountry set oxactive = '0'" ) );
+        $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "update oxcountry set oxactive = '1' where oxid = ''" ) );
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "delete from oxconfig where oxvarname = 'blLoadDynContents'" ) );
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "delete from oxconfig where oxvarname = 'sShopCountry'" ) );
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "delete from oxconfig where oxvarname = 'blCheckForUpdates'" ) );

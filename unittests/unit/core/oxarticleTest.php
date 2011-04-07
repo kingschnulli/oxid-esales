@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 33754 2011-03-14 15:38:56Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticleTest.php 34292 2011-04-06 08:38:37Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -7271,4 +7271,24 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertFalse( $oArticle->getMasterZoomPictureUrl( 1 ) );
     }
 
+    /**
+     * oxArticle::getVariantSelections() test case
+     *
+     * @return null
+     */
+    public function testGetVariantSelections()
+    {
+        oxTestModules::addFunction("oxVariantHandler", "buildVariantSelections", "{return 'buildVariantSelections';}");
+
+        modConfig::getInstance()->setConfigParam( "blUseMultidimensionVariants", false );
+        $oProduct = $this->getMock( "oxArticle", array( "getVariants" ) );
+        $oProduct->expects( $this->never() )->method( 'getVariants' );
+        $this->assertFalse( $oProduct->getVariantSelections() );
+
+        modConfig::getInstance()->setConfigParam( "blUseMultidimensionVariants", true );
+        $oProduct = $this->getMock( "oxArticle", array( "getVariants" ) );
+        $oProduct->expects( $this->once() )->method( 'getVariants' )->will( $this->returnValue( true ) );
+        $oProduct->oxarticles__oxvarname = new oxField();
+        $this->assertEquals( 'buildVariantSelections', $oProduct->getVariantSelections() );
+    }
 }

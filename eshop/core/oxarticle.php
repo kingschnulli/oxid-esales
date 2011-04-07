@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 34210 2011-04-04 12:57:58Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 34292 2011-04-06 08:38:37Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -1131,7 +1131,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         if ( $this->_aVariantSelections === null  ) {
             $this->_aVariantSelections = false;
-            if ( ( $oVariantList = $this->getVariants() ) ) {
+            if ( $this->getConfig()->getConfigParam( 'blUseMultidimensionVariants' ) &&
+                 ( $oVariantList = $this->getVariants() ) ) {
                 $this->_aVariantSelections = oxNew( "oxVariantHandler" )->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $oVariantList, $aFilterIds, $sActVariantId );
             }
         }
