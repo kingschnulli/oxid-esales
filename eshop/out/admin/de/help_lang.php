@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 34107 2011-03-31 15:18:40Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 34471 2011-04-08 15:05:28Z juergen.busch $
  */
 
 /**
@@ -266,7 +266,8 @@ $aLang =  array(
 
 
 'HELP_SHOP_MAIN_PRODUCTIVE'                   => 'So lange diese Einstellung <span class="warning_or_important_hint">nicht</span> aktiv ist, werden am unteren Ende jeder Seite Informationen zu Ladezeiten angezeigt. Außerdem werden Debug-Informationen angezeigt. Diese Informationen sind für Entwickler wichtig, wenn sie den OXID eShop anpassen.<br>' .
-                                                 '<span class="warning_or_important_hint">Aktivieren Sie diese Einstellung, bevor ihr eShop öffentlich zugänglich gemacht wird! Dadurch wird den Benutzern nur der eShop ohne die zusätzlichen Informationen angezeigt.</span>',
+                                                 '<span class="warning_or_important_hint">Aktivieren Sie diese Einstellung, bevor ihr eShop öffentlich zugänglich gemacht wird! Dadurch wird den Benutzern nur der eShop ohne die zusätzlichen Informationen angezeigt.</span><br>',
+                                                 'Weitere wichtige Hinweise für den Livegang des OXID eShop finden Sie in unserer <a href="http://wiki.oxidforge.org/Tutorials/Check_vor_dem_Livegang" target="_blank">OXIDforge</a>.', 
 
 'HELP_SHOP_MAIN_ACTIVE'                       => 'Mit <span class="navipath_or_inputname">Aktiv</span> können Sie ihren kompletten eShop ein- und ausschalten. Wenn ihr eShop ausgeschaltet ist, wird Ihren Kunden eine Meldung angezeigt, dass der eShop vorübergehend offline ist. Das kann für Wartungsarbeiten am eShop nützlich sein.',
 
@@ -477,14 +478,14 @@ $aLang =  array(
 'HELP_PAYMENT_MAIN_AMOUNT'                    => 'Mit <span class="navipath_or_inputname">Einkaufswert</span> können Sie einstellen, dass die Zahlungsart nur für bestimmte Einkaufswerte gültig ist. Mit den Feldern <span class="navipath_or_inputname">von</span> und <span class="navipath_or_inputname">bis</span> können Sie den Bereich einstellen.<br>' .
                                                     'Wenn die Zahlungsart für jeden Einkaufswert gültig sein soll, müssen Sie eine Bedingung eingeben, die immer gültig ist: Geben sie in das Feld <span class="navipath_or_inputname">von</span> <span class="userinput_or_code">0</span> ein, in das Feld <span class="navipath_or_inputname">bis</span> <span class="userinput_or_code">999999999</span>.',
 
-'HELP_PAYMENT_MAIN_ADDPRICE'                  => 'Bei <span class="navipath_or_inputname">Preis Auf-/Abschlag</span> wird der Preis für die Zahlungsart eingegeben. Die Preise können auf zwei verschiedene Arten angegeben werden:' .
+'HELP_PAYMENT_MAIN_ADDPRICE'                  => 'Bei <span class="navipath_or_inputname">Preisauf-/abschlag</span> wird der Preis für die Zahlungsart eingegeben. Die Preise können auf zwei verschiedene Arten angegeben werden:' .
                                                  '<ul>' .
                                                  '<li>Mit <span class="userinput_or_code">abs</span> wird der Preis absolut angegeben (z. B.: Wenn Sie <span class="userinput_or_code">7,50</span> eingeben, werden 7,50 Euro berechnet).</li>' .
                                                  '<li>Mit <span class="userinput_or_code">%</span> wird der Preis relativ zum Einkaufspreis berechnet (z. B.: Wenn Sie <span class="userinput_or_code">2</span> eingeben, werden 2 Prozent des Einkaufspreises berechnet).</li>' .
                                                  '</ul>' .
                                                  'Sie können auch negative Werte eingeben. Dadurch wird der eingegebene Wert abgezogen: Wenn Sie z. B. <span class="userinput_or_code">-2</span> eingeben und <span class="userinput_or_code">%</span> auswählen, werden 2% des Einkaufswerts abgezogen.',
 
-'HELP_PAYMENT_MAIN_ADDSUMRULES'               => '[tr]Zur Berechnung von Rabatten oder Aufschlägen wird der Warenkorbwert als Basissumme verwendet. Stellen Sie ein, welche Werte in die Berechung hierfür in den Warenkorbwerts einbezogen werden (none selected = <b>1</b>-<b>4</b> selected)',
+'HELP_PAYMENT_MAIN_ADDSUMRULES'               => 'Zur Berechnung von Preisauf- oder abschlägen wird der Warenkorbwert als Basissumme verwendet. Legen Sie fest, welche Kosten in die Berechnung des Warenkorbwertes einbezogen werden.',
 
 
 'HELP_SELECTLIST_MAIN_TITLEIDENT'             => 'Bei <span class="navipath_or_inputname">Arbeitstitel</span> können Sie einen zusätzlichen Titel eingeben, der den Benutzern Ihres eShops nicht angezeigt wird. Sie können den Arbeitstitel dazu verwenden, um ähnliche Auswahllisten zu unterscheiden (z. B. <span class="filename_filepath_or_italic">Größe für Hosen</span> und <span class="filename_filepath_or_italic">Größe für Hemden</span>).',

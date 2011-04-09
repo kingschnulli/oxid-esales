@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 33799 2011-03-16 16:51:42Z vilma $
+ * @version   SVN: $Id: oxemailTest.php 34447 2011-04-08 11:38:33Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -344,7 +344,10 @@ class Unit_Core_oxemailTest extends OxidTestCase
     public function testSetSmtp()
     {
         // just forcing to connect to webserver..
-        $oEmail = new oxEmail();
+        $oEmail = $this->getMock('oxEmail', array('_isValidSmtpHost'));
+        $oEmail->expects($this->once())->method('_isValidSmtpHost')
+                ->with($this->equalTo('127.0.0.1'))
+                ->will($this->returnValue(true));
 
         $oEmail->setSmtp( $this->_oShop );
         $this->assertEquals( 'smtp', $oEmail->getMailer() );

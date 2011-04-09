@@ -27,7 +27,7 @@
  *
  * @package core
  */
-class oxVariantSelection
+class oxSelection
 {
     /**
      * Selection name
@@ -54,7 +54,7 @@ class oxVariantSelection
     protected $_blDisabled = null;
 
     /**
-     * Initializes oxVariantSelection object
+     * Initializes oxSelection object
      *
      * @param string $sName      selection name
      * @param string $sValue     selection value

@@ -228,6 +228,8 @@ $aLang = array(
 'PAGE_SEARCH_SEARCH_TITLE'                                        => "Suche",
 'PAGE_SEARCH_SEARCH_LOCATION'                                     => "Suche",
 
+'WIDGET_TRUSTED_SHOPS'                                            => "Trusted shops",
+'WIDGET_SHOPLUPE'                                                 => "Shoplupe",
 'WIDGET_SERVICES_HOME'                                            => "Home",
 'WIDGET_SERVICES_CONTACTS'                                        => "Kontakt",
 'WIDGET_SERVICES_HELP'                                            => "Hilfe",
@@ -271,7 +273,7 @@ $aLang = array(
 'PAGE_CHECKOUT_BASKETCONTENTS_UNITPRICE'                          => "Einzelpreis",
 'PAGE_CHECKOUT_BASKETCONTENTS_TAX'                                => "MwSt",
 'PAGE_CHECKOUT_BASKETCONTENTS_TOTAL'                              => "Gesamtsumme",
-'PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING'                        => "ändern",
+'PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING'                        => "hinzufügen",
 'PAGE_CHECKOUT_BASKETCONTENTS_NONE'                               => "keine",
 'PAGE_CHECKOUT_BASKETCONTENTS_ARTNOMBER'                          => "Artikel Nr.",
 'PAGE_CHECKOUT_BASKETCONTENTS_DISCOUNT'                           => "Rabatt",
@@ -324,6 +326,7 @@ $aLang = array(
 'PAGE_CHECKOUT_STEPS_PAY'                                         => "3. Versand & Zahlungsart",
 'PAGE_CHECKOUT_STEPS_ORDER'                                       => "4. überprüfen & absenden",
 'PAGE_CHECKOUT_STEPS_LASTSTEP'                                    => "Fertig!",
+'PAGE_CHECKOUT_WRAPPING_CANCEL'                                   => "Abbrechen",
 'PAGE_CHECKOUT_WRAPPING_GIFTOPTION'                               => "Geschenkoption",
 'PAGE_CHECKOUT_WRAPPING_ADDWRAPPING'                              => "Als Geschenk verpacken",
 'PAGE_CHECKOUT_WRAPPING_PERSONALMESSAGE'                          => "Wir verpacken Ihr Geschenk sehr gerne mit unserem schönen Geschenkpapier, oder lassen Sie uns eine Karte mit Ihrer persönlichen Nachricht beilegen.",
@@ -334,7 +337,7 @@ $aLang = array(
 'PAGE_CHECKOUT_WRAPPING_GREETINGCARD'                             => "Grußkarte",
 'PAGE_CHECKOUT_WRAPPING_NOGREETINGCARD'                           => "Keine Grußkarte",
 'PAGE_CHECKOUT_WRAPPING_GREETINGMESSAGE'                          => "Grußnachricht",
-'PAGE_CHECKOUT_WRAPPING_BACKTOORDER'                              => "Zurück zur Bestellung",
+'PAGE_CHECKOUT_WRAPPING_BACKTOORDER'                              => "Übernehmen",
 'PAGE_CHECKOUT_ORDER_USEDCOUPONS'                                 => "Folgende Gutscheine werden benutzt",
 'PAGE_CHECKOUT_ORDER_COUPONNOTACCEPTED1'                          => "Ihr Gutschein",
 'PAGE_CHECKOUT_ORDER_COUPONNOTACCEPTED2'                          => "wurde abgewiesen.",
@@ -983,8 +986,8 @@ $aLang = array(
 'WIDGET_TRUSTEDSHOPS_RATINGS_INFO_URL_TITLE'                      => "Trusted Shops Kundenbewertungen",
 'WIDGET_TRUSTEDSHOPS_RATINGS_ALT'                                 => "Trusted Shops Kundenbewertungen",
 
-'WIDGET_SHOPLUPE_RATINGS_INFO_URL_TITLE'                          => "[Tr] Shop lupe",
-'WIDGET_SHOPLUPE_RATINGS_ALT'                                     => "[Tr] Shop lupe",
+'WIDGET_SHOPLUPE_RATINGS_INFO_URL_TITLE'                          => "Shoplupe",
+'WIDGET_SHOPLUPE_RATINGS_ALT'                                     => "Shoplupe",
 
 'PAGE_INFO_NEWS_TITLE'                                            => "Neuigkeiten bei uns",
 'PAGE_INFO_NEWS_LATESTNEWSBY'                                     => "Neuigkeiten bei",
@@ -1027,7 +1030,7 @@ $aLang = array(
 
 'WIDGET_BARGAIN_ITEMS_PRODUCT_PLUSSHIPPING'                       => "inkl. MwSt., zzgl. ",
 'WIDGET_BARGAIN_ITEMS_PRODUCT_PLUSSHIPPING2'                      => "Versandkosten",
-'WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART'                          => "Warenkorb",
+'WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART'                          => "in den Warenkorb",
 
 'PAGE_ACCOUNT_FORGOTPWD_TITLE'                                    => "Passwort vergessen?",
 'PAGE_ACCOUNT_FORGOTPWD_FORGOTPWD'                                => "Sie haben Ihr Passwort vergessen?",

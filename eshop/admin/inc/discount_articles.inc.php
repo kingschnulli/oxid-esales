@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: discount_articles.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
+ * @version   SVN: $Id: discount_articles.inc.php 34302 2011-04-06 11:08:47Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -105,23 +105,6 @@ class ajaxComponent extends ajaxListComponent
     }
 
     /**
-     * Adds filter SQL to current query
-     *
-     * @param string $sQ query to add filter condition
-     *
-     * @return string
-     */
-    protected function _addFilter( $sQ )
-    {
-        $sArtTable = $this->_getViewName('oxarticles');
-        $sQ = parent::_addFilter( $sQ );
-
-        // display variants or not ?
-        $sQ .= $this->getConfig()->getConfigParam( 'blVariantsSelection' ) ? ' group by '.$sArtTable.'.oxid ' : '';
-        return $sQ;
-    }
-
-    /**
      * Removes selected article (articles) from discount list
      *
      * @return null
@@ -153,7 +136,7 @@ class ajaxComponent extends ajaxListComponent
         // adding
         if ( oxConfig::getParameter( 'all' ) ) {
             $sArticleTable = $this->_getViewName('oxarticles');
-            $aChosenArt = $this->_getAll( $this->_addFilter( "select $sArticleTable.oxid ".$this->_getQuery() ) );
+            $aChosenArt = $this->_getAll( parent::_addFilter( "select $sArticleTable.oxid ".$this->_getQuery() ) );
         }
         if ( $soxId && $soxId != "-1" && is_array( $aChosenArt ) ) {
             foreach ( $aChosenArt as $sChosenArt) {

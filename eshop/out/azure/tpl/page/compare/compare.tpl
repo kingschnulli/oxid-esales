@@ -19,7 +19,7 @@
         <tr>
             <td style="vertical-align:top;">
                 <div id="compareFirstCol" style="overflow: hidden;">
-                    <table width="200px">
+                    <table style="width:200px; border-collapse:collapse;">
                         <tr id="firstDataTr">
                             <td class="firstCol">&nbsp;</td>
                         </tr>
@@ -35,7 +35,7 @@
                 </div>
             </td>
             <td style="vertical-align:top;">
-                <div id="compareDataDiv" style="overflow:hidden; width:[{if $oxcmp_user}]545px;[{else}]740px;[{/if}] position:relative">
+                <div id="compareDataDiv" [{if !$oxcmp_user}] class="compareWide"[{/if}] style="overflow:hidden; width:[{if $oxcmp_user}]545px;[{else}]740px;[{/if}] position:relative">
                     <table>
                         <tr id="firstTr">
                             [{foreach key=iProdNr from=$articleList item=product name=comparelist}]

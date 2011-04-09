@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarm_send.php 33418 2011-02-21 16:19:54Z rimvydas.paskevicius $
+ * @version   SVN: $Id: pricealarm_send.php 34450 2011-04-08 12:02:24Z sarunas $
  */
 
 /**
@@ -137,7 +137,7 @@ class PriceAlarm_Send extends oxAdminList
         $oLang->setTplLanguage( $iOldLangId );
 
         if ( $blSuccess ) {
-            $oAlarm->oxpricealarm__oxsended->setValue( date( "Y-m-d H:i:s" ) );
+            $oAlarm->oxpricealarm__oxsended = new oxField( date( "Y-m-d H:i:s" ) );
             $oAlarm->save();
         }
 

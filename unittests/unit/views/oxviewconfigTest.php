@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 34014 2011-03-25 14:06:07Z sarunas $
+ * @version   SVN: $Id: oxviewconfigTest.php 34364 2011-04-07 12:01:42Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -601,5 +601,48 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         } catch (oxFileException $e) {
             $this->assertEquals("Requested file not found for module test1 ($sMdir/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
         }
+    }
+
+    public function testViewThemeParam()
+    {
+        $oVC = new oxViewConfig();
+
+        $oV = $this->getMock('oxConfig', array('isThemeOption'));
+        $oV->expects($this->any())->method('getSession')->will($this->returnValue(false));
+
+        $this->assertEquals(false, $oVC->getViewThemeParam('aaa'));
+
+        $oV = $this->getMock('oxConfig', array('isThemeOption'));
+        $oV->expects($this->any())->method('getSession')->will($this->returnValue(true));
+
+        modConfig::getInstance()->setConfigParam('bl_showListmania', 1);
+        $this->assertEquals(1, $oVC->getViewThemeParam('bl_showListmania'));
+
+        modConfig::getInstance()->setConfigParam('bl_showListmania', 0);
+        $this->assertEquals(0, $oVC->getViewThemeParam('bl_showListmania'));
+    }
+
+    /**
+     * Test case for oxViewConfig::showSelectLists()
+     *
+     * @return null
+     */
+    public function testShowSelectLists()
+    {
+        $blExp = (bool) oxConfig::getINstance()->getConfigParam( 'bl_perfLoadSelectLists' );
+        $oVC = new oxViewConfig();
+        $this->assertEquals( $blExp, $oVC->showSelectLists() );
+    }
+
+    /**
+     * Test case for oxViewConfig::showSelectListsInList()
+     *
+     * @return null
+     */
+    public function testShowSelectListsInList()
+    {
+        $blExp = (bool) oxConfig::getINstance()->getConfigParam( 'bl_perfLoadSelectLists' ) && (bool) oxConfig::getINstance()->getConfigParam( 'bl_perfLoadSelectLists' );
+        $oVC = new oxViewConfig();
+        $this->assertEquals( $blExp, $oVC->showSelectLists() );
     }
 }

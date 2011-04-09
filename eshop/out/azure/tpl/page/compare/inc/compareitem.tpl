@@ -28,64 +28,55 @@
         <span class="flag [{if $product->getStockStatus() == -1}]red[{elseif $product->getStockStatus() == 1}]orange[{elseif $product->getStockStatus() == 0}]green[{/if}]">&nbsp;</span>
     [{/if}]
 
-    <form name="tobasket.[{$testid}]" action="[{ $oViewConf->getSelfActionLink() }]" method="post">
+    [{assign var="aVariantSelections" value=$product->getVariantSelections(null,null,1)}]
+    [{assign var="blShowToBasket" value=true}] [{* tobasket or more info ? *}]
+    [{if $product->isNotBuyable()||($aVariantSelections&&$aVariantSelections.selections)||$product->hasMdVariants()||($oViewConf->showSelectListsInList() && $product->getSelections(1))||$product->getVariants()}]
+        [{assign var="blShowToBasket" value=false}]
+    [{/if}]
+
+    <form name="tobasket.[{$testid}]" [{if $blShowToBasket}]action="[{ $oViewConf->getSelfActionLink() }]" method="post"[{else}]action="[{$_productLink}]" method="get"[{/if}]>
         <div class="variants">
-            [{ $oViewConf->getHiddenSid() }]
-            [{ $oViewConf->getNavFormParams() }]
-            <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
-            [{if $owishid}]
-                <input type="hidden" name="owishid" value="[{$owishid}]">
-            [{/if}]
-            [{if $toBasketFunction}]
-                <input type="hidden" name="fnc" value="[{$toBasketFunction}]">
-            [{else}]
-                <input type="hidden" name="fnc" value="tobasket">
-            [{/if}]
-            <input type="hidden" name="aid" value="[{ $product->oxarticles__oxid->value }]">
-            [{if $altproduct}]
-                <input type="hidden" name="anid" value="[{ $altproduct }]">
-            [{else}]
-                <input type="hidden" name="anid" value="[{ $product->oxarticles__oxnid->value }]">
-            [{/if}]
-            [{if $recommid}]
-                <input type="hidden" name="recommid" value="[{ $recommid }]">
-            [{/if}]
-            <input type="hidden" name="pgNr" value="[{ $oView->getActPage() }]">
-
-            [{ if $product->getVariantList()}]
-              <label>[{ $product->oxarticles__oxvarname->value }]:</label>
-              [{ if $product->hasMdVariants() }]
-              <select id="mdVariant_[{$testid}]" name="mdVariant_[{$testid}]">
-                [{ if !$product->isParentNotBuyable()}]
-                  <option value="[{$product->getId()}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]*[{/oxhasrights}]</option>
-                [{/if}]
-                [{foreach from=$product->getMdSubvariants() item=mdVariant}]
-                  <option value="[{$mdVariant->getLink()}]">[{ $mdVariant->getName() }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $mdVariant->getFPrice()|strip_tags }]* [{/oxhasrights}]</option>
-                [{/foreach}]
-              </select>
-              [{else}]
-              <select id="varSelect_[{$testid}]" name="aid">
-                [{ if !$product->isParentNotBuyable()}]
-                  <option value="[{$product->getId()}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]*[{/oxhasrights}]</option>
-                [{/if}]
-                [{foreach from=$product->getVariantList() item=variant}]
-                  <option value="[{$variant->getId()}]">[{ $variant->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $variant->getFPrice() }] [{ $currency->sign|strip_tags}]* [{/oxhasrights}]</option>
-                [{/foreach}]
-              </select>
-              [{/if}]
-
-            [{elseif $product->getDispSelList()}]
-
-              [{foreach key=iSel from=$product->getDispSelList() item=oList}]
-                <label>[{ $oList.name }] :</label>
-                <select id="selectList_[{$testid}]_[{$iSel}]" name="sel[[{$iSel}]]">
-                  [{foreach key=iSelIdx from=$oList item=oSelItem}]
-                    [{ if $oSelItem->name }]
-                      <option value="[{$iSelIdx}]"[{if $oSelItem->selected }]SELECTED[{/if }]>[{ $oSelItem->name }]</option>
+            [{oxhasrights ident="TOBASKET"}]
+                [{ if $blShowToBasket}]
+                    [{ $oViewConf->getHiddenSid() }]
+                    [{ $oViewConf->getNavFormParams() }]
+                    <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
+                    [{if $owishid}]
+                        <input type="hidden" name="owishid" value="[{$owishid}]">
                     [{/if}]
-                  [{/foreach}]
-                </select>
-              [{/foreach}]
+                    [{if $toBasketFunction}]
+                        <input type="hidden" name="fnc" value="[{$toBasketFunction}]">
+                    [{else}]
+                        <input type="hidden" name="fnc" value="tobasket">
+                    [{/if}]
+                    <input type="hidden" name="aid" value="[{ $product->oxarticles__oxid->value }]">
+                    [{if $altproduct}]
+                        <input type="hidden" name="anid" value="[{ $altproduct }]">
+                    [{else}]
+                        <input type="hidden" name="anid" value="[{ $product->oxarticles__oxnid->value }]">
+                    [{/if}]
+                    [{if $recommid}]
+                        <input type="hidden" name="recommid" value="[{ $recommid }]">
+                    [{/if}]
+                    <input type="hidden" name="pgNr" value="[{ $oView->getActPage() }]">
+                [{/if}]
+            [{/oxhasrights}]
+
+            [{if $aVariantSelections && $aVariantSelections.selections }]
+                <div class="variantBox selectorsBox fnSubmit clear" id="compareVariantSelections_[{$testid}]">
+                    [{foreach from=$aVariantSelections.selections item=oSelectionList key=iKey}]
+                        [{include file="widget/product/selectbox.tpl" oSelectionList=$oSelectionList}]
+                    [{/foreach}]
+                </div>
+            [{elseif $oViewConf->showSelectListsInList()}]
+                [{assign var="oSelections" value=$product->getSelections(1)}]
+                [{if $oSelections}]
+                    <div class="selectorsBox fnSubmit clear" id="compareSelections_[{$testid}]">
+                        [{foreach from=$oSelections item=oList name=selections}]
+                            [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="sel" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop"}]
+                        [{/foreach}]
+                    </div>
+                [{/if}]
             [{/if}]
         </div>
 
@@ -94,37 +85,34 @@
                 [{if $product->getFTPrice()}]
                     <p class="oldPrice">
                         <strong>[{oxmultilang ident="DETAILS_REDUCEDFROM"}] <del>[{$product->getFTPrice()}] [{$currency->sign}]</del></strong>
-                       <span>[{oxmultilang ident="DETAILS_REDUCEDTEXT"}]</span>
                     </p>
                  [{/if}]
             [{/oxhasrights}]
             <div class="tobasketFunction clear">
                 [{oxhasrights ident="SHOWARTICLEPRICE"}]
                     <label id="productPrice" class="price">
-                        [{if $product->getFTPrice()}]
-                            [{oxmultilang ident="DETAILS_NOWONLY"}]
-                        [{/if}]
                         <strong>[{$product->getFPrice()}] [{$currency->sign}]</strong>
                     </label>
                     [{if $product->loadAmountPriceInfo()}]
                         <a class="selector corners FXgradBlueDark" href="#priceinfo"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" alt="Select"></a>
                     [{/if}]
                 [{/oxhasrights}]
-                [{if !$product->isNotBuyable()}]
-                <p class="fn clear">
-                    <input type="text" name="am" value="1" size="3" autocomplete="off" class="textbox" title="[{ oxmultilang ident="DETAILS_QUANTITY" }]">
-                    <button type="submit" class="submitButton largeButton" title="[{oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ADDTOCARD2"}]">[{oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ADDTOCARD2"}]</button>
-                    [{if $product->loadAmountPriceInfo()}]
-                        [{oxscript add="$( '.ox-details-amount' ).oxSuggest();"}]
-                    [{/if}]
-                </p>
+                [{ if $blShowToBasket }]
+                    [{oxhasrights ident="TOBASKET"}]
+                        <p class="fn clear">
+                            <input type="text" name="am" value="1" size="3" autocomplete="off" class="textbox" title="[{ oxmultilang ident="DETAILS_QUANTITY" }]">
+                            <button type="submit" class="submitButton largeButton" title="[{oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ADDTOCARD2"}]">[{oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ADDTOCARD2"}]</button>
+                            [{if $product->loadAmountPriceInfo()}]
+                                [{oxscript add="$( '.ox-details-amount' ).oxSuggest();"}]
+                            [{/if}]
+                        </p>
+                    [{/oxhasrights}]
+                [{else}]
+                    <span >
+                        <a id="variantMoreInfo_[{$testid}]" class="submitButton" href="[{ $_productLink }]" onclick="oxid.mdVariants.getMdVariantUrl('mdVariant_[{$testid}]'); return false;">[{ oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_VARIANTS_MOREINFO" }]</a>
+                    </span>
                 [{/if}]
             </div>
         </div>
-        [{if $product->hasMdVariants() }]
-        <span >
-            <a id="variantMoreInfo_[{$testid}]" class="submitButton" href="[{ $_productLink }]" onclick="oxid.mdVariants.getMdVariantUrl('mdVariant_[{$testid}]'); return false;">[{ oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_VARIANTS_MOREINFO" }]</a>
-        </span>
-        [{/if}]
     </form>
 </div>

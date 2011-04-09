@@ -830,7 +830,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $this->assertEquals( '\/ß[]~ä#-', $oLang->translateString("\/ß[]~ä#-" ) );
 
         $this->assertEquals( 'Bitte Kategorien wählen', $oLang->translateString( "GENERAL_CATEGORYSELECT", 0, true ) );
-        $this->assertEquals( 'Gästebuch', $oLang->translateString( "GUI_GROUP_BODY_GUESTBOOK", 0, true ) );
+        //$this->assertEquals( 'Gästebuch', $oLang->translateString( "GUI_GROUP_BODY_GUESTBOOK", 0, true ) );
         $this->assertEquals( 'Notiz anfügen', $oLang->translateString( "TOOLTIPS_NEWREMARK", 0, true ) );
         $this->assertEquals( 'UTF-8', $oLang->translateString( "charset", 0, true ) );
     }

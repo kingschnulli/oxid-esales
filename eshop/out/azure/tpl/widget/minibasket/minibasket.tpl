@@ -56,11 +56,15 @@
         </div>
     [{/oxhasrights}]
 [{/if}]
+[{if $oxcmp_basket->getItemsCount() > 0}]
 <span class="counter FXgradOrange">
     [{insert name="oxid_newbasketitem" tpl="widget/minibasket/newbasketitemmsg.tpl" type="message"}]
-    <span id="countValue">
-    [{if $oxcmp_basket->getItemsCount()}][{$oxcmp_basket->getItemsCount()}][{else}]0[{/if}]
-    </span>
+
+        <span id="countValue">
+         [{$oxcmp_basket->getItemsCount()}]
+         </span>
+
 </span>
+[{/if}]
 <img src="[{$oViewConf->getImageUrl()}]basket.png" class="minibasketIcon" alt="Basket">
 </div>

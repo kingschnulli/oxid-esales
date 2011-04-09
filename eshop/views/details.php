@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 34279 2011-04-05 15:54:26Z sarunas $
+ * @version   SVN: $Id: details.php 34331 2011-04-06 16:11:30Z sarunas $
  */
 
 /**
@@ -569,7 +569,7 @@ class Details extends oxUBase
 
         $sRecommText = trim( ( string ) oxConfig::getParameter( 'recomm_txt' ) );
         $sRecommList = oxConfig::getParameter( 'recomm' );
-        $sArtId      = oxConfig::getParameter( 'anid' );
+        $sArtId      = $this->getProduct()->getId();
 
         if ( $sArtId ) {
             $oRecomm = oxNew( 'oxrecommlist' );
@@ -776,6 +776,11 @@ class Details extends oxUBase
             if ( !$this->_oProduct->load( $sOxid ) ) {
                 $myUtils->redirect( $myConfig->getShopHomeURL() );
                 $myUtils->showMessageAndExit( '' );
+            }
+
+            $aVariantSelections = $this->_oProduct->getVariantSelections( oxConfig::getParameter( "varselid" ) );
+            if ($aVariantSelections && $aVariantSelections['oActiveVariant'] && $aVariantSelections['blPerfectFit']) {
+                $this->_oProduct = $aVariantSelections['oActiveVariant'];
             }
         }
 
@@ -1554,7 +1559,7 @@ class Details extends oxUBase
     /**
      * Returns variant selection
      *
-     * @return oxVariantSelectionList
+     * @return oxVariantSelectList
      */
     public function getVariantSelections()
     {
@@ -1574,14 +1579,10 @@ class Details extends oxUBase
      */
     public function getPicturesProduct()
     {
-        $oProduct = $this->getProduct();
-        //
-        if ( ( $sId = oxConfig::getParameter( "panid" ) ) && $sId != $oProduct->getId() ) {
-            $oVariantList = $oProduct->getVariants( false );
-            if ( $oVariantList && $oVariantList->offsetExists( $sId ) ) {
-                return $oVariantList->offsetGet( $sId );
-            }
+        $aVariantSelections = $this->getVariantSelections();
+        if ($aVariantSelections && $aVariantSelections['oActiveVariant'] && !$aVariantSelections['blPerfectFit']) {
+            return $aVariantSelections['oActiveVariant'];
         }
-        return $oProduct;
+        return $this->getProduct();
     }
 }

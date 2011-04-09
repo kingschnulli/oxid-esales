@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 34014 2011-03-25 14:06:07Z sarunas $
+ * @version   SVN: $Id: oxviewconfig.php 34356 2011-04-07 10:22:52Z arvydas.vapsva $
  */
 
 /**
@@ -1239,5 +1239,44 @@ class oxViewConfig extends oxSuperCfg
         // check if file exists
         $this->getModulePath($sModule, $sFile);
         return rtrim($this->getConfig()->getCurrentShopUrl(), '/').'/modules/'.basename($sModule).$sFile;
+    }
+
+    /**
+     * return param value
+     *
+     * @param string $sName param name
+     *
+     * @return mix
+     */
+    public function getViewThemeParam( $sName )
+    {
+        $sValue = false;
+
+        if ($this->getConfig()->isThemeOption( $sName ) ) {
+            $sValue = $this->getConfig()->getConfigParam( $sName );
+        }
+
+        return $sValue;
+    }
+
+
+    /**
+     * Returns true if selection lists must be displayed in details page
+     *
+     * @return bool
+     */
+    public function showSelectLists()
+    {
+        return (bool) $this->getConfig()->getConfigParam( 'bl_perfLoadSelectLists' );
+    }
+
+    /**
+     * Returns true if selection lists must be displayed in details page
+     *
+     * @return bool
+     */
+    public function showSelectListsInList()
+    {
+        return $this->showSelectLists() && (bool) $this->getConfig()->getConfigParam( 'bl_perfLoadSelectListsInAList' );
     }
 }

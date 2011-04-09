@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 33563 2011-02-28 12:44:14Z sarunas $
+ * @version   SVN: $Id: oxconfigTest.php 34355 2011-04-07 10:20:42Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2066,4 +2066,14 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $iRes = oxDb::getDb()->getOne($sQ);
         $this->assertTrue($iRes >= 1);
     }
+
+    public function testIsThemeOption()
+    {
+        $oConfig = $this->getProxyClass( "oxConfig" );
+        $oConfig->setNonPublicVar("_aThemeConfigParams", array( 'param1' => 'theme1', 'param2' => 'theme2' ) );
+
+        $this->assertTrue( $oConfig->isThemeOption( 'param1' ) );
+        $this->assertFalse( $oConfig->isThemeOption( 'aaa' ) );
+    }
+
 }

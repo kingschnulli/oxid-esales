@@ -69,7 +69,6 @@
     [{oxscript include="js/cloud-zoom.1.0.2.js" priority=1}]
     [{oxscript include="js/countdown.jquery.js" priority=1}]
     [{oxscript include="js/gui.js" priority=9}]
-    [{oxscript include="js/oxid.js" priority=1}]
 
     [{oxscript include='js/superfish/hoverIntent.js'}]
     [{oxscript include='js/superfish/supersubs.js'}]

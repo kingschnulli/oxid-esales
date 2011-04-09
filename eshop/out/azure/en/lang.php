@@ -231,7 +231,8 @@ $aLang = array(
 'PAGE_SEARCH_SEARCH_TITLE'                                        => "Search",
 'PAGE_SEARCH_SEARCH_LOCATION'                                     => "Search",
 
-
+'WIDGET_TRUSTED_SHOPS'                                            => "Trusted shops",
+'WIDGET_SHOPLUPE'                                                 => "Shoplupe",
 'WIDGET_SERVICES_HOME'                                            => "Home",
 'WIDGET_SERVICES_CONTACTS'                                        => "Contacts",
 'WIDGET_SERVICES_HELP'                                            => "Help",
@@ -282,7 +283,7 @@ $aLang = array(
 'PAGE_CHECKOUT_BASKETCONTENTS_UNITPRICE'                          => "Unit Price",
 'PAGE_CHECKOUT_BASKETCONTENTS_TAX'                                => "VAT",
 'PAGE_CHECKOUT_BASKETCONTENTS_TOTAL'                              => "Total",
-'PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING'                        => "change",
+'PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING'                        => "add",
 'PAGE_CHECKOUT_BASKETCONTENTS_NONE'                               => "none",
 'PAGE_CHECKOUT_BASKETCONTENTS_ARTNOMBER'                          => "Art.No.:",
 'PAGE_CHECKOUT_BASKETCONTENTS_REMOVE'                             => "remove",
@@ -333,6 +334,7 @@ $aLang = array(
 'PAGE_CHECKOUT_STEPS_PAY'                                         => "3. Pay",
 'PAGE_CHECKOUT_STEPS_ORDER'                                       => "4. Order",
 'PAGE_CHECKOUT_STEPS_LASTSTEP'                                    => "Ready!",
+'PAGE_CHECKOUT_WRAPPING_CANCEL'                                   => "Cancel",
 'PAGE_CHECKOUT_WRAPPING_GIFTOPTION'                               => "Gift options",
 'PAGE_CHECKOUT_WRAPPING_ADDWRAPPING'                              => "Add gift wrap",
 'PAGE_CHECKOUT_WRAPPING_PERSONALMESSAGE'                          => "We're happy to wrap your gift or to add a gift card with your personal message.",
@@ -343,7 +345,7 @@ $aLang = array(
 'PAGE_CHECKOUT_WRAPPING_GREETINGCARD'                             => "Greeting Card",
 'PAGE_CHECKOUT_WRAPPING_NOGREETINGCARD'                           => "No Greeting Card",
 'PAGE_CHECKOUT_WRAPPING_GREETINGMESSAGE'                          => "Greeting message",
-'PAGE_CHECKOUT_WRAPPING_BACKTOORDER'                              => "Back to Order",
+'PAGE_CHECKOUT_WRAPPING_BACKTOORDER'                              => "Apply",
 'PAGE_CHECKOUT_ORDER_USEDCOUPONS'                                 => "Following Coupons are used",
 'PAGE_CHECKOUT_ORDER_COUPONNOTACCEPTED1'                          => "Your Coupon",
 'PAGE_CHECKOUT_ORDER_COUPONNOTACCEPTED2'                          => "couldn't be accepted.",
@@ -985,8 +987,8 @@ $aLang = array(
 'WIDGET_TRUSTEDSHOPS_RATINGS_INFO_URL_TITLE'                      => "Trusted Shops Customer Ratings",
 'WIDGET_TRUSTEDSHOPS_RATINGS_ALT'                                 => "Trusted Shops Customer Rating",
 
-'WIDGET_SHOPLUPE_RATINGS_INFO_URL_TITLE'                      => "[Tr] Shop lupe",
-'WIDGET_SHOPLUPE_RATINGS_ALT'                                 => "[Tr] Shop lupe",
+'WIDGET_SHOPLUPE_RATINGS_INFO_URL_TITLE'                          => "Shoplupe",
+'WIDGET_SHOPLUPE_RATINGS_ALT'                                     => "Shoplupe",
 
 'PAGE_INFO_NEWS_TITLE'                                            => "Latest News and Updates",
 'PAGE_INFO_NEWS_LATESTNEWSBY'                                     => "Latest News and Updates at",
@@ -1030,7 +1032,7 @@ $aLang = array(
 
 'WIDGET_BARGAIN_ITEMS_PRODUCT_PLUSSHIPPING'                       => "incl. VAT, plus ",
 'WIDGET_BARGAIN_ITEMS_PRODUCT_PLUSSHIPPING2'                      => "shipping",
-'WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART'                          => "To cart",
+'WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART'                          => "add to Cart",
 
 'PAGE_ACCOUNT_FORGOTPWD_TITLE'                                    => "Forgot password?",
 'PAGE_ACCOUNT_FORGOTPWD_FORGOTPWD'                                => "Have you forgotten your password?",

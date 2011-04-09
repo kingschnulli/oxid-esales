@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 34292 2011-04-06 08:38:37Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 34379 2011-04-07 13:16:58Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -392,9 +392,19 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
     /**
      * Variant selections array
+     *
+     * @see getVariantSelections()
+     *
      * @var array
      */
-    protected $_aVariantSelections = null;
+    protected $_aVariantSelections = array();
+
+    /**
+     * Array of product selections
+     * @var array
+     */
+    protected static $_aSelections = array();
+
 
     /**
      * Class constructor, sets shop ID for article (oxconfig::getShopId()),
@@ -1048,7 +1058,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Returns all selectlists this article has.
+     * Returns all selectlists this article has (used in basic theme and oxbasket)
      *
      * @param string $sKeyPrefix Optionall key prefix
      *
@@ -1124,19 +1134,80 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      *
      * @param array  $aFilterIds    ids of active selections [optional]
      * @param string $sActVariantId active variant id [optional]
+     * @param int    $iLimit        limit variant lists count (if non zero, return limited number of multidimensional variant selections)
      *
      * @return array
      */
-    public function getVariantSelections( $aFilterIds = null, $sActVariantId = null )
+    public function getVariantSelections( $aFilterIds = null, $sActVariantId = null, $iLimit = 0 )
     {
-        if ( $this->_aVariantSelections === null  ) {
-            $this->_aVariantSelections = false;
-            if ( $this->getConfig()->getConfigParam( 'blUseMultidimensionVariants' ) &&
-                 ( $oVariantList = $this->getVariants() ) ) {
-                $this->_aVariantSelections = oxNew( "oxVariantHandler" )->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $oVariantList, $aFilterIds, $sActVariantId );
+        $iLimit = (int) $iLimit;
+        if ( !isset($this->_aVariantSelections[$iLimit])) {
+            $this->_aVariantSelections[$iLimit] = false;
+            if ( ( $oVariantList = $this->getVariants() ) ) {
+                $this->_aVariantSelections[$iLimit] = oxNew( "oxVariantHandler" )->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $oVariantList, $aFilterIds, $sActVariantId, $iLimit );
             }
         }
-        return $this->_aVariantSelections;
+        return $this->_aVariantSelections[$iLimit];
+    }
+
+    /**
+     * Returns product selections lists array (used in azure theme)
+     *
+     * @param int   $iLimit  if given - will load limited count of selections [optional]
+     * @param array $aFilter selection filter [optional]
+     *
+     * @return array
+     */
+    public function getSelections( $iLimit = null, $aFilter = null )
+    {
+        $sId = $this->getId() . ( (int) $iLimit );
+        if ( !array_key_exists( $sId, self::$_aSelections ) ) {
+
+            $oDb = oxDb::getDb();
+            $sSLViewName = getViewName( 'oxselectlist' );
+
+            $sQ = "select {$sSLViewName}.* from oxobject2selectlist join {$sSLViewName} on $sSLViewName.oxid=oxobject2selectlist.oxselnid
+                   where oxobject2selectlist.oxobjectid=%s order by oxobject2selectlist.oxsort";
+
+            if ( ( $iLimit = (int) $iLimit ) ) {
+                $sQ .= " limit $iLimit ";
+            }
+
+            // vat value for price
+            $dVat = 0;
+            if ( ( $oPrice = $this->getPrice() ) != null ) {
+                $dVat = $oPrice->getVat();
+            }
+
+            // all selectlists this article has
+            $oList = oxNew( 'oxlist' );
+            $oList->init( 'oxselectlist' );
+            $oList->getBaseObject()->setVat( $dVat );
+            $oList->selectString( sprintf( $sQ, $oDb->quote( $this->getId() ) ) );
+
+            //#1104S if this is variant and it has no selectlists, trying with parent
+            if ( $oList->count() == 0 && $this->oxarticles__oxparentid->value ) {
+                $oList->selectString( sprintf( $sQ, $oDb->quote( $this->oxarticles__oxparentid->value ) ) );
+            }
+
+            self::$_aSelections[$sId] = $oList->count() ? $oList : false;
+        }
+
+        if ( self::$_aSelections[$sId] ) {
+            // marking active from filter
+            $aFilter = ( $aFilter === null ) ? oxConfig::getParameter( "sel" ) : $aFilter;
+            if ( $aFilter ) {
+                $iSelIdx = 0;
+                foreach ( self::$_aSelections[$sId] as $oSelection ) {
+                    if ( isset( $aFilter[$iSelIdx] ) ) {
+                        $oSelection->setActiveSelectionByIndex( $aFilter[$iSelIdx] );
+                    }
+                    $iSelIdx++;
+                }
+            }
+        }
+
+        return self::$_aSelections[$sId];
     }
 
     /**

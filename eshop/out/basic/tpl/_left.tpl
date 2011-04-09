@@ -4,7 +4,7 @@
         <p>
             [{ $oViewConf->getHiddenSid() }]
             <input type="hidden" name="cl" value="search">
-            <input type="text" name="searchparam" value="[{$oView->getSearchParamForHtml()}]" size="21" id="f.search.param" class="txt">
+            <input type="text" name="searchparam" value="[{$oView->getSearchParamForHtml()}]" size="21" id="f.search.param" name="search" class="txt">
 
             [{if $oView->getSearchCatTree() }]
             <select id="test_searchCategorySelect" class="search_input" name="searchcnid" [{if $oViewConf->isAutoSearchOnCat() }]onchange="oxid.search('f.search','f.search.param');"[{/if}]>

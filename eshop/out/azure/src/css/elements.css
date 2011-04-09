@@ -258,11 +258,11 @@
     text-shadow: 0px -1px 1px #652b00;
 }
 
-.specBox .price {
-    /*visibility: hidden;*/
+.specBox .price, .specBox .price .button{
+    visibility: hidden;
 }
 
-.specBox:hover .price, .specBoxTitles a.title:hover .specBox .price {
+.specBox:hover .price, .specBox:hover .price .button, .specBoxTitles a.title:hover .specBox .price {
     visibility: visible;
 }
 
@@ -309,9 +309,15 @@
 .specBoxInfo .price {
     position: absolute;
     bottom: 0;
-    padding: 0 10px;
+    padding: 25px 10px 0 10px;
+    height: 51px;
+    width: 167px;
+    background:transparent url(../bg/fx-grad-darkblue-spiked.png) top center no-repeat;
+}
+
+.specBoxInfo .price.tight {
+    padding-top: 20px;
     height: 56px;
-    width: 170px;
 }
 
 .specBoxInfo .priceValue, .specBoxInfo .priceValue a {
@@ -320,6 +326,45 @@
     text-decoration: none;
     font-size: 14px;
     font-weight: 700;
+}
+
+.specBoxInfo .button{
+    color:#fff;
+    text-shadow:0 -1px 0px #8c4600;
+    border:1px solid #fff;
+    background:transparent;
+
+    display: block;
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    padding:1px 10px;
+    visibility: hidden;
+    text-decoration:none;
+    font-size: 10px;
+    font-weight: 100;
+}
+
+.specBoxInfo .tight .button{
+    bottom: 5px;
+}
+.specBoxInfo .priceOld{
+    font-size: 11px;
+    color:#fff;
+    text-shadow: 0px -1px 1px #000;
+}
+
+.specBoxInfo .pricePerUnit{
+    font-size: 8px;
+    color:#fff;
+    line-height: 9px;
+    display:block;
+    margin-top:-1px;
+    text-shadow: 0px -1px 1px #000;
+}
+
+.specBoxInfo .price:hover .button{
+    background:#ec6105;
 }
 
 .specCatBox .viewAllHover {
@@ -361,8 +406,7 @@
     border: none;
 }
 
-.textbox, input[type =
-"text"] {
+.textbox, input[type="text"] {
     border: 1px solid #8c8989;
     background: #fff;
     padding: 1px 5px;
@@ -670,12 +714,6 @@ button {
     text-transform: uppercase;
 }
 
-
-a.submitButton {
-    height: 21px;
-    font-weight: bold;
-}
-
 .largeButton {
     font-size: 11px;
     text-transform: uppercase;
@@ -706,15 +744,16 @@ div.lineBox span.title {
 }
 
 .submitButton:hover {
-    line-height: 17px;
     text-decoration: none;
     cursor:pointer;
     text-shadow: 0px -1px 0px #aa6826;
 }
 
+
 a.submitButton {
     color: #fff;
     padding: 2px 17px;
+    font-weight: bold;
 }
 
 .textButton {
@@ -1075,7 +1114,8 @@ a.submitButton {
     width: 122px;
     padding-left: 4px;
     color: #b4b8b8;
-    /*background: url(../../img/search-icon.png) no-repeat 100% 3px;*/
+    float:left;
+    margin:2px 3px 0 0;
 }
 
 .searchBox .searchSubmit {
@@ -1083,6 +1123,8 @@ a.submitButton {
     border: none;
     cursor: pointer;
     width: 20px;
+    height:20px;
+    float:left;
 }
 
 .searchBox .textbox:focus {
@@ -1231,6 +1273,19 @@ a.readMore:hover {
 .tagError {
  display: none;
 }
+
+a.tagText{
+    vertical-align:middle;
+    display:inline-block;
+    line-height:12px;
+
+}
+a.tagText img{
+    margin-right:3px;
+    vertical-align:top;
+
+}
+
 .gridView,
 .infogridView {
     margin: 0;
@@ -1253,6 +1308,7 @@ a.readMore:hover {
     height: 30px;
     padding:5px 10px;
     color:#29373c;
+    line-height:15px;
     background:#eee;
     text-decoration:none;
     text-shadow: 0 1px 1px #fff;
@@ -1272,7 +1328,7 @@ a.readMore:hover {
 
 .gridView li:hover .titleBlock{
     color:#fff;
-    text-shadow: 0px -1px 1px #652b00;
+    text-shadow: 0px -1px 0px #bf5001;
     background:transparent url(../bg/fx-grad-darkblue.png) bottom center no-repeat;
 }
 
@@ -1288,7 +1344,19 @@ a.readMore:hover {
     left:0;
     padding:5px 10px;
     background:#fff;
+    font-size:14px;
 }
+
+.gridView li .priceBlock .priceOld{
+    font-size: 10px;
+}
+
+.gridView li .priceBlock .pricePerUnit{
+    font-size: 9px;
+    line-height: 9px;
+    display:block;
+}
+
 .gridView li .priceBlock .button{
     display: block;
     position: absolute;
@@ -1297,19 +1365,21 @@ a.readMore:hover {
     padding:1px 10px;
     visibility: hidden;
     text-decoration:none;
+    text-transform: uppercase;
+    font-size: 10px;
 }
 .gridView li:hover .priceBlock{
     height: 60px;
     padding-top:30px;
     color:#fff;
-    text-shadow:0 -1px 1px #397F90;
+    text-shadow: 0px -1px 1px #000;
 
     background:transparent url(../bg/fx-grad-darkblue-spiked.png) top center no-repeat;
 }
 .gridView li:hover .priceBlock .button{
     visibility: visible;
     color:#fff;
-    text-shadow:0 -1px 1px #397F90;
+    text-shadow:0 -1px 0px #8c4600;
     border:1px solid #fff;
     background:transparent;
 }
@@ -1387,7 +1457,7 @@ a.readMore:hover {
 }
 
 .infogridView .titleBox,
-.infogridView .variantBox,
+.infogridView .selectorsBox,
 .infogridView .buttonBox,
 .infogridView .priceBox {
     background: none;
@@ -1399,8 +1469,8 @@ a.readMore:hover {
     height: 40px;
 }
 
-.infogridView .variantBox {
-    height: 40px;
+.infogridView .selectorsBox {
+    height: 35px;
     padding-left: 10px;
 }
 
@@ -2115,6 +2185,7 @@ a.next {
 .wrapping .areabox {
     width: 646px;
     margin-bottom: 10px;
+    background:#fff;
 }
 
 .wrappingComment label {
@@ -2351,6 +2422,10 @@ h3.section button {
     height:25px;
 }
 
+.social div.socialButton {
+    float: left;
+}
+
 .social label {
     display: block;
     text-transform: none;
@@ -2394,9 +2469,13 @@ a.fb_button_simple {
     border-bottom: 0;
 }
 
+.detailsRelated {
+    clear:both;
+    padding-top:20px;
+}
+
 .detailsInfo {
     position: relative;
-    height:321px;
 }
 
 .detailsInfo .picture {
@@ -2405,6 +2484,15 @@ a.fb_button_simple {
     text-align: center;
     line-height: 340px;
     height: 340px;
+}
+
+.detailsInfo .picture a {
+    width: 380px;
+    float: left;
+    text-align: center;
+    line-height: 340px;
+    height: 340px;
+    overflow: hidden;
 }
 
 .detailsInfo .picture img {
@@ -2532,12 +2620,14 @@ a.fb_button_simple {
 .otherPictures ul {
     margin: 0 0 20px 0;
     padding: 0;
+    overflow:hidden;
 }
 
 .otherPictures li,
 .otherPictures a {
     list-style: none;
     padding: 0;
+    float: left;
 }
 
 .otherPictures a {
@@ -3681,8 +3771,12 @@ a.sliderHover {
 
 .compareItem {
     width: 190px;
-    height: 300px;
+    height: 380px;
     position: relative;
+}
+
+.compareWide .compareItem {
+    width: 238px;
 }
 
 .compareItem .tobasket {
@@ -3691,17 +3785,32 @@ a.sliderHover {
 }
 
 .compareItem .oldPrice {
-    font-size: 12px;
+    font-size: 11px;
     line-height: 14px;
+}
+
+.compareItem .variants{
+    padding-top:15px;
+}
+
+.compareItem .variants select{
+    margin:5px 0 10px 0;
+    display: block;
 }
 
 .compareItem .picture {
     text-align: center;
+    display:block;
+    width:190px;
+    height:150px;
+    overflow:hidden;
+    margin-bottom:7px;
 }
 
 .compareItem .title {
     display: block;
     font-size: 18px;
+    line-height:18px;
     font-weight: 400;
     padding-bottom: 3px;
 }
@@ -3769,36 +3878,40 @@ a.sliderHover {
 
 /* article box */
 li.articleImage{
-    height: 100px;
+    height: 110px;
 }
 
 .featuredList a.articleBoxImage {
-    height: 87px;
-    min-width:148px;
+    height: 97px;
+    line-height:97px;
+    width:148px;
     background: #fff;
     text-align: center;
     display: block;
-    vertical-align: middle;
+}
+
+.featuredList a.articleBoxImage img{
+    vertical-align:middle;
 }
 
 /* MD Variant Selects in details */
-.variantSelecors {
+.selectorsBox {
     clear:both;
     background: none;
     padding: 10px 10px 0px 0px;
     font-size: 11px;
 }
 
-.variantSelecors .dropDown {
+.selectorsBox .dropDown {
     margin-bottom: 10px;
     min-width: 200px;
 }
 
-.variantSelecors .dropDown li.disabled a {
+.selectorsBox .dropDown li.disabled a {
     color: #b4b8b8;
 }
 
-.variantSelecors p.underlined {
+.selectorsBox p.underlined {
     border-bottom: 1px solid #29373c;
 }
 
@@ -3829,22 +3942,22 @@ li.articleImage{
 }
 
 /* MD Variant Selects in infoGrid */
-.listDetails .variantSelecors {
+.listDetails .selectorsBox {
     background: none;
-    padding: 10px 10px 0px 0px;
+    padding: 10px 10px 0px 5px;
     font-size: 11px;
 }
 
-.listDetails .variantSelecors .dropDown {
+.listDetails .selectorsBox .dropDown {
     margin-bottom: 10px;
     min-width: 150px;
 }
 
-.listDetails .variantSelecors .dropDown li.disabled a {
+.listDetails .selectorsBox .dropDown li.disabled a {
     color: #b4b8b8;
 }
 
-.listDetails .variantSelecors p.underlined {
+.listDetails .selectorsBox p.underlined {
     border-bottom: 1px solid #29373c;
 }
 
@@ -3854,22 +3967,22 @@ li.articleImage{
 }
 
 /* MD Variant Selects for line */
-.infoBox .variantSelecors {
+.infoBox .selectorsBox {
     background: none;
     padding: 10px 10px 0px 0px;
     font-size: 11px;
 }
 
-.infoBox .variantSelecors .dropDown {
+.infoBox .selectorsBox .dropDown {
     margin-bottom: 10px;
     min-width: 200px;
 }
 
-.infoBox .variantSelecors .dropDown li.disabled a {
+.infoBox .selectorsBox .dropDown li.disabled a {
     color: #b4b8b8;
 }
 
-.infoBox .variantSelecors p.underlined {
+.infoBox .selectorsBox p.underlined {
     border-bottom: 1px solid #29373c;
 }
 
@@ -3909,5 +4022,6 @@ button[disabled].submitButton, button[disabled].submitButton:hover  {
 /* shop lupe */
 
 .shoplupe {
+    padding-top:15px;
     text-align: center;
 }

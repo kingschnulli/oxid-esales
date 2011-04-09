@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_countries.php 34284 2011-04-06 07:19:12Z vilma $
+ * @version   SVN: $Id: shop_countries.php 34406 2011-04-07 16:56:44Z vilma $
  */
 
 //shop location countries - used when loading dynamic content from oxid servers
@@ -41,6 +41,12 @@ $aLocationCountries['de'] = array (
 
 $aCountries['en'] = array (
 
+"a7c40f6320aeb2ec2.72885259" => "Austria",
+"a7c40f63272a57296.32117580" => "France",
+"a7c40f631fc920687.20179984" => "Germany",
+"a7c40f632a0804ab5.18804076" => "United Kingdom",
+"8f241f11096877ac0.98748826" => "United States",
+"a7c40f6321c6f6109.43859248" => "Switzerland",
 "8f241f11095306451.36998225" => "Afghanistan",
 "8f241f110953265a5.25286134" => "Albania",
 "8f241f1109533b943.50287900" => "Algeria",
@@ -54,7 +60,6 @@ $aCountries['en'] = array (
 "8f241f110953e7993.88180360" => "Armenia",
 "8f241f110953facc6.31621036" => "Aruba",
 "8f241f11095410f38.37165361" => "Australia",
-"a7c40f6320aeb2ec2.72885259" => "Austria",
 "8f241f1109543cf47.17877015" => "Azerbaijan",
 "8f241f11095451379.72078871" => "Bahamas",
 "8f241f110954662e3.27051654" => "Bahrain",
@@ -113,14 +118,12 @@ $aCountries['en'] = array (
 "8f241f110958f7ba4.96908065" => "Faroe Islands",
 "8f241f1109590d226.07938729" => "Fiji",
 "a7c40f63293c19d65.37472814" => "Finland",
-"a7c40f63272a57296.32117580" => "France",
 "8f241f1109594fcb1.79441780" => "French Guiana",
 "8f241f110959636f5.71476354" => "French Polynesia",
 "8f241f110959784a3.34264829" => "French Southern Territories",
 "8f241f11095994cb6.59353392" => "Gabon",
 "8f241f110959ace77.17379319" => "Gambia",
 "8f241f110959c2341.01830199" => "Georgia",
-"a7c40f631fc920687.20179984" => "Germany",
 "8f241f110959e96b3.05752152" => "Ghana",
 "8f241f110959fdde0.68919405" => "Gibraltar",
 "a7c40f633114e8fc6.25257477" => "Greece",
@@ -253,7 +256,6 @@ $aCountries['en'] = array (
 "8f241f110965eb7b7.26149742" => "Svalbard and Jan Mayen",
 "8f241f1109660c113.62780718" => "Swaziland",
 "a7c40f632848c5217.53322339" => "Sweden",
-"a7c40f6321c6f6109.43859248" => "Switzerland",
 "8f241f1109666b7f3.81435898" => "Syria",
 "8f241f11096687ec7.58824735" => "Taiwan, Province of China",
 "8f241f110966a54d1.43798997" => "Tajikistan",
@@ -272,8 +274,6 @@ $aCountries['en'] = array (
 "8f241f11096823019.47846368" => "Uganda",
 "8f241f110968391d2.37199812" => "Ukraine",
 "8f241f1109684bf15.63071279" => "United Arab Emirates",
-"a7c40f632a0804ab5.18804076" => "United Kingdom",
-"8f241f11096877ac0.98748826" => "United States",
 "8f241f11096894977.41239553" => "United States Minor Outlying Islands",
 "8f241f110968a7cc9.56710143" => "Uruguay",
 "8f241f110968bec45.44161857" => "Uzbekistan",
@@ -292,6 +292,12 @@ $aCountries['en'] = array (
 
 $aCountries['de'] = array (
 
+"a7c40f6320aeb2ec2.72885259" => "Österreich",
+"a7c40f63272a57296.32117580" => "Frankreich",
+"a7c40f631fc920687.20179984" => "Deutschland",
+"a7c40f6321c6f6109.43859248" => "Schweiz",
+"a7c40f632a0804ab5.18804076" => "Vereinigtes Königreich",
+"8f241f11096877ac0.98748826" => "Vereinigte Staaten von Amerika",
 "8f241f11095306451.36998225" => "Afghanistan",
 "8f241f110953265a5.25286134" => "Albanien",
 "8f241f1109533b943.50287900" => "Algerien",
@@ -333,7 +339,6 @@ $aCountries['de'] = array (
 "8f241f11095746a92.94878441" => "Cookinseln",
 "8f241f1109575d708.20084150" => "Costa Rica",
 "8f241f11095771f76.87904122" => "Cote d´Ivoire",
-"a7c40f631fc920687.20179984" => "Deutschland",
 "8f241f11095811ea5.84717844" => "Dominica",
 "8f241f11095825bf2.61063355" => "Dominikanische Republik",
 "8f241f110957fd356.02918645" => "Dschibuti",
@@ -345,7 +350,6 @@ $aCountries['de'] = array (
 "8f241f110958e2cc3.90770249" => "Falklandinseln (Malwinen)",
 "8f241f1109590d226.07938729" => "Fidschi",
 "a7c40f63293c19d65.37472814" => "Finnland",
-"a7c40f63272a57296.32117580" => "Frankreich",
 "8f241f1109594fcb1.79441780" => "Französisch Guiana",
 "8f241f110959636f5.71476354" => "Französisch-Polynesien",
 "8f241f110959784a3.34264829" => "Französische Südgebiete",
@@ -478,7 +482,6 @@ $aCountries['de'] = array (
 "8f241f1109639b8c4.57484984" => "Sao Tome und Principe",
 "8f241f110963b9b20.41500709" => "Saudi-Arabien",
 "a7c40f632848c5217.53322339" => "Schweden",
-"a7c40f6321c6f6109.43859248" => "Schweiz",
 "8f241f110963d9962.36307144" => "Senegal",
 "8f241f110963f98d8.68428379" => "Serbien",
 "8f241f11096418496.77253079" => "Seychellen",
@@ -525,8 +528,6 @@ $aCountries['de'] = array (
 "8f241f110968d3f03.13630334" => "Vanuatu",
 "8f241f11096902d92.14742486" => "Venezuela",
 "8f241f1109684bf15.63071279" => "Vereinigte Arabische Emirate",
-"8f241f11096877ac0.98748826" => "Vereinigte Staaten von Amerika",
-"a7c40f632a0804ab5.18804076" => "Vereinigtes Königreich",
 "8f241f11096919d00.92534927" => "Vietnam",
 "8f241f110969598c8.76966113" => "Wallis und Futuna",
 "8f241f110956df6b2.52283428" => "Weihnachtsinsel",
@@ -538,5 +539,4 @@ $aCountries['de'] = array (
 "8f241f11095861fb7.55278256" => "Ägypten",
 "8f241f1109588d077.74284490" => "Äquatorialguinea",
 "8f241f110958caf67.08982313" => "Äthiopien",
-"a7c40f6320aeb2ec2.72885259" => "Österreich",
 );

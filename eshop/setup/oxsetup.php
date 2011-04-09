@@ -863,7 +863,7 @@ class OxSetupDb extends oxSetupCore
         $sLocationLang  = isset( $aParams["location_lang"] ) ? $aParams["location_lang"] : $oSession->getSessionParam( 'location_lang' );
         $blCheckForUpdates = isset( $aParams["check_for_updates"] ) ? $aParams["check_for_updates"] : $oSession->getSessionParam( 'check_for_updates' );
         $sCountryLang  = isset( $aParams["country_lang"] ) ? $aParams["country_lang"] : $oSession->getSessionParam( 'country_lang' );
-
+        $sAdminLang = isset( $aParams["setup_lang"] ) ? $aParams["setup_lang"] :  $oSession->getSessionParam('setup_lang');
         $sBaseShopId = $this->getInstance( "oxSetup" )->getShopId();
 
         $this->execSql( "update oxcountry set oxactive = '0'" );
@@ -872,6 +872,7 @@ class OxSetupDb extends oxSetupCore
         $this->execSql( "delete from oxconfig where oxvarname = 'blLoadDynContents'" );
         $this->execSql( "delete from oxconfig where oxvarname = 'sShopCountry'" );
         $this->execSql( "delete from oxconfig where oxvarname = 'blCheckForUpdates'" );
+       // $this->execSql( "delete from oxconfig where oxvarname = 'aLanguageParams'" );
 
         $sID1 = $oUtils->generateUid();
         $this->execSql( "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
@@ -884,6 +885,26 @@ class OxSetupDb extends oxSetupCore
         $sID3 = $oUtils->generateUid();
         $this->execSql( "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
                                  values('$sID3', '$sBaseShopId', 'blCheckForUpdates', 'bool', ENCODE( '$blCheckForUpdates', '".$oConfk->sConfigKey."'))" );
+
+        //set only one active language
+        $aRes = $this->execSql( "select oxvarname, oxvartype, DECODE( oxvarvalue, '".$oConfk->sConfigKey."') AS oxvarvalue from oxconfig where oxvarname='aLanguageParams'" );
+        if ($aRes) {
+            if ( $aRow = mysql_fetch_assoc( $aRes ) ) {
+                if ( $aRow['oxvartype'] == 'arr' || $aRow['oxvartype'] == 'aarr' ) {
+                    $aRow['oxvarvalue'] = unserialize( $aRow['oxvarvalue'] );
+                }
+                $aLanguageParams = $aRow['oxvarvalue'];
+            }
+            foreach ($aLanguageParams as $sKey => $aLang) {
+                $aLanguageParams[$sKey]["active"] = "0";
+            }
+            $aLanguageParams[$sAdminLang]["active"] = "1";
+
+            $sValue = serialize( $aLanguageParams );
+            $sID4 = $oUtils->generateUid();
+            $this->execSql( "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue)
+                                     values('$sID4', '$sBaseShopId', 'aLanguageParams', 'aarr', ENCODE( '$sValue', '".$oConfk->sConfigKey."'))" );
+        }
     }
 
 

@@ -9,19 +9,29 @@
         <img src="[{$_product->getThumbnailUrl()}]" alt="[{ $sBargainArtTitle|strip_tags }]" class="picture">
     [{/capture}]
     [{capture name="bargainPrice"}]
-          <div class="price hoverBox" id="priceBargain_[{$smarty.foreach.bargainList.iteration}]">
+          <div class="price [{if $_product->getPricePerUnit()}]tight[{/if}]" id="priceBargain_[{$smarty.foreach.bargainList.iteration}]">
               <div class="hoverInfo">
-                  [{oxhasrights ident="SHOWARTICLEPRICE"}]
+              [{oxhasrights ident="SHOWARTICLEPRICE"}]
+                  [{if $_product->getFTPrice()}]
+                  <span class="priceOld">
+                      [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REDUCEDFROM" }] <del>[{ $_product->getFTPrice()}] [{ $currency->sign}]</del>
+                  </span>
+                  [{/if}]
                   [{if $_product->getFPrice()}]
                     [{assign var="currency" value=$oView->getActCurrency() }]
-                       <span class="priceValue">[{ $_product->getFPrice() }] [{ $currency->sign}] [{ if !( $_product->hasMdVariants() || $_product->getDispSelList() || $_product->getVariantList() ) }]*[{/if}]</span>
+                       <span class="priceValue">[{ $_product->getFPrice() }] [{ $currency->sign}] [{ if !( $_product->hasMdVariants() || ($oViewConf->showSelectListsInList()&&$_product->getSelections(1)) || $_product->getVariantList() ) }]*[{/if}]</span>
                   [{/if}]
-                    [{ if !( $_product->hasMdVariants() || $_product->getDispSelList() || $_product->getVariantList() ) }]
-                        <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=start" params="fnc=tobasket&amp;aid=`$_product->oxarticles__oxid->value`&amp;am=1" }]" class="toCart" title="[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]">[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]</a>
+                  [{if $_product->getPricePerUnit()}]
+                  <span class="pricePerUnit">
+                      [{$_product->oxarticles__oxunitquantity->value}] [{$_product->oxarticles__oxunitname->value}] | [{$_product->getPricePerUnit()}] [{ $currency->sign}]/[{$_product->oxarticles__oxunitname->value}]
+                  </span>
+                  [{/if}]
+                    [{ if !( $_product->hasMdVariants() || ($oViewConf->showSelectListsInList() && $_product->getSelections(1)) || $_product->getVariantList() ) }]
+                        <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=start" params="fnc=tobasket&amp;aid=`$_product->oxarticles__oxid->value`&amp;am=1" }]" class="toCart button" title="[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]">[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]</a>
                     [{else}]
-                        <a href="[{ $_product->getLink() }]" class="toCart">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>
+                        <a href="[{ $_product->getLink() }]" class="toCart button">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>
                     [{/if}]
-                    [{/oxhasrights}]
+                [{/oxhasrights}]
                 </div>
             </div>
     [{/capture}]

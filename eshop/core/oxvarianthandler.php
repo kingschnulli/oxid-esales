@@ -327,17 +327,20 @@ class oxVariantHandler extends oxSuperCfg
         // filling selections
         foreach ( $oVariantList as $oVariant ) {
 
-            $aNames = explode( $this->_sMdSeparator, $oVariant->oxarticles__oxvarselect->getRawValue() );
+            $aNames = $this->_getSelections( $oVariant->oxarticles__oxvarselect->getRawValue() );
             $blActive = ( $sActVariantId === $oVariant->getId() ) ? true : false;
             for ( $i = 0; $i < $iVarSelCnt; $i++ ) {
-                $sName = isset( $aNames[$i] ) ? $aNames[$i] : '';
-                $sHash = md5( trim( $sName ) );
+                $sName = isset( $aNames[$i] ) ? trim($aNames[$i]) : false;
+                if ($sName) {
+                    $sHash = md5($sName );
 
-                // filling up filter
-                if ( $blActive && $sName ) {
-                    $aFilter[$i] = $sHash;
+                    // filling up filter
+                    if ( $blActive ) {
+                        $aFilter[$i] = $sHash;
+                    }
+
+                    $aSelections[$oVariant->getId()][$i] = array( 'name' => $sName, 'disabled' => null, 'active' => false, 'hash' => $sHash );
                 }
-                $aSelections[$oVariant->getId()][] = array( 'name' => $sName, 'disabled' => null, 'active' => false, 'hash' => $sHash );
             }
         }
 
@@ -375,37 +378,48 @@ class oxVariantHandler extends oxSuperCfg
      */
     protected function _applyVariantSelectionsFilter( $aSelections, $aFilter )
     {
+        $iMaxActiveCount = 0;
+        $sMostSuitableVariantId = null;
+        $blPerfectFit = false;
         // applying filters, disabling/activating items
         if ( ( $aFilter = $this->_cleanFilter( $aFilter ) ) ) {
+            foreach ( $aSelections as $sVariantId => &$aLineSelections ) {
+                $iActive = 0;
+                foreach ( $aFilter as $iKey => $sVal ) {
 
-            $iSelCnt = count( current( $aSelections ) );
-            foreach ( $aFilter as $iKey => $sVal ) {
-
-                foreach ( $aSelections as & $aLineSelections ) {
                     if ( strcmp( $aLineSelections[$iKey]['hash'], $sVal ) === 0 ) {
                         $aLineSelections[$iKey]['active'] = true;
-                        for ( $i = 0; $i < $iSelCnt; $i++ ) {
-                            $aLineSelections[$i]['disabled'] = false;
+                        $iActive++;
+                        foreach ($aLineSelections as $iOtherKey => &$aLineOtherVariant) {
+                            if ( $iKey != $iOtherKey ) {
+                                $aLineOtherVariant['disabled'] = false;
+                            }
                         }
+                        unset($aLineOtherVariant);
                     } else {
-                        for ( $i = 0; $i < $iSelCnt; $i++ ) {
-                            if ( $i != $iKey ) {
-                                $aLineSelections[$i]['disabled'] = true;
+                        foreach ($aLineSelections as $iOtherKey => &$aLineOtherVariant) {
+                            if ( $iKey != $iOtherKey ) {
+                                $aLineOtherVariant['disabled'] = true;
                             }
                         }
                     }
                 }
 
-                //
+                $blFitsAll = $iActive && (count($aLineSelections) == $iActive) && (count($aFilter) == $iActive);
+                if (($iActive > $iMaxActiveCount) || (!$blPerfectFit && $blFitsAll)) {
+                    $blPerfectFit = $blFitsAll;
+                    $sMostSuitableVariantId = $sVariantId;
+                    $iMaxActiveCount = $iActive;
+                }
+
                 unset( $aLineSelections );
             }
         }
-
-        return $aSelections;
+        return array($aSelections, $sMostSuitableVariantId, $blPerfectFit);
     }
 
     /**
-     * Builds variant selections list - array containing oxVariantSelectionList
+     * Builds variant selections list - array containing oxVariantSelectList
      *
      * @param array $aVarSelects variant selection titles
      * @param array $aSelections variant selections
@@ -416,7 +430,7 @@ class oxVariantHandler extends oxSuperCfg
     {
         // creating selection lists
         foreach ( $aVarSelects as $iKey => $sLabel ) {
-            $aVariantSelections[$iKey] = oxNew( "oxVariantSelectionList", $sLabel, $iKey );
+            $aVariantSelections[$iKey] = oxNew( "oxVariantSelectList", $sLabel, $iKey );
         }
 
         // building variant selections
@@ -430,34 +444,67 @@ class oxVariantHandler extends oxSuperCfg
     }
 
     /**
+     * In case multidimentional variants ON explodes title by _sMdSeparator
+     * and returns array, else - returns array containing title
+     *
+     * @param string $sTitle title to process
+     *
+     * @return array
+     */
+    protected function _getSelections( $sTitle )
+    {
+        if ( $this->getConfig()->getConfigParam( 'blUseMultidimensionVariants' ) ) {
+            $aSelections = explode( $this->_sMdSeparator, $sTitle );
+        } else {
+            $aSelections = array( $sTitle );
+        }
+
+        return $aSelections;
+    }
+
+    /**
      * Builds variant selection list
      *
      * @param string        $sVarName      product (parent product) oxvarname value
      * @param oxarticlelist $oVariantList  variant list
      * @param array         $aFilter       variant filter
      * @param string        $sActVariantId active variant id
+     * @param int           $iLimit        limit variant lists count (if non zero, return limited number of multidimensional variant selections)
      *
      * @return Ambigous false | array
      */
-    public function buildVariantSelections( $sVarName, $oVariantList, $aFilter, $sActVariantId )
+    public function buildVariantSelections( $sVarName, $oVariantList, $aFilter, $sActVariantId, $iLimit = 0 )
     {
         $aReturn = false;
 
         // assigning variants
-        $aVarSelects = explode( $this->_sMdSeparator, $sVarName );
+        $aVarSelects = $this->_getSelections( $sVarName );
+        if ($iLimit) {
+            $aVarSelects = array_slice($aVarSelects, 0, $iLimit);
+        }
         if ( ( $iVarSelCnt = count( $aVarSelects ) ) ) {
 
             // filling selections
             $aRawVariantSelections = $this->_fillVariantSelections( $oVariantList, $iVarSelCnt, $aFilter, $sActVariantId );
 
             // applying filters, disabling/activating items
-            $aSelections = $this->_applyVariantSelectionsFilter( $aRawVariantSelections, $aFilter );
+            list($aRawVariantSelections, $sActVariantId, $blPerfectFit) = $this->_applyVariantSelectionsFilter( $aRawVariantSelections, $aFilter );
 
             // creating selection lists
-            $aVariantSelections = $this->_buildVariantSelectionsList( $aVarSelects, $aSelections );
+            $aVariantSelections = $this->_buildVariantSelectionsList( $aVarSelects, $aRawVariantSelections );
 
-            $aReturn = array( 'selections' => $aVariantSelections, 'rawselections' => $aRawVariantSelections );
+            $oCurrentVariant = null;
+            if ($sActVariantId) {
+                $oCurrentVariant = $oVariantList[$sActVariantId];
+            }
+
+            return array(
+                'selections' => $aVariantSelections,
+                'rawselections' => $aRawVariantSelections,
+                'oActiveVariant' => $oCurrentVariant,
+                'blPerfectFit' => $blPerfectFit
+            );
         }
-        return $aReturn;
+        return false;
     }
 }

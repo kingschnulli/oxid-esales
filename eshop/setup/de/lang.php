@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34284 2011-04-06 07:19:12Z vilma $
+ * @version   SVN: $Id: lang.php 34394 2011-04-07 14:18:26Z ralf.trapp $
  */
 
 $aLang = array(
@@ -188,10 +188,11 @@ $aLang = array(
 'SETUP_DIR_DELETE_NOTICE'                       => "WICHTIG: Bitte löschen Sie Ihr Setup Verzeichnis falls dieses nicht bereits automatisch entfernt wurde!",
 'SETUP_CONFIG_PERMISSIONS'                      => "WICHTIG: Aus Sicherheitsgründen setzen Sie Ihre config.inc.php Datei auf read-only-Modus!",
 
-'SELECT_SETUP_LANG'                             => "Sprache für die Installation",
-'SELECT_COUNTRY_LANG'                           => "Ihr Standort",
-'SELECT_SELIVERY_COUNTRY'                       => "[tr] Main delivery country",
-'SELECT_DELIVERY_COUNTRY_HINT'                  => "[tr] You can  add more languages/countries simply by activating them in admin",
+'SELECT_SETUP_LANG'                             => "Sprache für Installation und Shop",
+'SELECT_SETUP_LANG_HINT'                        => ". Aktivieren Sie weitere Sprachen im Admin, falls gewünscht.",
+'SELECT_COUNTRY_LANG'                           => "Shop-Standort",
+'SELECT_SELIVERY_COUNTRY'                       => "Haupt Lieferland",
+'SELECT_DELIVERY_COUNTRY_HINT'                  => "Aktivieren Sie weitere Lieferländer im Admin, falls benötigt",
 'SELECT_SETUP_LANG_SUBMIT'                      => "Auswählen",
 'USE_DYNAMIC_PAGES'                             => "Um Ihren Geschäftserfolg zu vergrößern, laden Sie weitere Informationen vom OXID Server nach. <br>Mehr Informationen in unserern ",
 'PRIVACY_POLICY'                                => "Datenschutzerläuterungen",

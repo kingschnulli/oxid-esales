@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmTest.php 33309 2011-02-17 11:45:09Z linas.kukulskis $
+ * @version   SVN: $Id: pricealarmTest.php 34362 2011-04-07 11:44:14Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -107,21 +107,19 @@ class Unit_Views_pricealarmTest extends OxidTestCase
         $aParams["email"] = "goodemail@ladyGagaFans.lt";
         $aParams["aid"] = "_testArtId";
         $aParams["price"] = "10";
-        
+
         $aParams["mano"] = "101";
 
         modConfig::setParameter( "pa", $aParams );
         $oPriceAlarm->addme();
-        
+
         $this->assertEquals( 999, $oPriceAlarm->getNonPublicVar( "_iPriceAlarmStatus" ) );
 
         $sSql = "select * from oxpricealarm";
-        
+
         $oDb = oxDb::getDb( true );
         $aAlarm = $oDb->getRow( $sSql );
-        
-        print_r($aAlarm);
-        
+
         $this->assertEquals( $aParams["email"], $aAlarm["OXEMAIL"] );
         $this->assertEquals( $aParams["aid"], $aAlarm["OXARTID"] );
         $this->assertEquals( $aParams["price"], $aAlarm["OXPRICE"] );

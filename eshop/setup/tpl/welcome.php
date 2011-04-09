@@ -70,25 +70,29 @@ require "_header.php"; ?>
     <tr>
         <td style="padding-top: 5px;"><?php $this->getText('SELECT_SELIVERY_COUNTRY'); ?>: </td>
         <td>
-            <select name="country_lang" style="font-size: 11px;">
-                <?php
-                    $aCountries   = $this->getViewParam( "aCountries" );
-                    $sSetupLang   = $this->getViewParam( "sSetupLang" );
-                    $sCountryLang = $this->getViewParam( "sCountryLang" );
+            <table cellpadding="0" cellspacing="0" border="0" height="29">
+                <tr>
+                    <td>
+                        <select name="country_lang" style="font-size: 11px;">
+                            <?php
+                                $aCountries   = $this->getViewParam( "aCountries" );
+                                $sSetupLang   = $this->getViewParam( "sSetupLang" );
+                                $sCountryLang = $this->getViewParam( "sCountryLang" );
 
-                    if ( isset( $aCountries[$sSetupLang] ) ) {
-                        foreach ( $aCountries[$sSetupLang] as $sKey => $sValue ) {
-                            $sSelected = ( $sCountryLang !== null && $sCountryLang == $sKey ) ? 'selected' : '';
-                            ?><option value="<?php echo $sKey; ?>" <?php echo $sSelected; ?>><?php echo $sValue; ?></option><?php
-                        }
-                    }
-                ?>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding-right: 3px;" colspan="2">
-            <?php $this->getText('SELECT_DELIVERY_COUNTRY_HINT'); ?>
+                                if ( isset( $aCountries[$sSetupLang] ) ) {
+                                    foreach ( $aCountries[$sSetupLang] as $sKey => $sValue ) {
+                                        $sSelected = ( $sCountryLang !== null && $sCountryLang == $sKey ) ? 'selected' : '';
+                                        ?><option value="<?php echo $sKey; ?>" <?php echo $sSelected; ?>><?php echo $sValue; ?></option><?php
+                                    }
+                                }
+                            ?>
+                        </select>
+                    </td>
+                    <td style="padding: 0px 5px;">
+                        <?php $this->getText('SELECT_DELIVERY_COUNTRY_HINT'); ?>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
     <input type="hidden" name="sid" value="<?php $this->getSid(); ?>">

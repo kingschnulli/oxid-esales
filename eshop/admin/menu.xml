@@ -31,7 +31,6 @@
                 <TAB id="tbcltheme_main" cl="theme_main" />
                 <TAB id="tbcltheme_config" cl="theme_config" />
             </SUBMENU>
-            <SUBMENU id="mxlooknfeel" cl="gui" />
             <SUBMENU id="mxlanguages" cl="language" list="language_list">
                 <TAB id="tbcllanguage_main" cl="language_main" />
                 <BTN id="language_new" />

@@ -27,7 +27,7 @@
  *
  * @package core
  */
-class oxVariantSelectionList
+class oxVariantSelectList implements oxISelectList
 {
     /**
      * Variant selection list label
@@ -49,7 +49,7 @@ class oxVariantSelectionList
 
     /**
      * Active variant selection object
-     * @var oxVariantSelection
+     * @var oxSelection
      */
     protected $_oActiveSelection = null;
 
@@ -94,7 +94,7 @@ class oxVariantSelectionList
 
             // creating new
             if ( !isset( $this->_aList[$sKey] ) ) {
-                $this->_aList[$sKey] = oxNew( "oxVariantSelection", $sName, $sValue, $blDisabled, $blActive );
+                $this->_aList[$sKey] = oxNew( "oxSelection", $sName, $sValue, $blDisabled, $blActive );
             } else {
 
                 // overriding states
@@ -117,7 +117,7 @@ class oxVariantSelectionList
     /**
      * Returns active selection object
      *
-     * @return oxVariantSelection
+     * @return oxSelection
      */
     public function getActiveSelection()
     {
@@ -125,33 +125,12 @@ class oxVariantSelectionList
     }
 
     /**
-     * Returns array of oxVariantSelections
+     * Returns array of oxSelection's
      *
      * @return array
      */
     public function getSelections()
     {
         return $this->_aList;
-    }
-
-    /**
-     * Checks if current selection combination allows variabt to be buyable
-     *
-     * @param bool $blAllow previous state
-     *
-     * @return bool
-     */
-    public function allowsToBuy( $blAllow )
-    {
-        if ( $blAllow ) {
-            if ( $this->getActiveSelection() ) {
-                $blAllow = true;
-            } else {
-                foreach ( $this->getSelections() as $oSelection ) {
-                    $blAllow = $blAllow & $oSelection->isDisabled();
-                }
-            }
-        }
-        return $blAllow;
     }
 }

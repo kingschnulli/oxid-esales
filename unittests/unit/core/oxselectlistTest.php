@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxselectlistTest.php 27601 2010-05-06 12:53:09Z vilma $
+ * @version   SVN: $Id: oxselectlistTest.php 34391 2011-04-07 14:07:05Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -151,4 +151,95 @@ class Unit_Core_oxselectlistTest extends OxidTestCase
         $this->assertEquals( "test3, 10 +14,33 CHF", $aSelList[2]->name );
     }
 
+    /**
+     * oxSelectList::setActiveSelectionByIndex() test case
+     *
+     * @return null
+     */
+    public function testSetActiveSelectionByIndex()
+    {
+        $oSel0 = $this->getMock( "oxStdClass", array( "setActiveState" ) );
+        $oSel0->expects( $this->once() )->method( 'setActiveState' )->with( $this->equalTo( false ) );
+
+        $oSel1 = $this->getMock( "oxStdClass", array( "setActiveState" ) );
+        $oSel1->expects( $this->once() )->method( 'setActiveState' )->with( $this->equalTo( false ) );
+
+        $oSel2 = $this->getMock( "oxStdClass", array( "setActiveState" ) );
+        $oSel2->expects( $this->once() )->method( 'setActiveState' )->with( $this->equalTo( true ) );
+
+        $aSelections = array( $oSel0, $oSel1, $oSel2 );
+
+        $oSelectList = $this->getMock( "oxselectlist", array( "getSelections" ) );
+        $oSelectList->expects( $this->once() )->method( 'getSelections' )->will( $this->returnValue( $aSelections ) );
+        $oSelectList->setActiveSelectionByIndex( 2 );
+
+        $this->assertEquals( $oSel2, $oSelectList->getActiveSelection() );
+    }
+
+    /**
+     * oxSelectList::getActiveSelection() test case
+     *
+     * @return null
+     */
+    public function testGetActiveSelection()
+    {
+        $aSelections = array( "oxStdClass0", "oxStdClass1", "oxStdClass2" );
+
+        $oSelectList = $this->getMock( "oxselectlist", array( "getSelections" ) );
+        $oSelectList->expects( $this->once() )->method( 'getSelections' )->will( $this->returnValue( $aSelections ) );
+        $this->assertEquals( "oxStdClass0", $oSelectList->getActiveSelection() );
+    }
+
+    /**
+     * oxSelectList::getSelections() test case
+     *
+     * @return null
+     */
+    public function testGetSelections()
+    {
+        // valdesc is not set
+        $oSelectList = new oxselectlist();
+        $this->assertNull( $oSelectList->getSelections() );
+
+        modConfig::getInstance()->setParameter( 'cur', 2 );
+        $aSelections = array( new oxSelection( "test1, 10", 0, false, true ),
+                              new oxSelection( "test2, 10", 1, false, false ),
+                              new oxSelection( "test3, 10", 2, false, false ),
+                             );
+
+        // valdesc is set
+        $oSelectList = new oxselectlist();
+        $oSelectList->oxselectlist__oxvaldesc = new oxField( 'test1, 10!P!10__@@test2, 10!P!10__@@test3, 10!P!10__@@' );
+
+        $this->assertEquals( $aSelections, $oSelectList->getSelections() );
+    }
+
+    /**
+     * oxSelectList::getLabel() test case
+     *
+     * @return null
+     */
+    public function testGetLabel()
+    {
+        $oSelectList = new oxselectlist();
+        $oSelectList->oxselectlist__oxtitle = new oxField( "test" );
+        $this->assertEquals( "test", $oSelectList->getLabel() );
+
+    }
+
+    /**
+     * oxSelectList::setVat() & oxSelectList::getVat() test case
+     *
+     * @return null
+     */
+    public function testSetVatAndGetVat()
+    {
+        // no VAT set
+        $oSelectList = new oxselectlist();
+        $this->assertNull( $oSelectList->getVat() );
+
+        // setting and checking VAT
+        $oSelectList->setVat( 123 );
+        $this->assertEquals( 123, $oSelectList->getVat() );
+    }
 }

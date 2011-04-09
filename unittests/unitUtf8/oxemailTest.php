@@ -342,7 +342,10 @@ class UnitUtf8_oxemailTest extends OxidTestCase
     public function testSetSmtp()
     {
         // just forcing to connect to webserver..
-        $oEmail = new oxEmail();
+        $oEmail = $this->getMock('oxEmail', array('_isValidSmtpHost'));
+        $oEmail->expects($this->once())->method('_isValidSmtpHost')
+                ->with($this->equalTo('127.0.0.1'))
+                ->will($this->returnValue(true));
 
         $oEmail->setSmtp( $this->_oShop );
         $this->assertEquals( 'smtp', $oEmail->getMailer() );

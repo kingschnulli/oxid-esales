@@ -20,7 +20,7 @@
 [{/capture}]
 [{/if}]
 
-[{if $oView->getClassName() ne "details"}]
+[{if $oView->getClassName() ne "details"  && $oView->getClassName() ne "tags"}]
     [{if $oView->getTagCloudManager() }]
     [{capture append="oxidBlock_sidebar"}]
         [{include file="widget/sidebar/tags.tpl" oTagsManager=$oView->getTagCloudManager()}]
@@ -52,6 +52,12 @@
         [{include file="widget/trustedshops/ratings.tpl" }]
     [{/capture}]
     [{/if}]
+[{/if}]
+
+[{if $oView->getClassName() eq "start"}]
+    [{capture append="oxidBlock_sidebar"}]
+        [{include file="widget/shoplupe/ratings.tpl" }]
+    [{/capture}]
 [{/if}]
 
 [{foreach from=$oxidBlock_sidebar item="_block"}]

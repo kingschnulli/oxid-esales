@@ -290,6 +290,7 @@ class Unit_Setup_oxSetupDbTest extends OxidTestCase
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" );
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" );
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" );
+        $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->will( $this->returnValue( false ) );
         $oDb->saveDynPagesSettings( array() );
     }
 

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandler.php 33257 2011-02-15 09:25:06Z sarunas $
+ * @version   SVN: $Id: oxdbmetadatahandler.php 34483 2011-04-08 16:10:14Z vilma $
  */
 
 /**
@@ -61,18 +61,12 @@ class oxDbMetaDataHandler extends oxSuperCfg
      */
     public function getFields( $sTableName )
     {
-
-        if ( empty($this->_aDbTablesFields[$sTableName]) ) {
-            $aFields = oxDb::getInstance()->getTableDescription( $sTableName );
-
-            $this->_aDbTablesFields[$sTableName] = array();
-
-            foreach ( $aFields as $oField ) {
-                $this->_aDbTablesFields[$sTableName][] = $oField->name;
-            }
+        $aFields    = array();
+        $aRawFields = oxDb::getDb()->MetaColumns( $sTableName );
+        foreach ( $aRawFields as $oField ) {
+            $aFields[] = $oField->name;
         }
-
-        return $this->_aDbTablesFields[$sTableName];
+        return $aFields;
     }
 
     /**

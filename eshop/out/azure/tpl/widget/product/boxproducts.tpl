@@ -1,6 +1,7 @@
 <div class="box" [{if $_boxId}]id="[{$_boxId}]"[{/if}]>
     [{if $_sHeaderIdent}]
-        <h3[{if $_sHeaderCssClass}] class="[{$_sHeaderCssClass}]"[{/if}]>[{ oxmultilang ident=$_sHeaderIdent }]
+        <h3 class="clear [{if $_sHeaderCssClass}] [{$_sHeaderCssClass}][{/if}]">
+            [{ oxmultilang ident=$_sHeaderIdent }]
             [{assign var='rsslinks' value=$oView->getRssLinks() }]
             [{if $rsslinks.topArticles}]
                 <a class="rss external" id="rssTopProducts" href="[{$rsslinks.topArticles.link}]" title="[{$rsslinks.topArticles.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.topArticles.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.topArticles.title}]</span></a>

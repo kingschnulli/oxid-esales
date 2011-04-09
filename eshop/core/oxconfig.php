@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 33878 2011-03-22 11:41:42Z sarunas $
+ * @version   SVN: $Id: oxconfig.php 34355 2011-04-07 10:20:42Z linas.kukulskis $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -206,6 +206,13 @@ class oxConfig extends oxSuperCfg
      * @var array
      */
     protected $_aConfigParams = array();
+
+    /**
+     * Theme config parameters storage array
+     *
+     * @var array
+     */
+    protected $_aThemeConfigParams = array();
 
     /**
      * Current language Id
@@ -504,6 +511,11 @@ class oxConfig extends oxSuperCfg
                 }
 
                 $this->_setConfVarFromDb($sVarName, $sVarType, $sVarVal);
+
+                //setting theme options array
+                if ( $sModule != '' ) {
+                    $this->_aThemeConfigParams[$sVarName] = $sModule;
+                }
 
                 $oRs->moveNext();
             }
@@ -1806,4 +1818,17 @@ class oxConfig extends oxSuperCfg
     {
         return $this->getConfigParam( 'sShopDir' ).'log/';
     }
+
+    /**
+     * Returns true if option is theme option
+     *
+     * @param string $sName option name
+     *
+     * @return bool
+     */
+    public function isThemeOption( $sName )
+    {
+        return (bool) isset( $this->_aThemeConfigParams[$sName] );
+    }
+
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 34220 2011-04-04 14:51:15Z arvydas.vapsva $
+ * @version   SVN: $Id: detailsTest.php 34381 2011-04-07 13:26:27Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -429,6 +429,54 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oDetails = $this->getProxyClass( 'details' );
         $oDetails->init();
         $this->assertEquals('2000', $oDetails->getProduct()->getId());
+    }
+
+    /**
+     * Test get product.
+     *
+     * @return null
+     */
+    public function testGetProductWithDirectVariant()
+    {
+        $oProduct = $this->getMock( 'oxarticle', array( 'load', 'getVariantSelections' ));
+        $oProduct->expects( $this->once() )->method( 'load')
+                ->with( $this->equalTo( 'anid__' ) )
+                ->will($this->returnValue(1));
+        $oProduct->expects( $this->once() )->method( 'getVariantSelections')
+                ->with( $this->equalTo( 'varselid__' ) )
+                ->will($this->returnValue(array('oActiveVariant'=>'actvar', 'blPerfectFit'=>true)));
+        oxTestModules::addModuleObject('oxarticle', $oProduct);
+
+        modConfig::setParameter( 'anid', 'anid__' );
+        modConfig::setParameter( 'varselid', 'varselid__' );
+
+        $oDetailsView = $this->getProxyClass( 'details' );
+        $oDetailsView->setNonPublicVar( '_blIsInitialized', 1 );
+        $this->assertEquals('actvar', $oDetailsView->getProduct());
+    }
+
+    /**
+     * Test get product.
+     *
+     * @return null
+     */
+    public function testGetProductWithIndirectVariant()
+    {
+        $oProduct = $this->getMock( 'oxarticle', array( 'load', 'getVariantSelections' ));
+        $oProduct->expects( $this->once() )->method( 'load')
+                ->with( $this->equalTo( 'anid__' ) )
+                ->will($this->returnValue(1));
+        $oProduct->expects( $this->once() )->method( 'getVariantSelections')
+                ->with( $this->equalTo( 'varselid__' ) )
+                ->will($this->returnValue(array('oActiveVariant'=>'actvar', 'blPerfectFit'=>false)));
+        oxTestModules::addModuleObject('oxarticle', $oProduct);
+
+        modConfig::setParameter( 'anid', 'anid__' );
+        modConfig::setParameter( 'varselid', 'varselid__' );
+
+        $oDetailsView = $this->getProxyClass( 'details' );
+        $oDetailsView->setNonPublicVar( '_blIsInitialized', 1 );
+        $this->assertSame($oProduct, $oDetailsView->getProduct());
     }
 
     /**
@@ -1349,33 +1397,46 @@ class Unit_Views_detailsTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetPicturesProduct()
+    public function testGetPicturesProductNoVariantInfo()
     {
-        modConfig::setParameter( "panid", false );
-
-        $oProduct = $this->getMock( "details", array( "getId" ) );
+        $oProduct = $this->getMock( "stdclass", array( "getId" ) );
         $oProduct->expects( $this->never() )->method( 'getId');
 
         // no picture product id
-        $oView = $this->getMock( "details", array( "getProduct" ) );
+        $oView = $this->getMock( "details", array( "getProduct", 'getVariantSelections' ) );
         $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
-        $oView->getPicturesProduct();
-
-        modConfig::setParameter( "panid", "testid" );
-
-        $oVariants = $this->getMock( "oxStdClass", array( "offsetExists", "offsetGet" ) );
-        $oVariants->expects( $this->once() )->method( 'offsetExists')->will( $this->returnValue( true ) );
-        $oVariants->expects( $this->once() )->method( 'offsetGet')->will( $this->returnValue( "variant" ) );
-
-        $oProduct = $this->getMock( "details", array( "getId", "getVariants" ) );
-        $oProduct->expects( $this->once() )->method( 'getId')->will( $this->returnValue( "someid" ) );
-        $oProduct->expects( $this->once() )->method( 'getVariants')->will( $this->returnValue( $oVariants ) );
-
-        // passing picture product id
-        $oView = $this->getMock( "details", array( "getProduct" ) );
-        $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
-
-        $this->assertEquals( "variant", $oView->getPicturesProduct() );
-
+        $oView->expects( $this->once() )->method( 'getVariantSelections')->will( $this->returnValue( false ) );
+        $this->assertSame($oProduct, $oView->getPicturesProduct());
     }
+    public function testGetPicturesProductWithNoPerfectFitVariant()
+    {
+        $oProduct = $this->getMock( "stdclass", array( "getId" ) );
+        $oProduct->expects( $this->never() )->method( 'getId');
+
+        $aInfo = array(
+            'oActiveVariant' => $oProduct,
+            'blPerfectFit' => false
+        );
+        // no picture product id
+        $oView = $this->getMock( "details", array( "getProduct", 'getVariantSelections' ) );
+        $oView->expects( $this->never() )->method( 'getProduct');
+        $oView->expects( $this->once() )->method( 'getVariantSelections')->will( $this->returnValue( $aInfo ) );
+        $this->assertSame($oProduct, $oView->getPicturesProduct());
+    }
+    public function testGetPicturesProductWithPerfectFitVariant()
+    {
+        $oProduct = $this->getMock( "stdclass", array( "getId" ) );
+        $oProduct->expects( $this->never() )->method( 'getId');
+
+        $aInfo = array(
+            'oActiveVariant' => $oProduct,
+            'blPerfectFit' => true
+        );
+        // no picture product id
+        $oView = $this->getMock( "details", array( "getProduct", 'getVariantSelections' ) );
+        $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( 'prod' ) );
+        $oView->expects( $this->once() )->method( 'getVariantSelections')->will( $this->returnValue( $aInfo ) );
+        $this->assertEquals('prod', $oView->getPicturesProduct());
+    }
+
 }

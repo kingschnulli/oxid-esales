@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 34292 2011-04-06 08:38:37Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticleTest.php 34388 2011-04-07 13:49:32Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -7279,16 +7279,91 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testGetVariantSelections()
     {
         oxTestModules::addFunction("oxVariantHandler", "buildVariantSelections", "{return 'buildVariantSelections';}");
+        $oVariantHandler = $this->getMock('oxVariantHandler', array("buildVariantSelections"));
+        $oVariantHandler->expects($this->once())->method("buildVariantSelections")
+            ->with($this->equalTo('varname'), $this->equalTo('variants'), $this->equalTo(1), $this->equalTo(2), $this->equalTo(3))
+            ->will($this->returnValue("asd"));
+        oxTestModules::addModuleObject("oxVariantHandler", $oVariantHandler);
 
-        modConfig::getInstance()->setConfigParam( "blUseMultidimensionVariants", false );
         $oProduct = $this->getMock( "oxArticle", array( "getVariants" ) );
-        $oProduct->expects( $this->never() )->method( 'getVariants' );
-        $this->assertFalse( $oProduct->getVariantSelections() );
-
-        modConfig::getInstance()->setConfigParam( "blUseMultidimensionVariants", true );
-        $oProduct = $this->getMock( "oxArticle", array( "getVariants" ) );
-        $oProduct->expects( $this->once() )->method( 'getVariants' )->will( $this->returnValue( true ) );
-        $oProduct->oxarticles__oxvarname = new oxField();
-        $this->assertEquals( 'buildVariantSelections', $oProduct->getVariantSelections() );
+        $oProduct->expects( $this->once() )->method( 'getVariants' )->will( $this->returnValue( 'variants' ) );
+        $oProduct->oxarticles__oxvarname = new oxField('varname');
+        $this->assertEquals( 'asd', $oProduct->getVariantSelections(1, 2, 3) );
     }
+
+    /**
+     * oxArticle::getSelections() test case
+     *
+     * @return null
+     */
+    public function testGetSelections()
+    {
+        // inserting selection lists
+        $oSel = new oxBase();
+        $oSel->init( "oxselectlist" );
+        $oSel->setId( "_testSel1" );
+        $oSel->oxselectlist__oxshopid    = new oxField( 1 );
+        $oSel->oxselectlist__oxshopincl  = new oxField( 1 );
+        $oSel->oxselectlist__oxtitle     = new oxField( "selection list A" );
+        $oSel->oxselectlist__oxtitle_1   = new oxField( "selection list A" );
+        $oSel->oxselectlist__oxvaldesc   = new oxField( "L__@@M__@@S__@@" );
+        $oSel->oxselectlist__oxvaldesc_1 = new oxField( "L__@@M__@@S__@@" );
+        $oSel->save();
+
+        $oSel = new oxBase();
+        $oSel->init( "oxselectlist" );
+        $oSel->setId( "_testSel2" );
+        $oSel->oxselectlist__oxshopid    = new oxField( 1 );
+        $oSel->oxselectlist__oxshopincl  = new oxField( 1 );
+        $oSel->oxselectlist__oxtitle     = new oxField( "selection list B" );
+        $oSel->oxselectlist__oxtitle_1   = new oxField( "selection list B" );
+        $oSel->oxselectlist__oxvaldesc   = new oxField( "Blue__@@Green__@@Red__@@" );
+        $oSel->oxselectlist__oxvaldesc_1 = new oxField( "Blue__@@Green__@@Red__@@" );
+        $oSel->save();
+
+        // assigning to products
+        $oO2S = new oxBase();
+        $oO2S->init( "oxobject2selectlist" );
+        $oO2S->setId( "_testo2s1" );
+        $oO2S->oxobject2selectlist__oxobjectid  = new oxField( "1126" );
+        $oO2S->oxobject2selectlist__oxselnid    = new oxField( "_testSel1" );
+        $oO2S->save();
+
+        $oO2S = new oxBase();
+        $oO2S->init( "oxobject2selectlist" );
+        $oO2S->setId( "_testo2s2" );
+        $oO2S->oxobject2selectlist__oxobjectid  = new oxField( "1126" );
+        $oO2S->oxobject2selectlist__oxselnid    = new oxField( "_testSel2" );
+        $oO2S->save();
+
+        // loading product
+        $oProduct = new oxArticle();
+        $oProduct->load( "1126" );
+
+        // default
+        $aList = $oProduct->getSelections();
+        $this->assertTrue( (bool) $aList );
+        $this->assertEquals( 2, $aList->count() );
+
+        $aIds = $aList->arrayKeys();
+        $this->assertEquals( $aList[$aIds[0]]->getActiveSelection()->getName(), "L" );
+        $this->assertEquals( $aList[$aIds[1]]->getActiveSelection()->getName(), "Blue" );
+
+        // limited
+        $aList = $oProduct->getSelections( 1 );
+        $this->assertTrue( (bool) $aList );
+        $this->assertEquals( 1, $aList->count() );
+        $aIds = $aList->arrayKeys();
+        $this->assertEquals( $aList[$aIds[0]]->getActiveSelection()->getName(), "L" );
+
+        // with filter
+        $aList = $oProduct->getSelections( null, array( 1, 2 ) );
+        $this->assertTrue( (bool) $aList );
+        $this->assertEquals( 2, $aList->count() );
+
+        $aIds = $aList->arrayKeys();
+        $this->assertEquals( $aList[$aIds[0]]->getActiveSelection()->getName(), "M" );
+        $this->assertEquals( $aList[$aIds[1]]->getActiveSelection()->getName(), "Red" );
+    }
+
 }

@@ -273,6 +273,34 @@ var oxid = {
         }
     },
 
+    selectionDrop : {
+        onClick : function ( obj ) {
+            // setting new selection
+            var oUl = obj.parent( "li" ).parent( "ul" );
+            var oP  = oUl.prev( "input" ).prev( "p" );
+
+            oP.addClass( "underlined" );
+            $( "span", oP ).html( obj.html() );
+
+            $( "a", oUl ).removeClass('selected');
+            obj.addClass( "selected" );
+
+            oUl.prev( "input" ).attr( "value", obj.attr( "rel" ) );
+            oUl.hide();
+            return false;
+        }
+    },
+
+    initBasket : function () {
+        /**
+         * Selection dropdown
+         */
+        $('ul.seldrop a').unbind( "click" );
+        $("ul.seldrop a").bind( "click", function() {
+            return oxid.selectionDrop.onClick( $( this ) );
+        });
+    },
+
     initDetailsMain : function () {
         if ($("#productTitle").length > 0) {
             var targetWidth = $("#productTitle span").width();
@@ -448,15 +476,12 @@ var oxid = {
             }
         });
 
-        /**
-         * Unbinding previous event
-         */
-        $('ul.vardrop a').unbind( "click" );
 
         /**
          * Variant selection dropdown
          */
-        $("ul.vardrop a").bind( "click", function(){
+        $('ul.vardrop a').unbind( "click" );
+        $("ul.vardrop a").bind( "click", function() {
 
             var obj = $( this );
 
@@ -468,19 +493,22 @@ var oxid = {
             }
 
             // setting new selection
-            var objFnIdent = obj.parents().hasClass("fnSubmit");
-            if ( objFnIdent ){
+            if ( obj.parents().hasClass("fnSubmit") ){
                 obj.parent('li').parent('ul').prev('input').attr( "value", obj.attr("rel") );
 
-                //
-                oxid.variantSelection.findClosestVariant();
                 var form = obj.closest("form");
                 $('input[name=fnc]', form).val("");
                 form.submit();
-                return false;
             }
-
             return false;
+        });
+
+        /**
+         * selection dropdown
+         */
+        $('ul.seldrop a').unbind( "click" );
+        $("ul.seldrop a").bind( "click", function() {
+            return oxid.selectionDrop.onClick( $( this ) );
         });
 
         /**
@@ -513,15 +541,17 @@ var oxid = {
 
         $(".oxProductForm").submit(function () {
             if (!$("input[name='fnc']", this).val()) {
-                if (
-                    ( $( "input[name=panid]", this ).attr( "value" )
-                      || ($( "input[name=anid]", this ).val() == $( "input[name=parentid]", this ).val() )
-                    )
-                    && ($( "input[name=aid]", this ).val() == $( "input[name=parentid]", this ).val() )
-                ) {
-                    // if picture is changed [panid check] and currently loaded not full variant
-                    // OR if article to select is parent and currently loaded not full variant
-                    return reloadProductPartially($(".oxProductForm"),'detailsMain',$("#detailsMain"),$("#detailsMain")[0]);
+                if (($( "input[name=aid]", this ).val() == $( "input[name=parentid]", this ).val() )) {
+                    var aSelectionInputs = $("input[name^=varselid]", this);
+                    if (aSelectionInputs.length) {
+                        var hash = '';
+                        aSelectionInputs.not("*[value='']").each(function(i){
+                            hash = hash+i+':'+$(this).val()+"|";
+                        });
+                        if (oxVariantSelections.indexOf(hash) < 0) {
+                            return reloadProductPartially($(".oxProductForm"),'detailsMain',$("#detailsMain"),$("#detailsMain")[0]);
+                        }
+                    }
                 }
                 return reloadProductPartially($(".oxProductForm"),'productInfo',$("#productinfo"),$("#productinfo")[0]);
             }
@@ -532,7 +562,7 @@ var oxid = {
 
         $(".tabbedWidgetBox").tabs();
 
-        $(".tagCloud #tagText").click(oxid.highTag);
+        $(".tagCloud .tagText").click(oxid.highTag);
         $("#saveTag").click(oxid.saveTag);
         $("#cancelTag").click(oxid.cancelTag);
         $("#editTag").click(oxid.editTag);
@@ -613,7 +643,7 @@ var oxid = {
                 'onSuccess' : function(response, params) {
                     if ( response ) {
                         $('#tags').html(response);
-                        $("#tags #tagText").click(oxid.highTag);
+                        $("#tags .tagText").click(oxid.highTag);
                         $('#tags #saveTag').click(oxid.saveTag);
                         $('#tags #cancelTag').click(oxid.cancelTag);
                     }
@@ -639,7 +669,7 @@ var oxid = {
         sublist = targetObj.nextAll("ul.drop");
 
         sublist.prepend("<li class='value'></li>");
-        targetObj.clone().appendTo(".value", sublist);
+        targetObj.clone().appendTo($(".value", sublist));
         sublist.css("width", targetObj.parent().outerWidth());
 
         if (sublist.length) {
@@ -659,14 +689,13 @@ var oxid = {
     initDropDowns : function () {
         $(document).click( function(e){
             var clickTarget = e.target;
-            if($(clickTarget).parents().hasClass("dropDown")){
-            }else{
+            if (!$(clickTarget).parents().hasClass("dropDown")) {
                 $(".drop").hide();
                 $(".dropDown p").addClass("underlined");
             }
         });
 
-        $(".dropDown p").click(oxid.showDropdown);
+        $(".dropDown p:not(.oxdisabled)").click(oxid.showDropdown);
 
         $(".dropDown p").hover(function(){
             $(this).toggleClass("selected");
@@ -701,54 +730,6 @@ var oxid = {
 
             //
             $( ".oxProductForm input[name=anid]" ).attr( "value", $( ".oxProductForm input[name=parentid]" ).attr( "value" ) );
-        },
-
-        /**
-         * Finds closes variant which image should be loaded or even vull variant must be loaded
-         */
-        findClosestVariant : function ()
-        {
-            var sVariantId = false;
-
-            // choosing active variant
-            var aVarSelections = $( ".oxProductForm input[name^=varselid]" );
-            var iSelections = aVarSelections.length;
-            var blLoadVariant = false;
-
-            var iMaxFitCount = 0;
-            for (var oSelection in oxVariantSelections ) {
-                var iFitCount = 0;
-                var blFitsAll = true;
-                for (var i = 0; i < iSelections; i++) {
-                    var sActSelection = $( aVarSelections[i] ).attr( "value" );
-                    if ( oxVariantSelections[oSelection][i] ) {
-                        if ( sActSelection && (sActSelection == oxVariantSelections[oSelection][i] )) {
-                            iFitCount += 1;
-                        } else {
-                            blFitsAll = false
-                        }
-                    }
-                }
-
-                if ( iFitCount > iMaxFitCount ) {
-                    iMaxFitCount = iFitCount;
-                    sVariantId = oSelection;
-                }
-
-                if ( blFitsAll ) {
-                    blLoadVariant = true;
-                    break;
-                }
-            }
-
-            if ( sVariantId != false ) {
-                // overriding product
-                if ( blLoadVariant ) {
-                    $( ".oxProductForm input[name=anid]" ).attr( "value", sVariantId );
-                } else {
-                    $( ".oxProductForm input[name=panid]" ).attr( "value", sVariantId );
-                }
-            }
         }
     }
 
@@ -1014,12 +995,21 @@ $(function(){
             } else {
 
                 group.each(function(){
+
                     var thisHeight = $(this).height();
                     if (thisHeight > tallest) {
                         tallest = thisHeight;
                     }
                 });
-                group.height(tallest);
+
+                 group.each(function(){
+                    if( $(this).hasClass('catPicOnly') && $(this).height() < tallest  ){
+                        $(this).height(tallest+20);
+                    }else{
+                        $(this).height(tallest);
+
+                    }
+                 });
             }
         }
 
@@ -1034,7 +1024,7 @@ $(function(){
         function trimTitles(group) {
             group.each(function(){
                 var thisWidth  = $(this).width();
-                var thisText   = jQuery.trim($(this).text());
+                var thisText   = $.trim($(this).text());
                 var parentWidth = $(this).parent().width();
                 if (thisWidth > parentWidth) {
                     var thisLength  = thisText.length;

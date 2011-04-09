@@ -25,7 +25,7 @@
 
 [{if $oView->getTagCloudManager() || ( ( $oView->getTagCloudManager() || $oxcmp_user) && $oDetailsProduct )}]
     [{capture append="tabs"}]<a href="#tags">[{oxmultilang ident="PAGE_DETAILS_TABS_TAGS"}]</a>[{/capture}]
-    [{capture append="tabsContent"}]<div id="tags" class="tabcontent">[{include file="page/details/inc/tags.tpl"}]</div>[{/capture}]
+    [{capture append="tabsContent"}]<div id="tags" class="tabcontent">[{oxid_include_dynamic file="page/details/inc/tags.tpl"}]</div>[{/capture}]
 [{/if}]
 
 [{if $oView->getMediaFiles() || $oDetailsProduct->oxarticles__oxfile->value}]

@@ -1,23 +1,24 @@
 [{assign var="aVariantSelections" value=$oView->getVariantSelections()}]
 
+
+[{if $aVariantSelections && $aVariantSelections.rawselections}]
+    [{assign var="_sSelectionHashCollection" value=""}]
+    [{foreach from=$aVariantSelections.rawselections item=oSelectionList key=iKey}]
+        [{assign var="_sSelectionHash" value=""}]
+        [{foreach from=$oSelectionList item=oListItem key=iPos}]
+            [{assign var="_sSelectionHash" value=$_sSelectionHash|cat:$iPos|cat:":"|cat:$oListItem.hash|cat:"|"}]
+        [{/foreach}]
+        [{if $_sSelectionHash}]
+            [{if $_sSelectionHashCollection}][{assign var="_sSelectionHashCollection" value=$_sSelectionHashCollection|cat:","}][{/if}]
+            [{assign var="_sSelectionHashCollection" value=$_sSelectionHashCollection|cat:"'`$_sSelectionHash`'"}]
+        [{/if}]
+    [{/foreach}]
+    [{oxscript add="var oxVariantSelections  = [`$_sSelectionHashCollection`];"}]
+[{/if}]
+
 [{oxhasrights ident="TOBASKET"}]
 [{if !$oDetailsProduct->isNotBuyable()}]
     <form class="loadVariant oxProductForm" action="[{$oViewConf->getSelfActionLink()}]" method="post">
-
-    [{if $aVariantSelections && $aVariantSelections.rawselections}]
-        [{oxscript add="var oxVariantSelections = new Array();"}]
-        [{foreach from=$aVariantSelections.rawselections item=oSelectionList key=iKey}]
-            [{oxscript add="oxVariantSelections['`$iKey`'] = new Array();"}]
-            [{foreach from=$oSelectionList item=oListItem key=iPos}]
-                [{if $oListItem.name}]
-                    [{assign var="sSelectionValue" value=$oListItem.hash}]
-                [{else}]
-                    [{assign var="sSelectionValue" value=false}]
-                [{/if}]
-                [{oxscript add="oxVariantSelections['`$iKey`'][`$iPos`] = '`$sSelectionValue`';"}]
-            [{/foreach}]
-        [{/foreach}]
-    [{/if}]
 
     <div>
         [{$oViewConf->getHiddenSid()}]
@@ -120,12 +121,15 @@
             [{assign var="blCanBuy" value=true}]
             [{* variants | md variants *}]
             [{if $aVariantSelections && $aVariantSelections.selections }]
-                <div id="variants" class="variantSelecors fnSubmit clear">
+                [{assign var="blCanBuy" value=$aVariantSelections.blPerfectFit}]
+                <div id="variants" class="selectorsBox fnSubmit clear">
 
                     [{assign var="blHasActiveSelections" value=false}]
-                    [{foreach from=$aVariantSelections.selections item=oSelectionList key=iKey}]
-                        [{assign var="blCanBuy" value=$oSelectionList->allowsToBuy($blCanBuy)}]
-                        [{include file="widget/product/selectbox.tpl" oSelectionList=$oSelectionList}]
+                    [{foreach from=$aVariantSelections.selections item=oList key=iKey}]
+                        [{if $oList->getActiveSelection()}]
+                            [{assign var="blHasActiveSelections" value=true}]
+                        [{/if}]
+                        [{include file="widget/product/selectbox.tpl" oSelectionList=$oList iKey=$iKey}]
                     [{/foreach}]
 
                 </div>
@@ -149,16 +153,24 @@
                             [{/foreach}]
                         [{/strip}]
                     </div>
-
+                [{else}]
+                    [{if !$blCanBuy && !$oDetailsProduct->isParentNotBuyable()}]
+                        [{assign var="blCanBuy" value=true}]
+                    [{/if}]
                 [{/if}]
 
             [{/if}]
 
             [{* selection lists *}]
-            [{if $oView->getSelectLists() }]
-                <div class="selectlist-box">
-                    [{include file="page/details/inc/selectlist.tpl"}]
-                </div>
+            [{if $oViewConf->showSelectLists()}]
+                [{assign var="oSelections" value=$oDetailsProduct->getSelections()}]
+                [{if $oSelections}]
+                    <div class="selectorsBox fnSubmit clear" id="productSelections">
+                        [{foreach from=$oSelections item=oList name=selections}]
+                            [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="sel" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop"}]
+                        [{/foreach}]
+                    </div>
+                [{/if}]
             [{/if}]
 
             <div class="tobasket">
@@ -201,13 +213,13 @@
                     [{/oxhasrights}]
 
                     [{oxhasrights ident="TOBASKET"}]
-                    [{if !$oDetailsProduct->isNotBuyable()}]
-                        <input id="amountToBasket" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
-                        <button id="toBasket" type="submit" [{if !$blCanBuy}]disabled="disabled"[{/if}] class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
-                        [{if $oDetailsProduct->loadAmountPriceInfo()}]
-                            [{oxscript add="$( '.ox-details-amount' ).oxSuggest();"}]
+                        [{if !$oDetailsProduct->isNotBuyable()}]
+                            <input id="amountToBasket" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
+                            <button id="toBasket" type="submit" [{if !$blCanBuy}]disabled="disabled"[{/if}] class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
+                            [{if $oDetailsProduct->loadAmountPriceInfo()}]
+                                [{oxscript add="$( '.ox-details-amount' ).oxSuggest();"}]
+                            [{/if}]
                         [{/if}]
-                    [{/if}]
                     [{/oxhasrights}]
 
                 </div>
@@ -247,10 +259,14 @@
                     <span id="productWeight">[{oxmultilang ident="DETAILS_ARTWEIGHT"}] [{$oDetailsProduct->oxarticles__oxweight->value}] [{oxmultilang ident="DETAILS_ARTWEIGHTUNIT"}]</span>
                 [{/if}]
               </div>
-              <p class="social">
-                  [{include file="widget/facebook/like.tpl" width="90"}]
-                  [{include file="widget/facebook/share.tpl"}]
-              </p>
+              <div class="social">
+                  <div class="socialButton">
+                    [{include file="widget/facebook/share.tpl"}]
+                  </div>
+                  <div class="socialButton">
+                    [{include file="widget/facebook/like.tpl" width="90"}]
+                  </div>
+              </div>
             </div>
           </div>
     </div>

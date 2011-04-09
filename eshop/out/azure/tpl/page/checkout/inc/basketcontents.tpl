@@ -61,21 +61,20 @@
                     <div>
                         [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ARTNOMBER" }] [{ $basketproduct->oxarticles__oxartnum->value }]
                     </div>
+
                     [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
-                        [{if $basketproduct->getDispSelList() }]
-                            <div>
-                                [{foreach key=iSel from=$basketproduct->getDispSelList() item=oList }]
-                                    <select name="aproducts[[{ $basketindex }]][sel][[{ $iSel }]]" [{if !$editable }]disabled[{/if}]>
-                                        [{foreach key=iSelIdx from=$oList item=oSelItem }]
-                                            [{if $oSelItem->name }]
-                                                <option value="[{ $iSelIdx }]"[{if $oSelItem->selected }]SELECTED[{/if }]>[{ $oSelItem->name }]</option>
-                                            [{/if }]
-                                        [{/foreach }]
-                                    </select>
-                                [{/foreach }]
-                            </div>
+                        [{if $oViewConf->showSelectListsInList()}]
+                            [{assign var="oSelections" value=$basketproduct->getSelections(null,$basketitem->getSelList())}]
+                            [{if $oSelections}]
+                                <div class="selectorsBox clear" id="cartItemSelections_[{$smarty.foreach.basketContents.iteration}]">
+                                    [{foreach from=$oSelections item=oList name=selections}]
+                                        [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="aproducts[`$basketindex`][sel]" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop"}]
+                                    [{/foreach}]
+                                </div>
+                            [{/if}]
                         [{/if}]
                     [{/if }]
+
                     [{if !$editable }]
                     [{foreach key=sVar from=$basketitem->getPersParams() item=aParam }]
                         <p class="persparamBox"><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> [{ $aParam }]</p>
@@ -88,8 +87,7 @@
                 <td>
                         [{ if !$basketitem->getWrappingId() }]
                             [{if $editable }]
-                                [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_NONE" }]
-                                <a class="wrappingTrigger" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wrapping" params="aid="|cat:$basketitem->getProductId() }]" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]"><span>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]</span></a>
+                                <a class="wrappingTrigger" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wrapping" params="aid="|cat:$basketitem->getProductId() }]" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]">[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]</a>
                             [{else}]
                                 [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_NONE" }]
                             [{/if}]
@@ -97,7 +95,6 @@
                             [{assign var="oWrap" value=$basketitem->getWrapping() }]
                             [{if $editable }]
                                 <a class="wrappingTrigger" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wrapping" params="aid="|cat:$basketitem->getProductId() }]" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]">[{$oWrap->oxwrapping__oxname->value}]</a>
-                                <a class="wrappingTrigger" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wrapping" params="aid="|cat:$basketitem->getProductId() }]" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]"><span>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]</span></a>
                             [{else}]
                                 [{$oWrap->oxwrapping__oxname->value}]
                             [{/if}]

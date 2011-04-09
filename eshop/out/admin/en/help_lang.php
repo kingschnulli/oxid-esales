@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 34273 2011-04-05 13:31:21Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 34473 2011-04-08 15:12:40Z juergen.busch $
  */
 
 /**
@@ -271,7 +271,8 @@ $aLang =  array(
 
 
 'HELP_SHOP_MAIN_PRODUCTIVE'                   => 'As long as this setting is <span class="warning_or_important_hint">not</span> active, information about execution times and debug information are displayed  at the bottom of each page. These information is useful when customizing eShop.<br>' .
-                                                 '<span class="warning_or_important_hint">Activate this setting when the eShop is launched. Thereby only the eShop without additional information is displayed to your users.</span>',
+                                                 '<span class="warning_or_important_hint">Activate this setting when the eShop is launched. Thereby only the eShop without additional information is displayed to your users.</span><br>',
+                                                 'Find other important information for going live with OXID eShop in our <a href="http://wiki.oxidforge.org/Tutorials/Check_before_going_live" target="_blank">OXIDforge</a>.',
 
 'HELP_SHOP_MAIN_ACTIVE'                       => 'With <span class="navipath_or_inputname">Active</span> you can enable/disable the complete eShop. If the eShop is disabled, a message saying the eShop is temporary offline is displayed to the users. This can be useful for maintenance.',
 
@@ -473,11 +474,11 @@ $aLang =  array(
 'HELP_PAYMENT_MAIN_AMOUNT'                    => 'You can use <span class="navipath_or_inputname">Purchase Price</span> to specify that the payment method is only valid for certain purchase prices. The <span class="navipath_or_inputname">from</span> and <span class="navipath_or_inputname">to</span> fields allow you to set a range.<br>' .
                                                  'If the payment method is to be valid for any purchase price, you must specify a condition that is always met: Enter <span class="userinput_or_code">0</span> in the <span class="navipath_or_inputname">from</span>  and <span class="userinput_or_code">99999999</span> in the <span class="navipath_or_inputname">to</span> field.',
 
-'HELP_PAYMENT_MAIN_ADDPRICE'                  => 'In <span class="navipath_or_inputname">Price Surcharge/Discount</span>, the price is entered for the payment method. The price can be specified in two different ways:' .
+'HELP_PAYMENT_MAIN_ADDPRICE'                  => 'In <span class="navipath_or_inputname">Price Surcharge/Reduction</span>, the price is entered for the payment method. The price can be specified in two different ways:' .
                                                  '<ul><li>With <span class="userinput_or_code">abs</span> the price is entered for the payment method (e.g.: if you enter <span class="userinput_or_code">7.50</span> a price of EUR 7.50 is calculated.)</li>' .
                                                  '<li>With <span class="userinput_or_code">%</span>, the price is calculated relative to the purchase price (e.g.: if you enter <span class="userinput_or_code">2</span>, the price is 2 percent of the purchase price)</li></ul>',
 
-'HELP_PAYMENT_MAIN_ADDSUMRULES'               => '[tr] When calculating surcharge or discount, basket value is being used as base. Define what costs will be included when calculating surcharge or discount, based on basket value (none selected = <b>1</b>-<b>4</b> selected)',
+'HELP_PAYMENT_MAIN_ADDSUMRULES'               => 'When calculating price surcharge or reduction, basket value is being used as base. Define what costs will be included when calculating basket value.',
 
 'HELP_SELECTLIST_MAIN_TITLEIDENT'             => 'In <span class="navipath_or_inputname">Working Title</span>, you can enter an additional name that is not displayed to users of your eShop. You can use the working title to differentiate between similar selection lists (e.g., Sizes for trousers and Sizes for shirts).',
 
