@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34441 2011-04-08 10:13:19Z juergen.busch $
+ * @version   SVN: $Id: lang.php 34552 2011-04-09 15:31:02Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -772,6 +772,7 @@ $aLang = array(
 'THEME_ACTIVATE'                                           => 'Aktivieren',
 'THEME_PARENT_THEME_TITLE'                                 => 'Eltern-Theme',
 'THEME_PARENT_VERSIONS'                                    => 'Kompatible Eltern-Theme Version(en)',
+'LANGUAGE_ERRORGENERATEVIEWS'                              => "Bitte aktualisieren sie die Datenbank-Views unter Service->Tools",
 'LANGUAGE_ACTIVE'                                          => 'Im Frontend aktiv',
 'LANGUAGE_LIST_MENUITEM'                                   => 'Stammdaten',
 'LANGUAGE_LIST_MENUSUBITEM'                                => 'Sprachen',

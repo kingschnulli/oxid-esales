@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 34388 2011-04-07 13:49:32Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticleTest.php 34540 2011-04-09 13:03:51Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -6502,6 +6502,49 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals( $iCount, count($oList) );
     }
 
+
+    /**
+     * Test long descriptio saving , save raw value.
+     *
+     * @return null
+     */
+    public function testLongDescSaving_savesRawValue()
+    {
+        $oArticle = oxNew("oxarticle");
+        if ($oArticle->load('test_SubshopFields_savesRawValue')) {
+            $oArticle->delete();
+        }
+        oxDb::getDb()->execute('delete from oxarticles where oxid="test_SubshopFields_savesRawValue"');
+        oxDb::getDb()->execute('delete from oxartextends where oxid="test_SubshopFields_savesRawValue"');
+
+
+        // insert article
+        $oArticle = oxNew("oxarticle");
+        $oArticle->assign(array('OXID'=>'test_SubshopFields_savesRawValue'));
+        $oArticle->setArticleLongDesc( 'lalaal&!<b><' );
+        $oArticle->save();
+
+        $oArticle = oxNew( "oxarticle" );
+        $this->assertTrue( $oArticle->load( 'test_SubshopFields_savesRawValue' ) );
+        $this->assertEquals( 'lalaal&!<b><', $oArticle->getArticleLongDesc()->getRawValue() );
+
+        // lang 1
+        $oArticle = oxNew("oxarticle");
+        $oArticle->setLanguage(1);
+        $oArticle->assign(array('OXID'=>'test_SubshopFields_savesRawValue'));
+        $oArticle->setArticleLongDesc( 'lalaal&!<b><a' );
+        $oArticle->save();
+
+        $oArticle = oxNew( "oxarticle" );
+        $this->assertTrue( $oArticle->loadInLang( 1, 'test_SubshopFields_savesRawValue' ) );
+        $this->assertEquals( 'lalaal&!<b><a', $oArticle->getArticleLongDesc()->getRawValue() );
+
+        // back in 0 lang
+        $oArticle = oxNew( "oxarticle" );
+        $oArticle->setLanguage(0);
+        $this->assertTrue( $oArticle->load( 'test_SubshopFields_savesRawValue' ) );
+        $this->assertEquals( 'lalaal&!<b><', $oArticle->getArticleLongDesc()->getRawValue() );
+    }
 
 
 

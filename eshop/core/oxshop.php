@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshop.php 32914 2011-02-04 09:21:19Z alfonsas $
+ * @version   SVN: $Id: oxshop.php 34554 2011-04-09 19:51:23Z alfonsas $
  */
 
 /**
@@ -102,7 +102,7 @@ class oxShop extends oxI18n
         }
 
         foreach ($aQ as $sQ) {
-            $oDB->execute( $sQ ); // echo $sQ.';'.PHP_EOL;
+            $oDB->execute( $sQ );
         }
     }
 
@@ -116,7 +116,7 @@ class oxShop extends oxI18n
      */
     protected function _getViewSelect($sTable,$iLang)
     {
-        $oMetaData = oxnew('oxDbMetaDataHandler');
+        $oMetaData = oxNew('oxDbMetaDataHandler');
         $aFields = $oMetaData->getSinglelangFields($sTable, $iLang);
         foreach ($aFields as $sCoreField => $sField) {
             if ($sCoreField !== $sField) {
@@ -136,11 +136,15 @@ class oxShop extends oxI18n
      */
     protected function _getViewJoinAll($sTable)
     {
-        $oMetaData = oxnew('oxDbMetaDataHandler');
+        $sJoin = ' ';
+        $oMetaData = oxNew('oxDbMetaDataHandler');
         $aTables = $oMetaData->getAllMultiTables($sTable);
         if (count($aTables)) {
-           return 'JOIN ('.implode(',', $aTables).') USING (OXID)';
+            foreach ($aTables as $sTableKey => $sTableName) {
+                $sJoin .= "LEFT JOIN {$sTableName} USING (OXID) ";
+            }
         }
+        return $sJoin;
     }
 
     /**
@@ -153,10 +157,12 @@ class oxShop extends oxI18n
      */
     protected function _getViewJoinLang($sTable,$iLang)
     {
+        $sJoin = ' ';
         $sLangTable = getLangTableName($sTable, $iLang);
         if ($sLangTable && $sLangTable !== $sTable) {
-            return 'JOIN ('.$sLangTable.') USING (OXID)';
+            $sJoin .= "LEFT JOIN {$sLangTable} USING (OXID) ";
         }
+        return $sJoin;
     }
 
 }

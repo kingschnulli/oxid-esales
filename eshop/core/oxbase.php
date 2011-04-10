@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 33719 2011-03-10 08:40:42Z sarunas $
+ * @version   SVN: $Id: oxbase.php 34529 2011-04-09 11:08:04Z sarunas $
  */
 
 /**
@@ -1237,6 +1237,24 @@ class oxBase extends oxSuperCfg
     }
 
     /**
+     * check if db field can be null
+     *
+     * @param string $sFieldName db field name
+     *
+     * @return bool
+     */
+    protected function _canFieldBeNull($sFieldName)
+    {
+        $aMetaData = $this->_getAllFields();
+        foreach ($aMetaData as $oMetaInfo) {
+            if (!strcasecmp($oMetaInfo->name, $sFieldName)) {
+                return !$oMetaInfo->not_null;
+            }
+        }
+        return false;
+    }
+
+    /**
      * returns quoted field value for using in update statement
      *
      * @param string  $sFieldName name of field
@@ -1246,27 +1264,16 @@ class oxBase extends oxSuperCfg
      */
     protected function _getUpdateFieldValue($sFieldName, $oField)
     {
-        $blPassNullValue = false;
         if ($oField instanceof oxField) {
             $value = $oField->getRawValue();
         } else {
             $value = $oField->value;
         }
         // Sarunas. check if this field value is null AND it can be null according to table description
-        if (null === $value) {
-            $aMetaData = $this->_getAllFields();
-            foreach ($aMetaData as $oMetaInfo) {
-                if (!strcasecmp($oMetaInfo->name, $sFieldName)) {
-                    $blPassNullValue = !$oMetaInfo->not_null;
-                    break;
-                }
-            }
-        }
-        if ($blPassNullValue) {
+        if ((null === $value) && $this->_canFieldBeNull($sFieldName)) {
             return 'null';
-        } else {
-            return oxDb::getDb()->quote( $value );
         }
+        return oxDb::getDb()->quote( $value );
     }
 
     /**

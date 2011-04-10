@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxi18n.php 33719 2011-03-10 08:40:42Z sarunas $
+ * @version   SVN: $Id: oxi18n.php 34547 2011-04-09 14:24:32Z sarunas $
  */
 
 /**
@@ -202,7 +202,10 @@ class oxI18n extends oxBase
     {
         $aLanguages = oxLang::getInstance()->getLanguageNames();
 
-        $aObjFields = $this->_getAllFields(true);
+        $aObjFields = $this->_getTableFields(
+            getViewName($this->_sCoreTable, -1, -1),
+            true
+        );
         $aMultiLangFields = array();
 
         //selecting all object multilang fields
@@ -451,8 +454,8 @@ class oxI18n extends oxBase
                 $aUpdateTables = $this->_getLanguageSetTables();
             }
             foreach ($aUpdateTables as $sLangTable) {
-                $sUpdate= "update $sLangTable set ".$this->_getUpdateFieldsForTable( $sLangTable )
-                         ." where $sLangTable.oxid = '".$this->getId()."' ";
+                $sUpdate= "insert into $sLangTable set ".$this->_getUpdateFieldsForTable( $sLangTable, false ) . 
+                          " on duplicate key update ".$this->_getUpdateFieldsForTable( $sLangTable );
 
                 $blRet = (bool) oxDB::getDb()->execute( $sUpdate);
             }
@@ -588,5 +591,23 @@ class oxI18n extends oxBase
         }
 
         return parent::_addField($sName, $sStatus, $sType, $sLength);
+    }
+
+    /**
+     * check if db field can be null
+     * for multilingual fields it checks only the base fields as they may be
+     * coming from outer join views, so oxbase would return that they always
+     * support null (while in reality updates to their lang set table with null
+     * would fail)
+     *
+     * @param string $sFieldName db field name
+     *
+     * @return bool
+     */
+    protected function _canFieldBeNull($sFieldName)
+    {
+        return parent::_canFieldBeNull(
+                preg_replace('/_\d{1,2}$/', '', $sFieldName)
+                );
     }
 }

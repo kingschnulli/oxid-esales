@@ -60,7 +60,7 @@ if (getenv('CODECOVERAGE')) {
         PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/phpdtaus/');
         PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/admin/reports/jpgraph/');
         PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/admin/reports/');
-    PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/openid/');
+    //PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/openid/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/adodblite/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/tcpdf/');
     PHPUnit_Util_Filter::removeDirectoryFromWhitelist(oxPATH.'/core/phpmailer/');
@@ -75,9 +75,9 @@ if (getenv('CODECOVERAGE')) {
     PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxerpbase.php');
     PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxerpcompatability.php');
     PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxerpcsv.php');
-    PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxopeniddb.php');
-    PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxopenidhttpfetcher.php');
-    PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxopenidgenericconsumer.php');
+    //PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxopeniddb.php');
+    //PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxopenidhttpfetcher.php');
+    //PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxopenidgenericconsumer.php');
 
 
 

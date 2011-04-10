@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfunctions.php 33861 2011-03-21 12:43:26Z sarunas $
+ * @version   SVN: $Id: oxfunctions.php 34550 2011-04-09 15:18:41Z vilma $
  */
 
 /**
@@ -392,6 +392,26 @@ function ox_get_trusted( $sTplName, $oSmarty )
     // not used for templates
 }
 
+
+if ( !function_exists( 'getLangTableIdx' ) ) {
+
+    /**
+     * Returns language table index
+     *
+     * @param int $iLangId language id
+     *
+     * @return string
+     */
+    function getLangTableIdx( $iLangId )
+    {
+        $iLangPerTable = oxConfig::getInstance()->getConfigParam( "iLangPerTable" );
+        $iLangPerTable = $iLangPerTable ? $iLangPerTable : 8;
+
+        $iTableIdx = (int) ( $iLangId / $iLangPerTable );
+        return $iTableIdx;
+    }
+}
+
 if ( !function_exists( 'getLangTableName' ) ) {
 
     /**
@@ -404,11 +424,8 @@ if ( !function_exists( 'getLangTableName' ) ) {
      */
     function getLangTableName( $sTable, $iLangId )
     {
-        $iLangPerTable = oxConfig::getInstance()->getConfigParam( "iLangPerTable" );
-        $iLangPerTable = $iLangPerTable ? $iLangPerTable : 8;
-
-        $iTableIdx = (int) ( $iLangId / $iLangPerTable );
-        if ( $iTableIdx ) {
+        $iTableIdx = getLangTableIdx( $iLangId );
+        if ( $iTableIdx && in_array($sTable, getMultilangTables())) {
             $sLangTableSuffix = oxConfig::getInstance()->getConfigParam( "sLangTableSuffix" );
             $sLangTableSuffix = $sLangTableSuffix ? $sLangTableSuffix : "_set";
 

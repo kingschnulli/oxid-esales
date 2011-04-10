@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxI18nTest.php 33685 2011-03-08 08:19:37Z sarunas $
+ * @version   SVN: $Id: oxI18nTest.php 34547 2011-04-09 14:24:32Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -650,7 +650,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $this->assertEquals(
             array(
                 "update oxstates set oxid = 'test_update',oxcountryid = '',oxisoalpha2 = '' where oxstates.oxid = 'test_update'",
-                "update oxstates_set11 set oxid = 'test_update',oxtitle_90 = 'test_x' where oxstates_set11.oxid = 'test_update'",
+                "insert into oxstates_set11 set oxid = 'test_update',oxtitle_90 = 'test_x' on duplicate key update oxid = 'test_update',oxtitle_90 = 'test_x'",
             ),
             array_map('trim', Unit_Core_oxi18ntest::$aLoggedSqls)
         );
@@ -691,7 +691,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $this->assertEquals(
             array(
                 "update oxstates set oxid = 'test_update',oxcountryid = '',oxtitle = 'test_x',oxisoalpha2 = '',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '' where oxstates.oxid = 'test_update'",
-                "update oxstates_set11 set oxid = 'test_update',oxtitle_90 = 'test_y' where oxstates_set11.oxid = 'test_update'",
+                "insert into oxstates_set11 set oxid = 'test_update',oxtitle_90 = 'test_y' on duplicate key update oxid = 'test_update',oxtitle_90 = 'test_y'",
             ),
             array_map('trim', Unit_Core_oxi18ntest::$aLoggedSqls)
         );
@@ -702,7 +702,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $this->assertEquals(
             array(
                 "update oxstates set oxid = 'test_update',oxcountryid = '',oxtitle = 'test_x',oxisoalpha2 = '',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '' where oxstates.oxid = 'test_update'",
-                "update oxstates_set11 set oxid = 'test_update',oxtitle_90 = 'test_y' where oxstates_set11.oxid = 'test_update'",
+                "insert into oxstates_set11 set oxid = 'test_update',oxtitle_90 = 'test_y' on duplicate key update oxid = 'test_update',oxtitle_90 = 'test_y'",
             ),
             array_map('trim', Unit_Core_oxi18ntest::$aLoggedSqls)
         );
@@ -813,19 +813,39 @@ class Unit_Core_oxi18ntest extends OxidTestCase
             ;
         $oObj->expects($this->exactly(1))->method('getViewName')
                 ->will($this->returnValue('view'))
-            ;
+             ;
         $oObj->setEnableMultilang(false);
 
         $this->assertEquals('returned val', $oObj->UNITGetAllFields('simeple?'));
-
 
         $oObj = $this->getMock('oxi18n', array('getViewName'));
         $oObj->expects($this->exactly(1))->method('getViewName')
                 ->will($this->returnValue(''))
             ;
-        $oObj->setEnableMultilang(false);
+         $oObj->setEnableMultilang(false);
 
         $this->assertEquals(array(), $oObj->UNITGetAllFields('simeple?'));
 
+    }
+
+    /**
+     * Test get update field value.
+     *
+     * @return null
+     */
+    public function test_getUpdateFieldValue()
+    {
+        $oObj = new oxI18n();
+        $oObj->init( "oxarticles" );
+        $oObj->setId('test');
+        $this->assertSame("'aaa'", $oObj->UNITgetUpdateFieldValue('oxid', new oxField('aaa')));
+        $this->assertSame("'aaa\\\"'", $oObj->UNITgetUpdateFieldValue('oxid', new oxField('aaa"')));
+        $this->assertSame("'aaa\''", $oObj->UNITgetUpdateFieldValue('oxid', new oxField('aaa\'')));
+
+        $this->assertSame("''", $oObj->UNITgetUpdateFieldValue('oxid', new oxField(null)));
+        $this->assertSame('null', $oObj->UNITgetUpdateFieldValue('oxvat', new oxField(null)));
+
+        $this->assertSame("''", $oObj->UNITgetUpdateFieldValue('oxid_10', new oxField(null)));
+        $this->assertSame('null', $oObj->UNITgetUpdateFieldValue('oxvat_10', new oxField(null)));
     }
 }

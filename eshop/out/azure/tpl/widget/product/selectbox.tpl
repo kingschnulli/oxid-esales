@@ -1,4 +1,4 @@
-<div class="dropDown">
+<div class="dropDown" id="selectlist_[{$iKey}]">
 
     <p class="selectorLabel underlined[{if $editable === false}] oxdisabled[{/if}]">
         <label>[{$oSelectionList->getLabel()}]:</label>

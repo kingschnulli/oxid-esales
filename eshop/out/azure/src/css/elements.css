@@ -1054,26 +1054,21 @@ a.submitButton {
 #languages a span,
 .selectedValue a.flag span{
     text-indent: -9999px;
-    display: block;
+    display: block;]
 }
 
-#languages a.en span,
-.selectedValue a.en span{
-    background:url(../../img/lang/en.png) no-repeat 0 3px;
+#languages a.flag span,
+.selectedValue a.flag span{
+    background-image:url(../../img/lang/blank.png) ;
+    background-position: 0 3px;
+    background-repeat: no-repeat;
 }
 
-#languages a.de span,
-.selectedValue a.de span{
-    background:url(../../img/lang/de.png) no-repeat 0 3px;
-}
-
-.selectedValue a.en span,
-.selectedValue a.de span {
+.selectedValue a.flag span{
     background-position: 0 2px;
 }
 
-.selectedValue a.en,
-.selectedValue a.de {
+.selectedValue a.flag{
     display: inline-block;
     width:15px;
 }

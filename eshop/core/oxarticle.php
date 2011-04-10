@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 34379 2011-04-07 13:16:58Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 34540 2011-04-09 13:03:51Z sarunas $
  */
 
 // defining supported link types
@@ -2479,9 +2479,10 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $oTagCloud->resetTagCache();
         $sTags = mysql_real_escape_string( $oTagCloud->prepareTags( $sTags ) );
 
-        $sViewName = getViewName( 'oxartextends', $this->getLanguage() );
-        $sQ = "insert into {$sViewName} (oxid, oxtags) value ('".$this->getId()."', '{$sTags}')
-               on duplicate key update oxtags = '{$sTags}'";
+        $sTable = getLangTableName( 'oxartextends', $this->getLanguage() );
+        $sLangSuffix = oxLang::getInstance()->getLanguageTag($this->getLanguage());
+        $sQ = "insert into {$sTable} (oxid, oxtags$sLangSuffix) value ('".$this->getId()."', '{$sTags}')
+               on duplicate key update oxtags$sLangSuffix = '{$sTags}'";
         return oxDb::getDb()->execute( $sQ );
     }
 
@@ -2501,8 +2502,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $sTag = $oTagCloud->prepareTags($sTag);
         $sTagSeparator = $this->getConfig()->getConfigParam('sTagSeparator');
 
-        $sViewName = getViewName( 'oxartextends', $this->getLanguage() );
-        if ( $oDb->getOne( "select {$sViewName}.OXTAGS from {$sViewName} where {$sViewName}.OXID = '".$this->getId()."'" ) ) {
+        $sTable = getLangTableName( 'oxartextends', $this->getLanguage() );
+        $sLangSuffix = oxLang::getInstance()->getLanguageTag($this->getLanguage());
+        if ( $oDb->getOne( "select {$sTable}.OXTAGS$sLangSuffix from {$sTable} where {$sTable}.OXID = '".$this->getId()."'" ) ) {
             $sTailTag = $sTagSeparator . $sTag;
         } else {
             $sTailTag = $sTag;
@@ -2514,8 +2516,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $sTag = mysql_real_escape_string($sTag);
         $sTailTag = mysql_real_escape_string($sTailTag);
 
-        $sQ = "insert into {$sViewName} ( {$sViewName}.OXID, {$sViewName}.OXTAGS) values ('".$this->getId()."', '{$sTag}')
-                       ON DUPLICATE KEY update {$sViewName}.OXTAGS = CONCAT(TRIM({$sViewName}.OXTAGS), '$sTailTag') ";
+        $sQ = "insert into {$sTable} ( {$sTable}.OXID, {$sTable}.OXTAGS$sLangSuffix) values ('".$this->getId()."', '{$sTag}')
+                       ON DUPLICATE KEY update {$sTable}.OXTAGS$sLangSuffix = CONCAT(TRIM({$sTable}.OXTAGS$sLangSuffix), '$sTailTag') ";
 
         return $oDb->execute( $sQ );
     }
@@ -2980,10 +2982,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $blSave = $sValue !== null;
 
         if ( $blSave ) {
-            $sLangField = oxLang::getInstance()->getLanguageTag( (int) $this->getLanguage() );
-            $sLongDescSQL = "insert into oxartextends (oxartextends.oxid, oxartextends.oxlongdesc{$sLangField})
-                             values ('".$this->getId()."', ?) on duplicate key update oxartextends.oxlongdesc{$sLangField} = ? ";
-            oxDb::getDb()->execute( $sLongDescSQL, array( $sValue, $sValue ) );
+            $oArtExt = oxNew('oxI18n');
+            $oArtExt->init('oxartextends');
+            $oArtExt->setLanguage((int) $this->getLanguage());
+            if (!$oArtExt->load($this->getId())) {
+                $oArtExt->setId($this->getId());
+            }
+            $oArtExt->oxartextends__oxlongdesc = new oxField($sValue, oxField::T_RAW);
+            $oArtExt->save();
         }
     }
 
