@@ -191,7 +191,7 @@
             [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
             <sup class="dinfo">
                 [{assign var="_oPrice" value=$product->getPrice()}]
-                [{if $_oPrice->getVat() > 0 }]
+                [{if $_oPrice && $_oPrice->getVat() > 0 }]
                 [{ oxmultilang ident="DETAILS_PLUSSHIPPING" }]
                 [{else}]
                 [{ oxmultilang ident="DETAILS_PLUSSHIPPING_PLUS" }]

@@ -551,7 +551,7 @@ INSERT INTO `oxconfig` VALUES('omc4555952125c3c2.98253113', 'oxbaseshop', 'theme
 
 -- data for azure theme
 INSERT INTO `oxconfig` VALUES('1ec4235c2aee774aa45d772875437919', 'oxbaseshop', 'theme:azure', 'sIconsize', 'str', 0x8064a213b1);
-INSERT INTO `oxconfig` VALUES('1563fba1bee774aec57c192086494217', 'oxbaseshop', 'theme:azure', 'sThumbnailsize', 'str', 0x07a1b84dce3234);
+INSERT INTO `oxconfig` VALUES('1563fba1bee774aec57c192086494217', 'oxbaseshop', 'theme:azure', 'sThumbnailsize', 'str', 0x079a3a49ca3630);
 INSERT INTO `oxconfig` VALUES('1563fba1bee774aec599d56894094456', 'oxbaseshop', 'theme:azure', 'sCatThumbnailsize', 'str', 0x77e7ed4ecd3137);
 INSERT INTO `oxconfig` VALUES('12642dfaa1dee77488b1b22948593071', 'oxbaseshop', 'theme:azure', 'sZoomImageSize', 'str', 0x170A3340D372BE);
 INSERT INTO `oxconfig` VALUES('12642dfaa1dee77487d0644506753921', 'oxbaseshop', 'theme:azure', 'aDetailImageSizes', 'aarr', 0x4dba326a73d2cdcb471b9533d7800b4b898873f7ae9dc29ed9e0e4f6bc678f00ea1438810efd6c1fe338a39dc20247d3a63beec4852106b7a1dd7cb1451f56975c3fd6159579cd2cab97104f17ae6c45a38a41e9a5bc59ceee828bfd6883e282aef2e55d00fb7ee9abb79b63c74cb7ba3fa76665f6a9294d8bf365bf7d3d0d56faf2355df145b02498b144bc6b0ab9fc9f74d2e1dd0ac7a4989184f58b7e2c58400bb4b92c9468f3d8ca7170cde789d6c1282016056e51005091e19803a859992a5549080378f64fff88ce4c1cbdf4afd32943b63877831b221ca302652eabe106a93f9f4d1ed363f2f33c1e29716b95b8541d2f79ec8a7a1d821a46270a1bb5f32622a06655b85a31d7ee2f52dbf963fd4426a6047b0e2bc4896143076e8dbc7dd8a7448ba2a5233ec8d166b611c288134420559cc4a6f4eec2835336d4f71df0ac899e314365a321d1d774bdb9);

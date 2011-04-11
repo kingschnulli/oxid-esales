@@ -12,10 +12,13 @@
 
 <form name="tobasket[{$testid}]" [{if $blShowToBasket}]action="[{ $oViewConf->getSelfActionLink() }]" method="post"[{else}]action="[{$_productLink}]" method="get"[{/if}]>
     [{ $oViewConf->getNavFormParams() }]
+    [{ $oViewConf->getHiddenSid() }]
+    <input type="hidden" name="pgNr" value="[{ $oView->getActPage() }]">
+    [{if $recommid}]
+        <input type="hidden" name="recommid" value="[{ $recommid }]">
+    [{/if}]
     [{oxhasrights ident="TOBASKET"}]
         [{ if $blShowToBasket}]
-            [{ $oViewConf->getHiddenSid() }]
-            <input type="hidden" name="pgNr" value="[{ $oView->getActPage() }]">
             <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
             [{if $owishid}]
                 <input type="hidden" name="owishid" value="[{$owishid}]">
@@ -30,9 +33,6 @@
                 <input type="hidden" name="anid" value="[{ $altproduct }]">
             [{else}]
                 <input type="hidden" name="anid" value="[{ $product->oxarticles__oxnid->value }]">
-            [{/if}]
-            [{if $recommid}]
-                <input type="hidden" name="recommid" value="[{ $recommid }]">
             [{/if}]
             <input type="hidden" name="am" value="1">
         [{/if}]
