@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategoryTest.php 29954 2010-09-23 14:08:00Z tomas $
+ * @version   SVN: $Id: oxcategoryTest.php 33731 2011-03-10 14:39:37Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -75,6 +75,19 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $this->_sCategory   = '8a142c3e60a535f16.78077188';
         $myDB = oxDb::getDb();
         $myDB->Execute('insert into oxcategory2attribute (oxid, oxobjectid, oxattrid, oxsort) values ("test3","'.$this->_sCategory.'","'.$this->_sAttributeD.'", "333")');
+
+       /* $sOrigTestPicFile   = "1126_th.jpg";
+        $sOrigTestIconFile  = "1126_th.jpg";
+
+
+        $myConfig = oxConfig::getInstance();
+        $sPicDir  = $myConfig->getPictureDir()."0/";
+        $sIconDir  = $myConfig->getPictureDir()."icon/";
+
+        copy( $sDir.$sOrigTestPicFile, $sDir.$sCloneTestPicFile );
+        copy( $sDir.$sOrigTestIconFile, $sDir.$sCloneTestIconFile );*/
+
+
     }
 
     /**
@@ -222,10 +235,10 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( 'bl_perfShowActionCatArticleCnt', false );
         $this->_oCategory->oxcategories__oxlongdesc = new oxField('aa[{* smarty comment *}]zz', oxField::T_RAW);
         $this->_oCategory->save();
-        $sDimagedir = oxConfig::getInstance()->getDynImageDir( oxConfig::getInstance()->getShopId());
+        $sDimagedir = oxConfig::getInstance()->getPictureUrl( null, false, oxConfig::getInstance()->isSsl(), null);
         $this->reload();
         $this->assertEquals( 'aa[{* smarty comment *}]zz', $this->_oCategory->oxcategories__oxlongdesc->value);
-        $this->assertEquals( null, $this->_oCategory->getNrOfArticles());
+        $this->assertEquals( 0, $this->_oCategory->getNrOfArticles());
         $this->assertEquals( $sDimagedir, $this->_oCategory->dimagedir);
     }
 
@@ -274,7 +287,7 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $this->_oCategory->save();
         $oObj3 = oxNew( "oxcategory");
         $oObj3->load( $this->_oCategory->getId());
-        $this->assertEquals('aazz', $oObj3->oxcategories__oxlongdesc->value);
+        $this->assertEquals('aazz', $oObj3->getLongDesc() );
     }
 
     public function testAssignParseLongDescInList()
@@ -295,12 +308,14 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
     public function testAssignCountArt()
     {
         $oObj = new oxcategory();
-        $this->assertEquals(null, $oObj->getNrOfArticles());
+        $this->assertEquals(0, $oObj->getNrOfArticles());
         modConfig::getInstance()->setConfigParam( 'bl_perfShowActionCatArticleCnt', true );
         $sCat = '30e44ab83fdee7564.23264141';
             $sCat = '8a142c3e4143562a5.46426637';
-        oxUtilsCount::getInstance()->resetCatArticleCount($oObj->getId());
+
         $oObj->load($sCat);
+        oxUtilsCount::getInstance()->resetCatArticleCount($oObj->getId());
+
             $this->assertEquals(32, $oObj->getNrOfArticles());
     }
 
@@ -313,7 +328,7 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $this->_oCategory->save();
         $this->reload(); // call assign
 
-            $this->assertEquals(23, $this->_oCategory->getNrOfArticles());
+            $this->assertEquals(24, $this->_oCategory->getNrOfArticles());
     }
 
     public function testDelete()
@@ -356,117 +371,6 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $iCnt = $myDB->getOne('select count(*) from oxobject2delivery where oxobjectid = "'.$sCatId.'"');
 
         $this->assertEquals(0, $iCnt);
-    }
-
-    public function testGetAttribute()
-    {
-        $oObj = oxNew( "oxcategory");
-        $oObj->load($this->_sCategory);
-        $aAtrr = $oObj->getAttributes();
-        $sVal = $aAtrr[$this->_sAttributeD];
-        $this->assertEquals(1, count($aAtrr));
-        $this->assertEquals(6, count($aAtrr[$this->_sAttributeD]->aValues));
-    }
-
-    public function testGetAttributeWithSort()
-    {
-        //$this->_sCategory = 'testCat1';
-        $myDB = oxDb::getDb();
-        $myDB->Execute('insert into oxcategory2attribute (oxid, oxobjectid, oxattrid, oxsort) values ("test1","'.$this->_sCategory.'","'.$this->_sAttributeB.'", "111"), ("test2","'.$this->_sCategory.'","'.$this->_sAttributeC.'", "222")');
-        $oObj = oxNew( "oxcategory");
-        $oObj->load($this->_sCategory);
-        $aAttrList = $oObj->getAttributes();
-
-        $iCnt = 0;
-            $aNames = array( "_sAttributeB", "_sAttributeC", "_sAttributeD" );
-
-
-        foreach ( $aAttrList as $sId => $aAttr ) {
-            $this->assertEquals( $this->{$aNames[$iCnt]}, $sId);
-            $iCnt++;
-        }
-    }
-
-    public function testGetAttributeSelectedValue()
-    {
-
-            $sAttValue = 'originell';
-
-        $aFilter = array($this->_sAttributeD => $sAttValue );
-        oxSession::setVar( "session_attrfilter", array($this->_sCategory => $aFilter ) );
-        $oObj = oxNew( "oxcategory");
-        $oObj->load($this->_sCategory);
-        $aAtrr = $oObj->getAttributes();
-        $sVal = $aAtrr[$this->_sAttributeD];
-        oxSession::setVar( "session_attrfilter", null );
-            $this->assertEquals(1, count($aAtrr));
-        $this->assertTrue($aAtrr[$this->_sAttributeD]->aValues[md5( $sAttValue )]->blSelected);
-    }
-
-    /*
-     * Checking if attributes values are loaded correclty when only english values are entered
-     * M:787
-     */
-    public function testGetAttributesWhenValuesAreOnlyInEnglish()
-    {
-        $myDB = oxDb::getDb();
-        oxLang::getInstance()->setBaseLanguage( 1 );
-        $oObj = oxNew( "oxcategory");
-
-            $myDB->Execute('insert into oxattribute (oxid, oxshopid, oxtitle, oxtitle_1) values ("_testAttrId", "' . $oObj->getConfig()->getShopId() . '", "testNameDE", "testNameEN")');
-
-        $myDB->Execute('insert into oxobject2attribute (oxid, oxobjectid, oxattrid, oxvalue, oxvalue_1) values ("_testO2AId_1", "1354", "_testAttrId", "", "testValue_1_EN")');
-        $myDB->Execute('insert into oxobject2attribute (oxid, oxobjectid, oxattrid, oxvalue, oxvalue_1) values ("_testO2AId_2", "1672", "_testAttrId", "", "testValue_2_EN")');
-        $myDB->Execute('insert into oxcategory2attribute (oxid, oxobjectid, oxattrid) values ("test11","'.$this->_sCategory.'","_testAttrId")');
-
-        oxSession::setVar( "session_attrfilter", null );
-        $oObj->load($this->_sCategory);
-        $aAtrr = $oObj->getAttributes();
-        $oValues = $aAtrr['_testAttrId'];
-
-        $this->assertEquals( 2, count($oValues->aValues) );
-        $this->assertEquals( 'testValue_1_EN', $oValues->aValues[md5('testValue_1_EN')]->id );
-        $this->assertEquals( 'testValue_2_EN', $oValues->aValues[md5('testValue_2_EN')]->id );
-    }
-
-    /*
-     * Checking if attributes values are loaded correclty when only english values are entered
-     * and both values are same
-     */
-    public function testGetAttributesWhenValuesAreOnlyInEnglishAndSameValues()
-    {
-        $myDB = oxDb::getDb();
-        oxLang::getInstance()->setBaseLanguage( 1 );
-        $oObj = oxNew( "oxcategory");
-
-            $myDB->Execute('insert into oxattribute (oxid, oxshopid, oxtitle, oxtitle_1) values ("_testAttrId", "' . $oObj->getConfig()->getShopId() . '", "testNameDE", "testNameEN")');
-
-        $myDB->Execute('insert into oxobject2attribute (oxid, oxobjectid, oxattrid, oxvalue, oxvalue_1) values ("_testO2AId_1", "1354", "_testAttrId", "", "testValue_EN")');
-        $myDB->Execute('insert into oxobject2attribute (oxid, oxobjectid, oxattrid, oxvalue, oxvalue_1) values ("_testO2AId_2", "1672", "_testAttrId", "", "testValue_EN")');
-        $myDB->Execute('insert into oxcategory2attribute (oxid, oxobjectid, oxattrid) values ("test11","'.$this->_sCategory.'","_testAttrId")');
-
-        oxSession::setVar( "session_attrfilter", null );
-        $oObj->load($this->_sCategory);
-        $aAtrr = $oObj->getAttributes();
-        $oValues = $aAtrr['_testAttrId'];
-
-        $this->assertEquals( 1, count($oValues->aValues) );
-        $this->assertEquals( 'testValue_EN', $oValues->aValues[md5('testValue_EN')]->id );
-    }
-
-    public function testGetAttributeHasNoAttributes()
-    {
-        $myDB = oxDb::getDb();
-        $sDelete = "Delete from oxcategory2attribute where oxid like 'test%' ";
-        $myDB->Execute($sDelete);
-        $aFilter = array($this->_sAttributeD => 'originell');
-        oxSession::setVar( "session_attrfilter", array($this->_sCategory => $aFilter) );
-        $oObj = oxNew( "oxcategory");
-        $oObj->load($this->_sCategory);
-        $aAtrr = $oObj->getAttributes();
-        $sVal = $aAtrr[$this->_sAttributeD];
-        oxSession::setVar( "session_attrfilter", null );
-        $this->assertEquals(0, count($aAtrr));
     }
 
     public function testGetCatInLang()
@@ -797,7 +701,7 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
     }
 
     // #M366: Upload of manufacturer and categories icon does not work
-    public function testGetIconUrl()
+   /* public function testGetIconUrl()
     {
         $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
         $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('icon/test_ico')->will( $this->returnValue( 'iconUrl' ) );
@@ -807,7 +711,7 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $oCategory->setConfig($oConfig);
 
         $this->assertEquals( 'iconUrl', $oCategory->getIconUrl() );
-    }
+    }*/
 
     public function testSetGetSubCats()
     {
@@ -912,8 +816,9 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( 'bl_perfShowActionCatArticleCnt', false );
         modConfig::getInstance()->setConfigParam( 'blDontShowEmptyCategories', true );
         $oCategory = $this->getProxyClass( "oxcategory" );
-        $oCategory->setNrOfArticles( 12 );
-        $this->assertEquals( 0, $oCategory->getNrOfArticles() );
+            $oCategory->load( '8a142c3e60a535f16.78077188' );
+            oxUtilsCount::getInstance()->resetCatArticleCount($oCategory->getId());
+            $this->assertEquals( 6, $oCategory->getNrOfArticles() );
     }
 
     public function testSetGetIsVisible()
@@ -1018,12 +923,95 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $oCategory->load( $sId );
         $this->assertEquals( 'Living', $oCategory->oxcategories__oxtitle->value );
     }
+
     public function testGetStdLinkWithParams()
     {
         $oCategory = new oxcategory();
         $oCategory->setId('l_id');
         $this->assertEquals( oxConfig::getInstance()->getShopHomeURL(). "cl=alist&amp;cnid=l_id&amp;foo=bar", $oCategory->getStdLink(0, array('foo'=>'bar')) );
         $this->assertEquals( oxConfig::getInstance()->getShopHomeURL(). "cl=alist&amp;cnid=l_id&amp;foo=bar&amp;lang=1", $oCategory->getStdLink(1, array('foo'=>'bar')) );
+    }
+
+    public function testGetPictureUrlForType()
+    {
+        $oCategory = new oxcategory();
+        $oCategory->setId('l_id');
+
+        $sExistingPic= '1126_th.jpg';
+        $sExistingIcon= '1126_ico.jpg';
+        $sEmptyPic = '';
+
+        $this->assertFalse($oCategory->getPictureUrlForType($sEmptyPic, '0'));
+        $this->assertFalse($oCategory->getPictureUrlForType($sEmptyPic, 'icon'));
+
+        $this->assertEquals($oCategory->getPictureUrl() . '0/' . $sExistingPic
+            , $oCategory->getPictureUrlForType($sExistingPic, '0'));
+        $this->assertEquals($oCategory->getPictureUrl() . 'icon/' . $sExistingIcon
+            , $oCategory->getPictureUrlForType($sExistingIcon, 'icon'));
+    }
+
+    public function testGetThumbUrl()
+    {
+        $oCategory = new oxcategory();
+        $oCategory->setId('l_id');
+
+        $sExistingPic = '1126_th.jpg';
+        $sEmptyPic = '';
+
+        $oCategory->oxcategories__oxthumb = new oxField($sEmptyPic);
+        $this->assertFalse($oCategory->getThumbUrl());
+
+        $oCategory->oxcategories__oxthumb = new oxField($sExistingPic);
+        $this->assertEquals($oCategory->getPictureUrl() . '0/' . $sExistingPic
+            , $oCategory->getThumbUrl());
+
+    }
+
+    public function testGetIconUrl()
+    {
+        $oCategory = new oxcategory();
+        $oCategory->setId('l_id');
+
+        $sExistingIcon= '1126_ico.jpg';
+        $sEmptyPic = '';
+
+        $oCategory->oxcategories__oxicon = new oxField($sEmptyPic);
+        $this->assertFalse($oCategory->getIconUrl());
+
+        $oCategory->oxcategories__oxicon = new oxField($sExistingIcon);
+        $this->assertEquals($oCategory->getPictureUrl() . 'icon/' . $sExistingIcon
+            , $oCategory->getIconUrl());
+    }
+
+    public function testGetPromotionIconUrl()
+    {
+        $oCategory = new oxcategory();
+        $oCategory->setId('l_id');
+
+        $sExistingIcon= '1126_ico.jpg';
+        $sEmptyPic = '';
+
+        $oCategory->oxcategories__oxpromoicon = new oxField($sEmptyPic);
+        $this->assertFalse($oCategory->getPromotionIconUrl());
+
+        $oCategory->oxcategories__oxpromoicon = new oxField($sExistingIcon);
+        $this->assertEquals($oCategory->getPictureUrl() . 'icon/' . $sExistingIcon
+            , $oCategory->getPromotionIconUrl());
+    }
+
+    public function testGetAttributes()
+    {
+        $oAttrList = new oxAttributeList();
+        $oAttr = new oxAttribute();
+        $oAttrList->offsetSet(1, $oAttr);
+
+        $oCAttrList = $this->getMock( 'oxattributelist', array( 'getCategoryAttributes' ));
+        $oCAttrList->expects( $this->any() )->method( 'getCategoryAttributes')->will( $this->returnValue( $oAttrList ) );
+
+        $oCategory = $this->getMock( 'oxcategory', array( 'getAttributes' ));
+        $oCategory->expects( $this->any() )->method( 'getAttributes')->will( $this->returnValue( $oCAttrList ) );
+
+        $this->assertEquals( $oCAttrList->getArray() , $oCategory->getAttributes()->getArray() );
     }
 
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: deliverysetpaymentTest.php 26329 2010-03-05 13:31:44Z arvydas $
+ * @version   SVN: $Id: deliverysetpaymentTest.php 33188 2011-02-10 15:55:15Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -57,14 +57,11 @@ class Unit_Admin_DeliverySetPaymentTest extends OxidTestCase
     public function testRenderNoRealObjectId()
     {
         modConfig::setParameter( "oxid", "-1" );
-        modConfig::setParameter( "saved_oxid", "-1" );
 
         // testing..
         $oView = new DeliverySet_Payment();
         $this->assertEquals( 'deliveryset_payment.tpl', $oView->render() );
         $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['updatelist'] ) );
-        $this->assertEquals( "1", $aViewData['updatelist'] );
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );
     }

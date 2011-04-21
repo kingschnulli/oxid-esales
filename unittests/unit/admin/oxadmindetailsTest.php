@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadmindetailsTest.php 26851 2010-03-25 16:56:52Z arvydas $
+ * @version   SVN: $Id: oxadmindetailsTest.php 32926 2011-02-04 15:00:59Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -177,16 +177,14 @@ class Unit_Admin_oxAdminDetailsTest extends OxidTestCase
     public function testGetEditValue_parseIsOff()
     {
         $oObject = new oxStdClass;
-        $oObject->oField1 = new oxField( 'test [{$shop->currenthomedir}]' );
-        $oObject->oField2 = new oxField( 'test [{$oViewConf->getCurrentHomeDir()}]' );
+        $oObject->oField = new oxField( 'test [{$oViewConf->getCurrentHomeDir()}]' );
 
         $myConfig = modConfig::getInstance();
         $myConfig->setConfigParam( "bl_perfParseLongDescinSmarty", false );
         $sUrl = modConfig::getInstance()->getCurrentShopURL();
 
         $oAdminDetails = new oxadmindetails();
-        $this->assertEquals( "test $sUrl", $oAdminDetails->UNITgetEditValue( $oObject, 'oField1' ) );
-        $this->assertEquals( "test $sUrl", $oAdminDetails->UNITgetEditValue( $oObject, 'oField2' ) );
+        $this->assertEquals( "test $sUrl", $oAdminDetails->UNITgetEditValue( $oObject, 'oField' ) );
     }
 
     /**
@@ -268,6 +266,7 @@ class Unit_Admin_oxAdminDetailsTest extends OxidTestCase
     {
         $oListItem = oxNew( 'oxContent' );
         $oListItem->setId( '_testId' );
+        $oListItem->oxcontents__oxloadid = new oxField( "_testLoadId" );
         $oListItem->save();
 
         modConfig::setParameter( 'oxid', '_testId' );
@@ -291,6 +290,7 @@ class Unit_Admin_oxAdminDetailsTest extends OxidTestCase
     {
         $oListItem = oxNew( 'oxContent' );
         $oListItem->setId( '_testId' );
+        $oListItem->oxcontents__oxloadid = new oxField( "_testLoadId" );
         $oListItem->oxcontents__oxfolder = new oxField('neu', oxField::T_RAW);
         $oListItem->save();
 

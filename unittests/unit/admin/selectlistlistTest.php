@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: selectlistlistTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: selectlistlistTest.php 31986 2010-12-17 14:03:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -42,7 +42,7 @@ class Unit_Admin_SelectListListTest extends OxidTestCase
         $oView->expects( $this->any() )->method( '_authorize' )->will( $this->returnValue( true ) );
         $oView->init();
         $oView->render();
-        $this->assertEquals( getViewName('oxselectlist').".oxtitle", $oView->getViewDataElement( 'sort' ) );
+        $this->assertEquals( array( 'oxselectlist' => array( "oxtitle" => "asc" ) ), $oView->getListSorting() );
     }
 
     /**

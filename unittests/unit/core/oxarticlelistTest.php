@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 31032 2010-11-18 09:35:33Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticlelistTest.php 33601 2011-03-01 14:34:42Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -56,7 +56,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     protected function _getArticleTable()
     {
-            return "oxarticles";
+        return getViewName("oxarticles");
     }
 
     /**
@@ -163,6 +163,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testGetCategorySelectTestingIfAllDataIsProperlyEscaped()
     {
         $sO2CView = getViewName( 'oxobject2category' );
+        $sO2AView = getViewName( 'oxobject2attribute' );
 
         $sCatId = "testcatid";
         $aSessionFilter["'\"\"'"] = "'\"\"'";
@@ -172,7 +173,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sExpQ  = "select oc.oxobjectid as oxobjectid, count(*) as cnt from ";
         $sExpQ .= "(SELECT * FROM {$sO2CView} WHERE {$sO2CView}.oxcatnid ";
         $sExpQ .= "= 'testcatid' GROUP BY {$sO2CView}.oxobjectid, {$sO2CView}.oxcatnid)";
-        $sExpQ .= " as oc INNER JOIN oxobject2attribute as oa ON ( oa.oxobjectid = oc.oxobjectid ) ";
+        $sExpQ .= " as oc INNER JOIN {$sO2AView} as oa ON ( oa.oxobjectid = oc.oxobjectid ) ";
         $sExpQ .= "WHERE ( oa.oxattrid = ".$oDb->quote( "'\"\"'" )." and oa.oxvalue = ".$oDb->quote( "'\"\"'" )." )  GROUP BY oa.oxobjectid HAVING cnt = 1 ";
 
         $oArticleList = new oxArticleList();
@@ -284,10 +285,10 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         oxLang::getInstance()->setBaseLanguage( 1 );
         $oTestList = $this->getProxyClass('oxArticleList');
         $oTestList->setCustomSorting('oxtitle desc');
-        $this->assertEquals('oxtitle_1 desc', $oTestList->getNonPublicVar('_sCustomSorting'));
+        $this->assertEquals('oxtitle desc', $oTestList->getNonPublicVar('_sCustomSorting'));
 
         $oTestList->setCustomSorting('testTable.oxtitle desc');
-        $this->assertEquals('testTable.oxtitle_1 desc', $oTestList->getNonPublicVar('_sCustomSorting'));
+        $this->assertEquals('testTable.oxtitle desc', $oTestList->getNonPublicVar('_sCustomSorting'));
     }
 
 
@@ -552,9 +553,10 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         modDB::getInstance()->cleanup();
 
         $sO2CView      = getViewName( 'oxobject2category' );
+        $sO2AView      = getViewName( 'oxobject2attribute' );
         $sExpt = "select oc.oxobjectid as oxobjectid, count(*)as cnt from
             (SELECT * FROM $sO2CView WHERE $sO2CView.oxcatnid='$sCatId' GROUP BY $sO2CView.oxobjectid, $sO2CView.oxcatnid) as oc
-            INNER JOIN oxobject2attribute as oa ON(oa.oxobjectid=oc.oxobjectid)
+            INNER JOIN {$sO2AView} as oa ON(oa.oxobjectid=oc.oxobjectid)
             WHERE (oa.oxattrid='8a142c3ee0edb75d4.80743302' and oa.oxvalue='Zeiger')
                 or (oa.oxattrid='8a142c3e9cd961518.80299776'andoa.oxvalue='originell')
             GROUPBY oa.oxobjectid
@@ -685,13 +687,14 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest = $this->getProxyClass('oxArticleList');
 
         $sArticleTable = $this->_getArticleTable();
+        $sAEV = getViewName('oxartextends');
 
         $sExpt = "and ( ( $sArticleTable.oxtitle like '%test%' or $sArticleTable.oxshortdesc like '%test%' ";
         $sExpt.= "or $sArticleTable.oxsearchkeys like '%test%' or $sArticleTable.oxartnum like '%test%' ";
-        $sExpt.= "or oxartextends.oxtags like '%test%' ) or ";
+        $sExpt.= "or $sAEV.oxtags like '%test%' ) or ";
         $sExpt.= " ( $sArticleTable.oxtitle like '%Search%' or $sArticleTable.oxshortdesc like '%Search%' ";
         $sExpt.= "or $sArticleTable.oxsearchkeys like '%Search%' or $sArticleTable.oxartnum like '%Search%' ";
-        $sExpt.= "or oxartextends.oxtags like '%Search%' )  ) ";
+        $sExpt.= "or $sAEV.oxtags like '%Search%' )  ) ";
 
         $sRes = $oTest->UNITgetSearchSelect('test Search');
 
@@ -725,13 +728,14 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest = $this->getProxyClass('oxArticleList');
 
         $sArticleTable = $this->_getArticleTable();
+        $sAEV = getViewName('oxartextends');
 
         $sExpt = "and ( ( $sArticleTable.oxtitle like '%test%' or $sArticleTable.oxshortdesc like '%test%' ";
         $sExpt.= "or $sArticleTable.oxsearchkeys like '%test%' or $sArticleTable.oxartnum like '%test%' ";
-        $sExpt.= "or oxartextends.oxtags like '%test%' ) and ";
+        $sExpt.= "or $sAEV.oxtags like '%test%' ) and ";
         $sExpt.= " ( $sArticleTable.oxtitle like '%Search%' or $sArticleTable.oxshortdesc like '%Search%' ";
         $sExpt.= "or $sArticleTable.oxsearchkeys like '%Search%' or $sArticleTable.oxartnum like '%Search%' ";
-        $sExpt.= "or oxartextends.oxtags like '%Search%' )  ) ";
+        $sExpt.= "or $sAEV.oxtags like '%Search%' )  ) ";
 
         $sRes = $oTest->UNITgetSearchSelect('test Search');
 
@@ -752,12 +756,13 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest = $this->getProxyClass('oxArticleList');
 
         $sArticleTable = $this->_getArticleTable();
+        $sAEV = getViewName('oxartextends');
 
         $sExpt = "and ( ( $sArticleTable.oxtitle like '%würfel%' or $sArticleTable.oxtitle like '%w&uuml;rfel%' ";
         $sExpt.= "or $sArticleTable.oxshortdesc like '%würfel%' or $sArticleTable.oxshortdesc like '%w&uuml;rfel%' ";
         $sExpt.= "or $sArticleTable.oxsearchkeys like '%würfel%' or $sArticleTable.oxsearchkeys like '%w&uuml;rfel%' ";
         $sExpt.= "or $sArticleTable.oxartnum like '%würfel%' or $sArticleTable.oxartnum like '%w&uuml;rfel%' ";
-        $sExpt.= "or oxartextends.oxtags like '%würfel%' or oxartextends.oxtags like '%w&uuml;rfel%' ) )";
+        $sExpt.= "or $sAEV.oxtags like '%würfel%' or $sAEV.oxtags like '%w&uuml;rfel%' ) )";
 
         $sRes = $oTest->UNITgetSearchSelect('würfel ');
 
@@ -811,10 +816,10 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
 
         $sExpt  = "select $sArticleTable.oxid from $sArticleTable  where";
         $sExpt .= " ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''";
-        $sExpt .= " and $sArticleTable.oxissearch = 1  and ( ( $sArticleTable.oxtitle_1 like";
-        $sExpt .= " '%testSearch%'  or $sArticleTable.oxshortdesc_1 like '%testSearch%'  or";
-        $sExpt .= " $sArticleTable.oxsearchkeys_1 like '%testSearch%'  or $sArticleTable.oxartnum";
-        $sExpt .= " like '%testSearch%'  )  )  order by oxtitle_1 desc ";
+        $sExpt .= " and $sArticleTable.oxissearch = 1  and ( ( $sArticleTable.oxtitle like";
+        $sExpt .= " '%testSearch%'  or $sArticleTable.oxshortdesc like '%testSearch%'  or";
+        $sExpt .= " $sArticleTable.oxsearchkeys like '%testSearch%'  or $sArticleTable.oxartnum";
+        $sExpt .= " like '%testSearch%'  )  )  order by oxtitle desc ";
 
         $oTest = $this->getMock( 'oxArticleList', array( "_createIdListFromSql" ) );
         $oTest->expects($this->once())->method( "_createIdListFromSql" )
@@ -951,9 +956,11 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt  = "select $sArticleTable.oxid from $sArticleTable  LEFT JOIN oxartextends ON oxartextends.oxid=$sArticleTable.oxid  where";
+        $sAEV = getViewName('oxartextends');
+
+        $sExpt  = "select $sArticleTable.oxid from $sArticleTable  LEFT JOIN $sAEV ON $sAEV.oxid=$sArticleTable.oxid  where";
         $sExpt .= " ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''";
-        $sExpt .= " and $sArticleTable.oxissearch = 1  and ( ( oxartextends.oxtags like";
+        $sExpt .= " and $sArticleTable.oxissearch = 1  and ( ( $sAEV.oxtags like";
         $sExpt .= " '%testSearch%'  )  ) ";
 
         $oTest = $this->getMock( 'oxArticleList', array( "_createIdListFromSql" ) );
@@ -977,9 +984,10 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt  = "select $sArticleTable.oxid from $sArticleTable  LEFT JOIN oxartextends ON oxartextends.oxid=$sArticleTable.oxid  where";
+        $sAEV = getViewName('oxartextends');
+        $sExpt  = "select $sArticleTable.oxid from $sArticleTable  LEFT JOIN $sAEV ON $sAEV.oxid=$sArticleTable.oxid  where";
         $sExpt .= " ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''";
-        $sExpt .= " and $sArticleTable.oxissearch = 1  and ( ( oxartextends.oxlongdesc like";
+        $sExpt .= " and $sArticleTable.oxissearch = 1  and ( ( $sAEV.oxlongdesc like";
         $sExpt .= " '%testSearch%'  )  ) ";
 
         $oTest = $this->getMock( 'oxArticleList', array( "_createIdListFromSql" ) );
@@ -1149,22 +1157,38 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     }
 
     /**
-     * Test load price articles from category if article count set.
+     * Test counting price category articles
      *
      * @return null
      */
-    public function testLoadPriceArticlesFromCategoryIfArtCntSet()
+    public function testLoadPriceArticles_totalArticlesCount()
     {
-        $iPrice1 = 5;
-        $iPrice2 = 10;
+        $oUtilsCount = $this->getMock( 'oxUtilsCount', array( "getPriceCatArticleCount" ) );
+        $oUtilsCount->expects($this->once())->method( "getPriceCatArticleCount" )->will( $this->returnValue( 25 ) );
 
-        $oCat = $this->getMock( 'oxCategory', array( "getNrOfArticles" ) );
-        $oCat->expects($this->any())->method( "getNrOfArticles" )->will( $this->returnValue( 15 ) );
-        $oTest = new oxArticleList();
-        $iRes = $oTest->loadPriceArticles( $iPrice1, $iPrice2, $oCat );
+        oxTestModules::addModuleObject( "oxUtilsCount", $oUtilsCount );
 
-        $this->assertEquals( 15, $iRes );
-        $this->assertNotEquals( 15, $oTest->count() );
+        $oCat = oxNew( 'oxCategory' );
+        
+        $oArticleList = new oxArticleList();
+        $iRes = $oArticleList->loadPriceArticles( 1, 2, $oCat );
+
+        $this->assertEquals( 25, $iRes );
+    }
+
+    /**
+     * Test counting price category articles
+     *
+     * @return null
+     */
+    public function testLoadPriceArticles_totalArticlesCount_noCategory()
+    {
+        $oArticleList = $this->getMock( 'oxArticleList', array( "count" ) );
+        $oArticleList->expects($this->once())->method( "count" )->will( $this->returnValue( 25 ) );
+
+        $iRes = $oArticleList->loadPriceArticles( 1, 2 );
+
+        $this->assertEquals( 25, $iRes );
     }
 
     /**
@@ -1187,12 +1211,14 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadNewestArticlesNoneDoNotLoadPrice()
     {
-        $oTest = $this->getProxyClass('oxArticleList');
         modConfig::getInstance()->setConfigParam( 'bl_perfLoadPriceForAddList', 0 );
         modConfig::getInstance()->setConfigParam( 'iNewestArticlesMode', 0 );
+        $oTest = new oxArticleList();
         $oTest->loadNewestArticles();
         $this->assertEquals( 0, $oTest->count() );
-        $this->assertFalse( $oTest->getNonPublicVar( '_blLoadPrice' ) );
+
+        $oBase = $oTest->getBaseObject();
+        $this->assertNull( $oBase->getBasePrice() );
     }
 
     /**
@@ -1307,12 +1333,15 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadTop5ArticlesNone()
     {
-        $oTest = $this->getProxyClass('oxArticleList');
         modConfig::getInstance()->setConfigParam( 'bl_perfLoadPriceForAddList', 0 );
         modConfig::getInstance()->setConfigParam( 'iTop5Mode', 0 );
+
+        $oTest = new oxArticleList();
         $oTest->loadTop5Articles();
         $this->assertEquals( 0, $oTest->count() );
-        $this->assertFalse( $oTest->getNonPublicVar( '_blLoadPrice' ) );
+
+        $oBase = $oTest->getBaseObject();
+        $this->assertNull( $oBase->getBasePrice() );
     }
 
     /**
@@ -1658,19 +1687,6 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     }
 
     /**
-     * Test select string load price.
-     *
-     * @return null
-     */
-    public function testSelectStringLoadPrice()
-    {
-        $oTest = $this->getProxyClass("oxArticleList");
-        $oTest->setNonPublicVar("_blLoadPrice", false);
-        $oTest->selectString("select * from oxarticles where 0");
-        $this->assertEquals(array( oxNew('oxarticle'), "disablePriceLoad"), $oTest->getNonPublicVar("_aAssignCallbackPrepend"));
-    }
-
-    /**
      * Test select string do non load price.
      *
      * @return null
@@ -1842,8 +1858,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
         $oTest = $this->getProxyClass("oxArticleList");
         oxLang::getInstance()->setBaseLanguage( 1 );
-        $oTest->selectString("select * from oxarticles where oxid = '2080'");
-        $this->assertEquals($oTest[2080]->oxarticles__oxtitle_1->value, $oTest[2080]->oxarticles__oxtitle->value);
+        $sView = getViewName('oxarticles', 1);
+        $oTest->selectString("select * from $sView where oxid = '2080'");
+            $this->assertEquals("Champagne Pliers &amp; Bottle Opener", $oTest[2080]->oxarticles__oxtitle->value);
     }
 
     /**
@@ -1943,8 +1960,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
         oxTestModules::addFunction( 'oxUtilsCount', 'getTagArticleCount', '{ return 999; }' );
 
-        $sQ = "select yyy from oxartextends inner join xxx on ".
-              "xxx.oxid = oxartextends.oxid where match ( oxartextends.oxtags_5 ) ".
+        $sView = getViewName('oxartextends', 5);
+        $sQ = "select yyy from $sView inner join xxx on ".
+              "xxx.oxid = $sView.oxid where match ( $sView.oxtags ) ".
               "against( ".oxDb::getDb()->quote('"zzz_"')." IN BOOLEAN MODE ) and 1";
 
         $oBaseObject = $this->getMock( 'oxArticle', array( 'getViewName', 'getSelectFields', 'getSqlActiveSnippet' ) );
@@ -2051,9 +2069,10 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testGetTagArticleIdsMocking()
     {
         $aReturn = array( 'aaa' => 'bbb' );
-        $sQ = "select oxartextends.oxid from oxartextends inner join xxx on ".
-              "xxx.oxid = oxartextends.oxid where xxx.oxissearch = 1 and ".
-              "match ( oxartextends.oxtags_5 ) ".
+        $sView = getViewName('oxartextends', 5);
+        $sQ = "select $sView.oxid from $sView inner join xxx on ".
+              "xxx.oxid = $sView.oxid where xxx.oxissearch = 1 and ".
+              "match ( $sView.oxtags ) ".
               "against( 'zzz_' IN BOOLEAN MODE ) and 1 order by xxx.yyy ";
 
         $oBaseObject = $this->getMock( 'oxArticle', array( 'getViewName', 'getSqlActiveSnippet' ) );
@@ -2061,7 +2080,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oBaseObject->expects( $this->once() )->method( 'getSqlActiveSnippet' )->will( $this->returnValue( '1' ) );
 
         $oArtList = $this->getMock( 'oxArticleList', array( 'getBaseObject', '_createIdListFromSql' ) );
-        $oArtList->expects( $this->exactly( 2 ) )->method( 'getBaseObject' )->will( $this->returnValue( $oBaseObject ) );
+        $oArtList->expects( $this->exactly( 1 ) )->method( 'getBaseObject' )->will( $this->returnValue( $oBaseObject ) );
         $oArtList->expects( $this->once() )->method( '_createIdListFromSql' )->with( $sQ )->will( $this->returnValue( $aReturn ));
 
         $oArtList->setCustomSorting( 'yyy' );
@@ -2075,15 +2094,15 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testGetTagArticleIds()
     {
-            $sTag = "wanduhr";
+        $sTag = "wanduhr";
 
 
-                $aExpIds = array( 1354, 2000, 1771 );
+            $aExpIds = array( 1354, 2000, 1771 );
 
-            $oArtList = new oxArticleList();
-            $oArtList->setCustomSorting('oxtitle desc');
-            $oArtList->getTagArticleIds( $sTag, 0 );
-            $this->assertEquals( $aExpIds, $oArtList->ArrayKeys() );
+        $oArtList = new oxArticleList();
+        $oArtList->setCustomSorting('oxtitle desc');
+        $oArtList->getTagArticleIds( $sTag, 0 );
+        $this->assertEquals( $aExpIds, $oArtList->ArrayKeys() );
     }
 
     /**

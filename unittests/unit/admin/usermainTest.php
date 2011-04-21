@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: usermainTest.php 26265 2010-03-04 08:09:26Z arvydas $
+ * @version   SVN: $Id: usermainTest.php 33190 2011-02-10 15:56:27Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -60,7 +60,6 @@ class Unit_Admin_UserMainTest extends OxidTestCase
     {
         oxTestModules::addFunction( 'oxuser', 'loadAdminUser', '{ $this->oxuser__oxrights = new oxField( "malladmin" ); return; }' );
         modConfig::setParameter( "oxid", "-1" );
-        modConfig::setParameter( "saved_oxid", "-1" );
 
         // testing..
         $oView = new User_Main();
@@ -69,8 +68,6 @@ class Unit_Admin_UserMainTest extends OxidTestCase
         $aViewData = $oView->getViewData();
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );
-        $this->assertTrue( isset( $aViewData['updatelist'] ) );
-        $this->assertEquals( "1", $aViewData['updatelist'] );
     }
 
     /**
@@ -96,7 +93,6 @@ class Unit_Admin_UserMainTest extends OxidTestCase
         $oView->save();
 
         $this->assertEquals( "1", $oView->getViewDataElement( "updatelist" ) );
-        $this->assertEquals( "testId", oxSession::getVar( "saved_oxid" ) );
     }
 
     /**

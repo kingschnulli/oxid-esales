@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: tagTest.php 30110 2010-10-05 14:33:36Z rimvydas.paskevicius $
+ * @version   SVN: $Id: tagTest.php 33265 2011-02-15 12:35:35Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -47,36 +47,31 @@ class Unit_Views_tagTest extends OxidTestCase
     {
         $oArticleList = $this->getMock( "oxArticleList", array( "count" ) );
         $oArticleList->expects( $this->any() )->method( 'count')->will( $this->returnValue(1) );
-        
-        $oView = $this->getMock( "tag", array( "getArticleList", "getTitle", "getTemplateLocation", "getTag", "getPageNavigation", "getActiveCategory", "_processListArticles" ) );
+
+        $oView = $this->getMock( "tag", array( "getArticleList", "_processListArticles" ) );
         $oView->expects( $this->atLeastOnce() )->method( 'getArticleList')->will( $this->returnValue($oArticleList) );
-        $oView->expects( $this->atLeastOnce() )->method( 'getTitle');
-        $oView->expects( $this->atLeastOnce() )->method( 'getTemplateLocation');
-        $oView->expects( $this->atLeastOnce() )->method( 'getTag');
-        $oView->expects( $this->atLeastOnce() )->method( 'getPageNavigation');
-        $oView->expects( $this->atLeastOnce() )->method( 'getActiveCategory');
         $oView->expects( $this->atLeastOnce() )->method( '_processListArticles');
 
-        $this->assertEquals( "list.tpl", $oView->render() );
+        $this->assertEquals( "page/list/list.tpl", $oView->render() );
     }
-    
+
     /**
-     * Testing if render method calls output of 404 error if articles list is empty 
+     * Testing if render method calls output of 404 error if articles list is empty
      */
     public function testRender_noArticlesForTag()
     {
         $oUtils = $this->getMock('oxUtils', array('handlePageNotFoundError'));
         $oUtils->expects( $this->once() )->method('handlePageNotFoundError');
-        oxTestModules::addModuleObject('oxUtils', $oUtils);        
-            
+        oxTestModules::addModuleObject('oxUtils', $oUtils);
+
         $oArticleList = $this->getMock( "oxArticleList", array( "count" ) );
         $oArticleList->expects( $this->any() )->method( 'count')->will( $this->returnValue(0) );
-        
+
         $oView = $this->getMock( "tag", array( "getArticleList" ) );
         $oView->expects( $this->any() )->method( 'getArticleList')->will( $this->returnValue($oArticleList) );
 
         $oView->render();
-    }    
+    }
 
     public function testGetAddUrlParams()
     {
@@ -269,11 +264,15 @@ class Unit_Views_tagTest extends OxidTestCase
         $this->assertEquals( 'Wanduhr', $oTag->getTitle());
     }
 
-    public function testGetTemplateLocation()
+    /**
+     * Testing tags::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
     {
-        $sTag = "wanduhr";
-        $oTag = $this->getProxyClass( 'tag' );
-        $oTag->setNonPublicVar( "_sTag", $sTag );
-        $this->assertEquals( 'Stichworte / Wanduhr', $oTag->getTemplateLocation());
+        $oTag = new Tag();
+        $this->assertEquals(2, count($oTag->getBreadCrumb()));
     }
+
 }

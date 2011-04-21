@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmanufacturerTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxmanufacturerTest.php 32882 2011-02-03 11:45:48Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -169,7 +169,7 @@ class Unit_Core_oxmanufacturerTest extends OxidTestCase
         $oManufacturer->setLanguage( 0 );
         $oManufacturer->load( $sManufacturerId );
 
-        $this->assertEquals( oxConfig::getInstance()->getShopUrl().'Nach-Marke-Hersteller/'.str_replace( ' ', '-', $sManufacturerTitle ).'/', $oManufacturer->getLink() );
+        $this->assertEquals( oxConfig::getInstance()->getShopUrl().'Nach-Marke/'.str_replace( ' ', '-', $sManufacturerTitle ).'/', $oManufacturer->getLink() );
     }
 
     public function testGetLinkSeoEng()
@@ -189,7 +189,7 @@ class Unit_Core_oxmanufacturerTest extends OxidTestCase
         $oManufacturer = new oxManufacturer();
         $oManufacturer->loadInLang( 1, $sManufacturerId );
 
-        $this->assertEquals( oxConfig::getInstance()->getShopUrl().'en/By-Brand-Manufacturer/'.str_replace( ' ', '-', $sManufacturerTitle ).'/', $oManufacturer->getLink() );
+        $this->assertEquals( oxConfig::getInstance()->getShopUrl().'en/By-Brand/'.str_replace( ' ', '-', $sManufacturerTitle ).'/', $oManufacturer->getLink() );
     }
 
     public function testGetLink()
@@ -227,7 +227,7 @@ class Unit_Core_oxmanufacturerTest extends OxidTestCase
         $oManufacturer->setLanguage(1);
         $oManufacturer->load( $sManufacturerId );
 
-        $this->assertEquals( oxConfig::getInstance()->getShopUrl().'Nach-Marke-Hersteller/'.str_replace( ' ', '-', $sManufacturerTitle ).'/', $oManufacturer->getLink(0) );
+        $this->assertEquals( oxConfig::getInstance()->getShopUrl().'Nach-Marke/'.str_replace( ' ', '-', $sManufacturerTitle ).'/', $oManufacturer->getLink(0) );
     }
 
     public function testGetLinkSeoEngWithLangParam()
@@ -247,7 +247,7 @@ class Unit_Core_oxmanufacturerTest extends OxidTestCase
         $oManufacturer = new oxManufacturer();
         $oManufacturer->loadInLang( 0, $sManufacturerId );
 
-        $this->assertEquals( oxConfig::getInstance()->getShopUrl().'en/By-Brand-Manufacturer/'.str_replace( ' ', '-', $sManufacturerTitle ).'/', $oManufacturer->getLink(1) );
+        $this->assertEquals( oxConfig::getInstance()->getShopUrl().'en/By-Brand/'.str_replace( ' ', '-', $sManufacturerTitle ).'/', $oManufacturer->getLink(1) );
     }
 
     public function testGetLinkWithLangParam()
@@ -260,21 +260,24 @@ class Unit_Core_oxmanufacturerTest extends OxidTestCase
         $this->assertEquals( oxConfig::getInstance()->getShopHomeURL().'cl=manufacturerlist&amp;mnid=xxx&amp;lang=1', $oManufacturer->getLink(1) );
     }
 
-    public function testGetRootManufacturer()
+    public function testLoadRootManufacturer()
     {
-        oxTestModules::addFunction('oxManufacturer', 'setRootV', '{oxManufacturer::$_aRootManufacturer[$aA[1]] = $aA[0];}');
-        $oV = oxManufacturer::getRootManufacturer();
+        $oV = new oxManufacturer();
+        $oV->load('root');
         $this->assertTrue($oV instanceof oxManufacturer);
         $this->assertEquals('root', $oV->getId());
-        $oV = oxNew('oxManufacturer');
-        $oV->test = 'sdf';
-        $oV->setRootV($oV, oxLang::getInstance()->getBaseLanguage());
-        $oV = oxManufacturer::getRootManufacturer();
-        $this->assertEquals('sdf', $oV->test);
 
-        $this->assertEquals(0, oxManufacturer::getRootManufacturer( 0 )->getLanguage());
-        $this->assertEquals(1, oxManufacturer::getRootManufacturer( 1 )->getLanguage());
-        $this->assertEquals(oxLang::getInstance()->getBaseLanguage(), oxManufacturer::getRootManufacturer( )->getLanguage());
+        $oV = new oxManufacturer();
+        $oV->loadInLang(0, 'root');
+        $this->assertEquals(0, $oV->getLanguage());
+
+        $oV = new oxManufacturer();
+        $oV->loadInLang(1, 'root');
+        $this->assertEquals(1, $oV->getLanguage());
+
+        $oV = new oxManufacturer();
+        $oV->load('root');
+        $this->assertEquals(oxLang::getInstance()->getBaseLanguage(), $oV->getLanguage());
     }
 
     public function testGetNrOfArticles()
@@ -353,11 +356,20 @@ class Unit_Core_oxmanufacturerTest extends OxidTestCase
         $this->assertEquals(1, count(oxSeoEncoderManufacturer::getInstance()->onDelete));
         $this->assertSame($obj, oxSeoEncoderManufacturer::getInstance()->onDelete[0]);
     }
+
     public function testGetStdLinkWithParams()
     {
         $oManufacturer = new oxManufacturer();
         $oManufacturer->setId( 'xxx' );
         $this->assertEquals( oxConfig::getInstance()->getShopHomeURL().'cl=manufacturerlist&amp;mnid=xxx&amp;foo=bar', $oManufacturer->getStdLink(0, array('foo'=>'bar')) );
+    }
+
+    public function testGetThumbUrl()
+    {
+        $oManufacturer = new oxManufacturer();
+        $oManufacturer->setId( 'xxx' );
+
+        $this->assertFalse($oManufacturer->getThumbUrl());
     }
 
 }

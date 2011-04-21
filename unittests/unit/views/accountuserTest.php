@@ -39,7 +39,7 @@ class Unit_Views_accountUserTest extends OxidTestCase
     {
         $oView = $this->getMock( "Account_User", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( false ) );
-        $this->assertEquals( 'account_login.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/login.tpl', $oView->render() );
     }
 
     /**
@@ -54,79 +54,18 @@ class Unit_Views_accountUserTest extends OxidTestCase
 
         $oView = $this->getMock( "Account_User", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
-        $this->assertEquals( 'account_user.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/user.tpl', $oView->render() );
     }
 
     /**
-     * Testing Account_User::getCountryList()
+     * Testing Account_User::getBreadCrumb()
      *
      * @return null
      */
-    public function testGetCountryList()
+    public function testGetBreadCrumb()
     {
-        $oView = new Account_User();
-        $this->assertTrue( $oView->getCountryList() instanceof oxcountrylist );
-    }
+        $oAccUser = new Account_User();
 
-    /**
-     * Testing Account_User::getDeliverAddress()
-     *
-     * @return null
-     */
-    public function testGetDeliverAddressNoUser()
-    {
-        $oView = $this->getMock( "Account_User", array( "getUser" ) );
-        $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( false ) );
-        $this->assertNull( $oView->getDeliverAddress() );
-    }
-
-    /**
-     * Testing Account_User::getDeliverAddress()
-     *
-     * @return null
-     */
-    public function testGetDeliverAddressFoundSelectedAddress()
-    {
-        $oAddress1 = new oxAddress();
-        $oAddress1->selected = 0;
-
-        $oAddress2 = new oxAddress();
-        $oAddress2->selected = 1;
-
-        $oAddressList = new oxList();
-        $oAddressList->offsetSet( "1", $oAddress1 );
-        $oAddressList->offsetSet( "2", $oAddress2 );
-
-        $oUser = $this->getMock( "oxStdClass", array( "getUserAddresses" ) );
-        $oUser->expects( $this->once() )->method( 'getUserAddresses')->will( $this->returnValue( $oAddressList ) );
-
-        $oView = $this->getMock( "Account_User", array( "getUser" ) );
-        $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
-        $this->assertEquals( $oAddress2, $oView->getDeliverAddress() );
-    }
-
-    /**
-     * Testing Account_User::getDeliverAddress()
-     *
-     * @return null
-     */
-    public function testGetDeliverAddressTakingFirlsFromList()
-    {
-        $oAddress1 = new oxAddress();
-        $oAddress1->selected = 0;
-
-        $oAddress2 = new oxAddress();
-        $oAddress2->selected = 0;
-
-        $oAddressList = new oxList();
-        $oAddressList->offsetSet( "1", $oAddress1 );
-        $oAddressList->offsetSet( "2", $oAddress2 );
-
-        $oUser = $this->getMock( "oxStdClass", array( "getUserAddresses" ) );
-        $oUser->expects( $this->once() )->method( 'getUserAddresses')->will( $this->returnValue( $oAddressList ) );
-
-        $oView = $this->getMock( "Account_User", array( "getUser" ) );
-        $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
-        $this->assertEquals( $oAddress1, $oView->getDeliverAddress() );
+        $this->assertEquals(2, count($oAccUser->getBreadCrumb()));
     }
 }

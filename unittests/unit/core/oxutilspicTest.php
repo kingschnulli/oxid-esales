@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilspicTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxutilspicTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -43,12 +43,12 @@ class Unit_Core_oxUtilsPicTest extends OxidTestCase
                 $myConfig = oxConfig::getInstance();
 
                 // setup-> create a copy of a picture and delete this one for successful test
-                $sOrigTestPicFile   = "1126_th.jpg";
-                $sOrigTestIconFile  = "1126_th.jpg"; // we simply fake an icon file by copying the same
-                $sCloneTestPicFile  = "CC1126_th.jpg";
-                $sCloneTestIconFile = "CC1126_th_ico.jpg";
+                $sOrigTestPicFile   = "1672_th.jpg";
+                $sOrigTestIconFile  = "1672_th.jpg"; // we simply fake an icon file by copying the same
+                $sCloneTestPicFile  = "CC1672_th.jpg";
+                $sCloneTestIconFile = "CC1672_th_ico.jpg";
 
-                $sDir  = $myConfig->getAbsDynImageDir()."0/";
+                $sDir  = $myConfig->getPictureDir(false)."0/";
 
                 copy( $sDir.$sOrigTestPicFile, $sDir.$sCloneTestPicFile );
                 copy( $sDir.$sOrigTestIconFile, $sDir.$sCloneTestIconFile );
@@ -73,10 +73,10 @@ class Unit_Core_oxUtilsPicTest extends OxidTestCase
                 $myConfig = oxConfig::getInstance();
 
                 // setup-> create a copy of a picture and delete this one for successful test
-                $sCloneTestPicFile  = "CC1126_th.jpg";
-                $sCloneTestIconFile = "CC1126_th_ico.jpg";
+                $sCloneTestPicFile  = "CC1672_th.jpg";
+                $sCloneTestIconFile = "CC1672_th_ico.jpg";
 
-                $sDir  = $myConfig->getAbsDynImageDir()."/0/";
+                $sDir  = $myConfig->getPictureDir(false)."/0/";
 
                 @unlink( $sDir.$sCloneTestPicFile );
                 @unlink( $sDir.$sCloneTestIconFile );
@@ -206,7 +206,7 @@ class Unit_Core_oxUtilsPicTest extends OxidTestCase
         $oUtilsPic = $this->getMock( 'oxutilspic', array( 'getConfig' ) );
         $oUtilsPic->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
 
-        $this->assertTrue( $oUtilsPic->UNITdeletePicture( 'CC1126_th.jpg', oxConfig::getInstance()->getAbsDynImageDir()."/0/" ) );
+        $this->assertTrue( $oUtilsPic->UNITdeletePicture( 'CC1672_th.jpg', oxConfig::getInstance()->getPictureDir(false)."/0/" ) );
     }
 
     public function testIsPicDeletable()
@@ -269,18 +269,6 @@ class Unit_Core_oxUtilsPicTest extends OxidTestCase
         $oObject->oxtbl__oxpic = new oxField('testPictureName', oxField::T_RAW);
 
         $blTrue = $oUtilsPic->overwritePic( $oObject, 'oxtbl', 'oxpic', 'testType', 'testPath', array( 'oxtbl__oxpic' => 'xxx' ), 'testAbsPath/' );
-    }
-
-    public function testIconName()
-    {
-        $this->assertEquals('TEST_ico.jpg', oxUtilsPic::getInstance()->iconName('TEST.jpg'));
-        $this->assertEquals('TEST_ico.gif', oxUtilsPic::getInstance()->iconName('TEST.gif'));
-        $this->assertEquals('TEST_ico.png', oxUtilsPic::getInstance()->iconName('TEST.png'));
-
-        $this->assertEquals('TEST_ico.PNG', oxUtilsPic::getInstance()->iconName('TEST.PNG'));
-
-        $this->assertNotEquals('TEST_ico.bmp', oxUtilsPic::getInstance()->iconName('TEST.bmp'));
-        $this->assertEquals('', oxUtilsPic::getInstance()->iconName('') );
     }
 
     /**

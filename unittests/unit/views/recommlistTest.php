@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: recommlistTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: recommlistTest.php 32991 2011-02-07 14:23:27Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -250,14 +250,14 @@ class Unit_Views_recommlistTest extends OxidTestCase
         $this->assertEquals( 'testlist', $oRecommList->getId() );
     }
 
-    public function testGetActiveRecommItems()
+    public function testGetArticleList()
     {
         modConfig::setParameter( 'recommid', 'testlist' );
         $oRecomm = $this->getProxyClass( "recommlist" );
         $oRecommtList = new oxRecommList();
         $oRecommtList->load('testlist');
         $oRecomm->setNonPublicVar( "_oActiveRecommItems", $oRecommtList );
-        $this->assertEquals( 1, count( $oRecomm->getActiveRecommItems() ) );
+        $this->assertEquals( 1, count( $oRecomm->getArticleList() ) );
     }
 
     public function testGetSimilarRecommLists()
@@ -282,13 +282,6 @@ class Unit_Views_recommlistTest extends OxidTestCase
         $this->assertEquals( 1, $aLists->count() );
         $this->assertEquals( 'testlist2', $aLists['testlist2']->getId() );
         $this->assertTrue( in_array( $aLists['testlist2']->getFirstArticle()->getId(), array($sArticleID) ) );
-    }
-
-    public function testGetRecommId()
-    {
-        modConfig::setParameter( 'recommid', 'testlist' );
-        $oRecomm = new RecommList();
-        $this->assertEquals( 'testlist', $oRecomm->getRecommId() );
     }
 
     public function testGetReviews()
@@ -382,44 +375,6 @@ class Unit_Views_recommlistTest extends OxidTestCase
         $this->assertEquals( 'test search', $oRecomm->getRecommSearch() );
     }
 
-    public function testGetTemplateLocationAfterSearch()
-    {
-        modConfig::setParameter( 'searchrecomm', 'test' );
-        $sUrl = modConfig::getInstance()->getShopHomeURL();
-        $sLink = "{$sUrl}cl=recommlist&amp;searchrecomm=test";
-        $sTitle  = oxLang::getInstance()->translateString('RECOMMLIST');
-        $sTitle .= " / ".oxLang::getInstance()->translateString('RECOMMLIST_SEARCH').' "test"';
-        $sTemplateLocation = "<a href='".$sLink."'>".$sTitle."</a>";
-        $oRecomm = new RecommList();
-        $this->assertEquals( $sTemplateLocation, $oRecomm->getTemplateLocation() );
-    }
-
-    public function testGetTemplateLocationAfterSearchForTwoWords()
-    {
-        modConfig::setParameter( 'searchrecomm', 'test search' );
-        $sUrl = modConfig::getInstance()->getShopHomeURL();
-        $sLink = "{$sUrl}cl=recommlist&amp;searchrecomm=test%20search";
-        $sTitle  = oxLang::getInstance()->translateString('RECOMMLIST');
-        $sTitle .= " / ".oxLang::getInstance()->translateString('RECOMMLIST_SEARCH').' "test search"';
-        $sTemplateLocation = "<a href='".$sLink."'>".$sTitle."</a>";
-        $oRecomm = new RecommList();
-        $this->assertEquals( $sTemplateLocation, $oRecomm->getTemplateLocation() );
-    }
-
-    public function testGetTemplateLocation()
-    {
-        modConfig::setParameter( 'searchrecomm', null );
-        $oRecomm = new RecommList();
-        $this->assertEquals( oxLang::getInstance()->translateString('RECOMMLIST'), $oRecomm->getTemplateLocation() );
-    }
-
-    public function testGetLoginFormAnchor()
-    {
-        $oRecomm = new RecommList();
-        $oRecomm->showLogin();
-        $this->assertEquals( 'review', $oRecomm->getLoginFormAnchor() );
-    }
-
     public function testGetAdditionalParams()
     {
         $oRecommList = new oxRecommList();
@@ -483,5 +438,17 @@ class Unit_Views_recommlistTest extends OxidTestCase
         $sTestLink = $oUBaseView->getLink( 0 );
 
         $this->assertEquals( $sTestLink."&amp;searchrecomm=aaa", $oRecomm->getLink() );
+    }
+
+    /**
+     * Testing Account_RecommList::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oRecommList = new RecommList();
+
+        $this->assertEquals(1, count($oRecommList->getBreadCrumb()));
     }
 }

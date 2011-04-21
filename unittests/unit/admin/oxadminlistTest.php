@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminlistTest.php 28324 2010-06-14 12:27:02Z vilma $
+ * @version   SVN: $Id: oxadminlistTest.php 32455 2011-01-10 09:33:51Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -84,50 +84,6 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         oxConfig::getInstance()->setGlobalParameter( 'ListCoreTable', null );
 
         parent::tearDown();
-    }
-
-    /**
-     * Tear set filter parameters non set.
-     *
-     * @return null
-     */
-    public function testSetFilterParamsNonSet()
-    {
-        oxConfig::getInstance()->setGlobalParameter( 'ListCoreTable', null );
-        modConfig::getInstance()->setParameter( 'where', null );
-
-        $oAdminList = new oxAdminList;
-        $oAdminList->UNITsetFilterParams();
-
-        $aViewData = $oAdminList->getViewData();
-        $this->assertFalse( isset( $aViewData['whereparam'] ) );
-        $this->assertFalse( isset( $aViewData['where'] ) );
-    }
-
-    /**
-     * Tear set filter parameters.
-     *
-     * @return null
-     */
-    public function testSetFilterParams()
-    {
-        $sTable = getViewName( 'oxarticles' );
-        $oWhere = new oxStdClass();
-        $oWhere->{"oxarticles__oxtitle"} = 'testtitle';
-        $oWhere->{"oxarticles__oxprice"} = 999;
-
-        $sWhereParam = '&amp;where['.$sTable.'.oxtitle]=testtitle&amp;where['.$sTable.'.oxprice]=999&amp;art_category=testcategory';
-
-        oxConfig::getInstance()->setGlobalParameter( 'ListCoreTable', 'oxarticles' );
-        modConfig::getInstance()->setParameter( 'art_category', 'testcategory' );
-        modConfig::getInstance()->setParameter( 'where', array( $sTable.'.oxtitle' => 'testtitle', $sTable.'.oxprice' => 999 ) );
-
-        $oAdminList = new oxAdminList;
-        $oAdminList->UNITsetFilterParams();
-
-        $aViewData = $oAdminList->getViewData();
-        $this->assertEquals( $sWhereParam, $aViewData['whereparam'] );
-        $this->assertEquals( $oWhere, $aViewData['where'] );
     }
 
     /**
@@ -296,16 +252,18 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         $oLinks = oxNew( 'oxList' );
         $oLinks->init( 'oxLinks' );
 
-        $sTable = getViewName( 'oxlinks' );
-        modConfig::setParameter( 'sort', 'oxtitle' );
+        $sTable = getViewName( 'oxarticles', 1 );
 
-        $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $oAdminList->setNonPublicVar( '_oList', $oLinks );
-        $sResultSql = $oAdminList->UNITprepareOrderByQuery( '' );
+        $aSorting = array( "oxarticles" => array( "oxtitle" => "asc" ) );
+        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage" ) );
+        $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
+        $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
 
-        $sSql = "order by $sTable.oxtitle";
+        $oAdminList = $this->getMock( 'oxadminlist', array( "getListSorting", "getItemListBaseObject" ) );
+        $oAdminList->expects( $this->once() )->method( 'getListSorting' )->will( $this->returnValue( $aSorting ) );
+        $oAdminList->expects( $this->once() )->method( 'getItemListBaseObject' )->will( $this->returnValue( $oListObject ) );
 
-        $this->assertEquals( $sSql, trim( $sResultSql ) );
+        $this->assertEquals( "order by $sTable.oxtitle", trim( $oAdminList->UNITprepareOrderByQuery( '' ) ) );
     }
 
     /**
@@ -315,20 +273,18 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testPrepareOrderByQueryMultipleSort()
     {
-        $oLinks = oxNew( 'oxList' );
-        $oLinks->init( 'oxLinks' );
+        $sTable = getViewName( 'oxlinks', 1 );
+        $aSorting = array( "oxlinks" => array( "oxtitle" => "asc", "oxactive" => "asc", "sort" => "asc" ) );
 
-        $sTable = getViewName( 'oxlinks' );
-        modConfig::setParameter( 'sort', 'oxtitle' );
+        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage" ) );
+        $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
+        $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
 
-        $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $oAdminList->setNonPublicVar( '_oList', $oLinks );
-        $oAdminList->setNonPublicVar( '_aSort', array( '', 'oxactive') );
-        $sResultSql = $oAdminList->UNITprepareOrderByQuery( '' );
+        $oAdminList = $this->getMock( 'oxadminlist', array( "getListSorting", "getItemListBaseObject" ) );
+        $oAdminList->expects( $this->once() )->method( 'getListSorting' )->will( $this->returnValue( $aSorting ) );
+        $oAdminList->expects( $this->once() )->method( 'getItemListBaseObject' )->will( $this->returnValue( $oListObject ) );
 
-        $sSql = "order by $sTable.oxtitle, $sTable.oxactive desc";
-
-        $this->assertEquals( $sSql, trim( $sResultSql ) );
+        $this->assertEquals( "order by $sTable.oxtitle, $sTable.oxactive desc , $sTable.sort", trim( $oAdminList->UNITprepareOrderByQuery( '' ) ) );
     }
 
     /**
@@ -339,14 +295,19 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testPrepareOrderByQueryByInternalParam()
     {
-        $oLinks = oxNew( 'oxList' );
-        $oLinks->init( 'oxLinks' );
+        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage", "getCoreTableName" ) );
+        $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
+        $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
+        $oListObject->expects( $this->once() )->method( 'getCoreTableName' )->will( $this->returnValue( "oxlinks" ) );
 
-        $sTable = getViewName( 'oxlinks' );
+        $oList = $this->getMock( 'oxstdclass', array( "getBaseObject" ) );
+        $oList->expects( $this->any() )->method( 'getBaseObject' )->will( $this->returnValue( $oListObject ) );
+
+        $sTable = getViewName( 'oxlinks', 1 );
 
         $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $oAdminList->setNonPublicVar( '_oList', $oLinks );
-        $oAdminList->setNonPublicVar( '_sDefSort', 'oxactive' );
+        $oAdminList->setNonPublicVar( '_oList', $oList );
+        $oAdminList->setNonPublicVar( '_sDefSortField', 'oxactive' );
         $sResultSql = $oAdminList->UNITprepareOrderByQuery( '' );
 
         $this->assertEquals( "order by $sTable.oxactive desc", trim( $sResultSql ) );
@@ -376,19 +337,18 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testPrepareOrderWithOrderType()
     {
-        $oLinks = oxNew( 'oxList' );
-        $oLinks->init( 'oxLinks' );
+        $sTable = getViewName( 'oxlinks', 1 );
+        $aSorting = array( "oxlinks" => array( "oxtitle" => "desc" ) );
 
-        $sTable = getViewName( 'oxlinks' );
+        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage" ) );
+        $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
+        $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
 
-        modConfig::setParameter( 'sort', 'oxtitle' );
-        modConfig::setParameter( 'adminorder', 'desc' );
+        $oAdminList = $this->getMock( 'oxadminlist', array( "getListSorting", "getItemListBaseObject" ) );
+        $oAdminList->expects( $this->once() )->method( 'getListSorting' )->will( $this->returnValue( $aSorting ) );
+        $oAdminList->expects( $this->once() )->method( 'getItemListBaseObject' )->will( $this->returnValue( $oListObject ) );
 
-        $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $oAdminList->setNonPublicVar( '_oList', $oLinks );
-        $sResultSql = $oAdminList->UNITprepareOrderByQuery( '' );
-
-        $this->assertEquals( "order by $sTable.oxtitle desc", trim( $sResultSql ) );
+        $this->assertEquals( "order by $sTable.oxtitle desc", trim( $oAdminList->UNITprepareOrderByQuery( '' ) ) );
     }
 
     /**
@@ -398,20 +358,18 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testPrepareOrderMultilanguageField()
     {
-        $oLinks = oxNew( 'oxList' );
-        $oLinks->init( 'oxLinks' );
+        $sTable = getViewName( 'oxlinks', 1 );
+        $aSorting = array( "oxlinks" => array( "oxurldesc" => "asc" ) );
 
-        $sTable = getViewName( 'oxlinks' );
+        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage" ) );
+        $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
+        $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
 
-        $oLinks->getBaseObject()->setLanguage(1);
+        $oAdminList = $this->getMock( 'oxadminlist', array( "getListSorting", "getItemListBaseObject" ) );
+        $oAdminList->expects( $this->once() )->method( 'getListSorting' )->will( $this->returnValue( $aSorting ) );
+        $oAdminList->expects( $this->once() )->method( 'getItemListBaseObject' )->will( $this->returnValue( $oListObject ) );
 
-        modConfig::setParameter( 'sort', 'oxurldesc' );
-
-        $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $oAdminList->setNonPublicVar( '_oList', $oLinks );
-        $sResultSql = $oAdminList->UNITprepareOrderByQuery( '' );
-
-        $this->assertEquals( "order by $sTable.oxurldesc_1", trim( $sResultSql ) );
+        $this->assertEquals( "order by $sTable.oxurldesc", trim( $oAdminList->UNITprepareOrderByQuery( '' ) ) );
     }
 
     /**
@@ -421,18 +379,18 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testPrepareOrderByWithDefinedOrderTable()
     {
-        $oLinks = oxNew( 'oxList' );
-        $oLinks->init( 'oxLinks' );
+        $sTable = getViewName( 'oxarticles', 1 );
+        $aSorting = array( "oxarticles" => array( "oxtitle" => "asc" ) );
 
-        $sTable = getViewName( 'oxlinks' );
+        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage" ) );
+        $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
+        $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
 
-        modConfig::setParameter( 'sort', 'oxarticles.oxtitle' );
+        $oAdminList = $this->getMock( 'oxadminlist', array( "getListSorting", "getItemListBaseObject" ) );
+        $oAdminList->expects( $this->once() )->method( 'getListSorting' )->will( $this->returnValue( $aSorting ) );
+        $oAdminList->expects( $this->once() )->method( 'getItemListBaseObject' )->will( $this->returnValue( $oListObject ) );
 
-        $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $oAdminList->setNonPublicVar( '_oList', $oLinks );
-        $sResultSql = $oAdminList->UNITprepareOrderByQuery( '' );
-
-        $this->assertEquals( "order by oxarticles.oxtitle", trim( $sResultSql ) );
+        $this->assertEquals( "order by $sTable.oxtitle", trim( $oAdminList->UNITprepareOrderByQuery( '' ) ) );
     }
 
     /**
@@ -442,15 +400,11 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testBuildSelectString()
     {
+        $sTable = getViewName( 'oxactions' );
+        $sSql = "select {$sTable}.oxid, {$sTable}.oxshopid, {$sTable}.oxtype, {$sTable}.oxtitle, {$sTable}.oxlongdesc, {$sTable}.oxactive, {$sTable}.oxactivefrom, {$sTable}.oxactiveto, {$sTable}.oxpic, {$sTable}.oxlink, {$sTable}.oxsort from {$sTable} where 1 ";
 
-        $oListObject = oxNew( 'oxActions' );
-
-        $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $sResultSql = $oAdminList->UNITbuildSelectString( $oListObject );
-
-        $sSql = "select oxactions.oxid, oxactions.oxshopid, oxactions.oxtype, oxactions.oxtitle, oxactions.oxtitle_1, oxactions.oxtitle_2, oxactions.oxtitle_3, oxactions.oxlongdesc, oxactions.oxlongdesc_1, oxactions.oxlongdesc_2, oxactions.oxlongdesc_3, oxactions.oxactive, oxactions.oxactivefrom, oxactions.oxactiveto, oxactions.oxsort from oxactions where 1 ";
-
-        $this->assertEquals( $sSql, $sResultSql );
+        $oAdminList = new oxadminlist();
+        $this->assertEquals( $sSql, $oAdminList->UNITbuildSelectString( new oxActions() ) );
     }
 
     /**
@@ -615,10 +569,10 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testBuildWhereMultiLang()
     {
-        $sTable = getViewName( 'oxlinks' );
-        $aWhere['oxurldesc'] = 'oxurldesc';
+        $sTable = getViewName( 'oxlinks', 1 );
+        $aWhere['oxlinks']['oxurldesc'] = 'oxurldesc';
 
-        $aResultWhere[$sTable.'.oxurldesc_1'] = '%oxurldesc%';
+        $aResultWhere["{$sTable}.oxurldesc"] = '%oxurldesc%';
 
         modConfig::setParameter( 'where', $aWhere );
         oxLang::getInstance()->setBaseLanguage( 1 );
@@ -626,33 +580,9 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         $oLinks = oxNew( 'oxList' );
         $oLinks->init( 'oxLinks' );
 
-        $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $oAdminList->setNonPublicVar( '_oList', $oLinks );
+        $oAdminList = $this->getMock( 'oxadminlist', array( "getItemList" ) );
+        $oAdminList->expects( $this->any() )->method( 'getItemList' )->will( $this->returnValue( $oLinks ) );
         $this->assertEquals( $aResultWhere, $oAdminList->buildWhere() );
-    }
-
-    /**
-     * Test building sql where with specified "folder" param
-     *  for oxarticles, oxorder, oxcontents tables
-     *
-     * @return null
-     */
-    public function testBuildWhereWithSpecifiedFolderParam()
-    {
-        $sObjects = 'oxArticle';
-        $sClasses = 'article_list';
-        $sTable = getViewName( 'oxarticles' );
-
-        $oAdminList = $this->getProxyClass( $sClasses );
-        modConfig::setParameter( 'folder', $sObjects.'TestFolderName' );
-
-        $oListItem = oxNew( 'oxList' );
-        $oListItem->init( $sObjects );
-
-        $oAdminList->setNonPublicVar( '_oList', $oListItem );
-        $aBuildWhere[] = $oAdminList->buildWhere();
-
-        $this->assertEquals( 'oxArticleTestFolderName', $aBuildWhere[0][$sTable.'.oxfolder'] );
     }
 
     /**
@@ -682,7 +612,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     public function testBuildWhereWithoutListObject()
     {
         $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $this->assertEquals( array(), $oAdminList->buildWhere() );
+        $this->assertNull( $oAdminList->buildWhere() );
     }
 
     /**
@@ -707,23 +637,22 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testBuildWhereWithParams()
     {
-        $sTable = getViewName( 'oxlinks' );
-
-        $aWhere[$sTable.'.oxshopid'] = '1';
-        $aWhere['oxlinks.oxurl']     = 'testurl';
-        $aWhere['oxurldesc']         = 'oxurldesc';
+        $aWhere['oxlinks']['oxshopid']  = '1';
+        $aWhere['oxlinks']['oxurl']     = 'testurl';
+        $aWhere['oxlinks']['oxurldesc'] = 'oxurldesc';
 
         modConfig::setParameter( 'where', $aWhere );
 
-        $aResultWhere[$sTable.'.oxshopid']  = '%1%';
-        $aResultWhere[$sTable.'.oxurl']     = '%testurl%';
-        $aResultWhere[$sTable.'.oxurldesc'] = '%oxurldesc%';
+        $sViewName = getViewName( 'oxlinks' );
+        $aResultWhere[$sViewName.'.oxshopid']  = '%1%';
+        $aResultWhere[$sViewName.'.oxurl']     = '%testurl%';
+        $aResultWhere[$sViewName.'.oxurldesc'] = '%oxurldesc%';
 
         $oLinks = oxNew( 'oxList' );
         $oLinks->init( 'oxLinks' );
 
-        $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $oAdminList->setNonPublicVar( '_oList', $oLinks );
+        $oAdminList = $this->getMock( 'oxadminlist', array( "getItemList" ) );
+        $oAdminList->expects( $this->any() )->method( 'getItemList' )->will( $this->returnValue( $oLinks ) );
 
         $this->assertEquals( $aResultWhere, $oAdminList->buildWhere() );
     }
@@ -735,21 +664,19 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testBuildWhereWithParamsFromDifferentTables()
     {
-        $sTable = getViewName( 'oxlinks' );
-
-        $aWhere[$sTable.'.oxshopid'] = '1';
-        $aWhere['oxactions.oxtitle'] = 'testtitle';
+        $aWhere['oxlinks']['oxshopid']  = '1';
+        $aWhere['oxactions']['oxtitle'] = 'testtitle';
 
         modConfig::setParameter( 'where', $aWhere );
 
-        $aResultWhere[$sTable.'.oxshopid']  = '%1%';
-        $aResultWhere['oxactions.oxtitle']  = '%testtitle%';
+        $aResultWhere[getViewName( 'oxlinks' ).'.oxshopid']  = '%1%';
+        $aResultWhere[getViewName( 'oxactions' ).'.oxtitle']  = '%testtitle%';
 
         $oLinks = oxNew( 'oxList' );
         $oLinks->init( 'oxLinks' );
 
-        $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $oAdminList->setNonPublicVar( '_oList', $oLinks );
+        $oAdminList = $this->getMock( 'oxadminlist', array( "getItemList" ) );
+        $oAdminList->expects( $this->any() )->method( 'getItemList' )->will( $this->returnValue( $oLinks ) );
 
         $this->assertEquals( $aResultWhere, $oAdminList->buildWhere() );
     }
@@ -762,26 +689,30 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     public function testBuildWhereWithDate()
     {
         oxConfig::getInstance()->setConfigParam( 'sLocalDateFormat', 'USA' );
-        $sTable = getViewName( 'oxlinks' );
 
-        $aWhere[$sTable.'.oxshopid'] = '1';
-        $aWhere['oxlinks.oxurl']     = 'testurl';
-        $aWhere['oxurldesc']         = 'oxurldesc';
-        $aWhere['oxinsert']          = '08/09/2008';
+        $aWhere['oxlinks']['oxshopid']  = '1';
+        $aWhere['oxlinks']['oxurl']     = 'testurl';
+        $aWhere['oxlinks']['oxurldesc'] = 'oxurldesc';
+        $aWhere['oxlinks']['oxinsert']  = '08/09/2008';
 
         modConfig::setParameter( 'where', $aWhere );
 
+        $sTable = getViewName( 'oxlinks' );
         $aResultWhere[$sTable.'.oxshopid']  = '%1%';
         $aResultWhere[$sTable.'.oxurl']     = '%testurl%';
         $aResultWhere[$sTable.'.oxurldesc'] = '%oxurldesc%';
         $aResultWhere[$sTable.'.oxinsert']  = '%2008-08-09%';
 
-
         $oLinks = oxNew( 'oxList' );
         $oLinks->init( 'oxLinks' );
 
-        $oAdminList = $this->getProxyClass( 'oxadminlist' );
-        $oAdminList->setNonPublicVar( '_oList', $oLinks );
+        $oBaseObject = new oxLinks();
+        $oBaseObject->oxlinks__oxinsert = new oxField( "test" );
+        $oBaseObject->oxlinks__oxinsert->fldtype = "date";
+
+        $oAdminList = $this->getMock( 'oxadminlist', array( "getItemList", "getItemListBaseObject" ) );
+        $oAdminList->expects( $this->any() )->method( 'getItemList' )->will( $this->returnValue( $oLinks ) );
+        $oAdminList->expects( $this->any() )->method( 'getItemListBaseObject' )->will( $this->returnValue( $oBaseObject ) );
 
         $this->assertEquals( $aResultWhere, $oAdminList->buildWhere() );
     }
@@ -964,5 +895,20 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
             $this->assertEquals( $sResult, $oAdminList->UNITconvertTime( $sInput ) );
         }
     }
+    
+    /**
+     * Test item list clear (set to null)
+     *
+     * @return null
+     */
+     public function testClearItemList()
+     {
+         $oAdminList = $this->getProxyClass( 'oxadminlist' );
+
+         $oAdminList->setNonPublicVar( '_oList', 'list');
+         $oAdminList->clearItemList();
+         
+         $this->assertNull( $oAdminList->getNonPublicVar( '_oList') );
+     }
 
 }

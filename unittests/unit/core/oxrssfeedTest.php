@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxrssfeedTest.php 32885 2011-02-03 13:05:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -60,7 +60,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
 
     public function testLoadBaseChannel()
     {
-        oxTestModules::addFunction('oxutils', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
         oxTestModules::addFunction('oxlang', 'getBaseLanguage', '{return 1;}');
         oxTestModules::addFunction('oxlang', 'getLanguageIds', '{return array("aa", "bb");}');
         oxTestModules::publicize('oxrssfeed', '_loadBaseChannel');
@@ -196,7 +196,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
     }
     public function testGetArticleItems()
     {
-        oxTestModules::addFunction('oxutils', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
 
         $oCfg = $this->getMock( 'oxconfig', array( 'getActShopCurrencyObject' ) );
         $oActCur = new stdClass();
@@ -247,7 +247,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
 
     public function testGetArticleItemsWithNoArticlePrice()
     {
-        oxTestModules::addFunction('oxutils', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
 
         $oActCur = new stdClass();
         $oActCur->decimal = 1;
@@ -302,7 +302,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
 
     public function testGetArticleItemsDiffCurrency()
     {
-        oxTestModules::addFunction('oxutils', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
 
         $oActCur = new stdClass();
         $oActCur->decimal = 1.47;
@@ -356,7 +356,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
 
     public function testPrepareUrlSeoOff()
     {
-        oxTestModules::addFunction( 'oxutils', 'prepareUrlForNoSession', '{return $aA[0]."extra";}' );
+        oxTestModules::addFunction( 'oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}' );
         oxTestModules::addFunction( 'oxLang', 'getBaseLanguage', '{return 1;}' );
         oxTestModules::addFunction( 'oxutils', 'seoIsActive', '{return false;}' );
 
@@ -370,7 +370,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
 
     public function testPrepareUrlSeoOn()
     {
-        oxTestModules::addFunction( 'oxutils', 'prepareUrlForNoSession', '{return $aA[0]."extra";}' );
+        oxTestModules::addFunction( 'oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}' );
         oxTestModules::addFunction( 'oxutils', 'seoIsActive', '{return true;}' );
         oxTestModules::addFunction( 'oxLang', 'translateString', '{return $aA[0]."tr";}' );
         oxTestModules::addFunction( 'oxLang', 'getLanguageIds', '{return array(1=>"as");}' );
@@ -817,7 +817,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
 
     public function testGetRecommListItems()
     {
-        oxTestModules::addFunction('oxutils', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
 
         $oArt1 = $this->getMock('oxrecommlist', array("getLink" ) );
         $oArt1->expects($this->any())->method( 'getLink')->will( $this->returnValue( "rllink" ) );

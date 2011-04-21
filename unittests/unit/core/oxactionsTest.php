@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 28637 2010-06-28 08:39:05Z michael.keiluweit $
+ * @version   SVN: $Id: oxactionsTest.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -31,7 +31,7 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 class Unit_Core_oxactionsTest extends OxidTestCase
 {
     /**
-     * Contains a object of oxactions() 
+     * Contains a object of oxactions()
      *
      * @var object
      */
@@ -70,9 +70,11 @@ class Unit_Core_oxactionsTest extends OxidTestCase
      */
     protected function tearDown()
     {
+        modDb::getInstance()->cleanup();
         $this->_oAction->delete();
         $this->oPromo->delete();
         oxNew('oxStr')->setH(null);
+
         parent::tearDown();
     }
 
@@ -159,7 +161,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     /**
      * oxActions::getTimeLeft() test case
      * Test if the setted timeleft in database equals what we expect
-     * 
+     *
      * @return null
      */
     public function testGetTimeLeft()
@@ -172,7 +174,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     /**
      * oxActions::getTimeUntilStart() test case
      * Test if promo starts at the setted time we expect
-     * 
+     *
      * @return null
      */
     public function testGetTimeUntilStart()
@@ -234,7 +236,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     /**
      * oxActions::stop() test case
      * stops the current promo action and test if oxactiveto equals the current date.
-     * 
+     *
      * @return null
      */
     public function testStop()
@@ -299,41 +301,185 @@ class Unit_Core_oxactionsTest extends OxidTestCase
 
     /**
      * oxActions::getLongDesc() test case
-     * test getted long description without smarty tags
-     *
-     * @return null
-     */
-    public function testGetLongDescNoTags()
-    {
-        $oUV =  $this->getMock('oxUtilsView', array('parseThroughSmarty'));
-        $oUV->expects($this->never())->method('parseThroughSmarty');
-        oxTestModules::addModuleObject('oxUtilsView', $oUV);
-
-        $oStr = $this->getMock('oxStrRegular', array('strstr'));
-        $oStr->expects($this->at(0))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('[{'))->will($this->returnValue(false));
-        $oStr->expects($this->at(1))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('<?'))->will($this->returnValue(false));
-        oxNew('oxStr')->setH($oStr);
-
-        $this->assertEquals('longdesc', $this->oPromo->getLongDesc());
-    }
-
-    /**
-     * oxActions::getLongDesc() test case
      * test getted long description with smarty tags
      *
      * @return null
      */
     public function testGetLongDescTags()
     {
-        $oUV =  $this->getMock('oxUtilsView', array('parseThroughSmarty'));
-        $oUV->expects($this->once())->method('parseThroughSmarty')->with($this->equalTo('longdesc'))->will($this->returnValue('parsed'));
-        oxTestModules::addModuleObject('oxUtilsView', $oUV);
-
-        $oStr = $this->getMock('oxStrRegular', array('strstr'));
-        $oStr->expects($this->at(0))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('[{'))->will($this->returnValue(true));
-        $oStr->expects($this->at(1))->method('strstr')->with($this->equalTo('longdesc'), $this->equalTo('<?'))->will($this->returnValue(false));
-        oxNew('oxStr')->setH($oStr);
-
+        $this->oPromo->oxactions__oxlongdesc = new oxField( "[{* *}]parsed" );
         $this->assertEquals('parsed', $this->oPromo->getLongDesc());
     }
+
+    /**
+     * test
+     */
+    public function testGetBannerArticle_notAssigned()
+    {
+        $oDb = $this->getMock('stdClass', array('getOne', 'quote'));
+
+        $oDb->expects($this->once())->method('quote')
+                ->with($this->equalTo('promoid'))
+                ->will($this->returnValue("'promoid'"));
+
+        $oDb->expects($this->once())->method('getOne')
+                ->with($this->equalTo('select oxobjectid from oxobject2action where oxactionid=\'promoid\' and oxclass="oxarticle"'))
+                ->will($this->returnValue(false));
+
+        modDb::getInstance()->modAttach($oDb);
+
+        $oArticle = $this->getMock('stdclass', array('load'));
+        $oArticle->expects($this->never())->method('load');
+
+        oxTestModules::addModuleObject('oxarticle', $oArticle);
+
+        $oPromo = new oxactions();
+        $oPromo->setId('promoid');
+        $this->assertNull($oPromo->getBannerArticle());
+    }
+
+    /**
+     * test
+     */
+    public function testGetBannerArticle_notExisting()
+    {
+        $oDb = $this->getMock('stdClass', array('getOne', 'quote'));
+
+        $oDb->expects($this->once())->method('quote')
+                ->with($this->equalTo('promoid'))
+                ->will($this->returnValue("'promoid'"));
+
+        $oDb->expects($this->once())->method('getOne')
+                ->with($this->equalTo('select oxobjectid from oxobject2action where oxactionid=\'promoid\' and oxclass="oxarticle"'))
+                ->will($this->returnValue('asdabsdbdsf'));
+
+        modDb::getInstance()->modAttach($oDb);
+
+        $oArticle = $this->getMock('stdclass', array('load'));
+        $oArticle->expects($this->once())->method('load')
+                ->with($this->equalTo('asdabsdbdsf'))
+                ->will($this->returnValue(false));
+
+        oxTestModules::addModuleObject('oxarticle', $oArticle);
+
+        $oPromo = new oxactions();
+        $oPromo->setId('promoid');
+        $this->assertNull($oPromo->getBannerArticle());
+    }
+
+    /**
+     * test
+     */
+    public function testGetBannerArticle_Existing()
+    {
+        $oDb = $this->getMock('stdClass', array('getOne', 'quote'));
+
+        $oDb->expects($this->once())->method('quote')
+                ->with($this->equalTo('promoid'))
+                ->will($this->returnValue("'promoid'"));
+
+        $oDb->expects($this->once())->method('getOne')
+                ->with($this->equalTo('select oxobjectid from oxobject2action where oxactionid=\'promoid\' and oxclass="oxarticle"'))
+                ->will($this->returnValue('2000'));
+
+        modDb::getInstance()->modAttach($oDb);
+
+        $oArticle = $this->getMock('stdclass', array('load'));
+        $oArticle->expects($this->once())->method('load')
+                ->with($this->equalTo('2000'))
+                ->will($this->returnValue(true));
+
+        oxTestModules::addModuleObject('oxarticle', $oArticle);
+
+        $oPromo = new oxactions();
+        $oPromo->setId('promoid');
+        $oArt = $oPromo->getBannerArticle();
+        $this->assertNotNull($oArt);
+        $this->assertSame($oArticle, $oArt);
+    }
+
+    /**
+     * test
+     */
+    public function testGetBannerPictureUrl()
+    {
+        $oPromo = new oxactions();
+        $oPromo->oxactions__oxpic = new oxField( "current_de.jpg" );
+        $oConfig = modConfig::getInstance();
+
+        $this->assertEquals( $oConfig->getPictureUrl( "promo/" )."current_de.jpg", $oPromo->getBannerPictureUrl() );
+    }
+
+    /**
+     * test
+     */
+    public function testGetBannerPictureUrl_noPicture()
+    {
+        $oPromo = new oxactions();
+        $oConfig = modConfig::getInstance();
+
+        $this->assertNull( $oPromo->getBannerPictureUrl() );
+    }
+
+    /**
+     * test
+     */
+    public function testGetBannerPictureUrl_pictureNotUploaded()
+    {
+        $oPromo = new oxactions();
+        $oPromo->oxactions__oxpic = new oxField( "noSuchPic.jpg" );
+        $oConfig = modConfig::getInstance();
+
+        $this->assertEquals( $oConfig->getPictureUrl( "0/" )."nopic.jpg", $oPromo->getBannerPictureUrl() );
+    }
+
+    /**
+     * test
+     */
+    public function testGetBannerLink()
+    {
+        $oUtilsUrl = $this->getMock('oxUtilsUrl', array('processUrl'));
+
+        $oUtilsUrl->expects($this->once())->method('processUrl')
+                  ->with( $this->equalTo("http://www.oxid-esales.com") )
+                  ->will( $this->returnValue("http://www.oxid-esales.com/") );
+
+        oxTestModules::addModuleObject( 'oxUtilsUrl', $oUtilsUrl );
+
+        $oPromo = new oxactions();
+        $oPromo->oxactions__oxlink = new oxField( "http://www.oxid-esales.com" );
+
+        $this->assertEquals( "http://www.oxid-esales.com/", $oPromo->getBannerLink() );
+    }
+
+    /**
+     * test
+     */
+    public function testGetBannerLink_noLink()
+    {
+        $oPromo = new oxactions();
+        $oPromo->oxactions__oxlink = new oxField( null );
+
+        $this->assertNull( $oPromo->getBannerLink() );
+    }
+
+    /**
+     * test
+     */
+    public function testGetBannerLink_noLinkWithAssignedArticle()
+    {
+        $oArticle = $this->getMock('oxArticle', array('getLink'));
+        $oArticle->expects($this->once())->method('getLink')
+                 ->will( $this->returnValue("testLinkToArticle") );
+
+        $oPromo = $this->getMock('oxActions', array('getBannerArticle'));
+        $oPromo->expects($this->once())->method('getBannerArticle')
+               ->will( $this->returnValue($oArticle) );
+
+        $oPromo->oxactions__oxlink = new oxField( null );
+
+        $this->assertEquals( "testLinkToArticle", $oPromo->getBannerLink() );
+    }
+
+
 }

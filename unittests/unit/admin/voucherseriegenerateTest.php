@@ -66,7 +66,7 @@ class Unit_Admin_VoucherSerieGenerateTest extends OxidTestCase
      */
     public function testGenerateVoucher()
     {
-        modConfig::setParameter( "voucherAmount", 100 );
+        modSession::getInstance()->setVar( "voucherAmount", 100 );
 
         $oSerie = $this->getMock( "oxStdClass", array( "getId" ) );
         $oSerie->expects( $this->exactly( 2 ) )->method( 'getId' )->will( $this->returnValue( "testId" ) );

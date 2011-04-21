@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticleTest.php 28585 2010-06-23 09:23:38Z sarunas $
+ * @version   SVN: $Id: oxorderarticleTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -481,8 +481,7 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
      */
     public function testAssignAddsPersistenInfo()
     {
-        $oOrderArticle = $this->getMock( 'oxorderarticle', array( '_setDeprecatedValues') );
-        $oOrderArticle->expects( $this->once() )->method( '_setDeprecatedValues');
+        $oOrderArticle = new oxorderarticle();
         $oOrderArticle->load( '_testOrderArticleId' );
     }
 
@@ -615,31 +614,6 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
     }
 
     /*
-     * Test setting deprecated values
-     */
-    public function testSetDeprecatedValues()
-    {
-        $aTestArr = array("test", "test2");
-        $sParams = serialize( $aTestArr );
-
-        $this->_oOrderArticle->oxorderarticles__oxpersparam = new oxField($sParams, oxField::T_RAW);
-        $this->_oOrderArticle->oxorderarticles__oxerpstatus = new oxField($sParams, oxField::T_RAW);
-        $this->_oOrderArticle->oxorderarticles__oxbrutprice = new oxField('123', oxField::T_RAW);
-        $this->_oOrderArticle->oxorderarticles__oxbprice = new oxField('456', oxField::T_RAW);
-        $this->_oOrderArticle->oxorderarticles__oxnprice = new oxField('789', oxField::T_RAW);
-        $this->_oOrderArticle->save();
-
-        $oOrderArticle = new oxorderarticle();
-        $oOrderArticle->load( '_testOrderArticleId' );
-
-
-        $this->assertEquals( $aTestArr, $oOrderArticle->aPersParam );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency('123'), $oOrderArticle->ftotbrutprice );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency('456'), $oOrderArticle->fbrutprice );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency('789'), $oOrderArticle->fnetprice );
-    }
-
-    /*
      * Test _setFieldData - correctly sets data type to T_RAW to oxpersparam and oxerpstatus fields
      * M #275
      */
@@ -661,7 +635,12 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
 
     }
 
-    function testGetWrapping()
+    /**
+     * Wrapping info getter test
+     *
+     * @return null
+     */
+    public function testGetWrapping()
     {
         oxTestModules::addFunction('oxwrapping', 'load($id)', '{if ($id=="a") return true; }');
         $o = new oxOrderArticle();
@@ -674,5 +653,21 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
 
         $o->oxorderarticles__oxwrapid = new oxField('a');
         $this->assertTrue($o->getWrapping() instanceof oxwrapping);
+    }
+
+    /**
+     * Testing bundle state getter
+     *
+     * @return bool
+     */
+    public function testIsBundle()
+    {
+        $oOrderArticle = new oxOrderArticle();
+        $oOrderArticle->oxorderarticles__oxisbundle = new oxField( false );
+        $this->assertFalse( $oOrderArticle->isBundle() );
+
+        $oOrderArticle = new oxOrderArticle();
+        $oOrderArticle->oxorderarticles__oxisbundle = new oxField( true );
+        $this->assertTrue( $oOrderArticle->isBundle() );
     }
 }

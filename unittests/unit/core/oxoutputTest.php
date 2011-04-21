@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxoutputTest.php 32347 2011-01-04 08:38:45Z sarunas $
+ * @version   SVN: $Id: oxoutputTest.php 34114 2011-04-01 08:32:47Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -187,5 +187,56 @@ class Unit_Core_oxoutputTest extends OxidTestCase
         $oEmail2 = clone $oEmail;
         $oOutput->processEmail( $oEmail );
         $this->assertEquals( $oEmail2, $oEmail );
+    }
+
+    public function testSetCharsetSetOutputFormatSendHeaders()
+    {
+        $oU = $this->getMock('oxUtils', array('setHeader'));
+        $oU->expects($this->once())->method('setHeader')->with($this->equalTo('Content-Type: text/html; charset=asd'));
+        oxTestModules::cleanUp();
+        oxTestModules::addModuleObject('oxUtils', $oU);
+        $oOutput = oxNew( 'oxOutput' );
+        $oOutput->setCharset('asd');
+        $oOutput->sendHeaders();
+
+
+        $oU = $this->getMock('oxUtils', array('setHeader'));
+        $oU->expects($this->once())->method('setHeader')->with($this->equalTo('Content-Type: application/json; charset=asdd'));
+        oxTestModules::cleanUp();
+        oxTestModules::addModuleObject('oxUtils', $oU);
+        $oOutput = oxNew( 'oxOutput' );
+        $oOutput->setCharset('asdd');
+        $oOutput->setOutputFormat(oxOutput::OUTPUT_FORMAT_JSON);
+        $oOutput->sendHeaders();
+
+
+        $oU = $this->getMock('oxUtils', array('setHeader'));
+        $oU->expects($this->once())->method('setHeader')->with($this->equalTo('Content-Type: text/html; charset=asdd'));
+        oxTestModules::cleanUp();
+        oxTestModules::addModuleObject('oxUtils', $oU);
+        $oOutput = oxNew( 'oxOutput' );
+        $oOutput->setCharset('asdd');
+        $oOutput->setOutputFormat(oxOutput::OUTPUT_FORMAT_HTML);
+        $oOutput->sendHeaders();
+    }
+
+    public function testOutputFlushOutput()
+    {
+        $oOutput = oxNew( 'oxOutput' );
+        ob_start();
+        $oOutput->output('asd', 'asasd');
+        $this->assertEquals('asasd', ob_get_clean());
+        ob_start();
+        $oOutput->flushOutput();
+        $this->assertEquals('', ob_get_clean());
+
+        $oOutput = oxNew( 'oxOutput' );
+        $oOutput->setOutputFormat(oxOutput::OUTPUT_FORMAT_JSON);
+        ob_start();
+        $oOutput->output('asd', 'asasd');
+        $this->assertEquals('', ob_get_clean());
+        ob_start();
+        $oOutput->flushOutput();
+        $this->assertEquals('{"asd":"asasd"}', ob_get_clean());
     }
 }

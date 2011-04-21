@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newslistTest.php 27089 2010-04-07 14:28:32Z sarunas $
+ * @version   SVN: $Id: newslistTest.php 32003 2010-12-17 15:10:01Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,17 +37,9 @@ class Unit_Admin_NewsListTest extends OxidTestCase
      */
     public function testInit()
     {
-        oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return array(1);}");
-        oxTestModules::addFunction("oxUtils", "checkAccessRights", "{return true;}");
-
-        $oSess = $this->getMock('oxsession', array('checkSessionChallenge'));
-        $oSess->expects($this->once())->method('checkSessionChallenge')->will($this->returnValue(true));
-
-        $oView = $this->getMock($this->getProxyClassName('News_List'), array('getSession'));
-        $oView->expects($this->any())->method('getSession')->will($this->returnValue($oSess));
-
-        $oView->init();
-
+        $oView = $this->getProxyClass('News_List');
+        $this->assertFalse( $oView->getNonPublicVar( "_blDesc" ) );
+        $oView->getListSorting();
         $this->assertTrue( $oView->getNonPublicVar( "_blDesc" ) );
     }
 

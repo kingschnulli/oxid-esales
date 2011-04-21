@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: startTest.php 28209 2010-06-08 08:42:03Z arvydas $
+ * @version   SVN: $Id: startTest.php 32964 2011-02-07 12:11:49Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -118,14 +118,15 @@ class Unit_Views_startTest extends OxidTestCase
         $this->assertEquals(2, $aList->count());
     }
 
-    public function testTagCloud()
+    /**
+     * Testing start::getTagCloudManager()
+     *
+     * @return null
+     */
+    public function testGetTagCloudManager()
     {
-        oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
-        $oStart = $this->getProxyClass( 'start' );
-
-        $sTag = $oStart->getTagCloud();
-        $this->assertTrue(strpos($sTag, "tag/wanduhr/'>wanduhr</a>") > 0);
-        $this->assertFalse(strpos($sTag, "tag/funktionales/'>funktionales</a>") > 0);
+        $oView = new Start();
+        $this->assertTrue( $oView->getTagCloudManager() instanceof oxTagCloud );
     }
 
     public function testIsMoreTagsVisible()
@@ -157,9 +158,7 @@ class Unit_Views_startTest extends OxidTestCase
         $oStart->render();
         $aMetaKeywords = $oStart->getMetaKeywords();
 
-        $aViewData = $oStart->getNonPublicVar('_aViewData');
-        $sViewMetaKeywords = $aViewData['meta_keywords'];
-        $this->assertTrue(strlen($sViewMetaKeywords) > 0);
+        $this->assertTrue(strlen($aMetaKeywords) > 0);
     }
 
     public function testPrepareMetaDescription()
@@ -184,9 +183,19 @@ class Unit_Views_startTest extends OxidTestCase
         $oStart->render();
         $aMetaKeywords = $oStart->getMetaDescription();
 
-        $aViewData = $oStart->getNonPublicVar('_aViewData');
-        $sViewMetaDescription = $aViewData['meta_description'];
-        $this->assertTrue(strlen($sViewMetaDescription) > 0);
+        $this->assertTrue(strlen($aMetaKeywords) > 0);
+    }
+
+    public function testGetBanners()
+    {
+        $oArticleList = $this->getMock( 'oxActionList', array( 'loadBanners' ) );
+        $oArticleList->expects( $this->once() )->method( 'loadBanners' );
+
+        oxTestModules::addModuleObject('oxActionList', $oArticleList);
+
+        $oView = new start();
+        $oView->getBanners();
+
     }
 
 

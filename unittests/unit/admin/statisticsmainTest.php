@@ -62,9 +62,6 @@ class Unit_Admin_StatisticsMainTest extends OxidTestCase
         modConfig::setParameter("saved_oxid", "testId");
 
         $this->assertEquals( 'statistic_main.tpl', $oSubj->render() );
-
-        $aViewData = $oSubj->getNonPublicVar("_aViewData");
-        $this->assertEquals($aViewData["updatelist"], 1);
     }
 
     public function testSave()
@@ -78,7 +75,7 @@ class Unit_Admin_StatisticsMainTest extends OxidTestCase
 
         modConfig::getInstance()->setParameter("editval", $aTestParams);
 
-        $aTestParams["oxstatistics__oxshopid"] = NULL;
+        $aTestParams["oxstatistics__oxshopid"] = oxConfig::getInstance()->getBaseShopId();
 
         $oStatMock = $this->getMock("oxstatistic", array("load", "setReports", "assign", "save"));
         $oStatMock->expects($this->once())->method("load")->with("testId");

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentUsageTest.php 28142 2010-06-03 14:05:08Z arvydas $
+ * @version   SVN: $Id: contentUsageTest.php 34021 2011-03-25 15:46:51Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -74,14 +74,18 @@ class Unit_Maintenance_contentUsageTest extends OxidTestCase
      */
     private function _checkTemplates( $dir, $aConst)
     {
-        // regular templates
-        foreach (glob($dir."/out/basic/tpl/*.tpl") as $tpl) {
-            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+        $aDirs = array($dir."/out/basic/tpl", $dir."/out/azure/tpl");
+        while ($aDirs) {
+            $sPWD = array_pop($aDirs);
+            foreach (glob($sPWD."/*") as $tpl) {
+                if (is_dir($tpl)) {
+                    array_push($aDirs, $tpl);
+                } elseif (preg_match('/\.tpl$/', $tpl)) {
+                    $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
+                }
+            }
         }
-        // includable templates
-        foreach (glob($dir."/out/basic/tpl/inc/*.tpl") as $tpl) {
-            $aConst = $this->_getNotUsedInTemplates($tpl, $aConst, true);
-        }
+
         foreach (glob($dir."/views/*.php") as $php) {
             $aConst = $this->_getNotUsedInTemplates($php, $aConst, false);
         }
@@ -89,7 +93,7 @@ class Unit_Maintenance_contentUsageTest extends OxidTestCase
     }
 
     /**
-     * Returns array of non existing but used content.
+     * Returns array of existing but not used content.
      *
      * @param string $ftpl   file path
      * @param array  $aConst not used constants array

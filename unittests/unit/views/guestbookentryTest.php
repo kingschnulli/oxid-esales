@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: guestbookentryTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: guestbookentryTest.php 32077 2010-12-20 13:54:27Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -74,7 +74,7 @@ class Unit_Views_GuestbookEntryTest extends OxidTestCase
 
         $oExcp = unserialize( $aErrors['default'][0] );
         $this->assertTrue( $oExcp instanceof oxDisplayError );
-        $this->assertEquals( oxLang::getInstance()->translateString( "GUESTBOOKENTRY_ERRLOGGINTOWRITEENTRY" ), $oExcp->getOxMessage() );
+        $this->assertEquals( oxLang::getInstance()->translateString( "EXCEPTION_GUESTBOOKENTRY_ERRLOGGINTOWRITEENTRY" ), $oExcp->getOxMessage() );
     }
 
     /**
@@ -99,7 +99,7 @@ class Unit_Views_GuestbookEntryTest extends OxidTestCase
 
         $oExcp = unserialize( $aErrors['default'][0] );
         $this->assertTrue( $oExcp instanceof oxDisplayError );
-        $this->assertEquals( oxLang::getInstance()->translateString( "GUESTBOOKENTRY_ERRUNDEFINEDSHOP" ), $oExcp->getOxMessage() );
+        $this->assertEquals( oxLang::getInstance()->translateString( "EXCEPTION_GUESTBOOKENTRY_ERRUNDEFINEDSHOP" ), $oExcp->getOxMessage() );
     }
 
     /**
@@ -120,7 +120,7 @@ class Unit_Views_GuestbookEntryTest extends OxidTestCase
 
         $oExcp = unserialize( $aErrors['default'][0] );
         $this->assertTrue( $oExcp instanceof oxDisplayError );
-        $this->assertEquals( oxLang::getInstance()->translateString( "GUESTBOOKENTRY_ERRREVIEWCONTAINSNOTEXT" ), $oExcp->getOxMessage() );
+        $this->assertEquals( oxLang::getInstance()->translateString( "EXCEPTION_GUESTBOOKENTRY_ERRREVIEWCONTAINSNOTEXT" ), $oExcp->getOxMessage() );
     }
 
     /**
@@ -143,7 +143,7 @@ class Unit_Views_GuestbookEntryTest extends OxidTestCase
 
         $oExcp = unserialize( $aErrors['default'][0] );
         $this->assertTrue( $oExcp instanceof oxDisplayError );
-        $this->assertEquals( oxLang::getInstance()->translateString( "GUESTBOOKENTRY_ERRMAXIMUMNOMBEREXCEEDED" ), $oExcp->getOxMessage() );
+        $this->assertEquals( oxLang::getInstance()->translateString( "EXCEPTION_GUESTBOOKENTRY_ERRMAXIMUMNOMBEREXCEEDED" ), $oExcp->getOxMessage() );
     }
 
     /**

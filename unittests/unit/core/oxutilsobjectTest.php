@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobjectTest.php 31053 2010-11-19 16:52:01Z arvydas $
+ * @version   SVN: $Id: oxutilsobjectTest.php 32008 2010-12-17 15:10:36Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -72,8 +72,6 @@ class Unit_Core_oxutilsobjectTest extends OxidTestCase
     {
         oxRemClassModule('modOxUtilsObject_oxUtilsObject');
 
-        $oShop = new oxShop();
-        $oShop->delete( 2 );
 
         $oArticle = new oxarticle();
         $oArticle->delete( 'testArticle' );

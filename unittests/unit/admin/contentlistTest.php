@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentlistTest.php 25334 2010-01-22 07:14:37Z alfonsas $
+ * @version   SVN: $Id: contentlistTest.php 31986 2010-12-17 14:03:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -57,12 +57,13 @@ class Unit_Admin_ContentListTest extends OxidTestCase
     public function testPrepareWhereQueryUserDefinedFolder()
     {
         modConfig::setParameter( "folder", "testFolder" );
+        $sViewName = getviewName( "oxcontents" );
 
         // defining parameters
         $oView = new Content_List();
         $sResQ = $oView->UNITprepareWhereQuery( array(), "" );
 
-        $sQ .= " and oxcontents.oxfolder = 'testFolder'";
+        $sQ .= " and {$sViewName}.oxfolder = 'testFolder'";
 
         $this->assertEquals( $sQ, $sResQ );
     }

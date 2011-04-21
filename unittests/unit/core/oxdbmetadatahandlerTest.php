@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandlerTest.php 26848 2010-03-25 15:08:28Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxdbmetadatahandlerTest.php 34500 2011-04-09 07:25:48Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -124,40 +124,41 @@ class Unit_Core_oxDbMetaDataHandlerTest extends OxidTestCase
     }
 
     /*
+     * Test if returned sql for creating new table set is correct
+     */
+    public function testGetCreateTableSetSql()
+    {
+        $sTestSql = "CREATE TABLE `oxcountry_set1` (`OXID` char(32) COLLATE latin1_general_ci NOT NULL, PRIMARY KEY (`OXID`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci";
+
+        $oDbMeta = $this->getProxyClass( "oxDbMetaDataHandler" );
+
+        //comparing in case insensitive form
+        $this->assertEquals( $sTestSql, $oDbMeta->UNITgetCreateTableSetSql("oxcountry", 8), '', 0, 10, false, true );
+    }
+
+    /*
      * Test if returned sql for creating new field is correct
      */
-    public function testGetDublicatedFieldSql()
+    public function testGetAddFieldSql()
     {
         $sTestSql = "alter TABLE `oxcountry` ADD `OXTITLE_4` char(128) collate latin1_general_ci NOT NULL default '' AFTER `OXTITLE_3`";
 
         $oDbMeta = $this->getProxyClass( "oxDbMetaDataHandler" );
 
         //comparing in case insensitive form
-        $this->assertEquals( $sTestSql, $oDbMeta->UNITgetDublicatedFieldSql( "OXTITLE", "OXTITLE_4", "oxcountry", "OXTITLE_3" ), '', 0, 10, false, true );
-    }
-
-    /*
-     * Test if returned sql for creating new field is correct with missing param
-     */
-    public function testGetDublicatedFieldSqlWhenMissingParams()
-    {
-        $oDbMeta = $this->getProxyClass( "oxDbMetaDataHandler" );
-
-        $this->assertNull( $oDbMeta->UNITgetDublicatedFieldSql( null, "OXTITLE_4", "oxactions", "OXTITLE_3" ) );
-        $this->assertNull( $oDbMeta->UNITgetDublicatedFieldSql( "OXTITLE", null, "oxactions", "OXTITLE_3" ) );
-        $this->assertNull( $oDbMeta->UNITgetDublicatedFieldSql( "OXTITLE", "OXTITLE_4", null, "OXTITLE_3" ) );
+        $this->assertEquals( $sTestSql, $oDbMeta->UNITgetAddFieldSql( "oxcountry", "OXTITLE", 4 ), '', 0, 10, false, true );
     }
 
     /*
      * Test if returned sql for creating new field indexes is correct
      */
-    public function testGetDublicatedFieldIndexesSql()
+    public function testAddFieldIndexSql()
     {
         $aTestSql[] = "ALTER TABLE `oxartextends` ADD FULLTEXT KEY  (`OXTAGS_4`)";
 
         $oDbMeta = $this->getProxyClass( "oxDbMetaDataHandler" );
 
-        $this->assertEquals( $aTestSql, $oDbMeta->UNITgetDublicatedFieldIndexesSql( "OXTAGS_3", "OXTAGS_4", "oxartextends" ) );
+        $this->assertEquals( $aTestSql, $oDbMeta->UNITgetAddFieldIndexSql( "oxartextends", "OXTAGS", 4 ) );
     }
 
 
@@ -207,13 +208,31 @@ class Unit_Core_oxDbMetaDataHandlerTest extends OxidTestCase
     /*
      * Test if method collects sql for creating table new multilang fields
      */
-    public function testAddNewMultilangField()
+    public function testAddNewMultilangFieldAlterTable()
     {
         $aTestSql[] = "ALTER TABLE `oxcountry` ADD `OXTITLE_4` char(128) collate latin1_general_ci NOT NULL default '' AFTER `OXTITLE_3`";
         $aTestSql[] = "ALTER TABLE `oxcountry` ADD `OXSHORTDESC_4` char(128) collate latin1_general_ci NOT NULL default '' AFTER `OXSHORTDESC_3`";
         $aTestSql[] = "ALTER TABLE `oxcountry` ADD `OXLONGDESC_4` char(255) collate latin1_general_ci NOT NULL default '' AFTER `OXLONGDESC_3`";
 
         $oDbMeta = $this->getMock( 'oxdbmetadatahandler', array( '_executeSql' ) );
+
+        $oDbMeta->expects( $this->once() )->method( '_executeSql' )->with( $this->equalTo( $aTestSql, 0, 10, false, true ) ); //case insensitive
+
+        $oDbMeta->addNewMultilangField( "oxcountry" );
+    }
+
+    /*
+     * Test if method collects sql for creating table new multilang fields
+     */
+    public function testAddNewMultilangFieldCreateTable()
+    {
+        $aTestSql[] = "CREATE TABLE `oxcountry_set1` (`OXID` char(32) COLLATE latin1_general_ci NOT NULL, PRIMARY KEY (`OXID`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci";
+        $aTestSql[] = "ALTER TABLE `oxcountry_set1` ADD `OXTITLE_8` char(128) collate latin1_general_ci NOT NULL default ''";
+        $aTestSql[] = "ALTER TABLE `oxcountry_set1` ADD `OXSHORTDESC_8` char(128) collate latin1_general_ci NOT NULL default ''";
+        $aTestSql[] = "ALTER TABLE `oxcountry_set1` ADD `OXLONGDESC_8` char(255) collate latin1_general_ci NOT NULL default ''";
+
+        $oDbMeta = $this->getMock( 'oxdbmetadatahandler', array( '_executeSql','getCurrentMaxLangId' ) );
+        $oDbMeta->expects( $this->any() )->method( 'getCurrentMaxLangId' )->will( $this->returnValue( 7 ) );
         $oDbMeta->expects( $this->once() )->method( '_executeSql' )->with( $this->equalTo( $aTestSql, 0, 10, false, true ) ); //case insensitive
 
         $oDbMeta->addNewMultilangField( "oxcountry" );
@@ -272,6 +291,20 @@ class Unit_Core_oxDbMetaDataHandlerTest extends OxidTestCase
         $this->assertEquals( "OXLONGDESC_2", $aIndexes[10]["Key_name"] );
         $this->assertEquals( "OXLONGDESC_2", $aIndexes[10]["Column_name"] );
         $this->assertEquals( "FULLTEXT", $aIndexes[10]["Index_type"] );
+    }
+
+    /*
+     * Testing real db table update on adding correct indexes
+     */
+    public function testAddNewMultilangFieldAddsTable()
+    {
+        $this->_createTestTable();
+
+        $oDb = oxDb::getDb();
+        $oDbMeta = $this->getMock( 'oxdbmetadatahandler', array( 'getCurrentMaxLangId' ) );
+        $oDbMeta->expects( $this->any() )->method( 'getCurrentMaxLangId' )->will( $this->returnValue( 8 ) );
+
+        $oDbMeta->addNewMultilangField( "testDbMetaDataHandler" );
     }
 
     /*

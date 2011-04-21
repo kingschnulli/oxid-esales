@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: test_config.inc.php 26863 2010-03-26 09:43:10Z arvydas $
+ * @version   SVN: $Id: test_config.inc.php 34014 2011-03-25 14:06:07Z sarunas $
  */
 
 // DO NOT TOUCH THIS _ INSTEAD FIX NOTICES - DODGER
@@ -28,8 +28,19 @@ ini_set('display_errors', true);
 
 define ('OXID_PHP_UNIT', true);
 
+$_sOverridenShopBasePath = null;
+function overrideGetShopBasePath($sPath)
+{
+    global $_sOverridenShopBasePath;
+    $_sOverridenShopBasePath = $sPath;
+}
+
 function getShopBasePath()
 {
+    global $_sOverridenShopBasePath;
+    if (isset($_sOverridenShopBasePath)) {
+        return $_sOverridenShopBasePath;
+    }
     return oxPATH;
 }
 
@@ -43,6 +54,7 @@ require_once 'test_utils.php';
 // Generic utility method file.
 require_once getShopBasePath() . 'core/oxfunctions.php';
 
+oxConfig::getInstance();
 
 /**
  * Useful for defining custom time

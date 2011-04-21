@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: guestbookTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: guestbookTest.php 33284 2011-02-15 15:17:07Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -71,40 +71,14 @@ class Unit_Views_GuestbookTest extends OxidTestCase
     public function testRender()
     {
         $oView = $this->getMock( "guestbook", array( "floodProtection", "getSortColumns", "getGbSortBy", "getGbSortDir", "getEntries", "getPageNavigation" ) );
-        $oView->expects( $this->once() )->method( 'floodProtection')->will( $this->returnValue( "floodProtection" ) );
-        $oView->expects( $this->once() )->method( 'getSortColumns')->will( $this->returnValue( "getSortColumns" ) );
-        $oView->expects( $this->once() )->method( 'getGbSortBy')->will( $this->returnValue( "getGbSortBy" ) );
-        $oView->expects( $this->once() )->method( 'getGbSortDir')->will( $this->returnValue( "getGbSortDir" ) );
-        $oView->expects( $this->once() )->method( 'getEntries')->will( $this->returnValue( "getEntries" ) );
-        $oView->expects( $this->once() )->method( 'getPageNavigation')->will( $this->returnValue( "getPageNavigation" ) );
-
-        $this->assertEquals( "guestbook.tpl", $oView->render() );
-        $aViewData = $oView->getViewData();
-        $this->assertEquals( "floodProtection", $aViewData["hideentries"] );
-        $this->assertEquals( "getSortColumns", $aViewData["allsortcolumns"] );
-        $this->assertEquals( "getGbSortBy", $aViewData["gborderby"] );
-        $this->assertEquals( "getGbSortDir", $aViewData["gborder"] );
-        $this->assertEquals( "getEntries", $aViewData["entries"] );
-        $this->assertEquals( "getPageNavigation", $aViewData["pageNavigation"] );
-    }
-
-    /**
-     * compare::render() test case
-     *
-     * @return null
-     */
-    public function testRenderShowLogin()
-    {
-        $oView = $this->getMock( "guestbook", array( "floodProtection", "getSortColumns", "getGbSortBy", "getGbSortDir", "getEntries", "getPageNavigation" ) );
         $oView->expects( $this->never() )->method( 'floodProtection');
         $oView->expects( $this->never() )->method( 'getSortColumns');
         $oView->expects( $this->never() )->method( 'getGbSortBy');
         $oView->expects( $this->never() )->method( 'getGbSortDir');
-        $oView->expects( $this->never() )->method( 'getEntries');
+        $oView->expects( $this->once() )->method( 'getEntries');
         $oView->expects( $this->never() )->method( 'getPageNavigation');
 
-        $oView->showLogin();
-        $this->assertEquals( "guestbook_login.tpl", $oView->render() );
+        $this->assertEquals( "page/guestbook/guestbook.tpl", $oView->render() );
     }
 
     /**
@@ -237,5 +211,17 @@ class Unit_Views_GuestbookTest extends OxidTestCase
         $oView = $this->getMock( "GuestBook", array( "generatePageNavigation" ) );
         $oView->expects( $this->once() )->method( 'generatePageNavigation' )->will( $this->returnValue( "generatePageNavigation" ) );
         $this->assertEquals( "generatePageNavigation", $oView->getPageNavigation() );
+    }
+
+    /**
+     * Testing Contact::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oGuestBook = new GuestBook();
+
+        $this->assertEquals(1, count($oGuestBook->getBreadCrumb()));
     }
 }

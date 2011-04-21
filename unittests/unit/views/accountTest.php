@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: accountTest.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
+ * @version   SVN: $Id: accountTest.php 32932 2011-02-04 16:24:54Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -42,7 +42,7 @@ class Unit_Views_accountTest extends OxidTestCase
         $oUserView = $this->getMock( 'account', array( 'confirmTerms', 'getUser' ) );
         $oUserView->expects( $this->any() )->method( 'confirmTerms' )->will( $this->returnValue( true ) );
         $oUserView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( true ) );
-        $this->assertEquals( 'account_login_alt.tpl', $oUserView->render());
+        $this->assertEquals( 'page/privatesales/login.tpl', $oUserView->render());
     }
 
     /**
@@ -60,7 +60,7 @@ class Unit_Views_accountTest extends OxidTestCase
         $oUserView->expects( $this->any() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
         $oUserView->expects( $this->any() )->method( 'getOrderCnt' );
         $oUserView->expects( $this->any() )->method( 'isEnabledPrivateSales' )->will( $this->returnValue( false ) );
-        $this->assertEquals( 'account_main.tpl', $oUserView->render());
+        $this->assertEquals( 'page/account/dashboard.tpl', $oUserView->render());
     }
 
     /**
@@ -279,26 +279,14 @@ class Unit_Views_accountTest extends OxidTestCase
         $oUser = new oxuser();
         $oUser->oxuser__oxpassword = new oxField( 1 );
 
-        $oView = $this->getMock( "account", array( "redirectAfterLogin", "_loadActions",
-                                                   "getArticleId", "getSearchParam",
-                                                   "getSearchParamForHtml", "getSearchCatId",
-                                                   "getSearchVendor", "getSearchManufacturer",
-                                                   "getListType", "getUser", "getOrderCnt", "isEnabledPrivateSales" ) );
+        $oView = $this->getMock( "account", array( "redirectAfterLogin",
+                                                   "getUser", "isEnabledPrivateSales" ) );
 
         $oView->expects( $this->once() )->method( "redirectAfterLogin" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "_loadActions" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->atLeastOnce() )->method( "getArticleId" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getSearchParam" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getSearchParamForHtml" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getSearchCatId" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getSearchVendor" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getSearchManufacturer" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getListType" )->will( $this->returnValue( 1 ) );
         $oView->expects( $this->once() )->method( "getUser" )->will( $this->returnValue( $oUser ) );
-        $oView->expects( $this->once() )->method( "getOrderCnt" )->will( $this->returnValue( 1 ) );
         $oView->expects( $this->any() )->method( 'isEnabledPrivateSales' )->will( $this->returnValue( false ) );
 
-        $this->assertEquals( 'account_main.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/dashboard.tpl', $oView->render() );
     }
 
     /**
@@ -314,25 +302,13 @@ class Unit_Views_accountTest extends OxidTestCase
         $oUser = new oxuser();
         $oUser->oxuser__oxpassword = new oxField( 1 );
 
-        $oView = $this->getMock( "account", array( "redirectAfterLogin", "_loadActions",
-                                                   "getArticleId", "getSearchParam",
-                                                   "getSearchParamForHtml", "getSearchCatId",
-                                                   "getSearchVendor", "getSearchManufacturer",
-                                                   "getListType", "getUser", "getOrderCnt", 'isActive' ) );
+        $oView = $this->getMock( "account", array( "redirectAfterLogin",
+                                                   "getUser", 'isActive' ) );
 
         $oView->expects( $this->once() )->method( "redirectAfterLogin" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "_loadActions" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->atLeastOnce() )->method( "getArticleId" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getSearchParam" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getSearchParamForHtml" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getSearchCatId" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getSearchVendor" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getSearchManufacturer" )->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( "getListType" )->will( $this->returnValue( 1 ) );
         $oView->expects( $this->once() )->method( "getUser" )->will( $this->returnValue( false ) );
         $oView->expects( $this->any() )->method( 'isActive' )->will( $this->returnValue( true ) );
-        $oView->expects( $this->never() )->method( "getOrderCnt" );
 
-        $this->assertEquals( 'account_login_alt.tpl', $oView->render() );
+        $this->assertEquals( 'page/privatesales/login.tpl', $oView->render() );
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorlistTest.php 25334 2010-01-22 07:14:37Z alfonsas $
+ * @version   SVN: $Id: vendorlistTest.php 31986 2010-12-17 14:03:45Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -40,20 +40,5 @@ class Unit_Admin_VendorListTest extends OxidTestCase
         // testing..
         $oView = new Vendor_List();
         $this->assertEquals( 'vendor_list.tpl', $oView->render() );
-    }
-
-    /**
-     * Vendor::init() test case
-     *
-     * @return null
-     */
-    public function testInit()
-    {
-        // testing..
-        $oView = $this->getMock( "Vendor_List", array( "_authorize" ) );
-        $oView->expects( $this->once() )->method( '_authorize')->will( $this->returnValue( true ) );
-        $oView->init();
-        $oView->render();
-        $this->assertEquals( getViewName('oxvendor').".oxtitle", $oView->getViewDataElement( "sort" ) );
     }
 }

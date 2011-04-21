@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: adminlinksmainTest.php 26165 2010-03-02 09:53:45Z arvydas $
+ * @version   SVN: $Id: adminlinksmainTest.php 33187 2011-02-10 15:54:30Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -47,7 +47,6 @@ class Unit_Admin_AdminLinksMainTest extends OxidTestCase
         // testing view data
         $aViewData = $oView->getViewData();
         $this->assertEquals( '-1', $aViewData["oxid"] );
-        $this->assertEquals( '1', $aViewData["updatelist"] );
         $this->assertEquals( 'adminlinks_main.tpl', $sTplName );
     }
 

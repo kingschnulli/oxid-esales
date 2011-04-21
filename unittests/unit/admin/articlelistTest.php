@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlelistTest.php 27094 2010-04-08 07:34:16Z arvydas $
+ * @version   SVN: $Id: articlelistTest.php 32003 2010-12-17 15:10:01Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -31,22 +31,36 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 class Unit_Admin_ArticleListTest extends OxidTestCase
 {
     /**
+     * Test building sql where with specified "folder" param
+     *  for oxarticles, oxorder, oxcontents tables
+     *
+     * @return null
+     */
+    public function testBuildWhereWithSpecifiedFolderParam()
+    {
+        $sObjects = 'oxArticle';
+
+        modConfig::setParameter( 'folder', $sObjects.'TestFolderName' );
+
+        $oAdminList = $this->getMock( 'article_list', array( "getItemList" ) );
+        $oAdminList->expects( $this->once() )->method( 'getItemList' )->will( $this->returnValue( null ) );
+        $aBuildWhere = $oAdminList->buildWhere();
+        $this->assertEquals( 'oxArticleTestFolderName', $aBuildWhere[getViewName('oxarticles').'.oxfolder'] );
+    }
+
+    /**
      * Article_List::Render() test case
      *
      * @return null
      */
     public function testRenderSelectingProductCategory()
     {
+        modConfig::getInstance()->setParameter( "where", array( "oxarticles" => array( "oxtitle" => "testValue" ) ) );
+
         $sCatId = oxDb::getDb()->getOne( "select oxid from oxcategories" );
         modConfig::setParameter( "art_category", "cat@@".$sCatId );
-
-        $oWhere = new oxStdClass();
-        $oWhere->oxarticles__OXTITLE = "testValue";
-
         // testing..
         $oView = new Article_List();
-        $oView->addTplParam( "where", $oWhere );
-
         $this->assertEquals( 'article_list.tpl', $oView->render() );
 
         // testing view data

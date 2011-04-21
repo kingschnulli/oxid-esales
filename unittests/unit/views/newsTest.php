@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: newsTest.php 32923 2011-02-04 14:35:22Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -97,13 +97,25 @@ class Unit_Views_newsTest extends OxidTestCase
 
     public function testRender()
     {
-        $n = $this->getMock('news', array('getNews', '_loadActions'));
+        $n = $this->getMock('news', array('getNews'));
         $n->expects($this->once())->method('getNews')->will($this->returnValue('newse'));
-        $n->expects($this->once())->method('_loadActions');
 
-        $this->assertEquals('news.tpl', $n->render());
-        $aVD = $n->getViewData();
-        $this->assertEquals('newse', $aVD['news']);
+        $this->assertEquals('page/info/news.tpl', $n->render());
+        $this->assertEquals('newse', $n->getNews());
+    }
+
+    /**
+     * Testing News::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oNews = new News();
+
+        $aResult[]["title"] = oxLang::getInstance()->translateString( 'PAGE_INFO_NEWS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+
+        $this->assertEquals( $aResult, $oNews->getBreadCrumb() );
     }
 
 }

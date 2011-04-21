@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentmainTest.php 26337 2010-03-05 14:04:36Z arvydas $
+ * @version   SVN: $Id: contentmainTest.php 33187 2011-02-10 15:54:30Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -55,14 +55,11 @@ class Unit_Admin_ContentMainTest extends OxidTestCase
     public function testRenderNoRealObjectId()
     {
         modConfig::setParameter( "oxid", "-1" );
-        modConfig::setParameter( "saved_oxid", "-1" );
 
         // testing..
         $oView = new Content_Main();
         $this->assertEquals( 'content_main.tpl', $oView->render() );
         $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['updatelist'] ) );
-        $this->assertEquals( "1", $aViewData['updatelist'] );
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );
     }

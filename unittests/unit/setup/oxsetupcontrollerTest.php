@@ -96,8 +96,10 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
         $oView = $this->getMock( "oxStdClass", array( "setTitle", "setViewParam" ) );
         $oView->expects( $this->at( 0 ) )->method( "setTitle" )->with( $this->equalTo( 'STEP_1_TITLE' ) );
         $oView->expects( $this->at( 1 ) )->method( "setViewParam" )->with( $this->equalTo( 'aCountries' ) );
-        $oView->expects( $this->at( 2 ) )->method( "setViewParam" )->with( $this->equalTo( 'sSetupLang' ) );
-        $oView->expects( $this->at( 3 ) )->method( "setViewParam" )->with( $this->equalTo( 'sCountryLang' ) );
+        $oView->expects( $this->at( 2 ) )->method( "setViewParam" )->with( $this->equalTo( 'aLocations' ) );
+        $oView->expects( $this->at( 3 ) )->method( "setViewParam" )->with( $this->equalTo( 'sSetupLang' ) );
+        $oView->expects( $this->at( 4 ) )->method( "setViewParam" )->with( $this->equalTo( 'sLocationLang' ) );
+        $oView->expects( $this->at( 5 ) )->method( "setViewParam" )->with( $this->equalTo( 'sCountryLang' ) );
 
         $oLang = $this->getMock( "oxStdClass", array( "getSetupLang" ) );
         $oLang->expects( $this->once() )->method( "getSetupLang" )->will( $this->returnValue( "oxidadminlanguage" ) );
@@ -386,9 +388,10 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
         $oUtils = $this->getMock( "oxStdClass", array( "getRequestVar" ) );
         $oUtils->expects( $this->once() )->method( "getRequestVar" );
 
-        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "execSql" ) );
+        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "execSql", "testCreateView" ) );
         $oDb->expects( $this->once() )->method( "openDatabase" );
         $oDb->expects( $this->once() )->method( "execSql" );
+        $oDb->expects( $this->once() )->method( "testCreateView" );
 
         $oController = $this->getMock( "oxSetupController", array( "getView", "getInstance" ) );
         $oController->expects( $this->at( 0 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetup" ) )->will( $this->returnValue( $oSetup ) );
@@ -420,11 +423,12 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
         $oUtils = $this->getMock( "oxStdClass", array( "getRequestVar" ) );
         $oUtils->expects( $this->once() )->method( "getRequestVar" );
 
-        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "execSql", "setMySqlCollation", "queryFile" ) );
+        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "execSql", "setMySqlCollation", "queryFile", "testCreateView" ) );
         $oDb->expects( $this->once() )->method( "openDatabase" );
         $oDb->expects( $this->once() )->method( "setMySqlCollation" );
         $oDb->expects( $this->once() )->method( "execSql" )->will( $this->throwException( new Exception ));
         $oDb->expects( $this->once() )->method( "queryFile" )->will( $this->throwException( new Exception ));
+        $oDb->expects( $this->once() )->method( "testCreateView" );
 
         $oController = $this->getMock( "oxSetupController", array( "getView", "getInstance" ) );
         $oController->expects( $this->at( 0 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetup" ) )->will( $this->returnValue( $oSetup ) );
@@ -459,12 +463,13 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
         $oLang = $this->getMock( "oxStdClass", array( "getText" ) );
         $oLang->expects( $this->atLeastOnce() )->method( "getText" );
 
-        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "execSql", "setMySqlCollation", "queryFile" ) );
+        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "execSql", "setMySqlCollation", "queryFile", "testCreateView" ) );
         $oDb->expects( $this->at( 0 ) )->method( "openDatabase" );
-        $oDb->expects( $this->at( 1 ) )->method( "execSql" )->will( $this->throwException( new Exception ));
-        $oDb->expects( $this->at( 2 ) )->method( "setMySqlCollation" );
-        $oDb->expects( $this->at( 3 ) )->method( "queryFile" );
-        $oDb->expects( $this->at( 4 ) )->method( "queryFile" )->will( $this->throwException( new Exception ));
+        $oDb->expects( $this->at( 1 ) )->method( "testCreateView" );
+        $oDb->expects( $this->at( 2 ) )->method( "execSql" )->will( $this->throwException( new Exception ));
+        $oDb->expects( $this->at( 3 ) )->method( "setMySqlCollation" );
+        $oDb->expects( $this->at( 4 ) )->method( "queryFile" );
+        $oDb->expects( $this->at( 5 ) )->method( "queryFile" )->will( $this->throwException( new Exception ));
 
         $oController = $this->getMock( "oxSetupController", array( "getView", "getInstance" ) );
         $oController->expects( $this->at( 0 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetup" ) )->will( $this->returnValue( $oSetup ) );
@@ -488,7 +493,7 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
 
         $oSession = $this->getMock( "oxStdClass", array( "getSessionParam" ) );
         $oSession->expects( $this->at( 0 ) )->method( "getSessionParam" )->with( $this->equalTo( "aDB" ) )->will( $this->returnValue( array( "dbiDemoData" => 1 ) ) );
-        $oSession->expects( $this->at( 1 ) )->method( "getSessionParam" )->with( $this->equalTo( "country_lang" ) )->will( $this->returnValue( "en" ) );
+        $oSession->expects( $this->at( 1 ) )->method( "getSessionParam" )->with( $this->equalTo( "location_lang" ) )->will( $this->returnValue( "en" ) );
 
         $oView = $this->getMock( "oxStdClass", array( "setTitle", "setMessage" ) );
         $oView->expects( $this->once() )->method( "setTitle" )->with( $this->equalTo( "STEP_3_2_TITLE" ) );
@@ -500,18 +505,54 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
         $oLang = $this->getMock( "oxStdClass", array( "getText" ) );
         $oLang->expects( $this->atLeastOnce() )->method( "getText" );
 
-        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "execSql", "setMySqlCollation", "queryFile" ) );
+        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "execSql", "setMySqlCollation", "queryFile", "testCreateView" ) );
         $oDb->expects( $this->at( 0 ) )->method( "openDatabase" );
-        $oDb->expects( $this->at( 1 ) )->method( "execSql" )->will( $this->throwException( new Exception ));
-        $oDb->expects( $this->at( 2 ) )->method( "setMySqlCollation" );
-        $oDb->expects( $this->at( 3 ) )->method( "queryFile" );
+        $oDb->expects( $this->at( 1 ) )->method( "testCreateView" );
+        $oDb->expects( $this->at( 2 ) )->method( "execSql" )->will( $this->throwException( new Exception ));
+        $oDb->expects( $this->at( 3 ) )->method( "setMySqlCollation" );
         $oDb->expects( $this->at( 4 ) )->method( "queryFile" );
-        $oDb->expects( $this->at( 5 ) )->method( "queryFile" )->will( $this->throwException( new Exception ));
+        $oDb->expects( $this->at( 5 ) )->method( "queryFile" );
+        $oDb->expects( $this->at( 6 ) )->method( "queryFile" )->will( $this->throwException( new Exception ));
 
         $oController = $this->getMock( "oxSetupController", array( "getView", "getInstance" ) );
         $oController->expects( $this->at( 0 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetup" ) )->will( $this->returnValue( $oSetup ) );
         $oController->expects( $this->at( 1 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupSession" ) )->will( $this->returnValue( $oSession ) );
         $oController->expects( $this->at( 2 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupLang" ) )->will( $this->returnValue( $oLang ) );
+        $oController->expects( $this->at( 3 ) )->method( "getView" )->will( $this->returnValue( $oView ) );
+        $oController->expects( $this->at( 4 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupUtils" ) )->will( $this->returnValue( $oUtils ) );
+        $oController->expects( $this->at( 5 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupDb" ) )->will( $this->returnValue( $oDb ) );
+        $this->assertEquals( "default.php", $oController->dbCreate() );
+    }
+
+    /**
+     * Testing oxSetupController::dbCreate()
+     *
+     * @return null
+     */
+    public function testDbCreateFailedViewTest()
+    {
+        $oSetup = $this->getMock( "oxStdClass", array( "setNextStep", "getStep" ) );
+        $oSetup->expects( $this->once() )->method( "setNextStep" );
+        $oSetup->expects( $this->once() )->method( "getStep" );
+
+        $oSession = $this->getMock( "oxStdClass", array( "getSessionParam" ) );
+        $oSession->expects( $this->at( 0 ) )->method( "getSessionParam" )->with( $this->equalTo( "aDB" ) )->will( $this->returnValue( array( "dbiDemoData" => 1 ) ) );
+
+        $oView = $this->getMock( "oxStdClass", array( "setTitle", "setMessage" ) );
+        $oView->expects( $this->once() )->method( "setTitle" )->with( $this->equalTo( "STEP_3_2_TITLE" ) );
+        $oView->expects( $this->once() )->method( "setMessage" );
+
+        $oUtils = $this->getMock( "oxStdClass", array( "getRequestVar" ) );
+        $oUtils->expects( $this->once() )->method( "getRequestVar" );
+
+        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "testCreateView" ) );
+        $oDb->expects( $this->at( 0 ) )->method( "openDatabase" );
+        $oDb->expects( $this->at( 1 ) )->method( "testCreateView" )->will( $this->throwException( new Exception ));
+
+        $oController = $this->getMock( "oxSetupController", array( "getView", "getInstance" ) );
+        $oController->expects( $this->at( 0 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetup" ) )->will( $this->returnValue( $oSetup ) );
+        $oController->expects( $this->at( 1 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupSession" ) )->will( $this->returnValue( $oSession ) );
+        $oController->expects( $this->at( 2 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupLang" ) );
         $oController->expects( $this->at( 3 ) )->method( "getView" )->will( $this->returnValue( $oView ) );
         $oController->expects( $this->at( 4 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupUtils" ) )->will( $this->returnValue( $oUtils ) );
         $oController->expects( $this->at( 5 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupDb" ) )->will( $this->returnValue( $oDb ) );
@@ -532,7 +573,7 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
 
         $oSession = $this->getMock( "oxStdClass", array( "getSessionParam" ) );
         $oSession->expects( $this->at( 0 ) )->method( "getSessionParam" )->with( $this->equalTo( "aDB" ) )->will( $this->returnValue( array( "dbiDemoData" => 1, "iUtfMode" => 1 ) ) );
-        $oSession->expects( $this->at( 1 ) )->method( "getSessionParam" )->with( $this->equalTo( "country_lang" ) )->will( $this->returnValue( "en" ) );
+        $oSession->expects( $this->at( 1 ) )->method( "getSessionParam" )->with( $this->equalTo( "location_lang" ) )->will( $this->returnValue( "en" ) );
 
         $oView = $this->getMock( "oxStdClass", array( "setTitle", "setMessage" ) );
         $oView->expects( $this->once() )->method( "setTitle" )->with( $this->equalTo( "STEP_3_2_TITLE" ) );
@@ -544,16 +585,17 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
         $oLang = $this->getMock( "oxStdClass", array( "getText" ) );
         $oLang->expects( $this->atLeastOnce() )->method( "getText" );
 
-        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "execSql", "setMySqlCollation", "queryFile", "saveDynPagesSettings", "convertConfigTableToUtf" ) );
+        $oDb = $this->getMock( "oxStdClass", array( "openDatabase", "execSql", "setMySqlCollation", "queryFile", "saveDynPagesSettings", "convertConfigTableToUtf", "testCreateView" ) );
         $oDb->expects( $this->at( 0 ) )->method( "openDatabase" );
-        $oDb->expects( $this->at( 1 ) )->method( "execSql" )->will( $this->throwException( new Exception ));
-        $oDb->expects( $this->at( 2 ) )->method( "setMySqlCollation" );
-        $oDb->expects( $this->at( 3 ) )->method( "queryFile" );
+        $oDb->expects( $this->at( 1 ) )->method( "testCreateView" );
+        $oDb->expects( $this->at( 2 ) )->method( "execSql" )->will( $this->throwException( new Exception ));
+        $oDb->expects( $this->at( 3 ) )->method( "setMySqlCollation" );
         $oDb->expects( $this->at( 4 ) )->method( "queryFile" );
-        $oDb->expects( $this->at( 5 ) )->method( "saveDynPagesSettings" );
-        $oDb->expects( $this->at( 6 ) )->method( "queryFile" );
-        $oDb->expects( $this->at( 7 ) )->method( "setMySqlCollation" );
-        $oDb->expects( $this->at( 8 ) )->method( "convertConfigTableToUtf" );
+        $oDb->expects( $this->at( 5 ) )->method( "queryFile" );
+        $oDb->expects( $this->at( 6 ) )->method( "saveDynPagesSettings" );
+        $oDb->expects( $this->at( 7 ) )->method( "queryFile" );
+        $oDb->expects( $this->at( 8 ) )->method( "setMySqlCollation" );
+        $oDb->expects( $this->at( 9 ) )->method( "convertConfigTableToUtf" );
 
         $oController = $this->getMock( "oxSetupController", array( "getView", "getInstance" ) );
         $oController->expects( $this->at( 0 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetup" ) )->will( $this->returnValue( $oSetup ) );

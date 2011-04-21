@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: orderaddressTest.php 26302 2010-03-04 15:48:11Z arvydas $
+ * @version   SVN: $Id: orderaddressTest.php 33189 2011-02-10 15:55:32Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -55,14 +55,11 @@ class Unit_Admin_OrderAddressTest extends OxidTestCase
     public function testRenderNoRealObjectId()
     {
         modConfig::setParameter( "oxid", "-1" );
-        modConfig::setParameter( "saved_oxid", "-1" );
 
         // testing..
         $oView = new Order_Address();
         $this->assertEquals( 'order_address.tpl', $oView->render() );
         $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['updatelist'] ) );
-        $this->assertEquals( "1", $aViewData['updatelist'] );
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );
     }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 32752 2011-01-26 09:55:13Z sarunas $
+ * @version   SVN: $Id: paymentTest.php 34014 2011-03-25 14:06:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -231,7 +231,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->assertEquals( -2, $oPayment->getPaymentError() );
     }
 
-    public function testGetPaymentError()
+    public function testGetPaymentErrorFromSession()
     {
         modSession::getInstance()->setVar('payerror', 'test');
 
@@ -242,9 +242,31 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->assertEquals( 'test', $oPayment->getPaymentError() );
     }
 
-    public function testGetPaymentErrorText()
+    public function testGetPaymentErrorTextFromSession()
     {
         modSession::getInstance()->setVar('payerrortext', 'test');
+
+        $oPayment = new Payment();
+        $oPayment->UNITunsetPaymentErrors();
+        $oEmptyPayment = $oPayment->getPaymentErrorText();
+
+        $this->assertEquals( 'test', $oPayment->getPaymentErrorText() );
+    }
+
+    public function testGetPaymentErrorFromRequest()
+    {
+        modConfig::setParameter('payerror', 'test');
+
+        $oPayment = new Payment();
+        $oPayment->UNITunsetPaymentErrors();
+        $oEmptyPayment = $oPayment->getPaymentError();
+
+        $this->assertEquals( 'test', $oPayment->getPaymentError() );
+    }
+
+    public function testGetPaymentErrorTextFromRequest()
+    {
+        modConfig::setParameter('payerrortext', 'test');
 
         $oPayment = new Payment();
         $oPayment->UNITunsetPaymentErrors();
@@ -655,14 +677,12 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment = $this->getMock('payment', array('getSession'));
         $oPayment->expects($this->any())->method('getSession')->will($this->returnValue($oS));
 
-        $oProduct = new oxStdClass();
-        $oProduct->oPrice = oxNew( 'oxPrice' );
-        $oProduct->oPrice->setPrice( 0.98, 19 );
-        $oProduct->sTsId = 'TS080501_500_30_EUR';
-        $oProduct->iAmount = 500;
-        $oProduct->fPrice = 0.98;
+        $oProducts = $oPayment->getTsProtections();
+        $oProduct = current($oProducts);
 
-        $this->assertEquals( array($oProduct), $oPayment->getTsProtections() );
+        $this->assertEquals( "0,98", $oProduct->getFPrice() );
+        $this->assertEquals( 'TS080501_500_30_EUR', $oProduct->getTsId() );
+        $this->assertEquals( 500, $oProduct->getAmount() );
     }
 
     public function testGetCheckedTsProductId()
@@ -671,6 +691,18 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment = $this->getProxyClass( "payment" );
 
         $this->assertEquals( 'testId', $oPayment->getCheckedTsProductId() );
+    }
+
+    /**
+     * Testing Payment::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oPayment = new Payment();
+
+        $this->assertEquals(1, count($oPayment->getBreadCrumb()));
     }
 
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: pricealarmTest.php 34362 2011-04-07 11:44:14Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -99,23 +99,25 @@ class Unit_Views_pricealarmTest extends OxidTestCase
 
     public function testAddme_savesAndSendsPriceAlarm()
     {
-        $oDb = oxDb::getDb( true );
-
         $oPriceAlarm = $this->getProxyClass( 'pricealarm' );
         oxTestModules::addFunction('oxCaptcha', 'pass', '{return true;}');
         oxTestModules::addFunction('oxEmail', 'sendPricealarmNotification', '{return 999;}');
 
-        oxSession::setVar( 'usr', "testUserId" );
+        modSession::getInstance()->setVar( 'usr', "testUserId" );
         $aParams["email"] = "goodemail@ladyGagaFans.lt";
         $aParams["aid"] = "_testArtId";
         $aParams["price"] = "10";
 
-        modConfig::setParameter( "pa", $aParams );
+        $aParams["mano"] = "101";
 
+        modConfig::setParameter( "pa", $aParams );
         $oPriceAlarm->addme();
+
         $this->assertEquals( 999, $oPriceAlarm->getNonPublicVar( "_iPriceAlarmStatus" ) );
 
         $sSql = "select * from oxpricealarm";
+
+        $oDb = oxDb::getDb( true );
         $aAlarm = $oDb->getRow( $sSql );
 
         $this->assertEquals( $aParams["email"], $aAlarm["OXEMAIL"] );
@@ -134,7 +136,7 @@ class Unit_Views_pricealarmTest extends OxidTestCase
         oxTestModules::addFunction('oxCaptcha', 'pass', '{return true;}');
         oxTestModules::addFunction('oxEmail', 'sendPricealarmNotification', '{return 999;}');
 
-        oxSession::setVar( 'usr', "testUserId" );
+        modSession::getInstance()->setVar( 'usr', "testUserId" );
         $aParams["email"] = "goodemail@ladyGagaFans.lt";
 
         oxLang::getInstance()->setBaseLanguage( 1 );

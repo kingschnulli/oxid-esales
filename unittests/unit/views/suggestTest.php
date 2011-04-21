@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: suggestTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: suggestTest.php 33007 2011-02-07 16:02:53Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -161,22 +161,8 @@ class Unit_Views_suggestTest extends OxidTestCase
 
     public function testRender()
     {
-        $oSuggest = $this->getMock( "suggest", array( "getProduct", 'getCrossSelling', 'getSimilarProducts', 'getRecommList', 'getCaptcha', 'getSuggestData' ) );
-        $oSuggest->expects( $this->once() )->method( 'getProduct')->will($this->returnValue( 'XgetProduct' ) );
-        $oSuggest->expects( $this->once() )->method( 'getCrossSelling')->will($this->returnValue( 'XgetCrossSelling' ) );
-        $oSuggest->expects( $this->once() )->method( 'getSimilarProducts')->will($this->returnValue( 'XgetSimilarProducts' ) );
-        $oSuggest->expects( $this->once() )->method( 'getRecommList')->will($this->returnValue( 'XgetRecommList' ) );
-        $oSuggest->expects( $this->once() )->method( 'getCaptcha')->will($this->returnValue( 'XgetCaptcha' ) );
-        $oSuggest->expects( $this->once() )->method( 'getSuggestData')->will($this->returnValue( 'XgetSuggestData' ) );
-
-        $this->assertSame('suggest.tpl', $oSuggest->render());
-        $aVD = $oSuggest->getViewData();
-        $this->assertEquals('XgetProduct', $aVD['product']);
-        $this->assertEquals('XgetCrossSelling', $aVD['crossselllist']);
-        $this->assertEquals('XgetSimilarProducts', $aVD['similarlist']);
-        $this->assertEquals('XgetRecommList', $aVD['similarrecommlist']);
-        $this->assertEquals('XgetCaptcha', $aVD['oCaptcha']);
-        $this->assertEquals('XgetSuggestData', $aVD['editval']);
+        $oSuggest = $this->getProxyClass( "suggest" );
+        $this->assertSame('page/info/suggest.tpl', $oSuggest->render());
     }
 
     public function testSendNoEditval()
@@ -256,4 +242,16 @@ class Unit_Views_suggestTest extends OxidTestCase
         $this->assertEquals( '', $oSuggest->send() );
     }
 
+    /**
+     * Testing Account_RecommList::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oSuggest = $this->getProxyClass( "suggest" );
+        $aResult[]["title"] = oxLang::getInstance()->translateString( 'PAGE_INFO_SUGGEST_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+
+        $this->assertEquals( $aResult, $oSuggest->getBreadCrumb() );
+    }
 }

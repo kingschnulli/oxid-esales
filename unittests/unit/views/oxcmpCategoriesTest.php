@@ -585,19 +585,12 @@ class Unit_Views_oxcmpCategoriesTest extends OxidTestCase
         $oVTree  = $this->getMock('stdClass', array('getRootCat'));
         $oVTree->expects( $this->at(0) )->method( 'getRootCat' )->will($this->returnValue("root vendor cat"));
 
-        $oParent = $this->getMock('stdClass', array('getVendorTree', 'getManufacturerTree', 'getCategoryTree', 'setVendorlist', 'setRootVendor', 'addTplParam', 'getRootVendor', 'getVendorlist', 'getVendorId'));
+        $oParent = $this->getMock('stdClass', array('getVendorTree', 'getManufacturerTree', 'getCategoryTree', 'setVendorlist', 'setRootVendor' ));
         $oParent->expects( $this->at(0) )->method( 'getVendorTree' )->will($this->returnValue($oVTree));
         $oParent->expects( $this->never() )->method( 'getManufacturerTree' );
         $oParent->expects( $this->never() )->method( 'getCategoryTree' );
         $oParent->expects( $this->once() )->method( 'setVendorlist' )->with($this->equalTo($oVTree));
         $oParent->expects( $this->once() )->method( 'setRootVendor' )->with($this->equalTo("root vendor cat"));
-
-        // deprecated functionality test
-        $oParent->expects( $this->exactly(3) )->method( 'addTplParam' );
-        $oParent->expects( $this->once() )->method( 'getRootVendor' );
-        $oParent->expects( $this->once() )->method( 'getVendorlist' );
-        $oParent->expects( $this->once() )->method( 'getVendorId' );
-        // end of deprecated
 
         $o = $this->getMock('oxcmp_categories', array('getConfig'));
         $o->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
@@ -616,19 +609,12 @@ class Unit_Views_oxcmpCategoriesTest extends OxidTestCase
         $oMTree  = $this->getMock('stdClass', array('getRootCat'));
         $oMTree->expects( $this->at(0) )->method( 'getRootCat' )->will($this->returnValue("root Manufacturer cat"));
 
-        $oParent = $this->getMock('stdClass', array('getVendorTree', 'getManufacturerTree', 'getCategoryTree', 'setManufacturerlist', 'setRootManufacturer', 'addTplParam', 'getRootManufacturer', 'getManufacturerlist', 'getManufacturerId'));
+        $oParent = $this->getMock('stdClass', array('getVendorTree', 'getManufacturerTree', 'getCategoryTree', 'setManufacturerlist', 'setRootManufacturer' ));
         $oParent->expects( $this->never() )->method( 'getVendorTree' );
         $oParent->expects( $this->at(0) )->method( 'getManufacturerTree' )->will($this->returnValue($oMTree));
         $oParent->expects( $this->never() )->method( 'getCategoryTree' );
         $oParent->expects( $this->once() )->method( 'setManufacturerlist' )->with($this->equalTo($oMTree));
         $oParent->expects( $this->once() )->method( 'setRootManufacturer' )->with($this->equalTo("root Manufacturer cat"));
-
-        // deprecated functionality test
-        $oParent->expects( $this->exactly(3) )->method( 'addTplParam' );
-        $oParent->expects( $this->once() )->method( 'getRootManufacturer' );
-        $oParent->expects( $this->once() )->method( 'getManufacturerlist' );
-        $oParent->expects( $this->once() )->method( 'getManufacturerId' );
-        // end of deprecated
 
         $o = $this->getMock('oxcmp_categories', array('getConfig'));
         $o->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
@@ -671,15 +657,11 @@ class Unit_Views_oxcmpCategoriesTest extends OxidTestCase
 
         $oCTree  = $this->getMock('stdClass', array());
 
-        $oParent = $this->getMock('stdClass', array('getVendorTree', 'getManufacturerTree', 'getCategoryTree', 'setSearchCatTree', 'addTplParam', 'getSearchCatTree'));
+        $oParent = $this->getMock('stdClass', array('getVendorTree', 'getManufacturerTree', 'getCategoryTree', 'setSearchCatTree'));
         $oParent->expects( $this->never() )->method( 'getVendorTree' );
         $oParent->expects( $this->never() )->method( 'getManufacturerTree' );
         $oParent->expects( $this->at(0) )->method( 'getCategoryTree' )->will($this->returnValue($oCTree));
         $oParent->expects( $this->at(1) )->method( 'setSearchCatTree' )->with($this->equalTo($oCTree));
-        // deprecated functionality test
-        $oParent->expects( $this->exactly(1) )->method( 'addTplParam' );
-        $oParent->expects( $this->once() )->method( 'getSearchCatTree' );
-        // end of deprecated
 
         $o = $this->getMock('oxcmp_categories', array('getConfig'));
         $o->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
@@ -697,18 +679,13 @@ class Unit_Views_oxcmpCategoriesTest extends OxidTestCase
         $oCfg->expects( $this->at( 3 ) )->method( 'getConfigParam' )->with($this->equalTo('bl_perfLoadTreeForSearch')) ->will( $this->returnValue( false ));
         $oCfg->expects( $this->at( 4 ) )->method( 'getConfigParam' )->with($this->equalTo('blTopNaviLayout')) ->will( $this->returnValue( true ));
 
-        $oCTree  = $this->getMock('stdClass', array('count'));
-        $oCTree->expects( $this->once() )->method( 'count' )->will($this->returnValue(8479));
+        $oCTree  = $this->getMock('stdClass', array());
 
-        $oParent = $this->getMock('stdClass', array('getVendorTree', 'getManufacturerTree', 'getCategoryTree', 'setCatMore', 'addTplParam', 'getCatMore'));
+        $oParent = $this->getMock('stdClass', array('getVendorTree', 'getManufacturerTree', 'getCategoryTree', 'setCatMore' ));
         $oParent->expects( $this->never() )->method( 'getVendorTree' );
         $oParent->expects( $this->never() )->method( 'getManufacturerTree' );
         $oParent->expects( $this->at(0) )->method( 'getCategoryTree' )->will($this->returnValue($oCTree));
         $oParent->expects( $this->at(1) )->method( 'setCatMore' )->with($this->equalTo("more category"));
-        // deprecated functionality test
-        $oParent->expects( $this->exactly(3) )->method( 'addTplParam' );
-        $oParent->expects( $this->once() )->method( 'getCatMore' );
-        // end of deprecated
 
         $sClass = oxTestModules::addFunction('oxcmp_categories', '__set($name, $v)', '{$name = str_replace("UNIT_", "_", $name); $this->$name = $v; }');
 

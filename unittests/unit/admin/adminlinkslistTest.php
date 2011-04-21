@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: adminlinkslistTest.php 27089 2010-04-07 14:28:32Z sarunas $
+ * @version   SVN: $Id: adminlinkslistTest.php 32000 2010-12-17 15:09:21Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,17 +37,9 @@ class Unit_Admin_AdminlinksListTest extends OxidTestCase
      */
     public function testInit()
     {
-        oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return array(1);}");
-        oxTestModules::addFunction("oxUtils", "checkAccessRights", "{return true;}");
-
-        $oSess = $this->getMock('oxsession', array('checkSessionChallenge'));
-        $oSess->expects($this->once())->method('checkSessionChallenge')->will($this->returnValue(true));
-     
-        $oView = $this->getMock($this->getProxyClassName('Adminlinks_List'), array('getSession'));
-        $oView->expects($this->any())->method('getSession')->will($this->returnValue($oSess));
-
-        $oView->init();
-
+        $oView = $this->getProxyClass( 'Adminlinks_List' );
+        $this->assertFalse( $oView->getNonPublicVar( "_blDesc" ) );
+        $oView->getListSorting();
         $this->assertTrue( $oView->getNonPublicVar( "_blDesc" ) );
     }
 

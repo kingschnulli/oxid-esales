@@ -42,8 +42,6 @@ class Unit_Admin_ManufacturerListTest extends OxidTestCase
         $oView->expects( $this->once() )->method( '_authorize' )->will( $this->returnValue( true ) );
         $oView->init();
         $this->assertEquals( "manufacturer_list.tpl", $oView->render() );
-        $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['sort'] ) );
-        $this->assertEquals( getViewName('oxmanufacturers').".oxtitle", $aViewData['sort'] );
+        $this->assertEquals( array( 'oxmanufacturers' => array( "oxtitle" => "asc" )), $oView->getListSorting() );
     }
 }

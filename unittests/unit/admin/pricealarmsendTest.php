@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmsendTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: pricealarmsendTest.php 34447 2011-04-08 11:38:33Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -76,22 +76,24 @@ class Unit_Admin_PriceAlarmSendTest extends OxidTestCase
      */
     public function testSendeMail()
     {
-        oxTestModules::addFunction( 'oxemail', 'send', '{ return true; }');
-        oxTestModules::addFunction( 'oxemail', 'setBody', '{ return true; }');
-        oxTestModules::addFunction( 'oxemail', 'setSubject', '{ return true; }');
-        oxTestModules::addFunction( 'oxemail', 'addAddress', '{ return true; }');
-        oxTestModules::addFunction( 'oxemail', 'addReplyTo', '{ return true; }');
-        oxTestModules::addFunction( 'oxpricealarm', 'save', '{ throw new Exception( "save" ); }');
-        oxTestModules::addFunction( 'oxpricealarm', 'load', '{ return true; }');
+        $oAlarm = $this->getMock('oxpricealarm', array('save', 'load'));
+        $oAlarm->expects($this->once())->method('load')
+                ->with($this->equalTo("paid"))
+                ->will($this->returnValue(true));
+        $oAlarm->expects($this->once())->method('save')
+                ->will($this->returnValue(true));
+
+        oxTestModules::addModuleObject('oxpricealarm', $oAlarm);
+
+        $oEmail = $this->getMock('oxemail', array('sendPricealarmToCustomer'));
+        $oEmail->expects($this->once())->method('sendPricealarmToCustomer')
+                ->with($this->equalTo("info@example.com"), $this->isInstanceOf('oxpricealarm'))
+                ->will($this->returnValue(true));
+
+        oxTestModules::addModuleObject('oxemail', $oEmail);
 
         // testing..
-        try {
-            $oView = new PriceAlarm_Send();
-            $oView->sendeMail( "info@example.com", "", "", "" );
-        } catch ( Exception $oExcp ) {
-            $this->assertEquals( "save", $oExcp->getMessage(), "error in PriceAlarm_Send::sendeMail()" );
-            return;
-        }
-        $this->fail( "error in PriceAlarm_Send::sendeMail()" );
+        $oView = new PriceAlarm_Send();
+        $oView->sendeMail( "info@example.com", "", "paid", "" );
     }
 }

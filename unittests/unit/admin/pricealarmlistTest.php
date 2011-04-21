@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmlistTest.php 26682 2010-03-19 15:36:24Z arvydas $
+ * @version   SVN: $Id: pricealarmlistTest.php 33217 2011-02-11 16:06:47Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,11 +37,14 @@ class Unit_Admin_PriceAlarmListTest extends OxidTestCase
      */
     public function testBuildSelectString()
     {
-        $sSql  = "select oxpricealarm.*, oxarticles.oxtitle AS articletitle, ";
+        $sViewName = getViewName( "oxpricealarm" );
+        $sArtViewName = getViewName( "oxarticles" );
+
+        $sSql  = "select {$sViewName}.*, {$sArtViewName}.oxtitle AS articletitle, ";
         $sSql .= "oxuser.oxlname as userlname, oxuser.oxfname as userfname ";
-        $sSql .= "from oxpricealarm ";
-        $sSql .= "left join oxarticles on oxarticles.oxid = oxpricealarm.oxartid ";
-        $sSql .= "left join oxuser on oxuser.oxid = oxpricealarm.oxuserid WHERE 1 ";
+        $sSql .= "from {$sViewName} ";
+        $sSql .= "left join {$sArtViewName} on {$sArtViewName}.oxid = {$sViewName}.oxartid ";
+        $sSql .= "left join oxuser on oxuser.oxid = {$sViewName}.oxuserid WHERE 1 ";
 
         // testing..
         $oView = new PriceAlarm_List();
@@ -55,29 +58,8 @@ class Unit_Admin_PriceAlarmListTest extends OxidTestCase
      */
     public function testRender()
     {
-
-        $oItem1 = new oxStdClass();
-        $oItem1->oxpricealarm__oxartid      = new oxField( "1126" );
-        $oItem1->oxpricealarm__oxcurrency   = new oxField( "NOCURR" );
-        $oItem1->articletitle               = new oxField( "notitle" );
-        $oItem1->oxpricealarm__oxprice      = new oxField( 999999 );
-        $oItem1->oxpricealarm__oxsended     = new oxField( "1" );
-
-        $oItem2 = new oxStdClass();
-        $oItem2->oxpricealarm__oxartid      = new oxField( oxDb::getDb()->getOne( "select oxid from oxarticles where oxparentid !=''" ) );
-        $oItem2->oxpricealarm__oxcurrency   = new oxField( "NOCURR" );
-        $oItem2->articletitle               = new oxField( "notitle" );
-        $oItem2->oxpricealarm__oxprice      = new oxField( 999999 );
-        $oItem2->oxpricealarm__oxsended     = new oxField( "1" );
-
-        // testing..
-        $oView = $this->getProxyClass( "PriceAlarm_List" );
-        $oView->setNonPublicVar( "_aViewData", array( "mylist" => array() ) );
-        $oView->addTplParam( "mylist", array( $oItem1, $oItem2 ) );
+        $oView = new PriceAlarm_List();
         $this->assertEquals( 'pricealarm_list.tpl', $oView->render() );
-
-        $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData["mylist"] ) );
     }
 
     /**
@@ -87,10 +69,13 @@ class Unit_Admin_PriceAlarmListTest extends OxidTestCase
      */
     public function testBuildWhere()
     {
-        modConfig::setParameter( 'where', array( "oxpricealarm.oxprice" => 15, "oxarticles.oxprice" => 15 ) );
+        modConfig::setParameter( 'where', array( "oxpricealarm" => array( "oxprice" => 15 ), "oxarticles" => array( "oxprice" => 15 ) ) );
 
-        $aWhere['oxpricealarm.oxprice'] = '%15%';
-        $aWhere['oxarticles.oxprice'] = '%15%';
+        $sViewName = getViewName( "oxpricealarm" );
+        $sArtViewName = getViewName( "oxarticles" );
+
+        $aWhere[$sViewName.'.oxprice'] = '%15%';
+        $aWhere[$sArtViewName.'.oxprice'] = '%15%';
 
 
         // testing..

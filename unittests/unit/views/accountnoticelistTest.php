@@ -122,7 +122,7 @@ class Unit_Views_accountNoticelistTest extends OxidTestCase
     {
         $oView = $this->getMock( "Account_Noticelist", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( false ) );
-        $this->assertEquals( 'account_login.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/login.tpl', $oView->render() );
     }
 
     /**
@@ -137,6 +137,20 @@ class Unit_Views_accountNoticelistTest extends OxidTestCase
 
         $oView = $this->getMock( "Account_Noticelist", array( "getUser" ) );
         $oView->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
-        $this->assertEquals( 'account_noticelist.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/noticelist.tpl', $oView->render() );
     }
+
+	/**
+     * Testing Account_Newsletter::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oAccNoticeList = new Account_Noticelist();
+
+        $this->assertEquals(2, count($oAccNoticeList->getBreadCrumb()));
+    }
+
+
 }

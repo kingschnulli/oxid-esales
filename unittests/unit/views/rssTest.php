@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: rssTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: rssTest.php 33635 2011-03-03 13:12:20Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -74,9 +74,7 @@ class Unit_Views_rssTest extends OxidTestCase
     {
         $oSmarty = $this->getMock('stdclass', array('assign_by_ref', 'assign', 'fetch'));
         $oSmarty->expects($this->any())->method('assign_by_ref');
-        $oSmarty->expects($this->at(7))->method('assign')->with($this->equalTo('channel'), $this->equalTo('xchannel'));
-        $oSmarty->expects($this->at(8))->method('assign')->with($this->equalTo('xmldef'), $this->equalTo('xXMLDEF'));
-        $oSmarty->expects($this->once())->method('fetch')->with($this->equalTo('rss.tpl'), $this->equalTo('viewid'))->will($this->returnValue('smarty processed xml'));
+        $oSmarty->expects($this->once())->method('fetch')->with($this->equalTo('widget/rss.tpl'), $this->equalTo('viewid'))->will($this->returnValue('smarty processed xml'));
         $oUtilsView = $this->getMock('oxUtilsView', array('getSmarty'));
         $oUtilsView->expects($this->once())->method('getSmarty')->will($this->returnValue($oSmarty));
 
@@ -87,9 +85,7 @@ class Unit_Views_rssTest extends OxidTestCase
         $oLang = $this->getMock('oxLang', array('translateString'));
         $oLang->expects($this->once())->method('translateString')->with($this->equalTo('charset'))->will($this->returnValue('XCHARSET'));
 
-        $oRss = $this->getMock('Rss', array('getChannel', 'getXmlDef', 'getViewId'));
-        $oRss->expects($this->once())->method('getChannel')->will($this->returnValue('xchannel'));
-        $oRss->expects($this->once())->method('getXmlDef')->will($this->returnValue('xXMLDEF'));
+        $oRss = $this->getMock('Rss', array('getViewId'));
         $oRss->expects($this->once())->method('getViewId')->will($this->returnValue('viewid'));
 
         oxTestModules::addModuleObject('oxUtils', $oUtils);

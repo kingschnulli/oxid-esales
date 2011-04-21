@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpaymentTest.php 29954 2010-09-23 14:08:00Z tomas $
+ * @version   SVN: $Id: oxpaymentTest.php 33202 2011-02-11 09:22:02Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -171,18 +171,34 @@ class Unit_Core_oxpaymentTest extends OxidTestCase
      * Test getting payment price
      */
     // positive price
-    public function testGetPaymentPricePositivePrice()
+    public function testGetPaymentPricePositivePriceStdBehaviour()
     {
+        $oProductsPrice = $this->getMock( "oxpricelist", array( "getBruttoSum" ) );
+        $oProductsPrice->expects( $this->once() )->method( 'getBruttoSum' )->will( $this->returnValue( 30 ) );
+
+        $oTotalDiscount = $this->getMock( "oxprice", array( "getBruttoPrice" ) );
+        $oTotalDiscount->expects( $this->once() )->method( 'getBruttoPrice' )->will( $this->returnValue( 10 ) );
+
+        $oDeliveryCosts = $this->getMock( "oxprice", array( "getBruttoPrice" ) );
+        $oDeliveryCosts->expects( $this->once() )->method( 'getBruttoPrice' )->will( $this->returnValue( 10 ) );
+
+        //$oWrappingCosts = $this->getMock( "oxprice", array( "getBruttoPrice" ) );
+        //$oWrappingCosts->expects( $this->once() )->method( 'getBruttoPrice' )->will( $this->returnValue( 10 ) );
+
         // preparing basket for input
-        $oBasket = $this->getMock( 'oxbasket', array('getDiscountedProductsBruttoPrice', 'getMostUsedVatPercent') );
-        $oBasket->expects( $this->once() )->method( 'getDiscountedProductsBruttoPrice' )->will( $this->returnValue( 30 ) );
-        $oBasket->expects( $this->once() )->method( 'getMostUsedVatPercent' )->will( $this->returnValue( 50 ) );
+        $oBasket = $this->getMock( 'oxbasket', array('getProductsPrice', 'getTotalDiscount', 'getVoucherDiscValue', 'getCosts', 'getMostUsedVatPercent') );
+        $oBasket->expects( $this->at( 0 ) )->method( 'getProductsPrice' )->will( $this->returnValue( $oProductsPrice ) );
+        $oBasket->expects( $this->at( 1 ) )->method( 'getTotalDiscount' )->will( $this->returnValue( $oTotalDiscount ) );
+        $oBasket->expects( $this->at( 2 ) )->method( 'getVoucherDiscValue' )->will( $this->returnValue( 10 ) );
+        $oBasket->expects( $this->at( 3 ) )->method( 'getCosts' )->with( 'oxdelivery' )->will( $this->returnValue( $oDeliveryCosts ) );
+        //$oBasket->expects( $this->at( 4 ) )->method( 'getCosts' )->with( 'oxwrapping' )->will( $this->returnValue( $oWrappingCosts ) );
+        $oBasket->expects( $this->at( 4 ) )->method( 'getMostUsedVatPercent' )->will( $this->returnValue( 50 ) );
 
         oxConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
 
         // preparing payment for test
         $oPayment = $this->getMock( 'oxPayment', array('getPaymentValue') );
-        $oPayment->expects( $this->once() )->method( 'getPaymentValue')->with( 30 )->will( $this->returnValue( 60 ) );
+        $oPayment->expects( $this->once() )->method( 'getPaymentValue')->with( 20 )->will( $this->returnValue( 60 ) );
         $oPayment->oxpayments__oxaddsum = new oxField(60, oxField::T_RAW);
         $oPrice = $oPayment->getPaymentPrice( $oBasket );
 
@@ -193,6 +209,48 @@ class Unit_Core_oxpaymentTest extends OxidTestCase
         $this->assertEquals( 60-60/1.5, $oPrice->getVatValue() );
     }
 
+    /**
+     * Test getting payment price
+     */
+    // positive price
+    public function testGetPaymentPricePositivePrice()
+    {
+        $oProductsPrice = $this->getMock( "oxpricelist", array( "getBruttoSum" ) );
+        $oProductsPrice->expects( $this->once() )->method( 'getBruttoSum' )->will( $this->returnValue( 30 ) );
+
+        $oTotalDiscount = $this->getMock( "oxprice", array( "getBruttoPrice" ) );
+        $oTotalDiscount->expects( $this->once() )->method( 'getBruttoPrice' )->will( $this->returnValue( 10 ) );
+
+        $oDeliveryCosts = $this->getMock( "oxprice", array( "getBruttoPrice" ) );
+        $oDeliveryCosts->expects( $this->once() )->method( 'getBruttoPrice' )->will( $this->returnValue( 10 ) );
+
+        $oWrappingCosts = $this->getMock( "oxprice", array( "getBruttoPrice" ) );
+        $oWrappingCosts->expects( $this->once() )->method( 'getBruttoPrice' )->will( $this->returnValue( 10 ) );
+
+        // preparing basket for input
+        $oBasket = $this->getMock( 'oxbasket', array('getProductsPrice', 'getTotalDiscount', 'getVoucherDiscValue', 'getCosts', 'getMostUsedVatPercent') );
+        $oBasket->expects( $this->at( 0 ) )->method( 'getProductsPrice' )->will( $this->returnValue( $oProductsPrice ) );
+        $oBasket->expects( $this->at( 1 ) )->method( 'getTotalDiscount' )->will( $this->returnValue( $oTotalDiscount ) );
+        $oBasket->expects( $this->at( 2 ) )->method( 'getVoucherDiscValue' )->will( $this->returnValue( 10 ) );
+        $oBasket->expects( $this->at( 3 ) )->method( 'getCosts' )->with( 'oxdelivery' )->will( $this->returnValue( $oDeliveryCosts ) );
+        $oBasket->expects( $this->at( 4 ) )->method( 'getCosts' )->with( 'oxwrapping' )->will( $this->returnValue( $oWrappingCosts ) );
+        $oBasket->expects( $this->at( 5 ) )->method( 'getMostUsedVatPercent' )->will( $this->returnValue( 50 ) );
+
+        oxConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
+
+        // preparing payment for test
+        $oPayment = $this->getMock( 'oxPayment', array('getPaymentValue') );
+        $oPayment->expects( $this->once() )->method( 'getPaymentValue')->with( 30 )->will( $this->returnValue( 60 ) );
+        $oPayment->oxpayments__oxaddsum = new oxField(60, oxField::T_RAW);
+        $oPayment->oxpayments__oxaddsumrules = new oxField(31, oxField::T_RAW);
+        $oPrice = $oPayment->getPaymentPrice( $oBasket );
+
+        // testing
+        $this->assertEquals( 50, $oPrice->getVat() );
+        $this->assertEquals( 60, $oPrice->getBruttoPrice() );
+        $this->assertEquals( 60/1.5, $oPrice->getNettoPrice() );
+        $this->assertEquals( 60-60/1.5, $oPrice->getVatValue() );
+    }
 
 /*
     // negative price

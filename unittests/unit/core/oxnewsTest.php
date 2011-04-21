@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsTest.php 27793 2010-05-18 13:32:24Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxnewsTest.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -84,6 +84,19 @@ class Unit_Core_oxnewsTest extends OxidTestCase
         $oNews->Load( $this->_oNews->getId() );
         $this->assertEquals( $oNews->oxnews__oxshortdesc->value, 'Test_news' );
         $this->assertEquals( $oNews->oxnews__oxdate->value, $oTestNews->oxnews__oxdate->value );
+    }
+
+    /**
+     * getLongDesc() test case
+     * test getted long description with smarty tags
+     *
+     * @return null
+     */
+    public function testGetLongDescTags()
+    {
+        $oNews = oxNew( 'oxnews' );
+        $oNews->oxnews__oxlongdesc = new oxField( "[{* *}]parsed" );
+        $this->assertEquals('parsed', $oNews->getLongDesc());
     }
 
     /**

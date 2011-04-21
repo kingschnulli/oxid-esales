@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcountryTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxcountryTest.php 33785 2011-03-16 06:57:29Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -117,9 +117,9 @@ class Unit_Core_oxCountryTest extends OxidTestCase
     public function testGetStatesNumber()
     {
         $oSubj = new oxCountry();
-        $oSubj->load('a7c40f631fc920687.20179984');
+        $oSubj->load('8f241f11095649d18.02676059');
         $aStates = $oSubj->getStates();
-        $this->assertEquals(16, count($aStates));
+        $this->assertEquals(11, count($aStates));
     }
 
 
@@ -131,9 +131,9 @@ class Unit_Core_oxCountryTest extends OxidTestCase
     public function testGetStates()
     {
         $oSubj = new oxCountry();
-        $oSubj->load('a7c40f631fc920687.20179984');
+        $oSubj->load('8f241f11095649d18.02676059');
         $aStates = $oSubj->getStates();
-        $this->assertEquals('Berlin', $aStates['BE']->oxstates__oxtitle->value);
+        $this->assertEquals('Manitoba', $aStates['MB']->oxstates__oxtitle->value);
 
     }
 }

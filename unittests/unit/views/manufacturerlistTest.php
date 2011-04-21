@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlistTest.php 31083 2010-11-23 08:02:22Z arvydas $
+ * @version   SVN: $Id: manufacturerlistTest.php 33262 2011-02-15 12:34:30Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -63,17 +63,15 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
         $oManufacturer = $this->getMock( "oxStdClass", array( "getId" ) );
         $oManufacturer->expects( $this->atLeastOnce() )->method( 'getId' )->will( $this->returnValue( "testId" ) );
 
-        $oView = $this->getMock( "manufacturerlist", array( "getCatTreePath", "getManufacturerTree", "getActManufacturer", "getArticleList", "getPageNavigation", "_processListArticles", "setMetaDescription", "setMetaKeywords" ) );
+        $oView = $this->getMock( "manufacturerlist", array( "getManufacturerTree", "getActManufacturer", "getArticleList", "_processListArticles", "setMetaDescription", "setMetaKeywords" ) );
         $oView->expects( $this->once() )->method( 'getManufacturerTree' )->will( $this->returnValue( true ) );
         $oView->expects( $this->atLeastOnce() )->method( 'getActManufacturer' )->will( $this->returnValue( $oManufacturer ) );
         $oView->expects( $this->atLeastOnce() )->method( 'getArticleList' );
-        $oView->expects( $this->atLeastOnce() )->method( 'getCatTreePath' );
-        $oView->expects( $this->once() )->method( 'getPageNavigation' );
         $oView->expects( $this->once() )->method( '_processListArticles' );
         $oView->expects( $this->once() )->method( 'setMetaDescription' );
         $oView->expects( $this->once() )->method( 'setMetaKeywords' );
 
-        $this->assertEquals( "list.tpl", $oView->render() );
+        $this->assertEquals( "page/list/list.tpl", $oView->render() );
     }
 
     /**
@@ -326,24 +324,6 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
     }
 
     /**
-     * Test get template location.
-     *
-     * @return null
-     */
-    public function testGetTemplateLocation()
-    {
-        modConfig::setParameter( 'cnid', 'v_root' );
-        $oManufacturerTree = new oxManufacturerlist();
-        $oManufacturerTree->buildManufacturerTree( 'Manufacturerlist', 'v_root', oxConfig::getInstance()->getShopHomeURL() );
-
-        $oManufacturer = $this->getProxyClass( "Manufacturerlist" );
-        $oManufacturer->setManufacturerTree( $oManufacturerTree );
-        $oManufacturer->init();
-
-        $this->assertEquals( $oManufacturerTree->getHtmlPath(), $oManufacturer->getTemplateLocation() );
-    }
-
-    /**
      * Test get active category.
      *
      * @return null
@@ -409,6 +389,32 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
         $oManufacturerList->setNonPublicVar( "_oActManufacturer", $oManufacturer );
 
         $this->assertEquals( 'online kaufen', $oManufacturerList->getTitleSuffix() );
+    }
+
+    /**
+     * Testing allist::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+
+        $oCat1 = $this->getMock( 'oxmanufacturer', array( 'getLink' ));
+        $oCat1->expects( $this->once() )->method( 'getLink')->will($this->returnValue( 'linkas1' ) );
+        $oCat1->oxcategories__oxtitle = new oxField('title1');
+
+        $oCat2 = $this->getMock( 'oxmanufacturer', array( 'getLink' ));
+        $oCat2->expects( $this->once() )->method( 'getLink')->will($this->returnValue( 'linkas2' ) );
+        $oCat2->oxcategories__oxtitle = new oxField('title2');
+
+        $oCategoryList = $this->getMock( 'oxmanufacturelist', array( 'getPath' ));
+        $oCategoryList->expects( $this->once() )->method( 'getPath')->will($this->returnValue( array($oCat1, $oCat2 ) ) );
+
+        $oView = $this->getMock( "manufacturerlist", array( "getManufacturerTree" ) );
+        $oView->expects( $this->once() )->method( 'getManufacturerTree')->will( $this->returnValue( $oCategoryList ) );
+
+        $this->assertTrue( count($oView->getBreadCrumb()) >= 1 );
+
     }
 
 }

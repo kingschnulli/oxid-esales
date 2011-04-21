@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: basketTest.php 28585 2010-06-23 09:23:38Z sarunas $
+ * @version   SVN: $Id: basketTest.php 31670 2010-12-10 12:03:32Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -100,19 +100,9 @@ class Unit_Views_basketTest extends OxidTestCase
     public function testRenderNoSE()
     {
         oxTestModules::addFunction('oxUtils', 'isSearchEngine()', '{return false;}');
-        $oBasket = $this->getMock( "basket", array( "getBasketArticles", 'getBasketSimilarList', 'getSimilarRecommLists', 'showBackToShop' ) );
-        $oBasket->expects( $this->once() )->method( 'getBasketArticles')->will($this->returnValue( 'getBasketArticles' ) );
-        $oBasket->expects( $this->once() )->method( 'getBasketSimilarList')->will($this->returnValue( 'getBasketSimilarList' ) );
-        $oBasket->expects( $this->once() )->method( 'getSimilarRecommLists')->will($this->returnValue( 'getSimilarRecommLists' ) );
-        $oBasket->expects( $this->once() )->method( 'showBackToShop')->will($this->returnValue( 'showBackToShop' ) );
+        $oBasket = new basket();
 
-        $this->assertEquals('basket.tpl', $oBasket->render());
-
-        $aGot = $oBasket->getViewData();
-        $this->assertEquals('getBasketArticles', $aGot['basketitemlist']);
-        $this->assertEquals('getBasketSimilarList', $aGot['basketsimilarlist']);
-        $this->assertEquals('getSimilarRecommLists', $aGot['similarrecommlist']);
-        $this->assertEquals('showBackToShop', $aGot['showbacktoshop']);
+        $this->assertEquals('page/checkout/basket.tpl', $oBasket->render());
     }
 
     /**
@@ -283,5 +273,17 @@ class Unit_Views_basketTest extends OxidTestCase
         $oB->expects($this->any())->method('getSession')->will($this->returnValue($oS));
 
         $oB->render();
+    }
+
+    /**
+     * Testing Basket::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oBasket = new Basket();
+
+        $this->assertEquals(1, count($oBasket->getBreadCrumb()));
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: listreviewTest.php 26840 2010-03-25 13:28:50Z arvydas $
+ * @version   SVN: $Id: listreviewTest.php 31989 2010-12-17 14:04:33Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -70,52 +70,6 @@ class Unit_Admin_ListReviewTest extends OxidTestCase
     }
 
     /**
-     * List_Review::_setFilterParams() test case
-     *
-     * @return null
-     */
-    public function testSetFilterParamsNonSet()
-    {
-        oxConfig::getInstance()->setGlobalParameter( 'ListCoreTable', null );
-        modConfig::getInstance()->setParameter( 'where', null );
-
-        $oAdminList = new List_Review;
-        $oAdminList->UNITsetFilterParams();
-
-        $aViewData = $oAdminList->getViewData();
-        $this->assertFalse( isset( $aViewData['whereparam'] ) );
-        $this->assertFalse( isset( $aViewData['where'] ) );
-    }
-
-    /**
-     * List_Review::_setFilterParams() test case
-     *
-     * @return null
-     */
-    public function testSetFilterParams()
-    {
-        $sTable = getViewName( 'oxarticles' );
-        $oWhere = new oxStdClass();
-        $oWhere->{"oxarticles__oxtitle"} = 'testtitle';
-        $oWhere->{"oxarticles__oxprice"} = 999;
-        $oWhere->{"{$sTable}__oxtitle"} = 'testtitle';
-        $oWhere->{"{$sTable}__oxprice"} = 999;
-
-        $sWhereParam = '&amp;where['.$sTable.'.oxtitle]=testtitle&amp;where['.$sTable.'.oxprice]=999&amp;art_category=testcategory';
-
-        oxConfig::getInstance()->setGlobalParameter( 'ListCoreTable', 'oxreviews' );
-        modConfig::getInstance()->setParameter( 'art_category', 'testcategory' );
-        modConfig::getInstance()->setParameter( 'where', array( $sTable.'.oxtitle' => 'testtitle', $sTable.'.oxprice' => 999 ) );
-
-        $oAdminList = new List_Review;
-        $oAdminList->UNITsetFilterParams();
-
-        $aViewData = $oAdminList->getViewData();
-        $this->assertEquals( $sWhereParam, $aViewData['whereparam'] );
-        $this->assertEquals( $oWhere, $aViewData['where'] );
-    }
-
-    /**
      * Testing if methods removes parent id checking from sql
      *
      * @return null
@@ -160,18 +114,5 @@ class Unit_Admin_ListReviewTest extends OxidTestCase
         // checking if not exists string oxarticle.oxparentid = ''
         $blCheckForParent = preg_match( "/\s+and\s+".getViewName( 'oxarticles' ).".oxparentid\s+=\s+''/", $sSql );
         $this->assertFalse( (bool)$blCheckForParent );
-    }
-
-    /**
-     * Testing if methods removes parent id checking from sql
-     *
-     * @return null
-     */
-    public function testPrepareOrderByQuery()
-    {
-        modConfig::setParameter( "sort", "testSort" );
-
-        $oAdminList = new List_Review;
-        $this->assertEquals( " order by testSort ", $oAdminList->UNITprepareOrderByQuery( "" ) );
     }
 }

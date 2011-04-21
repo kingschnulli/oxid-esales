@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: thankyouTest.php 28695 2010-06-29 10:25:10Z vilma $
+ * @version   SVN: $Id: thankyouTest.php 33009 2011-02-07 16:18:12Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -172,9 +172,10 @@ class Unit_Views_thankyouTest extends OxidTestCase
 
         $oBasketItem = $this->getProxyClass('oxbasketitem');
         $oBasketItem->setNonPublicVar( '_sProductId', '_testArt' );
-        $oBasket = $this->getMock( 'oxBasket', array( 'getContents', 'getProductsCount' ) );
+        $oBasket = $this->getMock( 'oxBasket', array( 'getContents', 'getProductsCount', 'getOrderId' ) );
         $oBasket->expects( $this->once() )->method( 'getContents')->will( $this->returnValue( array($oBasketItem) ) );
         $oBasket->expects( $this->once() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->once() )->method( 'getOrderId')->will( $this->returnValue( 1 ) );
         $oThankyou = $this->getProxyClass( 'thankyou' );
         $oThankyou->setNonPublicVar( '_oBasket', $oBasket );
         $oThankyou->render();
@@ -184,6 +185,18 @@ class Unit_Views_thankyouTest extends OxidTestCase
     {
         $oThankyou = $this->getProxyClass( 'thankyou' );
         $this->assertEquals( 'start', $oThankyou->getActionClassName());
+    }
+
+    /**
+     * Testing Thankyou::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oTh = new Thankyou();
+
+        $this->assertEquals(1, count($oTh->getBreadCrumb()));
     }
 
 }

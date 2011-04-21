@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticleTest.php 31086 2010-11-23 08:07:20Z arvydas $
+ * @version   SVN: $Id: oxseoencoderarticleTest.php 33661 2011-03-07 09:50:28Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -696,7 +696,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         $sManufacturerId = oxDb::getDb()->getOne( "select oxid from oxmanufacturers" );
         $oManufacturer = new oxManufacturer();
         $oManufacturer->load( $sManufacturerId );
-        $sSeoUri = "Nach-Marke-Hersteller/".str_replace( array(' ', '.', '+'), '-', $oManufacturer->oxmanufacturers__oxtitle->value )."/oxid-test-article-title-oxid-test-article-var-select.html";
+        $sSeoUri = "Nach-Marke/".str_replace( array(' ', '.', '+'), '-', $oManufacturer->oxmanufacturers__oxtitle->value )."/oxid-test-article-title-oxid-test-article-var-select.html";
 
         $oArticle = new oxarticle();
         $oArticle->oxarticles__oxtitle     = new oxField( 'oxid test article title' );
@@ -732,7 +732,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         $oManufacturer = new oxManufacturer();
         $oManufacturer->load( $sManufacturerId );
 
-        $sSeoUri = 'Nach-Marke-Hersteller/'.str_replace( array(' ', '.', '+'), '-', $oManufacturer->oxmanufacturers__oxtitle->value ).'/oxid-test-article-title-oxid-test-article-var-select.html';
+        $sSeoUri = 'Nach-Marke/'.str_replace( array(' ', '.', '+'), '-', $oManufacturer->oxmanufacturers__oxtitle->value ).'/oxid-test-article-title-oxid-test-article-var-select.html';
 
         $oArticle = new oxarticle();
         $oArticle->oxarticles__oxtitle     = new oxField( 'oxid test article title' );
@@ -779,7 +779,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
             $sArtId = '1354';
             $oxtitle   = 'Wanduhr-SPIDER';
 
-        $sSeoUri = 'Nach-Marke-Hersteller/'.str_replace( array(' ', '.', '+'), '-', $oManufacturer->oxmanufacturers__oxtitle->value ).'/'.$oxtitle.'-oxid-test-article-var-select.html';
+        $sSeoUri = 'Nach-Marke/'.str_replace( array(' ', '.', '+'), '-', $oManufacturer->oxmanufacturers__oxtitle->value ).'/'.$oxtitle.'-oxid-test-article-var-select.html';
 
         $oArticle->setId($sArtId);
         $oArticle->oxarticles__oxtitle     = new oxField( $oxtitle );
@@ -827,7 +827,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
             $sArtId = '1354';
             $oxtitle   = 'Wall-Clock-SPIDER';
 
-        $sSeoUri = 'en/By-Brand-Manufacturer/'.str_replace( array(' ', '.', '+'), '-', $oManufacturer->oxmanufacturers__oxtitle->value ).'/'.$oxtitle.'-oxid-test-article-var-select.html';
+        $sSeoUri = 'en/By-Brand/'.str_replace( array(' ', '.', '+'), '-', $oManufacturer->oxmanufacturers__oxtitle->value ).'/'.$oxtitle.'-oxid-test-article-var-select.html';
 
         $oArticle->setId($sArtId);
         $oArticle->oxarticles__oxtitle     = new oxField( $oxtitle );
@@ -1121,11 +1121,11 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         $oArticle = new oxarticle();
 
             $oArticle->loadInLang( 0, '1127' );
-            $sExp = "Blinkende-Eiswuerfel-FLASH.html";
+            $sExp = "Blinkende-Eiswuerfel-FLASH";
 
         $oEncoder = oxSeoEncoderArticle::getInstance();
         $oEncoder->setSeparator();
-        $this->assertEquals( $sExp, $oEncoder->UNITprepareTitle( $oArticle->oxarticles__oxtitle->value.".html" ) );
+        $this->assertEquals( $sExp, $oEncoder->UNITprepareTitle( $oArticle->oxarticles__oxtitle->value ) );
     }
 
 

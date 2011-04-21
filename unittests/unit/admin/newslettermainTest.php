@@ -55,14 +55,11 @@ class Unit_Admin_NewsletterMainTest extends OxidTestCase
     public function testRenderNoRealObjectId()
     {
         modConfig::setParameter( "oxid", "-1" );
-        modConfig::setParameter( "saved_oxid", "-1" );
 
         // testing..
         $oView = new Newsletter_Main();
         $this->assertEquals( 'newsletter_main.tpl', $oView->render() );
         $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['updatelist'] ) );
-        $this->assertEquals( "1", $aViewData['updatelist'] );
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );
     }

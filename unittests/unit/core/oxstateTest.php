@@ -29,7 +29,7 @@ class Unit_Core_oxstateTest extends OxidTestCase
     public function testInit()
     {
         $oSubj = new oxstate();
-        $oSubj->load('BE');
-        $this->assertEquals('Berlin', $oSubj->oxstates__oxtitle->value);
+        $oSubj->load('MB');
+        $this->assertEquals('Manitoba', $oSubj->oxstates__oxtitle->value);
     }
 }

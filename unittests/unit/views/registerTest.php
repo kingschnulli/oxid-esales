@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: registerTest.php 28315 2010-06-11 15:34:43Z arvydas $
+ * @version   SVN: $Id: registerTest.php 33901 2011-03-22 17:06:57Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -38,7 +38,7 @@ class Unit_Views_registerTest extends OxidTestCase
 
         $oView = $this->getMock( "register", array( "isConfirmed" ) );
         $oView->expects( $this->once() )->method( 'isConfirmed' )->will( $this->returnValue( true ) );
-        $this->assertEquals( 'register_confirm.tpl', $oView->render() );
+        $this->assertEquals( 'page/account/register_confirm.tpl', $oView->render() );
     }
 
     /**
@@ -133,14 +133,8 @@ class Unit_Views_registerTest extends OxidTestCase
 
     public function testRenderNoRStat()
     {
-        $oRegister = $this->getMock( 'register', array( 'getRegistrationStatus', 'getMustFillFields' ) );
-        $oRegister->expects( $this->once() )->method( 'getRegistrationStatus' )->will( $this->returnValue( false ) );
-        $oRegister->expects( $this->any() )->method( 'getMustFillFields' )->will( $this->returnValue( 'xaMustFillFields' ) );
-
-        $this->assertEquals('register.tpl', $oRegister->render() );
-        $oVD = $oRegister->getViewData();
-        $this->assertEquals('xaMustFillFields', $oVD['aMustFillFields'] );
-
+        $oRegister = new register();
+        $this->assertEquals('page/account/register.tpl', $oRegister->render() );
     }
 
     public function testRenderRStat()
@@ -149,31 +143,15 @@ class Unit_Views_registerTest extends OxidTestCase
         $oRegister->expects( $this->exactly(2) )->method( 'getRegistrationStatus' )->will( $this->returnValue( 'rst' ) );
         $oRegister->expects( $this->once() )->method( 'getRegistrationError' )->will( $this->returnValue( 'rer' ) );
 
-        $this->assertEquals('register_success.tpl', $oRegister->render() );
-        $oVD = $oRegister->getViewData();
-        $this->assertEquals('rst', $oVD['success'] );
-        $this->assertEquals('rer', $oVD['error'] );
+        $this->assertEquals('page/account/register_success.tpl', $oRegister->render() );
+        $this->assertEquals('rst', $oRegister->getRegistrationStatus() );
+        $this->assertEquals('rer', $oRegister->getRegistrationError() );
     }
 
-    public function testGetDelAddress()
-    {
-
-        $oDelAddr = $this->getMock( 'stdclass', array( 'load' ) );
-        $oDelAddr->expects( $this->once() )->method( 'load' )->with( $this->equalTo( 'xsAddressId' ) );
-        $oUser = $this->getMock( 'stdclass', array( 'getSelectedAddress' ) );
-        $oUser->expects( $this->once() )->method( 'getSelectedAddress' )->will( $this->returnValue( 'xsAddressId' ) );
-        $oRegister = $this->getMock( 'register', array( 'getUser' ) );
-        $oRegister->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
-        oxTestModules::addModuleObject('oxaddress', $oDelAddr);
-
-        $this->assertSame($oDelAddr, $oRegister->getDelAddress() );
-    }
-
-
-    public function testAddFakeAddress()
+    public function testGetBreadCrumb()
     {
         $oRegister = new register;
 
-        $this->assertSame(null, $oRegister->UNITaddFakeAddress('asd') );
+        $this->assertEquals(1, count($oRegister->getBreadCrumb()));
     }
 }

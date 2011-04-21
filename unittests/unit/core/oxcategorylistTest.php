@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylistTest.php 29612 2010-09-01 12:10:44Z vilma $
+ * @version   SVN: $Id: oxcategorylistTest.php 32794 2011-01-28 09:04:24Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -164,8 +164,9 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
 
         $sCurSnippet = $this->_oList->UNITgetDepthSqlSnippet(null);
 
-            $sExpSnippet = " ( 0 or oxcategories.oxparentid = 'oxrootid' ) ";
+        $sViewName = getViewName('oxcategories');
 
+        $sExpSnippet = " ( 0 or $sViewName.oxparentid = 'oxrootid' ) ";
 
         $this->assertEquals($sExpSnippet, $sCurSnippet);
     }
@@ -184,8 +185,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
 
         $sCurSnippet = $this->_oList->UNITgetDepthSqlSnippet(null);
 
-            $sExpSnippet = " ( 0 or oxcategories.oxparentid = 'oxrootid' or oxcategories.oxrootid = oxcategories.oxparentid or oxcategories.oxid = oxcategories.oxrootid ) ";
-
+        $sViewName = getViewName('oxcategories');
+        $sExpSnippet = " ( 0 or $sViewName.oxparentid = 'oxrootid' or $sViewName.oxrootid = $sViewName.oxparentid or $sViewName.oxid = $sViewName.oxrootid ) ";
 
         $this->assertEquals($sExpSnippet, $sCurSnippet);
     }
@@ -206,8 +207,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $oCat->load($this->_sActCat);
         $sCurSnippet = $this->_oList->UNITgetDepthSqlSnippet($oCat);
 
-            $sExpSnippet = " ( 0 or (oxcategories.oxparentid = '8a142c3e44ea4e714.31136811') ) ";
-
+        $sViewName = getViewName('oxcategories');
+            $sExpSnippet = " ( 0 or ($sViewName.oxparentid = '8a142c3e44ea4e714.31136811') ) ";
 
         $this->assertEquals($sExpSnippet, $sCurSnippet);
     }
@@ -325,7 +326,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
 
         $sCurSql = $this->_oList->UNITgetSelectString();
 
-            $sExpSql = ",not oxcategories.oxactive as oxppremove";
+        $sViewName = getViewName('oxcategories');
+            $sExpSql = ",not $sViewName.oxactive as oxppremove";
 
 
         $this->assertContains($sExpSql, $sCurSql);
@@ -369,7 +371,7 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
     {
         oxLang::getInstance()->setBaseLanguage(1);
         $sExpect = 'tablex.oxid as oxid,'
-                           .' tablex.oxactive_1 as oxactive,'
+                           .' tablex.oxactive as oxactive,'
                            .' tablex.oxhidden as oxhidden,'
                            .' tablex.oxparentid as oxparentid,'
                            .' tablex.oxdefsort as oxdefsort,'
@@ -378,13 +380,13 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
                            .' tablex.oxright as oxright,'
                            .' tablex.oxrootid as oxrootid,'
                            .' tablex.oxsort as oxsort,'
-                           .' tablex.oxtitle_1 as oxtitle,'
-                           .' tablex.oxdesc_1 as oxdesc,'
+                           .' tablex.oxtitle as oxtitle,'
+                           .' tablex.oxdesc as oxdesc,'
                            .' tablex.oxpricefrom as oxpricefrom,'
                            .' tablex.oxpriceto as oxpriceto,'
                            .' tablex.oxicon as oxicon, tablex.oxextlink as oxextlink ,';
 
-           $sExpect .= 'not tablex.oxactive_1 as oxppremove';
+           $sExpect .= 'not tablex.oxactive as oxppremove';
 
 
         $this->assertEquals($sExpect, $this->_oList->UNITgetSqlSelectFieldsForTree('tablex'));
@@ -748,8 +750,7 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $oCat3->oxcategories__oxactive = new oxField(1);
         $oCat3->save();
 
-        $this->_oList->selectString($this->_oList->UNITgetSelectString());
-        $this->_oList->UNITppBuildTree();
+        $this->_oList->buildTree($this->_sActRoot, 1, 1, 1);
 
         //Check root order
         $aCurRootOrder = array();
@@ -1019,57 +1020,4 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         }
         return $g;
     }
-
-    /**
-     * Test category sorting.
-     *
-     * @return null
-     */
-    public function testSortCats()
-    {
-            $aCat = array(
-                        '8a142c3e49b5a80c1.23676990' => 0,
-                        '8a142c3e4d3253c95.46563530' => 1,
-                        '8a142c3e44ea4e714.31136811' => 2,
-                        '943202124f58e02e84bb228a9a2a9f1e' => 3,
-                        '943173edecf6d6870a0f357b8ac84d32' => 4,
-                        '943a9ba3050e78b443c16e043ae60ef3' => 5,
-                        '8a142c3e4143562a5.46426637' => 6,
-                    );
-
-        $oCategory = oxNew( 'testOxCategoryList' );
-        $oCategory->setVar('iForceLevel', 2);
-        $aGotCat = $oCategory->sortCats();
-
-        $this->assertEquals( $aCat, $aGotCat );
-    }
-
-    /**
-     * Test category sorting for full tree.
-     *
-     * @return null
-     */
-    public function testSortCats_loadFull()
-    {
-            $aCat = array (
-                        '8a142c3e49b5a80c1.23676990' => 0,
-                        '8a142c3e4d3253c95.46563530' => 1,
-                        '8a142c3e44ea4e714.31136811' => 2,
-                        '8a142c3e60a535f16.78077188' => 3,
-                        '94342f1d6f3b6fe9f1520d871f566511' => 4,
-                        '943927cd5d60751015b567794d3239bb' => 5,
-                        '6b6b64bdcf7c25e92191b1120974af4e' => 6,
-                        '943202124f58e02e84bb228a9a2a9f1e' => 7,
-                        '943173edecf6d6870a0f357b8ac84d32' => 8,
-                        '943a9ba3050e78b443c16e043ae60ef3' => 9,
-                        '8a142c3e4143562a5.46426637' => 10,
-                    );
-
-        $oCategory = oxNew( 'testOxCategoryList' );
-        $oCategory->setVar('blForceFull', true);
-
-        $aGotCat = $oCategory->sortCats();
-        $this->assertEquals( $aCat, $aGotCat );
-    }
-
 }

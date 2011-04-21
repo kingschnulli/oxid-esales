@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 27199 2010-04-14 07:59:38Z arvydas $
+ * @version   SVN: $Id: alistTest.php 33756 2011-03-14 16:03:49Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -104,9 +104,9 @@ class Unit_Views_alistTest extends OxidTestCase
         $oCategory = new oxCategory();
         $oCategory->load( $sCatId );
 
-        $oView = $this->getMock( "alist", array( "getActPage", "_getCategory" ) );
+        $oView = $this->getMock( "alist", array( "getActPage", "getActCategory" ) );
         $oView->expects( $this->once() )->method( 'getActPage')->will( $this->returnValue( 1 ) );
-        $oView->expects( $this->once() )->method( '_getCategory')->will( $this->returnValue( $oCategory ) );
+        $oView->expects( $this->any() )->method( 'getActCategory')->will( $this->returnValue( $oCategory ) );
 
         $this->assertEquals( $sPrefix.", ".oxLang::getInstance()->translateString( 'INC_HEADER_TITLEPAGE' ). 2, $oView->getMetaDescription() );
     }
@@ -247,7 +247,7 @@ class Unit_Views_alistTest extends OxidTestCase
 
         $oListView = $this->getMock( "aList", array( 'setActCategory' ) );
         $oListView->expects( $this->once() )->method( 'setActCategory')->with( $this->equalto( $oMoreCat ) );
-        $this->assertEquals( 'list_more.tpl', $oListView->render() );
+        $this->assertEquals( 'page/list/morecategories.tpl', $oListView->render() );
     }
 
     /**
@@ -298,6 +298,35 @@ class Unit_Views_alistTest extends OxidTestCase
         }
 
         $this->fail( 'failed redirect on inactive category' );
+    }
+
+    /**
+     * Test render actual page count exceeds real page count
+     *
+     * @return null
+     */
+    public function testRender_pageCountIsIncorrect()
+    {
+        oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
+
+        $oCat = $this->getMock( "oxcategory", array( 'canView' ) );
+        $oCat->expects( $this->any() )->method( 'canView')->will( $this->returnValue( true ) );
+        $oCat->oxcategories__oxactive = new oxField( 1, oxField::T_RAW );
+
+        $oListView = $this->getMock( "aList", array( 'getActCategory', 'getArticleList', 'getActPage', 'getPageCount' ) );
+        $oListView->expects( $this->atLeastOnce() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
+        $oListView->expects( $this->once() )->method( 'getActPage')->will( $this->returnValue( 12 ) );
+        $oListView->expects( $this->once() )->method( 'getPageCount')->will( $this->returnValue( 10 ) );
+        $oListView->expects( $this->atLeastOnce() )->method( 'getArticleList' );
+
+        try {
+            $oListView->render();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( 'OK', $oExcp->getMessage() );
+            return;
+        }
+
+        $this->fail( 'failed redirect when page count is incorrect' );
     }
 
     /**
@@ -413,11 +442,14 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testGetViewIdPE()
     {
 
+        $oSession = modSession::getInstance();
+
         modConfig::setParameter( 'cnid', 'xxx' );
-        modConfig::setParameter( '_artperpage', '100' );
+        $oSession->setVar( '_artperpage', '100' );
+        $oSession->setVar( 'ldtype', 'grid' );
 
         $oView = new oxUBase();
-        $sViewId = md5( $oView->getViewId().'|xxx|999|100' );
+        $sViewId = md5( $oView->getViewId().'|xxx|999|100|grid' );
 
         $oListView = $this->getMock( 'alist', array( 'getActPage' ) );
         $oListView->expects( $this->any() )->method( 'getActPage')->will( $this->returnValue( '999' ) );
@@ -537,7 +569,7 @@ class Unit_Views_alistTest extends OxidTestCase
 
         // default template name
         $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
-        $this->assertEquals( 'list.tpl', $oListView->getTemplateName() );
+        $this->assertEquals( 'page/list/list.tpl', $oListView->getTemplateName() );
 
         $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
         $oListView->expects( $this->any() )->method( 'getActCategory')->will( $this->returnValue( $oCategory ) );
@@ -603,34 +635,6 @@ class Unit_Views_alistTest extends OxidTestCase
 
         $this->assertEquals( $sUrl."&amp;pgNr=10", $oListView->UNITaddPageNrParam( $sUrl, 10, 0 ) );
     }
-
-    /**
-     * Test if url is marked as fixed.
-     *
-     * @return null
-     */
-    public function testIsFixedUrl()
-    {
-        $oCat1 = new oxcategory();
-        $oCat1->setId( 'cat1' );
-
-        $oCat2 = new oxcategory();
-        $oCat2->setId( 'cat2' );
-
-        $sId = $oCat1->getId();
-        $iLang = $oCat1->getLanguage();
-        $sShopId = oxConfig::getInstance()->getShopId();
-
-        // inserting test data
-        oxDb::getDb()->execute( "insert into oxseo ( `oxobjectid`, `oxident`, `oxshopid`, `oxlang`, `oxstdurl`, `oxseourl`, `oxtype`, `oxfixed` ) values ( '{$sId}', 'cat1ident', '{$sShopId}', '{$iLang}', 'cat1stdurl', 'cat1seourl', 'oxcategory', '1' ) " );
-
-        $oListView = new alist();
-        $this->assertTrue( (bool) $oListView->UNITisFixedUrl( $oCat1 ) );
-
-        $oListView = new alist();
-        $this->assertFalse( (bool) $oListView->UNITisFixedUrl( $oCat2 ) );
-    }
-
 
     /**
      * Test prepare meta keywords.
@@ -700,12 +704,17 @@ class Unit_Views_alistTest extends OxidTestCase
      */
     public function testGetAttributes()
     {
+        $oAttrList = new oxAttributeList();
+        $oAttr = new oxAttribute();
+        $oAttrList->offsetSet(1, $oAttr);
+
         $oCategory = $this->getMock( 'oxcategory', array( 'getAttributes' ));
-        $oCategory->expects( $this->any() )->method( 'getAttributes')->will($this->returnValue( array("testattr") ) );
+        $oCategory->expects( $this->any() )->method( 'getAttributes')->will( $this->returnValue( $oAttrList ) );
 
         $oListView = $this->getMock( "alist", array( 'getActCategory' ) );
         $oListView->expects( $this->any() )->method( 'getActCategory')->will($this->returnValue( $oCategory ) );
-        $this->assertEquals( array("testattr"), $oListView->getAttributes() );
+
+        $this->assertEquals( $oAttrList->getArray() , $oListView->getAttributes()->getArray() );
     }
 
     /**
@@ -790,20 +799,6 @@ class Unit_Views_alistTest extends OxidTestCase
     }
 
     /**
-     * Test get template location.
-     *
-     * @return null
-     */
-    public function testGetTemplateLocation()
-    {
-        $oCatTree = $this->getMock( 'oxcategorylist', array( 'getHtmlPath' ));
-        $oCatTree->expects( $this->any() )->method( 'getHtmlPath')->will($this->returnValue( "aaa" ) );
-        $oObj = $this->getProxyClass( "alist" );
-        $oObj->setCategoryTree( $oCatTree );
-        $this->assertEquals( 'aaa', $oObj->getTemplateLocation() );
-    }
-
-    /**
      * Test if active category has visible subcategories.
      *
      * @return null
@@ -862,6 +857,7 @@ class Unit_Views_alistTest extends OxidTestCase
     {
         $oObj = $this->getProxyClass( "alist" );
         $oObj->setNonPublicVar( "_blIsCat", true );
+        $oObj->setNonPublicVar( "_blTop5Action", true );
 
         $aList = $oObj->getTop5ArticleList();
             $this->assertEquals(4, $aList->count());
@@ -921,10 +917,7 @@ class Unit_Views_alistTest extends OxidTestCase
 
         $oSubj->render();
         $sMetaKeywords = $oSubj->getMetaKeywords();
-
-        $aViewData = $oSubj->getViewData();
-        $sViewMetaKeywords = $aViewData['meta_keywords'];
-        $this->assertEquals( "aaa", $sViewMetaKeywords );
+        $this->assertEquals( "aaa", $oSubj->getMetaKeywords() );
     }
 
     /**
@@ -939,4 +932,71 @@ class Unit_Views_alistTest extends OxidTestCase
         $this->assertEquals( 'aaa', $oSubj->getActiveCategory() );
     }
 
+
+    /**
+     * Testing allist::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oCat1 = $this->getMock( 'oxcategory', array( 'getLink' ));
+        $oCat1->expects( $this->once() )->method( 'getLink')->will($this->returnValue( 'linkas1' ) );
+        $oCat1->oxcategories__oxtitle = new oxField('title1');
+
+        $oCat2 = $this->getMock( 'oxcategory', array( 'getLink' ));
+        $oCat2->expects( $this->once() )->method( 'getLink')->will($this->returnValue( 'linkas2' ) );
+        $oCat2->oxcategories__oxtitle = new oxField('title2');
+
+        $oCategoryList = $this->getMock( 'oxcategorylist', array( 'getPath' ));
+        $oCategoryList->expects( $this->once() )->method( 'getPath')->will($this->returnValue( array($oCat1, $oCat2 ) ) );
+
+        $oView = $this->getMock( "alist", array( "getCategoryTree" ) );
+        $oView->expects( $this->once() )->method( 'getCategoryTree')->will( $this->returnValue( $oCategoryList ) );
+
+        $this->assertTrue( count($oView->getBreadCrumb()) == 2 );
+
+    }
+
+    /**
+     * Test can display type selector getter
+     *
+     * @return null
+     */
+    public function testCanSelectDisplayType()
+    {
+        $oConfig = $this->getMock( 'oxConfig', array( 'getConfigParam' ));
+        $oConfig->expects( $this->once() )->method( 'getConfigParam' )->will( $this->returnValue( true ) );
+
+        $oSubj = $this->getMock( 'alist', array( 'getConfig' ));
+        $oSubj->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( true, $oSubj->canSelectDisplayType() );
+    }
+
+    /**
+     * Test get active page nr
+     *
+     * @return null
+     */
+    public function testGetActPage()
+    {
+        $oList = $this->getMock( 'alist', array( '_getRequestPageNr' ));
+        $oList->expects( $this->once() )->method( '_getRequestPageNr' )->will( $this->returnValue( "10" ) );
+
+        $this->assertEquals( 10, $oList->getActPage() );
+    }
+
+    /**
+     * Test get list pages count
+     *
+     * @return null
+     */
+    public function testGetPageCount()
+    {
+        $oList = $this->getProxyClass( "aList" );
+        $oList->setNonPublicVar( "_iCntPages", 10 );
+
+        $this->assertEquals( 10, $oList->getPageCount() );
+    }
 }

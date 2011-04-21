@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: test_utils.php 30437 2010-10-20 15:18:56Z rimvydas.paskevicius $
+ * @version   SVN: $Id: test_utils.php 30448 2010-10-21 08:53:39Z sarunas $
  */
 
 define ('MAX_LOOP_AMOUNT', 4);
@@ -351,7 +351,7 @@ abstract class modOXID
         return $this->_oRealInstance;
     }
 
-    public function modAttach()
+    public function modAttach($oObj = null)
     {
         $this->cleanup();
     }
@@ -469,12 +469,15 @@ class modConfig extends modOXID
     protected static $_inst = null;
     protected $_aConfigparams = array();
 
-    function modAttach()
+    function modAttach($oObj = null)
     {
-        parent::modAttach();
+        parent::modAttach($oObj);
         self::$unitMOD = null;
         $this->_oRealInstance = oxConfig::getInstance();
-        self::$unitMOD = $this;
+        if (!$oObj) {
+            $oObj = $this;
+        }
+        self::$unitMOD = $oObj;
     }
 
     /**
@@ -587,11 +590,14 @@ class modSession extends modOXID
      */
     protected  $_aSessionVars = array();
 
-    function modAttach()
+    function modAttach($oObj = null)
     {
-        parent::modAttach();
+        parent::modAttach($oObj);
         $this->_oRealInstance = oxSession::getInstance();
-        self::$unitMOD = $this;
+        if (!$oObj) {
+            $oObj = $this;
+        }
+        self::$unitMOD = $oObj;
         $this->_id = $this->_oRealInstance->getId();
     }
 
@@ -664,11 +670,14 @@ class modDB extends modOXID
     public static $unitMOD = null;
     protected static $_inst = null;
 
-    function modAttach()
+    function modAttach($oObj = null)
     {
         parent::modAttach();
         $this->_oRealInstance = oxDb::getDb();
-        self::$unitMOD = $this;
+        if (!$oObj) {
+            $oObj = $this;
+        }
+        self::$unitMOD = $oObj;
         modConfig::getInstance()->addClassFunction('getDB', create_function('', 'return modDB::$unitMOD;'));
     }
 

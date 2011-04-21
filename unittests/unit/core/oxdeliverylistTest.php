@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliverylistTest.php 32997 2011-02-07 15:40:19Z arvydas.vapsva $
+ * @version   SVN: $Id: oxdeliverylistTest.php 33551 2011-02-25 16:13:04Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -131,7 +131,7 @@ class Unit_Core_oxdeliverylistTest extends OxidTestCase
         $oAdress->oxaddress__oxaddressuserid = new oxField($this->_oUser->getId(), oxField::T_RAW);
         $oAdress->oxaddress__oxcountryid = new oxField('a7c40f6323c4bfb36.59919433', oxField::T_RAW); //italien
         $oAdress->save();
-        modConfig::setParameter( 'deladrid', '_testAddressId' );
+        oxSession::setVar( 'deladrid', '_testAddressId' );
 
         //add user to group
         $oO2Group = oxNew( 'oxbase' );
@@ -243,6 +243,9 @@ class Unit_Core_oxdeliverylistTest extends OxidTestCase
         $oDelivery->delete('bdd46f9f2455153b9.22318118');
         $oDelList = new oxDeliverySet();
         $oDelList->delete('b3b46b74d3894f9f5.62965460');
+
+        oxSession::deleteVar('deladrid');
+
         parent::tearDown();
     }
 

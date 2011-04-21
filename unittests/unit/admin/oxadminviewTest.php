@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 32734 2011-01-26 08:32:22Z arvydas.vapsva $
+ * @version   SVN: $Id: oxadminviewTest.php 33189 2011-02-10 15:55:32Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -346,16 +346,16 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
 
     public function testAddGlobalParamsAddsSid()
     {
-        $oSess = $this->getMock( 'oxSession', array( 'url' ) );
-        $oSess->expects( $this->exactly(2) )->method( 'url' )->will( $this->returnValue( 'sess:url' ) );
+        $oUU = $this->getMock( 'oxUtilsUrl', array( 'processUrl' ) );
+        $oUU->expects( $this->any() )->method( 'processUrl' )->will( $this->returnValue( 'sess:url' ) );
+        modInstances::addMod('oxUtilsUrl', $oUU);
 
-        $oAView = $this->getMock( 'oxAdminView', array( 'getSession' ) );
-        $oAView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSess ) );
+        $oAView = new oxAdminView();
         $oAView->addGlobalParams();
         $oViewCfg = $oAView->getViewConfig();
 
-        $this->assertEquals( 'sess:url', $oViewCfg->selflink );
-        $this->assertEquals( 'sess:url', $oViewCfg->ajaxlink );
+        $this->assertEquals( 'sess:url', $oViewCfg->getSelfLink() );
+        $this->assertEquals( 'sess:url', $oViewCfg->getAjaxLink() );
 
     }
 
@@ -419,7 +419,7 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
         $aLangArray = array("0"=>"en", "1" => "de");
 
         $oLangMock = $this->getMock("oxLang", array("getLanguageIds"));
-        $oLangMock->expects($this->once())->method("getLanguageIds")->will($this->returnValue($aLangArray));
+        $oLangMock->expects($this->atLeastOnce())->method("getLanguageIds")->will($this->returnValue($aLangArray));
 
         modInstances::addMod("oxLang", $oLangMock);
 
@@ -430,4 +430,28 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
         $this->assertEquals("deutschland", $oSubj->UNITgetCountryByCode($sTestCode));
     }
 
+    /**
+     * test case for oxAdminView::getEditObjectId()/oxAdminView::setEditObjectId()
+     */
+    public function testSetEditObjectIdGetEditObjectId()
+    {
+        modConfig::setParameter( "oxid", null );
+        modSession::getInstance()->setVar( "saved_oxid", "testSessId" );
+
+        $oView = new oxAdminView();
+        $this->assertEquals( "testSessId", $oView->getEditObjectId() );
+
+        modConfig::setParameter( "oxid", "testRequestId" );
+        modSession::getInstance()->setVar( "saved_oxid", "testSessId" );
+
+        $oView = new oxAdminView();
+        $this->assertEquals( "testRequestId", $oView->getEditObjectId() );
+
+        modConfig::setParameter( "oxid", "testRequestId" );
+        modSession::getInstance()->setVar( "saved_oxid", "testSessId" );
+
+        $oView = new oxAdminView();
+        $oView->setEditObjectId( "testSetId" );
+        $this->assertEquals( "testSetId", $oView->getEditObjectId() );
+    }
 }
