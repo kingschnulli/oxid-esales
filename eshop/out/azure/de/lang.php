@@ -460,13 +460,14 @@ $aLang = array(
 'FORM_USER_NEWSLETTER_NO'                                         => "Nein",
 'FORM_USER_NEWSLETTER_SAVE'                                       => "Speichern",
 'FORM_USER_NEWSLETTER_MESSAGE'                                    => "Sie können den Newsletter jederzeit kostenlos abbestellen.",
+'FORM_NEWSLETTER_COMPLETEMARKEDFIELDS'                            => 'Bitte alle fett beschrifteten Pflichtfelder ausfüllen.',
 
 'FORM_USER_BILLINGADDRESS'                                        => "Rechnungsadresse",
-'FORM_USER_COMPLETEMARKEDFIELDS'                                  => 'Felder mit einem <span class="fontred">*</span>müssen ausgefüllt werden',
+'FORM_USER_COMPLETEMARKEDFIELDS'                                  => 'Bitte alle fett beschrifteten Pflichtfelder ausfüllen.',
 'FORM_USER_SHIPPINGADDRESSES'                                     => "Lieferadressen",
 
 'FORM_REGISTER_ACCOUNTINFO'                                       => "Kontoinformationen",
-'FORM_REGISTER_COMPLETEMARKEDFIELDS'                              => '(Felder mit einem <span class="req">*</span> müssen ausgefüllt werden)',
+'FORM_REGISTER_COMPLETEMARKEDFIELDS'                              => '(Bitte alle fett beschrifteten Pflichtfelder ausfüllen.)',
 'FORM_REGISTER_BILLINGADDRESS'                                    => "Rechnungsadresse",
 'FORM_REGISTER_SHIPPINGADDRESS'                                   => "Lieferanschrift",
 'FORM_REGISTER_USE_BILLINGADDRESS_FOR_SHIPPINGADDRESS'            => "Rechnungsadresse als Lieferadresse verwenden",
@@ -865,6 +866,10 @@ $aLang = array(
 'EMAIL_ORDER_OWNER_HTML_MESSAGE'                                  => "Mitteilung:",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFO'                              => "Bezahlinformation:",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'                           => "<b>BEZAHLINFORMATIONEN AUSGESCHALTET</b> - um diese einzuschalten bitte email_order_owner_html.tpl aendern.",
+'EMAIL_ORDER_OWNER_HTML_LSBANKNAME'                               => 'Bankname',
+'EMAIL_ORDER_OWNER_HTML_LSBLZ'                                    => 'BLZ',
+'EMAIL_ORDER_OWNER_HTML_LSKTONR'                                  => 'Kontonummer',
+'EMAIL_ORDER_OWNER_HTML_LSKTOINHABER'                             => 'Kontoinhaber',
 
 'EMAIL_OWNER_REMINDER_HTML_STOCKLOW'                              => "Lagerbestand niedrig: Dieser Artikel hat die eing. Lagerbestandsgrenze erreicht.",
 'EMAIL_OWNER_REMINDER_HTML_PRODUCT'                               => "Artikel",
@@ -948,10 +953,10 @@ $aLang = array(
 'FORM_SUGGEST_MESSAGE2'                                           => "für dich gefunden. Einfach auf den Link unten klicken, und du gelangst direkt zum Shop.",
 'FORM_SUGGEST_SEND'                                               => "Empfehlung abschicken",
 'FORM_SUGGEST_VERIFICATIONCODE'                                   => "Prüfcode:",
-'FORM_SUGGEST_COMPLETEMARKEDFIELDS2'                              => 'Felder mit einem <span class="req">*</span> müssen ausgefüllt werden',
+'FORM_SUGGEST_COMPLETEMARKEDFIELDS2'                              => 'Bitte alle fett beschrifteten Pflichtfelder ausfüllen.',
 
 'PAGE_INFO_CONTACT_TITLECONTACT'                                  => "Kontakt",
-'PAGE_INFO_CONTACT_COMPLETEMARKEDFIELDS'                          => 'Bitte alle Felder mit * ausfüllen !',
+'PAGE_INFO_CONTACT_COMPLETEMARKEDFIELDS'                          => 'Bitte alle fett beschrifteten Pflichtfelder ausfüllen.',
 'PAGE_INFO_CONTACT_PHONE'                                         => "Telefon:",
 'PAGE_INFO_CONTACT_FAX'                                           => "Telefax:",
 'PAGE_INFO_CONTACT_EMAIL'                                         => "E-Mail:",
@@ -967,7 +972,7 @@ $aLang = array(
 'FORM_CONTACT_SUBJECT'                                            => "Betreff:",
 'FORM_CONTACT_MESSAGE'                                            => "Nachricht:",
 'FORM_CONTACT_VERIFICATIONCODE'                                   => "Prüfcode:",
-'FORM_CONTACT_COMPLETEMARKEDFIELDS2'                              => 'Felder mit einem <span class="req">*</span> müssen ausgefüllt werden',
+'FORM_CONTACT_COMPLETEMARKEDFIELDS2'                              => 'Bitte alle fett beschrifteten Pflichtfelder ausfüllen.',
 'FORM_CONTACT_SEND'                                               => "Nachricht abschicken",
 'FORM_CONTACT_FROM'                                               => "Nachricht von",
 
@@ -1119,6 +1124,8 @@ $aLang = array(
 'PAGE_DETAILS_DELIVERYTIME_WEEKS'                                 => "Wochen",
 
 'PAGE_SHOP_MALLSTART_PLEASECHOOSE'                                => "Bitte wählen Sie:",
+
+'INC_HEADER_TITLEPAGE'                                            => "Seite ",
 
 
 );

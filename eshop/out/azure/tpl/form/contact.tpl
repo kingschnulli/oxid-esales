@@ -13,7 +13,7 @@
             [{include file="form/fieldset/salutation.tpl" name="editval[oxuser__oxsal]" value=$editval.oxuser__oxsal }]
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
-            <label>[{ oxmultilang ident="FORM_CONTACT_FIRSTNAME" }]<span class="req">*</span></label>
+            <label class="req">[{ oxmultilang ident="FORM_CONTACT_FIRSTNAME" }]</label>
             <input type="text" name="editval[oxuser__oxfname]" size="70" maxlength="40" value="[{$editval.oxuser__oxfname}]" class="oxValidate oxValidate_notEmpty">
             <p class="oxValidateError">
                 <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
@@ -21,21 +21,21 @@
             </p>
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
-            <label>[{ oxmultilang ident="FORM_CONTACT_LASTNAME" }]<span class="req">*</span></label>
+            <label class="req">[{ oxmultilang ident="FORM_CONTACT_LASTNAME" }]</label>
             <input type="text" name="editval[oxuser__oxlname]" size=70 maxlength=40 value="[{$editval.oxuser__oxlname}]" class="oxValidate oxValidate_notEmpty">
             <p class="oxValidateError">
                 <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
-            <label>[{ oxmultilang ident="FORM_CONTACT_EMAIL2" }]<span class="req">*</span></label>
+            <label class="req">[{ oxmultilang ident="FORM_CONTACT_EMAIL2" }]</label>
             <input id="contactEmail" type="text" name="editval[oxuser__oxusername]"  size=70 maxlength=40 value="[{$editval.oxuser__oxusername}]" class="oxValidate oxValidate_notEmpty oxValidate_email">
             <p class="oxValidateError">
                 <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
-            <label>[{ oxmultilang ident="FORM_CONTACT_SUBJECT" }]<span class="req">*</span></label>
+            <label class="req">[{ oxmultilang ident="FORM_CONTACT_SUBJECT" }]</label>
             <input type="text" name="c_subject" size="70" maxlength=80 value="[{$oView->getContactSubject()}]" class="oxValidate oxValidate_notEmpty">
                     <p class="oxValidateError">
                 <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
@@ -46,7 +46,7 @@
             <textarea rows="15" cols="70" name="c_message" class="areabox">[{$oView->getContactMessage()}]</textarea>
         </li>
         <li class="verify">
-            <label>[{ oxmultilang ident="FORM_CONTACT_VERIFICATIONCODE" }]<span class="req">*</span></label>
+            <label class="req">[{ oxmultilang ident="FORM_CONTACT_VERIFICATIONCODE" }]</label>
             [{assign var="oCaptcha" value=$oView->getCaptcha() }]
             [{if $oCaptcha->isImageVisible()}]
                 <img src="[{$oCaptcha->getImageUrl()}]" alt="">

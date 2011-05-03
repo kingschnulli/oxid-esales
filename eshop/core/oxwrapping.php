@@ -19,12 +19,12 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrapping.php 33010 2011-02-07 16:31:41Z alfonsas $
+ * @version   SVN: $Id: oxwrapping.php 34906 2011-04-22 13:05:51Z linas.kukulskis $
  */
 
 /**
  * Wrapping manager.
- * Performs Wrapping data/objetcs loading, deleting.
+ * Performs Wrapping data/objects loading, deleting.
  * @package core
  */
 class oxWrapping extends oxI18n

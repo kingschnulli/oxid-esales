@@ -467,12 +467,13 @@ $aLang = array(
 'FORM_USER_NEWSLETTER_NO'                                         => "No",
 'FORM_USER_NEWSLETTER_SAVE'                                       => "Save",
 'FORM_USER_NEWSLETTER_MESSAGE'                                    => "It's possible to cancel newsletter at any time.",
+'FORM_NEWSLETTER_COMPLETEMARKEDFIELDS'                            => 'Please fill in all mandatory fields labeled in bold.',
 
 'FORM_USER_BILLINGADDRESS'                                        => "Billing Address",
-'FORM_USER_COMPLETEMARKEDFIELDS'                                  => 'Please complete all fields marked with a <span class="req">*</span>',
+'FORM_USER_COMPLETEMARKEDFIELDS'                                  => 'Please fill in all mandatory fields labeled in bold.',
 
 'FORM_REGISTER_ACCOUNTINFO'                                       => "Account information",
-'FORM_REGISTER_COMPLETEMARKEDFIELDS'                              => '(Please complete all fields marked with a <span class="req">*</span>)',
+'FORM_REGISTER_COMPLETEMARKEDFIELDS'                              => '(Please fill in all mandatory fields labeled in bold.)',
 'FORM_REGISTER_BILLINGADDRESS'                                    => "Billing Address",
 'FORM_REGISTER_SHIPPINGADDRESS'                                   => "Shipping Address",
 'FORM_REGISTER_USE_BILLINGADDRESS_FOR_SHIPPINGADDRESS'            => "Use Billing Address for Shipping",
@@ -871,6 +872,10 @@ $aLang = array(
 'EMAIL_ORDER_OWNER_HTML_MESSAGE'                                  => "Message:",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFO'                              => "",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'                           => "",
+'EMAIL_ORDER_OWNER_HTML_LSBANKNAME'                               => 'Bank',
+'EMAIL_ORDER_OWNER_HTML_LSBLZ'                                    => 'Bank code',
+'EMAIL_ORDER_OWNER_HTML_LSKTONR'                                  => 'Account No.',
+'EMAIL_ORDER_OWNER_HTML_LSKTOINHABER'                             => 'Account Holder',
 
 'EMAIL_OWNER_REMINDER_HTML_STOCKLOW'                              => "Stock low: This Product has reached the specified stock limit.",
 'EMAIL_OWNER_REMINDER_HTML_PRODUCT'                               => "Product",
@@ -956,10 +961,10 @@ $aLang = array(
 'FORM_SUGGEST_MESSAGE2'                                           => "today and found something that might be interesting for you. Just click on the link below and you will be directed to the shop.",
 'FORM_SUGGEST_SEND'                                               => "Send",
 'FORM_SUGGEST_VERIFICATIONCODE'                                   => "Verification code:",
-'FORM_SUGGEST_COMPLETEMARKEDFIELDS2'                              => 'Please complete all fields marked with a <span class="req">*</span>',
+'FORM_SUGGEST_COMPLETEMARKEDFIELDS2'                              => 'Please fill in all mandatory fields labeled in bold.',
 
 'PAGE_INFO_CONTACT_TITLECONTACT'                                  => "Contact",
-'PAGE_INFO_CONTACT_COMPLETEMARKEDFIELDS'                          => 'Please complete all fields marked with a <span class="req">*</span>',
+'PAGE_INFO_CONTACT_COMPLETEMARKEDFIELDS'                          => 'Please fill in all mandatory fields labeled in bold.',
 'PAGE_INFO_CONTACT_PHONE'                                         => "Phone:",
 'PAGE_INFO_CONTACT_FAX'                                           => "Fax:",
 'PAGE_INFO_CONTACT_EMAIL'                                         => "eMail:",
@@ -973,7 +978,7 @@ $aLang = array(
 'FORM_CONTACT_SUBJECT'                                            => "Subject:",
 'FORM_CONTACT_MESSAGE'                                            => "Message:",
 'FORM_CONTACT_VERIFICATIONCODE'                                   => "Verification code:",
-'FORM_CONTACT_COMPLETEMARKEDFIELDS2'                              => 'Please complete all fields marked with a <span class="req">*</span>',
+'FORM_CONTACT_COMPLETEMARKEDFIELDS2'                              => 'Please fill in all mandatory fields labeled in bold.',
 'FORM_CONTACT_SEND'                                               => "Send",
 'FORM_CONTACT_FROM'                                               => "Message from",
 
@@ -1123,6 +1128,8 @@ $aLang = array(
 'PAGE_DETAILS_DELIVERYTIME_WEEKS'                                 => "weeks",
 
 'PAGE_SHOP_MALLSTART_PLEASECHOOSE'                                => "Please choose:",
+
+'INC_HEADER_TITLEPAGE'                                            => "Page ",
 
 
 

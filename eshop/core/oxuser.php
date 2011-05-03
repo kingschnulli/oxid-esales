@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 33914 2011-03-23 08:59:05Z vilma $
+ * @version   SVN: $Id: oxuser.php 34972 2011-04-27 13:34:00Z sarunas $
  */
 
 /**

@@ -548,6 +548,9 @@ INSERT INTO `oxconfig` VALUES('0ec42a395d0595ee7741091898848474', 'oxbaseshop', 
 INSERT INTO `oxconfig` VALUES('0545423fe8ce213a06.20230295', 'oxbaseshop', 'theme:basic', 'aNrofCatArticles', 'arr', 0x4dbace2972e14bf2cbd3a9a4113b83ad1c8f7b704f710ba39fd1ecd29b438b41809712e316c6f4fdc92741f7876cc6fca127d78994e604dcc99519);
 INSERT INTO `oxconfig` VALUES('omc4555952125c3c2.98253113', 'oxbaseshop', 'theme:basic', 'blDisableNavBars', 'bool', 0x07);
 
+INSERT INTO `oxconfig` VALUES('c20424bf2f8e71271.429555451', 'oxbaseshop', 'theme:basic', 'bl_perfLoadTreeForSearch', 'bool', 0x07);
+INSERT INTO `oxconfig` VALUES('79e417a442934fcb9.117331841', 'oxbaseshop', 'theme:basic', 'bl_perfLoadCatTree', 'bool', 0x07);
+INSERT INTO `oxconfig` VALUES('8563fba1c3936e4e0.645674481', 'oxbaseshop', 'theme:basic', 'blLoadFullTree', 'bool', '');
 
 -- data for azure theme
 INSERT INTO `oxconfig` VALUES('1ec4235c2aee774aa45d772875437919', 'oxbaseshop', 'theme:azure', 'sIconsize', 'str', 0x8064a213b1);
@@ -591,26 +594,30 @@ CREATE TABLE `oxconfigdisplay` (
   KEY `list` (`OXCFGMODULE`, `OXCFGVARNAME`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `oxconfigdisplay` VALUES('0ec4235c2aee774aa45d772875437919', 'theme:basic', 'sIconsize',              'images',   '', 1);
-INSERT INTO `oxconfigdisplay` VALUES('0563fba1bee774aec57c192086494217', 'theme:basic', 'sThumbnailsize',         'images',   '', 2);
-INSERT INTO `oxconfigdisplay` VALUES('0563fba1bee774aec599d56894094456', 'theme:basic', 'sCatThumbnailsize',      'images',   '', 3);
-INSERT INTO `oxconfigdisplay` VALUES('02642dfaa1dee77488b1b22948593071', 'theme:basic', 'sZoomImageSize',         'images',   '', 4);
-INSERT INTO `oxconfigdisplay` VALUES('02642dfaa1dee77487d0644506753921', 'theme:basic', 'aDetailImageSizes',      'images',   '', 5);
-INSERT INTO `oxconfigdisplay` VALUES('08a9473894d473f6ed28f04e80d929fc', 'theme:basic', 'bl_showCompareList',     'features', '', 6);
-INSERT INTO `oxconfigdisplay` VALUES('08acb2f595da54b5f865e54aa5cdb967', 'theme:basic', 'bl_showListmania',       'features', '', 7);
-INSERT INTO `oxconfigdisplay` VALUES('08a12329124850cd8f63cda6e8e7b4e1', 'theme:basic', 'bl_showWishlist',        'features', '', 8);
-INSERT INTO `oxconfigdisplay` VALUES('08a23429124850cd8f63cda6e8e7b4e1', 'theme:basic', 'bl_showVouchers',        'features', '', 8);
-INSERT INTO `oxconfigdisplay` VALUES('08a34529124850cd8f63cda6e8e7b4e1', 'theme:basic', 'bl_showGiftWrapping',    'features', '', 10);
-INSERT INTO `oxconfigdisplay` VALUES('069425a324684b6c089769ee77426393', 'theme:basic', 'bl_perfShowLeftBasket',  'display',  '', 12);
-INSERT INTO `oxconfigdisplay` VALUES('069425a324685ee7745199.098323559', 'theme:basic', 'bl_perfShowRightBasket', 'display',  '', 13);
-INSERT INTO `oxconfigdisplay` VALUES('069425a32468ee77455199.098243559', 'theme:basic', 'bl_perfShowTopBasket',   'display',  '', 14);
-INSERT INTO `oxconfigdisplay` VALUES('05342e4cab0ee774acb3905838384984', 'theme:basic', 'blShowBirthdayFields',   'display',  '', 15);
-INSERT INTO `oxconfigdisplay` VALUES('01296159b2341d31b93423972af6150b', 'theme:basic', 'blTopNaviLayout',        'display',  '', 16);
-INSERT INTO `oxconfigdisplay` VALUES('01296159b7641d31b93423972af6150b', 'theme:basic', 'iTopNaviCatCount',       'display',  '', 17);
-INSERT INTO `oxconfigdisplay` VALUES('073455b29d0db9ee774b788731623955', 'theme:basic', 'blShowFinalStep',        'display',  '', 18);
-INSERT INTO `oxconfigdisplay` VALUES('0ec42a395d0595ee7741091898848474', 'theme:basic', 'iNewBasketItemMessage',  'display',  '0|1|2|3', 19);
-INSERT INTO `oxconfigdisplay` VALUES('0545423fe8ce213a06.20230295',      'theme:basic', 'aNrofCatArticles',       'display',   '', 20);
-INSERT INTO `oxconfigdisplay` VALUES('omc4555952125c3c2.98253113',       'theme:basic', 'blDisableNavBars',       'display',   '', 21);
+INSERT INTO `oxconfigdisplay` VALUES('0ec4235c2aee774aa45d772875437919', 'theme:basic', 'sIconsize',                'images',   '', 110);
+INSERT INTO `oxconfigdisplay` VALUES('0563fba1bee774aec57c192086494217', 'theme:basic', 'sThumbnailsize',           'images',   '', 120);
+INSERT INTO `oxconfigdisplay` VALUES('0563fba1bee774aec599d56894094456', 'theme:basic', 'sCatThumbnailsize',        'images',   '', 130);
+INSERT INTO `oxconfigdisplay` VALUES('02642dfaa1dee77488b1b22948593071', 'theme:basic', 'sZoomImageSize',           'images',   '', 140);
+INSERT INTO `oxconfigdisplay` VALUES('02642dfaa1dee77487d0644506753921', 'theme:basic', 'aDetailImageSizes',        'images',   '', 150);
+INSERT INTO `oxconfigdisplay` VALUES('08a9473894d473f6ed28f04e80d929fc', 'theme:basic', 'bl_showCompareList',       'features', '', 210);
+INSERT INTO `oxconfigdisplay` VALUES('08acb2f595da54b5f865e54aa5cdb967', 'theme:basic', 'bl_showListmania',         'features', '', 220);
+INSERT INTO `oxconfigdisplay` VALUES('08a12329124850cd8f63cda6e8e7b4e1', 'theme:basic', 'bl_showWishlist',          'features', '', 230);
+INSERT INTO `oxconfigdisplay` VALUES('08a23429124850cd8f63cda6e8e7b4e1', 'theme:basic', 'bl_showVouchers',          'features', '', 240);
+INSERT INTO `oxconfigdisplay` VALUES('08a34529124850cd8f63cda6e8e7b4e1', 'theme:basic', 'bl_showGiftWrapping',      'features', '', 250);
+INSERT INTO `oxconfigdisplay` VALUES('069425a324684b6c089769ee77426393', 'theme:basic', 'bl_perfShowLeftBasket',    'display',  '', 310);
+INSERT INTO `oxconfigdisplay` VALUES('069425a324685ee7745199.098323559', 'theme:basic', 'bl_perfShowRightBasket',   'display',  '', 320);
+INSERT INTO `oxconfigdisplay` VALUES('069425a32468ee77455199.098243559', 'theme:basic', 'bl_perfShowTopBasket',     'display',  '', 330);
+INSERT INTO `oxconfigdisplay` VALUES('05342e4cab0ee774acb3905838384984', 'theme:basic', 'blShowBirthdayFields',     'display',  '', 340);
+INSERT INTO `oxconfigdisplay` VALUES('01296159b7641d31b93423972af6150b', 'theme:basic', 'iTopNaviCatCount',         'display',  '', 350);
+INSERT INTO `oxconfigdisplay` VALUES('073455b29d0db9ee774b788731623955', 'theme:basic', 'blShowFinalStep',          'display',  '', 360);
+INSERT INTO `oxconfigdisplay` VALUES('0ec42a395d0595ee7741091898848474', 'theme:basic', 'iNewBasketItemMessage',    'display',  '0|1|2|3', 370);
+INSERT INTO `oxconfigdisplay` VALUES('0545423fe8ce213a06.20230295',      'theme:basic', 'aNrofCatArticles',         'display',   '', 380);
+INSERT INTO `oxconfigdisplay` VALUES('omc4555952125c3c2.98253113',       'theme:basic', 'blDisableNavBars',         'display',   '', 390);
+INSERT INTO `oxconfigdisplay` VALUES('79e417a442934fcb9.11733184',       'theme:basic', 'bl_perfLoadCatTree',       'navigation', '', 410);
+INSERT INTO `oxconfigdisplay` VALUES('c20424bf2f8e71271.42955545',       'theme:basic', 'bl_perfLoadTreeForSearch', 'navigation', '', 420);
+INSERT INTO `oxconfigdisplay` VALUES('01296159b2341d31b93423972af6150b', 'theme:basic', 'blTopNaviLayout',          'navigation', '', 430);
+INSERT INTO `oxconfigdisplay` VALUES('8563fba1c3936e4e0.64567448',       'theme:basic', 'blLoadFullTree',           'navigation', '', 440);
+
 
 INSERT INTO `oxconfigdisplay` VALUES('1ec4235c2aee774aa45d772875437919', 'theme:azure', 'sIconsize',              'images',   '', 1);
 INSERT INTO `oxconfigdisplay` VALUES('1563fba1bee774aec57c192086494217', 'theme:azure', 'sThumbnailsize',         'images',   '', 2);
@@ -716,6 +723,7 @@ INSERT INTO `oxcontents` VALUES('220404cee0caf470e227c1c9f1ec4ae2', 'oxrighttoca
 INSERT INTO `oxcontents` VALUES('c4241316b2e5c1966.96997011', 'oxhelpalist', 'oxbaseshop', 1, 0, 1, 1, '', 'Hilfe - Die Produktliste', '<p>Hier können zusätzliche Informationen, weiterführende Links, Bedienungshinweise etc. für die Hilfe-Funktion in den <em>Produktlisten</em> eingefügt werden. </p>', 'Help - Product List', '<p>Here, you can insert additional information, further links, user manual etc. for the &quot;Help&quot;-function on <em>product pages</em>.</p>', 1, '', '', 1, '', '', '30e44ab83fdee7564.23264141', 'CMSFOLDER_USERINFO', '');
 INSERT INTO `oxcontents` VALUES('c4241316b2e5c1966.96997012', 'oxhelpdefault', 'oxbaseshop', 1, 0, 1, 1, '', 'Hilfe - Main', '<p>Hier können zusätzliche Informationen, weiterführende Links, Bedienungshinweise etc. für die Hilfe-Funktion in der <em>Kategorieansicht</em> eingefügt werden. </p>', 'Help - Main', '<p>Here, you can insert additional information, further links, user manual etc. for the &quot;Help&quot;-function on <em>category pages</em>.</p>', 1, '', '', 1, '', '', '30e44ab83fdee7564.23264141', 'CMSFOLDER_USERINFO', '');
 INSERT INTO `oxcontents` VALUES('c4241316b2e5c1966.96997013', 'oxhelpstart', 'oxbaseshop', 1, 0, 1, 1, '', 'Hilfe - Die Startseite', '<p>Hier können zusätzliche Informationen, weiterführende Links, Bedienungshinweise etc. für die Hilfe-Funktion auf der <em>Startseite</em> eingefügt werden. </p>\r\n<p>&nbsp;</p>', 'Help - Start page', '<p>Here, you can insert additional information, further links, user manual etc. for the &quot;Help&quot;-function on the <em>start page</em>.</p><br />', 1, '', '', 1, '', '', '30e44ab83fdee7564.23264141', 'CMSFOLDER_USERINFO', '');
+INSERT INTO `oxcontents` VALUES ('220404cee0caf470e227c1c9f1ec4ae3', 'oxrighttocancellegend2', 'oxbaseshop', 1, 0, 1, 1, '', 'Widerrufsrecht Hinweistext', '[{oxifcontent ident="oxagb" object="oCont"}]\r\n    Es gelten unsere <a id="orderConfirmAgbBottom" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open(''[{ $oCont->getLink()|oxaddparams:"plain=1"}]'', ''agb_popup'', ''resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400'');return false;" class="fontunderline">Allgemeinen Geschäftsbedingungen</a>.&nbsp;\r\n[{/oxifcontent}]\r\n[{oxifcontent ident="oxrightofwithdrawal" object="oCont"}]\r\n    Hier finden Sie <a id="test_OrderOpenWithdrawalBottom" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open(''[{ $oCont->getLink()|oxaddparams:"plain=1"}]'', ''rightofwithdrawal_popup'', ''resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400'');return false;">Einzelheiten zum Widerrufsrecht</a>.\r\n[{/oxifcontent}]', 'Right to Cancel Legend', '[{oxifcontent ident="oxagb" object="oCont"}] Our general <a id="orderConfirmAgbBottom" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open(''[{ $oCont->getLink()|oxaddparams:"plain=1"}]'', ''agb_popup'', ''resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400'');return false;" class="fontunderline">terms and conditions</a> apply.&nbsp;\r\n[{/oxifcontent}]\r\n[{oxifcontent ident="oxrightofwithdrawal" object="oCont"}]\r\n    Read details about  <a id="test_OrderOpenWithdrawalBottom" rel="nofollow" href="[{ $oCont->getLink() }]" onclick="window.open(''[{ $oCont->getLink()|oxaddparams:"plain=1"}]'', ''rightofwithdrawal_popup'', ''resizable=yes,status=no,scrollbars=yes,menubar=no,width=620,height=400'');return false;">right of withdrawal</a>.\r\n[{/oxifcontent}]', 1, '', '', 1, '', '', '8a142c3e4143562a5.46426637', 'CMSFOLDER_USERINFO', '');
 
 # --------------------------------------------------------
 
@@ -2460,3 +2468,5 @@ CREATE OR REPLACE VIEW oxv_oxmediaurls_en AS SELECT OXID,OXOBJECTID,OXURL,OXDESC
 CREATE OR REPLACE VIEW oxv_oxstates AS SELECT oxstates.* FROM oxstates;
 CREATE OR REPLACE VIEW oxv_oxstates_de AS SELECT OXID,OXCOUNTRYID,OXTITLE,OXISOALPHA2 FROM oxstates;
 CREATE OR REPLACE VIEW oxv_oxstates_en AS SELECT OXID,OXCOUNTRYID,OXTITLE_1 AS OXTITLE,OXISOALPHA2 FROM oxstates;
+
+

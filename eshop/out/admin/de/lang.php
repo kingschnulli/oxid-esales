@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34552 2011-04-09 15:31:02Z vilma $
+ * @version   SVN: $Id: lang.php 34960 2011-04-27 13:33:31Z sarunas $
  */
 
 $sLangName  = 'Deutsch';
@@ -207,6 +207,7 @@ $aLang = array(
 'GENERAL_EXPORTSTATUS'                                     => 'Status',
 'GENERAL_EXPORTSTATUSNEW'                                  => 'neu',
 'GENERAL_EXPORTSTATUSUSED'                                 => 'gebraucht',
+'GENERAL_EXPORTLANGUAGE'                                   => 'Export für Sprache',
 'GENERAL_EXTERNALSTOCK'                                    => 'Fremdlager',
 'GENERAL_EXTRAINFO'                                        => 'zus. Info',
 'GENERAL_FAX'                                              => 'Fax',
@@ -875,6 +876,10 @@ $aLang = array(
 'ORDER_REMARK_NEWS'                                        => '[News]',
 'ORDER_OVERVIEW_VATID'                                     => 'Umsatzsteuer-Identnummer:',
 'ORDER_OVERVIEW_DELTYPE'                                   => 'Versandart',
+'ORDER_OVERVIEW_LSBANKNAME'                                => 'Bankname',
+'ORDER_OVERVIEW_LSBLZ'                                     => 'BLZ',
+'ORDER_OVERVIEW_LSKTONR'                                   => 'Kontonummer',
+'ORDER_OVERVIEW_LSKTOINHABER'                              => 'Kontoinhaber',
 'ORDER_OVERVIEW_INFOLDER'                                  => 'In Ordner',
 'ORDER_OVERVIEW_INTSTATUS'                                 => 'Interner Status',
 'ORDER_OVERVIEW_ORDERAMTODAY'                              => 'Anzahl Bestellungen heute',
@@ -1248,6 +1253,7 @@ $aLang = array(
 'SYSREQ_OPEN_SSL'                                          => 'OpenSSL',
 'SYSREQ_SOAP'                                              => 'SOAP',
 'SYSREQ_UNICODE_SUPPORT'                                   => 'UTF-8 Unterstützung',
+'SYSREQ_BUG53632'                                          => '[tr] possible issues on server due to PHP Bug #53632',
 'SYSREQ_MEMORY_LIMIT'                                      => 'PHP Memory limit (min. 14MB, 30MB empfohlen)',
 'SYSREQ_DESCRIPTION_PASS'                                  => 'Erfüllt.',
 'SYSREQ_DESCRIPTION_PMIN'                                  => 'Nicht oder nur teilweise erfüllt. Dieser OXID eShop kann sich in Bereichen unerwartet verhalten.',

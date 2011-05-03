@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpriceTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxpriceTest.php 35010 2011-04-28 12:05:24Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -462,6 +462,7 @@ class Unit_Core_oxpriceTest extends OxidTestCase
     public function testBrutto2Netto()
     {
         $this->assertEquals( 200.00, $this->_oPrice->brutto2Netto(236, 18) );
+        $this->assertLessThan(0.00001, abs(200.10462372881 - $this->_oPrice->brutto2Netto(236.123456, 18) ) );
     }
 
     public function testBrutto2NettoMinusVat()
@@ -472,6 +473,7 @@ class Unit_Core_oxpriceTest extends OxidTestCase
     public function testNetto2Brutto()
     {
         $this->assertEquals( 120.00, $this->_oPrice->netto2Brutto(100, 20) );
+        $this->assertLessThan(0.00001, abs(120.1481472 - $this->_oPrice->netto2Brutto(100.123456, 20) ) );
     }
 
     public function testCompare()

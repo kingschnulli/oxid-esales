@@ -803,7 +803,7 @@ a.submitButton {
 
 /*** HEADER ELEMENTS -> ***/
 #logo {
-    margin: 21px 0 10px 0;
+    margin: 19px 0 8px 0;
     float: left;
 }
 
@@ -1235,33 +1235,42 @@ a.readMore:hover {
  font-size:13px;
 }
 
-.tagitem_300 {
+.tagitem_100 {
+ font-size:12px;
+}
+
+.tagitem_200 {
  font-size:14px;
 }
 
-.tagitem_400 {
+.tagitem_300 {
  font-size:16px;
 }
 
-.tagitem_500 {
+.tagitem_400 {
  font-size:18px;
 }
 
-.tagitem_600 {
+.tagitem_500 {
  font-size:20px;
 }
 
-.tagitem_700 {
+.tagitem_600 {
  font-size:22px;
 }
 
-.tagitem_800 {
+.tagitem_700 {
  font-size:24px;
 }
 
-.tagitem_900 {
+.tagitem_800 {
  font-size:26px;
 }
+
+.tagitem_900 {
+ font-size:28px
+}
+
 .taggedText {
  color: #a2a9ab;
 }
@@ -2071,6 +2080,7 @@ a.next {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
+    clear:both;
 }
 
 #breadCrumb span {
@@ -2575,7 +2585,6 @@ a.fb_button_simple {
 }
 
 .additionalInfo span{
-    float: left;
     padding: 0 7px;
     margin-bottom: 3px;
     font-size: 11px;
@@ -3097,6 +3106,10 @@ span.verificationCode {
     line-height: 18px;
 }
 
+.form label.req{
+    font-weight:700;
+}
+
 .form label.short {
     width: 90px;
     padding-right: 5px;
@@ -3222,6 +3235,7 @@ span.verificationCode {
 .oxSlider {
     padding: 0 10px;
     overflow: hidden;
+    clear:both;
 }
 
 .oxSlider ul, .oxSlider li {
@@ -4019,4 +4033,29 @@ button[disabled].submitButton, button[disabled].submitButton:hover  {
 .shoplupe {
     padding-top:15px;
     text-align: center;
+}
+
+/* category tree */
+.categoryBox {
+    border-color: #999999;
+    border-style: solid;
+    border-width: 1px;
+    -moz-border-radius: 3px;
+    margin: 0 0 20px;
+}
+
+.categoryTagsBox {
+    border-top-color: #999999;
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+
+.categoryTagsBox h3 {
+    text-transform: uppercase;
+    padding: 5px 0 0 10px;
+    font-size: 12px;
+}
+
+.categoryTags {
+    padding: 5px 5px 5px 5px;
 }

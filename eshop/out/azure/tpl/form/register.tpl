@@ -12,30 +12,40 @@
         [{ include file="form/fieldset/user_account.tpl" }]
         [{if $oView->isActive('PsLogin') }]
             <li>
-                <span>
+                <label>[{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }]</label>
+                <input type="hidden" name="ord_agb" value="0">
+                <input id="orderConfirmAgbBottom" type="checkbox" class="checkbox" name="ord_agb" value="1">
+                <span class="inputNote agb">
                     [{oxifcontent ident="oxagb" object="oCont"}]
-                        [{assign var="sLink" value=$oCont->getLink()|replace:'&amp;':'&' }]
-                        [{oxscript add="$( '#orderOpenAgbBottom' ).oxModalPopup({target: '#popup', loadUrl: '$sLink&plain=1'});"}]
+                        [{oxscript add="$( '#orderOpenAgbBottom' ).oxModalPopup({target: '#popup1'});"}]
                         [{oxmultilang ident="FORM_REGISTER_IAGREETOTERMS1" }]
-                        <a id="orderOpenAgbBottom" rel="nofollow" href="[{ $oCont->getLink() }]"  class="fontunderline">[{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }]</a>
+                        <a id="orderOpenAgbBottom" rel="nofollow" href="#"  class="fontunderline">[{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }]</a>
                         [{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS3" }],&nbsp;
                     [{/oxifcontent}]
                     [{oxifcontent ident="oxrightofwithdrawal" object="oCont"}]
-                        [{assign var="sLink" value=$oCont->getLink()|replace:'&amp;':'&' }]
-                        [{oxscript add="$( '#orderOpenWithdrawalBottom' ).oxModalPopup({target: '#popup', loadUrl: '$sLink&plain=1'});"}]
+                        [{oxscript add="$( '#orderOpenWithdrawalBottom' ).oxModalPopup({target: '#popup2'});"}]
                         [{oxmultilang ident="FORM_REGISTER_IAGREETORIGHTOFWITHDRAWAL1" }]
-                        <a id="orderOpenWithdrawalBottom" rel="nofollow" href="[{ $oCont->getLink() }]">[{ $oCont->oxcontents__oxtitle->value }]</a>
+                        <a id="orderOpenWithdrawalBottom" rel="nofollow" href="#">[{ $oCont->oxcontents__oxtitle->value }]</a>
                         [{ oxmultilang ident="FORM_REGISTER_IAGREETORIGHTOFWITHDRAWAL3" }]
                     [{/oxifcontent}]
                 </span>
-                <input type="hidden" name="ord_agb" value="0">
-                <input id="orderConfirmAgbBottom" type="checkbox" class="chk" name="ord_agb" value="1">
             </li>
         [{/if}]
     </ul>
     <h3 class="blockHead">[{ oxmultilang ident="FORM_REGISTER_BILLINGADDRESS" }]</h3>
     <ul class="form">[{ include file="form/fieldset/user_billing.tpl" }]</ul>
 </form>
- <div id="popup" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
-     <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
-</div>
+[{if $oView->isActive('PsLogin') }]
+    <div id="popup1" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
+         <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
+         [{oxifcontent ident="oxagb" object="oContent"}]
+            [{ $oContent->oxcontents__oxcontent->value }]
+         [{/oxifcontent}]
+    </div>
+    <div id="popup2" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
+         <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
+         [{oxifcontent ident="oxrightofwithdrawal" object="oContent"}]
+            [{ $oContent->oxcontents__oxcontent->value }]
+         [{/oxifcontent}]
+    </div>
+[{/if}]

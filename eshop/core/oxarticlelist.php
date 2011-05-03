@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 33601 2011-03-01 14:34:42Z rimvydas.paskevicius $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 34884 2011-04-20 13:54:32Z linas.kukulskis $
  */
 
 /**
@@ -893,7 +893,11 @@ class oxArticleList extends oxList
             if ( $sIds ) {
                 $sFilterSql = " and $sArticleTable.oxid in ( $sIds ) ";
             }
+        // bug fix #0001695: if no articles found return false
+        } elseif ( !( current( $aFilter ) == '' && count( array_unique( $aFilter ) ) == 1 ) ) {
+            $sFilterSql = " and false ";
         }
+
         return $sFilterSql;
     }
 

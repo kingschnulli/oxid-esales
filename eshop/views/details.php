@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 34331 2011-04-06 16:11:30Z sarunas $
+ * @version   SVN: $Id: details.php 35025 2011-04-29 13:05:50Z linas.kukulskis $
  */
 
 /**
@@ -351,28 +351,6 @@ class Details extends oxUBase
 
 
     /**
-     * Executes parent method parent::init() and newly loads article
-     * object if users language was changed.
-     *
-     * @return null
-     */
-    public function init()
-    {
-        parent::init();
-
-        $oProduct = $this->getProduct();
-
-        // assign template name
-        if ( $oProduct->oxarticles__oxtemplate->value ) {
-            $this->_sThisTemplate = $oProduct->oxarticles__oxtemplate->value;
-        }
-
-        if ( ( $sTplName = oxConfig::getParameter( 'tpl' ) ) ) {
-            $this->_sThisTemplate = basename ( $sTplName );
-        }
-    }
-
-    /**
      * If possible loads additional article info (oxarticle::getCrossSelling(),
      * oxarticle::getAccessoires(), oxarticle::getReviews(), oxarticle::GetSimilarProducts(),
      * oxarticle::GetCustomerAlsoBoughtThisProducts()), forms variants details
@@ -388,6 +366,15 @@ class Details extends oxUBase
         $myConfig = $this->getConfig();
 
         $oProduct = $this->getProduct();
+
+        // assign template name
+        if ( $oProduct->oxarticles__oxtemplate->value ) {
+            $this->_sThisTemplate = $oProduct->oxarticles__oxtemplate->value;
+        }
+
+        if ( ( $sTplName = oxConfig::getParameter( 'tpl' ) ) ) {
+            $this->_sThisTemplate = basename ( $sTplName );
+        }
 
         //loading amount price list
         $oProduct->loadAmountPriceInfo();
@@ -1584,5 +1571,15 @@ class Details extends oxUBase
             return $aVariantSelections['oActiveVariant'];
         }
         return $this->getProduct();
+    }
+
+     /**
+     * Should "More tags" link be visible.
+     *
+     * @return bool
+     */
+    public function isMoreTagsVisible()
+    {
+        return true;
     }
 }

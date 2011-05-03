@@ -28,6 +28,7 @@ $aLang = array(
 'SHOP_THEME_GROUP_images'               => 'Images',
 'SHOP_THEME_GROUP_features'             => 'Features',
 'SHOP_THEME_GROUP_display'              => 'Display',
+'SHOP_THEME_GROUP_navigation'           => 'Navigation',
 
 'SHOP_THEME_sIconsize'                  => 'Icon size (width*height)',//SHOP_CONFIG_ICONSIZE
 'HELP_SHOP_THEME_sIconsize'             => 'Icons are the smallest pictures of a product. They are used: <br>' .
@@ -54,7 +55,16 @@ $aLang = array(
 'SHOP_THEME_bl_perfShowRightBasket'     => 'Display cart on right side',//SHOP_PERF_SHOWRIGHTBASKET
 'SHOP_THEME_bl_perfShowTopBasket'       => 'Display cart at top',//SHOP_PERF_SHOWTOPBASKET
 'SHOP_THEME_blShowBirthdayFields'       => 'Display input fields for date of birth when users enter their personal data',//SHOP_CONFIG_SHOWBIRTHDAYFIELDS
-'SHOP_THEME_blTopNaviLayout'            => 'Display category navigation at top',//SHOP_CONFIG_TOPNAVILAYOUT
+
+'SHOP_THEME_blTopNaviLayout'            => 'Display category navigation at top',
+'HELP_SHOP_THEME_blTopNaviLayout'            => '[tr] text needed',
+'SHOP_THEME_blLoadFullTree'             => 'Load complete Category Tree for Navigation (May cause Performance Problems if much Categories exist)',
+'HELP_SHOP_THEME_blLoadFullTree'             => '[tr] text needed',
+'SHOP_THEME_bl_perfLoadTreeForSearch'   => 'Load complete Category Tree for Search',
+'HELP_SHOP_THEME_bl_perfLoadTreeForSearch'   => '[tr] text needed',
+'SHOP_THEME_bl_perfLoadCatTree'         => 'Load Categories and display Category Navigation',
+'HELP_SHOP_THEME_bl_perfLoadCatTree'    => '[tr] text needed',
+
 'HELP_SHOP_THEME_blTopNaviLayout'       => 'Usually, the category navigation is shown on the left. If this setting is checked, the category navigation is shown at top instead.',
 
 'SHOP_THEME_iTopNaviCatCount'           => 'Amount of categories that is displayed at top',//SHOP_CONFIG_TOPNAVICATCOUNT

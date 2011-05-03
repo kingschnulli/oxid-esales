@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 34540 2011-04-09 13:03:51Z sarunas $
+ * @version   SVN: $Id: oxarticleTest.php 34842 2011-04-19 12:00:31Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -6544,6 +6544,27 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->setLanguage(0);
         $this->assertTrue( $oArticle->load( 'test_SubshopFields_savesRawValue' ) );
         $this->assertEquals( 'lalaal&!<b><', $oArticle->getArticleLongDesc()->getRawValue() );
+    }
+
+    /**
+     * Test long descriptio saving , save raw value.
+     *
+     * @return null
+     */
+    public function testLongDescSavingIfMultilingualIsFalse()
+    {
+        // insert article
+        $oArticle = oxNew("oxarticle");
+        $oArticle->setEnableMultilang(false);
+        $oArticle->setId("_testArt");
+        $oArticle->oxarticles__oxlongdesc = new oxField('[de] lalaal&!<b><', oxField::T_RAW);
+        $oArticle->oxarticles__oxlongdesc_1 = new oxField('[en] lalaal&!<b><', oxField::T_RAW);
+        $this->assertEquals( "[de] lalaal&!<b><",$oArticle->oxarticles__oxlongdesc->value);
+        $this->assertEquals( "[en] lalaal&!<b><",$oArticle->oxarticles__oxlongdesc_1->value);
+        $oArticle->UNITsaveArtLongDesc();
+
+        $this->assertEquals( "[de] lalaal&!<b><", oxDb::getDB()->getOne("select oxlongdesc from oxartextends where oxid = '_testArt'") );
+        $this->assertEquals( "[en] lalaal&!<b><", oxDb::getDB()->getOne("select oxlongdesc_1 from oxartextends where oxid = '_testArt'") );
     }
 
 

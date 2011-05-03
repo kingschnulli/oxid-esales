@@ -28,6 +28,7 @@ $aLang = array(
 'SHOP_THEME_GROUP_images'               => 'Bilder',
 'SHOP_THEME_GROUP_features'             => 'Funktionen',
 'SHOP_THEME_GROUP_display'              => 'Anzeige',
+'SHOP_THEME_GROUP_navigation'           => '[tr] Navigation',
 
 'SHOP_THEME_sIconsize'                  => 'Größe des Icons in Pixeln (Breite*Höhe)',//SHOP_CONFIG_ICONSIZE
 'HELP_SHOP_THEME_sIconsize'             => 'Icons sind die kleinsten Bilder eines Artikels. Sie werden z. B. <br>' .
@@ -53,8 +54,15 @@ $aLang = array(
 'SHOP_THEME_bl_perfShowRightBasket'     => 'Warenkorb rechts anzeigen',//SHOP_PERF_SHOWRIGHTBASKET
 'SHOP_THEME_bl_perfShowTopBasket'       => 'Warenkorb oben anzeigen',//SHOP_PERF_SHOWTOPBASKET
 'SHOP_THEME_blShowBirthdayFields'       => 'Eingabefeld für das Geburtsdatum anzeigen, wenn Benutzer ihre Daten eingeben',//SHOP_CONFIG_SHOWBIRTHDAYFIELDS
+
 'SHOP_THEME_blTopNaviLayout'            => 'Kategorien-Navigation oben anzeigen',//SHOP_CONFIG_TOPNAVILAYOUT
 'HELP_SHOP_THEME_blTopNaviLayout'       => 'Die Kategorien-Navigation wird normalerweise links angezeigt. Wenn Sie diese Einstellung aktivieren, wird die Kategorien-Navigation anstatt links oben angezeigt.',
+'SHOP_THEME_blLoadFullTree'             => 'Den kompletten Kategoriebaum für die Navigation laden (belastet die Performance, wenn viele Kategorien vorhanden sind)',
+'HELP_SHOP_THEME_blLoadFullTree'             => '[tr] text needed',
+'SHOP_THEME_bl_perfLoadTreeForSearch'   => 'Kategoriebaum für die Suche laden (Die Suche kann auf einzelne Kategorien beschränkt werden)',
+'HELP_SHOP_THEME_bl_perfLoadTreeForSearch'   => '[tr] text needed',
+'SHOP_THEME_bl_perfLoadCatTree'         => 'Kategorien laden und Kategorienavigation anzeigen',
+'HELP_SHOP_THEME_bl_perfLoadCatTree'    => '[tr] text needed',
 
 'SHOP_THEME_iTopNaviCatCount'           => 'Anzahl der Kategorien, die oben angezeigt werden (weitere Kategorien werden ebenfalls oben unter "mehr" aufgelistet)',//SHOP_CONFIG_TOPNAVICATCOUNT
 'SHOP_THEME_blShowFinalStep'            => 'Bestellbestätigung anzeigen, wenn die Bestellung abgeschlossen ist (fünfter Bestellschritt)',//SHOP_SYSTEM_SHOWFINALSTEP
