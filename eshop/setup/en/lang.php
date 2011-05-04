@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34394 2011-04-07 14:18:26Z ralf.trapp $
+ * @version   SVN: $Id: lang.php 34983 2011-04-27 13:55:54Z sarunas $
  */
 
 $aLang = array(
@@ -98,6 +98,7 @@ $aLang = array(
 'MOD_OPEN_SSL'                                  => 'OpenSSL',
 'MOD_SOAP'                                      => 'SOAP',
 'MOD_UNICODE_SUPPORT'                           => 'UTF-8 support',
+'MOD_BUG53632'                                  => '[tr] possible issues on server due to PHP Bug #53632',
 
 'STEP_0_ERROR_TEXT'                             => 'Your system does not fit system requirements',
 'STEP_0_ERROR_URL'                              => "http://www.oxid-esales.com/en/products/community-edition/system-requirements",

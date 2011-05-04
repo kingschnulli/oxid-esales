@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 33601 2011-03-01 14:34:42Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxarticlelistTest.php 34929 2011-04-26 11:41:14Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -496,7 +496,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sExpt = "SELECT oxid FROM $sO2CTable as oc left join $sArticleTable ON
                   $sArticleTable.oxid = oc.oxobjectid WHERE
                   ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''
-                  and oc.oxcatnid = '$sCatId' GROUP BY oc.oxcatnid, oc.oxobjectid ORDER BY  oc.oxpos,oc.oxobjectid";
+                  and oc.oxcatnid = '$sCatId' and false GROUP BY oc.oxcatnid, oc.oxobjectid ORDER BY  oc.oxpos,oc.oxobjectid";
 
         $sRes = $oTest->UNITgetCategorySelect( 'oxid', $sCatId, array( $sCatId => array( "8a142c3ee0edb75d4.80743302" => "Zeigar" ) ) );
         $sExpt = str_replace( array( "\n", "\r", " ", "\t" ), "", $sExpt );
@@ -1169,7 +1169,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         oxTestModules::addModuleObject( "oxUtilsCount", $oUtilsCount );
 
         $oCat = oxNew( 'oxCategory' );
-        
+
         $oArticleList = new oxArticleList();
         $iRes = $oArticleList->loadPriceArticles( 1, 2, $oCat );
 

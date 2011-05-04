@@ -19,12 +19,12 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpricealarm.php 33411 2011-02-21 14:24:44Z vilma $
+ * @version   SVN: $Id: oxpricealarm.php 34922 2011-04-26 08:58:39Z sarunas $
  */
 
 /**
  * Pricealarm manager.
- * Performs Pricealarm data/objetcs loading, deleting.
+ * Performs Pricealarm data/objects loading, deleting.
  * @package core
  */
 class oxPricealarm extends oxBase

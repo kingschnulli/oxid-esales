@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 33752 2011-03-14 15:05:16Z linas.kukulskis $
+ * @version   SVN: $Id: alist.php 35062 2011-05-03 07:54:13Z sarunas $
  */
 
 /**
@@ -123,7 +123,7 @@ class aList extends oxUBase
      * Show tags cloud
      * @var bool
      */
-    protected $_blShowTagCloud = false;
+    protected $_blShowTagCloud = true;
 
     /**
      * Sign if to load and show bargain action
@@ -974,5 +974,15 @@ class aList extends oxUBase
     public function getPageCount()
     {
         return $this->_iCntPages;
+    }
+
+    /**
+     * Should "More tags" link be visible.
+     *
+     * @return bool
+     */
+    public function isMoreTagsVisible()
+    {
+        return true;
     }
 }

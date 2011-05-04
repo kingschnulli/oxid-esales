@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34833 2011-04-19 08:32:43Z linas.kukulskis $
+ * @version   SVN: $Id: lang.php 34983 2011-04-27 13:55:54Z sarunas $
  */
 
 /*
@@ -212,7 +212,7 @@ $aLang = array(
 'GENERAL_EXPORTSTATUS'                                     => 'Status',
 'GENERAL_EXPORTSTATUSNEW'                                  => 'new',
 'GENERAL_EXPORTSTATUSUSED'                                 => 'used',
-'GENERAL_EXPORTLANGUAGE'                                   => '[tr] Export in language',
+'GENERAL_EXPORTLANGUAGE'                                   => 'Export for language',
 'GENERAL_EXTERNALSTOCK'                                    => 'External Storehouse',
 'GENERAL_EXTRAINFO'                                        => 'Additional Info',
 'GENERAL_FAX'                                              => 'Fax',
@@ -883,6 +883,10 @@ $aLang = array(
 'ORDER_REMARK_NEWS'                                        => '[News]',
 'ORDER_OVERVIEW_VATID'                                     => 'Vat id:',
 'ORDER_OVERVIEW_DELTYPE'                                   => 'Shipped with',
+'ORDER_OVERVIEW_LSBANKNAME'                                => 'Bank',
+'ORDER_OVERVIEW_LSBLZ'                                     => 'Bank code',
+'ORDER_OVERVIEW_LSKTONR'                                   => 'Account No.',
+'ORDER_OVERVIEW_LSKTOINHABER'                              => 'Account Holder',
 'ORDER_OVERVIEW_INFOLDER'                                  => 'In Folder',
 'ORDER_OVERVIEW_INTSTATUS'                                 => 'Internal Status',
 'ORDER_OVERVIEW_ORDERAMTODAY'                              => 'Number Orders Today',
@@ -1256,6 +1260,7 @@ $aLang = array(
 'SYSREQ_OPEN_SSL'                                          => 'OpenSSL',
 'SYSREQ_SOAP'                                              => 'SOAP',
 'SYSREQ_UNICODE_SUPPORT'                                   => 'UTF-8 support',
+'SYSREQ_BUG53632'                                          => '[tr] possible issues on server due to PHP Bug #53632',
 'SYSREQ_MEMORY_LIMIT'                                      => 'PHP Memory limit (min. 14MB, 30MB recommended)',
 'SYSREQ_DESCRIPTION_PASS'                                  => 'System health is good.',
 'SYSREQ_DESCRIPTION_PMIN'                                  => 'System health might be broken.',
@@ -1434,7 +1439,7 @@ $aLang = array(
 'MANUFACTURER_MAIN_ALLITEMS'                               => 'All Products',
 'MANUFACTURER_LIST_TITLE'                                  => 'Manufacturer List',
 'MANUFACTURER_LIST_MENUITEM'                               => 'Master Settings',
-'MANUFACTURER_LIST_MENUSUBITEM'                            => 'Manufacturers',
+'MANUFACTURER_LIST_MENUSUBITEM'                            => 'Brands/Manufacturers',
 'SHOP_PERF_CHECKIFTPLCOMPILE'                              => 'Automatic detection of necessary Template re-compilation. Uncheck during normal operation for increased performance.',
 'SHOP_PERF_COMPARE'                                        => 'Activate Product Comparison',
 'SHOP_PERF_DONTSHOWEMTYCATEGORIES'                         => 'Do <strong>not</strong> display empty Categories (Categories which have no Sub-Categories and no Products).',
@@ -1546,7 +1551,7 @@ $aLang = array(
 'mxugroups'                                                => 'User Groups',
 'mxusers'                                                  => 'Users',
 'mxvendor'                                                 => 'Distributors',
-'mxmanufacturer'                                           => 'Manufacturers',
+'mxmanufacturer'                                           => 'Brands/Manufacturers',
 'mxvouchers'                                               => 'Coupon Series',
 'mxwrapping'                                               => 'Gift Wrapping',
 'mxdynscreenlocal'                                         => 'Services info',

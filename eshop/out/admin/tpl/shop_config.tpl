@@ -471,6 +471,18 @@ function showInvitations()
                 <div class="spacer"></div>
             </dl>
 
+             <dl>
+                <dt>
+            <input type=hidden name=confbools[blEnterNetPrice] value=false>
+            <input type=checkbox name=confbools[blEnterNetPrice] value=true  [{if ($confbools.blEnterNetPrice)}]checked[{/if}] [{ $readonly}]>
+            [{ oxinputhelp ident="HELP_SHOP_CONFIG_ENTERNETPRICE" }]
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_ENTERNETPRICE" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
 
          </div>
     </div>
@@ -999,18 +1011,6 @@ function showInvitations()
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_DELIVERYCOSTS" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
-            <dl>
-                <dt>
-            <input type=hidden name=confbools[blEnterNetPrice] value=false>
-            <input type=checkbox name=confbools[blEnterNetPrice] value=true  [{if ($confbools.blEnterNetPrice)}]checked[{/if}] [{ $readonly}]>
-            [{ oxinputhelp ident="HELP_SHOP_CONFIG_ENTERNETPRICE" }]
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_ENTERNETPRICE" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>

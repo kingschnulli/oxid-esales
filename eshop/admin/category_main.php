@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.php 33736 2011-03-10 15:36:39Z arvydas.vapsva $
+ * @version   SVN: $Id: category_main.php 34880 2011-04-20 11:05:12Z linas.kukulskis $
  */
 
 /**
@@ -170,6 +170,8 @@ class Category_Main extends oxAdminDetails
         if ( isset( $aParams["oxcategories__oxlongdesc"] ) ) {
             $aParams["oxcategories__oxlongdesc"] = $this->_processLongDesc( $aParams["oxcategories__oxlongdesc"] );
         }
+
+
         $oCategory->assign( $aParams );
         $oCategory->setLanguage($this->_iEditLang);
 

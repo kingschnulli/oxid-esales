@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 34540 2011-04-09 13:03:51Z sarunas $
+ * @version   SVN: $Id: oxarticle.php 34921 2011-04-26 08:58:37Z sarunas $
  */
 
 // defining supported link types
@@ -476,8 +476,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         // deprecated since 2011.03.14, should be used setArticleLongDesc()
         if ( strpos( $sName, 'oxarticles__oxlongdesc' ) === 0 ) {
-            $sValue = ( $sValue instanceof oxField ) ? $sValue->getRawValue() : $sValue;
-            $this->setArticleLongDesc( $sValue );
+            if ($this->_blEmployMultilanguage) {
+                $sValue = ( $sValue instanceof oxField ) ? $sValue->getRawValue() : $sValue;
+                $this->setArticleLongDesc( $sValue );
+            } else {
+                $this->$sName = $sValue;
+            }
         } else {
             parent::__set( $sName, $sValue );
         }
@@ -2978,17 +2982,46 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $myConfig = $this->getConfig();
         $sShopId = $myConfig->getShopID();
 
-        $sValue = $this->getArticleLongDesc()->getRawValue();
-        $blSave = $sValue !== null;
 
-        if ( $blSave ) {
+        if ($this->_blEmployMultilanguage) {
+            $sValue = $this->getArticleLongDesc()->getRawValue();
+            if ( $sValue !== null ) {
+                $oArtExt = oxNew('oxI18n');
+                $oArtExt->init('oxartextends');
+                $oArtExt->setLanguage((int) $this->getLanguage());
+                if (!$oArtExt->load($this->getId())) {
+                    $oArtExt->setId($this->getId());
+                }
+                $oArtExt->oxartextends__oxlongdesc = new oxField($sValue, oxField::T_RAW);
+                $oArtExt->save();
+            }
+        } else {
             $oArtExt = oxNew('oxI18n');
+            $oArtExt->setEnableMultilang(false);
             $oArtExt->init('oxartextends');
-            $oArtExt->setLanguage((int) $this->getLanguage());
+            $aObjFields = $oArtExt->_getAllFields(true);
             if (!$oArtExt->load($this->getId())) {
                 $oArtExt->setId($this->getId());
             }
-            $oArtExt->oxartextends__oxlongdesc = new oxField($sValue, oxField::T_RAW);
+
+            foreach ($aObjFields as $sKey => $sValue ) {
+                if ( preg_match('/^oxlongdesc(_(\d{1,2}))?$/', $sKey) ) {
+                    $sField = $this->_getFieldLongName($sKey);
+
+                    if (isset($this->$sField)) {
+                        $sLongDesc = null;
+                        if ($this->$sField instanceof oxField) {
+                            $sLongDesc = $this->$sField->getRawValue();
+                        } elseif (is_object($this->$sField)) {
+                            $sLongDesc = $this->$sField->value;
+                        }
+                        if (isset($sLongDesc)) {
+                            $sAEField = $oArtExt->_getFieldLongName($sKey);
+                            $oArtExt->$sAEField = new oxField($sLongDesc, oxField::T_RAW);
+                        }
+                    }
+                }
+            }
             $oArtExt->save();
         }
     }
@@ -3631,7 +3664,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
             // only overwrite database values
             if ( substr( $sCopyFieldName, 0, 12) != 'oxarticles__') {
-                continue;
+                return;
             }
 
             //do not copy certain fields
@@ -3708,7 +3741,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 }
 
                 //assing long description
-                if ( $this->getArticleLongDesc()->getRawValue() === null ) {
+                $sLongDesc = $this->getArticleLongDesc()->getRawValue();
+                if ( $sLongDesc === null || $sLongDesc == '' ) {
                     $this->setArticleLongDesc( $this->getParentArticle()->getArticleLongDesc()->getRawValue() );
                 }
             }

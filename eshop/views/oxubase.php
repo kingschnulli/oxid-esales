@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 34200 2011-04-04 11:56:38Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 35074 2011-05-03 07:54:41Z sarunas $
  */
 
 /**
@@ -928,6 +928,16 @@ class oxUBase extends oxView
     }
 
     /**
+     * Returns true if empty categories are not loaded
+     *
+     * @return bool
+     */
+    public function showCategoryArticlesCount()
+    {
+        return $this->getConfig()->getConfigParam( 'bl_perfShowActionCatArticleCnt' );
+    }
+
+    /**
      * Returns if language should be loaded
      *
      * @return bool
@@ -1622,6 +1632,15 @@ class oxUBase extends oxView
     }
 
     /**
+     * Returns title page suffix used in template in lists
+     *
+     * @return string
+     */
+    public function getTitlePageSuffix()
+    {
+    }
+
+    /**
      * Returns title prefix used in template
      *
      * @return string
@@ -1631,6 +1650,8 @@ class oxUBase extends oxView
     {
         return $this->getConfig()->getActiveShop()->oxshops__oxtitleprefix->value;
     }
+
+
 
     /**
      * returns object, assosiated with current view.

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryTest.php 33244 2011-02-14 15:40:18Z sarunas $
+ * @version   SVN: $Id: oxdeliveryTest.php 34923 2011-04-26 08:58:41Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -557,20 +557,20 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
     /*
      * Testing if hasArticles() returns false, when no articles are assiged
      */
-    public function testHasArticesWhenNoArticlesAreAssigned()
+    public function testHasArticlesWhenNoArticlesAreAssigned()
     {
         $oDelivery = oxNew( 'oxdelivery' );
-        $this->assertFalse( $oDelivery->hasArtices() );
+        $this->assertFalse( $oDelivery->hasArticles() );
     }
 
     /*
      * Testing if hasArticles() returns true
      */
-    public function testHasArtices()
+    public function testHasArticles()
     {
         $oDelivery = oxNew( 'oxdelivery' );
         $oDelivery->load( $this->_sOxId );
-        $this->assertTrue( $oDelivery->hasArtices() );
+        $this->assertTrue( $oDelivery->hasArticles() );
     }
 
     /*

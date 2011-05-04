@@ -352,9 +352,13 @@
     [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD" }] [{ $payment->oxpayments__oxdesc->value }] [{ if $basket->getPaymentCosts() }]([{ $basket->getFPaymentCosts() }] [{ $currency->sign}])[{/if}]<br>
     [{ $payment->oxpayments__oxlongdesc->value }]<br><br>
     [{ oxmultilang ident="EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF" }]<br>
-    [{ * foreach from=$payment->aDynValues item=value *}]
-      [{ * $value->name * }]: [{ * $value->value *}]  <br>
-    [{* /foreach *}]
+    [{*
+    [{foreach from=$payment->aDynValues item=value}]
+    [{assign var="ident" value='EMAIL_ORDER_OWNER_HTML_'|cat:$value->name}]
+    [{assign var="ident" value=$ident|oxupper}]
+      [{oxmultilang ident=$ident }]: [{ $value->value }]  <br>
+    [{/foreach}]
+    *}]
     [{/if}]
     <br>
     [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_EMAILADDRESS" }] [{ $user->oxuser__oxusername->value }]<br><br>

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 33938 2011-03-23 16:11:45Z sarunas $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 35066 2011-05-03 07:54:21Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -43,6 +43,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         if ( isAdmin() ) {
             $sCnt++;
         }
+        $sCnt++;
         $this->assertEquals( $sCnt, count($aRequiredModules));
     }
 
@@ -67,6 +68,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         if ( isAdmin() ) {
             $sCnt++;
         }
+        $sCnt++;
         $this->assertEquals( $sCnt, count($aSysInfo['server_config']));
     }
 
@@ -365,5 +367,22 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 array(),
                 $oSR->getMissingTemplateBlocks()
             );
+    }
+
+    /**
+     * Test case for oxSysRequirements::checkBug53632()
+     *
+     * @return null
+     */
+    public function testcheckBug53632()
+    {
+        $iState = 1;
+        if ( version_compare( PHP_VERSION, "5.3", ">=" ) ) {
+            $iState = version_compare( PHP_VERSION, "5.3.5", ">=" ) ? 2 : $iState;
+        } elseif ( version_compare( PHP_VERSION, '5.2', ">=" ) ) {
+            $iState = version_compare( PHP_VERSION, "5.2.17", ">=" ) ? 2 : $iState;
+        }
+        $oSysReq = new oxSysRequirements();
+        $this->assertEquals( $iState, $oSysReq->checkBug53632() );
     }
 }

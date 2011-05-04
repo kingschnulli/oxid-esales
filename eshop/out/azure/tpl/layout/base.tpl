@@ -3,9 +3,10 @@
 
     [{assign var="_sMetaTitlePrefix" value=$oView->getTitlePrefix() }]
     [{assign var="_sMetaTitleSuffix" value=$oView->getTitleSuffix() }]
+    [{assign var="_sMetaTitlePageSuffix" value=$oView->getTitlePageSuffix() }]
     [{assign var="_sMetaTitle" value=$oView->getTitle() }]
 
-    <title>[{ $_sMetaTitlePrefix }][{if $_sMetaTitlePrefix && $_sMetaTitle }] | [{/if}][{$_sMetaTitle|strip_tags}][{if $_sMetaTitleSuffix && ($_sMetaTitlePrefix || $_sMetaTitle) }] | [{/if}][{$_sMetaTitleSuffix}]</title>
+    <title>[{ $_sMetaTitlePrefix }][{if $_sMetaTitlePrefix && $_sMetaTitle }] | [{/if}][{$_sMetaTitle|strip_tags}][{if $_sMetaTitleSuffix && ($_sMetaTitlePrefix || $_sMetaTitle) }] | [{/if}][{$_sMetaTitleSuffix}] [{if $_sMetaTitlePageSuffix }] | [{ $_sMetaTitlePageSuffix }] [{/if}]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=[{$oView->getCharSet()}]">
     <meta http-equiv="X-UA-Compatible" content="IE=9" >
     [{if $oView->noIndex() == 1 }]

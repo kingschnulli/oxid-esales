@@ -20,7 +20,7 @@
             <input id="newsletterLname" type="text" name="editval[oxuser__oxlname]" size=40 maxlength=40 value="[{if $aRegParams.oxuser__oxlname}][{$aRegParams.oxuser__oxlname}][{/if}]">
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
-            <label>[{ oxmultilang ident="FORM_NEWSLETTER_EMAIL" }]<span class="req">*</span></label>
+            <label class="req">[{ oxmultilang ident="FORM_NEWSLETTER_EMAIL" }]</label>
             <input id="newsletterUserName" type="text" class="oxValidate oxValidate_notEmpty oxValidate_email" name="editval[oxuser__oxusername]" size=40 maxlength=40 value="[{if $aRegParams.oxuser__oxusername}][{$aRegParams.oxuser__oxusername}][{/if}]">
             <p class="oxValidateError">
                 <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
@@ -31,6 +31,7 @@
             <input id="newsletterSubscribeOn" class="radiobox" type="radio" name="subscribeStatus" value="1" checked><label for="newsletterSubscribeOn">[{ oxmultilang ident="FORM_NEWSLETTER_SUBSCRIBE" }]</label>
             <input id="newsletterSubscribeOff" class="radiobox" type="radio" name="subscribeStatus" value="0"><label for="newsletterSubscribeOff">[{ oxmultilang ident="FORM_NEWSLETTER_UNSUBSCRIBE" }]</label>
         </li>
+        <li class="formNote">[{ oxmultilang ident="FORM_NEWSLETTER_COMPLETEMARKEDFIELDS" }]</li>
         <li class="formSubmit">
             <button id="newsLetterSubmit" class="submitButton largeButton" type="submit">[{ oxmultilang ident="FORM_NEWSLETTER_SUBSCRIBE" }]</button>
         </li>

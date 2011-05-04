@@ -2,40 +2,40 @@ module('Inline form validation');
 
 test( 'showInput()', function() {
     var oSource  = $( '<input type="text" class="testTarget[test1,test2]">' );
-	var oBody = $( '#fixture' );
-	oBody.html( '<input type="text" class="test1" style="display:none"><input type="text" class="test2" style="display:none"><input type="text" class="test3" style="display:none">' );
+    var oBody = $( '#fixture' );
+    oBody.html( '<input type="text" class="test1" style="display:none"><input type="text" class="test2" style="display:none"><input type="text" class="test3" style="display:none">' );
 
-	equals( $( '.test1' ).css( "display" ), "none" );
-	equals( $( '.test2' ).css( "display" ), "none" );
-	equals( $( '.test3' ).css( "display" ), "none" );
+    equals( $( '.test1' ).css( "display" ), "none" );
+    equals( $( '.test2' ).css( "display" ), "none" );
+    equals( $( '.test3' ).css( "display" ), "none" );
 
-	oxInputValidator.showInput( oSource, true, "test" );
+    oxInputValidator.showInput( oSource, true, "test" );
 
-	equals( $( '.test1' ).css( "display" ), "inline" );
-	equals( $( '.test2' ).css( "display" ), "inline" );
-	equals( $( '.test3' ).css( "display" ), "none" );
+    equals( $( '.test1' ).css( "display" ), "inline" );
+    equals( $( '.test2' ).css( "display" ), "inline" );
+    equals( $( '.test3' ).css( "display" ), "none" );
 
     oBody.html("");
 });
 
 test( '_bindSpecialListener()', function() {
     var oSource  = $( '<input type="text" class="oxValidate_enterPass oxValidate_enterPassTarget[test1,test2]" value="aaa">' );
-	var oBody = $( '#fixture' );
-	oBody.html( '<input type="text" class="test1" style="display:none"><input type="text" class="test2" style="display:none"><input type="text" class="test3" style="display:none">' );
+    var oBody = $( '#fixture' );
+    oBody.html( '<input type="text" class="test1" style="display:none"><input type="text" class="test2" style="display:none"><input type="text" class="test3" style="display:none">' );
 
-	equals( $( '.test1' ).css( "display" ), "none" );
-	equals( $( '.test2' ).css( "display" ), "none" );
-	equals( $( '.test3' ).css( "display" ), "none" );
+    equals( $( '.test1' ).css( "display" ), "none" );
+    equals( $( '.test2' ).css( "display" ), "none" );
+    equals( $( '.test3' ).css( "display" ), "none" );
 
-	oxInputValidator._bindSpecialListener( oSource );
+    oxInputValidator._bindSpecialListener( oSource );
 
-	oSource.attr( "value", "bbb" );
+    oSource.attr( "value", "bbb" );
 
-	oSource.trigger( "keyup" );
+    oSource.trigger( "keyup" );
 
-	equals( $( '.test1' ).css( "display" ), "inline" );
-	equals( $( '.test2' ).css( "display" ), "inline" );
-	equals( $( '.test3' ).css( "display" ), "none" );
+    equals( $( '.test1' ).css( "display" ), "inline" );
+    equals( $( '.test2' ).css( "display" ), "inline" );
+    equals( $( '.test3' ).css( "display" ), "none" );
 
     oBody.html("");
 });
@@ -48,7 +48,7 @@ test('isEqual()', function() {
 });
 
 test('isEmail()', function() {
-	equals(oxInputValidator.isEmail( "name@surname.com" ), true, "name@surname.com");
+    equals(oxInputValidator.isEmail( "name@surname.com" ), true, "name@surname.com");
     equals(oxInputValidator.isEmail( "name surname.com" ), false, "name surname.com");
     equals(oxInputValidator.isEmail( "name@s urname.com" ), false, "name@s urname.com");
     equals(oxInputValidator.isEmail( "na me@surname.com" ), false, "na me@surname.com");
@@ -256,7 +256,7 @@ test('getLength()', function() {
 
     var sElement =
         '<form>' +
-        	'<input id="passwordLength" type="hidden" value="5">' +
+            '<input id="passwordLength" type="hidden" value="5">' +
             '<ul>' +
                 '<li>' +
                         '<label> label 1 </label>' +
