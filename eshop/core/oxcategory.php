@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategory.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcategory.php 35081 2011-05-03 10:57:53Z linas.kukulskis $
  */
 
 /**
@@ -296,6 +296,10 @@ class oxCategory extends oxI18n implements oxIUrl
         $this->_aSubCats = $aCats;
 
         foreach ( $aCats as $oCat ) {
+
+            // keeping ref. to parent
+            $oCat->setParentCategory( $this );
+
             if ( $oCat->getIsVisible() ) {
                 $this->setHasVisibleSubCats( true );
             }
@@ -697,6 +701,12 @@ class oxCategory extends oxI18n implements oxIUrl
      */
     public function setHasVisibleSubCats( $blHasVisibleSubcats )
     {
+        if ( $blHasVisibleSubcats && !$this->_blHasVisibleSubCats ) {
+            unset( $this->_blIsVisible );
+            if ($this->_oParent instanceof oxCategory) {
+                $this->_oParent->setHasVisibleSubCats( true );
+            }
+        }
         $this->_blHasVisibleSubCats = $blHasVisibleSubcats;
     }
 

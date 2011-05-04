@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 35048 2011-05-02 14:51:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 35083 2011-05-03 11:15:49Z sarunas $
  */
 
 /**
@@ -409,9 +409,10 @@ class oxUBase extends oxView
 
     /**
      * Url parameters which block redirection
+     *
      * @return null
      */
-    protected $_aBlockRedirectParams = array( 'fnc' );
+    protected $_aBlockRedirectParams = array( 'fnc', 'stoken', 'force_sid', 'force_admin_sid' );
 
     /**
      * Vendorlist for search
@@ -552,18 +553,20 @@ class oxUBase extends oxView
             // fetching standard url and looking for it in seo table
             if ( $this->_canRedirect() && ( $sRedirectUrl = oxSeoEncoder::getInstance()->fetchSeoUrl( $sStdUrl ) ) ) {
                 $myUtils->redirect( $this->getConfig()->getCurrentShopUrl() . $sRedirectUrl, false );
-            } else {
+            } elseif (VIEW_INDEXSTATE_INDEX == $this->noIndex()) {
                 // forcing to set noindex/follow meta
                 $this->_forceNoIndex();
 
-                $sShopId = $this->getConfig()->getShopId();
-                $sLangId = oxLang::getInstance()->getBaseLanguage();
-                $sIdent  = md5( strtolower( $sStdUrl ) . $sShopId . $sLangId );
+                if (!$this->getConfig()->isProductiveMode() || $this->getConfig()->getConfigParam('blSeoLogging')) {
+                    $sShopId = $this->getConfig()->getShopId();
+                    $sLangId = oxLang::getInstance()->getBaseLanguage();
+                    $sIdent  = md5( strtolower( $sStdUrl ) . $sShopId . $sLangId );
 
-                // logging "not found" url
-                $oDb = oxDb::getDb();
-                $oDb->execute( "replace oxseologs ( oxstdurl, oxident, oxshopid, oxlang )
-                                values ( " . $oDb->quote( $sStdUrl ) . ", '{$sIdent}', '{$sShopId}', '{$sLangId}' ) " );
+                    // logging "not found" url
+                    $oDb = oxDb::getDb();
+                    $oDb->execute( "replace oxseologs ( oxstdurl, oxident, oxshopid, oxlang )
+                                    values ( " . $oDb->quote( $sStdUrl ) . ", '{$sIdent}', '{$sShopId}', '{$sLangId}' ) " );
+                }
             }
         }
     }
