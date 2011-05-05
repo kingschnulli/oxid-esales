@@ -18,18 +18,18 @@
                   </span>
                   [{/if}]
                   [{if $_product->getFPrice()}]
-                    [{assign var="currency" value=$oView->getActCurrency() }]
-                       <span class="priceValue">[{ $_product->getFPrice() }] [{ $currency->sign}] [{ if !( $_product->hasMdVariants() || ($oViewConf->showSelectListsInList()&&$_product->getSelections(1)) || $_product->getVariantList() ) }]*[{/if}]</span>
+                    [{assign var="currency" value=$oView->getActCurrency()}]
+                       <span class="priceValue">[{$_product->getFPrice()}] [{$currency->sign}] [{if !( $_product->hasMdVariants() || ($oViewConf->showSelectListsInList()&&$_product->getSelections(1)) || $_product->getVariantList() )}]*[{/if}]</span>
                   [{/if}]
                   [{if $_product->getPricePerUnit()}]
                   <span class="pricePerUnit">
                       [{$_product->oxarticles__oxunitquantity->value}] [{$_product->oxarticles__oxunitname->value}] | [{$_product->getPricePerUnit()}] [{ $currency->sign}]/[{$_product->oxarticles__oxunitname->value}]
                   </span>
                   [{/if}]
-                    [{ if !( $_product->hasMdVariants() || ($oViewConf->showSelectListsInList() && $_product->getSelections(1)) || $_product->getVariantList() ) }]
-                        <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=start" params="fnc=tobasket&amp;aid=`$_product->oxarticles__oxid->value`&amp;am=1" }]" class="toCart button" title="[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]">[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]</a>
+                    [{ if !( $_product->hasMdVariants() || ($oViewConf->showSelectListsInList() && $_product->getSelections(1)) || $_product->getVariantList() )}]
+                        <a href="[{oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=start" params="fnc=tobasket&amp;aid=`$_product->oxarticles__oxid->value`&amp;am=1"}]" class="toCart button" title="[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]">[{oxmultilang ident="WIDGET_BARGAIN_ITEMS_PRODUCT_ADDTOCART" }]</a>
                     [{else}]
-                        <a href="[{ $_product->getLink() }]" class="toCart button">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>
+                        <a href="[{$_product->getMainLink()}]" class="toCart button">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>
                     [{/if}]
                 [{/oxhasrights}]
                 </div>

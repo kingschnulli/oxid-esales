@@ -23,7 +23,7 @@
   [{/if}]
   [{if $oView->getArticleList() }]
     [{foreach from=$oView->getArticleList() name=search item=product}]
-      [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() listId="searchList" products=$oView->getArticleList() }]
+      [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() listId="searchList" products=$oView->getArticleList() showMainLink=true }]
     [{/foreach}]
   [{/if}]
   [{if $oView->getArticleCount() }]
