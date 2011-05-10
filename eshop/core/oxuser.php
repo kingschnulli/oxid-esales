@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 34972 2011-04-27 13:34:00Z sarunas $
+ * @version   SVN: $Id: oxuser.php 35163 2011-05-06 11:35:03Z linas.kukulskis $
  */
 
 /**
@@ -422,15 +422,6 @@ class oxUser extends oxBase
                         $oAddress->selected = 1;
                         $oSelectedAddress = $oAddress;
                         break;
-                    }
-                }
-            } elseif ( $sWishId = $this->_getWishListId() ) {
-                foreach ( $oAddresses as $oAddress ) {
-                    $oAddress->selected = 0;
-                    if ( $oAddress->oxaddress__oxaddressuserid->value == $sWishId ) {
-                        $oAddress->selected = 1;
-                        $sAddressId = $oAddress->getId();
-                        $oSelectedAddress = $oAddress;
                     }
                 }
             }
@@ -1172,6 +1163,8 @@ class oxUser extends oxBase
      * address ID
      *
      * @param object $oUser user object to copy address info
+     *
+     * @deprecated in 4.5.1 since 2011-05-06 related with bug #0002072
      *
      * @return mixed
      */
@@ -1923,6 +1916,7 @@ class oxUser extends oxBase
      *
      * @param object $sUserId user to check Id
      *
+     * @deprecated in 4.5.1 since 2011-05-06 related with bug #0002072
      * @return bool
      */
     protected function _hasUserAddress( $sUserId )

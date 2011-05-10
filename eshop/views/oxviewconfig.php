@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 34356 2011-04-07 10:22:52Z arvydas.vapsva $
+ * @version   SVN: $Id: oxviewconfig.php 35215 2011-05-09 13:17:24Z linas.kukulskis $
  */
 
 /**

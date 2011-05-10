@@ -32,7 +32,7 @@
 </a>
 <div class="priceBlock">
     [{oxhasrights ident="TOBASKET"}]
-    [{ if !$product->isNotBuyable()}]
+    [{ if !$product->isNotBuyable() && !$blDisableToCart}]
         [{$smarty.capture.product_price}]
         [{if $product->hasMdVariants() || ($oViewConf->showSelectListsInList() && $product->getSelections(1)) || $product->getVariantList()}]
             <a href="[{ $_productLink }]" class="toCart button">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>

@@ -2512,7 +2512,7 @@ a.fb_button_simple {
 .detailsInfo .information {
     float: right;
     width: 358px;
-    height:340px;
+    min-height:340px;
     position: relative;
     padding: 0 0 0 10px;
 }
@@ -3911,6 +3911,10 @@ li.articleImage{
     font-size: 11px;
 }
 
+div.information .selectorsBox {
+    margin-bottom: 85px;
+}
+
 .selectorsBox .dropDown {
     margin-bottom: 10px;
     min-width: 200px;
@@ -4058,4 +4062,9 @@ button[disabled].submitButton, button[disabled].submitButton:hover  {
 
 .categoryTags {
     padding: 5px 5px 5px 5px;
+}
+
+.agb p.errorMsg  {
+    color: #ff0000;
+    display: none;
 }

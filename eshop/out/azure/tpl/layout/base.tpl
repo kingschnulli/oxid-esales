@@ -49,7 +49,7 @@
     <base href="[{ $oViewConf->getBaseDir() }]">
 [{/capture}]
 <!DOCTYPE HTML>
-<html lang="[{ $oView->getActiveLangAbbr() }]" [{if $oViewConf->getFbAppId()}]xmlns:fb="http://www.facebook.com/2008/fbml"[{/if}]>
+<html lang="[{ $oView->getActiveLangAbbr() }]" [{if $oViewConf->getShowFbConnect() }]xmlns:fb="http://www.facebook.com/2008/fbml"[{/if}]>
 <head>
     [{foreach from=$oxidBlock_pageHead item="_block"}]
         [{$_block}]

@@ -172,7 +172,8 @@
         [{else}]
           [{assign var="order_remark" value=$oView->getOrderRemark()}]
         [{/if}]
-        <textarea cols="60" rows="7" name="order_remark" class="areabox">[{$order_remark}]</textarea>
+        <input type="hidden" id="orderRemarkDefaultValue" name="orderRemarkDefaultValue" value="[{ oxmultilang ident="FORM_FIELDSET_USER_MESSAGEHERE" }]" >
+        <textarea cols="60" rows="7" name="order_remark" class="areabox innerLabel" >[{$order_remark}]</textarea>
     </li>
     [{/if}]
     <li class="formNote">[{ oxmultilang ident="FORM_USER_COMPLETEMARKEDFIELDS" }]</li>

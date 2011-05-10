@@ -19,15 +19,15 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerptype_order.php 35102 2011-05-04 08:20:01Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxshop.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 require_once 'oxerptype.php';
 
 /**
- * order erp type subclass
+ * content erp type subclass
  */
-class oxERPType_Order extends oxERPType
+class oxERPType_Content extends oxERPType
 {
     /**
      * class constructor
@@ -38,8 +38,7 @@ class oxERPType_Order extends oxERPType
     {
         parent::__construct();
 
-        $this->_sTableName = 'oxorder';
-        $this->_sShopObjectName = 'oxorder';
-        $this->_blRestrictedByShopId = true;
+        $this->_sTableName = 'oxcontents';
+        $this->_sShopObjectName = 'oxcontent';
     }
 }

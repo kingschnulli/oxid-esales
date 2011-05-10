@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 33756 2011-03-14 16:03:49Z linas.kukulskis $
+ * @version   SVN: $Id: alistTest.php 35208 2011-05-09 08:23:41Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -99,7 +99,7 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testGetMetaDescription()
     {
         $sCatId  = '8a142c3e60a535f16.78077188';
-        $sPrefix = "Sie sind hier  Wohnen - Uhren. Originelle, witzige Geschenkideen - Lifestyle, Trends, Accessoires";
+        $sPrefix = "Sie sind hier  Wohnen - Uhren. Der Onlineshop für Wassersport und Sommerspass";
 
         $oCategory = new oxCategory();
         $oCategory->load( $sCatId );
@@ -692,7 +692,7 @@ class Unit_Views_alistTest extends OxidTestCase
         $oListView->expects( $this->any() )->method( 'getActCategory')->will($this->returnValue( $oCategory ) );
 
         $this->assertEquals(
-            'Sie sind hier  parent category - category. Originelle, witzige Geschenkideen - Lifestyle, Trends, Accessoires',
+            'Sie sind hier  parent category - category. Der Onlineshop für Wassersport und Sommerspass',
             $oListView->UNITprepareMetaDescription( $aCatPath, 1024, false )
         );
     }

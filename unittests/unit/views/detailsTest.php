@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 34381 2011-04-07 13:26:27Z sarunas $
+ * @version   SVN: $Id: detailsTest.php 35108 2011-05-04 12:55:17Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1437,6 +1437,14 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( 'prod' ) );
         $oView->expects( $this->once() )->method( 'getVariantSelections')->will( $this->returnValue( $aInfo ) );
         $this->assertEquals('prod', $oView->getPicturesProduct());
+    }
+
+    public function testGetSearchParamForHtml()
+    {
+        $oDetails = $this->getProxyClass( 'details' );
+        modConfig::setParameter( 'searchparam', 'aaa' );
+
+        $this->assertEquals( 'aaa', $oDetails->getSearchParamForHtml() );
     }
 
 }

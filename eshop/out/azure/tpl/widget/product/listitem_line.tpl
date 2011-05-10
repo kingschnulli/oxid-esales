@@ -6,7 +6,7 @@
 [{/if}]
 [{assign var="aVariantSelections" value=$product->getVariantSelections(null,null,1)}]
 [{assign var="blShowToBasket" value=true}] [{* tobasket or more info ? *}]
-[{if $product->isNotBuyable()||($aVariantSelections&&$aVariantSelections.selections)||$product->getVariants()||($oViewConf->showSelectListsInList()&&$product->getSelections(1))}]
+[{if $blDisableToCart || $product->isNotBuyable()||($aVariantSelections&&$aVariantSelections.selections)||$product->getVariants()||($oViewConf->showSelectListsInList()&&$product->getSelections(1))}]
     [{assign var="blShowToBasket" value=false}]
 [{/if}]
 

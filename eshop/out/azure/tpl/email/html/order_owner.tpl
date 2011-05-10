@@ -354,7 +354,7 @@
     [{ oxmultilang ident="EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF" }]<br>
     [{*
     [{foreach from=$payment->aDynValues item=value }]
-    [{assign var="ident" value='EMAIL_ORDER_OWNER_HTML_'|cat:$value->name*}]
+    [{assign var="ident" value='EMAIL_ORDER_OWNER_HTML_'|cat:$value->name}]
     [{assign var="ident" value=$ident|oxupper }]
       [{oxmultilang ident=$ident }]: [{ $value->value }]  <br>
     [{/foreach }]

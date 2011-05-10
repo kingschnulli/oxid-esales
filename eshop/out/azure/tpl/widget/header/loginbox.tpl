@@ -1,7 +1,7 @@
 [{assign var="bIsError" value=0 }]
 [{capture name=loginErrors}]
     [{foreach from=$Errors.loginBoxErrors item=oEr key=key }]
-        <p id="errorBadLogin" class="errorMsg">[{ $oEr->getOxMessage()}]</>
+        <p id="errorBadLogin" class="errorMsg">[{ $oEr->getOxMessage()}]</p>
         [{assign var="bIsError" value=1 }]
     [{/foreach}]
 [{/capture}]
@@ -52,7 +52,7 @@
 [{else}]
     [{ oxmultilang ident="WIDGET_LOGINBOX_GREETING" }]
     [{assign var="fullname" value=$oxcmp_user->oxuser__oxfname->value|cat:" "|cat:$oxcmp_user->oxuser__oxlname->value }]
-    <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_password" params=$oViewConf->getNavUrlParams() }]">
+    <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params=$oViewConf->getNavUrlParams() }]">
     [{if $fullname}]
         [{ $fullname }]
     [{else}]
