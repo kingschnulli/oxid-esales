@@ -3936,6 +3936,7 @@ div.information .selectorsBox {
 .variantReset {
     padding-bottom: 10px;
     font-size: 11px;
+    margin-top: -82px;
 }
 
 .variantReset label {

@@ -951,7 +951,7 @@ $(function(){
                             verticalArrowPositions: 'split'
                         });
                     }
-                }, 300);
+                }, 2000);
             }, function(){
                 clearTimeout(timeout);
             });
