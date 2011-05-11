@@ -31,7 +31,7 @@
     [{include file="widget/manufacturersslider.tpl" }]
     [{if $oView->getNewestArticles() }]
         [{assign var='rsslinks' value=$oView->getRssLinks() }]
-        [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() head="PAGE_SHOP_START_JUSTARRIVED"|oxmultilangassign listId="newItems" products=$oView->getNewestArticles() rsslink=$rsslinks.newestArticles rssId="rssNewestProducts"}]
+        [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() head="PAGE_SHOP_START_JUSTARRIVED"|oxmultilangassign listId="newItems" products=$oView->getNewestArticles() rsslink=$rsslinks.newestArticles rssId="rssNewestProducts" showMainLink=true}]
     [{/if}]
 [{/capture}]
 [{include file="layout/page.tpl" sidebar="Right"}]

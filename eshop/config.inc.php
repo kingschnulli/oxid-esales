@@ -159,3 +159,9 @@
      * this is mainly intended for module writers in non productive environment
      */
     $this->blDebugTemplateBlocks = false;
+
+    /**
+     * should requests, coming via stdurl and not redirected to seo url be logged to seologs db table?
+     * note: only active if in productive mode, as the eShop in non productive more will always log such urls
+     */
+    $this->blSeoLogging = false;

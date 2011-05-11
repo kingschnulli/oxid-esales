@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 34994 2011-04-27 13:56:19Z sarunas $
+ * @version   SVN: $Id: userTest.php 35269 2011-05-10 06:48:11Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -112,13 +112,6 @@ class Unit_Views_userTest extends OxidTestCase
     public function testGetOrderRemark()
     {
          modSession::getInstance()->setVar( 'ordrem', "test" );
-         $oUserView = new user();
-         $this->assertEquals( "test", $oUserView->getOrderRemark() );
-    }
-
-    public function testGetOrderRemarkIfNewUser()
-    {
-         modConfig::setParameter( 'order_remark', "test" );
          $oUserView = new user();
          $this->assertEquals( "test", $oUserView->getOrderRemark() );
     }

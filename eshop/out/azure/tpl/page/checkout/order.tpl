@@ -1,10 +1,16 @@
 [{oxstyle include="css/checkout.css"}]
 [{capture append="oxidBlock_content"}]
 [{* ordering steps *}]
+
+[{ if $oView->isConfirmAGBActive() && $oView->isConfirmAGBError() == 1 }]
+    [{include file="message/error.tpl" statusMessage="PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS"|oxmultilangassign }]
+[{/if}]
 [{include file="page/checkout/inc/steps.tpl" active=4 }]
-<div class="lineBox clear">
-    <span class="title">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_TITLE2" }]<span>
-</div>
+[{if !$oView->showOrderButtonOnTop()}]
+    <div class="lineBox clear">
+        <span class="title">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_TITLE2" }]<span>
+    </div>
+[{/if}]
 <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
 <h3 class="section">
    <strong>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_BASKET" }]</strong>
@@ -14,9 +20,6 @@
     <button type="submit" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_MODIFY4" }]</button>
 </h3>
 </form>
-[{ if $oView->isConfirmAGBActive() && $oView->isConfirmAGBError() == 1 }]
-    <div>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS" }]</div>
-[{/if}]
 [{ if !$oxcmp_basket->getProductsCount()  }]
     <div>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_BASKETEMPTY" }]</div>
 [{else}]
@@ -39,6 +42,7 @@
                     [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
                         [{ $oContent->oxcontents__oxcontent->value }]
                     [{/oxifcontent}]
+                     <p class="errorMsg" name="agbError">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS" }]</p>
                 [{else}]
                     <input type="hidden" name="ord_agb" value="1">
                     [{oxifcontent ident="oxrighttocancellegend2" object="oContent"}]
@@ -82,40 +86,41 @@
             <button type="submit" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_MODIFYADDRESS" }]</button>
             </h3>
         </form>
-
-    <dl>
-        <dt>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_BILLINGADDRESS" }]</dt>
-        <dd>
-            [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_EMAIL" }]&nbsp;[{ $oxcmp_user->oxuser__oxusername->value }]<br>
-            [{if $oxcmp_user->oxuser__oxcompany->value }] [{ $oxcmp_user->oxuser__oxcompany->value }]&nbsp;<br> [{/if}]
-            [{ $oxcmp_user->oxuser__oxsal->value|oxmultilangsal}]&nbsp;[{ $oxcmp_user->oxuser__oxfname->value }]&nbsp;[{ $oxcmp_user->oxuser__oxlname->value }]<br>
-            [{if $oxcmp_user->oxuser__oxaddinfo->value }] [{ $oxcmp_user->oxuser__oxaddinfo->value }]<br> [{/if}]
-            [{ $oxcmp_user->oxuser__oxstreet->value }]&nbsp;[{ $oxcmp_user->oxuser__oxstreetnr->value }]<br>
-            [{ $oxcmp_user->getState() }]
-            [{ $oxcmp_user->oxuser__oxzip->value }]&nbsp;[{ $oxcmp_user->oxuser__oxcity->value }]<br>
-            [{ $oxcmp_user->oxuser__oxcountry->value }]<br><br>
-            [{if $oxcmp_user->oxuser__oxfon->value }] [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_PHONE" }] [{ $oxcmp_user->oxuser__oxfon->value }]&nbsp;<br> [{/if}]
-        </dd>
-
-        <dt>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_SHIPPINGADDRESS" }]</dt>
-        <dd>
+        <dl>
+            <dt>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_BILLINGADDRESS" }]</dt>
+            <dd>
+                [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_EMAIL" }]&nbsp;[{ $oxcmp_user->oxuser__oxusername->value }]<br>
+                [{if $oxcmp_user->oxuser__oxcompany->value }] [{ $oxcmp_user->oxuser__oxcompany->value }]&nbsp;<br> [{/if}]
+                [{ $oxcmp_user->oxuser__oxsal->value|oxmultilangsal}]&nbsp;[{ $oxcmp_user->oxuser__oxfname->value }]&nbsp;[{ $oxcmp_user->oxuser__oxlname->value }]<br>
+                [{if $oxcmp_user->oxuser__oxaddinfo->value }] [{ $oxcmp_user->oxuser__oxaddinfo->value }]<br> [{/if}]
+                [{ $oxcmp_user->oxuser__oxstreet->value }]&nbsp;[{ $oxcmp_user->oxuser__oxstreetnr->value }]<br>
+                [{ $oxcmp_user->getState() }]
+                [{ $oxcmp_user->oxuser__oxzip->value }]&nbsp;[{ $oxcmp_user->oxuser__oxcity->value }]<br>
+                [{ $oxcmp_user->oxuser__oxcountry->value }]<br><br>
+                [{if $oxcmp_user->oxuser__oxfon->value }] [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_PHONE" }] [{ $oxcmp_user->oxuser__oxfon->value }]&nbsp;<br><br> [{/if}]
+            </dd>
             [{assign var="oDelAdress" value=$oView->getDelAddress() }]
             [{if $oDelAdress }]
-                [{if $oDelAdress->oxaddress__oxcompany->value }] [{ $oDelAdress->oxaddress__oxcompany->value }]&nbsp;<br> [{/if}]
-                [{ $oDelAdress->oxaddress__oxsal->value|oxmultilangsal}]&nbsp;[{ $oDelAdress->oxaddress__oxfname->value }]&nbsp;[{ $oDelAdress->oxaddress__oxlname->value }]<br>
-                [{if $oDelAdress->oxaddress__oxaddinfo->value }] [{ $oDelAdress->oxaddress__oxaddinfo->value }]<br> [{/if}]
-                [{ $oDelAdress->oxaddress__oxstreet->value }]&nbsp;[{ $oDelAdress->oxaddress__oxstreetnr->value }]<br>
-                [{ $oDelAdress->getState() }]
-                [{ $oDelAdress->oxaddress__oxzip->value }]&nbsp;[{ $oDelAdress->oxaddress__oxcity->value }]<br>
-                [{ $oDelAdress->oxaddress__oxcountry->value }]<br><br>
-                [{if $oDelAdress->oxaddress__oxfon->value }] [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_PHONE2" }] [{ $oDelAdress->oxaddress__oxfon->value }]&nbsp;<br>[{/if}]
+                <dt>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_SHIPPINGADDRESS" }]</dt>
+                <dd>
+                    [{if $oDelAdress->oxaddress__oxcompany->value }] [{ $oDelAdress->oxaddress__oxcompany->value }]&nbsp;<br> [{/if}]
+                    [{ $oDelAdress->oxaddress__oxsal->value|oxmultilangsal}]&nbsp;[{ $oDelAdress->oxaddress__oxfname->value }]&nbsp;[{ $oDelAdress->oxaddress__oxlname->value }]<br>
+                    [{if $oDelAdress->oxaddress__oxaddinfo->value }] [{ $oDelAdress->oxaddress__oxaddinfo->value }]<br> [{/if}]
+                    [{ $oDelAdress->oxaddress__oxstreet->value }]&nbsp;[{ $oDelAdress->oxaddress__oxstreetnr->value }]<br>
+                    [{ $oDelAdress->getState() }]
+                    [{ $oDelAdress->oxaddress__oxzip->value }]&nbsp;[{ $oDelAdress->oxaddress__oxcity->value }]<br>
+                    [{ $oDelAdress->oxaddress__oxcountry->value }]<br><br>
+                    [{if $oDelAdress->oxaddress__oxfon->value }] [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_PHONE2" }] [{ $oDelAdress->oxaddress__oxfon->value }]&nbsp;<br>[{/if}]
+                </dd>
             [{/if}]
-        </dd>
-    </dl>
+        </dl>
 
-    <div>
-        [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_WHATIWANTEDTOSAY" }] [{ $oView->getOrderRemark() }]
-    </div>
+        [{if $oView->getOrderRemark() }]
+            <div>
+                [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_WHATIWANTEDTOSAY" }] [{ $oView->getOrderRemark() }]
+            </div>
+        [{/if}]
+
     </div>
 
 
@@ -172,6 +177,7 @@
                             [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
                                 [{ $oContent->oxcontents__oxcontent->value }]
                             [{/oxifcontent}]
+                            <p class="errorMsg" name="agbError">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS" }]</p>
                         [{else}]
                             <input type="hidden" name="ord_agb" value="1">
                             [{oxifcontent ident="oxrighttocancellegend2" object="oContent"}]

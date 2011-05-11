@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: thankyou.php 33009 2011-02-07 16:18:12Z vilma $
+ * @version   SVN: $Id: thankyou.php 35241 2011-05-10 06:47:09Z sarunas $
  */
 
 /**
@@ -140,7 +140,9 @@ class Thankyou extends oxUBase
         parent::render();
 
         $oUser = $this->getUser();
-        if ( !$oUser ) {
+        
+        // removing also unregistered user info (#2580)
+        if ( !$oUser || !$oUser->oxuser__oxpassword->value) {
             oxSession::deleteVar( 'usr' );
             oxSession::deleteVar( 'dynvalue' );
         }

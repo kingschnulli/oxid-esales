@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 35062 2011-05-03 07:54:13Z sarunas $
+ * @version   SVN: $Id: details.php 35236 2011-05-10 06:46:56Z sarunas $
  */
 
 /**
@@ -247,6 +247,12 @@ class Details extends oxUBase
      * @var integer
      */
     protected $_iPriceAlarmStatus = null;
+
+    /**
+     * Search parameter for Html
+     * @var string
+     */
+    protected $_sSearchParamForHtml = null;
 
     /**
      * Returns current product parent article object if it is available
@@ -1573,6 +1579,7 @@ class Details extends oxUBase
         return $this->getProduct();
     }
 
+
      /**
      * Should "More tags" link be visible.
      *
@@ -1582,4 +1589,18 @@ class Details extends oxUBase
     {
         return true;
     }
+
+     /**
+     * Template variable getter. Returns search parameter for Html
+     *
+     * @return string
+     */
+    public function getSearchParamForHtml()
+    {
+        if ( $this->_sSearchParamForHtml === null ) {
+            $this->_sSearchParamForHtml = oxConfig::getParameter( 'searchparam' );
+        }
+        return $this->_sSearchParamForHtml;
+    }
+
 }

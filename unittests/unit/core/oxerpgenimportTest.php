@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpgenimportTest.php 28184 2010-06-07 12:40:28Z vilma $
+ * @version   SVN: $Id: oxerpgenimportTest.php 35248 2011-05-10 06:47:23Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -81,7 +81,7 @@ class Unit_Core_oxErpGenImportTest extends OxidTestCase
     {
         $oImport = $this->getProxyClass( "oxErpGenImport" );
         $oImport->UNITsetDbLayerVersion();
-        $this->assertEquals( 2, oxErpBase::getRequestedVersion() );
+        $this->assertEquals( "2.9.0", oxErpBase::getRequestedVersion() );
     }
 
     /*
@@ -374,10 +374,18 @@ class Unit_Core_oxErpGenImportTest extends OxidTestCase
      */
     public function testGetCsvFieldsTerminator()
     {
+        modConfig::getInstance()->setConfigParam( 'sGiCsvFieldTerminator', "");
         modConfig::getInstance()->setConfigParam( 'sCSVSign', ",");
         $oImport = $this->getProxyClass( "oxErpGenImport" );
 
         $this->assertEquals( ",", $oImport->UNITgetCsvFieldsTerminator() );
+        
+        modConfig::getInstance()->setConfigParam( 'sGiCsvFieldTerminator', ";");
+        modConfig::getInstance()->setConfigParam( 'sCSVSign', ",");
+        $oImport = $this->getProxyClass( "oxErpGenImport" );
+
+        $this->assertEquals( ";", $oImport->UNITgetCsvFieldsTerminator() );
+        
     }
 
     /*

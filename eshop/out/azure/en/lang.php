@@ -183,8 +183,13 @@ $aLang = array(
 'FACEBOOK_COMMENTS'                                               => 'Facebook Comments',
 'FACEBOOK_CHAT'                                                   => 'Facebook Live Stream',
 'FACEBOOK_INVITE'                                                 => 'Facebook Invite',
+'FACEBOOK_INVITEHEADER'                                           => 'Invite your Friends',
+'FACEBOOK_INVITETEXT'                                             => 'Check this out. Simply click on the button below to check recommended product.',
+'FACEBOOK_INVITEBUTTONTEXT'                                       => 'Open website',
 
-'FORM_NEWSLETTER_TITLE'                                           => "Newsletter",
+
+'WIDGET_FOOTER_NEWSLETTER_TITLE'                                  => "Newsletter",
+'FORM_NEWSLETTER_TITLE'                                           => "Title",
 'FORM_NEWSLETTER_FIRSTNAME'                                       => "First Name:",
 'FORM_NEWSLETTER_LASTNAME'                                        => "Last Name",
 'FORM_NEWSLETTER_EMAIL'                                           => "eMail",

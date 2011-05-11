@@ -302,6 +302,7 @@ var oxid = {
     },
 
     initDetailsMain : function () {
+
         if ($("#productTitle").length > 0) {
             var targetWidth = $("#productTitle span").width();
             if (targetWidth > 220) {
@@ -360,7 +361,7 @@ var oxid = {
                 return false;
              });
 
-
+            /* articles details action selector */
 
             $(".actionLinks").css({
                 "top": $("#productTitle").position().top - 7,
@@ -371,12 +372,15 @@ var oxid = {
 
             var arrowSrc = $(".selector img").attr("src");
             var arrow = $("#productLinks").children("img");
+
             function showLinks() {
                 var arrowOnSrc = arrow.attr("longdesc");
                 $(".actionLinks").slideDown("normal", function(){
                     arrow.attr("src", arrowOnSrc);
+                    $('#productLinks').toggleClass("selected");
                 });
             }
+
             function hideLinks() {
                 $(".actionLinks").animate({
                     height: 0,
@@ -387,6 +391,7 @@ var oxid = {
                         opacity: '1'
                     });
                     arrow.attr("src", arrowSrc);
+                    $('#productLinks').toggleClass("selected");
                 });
             }
 
@@ -394,21 +399,27 @@ var oxid = {
                 "top": $("#productTitle").position().top - 3,
                 "left": targetWidth + $("#productTitle").position().left + 10
             }).click(function(){
-                $(this).toggleClass("selected");
-                if ($(this).hasClass("selected")) {
-                    showLinks();
-                }
-                else {
-                    hideLinks();
+                if ( $(this).hasClass("selected") ) {
+                   hideLinks();
+                } else {
+                     showLinks();
                 }
                 return false;
             });
-            $("#productLinks").hover(function() {
-                showLinks();
+
+
+            $("#productLinks").mouseenter(function() {
+                if (! $(this).hasClass("selected") ) {
+                     showLinks();
+                }
+                return false;
             });
+
             $(".actionLinks").mouseleave( function() {
                 hideLinks();
+                return false;
             });
+
             if ($("#showLinksOnce").length > 0) {
                 $(".actionLinks").slideDown('normal').delay(1000).slideUp('normal', function(){
                      setCookie('showlinksonce', 1);
@@ -808,7 +819,9 @@ $(function(){
                 return null;
             }
         );
+
         $(".external").attr("target", "_blank");
+
         $('input.innerLabel').focus(function() {
             if (this.value == this.defaultValue){
                 this.value = '';
@@ -823,6 +836,43 @@ $(function(){
                 this.value = (this.defaultValue);
             }
         });
+
+        $('textarea.innerLabel').focus(function() {
+            if (this.value == this.defaultValue){
+                this.value = '';
+            }
+            if(this.value != this.defaultValue){
+                this.select();
+            }
+        });
+
+        $('textarea.innerLabel').closest('form').submit(function() {
+            var sDefaultValue = $('#orderRemarkDefaultValue').val();
+            if ($.trim($('textarea.innerLabel').val()) == sDefaultValue) {
+                $('textarea.innerLabel').val('');
+            }
+        });
+
+        $("input.checkbox[name='ord_agb']").closest('form').submit(function() {
+            var oAGBCheck = $("input.checkbox[name='ord_agb']");
+            if( oAGBCheck.attr('checked') ){
+                return true;
+            } else {
+                $("p[name='agbError']").show();
+                return false;
+            }
+
+        });
+
+        $("input.checkbox[name='ord_agb']").click(function() {
+            if( $( this ).attr('checked') ){
+                $("input.checkbox[name='ord_agb']").attr('checked', true);
+                $("p[name='agbError']").hide();
+            } else {
+                $("input.checkbox[name='ord_agb']").attr('checked', false);
+            }
+        });
+
 
 
         $(".flyout a.trigger").click(function(){
@@ -894,18 +944,25 @@ $(function(){
         if ($("#miniBasket ul").length > 0) {
             $("#miniBasket img.minibasketIcon").hover(function(){
                 timeout = setTimeout(function(){
-                    $(".basketFlyout").show();
-                    if ($(".scrollable ul").length > 0) {
-                        $('.scrollable ul').jScrollPane({
-                            showArrows: true,
-                            verticalArrowPositions: 'split'
-                        });
-                    }
-                }, 300);
+                    showMiniBasket();
+                }, 2000);
             }, function(){
                 clearTimeout(timeout);
             });
+            $("#miniBasket img.minibasketIcon").click(function(){
+                showMiniBasket();
+            });
         }
+
+        function showMiniBasket(){
+            $(".basketFlyout").show();
+            if ($(".scrollable ul").length > 0) {
+                $('.scrollable ul').jScrollPane({
+                    showArrows: true,
+                    verticalArrowPositions: 'split'
+                });
+            }
+        };
 
         if ($("#compareDataDiv").length) {
             $("#compareDataDiv").jScrollPane({

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.php 34880 2011-04-20 11:05:12Z linas.kukulskis $
+ * @version   SVN: $Id: category_main.php 35238 2011-05-10 06:47:01Z sarunas $
  */
 
 /**
@@ -102,7 +102,8 @@ class Category_Main extends oxAdminDetails
      */
     public function getSortableFields()
     {
-        $aSkipFields = array( "OXID", "OXSHOPID", "OXPARENTID", "OXACTIVE", "OXSHORTDESC"
+        $aSkipFields = array( "OXID", "OXSHOPID", "OXSHOPINCL", "OXSHOPEXCL", "OXPARENTID", "OXACTIVE", "OXACTIVEFROM"
+            , "OXACTIVETO", "OXSHORTDESC"
             , "OXUNITNAME", "OXUNITQUANTITY", "OXEXTURL", "OXURLDESC", "OXURLIMG", "OXVAT"
             , "OXTHUMB", "OXPICSGENERATED", "OXPIC1", "OXPIC2", "OXPIC3", "OXPIC4", "OXPIC5"
             , "OXPIC6", "OXPIC7", "OXPIC8", "OXPIC9", "OXPIC10", "OXPIC11", "OXPIC12", "OXSTOCKFLAG"

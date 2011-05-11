@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 34983 2011-04-27 13:55:54Z sarunas $
+ * @version   SVN: $Id: oxsysrequirements.php 35229 2011-05-10 06:46:38Z sarunas $
  */
 
 /**
@@ -598,7 +598,7 @@ class oxSysRequirements
         }
 
         $iModStat = 0;
-        if ( version_compare( $sVersion, '5', '>=' ) && version_compare( $sVersion, '5.0.37', '<>' ) ) {
+        if ( version_compare( $sVersion, '5.0.3', '>=' ) && version_compare( $sVersion, '5.0.37', '<>' ) ) {
             $iModStat = 2;
         }
 

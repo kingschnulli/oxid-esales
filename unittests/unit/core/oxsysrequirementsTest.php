@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 35066 2011-05-03 07:54:21Z sarunas $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 35229 2011-05-10 06:46:38Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -97,13 +97,17 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         }
 
         $iModStat = 0;
-        if ( version_compare( $sVersion, '5', '>=' ) && version_compare( $sVersion, '5.0.37', '<>' ) ) {
+        if ( version_compare( $sVersion, '5.0.3', '>=' ) && version_compare( $sVersion, '5.0.37', '<>' ) ) {
             $iModStat = 2;
         }
 
         //
         $oSysReq = new oxSysRequirements();
         $this->assertEquals( $iModStat, $oSysReq->checkMysqlVersion() );
+        $this->assertEquals( 0, $oSysReq->checkMysqlVersion('5') );
+        $this->assertEquals( 0, $oSysReq->checkMysqlVersion('5.0.1') );
+        $this->assertEquals( 0, $oSysReq->checkMysqlVersion('5.0.2') );
+        $this->assertEquals( 2, $oSysReq->checkMysqlVersion('5.0.3') );
     }
 
     public function testCheckCollation()

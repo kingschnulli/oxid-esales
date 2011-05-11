@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: thankyouTest.php 33009 2011-02-07 16:18:12Z vilma $
+ * @version   SVN: $Id: thankyouTest.php 35241 2011-05-10 06:47:09Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -179,6 +179,28 @@ class Unit_Views_thankyouTest extends OxidTestCase
         $oThankyou = $this->getProxyClass( 'thankyou' );
         $oThankyou->setNonPublicVar( '_oBasket', $oBasket );
         $oThankyou->render();
+    }
+    
+    // #2580: Checking if after order unregistered user contact data were deleted
+    public function testRender_resetUnregisteredUser()
+    {
+        $oUser = oxNew( "oxuser" );
+        $oUser->oxuser__oxpassword = new oxField( "" );
+        
+        $oBasket = $this->getMock( 'oxBasket', array( 'getProductsCount' ) );
+        $oBasket->expects( $this->once() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
+        
+        $oThankyou = $this->getProxyClass( 'thankyou' );
+        $oThankyou->setNonPublicVar( '_oBasket', $oBasket );
+        $oThankyou->setUser( $oUser );
+        
+        oxSession::setVar( "usr", "testValue1");
+        oxSession::setVar( "dynvalue", "testValue2");
+        
+        $oThankyou->render();
+        
+        $this->assertFalse( oxSession::hasVar( "usr" ) );
+        $this->assertFalse( oxSession::hasVar( "dynvalue" ) );
     }
 
     public function testGetActionClassName()

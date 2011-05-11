@@ -19,15 +19,17 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerptype_order.php 35231 2011-05-10 06:46:43Z sarunas $
+ * @version   SVN: $Id: oxshop.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 require_once 'oxerptype.php';
 
 /**
- * order erp type subclass
+ * Objects of this class represent associations between oxarticle
+ * and oxattribute objects. Each of these associations also has
+ * a value.
  */
-class oxERPType_Order extends oxERPType
+class oxERPType_Article2Attribute extends oxERPType
 {
     /**
      * class constructor
@@ -38,8 +40,6 @@ class oxERPType_Order extends oxERPType
     {
         parent::__construct();
 
-        $this->_sTableName = 'oxorder';
-        $this->_sShopObjectName = 'oxorder';
-        $this->_blRestrictedByShopId = true;
+        $this->_sTableName = 'oxobject2attribute';
     }
 }

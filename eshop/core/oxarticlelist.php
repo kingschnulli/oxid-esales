@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 34884 2011-04-20 13:54:32Z linas.kukulskis $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 35265 2011-05-10 06:48:03Z sarunas $
  */
 
 /**
@@ -682,7 +682,7 @@ class oxArticleList extends oxList
         $sTag = $oTagHandler->prepareTags( $sTag );
 
         $sQ = "select {$sArticleFields} from {$sViewName} inner join {$sArticleTable} on ".
-              "{$sArticleTable}.oxid = {$sViewName}.oxid where match ( {$sViewName}.oxtags ) ".
+              "{$sArticleTable}.oxid = {$sViewName}.oxid where {$sArticleTable}.oxparentid = '' AND match ( {$sViewName}.oxtags ) ".
               "against( ".oxDb::getDb()->quote( "\"".$sTag."\"" )." IN BOOLEAN MODE )";
 
         // checking stock etc

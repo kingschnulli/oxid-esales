@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 33900 2011-03-22 17:06:44Z vilma $
+ * @version   SVN: $Id: user.php 35244 2011-05-10 06:47:15Z sarunas $
  */
 
 /**
@@ -174,8 +174,6 @@ class User extends oxUBase
             $this->_sOrderRemark = false;
             if ( $sOrderRemark = oxSession::getVar( 'ordrem' ) ) {
                 $this->_sOrderRemark = oxConfig::checkSpecialChars( $sOrderRemark );
-            } elseif ( $sOrderRemark = oxConfig::getParameter( 'order_remark' ) ) {
-                $this->_sOrderRemark = $sOrderRemark;
             }
         }
         return $this->_sOrderRemark;
