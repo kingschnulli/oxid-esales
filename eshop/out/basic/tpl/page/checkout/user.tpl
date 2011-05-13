@@ -133,7 +133,6 @@
         <div class="bar prevnext order">
             <div class="right arrowright">
                 <input id="test_UserNextStepTop" name="userform" type="submit" value="[{ oxmultilang ident="USER_NEXTSTEP" }]">
-                <input name="userform" type="hidden" value="1">
             </div>
         </div>
       [{/if}]

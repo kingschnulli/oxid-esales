@@ -1,3 +1,5 @@
+[{oxscript add="$('a.external').attr('target', '_blank');"}]
+[{oxscript add="$('div.tabbedWidgetBox').tabs();"}]
 [{oxhasrights ident="SHOWLONGDESCRIPTION"}]
 [{assign var="oLongdesc" value=$oDetailsProduct->getArticleLongDesc()}]
 [{if $oLongdesc->value}]

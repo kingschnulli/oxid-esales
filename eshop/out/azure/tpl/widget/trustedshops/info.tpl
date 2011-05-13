@@ -1,3 +1,4 @@
+[{oxscript add="$('a.external').attr('target', '_blank');"}]
 <!-- Trusted Shops Siegel -->
 [{if $oView->getTrustedShopId() }]
     [{assign var="tsId" value=$oView->getTrustedShopId() }]

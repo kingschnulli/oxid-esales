@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: test_utils.php 30448 2010-10-21 08:53:39Z sarunas $
+ * @version   SVN: $Id: test_utils.php 35310 2011-05-12 07:45:48Z arvydas.vapsva $
  */
 
 define ('MAX_LOOP_AMOUNT', 4);
@@ -784,7 +784,6 @@ if (!function_exists('getFileArr')) {
             '/_cc.php',
             '/_version_define.php',
             '/core/oxerpbase.php', // TODO: remove after gen import was refactored
-            '/core/oxerpcompatability.php', // TODO: remove after gen import was refactored
             '/core/oxerpcsv.php',// TODO: remove after gen import was refactored
             '/core/oxerpinterface.php', // TODO: remove after gen import was refactored
             '/core/oxopenidhttpfetcher.php', //third party lib

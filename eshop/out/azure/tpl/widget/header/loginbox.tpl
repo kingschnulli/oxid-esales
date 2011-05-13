@@ -52,7 +52,7 @@
 [{else}]
     [{ oxmultilang ident="WIDGET_LOGINBOX_GREETING" }]
     [{assign var="fullname" value=$oxcmp_user->oxuser__oxfname->value|cat:" "|cat:$oxcmp_user->oxuser__oxlname->value }]
-    <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params=$oViewConf->getNavUrlParams() }]">
+    <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account"}]">
     [{if $fullname}]
         [{ $fullname }]
     [{else}]

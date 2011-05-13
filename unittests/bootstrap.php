@@ -73,7 +73,6 @@ if (getenv('CODECOVERAGE')) {
 
     PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/admin/index.php');
     PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxerpbase.php');
-    PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxerpcompatability.php');
     PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxerpcsv.php');
     //PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxopeniddb.php');
     //PHPUnit_Util_Filter::removeFileFromWhitelist(oxPATH.'/core/oxopenidhttpfetcher.php');

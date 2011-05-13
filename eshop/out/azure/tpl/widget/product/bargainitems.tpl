@@ -1,3 +1,4 @@
+[{oxscript add="$('a.external').attr('target', '_blank');"}]
 [{assign var="currency" value=$oView->getActCurrency()}]
 [{foreach from=$oView->getBargainArticleList() item=_product name=bargainList}]
 [{if $smarty.foreach.bargainList.first}]

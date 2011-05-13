@@ -1,4 +1,8 @@
 var oxid = {
+
+//
+// MD variants --------------------------------------------
+//
     mdVariants: {
         // reloading page by selected value in select list
         getMdVariantUrl: function(selId){
@@ -118,6 +122,15 @@ var oxid = {
         }
     },
 
+//
+// MD variants ===============================================
+//
+
+//
+// ajax ---------------------------------------------
+//
+
+
     loadingScreen: {
         start : function (target, iconPositionElement) {
             var loadingScreens = Array();
@@ -175,6 +188,7 @@ var oxid = {
           });
         }
     },
+
 
     updatePageErrors : function(errors) {
         if (errors.length) {
@@ -273,6 +287,13 @@ var oxid = {
         }
     },
 
+//
+// ajax =============================================
+//
+
+//
+// selections --------------------------------------------------
+//
     selectionDrop : {
         onClick : function ( obj ) {
             // setting new selection
@@ -290,29 +311,43 @@ var oxid = {
             return false;
         }
     },
+//
+// selections =====================================================
+//
 
-    initBasket : function () {
+//
+// variant selection ------------------------------------------
+//
+    /**
+     * Variant selection handler
+     */
+    variantSelection : {
+
         /**
-         * Selection dropdown
+         * Resets variant selections
          */
-        $('ul.seldrop a').unbind( "click" );
-        $("ul.seldrop a").bind( "click", function() {
-            return oxid.selectionDrop.onClick( $( this ) );
-        });
+        resetVariantSelections : function()
+        {
+            var aVarSelections = $( ".oxProductForm input[name^=varselid]" );
+            for (var i = 0; i < aVarSelections.length; i++) {
+                $( aVarSelections[i] ).attr( "value", "" );
+            }
+            $( ".oxProductForm input[name=anid]" ).attr( "value", $( ".oxProductForm input[name=parentid]" ).attr( "value" ) );
+        }
     },
+
+//
+// variant selection ------------------------------------------
+//
 
     initDetailsMain : function () {
 
-        if ($("#productTitle").length > 0) {
-            var targetWidth = $("#productTitle span").width();
-            if (targetWidth > 220) {
-                var linkboxWidth = $("#productTitle span").width();
-            }
-            else {
-                var linkboxWidth = 220;
-            }
-            var targetHeight = $("#productTitle span").height();
+        oxid.initDropDowns();
 
+        //
+        // details page article more pictures ---------------------------------------
+        //
+            $(".cloud-zoom, .cloud-zoom-gallery").CloudZoom();
              /* More pictures marker*/
 
              $(".otherPictures li a").click(function(){
@@ -361,6 +396,25 @@ var oxid = {
                 return false;
              });
 
+        //
+        // details page article more pictures =========================================
+        //
+
+
+        //
+        // details page article action links ---------------------------------------
+        //
+
+        if ($("#productTitle").length > 0) {
+            var targetWidth = $("#productTitle span").width();
+            if (targetWidth > 220) {
+                var linkboxWidth = $("#productTitle span").width();
+            }
+            else {
+                var linkboxWidth = 220;
+            }
+            var targetHeight = $("#productTitle span").height();
+
             /* articles details action selector */
 
             $(".actionLinks").css({
@@ -369,6 +423,8 @@ var oxid = {
                 "padding-top": targetHeight + 10,
                 "width": linkboxWidth + 50
             });
+
+
 
             var arrowSrc = $(".selector img").attr("src");
             var arrow = $("#productLinks").children("img");
@@ -425,7 +481,29 @@ var oxid = {
                      setCookie('showlinksonce', 1);
                 });
             }
+
+
+            $('select[id^=sellist]').change (function() {
+                var oSelf = $(this);
+                var oNoticeList = $('#linkToNoticeList');
+                if ( oNoticeList ) {
+                    oNoticeList.attr('href', oNoticeList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
+                }
+                var oWishList = $('#linkToWishList');
+                if ( oWishList ) {
+                    oWishList.attr('href', oWishList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
+                }
+            });
+
+            //
+            // details page article action links =========================================
+            //
+
         }
+
+//
+// Ammount price -----------------------------------------------------------------
+//
 
         if ($("#amountPrice").length > 0) {
             $(".pricePopup").css({
@@ -469,25 +547,27 @@ var oxid = {
             });
         }
 
+//
+// Ammount price ==========================================================
+//
+
+//
+// Price alarm --------------------------------------------------------
+//
+
         $(".priceAlarmLink").click(function() {
             var $tabs = $('.tabbedWidgetBox').tabs();
             $tabs.tabs('select', '#pricealarm');
             return false;
         });
 
-        $('select[id^=sellist]').change (function() {
-            var oSelf = $(this);
-            var oNoticeList = $('#linkToNoticeList');
-            if ( oNoticeList ) {
-                oNoticeList.attr('href', oNoticeList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
-            }
-            var oWishList = $('#linkToWishList');
-            if ( oWishList ) {
-                oWishList.attr('href', oWishList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
-            }
-        });
+//
+// Price alarm ==============================================
+//
 
-
+//
+// variants select  call ----------------------------------------------
+//
         /**
          * Variant selection dropdown
          */
@@ -512,14 +592,6 @@ var oxid = {
                 form.submit();
             }
             return false;
-        });
-
-        /**
-         * selection dropdown
-         */
-        $('ul.seldrop a').unbind( "click" );
-        $("ul.seldrop a").bind( "click", function() {
-            return oxid.selectionDrop.onClick( $( this ) );
         });
 
         /**
@@ -567,18 +639,30 @@ var oxid = {
                 return reloadProductPartially($(".oxProductForm"),'productInfo',$("#productinfo"),$("#productinfo")[0]);
             }
         });
+//
+// variants  select call =====================================================
+//
+
+        //
+        // selections call ----------------------------------------------
+        //
+
+        /**
+         * selection dropdown
+         */
+        $('ul.seldrop a').unbind( "click" );
+        $("ul.seldrop a").bind( "click", function() {
+            return oxid.selectionDrop.onClick( $( this ) );
+        });
+
+        //
+        // selections call ==========================================
+        //
     },
 
-    initDetailsRelated : function () {
-
-        $(".tabbedWidgetBox").tabs();
-
-        $(".tagCloud .tagText").click(oxid.highTag);
-        $("#saveTag").click(oxid.saveTag);
-        $("#cancelTag").click(oxid.cancelTag);
-        $("#editTag").click(oxid.editTag);
-
-    },
+//
+// Reviews --------------------------------------------
+//
 
     initNewReview : function () {
 
@@ -589,6 +673,39 @@ var oxid = {
         });
 
     },
+
+//
+// Reviews ===========================================
+//
+
+
+    initDetailsRelated : function () {
+
+//
+// details tabs -----------------------
+//
+      //  $(".tabbedWidgetBox").tabs();
+//
+// details tabs ==================================
+//
+
+//
+// tags calls ------------------------------
+//
+        $(".tagCloud .tagText").click(oxid.highTag);
+        $("#saveTag").click(oxid.saveTag);
+        $("#cancelTag").click(oxid.cancelTag);
+        $("#editTag").click(oxid.editTag);
+
+//
+// tags calls =========================================
+//
+
+    },
+
+//
+// Tags --------------------------------------------
+//
 
     highTag : function() {
         var oSelf = $(this);
@@ -663,14 +780,29 @@ var oxid = {
         );
         return false;
     },
+//
+// Tags ===========================================
+//
+
+//
+// facebook ----------------------------------------------------
+//
+
+// add cripts  from tpl
 
     initDetailsPagePartial : function () {
         if (window.fbAsyncInit) {
             window.fbAsyncInit();
         }
-        $(".cloud-zoom, .cloud-zoom-gallery").CloudZoom();
-        oxid.initDropDowns();
     },
+
+//
+// facebook ======================================================
+//
+
+//
+// dropDowns ------------------------------------------------------
+//
 
     showDropdown : function () {
         oxid.hideDropdown();
@@ -687,7 +819,6 @@ var oxid = {
             sublist.slideToggle("fast");
             targetObj.toggleClass("selected");
         }
-
     },
 
     hideDropdown: function () {
@@ -724,27 +855,17 @@ var oxid = {
         })
     },
 
-    /**
-     * Variant selection handler
-     */
-    variantSelection : {
+//
+// dropDowns ===============================================
+//
 
-        /**
-         * Resets variant selections
-         */
-        resetVariantSelections : function()
-        {
-            var aVarSelections = $( ".oxProductForm input[name^=varselid]" );
-            for (var i = 0; i < aVarSelections.length; i++) {
-                $( aVarSelections[i] ).attr( "value", "" );
-            }
-
-            //
-            $( ".oxProductForm input[name=anid]" ).attr( "value", $( ".oxProductForm input[name=parentid]" ).attr( "value" ) );
-        }
-    }
 
 }
+
+//
+// Sausainiai --------------------------------------------
+//
+
 
 function setCookie(name,value,days) {
     var expires = "";
@@ -771,7 +892,21 @@ function deleteCookie(name) {
     setCookie(name,"",-1);
 }
 
+//
+// Sausainiai ===================================================
+//
+
+
+//
+// Smulkmenos --------------------------------------------
+//
+
 $(function(){
+
+//
+// top menu -----------------------------------------------------------
+//
+
         if ($.browser.msie) {
             $("ul.sf-menu li:not(:has(ul))").hover(function(){
                 $(this).addClass("sfHover");
@@ -807,21 +942,13 @@ $(function(){
             }
         } );
 
+//
+// top menu ======================================================
+//
 
-        $("#countdown").countdown(
-            function(count, element, container) {
-                if (count <= 1) {
-                    $(element).parents("#basketFlyout").hide();
-                    $("#countValue").replaceWith("0");
-                    $("#miniBasket img.minibasketIcon").unbind('mouseenter mouseleave');
-                    return container.not(element);
-                }
-                return null;
-            }
-        );
-
-        $(".external").attr("target", "_blank");
-
+//
+// -- search inner labels --------------------------------------
+//
         $('input.innerLabel').focus(function() {
             if (this.value == this.defaultValue){
                 this.value = '';
@@ -836,12 +963,20 @@ $(function(){
                 this.value = (this.defaultValue);
             }
         });
+//
+// -- search inner labels ==========================================
+//
+
+//
+// -- checkout remark inner labels --------------------------------------
+//
 
         $('textarea.innerLabel').focus(function() {
-            if (this.value == this.defaultValue){
+            var sDefaultValue = $('#orderRemarkDefaultValue').val();
+            if (this.value == sDefaultValue){
                 this.value = '';
             }
-            if(this.value != this.defaultValue){
+            if(this.value != sDefaultValue){
                 this.select();
             }
         });
@@ -852,7 +987,13 @@ $(function(){
                 $('textarea.innerLabel').val('');
             }
         });
+//
+// -- checkout remark inner labels ===========================================
+//
 
+//
+// checkout ABG checkboxes --------------------------------------------------------
+//
         $("input.checkbox[name='ord_agb']").closest('form').submit(function() {
             var oAGBCheck = $("input.checkbox[name='ord_agb']");
             if( oAGBCheck.attr('checked') ){
@@ -873,12 +1014,32 @@ $(function(){
             }
         });
 
+//
+// checkout ABG checkboxes =========================================================
+//
 
+//
+// login box ------------------------------------------------------
+//
 
         $(".flyout a.trigger").click(function(){
             $(".loginBox").show();
             return false;
         });
+
+        $(".altLoginBox .fb_button").live("click", function(){
+            $("#loginBox").hide();
+        });
+//
+// login box ==========================================================
+//
+
+
+//
+// flyoutbox in header ----------------------------------------------
+//
+
+    //add features in modal popups from this scripts
 
         $(document).click( function(e){
             if( $(e.target).parents("div").hasClass("popBox") || $(e.target).parents("div").hasClass("topPopList") ){
@@ -899,7 +1060,13 @@ $(function(){
             return false;
         });
 
+//
+// flyoutbox in header ===================================================
+//
 
+//
+// - CHECKOUT basket checkboxes ----------------------------------
+//
         $("#checkAll").click(function(){
             toggleChecks(this);
         });
@@ -915,13 +1082,19 @@ $(function(){
                 $("#checkAll").attr("checked", false);
         };
 
-
         $("#basketRemoveAll").click(function(){
             $("#checkAll").click();
             toggleChecks();
             return false;
         });
 
+//
+// - CHECKOUT basket checkboxes ====================================
+//
+
+//
+// - CHECKOUT payments ----------------------------------
+//
 
         $("#paymentStep #orderStep").click(function(){
             $(".order").attr("submit", true);
@@ -936,14 +1109,21 @@ $(function(){
             $(this).parents("dl").children("dd").toggle();
         });
 
+//
+// - CHECKOUT payments ========================================
+//
+
+//
+// --- mini basket -----------------------------------------
+//
 
         /*
         * Minibasket flyout
         */
         var timeout;
         if ($("#miniBasket ul").length > 0) {
-            $("#miniBasket img.minibasketIcon").hover(function(){
-                timeout = setTimeout(function(){
+            $("#miniBasket img.minibasketIcon").click(function(){
+                //timeout = setTimeout(function(){
                     $(".basketFlyout").show();
                     if ($(".scrollable ul").length > 0) {
                         $('.scrollable ul').jScrollPane({
@@ -951,11 +1131,49 @@ $(function(){
                             verticalArrowPositions: 'split'
                         });
                     }
-                }, 2000);
+                //}, 2000);
             }, function(){
                 clearTimeout(timeout);
             });
         }
+
+        $("#countdown").countdown(
+            function(count, element, container) {
+                if (count <= 1) {
+                    $(element).parents("#basketFlyout").hide();
+                    $("#countValue").replaceWith("0");
+                    $("#miniBasket img.minibasketIcon").unbind('mouseenter mouseleave');
+                    return container.not(element);
+                }
+                return null;
+            }
+        );
+
+         if($("#newItemMsg").length > 0){
+            $("#countValue").hide();
+            $("#newItemMsg").delay(3000).fadeTo("fast", 0, function(){
+                $("#countValue").fadeTo("fast", 1);
+                $("#newItemMsg").remove()
+            });
+        }
+
+//
+// --- mini basket ============================================
+//
+
+//
+// links ---------------------------------------------------
+//
+
+//$(".external").attr("target", "_blank");
+
+//
+// links ==================================================
+//
+
+//
+// compare --------------------------------------------
+//
 
         if ($("#compareDataDiv").length) {
             $("#compareDataDiv").jScrollPane({
@@ -963,6 +1181,14 @@ $(function(){
                                 horizontalGutter: 0
             });
         }
+
+//
+// compare ===============================================
+//
+
+//
+// modal popup ----------------------------------------------
+//
 
         $(".closePop").live("click", function(){
             $(".basketFlyout").hide();
@@ -972,25 +1198,9 @@ $(function(){
             return false;
         });
 
-        $(".altLoginBox .fb_button").live("click", function(){
-            $("#loginBox").hide();
-        });
-
-
-        /*
-         * Show/hide item details on grid list
-         */
-
-         $(".gridView li").hover(function (){
-             $(".listDetails", this).show();
-         }, function(){
-             $(".listDetails", this).hide();
-         });
-
         /*
          *  Overlay popup
          */
-
          function initOverlay(target, w, h) {
             $(target).dialog({
                     width: w,
@@ -1007,8 +1217,36 @@ $(function(){
             return false;
          });
 
+//
+// modal popup ===============================================
+//
 
-         oxid.initDropDowns();
+
+
+//
+// list grids -------------------------------------------------
+//
+
+        /*
+         * Show/hide item details on grid list
+         */
+
+         $(".gridView li").hover(function (){
+             $(".listDetails", this).show();
+         }, function(){
+             $(".listDetails", this).hide();
+         });
+
+
+//
+// list grids ==============================================
+//
+
+
+//
+// checkout wrapping ------------------------------------------
+//
+
          /*
           * Wraping selection, overlayPopup window
           */
@@ -1023,6 +1261,14 @@ $(function(){
             return false;
         });*/
 
+//
+// checkout wrapping =========================================
+//
+
+//
+// remove item from list button (wishlist ant etc.) ----------------------------------
+//
+
         /*
          * Remove item from list
          */
@@ -1032,6 +1278,13 @@ $(function(){
             return false;
         });
 
+//
+// remove item from list button (wishlist ant etc.) ========================================
+//
+
+//
+// Equalize columns ---------------------------------------
+//
 
         /*
          * Equalize columns
@@ -1068,6 +1321,14 @@ $(function(){
         equalHeight($(".subcatList li .content"));
         equalHeight($(".checkoutOptions .option"));
 
+//
+// Equalize columns ==========================================
+//
+
+//
+// box titles ---------------------------------------------
+//
+
         /*
          * Trim title and add ellipsis ...
          */
@@ -1091,6 +1352,14 @@ $(function(){
 
         trimTitles($(".box h3 a"));
 
+//
+// box titles ================================================
+//
+
+//
+// start page promo category -----------------------------------
+//
+
        /* Show all items hover */
       $(".linkAll").hover(function(){
           var targetObj = $(this).children(".viewAllHover");
@@ -1101,6 +1370,14 @@ $(function(){
           $(".viewAllHover").hide();
       });
 
+//
+// start page promo category =====================================
+//
+
+//
+// bargain item ------------------------------------------
+//
+
      /* Vertical box positioning*/
     $(".specBoxInfo").hover(function(){
         var boxHeight = $(".hoverBox", $(this)).height();
@@ -1109,14 +1386,15 @@ $(function(){
         boxTarget.css("padding-top", addHoverPadding);
     });
 
-    if($("#newItemMsg").length > 0){
-        $("#countValue").hide();
-        $("#newItemMsg").delay(3000).fadeTo("fast", 0, function(){
-            $("#countValue").fadeTo("fast", 1);
-            $("#newItemMsg").remove()
-        });
-    }
+//
+// bargain item =============================================
+//
 
+
+
+//
+// - user addresses select -----------------------------------------------------
+//
     $('#addressId').change(function() {
         $( ".oxValidate" ).unbind('submit');
         var reload = '2';
@@ -1141,4 +1419,9 @@ $(function(){
             $("select[name='deladr[oxaddress__oxstateid]']").children("option[name='promtString']").attr("selected", "selected");
         }
     });
+//
+// - state select =======================================================
+//
+
+    oxid.initDropDowns();
 });

@@ -1,3 +1,4 @@
+[{oxscript add="$('a.external').attr('target', '_blank');"}]
 [{if $head}]
     [{if $header eq "light"}]
         <h3 class="lightHead sectionHead">[{$head}]</h3>

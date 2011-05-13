@@ -1,3 +1,4 @@
+[{oxscript add="$('a.external').attr('target', '_blank');"}]
 <div class="box" [{if $_boxId}]id="[{$_boxId}]"[{/if}]>
     [{if $_sHeaderIdent}]
         <h3 class="clear [{if $_sHeaderCssClass}] [{$_sHeaderCssClass}][{/if}]">
