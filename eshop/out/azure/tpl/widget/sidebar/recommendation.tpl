@@ -1,3 +1,4 @@
+[{oxscript add="$('a.external').attr('target', '_blank');"}]
 [{assign var="_oRecommendationList" value=$oView->getSimilarRecommLists()}]
 
 [{ if $_oRecommendationList || $oView->getRecommSearch() }]

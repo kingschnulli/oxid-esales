@@ -1,3 +1,4 @@
+[{oxscript add="$( '#specCatBox' ).oxPromoCategory();" }]
 [{capture append="oxidBlock_content"}]
     [{assign var="oFirstArticle" value=$oView->getFirstArticle()}]
     [{if $oView->getCatOfferArticleList()|@count > 0}]

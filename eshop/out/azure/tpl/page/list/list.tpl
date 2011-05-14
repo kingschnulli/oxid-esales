@@ -1,3 +1,4 @@
+[{oxscript add="$('a.external').attr('target', '_blank');"}]
 [{capture append="oxidBlock_content"}]
         [{assign var="actCategory" value=$oView->getActiveCategory()}]
 

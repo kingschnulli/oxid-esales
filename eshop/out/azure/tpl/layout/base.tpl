@@ -71,6 +71,13 @@
     [{oxscript include="js/countdown.jquery.js" priority=1}]
     [{oxscript include="js/gui.js" priority=9}]
 
+    [{oxscript include="js/widgets/oxreview.js" priority=10 }]
+    [{oxscript include="js/widgets/oxrating.js" priority=10 }]
+    [{oxscript include="js/widgets/oxcompare.js" priority=10 }]
+    [{oxscript include="js/widgets/oxarticlebox.js" priority=10 }]
+    [{oxscript include="js/widgets/oxbargainitem.js" priority=10 }]
+    [{oxscript include="js/widgets/oxpromocategory.js" priority=10 }]
+
     [{oxscript include='js/superfish/hoverIntent.js'}]
     [{oxscript include='js/superfish/supersubs.js'}]
     [{oxscript include='js/superfish/superfish.js'}]

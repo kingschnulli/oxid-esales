@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: searchTest.php 35224 2011-05-10 06:46:25Z sarunas $
+ * @version   SVN: $Id: searchTest.php 35355 2011-05-13 12:52:39Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -288,6 +288,6 @@ class Unit_Views_searchTest extends OxidTestCase
     public function testCanRedirect()
     {
         $oSearch = new search();
-        $this->assertFalse($oSearch->_canRedirect());
+        $this->assertFalse($oSearch->UNITcanRedirect());
    }
 }

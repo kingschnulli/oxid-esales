@@ -1,5 +1,5 @@
+[{oxscript add="$('a.external').attr('target', '_blank');"}]
 [{capture append="oxidBlock_content"}]
-
     [{if $oView->getActiveRecommList() }]
         [{assign var="_actvrecommlist" value=$oView->getActiveRecommList() }]
         [{assign var="recommendation_head" value="PAGE_RECOMMENDATIONS_PRODUCTS_LISTBY"|oxmultilangassign}]

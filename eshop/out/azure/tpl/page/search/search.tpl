@@ -1,3 +1,4 @@
+[{oxscript add="$('a.external').attr('target', '_blank');"}]
 [{capture append="oxidBlock_content"}]
 [{assign var="search_title" value="PAGE_SEARCH_SEARCH_TITLE"|oxmultilangassign}]
 [{assign var="searchparamforhtml" value=$oView->getSearchParamForHtml() }]

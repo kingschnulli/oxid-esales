@@ -1,4 +1,5 @@
 [{oxscript add="$( '#reviewRating' ).oxRating({openReviewForm: false, hideReviewButton: false});"}]
+[{oxscript add="$( '#writeNewReview' ).oxReview();"}]
 <div id="review">
   [{if $oxcmp_user}]
     <form action="[{$oViewConf->getSelfActionLink()}]" method="post" id="rating">
@@ -59,5 +60,4 @@
     </dt>
   [{/if}]
   </dl>
-  [{oxscript add="$(function(){oxid.initNewReview();});"}]
 </div>
