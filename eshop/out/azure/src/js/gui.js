@@ -660,34 +660,9 @@ var oxid = {
         //
     },
 
-//
-// Reviews --------------------------------------------
-//
-
-    initNewReview : function () {
-
-        $("#writeNewReview").click(function(){
-            $("#writeReview").slideToggle();
-            $("#writeNewReview").hide();
-            return false;
-        });
-
-    },
-
-//
-// Reviews ===========================================
-//
-
 
     initDetailsRelated : function () {
 
-//
-// details tabs -----------------------
-//
-      //  $(".tabbedWidgetBox").tabs();
-//
-// details tabs ==================================
-//
 
 //
 // tags calls ------------------------------
@@ -863,7 +838,7 @@ var oxid = {
 }
 
 //
-// Sausainiai --------------------------------------------
+// Cookies --------------------------------------------
 //
 
 
@@ -893,58 +868,15 @@ function deleteCookie(name) {
 }
 
 //
-// Sausainiai ===================================================
+// Cookies ===================================================
 //
 
 
 //
-// Smulkmenos --------------------------------------------
+// Other --------------------------------------------
 //
 
 $(function(){
-
-//
-// top menu -----------------------------------------------------------
-//
-
-        if ($.browser.msie) {
-            $("ul.sf-menu li:not(:has(ul))").hover(function(){
-                $(this).addClass("sfHover");
-            }, function(){
-                $("ul.sf-menu li:not(:has(ul))").removeClass("sfHover");
-            });
-        }
-
-        //Categories menu init
-        $("ul.sf-menu").supersubs({
-            minWidth:    12,   // minimum width of sub-menus in em units
-            maxWidth:    35,   // maximum width of sub-menus in em units
-            extraWidth:  1     // extra width can ensure lines don't sometimes turn over
-                               // due to slight rounding differences and font-family
-        }).superfish( {
-             delay : 500,
-             dropShadows : false,
-             onBeforeShow : function() {
-                //adding hover class for active <A> elements
-                $('a:first', this.parent()).addClass($.fn.superfish.op.hoverClass);
-
-                // horizontaly centering top navigation first level popup accoring its parent
-                activeItem = this.parent()
-                if ( activeItem.parent().hasClass('sf-menu') ) {
-                    liWidth = activeItem.width();
-                    ulWidth = $('ul:first', activeItem).width();
-                    marginWidth = (liWidth - ulWidth) / 2;
-                    $('ul:first', activeItem).css("margin-left", marginWidth);
-                }
-            },
-            onHide : function() {
-                $('a:first-child',this.parent()).removeClass($.fn.superfish.op.hoverClass);
-            }
-        } );
-
-//
-// top menu ======================================================
-//
 
 //
 // -- search inner labels --------------------------------------
@@ -991,106 +923,6 @@ $(function(){
 // -- checkout remark inner labels ===========================================
 //
 
-//
-// checkout ABG checkboxes --------------------------------------------------------
-//
-        $("input.checkbox[name='ord_agb']").closest('form').submit(function() {
-            var oAGBCheck = $("input.checkbox[name='ord_agb']");
-            if( oAGBCheck.attr('checked') ){
-                return true;
-            } else {
-                $("p[name='agbError']").show();
-                return false;
-            }
-
-        });
-
-        $("input.checkbox[name='ord_agb']").click(function() {
-            if( $( this ).attr('checked') ){
-                $("input.checkbox[name='ord_agb']").attr('checked', true);
-                $("p[name='agbError']").hide();
-            } else {
-                $("input.checkbox[name='ord_agb']").attr('checked', false);
-            }
-        });
-
-//
-// checkout ABG checkboxes =========================================================
-//
-
-//
-// login box ------------------------------------------------------
-//
-
-        $(".flyout a.trigger").click(function(){
-            $(".loginBox").show();
-            return false;
-        });
-
-        $(".altLoginBox .fb_button").live("click", function(){
-            $("#loginBox").hide();
-        });
-//
-// login box ==========================================================
-//
-
-
-//
-// flyoutbox in header ----------------------------------------------
-//
-
-    //add features in modal popups from this scripts
-
-        $(document).click( function(e){
-            if( $(e.target).parents("div").hasClass("popBox") || $(e.target).parents("div").hasClass("topPopList") ){
-            }else{
-                $(".popBox,.topPopList .flyoutBox").hide();
-            }
-        });
-
-        $(document).keydown( function( e ) {
-           if( e.which == 27) {
-                $(".popBox,.topPopList .flyoutBox").hide();
-           }
-        });
-
-        $(".selectedValue").click(function(){
-            $(".flyoutBox").hide();
-            $(this).nextAll(".flyoutBox").show();
-            return false;
-        });
-
-//
-// flyoutbox in header ===================================================
-//
-
-//
-// - CHECKOUT basket checkboxes ----------------------------------
-//
-        $("#checkAll").click(function(){
-            toggleChecks(this);
-        });
-
-
-        function toggleChecks(){
-            if ($("#checkAll").attr("checked")) {
-                $(".basketitems .checkbox input").attr("checked", true);
-                $("#checkAll").attr("checked", true);
-                return;
-            }
-                $(".basketitems .checkbox input").attr("checked", false);
-                $("#checkAll").attr("checked", false);
-        };
-
-        $("#basketRemoveAll").click(function(){
-            $("#checkAll").click();
-            toggleChecks();
-            return false;
-        });
-
-//
-// - CHECKOUT basket checkboxes ====================================
-//
 
 //
 // - CHECKOUT payments ----------------------------------
@@ -1161,30 +993,6 @@ $(function(){
 // --- mini basket ============================================
 //
 
-//
-// links ---------------------------------------------------
-//
-
-//$(".external").attr("target", "_blank");
-
-//
-// links ==================================================
-//
-
-//
-// compare --------------------------------------------
-//
-
-        if ($("#compareDataDiv").length) {
-            $("#compareDataDiv").jScrollPane({
-                                showArrows: true,
-                                horizontalGutter: 0
-            });
-        }
-
-//
-// compare ===============================================
-//
 
 //
 // modal popup ----------------------------------------------
@@ -1221,66 +1029,6 @@ $(function(){
 // modal popup ===============================================
 //
 
-
-
-//
-// list grids -------------------------------------------------
-//
-
-        /*
-         * Show/hide item details on grid list
-         */
-
-         $(".gridView li").hover(function (){
-             $(".listDetails", this).show();
-         }, function(){
-             $(".listDetails", this).hide();
-         });
-
-
-//
-// list grids ==============================================
-//
-
-
-//
-// checkout wrapping ------------------------------------------
-//
-
-         /*
-          * Wraping selection, overlayPopup window
-          */
-
-         $("#wrapp li, #wrappCard li").click(function(){
-            $(this).children("input[type=radio]").attr("checked", true);
-         });
-
-
-        /*$(".wrappingTrigger").click(function(){
-            initOverlay(".wrapping", 687);
-            return false;
-        });*/
-
-//
-// checkout wrapping =========================================
-//
-
-//
-// remove item from list button (wishlist ant etc.) ----------------------------------
-//
-
-        /*
-         * Remove item from list
-         */
-        $(".removeButton").click(function(){
-            var targetForm = $(this).attr("triggerForm");
-            $("#"+targetForm).submit();
-            return false;
-        });
-
-//
-// remove item from list button (wishlist ant etc.) ========================================
-//
 
 //
 // Equalize columns ---------------------------------------
@@ -1355,42 +1103,6 @@ $(function(){
 //
 // box titles ================================================
 //
-
-//
-// start page promo category -----------------------------------
-//
-
-       /* Show all items hover */
-      $(".linkAll").hover(function(){
-          var targetObj = $(this).children(".viewAllHover");
-          targetObj.show();
-          var targetObjMargin = targetObj.width() / 2;
-          targetObj.css("margin-left", "-" + targetObjMargin + "px");
-      }, function(){
-          $(".viewAllHover").hide();
-      });
-
-//
-// start page promo category =====================================
-//
-
-//
-// bargain item ------------------------------------------
-//
-
-     /* Vertical box positioning*/
-    $(".specBoxInfo").hover(function(){
-        var boxHeight = $(".hoverBox", $(this)).height();
-        var boxTarget = $(".hoverInfo", $(this));
-        var addHoverPadding = (boxHeight - boxTarget.height()) / 2;
-        boxTarget.css("padding-top", addHoverPadding);
-    });
-
-//
-// bargain item =============================================
-//
-
-
 
 //
 // - user addresses select -----------------------------------------------------

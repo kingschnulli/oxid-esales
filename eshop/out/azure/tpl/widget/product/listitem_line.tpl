@@ -1,3 +1,4 @@
+[{oxscript add="$('button.removeButton').oxListRemoveButton();"}]
 [{assign var="currency" value=$oView->getActCurrency()}]
 [{if $showMainLink}]
     [{assign var='_productLink' value=$product->getMainLink()}]

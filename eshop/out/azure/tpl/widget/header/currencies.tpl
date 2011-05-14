@@ -1,3 +1,4 @@
+[{oxscript add="$( '#currencyTrigger' ).oxFlyOutBox();"}]
 [{if $oView->loadCurrency()}]
     <div class="topPopList">
     [{capture name="currencyList"}]

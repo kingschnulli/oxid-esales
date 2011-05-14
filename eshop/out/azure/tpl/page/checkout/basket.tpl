@@ -88,7 +88,6 @@
 [{if $oView->isWrapping() }]
 [{include file="page/checkout/inc/wrapping.tpl"}]
 [{/if}]
-[{oxscript add="$(function(){oxid.initBasket();});"}]
 [{insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 [{include file="layout/page.tpl"}]

@@ -1,3 +1,4 @@
+[{oxscript add="$( '#loginBoxOpener' ).oxLoginBox();"}]
 [{assign var="bIsError" value=0 }]
 [{capture name=loginErrors}]
     [{foreach from=$Errors.loginBoxErrors item=oEr key=key }]
@@ -12,7 +13,7 @@
         <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
         [{include file="form/forgotpwd_email.tpl"}]
     </div>
-    <a href="#" class="trigger" title="[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</a>
+    <a href="#" id="loginBoxOpener" class="trigger" title="[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</a>
     <form id="login" name="login" action="[{ $oViewConf->getSslSelfLink() }]" method="post">
         <div id="loginBox" class="loginBox popBox" [{if $bIsError}]style="display: block;"[{/if}]>
             [{ $oViewConf->getHiddenSid() }]

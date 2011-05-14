@@ -1,3 +1,4 @@
+[{oxscript add="$( '#languageTrigger' ).oxFlyOutBox();"}]
 [{if $oView->isLanguageLoaded()}]
 <div class="topPopList">
     [{capture name="languageList"}]

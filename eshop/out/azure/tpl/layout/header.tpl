@@ -1,6 +1,7 @@
 <div id="header" class="clear">
   [{include file="widget/header/languages.tpl"}]
   [{include file="widget/header/currencies.tpl"}]
+  [{oxscript add="$( '#servicesTrigger' ).oxFlyOutBox();"}]
   [{oxid_include_dynamic file="widget/header/servicebox.tpl"}]
   <ul id="topMenu">
     <li class="login flyout[{if $oxcmp_user->oxuser__oxpassword->value}] logged[{/if}]">

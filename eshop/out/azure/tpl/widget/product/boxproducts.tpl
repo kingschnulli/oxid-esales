@@ -1,4 +1,5 @@
 [{oxscript add="$('a.external').attr('target', '_blank');"}]
+[{oxscript add="$( 'ul.articleBox' ).oxArticleBox();" }]
 <div class="box" [{if $_boxId}]id="[{$_boxId}]"[{/if}]>
     [{if $_sHeaderIdent}]
         <h3 class="clear [{if $_sHeaderCssClass}] [{$_sHeaderCssClass}][{/if}]">
@@ -9,7 +10,6 @@
             [{/if }]
         </h3>
     [{/if}]
-    [{oxscript add="$( '.articleBox' ).oxArticleBox();" }]
     <ul class="articleBox featuredList">
     [{foreach from=$_oBoxProducts item=_oBoxProduct name=_sProdList}]
             [{ assign var="currency" value=$oView->getActCurrency()}]

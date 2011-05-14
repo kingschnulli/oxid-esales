@@ -1,3 +1,4 @@
+[{oxscript add="$('#checkAgbTop, #checkAgbBottom').oxAGBCheck();"}]
 [{oxstyle include="css/checkout.css"}]
 [{capture append="oxidBlock_content"}]
 [{* ordering steps *}]
@@ -38,7 +39,7 @@
                 <span class="agb">
                 [{if $oView->isConfirmAGBActive()}]
                     <input type="hidden" name="ord_agb" value="0">
-                    <input class="checkbox" type="checkbox" name="ord_agb" value="1">
+                    <input id="checkAgbTop" class="checkbox" type="checkbox" name="ord_agb" value="1">
                     [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
                         [{ $oContent->oxcontents__oxcontent->value }]
                     [{/oxifcontent}]
@@ -173,7 +174,7 @@
                         </h3>
                         [{if $oView->isConfirmAGBActive()}]
                             <input type="hidden" name="ord_agb" value="0">
-                            <input class="checkbox" type="checkbox" name="ord_agb" value="1">
+                            <input id="checkAgbBottom" class="checkbox" type="checkbox" name="ord_agb" value="1">
                             [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
                                 [{ $oContent->oxcontents__oxcontent->value }]
                             [{/oxifcontent}]
