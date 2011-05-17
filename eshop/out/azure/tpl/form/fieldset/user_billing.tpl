@@ -165,6 +165,9 @@
     [{/if}]
 
     [{if $blOrderRemark}]
+    [{oxscript include="js/widgets/oxinnerlabel.js" priority=10 }]
+    [{assign var="defaulInnerLabel" value="FORM_FIELDSET_USER_MESSAGEHERE"|oxmultilangassign}]
+    [{oxscript add="$( '#orderRemark' ).oxInnerLabel({ sDefaultValue : '`$defaulInnerLabel`'});"}]
     <li>
         <label>[{ oxmultilang ident="FORM_FIELDSET_USER_YOURMESSAGE" }]</label>
         [{ if !$oView->getOrderRemark()}]
@@ -172,8 +175,7 @@
         [{else}]
           [{assign var="order_remark" value=$oView->getOrderRemark()}]
         [{/if}]
-        <input type="hidden" id="orderRemarkDefaultValue" name="orderRemarkDefaultValue" value="[{ oxmultilang ident="FORM_FIELDSET_USER_MESSAGEHERE" }]" >
-        <textarea cols="60" rows="7" name="order_remark" class="areabox innerLabel" >[{$order_remark}]</textarea>
+        <textarea id="orderRemark" cols="60" rows="7" name="order_remark" class="areabox innerLabel" >[{$order_remark}]</textarea>
     </li>
     [{/if}]
     <li class="formNote">[{ oxmultilang ident="FORM_USER_COMPLETEMARKEDFIELDS" }]</li>

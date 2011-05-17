@@ -525,6 +525,12 @@
 
                     return false;
                 });
+
+                 $("img.closePop").click(function(){
+                    $(options.target).dialog("close");
+                    return false;
+                 });
+
             },
 
              openDialog: function (target, options) {
@@ -548,7 +554,6 @@
     };
 
     $.widget("ui.oxModalPopup", oxModalPopup );
-
 
 
     oxLoadArticleVariant = {

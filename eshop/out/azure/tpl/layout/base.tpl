@@ -83,6 +83,8 @@
     [{oxscript include="js/widgets/oxtopmenu.js" priority=10 }]
     [{oxscript include="js/widgets/oxloginbox.js" priority=10 }]
     [{oxscript include="js/widgets/oxflyoutbox.js" priority=10 }]
+    [{oxscript include="js/widgets/oxminibasket.js" priority=10 }]
+    [{oxscript include="js/widgets/oxpayment.js" priority=10 }]
 
     [{oxscript include='js/superfish/hoverIntent.js'}]
     [{oxscript include='js/superfish/supersubs.js'}]

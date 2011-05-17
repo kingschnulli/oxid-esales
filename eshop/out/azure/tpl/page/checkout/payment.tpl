@@ -62,6 +62,7 @@
 [{/if}]
 
 [{block name="change_payment"}]
+    [{oxscript add="$( '#payment' ).oxPayment();"}]
     <form action="[{ $oViewConf->getSslSelfLink() }]" class="oxValidate" id="payment" name="order" method="post">
         <div>
             [{ $oViewConf->getHiddenSid() }]

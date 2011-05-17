@@ -41,10 +41,17 @@
         redirectPage: function ( sUrl ) {
             
            sUrl = sUrl.toString().replace(/&amp;/g,"&");
-           alert(sUrl); return;
            document.location.href = sUrl;
+        },
+        
+        /*
+         * Add scripts from tpl
+         */
+        initDetailsPagePartial : function () {
+            if (window.fbAsyncInit) {
+                window.fbAsyncInit();
+            }
         }
+        
     };
-
-    $.widget("ui.oxFacebook", oxFacebook );
     

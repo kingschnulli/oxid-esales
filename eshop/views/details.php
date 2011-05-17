@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 35108 2011-05-04 12:55:17Z linas.kukulskis $
+ * @version   SVN: $Id: details.php 35393 2011-05-16 07:23:18Z vilma $
  */
 
 /**
@@ -284,11 +284,8 @@ class Details extends oxUBase
         if ( $this->_aVariantList === null ) {
             $oProduct = $this->getProduct();
 
-            //loading full list of variants
-            $this->_aVariantList = $oProduct->getVariants( false );
-
             //if we are child and do not have any variants then let's load all parent variants as ours
-            if ( ( $oParent = $this->_getParentProduct( $oProduct->oxarticles__oxparentid->value ) ) && count( $this->_aVariantList ) == 0 ) {
+            if ( $oParent = $oProduct->getParentArticle() ) {
                 $myConfig = $this->getConfig();
 
                 $this->_aVariantList = $oParent->getVariants( false );
@@ -299,6 +296,9 @@ class Details extends oxUBase
                     $oParent->aSelectlist = $oParent->getSelectLists();
                     $this->_aVariantList = array_merge( array( $oParent ), $this->_aVariantList->getArray() );
                 }
+            } else {
+                //loading full list of variants
+                $this->_aVariantList = $oProduct->getVariants( false );
             }
 
             // setting link type for variants ..

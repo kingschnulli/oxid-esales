@@ -169,19 +169,22 @@
                     [{if $oView->isActive('PsLogin') }]
                         <input type="hidden" name="ord_agb" value="1">
                     [{else}]
-                        <h3 class="section">
-                            <strong>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_TERMS_TITLE" }]</strong>
-                        </h3>
                         [{if $oView->isConfirmAGBActive()}]
-                            <input type="hidden" name="ord_agb" value="0">
-                            <input id="checkAgbBottom" class="checkbox" type="checkbox" name="ord_agb" value="1">
                             [{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
+                                <h3 class="section">
+                                    <strong>[{ $oContent->oxcontents__oxtitle->value }]</strong>
+                                </h3>
+                                <input type="hidden" name="ord_agb" value="0">
+                                <input id="checkAgbBottom" class="checkbox" type="checkbox" name="ord_agb" value="1">
                                 [{ $oContent->oxcontents__oxcontent->value }]
                             [{/oxifcontent}]
                             <p class="errorMsg" name="agbError">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_READANDCONFIRMTERMS" }]</p>
                         [{else}]
-                            <input type="hidden" name="ord_agb" value="1">
                             [{oxifcontent ident="oxrighttocancellegend2" object="oContent"}]
+                                <h3 class="section">
+                                    <strong>[{ $oContent->oxcontents__oxtitle->value }]</strong>
+                                </h3>
+                                <input type="hidden" name="ord_agb" value="1">
                                 [{ $oContent->oxcontents__oxcontent->value }]
                             [{/oxifcontent}]
                         [{/if}]
