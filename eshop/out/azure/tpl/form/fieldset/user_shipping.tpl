@@ -4,6 +4,8 @@
 <li>
     <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_ADDRESSES" }]</label>
     <input type="hidden" name="changeClass" value="[{$onChangeClass|default:'account_user'}]">
+    [{oxscript include="js/widgets/oxusershipingaddressselect.js" priority=10 }]
+    [{oxscript add="$( '#addressId' ).oxUserShipingAddressSelect();"}]
     <select id="addressId" name="oxaddressid">
         <option value="-1">[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_NEWADDRESS" }]</option>
         [{if $oxcmp_user }]

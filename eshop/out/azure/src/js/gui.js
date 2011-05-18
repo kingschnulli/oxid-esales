@@ -405,147 +405,10 @@ var oxid = {
         // details page article action links ---------------------------------------
         //
 
-        if ($("#productTitle").length > 0) {
-            var targetWidth = $("#productTitle span").width();
-            if (targetWidth > 220) {
-                var linkboxWidth = $("#productTitle span").width();
-            }
-            else {
-                var linkboxWidth = 220;
-            }
-            var targetHeight = $("#productTitle span").height();
-
-            /* articles details action selector */
-
-            $(".actionLinks").css({
-                "top": $("#productTitle").position().top - 7,
-                "left": $("#productTitle").position().left - 10,
-                "padding-top": targetHeight + 10,
-                "width": linkboxWidth + 50
-            });
-
-
-
-            var arrowSrc = $(".selector img").attr("src");
-            var arrow = $("#productLinks").children("img");
-
-            function showLinks() {
-                var arrowOnSrc = arrow.attr("longdesc");
-                $(".actionLinks").slideDown("normal", function(){
-                    arrow.attr("src", arrowOnSrc);
-                    $('#productLinks').toggleClass("selected");
-                });
-            }
-
-            function hideLinks() {
-                $(".actionLinks").animate({
-                    height: 0,
-                    opacity: 0.1
-                }, 300, function(){
-                    $(".actionLinks").hide().css({
-                        height: 'auto',
-                        opacity: '1'
-                    });
-                    arrow.attr("src", arrowSrc);
-                    $('#productLinks').toggleClass("selected");
-                });
-            }
-
-            $("#productLinks").css({
-                "top": $("#productTitle").position().top - 3,
-                "left": targetWidth + $("#productTitle").position().left + 10
-            }).click(function(){
-                if ( $(this).hasClass("selected") ) {
-                   hideLinks();
-                } else {
-                     showLinks();
-                }
-                return false;
-            });
-
-
-            $("#productLinks").mouseenter(function() {
-                if (! $(this).hasClass("selected") ) {
-                     showLinks();
-                }
-                return false;
-            });
-
-            $(".actionLinks").mouseleave( function() {
-                hideLinks();
-                return false;
-            });
-
-            if ($("#showLinksOnce").length > 0) {
-                $(".actionLinks").slideDown('normal').delay(1000).slideUp('normal', function(){
-                     setCookie('showlinksonce', 1);
-                });
-            }
-
-
-            $('select[id^=sellist]').change (function() {
-                var oSelf = $(this);
-                var oNoticeList = $('#linkToNoticeList');
-                if ( oNoticeList ) {
-                    oNoticeList.attr('href', oNoticeList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
-                }
-                var oWishList = $('#linkToWishList');
-                if ( oWishList ) {
-                    oWishList.attr('href', oWishList.attr('href') + "&" + oSelf.attr('name') + "&" + oSelf.val());
-                }
-            });
-
-            //
-            // details page article action links =========================================
-            //
-
-        }
 
 //
 // Ammount price -----------------------------------------------------------------
 //
-
-        if ($("#amountPrice").length > 0) {
-            $(".pricePopup").css({
-                "top": $("#amountPrice").position().top - 7,
-                "left": $("#amountPrice").position().left - 10,
-                "width": 220
-            });
-
-            var arrowSrc = $(".selector img").attr("src");
-
-            $("#amountPrice").click(function(){
-                var arrow = $(this).children("img");
-
-                var arrowOnSrc = arrow.attr("longdesc");
-                $(this).toggleClass("selected");
-                if ($(this).hasClass("selected")) {
-                    $("#priceinfo").slideDown("normal", function(){
-                        arrow.attr("src", arrowOnSrc);
-                    });
-                    $(".tobasketFunction .selector").css({
-                        "left": $("#amountPrice").position().left,
-                        "position": "absolute"
-                    });
-                }
-                else {
-                    $("#priceinfo").animate({
-                        height: 0,
-                        opacity: 0.1
-                    }, 300, function(){
-                        $("#priceinfo").hide().css({
-                            height: 'auto',
-                            opacity: '1'
-                        });
-                        arrow.attr("src", arrowSrc);
-                    });
-                    $(".tobasketFunction .selector").css({
-                        "position": "static"
-                    });
-                }
-                return false;
-            });
-        }
 
 //
 // Ammount price ==========================================================
@@ -817,44 +680,7 @@ var oxid = {
 //
 // dropDowns ===============================================
 //
-
-
 }
-
-//
-// Cookies --------------------------------------------
-//
-
-
-function setCookie(name,value,days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime()+(days*24*60*60*1000));
-        expires = "; expires="+date.toGMTString();
-    }
-    document.cookie = name+"="+value+expires+"; path=/";
-}
-
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-
-function deleteCookie(name) {
-    setCookie(name,"",-1);
-}
-
-//
-// Cookies ===================================================
-//
-
 
 //
 // Other --------------------------------------------
@@ -940,30 +766,7 @@ $(function(){
 //
 // - user addresses select -----------------------------------------------------
 //
-    $('#addressId').change(function() {
-        $( ".oxValidate" ).unbind('submit');
-        var reload = '2';
-        var selectValue = $(this).val();
-        if (selectValue === '-1') {
-            reload = '1';
-        }
-        if ($("input[name=reloadaddress]")) {
-            $("input[name=reloadaddress]").val(reload);
-        }
-        if (selectValue !== '-1') {
-            $("form[name='order'] input[name=cl]").val($("input[name=changeClass]").val());
-            $("form[name='order'] input[name=fnc]").val("");
-            $("form[name='order']").submit();
-        } else {
-            $("input:text").filter(function() {
-                return this.name.match(/address__/);
-            }).val("");
-            $('#shippingAddressForm').show();
-            $('#shippingAddressText').hide();
-            $("select[name='deladr[oxaddress__oxcountryid]']").children("option").attr("selected", null);
-            $("select[name='deladr[oxaddress__oxstateid]']").children("option[name='promtString']").attr("selected", "selected");
-        }
-    });
+
 //
 // - state select =======================================================
 //
