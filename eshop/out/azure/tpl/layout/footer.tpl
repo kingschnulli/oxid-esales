@@ -71,6 +71,7 @@
     </div>
 </div>
 [{if $oView->isRootCatChanged()}]
+    [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
     [{oxscript add="$( '#scRootCatChanged' ).oxModalPopup({ target: '#scRootCatChanged', openDialog: true});"}]
     <div id="scRootCatChanged" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
         [{include file="form/privatesales/basketexcl.tpl"}]

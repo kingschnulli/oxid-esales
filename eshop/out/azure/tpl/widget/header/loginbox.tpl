@@ -8,6 +8,7 @@
 [{/capture}]
 
 [{if !$oxcmp_user->oxuser__oxpassword->value}]
+    [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
     [{oxscript add="$( '#forgotPasswordOpener' ).oxModalPopup({ target: '#forgotPassword'});"}]
     <div id="forgotPassword" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
         <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">

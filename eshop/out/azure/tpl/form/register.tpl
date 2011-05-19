@@ -17,12 +17,14 @@
                 <input id="orderConfirmAgbBottom" type="checkbox" class="checkbox" name="ord_agb" value="1">
                 <span class="inputNote agb">
                     [{oxifcontent ident="oxagb" object="oCont"}]
+                        [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
                         [{oxscript add="$( '#orderOpenAgbBottom' ).oxModalPopup({target: '#popup1'});"}]
                         [{oxmultilang ident="FORM_REGISTER_IAGREETOTERMS1" }]
                         <a id="orderOpenAgbBottom" rel="nofollow" href="#"  class="fontunderline">[{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }]</a>
                         [{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS3" }],&nbsp;
                     [{/oxifcontent}]
                     [{oxifcontent ident="oxrightofwithdrawal" object="oCont"}]
+                        [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
                         [{oxscript add="$( '#orderOpenWithdrawalBottom' ).oxModalPopup({target: '#popup2'});"}]
                         [{oxmultilang ident="FORM_REGISTER_IAGREETORIGHTOFWITHDRAWAL1" }]
                         <a id="orderOpenWithdrawalBottom" rel="nofollow" href="#">[{ $oCont->oxcontents__oxtitle->value }]</a>

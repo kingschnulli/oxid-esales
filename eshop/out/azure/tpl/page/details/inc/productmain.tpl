@@ -37,6 +37,7 @@
 
         [{* article picture with zoom *}]
         [{if $oView->showZoomPics()}]
+            [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
             [{oxscript add="$('#zoomTrigger').oxModalPopup({target:'#zoomModal'});"}]
             <a id="zoomTrigger" alt="[{oxmultilang ident="DETAILS_ZOOM"}]" rel="nofollow" href="#">Zoom</a>
         [{/if}]

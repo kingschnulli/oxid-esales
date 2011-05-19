@@ -20,12 +20,12 @@
             });
 
             // show on click
-            $("#miniBasket img.minibasketIcon").click(function(){
+            $("img.minibasketIcon", el).click(function(){
                 self.showMiniBasket();
             });
 
             // close basket
-            $(".closePop").live("click", function(){
+            $(".closePop").click(function(){
                 $(".basketFlyout").hide();
                 clearTimeout(timeout);
                 return false;

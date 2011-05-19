@@ -1,3 +1,4 @@
+[{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
 [{oxscript add="$( '.wrappingTrigger' ).oxModalPopup({ target: '.wrapping'});"}]
 <div class="wrapping popupBox corners FXgradGreyLight glowShadow overlayPop">
     <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
