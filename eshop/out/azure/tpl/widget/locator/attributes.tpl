@@ -7,6 +7,8 @@
         <input type="hidden" name="tpl" value="[{$oViewConf->getActTplName()}]">
         <input type="hidden" name="fnc" value="executefilter">
         <input type="hidden" name="fname" value="">
+        [{oxscript include="js/widgets/oxdropdown.js" priority=10 }]
+        [{oxscript add="$('.dropDown p').oxDropDown();"}]
         [{foreach from=$attributes item=oFilterAttr key=sAttrID name=attr}]
             <div class="dropDown" id="attributeFilter[[{ $sAttrID }]]">
                 <p>

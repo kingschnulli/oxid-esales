@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34157 2011-04-02 09:19:24Z juergen.busch $
+ * @version   SVN: $Id: lang.php 35476 2011-05-19 11:35:42Z arunas.paskevicius $
  */
 
 
@@ -1249,7 +1249,7 @@ $aLang = array(
 'usrRegistered'                                     => 'User will be registered after he provided his password',
 'simpleDateFormat'                                  => 'Y-m-d',
 'EXCEPTION_COOKIE_NOCOOKIE'                         => 'We are sorry. This action requires cookie support. Please enable cookies, or use a cookie-enabled browser to access our site.',
-'EXCEPTION_USER_NOVALIDLOGIN'                       => 'Wrong e-Mail or password!',
+'EXCEPTION_USER_NOVALIDLOGIN'                       => 'Wrong e-mail or password!',
 'EXCEPTION_USER_USEREXISTS'                         => 'Not possible to register %s. Maybe you have registered already previously?',
 'EXCEPTION_USER_USERCREATIONFAILED'                 => 'Error while creating user!',
 'EXCEPTION_USER_PWDDONTMATCH'                       => "Passwords don't match!",

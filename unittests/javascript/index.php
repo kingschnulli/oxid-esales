@@ -12,6 +12,8 @@
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/jquery.ui.oxid.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxrating.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxcompare.js"></script>
+    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxcountrystateselect.js"></script>
+    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxslider.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxarticleactionlinksselect.js"></script>
 
     <!-- Your tests file goes here -->

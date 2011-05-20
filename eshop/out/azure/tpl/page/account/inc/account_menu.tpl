@@ -1,3 +1,5 @@
+[{oxscript include="js/widgets/oxequalizer.js" priority=10 }]
+[{oxscript add="$(function(){oxEqualizer.equalHeight($('.sidebarMenu'), $('#content'));});"}]
 <ul class="tree sidebarMenu corners">
   <li [{if $active_link == "password"}]class="active"[{/if}]><a href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account_password" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_INC_ACCOUNT_MENU_PERSONALSETTINGS" }]</a></li>
   <li [{if $active_link == "newsletter"}]class="active"[{/if}]><a href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account_newsletter" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_INC_ACCOUNT_MENU_NEWSLETTERSETTINGS" }]</a></li>

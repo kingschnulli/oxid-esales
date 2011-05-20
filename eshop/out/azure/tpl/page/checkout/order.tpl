@@ -1,3 +1,4 @@
+[{oxscript include="js/widgets/oxagbcheck.js" priority=10 }]
 [{oxscript add="$('#checkAgbTop, #checkAgbBottom').oxAGBCheck();"}]
 [{oxstyle include="css/checkout.css"}]
 [{capture append="oxidBlock_content"}]

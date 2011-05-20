@@ -1,4 +1,6 @@
+[{oxscript include="js/widgets/oxrating.js" priority=10 }]
 [{oxscript add="$( '#reviewRating' ).oxRating({openReviewForm: false, hideReviewButton: false});"}]
+[{oxscript include="js/widgets/oxreview.js" priority=10 }]
 [{oxscript add="$( '#writeNewReview' ).oxReview();"}]
 <div id="review">
   [{if $oxcmp_user}]

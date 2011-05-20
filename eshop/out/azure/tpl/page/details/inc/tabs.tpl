@@ -1,5 +1,6 @@
 [{oxscript add="$('a.external').attr('target', '_blank');"}]
-[{oxscript add="$('div.tabbedWidgetBox').tabs();"}]
+[{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
+[{oxscript add="$('div.tabbedWidgetBox').oxInputValidator();"}]
 [{oxhasrights ident="SHOWLONGDESCRIPTION"}]
 [{assign var="oLongdesc" value=$oDetailsProduct->getArticleLongDesc()}]
 [{if $oLongdesc->value}]

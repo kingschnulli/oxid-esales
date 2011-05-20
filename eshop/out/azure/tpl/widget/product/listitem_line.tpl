@@ -1,3 +1,4 @@
+[{oxscript include="js/widgets/oxlistremovebutton.js" priority=10 }]
 [{oxscript add="$('button.removeButton').oxListRemoveButton();"}]
 [{assign var="currency" value=$oView->getActCurrency()}]
 [{if $showMainLink}]

@@ -73,7 +73,7 @@
                 "left": sLeftPosition,
                 "position": "absolute"
             });
-        },
+        }
 
     }
 

@@ -13,6 +13,7 @@
     [{oxscript include="js/scrollpane/jquery.mousewheel.js"}]
     [{oxscript include="js/scrollpane/mwheelIntent.js"}]
     [{oxstyle include="css/jquery.jscrollpane.css"}]
+    [{oxscript include="js/widgets/oxcompare.js" priority=10 }]
     [{oxscript add="$( '#compareList' ).oxCompare();"}]
     <table id="compareList">
         <tr>

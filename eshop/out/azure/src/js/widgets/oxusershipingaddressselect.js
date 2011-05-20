@@ -64,7 +64,7 @@
             } else {
                 return '2';
             }
-        },
+        }
     }
 
     $.widget( "ui.oxUserShipingAddressSelect", oxUserShipingAddressSelect );

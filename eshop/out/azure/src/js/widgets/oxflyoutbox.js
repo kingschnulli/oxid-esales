@@ -29,7 +29,7 @@
                 return false;
             });
 
-        },
+        }
     }
 
     $.widget( "ui.oxFlyOutBox", oxFlyOutBox );

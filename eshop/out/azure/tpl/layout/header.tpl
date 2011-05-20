@@ -1,6 +1,7 @@
 <div id="header" class="clear">
   [{include file="widget/header/languages.tpl"}]
   [{include file="widget/header/currencies.tpl"}]
+  [{oxscript include="js/widgets/oxflyoutbox.js" priority=10 }]
   [{oxscript add="$( '#servicesTrigger' ).oxFlyOutBox();"}]
   [{oxid_include_dynamic file="widget/header/servicebox.tpl"}]
   <ul id="topMenu">
@@ -13,6 +14,7 @@
   </ul>
   <a id="logo" href="[{$oViewConf->getHomeLink()}]" title="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"><img src="[{$oViewConf->getImageUrl()}]logo.png" alt="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"></a>
     [{include file="widget/header/topcategories.tpl"}]
+    [{oxscript include="js/widgets/oxminibasket.js" priority=10 }]
     [{oxscript add="$( '#miniBasket' ).oxMiniBasket();"}]
     [{oxid_include_dynamic file="widget/minibasket/minibasket.tpl"}]
     [{include file="widget/header/search.tpl"}]

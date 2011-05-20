@@ -28,7 +28,7 @@
                     $("#loginBox").hide();
                }
             });
-        },
+        }
     }
 
     $.widget( "ui.oxLoginBox", oxLoginBox );

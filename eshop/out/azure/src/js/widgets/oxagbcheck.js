@@ -26,7 +26,7 @@
                     el.attr('checked', false);
                 }
             });
-        },
+        }
     }
 
     $.widget( "ui.oxAGBCheck", oxAGBCheck );

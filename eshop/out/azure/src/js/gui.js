@@ -626,7 +626,7 @@ var oxid = {
 // dropDowns ------------------------------------------------------
 //
 
-    showDropdown : function () {
+   /* showDropdown : function () {
         oxid.hideDropdown();
         targetObj = $(this);
 
@@ -675,7 +675,7 @@ var oxid = {
             }
             return null;
         })
-    },
+    },*/
 
 //
 // dropDowns ===============================================
@@ -693,40 +693,6 @@ $(function(){
 // Equalize columns ---------------------------------------
 //
 
-        /*
-         * Equalize columns
-         */
-        function equalHeight(group, target, getAddHeight) {
-            var tallest = 0;
-            if (target) {
-                if (group.height() < target.height()){
-                    group.css("height", target.height());
-                }
-            } else {
-
-                group.each(function(){
-
-                    var thisHeight = $(this).height();
-                    if (thisHeight > tallest) {
-                        tallest = thisHeight;
-                    }
-                });
-
-                 group.each(function(){
-                    if( $(this).hasClass('catPicOnly') && $(this).height() < tallest  ){
-                        $(this).height(tallest+20);
-                    }else{
-                        $(this).height(tallest);
-
-                    }
-                 });
-            }
-        }
-
-        equalHeight($("#panel dl"));
-        equalHeight($(".sidebarMenu"), $("#content"));
-        equalHeight($(".subcatList li .content"));
-        equalHeight($(".checkoutOptions .option"));
 
 //
 // Equalize columns ==========================================
@@ -771,5 +737,5 @@ $(function(){
 // - state select =======================================================
 //
 
-    oxid.initDropDowns();
+   // oxid.initDropDowns();
 });

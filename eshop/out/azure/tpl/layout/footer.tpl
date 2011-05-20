@@ -1,3 +1,5 @@
+[{oxscript include="js/widgets/oxequalizer.js" priority=10 }]
+[{oxscript add="$(function(){oxEqualizer.equalHeight($( '#panel dl' ));});"}]
 <div id="footer">
   <div id="panel" class="corners">
       [{capture append="oxidBlock_footer"}]

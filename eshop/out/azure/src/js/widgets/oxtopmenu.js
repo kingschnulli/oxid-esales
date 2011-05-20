@@ -43,7 +43,7 @@
                     $('a:first-child',this.parent()).removeClass($.fn.superfish.op.hoverClass);
                 }
             });
-        },
+        }
     }
 
     $.widget( "ui.oxTopMenu", oxTopMenu );

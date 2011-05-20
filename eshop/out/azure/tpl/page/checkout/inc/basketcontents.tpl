@@ -1,4 +1,5 @@
 [{* basket contents *}]
+[{oxscript include="js/widgets/oxbasketchecks.js" priority=10 }]
 [{oxscript add="$('#checkAll, #basketRemoveAll').oxBasketChecks();"}]
 [{assign var="currency" value=$oView->getActCurrency()}]
 <form name="basket[{ $basketindex }]" action="[{ $oViewConf->getSelfActionLink() }]" method="post">

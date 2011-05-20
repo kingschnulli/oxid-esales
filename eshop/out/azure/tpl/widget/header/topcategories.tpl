@@ -1,3 +1,4 @@
+[{oxscript include="js/widgets/oxtopmenu.js" priority=10 }]
 [{oxscript add="$('#navigation').oxTopMenu();"}]
 [{oxstyle include="css/superfish.css"}]
 <ul id="navigation" class="sf-menu">

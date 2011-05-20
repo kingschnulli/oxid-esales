@@ -1,3 +1,4 @@
+[{oxscript include="js/widgets/oxloginbox.js" priority=10 }]
 [{oxscript add="$( '#loginBoxOpener' ).oxLoginBox();"}]
 [{assign var="bIsError" value=0 }]
 [{capture name=loginErrors}]

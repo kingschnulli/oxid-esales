@@ -1,3 +1,5 @@
+[{oxscript include="js/widgets/oxequalizer.js" priority=10 }]
+[{oxscript add="$(function(){oxEqualizer.equalHeight($( '.checkoutOptions .option' ));});"}]
 <div class="checkoutOptions clear">
     [{if $oView->getShowNoRegOption() }]
     <div class="lineBox option" id="optionNoRegistration">

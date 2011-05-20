@@ -1,3 +1,5 @@
+[{oxscript include="js/widgets/oxdropdown.js" priority=10 }]
+[{oxscript add="$('.dropDown p').oxDropDown();"}]
 <div class="dropDown" id="selectlist_[{$iKey}]">
 
     <p class="selectorLabel underlined[{if $editable === false}] oxdisabled[{/if}]">
