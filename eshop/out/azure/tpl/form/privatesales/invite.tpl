@@ -1,6 +1,7 @@
-
 [{assign var="_oProduct" value=$oView->getProduct()}]
 [{assign var="editval" value=$oView->getInviteData()}]
+[{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
+[{oxscript add="$('form.oxValidate').oxInputValidator();"}]
 <form class="oxValidate" action="[{ $oViewConf->getSslSelfLink() }]" method="post">
     <div class="suggestView">
         [{ $oViewConf->getHiddenSid() }]

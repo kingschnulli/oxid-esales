@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 34014 2011-03-25 14:06:07Z sarunas $
+ * @version   SVN: $Id: oxlangTest.php 35507 2011-05-20 12:00:17Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -326,7 +326,7 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $this->assertEquals( 'Active', $oLang->translateString( "GENERAL_ACTIVE", 1 ) );
 
         $this->assertEquals( 'Falsche E-Mail oder Passwort!', $oLang->translateString( "EXCEPTION_USER_NOVALIDLOGIN", 0 ) );
-        $this->assertEquals( 'Wrong e-Mail or password!', $oLang->translateString( "EXCEPTION_USER_NOVALIDLOGIN", 1 ) );
+        $this->assertEquals( 'Wrong e-mail or password!', $oLang->translateString( "EXCEPTION_USER_NOVALIDLOGIN", 1 ) );
 
         $this->assertEquals( 'blafoowashere123', $oLang->translateString( "blafoowashere123" ) );
         $this->assertEquals( '', $oLang->translateString( "" ) );

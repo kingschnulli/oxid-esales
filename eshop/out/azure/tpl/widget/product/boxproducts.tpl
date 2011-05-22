@@ -1,4 +1,5 @@
 [{oxscript add="$('a.external').attr('target', '_blank');"}]
+[{oxscript include="js/widgets/oxarticlebox.js" priority=10 }]
 [{oxscript add="$( 'ul.articleBox' ).oxArticleBox();" }]
 <div class="box" [{if $_boxId}]id="[{$_boxId}]"[{/if}]>
     [{if $_sHeaderIdent}]

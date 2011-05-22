@@ -177,7 +177,7 @@ tbclremote = Interface
 snpuserlistheader = Benutzerliste
 snpuserlistoxfname = Vorname
 snpuserlistoxlname = Nachname
-snpuserlistoxusername = e-Mail
+snpuserlistoxusername = E-Mail
 snpuserlistoxcreate = Registriert
 #reviewlist
 snpreviewlistheader = Bemerkungen Liste

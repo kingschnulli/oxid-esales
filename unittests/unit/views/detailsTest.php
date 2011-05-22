@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 35236 2011-05-10 06:46:56Z sarunas $
+ * @version   SVN: $Id: detailsTest.php 35507 2011-05-20 12:00:17Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -171,8 +171,12 @@ class Unit_Views_detailsTest extends OxidTestCase
     {
         modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', true );
 
-        $oProduct = $this->getMock( 'oxarticle', array( 'getVariants', 'getId' ) );
-        $oProduct->expects( $this->once() )->method( 'getVariants')->will( $this->returnValue( new oxlist() ) );
+        $this->getProxyClass( 'oxarticle' );
+        $oProductParent = $this->getMock( 'oxarticlePROXY', array( 'getSelectLists' ) );
+        $oProductParent->expects( $this->once() )->method( 'getSelectLists');
+
+        $oProduct = $this->getMock( 'oxarticle', array( 'getParentArticle', 'getVariants', 'getId' ) );
+        $oProduct->expects( $this->never() )->method( 'getVariants');
         $oProduct->expects( $this->atLeastOnce() )->method( 'getId')->will( $this->returnValue( 'testArtId' ) );
 
         $oVar1 = new oxarticle();
@@ -194,14 +198,13 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oVarList->offsetSet( $oVar3->getId(), $oVar3 );
         $oVarList->offsetSet( $oVar4->getId(), $oVar4 );
 
-        $oProductParent = $this->getMock( 'oxarticle', array( 'getVariants', 'getSelectLists' ) );;
-        $oProductParent->expects( $this->once() )->method( 'getVariants')->will( $this->returnValue( $oVarList ) );
-        $oProductParent->expects( $this->once() )->method( 'getSelectLists');
-        $oProductParent->blNotBuyableParent = true;
+        $oProductParent->setNonPublicVar( '_aVariantsWithNotOrderables', $oVarList );
+        $oProductParent->setNonPublicVar( '_blNotBuyableParent', true );
 
-        $oDetailsView = $this->getMock( 'details', array( 'getProduct', '_getParentProduct', 'getLinkType' ) );
+        $oProduct->expects( $this->any() )->method( 'getParentArticle')->will( $this->returnValue( $oProductParent ) );
+
+        $oDetailsView = $this->getMock( 'details', array( 'getProduct', 'getLinkType' ) );
         $oDetailsView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
-        $oDetailsView->expects( $this->once() )->method( '_getParentProduct')->will( $this->returnValue( $oProductParent ) );
         $oDetailsView->expects( $this->exactly( 6 ) )->method( 'getLinkType');
         $oDetailsView->loadVariantInformation();
     }

@@ -36,6 +36,8 @@
     [{include file="page/checkout/inc/basketcontents.tpl" editable=true}]
 
     [{if $oViewConf->getShowVouchers()}]
+        [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
+        [{oxscript add="$('form.oxValidate').oxInputValidator();"}]
         <form name="voucher" action="[{ $oViewConf->getSelfActionLink() }]" method="post" class="left oxValidate">
             <div class="couponBox" id="coupon">
                 [{foreach from=$Errors.basket item=oEr key=key}]
@@ -88,7 +90,6 @@
 [{if $oView->isWrapping() }]
 [{include file="page/checkout/inc/wrapping.tpl"}]
 [{/if}]
-[{oxscript add="$(function(){oxid.initBasket();});"}]
 [{insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 [{include file="layout/page.tpl"}]

@@ -37,6 +37,7 @@
 
         [{* article picture with zoom *}]
         [{if $oView->showZoomPics()}]
+            [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
             [{oxscript add="$('#zoomTrigger').oxModalPopup({target:'#zoomModal'});"}]
             <a id="zoomTrigger" alt="[{oxmultilang ident="DETAILS_ZOOM"}]" rel="nofollow" href="#">Zoom</a>
         [{/if}]
@@ -53,6 +54,8 @@
 
         [{ assign var="oManufacturer" value=$oView->getManufacturer()}]
             <div class="productMainInfo[{if $oManufacturer->oxmanufacturers__oxicon->value}] hasBrand[{/if}]">
+            [{oxscript include="js/widgets/oxarticleactionlinksselect.js" priority=10 }]
+            [{oxscript add="$( '#productTitle' ).oxArticleActionLinksSelect();"}]
             <h1 id="productTitle"><span>[{$oDetailsProduct->oxarticles__oxtitle->value}] [{$oDetailsProduct->oxarticles__oxvarselect->value}]</span></h1>
 
 
@@ -207,6 +210,8 @@
                             </label>
                         [{/if}]
                         [{if $oDetailsProduct->loadAmountPriceInfo()}]
+                            [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]
+                            [{oxscript add="$( '#amountPrice' ).oxAmountPriceSelect();"}]
                             <a class="selector corners FXgradBlueDark" href="#priceinfo" id="amountPrice"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" longdesc="[{$oViewConf->getImageUrl()}]selectbutton-on.png" alt="Select"></a>
                             [{include file="page/details/inc/priceinfo.tpl"}]
                         [{/if}]

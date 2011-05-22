@@ -2,6 +2,7 @@
   [{assign var="oDetailsProduct" value=$oView->getProduct()}]
   [{assign var="oPictureProduct" value=$oView->getPicturesProduct()}]
   [{assign var="currency" value=$oView->getActCurrency()}]
+  [{assign var="sPageHeadTitle" value=$oDetailsProduct->oxarticles__oxtitle->value|cat:' '|cat:$oDetailsProduct->oxarticles__oxvarselect->value}]
   [{capture append="oxidBlock_pagePopup"}]
     <div>
       [{include file="page/details/inc/zoompopup.tpl"}]
@@ -37,7 +38,7 @@
 
 
         [{* details locator  *}]
-        <h2 class="pageHead category">[{$detailsLocation}]</h2>
+        <h2 class="pageHead category">[{$sPageHeadTitle|truncate:80}]</h2>
 
         [{assign var="actCategory" value=$oView->getActiveCategory()}]
         <div class="detailsParams listRefine bottomRound">

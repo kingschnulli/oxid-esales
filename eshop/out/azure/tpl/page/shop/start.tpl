@@ -1,3 +1,4 @@
+[{oxscript include="js/widgets/oxpromocategory.js" priority=10 }]
 [{oxscript add="$( '#specCatBox' ).oxPromoCategory();" }]
 [{capture append="oxidBlock_content"}]
     [{assign var="oFirstArticle" value=$oView->getFirstArticle()}]

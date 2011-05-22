@@ -74,14 +74,14 @@ test('getColumnHeight()', function() {
 
     oBody.html(oElement);
 
-    oColumn = oxCompareList.getOtherColumn(5, 3);
+    oColumn = oxCompare.getOtherColumn(5, 3);
 
     var rH = oColumn.outerHeight();
-    equals( oxCompareList.getColumnHeight('mozilla', oColumn) , rH, "height 22");
+    equals( oxCompare.getColumnHeight('mozilla', oColumn) , rH, "height 22");
 
-    oColumn = oxCompareList.getOtherColumn(5, 5);
+    oColumn = oxCompare.getOtherColumn(5, 5);
     rH = oColumn.outerHeight();
-    equals( oxCompareList.getColumnHeight('mozilla', oColumn) , rH, "height 22");
+    equals( oxCompare.getColumnHeight('mozilla', oColumn) , rH, "height 22");
 
     oBody.html("");
 
@@ -94,15 +94,15 @@ test('setColumnHeight()', function() {
 
     oBody.html(oElement);
 
-     var oColumn = oxCompareList.getOtherColumn(5, 3);
+     var oColumn = oxCompare.getOtherColumn(5, 3);
 
-     oColumn = oxCompareList.setColumnHeight(oColumn, 150);
+     oColumn = oxCompare.setColumnHeight(oColumn, 150);
      equals( jQuery.trim(oColumn.attr('style')) , 'height: 150px;', "height - 150");
 
-     oColumn = oxCompareList.setColumnHeight(oColumn, 250);
+     oColumn = oxCompare.setColumnHeight(oColumn, 250);
      equals( jQuery.trim(oColumn.attr('style')) , 'height: 250px;', "height - 250");
 
-     oColumn = oxCompareList.setColumnHeight(oColumn, 0);
+     oColumn = oxCompare.setColumnHeight(oColumn, 0);
      equals( jQuery.trim(oColumn.attr('style')) , 'height: 0px;', "height - 0");
 
      oBody.html("");
@@ -115,10 +115,10 @@ test('getOtherColumn()', function() {
 
     oBody.html(oElement);
 
-    equals(oxCompareList.getOtherColumn(5, 3).is('td'), true, "is column");
-    equals(oxCompareList.getOtherColumn(5, 2).is('td'), true, "is column");
-    equals(oxCompareList.getOtherColumn(5, 7).is('td'), false, "not column");
-    equals(oxCompareList.getOtherColumn(5, 6).is('td'), false, "not column");
+    equals(oxCompare.getOtherColumn(5, 3).is('td'), true, "is column");
+    equals(oxCompare.getOtherColumn(5, 2).is('td'), true, "is column");
+    equals(oxCompare.getOtherColumn(5, 7).is('td'), false, "not column");
+    equals(oxCompare.getOtherColumn(5, 6).is('td'), false, "not column");
 
     oBody.html("");
 
@@ -131,7 +131,7 @@ test('getColumnCount()', function() {
 
     oBody.html(oElement);
 
-    equals(oxCompareList.getColumnCount(oBody), 5, "5 data columns");
+    equals(oxCompare.getColumnCount(oBody), 5, "5 data columns");
 
     oBody.html("");
 

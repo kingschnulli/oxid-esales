@@ -14,6 +14,7 @@
 [{/capture}]
 [{if $slideCount > 6 }]
     [{oxscript include="js/jquery.jcarousellite.js"}]
+    [{oxscript include="js/widgets/oxmanufacturerslider.js" priority=10 }]
     [{oxscript add="$( '#manufacturerSlider' ).oxManufacturerSlider();"}]
     <div class="itemSlider">
         <a class="prevItem slideNav" href="#" rel="nofollow"><strong>[{ oxmultilang ident="WIDGET_MANUFACTURERS_SLIDER_OURBRANDS" }]</strong><span>&laquo;</span></a>

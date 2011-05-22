@@ -1,5 +1,7 @@
 [{assign var="currency" value=$oView->getActCurrency()}]
 <p>[{ oxmultilang ident="FORM_PRICEALARM_PRICEALARMMESSAGE" }]</p>
+[{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
+[{oxscript add="$('form.oxValidate').oxInputValidator();"}]
 <form class="oxValidate" name="pricealarm" action="[{ $oViewConf->getSelfActionLink() }]" method="post">
     <div>
         [{ $oViewConf->getHiddenSid() }]

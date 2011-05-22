@@ -1,5 +1,7 @@
 [{ oxmultilang ident="PAGE_ACCOUNT_FORGOTPWD_FORGOTPWD" }]<br>
 [{ oxmultilang ident="PAGE_ACCOUNT_FORGOTPWD_WEWILLSENDITTOYOU" }]<br><br>
+[{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
+[{oxscript add="$('form.oxValidate').oxInputValidator();"}]
 <form class="oxValidate" action="[{ $oViewConf->getSelfActionLink() }]" name="order" method="post">
   [{ $oViewConf->getHiddenSid() }]
   [{ $oViewConf->getNavFormParams() }]

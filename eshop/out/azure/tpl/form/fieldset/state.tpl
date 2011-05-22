@@ -10,7 +10,7 @@
 [{else}]
   [{assign var=showDiv value='false'}]
 [{/if}]
-
+[{oxscript include="js/widgets/oxcountrystateselect.js" priority=10 }]
 [{oxscript add="$( '#`$countrySelectId`' ).oxCountryStateSelect({selectedStateId:'`$selectedStateId`'});"}]
 
 <script type="text/javascript"><!--

@@ -1,3 +1,6 @@
+[{oxscript include="js/widgets/oxinnerlabel.js" priority=10 }]
+[{assign var="defaulInnerLabel" value="SEARCH_TITLE"|oxmultilangassign}]
+[{oxscript add="$( '#searchParam' ).oxInnerLabel({ sDefaultValue : '`$defaulInnerLabel`'});"}]
 <form class="search" action="[{ $oViewConf->getSelfActionLink() }]" method="get" name="search">
     <div class="searchBox">
         [{ $oViewConf->getHiddenSid() }]

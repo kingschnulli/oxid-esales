@@ -10,6 +10,8 @@
 
         [{if $oView->hasVisibleSubCats()}]
             [{assign var="iSubCategoriesCount" value=0}]
+            [{oxscript include="js/widgets/oxequalizer.js" priority=10 }]
+            [{oxscript add="$(function(){oxEqualizer.equalHeight($( '.subcatList li .content' ));});"}]
             <ul class="subcatList clear">
                 <li>
                 [{foreach from=$oView->getSubCatList() item=category name=MoreSubCat}]

@@ -1,4 +1,6 @@
 [{assign var="_additionalParams" value=$oView->getAdditionalParams()}]
+[{oxscript include="js/widgets/oxdropdown.js" priority=10 }]
+[{oxscript add="$('.dropDown p').oxDropDown();"}]
 <div class="dropDown" id="itemsPerPage">
     <p>
         <label>[{oxmultilang ident="WIDGET_PRODUCT_LOCATOR_ARTICLE_PER_PAGE"}]</label>

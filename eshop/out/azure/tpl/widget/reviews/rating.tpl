@@ -1,3 +1,4 @@
+[{oxscript include="js/widgets/oxrating.js" priority=10 }]
 [{oxscript add="$( '#itemRating' ).oxRating();"}]
 
 <ul id="itemRating" class="rating">

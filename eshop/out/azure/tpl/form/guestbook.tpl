@@ -1,3 +1,4 @@
+[{oxscript include="js/widgets/oxreview.js" priority=10 }]
 [{oxscript add="$( '#writeNewReview' ).oxReview();"}]
 [{if $oxcmp_user}]
     [{if !$oView->floodProtection() }]

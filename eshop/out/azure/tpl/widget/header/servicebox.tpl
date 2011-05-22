@@ -8,7 +8,7 @@
     [{/if}]
     [{math equation="a+b+c" a=$oView->getCompareItemsCnt() b=$noticeListCount c=$wishListCount assign=notificationsCounter}]
     <p id="servicesTrigger" class="selectedValue [{if $notificationsCounter > 0}]hasNotifications[{/if}]">
-      <a href="#" rel="nofollow"><span>[{oxmultilang ident="WIDGET_SERVICES_ACCOUNT"}]</span></a>[{if $notificationsCounter > 0}]<span class="counter FXgradOrange">[{$notificationsCounter}]</span>[{/if}]
+        <a href="#" rel="nofollow"><span>[{oxmultilang ident="WIDGET_SERVICES_ACCOUNT"}]</span></a>[{if $notificationsCounter > 0}]<span class="counter FXgradOrange">[{$notificationsCounter}]</span>[{/if}]
     </p>
     <div class="flyoutBox">
         <ul id="services" class="corners flyoutMenu">
