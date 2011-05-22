@@ -342,64 +342,7 @@ var oxid = {
 
     initDetailsMain : function () {
 
-        oxid.initDropDowns();
-
-        //
-        // details page article more pictures ---------------------------------------
-        //
-            $(".cloud-zoom, .cloud-zoom-gallery").CloudZoom();
-             /* More pictures marker*/
-
-             $(".otherPictures li a").click(function(){
-                $(".otherPictures li a").removeClass("selected");
-                $(this).addClass("selected");
-                return false;
-             });
-
-             $("#zoomModal li a").click(function(){
-                $("#zoomImg").attr("src", $(this).attr("href"));
-                return false;
-             });
-
-             $(".cloud-zoom").click(function(){
-                return false;
-             });
-
-            $("#zoomImg").click(function(){
-
-                var oPaging     = $(".zoomPager");
-                var iImgCount   = $(".zoomPager li").size();
-                var iCurImgNo   = $(".selected", oPaging).text();
-
-                if ( $(".selected", oPaging).length == 0 ) {
-                    iCurImgNo = 1;
-                    $(".zoomPager li:first").children("a").addClass('selected');
-                }
-
-                var sFirstImage = $(".zoomPager li:first").children("a").attr("href");
-                var sNextImage  = $(".selected", oPaging).parent().next().children("a").attr("href");
-                var oCurPage    = $(".selected", oPaging);
-                var oNextPage   = $(".selected", oPaging).parent().next().children();
-                var oLastPage   = $(".zoomPager li:last").children("a");
-                var oFirstPage  = $(".zoomPager li:first").children("a");
-
-                if( iCurImgNo == iImgCount ) {
-                    $("#zoomImg").attr("src", sFirstImage);
-                    oLastPage.removeClass('selected');
-                    oFirstPage.addClass('selected');
-                } else {
-                    $("#zoomImg").attr("src", sNextImage);
-                    oCurPage.removeClass('selected');
-                    oNextPage.addClass('selected');
-                }
-
-                return false;
-             });
-
-        //
-        // details page article more pictures =========================================
-        //
-
+     //   oxid.initDropDowns();
 
         //
         // details page article action links ---------------------------------------
@@ -524,32 +467,33 @@ var oxid = {
     },
 
 
-    initDetailsRelated : function () {
+   // initDetailsRelated : function () {
 
 
 //
 // tags calls ------------------------------
 //
-        $(".tagCloud .tagText").click(oxid.highTag);
-        $("#saveTag").click(oxid.saveTag);
-        $("#cancelTag").click(oxid.cancelTag);
-        $("#editTag").click(oxid.editTag);
+        /*$(".tagCloud .tagText").click(oxTag.highTag);
+        $("#saveTag").click(oxTag.saveTag);
+        $("#cancelTag").click(oxTag.cancelTag);
+        $("#editTag").click(oxTag.editTag); */
 
 //
 // tags calls =========================================
 //
 
-    },
+  //  },
 
 //
 // Tags --------------------------------------------
 //
 
-    highTag : function() {
+ /*   highTag : function() {
         var oSelf = $(this);
+
         $(".tagError").hide();
 
-        oxid.ajax(
+        oxAjax.ajax(
             $("#tagsForm"),
             {//targetEl, onSuccess, onError, additionalData
                 'targetEl' : $("#tags"),
@@ -561,12 +505,13 @@ var oxid = {
             }
         );
         return false;
-    },
+    }, */
 
+/*
     saveTag : function() {
         $(".tagError").hide();
 
-        oxid.ajax(
+        oxAjax.ajax(
             $("#tagsForm"),
             {//targetEl, onSuccess, onError, additionalData
                 'targetEl' : $("#tags"),
@@ -582,9 +527,11 @@ var oxid = {
         );
         return false;
     },
+*/
+/*
 
     cancelTag : function () {
-        oxid.ajax(
+        oxAjax.ajax(
             $("#tagsForm"),
             {//targetEl, onSuccess, onError, additionalData
                 'targetEl' : $("#tags"),
@@ -600,8 +547,10 @@ var oxid = {
         return false;
     },
 
-    editTag : function() {
-        oxid.ajax(
+*/
+
+   /* editTag : function() {
+        oxAjax.ajax(
             $("#tagsForm"),
             {//targetEl, onSuccess, onError, additionalData
                 'targetEl' : $("#tags"),
@@ -617,7 +566,7 @@ var oxid = {
             }
         );
         return false;
-    },
+    }, */
 //
 // Tags ===========================================
 //
@@ -690,15 +639,6 @@ $(function(){
 
 
 //
-// Equalize columns ---------------------------------------
-//
-
-
-//
-// Equalize columns ==========================================
-//
-
-//
 // box titles ---------------------------------------------
 //
 
@@ -728,14 +668,5 @@ $(function(){
 //
 // box titles ================================================
 //
-
-//
-// - user addresses select -----------------------------------------------------
-//
-
-//
-// - state select =======================================================
-//
-
    // oxid.initDropDowns();
 });

@@ -9,12 +9,12 @@
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/jquery-ui.min.js"></script>
 
     <!-- Your project file goes here -->
-    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/jquery.ui.oxid.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxrating.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxcompare.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxcountrystateselect.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxslider.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxarticleactionlinksselect.js"></script>
+    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxinputvalidator.js"></script>
 
     <!-- Your tests file goes here -->
     <script type="text/javascript" src="inputvalidatorTests.js"></script>

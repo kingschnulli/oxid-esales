@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbase.php 34833 2011-04-19 08:32:43Z linas.kukulskis $
+ * @version   SVN: $Id: dynexportbase.php 35505 2011-05-20 11:20:42Z arunas.paskevicius $
  */
 
 /**
@@ -578,7 +578,7 @@ class DynExportBase extends oxAdminDetails
         $blDone = false;
 
         $oDB = oxDb::getDb();
-        $sQ = "CREATE TABLE if not exists {$sHeapTable} ( oxid char(32) NOT NULL default '' ) TYPE=HEAP {$sTableCharset}";
+        $sQ = "CREATE TABLE if not exists {$sHeapTable} ( oxid char(32) NOT NULL default '' ) ENGINE=HEAP {$sTableCharset}";
         if ( ( $oDB->execute( $sQ ) ) !== false ) {
             $blDone = true;
             $oDB->execute( "truncate table {$sHeapTable}" );

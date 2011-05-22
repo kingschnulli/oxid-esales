@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 34473 2011-04-08 15:12:40Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 35498 2011-05-20 08:01:19Z arunas.paskevicius $
  */
 
 /**
@@ -278,9 +278,9 @@ $aLang =  array(
 
 'HELP_SHOP_MAIN_INFOEMAIL'                    => 'All e-mails sent via the contact page are sent to this e-mail address.',
 
-'HELP_SHOP_MAIN_ORDEREMAIL'                   => 'When users order they receive an email with a summary of the order. Answers to this e-mail are sent to <span class="navipath_or_inputname">Order E-mail reply</span>.',
+'HELP_SHOP_MAIN_ORDEREMAIL'                   => 'When users order they receive an e-mail with a summary of the order. Answers to this e-mail are sent to <span class="navipath_or_inputname">Order e-mail reply</span>.',
 
-'HELP_SHOP_MAIN_OWNEREMAIL'                   => 'When users order, you receive an e-mail with a summary of the order. These e-mails are sent to <span class="navipath_or_inputname">Order E-mails to</span>.',
+'HELP_SHOP_MAIN_OWNEREMAIL'                   => 'When users order, you receive an e-mail with a summary of the order. These e-mails are sent to <span class="navipath_or_inputname">Order e-mails to</span>.',
 
 'HELP_SHOP_MAIN_SMTPSERVER'                   => 'SMTP data is needed for sending e-mails (e.g. sending customers an order confirmation e-mail) Further information can be found in the <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/entering-smtp-data" target="_blank">accordant manual entry</a>.',
 
@@ -538,11 +538,11 @@ $aLang =  array(
 
 
 
-'HELP_DYN_TRUSTED_RATINGS_ID'                 => 'You will receive your Trusted Shops ID for Customer Ratings in the order conformation email. If you are already a member of Trusted Shops, please use your known Trusted Shops ID. The green light indicates that the Customer Ratings have been verified and enabled after saving your settings.',
+'HELP_DYN_TRUSTED_RATINGS_ID'                 => 'You will receive your Trusted Shops ID for Customer Ratings in the order conformation e-mail. If you are already a member of Trusted Shops, please use your known Trusted Shops ID. The green light indicates that the Customer Ratings have been verified and enabled after saving your settings.',
 'HELP_DYN_TRUSTED_RATINGS_WIDGET'             => 'Enable the Customer Ratings Widget by switching this option on.',
 'HELP_DYN_TRUSTED_RATINGS_THANKYOU'           => 'Enable the button "Write a review!" on "Order completed" page subsequent to an order by switching this option on.',
-'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'         => 'Enable the button "Write a review!" in "Order confirmation" email subsequent to an order by switching this option on.',
-'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'     => 'Enable the button "Write a review!" in "Order sent" email after dispatch of the order.',
+'HELP_DYN_TRUSTED_RATINGS_ORDEREMAIL'         => 'Enable the button "Write a review!" in "Order confirmation" e-mail subsequent to an order by switching this option on.',
+'HELP_DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'     => 'Enable the button "Write a review!" in "Order sent" e-mail after dispatch of the order.',
 'HELP_DYN_TRUSTED_TSID'                       => 'Trusted Shops ID of the online shop (for language).',
 'HELP_DYN_TRUSTED_USER'                       => 'A user name (wsUser) for the Trusted Shops webservice is required if you offer the Trusted Shops Buyer Protection Excellence to your customers. Buyer Protection Classic does not require a user name.',
 'HELP_DYN_TRUSTED_PASSWORD'                   => 'A password (wsPassword) for the Trusted Shops webservice is required if you offer the Trusted Shops Buyer Protection Excellence to your customers. Buyer Protection Classic does not require a password.',

@@ -221,9 +221,6 @@
                         [{if !$oDetailsProduct->isNotBuyable()}]
                             <input id="amountToBasket" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
                             <button id="toBasket" type="submit" [{if !$blCanBuy}]disabled="disabled"[{/if}] class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
-                            [{if $oDetailsProduct->loadAmountPriceInfo()}]
-                                [{oxscript add="$( '.ox-details-amount' ).oxSuggest();"}]
-                            [{/if}]
                         [{/if}]
                     [{/oxhasrights}]
 

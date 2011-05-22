@@ -7,7 +7,6 @@
         [{assign var="bIsError" value=1 }]
     [{/foreach}]
 [{/capture}]
-
 [{if !$oxcmp_user->oxuser__oxpassword->value}]
     [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
     [{oxscript add="$( '#forgotPasswordOpener' ).oxModalPopup({ target: '#forgotPassword'});"}]
@@ -31,10 +30,16 @@
             <div class="loginForm corners fx-gradient-bg">
                 <h4>[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</h4>
                 <p>
-                    <input id="loginEmail" type="text" name="lgn_usr" value="[{ oxmultilang ident="WIDGET_LOGINBOX_EMAIL_ADDRESS" }]" class="textbox innerLabel ">
+                    [{oxscript include="js/widgets/oxinnerlabel.js" priority=10 }]
+                    [{assign var="defaulInnerLabel" value="WIDGET_LOGINBOX_EMAIL_ADDRESS"|oxmultilangassign}]
+                    [{oxscript add="$( '#loginEmail' ).oxInnerLabel({ sDefaultValue : '`$defaulInnerLabel`'});"}]
+                    <input id="loginEmail" type="text" name="lgn_usr" value="[{ oxmultilang ident="WIDGET_LOGINBOX_EMAIL_ADDRESS" }]" class="textbox innerLabel">
                 </p>
                 <p>
-                    <input type="password" name="lgn_pwd" class="textbox passwordbox innerLabel" value="[{ oxmultilang ident="WIDGET_LOGINBOX_PASSWORD" }]"><strong><a id="forgotPasswordOpener" href="#" title="[{ oxmultilang ident="WIDGET_LOGINBOX_FORGOT_PASSWORD" }]">?</a></strong>
+                    [{oxscript include="js/widgets/oxinnerlabel.js" priority=10 }]
+                    [{assign var="defaulInnerLabel" value="WIDGET_LOGINBOX_PASSWORD"|oxmultilangassign}]
+                    [{oxscript add="$( '#loginPasword' ).oxInnerLabel({ sDefaultValue : '`$defaulInnerLabel`'});"}]
+                    <input id="loginPasword" type="password" name="lgn_pwd" class="textbox passwordbox innerLabel" value="[{ oxmultilang ident="WIDGET_LOGINBOX_PASSWORD" }]"><strong><a id="forgotPasswordOpener" href="#" title="[{ oxmultilang ident="WIDGET_LOGINBOX_FORGOT_PASSWORD" }]">?</a></strong>
                 </p>
                 [{$smarty.capture.loginErrors}]
                 <p class="checkFields clear">
