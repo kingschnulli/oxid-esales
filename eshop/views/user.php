@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 35123 2011-05-05 08:07:38Z linas.kukulskis $
+ * @version   SVN: $Id: user.php 35529 2011-05-23 07:31:20Z arunas.paskevicius $
  */
 
 /**
@@ -265,6 +265,8 @@ class User extends oxUBase
         $aPath = array();
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_CHECKOUT_USER', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
+        
         $aPaths[] = $aPath;
 
         return $aPaths;

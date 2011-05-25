@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 35393 2011-05-16 07:23:18Z vilma $
+ * @version   SVN: $Id: details.php 35562 2011-05-24 08:38:35Z arunas.paskevicius $
  */
 
 /**
@@ -1431,19 +1431,27 @@ class Details extends oxUBase
         $aPaths = array();
 
         if ( 'search' == oxConfig::getParameter( 'listtype' ) ) {
-
+            
             $aCatPath = array();
             $aCatPath['title'] = sprintf(oxLang::getInstance()->translateString( 'searchResult', oxLang::getInstance()->getBaseLanguage(), false ), oxConfig::getParameter( 'searchparam' ));
+            $sLink = $this->getViewConfig()->getSelfLink() . 'stoken=' . oxSession::getVar('sess_stoken')
+                   . "&amp;cl=search&amp;searchparam=" . oxConfig::getParameter( 'searchparam' );
+                        
+            $aCatPath['link']  = $sLink;
+            
             $aPaths[] = $aCatPath;
 
         } elseif ( 'tag' == oxConfig::getParameter( 'listtype' ) ) {
 
             $aCatPath = array();
+         
             $aCatPath['title'] = oxLang::getInstance()->translateString( 'TAGS', oxLang::getInstance()->getBaseLanguage(), false );
+            $aCatPath['link']  = oxSeoEncoder::getInstance()->getStaticUrl( $this->getViewConfig()->getSelfLink() . 'cl=tags' );
             $aPaths[] = $aCatPath;
 
             $oStr = getStr();
-            $aCatPath['title'] = $oStr->ucfirst(oxConfig::getParameter( 'searchtag' ));
+            $aCatPath['title'] = $oStr->ucfirst(oxConfig::getParameter( 'searchtag' ));           
+            $aCatPath['link']  = oxSeoEncoderTag::getInstance()->getTagUrl( oxConfig::getParameter( 'searchtag' ) );
             $aPaths[] = $aCatPath;
 
         } elseif ( 'recommlist' == oxConfig::getParameter( 'listtype' ) ) {

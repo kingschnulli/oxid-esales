@@ -1960,12 +1960,18 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
     public function testTagGetBreadCrumb()
     {
-        $sValue = 'литов';
+        $sValue = 'Литов';
         $sResult = 'Литов';
 
         $oView = $this->getProxyClass( 'tag' );
         $oView->setNonPublicVar( "_sTag", $sValue );
-        $this->assertEquals( array(array('title'=>'Stichworte'),array('title'=>$sResult)), $oView->getBreadCrumb());
+        
+        $aPath = array(
+            array('title'=>'Stichworte', 'link' => oxSeoEncoder::getInstance()->getStaticUrl( $oView->getViewConfig()->getSelfLink() . 'cl=tags' )),
+            array('title'=>$sResult, 'link' => $oView->getCanonicalUrl())
+        );
+        
+        $this->assertEquals( $aPath, $oView->getBreadCrumb());
     }
 
     public function testOxEmailIncludeImages()

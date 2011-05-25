@@ -22,7 +22,7 @@
     <script type="text/javascript" src="comparelistTests.js"></script>
     <script type="text/javascript" src="sliderTests.js"></script>
     <script type="text/javascript" src="ratingTests.js"></script>
-    <script type="text/javascript" src="variantTests.js"></script>
+    <!--<script type="text/javascript" src="variantTests.js"></script>-->
 </head>
 <body>
     <h1 id="qunit-header">OXID eShop javascript tests</h1>

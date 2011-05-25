@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: thankyou.php 35117 2011-05-04 15:11:27Z rimvydas.paskevicius $
+ * @version   SVN: $Id: thankyou.php 35529 2011-05-23 07:31:20Z arunas.paskevicius $
  */
 
 /**
@@ -347,6 +347,7 @@ class Thankyou extends oxUBase
 
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_CHECKOUT_THANKYOU', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
         $aPaths[] = $aPath;
 
         return $aPaths;

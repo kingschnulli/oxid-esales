@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: tags.php 32965 2011-02-07 12:22:04Z vilma $
+ * @version   SVN: $Id: tags.php 35529 2011-05-23 07:31:20Z arunas.paskevicius $
  */
 
 /**
@@ -88,6 +88,7 @@ class Tags extends oxUBase
         $aCatPath = array();
 
         $aCatPath['title'] = oxLang::getInstance()->translateString( 'TAGS', oxLang::getInstance()->getBaseLanguage(), false );
+        $aCatPath['link']  = $this->getLink();
         $aPaths[] = $aCatPath;
 
         return $aPaths;

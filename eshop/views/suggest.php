@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: suggest.php 33007 2011-02-07 16:02:53Z vilma $
+ * @version   SVN: $Id: suggest.php 35529 2011-05-23 07:31:20Z arunas.paskevicius $
  */
 
 /**
@@ -283,7 +283,12 @@ class Suggest extends oxUBase
      */
     public function getBreadCrumb()
     {
-        $aPaths[]['title'] = oxLang::getInstance()->translateString( 'PAGE_INFO_SUGGEST_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPaths = array();
+        $aPath  = array();
+        $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_INFO_SUGGEST_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
+        
+        $aPaths[] = $aPath;
 
         return $aPaths;
     }

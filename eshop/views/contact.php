@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contact.php 32930 2011-02-04 16:08:29Z vilma $
+ * @version   SVN: $Id: contact.php 35529 2011-05-23 07:31:20Z arunas.paskevicius $
  */
 
 /**
@@ -191,6 +191,7 @@ class Contact extends oxUBase
         $aPath = array();
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_INFO_CONTACT_TITLECONTACT', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
         $aPaths[] = $aPath;
 
         return $aPaths;

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: basket.php 33818 2011-03-17 13:41:37Z arvydas.vapsva $
+ * @version   SVN: $Id: basket.php 35569 2011-05-24 13:31:03Z vilma $
  */
 
 /**
@@ -332,17 +332,18 @@ class Basket extends oxUBase
      * each article in basket (if possible). Plus adds
      * gift message and chosen card ( takes from GET/POST/session;
      * oBasket::giftmessage, oBasket::chosencard). Then sets
-     * basket back to session (oxsession::setBasket()). Returns
-     * "order" to redirect to order confirmation secreen.
+     * basket back to session (oxsession::setBasket()).
+     *
+     * @deprecated since 4.5.0: remove this function as it is duplicated: use wrapping::changeWrapping
      *
      * @return string
      */
     public function changeWrapping()
     {
         $aWrapping = oxConfig::getParameter( 'wrapping' );
+
         if ( $this->getViewConfig()->getShowGiftWrapping() ) {
             $oBasket = $this->getSession()->getBasket();
-
             // setting wrapping info
             if ( is_array( $aWrapping ) && count( $aWrapping ) ) {
                 foreach ( $oBasket->getContents() as $sKey => $oBasketItem ) {
@@ -356,9 +357,8 @@ class Basket extends oxUBase
             $oBasket->setCardMessage( oxConfig::getParameter( 'giftmessage' ) );
             $oBasket->setCardId( oxConfig::getParameter( 'chosencard' ) );
             $oBasket->onUpdate();
-        }
 
-        return 'basket';
+        }
     }
 
     /**
@@ -373,6 +373,7 @@ class Basket extends oxUBase
 
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_CHECKOUT_VIEWCART', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
         $aPaths[] = $aPath;
 
         return $aPaths;

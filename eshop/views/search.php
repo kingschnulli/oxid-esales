@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: search.php 35083 2011-05-03 11:15:49Z sarunas $
+ * @version   SVN: $Id: search.php 35529 2011-05-23 07:31:20Z arunas.paskevicius $
  */
 
 /**
@@ -459,6 +459,7 @@ class Search extends oxUBase
         $aPath = array();
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'SEARCH_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
         $aPaths[] = $aPath;
 
         return $aPaths;

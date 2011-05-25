@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 35025 2011-04-29 13:05:50Z linas.kukulskis $
+ * @version   SVN: $Id: alist.php 35529 2011-05-23 07:31:20Z arunas.paskevicius $
  */
 
 /**
@@ -801,11 +801,14 @@ class aList extends oxUBase
     public function getBreadCrumb()
     {
         $aPaths = array();
-
+        
         if ( 'oxmore' == oxConfig::getParameter( 'cnid' ) ) {
-
-            $aPaths[]['title'] = oxLang::getInstance()->translateString( 'PAGE_PRODUCT_MORECATEGORIES', oxLang::getInstance()->getBaseLanguage(), false );
-
+            $aPath = array();    
+            $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_PRODUCT_MORECATEGORIES', oxLang::getInstance()->getBaseLanguage(), false );
+            $aPath['link']  = $this->getLink();
+            
+            $aPaths[] = $aPath;
+            
             return $aPaths;
         }
 

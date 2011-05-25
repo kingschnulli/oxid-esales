@@ -111,10 +111,11 @@ class Unit_Views_wrappingTest extends OxidTestCase
         $oContents->offsetSet( 1 , $oBasketItem1 );
         $oContents->offsetSet( 2 , $oBasketItem2 );
 
-        $oBasket = $this->getMock( "oxStdClass", array( "getContents", "setCardMessage", "setCardId" ) );
+        $oBasket = $this->getMock( "oxStdClass", array( "getContents", "setCardMessage", "setCardId", "onUpdate" ) );
         $oBasket->expects( $this->once() )->method( 'getContents' )->will( $this->returnValue( $oContents ) );
         $oBasket->expects( $this->once() )->method( 'setCardMessage' )->with( $this->equalTo( "testCardMessage" ) );
         $oBasket->expects( $this->once() )->method( 'setCardId' )->with( $this->equalTo( "testCardId" ) );
+        $oBasket->expects( $this->once() )->method( 'onUpdate' );
 
         $oSession = $this->getMock( "oxStdClass", array( "getBasket" ) );
         $oSession->expects( $this->once() )->method( 'getBasket' )->will( $this->returnValue( $oBasket ) );
@@ -125,6 +126,6 @@ class Unit_Views_wrappingTest extends OxidTestCase
         $oView = $this->getMock( "Wrapping", array( "getViewConfig", "getSession" ), array(), '', false );
         $oView->expects( $this->once() )->method( 'getViewConfig' )->will( $this->returnValue( $oViewConfig ) );
         $oView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
-        $this->assertEquals( "order", $oView->changeWrapping() );
+        $this->assertEquals( "basket", $oView->changeWrapping() );
     }
 }
