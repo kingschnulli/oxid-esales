@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlistTest.php 35507 2011-05-20 12:00:17Z vilma $
+ * @version   SVN: $Id: oxlistTest.php 35561 2011-05-24 08:02:25Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -321,24 +321,24 @@ class Unit_Core_oxlistTest extends OxidTestCase
         $oSubj = $this->getProxyClass("oxList");
         $oSubj->UNITassignElement($oListObjectMock, $aDbFields);
     }
-    
+
     /**
      * Testing oxList::_getFieldLongName()
-	 * 
-	 * @return null
+     *
+     * @return null
      */
     public function testGetFieldLongName()
     {
         $sFieldName = "testFieldNames";
         $sCoreTable = "testCoreTable";
-        
+
         $oSubj = $this->getProxyClass("oxList");
-        
+
         $oSubj->setNonPublicVar("_sCoreTable", "");
-        $this->assertEquals($sFieldName, $oSubj->_getFieldLongName($sFieldName));
-        
+        $this->assertEquals($sFieldName, $oSubj->UNITgetFieldLongName($sFieldName));
+
         $oSubj->setNonPublicVar("_sCoreTable", $sCoreTable);
-        $this->assertEquals($sCoreTable . "__" . $sFieldName, $oSubj->_getFieldLongName($sFieldName));
+        $this->assertEquals($sCoreTable . "__" . $sFieldName, $oSubj->UNITgetFieldLongName($sFieldName));
     }
 
 }
