@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 35191 2011-05-06 14:35:44Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticlelistTest.php 35592 2011-05-25 12:56:44Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -498,7 +498,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
                   ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''
                   and oc.oxcatnid = '$sCatId' and false GROUP BY oc.oxcatnid, oc.oxobjectid ORDER BY  oc.oxpos,oc.oxobjectid";
 
-        $sRes = $oTest->UNITgetCategorySelect( 'oxid', $sCatId, array( $sCatId => array( "8a142c3ee0edb75d4.80743302" => "Zeigar" ) ) );
+        $sRes = $oTest->UNITgetCategorySelect( 'oxid', $sCatId, array( $sCatId => array ( '0' => array( "8a142c3ee0edb75d4.80743302" => "Zeigar" ) ) ) );
         $sExpt = str_replace( array( "\n", "\r", " ", "\t" ), "", $sExpt );
         $sRes  = str_replace( array( "\n", "\r", " ", "\t" ), "", $sRes );
         $this->assertEquals( $sExpt, $sRes );
@@ -623,7 +623,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sCatId = '8a142c3e60a535f16.78077188';
         $sAttrId = '8a142c3ee0edb75d4.80743302';
         $iExptCount = 5;
-        $aSessionFilter = array ( $sCatId => array ( $sAttrId => 'Zeiger') );
+        $aSessionFilter = array ( $sCatId => array ( '0' => array($sAttrId => 'Zeiger') ) );
 
         $oTest = $this->getProxyClass('oxArticleList');
         $sCount = $oTest->loadCategoryArticles( $sCatId, $aSessionFilter );

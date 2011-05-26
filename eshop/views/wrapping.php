@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: wrapping.php 35569 2011-05-24 13:31:03Z vilma $
+ * @version   SVN: $Id: wrapping.php 35590 2011-05-25 12:16:54Z vilma $
  */
 
 /**
@@ -144,6 +144,6 @@ class Wrapping extends oxUBase
 
         }
 
-        return 'basket';
+        return 'order';
     }
 }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: basket.php 35569 2011-05-24 13:31:03Z vilma $
+ * @version   SVN: $Id: basket.php 35590 2011-05-25 12:16:54Z vilma $
  */
 
 /**
@@ -334,8 +334,6 @@ class Basket extends oxUBase
      * oBasket::giftmessage, oBasket::chosencard). Then sets
      * basket back to session (oxsession::setBasket()).
      *
-     * @deprecated since 4.5.0: remove this function as it is duplicated: use wrapping::changeWrapping
-     *
      * @return string
      */
     public function changeWrapping()
@@ -357,7 +355,6 @@ class Basket extends oxUBase
             $oBasket->setCardMessage( oxConfig::getParameter( 'giftmessage' ) );
             $oBasket->setCardId( oxConfig::getParameter( 'chosencard' ) );
             $oBasket->onUpdate();
-
         }
     }
 

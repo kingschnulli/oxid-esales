@@ -17,7 +17,7 @@
 [{else}]
     <form name="basket" action="[{ $oViewConf->getSelfActionLink() }]" method="post">
         [{ $oViewConf->getHiddenSid() }]
-        <input type="hidden" name="cl" value="wrapping">
+        <input type="hidden" name="cl" value="basket">
         <input type="hidden" name="fnc" value="changewrapping">
         [{ assign var="oWrapList" value=$oView->getWrappingList() }]
         [{if $oWrapList->count() }]

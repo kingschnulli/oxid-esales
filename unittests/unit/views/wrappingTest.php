@@ -126,6 +126,6 @@ class Unit_Views_wrappingTest extends OxidTestCase
         $oView = $this->getMock( "Wrapping", array( "getViewConfig", "getSession" ), array(), '', false );
         $oView->expects( $this->once() )->method( 'getViewConfig' )->will( $this->returnValue( $oViewConfig ) );
         $oView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
-        $this->assertEquals( "basket", $oView->changeWrapping() );
+        $this->assertEquals( "order", $oView->changeWrapping() );
     }
 }
