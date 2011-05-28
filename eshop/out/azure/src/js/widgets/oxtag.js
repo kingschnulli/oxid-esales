@@ -61,8 +61,6 @@
 
         editTag : function() {
 
-
-
             oxAjax.ajax(
                 $("#tagsForm"),
                 { //targetEl, onSuccess, onError, additionalData

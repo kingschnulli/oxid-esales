@@ -34,10 +34,10 @@
     [{assign var=showStepLinks value=false}]
     [{if $active != 1 && $oxcmp_user && $oxcmp_basket->getProductsCount() && $oView->getPaymentList() && !$oView->isLowOrderPrice()}]
         [{assign var=showStepLinks value=true}]
-    [{/if}]
+    [{/if}]    
     <li class="step4[{ if $active == 4}] active [{elseif $active > 4}] passed [{/if}]">
         <span>
-        [{if $showStepLinks}]<a rel="nofollow" [{if $oViewConf->getActiveClassName() == "payment"}]id="orderStep"[{/if}] href="[{ oxgetseourl ident=$oViewConf->getOrderConfirmLink() }]">[{/if}]
+        [{if $showStepLinks}]<a rel="nofollow" [{if $oViewConf->getActiveClassName() == "payment"}]id="orderStep"[{/if}] href="[{ if $oViewConf->getActiveClassName() == "payment"}]javascript:document.forms.order.submit();[{else}][{ oxgetseourl ident=$oViewConf->getOrderConfirmLink() }][{/if}]">[{/if}]
         [{ oxmultilang ident="PAGE_CHECKOUT_STEPS_ORDER" }]
         [{if $showStepLinks}]</a>[{/if}]
         </span>

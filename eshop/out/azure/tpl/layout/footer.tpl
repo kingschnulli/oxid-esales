@@ -6,7 +6,7 @@
       <div class="bar">
           [{if $oView->isActive('FbLike') && $oViewConf->getFbAppId()}]
         <div class="facebook">
-          [{include file="widget/facebook/like.tpl"}]
+          [{include file="widget/facebook/like.tpl" parent="footer"}]
         </div>
         [{/if}]
           [{include file="widget/footer/newsletter.tpl"}]

@@ -4,6 +4,10 @@
 [{else}]
     [{assign var='_productLink' value=$product->getLink()}]
 [{/if}]
+[{assign var="blShowToBasket" value=true}] [{* tobasket or more info ? *}]
+[{if $blDisableToCart || $product->isNotBuyable()||($aVariantSelections&&$aVariantSelections.selections)||$product->hasMdVariants()||($oViewConf->showSelectListsInList() && $product->getSelections(1))||$product->getVariants()}]
+    [{assign var="blShowToBasket" value=false}]
+[{/if}]
 [{capture name=product_price}]
     [{oxhasrights ident="SHOWARTICLEPRICE"}]
         [{if $product->getFTPrice()}]
@@ -32,14 +36,12 @@
 </a>
 <div class="priceBlock">
     [{oxhasrights ident="TOBASKET"}]
-    [{ if !$product->isNotBuyable() && !$blDisableToCart}]
         [{$smarty.capture.product_price}]
-        [{if $product->hasMdVariants() || ($oViewConf->showSelectListsInList() && $product->getSelections(1)) || $product->getVariantList()}]
+        [{if !$blShowToBasket }]
             <a href="[{ $_productLink }]" class="toCart button">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_MOREINFO" }]</a>
         [{else}]
             [{assign var="listType" value=$oView->getListType()}]
             <a href="[{$oView->getLink()|oxaddparams:"listtype=`$listType`&amp;fnc=tobasket&amp;aid=`$product->oxarticles__oxid->value`&amp;am=1" }]" class="toCart button" title="[{oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ADDTOCART" }]">[{oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ADDTOCART" }]</a>
         [{/if}]
-    [{/if}]
     [{/oxhasrights}]
 </div>

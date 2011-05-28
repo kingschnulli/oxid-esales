@@ -2,7 +2,8 @@
 <h1 class="pageHead">[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_TITLE" }]</h1>
 
 [{assign var=oOrders value=$oView->getOrderList() }]
-[{if $oOrders|count > 0 }]
+
+[{if count($oOrders) > 0 }]
 [{assign var=oArticleList value=$oView->getOrderArticleList() }]
 <ul class="orderList">
     [{foreach from=$oOrders item=order }]

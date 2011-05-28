@@ -4,6 +4,8 @@ var oxid = {
 // MD variants --------------------------------------------
 //
     mdVariants: {
+
+
         // reloading page by selected value in select list
         getMdVariantUrl: function(selId){
             var _mdVar = document.getElementById(selId);
@@ -294,7 +296,7 @@ var oxid = {
 //
 // selections --------------------------------------------------
 //
-    selectionDrop : {
+  /*  selectionDrop : {
         onClick : function ( obj ) {
             // setting new selection
             var oUl = obj.parent( "li" ).parent( "ul" );
@@ -310,7 +312,7 @@ var oxid = {
             oUl.hide();
             return false;
         }
-    },
+    }, */
 //
 // selections =====================================================
 //
@@ -361,11 +363,11 @@ var oxid = {
 // Price alarm --------------------------------------------------------
 //
 
-        $(".priceAlarmLink").click(function() {
+      /*  $(".priceAlarmLink").click(function() {
             var $tabs = $('.tabbedWidgetBox').tabs();
             $tabs.tabs('select', '#pricealarm');
             return false;
-        });
+        }); */
 
 //
 // Price alarm ==============================================
@@ -456,10 +458,13 @@ var oxid = {
         /**
          * selection dropdown
          */
-        $('ul.seldrop a').unbind( "click" );
-        $("ul.seldrop a").bind( "click", function() {
-            return oxid.selectionDrop.onClick( $( this ) );
-        });
+       // $('ul.seldrop a').unbind( "click" );
+        //$("ul.seldrop a").bind( "click", function() {
+
+           // alert('aa');
+
+        //    return oxid.selectionDrop.onClick( $( this ) );
+       // });
 
         //
         // selections call ==========================================

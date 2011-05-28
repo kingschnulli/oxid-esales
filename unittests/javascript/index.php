@@ -4,6 +4,13 @@
 <head>
     <title>OXID eShop javascript tests</title>
     <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/superfish.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/reset.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/typography.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/layouts.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/fxstyles.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/elements.css" type="text/css" media="screen">
+
     <script type="text/javascript" src="qunit/qunit.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/jquery.min.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/jquery-ui.min.js"></script>
@@ -15,6 +22,7 @@
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxslider.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxarticleactionlinksselect.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxinputvalidator.js"></script>
+    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxdropdown.js"></script>
 
     <!-- Your tests file goes here -->
     <script type="text/javascript" src="inputvalidatorTests.js"></script>
@@ -22,6 +30,7 @@
     <script type="text/javascript" src="comparelistTests.js"></script>
     <script type="text/javascript" src="sliderTests.js"></script>
     <script type="text/javascript" src="ratingTests.js"></script>
+    <script type="text/javascript" src="dropdownTests.js"></script>
     <!--<script type="text/javascript" src="variantTests.js"></script>-->
 </head>
 <body>
@@ -30,7 +39,6 @@
     <div id="qunit-testrunner-toolbar"></div>
     <h2 id="qunit-userAgent"></h2>
     <ol id="qunit-tests"></ol>
-
     <div id="fixture"></div>
 </body>
 </html>

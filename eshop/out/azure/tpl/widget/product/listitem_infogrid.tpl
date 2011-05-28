@@ -52,7 +52,7 @@
             [{ if $aVariantSelections && $aVariantSelections.selections }]
                 <div id="variantselector_[{$testid}]" class="variantBox selectorsBox fnSubmit clear">
                     [{foreach from=$aVariantSelections.selections item=oSelectionList key=iKey}]
-                        [{include file="widget/product/selectbox.tpl" oSelectionList=$oSelectionList}]
+                        [{include file="widget/product/selectbox.tpl" oSelectionList=$oSelectionList sJsAction="js-fnSubmit"}]
                     [{/foreach}]
                 </div>
             [{elseif $oViewConf->showSelectListsInList()}]
@@ -60,7 +60,7 @@
                 [{if $oSelections}]
                     <div id="selectlistsselector_[{$testid}]" class="selectorsBox fnSubmit clear">
                         [{foreach from=$oSelections item=oList name=selections}]
-                            [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="sel" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop"}]
+                            [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="sel" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop" sJsAction="js-fnSubmit"}]
                         [{/foreach}]
                     </div>
                 [{/if}]

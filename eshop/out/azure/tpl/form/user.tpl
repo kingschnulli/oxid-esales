@@ -16,8 +16,12 @@
     [{ include file="form/fieldset/user_billing.tpl" }]
 </ul>
 <ul class="form" id="addressText">
-    [{ include file="widget/address/billing_address.tpl"}]
-    <button id="userChangeAddress" class="submitButton largeButton" name="changeBillAddress" type="submit">[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_CHANGE" }]</button>
+    <li>
+        [{ include file="widget/address/billing_address.tpl"}]
+    </li>
+    <li>
+        <button id="userChangeAddress" class="submitButton largeButton" name="changeBillAddress" type="submit">[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_CHANGE" }]</button>
+    </li>
 </ul>
 [{oxscript add="$('#userChangeAddress').click( function() { $('#addressForm').show();$('#addressText').hide();return false;});"}]
 

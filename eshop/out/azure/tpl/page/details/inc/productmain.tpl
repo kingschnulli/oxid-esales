@@ -132,13 +132,12 @@
                         [{if $oList->getActiveSelection()}]
                             [{assign var="blHasActiveSelections" value=true}]
                         [{/if}]
-                        [{include file="widget/product/selectbox.tpl" oSelectionList=$oList iKey=$iKey}]
+                        [{include file="widget/product/selectbox.tpl" oSelectionList=$oList iKey=$iKey sJsAction="js-fnSubmit"}]
                     [{/foreach}]
 
                 </div>
 
                 [{if $blHasActiveSelections}]
-
                     <div class="variantReset">
                         [{* Reset link *}]
                         <a href="" class="reset">[{ oxmultilang ident="DETAILS_VARIANTS_RESETSELECTION" }]</a>
