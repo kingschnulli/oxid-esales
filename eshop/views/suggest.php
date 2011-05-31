@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: suggest.php 35529 2011-05-23 07:31:20Z arunas.paskevicius $
+ * @version   SVN: $Id: suggest.php 35664 2011-05-30 13:23:36Z arunas.paskevicius $
  */
 
 /**
@@ -98,7 +98,7 @@ class Suggest extends oxUBase
 
         if ( !$oCaptcha->pass($sMac, $sMacHash ) ) {
             // even if there is no exception, use this as a default display method
-            oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_NOTALLFIELDS' );
+            oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_WRONGCAPTCHA' );
             return false;
         }
 

@@ -142,6 +142,7 @@ $aLang = array(
 'EXCEPTION_USER_PWDDONTMATCH'                                     => 'Passwörter stimmen nicht überein!',
 'EXCEPTION_USER_NOVALUES'                                         => 'E-Mail und Passwort müssen ausgefüllt sein!',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                                    => 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
+'EXCEPTION_INPUT_WRONGCAPTCHA'                                    => 'Der Prüfcode, den Sie eingegeben haben, ist nicht korrekt. Bitte versuchen Sie es erneut.',
 'EXCEPTION_INPUT_NOTALLFIELDS'                                    => 'Bitte Wert angeben!',
 'EXCEPTION_PAGE_TITLE'                                            => 'Fehler',
 'EXCEPTION_PAGE_HEADLINE'                                         => 'Der Shop ist vorübergehend offline...',

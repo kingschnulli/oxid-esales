@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 32880 2011-02-03 11:45:17Z sarunas $
+ * @version   SVN: $Id: oxutils.php 35658 2011-05-30 07:53:52Z arunas.paskevicius $
  */
 
 /**
@@ -1389,8 +1389,12 @@ class oxUtils extends oxSuperCfg
      * @return void
      */
     public function handlePageNotFoundError($sUrl = '')
-    {
+    {        
         $this->setHeader("HTTP/1.0 404 Not Found");
+        if ( oxConfig::getInstance()->isUtf() ) {
+            $this->setHeader("Content-Type: text/html; charset=UTF-8");
+        }
+        
         $sReturn = "Page not found.";
         try {
             $oView = oxNew('oxubase');

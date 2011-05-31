@@ -101,7 +101,7 @@ class Invite extends oxUBase
 
         if ( !$oCaptcha->pass($sMac, $sMacHash ) ) {
             // even if there is no exception, use this as a default display method
-            oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_NOTALLFIELDS' );
+            oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_WRONGCAPTCHA' );
             return;
         }
 

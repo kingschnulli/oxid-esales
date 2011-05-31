@@ -64,7 +64,6 @@ test("showHideDropDownValues", function (){
     //disabled dropdown
     $('#selectListHead').addClass('js-disabled');
 
-    console.log($('#selectListHead'));
     $('#selectListHead').click();
     equals( $('ul.drop').css("display"), 'none', "Checking visibility for disabled dropdown");
 

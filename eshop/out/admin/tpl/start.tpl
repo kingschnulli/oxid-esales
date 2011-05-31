@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-    <title>[{ oxmultilang ident="GENERAL_ADMIN_TITLE_1" }]sss</title>
+    <title>[{ oxmultilang ident="GENERAL_ADMIN_TITLE_1" }]</title>
     <link rel="shortcut icon" href="[{ $oViewConf->getBaseDir() }]favicon.ico">
 </head>
 <script type="text/javascript">
