@@ -5,8 +5,17 @@
      */
     oxAjax = {
 
+        /**
+         * Loading temporary screen when ajax call proseeds
+         */
         loadingScreen:  {
 
+            /**
+             * Starts load
+             *
+             * @target - DOM element witch must be hide with the loading screen
+             * @iconPositionElement - element of a target on witch loaging icon is shown
+             */
             start : function (target, iconPositionElement) {
 
                 var loadingScreens = Array();
@@ -36,7 +45,7 @@
                             )/2
                         );
 
-                        $('div.loadingiconbg,div.loadingicon', overlayKeeper).css({
+                        $('div.loadingiconbg, div.loadingicon', overlayKeeper).css({
                             'background-position' : x + "px "+y+"px"
                         });
                     }
@@ -53,6 +62,12 @@
                 return loadingScreens;
             },
 
+
+            /**
+             * Stops viewing loading screens
+             *
+             * @loadingScreens - one or more showing screens
+             */
             stop : function ( loadingScreens ) {
               $.each(loadingScreens, function(i, el) {
                   $('div', el).not('.loadingfade').remove();
@@ -67,7 +82,11 @@
             }
         },
 
-
+        /**
+         * Updating errors on page
+         *
+         * @errors - array of errors
+         */
         updatePageErrors : function(errors) {
             if (errors.length) {
                 var errlist = $("#content > .status.error");
@@ -89,11 +108,14 @@
             }
         },
 
+        /**
+         * Ajax call
+         *
+         * @activator - link or form element that activates ajax call
+         * @params - call params: targetEl, iconPosEl, onSuccess, onError, additionalData
+         */
         ajax : function(activator, params) {
-
             var self = this;
-            // activator: form or link element
-            // params: targetEl, iconPosEl, onSuccess, onError, additionalData
             var inputs = {};
             var action = "";
             var type   = "";
@@ -121,13 +143,12 @@
             }
 
             jQuery.ajax({
-
                 data    : inputs,
                 url     : action,
                 type    : type,
                 timeout : 30000,
 
-                error: function(jqXHR, textStatus, errorThrown) {
+                error   : function(jqXHR, textStatus, errorThrown) {
                     if (sLoadingScreen) {
                         self.loadingScreen.stop(sLoadingScreen);
                     }
@@ -136,7 +157,7 @@
                     }
                 },
 
-                success: function(r) {
+                success : function(r) {
 
                     if (sLoadingScreen) {
                         self.loadingScreen.stop(sLoadingScreen);
@@ -157,18 +178,23 @@
             });
         },
 
+        /**
+         * Evals returned html and executes javascript after reload
+         *
+         * @container - witch javascript must be restarted
+         */
         evalScripts : function(container){
             try {
                 $("script", container).each(function(){
                     try {
                         eval(this.innerHTML);
                     } catch (e) {
-                        // console.error(e);
+                       //  console.error(e);
                     }
                     $(this).remove();
                 });
             } catch (e) {
-                // console.error(e);
+               //  console.error(e);
             }
         }
     };

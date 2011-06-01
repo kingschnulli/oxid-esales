@@ -23,13 +23,35 @@
                     $('.articleTitle', el).removeClass('titleOn');
                     $('.showImage', el).slideUp(500);
 
-                    //obening selected
+                    //opening selected
                     $(this).addClass('titleOn');
                     $(this).prev().addClass('showImage')
                     $(this).prev().slideDown(500);
                 }
             });
+
+            self.trimTitles( $( ".box h3 a", el ) );
+
+        },
+
+        trimTitles : function(group) {
+            group.each(function(){
+                var thisWidth  = $(this).width();
+                var thisText   = $.trim($(this).text());
+                var parentWidth = $(this).parent().width();
+                if (thisWidth > parentWidth) {
+                    var thisLength  = thisText.length;
+                    while (thisWidth > parentWidth)
+                    {
+                        thisLength--;
+                        $(this).html(thisText.substr(0,thisLength)+'&hellip;');
+                        var thisWidth = $(this).width();
+                    }
+                    $(this).attr('title',thisText);
+                }
+            });
         }
+
     }
 
     $.widget( "ui.oxArticleBox", oxArticleBox );

@@ -15,5 +15,5 @@
     </div>
 [{/if}]
 
-[{oxscript include="js/widgets/oxMorePictures.js" priority=10}]
+[{oxscript include="js/widgets/oxmorepictures.js" priority=10}]
 [{oxscript add="$('#morePicsContainer').oxMorePictures();"}]

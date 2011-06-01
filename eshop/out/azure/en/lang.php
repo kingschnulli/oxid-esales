@@ -735,6 +735,7 @@ $aLang = array(
 'WIDGET_PRODUCT_PRODUCT_NR'                                       => "Art.No.:",
 'WIDGET_PRODUCT_PRODUCT_REMOVE'                                   => "Remove",
 'WIDGET_BREADCRUMB_YOUAREHERE'                                    => "You are here",
+'WIDGET_BREADCRUMB_OVERVIEW'                                      => "Back to Overview",
 
 'WIDGET_PRODUCT_ATTRIBUTES_PLEASECHOOSE'                          => "Please choose",
 

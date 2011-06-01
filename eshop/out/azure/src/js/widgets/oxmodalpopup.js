@@ -43,7 +43,7 @@
                     return false;
                 });
 
-                 $("img.closePop").click(function(){
+                 $("img.closePop, button.closePop").click(function(){
                     $(options.target).dialog("close");
                     return false;
                  });

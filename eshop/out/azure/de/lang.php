@@ -726,6 +726,7 @@ $aLang = array(
 'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2'                               => "kg",
 
 'WIDGET_BREADCRUMB_YOUAREHERE'                                    => "Sie sind hier",
+'WIDGET_BREADCRUMB_OVERVIEW'                                      => "Zurück zur Übersicht",
 
 'WIDGET_PRODUCT_ATTRIBUTES_PLEASECHOOSE'                          => "Bitte wählen",
 

@@ -52,7 +52,9 @@
                                 [{foreach from=$oView->getWrappingList() item=wrapping name=Wraps}]
                                     <li>
                                         <input class="radiobox" type="radio" name="wrapping[[{$basketindex}]]" value="[{$wrapping->oxwrapping__oxid->value}]" [{ if $basketitem->getWrappingId() == $wrapping->oxwrapping__oxid->value}]CHECKED[{/if}]>
+                                        [{if $wrapping->oxwrapping__oxpic->value }]
                                         <span><img src="[{$wrapping->getPictureUrl()}]0/[{$wrapping->oxwrapping__oxpic->value}]" alt="[{$wrapping->oxwrapping__oxname->value}]"></span>
+                                        [{/if}]
                                         <label>[{$wrapping->oxwrapping__oxname->value}]</label>
                                         <strong>[{$wrapping->getFPrice()}] [{ $currency->sign}]</strong>
                                     </li>
@@ -85,7 +87,9 @@
                         <input class="radiobox" type="radio" name="chosencard" value="[{$card->oxwrapping__oxid->value}]" [{ if $oxcmp_basket->getCardId() == $card->oxwrapping__oxid->value}]CHECKED[{/if}]>
                         <label>[{$card->oxwrapping__oxname->value}] <strong>[{$card->getFPrice() }] [{ $currency->sign}]</strong></label>
                     </p>
+                    [{if $card->oxwrapping__oxpic->value}]
                     <img src="[{$card->getPictureUrl()}]0/[{$card->oxwrapping__oxpic->value}]" alt="[{$card->oxwrapping__oxname->value}]">
+                    [{/if}]
                 </li>
             [{assign var="icounter" value="`$icounter+1`"}]
             [{/foreach}]
@@ -97,7 +101,7 @@
         [{/if}]
         <div class="submitForm clear">
             <button type="submit" style="white-space:nowrap;" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_BACKTOORDER" }]</button>
-            <button type="submit" class="textButton largeButton closeOverlay">[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_CANCEL" }]</button>
+            <button class="textButton largeButton closePop">[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_CANCEL" }]</button>
         </div>
     </form>
 [{/if}]
