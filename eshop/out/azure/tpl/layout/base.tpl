@@ -32,7 +32,7 @@
         [{ else }]    
             <meta property="og:type" content="website">            
             <meta property="og:image" content="[{$oViewConf->getImageUrl()}]basket.png">
-            <meta property="og:url" content="[{$oViewConf->getHomeLink()}]">
+            <meta property="og:url" content="[{$oViewConf->getCurrentHomeDir()}]">
         [{/if}] 
     [{/if}]     
     

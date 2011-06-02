@@ -18,7 +18,7 @@
             <meta property="og:type" content="product">            
             <meta property="og:image" content="[{$oView->getActPicture()}]">
             <meta property="og:url" content="[{$oView->getCanonicalUrl()}]">
-	        <meta property="og:site_name" content="[{$oViewConf->getBaseDir()}]">
+	        <meta property="og:site_name" content="[{$oViewConf->getCurrentHomeDir()}]">
 	        <meta property="fb:app_id" content="[{$oViewConf->getFbAppId()}]">
             <meta property="og:title" content="[{ $_titleprefix }][{if $title&& $_titleprefix }] | [{/if}][{$title|strip_tags}][{if $_titlesuffix}] | [{$_titlesuffix}][{/if}][{if $titlepagesuffix}] | [{$titlepagesuffix}][{/if}]">
         [{/if}] 
