@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/elements.css" type="text/css" media="screen">
 
     <script type="text/javascript" src="qunit/qunit.js"></script>
-    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/jquery.min.js"></script>
-    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/libs/jquery.min.js"></script>
+    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/libs/jquery-ui.min.js"></script>
 
     <!-- Your project file goes here -->
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxrating.js"></script>

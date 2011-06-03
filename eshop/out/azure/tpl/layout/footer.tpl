@@ -26,7 +26,7 @@
       [{/capture}]
 
       [{capture append="oxidBlock_footer"}]
-      <dl class="services" id="footerServices">
+      <dl class="services" id="footerInformation">
         <dt>[{oxmultilang ident="FOOTER_INFORMATION" }]</dt>
         <dd>[{include file="widget/footer/info.tpl"}]</dd>
       </dl>

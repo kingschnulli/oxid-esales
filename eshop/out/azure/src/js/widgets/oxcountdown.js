@@ -11,6 +11,7 @@
  * if CALLBACK function returns a jQuery container, it is replaced from the next iteration
  */
 jQuery.fn.countdown = function(callback, start) {
+    
     if(jQuery(this).length == 0 ){ return false;}
     var rs = this;
     var go = false;

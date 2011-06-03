@@ -6,9 +6,9 @@
     [{/if}]
         [{assign var="currency" value=$oView->getActCurrency() }]
         [{if $scrollableBasket}]
-            [{oxscript include="js/scrollpane/jquery.jscrollpane.min.js"}]
-            [{oxscript include="js/scrollpane/jquery.mousewheel.js"}]
-            [{oxscript include="js/scrollpane/mwheelIntent.js"}]
+            [{oxscript include="js/libs/scrollpane/jscrollpane.min.js"}]
+            [{oxscript include="js/libs/scrollpane/mousewheel.js"}]
+            [{oxscript include="js/libs/scrollpane/mwheelIntent.js"}]
             [{oxstyle include="css/jquery.jscrollpane.css"}]
         [{/if}]
         <div id="basketFlyout" class="basketFlyout corners[{if $scrollableBasket}] scrollable[{/if}]">

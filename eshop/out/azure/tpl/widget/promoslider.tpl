@@ -2,7 +2,7 @@
 [{assign var="currency" value=$oView->getActCurrency()}]
 [{if $oBanners}]
     [{oxstyle include="css/anythingslider.css"}]
-    [{oxscript include="js/jquery.anythingslider.js"}]
+    [{oxscript include="js/libs/anythingslider.js"}]
     [{oxscript include="js/widgets/oxslider.js" priority=10 }]
     [{oxscript add="$( '#promotionSlider' ).oxSlider();"}]
     <img src="[{$oViewConf->getImageUrl()}]promo-shadowleft.png" height="220" width="7" class="promoShadow shadowLeft" alt="">
