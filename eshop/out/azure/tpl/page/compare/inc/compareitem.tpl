@@ -102,9 +102,6 @@
                         <p class="fn clear">
                             <input type="text" name="am" value="1" size="3" autocomplete="off" class="textbox" title="[{ oxmultilang ident="DETAILS_QUANTITY" }]">
                             <button type="submit" class="submitButton largeButton" title="[{oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ADDTOCARD2"}]">[{oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ADDTOCARD2"}]</button>
-                            [{if $product->loadAmountPriceInfo()}]
-                                [{oxscript add="$( '.ox-details-amount' ).oxSuggest();"}]
-                            [{/if}]
                         </p>
                     [{/oxhasrights}]
                 [{else}]

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 35062 2011-05-03 07:54:13Z sarunas $
+ * @version   SVN: $Id: alist.php 35805 2011-06-03 08:02:50Z linas.kukulskis $
  */
 
 /**
@@ -300,13 +300,17 @@ class aList extends oxUBase
      */
     public function executefilter()
     {
+        $iLang = oxLang::getInstance()->getBaseLanguage();
         // store this into session
         $aFilter = oxConfig::getParameter( 'attrfilter', 1 );
         $sActCat = oxConfig::getParameter( 'cnid' );
 
         if ( !empty( $aFilter ) ) {
             $aSessionFilter = oxSession::getVar( 'session_attrfilter' );
-            $aSessionFilter[$sActCat] = $aFilter;
+            //fix for #2904 - if language will be changed attributes of this category will be deleted from session
+            //and new filters for active language set.
+            $aSessionFilter[$sActCat] = null;
+            $aSessionFilter[$sActCat][$iLang] = $aFilter;
             oxSession::setVar( 'session_attrfilter', $aSessionFilter );
         }
     }
@@ -803,8 +807,11 @@ class aList extends oxUBase
         $aPaths = array();
 
         if ( 'oxmore' == oxConfig::getParameter( 'cnid' ) ) {
+            $aPath = array();
+            $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_PRODUCT_MORECATEGORIES', oxLang::getInstance()->getBaseLanguage(), false );
+            $aPath['link']  = $this->getLink();
 
-            $aPaths[]['title'] = oxLang::getInstance()->translateString( 'PAGE_PRODUCT_MORECATEGORIES', oxLang::getInstance()->getBaseLanguage(), false );
+            $aPaths[] = $aPath;
 
             return $aPaths;
         }

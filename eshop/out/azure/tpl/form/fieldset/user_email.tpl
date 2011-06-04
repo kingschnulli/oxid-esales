@@ -1,3 +1,5 @@
+[{oxscript include="js/widgets/oxenterpassword.js" priority=10 }]
+[{oxscript add="$('.oxValidate_enterPass').oxEnterPassword();"}]
 <li [{if $aErrors}]class="oxError"[{/if}]>
     <label class="req">[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_EMAIL" }]</label>
     <input class="oxValidate oxValidate_notEmpty oxValidate_email oxValidate_enterPass oxValidate_enterPassTarget[oxValidate_pwd] textbox" type="text" name="invadr[oxuser__oxusername]" value="[{if isset( $invadr.oxuser__oxusername ) }][{ $invadr.oxuser__oxusername }][{else }][{ $oxcmp_user->oxuser__oxusername->value }][{/if }]" size="37">

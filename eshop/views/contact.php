@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contact.php 32930 2011-02-04 16:08:29Z vilma $
+ * @version   SVN: $Id: contact.php 35847 2011-06-03 08:20:49Z linas.kukulskis $
  */
 
 /**
@@ -96,10 +96,10 @@ class Contact extends oxUBase
             oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_NOVALIDEMAIL' );
             return false;
         }
-
-        if ( !$oCaptcha->pass($sMac, $sMacHash ) ) {
+                
+        if ( !$oCaptcha->pass($sMac, $sMacHash ) ) {            
             // even if there is no exception, use this as a default display method
-            oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_NOTALLFIELDS' );
+            oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_WRONGCAPTCHA' );
             return false;
         }
 
@@ -191,6 +191,7 @@ class Contact extends oxUBase
         $aPath = array();
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_INFO_CONTACT_TITLECONTACT', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
         $aPaths[] = $aPath;
 
         return $aPaths;

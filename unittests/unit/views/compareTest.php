@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: compareTest.php 33281 2011-02-15 15:04:44Z arvydas.vapsva $
+ * @version   SVN: $Id: compareTest.php 35792 2011-06-03 08:00:18Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -310,12 +310,20 @@ class Unit_Views_compareTest extends OxidTestCase
     public function testGetBreadCrumb()
     {
         $oCompare = new Compare();
+        $aCatPath = array();
+        $aResult  = array();
+        
+        $aCatPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_MY_ACCOUNT', 0, false );
+        $aCatPath['link']  = oxSeoEncoder::getInstance()->getStaticUrl( $oCompare->getViewConfig()->getSelfLink() . 'cl=account' );
+        
+        $aResult[] = $aCatPath;
+        
+        $aCatPath['title'] = oxLang::getInstance()->translateString( 'PAGE_PRODUCT_COMPARE_TITLE', 0, false );
+        $aCatPath['link']  = $oCompare->getLink();
 
-        $aResutlt[]['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_MY_ACCOUNT', 0, false );
-        $aResutlt[]['title'] = oxLang::getInstance()->translateString( 'PAGE_PRODUCT_COMPARE_TITLE', 0, false );
-
-
-        $this->assertEquals( $aResutlt, $oCompare->getBreadCrumb() );
+        $aResult[] = $aCatPath;
+        
+        $this->assertEquals( $aResult, $oCompare->getBreadCrumb() );
     }
 
 }

@@ -13,7 +13,7 @@
     [{/foreach}]
 [{/capture}]
 [{if $slideCount > 6 }]
-    [{oxscript include="js/jquery.jcarousellite.js"}]
+    [{oxscript include="js/libs/jcarousellite.js"}]
     [{oxscript include="js/widgets/oxmanufacturerslider.js" priority=10 }]
     [{oxscript add="$( '#manufacturerSlider' ).oxManufacturerSlider();"}]
     <div class="itemSlider">

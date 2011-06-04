@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order.php 33087 2011-02-09 12:37:33Z arvydas.vapsva $
+ * @version   SVN: $Id: order.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
  */
 
 /**
@@ -507,10 +507,11 @@ class order extends oxUBase
     public function getBreadCrumb()
     {
         $aPaths = array();
-        $aPath = array();
-
+        $aPath  = array();
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_CHECKOUT_ORDER', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
+        
         $aPaths[] = $aPath;
 
         return $aPaths;

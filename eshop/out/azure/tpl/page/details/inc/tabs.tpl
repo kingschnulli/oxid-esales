@@ -26,6 +26,12 @@
 [{/if}]
 
 [{if $oView->getTagCloudManager() || ( ( $oView->getTagCloudManager() || $oxcmp_user) && $oDetailsProduct )}]
+    [{oxscript include='js/widgets/oxajax.js'}]
+    [{oxscript include='js/widgets/oxTag.js'}]
+    [{oxscript add="$('p.tagCloud a.tagText').click(oxTag.highTag);"}]
+    [{oxscript add="$('#saveTag').click(oxTag.saveTag);"}]
+    [{oxscript add="$('#cancelTag').click(oxTag.cancelTag);"}]
+    [{oxscript add="$('#editTag').click(oxTag.editTag);"}]
     [{capture append="tabs"}]<a href="#tags">[{oxmultilang ident="PAGE_DETAILS_TABS_TAGS"}]</a>[{/capture}]
     [{capture append="tabsContent"}]<div id="tags" class="tabcontent">[{oxid_include_dynamic file="page/details/inc/tags.tpl"}]</div>[{/capture}]
 [{/if}]
@@ -34,8 +40,6 @@
     [{capture append="tabs"}]<a href="#media">[{oxmultilang ident="PAGE_DETAILS_TABS_MEDIA"}]</a>[{/capture}]
     [{capture append="tabsContent"}]<div id="media" class="tabcontent">[{include file="page/details/inc/media.tpl"}]</div>[{/capture}]
 [{/if}]
-
-
 
 
 [{if $oView->isActive('FbComments') && $oViewConf->getFbAppId()}]

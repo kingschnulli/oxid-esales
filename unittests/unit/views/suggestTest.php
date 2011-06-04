@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: suggestTest.php 33007 2011-02-07 16:02:53Z vilma $
+ * @version   SVN: $Id: suggestTest.php 35792 2011-06-03 08:00:18Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -250,8 +250,14 @@ class Unit_Views_suggestTest extends OxidTestCase
     public function testGetBreadCrumb()
     {
         $oSuggest = $this->getProxyClass( "suggest" );
-        $aResult[]["title"] = oxLang::getInstance()->translateString( 'PAGE_INFO_SUGGEST_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aResults = array();
+        $aResult  = array();
+        
+        $aResult["title"] = oxLang::getInstance()->translateString( 'PAGE_INFO_SUGGEST_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aResult["link"]  = $oSuggest->getLink();
+        
+        $aResults[] = $aResult;
 
-        $this->assertEquals( $aResult, $oSuggest->getBreadCrumb() );
+        $this->assertEquals( $aResults, $oSuggest->getBreadCrumb() );
     }
 }

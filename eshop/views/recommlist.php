@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: recommlist.php 33105 2011-02-09 14:52:06Z linas.kukulskis $
+ * @version   SVN: $Id: recommlist.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
  */
 
 /**
@@ -525,6 +525,7 @@ class RecommList extends aList
         $aPath = array();
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_RECOMMENDATIONS_PRODUCTS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
         $aPaths[] = $aPath;
 
         return $aPaths;

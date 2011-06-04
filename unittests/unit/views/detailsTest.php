@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 35507 2011-05-20 12:00:17Z vilma $
+ * @version   SVN: $Id: detailsTest.php 35792 2011-06-03 08:00:18Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1339,8 +1339,8 @@ class Unit_Views_detailsTest extends OxidTestCase
         modConfig::setParameter( 'listtype', 'search' );
 
         $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
-
-
+        
+        
         modConfig::setParameter( 'listtype', 'tag' );
 
         $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
@@ -1359,6 +1359,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'getCatTreePath')->will( $this->returnValue( array($oCat1, $oCat2 ) ) );
 
         $this->assertTrue( count($oView->getBreadCrumb()) >= 1 );
+        
     }
 
 

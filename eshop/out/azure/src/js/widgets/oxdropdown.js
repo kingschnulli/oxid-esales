@@ -1,86 +1,146 @@
 ( function ( $ ) {
 
-    /**
-     * Equalize columns
-     */
     oxDropDown = {
 
         options: {
-            sNotClickable      : ".oxdisabled",
-            sSelectedClass     : "selected",
-            sUnselectedClass   : "underlined",
-            sDropBoxElement    : "ul.drop",
-            sMainDropBoxClass  : ".drop",
-            sMainDropDownClass : "dropDown",
-            sSubmitClass       : "fnSubmit"
+            sSubmitActionClass  : 'js-fnSubmit',
+            sLinkActionClass    : 'js-fnLink',
+            sDisabledClass      : 'js-disabled'
         },
 
-        _create: function(){
+         _create: function(){
 
             var self = this,
-                options = self.options,
-                el      = self.element;
+                options = self.options;
 
-            el.not(options.sNotClickable).click(function() {
-                self.showDropdown($(this));
+            this.head               = this.element;
+            this.oxDropDown         = this.head.parent( 'div' );
+            this.valueList          = this.oxDropDown.children( 'ul' );
+            this.selectedValueLabel = $( 'p span', this.oxDropDown );
+            this.selectedValue      = $( 'input', this.oxDropDown );
+            this.blSubmit           = this.oxDropDown.hasClass( options.sSubmitActionClass );
+            this.blLink             = this.oxDropDown.hasClass( options.sLinkActionClass );
+            this.actionForm         = this.oxDropDown.closest( 'form' );
+
+            // clicking on drop down header
+            this.head.click(function() {
+                self.toggleDropDown();
+                return false;
             });
 
-            el.hover(function(){
-                $(this).toggleClass(options.sSelectedClass);
+            // selecting value
+            $( 'a', this.valueList ).click( function (){
+                self.select( $(this) );
+                self.hideDropDown();
+                return self.action();
             });
 
-            $("a", options.sDropBoxElement).click(function(){
-                var obj = $(this);
-                var objFnIdent = obj.parents().hasClass(options.sSubmitClass);
-                if ( objFnIdent ) {
-                    obj.parent('li').parent('ul').prev('input').attr( "value", obj.attr("rel") );
-                    obj.closest("form").submit();
-                    return false;
-                }
-                return null;
+            // clicking else where
+            $( document ).click( function(){
+                self.hideAll();
             });
-
-            $(document).click( function(e) {
-                if (!$(e.target).parents().hasClass(options.sMainDropDownClass)) {
-                    $(options.sMainDropBoxClass).hide();
-                    el.addClass(options.sUnselectedClass);
-                }
-            });
-
         },
 
-        showDropdown : function (targetObj)
-        {
-            options = this.options;
-            this.hideDropdown();
+        /**
+         * execute action after select: do nothing, submit, go link
+         *
+         * @return boolean
+         */
+        action : function(){
 
-            targetObj.removeClass(options.sUnselectedClass);
-            sublist = targetObj.nextAll(options.sDropBoxElement);
+            // on submit
+            if( this.blSubmit ){
+                this.actionForm.submit();
+                return false;
+            }
 
-            sublist.prepend("<li class='value'></li>");
-            targetObj.clone().appendTo($(".value", sublist));
-            sublist.css("width", targetObj.parent().outerWidth());
+            // on link
+            if( this.blLink ){
+               return true;
+            }
 
-            if (sublist.length) {
-                sublist.slideToggle("fast");
-                targetObj.toggleClass(this.options.sSelectedClass);
+            // just setting
+            return false;
+        },
+
+        /**
+         * set selected value
+         *
+         * @return null
+         */
+        select : function( oSelectLink ) {
+            this.selectedValue.val( oSelectLink.attr('rel') );
+            this.selectedValueLabel.text( oSelectLink.html() );
+            $('a', this.valueList).removeClass('selected');
+            oSelectLink.addClass('selected');
+        },
+
+        /**
+         * toggle oxDropDown
+         *
+         * @return null
+         */
+        toggleDropDown : function() {
+            if ( !this.isDisabled() ) {
+                if (this.valueList.is(':visible')) {
+                    this.hideDropDown();
+                }
+                else {
+                    this.showDropDown();
+                }
             }
         },
 
-        hideDropdown: function ()
-        {
-            el      = this.element;
-            options = this.options;
-            $(options.sDropBoxElement).hide();
-            $("li.value", options.sDropBoxElement).remove();
-            el.removeClass(options.sSelectedClass);
-            el.addClass(options.sUnselectedClass);
-        }
-    };
+        /**
+         * show value list
+         *
+         * @return null
+         */
+        showDropDown : function (){
 
-    /**
-     * Equalizer widget
-     */
-    $.widget("ui.oxDropDown", oxDropDown );
+           this.hideAll();
+
+           //adding additional <li> for default value from dropbox header
+           this.valueList.prepend('<li class="value"></li>');
+           this.head.clone().appendTo($("li.value", this.valueList));
+           $('li.value p', this.valueList ).removeClass('underlined');
+
+           // set width
+           this.valueList.css("width", this.oxDropDown.outerWidth());
+
+           this.valueList.show();
+        },
+
+        /**
+         * hide values list
+         *
+         * @return null
+         */
+        hideDropDown : function() {
+            this.valueList.hide();
+            $("li.value").remove();
+        },
+
+        /**
+         * hide all opend oxDropDown
+         *
+         * @return null
+         */
+        hideAll : function() {
+            $("li.value").remove();
+            $('ul.drop').hide();
+        },
+
+        /**
+         * check is dropdown disabled
+         *
+         * @return boolean
+         */
+        isDisabled : function() {
+            return this.head.hasClass( this.options.sDisabledClass );
+        },
+    }
+
+   $.widget("ui.oxDropDown", oxDropDown );
 
 })( jQuery )

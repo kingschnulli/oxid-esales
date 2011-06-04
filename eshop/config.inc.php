@@ -33,12 +33,6 @@
         $this->sShopDir     = '<sShopDir_ce>';
         $this->sCompileDir  = '<sCompileDir_ce>';
 
-    // Template theme name, a directory in out/ folder containing all needed resources
-    // $this->sTheme = 'azure';
-
-    // Custom  theme, a directory in out/ folder containing only modified template files
-    // $this->sCustomTheme = null;
-
     // UTF-8 mode in shop 0 - off, 1 - on
     $this->iUtfMode  = '<iUtfMode>';
 

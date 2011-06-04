@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: compare.php 33071 2011-02-09 09:14:01Z linas.kukulskis $
+ * @version   SVN: $Id: compare.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
  */
 
 /**
@@ -443,9 +443,11 @@ class Compare extends oxUBase
         $aPath = array();
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_MY_ACCOUNT', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = oxSeoEncoder::getInstance()->getStaticUrl( $this->getViewConfig()->getSelfLink() . 'cl=account' );
         $aPaths[] = $aPath;
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_PRODUCT_COMPARE_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
         $aPaths[] = $aPath;
 
         return $aPaths;

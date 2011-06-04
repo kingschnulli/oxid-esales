@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: news.php 32923 2011-02-04 14:35:22Z vilma $
+ * @version   SVN: $Id: news.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
  */
 
 /**
@@ -78,8 +78,14 @@ class News extends oxUBase
      */
     public function getBreadCrumb()
     {
-        $aPaths[]['title'] = oxLang::getInstance()->translateString( 'PAGE_INFO_NEWS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
-
+        $aPaths = array();
+        $aPath  = array();
+        
+        $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_INFO_NEWS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
+        
+        $aPaths[] = $aPath;
+        
         return $aPaths;
     }
 

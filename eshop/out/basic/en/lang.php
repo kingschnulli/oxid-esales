@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 35507 2011-05-20 12:00:17Z vilma $
+ * @version   SVN: $Id: lang.php 35847 2011-06-03 08:20:49Z linas.kukulskis $
  */
 
 
@@ -1255,6 +1255,7 @@ $aLang = array(
 'EXCEPTION_USER_PWDDONTMATCH'                       => "Passwords don't match!",
 'EXCEPTION_USER_NOVALUES'                           => 'E-mail and password have to be filled!',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                      => 'Please enter a valid e-mail address',
+'EXCEPTION_INPUT_WRONGCAPTCHA'						=> 'The verification code you entered is not correct. Please try again.',
 'EXCEPTION_INPUT_NOTALLFIELDS'                      => 'Please complete all fields marked with a <span class="req">*</span>',
 'EXCEPTION_PAGE_TITLE'                              => 'Error',
 'EXCEPTION_PAGE_HEADLINE'                           => 'The shop is temporary offline<br>Please come back later<br><br>Thank you for understanding.',

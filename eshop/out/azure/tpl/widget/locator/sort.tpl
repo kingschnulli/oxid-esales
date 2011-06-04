@@ -5,8 +5,8 @@
     [{assign var="_sortColumnVarName" value=$oView->getSortOrderByParameterName()}]
     [{assign var="_sortDirectionVarName" value=$oView->getSortOrderParameterName()}]
     [{oxscript include="js/widgets/oxdropdown.js" priority=10 }]
-    [{oxscript add="$('.dropDown p').oxDropDown();"}]
-    <div class="dropDown" id="sortItems">
+    [{oxscript add="$('div.dropDown p').oxDropDown();"}]
+    <div class="dropDown js-fnLink" id="sortItems">
         <p>
             <label>[{ oxmultilang ident="WIDGET_LOCATOR_SORT_SORTBY" }]</label>
             <span>

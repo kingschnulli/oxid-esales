@@ -38,49 +38,9 @@
                     }
                 });
 
-                self._bindSpecialListener( el );
                 el.bind( "submit", function() {
                     return self.submitValidation(this);
                 });
-            },
-
-            /**
-             * Binds special listeners to given input field
-             *
-             * @return null
-             */
-            _bindSpecialListener: function( oInput )
-            {
-                var oOptions = this.options;
-                var self     = this;
-                var oInput   = $( oInput );
-
-                if ( oInput.hasClass( oOptions.metodEnterPasswd ) ) {
-                    oInput.bind ( "keyup", function() {
-                        self.showInput( oInput, oInput.val() != oInput.attr( "defaultValue" ), oOptions.metodEnterPasswd );
-                    });
-                }
-            },
-
-            /**
-             * Shows/hides given element
-             */
-            showInput: function( oSource, blShow, sClass )
-            {
-                var oRegexp  = new RegExp( sClass + "Target\\[(.+)\\]", "g" );
-                var sClasses = oRegexp.exec( oSource.attr( "class" ) );
-                if ( sClasses && sClasses.length ) {
-                    var aClasses = sClasses[1].split(",");
-
-                    for (var i = 0; i < aClasses.length; i++) {
-                        if (blShow) {
-                            $("." + aClasses[i]).show();
-                        }
-                        else {
-                            $("." + aClasses[i]).hide();
-                        }
-                    }
-                }
             },
 
             /**

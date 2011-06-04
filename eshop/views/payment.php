@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 34000 2011-03-25 12:50:06Z sarunas $
+ * @version   SVN: $Id: payment.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
  */
 
 /**
@@ -672,6 +672,8 @@ class Payment extends oxUBase
 
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_CHECKOUT_PAY', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
+        
         $aPaths[] = $aPath;
 
         return $aPaths;

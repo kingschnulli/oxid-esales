@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contactTest.php 32932 2011-02-04 16:24:54Z vilma $
+ * @version   SVN: $Id: contactTest.php 35848 2011-06-03 08:21:01Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -84,7 +84,7 @@ class Unit_Views_contactTest extends OxidTestCase
         $this->assertFalse( $oContact->send() );
 
         //checking if warning was added to errors list
-        $sErr = oxLang::getInstance()->translateString( 'EXCEPTION_INPUT_NOTALLFIELDS' );
+        $sErr = oxLang::getInstance()->translateString( 'EXCEPTION_INPUT_WRONGCAPTCHA' );
         $aEx = oxSession::getVar( 'Errors' );
         $oErr = unserialize( $aEx['default'][0] );
 

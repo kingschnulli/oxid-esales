@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: tag.php 33307 2011-02-17 10:31:11Z sarunas $
+ * @version   SVN: $Id: tag.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
  */
 
 /**
@@ -342,7 +342,7 @@ class Tag extends aList
     {
         if ( ( $iPage = $this->getActPage() ) ) {
             return $this->_addPageNrParam( $this->generatePageNavigationUrl(), $iPage );
-        } elseif ( ( $sTag = $this->getTag() ) ) {
+        } elseif ( ( $sTag = $this->getTag() ) ) {        
             return oxSeoEncoderTag::getInstance()->getTagUrl( $sTag );
         }
     }
@@ -358,9 +358,11 @@ class Tag extends aList
         $aCatPath = array();
 
         $aCatPath['title'] = oxLang::getInstance()->translateString( 'TAGS', oxLang::getInstance()->getBaseLanguage(), false );
+        $aCatPath['link']  = oxSeoEncoder::getInstance()->getStaticUrl( $this->getViewConfig()->getSelfLink() . 'cl=tags' );
         $aPaths[] = $aCatPath;
-
+        
         $aCatPath['title'] = $this->getTitle();
+        $aCatPath['link']  = $this->getCanonicalUrl();
         $aPaths[] = $aCatPath;
 
         return $aPaths;

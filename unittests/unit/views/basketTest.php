@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: basketTest.php 31670 2010-12-10 12:03:32Z linas.kukulskis $
+ * @version   SVN: $Id: basketTest.php 35809 2011-06-03 08:03:39Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -285,5 +285,44 @@ class Unit_Views_basketTest extends OxidTestCase
         $oBasket = new Basket();
 
         $this->assertEquals(1, count($oBasket->getBreadCrumb()));
+    }
+
+    /**
+     * Testing Wrapping::changeWrapping()
+     *
+     * @return null
+     */
+    public function testChangeWrapping()
+    {
+        modConfig::setParameter( "wrapping", array( 1 => 2 ) );
+        modConfig::setParameter( "giftmessage", "testCardMessage" );
+        modConfig::setParameter( "chosencard", "testCardId" );
+
+        $oBasketItem1 = $this->getMock( "oxStdClass", array( "setWrapping" ));
+        $oBasketItem1->expects( $this->once() )->method( 'setWrapping' )->with( $this->equalTo( 2 ) );
+
+        $oBasketItem2 = $this->getMock( "oxStdClass", array( "setWrapping" ));
+        $oBasketItem2->expects( $this->never() )->method( 'setWrapping' );
+
+        $oContents = new oxList();
+        $oContents->offsetSet( 1 , $oBasketItem1 );
+        $oContents->offsetSet( 2 , $oBasketItem2 );
+
+        $oBasket = $this->getMock( "oxStdClass", array( "getContents", "setCardMessage", "setCardId", "onUpdate" ) );
+        $oBasket->expects( $this->once() )->method( 'getContents' )->will( $this->returnValue( $oContents ) );
+        $oBasket->expects( $this->once() )->method( 'setCardMessage' )->with( $this->equalTo( "testCardMessage" ) );
+        $oBasket->expects( $this->once() )->method( 'setCardId' )->with( $this->equalTo( "testCardId" ) );
+        $oBasket->expects( $this->once() )->method( 'onUpdate' );
+
+        $oSession = $this->getMock( "oxStdClass", array( "getBasket" ) );
+        $oSession->expects( $this->once() )->method( 'getBasket' )->will( $this->returnValue( $oBasket ) );
+
+        $oViewConfig = $this->getMock( "oxStdClass", array( "getShowGiftWrapping" ) );
+        $oViewConfig->expects( $this->once() )->method( 'getShowGiftWrapping' )->will( $this->returnValue( true ) );
+
+        $oView = $this->getMock( "basket", array( "getViewConfig", "getSession" ), array(), '', false );
+        $oView->expects( $this->once() )->method( 'getViewConfig' )->will( $this->returnValue( $oViewConfig ) );
+        $oView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
+        $oView->changeWrapping();
     }
 }

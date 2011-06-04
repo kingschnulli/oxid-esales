@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>[{ oxmultilang ident="GENERAL_ADMIN_TITLE_1" }]</title>
+    <link rel="shortcut icon" href="[{ $oViewConf->getBaseDir() }]favicon.ico">
 </head>
 <script type="text/javascript">
 <!--//

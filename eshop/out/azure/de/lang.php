@@ -142,6 +142,7 @@ $aLang = array(
 'EXCEPTION_USER_PWDDONTMATCH'                                     => 'Passwörter stimmen nicht überein!',
 'EXCEPTION_USER_NOVALUES'                                         => 'E-Mail und Passwort müssen ausgefüllt sein!',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                                    => 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
+'EXCEPTION_INPUT_WRONGCAPTCHA'                                    => 'Der Prüfcode, den Sie eingegeben haben, ist nicht korrekt. Bitte versuchen Sie es erneut.',
 'EXCEPTION_INPUT_NOTALLFIELDS'                                    => 'Bitte Wert angeben!',
 'EXCEPTION_PAGE_TITLE'                                            => 'Fehler',
 'EXCEPTION_PAGE_HEADLINE'                                         => 'Der Shop ist vorübergehend offline...',
@@ -725,6 +726,7 @@ $aLang = array(
 'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2'                               => "kg",
 
 'WIDGET_BREADCRUMB_YOUAREHERE'                                    => "Sie sind hier",
+'WIDGET_BREADCRUMB_OVERVIEW'                                      => "Zurück zur Übersicht",
 
 'WIDGET_PRODUCT_ATTRIBUTES_PLEASECHOOSE'                          => "Bitte wählen",
 

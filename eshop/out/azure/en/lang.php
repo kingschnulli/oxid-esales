@@ -141,6 +141,7 @@ $aLang = array(
 'EXCEPTION_USER_PWDDONTMATCH'                                     => "Passwords don't match!",
 'EXCEPTION_USER_NOVALUES'                                         => 'E-mail and password have to be filled!',
 'EXCEPTION_INPUT_NOVALIDEMAIL'                                    => 'Please enter a valid e-mail address',
+'EXCEPTION_INPUT_WRONGCAPTCHA'								      => 'The verification code you entered is not correct. Please try again.',
 'EXCEPTION_INPUT_NOTALLFIELDS'                                    => 'Specify a value for this required field.',
 'EXCEPTION_PAGE_TITLE'                                            => 'Error',
 'EXCEPTION_PAGE_HEADLINE'                                         => 'The shop is temporary offline<br>Please come back later<br><br>Thank you for understanding.',
@@ -734,6 +735,7 @@ $aLang = array(
 'WIDGET_PRODUCT_PRODUCT_NR'                                       => "Art.No.:",
 'WIDGET_PRODUCT_PRODUCT_REMOVE'                                   => "Remove",
 'WIDGET_BREADCRUMB_YOUAREHERE'                                    => "You are here",
+'WIDGET_BREADCRUMB_OVERVIEW'                                      => "Back to Overview",
 
 'WIDGET_PRODUCT_ATTRIBUTES_PLEASECHOOSE'                          => "Please choose",
 

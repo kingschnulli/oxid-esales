@@ -2080,19 +2080,20 @@ CREATE TABLE `oxmanufacturers` (
 DROP TABLE IF EXISTS `oxseo`;
 
 CREATE TABLE `oxseo` (
-`OXOBJECTID` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
-`OXIDENT`    char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
-`OXSHOPID` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
-`OXLANG`     int(2) NOT NULL default 0,
-`OXSTDURL`   TEXT NOT NULL,
-`OXSEOURL`   TEXT character set latin1 collate latin1_bin NOT NULL,
-`OXTYPE`     enum('static', 'oxarticle', 'oxcategory', 'oxvendor', 'oxcontent', 'dynamic', 'oxmanufacturer') NOT NULL,
-`OXFIXED`    TINYINT(1) NOT NULL default 0,
-`OXEXPIRED` tinyint(1) NOT NULL default '0',
-`OXPARAMS` char(32) NOT NULL default '',
-PRIMARY KEY (`OXIDENT`, `OXSHOPID`, `OXLANG`),
-UNIQUE KEY search (`OXTYPE`, `OXOBJECTID`, `OXSHOPID`, `OXLANG`,`OXPARAMS`),
-KEY `OXOBJECTID` (`OXLANG`,`OXOBJECTID`,`OXSHOPID`)
+    `OXOBJECTID` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
+    `OXIDENT`    char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
+    `OXSHOPID`   char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
+    `OXLANG`     int(2) NOT NULL default 0,
+    `OXSTDURL`   TEXT NOT NULL,
+    `OXSEOURL`   TEXT character set latin1 collate latin1_bin NOT NULL,
+    `OXTYPE`     enum('static', 'oxarticle', 'oxcategory', 'oxvendor', 'oxcontent', 'dynamic', 'oxmanufacturer') NOT NULL,
+    `OXFIXED`    TINYINT(1) NOT NULL default 0,
+    `OXEXPIRED` tinyint(1) NOT NULL default '0',
+    `OXPARAMS` char(32) NOT NULL default '',
+    PRIMARY KEY (`OXIDENT`, `OXSHOPID`, `OXLANG`),
+    UNIQUE KEY search (`OXTYPE`, `OXOBJECTID`, `OXSHOPID`, `OXLANG`,`OXPARAMS`),
+    KEY `OXOBJECTID` (`OXLANG`,`OXOBJECTID`,`OXSHOPID`),
+    KEY `SEARCHSTD` (OXSTDURL(100),`OXSHOPID`)
 ) ENGINE=InnoDB;
 
 #

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 35275 2011-05-10 06:48:25Z sarunas $
+ * @version   SVN: $Id: alistTest.php 35805 2011-06-03 08:02:50Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -343,7 +343,7 @@ class Unit_Views_alistTest extends OxidTestCase
         $oListView = new aList();
         $oListView->executefilter();
 
-        $this->assertEquals( array( 'somecategory' => 'somefilter' ), oxSession::getVar( 'session_attrfilter' ) );
+        $this->assertEquals( array( 'somecategory' => array( '0' => 'somefilter') ), oxSession::getVar( 'session_attrfilter' ) );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: wishlist.php 33564 2011-02-28 12:44:18Z vilma $
+ * @version   SVN: $Id: wishlist.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
  */
 
 /**
@@ -181,6 +181,7 @@ class Wishlist extends oxUBase
         $aPath = array();
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_WISHLIST_PRODUCTS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aPath['link']  = $this->getLink();
         $aPaths[] = $aPath;
 
         return $aPaths;

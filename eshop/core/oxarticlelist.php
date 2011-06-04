@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 35265 2011-05-10 06:48:03Z sarunas $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 35805 2011-06-03 08:02:50Z linas.kukulskis $
  */
 
 /**
@@ -925,8 +925,9 @@ class oxArticleList extends oxList
         // ----------------------------------
         // filtering ?
         $sFilterSql = '';
-        if ( $aSessionFilter && isset( $aSessionFilter[$sCatId] ) ) {
-            $sFilterSql = $this->_getFilterSql($sCatId, $aSessionFilter[$sCatId]);
+        $iLang = oxLang::getInstance()->getBaseLanguage();
+        if ( $aSessionFilter && isset( $aSessionFilter[$sCatId][$iLang] ) ) {
+            $sFilterSql = $this->_getFilterSql($sCatId, $aSessionFilter[$sCatId][$iLang]);
         }
 
         $oDb = oxDb::getDb();

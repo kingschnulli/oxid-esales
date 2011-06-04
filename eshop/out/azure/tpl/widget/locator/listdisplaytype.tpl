@@ -3,8 +3,8 @@
 [{assign var="_artPerPage" value=$oViewConf->getArtPerPageCount()}]
 [{if $oView->canSelectDisplayType()}]
     [{oxscript include="js/widgets/oxdropdown.js" priority=10 }]
-    [{oxscript add="$('.dropDown p').oxDropDown();"}]
-    <div class="dropDown" id="viewOptions">
+    [{oxscript add="$('div.dropDown p').oxDropDown();"}]
+    <div class="dropDown js-fnLink" id="viewOptions">
         <p>
             <label>[{oxmultilang ident="view"}]:</label>
             <span>[{oxmultilang ident=$listType}]</span>

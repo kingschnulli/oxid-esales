@@ -9,9 +9,9 @@
 <h1 id="productComparisonHeader" class="pageHead">[{$template_title}]</h1>
 <div>
 [{if $oView->getCompareItemsCnt() > 1 }]
-    [{oxscript include="js/scrollpane/jquery.jscrollpane.min.js"}]
-    [{oxscript include="js/scrollpane/jquery.mousewheel.js"}]
-    [{oxscript include="js/scrollpane/mwheelIntent.js"}]
+    [{oxscript include="js/libs/scrollpane/jscrollpane.min.js"}]
+    [{oxscript include="js/libs/scrollpane/mousewheel.js"}]
+    [{oxscript include="js/libs/scrollpane/mwheelIntent.js"}]
     [{oxstyle include="css/jquery.jscrollpane.css"}]
     [{oxscript include="js/widgets/oxcompare.js" priority=10 }]
     [{oxscript add="$( '#compareList' ).oxCompare();"}]

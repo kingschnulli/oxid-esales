@@ -1,6 +1,5 @@
 [{assign var="aVariantSelections" value=$oView->getVariantSelections()}]
 
-
 [{if $aVariantSelections && $aVariantSelections.rawselections}]
     [{assign var="_sSelectionHashCollection" value=""}]
     [{foreach from=$aVariantSelections.rawselections item=oSelectionList key=iKey}]
@@ -42,6 +41,9 @@
             <a id="zoomTrigger" alt="[{oxmultilang ident="DETAILS_ZOOM"}]" rel="nofollow" href="#">Zoom</a>
         [{/if}]
 
+
+        [{oxscript include="js/libs/cloudzoom.js" priority=10}]
+        [{oxscript add="$('.cloud-zoom, .cloud-zoom-gallery').CloudZoom();"}]
         <div class="picture">
             <a href="[{$oPictureProduct->getMasterZoomPictureUrl(1)}]" class="cloud-zoom" id="zoom1" rel="adjustY:-2, zoomWidth:'354', fixZoomWindow:'390', trImg:'[{$oViewConf->getImageUrl()}]dot.png', loadingText:'[{oxmultilang ident="PAGE_DETAILS_ZOOM_LOADING"}]'">
                 <img src="[{$oView->getActPicture()}]"  alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">
@@ -54,8 +56,10 @@
 
         [{ assign var="oManufacturer" value=$oView->getManufacturer()}]
             <div class="productMainInfo[{if $oManufacturer->oxmanufacturers__oxicon->value}] hasBrand[{/if}]">
+
             [{oxscript include="js/widgets/oxarticleactionlinksselect.js" priority=10 }]
             [{oxscript add="$( '#productTitle' ).oxArticleActionLinksSelect();"}]
+
             <h1 id="productTitle"><span>[{$oDetailsProduct->oxarticles__oxtitle->value}] [{$oDetailsProduct->oxarticles__oxvarselect->value}]</span></h1>
 
 
@@ -63,7 +67,7 @@
             [{if $smarty.cookies.showlinksonce ne "1"}]
                 <div id="showLinksOnce"></div>
             [{/if}]
-            <a class="selector corners FXgradBlueDark" href="#priceinfo" id="productLinks"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" longdesc="[{$oViewConf->getImageUrl()}]selectbutton-on.png" alt="Select"></a>
+            <a class="selector corners FXgradBlueDark" href="#" id="productLinks"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" longdesc="[{$oViewConf->getImageUrl()}]selectbutton-on.png" alt="Select"></a>
             <ul class="actionLinks corners shadow">
                 [{if $oViewConf->getShowCompareList() }]
                     <li><span>[{oxid_include_dynamic file="page/details/inc/compare_links.tpl" testid="" type="compare" aid=$oDetailsProduct->oxarticles__oxid->value anid=$oDetailsProduct->oxarticles__oxnid->value in_list=$oDetailsProduct->isOnComparisonList() page=$oView->getActPage() text_to_id="PAGE_DETAILS_COMPARE" text_from_id="PAGE_DETAILS_REMOVEFROMCOMPARELIST"}]</span></li>
@@ -124,6 +128,9 @@
             [{assign var="blCanBuy" value=true}]
             [{* variants | md variants *}]
             [{if $aVariantSelections && $aVariantSelections.selections }]
+                [{oxscript include="js/widgets/oxajax.js" priority=10 }]
+                [{oxscript include="js/widgets/oxarticlevariant.js" priority=10 }]
+                [{oxscript add="$( '#variants' ).oxArticleVariant();"}]
                 [{assign var="blCanBuy" value=$aVariantSelections.blPerfectFit}]
                 <div id="variants" class="selectorsBox fnSubmit clear">
 
@@ -138,7 +145,6 @@
                 </div>
 
                 [{if $blHasActiveSelections}]
-
                     <div class="variantReset">
                         [{* Reset link *}]
                         <a href="" class="reset">[{ oxmultilang ident="DETAILS_VARIANTS_RESETSELECTION" }]</a>
@@ -209,8 +215,8 @@
                                 <strong>[{$fPrice}] [{$currency->sign}] *</strong>
                             </label>
                         [{/if}]
+                        [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]
                         [{if $oDetailsProduct->loadAmountPriceInfo()}]
-                            [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]
                             [{oxscript add="$( '#amountPrice' ).oxAmountPriceSelect();"}]
                             <a class="selector corners FXgradBlueDark" href="#priceinfo" id="amountPrice"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" longdesc="[{$oViewConf->getImageUrl()}]selectbutton-on.png" alt="Select"></a>
                             [{include file="page/details/inc/priceinfo.tpl"}]
@@ -221,9 +227,6 @@
                         [{if !$oDetailsProduct->isNotBuyable()}]
                             <input id="amountToBasket" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
                             <button id="toBasket" type="submit" [{if !$blCanBuy}]disabled="disabled"[{/if}] class="submitButton largeButton" title="[{oxmultilang ident="DETAILS_ADDTOCART"}]">[{oxmultilang ident="DETAILS_ADDTOCART"}]</button>
-                            [{if $oDetailsProduct->loadAmountPriceInfo()}]
-                                [{oxscript add="$( '.ox-details-amount' ).oxSuggest();"}]
-                            [{/if}]
                         [{/if}]
                     [{/oxhasrights}]
 
@@ -281,8 +284,5 @@
 </form>
 [{/if}]
 [{/oxhasrights}]
-
 [{include file="page/details/inc/morepics.tpl"}]
-
-[{oxscript add="$(function(){oxid.initDetailsMain();});"}]
 

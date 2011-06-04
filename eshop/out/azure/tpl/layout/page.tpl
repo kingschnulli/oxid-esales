@@ -2,7 +2,7 @@
     <div id="page" class="pageLayout[{if $sidebar}] sidebar[{$sidebar}][{/if}]">
     [{include file="layout/header.tpl"}]
     [{if $oView->getClassName() ne "start" && !$blHideBreadcrumb}]
-        <div id="breadCrumb">[{ include file="widget/breadcrumb.tpl"}]</div>
+       [{ include file="widget/breadcrumb.tpl"}]
     [{/if}]
     [{if $sidebar}]
     <div id="sidebar">

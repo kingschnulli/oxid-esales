@@ -330,7 +330,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
         // finally testing
         $oArtList = new oxArticleList();
-        $oArtList->loadCategoryIds( $sCatId, array( $sCatId => array( '_testAttribute1' => 'Литовские-' ) ) );
+        $oArtList->loadCategoryIds( $sCatId, array( $sCatId => array( '0' => array ('_testAttribute1' => 'Литовские-' ) ) ) );
         $aKeys = $oArtList->arrayKeys();
 
         $this->assertTrue( in_array( '_testArticle1', $aKeys ) );
@@ -338,7 +338,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $this->assertFalse( in_array( '_testArticle3', $aKeys ) );
 
         $oArtList = new oxArticleList();
-        $oArtList->loadCategoryIds( $sCatId, array( $sCatId => array( '_testAttribute2' => 'agentūrų-' ) ) );
+        $oArtList->loadCategoryIds( $sCatId, array( $sCatId => array( '0' => array ('_testAttribute2' => 'agentūrų-' ) ) ) );
         $aKeys = $oArtList->arrayKeys();
 
         $this->assertFalse( in_array( '_testArticle1', $aKeys ) );
@@ -346,7 +346,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $this->assertFalse( in_array( '_testArticle3', $aKeys ) );
 
         $oArtList = new oxArticleList();
-        $oArtList->loadCategoryIds( $sCatId, array( $sCatId => array( '_testAttribute3' => 'für-' ) ) );
+        $oArtList->loadCategoryIds( $sCatId, array( $sCatId => array( '0' => array ('_testAttribute3' => 'für-' ) ) ) );
         $aKeys = $oArtList->arrayKeys();
 
         $this->assertFalse( in_array( '_testArticle1', $aKeys ) );
@@ -1960,12 +1960,18 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
     public function testTagGetBreadCrumb()
     {
-        $sValue = 'литов';
+        $sValue = 'Литов';
         $sResult = 'Литов';
 
         $oView = $this->getProxyClass( 'tag' );
         $oView->setNonPublicVar( "_sTag", $sValue );
-        $this->assertEquals( array(array('title'=>'Stichworte'),array('title'=>$sResult)), $oView->getBreadCrumb());
+
+        $aPath = array(
+            array('title'=>'Stichworte', 'link' => oxSeoEncoder::getInstance()->getStaticUrl( $oView->getViewConfig()->getSelfLink() . 'cl=tags' )),
+            array('title'=>$sResult, 'link' => $oView->getCanonicalUrl())
+        );
+
+        $this->assertEquals( $aPath, $oView->getBreadCrumb());
     }
 
     public function testOxEmailIncludeImages()

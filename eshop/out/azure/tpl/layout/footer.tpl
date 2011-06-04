@@ -6,7 +6,7 @@
       <div class="bar">
           [{if $oView->isActive('FbLike') && $oViewConf->getFbAppId()}]
         <div class="facebook">
-          [{include file="widget/facebook/like.tpl"}]
+          [{include file="widget/facebook/like.tpl" parent="footer"}]
         </div>
         [{/if}]
           [{include file="widget/footer/newsletter.tpl"}]
@@ -26,7 +26,7 @@
       [{/capture}]
 
       [{capture append="oxidBlock_footer"}]
-      <dl class="services" id="footerServices">
+      <dl class="services" id="footerInformation">
         <dt>[{oxmultilang ident="FOOTER_INFORMATION" }]</dt>
         <dd>[{include file="widget/footer/info.tpl"}]</dd>
       </dl>

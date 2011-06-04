@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 34355 2011-04-07 10:20:42Z linas.kukulskis $
+ * @version   SVN: $Id: oxconfig.php 35842 2011-06-03 08:19:31Z linas.kukulskis $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -355,10 +355,10 @@ class oxConfig extends oxSuperCfg
         if( !$this->getConfigParam( 'sDefaultLang' ) )
             $this->setConfigParam( 'sDefaultLang', 0 );
 
-        $sTheme = $this->getConfigParam( 'sTheme' );
-        if( !isset( $sTheme ) )
-            $this->setConfigParam( 'sTheme', 'basic' );
+        
+        $this->setConfigParam( 'sTheme', 'basic' );
 
+        
         $blLogChangesInAdmin = $this->getConfigParam( 'blLogChangesInAdmin' );
         if( !isset( $blLogChangesInAdmin ) )
             $this->setConfigParam( 'blLogChangesInAdmin', false );
@@ -410,10 +410,6 @@ class oxConfig extends oxSuperCfg
             // load now
             $this->_loadVarsFromDb( $sShopID );
             $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_THEME_PREFIX . $this->getConfigParam('sTheme') );
-            $sCustomTheme = $this->getConfigParam('sCustomTheme');
-            if ($sCustomTheme) {
-                $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_THEME_PREFIX . $sCustomTheme );
-            }
 
 
             //starting up the session
@@ -1043,6 +1039,7 @@ class oxConfig extends oxSuperCfg
             $sTheme = $this->getConfigParam( 'sTheme' );
         }
 
+           
         if ( $blAdmin ) {
             $sTheme = 'admin';
         }

@@ -20,6 +20,23 @@
     [{if $oView->getMetaKeywords()}]
         <meta name="keywords" content="[{$oView->getMetaKeywords()}]">
     [{/if}]
+
+    [{if $oViewConf->getFbAppId()}]
+        <meta property="og:site_name" content="[{$oViewConf->getBaseDir()}]">
+        <meta property="fb:app_id" content="[{$oViewConf->getFbAppId()}]">
+        <meta property="og:title" content="[{ $_sMetaTitlePrefix }][{if $_sMetaTitlePrefix && $_sMetaTitle }] | [{/if}][{$_sMetaTitle|strip_tags}][{if $_sMetaTitleSuffix && ($_sMetaTitlePrefix || $_sMetaTitle) }] | [{/if}][{$_sMetaTitleSuffix}] [{if $_sMetaTitlePageSuffix }] | [{ $_sMetaTitlePageSuffix }] [{/if}]">
+        [{if $oViewConf->getActiveClassName() == 'details' }]
+            <meta property="og:type" content="product">
+            <meta property="og:image" content="[{$oView->getActPicture()}]">
+            <meta property="og:url" content="[{$oView->getCanonicalUrl()}]">
+        [{ else }]
+            <meta property="og:type" content="website">
+            <meta property="og:image" content="[{$oViewConf->getImageUrl()}]basket.png">
+            <meta property="og:url" content="[{$oViewConf->getCurrentHomeDir()}]">
+        [{/if}]
+    [{/if}]
+
+
     [{assign var="canonical_url" value=$oView->getCanonicalUrl()}]
     [{if $canonical_url }]
         <link rel="canonical" href="[{ $canonical_url }]">
@@ -64,17 +81,15 @@
         [{$_block}]
     [{/foreach}]
 
-    [{oxscript include="js/jquery.min.js" priority=1}]
-    [{oxscript include="js/jquery-ui.min.js" priority=1}]
-    [{oxscript include="js/cloud-zoom.1.0.2.js" priority=1}]
-    [{oxscript include="js/countdown.jquery.js" priority=1}]
-    [{oxscript include="js/gui.js" priority=9}]
-    [{oxscript include='js/superfish/hoverIntent.js'}]
-    [{oxscript include='js/superfish/supersubs.js'}]
-    [{oxscript include='js/superfish/superfish.js'}]
+    [{oxscript include="js/libs/jquery.min.js" priority=1}]
+    [{oxscript include="js/libs/jquery-ui.min.js" priority=1}]
+    [{oxscript include='js/libs/superfish/hoverIntent.js'}]
+    [{oxscript include='js/libs/superfish/supersubs.js'}]
+    [{oxscript include='js/libs/superfish/superfish.js'}]
 
     [{if $oViewConf->isTplBlocksDebugMode()}]
-        [{oxscript include="js/block-debug.js"}]
+        [{oxscript include="js/widgets/oxblockdebug.js"}]
+        [{oxscript add="$( 'hr.debugBlocksStart' ).oxBlockDebug();"}]
     [{/if}]
 
     [{oxscript}]
@@ -83,11 +98,12 @@
     [{/foreach}]
 
     <!--[if (gte IE 6)&(lte IE 8)]>
-        <script type="text/javascript" src="[{ $oViewConf->getResourceUrl() }]js/IE9.js"></script>
+        <script type="text/javascript" src="[{ $oViewConf->getResourceUrl() }]js/libs/IE9.js"></script>
     <![endif]-->
     <!--[if IE]>
-        <script src="[{ $oViewConf->getResourceUrl() }]js/jquery-fonteffect-1.0.0.js"></script>
-        <script src="[{ $oViewConf->getResourceUrl() }]js/fonteffect.oxid.js"></script>
+        <script src="[{ $oViewConf->getResourceUrl() }]js/libs/fonteffect.js"></script>
+        <script src="[{ $oViewConf->getResourceUrl() }]js/widgets/oxiefontshadow.js"></script>
     <![endif]-->
+
 </body>
 </html>

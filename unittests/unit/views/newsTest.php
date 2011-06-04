@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsTest.php 32923 2011-02-04 14:35:22Z vilma $
+ * @version   SVN: $Id: newsTest.php 35792 2011-06-03 08:00:18Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -111,11 +111,16 @@ class Unit_Views_newsTest extends OxidTestCase
      */
     public function testGetBreadCrumb()
     {
-        $oNews = new News();
+        $oNews    = new News();
+        $aResult  = array();
+        $aResults = array();
+        
+        $aResult["title"] = oxLang::getInstance()->translateString( 'PAGE_INFO_NEWS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
+        $aResult["link"]  = $oNews->getLink();
+        
+        $aResults[] = $aResult;
 
-        $aResult[]["title"] = oxLang::getInstance()->translateString( 'PAGE_INFO_NEWS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
-
-        $this->assertEquals( $aResult, $oNews->getBreadCrumb() );
+        $this->assertEquals( $aResults, $oNews->getBreadCrumb() );
     }
 
 }
