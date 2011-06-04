@@ -61,10 +61,22 @@
                     return self.reloadProductPartially($(".oxProductForm"),'productInfo',$("#productinfo"),$("#productinfo")[0]);
                 }
             });
+            
         },
-
-
-         reloadProductPartially : function(activator, renderPart, highlightTargets, contentTarget) {
+        
+        /**
+         * Runs defined scripts inside the method, before ajax is called
+         */
+        _preAjaxCaller : function() 
+        {
+        	$('#zoomModal').remove();
+        },
+                
+        reloadProductPartially : function(activator, renderPart, highlightTargets, contentTarget) {
+        	
+        	// calls some scripts before the ajax starts
+        	this._preAjaxCaller();
+        	
             oxAjax.ajax(
                 activator,
                 {//targetEl, onSuccess, onError, additionalData

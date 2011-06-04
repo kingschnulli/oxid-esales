@@ -51,9 +51,6 @@
                 });
                 arrow.attr("src", arrowSrc);
             });
-            $(".tobasketFunction .selector").css({
-                "position": "static"
-            });
         },
 
         /**
@@ -68,10 +65,6 @@
             var arrowOnSrc = arrow.attr("longdesc");
             $("#priceinfo").slideDown("normal", function(){
                 arrow.attr("src", arrowOnSrc);
-            });
-            $(".tobasketFunction .selector").css({
-                "left": sLeftPosition,
-                "position": "absolute"
             });
         }
 

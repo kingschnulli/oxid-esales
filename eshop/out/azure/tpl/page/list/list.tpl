@@ -33,9 +33,16 @@
                         [{assign var="iSubCategoriesCount" value=$iSubCategoriesCount+1}]
                         [{assign var="iconUrl" value=$category->getIconUrl()}]
                             <div class="box">
-                                <h3>
+                                <h3>                                
+                                    [{assign var="maxTitleLength" value=19}]    
+                                    [{ if $oView->showCategoryArticlesCount() && ($category->getNrOfArticles() > 0) }]                                   
+                                        [{assign var="articleNrLength" value=$category->getNrOfArticles|count_characters}]
+                                        [{assign var="categoryTitle" value=$category->oxcategories__oxtitle->value|truncate:$maxTitleLength-3-$articleNrLength:'...':true|cat:" ("|cat:$category->getNrOfArticles()|cat:")"}]    
+                                    [{else}]    
+                                        [{assign var="categoryTitle" value=$category->oxcategories__oxtitle->value|truncate:$maxTitleLength:'...':true}]
+                                    [{/if}]                                    
                                     <a id="moreSubCat_[{$smarty.foreach.MoreSubCat.iteration}]" href="[{ $category->getLink() }]">
-                                        [{$category->oxcategories__oxtitle->value }][{ if $oView->showCategoryArticlesCount() && ($category->getNrOfArticles() > 0) }] ([{ $category->getNrOfArticles() }])[{/if}]
+                                        [{$categoryTitle}]                                    
                                     </a>
                                 </h3>
                                 [{if $category->getHasVisibleSubCats()}]

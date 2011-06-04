@@ -10,6 +10,7 @@
 [{include file="page/checkout/inc/steps.tpl" active=4 }]
 [{if !$oView->showOrderButtonOnTop()}]
     <div class="lineBox clear">
+        <span>&nbsp;</span>
         <span class="title">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_TITLE2" }]<span>
     </div>
 [{/if}]
