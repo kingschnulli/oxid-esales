@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbase.php 35505 2011-05-20 11:20:42Z arunas.paskevicius $
+ * @version   SVN: $Id: dynexportbase.php 35962 2011-06-06 13:38:31Z vilma $
  */
 
 /**
@@ -625,7 +625,10 @@ class DynExportBase extends oxAdminDetails
     {
         $oDB = oxDb::getDb();
 
-        $iExpLang = oxSession::getVar( "iExportLanguage" );
+        $iExpLang = oxConfig::getParameter( "iExportLanguage" );
+        if (!isset($iExpLang)) {
+            $iExpLang = oxSession::getVar( "iExportLanguage" );
+        }
 
         $oArticle = oxNew( 'oxarticle' );
         $oArticle->setLanguage( $iExpLang );

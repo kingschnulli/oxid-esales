@@ -3,10 +3,9 @@
     oxArticleBox = {
 
         _create: function(){
-
             var self = this;
             var el   = self.element;
-
+            	
             //hide all
             $('.articleImage', el).hide();
 
@@ -29,12 +28,13 @@
                     $(this).prev().slideDown(500);
                 }
             });
-
+            	
             self.trimTitles( $( ".box h3 a", el ) );
 
         },
 
         trimTitles : function(group) {
+        	
             group.each(function(){
                 var thisWidth  = $(this).width();
                 var thisText   = $.trim($(this).text());

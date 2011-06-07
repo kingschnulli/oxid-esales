@@ -161,9 +161,10 @@
                     [{if $basketproduct->oxarticles__oxid->value == $oEr->getValue('productId') }]
                         <tr class="basketError">
                             [{if $editable }]<td></td>[{/if}]
-                            <td colspan="6">
+                            <td colspan="5">
                                 <span class="inlineError">[{ $oEr->getOxMessage() }] <strong>[{ $oEr->getValue('remainingAmount') }]</strong></span>
                             </td>
+                            [{if $oView->isWrapping() }]<td></td>[{/if}]
                             <td></td>
                         </tr>
                     [{/if}]
@@ -172,9 +173,10 @@
                     [{if $basketproduct->oxarticles__oxid->value == $oEr->getValue('productId') }]
                         <tr>
                             [{if $editable }]<td></td>[{/if}]
-                            <td colspan="6">
+                            <td colspan="5">
                                 [{ $oEr->getOxMessage() }]
                             </td>
+                            [{if $oView->isWrapping() }]<td></td>[{/if}]
                             <td></td>
                         </tr>
                     [{/if}]
@@ -193,10 +195,10 @@
                   <br>
                   <b>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_YOURMESSAGE" }]</b>
                   <br>
-                  <div id="orderCardText">[{ $oxcmp_basket->getCardMessage()|nl2br }]</div
+                  <div id="orderCardText">[{ $oxcmp_basket->getCardMessage()|nl2br }]</div>
                   </td>
                   <td id="orderCardPrice" class="orderprice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
-                  <td class="vat_order">[{if $oxcmp_basket->getWrappCostVat() }][{ $oxcmp_basket->getWrappCostVatPercent() }]%[{/if}]</td>
+                  <td>[{if $oxcmp_basket->getWrappCostVat() }][{ $oxcmp_basket->getWrappCostVatPercent() }]%[{/if}]</td>
                   <td id="orderCardTotalPrice" align="right" class="totalprice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
                 </tr>
               [{/if}]

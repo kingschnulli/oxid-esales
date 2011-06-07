@@ -28,8 +28,7 @@
         </div>
         [{/if}]
     </div>
+    [{oxscript include="js/widgets/oxzoompictures.js" priority=10}]
+    [{oxscript add="$('#moreZoomPicsContainer').oxZoomPictures();"}]    
 [{/if}]
-
-[{oxscript include="js/widgets/oxzoompictures.js" priority=10}]
-[{oxscript add="$('#moreZoomPicsContainer').oxZoomPictures();"}]
         

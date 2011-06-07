@@ -27,7 +27,7 @@
 
 [{if $oView->getTagCloudManager() || ( ( $oView->getTagCloudManager() || $oxcmp_user) && $oDetailsProduct )}]
     [{oxscript include='js/widgets/oxajax.js'}]
-    [{oxscript include='js/widgets/oxTag.js'}]
+    [{oxscript include='js/widgets/oxtag.js'}]
     [{oxscript add="$('p.tagCloud a.tagText').click(oxTag.highTag);"}]
     [{oxscript add="$('#saveTag').click(oxTag.saveTag);"}]
     [{oxscript add="$('#cancelTag').click(oxTag.cancelTag);"}]

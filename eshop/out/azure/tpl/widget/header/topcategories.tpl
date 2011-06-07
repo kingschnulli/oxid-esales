@@ -1,6 +1,6 @@
 [{oxscript include="js/widgets/oxtopmenu.js" priority=10 }]
 [{oxscript add="$('#navigation').oxTopMenu();"}]
-[{oxstyle include="css/superfish.css"}]
+[{oxstyle include="css/libs/superfish.css"}]
 <ul id="navigation" class="sf-menu">
     <li [{if $oView->getClassName()=='start'}]class="current"[{/if}]><a [{if $oView->getClassName()=='start'}]class="current"[{/if}] href="[{$oViewConf->getHomeLink()}]">[{oxmultilang ident="TOP_CATEGORIES_HOME"}]</a></li>
 

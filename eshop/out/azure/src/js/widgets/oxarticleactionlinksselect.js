@@ -68,6 +68,12 @@
                 }
             });
 
+            //open price alart tab if pricealert link is clicked
+            $(".priceAlarmLink").click(function() {
+                var $tabs = $('.tabbedWidgetBox').tabs();
+                $tabs.tabs('select', '#pricealarm');
+                return false;
+            });
         },
 
         /**

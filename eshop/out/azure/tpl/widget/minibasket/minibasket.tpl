@@ -5,18 +5,13 @@
         [{assign var="scrollableBasket" value=true}]
     [{/if}]
         [{assign var="currency" value=$oView->getActCurrency() }]
-        [{if $scrollableBasket}]
-            [{oxscript include="js/libs/scrollpane/jscrollpane.min.js"}]
-            [{oxscript include="js/libs/scrollpane/mousewheel.js"}]
-            [{oxscript include="js/libs/scrollpane/mwheelIntent.js"}]
-            [{oxstyle include="css/jquery.jscrollpane.css"}]
-        [{/if}]
         <div id="basketFlyout" class="basketFlyout corners[{if $scrollableBasket}] scrollable[{/if}]">
             <p class="title">
                 <strong>[{$oxcmp_basket->getItemsCount()}] [{ oxmultilang ident="WIDGET_MINIBASKET_ITEMS_IN_BASKET" }]</strong>
                 <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
             </p>
             [{if $scrollableBasket}]
+                <div class="scrollbarBox">
                 <div class="basketItems">
                 <hr>
             [{/if}]
@@ -37,6 +32,7 @@
             [{/foreach}]
             </ul>
             [{if $scrollableBasket}]
+                </div>
                 </div>
                 <hr>
             [{/if}]

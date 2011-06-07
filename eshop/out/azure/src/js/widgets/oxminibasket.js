@@ -56,8 +56,9 @@
 
         showMiniBasket : function(){
             $("#basketFlyout").show();
-            if ($(".scrollable ul").length > 0) {
-                $('.scrollable ul').jScrollPane({
+            
+            if ($(".scrollable .scrollbarBox").length > 0) {            	
+                $('.scrollable .scrollbarBox').jScrollPane({
                     showArrows: true,
                     verticalArrowPositions: 'split'
                 });
