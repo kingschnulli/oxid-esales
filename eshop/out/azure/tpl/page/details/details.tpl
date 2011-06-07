@@ -3,11 +3,6 @@
   [{assign var="oPictureProduct" value=$oView->getPicturesProduct()}]
   [{assign var="currency" value=$oView->getActCurrency()}]
   [{assign var="sPageHeadTitle" value=$oDetailsProduct->oxarticles__oxtitle->value|cat:' '|cat:$oDetailsProduct->oxarticles__oxvarselect->value}]
-  [{capture append="oxidBlock_pagePopup"}]
-    <div>
-      [{include file="page/details/inc/zoompopup.tpl"}]
-    </div>
-  [{/capture}]
 
     [{if $oView->getPriceAlarmStatus() == 1}]
         [{assign var="_statusMessage1" value="PAGE_DETAILS_THANKYOUMESSAGE1"|oxmultilangassign|cat:" "|cat:$oxcmp_shop->oxshops__oxname->value}]

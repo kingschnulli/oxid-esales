@@ -155,6 +155,7 @@
     background:#fff;
     display:block;
     height: 100px;
+    line-height:98px;       
 }
 
 .box .catPicOnly {
@@ -164,11 +165,12 @@
 .box .catPicOnly .subcatPic {
     left: 0;
     top: 0;
+    text-align: center;
+    
 }
 
 .box .catPicOnly .subcatPic img{
-    display:block;
-    margin:0 auto;
+    vertical-align: middle;
 }
 
 .subcatList .box li.subcatPic {

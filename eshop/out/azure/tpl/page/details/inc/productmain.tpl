@@ -285,4 +285,6 @@
 [{/if}]
 [{/oxhasrights}]
 [{include file="page/details/inc/morepics.tpl"}]
-
+<div>
+  [{include file="page/details/inc/zoompopup.tpl"}]
+</div>
