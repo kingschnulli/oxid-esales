@@ -23,6 +23,7 @@
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxarticleactionlinksselect.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxinputvalidator.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxdropdown.js"></script>
+    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxarticlebox.js"></script>
 
     <!-- Your tests file goes here -->
     <script type="text/javascript" src="inputvalidatorTests.js"></script>
@@ -31,6 +32,7 @@
     <script type="text/javascript" src="sliderTests.js"></script>
     <script type="text/javascript" src="ratingTests.js"></script>
     <script type="text/javascript" src="dropdownTests.js"></script>
+    <script type="text/javascript" src="articleboxTests.js"></script>    
     <!--<script type="text/javascript" src="variantTests.js"></script>-->
 </head>
 <body>

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbase.php 35962 2011-06-06 13:38:31Z vilma $
+ * @version   SVN: $Id: dynexportbase.php 35975 2011-06-07 06:45:11Z vilma $
  */
 
 /**
@@ -160,8 +160,12 @@ class DynExportBase extends oxAdminDetails
         $this->_aViewData["cattree"] = oxNew( "oxCategoryList" );
         $this->_aViewData["cattree"]->buildList( $this->getConfig()->getConfigParam( 'bl_perfLoadCatTree' ) );
 
-        $oLang = oxNew( 'oxLang' );
-        $this->_aViewData['aLangs'] = $oLang->getLanguageArray();
+        $oLangObj = oxNew( 'oxLang' );
+        $aLangs = $oLangObj->getLanguageArray();
+        foreach ( $aLangs as $id => $language) {
+            $language->selected = ($id == $this->_iEditLang);
+            $this->_aViewData["aLangs"][$id] = clone $language;
+        }
     }
 
     /**

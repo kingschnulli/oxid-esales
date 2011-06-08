@@ -70,7 +70,7 @@
          */
         select : function( oSelectLink ) {
             this.selectedValue.val( oSelectLink.attr('rel') );
-            this.selectedValueLabel.text( oSelectLink.html() );
+            this.selectedValueLabel.text( oSelectLink.text() );
             $('a', this.valueList).removeClass('selected');
             oSelectLink.addClass('selected');
         },

@@ -1711,7 +1711,7 @@ a.tagText img{
 }
 
 .scrollable .totals {
-    width: 216px;
+    width: 230px;
     border-top: none;
 }
 
@@ -1754,15 +1754,18 @@ a.tagText img{
 }
 
 .scrollable hr {
-    width: 236px;
+    width: 250px;
 }
 
 .basketItems {
-    width: 236px;
+    width: 250px;
+    height:230px;
+    oveflow:hidden;
 }
 
-.scrollable ul {
-    height: 220px;
+.scrollable .scrollbarBox {
+    height: 200px;
+    width:  265px;
     overflow: hidden;
 }
 

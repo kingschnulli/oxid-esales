@@ -15,7 +15,7 @@
                 var obj = $( this );
 
                 // resetting
-                if ( obj.parents().hasClass("oxdisabled") ) {
+                if ( obj.parents().hasClass("js-disabled") ) {
                     self.resetVariantSelections();
                 } else {
                     $( ".oxProductForm input[name=anid]" ).attr( "value", $( ".oxProductForm input[name=parentid]" ).attr( "value" ) );

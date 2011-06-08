@@ -135,9 +135,9 @@
                 [{ oxmultilang ident="GENERAL_EXPORTLANGUAGE" }]
             </td>
             <td class="edittext">
-            <select name="iExportLanguage">
-                [{foreach from=$aLangs item=olang}]
-                <option value="[{ $olang->id }]">[{ $olang->name }]</option>
+            <select name="iExportLanguage" class="saveinnewlanginput">
+                [{foreach from=$aLangs key=lang item=olang}]
+                <option value="[{ $lang }]"[{ if $olang->selected}]SELECTED[{/if}]>[{ $olang->name }]</option>
                 [{/foreach}]
             </select>
             [{ oxinputhelp ident="HELP_GENERAL_EXPORTLANGUAGE" }]

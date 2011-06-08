@@ -1,4 +1,6 @@
 [{oxscript add="$('a.external').attr('target', '_blank');"}]
+[{oxscript include="js/widgets/oxarticlebox.js" priority=10 }]
+[{oxscript add="$( '#content' ).oxArticleBox();"}]
 [{capture append="oxidBlock_content"}]
         [{assign var="actCategory" value=$oView->getActiveCategory()}]
 
@@ -63,14 +65,14 @@
                                         [{/foreach}]
                                     </ul>
                                 [{else}]
-                                    <div class="content[{if $iconUrl}] catPicOnly[{/if}]">
+                                    <div class="content catPicOnly">                                        
+                                        <div class="subcatPic">
                                         [{if $iconUrl}]
-                                            <div class="subcatPic">
-                                                <a href="[{ $category->getLink() }]">
-                                                    <img src="[{$category->getIconUrl() }]" alt="[{ $category->oxcategories__oxtitle->value }]">
-                                                </a>
-                                            </div>
-                                        [{/if}]
+                                            <a href="[{ $category->getLink() }]">
+                                                <img src="[{$category->getIconUrl() }]" alt="[{ $category->oxcategories__oxtitle->value }]">
+                                            </a>
+                                         [{/if}]
+                                        </div>                                       
                                     </div>
                                 [{/if}]
                             </div>
