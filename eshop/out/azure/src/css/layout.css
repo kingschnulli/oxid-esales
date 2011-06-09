@@ -1,12 +1,12 @@
-#header, #banner, #sidebar, #content, #footer {
+#header, #sidebar, #content, #footer {
     margin: 10px;
 }
 
-#header, #banner, #footer {
+#header, #footer {
     clear: left;
 }
 
-#page:after, .flyout p:after, #header:after, #banner:after, #footer:after, #footer #panel:after, #details .locator:after, #details .description-box div:after, #details .more-description-box div:after, #details div.morepic-box:after, #details div.tab-container:after, #details div.title-box:after, #details #attributes table:after, ul.select li:after, #navigation:after {
+#page:after, .flyout p:after, #header:after, #footer:after, #footer #panel:after, #details #attributes table:after, #navigation:after {
     clear: both;
     content: ' ';
     display: block;
@@ -31,19 +31,10 @@
     position: relative;
 }
 
-#banner {
-    width: 960px;
-    margin: 10px 0;
-}
-
 #sidebar {
     margin-top: 0;
     width: 172px;
     float: left;
-}
-
-#productbar {
-    width: 172px;
 }
 
 #content {

@@ -8,12 +8,12 @@
             var el   = self.element;
 
              el.hover(function(){
-                  var targetObj = $(this).children(".viewAllHover");
+                  var targetObj = $(".viewAllHover", el);
                   targetObj.show();
                   var targetObjMargin = targetObj.width() / 2;
                   targetObj.css("margin-left", "-" + targetObjMargin + "px");
               }, function(){
-                  $(".viewAllHover").hide();
+                  $(".viewAllHover", el).hide();
               });
         }
     }

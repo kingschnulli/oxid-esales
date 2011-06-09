@@ -130,7 +130,7 @@ ul.sf-menu li li li:hover ul, ul.sf-menu li li li.sfHover ul {
     left: 0;
     text-indent: -999em;
     overflow: hidden;
-    background: url('../bg/arrows-down.png') no-repeat top center; /* 8-bit indexed alpha png. IE6 gets solid image only */
+    background: url('../../bg/arrows-down.png') no-repeat top center; /* 8-bit indexed alpha png. IE6 gets solid image only */
     display: none;
 }
 
@@ -152,7 +152,7 @@ a:focus > .sf-sub-indicator, a:hover > .sf-sub-indicator, a:active > .sf-sub-ind
     right: -10px;
     width: 10px;
     height: 2.5em;
-    background: url('../bg/arrows-right.png') no-repeat left center;
+    background: url('../../bg/arrows-right.png') no-repeat left center;
 }
 
 .sf-menu ul a > .sf-sub-indicator {

@@ -20,15 +20,9 @@
 }
 
 /* close commented backslash hack */
-.testScreen {
-    padding: 25px 0;
-    overflow: hidden;
-}
+
 
 /*Generic*/
-.hidden {
-    display: none;
-}
 
 .status {
     padding: 8px 15px 8px 30px;
@@ -60,10 +54,6 @@
     padding-left: 15px;
 }
 
-.inlineSuccess {
-    background: url(../../img/success-inline.png) no-repeat 12px 11px;
-    padding-left: 10px;
-}
 
 .removeFn {
     padding-left: 17px;
@@ -79,10 +69,6 @@
     width: 172px;
     margin-bottom: 15px;
     /*overflow: hidden;*/
-}
-
-.boxCats a {
-    text-transform: uppercase;
 }
 
 .box ul, .box ol, .box .content {
@@ -155,7 +141,7 @@
     background:#fff;
     display:block;
     height: 100px;
-    line-height:98px;       
+    line-height:98px;
 }
 
 .box .catPicOnly {
@@ -166,7 +152,7 @@
     left: 0;
     top: 0;
     text-align: center;
-    
+
 }
 
 .box .catPicOnly .subcatPic img{
@@ -256,9 +242,7 @@
     text-shadow: 0 -1px 0 #000;
 }
 
-.hoverBox:hover .toCart, .hoverBox:hover .priceValue {
-    text-shadow: 0px -1px 1px #652b00;
-}
+
 
 .specBox .price, .specBox .price .button{
     visibility: hidden;
@@ -381,9 +365,6 @@
     display: block;
 }
 
-.pictureView {
-    border-bottom: 2px solid #58b3ca;
-}
 
 .box .price {
     display: block;
@@ -393,14 +374,6 @@
     clear: left;
 }
 
-.head {
-    margin: 10px;
-    padding: 5px;
-    background: #eee;
-    color: #000;
-    font-size: 16px;
-    font-weight: bold;
-}
 
 .checkbox {
     padding: 0;
@@ -556,10 +529,6 @@ a.rss span {
     visibility: visible;
 }
 
-.boxCats h2 {
-    height: 43px;
-}
-
 h3.lightHead {
     color: #1d7e96;
     text-shadow: 0px 1px 1px #fff;
@@ -634,12 +603,13 @@ h3.lightHead {
     line-height: 18px;
 }
 
+/*
 .writeReviewLink {
     text-transform: uppercase;
     color: #1d7e96;
     font-size: 11px;
     font-weight: 700;
-}
+}*/
 
 #writeReview {
     display: none;
@@ -1233,10 +1203,6 @@ a.readMore:hover {
  line-height: 1.5em;
 }
 
-.tag_200 {
- font-size:13px;
-}
-
 .tagitem_100 {
  font-size:12px;
 }
@@ -1276,6 +1242,7 @@ a.readMore:hover {
 .taggedText {
  color: #a2a9ab;
 }
+
 .tagError {
  display: none;
 }
@@ -1614,8 +1581,6 @@ a.tagText img{
 .pictureBox img {
     vertical-align: middle;
 }
-/*.productNr {color:#515353; margin-bottom: 20px; display: block;}*/
-.lineView .info .title + .productNr {margin-top:-20px; }
 
 .popBox {
  z-index:9;
@@ -1899,10 +1864,6 @@ a.tagText img{
     color: #3799B1;
 }
 
-#facebook body {
-    background: red;
-}
-
 
 .pageHead + .listRefine,
 .pageHead + css3-container +.listRefine {
@@ -2095,11 +2056,11 @@ a.next {
 #overviewLink a{
    font-size: 11px;
    font-weight: 700;
-   text-transform: uppercase;	
+   text-transform: uppercase;
    position:absolute;
    right:10px;
    top:115px;
-}	
+}
 
 .listFilter {
     background: #f2f4f5;
@@ -2326,11 +2287,6 @@ a.next {
     margin: 20px 0;
     background:#d9dfe1 url(../../img/line-innershadow.png) no-repeat 0 0;
 }
-
-.lineBox .importantSubmit {
-    float:right;
-}
-
 
 .couponBox {
     border-top: 5px solid #eceff0;
@@ -2874,10 +2830,6 @@ ul.rating li.s5 a:hover {
     background-position: 0 -18px;
 }
 
-.rating_review_input {
-    margin: 0;
-    height: 16px;
-}
 
 .rating li.currentRate {
     background: url(../../img/stars.jpg) left bottom;
@@ -2920,16 +2872,6 @@ dl.review .param {
     margin-left: 20px;
     color: #757C83;
 }
-
-.variantlist-box {
-    display: none;
-}
-
-.variantlist-box li{
-    list-style: none;
-}
-
-
 
 
 /*Account*/
@@ -3013,7 +2955,6 @@ dl.review .param {
     font-size: 16px;
 }
 
-.popup,
 .selectorbox {
     display: none;
 }
@@ -3179,11 +3120,6 @@ span.verificationCode {
     padding-top: 5px;
 }
 
-#testS input {
-    float: left;
-    width: 50px;
-}
-
 .inlineForm button {
     margin-left: 5px;
 }
@@ -3263,13 +3199,6 @@ span.verificationCode {
     height: 220px;
 }
 
-.thumbnav {
-    float: left;
-}
-
-.thumbnav li {
-    float: left;
-}
 
 .recommendations .title {
     font-size:12px;
@@ -3693,10 +3622,6 @@ a.sliderHover {
     color: orange;
 }
 
-#servicesTrigger .notification {
-    top: 20px;
-}
-
 .wishlistPublish {
     float: right;
     width: 360px;
@@ -3783,10 +3708,6 @@ a.sliderHover {
 #compareList table #firstTr td,
 #compareList table #firstDataTr td {
     border: 0;
-}
-
-#compareDataDiv .product {
-    width: 190px;
 }
 
 #compareList table tr:last-child td {

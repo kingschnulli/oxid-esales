@@ -1,5 +1,4 @@
 /* IE */
-.pie,
 .corners,
 .button,
 .submitButton,
@@ -23,7 +22,6 @@
 .box ul,
 .box
 .featured,
-.pictureView,
 .box li,
 .box li:hover,
 .box .content,
@@ -44,8 +42,6 @@ input[type = "text"],
 .itemSlider .prevItem,
 .itemSlider .nextItem,
 .specBoxTitles a.title,
-.itemSlider .nextItem,
-.itemSlider .prevtItem,
 .specBox h3,
 .flyoutMenu,
 .flyoutMenu a,
@@ -98,18 +94,7 @@ h1.page {
     top: -50%;
 }
 
-.product .title { *display:block;
-    * width: 166px;
-    * height: 42px;
-}
-
-.product:hover .cost-box { *display:block;
-}
-
 /* Fix for positioning */
-#mask {
-    position: absolute;
-}
 
 .submitButton {
     width: 1;

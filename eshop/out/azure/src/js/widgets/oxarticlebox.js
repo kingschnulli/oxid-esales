@@ -21,8 +21,8 @@
                 if ($(this).prev().is(':hidden') == true) {
 
                     //closing opened
-                    $('.articleTitle', el).removeClass('titleOn');
-                    $('.showImage', el).slideUp(500);
+                    $('.articleTitle', oElement).removeClass('titleOn');
+                    $('.showImage', oElement).slideUp(500);
 
                     //opening selected
                     $(this).addClass('titleOn');

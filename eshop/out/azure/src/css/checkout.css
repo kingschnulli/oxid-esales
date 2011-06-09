@@ -11,9 +11,6 @@
     float: left;
 }
 
-.basket {
-    margin: 0px 10px;
-}
 
 .basketitems {
     width: 100%;
@@ -104,12 +101,6 @@
 .quantity {
     white-space: nowrap;
     padding-right: 10px;
-}
-
-.updateBasket {
-    width: 640px;
-    float: left;
-    padding-top: 15px;
 }
 
 .summary {

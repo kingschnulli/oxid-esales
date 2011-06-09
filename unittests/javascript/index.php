@@ -4,7 +4,7 @@
 <head>
     <title>OXID eShop javascript tests</title>
     <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/superfish.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/libs/superfish.css" type="text/css" media="screen">
     <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/reset.css" type="text/css" media="screen">
     <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/typography.css" type="text/css" media="screen">
     <link rel="stylesheet" href="http://<?php echo $shopUrl ?>/out/azure/src/css/layouts.css" type="text/css" media="screen">

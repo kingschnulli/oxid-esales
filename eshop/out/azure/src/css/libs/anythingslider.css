@@ -1,6 +1,5 @@
 /*
  AnythingSlider v1.4.1+ Default (base) theme
- 
  By Chris Coyier: http://css-tricks.com
  with major improvements by Doug Neiner: http://pixelgraphics.us/
  based on work by Remy Sharp: http://jqueryfordesigners.com/
@@ -142,11 +141,11 @@ div.anythingSlider .back {
 }
 
 div.anythingSlider .forward a {
-    background: url(../../img/promo-arrows.png) no-repeat -85px 0;
+    background: url(../../../img/promo-arrows.png) no-repeat -85px 0;
 }
 
 div.anythingSlider .back a {
-    background: url(../../img/promo-arrows.png) no-repeat -7px 0;
+    background: url(../../../img/promo-arrows.png) no-repeat -7px 0;
 }
 
 div.anythingSlider .forward a:hover {
