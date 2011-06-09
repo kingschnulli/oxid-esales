@@ -48,6 +48,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
      */
     static function suite()
     {
+        chdir(dirname(__FILE__));
         $oSuite = new PHPUnit_Framework_TestSuite( 'PHPUnit' );
         $sFilter = getenv("PREG_FILTER");
         //foreach ( array( oxTESTSUITEDIR, oxTESTSUITEDIR.'/admin', oxTESTSUITEDIR.'/core', oxTESTSUITEDIR.'/views', oxTESTSUITEDIR.'/maintenance', oxTESTSUITEDIR.'/setup' ) as $sDir ) {
