@@ -6,7 +6,6 @@
 .textbox,
 #footer .list a,
 .fx-gradient,
-.fx-gradient-bg,
 .fx-shadow-gradient,
 .fx-gradient2,
 .fx-gradient-3,
@@ -77,21 +76,6 @@ h1.page {
 /* Fix for displaying CSS 3 FX on hover elements  */
 #footer .list a {
     -pie-background: none;
-}
-
-/* Verticaly centered box */
-.v-align-box {
-    position: relative;
-}
-
-.v-align-box .v-align-item { *position:absolute;
-    top:
-    50%;
-}
- /* *position - IE 7 fix  */
-.v-align-box .v-align-content {
-    position: relative;
-    top: -50%;
 }
 
 /* Fix for positioning */

@@ -5,7 +5,7 @@
     [{oxscript include="js/libs/anythingslider.js"}]
     [{oxscript include="js/widgets/oxslider.js" priority=10 }]
     [{oxscript add="$( '#promotionSlider' ).oxSlider();"}]
-    <img src="[{$oViewConf->getImageUrl()}]promo-shadowleft.png" height="220" width="7" class="promoShadow shadowLeft" alt="">
+    <img src="[{$oViewConf->getImageUrl()}]promo-shadowleft.png" height="220" width="7" class="promoShadow" alt="">
     <img src="[{$oViewConf->getImageUrl()}]promo-shadowright.png" height="220" width="7" class="promoShadow shadowRight" alt="">
     <ul id="promotionSlider">
         [{foreach from=$oBanners item=oBanner }]

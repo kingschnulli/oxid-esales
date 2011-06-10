@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contact.php 35664 2011-05-30 13:23:36Z arunas.paskevicius $
+ * @version   SVN: $Id: contact.php 36093 2011-06-08 14:59:33Z arvydas.vapsva $
  */
 
 /**
@@ -85,7 +85,7 @@ class Contact extends oxUBase
         // spam spider prevension
         $sMac     = oxConfig::getParameter( 'c_mac' );
         $sMacHash = oxConfig::getParameter( 'c_mach' );
-        $oCaptcha = oxNew('oxCaptcha');
+        $oCaptcha = $this->getCaptcha();
 
         $aParams  = oxConfig::getParameter( 'editval' );
         $sSubject = oxConfig::getParameter( 'c_subject' );
@@ -96,8 +96,8 @@ class Contact extends oxUBase
             oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_NOVALIDEMAIL' );
             return false;
         }
-                
-        if ( !$oCaptcha->pass($sMac, $sMacHash ) ) {            
+
+        if ( !$oCaptcha->pass( $sMac, $sMacHash ) ) {
             // even if there is no exception, use this as a default display method
             oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_WRONGCAPTCHA' );
             return false;

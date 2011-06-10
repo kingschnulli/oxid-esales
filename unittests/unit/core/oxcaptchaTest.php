@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptchaTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxcaptchaTest.php 36093 2011-06-08 14:59:33Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -45,10 +45,15 @@ class Unit_Core_oxcaptchaTest extends OxidTestCase
         $this->assertEquals(5, strlen($sText));
     }
 
+    public function testGetTextHash()
+    {
+         $this->assertEquals('c4b961848aeff4d9b083fe15a56c9bd0', $this->_oCaptcha->getTextHash( "test1" ));
+    }
+
     public function testGetHash()
     {
-         $this->_oCaptcha->setNonPublicVar('_sText', 'test1');
-         $this->assertEquals('c4b961848aeff4d9b083fe15a56c9bd0', $this->_oCaptcha->getHash());
+        $sHash = $this->_oCaptcha->getHash( 'test' );
+        $this->assertEquals( oxDb::getDb()->getOne( "select LAST_INSERT_ID()" ), $sHash );
     }
 
     public function testGetImageUrl()
@@ -70,7 +75,9 @@ class Unit_Core_oxcaptchaTest extends OxidTestCase
 
     public function testPassCorrect()
     {
-        $this->assertTrue($this->_oCaptcha->pass('3at8u', 'd9a470912b222133fb913da36c0f50d0'));
+        $this->_oCaptcha->getHash( '3at8u' );
+        $sHash = oxDb::getDb()->getOne( "select LAST_INSERT_ID()" );
+        $this->assertTrue($this->_oCaptcha->pass('3at8u', $sHash ) );
     }
 
     public function testPassFail()

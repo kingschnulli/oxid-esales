@@ -463,6 +463,13 @@ $aLang = array(
 'TS_RATINGS'                                                      => "Trusted Shops Customer Rating",
 'TS_RATINGS_RATEUS'                                               => "Please take a minute to rate our shop.",
 
+'FORM_USER_CHECKOUT_CHANGE_NEXTSTEP'							  => "Continue to Next Step",
+'FORM_USER_CHECKOUT_CHANGE_BACKSTEP'							  => "Previous Step",
+'FORM_USER_CHECKOUT_NOREGISTRATION_NEXTSTEP'			    	  => "Continue to Next Step",
+'FORM_USER_CHECKOUT_NOREGISTRATION_BACKSTEP'			    	  => "Previous Step",
+'FORM_USER_CHECKOUT_REGISTRATION_NEXTSTEP'					      => "Continue to Next Step",
+'FORM_USER_CHECKOUT_REGISTRATION_BACKSTEP'					      => "Previous Step",
+
 'FORM_USER_PASSWORD_OLDPASSWORD'                                  => "Old Password:",
 'FORM_USER_PASSWORD_NEWPASSWORD'                                  => "New Password",
 'FORM_USER_PASSWORD_CONFIRMPASSWORD'                              => "Confirm Password:",

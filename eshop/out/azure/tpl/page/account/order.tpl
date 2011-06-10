@@ -23,7 +23,7 @@
                                     [{if $order->oxorder__oxstorno->value}]
                                         <span class="note">[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_STORNO" }]</span>
                                     [{elseif $order->oxorder__oxsenddate->value !="-" }]
-                                        <span class="done">[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_SHIPPED" }]</span>
+                                        <span>[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_SHIPPED" }]</span>
                                     [{else }]
                                         <span class="note">[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_NOTSHIPPED" }]</span>
                                     [{/if }]
@@ -65,7 +65,7 @@
                                 <tr id="accOrderAmount_[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]">
                                   <td>
                                     [{ if $oArticle->oxarticles__oxid->value && $oArticle->isVisible() }]
-                                        <a  id="accOrderLink_[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]" href="[{ $oArticle->getLink() }]" class="artlink">
+                                        <a  id="accOrderLink_[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]" href="[{ $oArticle->getLink() }]">
                                     [{/if }]
                                         [{ $orderitem->oxorderarticles__oxtitle->value }] [{ $orderitem->oxorderarticles__oxselvariant->value }] <span class="amount"> - [{ $orderitem->oxorderarticles__oxamount->value }] [{oxmultilang ident="PAGE_ACCOUNT_ORDERHISTORY_QNT"}]</span>
                                     [{ if $oArticle->oxarticles__oxid->value && $oArticle->isVisible() }]</a>[{/if }]
@@ -75,13 +75,13 @@
                                         [{/if }]
                                     [{/foreach}]
                                   </td>
-                                  <td align="right">
+                                  <td>
                                     [{* Commented due to Trusted Shops precertification. Enable if needed *}]
                                     [{*
                                     [{oxhasrights ident="TOBASKET"}]
                                     [{if $oArticle->isBuyable() }]
                                       [{if $oArticle->oxarticles__oxid->value }]
-                                        <a id="accOrderToBasket_[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_order" params="fnc=tobasket&amp;aid=`$oArticle->oxarticles__oxid->value`&amp;am=1" }]" class="tocart" rel="nofollow"></a>
+                                        <a id="accOrderToBasket_[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_order" params="fnc=tobasket&amp;aid=`$oArticle->oxarticles__oxid->value`&amp;am=1" }]" rel="nofollow"></a>
                                       [{/if }]
                                     [{/if }]
                                     [{/oxhasrights}]

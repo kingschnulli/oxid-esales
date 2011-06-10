@@ -6,8 +6,8 @@
         [{assign var='_productLink' value=$product->getLink()}]
     [{/if}]
 
-    <a href="[{ $_productLink }]" class="picture url" rel="product[{if $oView->noIndex() }] nofollow[{/if}]">
-      <img class="photo" src="[{if $size=='big'}][{$product->getPictureUrl(1) }][{elseif $size=='thinest'}][{$product->getIconUrl() }][{else}][{ $product->getThumbnailUrl() }][{/if}]" alt="[{ $product->oxarticles__oxtitle->value|strip_tags }] [{ $product->oxarticles__oxvarselect->value|default:'' }]">
+    <a href="[{ $_productLink }]" class="picture" rel="product[{if $oView->noIndex() }] nofollow[{/if}]">
+      <img src="[{if $size=='big'}][{$product->getPictureUrl(1) }][{elseif $size=='thinest'}][{$product->getIconUrl() }][{else}][{ $product->getThumbnailUrl() }][{/if}]" alt="[{ $product->oxarticles__oxtitle->value|strip_tags }] [{ $product->oxarticles__oxvarselect->value|default:'' }]">
     </a>
 
     <strong class="title">
@@ -16,11 +16,11 @@
     <span class="identifier">
         [{if $product->oxarticles__oxweight->value }]
             <div>
-                <span class="type" title="weight">[{ oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ARTWEIGHT" }]</span>
+                <span title="weight">[{ oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ARTWEIGHT" }]</span>
                 <span class="value">[{ $product->oxarticles__oxweight->value }] [{ oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ARTWEIGHT2" }]</span>
             </div>
         [{/if}]
-        <span class="type" title="sku">[{ oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ARTNOMBER2" }]</span>
+        <span title="sku">[{ oxmultilang ident="PAGE_PRODUCT_INC_PRODUCT_ARTNOMBER2" }]</span>
         <span class="value">[{ $product->oxarticles__oxartnum->value }]</span>
     </span>
 
@@ -63,7 +63,7 @@
             [{/oxhasrights}]
 
             [{if $aVariantSelections && $aVariantSelections.selections }]
-                <div class="variantBox selectorsBox fnSubmit clear" id="compareVariantSelections_[{$testid}]">
+                <div class="selectorsBox fnSubmit clear" id="compareVariantSelections_[{$testid}]">
                     [{foreach from=$aVariantSelections.selections item=oSelectionList key=iKey}]
                         [{include file="widget/product/selectbox.tpl" oSelectionList=$oSelectionList}]
                     [{/foreach}]

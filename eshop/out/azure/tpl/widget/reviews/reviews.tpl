@@ -41,12 +41,12 @@
     <a id="reviewsLogin" rel="nofollow" href="[{oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams()}]"><b>[{oxmultilang ident="DETAILS_LOGINTOWRITEREVIEW"}]</b></a>
   [{/if}]
 
-  <dl class="hreview">
+  <dl>
   [{if $oView->getReviews()}]
     [{foreach from=$oView->getReviews() item=review name=ReviewsCounter}]
     <dt id="reviewName_[{$smarty.foreach.ReviewsCounter.iteration}]" class="clear item">
 
-      <span>[{$review->oxuser__oxfname->value}] [{oxmultilang ident="DETAILS_WRITES"}] <span class="dtreviewed">[{$review->oxreviews__oxcreate->value|date_format:"%d.%m.%Y"}]<span></span></span>
+      <span>[{$review->oxuser__oxfname->value}] [{oxmultilang ident="DETAILS_WRITES"}] <span>[{$review->oxreviews__oxcreate->value|date_format:"%d.%m.%Y"}]<span></span></span>
       [{if $review->oxreviews__oxrating->value}]
         [{math equation="x*y" x=20 y=$review->oxreviews__oxrating->value assign="iRatingAverage"}]
         <ul class="rating"><li class="currentRate" style="width: [{$iRatingAverage}]%;"></li></ul>

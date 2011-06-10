@@ -9,7 +9,7 @@
     <div class="dropDown js-fnLink" id="sortItems">
         <p>
             <label>[{ oxmultilang ident="WIDGET_LOCATOR_SORT_SORTBY" }]</label>
-            <span>
+            <span class="[{$oView->getListOrderDirection()}]">
                 [{if $oView->getListOrderBy() }]
                     [{oxmultilang ident="WIDGET_LOCATOR_SORT_"|cat:$oView->getListOrderBy()|upper }]
                 [{else}]

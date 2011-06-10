@@ -38,7 +38,7 @@
                  [{assign var="iCatCnt" value=$iCatCnt+1}]
         [{/if}]
         [{if $iCatCnt <= $oView->getTopNavigationCatCnt()}]
-            <li [{if $ocat->expanded}]class="current"[{/if}]>
+            <li [{if $ocat->expanded && $oView->getClassName() != 'start'}]class="current"[{/if}]>
                 <a  [{if $ocat->expanded}]class="current"[{/if}] href="[{$ocat->getLink()}]">[{$ocat->oxcategories__oxtitle->value}][{ if $oView->showCategoryArticlesCount() && ($ocat->getNrOfArticles() > 0) }] ([{$ocat->getNrOfArticles()}])[{/if}]</a>
                 [{if $ocat->getSubCats()}]
                     <ul>
@@ -57,7 +57,7 @@
             </li>
         [{else}]
             [{capture append="moreLinks"}]
-               <li [{if $ocat->expanded}]class="current"[{/if}]>
+               <li [{if $ocat->expanded && $oView->getClassName() != 'start'}]class="current"[{/if}]>
                     <a href="[{$ocat->getLink()}]">[{$ocat->oxcategories__oxtitle->value}][{ if $oView->showCategoryArticlesCount() && ($ocat->getNrOfArticles() > 0)}] ([{$ocat->getNrOfArticles()}])[{/if}]</a>
                </li>
             [{/capture}]

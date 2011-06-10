@@ -104,6 +104,7 @@
            this.valueList.prepend('<li class="value"></li>');
            this.head.clone().appendTo($("li.value", this.valueList));
            $('li.value p', this.valueList ).removeClass('underlined');
+           $('li.value p', this.valueList ).css('padding-right', '5px');
 
            // set width
            this.valueList.css("width", this.oxDropDown.outerWidth());

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 33895 2011-03-22 16:20:52Z arvydas.vapsva $
+ * @version   SVN: $Id: oxsession.php 36085 2011-06-08 14:39:28Z arvydas.vapsva $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -746,7 +746,7 @@ class oxSession extends oxSuperCfg
         if (!$sToken && $blGenerateNew) {
             $sToken = md5(rand() . $this->getId());
             $sToken = substr($sToken, 0, 8);
-            $this->setVar('_rtoken', $sToken);
+            self::setVar('_rtoken', $sToken);
         }
 
         return $sToken;
@@ -1038,7 +1038,7 @@ class oxSession extends oxSuperCfg
      */
     protected function _isValidRemoteAccessToken()
     {
-        $sInputToken = oxConfig::getInstance()->getParameter('rtoken');
+        $sInputToken = oxConfig::getParameter('rtoken');
         $sToken = $this->getRemoteAccessToken(false);
         $blTokenEqual = !(bool)strcmp($sInputToken, $sToken);
         $blValid = $sInputToken && $blTokenEqual;

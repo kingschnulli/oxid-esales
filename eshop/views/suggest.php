@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: suggest.php 35664 2011-05-30 13:23:36Z arunas.paskevicius $
+ * @version   SVN: $Id: suggest.php 36093 2011-06-08 14:59:33Z arvydas.vapsva $
  */
 
 /**
@@ -94,9 +94,9 @@ class Suggest extends oxUBase
         // spam spider prevension
         $sMac     = oxConfig::getParameter( 'c_mac' );
         $sMacHash = oxConfig::getParameter( 'c_mach' );
-        $oCaptcha = oxNew('oxCaptcha');
+        $oCaptcha = $this->getCaptcha();
 
-        if ( !$oCaptcha->pass($sMac, $sMacHash ) ) {
+        if ( !$oCaptcha->pass( $sMac, $sMacHash ) ) {
             // even if there is no exception, use this as a default display method
             oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_INPUT_WRONGCAPTCHA' );
             return false;
@@ -287,7 +287,7 @@ class Suggest extends oxUBase
         $aPath  = array();
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_INFO_SUGGEST_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
         $aPath['link']  = $this->getLink();
-        
+
         $aPaths[] = $aPath;
 
         return $aPaths;

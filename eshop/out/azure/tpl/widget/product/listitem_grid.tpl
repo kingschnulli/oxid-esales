@@ -24,7 +24,7 @@
             </span>
         [{elseif $product->oxarticles__oxweight->value  }]
             <span id="productPricePerUnit_[{$testid}]" class="pricePerUnit">
-                <span class="type" title="weight">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ARTWEIGHT" }]</span>
+                <span title="weight">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ARTWEIGHT" }]</span>
                 <span class="value">[{ $product->oxarticles__oxweight->value }] [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2" }]</span>
             </span>
         [{/if }]

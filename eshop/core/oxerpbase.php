@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpbase.php 35133 2011-05-05 12:26:36Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxerpbase.php 36086 2011-06-08 14:39:43Z arvydas.vapsva $
  */
 
 /**
@@ -203,8 +203,8 @@ abstract class oxERPBase
         @$mySession->start();
 
 
-        $mySession->setVar( "lang", $iLanguage);
-        $mySession->setVar( "language", $iLanguage);
+        oxSession::setVar( "lang", $iLanguage);
+        oxSession::setVar( "language", $iLanguage);
 
         $oUser = oxNew('oxuser');
         try {
@@ -275,7 +275,7 @@ abstract class oxERPBase
         $this->_iLanguage   = $mySession->getVar('lang');
         $this->_sUserID     = $sAuth;
 
-        
+
         $this->_blInit      = true;
     }
 

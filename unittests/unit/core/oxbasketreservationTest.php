@@ -47,7 +47,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
     {
         parent::tearDown();
     }
-    
+
     /**
      * oxBasketReservation::_getReservationsId() test case
      * test if the new created id equals to our test id.
@@ -56,16 +56,13 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
      */
     public function testGetReservationsIdInitNew()
     {
-        $oS = $this->getMock('stdClass', array('getVar', 'setVar'));
-        $oS->expects($this->once())->method('getVar')->with($this->equalTo('basketReservationToken'))->will($this->returnValue(null));
-        $oS->expects($this->once())->method('setVar')->with($this->equalTo('basketReservationToken'), $this->equalTo('newvarval'))->will($this->returnValue(null));
+        modSession::getInstance()->setVar( 'basketReservationToken', null );
 
         $oUO = $this->getMock('oxUtilsObject', array('generateUID'));
         $oUO->expects($this->once())->method('generateUID')->will($this->returnValue('newvarval'));
         modInstances::addMod('oxUtilsObject', $oUO);
 
-        $oR = $this->getMock('oxBasketReservation', array('getSession'));
-        $oR->expects($this->exactly(2))->method('getSession')->will($this->returnValue($oS));
+        $oR = oxNew('oxBasketReservation');
 
         $this->assertEquals('newvarval', $oR->UNITgetReservationsId());
     }
@@ -78,16 +75,13 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
      */
     public function testGetReservationsIdReturnInited()
     {
-        $oS = $this->getMock('stdClass', array('getVar', 'setVar'));
-        $oS->expects($this->once())->method('getVar')->with($this->equalTo('basketReservationToken'))->will($this->returnValue('oldvarval'));
-        $oS->expects($this->never())->method('setVar');
+        modSession::getInstance()->setVar( 'basketReservationToken', 'oldvarval' );
 
         $oUO = $this->getMock('oxUtilsObject', array('generateUID'));
         $oUO->expects($this->never())->method('generateUID');
         modInstances::addMod('oxUtilsObject', $oUO);
 
-        $oR = $this->getMock('oxBasketReservation', array('getSession'));
-        $oR->expects($this->exactly(1))->method('getSession')->will($this->returnValue($oS));
+        $oR = oxNew('oxBasketReservation');
 
         $this->assertEquals('oldvarval', $oR->UNITgetReservationsId());
     }
@@ -95,7 +89,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
     /**
      * oxBasketReservation::_loadReservations() test case
      * test the load of reservation oxuserbasket
-     * 
+     *
      * @return null
      */
     public function testLoadReservationsLoad()
@@ -110,7 +104,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
         $oUO->expects($this->never())->method('setIsNewBasket');
 
         oxTestModules::addModuleObject('oxuserbasket', $oUO);
-        
+
         $oR = new oxBasketReservation();
         $this->assertSame($oUO, $oR->UNITloadReservations('p:basketId'));
     }
@@ -118,7 +112,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
     /**
      * oxBasketReservation::_loadReservations() test case
      * test if the new reservation will create as we expect
-     * 
+     *
      * @return null
      */
     public function testLoadReservationsCreate()
@@ -262,7 +256,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
     /**
      * oxBasketReservation::_getReservedItems() test case
      * test without an id if the getter return what we expect
-     * 
+     *
      * @return null
      */
     public function testGetReservedItemsSkipsArticleActiveCheck()
@@ -312,7 +306,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
 
         $oR = $this->getMock('oxBasketReservation', array('_getReservedItems'));
         $oR->expects($this->exactly(1))->method('_getReservedItems')->will($this->returnValue(array('2000'=>5)));
-        
+
         $this->assertEquals(array('2000'=>4, '1126'=>-1), $oR->UNITbasketDifference($oBasket));
     }
 
@@ -356,9 +350,9 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
 
     /**
      * oxBasketReservation::commitArticleReservation() test case
-     * test if an article added to basket of the reservation will be deleted and 
+     * test if an article added to basket of the reservation will be deleted and
      * the sold amount will updated.
-     * 
+     *
      * @return null
      */
     public function testCommitArticleReservation()
@@ -379,9 +373,9 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
 
     /**
      * oxBasketReservation::discardArticleReservation() test case
-     * test the discard of one article reservation and return the reserved 
+     * test the discard of one article reservation and return the reserved
      * stock to article
-     * 
+     *
      * @return null
      */
     public function testDiscardArticleReservation()
@@ -402,9 +396,9 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
 
     /**
      * oxBasketReservation::discardReservations() test case
-     * test the discard of all article reservations and return the reserved 
+     * test the discard of all article reservations and return the reserved
      * stock to articles
-     * 
+     *
      * @return null
      */
     public function testDiscardReservations()
@@ -462,7 +456,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
 
     /**
      * TEST IF return time left (in seconds) for basket before expiration
-     * 
+     *
      * @return null
      */
     public function testGetTimeLeft()
@@ -490,7 +484,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
 
     /**
      * TEST IF renews expiration timer to maximum value
-     * 
+     *
      * @return null
      */
     public function testRenewExpiration()

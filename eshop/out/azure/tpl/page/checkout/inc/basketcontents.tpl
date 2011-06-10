@@ -50,7 +50,7 @@
 
                 [{* product image *}]
                 <td class="basketImage">
-                    <a class="image" href="[{ $basketproduct->getLink() }]" rel="nofollow">
+                    <a href="[{ $basketproduct->getLink() }]" rel="nofollow">
                         <img src="[{ $basketproduct->getIconUrl() }]" alt="[{ $basketproduct->oxarticles__oxtitle->value|strip_tags }]">
                     </a>
                 </td>
@@ -145,7 +145,7 @@
                 </td>
 
                 [{* product quantity * price *}]
-                <td class="total">
+                <td>
                     [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
                         [{ $basketitem->getFTotalPrice() }]&nbsp;[{ $currency->sign }]
                     [{/if}]
@@ -197,9 +197,9 @@
                   <br>
                   <div id="orderCardText">[{ $oxcmp_basket->getCardMessage()|nl2br }]</div>
                   </td>
-                  <td id="orderCardPrice" class="orderprice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
+                  <td id="orderCardPrice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
                   <td>[{if $oxcmp_basket->getWrappCostVat() }][{ $oxcmp_basket->getWrappCostVatPercent() }]%[{/if}]</td>
-                  <td id="orderCardTotalPrice" align="right" class="totalprice">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
+                  <td id="orderCardTotalPrice" align="right">[{ $oCard->getFPrice() }]&nbsp;[{ $currency->sign }]</td>
                 </tr>
               [{/if}]
           [{/if}]

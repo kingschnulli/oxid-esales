@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptcha.php 28103 2010-06-02 14:24:32Z michael.keiluweit $
+ * @version   SVN: $Id: oxcaptcha.php 36100 2011-06-09 07:03:18Z arvydas.vapsva $
  */
 
 /**
@@ -51,18 +51,25 @@ class oxCaptcha extends oxSuperCfg
     private $_sMacChars  = 'abcdefghijkmnpqrstuvwxyz23456789';
 
     /**
+     * Captcha timeout 60 * 5 = 5 minutes
+     *
+     * @var int
+     */
+    protected $_iTimeout = 300;
+
+    /**
      * Returns text
      *
      * @return string
      */
     public function getText()
     {
-        if (!$this->_sText) {
+        if ( !$this->_sText ) {
+            $this->_sText = '';
             for ( $i=0; $i < $this->_iMacLength; $i++ ) {
-                $this->_sText .= strtolower($this->_sMacChars{ rand( 0, strlen($this->_sMacChars) - 1 ) });
+                $this->_sText .= strtolower( $this->_sMacChars{ rand( 0, strlen( $this->_sMacChars ) - 1 ) } );
             }
         }
-
 
         return $this->_sText;
     }
@@ -76,12 +83,29 @@ class oxCaptcha extends oxSuperCfg
      */
     public function getHash($sText = null)
     {
+        // inserting captcha record
+        $iTime = time() + $this->_iTimeout;
+        $sHash = $this->getTextHash( $sText );
+        $sQ = "insert into oxcaptcha ( oxhash, oxtime ) values ( '{$sHash}', '{$iTime}' )";
+        oxDb::getDb()->execute( $sQ );
+
+        return oxDb::getDb()->getOne( "select LAST_INSERT_ID()" );
+    }
+
+    /**
+     * Returns given string captcha hash
+     *
+     * @param string $sText string to hash
+     *
+     * @return string
+     */
+    public function getTextHash( $sText )
+    {
         if (!$sText) {
             $sText = $this->getText();
         }
 
         $sText = strtolower($sText);
-
         return md5( "ox{$sText}" );
     }
 
@@ -105,20 +129,34 @@ class oxCaptcha extends oxSuperCfg
      */
     public function isImageVisible()
     {
-        return (( function_exists('imagecreatetruecolor') || function_exists( 'imagecreate' ) ) && $this->getConfig()->getConfigParam( 'iUseGDVersion' ) > 1 );
+        return ( ( function_exists( 'imagecreatetruecolor' ) || function_exists( 'imagecreate' ) ) && $this->getConfig()->getConfigParam( 'iUseGDVersion' ) > 1 );
     }
 
     /**
      * Verifies captcha input vs supplied hash. Returns true on success.
      *
-     * @param string $sMac     User supplie text
+     * @param string $sMac     User supplied text
      * @param string $sMacHash Generated hash
      *
      * @return bool
      */
-    public function pass($sMac, $sMacHash)
+    public function pass( $sMac, $sMacHash )
     {
-        return strlen( $sMacHash ) == 32 && $this->getHash($sMac) == $sMacHash;
+        $oDb = oxDb::getDb();
+        $iMacHash = (int) $sMacHash;
+        $sHash = $this->getTextHash( $sMac );
+
+        $sQ  = "select 1 from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
+        if ( ( $blPass = $oDb->getOne( $sQ ) ) ) {
+            // cleanup
+            $sQ = "delete from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
+            $oDb->execute( $sQ );
+        }
+
+        // garbage cleanup
+        $sQ = "delete from oxcaptcha where oxtime < ". time();
+        $oDb->execute( $sQ );
+
+        return (bool) $blPass;
     }
 }
-

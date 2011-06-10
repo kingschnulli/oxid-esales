@@ -2,7 +2,7 @@
     [{if $oView->getTagCloudManager() }]
         <h1 class="pageHead" id="tags">[{ oxmultilang ident="TAGS"}]</h1>
         <div >
-            <p class="tags" id="tagsCloud">
+            <p id="tagsCloud">
                 [{assign var="oCloudManager" value=$oView->getTagCloudManager() }]
                 [{foreach from=$oCloudManager->getCloudArray() item=iCount key=sTagTitle}]
                     <a class="tagitem_[{$oCloudManager->getTagSize($sTagTitle)}]" href="[{$oCloudManager->getTagLink($sTagTitle)}]">[{$oCloudManager->getTagTitle($sTagTitle)}]</a>

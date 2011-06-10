@@ -38,7 +38,7 @@
     [{if $oViewConf->getShowVouchers()}]
         [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
         [{oxscript add="$('form.oxValidate').oxInputValidator();"}]
-        <form name="voucher" action="[{ $oViewConf->getSelfActionLink() }]" method="post" class="left oxValidate">
+        <form name="voucher" action="[{ $oViewConf->getSelfActionLink() }]" method="post" class="oxValidate">
             <div class="couponBox" id="coupon">
                 [{foreach from=$Errors.basket item=oEr key=key}]
                     [{if $oEr->getErrorClassType() == 'oxVoucherException'}]

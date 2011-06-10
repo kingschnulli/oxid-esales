@@ -28,7 +28,7 @@
                         </tr>
                         [{foreach key=sAttrID from=$atributeList item=oAttrib name=CmpAttr}]
                         <tr>
-                            <td class="firstCol" id="cmpAttrTitle_[{$smarty.foreach.CmpAttr.iteration}]" class="no_left_brd">[{ $oAttrib->title }]:</td>
+                            <td class="firstCol" id="cmpAttrTitle_[{$smarty.foreach.CmpAttr.iteration}]">[{ $oAttrib->title }]:</td>
                         </tr>
                         [{/foreach}]
                     </table>

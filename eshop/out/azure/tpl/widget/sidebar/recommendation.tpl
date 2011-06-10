@@ -36,12 +36,12 @@
         [{/if}]
             [{ if $_oRecommendationList || $oView->getRecommSearch() }]
             <li>
-                <form name="basket" class="recommendationsSearchForm" action="[{ $oViewConf->getSelfActionLink() }]" method="post" class="recommlistsearch">
+                <form name="basket" class="recommendationsSearchForm" action="[{ $oViewConf->getSelfActionLink() }]" method="post">
                     <div>
                         <input type="hidden" name="cl" value="recommlist">
                         [{ $oViewConf->getHiddenSid() }]
                     </div>
-                    <label class="onTop">[{ oxmultilang ident="WIDGET_RECOMMENDATIONLIST_SEARCHFORLISTS" }]</label>
+                    <label>[{ oxmultilang ident="WIDGET_RECOMMENDATIONLIST_SEARCHFORLISTS" }]</label>
                     <input type="text" name="searchrecomm" id="searchRecomm" value="[{$oView->getRecommSearch()}]" class="searchInput">
                     <button class="submitButton largeButton" type="submit">[{ oxmultilang ident="WIDGET_RECOMMENDATIONLIST_SEARCHBUTTON" }]</button>
                 </form>

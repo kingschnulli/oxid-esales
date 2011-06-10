@@ -1,14 +1,14 @@
 [{if $oView->showZoomPics()}]
     [{assign var="aZoomPics" value=$oView->getZoomPics()}]
     [{assign var="iZoomPic" value=$oView->getActZoomPic()}]
-    <div id="zoomModal" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
+    <div id="zoomModal" class="popupBox corners FXgradGreyLight glowShadow">
         <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
         <div class="zoomHead">
             [{oxmultilang ident="PAGE_DETAILS_ZOOMPOP"}]
-            <a class="ox-zoom-close zoom-close" href="#zoom"><span></span></a>
+            <a href="#zoom"><span></span></a>
         </div>
         <div class="zoomed">
-            <img class="ox-zoomimg" src="[{$aZoomPics[$iZoomPic].file}]" alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|default:''}]" id="zoomImg">
+            <img src="[{$aZoomPics[$iZoomPic].file}]" alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|default:''}]" id="zoomImg">
         </div>
         [{if $aZoomPics|@count > 1}]
         <div class="otherPictures" id="moreZoomPicsContainer">
@@ -29,6 +29,5 @@
         [{/if}]
     </div>
     [{oxscript include="js/widgets/oxzoompictures.js" priority=10}]
-    [{oxscript add="$('#moreZoomPicsContainer').oxZoomPictures();"}]    
+    [{oxscript add="$('#moreZoomPicsContainer').oxZoomPictures();"}]
 [{/if}]
-        

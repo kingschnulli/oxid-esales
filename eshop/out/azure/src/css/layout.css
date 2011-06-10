@@ -6,7 +6,7 @@
     clear: left;
 }
 
-#page:after, .flyout p:after, #header:after, #footer:after, #footer #panel:after, #details #attributes table:after, #navigation:after {
+#page:after, #header:after, #footer:after, #footer #panel:after, #details #attributes table:after, #navigation:after {
     clear: both;
     content: ' ';
     display: block;
@@ -44,11 +44,11 @@
     float: left;
 }
 
-.sidebarLeft #content, .sidebarRight #content {
+div.sidebarLeft #content, div.sidebarRight #content {
     width: 748px;
 }
 
-.sidebarRight #sidebar {
+div.sidebarRight #sidebar {
     float: right;
 }
 

@@ -20,7 +20,7 @@
         [{/block}]
     </div>
   [{else}]
-    <div class="msg">[{ oxmultilang ident="PAGE_SEARCH_SEARCH_NOITEMSFOUND" }]</div>
+    <div>[{ oxmultilang ident="PAGE_SEARCH_SEARCH_NOITEMSFOUND" }]</div>
   [{/if}]
   [{if $oView->getArticleList() }]
     [{foreach from=$oView->getArticleList() name=search item=product}]

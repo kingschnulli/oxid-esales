@@ -19,7 +19,7 @@
         [{include file="message/error.tpl" statusMessage=`$_statusMessage1``$_statusMessage2`}]
     [{/if}]
 
-    <div id="details" class="hreview-aggregate hproduct">
+    <div id="details">
         [{ if $oView->getSearchTitle() }]
           [{ assign var="detailsLocation" value=$oView->getSearchTitle()}]
         [{else}]

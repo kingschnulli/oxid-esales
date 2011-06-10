@@ -17,7 +17,7 @@
 
 [{oxhasrights ident="TOBASKET"}]
 [{if !$oDetailsProduct->isNotBuyable()}]
-    <form class="loadVariant oxProductForm" action="[{$oViewConf->getSelfActionLink()}]" method="post">
+    <form class="oxProductForm" action="[{$oViewConf->getSelfActionLink()}]" method="post">
 
     <div>
         [{$oViewConf->getHiddenSid()}]
@@ -47,11 +47,11 @@
                 </a>
             </div>
         [{else}]
-            <div class="picture">                
-                <img src="[{$oView->getActPicture()}]"  alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">                
-            </div>                            
+            <div class="picture">
+                <img src="[{$oView->getActPicture()}]"  alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">
+            </div>
         [{/if}]
-        
+
 
         [{* article main info block *}]
         <div class="information">
@@ -82,9 +82,9 @@
                 <li>
                     <span>
                     [{if $oxcmp_user }]
-                        <a id="recommList" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=recommadd" params="aid=`$oDetailsProduct->oxarticles__oxnid->value`&amp;anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]" class="details">[{ oxmultilang ident="PAGE_DETAILS_ADDTORECOMMLIST" }]</a>
+                        <a id="recommList" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=recommadd" params="aid=`$oDetailsProduct->oxarticles__oxnid->value`&amp;anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="PAGE_DETAILS_ADDTORECOMMLIST" }]</a>
                     [{ else}]
-                        <a id="loginToRecommlist" class="reqlogin" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="PAGE_DETAILS_LOGGINTOACCESSRECOMMLIST" }]</a>
+                        <a id="loginToRecommlist" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]">[{ oxmultilang ident="PAGE_DETAILS_LOGGINTOACCESSRECOMMLIST" }]</a>
                     [{/if}]
                     </span>
                 </li>
@@ -92,13 +92,13 @@
                 [{if $oxcmp_user }]
                     <li><span><a id="linkToNoticeList" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$oDetailsProduct->oxarticles__oxnid->value`&amp;anid=`$oDetailsProduct->oxarticles__oxnid->value`&amp;fnc=tonoticelist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="PAGE_DETAILS_ADDTONOTICELIST" }]</a></span></li>
                 [{else}]
-                    <li><span><a id="loginToNotice" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="PAGE_DETAILS_LOGGINTOACCESSNOTICELIST" }]</a></span></li>
+                    <li><span><a id="loginToNotice" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="PAGE_DETAILS_LOGGINTOACCESSNOTICELIST" }]</a></span></li>
                 [{/if}]
                 [{if $oViewConf->getShowWishlist()}]
                     [{if $oxcmp_user }]
                         <li><span><a id="linkToWishList" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$oDetailsProduct->oxarticles__oxnid->value`&anid=`$oDetailsProduct->oxarticles__oxnid->value`&amp;fnc=towishlist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="PAGE_DETAILS_ADDTOWISHLIST" }]</a></span></li>
                     [{else}]
-                        <li><span><a id="loginToWish" class="reqlogin" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="PAGE_DETAILS_LOGGINTOACCESSWISHLIST" }]</a></span></li>
+                        <li><span><a id="loginToWish" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getActiveClassName()|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="PAGE_DETAILS_LOGGINTOACCESSWISHLIST" }]</a></span></li>
                     [{/if}]
                 [{/if}]
 
@@ -118,7 +118,7 @@
             </div>
             </div>
             [{if $oManufacturer->oxmanufacturers__oxicon->value}]
-                <img class="brandLogo" src="[{$oManufacturer->getIconUrl()}]" alt="[{ $oManufacturer->oxmanufacturers__oxtitle->value}]">
+                <img src="[{$oManufacturer->getIconUrl()}]" alt="[{ $oManufacturer->oxmanufacturers__oxtitle->value}]">
             [{/if}]
 
             [{* short description *}]
@@ -253,7 +253,7 @@
                 [{elseif $oDetailsProduct->getStockStatus() == 1}]
                     <span class="stockFlag lowStock">[{oxmultilang ident="DETAILS_LOWSTOCK"}]</span>
                 [{elseif $oDetailsProduct->getStockStatus() == 0}]
-                    <span class="stockFlag onStock">
+                    <span class="stockFlag">
                         [{if $oDetailsProduct->oxarticles__oxstocktext->value}]
                             [{$oDetailsProduct->oxarticles__oxstocktext->value}]
                         [{elseif $oViewConf->getStockOnDefaultMessage()}]

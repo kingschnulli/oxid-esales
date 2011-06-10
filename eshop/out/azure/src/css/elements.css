@@ -1992,12 +1992,14 @@ a.tagText img{
 }
 
 .dropDown li.asc span,
-.dropDown li.desc span {
+.dropDown li.desc span,
+.dropDown p span.asc,
+.dropDown p span.desc {
     padding-right: 15px;
     background: url(../../img/arrow-updown.png) no-repeat 100% 3px;
 }
 
-.dropDown li.desc span {
+.dropDown li.desc span, .dropDown p span.desc {
     background-position: 100% -39px;
 }
 

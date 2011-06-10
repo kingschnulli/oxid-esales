@@ -25,7 +25,7 @@
         </dl>
         [{/capture}]
         [{capture append="oxidBlock_footer" if=$oView->getManufacturerlist()|count}]
-        <dl class="manufacturers" id="footerManufacturers">
+        <dl id="footerManufacturers">
             <dt>
                 [{oxmultilang ident="FOOTER_MANUFACTURERS" }]
             </dt>
@@ -35,7 +35,7 @@
         </dl>
         [{/capture}]
         [{capture append="oxidBlock_footer" if=$oView->getVendorlist()|count}]
-        <dl class="vendors" id="footerVendors">
+        <dl id="footerVendors">
             <dt>
                 [{oxmultilang ident="FOOTER_DISTRIBUTORS" }]
             </dt>

@@ -5,11 +5,11 @@
     </div>
     <div class="reviews">
         [{include file="form/guestbook.tpl"}]
-        <dl class="hreview">
+        <dl>
             [{if $oView->getEntries()}]
                 [{foreach from=$oView->getEntries() item=entry}]
                     <dt class="clear item">
-                        <span>[{ $entry->oxuser__oxfname->value }] [{oxmultilang ident="PAGE_GUESTBOOK_LIST_WRITES"}] <span class="dtreviewed">[{$entry->oxgbentries__oxcreate->value|date_format:"%d.%m.%Y"}] [{ $entry->oxgbentries__oxcreate->value|date_format:"%H:%M" }]<span></span></span>
+                        <span>[{ $entry->oxuser__oxfname->value }] [{oxmultilang ident="PAGE_GUESTBOOK_LIST_WRITES"}] <span>[{$entry->oxgbentries__oxcreate->value|date_format:"%d.%m.%Y"}] [{ $entry->oxgbentries__oxcreate->value|date_format:"%H:%M" }]<span></span></span>
                     </dt>
                     <dd>
                         <div class="description">[{ $entry->oxgbentries__oxcontent->value|nl2br }]</div>

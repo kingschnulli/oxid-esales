@@ -14,7 +14,7 @@
 
     <li class="currentRate" style="width: [{$iRatingAverage}]%;">
         <a title="[{$_star_title}]"></a>
-        <span class="value-title" title="[{$iRatingAverage}]"></span>
+        <span title="[{$iRatingAverage}]"></span>
     </li>
     [{section name=star start=1 loop=6}]
         <li class="s[{$smarty.section.star.index}]">
@@ -31,7 +31,7 @@
     <li class="ratingValue">
         <a id="itemRatingText" class="rates" rel="nofollow" rel="nofollow" [{if $sRateUrl}]href="[{if !$oxcmp_user}][{oxgetseourl ident=$sRateUrl params=$sRateUrlParams}][{else}][{$sRateUrl}][{/if}]#review"[{/if}]>
             [{if $oView->getRatingCount()}]
-                (<span class="count">[{$oView->getRatingCount()}]</span>)
+                (<span>[{$oView->getRatingCount()}]</span>)
             [{else}]
                 [{oxmultilang ident="DETAILS_NORATINGS"}]
             [{/if}]

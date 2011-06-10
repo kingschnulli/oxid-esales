@@ -79,7 +79,7 @@
         </div>
     [{/if}]
 
-    <div class="orderData" id="orderAddress">
+    <div id="orderAddress">
         <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
             <h3 class="section">
             <strong>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_ADDRESSES" }]</strong>
@@ -128,7 +128,7 @@
 
 
     [{block name="shippingAndPayment"}]
-        <div class="orderData" id="orderShipping">
+        <div id="orderShipping">
         <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
             <h3 class="section">
                 <strong>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_SHIPPINGCARRIER" }]</strong>
@@ -142,7 +142,7 @@
         [{ $oShipSet->oxdeliveryset__oxtitle->value }]
         </div>
 
-        <div class="orderData" id="orderPayment">
+        <div id="orderPayment">
             <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
                 <h3 class="section">
                     <strong>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_PAYMENTMETHOD" }]</strong>

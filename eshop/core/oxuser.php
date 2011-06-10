@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 35163 2011-05-06 11:35:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxuser.php 36084 2011-06-08 14:39:09Z arvydas.vapsva $
  */
 
 /**
@@ -1103,7 +1103,7 @@ class oxUser extends oxBase
 
                     if ( $blSuccess ) {
                         //setting in seesion parameter to force sending email only once (#2033)
-                        $mySession->setVar( "blDBOptInMailAlreadyDone", true );
+                        oxSession::setVar( "blDBOptInMailAlreadyDone", true );
                     }
                 } else {
                     // mail already was sent, so just confirming that
