@@ -1,4 +1,4 @@
-[{oxscript add="$('a.external').attr('target', '_blank');"}]
+[{oxscript add="$('a.js-external').attr('target', '_blank');"}]
 [{oxscript add="$('div.tabbedWidgetBox').tabs();"}]
 [{oxhasrights ident="SHOWLONGDESCRIPTION"}]
 [{assign var="oLongdesc" value=$oDetailsProduct->getArticleLongDesc()}]
@@ -8,7 +8,7 @@
     <div id="description">
         [{oxeval var=$oLongdesc}]
         [{if $oDetailsProduct->oxarticles__oxexturl->value}]
-            <a id="productExturl" class="external" href="[{$oDetailsProduct->oxarticles__oxexturl->value}]">[{$oDetailsProduct->oxarticles__oxurldesc->value}]</a>
+            <a id="productExturl" class="js-external" href="[{$oDetailsProduct->oxarticles__oxexturl->value}]">[{$oDetailsProduct->oxarticles__oxurldesc->value}]</a>
         [{/if}]
     </div>
     [{/capture}]

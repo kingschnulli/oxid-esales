@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 35498 2011-05-20 08:01:19Z arunas.paskevicius $
+ * @version   SVN: $Id: help_lang.php 36127 2011-06-09 13:48:00Z vilma $
  */
 
 /**
@@ -302,6 +302,10 @@ $aLang =  array(
 
 'HELP_ARTICLE_EXTEND_QUESTIONEMAIL'           => 'At <span class="navipath_or_inputname">Alt. Contact</span> you can enter an e-mail address. If users submit questions on this product, they will be sent to this e-mail address. If no e-mail address is entered, the query will be send to the normal info e-mail address.',
 
+'HELP_ARTICLE_EXTEND_NONMATERIAL'             => '[tr]The options oxfreeshipping, oxnonmaterial and oxremindactive are always inherited to Variants from Parent products. That\'s because these options are general for all the product and should not be different for particular variants (i.e. Parent product is material and just one of variants is non-material).',
+
+'HELP_ARTICLE_EXTEND_FREESHIPPING'            => '[tr]The options oxfreeshipping, oxnonmaterial and oxremindactive are always inherited to Variants from Parent products. That\'s because these options are general for all the product and should not be different for particular variants (i.e. Parent product is material and just one of variants is non-material).',
+
 'HELP_ARTICLE_EXTEND_SKIPDISCOUNTS'           => 'If <span class="navipath_or_inputname">Skip all negative discounts</span> is active, negative allowances will not be calculated for this product. These include discounts and vouchers.',
 
 'HELP_ARTICLE_EXTEND_TEMPLATE'                => 'The detail view of a product can be displayed with a different template. For doing so, enter the filename of the template to be used. Further information is available in the <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/display-certain-products-or-categories-another-template" target="_blank">accordant manual entry</a>.',
@@ -330,13 +334,15 @@ $aLang =  array(
 
 
 
+'HELP_ARTICLE_STOCK_REMINDACTIV'              => '[tr]The options oxfreeshipping, oxnonmaterial and oxremindactive are always inherited to Variants from Parent products. That\'s because these options are general for all the product and should not be different for particular variants (i.e. Parent product is material and just one of variants is non-material).',
+
 'HELP_ARTICLE_STOCK_STOCKFLAG'                => 'At <span class="navipath_or_inputname">Delivery status</span> you can select from 4 settings:' .
                                                  '<ul><li><span class="userinput_or_code">Standard</span>: The product can then also be ordered if it is sold out.</li>' .
                                                  '<li><span class="userinput_or_code">External storehouse</span>: The product can always be purchased and is always displayed as <span class="filename_filepath_or_italic">in stock</span>. (The stock level cannot be given for external storehouse. Therefore, the product is always shown as <span class="filename_filepath_or_italic">in stock</span>).</li>' .
                                                  '<li><span class="userinput_or_code">If out of stock, offline</span>: The product is not displayed if it is sold out.</li>' .
                                                  '<li><span class="userinput_or_code">If out of stock, not orderable</span>: The product is displayed if it is sold out but it cannot be ordered.</li></ul>',
 
-'HELP_ARTICLE_STOCK_REMINDACTIV'              => 'With <span class="navipath_or_inputname">Send e-mail if stock falls below value</span> you can specify that an e-mail will be sent as soon as the stock level falls below the value entered. Select the check box and then enter the level at which you want to be notified.',
+'HELP_ARTICLE_STOCK_REMINDAMAOUNT'            => 'With <span class="navipath_or_inputname">Send e-mail if stock falls below value</span> you can specify that an e-mail will be sent as soon as the stock level falls below the value entered. Select the check box and then enter the level at which you want to be notified.',
 
 'HELP_ARTICLE_STOCK_DELIVERY'                 => 'Here you can enter the date when the product will be available again if it is sold out. The format is year-month-day, e. g. 2009-02-16.',
 

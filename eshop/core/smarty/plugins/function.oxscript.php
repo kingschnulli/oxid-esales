@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: function.oxscript.php 35495 2011-05-20 07:48:19Z rimvydas.paskevicius $
+ * @version   SVN: $Id: function.oxscript.php 36126 2011-06-09 13:17:34Z arunas.paskevicius $
  */
 
 /**
@@ -49,13 +49,16 @@ function smarty_function_oxscript($params, &$smarty)
     $sScripts  = 'scripts'.$sSufix;
     $iDefaultPriority = 3;
 
-    $sScript  = (string) $myConfig->getGlobalParameter($sScripts);
+    $aScript  = (array) $myConfig->getGlobalParameter($sScripts);
     $aInclude = (array) $myConfig->getGlobalParameter($sIncludes);
     $sOutput  = '';
 
     if ( $params['add'] ) {
-        $sScript .= "    " . trim( $params['add'] ) . "\n";
-        $myConfig->setGlobalParameter($sScripts, $sScript);
+        $sScriptToken = trim( $params['add'] );
+        if ( !in_array($sScriptToken, $aScript)) {
+            $aScript[] = $sScriptToken;    
+        }         
+        $myConfig->setGlobalParameter($sScripts, $aScript);
 
     } elseif ( $params['include'] ) {
         $sUrl = $params['include'];
@@ -81,8 +84,13 @@ function smarty_function_oxscript($params, &$smarty)
                 $sOutput .= '<script type="text/javascript" src="'.$sSrc.'"></script>'.PHP_EOL;
             }
         }
-        if (strlen($sScript)) {
-            $sOutput .= '<script type="text/javascript">'."\n".$sScript. "\n" .'</script>'.PHP_EOL;
+        
+        if (count($aScript)) {
+            $sOutput .= '<script type="text/javascript">' . "\n";
+            foreach ($aScript as $sScriptToken) {
+                $sOutput .= $sScriptToken. "\n";
+            }
+            $sOutput .= '</script>' . PHP_EOL;
         }
     }
 

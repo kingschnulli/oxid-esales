@@ -65,8 +65,8 @@
     [{oxscript include="js/widgets/oxpayment.js" priority=10 }]
     [{oxscript add="$( '#payment' ).oxPayment();"}]
     [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
-    [{oxscript add="$('form.oxValidate').oxInputValidator();"}]
-    <form action="[{ $oViewConf->getSslSelfLink() }]" class="oxValidate" id="payment" name="order" method="post">
+    [{oxscript add="$('form.js-oxValidate').oxInputValidator();"}]
+    <form action="[{ $oViewConf->getSslSelfLink() }]" class="js-oxValidate" id="payment" name="order" method="post">
         <div>
             [{ $oViewConf->getHiddenSid() }]
             [{ $oViewConf->getNavFormParams() }]

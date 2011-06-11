@@ -1,7 +1,7 @@
 <div class="col">
     [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
-    [{oxscript add="$('form.oxValidate').oxInputValidator();"}]
-    <form name="login" class="oxValidate" action="[{ $oViewConf->getSslSelfLink() }]" method="post">
+    [{oxscript add="$('form.js-oxValidate').oxInputValidator();"}]
+    <form name="login" class="js-oxValidate" action="[{ $oViewConf->getSslSelfLink() }]" method="post">
         <div>
             [{ $oViewConf->getHiddenSid() }]
             [{ $oViewConf->getNavFormParams() }]

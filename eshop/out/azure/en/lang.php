@@ -950,6 +950,8 @@ $aLang = array(
 'PAGE_WISHLIST_PRODUCTS_PRODUCTS1'                                => "These products are on the wish list of",
 'PAGE_WISHLIST_PRODUCTS_PRODUCTS2'                                => ". If you want to please him/her, purchase one or multiple of these products.",
 
+'WIDGET_FOOTER_MANUFACTURERS_MORE'								  => "More...",
+
 'WIDGET_MANUFACTURERS_SLIDER_VIEWALL'                             => "View all products",
 'WIDGET_MANUFACTURERS_SLIDER_OURBRANDS'                           => "Our<br>brands",
 

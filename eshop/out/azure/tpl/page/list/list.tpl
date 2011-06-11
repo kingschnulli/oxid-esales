@@ -1,4 +1,4 @@
-[{oxscript add="$('a.external').attr('target', '_blank');"}]
+[{oxscript add="$('a.js-external').attr('target', '_blank');"}]
 [{oxscript include="js/widgets/oxarticlebox.js" priority=10 }]
 [{oxscript add="$( '#content' ).oxArticleBox();"}]
 [{capture append="oxidBlock_content"}]
@@ -65,14 +65,14 @@
                                         [{/foreach}]
                                     </ul>
                                 [{else}]
-                                    <div class="content catPicOnly">                                        
+                                    <div class="content catPicOnly">
                                         <div class="subcatPic">
                                         [{if $iconUrl}]
                                             <a href="[{ $category->getLink() }]">
                                                 <img src="[{$category->getIconUrl() }]" alt="[{ $category->oxcategories__oxtitle->value }]">
                                             </a>
                                          [{/if}]
-                                        </div>                                       
+                                        </div>
                                     </div>
                                 [{/if}]
                             </div>
@@ -90,7 +90,7 @@
         <h1 class="pageHead">[{$oView->getTitle()}]
             [{assign var='rsslinks' value=$oView->getRssLinks() }]
             [{ if $rsslinks.activeCategory}]
-                <a class="rss external" id="rssActiveCategory" href="[{$rsslinks.activeCategory.link}]" title="[{$rsslinks.activeCategory.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.activeCategory.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.activeCategory.title}]</span></a>
+                <a class="rss js-external" id="rssActiveCategory" href="[{$rsslinks.activeCategory.link}]" title="[{$rsslinks.activeCategory.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.activeCategory.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.activeCategory.title}]</span></a>
             [{/if }]
         </h1>
         <div class="listRefine clear bottomRound">

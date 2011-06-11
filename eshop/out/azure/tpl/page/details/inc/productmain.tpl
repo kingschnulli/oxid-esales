@@ -17,7 +17,7 @@
 
 [{oxhasrights ident="TOBASKET"}]
 [{if !$oDetailsProduct->isNotBuyable()}]
-    <form class="oxProductForm" action="[{$oViewConf->getSelfActionLink()}]" method="post">
+    <form class="js-oxProductForm" action="[{$oViewConf->getSelfActionLink()}]" method="post">
 
     <div>
         [{$oViewConf->getHiddenSid()}]
@@ -104,7 +104,7 @@
 
                 [{oxhasrights ident="TOBASKET"}]
                  [{if $oView->isPriceAlarm() && $oDetailsProduct->isBuyable()}]
-                    <li><a id="priceAlarmLink" class="priceAlarmLink" rel="nofollow" href="[{ $oDetailsProduct->getLink()|cat:'#itemTabs'}]">[{oxmultilang ident="DETAILS_PRICEALARM"}]</a></li>
+                    <li><a id="priceAlarmLink" rel="nofollow" href="[{ $oDetailsProduct->getLink()|cat:'#itemTabs'}]">[{oxmultilang ident="DETAILS_PRICEALARM"}]</a></li>
                  [{/if}]
                 [{/oxhasrights}]
             </ul>
@@ -135,7 +135,7 @@
                 [{oxscript include="js/widgets/oxarticlevariant.js" priority=10 }]
                 [{oxscript add="$( '#variants' ).oxArticleVariant();"}]
                 [{assign var="blCanBuy" value=$aVariantSelections.blPerfectFit}]
-                <div id="variants" class="selectorsBox fnSubmit clear">
+                <div id="variants" class="selectorsBox js-fnSubmit clear">
 
                     [{assign var="blHasActiveSelections" value=false}]
                     [{foreach from=$aVariantSelections.selections item=oList key=iKey}]
@@ -177,7 +177,7 @@
             [{if $oViewConf->showSelectLists()}]
                 [{assign var="oSelections" value=$oDetailsProduct->getSelections()}]
                 [{if $oSelections}]
-                    <div class="selectorsBox fnSubmit clear" id="productSelections">
+                    <div class="selectorsBox js-fnSubmit clear" id="productSelections">
                         [{foreach from=$oSelections item=oList name=selections}]
                             [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="sel" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop"}]
                         [{/foreach}]

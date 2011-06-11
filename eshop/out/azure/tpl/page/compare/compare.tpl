@@ -21,14 +21,14 @@
                 <div id="compareFirstCol" style="overflow: hidden;">
                     <table style="width:200px; border-collapse:collapse;">
                         <tr id="firstDataTr">
-                            <td class="firstCol">&nbsp;</td>
+                            <td class="js-firstCol">&nbsp;</td>
                         </tr>
                         <tr>
-                            <td class="firstCol">[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_PRODUCTATTRIBUTES" }]</td>
+                            <td class="js-firstCol">[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_PRODUCTATTRIBUTES" }]</td>
                         </tr>
                         [{foreach key=sAttrID from=$atributeList item=oAttrib name=CmpAttr}]
                         <tr>
-                            <td class="firstCol" id="cmpAttrTitle_[{$smarty.foreach.CmpAttr.iteration}]">[{ $oAttrib->title }]:</td>
+                            <td class="js-firstCol" id="cmpAttrTitle_[{$smarty.foreach.CmpAttr.iteration}]">[{ $oAttrib->title }]:</td>
                         </tr>
                         [{/foreach}]
                     </table>

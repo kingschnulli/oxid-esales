@@ -1,4 +1,4 @@
-[{oxscript add="$('a.external').attr('target', '_blank');"}]
+[{oxscript add="$('a.js-external').attr('target', '_blank');"}]
 [{assign var="_oRecommendationList" value=$oView->getSimilarRecommLists()}]
 
 [{ if $_oRecommendationList || $oView->getRecommSearch() }]
@@ -6,7 +6,7 @@
     <h3>[{ oxmultilang ident="WIDGET_RECOMMENDATIONLIST_HEADER" }]
     [{assign var='rsslinks' value=$oView->getRssLinks() }]
     [{if $rsslinks.recommlists}]
-        <a class="rss external" id="rssRecommLists" href="[{$rsslinks.recommlists.link}]" title="[{$rsslinks.recommlists.title}]">
+        <a class="rss js-external" id="rssRecommLists" href="[{$rsslinks.recommlists.link}]" title="[{$rsslinks.recommlists.title}]">
             <img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.recommlists.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.recommlists.title}]</span>
         </a>
     [{/if}]

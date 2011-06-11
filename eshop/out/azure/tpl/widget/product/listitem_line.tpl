@@ -12,7 +12,7 @@
     [{assign var="blShowToBasket" value=false}]
 [{/if}]
 
-<form name="tobasket.[{$testid}]" [{if $blShowToBasket}]action="[{ $oViewConf->getSelfActionLink() }]" method="post"[{else}]action="[{$_productLink}]" method="get"[{/if}]  class="oxProductForm">
+<form name="tobasket.[{$testid}]" [{if $blShowToBasket}]action="[{ $oViewConf->getSelfActionLink() }]" method="post"[{else}]action="[{$_productLink}]" method="get"[{/if}]  class="js-oxProductForm">
     [{ $oViewConf->getNavFormParams() }]
     [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="pgNr" value="[{ $oView->getActPage() }]">
@@ -51,7 +51,7 @@
             <a id="[{$testid}]" href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}]">[{ $product->oxarticles__oxtitle->value }]</a>
             <div class="variants">
                 [{if $aVariantSelections && $aVariantSelections.selections }]
-                    <div id="variantselector_[{$testid}]" class="selectorsBox fnSubmit clear">
+                    <div id="variantselector_[{$testid}]" class="selectorsBox js-fnSubmit clear">
                         [{foreach from=$aVariantSelections.selections item=oSelectionList key=iKey}]
                             [{include file="widget/product/selectbox.tpl" oSelectionList=$oSelectionList sJsAction="js-fnSubmit"}]
                         [{/foreach}]
@@ -59,7 +59,7 @@
                 [{elseif $oViewConf->showSelectListsInList()}]
                     [{assign var="oSelections" value=$product->getSelections(1)}]
                     [{if $oSelections}]
-                        <div id="selectlistsselector_[{$testid}]" class="selectorsBox fnSubmit clear">
+                        <div id="selectlistsselector_[{$testid}]" class="selectorsBox js-fnSubmit clear">
                             [{foreach from=$oSelections item=oList name=selections}]
                                 [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="sel" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop" sJsAction="js-fnSubmit"}]
                             [{/foreach}]

@@ -1,7 +1,7 @@
 [{assign var="editval" value=$oView->getUserData() }]
 [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
-[{oxscript add="$('form.oxValidate').oxInputValidator();"}]
-<form class="oxValidate" action="[{ $oViewConf->getSslSelfLink() }]" method="post">
+[{oxscript add="$('form.js-oxValidate').oxInputValidator();"}]
+<form class="js-oxValidate" action="[{ $oViewConf->getSslSelfLink() }]" method="post">
     <div>
         [{ $oViewConf->getHiddenSid() }]
         <input type="hidden" name="fnc" value="send"/>
@@ -16,31 +16,31 @@
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_FIRSTNAME" }]</label>
-            <input type="text" name="editval[oxuser__oxfname]" size="70" maxlength="40" value="[{$editval.oxuser__oxfname}]" class="oxValidate oxValidate_notEmpty">
+            <input type="text" name="editval[oxuser__oxfname]" size="70" maxlength="40" value="[{$editval.oxuser__oxfname}]" class="js-oxValidate js-oxValidate_notEmpty">
             <p class="oxValidateError">
-                <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+                <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
                 [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxfname}]
             </p>
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_LASTNAME" }]</label>
-            <input type="text" name="editval[oxuser__oxlname]" size=70 maxlength=40 value="[{$editval.oxuser__oxlname}]" class="oxValidate oxValidate_notEmpty">
+            <input type="text" name="editval[oxuser__oxlname]" size=70 maxlength=40 value="[{$editval.oxuser__oxlname}]" class="js-oxValidate js-oxValidate_notEmpty">
             <p class="oxValidateError">
-                <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+                <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_EMAIL2" }]</label>
-            <input id="contactEmail" type="text" name="editval[oxuser__oxusername]"  size=70 maxlength=40 value="[{$editval.oxuser__oxusername}]" class="oxValidate oxValidate_notEmpty oxValidate_email">
+            <input id="contactEmail" type="text" name="editval[oxuser__oxusername]"  size=70 maxlength=40 value="[{$editval.oxuser__oxusername}]" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email">
             <p class="oxValidateError">
-                <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+                <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
         <li [{if $aErrors}]class="oxError"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_SUBJECT" }]</label>
-            <input type="text" name="c_subject" size="70" maxlength=80 value="[{$oView->getContactSubject()}]" class="oxValidate oxValidate_notEmpty">
+            <input type="text" name="c_subject" size="70" maxlength=80 value="[{$oView->getContactSubject()}]" class="js-oxValidate js-oxValidate_notEmpty">
                     <p class="oxValidateError">
-                <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+                <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
         <li>
@@ -55,9 +55,9 @@
             [{else}]
                 <span class="verificationCode" id="verifyTextCode">[{$oCaptcha->getText()}]</span>
             [{/if}]
-            <input type="text" field="verify" name="c_mac" value="" class="oxValidate oxValidate_notEmpty">
+            <input type="text" field="verify" name="c_mac" value="" class="js-oxValidate js-oxValidate_notEmpty">
             <p class="oxValidateError">
-                <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+                <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
         <li class="formNote">

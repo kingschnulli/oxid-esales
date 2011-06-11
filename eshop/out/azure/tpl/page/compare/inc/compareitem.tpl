@@ -63,7 +63,7 @@
             [{/oxhasrights}]
 
             [{if $aVariantSelections && $aVariantSelections.selections }]
-                <div class="selectorsBox fnSubmit clear" id="compareVariantSelections_[{$testid}]">
+                <div class="selectorsBox js-fnSubmit clear" id="compareVariantSelections_[{$testid}]">
                     [{foreach from=$aVariantSelections.selections item=oSelectionList key=iKey}]
                         [{include file="widget/product/selectbox.tpl" oSelectionList=$oSelectionList}]
                     [{/foreach}]
@@ -71,7 +71,7 @@
             [{elseif $oViewConf->showSelectListsInList()}]
                 [{assign var="oSelections" value=$product->getSelections(1)}]
                 [{if $oSelections}]
-                    <div class="selectorsBox fnSubmit clear" id="compareSelections_[{$testid}]">
+                    <div class="selectorsBox js-fnSubmit clear" id="compareSelections_[{$testid}]">
                         [{foreach from=$oSelections item=oList name=selections}]
                             [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="sel" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop"}]
                         [{/foreach}]

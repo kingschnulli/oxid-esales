@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 36085 2011-06-08 14:39:28Z arvydas.vapsva $
+ * @version   SVN: $Id: oxsession.php 36148 2011-06-10 11:20:53Z arvydas.vapsva $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -110,6 +110,13 @@ class oxSession extends oxSuperCfg
      * @var object
      */
     protected $_oBasketReservations = null;
+
+    /**
+     * Started session marker
+     *
+     * @var bool
+     */
+    protected $_blStarted = false;
 
     /**
      * Force session start by defined parameter rules.
@@ -346,12 +353,12 @@ class oxSession extends oxSuperCfg
             header("Cache-Control: no-store, private, must-revalidate, proxy-revalidate, post-check=0, pre-check=0, max-age=0, s-maxage=0");
         }
 
-        $blStarted = @session_start();
+        $this->_blStarted = @session_start();
         if ( !$this->getSessionChallengeToken() ) {
             $this->_initNewSessionChallenge();
         }
 
-        return $blStarted;
+        return $this->_blStarted;
     }
 
     /**
@@ -1069,4 +1076,13 @@ class oxSession extends oxSuperCfg
         return headers_sent();
     }
 
+    /**
+     * Returns true if session was started
+     *
+     * @return bool
+     */
+    public function isSessionStarted()
+    {
+        return $this->_blStarted;
+    }
 }

@@ -62,5 +62,5 @@
 
 </span>
 [{/if}]
-<img src="[{$oViewConf->getImageUrl()}]basket.png" class="minibasketIcon" alt="Basket">
+<img src="[{$oViewConf->getImageUrl()}]basket.png" id="minibasketIcon" alt="Basket">
 </div>

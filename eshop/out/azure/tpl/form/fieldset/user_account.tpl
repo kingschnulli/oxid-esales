@@ -1,29 +1,29 @@
      <input type="hidden" id="passwordLength" value="[{$oViewConf->getPasswordLength()}]">
     <li [{if $aErrors}]class="oxError"[{/if}]>
         <label class="req">[{ oxmultilang ident="FORM_FIELDSET_USER_ACCOUNT_EMAIL" }]</label>
-        <input id="userLoginName" class="oxValidate oxValidate_notEmpty oxValidate_email" type="text" name="lgn_usr" value="[{ $oView->getActiveUsername()}]" size="37" >
+        <input id="userLoginName" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email" type="text" name="lgn_usr" value="[{ $oView->getActiveUsername()}]" size="37" >
         <p class="oxValidateError">
-            <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
-            <span class="oxError_email">[{ oxmultilang ident="EXCEPTION_INPUT_NOVALIDEMAIL" }]</span>
+            <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+            <span class="js-oxError_email">[{ oxmultilang ident="EXCEPTION_INPUT_NOVALIDEMAIL" }]</span>
             [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxusername}]
         </p>
     </li>
     <li>
         <label class="req">[{ oxmultilang ident="FORM_FIELDSET_USER_ACCOUNT_PWD" }]</label>
-        <input class="textbox" id="userPassword" class="oxValidate oxValidate_notEmpty oxValidate_length oxValidate_match" type="password" name="lgn_pwd" value="[{$lgn_pwd}]" size="37">
+        <input id="userPassword" class="textbox js-oxValidate js-oxValidate_notEmpty js-oxValidate_length js-oxValidate_match" type="password" name="lgn_pwd" value="[{$lgn_pwd}]" size="37">
         <p class="oxValidateError">
-            <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
-            <span class="oxError_length">[{ oxmultilang ident="EXCEPTION_INPUT_PASSTOOSHORT" }]</span>
-            <span class="oxError_match">[{ oxmultilang ident="EXCEPTION_USER_PWDDONTMATCH" }]</span>
+            <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+            <span class="js-oxError_length">[{ oxmultilang ident="EXCEPTION_INPUT_PASSTOOSHORT" }]</span>
+            <span class="js-oxError_match">[{ oxmultilang ident="EXCEPTION_USER_PWDDONTMATCH" }]</span>
         </p>
     </li>
     <li [{if $aErrors}]class="oxError"[{/if}]>
         <label class="req">[{ oxmultilang ident="FORM_FIELDSET_USER_ACCOUNT_CONFIRMPWD" }]</label>
-        <input class="textbox" id="userPasswordConfirm" class="oxValidate oxValidate_notEmpty oxValidate_length oxValidate_match" type="password" name="lgn_pwd2" value="[{$lgn_pwd2}]" size="37">
+        <input id="userPasswordConfirm" class="textbox js-oxValidate js-oxValidate_notEmpty js-oxValidate_length js-oxValidate_match" type="password" name="lgn_pwd2" value="[{$lgn_pwd2}]" size="37">
         <p class="oxValidateError">
-            <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
-            <span class="oxError_length">[{ oxmultilang ident="EXCEPTION_INPUT_PASSTOOSHORT" }]</span>
-            <span class="oxError_match">[{ oxmultilang ident="EXCEPTION_USER_PWDDONTMATCH" }]</span>
+            <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+            <span class="js-oxError_length">[{ oxmultilang ident="EXCEPTION_INPUT_PASSTOOSHORT" }]</span>
+            <span class="js-oxError_match">[{ oxmultilang ident="EXCEPTION_USER_PWDDONTMATCH" }]</span>
             [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxpassword}]
         </p>
     </li>

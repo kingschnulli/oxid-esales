@@ -2189,6 +2189,10 @@ a.next {
     margin-top: 2px;
 }
 
+/* --- checkout steps --- */
+
+
+
 .checkoutSteps {
     margin: 0;
     overflow: hidden;
@@ -2282,6 +2286,12 @@ a.next {
 .checkoutOptions .option:last-child{
     margin-right:0;
 }
+
+
+
+
+/* ====================================== */
+
 
 .lineBox {
     border: 1px solid #999;

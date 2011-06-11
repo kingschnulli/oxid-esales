@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptcha.php 36100 2011-06-09 07:03:18Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcaptcha.php 36149 2011-06-10 11:25:50Z arvydas.vapsva $
  */
 
 /**
@@ -85,11 +85,18 @@ class oxCaptcha extends oxSuperCfg
     {
         // inserting captcha record
         $iTime = time() + $this->_iTimeout;
-        $sHash = $this->getTextHash( $sText );
-        $sQ = "insert into oxcaptcha ( oxhash, oxtime ) values ( '{$sHash}', '{$iTime}' )";
-        oxDb::getDb()->execute( $sQ );
+        $sTextHash = $this->getTextHash( $sText );
 
-        return oxDb::getDb()->getOne( "select LAST_INSERT_ID()" );
+        // if session is started - storing captcha info here
+        if ( $this->getSession()->isSessionStarted() ) {
+            $sHash = oxUtilsObject::getInstance()->generateUID();
+            oxSession::setVar( "aCaptchaHash", array( $sHash => array( $sTextHash => $iTime ) ) );
+        } else {
+            $sQ = "insert into oxcaptcha ( oxhash, oxtime ) values ( '{$sTextHash}', '{$iTime}' )";
+            oxDb::getDb()->execute( $sQ );
+            $sHash = oxDb::getDb()->getOne( "select LAST_INSERT_ID()" );
+        }
+        return $sHash;
     }
 
     /**
@@ -133,6 +140,53 @@ class oxCaptcha extends oxSuperCfg
     }
 
     /**
+     * Checks for session captcha hash validity
+     *
+     * @param string $sMacHash hash key
+     * @param string $sHash    captcha hash
+     * @param int    $iTime    check time
+     *
+     * @return bool
+     */
+    protected function _passFromSession( $sMacHash, $sHash, $iTime )
+    {
+        $blPass = null;
+        if ( ( $aHash = oxSession::getVar( "aCaptchaHash" ) ) ) {
+            $blPass = ( isset( $aHash[$sMacHash][$sHash] ) && $aHash[$sMacHash][$sHash] >= $iTime ) ? true : false;
+            oxSession::deleteVar( "aCaptchaHash" );
+        }
+        return $blPass;
+    }
+
+    /**
+     * Checks for DB captcha hash validity
+     *
+     * @param int    $iMacHash hash key
+     * @param string $sHash    captcha hash
+     * @param int    $iTime    check time
+     *
+     * @return bool
+     */
+    protected function _passFromDb( $iMacHash, $sHash, $iTime )
+    {
+        $blPass = false;
+
+        $oDb = oxDb::getDb();
+        $sQ  = "select 1 from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
+        if ( ( $blPass = (bool) $oDb->getOne( $sQ ) ) ) {
+            // cleanup
+            $sQ = "delete from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
+            $oDb->execute( $sQ );
+        }
+
+        // garbage cleanup
+        $sQ = "delete from oxcaptcha where oxtime < $iTime";
+        $oDb->execute( $sQ );
+
+        return $blPass;
+    }
+
+    /**
      * Verifies captcha input vs supplied hash. Returns true on success.
      *
      * @param string $sMac     User supplied text
@@ -142,20 +196,15 @@ class oxCaptcha extends oxSuperCfg
      */
     public function pass( $sMac, $sMacHash )
     {
-        $oDb = oxDb::getDb();
-        $iMacHash = (int) $sMacHash;
+        $iTime = time();
         $sHash = $this->getTextHash( $sMac );
 
-        $sQ  = "select 1 from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
-        if ( ( $blPass = $oDb->getOne( $sQ ) ) ) {
-            // cleanup
-            $sQ = "delete from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
-            $oDb->execute( $sQ );
-        }
+        $blPass = $this->_passFromSession( $sMacHash, $sHash, $iTime );
 
-        // garbage cleanup
-        $sQ = "delete from oxcaptcha where oxtime < ". time();
-        $oDb->execute( $sQ );
+        // if captha info was NOT stored in session
+        if ( $blPass === null ) {
+            $blPass = $this->_passFromDb( (int) $sMacHash, $sHash, $iTime );
+        }
 
         return (bool) $blPass;
     }
