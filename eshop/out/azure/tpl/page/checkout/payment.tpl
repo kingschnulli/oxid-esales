@@ -1,4 +1,3 @@
-[{oxstyle include="css/checkout.css"}]
 [{capture append="oxidBlock_content"}]
 [{* ordering steps *}]
 [{include file="page/checkout/inc/steps.tpl" active=3 }]

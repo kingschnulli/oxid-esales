@@ -4,28 +4,6 @@
  with major improvements by Doug Neiner: http://pixelgraphics.us/
  based on work by Remy Sharp: http://jqueryfordesigners.com/
  */
-.promoShadow {
-    position: absolute;
-    top: 0;
-    z-index: 3;
-}
-
-.shadowRight {
-    right: 10px;
-}
-
-.oxSlider {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.oxSlider li {
-    position: relative;
-}
-
-.oxSlider a:hover {
-    text-decoration: none;
-}
 
 /******* SET DEFAULT DIMENSIONS HERE ********/
 div.anythingSlider {

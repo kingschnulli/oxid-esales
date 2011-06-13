@@ -22,7 +22,7 @@
                 </div>
             [{/if}]
             [{if $promoCatTitle && $promoCatImg}]
-                <div id="specCatBox" class="specCatBox box">
+                <div id="specCatBox" class="specCatBox">
                     <h2 class="sectionHead">[{$promoCatTitle}]</h2>
                     <a href="[{$promoCatLink}]" class="viewAllHover glowShadow corners"><span>[{ oxmultilang ident="PAGE_SHOP_START_VIEW_ALL" }]</span></a>
                     <img src="[{$promoCatImg}]" alt="[{$promoCatTitle}]">

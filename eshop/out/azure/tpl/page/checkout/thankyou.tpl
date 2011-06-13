@@ -1,4 +1,3 @@
-[{oxstyle include="css/checkout.css"}]
 [{capture append="oxidBlock_content"}]
 
 [{if $oView->showFinalStep()}]

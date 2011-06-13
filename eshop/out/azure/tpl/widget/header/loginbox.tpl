@@ -16,7 +16,7 @@
     </div>
     <a href="#" id="loginBoxOpener" title="[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</a>
     <form id="login" name="login" action="[{ $oViewConf->getSslSelfLink() }]" method="post">
-        <div id="loginBox" class="loginBox popBox" [{if $bIsError}]style="display: block;"[{/if}]>
+        <div id="loginBox" class="loginBox" [{if $bIsError}]style="display: block;"[{/if}]>
             [{ $oViewConf->getHiddenSid() }]
             [{ $oViewConf->getNavFormParams() }]
             <input type="hidden" name="fnc" value="login_noredirect">

@@ -8,7 +8,7 @@
             browserMozzila  : "mozilla",
             browserIE       : "msie",
             propertyHeight  : "height",
-            classFirstCol   : ".firstCol",
+            classFirstCol   : ".js-firstCol",
             idDataTable     : "#compareDataDiv",
             elementTd       : "td",
             idFirstTr       : "#firstTr"

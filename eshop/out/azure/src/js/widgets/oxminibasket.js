@@ -11,7 +11,7 @@
             var timeout;
 
             // show on hover after some time
-            $("img.minibasketIcon", el).hover(function(){
+            $("#minibasketIcon", el).hover(function(){
                 timeout = setTimeout(function(){
                     self.showMiniBasket();
                 }, 2000);
@@ -20,7 +20,7 @@
             });
 
             // show on click
-            $("img.minibasketIcon", el).click(function(){
+            $("#minibasketIcon", el).click(function(){
                 self.showMiniBasket();
             });
 
@@ -45,7 +45,7 @@
                     if (count <= 1) {
                         $(element).parents("#basketFlyout").hide();
                         $("#countValue").replaceWith("0");
-                        $("#miniBasket img.minibasketIcon").unbind('mouseenter mouseleave');
+                        $("#miniBasket #minibasketIcon").unbind('mouseenter mouseleave');
                         return container.not(element);
                     }
                     return null;
@@ -56,8 +56,8 @@
 
         showMiniBasket : function(){
             $("#basketFlyout").show();
-            
-            if ($(".scrollable .scrollbarBox").length > 0) {            	
+
+            if ($(".scrollable .scrollbarBox").length > 0) {
                 $('.scrollable .scrollbarBox').jScrollPane({
                     showArrows: true,
                     verticalArrowPositions: 'split'
