@@ -1,27 +1,28 @@
 ( function( $ ) {
-
+	
     oxArticleBox = {
 
         _create: function(){
-
-            var self = this;
-            var el   = self.element;
-
+            var oSelf         = this,
+            	oElement      = oSelf.element,
+            	sTitlePattern = /^(.+) \([0-9]+\)$/,
+            	sEndPattern   = / \([0-9]+\)$/;
+            	
             //hide all
-            $('.articleImage', el).hide();
+            $('.articleImage', oElement).hide();
 
             //open first
-            $('.articleImage:first', el).show();
-            $('.articleImage:first', el).addClass('showImage');
+            $('.articleImage:first', oElement).show();
+            $('.articleImage:first', oElement).addClass('showImage');
 
-            $('.articleTitle', el).mouseover(function() {
+            $('.articleTitle', oElement).mouseover(function() {
 
                 //if not opened
                 if ($(this).prev().is(':hidden') == true) {
 
                     //closing opened
-                    $('.articleTitle', el).removeClass('titleOn');
-                    $('.showImage', el).slideUp(500);
+                    $('.articleTitle', oElement).removeClass('titleOn');
+                    $('.showImage', oElement).slideUp(500);
 
                     //opening selected
                     $(this).addClass('titleOn');
@@ -29,29 +30,38 @@
                     $(this).prev().slideDown(500);
                 }
             });
-
-            self.trimTitles( $( ".box h3 a", el ) );
-
-        },
-
-        trimTitles : function(group) {
-            group.each(function(){
-                var thisWidth  = $(this).width();
-                var thisText   = $.trim($(this).text());
-                var parentWidth = $(this).parent().width();
-                if (thisWidth > parentWidth) {
-                    var thisLength  = thisText.length;
-                    while (thisWidth > parentWidth)
+            
+            // triming titles to mach container width (if needed)
+            $( ".box h3 a", oElement ).each(function() {
+                var iTitleWidth = $(this).width(),
+                	iContWidth  = $(this).parent().width(),
+                	sTitleText  = $.trim($(this).text());                
+                
+                // if title is longer than its container
+                if (iTitleWidth > iContWidth) {
+                	                	
+                	// checking if title has numbers at the end
+                	var sTitleEnd	    = $.trim(sEndPattern.exec(sTitleText));
+                	
+                	// seperating the title from the numbers
+                	if (sTitleEnd) {
+                		sTitleEnd  = ' ' + sTitleEnd;
+                		sTitleText = sTitlePattern.exec(sTitleText).pop();
+                	}
+                	
+                	// getting the length of the title
+                	var iTitleLength = sTitleText.length;
+                	
+                    while (iTitleWidth > iContWidth)
                     {
-                        thisLength--;
-                        $(this).html(thisText.substr(0,thisLength)+'&hellip;');
-                        var thisWidth = $(this).width();
+                    	iTitleLength--;
+                        $(this).html(sTitleText.substr(0, iTitleLength)+'&hellip;' + sTitleEnd);
+                        var iTitleWidth = $(this).width();
                     }
-                    $(this).attr('title',thisText);
+                    $(this).attr('title',sTitleText);
                 }
             });
         }
-
     }
 
     $.widget( "ui.oxArticleBox", oxArticleBox );

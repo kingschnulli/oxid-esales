@@ -463,6 +463,13 @@ $aLang = array(
 'TS_RATINGS'                                                      => "Trusted Shops Customer Rating",
 'TS_RATINGS_RATEUS'                                               => "Please take a minute to rate our shop.",
 
+'FORM_USER_CHECKOUT_CHANGE_NEXTSTEP'							  => "Continue to Next Step",
+'FORM_USER_CHECKOUT_CHANGE_BACKSTEP'							  => "Previous Step",
+'FORM_USER_CHECKOUT_NOREGISTRATION_NEXTSTEP'			    	  => "Continue to Next Step",
+'FORM_USER_CHECKOUT_NOREGISTRATION_BACKSTEP'			    	  => "Previous Step",
+'FORM_USER_CHECKOUT_REGISTRATION_NEXTSTEP'					      => "Continue to Next Step",
+'FORM_USER_CHECKOUT_REGISTRATION_BACKSTEP'					      => "Previous Step",
+
 'FORM_USER_PASSWORD_OLDPASSWORD'                                  => "Old Password:",
 'FORM_USER_PASSWORD_NEWPASSWORD'                                  => "New Password",
 'FORM_USER_PASSWORD_CONFIRMPASSWORD'                              => "Confirm Password:",
@@ -942,6 +949,8 @@ $aLang = array(
 'PAGE_WISHLIST_PRODUCTS_WISHLISTEMPTY'                            => "The Gift Registry is empty.",
 'PAGE_WISHLIST_PRODUCTS_PRODUCTS1'                                => "These products are on the wish list of",
 'PAGE_WISHLIST_PRODUCTS_PRODUCTS2'                                => ". If you want to please him/her, purchase one or multiple of these products.",
+
+'WIDGET_FOOTER_MANUFACTURERS_MORE'								  => "More...",
 
 'WIDGET_MANUFACTURERS_SLIDER_VIEWALL'                             => "View all products",
 'WIDGET_MANUFACTURERS_SLIDER_OURBRANDS'                           => "Our<br>brands",

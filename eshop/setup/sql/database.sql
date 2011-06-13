@@ -383,6 +383,23 @@ CREATE TABLE `oxcategories` (
    KEY `OXVAT` (`OXVAT`)
 ) ENGINE=MyISAM;
 
+
+#
+# Table structure for table `oxcaptcha`
+#
+
+DROP TABLE IF EXISTS `oxcaptcha`;
+
+CREATE TABLE IF NOT EXISTS `oxcaptcha` (
+  `OXID` int(11) NOT NULL AUTO_INCREMENT,
+  `OXHASH` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
+  `OXTIME` int(11) NOT NULL,
+  PRIMARY KEY (`OXID`),
+  KEY `OXID` (`OXID`,`OXHASH`),
+  KEY `OXTIME` (`OXTIME`)
+) ENGINE=MEMORY AUTO_INCREMENT=1;
+
+
 #
 # Table structure for table `oxconfig`
 #

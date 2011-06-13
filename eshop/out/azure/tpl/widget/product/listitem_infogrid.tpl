@@ -50,7 +50,7 @@
 
         <div class="selectorsBox">
             [{ if $aVariantSelections && $aVariantSelections.selections }]
-                <div id="variantselector_[{$testid}]" class="variantBox selectorsBox fnSubmit clear">
+                <div id="variantselector_[{$testid}]" class="selectorsBox js-fnSubmit clear">
                     [{foreach from=$aVariantSelections.selections item=oSelectionList key=iKey}]
                         [{include file="widget/product/selectbox.tpl" oSelectionList=$oSelectionList sJsAction="js-fnSubmit"}]
                     [{/foreach}]
@@ -58,7 +58,7 @@
             [{elseif $oViewConf->showSelectListsInList()}]
                 [{assign var="oSelections" value=$product->getSelections(1)}]
                 [{if $oSelections}]
-                    <div id="selectlistsselector_[{$testid}]" class="selectorsBox fnSubmit clear">
+                    <div id="selectlistsselector_[{$testid}]" class="selectorsBox js-fnSubmit clear">
                         [{foreach from=$oSelections item=oList name=selections}]
                             [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="sel" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop" sJsAction="js-fnSubmit"}]
                         [{/foreach}]
@@ -85,7 +85,7 @@
                         </span>
                     [{elseif $product->oxarticles__oxweight->value  }]
                         <span id="productPricePerUnit_[{$testid}]" class="pricePerUnit">
-                            <span class="type" title="weight">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ARTWEIGHT" }]</span>
+                            <span title="weight">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ARTWEIGHT" }]</span>
                             <span class="value">[{ $product->oxarticles__oxweight->value }] [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2" }]</span>
                         </span>
                     [{/if }]

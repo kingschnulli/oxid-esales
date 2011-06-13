@@ -1,6 +1,4 @@
-[{oxscript add="$('a.external').attr('target', '_blank');"}]
-[{oxscript include="js/widgets/oxbargainitem.js" priority=10 }]
-[{oxscript add="$('div.specBoxInfo').oxBargainItem();"}]
+[{oxscript add="$('a.js-external').attr('target', '_blank');"}]
 [{assign var="currency" value=$oView->getActCurrency()}]
 [{foreach from=$oView->getBargainArticleList() item=_product name=bargainList}]
 [{if $smarty.foreach.bargainList.first}]
@@ -13,7 +11,7 @@
     [{/capture}]
     [{capture name="bargainPrice"}]
           <div class="price [{if $_product->getPricePerUnit()}]tight[{/if}]" id="priceBargain_[{$smarty.foreach.bargainList.iteration}]">
-              <div class="hoverInfo">
+              <div>
               [{oxhasrights ident="SHOWARTICLEPRICE"}]
                   [{if $_product->getFTPrice()}]
                   <span class="priceOld">
@@ -47,7 +45,7 @@
 
         [{assign var='rsslinks' value=$oView->getRssLinks() }]
         [{if $rsslinks.bargainArticles}]
-            <a class="rss external" id="rssBargainProducts" href="[{$rsslinks.bargainArticles.link}]" title="[{$rsslinks.bargainArticles.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.bargainArticles.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.bargainArticles.title}]</span></a>
+            <a class="rss js-external" id="rssBargainProducts" href="[{$rsslinks.bargainArticles.link}]" title="[{$rsslinks.bargainArticles.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.bargainArticles.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.bargainArticles.title}]</span></a>
         [{/if}]
     </h3>
     [{$smarty.capture.bargainTitle}]

@@ -1,9 +1,9 @@
 [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
-[{oxscript add="$('form.oxValidate').oxInputValidator();"}]
-<form class="oxValidate" action="[{ $oViewConf->getSelfActionLink() }]" name="order" method="post">
+[{oxscript add="$('form.js-oxValidate').oxInputValidator();"}]
+<form class="js-oxValidate" action="[{ $oViewConf->getSelfActionLink() }]" name="order" method="post">
 [{assign var="aErrors" value=$oView->getFieldValidationErrors()}]
 <h3 class="blockHead">[{ oxmultilang ident="FORM_USER_BILLINGADDRESS" }]</h3>
-<div class="customFields">
+<div>
     [{ $oViewConf->getHiddenSid() }]
     [{ $oViewConf->getNavFormParams() }]
     <input type="hidden" name="fnc" value="changeuser_testvalues">

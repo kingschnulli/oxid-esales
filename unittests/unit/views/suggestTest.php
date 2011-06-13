@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: suggestTest.php 35792 2011-06-03 08:00:18Z linas.kukulskis $
+ * @version   SVN: $Id: suggestTest.php 36257 2011-06-13 13:27:18Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -173,7 +173,6 @@ class Unit_Views_suggestTest extends OxidTestCase
 
     public function testSendPass()
     {
-        oxTestModules::addFunction('oxCaptcha', 'pass', '{return true;}');
         modConfig::setParameter( 'editval',
                 array(
                     'name'=>'test',
@@ -191,12 +190,17 @@ class Unit_Views_suggestTest extends OxidTestCase
         $oEmail->expects( $this->once() )->method( 'sendSuggestMail')
                 ->will($this->returnValue( 1 ) );
 
-        oxTestModules::addModuleObject('oxemail', $oEmail);
+        oxTestModules::addModuleObject('oxemail', $oEmail );
 
         $oProduct = $this->getMock( "stdclass", array( 'getId' ) );
         $oProduct->expects( $this->once() )->method( 'getId')->will($this->returnValue( 'XProduct' ) );
-        $oSuggest = $this->getMock( "suggest", array( "getProduct", 'getCrossSelling', 'getSimilarProducts', 'getRecommList', 'getCaptcha', 'getSuggestData' ) );
+
+        $oCaptcha = $this->getMock( "stdclass", array( 'pass' ) );
+        $oCaptcha->expects( $this->once() )->method( 'pass')->will($this->returnValue( true ) );
+
+        $oSuggest = $this->getMock( "suggest", array( "getProduct", 'getCaptcha' ) );
         $oSuggest->expects( $this->once() )->method( 'getProduct')->will($this->returnValue( $oProduct ) );
+        $oSuggest->expects( $this->once() )->method( 'getCaptcha')->will($this->returnValue( $oCaptcha ) );
 
          modConfig::setParameter( 'searchparam', "searchparam&&A" );
          modConfig::setParameter( 'searchcnid', "searchcnid&&A" );
@@ -209,7 +213,6 @@ class Unit_Views_suggestTest extends OxidTestCase
 
     public function testSendPassInvalidMail()
     {
-        oxTestModules::addFunction('oxCaptcha', 'pass', '{return true;}');
         modConfig::setParameter( 'editval',
                 array(
                     'name'=>'test',
@@ -231,8 +234,13 @@ class Unit_Views_suggestTest extends OxidTestCase
 
         $oProduct = $this->getMock( "stdclass", array( 'getId' ) );
         $oProduct->expects( $this->never() )->method( 'getId');
-        $oSuggest = $this->getMock( "suggest", array( "getProduct", 'getCrossSelling', 'getSimilarProducts', 'getRecommList', 'getCaptcha', 'getSuggestData' ) );
+
+        $oCaptcha = $this->getMock( "stdclass", array( 'pass' ) );
+        $oCaptcha->expects( $this->once() )->method( 'pass')->will($this->returnValue( true ) );
+
+        $oSuggest = $this->getMock( "suggest", array( "getProduct", 'getCaptcha' ) );
         $oSuggest->expects( $this->once() )->method( 'getProduct')->will($this->returnValue( $oProduct ) );
+        $oSuggest->expects( $this->once() )->method( 'getCaptcha')->will($this->returnValue( $oCaptcha ) );
 
         $oUtilsView = $this->getMock( "stdclass", array( 'addErrorToDisplay' ) );
         $oUtilsView->expects( $this->once() )->method( 'addErrorToDisplay');
@@ -252,10 +260,10 @@ class Unit_Views_suggestTest extends OxidTestCase
         $oSuggest = $this->getProxyClass( "suggest" );
         $aResults = array();
         $aResult  = array();
-        
+
         $aResult["title"] = oxLang::getInstance()->translateString( 'PAGE_INFO_SUGGEST_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
         $aResult["link"]  = $oSuggest->getLink();
-        
+
         $aResults[] = $aResult;
 
         $this->assertEquals( $aResults, $oSuggest->getBreadCrumb() );

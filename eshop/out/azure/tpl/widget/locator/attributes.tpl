@@ -1,6 +1,6 @@
 [{if $attributes }]
     <form method="post" action="[{ $oViewConf->getSelfActionLink() }]" name="_filterlist" id="filterList">
-    <div class="listFilter fnSubmit clear">
+    <div class="listFilter js-fnSubmit clear">
         [{ $oViewConf->getHiddenSid() }]
         [{ $oViewConf->getNavFormParams() }]
         <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">

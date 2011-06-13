@@ -17,6 +17,12 @@
     [{oxscript include="js/widgets/oxcountdown.js" priority=10 }]
     [{oxscript include="js/widgets/oxminibasket.js" priority=10 }]
     [{oxscript add="$( '#miniBasket' ).oxMiniBasket();"}]
+    [{if $oxcmp_basket->getProductsCount() gte 8}]
+        [{oxscript include="js/libs/scrollpane/jscrollpane.min.js"}]
+        [{oxscript include="js/libs/scrollpane/mousewheel.js"}]
+        [{oxscript include="js/libs/scrollpane/mwheelIntent.js"}]
+        [{oxstyle include="css/jquery.jscrollpane.css"}]    
+    [{/if}]
     [{oxid_include_dynamic file="widget/minibasket/minibasket.tpl"}]
     [{include file="widget/header/search.tpl"}]
 </div>

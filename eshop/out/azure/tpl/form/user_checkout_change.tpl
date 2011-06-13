@@ -1,6 +1,6 @@
 [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
-[{oxscript add="$('form.oxValidate').oxInputValidator();"}]
-<form class="oxValidate" action="[{ $oViewConf->getSslSelfLink() }]" name="order" method="post">
+[{oxscript add="$('form.js-oxValidate').oxInputValidator();"}]
+<form class="js-oxValidate" action="[{ $oViewConf->getSslSelfLink() }]" name="order" method="post">
 [{assign var="aErrors" value=$oView->getFieldValidationErrors()}]
 [{ $oViewConf->getHiddenSid() }]
 [{ $oViewConf->getNavFormParams() }]
@@ -11,15 +11,15 @@
 <input type="hidden" name="blshowshipaddress" value="1">
 
 <div class="lineBox clear">
-    <a href="[{ oxgetseourl ident=$oViewConf->getBasketLink() }]" class="submitButton largeButton" id="userBackStepBottom">[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_BACKSTEP" }]</a>
-    <button id="userNextStepTop" class="submitButton largeButton nextStep" name="userform" type="submit">[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_NEXTSTEP" }]</button>
+    <a href="[{ oxgetseourl ident=$oViewConf->getBasketLink() }]" class="submitButton largeButton" id="userBackStepBottom">[{ oxmultilang ident="FORM_USER_CHECKOUT_CHANGE_BACKSTEP" }]</a>
+    <button id="userNextStepTop" class="submitButton largeButton nextStep" name="userform" type="submit">[{ oxmultilang ident="FORM_USER_CHECKOUT_CHANGE_NEXTSTEP" }]</button>
 </div>
 
 <div class="checkoutCollumns clear">
     <div class="collumn">
         <h3 class="blockHead">[{ oxmultilang ident="FORM_REGISTER_BILLINGADDRESS" }]</h3>
-        <ul class="form" style="display: none;" id="addressForm">            
-            [{ include file="form/fieldset/user_billing.tpl" noFormSubmit=true blSubscribeNews=true blOrderRemark=true}]                        
+        <ul class="form" style="display: none;" id="addressForm">
+            [{ include file="form/fieldset/user_billing.tpl" noFormSubmit=true blSubscribeNews=true blOrderRemark=true}]
         </ul>
         <ul class="form" id="addressText">
             <li>
@@ -33,7 +33,7 @@
         <h3 class="blockHead">[{ oxmultilang ident="FORM_REGISTER_SHIPPINGADDRESS" }]</h3>
         <p><input type="checkbox" name="blshowshipaddress" id="showShipAddress" [{if !$oView->showShipAddress()}]checked[{/if}] value="0"><label for="showShipAddress">[{ oxmultilang ident="FORM_REGISTER_USE_BILLINGADDRESS_FOR_SHIPPINGADDRESS" }]</label></p>
         <ul id="shippingAddress" class="form" [{if !$oView->showShipAddress()}]style="display: none;"[{/if}]>
-        [{ include file="form/fieldset/user_shipping.tpl" noFormSubmit=true onChangeClass='user'}]        
+        [{ include file="form/fieldset/user_shipping.tpl" noFormSubmit=true onChangeClass='user'}]
         </ul>
     </div>
 </div>
@@ -41,8 +41,8 @@
 [{oxscript add="$('#showShipAddress').change( function() { $('#shippingAddress').toggle($(this).is(':not(:checked)'));});"}]
 
 <div class="lineBox clear">
-    <a href="[{ oxgetseourl ident=$oViewConf->getBasketLink() }]" class="submitButton largeButton" id="userBackStepBottom">[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_BACKSTEP" }]</a>
-    <button id="userNextStepBottom" class="submitButton largeButton nextStep" name="userform" type="submit">[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_NEXTSTEP" }]</button>
+    <a href="[{ oxgetseourl ident=$oViewConf->getBasketLink() }]" class="submitButton largeButton" id="userBackStepBottom">[{ oxmultilang ident="FORM_USER_CHECKOUT_CHANGE_BACKSTEP" }]</a>
+    <button id="userNextStepBottom" class="submitButton largeButton nextStep" name="userform" type="submit">[{ oxmultilang ident="FORM_USER_CHECKOUT_CHANGE_NEXTSTEP" }]</button>
 </div>
 
 </form>

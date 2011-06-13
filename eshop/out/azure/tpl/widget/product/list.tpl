@@ -1,4 +1,4 @@
-[{oxscript add="$('a.external').attr('target', '_blank');"}]
+[{oxscript add="$('a.js-external').attr('target', '_blank');"}]
 [{if $head}]
     [{if $header eq "light"}]
         <h3 class="lightHead sectionHead">[{$head}]</h3>
@@ -6,7 +6,7 @@
         <h2 class="sectionHead clear">
             <span>[{$head}]</span>
             [{if $rsslink}]
-                    <a class="rss external" id="[{$rssId}]" href="[{$rsslink.link}]" title="[{$rsslink.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslink.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslink.title}]</span></a>
+                    <a class="rss js-external" id="[{$rssId}]" href="[{$rsslink.link}]" title="[{$rsslink.title}]"><img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslink.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslink.title}]</span></a>
             [{/if}]
         </h2>
     [{/if}]

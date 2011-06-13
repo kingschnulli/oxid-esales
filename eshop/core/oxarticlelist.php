@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 35805 2011-06-03 08:02:50Z linas.kukulskis $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 36242 2011-06-13 13:23:53Z linas.kukulskis $
  */
 
 /**
@@ -119,7 +119,7 @@ class oxArticleList extends oxList
     public function setHistoryArticles($aArticlesIds)
     {
         if ($this->getSession()->getId()) {
-            $this->getSession()->setVar('aHistoryArticles', $aArticlesIds);
+            oxSession::setVar('aHistoryArticles', $aArticlesIds);
             // clean cookie, if session started
             oxUtilsServer::getInstance()->setOxCookie('aHistoryArticles', '');
         } else {

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 33511 2011-02-24 15:06:14Z vilma $
+ * @version   SVN: $Id: oxbasketTest.php 36246 2011-06-13 13:25:13Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -4268,6 +4268,26 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket = $this->getMock( "oxbasket", array( "getProductsCount", "getDiscountedProductsBruttoPrice" ) );
         $oBasket->expects( $this->never() )->method( 'getProductsCount');
         $oBasket->expects( $this->never() )->method( 'getDiscountedProductsBruttoPrice');
+
+        $this->assertFalse( $oBasket->isBelowMinOrderPrice() );
+    }
+
+    /**
+     * Check if method isBelowMinOrderPrice() works correctly
+     *
+     * @return null
+     */
+    public function testIsBelowMinOrderPriceAddNotDiscountedProducts()
+    {
+        modConfig::getInstance()->setConfigParam( "iMinOrderPrice", 2 );
+
+        $oPrice = $this->getMock( "oxprice", array( "getBruttoSum" ) );
+        $oPrice->expects( $this->once() )->method( 'getBruttoSum')->will( $this->returnValue( 2 ) );
+
+        $oBasket = $this->getMock( "oxbasket", array( "getProductsCount", "getDiscountedProductsBruttoPrice", "getNotDiscountProductsPrice" ) );
+        $oBasket->expects( $this->once() )->method( 'getProductsCount')->will( $this->returnValue( 2 ) );
+        $oBasket->expects( $this->once() )->method( 'getDiscountedProductsBruttoPrice')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->once() )->method( 'getNotDiscountProductsPrice')->will( $this->returnValue( $oPrice ) );
 
         $this->assertFalse( $oBasket->isBelowMinOrderPrice() );
     }

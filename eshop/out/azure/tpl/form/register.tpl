@@ -1,6 +1,6 @@
 [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
-[{oxscript add="$('form.oxValidate').oxInputValidator();"}]
-<form class="oxValidate" action="[{ $oViewConf->getSslSelfLink() }]" name="order" method="post">
+[{oxscript add="$('form.js-oxValidate').oxInputValidator();"}]
+<form class="js-oxValidate" action="[{ $oViewConf->getSslSelfLink() }]" name="order" method="post">
 [{assign var="aErrors" value=$oView->getFieldValidationErrors()}]
 [{ $oViewConf->getHiddenSid() }]
 [{ $oViewConf->getNavFormParams() }]
@@ -22,7 +22,7 @@
                         [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
                         [{oxscript add="$( '#orderOpenAgbBottom' ).oxModalPopup({target: '#popup1'});"}]
                         [{oxmultilang ident="FORM_REGISTER_IAGREETOTERMS1" }]
-                        <a id="orderOpenAgbBottom" rel="nofollow" href="#"  class="fontunderline">[{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }]</a>
+                        <a id="orderOpenAgbBottom" rel="nofollow" href="#">[{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }]</a>
                         [{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS3" }],&nbsp;
                     [{/oxifcontent}]
                     [{oxifcontent ident="oxrightofwithdrawal" object="oCont"}]
@@ -40,13 +40,13 @@
     <ul class="form">[{ include file="form/fieldset/user_billing.tpl" }]</ul>
 </form>
 [{if $oView->isActive('PsLogin') }]
-    <div id="popup1" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
+    <div id="popup1" class="popupBox corners FXgradGreyLight glowShadow">
          <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
          [{oxifcontent ident="oxagb" object="oContent"}]
             [{ $oContent->oxcontents__oxcontent->value }]
          [{/oxifcontent}]
     </div>
-    <div id="popup2" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
+    <div id="popup2" class="popupBox corners FXgradGreyLight glowShadow">
          <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
          [{oxifcontent ident="oxrightofwithdrawal" object="oContent"}]
             [{ $oContent->oxcontents__oxcontent->value }]

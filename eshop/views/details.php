@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 35805 2011-06-03 08:02:50Z linas.kukulskis $
+ * @version   SVN: $Id: details.php 36245 2011-06-13 13:24:59Z linas.kukulskis $
  */
 
 /**
@@ -1496,8 +1496,8 @@ class Details extends oxUBase
         //control captcha
         $sMac     = oxConfig::getParameter( 'c_mac' );
         $sMacHash = oxConfig::getParameter( 'c_mach' );
-        $oCaptcha = oxNew('oxCaptcha');
-        if (!$oCaptcha->pass($sMac, $sMacHash)) {
+        $oCaptcha = $this->getCaptcha();
+        if ( !$oCaptcha->pass( $sMac, $sMacHash ) ) {
             $this->_iPriceAlarmStatus = 2;
             return;
         }

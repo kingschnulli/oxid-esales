@@ -41,7 +41,7 @@
     [{if $canonical_url }]
         <link rel="canonical" href="[{ $canonical_url }]">
     [{/if}]
-    <link rel="shortcut icon" href="[{ $oViewConf->getBaseDir() }]favicon.ico">
+    <link rel="shortcut icon" href="[{ $oViewConf->getImageUrl() }]favicon.ico">
 
     [{oxstyle include="css/reset.css"}]
     [{oxstyle include="css/typography.css"}]

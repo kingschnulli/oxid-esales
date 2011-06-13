@@ -10,7 +10,7 @@
                 el = self.element;
 
             el.change(function() {
-                $( ".oxValidate" ).unbind('submit');
+                $( ".js-oxValidate" ).unbind('submit');
                 var selectValue = $(this).val();
 
                 if ($("input[name=reloadaddress]")) {

@@ -11,7 +11,7 @@
     </p>
     [{if $oDetailsProduct && $oView->canChangeTags()}]
       <form action="[{$oViewConf->getSelfActionLink()}]#tags" method="post" id="tagsForm" >
-        <div class="tagAdd">
+        <div>
           [{$oViewConf->getHiddenSid()}]
           [{$oViewConf->getNavFormParams()}]
           <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">

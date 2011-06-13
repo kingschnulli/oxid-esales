@@ -8,7 +8,7 @@
       [{/if}]
 
       [{if $oView->getRegistrationError() == 4}]
-        <div class="errorbox inbox">
+        <div>
           [{ oxmultilang ident="PAGE_ACCOUNT_REGISTER_SUCCESS_NOTABLETOSENDEMAIL" }]
         </div>
       [{/if}]

@@ -1,17 +1,15 @@
 [{capture append="oxidBlock_pageBody"}]
 
-<div id="page" class="pageLayout">
-
+<div id="page">
     <div id="header" class="clear">
        [{include file="widget/header/languages.tpl"}]
        <div><a id="logo" href="[{$oViewConf->getHomeLink()}]" title="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"><img src="[{$oViewConf->getImageUrl()}]logo.png" alt="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"></a></div>
     </div>
-
-    <div class="welcomebox">
+    <div>
         [{oxifcontent ident="oxstartwelcome" object="oCont"}]
             [{$oCont->oxcontents__oxcontent->value}]
         [{/oxifcontent}]
-        <div class="shopselectbox">
+        <div>
             [{ oxmultilang ident="PAGE_SHOP_MALLSTART_PLEASECHOOSE" }]
             <br>
             <br>

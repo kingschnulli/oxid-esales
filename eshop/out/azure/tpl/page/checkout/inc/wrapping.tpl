@@ -1,6 +1,6 @@
 [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
 [{oxscript add="$( '.wrappingTrigger' ).oxModalPopup({ target: '.wrapping'});"}]
-<div class="wrapping popupBox corners FXgradGreyLight glowShadow overlayPop">
+<div class="wrapping popupBox corners FXgradGreyLight glowShadow">
     <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
     [{assign var="currency" value=$oView->getActCurrency() }]
     <div class="wrappingIntro clear">
@@ -13,7 +13,7 @@
     <h3 class="blockHead">[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_ADDWRAPPING" }]</h3>
 
 [{ if !$oxcmp_basket->getProductsCount()  }]
-    <div class="msg">[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_BASKETEMPTY" }]</div>
+    <div>[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_BASKETEMPTY" }]</div>
 [{else}]
     <form name="basket" action="[{ $oViewConf->getSelfActionLink() }]" method="post">
         [{ $oViewConf->getHiddenSid() }]

@@ -12,7 +12,7 @@
     [{oxscript include="js/libs/scrollpane/jscrollpane.min.js"}]
     [{oxscript include="js/libs/scrollpane/mousewheel.js"}]
     [{oxscript include="js/libs/scrollpane/mwheelIntent.js"}]
-    [{oxstyle include="css/jquery.jscrollpane.css"}]
+    [{oxstyle include="css/libs/jscrollpane.css"}]
     [{oxscript include="js/widgets/oxcompare.js" priority=10 }]
     [{oxscript add="$( '#compareList' ).oxCompare();"}]
     <table id="compareList">
@@ -21,14 +21,14 @@
                 <div id="compareFirstCol" style="overflow: hidden;">
                     <table style="width:200px; border-collapse:collapse;">
                         <tr id="firstDataTr">
-                            <td class="firstCol">&nbsp;</td>
+                            <td class="js-firstCol">&nbsp;</td>
                         </tr>
                         <tr>
-                            <td class="firstCol">[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_PRODUCTATTRIBUTES" }]</td>
+                            <td class="js-firstCol">[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_PRODUCTATTRIBUTES" }]</td>
                         </tr>
                         [{foreach key=sAttrID from=$atributeList item=oAttrib name=CmpAttr}]
                         <tr>
-                            <td class="firstCol" id="cmpAttrTitle_[{$smarty.foreach.CmpAttr.iteration}]" class="no_left_brd">[{ $oAttrib->title }]:</td>
+                            <td class="js-firstCol" id="cmpAttrTitle_[{$smarty.foreach.CmpAttr.iteration}]">[{ $oAttrib->title }]:</td>
                         </tr>
                         [{/foreach}]
                     </table>

@@ -14,7 +14,7 @@
             var linkboxWidth = self.getLinkboxWidth( targetWidth, $("span", el));
             var targetHeight = $("span", el).height();
 
-            $(".actionLinks").css({
+            $("ul.actionLinks").css({
                 "top": el.position().top - 7,
                 "left": el.position().left - 10,
                 "padding-top": targetHeight + 10,
@@ -43,7 +43,7 @@
                 return false;
             });
 
-            $(".actionLinks").mouseleave( function() {
+            $("ul.actionLinks").mouseleave( function() {
                 self.hideLinks(arrow, arrowSrc);
                 return false;
             });
@@ -51,7 +51,7 @@
             //if user comes first time to details shows action links box
             //and sets to cookie, not to show it later
             if ($("#showLinksOnce").length > 0) {
-                $(".actionLinks").slideDown('normal').delay(2000).slideUp('normal', function(){
+                $("ul.actionLinks").slideDown('normal').delay(2000).slideUp('normal', function(){
                      document.cookie = "showlinksonce=1; path=/";
                 });
             }
@@ -69,9 +69,8 @@
             });
 
             //open price alart tab if pricealert link is clicked
-            $(".priceAlarmLink").click(function() {
-                var $tabs = $('.tabbedWidgetBox').tabs();
-                $tabs.tabs('select', '#pricealarm');
+            $("#priceAlarmLink").click(function() {
+                $('div.tabbedWidgetBox').tabs('select', '#pricealarm');
                 return false;
             });
         },
@@ -86,7 +85,7 @@
         showLinks : function( arrow )
         {
             var arrowOnSrc = arrow.attr("longdesc");
-            $(".actionLinks").slideDown("normal", function(){
+            $("ul.actionLinks").slideDown("normal", function(){
                 arrow.attr("src", arrowOnSrc);
                 $('#productLinks').toggleClass("selected");
             });
@@ -102,11 +101,11 @@
          */
         hideLinks : function( arrow, arrowSrc )
         {
-            $(".actionLinks").animate({
+            $("ul.actionLinks").animate({
                 height: 0,
                 opacity: 0.1
             }, 300, function(){
-                $(".actionLinks").hide().css({
+                $("ul.actionLinks").hide().css({
                     height: 'auto',
                     opacity: '1'
                 });

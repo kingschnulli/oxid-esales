@@ -1,4 +1,4 @@
-[{if $categories}]
+[{if $categories && $oView->getClassName() != 'start'}]
 <div class="categoryBox">
     <ul class="tree" id="tree">
     [{defun name="tree" categories=$categories}]

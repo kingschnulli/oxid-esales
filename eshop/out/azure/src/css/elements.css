@@ -1,3 +1,186 @@
+/* --- Checkout basket content ----------------------- */
+.basketitems {
+    width: 100%;
+    font-size: 14px;
+}
+
+.basketitems td {
+    vertical-align: top;
+    border-top: 5px solid #ECEFF0;
+    padding-top: 6px;
+}
+
+.basketitems tr:last-child td {
+    border-bottom: 5px solid #ECEFF0;
+}
+
+.basketitems th {
+    font-size: 12px;
+    text-align: left;
+    color: #515353;
+    padding-bottom: 2px;
+    font-weight: 400;
+    vertical-align: top;
+    border-bottom: 5px solid #ECEFF0;
+}
+
+.basketitems tr td:last-child, .basketitems tr th:last-child {
+    text-align: right;
+    padding-right: 5px;
+}
+
+.basketitems td.basketImage {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.basketitems tr.basketError td {
+    padding-top: 0;
+    padding-bottom: 10px;
+    border: none;
+}
+
+.basketitems .picture {
+    width: 130px;
+    height: 160px;
+    overflow: hidden;
+    border: 1px solid #555555;
+}
+
+.basketitems .wrappingTrigger {
+    color: #1D7E96;
+}
+
+.wrappingTrigger span {
+    display: block;
+    color: #555;
+    font-size: 11px;
+}
+
+.wrappingTrigger:hover span {
+    text-decoration: underline;
+}
+
+.basketitems .checkbox {
+    vertical-align: middle;
+}
+
+.basketitems .textbox {
+    width: 20px;
+    text-align: right;
+}
+
+.basketitems .persParam {
+    width: 120px;
+    text-align: left;
+}
+
+.quantity strong {
+    display: block;
+    font-size: 11px;
+    margin-bottom: 3px;
+}
+
+.quantity p {
+    margin-bottom: 5px;
+}
+
+.quantity {
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+.summary {
+    font-size: 14px;
+    width: 350px;
+    float: right;
+    padding-top: 15px;
+}
+
+.summary table {
+    width: 100%;
+}
+
+.summary table td {
+    text-align: right;
+    width: 90px;
+    padding: 5px 5px 5px 2px;
+    border-top: 2px solid #ECEFF0;
+}
+
+.summary table td {
+    text-align: right;
+    width: 90px;
+    padding: 5px 5px 5px 2px;
+    border-bottom: 1px solid #ECEFF0;
+}
+
+.summary table th {
+    text-align: left;
+    font-weight: 400;
+    border-top: 2px solid #ECEFF0;
+}
+
+.summary table tr:last-child td, .summary table tr:last-child th {
+    border-top-color: #c9d3d7;
+    border-bottom-width: 0px;
+    font-weight: 700;
+}
+
+.summary table tr:first-child td, .summary table tr:first-child th {
+    border-top-width: 0;
+}
+
+.backtoshop {
+    float: left;
+    padding-left: 10px;
+}
+
+.nextStep {
+    float: right;
+}
+
+.basketFunctions {
+    float: left;
+    padding-top: 20px;
+}
+
+.basketFunctions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #1d7e96;
+    padding: 0;
+    height: 14px;
+    line-height: 14px;
+}
+
+.basketFunctions span {
+    border-right: 1px solid #1d7e96;
+    padding: 0 9px 0 0;
+    float: left;
+    line-height: 12px;
+    height: 12px;
+}
+
+.removeFn {
+    padding-left: 17px;
+    color: #e70404;
+    background: url(../../img/x-icon.png) no-repeat 0 1px;
+}
+
+.removeFn:hover {
+    background-position: 0 -25px;
+}
+
+/* --- checkout order ---------------------------- */
+
+#orderAddress, #orderShipping, #orderPayment {
+    margin-bottom: 35px;
+}
+
+/* --- CLEAR ------------------------ */
+
 .clear:after, .basketFlyout li a:after, .basketFlyout .totals:after, .basketFlyout .title:after, .lineView li:after, .wrappingData li:after, .form li:after {
     visibility: hidden;
     display: block;
@@ -20,15 +203,9 @@
 }
 
 /* close commented backslash hack */
-.testScreen {
-    padding: 25px 0;
-    overflow: hidden;
-}
 
-/*Generic*/
-.hidden {
-    display: none;
-}
+
+/* --- Main page error or messages -----------*/
 
 .status {
     padding: 8px 15px 8px 30px;
@@ -37,14 +214,12 @@
 }
 
 .error {
-    /*border: 2px solid #f06262;*/
     color: #4b0b0b;
     border: 2px solid #fed8d2;
     background: #ffe7e3 url(../../img/error-inline.png) no-repeat 12px 11px;
 }
 
 .success {
-    /*border:2px solid #a3c273;*/
     border: 2px solid #edf8cb;
     color: #323b16;
     background: #f8ffe3 url(../../img/success-inline.png) no-repeat 12px 11px;
@@ -60,29 +235,12 @@
     padding-left: 15px;
 }
 
-.inlineSuccess {
-    background: url(../../img/success-inline.png) no-repeat 12px 11px;
-    padding-left: 10px;
-}
 
-.removeFn {
-    padding-left: 17px;
-    color: #e70404;
-    background: url(../../img/x-icon.png) no-repeat 0 1px;
-}
-
-.removeFn:hover {
-    background-position: 0 -25px;
-}
+/* --- box -------------------------------- */
 
 .box {
     width: 172px;
     margin-bottom: 15px;
-    /*overflow: hidden;*/
-}
-
-.boxCats a {
-    text-transform: uppercase;
 }
 
 .box ul, .box ol, .box .content {
@@ -102,6 +260,7 @@
     padding: 10px;
 }
 
+/* --- News Box ----------------------- */
 #newsBox.box li {
     padding-top: 7px;
 }
@@ -110,6 +269,8 @@
     padding-top: 0;
 }
 
+
+/* --- Article  box & remomendation box --------------------- */
 .featuredList a {
     padding: 7px 10px;
     display: block;
@@ -144,6 +305,7 @@
     vertical-align: middle;
 }
 
+/* --- category list category boxes ---------------- */
 .box .subcatPic {
     position: relative;
     height: 100px;
@@ -155,7 +317,7 @@
     background:#fff;
     display:block;
     height: 100px;
-    line-height:98px;       
+    line-height:98px;
 }
 
 .box .catPicOnly {
@@ -166,7 +328,7 @@
     left: 0;
     top: 0;
     text-align: center;
-    
+
 }
 
 .box .catPicOnly .subcatPic img{
@@ -176,6 +338,8 @@
 .subcatList .box li.subcatPic {
     padding: 0;
 }
+
+/* --- promo boxes: bargain item -------------- */
 
 .promoBoxes {
     margin-bottom: 20px;
@@ -227,10 +391,6 @@
     width: 150px;
 }
 
-#sidebar .rss span{
-    top: 0;
-}
-
 .specBox .deliveryInfo {
     display: block;
     font-size: 11px;
@@ -256,9 +416,7 @@
     text-shadow: 0 -1px 0 #000;
 }
 
-.hoverBox:hover .toCart, .hoverBox:hover .priceValue {
-    text-shadow: 0px -1px 1px #652b00;
-}
+
 
 .specBox .price, .specBox .price .button{
     visibility: hidden;
@@ -335,7 +493,6 @@
     text-shadow:0 -1px 0px #8c4600;
     border:1px solid #fff;
     background:transparent;
-
     display: block;
     position: absolute;
     bottom: 8px;
@@ -381,27 +538,13 @@
     display: block;
 }
 
-.pictureView {
-    border-bottom: 2px solid #58b3ca;
-}
 
-.box .price {
-    display: block;
-}
-
+/* ??? */
 .list {
     clear: left;
 }
 
-.head {
-    margin: 10px;
-    padding: 5px;
-    background: #eee;
-    color: #000;
-    font-size: 16px;
-    font-weight: bold;
-}
-
+/* --- form elements  -------------------- */
 .checkbox {
     padding: 0;
     margin: 0;
@@ -418,9 +561,7 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.textbox:focus, input[type =
-"text"]:focus {
-    /*background: lightYellow;*/
+.textbox:focus, input[type ="text"]:focus {
     border-color: #666;
 }
 
@@ -436,6 +577,7 @@
     width: 13px;
 }
 
+/* --- Page title --------------------- */
 .pageHead {
     font-size: 14px;
     line-height: 16px;
@@ -448,6 +590,8 @@
     position: relative;
     z-index: 2;
 }
+
+/* --- box -------------------------------- */
 
 .box h2, .box h3, .sectionHead {
     color: #fff;
@@ -483,10 +627,6 @@ h3.blockHead {
     color: #000;
 }
 
-/* Check this - somehow does not work */
-h3.blockHead:first-child {
-    margin-top: 0;
-}
 
 .sectionHead + .gridView, .sectionHead + .infogridView {
     margin-top: -2px;
@@ -523,10 +663,12 @@ a.viewAllHover span {
     text-shadow: 0px -1px 0px #ac5403;
 }
 
+/* --- underlined links in login page ---------------- */
 a.textLink {
     text-decoration: underline;
 }
 
+/* --- RSS link ----------------------------- */
 .rss {
     float: right;
 }
@@ -556,9 +698,7 @@ a.rss span {
     visibility: visible;
 }
 
-.boxCats h2 {
-    height: 43px;
-}
+
 
 h3.lightHead {
     color: #1d7e96;
@@ -595,7 +735,7 @@ h3.lightHead {
     border-top: 0;
 }
 
-/*Reviews*/
+/* --- Reviews ------------------------------- */
 .reviews h4 {
     margin-bottom: 5px;
 }
@@ -634,17 +774,11 @@ h3.lightHead {
     line-height: 18px;
 }
 
-.writeReviewLink {
-    text-transform: uppercase;
-    color: #1d7e96;
-    font-size: 11px;
-    font-weight: 700;
-}
-
 #writeReview {
     display: none;
 }
 
+/* --- Article details  ----------- */
 .tabs {
     position: relative;
     z-index: 2;
@@ -689,7 +823,7 @@ h3.lightHead {
     color: #515353;
 }
 
-/*** BUTTONS -> ***/
+/* --- BUTTONS  ------------------- */
 button {
     width: auto;
     overflow: visible;
@@ -704,7 +838,6 @@ button {
 
 .submitButton, {
     text-shadow: 0px -1px 0px #000;
-    /*padding: 0 17px 1px 17px;*/
     padding: 0 10px 1px 10px;
     font-size: 11px;
     height: 19px;
@@ -751,6 +884,11 @@ div.lineBox span.title {
     text-shadow: 0px -1px 0px #aa6826;
 }
 
+button[disabled].submitButton, button[disabled].submitButton:hover  {
+    background: #cccccc;
+    color:#fff;
+    text-shadow:none;
+}
 
 a.submitButton {
     color: #fff;
@@ -782,7 +920,7 @@ a.submitButton {
 }
 
 /******/
-.fx-gradient {
+/*.fx-gradient {
     background: #19798f;
     background: -moz-linear-gradient(top, #adefff, #19798f); background: -webkit-gradient(linear, left top, left bottom, from(#adefff), to(#19798f)); -pie-background: linear-gradient(90deg, #19798f, #adefff); }
 .fx-gradient2  {background: #e0f1f5; background: -moz-linear-gradient(top, #e0f1f5, #b9dde6); background: -webkit-gradient(linear, left top, left bottom, from(#e0f1f5), to(#b9dde6)); -pie-background: linear-gradient(90deg, #e0f1f5, #b9dde6); }
@@ -790,9 +928,7 @@ a.submitButton {
 .fx-gradient-3:hover {background: #f67402; background: -moz-linear-gradient(top, #ff8604, #eb6105); background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6105)); -pie-background: linear-gradient(90deg, #eb6105, #ff8604); }
 .fx-gradient-4 {background: #389cb4; background: -moz-linear-gradient(top, #adefff, #18778e); background: -webkit-gradient(linear, left top, left bottom, from(#adefff), to(#18778e)); -pie-background: linear-gradient(90deg, #18778e, #adefff); }
 .fx-gradient-4:hover {background: #f67402; background: -moz-linear-gradient(top, #ff8604, #eb6105); background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6105)); -pie-background: linear-gradient(90deg, #eb6105, #ff8604); }
-/* light blue -> dark blue */
 .fx-gradient-5 {background: #389cb4; background: -moz-linear-gradient(top, #adefff, #18778e); background: -webkit-gradient(linear, left top, left bottom, from(#adefff), to(#18778e)); -pie-background: linear-gradient(90deg, #18778e, #adefff); }
-/* light orange -> dark orange */
 .fx-gradient-6{background: #f67402; background: -moz-linear-gradient(top, #ff8604, #eb6005); background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6005)); -pie-background: linear-gradient(90deg, #eb6005, #ff8604); }
 
 .fx-shadow-gradient, .fx-shadow-gradient-2 {margin: -2px; height: 9px; background: transparent url(../bg/shadow.png) repeat-x; z-index:500; position: relative; }
@@ -800,10 +936,10 @@ a.submitButton {
 
 .fx-shadow-top    {-moz-box-shadow: 0px -2px 5px #333; -webkit-box-shadow: 1px 1px 1px #444; box-shadow: 1px 1px 4px #444;}
 .fx-shadow-bottom {-moz-box-shadow: 0px 2px 5px #333; -webkit-box-shadow: 1px 1px 1px #444; box-shadow: 1px 1px 4px #444;}
+*/
 
 
-
-/*** HEADER ELEMENTS -> ***/
+/* --- HEADER ELEMENTS ---------------- */
 #logo {
     margin: 19px 0 8px 0;
     float: left;
@@ -850,19 +986,6 @@ a.submitButton {
 }
 
 
-/*
-.flyout .textbox {
-    color: #b4b8b8;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.flyout .textbox:focus,
-.flyout .textbox:blur {
-    color: #333;
-    text-transform: none;
-}
-*/
 
 .loginForm,.altLoginBox{
     border: 1px solid #c1c1c1;
@@ -939,8 +1062,7 @@ a.submitButton {
   position: relative;
 }
 
-.logged,
-#topMenu li.logged {
+.logged, #topMenu li.logged {
     text-transform: none;
 }
 
@@ -949,6 +1071,7 @@ a.submitButton {
   right: -1px;
   top: -2px;
   display: none;
+  z-index:9;
 }
 
 #topMenu .flyout strong a {
@@ -1002,6 +1125,7 @@ a.submitButton {
     background:url(../../img/arrow-down.png) no-repeat 100% 5px;
 }
 
+/* --- currency and language flyouts ----- */
 #currencies,
 #languages,
 .flyoutMenu {
@@ -1085,6 +1209,7 @@ a.submitButton {
     color: #333;
 }
 
+/* --- main navigation meniu ------------------- */
 #navigation {clear:both; width:720px; padding-top: 8px;}
 #navigation {float:left;}
 #navigation a {
@@ -1094,17 +1219,11 @@ a.submitButton {
 #navigation > li > a{font-weight:700; font-size:13px; text-transform:uppercase;}
 #navigation > li > ul {margin-top:6px;}
 
-/*
-#navigation .search{float:right; padding-right:65px; visibility:hidden;}
-#navigation .categories li{float:left; text-transform:uppercase; margin-right:2px; visibility:hidden;}
-.categories a{padding:3px 10px; float:left;}
-*/
-
+/* --- Search box ------------------------------- */
 .searchBox {
     position: absolute;
     right: 67px;
     top: 71px;
-    /*padding:15px 67px 0 0;*/
 }
 
 .searchBox .textbox {
@@ -1128,6 +1247,7 @@ a.submitButton {
     color: #333;
 }
 
+/* --- basket box ------------------------------ */
 .basketBox {
     position: absolute;
     right: 10px;
@@ -1164,6 +1284,7 @@ a.submitButton {
     cursor: pointer;
 }
 
+/* --- Footer ----------------------------- */
 #footer #panel {
  margin: 0 10px;
  border:1px solid #3799B1;
@@ -1229,12 +1350,10 @@ a.readMore:hover {
  text-decoration: underline;
 }
 
+/* --- Tags --------------------------------- */
+
 .tagCloud {
  line-height: 1.5em;
-}
-
-.tag_200 {
- font-size:13px;
 }
 
 .tagitem_100 {
@@ -1276,6 +1395,7 @@ a.readMore:hover {
 .taggedText {
  color: #a2a9ab;
 }
+
 .tagError {
  display: none;
 }
@@ -1284,14 +1404,14 @@ a.tagText{
     vertical-align:middle;
     display:inline-block;
     line-height:12px;
-
 }
-a.tagText img{
+a.
+tagText img{
     margin-right:3px;
     vertical-align:top;
-
 }
 
+/* --- Grid View ------------------------------------ */
 .gridView,
 .infogridView {
     margin: 0;
@@ -1421,7 +1541,7 @@ a.tagText img{
  padding-right: 5px;
 }
 
-/*Infogrid*/
+/* --- Infogrid -------------------------------- */
 .infogridView {
     margin: 0;
     padding: 0;
@@ -1548,7 +1668,7 @@ a.tagText img{
     text-decoration: none;
 }
 
-/* line view */
+/* --- line view --------------------------- */
 .lineView {
     margin: 0;
 }
@@ -1609,18 +1729,12 @@ a.tagText img{
 .lineView .description {width: 268px;    padding: 7px 0 0 20px;    font-size: 14px;    line-height: 18px;}
 .lineView .functions {padding: 0 0 0px 10px; position: absolute; bottom: 10px; clear: right; float:left; left: 190px; width:550px;}
 
-/*.lineView .info .title {display:block;}*/
 .pictureBox { width: 190px; height:150px; float: left; text-align: center; line-height:150px; overflow: hidden;}
 .pictureBox img {
     vertical-align: middle;
 }
-/*.productNr {color:#515353; margin-bottom: 20px; display: block;}*/
-.lineView .info .title + .productNr {margin-top:-20px; }
 
-.popBox {
- z-index:9;
-
-}
+/* --- Modal Popap -------------------- */
 
 .popupBox {
     position: absolute;
@@ -1636,6 +1750,7 @@ a.tagText img{
     cursor: pointer;
 }
 
+/* --- mini basket -------------------------- */
 .basketFlyout {
     display: none;
     border: 1px solid #676767;
@@ -1711,7 +1826,7 @@ a.tagText img{
 }
 
 .scrollable .totals {
-    width: 216px;
+    width: 230px;
     border-top: none;
 }
 
@@ -1754,16 +1869,24 @@ a.tagText img{
 }
 
 .scrollable hr {
-    width: 236px;
+    width: 250px;
 }
 
 .basketItems {
-    width: 236px;
+    width: 250px;
+    height:230px;
+    oveflow:hidden;
 }
 
-.scrollable ul {
-    height: 220px;
+.scrollable .scrollbarBox {
+    height: 200px;
+    width:  265px;
     overflow: hidden;
+}
+
+/* --- Side Bar category tree ------------------------------ */
+#sidebar .rss span{
+    top: 0;
 }
 
 #sidebar .tree {
@@ -1851,6 +1974,8 @@ a.tagText img{
     text-shadow: 0px -1px 0px #aa6826;
 }
 
+/* --- Checkout - payment --------------------- */
+
 #payment dl {
     margin-bottom: 10px;
 }
@@ -1868,7 +1993,7 @@ a.tagText img{
     display: block;
 }
 
-/* Trusted shops */
+/* --- Trusted shops -------------------------------- */
 
 .etrustlogocol {
     float: left;
@@ -1883,6 +2008,7 @@ a.tagText img{
    margin: 7px 0;
 }
 
+/* --- Checkout - thankyou page --------------------- */
 #thankyouPage h3.blockHead:first-child {
    color: #ec6105;
 }
@@ -1896,9 +2022,6 @@ a.tagText img{
     color: #3799B1;
 }
 
-#facebook body {
-    background: red;
-}
 
 
 .pageHead + .listRefine,
@@ -1954,7 +2077,7 @@ a.tagText img{
     float: right;
 }
 
-
+/* --- dropdown ------------- */
 .drop li {
     list-style: none;
     padding: 0;
@@ -2010,7 +2133,6 @@ a.tagText img{
 }
 
 .dropDown p label {
-    /*font-weight: 700; */
     text-transform: uppercase;
 }
 
@@ -2028,15 +2150,18 @@ a.tagText img{
 }
 
 .dropDown li.asc span,
-.dropDown li.desc span {
+.dropDown li.desc span,
+.dropDown p span.asc,
+.dropDown p span.desc {
     padding-right: 15px;
     background: url(../../img/arrow-updown.png) no-repeat 100% 3px;
 }
 
-.dropDown li.desc span {
+.dropDown li.desc span, .dropDown p span.desc {
     background-position: 100% -39px;
 }
 
+/* --- Pager ------------------------- */
 .pager {
     float: left;
     padding-top: 1px;
@@ -2076,7 +2201,7 @@ a.next {
     background-position: 100% 3px;
 }
 
-
+/* --- Bread crumb ------------------ */
 #breadCrumb {
     padding: 0 10px 10px 10px;
     font-size: 11px;
@@ -2089,14 +2214,15 @@ a.next {
     color: #999;
 }
 
+
 #overviewLink a{
    font-size: 11px;
    font-weight: 700;
-   text-transform: uppercase;	
+   text-transform: uppercase;
    position:absolute;
    right:10px;
    top:115px;
-}	
+}
 
 .listFilter {
     background: #f2f4f5;
@@ -2110,10 +2236,8 @@ a.next {
     min-width:232px;
 }
 
-
+/* --- Wrapping ----------------------------- */
 .wrapping {
-    /*display: none;*/
-   /*width: 663px;*/
    border-color: #666;
    overflow: hidden;
 }
@@ -2223,6 +2347,21 @@ a.next {
     margin-top: 2px;
 }
 
+/* --- checkout Steps ------------------ */
+
+.checkoutSteps + .status, .checkoutSteps + css3-container + .status {
+    margin-top: 20px;
+}
+
+.checkoutCollumns .row {
+    margin-bottom: 20px;
+}
+
+.checkoutCollumns .collumn {
+    width: 50%;
+    float: left;
+}
+
 .checkoutSteps {
     margin: 0;
     overflow: hidden;
@@ -2243,9 +2382,6 @@ a.next {
     padding-left: 15px;
     background: url(../../img/steps.png) no-repeat 100% 0;
 }
-
-
-
 
 .checkoutSteps li.active {
     background-position: 100% -29px;
@@ -2324,11 +2460,6 @@ a.next {
     background:#d9dfe1 url(../../img/line-innershadow.png) no-repeat 0 0;
 }
 
-.lineBox .importantSubmit {
-    float:right;
-}
-
-
 .couponBox {
     border-top: 5px solid #eceff0;
     border-bottom: 5px solid #eceff0;
@@ -2374,6 +2505,7 @@ h3.section button {
     text-shadow: 0px 1px 1px #fff;
 }
 
+/* --- Amount price select ---------- */
 .pricePopup li {
     padding: 0 10px;
 }
@@ -2401,7 +2533,19 @@ h3.section button {
     padding: 0 30px;
 }
 
-.pricePopup, .actionLinks {
+.pricePopup {
+    display: none;
+    position: absolute;
+    z-index: 12;
+    background: #D8DEE0;
+    text-transform: uppercase;
+    font-size: 11px;
+    border: 1px solid #979797;
+    padding: 7px 0;
+}
+
+/* --- Article action select ------ */
+ .actionLinks {
     display: none;
     position: absolute;
     z-index: 12;
@@ -2432,6 +2576,17 @@ h3.section button {
     text-decoration: none;
     color: #fff;
 }
+
+.actionLinks li:first-child span{
+    border-top: 1px solid #b2b6b6;
+    display: block;
+}
+
+.actionLinks li:last-child a{
+    border-bottom: 0;
+}
+
+/* --- Social button like FB and etc. --- */
 .social{
     padding-top:10px;
     margin-bottom:0;
@@ -2476,14 +2631,7 @@ a.fb_button_simple {
     background: none;
 }
 
-.actionLinks li:first-child span{
-    border-top: 1px solid #b2b6b6;
-    display: block;
-}
-
-.actionLinks li:last-child a{
-    border-bottom: 0;
-}
+/* --- Article Details ----------- */
 
 .detailsRelated {
     clear:both;
@@ -2528,6 +2676,7 @@ a.fb_button_simple {
     padding: 0 0 0 10px;
 }
 
+/* --- persparams ---------------- */
 .persparamBox {
     padding-bottom: 7px;
 }
@@ -2549,11 +2698,12 @@ a.fb_button_simple {
 .persparamBox label {
     margin: 2px 5px 0 0;
 }
-
+/* Used for tab content displaying */
 .ui-tabs-hide {
     display: none;
 }
 
+/* --- articles dertails atributes ------------ */
 .attributes {
     width: 100%;
 }
@@ -2730,7 +2880,7 @@ a.fb_button_simple {
     padding-right: 0;
 }
 
-/*Stock flags*/
+/* --- Stock flags ----------------- */
 .stockFlag {
     background: url(../../img/stockstatus.png) no-repeat 7px -46px;
 }
@@ -2776,9 +2926,7 @@ a.fb_button_simple {
     position: absolute; bottom:5px;
 }
 
-
-
-/* Ratings */
+/* --- Ratings ---------------------------- */
 div.rating {
     margin-bottom: 10px;
 }
@@ -2871,10 +3019,6 @@ ul.rating li.s5 a:hover {
     background-position: 0 -18px;
 }
 
-.rating_review_input {
-    margin: 0;
-    height: 16px;
-}
 
 .rating li.currentRate {
     background: url(../../img/stars.jpg) left bottom;
@@ -2893,6 +3037,7 @@ ul.rating li.s5 a:hover {
        background: none;
 }
 
+/* ---- Reviews ------------------------ */
 dl.review {
     margin: 5px 0;
     padding-top: 5px;
@@ -2918,18 +3063,7 @@ dl.review .param {
     color: #757C83;
 }
 
-.variantlist-box {
-    display: none;
-}
-
-.variantlist-box li{
-    list-style: none;
-}
-
-
-
-
-/*Account*/
+/* --- Account Order List ----------------------- */
 .orderList {
     margin: 0;
     padding: 0;
@@ -3010,13 +3144,13 @@ dl.review .param {
     font-size: 16px;
 }
 
-.popup,
-.selectorbox {
+/* ??? */
+/*.selectorbox {
     display: none;
-}
+}*/
 
 
-/*Forms, Validation*/
+/* --- Forms, Validation ---------------------------- */
 .form {
     width: 354px;
 }
@@ -3077,8 +3211,6 @@ dl.review .param {
     margin-left: 5px;
 }
 
-
-
 .form input[field="xsmall"] + .form input,
 .form input[field="xsmall"] + css3-container + .form input {
     margin-left: 10px;
@@ -3108,9 +3240,7 @@ span.verificationCode {
 
 .form li.stateBox {
     padding-left: 150px;
-    /*display: none;*/
 }
-
 
 .form label {
     width: 140px;
@@ -3176,11 +3306,6 @@ span.verificationCode {
     padding-top: 5px;
 }
 
-#testS input {
-    float: left;
-    width: 50px;
-}
-
 .inlineForm button {
     margin-left: 5px;
 }
@@ -3211,7 +3336,6 @@ span.verificationCode {
     color: #ff0000;
     margin: 0;
     padding: 5px 0 5px 150px;
-    /*background: url(../../img/error-marker.png) no-repeat 50% 5px;*/
 }
 
 .oxValidateError span {
@@ -3235,7 +3359,7 @@ span.verificationCode {
 .oxInValid select,
 .oxInValid input:focus {
     border-color: #e40000;
-    background: #fff8f8/* url(../../img/error-inline.png) no-repeat 100% 3px*/;
+    background: #fff8f8;
 }
 
 .oxInValid select {
@@ -3243,7 +3367,30 @@ span.verificationCode {
     border-width: 1px;
 }
 
-/*Promotions*/
+/* --- Promotions Slider ------------------------ */
+.promoShadow {
+    position: absolute;
+    top: 0;
+    z-index: 3;
+}
+
+.shadowRight {
+    right: 10px;
+}
+
+.oxSlider {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.oxSlider li {
+    position: relative;
+}
+
+.oxSlider a:hover {
+    text-decoration: none;
+}
+
 .oxSlider {
     padding: 0 10px;
     overflow: hidden;
@@ -3260,14 +3407,7 @@ span.verificationCode {
     height: 220px;
 }
 
-.thumbnav {
-    float: left;
-}
-
-.thumbnav li {
-    float: left;
-}
-
+/* --- Recommendatins ---------------------------- */
 .recommendations .title {
     font-size:12px;
     padding:2px 0px 6px;
@@ -3307,7 +3447,7 @@ span.verificationCode {
 }
 
 
-/* Item slider*/
+/* --- Manufacturer Item slider ------------------------- */
 .itemSlider {
     width:744px;
     height: 148px;
@@ -3438,13 +3578,15 @@ a.sliderHover {
     display: block;
 }
 
-.gridView li:hover a.sliderHover {
+/* ??? */
+/*.gridView li:hover a.sliderHover {
     display: block;
     width: 187px;
     height: 150px;
     z-index: 1;
-}
+}*/
 
+/* --- Category lists ----------------------- */
 .subcatList,
 .subcatList ul {
     margin: 0;
@@ -3485,31 +3627,30 @@ a.sliderHover {
     margin-bottom: 20px;
 }
 
+/* --- Trusted shop logo --------------- */
 .box #tsSeal {
     text-align: center;
     margin-bottom: 7px;
 }
 
 
-/* Layout helpers
-----------------------------------*/
+/* --- Layout helpers ---------------------------------*/
 .ui-helper-hidden { display: none; }
 .ui-helper-hidden-accessible { position: absolute; left: -99999999px; }
 .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
 .ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 .ui-helper-clearfix { display: inline-block; }
-/* required comment for clearfix to work in Opera \*/
+    /* required comment for clearfix to work in Opera \*/
 * html .ui-helper-clearfix { height:1%; }
 .ui-helper-clearfix { display:block; }
-/* end clearfix */
+    /* end clearfix */
 .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
 
 
-/* Interaction Cues
-----------------------------------*/
+/* --- Interaction Cues ----------------------------------*/
 .ui-state-disabled { cursor: default !important; }
 
-/* Overlays */
+    /* Overlays */
 .ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 .ui-widget-overlay { background: #000; opacity: .50;filter:Alpha(Opacity=50); }
 
@@ -3528,8 +3669,8 @@ a.sliderHover {
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
 
 
-
-/* This is the moving lens square underneath the mouse pointer. */
+/* --- ZOOM CLOUD ----------------------------- */
+    /* This is the moving lens square underneath the mouse pointer. */
 .cloud-zoom-lens {
     border: 2px solid #EB6005;
     margin:-2px;    /* Set this to minus the border thickness. */
@@ -3537,7 +3678,7 @@ a.sliderHover {
     cursor:move;
 }
 
-/* This is for the title text. */
+    /* This is for the title text. */
 .cloud-zoom-title {
     font-family:Arial, Helvetica, sans-serif;
     position:absolute !important;
@@ -3551,7 +3692,7 @@ a.sliderHover {
     top:0px;
 }
 
-/* This is the zoom window. */
+    /* This is the zoom window. */
 .cloud-zoom-big {
     border:2px solid #51A8BC;
     overflow:hidden;
@@ -3559,7 +3700,7 @@ a.sliderHover {
     background-color: #fff;
 }
 
-/* This is the loading message. */
+    /* This is the loading message. */
 .cloud-zoom-loading {
     color: #000;
     background: #fff;
@@ -3652,6 +3793,7 @@ a.sliderHover {
     z-index: 6;
 }
 
+/* --- Services ---------------------- */
 #services {
     width: 175px;
 }
@@ -3690,10 +3832,7 @@ a.sliderHover {
     color: orange;
 }
 
-#servicesTrigger .notification {
-    top: 20px;
-}
-
+/* --- WishList ------------------------------ */
 .wishlistPublish {
     float: right;
     width: 360px;
@@ -3749,6 +3888,8 @@ a.sliderHover {
     padding: 40px 0 0 0px;}
 
 
+/* --- Account Dashbord ----------------- */
+
 .accountDashboardView .col {
    float: left;
    width: 300px;
@@ -3764,6 +3905,7 @@ a.sliderHover {
    margin-top: 2px;
 }
 
+/* --- Compare List ----------------------- */
 #compareList {
     width: 100%;
 }
@@ -3780,10 +3922,6 @@ a.sliderHover {
 #compareList table #firstTr td,
 #compareList table #firstDataTr td {
     border: 0;
-}
-
-#compareDataDiv .product {
-    width: 190px;
 }
 
 #compareList table tr:last-child td {
@@ -3872,11 +4010,13 @@ a.sliderHover {
     float: right;
 }
 
+/* --- Login form ------------------------ */
 .accountLoginView .col {
    float: left;
    width: 50%;
 }
 
+/* --- right corner message ---------------- */
 #incVatMessage{
     position:fixed;
     bottom:-3px;
@@ -3889,7 +4029,7 @@ a.sliderHover {
     z-index:9999;
 }
 
-/* Plain errors*/
+/* --- Plain errors ------------------------ */
 .errorBox {width: auto; font-size:10px; font-weight:bold; color:#D81F01; margin: 20px; padding: 0; border: none; width: 500px;}
 .errorBox a {color:#D81F01; text-decoration: underline;}
 .errorBox a:hover {color:#666;}
@@ -3897,7 +4037,7 @@ a.sliderHover {
 .errorBox .errBody {border: 1px solid #D81F01; padding: 15px;}
 
 
-/* article box */
+/* --- article box ------------------------ */
 li.articleImage{
     height: 110px;
 }
@@ -3915,7 +4055,7 @@ li.articleImage{
     vertical-align:middle;
 }
 
-/* MD Variant Selects in details */
+/* --- MD Variant Selects in details ----------- */
 .selectorsBox {
     clear:both;
     background: none;
@@ -3967,7 +4107,7 @@ div.information .selectorsBox {
     color: #EB6005;
 }
 
-/* MD Variant Selects in infoGrid */
+/* --- MD Variant Selects in infoGrid ----------------- */
 .listDetails .selectorsBox {
     background: none;
     padding: 10px 10px 0px 5px;
@@ -3992,7 +4132,7 @@ div.information .selectorsBox {
     display: inline-block;
 }
 
-/* MD Variant Selects for line */
+/* --- MD Variant Selects for line -------------------- */
 .infoBox .selectorsBox {
     background: none;
     padding: 10px 10px 0px 0px;
@@ -4017,7 +4157,7 @@ div.information .selectorsBox {
     display: inline-block;
 }
 
-/* AGB conditions links */
+/* ------- Checkout AGB conditions links --------------- */
 .agb a {
     color: #1d7e96;
 }
@@ -4027,11 +4167,12 @@ div.information .selectorsBox {
     text-decoration:none;
 }
 
-button[disabled].submitButton, button[disabled].submitButton:hover  {
-    background: #cccccc;
-    color:#fff;
-    text-shadow:none;
+.agb p.errorMsg  {
+    color: #ff0000;
+    display: none;
 }
+
+/* ---- ajax loading icon -----------------------------*/
 
 .loadingfade {
     background: #fff;
@@ -4045,14 +4186,14 @@ button[disabled].submitButton, button[disabled].submitButton:hover  {
     background: url(../../img/loading.gif) no-repeat center center;
     z-index : 5002;
 }
-/* shop lupe */
 
+/* --- shop lupe ------------------------------ */
 .shoplupe {
     padding-top:15px;
     text-align: center;
 }
 
-/* category tree */
+/* --- category tree ----------------------------- */
 .categoryBox {
     border-color: #999999;
     border-style: solid;
@@ -4075,9 +4216,4 @@ button[disabled].submitButton, button[disabled].submitButton:hover  {
 
 .categoryTags {
     padding: 5px 5px 5px 5px;
-}
-
-.agb p.errorMsg  {
-    color: #ff0000;
-    display: none;
 }

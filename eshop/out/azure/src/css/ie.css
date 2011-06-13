@@ -1,19 +1,17 @@
 /* IE */
-.pie,
 .corners,
 .button,
 .submitButton,
 .input,
 .textbox,
 #footer .list a,
-.fx-gradient,
-.fx-gradient-bg,
+/*.fx-gradient,
 .fx-shadow-gradient,
 .fx-gradient2,
 .fx-gradient-3,
 .fx-gradient-4,
 .fx-gradient-5,
-.fx-gradient-6,
+.fx-gradient-6,*/
 #currencies a,
 #languages a,
 .box h2,
@@ -23,7 +21,6 @@
 .box ul,
 .box
 .featured,
-.pictureView,
 .box li,
 .box li:hover,
 .box .content,
@@ -44,8 +41,6 @@ input[type = "text"],
 .itemSlider .prevItem,
 .itemSlider .nextItem,
 .specBoxTitles a.title,
-.itemSlider .nextItem,
-.itemSlider .prevtItem,
 .specBox h3,
 .flyoutMenu,
 .flyoutMenu a,
@@ -83,33 +78,7 @@ h1.page {
     -pie-background: none;
 }
 
-/* Verticaly centered box */
-.v-align-box {
-    position: relative;
-}
-
-.v-align-box .v-align-item { *position:absolute;
-    top:
-    50%;
-}
- /* *position - IE 7 fix  */
-.v-align-box .v-align-content {
-    position: relative;
-    top: -50%;
-}
-
-.product .title { *display:block;
-    * width: 166px;
-    * height: 42px;
-}
-
-.product:hover .cost-box { *display:block;
-}
-
 /* Fix for positioning */
-#mask {
-    position: absolute;
-}
 
 .submitButton {
     width: 1;

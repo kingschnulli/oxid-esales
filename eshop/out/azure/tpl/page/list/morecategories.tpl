@@ -1,3 +1,5 @@
+[{oxscript include="js/widgets/oxarticlebox.js" priority=10 }]
+[{oxscript add="$( '#content' ).oxArticleBox();"}]
 [{capture append="oxidBlock_content"}]
     <h1 class="pageHead">[{ oxmultilang ident="PAGE_PRODUCT_MORECATEGORIES" }]</h1>
 
@@ -61,14 +63,14 @@
                                 [{/foreach}]
                             </ul>
                         [{else}]
-                            <div class="content[{if $iconUrl}] catPicOnly[{/if}]">
-                                [{if $iconUrl}]
-                                    <div class="subcatPic">
-                                        <a href="[{ $category->getLink() }]">
-                                            <img src="[{$category->getIconUrl() }]" alt="[{ $category->oxcategories__oxtitle->value }]" height="100" width="168">
-                                        </a>
-                                    </div>
-                                [{/if}]
+                            <div class="content catPicOnly">                            
+                                <div class="subcatPic">
+                                    [{if $iconUrl}]
+                                    <a href="[{ $category->getLink() }]">
+                                        <img src="[{$category->getIconUrl() }]" alt="[{ $category->oxcategories__oxtitle->value }]" height="100" width="168">
+                                    </a>
+                                    [{/if}]
+                                </div>                            
                             </div>
                         [{/if}]
                     </div>

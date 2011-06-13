@@ -19,7 +19,7 @@
         [{include file="message/error.tpl" statusMessage=`$_statusMessage1``$_statusMessage2`}]
     [{/if}]
 
-    <div id="details" class="hreview-aggregate hproduct">
+    <div id="details">
         [{ if $oView->getSearchTitle() }]
           [{ assign var="detailsLocation" value=$oView->getSearchTitle()}]
         [{else}]
@@ -33,9 +33,11 @@
 
 
         [{* details locator  *}]
-        <h2 class="pageHead category">[{$sPageHeadTitle|truncate:80}]</h2>
-
         [{assign var="actCategory" value=$oView->getActiveCategory()}]
+        <div id="overviewLink">
+            <a href="[{ $actCategory->toListLink }]" class="overviewLink">[{ oxmultilang ident="WIDGET_BREADCRUMB_OVERVIEW" }]</a>
+        </div>        
+        <h2 class="pageHead category">[{$sPageHeadTitle|truncate:80}]</h2>        
         <div class="detailsParams listRefine bottomRound">
             <div class="pager refineParams clear" id="detailsItemsPager">
                 [{if $actCategory->prevProductLink}]<a id="linkPrevArticle" class="prev" href="[{$actCategory->prevProductLink}]">[{oxmultilang ident="DETAILS_LOCATOR_PREVIUOSPRODUCT"}]</a>[{/if}]

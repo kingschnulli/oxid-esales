@@ -1,4 +1,3 @@
-[{oxstyle include="css/checkout.css"}]
 [{capture append="oxidBlock_content"}]
 
 [{if $oView->showFinalStep()}]
@@ -59,7 +58,7 @@
                   <input name="KDNR" type="hidden" value="[{ $oxcmp_user->oxuser__oxcustnr->value }]">
                   <input name="ORDERNR" type="hidden" value="[{ $order->oxorder__oxordernr->value }]">
                   [{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_TRUSTEDSHOPMESSAGE" }]<br><br>
-                  <span class="btn"><input type="submit" id="btnProtect" name="btnProtect" class="btn" value="[{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_LOGGIN" }]"></span>
+                  <span><input type="submit" id="btnProtect" name="btnProtect" value="[{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_LOGGIN" }]"></span>
               </div>
             </form>
             <div class="clear"></div>
@@ -72,7 +71,7 @@
           [{assign var="discountnetprice" value=$basket->getDiscountedNettoPrice()}]
           [{assign var="currencycovindex" value=$oView->getCurrencyCovIndex()}]
           <img src="https://www1.belboon.de/adtracking/sale/[{$oxcmp_shop->oxshops__oxadbutlerid->value }].gif/oc=[{$order->oxorder__oxordernr->value }]&sale=[{ $discountnetprice * $currencycovindex|string_format:"%.2f"}]&belboon=[{$oView->getBelboonParam()}]" WIDTH="1" HEIGHT="1">
-          <object class="flash" type="application/x-shockwave-flash" data="http://www1.belboon.de/tracking/flash.swf" width="1" height="1" >
+          <object type="application/x-shockwave-flash" data="http://www1.belboon.de/tracking/flash.swf" width="1" height="1" >
             <param name="flashvars" value="pgmid=[{$oxcmp_shop->oxshops__oxadbutlerid->value }]&etype=sale&tparam=sale&evalue=[{ $discountnetprice * $currencycovindex|string_format:"%.2f"}]&oc=[{$order->oxorder__oxordernr->value }]">
             <param name="movie" value="http://www1.belboon.de/tracking/flash.swf" />
           </object>

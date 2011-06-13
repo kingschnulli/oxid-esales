@@ -26,7 +26,7 @@
     
     [{assign var="canonical_url" value=$oView->getCanonicalUrl()}]
     [{if $canonical_url }]<link rel="canonical" href="[{ $canonical_url }]">[{/if}]
-    <link rel="shortcut icon" href="[{ $oViewConf->getBaseDir() }]favicon.ico">
+    <link rel="shortcut icon" href="[{ $oViewConf->getImageUrl() }]favicon.ico">
     <link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid.css">
     <!--[if IE 8]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid_ie8.css"><![endif]-->
     <!--[if IE 7]><link rel="stylesheet" type="text/css" href="[{ $oViewConf->getResourceUrl() }]oxid_ie7.css"><![endif]-->

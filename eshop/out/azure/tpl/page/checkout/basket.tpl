@@ -1,4 +1,3 @@
-[{oxstyle include="css/checkout.css"}]
 [{capture append="oxidBlock_content"}]
 
 [{* ordering steps *}]
@@ -37,8 +36,8 @@
 
     [{if $oViewConf->getShowVouchers()}]
         [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
-        [{oxscript add="$('form.oxValidate').oxInputValidator();"}]
-        <form name="voucher" action="[{ $oViewConf->getSelfActionLink() }]" method="post" class="left oxValidate">
+        [{oxscript add="$('form.js-oxValidate').oxInputValidator();"}]
+        <form name="voucher" action="[{ $oViewConf->getSelfActionLink() }]" method="post" class="js-oxValidate">
             <div class="couponBox" id="coupon">
                 [{foreach from=$Errors.basket item=oEr key=key}]
                     [{if $oEr->getErrorClassType() == 'oxVoucherException'}]
@@ -53,10 +52,10 @@
                 [{ $oViewConf->getHiddenSid() }]
                 <input type="hidden" name="cl" value="basket">
                 <input type="hidden" name="fnc" value="addVoucher">
-                <input type="text" size="20" name="voucherNr" class="textbox oxValidate oxValidate_notEmpty">
+                <input type="text" size="20" name="voucherNr" class="textbox js-oxValidate js-oxValidate_notEmpty">
                 <button type="submit" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_SUBMITCOUPON" }]</button>
                 <p class="oxValidateError">
-                    <span class="oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+                    <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
                 </p>
                 <input type="hidden" name="CustomError" value='basket'>
             </div>

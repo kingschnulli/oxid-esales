@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: article_extend.php 36259 2011-06-13 13:27:42Z linas.kukulskis $
  */
 
 /**
@@ -73,6 +73,8 @@ class Article_Extend extends oxAdminDetails
             if ( $oArticle->oxarticles__oxparentid->value) {
                 $oParentArticle = oxNew( 'oxarticle' );
                 $oParentArticle->load( $oArticle->oxarticles__oxparentid->value);
+                $oArticle->oxarticles__oxnonmaterial = new oxField( $oParentArticle->oxarticles__oxnonmaterial->value );
+                $oArticle->oxarticles__oxfreeshipping = new oxField( $oParentArticle->oxarticles__oxfreeshipping->value );
                 $this->_aViewData["parentarticle"] = $oParentArticle;
                 $this->_aViewData["oxparentid"]    = $oArticle->oxarticles__oxparentid->value;
             }

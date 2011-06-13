@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 34517 2011-04-09 09:12:28Z sarunas $
+ * @version   SVN: $Id: oxbasket.php 36246 2011-06-13 13:25:13Z linas.kukulskis $
  */
 
 /**
@@ -2354,7 +2354,11 @@ class oxBasket extends oxSuperCfg
         $sConfValue = $this->getConfig()->getConfigParam( 'iMinOrderPrice' );
         if ( is_numeric($sConfValue) && $this->getProductsCount() ) {
             $dMinOrderPrice = oxPrice::getPriceInActCurrency( ( int ) $sConfValue );
-            $blIsBelowMinOrderPrice = ($dMinOrderPrice > $this->getDiscountedProductsBruttoPrice());
+            $dNotDiscountedProductPrice = 0;
+            if ( $oPrice = $this->getNotDiscountProductsPrice() ) {
+                $dNotDiscountedProductPrice = $oPrice->getBruttoSum();
+            }
+            $blIsBelowMinOrderPrice = ($dMinOrderPrice > ($this->getDiscountedProductsBruttoPrice() + $dNotDiscountedProductPrice));
         }
 
         return $blIsBelowMinOrderPrice;

@@ -454,6 +454,12 @@ $aLang = array(
 'TS_RATINGS'                                                      => "Trusted Shops Kundenbewertung",
 'TS_RATINGS_RATEUS'                                               => "Bitte nehmen Sie sich eine Minute, um unseren Shop zu bewerten.",
 
+'FORM_USER_CHECKOUT_CHANGE_NEXTSTEP'							  => "Weiter zum nächsten Schritt",
+'FORM_USER_CHECKOUT_CHANGE_BACKSTEP'							  => "Zurück",
+'FORM_USER_CHECKOUT_NOREGISTRATION_NEXTSTEP'			    	  => "Weiter zum nächsten Schritt",
+'FORM_USER_CHECKOUT_NOREGISTRATION_BACKSTEP'			    	  => "Zurück",
+'FORM_USER_CHECKOUT_REGISTRATION_NEXTSTEP'					      => "Weiter zum nächsten Schritt",
+'FORM_USER_CHECKOUT_REGISTRATION_BACKSTEP'					      => "Zurück",
 
 'FORM_USER_PASSWORD_OLDPASSWORD'                                  => "Altes Passwort:",
 'FORM_USER_PASSWORD_NEWPASSWORD'                                  => "Neues Passwort:",
@@ -935,6 +941,8 @@ $aLang = array(
 'PAGE_WISHLIST_PRODUCTS_WISHLISTEMPTY'                            => "Der Wunschzettel ist leer.",
 'PAGE_WISHLIST_PRODUCTS_PRODUCTS1'                                => "Diese Artikel hat sich",
 'PAGE_WISHLIST_PRODUCTS_PRODUCTS2'                                => " gewünscht. Wenn Sie ihr/ihm eine Freude machen wollen, dann kaufen Sie einen oder mehrere von diesen Artikeln.",
+
+'WIDGET_FOOTER_MANUFACTURERS_MORE'								  => "Mehr...",
 
 'WIDGET_MANUFACTURERS_SLIDER_VIEWALL'                             => "Alle Produkte ansehen",
 'WIDGET_MANUFACTURERS_SLIDER_OURBRANDS'                           => "unsere Marken",

@@ -1,5 +1,5 @@
 <form action="[{ $oViewConf->getSelfActionLink() }]" name="saverecommlist" method="post">
-    <div class="listmaniaAdd clear">
+    <div class="clear">
         [{ $oViewConf->getHiddenSid() }]
         [{ $oViewConf->getNavFormParams() }]
         <input type="hidden" name="fnc" value="saveRecommList">

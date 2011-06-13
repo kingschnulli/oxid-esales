@@ -5,7 +5,8 @@
     box-shadow: 2px 2px 5px #666;
 }
 
-.bottomShadow, .box h3, .box h2, .pageHead, .sectionHead {
+/* bottom shadow */
+.box h3, .box h2, .pageHead, .sectionHead {
     -moz-box-shadow: 0px 3px 5px -1.3px #555;
     -webkit-box-shadow: 0px 3px 5px -1.3px #555;
     box-shadow: 0px 3px 5px -2px #555;
@@ -35,7 +36,7 @@
     box-shadow: 1px 1px 9px 2px #000;
 }
 
-.lightGlowShadow, .promoBox {
+.promoBox {
     -moz-box-shadow: 1px 1px 6px 1px #222;
     -webkit-box-shadow: 1px 1px 6px 2px #222;
     box-shadow: 1px 1px 6px 2px #222;
@@ -47,7 +48,7 @@
     box-shadow: 4px 0px 4px -1.5px #555555;
 }
 
-.leftShadow, .itemSlider .nextItem {
+.itemSlider .nextItem {
     -webkit-box-shadow: -4px 0px 4px -1.5px #555555;
     -moz-box-shadow: -4px 0px 4px -1.5px #555555;
     box-shadow: -4px 0px 4px -1.5px #555555;
@@ -55,7 +56,7 @@
 
 /******/
 /*** ROUNDED CORNERS -> ***/
-.corners, .button, .input, .textbox, .areabox, .checkbox, .submitButton, .pictureView, .widgetBox, .dropDown ul, div.anythingSlider .arrow, .promoBox {
+.corners, .button, .input, .textbox, .areabox, .checkbox, .submitButton, .widgetBox, .dropDown ul, div.anythingSlider .arrow, .promoBox {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     -khtml-border-radius: 4px;
@@ -76,7 +77,7 @@
     border-radius: 3px;
 }
 
-.topRound, .tabs li, .thumbNav, #navigation ul li:first-child, #currencies li:first-child a, #languages li:first-child a, .flyoutMenu li:first-child a, .dropDown li:first-child a {
+.tabs li, .thumbNav, #navigation ul li:first-child, #currencies li:first-child a, #languages li:first-child a, .flyoutMenu li:first-child a, .dropDown li:first-child a {
     -moz-border-radius: 3px 3px 0px 0px;
     -webkit-border-radius: 3px 3px 0px 0px;
     -khtml-border-radius: 3px 3px 0px 0px;
@@ -97,14 +98,14 @@
     border-radius: 0px 0px 3px 3px;
 }
 
-.leftRound, .promoBox strong.promoPrice {
+.promoBox strong.promoPrice {
     -moz-border-radius: 3px 0px 0px 3px;
     -webkit-border-radius: 3px 0px 0px 3px;
     -khtml-border-radius: 3px 0px 0px 3px;
     border-radius: 3px 0px 0px 3px;
 }
 
-.rightRound, .promoBox strong.promoTitle {
+.promoBox strong.promoTitle {
     -moz-border-radius: 0px 3px 3px 0px;
     -webkit-border-radius: 0px 3px 3px 0px;
     -khtml-border-radius: 0px 3px 3px 0px;
@@ -114,14 +115,14 @@
 /******/
 /*** GRADIENTS -> ***/
 /* Blue */
-.FXgradBlue,.gridView .titleBox,.gridView .priceBox, .box h3, .box h2, .sectionHead, .pageHead, #currencies a.selected, #languages a.selected, .flyoutMenu a.selected, .dropDown a.selected, .thumbNav a.cur, .thumbNav a.cur:hover, .promoBox strong.promoPrice, .itemSlider .prevItem, .itemSlider .nextItem, .specBox h3{
+.gridView .titleBox,.gridView .priceBox, .box h3, .box h2, .sectionHead, .pageHead, #currencies a.selected, #languages a.selected, .flyoutMenu a.selected, .dropDown a.selected, .thumbNav a.cur, .thumbNav a.cur:hover, .promoBox strong.promoPrice, .itemSlider .prevItem, .itemSlider .nextItem, .specBox h3{
     background: #59b2c7 url(../bg/svg/grad_blue.svg);
     background: -moz-linear-gradient(bottom, #18778e, #389cb4, #adefff);
     background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #18778e), color-stop(50%, #389cb4), color-stop(100%, #adefff));
     -pie-background: linear-gradient(90deg, #18778E, #a9edfd);
 }
 
-.FXgradBlueLight,
+
 .lightHead,
 h2.lightHead,
 h3.lightHead {
@@ -142,7 +143,6 @@ h3.lightHead {
 
 
 /* Grey */
-.FXgradGrey,
 .promoBox strong.promoTitle,
 .specBoxTitles a.title{
     background: #d1d8db url(../bg/svg/grad_grey.svg);

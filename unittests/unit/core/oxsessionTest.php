@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 33895 2011-03-22 16:20:52Z arvydas.vapsva $
+ * @version   SVN: $Id: oxsessionTest.php 36271 2011-06-13 13:30:37Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1520,5 +1520,15 @@ class Unit_Core_oxsessionTest extends OxidTestCase
 
         $oSubj->setForceNewSession();
         $this->assertTrue( $oSubj->getNonPublicVar("_blForceNewSession") );
+    }
+
+    public function testIsSessionStarted()
+    {
+        $oSession = $this->getProxyClass( "oxSession" );
+        $this->assertFalse( $oSession->isSessionStarted() );
+
+        // thats only way to test, cant wrap native "session_start()" function
+        $oSession->setNonPublicVar( "_blStarted", true );
+        $this->assertTrue( $oSession->isSessionStarted() );
     }
 }

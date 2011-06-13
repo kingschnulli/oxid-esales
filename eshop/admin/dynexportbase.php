@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbase.php 35507 2011-05-20 12:00:17Z vilma $
+ * @version   SVN: $Id: dynexportbase.php 36207 2011-06-13 13:16:51Z linas.kukulskis $
  */
 
 /**
@@ -160,8 +160,12 @@ class DynExportBase extends oxAdminDetails
         $this->_aViewData["cattree"] = oxNew( "oxCategoryList" );
         $this->_aViewData["cattree"]->buildList( $this->getConfig()->getConfigParam( 'bl_perfLoadCatTree' ) );
 
-        $oLang = oxNew( 'oxLang' );
-        $this->_aViewData['aLangs'] = $oLang->getLanguageArray();
+        $oLangObj = oxNew( 'oxLang' );
+        $aLangs = $oLangObj->getLanguageArray();
+        foreach ( $aLangs as $id => $language) {
+            $language->selected = ($id == $this->_iEditLang);
+            $this->_aViewData["aLangs"][$id] = clone $language;
+        }
     }
 
     /**
@@ -625,7 +629,10 @@ class DynExportBase extends oxAdminDetails
     {
         $oDB = oxDb::getDb();
 
-        $iExpLang = oxSession::getVar( "iExportLanguage" );
+        $iExpLang = oxConfig::getParameter( "iExportLanguage" );
+        if (!isset($iExpLang)) {
+            $iExpLang = oxSession::getVar( "iExportLanguage" );
+        }
 
         $oArticle = oxNew( 'oxarticle' );
         $oArticle->setLanguage( $iExpLang );

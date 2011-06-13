@@ -34,7 +34,7 @@
 
       [{if $oView->getManufacturerlist()|count}]
           [{capture append="oxidBlock_footer"}]
-          <dl class="manufacturers" id="footerManufacturers">
+          <dl id="footerManufacturers">
             <dt>[{oxmultilang ident="FOOTER_MANUFACTURERS" }]</dt>
             <dd>[{include file="widget/footer/manufacturers.tpl" manufacturers=$oView->getManufacturerlist()}]</dd>
           </dl>
@@ -43,7 +43,7 @@
 
       [{if $oView->getVendorlist()|count}]
           [{capture append="oxidBlock_footer" }]
-          <dl class="vendors" id="footerVendors">
+          <dl id="footerVendors">
             <dt>[{oxmultilang ident="FOOTER_DISTRIBUTORS" }]</dt>
             <dd>[{include file="widget/footer/vendors.tpl" vendors=$oView->getVendorlist()}]</dd>
           </dl>
@@ -75,7 +75,7 @@
 [{if $oView->isRootCatChanged()}]
     [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
     [{oxscript add="$( '#scRootCatChanged' ).oxModalPopup({ target: '#scRootCatChanged', openDialog: true});"}]
-    <div id="scRootCatChanged" class="popupBox corners FXgradGreyLight glowShadow overlayPop">
+    <div id="scRootCatChanged" class="popupBox corners FXgradGreyLight glowShadow">
         [{include file="form/privatesales/basketexcl.tpl"}]
     </div>
 [{/if}]
