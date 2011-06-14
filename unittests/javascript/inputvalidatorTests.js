@@ -149,7 +149,7 @@ test('inputValidation()', function() {
     var sHTMLelement =
             '<li class="oxInValid">' +
                         '<label>label 1 </label>' +
-                        '<input type="text" class="oxValidate oxValidate_notEmpty oxValidate_email">' +
+                        '<input type="text" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email">' +
                         '<p class="oxValidateError" style="display: block;">' +
                             '<span class="oxError_notEmpty" style="display: inline;"> not empty error message </span>' +
                             '<span class="oxError_email" style="display: inline;"> bad email error message </span>' +
@@ -160,8 +160,6 @@ test('inputValidation()', function() {
     var oInput = oFormElement.children("input");
 
     equals( oxInputValidator.inputValidation( oInput ) , false, "Not valid element: empty");
-
-
 
     oInput.val('aaa');
     equals( oxInputValidator.inputValidation( oInput ) , false, "Not valid element: not empty but not email");
