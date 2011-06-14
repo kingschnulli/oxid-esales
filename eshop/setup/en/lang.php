@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34941 2011-04-27 07:09:28Z arvydas.vapsva $
+ * @version   SVN: $Id: lang.php 36313 2011-06-14 09:43:17Z arunas.paskevicius $
  */
 
 $aLang = array(
@@ -124,7 +124,7 @@ $aLang = array(
 'BUTTON_PROCEED_INSTALL'                        => "Proceed with setup",
 
 'STEP_2_TITLE'                                  => "License conditions",
-'BUTTON_RADIO_LICENCE_ACCEPT'                   => "I acceppt license conditions.",
+'BUTTON_RADIO_LICENCE_ACCEPT'                   => "I accept license conditions.",
 'BUTTON_RADIO_LICENCE_NOT_ACCEPT'               => "I do not accept license conditions.",
 'BUTTON_LICENCE'                                => "Continue",
 
