@@ -6,7 +6,7 @@
 
             var oSelf = $(this);
 
-            $(".tagError").hide();
+            $("p.tagError").hide();
 
             oxAjax.ajax(
                 $("#tagsForm"),
@@ -23,7 +23,7 @@
         },
 
         saveTag : function() {
-            $(".tagError").hide();
+            $("p.tagError").hide();
 
             oxAjax.ajax(
                 $("#tagsForm"),
@@ -34,7 +34,7 @@
                         if ( response ) {
                             $(".tagCloud").append("<span class='taggedText'>" + params["newTags"] + "</span> ");
                         } else {
-                            $(".tagError").show();
+                            $("p.tagError").show();
                         }
                     }
                 }

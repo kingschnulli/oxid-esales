@@ -41,7 +41,6 @@
     [{capture append="tabsContent"}]<div id="media">[{include file="page/details/inc/media.tpl"}]</div>[{/capture}]
 [{/if}]
 
-
 [{if $oView->isActive('FbComments') && $oViewConf->getFbAppId()}]
     [{capture append="FBtabs"}]<a href="#productFbComments">[{oxmultilang ident="FACEBOOK_COMMENTS"}]</a>[{/capture}]
     [{capture append="FBtabsContent"}]<div id="productFbComments">[{include file="widget/facebook/comments.tpl"}]</div>[{/capture}]

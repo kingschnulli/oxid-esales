@@ -69,7 +69,7 @@
 
                     if ( $( oInput ).hasClass( oOptions.metodValidateLength ) && blValidInput ) {
 
-                        var iLength = self.getLength( $( oInput ).parent(oOptions.listItem).parent(oOptions.list).parent(oOptions.form ));
+                        var iLength = self.getLength( $( oInput ).closest(oOptions.form ));
 
                         if( $( oInput ).val() ) {
                             self.manageErrorMessage(oInput, self.hasLength( $( oInput ).val(), iLength), oOptions.errorMessageShort);
@@ -220,7 +220,6 @@
 
                 return $( oOptions.idPasswordLength , oObject).val();
             },
-
             /**
              * Checks length
              *

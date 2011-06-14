@@ -669,11 +669,11 @@ a.textLink {
 }
 
 /* --- RSS link ----------------------------- */
-.rss {
+a.rss {
     float: right;
 }
 
-.rss img {
+a.rss img {
     position: relative;
     z-index: 11;
 }
@@ -681,9 +681,6 @@ a.textLink {
 a.rss span {
     visibility: hidden;
     display: block;
-}
-
-.rss span {
     position: absolute;
     white-space: nowrap;
     right: 5px;
@@ -694,7 +691,7 @@ a.rss span {
     height: 22px;
 }
 
-.rss:hover span {
+a.rss:hover span {
     visibility: visible;
 }
 
@@ -736,41 +733,42 @@ h3.lightHead {
 }
 
 /* --- Reviews ------------------------------- */
-.reviews h4 {
+div.reviews h4 {
     margin-bottom: 5px;
 }
 
-.reviews .rating {
+div.reviews ul.rating {
     margin: 0 0 10px 0;
 }
 
-.reviews .areabox {
+div.reviews textarea.areabox {
     width: 95%;
     height: 120px;
     margin-bottom: 10px;
 }
 
-.reviews form {
+div.reviews form {
     margin-bottom: 20px;
 }
 
-.reviews dt {
+div.reviews dt {
     display: block;
     border-top: 1px solid #b4b8b8;
     padding: 10px 0 5px;
     margin-top: 10px;
 }
 
-.reviews dt:first-child {
+div.reviews dt:first-child {
     margin-top: 5px;
 }
 
-.reviews dt span, .reviews dt ul {
+div.reviews dt span,
+div.reviews dt ul {
     float: left;
     margin-right: 10px;
 }
 
-.reviews dd {
+div.reviews dd {
     line-height: 18px;
 }
 
@@ -778,8 +776,8 @@ h3.lightHead {
     display: none;
 }
 
-/* --- Article details  ----------- */
-.tabs {
+/* --- Article details tabs  ----------- */
+ul.tabs {
     position: relative;
     z-index: 2;
     overflow: hidden;
@@ -787,7 +785,7 @@ h3.lightHead {
     padding: 0;
 }
 
-.tabs li {
+ul.tabs li {
     float: left;
     padding: 0;
     list-style: none;
@@ -803,7 +801,7 @@ h3.lightHead {
     text-shadow: 0px 1px 1px #fff;
 }
 
-.tabs li.ui-state-active {
+ul.tabs li.ui-state-active {
     background: #fff;
     border-bottom-color: #fff;
     border-top-color: #c9d3d7;
@@ -811,16 +809,20 @@ h3.lightHead {
     z-index: 2;
 }
 
-.tabs css3-container:first-child + li, .tabs li:first-child {
+ul.tabs css3-container:first-child + li, .tabs li:first-child {
     margin-left: 0;
 }
 
-.tabs li.ui-state-active:first-child, .tabs css3-container:first-child + li.ui-state-active {
+ul.tabs li.ui-state-active:first-child, .tabs css3-container:first-child + li.ui-state-active {
     border-left-color: #c9d3d7;
 }
 
-.tabs a {
+ul.tabs a {
     color: #515353;
+}
+
+div.ui-tabs-hide {
+    display: none;
 }
 
 /* --- BUTTONS  ------------------- */
@@ -1220,13 +1222,13 @@ a.submitButton {
 #navigation > li > ul {margin-top:6px;}
 
 /* --- Search box ------------------------------- */
-.searchBox {
+div.searchBox {
     position: absolute;
     right: 67px;
     top: 71px;
 }
 
-.searchBox .textbox {
+div.searchBox input.textbox {
     width: 122px;
     padding-left: 4px;
     color: #b4b8b8;
@@ -1234,7 +1236,7 @@ a.submitButton {
     margin:2px 3px 0 0;
 }
 
-.searchBox .searchSubmit {
+div.searchBox input.searchSubmit {
     background: url(../../img/search-icon.png) no-repeat 3px;
     border: none;
     cursor: pointer;
@@ -1243,7 +1245,7 @@ a.submitButton {
     float:left;
 }
 
-.searchBox .textbox:focus {
+div.searchBox input.textbox:focus {
     color: #333;
 }
 
@@ -1352,52 +1354,52 @@ a.readMore:hover {
 
 /* --- Tags --------------------------------- */
 
-.tagCloud {
- line-height: 1.5em;
+p.tagCloud, div.tagCloud  {
+    line-height: 1.5em;
 }
 
-.tagitem_100 {
- font-size:12px;
+a.tagitem_100 {
+    font-size:12px;
 }
 
-.tagitem_200 {
- font-size:14px;
+a.tagitem_200 {
+    font-size:14px;
 }
 
-.tagitem_300 {
- font-size:16px;
+a.tagitem_300 {
+    font-size:16px;
 }
 
-.tagitem_400 {
- font-size:18px;
+a.tagitem_400 {
+    font-size:18px;
 }
 
-.tagitem_500 {
- font-size:20px;
+a.tagitem_500 {
+    font-size:20px;
 }
 
-.tagitem_600 {
- font-size:22px;
+a.tagitem_600 {
+    font-size:22px;
 }
 
-.tagitem_700 {
- font-size:24px;
+a.tagitem_700 {
+    font-size:24px;
 }
 
-.tagitem_800 {
- font-size:26px;
+a.tagitem_800 {
+    font-size:26px;
 }
 
-.tagitem_900 {
- font-size:28px
+a.tagitem_900 {
+    font-size:28px
 }
 
-.taggedText {
- color: #a2a9ab;
+span.taggedText {
+    color: #a2a9ab;
 }
 
-.tagError {
- display: none;
+p.tagError {
+    display: none;
 }
 
 a.tagText{
@@ -1405,8 +1407,8 @@ a.tagText{
     display:inline-block;
     line-height:12px;
 }
-a.
-tagText img{
+
+a.tagText img{
     margin-right:3px;
     vertical-align:top;
 }
@@ -2697,10 +2699,6 @@ a.fb_button_simple {
 
 .persparamBox label {
     margin: 2px 5px 0 0;
-}
-/* Used for tab content displaying */
-.ui-tabs-hide {
-    display: none;
 }
 
 /* --- articles dertails atributes ------------ */
@@ -4188,7 +4186,7 @@ div.information .selectorsBox {
 }
 
 /* --- shop lupe ------------------------------ */
-.shoplupe {
+p.shoplupe {
     padding-top:15px;
     text-align: center;
 }
