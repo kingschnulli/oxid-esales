@@ -921,26 +921,6 @@ a.submitButton {
     padding-left: 15px;
 }
 
-/******/
-/*.fx-gradient {
-    background: #19798f;
-    background: -moz-linear-gradient(top, #adefff, #19798f); background: -webkit-gradient(linear, left top, left bottom, from(#adefff), to(#19798f)); -pie-background: linear-gradient(90deg, #19798f, #adefff); }
-.fx-gradient2  {background: #e0f1f5; background: -moz-linear-gradient(top, #e0f1f5, #b9dde6); background: -webkit-gradient(linear, left top, left bottom, from(#e0f1f5), to(#b9dde6)); -pie-background: linear-gradient(90deg, #e0f1f5, #b9dde6); }
-.fx-gradient-3 {background: #d0d5d8; background: -moz-linear-gradient(top, #f9f9f9, #a9a9a9); background: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#a9a9a9)); -pie-background: linear-gradient(90deg, #a9a9a9, #f9f9f9); }
-.fx-gradient-3:hover {background: #f67402; background: -moz-linear-gradient(top, #ff8604, #eb6105); background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6105)); -pie-background: linear-gradient(90deg, #eb6105, #ff8604); }
-.fx-gradient-4 {background: #389cb4; background: -moz-linear-gradient(top, #adefff, #18778e); background: -webkit-gradient(linear, left top, left bottom, from(#adefff), to(#18778e)); -pie-background: linear-gradient(90deg, #18778e, #adefff); }
-.fx-gradient-4:hover {background: #f67402; background: -moz-linear-gradient(top, #ff8604, #eb6105); background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6105)); -pie-background: linear-gradient(90deg, #eb6105, #ff8604); }
-.fx-gradient-5 {background: #389cb4; background: -moz-linear-gradient(top, #adefff, #18778e); background: -webkit-gradient(linear, left top, left bottom, from(#adefff), to(#18778e)); -pie-background: linear-gradient(90deg, #18778e, #adefff); }
-.fx-gradient-6{background: #f67402; background: -moz-linear-gradient(top, #ff8604, #eb6005); background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6005)); -pie-background: linear-gradient(90deg, #eb6005, #ff8604); }
-
-.fx-shadow-gradient, .fx-shadow-gradient-2 {margin: -2px; height: 9px; background: transparent url(../bg/shadow.png) repeat-x; z-index:500; position: relative; }
-.fx-shadow-gradient-2 {margin: 1px;height: 6px; background: transparent url(bg/shadow2.png) repeat-x;}
-
-.fx-shadow-top    {-moz-box-shadow: 0px -2px 5px #333; -webkit-box-shadow: 1px 1px 1px #444; box-shadow: 1px 1px 4px #444;}
-.fx-shadow-bottom {-moz-box-shadow: 0px 2px 5px #333; -webkit-box-shadow: 1px 1px 1px #444; box-shadow: 1px 1px 4px #444;}
-*/
-
-
 /* --- HEADER ELEMENTS ---------------- */
 #logo {
     margin: 19px 0 8px 0;
@@ -1927,7 +1907,6 @@ a.tagText img{
     background:#f67402;
     background: -moz-linear-gradient(top, #ff8604, #eb6005);
     background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6005));
-    -pie-background: linear-gradient(90deg, #ff8604, #eb6005);
     color:#fff;
 }
 
@@ -1939,7 +1918,6 @@ a.tagText img{
     background:#f67402;
     background:-moz-linear-gradient(top, #ff8604, #eb6005);
     background:-webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6005));
-    -pie-background:linear-gradient(90deg, #ff8604, #eb6005);
     color:#fff;
 }
 
@@ -1951,7 +1929,6 @@ a.tagText img{
     background:#389cb4;
     background:-moz-linear-gradient(top, #adefff, #18778e);
     background:-webkit-gradient(linear, left top, left bottom, from(#adefff), to(#18778e));
-    -pie-background: linear-gradient(90deg, #adefff, #18778e);
     color:#fff;
 }
 
@@ -4156,6 +4133,15 @@ div.information .selectorsBox {
 }
 
 /* ------- Checkout AGB conditions links --------------- */
+div.agbInner {
+    width:500px;
+    float:left;
+}
+
+div.agbButton  {
+    float:right;
+}
+
 .agb a {
     color: #1d7e96;
 }
@@ -4165,9 +4151,10 @@ div.information .selectorsBox {
     text-decoration:none;
 }
 
-.agb p.errorMsg  {
+.agb p.errorMsg, .agbInner p.errorMsg  {
     color: #ff0000;
     display: none;
+    margin: 0px;
 }
 
 /* ---- ajax loading icon -----------------------------*/

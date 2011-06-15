@@ -21,7 +21,7 @@
         [{oxscript include="js/libs/scrollpane/jscrollpane.min.js"}]
         [{oxscript include="js/libs/scrollpane/mousewheel.js"}]
         [{oxscript include="js/libs/scrollpane/mwheelIntent.js"}]
-        [{oxstyle include="css/jquery.jscrollpane.css"}]    
+        [{oxstyle include="css/libs/jscrollpane.css"}]
     [{/if}]
     [{oxid_include_dynamic file="widget/minibasket/minibasket.tpl"}]
     [{include file="widget/header/search.tpl"}]
