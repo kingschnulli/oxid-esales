@@ -1,5 +1,5 @@
      <input type="hidden" id="passwordLength" value="[{$oViewConf->getPasswordLength()}]">
-    <li [{if $aErrors}]class="oxError"[{/if}]>
+    <li [{if $aErrors.oxuser__oxusername}]class="oxInValid"[{/if}]>
         <label class="req">[{ oxmultilang ident="FORM_FIELDSET_USER_ACCOUNT_EMAIL" }]</label>
         <input id="userLoginName" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email" type="text" name="lgn_usr" value="[{ $oView->getActiveUsername()}]" size="37" >
         <p class="oxValidateError">
@@ -17,7 +17,7 @@
             <span class="js-oxError_match">[{ oxmultilang ident="EXCEPTION_USER_PWDDONTMATCH" }]</span>
         </p>
     </li>
-    <li [{if $aErrors}]class="oxError"[{/if}]>
+    <li [{if $aErrors.oxuser__oxpassword}]class="oxInValid"[{/if}]>
         <label class="req">[{ oxmultilang ident="FORM_FIELDSET_USER_ACCOUNT_CONFIRMPWD" }]</label>
         <input id="userPasswordConfirm" class="textbox js-oxValidate js-oxValidate_notEmpty js-oxValidate_length js-oxValidate_match" type="password" name="lgn_pwd2" value="[{$lgn_pwd2}]" size="37">
         <p class="oxValidateError">

@@ -3321,13 +3321,9 @@ span.verificationCode {
     float: none;
     display: inline;
 }
-
-.oxInValid label {
-    color: #ff0000;
-}
-
+.oxInValid label,
 .oxInValid p {
-    color: red;
+    color: #ff0000;
 }
 
 .oxInValid input,
@@ -3342,6 +3338,10 @@ span.verificationCode {
     border-width: 1px;
 }
 
+.oxInValid .oxValidateError,
+.oxInValid .oxValidateError .js-oxError_postError {
+    display:block;	
+}
 /* --- Promotions Slider ------------------------ */
 .promoShadow {
     position: absolute;
