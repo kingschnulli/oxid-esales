@@ -55,8 +55,9 @@
                 var blValidInput = true;
 
                     if ( $( oInput ).hasClass( oOptions.metodValidateNotEmpty ) && blValidInput ) {
-                        self.manageErrorMessage(oInput, $( oInput ).val() , oOptions.errorMessageNotEmpty);
-                        blValidInput = $( oInput ).val() ? true : false;
+                    	var sValue = $.trim( $( oInput ).val());
+                        self.manageErrorMessage(oInput, sValue , oOptions.errorMessageNotEmpty);
+                        blValidInput = sValue ? true : false;
                     }
 
                     if ( $( oInput ).hasClass( oOptions.metodValidateEmail ) && blValidInput ) {

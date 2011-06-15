@@ -93,6 +93,8 @@
     [{/if}]
 
     [{oxscript}]
+    [{oxid_include_dynamic file="widget/dynscript.tpl"}]
+
     [{foreach from=$oxidBlock_pageScript item="_block"}]
         [{$_block}]
     [{/foreach}]
