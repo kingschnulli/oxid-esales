@@ -9,7 +9,7 @@
         <input type="hidden" name="CustomError" value='user'>
         <input type="hidden" id="passwordLength" value="[{$oViewConf->getPasswordLength()}]">
     <ul class="form clear">
-        <li [{if $aErrors}]class="oxError"[{/if}]>
+        <li [{if $aErrors.oxuser__oxpassword}]class="oxInValid"[{/if}]>
             <label for="passwordOld">[{ oxmultilang ident="FORM_USER_PASSWORD_OLDPASSWORD" }]</label>
             <input type="password" id="passwordOld" name="password_old" class="js-oxValidate js-oxValidate_notEmpty textbox">
             <p class="oxValidateError">
@@ -17,7 +17,7 @@
                 [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxpassword}]
             </p>
         </li>
-        <li [{if $aErrors}]class="oxError"[{/if}]>
+        <li [{if $aErrors.oxuser__oxpassword}]class="oxInValid"[{/if}]>
             <label for="passwordNew">[{ oxmultilang ident="FORM_USER_PASSWORD_NEWPASSWORD" }]</label>
             <input type="password" id="passwordNew" name="password_new" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_length js-oxValidate_match textbox">
             <p class="oxValidateError">
@@ -27,7 +27,7 @@
                 [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxpassword}]
             </p>
         </li>
-        <li [{if $aErrors}]class="oxError"[{/if}]>
+        <li [{if $aErrors.oxuser__oxpassword}]class="oxInValid"[{/if}]>
             <label for="passwordNewConfirm">[{ oxmultilang ident="FORM_USER_PASSWORD_CONFIRMPASSWORD" }]</label>
             <input type="password" id="passwordNewConfirm" name="password_new_confirm" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_length js-oxValidate_match textbox">
             <p class="oxValidateError">

@@ -1,4 +1,5 @@
 [{capture append="oxidBlock_content"}]
+    [{assign var="template_title" value="TAGS"|oxmultilangassign }]
     [{if $oView->getTagCloudManager() }]
         <h1 class="pageHead" id="tags">[{ oxmultilang ident="TAGS"}]</h1>
         <div >
@@ -10,5 +11,6 @@
             </p>
         </div>
     [{/if}]
+    [{insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 [{include file="layout/page.tpl" sidebar="Left"}]

@@ -37,7 +37,7 @@
                 <input type="hidden" name="cl" value="order">
                 <input type="hidden" name="fnc" value="[{$oView->getExecuteFnc()}]">
                 <input type="hidden" name="challenge" value="[{$challenge}]">
-                <span class="agb">
+                <div class="agbInner">
                 [{if $oView->isConfirmAGBActive()}]
                     <input type="hidden" name="ord_agb" value="0">
                     <input id="checkAgbTop" class="checkbox" type="checkbox" name="ord_agb" value="1">
@@ -51,8 +51,10 @@
                         [{ $oContent->oxcontents__oxcontent->value }]
                     [{/oxifcontent}]
                 [{/if}]
-                </span>
-                <button type="submit" class="submitButton largeButton nextStep">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_SUBMITORDER" }]</button>
+                </div>
+                <div >
+                    <button type="submit" class="submitButton largeButton nextStep">[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_SUBMITORDER" }]</button>
+                </div>
             </form>
         </div>
     [{/if}]

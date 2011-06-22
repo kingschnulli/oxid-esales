@@ -23,7 +23,7 @@
             [{/if }]
             [{assign var=sBannerPictureUrl value=$oBanner->getBannerPictureUrl() }]
             [{if $sBannerPictureUrl }]
-            <img src="[{ $sBannerPictureUrl }]" height="220" width="940">
+            <img src="[{ $sBannerPictureUrl }]" height="220" width="940" alt="[{$oBanner->oxactions__oxtitle->value}]">
             [{/if }]
             [{if $sBannerLink }]
             </a>

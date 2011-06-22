@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 34983 2011-04-27 13:55:54Z sarunas $
+ * @version   SVN: $Id: lang.php 36506 2011-06-21 13:47:07Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -1253,7 +1253,7 @@ $aLang = array(
 'SYSREQ_OPEN_SSL'                                          => 'OpenSSL',
 'SYSREQ_SOAP'                                              => 'SOAP',
 'SYSREQ_UNICODE_SUPPORT'                                   => 'UTF-8 Unterstützung',
-'SYSREQ_BUG53632'                                          => '[tr] possible issues on server due to PHP Bug #53632',
+'SYSREQ_BUG53632'                                          => 'Mögliche Probleme mit Server durch PHP Bug #53632',
 'SYSREQ_MEMORY_LIMIT'                                      => 'PHP Memory limit (min. 14MB, 30MB empfohlen)',
 'SYSREQ_DESCRIPTION_PASS'                                  => 'Erfüllt.',
 'SYSREQ_DESCRIPTION_PMIN'                                  => 'Nicht oder nur teilweise erfüllt. Dieser OXID eShop kann sich in Bereichen unerwartet verhalten.',

@@ -119,7 +119,6 @@
     background: #59b2c7 url(../bg/svg/grad_blue.svg);
     background: -moz-linear-gradient(bottom, #18778e, #389cb4, #adefff);
     background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #18778e), color-stop(50%, #389cb4), color-stop(100%, #adefff));
-    -pie-background: linear-gradient(90deg, #18778E, #a9edfd);
 }
 
 
@@ -129,7 +128,6 @@ h3.lightHead {
     background: #429db3 url(../bg/svg/grad_blue-light.svg);
     background: -moz-linear-gradient(top, #e0f1f5, #b8dde6);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #e0f1f5), color-stop(100%, #b8dde6));
-    -pie-background: linear-gradient(90deg, #b8dde6, #e0f1f5);
 }
 
 .FXgradBlueDark,
@@ -137,7 +135,6 @@ h3.lightHead {
     background: #429db3 url(../bg/svg/grad_blue-dark.svg);
     background: -moz-linear-gradient(top, #5fb7cc, #1a7990);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #5fb7cc), color-stop(100%, #1a7990));
-    -pie-background: linear-gradient(90deg, #1a7990, #5FB7CC);
 }
 
 
@@ -148,7 +145,6 @@ h3.lightHead {
     background: #d1d8db url(../bg/svg/grad_grey.svg);
     background: -moz-linear-gradient(top,  #f9fafa, #a9b1b4);
     background: -webkit-gradient(linear, left top, left bottom, from(#f9fafa), to(#a9b1b4));
-    -pie-background: linear-gradient(90deg, #a9b1b4, #f9fafa);
 }
 
 
@@ -168,7 +164,6 @@ div.anythingSlider .arrow,
     background: #d1d8db url(../bg/svg/grad_grey-light.svg);
     background: -moz-linear-gradient(top,  #ffffff, #d1d8db);
     background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#d1d8db));
-    -pie-background: linear-gradient(90deg, #d1d8db, #ffffff);
 }
 
 /* Orange */
@@ -197,6 +192,5 @@ a.viewAllHover,
     background: #ec6105 url("../bg/svg/grad_orange.svg");
     background: -moz-linear-gradient(top,  #ff8604, #ec6105);
     background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#ec6105));
-    -pie-background: linear-gradient(90deg, #ec6105, #ff8604);
 }
 /******/

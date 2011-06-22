@@ -1,4 +1,5 @@
 [{capture append="oxidBlock_content"}]
+    [{assign var="template_title" value="PAGE_GUESTBOOK_LIST_GUESTBOOK"|oxmultilangassign}]
     <h1 class="pageHead">[{ oxmultilang ident="PAGE_GUESTBOOK_LIST_GUESTBOOK" }]</h1>
     <div class="listRefine clear bottomRound">
         [{include file="widget/locator/listlocator.tpl" locator=$oView->getPageNavigation() sort=true}]
@@ -16,12 +17,14 @@
                     </dd>
                 [{/foreach}]
             [{else}]
-                <dt id="reviewName_[{$smarty.foreach.ReviewsCounter.iteration}]">
+                <dt>
                     [{oxmultilang ident="PAGE_GUESTBOOK_LIST_NOENTRYAVAILABLE"}]
                 </dt>
+                <dd></dd>
             [{/if}]
         </dl>
         [{include file="widget/locator/listlocator.tpl" locator=$oView->getPageNavigation() place="bottom"}]
     </div>
+    [{ insert name="oxid_tracker" title=$template_title }]    
 [{/capture}]
 [{include file="layout/page.tpl" sidebar="Right"}]

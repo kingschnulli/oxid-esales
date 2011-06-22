@@ -1,64 +1,4 @@
 /* IE */
-.corners,
-.button,
-.submitButton,
-.input,
-.textbox,
-#footer .list a,
-/*.fx-gradient,
-.fx-shadow-gradient,
-.fx-gradient2,
-.fx-gradient-3,
-.fx-gradient-4,
-.fx-gradient-5,
-.fx-gradient-6,*/
-#currencies a,
-#languages a,
-.box h2,
-.box h3,
-.sectionHead,
-.box ol,
-.box ul,
-.box
-.featured,
-.box li,
-.box li:hover,
-.box .content,
-.tabs li,
-.widgetBox,
-.bottomRound,
-.widgetBoxBottomRound,
-.sf-menu li.sfHover,
-.sf-menu li ul,
-a.viewAllHover,
-.pageHead,
-.counter,
-.dropDown ul,
-.pager
-.active,
-.lineBox,
-input[type = "text"],
-.itemSlider .prevItem,
-.itemSlider .nextItem,
-.specBoxTitles a.title,
-.specBox h3,
-.flyoutMenu,
-.flyoutMenu a,
-.glowShadow,
-a.viewAllHover,
-div.anythingSlider .arrow,
-.promoBox,
-.FXgradOrange,
-.titleBox,
-.priceBox,
-.featuredList a {
-    behavior: url(out/azure/src/css/PIE.htc);
-    -pie-lazy-init:true;
-}
-
-.rss {
-    display: none;
-}
 
 .button, .submitButton {
     width: 1;
@@ -71,11 +11,6 @@ h1.page {
 /* Fix for adding spacer with hasLayout (http://www.satzansatz.de/cssd/onhavinglayout.html#list) */
 #footer .list li {
     zoom: 1;
-}
-
-/* Fix for displaying CSS 3 FX on hover elements  */
-#footer .list a {
-    -pie-background: none;
 }
 
 /* Fix for positioning */

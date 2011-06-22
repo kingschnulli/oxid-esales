@@ -43,8 +43,11 @@
             $("#countdown").countdown(
                 function(count, element, container) {
                     if (count <= 1) {
+                        //alert('aa');
+                        //closing and emptying the basket
                         $(element).parents("#basketFlyout").hide();
-                        $("#countValue").replaceWith("0");
+                        $("#countValue").parent('span').remove();
+                        $("#basketFlyout").remove();
                         $("#miniBasket #minibasketIcon").unbind('mouseenter mouseleave');
                         return container.not(element);
                     }

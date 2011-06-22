@@ -106,4 +106,3 @@
     </form>
 [{/if}]
 </div>
-[{ insert name="oxid_tracker" title=$template_title }]

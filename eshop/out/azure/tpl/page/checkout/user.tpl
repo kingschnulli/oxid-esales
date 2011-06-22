@@ -1,4 +1,5 @@
 [{capture append="oxidBlock_content"}]
+[{assign var="template_title" value=""}]
 
 [{* ordering steps *}]
 [{include file="page/checkout/inc/steps.tpl" active=2 }]
@@ -18,6 +19,6 @@
 [{if $oxcmp_user}]
     [{include file="form/user_checkout_change.tpl"}]
 [{/if}]
-
+[{ insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 [{include file="layout/page.tpl"}]

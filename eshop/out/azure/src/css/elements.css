@@ -669,11 +669,11 @@ a.textLink {
 }
 
 /* --- RSS link ----------------------------- */
-.rss {
+a.rss {
     float: right;
 }
 
-.rss img {
+a.rss img {
     position: relative;
     z-index: 11;
 }
@@ -681,9 +681,6 @@ a.textLink {
 a.rss span {
     visibility: hidden;
     display: block;
-}
-
-.rss span {
     position: absolute;
     white-space: nowrap;
     right: 5px;
@@ -694,7 +691,7 @@ a.rss span {
     height: 22px;
 }
 
-.rss:hover span {
+a.rss:hover span {
     visibility: visible;
 }
 
@@ -736,41 +733,42 @@ h3.lightHead {
 }
 
 /* --- Reviews ------------------------------- */
-.reviews h4 {
+div.reviews h4 {
     margin-bottom: 5px;
 }
 
-.reviews .rating {
+div.reviews ul.rating {
     margin: 0 0 10px 0;
 }
 
-.reviews .areabox {
+div.reviews textarea.areabox {
     width: 95%;
     height: 120px;
     margin-bottom: 10px;
 }
 
-.reviews form {
+div.reviews form {
     margin-bottom: 20px;
 }
 
-.reviews dt {
+div.reviews dt {
     display: block;
     border-top: 1px solid #b4b8b8;
     padding: 10px 0 5px;
     margin-top: 10px;
 }
 
-.reviews dt:first-child {
+div.reviews dt:first-child {
     margin-top: 5px;
 }
 
-.reviews dt span, .reviews dt ul {
+div.reviews dt span,
+div.reviews dt ul {
     float: left;
     margin-right: 10px;
 }
 
-.reviews dd {
+div.reviews dd {
     line-height: 18px;
 }
 
@@ -778,8 +776,8 @@ h3.lightHead {
     display: none;
 }
 
-/* --- Article details  ----------- */
-.tabs {
+/* --- Article details tabs  ----------- */
+ul.tabs {
     position: relative;
     z-index: 2;
     overflow: hidden;
@@ -787,7 +785,7 @@ h3.lightHead {
     padding: 0;
 }
 
-.tabs li {
+ul.tabs li {
     float: left;
     padding: 0;
     list-style: none;
@@ -803,7 +801,7 @@ h3.lightHead {
     text-shadow: 0px 1px 1px #fff;
 }
 
-.tabs li.ui-state-active {
+ul.tabs li.ui-state-active {
     background: #fff;
     border-bottom-color: #fff;
     border-top-color: #c9d3d7;
@@ -811,16 +809,20 @@ h3.lightHead {
     z-index: 2;
 }
 
-.tabs css3-container:first-child + li, .tabs li:first-child {
+ul.tabs css3-container:first-child + li, .tabs li:first-child {
     margin-left: 0;
 }
 
-.tabs li.ui-state-active:first-child, .tabs css3-container:first-child + li.ui-state-active {
+ul.tabs li.ui-state-active:first-child, .tabs css3-container:first-child + li.ui-state-active {
     border-left-color: #c9d3d7;
 }
 
-.tabs a {
+ul.tabs a {
     color: #515353;
+}
+
+div.ui-tabs-hide {
+    display: none;
 }
 
 /* --- BUTTONS  ------------------- */
@@ -836,7 +838,7 @@ button {
     text-align: center;
 }
 
-.submitButton, {
+.submitButton {
     text-shadow: 0px -1px 0px #000;
     padding: 0 10px 1px 10px;
     font-size: 11px;
@@ -918,26 +920,6 @@ a.submitButton {
     background: url(../../img/remove.png) no-repeat 0 1px;
     padding-left: 15px;
 }
-
-/******/
-/*.fx-gradient {
-    background: #19798f;
-    background: -moz-linear-gradient(top, #adefff, #19798f); background: -webkit-gradient(linear, left top, left bottom, from(#adefff), to(#19798f)); -pie-background: linear-gradient(90deg, #19798f, #adefff); }
-.fx-gradient2  {background: #e0f1f5; background: -moz-linear-gradient(top, #e0f1f5, #b9dde6); background: -webkit-gradient(linear, left top, left bottom, from(#e0f1f5), to(#b9dde6)); -pie-background: linear-gradient(90deg, #e0f1f5, #b9dde6); }
-.fx-gradient-3 {background: #d0d5d8; background: -moz-linear-gradient(top, #f9f9f9, #a9a9a9); background: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#a9a9a9)); -pie-background: linear-gradient(90deg, #a9a9a9, #f9f9f9); }
-.fx-gradient-3:hover {background: #f67402; background: -moz-linear-gradient(top, #ff8604, #eb6105); background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6105)); -pie-background: linear-gradient(90deg, #eb6105, #ff8604); }
-.fx-gradient-4 {background: #389cb4; background: -moz-linear-gradient(top, #adefff, #18778e); background: -webkit-gradient(linear, left top, left bottom, from(#adefff), to(#18778e)); -pie-background: linear-gradient(90deg, #18778e, #adefff); }
-.fx-gradient-4:hover {background: #f67402; background: -moz-linear-gradient(top, #ff8604, #eb6105); background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6105)); -pie-background: linear-gradient(90deg, #eb6105, #ff8604); }
-.fx-gradient-5 {background: #389cb4; background: -moz-linear-gradient(top, #adefff, #18778e); background: -webkit-gradient(linear, left top, left bottom, from(#adefff), to(#18778e)); -pie-background: linear-gradient(90deg, #18778e, #adefff); }
-.fx-gradient-6{background: #f67402; background: -moz-linear-gradient(top, #ff8604, #eb6005); background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6005)); -pie-background: linear-gradient(90deg, #eb6005, #ff8604); }
-
-.fx-shadow-gradient, .fx-shadow-gradient-2 {margin: -2px; height: 9px; background: transparent url(../bg/shadow.png) repeat-x; z-index:500; position: relative; }
-.fx-shadow-gradient-2 {margin: 1px;height: 6px; background: transparent url(bg/shadow2.png) repeat-x;}
-
-.fx-shadow-top    {-moz-box-shadow: 0px -2px 5px #333; -webkit-box-shadow: 1px 1px 1px #444; box-shadow: 1px 1px 4px #444;}
-.fx-shadow-bottom {-moz-box-shadow: 0px 2px 5px #333; -webkit-box-shadow: 1px 1px 1px #444; box-shadow: 1px 1px 4px #444;}
-*/
-
 
 /* --- HEADER ELEMENTS ---------------- */
 #logo {
@@ -1180,7 +1162,7 @@ a.submitButton {
 #languages a span,
 .selectedValue a.flag span{
     text-indent: -9999px;
-    display: block;]
+    display: block;
 }
 
 #languages a.flag span,
@@ -1220,13 +1202,13 @@ a.submitButton {
 #navigation > li > ul {margin-top:6px;}
 
 /* --- Search box ------------------------------- */
-.searchBox {
+div.searchBox {
     position: absolute;
     right: 67px;
     top: 71px;
 }
 
-.searchBox .textbox {
+div.searchBox input.textbox {
     width: 122px;
     padding-left: 4px;
     color: #b4b8b8;
@@ -1234,7 +1216,7 @@ a.submitButton {
     margin:2px 3px 0 0;
 }
 
-.searchBox .searchSubmit {
+div.searchBox input.searchSubmit {
     background: url(../../img/search-icon.png) no-repeat 3px;
     border: none;
     cursor: pointer;
@@ -1243,7 +1225,7 @@ a.submitButton {
     float:left;
 }
 
-.searchBox .textbox:focus {
+div.searchBox input.textbox:focus {
     color: #333;
 }
 
@@ -1352,52 +1334,52 @@ a.readMore:hover {
 
 /* --- Tags --------------------------------- */
 
-.tagCloud {
- line-height: 1.5em;
+p.tagCloud, div.tagCloud  {
+    line-height: 1.5em;
 }
 
-.tagitem_100 {
- font-size:12px;
+a.tagitem_100 {
+    font-size:12px;
 }
 
-.tagitem_200 {
- font-size:14px;
+a.tagitem_200 {
+    font-size:14px;
 }
 
-.tagitem_300 {
- font-size:16px;
+a.tagitem_300 {
+    font-size:16px;
 }
 
-.tagitem_400 {
- font-size:18px;
+a.tagitem_400 {
+    font-size:18px;
 }
 
-.tagitem_500 {
- font-size:20px;
+a.tagitem_500 {
+    font-size:20px;
 }
 
-.tagitem_600 {
- font-size:22px;
+a.tagitem_600 {
+    font-size:22px;
 }
 
-.tagitem_700 {
- font-size:24px;
+a.tagitem_700 {
+    font-size:24px;
 }
 
-.tagitem_800 {
- font-size:26px;
+a.tagitem_800 {
+    font-size:26px;
 }
 
-.tagitem_900 {
- font-size:28px
+a.tagitem_900 {
+    font-size:28px
 }
 
-.taggedText {
- color: #a2a9ab;
+span.taggedText {
+    color: #a2a9ab;
 }
 
-.tagError {
- display: none;
+p.tagError {
+    display: none;
 }
 
 a.tagText{
@@ -1405,8 +1387,8 @@ a.tagText{
     display:inline-block;
     line-height:12px;
 }
-a.
-tagText img{
+
+a.tagText img{
     margin-right:3px;
     vertical-align:top;
 }
@@ -1925,7 +1907,6 @@ tagText img{
     background:#f67402;
     background: -moz-linear-gradient(top, #ff8604, #eb6005);
     background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6005));
-    -pie-background: linear-gradient(90deg, #ff8604, #eb6005);
     color:#fff;
 }
 
@@ -1937,7 +1918,6 @@ tagText img{
     background:#f67402;
     background:-moz-linear-gradient(top, #ff8604, #eb6005);
     background:-webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#eb6005));
-    -pie-background:linear-gradient(90deg, #ff8604, #eb6005);
     color:#fff;
 }
 
@@ -1949,7 +1929,6 @@ tagText img{
     background:#389cb4;
     background:-moz-linear-gradient(top, #adefff, #18778e);
     background:-webkit-gradient(linear, left top, left bottom, from(#adefff), to(#18778e));
-    -pie-background: linear-gradient(90deg, #adefff, #18778e);
     color:#fff;
 }
 
@@ -2698,10 +2677,6 @@ a.fb_button_simple {
 .persparamBox label {
     margin: 2px 5px 0 0;
 }
-/* Used for tab content displaying */
-.ui-tabs-hide {
-    display: none;
-}
 
 /* --- articles dertails atributes ------------ */
 .attributes {
@@ -3346,13 +3321,9 @@ span.verificationCode {
     float: none;
     display: inline;
 }
-
-.oxInValid label {
-    color: #ff0000;
-}
-
+.oxInValid label,
 .oxInValid p {
-    color: red;
+    color: #ff0000;
 }
 
 .oxInValid input,
@@ -3367,6 +3338,10 @@ span.verificationCode {
     border-width: 1px;
 }
 
+.oxInValid .oxValidateError,
+.oxInValid .oxValidateError .js-oxError_postError {
+    display:block;	
+}
 /* --- Promotions Slider ------------------------ */
 .promoShadow {
     position: absolute;
@@ -3483,7 +3458,7 @@ span.verificationCode {
     z-index: 4;
     bottom: -1px;
     opacity: 0.9;
-    filter: alpha(opacity = 90);
+    filter: alpha(opacity =90);
     height: 150px;
     display: block;
     text-shadow: 0px -1px 0px #486066;
@@ -3492,7 +3467,7 @@ span.verificationCode {
 .itemSlider .slideNav:hover {
     text-shadow: 0px -1px 0px #ac8a6b;
     opacity: 1;
-    filter: alpha(opacity = 100);
+    filter: alpha(opacity =100);
 
 }
 
@@ -3549,7 +3524,7 @@ span.verificationCode {
     opacity: 1;
     padding-right: 5px;
     padding-top:25px;
-    filter: alpha(opacity = 100);
+    filter: alpha(opacity =100);
     background:transparent url(../bg/fx-grad-orange-spiked.png) -30px 0px no-repeat;
 }
 
@@ -3566,7 +3541,7 @@ span.verificationCode {
 a.sliderHover {
     background: #fd8304;
     opacity: 0.7;
-    filter: alpha(opacity = 70);
+    filter: alpha(opacity =70);
     width: 124px;
     height: 148px;
     display: none;
@@ -3912,6 +3887,12 @@ a.sliderHover {
 
 #compareList td {
     border-collapse: collapse;
+    vertical-align:top;
+}
+
+#compareList table{
+    width:200px;
+    border-collapse:collapse;
 }
 
 #compareList table td {
@@ -3928,10 +3909,23 @@ a.sliderHover {
     padding-bottom: 20px;
 }
 
+#compareDataDiv {
+    overflow:hidden;
+}
+
+#compareFirstCol {
+    overflow: hidden;
+}
+
 .compareItem {
     width: 190px;
     height: 380px;
     position: relative;
+}
+
+.compareWide {
+    width:740px;
+    position:relative;
 }
 
 .compareWide .compareItem {
@@ -4008,6 +4002,13 @@ a.sliderHover {
 
 #compareList .lineBox a.moveNext {
     float: right;
+}
+
+td.centered {
+    text-align:center;
+}
+td.alignTop{
+    vertical-align:top;
 }
 
 /* --- Login form ------------------------ */
@@ -4158,6 +4159,15 @@ div.information .selectorsBox {
 }
 
 /* ------- Checkout AGB conditions links --------------- */
+div.agbInner {
+    width:500px;
+    float:left;
+}
+
+div.agbButton  {
+    float:right;
+}
+
 .agb a {
     color: #1d7e96;
 }
@@ -4167,9 +4177,10 @@ div.information .selectorsBox {
     text-decoration:none;
 }
 
-.agb p.errorMsg  {
+.agb p.errorMsg, .agbInner p.errorMsg  {
     color: #ff0000;
     display: none;
+    margin: 0px;
 }
 
 /* ---- ajax loading icon -----------------------------*/
@@ -4188,7 +4199,7 @@ div.information .selectorsBox {
 }
 
 /* --- shop lupe ------------------------------ */
-.shoplupe {
+p.shoplupe {
     padding-top:15px;
     text-align: center;
 }

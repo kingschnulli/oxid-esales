@@ -6,12 +6,12 @@
         [{assign var='_productLink' value=$product->getLink()}]
     [{/if}]
 
-    <a href="[{ $_productLink }]" class="picture" rel="product[{if $oView->noIndex() }] nofollow[{/if}]">
+    <a href="[{ $_productLink }]" class="picture" [{if $oView->noIndex() }]rel="nofollow"[{/if}]>
       <img src="[{if $size=='big'}][{$product->getPictureUrl(1) }][{elseif $size=='thinest'}][{$product->getIconUrl() }][{else}][{ $product->getThumbnailUrl() }][{/if}]" alt="[{ $product->oxarticles__oxtitle->value|strip_tags }] [{ $product->oxarticles__oxvarselect->value|default:'' }]">
     </a>
 
     <strong class="title">
-        <a class="fn" href="[{ $_productLink }]" rel="product[{if $oView->noIndex() }] nofollow[{/if}]">[{$product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]</a>
+        <a class="fn" href="[{ $_productLink }]" [{if $oView->noIndex() }]rel="nofollow"[{/if}]>[{$product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]</a>
     </strong>
     <span class="identifier">
         [{if $product->oxarticles__oxweight->value }]
@@ -90,7 +90,7 @@
             [{/oxhasrights}]
             <div class="tobasketFunction clear">
                 [{oxhasrights ident="SHOWARTICLEPRICE"}]
-                    <label id="productPrice" class="price">
+                    <label id="productPrice_[{$testid}]" class="price">
                         <strong>[{$product->getFPrice()}] [{$currency->sign}]</strong>
                     </label>
                     [{if $product->loadAmountPriceInfo()}]

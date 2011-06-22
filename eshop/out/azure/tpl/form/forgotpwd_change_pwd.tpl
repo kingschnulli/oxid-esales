@@ -9,7 +9,7 @@
           <input type="hidden" name="cl" value="forgotpwd">
           <input type="hidden" id="passwordLength" value="[{$oViewConf->getPasswordLength()}]">
       <ul class="form clear">
-            <li [{if $aErrors}]class="oxError"[{/if}]>
+            <li [{if $aErrors.oxuser__oxpassword}]class="oxInValid"[{/if}]>
                 <label>[{ oxmultilang ident="PAGE_ACCOUNT_FORGOTPWD_NEWPASSWORD" }]</label>
                 <input type="password" name="password_new" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_length js-oxValidate_match textbox">
                 <p class="oxValidateError">
@@ -19,7 +19,7 @@
                     [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxpassword}]
                     </p>
             </li>
-            <li [{if $aErrors}]class="oxError"[{/if}]>
+            <li [{if $aErrors.oxuser__oxpassword}]class="oxInValid"[{/if}]>
                 <label>[{ oxmultilang ident="PAGE_ACCOUNT_FORGOTPWD_CONFIRMPASSWORD" }]</label>
                 <input type="password" name="password_new_confirm" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_length js-oxValidate_match textbox">
                 <p class="oxValidateError">

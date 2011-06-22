@@ -16,11 +16,9 @@
             [{ assign var="currency" value=$oView->getActCurrency()}]
             [{ assign var="_sTitle" value="`$_oBoxProduct->oxarticles__oxtitle->value` `$_oBoxProduct->oxarticles__oxvarselect->value`"|strip_tags}]
             <li class="articleImage" [{if !$smarty.foreach._sProdList.first}] style="display:none;" [{/if}]>
-                <div align="center">
-                    <a class="articleBoxImage" href="[{ $_oBoxProduct->getMainLink() }]">
-                        <img src="[{$_oBoxProduct->getIconUrl()}]" alt="[{$_sTitle}]">
-                    </a>
-                </div>
+                <a class="articleBoxImage" href="[{ $_oBoxProduct->getMainLink() }]">
+                    <img src="[{$_oBoxProduct->getIconUrl()}]" alt="[{$_sTitle}]">
+                </a>
             </li>
             <li class="articleTitle">
                 <a href="[{ $_oBoxProduct->getMainLink() }]">

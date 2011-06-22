@@ -1,4 +1,5 @@
 [{capture append="oxidBlock_content"}]
+    [{assign var="template_title" value="PAGE_ACCOUNT_RECOMMENDATIONLIST_TITLE"|oxmultilangassign }]
     [{assign var="_actvrecommlist" value=$oView->getActiveRecommList() }]
     <h1 class="pageHead">[{ oxmultilang ident="PAGE_ACCOUNT_RECOMMENDATIONLIST_TITLE" }]</h1>
     [{if  $oView->isSavedList()}]
@@ -12,6 +13,7 @@
         [{assign var="blEdit" value=true }]
         [{include file="page/recommendations/inc/list.tpl"}]
     [{/if}]
+    [{insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 [{capture append="oxidBlock_sidebar"}]
     [{include file="page/account/inc/account_menu.tpl" active_link="recommendationlist"}]

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_config.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: shop_config.php 36470 2011-06-20 08:13:55Z linas.kukulskis $
  */
 
 /**
@@ -442,6 +442,21 @@ class Shop_Config extends oxAdminDetails
         }
 
         return $aArr;
+    }
+    
+    /**
+     * Returns active/editable object id
+     *
+     * @return string
+     */
+    public function getEditObjectId()
+    {
+        $sEditId = parent::getEditObjectId(); 
+        if ( !$sEditId ) {
+            return $this->getConfig()->getShopId();
+        } else {
+            return $sEditId;
+        }
     }
 
 }

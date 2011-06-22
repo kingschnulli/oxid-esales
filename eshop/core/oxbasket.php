@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 36246 2011-06-13 13:25:13Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasket.php 36493 2011-06-21 09:53:24Z linas.kukulskis $
  */
 
 /**
@@ -245,6 +245,12 @@ class oxBasket extends oxSuperCfg
     protected $_sTsProductId = null;
 
     /**
+     * new basket item addition state
+     * @var bool
+     */
+    protected $_blNewITemAdded = null;
+
+    /**
      * Checks if configuration allows basket usage or if user agent is search engine
      *
      * @return bool
@@ -376,6 +382,11 @@ class oxBasket extends oxSuperCfg
         if ( $oEx ) {
             throw $oEx;
         }
+
+        // notifying that new basket item was added
+        $this->_addedNewItem( $sProductID, $dAmount, $aSel, $aPersParam, $blOverride, $blBundle, $sOldBasketItemId );
+
+        // returning basket item object
         return $this->_aBasketContents[$sItemId];
     }
 
@@ -2598,4 +2609,48 @@ class oxBasket extends oxSuperCfg
         return $this->_oNotDiscountedProductsPriceList;
     }
 
+    /**
+     * Is called when new basket item is successfully added
+     *
+     * @param string $sProductID       id of product
+     * @param double $dAmount          product amount
+     * @param array  $aSel             product select lists (default null)
+     * @param array  $aPersParam       product persistent parameters (default null)
+     * @param bool   $blOverride       marker to acumulate passed amount or renew (default false)
+     * @param bool   $blBundle         marker if product is bundle or not (default false)
+     * @param string $sOldBasketItemId id if old basket item if to change it
+     *
+     * @return null
+     */
+    protected function _addedNewItem( $sProductID, $dAmount, $aSel, $aPersParam, $blOverride, $blBundle, $sOldBasketItemId )
+    {
+        if ( !$blOverride ) {
+            $this->_blNewITemAdded = null;
+            oxSession::setVar( "blAddedNewItem", true );
+        }
+    }
+
+    /**
+     * Resets new basket item addition state on unserialization
+     *
+     * @return null
+     */
+    public function __wakeUp()
+    {
+        $this->_blNewITemAdded = null;
+    }
+
+    /**
+     * Returns true if new product was just added to basket
+     *
+     * @return bool
+     */
+    public function isNewItemAdded()
+    {
+        if ( $this->_blNewITemAdded == null ) {
+            $this->_blNewITemAdded = (bool) oxSession::getVar( "blAddedNewItem" );
+            oxSession::deleteVar( "blAddedNewItem" );
+        }
+        return $this->_blNewITemAdded;
+    }
 }

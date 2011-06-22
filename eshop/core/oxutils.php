@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 35841 2011-06-03 08:19:17Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 36372 2011-06-16 07:34:26Z linas.kukulskis $
  */
 
 /**
@@ -1025,7 +1025,7 @@ class oxUtils extends oxSuperCfg
      */
     public function isValidAlpha( $sField )
     {
-        return (boolean) getStr()->preg_match( "#^[\w]*$#", $sField );
+        return (boolean) getStr()->preg_match( '/^[a-zA-Z0-9_]*$/', $sField );
     }
 
     /**
@@ -1389,12 +1389,12 @@ class oxUtils extends oxSuperCfg
      * @return void
      */
     public function handlePageNotFoundError($sUrl = '')
-    {        
+    {
         $this->setHeader("HTTP/1.0 404 Not Found");
         if ( oxConfig::getInstance()->isUtf() ) {
             $this->setHeader("Content-Type: text/html; charset=UTF-8");
         }
-        
+
         $sReturn = "Page not found.";
         try {
             $oView = oxNew('oxubase');

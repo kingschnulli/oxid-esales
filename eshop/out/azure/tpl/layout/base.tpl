@@ -8,7 +8,9 @@
 
     <title>[{ $_sMetaTitlePrefix }][{if $_sMetaTitlePrefix && $_sMetaTitle }] | [{/if}][{$_sMetaTitle|strip_tags}][{if $_sMetaTitleSuffix && ($_sMetaTitlePrefix || $_sMetaTitle) }] | [{/if}][{$_sMetaTitleSuffix}] [{if $_sMetaTitlePageSuffix }] | [{ $_sMetaTitlePageSuffix }] [{/if}]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=[{$oView->getCharSet()}]">
+    <!--[if IE]>
     <meta http-equiv="X-UA-Compatible" content="IE=9" >
+    <![endif]-->
     [{if $oView->noIndex() == 1 }]
         <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
     [{elseif $oView->noIndex() == 2 }]
@@ -93,6 +95,8 @@
     [{/if}]
 
     [{oxscript}]
+    [{oxid_include_dynamic file="widget/dynscript.tpl"}]
+
     [{foreach from=$oxidBlock_pageScript item="_block"}]
         [{$_block}]
     [{/foreach}]

@@ -61,11 +61,14 @@
           [{include file="form/forgotpwd_email.tpl"}]
   [{ /if}]
 [{/if}]
+[{if !$oView->isActive('PsLogin') }]
+    [{insert name="oxid_tracker" title=$template_title }]
+[{/if}]
 
 [{/capture}]
 [{if $oView->isActive('PsLogin') }]
-[{include file="layout/popup.tpl"}]
+    [{include file="layout/popup.tpl"}]
 [{else}]
-[{include file="layout/page.tpl"}]
+    [{include file="layout/page.tpl"}]
 [{/if}]
 

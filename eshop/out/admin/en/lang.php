@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 35507 2011-05-20 12:00:17Z vilma $
+ * @version   SVN: $Id: lang.php 36507 2011-06-21 13:47:28Z juergen.busch $
  */
 
 /*
@@ -1237,7 +1237,7 @@ $aLang = array(
 'SYSREQ_PHP_CONFIG'                                        => 'PHP configuration',
 'SYSREQ_SERVER_CONFIG'                                     => 'Server configuration',
 'SYSREQ_SERVER_PERMISSIONS'                                => 'Files/folders access rights',
-'SYSREQ_MOD_REWRITE'                                       => 'apache mod_rewrite module',
+'SYSREQ_MOD_REWRITE'                                       => 'Apache mod_rewrite module',
 'SYSREQ_ALLOW_URL_FOPEN'                                   => 'allow_url_fopen or fsockopen to port 80',
 'SYSREQ_PHP4_COMPAT'                                       => 'Zend compatibility mode must be off',
 'SYSREQ_PHP_VERSION'                                       => 'PHP version at least 5.2.0',
@@ -1260,7 +1260,7 @@ $aLang = array(
 'SYSREQ_OPEN_SSL'                                          => 'OpenSSL',
 'SYSREQ_SOAP'                                              => 'SOAP',
 'SYSREQ_UNICODE_SUPPORT'                                   => 'UTF-8 support',
-'SYSREQ_BUG53632'                                          => '[tr] possible issues on server due to PHP Bug #53632',
+'SYSREQ_BUG53632'                                          => 'Possible issues on server due to PHP Bug #53632',
 'SYSREQ_MEMORY_LIMIT'                                      => 'PHP Memory limit (min. 14MB, 30MB recommended)',
 'SYSREQ_DESCRIPTION_PASS'                                  => 'System health is good.',
 'SYSREQ_DESCRIPTION_PMIN'                                  => 'System health might be broken.',

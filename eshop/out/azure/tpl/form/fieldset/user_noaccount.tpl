@@ -1,5 +1,4 @@
-     <input type="hidden" id="passwordLength" value="[{$oViewConf->getPasswordLength()}]">
-    <li [{if $aErrors}]class="oxError"[{/if}]>
+    <li [{if $aErrors.oxuser__oxusername}]class="oxInValid"[{/if}]>
         <label class="req">[{ oxmultilang ident="FORM_FIELDSET_USER_ACCOUNT_EMAIL" }]</label>
         <input id="userLoginName" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email" type="text" name="lgn_usr" value="[{ $oView->getActiveUsername() }]" size="37" >
         <p class="oxValidateError">
