@@ -52,7 +52,7 @@
 
                 self.hideControls(oAnythingSlider);
 
-                $("a[class^='panel']", oAnythingSlider).attr("rel", 'nofolow');
+                $("a[class^='panel']", oAnythingSlider).attr("rel", 'nofollow');
 
                 var blOnNav = false;
 

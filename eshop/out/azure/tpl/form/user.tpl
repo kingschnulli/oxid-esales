@@ -28,7 +28,7 @@
 <h3 id="addShippingAddress" class="blockHead">[{ oxmultilang ident="FORM_USER_SHIPPINGADDRESSES" }]</h3>
 <p><input type="checkbox" name="blshowshipaddress" id="showShipAddress" [{if !$oView->showShipAddress()}]checked[{/if}] value="0"><label for="showShipAddress">[{ oxmultilang ident="FORM_REGISTER_USE_BILLINGADDRESS_FOR_SHIPPINGADDRESS" }]</label></p>
 <ul id="shippingAddress" class="form clear" [{if !$oView->showShipAddress()}] style="display: none;" [{/if}]>
-[{ include file="form/fieldset/user_shipping.tpl" }]
+[{ include file="form/fieldset/user_shipping.tpl"}]
 </ul>
 </form>
 [{oxscript add="$('#showShipAddress').change( function() { $('#shippingAddress').toggle($(this).is(':not(:checked)'));});"}]

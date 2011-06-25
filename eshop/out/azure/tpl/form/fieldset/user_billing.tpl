@@ -139,7 +139,7 @@
         [{/if}]
     </li>
     [{if $oViewConf->showBirthdayFields() }]
-    <li [{if $aErrors}]class="oxInValid"[{/if}]>
+    <li [{if $aErrors.oxuser__oxbirthdate}]class="oxInValid"[{/if}]>
         <label [{if $oView->isFieldRequired(oxuser__oxbirthdate) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_BIRTHDATE" }]</label>
           <input [{if $oView->isFieldRequired(oxuser__oxbirthdate) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if}] type="text" field="small" maxlength="2" name="invadr[oxuser__oxbirthdate][day]" value="[{if isset( $invadr.oxuser__oxbirthdate.day ) }][{$invadr.oxuser__oxbirthdate.day }][{elseif $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00"}][{$oxcmp_user->oxuser__oxbirthdate->value|regex_replace:"/^([0-9]{4})[-]([0-9]{1,2})[-]/":"" }][{/if}]">
           <input [{if $oView->isFieldRequired(oxuser__oxbirthdate) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if}] type="text" field="small" maxlength="2" name="invadr[oxuser__oxbirthdate][month]" value="[{if isset( $invadr.oxuser__oxbirthdate.month ) }][{$invadr.oxuser__oxbirthdate.month }][{elseif $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00" }][{$oxcmp_user->oxuser__oxbirthdate->value|regex_replace:"/^([0-9]{4})[-]/":""|regex_replace:"/[-]([0-9]{1,2})$/":"" }][{/if}]">

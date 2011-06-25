@@ -83,6 +83,7 @@
         </ul>
 
     [{/if}]
+    [{insert name="oxid_tracker"}]
 [{/capture}]
 
 

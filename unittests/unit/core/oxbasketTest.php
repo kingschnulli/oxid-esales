@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 36094 2011-06-08 15:04:31Z vilma $
+ * @version   SVN: $Id: oxbasketTest.php 36392 2011-06-16 08:54:45Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -4601,5 +4601,24 @@ class Unit_Core_oxbasketTest extends OxidTestCase
             $this->assertTrue( isset( $aInfo[$sId] ) );
             $this->assertEquals( $aInfo[$sId], $oContent->getAmount() );
         }
+    }
+
+    /**
+     * Test case for oxBasket::_addedNewItem(), oxBasket::isNewItemAdded()
+     *
+     * @return null
+     */
+    public function testIsNewItemAdded()
+    {
+        $oBasket = new oxBasket();
+        $this->assertFalse( $oBasket->isNewItemAdded() );
+        $this->assertNull( oxSession::getVar( "blAddedNewItem" ) );
+
+        $oBasket = new oxBasket();
+        $oBasket->UNITaddedNewItem( 0, 0, 0, 0, 0, 0, 0);
+        $this->assertTrue( oxSession::getVar( "blAddedNewItem" ) );
+        $this->assertTrue( $oBasket->isNewItemAdded() );
+        $this->assertNull( oxSession::getVar( "blAddedNewItem" ) );
+
     }
 }

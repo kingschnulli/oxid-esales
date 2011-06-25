@@ -10,7 +10,7 @@
 [{/if}]
 [{capture name=product_price}]
     [{oxhasrights ident="SHOWARTICLEPRICE"}]
-        [{if $product->getFTPrice()}]
+        [{if $product->getFTPrice() > $product->getFPrice()}]
         <span class="priceOld">
             [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REDUCEDFROM" }] <del>[{ $product->getFTPrice()}] [{ $currency->sign}]</del>
         </span>

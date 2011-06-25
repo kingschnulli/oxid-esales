@@ -60,6 +60,7 @@
     <dt id="reviewName_[{$smarty.foreach.ReviewsCounter.iteration}]">
       [{oxmultilang ident="DETAILS_REVIEWNOTAVAILABLE"}]
     </dt>
+    <dd></dd>
   [{/if}]
   </dl>
 </div>

@@ -16,7 +16,7 @@
 <input type="hidden" name="blshowshipaddress" value="1">
 
 <div class="lineBox clear">
-    <a href="[{ oxgetseourl ident=$oViewConf->getBasketLink() }]" class="submitButton largeButton" id="userBackStepBottom">[{ oxmultilang ident="FORM_USER_CHECKOUT_REGISTRATION_BACKSTEP" }]</a>
+    <a href="[{ oxgetseourl ident=$oViewConf->getBasketLink() }]" class="submitButton largeButton" id="userBackStepTop">[{ oxmultilang ident="FORM_USER_CHECKOUT_REGISTRATION_BACKSTEP" }]</a>
     <button id="userNextStepTop" class="submitButton largeButton nextStep" name="userform" type="submit">[{ oxmultilang ident="FORM_USER_CHECKOUT_REGISTRATION_NEXTSTEP" }]</button>
 </div>
 

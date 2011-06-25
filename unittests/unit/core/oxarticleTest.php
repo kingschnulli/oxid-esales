@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 34842 2011-04-19 12:00:31Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 36517 2011-06-22 14:40:14Z arunas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2596,6 +2596,30 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals( $sCatId, $oCategory->getId() );
     }
 
+    /**
+     * Tests if the "oxarticle::getCategory()" uses a cached value
+     * 
+     * @return null
+     */
+    public function testGetCategoryCached()
+    {
+        // test variables
+        $sCacheIndex  = "test";
+        $sCacheResult = "already cached";
+        $aCache       = array( $sCacheIndex => $sCacheResult );
+        
+        // setting the "cached" variables
+        $oArticle = $this->getProxyClass( 'oxarticle' );
+        $oArticle->setNonPublicVar( '_aCategoryCache', $aCache );
+        
+        // setting the used article ID 
+        $oArticle->setId( $sCacheIndex );
+        
+        // asserts are equals if the articles ID is in the caches index
+        // and returns the cached result
+        $this->assertEquals( $sCacheResult, $oArticle->getCategory() );
+    }
+    
     /**
      * Test get category by price.
      *

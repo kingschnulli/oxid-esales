@@ -13,7 +13,7 @@
           <div class="price [{if $_product->getPricePerUnit()}]tight[{/if}]" id="priceBargain_[{$smarty.foreach.bargainList.iteration}]">
               <div>
               [{oxhasrights ident="SHOWARTICLEPRICE"}]
-                  [{if $_product->getFTPrice()}]
+                  [{if $_product->getFTPrice() > $_product->getFPrice()}]
                   <span class="priceOld">
                       [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REDUCEDFROM" }] <del>[{ $_product->getFTPrice()}] [{ $currency->sign}]</del>
                   </span>

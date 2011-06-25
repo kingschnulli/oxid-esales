@@ -38,7 +38,7 @@
         [{if $oView->showZoomPics()}]
             [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
             [{oxscript add="$('#zoomTrigger').oxModalPopup({target:'#zoomModal'});"}]
-            <a id="zoomTrigger" alt="[{oxmultilang ident="DETAILS_ZOOM"}]" rel="nofollow" href="#">Zoom</a>
+            <a id="zoomTrigger" rel="nofollow" href="#">Zoom</a>
             [{oxscript include="js/libs/cloudzoom.js" priority=10}]
             [{oxscript add="$('.cloud-zoom, .cloud-zoom-gallery').CloudZoom();"}]
             <div class="picture">
@@ -70,7 +70,7 @@
             [{if $smarty.cookies.showlinksonce ne "1"}]
                 <div id="showLinksOnce"></div>
             [{/if}]
-            <a class="selector corners FXgradBlueDark" href="#" id="productLinks"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" longdesc="[{$oViewConf->getImageUrl()}]selectbutton-on.png" alt="Select"></a>
+            <a class="selector corners FXgradBlueDark" href="#" id="productLinks"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" alt="Select"></a>
             <ul class="actionLinks corners shadow">
                 [{if $oViewConf->getShowCompareList() }]
                     <li><span>[{oxid_include_dynamic file="page/details/inc/compare_links.tpl" testid="" type="compare" aid=$oDetailsProduct->oxarticles__oxid->value anid=$oDetailsProduct->oxarticles__oxnid->value in_list=$oDetailsProduct->isOnComparisonList() page=$oView->getActPage() text_to_id="PAGE_DETAILS_COMPARE" text_from_id="PAGE_DETAILS_REMOVEFROMCOMPARELIST"}]</span></li>
@@ -195,7 +195,7 @@
                 [{/if}]
 
                 [{oxhasrights ident="SHOWARTICLEPRICE"}]
-                    [{if $oDetailsProduct->getFTPrice()}]
+                    [{if $oDetailsProduct->getFTPrice() > $oDetailsProduct->getFPrice()}]
                         <p class="oldPrice">
                             <strong>[{oxmultilang ident="DETAILS_REDUCEDFROM"}] <del>[{$oDetailsProduct->getFTPrice()}] [{$currency->sign}]</del></strong>
                         </p>
@@ -221,7 +221,7 @@
                         [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]
                         [{if $oDetailsProduct->loadAmountPriceInfo()}]
                             [{oxscript add="$( '#amountPrice' ).oxAmountPriceSelect();"}]
-                            <a class="selector corners FXgradBlueDark" href="#priceinfo" id="amountPrice"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" longdesc="[{$oViewConf->getImageUrl()}]selectbutton-on.png" alt="Select"></a>
+                            <a class="selector corners FXgradBlueDark" href="#priceinfo" id="amountPrice"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" alt="Select"></a>
                             [{include file="page/details/inc/priceinfo.tpl"}]
                         [{/if}]
                     [{/oxhasrights}]

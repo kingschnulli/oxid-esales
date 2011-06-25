@@ -109,5 +109,6 @@
         [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() listId="productList" products=$oView->getArticleList()}]
         [{include file="widget/locator/listlocator.tpl" locator=$oView->getPageNavigationLimitedBottom() place="bottom"}]
     [{/if}]
+    [{insert name="oxid_tracker"}]    
 [{/capture}]
 [{include file="layout/page.tpl" sidebar="Left" tree_path=$oView->getTreePath()}]

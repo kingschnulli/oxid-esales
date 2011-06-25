@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 34917 2011-04-26 08:33:18Z vilma $
+ * @version   SVN: $Id: oxarticle.php 36516 2011-06-22 14:39:22Z arunas.paskevicius $
  */
 
 // defining supported link types
@@ -405,7 +405,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     protected static $_aSelections = array();
 
-
+    /**
+     * Category instance cache
+     * @var array
+     */
+    protected static $_aCategoryCache = null;
     /**
      * Class constructor, sets shop ID for article (oxconfig::getShopId()),
      * initiates parent constructor (parent::oxI18n()).
@@ -1349,7 +1353,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getCategory()
     {
-        startPRofile( 'getCategory' );
 
         $oCategory = oxNew( 'oxcategory' );
         $oCategory->setLanguage( $this->getLanguage() );
@@ -1359,25 +1362,33 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         if ( isset( $this->oxarticles__oxparentid->value ) && $this->oxarticles__oxparentid->value ) {
             $sOXID = $this->oxarticles__oxparentid->value;
         }
-
-        $oStr = getStr();
-        $sWhere   = $oCategory->getSqlActiveSnippet();
-        $sSelect  = $this->_generateSearchStr( $sOXID );
-        $sSelect .= ( $oStr->strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere . " order by oxobject2category.oxtime limit 1";
-
-        // category not found ?
-        if ( !$oCategory->assignRecord( $sSelect ) ) {
-
-            $sSelect  = $this->_generateSearchStr( $sOXID, true );
-            $sSelect .= ( $oStr->strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere . " limit 1";
-
-            // looking for price category
+        // if the oxcategory instance of this article is not cached
+        if ( !isset( $this->_aCategoryCache[ $sOXID ] ) ) {
+            startPRofile( 'getCategory' );
+            $oStr = getStr();
+            $sWhere   = $oCategory->getSqlActiveSnippet();
+            $sSelect  = $this->_generateSearchStr( $sOXID );
+            $sSelect .= ( $oStr->strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere . " order by oxobject2category.oxtime limit 1";
+    
+            // category not found ?
             if ( !$oCategory->assignRecord( $sSelect ) ) {
-                $oCategory = null;
+    
+                $sSelect  = $this->_generateSearchStr( $sOXID, true );
+                $sSelect .= ( $oStr->strstr( $sSelect, 'where' )?' and ':' where ') . $sWhere . " limit 1";
+    
+                // looking for price category
+                if ( !$oCategory->assignRecord( $sSelect ) ) {
+                    $oCategory = null;
+                }
             }
+            // add the category instance to cache
+            $this->_aCategoryCache[ $sOXID ] = $oCategory;
+            stopPRofile( 'getCategory' );
+        } else {
+           // if the oxcategory instance is cached
+           $oCategory = $this->_aCategoryCache[ $sOXID ];
         }
 
-        stopPRofile( 'getCategory' );
         return $oCategory;
     }
 

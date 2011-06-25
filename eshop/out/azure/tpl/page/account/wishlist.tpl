@@ -1,4 +1,5 @@
 [{capture append="oxidBlock_content"}]
+    [{assign var="template_title" value="PAGE_ACCOUNT_WISHLIST_TITLE"|oxmultilangassign}]
     [{if !$oView->getWishListUsers() && $oView->getWishListSearchParam() }]
         [{assign var="_statusMessage" value="PAGE_ACCOUNT_WISHLIST_SORRYNOWISHLIST"|oxmultilangassign}]
         [{include file="message/error.tpl" statusMessage=$_statusMessage}]
@@ -22,6 +23,7 @@
     [{else }]
         [{ oxmultilang ident="PAGE_ACCOUNT_WISHLIST_WISHLISTISEMPTY" }]
     [{/if }]
+    [{ insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 [{capture append="oxidBlock_sidebar"}]
     [{include file="page/account/inc/account_menu.tpl" active_link="wishlist"}]

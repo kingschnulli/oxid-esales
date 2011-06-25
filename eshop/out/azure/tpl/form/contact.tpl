@@ -14,7 +14,7 @@
             <label>[{ oxmultilang ident="FORM_CONTACT_TITLE" }]</label>
             [{include file="form/fieldset/salutation.tpl" name="editval[oxuser__oxsal]" value=$editval.oxuser__oxsal }]
         </li>
-        <li [{if $aErrors}]class="oxError"[{/if}]>
+        <li [{if $aErrors.oxuser__oxfname}]class="oxInValid"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_FIRSTNAME" }]</label>
             <input type="text" name="editval[oxuser__oxfname]" size="70" maxlength="40" value="[{$editval.oxuser__oxfname}]" class="js-oxValidate js-oxValidate_notEmpty">
             <p class="oxValidateError">
@@ -22,21 +22,21 @@
                 [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxfname}]
             </p>
         </li>
-        <li [{if $aErrors}]class="oxError"[{/if}]>
+        <li [{if $aErrors.oxuser__oxlname}]class="oxInValid"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_LASTNAME" }]</label>
             <input type="text" name="editval[oxuser__oxlname]" size=70 maxlength=40 value="[{$editval.oxuser__oxlname}]" class="js-oxValidate js-oxValidate_notEmpty">
             <p class="oxValidateError">
                 <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
-        <li [{if $aErrors}]class="oxError"[{/if}]>
+        <li [{if $aErrors.oxuser__oxusername}]class="oxInValid"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_EMAIL2" }]</label>
             <input id="contactEmail" type="text" name="editval[oxuser__oxusername]"  size=70 maxlength=40 value="[{$editval.oxuser__oxusername}]" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email">
             <p class="oxValidateError">
                 <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
-        <li [{if $aErrors}]class="oxError"[{/if}]>
+        <li [{if $aErrors && !$oView->getContactSubject()}]class="oxInValid"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_SUBJECT" }]</label>
             <input type="text" name="c_subject" size="70" maxlength=80 value="[{$oView->getContactSubject()}]" class="js-oxValidate js-oxValidate_notEmpty">
                     <p class="oxValidateError">

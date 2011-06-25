@@ -103,7 +103,7 @@
          */
         removeSelectOptions: function(oSelect)
         {
-            oSelect.find('option[name!="promtString"]').remove().end();
+            oSelect.find('option[value!=""]').remove().end();
             return oSelect;
         },
 

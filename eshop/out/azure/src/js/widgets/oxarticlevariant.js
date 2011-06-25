@@ -23,7 +23,7 @@
 
                 // setting new selection
                 if ( obj.parents().hasClass("js-fnSubmit") ){
-                    obj.parent('li').parent('ul').prev('input').attr( "value", obj.attr("rel") );
+                    obj.parent('li').parent('ul').siblings('input:hidden').attr( "value", obj.attr("rel") );
 
                     var form = obj.closest("form");
                     $('input[name=fnc]', form).val("");
@@ -53,7 +53,7 @@
                             aSelectionInputs.not("*[value='']").each(function(i){
                                 hash = hash+i+':'+$(this).val()+"|";
                             });
-                            if (oxVariantSelections.indexOf(hash) < 0) {
+                            if ( jQuery.inArray( hash, oxVariantSelections ) ) {
                                 return self.reloadProductPartially( $("form.js-oxProductForm"), 'detailsMain', $("#detailsMain"), $("#detailsMain")[0]);
                             }
                         }

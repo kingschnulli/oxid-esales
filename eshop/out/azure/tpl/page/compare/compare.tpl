@@ -17,9 +17,9 @@
     [{oxscript add="$( '#compareList' ).oxCompare();"}]
     <table id="compareList">
         <tr>
-            <td style="vertical-align:top;">
-                <div id="compareFirstCol" style="overflow: hidden;">
-                    <table style="width:200px; border-collapse:collapse;">
+            <td>
+                <div id="compareFirstCol">
+                    <table>
                         <tr id="firstDataTr">
                             <td class="js-firstCol">&nbsp;</td>
                         </tr>
@@ -34,12 +34,12 @@
                     </table>
                 </div>
             </td>
-            <td style="vertical-align:top;">
-                <div id="compareDataDiv" [{if !$oxcmp_user}] class="compareWide"[{/if}] style="overflow:hidden; width:[{if $oxcmp_user}]545px;[{else}]740px;[{/if}] position:relative">
+            <td>
+                <div id="compareDataDiv" [{if !$oxcmp_user}]class="compareWide"[{/if}]>
                     <table>
                         <tr id="firstTr">
                             [{foreach key=iProdNr from=$articleList item=product name=comparelist}]
-                            <td valign="top">
+                            <td class="alignTop">
                                 <div class="lineBox clear">
                                 [{if !$product->hidePrev}]
                                     <a id="compareLeft_[{ $product->oxarticles__oxid->value }]" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="fnc=moveleft&amp;aid=`$product->oxarticles__oxnid->value`&amp;pgNr="|cat:$oView->getActPage() }]" class="navigation movePrev">&laquo;</a>
@@ -55,7 +55,7 @@
                         </tr>
                         <tr>
                             [{foreach key=iProdNr from=$articleList item=product name=testArt}]
-                            <td align="center">
+                            <td class="centered">
                             [{*  if $oxcmp_user }]
                                   <a id="tonotice_cmp_[{ $product->oxarticles__oxid->value }]_[{$smarty.foreach.testArt.iteration}]" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&amp;anid=`$product->oxarticles__oxnid->value`&amp;fnc=tonoticelist&amp;am=1"|cat:$oViewConf->getNavUrlParams() }]" rel="nofollow">[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_NOTICELIST" }]</a>
                                   [{if $oViewConf->getShowWishlist()}]
@@ -84,7 +84,7 @@
                         [{foreach key=sAttrID from=$atributeList item=oAttrib name=CmpAttr}]
                         <tr>
                               [{foreach key=iProdNr from=$articleList item=product}]
-                            <td valign="top">
+                            <td class="alignTop">
                               <div id="cmpAttr_[{$smarty.foreach.CmpAttr.iteration}]_[{ $product->oxarticles__oxid->value }]">
                                 [{ if $oAttrib->aProd.$iProdNr && $oAttrib->aProd.$iProdNr->value}]
                                   [{ $oAttrib->aProd.$iProdNr->value }]
@@ -106,6 +106,7 @@
   [{ oxmultilang ident="PAGE_PRODUCT_COMPARE_SELECTATLEASTTWOART" }]
 [{/if}]
 </div>
+[{ insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 
 [{if !$oxcmp_user->oxuser__oxpassword->value}]

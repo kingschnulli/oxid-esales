@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 35083 2011-05-03 11:15:49Z sarunas $
+ * @version   SVN: $Id: oxubaseTest.php 36400 2011-06-16 12:59:26Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2049,7 +2049,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $this->assertEquals( 'testId', $oUbase->getWishlistUserId() );
     }
 
-     /**
+    /**
      * oxUbase::showCategoryArticlesCount() test case
      *
      * @return null
@@ -2065,7 +2065,16 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         // enable
         modConfig::getInstance()->setConfigParam( "bl_perfShowActionCatArticleCnt", true );
         $this->assertTrue( $oView->showCategoryArticlesCount() );
-
     }
 
+     /**
+     * oxUbase::getNewBasketItemMsgType() test case
+     *
+     * @return null
+     */
+    public function testGetNewBasketItemMsgType()
+    {
+        $oView = new oxUbase();
+        $this->assertEquals( (int) oxConfig::getInstance()->getConfigParam( "iNewBasketItemMessage" ), $oView->getNewBasketItemMsgType() );
+    }
 }

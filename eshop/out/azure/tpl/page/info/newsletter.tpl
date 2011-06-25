@@ -1,5 +1,4 @@
 [{capture append="oxidBlock_content"}]
-
     [{if $oView->getNewsletterStatus() == 4 || !$oView->getNewsletterStatus()}]
       <h1 class="pageHead">[{ oxmultilang ident="PAGE_INFO_NEWSLETTER_STAYINFORMED" }]</h1>
       [{ oxcontent ident="oxnewstlerinfo" }]
@@ -15,7 +14,7 @@
       <h1 class="pageHead">[{ oxmultilang ident="PAGE_INFO_NEWSLETTER_SUCCESS" }]</h1>
       [{ oxmultilang ident="PAGE_INFO_NEWSLETTER_SUBSCRIPTIONCANCELED" }]<br><br>
     [{/if}]
-
+    [{ insert name="oxid_tracker"}]
 [{/capture}]
 
 [{include file="layout/page.tpl"}]

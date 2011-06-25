@@ -21,7 +21,7 @@
             <label>[{ oxmultilang ident="FORM_NEWSLETTER_LASTNAME" }]</label>
             <input id="newsletterLname" type="text" name="editval[oxuser__oxlname]" size=40 maxlength=40 value="[{if $aRegParams.oxuser__oxlname}][{$aRegParams.oxuser__oxlname}][{/if}]">
         </li>
-        <li [{if $aErrors}]class="oxError"[{/if}]>
+        <li [{if $aErrors}]class="oxInValid"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_NEWSLETTER_EMAIL" }]</label>
             <input id="newsletterUserName" type="text" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email" name="editval[oxuser__oxusername]" size=40 maxlength=40 value="[{if $aRegParams.oxuser__oxusername}][{$aRegParams.oxuser__oxusername}][{/if}]">
             <p class="oxValidateError">

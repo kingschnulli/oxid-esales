@@ -1,6 +1,6 @@
 [{oxscript include="js/widgets/oxdropdown.js" priority=10 }]
 [{oxscript add="$('div.dropDown p').oxDropDown();" }]
-<div class="dropDown [{$sJsAction}]" id="selectlist_[{$iKey}]">
+<div class="dropDown [{$sJsAction}]">
     <p class="selectorLabel underlined [{if $editable === false}] js-disabled[{/if}]">
         <label>[{$oSelectionList->getLabel()}]:</label>
         [{assign var="oActiveSelection" value=$oSelectionList->getActiveSelection()}]

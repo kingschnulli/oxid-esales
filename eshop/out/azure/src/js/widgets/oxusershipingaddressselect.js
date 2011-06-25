@@ -37,7 +37,7 @@
             $('#shippingAddressForm').show();
             $('#shippingAddressText').hide();
             $("select[name='deladr[oxaddress__oxcountryid]']").children("option").attr("selected", null);
-            $("select[name='deladr[oxaddress__oxstateid]']").children("option[name='promtString']").attr("selected", "selected");
+            $("select[name='deladr[oxaddress__oxstateid]']").children('option[value=""]').attr("selected", "selected");
         },
 
         /**

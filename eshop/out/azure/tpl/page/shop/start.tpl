@@ -35,5 +35,6 @@
         [{assign var='rsslinks' value=$oView->getRssLinks() }]
         [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() head="PAGE_SHOP_START_JUSTARRIVED"|oxmultilangassign listId="newItems" products=$oView->getNewestArticles() rsslink=$rsslinks.newestArticles rssId="rssNewestProducts" showMainLink=true}]
     [{/if}]
+    [{ insert name="oxid_tracker"}]
 [{/capture}]
 [{include file="layout/page.tpl" sidebar="Right"}]

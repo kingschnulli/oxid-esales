@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticleTest.php 33661 2011-03-07 09:50:28Z sarunas $
+ * @version   SVN: $Id: oxseoencoderarticleTest.php 36446 2011-06-17 14:56:03Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1265,5 +1265,29 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
             )->will($this->returnValue('articleUrlReturned'));
 
         $this->assertEquals('articleUrlReturned', $oSEA->getArticleMainUrl( $oA ));
+    }
+
+    /**
+     * oxSeoEncoderArticle::_getArticleUri() test case
+     *
+     * @return null
+     */
+    public function testGetArticleUriForMainCategory()
+    {
+        $sProdId = "1126";
+        $sCatId = oxDb::getDb()->getOne( "select oxcatnid from oxobject2category where oxobjectid = '{$sProdId}'" );
+
+        $oProduct = new oxArticle();
+        $oProduct->load( $sProdId );
+
+        $oCategory = new oxCategory();
+        $oCategory->load( $sCatId );
+        $sBaseUri = str_replace( oxConfig::getInstance()->getConfigParam( "sShopURL" ), "", $oCategory->getLink() );
+
+        $oEncoder = $this->getMock( 'oxSeoEncoderArticle', array('_getCategory', '_getMainCategory', '_loadFromDb' ) );
+        $oEncoder->expects( $this->once( ))->method( '_getCategory' )->will( $this->returnValue( false ) );
+        $oEncoder->expects( $this->once( ))->method( '_loadFromDb' )->will( $this->returnValue( false ) );
+        $oEncoder->expects( $this->once( ))->method( '_getMainCategory' )->will( $this->returnValue( $oCategory ) );
+        $this->assertEquals( $sBaseUri . "Bar-Set-ABSINTH.html", $oEncoder->UNITgetArticleUri( $oProduct, 0 ) );
     }
 }

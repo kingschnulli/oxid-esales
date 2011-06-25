@@ -84,9 +84,9 @@
          */
         showLinks : function( arrow )
         {
-            var arrowOnSrc = arrow.attr("longdesc");
+            var arrowSrc = arrow.attr("src");
             $("ul.actionLinks").slideDown("normal", function(){
-                arrow.attr("src", arrowOnSrc);
+                arrow.attr("src", arrowSrc.replace('selectbutton.png', 'selectbutton-on.png'));
                 $('#productLinks').toggleClass("selected");
             });
         },

@@ -1,4 +1,5 @@
 [{capture append="oxidBlock_content"}]
+[{assign var="template_title" value="PAGE_ACCOUNT_ORDER_TITLE"|oxmultilangassign }]
 <h1 class="pageHead">[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_TITLE" }]</h1>
 
 [{assign var=oOrders value=$oView->getOrderList() }]
@@ -101,6 +102,7 @@
   [{else}]
   [{ oxmultilang ident="PAGE_ACCOUNT_ORDER_EMPTYHISTORY" }]
   [{/if }]
+[{insert name="oxid_tracker" title=$template_title }]  
 [{/capture}]
 
 

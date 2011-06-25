@@ -1,3 +1,4 @@
+[{assign var="template_title" value="PAGE_ACCOUNT_DASHBOARD_MYACCOUNT"|oxmultilangassign }]
 [{capture append="oxidBlock_content"}]
     <div class="accountDashboardView">
         <h1 id="accountMain" class="pageHead">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_MYACCOUNT" }]"[{ $oxcmp_user->oxuser__oxusername->value }]"</h1>
@@ -21,7 +22,7 @@
             </dl>
         </div>
         <div class="col">
-            <dl>
+            <dl>  
                 <dt><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_noticelist" }]" rel="nofollow">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_MYNOTICELIST" }]</a></dt>
                 <dd>[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_PRODUCT3" }] [{ if $oxcmp_user }][{ $oxcmp_user->getNoticeListArtCnt() }][{else}]0[{/if}]</dd>
             </dl>
@@ -49,12 +50,12 @@
 
         <a href="[{ $oViewConf->getLogoutLink() }]" class="submitButton largeButton">[{ oxmultilang ident="PAGE_ACCOUNT_DASHBOARD_LOGOUT" }]</a>
     </div>
-
+    [{insert name="oxid_tracker" title=$template_title }]
+    [{$template_title}]
 [{/capture}]
 
 
 [{capture append="oxidBlock_sidebar"}]
     [{include file="page/account/inc/account_menu.tpl"}]
 [{/capture}]
-
 [{include file="layout/page.tpl" sidebar="Left"}]

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 35083 2011-05-03 11:15:49Z sarunas $
+ * @version   SVN: $Id: oxubase.php 36390 2011-06-16 08:46:10Z arvydas.vapsva $
  */
 
 /**
@@ -3174,4 +3174,13 @@ class oxUBase extends oxView
 
     }
 
+    /**
+     * Returns added basket item notification message type
+     * 
+     * @return int
+     */
+    public function getNewBasketItemMsgType()
+    {
+        return (int) $this->getConfig()->getConfigParam( "iNewBasketItemMessage" );
+    }
 }

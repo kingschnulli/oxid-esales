@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxinputvalidatorTest.php 30461 2010-10-21 13:46:47Z arvydas $
+ * @version   SVN: $Id: oxinputvalidatorTest.php 36409 2011-06-17 06:44:57Z arunas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -531,7 +531,7 @@ class Unit_Core_oxInputValidatorTest extends OxidTestCase
         $oValidator = $this->getMock('oxinputvalidator', array('_addValidationError'));
         $oValidator->expects($this->at(0))->method('_addValidationError')
                 ->with(
-                        $this->equalTo('oxuser__oxpassword'),
+                        $this->equalTo('oxuser__oxfname'),
                         $this->logicalAnd(
                             $this->isInstanceOf('oxInputException'),
                             $this->attributeEqualTo('message','EXCEPTION_INPUT_NOTALLFIELDS')
@@ -539,7 +539,7 @@ class Unit_Core_oxInputValidatorTest extends OxidTestCase
                 );
         $oValidator->expects($this->at(1))->method('_addValidationError')
                 ->with(
-                        $this->equalTo('oxuser__oxpassword'),
+                        $this->equalTo('oxuser__oxlname'),
                         $this->logicalAnd(
                             $this->isInstanceOf('oxInputException'),
                             $this->attributeEqualTo('message','EXCEPTION_INPUT_NOTALLFIELDS')

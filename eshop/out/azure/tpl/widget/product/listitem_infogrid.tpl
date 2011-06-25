@@ -73,7 +73,7 @@
                   <a class="compare" href="#">VERGLEICHEN</a><br><br>
                [{* ======================================= *}]
                 [{oxhasrights ident="SHOWARTICLEPRICE"}]
-                    [{if $product->getFTPrice()}]
+                    [{if $product->getFTPrice() > $product->getFPrice()}]
                         <span class="oldPrice">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REDUCEDFROM" }] <del>[{ $product->getFTPrice()}] [{ $currency->sign}]</del></span>
                     [{/if}]
                     [{if $product->getFPrice()}]

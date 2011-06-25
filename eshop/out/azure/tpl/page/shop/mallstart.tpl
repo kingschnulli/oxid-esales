@@ -31,7 +31,7 @@
 
     <div id="footer">
         <div class="copyright">
-            <img src="[{$oViewConf->getImageUrl()}]logo_small.png">
+            <img src="[{$oViewConf->getImageUrl()}]logo_small.png" alt="[{oxmultilang ident="OXID_ESALES_URL_TITLE"}]">
         </div>
         <div class="text">
             [{oxifcontent ident="oxstdfooter" object="oCont"}]
