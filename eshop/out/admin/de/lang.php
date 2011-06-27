@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 36506 2011-06-21 13:47:07Z juergen.busch $
+ * @version   SVN: $Id: lang.php 36521 2011-06-23 09:41:49Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -245,7 +245,7 @@ $aLang = array(
 'GENERAL_MANUEL'                                           => 'Manuell',
 'GENERAL_MANUELL'                                          => 'manuell',
 'GENERAL_MENUITEM'                                         => 'Artikel verwalten',
-'GENERAL_MANUFACTURER'                                     => 'Lieferant',
+'GENERAL_MANUFACTURER'                                     => 'Hersteller',
 'GENERAL_MAX_FILE_UPLOAD'                                  => 'max.',
 'GENERAL_NAME'                                             => 'Name',
 'GENERAL_NO'                                               => 'Nein',
@@ -309,7 +309,7 @@ $aLang = array(
 'GENERAL_USER'                                             => 'Benutzer',
 'GENERAL_USTID'                                            => 'Umsatzsteuer-Identnummer',
 'GENERAL_VARIANTE'                                         => 'Variante von  ',
-'GENERAL_VENDOR'                                           => 'Hersteller',
+'GENERAL_VENDOR'                                           => 'Lieferant',
 'GENERAL_VOUCHERS'                                         => 'Gutschein Rabatt',
 'GENERAL_YOUWANTTODELETE'                                  => 'Wollen Sie diesen Eintrag wirklich löschen?',
 'GENERAL_YOUWANTTOUNASSIGN'                                => 'Wollen Sie die Verknüpfung zu diesem Shop wirklich lösen?',
@@ -1175,7 +1175,7 @@ $aLang = array(
 'SHOP_SEO_TITLEPREFIX'                                     => 'Titel Präfix',
 'SHOP_SEO_TITLESUFFIX'                                     => 'Titel Suffix',
 'SHOP_SEO_STARTTITLE'                                      => 'Titel der Startseite',
-'SHOP_SEO_ROOTVENDORID'                                    => 'Hersteller Wurzel SEO ID',
+'SHOP_SEO_ROOTVENDORID'                                    => 'Lieferant Wurzel SEO ID',
 'SHOP_SEO_IDSSEPARATOR'                                    => 'SEO IDs Trennzeichen (z. B. "+", "-")',
 'SHOP_SEO_SAFESEOPREF'                                     => 'SEO Suffix um gleiche Artikel zu unterscheiden',
 'SHOP_SEO_RESETIDS'                                        => 'SEO URLs neu berechnen',
@@ -1384,7 +1384,7 @@ $aLang = array(
 'USERGROUP_MAIN_ALLMEMBERS'                                => 'Alle Benutzer',
 'VENDOR_LIST_MENUITEM'                                     => 'Stammdaten',
 'VENDOR_LIST_MENUSUBITEM'                                  => 'Lieferanten',
-'VENDOR_LIST_TITLE'                                        => '[OXID Herstellerverwaltung]',
+'VENDOR_LIST_TITLE'                                        => '[OXID Lieferantenverwaltung]',
 'VENDOR_MAIN_ALLITEMS'                                     => 'Alle verfügbaren Artikel',
 'VENDOR_MAIN_ITEMSWITHVENDOR'                              => 'Artikel von diesem Lieferanten',
 'VENDOR_MAIN_ICONUPLOAD'                                   => 'Icon hochladen',
