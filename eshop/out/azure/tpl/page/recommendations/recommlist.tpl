@@ -11,7 +11,7 @@
 
         [{if $rsslinks.recommlistarts}]
             <a class="rss js-external" id="rssRecommListProducts" href="[{$rsslinks.recommlistarts.link}]" title="[{$rsslinks.recommlistarts.title}]">
-                <img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.recommlistarts.title}]">
+                <img src="[{$oViewConf->getImageUrl('rss.png')}]" alt="[{$rsslinks.recommlistarts.title}]">
                 <span class="FXgradOrange corners glowShadow">[{$rsslinks.recommlistarts.title}]</span>
             </a>
         [{/if }]
@@ -20,16 +20,20 @@
         <div class="listRefine clear bottomRound">
             [{include file="widget/locator/listlocator.tpl" locator=$oView->getPageNavigation()}]
         </div>
-        <div >
-            <div class="clear">
-                <div>
-                    [{ $_actvrecommlist->oxrecommlists__oxdesc->value }]
-                </div>
-                <div class="rating clear">
-                    [{include file="widget/reviews/rating.tpl" itemid="recommid="|cat:$_actvrecommlist->getId() sRateUrl=$oViewConf->getSelfLink()|cat:"cl=recommlist"}]
+
+        [{block name="recommendations_desc"}]
+            <div>
+                <div class="clear">
+                    <div>
+                        [{ $_actvrecommlist->oxrecommlists__oxdesc->value }]
+                    </div>
+                    <div class="rating clear">
+                        [{include file="widget/reviews/rating.tpl" itemid="recommid="|cat:$_actvrecommlist->getId() sRateUrl=$oViewConf->getSelfLink()|cat:"cl=recommlist"}]
+                    </div>
                 </div>
             </div>
-        </div>
+        [{/block}]
+
         [{* List types: grid|line *}]
         [{include file="widget/product/list.tpl" type="line" listId="productList" products=$oView->getArticleList() recommid=$_actvrecommlist->getId()}]
         [{include file="widget/locator/listlocator.tpl" locator=$oView->getPageNavigation() place="bottom"}]

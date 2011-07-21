@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 36127 2011-06-09 13:48:00Z vilma $
+ * @version   SVN: $Id: help_lang.php 37041 2011-07-14 13:17:59Z arvydas.vapsva $
  */
 
 /**
@@ -177,6 +177,8 @@ $aLang =  array(
                                                  'How to connect your website to Facebook, you can read in ' .
                                                  '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank" target="_blank">tutorial</a>.',
 
+'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONFIRM'=> '[tr] To improve customer privacy we implement confirmation button which enables Facebook widgets, thus data is shared with third party only with user confirmation',
+
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FBSECRETKEY'    => 'To ensure secure connection between your site and facebook, you must ' .
                                                  'enter Secure Key which you get when registering your website to ' .
                                                  'Facebook. Read in <a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank" target="_blank">tutorial</a> ' .
@@ -199,6 +201,8 @@ $aLang =  array(
 
 
 'HELP_SHOP_CONFIG_ATTENTION'                  => 'Caution: Even if encryption is used, Credit Card contracts usually prohibit this strictly!',
+
+'HELP_SHOP_CONFIG_SHOWTAGS'                   => '[tr] If unchecked tags will not bi displayed in shop, also tags pages will not be accessible',
 
 'HELP_SHOP_MALL_MALLMODE'                     => 'Here you can set what is shown as front page of this eShop:' .
                                                  '<ul><li><span class="navipath_or_inputname">Show shop selector</span>: A page where the different eShops can be selected is shown.</li>' .

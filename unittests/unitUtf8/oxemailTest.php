@@ -260,7 +260,7 @@ class UnitUtf8_oxemailTest extends OxidTestCase
 
         $sBody  = '<img src="'.$myConfig->getImageDir().'stars.jpg" border="0" hspace="0" vspace="0" alt="stars" align="texttop">';
         $sBody .= '<img src="'.$myConfig->getImageUrl().'wishlist.jpg" border="0" hspace="0" vspace="0" alt="wishlist" align="texttop">';
-        $sBody .= '<img src="'.$myConfig->getPictureUrl(null).'0/'.$iImgFile.'" border="0" hspace="0" vspace="0" alt="'.$sTitle.'" align="texttop">';
+        $sBody .= '<img src="'.$sImgUrl.'" border="0" hspace="0" vspace="0" alt="'.$sTitle.'" align="texttop">';
 
         $sGenBody  = '<img src="cid:xxx" border="0" hspace="0" vspace="0" alt="stars" align="texttop">';
         $sGenBody .= '<img src="cid:xxx" border="0" hspace="0" vspace="0" alt="wishlist" align="texttop">';
@@ -270,7 +270,7 @@ class UnitUtf8_oxemailTest extends OxidTestCase
         $oEmail->expects( $this->once() )->method( 'getBody' )->will($this->returnValue( $sBody ) );
         $oEmail->expects( $this->at( 1 ) )->method( 'addEmbeddedImage' )->with( $this->equalTo( $myConfig->getImageDir().'stars.jpg' ), $this->equalTo( 'xxx' ), $this->equalTo( "image" ), $this->equalTo( "base64"), $this->equalTo( 'image/jpeg' ) )->will( $this->returnValue( true ) );
         $oEmail->expects( $this->at( 2 ) )->method( 'addEmbeddedImage' )->with( $this->equalTo( $myConfig->getImageDir().'wishlist.jpg' ), $this->equalTo( 'xxx' ), $this->equalTo( "image" ), $this->equalTo( "base64"), $this->equalTo( 'image/jpeg' ) )->will( $this->returnValue( true ) );
-        $oEmail->expects( $this->at( 3 ) )->method( 'addEmbeddedImage' )->with( $this->equalTo( $myConfig->getPictureDir(false).'0/'.$iImgFile ), $this->equalTo( 'xxx' ), $this->equalTo( "image" ), $this->equalTo( "base64"), $this->equalTo( 'image/jpeg' ) )->will( $this->returnValue( true ) );
+        $oEmail->expects( $this->at( 3 ) )->method( 'addEmbeddedImage' )->with( $this->equalTo( $myConfig->getPictureDir(false).'generated/product/thumb/185_150_75/'.$iImgFile ), $this->equalTo( 'xxx' ), $this->equalTo( "image" ), $this->equalTo( "base64"), $this->equalTo( 'image/jpeg' ) )->will( $this->returnValue( true ) );
         $oEmail->expects( $this->once() )->method( 'setBody' )->with( $this->equalTo( $sGenBody ) );
 
         $oEmail->UNITincludeImages( $myConfig->getImageDir(), $myConfig->getImageUrl( false ), $myConfig->getPictureUrl(null),

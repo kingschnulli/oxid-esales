@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 36517 2011-06-22 14:40:14Z arunas.paskevicius $
+ * @version   SVN: $Id: oxarticleTest.php 37178 2011-07-20 09:08:35Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -251,6 +251,9 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $this->cleanUpTable('oxdiscount');
 
+
+        oxDb::getInstance()->resetTblDescCache();
+
         parent::tearDown();
     }
 
@@ -312,7 +315,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         $sPrefix = '';
 
-        $sIconUrl = oxConfig::getInstance()->getConfigParam( "sShopURL" )."out/pictures{$sPrefix}/icon/nopic_ico.jpg";
+        $sIconUrl = oxConfig::getInstance()->getConfigParam( "sShopURL" )."out/pictures{$sPrefix}/generated/product/1/87_87_75/nopic.jpg";
         $this->assertEquals( $sIconUrl, $this->oArticle->getIconUrl() );
     }
 
@@ -953,8 +956,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle = new oxarticle();
         $aGallery = $oArticle->getPictureGallery();
 
-        $sUrl = oxConfig::getInstance()->getPictureUrl( '1/nopic.jpg' );
-        $this->assertNotNull( $sUrl );
+        $sUrl = oxConfig::getInstance()->getPictureUrl( "" ) . 'generated/product/1/380_340_75/nopic.jpg';
         $this->assertEquals( $sUrl, $aGallery['ActPic'] );
     }
 
@@ -990,6 +992,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oMediaUrls = $oArt->getMediaUrls();
 
+        $this->assertEquals( 1, count($oMediaUrls) );
         $this->assertEquals( 1, $oMediaUrls->current()->getLanguage() );
         $this->cleanUpTable( 'oxmediaurls' );
     }
@@ -2077,8 +2080,10 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testGetVariantsCached()
     {
         $oSubj = $this->getProxyClass('oxarticle');
-        $oSubj->setNonPublicVar("_aVariants", 'testval1');
-        $oSubj->setNonPublicVar("_aVariantsWithNotOrderables", 'testval2');
+        $oSubj->oxarticles__oxvarcount = new oxField( 10 );
+        $oSubj->setInList();
+        $oSubj->setNonPublicVar("_aVariants", array( 'simple' => 'testval1' ) );
+        $oSubj->setNonPublicVar("_aVariantsWithNotOrderables", array( 'simple' => 'testval2' ) );
         $this->assertEquals('testval2', $oSubj->getVariants(false));
         $this->assertEquals('testval1', $oSubj->getVariants(true));
         $this->assertEquals('testval1', $oSubj->getVariants());
@@ -2449,6 +2454,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->oxarticles__oxvendorid = new oxField( $sVendId );
 
         $oVendor = $oArticle->getVendor( false );
+        $this->assertNotNull( $oVendor );
         $this->assertTrue( $oVendor->isReadOnly() );
     }
 
@@ -2512,6 +2518,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->oxarticles__oxmanufacturerid = new oxField($sManId, oxField::T_RAW);
 
         $oMan = $oArticle->getManufacturer( false );
+        $this->assertNotNull( $oMan );
         $this->assertTrue( $oMan->isReadOnly() );
     }
 
@@ -2598,7 +2605,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
     /**
      * Tests if the "oxarticle::getCategory()" uses a cached value
-     * 
+     *
      * @return null
      */
     public function testGetCategoryCached()
@@ -2607,19 +2614,19 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $sCacheIndex  = "test";
         $sCacheResult = "already cached";
         $aCache       = array( $sCacheIndex => $sCacheResult );
-        
+
         // setting the "cached" variables
         $oArticle = $this->getProxyClass( 'oxarticle' );
         $oArticle->setNonPublicVar( '_aCategoryCache', $aCache );
-        
-        // setting the used article ID 
+
+        // setting the used article ID
         $oArticle->setId( $sCacheIndex );
-        
+
         // asserts are equals if the articles ID is in the caches index
         // and returns the cached result
         $this->assertEquals( $sCacheResult, $oArticle->getCategory() );
     }
-    
+
     /**
      * Test get category by price.
      *
@@ -3726,7 +3733,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $aPicGallery = $oArticle->getPictureGallery();
 
-        $sActPic = $sRawPath.$oArticle->oxarticles__oxpic1->value;
+        $sActPic = $sRawPath.'generated/product/1/380_340_75/'.preg_replace('#^1/#', '', $oArticle->oxarticles__oxpic1->value);
         $this->assertEquals($sActPic, $aPicGallery['ActPic']);
         $aPicGallery = $oArticle->getPictureGallery();
 
@@ -4350,7 +4357,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals( $this->oArticle->oxarticles__oxvat->value, $oArticle2->oxarticles__oxvat->value);
         //$this->assertEquals( $this->oArticle->oxarticles__oxthumb->value, "0/".$oArticle2->oxarticles__oxthumb->value);
 
-        $this->assertEquals( "0/test.jpg", $oArticle2->oxarticles__oxthumb->value);
+        $this->assertEquals( "test.jpg", $oArticle2->oxarticles__oxthumb->value);
         $this->assertNotEquals( $this->oArticle->oxarticles__oxid->value, $oArticle2->oxarticles__oxid->value);
     }
 
@@ -4417,185 +4424,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle->oxarticles__oxvarstock = new oxField(0, oxField::T_RAW);
         $this->oArticle->UNITassignNotBuyableParent();
         $this->assertFalse( $this->oArticle->_blNotBuyableParent );
-    }
-
-    /**
-     * Test assign zoom picture values in non admin mode.
-     *
-     * @return null
-     */
-    public function testAssignZoomPictureValues_NotAdminMode()
-    {
-        $oArticle = $this->getMock( 'oxarticle', array( 'isAdmin', '_getThumbnailName', '_getZoomPictureName' ) );
-        $oArticle->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->once() )->method( '_getZoomPictureName' )->will( $this->returnValue( "testZoom1.jpg" ) );
-
-        $oArticle->disableLazyLoading();
-
-        $oArticle->UNITassignZoomPictureValues( "oxarticles__oxzoom1" );
-
-        $this->assertEquals( "z1/testZoom1.jpg", $oArticle->oxarticles__oxzoom1->value );
-    }
-
-    /**
-     * Test assign zoom picture values in admin mode.
-     *
-     * @return null
-     */
-    public function testAssignZoomPictureValues_adminMode()
-    {
-        $oArticle = $this->getMock( 'oxarticle', array( 'isAdmin', '_getThumbnailName', '_getZoomPictureName' ) );
-        $oArticle->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->never() )->method( '_getZoomPictureName' );
-
-        $oArticle->disableLazyLoading();
-
-        $oArticle->UNITassignZoomPictureValues( "oxarticles__oxzoom1" );
-    }
-
-    /**
-     * Test assign picture values in admin mode. No additional pictures fields proccessing
-     * should be done.
-     *
-     * @return null
-     */
-    public function testAssignPictureValues_AdminMode()
-    {
-        $oArticle = $this->getMock( 'oxarticle', array( 'isAdmin', '_getThumbnailName', '_getIconName', '_getPictureName', '_getZoomPictureName' ) );
-        $oArticle->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->never() )->method( '_getThumbnailName' );
-        $oArticle->expects( $this->never() )->method( '_getIconName' );
-        $oArticle->expects( $this->never() )->method( '_getPictureName' );
-        $oArticle->expects( $this->never() )->method( '_getZoomPictureName' );
-
-        $oArticle->UNITassignPictureValues( "oxthumb" );
-    }
-
-    /**
-     * Test assign picture values when paremeter is not passed to function.
-     * No additional pictures fields proccessing should be done.
-     *
-     * @return null
-     */
-    public function testAssignPictureValues_NoParameters()
-    {
-        $oArticle = $this->getMock( 'oxarticle', array( 'isAdmin', '_getThumbnailName', '_getIconName', '_getPictureName', '_getZoomPictureName' ) );
-        $oArticle->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->never() )->method( '_getThumbnailName' );
-        $oArticle->expects( $this->never() )->method( '_getIconName' );
-        $oArticle->expects( $this->never() )->method( '_getPictureName' );
-        $oArticle->expects( $this->never() )->method( '_getZoomPictureName' );
-
-        $oArticle->UNITassignPictureValues();
-    }
-
-    /**
-     * Test assign picture values in non admin mode. Additional processing on pictures fields
-     * should be done.
-     *
-     * @return null
-     */
-    public function testAssignPictureValues_NotAdminMode()
-    {
-        $oArticle = $this->getMock( 'oxarticle', array( 'isAdmin', '_getThumbnailName', '_getIconName', '_getPictureName', '_getZoomPictureName' ) );
-        $oArticle->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-        // calling _getIconName() 2 times - one for main icon, one for picture icons
-        $oArticle->expects( $this->exactly(2) )->method( '_getIconName' )->will( $this->returnValue( "testIcon.jpg" ) );
-        $oArticle->expects( $this->once() )->method( '_getThumbnailName' )->will( $this->returnValue( "testThumb.jpg" ) );
-        $oArticle->expects( $this->once() )->method( '_getPictureName' )->will( $this->returnValue( "testPic1.jpg" ) );
-        $oArticle->expects( $this->once() )->method( '_getZoomPictureName' )->will( $this->returnValue( "testZoom1.jpg" ) );
-
-        $oArticle->disableLazyLoading();
-
-        $oArticle->UNITassignPictureValues( "oxarticles__oxicon" );
-        $oArticle->UNITassignPictureValues( "oxarticles__oxthumb" );
-        $oArticle->UNITassignPictureValues( "oxarticles__oxpic1" );
-        $oArticle->UNITassignPictureValues( "oxarticles__oxzoom1" );
-
-        $this->assertEquals( "icon/testIcon.jpg", $oArticle->oxarticles__oxicon->value );
-        $this->assertEquals( "0/testThumb.jpg", $oArticle->oxarticles__oxthumb->value );
-        $this->assertEquals( "1/testPic1.jpg", $oArticle->oxarticles__oxpic1->value );
-        $this->assertEquals( "z1/testZoom1.jpg", $oArticle->oxarticles__oxzoom1->value );
-    }
-
-    /**
-     * Test assign picture values not in admin mode.
-     *
-     * @return null
-     */
-    public function testAssignPictureValuesIfNotAdmin()
-    {
-        /*
-        $this->cleanTmpDir();
-        $iPicCount = modConfig::getInstance()->getConfigParam( 'iPicCount' );
-        $iZoomPicCount = modConfig::getInstance()->getConfigParam( 'iZoomPicCount' );
-        // TODO: works sometimes
-        $oArticle = $this->getMock( 'oxarticle', array( 'isAdmin', '_hasGeneratedImage', '_hasMasterImage' ) );
-        $oArticle->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->any() )->method( '_hasGeneratedImage')->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->any() )->method( '_hasMasterImage')->will( $this->returnValue( true ) );
-        $oArticle->load('_testArt');
-        $oArticle->oxarticles__oxthumb = new oxField('test.jpg', oxField::T_RAW);
-        $oArticle->oxarticles__oxicon = new oxField('tes_icon.jpg', oxField::T_RAW);
-        for ( $i=1; $i<= $iPicCount; $i++ ) {
-            $oArticle->{'oxarticles__oxpic'.$i} = new oxField("test$i.jpg", oxField::T_RAW);
-        }
-        for ( $i=1; $i<= $iZoomPicCount; $i++ ) {
-            $oArticle->{'oxarticles__oxzoom'.$i} = new oxField("test$i.jpg", oxField::T_RAW);
-        }
-
-        $oArticle->UNITassignPictureValues();
-
-        $this->assertEquals( '0/test.jpg', $oArticle->oxarticles__oxthumb->value );
-        $this->assertEquals( 'icon/tes_icon.jpg', $oArticle->oxarticles__oxicon->value );
-        for ( $i=1; $i<= $iPicCount; $i++ ) {
-            $this->assertEquals( "$i/test$i.jpg", $oArticle->{'oxarticles__oxpic'.$i}->value );
-            $this->assertEquals( "$i/test".$i."_ico.jpg", $oArticle->{'oxarticles__oxpic'.$i.'_ico'}->value );
-        }
-        for ( $i=1; $i<= $iZoomPicCount; $i++ ) {
-            $this->assertEquals( "z$i/test$i.jpg", $oArticle->{'oxarticles__oxzoom'.$i}->value );
-        }
-        */
-    }
-
-    /**
-     * Test assign all loaded picture values.
-     *
-     * @return null
-     */
-    public function testAssignAllPictureValues()
-    {
-        $myConfig = oxConfig::getInstance();
-        $oArticle = new oxArticle();
-        $oArticle->load( "1126" );
-
-        $this->assertFalse( isset( $oArticle->oxarticles__oxicon ) );
-        $this->assertFalse( isset( $oArticle->oxarticles__oxthumb ) );
-
-        $iPicCount = $myConfig->getConfigParam( 'iPicCount' );
-        for ( $i=1; $i<= $iPicCount; $i++ ) {
-            $this->assertFalse( isset( $oArticle->{"oxarticles__oxpic.$i"} ) );
-        }
-
-        if ( $iZoomPicCount = $myConfig->getConfigParam( 'iZoomPicCount' ) ) {
-            for ( $i=1; $i<= $iZoomPicCount; $i++ ) {
-                $this->assertFalse( isset( $oArticle->{"oxarticles__oxzoom.$i"} ) );
-            }
-        }
-
-        $oArticle->oxarticles__oxicon->value  = new oxField( "1126_ico.jpg" );
-        $oArticle->oxarticles__oxthumb->value = new oxField( "1126_th.jpg" );
-        $oArticle->oxarticles__oxpic1->value  = new oxField( "1126_p1.jpg" );
-        $oArticle->oxarticles__oxpic2->value  = new oxField( "1126_p2.jpg" );
-        $oArticle->oxarticles__oxpic3->value  = new oxField( "nopic.jpg" );
-
-        $oArticle->UNITassignAllPictureValues();
-
-        $this->assertEquals( "icon/1126_ico.jpg", $oArticle->oxarticles__oxicon->value );
-        $this->assertEquals( "0/1126_th.jpg", $oArticle->oxarticles__oxthumb->value );
-        $this->assertEquals( "1/1126_p1.jpg", $oArticle->oxarticles__oxpic1->value );
-        $this->assertEquals( "2/1126_p2.jpg", $oArticle->oxarticles__oxpic2->value );
-        $this->assertEquals( "3/nopic.jpg", $oArticle->oxarticles__oxpic3->value );
     }
 
     /**
@@ -4793,10 +4621,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->expects( $this->never() )->method( 'getAttributes');
         $oArticle->UNITassignAttributes();
     }
-
-
-
-
 
 
 
@@ -5111,7 +4935,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testLazyLoadPictures()
     {
         $oArticle = new _oxArticle();
-        $oArticle->load("1672");
+        $oArticle->load("09646538b54bac72b4ccb92fb5e3649f");
         $oArticle->zz = true;
 
         $this->assertFalse(isset($oArticle->oxarticles__oxpic1));
@@ -5122,8 +4946,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $sZoomPic = $oArticle->oxarticles__oxzoom1->value;
 
         $this->assertTrue(isset($oArticle->oxarticles__oxpic1));
-        $this->assertEquals("1/1672_p1.jpg", $oArticle->oxarticles__oxpic1->value);
-        $this->assertEquals("z1/1672_z1.jpg", $oArticle->oxarticles__oxzoom1->value);
+        $this->assertEquals("front_z1.jpg", $oArticle->oxarticles__oxpic1->value);
     }
 
     /**
@@ -5142,7 +4965,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $sPic = $oArticle->oxarticles__oxthumb->value;
 
         $this->assertTrue(isset($oArticle->oxarticles__oxthumb));
-        $this->assertEquals("0/2000_th.jpg", $oArticle->oxarticles__oxthumb->value);
+        $this->assertEquals("2000_th.jpg", $oArticle->oxarticles__oxthumb->value);
     }
 
     /**
@@ -5161,7 +4984,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $sPic = $oArticle->oxarticles__oxicon->value;
 
         $this->assertTrue(isset($oArticle->oxarticles__oxicon));
-        $this->assertEquals("icon/2000_ico.jpg", $oArticle->oxarticles__oxicon->value);
+        $this->assertEquals("2000_ico.jpg", $oArticle->oxarticles__oxicon->value);
     }
 
     /**
@@ -5708,7 +5531,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle2->resetVar();
         $oArticle2->UNITassignParentFieldValue('oxarticles__oxthumb');
         //$this->assertEquals( $this->oArticle->oxarticles__oxthumb->value, "0/".$oArticle2->oxarticles__oxthumb->value);
-        $this->assertEquals( "0/test.jpg", $oArticle2->oxarticles__oxthumb->value);
+        $this->assertEquals( "test.jpg", $oArticle2->oxarticles__oxthumb->value);
         $this->assertNotEquals( $this->oArticle->oxarticles__oxid->value, $oArticle2->oxarticles__oxid->value);
     }
 
@@ -5779,13 +5602,10 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oVarArticle->oxarticles__oxpicsgenerated = new oxField( 1, oxField::T_RAW);
 
         $oVarArticle->UNITassignParentFieldValue( "oxicon" );
-        $this->assertEquals( "icon/var_pic1_ico.jpg", $oVarArticle->oxarticles__oxicon->value);
+        $this->assertEquals( "var_pic1.jpg", $oVarArticle->oxarticles__oxicon->value);
 
         $oVarArticle->UNITassignParentFieldValue( "oxthumb" );
-        $this->assertEquals( "0/var_pic1_th.jpg", $oVarArticle->oxarticles__oxthumb->value);
-
-        $oVarArticle->UNITassignParentFieldValue( "oxzoom1" );
-        $this->assertEquals( "z1/var_pic1_z1.jpg", $oVarArticle->oxarticles__oxzoom1->value);
+        $this->assertEquals( "var_pic1.jpg", $oVarArticle->oxarticles__oxthumb->value);
 
         $oVarArticle->UNITassignParentFieldValue( "oxpicsgenerated" );
         $this->assertEquals( 1, $oVarArticle->oxarticles__oxpicsgenerated->value);
@@ -6171,16 +5991,29 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testGetPictureUrl()
     {
-        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('1/testPic1')->will( $this->returnValue( 'testPic1Url' ) );
+        $oPH = $this->getMock( 'oxPictureHandler', array( 'getPicUrl' ) );
+        $oPH->expects( $this->once() )->method( 'getPicUrl' )->with( $this->equalTo( 'product/1/' ), $this->equalTo( 'nopic.jpg' ) )->will( $this->returnValue( 'testPic1Url' ) );
+        modInstances::addMod('oxPictureHandler', $oPH);
 
-        $oArticle = $this->getMock( 'oxarticle', array( '_hasGeneratedImage', '_getPictureName' ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with('1')->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->once() )->method( '_getPictureName' )->with('1')->will( $this->returnValue( "testPic1" ) );
-
-        $oArticle->setConfig( $oConfig );
+        $oArticle = new oxarticle();
 
         $this->assertEquals( 'testPic1Url', $oArticle->getPictureUrl( 1 ) );
+    }
+
+    /**
+     * Test get picture url when new path is set up
+     *
+     * @return null
+     */
+    public function testGetPictureUrlNewPath()
+    {
+        $oArticle = new oxarticle();
+        $oArticle->oxarticles__oxpic1 = new oxField( "cabrinha_caliber_2011.jpg" );
+
+        $sUrl  = oxConfig::getInstance()->getOutUrl() . basename( oxConfig::getInstance()->getPicturePath( "" ) );
+        $sUrl .= "/generated/product/1/380_340_75/cabrinha_caliber_2011.jpg";
+
+        $this->assertEquals( $sUrl, $oArticle->getPictureUrl( 1 ) );
     }
 
     /**
@@ -6198,83 +6031,64 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle = $this->getProxyClass( "oxarticle" );
         $oArticle->setConfig($oConfig);
 
-        $this->assertNull( $oArticle->getPictureUrl() );
+        $this->assertNull( $oArticle->getPictureUrl(0) );
     }
 
     /**
-     * Test get main icon url.
+     * Test get picture icon url with new path setup
      *
      * @return null
      */
-    public function testGetIconUrl_mainIcon()
+    public function testGetIconUrlNewPath()
     {
-        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('icon/testIcon')->will( $this->returnValue( 'testIconUrl' ) );
-
         $oArticle = $this->getMock( 'oxarticle', array( '_getIconName', '_isFieldEmpty', '_assignPictureValues' ) );
+
+        $oArticle->oxarticles__oxpic1 = new oxField( "30-360-back_p1_z_f_th_665.jpg" );
+
         $oArticle->expects( $this->any() )->method( '_isFieldEmpty' )->will( $this->returnValue( false ) );
         $oArticle->expects( $this->any() )->method( '_assignPictureValues' )->will( $this->returnValue( null ) );
-        $oArticle->expects( $this->once() )->method( '_getIconName' )->with('')->will( $this->returnValue( "testIcon" ) );
+        $oArticle->expects( $this->never() )->method( '_getIconName' );
 
-        $oArticle->setConfig( $oConfig );
-        $this->assertEquals( 'testIconUrl', $oArticle->getIconUrl() );
+        $sUrl  = oxConfig::getInstance()->getOutUrl() . basename( oxConfig::getInstance()->getPicturePath( "" ) );
+        $sUrl .= "/generated/product/1/87_87_75/30-360-back_p1_z_f_th_665.jpg";
+
+        $this->assertEquals( $sUrl, $oArticle->getIconUrl( 1 ) );
     }
 
     /**
-     * Test get picture icon url.
+     * Test get thumbnail url when new path is set up
      *
      * @return null
      */
-    public function testGetIconUrl_pictureIcon()
+    public function testGetThumbnailUrlNewPath()
     {
-        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('1/testIcon1')->will( $this->returnValue( 'testIcon1Url' ) );
-
-        $oArticle = $this->getMock( 'oxarticle', array( '_getIconName', '_isFieldEmpty', '_assignPictureValues' ) );
+        $oArticle = $this->getMock( 'oxarticle', array( '_isFieldEmpty', '_assignPictureValues' ) );
+        $oArticle->oxarticles__oxthumb = new oxField( "detail1_z3_ico_th.jpg" );
         $oArticle->expects( $this->any() )->method( '_isFieldEmpty' )->will( $this->returnValue( false ) );
         $oArticle->expects( $this->any() )->method( '_assignPictureValues' )->will( $this->returnValue( null ) );
-        $oArticle->expects( $this->once() )->method( '_getIconName' )->with('1')->will( $this->returnValue( "testIcon1" ) );
 
-        $oArticle->setConfig( $oConfig );
-        $this->assertEquals( 'testIcon1Url', $oArticle->getIconUrl( 1 ) );
+        $sUrl  = oxConfig::getInstance()->getOutUrl() . basename( oxConfig::getInstance()->getPicturePath( "" ) );
+        $sUrl .= "/generated/product/thumb/185_150_75/detail1_z3_ico_th.jpg";
+
+        $this->assertEquals( $sUrl, $oArticle->getThumbnailUrl() );
     }
 
+
     /**
-     * Test get thumbnail url.
+     * Test get zoom picture url when new path is set up
      *
      * @return null
      */
-    public function testGetThumbnailUrl()
+    public function testGetZoomPictureUrlNewPath()
     {
-        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('0/testThumb')->will( $this->returnValue( 'testThumbUrl' ) );
-
-        $oArticle = $this->getMock( 'oxarticle', array( '_getThumbnailName', '_isFieldEmpty', '_assignPictureValues' ) );
+        $oArticle = $this->getMock( 'oxarticle', array( '_isFieldEmpty' ) );
+        $oArticle->oxarticles__oxpic1 = new oxField( "30-360-back_p1_z_f_th_665.jpg" );
         $oArticle->expects( $this->any() )->method( '_isFieldEmpty' )->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->any() )->method( '_assignPictureValues' )->will( $this->returnValue( null ) );
-        $oArticle->expects( $this->once() )->method( '_getThumbnailName' )->will( $this->returnValue( "testThumb" ) );
 
-        $oArticle->setConfig( $oConfig );
-        $this->assertEquals( 'testThumbUrl', $oArticle->getThumbnailUrl() );
-    }
+        $sUrl  = oxConfig::getInstance()->getOutUrl() . basename( oxConfig::getInstance()->getPicturePath( "" ) );
+        $sUrl .= "/generated/product/1/665_665_75/30-360-back_p1_z_f_th_665.jpg";
 
-    /**
-     * Test get zoom picture url.
-     *
-     * @return null
-     */
-    public function testGetZoomPictureUrl()
-    {
-        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('z1/testZoom')->will( $this->returnValue( 'testZoomUrl' ) );
-
-        $oArticle = $this->getMock( 'oxarticle', array( '_getZoomPictureName', '_isFieldEmpty', '_assignPictureValues' ) );
-        $oArticle->expects( $this->any() )->method( '_isFieldEmpty' )->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->any() )->method( '_assignPictureValues' )->will( $this->returnValue( null ) );
-        $oArticle->expects( $this->once() )->method( '_getZoomPictureName' )->with('1')->will( $this->returnValue( "testZoom" ) );
-
-        $oArticle->setConfig( $oConfig );
-        $this->assertEquals( 'testZoomUrl', $oArticle->getZoomPictureUrl( 1) );
+        $this->assertEquals( $sUrl, $oArticle->getZoomPictureUrl( 1) );
     }
 
     /**
@@ -6429,7 +6243,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oSubj->oxarticles__oxicon = new stdClass();
         $oSubj->oxarticles__oxicon->value = "nopic.jpg";
-        $this->assertFalse($oSubj->UNITisFieldEmpty("oxarticles__oxicon"));
+        $this->assertTrue($oSubj->UNITisFieldEmpty("oxarticles__oxicon"));
 
         $oSubj->oxarticles__oxthumb = new stdClass();
         $oSubj->oxarticles__oxthumb->value = "nopic_ico.jpg";
@@ -6800,394 +6614,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     }
 
     /**
-     * Test geting picture name.
-     *
-     * @return null
-     */
-    public function testGetPictureName()
-    {
-        $oArticle = $this->getProxyClass( "oxarticle" );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-
-        $this->assertEquals( "testPic1.jpg", $oArticle->UNITgetPictureName(1) );
-    }
-
-    /**
-     * Test geting picture name, when oxpic field is empty.
-     *
-     * @return null
-     */
-    public function testGetPictureName_noValue()
-    {
-        $oArticle = $this->getProxyClass( "oxarticle" );
-
-        $this->assertEquals( "nopic.jpg", $oArticle->UNITgetPictureName(1) );
-    }
-
-    /**
-     * Test geting article main icon name when icon name is set to oxicon field.
-     *
-     * @return null
-     */
-    public function testGetIconName()
-    {
-        $oArticle = $this->getProxyClass( "oxarticle" );
-        $oArticle->oxarticles__oxicon = new oxField( "testIcon.jpg" );
-
-        $this->assertEquals( "testIcon.jpg", $oArticle->UNITgetIconName() );
-    }
-
-    /**
-     * Test geting article main icon name when oxicon field is empty.
-     *
-     * @return null
-     */
-    public function testGetIconName_noValue()
-    {
-        $oArticle = $this->getProxyClass( "oxarticle" );
-
-        $this->assertEquals( "nopic_ico.jpg", $oArticle->UNITgetIconName() );
-    }
-
-    /**
-     * Test getting article main icon name generated from master picture.
-     *
-     * @return null
-     */
-    public function testGetIconName_usingMasterPicture()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->once() )->method( '_hasMasterImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( true ) );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "testPic1_ico.jpg", $oArticle->UNITgetIconName() );
-    }
-
-    /**
-     * Test getting article main icon name when picture is not generated from master picture.
-     *
-     * @return null
-     */
-    public function testGetIconName_noGeneratedImage()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->never() )->method( '_hasMasterImage' );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "nopic_ico.jpg", $oArticle->UNITgetIconName() );
-    }
-
-    /**
-     * Test getting article main icon name when genereated images value is ok,
-     * but no master picture is uploaded (compatibility with old versions).
-     *
-     * @return null
-     */
-    public function testGetIconName_noMasterImage()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->once() )->method( '_hasMasterImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( false ) );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "nopic_ico.jpg", $oArticle->UNITgetIconName() );
-    }
-
-    /**
-     * Test getting picture icon name.
-     *
-     * @return null
-     */
-    public function testGetIconName_usingIndex()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_hasGeneratedImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '2' ) )->will( $this->returnValue( true ) );
-        $oArticle->oxarticles__oxpic2 = new oxField( "testPic2.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "testPic2_ico.jpg", $oArticle->UNITgetIconName(2) );
-    }
-
-    /**
-     * Test getting picture icon name when picture is not generated from master picture
-     *
-     * @return null
-     */
-    public function testGetIconName_usingIndex_noGeneratedImage()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_hasGeneratedImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( false ) );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "nopic_ico.jpg", $oArticle->UNITgetIconName(1) );
-    }
-
-    /**
-     * Test getting picture thumbnail name using oxthumb field.
-     *
-     * @return null
-     */
-    public function testGetThumbnailName()
-    {
-        $oArticle = $this->getProxyClass( "oxarticle" );
-        $oArticle->oxarticles__oxthumb = new oxField( "testThumb.jpg" );
-
-        $this->assertEquals( "testThumb.jpg", $oArticle->UNITgetThumbnailName() );
-    }
-
-    /**
-     * Test getting picture thumbnail name using master picture.
-     *
-     * @return null
-     */
-    public function testGetThumbnailName_usingMasterPic()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->once() )->method( '_hasMasterImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( true ) );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "testPic1_th.jpg", $oArticle->UNITgetThumbnailName() );
-    }
-
-    /**
-     * Test getting picture thumbnail name when no thumb image was generated
-     * from master picture.
-     *
-     * @return null
-     */
-    public function testGetThumbnailName_noGeneratedImage()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->never() )->method( '_hasMasterImage' );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "nopic.jpg", $oArticle->UNITgetThumbnailName() );
-    }
-
-    /**
-     * Test getting picture thumbnail name when genereated images value is ok,
-     * but no master picture is uploaded (compatibility with old versions).
-     *
-     * @return null
-     */
-    public function testGetThumbnailName_noMasterImage()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->once() )->method( '_hasMasterImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( false ) );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "nopic.jpg", $oArticle->UNITgetThumbnailName() );
-    }
-
-    /**
-     * Test getting zoom picture name using oxzoom field.
-     *
-     * @return null
-     */
-    public function testGetZoomPictureName()
-    {
-        $oArticle = $this->getProxyClass( "oxarticle" );
-        $oArticle->oxarticles__oxzoom1 = new oxField( "testZoom1.jpg" );
-
-        $this->assertEquals( "testZoom1.jpg", $oArticle->UNITgetZoomPictureName(1) );
-    }
-
-    /**
-     * Test getting zoom picture name using master picture.
-     *
-     * @return null
-     */
-    public function testGetZoomPictureName_usingMasterPic()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->once() )->method( '_hasMasterImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( true ) );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "testPic1_z1.jpg", $oArticle->UNITgetZoomPictureName(1) );
-    }
-
-    /**
-     * Test getting zoom picture name when no zoom image was generated
-     * from master picture.
-     *
-     * @return null
-     */
-    public function testGetZoomPictureName_noGeneratedImage()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_isFieldEmpty", "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_isFieldEmpty' )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->never() )->method( '_hasMasterImage' );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "nopic.jpg", $oArticle->UNITgetZoomPictureName(1) );
-    }
-
-    /**
-     * Test getting zoom picture name using when genereated images value is ok,
-     * but no master picture is uploaded (compatibility with old versions).
-     *
-     * @return null
-     */
-    public function testGetZoomPictureName_noMasterImage()
-    {
-        $oArticle = $this->getMock( "oxarticle", array( "_isFieldEmpty", "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_isFieldEmpty' )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->once() )->method( '_hasMasterImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( false ) );
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic1.jpg" );
-        $oArticle->disableLazyLoading();
-
-        $this->assertEquals( "nopic.jpg", $oArticle->UNITgetZoomPictureName(1) );
-    }
-
-    /**
-     * Test images generation
-     *
-     * @return null
-     */
-    public function testGenerateImages()
-    {
-        $oPicHandler = $this->getMock( "oxPictureHandler", array( "generateArticlePictures" ) );
-        $oPicHandler->expects( $this->once() )->method( 'generateArticlePictures' );
-
-        modInstances::addMod( "oxPictureHandler", $oPicHandler );
-
-        $oArticle = $this->getMock( "oxArticle", array( "_hasGeneratedImage", "_hasMasterImage", "_isFieldEmpty" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->once() )->method( '_hasMasterImage' )->with( $this->equalTo( '1' ) )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->once() )->method( '_isFieldEmpty' )->with( $this->equalTo( 'oxarticles__oxpic1' ) )->will( $this->returnValue( false ) );
-
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic" );
-        $oArticle->UNITgenerateImages( 1 );
-    }
-
-    /**
-     * Test images generation when article already has generated images
-     *
-     * @return null
-     */
-    public function testGenerateImages_noMasterImage()
-    {
-        $oPicHandler = $this->getMock( "oxPictureHandler", array( "generateArticlePictures" ) );
-        $oPicHandler->expects( $this->never() )->method( 'generateArticlePictures' );
-
-        modInstances::addMod( "oxPictureHandler", $oPicHandler );
-
-        $oArticle = $this->getMock( "oxArticle", array( "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->never() )->method( '_hasMasterImage' );
-
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic" );
-        $oArticle->UNITgenerateImages( 1 );
-    }
-
-    /**
-     * Test images generation when article hasn't generated images
-     * and master image file does not exists
-     *
-     * @return null
-     */
-    public function testGenerateImages_imagesAlreadyGenerated()
-    {
-        $oPicHandler = $this->getMock( "oxPictureHandler", array( "generateArticlePictures" ) );
-        $oPicHandler->expects( $this->never() )->method( 'generateArticlePictures' );
-
-        modInstances::addMod( "oxPictureHandler", $oPicHandler );
-
-        $oArticle = $this->getMock( "oxArticle", array( "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->once() )->method( '_hasMasterImage' )->will( $this->returnValue( false ) );
-
-        $oArticle->oxarticles__oxpic1 = new oxField( "testPic" );
-        $oArticle->UNITgenerateImages( 1 );
-    }
-
-    /**
-     * Test images generation when pic value is empty
-     *
-     * @return null
-     */
-    public function testGenerateImages_picValueIsNotSetted()
-    {
-        $oPicHandler = $this->getMock( "oxPictureHandler", array( "generateArticlePictures" ) );
-        $oPicHandler->expects( $this->never() )->method( 'generateArticlePictures' );
-
-        modInstances::addMod( "oxPictureHandler", $oPicHandler );
-
-        $oArticle = $this->getMock( "oxArticle", array( "_hasGeneratedImage", "_hasMasterImage" ) );
-        $oArticle->expects( $this->never() )->method( '_hasGeneratedImage' );
-        $oArticle->expects( $this->never() )->method( '_hasMasterImage' );
-
-        $oArticle->UNITgenerateImages( 1 );
-    }
-
-    /**
-     * Test images generation when pic value is set but is empty
-     *
-     * @return null
-     */
-    public function testGenerateImages_picValueIsEmpty()
-    {
-        $oPicHandler = $this->getMock( "oxPictureHandler", array( "generateArticlePictures" ) );
-        $oPicHandler->expects( $this->never() )->method( 'generateArticlePictures' );
-
-        modInstances::addMod( "oxPictureHandler", $oPicHandler );
-
-        $oArticle = $this->getMock( "oxArticle", array( "_hasGeneratedImage", "_hasMasterImage", "_isFieldEmpty" ) );
-        $oArticle->expects( $this->once() )->method( '_hasGeneratedImage' )->will( $this->returnValue( false ) );
-        $oArticle->expects( $this->once() )->method( '_isFieldEmpty' )->with( $this->equalTo( 'oxarticles__oxpic1' ) )->will( $this->returnValue( true ) );
-        $oArticle->expects( $this->never() )->method( '_hasMasterImage' );
-
-        $oArticle->oxarticles__oxpic1 = new oxField( "nopic.jpg" );
-
-        $oArticle->UNITgenerateImages( 1 );
-    }
-
-    /**
-     * Test updating amount of generated images
-     *
-     * @return null
-     */
-    public function testUpdateAmountOfGeneratedPictures()
-    {
-        $this->oArticle->oxarticles__oxpicsgenerated = new oxField( 0 );
-        $this->oArticle->updateAmountOfGeneratedPictures( 3 );
-
-        $sQ = "SELECT oxpicsgenerated FROM oxarticles WHERE oxid = '".$this->oArticle->getId()."'";
-        $this->assertEquals( 3, oxDb::getDb()->getOne($sQ) );
-    }
-
-    /**
-     * Test checking if article has correct oxpicsgenerated field value
-     *
-     * @return null
-     */
-    public function testHasGeneratedImage()
-    {
-        $oArticle = $this->getProxyClass( "oxarticle" );
-        $oArticle->oxarticles__oxpicsgenerated = new oxField( 2 );
-
-        $this->assertTrue( $oArticle->UNIThasGeneratedImage( 2 ) );
-        $this->assertFalse( $oArticle->UNIThasGeneratedImage( 3 ) );
-    }
-
-    /**
      * Test checking if article has upladed master picture
      *
      * @return null
@@ -7195,7 +6621,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testHasMasterImage_noImage()
     {
         $oConfig = $this->getMock( "oxconfig", array( "getMasterPicturePath" ) );
-        $oConfig->expects( $this->any() )->method( 'getMasterPicturePath' )->with( $this->equalTo( '1/testPic1.jpg' ) )->will( $this->returnValue( false ) );
+        $oConfig->expects( $this->any() )->method( 'getMasterPicturePath' )->with( $this->equalTo( 'product/1/testPic1.jpg' ) )->will( $this->returnValue( false ) );
 
         $oArticle = $this->getProxyClass( "oxarticle" );
         $oArticle->setConfig( $oConfig );
@@ -7248,8 +6674,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testHasMasterImage_hasImage()
     {
         $oConfig = $this->getMock( "oxconfig", array( "getMasterPicturePath" ) );
-        $oConfig->expects( $this->at(0) )->method( 'getMasterPicturePath' )->with( $this->equalTo( '1/testPic1.jpg' ) )->will( $this->returnValue( true ) );
-        $oConfig->expects( $this->at(1) )->method( 'getMasterPicturePath' )->with( $this->equalTo( '2/testPic2.jpg' ) )->will( $this->returnValue( true ) );
+        $oConfig->expects( $this->at(0) )->method( 'getMasterPicturePath' )->with( $this->equalTo( 'product/1/testPic1.jpg' ) )->will( $this->returnValue( true ) );
+        $oConfig->expects( $this->at(1) )->method( 'getMasterPicturePath' )->with( $this->equalTo( 'product/2/testPic2.jpg' ) )->will( $this->returnValue( true ) );
 
         $oArticle = $this->getProxyClass( "oxarticle" );
         $oArticle->setConfig( $oConfig );
@@ -7312,11 +6738,11 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
 
         $sMasterPicDir = oxConfig::getInstance()->getPictureUrl("master");
-        $sPic = $sMasterPicDir . "/1/1672_p1.jpg";
+        $sPic = $sMasterPicDir . "/product/1/30-360-back_p1_z_f_th_665.jpg";
 
 
         $oArticle = new oxArticle();
-        $oArticle->oxarticles__oxpic1 = new oxField( '1672_p1.jpg' );
+        $oArticle->oxarticles__oxpic1 = new oxField( '30-360-back_p1_z_f_th_665.jpg' );
 
         $this->assertEquals( $sPic, $oArticle->getMasterZoomPictureUrl( 1 ) );
     }

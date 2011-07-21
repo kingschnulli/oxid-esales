@@ -11,7 +11,7 @@
 [{if $tsId }]
     <div id="tsSeal">
         <a id="tsCertificate" class="js-external" href="https://www.trustedshops.com/shop/certificate.php?shop_id=[{$tsId}]">
-            <img src="[{$oViewConf->getImageUrl()}]trustedshops_m.gif" title="[{ oxmultilang ident="WIDGET_TRUSTEDSHOPS_ITEM_IMGTITLE" }]">
+            <img src="[{$oViewConf->getImageUrl('trustedshops_m.gif')}]" title="[{ oxmultilang ident="WIDGET_TRUSTEDSHOPS_ITEM_IMGTITLE" }]">
         </a>
     </div>
     <div id="tsText">
@@ -21,7 +21,8 @@
     </div>
 [{else}]
     <a id="tsMembership" class="js-external" href="[{ oxmultilang ident="WIDGET_TRUSTEDSHOPS_ITEM_LINK" }]">
-        <img src="[{$oViewConf->getImageUrl()}]trustedshops_[{$oViewConf->getActLanguageId()}].gif" alt="[{ oxmultilang ident="WIDGET_TRUSTEDSHOPS_ITEM_ALTTEXT" }]">
+        [{assign var="sTrustShopImg" value="trustedshops_"|cat:$oViewConf->getActLanguageId()|cat:".gif" }]
+        <img src="[{$oViewConf->getImageUrl($sTrustShopImg)}]" alt="[{ oxmultilang ident="WIDGET_TRUSTEDSHOPS_ITEM_ALTTEXT" }]">
     </a>
 [{/if}]
 <!-- / Trusted Shops Siegel -->

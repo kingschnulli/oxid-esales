@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: function.oxscript.php 36126 2011-06-09 13:17:34Z arunas.paskevicius $
+ * @version   SVN: $Id: function.oxscript.php 36584 2011-06-28 10:04:06Z linas.kukulskis $
  */
 
 /**
@@ -56,8 +56,8 @@ function smarty_function_oxscript($params, &$smarty)
     if ( $params['add'] ) {
         $sScriptToken = trim( $params['add'] );
         if ( !in_array($sScriptToken, $aScript)) {
-            $aScript[] = $sScriptToken;    
-        }         
+            $aScript[] = $sScriptToken;
+        }
         $myConfig->setGlobalParameter($sScripts, $aScript);
 
     } elseif ( $params['include'] ) {
@@ -84,14 +84,18 @@ function smarty_function_oxscript($params, &$smarty)
                 $sOutput .= '<script type="text/javascript" src="'.$sSrc.'"></script>'.PHP_EOL;
             }
         }
-        
+        $myConfig->setGlobalParameter($sIncludes, null);
+
         if (count($aScript)) {
             $sOutput .= '<script type="text/javascript">' . "\n";
             foreach ($aScript as $sScriptToken) {
                 $sOutput .= $sScriptToken. "\n";
             }
             $sOutput .= '</script>' . PHP_EOL;
+
+            $myConfig->setGlobalParameter($sScripts, null);
         }
+
     }
 
     return $sOutput;

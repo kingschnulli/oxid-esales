@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 36084 2011-06-08 14:39:09Z arvydas.vapsva $
+ * @version   SVN: $Id: oxuser.php 36613 2011-06-28 15:04:37Z arunas.paskevicius $
  */
 
 /**
@@ -419,19 +419,26 @@ class oxUser extends oxBase
             if ( $sAddressId = $this->getSelectedAddressId() ) {
                 foreach ( $oAddresses as $oAddress ) {
                     if ( $oAddress->getId() == $sAddressId ) {
-                        $oAddress->selected = 1;
+                        $oAddress->selected = 1;                            
+                        $oAddress->setSelected();
                         $oSelectedAddress = $oAddress;
                         break;
                     }
                 }
             }
-
+            
             // in case none is set - setting first one
             if ( !$oSelectedAddress ) {
-                $oAddresses->rewind();
-                $oAddress = $oAddresses->current();
+                if ( !$sAddressId || $sAddressId >= 0 ) {
+                    $oAddresses->rewind();
+                    $oAddress = $oAddresses->current();
+                } else {
+                    $aAddresses = $oAddresses->getArray();
+                    $oAddress   = array_pop( $aAddresses );                    
+                }
                 $oAddress->selected = 1;
-                $oSelectedAddress = $oAddress;
+                $oAddress->setSelected();
+                $oSelectedAddress = $oAddress;                
             }
         }
         $this->_oSelAddress = $oSelectedAddress;

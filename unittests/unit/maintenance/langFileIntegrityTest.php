@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: langFileIntegrityTest.php 33208 2011-02-11 13:04:08Z alfonsas $
+ * @version   SVN: $Id: langFileIntegrityTest.php 37179 2011-07-20 10:38:49Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -40,9 +40,9 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE = array_keys( $this->_getLanguageArray(null, 1, 'de') );
         $aLangIdentsEN = array_keys( $this->_getLanguageArray(null, 1, 'en') );
 
+        $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
         $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
-        $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
 
@@ -56,9 +56,9 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE = array_keys( $this->_getLanguageArray('basic', 1, 'de') );
         $aLangIdentsEN = array_keys( $this->_getLanguageArray('basic', 1, 'en') );
 
+        $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
         $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
-        $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
 
@@ -72,9 +72,9 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE = array_keys( $this->_getLanguageArray('azure', 1, 'de') );
         $aLangIdentsEN = array_keys( $this->_getLanguageArray('azure', 1, 'en') );
 
+        $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
         $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
-        $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
 
@@ -88,9 +88,9 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE = array_keys( $this->_getLanguageArray( 'admin', 1, 'de') );
         $aLangIdentsEN = array_keys( $this->_getLanguageArray( 'admin', 1, 'en') );
 
+        $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
         $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
-        $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
 
@@ -246,6 +246,18 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $sMask = oxConfig::getInstance()->getConfigParam( 'sShopDir' ).DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, array_diff($aFile, array(null, '')));
 
         foreach ( glob($sMask) as $sFile ) {
+            if (is_readable($sFile)) {
+                include $sFile;
+                $aAllLang = array_merge($aAllLang, $aLang);
+            } else {
+                $aLang = array();
+            }
+        }
+
+        $aFileGeneric = array( 'out', $sLang, 'lang.php' );
+        $sGenericMask = oxConfig::getInstance()->getConfigParam( 'sShopDir' ).DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, array_diff($aFileGeneric, array(null, '')));
+
+        foreach ( glob($sGenericMask) as $sFile ) {
             if (is_readable($sFile)) {
                 include $sFile;
                 $aAllLang = array_merge($aAllLang, $aLang);

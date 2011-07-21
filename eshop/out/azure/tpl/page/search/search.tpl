@@ -7,7 +7,7 @@
 [{assign var="search_head" value=$oView->getArticleCount()|cat:" "|cat:$search_head|cat:" &quot;"|cat:$oView->getSearchParamForHtml()|cat:"&quot;"}]
 [{assign var='rsslinks' value=$oView->getRssLinks() }]
 [{if $rsslinks.searchArticles}]
-    [{assign var="imgUrl" value=$oViewConf->getImageUrl()|cat:"rss.png"}]
+    [{assign var="imgUrl" value=$oViewConf->getImageUrl('rss.png')}]
         [{assign var="search_head" value="`$search_head` <a class=\"rss js-external\" id=\"rssSearchProducts\" href=\"`$rsslinks.searchArticles.link`\" title=\"`$rsslinks.searchArticles.title`\"><img src=\"$imgUrl\" alt=\"`$rsslinks.searchArticles.title`\"><span class=\"FXgradOrange corners glowShadow\">`$rsslinks.searchArticles.title`</span></a>"}]
 [{/if}]
 

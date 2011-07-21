@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 35592 2011-05-25 12:56:44Z vilma $
+ * @version   SVN: $Id: oxarticlelistTest.php 37133 2011-07-18 14:54:05Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1800,9 +1800,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $this->cleanTmpDir();
         $oTest->selectString("select oxid from oxarticles where oxid = '2000' or oxid = '1354' order by oxid");
         //this should be lazy loaded
-        $this->assertEquals('1/1354_p1.jpg', $oTest['1354']->oxarticles__oxpic1->value);
+        $this->assertEquals('1354_p1.jpg', $oTest['1354']->oxarticles__oxpic1->value);
         //article 2
-        $this->assertEquals('1/2000_p1.jpg', $oTest['2000']->oxarticles__oxpic1->value);
+        $this->assertEquals('2000_p1.jpg', $oTest['2000']->oxarticles__oxpic1->value);
     }
 
     /**
@@ -1816,9 +1816,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $this->cleanTmpDir();
         $oTest->selectString("select oxid from oxarticles where oxid = '2000' or oxid = '1354' order by oxid");
         //this should be lazy loaded
-        $this->assertEquals('0/1354_th.jpg', $oTest['1354']->oxarticles__oxthumb->value);
+        $this->assertEquals('1354_th.jpg', $oTest['1354']->oxarticles__oxthumb->value);
         //article 2
-        $this->assertEquals('0/2000_th.jpg', $oTest['2000']->oxarticles__oxthumb->value);
+        $this->assertEquals('2000_th.jpg', $oTest['2000']->oxarticles__oxthumb->value);
     }
 
     /**
@@ -1832,9 +1832,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $this->cleanTmpDir();
         $oTest->selectString("select oxid from oxarticles where oxid = '2000' or oxid = '1354' order by oxid");
         //this should be lazy loaded
-        $this->assertEquals('icon/1354_ico.jpg', $oTest['1354']->oxarticles__oxicon->value);
+        $this->assertEquals('1354_ico.jpg', $oTest['1354']->oxarticles__oxicon->value);
         //article 2
-        $this->assertEquals('icon/2000_ico.jpg', $oTest['2000']->oxarticles__oxicon->value);
+        $this->assertEquals('2000_ico.jpg', $oTest['2000']->oxarticles__oxicon->value);
     }
 
     /**

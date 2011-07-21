@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 35600 2011-05-26 07:16:11Z vilma $
+ * @version   SVN: $Id: oxconfigTest.php 37137 2011-07-19 06:58:06Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -177,7 +177,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
     public function testGetIconUrl()
     {
         $oConfig = $this->getMock( 'oxconfig', array( "getPictureUrl" ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl')->with( $this->equalTo( "someIconFile" ), $this->equalTo( false ), $this->equalTo( null ), $this->equalTo( null ), $this->equalTo( null ), $this->equalTo( "icon/nopic_ico.jpg" ) )->will( $this->returnValue( "testIconUrl" ) );
+        $oConfig->expects( $this->once() )->method( 'getPictureUrl')->with( $this->equalTo( "someIconFile" ), $this->equalTo( false ), $this->equalTo( null ), $this->equalTo( null ), $this->equalTo( null ), $this->equalTo( "master/nopic.jpg" ) )->will( $this->returnValue( "testIconUrl" ) );
         $this->assertEquals( "testIconUrl", $oConfig->getIconUrl( "someIconFile" ) );
     }
 
@@ -1957,7 +1957,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->init();
         $oConfig->setConfigParam( 'blFormerTplSupport', true );
         $this->assertNotEquals( '', $oConfig->getPictureUrl( "test.gif", false) );
-        $this->assertContains( 'nopic.jpg', $oConfig->getPictureUrl( "test.gif", false) );
+        $this->assertContains( 'master/nopic.jpg', $oConfig->getPictureUrl( "test.gif", false) );
     }
 
     public function testgetPictureUrlForBugEntry0001557()
@@ -1969,7 +1969,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->setConfigParam( "sAltImageDir", false );
         $oConfig->setConfigParam( "blFormerTplSupport", false );
 
-        $this->assertEquals( $myConfig->getConfigParam( "sShopURL" )."out/pictures".OXID_VERSION_SUFIX."/0/nopic.jpg", $oConfig->getPictureUrl( "unknown.file", true ) );
+        $this->assertEquals( $myConfig->getConfigParam( "sShopURL" )."out/pictures".OXID_VERSION_SUFIX."/master/nopic.jpg", $oConfig->getPictureUrl( "unknown.file", true ) );
     }
 
     public function testGetTemplateBase()
@@ -2076,4 +2076,36 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $this->assertFalse( $oConfig->isThemeOption( 'aaa' ) );
     }
 
+    /**
+     * Testing value decoder
+     *
+     * @return null
+     */
+    public function testDecodeValue()
+    {
+        $sString = "test";
+        $oObject = new oxStdClass();
+        $blBool  = "true";
+        $aArray  = array( 1, 2, 3 );
+        $aAssocArray = array( "a" => 1, "b" => 2, "c" => 3 );
+
+        $oConfig = new oxConfig();
+        $this->assertEquals( $sString, $oConfig->decodeValue( "string", $sString ) );
+        $this->assertEquals( $oObject, $oConfig->decodeValue( "object", $oObject ) );
+        $this->assertEquals( true, $oConfig->decodeValue( "bool", $blBool ) );
+        $this->assertEquals( $aArray, $oConfig->decodeValue( "arr", serialize( $aArray ) ) );
+        $this->assertEquals( $aAssocArray, $oConfig->decodeValue( "aarr", serialize( $aAssocArray ) ) );
+    }
+
+    /**
+     * Test case for oxConfig::getDecodeValueQuery()
+     *
+     * @return null
+     */
+    public function testGetDecodeValueQuery()
+    {
+        $oConfig = new oxConfig();
+        $sQ = " DECODE( oxvarvalue, '".$oConfig->getConfigParam( 'sConfigKey' )."') ";
+        $this->assertEquals( $sQ, $oConfig->getDecodeValueQuery() );
+    }
 }

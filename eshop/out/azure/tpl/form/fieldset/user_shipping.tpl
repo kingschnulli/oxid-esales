@@ -23,13 +23,13 @@
     </li>
 [{/if}]
 <li>
-    <ol id="shippingAddressForm" [{if $delivadr }]style="display: none;"[{/if}]>
+    <ul id="shippingAddressForm" [{if $delivadr }]style="display: none;"[{/if}]>
         <li>
             <label [{if $oView->isFieldRequired(oxaddress__oxsal) }]class="req"[{/if }]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_TITLE2" }]</label>
               [{include file="form/fieldset/salutation.tpl" name="deladr[oxaddress__oxsal]" value=$delivadr->oxaddress__oxsal->value value2=$deladr.oxaddress__oxsal }]
         </li>
         <li [{if $aErrors.oxaddress__oxfname}]class="oxInValid"[{/if}]>
-            <label [{if $oView->isFieldRequired(oxaddress__oxfname)}]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_FIRSTLASTNAME" }]</label>
+            <label [{if $oView->isFieldRequired(oxaddress__oxfname)}]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_FIRSTNAME" }]</label>
               <input [{if $oView->isFieldRequired(oxaddress__oxfname) }]class="js-oxValidate js-oxValidate_notEmpty"[{/if }] type="text" maxlength="255" name="deladr[oxaddress__oxfname]" value="[{if isset( $deladr.oxaddress__oxfname ) }][{ $deladr.oxaddress__oxfname }][{else}][{ $delivadr->oxaddress__oxfname->value }][{/if }]">
               [{if $oView->isFieldRequired(oxaddress__oxfname)}]
               <p class="oxValidateError">
@@ -39,7 +39,7 @@
               [{/if }]
         </li>
         <li [{if $aErrors.oxaddress__oxlname}]class="oxInValid"[{/if}]>
-            <label [{if $oView->isFieldRequired(oxaddress__oxlname)}]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_FIRSTLASTNAME" }]</label>
+            <label [{if $oView->isFieldRequired(oxaddress__oxlname)}]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_LASTNAME" }]</label>
             <input [{if $oView->isFieldRequired(oxaddress__oxlname)}]class="js-oxValidate js-oxValidate_notEmpty"[{/if }] type="text" maxlength="255" name="deladr[oxaddress__oxlname]" value="[{if isset( $deladr.oxaddress__oxlname ) }][{ $deladr.oxaddress__oxlname }][{else}][{ $delivadr->oxaddress__oxlname->value }][{/if }]">
             [{if $oView->isFieldRequired(oxaddress__oxlname)}]
             <p class="oxValidateError">
@@ -134,7 +134,7 @@
             </p>
              [{/if }]
         </li>
-    </ol>
+    </ul>
 </li>
 [{if !$noFormSubmit}]
     <li class="formNote">[{ oxmultilang ident="FORM_USER_COMPLETEMARKEDFIELDS" }]</li>

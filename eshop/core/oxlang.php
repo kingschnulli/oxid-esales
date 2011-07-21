@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 34004 2011-03-25 12:50:15Z sarunas $
+ * @version   SVN: $Id: oxlang.php 37172 2011-07-20 08:11:07Z linas.kukulskis $
  */
 
 /**
@@ -471,11 +471,22 @@ class oxLang extends oxSuperCfg
      */
     public function translateString( $sStringToTranslate, $iLang = null, $blAdminMode = null )
     {
+        $myConfig = $this->getConfig();
+
+        // checking if in cash exist
         $aLang = $this->_getLangTranslationArray( $iLang, $blAdminMode );
-        if (isset( $aLang[$sStringToTranslate] )) {
+        if ( isset( $aLang[$sStringToTranslate] ) ) {
             return $aLang[$sStringToTranslate];
         }
 
+        // checking if in map exist
+        $sMapFile = $myConfig->getOutDir() . oxLang::getInstance()->getLanguageAbbr( $iLang ) . '/map.php';
+        $aMap = $this->_getLanguageMap($sMapFile);
+        if ( isset( $aLang[$aMap[$sStringToTranslate]] ) ) {
+            return $aLang[$aMap[$sStringToTranslate]];
+        }
+
+        // checking if in theme options exist
         if (count($this->_aAdditionalLangFiles)) {
             $aLang = $this->_getLangTranslationArray( $iLang, $blAdminMode, $this->_aAdditionalLangFiles);
             if (isset( $aLang[$sStringToTranslate] )) {
@@ -483,6 +494,7 @@ class oxLang extends oxSuperCfg
             }
         }
 
+        // @deprecated, text files should not be used any more (2011.07.06)
             $blIsAdmin = isset( $blAdminMode ) ? $blAdminMode : $this->isAdmin();
             if ( !$blIsAdmin ) {
                 return $this->_readTranslateStrFromTextFile( $sStringToTranslate, $iLang, $blIsAdmin );
@@ -647,22 +659,59 @@ class oxLang extends oxSuperCfg
         $myConfig = $this->getConfig();
         $aLangFiles = array();
 
-        //get all lang files
-        $sStdPath = $myConfig->getStdLanguagePath( "", $blAdmin, $iLang );
-        if ( $sStdPath ) {
-            $aLangFiles[] = $sStdPath . "lang.php";
-            $aLangFiles = array_merge( $aLangFiles, glob( $sStdPath."*_lang.php" ) );
+        $sOutDir        = $myConfig->getOutDir();
+        $sLang          = oxLang::getInstance()->getLanguageAbbr( $iLang );
+        $sTheme         = $myConfig->getConfigParam( "sTheme" );
+        $sCustomTheme   = $myConfig->getConfigParam( "sCustomTheme" );
+        $sShopId        = $myConfig->getShopId();
+
+        if ( $blAdmin ) {
+
+            $sAdminPath = $sOutDir . 'admin/' . $sLang . '/';
+            $aLangFiles[] = $sAdminPath . "lang.php";
+            $aLangFiles = array_merge( $aLangFiles, glob( $sAdminPath."*_lang.php" ) );
+
+            return count( $aLangFiles ) ? $aLangFiles : false;
         }
 
-        $sCustPath = $myConfig->getLanguagePath( "", $blAdmin, $iLang );
-        if ( $sCustPath && $sCustPath != $sStdPath ) {
-            if ( is_readable( $sCustPath . "lang.php" ) ) {
-                $aLangFiles[] = $sCustPath . "lang.php";
-            }
+        //get generic lang files
+        $sGenericPath = $sOutDir . $sLang . '/';
+        if ( $sGenericPath ) {
+            $aLangFiles[] = $sGenericPath . "lang.php";
+            $aLangFiles = array_merge( $aLangFiles, glob( $sGenericPath."*_lang.php" ) );
+        }
+
+        //get theme lang files
+        if ( $sTheme ) {
+            $sThemePath = $sOutDir . $sTheme .'/' . $sLang . '/';
+            $aLangFiles[] = $sThemePath . "lang.php";
+            $aLangFiles = array_merge( $aLangFiles, glob( $sThemePath."*_lang.php" ) );
+        }
+
+        //get custom theme lang files
+
+        if ( $sCustomTheme) {
+            $sCustPath = $sOutDir . $sCustomTheme .'/' . $sLang . '/';
+            $aLangFiles[] = $sCustPath . "lang.php";
             $aLangFiles = array_merge( $aLangFiles, glob( $sCustPath."*_lang.php" ) );
+
+            // custom theme shop languages
+            if ( $sCustomTheme ) {
+                $sShopPath = $sOutDir . $sCustomTheme .'/' . $sShopId . '/' . $sLang . '/';
+                $aLangFiles[] = $sShopPath . "lang.php";
+                $aLangFiles = array_merge( $aLangFiles, glob( $sShopPath."*_lang.php" ) );
+            }
+        } else {
+            // theme shop languages
+            if ( $sTheme ) {
+                $sShopPath = $sOutDir . $sTheme .'/' . $sShopId . '/' . $sLang . '/';
+                $aLangFiles[] = $sShopPath . "lang.php";
+                $aLangFiles = array_merge( $aLangFiles, glob( $sShopPath."*_lang.php" ) );
+            }
         }
 
-        $aModuleFiles = glob(getShopBasePath().'/modules/*/out/lang/'.oxLang::getInstance()->getLanguageAbbr( $iLang ).'/*_lang.php');
+        //modules language files
+        $aModuleFiles = glob(getShopBasePath().'/modules/*/out/lang/' . $sLang . '/*_lang.php');
         if (is_array($aModuleFiles) && count($aModuleFiles)) {
             $aLangFiles = array_merge( $aLangFiles, $aModuleFiles );
         }
@@ -749,6 +798,24 @@ class oxLang extends oxSuperCfg
     }
 
     /**
+     * Returns language map array
+     *
+     * @param array $sMapFile language map
+     *
+     * @return array
+     */
+    protected function _getLanguageMap( $sMapFile )
+    {
+        if ( $sMapFile ) {
+            $aMap = array();
+            if ( file_exists( $sMapFile ) && is_readable( $sMapFile ) ) {
+                include $sMapFile;
+            }
+        }
+        return $aMap;
+    }
+
+    /**
      * Returns current language cache language id
      *
      * @param bool $blAdmin admin mode
@@ -806,6 +873,8 @@ class oxLang extends oxSuperCfg
      * @param string $sStringToTranslate string that should be translated
      * @param int    $iLang              language id (optional)
      * @param bool   $blIsAdmin          admin mode switch (default null)
+     *
+     * @deprecated, text files should not be used any more (2011.07.06)
      *
      * @return string translation
      */

@@ -105,46 +105,28 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
         $oUtils = $this->getMock( "oxSetupUtils", array( "getBaseOutDir", "checkFileOrDirectory" ) );
         $oUtils->expects( $this->at( $iAt++ ) )->method( "getBaseOutDir" )->will( $this->returnValue( 'sBaseOutDir' ) );
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/config.inc.php' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/0' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/1' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/2' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/3' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/4' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/5' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/6' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/7' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/8' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/9' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/10' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/11' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/12' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/1' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/2' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/3' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/4' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/5' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/6' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/7' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/8' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/9' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/10' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/11' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/12' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/icon' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z1' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z2' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z3' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z4' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z5' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z6' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z7' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z8' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z9' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z10' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z11' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/z12' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/out/basic/src/bg' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/out/basic/src' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/1' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/2' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/3' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/4' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/5' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/6' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/7' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/8' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/9' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/10' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/11' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/12' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/thumb' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/category/icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/category/promo_icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/category/thumb' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/manufacturer/icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/vendor/icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/wrapping' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/out/azure/src/bg' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/out/azure/src' ) );
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/log' ) );
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sCompileDir' ) );
         $oUtils->checkPaths( $aParams );
@@ -173,6 +155,8 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
      */
     public function testGetDefaultPathParams()
     {
+        $sTmp = "tmp/";
+
         $_SERVER['PATH_TRANSLATED'] = null;
         $_SERVER['HTTP_REFERER']    = null;
         $_SERVER['SCRIPT_FILENAME'] = "/var/www/ee440setup/setup/index.php";
@@ -181,7 +165,7 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
 
         // paths
         $aParams['sShopDir'] = "/var/www/ee440setup/";
-        $aParams['sCompileDir'] = $aParams['sShopDir'] . "tmp/";
+        $aParams['sCompileDir'] = $aParams['sShopDir'] . $sTmp;
         $aParams['sShopURL'] = "http://127.0.0.1:1001/ee440setup/";
 
         $oUtils = new oxSetupUtils();
@@ -195,6 +179,8 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
      */
     public function testGetDefaultPathParamsIfPathTranslatedIsEmpty()
     {
+        $sTmp = "tmp/";
+
         $_SERVER['PATH_TRANSLATED'] = '';
         $_SERVER['HTTP_REFERER']    = null;
         $_SERVER['SCRIPT_FILENAME'] = "/var/www/ee440setup/setup/index.php";
@@ -203,7 +189,7 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
 
         // paths
         $aParams['sShopDir'] = "/var/www/ee440setup/";
-        $aParams['sCompileDir'] = $aParams['sShopDir'] . "tmp/";
+        $aParams['sCompileDir'] = $aParams['sShopDir'] . $sTmp;
         $aParams['sShopURL'] = "http://127.0.0.1:1001/ee440setup/";
 
         $oUtils = new oxSetupUtils();

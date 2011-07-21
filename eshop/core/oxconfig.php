@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 35659 2011-05-30 08:40:52Z arunas.paskevicius $
+ * @version   SVN: $Id: oxconfig.php 37137 2011-07-19 06:58:06Z arvydas.vapsva $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -355,10 +355,10 @@ class oxConfig extends oxSuperCfg
         if( !$this->getConfigParam( 'sDefaultLang' ) )
             $this->setConfigParam( 'sDefaultLang', 0 );
 
-        
+
         $this->setConfigParam( 'sTheme', 'basic' );
 
-        
+
         $blLogChangesInAdmin = $this->getConfigParam( 'blLogChangesInAdmin' );
         if( !isset( $blLogChangesInAdmin ) )
             $this->setConfigParam( 'blLogChangesInAdmin', false );
@@ -477,7 +477,7 @@ class oxConfig extends oxSuperCfg
     {
         $oDb = oxDb::getDb();
 
-        $sQ = "select oxvarname, oxvartype, DECODE( oxvarvalue, '".$this->getConfigParam( 'sConfigKey' )."') as oxvarvalue from oxconfig where oxshopid = '$sShopID' and oxmodule=".$oDb->quote($sModule);
+        $sQ = "select oxvarname, oxvartype, ".$this->getDecodeValueQuery()." as oxvarvalue from oxconfig where oxshopid = '$sShopID' and oxmodule=".$oDb->quote($sModule);
         // dodger, allow loading from some vars only from baseshop
         if ( $aOnlyVars !== null ) {
             $blSep = false;
@@ -1039,7 +1039,6 @@ class oxConfig extends oxSuperCfg
             $sTheme = $this->getConfigParam( 'sTheme' );
         }
 
-           
         if ( $blAdmin ) {
             $sTheme = 'admin';
         }
@@ -1165,16 +1164,17 @@ class oxConfig extends oxSuperCfg
     /**
      * Finds and returns image folder url
      *
-     * @param bool $blAdmin     Whether to force admin
-     * @param bool $blSSL       Whether to force ssl
-     * @param bool $blNativeImg Whether to force native image dirs
+     * @param bool   $blAdmin     Whether to force admin
+     * @param bool   $blSSL       Whether to force ssl
+     * @param bool   $blNativeImg Whether to force native image dirs
+     * @param string $sFile       Image file name
      *
      * @return string
      */
-    public function getImageUrl( $blAdmin = false, $blSSL = null, $blNativeImg = null )
+    public function getImageUrl( $blAdmin = false, $blSSL = null, $blNativeImg = null, $sFile = null )
     {
         $blNativeImg = is_null($blNativeImg)?$this->getConfigParam( 'blNativeImages' ):$blNativeImg;
-        return $this->getUrl( null, $this->_sImageDir, $blAdmin, $blSSL, $blNativeImg );
+        return $this->getUrl( $sFile, $this->_sImageDir, $blAdmin, $blSSL, $blNativeImg );
     }
 
     /**
@@ -1194,12 +1194,15 @@ class oxConfig extends oxSuperCfg
      *
      * @param string $sFile   File name
      * @param bool   $blAdmin Whether to force admin
+     * @param int    $iLang   Language
+     * @param int    $iShop   Shop id
+     * @param string $sTheme  theme name
      *
      * @return string
      */
-    public function getPicturePath($sFile, $blAdmin = false )
+    public function getPicturePath($sFile, $blAdmin = false, $iLang = null , $iShop = null , $sTheme = null)
     {
-        return $this->getDir( $sFile, $this->_sPictureDir, $blAdmin );
+        return $this->getDir( $sFile, $this->_sPictureDir, $blAdmin, $iLang, $iShop, $sTheme );
     }
 
     /**
@@ -1237,9 +1240,11 @@ class oxConfig extends oxSuperCfg
      * @param int    $iShopId Shop id
      * @param string $sDefPic Default (nopic) image path ["0/nopic.jpg"]
      *
+     * @deprecated
+     *
      * @return string
      */
-    public function getPictureUrl( $sFile, $blAdmin = false, $blSSL = null, $iLang = null, $iShopId = null, $sDefPic = "0/nopic.jpg" )
+    public function getPictureUrl( $sFile, $blAdmin = false, $blSSL = null, $iLang = null, $iShopId = null, $sDefPic = "master/nopic.jpg" )
     {
         if (!isset($blSSL)) {
             $blSSL = $this->isSsl();
@@ -1263,7 +1268,7 @@ class oxConfig extends oxSuperCfg
 
 
         //anything is better than empty name, because <img src=""> calls shop once more = x2 SLOW.
-        if ( !$sUrl ) {
+        if ( !$sUrl && $sDefPic ) {
             $sUrl = $this->getUrl( $sDefPic, $this->_sPictureDir, $blAdmin, $blSSL, $blNativeImg, $iLang, $iShopId );
         }
         return $sUrl;
@@ -1279,9 +1284,11 @@ class oxConfig extends oxSuperCfg
      * @param int    $iShopId Shop id
      * @param string $sDefPic Default (nopic) image path ["icon/nopic_ico.jpg"]
      *
+     * @deprecated
+     *
      * @return string
      */
-    public function getIconUrl( $sFile, $blAdmin = false , $blSSL = null , $iLang = null, $iShopId = null, $sDefPic = "icon/nopic_ico.jpg" )
+    public function getIconUrl( $sFile, $blAdmin = false , $blSSL = null , $iLang = null, $iShopId = null, $sDefPic = "master/nopic.jpg" )
     {
         return $this->getPictureUrl( $sFile, $blAdmin, $blSSL, $iLang, $iShopId, $sDefPic );
     }
@@ -1697,27 +1704,50 @@ class oxConfig extends oxSuperCfg
         }
 
         $oDb = oxDb::getDb(true);
-        $sQ  = "select oxvartype, DECODE( oxvarvalue, '".$this->getConfigParam( 'sConfigKey' )."') as oxvarvalue from oxconfig where oxshopid = '$sShopId' and oxvarname = ".$oDb->quote($sVarName);
+        $sQ  = "select oxvartype, ".$this->getDecodeValueQuery()." as oxvarvalue from oxconfig where oxshopid = '$sShopId' and oxvarname = ".$oDb->quote($sVarName);
         $oRs = $oDb->Execute( $sQ );
 
         $sValue = null;
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
-            $sVarType = $oRs->fields['oxvartype'];
-            $sVarVal  = $oRs->fields['oxvarvalue'];
-            switch ( $sVarType ) {
-                case 'arr':
-                case 'aarr':
-                    $sValue =  unserialize( $sVarVal );
-                    break;
-                case 'bool':
-                    $sValue =  ( $sVarVal == 'true' || $sVarVal == '1' );
-                    break;
-                default:
-                    $sValue = $sVarVal;
-                    break;
-            }
+            $sValue = $this->decodeValue( $oRs->fields['oxvartype'], $oRs->fields['oxvarvalue'] );
         }
         return $sValue;
+    }
+
+    /**
+     * Decodes and returns database value
+     *
+     * @param string $sType      parameter type
+     * @param mixed  $mOrigValue parameter db value
+     *
+     * @return mixed
+     */
+    public function decodeValue( $sType, $mOrigValue )
+    {
+        $sValue = $mOrigValue;
+        switch ( $sType ) {
+            case 'arr':
+            case 'aarr':
+                $sValue = unserialize( $mOrigValue );
+                break;
+            case 'bool':
+                $sValue = ( $mOrigValue == 'true' || $mOrigValue == '1' );
+                break;
+        }
+
+        return $sValue;
+    }
+
+    /**
+     * Returns decode query part user to decode config field value
+     *
+     * @param string $sFieldName field name, default "oxvarvalue" [optional]
+     *
+     * @return string
+     */
+    public function getDecodeValueQuery( $sFieldName = "oxvarvalue" )
+    {
+        return " DECODE( {$sFieldName}, '".$this->getConfigParam( 'sConfigKey' )."') ";
     }
 
     /**

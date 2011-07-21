@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvendorTest.php 32882 2011-02-03 11:45:48Z sarunas $
+ * @version   SVN: $Id: oxvendorTest.php 37095 2011-07-15 14:24:50Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,27 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Core_oxvendorTest extends OxidTestCase
 {
+    //
+    protected $_sVndIcon = "/vendor/icon/big_matsol_1_mico.jpg";
+    protected $_sManIcon = "/manufacturer/icon/big_matsol_1_mico.jpg";
+
+    /**
+     * Test setup
+     *
+     * @return null
+     */
+    protected function setUp()
+    {
+        // test require icon for vendors
+        if ( $this->getName() == "testGetIconUrlNewPath" || $this->getName() == "testMagicGetter" || $this->getName() == "testGetIconUrl" ) {
+            $sTarget = oxConfig::getInstance()->getPicturePath( "" ) . "master";
+            if ( file_exists( $sTarget . $this->_sManIcon ) ) {
+                copy( $sTarget . $this->_sManIcon, $sTarget . $this->_sVndIcon );
+            }
+        }
+
+        return parent::setUp();
+    }
     /**
      * Tear down the fixture.
      *
@@ -37,6 +58,14 @@ class Unit_Core_oxvendorTest extends OxidTestCase
      */
     protected function tearDown()
     {
+        // removing folder
+        if ( $this->getName() == "testGetIconUrlNewPath" || $this->getName() == "testMagicGetter" || $this->getName() == "testGetIconUrl" ) {
+            $sTarget = oxConfig::getInstance()->getPicturePath( "" ) . "master";
+            if ( file_exists( $sTarget . $this->_sVndIcon ) ) {
+                unlink( $sTarget . $this->_sVndIcon );
+            }
+        }
+
         oxTestModules::addFunction('oxVendor', 'cleanRootVendor', '{oxVendor::$_aRootVendor = array();}');
         oxNew('oxvendor')->cleanRootVendor();
 
@@ -80,15 +109,10 @@ class Unit_Core_oxvendorTest extends OxidTestCase
 
     public function testMagicGetter()
     {
-
-        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('icon/test_ico')->will( $this->returnValue( 'iconUrl' ) );
-
         $oVendor = $this->getProxyClass( "oxvendor" );
-        $oVendor->oxvendor__oxicon = new oxField('test_ico');
-        $oVendor->setConfig($oConfig);
+        $oVendor->oxvendor__oxicon = new oxField( 'big_matsol_1_mico.jpg' );
 
-        $this->assertEquals( 'iconUrl', $oVendor->getIconUrl() );
+        $this->assertEquals( 'big_matsol_1_mico.jpg', basename( $oVendor->getIconUrl() ) );
 
 
         $oVendor = $this->getMock( 'oxvendor', array( 'getLink', 'getNrOfArticles', 'getIsVisible', 'getHasVisibleSubCats', 'getId' ) );
@@ -107,6 +131,15 @@ class Unit_Core_oxvendorTest extends OxidTestCase
         $this->assertEquals( 'NrOfArticles', $oVendor->iArtCnt );
         $this->assertEquals( 'IsVisible', $oVendor->isVisible );
         $this->assertEquals( 'HasVisibleSubCats', $oVendor->hasVisibleSubCats );
+    }
+
+    // #M366: Upload of manufacturer and categories icon does not work
+    public function testGetIconUrl()
+    {
+        $oVendor = $this->getProxyClass( "oxvendor" );
+        $oVendor->oxvendor__oxicon = new oxField('big_matsol_1_mico.jpg');
+
+        $this->assertEquals( 'big_matsol_1_mico.jpg', basename( $oVendor->getIconUrl() ) );
     }
 
     public function testAssignWithoutArticleCnt()
@@ -326,17 +359,20 @@ class Unit_Core_oxvendorTest extends OxidTestCase
         $this->assertFalse($oVendor->getHasVisibleSubCats());
     }
 
-    // #M366: Upload of manufacturer and categories icon does not work
-    public function testGetIconUrl()
+    /**
+     * Testing icon url getter with new path solution
+     *
+     * @return null
+     */
+    public function testGetIconUrlNewPath()
     {
-        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('icon/test_ico')->will( $this->returnValue( 'iconUrl' ) );
-
         $oVendor = $this->getProxyClass( "oxvendor" );
-        $oVendor->oxvendor__oxicon = new oxField('test_ico');
-        $oVendor->setConfig($oConfig);
+        $oVendor->oxvendor__oxicon = new oxField('big_matsol_1_mico.jpg');
 
-        $this->assertEquals( 'iconUrl', $oVendor->getIconUrl() );
+        $sUrl  = oxConfig::getInstance()->getOutUrl() . basename( oxConfig::getInstance()->getPicturePath( "" ) );
+        $sUrl .= "/generated/vendor/icon/100_100_75/big_matsol_1_mico.jpg";
+
+        $this->assertEquals( $sUrl, $oVendor->getIconUrl() );
     }
 
     public function testDelete()

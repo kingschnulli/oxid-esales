@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 36520 2011-06-23 09:40:53Z juergen.busch $
+ * @version   SVN: $Id: lang.php 37041 2011-07-14 13:17:59Z arvydas.vapsva $
  */
 
 $sLangName  = 'Deutsch';
@@ -1132,6 +1132,7 @@ $aLang = array(
 'SHOP_CONFIG_POINTSFORINVITATION'                          => 'Bonuspunkte für neu geworbene Kunden',
 'SHOP_CONFIG_POINTSFORREGISTRATION'                        => 'Bonuspunkte für den Eingeladenen für die Registrierung',
 'SHOP_CONFIG_FACEBOOKAPPID'                                => 'Application ID',
+'SHOP_CONFIG_FACEBOOKCONFIRM'                              => '[tr] User must enable all Facebook widgets',
 'SHOP_CONFIG_FBSECRETKEY'                                  => 'Application Secret Key',
 'SHOP_CONFIG_FBCOMMENTS'                                   => 'Comments',
 'SHOP_CONFIG_FBFACEPILE'                                   => 'Facepile',
@@ -1141,6 +1142,7 @@ $aLang = array(
 'SHOP_CONFIG_FBLIKE'                                       => 'Like',
 'SHOP_CONFIG_FACEBOOKCONNECT'                              => 'Connect',
 'SHOP_CONFIG_FACEBOOKCONNECTDISABLED'                      => 'Facebook Connect <b>ist inaktiv</b> da eine installierte cURL Library benötigt wird. Bitte <a href="http://www.google.de/search?source=ig&hl=de&rlz=&=&q=install+curl+library+in+php&aq=f&aqi=&aql=&oq=&gs_rfai=">installieren Sie cURL</a>.',
+'SHOP_CONFIG_SHOWTAGS'                                     => '[tr] Display tags in shop pages',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                            => 'Prozentsatz gleicher Attribute, damit Artikel ähnlich sind',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'                          => 'Bildqualität - von 0 (schlechteste Qualität, kleine Dateigröße) bis 100 (beste Qualität, große Dateigröße)',

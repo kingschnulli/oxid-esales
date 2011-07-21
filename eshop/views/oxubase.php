@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 36390 2011-06-16 08:46:10Z arvydas.vapsva $
+ * @version   SVN: $Id: oxubase.php 37027 2011-07-14 11:55:57Z arvydas.vapsva $
  */
 
 /**
@@ -40,6 +40,12 @@ define( 'VIEW_INDEXSTATE_NOINDEXFOLLOW', 2 );   //  no index / follow
 class oxUBase extends oxView
 {
     /**
+     * Facebook widget status marker
+     * @var bool
+     */
+    protected $_blFbWidgetsOn = null;
+    
+    /**
      * Checks if feature is enabled
      *
      * @param string $sName feature name
@@ -49,6 +55,25 @@ class oxUBase extends oxView
     public function isActive( $sName )
     {
         return $this->getConfig()->getConfigParam( "bl".$sName."Enabled" );
+    }
+
+    /**
+     * Returns TRUE if facebook widgets are on
+     *
+     * @return boolean
+     */
+    public function isFbWidgetWisible()
+    {
+        if ( $this->_blFbWidgetsOn === null ) {
+            $oUtils = oxUtilsServer::getInstance();
+
+            // reading ..
+            $this->_blFbWidgetsOn = (bool) $oUtils->getOxCookie( "fbwidgetson" );
+
+            // .. and setting back
+            $oUtils->setOxCookie( "fbwidgetson", $this->_blFbWidgetsOn ? 1 : 0 );
+        }
+        return $this->_blFbWidgetsOn;
     }
 
     /**
@@ -585,6 +610,11 @@ class oxUBase extends oxView
             unset( $this->_aComponentNames['oxcmp_basket'] );
         }
 
+        // #1721: custom component handling. At the moment it is not possible to override this variable in oxubase,
+        // so we added this array to config.inc.php file
+        if ($this->getConfig()->getConfigParam( 'aUserComponentNames' )) {
+            $this->_aUserComponentNames = array_merge( $this->_aUserComponentNames, $this->getConfig()->getConfigParam( 'aUserComponentNames' ) );
+        }
         // as the objects are cached by dispatcher we have to watch out, that we don't add these components twice
         if ( !$this->_blCommonAdded ) {
             $this->_aComponentNames = array_merge( $this->_aComponentNames, $this->_aUserComponentNames );
@@ -3176,11 +3206,21 @@ class oxUBase extends oxView
 
     /**
      * Returns added basket item notification message type
-     * 
+     *
      * @return int
      */
     public function getNewBasketItemMsgType()
     {
         return (int) $this->getConfig()->getConfigParam( "iNewBasketItemMessage" );
+    }
+
+    /**
+     * Returns true if tags are ON
+     *
+     * @return boolean
+     */
+    public function showTags()
+    {
+        return (bool) $this->getConfig()->getConfigParam( "blShowTags" );
     }
 }

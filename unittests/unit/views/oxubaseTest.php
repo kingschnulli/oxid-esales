@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 36400 2011-06-16 12:59:26Z arvydas.vapsva $
+ * @version   SVN: $Id: oxubaseTest.php 37027 2011-07-14 11:55:57Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -399,6 +399,24 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $aComponents = $oView->getComponents();
         $this->assertEquals( 1, count( $aComponents ) );
         $this->assertEquals( "oxcmp_lang", $aComponents["oxcmp_lang"]->getThisAction() );
+        $this->assertEquals( "oxubaseproxy", $aComponents["oxcmp_lang"]->getParent()->getThisAction() );
+    }
+
+    /*
+     * Testing initiating components
+     */
+    public function testInitUserDefinedComponents()
+    {
+        $myConfig = oxConfig::getInstance();
+        $myConfig->setConfigParam( "aUserComponentNames", array( "oxcmp_cur" => false ) );
+        $oView = $this->getProxyClass('oxubase');
+        $oView->setNonPublicVar( '_aComponentNames', array( "oxcmp_lang" => false ) );
+        $oView->init();
+
+        $aComponents = $oView->getComponents();
+        $this->assertEquals( 2, count( $aComponents ) );
+        $this->assertEquals( "oxcmp_lang", $aComponents["oxcmp_lang"]->getThisAction() );
+        $this->assertEquals( "oxcmp_cur", $aComponents["oxcmp_cur"]->getThisAction() );
         $this->assertEquals( "oxubaseproxy", $aComponents["oxcmp_lang"]->getParent()->getThisAction() );
     }
 
@@ -2076,5 +2094,36 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     {
         $oView = new oxUbase();
         $this->assertEquals( (int) oxConfig::getInstance()->getConfigParam( "iNewBasketItemMessage" ), $oView->getNewBasketItemMsgType() );
+    }
+
+    /**
+     * oxUBase::showTags() test case
+     *
+     * @return null
+     */
+    public function testShowTags()
+    {
+        modConfig::getInstance()->setConfigParam( "blShowTags", true );
+
+        $oView = new oxUbase();
+        $this->assertTrue( $oView->showTags() );
+    }
+
+    /**
+     * oxUBase::isFbWidgetWisible()
+     *
+     * @return null
+     */
+    public function testisFbWidgetWisible()
+    {
+        // cookie OFF
+        oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 0;}");
+        $oView = new oxUbase();
+        $this->assertFalse( $oView->isFbWidgetWisible() );
+
+        // cookie ON
+        oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 1;}");
+        $oView = new oxUbase();
+        $this->assertTrue( $oView->isFbWidgetWisible() );
     }
 }

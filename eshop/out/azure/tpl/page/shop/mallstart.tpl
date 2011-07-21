@@ -3,7 +3,7 @@
 <div id="page">
     <div id="header" class="clear">
        [{include file="widget/header/languages.tpl"}]
-       <div><a id="logo" href="[{$oViewConf->getHomeLink()}]" title="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"><img src="[{$oViewConf->getImageUrl()}]logo.png" alt="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"></a></div>
+       <div><a id="logo" href="[{$oViewConf->getHomeLink()}]" title="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"><img src="[{$oViewConf->getImageUrl('logo.png')}]" alt="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"></a></div>
     </div>
     <div>
         [{oxifcontent ident="oxstartwelcome" object="oCont"}]
@@ -24,14 +24,14 @@
             [{/foreach}]
          </div>
         [{if $oView->isDemoShop()}]
-            <a id="demoAdminLink" href="[{ $oViewConf->getBaseDir() }]admin/" rel="nofollow"><img src="[{ $oViewConf->getImageUrl() }]/admin_start.jpg"></a>
+            <a id="demoAdminLink" href="[{ $oViewConf->getBaseDir() }]admin/" rel="nofollow"><img src="[{ $oViewConf->getImageUrl('admin_start.jpg') }]"></a>
         [{/if}]
     </div>
 
 
     <div id="footer">
         <div class="copyright">
-            <img src="[{$oViewConf->getImageUrl()}]logo_small.png" alt="[{oxmultilang ident="OXID_ESALES_URL_TITLE"}]">
+            <img src="[{$oViewConf->getImageUrl('logo_small.png')}]" alt="[{oxmultilang ident="OXID_ESALES_URL_TITLE"}]">
         </div>
         <div class="text">
             [{oxifcontent ident="oxstdfooter" object="oCont"}]

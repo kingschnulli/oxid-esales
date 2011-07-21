@@ -22,6 +22,12 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (\.html|\/)$ oxseo.php
 
 
+
+RewriteCond %{REQUEST_URI} (\/out\/pictures_ee\/|\/out\/pictures_pe\/|\/out\/pictures_ce\/|\/out\/pictures\/)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (\.jpg|\.gif|\.png)$ core/utils/getimg.php
+
 </IfModule>
 
 # disabling log file access from outside

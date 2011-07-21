@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
+ * @version   SVN: $Id: oxactionsTest.php 37095 2011-07-15 14:24:50Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -428,9 +428,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     {
         $oPromo = new oxactions();
         $oPromo->oxactions__oxpic = new oxField( "noSuchPic.jpg" );
-        $oConfig = modConfig::getInstance();
-
-        $this->assertEquals( $oConfig->getPictureUrl( "0/" )."nopic.jpg", $oPromo->getBannerPictureUrl() );
+        $this->assertEquals( modConfig::getInstance()->getPictureUrl( "master/" )."nopic.jpg", $oPromo->getBannerPictureUrl() );
     }
 
     /**

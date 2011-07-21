@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: start.php 32965 2011-02-07 12:22:04Z vilma $
+ * @version   SVN: $Id: start.php 37157 2011-07-19 14:49:41Z vilma $
  */
 
 /**
@@ -28,6 +28,13 @@
  */
 class Start extends oxUBase
 {
+    /**
+     * List display type
+     *
+     * @var string
+     */
+    protected $_sListDisplayType = null;
+
     /**
      * Current class template name.
      * @var string
@@ -419,4 +426,5 @@ class Start extends oxUBase
 
         return $oList;
     }
+
 }

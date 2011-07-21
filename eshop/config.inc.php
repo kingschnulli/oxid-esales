@@ -159,3 +159,10 @@
      * note: only active if in productive mode, as the eShop in non productive more will always log such urls
      */
     $this->blSeoLogging = false;
+
+    /**
+     * To override oxubase::_aUserComponentNames use this array option:
+     * array keys are component(class) names and array values defines if component is cacheable (true/false)
+     * e.g. array("user_class" => false);
+     */
+    $this->aUserComponentNames = null;

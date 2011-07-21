@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilspicTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxutilspicTest.php 37095 2011-07-15 14:24:50Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -43,12 +43,12 @@ class Unit_Core_oxUtilsPicTest extends OxidTestCase
                 $myConfig = oxConfig::getInstance();
 
                 // setup-> create a copy of a picture and delete this one for successful test
-                $sOrigTestPicFile   = "1672_th.jpg";
-                $sOrigTestIconFile  = "1672_th.jpg"; // we simply fake an icon file by copying the same
-                $sCloneTestPicFile  = "CC1672_th.jpg";
-                $sCloneTestIconFile = "CC1672_th_ico.jpg";
+                $sOrigTestPicFile   = "detail1_z3_ico_th.jpg";
+                $sOrigTestIconFile  = "detail1_z3_ico_th.jpg"; // we simply fake an icon file by copying the same
+                $sCloneTestPicFile  = "CCdetail1_z3_ico_th.jpg";
+                $sCloneTestIconFile = "CCdetail1_z3_ico_th.jpg";
 
-                $sDir  = $myConfig->getPictureDir(false)."0/";
+                $sDir  = $myConfig->getPictureDir(false)."master/product/thumb/";
 
                 copy( $sDir.$sOrigTestPicFile, $sDir.$sCloneTestPicFile );
                 copy( $sDir.$sOrigTestIconFile, $sDir.$sCloneTestIconFile );
@@ -76,7 +76,7 @@ class Unit_Core_oxUtilsPicTest extends OxidTestCase
                 $sCloneTestPicFile  = "CC1672_th.jpg";
                 $sCloneTestIconFile = "CC1672_th_ico.jpg";
 
-                $sDir  = $myConfig->getPictureDir(false)."/0/";
+                $sDir  = $myConfig->getPictureDir(false)."/master/product/thumb/";
 
                 @unlink( $sDir.$sCloneTestPicFile );
                 @unlink( $sDir.$sCloneTestIconFile );
@@ -199,14 +199,8 @@ class Unit_Core_oxUtilsPicTest extends OxidTestCase
     // deleting existing
     public function testDeletePictureExisting()
     {
-        //$oConfig = $this->getMock( 'oxconfig', array( 'hasModule' ) );
-        //$oConfig->expects( $this->once() )->method( 'hasModule')->will( $this->returnValue( false ) );
-        $oConfig = $this->getMock( 'oxconfig');
-
-        $oUtilsPic = $this->getMock( 'oxutilspic', array( 'getConfig' ) );
-        $oUtilsPic->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
-
-        $this->assertTrue( $oUtilsPic->UNITdeletePicture( 'CC1672_th.jpg', oxConfig::getInstance()->getPictureDir(false)."/0/" ) );
+        $oUtilsPic = new oxutilspic();
+        $this->assertTrue( $oUtilsPic->UNITdeletePicture( 'CCdetail1_z3_ico_th.jpg', oxConfig::getInstance()->getPictureDir( false )."master/product/thumb/" ) );
     }
 
     public function testIsPicDeletable()

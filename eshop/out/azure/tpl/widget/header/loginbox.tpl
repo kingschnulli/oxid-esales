@@ -11,7 +11,7 @@
     [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
     [{oxscript add="$( '#forgotPasswordOpener' ).oxModalPopup({ target: '#forgotPassword'});"}]
     <div id="forgotPassword" class="popupBox corners FXgradGreyLight glowShadow">
-        <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
+        <img src="[{$oViewConf->getImageUrl('x.png')}]" alt="" class="closePop">
         [{include file="form/forgotpwd_email.tpl" idPrefix="Popup"}]
     </div>
     <a href="#" id="loginBoxOpener" title="[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</a>

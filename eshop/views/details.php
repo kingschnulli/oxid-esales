@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 36093 2011-06-08 14:59:33Z arvydas.vapsva $
+ * @version   SVN: $Id: details.php 36706 2011-07-04 15:02:30Z arvydas.vapsva $
  */
 
 /**
@@ -288,7 +288,7 @@ class Details extends oxUBase
             if ( $oParent = $oProduct->getParentArticle() ) {
                 $myConfig = $this->getConfig();
 
-                $this->_aVariantList = $oParent->getVariants( false );
+                $this->_aVariantList = $oParent->getFullVariants( false );
 
                 //lets additionally add parent article if it is sellable
                 if ( $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
@@ -298,7 +298,7 @@ class Details extends oxUBase
                 }
             } else {
                 //loading full list of variants
-                $this->_aVariantList = $oProduct->getVariants( false );
+                $this->_aVariantList = $oProduct->getFullVariants( false );
             }
 
             // setting link type for variants ..

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 36148 2011-06-10 11:20:53Z arvydas.vapsva $
+ * @version   SVN: $Id: oxsession.php 37024 2011-07-14 11:10:30Z linas.kukulskis $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -423,10 +423,19 @@ class oxSession extends oxSuperCfg
      */
     protected function _getNewSessionId( $blUnset = true )
     {
-        session_regenerate_id( true );
+        $sOldId = session_id();
+        session_regenerate_id( ! oxConfig::getInstance()->getConfigParam( 'blAdodbSessionHandler' ) );
+        $sNewId = session_id();
+
         if ( $blUnset ) {
             session_unset();
         }
+
+        if ( oxConfig::getInstance()->getConfigParam( 'blAdodbSessionHandler' ) ) {
+            $oDB = oxDb::getDb();
+            $oDB->execute("UPDATE oxsessions SET SessionID = '$sNewId' WHERE SessionID = '$sOldId'");
+        }
+
         return session_id();
     }
 
@@ -728,12 +737,14 @@ class oxSession extends oxSuperCfg
         $sSid = $this->sid( $this->isSidNeeded( $sUrl ) );
         if ($sSid) {
             $oStr = getStr();
-            if ( !$oStr->preg_match('/(\?|&(amp;)?)sid=/i', $sUrl) && (false === $oStr->strpos($sUrl, $sSid))) {
+            $aUrlParts = explode( '#', $sUrl );
+            if ( !$oStr->preg_match('/(\?|&(amp;)?)sid=/i', $aUrlParts[0]) && (false === $oStr->strpos($aUrlParts[0], $sSid))) {
                 if (!$oStr->preg_match('/(\?|&(amp;)?)$/', $sUrl)) {
-                    $sUrl .= ( $oStr->strstr( $sUrl, '?' ) !== false ?  '&amp;' : '?' );
+                    $aUrlParts[0] .= ( $oStr->strstr( $aUrlParts[0], '?' ) !== false ?  '&amp;' : '?' );
                 }
-                $sUrl .= $sSid . '&amp;';
+                $aUrlParts[0] .= $sSid . '&amp;';
             }
+            $sUrl = join( '#', $aUrlParts );
         }
         return $sUrl;
     }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 35563 2011-05-24 08:39:56Z arunas.paskevicius $
+ * @version   SVN: $Id: detailsTest.php 37151 2011-07-19 14:02:40Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -174,10 +174,12 @@ class Unit_Views_detailsTest extends OxidTestCase
         $this->getProxyClass( 'oxarticle' );
         $oProductParent = $this->getMock( 'oxarticlePROXY', array( 'getSelectLists' ) );
         $oProductParent->expects( $this->once() )->method( 'getSelectLists');
+        $oProductParent->oxarticles__oxvarcount = new oxField( 10 );
 
         $oProduct = $this->getMock( 'oxarticle', array( 'getParentArticle', 'getVariants', 'getId' ) );
         $oProduct->expects( $this->never() )->method( 'getVariants');
         $oProduct->expects( $this->atLeastOnce() )->method( 'getId')->will( $this->returnValue( 'testArtId' ) );
+        $oProduct->oxarticles__oxvarcount = new oxField( 10 );
 
         $oVar1 = new oxarticle();
         $oVar1->setId( 'var1' );
@@ -198,7 +200,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oVarList->offsetSet( $oVar3->getId(), $oVar3 );
         $oVarList->offsetSet( $oVar4->getId(), $oVar4 );
 
-        $oProductParent->setNonPublicVar( '_aVariantsWithNotOrderables', $oVarList );
+        $oProductParent->setNonPublicVar( '_aVariantsWithNotOrderables', array( "full" => $oVarList ) );
         $oProductParent->setNonPublicVar( '_blNotBuyableParent', true );
 
         $oProduct->expects( $this->any() )->method( 'getParentArticle')->will( $this->returnValue( $oProductParent ) );
@@ -715,11 +717,11 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testGetPictureGallery()
     {
-            $sArtID = "1672";
+        $sArtID = "096a1b0849d5ffa4dd48cd388902420b";
 
         $oArticle = new oxarticle();
         $oArticle->load($sArtID);
-        $sActPic =  oxConfig::getInstance()->getPictureUrl(null).$oArticle->oxarticles__oxpic1->value;
+        $sActPic =  oxConfig::getInstance()->getPictureUrl(null)."generated/product/1/380_340_75/".basename( $oArticle->oxarticles__oxpic1->value );
 
         $oDetails = $this->getMock( 'details', array( "getPicturesProduct" ) );
         $oDetails->expects( $this->once() )->method( 'getPicturesProduct')->will( $this->returnValue( $oArticle ) );
@@ -1339,8 +1341,8 @@ class Unit_Views_detailsTest extends OxidTestCase
         modConfig::setParameter( 'listtype', 'search' );
 
         $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
-        
-        
+
+
         modConfig::setParameter( 'listtype', 'tag' );
 
         $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
@@ -1359,7 +1361,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'getCatTreePath')->will( $this->returnValue( array($oCat1, $oCat2 ) ) );
 
         $this->assertTrue( count($oView->getBreadCrumb()) >= 1 );
-        
+
     }
 
 

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 33719 2011-03-10 08:40:42Z sarunas $
+ * @version   SVN: $Id: oxutilsfile.php 37181 2011-07-20 11:28:57Z arvydas.vapsva $
  */
 
 /**
@@ -60,24 +60,27 @@ class oxUtilsFile extends oxSuperCfg
      *
      * @var array
      */
-    protected $_aTypeToPath = array( 'ICO'  => 'icon',
-                                     'CICO' => 'icon',
-                                     'PICO' => 'icon',
-                                     'MICO' => 'icon',
-                                     'TH'   => '0',
-                                     'TC'   => '0',
-                                     'M1'   => 'master/1',
-                                     'M2'   => 'master/2',
-                                     'M3'   => 'master/3',
-                                     'M4'   => 'master/4',
-                                     'M5'   => 'master/5',
-                                     'M6'   => 'master/6',
-                                     'M7'   => 'master/7',
-                                     'M8'   => 'master/8',
-                                     'M9'   => 'master/9',
-                                     'M10'  => 'master/10',
-                                     'M11'  => 'master/11',
-                                     'M12'  => 'master/12',
+    protected $_aTypeToPath = array( 'TC'   => 'master/category/thumb',
+                                     'CICO' => 'master/category/icon',
+                                     'PICO' => 'master/category/promo_icon',
+                                     'MICO' => 'master/manufacturer/icon',
+                                     'VICO' => 'master/vendor/icon',
+                                     'PROMO'=> self::PROMO_PICTURE_DIR,
+                                     'ICO'  => 'master/product/icon',
+                                     'TH'   => 'master/product/thumb',
+                                     'M1'   => 'master/product/1',
+                                     'M2'   => 'master/product/2',
+                                     'M3'   => 'master/product/3',
+                                     'M4'   => 'master/product/4',
+                                     'M5'   => 'master/product/5',
+                                     'M6'   => 'master/product/6',
+                                     'M7'   => 'master/product/7',
+                                     'M8'   => 'master/product/8',
+                                     'M9'   => 'master/product/9',
+                                     'M10'  => 'master/product/10',
+                                     'M11'  => 'master/product/11',
+                                     'M12'  => 'master/product/12',
+                                     //
                                      'P1'   => '1',
                                      'P2'   => '2',
                                      'P3'   => '3',
@@ -102,8 +105,7 @@ class oxUtilsFile extends oxSuperCfg
                                      'Z10'  => 'z10',
                                      'Z11'  => 'z11',
                                      'Z12'  => 'z12',
-                                     'PROMO'=> self::PROMO_PICTURE_DIR,
-                                   );
+    );
 
     /**
      * Denied file types
@@ -568,7 +570,7 @@ class oxUtilsFile extends oxSuperCfg
                                 $this->_prepareImage( $sType, $sProcessPath, $sTarget );
 
                                 // assign the name
-                                if ( $oObject ) {
+                                if ( $oObject && isset( $oObject->$sKey ) ) {
                                     $oObject->{$sKey}->setValue( $sValue );
                                 }
                             }
@@ -743,7 +745,6 @@ class oxUtilsFile extends oxSuperCfg
     public function getImageDirByType( $sType )
     {
         $sFolder = array_key_exists( $sType, $this->_aTypeToPath ) ? $this->_aTypeToPath[ $sType ] : '0';
-
         return $this->normalizeDir( $sFolder );
     }
 }

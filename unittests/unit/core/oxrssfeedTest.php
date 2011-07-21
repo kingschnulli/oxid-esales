@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 32885 2011-02-03 13:05:07Z sarunas $
+ * @version   SVN: $Id: oxrssfeedTest.php 37095 2011-07-15 14:24:50Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -91,6 +91,8 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
                     'link' => 'http://homeurl/extra',
                 )
             );
+
+
         $this->assertEquals($expect, $oRss->getChannel());
         $oShop->oxshops__oxinfoemail = new oxField('emaiail.com');
 

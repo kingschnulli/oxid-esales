@@ -33,7 +33,7 @@
             <meta property="og:url" content="[{$oView->getCanonicalUrl()}]">
         [{ else }]
             <meta property="og:type" content="website">
-            <meta property="og:image" content="[{$oViewConf->getImageUrl()}]basket.png">
+            <meta property="og:image" content="[{$oViewConf->getImageUrl('basket.png')}]">
             <meta property="og:url" content="[{$oViewConf->getCurrentHomeDir()}]">
         [{/if}]
     [{/if}]
@@ -43,14 +43,14 @@
     [{if $canonical_url }]
         <link rel="canonical" href="[{ $canonical_url }]">
     [{/if}]
-    <link rel="shortcut icon" href="[{ $oViewConf->getImageUrl() }]favicon.ico">
+    <link rel="shortcut icon" href="[{ $oViewConf->getImageUrl('favicon.ico') }]">
 
-    [{oxstyle include="css/reset.css"}]
-    [{oxstyle include="css/typography.css"}]
-    [{oxstyle include="css/layout.css"}]
-    [{oxstyle include="css/fxstyles.css"}]
-    [{oxstyle include="css/elements.css"}]
-    [{oxstyle include="css/ie.css" if="lte IE 8"}]
+    [{block name="base_style"}]
+        [{oxstyle include="css/reset.css"}]
+        [{oxstyle include="css/oxid.css"}]
+        [{oxstyle include="css/ie7.css" if="IE 7"}]
+        [{oxstyle include="css/ie8.css" if="IE 8"}]
+    [{/block}]
 
     [{assign var='rsslinks' value=$oView->getRssLinks() }]
     [{if $rsslinks}]
@@ -83,19 +83,21 @@
         [{$_block}]
     [{/foreach}]
 
-    [{oxscript include="js/libs/jquery.min.js" priority=1}]
-    [{oxscript include="js/libs/jquery-ui.min.js" priority=1}]
-    [{oxscript include='js/libs/superfish/hoverIntent.js'}]
-    [{oxscript include='js/libs/superfish/supersubs.js'}]
-    [{oxscript include='js/libs/superfish/superfish.js'}]
+    [{block name="base_js"}]
+        [{oxscript include="js/libs/jquery.min.js" priority=1}]
+        [{oxscript include="js/libs/jquery-ui.min.js" priority=1}]
+        [{oxscript include='js/libs/superfish/hoverIntent.js'}]
+        [{oxscript include='js/libs/superfish/supersubs.js'}]
+        [{oxscript include='js/libs/superfish/superfish.js'}]
+    [{/block}]
 
     [{if $oViewConf->isTplBlocksDebugMode()}]
         [{oxscript include="js/widgets/oxblockdebug.js"}]
         [{oxscript add="$( 'hr.debugBlocksStart' ).oxBlockDebug();"}]
     [{/if}]
 
-    [{oxscript}]
-    [{oxid_include_dynamic file="widget/dynscript.tpl"}]
+    [{ oxscript }]
+    [{ oxid_include_dynamic file="widget/dynscript.tpl" }]
 
     [{foreach from=$oxidBlock_pageScript item="_block"}]
         [{$_block}]
@@ -108,6 +110,8 @@
         <script src="[{ $oViewConf->getResourceUrl() }]js/libs/fonteffect.js"></script>
         <script src="[{ $oViewConf->getResourceUrl() }]js/widgets/oxiefontshadow.js"></script>
     <![endif]-->
+
+
 
 </body>
 </html>

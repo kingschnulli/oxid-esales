@@ -1,11 +1,11 @@
 [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
 [{oxscript add="$( '.wrappingTrigger' ).oxModalPopup({ target: '.wrapping'});"}]
 <div class="wrapping popupBox corners FXgradGreyLight glowShadow">
-    <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
+    <img src="[{$oViewConf->getImageUrl('x.png')}]" alt="" class="closePop">
     [{assign var="currency" value=$oView->getActCurrency() }]
     <div class="wrappingIntro clear">
         <h3>[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_GIFTOPTION" }]</h3>
-        <img src="[{$oViewConf->getImageUrl()}]gift-wrapping.jpg" alt="[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_ADDWRAPPING" }]">
+        <img src="[{$oViewConf->getImageUrl('gift-wrapping.jpg')}]" alt="[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_ADDWRAPPING" }]">
         <div class="introtext">
             [{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_PERSONALMESSAGE" }]
         </div>
@@ -25,9 +25,9 @@
             [{assign var="icounter" value="0"}]
             <table class="wrappingData">
                 <colgroup>
-                    <col width="150">
-                    <col width="170">
-                    <col width="640">
+                    <col class="thumbCol">
+                    <col class="articleCol">
+                    <col class="priceCol">
                 </colgroup>
                 [{assign var="basketitemlist" value=$oView->getBasketArticles()}]
                 [{foreach key=basketindex from=$oxcmp_basket->getContents() item=basketitem name=wrappArt}]
@@ -41,7 +41,6 @@
                         <td>
                             <a rel="nofollow" href="[{ $basketproduct->getLink()}]">[{ $basketproduct->oxarticles__oxtitle->value }][{ if $basketproduct->oxarticles__oxvarselect->value}], [{ $basketproduct->oxarticles__oxvarselect->value}][{/if}]</a>
                         </td>
-
                         <td>
                             <ul id="wrapp_[{$smarty.foreach.wrappArt.iteration}]">
                                 <li>

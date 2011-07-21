@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: moredetailsTest.php 32218 2010-12-22 12:23:44Z arvydas $
+ * @version   SVN: $Id: moredetailsTest.php 37151 2011-07-19 14:02:40Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -77,7 +77,7 @@ class Unit_Views_moredetailsTest extends OxidTestCase
     public function testGetActPictureId()
     {
         $oMoreDetails = $this->getProxyClass( 'moredetails' );
-        modConfig::setParameter( 'anid', '1672' );
+        modConfig::setParameter( 'anid', '096a1b0849d5ffa4dd48cd388902420b' );
         $oMoreDetails->init();
 
         $this->assertEquals( '1', $oMoreDetails->getActPictureId() );
@@ -91,9 +91,10 @@ class Unit_Views_moredetailsTest extends OxidTestCase
     public function testGetArtZoomPics()
     {
         $oMoreDetails = $this->getProxyClass( 'moredetails' );
-        modConfig::setParameter( 'anid', '1672' );
+        modConfig::setParameter( 'anid', '096a1b0849d5ffa4dd48cd388902420b' );
         $oMoreDetails->init();
         $aZoom = $oMoreDetails->getArtZoomPics();
-        $this->assertEquals( '1672_z1.jpg', basename($aZoom[1]['file']) );
+
+        $this->assertEquals( 'front_z1(1).jpg', basename($aZoom[1]['file']) );
     }
 }

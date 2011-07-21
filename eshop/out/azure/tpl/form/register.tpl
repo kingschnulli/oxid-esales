@@ -41,13 +41,13 @@
 </form>
 [{if $oView->isActive('PsLogin') }]
     <div id="popup1" class="popupBox corners FXgradGreyLight glowShadow">
-         <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
+         <img src="[{$oViewConf->getImageUrl('x.png')}]" alt="" class="closePop">
          [{oxifcontent ident="oxagb" object="oContent"}]
             [{ $oContent->oxcontents__oxcontent->value }]
          [{/oxifcontent}]
     </div>
     <div id="popup2" class="popupBox corners FXgradGreyLight glowShadow">
-         <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
+         <img src="[{$oViewConf->getImageUrl('x.png')}]" alt="" class="closePop">
          [{oxifcontent ident="oxrightofwithdrawal" object="oContent"}]
             [{ $oContent->oxcontents__oxcontent->value }]
          [{/oxifcontent}]

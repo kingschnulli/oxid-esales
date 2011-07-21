@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 36509 2011-06-21 13:51:36Z juergen.busch $
+ * @version   SVN: $Id: lang.php 37041 2011-07-14 13:17:59Z arvydas.vapsva $
  */
 
 /*
@@ -1139,6 +1139,7 @@ $aLang = array(
 'SHOP_CONFIG_POINTSFORINVITATION'                          => 'Credit points for user registering after invitation',
 'SHOP_CONFIG_POINTSFORREGISTRATION'                        => 'Credit points for inviting user',
 'SHOP_CONFIG_FACEBOOKAPPID'                                => 'Application ID',
+'SHOP_CONFIG_FACEBOOKCONFIRM'                              => '[tr] User must enable all Facebook widgets',
 'SHOP_CONFIG_FBSECRETKEY'                                  => 'Application Secret Key',
 'SHOP_CONFIG_FBCOMMENTS'                                   => 'Comments',
 'SHOP_CONFIG_FBFACEPILE'                                   => 'Facepile',
@@ -1148,6 +1149,7 @@ $aLang = array(
 'SHOP_CONFIG_FBLIKE'                                       => 'Like',
 'SHOP_CONFIG_FACEBOOKCONNECT'                              => 'Connect',
 'SHOP_CONFIG_FACEBOOKCONNECTDISABLED'                      => 'Facebook connect <b>is disabled</b> as it requires cURL extension to be installed into your server. Please <a href="http://www.google.de/search?source=ig&hl=de&rlz=&=&q=install+curl+library+in+php&aq=f&aqi=&aql=&oq=&gs_rfai=">install cURL</a>.',
+'SHOP_CONFIG_SHOWTAGS'                                     => '[tr] Display tags in shop pages',
 
 'SHOP_SYSTEM_ATTRIBUTESPERCENT'                            => 'Number of equal Attributes for similar Products (%)',
 'SHOP_SYSTEM_DEFAULTIMAGEQUALITY'                          => 'Picture Quality - from 0 (poor Quality, small File Size) to 100 (best Quality, large File Size)',

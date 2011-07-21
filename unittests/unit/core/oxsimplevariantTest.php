@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariantTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxsimplevariantTest.php 37026 2011-07-14 11:52:21Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -243,6 +243,21 @@ class Unit_Core_oxsimpleVariantTest extends OxidTestCase
 
         $oParent = $this->getMock( 'oxArticle', array( 'applyVats' ) );
         $oParent->expects( $this->once() )->method( 'applyVats')->will( $this->returnValue( null ) )->with( $oPrice );
+
+        $oSubj = $this->getMock("oxSimpleVariant", array( 'getParent' ));
+        $oSubj->expects( $this->once() )->method( 'getParent')->will( $this->returnValue( $oParent ) );
+
+        $oSubj->UNITapplyParentVat($oPrice);
+    }
+
+    // #2231: Admin settings for "apply VAT in cart" and "net product pricing" don't work for Variants
+    public function testApplyParentVatEnterNetPrice()
+    {
+        $oPrice = new oxPrice();
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', true );
+
+        $oParent = $this->getMock( 'oxArticle', array( 'applyVats' ) );
+        $oParent->expects( $this->never() )->method( 'applyVats');
 
         $oSubj = $this->getMock("oxSimpleVariant", array( 'getParent' ));
         $oSubj->expects( $this->once() )->method( 'getParent')->will( $this->returnValue( $oParent ) );

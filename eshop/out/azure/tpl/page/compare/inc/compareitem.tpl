@@ -94,7 +94,7 @@
                         <strong>[{$product->getFPrice()}] [{$currency->sign}]</strong>
                     </label>
                     [{if $product->loadAmountPriceInfo()}]
-                        <a class="selector corners FXgradBlueDark" href="#priceinfo"><img src="[{$oViewConf->getImageUrl()}]selectbutton.png" alt="Select"></a>
+                        <a class="selector corners FXgradBlueDark" href="#priceinfo"><img src="[{$oViewConf->getImageUrl('selectbutton.png')}]" alt="Select"></a>
                     [{/if}]
                 [{/oxhasrights}]
                 [{ if $blShowToBasket }]

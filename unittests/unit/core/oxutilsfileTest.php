@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfileTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxutilsfileTest.php 37148 2011-07-19 13:00:40Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -78,10 +78,10 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
 
     public function testGetUniqueFileName()
     {
-        $sFilePath = oxConfig::getInstance()->getPictureDir(false) . "/1/";
+        $sFilePath = oxConfig::getInstance()->getPictureDir(false) . "/master/product/1/";
 
         $oUtilsFile = new oxUtilsFile();
-        $this->assertEquals( "1672_p1(1).jpg", $oUtilsFile->UNITgetUniqueFileName( $sFilePath, "1672_p1", "jpg" ) );
+        $this->assertEquals( "2010_speed3_120_1(1).jpg", $oUtilsFile->UNITgetUniqueFileName( $sFilePath, "2010_speed3_120_1", "jpg" ) );
     }
 
     public function testGetImageSize()

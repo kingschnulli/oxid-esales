@@ -187,7 +187,12 @@ $aLang = array(
 'FACEBOOK_INVITEHEADER'                                           => 'Invite your Friends',
 'FACEBOOK_INVITETEXT'                                             => 'Check this out. Simply click on the button below to check recommended product.',
 'FACEBOOK_INVITEBUTTONTEXT'                                       => 'Open website',
-
+'FACEBOOK_ENABLEBUTTONTEXT'                                       => 'Enable',
+'FACEBOOK_ENABLE_INFOTEXTHEADER'                                  => 'Notes on data protection using Facebook plug-ins',
+'FACEBOOK_ENABLE_INFOTEXT'                                        => 'Here you can leave information about the transmission of personal data to Facebook.<br><br>While using Facebook plug-ins, a connection is established enabling the share of content with other users. Using plug-ins while browsing through the online shop being logged in on Facebook at the same time, your personal data is automatically transmitted to Facebook. You can find more information about collecting, using and processing of your personal data on <a href="http://www.facebook.com/policy.php" target="_blank">Facebook\'s Privacy Policy</a>.',
+'FACEBOOK_ENABLELINK'                                             => '[tr] FACEBOOK INHALTE ANZEIGEN',
+'FACEBOOK_ENABLETEXT'                                             => '[tr] Dadurch werden Daten an Facebook übermittelt.',
+'FACEBOOK_ENABLEINFOLINK'                                         => '[tr] Informationen über die Datenübermittlung anzeigen.',
 
 'WIDGET_FOOTER_NEWSLETTER_TITLE'                                  => "Newsletter",
 'FORM_NEWSLETTER_TITLE'                                           => "Title",
@@ -263,6 +268,10 @@ $aLang = array(
 'WIDGET_PRODUCT_PRODUCT_MOREINFO'                                 => "more Info",
 'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT'                                => "Weight:",
 'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2'                               => "kg",
+'WIDGET_PRODUCT_PRODUCT_DETAILS'                                  => "Product details",
+
+'WIDGET_PRODUCT_REMOVEFROMCOMPARELIST'                            => "remove from compare list",
+'WIDGET_PRODUCT_COMPARE'                                          => "compare",
 
 'TOP_CATEGORIES_HOME'                                             => 'Home',
 'TOP_CATEGORIES_MORE'                                             => 'More',
@@ -520,6 +529,8 @@ $aLang = array(
 'FORM_FIELDSET_USER_SHIPPING_NEWADDRESS'                          => "New Address",
 'FORM_FIELDSET_USER_SHIPPING_TITLE2'                              => "Title:",
 'FORM_FIELDSET_USER_SHIPPING_FIRSTLASTNAME'                       => "First/Last Name:",
+'FORM_FIELDSET_USER_SHIPPING_FIRSTNAME'                           => "First Name:",
+'FORM_FIELDSET_USER_SHIPPING_LASTNAME'                            => "Last Name:",
 'FORM_FIELDSET_USER_SHIPPING_COMPANY2'                            => "Company:",
 'FORM_FIELDSET_USER_SHIPPING_STREETANDSTREETNO2'                  => "Street, StreetNo:",
 'FORM_FIELDSET_USER_SHIPPING_POSTALCODEANDCITY2'                  => "Postal Code, City:",

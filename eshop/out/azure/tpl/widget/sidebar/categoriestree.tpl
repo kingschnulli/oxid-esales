@@ -25,7 +25,7 @@
         [{/foreach}]
     [{/defun}]
     </ul>
-    [{if $oView->getTagCloudManager() }]
+    [{if $oView->showTags() && $oView->getTagCloudManager() }]
         <div class="categoryTagsBox">
             [{assign var="oTagsManager" value=$oView->getTagCloudManager() }]
             <h3>[{ oxmultilang ident="WIDGET_TAGS_HEADER" }]</h3>
