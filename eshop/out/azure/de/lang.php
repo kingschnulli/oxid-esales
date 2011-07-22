@@ -191,9 +191,9 @@ $aLang = array(
 'FACEBOOK_ENABLEBUTTONTEXT'                                       => 'Anzeigen',
 'FACEBOOK_ENABLE_INFOTEXTHEADER'                                  => 'Hinweis zum Datenschutz bei der Nutzung der Facebook Plugins',
 'FACEBOOK_ENABLE_INFOTEXT'                                        => 'Hier können Informationen zur Übermittlung personenbezogener Daten an Facebook hinterlegt werden.<br><br>Bei der Nutzung der Facebook Plugins wird eine Verbindung zu Facebook hergestellt, damit Sie Inhalte mit anderen Usern teilen können. Sollten Sie beim Besuch des Online-Shops die Plugins nutzen und gleichzeitig bei Facebook eingeloggt sein, werden personenbezogene Daten automatisch an Facebook übermittelt. Der Umfang der Datenerhebung sowie die weitere Verarbeitung und Nutzung der Daten kann in den <a href="http://www.facebook.com/policy.php" target="_blank">Datenschutzhinweisen von Facebook</a> nachgelesen und individuell konfiguriert werden.',
-'FACEBOOK_ENABLELINK'                                             => '[tr] FACEBOOK INHALTE ANZEIGEN',
-'FACEBOOK_ENABLETEXT'                                             => '[tr] Dadurch werden Daten an Facebook übermittelt.',
-'FACEBOOK_ENABLEINFOLINK'                                         => '[tr] Informationen über die Datenübermittlung anzeigen.',
+'FACEBOOK_ENABLELINK'                                             => 'FACEBOOK INHALTE ANZEIGEN',
+'FACEBOOK_ENABLETEXT'                                             => 'Es werden Daten an Facebook übermittelt.',
+'FACEBOOK_ENABLEINFOLINK'                                         => 'Informationen über die Datenübermittlung anzeigen.',
 
 'WIDGET_FOOTER_NEWSLETTER_TITLE'                                  => 'Newsletter',
 'FORM_NEWSLETTER_TITLE'                                           => 'Anrede',

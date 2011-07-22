@@ -190,9 +190,9 @@ $aLang = array(
 'FACEBOOK_ENABLEBUTTONTEXT'                                       => 'Enable',
 'FACEBOOK_ENABLE_INFOTEXTHEADER'                                  => 'Notes on data protection using Facebook plug-ins',
 'FACEBOOK_ENABLE_INFOTEXT'                                        => 'Here you can leave information about the transmission of personal data to Facebook.<br><br>While using Facebook plug-ins, a connection is established enabling the share of content with other users. Using plug-ins while browsing through the online shop being logged in on Facebook at the same time, your personal data is automatically transmitted to Facebook. You can find more information about collecting, using and processing of your personal data on <a href="http://www.facebook.com/policy.php" target="_blank">Facebook\'s Privacy Policy</a>.',
-'FACEBOOK_ENABLELINK'                                             => '[tr] FACEBOOK INHALTE ANZEIGEN',
-'FACEBOOK_ENABLETEXT'                                             => '[tr] Dadurch werden Daten an Facebook übermittelt.',
-'FACEBOOK_ENABLEINFOLINK'                                         => '[tr] Informationen über die Datenübermittlung anzeigen.',
+'FACEBOOK_ENABLELINK'                                             => 'DISPLAY FACEBOOK CONTENT',
+'FACEBOOK_ENABLETEXT'                                             => 'Data is transmitted to Facebook.',
+'FACEBOOK_ENABLEINFOLINK'                                         => 'View information about the data transmission.',
 
 'WIDGET_FOOTER_NEWSLETTER_TITLE'                                  => "Newsletter",
 'FORM_NEWSLETTER_TITLE'                                           => "Title",
@@ -268,7 +268,7 @@ $aLang = array(
 'WIDGET_PRODUCT_PRODUCT_MOREINFO'                                 => "more Info",
 'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT'                                => "Weight:",
 'WIDGET_PRODUCT_PRODUCT_ARTWEIGHT2'                               => "kg",
-'WIDGET_PRODUCT_PRODUCT_DETAILS'                                  => "Product details",
+'WIDGET_PRODUCT_PRODUCT_DETAILS'                                  => "Product Details",
 
 'WIDGET_PRODUCT_REMOVEFROMCOMPARELIST'                            => "remove from compare list",
 'WIDGET_PRODUCT_COMPARE'                                          => "compare",
@@ -370,7 +370,7 @@ $aLang = array(
 'PAGE_CHECKOUT_ORDER_MODIFYADDRESS'                               => "modify",
 'PAGE_CHECKOUT_ORDER_EMAIL'                                       => "E-mail:",
 'PAGE_CHECKOUT_ORDER_PHONE'                                       => "Phone:",
-'PAGE_CHECKOUT_ORDER_SHIPPINGADDRESS'                             => "Shipping address",
+'PAGE_CHECKOUT_ORDER_SHIPPINGADDRESS'                             => "Shipping Address",
 'PAGE_CHECKOUT_ORDER_PHONE2'                                      => "Phone:",
 'PAGE_CHECKOUT_ORDER_WHATIWANTEDTOSAY'                            => "What I wanted to say ...:",
 'PAGE_CHECKOUT_ORDER_SHIPPINGCARRIER'                             => "Shipping Carrier",
@@ -447,7 +447,7 @@ $aLang = array(
 
 'PAGE_CHECKOUT_THANKYOU_ALSOBOUGHT'                               => "Customers who bought this products, also bought:",
 'PAGE_CHECKOUT_THANKYOU_TITLE'                                    => "Thank you",
-'PAGE_CHECKOUT_THANKYOU_LOCATION'                                 => "Order completed",
+'PAGE_CHECKOUT_THANKYOU_LOCATION'                                 => "Order Completed",
 'PAGE_CHECKOUT_THANKYOU_THANKYOU1'                                => "Thank you for your order",
 'PAGE_CHECKOUT_THANKYOU_THANKYOU2'                                => "in",
 'PAGE_CHECKOUT_THANKYOU_REGISTEREDYOUORDERNO1'                    => "We registered your order under the number:",
@@ -480,8 +480,8 @@ $aLang = array(
 'FORM_USER_CHECKOUT_REGISTRATION_BACKSTEP'					      => "Previous Step",
 
 'FORM_USER_PASSWORD_OLDPASSWORD'                                  => "Old Password:",
-'FORM_USER_PASSWORD_NEWPASSWORD'                                  => "New Password",
-'FORM_USER_PASSWORD_CONFIRMPASSWORD'                              => "Confirm Password:",
+'FORM_USER_PASSWORD_NEWPASSWORD'                                  => "New password",
+'FORM_USER_PASSWORD_CONFIRMPASSWORD'                              => "Confirm password:",
 'FORM_USER_PASSWORD_SAVE'                                         => "Save",
 
 'FORM_USER_NEWSLETTER_SUBSCRIPTION'                               => "Newsletter subscription:",
@@ -502,7 +502,7 @@ $aLang = array(
 
 'FORM_FIELDSET_USER_ACCOUNT_EMAIL'                                => "E-mail Address:",
 'FORM_FIELDSET_USER_ACCOUNT_PWD'                                  => "Password:",
-'FORM_FIELDSET_USER_ACCOUNT_CONFIRMPWD'                           => "Confirm Password:",
+'FORM_FIELDSET_USER_ACCOUNT_CONFIRMPWD'                           => "Confirm password:",
 'FORM_FIELDSET_USER_ACCOUNT_NEWSLETTER'                           => "Newsletter subscription",
 'FORM_FIELDSET_USER_ACCOUNT_NEWSLETTER_MESSAGE'                   => "It's possible to cancel newsletter at any time.",
 
@@ -598,7 +598,7 @@ $aLang = array(
 'PAGE_ACCOUNT_NEWSLETTER_SETTINGS'                                => "Newsletter Settings",
 'PAGE_ACCOUNT_NEWSLETTER_SUBSCRIPTIONSUCCESS'                     => "The Newsletter subscription was successful.",
 'PAGE_ACCOUNT_NEWSLETTER_SUBSCRIPTIONREJECT'                      => "The Newsletter subscription has been canceled.",
-'PAGE_ACCOUNT_USER_USERTITLE'                                     => "Billings and shipping settings",
+'PAGE_ACCOUNT_USER_USERTITLE'                                     => "Billings and Shipping settings",
 'PAGE_ACCOUNT_PASSWORD_CHANGEPASSWORD'                            => "Create Password",
 
 'PAGE_ACCOUNT_REGISTER_OPENACCOUNT'                               => "Open account",
@@ -820,7 +820,7 @@ $aLang = array(
 'PAGE_ACCOUNT_ORDER_TRACKSHIPMENT'                                => "Track Shipment",
 'PAGE_ACCOUNT_ORDER_SHIPMENTTO'                                   => "Shipment to:",
 'PAGE_ACCOUNT_ORDER_CART'                                         => "Cart:",
-'PAGE_ACCOUNT_ORDER_ADDTOCART'                                    => "add to cart",
+'PAGE_ACCOUNT_ORDER_ADDTOCART'                                    => "add to Cart",
 'PAGE_ACCOUNT_ORDER_EMPTYHISTORY'                                 => "Order History is empty",
 'PAGE_ACCOUNT_ORDER_BACKTOSHOP'                                   => "Back to Shop",
 'PAGE_ACCOUNT_ORDER_ERPSTATUS'                                    => "Delivery status",
@@ -872,7 +872,7 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_WRAPPINGANDGREETINGCARD1'                  => "Gift Wrapping/Greeting Card",
 'EMAIL_ORDER_CUST_HTML_WRAPPINGANDGREETINGCARD2'                  => "(gross)",
 'EMAIL_ORDER_CUST_HTML_GRANDTOTAL'                                => "Grand Total:",
-'EMAIL_ORDER_CUST_HTML_YOURMESSAGE'                               => "What I wanted to say ...: ",
+'EMAIL_ORDER_CUST_HTML_YOURMESSAGE'                               => "What I wanted to say ...:",
 'EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD'                             => "Payment Method:",
 'EMAIL_ORDER_CUST_HTML_ADDRESS'                                   => "Address:",
 'EMAIL_ORDER_CUST_HTML_EMAILADDRESS'                              => "E-mail Address:",
@@ -882,7 +882,7 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_SHIPPINGADDRESS'                           => "Shipping Address:",
 'EMAIL_ORDER_CUST_HTML_SHIPPINGCARRIER'                           => "Shipping Carrier:",
 'EMAIL_ORDER_CUST_HTML_BANK'                                      => "Bank:",
-'EMAIL_ORDER_CUST_HTML_ROUTINGNOMBER'                             => "Bank Code:",
+'EMAIL_ORDER_CUST_HTML_ROUTINGNOMBER'                             => "Bank code:",
 'EMAIL_ORDER_CUST_HTML_ACCOUNTNOMBER'                             => "Account No.:",
 'EMAIL_ORDER_CUST_HTML_BIC'                                       => "BIC:",
 'EMAIL_ORDER_CUST_HTML_IBAN'                                      => "IBAN:",
@@ -905,7 +905,7 @@ $aLang = array(
 'EMAIL_OWNER_REMINDER_HTML_STOCKLOW'                              => "Stock low: This Product has reached the specified stock limit.",
 'EMAIL_OWNER_REMINDER_HTML_PRODUCT'                               => "Product",
 'EMAIL_OWNER_REMINDER_HTML_QUANTITY'                              => "Total quantity",
-'EMAIL_OWNER_REMINDER_HTML_ARTNOMBER'                             => "Art No.:",
+'EMAIL_OWNER_REMINDER_HTML_ARTNOMBER'                             => "Art. No.:",
 
 'EMAIL_NEWSLETTEROPTIN_HTML_NEWSLETTER'                           => "Newsletter",
 'EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT'                             => "Newsletter",
@@ -1054,7 +1054,7 @@ $aLang = array(
 
 'ORDER_READANDCONFIRMTERMS'                                       => "Please read and confirm our terms and conditions.",
 
-'LAYOUT_HEADER_ACCOUNT_LINK'                                      => "My account",
+'LAYOUT_HEADER_ACCOUNT_LINK'                                      => "My Account",
 'LAYOUT_HEADER_COMPARE_LINK'                                      => "My Product Compare",
 'LAYOUT_HEADER_NOTICELIST_LINK'                                   => "My Wish List",
 'LAYOUT_HEADER_WISHLIST_LINK'                                     => "My Gift Registry",

@@ -112,6 +112,8 @@ if ( !function_exists( "resizeGif" ) ) {
      */
     function resizeGif( $sSrc, $sTarget, $iNewWidth, $iNewHeight, $iOriginalWidth, $iOriginalHeigth, $iGDVer )
     {
+        list( $iWidth, $iHeight ) = calcImageSize( $iWidth, $iHeight, $aImageInfo[0], $aImageInfo[1] );
+
         $hDestinationImage = imagecreate( $iNewWidth, $iNewHeight );
         $hSourceImage = imagecreatefromgif( $sSrc );
         $iTransparentColor = imagecolorresolve( $hSourceImage, 255, 255, 255 );
@@ -151,6 +153,8 @@ if ( !function_exists( "resizePng" ) ) {
      */
     function resizePng( $sSrc, $sTarget, $iWidth, $iHeight, $aImageInfo, $iGdVer, $hDestinationImage )
     {
+        list( $iWidth, $iHeight ) = calcImageSize( $iWidth, $iHeight, $aImageInfo[0], $aImageInfo[1] );
+
         if ( $hDestinationImage === null ) {
             $hDestinationImage = $iGdVer == 1 ? imagecreate( $iWidth, $iHeight ) : imagecreatetruecolor( $iWidth, $iHeight );
         }
@@ -200,6 +204,9 @@ if ( !function_exists( "resizeJpeg" ) ) {
      */
     function resizeJpeg( $sSrc, $sTarget, $iWidth, $iHeight, $aImageInfo, $iGdVer, $hDestinationImage, $iDefQuality )
     {
+
+        list( $iWidth, $iHeight ) = calcImageSize( $iWidth, $iHeight, $aImageInfo[0], $aImageInfo[1] );
+
         if ( $hDestinationImage === null ) {
             $hDestinationImage = $iGdVer == 1 ? imagecreate( $iWidth, $iHeight ) : imagecreatetruecolor( $iWidth, $iHeight );
         }

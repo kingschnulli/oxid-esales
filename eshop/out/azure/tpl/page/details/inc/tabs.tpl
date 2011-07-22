@@ -99,7 +99,7 @@
                     <li>[{$FBtab}]</li>
                 [{/foreach}]
             </ul>
-            <div class="widgetBoxBottomRound">
+            <div class="widgetBoxBottomRound FXgradBlueLight">
                 [{foreach from=$FBtabsContent item="FBtabContent"}]
                     [{$FBtabContent}]
                 [{/foreach}]

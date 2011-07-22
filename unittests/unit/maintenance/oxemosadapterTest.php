@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemosadapterTest.php 26900 2010-03-26 15:52:16Z arvydas $
+ * @version   SVN: $Id: oxemosadapterTest.php 37226 2011-07-21 12:52:31Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1092,6 +1092,12 @@ class Unit_Maintenance_oxemosadapterTest extends OxidTestCase
         $oEmos->expects( $this->once() )->method( 'getEmos')->will( $this->returnValue( $oFormatter ) );
         $oEmos->expects( $this->once() )->method( '_getEmosCl')->will( $this->returnValue( 'default' ) );
         $oEmos->getCode( $aParams, $oSmarty );
+    }
+
+    public function testGetScriptPath()
+    {
+        $oEmos = new oxEmosAdapter();
+        $this->assertEquals( modConfig::getInstance()->getShopUrl().'modules/econda/out/', $oEmos->UNITgetScriptPath() );
     }
 
     public function testGetCodeForToBasket()

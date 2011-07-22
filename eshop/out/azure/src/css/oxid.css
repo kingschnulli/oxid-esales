@@ -228,7 +228,8 @@ div.sidebarRight #sidebar {
     box-shadow: 1px 1px 6px 2px #222;
 }
 
-.rightShadow, .itemSlider .prevItem {
+.rightShadow,
+.itemSlider .leftHolder {
     -webkit-box-shadow: 4px 0px 4px -1.5px #555555;
     -moz-box-shadow: 4px 0px 4px -1.5px #555555;
     box-shadow: 4px 0px 4px -1.5px #555555;
@@ -301,7 +302,24 @@ div.sidebarRight #sidebar {
 /******/
 /*** GRADIENTS -> ***/
 /* Blue */
-.gridView .titleBox,.gridView .priceBox, .box h3, .box h2, .sectionHead, .pageHead, #currencies a.selected, #languages a.selected, .flyoutMenu a.selected, .dropDown a.selected, .thumbNav a.cur, .thumbNav a.cur:hover, .promoBox strong.promoPrice, .itemSlider .prevItem, .itemSlider .nextItem, .specBox h3{
+.gridView .titleBox, 
+.itemSlider .titleBlock, 
+.itemSlider .titleBlock:hover, 
+.gridView .priceBox, 
+.box h3, 
+.box h2, 
+.sectionHead, 
+.pageHead, 
+#currencies a.selected, 
+#languages a.selected, 
+.flyoutMenu a.selected, 
+.dropDown a.selected, 
+.thumbNav a.cur, 
+.thumbNav a.cur:hover, 
+.promoBox strong.promoPrice, 
+.itemSlider .prevItem span.slideBg, 
+.itemSlider .nextItem span.slideBg, 
+.specBox h3{
     background: #389cb4 url(../bg/svg/grad_blue.svg);
     background: -moz-linear-gradient(#adefff, #389cb4, #18778e);
     background: -ms-linear-gradient(#defff, #389cb4, #18778e);
@@ -390,7 +408,8 @@ div.anythingSlider .arrow,
 .dropDown ul a:hover,
 div.anythingSlider span.arrow:hover,
 .thumbNav a:hover,
-.slideNav:hover,
+.itemSlider .prevItem:hover span.slideBg,
+.itemSlider .nextItem:hover span.slideBg,
 a.viewAllHover,
 .itemSlider li a.viewAllHover,
 .specBoxTitles a.title:hover,
@@ -404,8 +423,8 @@ a.viewAllHover,
     background: linear-gradient(#ff8604, #ec6105);
 }
 
-
-.fbEnableButton {
+/* Light blue */
+.FXgradBlueLight, .fbEnableButton {
     background: #ffffff url("../bg/svg/grad_light_blue.svg");
     background: -moz-linear-gradient(#fff, #d7e3f1);
     background: -ms-linear-gradient(#fff, #d7e3f1);
@@ -691,7 +710,7 @@ a.viewAllHover,
     border: 2px solid #58b3ca;
     border-top: none;
     margin: 0;
-    margin-top: -3px;
+    margin-top: -2px;
     text-shadow: 0px 1px 1px #fff;
 }
 
@@ -716,7 +735,7 @@ a.viewAllHover,
 
 /* --- Article  box & remomendation box --------------------- */
 .featuredList a {
-    padding: 7px 10px;
+    padding: 7px 10px 5px 10px;
     display: block;
 }
 
@@ -727,6 +746,10 @@ a.viewAllHover,
 
 .featuredList ol a {
     padding-left: 0;
+}
+
+.featuredList li:last-child a {
+    padding-bottom:11px;    
 }
 
 .featuredList a:hover, .featuredList a:hover strong, .featuredList li.articleImage:hover + li.articleTitle > a {
@@ -821,18 +844,17 @@ a.viewAllHover,
 .specBox .rss {
     position: absolute;
     right: 10px;
-    top: 15px;
+    top: 10px;
     text-decoration: none;
 }
 
 .specBox .rss span {
-    left: -5px;
+    visibility: hidden;
     white-space: nowrap;
-    top: -5px;
+    right: -198px;
     color: #fff;
-    padding: 4px 8px 0px 30px;
+    padding: 5px 8px 0px 30px;
     height: 22px;
-    width: 150px;
 }
 
 .specBox .deliveryInfo {
@@ -1114,7 +1136,11 @@ a.textLink {
 
 /* --- RSS link ----------------------------- */
 a.rss {
+    text-decoration:none;
     float: right;
+    height:16px;
+    margin:1px 0;
+    position: relative;
 }
 
 a.rss img {
@@ -1127,12 +1153,13 @@ a.rss span {
     display: block;
     position: absolute;
     white-space: nowrap;
-    right: 5px;
+    right: -6px;
     font-size: 12px;
-    top: 8px;
+    top: -5px;
     color: #fff;
-    padding: 4px 30px 0px 8px;
-    height: 22px;
+    padding: 5px 30px 0px 8px;
+    height: 21px;
+    z-index: 5;
 }
 
 a.rss:hover span {
@@ -1232,6 +1259,7 @@ ul.tabs li {
     padding: 0;
     list-style: none;
     border: 1px solid #999;
+    border-bottom: 1px solid #c9d3d7;
     background: #d9dfe1;
     padding: 7px 10px;
     margin-left: -1px;
@@ -1640,14 +1668,15 @@ a.submitButton {
     text-decoration: none;
 }
 
-#navigation > li > a{font-weight:700; font-size:13px; text-transform:uppercase;}
+#navigation > li > a{font-weight:700; font-size:13px; line-height:16px; text-transform:uppercase;}
 #navigation > li > ul {margin-top:6px;}
+#navigation > li > ul > li > a {font-size:10px; text-transform: uppercase; font-weight: 700 }
 
 /* --- Search box ------------------------------- */
 div.searchBox {
     position: absolute;
-    right: 67px;
-    top: 71px;
+    right: 75px;
+    top: 73px;
 }
 
 div.searchBox input.textbox {
@@ -1682,21 +1711,20 @@ div.searchBox input.textbox:focus {
     display: block;
     color: #fff;
     font-size:11px;
-    padding:0px 6px 1px 6px;
+    padding:1px 5px 0px 5px;
     line-height: 15px;
     position: absolute;
     z-index: 13;
-    right: 30px;
+    right: 28px;
+    top: -3px;
     border: 1px solid #cdcdcd;
     white-space: nowrap;
-
+    text-align:center;
     -moz-border-radius: 25px;
     -webkit-border-radius: 10px;
     -khtml-border-radius: 10px;
     border-radius: 10px;
 }
-
-
 
 .basketBox img {
     position: absolute;
@@ -2401,10 +2429,6 @@ a.tagText img{
 }
 
 /* --- Side Bar category tree ------------------------------ */
-#sidebar .rss span{
-    top: 0;
-}
-
 #sidebar .tree {
     margin: 0 0 20px 0;
 }
@@ -4029,7 +4053,7 @@ span.verificationCode {
 }
 
 .itemSlider .slideNav {
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 700;
     line-height: 24px;
     color: #fff;
@@ -4043,6 +4067,14 @@ span.verificationCode {
     display: block;
     text-shadow: 0px -1px 0px #486066;
 }
+.itemSlider .leftHolder {
+    position:absolute;
+    left:-1px;
+    bottom:-1px;
+    height:150px;
+    z-index:3;
+    width:179px;       
+}
 
 .itemSlider .slideNav:hover {
     text-shadow: 0px -1px 0px #ac8a6b;
@@ -4050,26 +4082,48 @@ span.verificationCode {
     filter: alpha(opacity =100);
 
 }
-
-.itemSlider .prevItem {
+.itemSlider .titleBlock {
     left: -1px;
-    width: 170px;
+    bottom:0;
+    width: 130px;
     padding-left: 10px;
+    text-transform: uppercase;
+}
+.itemSlider .titleBlock:hover {
+    opacity: 0.9;
+    filter: alpha(opacity = 90);
+    text-shadow: 0px -1px 0px #486066;    
 }
 
-.itemSlider .nextItem {
-    right: -1px;
-    width: 40px;
-}
-
-.itemSlider .prevItem strong {
+.itemSlider .titleBlock strong {
     float: left;
     margin: 50px 0 0 0;
     width: 130px;
 }
+.itemSlider span.slideBg {
+    height:100%;
+    width:100%;
+    display:block;    
+}
+.itemSlider .prevItem {
+    left:139px;
+    bottom:0;    
+    width:40px;    
+}
+.itemSlider .nextItem {
+    right: -1px;
+    width: 40px;
+}
+.itemSlider .prevItem:hover span.slideBg,
+.itemSlider .nextItem:hover span.slideBg {
+    filter: alpha(opacity =90);
+    opacity:0.9;
+}
 
-.itemSlider .prevItem span,
-.itemSlider .nextItem span {
+.itemSlider .prevItem span.slidePointer,
+.itemSlider .nextItem span.slidePointer {
+    position:relative;
+    z-index: 5;
     float: right;
     text-indent: -9999px;
     width: 30px;
@@ -4078,15 +4132,15 @@ span.verificationCode {
     background:url(../../img/promo-arrows.png) no-repeat -98px -162px;
 }
 
-.itemSlider .prevItem span {
+.itemSlider .prevItem span.slidePointer {
     background-position: -26px -162px;
 }
 
-.itemSlider .prevItem:hover span {
+.itemSlider .prevItem:hover span.slidePointer {
     background-position: -26px -86px;
 }
 
-.itemSlider .nextItem:hover span {
+.itemSlider .nextItem:hover span.slidePointer {
     background-position: -98px -86px;
 }
 
@@ -4134,7 +4188,6 @@ a.sliderHover {
 .itemSlider li:hover a.sliderHover {
     display: block;
 }
-
 /* ??? */
 /*.gridView li:hover a.sliderHover {
     display: block;

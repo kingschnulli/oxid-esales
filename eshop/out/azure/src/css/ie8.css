@@ -96,7 +96,7 @@ a.viewAllHover,
 }
 
 /* Light blue */
-.fbEnableButton {
+.FXgradBlueLight, .fbEnableButton {
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#FFFFFF, endColorstr=#d7e3f1)";
 }
 
@@ -124,7 +124,7 @@ a.viewAllHover,
      -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#666666')";
 }
 
-.glowShadow, div.anythingSlider .arrow {
+div.anythingSlider .arrow {
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9fafa', endColorstr='#a9b1b4'); progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#666666')";
 }
 
@@ -138,4 +138,12 @@ a.viewAllHover,
 
 .itemSlider .nextItem {
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#ADEFFF, endColorstr=#19788F); progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=270, Color='#666666')";
+}
+
+.box h3, .sectionHead, .specBox h3 {
+    z-index: auto;
+}
+
+.specBox .rss span {
+    right: -188px;
 }

@@ -96,7 +96,7 @@ a.viewAllHover,
 }
 
 /* Light blue */
-.fbEnableButton {
+.FXgradBlueLight, .fbEnableButton {
      filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#d7e3f1')";
 }
 /******/
@@ -197,4 +197,20 @@ a.viewAllHover,
 a.viewAllHover span {
     padding-top: 3px;
     background: url(../../img/plus.png) no-repeat 0 3px;
+}
+
+.specBox h3 {
+    zoom: 1;
+}
+
+.specBox .rss {
+    text-decoration: none;
+}
+
+.specBox .rss span {
+    right: -188px;
+}
+
+a.rss:hover {
+    text-decoration: none;
 }

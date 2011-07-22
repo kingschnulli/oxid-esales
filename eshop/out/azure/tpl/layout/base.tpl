@@ -106,11 +106,6 @@
     <!--[if (gte IE 6)&(lte IE 8)]>
         <script type="text/javascript" src="[{ $oViewConf->getResourceUrl() }]js/libs/IE9.js"></script>
     <![endif]-->
-    <!--[if IE]>
-        <script src="[{ $oViewConf->getResourceUrl() }]js/libs/fonteffect.js"></script>
-        <script src="[{ $oViewConf->getResourceUrl() }]js/widgets/oxiefontshadow.js"></script>
-    <![endif]-->
-
 
 
 </body>

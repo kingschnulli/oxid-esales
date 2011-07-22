@@ -26,5 +26,5 @@ $sLangName  = "English";
 
 
 $aMap = array(
-'WIDGET_LOGINBOX_LOGIN_A' => 'LLL',
+
 );

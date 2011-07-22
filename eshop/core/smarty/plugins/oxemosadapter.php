@@ -34,7 +34,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  $Id: oxemosadapter.php 32923 2011-02-04 14:35:22Z vilma $
+ *  $Id: oxemosadapter.php 37226 2011-07-21 12:52:31Z vilma $
  */
 
 
@@ -93,8 +93,7 @@ class oxEmosAdapter extends oxSuperCfg
      */
     protected function _getScriptPath()
     {
-        $myConfig = $this->getConfig();
-        $sShopUrl = $myConfig->isSsl() ? $myConfig->getConfigParam( 'sSSLShopURL' ) : $myConfig->getConfigParam( 'sShopURL' );
+        $sShopUrl = $this->getConfig()->getCurrentShopUrl();
         return "{$sShopUrl}modules/econda/out/";
     }
 

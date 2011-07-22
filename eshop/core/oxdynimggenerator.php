@@ -31,7 +31,7 @@ if ( !function_exists( "getShopBasePath" ) ) {
      */
     function getShopBasePath()
     {
-        return realpath( dirname( __FILE__ ) . '/../..' ) . '/';
+        return realpath( dirname( __FILE__ ) . '/..' ) . '/';
     }
 }
 
@@ -432,6 +432,10 @@ class oxDynImgGenerator
                         $sNames .= ", ";
                     }
                     $sNames .= $oDb->quote( $sParamName );
+
+                    if ( $sParamName == "sManufacturerIconsize" ) {
+                        $sNames .= ", " . $oDb->quote( "sIconsize" );
+                    }
                 }
             }
 

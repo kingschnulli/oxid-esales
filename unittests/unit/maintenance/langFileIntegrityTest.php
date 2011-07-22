@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: langFileIntegrityTest.php 37179 2011-07-20 10:38:49Z vilma $
+ * @version   SVN: $Id: langFileIntegrityTest.php 37221 2011-07-21 11:36:05Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,15 +30,45 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
 {
+
     /**
-     * Test if current template set language idents are the same.
+     * Initialize the fixture.
      *
      * @return null
      */
-    public function testCurrentTemplateSetIdentMatch()
+    protected function setUp()
     {
-        $aLangIdentsDE = array_keys( $this->_getLanguageArray(null, 1, 'de') );
-        $aLangIdentsEN = array_keys( $this->_getLanguageArray(null, 1, 'en') );
+        parent::setUp();
+        $this->markTestSkipped("");
+
+    }
+
+    /**
+     * Test if generic language file idents are the same.
+     *
+     * @return null
+     */
+    public function testGenericTemplateSetIdentMatch()
+    {
+        $this->markTestSkipped("");
+        $aLangIdentsDE = array_keys( $this->_getLanguageArray('', 1, 'de') );
+        $aLangIdentsEN = array_keys( $this->_getLanguageArray('', 1, 'en') );
+
+        $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
+        //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
+    }
+
+    /**
+     * Test if mapping language idents are the same.
+     *
+     * @return null
+     */
+    public function testMapSetIdentMatch()
+    {
+        $aLangIdentsDE = array_keys( $this->_getLanguageMapArray('de') );
+        $aLangIdentsEN = array_keys( $this->_getLanguageMapArray('en') );
 
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
@@ -101,8 +131,8 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
      */
     public function testDublicateConstats()
     {
-        $aLangIdentsDE = $this->_getLanguageConst( 'admin', 'de');
-        $aLangIdentsEN = $this->_getLanguageConst( 'admin', 'en');
+        $aLangIdentsDE = $this->_getLanguageConst( 'admin', 'de' );
+        $aLangIdentsEN = $this->_getLanguageConst( 'admin', 'en' );
         $aFillIdentsDE = array_unique($aLangIdentsDE);
         $aFillIdentsEN = array_unique($aLangIdentsEN);
         $this->assertEquals( array(), array_diff_key($aLangIdentsDE, $aFillIdentsDE), 'ident does not match');
@@ -121,19 +151,22 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aFillIdentsEN = array_unique($aLangIdentsEN);
         $this->assertEquals( array(), array_diff_key($aLangIdentsDE, $aFillIdentsDE), 'ident does not match');
         $this->assertEquals( array(), array_diff_key($aLangIdentsEN, $aFillIdentsEN), 'ident does not match');
-    }
 
-    /**
-     * Test if there are no missing constant language idents used in current templates.
-     *
-     * @return null
-     */
-    public function testMissingCurrentTemplateConstants()
-    {
-        $aTemplateLangIdents = $this->_getTemplateConstants(null, 1, 'de');
-        $aConstantLangIdents = array_merge( array_keys( $this->_getLanguageArray(null, 1, 'de') ), array_keys( $this->_getLanguageArray( 'admin', 1, 'de') ) );
+        // test generic lang file
+        $aLangIdentsDE = $this->_getLanguageConst( '', 'de' );
+        $aLangIdentsEN = $this->_getLanguageConst( '', 'en' );
+        $aFillIdentsDE = array_unique($aLangIdentsDE);
+        $aFillIdentsEN = array_unique($aLangIdentsEN);
+        $this->assertEquals( array(), array_diff_key($aLangIdentsDE, $aFillIdentsDE), 'ident does not match');
+        $this->assertEquals( array(), array_diff_key($aLangIdentsEN, $aFillIdentsEN), 'ident does not match');
 
-        $this->assertEquals( array(), array_diff($aTemplateLangIdents, $aConstantLangIdents), 'missing constants in templates');
+        // test generic map file
+        $aLangIdentsDE = $this->_getLanguageConst( '', 'de', 'map.php');
+        $aLangIdentsEN = $this->_getLanguageConst( '', 'en', 'map.php');
+        $aFillIdentsDE = array_unique($aLangIdentsDE);
+        $aFillIdentsEN = array_unique($aLangIdentsEN);
+        $this->assertEquals( array(), array_diff_key($aLangIdentsDE, $aFillIdentsDE), 'ident does not match');
+        $this->assertEquals( array(), array_diff_key($aLangIdentsEN, $aFillIdentsEN), 'ident does not match');
     }
 
     /**
@@ -144,7 +177,7 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
     public function testMissingBasicTemplateConstants()
     {
         $aTemplateLangIdents = $this->_getTemplateConstants('basic', 1, 'de');
-        $aConstantLangIdents = array_merge( array_keys( $this->_getLanguageArray('basic', 1, 'de') ), array_keys( $this->_getLanguageArray( 'admin', 1, 'de') ) );
+        $aConstantLangIdents = array_merge( array_keys( $this->_getLanguageArrayMappedWithGeneric('basic', 1, 'de') ), array_keys( $this->_getLanguageArray( 'admin', 1, 'de') ) );
 
         $this->assertEquals( array(), array_diff($aTemplateLangIdents, $aConstantLangIdents), 'missing constants in templates');
     }
@@ -157,7 +190,7 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
     public function testMissingAzureTemplateConstants()
     {
         $aTemplateLangIdents = $this->_getTemplateConstants('azure', 1, 'de');
-        $aConstantLangIdents = array_merge( array_keys( $this->_getLanguageArray('azure', 1, 'de') ), array_keys( $this->_getLanguageArray( 'admin', 1, 'de') ) );
+        $aConstantLangIdents = array_merge( array_keys( $this->_getLanguageArrayMappedWithGeneric('azure', 1, 'de') ), array_keys( $this->_getLanguageArray( 'admin', 1, 'de') ) );
 
         $this->assertEquals( array(), array_diff($aTemplateLangIdents, $aConstantLangIdents), 'missing constants in templates');
     }
@@ -198,6 +231,36 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
             $sDecodedValue = html_entity_decode( $sValue, ENT_QUOTES, 'UTF-8' );
             $this->assertEquals( $sDecodedValue, $sValue, "html entities found for ident $sIdent" );
         }
+
+        // Generic
+        $aLangIdentsDE = $this->_getLanguageArray('', 1, 'de');
+        foreach ( $aLangIdentsDE as $sIdent => $sValue ) {
+            $sValue = str_replace( '&amp;', '(amp)', $sValue );
+            $sDecodedValue = html_entity_decode( $sValue, ENT_QUOTES, 'UTF-8' );
+            $this->assertEquals( $sDecodedValue, $sValue, "html entities found for ident $sIdent" );
+        }
+
+        $aLangIdentsEN = $this->_getLanguageArray('', 1, 'en');
+        foreach ( $aLangIdentsEN as $sIdent => $sValue ) {
+            $sValue = str_replace( '&amp;', '(amp)', $sValue );
+            $sDecodedValue = html_entity_decode( $sValue, ENT_QUOTES, 'UTF-8' );
+            $this->assertEquals( $sDecodedValue, $sValue, "html entities found for ident $sIdent" );
+        }
+
+        // Map
+        $aLangIdentsDE = $this->_getLanguageMapArray('de');
+        foreach ( $aLangIdentsDE as $sIdent => $sValue ) {
+            $sValue = str_replace( '&amp;', '(amp)', $sValue );
+            $sDecodedValue = html_entity_decode( $sValue, ENT_QUOTES, 'UTF-8' );
+            $this->assertEquals( $sDecodedValue, $sValue, "html entities found for ident $sIdent" );
+        }
+
+        $aLangIdentsEN = $this->_getLanguageMapArray('en');
+        foreach ( $aLangIdentsEN as $sIdent => $sValue ) {
+            $sValue = str_replace( '&amp;', '(amp)', $sValue );
+            $sDecodedValue = html_entity_decode( $sValue, ENT_QUOTES, 'UTF-8' );
+            $this->assertEquals( $sDecodedValue, $sValue, "html entities found for ident $sIdent" );
+        }
     }
 
     /**
@@ -215,12 +278,31 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
             $this->assertEquals( $sDecodedValue, $sValue, "html entities found for ident $sIdent" );
         }
 
-
         $aLangIdentsEN = $this->_getLanguageArray('admin', 1, 'en');
         foreach ( $aLangIdentsEN as $sIdent => $sValue ) {
             $sValue = str_replace( '&amp;', '(amp)', $sValue );
             $sDecodedValue = html_entity_decode( $sValue, ENT_QUOTES, 'UTF-8' );
             $this->assertEquals( $sDecodedValue, $sValue, "html entities found for ident $sIdent" );
+        }
+    }
+
+    /**
+     * Test if constants of map
+     *
+     * @return null
+     */
+    public function testMapConstantsInGeneric()
+    {
+        $aMapIdentsDE = $this->_getLanguageMapArray('de');
+        $aLangIdentsDE = $this->_getLanguageArray('', 1, 'de');
+        foreach ( $aMapIdentsDE as $sIdent => $sValue ) {
+            $this->assertTrue( isset($aLangIdentsDE[$sValue]), "has no translation in generic file $sIdent => $sValue" );
+        }
+
+        $aMapIdentsEn = $this->_getLanguageMapArray('en');
+        $aLangIdentsEn = $this->_getLanguageArray('', 1, 'en');
+        foreach ( $aMapIdentsEn as $sIdent => $sValue ) {
+            $this->assertTrue( isset($aLangIdentsEn[$sValue]), "has no translation in generic file $sIdent => $sValue" );
         }
     }
 
@@ -235,10 +317,40 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
      */
     private function _getLanguageArray( $sTheme, $sShop, $sLang, $sFilePattern = '*lang.php' )
     {
-        if ( !$sTheme ) {
-                $sTheme = 'pe_former';
+        $aLang    = array();
+        $aAllLang = array();
+
+        $aFile = array( 'out' );
+        if ($sTheme != '') {
+            $aFile[] = $sTheme;
+        }
+        $aFile[] = $sLang;
+        $aFile[] = $sFilePattern;
+        $sMask = oxConfig::getInstance()->getConfigParam( 'sShopDir' ).DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, array_diff($aFile, array(null, '')));
+
+        foreach ( glob($sMask) as $sFile ) {
+            if (is_readable($sFile)) {
+                include $sFile;
+                $aAllLang = array_merge($aAllLang, $aLang);
+            } else {
+                $aLang = array();
+            }
         }
 
+        return $aAllLang;
+    }
+
+    /**
+     * Get mapped language array by given theme, shop and language.
+     *
+     * @param string $sTheme theme name
+     * @param string $sShop  shom id
+     * @param string $sLang  languge abbr
+     *
+     * @return array
+     */
+    private function _getLanguageArrayMappedWithGeneric( $sTheme, $sShop, $sLang, $sFilePattern = '*lang.php' )
+    {
         $aLang    = array();
         $aAllLang = array();
 
@@ -253,37 +365,53 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
                 $aLang = array();
             }
         }
+        $aAllLang = array_merge($aAllLang, $this->_getLanguageMapArray($sLang));
 
-        $aFileGeneric = array( 'out', $sLang, 'lang.php' );
-        $sGenericMask = oxConfig::getInstance()->getConfigParam( 'sShopDir' ).DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, array_diff($aFileGeneric, array(null, '')));
-
-        foreach ( glob($sGenericMask) as $sFile ) {
-            if (is_readable($sFile)) {
-                include $sFile;
-                $aAllLang = array_merge($aAllLang, $aLang);
-            } else {
-                $aLang = array();
-            }
-        }
         return $aAllLang;
+    }
+
+    /**
+     * Get mapped language array by given theme, shop and language.
+     *
+     * @param string $sTheme theme name
+     * @param string $sShop  shom id
+     * @param string $sLang  languge abbr
+     *
+     * @return array
+     */
+    private function _getLanguageMapArray( $sLang )
+    {
+        $sFile = oxConfig::getInstance()->getConfigParam( 'sShopDir' ).DIRECTORY_SEPARATOR.'out'.DIRECTORY_SEPARATOR.$sLang.DIRECTORY_SEPARATOR.'map.php';
+
+        if (is_readable($sFile)) {
+            include $sFile;
+            return $aMap;
+        }
+
+        return array();
     }
 
     /**
      * Get used language constants in given language file (parsing php file).
      *
-     * @param string $sTheme theme name
-     * @param string $sLang  languge abbr
+     * @param string $sTheme    theme name
+     * @param string $sLang     languge abbr
+     * @param string $sFileName lang file name
      *
      * @return array
      */
-    private function _getLanguageConst( $sTheme, $sLang )
+    private function _getLanguageConst( $sTheme, $sLang, $sFileName = "lang.php" )
     {
         $aSkip = array('SYSREQ_MEMORY_LIMIT');
         $aLang = array();
-        $sFile = oxConfig::getInstance()->getConfigParam( 'sShopDir' )."out".DIRECTORY_SEPARATOR.$sTheme.DIRECTORY_SEPARATOR.$sLang.DIRECTORY_SEPARATOR."lang.php";
-        $sArray =  file_get_contents($sFile);
-        $sReg = "/'([A-Z\_0-9]+)' +/i";
-        preg_match_all($sReg, $sArray, $aMatches);
+        $sFile = oxConfig::getInstance()->getConfigParam( 'sShopDir' )."out";
+        if ($sTheme != '') {
+            $sFile .= DIRECTORY_SEPARATOR.$sTheme;
+        }
+        $sFile .= DIRECTORY_SEPARATOR.$sLang.DIRECTORY_SEPARATOR.$sFileName;
+        $sArray = file_get_contents($sFile);
+        $sReg = "/'([A-Z\_0-9]+)' +=/i";
+        $sArray = preg_match_all($sReg, $sArray, $aMatches);
         foreach ($aMatches[1] as $sConst) {
             if ( !in_array($sConst, $aSkip) ) {
                 $aLang[] = trim($sConst);
