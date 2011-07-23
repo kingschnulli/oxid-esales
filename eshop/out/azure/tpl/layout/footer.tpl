@@ -7,7 +7,7 @@
                     [{block name="footer_fblike"}]
                         [{if $oView->isActive('FbLike') && $oViewConf->getFbAppId()}]
                             <div class="facebook" id="footerFbLike">
-                                [{include file="widget/facebook/include.tpl" source="widget/facebook/like.tpl" ident="#footerFbLike" parent="footer"}]
+                                [{include file="widget/facebook/enable.tpl" source="widget/facebook/like.tpl" ident="#footerFbLike" parent="footer"}]
                             </div>
                         [{/if}]
                     [{/block}]

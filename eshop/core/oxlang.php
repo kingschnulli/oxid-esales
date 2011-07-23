@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 37172 2011-07-20 08:11:07Z linas.kukulskis $
+ * @version   SVN: $Id: oxlang.php 37260 2011-07-22 10:04:21Z linas.kukulskis $
  */
 
 /**
@@ -480,7 +480,7 @@ class oxLang extends oxSuperCfg
         }
 
         // checking if in map exist
-        $sMapFile = $myConfig->getOutDir() . oxLang::getInstance()->getLanguageAbbr( $iLang ) . '/map.php';
+        $sMapFile = $myConfig->getOutDir() . '/' . $myConfig->getConfigParam( "sTheme" ) .'/' . oxLang::getInstance()->getLanguageAbbr( $iLang ) . '/map.php';
         $aMap = $this->_getLanguageMap($sMapFile);
         if ( isset( $aLang[$aMap[$sStringToTranslate]] ) ) {
             return $aLang[$aMap[$sStringToTranslate]];

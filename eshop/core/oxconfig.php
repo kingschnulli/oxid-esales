@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 37137 2011-07-19 06:58:06Z arvydas.vapsva $
+ * @version   SVN: $Id: oxconfig.php 37275 2011-07-22 11:44:11Z linas.kukulskis $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1408,6 +1408,8 @@ class oxConfig extends oxSuperCfg
      * @param int    $iShop   Shop id
      * @param string $sTheme  Theme name
      *
+     * @deprecated,  should not be used any more (2011.07.06)
+     *
      * @return string
      */
     public function getLanguagePath( $sFile, $blAdmin, $iLang = null, $iShop = null, $sTheme = null )
@@ -1421,6 +1423,8 @@ class oxConfig extends oxSuperCfg
      * @param string $sFile   File name
      * @param bool   $blAdmin Whether to force admin
      * @param int    $iLang   Language id
+     *
+     * @deprecated,  should not be used any more (2011.07.06)
      *
      * @return string
      */

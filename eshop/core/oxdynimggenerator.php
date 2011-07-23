@@ -222,6 +222,16 @@ class oxDynImgGenerator
     }
 
     /**
+     * Returns shops base path
+     *
+     * @return string
+     */
+    protected function _getShopBasePath()
+    {
+        return str_replace( "\\", "/", getShopBasePath() );
+    }
+
+    /**
      * Returns requested image uri
      *
      * @return string
@@ -229,7 +239,17 @@ class oxDynImgGenerator
     protected function _getImageUri()
     {
         if ( $this->_sImageUri === null ) {
-            $this->_sImageUri = isset( $_SERVER["REQUEST_URI"] ) ? trim( $_SERVER["REQUEST_URI"], "/" ) : "";
+
+            $this->_sImageUri = "";
+            $sReqPath = "out/pictures/generated";
+
+
+            $sReqImg = isset( $_SERVER["REQUEST_URI"] ) ? $_SERVER["REQUEST_URI"] : "";
+            if ( ( $iPos = strpos( $sReqImg, $sReqPath ) ) !== false ) {
+                $this->_sImageUri = substr( $sReqImg, $iPos );
+            }
+
+            $this->_sImageUri = trim( $this->_sImageUri, "/" );
         }
 
         return $this->_sImageUri;
@@ -284,7 +304,7 @@ class oxDynImgGenerator
      */
     protected function _getImageTarget()
     {
-        return getShopBasePath() . $this->_getImageUri();
+        return $this->_getShopBasePath() . $this->_getImageUri();
     }
 
     /**
@@ -294,7 +314,7 @@ class oxDynImgGenerator
      */
     protected function _getNopicImageTarget()
     {
-        $sPath = getShopBasePath() . $this->_getImageUri();
+        $sPath = $this->_getShopBasePath() . $this->_getImageUri();
         return str_replace( $this->_getImageName(), "nopic.jpg", $sPath );
     }
 
@@ -610,19 +630,20 @@ class oxDynImgGenerator
     public function getImagePath( $sAbsPath = false )
     {
         if ( $sAbsPath ) {
-            $this->_sImageUri = str_replace( getShopBasePath(), "", $sAbsPath );
+            $this->_sImageUri = str_replace( $this->_getShopBasePath(), "", $sAbsPath );
         }
 
         $sImagePath  = false;
         $sMasterPath = $this->_getImageMasterPath();
 
         // building base path + extracting image name + extracting master image path
-        $sMasterImagePath = getShopBasePath() . $sMasterPath . $this->_getImageName();
+        $sMasterImagePath = $this->_getShopBasePath() . $sMasterPath . $this->_getImageName();
+
         if ( file_exists( $sMasterImagePath ) ) {
             $sGenImagePath = $this->_getImageTarget();
         } else {
             // nopic master path
-            $sMasterImagePath = getShopBasePath() . dirname( dirname( $sMasterPath ) ) . "/nopic.jpg";
+            $sMasterImagePath = $this->_getShopBasePath() . dirname( dirname( $sMasterPath ) ) . "/nopic.jpg";
             $sGenImagePath    = $this->_getNopicImageTarget();
 
             // 404 header for nopic

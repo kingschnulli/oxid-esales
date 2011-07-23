@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 37173 2011-07-20 08:11:36Z linas.kukulskis $
+ * @version   SVN: $Id: oxlangTest.php 37261 2011-07-22 10:11:58Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1044,16 +1044,16 @@ class Unit_Core_oxLangTest extends OxidTestCase
     {
         $oSubj = $this->getProxyClass("oxLang");
         $aTrArray = $oSubj->UNITgetLangTranslationArray();
-        $this->assertTrue(isset($aTrArray["DETAILS_QUESTIONS"]));
-        $this->assertEquals($aTrArray["DETAILS_QUESTIONS"], "[?] Sie haben Fragen zu diesem Artikel?");
+        $this->assertTrue(isset($aTrArray["QUESTIONS_ABOUT_THIS_PRODUCT_2"]));
+        $this->assertEquals($aTrArray["QUESTIONS_ABOUT_THIS_PRODUCT_2"], "[?] Sie haben Fragen zu diesem Artikel?");
     }
 
     public function testGetLangTranslationArrayLang1()
     {
         $oSubj = $this->getProxyClass("oxLang");
         $aTrArray = $oSubj->UNITgetLangTranslationArray(1);
-        $this->assertTrue(isset($aTrArray["DETAILS_QUESTIONS"]));
-        $this->assertEquals($aTrArray["DETAILS_QUESTIONS"], "[?] Questions about this product?");
+        $this->assertTrue(isset($aTrArray["QUESTIONS_ABOUT_THIS_PRODUCT_2"]));
+        $this->assertEquals($aTrArray["QUESTIONS_ABOUT_THIS_PRODUCT_2"], "[?] Questions about this product?");
     }
 
     public function testGetLangTranslationArrayIsSetInCache()
@@ -1061,8 +1061,8 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oSubj = $this->getProxyClass("oxLang");
         $oSubj->setNonPublicVar( '_aLangCache', array( 'langcache_0_1_'.oxConfig::getInstance()->getShopId().'_basic_default'=>array('1'=>array("ACCOUNT_LOGIN"=>"Login") ) ) );
         $aTrArray = $oSubj->UNITgetLangTranslationArray(1);
-        $this->assertTrue(isset($aTrArray["DETAILS_QUESTIONS"]));
-        $this->assertEquals($aTrArray["DETAILS_QUESTIONS"], "[?] Questions about this product?");
+        $this->assertTrue(isset($aTrArray["QUESTIONS_ABOUT_THIS_PRODUCT_2"]));
+        $this->assertEquals($aTrArray["QUESTIONS_ABOUT_THIS_PRODUCT_2"], "[?] Questions about this product?");
     }
 
     public function testGetLangTranslationArrayIfBaseLAngNotSet()
@@ -1070,8 +1070,8 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oSubj = $this->getMock( 'oxLang', array( 'getBaseLanguage' ) );
         $oSubj->expects( $this->any() )->method( 'getBaseLanguage' )->will( $this->returnValue( null ) );
         $aTrArray = $oSubj->UNITgetLangTranslationArray();
-        $this->assertTrue(isset($aTrArray["DETAILS_QUESTIONS"]));
-        $this->assertEquals($aTrArray["DETAILS_QUESTIONS"], "[?] Sie haben Fragen zu diesem Artikel?");
+        $this->assertTrue(isset($aTrArray["QUESTIONS_ABOUT_THIS_PRODUCT_2"]));
+        $this->assertEquals($aTrArray["QUESTIONS_ABOUT_THIS_PRODUCT_2"], "[?] Sie haben Fragen zu diesem Artikel?");
     }
 
     public function testGetLangTranslationArrayModuleFile()

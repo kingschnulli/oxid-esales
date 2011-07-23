@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 36473 2011-06-20 11:12:11Z arvydas.vapsva $
+ * @version   SVN: $Id: oxbasket.php 37278 2011-07-22 12:49:48Z arunas.paskevicius $
  */
 
 /**
@@ -2276,7 +2276,7 @@ class oxBasket extends oxSuperCfg
     public function getFDeliveryCosts()
     {
         $oDeliveryCost = $this->getCosts( 'oxdelivery' );
-        if ( $oDeliveryCost && $oDeliveryCost->getBruttoPrice()) {
+        if ( $oDeliveryCost ) {
             return oxLang::getInstance()->formatCurrency( $oDeliveryCost->getBruttoPrice(), $this->getBasketCurrency() );
         }
         return false;

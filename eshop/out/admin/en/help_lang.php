@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 37041 2011-07-14 13:17:59Z arvydas.vapsva $
+ * @version   SVN: $Id: help_lang.php 37256 2011-07-22 08:47:13Z juergen.busch $
  */
 
 /**
@@ -177,7 +177,7 @@ $aLang =  array(
                                                  'How to connect your website to Facebook, you can read in ' .
                                                  '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank" target="_blank">tutorial</a>.',
 
-'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONFIRM'=> '[tr] To improve customer privacy we implement confirmation button which enables Facebook widgets, thus data is shared with third party only with user confirmation',
+'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONFIRM'=> 'To protect customer privacy, the display of the Facebook social plugins must be explicitly confirmed. Only after confirmation data is shared with Facebook.',
 
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FBSECRETKEY'    => 'To ensure secure connection between your site and facebook, you must ' .
                                                  'enter Secure Key which you get when registering your website to ' .
@@ -202,7 +202,7 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_ATTENTION'                  => 'Caution: Even if encryption is used, Credit Card contracts usually prohibit this strictly!',
 
-'HELP_SHOP_CONFIG_SHOWTAGS'                   => '[tr] If unchecked tags will not bi displayed in shop, also tags pages will not be accessible',
+'HELP_SHOP_CONFIG_SHOWTAGS'                   => 'If not checked, no tags will be displayed in eShop. Pages that could be called via tag URL, are not accessible.',
 
 'HELP_SHOP_MALL_MALLMODE'                     => 'Here you can set what is shown as front page of this eShop:' .
                                                  '<ul><li><span class="navipath_or_inputname">Show shop selector</span>: A page where the different eShops can be selected is shown.</li>' .
@@ -306,9 +306,9 @@ $aLang =  array(
 
 'HELP_ARTICLE_EXTEND_QUESTIONEMAIL'           => 'At <span class="navipath_or_inputname">Alt. Contact</span> you can enter an e-mail address. If users submit questions on this product, they will be sent to this e-mail address. If no e-mail address is entered, the query will be send to the normal info e-mail address.',
 
-'HELP_ARTICLE_EXTEND_NONMATERIAL'             => '[tr]The options oxfreeshipping, oxnonmaterial and oxremindactive are always inherited to Variants from Parent products. That\'s because these options are general for all the product and should not be different for particular variants (i.e. Parent product is material and just one of variants is non-material).',
+'HELP_ARTICLE_EXTEND_NONMATERIAL'             => 'Setting is inherited from Parent product to Variants and applies to the entire product.',
 
-'HELP_ARTICLE_EXTEND_FREESHIPPING'            => '[tr]The options oxfreeshipping, oxnonmaterial and oxremindactive are always inherited to Variants from Parent products. That\'s because these options are general for all the product and should not be different for particular variants (i.e. Parent product is material and just one of variants is non-material).',
+'HELP_ARTICLE_EXTEND_FREESHIPPING'            => 'Setting is inherited from Parent product to Variants and applies to the entire product.',
 
 'HELP_ARTICLE_EXTEND_SKIPDISCOUNTS'           => 'If <span class="navipath_or_inputname">Skip all negative discounts</span> is active, negative allowances will not be calculated for this product. These include discounts and vouchers.',
 
@@ -338,7 +338,7 @@ $aLang =  array(
 
 
 
-'HELP_ARTICLE_STOCK_REMINDACTIV'              => '[tr]The options oxfreeshipping, oxnonmaterial and oxremindactive are always inherited to Variants from Parent products. That\'s because these options are general for all the product and should not be different for particular variants (i.e. Parent product is material and just one of variants is non-material).',
+'HELP_ARTICLE_STOCK_REMINDACTIV'              => 'Setting is inherited from Parent product to Variants and applies to the entire product.',
 
 'HELP_ARTICLE_STOCK_STOCKFLAG'                => 'At <span class="navipath_or_inputname">Delivery status</span> you can select from 4 settings:' .
                                                  '<ul><li><span class="userinput_or_code">Standard</span>: The product can then also be ordered if it is sold out.</li>' .

@@ -3,9 +3,11 @@
     [{assign var='file' value=$file|strip|escape:'url'}]
     [{oxscript add="oxFacebook.buttons['`$ident`']={html:'`$file`',script:'`$script`'};"}]
     [{if $type=="text"}]
-        <a class="oxfbenable" href="#">[{oxmultilang ident="FACEBOOK_ENABLELINK"}]</a><br><br>
-        [{oxmultilang ident="FACEBOOK_ENABLETEXT"}]<br>
-        <a href="#" class="oxfbinfo">[{oxmultilang ident="FACEBOOK_ENABLEINFOLINK"}]</a>
+        <a class="oxfbenable fbEnableLink" href="#">[{oxmultilang ident="FACEBOOK_ENABLELINK"}]</a>
+        <p class="fbEnableDesc">
+            [{oxmultilang ident="FACEBOOK_ENABLETEXT"}]<br>
+            <a href="#" class="oxfbinfo">[{oxmultilang ident="FACEBOOK_ENABLEINFOLINK"}]</a>
+        </p>
     [{else}]
         <div class="oxfbenable fbEnableButton corners">
             <a href="#">[{oxmultilang ident="FACEBOOK_ENABLEBUTTONTEXT"}]</a>

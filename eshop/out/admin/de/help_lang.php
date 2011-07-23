@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 37041 2011-07-14 13:17:59Z arvydas.vapsva $
+ * @version   SVN: $Id: help_lang.php 37255 2011-07-22 08:46:45Z juergen.busch $
  */
 
 /**
@@ -174,7 +174,7 @@ $aLang =  array(
                                                  'Weitere Informationen finden Sie im ' .
                                                  '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank" target="_blank">Tutorial</a>.',
 
-'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONFIRM'=> '[tr] To improve customer privacy we implement confirmation button which enables Facebook widgets, thus data is shared with third party only with user confirmation',
+'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONFIRM'=> 'Um die Privatsphäre des Kunden zu schützen, muss die Anzeige der Facebook Social Plugins explizit bestätigt werden. Erst nach Bestätigung werden Daten mit Facebook ausgetauscht.',
 
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FBSECRETKEY'    => 'Um die Verbindung zwischen eShop und Facebook abzusichern, geben Sie den \'Secure Key\' hier ein. ' .
                                                  'Weitere Informationen finden Sie im ' .
@@ -182,7 +182,7 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_FBCOMMENTS'                 => 'Erlaubt den Shopbesuchern, Kommentare zu Produkten abzugeben.',
 
-'HELP_SHOP_CONFIG_FBFACEPILE'                 => 'Zeigt Ihren Shopbesuchern wer von deren Freunden in Facebook ein Freund Ihres Shops ist.',
+'HELP_SHOP_CONFIG_FBFACEPILE'                 => 'Zeigt Ihren Shopbesuchern, wer von deren Freunden in Facebook ein Freund Ihres Shops ist.',
 
 'HELP_SHOP_CONFIG_FBLIVESTREAM'               => 'Lässt die Besucher Ihres Shops miteinander in Echtzeit über Produkte Ihres Shops diskutieren',
 
@@ -190,13 +190,13 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_FBSHARE'                    => 'Zeigt Facebooks \'Share button\'.',
 
-'HELP_SHOP_CONFIG_FBLIKE'                     => 'Zeigt Facebooks \'Like button\' mit dem die Besucher Ihres Shops in Facebook bekannt geben, dass Sie Ihren Shop mögen.',
+'HELP_SHOP_CONFIG_FBLIKE'                     => 'Zeigt Facebooks \'Like button\', mit dem die Besucher Ihres Shops in Facebook bekannt geben, dass sie Ihren Shop mögen.',
 
-'HELP_SHOP_CONFIG_FACEBOOKCONNECT'            => 'Facebook Connect anzeigen damit Anwender sich mit ihren Facebook-Profildaten im Shop anmelden können.',
+'HELP_SHOP_CONFIG_FACEBOOKCONNECT'            => 'Facebook Connect anzeigen, damit Anwender sich mit ihren Facebook-Profildaten im Shop anmelden können.',
 
 'HELP_SHOP_CONFIG_ATTENTION'                  => 'ACHTUNG! Üblicherweise ist in den Verträgen mit MasterCard und VISA die Speicherung der Daten ausdrücklich verboten.',
 
-'HELP_SHOP_CONFIG_SHOWTAGS'                   => '[tr] If unchecked tags will not bi displayed in shop, also tags pages will not be accessible',
+'HELP_SHOP_CONFIG_SHOWTAGS'                   => 'Wenn nicht angehakt, werden keine Tags im eShop angezeigt. Auf Seiten, die über Tag URL aufgerufen werden könnten, kann nicht zugegriffen werden.',
 
 'HELP_SHOP_MALL_MALLMODE'                     => 'Hier stellen Sie ein, was auf der Startseite dieses eShops angezeigt werden soll: '.
                                                  '<ul><li><span class="navipath_or_inputname">Shop-Auswahlseite</span>: Eine Seite wird angezeigt, auf der Kunden zwischen den verschiedenen Shops wählen können.</li>' .
@@ -304,9 +304,9 @@ $aLang =  array(
 
 'HELP_ARTICLE_EXTEND_SKIPDISCOUNTS'           => 'Wenn <span class="navipath_or_inputname">Alle neg. Nachlässe ignorieren</span> aktiviert ist, werden für diesen Artikel keine negativen Nachlässe berechnet. Das sind z. B. Rabatte und Gutscheine.',
 
-'HELP_ARTICLE_EXTEND_NONMATERIAL'             => '[tr]The options oxfreeshipping, oxnonmaterial and oxremindactive are always inherited to Variants from Parent products. That\'s because these options are general for all the product and should not be different for particular variants (i.e. Parent product is material and just one of variants is non-material).',
+'HELP_ARTICLE_EXTEND_NONMATERIAL'             => 'Einstellung wird vom Vater-Artikel an die Varianten vererbt und gilt für den gesamten Artikel.',
 
-'HELP_ARTICLE_EXTEND_FREESHIPPING'            => '[tr]The options oxfreeshipping, oxnonmaterial and oxremindactive are always inherited to Variants from Parent products. That\'s because these options are general for all the product and should not be different for particular variants (i.e. Parent product is material and just one of variants is non-material).',
+'HELP_ARTICLE_EXTEND_FREESHIPPING'            => 'Einstellung wird vom Vater-Artikel an die Varianten vererbt und gilt für den gesamten Artikel.',
 
 'HELP_ARTICLE_EXTEND_TEMPLATE'                => 'Sie können die Detailansicht des Artikels mit einem anderen Template anzeigen lassen. Tragen Sie dazu den Dateinamen des Templates ein, das verwendet werden soll. Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/bestimmte-artikel-oder-kategorien-mit-anderen-templates-anzeigen" target="_blank">eShop Handbuch</a>.',
 
@@ -335,7 +335,7 @@ $aLang =  array(
 
 
 
-'HELP_ARTICLE_STOCK_REMINDACTIV'              => '[tr]The options oxfreeshipping, oxnonmaterial and oxremindactive are always inherited to Variants from Parent products. That\'s because these options are general for all the product and should not be different for particular variants (i.e. Parent product is material and just one of variants is non-material).',
+'HELP_ARTICLE_STOCK_REMINDACTIV'              => 'Einstellung wird vom Vater-Artikel an die Varianten vererbt und gilt für den gesamten Artikel.',
 
 'HELP_ARTICLE_STOCK_STOCKFLAG'                => 'Hier können Sie einstellen, wie sich der eShop verhält, wenn der Artikel ausverkauft ist:<br>' .
                                                  '<ul><li>Standard: Der Artikel kann auch dann bestellt werden, wenn er ausverkauft ist.</li>' .

@@ -50,7 +50,7 @@
     [{if $oView->isActive('FbComments') && $oViewConf->getFbAppId()}]
         [{capture append="FBtabs"}]<a href="#productFbComments">[{oxmultilang ident="FACEBOOK_COMMENTS"}]</a>[{/capture}]
         [{assign var='_fbScript' value="http://connect.facebook.net/en_US/all.js#appId="|cat:$oViewConf->getFbAppId()|cat:"&amp;xfbml=1"}]
-        [{capture append="FBtabsContent"}]<div id="productFbComments">[{include file="widget/facebook/include.tpl" source="widget/facebook/comments.tpl" ident="#productFbComments" script=$_fbScript type="text"}]</div>[{/capture}]
+        [{capture append="FBtabsContent"}]<div id="productFbComments">[{include file="widget/facebook/enable.tpl" source="widget/facebook/comments.tpl" ident="#productFbComments" script=$_fbScript type="text"}]</div>[{/capture}]
     [{/if}]
 [{/block}]
 
@@ -60,7 +60,7 @@
         [{capture append="FBtabsContent"}]
             <div id="productFbInvite">
                 <fb:serverfbml width="560px" id="productFbInviteFbml">
-                    [{include file="widget/facebook/include.tpl" source="widget/facebook/invite.tpl" ident="#productFbInviteFbml" type="text"}]
+                    [{include file="widget/facebook/enable.tpl" source="widget/facebook/invite.tpl" ident="#productFbInviteFbml" type="text"}]
                 </fb:serverfbml>
             </div>
         [{/capture}]
@@ -70,7 +70,7 @@
 [{block name="details_tabs_fblivestream"}]
     [{if $oView->isActive('FbLiveStream') && $oViewConf->getFbAppId()}]
         [{capture append="FBtabs"}]<a href="#productFbLiveStream">[{oxmultilang ident="FACEBOOK_CHAT"}]</a>[{/capture}]
-        [{capture append="FBtabsContent"}]<div id="productFbLiveStream">[{include file="widget/facebook/include.tpl" source="widget/facebook/livestream.tpl" ident="#productFbLiveStream" type="text"}]</div>[{/capture}]
+        [{capture append="FBtabsContent"}]<div id="productFbLiveStream">[{include file="widget/facebook/enable.tpl" source="widget/facebook/livestream.tpl" ident="#productFbLiveStream" type="text"}]</div>[{/capture}]
     [{/if}]
 [{/block}]
 
@@ -96,7 +96,7 @@
         <div class="tabbedWidgetBox clear" style="min-height:50px;">
             <ul id="itemFbTabs" class="tabs clear">
                 [{foreach from=$FBtabs item="FBtab"}]
-                    <li>[{$FBtab}]</li>
+                    <li class="fbTab">[{$FBtab}]</li>
                 [{/foreach}]
             </ul>
             <div class="widgetBoxBottomRound FXgradBlueLight">

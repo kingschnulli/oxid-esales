@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 36392 2011-06-16 08:54:45Z arvydas.vapsva $
+ * @version   SVN: $Id: oxbasketTest.php 37280 2011-07-22 13:46:21Z arunas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3954,7 +3954,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oPrice->expects( $this->any() )->method( 'getBruttoPrice' )->will( $this->returnValue( 0 ) );
         $oBasket = $this->getProxyClass( "oxBasket" );
         $oBasket->setNonPublicVar('_aCosts', array ( "oxdelivery" => $oPrice ) );
-        $this->assertFalse( $oBasket->getFDeliveryCosts() );
+        $this->assertEquals( "0,00", $oBasket->getFDeliveryCosts() );
     }
 
     /**

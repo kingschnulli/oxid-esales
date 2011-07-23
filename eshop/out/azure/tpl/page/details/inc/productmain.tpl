@@ -313,7 +313,7 @@
                 <div class="social">
                     [{if $oView->isActive('FacebookConfirm') && !$oView->isFbWidgetWisible() }]
                         <div class="socialButton" id="productFbShare">
-                            [{include file="widget/facebook/include.tpl" source="widget/facebook/share.tpl" ident="#productFbShare"}]
+                            [{include file="widget/facebook/enable.tpl" source="widget/facebook/share.tpl" ident="#productFbShare"}]
                             [{include file=widget/facebook/like.tpl assign="fbfile"}]
                             [{assign var='fbfile' value=$fbfile|strip|escape:'url'}]
                             [{oxscript add="oxFacebook.buttons['#productFbLike']={html:'`$fbfile`',script:''};"}]
@@ -321,10 +321,10 @@
                         <div class="socialButton" id="productFbLike"></div>
                     [{else}]
                         <div class="socialButton" id="productFbShare">
-                            [{include file="widget/facebook/include.tpl" source="widget/facebook/share.tpl" ident="#productFbShare"}]
+                            [{include file="widget/facebook/enable.tpl" source="widget/facebook/share.tpl" ident="#productFbShare"}]
                         </div>
                         <div class="socialButton" id="productFbLike">
-                            [{include file="widget/facebook/include.tpl" source="widget/facebook/like.tpl" ident="#productFbLike"}]
+                            [{include file="widget/facebook/enable.tpl" source="widget/facebook/like.tpl" ident="#productFbLike"}]
                         </div>
                     [{/if}]
                 </div>
