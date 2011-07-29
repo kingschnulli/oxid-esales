@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 37268 2011-07-22 11:04:53Z linas.kukulskis $
+ * @version   SVN: $Id: lang.php 37318 2011-07-25 13:59:28Z vilma $
  */
 
 
@@ -50,6 +50,7 @@ $aLang = array(
 'ACCOUNT_WISHLIST_BUYFORME2'                                  => ". Great if you could buy something for me.",
 'ACCOUNT_WISHLIST_CLICKHERETOSENDWISHLIST'                    => "Click here to send your gift registry to your friends:",
 'ACCOUNT_WISHLIST_SENDSUCCESSFULLY1'                          => "Your Gift Registry was sent successfully to:",
+'ACCOUNT_WISHLIST_SENDSUCCESSFULLY2'                          => "",
 'ADD_RECOMM_ADDRECOMMLINK1'                                   => "There is no Listmania lists at the moment. To create new, click",
 'ADD_RECOMM_ADDRECOMMLINK2'                                   => "here",
 'BASKET_ARTICLENOTONSTOCK'                                    => "This product is not on stock and has to be reordered.",
@@ -68,13 +69,17 @@ $aLang = array(
 'DETAILS_PRICEALARM2'                                         => "<b>[!]</b> Price Alert",
 'DETAILS_REDUCEDTEXT'                                         => "(Our normal price.)",
 'DETAILS_VPE_MESSAGE_1'                                       => "This product can only be ordered in packaging units of ",
+'DETAILS_VPE_MESSAGE_2'                                       => "",
 'DETAILS_ZOOM'                                                => "[+] zoom",
 'EMAIL_INVITE_HTML_INVITETOSHOP'                              => "An invitation from",
 'EMAIL_INVITE_HTML_INVITETOSHOP2'                             => "to visit",
+'EMAIL_INVITE_HTML_INVITETOSHOP3'                             => "",
 'EMAIL_ORDER_CUST_HTML_NONE'                                  => "NONE",
 'EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEVAT1'                     => "Payment Charge VAT",
 'EMAIL_ORDER_CUST_HTML_YOURMESSAGE'                           => "What I wanted to say ...: ",
 'EMAIL_OWNER_REMINDER_HTML_ARTNOMBER'                         => "Art No.:",
+'EMAIL_ORDER_OWNER_HTML_PAYMENTINFO'                          => "",
+'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'                       => "",
 'EXCEPTION_INPUT_NOTALLFIELDS'                                => 'Please complete all fields marked with a <span class="req">*</span>',
 'FACEBOOK_POPUP_HEADER'                                       => "Account data update",
 'FACEBOOK_POPUP_UPDATEBTN'                                    => "Update account",
@@ -85,6 +90,7 @@ $aLang = array(
 'INC_ACCOUNT_HEADER_ADDRESS'                                  => "My Address",
 'INC_ACCOUNT_HEADER_LOGOUT'                                   => "LOGOUT",
 'INC_ACCOUNT_HEADER_PASSWORD'                                 => "My Password",
+'INC_ACCOUNT_HEADER_LOGOUTFROMSHOP'                           => "",
 'INC_CMP_BASKET_QTY'                                          => "Stk",
 'INC_CMP_FBCONNECT_YOUARELOGGEDINAS'                          => "You are logged in as",
 'INC_CMP_LOGIN_ERRINVALIDEMAILORPWD'                          => "<b>Error:</b> <br>Incorrect e-mail address or password!",
@@ -147,7 +153,9 @@ $aLang = array(
 'ORDER_DISCOUNTS_NOT_APPLIED_FOR_ARTICLES'                    => "Discounts are not applied for these articles",
 'ORDER_GIFTOPTION'                                            => "Gift option",
 'ORDER_IAGREETORIGHTOFWITHDRAWAL1'                            => "I have been informed about my",
+'ORDER_IAGREETORIGHTOFWITHDRAWAL3'                            => "",
 'ORDER_IAGREETOTERMS1'                                        => "I agree to the",
+'ORDER_IAGREETOTERMS3'                                        => "",
 'ORDER_INFO_TITLE'                                            => "How to order?",
 'ORDER_MODIFYADDRESS'                                         => "Modify this address",
 'ORDER_MODIFYADDRESS2'                                        => "Modify this address",
@@ -187,6 +195,7 @@ $aLang = array(
 'PROMO_WILLENDIN_PREFIX'                                      => "Will end in ",
 'PROMO_WILLENDIN_SUFFIX'                                      => "!",
 'PROMO_WILLSTARTIN_PREFIX'                                    => "Will start in ",
+'PROMO_WILLSTARTIN_SUFFIX'                                    => "",
 'RECOMMLIST'                                                  => "Recomendation List",
 'RECOMMLIST_ALREADYRATED'                                     => "You have already rated!",
 'RECOMMLIST_LISTREVIEW'                                       => "Write a Review",
@@ -225,6 +234,7 @@ $aLang = array(
 'THANKYOU_LOCATION'                                           => "Order completed",
 'THANKYOU_ORDERHISTORY'                                       => "Your Order History",
 'THANKYOU_REGISTEREDYOUORDERNO1'                              => "We registered your order under the number:",
+'THANKYOU_REGISTEREDYOUORDERNO2'                              => "",
 'THANKYOU_THANKYOU1'                                          => "Thank you for your order",
 'THANKYOU_THANKYOU2'                                          => "in",
 'USER_BIRTHDAYMESSAGE'                                        => "Tell us your birthday<br>so that we can surprise you.",

@@ -34,7 +34,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  $Id: oxemosadapter.php 37226 2011-07-21 12:52:31Z vilma $
+ *  $Id: oxemosadapter.php 37791 2011-07-28 18:35:39Z tomas $
  */
 
 
@@ -416,7 +416,12 @@ class oxEmosAdapter extends oxSuperCfg
                     //ECONDA FIX only track first search page, not the following pages
                     // #1184M - specialchar search
                     $sSearchParamForLink = rawurlencode( oxConfig::getParameter( 'searchparam', true ) );
-                    $sOutput .= $oEmos->addSearch( $sSearchParamForLink, $oSmarty->_tpl_vars['pageNavigation']->iArtCnt );
+                    //$sOutput .= $oEmos->addSearch( $sSearchParamForLink, $oSmarty->_tpl_vars['d']->iArtCnt );
+                    $iSearchCount = 0;
+                    if (($oSmarty->_tpl_vars['oView']) && $oSmarty->_tpl_vars['oView']->getArticleCount()) {
+                        $iSearchCount = $oSmarty->_tpl_vars['oView']->getArticleCount();
+                    }
+                    $sOutput .= $oEmos->addSearch( $sSearchParamForLink, $iSearchCount);
                 }
                 break;
             case 'alist':

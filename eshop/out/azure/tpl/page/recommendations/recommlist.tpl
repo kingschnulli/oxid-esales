@@ -44,7 +44,7 @@
     [{else}]
 
         [{assign var="hitsfor" value="PAGE_RECOMMENDATIONS_PRODUCTS_HITSFOR"|oxmultilangassign }]
-        [{assign var="recommendation_head" value=$oView->getArticleCount()|cat:" "|cat:$hitsfor|cat:" &quot;"|cat:$oView->getRecommSearch()|cat:"&quot;" }]
+        [{assign var="recommendation_head" value=$oView->getArticleCount()|cat:" "|cat:$hitsfor|cat:" &quot;"|cat:$oView->getSearchForHtml()|cat:"&quot;" }]
 
         <h1 class="pageHead">[{$recommendation_head}]</h1>
         [{ include file="page/recommendations/inc/list.tpl"}]

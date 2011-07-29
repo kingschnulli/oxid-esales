@@ -129,6 +129,10 @@ if ( !function_exists( "resizeGif" ) ) {
 
         imagecolortransparent( $hDestinationImage, $fillColor );
         imagegif( $hDestinationImage, $sTarget );
+        @chmod( $sTarget, 0755 );
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            @chmod( $sTarget, 0777 );
+        }
         imagedestroy( $hDestinationImage );
         imagedestroy( $hSourceImage );
         return $sTarget;
@@ -176,6 +180,10 @@ if ( !function_exists( "resizePng" ) ) {
 
         if ( copyAlteredImage( $hDestinationImage, $hSourceImage, $iWidth, $iHeight, $aImageInfo, $sTarget, $iGdVer ) ) {
             imagepng( $hDestinationImage, $sTarget );
+            @chmod( $sTarget, 0755 );
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                @chmod( $sTarget, 0777 );
+            }
             imagedestroy( $hDestinationImage );
             imagedestroy( $hSourceImage );
             $blSuccess = $sTarget;
@@ -215,6 +223,10 @@ if ( !function_exists( "resizeJpeg" ) ) {
         $hSourceImage = imagecreatefromjpeg( $sSrc );
         if ( copyAlteredImage( $hDestinationImage, $hSourceImage, $iWidth, $iHeight, $aImageInfo, $sTarget, $iGdVer ) ) {
             imagejpeg( $hDestinationImage, $sTarget, $iDefQuality );
+            @chmod( $sTarget, 0755 );
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                @chmod( $sTarget, 0777 );
+            }
             imagedestroy( $hDestinationImage );
             imagedestroy( $hSourceImage );
             $blSuccess = $sTarget;

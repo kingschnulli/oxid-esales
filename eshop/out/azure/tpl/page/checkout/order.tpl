@@ -102,28 +102,13 @@
                         <dl>
                             <dt>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_BILLINGADDRESS" }]</dt>
                             <dd>
-                                [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_EMAIL" }]&nbsp;[{ $oxcmp_user->oxuser__oxusername->value }]<br>
-                                [{if $oxcmp_user->oxuser__oxcompany->value }] [{ $oxcmp_user->oxuser__oxcompany->value }]&nbsp;<br> [{/if}]
-                                [{ $oxcmp_user->oxuser__oxsal->value|oxmultilangsal}]&nbsp;[{ $oxcmp_user->oxuser__oxfname->value }]&nbsp;[{ $oxcmp_user->oxuser__oxlname->value }]<br>
-                                [{if $oxcmp_user->oxuser__oxaddinfo->value }] [{ $oxcmp_user->oxuser__oxaddinfo->value }]<br> [{/if}]
-                                [{ $oxcmp_user->oxuser__oxstreet->value }]&nbsp;[{ $oxcmp_user->oxuser__oxstreetnr->value }]<br>
-                                [{ $oxcmp_user->getState() }]
-                                [{ $oxcmp_user->oxuser__oxzip->value }]&nbsp;[{ $oxcmp_user->oxuser__oxcity->value }]<br>
-                                [{ $oxcmp_user->oxuser__oxcountry->value }]<br><br>
-                                [{if $oxcmp_user->oxuser__oxfon->value }] [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_PHONE" }] [{ $oxcmp_user->oxuser__oxfon->value }]&nbsp;<br><br> [{/if}]
+                                [{include file="widget/address/billing_address.tpl"}]
                             </dd>
                             [{assign var="oDelAdress" value=$oView->getDelAddress() }]
                             [{if $oDelAdress }]
                                 <dt>[{ oxmultilang ident="PAGE_CHECKOUT_ORDER_SHIPPINGADDRESS" }]</dt>
                                 <dd>
-                                    [{if $oDelAdress->oxaddress__oxcompany->value }] [{ $oDelAdress->oxaddress__oxcompany->value }]&nbsp;<br> [{/if}]
-                                    [{ $oDelAdress->oxaddress__oxsal->value|oxmultilangsal}]&nbsp;[{ $oDelAdress->oxaddress__oxfname->value }]&nbsp;[{ $oDelAdress->oxaddress__oxlname->value }]<br>
-                                    [{if $oDelAdress->oxaddress__oxaddinfo->value }] [{ $oDelAdress->oxaddress__oxaddinfo->value }]<br> [{/if}]
-                                    [{ $oDelAdress->oxaddress__oxstreet->value }]&nbsp;[{ $oDelAdress->oxaddress__oxstreetnr->value }]<br>
-                                    [{ $oDelAdress->getState() }]
-                                    [{ $oDelAdress->oxaddress__oxzip->value }]&nbsp;[{ $oDelAdress->oxaddress__oxcity->value }]<br>
-                                    [{ $oDelAdress->oxaddress__oxcountry->value }]<br><br>
-                                    [{if $oDelAdress->oxaddress__oxfon->value }] [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_PHONE2" }] [{ $oDelAdress->oxaddress__oxfon->value }]&nbsp;<br>[{/if}]
+                                    [{include file="widget/address/shipping_address.tpl" delivadr=$oDelAdress}]
                                 </dd>
                             [{/if}]
                         </dl>

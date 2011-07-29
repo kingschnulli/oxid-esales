@@ -28,7 +28,7 @@
                 el = self.element;
 
             $("dl dt input[type=radio]", el).click(function(){
-                $("#payment dd").hide();
+                $("dd", el).hide();
                 $(this).parents("dl").children("dd").toggle();
             });
         }

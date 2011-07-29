@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 37275 2011-07-22 11:44:11Z linas.kukulskis $
+ * @version   SVN: $Id: oxconfig.php 37449 2011-07-27 15:25:50Z linas.kukulskis $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1239,8 +1239,6 @@ class oxConfig extends oxSuperCfg
      * @param int    $iLang   Language
      * @param int    $iShopId Shop id
      * @param string $sDefPic Default (nopic) image path ["0/nopic.jpg"]
-     *
-     * @deprecated
      *
      * @return string
      */

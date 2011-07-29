@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 35586 2011-05-25 10:58:13Z vilma $
+ * @version   SVN: $Id: alist.php 37363 2011-07-26 11:20:02Z linas.kukulskis $
  */
 
 /**
@@ -663,7 +663,7 @@ class aList extends oxUBase
         $aSorting = parent::getSorting( $sCnid );
         $oActCat = $this->getActCategory();
         if ( !$aSorting && $oActCat && $oActCat->oxcategories__oxdefsort->value ) {
-            $sSortBy  = getViewName( 'oxarticles' ).".{$oActCat->oxcategories__oxdefsort->value}";
+            $sSortBy  = $oActCat->oxcategories__oxdefsort->value;
             $sSortDir = ( $oActCat->oxcategories__oxdefsortmode->value ) ? "desc" : null;
 
             $this->setItemSorting( $sCnid, $sSortBy, $sSortDir );

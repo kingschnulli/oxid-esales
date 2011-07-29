@@ -9,7 +9,7 @@
         <input type="hidden" name="fnc" value="changebasket">
         <input type="hidden" name="CustomError" value='basket'>
     </div>
-    <table id="basket" class="basketitems">
+    <table id="basket" class="basketitems[{if $oViewConf->getActiveClassName() == 'order' }] orderBasketItems[{/if}]">
         <colgroup>
             [{if $editable }]<col class="editCol">[{/if}]
             <col class="thumbCol">
@@ -242,160 +242,162 @@
             [{/if}]
         [{/block}]
 
-        <div id="basketSummary" class="summary">
-            [{*  basket summary  *}]
-            <table>
-                [{if !$oxcmp_basket->getDiscounts() }]
+        [{block name="checkout_basketcontents_summary"}]
+            <div id="basketSummary" class="summary[{if $oViewConf->getActiveClassName() == 'order' }] orderSummary[{/if}]">
+                [{*  basket summary  *}]
+                <table>
+                    [{if !$oxcmp_basket->getDiscounts() }]
 
-                    [{block name="checkout_basketcontents_nodiscounttotalnet"}]
+                        [{block name="checkout_basketcontents_nodiscounttotalnet"}]
+                            <tr>
+                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TOTALNET" }]</th>
+                                <td>[{ $oxcmp_basket->getProductsNetPrice() }]&nbsp;[{ $currency->sign }]</td>
+                            </tr>
+                        [{/block}]
+
+                        [{block name="checkout_basketcontents_nodiscountproductvats"}]
+                            [{foreach from=$oxcmp_basket->getProductVats() item=VATitem key=key }]
+                                <tr>
+                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TAX1" }]&nbsp;[{ $key }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TAX2" }]</th>
+                                    <td>[{ $VATitem }]&nbsp;[{ $currency->sign }]</td>
+                                </tr>
+                            [{/foreach }]
+                        [{/block}]
+                    [{/if }]
+
+                    [{block name="checkout_basketcontents_totalgross"}]
                         <tr>
-                            <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TOTALNET" }]</th>
-                            <td>[{ $oxcmp_basket->getProductsNetPrice() }]&nbsp;[{ $currency->sign }]</td>
+                            <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TOTALGROSS" }]</th>
+                            <td>[{ $oxcmp_basket->getFProductsPrice() }]&nbsp;[{ $currency->sign }]</td>
                         </tr>
                     [{/block}]
 
-                    [{block name="checkout_basketcontents_nodiscountproductvats"}]
-                        [{foreach from=$oxcmp_basket->getProductVats() item=VATitem key=key }]
-                            <tr>
-                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TAX1" }]&nbsp;[{ $key }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TAX2" }]</th>
-                                <td>[{ $VATitem }]&nbsp;[{ $currency->sign }]</td>
-                            </tr>
-                        [{/foreach }]
-                    [{/block}]
-                [{/if }]
+                    [{if $oxcmp_basket->getDiscounts() }]
+                        [{block name="checkout_basketcontents_discounts"}]
+                            [{foreach from=$oxcmp_basket->getDiscounts() item=oDiscount name=test_Discounts}]
+                                <tr>
+                                    <th>
+                                        <b>[{if $oDiscount->dDiscount < 0 }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_CHARGE" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_DISCOUNT2" }][{/if}]&nbsp;</b>
+                                        [{ $oDiscount->sDiscount }]
+                                    </th>
+                                    <td>
+                                        [{if $oDiscount->dDiscount < 0 }][{ $oDiscount->fDiscount|replace:"-":"" }][{else}]-[{ $oDiscount->fDiscount }][{/if}]&nbsp;[{ $currency->sign }]
+                                    </td>
+                                </tr>
+                            [{/foreach }]
+                        [{/block}]
 
-                [{block name="checkout_basketcontents_totalgross"}]
-                    <tr>
-                        <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TOTALGROSS" }]</th>
-                        <td>[{ $oxcmp_basket->getFProductsPrice() }]&nbsp;[{ $currency->sign }]</td>
-                    </tr>
-                [{/block}]
-
-                [{if $oxcmp_basket->getDiscounts() }]
-                    [{block name="checkout_basketcontents_discounts"}]
-                        [{foreach from=$oxcmp_basket->getDiscounts() item=oDiscount name=test_Discounts}]
+                        [{block name="checkout_basketcontents_totalnet"}]
                             <tr>
                                 <th>
-                                    <b>[{if $oDiscount->dDiscount < 0 }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_CHARGE" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_DISCOUNT2" }][{/if}]&nbsp;</b>
-                                    [{ $oDiscount->sDiscount }]
+                                    [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TOTALNET" }]
                                 </th>
                                 <td>
-                                    [{if $oDiscount->dDiscount < 0 }][{ $oDiscount->fDiscount|replace:"-":"" }][{else}]-[{ $oDiscount->fDiscount }][{/if}]&nbsp;[{ $currency->sign }]
+                                    [{ $oxcmp_basket->getProductsNetPrice() }]&nbsp;[{ $currency->sign }]
                                 </td>
                             </tr>
-                        [{/foreach }]
-                    [{/block}]
+                        [{/block}]
 
-                    [{block name="checkout_basketcontents_totalnet"}]
-                        <tr>
-                            <th>
-                                [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TOTALNET" }]
-                            </th>
-                            <td>
-                                [{ $oxcmp_basket->getProductsNetPrice() }]&nbsp;[{ $currency->sign }]
-                            </td>
-                        </tr>
-                    [{/block}]
-
-                    [{block name="checkout_basketcontents_productvats"}]
-                        [{foreach from=$oxcmp_basket->getProductVats() item=VATitem key=key }]
-                            <tr>
-                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TAX1" }] [{ $key }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TAX2" }]</th>
-                                <td>[{ $VATitem }]&nbsp;[{ $currency->sign }]</td>
-                            </tr>
-                        [{/foreach }]
-                    [{/block}]
-                [{/if }]
-
-                [{block name="checkout_basketcontents_voucherdiscount"}]
-                    [{if $oViewConf->getShowVouchers() && $oxcmp_basket->getVoucherDiscValue() }]
-                        [{foreach from=$oxcmp_basket->getVouchers() item=sVoucher key=key name=Voucher}]
-                            <tr class="couponData">
-                                <th><span><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_COUPON" }]</strong>&nbsp;([{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_NOMBER" }] [{ $sVoucher->sVoucherNr }])</span>
-                                [{if $editable }]
-                                    <a href="[{ $oViewConf->getSelfLink() }]&amp;cl=basket&amp;fnc=removeVoucher&amp;voucherId=[{ $sVoucher->sVoucherId }]&amp;CustomError=basket" class="removeFn" rel="nofollow">[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_REMOVE2" }]</a>
-                                [{/if}]
-                                </th>
-                                <td>-<strong>[{ $sVoucher->fVoucherdiscount }]&nbsp;[{ $currency->sign }]</strong></td>
-                            </tr>
-                        [{/foreach }]
+                        [{block name="checkout_basketcontents_productvats"}]
+                            [{foreach from=$oxcmp_basket->getProductVats() item=VATitem key=key }]
+                                <tr>
+                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TAX1" }] [{ $key }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TAX2" }]</th>
+                                    <td>[{ $VATitem }]&nbsp;[{ $currency->sign }]</td>
+                                </tr>
+                            [{/foreach }]
+                        [{/block}]
                     [{/if }]
-                [{/block}]
 
-                [{block name="checkout_basketcontents_delcosts"}]
-                    [{if $oxcmp_basket->getDelCostNet() }]
-                        <tr>
-                            <th>[{if $oxcmp_basket->getDelCostVat() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_SHIPPINGNET" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_SHIPPING" }][{/if }]</th>
-                            <td>[{ $oxcmp_basket->getDelCostNet() }]&nbsp;[{ $currency->sign }]</td>
-                        </tr>
-                        [{if $oxcmp_basket->getDelCostVat() }]
-                            <tr>
-                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PLUSTAX1" }] [{ $oxcmp_basket->getDelCostVatPercent() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PLUSTAX2" }]</th>
-                                <td>[{ $oxcmp_basket->getDelCostVat() }]&nbsp;[{ $currency->sign }]</td>
-                            </tr>
+                    [{block name="checkout_basketcontents_voucherdiscount"}]
+                        [{if $oViewConf->getShowVouchers() && $oxcmp_basket->getVoucherDiscValue() }]
+                            [{foreach from=$oxcmp_basket->getVouchers() item=sVoucher key=key name=Voucher}]
+                                <tr class="couponData">
+                                    <th><span><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_COUPON" }]</strong>&nbsp;([{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_NOMBER" }] [{ $sVoucher->sVoucherNr }])</span>
+                                    [{if $editable }]
+                                        <a href="[{ $oViewConf->getSelfLink() }]&amp;cl=basket&amp;fnc=removeVoucher&amp;voucherId=[{ $sVoucher->sVoucherId }]&amp;CustomError=basket" class="removeFn" rel="nofollow">[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_REMOVE2" }]</a>
+                                    [{/if}]
+                                    </th>
+                                    <td>-<strong>[{ $sVoucher->fVoucherdiscount }]&nbsp;[{ $currency->sign }]</strong></td>
+                                </tr>
+                            [{/foreach }]
                         [{/if }]
-                    [{/if }]
-                [{/block}]
+                    [{/block}]
 
-                [{block name="checkout_basketcontents_paymentcosts"}]
-                    [{if $oxcmp_basket->getPaymentCosts() }]
-                        <tr>
-                            <th>[{if $oxcmp_basket->getPaymentCosts() >= 0}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENT" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_CHARGE2" }][{/if}] [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_DISCOUNT3" }]</th>
-                            <td>[{ $oxcmp_basket->getPayCostNet() }]&nbsp;[{ $currency->sign }]</td>
-                        </tr>
-                        [{if $oxcmp_basket->getPayCostVat() }]
+                    [{block name="checkout_basketcontents_delcosts"}]
+                        [{if $oxcmp_basket->getDelCostNet() }]
                             <tr>
-                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENTTAX1" }] [{ $oxcmp_basket->getPayCostVatPercent() }] [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENTTAX2" }]</th>
-                                <td>[{ $oxcmp_basket->getPayCostVat() }]&nbsp;[{ $currency->sign }]</td>
+                                <th>[{if $oxcmp_basket->getDelCostVat() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_SHIPPINGNET" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_SHIPPING" }][{/if }]</th>
+                                <td>[{ $oxcmp_basket->getDelCostNet() }]&nbsp;[{ $currency->sign }]</td>
                             </tr>
+                            [{if $oxcmp_basket->getDelCostVat() }]
+                                <tr>
+                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PLUSTAX1" }] [{ $oxcmp_basket->getDelCostVatPercent() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PLUSTAX2" }]</th>
+                                    <td>[{ $oxcmp_basket->getDelCostVat() }]&nbsp;[{ $currency->sign }]</td>
+                                </tr>
+                            [{/if }]
                         [{/if }]
-                    [{/if }]
-                [{/block}]
+                    [{/block}]
 
-                [{block name="checkout_basketcontents_ts"}]
-                    [{ if $oxcmp_basket->getTsProtectionCosts() }]
-                        <tr>
-                            <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTION" }]</th>
-                            <td>[{ $oxcmp_basket->getTsProtectionNet() }]&nbsp;[{ $currency->sign}]</td>
-                        </tr>
-                        [{ if $oxcmp_basket->getTsProtectionVat() }]
+                    [{block name="checkout_basketcontents_paymentcosts"}]
+                        [{if $oxcmp_basket->getPaymentCosts() }]
                             <tr>
-                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTIONCHARGETAX1" }] [{ $oxcmp_basket->getTsProtectionVatPercent()}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTIONCHARGETAX2" }]</th>
-                                <td>[{ $oxcmp_basket->getTsProtectionVat() }]&nbsp;[{ $currency->sign}]</td>
+                                <th>[{if $oxcmp_basket->getPaymentCosts() >= 0}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENT" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_CHARGE2" }][{/if}] [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_DISCOUNT3" }]</th>
+                                <td>[{ $oxcmp_basket->getPayCostNet() }]&nbsp;[{ $currency->sign }]</td>
                             </tr>
-                        [{/if}]
-                    [{/if}]
-                [{/block}]
+                            [{if $oxcmp_basket->getPayCostVat() }]
+                                <tr>
+                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENTTAX1" }] [{ $oxcmp_basket->getPayCostVatPercent() }] [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENTTAX2" }]</th>
+                                    <td>[{ $oxcmp_basket->getPayCostVat() }]&nbsp;[{ $currency->sign }]</td>
+                                </tr>
+                            [{/if }]
+                        [{/if }]
+                    [{/block}]
 
-                [{block name="checkout_basketcontents_wrappingcosts"}]
-                    [{ if $oViewConf->getShowGiftWrapping() && $oxcmp_basket->getWrappCostNet() }]
-                        <tr>
-                            <th>[{if $oxcmp_basket->getWrappCostVat() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGNET" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGGROSS1" }][{/if}]</th>
-                            <td>[{ $oxcmp_basket->getWrappCostNet() }] [{ $currency->sign}]</td>
-                        </tr>
-                        [{if $oxcmp_basket->getWrappCostVat() }]
+                    [{block name="checkout_basketcontents_ts"}]
+                        [{ if $oxcmp_basket->getTsProtectionCosts() }]
                             <tr>
-                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGTAX1" }] [{ $oxcmp_basket->getWrappCostVatPercent() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGTAX2" }]</th>
-                                <td>[{ $oxcmp_basket->getWrappCostVat() }] [{ $currency->sign}]</td>
+                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTION" }]</th>
+                                <td>[{ $oxcmp_basket->getTsProtectionNet() }]&nbsp;[{ $currency->sign}]</td>
                             </tr>
+                            [{ if $oxcmp_basket->getTsProtectionVat() }]
+                                <tr>
+                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTIONCHARGETAX1" }] [{ $oxcmp_basket->getTsProtectionVatPercent()}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTIONCHARGETAX2" }]</th>
+                                    <td>[{ $oxcmp_basket->getTsProtectionVat() }]&nbsp;[{ $currency->sign}]</td>
+                                </tr>
+                            [{/if}]
                         [{/if}]
+                    [{/block}]
+
+                    [{block name="checkout_basketcontents_wrappingcosts"}]
+                        [{ if $oViewConf->getShowGiftWrapping() && $oxcmp_basket->getWrappCostNet() }]
+                            <tr>
+                                <th>[{if $oxcmp_basket->getWrappCostVat() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGNET" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGGROSS1" }][{/if}]</th>
+                                <td>[{ $oxcmp_basket->getWrappCostNet() }] [{ $currency->sign}]</td>
+                            </tr>
+                            [{if $oxcmp_basket->getWrappCostVat() }]
+                                <tr>
+                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGTAX1" }] [{ $oxcmp_basket->getWrappCostVatPercent() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGTAX2" }]</th>
+                                    <td>[{ $oxcmp_basket->getWrappCostVat() }] [{ $currency->sign}]</td>
+                                </tr>
+                            [{/if}]
+                        [{/if}]
+                    [{/block}]
+
+                    [{block name="checkout_basketcontents_grandtotal"}]
+                        <tr>
+                            <th><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_GRANDTOTAL" }]</strong></th>
+                            <td><strong>[{ $oxcmp_basket->getFPrice() }]&nbsp;[{ $currency->sign }]</strong></td>
+                        </tr>
+                    [{/block}]
+
+                    [{if $oxcmp_basket->hasSkipedDiscount() }]
+                        <tr>
+                            <th><span class="note">**</span> [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_DISCOUNTS_NOT_APPLIED_FOR_ARTICLES" }]</span></th>
+                            <td></td>
+                        </tr>
                     [{/if}]
-                [{/block}]
-
-                [{block name="checkout_basketcontents_grandtotal"}]
-                    <tr>
-                        <th><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_GRANDTOTAL" }]</strong></th>
-                        <td><strong>[{ $oxcmp_basket->getFPrice() }]&nbsp;[{ $currency->sign }]</strong></td>
-                    </tr>
-                [{/block}]
-
-                [{if $oxcmp_basket->hasSkipedDiscount() }]
-                    <tr>
-                        <th><span class="note">**</span> [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_DISCOUNTS_NOT_APPLIED_FOR_ARTICLES" }]</span></th>
-                        <td></td>
-                    </tr>
-                [{/if}]
-            </table>
-        </div>
+                </table>
+            </div>
+        [{/block}]
     </div>
  </form>

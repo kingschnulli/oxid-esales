@@ -9,6 +9,7 @@
 
 [{include file="email/html/header.tpl" title=$shop->oxshops__oxordersubject->value}]
 
+    [{block name="email_html_order_cust_orderemail"}]
         <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0; padding: 10px 0;">
             [{if $payment->oxuserpayments__oxpaymentsid->value == "oxempty"}]
               [{oxcontent ident="oxuserordernpemail"}]
@@ -16,6 +17,7 @@
               [{oxcontent ident="oxuserorderemail"}]
             [{/if}]
         </p>
+    [{/block}]
 
         <table border="0" cellspacing="0" cellpadding="0" width="100%">
           <tr>
@@ -145,7 +147,7 @@
                   </tr>
                   <tr valign="top">
                       <td style="padding: 5px; border-bottom: 4px solid #ddd;" valign="top" width="1%">
-                          <img src="[{$oCard->getNoSslDynImageDir()}]/0/[{$oCard->oxwrapping__oxpic->value}]" alt="[{$oCard->oxwrapping__oxname->value}]" hspace="0" vspace="0" border="0" align="top">
+                          <img src="[{$oCard->getPictureUrl()}]" alt="[{$oCard->oxwrapping__oxname->value}]" hspace="0" vspace="0" border="0" align="top">
                       </td>
                       <td style="padding: 5px; padding-left: 15px; border-bottom: 4px solid #ddd;">
                           <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0;">
@@ -585,7 +587,7 @@
         [{/if}]
     [{/block}]
 
-
+    [{block name="email_html_order_cust_paymentinfo"}]
         [{if $payment->oxuserpayments__oxpaymentsid->value == "oxidpayadvance"}]
             <h3 style="font-weight: bold; margin: 20px 0 7px; padding: 0; line-height: 35px; font-size: 12px;font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; border-bottom: 4px solid #ddd;">
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGCARRIER" }]
@@ -598,11 +600,15 @@
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_IBAN" }] [{$shop->oxshops__oxibannumber->value}]
             </p>
         [{/if}]
+    [{/block}]
 
+    [{block name="email_html_order_cust_orderemailend"}]
         <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; padding-top: 15px;">
             [{ oxcontent ident="oxuserorderemailend" }]
         </p>
+    [{/block}]
 
+    [{block name="email_html_order_cust_tsinfo"}]
         [{if $oViewConf->showTs("ORDEREMAIL") && $oViewConf->getTsId() }]
             <h3 style="font-weight: bold; margin: 20px 0 7px; padding: 0; line-height: 35px; font-size: 12px;font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; border-bottom: 4px solid #ddd;">
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TS_RATINGS_RATEUS" }]
@@ -612,5 +618,6 @@
                 <img src="https://www.trustedshops.com/bewertung/widget/img/bewerten_de.gif" border="0" alt="[{ oxmultilang ident="TS_RATINGS_BUTTON_ALT" }]" align="middle">
             </a>
         [{/if}]
+    [{/block}]
 
 [{include file="email/html/footer.tpl"}]

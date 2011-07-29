@@ -199,6 +199,36 @@ a.viewAllHover span {
     background: url(../../img/plus.png) no-repeat 0 3px;
 }
 
+.itemSlider .titleBlock, .itemSlider .titleBlock:hover {
+    filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ADEFFF', endColorstr='#19788F'); progid:DXImageTransform.Microsoft.Alpha(opacity=90)";
+}
+
+
+.itemSlider .prevItem {
+    filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#ADEFFF, endColorstr=#19788F); progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=90, Color='#666666'); progid:DXImageTransform.Microsoft.Alpha(opacity=90)";
+}
+
+.itemSlider .nextItem {
+    filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#ADEFFF, endColorstr=#19788F); progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=270, Color='#666666'); ";
+}
+
+.itemSlider .prevItem:hover span.slideBg {
+    filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff8604', endColorstr='#ec6105'); progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=90, Color='#666666'); progid:DXImageTransform.Microsoft.Alpha(opacity=90)";
+}
+
+.itemSlider .nextItem:hover span.slideBg {
+    filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff8604', endColorstr='#ec6105'); progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=270, Color='#666666'); progid:DXImageTransform.Microsoft.Alpha(opacity=90)";
+}
+
+.itemSlider .nextItem:hover {
+    right: 2px;
+}
+
+.itemSlider .nextItem:hover span.slidePointer {
+    right: -3px;
+}
+
+
 .specBox h3 {
     zoom: 1;
 }

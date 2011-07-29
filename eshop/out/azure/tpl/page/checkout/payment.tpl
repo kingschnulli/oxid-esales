@@ -69,7 +69,7 @@
             [{oxscript add="$( '#payment' ).oxPayment();"}]
             [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
             [{oxscript add="$('form.js-oxValidate').oxInputValidator();"}]
-            <form action="[{ $oViewConf->getSslSelfLink() }]" class="js-oxValidate" id="payment" name="order" method="post">
+            <form action="[{ $oViewConf->getSslSelfLink() }]" class="js-oxValidate payment" id="payment" name="order" method="post">
                 <div>
                     [{ $oViewConf->getHiddenSid() }]
                     [{ $oViewConf->getNavFormParams() }]
@@ -99,26 +99,30 @@
                     [{include file="page/checkout/inc/trustedshops.tpl"}]
                     [{* TRUSTED SHOPS END *}]
 
-                    [{if $oView->isLowOrderPrice()}]
-                        <div class="lineBox clear">
-                        <div><b>[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_MINORDERPRICE" }] [{ $oView->getMinOrderPrice() }] [{ $currency->sign }]</b></div>
-                        </div>
-                    [{else}]
-                        <div class="lineBox clear">
-                            <a href="[{ oxgetseourl ident=$oViewConf->getOrderLink() }]" class="prevStep submitButton largeButton" id="paymentBackStepBottom">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_BACKSTEP" }]</a>
-                            <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_NEXTSTEP" }]</button>
-                        </div>
-                    [{/if}]
+                    [{block name="checkout_payment_nextstep"}]
+                        [{if $oView->isLowOrderPrice()}]
+                            <div class="lineBox clear">
+                            <div><b>[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_MINORDERPRICE" }] [{ $oView->getMinOrderPrice() }] [{ $currency->sign }]</b></div>
+                            </div>
+                        [{else}]
+                            <div class="lineBox clear">
+                                <a href="[{ oxgetseourl ident=$oViewConf->getOrderLink() }]" class="prevStep submitButton largeButton" id="paymentBackStepBottom">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_BACKSTEP" }]</a>
+                                <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_NEXTSTEP" }]</button>
+                            </div>
+                        [{/if}]
+                    [{/block}]
 
                 [{elseif $oView->getEmptyPayment()}]
-                    <div class="lineBlock"></div>
-                    <h3 id="paymentHeader" class="blockHead">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_INFO" }]</h3>
-                    [{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_EMPTY_TEXT" }]
-                    <input type="hidden" name="paymentid" value="oxempty">
-                    <div class="lineBox clear">
-                        <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=user" }]" class="prevStep submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_BACKSTEP" }]</a>
-                        <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_NEXTSTEP" }]</button>
-                    </div>
+                    [{block name="checkout_payment_nopaymentsfound"}]
+                        <div class="lineBlock"></div>
+                        <h3 id="paymentHeader" class="blockHead">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_INFO" }]</h3>
+                        [{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_EMPTY_TEXT" }]
+                        <input type="hidden" name="paymentid" value="oxempty">
+                        <div class="lineBox clear">
+                            <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=user" }]" class="prevStep submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_BACKSTEP" }]</a>
+                            <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">[{ oxmultilang ident="PAGE_CHECKOUT_PAYMENT_NEXTSTEP" }]</button>
+                        </div>
+                    [{/block}]
                 [{/if}]
             </form>
         [{/block}]

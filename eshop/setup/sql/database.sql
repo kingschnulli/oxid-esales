@@ -2393,7 +2393,7 @@ CREATE TABLE `oxtplblocks` (
     `OXACTIVE`    tinyint(1) NOT NULL DEFAULT '1',
     `OXSHOPID`    char(32) character set latin1 collate latin1_general_ci NOT NULL,
     `OXTEMPLATE`  char(64) character set latin1 collate latin1_general_ci NOT NULL,
-    `OXBLOCKNAME` char(32) character set latin1 collate latin1_general_ci NOT NULL,
+    `OXBLOCKNAME` char(128) character set latin1 collate latin1_general_ci NOT NULL,
     `OXPOS`       int  NOT NULL,
     `OXFILE`      char(64) character set latin1 collate latin1_general_ci NOT NULL,
     `OXMODULE`    char(32) character set latin1 collate latin1_general_ci NOT NULL,

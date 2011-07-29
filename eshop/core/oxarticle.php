@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 37185 2011-07-20 12:10:39Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 37329 2011-07-25 15:03:04Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -3599,12 +3599,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             //COPY THE VALUE
             // assigning images from parent only if variant has no master image (#1807)
             if ( stristr($sCopyFieldName, '_oxthumb') || stristr($sCopyFieldName, '_oxicon') ) {
-                if ( $this->_isFieldEmpty( $sCopyFieldName ) ) {
-                    if ( $this->_hasMasterImage( 1 ) && isset( $this->oxarticles__oxpic1 ) && $this->oxarticles__oxpic1->value ) {
-                        $this->$sCopyFieldName = clone $this->oxarticles__oxpic1;
-                    } else {
-                        $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
-                    }
+                if ( $this->_isFieldEmpty( $sCopyFieldName ) && !$this->_hasMasterImage( 1 ) ) {
+                    $this->$sCopyFieldName = clone $oParentArticle->$sCopyFieldName;
                 }
             } elseif ( stristr($sCopyFieldName, '_oxzoom') ) {
                 // for zoom images checking master image with specified index

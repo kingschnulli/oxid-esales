@@ -8,6 +8,7 @@
 
 [{include file="email/html/header.tpl" title=$shop->oxshops__oxordersubject->value}]
 
+        [{block name="email_html_order_owner_orderemail"}]
             <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0; padding: 10px 0;">
                 [{if $payment->oxuserpayments__oxpaymentsid->value == "oxempty"}]
                     [{oxcontent ident="oxadminordernpemail"}]
@@ -17,6 +18,7 @@
 
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNOMBER" }] <b>[{ $order->oxorder__oxordernr->value }]</b>
             </p>
+        [{/block}]
 
             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                 <tr>
@@ -112,7 +114,7 @@
                             <td style="padding: 5px; border-bottom: 4px solid #ddd;">
                                 <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0;">
                                     <b>[{ oxmultilang ident="EMAIL_ORDER_OWNER_HTML_ATENTIONGREETINGCARD" }]</b><br>
-                                    <img src="[{$basket->oCard->getNoSslDynImageDir()}]/0/[{$basket->oCard->oxwrapping__oxpic->value}]" alt="[{$basket->oCard->oxwrapping__oxname->value}]" hspace="0" vspace="0" border="0" align="top">
+                                    <img src="[{$basket->oCard->getPictureUrl()}]" alt="[{$basket->oCard->oxwrapping__oxname->value}]" hspace="0" vspace="0" border="0" align="top">
                                 </p>
                             </td>
                             <td style="padding: 5px; border-bottom: 4px solid #ddd;">

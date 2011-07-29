@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: emosTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: emosTest.php 37790 2011-07-28 18:29:18Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -230,8 +230,16 @@ class Unit_Maintenance_emosTest extends OxidTestCase
         $oEmos = new EMOS( "xxx", "yyy" );
         $oEmos->appendPreScript( 'pre' );
         $oEmos->appendPostScript( 'post' );
+        $oEmos->jsFormatPrescript = "__JSPreScript__";
+        $oEmos->jsFormatScript = "__JSScript__";
 
-        $this->assertEquals( "pre<script type=\"text/javascript\" src=\"xxxyyy\"></script>\npost", $oEmos->toString() );
+        //$sExpt = "pre<script type=\"text/javascript\">window.emosTrackVersion = 2;</script>\n<script type=\"text/javascript\" src=\"xxxyyy\"></script>\n<script type=\"text/javascript\"><!--\n\tvar emospro = {};\n\twindow.emosPropertiesEvent(emospro);\n//-->\n</script>\npost";
+        $sExpt = "<script type=\"text/javascript\">window.emosTrackVersion = 2;</script>\n<script type=\"text/javascript\" src=\"xxxyyy\"></script>\n<script type=\"text/javascript\"><!--\n\tvar emospro = {};\n\twindow.emosPropertiesEvent(emospro);\n//-->\n</script>\n";
+
+        file_put_contents("hu", $oEmos->toString());
+        $this->assertEquals( $sExpt, $oEmos->toString() );
+
+
     }
 
     /**
@@ -732,4 +740,116 @@ class Unit_Maintenance_emosTest extends OxidTestCase
 
         $this->assertEquals( 'retval', $oEmos->getEMOSBasketEventArray( 'value' ) );
     }
+
+    /**
+     * tests EMOS::prepareJsFormat() method.
+     *
+     * @return null
+     */
+    public function testPrepareJsFormat()
+    {
+        $oEmos = new EMOS();
+        $oEmos->prepareJsFormat();
+        $sExpt1 = $oEmos->jsFormatPrescript;
+        $sExpt2 = $oEmos->jsFormatScript;
+
+        $this->assertContains("window.emosTrackVersion", $sExpt1);
+        $this->assertContains("window.emosPropertiesEvent(emospro)", $sExpt2);
+        $this->assertContains("var emospro = {};", $sExpt2);
+        $this->assertNotContains("contents", $sExpt2);
+    }
+
+    /**
+     * tests EMOS::prepareJsFormat() method. Sets internal params.
+     *
+     * @return null
+     */
+    public function testPrepareJsFormatExt()
+    {
+        $oEmos = $this->getProxyClass("EMOS");
+        $oEmos->setNonPublicVar("_content", "testContents");
+        $oEmos->prepareJsFormat();
+        $sExpt1 = $oEmos->jsFormatPrescript;
+        $sExpt2 = $oEmos->jsFormatScript;
+
+        $this->assertContains("window.emosTrackVersion", $sExpt1);
+        $this->assertContains("window.emosPropertiesEvent(emospro)", $sExpt2);
+        $this->assertContains("var emospro = {};", $sExpt2);
+        $this->assertContains("content = \"testContents\"", $sExpt2);
+    }
+
+    /**
+     * Tests EMOS::_addJsFormat method.
+     *
+     * @return null
+     */
+    public function testAddJsFormat()
+    {
+       $oSubj = $this->getProxyClass("EMOS");
+       $sRes = $oSubj->UNITaddJsFormat("contents", '111');
+       $this->assertContains("emospro.contents = \"111\"", $sRes);
+
+       $sRes = $oSubj->UNITaddJsFormat("contents", 111, true);
+       $this->assertContains("emospro.contents = 111", $sRes);
+    }
+
+    /**
+     * Tests EMOS::_addJsFormat method.
+     *
+     * @return null
+     */
+    public function testAddJsFormatArray()
+    {
+       $oSubj = $this->getProxyClass("EMOS");
+       $sRes = $oSubj->UNITaddJsFormat("contents", array('111'));
+       $this->assertContains("emospro.contents = [\"111\"]", $sRes);
+
+       $sRes = $oSubj->UNITaddJsFormat("contents", array('111', '222'), true);
+       $this->assertContains("emospro.contents = [\"111\",\"222\"]", $sRes);
+    }
+
+    /**
+     * Tests EMOS::_addJsFormat method.
+     *
+     * @return null
+     */
+    public function testAddJsFormatNoQuotes()
+    {
+       $oSubj = $this->getProxyClass("EMOS");
+       $sRes = $oSubj->UNITaddJsFormat("contents", 111);
+       $this->assertContains("emospro.contents = 111", $sRes);
+
+       $sRes = $oSubj->UNITaddJsFormat("contents", array(111, 222), true);
+       $this->assertContains("emospro.contents = [111,222]", $sRes);
+    }
+
+    /**
+     * Tests EMOS::_addJsFormat method.
+     *
+     * @return null
+     */
+    public function testAddJsFormatEmpty()
+    {
+       $oSubj = $this->getProxyClass("EMOS");
+       $sRes = $oSubj->UNITaddJsFormat("contents", null);
+       $this->assertNull($sRes);
+    }
+
+
+    /**
+     * Tests EMOS::_addJsFormat method. Zero suplied
+     *
+     * @return null
+     */
+    public function testAddJsFormatZero()
+    {
+       $oSubj = $this->getProxyClass("EMOS");
+       $sRes = $oSubj->UNITaddJsFormat("contents", '0');
+       $this->assertContains("emospro.contents = \"0\"", $sRes);
+
+       $sRes = $oSubj->UNITaddJsFormat("contents", 0);
+       $this->assertContains("emospro.contents = 0", $sRes);
+    }
+
+
 }

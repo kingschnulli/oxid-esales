@@ -1,5 +1,5 @@
 [{if $oView->showSorting()}]
-    [{assign var="_listType" value=$oView->getListType()}]
+    [{assign var="_listType" value=$oView->getListDisplayType()}]
     [{assign var="_additionalParams" value=$oView->getAdditionalParams()}]
     [{assign var="_artPerPage" value=$oViewConf->getArtPerPageCount()}]
     [{assign var="_sortColumnVarName" value=$oView->getSortOrderByParameterName()}]

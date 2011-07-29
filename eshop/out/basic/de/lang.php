@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 37268 2011-07-22 11:04:53Z linas.kukulskis $
+ * @version   SVN: $Id: lang.php 37318 2011-07-25 13:59:28Z vilma $
  */
 
 
@@ -99,6 +99,7 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_TAX1'                                  => "zzgl. MwSt.",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX1'                => "zzgl. Mwst.",
 'EMAIL_ORDER_OWNER_HTML_MESSAGE'                              => "Mitteilung:",
+'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'                       => "<b>BEZAHLINFORMATIONEN AUSGESCHALTET</b> - um diese einzuschalten bitte email_order_owner_html.tpl aendern.",
 'EMAIL_SUGGEST_HTML_MENYGREETINGS'                            => "Viele Grüsse,",
 'EXCEPTION_INPUT_NOTALLFIELDS'                                => "0",
 'FACEBOOK_COMMENTS'                                           => "Facebook comments",

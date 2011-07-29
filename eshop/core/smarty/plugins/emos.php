@@ -36,7 +36,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $Id: emos.php 36485 2011-06-21 06:25:04Z arunas.paskevicius $
+ * $Id: emos.php 37789 2011-07-28 18:28:37Z tomas $
  */
 
 /**
@@ -67,6 +67,20 @@ class EMOS
      * @var string
      */
     public $postScript = "";
+
+    /**
+     * JS format init code goes here
+     *
+     * @var string
+     */
+    public $jsFormatPrescript = "";
+
+    /**
+     * JS format parameters goes here
+     *
+     * @var string
+     */
+    public $jsFormatScript = "";
 
     /**
      * path to the empos2.js script-file
@@ -109,6 +123,118 @@ class EMOS
      * @var string
      */
     public $emvid = "";
+
+    /**
+     * tracker content
+     *
+     * @var string
+     */
+    protected $_content             = null;
+
+    /**
+     * order process step information
+     *
+     * @var string
+     */
+    protected $_orderProcess        = null;
+
+    /**
+     * site ID
+     *
+     * @var string
+     */
+    protected $_siteid              = null;
+
+    /**
+     * Language ID
+     *
+     * @var string
+     */
+    protected $_langid              = null;
+
+    /**
+     * Country ID
+     *
+     * @var string
+     */
+    protected $_countryid           = null;
+
+    /**
+     * Page ID
+     *
+     * @var string
+     */
+    protected $_pageid              = null;
+
+    /**
+     * Search Query string
+     *
+     * @var string
+     */
+    protected $_searchQuery         = null;
+
+    /**
+     * Number of search hits
+     *
+     * @var int
+     */
+    protected $_searchNumberOfHits   = null;
+
+    /**
+     * Register user hash
+     *
+     * @var string
+     */
+    protected $_registerUser        = null;
+
+    /**
+     * Registration result
+     *
+     * @var string
+     */
+    protected $_registerResult      = null;
+
+    /**
+     * Login user hash
+     *
+     * @var string
+     */
+    protected $_loginUser           = null;
+
+    /**
+     * Login result
+     *
+     * @var string
+     */
+    protected $_loginResult         = null;
+
+    /**
+     * Contact information
+     *
+     * @var string
+     */
+    protected $_scontact            = null;
+
+    /**
+     * Download file information
+     *
+     * @var string
+     */
+    protected $_download            = null;
+
+    /**
+     * Billing information
+     *
+     * @var array
+     */
+    protected $_billing            = null;
+
+    /**
+     * ec event array
+     *
+     * @var array
+     */
+    protected $_ecEvent             = null;
 
     /**
      * add compatibility function for php < 5.1
@@ -293,6 +419,63 @@ class EMOS
         "</script>" . $this->br;
     }
 
+    /*
+     * formats up the connector script in a new JS format
+     */
+    public function prepareJsFormat()
+    {
+        $this->jsFormatPrescript =  '<script type="text/javascript">window.emosTrackVersion = 2;</script>' . $this->br;
+
+        $this->jsFormatScript  = '<script type="text/javascript"><!--' . $this->br;
+        $this->jsFormatScript .= $this->tab . 'var emospro = {};' . $this->br;
+
+        $this->jsFormatScript .= $this->_addJsFormat( "content", $this->_content);
+        $this->jsFormatScript .= $this->_addJsFormat( "orderProcess", $this->_orderProcess);
+        $this->jsFormatScript .= $this->_addJsFormat( "siteid", $this->_siteid);
+        $this->jsFormatScript .= $this->_addJsFormat( "langid", $this->_langid);
+        $this->jsFormatScript .= $this->_addJsFormat( "countryid", $this->_countryid);
+        $this->jsFormatScript .= $this->_addJsFormat( "pageid", $this->_pageid);
+        $this->jsFormatScript .= $this->_addJsFormat( "scontact", $this->_scontact);
+        $this->jsFormatScript .= $this->_addJsFormat( "download", $this->_download);
+        $this->jsFormatScript .= $this->_addJsFormat( "billing", array($this->_billing));
+
+        $this->jsFormatScript .= $this->_addJsFormat( "search", array(array($this->_searchQuery, $this->_searchNumberOfHits)) );
+        $this->jsFormatScript .= $this->_addJsFormat( "register", array(array($this->_registerUser, $this->_registerResult)) );
+        $this->jsFormatScript .= $this->_addJsFormat( "login", array(array($this->_loginUser, $this->_loginResult)));
+
+        $this->jsFormatScript .= $this->_addJsFormat( "ec_Event", $this->_ecEvent);
+
+        $this->jsFormatScript .= $this->tab . 'window.emosPropertiesEvent(emospro);' . $this->br;
+        $this->jsFormatScript .= '//-->' . $this->br . '</script>' . $this->br;
+
+    }
+
+    /**
+     * Formats a line in JS format
+     *
+     * @param string $sVarName  Variable name
+     * @param mixed  $mContents Variable value
+     *
+     * @return string
+     */
+    protected function _addJsFormat($sVarName, $mContents)
+    {
+
+        //get the first non array $mContents element
+        $mVal = $mContents;
+        while (is_array($mVal)) {
+            $mVal = $mVal[0];
+        }
+
+        if (is_null($mVal)) {
+            return ;
+        }
+
+        $sJsLine = $this->tab . 'emospro.' . $sVarName . ' = ' . json_encode($mContents) . ';' . $this->br;
+
+        return $sJsLine;
+    }
+
     /**
      * returns the whole statement
      *
@@ -300,7 +483,19 @@ class EMOS
      */
     public function toString()
     {
-        return $this->preScript.$this->inScript.$this->postScript;
+        $this->prepareJsFormat();
+
+        return $this->jsFormatPrescript.
+               $this->inScript.
+               $this->jsFormatScript;
+
+
+        //do not return the old code
+/*        return $this->preScript.
+               $this->jsFormatPrescript.
+               $this->inScript.
+               $this->jsFormatScript.
+               $this->postScript;*/
     }
 
     /**
@@ -333,6 +528,7 @@ class EMOS
      */
     public function addContent( $sContent )
     {
+        $this->_content = $sContent;
         $this->appendPreScript( $this->getAnchorTag( "content", $sContent ) );
     }
 
@@ -346,6 +542,7 @@ class EMOS
      */
     public function addOrderProcess( $sProcessStep )
     {
+        $this->_orderProcess = $sProcessStep;
         $this->appendPreScript( $this->getAnchorTag( "orderProcess", $sProcessStep ) );
     }
 
@@ -359,6 +556,7 @@ class EMOS
      */
     public function addSiteID( $sIiteId )
     {
+        $this->_siteid = $sIiteId;
         $this->appendPreScript( $this->getAnchorTag( "siteid", $sIiteId ) );
     }
 
@@ -372,6 +570,7 @@ class EMOS
      */
     public function addLangID( $sLangId )
     {
+        $this->_langid = $sLangId;
         $this->appendPreScript( $this->getAnchorTag( "langid", $sLangId ) );
     }
 
@@ -385,6 +584,7 @@ class EMOS
      */
     public function addCountryID( $sCountryId )
     {
+        $this->_countryid = $sCountryId;
         $this->appendPreScript( $this->getAnchorTag( "countryid", $sCountryId ) );
     }
 
@@ -397,6 +597,7 @@ class EMOS
      */
     public function addPageID( $sPageId )
     {
+        $this->_pageid = $sPageId;
         $this->appendPreScript( "\n<script type=\"text/javascript\">\n window.emosPageId = '$sPageId';\n</script>\n" );
     }
 
@@ -411,6 +612,8 @@ class EMOS
      */
     public function addSearch( $sQueryString, $iNumberOfHits )
     {
+        $this->_searchQuery = $sQueryString;
+        $this->_searchNumberOfHits = $iNumberOfHits;
         $this->appendPreScript( $this->getAnchorTag( "search", $sQueryString, $iNumberOfHits ) );
     }
 
@@ -426,6 +629,8 @@ class EMOS
      */
     public function addRegister( $sUserId, $sResult )
     {
+        $this->_registerUser = $sUserId;
+        $this->_registerResult = $sResult;
         $this->appendPreScript($this->getAnchorTag( "register", md5( $sUserId ), $sResult ) );
     }
 
@@ -442,6 +647,8 @@ class EMOS
      */
     public function addLogin( $sUserId, $sResult )
     {
+        $this->_loginUser = $sUserId;
+        $this->_loginResult = $sResult;
         $this->appendPreScript( $this->getAnchorTag( "login", md5( $sUserId ), $sResult ) );
     }
 
@@ -455,6 +662,7 @@ class EMOS
      */
     public function addContact( $sContactType )
     {
+        $this->_scontact = $sContactType;
         $this->appendPreScript( $this->getAnchorTag( "scontact", $sContactType ) );
     }
 
@@ -468,6 +676,7 @@ class EMOS
      */
     public function addDownload( $sDownloadLabel )
     {
+        $this->_download = $sDownloadLabel;
         $this->appendPreScript( $this->getAnchorTag( "download", $sDownloadLabel ) );
     }
 
@@ -482,6 +691,13 @@ class EMOS
     public function getEmosECPageArray( $oItem, $sEvent )
     {
         $oItem = $this->emos_ItemFormat( $oItem );
+
+        $this->_ecEvent[] = array($sEvent, $oItem->productID, $oItem->productName,
+                                 $oItem->price, $oItem->productGroup,
+                                 $oItem->quantity, $oItem->variant1,
+                                 $oItem->variant2, $oItem->variant3);
+
+
         $out = "<script type=\"text/javascript\">$this->br" .
         "<!--$this->br" .
         "$this->tab var emosECPageArray = new Array();$this->br" .
@@ -570,6 +786,9 @@ class EMOS
         "$this->tab $sArrayName" . "['3'] = '$iTotal';$this->br" .
         "// -->$this->br" .
         "</script>$this->br";
+
+        $this->_billing = array($sBillingId, $sCustomerNumber, $ort, $iTotal);
+
         return $out;
     }
 
@@ -596,12 +815,18 @@ class EMOS
      */
     public function getEmosBasketPageArray( $aBasket, $sArrayName )
     {
+        //for JS
+        $aBasketItems = array();
         $out = "<script type=\"text/javascript\">$this->br" .
         "<!--$this->br" .
         "var $sArrayName = new Array();$this->br";
         $count = 0;
         foreach ( $aBasket as $oItem ) {
             $oItem = $this->emos_ItemFormat( $oItem );
+            //for JS
+            $aBasketItems[] = array("buy", $oItem->productID, $oItem->productName,
+                                  $oItem->price, $oItem->productGroup, $oItem->quantity,
+                                  $oItem->variant1, $oItem->variant2, $oItem->variant3 );
             $out .= $this->br;
             $out .= "$this->tab $sArrayName"."[$count]=new Array();$this->br";
             $out .= "$this->tab $sArrayName"."[$count][0]='$oItem->productID';$this->br";
@@ -616,6 +841,9 @@ class EMOS
         }
         $out .= "// -->$this->br" .
         "</script>$this->br";
+
+        //for JS
+        $this->_ecEvent = $aBasketItems;
 
         return $out;
     }
@@ -769,6 +997,7 @@ class EMOS
      */
     public function getEmosECEvent( $oItem, $sEvent )
     {
+
         $oItem = $this->emos_ItemFormat( $oItem );
         $out = "emos_ecEvent('$sEvent'," .
         "'$oItem->productID'," .

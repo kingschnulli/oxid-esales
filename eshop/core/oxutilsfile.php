@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 37181 2011-07-20 11:28:57Z arvydas.vapsva $
+ * @version   SVN: $Id: oxutilsfile.php 37440 2011-07-27 14:42:41Z arvydas.vapsva $
  */
 
 /**
@@ -113,7 +113,6 @@ class oxUtilsFile extends oxSuperCfg
      * @var array
      */
     protected $_aBadFiles = array( 'php', 'jsp', 'cgi', 'cmf', 'exe' );
-
 
     /**
      * Allowed to upload files in demo mode ( "white list")
@@ -304,11 +303,7 @@ class oxUtilsFile extends oxSuperCfg
                     $sFName = $oStr->preg_replace( '/[^a-zA-Z0-9()_\.-]/', '', implode( '.', $aFilename ) );
                 }
 
-                // removing sufix from main pictures, only zoom pictures, thumbnails
-                // and icons will have it.
-                $sSufix = ( $oStr->preg_match( "/(P|M)\d+/", $sType ) ) ? "" : "_".strtolower( $sType );
-
-                $sValue = $this->_getUniqueFileName( $sImagePath, "{$sFName}", $sFileType, $sSufix, $blUnique );
+                $sValue = $this->_getUniqueFileName( $sImagePath, "{$sFName}", $sFileType, "", $blUnique );
             }
         }
         return $sValue;
@@ -361,92 +356,6 @@ class oxUtilsFile extends oxSuperCfg
     }
 
     /**
-     * Prepares (resizes anc copies) images according to its type.
-     * Returns preparation status
-     *
-     * @param string $sType   image type
-     * @param string $sSource image location
-     * @param string $sTarget image copy location
-     *
-     * @return array
-     */
-    protected function _prepareImage( $sType, $sSource, $sTarget )
-    {
-        $oUtilsPic = oxUtilspic::getInstance();
-        $oPictureHandler = oxPictureHandler::getInstance();
-        $oStr = getStr();
-
-        // picture type
-        $sPicType = $oStr->preg_replace( "/\d*$/", "", $sType );
-
-        // numper of processable picture
-        $iPicNum  = (int) $oStr->preg_replace( "/^\D*/", "", $sType );
-        $iPicNum = $iPicNum ? abs( $iPicNum ) : 1;
-
-        $aSize = false;
-        $blResize = false;
-
-        // add file process here
-        switch ( $sPicType ) {
-            case 'TH':
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sThumbnailsize' );
-                break;
-            case 'TC':
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sCatThumbnailsize' );
-                break;
-            case 'MICO':
-                $sManufacturerIconsize = $this->getConfig()->getConfigParam( 'sManufacturerIconsize' );
-                if ( isset( $sManufacturerIconsize ) ) {
-                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sManufacturerIconsize' );
-                } else {
-                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' );
-                }
-                break;
-            case 'PICO':
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sCatPromotionsize' );
-                break;
-            case 'CICO':
-                $sCatIconsize = $this->getConfig()->getConfigParam( 'sCatIconsize' );
-                if ( isset( $sCatIconsize ) ) {
-                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sCatIconsize' );
-                } else {
-                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' );
-                }
-                break;
-            case 'ICO':
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' );
-                break;
-            case 'P':
-                // pictures count is limited to 12
-                $iPicNum = ( $iPicNum > $this->_iMaxPicImgCount ) ? $this->_iMaxPicImgCount : $iPicNum;
-
-                //make an icon
-                if ( ( $aSize = $this->_getImageSize( $sType, 1, 'sIconsize' ) ) ) {
-                    $sIconTarget = dirname($sTarget) . '/' . $oPictureHandler->getIconName( $sTarget );
-                    $oUtilsPic->resizeImage( $sSource, $sIconTarget, $aSize[0], $aSize[1] );
-                }
-
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'aDetailImageSizes' );
-                break;
-            case 'M':
-            case 'WP':
-            case 'FL':
-            case 'PROMO':
-                // just copy file to target folder
-                $this->_copyFile($sSource, $sTarget);
-                break;
-            case 'Z':
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sZoomImageSize' );
-                break;
-        }
-
-        if ( $aSize ) {
-            $blResize = $oUtilsPic->resizeImage( $sSource, $sTarget, $aSize[0], $aSize[1] );
-        }
-        return $blResize;
-    }
-
-    /**
      * Copy file from source to target location
      *
      * @param string $sSource file location
@@ -481,8 +390,6 @@ class oxUtilsFile extends oxSuperCfg
      */
     protected function _moveImage( $sSource, $sTarget )
     {
-
-
         $blDone = false;
 
         if ( $sSource === $sTarget ) {
@@ -496,18 +403,6 @@ class oxUtilsFile extends oxSuperCfg
         }
 
         return $blDone;
-    }
-
-    /**
-     * Removes temporary created image. Returns deletion state
-     *
-     * @param string $sImagePath temporary image path
-     *
-     * @return bool
-     */
-    protected function _removeTempImage( $sImagePath )
-    {
-        return unlink( $sImagePath );
     }
 
     /**
@@ -557,27 +452,17 @@ class oxUtilsFile extends oxSuperCfg
 
                         if ( $blUseMasterImage ) {
                             //using master image as source, so only copying it to
-                            //temp dir for processing
-                            $blMoved = $this->_copyFile( $sSource, $sProcessPath );
+                            $blMoved = $this->_copyFile( $sSource, $sImagePath . $sValue );
                         } else {
-                            $blMoved = $this->_moveImage( $sSource, $sProcessPath );
+                            $blMoved = $this->_moveImage( $sSource, $sImagePath . $sValue );
                         }
 
                         if ( $blMoved ) {
-                            // finding final image path
-                            if ( ( $sTarget = $sImagePath . $sValue ) ) {
-                                // processing image and moving to final location
-                                $this->_prepareImage( $sType, $sProcessPath, $sTarget );
-
-                                // assign the name
-                                if ( $oObject && isset( $oObject->$sKey ) ) {
-                                    $oObject->{$sKey}->setValue( $sValue );
-                                }
+                            // assign the name
+                            if ( $oObject && isset( $oObject->$sKey ) ) {
+                                $oObject->{$sKey}->setValue( $sValue );
                             }
                         }
-
-                        // removing temporary file
-                        $this->_removeTempImage( $sProcessPath );
                     }
                 }
             }

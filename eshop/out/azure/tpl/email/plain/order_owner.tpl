@@ -6,11 +6,13 @@
 [{ assign var="oDelSet"   value=$order->getDelSet() }]
 [{ assign var="payment"   value=$order->getPayment() }]
 
+[{block name="email_plain_order_owner_orderemail"}]
 [{if $payment->oxuserpayments__oxpaymentsid->value == "oxempty"}]
 [{oxcontent ident="oxadminordernpplainemail"}]
 [{else}]
 [{oxcontent ident="oxadminorderplainemail"}]
 [{/if}]
+[{/block}]
 
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNOMBER" }] [{ $order->oxorder__oxordernr->value }]
 

@@ -6,11 +6,13 @@
 [{ assign var="basket"    value=$order->getBasket() }]
 [{ assign var="payment"   value=$order->getPayment() }]
 
+[{block name="email_plain_order_cust_orderemail"}]
 [{if $payment->oxuserpayments__oxpaymentsid->value == "oxempty"}]
 [{oxcontent ident="oxuserordernpplainemail"}]
 [{else}]
 [{oxcontent ident="oxuserorderplainemail"}]
 [{/if}]
+[{/block}]
 
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNOMBER" }] [{ $order->oxorder__oxordernr->value }]
 
@@ -177,6 +179,7 @@
 [{/if}]
 [{/block}]
 
+[{block name="email_plain_order_cust_paymentinfo"}]
 [{if $payment->oxuserpayments__oxpaymentsid->value == "oxidpayadvance"}]
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_BANK" }] [{$shop->oxshops__oxbankname->getRawValue()}]<br>
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ROUTINGNOMBER" }] [{$shop->oxshops__oxbankcode->value}]<br>
@@ -184,12 +187,17 @@
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_BIC" }] [{$shop->oxshops__oxbiccode->value}]<br>
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_IBAN" }] [{$shop->oxshops__oxibannumber->value}]
 [{/if}]
+[{/block}]
 
+[{block name="email_plain_order_cust_orderemailend"}]
 [{ oxcontent ident="oxuserorderemailendplain" }]
+[{/block}]
 
+[{block name="email_plain_order_cust_tsinfo"}]
 [{if $oViewConf->showTs("ORDEREMAIL") && $oViewConf->getTsId() }]
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TS_RATINGS_RATEUS" }]
 [{ $oViewConf->getTsRatingUrl() }]
 [{/if}]
+[{/block}]
 
 [{ oxcontent ident="oxemailfooterplain" }]

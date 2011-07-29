@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 36088 2011-06-08 14:40:38Z arvydas.vapsva $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 37364 2011-07-26 11:20:43Z linas.kukulskis $
  */
 
 /**
@@ -57,15 +57,7 @@ class oxArticleList extends oxList
      */
     public function setCustomSorting( $sSorting )
     {
-        $aSorting = explode( " ", $sSorting );
-
-        if ( strpos( $aSorting[0], "." ) ) {
-            $aSortElements = explode( ".", $aSorting[0] );
-            $aSortElements[1] = trim($aSortElements[1]);
-            $aSorting[0] = implode( ".", $aSortElements );
-        }
-
-        $this->_sCustomSorting = implode( " ", $aSorting );
+        $this->_sCustomSorting = $sSorting;
     }
 
     /**

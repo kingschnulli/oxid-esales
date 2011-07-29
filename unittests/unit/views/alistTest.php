@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 35586 2011-05-25 10:58:13Z vilma $
+ * @version   SVN: $Id: alistTest.php 37367 2011-07-26 11:53:32Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -399,7 +399,7 @@ class Unit_Views_alistTest extends OxidTestCase
 
         $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
         $oListView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
-        $this->assertEquals( array( 'sortby' => getViewName( 'oxarticles' ).'.testsort', 'sortdir' => "desc" ), $oListView->getSorting( '999' ) );
+        $this->assertEquals( array( 'sortby' => 'testsort', 'sortdir' => "desc" ), $oListView->getSorting( '999' ) );
     }
 
     /**

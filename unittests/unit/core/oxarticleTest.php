@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 37178 2011-07-20 09:08:35Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticleTest.php 37329 2011-07-25 15:03:04Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -5598,14 +5598,14 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oVarArticle->expects( $this->any() )->method( 'getParentArticle' )->will( $this->returnValue( $oParentArticle ) );
         $oVarArticle->expects( $this->any() )->method( '_hasMasterImage' )->will( $this->returnValue( true ) );
 
-        $oVarArticle->oxarticles__oxpic1  = new oxField('var_pic1.jpg', oxField::T_RAW);
+        $oVarArticle->oxarticles__oxpic1  = new oxField('30-360-back_p1_z_f_th_665.jpg', oxField::T_RAW);
         $oVarArticle->oxarticles__oxpicsgenerated = new oxField( 1, oxField::T_RAW);
 
         $oVarArticle->UNITassignParentFieldValue( "oxicon" );
-        $this->assertEquals( "var_pic1.jpg", $oVarArticle->oxarticles__oxicon->value);
+        $this->assertEquals( "30-360-back_p1_z_f_th_665.jpg", basename( $oVarArticle->getIconUrl() ) );
 
         $oVarArticle->UNITassignParentFieldValue( "oxthumb" );
-        $this->assertEquals( "var_pic1.jpg", $oVarArticle->oxarticles__oxthumb->value);
+        $this->assertEquals( "30-360-back_p1_z_f_th_665.jpg", basename( $oVarArticle->getThumbnailUrl() ) ) ;
 
         $oVarArticle->UNITassignParentFieldValue( "oxpicsgenerated" );
         $this->assertEquals( 1, $oVarArticle->oxarticles__oxpicsgenerated->value);

@@ -106,7 +106,7 @@
                         <td></td>
                         <td colspan="2">
                         [{if $wrapping->oxwrapping__oxpic->value}]
-                            <img src="[{$wrapping->getPictureUrl()}]0/[{$wrapping->oxwrapping__oxpic->value}]" alt="[{$wrapping->oxwrapping__oxname->value}]">
+                            <img src="[{$wrapping->getPictureUrl()}]" alt="[{$wrapping->oxwrapping__oxname->value}]">
                         [{/if}]
                         </td>
                       </tr>
@@ -167,7 +167,7 @@
                         </div>
                         [{if $card->oxwrapping__oxpic->value}]
                         <div class="card_body">
-                            <img src="[{$card->getPictureUrl()}]0/[{$card->oxwrapping__oxpic->value}]" alt="[{$card->oxwrapping__oxname->value}]">
+                            <img src="[{$card->getPictureUrl()}]" alt="[{$card->oxwrapping__oxname->value}]">
                         </div>
                         [{/if}]
                      </div>

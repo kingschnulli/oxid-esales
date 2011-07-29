@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategoryTest.php 37095 2011-07-15 14:24:50Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcategoryTest.php 37445 2011-07-27 15:03:44Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -49,15 +49,15 @@ class oxcategoryForoxCategoryTest extends oxcategory
 /**
  * oxCategory extension class for easier access to static variables
  */
-class oxCategoryAttributeCacheTest extends oxCategory 
+class oxCategoryAttributeCacheTest extends oxCategory
 {
     /**
      * Sets the CACHE array for the oxCategory instance
      * (without it you can't set values to the static variables)
-     * 
-     * @param array $aCache 
+     *
+     * @param array $aCache
      */
-    public function setAttributeCache( $aCache = array() ) 
+    public function setAttributeCache( $aCache = array() )
     {
         self::$_aCatAttributes = $aCache;
     }
@@ -962,7 +962,7 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $oCategory = new oxcategory();
         $oCategory->setId( 'l_id' );
 
-        $sExistingPic = 'angebote_2_tc.jpg';
+        $sExistingPic = 'sportswear_1_tc.jpg';
         $sEmptyPic    = '';
 
         // no image
@@ -975,9 +975,9 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
 
         // new path
         $sUrl  = oxConfig::getInstance()->getOutUrl() . basename( oxConfig::getInstance()->getPicturePath( "" ) );
-        $sUrl .= "/generated/category/thumb/748_150_75/angebote_2_tc.jpg";
+        $sUrl .= "/generated/category/thumb/748_150_75/sportswear_1_tc.jpg";
 
-        $oCategory->oxcategories__oxthumb = new oxField( "angebote_2_tc.jpg" );
+        $oCategory->oxcategories__oxthumb = new oxField( "sportswear_1_tc.jpg" );
         $this->assertEquals( $sUrl, $oCategory->getThumbUrl() );
     }
 
@@ -1053,7 +1053,7 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
 
         $this->assertEquals( $oCAttrList->getArray() , $oCategory->getAttributes()->getArray() );
     }
-    
+
     /**
      * Testing oxCategory::getAttributes() when values already cached
      */
@@ -1062,15 +1062,15 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
        // instance cache array variables
        $sCacheResult = "Result";
        $sCacheId  = "Index";
-       
+
        // forming a MD5 code as an index for the cache array
        $sCacheIndex = md5( $sCacheId . serialize( oxSession::getVar( 'session_attrfilter' ) ) );
        $aCache = array( $sCacheIndex => $sCacheResult );
-       
+
        $oCatAttributes = oxNew( "oxCategoryAttributeCacheTest" );
-       $oCatAttributes->setAttributeCache( $aCache );       
+       $oCatAttributes->setAttributeCache( $aCache );
        $oCatAttributes->setId( $sCacheId );
-       
+
        $this->assertEquals( $sCacheResult, $oCatAttributes->getAttributes() );
     }
 }

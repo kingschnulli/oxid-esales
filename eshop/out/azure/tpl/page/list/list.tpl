@@ -3,11 +3,17 @@
 [{oxscript add="$( '#content' ).oxArticleBox();"}]
 [{capture append="oxidBlock_content"}]
         [{assign var="actCategory" value=$oView->getActiveCategory()}]
-
+            
         [{if $actCategory->oxcategories__oxthumb->value }]
             [{if $actCategory->getThumbUrl()}]
                 <img src="[{$actCategory->getThumbUrl()}]" alt="[{$actCategory->oxcategories__oxtitle->value}]" class="categoryPicture">
             [{/if}]
+        [{/if}]
+        [{if $actCategory && $actCategory->oxcategories__oxdesc->value }]
+            <div class="categoryTopDescription" id="catDesc">[{$actCategory->oxcategories__oxdesc->value}]</div>
+        [{/if}]
+        [{if $actCategory->oxcategories__oxlongdesc->value }]
+            <div class="categoryTopLongDescription" id="catLongDesc">[{oxeval var=$actCategory->oxcategories__oxlongdesc}]</div>
         [{/if}]
 
         [{if $oView->hasVisibleSubCats()}]
@@ -94,15 +100,15 @@
             [{/if }]
         </h1>
         <div class="listRefine clear bottomRound">
-
-            [{if $actCategory && $actCategory->oxcategories__oxdesc->value }]
-                <div id="catDesc" class="categoryDescription">[{$actCategory->oxcategories__oxdesc->value}]</div>
+        [{* uncomment if want to use descriptions in locator
+           [{if $actCategory && $actCategory->oxcategories__oxdesc->value }]
+                <div id="catDescLocator" class="categoryDescription">[{$actCategory->oxcategories__oxdesc->value}]</div>
             [{/if}]
 
             [{if $actCategory->oxcategories__oxlongdesc->value }]
-                <div id="catLongDesc" class="categoryDescription">[{oxeval var=$actCategory->oxcategories__oxlongdesc}]</div>
+                <div id="catLongDescLocator" class="categoryDescription">[{oxeval var=$actCategory->oxcategories__oxlongdesc}]</div>
             [{/if}]
-
+        *}]
             [{include file="widget/locator/listlocator.tpl" locator=$oView->getPageNavigationLimitedTop() attributes=$oView->getAttributes() listDisplayType=true itemsPerPage=true sort=true }]
         </div>
         [{* List types: grid|line|infogrid *}]

@@ -35,6 +35,7 @@ if ( !function_exists( "getShopBasePath" ) ) {
     }
 }
 
+
 // disables admin
 if ( !function_exists( 'isAdmin' )) {
     /**
@@ -57,7 +58,6 @@ if ( !function_exists( "getConfig" ) ) {
      */
     function getConfig()
     {
-
         // custom functions file
         include getShopBasePath() . 'modules/functions.php';
 
@@ -419,7 +419,11 @@ class oxDynImgGenerator
                 if ( ! ( $blDone = file_exists( $sDir ) ) ) {
                     clearstatcache();
                     // in case creation did not succeed, maybe another process allready created folder?
-                    $blDone = mkdir( $sDir, 0777, true ) || file_exists( $sDir );
+                    $iMode = 0755;
+                    if ( defined( 'OXID_PHP_UNIT' ) ) {
+                        $iMode = 0777;
+                    }
+                    $blDone = mkdir( $sDir, $iMode, true ) || file_exists( $sDir );
                 }
             }
         }

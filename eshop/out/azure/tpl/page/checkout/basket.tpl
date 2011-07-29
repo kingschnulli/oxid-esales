@@ -42,31 +42,33 @@
             [{include file="page/checkout/inc/basketcontents.tpl" editable=true}]
 
             [{if $oViewConf->getShowVouchers()}]
-                [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
-                [{oxscript add="$('form.js-oxValidate').oxInputValidator();"}]
-                <form name="voucher" action="[{ $oViewConf->getSelfActionLink() }]" method="post" class="js-oxValidate">
-                    <div class="couponBox" id="coupon">
-                        [{foreach from=$Errors.basket item=oEr key=key}]
-                            [{if $oEr->getErrorClassType() == 'oxVoucherException'}]
-                                <div class="inlineError">
-                                    [{ oxmultilang ident="PAGE_CHECKOUT_BASKET_COUPONNOTACCEPTED1" }] <strong>&ldquo;[{ $oEr->getValue('voucherNr') }]&rdquo;</strong> [{ oxmultilang ident="PAGE_CHECKOUT_BASKET_COUPONNOTACCEPTED2" }]<br>
-                                    <strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_REASON" }]</strong>
-                                    [{ $oEr->getOxMessage() }]
-                                </div>
-                            [{/if}]
-                        [{/foreach}]
-                        <label>[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_ENTERCOUPONNUMBER" }]</label>
-                        [{ $oViewConf->getHiddenSid() }]
-                        <input type="hidden" name="cl" value="basket">
-                        <input type="hidden" name="fnc" value="addVoucher">
-                        <input type="text" size="20" name="voucherNr" class="textbox js-oxValidate js-oxValidate_notEmpty">
-                        <button type="submit" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_SUBMITCOUPON" }]</button>
-                        <p class="oxValidateError">
-                            <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
-                        </p>
-                        <input type="hidden" name="CustomError" value='basket'>
-                    </div>
-                </form>
+                [{block name="checkout_basket_vouchers"}]
+                    [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
+                    [{oxscript add="$('form.js-oxValidate').oxInputValidator();"}]
+                    <form name="voucher" action="[{ $oViewConf->getSelfActionLink() }]" method="post" class="js-oxValidate">
+                        <div class="couponBox" id="coupon">
+                            [{foreach from=$Errors.basket item=oEr key=key}]
+                                [{if $oEr->getErrorClassType() == 'oxVoucherException'}]
+                                    <div class="inlineError">
+                                        [{ oxmultilang ident="PAGE_CHECKOUT_BASKET_COUPONNOTACCEPTED1" }] <strong>&ldquo;[{ $oEr->getValue('voucherNr') }]&rdquo;</strong> [{ oxmultilang ident="PAGE_CHECKOUT_BASKET_COUPONNOTACCEPTED2" }]<br>
+                                        <strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_REASON" }]</strong>
+                                        [{ $oEr->getOxMessage() }]
+                                    </div>
+                                [{/if}]
+                            [{/foreach}]
+                            <label>[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_ENTERCOUPONNUMBER" }]</label>
+                            [{ $oViewConf->getHiddenSid() }]
+                            <input type="hidden" name="cl" value="basket">
+                            <input type="hidden" name="fnc" value="addVoucher">
+                            <input type="text" size="20" name="voucherNr" class="textbox js-oxValidate js-oxValidate_notEmpty">
+                            <button type="submit" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_SUBMITCOUPON" }]</button>
+                            <p class="oxValidateError">
+                                <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+                            </p>
+                            <input type="hidden" name="CustomError" value='basket'>
+                        </div>
+                    </form>
+                [{/block}]
             [{/if}]
             <div class="lineBox clear">
                 [{if $oView->showBackToShop()}]
