@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order_article.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: order_article.php 37881 2011-08-01 14:39:12Z vilma $
  */
 
 /**
@@ -116,6 +116,7 @@ class Order_Article extends oxAdminDetails
             $sSearchArtNum = $this->getSearchProductArtNr();
 
             foreach ( $this->getProductList() as $oProduct ) {
+                var_dump($oProduct->oxarticles__oxartnum->value);
                 if ( $oProduct->oxarticles__oxartnum->value == $sSearchArtNum ) {
                     $this->_oSearchProduct = $oProduct;
                     break;
@@ -139,10 +140,13 @@ class Order_Article extends oxAdminDetails
 
             //get article id
             $oDb = oxDb::getDb(true);
-            $sQ  = "select oxid, oxparentid from oxarticles where oxarticles.oxartnum = ".$oDb->quote( $sArtNum )." limit 1";
+            $sTable = getViewName( "oxarticles" );
+            $sQ  = "select oxid, oxparentid from $sTable where oxartnum = ".$oDb->quote( $sArtNum )." limit 1";
+
             $rs  = $oDb->execute( $sQ );
             if ($rs != false && $rs->recordCount() > 0) {
-                $sArtId = $rs->fields['oxparentid'] ? $rs->fields['oxparentid'] : $rs->fields['oxid'];
+                $sArtId = $rs->fields['OXPARENTID'] ? $rs->fields['OXPARENTID'] : $rs->fields['OXID'];
+
                 $oProduct = oxNew( "oxarticle" );
                 if ( $oProduct->load( $sArtId ) ) {
                     $this->_oMainSearchProduct = $oProduct;

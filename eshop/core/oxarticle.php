@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 37329 2011-07-25 15:03:04Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 37898 2011-08-02 12:12:30Z linas.kukulskis $
  */
 
 // defining supported link types
@@ -3782,9 +3782,10 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $this->_fPricePerUnit = oxLang::getInstance()->formatCurrency($dPrice / (double) $this->oxarticles__oxunitquantity->value, $oCur);
         }
 
-
         //getting min and max prices of variants
-        $this->_applyRangePrice();
+        if ( $this->_hasAnyVariant() ) {
+            $this->_applyRangePrice();
+        }
     }
 
     /**
@@ -4164,6 +4165,15 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             return;
         }
 
+        if ( $this->isParentNotBuyable() && !$this->getConfig()->getConfigParam( 'blLoadVariants' )) {
+            //#2509 we cannot force brutto price here, as netto price can be added to DB
+            // $this->getPrice()->setBruttoPriceMode();
+            $this->getPrice()->setPrice($this->oxarticles__oxvarminprice->value);
+            $this->_blIsRangePrice = true;
+            $this->_calculatePrice( $this->getPrice() );
+            return;
+        }
+
         $aPrices = array();
 
         if (!$this->_blNotBuyableParent) {
@@ -4178,23 +4188,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             }
         }
 
-        /*  $oAmPrices = $this->loadAmountPriceInfo();
-        foreach ($oAmPrices as $oAmPrice) {
-            $aPrices[] = $oAmPrice->oxprice2article__oxaddabs->value;
-        }*/
-
-        if (count($aPrices)) {
-            $dMinPrice = $aPrices[0];
-            $dMaxPrice = $aPrices[0];
-            foreach ($aPrices as $dPrice) {
-                if ($dMinPrice > $dPrice) {
-                    $dMinPrice = $dPrice;
-                }
-
-                if ($dMaxPrice < $dPrice) {
-                    $dMaxPrice = $dPrice;
-                }
-            }
+        if ( count( $aPrices ) ) {
+            $dMinPrice = min( $aPrices );
+            $dMaxPrice = max( $aPrices );
         }
 
         if ($this->_blNotBuyableParent && isset($dMinPrice) && $dMinPrice == $dMaxPrice) {
@@ -4206,14 +4202,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $this->getPrice()->setBruttoPriceMode();
             $this->getPrice()->setPrice($dMinPrice);
             $this->_blIsRangePrice = true;
-        }
-
-        if ( $this->isParentNotBuyable() && !$this->getConfig()->getConfigParam( 'blLoadVariants' )) {
-            //#2509 we cannot force brutto price here, as netto price can be added to DB
-            // $this->getPrice()->setBruttoPriceMode();
-            $this->getPrice()->setPrice($this->oxarticles__oxvarminprice->value);
-            $this->_blIsRangePrice = true;
-            $this->_calculatePrice( $this->getPrice() );
         }
     }
 

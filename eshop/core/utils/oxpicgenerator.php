@@ -94,6 +94,56 @@ if ( !function_exists( "calcImageSize" ) ) {
     }
 }
 
+// sets 0755 permissions for given file
+if ( !function_exists( "makeReadable" ) ) {
+    /**
+     * Sets 0755 permissions for given file and returns name of affected file
+     *
+     * @param string $sTarget name of file
+     *
+     * @return string
+     */
+    function makeReadable( $sTarget )
+    {
+        $blChmodState = false;
+        if ( file_exists( $sTarget ) && is_readable( $sTarget ) ) {
+            $blChmodState = @chmod( $sTarget, 0755 );
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                @chmod( $sTarget, 0777 );
+            }
+        }
+
+        return $blChmodState ? $sTarget : false;
+    }
+}
+
+if ( !function_exists( "checkSizeAndCopy" ) ) {
+    /**
+     * Checks if preferred image dimensions size matches defined in config;
+     * in case it matches - copies original image to new location, returns
+     * copying state - TRUE/FALSe else - returns array with new dimensions
+     * array( $iNewWidth, $iNewHeight );
+     *
+     * @param string $sSrc        image source file name
+     * @param string $sTarget     target location
+     * @param int    $iWidth      preferred width
+     * @param int    $iHeight     preferred height
+     * @param int    $iOrigWidth  original width
+     * @param int    $iOrigHeigth preferred height
+     *
+     * @return mixed
+     */
+    function checkSizeAndCopy( $sSrc, $sTarget, $iWidth, $iHeight, $iOrigWidth, $iOrigHeigth )
+    {
+        list( $iNewWidth, $iNewHeight ) = calcImageSize( $iWidth, $iHeight, $iOrigWidth, $iOrigHeigth );
+        if ( $iNewWidth == $iOrigWidth && $iNewHeight == $iOrigHeigth ) {
+            return copy( $sSrc, $sTarget );
+        } else {
+            return array( $iNewWidth, $iNewHeight );
+        }
+    }
+}
+
 // checks if GIF resizer does not exist
 if ( !function_exists( "resizeGif" ) ) {
     /**
@@ -102,40 +152,37 @@ if ( !function_exists( "resizeGif" ) ) {
      *
      * @param string $sSrc            GIF source
      * @param string $sTarget         new image location
-     * @param int    $iNewWidth       new width
-     * @param int    $iNewHeight      new height
+     * @param int    $iWidth          new width
+     * @param int    $iHeight         new height
      * @param int    $iOriginalWidth  original width
      * @param int    $iOriginalHeigth original heigth
      * @param int    $iGDVer          GD library version
      *
      * @return string | false
      */
-    function resizeGif( $sSrc, $sTarget, $iNewWidth, $iNewHeight, $iOriginalWidth, $iOriginalHeigth, $iGDVer )
+    function resizeGif( $sSrc, $sTarget, $iWidth, $iHeight, $iOriginalWidth, $iOriginalHeigth, $iGDVer )
     {
-        list( $iWidth, $iHeight ) = calcImageSize( $iWidth, $iHeight, $aImageInfo[0], $aImageInfo[1] );
-
-        $hDestinationImage = imagecreate( $iNewWidth, $iNewHeight );
-        $hSourceImage = imagecreatefromgif( $sSrc );
-        $iTransparentColor = imagecolorresolve( $hSourceImage, 255, 255, 255 );
-        $iFillColor = imagecolorresolve( $hDestinationImage, 255, 255, 255 );
-        imagefill( $hDestinationImage, 0, 0, $iFillColor );
-        imagecolortransparent( $hSourceImage, $iTransparentColor );
-
-        if ( $iGDVer == 1 ) {
-            imagecopyresized( $hDestinationImage, $hSourceImage, 0, 0, 0, 0, $iNewWidth, $iNewHeight, $iOriginalWidth, $iOriginalHeigth );
-        } else {
-            imagecopyresampled( $hDestinationImage, $hSourceImage, 0, 0, 0, 0, $iNewWidth, $iNewHeight, $iOriginalWidth, $iOriginalHeigth );
+        $aResult = checkSizeAndCopy( $sSrc, $sTarget, $iWidth, $iHeight, $iOriginalWidth, $iOriginalHeigth );
+        if ( is_array( $aResult ) ) {
+            list( $iNewWidth, $iNewHeight ) = $aResult;
+            $hDestinationImage = imagecreate( $iNewWidth, $iNewHeight );
+            $hSourceImage = imagecreatefromgif( $sSrc );
+            $iTransparentColor = imagecolorresolve( $hSourceImage, 255, 255, 255 );
+            $iFillColor = imagecolorresolve( $hDestinationImage, 255, 255, 255 );
+            imagefill( $hDestinationImage, 0, 0, $iFillColor );
+            imagecolortransparent( $hSourceImage, $iTransparentColor );
+            if ( $iGDVer == 1 ) {
+                imagecopyresized( $hDestinationImage, $hSourceImage, 0, 0, 0, 0, $iNewWidth, $iNewHeight, $iOriginalWidth, $iOriginalHeigth );
+            } else {
+                imagecopyresampled( $hDestinationImage, $hSourceImage, 0, 0, 0, 0, $iNewWidth, $iNewHeight, $iOriginalWidth, $iOriginalHeigth );
+            }
+            imagecolortransparent( $hDestinationImage, $iFillColor );
+            imagegif( $hDestinationImage, $sTarget );
+            imagedestroy( $hDestinationImage );
+            imagedestroy( $hSourceImage );
         }
 
-        imagecolortransparent( $hDestinationImage, $fillColor );
-        imagegif( $hDestinationImage, $sTarget );
-        @chmod( $sTarget, 0755 );
-        if ( defined( 'OXID_PHP_UNIT' ) ) {
-            @chmod( $sTarget, 0777 );
-        }
-        imagedestroy( $hDestinationImage );
-        imagedestroy( $hSourceImage );
-        return $sTarget;
+        return makeReadable( $sTarget );
     }
 }
 
@@ -157,39 +204,32 @@ if ( !function_exists( "resizePng" ) ) {
      */
     function resizePng( $sSrc, $sTarget, $iWidth, $iHeight, $aImageInfo, $iGdVer, $hDestinationImage )
     {
-        list( $iWidth, $iHeight ) = calcImageSize( $iWidth, $iHeight, $aImageInfo[0], $aImageInfo[1] );
-
-        if ( $hDestinationImage === null ) {
-            $hDestinationImage = $iGdVer == 1 ? imagecreate( $iWidth, $iHeight ) : imagecreatetruecolor( $iWidth, $iHeight );
-        }
-
-        $blSuccess = false;
-        $hSourceImage = imagecreatefrompng( $sSrc );
-
-        if ( !imageistruecolor( $hSourceImage ) ) {
-            $hDestinationImage = imagecreate( $iWidth, $iHeight );
-            // fix for transparent images sets image to transparent
-            $imgWhite = imagecolorallocate( $hDestinationImage, 255, 255, 255 );
-            imagefill( $hDestinationImage, 0, 0, $imgWhite );
-            imagecolortransparent( $hDestinationImage, $imgWhite );
-            //end of fix
-        } else {
-            imagealphablending( $hDestinationImage, false );
-            imagesavealpha( $hDestinationImage, true );
-        }
-
-        if ( copyAlteredImage( $hDestinationImage, $hSourceImage, $iWidth, $iHeight, $aImageInfo, $sTarget, $iGdVer ) ) {
-            imagepng( $hDestinationImage, $sTarget );
-            @chmod( $sTarget, 0755 );
-            if ( defined( 'OXID_PHP_UNIT' ) ) {
-                @chmod( $sTarget, 0777 );
+        $aResult = checkSizeAndCopy( $sSrc, $sTarget, $iWidth, $iHeight, $aImageInfo[0], $aImageInfo[1] );
+        if ( is_array( $aResult ) ) {
+            list( $iNewWidth, $iNewHeight ) = $aResult;
+            if ( $hDestinationImage === null ) {
+                $hDestinationImage = $iGdVer == 1 ? imagecreate( $iNewWidth, $iNewHeight ) : imagecreatetruecolor( $iNewWidth, $iNewHeight );
             }
-            imagedestroy( $hDestinationImage );
-            imagedestroy( $hSourceImage );
-            $blSuccess = $sTarget;
+            $hSourceImage = imagecreatefrompng( $sSrc );
+            if ( !imageistruecolor( $hSourceImage ) ) {
+                $hDestinationImage = imagecreate( $iNewWidth, $iNewHeight );
+                // fix for transparent images sets image to transparent
+                $imgWhite = imagecolorallocate( $hDestinationImage, 255, 255, 255 );
+                imagefill( $hDestinationImage, 0, 0, $imgWhite );
+                imagecolortransparent( $hDestinationImage, $imgWhite );
+                //end of fix
+            } else {
+                imagealphablending( $hDestinationImage, false );
+                imagesavealpha( $hDestinationImage, true );
+            }
+            if ( copyAlteredImage( $hDestinationImage, $hSourceImage, $iNewWidth, $iNewHeight, $aImageInfo, $sTarget, $iGdVer ) ) {
+                imagepng( $hDestinationImage, $sTarget );
+                imagedestroy( $hDestinationImage );
+                imagedestroy( $hSourceImage );
+            }
         }
 
-        return $blSuccess;
+        return makeReadable( $sTarget );
     }
 }
 
@@ -212,26 +252,20 @@ if ( !function_exists( "resizeJpeg" ) ) {
      */
     function resizeJpeg( $sSrc, $sTarget, $iWidth, $iHeight, $aImageInfo, $iGdVer, $hDestinationImage, $iDefQuality )
     {
-
-        list( $iWidth, $iHeight ) = calcImageSize( $iWidth, $iHeight, $aImageInfo[0], $aImageInfo[1] );
-
-        if ( $hDestinationImage === null ) {
-            $hDestinationImage = $iGdVer == 1 ? imagecreate( $iWidth, $iHeight ) : imagecreatetruecolor( $iWidth, $iHeight );
-        }
-
-        $blSuccess = false;
-        $hSourceImage = imagecreatefromjpeg( $sSrc );
-        if ( copyAlteredImage( $hDestinationImage, $hSourceImage, $iWidth, $iHeight, $aImageInfo, $sTarget, $iGdVer ) ) {
-            imagejpeg( $hDestinationImage, $sTarget, $iDefQuality );
-            @chmod( $sTarget, 0755 );
-            if ( defined( 'OXID_PHP_UNIT' ) ) {
-                @chmod( $sTarget, 0777 );
+        $aResult = checkSizeAndCopy( $sSrc, $sTarget, $iWidth, $iHeight, $aImageInfo[0], $aImageInfo[1] );
+        if ( is_array( $aResult ) ) {
+            list( $iNewWidth, $iNewHeight ) = $aResult;
+            if ( $hDestinationImage === null ) {
+                $hDestinationImage = $iGdVer == 1 ? imagecreate( $iNewWidth, $iNewHeight ) : imagecreatetruecolor( $iNewWidth, $iNewHeight );
             }
-            imagedestroy( $hDestinationImage );
-            imagedestroy( $hSourceImage );
-            $blSuccess = $sTarget;
+            $hSourceImage = imagecreatefromjpeg( $sSrc );
+            if ( copyAlteredImage( $hDestinationImage, $hSourceImage, $iNewWidth, $iNewHeight, $aImageInfo, $sTarget, $iGdVer ) ) {
+                imagejpeg( $hDestinationImage, $sTarget, $iDefQuality );
+                imagedestroy( $hDestinationImage );
+                imagedestroy( $hSourceImage );
+            }
         }
 
-        return $blSuccess;
+        return makeReadable( $sTarget );
     }
 }

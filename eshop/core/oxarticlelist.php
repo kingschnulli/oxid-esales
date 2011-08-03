@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 37364 2011-07-26 11:20:43Z linas.kukulskis $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 37868 2011-08-01 11:57:18Z linas.kukulskis $
  */
 
 /**
@@ -1016,22 +1016,16 @@ class oxArticleList extends oxList
      */
     protected function _getPriceSelect( $dPriceFrom, $dPriceTo )
     {
-
         $oBaseObject   = $this->getBaseObject();
         $sArticleTable = $oBaseObject->getViewName();
         $sSelectFields = $oBaseObject->getSelectFields();
 
         $sSubSelect = "";
-        if ($dPriceTo) {
-            $sSubSelect .= "and oxvarminprice <= ".(double)$dPriceTo." ";
-        }
 
-        if ($dPriceFrom) {
-            $sSubSelect .= " and oxvarminprice <= ".(double)$dPriceFrom." ";
-        }
+        $sSelect  = "select {$sSelectFields} from {$sArticleTable} where oxvarminprice >= 0 ";
+        $sSelect .= $dPriceTo ? "and oxvarminprice <= " . (double)$dPriceTo . " " : " ";
+        $sSelect .= $dPriceFrom ? "and oxvarminprice  >= " . (double)$dPriceFrom . " " : " ";
 
-        $sSelect  = "select {$sSelectFields} from {$sArticleTable} where ";
-        $sSelect .= " oxvarminprice >= ".(double)$dPriceFrom." and oxvarminprice <= ".(double)$dPriceTo;
         $sSelect .= " and ".$oBaseObject->getSqlActiveSnippet()." and {$sArticleTable}.oxissearch = 1";
 
         if ( !$this->_sCustomSorting ) {
@@ -1041,7 +1035,6 @@ class oxArticleList extends oxList
         }
 
         return $sSelect;
-
     }
 
     /**

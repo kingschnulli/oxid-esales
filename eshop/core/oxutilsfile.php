@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 37440 2011-07-27 14:42:41Z arvydas.vapsva $
+ * @version   SVN: $Id: oxutilsfile.php 37880 2011-08-01 14:37:59Z vilma $
  */
 
 /**
@@ -583,7 +583,7 @@ class oxUtilsFile extends oxSuperCfg
 
         //removing dublicate slashes
         $sUrl = str_replace('//', '/', $sUrl);
-        $sUrl = str_replace('http:/', 'http://', $sUrl);
+        $sUrl = str_replace(array('http:/', 'https:/'), array('http://', 'https://'), $sUrl);
 
         return $sUrl;
     }

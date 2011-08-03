@@ -167,6 +167,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
      */
     public function testStartSystemComponentExceptionThrown_onlyInDebugMode()
     {
+        modConfig::setParameter( 'iDebug', -1 );
         modConfig::setParameter( 'cl', null );
         modConfig::setParameter( 'fnc', "testFnc" );
         oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{ throw new Exception("oxAddErrorToDisplayException"); }' );
@@ -181,10 +182,8 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         try {
             $oControl->start();
         } catch ( Exception $oExcp ) {
-            $this->assertNotEquals( "oxAddErrorToDisplayException", $oExcp->getMessage() );
-            return;
+            $this->fail( "Error while executing testStartSystemComponentExceptionThrown_onlyInDebugMode()" );
         }
-        $this->fail( "Error while executing testStartSystemComponentExceptionThrown_onlyInDebugMode()" );
      }
 
     /**

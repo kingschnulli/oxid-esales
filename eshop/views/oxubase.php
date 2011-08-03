@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 37027 2011-07-14 11:55:57Z arvydas.vapsva $
+ * @version   SVN: $Id: oxubase.php 37871 2011-08-01 12:15:05Z arvydas.vapsva $
  */
 
 /**
@@ -44,7 +44,7 @@ class oxUBase extends oxView
      * @var bool
      */
     protected $_blFbWidgetsOn = null;
-    
+
     /**
      * Checks if feature is enabled
      *
@@ -561,6 +561,39 @@ class oxUBase extends oxView
     protected $_sActiveUsername = null;
 
     /**
+     * Components which needs to be initialized/rendered (depending
+     * on cache and its cache status)
+     * @var array
+     */
+    protected static $_aCollectedComponentNames = null;
+
+    /**
+     * Returns component names
+     *
+     * @return array
+     */
+    protected function _getComponentNames()
+    {
+        if ( self::$_aCollectedComponentNames === null ) {
+            self::$_aCollectedComponentNames = array_merge( $this->_aComponentNames, $this->_aUserComponentNames );
+
+            // #1721: custom component handling. At the moment it is not possible to override this variable in oxubase,
+            // so we added this array to config.inc.php file
+            if ( ( $aUserCmps = $this->getConfig()->getConfigParam( 'aUserComponentNames' ) ) ) {
+                self::$_aCollectedComponentNames = array_merge( self::$_aCollectedComponentNames, $aUserCmps );
+            }
+
+            if ( oxConfig::getParameter( '_force_no_basket_cmp' ) ) {
+                unset( self::$_aCollectedComponentNames['oxcmp_basket'] );
+            }
+        }
+
+        // resetting array pointer
+        reset( self::$_aCollectedComponentNames );
+        return self::$_aCollectedComponentNames;
+    }
+
+    /**
      * In non admin mode checks if request was NOT processed by seo handler.
      * If NOT, then tries to load alternative SEO url and if url is available -
      * redirects to it. If no alternative path was found - 404 header is emitted
@@ -606,27 +639,12 @@ class oxUBase extends oxView
     {
         $this->_processRequest();
 
-        if ( oxConfig::getParameter( '_force_no_basket_cmp' ) ) {
-            unset( $this->_aComponentNames['oxcmp_basket'] );
-        }
-
-        // #1721: custom component handling. At the moment it is not possible to override this variable in oxubase,
-        // so we added this array to config.inc.php file
-        if ($this->getConfig()->getConfigParam( 'aUserComponentNames' )) {
-            $this->_aUserComponentNames = array_merge( $this->_aUserComponentNames, $this->getConfig()->getConfigParam( 'aUserComponentNames' ) );
-        }
-        // as the objects are cached by dispatcher we have to watch out, that we don't add these components twice
-        if ( !$this->_blCommonAdded ) {
-            $this->_aComponentNames = array_merge( $this->_aComponentNames, $this->_aUserComponentNames );
-            $this->_blCommonAdded = true;
-        }
-
         // storing current view
         $blInit = true;
 
 
         // init all components if there are any
-        foreach ( $this->_aComponentNames as $sComponentName => $blNotCacheable ) {
+        foreach ( $this->_getComponentNames() as $sComponentName => $blNotCacheable ) {
             // do not override initiated components
             if ( !isset( $this->_oaComponents[$sComponentName] ) ) {
                 // component objects MUST be created to support user called functions

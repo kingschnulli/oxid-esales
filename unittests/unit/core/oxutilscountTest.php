@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscountTest.php 33754 2011-03-14 15:38:56Z arvydas.vapsva $
+ * @version   SVN: $Id: oxutilscountTest.php 37889 2011-08-02 07:09:35Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -93,11 +93,13 @@ class Unit_Core_oxUtilsCountTest extends OxidTestCase
         $oArticle->setId( "_testArticle" );
         $oArticle->oxarticles__oxshopid = new oxField( oxConfig::getInstance()->getBaseShopId() );
         $oArticle->oxarticles__oxactive = new oxField( 1 );
-        $oArticle->oxarticles__oxprice  = new oxField( 0 );
+        $oArticle->oxarticles__oxvarminprice  = new oxField( 0 );
         $oArticle->save();
 
         $oUtilsCount = new oxUtilsCount();
-            $this->assertEquals( 1, $oUtilsCount->setPriceCatArticleCount( array(), 'xxx', 'xxx', 0, 1 ) );
+
+
+            $this->assertEquals( 5, $oUtilsCount->setPriceCatArticleCount( array(), 'xxx', 'xxx', 0, 1 ) );
     }
 
     public function testGetTagArticleCount()
@@ -247,7 +249,7 @@ class Unit_Core_oxUtilsCountTest extends OxidTestCase
         $this->assertEquals($sRetSet, $sRetGet);
 
 
-            $this->assertEquals(35, $sRetSet);
+            $this->assertEquals(34, $sRetSet);
     }
 
     public function testSetVendorArticleCount()

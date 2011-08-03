@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 37133 2011-07-18 14:54:05Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticlelistTest.php 37872 2011-08-01 12:50:06Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1029,7 +1029,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=12andoxvarminprice<=15and";
+        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=0andoxvarminprice<=15andoxvarminprice>=12and";
         $sExpt.= $oArticle->getSqlActiveSnippet()."and$sArticleTable.oxissearch=1orderby";
         $sExpt.= "$sArticleTable.oxvarminpriceasc,$sArticleTable.oxid";
 
@@ -1057,7 +1057,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=12andoxvarminprice<=15and";
+        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=0andoxvarminprice<=15andoxvarminprice>=12and";
         $sExpt.= $oArticle->getSqlActiveSnippet()."and$sArticleTable.oxissearch=1orderby";
         $sExpt.= "oxtitledesc,$sArticleTable.oxid";
 

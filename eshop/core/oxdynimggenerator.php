@@ -373,7 +373,8 @@ class oxDynImgGenerator
      */
     protected function _generateGif( $sSource, $sTarget, $iWidth, $iHeight )
     {
-        resizeGif( $sSource, $sTarget, $iWidth, $iHeight, $iOriginalWidth, $iOriginalHeigth, getGdVersion() );
+        $aImageInfo = @getimagesize( $sSource );
+        return resizeGif( $sSource, $sTarget, $iWidth, $iHeight, $aImageInfo[0], $aImageInfo[1], getGdVersion() );
     }
 
     /**

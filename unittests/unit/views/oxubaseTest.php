@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 37027 2011-07-14 11:55:57Z arvydas.vapsva $
+ * @version   SVN: $Id: oxubaseTest.php 37871 2011-08-01 12:15:05Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -52,6 +52,11 @@ class testOxViewComponent extends oxUBase
     {
         $this->setThisActionWasCalled = true;
     }
+
+    public static function resetComponentNames()
+    {
+        self::$_aCollectedComponentNames = null;
+    }
 }
 
 
@@ -70,6 +75,8 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     protected function setUp()
     {
+        testOxViewComponent::resetComponentNames();
+
         // adding article to recommendlist
         $sQ = 'insert into oxrecommlists ( oxid, oxuserid, oxtitle, oxdesc, oxshopid ) values ( "testlist", "oxdefaultadmin", "oxtest", "oxtest", "'.oxConfig::getInstance()->getShopId().'" ) ';
         oxDb::getDB()->Execute( $sQ );
@@ -101,7 +108,36 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oUBase = new oxUbase();
         $oUBase->getSession()->setBasket( null );
 
+        testOxViewComponent::resetComponentNames();
+
         parent::tearDown();
+    }
+
+    /**
+     * Test case for oxUBase::_getComponentNames()
+     *
+     * @return null
+     */
+    public function testGetComponentNames()
+    {
+        $sCmpName = "testCmp".time();
+        eval( "class {$sCmpName} extends oxUbase {}" );
+
+        modConfig::getInstance()->setConfigParam( 'aUserComponentNames', array( $sCmpName => 1 ) );
+
+        $aComponentNames = array(
+                                 'oxcmp_user'       => 1, // 0 means dont init if cached
+                                 'oxcmp_lang'       => 0,
+                                 'oxcmp_cur'        => 1,
+                                 'oxcmp_shop'       => 1,
+                                 'oxcmp_categories' => 0,
+                                 'oxcmp_utils'      => 1,
+                                 'oxcmp_news'       => 0,
+                                 'oxcmp_basket'     => 1,
+                                 $sCmpName          => 1
+                                );
+        $oView = new oxUBase();
+        $this->assertEquals( $aComponentNames, $oView->UNITgetComponentNames() );
     }
 
     /**
@@ -407,17 +443,15 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     public function testInitUserDefinedComponents()
     {
-        $myConfig = oxConfig::getInstance();
-        $myConfig->setConfigParam( "aUserComponentNames", array( "oxcmp_cur" => false ) );
-        $oView = $this->getProxyClass('oxubase');
-        $oView->setNonPublicVar( '_aComponentNames', array( "oxcmp_lang" => false ) );
+        $oView = $this->getMock( 'oxubase', array( "_getComponentNames" ) );
+        $oView->expects( $this->once() )->method( '_getComponentNames' )->will( $this->returnValue( array( "oxcmp_cur" => false, "oxcmp_lang" => false ) ) );
         $oView->init();
 
         $aComponents = $oView->getComponents();
         $this->assertEquals( 2, count( $aComponents ) );
         $this->assertEquals( "oxcmp_lang", $aComponents["oxcmp_lang"]->getThisAction() );
         $this->assertEquals( "oxcmp_cur", $aComponents["oxcmp_cur"]->getThisAction() );
-        $this->assertEquals( "oxubaseproxy", $aComponents["oxcmp_lang"]->getParent()->getThisAction() );
+        $this->assertEquals( strtolower( get_class( $oView ) ), $aComponents["oxcmp_lang"]->getParent()->getThisAction() );
     }
 
     /*
