@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucherTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxvoucherTest.php 37920 2011-08-03 12:11:14Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1103,6 +1103,42 @@ class Unit_Core_oxvoucherTest extends OxidTestCase
             return;
         }
         $this->fail( "failed test" );
+    }
+
+    /**
+     * Test case for #0002662: Wrong voucher calculation for articles selected by categorie
+     *
+     * @return null
+     */
+    public function testFor0002662()
+    {
+        $dPrice = 100;
+
+        $oBasketItem1['price'] = 5.45;
+        $oBasketItem1['amount'] = 100;
+
+        $oDiscount = new oxDiscount();
+        $oDiscount->oxdiscount__oxshopid      = new oxField( oxConfig::getInstance()->getShopId() );
+        $oDiscount->oxdiscount__oxactive      = new oxField( 1 );
+        $oDiscount->oxdiscount__oxactivefrom  = new oxField( "0000-00-00 00:00:00" );
+        $oDiscount->oxdiscount__oxactiveto    = new oxField( "0000-00-00 00:00:00" );
+        $oDiscount->oxdiscount__oxtitle       = new oxField( "test" );
+        $oDiscount->oxdiscount__oxamount      = new oxField( 1 );
+        $oDiscount->oxdiscount__oxprice       = new oxField( 0 );
+        $oDiscount->oxdiscount__oxamountto    = new oxField( MAX_64BIT_INTEGER );
+        $oDiscount->oxdiscount__oxpriceto     = new oxField( MAX_64BIT_INTEGER );
+        $oDiscount->oxdiscount__oxaddsumtype  = new oxField( '%' );
+        $oDiscount->oxdiscount__oxaddsum      = new oxField( 10 );
+        $oDiscount->oxdiscount__oxitmartid    = new oxField();
+        $oDiscount->oxdiscount__oxitmamount   = new oxField();
+        $oDiscount->oxdiscount__oxitmmultiple = new oxField();
+
+        $oVoucher = $this->getMock( "oxvoucher", array( "_getSerieDiscount", "_getBasketItems", "isAdmin" ) );
+        $oVoucher->expects( $this->once() )->method( '_getSerieDiscount')->will( $this->returnValue ($oDiscount ) );
+        $oVoucher->expects( $this->once() )->method( '_getBasketItems')->will( $this->returnValue( array( $oBasketItem1 ) ) );
+        $oVoucher->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+
+        $this->assertEquals( 54.5, $oVoucher->UNITgetCategoryDiscoutValue( $dPrice ) );
     }
 
 }

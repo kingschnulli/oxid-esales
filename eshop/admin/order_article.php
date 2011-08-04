@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order_article.php 37881 2011-08-01 14:39:12Z vilma $
+ * @version   SVN: $Id: order_article.php 37923 2011-08-03 12:47:57Z vilma $
  */
 
 /**
@@ -116,7 +116,6 @@ class Order_Article extends oxAdminDetails
             $sSearchArtNum = $this->getSearchProductArtNr();
 
             foreach ( $this->getProductList() as $oProduct ) {
-                var_dump($oProduct->oxarticles__oxartnum->value);
                 if ( $oProduct->oxarticles__oxartnum->value == $sSearchArtNum ) {
                     $this->_oSearchProduct = $oProduct;
                     break;

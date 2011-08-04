@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 37256 2011-07-22 08:47:13Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 37911 2011-08-03 07:37:54Z arvydas.vapsva $
  */
 
 /**
@@ -332,7 +332,7 @@ $aLang =  array(
                                                  'You should upload picture with maximum resolution.  After uploading, the main picture, zoom picture, thumbnail and icon will be generated automatically.<br>' .
                                                  'Further information is available in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/product-images-basics" target="_blank">product pictures manual entry</a>.',
 
-'HELP_ARTICLE_PICTURES_ZOOM1'                 => 'Zoom pictures are extra large pictures which can be opened from the detail view of a product. </br>' .
+'HELP_ARTICLE_PICTURES_ZOOM1'                 => 'Zoom pictures are extra large pictures which can be opened from the detail view of a product. <br>' .
                                                  'You can upload zoom pictures in <span class="navipath_or_inputname">Zoom X upload</span>. After uploading, the filename is shown in <span class="navipath_or_inputname">Zoom X</span>. If no zoom picture is uploaded yet, <span class="userinput_or_code">nopic.jpg</span> is displayed.<br>' .
                                                  'Further information is available in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/product-images-basics" target="_blank">product pictures manual entry</a>.',
 

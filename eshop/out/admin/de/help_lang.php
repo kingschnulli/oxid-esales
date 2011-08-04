@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 37255 2011-07-22 08:46:45Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 37911 2011-08-03 07:37:54Z arvydas.vapsva $
  */
 
 /**
@@ -329,7 +329,7 @@ $aLang =  array(
                                                  'Sie sollten ein Bild mit maximaler Auflösung hochladen. Danach wird aus diesem Bild automatisch das Artikelbild, Zoombild, Thumbnail und Icon generiert.<br>' .
                                                  'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen" target="_blank">Artikelbilder-Kapitel des Handbuchs</a>.',
 
-'HELP_ARTICLE_PICTURES_ZOOM1'                 => 'Zoom-Bilder sind extra große Artikelbilder, Die in der Detailansicht eines Artikels verlinkt werden. </br>' .
+'HELP_ARTICLE_PICTURES_ZOOM1'                 => 'Zoom-Bilder sind extra große Artikelbilder, Die in der Detailansicht eines Artikels verlinkt werden. <br>' .
                                                  'Zoom-Bilder können Sie bei <span class="navipath_or_inputname">Zoom X hochladen</span> hochladen. Bei <span class="navipath_or_inputname">Zoom X</span> wird nach dem Hochladen der Dateiname des Zoom-Bildes angezeigt, wenn noch kein Zoom-Bild hochgeladen wurde, wird <span class="userinput_or_code">nopic.jpg</span> angezeigt.<br>' .
                                                  'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/artikelbilder-grundlagen" target="_blank">Artikelbilder-Kapitel des Handbuchs</a>.',
 
