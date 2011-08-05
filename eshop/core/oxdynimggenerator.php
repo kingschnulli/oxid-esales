@@ -228,7 +228,7 @@ class oxDynImgGenerator
      */
     protected function _getShopBasePath()
     {
-        return str_replace( "\\", "/", getShopBasePath() );
+        return getConfig()->getConfigParam( "sShopDir" );
     }
 
     /**
@@ -458,7 +458,7 @@ class oxDynImgGenerator
                     }
                     $sNames .= $oDb->quote( $sParamName );
 
-                    if ( $sParamName == "sManufacturerIconsize" ) {
+                    if ( $sParamName == "sManufacturerIconsize" || $sParamName == "sCatIconsize" ) {
                         $sNames .= ", " . $oDb->quote( "sIconsize" );
                     }
                 }

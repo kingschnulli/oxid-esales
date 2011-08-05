@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 34114 2011-04-01 08:32:47Z sarunas $
+ * @version   SVN: $Id: oxviewTest.php 37948 2011-08-04 10:33:14Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -285,7 +285,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
         try {
             $oView->executeFunction( 'yyy' );
         } catch(oxSystemComponentException $oEx) {
-            $this->assertEquals( "EXCEPTION_SYSTEMCOMPONENT_FUNCTIONNOTFOUND", $oEx->getMessage() );
+            $this->assertEquals( "ERROR_MESSAGE_SYSTEMCOMPONENT_FUNCTIONNOTFOUND", $oEx->getMessage() );
             return;
         }
 

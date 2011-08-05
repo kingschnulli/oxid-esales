@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 37261 2011-07-22 10:11:58Z linas.kukulskis $
+ * @version   SVN: $Id: oxlangTest.php 37946 2011-08-04 08:51:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1410,18 +1410,10 @@ class Unit_Core_oxLangTest extends OxidTestCase
         oxTestModules::addFunction( "oxUtils", "getLangCache", "{}" );
         oxTestModules::addFunction( "oxUtils", "setLangCache", "{}" );
 
-        $sFilePrefix = md5( uniqid( rand(), true ) );
-
-        //writing a test map file
-        $sFilePath = oxConfig::getInstance()->getConfigParam( 'sCompileDir' );
-
-        file_put_contents( $sFilePath . "/map$sFilePrefix.php", '<?php $aMap = array( "key1" => "val1", "key2" => "val2");' );
-
-        $aResult = array( "key1" => "val1", "key2" => "val2" );
         $oLang = oxNew ( "oxLang" );
-        $aMapData = $oLang->UNITgetLanguageMap( $sFilePath . "/map$sFilePrefix.php" );
+        $aMapData = $oLang->UNITgetLanguageMap( 1 );
 
-        $this->assertEquals( $aResult, $aMapData );
+        $this->assertTrue(count($aMapData)>0);
     }
 
 }

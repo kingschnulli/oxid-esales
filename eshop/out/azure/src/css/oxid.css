@@ -117,6 +117,7 @@ form ol {
 
 form li {
     list-style: none;
+    position:relative;
 }
 
 /* --- layout --------------------------------------- */
@@ -1465,6 +1466,7 @@ a.submitButton {
 
 .loginForm p {
   margin-bottom: 5px;
+  position: relative;
 }
 
 .loginForm p.errorMsg {
@@ -1503,6 +1505,10 @@ a.submitButton {
 .loginForm .passwordbox {
   width: 118px;
   margin-right: 3px;
+}
+
+.loginForm label.innerLabel{
+  margin-top: 2px;
 }
 
 .altLoginBox {
@@ -3926,6 +3932,15 @@ span.verificationCode {
     clear: both;
 }
 
+
+label.innerLabel{
+  display:block;
+  position:absolute;
+  color:#B4B8B8;
+  margin: 3px 0 0 5px;
+  font-weight: normal;
+}
+
 .oxValidateError {
     display: none;
     clear: both;
@@ -4696,11 +4711,12 @@ td.alignTop{
 }
 
 /* --- Plain errors ------------------------ */
-.errorBox {width: auto; font-size:10px; font-weight:bold; color:#D81F01; margin: 20px; padding: 0; border: none; width: 500px;}
+.errorBox {width: auto; font-size:12px; font-weight:bold; color:#D81F01; margin: 20px; padding: 0; border: none; width: 500px;}
 .errorBox a {color:#D81F01; text-decoration: underline;}
 .errorBox a:hover {color:#666;}
 .errorBox .errHead {background: #D81F01; color: #fff; padding: 5px 15px;}
 .errorBox .errBody {border: 1px solid #D81F01; padding: 15px;}
+.errorBox .stackTrace { font-size: 11px; color #000; font-weight: normal; margin: 10px 0; padding: 10px 0; border-top: 2px solid #EED8D2}
 
 
 /* --- article box ------------------------ */

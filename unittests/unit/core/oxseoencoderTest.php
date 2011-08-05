@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 33661 2011-03-07 09:50:28Z sarunas $
+ * @version   SVN: $Id: oxseoencoderTest.php 37958 2011-08-04 12:55:10Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1446,6 +1446,8 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $this->assertEquals( 'aa?a=2', $oE->UNITtrimUrl( $sSslUrl . 'aa?sid=as23.&a=2', 0 ) );
         $this->assertEquals( 'aa', $oE->UNITtrimUrl( $sSslUrl . 'aa?sid=as23.', 1 ) );
         $this->assertEquals( 'aa', $oE->UNITtrimUrl( $sSslUrl .'aa?sid=as23.&', 1 ) );
+
+        $this->assertEquals( 'aa?a=2', $oE->UNITtrimUrl( $sSslUrl . 'aa?cur=5&a=2', 0 ) );
     }
 
     public function testSaveToDbCreatesGoodMd5()

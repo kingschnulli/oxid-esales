@@ -154,32 +154,6 @@
     </li>
     [{/if}]
 
-    [{if $blSubscribeNews}]
-    <li>
-        [{block name="user_billing_newsletter"}]
-        <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SUBSCRIBENEWSLETTER" }]</label>
-        <input type="hidden" name="blnewssubscribed" value="0">
-        <input id="subscribeNewsletter" type="checkbox" name="blnewssubscribed" value="1" [{if $oView->isNewsSubscribed()}]checked[{/if}]>
-        <br>
-        <div class="note">[{ oxmultilang ident="FORM_FIELDSET_USER_SUBSCRIBENEWSLETTER_MESSAGE" }]</div>
-        [{/block}]
-    </li>
-    [{/if}]
-
-    [{if $blOrderRemark}]
-    [{oxscript include="js/widgets/oxinnerlabel.js" priority=10 }]
-    [{assign var="defaulInnerLabel" value="FORM_FIELDSET_USER_MESSAGEHERE"|oxmultilangassign}]
-    [{oxscript add="$( '#orderRemark' ).oxInnerLabel({ sDefaultValue : '`$defaulInnerLabel`'});"}]
-    <li>
-        <label>[{ oxmultilang ident="FORM_FIELDSET_USER_YOURMESSAGE" }]</label>
-        [{ if !$oView->getOrderRemark()}]
-          [{assign var="order_remark" value="FORM_FIELDSET_USER_MESSAGEHERE"|oxmultilangassign}]
-        [{else}]
-          [{assign var="order_remark" value=$oView->getOrderRemark()}]
-        [{/if}]
-        <textarea id="orderRemark" cols="60" rows="7" name="order_remark" class="areabox" >[{$order_remark}]</textarea>
-    </li>
-    [{/if}]
     <li class="formNote">[{ oxmultilang ident="FORM_USER_COMPLETEMARKEDFIELDS" }]</li>
     [{if !$noFormSubmit}]
     <li class="formSubmit">

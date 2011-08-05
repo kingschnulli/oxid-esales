@@ -166,3 +166,8 @@
      * e.g. array("user_class" => false);
      */
     $this->aUserComponentNames = null;
+
+     /**
+     * saves subshopid in session
+     */
+    $this->blDeprecatedSubshopsInSessions = false;

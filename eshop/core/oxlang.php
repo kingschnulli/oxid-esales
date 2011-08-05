@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 37260 2011-07-22 10:04:21Z linas.kukulskis $
+ * @version   SVN: $Id: oxlang.php 37946 2011-08-04 08:51:40Z linas.kukulskis $
  */
 
 /**
@@ -89,6 +89,14 @@ class oxLang extends oxSuperCfg
      * @var array
      */
     protected $_aAdditionalLangFiles = array();
+
+    /**
+     * registered additional language filesets to load
+     *
+     * @var array
+     */
+    protected $_aLangMap = array();
+
 
     /**
      * resturns a single instance of this class
@@ -480,8 +488,7 @@ class oxLang extends oxSuperCfg
         }
 
         // checking if in map exist
-        $sMapFile = $myConfig->getOutDir() . '/' . $myConfig->getConfigParam( "sTheme" ) .'/' . oxLang::getInstance()->getLanguageAbbr( $iLang ) . '/map.php';
-        $aMap = $this->_getLanguageMap($sMapFile);
+        $aMap = $this->_getLanguageMap( $iLang );
         if ( isset( $aLang[$aMap[$sStringToTranslate]] ) ) {
             return $aLang[$aMap[$sStringToTranslate]];
         }
@@ -800,19 +807,25 @@ class oxLang extends oxSuperCfg
     /**
      * Returns language map array
      *
-     * @param array $sMapFile language map
+     * @param int $iLang language index
      *
      * @return array
      */
-    protected function _getLanguageMap( $sMapFile )
+    protected function _getLanguageMap( $iLang )
     {
-        if ( $sMapFile ) {
-            $aMap = array();
-            if ( file_exists( $sMapFile ) && is_readable( $sMapFile ) ) {
-                include $sMapFile;
+        if ( !isset($this->_aLangMap[$iLang]) ) {
+            $this->_aLangMap[$iLang] = array();
+            $myConfig = $this->getConfig();
+            $sMapFile = $myConfig->getOutDir() . '/' . $myConfig->getConfigParam( "sTheme" ) .'/' . oxLang::getInstance()->getLanguageAbbr( $iLang ) . '/map.php';
+            if ( $sMapFile ) {
+                if ( file_exists( $sMapFile ) && is_readable( $sMapFile ) ) {
+                    include $sMapFile;
+                    $this->_aLangMap[$iLang] = $aMap;
+                }
             }
         }
-        return $aMap;
+
+        return $this->_aLangMap[$iLang];
     }
 
     /**

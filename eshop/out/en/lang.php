@@ -217,6 +217,7 @@ $aLang = array(
 'ERROR_MESSAGE_PASSWORD_TOO_SHORT'                            => "Error: Your Password is too short.",
 'ERROR_MESSAGE_RECOMMLIST_NOTITLE'                            => "Title field is empty",
 'ERROR_MESSAGE_SYSTEMCOMPONENT_CLASSNOTFOUND'                 => 'Class "%s" not found',
+'ERROR_MESSAGE_SYSTEMCOMPONENT_FUNCTIONNOTFOUND'              => 'Function "%s" not found',
 'ERROR_MESSAGE_SYSTEMCOMPONENT_TEMPLATENOTFOUND'              => 'Template "%s" not found',
 'ERROR_MESSAGE_UNKNOWN_ERROR'                                 => "Unknown Error",
 'ERROR_MESSAGE_UNLICENSED1'                                   => "The shop is unlicensed, contact",

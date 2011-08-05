@@ -217,6 +217,7 @@ $aLang = array(
 'ERROR_MESSAGE_PASSWORD_TOO_SHORT'                            => "Fehler: Ihr Passwort ist zu kurz.",
 'ERROR_MESSAGE_RECOMMLIST_NOTITLE'                            => "Kein Titel angegeben",
 'ERROR_MESSAGE_SYSTEMCOMPONENT_CLASSNOTFOUND'                 => 'Class "%s" nicht gefunden',
+'ERROR_MESSAGE_SYSTEMCOMPONENT_FUNCTIONNOTFOUND'              => 'Function "%s" nicht gefunden',
 'ERROR_MESSAGE_SYSTEMCOMPONENT_TEMPLATENOTFOUND'              => 'Template "%s" nicht gefunden',
 'ERROR_MESSAGE_UNKNOWN_ERROR'                                 => "Unbekannter Fehler",
 'ERROR_MESSAGE_UNLICENSED1'                                   => "Ihr Shop ist nicht lizensiert, tragen Sie bitte im Shop Admin eine gültige Lizenznr. ein - oder kontaktieren Sie",

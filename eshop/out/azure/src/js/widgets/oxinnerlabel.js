@@ -25,29 +25,35 @@
     oxInnerLabel = {
 
         options: {
-            sDefaultValue : 'innerLabel'
+                sDefaultValue : 'innerLabel'
         },
 
         _create: function(){
 
             var self = this,
                 options = self.options,
-                el = self.element;
+                input = self.element,
+                label = $("label[for='"+input.attr('id')+"']");
 
-            el.focus(function() {
-                if ( $.trim( el.val() ) == options.sDefaultValue ){
-                    el.val('');
-                } else {
-                    el.select();
+            var pos = input.position();
+            label.css( { "left": (pos.left) + "px", "top":(pos.top) + "px" } );
+
+            input.focus(function() {
+                label.hide();
+            });
+
+            input.blur(function() {
+                if ( $.trim(input.val()) == ''){
+                    label.show();
                 }
             });
 
-            el.closest('form').submit(function() {
-                if ($.trim( el.val() ) == options.sDefaultValue ) {
-                    el.val('');
+            input.delay(500).queue(function(){
+                if ($.trim(input.val()) != '') {
+                    label.hide();
                 }
             });
-        }
+       }
     }
 
     $.widget( "ui.oxInnerLabel", oxInnerLabel );
