@@ -48,6 +48,9 @@
                 }
             });
 
+            if ($.trim(input.val()) != '') {
+                label.hide();
+            }
             input.delay(500).queue(function(){
                 if ($.trim(input.val()) != '') {
                     label.hide();
