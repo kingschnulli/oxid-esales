@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 37965 2011-08-04 14:23:44Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 38032 2011-08-08 08:20:29Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -1137,7 +1137,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $iLimit = (int) $iLimit;
         if ( !isset($this->_aVariantSelections[$iLimit])) {
             $this->_aVariantSelections[$iLimit] = false;
-            if ( ( $oVariantList = $this->getVariants( false ) ) ) {
+            if ( ( $oVariantList = $this->getVariants() ) ) {
                 $this->_aVariantSelections[$iLimit] = oxNew( "oxVariantHandler" )->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $oVariantList, $aFilterIds, $sActVariantId, $iLimit );
             }
         }

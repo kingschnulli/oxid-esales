@@ -41,6 +41,11 @@
                 <ul id="shippingAddress" class="form" [{if !$oView->showShipAddress()}]style="display: none;"[{/if}]>
                 [{ include file="form/fieldset/user_shipping.tpl" noFormSubmit=true}]
                 </ul>
+                <ul class="form">
+                    <li>
+                        [{include file="form/fieldset/order_remark.tpl" blOrderRemark=true}]
+                    </li>
+                </ul>
             </div>
         </div>
 
