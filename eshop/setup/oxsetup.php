@@ -1151,26 +1151,33 @@ class OxSetupUtils extends oxSetupCore
      *
      * @param string $sPath           path to remove
      * @param bool   $blDeleteSuccess removal state marker
+     * @param int    $iMode           remove mode: 0 files and folders, 1 - files only
+     * @param array  $aSkipFiles      files which should not be deleted (default null)
+     * @param array  $aSkipFolders    folders which should not be deleted (default null)
      *
      * @return bool
      */
-    public function removeDir( $sPath, $blDeleteSuccess )
+    public function removeDir( $sPath, $blDeleteSuccess, $iMode = 0, $aSkipFiles = array(), $aSkipFolders = array() )
     {
 
         if ( is_file( $sPath ) || is_dir( $sPath ) ) {
             // setting path to remove
             $d = dir( $sPath );
             $d->handle;
-            while ( false !== ( $entry = $d->read() ) ) {
-                if ( $entry != "." &&  $entry != ".." ) {
+            while ( false !== ( $sEntry = $d->read() ) ) {
+                if ( $sEntry != "." &&  $sEntry != ".." ) {
 
-                    $sFilePath = $sPath."/".$entry;
+                    $sFilePath = $sPath."/".$sEntry;
                     if ( is_file( $sFilePath ) ) {
-                        $blDeleteSuccess = $blDeleteSuccess * @unlink ( $sFilePath);
+                        if ( !in_array( basename( $sFilePath ), $aSkipFiles ) ) {
+                            $blDeleteSuccess = $blDeleteSuccess * @unlink ( $sFilePath );
+                        }
                     } elseif ( is_dir( $sFilePath ) ) {
                         // removing direcotry contents
-                        $this->removeDir( $sFilePath, $blDeleteSuccess );
-                        $blDeleteSuccess = $blDeleteSuccess * @rmdir ( $sFilePath );
+                        $this->removeDir( $sFilePath, $blDeleteSuccess, $iMode, $aSkipFiles, $aSkipFolders );
+                        if ( $iMode === 0 && !in_array( basename( $sFilePath ), $aSkipFolders ) ) {
+                            $blDeleteSuccess = $blDeleteSuccess * @rmdir ( $sFilePath );
+                        }
                     } else {
                         // there are some other objects ?
                         $blDeleteSuccess = $blDeleteSuccess * false;
@@ -1743,7 +1750,9 @@ class oxSetupView extends oxSetupCore
     }
 
     /**
-     * Checks if setup deletion is on and deletes setup files if possible, return deletion status
+     * If demo data installation is OFF, tries to delete demo pictures also
+     * checks if setup deletion is ON and deletes setup files if possible,
+     * return deletion status
      *
      * @return bool
      */
@@ -1751,11 +1760,25 @@ class oxSetupView extends oxSetupCore
     {
         //finalizing installation
         $blDeleted = true;
-        $aSetupConfig = $this->getInstance( "OxSetupSession" )->getSessionParam( "aSetupConfig" );
+        $oSession  = $this->getInstance( "OxSetupSession" );
+        $oUtils    = $this->getInstance( "oxSetupUtils" );
+        $sPath    = getInstallPath();
 
+        $aDemoConfig = $oSession->getSessionParam( "aDB" );
+        if ( !isset( $aDemoConfig['dbiDemoData'] ) || $aDemoConfig['dbiDemoData'] != '1' ) {
+            $sPrfx  = $this->getInstance( "oxSetup" )->getVersionPrefix();
+
+            // "/generated" cleanup
+            $oUtils->removeDir( $sPath . "out/pictures{$sPrfx}/generated", true );
+
+            // "/master" cleanup, leaving nopic
+            $oUtils->removeDir( $sPath . "out/pictures{$sPrfx}/master", true, 1, array( "nopic.jpg" ) );
+        }
+
+        $aSetupConfig = $oSession->getSessionParam( "aSetupConfig" );
         if ( isset( $aSetupConfig['blDelSetupDir'] ) && $aSetupConfig['blDelSetupDir'] ) {
             // removing setup files
-            $blDeleted = $this->getInstance( "oxSetupUtils" )->removeDir( getInstallPath()."setup", true );
+            $blDeleted = $oUtils->removeDir( $sPath . "setup", true );
         }
         return $blDeleted;
     }

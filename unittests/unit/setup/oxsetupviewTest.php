@@ -188,16 +188,25 @@ class Unit_Setup_oxSetupViewTest extends OxidTestCase
      */
     public function testIsDeletedSetup()
     {
+        $sPath  = getInstallPath();
+
         $oInst1 = $this->getMock( "oxStdClass", array( "getSessionParam" ) );
-        $oInst1->expects( $this->once() )->method( "getSessionParam" )->will( $this->returnValue( array( "blDelSetupDir" => true ) ) );
+        $oInst1->expects( $this->at( 0 ) )->method( "getSessionParam" )->will( $this->returnValue( array( "dbiDemoData" => 0 ) ) );
+        $oInst1->expects( $this->at( 1 ) )->method( "getSessionParam" )->will( $this->returnValue( array( "blDelSetupDir" => true ) ) );
 
         $oInst2 = $this->getMock( "oxStdClass", array( "removeDir" ) );
-        $oInst2->expects( $this->once() )->method( "removeDir" )->will( $this->returnValue( true ) );
+        $oInst2->expects( $this->at( 0 ) )->method( "removeDir" )->with( $this->equalTo( $sPath . "out/pictures_/generated" ), $this->equalTo( true ) )->will( $this->returnValue( true ) );
+        $oInst2->expects( $this->at( 1 ) )->method( "removeDir" )->with( $this->equalTo( $sPath . "out/pictures_/master" ), $this->equalTo( true ), $this->equalTo( 1 ), $this->equalTo( array( "nopic.jpg" ) ) )->will( $this->returnValue( true ) );
+        $oInst2->expects( $this->at( 2 ) )->method( "removeDir" )->with( $this->equalTo( $sPath . "setup" ), $this->equalTo( true ) )->will( $this->returnValue( true ) );
+
+        $oInst3 = $this->getMock( "oxStdClass", array( "getVersionPrefix" ) );
+        $oInst3->expects( $this->once() )->method( "getVersionPrefix" )->will( $this->returnValue( "_" ) );
 
         $oSetupView = $this->getMock( "oxsetupView", array( "getInstance" ) );
         $oSetupView->expects( $this->at( 0 ) )->method( "getInstance" )->with( $this->equalTo( "OxSetupSession" ) )->will( $this->returnValue( $oInst1 ) );
         $oSetupView->expects( $this->at( 1 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupUtils" ) )->will( $this->returnValue( $oInst2 ) );
-        $oSetupView->isDeletedSetup();
+        $oSetupView->expects( $this->at( 2 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetup" ) )->will( $this->returnValue( $oInst3 ) );
+        $this->assertTrue( $oSetupView->isDeletedSetup() );
     }
 
     /**
