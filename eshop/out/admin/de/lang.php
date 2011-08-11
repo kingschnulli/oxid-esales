@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 37227 2011-07-21 14:15:55Z juergen.busch $
+ * @version   SVN: $Id: lang.php 38111 2011-08-10 15:08:55Z linas.kukulskis $
  */
 
 $sLangName  = 'Deutsch';
@@ -247,6 +247,7 @@ $aLang = array(
 'GENERAL_MENUITEM'                                         => 'Artikel verwalten',
 'GENERAL_MANUFACTURER'                                     => 'Hersteller',
 'GENERAL_MAX_FILE_UPLOAD'                                  => 'max.',
+'GENERAL_MAX_PICTURE_DIMENSIONS'                           => 'max 1500x1500 px',
 'GENERAL_NAME'                                             => 'Name',
 'GENERAL_NO'                                               => 'Nein',
 'GENERAL_NOITEMSSEL'                                       => 'Kein Artikel ausgewählt',

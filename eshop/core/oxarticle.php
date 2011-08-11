@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 38068 2011-08-09 11:25:25Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 38105 2011-08-10 13:38:44Z vilma $
  */
 
 // defining supported link types
@@ -2906,7 +2906,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         $myConfig = $this->getConfig();
         $sShopId = $myConfig->getShopID();
-
+        if (in_array("oxlongdesc", $this->_aSkipSaveFields)) {
+            return;
+        }
 
         if ($this->_blEmployMultilanguage) {
             $sValue = $this->getArticleLongDesc()->getRawValue();
@@ -2963,7 +2965,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $this->_aSkipSaveFields = array();
 
         $this->_aSkipSaveFields[] = 'oxtimestamp';
-        $this->_aSkipSaveFields[] = 'oxlongdesc';
+       // $this->_aSkipSaveFields[] = 'oxlongdesc';
         $this->_aSkipSaveFields[] = 'oxinsert';
 
         if ( !isset( $this->oxarticles__oxparentid->value) || $this->oxarticles__oxparentid->value == '') {

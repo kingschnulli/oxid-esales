@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: emosTest.php 37968 2011-08-04 15:47:01Z tomas $
+ * @version   SVN: $Id: emosTest.php 38106 2011-08-10 14:21:54Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -84,12 +84,10 @@ class Unit_Maintenance_emosTest extends OxidTestCase
      */
     public function testConstruct()
     {
-        $this->markTestSkipped("skipped for the green build 2011-08-04");
-        $oEmos = new EMOS( "xxx", "yyy" );
+        $oEmos = new EmosTest( "xxx", "yyy" );
 
-        $this->assertEquals( 'xxx', $oEmos->pathToFile );
-        $this->assertEquals( 'yyy', $oEmos->scriptFileName );
-        $this->assertEquals( "<script type=\"text/javascript\" src=\"xxxyyy\"></script>\n", $oEmos->inScript );
+        $this->assertEquals( 'xxx', $oEmos->getProtected("_sPathToFile") );
+        $this->assertEquals( 'yyy', $oEmos->getProtected("_sScriptFileName" ));
     }
 
     /**
@@ -125,9 +123,8 @@ class Unit_Maintenance_emosTest extends OxidTestCase
      */
     public function testEmosDataFormat()
     {
-        $this->markTestSkipped("skipped for the green build 2011-08-04");
-        $sStrPre = '%20%20&amp;&quot;&gt;<a href="">ggg</a>&nbsp;\'"%;   / /';
-        $sStrPos = rawurlencode( '&>ggg//' );
+        $sStrPre = '  &amp;&quot;&gt;<a href="">ggg</a>&nbsp;\'"%;   / /';
+        $sStrPos = '&>ggg//';
 
         $oEmos = new EmosTest;
         $this->assertEquals( $sStrPos, $oEmos->call_emos_DataFormat( $sStrPre ) );
@@ -196,12 +193,12 @@ class Unit_Maintenance_emosTest extends OxidTestCase
      */
     public function testPrettyPrint()
     {
-        $this->markTestSkipped("skipped for the green build 2011-08-04");
-        $oEmos = new EMOS;
+        $oEmos = new EmosTest();
+        $this->assertEquals( "", $oEmos->getProtected("_br") );
+        $this->assertEquals( "", $oEmos->getProtected("_tab") );
         $oEmos->prettyPrint();
-
-        $this->assertEquals( "\n\n", $oEmos->br );
-        $this->assertEquals( "\t\t", $oEmos->tab );
+        $this->assertEquals( "\n", $oEmos->getProtected("_br") );
+        $this->assertEquals( "\t", $oEmos->getProtected("_tab") );
     }
 
     /**
@@ -250,14 +247,14 @@ class Unit_Maintenance_emosTest extends OxidTestCase
      */
     public function testPrepareScript()
     {
-        $this->markTestSkipped("skipped for the green build 2011-08-04");
         $oEmos = new EmosTest( "xxx", "yyy" );
-        $oEmos->call_prepareScript();
         $oEmos->prettyPrint();
+        $oEmos->call_prepareScript();
 
         $sRes = $oEmos->getProtected("_sIncScript");
+        $sExpt = "<script type=\"text/javascript\" src=\"xxxyyy\"></script>\n";
 
-        $this->assertEquals( "<script type=\"text/javascript\" src=\"xxxyyy\"></script>\n<script type=\"text/javascript\" src=\"xxxyyy\"></script>\n", $sRes);
+        $this->assertEquals( $sExpt, $sRes);
     }
 
     /**
@@ -425,20 +422,19 @@ class Unit_Maintenance_emosTest extends OxidTestCase
      */
     public function testSetEmosECPageArray()
     {
-        $this->markTestSkipped("skipped for the green build 2011-08-04");
         $oItem = new EMOS_Item();
         $oItem->productId     = 'productId';
-        $oItem->productName   = 'productName';
+        $oItem->productName   = 'product Name';
         $oItem->price         = 'price';
-        $oItem->productGroup  = 'productGroup';
+        $oItem->productGroup  = 'product\Group';
         $oItem->quantity = 'quantity';
         $oItem->variant1 = 'variant1';
-        $oItem->variant2 = 'variant2';
+        $oItem->variant2 = null;
         $oItem->variant3 = 'variant3';
 
         $oSubj = $this->getProxyClass("EMOS");
         $oSubj->UNITsetEmosECPageArray($oItem, "testEvent");
-        $aExpt = array_push($oItem, "testEvent");
+        $aExpt = array(array("testEvent", 'productId', 'product Name', 'price', 'product\Group', 'quantity', 'variant1', '', 'variant3'));
         $this->assertEquals( $aExpt, $oSubj->getNonPublicVar("_ecEvent"));
     }
 
@@ -477,7 +473,6 @@ class Unit_Maintenance_emosTest extends OxidTestCase
      *//*
     public function testAddToBasket()
     {
-        $this->markTestSkipped("skipped for the green build 2011-08-04");
         $oEmos = $this->getMock( 'EMos', array( 'getEmosECPageArray', 'appendPreScript' ) );
         $oEmos->expects( $this->once() )->method( 'getEmosECPageArray' )->with( $this->equalTo( 'value' ), $this->equalTo( 'c_add' ) )->will( $this->returnValue( 'retval' ) );
         $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( 'retval' ) );
@@ -623,42 +618,40 @@ class Unit_Maintenance_emosTest extends OxidTestCase
     }*/
 
     /**
-     * tests EMOS::prepareJsFormat() method.
-     *
-     * @return null
-     */
-    public function testPrepareScriptVer2()
-    {
-        $this->markTestSkipped("skipped for the green build 2011-08-04");
-        $oEmos = new EMOS();
-        $oEmos->_prepareScript();
-        $sExpt1 = $oEmos->jsFormatPrescript;
-        $sExpt2 = $oEmos->jsFormatScript;
-
-        $this->assertContains("window.emosTrackVersion", $sExpt1);
-        $this->assertContains("window.emosPropertiesEvent(emospro)", $sExpt2);
-        $this->assertContains("var emospro = {};", $sExpt2);
-        $this->assertNotContains("contents", $sExpt2);
-    }
-
-    /**
      * tests EMOS::prepareJsFormat() method. Sets internal params.
      *
      * @return null
      */
     public function testPrepareScriptExt()
     {
-        $this->markTestSkipped("skipped for the green build 2011-08-04");
         $oEmos = $this->getProxyClass("EMOS");
         $oEmos->setNonPublicVar("_content", "testContents");
-        $oEmos->prepareJsFormat();
-        $sExpt1 = $oEmos->jsFormatPrescript;
-        $sExpt2 = $oEmos->jsFormatScript;
+        $oEmos->UNITprepareScript();
+        $sRes1 = $oEmos->getNonPublicVar("_sPrescript");
+        $sRes2 = $oEmos->getNonPublicVar("_sPostscript");
 
-        $this->assertContains("window.emosTrackVersion", $sExpt1);
-        $this->assertContains("window.emosPropertiesEvent(emospro)", $sExpt2);
-        $this->assertContains("var emospro = {};", $sExpt2);
-        $this->assertContains("content = \"testContents\"", $sExpt2);
+        $this->assertContains("window.emosTrackVersion", $sRes1);
+        $this->assertContains("window.emosPropertiesEvent(emospro)", $sRes2);
+        $this->assertContains("var emospro = {};", $sRes2);
+        $this->assertContains("content = \"testContents\"", $sRes2);
+    }
+
+    /**
+     * tests EMOS::prepareJsFormat() method.
+     *
+     * @return null
+     */
+    public function testPrepareScriptNotContains()
+    {
+        $oEmos = $this->getProxyClass("EMOS");
+        $oEmos->UNITprepareScript();
+        $sRes1 = $oEmos->getNonPublicVar("_sPrescript");
+        $sRes2 = $oEmos->getNonPublicVar("_sPostscript");
+
+        $this->assertContains("window.emosTrackVersion", $sRes1);
+        $this->assertContains("window.emosPropertiesEvent(emospro)", $sRes2);
+        $this->assertContains("var emospro = {};", $sRes2);
+        $this->assertNotContains("contents", $sRes2);
     }
 
     /**

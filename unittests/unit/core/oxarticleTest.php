@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 37329 2011-07-25 15:03:04Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticleTest.php 38105 2011-08-10 13:38:44Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1455,8 +1455,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle = $this->getProxyClass( "oxArticle" );
         $oArticle->load('_testArt');
         $oArticle->oxarticles__oxshopid = new oxField('2', oxField::T_RAW);
-        $aSkipFields = array( 'oxtimestamp', 'oxlongdesc', 'oxinsert', 'oxparentid', 'oxprice', 'oxpricea', 'oxpriceb', 'oxpricec', 'oxshortdesc', 'oxshortdesc_1' );
-            $aSkipFields = array( 'oxtimestamp', 'oxlongdesc', 'oxinsert', 'oxparentid' );
+        $aSkipFields = array( 'oxtimestamp', 'oxinsert', 'oxparentid', 'oxprice', 'oxpricea', 'oxpriceb', 'oxpricec', 'oxshortdesc', 'oxshortdesc_1' );
+            $aSkipFields = array( 'oxtimestamp', 'oxinsert', 'oxparentid' );
         $oArticle->UNITskipSaveFields();
 
         $this->assertEquals( $aSkipFields, $oArticle->getNonPublicVar('_aSkipSaveFields'));
@@ -1469,7 +1469,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testSkipSaveFieldsForVariant()
     {
-        $aSkipFields = array( 'oxtimestamp', 'oxlongdesc', 'oxinsert' );
+        $aSkipFields = array( 'oxtimestamp', 'oxinsert' );
         $this->oArticle2->UNITskipSaveFields();
         $this->assertEquals( $aSkipFields, $this->oArticle2->getNonPublicVar('_aSkipSaveFields'));
     }
@@ -6403,6 +6403,24 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $this->assertEquals( "[de] lalaal&!<b><", oxDb::getDB()->getOne("select oxlongdesc from oxartextends where oxid = '_testArt'") );
         $this->assertEquals( "[en] lalaal&!<b><", oxDb::getDB()->getOne("select oxlongdesc_1 from oxartextends where oxid = '_testArt'") );
+    }
+
+    /**
+     * Test long descriptio saving , save raw value.
+     *
+     * @return null
+     */
+    public function testLongDescSavingIfLongDescIsSkipped()
+    {
+        // insert article
+        $oArticle = $this->getProxyClass( "oxarticle" );
+        $oArticle->setNonPublicVar('_aSkipSaveFields', array("oxlongdesc"));
+        $oArticle->setId("_testArt");
+        $oArticle->oxarticles__oxlongdesc = new oxField('[de] lalaal&!<b><', oxField::T_RAW);
+        $this->assertEquals( "[de] lalaal&!<b><",$oArticle->oxarticles__oxlongdesc->value);
+        $oArticle->UNITsaveArtLongDesc();
+
+        $this->assertEquals( "", oxDb::getDB()->getOne("select oxlongdesc from oxartextends where oxid = '_testArt'") );
     }
 
 
