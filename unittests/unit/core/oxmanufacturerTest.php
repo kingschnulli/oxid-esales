@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmanufacturerTest.php 37095 2011-07-15 14:24:50Z arvydas.vapsva $
+ * @version   SVN: $Id: oxmanufacturerTest.php 38134 2011-08-11 13:22:49Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -384,4 +384,16 @@ class Unit_Core_oxmanufacturerTest extends OxidTestCase
         $this->assertFalse($oManufacturer->getThumbUrl());
     }
 
+    /**
+     * Title getter test
+     *
+     * @return null
+     */
+    public function testGetTitle()
+    {
+        $sTitle = "testtitle";
+        $oManufacturer = new oxManufacturer();
+        $oManufacturer->oxmanufacturers__oxtitle = new oxField( "testtitle" );
+        $this->assertEquals( $sTitle, $oManufacturer->getTitle() );
+    }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 37367 2011-07-26 11:53:32Z linas.kukulskis $
+ * @version   SVN: $Id: alistTest.php 38129 2011-08-11 11:52:19Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -99,7 +99,7 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testGetMetaDescription()
     {
         $sCatId  = '8a142c3e60a535f16.78077188';
-        $sPrefix = "Sie sind hier  Wohnen - Uhren. Der Onlineshop für Wassersport und Sommerspass";
+        $sPrefix = "Sie sind hier  Wohnen - Uhren. Der Onlineshop";
 
         $oCategory = new oxCategory();
         $oCategory->load( $sCatId );
@@ -692,7 +692,7 @@ class Unit_Views_alistTest extends OxidTestCase
         $oListView->expects( $this->any() )->method( 'getActCategory')->will($this->returnValue( $oCategory ) );
 
         $this->assertEquals(
-            'Sie sind hier  parent category - category. Der Onlineshop für Wassersport und Sommerspass',
+            'Sie sind hier  parent category - category. Der Onlineshop',
             $oListView->UNITprepareMetaDescription( $aCatPath, 1024, false )
         );
     }

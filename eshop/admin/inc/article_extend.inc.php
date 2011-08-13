@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.inc.php 38098 2011-08-10 08:29:47Z arvydas.vapsva $
+ * @version   SVN: $Id: article_extend.inc.php 38141 2011-08-11 14:37:49Z tomas $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -130,7 +130,8 @@ class ajaxComponent extends ajaxListComponent
 
         } elseif ( is_array( $aRemoveCat ) && count( $aRemoveCat ) ) {
 
-            $sQ = 'delete from oxobject2category where oxid in (' . implode( ', ', oxDb::getInstance()->quoteArray( $aRemoveCat ) ) . ')';
+
+            $sQ = "delete from oxobject2category where oxshopid = $sShopID and oxid in (" . implode( ', ', oxDb::getInstance()->quoteArray( $aRemoveCat ) ) . ')';
             $oDb->Execute( $sQ );
 
 

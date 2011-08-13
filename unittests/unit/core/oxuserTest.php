@@ -184,6 +184,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $myDB->execute( 'delete from oxconfig where oxshopid != "'.oxConfig::getInstance()->getBaseShopId().'" ' );
         $myDB->execute( 'delete from oxaddress where oxid like "test%" ' );
         $myDB->execute( 'delete from oxacceptedterms' );
+        $myDB->execute( 'delete from oxinvitations' );
 
         // resetting globally admin mode
         $oUser = new oxuser();
@@ -399,14 +400,20 @@ class Unit_Core_oxuserTest extends OxidTestCase
      */
     public function testSetCreditPointsForRegistrant()
     {
+        $sDate = oxUtilsDate::getInstance()->formatDBDate( date("Y-m-d"), true );
+        $myDB = oxDb::getDB();
+        $sSql = "INSERT INTO oxinvitations SET oxuserid = 'oxdefaultadmin', oxemail = 'oxemail',  oxdate='$sDate', oxpending = '1', oxaccepted = '0', oxtype = '1' ";
+        $myDB->execute( $sSql );
         modConfig::getInstance()->setConfigParam( "dPointsForRegistration", 10 );
         modConfig::getInstance()->setConfigParam( "dPointsForInvitation", false );
-        modSession::getInstance()->setVar( 'su', true );
+        modSession::getInstance()->setVar( 'su', 'oxdefaultadmin' );
+        modSession::getInstance()->setVar( 're', md5('oxemail') );
 
         $oUser = $this->getMock( "oxuser", array( "save" ) );
         $oUser->expects( $this->once() )->method( 'save' )->will($this->returnValue( true ) );
-        $this->assertFalse( $oUser->setCreditPointsForRegistrant( "oxdefaultadmin" ));
+        $this->assertFalse( $oUser->setCreditPointsForRegistrant( "oxdefaultadmin", md5('oxemail') ));
         $this->assertNull( oxSession::getVar( 'su' ) );
+        $this->assertNull( oxSession::getVar( 're' ) );
     }
 
     /**
@@ -3552,6 +3559,34 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oUserView = $this->getMock( 'oxuser', array( 'getSession' ) );
         $oUserView->expects( $this->once() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
         $this->assertEquals( "testwishid", $oUserView->UNITgetWishListId() );
+    }
+
+    /**
+     * Testing method updateInvitationStatistics()
+     *
+     * @return null
+     */
+    public function testUpdateInvitationStatistics()
+    {
+        $aRecEmails = array( "test1@oxid-esales.com", "test2@oxid-esales.com" );
+
+        $oUser = $this->getProxyClass( 'oxuser' );
+        $oUser->load("oxdefaultadmin");
+        $oUser->updateInvitationStatistics( $aRecEmails );
+
+        $aRec = oxDb::getDb( true )->getAll( "select * from oxinvitations order by oxemail");
+
+        $this->assertEquals( "oxdefaultadmin", $aRec[0]["OXUSERID"] );
+        $this->assertEquals( "test1@oxid-esales.com", $aRec[0]["OXEMAIL"] );
+        $this->assertEquals( "1", $aRec[0]["OXPENDING"] );
+        $this->assertEquals( "0", $aRec[0]["OXACCEPTED"] );
+        $this->assertEquals( "1", $aRec[0]["OXTYPE"] );
+
+        $this->assertEquals( "oxdefaultadmin", $aRec[1]["OXUSERID"] );
+        $this->assertEquals( "test2@oxid-esales.com", $aRec[1]["OXEMAIL"] );
+        $this->assertEquals( "1", $aRec[1]["OXPENDING"] );
+        $this->assertEquals( "0", $aRec[1]["OXACCEPTED"] );
+        $this->assertEquals( "1", $aRec[1]["OXTYPE"] );
     }
 
 }

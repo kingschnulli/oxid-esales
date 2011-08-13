@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategoryTest.php 37445 2011-07-27 15:03:44Z vilma $
+ * @version   SVN: $Id: oxcategoryTest.php 38134 2011-08-11 13:22:49Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1072,5 +1072,18 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
        $oCatAttributes->setId( $sCacheId );
 
        $this->assertEquals( $sCacheResult, $oCatAttributes->getAttributes() );
+    }
+
+    /**
+     * Title getter test
+     *
+     * @return null
+     */
+    public function testGetTitle()
+    {
+        $sTitle = "testtitle";
+        $oCat = new oxCategory();
+        $oCat->oxcategories__oxtitle = new oxField( "testtitle" );
+        $this->assertEquals( $sTitle, $oCat->getTitle() );
     }
 }

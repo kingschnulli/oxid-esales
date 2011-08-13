@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 37142 2011-07-19 11:28:29Z arvydas.vapsva $
+ * @version   SVN: $Id: oxemail.php 38126 2011-08-11 11:09:02Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -972,26 +972,28 @@ class oxEmail extends PHPMailer
             $sHomeUrl .= "su=" . $oActiveUser->getId();
         }
 
-        $this->setViewData( "sHomeUrl", $sHomeUrl );
-
-        // Process view data array through oxoutput processor
-        $this->_processViewArray();
-
-        $this->setBody( $oSmarty->fetch( $this->_sInviteTemplate ) );
-
-        $this->setAltBody( $oSmarty->fetch( $this->_sInviteTemplatePlain ) );
-        $this->setSubject( $oParams->send_subject );
-
         if ( is_array($oParams->rec_email) && count($oParams->rec_email) > 0  ) {
             foreach ( $oParams->rec_email as $sEmail ) {
                 if ( !empty( $sEmail ) ) {
+                    $sRegisterUrl  = oxUtilsUrl::getInstance()->appendParamSeparator( $sHomeUrl );
+                    //setting recipient user email
+                    $sRegisterUrl .= "re=" . md5($sEmail);
+                    $this->setViewData( "sHomeUrl", $sRegisterUrl );
+
+                    // Process view data array through oxoutput processor
+                    $this->_processViewArray();
+
+                    $this->setBody( $oSmarty->fetch( $this->_sInviteTemplate ) );
+
+                    $this->setAltBody( $oSmarty->fetch( $this->_sInviteTemplatePlain ) );
+                    $this->setSubject( $oParams->send_subject );
+
                     $this->setRecipient( $sEmail );
                     $this->setReplyTo( $oParams->send_email, $oParams->send_name );
                     $this->send();
                     $this->clearAllRecipients();
                 }
             }
-
             return true;
         }
 

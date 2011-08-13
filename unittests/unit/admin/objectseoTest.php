@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: objectseoTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: objectseoTest.php 38166 2011-08-12 16:03:55Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -48,181 +48,93 @@ class Unit_Admin_ObjectSeoTest extends OxidTestCase
      */
     protected function tearDown()
     {
+        $sQ = "delete from oxseo where oxobjectid='objectid'";
+        oxDb::getDb()->execute( $sQ );
+
         oxSeoEncoder::getInstance()->cleanup();
         parent::tearDown();
     }
 
     /**
-     * Object_Seo::Render() test case
-     *
+     * Testing Object_Seo::isEntrySuffixed()
      * @return null
      */
-    public function testRender()
+    public function testIsEntrySuffixed()
     {
-        $oObject = $this->getMock( "oxbase", array( "getAvailableInLangs", "loadInLang" ) );
-        $oObject->expects( $this->once() )->method( 'getAvailableInLangs' )->will( $this->returnValue( array( 1 => 1 ) ) );
-        $oObject->expects( $this->once() )->method( 'loadInLang' );
-
-        // testing..
-        $oView = $this->getMock( "Object_Seo", array( "_getObject", "_getSeoDataSql", "_getSeoUrl" ) );
-        $oView->expects( $this->once() )->method( '_getObject' )->will( $this->returnValue( $oObject ) );
-        $oView->expects( $this->once() )->method( '_getSeoDataSql' )->will( $this->returnValue( "select 1 + 1" ) );
-        $oView->expects( $this->once() )->method( '_getSeoUrl' );
-        $this->assertEquals( 'object_seo.tpl', $oView->render() );
-        $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['edit'] ) );
-        $this->assertTrue( isset( $aViewData['aSeoData'] ) );
+        $oView = new Object_Seo();
+        $this->assertFalse( $oView->isEntrySuffixed() );
     }
 
     /**
-     * Object_Seo::GetSeoDataSql() test case
-     *
+     * Testing Object_Seo::isSuffixSupported()
      * @return null
      */
-    public function testGetSeoDataSql()
+    public function isSuffixSupported()
     {
-        $sQ = "select * from oxseo
-               left join oxobject2seodata on
-                   oxobject2seodata.oxobjectid = oxseo.oxobjectid and
-                   oxobject2seodata.oxshopid = oxseo.oxshopid and
-                   oxobject2seodata.oxlang = oxseo.oxlang
-               where
-                   oxseo.oxobjectid = 'testId' and
-                   oxseo.oxshopid = '1' and oxseo.oxlang = 1 ";
+        $oView = new Object_Seo();
+        $this->assertFalse( $oView->isSuffixSupported() );
+    }
 
-        // defining parameters
-        $oObject = $this->getMock( "oxbase", array( "getId" ) );
-        $oObject->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( "testId" ) );
+    /**
+     * Testing Object_Seo::showCatSelect()
+     * @return null
+     */
+    public function showCatSelect()
+    {
+        $oView = new Object_Seo();
+        $this->assertFalse( $oView->showCatSelect() );
+    }
+
+    /**
+     * Testing Object_Seo::processParam( $sParam )
+     * @return null
+     */
+    public function testProcessParam()
+    {
+        $sParam = "param";
 
         $oView = new Object_Seo();
-        $sResQ = $oView->UNITgetSeoDataSql( $oObject, 1, 1 );
-
-        $this->assertEquals( str_replace( array( "\n", " ", "\r", "\t" ), "", $sQ ), str_replace( array( "\n", " ", "\r", "\t" ), "", $sResQ ) );
+        $this->assertEquals( $sParam, $oView->processParam( $sParam ) );
     }
 
     /**
-     * Object_Seo::GetSeoUrl() test case
-     *
+     * Testing Object_Seo::_getEncoder()
      * @return null
      */
-    public function testGetSeoUrl()
+    public function testGetEncoder()
     {
-        // testing..
-        $oView = $this->getMock( "Object_Seo", array( "_getSeoUrlQuery" ) );
-        $oView->expects( $this->once() )->method( '_getSeoUrlQuery' )->with( $this->equalTo( "testObject" ), $this->equalTo( oxConfig::getInstance()->getShopId() ) )->will( $this->returnValue( "select 1 + 1" ) );
-        $this->assertEquals( "2", $oView->UNITgetSeoUrl( "testObject" ) );
+        $oView = new Object_Seo();
+        $this->assertNull( $oView->UNITgetEncoder() );
     }
 
     /**
-     * Object_Seo::GetSeoUrlQuery() test case
-     *
+     * Testing Object_Seo::getEntryUri()
      * @return null
      */
-    public function testGetSeoUrlQuery()
+    public function testGetEntryUri()
     {
-        $oObject = $this->getMock( "oxbase", array( "getId" ) );
-        $oObject->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( "testId" ) );
-
-        $sQ = "select oxseourl from oxseo where oxobjectid = 'testId' and oxshopid = '999' and oxlang = testLang ";
-
-        // testing..
-        $oView = $this->getProxyClass( "Object_Seo" );
-        $oView->setNonPublicVar( "_iEditLang", "testLang" );
-        $oView->UNITgetSeoUrlQuery( $oObject, 999 );
+        $oView = new Object_Seo();
+        $this->assertNull( $oView->getEntryUri() );
     }
 
     /**
-     * Object_Seo::GetObject() test case
-     *
-     * @return null
-     */
-    public function testGetObjectNoSuchObject()
-    {
-        // defining parameters
-        $oView = $this->getMock( "Object_Seo", array( "_getType" ) );
-        $oView->expects( $this->once() )->method( '_getType' )->will( $this->returnValue( "oxarticle" ) );
-        $this->assertFalse( $oView->UNITgetObject( time() ) );
-    }
-
-    /**
-     * Object_Seo::GetObject() test case
-     *
-     * @return null
-     */
-    public function testGetObject()
-    {
-        // defining parameters
-        $oView = $this->getMock( "Object_Seo", array( "_getType" ) );
-        $oView->expects( $this->once() )->method( '_getType' )->will( $this->returnValue( "oxarticle" ) );
-        $this->assertTrue( $oView->UNITgetObject( "1126" ) instanceof oxarticle );
-    }
-
-    /**
-     * Object_Seo::GetType() test case
-     *
+     * Testing Object_Seo::_getType()
      * @return null
      */
     public function testGetType()
     {
-        // testing..
         $oView = new Object_Seo();
         $this->assertNull( $oView->UNITgetType() );
     }
 
     /**
-     * Object_Seo::GetStdUrl() test case
-     *
+     * Testing Object_Seo::_getStdUrl()
      * @return null
      */
     public function testGetStdUrl()
     {
-        // defining parameters
-        $oObject = $this->getMock( "oxarticle", array( "getBaseStdLink" ) );
-        $oObject->expects( $this->once() )->method( 'getBaseStdLink' )->with( $this->equalTo( 0 ), $this->equalTo( true ), $this->equalTo( false ) )->will( $this->returnValue( "stdLink" ) );
-
-        $oView = $this->getMock( "Object_Seo", array( "_getObject" ) );
-        $oView->expects( $this->once() )->method( '_getObject' )->will( $this->returnValue( $oObject ) );
-        $this->assertEquals( "stdLink", $oView->UNITgetStdUrl( "testId" ) );
-    }
-
-    /**
-     * Object_Seo::Save() test case
-     *
-     * @return null
-     */
-    public function testSave()
-    {
-        modConfig::setParameter( "aSeoData", array( "oxseourl" => "testSeoUrl", "oxkeywords" => " testKeywords ", "oxdescription" => " testDescription ", "oxparams" => "testParams" ) );
-        oxTestModules::addFunction( 'oxSeoEncoder', 'addSeoEntry', '{ throw new Exception( serialize( $aA ) ); }');
-
-        try {
-            // testing..
-            $oView = $this->getMock( "Object_Seo", array( "_getSeoEntryId", "getEditLang", "_getStdUrl", "_getSeoEntryType", "processParam" ) );
-            $oView->expects( $this->once() )->method( '_getSeoEntryId' )->will( $this->returnValue( "testId" ) );
-            $oView->expects( $this->any() )->method( 'getEditLang' )->will( $this->returnValue( 1 ) );
-            $oView->expects( $this->once() )->method( '_getStdUrl' )->with( $this->equalTo( "testId" ) )->will( $this->returnValue( "testUrl" ) );
-            $oView->expects( $this->once() )->method( '_getSeoEntryType' )->will( $this->returnValue( "testType" ) );
-            $oView->expects( $this->once() )->method( 'processParam' )->with( $this->equalTo( "testParams" ))->will( $this->returnValue( "testParams" ) );
-            $oView->save();
-        } catch ( Exception $oExcp ) {
-            $aMsg = @unserialize( $oExcp->getMessage() );
-
-            $this->assertTrue( is_array( $aMsg ), "Error in Object_Seo::save()" );
-
-            $this->assertEquals( "testId", $aMsg[0], "Error in Object_Seo::save()" );
-            $this->assertEquals( oxConfig::getInstance()->getShopId(), $aMsg[1], "Error in Object_Seo::save()" );
-            $this->assertEquals( 1, $aMsg[2], "Error in Object_Seo::save()" );
-            $this->assertEquals( "testUrl", $aMsg[3], "Error in Object_Seo::save()" );
-            $this->assertEquals( "testSeoUrl", $aMsg[4], "Error in Object_Seo::save()" );
-            $this->assertEquals( "testType", $aMsg[5], "Error in Object_Seo::save()" );
-            $this->assertEquals( 0, $aMsg[6], "Error in Object_Seo::save()" );
-            $this->assertEquals( "testKeywords", $aMsg[7], "Error in Object_Seo::save()" );
-            $this->assertEquals( "testDescription", $aMsg[8], "Error in Object_Seo::save()" );
-            $this->assertEquals( "testParams", $aMsg[9], "Error in Object_Seo::save()" );
-            $this->assertTrue( $aMsg[10], "Error in Object_Seo::save()" );
-            return;
-        }
-        $this->fail( "Error in Object_Seo::save()" );
+        $oView = new Object_Seo();
+        $this->assertNull( $oView->UNITgetStdUrl( "anyid" ) );
     }
 
     /**
@@ -239,41 +151,119 @@ class Unit_Admin_ObjectSeoTest extends OxidTestCase
     }
 
     /**
-     * Object_Seo::_getSeoEntryId() test case
-     *
+     * Testing Object_Seo::_getAltSeoEntryId()
      * @return null
      */
-    public function testGetSeoEntryId()
+    public function testGetAltSeoEntryId()
     {
-        modConfig::setParameter( "oxid", "testId" );
-
-        // testing..
         $oView = new Object_Seo();
-        $this->assertEquals( "testId", $oView->UNITgetSeoEntryId() );
+        $this->assertNull( $oView->UNITgetAltSeoEntryId() );
     }
 
     /**
-     * Object_Seo::GetSeoEntryType() test case
+     * Returns seo entry type
      *
-     * @return null
+     * @return string
      */
     public function testGetSeoEntryType()
     {
-        // testing..
+
         $oView = $this->getMock( "Object_Seo", array( "_getType" ) );
         $oView->expects( $this->once() )->method( '_getType' )->will( $this->returnValue( "testType" ) );
         $this->assertEquals( "testType", $oView->UNITgetSeoEntryType() );
     }
 
     /**
-     * Object_Seo::ProcessParam() test case
+     * Object_Seo::Render() test case
      *
      * @return null
      */
-    public function testProcessParam()
+    public function testRender()
     {
-        // testing
+        // testing..
         $oView = new Object_Seo();
-        $this->assertEquals( "param1", $oView->processParam( "param1" ) );
+        $this->assertEquals( 'object_seo.tpl', $oView->render() );
+    }
+
+    /**
+     * Object_Seo::Save() test case
+     *
+     * @return null
+     */
+    public function testSave()
+    {
+        modConfig::setParameter( "aSeoData", array( "oxseourl" => "testSeoUrl", "oxkeywords" => " testKeywords ", "oxdescription" => " testDescription ", "oxparams" => "testParams", "oxfixed" => 0 ) );
+
+        $oEncoder = $this->getMock( "oxSeoEncoder", array( "addSeoEntry" ) );
+        $oEncoder->expects( $this->once() )->method( "addSeoEntry" )->with( $this->equalTo( "objectId" ),
+                                                                            $this->equalTo( 1 ),
+                                                                            $this->equalTo( 1 ),
+                                                                            $this->equalTo( "stdUrl" ),
+                                                                            $this->equalTo( "testSeoUrl" ),
+                                                                            $this->equalTo( "seoEntryType" ),
+                                                                            $this->equalTo( 0 ),
+                                                                            $this->equalTo( "testKeywords" ),
+                                                                            $this->equalTo( "testDescription" ),
+                                                                            $this->equalTo( "param" ),
+                                                                            $this->equalTo( true ),
+                                                                            $this->equalTo( "altSeoEntryId" ) );
+
+        $oConfig = $this->getMock( "oxConfig", array( "getShopId" ) );
+        $oConfig->expects( $this->once() )->method( "getShopId" )->will( $this->returnValue( 1 ) );
+
+        // testing..
+        $oView = $this->getMock( "Object_Seo", array( "getEditObjectId", "getConfig", "_getEncoder", "getEditLang", "_getStdUrl", "_getSeoEntryType", "processParam", "_getAltSeoEntryId" ), array(), '', false  );
+        $oView->expects( $this->once() )->method( 'getEditObjectId' )->will( $this->returnValue( "objectId" ) );
+        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->expects( $this->once() )->method( '_getEncoder' )->will( $this->returnValue( $oEncoder ) );
+        $oView->expects( $this->once() )->method( '_getStdUrl' )->will( $this->returnValue( "stdUrl" ) );
+        $oView->expects( $this->once() )->method( 'getEditLang' )->will( $this->returnValue( 1 ) );
+        $oView->expects( $this->once() )->method( '_getSeoEntryType' )->will( $this->returnValue( "seoEntryType" ) );
+        $oView->expects( $this->once() )->method( 'processParam' )->will( $this->returnValue( "param" ) );
+        $oView->expects( $this->once() )->method( '_getAltSeoEntryId' )->will( $this->returnValue( "altSeoEntryId" ) );
+        $oView->save();
+    }
+
+    /**
+     * Object_Seo::getEntryMetaData() test case
+     *
+     * @return null
+     */
+    public function testGetEntryMetaData()
+    {
+        $oEncoder = $this->getMock( "oxSeoEncoder", array( "getMetaData" ) );
+        $oEncoder->expects( $this->once() )->method( 'getMetaData' )->with( $this->equalTo( 1 ), $this->equalTo( "MetaType" ), $this->equalTo( "shopid" ), $this->equalTo( 1 ) )->will( $this->returnValue( "metaData" ) );
+
+        $oConfig = $this->getMock( "oxConfig", array( "getShopId" ) );
+        $oConfig->expects( $this->once() )->method( 'getShopId' )->will( $this->returnValue( "shopid" ) );
+
+        $oView = $this->getMock( "Object_Seo", array( "_getEncoder", "getEditObjectId", "getConfig", "getEditLang" ), array(), '', false );
+        $oView->expects( $this->once() )->method( '_getEncoder' )->will( $this->returnValue( $oEncoder ) );
+        $oView->expects( $this->once() )->method( 'getEditObjectId' )->will( $this->returnValue( 1 ) );
+        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->expects( $this->once() )->method( 'getEditLang' )->will( $this->returnValue( 1 ) );
+        $this->assertEquals(  "metaData", $oView->getEntryMetaData( "MetaType" ) );
+    }
+
+    /**
+     * Object_Seo::isEntryFixed() test case
+     *
+     * @return null
+     */
+    public function isEntryFixed()
+    {
+        $ShopId = oxConfig::getInstance()->getShopId();
+        $iLang  = 0;
+        $sQ = "insert into oxseo ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed ) values
+                                 ( 'objectid', 'ident', '{$ShopId}', '{$iLang}', 'stdurl', 'seourl', 'type', 1 )";
+        oxDb::getDb()->execute( $sQ );
+
+
+        $oView = $this->getMock( "Object_Seo", array( "getEditObjectId" ) );
+        $oView->expects( $this->at( 0 ) )->method( 'getEditObjectId' )->will( $this->returnValue( "objectid" ) );
+        $oView->expects( $this->at( 1 ) )->method( 'getEditObjectId' )->will( $this->returnValue( "notexistingobjectid" ) );
+
+        $this->assertTrue( $oView->isEntryFixed() );
+        $this->assertFalse( $oView->isEntryFixed() );
     }
 }

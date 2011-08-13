@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 34972 2011-04-27 13:34:00Z sarunas $
+ * @version   SVN: $Id: oxcmpUserTest.php 38126 2011-08-11 11:09:02Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -288,7 +288,8 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         oxTestModules::addFunction( "oxuser", "changeUserData", "{ return true;}" );
         oxTestModules::addFunction( "oxuser", "setCreditPointsForRegistrant", "{ throw new Exception('setCreditPointsForRegistrant');}" );
 
-        modConfig::setParameter( 'su', 'testUser' );
+        oxSession::setVar( 'su', 'testUser' );
+        oxSession::setVar( 're', 'testUser' );
         modConfig::getInstance()->setConfigParam( "blInvitationsEnabled", true );
 
         $oParent = $this->getMock( 'oxubase', array( "isEnabledPrivateSales" ) );

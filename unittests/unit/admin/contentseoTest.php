@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentseoTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: contentseoTest.php 38166 2011-08-12 16:03:55Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -48,23 +48,11 @@ class Unit_Admin_ContentSeoTest extends OxidTestCase
      */
     protected function tearDown()
     {
+        $sQ = "delete from oxcontents where oxid like '_test%'";
+        oxDb::getDb()->execute( $sQ );
+
         oxSeoEncoderContent::getInstance()->cleanup();
         parent::tearDown();
-    }
-
-    /**
-     * Content_Seo::GetSeoUrl() test case
-     *
-     * @return null
-     */
-    public function testGetSeoUrl()
-    {
-        oxTestModules::addFunction( 'oxSeoEncoderContent', 'getContentUrl', '{}');
-
-        // defining parameters
-        $oView = $this->getMock( "Content_Seo", array( "_getSeoUrlQuery" ) );
-        $oView->expects( $this->once() )->method( '_getSeoUrlQuery' )->will( $this->returnValue( "select 1" ) );
-        $this->assertEquals( "1", $oView->UNITgetSeoUrl( new oxContent ) );
     }
 
     /**
@@ -77,6 +65,54 @@ class Unit_Admin_ContentSeoTest extends OxidTestCase
         // testing..
         $oView = new Content_Seo();
         $this->assertEquals( 'oxcontent', $oView->UNITgetType() );
+    }
+
+    /**
+     * Content_Seo::_getEncoder() test case
+     *
+     * @return null
+     */
+    public function testGetEncoder()
+    {
+        $oView = new Content_Seo();
+        $this->assertTrue( $oView->UNITgetEncoder() instanceof oxSeoEncoderContent );
+    }
+
+    /**
+     * Content_Seo::getEntryUri() test case
+     *
+     * @return null
+     */
+    public function testGetEntryUri()
+    {
+        $oContent = new oxContent();
+        $oContent->setId( "_test1" );
+        $oContent->save();
+
+        $oEncoder = $this->getMock( "oxSeoEncoderContent", array( "getContentUri" ) );
+        $oEncoder->expects( $this->once() )->method( 'getContentUri' )->will( $this->returnValue( "ContentUri" ) );
+
+        $oView = $this->getMock( "Content_Seo", array( "getEditObjectId", "_getEncoder" ) );
+        $oView->expects( $this->once() )->method( 'getEditObjectId' )->will( $this->returnValue( "_test1" ) );
+        $oView->expects( $this->once() )->method( '_getEncoder' )->will( $this->returnValue( $oEncoder ) );
+        $this->assertEquals( "ContentUri", $oView->getEntryUri() );
+    }
+
+    /**
+     * Content_Seo::_getEncoder() test case
+     *
+     * @return null
+     */
+    public function testGetStdUrl()
+    {
+        $oContent = new oxContent();
+        $oContent->setId( "_test1" );
+        $oContent->save();
+
+        $oView = $this->getMock( "Content_Seo", array( "getEditLang" ) );
+        $oView->expects( $this->once() )->method( 'getEditLang' )->will( $this->returnValue( 0 ) );
+
+        $this->assertEquals( $oContent->getBaseStdLink( 0, true, false ), $oView->UNITgetStdUrl( "_test1" ) );
     }
 
     /**
