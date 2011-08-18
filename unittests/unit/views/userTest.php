@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 35202 2011-05-09 07:11:37Z linas.kukulskis $
+ * @version   SVN: $Id: userTest.php 38199 2011-08-17 14:04:12Z arunas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -108,14 +108,44 @@ class Unit_Views_userTest extends OxidTestCase
          $oUserView = new user();
          $this->assertEquals( 0, $oUserView->getLoginOption() );
     }
-
-    public function testGetOrderRemark()
-    {
-         modSession::getInstance()->setVar( 'ordrem', "test" );
-         $oUserView = new user();
-         $this->assertEquals( "test", $oUserView->getOrderRemark() );
+    /**
+     * Tests User::getOrderRemark() when not logged in and form was't submited
+     */
+    public function testGetOrderRemarkNoRemark()
+    {             
+        // get user returns false (not logged in)
+        $oUserView = $this->getMock( 'user', array( 'getUser' ) );
+        $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
+        
+        // not connected and no post (will return false)
+        $this->assertFalse( $oUserView->getOrderRemark() );         
     }
-
+    
+    /**
+     * Tests User::getOrderRemark() when logged in
+     */
+    public function testGetOrderRemarkFromPost()
+    {
+        // gettin order remark from post (when not logged in)
+        modConfig::setParameter( 'order_remark', 'test' );
+        
+        // get user returns false (not logged in)
+        $oUserView = $this->getMock( 'user', array( 'getUser' ) );
+        $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
+        $this->assertEquals( 'test', $oUserView->getOrderRemark() );                    
+    }
+    /**
+     * Tests User::getOrderRemark() when not logged in and form was submited
+     */
+    public function testGetOrderRemarkFromSession()
+    {
+        // setting the variable
+        modSession::getInstance()->setVar( 'ordrem', "test" );
+        $oUserView = $this->getMock( 'user', array( 'getUser' ) );
+        $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( true ) );
+        $this->assertEquals( 'test', $oUserView->getOrderRemark() );                
+    }
+    
     public function testIsNewsSubscribed()
     {
          modConfig::setParameter( 'blnewssubscribed', null );

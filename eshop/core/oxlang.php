@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 38103 2011-08-10 11:25:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxlang.php 38193 2011-08-17 12:24:51Z linas.kukulskis $
  */
 
 /**
@@ -1066,5 +1066,31 @@ class oxLang extends oxSuperCfg
                 return (int) $oLang->id;
             }
         }
+    }
+
+    /**
+     * Returns all multi language tables
+     *
+     * @return array
+     */
+    public function getMultiLangTables()
+    {
+        $aTables = array( "oxarticles", "oxartextends", "oxattribute",
+                          "oxcategories", "oxcontents", "oxcountry",
+                          "oxdelivery", "oxdiscount", "oxgroups",
+                          "oxlinks", "oxnews", "oxobject2attribute",
+                          "oxpayments", "oxselectlist", "oxshops",
+                          "oxactions", "oxwrapping", "oxdeliveryset",
+                          "oxvendor", "oxmanufacturers", "oxmediaurls",
+                          "oxstates" );
+
+
+        $aMultiLangTables = $this->getConfig()->getConfigParam( 'aMultiLangTables' );
+
+        if ( is_array( $aMultiLangTables ) ) {
+            $aTables = array_merge($aTables, $aMultiLangTables);
+        }
+
+        return $aTables;
     }
 }

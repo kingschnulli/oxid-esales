@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 37946 2011-08-04 08:51:40Z linas.kukulskis $
+ * @version   SVN: $Id: oxlangTest.php 38202 2011-08-17 15:00:28Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1416,6 +1416,22 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $this->assertTrue(count($aMapData)>0);
     }
 
+    public function testGetMultiLangTables()
+    {
+        $oLang = oxNew ( "oxLang" );
+        $aTable = $oLang->getMultiLangTables();
+
+
+            $this->assertTrue(count($aTable) == 22);
+
+        modConfig::getInstance()->setConfigParam( 'aMultiLangTables', array( 'table1', 'table2' ) );
+
+        $aTable = $oLang->getMultiLangTables();
+
+            $this->assertTrue( count($aTable) == 24 );
+    }
+
 }
+
 
 

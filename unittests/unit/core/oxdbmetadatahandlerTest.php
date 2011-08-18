@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandlerTest.php 34500 2011-04-09 07:25:48Z alfonsas $
+ * @version   SVN: $Id: oxdbmetadatahandlerTest.php 38189 2011-08-17 08:52:50Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -64,9 +64,8 @@ class Unit_Core_oxDbMetaDataHandlerTest extends OxidTestCase
                     `OXLONGDESC` text NOT NULL,
                     `OXLONGDESC_1` text NOT NULL,
                      PRIMARY KEY (`OXID`),
-                     KEY `oxtitle` (`OXTITLE`),
-                     KEY `oxtitle_1` (`OXTITLE_1`),
-                     KEY `oxtitle_x` (`OXID`, `OXTITLE_1`),
+                     KEY `OXTITLE` (`OXTITLE`),
+                     KEY `OXTITLE_1` (`OXTITLE_1`),
                      FULLTEXT KEY `OXLONGDESC` (`OXLONGDESC`),
                      FULLTEXT KEY `OXLONGDESC_1` (`OXLONGDESC_1`)
                   )";
@@ -154,11 +153,19 @@ class Unit_Core_oxDbMetaDataHandlerTest extends OxidTestCase
      */
     public function testAddFieldIndexSql()
     {
-        $aTestSql[] = "ALTER TABLE `oxartextends` ADD FULLTEXT KEY  (`OXTAGS_4`)";
-
         $oDbMeta = $this->getProxyClass( "oxDbMetaDataHandler" );
 
+        $aTestSql[0] = "ALTER TABLE `oxartextends` ADD FULLTEXT KEY  (`OXTAGS_4`)";
         $this->assertEquals( $aTestSql, $oDbMeta->UNITgetAddFieldIndexSql( "oxartextends", "OXTAGS", 4 ) );
+
+        $aTestSql[0] = "ALTER TABLE `oxartextends` ADD FULLTEXT KEY  (`OXTAGS_5`)";
+        $this->assertEquals( $aTestSql, $oDbMeta->UNITgetAddFieldIndexSql( "oxartextends", "OXTAGS", 5 ) );
+
+        $aTestSql[0] = "ALTER TABLE `oxartextends_set1` ADD FULLTEXT KEY  (`OXTAGS_8`)";
+        $this->assertEquals( $aTestSql, $oDbMeta->UNITgetAddFieldIndexSql( "oxartextends", "OXTAGS", 8 ) );
+
+        $aTestSql[0] = "ALTER TABLE `oxartextends_set2` ADD FULLTEXT KEY  (`OXTAGS_20`)";
+        $this->assertEquals( $aTestSql, $oDbMeta->UNITgetAddFieldIndexSql( "oxartextends", "OXTAGS", 20 ) );
     }
 
 
@@ -277,20 +284,26 @@ class Unit_Core_oxDbMetaDataHandlerTest extends OxidTestCase
 
         $aIndexes = oxDb::getDb( true )->getAll( "show index from testDbMetaDataHandler" );
 
-        //checking newly added index OXTITLE_2
-        $this->assertEquals( "OXTITLE_2", $aIndexes[5]["Key_name"] );
-        $this->assertEquals( "OXTITLE_2", $aIndexes[5]["Column_name"] );
+        $this->assertEquals( "PRIMARY", $aIndexes[0]["Key_name"] );
+        $this->assertEquals( "OXID", $aIndexes[0]["Column_name"] );
 
-        //checking newly added index (OXID, OXTITLE_2)
-        $this->assertEquals( "OXID", $aIndexes[6]["Key_name"] );
-        $this->assertEquals( "OXID", $aIndexes[6]["Column_name"] );
-        $this->assertEquals( "OXID", $aIndexes[7]["Key_name"] );
-        $this->assertEquals( "OXTITLE_2", $aIndexes[7]["Column_name"] );
+        //checking newly added index for column OXTITLE
+        $this->assertEquals( "OXTITLE", $aIndexes[1]["Key_name"] );
+        $this->assertEquals( "OXTITLE", $aIndexes[1]["Column_name"] );
+        $this->assertEquals( "OXTITLE_1", $aIndexes[2]["Key_name"] );
+        $this->assertEquals( "OXTITLE_1", $aIndexes[2]["Column_name"] );
+        $this->assertEquals( "OXTITLE_2", $aIndexes[3]["Key_name"] );
+        $this->assertEquals( "OXTITLE_2", $aIndexes[3]["Column_name"] );
 
-        //checking newly added index OXLONGDESC_2
-        $this->assertEquals( "OXLONGDESC_2", $aIndexes[10]["Key_name"] );
-        $this->assertEquals( "OXLONGDESC_2", $aIndexes[10]["Column_name"] );
-        $this->assertEquals( "FULLTEXT", $aIndexes[10]["Index_type"] );
+
+        //checking newly added index for column OXLONGDESC
+        $this->assertEquals( "OXLONGDESC", $aIndexes[4]["Key_name"] );
+        $this->assertEquals( "OXLONGDESC", $aIndexes[4]["Column_name"] );
+        $this->assertEquals( "OXLONGDESC_1", $aIndexes[5]["Key_name"] );
+        $this->assertEquals( "OXLONGDESC_1", $aIndexes[5]["Column_name"] );
+        $this->assertEquals( "OXLONGDESC_2", $aIndexes[6]["Key_name"] );
+        $this->assertEquals( "OXLONGDESC_2", $aIndexes[6]["Column_name"] );
+        $this->assertEquals( "FULLTEXT", $aIndexes[6]["Index_type"] );
     }
 
     /*

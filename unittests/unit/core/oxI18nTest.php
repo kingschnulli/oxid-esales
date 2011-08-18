@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxI18nTest.php 34547 2011-04-09 14:24:32Z sarunas $
+ * @version   SVN: $Id: oxI18nTest.php 38200 2011-08-17 14:10:30Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -719,8 +719,9 @@ class Unit_Core_oxi18ntest extends OxidTestCase
             $oObj->UNITgetLanguageSetTables()
         );
 
-        $oLang = $this->getMock('stdclass', array('getLanguageIds'));
+        $oLang = $this->getMock('oxLang', array('getLanguageIds'));
         $oLang->expects($this->any())->method('getLanguageIds')->will($this->returnValue(array(0=>'de', 1=>'en', 90=>'lt')));
+
         modInstances::addMod('oxLang', $oLang);
 
         $this->assertEquals(
