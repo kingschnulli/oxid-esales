@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: object_seo.php 38166 2011-08-12 16:03:55Z arvydas.vapsva $
+ * @version   SVN: $Id: object_seo.php 38209 2011-08-18 11:51:22Z vilma $
  */
 
 /**
@@ -234,4 +234,15 @@ class Object_Seo extends oxAdminDetails
     {
         return false;
     }
+
+    /**
+     * Returns FALSE, as this view does not support active selection type
+     *
+     * @return bool
+     */
+    public function getActCatType()
+    {
+        return false;
+    }
+
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: objectseoTest.php 38166 2011-08-12 16:03:55Z arvydas.vapsva $
+ * @version   SVN: $Id: objectseoTest.php 38209 2011-08-18 11:51:22Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -266,4 +266,17 @@ class Unit_Admin_ObjectSeoTest extends OxidTestCase
         $this->assertTrue( $oView->isEntryFixed() );
         $this->assertFalse( $oView->isEntryFixed() );
     }
+
+    /**
+     * Object_Seo::getActCatType() test case
+     *
+     * @return null
+     */
+    public function testGetActCatType()
+    {
+        // testing..
+        $oView = new Object_Seo();
+        $this->assertFalse( $oView->getActCatType() );
+    }
+
 }
