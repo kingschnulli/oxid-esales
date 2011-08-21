@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: category_seo.php 38166 2011-08-12 16:03:55Z arvydas.vapsva $
+ * @version   SVN: $Id: category_seo.php 38284 2011-08-19 11:30:55Z vilma $
  */
 
 /**
@@ -34,6 +34,7 @@ class Category_Seo extends Object_Seo
      */
     public function save()
     {
+        $sOxid = $this->getEditObjectId();
         $oCategory = oxNew( 'oxbase' );
         $oCategory->init( 'oxcategories' );
         if ( $oCategory->load( $sOxid ) ) {
@@ -65,7 +66,7 @@ class Category_Seo extends Object_Seo
     {
         return true;
     }
-    
+
     /**
      * Returns url type
      *

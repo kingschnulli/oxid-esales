@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_seo.php 38166 2011-08-12 16:03:55Z arvydas.vapsva $
+ * @version   SVN: $Id: article_seo.php 38284 2011-08-19 11:30:55Z vilma $
  */
 
 /**
@@ -380,7 +380,7 @@ class Article_Seo extends Object_Seo
         if ( $this->getTag() ) {
             return '';
         } else {
-            return trim( substr( $sParam, strpos( $sParam, '#') ), '#' );
+            return trim( substr( $sParam, strpos( $sParam, '#'), -1 ), '#' );
         }
     }
 
@@ -482,7 +482,7 @@ class Article_Seo extends Object_Seo
         $oDb = oxDb::getDb();
         $iLang = (int) $this->getEditLang();
         $iShopId = $this->getConfig()->getShopId();
-        $sParam = $this->processParam( $this->getActCatId() );
+        $sParam = $this->getActCatId();
 
         $sQ = "select oxfixed from oxseo where
                    oxseo.oxobjectid = " . $oDb->quote( $this->getEditObjectId() ) . " and

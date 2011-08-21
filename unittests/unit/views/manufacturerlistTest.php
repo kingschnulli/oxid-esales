@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlistTest.php 33262 2011-02-15 12:34:30Z arvydas.vapsva $
+ * @version   SVN: $Id: manufacturerlistTest.php 38303 2011-08-19 14:55:20Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -266,6 +266,8 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
 
         $oManufacturer = new oxManufacturer();
         $oManufacturer->load($sManufacturerId);
+        $oManufacturer->setIsVisible(true);
+
 
         $oManufacturerList = $this->getProxyClass( "Manufacturerlist" );
         $oManufacturerList->setManufacturerTree( $oManufacturerTree );

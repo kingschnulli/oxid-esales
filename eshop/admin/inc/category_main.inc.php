@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.inc.php 38162 2011-08-12 13:11:44Z tomas $
+ * @version   SVN: $Id: category_main.inc.php 38298 2011-08-19 13:07:29Z vilma $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -224,11 +224,14 @@ class ajaxComponent extends ajaxListComponent
 
         } elseif ( is_array( $aArticles ) && count( $aArticles ) ) {
             $sProdIds = implode( ", ", oxDb::getInstance()->quoteArray( $aArticles ) );
+
+            $sDelete = "delete from oxobject2category where";
+            $sWhere = " oxcatnid=".$oDb->quote( $sCategoryID );
             if ( !$this->getConfig()->getConfigParam( 'blVariantsSelection' ) ) {
-                $sQ = "delete from oxobject2category where oxshopid = $sShopID and oxcatnid=".$oDb->quote( $sCategoryID )." and oxobjectid in ( select oxid from oxarticles where oxparentid in ( {$sProdIds} ) )";
+                $sQ = $sDelete.$sWhere." and oxobjectid in ( select oxid from oxarticles where oxparentid in ( {$sProdIds} ) )";
                 $oDb->execute( $sQ );
             }
-            $sQ = "delete from oxobject2category where oxshopid = $sShopID and oxcatnid=".$oDb->quote( $sCategoryID )." and oxobjectid in ( {$sProdIds} )";
+            $sQ = $sDelete.$sWhere." and oxobjectid in ( {$sProdIds} )";
             $oDb->execute( $sQ );
 
 
