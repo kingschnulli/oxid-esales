@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 38132 2011-08-11 12:40:52Z vilma $
+ * @version   SVN: $Id: oxuser.php 38329 2011-08-22 13:36:07Z vilma $
  */
 
 /**
@@ -272,9 +272,9 @@ class oxUser extends oxBase
 
         $sViewName = getViewName( 'oxcountry', $iLang );
         $sQ = "select oxtitle from {$sViewName} where oxid = " . $oDb->quote( $sCountryId ) . " ";
-        $this->oxuser__oxcountry = new oxField( $oDb->getOne( $sQ ), oxField::T_RAW);
+        $sCountry = new oxField( $oDb->getOne( $sQ ), oxField::T_RAW);
 
-        return $this->oxuser__oxcountry;
+        return $sCountry;
     }
 
     /**

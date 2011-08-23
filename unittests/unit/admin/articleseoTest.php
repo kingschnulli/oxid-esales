@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articleseoTest.php 38284 2011-08-19 11:30:55Z vilma $
+ * @version   SVN: $Id: articleseoTest.php 38325 2011-08-22 12:30:00Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -591,8 +591,9 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
      */
     public function testProcessParam()
     {
-        $oView = $this->getMock( "Article_Seo", array( "getTag" ) );
+        $oView = $this->getMock( "Article_Seo", array( "getTag", "getActCatId" ) );
         $oView->expects( $this->once() )->method( "getTag" )->will( $this->returnValue( false ) );
+        $oView->expects( $this->once() )->method( "getActCatId" )->will( $this->returnValue( "testParam2" ) );
         $this->assertEquals( "testParam2", $oView->processParam( "testParam1#testParam2#0" ) );
     }
 
@@ -609,15 +610,16 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
                                  ( 'objectid', 'ident', '{$ShopId}', '{$iLang}', 'stdurl', 'seourl', 'type', 1, 'catid' )";
         oxDb::getDb()->execute( $sQ );
 
+        $oView = $this->getMock( "Article_Seo", array( "_getSaveObjectId", "getActCatId", "getEditLang", "processParam" ) );
+        $oView->expects( $this->at( 0 ) )->method( '_getSaveObjectId' )->will( $this->returnValue( "objectid" ) );
+        $oView->expects( $this->at( 1 ) )->method( 'getEditLang' )->will( $this->returnValue( 0 ) );
+        $oView->expects( $this->at( 2 ) )->method( 'getActCatId' )->will( $this->returnValue( "catid" ) );
+        $oView->expects( $this->at( 3 ) )->method( 'processParam' )->will( $this->returnValue( "catid" ) );
 
-        $oView = $this->getMock( "Article_Seo", array( "getEditObjectId", "getActCatId", "getEditLang", "processParam" ) );
-        $oView->expects( $this->at( 0 ) )->method( 'getEditLang' )->will( $this->returnValue( 0 ) );
-        $oView->expects( $this->at( 1 ) )->method( 'getActCatId' )->will( $this->returnValue( "catid" ) );
-        $oView->expects( $this->at( 2 ) )->method( 'getEditObjectId' )->will( $this->returnValue( "objectid" ) );
-
-        $oView->expects( $this->at( 3 ) )->method( 'getEditLang' )->will( $this->returnValue( 0 ) );
-        $oView->expects( $this->at( 4 ) )->method( 'getActCatId' )->will( $this->returnValue( "nonexistingcatid" ) );
-        $oView->expects( $this->at( 5 ) )->method( 'getEditObjectId' )->will( $this->returnValue( "objectid" ) );
+        $oView->expects( $this->at( 4 ) )->method( '_getSaveObjectId' )->will( $this->returnValue( "nonexistingobjectid" ) );
+        $oView->expects( $this->at( 5 ) )->method( 'getEditLang' )->will( $this->returnValue( 0 ) );
+        $oView->expects( $this->at( 6 ) )->method( 'getActCatId' )->will( $this->returnValue( "catid" ) );
+        $oView->expects( $this->at( 7 ) )->method( 'processParam' )->will( $this->returnValue( "catid" ) );
 
         $this->assertTrue( $oView->isEntryFixed() );
         $this->assertFalse( $oView->isEntryFixed() );

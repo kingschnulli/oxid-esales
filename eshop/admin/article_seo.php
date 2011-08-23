@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_seo.php 38284 2011-08-19 11:30:55Z vilma $
+ * @version   SVN: $Id: article_seo.php 38325 2011-08-22 12:30:00Z arvydas.vapsva $
  */
 
 /**
@@ -380,7 +380,7 @@ class Article_Seo extends Object_Seo
         if ( $this->getTag() ) {
             return '';
         } else {
-            return trim( substr( $sParam, strpos( $sParam, '#'), -1 ), '#' );
+            return $this->getActCatId();
         }
     }
 
@@ -437,7 +437,11 @@ class Article_Seo extends Object_Seo
         $iLang = $iLang !== null ? $iLang : $this->getEditLang();
         $sCatType  = $sCatType !== null ? $sCatType : $this->getActCatType();
         $sListType = $sListType !== null ? $sListType : $this->getListType();
-        $sStdLink  = $sListType ? "listtype={$sListType}&amp;" : "";
+
+        $aParams = array();
+        if ( $sListType ) {
+            $aParams["listtype"] = $sListType;
+        }
 
         $oProduct = oxNew( 'oxarticle' );
         $oProduct->loadInLang( $iLang, $sOxid );
@@ -445,21 +449,20 @@ class Article_Seo extends Object_Seo
         // adding vendor or manufacturer id
         switch ( $sCatType ) {
             case 'oxvendor':
-                $sStdLink .= "cnid=v_" . $this->getActCatId();
+                $aParams["cnid"] = "v_" . $this->getActCatId();
                 break;
             case 'oxmanufacturer':
-                $sStdLink .= "mnid=" . $this->getActCatId();
+                $aParams["mnid"] = $this->getActCatId();
                 break;
             case 'oxtag':
-                $sStdLink .= "searchtag=".rawurlencode( $sTag !== null ? $sTag : $this->getTag() );
+                $aParams["searchtag"] = $sTag !== null ? $sTag : $this->getTag();
                 break;
             default:
-                $sStdLink .= "cnid=" . $this->getActCatId();
+                $aParams["cnid"] = $this->getActCatId();
                 break;
         }
 
-        $oProduct->appendStdLink( $sStdLink, $iLang );
-        return $oProduct->getBaseStdLink( $iLang, true, false );
+        return trim( oxUtilsUrl::getInstance()->appendUrl( $oProduct->getBaseStdLink( $iLang, true, false ), $aParams ), '&amp;' );
     }
 
     /**
@@ -473,6 +476,20 @@ class Article_Seo extends Object_Seo
     }
 
     /**
+     * Returns id of object which must be saved
+     *
+     * @return string
+     */
+    protected function _getSaveObjectId()
+    {
+        $sId = $this->getEditObjectId();
+        if ( $this->getActCatType() == 'oxtag' ) {
+            $sId = $this->_getEncoder()->getDynamicObjectId( $this->getConfig()->getShopId(), $this->_getStdUrl( $sId ) );
+        }
+        return $sId;
+    }
+
+    /**
      * Returns TRUE if current seo entry has fixed state
      *
      * @return bool
@@ -480,13 +497,16 @@ class Article_Seo extends Object_Seo
     public function isEntryFixed()
     {
         $oDb = oxDb::getDb();
+
+        $sId   = $this->_getSaveObjectId();
         $iLang = (int) $this->getEditLang();
         $iShopId = $this->getConfig()->getShopId();
-        $sParam = $this->getActCatId();
+        $sParam  = $this->processParam( $this->getActCatId() );
 
         $sQ = "select oxfixed from oxseo where
-                   oxseo.oxobjectid = " . $oDb->quote( $this->getEditObjectId() ) . " and
+                   oxseo.oxobjectid = " . $oDb->quote( $sId ) . " and
                    oxseo.oxshopid = '{$iShopId}' and oxseo.oxlang = {$iLang} and oxparams = ".$oDb->quote( $sParam );
+
         return (bool) oxDb::getDb()->getOne( $sQ );
     }
 }

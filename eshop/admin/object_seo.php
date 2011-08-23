@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: object_seo.php 38209 2011-08-18 11:51:22Z vilma $
+ * @version   SVN: $Id: object_seo.php 38325 2011-08-22 12:30:00Z arvydas.vapsva $
  */
 
 /**
@@ -70,7 +70,7 @@ class Object_Seo extends oxAdminDetails
     public function save()
     {
         // saving/updating seo params
-        if ( ( $sOxid = $this->getEditObjectId() ) ) {
+        if ( ( $sOxid = $this->_getSaveObjectId() ) ) {
             $aSeoData = oxConfig::getParameter( 'aSeoData' );
             $iShopId  = $this->getConfig()->getShopId();
             $iLang    = $this->getEditLang();
@@ -90,6 +90,16 @@ class Object_Seo extends oxAdminDetails
                                     $aSeoData['oxseourl'], $this->_getSeoEntryType(), $aSeoData['oxfixed'],
                                     trim( $aSeoData['oxkeywords'] ), trim( $aSeoData['oxdescription'] ), $this->processParam( $aSeoData['oxparams'] ), true, $this->_getAltSeoEntryId() );
         }
+    }
+
+    /**
+     * Returns id of object which must be saved
+     *
+     * @return string
+     */
+    protected function _getSaveObjectId()
+    {
+        return $this->getEditObjectId();
     }
 
     /**

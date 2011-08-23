@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 38105 2011-08-10 13:38:44Z vilma $
+ * @version   SVN: $Id: oxarticle.php 38334 2011-08-22 14:25:07Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -1977,26 +1977,27 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Makes sure that image values (oxpic1 - oxpic12, oxthumb, oxicon) are only base name by  striping
-     * any dir information and leave only original file name  and finally save the object using parent::save() method.
+     * Makes sure that image values (oxpic1 - oxpic12, oxthumb, oxicon) are only base name by striping
+     * any dir information and leave only original file name and, saves long description
+     * (oxArticle::_saveArtLongDesc()) finally save the object using parent::save() method.
      *
      * @return bool
      */
     public function save()
     {
-        $myConfig = $this->getConfig();
-
-        $this->oxarticles__oxthumb = new oxField(basename($this->oxarticles__oxthumb->value), oxField::T_RAW);
-        $this->oxarticles__oxicon  = new oxField(basename($this->oxarticles__oxicon->value), oxField::T_RAW);
-        $iPicCount = $myConfig->getConfigParam( 'iPicCount');
-        for ($i=1; $i <= $iPicCount; $i++) {
-            if ( isset($this->{'oxarticles__oxpic'.$i}) ) {
-                $this->{'oxarticles__oxpic'.$i}->setValue(basename($this->{'oxarticles__oxpic'.$i}->value));
+        // @deprecated since 20110821. folders are no more written, getters must be user for urls
+        $this->oxarticles__oxthumb = new oxField( basename( $this->oxarticles__oxthumb->value ), oxField::T_RAW );
+        $this->oxarticles__oxicon  = new oxField( basename( $this->oxarticles__oxicon->value ), oxField::T_RAW );
+        $iPicCount = $this->getConfig()->getConfigParam( 'iPicCount' );
+        for ( $i = 1; $i <= $iPicCount; $i++ ) {
+            $sFieldName = 'oxarticles__oxpic' . $i;
+            if ( isset( $this->$sFieldName ) ) {
+                $this->_setFieldData( $sFieldName, basename( $this->$sFieldName->value ), oxField::T_RAW );
             }
         }
+        // @end deprecated
 
         if ( ( $blRet = parent::save() ) ) {
-
             // saving long descrition
             $this->_saveArtLongDesc();
         }
