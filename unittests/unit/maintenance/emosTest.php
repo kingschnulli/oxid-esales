@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: emosTest.php 38106 2011-08-10 14:21:54Z tomas $
+ * @version   SVN: $Id: emosTest.php 38351 2011-08-23 13:55:01Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -131,62 +131,6 @@ class Unit_Maintenance_emosTest extends OxidTestCase
     }
 
     /**
-     * Test remove session id.
-     *
-     * @return null
-     *//*
-    public function testSetSidNoSidSet()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript' ) );
-        $oEmos->expects( $this->never() )->method( 'appendPreScript' );
-        $oEmos->setSid();
-
-        $this->assertEquals( '', $oEmos->emsid );
-    }*/
-
-    /**
-     * Test set session id.
-     *
-     * @return null
-     *//*
-    public function testSetSid()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "<a name=\"emos_sid\" title=\"xxx\"></a>\n" ) );
-        $oEmos->setSid( 'xxx' );
-
-        $this->assertEquals( 'xxx', $oEmos->emsid );
-    }*/
-
-    /**
-     * Test remove version id.
-     *
-     * @return null
-     *//*
-    public function testSetVidNoSidSet()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript' ) );
-        $oEmos->expects( $this->never() )->method( 'appendPreScript' );
-        $oEmos->setVid();
-
-        $this->assertEquals( '', $oEmos->emvid );
-    }*/
-
-    /**
-     * Test set version id.
-     *
-     * @return null
-     *//*
-    public function testSetVid()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "<a name=\"emos_vid\" title=\"xxx\"></a>" ) );
-        $oEmos->setVid( 'xxx' );
-
-        $this->assertEquals( 'xxx', $oEmos->emvid );
-    }*/
-
-    /**
      * Test pretty print.
      *
      * @return null
@@ -200,45 +144,6 @@ class Unit_Maintenance_emosTest extends OxidTestCase
         $this->assertEquals( "\n", $oEmos->getProtected("_br") );
         $this->assertEquals( "\t", $oEmos->getProtected("_tab") );
     }
-
-    /**
-     * Test append in script.
-     *
-     * @return null
-     *//*
-    public function testAppendInScript()
-    {
-        $oEmos = new EMOS( "xxx", "yyy" );
-        $oEmos->appendInScript( 'xxx' );
-
-        $this->assertEquals( "<script type=\"text/javascript\" src=\"xxxyyy\"></script>\nxxx", $oEmos->inScript );
-    }*/
-
-    /**
-     * Test append pre script.
-     *
-     * @return null
-     *//*
-    public function testAppendPreScript()
-    {
-        $oEmos = new EMOS( "xxx", "yyy" );
-        $oEmos->appendPreScript( 'xxx' );
-
-        $this->assertEquals( "xxx", $oEmos->preScript );
-    }*/
-
-    /**
-     * Test append post script.
-     *
-     * @return null
-     *//*
-    public function testAppendPostScript()
-    {
-        $oEmos = new EMOS( "xxx", "yyy" );
-        $oEmos->appendPostScript( 'xxx' );
-
-        $this->assertEquals( "xxx", $oEmos->postScript );
-    }*/
 
     /**
      * Test EMOS::_prepareScript() method.
@@ -277,145 +182,6 @@ class Unit_Maintenance_emosTest extends OxidTestCase
     }
 
     /**
-     * Test get anchor tag.
-     *
-     * @return null
-     *//*
-    public function testGetAnchorTag()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'emos_DataFormat' ) );
-        $oEmos->expects( $this->at( 0 ) )->method( 'emos_DataFormat' )->with( $this->equalTo( "rel" ) )->will( $this->returnValue( "rel" ));
-        $oEmos->expects( $this->at( 1 ) )->method( 'emos_DataFormat' )->with( $this->equalTo( "rev" ) )->will( $this->returnValue( "rev" ));
-
-        $this->assertEquals( "<a name=\"emos_name\" title=\"title\" rel=\"rel\" rev=\"rev\"></a>\n", $oEmos->getAnchorTag( 'title', 'rel', 'rev' ) );
-    }*/
-
-    /**
-     * Test add content.
-     *
-     * @return null
-     */
-    /*public function testAddContent()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript', 'getAnchorTag' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "retvalue" ) );
-        $oEmos->expects( $this->once() )->method( 'getAnchorTag' )->with( $this->equalTo( "content" ), $this->equalTo( "value" ) )->will( $this->returnValue( "retvalue" ));
-
-        $oEmos->addContent( "value" );
-    }*/
-
-    /**
-     * Test add order process.
-     *
-     * @return null
-     */
-    /*public function testAddOrderProcess()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript', 'getAnchorTag' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "retvalue" ) );
-        $oEmos->expects( $this->once() )->method( 'getAnchorTag' )->with( $this->equalTo( "orderProcess" ), $this->equalTo( "value" ) )->will( $this->returnValue( "retvalue" ));
-
-        $oEmos->addOrderProcess( "value" );
-    }*/
-
-    /**
-     * Test add site id.
-     *
-     * @return null
-     *//*
-    public function testAddSiteId()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript', 'getAnchorTag' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "retvalue" ) );
-        $oEmos->expects( $this->once() )->method( 'getAnchorTag' )->with( $this->equalTo( "siteid" ), $this->equalTo( "value" ) )->will( $this->returnValue( "retvalue" ));
-
-        $oEmos->addSiteId( "value" );
-    }*/
-
-    /**
-     * Test add language id.
-     *
-     * @return null
-     *//*
-    public function testAddLangId()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript', 'getAnchorTag' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "retvalue" ) );
-        $oEmos->expects( $this->once() )->method( 'getAnchorTag' )->with( $this->equalTo( "langid" ), $this->equalTo( "value" ) )->will( $this->returnValue( "retvalue" ));
-
-        $oEmos->addLangId( "value" );
-    }*/
-
-    /**
-     * Test add country id.
-     *
-     * @return null
-     *//*
-    public function testAddCountryId()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript', 'getAnchorTag' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "retvalue" ) );
-        $oEmos->expects( $this->once() )->method( 'getAnchorTag' )->with( $this->equalTo( "countryid" ), $this->equalTo( "value" ) )->will( $this->returnValue( "retvalue" ));
-
-        $oEmos->addCountryId( "value" );
-    }*/
-
-    /**
-     * Test add page id.
-     *
-     * @return null
-     *//*
-    public function testAddPageId()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "\n<script type=\"text/javascript\">\n window.emosPageId = 'value';\n</script>\n" ) );
-
-        $oEmos->addPageId( "value" );
-    }*/
-
-    /**
-     * Test add search.
-     *
-     * @return null
-     *//*
-    public function testAddSearch()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript', 'getAnchorTag' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "retvalue" ) );
-        $oEmos->expects( $this->once() )->method( 'getAnchorTag' )->with( $this->equalTo( "search" ), $this->equalTo( "value" ), $this->equalTo( "value2" ) )->will( $this->returnValue( "retvalue" ));
-
-        $oEmos->addSearch( "value", "value2" );
-    }*/
-
-    /**
-     * Test add register.
-     *
-     * @return null
-     *//*
-    public function testAddRegister()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript', 'getAnchorTag' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "retvalue" ) );
-        $oEmos->expects( $this->once() )->method( 'getAnchorTag' )->with( $this->equalTo( "register" ), $this->equalTo( md5( "value" ) ), $this->equalTo( "value2" ) )->will( $this->returnValue( "retvalue" ));
-
-        $oEmos->addRegister( "value", "value2" );
-    }*/
-
-    /**
-     * Test add download.
-     *
-     * @return null
-     *//*
-    public function testAddDownload()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'appendPreScript', 'getAnchorTag' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( "retvalue" ) );
-        $oEmos->expects( $this->once() )->method( 'getAnchorTag' )->with( $this->equalTo( "download" ), $this->equalTo( "value" ) )->will( $this->returnValue( "retvalue" ));
-
-        $oEmos->addDownload( "value" );
-    }*/
-
-    /**
      * Test get emos EC page array.
      *
      * @return null
@@ -437,185 +203,6 @@ class Unit_Maintenance_emosTest extends OxidTestCase
         $aExpt = array(array("testEvent", 'productId', 'product Name', 'price', 'product\Group', 'quantity', 'variant1', '', 'variant3'));
         $this->assertEquals( $aExpt, $oSubj->getNonPublicVar("_ecEvent"));
     }
-
-    /**
-     * Test add detail view.
-     *
-     * @return null
-     *//*
-    public function testAddDetailView()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'getEmosECPageArray', 'appendPreScript' ) );
-        $oEmos->expects( $this->once() )->method( 'getEmosECPageArray' )->with( $this->equalTo( 'value' ), $this->equalTo( 'view' ) )->will( $this->returnValue( 'retval' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( 'retval' ) );
-
-        $oEmos->addDetailView( 'value' );
-    }*/
-
-    /**
-     * Test remove from basket.
-     *
-     * @return null
-     *//*
-    public function testRemoveFromBasket()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'getEmosECPageArray', 'appendPreScript' ) );
-        $oEmos->expects( $this->once() )->method( 'getEmosECPageArray' )->with( $this->equalTo( 'value' ), $this->equalTo( 'c_rmv' ) )->will( $this->returnValue( 'retval' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( 'retval' ) );
-
-        $oEmos->removeFromBasket( 'value' );
-    }*/
-
-    /**
-     * Test add to basket.
-     *
-     * @return null
-     *//*
-    public function testAddToBasket()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'getEmosECPageArray', 'appendPreScript' ) );
-        $oEmos->expects( $this->once() )->method( 'getEmosECPageArray' )->with( $this->equalTo( 'value' ), $this->equalTo( 'c_add' ) )->will( $this->returnValue( 'retval' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( 'retval' ) );
-
-        $oEmos->addToBasket( 'value' );
-    }*/
-
-    /**
-     * Test get emos custom page array.
-     *
-     * @return null
-     *//*
-    public function testGetEmosCustomPageArray()
-    {
-        $sValue = "<script type=\"text/javascript\">\n".
-        "<!--\n".
-        "\t var emosCustomPageArray = new Array();\n".
-        "\t emosCustomPageArray[0] = 'value0';\n".
-        "\t emosCustomPageArray[1] = 'value1';\n".
-        "// -->\n" ."</script>\n";
-
-        $aListOfValues = array( 'value0', 'value1' );
-
-        $oEmos = $this->getMock( 'EMos', array( 'emos_DataFormat' ) );
-        $oEmos->expects( $this->at( 0 ) )->method( 'emos_DataFormat' )->with( $this->equalTo( 'value0' ) )->will( $this->returnValue( 'value0' ) );
-        $oEmos->expects( $this->at( 1 ) )->method( 'emos_DataFormat' )->with( $this->equalTo( 'value1' ) )->will( $this->returnValue( 'value1' ) );
-
-        $this->assertEquals( $sValue, $oEmos->getEmosCustomPageArray( $aListOfValues ) );
-    }*/
-
-    /**
-     * Test add emos custom page array.
-     *
-     * @return null
-     *//*
-    public function testAddEmosCustomPageArray()
-    {
-        $aValues = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 );
-
-        $oEmos = $this->getMock( 'EMos', array( 'getEmosCustomPageArray', 'appendPreScript' ) );
-        $oEmos->expects( $this->once() )->method( 'getEmosCustomPageArray' )->with( $this->equalTo( $aValues ) )->will( $this->returnValue( 'retval' ) );
-        $oEmos->expects( $this->once() )->method( 'appendPreScript' )->with( $this->equalTo( 'retval' ) );
-
-        $oEmos->addEmosCustomPageArray( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 );
-    }*/
-
-    /**
-     * Test get emos EC event.
-     *
-     * @return null
-     *//*
-    public function testGetEmosECEvent()
-    {
-        $oItem = new oxStdClass;
-        $oItem->productId = 'productId';
-        $oItem->productName = 'productName';
-        $oItem->price = 'price';
-        $oItem->productGroup = 'productGroup';
-        $oItem->quantity = 'quantity';
-        $oItem->variant1 = 'variant1';
-        $oItem->variant2 = 'variant2';
-        $oItem->variant3 = 'variant3';
-
-        $sValue = "emos_ecEvent('event'," .
-        "'productId'," .
-        "'productName'," .
-        "'price'," .
-        "'productGroup'," .
-        "'quantity'," .
-        "'variant1'" .
-        "'variant2'" .
-        "'variant3');";
-
-        $oEmos = $this->getMock( 'EMos', array( 'emos_ItemFormat' ) );
-        $oEmos->expects( $this->once() )->method( 'emos_ItemFormat' )->with( $this->equalTo( $oItem ) )->will( $this->returnValue( $oItem ) );
-
-        $this->assertEquals( $sValue, $oEmos->getEmosECEvent( $oItem, 'event' ) );
-    }*/
-
-    /**
-     * Test get emos view event.
-     *
-     * @return null
-     *//*
-    public function testGetEmosViewEvent()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'getEmosECEvent' ) );
-        $oEmos->expects( $this->once() )->method( 'getEmosECEvent' )->with( $this->equalTo( 'value' ) )->will( $this->returnValue( 'retval' ) );
-
-        $this->assertEquals( 'retval', $oEmos->getEmosViewEvent( 'value' ) );
-    }*/
-
-    /**
-     * Test get emos add to basket event.
-     *
-     * @return null
-     *//*
-    public function testGetEmosAddToBasketEvent()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'getEmosECEvent' ) );
-        $oEmos->expects( $this->once() )->method( 'getEmosECEvent' )->with( $this->equalTo( 'value' ), $this->equalTo( 'c_add' ) )->will( $this->returnValue( 'retval' ) );
-
-        $this->assertEquals( 'retval', $oEmos->getEmosAddToBasketEvent( 'value' ) );
-    }*/
-
-    /**
-     * Test get remove from basket event.
-     *
-     * @return null
-     *//*
-    public function testGetRemoveFromBasketEvent()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'getEmosECEvent' ) );
-        $oEmos->expects( $this->once() )->method( 'getEmosECEvent' )->with( $this->equalTo( 'value' ), $this->equalTo( 'c_rmv' ) )->will( $this->returnValue( 'retval' ) );
-
-        $this->assertEquals( 'retval', $oEmos->getRemoveFromBasketEvent( 'value' ) );
-    }*/
-
-    /**
-     * Test get emos billing event array.
-     *
-     * @return null
-     *//*
-    public function testGetEmosBillingEventArray()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'getEmosBillingArray' ) );
-        $oEmos->expects( $this->once() )->method( 'getEmosBillingArray' )->with( $this->equalTo( 'billingID'), $this->equalTo( 'customerNumber'), $this->equalTo( 'total'), $this->equalTo( 'country'), $this->equalTo( 'cip'), $this->equalTo( 'city'), $this->equalTo( "emosBillingArray" ) )->will( $this->returnValue( 'retval' ) );
-
-        $this->assertEquals( 'retval', $oEmos->getEmosBillingEventArray( 'billingID', 'customerNumber', 'total', 'country', 'cip', 'city' ) );
-    }*/
-
-    /**
-     * Test get emos basket event array.
-     *
-     * @return null
-     *//*
-    public function testGetEMOSBasketEventArray()
-    {
-        $oEmos = $this->getMock( 'EMos', array( 'getEmosBasketArray' ) );
-        $oEmos->expects( $this->once() )->method( 'getEmosBasketArray' )->with( $this->equalTo( 'value' ), $this->equalTo( "emosBasketArray"  ) )->will( $this->returnValue( 'retval' ) );
-
-        $this->assertEquals( 'retval', $oEmos->getEMOSBasketEventArray( 'value' ) );
-    }*/
 
     /**
      * tests EMOS::prepareJsFormat() method. Sets internal params.
@@ -1109,5 +696,34 @@ class Unit_Maintenance_emosTest extends OxidTestCase
         $sExpt = 'emospro.billing = [["sBillingId","4b6f45defafe0ed53345cad1b77205bd","de\/c\/ci\/Halle\/cip",0]];';
 
         $this->assertContains($sExpt, $sRes);
+    }
+
+    /**
+     * Tests EMOS::addToBasket() method. Ensures, that "view" event is not exported together with c_add event.
+     * #3139 case.
+     *
+     * return null;
+     */
+    public function testShowAddOnly()
+    {
+       $oSubj = new EMOS();
+
+       $oItem = new EMOS_Item();
+       $oItem->productId = "123";
+       $oItem->productName = "Test product";
+       $oItem->price = 46.50;
+       $oItem->productGroup = "Test/Category/";
+       $oItem->quantity = 13;
+       $oItem->variant1 = "var1";
+       $oItem->variant2 = null;
+       $oItem->variant3 = "var3";
+
+       $oSubj->addDetailView($oItem);
+       $oSubj->addToBasket($oItem);
+       $sRes = $oSubj->toString();
+
+       $sExpt = '["c_add","123","Test product",46.5,"Test\/Category\/",13,"var1",null,"var3"]';
+       $this->assertContains($sExpt, $sRes);
+       $this->assertNotContains("view", $sRes);
     }
 }

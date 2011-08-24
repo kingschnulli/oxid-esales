@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 38329 2011-08-22 13:36:07Z vilma $
+ * @version   SVN: $Id: oxuser.php 38346 2011-08-23 12:39:01Z vilma $
  */
 
 /**
@@ -159,6 +159,13 @@ class oxUser extends oxBase
      */
     protected $_sWishId = null;
 
+     /**
+     * Country title field
+     *
+     * @var object
+     */
+    protected $_oUserCountryTitle = null;
+
     /**
      * Class constructor, initiates parent constructor (parent::oxBase()).
      *
@@ -265,16 +272,20 @@ class oxUser extends oxBase
      */
     public function getUserCountry( $sCountryId = null, $iLang = null )
     {
-        $oDb = oxDb::getDb();
-        if ( !$sCountryId ) {
-            $sCountryId = $this->oxuser__oxcountryid->value;
+        if ( $this->_oUserCountryTitle == null || $sCountryId ) {
+            $sId = $sCountryId ? $sCountryId : $this->oxuser__oxcountryid->value;
+            $oDb = oxDb::getDb();
+            $sViewName = getViewName( 'oxcountry', $iLang );
+            $sQ = "select oxtitle from {$sViewName} where oxid = " . $oDb->quote( $sId ) . " ";
+            $oCountry = new oxField( $oDb->getOne( $sQ ), oxField::T_RAW);
+            if ( !$sCountryId ) {
+                $this->_oUserCountryTitle = $oCountry;
+            }
+        } else {
+            return $this->_oUserCountryTitle;
         }
 
-        $sViewName = getViewName( 'oxcountry', $iLang );
-        $sQ = "select oxtitle from {$sViewName} where oxid = " . $oDb->quote( $sCountryId ) . " ";
-        $sCountry = new oxField( $oDb->getOne( $sQ ), oxField::T_RAW);
-
-        return $sCountry;
+        return $oCountry;
     }
 
     /**

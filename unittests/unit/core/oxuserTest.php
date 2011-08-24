@@ -1082,20 +1082,6 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertTrue( $oUser->getNewsSubscription()->loadFromEMail );
     }
 
-
-    /**
-     * Testing user country title getter
-     */
-    public function testGetUserCountry()
-    {
-        $myUtils  = oxUtils::getInstance();
-        $myDB     = oxDb::getDB();
-
-        $oUser = oxNew( 'oxuser' );
-        $oUser->oxuser__oxcountryid = new oxField($myDB->getOne( 'select oxid from oxcountry' ), oxField::T_RAW);
-        $this->assertEquals( $oUser->getUserCountry()->value, $myDB->getOne( 'select oxtitle'.oxLang::getInstance()->getLanguageTag( null ).' from oxcountry where oxid = "'.$oUser->oxuser__oxcountryid->value.'"' ) );
-    }
-
     /**
      * Testing how group/address/exec. payments list loading works
      */
@@ -3384,6 +3370,28 @@ class Unit_Core_oxuserTest extends OxidTestCase
     {
         $oUser = new oxuser();
         $this->assertEquals( "a7c40f631fc920687.20179984", $oUser->getUserCountryId('DE') );
+    }
+
+    /**
+     * oxuser::getUserCountry()
+     */
+    public function testGetUserCountryWithId()
+    {
+        $oUser = $this->getProxyClass("oxUser");
+        $this->assertEquals( "Deutschland", $oUser->getUserCountry("a7c40f631fc920687.20179984")->value );
+        $this->assertNull( $oUser->getNonPublicVar("_oUserCountryTitle") );
+    }
+
+    /**
+     * oxuser::getUserCountry()
+     */
+    public function testGetUserCountry()
+    {
+        $oUser = $this->getProxyClass("oxUser");
+        $oUser->load('oxdefaultadmin');
+        $this->assertEquals( "Deutschland", $oUser->getUserCountry()->value );
+        $this->assertEquals( "Deutschland", $oUser->getNonPublicVar("_oUserCountryTitle")->value );
+        $this->assertEquals( $oUser->getUserCountry()->value, oxDb::getDb()->getOne( 'select oxtitle'.oxLang::getInstance()->getLanguageTag( null ).' from oxcountry where oxid = "'.$oUser->oxuser__oxcountryid->value.'"' ) );
     }
 
     public function testGetReviewUserHash()

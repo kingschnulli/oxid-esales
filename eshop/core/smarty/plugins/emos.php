@@ -36,7 +36,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $Id: emos.php 38108 2011-08-10 14:23:22Z tomas $
+ * $Id: emos.php 38350 2011-08-23 13:54:20Z tomas $
  */
 
 /**
@@ -515,19 +515,19 @@ class Emos
     /**
      * constructs a emosECPageArray of given $sEvent type
      *
-     * @param EMOS_Item $oItem  a instance of class EMOS_Item
-     * @param string    $sEvent Type of this event ("add","c_rmv","c_add")
+     * @param EMOS_Item $oItem      an instance of class EMOS_Item
+     * @param string    $sEvent     Type of this event ("view","c_rmv","c_add")
      *
      * @return string
      */
-    protected function _setEmosECPageArray( $oItem, $sEvent )
+    protected function _setEmosECPageArray( $oItem, $sEvent)
     {
         $oItem = $this->_emos_ItemFormat( $oItem );
 
-        $this->_ecEvent[] = array($sEvent, $oItem->productId, $oItem->productName,
+        $this->_ecEvent = array(array($sEvent, $oItem->productId, $oItem->productName,
                  $oItem->price, $oItem->productGroup,
                  $oItem->quantity, $oItem->variant1,
-                 $oItem->variant2, $oItem->variant3);
+                 $oItem->variant2, $oItem->variant3));
     }
 
     /**

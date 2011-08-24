@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 38126 2011-08-11 11:09:02Z vilma $
+ * @version   SVN: $Id: oxemail.php 38337 2011-08-23 07:52:59Z arvydas.vapsva $
  */
 /**
  * Includes PHP mailer class.
@@ -1099,8 +1099,9 @@ class oxEmail extends PHPMailer
         $blAttashSucc = true;
         $sAttPath = oxUtilsFile::getInstance()->normalizeDir($sAttPath);
         foreach ( $aAttFiles as $iNum => $sAttFile ) {
-            if ( file_exists($sAttPath . $sAttFile) && is_file($sAttPath . $sAttFile) ) {
-                $blAttashSucc = $this->addAttachment( $sAttPath, $sAttFile );
+            $sFullPath = $sAttPath . $sAttFile;
+            if ( @is_readable( $sFullPath ) && @is_file( $sFullPath ) ) {
+                $blAttashSucc = $this->addAttachment( $sFullPath, $sAttFile );
             } else {
                 $blAttashSucc = false;
                 $aError[] = array( 5, $sAttFile );   //"Error: backup file $sAttFile not found";
@@ -1723,13 +1724,11 @@ class oxEmail extends PHPMailer
      */
     public function addAttachment( $sAttPath, $sAttFile = '', $sEncoding = 'base64', $sType = 'application/octet-stream' )
     {
-        $sFullPath = $sAttPath . $sAttFile;
-
-        $this->_aAttachments[] = array( $sFullPath, $sAttFile, $sEncoding, $sType );
+        $this->_aAttachments[] = array( $sAttPath, $sAttFile, $sEncoding, $sType );
         $blResult = false;
 
         try {
-             $blResult = parent::addAttachment( $sFullPath, $sAttFile, $sEncoding, $sType );
+             $blResult = parent::addAttachment( $sAttPath, $sAttFile, $sEncoding, $sType );
         } catch( Exception $oEx ) {
         }
 

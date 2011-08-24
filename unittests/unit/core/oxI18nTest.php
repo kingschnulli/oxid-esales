@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxI18nTest.php 38200 2011-08-17 14:10:30Z linas.kukulskis $
+ * @version   SVN: $Id: oxI18nTest.php 38348 2011-08-23 13:17:10Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -848,5 +848,19 @@ class Unit_Core_oxi18ntest extends OxidTestCase
 
         $this->assertSame("''", $oObj->UNITgetUpdateFieldValue('oxid_10', new oxField(null)));
         $this->assertSame('null', $oObj->UNITgetUpdateFieldValue('oxvat_10', new oxField(null)));
+    }
+
+    /**
+     * Test for #0003138: Multilanguage fields having different
+     * character case are not always detected as multilanguage
+     *
+     * @return null
+     */
+    public function testIsMultilingualFieldFor0003138()
+    {
+        $oArticle = new oxArticle();
+        $this->assertTrue( $oArticle->isMultilingualField( "oxtitle" ) );
+        $this->assertTrue( $oArticle->isMultilingualField( "OXTITLE" ) );
+        $this->assertTrue( $oArticle->isMultilingualField( "oXtItLe" ) );
     }
 }
