@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 38105 2011-08-10 13:38:44Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 38367 2011-08-24 08:45:07Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2080,6 +2080,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testGetVariantsCached()
     {
         $oSubj = $this->getProxyClass('oxarticle');
+        $oSubj->setId( "123" );
         $oSubj->oxarticles__oxvarcount = new oxField( 10 );
         $oSubj->setInList();
         $oSubj->setNonPublicVar("_aVariants", array( 'simple' => 'testval1' ) );
@@ -2577,6 +2578,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         oxTestModules::addFunction('oxcategory', 'assignRecord($sql)', '{throw new Exception($sql);}');
         $oArticle = new oxarticle();
+        $oArticle->setId( "123" );
         try {
             $oArticle->getCategory();
         } catch (Exception $e) {

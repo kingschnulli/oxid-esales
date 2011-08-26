@@ -1297,37 +1297,59 @@ class OxSetupUtils extends oxSetupCore
     public function checkPaths( $aParams )
     {
         $sBaseOut = $this->getBaseOutDir();
-        $aPaths = array($aParams['sShopDir']."/config.inc.php",
-                        // product required paths
-                        $aParams['sShopDir']."/$sBaseOut/master/product/1",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/2",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/3",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/4",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/5",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/6",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/7",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/8",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/9",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/10",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/11",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/12",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/icon",
-                        $aParams['sShopDir']."/$sBaseOut/master/product/thumb",
-                        // category required paths
-                        $aParams['sShopDir']."/$sBaseOut/master/category/icon",
-                        $aParams['sShopDir']."/$sBaseOut/master/category/promo_icon",
-                        $aParams['sShopDir']."/$sBaseOut/master/category/thumb",
-                        // manufacturer required paths
-                        $aParams['sShopDir']."/$sBaseOut/master/manufacturer/icon",
-                        // vendor required paths
-                        $aParams['sShopDir']."/$sBaseOut/master/vendor/icon",
-                        // wrapping required paths
-                        $aParams['sShopDir']."/$sBaseOut/master/wrapping",
-                        //
-                        $aParams['sShopDir']."/out/azure/src/bg",
-                        $aParams['sShopDir']."/out/azure/src",
-                        $aParams['sShopDir']."/log",
-                        $aParams['sCompileDir']);
+        $aPaths = array(
+            $aParams['sShopDir']."/config.inc.php",
+            $aParams['sShopDir']."/log",
+            $aParams['sCompileDir'],
+
+            // promo & media
+            $aParams['sShopDir']."/$sBaseOut/promo",
+            $aParams['sShopDir']."/$sBaseOut/media",
+
+            // Master
+                // product required paths
+                $aParams['sShopDir']."/$sBaseOut/master/product/1",
+                $aParams['sShopDir']."/$sBaseOut/master/product/2",
+                $aParams['sShopDir']."/$sBaseOut/master/product/3",
+                $aParams['sShopDir']."/$sBaseOut/master/product/4",
+                $aParams['sShopDir']."/$sBaseOut/master/product/5",
+                $aParams['sShopDir']."/$sBaseOut/master/product/6",
+                $aParams['sShopDir']."/$sBaseOut/master/product/7",
+                $aParams['sShopDir']."/$sBaseOut/master/product/8",
+                $aParams['sShopDir']."/$sBaseOut/master/product/9",
+                $aParams['sShopDir']."/$sBaseOut/master/product/10",
+                $aParams['sShopDir']."/$sBaseOut/master/product/11",
+                $aParams['sShopDir']."/$sBaseOut/master/product/12",
+                $aParams['sShopDir']."/$sBaseOut/master/product/icon",
+                $aParams['sShopDir']."/$sBaseOut/master/product/thumb",
+                // category required paths
+                $aParams['sShopDir']."/$sBaseOut/master/category/icon",
+                $aParams['sShopDir']."/$sBaseOut/master/category/promo_icon",
+                $aParams['sShopDir']."/$sBaseOut/master/category/thumb",
+                // manufacturer required paths
+                $aParams['sShopDir']."/$sBaseOut/master/manufacturer/icon",
+                // vendor required paths
+                $aParams['sShopDir']."/$sBaseOut/master/vendor/icon",
+                // wrapping required paths
+                $aParams['sShopDir']."/$sBaseOut/master/wrapping",
+
+            // Generated
+                // product required paths
+                $aParams['sShopDir']."/$sBaseOut/generated/product/1",
+                $aParams['sShopDir']."/$sBaseOut/generated/product/2",
+                $aParams['sShopDir']."/$sBaseOut/generated/product/3",
+                $aParams['sShopDir']."/$sBaseOut/generated/product/4",
+                $aParams['sShopDir']."/$sBaseOut/generated/product/5",
+                $aParams['sShopDir']."/$sBaseOut/generated/product/6",
+                $aParams['sShopDir']."/$sBaseOut/generated/product/icon",
+                $aParams['sShopDir']."/$sBaseOut/generated/product/thumb",
+                // category required paths
+                $aParams['sShopDir']."/$sBaseOut/generated/category/icon",
+                $aParams['sShopDir']."/$sBaseOut/generated/category/promo_icon",
+                $aParams['sShopDir']."/$sBaseOut/generated/category/thumb",
+                // manufacturer required paths
+                $aParams['sShopDir']."/$sBaseOut/generated/manufacturer/icon",
+           );
 
         foreach ( $aPaths as $sPath) {
             $this->checkFileOrDirectory( $sPath );
@@ -2386,7 +2408,9 @@ class oxSetupAps extends oxSetupCore
         $aParams["check_for_updates"] = $oUtils->getEnvVar( "SETTINGS_check_for_updates" );
 
         // default country language
+        $aParams["setup_lang"] = $oUtils->getEnvVar( "SETTINGS_location_lang" );
         $aParams["location_lang"] = $oUtils->getEnvVar( "SETTINGS_location_lang" );
+        $aParams["country_lang"] = $oUtils->getEnvVar( "SETTINGS_country_lang" );
 
         // enable dyn content?
         $aParams["use_dyn_pages"] = (int) $oUtils->getEnvVar( "SETTINGS_use_dynamic_pages" );

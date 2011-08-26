@@ -176,3 +176,8 @@
      * Default database conection character set
      */
     $this->sDefaultDatabaseConnection = '';
+
+    /**
+     * Additional multi language tables
+     */
+    $this->aMultiLangTables = null;

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 37151 2011-07-19 14:02:40Z arvydas.vapsva $
+ * @version   SVN: $Id: detailsTest.php 38379 2011-08-24 12:04:37Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -172,8 +172,9 @@ class Unit_Views_detailsTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', true );
 
         $this->getProxyClass( 'oxarticle' );
-        $oProductParent = $this->getMock( 'oxarticlePROXY', array( 'getSelectLists' ) );
+        $oProductParent = $this->getMock( 'oxarticlePROXY', array( 'getSelectLists', 'getId' ) );
         $oProductParent->expects( $this->once() )->method( 'getSelectLists');
+        $oProductParent->expects( $this->atLeastOnce() )->method( 'getId')->will( $this->returnValue( '123' ) );
         $oProductParent->oxarticles__oxvarcount = new oxField( 10 );
 
         $oProduct = $this->getMock( 'oxarticle', array( 'getParentArticle', 'getVariants', 'getId' ) );
