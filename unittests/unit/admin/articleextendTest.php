@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articleextendTest.php 26903 2010-03-26 16:03:58Z arvydas $
+ * @version   SVN: $Id: articleextendTest.php 38538 2011-09-05 09:03:51Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -134,7 +134,7 @@ class Unit_Admin_ArticleExtendTest extends OxidTestCase
         // testing..
         oxTestModules::addFunction( 'oxarticle', 'save', '{}');
         oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{ return $aA[0]; }');
-        oxTestModules::addFunction( 'oxUtilsFile', 'handleUploadedFile', '{ throw new Exception("handleUploadedFile"); }');
+        oxTestModules::addFunction( 'oxUtilsFile', 'processFile', '{ throw new Exception("handleUploadedFile"); }');
 
         modConfig::setParameter( "mediaUrl", "testUrl" );
         modConfig::setParameter( "mediaDesc", "testDesc" );
@@ -159,7 +159,7 @@ class Unit_Admin_ArticleExtendTest extends OxidTestCase
         // testing..
         oxTestModules::addFunction( 'oxarticle', 'save', '{}');
         oxTestModules::addFunction( 'oxmediaurl', 'save', '{ throw new Exception( "oxmediaurl.save" ); }');
-        oxTestModules::addFunction( 'oxUtilsFile', 'handleUploadedFile', '{}');
+        oxTestModules::addFunction( 'oxUtilsFile', 'processFile', '{}');
 
         modConfig::setParameter( "mediaUrl", "testUrl" );
         modConfig::setParameter( "mediaDesc", "testDesc" );

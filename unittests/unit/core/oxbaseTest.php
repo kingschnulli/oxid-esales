@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbaseTest.php 32051 2010-12-20 12:05:18Z sarunas $
+ * @version   SVN: $Id: oxbaseTest.php 38570 2011-09-05 12:46:43Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2574,5 +2574,22 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $this->assertFalse($oSubj->UNITisInList());
         $oSubj->setNonPublicVar("_blIsInList", true);
         $this->assertTrue($oSubj->UNITisInList());
+    }
+
+    /**
+     * Field names getter test
+     *
+     * @return null
+     */
+    public function testGetFieldNames()
+    {
+        $oBase = new oxBase();
+        $this->assertEquals( array( "oxid" ), $oBase->getFieldNames() );
+
+        $oBase->init( "oxarticles" );
+        $aFieldNames = $oBase->getFieldNames();
+
+        $this->assertTrue( is_array( $aFieldNames ) && count( $aFieldNames ) > 0 );
+        $this->assertTrue( in_array( "oxtitle", $aFieldNames ) );
     }
 }

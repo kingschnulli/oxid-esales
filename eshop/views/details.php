@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 38369 2011-08-24 10:41:37Z arvydas.vapsva $
+ * @version   SVN: $Id: details.php 38659 2011-09-06 10:13:57Z vilma $
  */
 
 /**
@@ -288,6 +288,7 @@ class Details extends oxUBase
             if ( $oParent = $oProduct->getParentArticle() ) {
                 $myConfig = $this->getConfig();
 
+                $oParent->setNoVariantLoading(false);
                 $this->_aVariantList = $oParent->getFullVariants( false );
 
                 //lets additionally add parent article if it is sellable
@@ -854,6 +855,7 @@ class Details extends oxUBase
         if (is_object($oList)) {
             $oList = clone $oList;
         }
+
         $sOxid = $this->getProduct()->getId();
         if (isset($oList[$sOxid])) {
             unset($oList[$sOxid]);

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlelistTest.php 32003 2010-12-17 15:10:01Z sarunas $
+ * @version   SVN: $Id: articlelistTest.php 38562 2011-09-05 11:20:59Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -232,4 +232,17 @@ class Unit_Admin_ArticleListTest extends OxidTestCase
     }
 
 
+    /**
+     * Test case for Article_List::getSearchFields()() getter
+     *
+     * @return null
+     */
+    public function testGetSearchFields()
+    {
+        $aSkipFields = array("oxblfixedprice", "oxvarselect", "oxamitemid", "oxamtaskid", "oxpixiexport", "oxpixiexported") ;
+        $oView = new Article_List();
+
+        $oArticle = new oxArticle();
+        $this->assertEquals( array_diff( $oArticle->getFieldNames(), $aSkipFields ), $oView->getSearchFields() );
+    }
 }

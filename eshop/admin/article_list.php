@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_list.php 33636 2011-03-03 13:53:12Z vilma $
+ * @version   SVN: $Id: article_list.php 38562 2011-09-05 11:20:59Z arvydas.vapsva $
  */
 
 /**
@@ -84,7 +84,7 @@ class Article_List extends oxAdminList
         if ( !$oArticle && $oList ) {
             $oArticle = $oList->getBaseObject();
         }
-        $this->_aViewData["pwrsearchfields"] = $oArticle ? $oArticle->getSearchableFields() : null;
+        $this->_aViewData["pwrsearchfields"] = $oArticle ? $this->getSearchFields() : null;
         $this->_aViewData["pwrsearchfld"]    = strtoupper( $sPwrSearchFld );
 
         $aFilter = $this->getListFilter();
@@ -111,6 +111,18 @@ class Article_List extends oxAdminList
         $this->_aViewData["vndtree"] = $this->getVendorList($sType, $sValue);
 
         return "article_list.tpl";
+    }
+
+    /**
+     * Returns array of fields which may be used for product data search
+     *
+     * @return array
+     */
+    public function getSearchFields()
+    {
+        $aSkipFields = array("oxblfixedprice", "oxvarselect", "oxamitemid", "oxamtaskid", "oxpixiexport", "oxpixiexported") ;
+        $oArticle = oxNew( "oxarticle" );
+        return array_diff( $oArticle->getFieldNames(), $aSkipFields );
     }
 
     /**

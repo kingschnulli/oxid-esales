@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfileTest.php 37440 2011-07-27 14:42:41Z arvydas.vapsva $
+ * @version   SVN: $Id: oxutilsfileTest.php 38541 2011-09-05 09:06:18Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -372,6 +372,80 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
 
         try {
             oxUtilsFile::getInstance()->handleUploadedFile($aFiles, '/out/media/');
+        }
+        catch (oxException $e)
+        {
+            return;
+        }
+        $this->fail('Wrongfile type slipped');
+    }
+
+    public function testProcessFileEmpty()
+    {
+        try {
+            oxUtilsFile::getInstance()->processFile(null, '/out/media/');
+        }
+        catch (oxException $e)
+        {
+            $this->assertEquals('EXCEPTION_NOFILE', $e->getMessage());
+            return;
+        }
+        $this->fail('Not a $_FILE array supplied');
+    }
+
+    public function testProcessFileWrongChar1()
+    {
+
+        $_FILES['fileItem']['name'] = 'testfile_\xc4\xaf\xc5\xa1.jpg';
+        $_FILES['fileItem']['tmp_name'] = 'testfile';
+        try {
+            oxUtilsFile::getInstance()->processFile('fileItem', '/out/media/');
+        }
+        catch (oxException $e)
+        {
+            $this->assertEquals('EXCEPTION_FILENAMEINVALIDCHARS', $e->getMessage());
+            return;
+        }
+        $this->fail('Wrong char slipped');
+    }
+
+    public function testProcessFileWrongChar2()
+    {
+        $_FILES['fileItem']['name'] = 'TEST.te.stfile_0__.jpg';
+        $_FILES['fileItem']['tmp_name'] = 'testfile';
+        try {
+            oxUtilsFile::getInstance()->processFile('fileItem', '/out/media/');
+        }
+        catch (oxException $e)
+        {
+            $this->fail('Wrong exception' . $e->getMessage());
+            return;
+        }
+    }
+
+    public function testProcessFileWrongFileType()
+    {
+        $_FILES['fileItem']['name'] = 'testfile';
+        $_FILES['fileItem']['tmp_name'] = 'testfile';
+
+        try {
+            oxUtilsFile::getInstance()->processFile('fileItem', '/out/media/');
+        }
+        catch (oxException $e)
+        {
+            return;
+        }
+        $this->fail('Wrongfile type slipped');
+    }
+
+    public function testProcessFileTooBigFile()
+    {
+        $_FILES['fileItem']['name']     = 'testfile.jpg';
+        $_FILES['fileItem']['tmp_name'] = 'testfile.jpg';
+        $_FILES['fileItem']['error']    = 1;
+
+        try {
+            oxUtilsFile::getInstance()->processFile('fileItem', '/out/media/');
         }
         catch (oxException $e)
         {

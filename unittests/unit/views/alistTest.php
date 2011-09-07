@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 38129 2011-08-11 11:52:19Z linas.kukulskis $
+ * @version   SVN: $Id: alistTest.php 38641 2011-09-06 07:36:48Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -307,7 +307,8 @@ class Unit_Views_alistTest extends OxidTestCase
      */
     public function testRender_pageCountIsIncorrect()
     {
-        oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
+        //oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
+        oxTestModules::addFunction( "oxUtils", "redirect", "{ throw new Exception('OK'); }" );
 
         $oCat = $this->getMock( "oxcategory", array( 'canView' ) );
         $oCat->expects( $this->any() )->method( 'canView')->will( $this->returnValue( true ) );
@@ -327,6 +328,33 @@ class Unit_Views_alistTest extends OxidTestCase
         }
 
         $this->fail( 'failed redirect when page count is incorrect' );
+    }
+
+    /**
+     * Test render actual page count is 0
+     *
+     * @return null
+     */
+    public function testRender_pageCountIsZero()
+    {
+        oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
+        //oxTestModules::addFunction( "oxUtils", "redirect", "{ throw new Exception('OK'); }" );
+
+        $oCat = $this->getMock( "oxcategory", array( 'canView' ) );
+        $oCat->expects( $this->any() )->method( 'canView')->will( $this->returnValue( true ) );
+        $oCat->oxcategories__oxactive = new oxField( 1, oxField::T_RAW );
+
+        $oListView = $this->getMock( "aList", array( 'getActCategory', 'getArticleList', 'getActPage', 'getPageCount' ) );
+        $oListView->expects( $this->atLeastOnce() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
+        $oListView->expects( $this->never() )->method( 'getActPage');//->will( $this->returnValue( 12 ) );
+        $oListView->expects( $this->once() )->method( 'getPageCount')->will( $this->returnValue( 0 ) );
+        $oListView->expects( $this->atLeastOnce() )->method( 'getArticleList' );
+
+        try {
+            $oListView->render();
+        } catch ( Exception $oExcp ) {
+            $this->fail( 'failed redirect when page count is incorrect' );
+        }
     }
 
     /**
@@ -888,6 +916,8 @@ class Unit_Views_alistTest extends OxidTestCase
 
             $sCatId = '8a142c3e44ea4e714.31136811';
 
+        modConfig::setParameter( 'cnid', $sCatId );
+
         $oSubj = $this->getMock( 'alist', array( '_prepareMetaKeyword' ) );
         $oSubj->expects( $this->any() )->method( '_prepareMetaKeyword')->will($this->returnValue( "aaa" ) );
 
@@ -908,6 +938,8 @@ class Unit_Views_alistTest extends OxidTestCase
     {
 
             $sCatId = '8a142c3e44ea4e714.31136811';
+
+        modConfig::setParameter( 'cnid', $sCatId );
 
         $oSubj = $this->getMock( 'alist', array( '_prepareMetaKeyword' ) );
         $oSubj->expects( $this->any() )->method( '_prepareMetaKeyword')->will($this->returnValue( "aaa" ) );

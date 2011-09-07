@@ -29,26 +29,6 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 class Unit_Core_oxbasketreservationTest extends OxidTestCase
 {
     /**
-     * Initialize the fixtures.
-     *
-     * @return null
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-
-    /**
-     * Tear down the fixtures.
-     *
-     * @return null
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-
-    /**
      * oxBasketReservation::_getReservationsId() test case
      * test if the new created id equals to our test id.
      *
@@ -464,7 +444,8 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( 'iPsBasketReservationTimeout', 50 );
         oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return 8484;}');
 
-        $oUB = new stdClass();
+        $oUB = new oxUserBasket();
+        $oUB->setId( 123 );
 
         $oR = $this->getMock('oxBasketReservation', array('getReservations'));
         $oR->expects($this->any())->method('getReservations')->will($this->returnValue($oUB));

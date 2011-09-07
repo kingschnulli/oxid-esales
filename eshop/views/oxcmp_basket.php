@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_basket.php 35207 2011-05-09 07:58:47Z linas.kukulskis $
+ * @version   SVN: $Id: oxcmp_basket.php 38551 2011-09-05 11:02:56Z arvydas.vapsva $
  */
 
 /**
@@ -151,9 +151,7 @@ class oxcmp_basket extends oxView
                 // passing article
                 oxSession::setVar( '_newitem', $oNewItem );
             }
-        }
 
-        if ( $this->getConfig()->getConfigParam( 'iNewBasketItemMessage' ) == 3 ) {
             // redirect to basket
             return $this->_getRedirectUrl();
         }
@@ -253,9 +251,8 @@ class oxcmp_basket extends oxView
                 $oUser->addUserAddress( $oWishUser );
                 $oBasketItem->setWishId( $sUserId );
             }
+            return $this->_getRedirectUrl();
         }
-
-        return $this->_getRedirectUrl();
     }
 
     /**

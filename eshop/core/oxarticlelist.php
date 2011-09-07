@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 37868 2011-08-01 11:57:18Z linas.kukulskis $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 38525 2011-09-05 07:02:20Z vilma $
  */
 
 /**
@@ -716,7 +716,7 @@ class oxArticleList extends oxList
         $sQ = "select {$sViewName}.oxid from {$sViewName} inner join {$sArticleTable} on ".
               "{$sArticleTable}.oxid = {$sViewName}.oxid where {$sArticleTable}.oxissearch = 1 and ".
               "match ( {$sViewName}.oxtags ) ".
-              "against( ".oxDb::getDb()->quote( $sTag )." IN BOOLEAN MODE )";
+              "against( ".oxDb::getDb()->quote( "\"".$sTag."\"" )." IN BOOLEAN MODE )";
 
         // checking stock etc
         if ( ( $sActiveSnippet = $oListObject->getSqlActiveSnippet() ) ) {

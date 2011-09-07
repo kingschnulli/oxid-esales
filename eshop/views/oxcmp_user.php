@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 38156 2011-08-12 10:44:57Z vilma $
+ * @version   SVN: $Id: oxcmp_user.php 38558 2011-09-05 11:16:50Z arvydas.vapsva $
  */
 
 // defining login/logout states
@@ -218,6 +218,7 @@ class oxcmp_user extends oxView
             }
 
             if ( $oBasket = $this->getSession()->getBasket() ) {
+                $oBasket->load();
                 $oBasket->onUpdate();
             }
         }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 38367 2011-08-24 08:45:07Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticleTest.php 38618 2011-09-05 14:02:31Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1042,7 +1042,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oP2A->save();
 
         $oArticle->setNonPublicVar("_oAmountPriceList", null);
-        $oArticle->oxarticles__oxprice->value = 50;
+        $oArticle->oxarticles__oxprice = new oxField( 50 );
         // testing article
         $this->assertEquals( $oArticle->oxarticles__oxprice->value, $oArticle->UNITgetAmountPrice( 1 ) );
 
@@ -1058,6 +1058,14 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->setNonPublicVar("_oAmountPriceList", null);
         $oArticle->oxarticles__oxprice->value = 30;
         $this->assertEquals( 30, $oArticle->UNITgetAmountPrice( 12 ) );
+
+        $oArticle = $this->getMock( "oxarticle", array( "skipDiscounts" ) );
+        $oArticle->expects( $this->any() )->method( 'skipDiscounts' )->will( $this->returnValue( true ) );
+        $oArticle->load( $this->oArticle->getId() );
+        $oArticle->oxarticles__oxprice = new oxField( 50 );
+        $this->assertEquals( $oArticle->oxarticles__oxprice->value, $oArticle->UNITgetAmountPrice( 1 ) );
+        $this->assertEquals( $oArticle->oxarticles__oxprice->value, $oArticle->UNITgetAmountPrice( 2 ) );
+        $this->assertEquals( $oArticle->oxarticles__oxprice->value, $oArticle->UNITgetAmountPrice( 12 ) );
     }
 
     /**
@@ -2356,13 +2364,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetVendorIdNotExist()
+    /*public function testGetVendorIdNotExist()
     {
         $this->oArticle->oxarticles__oxvendorid = new oxField('_xxx', oxField::T_RAW);
         $this->oArticle->save();
         $sVendorId = $this->oArticle->getVendorId( true);
         $this->assertFalse( $sVendorId );
-    }
+    }*/
 
     /**
      * Test get manufacturer id.
@@ -6821,7 +6829,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oProduct = $this->getMock( "oxArticle", array( "getVariants" ) );
         $oProduct->expects( $this->once() )->method( 'getVariants' )->will( $this->returnValue( 'variants' ) );
-        $oProduct->oxarticles__oxvarname = new oxField('varname');
+        $oProduct->oxarticles__oxvarcount = new oxField( 3 );
+        $oProduct->oxarticles__oxvarname  = new oxField( 'varname' );
         $this->assertEquals( 'asd', $oProduct->getVariantSelections(1, 2, 3) );
     }
 

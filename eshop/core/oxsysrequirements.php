@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 38391 2011-08-24 15:09:50Z vilma $
+ * @version   SVN: $Id: oxsysrequirements.php 38526 2011-09-05 07:04:21Z vilma $
  */
 
 /**
@@ -136,7 +136,7 @@ class oxSysRequirements
                                      "mod_rewrite"        => "apache_mod_rewrite_module",
                                      "server_permissions" => "Files_.26_Folder_Permission_Setup",
                                      "zend_optimizer"     => "Zend_Optimizer",
-                                     "bug53632"           => "PHP_Bug_.2353632",
+                                     "bug53632"           => "Not_recommended_PHP_versions",
                                      // "zend_platform_or_server"
                                       );
 

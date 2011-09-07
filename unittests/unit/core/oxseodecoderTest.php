@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseodecoderTest.php 32136 2010-12-21 13:57:36Z alfonsas $
+ * @version   SVN: $Id: oxseodecoderTest.php 38552 2011-09-05 11:04:05Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -56,6 +56,32 @@ class Unit_Core_oxSeoDecoderTest extends OxidTestCase
             // avoiding exceptions while removing columns ..
         }
         parent::tearDown();
+    }
+
+    /**
+     * Test case for oxSeoDecoder::_addQueryString()
+     *
+     * @return null
+     */
+    public function testAddQueryString()
+    {
+        $sUrl = "shop.com/index.php";
+        $oDecoder = new oxSeoDecoder();
+
+        $_SERVER["QUERY_STRING"] = "?abc=123";
+        $this->assertEquals( $sUrl . "?def=456&abc=123", $oDecoder->UNITaddQueryString( $sUrl . "?def=456" ) );
+
+        $_SERVER["QUERY_STRING"] = "&abc=123";
+        $this->assertEquals( $sUrl . "?def=456&abc=123", $oDecoder->UNITaddQueryString( $sUrl . "?def=456&" ) );
+
+        $_SERVER["QUERY_STRING"] = "abc=123";
+        $this->assertEquals( $sUrl . "?abc=123", $oDecoder->UNITaddQueryString( $sUrl ) );
+
+        $_SERVER["QUERY_STRING"] = "?abc=123";
+        $this->assertEquals( $sUrl . "?abc=123", $oDecoder->UNITaddQueryString( $sUrl ) );
+
+        $_SERVER["QUERY_STRING"] = "&abc=123";
+        $this->assertEquals( $sUrl . "?abc=123", $oDecoder->UNITaddQueryString( $sUrl ) );
     }
 
     public function testGetIdent()

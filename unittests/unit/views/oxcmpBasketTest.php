@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpBasketTest.php 35204 2011-05-09 07:51:53Z linas.kukulskis $
+ * @version   SVN: $Id: oxcmpBasketTest.php 38551 2011-09-05 11:02:56Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -55,6 +55,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
         $oBItem->expects($this->once())->method('getProductId')->will($this->returnValue('ret:getProductId'));
         $oBItem->expects($this->once())->method('getAmount')->will($this->returnValue('ret:getAmount'));
         $oBItem->expects($this->once())->method('getdBundledAmount')->will($this->returnValue('ret:getdBundledAmount'));
+
         $oConfig = $this->getMock('oxstdclass', array('getConfigParam'));
         $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('iNewBasketItemMessage'))->will($this->returnValue('2'));
         $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('iNewBasketItemMessage'))->will($this->returnValue('2'));
@@ -65,7 +66,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
         $o->expects($this->once())->method('_addItems')->with($this->equalTo($aProducts))->will($this->returnValue($oBItem));
         $o->expects($this->exactly(2))->method('getConfig')->will($this->returnValue($oConfig));
 
-        $this->assertSame(null, $o->tobasket());
+        $this->assertEquals( "start?", $o->tobasket());
 
         $oNewItem = oxSession::getVar( '_newitem' );
         $this->assertTrue($oNewItem instanceof oxstdclass);
@@ -92,15 +93,15 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
         $oBItem->expects($this->never())->method('getProductId')->will($this->returnValue('ret:getProductId'));
         $oBItem->expects($this->never())->method('getAmount')->will($this->returnValue('ret:getAmount'));
         $oBItem->expects($this->never())->method('getdBundledAmount')->will($this->returnValue('ret:getdBundledAmount'));
+
         $oConfig = $this->getMock('oxstdclass', array('getConfigParam'));
-        $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('iNewBasketItemMessage'))->will($this->returnValue('0'));
-        $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('iNewBasketItemMessage'))->will($this->returnValue('3'));
+        $oConfig->expects($this->once())->method('getConfigParam')->with($this->equalTo('iNewBasketItemMessage'))->will($this->returnValue('0'));
 
         $o = $this->getMock('oxcmp_basket', array('_getItems', '_setLastCallFnc', '_addItems', 'getSession', 'getConfig', '_getRedirectUrl'));
         $o->expects($this->once())->method('_getItems')->will($this->returnValue($aProducts));
         $o->expects($this->once())->method('_setLastCallFnc')->with($this->equalTo('tobasket'))->will($this->returnValue(null));
         $o->expects($this->once())->method('_addItems')->with($this->equalTo($aProducts))->will($this->returnValue($oBItem));
-        $o->expects($this->exactly(2))->method('getConfig')->will($this->returnValue($oConfig));
+        $o->expects($this->once())->method('getConfig')->will($this->returnValue($oConfig));
         $o->expects($this->once())->method('_getRedirectUrl')->will($this->returnValue('new url'));
 
         $this->assertEquals('new url', $o->tobasket());
@@ -249,9 +250,9 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                     $this->equalTo('override')
             )->will($this->returnValue(null));
         $o->expects($this->never())->method('getSession');
-        $o->expects($this->once())->method('_getRedirectUrl')->will($this->returnValue('retvalredirect'));
+        $o->expects($this->never())->method('_getRedirectUrl');
 
-        $this->assertEquals('retvalredirect', $o->wl_tobasket('abc', 10, 'sel', 'persparam', 'override'));
+        $this->assertNull( $o->wl_tobasket('abc', 10, 'sel', 'persparam', 'override'));
     }
     public function testWlTobasketTakesParamsFromRequestGetItemsNull()
     {
@@ -266,13 +267,13 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
             )->will($this->returnValue(null));
         $o->expects($this->never())->method('getSession');
         $o->expects($this->never())->method('_addItems');
-        $o->expects($this->once())->method('_getRedirectUrl')->will($this->returnValue('retvalredirect'));
+        $o->expects($this->never())->method('_getRedirectUrl');
 
         modConfig::setParameter( 'aid', 'b:artid');
         modConfig::setParameter( 'am', 'b:am');
         modConfig::setParameter( 'sel', 'b:sel');
         modConfig::setParameter( 'persparam', 'b:persparam');
-        $this->assertEquals('retvalredirect', $o->wl_tobasket());
+        $this->assertNull($o->wl_tobasket());
     }
 
     public function testWlTobasketTakesParamsFromRequestFailToLoadWishListUser()

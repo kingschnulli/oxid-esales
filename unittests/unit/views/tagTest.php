@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: tagTest.php 33265 2011-02-15 12:35:35Z arvydas.vapsva $
+ * @version   SVN: $Id: tagTest.php 38568 2011-09-05 12:25:37Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -45,12 +45,8 @@ class Unit_Views_tagTest extends OxidTestCase
 
     public function testRender()
     {
-        $oArticleList = $this->getMock( "oxArticleList", array( "count" ) );
-        $oArticleList->expects( $this->any() )->method( 'count')->will( $this->returnValue(1) );
-
-        $oView = $this->getMock( "tag", array( "getArticleList", "_processListArticles" ) );
-        $oView->expects( $this->atLeastOnce() )->method( 'getArticleList')->will( $this->returnValue($oArticleList) );
-        $oView->expects( $this->atLeastOnce() )->method( '_processListArticles');
+        modConfig::setParameter( "searchtag", "kuyichi" );
+        $oView = new tag();
 
         $this->assertEquals( "page/list/list.tpl", $oView->render() );
     }
@@ -60,17 +56,20 @@ class Unit_Views_tagTest extends OxidTestCase
      */
     public function testRender_noArticlesForTag()
     {
-        $oUtils = $this->getMock('oxUtils', array('handlePageNotFoundError'));
-        $oUtils->expects( $this->once() )->method('handlePageNotFoundError');
-        oxTestModules::addModuleObject('oxUtils', $oUtils);
+        modConfig::setParameter( "pgNr", 999 );
+        oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
 
-        $oArticleList = $this->getMock( "oxArticleList", array( "count" ) );
-        $oArticleList->expects( $this->any() )->method( 'count')->will( $this->returnValue(0) );
+        modConfig::setParameter( "searchtag", "notexistingtag" );
 
-        $oView = $this->getMock( "tag", array( "getArticleList" ) );
-        $oView->expects( $this->any() )->method( 'getArticleList')->will( $this->returnValue($oArticleList) );
+        $oView = new tag();
+        try {
+            $oView->render();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( 'OK', $oExcp->getMessage(), 'failed redirect on inactive category' );
+            return;
+        }
 
-        $oView->render();
+        $this->fail( 'failed redirect on inactive category' );
     }
 
     public function testGetAddUrlParams()

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticleTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxorderarticleTest.php 38567 2011-09-05 11:58:01Z arunas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -670,4 +670,32 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
         $oOrderArticle->oxorderarticles__oxisbundle = new oxField( true );
         $this->assertTrue( $oOrderArticle->isBundle() );
     }
+    
+    /**
+     * Testing article order getter, when order is not yet cached
+     */
+    public function testGetOrder()
+    {   
+        // oxOrderArticle instance
+        
+        $oOrderArticle = $this->getProxyClass( 'oxOrderArticle' );
+        // overriding the oxOrder::load() method to only return true when 'test' is passed as ID
+        oxTestModules::addFunction( "oxorder", 'load($sOXID)', '{ return in_array( $sOXID, array("test")); }' );
+        
+        // checking if function returns NULL 
+        // when it's impossible to get the order object        
+        $oOrderArticle->oxorderarticles__oxorderid = new oxField( 'test1' );        
+        $this->assertNull( $oOrderArticle->getOrder());
+        
+        // checking if the function returns an oxOrder instance 
+        // if oxorderarticles has an ID of the order
+        $oOrderArticle->oxorderarticles__oxorderid->setValue( 'test' );
+        $this->assertTrue( $oOrderArticle->getOrder() instanceof oxOrder );
+                        
+        // checking if method returns the result from cache
+        $oOrderArticle->setNonPublicVar( '_aOrderCache', array( 'test' => 'result' ));
+        $this->assertEquals( 'result', $oOrderArticle->getOrder());        
+                
+    }
+
 }
