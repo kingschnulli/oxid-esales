@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 38562 2011-09-05 11:20:59Z arvydas.vapsva $
+ * @version   SVN: $Id: lang.php 38692 2011-09-09 08:32:48Z arvydas.vapsva $
  */
 
 /*
@@ -1137,8 +1137,8 @@ $aLang = array(
 'SHOP_CONFIG_BASKETRESERVATION'                            => 'Basket expiration',
 'SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'                     => 'Seconds basket expiration timeout',
 'SHOP_CONFIG_INVITATION'                                   => 'Invitation',
-'SHOP_CONFIG_POINTSFORINVITATION'                          => 'Credit points for user registering after invitation',
-'SHOP_CONFIG_POINTSFORREGISTRATION'                        => 'Credit points for inviting user',
+'SHOP_CONFIG_POINTSFORINVITATION'                          => 'Credit points for inviting user',
+'SHOP_CONFIG_POINTSFORREGISTRATION'                        => 'Credit points for user registering after invitation',
 'SHOP_CONFIG_FACEBOOKAPPID'                                => 'Application ID',
 'SHOP_CONFIG_FACEBOOKCONFIRM'                              => 'Customer must enable Facebook social plugins',
 'SHOP_CONFIG_FBSECRETKEY'                                  => 'Application Secret Key',

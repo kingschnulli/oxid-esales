@@ -3597,4 +3597,116 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertEquals( "1", $aRec[1]["OXTYPE"] );
     }
 
+    /**
+     * Test case for oxUSer::_getLoginQuery()
+     *
+     * @return null
+     */
+    public function testGetLoginQuery()
+    {
+        $sUser     = "user";
+        $sPassword = "password";
+        $sShopID   = "shopid";
+        $blAdmin   = false;
+        $oDb       = oxDb::getDb();
+
+        $sWhat = "oxid";
+
+        $oUser = new oxUser();
+
+        $sQ  = "select {$sWhat} from oxuser where oxuser.oxactive = 1 and  ";
+        $sQ .= "oxuser.oxpassword = MD5( CONCAT( ".$oDb->quote( $sPassword ).", UNHEX( oxuser.oxpasssalt ) ) )  and ";
+        $sQ .= "oxuser.oxusername = " . $oDb->quote( $sUser ) . " ";
+        $sQ .= "$sShopSelect ";
+
+        $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( $sUser, $sPassword, $sShopID, $blAdmin ) );
+
+        // numeric customer id
+        $sQ  = "select {$sWhat} from oxuser where oxuser.oxactive = 1 and  ";
+        $sQ .= "oxuser.oxpassword = MD5( CONCAT( ".$oDb->quote( $sPassword ).", UNHEX( oxuser.oxpasssalt ) ) )  and ";
+        $sQ .= "oxuser.oxcustnr = 1  ";
+        $sQ .= "$sShopSelect ";
+
+        $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( 1, $sPassword, $sShopID, $blAdmin ) );
+
+        // admin
+        $sQ  = "select {$sWhat} from oxuser where oxuser.oxactive = 1 and  ";
+        $sQ .= "oxuser.oxpassword = MD5( CONCAT( ".$oDb->quote( $sPassword ).", UNHEX( oxuser.oxpasssalt ) ) )  and ";
+        $sQ .= "oxuser.oxusername = " . $oDb->quote( $sUser ) . " ";
+        $sQ .= " and ( oxrights != 'user' )  ";
+        $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( $sUser, $sPassword, $sShopID, true ) );
+
+        // demoshop + admin
+        $oConfig = $this->getMock( "oxConfig", array( "isDemoShop", "getConfigParam" ) );
+        $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
+
+            $oConfig->expects( $this->never() )->method( 'getConfigParam');
+
+        $oUser = $this->getMock( "oxUser", array( "getConfig" ), array(), '', false );
+        $oUser->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+        $sQ = "select $sWhat from oxuser where oxrights = 'malladmin'  and ( oxrights != 'user' )  ";
+        $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( "admin", "admin", $sShopID, true ) );
+
+        // demoshop + admin, but pass or user name are not "admin"
+        $oConfig = $this->getMock( "oxConfig", array( "getConfigParam", "isDemoShop" ) );
+            $oConfig->expects( $this->never() )->method( 'getConfigParam');
+        $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
+
+        try {
+            $oUser = $this->getMock( "oxUser", array( "getConfig" ), array(), '', false );
+            $oUser->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+            $oUser->UNITgetLoginQuery( $sUser, $sPassword, $sShopID, true );
+        } catch ( oxUserException $oExcp ) {
+            //
+        }
+
+    }
+
+    /**
+     * Test case for oxUser::_loadSavedUserBasketAfterLogin()
+     *
+     * @return null
+     */
+    public function testLoadSavedUserBasketAfterLogin()
+    {
+        // admin
+        $oUser = $this->getMock( "oxUser", array( "isAdmin", "getSession" ), array(), '', false );
+        $oUser->expects( $this->once() )->method( 'isAdmin')->will( $this->returnValue( true ) );
+        $oUser->expects( $this->never() )->method( 'getSession');
+        $oUser->UNITloadSavedUserBasketAfterLogin();
+
+        // non admin
+        $oBasket = $this->getMock( "oxBasket", array( "load" ) );
+        $oBasket->expects( $this->once() )->method( 'load' )->will( $this->throwException( new Exception() ) );
+
+        $oSession = $this->getMock( "oxSession", array( "getBasket" ) );
+        $oSession->expects( $this->once() )->method( 'getBasket')->will( $this->returnValue( $oBasket ) );
+
+        $oUser = $this->getMock( "oxUser", array( "isAdmin", "getSession" ), array(), '', false );
+        $oUser->expects( $this->once() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+        $oUser->expects( $this->once() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
+        try {
+            $oUser->UNITloadSavedUserBasketAfterLogin();
+        } catch ( Exception $oExcp ) {
+            $this->fail( "Exception must not be thrown");
+        }
+    }
+
+    /**
+     * Test case for #0002616: oxuser: addToGroup and inGroup inconsistent
+     *
+     * @return null
+     */
+    public function testAddToGroupFor0002616()
+    {
+        $aUsers  = current( $this->_aUsers );
+        $sUserId = current( $aUsers );
+
+        $oUser = $this->getMock( "oxuser", array( "inGroup" ) );
+        $oUser->expects( $this->any() )->method( 'inGroup')->will( $this->returnValue( false ) );
+        $oUser->load( $sUserId );
+
+        $this->assertTrue( $oUser->addToGroup( oxDb::getDb()->getOne( "select oxid from oxgroups" ) ) );
+        $this->assertFalse( $oUser->addToGroup( "nonsense" ) );
+    }
 }
