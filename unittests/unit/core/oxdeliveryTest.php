@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryTest.php 34907 2011-04-22 13:21:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxdeliveryTest.php 38762 2011-09-14 13:40:14Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -390,6 +390,32 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
         $oBasket->calculateBasket();
 
         $this->assertTrue( $oDelivery->isForBasket( $oBasket ) );
+    }
+
+    // #1130: Single article in Basket, checked as free shipping, is not buyable (step 3 no payments found)
+    public function testIsForBasketPriceDeliveryIsFixed()
+    {
+        $oDelivery = new oxDelivery();
+        $oDelivery->setId( '_testdelivery' );
+        $oDelivery->oxdelivery__oxshopid = new oxField(oxConfig::getInstance()->getBaseShopId(), oxField::T_RAW);
+        $oDelivery->oxdelivery__oxshopincl = new oxField($oDelivery->oxdelivery__oxshopid->value, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxactive = new oxField(1, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxtitle = new oxField('_testdelivery', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxaddsumtype = new oxField('abs', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxaddsum = new oxField('10', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxdeltype = new oxField('p', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxfixed = new oxField('2', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxparam = new oxField(0, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxparamend = new oxField(0, oxField::T_RAW);
+        $oDelivery->save();
+
+        $oBasket = new oxBasket();
+        modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );
+        modConfig::getInstance()->setConfigParam( 'blExclNonMaterialFromDelivery', true );
+        $oBasket->addToBasket( '1354', 5 );
+        $oBasket->calculateBasket();
+
+        $this->assertFalse( $oDelivery->isForBasket( $oBasket ) );
     }
 
     public function testIsForBasketRegularDeliveryOncePerArticle()
