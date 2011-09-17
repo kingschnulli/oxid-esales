@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 33967 2011-03-24 11:25:33Z arvydas.vapsva $
+ * @version   SVN: $Id: oxorderTest.php 38772 2011-09-15 07:33:06Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -664,18 +664,18 @@ class Unit_Core_oxorderTest extends OxidTestCase
     {
         $myConfig = oxConfig::getInstance();
 
+        $sPaymentId = oxDb::getDb()->getOne( "select oxid from oxpayments" );
+
         //set order
         $this->_oOrder = oxNew( "oxOrder" );
         $this->_oOrder->setId( $sId );
-        $this->_oOrder->oxorder__oxshopid = new oxField($myConfig->getShopId(), oxField::T_RAW);
-        $this->_oOrder->oxorder__oxuserid = new oxField("_testUserId", oxField::T_RAW);
-        //$this->_oOrder->oxorder__oxbillcountryid = new oxField('10', oxField::T_RAW);
+        $this->_oOrder->oxorder__oxshopid        = new oxField($myConfig->getShopId(), oxField::T_RAW);
+        $this->_oOrder->oxorder__oxuserid        = new oxField("_testUserId", oxField::T_RAW);
         $this->_oOrder->oxorder__oxbillcountryid = new oxField( "a7c40f6320aeb2ec2.72885259" );
         $this->_oOrder->oxorder__oxdelcountryid  = new oxField( "a7c40f631fc920687.20179984", oxField::T_RAW);
-        $this->_oOrder->oxorder__oxdeltype = new oxField('_testDeliverySetId', oxField::T_RAW);
-        $this->_oOrder->oxorder__oxpaymentid = new oxField('_testPaymentId', oxField::T_RAW);
-        $this->_oOrder->oxorder__oxpaymenttype = new oxField('_testPaymentId', oxField::T_RAW);
-        $this->_oOrder->oxorder__oxcardid = new oxField('_testWrappingId', oxField::T_RAW);
+        $this->_oOrder->oxorder__oxdeltype       = new oxField('_testDeliverySetId', oxField::T_RAW);
+        $this->_oOrder->oxorder__oxcardid        = new oxField('_testWrappingId', oxField::T_RAW);
+        $this->_oOrder->UNITsetPayment( $sPaymentId );
         $this->_oOrder->save();
     }
 
@@ -1456,15 +1456,10 @@ class Unit_Core_oxorderTest extends OxidTestCase
     {
         $this->_insertTestOrder();
 
-        //insert test delivery set
-        $oPayment = oxNew( 'oxUserPayment' );
-        $oPayment->setId('_testPaymentId');
-        $oPayment->save();
-
         $oOrder = oxNew( 'oxorder' );
         $oOrder->load( "_testOrderId" );
 
-        $this->assertEquals( "_testPaymentId", $oOrder->getPaymentType()->getId() );
+        $this->assertEquals( $oOrder->oxorder__oxpaymentid->value, $oOrder->getPaymentType()->getId() );
     }
 
     public function testLoadLoadsGiftCard()
@@ -2811,23 +2806,18 @@ class Unit_Core_oxorderTest extends OxidTestCase
 
         $oOrderArticle = oxNew( 'oxOrderArticle' );
         $oOrderArticle->setId( '_testOrderArticleId' );
-        $oOrderArticle->oxorderarticles__oxorderid = new oxField('_testOrderId', oxField::T_RAW);
-        $oOrderArticle->oxorderarticles__oxamount = new oxField('2', oxField::T_RAW);
+        $oOrderArticle->oxorderarticles__oxorderid = new oxField( '_testOrderId', oxField::T_RAW );
+        $oOrderArticle->oxorderarticles__oxamount  = new oxField( '2', oxField::T_RAW );
         $oOrderArticle->save();
 
-        $oPayment = oxNew( 'oxPayment' );
-        $oPayment->setId( '_testPaymentId' );
-        $oPayment->save();
+        $iCnt = $oDB->getOne( "select count(*) from oxuserpayments" );
 
-        $oOrder = $this->getProxyClass( "oxOrder" );
+        $oOrder = new oxOrder();
         $oOrder->load( '_testOrderId' );
-        $oOrder->oxorder__oxpaymentid = new oxField('_testPaymentId', oxField::T_RAW);
-
         $this->assertTrue( $oOrder->delete() );
 
-        $sSql = "select count(*) from oxuserpayments where oxid='_testPaymentId'";
-        $sStatus = $oDB->getOne( $sSql );
-        $this->assertEquals( 0, $sStatus );
+        $sSql = "select count(*) from oxuserpayments";
+        $this->assertEquals( $iCnt - 1, $oDB->getOne( $sSql ) );
     }
 
     public function testDeleteRestoresArticleStockInfoForNonCanceledOrderArticles()

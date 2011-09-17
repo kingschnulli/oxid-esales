@@ -3706,7 +3706,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oUser->expects( $this->any() )->method( 'inGroup')->will( $this->returnValue( false ) );
         $oUser->load( $sUserId );
 
-        $this->assertTrue( $oUser->addToGroup( oxDb::getDb()->getOne( "select oxid from oxgroups" ) ) );
+        $sQ = "select oxgroups.oxid from oxgroups left join oxobject2group on oxobject2group.oxgroupsid = oxgroups.oxid "
+              ."where oxobject2group.oxobjectid is null";
+
+        $this->assertTrue( $oUser->addToGroup( oxDb::getDb()->getOne( $sQ ) ) );
         $this->assertFalse( $oUser->addToGroup( "nonsense" ) );
     }
 }

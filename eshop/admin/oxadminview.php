@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminview.php 38557 2011-09-05 11:15:35Z arvydas.vapsva $
+ * @version   SVN: $Id: oxadminview.php 38776 2011-09-15 12:21:20Z arvydas.vapsva $
  */
 
 /**
@@ -161,7 +161,7 @@ class oxAdminView extends oxView
 
         // authorization check
         if ( !$this->_authorize() ) {
-            oxUtils::getInstance()->redirect( 'index.php');
+            oxUtils::getInstance()->redirect( 'index.php', true, 302 );
             exit;
         }
 

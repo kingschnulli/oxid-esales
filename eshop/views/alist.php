@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 38641 2011-09-06 07:36:48Z arvydas.vapsva $
+ * @version   SVN: $Id: alist.php 38776 2011-09-15 12:21:20Z arvydas.vapsva $
  */
 
 /**
@@ -193,7 +193,7 @@ class aList extends oxUBase
 
         // category is inactive ?
         if ( !$blContinue || !$oCategory ) {
-            oxUtils::getInstance()->redirect( $myConfig->getShopURL().'index.php' );
+            oxUtils::getInstance()->redirect( $myConfig->getShopURL().'index.php', true, 302 );
         }
 
         $oCat = $this->getActCategory();

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 38731 2011-09-14 11:33:56Z vilma $
+ * @version   SVN: $Id: details.php 38784 2011-09-16 07:00:36Z arvydas.vapsva $
  */
 
 /**
@@ -893,9 +893,11 @@ class Details extends oxUBase
     /**
      * Template variable getter. Returns last seen products
      *
+     * @param int $iCnt product count
+     *
      * @return array
      */
-    public function getLastProducts()
+    public function getLastProducts( $iCnt = 4 )
     {
         if ( $this->_aLastProducts === null ) {
             //last seen products for #768CA
@@ -903,7 +905,7 @@ class Details extends oxUBase
             $sArtId = $oProduct->oxarticles__oxparentid->value?$oProduct->oxarticles__oxparentid->value:$oProduct->getId();
 
             $oHistoryArtList = oxNew( 'oxarticlelist' );
-            $oHistoryArtList->loadHistoryArticles( $sArtId );
+            $oHistoryArtList->loadHistoryArticles( $sArtId, $iCnt );
             $this->_aLastProducts = $oHistoryArtList;
         }
         return $this->_aLastProducts;

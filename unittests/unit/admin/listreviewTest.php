@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: listreviewTest.php 31989 2010-12-17 14:04:33Z sarunas $
+ * @version   SVN: $Id: listreviewTest.php 38782 2011-09-15 15:11:05Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -76,16 +76,16 @@ class Unit_Admin_ListReviewTest extends OxidTestCase
      */
     public function testPrepareWhereQuery()
     {
-
-        $oArtList = $this->getProxyClass( "Article_List" );
-        $sSql = "select * from oxreview where 1";
+        $oArtList = new Article_List();
+        $sSql = $oArtList->UNITbuildSelectString( new oxArticle() );
         $sSql = $oArtList->UNITprepareWhereQuery( array(), $sSql );
 
         // checking if exists string oxarticle.oxparentid = ''
         $blCheckForParent = preg_match( "/\s+and\s+".getViewName( 'oxarticles' ).".oxparentid\s+=\s+''/", $sSql );
         $this->assertTrue( (bool)$blCheckForParent );
 
-        $oList = $this->getProxyClass( 'List_Review' );
+        $oList = new List_Review();
+        $sSql = $oList->UNITbuildSelectString( "" );
         $sSql = $oList->UNITprepareWhereQuery( array(), $sSql );
 
         // checking if not exists string oxarticle.oxparentid = ''
@@ -100,15 +100,16 @@ class Unit_Admin_ListReviewTest extends OxidTestCase
      */
     public function testPrepareWhereQueryCase2()
     {
-        $oArtList = $this->getProxyClass( "Article_List" );
-        $sSql = "select * from oxreview where 1";
+        $oArtList = new Article_List();
+        $sSql = $oArtList->UNITbuildSelectString( new oxArticle() );
         $sSql = $oArtList->UNITprepareWhereQuery( array(), $sSql );
 
         // checking if exists string oxarticle.oxparentid = ''
         $blCheckForParent = preg_match( "/\s+and\s+".getViewName( 'oxarticles' ).".oxparentid\s+=\s+''/", $sSql );
         $this->assertTrue( (bool)$blCheckForParent );
 
-        $oList = $this->getProxyClass( 'List_Review' );
+        $oList = new List_Review();
+        $sSql = $oList->UNITbuildSelectString( "" );
         $sSql = $oList->UNITprepareWhereQuery( array(), $sSql );
 
         // checking if not exists string oxarticle.oxparentid = ''

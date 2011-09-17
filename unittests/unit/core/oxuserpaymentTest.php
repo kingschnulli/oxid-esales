@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserpaymentTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxuserpaymentTest.php 38767 2011-09-14 15:07:41Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -58,6 +58,7 @@ class Unit_Core_oxuserpaymentTest extends OxidTestCase
     {
         $this->_oUpay->delete('_testOxId');
         $this->_oUpay->delete('_testOxId2');
+        $this->cleanUpTable( 'oxuserpayments' );
 
         parent::tearDown();
     }
@@ -346,6 +347,56 @@ class Unit_Core_oxuserpaymentTest extends OxidTestCase
         $oUserPayment->oxuserpayments__oxvalue = new oxField( $sDyn, oxField::T_RAW );
         $oUserPayment->oxuserpayments__oxpaymentsid = new oxField( 'oxidcreditcard', oxField::T_RAW );
         $this->assertNull( $oUserPayment->getDynValues() );
+    }
+
+    /**
+     * Test case for bug entry #0002439: wrong oxuserpayment entry in checkout
+     *
+     * @return null
+     */
+    public function testCaseFor0002439()
+    {
+        $oDb = oxDb::getDb();
+        $iRecCnt = (int) $oDb->getOne( "select count(*) from oxuserpayments" );
+
+        // this will insert new
+        $oUpay = oxNew( 'oxuserpayment' );
+        $oUpay->setId( '_testOxId3' );
+        $oUpay->oxuserpayments__oxuserid     = new oxField( '_testUserId3', oxField::T_RAW );
+        $oUpay->oxuserpayments__oxvalue      = new oxField( '_testValue3', oxField::T_RAW );
+        $oUpay->oxuserpayments__oxpaymentsid = new oxField( 'oxidcashondel3', oxField::T_RAW );
+        $this->assertEquals( '_testOxId3', $oUpay->save() );
+
+        $this->assertEquals( $iRecCnt + 1, (int) $oDb->getOne( "select count(*) from oxuserpayments" ) );
+
+        // this will update
+        $oUpay = oxNew( 'oxuserpayment' );
+        $this->assertTrue( $oUpay->load( '_testOxId3' ) );
+        $oUpay->oxuserpayments__oxvalue = new oxField( '_testValue2', oxField::T_RAW );
+        $this->assertEquals( '_testOxId3', $oUpay->save() );
+
+        $this->assertEquals( $iRecCnt + 1, (int) $oDb->getOne( "select count(*) from oxuserpayments" ) );
+
+        // this will overwrite
+        $oUpay = oxNew( 'oxuserpayment' );
+        $oUpay->setId( '_testOxId2' );
+        $oUpay->oxuserpayments__oxuserid     = new oxField( '_testUserId3', oxField::T_RAW );
+        $oUpay->oxuserpayments__oxvalue      = new oxField( '_testValue3', oxField::T_RAW );
+        $oUpay->oxuserpayments__oxpaymentsid = new oxField( 'oxidcashondel3', oxField::T_RAW );
+        $this->assertEquals( '_testOxId2', $oUpay->save() );
+
+        $this->assertEquals( $iRecCnt + 1, (int) $oDb->getOne( "select count(*) from oxuserpayments" ) );
+
+        // will delete
+        $oUpay = oxNew( 'oxuserpayment' );
+        $this->assertFalse( $oUpay->load( '_testOxId2' ) );
+        $this->assertFalse( $oUpay->delete() );
+
+        $oUpay = oxNew( 'oxuserpayment' );
+        $this->assertTrue( $oUpay->load( '_testOxId3' ) );
+        $this->assertTrue( $oUpay->delete() );
+
+        $this->assertEquals( $iRecCnt, (int) $oDb->getOne( "select count(*) from oxuserpayments" ) );
     }
 
 }

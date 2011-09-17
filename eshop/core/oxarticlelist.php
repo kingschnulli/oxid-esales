@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 38525 2011-09-05 07:02:20Z vilma $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 38784 2011-09-16 07:00:36Z arvydas.vapsva $
  */
 
 /**
@@ -124,32 +124,32 @@ class oxArticleList extends oxList
      * Returns article id array.
      *
      * @param string $sArtId Article ID
+     * @param int    $iCnt   product count
      *
      * @return array
      */
-    public function loadHistoryArticles($sArtId)
+    public function loadHistoryArticles( $sArtId, $iCnt = 4 )
     {
         $aHistoryArticles = $this->getHistoryArticles();
         $aHistoryArticles[] = $sArtId;
 
         // removing dublicates
-        $aHistoryArticles = array_unique( $aHistoryArticles);
-
-        if (count($aHistoryArticles) > 5) {
-            array_shift($aHistoryArticles);
+        $aHistoryArticles = array_unique( $aHistoryArticles );
+        if ( count( $aHistoryArticles ) > ( $iCnt + 1 ) ) {
+            array_shift( $aHistoryArticles );
         }
 
-        $this->setHistoryArticles($aHistoryArticles);
+        $this->setHistoryArticles( $aHistoryArticles );
 
         //remove current article and return array
         //asignment =, not ==
-        if (($iCurrentArt = array_search($sArtId, $aHistoryArticles)) !== false) {
-            unset ($aHistoryArticles[$iCurrentArt]);
+        if ( ( $iCurrentArt = array_search( $sArtId, $aHistoryArticles ) ) !== false ) {
+            unset( $aHistoryArticles[$iCurrentArt] );
         }
 
-        $aHistoryArticles = array_values($aHistoryArticles);
-        $this->loadIds($aHistoryArticles);
-        $this->_sortByIds($aHistoryArticles);
+        $aHistoryArticles = array_values( $aHistoryArticles );
+        $this->loadIds( $aHistoryArticles );
+        $this->_sortByIds( $aHistoryArticles );
     }
 
     /**

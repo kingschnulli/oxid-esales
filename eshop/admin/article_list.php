@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_list.php 38562 2011-09-05 11:20:59Z arvydas.vapsva $
+ * @version   SVN: $Id: article_list.php 38778 2011-09-15 13:39:47Z arvydas.vapsva $
  */
 
 /**
@@ -201,38 +201,45 @@ class Article_List extends oxAdminList
     }
 
     /**
-     * Sets articles sorting by category.
+     * Builds and returns SQL query string.
      *
-     * @param string $sSql sql string
+     * @param object $oListObject list main object
      *
      * @return string
      */
-    protected function _changeselect( $sSql )
+    protected function _buildSelectString( $oListObject = null )
     {
-        $sArtCat= oxConfig::getParameter("art_category");
-        if ( $sArtCat && strstr($sArtCat, "@@") !== false ) {
-            list($sType, $sValue) = explode("@@", $sArtCat);
+        $sQ = parent::_buildSelectString( $oListObject );
+        if ( $sQ ) {
+            $sTable = getViewName( "oxarticles" );
+            $sQ .= " and $sTable.oxparentid = '' ";
+
+            $sType   = false;
+            $sArtCat = oxConfig::getParameter( "art_category" );
+            if ( $sArtCat && strstr( $sArtCat, "@@" ) !== false ) {
+                list( $sType, $sValue ) = explode("@@", $sArtCat );
+            }
+
+            switch ( $sType ) {
+                // add category
+                case 'cat':
+                    $oStr = getStr();
+                    $sO2CView = getViewName( "oxobject2category" );
+                    $sInsert  = "from $sTable left join $sO2CView on $sTable.oxid = $sO2CView.oxobjectid where $sO2CView.oxcatnid = ".oxDb::getDb()->quote($sValue)." and ";
+                    $sQ = $oStr->preg_replace( "/from\s+$sTable\s+where/i", $sInsert, $sQ);
+                    break;
+                // add category
+                case 'mnf':
+                    $sQ.= " and $sTable.oxmanufacturerid = ".oxDb::getDb()->quote($sValue);
+                    break;
+                // add vendor
+                case 'vnd':
+                    $sQ.= " and $sTable.oxvendorid = ".oxDb::getDb()->quote($sValue);
+                    break;
+            }
         }
 
-        $sTable = getViewName( "oxarticles" );
-        switch ($sType) {
-            // add category
-            case 'cat':
-                $oStr = getStr();
-                $sO2CView = getViewName( "oxobject2category" );
-                $sInsert  = "from $sTable left join $sO2CView on $sTable.oxid = $sO2CView.oxobjectid where $sO2CView.oxcatnid = ".oxDb::getDb()->quote($sValue)." and ";
-                $sSql = $oStr->preg_replace( "/from\s+$sTable\s+where/i", $sInsert, $sSql);
-                break;
-            // add category
-            case 'mnf':
-                $sSql.= " and $sTable.oxmanufacturerid = ".oxDb::getDb()->quote($sValue);
-                break;
-            // add vendor
-            case 'vnd':
-                $sSql.= " and $sTable.oxvendorid = ".oxDb::getDb()->quote($sValue);
-                break;
-        }
-        return $sSql;
+        return $sQ;
     }
 
     /**
@@ -252,21 +259,6 @@ class Article_List extends oxAdminList
         }
 
         return $this->_aWhere;
-    }
-
-    /**
-     * Adding empty parent check
-     *
-     * @param array  $aWhere SQL condition array
-     * @param string $sQ     SQL query string
-     *
-     * @return $sQ
-     */
-    protected function _prepareWhereQuery( $aWhere, $sQ )
-    {
-        $sQ = parent::_prepareWhereQuery( $aWhere, $sQ );
-
-        return $sQ . " and ".getViewName( 'oxarticles' ).".oxparentid = '' ";
     }
 
     /**
