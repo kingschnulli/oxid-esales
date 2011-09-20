@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 38710 2011-09-12 13:42:25Z tomas $
+ * @version   SVN: $Id: oxarticleTest.php 38798 2011-09-19 13:08:30Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1571,6 +1571,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testGetVariantsIds()
     {
+        $this->oArticle2->oxarticles__oxactive = new oxField( 0 );
+        $this->oArticle2->save();
+        $aIds = $this->oArticle->UNITgetVariantsIds();
+        $this->assertEquals( 0, count( $aIds ) );
+
+        $this->oArticle2->oxarticles__oxactive = new oxField( 1 );
+        $this->oArticle2->save();
         $aIds = $this->oArticle->UNITgetVariantsIds();
         $this->assertEquals( '_testVar', $aIds[0]);
     }

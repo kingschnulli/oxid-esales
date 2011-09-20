@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscount.php 38525 2011-09-05 07:02:20Z vilma $
+ * @version   SVN: $Id: oxutilscount.php 38802 2011-09-19 14:09:14Z arvydas.vapsva $
  */
 
 /**
@@ -289,6 +289,7 @@ class oxUtilsCount extends oxSuperCfg
     {
         if ( !$sCatId ) {
             $this->getConfig()->setGlobalParameter( 'aLocalCatCache', null );
+            oxUtils::getInstance()->toFileCache( 'aLocalCatCache', '' );
         } else {
             // loading from cache
             $aCatData = $this->_getCatCache();

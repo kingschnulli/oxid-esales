@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 38618 2011-09-05 14:02:31Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 38798 2011-09-19 13:08:30Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -3143,10 +3143,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         $aSelect = array();
         if ( ( $sId = $this->getId() ) ) {
-            $oRs = oxDb::getDb(true)->execute( "select oxid from oxarticles where oxparentid = '{$sId}' " );
+            $sQ = "select oxid from " . $this->getViewName( true ) . " where oxparentid = '{$sId}' and " .
+                   $this->getSqlActiveSnippet( true );
+
+            $oRs = oxDb::getDb(true)->execute( $sQ );
             if ( $oRs != false && $oRs->recordCount() > 0 ) {
                 while (!$oRs->EOF) {
-                    $aSelect[] = $oRs->fields['oxid'];
+                    $aSelect[] = reset( $oRs->fields );
                     $oRs->moveNext();
                 }
             }
