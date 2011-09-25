@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 38526 2011-09-05 07:04:21Z vilma $
+ * @version   SVN: $Id: oxsysrequirements.php 38812 2011-09-20 06:28:09Z alfonsas $
  */
 
 /**
@@ -265,10 +265,8 @@ class oxSysRequirements
             return 0;
         }
 
-        $sTheme = 'basic';
         $sTmp = "$sPath/tmp$sVerPrefix/";
         if (class_exists('oxConfig')) {
-            $sTheme  = oxConfig::getInstance()->getConfigParam('sTheme');
             $sCfgTmp = oxConfig::getInstance()->getConfigParam('sCompileDir');
             if (strpos($sCfgTmp, '<sCompileDir_') === false) {
                 $sTmp = $sCfgTmp;
@@ -276,9 +274,10 @@ class oxSysRequirements
         }
 
         $aPathsToCheck = array(
-                            $sPath."out/pictures{$sVerPrefix}/",
-                            $sPath."out/media/",
-                            $sPath."out/$sTheme/src/",
+                            $sPath."out/pictures{$sVerPrefix}/promo/",
+                            $sPath."out/pictures{$sVerPrefix}/media/",
+                            $sPath."out/pictures{$sVerPrefix}/master/",
+                            $sPath."out/pictures{$sVerPrefix}/generated/",
                             $sPath."log/",
                             $sTmp
                             );

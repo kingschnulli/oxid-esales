@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: emosTest.php 38351 2011-08-23 13:55:01Z tomas $
+ * @version   SVN: $Id: emosTest.php 38884 2011-09-23 13:03:28Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -383,7 +383,7 @@ class Unit_Maintenance_emosTest extends OxidTestCase
        $oSubj->addPageId("123");
        $sRes = $oSubj->toString();
 
-       $this->assertContains("emospro.pageid = \"123\";", $sRes);
+       $this->assertContains("emospro.pageId = \"123\";", $sRes);
     }
 
     /**

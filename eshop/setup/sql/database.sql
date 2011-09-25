@@ -409,9 +409,9 @@ DROP TABLE IF EXISTS `oxconfig`;
 CREATE TABLE `oxconfig` (
   `OXID`            char(32) character set latin1 collate latin1_general_ci NOT NULL,
   `OXSHOPID`        char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
-  `OXMODULE`        varchar(32) NOT NULL default '',
-  `OXVARNAME`       char(32) NOT NULL default '',
-  `OXVARTYPE`       varchar(16) NOT NULL default '',
+  `OXMODULE`        varchar(32) character set latin1 collate latin1_general_ci NOT NULL default '',
+  `OXVARNAME`       char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
+  `OXVARTYPE`       varchar(16) character set latin1 collate latin1_general_ci NOT NULL default '',
   `OXVARVALUE`      blob NOT NULL,
   PRIMARY KEY  (`OXID`),
   KEY `OXVARNAME` (`OXVARNAME`),
@@ -603,9 +603,8 @@ DROP TABLE IF EXISTS `oxconfigdisplay`;
 
 CREATE TABLE `oxconfigdisplay` (
   `OXID`            char(32) character set latin1 collate latin1_general_ci NOT NULL,
-  `OXCFGMODULE`     varchar(32) NOT NULL default '',
-  `OXCFGVARNAME`    char(32) NOT NULL default '',
-
+  `OXCFGMODULE`     varchar(32) character set latin1 collate latin1_general_ci NOT NULL default '',
+  `OXCFGVARNAME`    char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
   `OXGROUPING`      varchar(255) NOT NULL default '',
   `OXVARCONSTRAINT` varchar(255) NOT NULL default '',
   `OXPOS`           int NOT NULL default 0,
