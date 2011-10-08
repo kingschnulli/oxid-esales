@@ -86,6 +86,8 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
 
             $this->cleanUpTable( 'oxstatistics' );
+        $sQ = 'delete from oxshops where oxid > "1" ';
+        oxDb::getDb()->Execute( $sQ );
 
         oxConfig::getInstance()->setActiveView( null );
         parent::tearDown();
@@ -1374,14 +1376,14 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
 
         $oShop = oxNew( 'oxshop' );
-        $oShop->setId( '_testShop' );
+        $oShop->setId( '5' );
         foreach ( $aFields as $sFieldName ) {
             $oShop->{$sFieldName} = new oxField( $sValue );
         }
         $oShop->save();
 
         $oShop = oxNew( 'oxshop' );
-        $oShop->load( '_testShop' );
+        $oShop->load( '5' );
 
         foreach ( $aFields as $sFieldName ) {
             $this->assertTrue( strcmp( $oShop->{$sFieldName}->value, $sValue ) === 0, "$sFieldName (".$oShop->{$sFieldName}->value.")" );
