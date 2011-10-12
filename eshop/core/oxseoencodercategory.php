@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercategory.php 28421 2010-06-18 08:54:27Z sarunas $
+ * @version   SVN: $Id: oxseoencodercategory.php 39131 2011-10-11 12:41:45Z arunas.paskevicius $
  */
 
 /**
@@ -272,8 +272,9 @@ class oxSeoEncoderCategory extends oxSeoEncoder
         $oDb = oxDb::getDb();
         $sIdQuoted = $oDb->quote($oCategory->getId());
         $oDb->execute("update oxseo, (select oxseourl from oxseo where oxobjectid = $sIdQuoted and oxtype = 'oxcategory') as test set oxseo.oxexpired=1 where oxseo.oxseourl like concat(test.oxseourl, '%') and (oxtype = 'oxcategory' or oxtype = 'oxarticle')");
+        $oDb->execute("delete from oxseo where oxseo.oxtype = 'oxarticle' and oxseo.oxparams = $sIdQuoted" );
         $oDb->execute("delete from oxseo where oxobjectid = $sIdQuoted and oxtype = 'oxcategory'");
-        $oDb->execute("delete from oxobject2seodata where oxobjectid = $sIdQuoted");
+        $oDb->execute("delete from oxobject2seodata where oxobjectid = $sIdQuoted");        
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercategoryTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxseoencodercategoryTest.php 39131 2011-10-11 12:41:45Z arunas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -379,13 +379,18 @@ class Unit_Core_oxSeoEncoderCategoryTest extends OxidTestCase
                values
                    ( 'obj_id', '132', '{$sShopId}', '0', '', '', 'oxcategory', '0', '0', '' )";
         $oDb->execute( $sQ );
-
+        $sQ = "insert into oxseo
+                   ( oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxfixed, oxexpired, oxparams )
+               values
+                   ( 'obj_art', '321', '{$sShopId}', '0', '', '', 'oxarticle', '0', '0', 'obj_id' )";
+        $oDb->execute( $sQ );
         $sQ = "insert into oxobject2seodata ( oxobjectid, oxshopid, oxlang ) values ( 'obj_id', '{$sShopId}', '0' )";
         $oDb->execute( $sQ );
 
         $this->assertTrue( (bool) $oDb->getOne( "select 1 from oxseo where oxobjectid = 'obj_id'" ) );
         $this->assertTrue( (bool) $oDb->getOne( "select 1 from oxobject2seodata where oxobjectid = 'obj_id'" ) );
-
+        $this->assertTrue( (bool) $oDb->getOne( "select 1 from oxseo where oxtype = 'oxarticle' and oxparams = 'obj_id' " ));
+        
         $oObj = new oxbase();
         $oObj->setId( 'obj_id' );
 
@@ -394,5 +399,6 @@ class Unit_Core_oxSeoEncoderCategoryTest extends OxidTestCase
 
         $this->assertFalse( (bool) $oDb->getOne( "select 1 from oxseo where oxobjectid = 'obj_id'" ) );
         $this->assertFalse( (bool) $oDb->getOne( "select 1 from oxobject2seodata where oxobjectid = 'obj_id'" ) );
+        $this->assertFalse( (bool) $oDb->getOne( "select 1 from oxseo where oxtype = 'oxarticle' and oxparams = 'obj_id' " ));
     }
 }
