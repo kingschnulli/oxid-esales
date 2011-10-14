@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 38118 2011-08-11 09:13:15Z linas.kukulskis $
+ * @version   SVN: $Id: oxubaseTest.php 39230 2011-10-12 14:12:41Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -812,7 +812,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView = new oxubase();
         $sResult = $oView->UNITprepareMetaKeyword( $sDesc );
 
-        $this->assertEquals( "aaa, bbb, ccc.", $sResult);
+        $this->assertEquals( "aaa, bbb, ccc", $sResult);
     }
 
     /*
@@ -842,7 +842,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView = new oxubase();
         $sResult = $oView->UNITprepareMetaKeyword( $sDesc );
 
-        $this->assertEquals( "lady, gaga, pokerface.", $sResult);
+        $this->assertEquals( "lady, gaga, pokerface", $sResult);
     }
         /*
      * Test prepearing meta keywords - removing spec. chars skips dots and commas
@@ -864,12 +864,14 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     public function testsRemoveDuplicatedWords()
     {
-        $sDesc = 'aaa ccc bbb ccc ddd ccc';
+        $aIn = array( "aaa ccc bbb ccc ddd ccc" => "aaa, ccc, bbb, ddd",
+                      "kuyichi, t-shirt, tiger, bekleidung, fashion, ihn, shirts, &, co., shirt, tiger, organic, men" => "kuyichi, t-shirt, tiger, bekleidung, fashion, ihn, shirts, co, shirt, organic, men",
+                    );
 
         $oView = new oxubase();
-        $sResult = $oView->UNITremoveDuplicatedWords( $sDesc );
-
-        $this->assertEquals( "aaa, ccc, bbb, ddd", $sResult);
+        foreach ( $aIn as $sIn => $sOut ) {
+            $this->assertEquals( $sOut, $oView->UNITremoveDuplicatedWords( $sIn ) );
+        }
     }
 
     /*

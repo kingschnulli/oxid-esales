@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 38379 2011-08-24 12:04:37Z arvydas.vapsva $
+ * @version   SVN: $Id: detailsTest.php 39230 2011-10-12 14:12:41Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -999,7 +999,7 @@ class Unit_Views_detailsTest extends OxidTestCase
             $sKeywords .= ", Geschenke, Bar-Equipment";
 
         $oView = new oxubase();
-        $sTestKeywords = $oView->UNITprepareMetaKeyword( $sKeywords, true ) . ", testValue1 testValue2 testValue3";
+        $sTestKeywords = $oView->UNITprepareMetaKeyword( $sKeywords, true ) . ", testvalue1, testvalue2, testvalue3";
 
         $this->assertEquals( $sTestKeywords, $oDetails->UNITprepareMetaKeyword( null ) );
     }

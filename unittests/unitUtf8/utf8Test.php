@@ -580,6 +580,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oCat->load( $sCatId );
         $aAttr = $oCat->getAttributes();
         $oAttr = $aAttr->offsetGet('_testAttribute1');
+        $this->assertTrue( $oAttr instanceof oxattribute );
         $this->assertEquals( 'für', $oAttr->getTitle());
     }
 
@@ -1888,7 +1889,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oView->expects( $this->any() )->method( 'getProduct' )->will( $this->returnValue( $oArt ) );
 
         $this->assertEquals( 'agentūЛитовfür test, best nest fest - agentūЛитовfür test, best nest fest', $oView->getMetaDescription() );
-        $this->assertEquals( 'agentūлитовfür, test, best, nest, fest, agentūЛитовfür test, best nest fest', $oView->getMetaKeywords() );
+        $this->assertEquals( 'agentūлитовfür, test, best, nest, fest', $oView->getMetaKeywords() );
     }
 
     public function testDetailsAddTags()

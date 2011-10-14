@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserpayment.php 38773 2011-09-15 07:37:04Z arvydas.vapsva $
+ * @version   SVN: $Id: oxuserpayment.php 39209 2011-10-12 13:31:50Z arvydas.vapsva $
  */
 
 /**
@@ -158,7 +158,8 @@ class oxUserPayment extends oxBase
 
         //encode sensitive data
         if ( $sValue = $this->oxuserpayments__oxvalue->value ) {
-            $sEncodedValue = oxDb::getDb()->getOne( "select encode( " . oxDb::getDb()->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )" );
+            $oDb = oxDb::getDb();
+            $sEncodedValue = $oDb->getOne( "select encode( " . $oDb->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )" );
             $this->oxuserpayments__oxvalue->setValue($sEncodedValue);
         }
 
@@ -179,9 +180,11 @@ class oxUserPayment extends oxBase
      */
     protected function _update()
     {
+        $oDb = oxDb::getDb();
+
         //encode sensitive data
         if ( $sValue = $this->oxuserpayments__oxvalue->value ) {
-            $sEncodedValue = oxDb::getDb()->getOne( "select encode( " . oxDb::getDb()->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )" );
+            $sEncodedValue = $oDb->getOne( "select encode( " . $oDb->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )" );
             $this->oxuserpayments__oxvalue->setValue($sEncodedValue);
         }
 
@@ -192,7 +195,6 @@ class oxUserPayment extends oxBase
         }
 
 
-        $oDb = oxDB::getDb();
         $sUpdate =  "update {$this->_sCoreTable} set ".$this->_getUpdateFields()
                   . " where {$this->_sCoreTable}.oxuserid = " . $oDb->quote( $this->oxuserpayments__oxuserid->value )
                   . " and oxpaymentsid = " . $oDb->quote( $this->oxuserpayments__oxpaymentsid->value )
@@ -306,8 +308,9 @@ class oxUserPayment extends oxBase
     {
         $blGet = false;
         if ( $oUser && $sPaymentType != null ) {
-            $sSelect  = 'select oxid from oxuserpayments where oxpaymentsid=' . oxDb::getDb()->quote( $sPaymentType ) . ' and oxuserid="' . $oUser->getId() . '" ';
-            if ( ( $sOxId = oxDb::getDb()->getOne( $sSelect ) ) ) {
+            $oDb = oxDb::getDb();
+            $sSelect  = 'select oxid from oxuserpayments where oxpaymentsid=' . $oDb->quote( $sPaymentType ) . ' and oxuserid=' . $oDb->quote( $oUser->getId() );
+            if ( ( $sOxId = $oDb->getOne( $sSelect ) ) ) {
                 $blGet = $this->load( $sOxId );
             }
         }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 38798 2011-09-19 13:08:30Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticleTest.php 39362 2011-10-13 12:51:10Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -198,6 +198,10 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         //$this->__oldRR = oxConfig::getInstance()->getConfigParam('blUseRightsRoles');
         modConfig::getInstance()->setConfigParam( 'blUseRightsRoles', 3 );
         modConfig::getInstance()->setConfigParam( 'blUseTimeCheck', true );
+
+        if ( $this->getName() == "testDeleteWithUnlimitedLanguages" ) {
+            $this->_insertTestLanguage();
+        }
     }
 
     /**
@@ -253,6 +257,10 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
 
         oxDb::getInstance()->resetTblDescCache();
+
+        if ( $this->getName() == "testDeleteWithUnlimitedLanguages" ) {
+            $this->_deleteTestLanguage();
+        }
 
         parent::tearDown();
     }
@@ -6916,4 +6924,101 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals( $aList[$aIds[1]]->getActiveSelection()->getName(), "Red" );
     }
 
+    /**
+     * Inserts new test language tables
+     *
+     * @return null
+     */
+    protected function _insertTestLanguage()
+    {
+        // creating new language tables
+        $aQ[] = "CREATE TABLE oxarticles_set1 (OXID char(32) COLLATE latin1_general_ci NOT NULL, PRIMARY KEY (OXID)) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci";
+        $aQ[] = "ALTER TABLE oxarticles_set1 ADD OXVARNAME_5 varchar(255) COLLATE latin1_general_ci NOT NULL DEFAULT ''";
+        $aQ[] = "ALTER TABLE oxarticles_set1 ADD OXVARSELECT_5 varchar(255) COLLATE latin1_general_ci NOT NULL DEFAULT ''";
+        $aQ[] = "ALTER TABLE oxarticles_set1 ADD OXTITLE_5 varchar(255) COLLATE latin1_general_ci NOT NULL DEFAULT ''";
+        $sQ[] = "ALTER TABLE oxarticles_set1 ADD OXSHORTDESC_5 varchar(255) COLLATE latin1_general_ci NOT NULL DEFAULT ''";
+        $aQ[] = "ALTER TABLE oxarticles_set1 ADD OXURLDESC_5 varchar(255) COLLATE latin1_general_ci NOT NULL DEFAULT ''";
+        $aQ[] = "ALTER TABLE oxarticles_set1 ADD OXSEARCHKEYS_5 varchar(255) COLLATE latin1_general_ci NOT NULL DEFAULT ''";
+        $aQ[] = "ALTER TABLE oxarticles_set1 ADD OXSTOCKTEXT_5 varchar(255) COLLATE latin1_general_ci NOT NULL DEFAULT ''";
+        $aQ[] = "ALTER TABLE oxarticles_set1 ADD OXNOSTOCKTEXT_5 varchar(255) COLLATE latin1_general_ci NOT NULL DEFAULT ''";
+
+        $aQ[] = "CREATE TABLE oxartextends_set1 (OXID char(32) COLLATE latin1_general_ci NOT NULL, PRIMARY KEY (`OXID`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci";
+        $aQ[] = "ALTER TABLE oxartextends_set1 ADD OXLONGDESC_5 text COLLATE latin1_general_ci NOT NULL";
+        $aQ[] = "ALTER TABLE oxartextends_set1 ADD OXTAGS_5 varchar(255) COLLATE latin1_general_ci NOT NULL";
+
+        $aQ[] = "CREATE OR REPLACE VIEW oxv_oxarticles_1_1 AS SELECT oxarticles.* FROM oxarticles";
+        $aQ[] = "CREATE OR REPLACE VIEW oxv_oxarticles_1_0 AS SELECT oxarticles.* FROM oxarticles";
+        $aQ[] = "CREATE OR REPLACE VIEW oxv_oxartextends_0 AS SELECT oxartextends.* FROM oxartextends";
+        $aQ[] = "CREATE OR REPLACE VIEW oxv_oxartextends_1 AS SELECT oxartextends.* FROM oxartextends";
+
+        $oDb = oxDb::getDb();
+        foreach ( $aQ as $sQ ) {
+            $oDb->execute( $sQ );
+        }
+    }
+
+    /**
+     * Removes test language tables
+     *
+     * @return null
+     */
+    protected function _deleteTestLanguage()
+    {
+        $oDb = oxDb::getDb();
+        $oDb->execute( "drop table oxarticles_set1" );
+        $oDb->execute( "drop table oxartextends_set1" );
+        $oDb->execute( "drop view oxv_oxarticles_1_0" );
+        $oDb->execute( "drop view oxv_oxarticles_1_1" );
+        $oDb->execute( "drop view oxv_oxartextends_0" );
+        $oDb->execute( "drop view oxv_oxartextends_1" );
+    }
+
+    /**
+     * Test case for #0002726: rows in additional language tables ar not deleted
+     *
+     * @return null
+     */
+    public function testDeleteWithUnlimitedLanguages()
+    {
+        modConfig::getInstance()->setConfigParam( "iLangPerTable", 4 );
+
+        oxTestModules::addFunction( "oxLang", "getLanguageIds", "{return array('0'=>'de', '1'=>'en', '2', '3', '4', '5');}");
+        oxTestModules::addFunction( "oxArticle", "_assignPrices", "{}");
+        oxTestModules::addFunction( "oxArticle", "_onChangeUpdateMinVarPrice", "{}");
+        oxTestModules::addFunction( "oxArticle", "_onChangeUpdateStock", "{}");
+
+        $sProdId = '_testArt';
+        $sVarId  = '_testVar';
+
+        $oDb = oxDb::getDb();
+
+        // inserting test data
+        $aQ2[] = "insert into oxarticles_set1 (oxid, oxtitle_5, oxvarname_5) values ('{$sProdId}','title','varname') ";
+        $aQ2[] = "insert into oxartextends_set1 (oxid, oxlongdesc_5) values ('{$sProdId}','longdesc') ";
+        $aQ2[] = "insert into oxarticles_set1 (oxid, oxtitle_5, oxvarname_5) values ('{$sVarId}','title','varname') ";
+        $aQ2[] = "insert into oxartextends_set1 (oxid, oxlongdesc_5) values ('{$sVarId}','longdesc') ";
+        foreach ( $aQ2 as $sQ ) {
+            $oDb->execute( $sQ );
+        }
+
+        $aQ[] = "select 1 from oxarticles where oxid = '{$sProdId}'";
+        $aQ[] = "select 1 from oxarticles_set1 where oxid = '{$sProdId}'";
+        $aQ[] = "select 1 from oxartextends_set1 where oxid = '{$sProdId}'";
+        $aQ[] = "select 1 from oxarticles where oxid = '{$sVarId}'";
+        $aQ[] = "select 1 from oxarticles_set1 where oxid = '{$sVarId}'";
+        $aQ[] = "select 1 from oxartextends_set1 where oxid = '{$sVarId}'";
+
+        // tables are full before deletion
+        foreach ( $aQ as $sQ ) {
+            $this->assertTrue( (bool) $oDb->getOne( $sQ ) );
+        }
+
+        $oProduct = oxNew( "oxArticle" );
+        $oProduct->delete( $sProdId );
+
+        // tables are cleaned-up after deletion
+        foreach ( $aQ as $sQ ) {
+            $this->assertFalse( $oDb->getOne( $sQ ) );
+        }
+    }
 }

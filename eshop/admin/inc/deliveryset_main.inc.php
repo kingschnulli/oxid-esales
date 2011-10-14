@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: deliveryset_main.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
+ * @version   SVN: $Id: deliveryset_main.inc.php 39182 2011-10-12 13:18:54Z arvydas.vapsva $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -57,12 +57,12 @@ class ajaxComponent extends ajaxListComponent
             $sQAdd  = " from $sDeliveryViewName where 1 ";
         } else {
             $sQAdd  = " from $sDeliveryViewName left join oxdel2delset on oxdel2delset.oxdelid=$sDeliveryViewName.oxid ";
-            $sQAdd .= "where oxdel2delset.oxdelsetid = '$sId' ";
+            $sQAdd .= "where oxdel2delset.oxdelsetid = ".$oDb->quote( $sId );
         }
 
         if ( $sSynchId && $sSynchId != $sId ) {
             $sQAdd .= "and $sDeliveryViewName.oxid not in ( select $sDeliveryViewName.oxid from $sDeliveryViewName left join oxdel2delset on oxdel2delset.oxdelid=$sDeliveryViewName.oxid ";
-            $sQAdd .= "where oxdel2delset.oxdelsetid = '$sSynchId' ) ";
+            $sQAdd .= "where oxdel2delset.oxdelsetid = ".$oDb->quote( $sSynchId ) ." ) ";
         }
 
         return $sQAdd;
@@ -106,7 +106,7 @@ class ajaxComponent extends ajaxListComponent
             $oDb = oxDb::getDb();
             foreach ( $aChosenSets as $sChosenSet) {
                 // check if we have this entry already in
-                $sID = $oDb->GetOne("select oxid from oxdel2delset where oxdelid =  " . $oDb->quote( $sChosenSet ) . " and oxdelsetid = '$soxId'");
+                $sID = $oDb->GetOne("select oxid from oxdel2delset where oxdelid =  " . $oDb->quote( $sChosenSet ) . " and oxdelsetid = ".$oDb->quote( $soxId ) );
                 if ( !isset( $sID) || !$sID) {
                     $oDel2delset = oxNew( 'oxbase' );
                     $oDel2delset->init( 'oxdel2delset' );

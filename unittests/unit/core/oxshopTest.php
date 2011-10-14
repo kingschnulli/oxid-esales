@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshopTest.php 38208 2011-08-18 11:13:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxshopTest.php 39228 2011-10-12 14:09:15Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -28,10 +28,13 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 class Unit_Core_oxshopTest extends OxidTestCase
 {
 
-    function testStructure()
+    public function testStructure()
     {
         $oShop = new oxShop();
         $this->assertTrue($oShop instanceof oxi18n);
         $this->assertEquals('oxshops', $oShop->getCoreTableName());
     }
+
+    protected $_aLangTables = array();
+
 }
