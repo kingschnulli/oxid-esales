@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserpaymentTest.php 38767 2011-09-14 15:07:41Z arvydas.vapsva $
+ * @version   SVN: $Id: oxuserpaymentTest.php 39380 2011-10-14 08:38:54Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -59,6 +59,7 @@ class Unit_Core_oxuserpaymentTest extends OxidTestCase
         $this->_oUpay->delete('_testOxId');
         $this->_oUpay->delete('_testOxId2');
         $this->cleanUpTable( 'oxuserpayments' );
+        $this->cleanUpTable( 'oxorder' );
 
         parent::tearDown();
     }
@@ -272,16 +273,41 @@ class Unit_Core_oxuserpaymentTest extends OxidTestCase
     }
 
     /**
+     * Inserting test orders
+     */
+    protected function _insertTestOrders( $aUserPaymentId, $sUserId )
+    {
+        $oDb = oxDb::getDb();
+
+        $sQ = "INSERT INTO `oxorder`
+                   (`OXID`, `OXSHOPID`, `OXUSERID`, `OXORDERDATE`, `OXORDERNR`, `OXBILLCOMPANY`, `OXBILLEMAIL`, `OXBILLFNAME`, `OXBILLLNAME`, `OXBILLSTREET`, `OXBILLSTREETNR`, `OXBILLADDINFO`, `OXBILLUSTID`, `OXBILLCITY`, `OXBILLCOUNTRYID`, `OXBILLSTATEID`, `OXBILLZIP`, `OXBILLFON`, `OXBILLFAX`, `OXBILLSAL`, `OXDELCOMPANY`, `OXDELFNAME`, `OXDELLNAME`, `OXDELSTREET`, `OXDELSTREETNR`, `OXDELADDINFO`, `OXDELCITY`, `OXDELCOUNTRYID`, `OXDELSTATEID`, `OXDELZIP`, `OXDELFON`, `OXDELFAX`, `OXDELSAL`, `OXPAYMENTID`, `OXPAYMENTTYPE`, `OXTOTALNETSUM`, `OXTOTALBRUTSUM`, `OXTOTALORDERSUM`, `OXARTVAT1`, `OXARTVATPRICE1`, `OXARTVAT2`, `OXARTVATPRICE2`, `OXDELCOST`, `OXDELVAT`, `OXPAYCOST`, `OXPAYVAT`, `OXWRAPCOST`, `OXWRAPVAT`, `OXCARDID`, `OXCARDTEXT`, `OXDISCOUNT`, `OXEXPORT`, `OXBILLNR`, `OXTRACKCODE`, `OXSENDDATE`, `OXREMARK`, `OXVOUCHERDISCOUNT`, `OXCURRENCY`, `OXCURRATE`, `OXFOLDER`, `OXTRANSID`, `OXPAYID`, `OXXID`, `OXPAID`, `OXSTORNO`, `OXIP`, `OXTRANSSTATUS`, `OXLANG`, `OXINVOICENR`, `OXDELTYPE`)
+               VALUES
+                   (?, ?, ?, ?, ?, '', 'info@oxid-esales.com', 'Marc', 'Muster', 'Hauptstr.', '13', '', '', 'Freiburg', 'a7c40f631fc920687.20179984', 'BW', '79098', '', '', 'MR', '', '', '', '', '', '', '', '', '', '', '', '', '', ?, 'oxidinvoice', 1639.15, 2108.39, 1950.59, 19, 311.44, 0, 0, 0, 19, 0, 0, 0, 0, '', '', 157.8, 0, '', '', '0000-00-00 00:00:00', 'Hier können Sie uns noch etwas mitteilen.', 0, 'EUR', 1, 'ORDERFOLDER_NEW', '', '', '', '0000-00-00 00:00:00', 0, '', 'OK', 0, 0, 'oxidstandard')";
+
+        $sShopId = oxConfig::getInstance()->GetBaseShopId();
+        foreach ( $aUserPaymentId as $iCnt => $sUserPaymentId ) {
+
+            $sOrderId = "_test" . ( time() + $iCnt );
+            $sOrderDate = "2011-03-1{$iCnt} 10:55:13";
+
+            $oDb->execute( $sQ, array( $sOrderId, $sShopId, $sUserId, $sOrderDate, $iCnt + 1, $sUserPaymentId ) );
+        }
+    }
+
+    /**
      * Testing get user payment by payment id
      */
     public function testGetPaymentByPaymentType()
     {
+        // inserting few test orders
+        $this->_insertTestOrders( array( '_testOxId5', '_testOxId4', '_testOxId3', '_testOxId2', '_testOxId' ), '_testUserId' );
+
         $oUser = oxNew( 'oxUser' );
         $oUser->setId( '_testUserId' );
 
         $oUserPayment = oxNew( 'oxUserPayment' );
 
-        $this->assertTrue( $oUserPayment->getPaymentByPaymentType( $oUser, 'oxidcashondel' ) );
+        $this->assertTrue( $oUserPayment->getPaymentByPaymentType( $oUser, 'oxidinvoice' ) );
         $this->assertEquals( '_testOxId', $oUserPayment->getId() );
     }
 
@@ -347,56 +373,6 @@ class Unit_Core_oxuserpaymentTest extends OxidTestCase
         $oUserPayment->oxuserpayments__oxvalue = new oxField( $sDyn, oxField::T_RAW );
         $oUserPayment->oxuserpayments__oxpaymentsid = new oxField( 'oxidcreditcard', oxField::T_RAW );
         $this->assertNull( $oUserPayment->getDynValues() );
-    }
-
-    /**
-     * Test case for bug entry #0002439: wrong oxuserpayment entry in checkout
-     *
-     * @return null
-     */
-    public function testCaseFor0002439()
-    {
-        $oDb = oxDb::getDb();
-        $iRecCnt = (int) $oDb->getOne( "select count(*) from oxuserpayments" );
-
-        // this will insert new
-        $oUpay = oxNew( 'oxuserpayment' );
-        $oUpay->setId( '_testOxId3' );
-        $oUpay->oxuserpayments__oxuserid     = new oxField( '_testUserId3', oxField::T_RAW );
-        $oUpay->oxuserpayments__oxvalue      = new oxField( '_testValue3', oxField::T_RAW );
-        $oUpay->oxuserpayments__oxpaymentsid = new oxField( 'oxidcashondel3', oxField::T_RAW );
-        $this->assertEquals( '_testOxId3', $oUpay->save() );
-
-        $this->assertEquals( $iRecCnt + 1, (int) $oDb->getOne( "select count(*) from oxuserpayments" ) );
-
-        // this will update
-        $oUpay = oxNew( 'oxuserpayment' );
-        $this->assertTrue( $oUpay->load( '_testOxId3' ) );
-        $oUpay->oxuserpayments__oxvalue = new oxField( '_testValue2', oxField::T_RAW );
-        $this->assertEquals( '_testOxId3', $oUpay->save() );
-
-        $this->assertEquals( $iRecCnt + 1, (int) $oDb->getOne( "select count(*) from oxuserpayments" ) );
-
-        // this will overwrite
-        $oUpay = oxNew( 'oxuserpayment' );
-        $oUpay->setId( '_testOxId2' );
-        $oUpay->oxuserpayments__oxuserid     = new oxField( '_testUserId3', oxField::T_RAW );
-        $oUpay->oxuserpayments__oxvalue      = new oxField( '_testValue3', oxField::T_RAW );
-        $oUpay->oxuserpayments__oxpaymentsid = new oxField( 'oxidcashondel3', oxField::T_RAW );
-        $this->assertEquals( '_testOxId2', $oUpay->save() );
-
-        $this->assertEquals( $iRecCnt + 1, (int) $oDb->getOne( "select count(*) from oxuserpayments" ) );
-
-        // will delete
-        $oUpay = oxNew( 'oxuserpayment' );
-        $this->assertFalse( $oUpay->load( '_testOxId2' ) );
-        $this->assertFalse( $oUpay->delete() );
-
-        $oUpay = oxNew( 'oxuserpayment' );
-        $this->assertTrue( $oUpay->load( '_testOxId3' ) );
-        $this->assertTrue( $oUpay->delete() );
-
-        $this->assertEquals( $iRecCnt, (int) $oDb->getOne( "select count(*) from oxuserpayments" ) );
     }
 
 }

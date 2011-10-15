@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserpayment.php 39209 2011-10-12 13:31:50Z arvydas.vapsva $
+ * @version   SVN: $Id: oxuserpayment.php 39380 2011-10-14 08:38:54Z arvydas.vapsva $
  */
 
 /**
@@ -70,13 +70,6 @@ class oxUserPayment extends oxBase
      * @var array
      */
     protected $_aDynValues = null;
-
-    /**
-     * Field name array of ignored fields when doing record update() (eg. oxarticles__oxtime)
-     *
-     * @var array
-     */
-    protected $_aSkipSaveFields = array( "oxid" );
 
     /**
      * Special getter for oxpayments__oxdesc field
@@ -167,7 +160,7 @@ class oxUserPayment extends oxBase
 
         //restore, as encoding was needed only for saving
         if ( $sEncodedValue ) {
-            $this->oxuserpayments__oxvalue->setValue( $sValue );
+            $this->oxuserpayments__oxvalue->setValue($sValue);
         }
 
         return $blRet;
@@ -188,90 +181,14 @@ class oxUserPayment extends oxBase
             $this->oxuserpayments__oxvalue->setValue($sEncodedValue);
         }
 
-        // replace (not update) existing record
-        //do not allow derived item update
-        if ( !$this->allowDerivedUpdate() ) {
-            return false;
-        }
-
-
-        $sUpdate =  "update {$this->_sCoreTable} set ".$this->_getUpdateFields()
-                  . " where {$this->_sCoreTable}.oxuserid = " . $oDb->quote( $this->oxuserpayments__oxuserid->value )
-                  . " and oxpaymentsid = " . $oDb->quote( $this->oxuserpayments__oxpaymentsid->value )
-                  . " limit 1";
-
-        //trigger event
-        $this->beforeUpdate();
-
-        $blRet = (bool) $oDb->execute( $sUpdate );
-        $this->_rebuildCache();
+        $blRet = parent::_update();
 
         //restore, as encoding was needed only for saving
         if ( $sEncodedValue ) {
-            $this->oxuserpayments__oxvalue->setValue( $sValue );
+            $this->oxuserpayments__oxvalue->setValue($sValue);
         }
 
         return $blRet;
-    }
-
-    /**
-     * Checks if this object exists, returns true on success.
-     *
-     * @param string $sOXID Object ID(default null)
-     *
-     * @return bool
-     */
-    public function exists( $sOXID = null )
-    {
-        if ( !$this->oxuserpayments__oxpaymentsid->value || !$this->oxuserpayments__oxuserid->value ) {
-            return false;
-        }
-
-        // generating new id..
-        if ( !$this->getId() ) {
-            $this->setId();
-        }
-
-        $oDB = oxDb::getDb( true );
-        $sSelect  = "select 1 from oxuserpayments where oxuserid = " . $oDB->quote( $this->oxuserpayments__oxuserid->value );
-        $sSelect .= " and oxpaymentsid = " . $oDB->quote( $this->oxuserpayments__oxpaymentsid->value );
-
-        return ( bool ) $oDB->getOne( $sSelect );
-    }
-
-    /**
-     * Delete this object from the database, returns true on success.
-     *
-     * @param string $sOXID Object ID(default null)
-     *
-     * @return bool
-     */
-    public function delete( $sOXID = null)
-    {
-        if ( !$sOXID ) {
-            $sOXID = $this->getId();
-
-            //do not allow derived deletion
-            if ( !$this->allowDerivedDelete() ) {
-                return false;
-            }
-        }
-
-        if ( !$sOXID || !$this->oxuserpayments__oxpaymentsid->value || !$this->oxuserpayments__oxuserid->value  ) {
-            return false;
-        }
-
-
-        $oDB = oxDb::getDb(true);
-        $sDelete  = "delete from $this->_sCoreTable where oxuserid = " . $oDB->quote( $this->oxuserpayments__oxuserid->value );
-        $sSelect .= " and oxpaymentsid = " . $oDB->quote( $this->oxuserpayments__oxpaymentsid->value );
-
-        $rs = $oDB->execute( $sDelete );
-        if ( $blDelete = ( bool ) $oDB->affected_Rows() ) {
-            $this->onChange(ACTION_DELETE, $sOXID);
-        }
-
-        return $blDelete;
     }
 
     /**
@@ -309,8 +226,9 @@ class oxUserPayment extends oxBase
         $blGet = false;
         if ( $oUser && $sPaymentType != null ) {
             $oDb = oxDb::getDb();
-            $sSelect  = 'select oxid from oxuserpayments where oxpaymentsid=' . $oDb->quote( $sPaymentType ) . ' and oxuserid=' . $oDb->quote( $oUser->getId() );
-            if ( ( $sOxId = $oDb->getOne( $sSelect ) ) ) {
+            $sQ  = 'select oxpaymentid from oxorder where oxpaymenttype=' . $oDb->quote( $sPaymentType ) . ' and
+                    oxuserid=' . $oDb->quote( $oUser->getId() ).' order by oxorderdate desc';
+            if ( ( $sOxId = $oDb->getOne( $sQ ) ) ) {
                 $blGet = $this->load( $sOxId );
             }
         }
