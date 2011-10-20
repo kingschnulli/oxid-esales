@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: suggest.php 39369 2011-10-13 14:16:32Z arvydas.vapsva $
+ * @version   SVN: $Id: suggest.php 39410 2011-10-17 11:29:46Z rimvydas.paskevicius $
  */
 
 /**
@@ -112,7 +112,7 @@ class Suggest extends oxUBase
         }
 
         $oUtils = oxUtils::getInstance();
-        if ( $oUtils->isValidEmail( $aParams["rec_email"] ) || $oUtils->isValidEmail( $aParams["send_email"] ) ) {
+        if ( !$oUtils->isValidEmail( $aParams["rec_email"] ) || !$oUtils->isValidEmail( $aParams["send_email"] ) ) {
             $oUtilsView->addErrorToDisplay( 'SUGGEST_INVALIDMAIL' );
             return;
         }

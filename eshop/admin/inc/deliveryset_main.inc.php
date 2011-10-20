@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: deliveryset_main.inc.php 39182 2011-10-12 13:18:54Z arvydas.vapsva $
+ * @version   SVN: $Id: deliveryset_main.inc.php 39434 2011-10-18 13:05:34Z arvydas.vapsva $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -47,8 +47,9 @@ class ajaxComponent extends ajaxListComponent
      */
     protected function _getQuery()
     {
-        $sId      = oxConfig::getParameter( 'oxid' );
+        $sId = oxConfig::getParameter( 'oxid' );
         $sSynchId = oxConfig::getParameter( 'synchoxid' );
+        $oDb = oxDb::getDb();
 
         $sDeliveryViewName = $this->_getViewName('oxdelivery');
 
