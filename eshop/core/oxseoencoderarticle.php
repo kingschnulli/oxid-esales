@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticle.php 39368 2011-10-13 14:16:23Z arvydas.vapsva $
+ * @version   SVN: $Id: oxseoencoderarticle.php 39649 2011-10-28 14:55:05Z arunas.paskevicius $
  */
 
 /**
@@ -386,7 +386,9 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         $sMainCatId = $oDb->getOne( "select oxcatnid from ".getViewName( "oxobject2category" )." where oxobjectid = ".$oDb->quote( $sArtId )." order by oxtime" );
         if ( $sMainCatId ) {
             $oMainCat = oxNew( "oxcategory" );
-            $oMainCat->load( $sMainCatId );
+            if ( ! $oMainCat->load( $sMainCatId )) {
+                $oMainCat = null;
+            }                
         }
 
         return $oMainCat;

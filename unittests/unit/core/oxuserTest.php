@@ -2710,8 +2710,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oConfig->setConfigParam( 'blOrderOptInEmail', true );
 
         $oSubscription = $this->getMock( 'oxnewssubscribed', array( 'getOptInStatus', 'setOptInStatus' ) );
-        $oSubscription->expects( $this->any() )->method( 'getOptInStatus')->will( $this->returnValue( 0 ) );
-        $oSubscription->expects( $this->any() )->method( 'setOptInStatus')->with( $this->equalTo( 2 ) );
+        $oSubscription->expects( $this->at( 0 ) )->method( 'getOptInStatus')->will( $this->returnValue( 0 ) );
+        $oSubscription->expects( $this->at( 1 ) )->method( 'setOptInStatus')->with( $this->equalTo( 2 ) );
+        $oSubscription->expects( $this->at( 2 ) )->method( 'getOptInStatus')->will( $this->returnValue( 2 ) );
+        $oSubscription->expects( $this->at( 3 ) )->method( 'setOptInStatus')->with( $this->equalTo( 2 ) );
 
         $oUser = $this->getMock( 'oxuser', array( 'getNewsSubscription', 'addToGroup', 'removeFromGroup' ) );
         $oUser->expects( $this->any() )->method( 'getNewsSubscription')->will( $this->returnValue( $oSubscription ) );

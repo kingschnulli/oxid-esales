@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 38776 2011-09-15 12:21:20Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcmp_user.php 39555 2011-10-26 08:24:26Z arvydas.vapsva $
  */
 
 // defining login/logout states
@@ -79,26 +79,6 @@ class oxcmp_user extends oxView
                                         'content',
                                         'account',
                                         );
-
-    /**
-     * Billing address fields which should be taken raw (no encoding)
-     *
-     * @var array
-     */
-    protected $_aRawBillingFields = array( 'oxuser__oxcompany', 'oxuser__oxaddinfo', 'oxuser__oxfname',
-                                           'oxuser__oxlname', 'oxuser__oxstreet', 'oxuser__oxstreetnr',
-                                           'oxuser__oxcity', 'oxuser__oxfon', 'oxuser__oxfax',
-                                           'oxuser__oxmobfon', 'oxuser__oxprivfon' );
-
-    /**
-     * Shipping addresses fields which should be taken raw (no encoding)
-     *
-     * @var array
-     */
-    protected $_aRawShippingFields = array( 'oxaddress__oxcompany', 'oxaddress__oxaddinfo', 'oxaddress__oxfname',
-                                            'oxaddress__oxlname', 'oxaddress__oxcity', 'oxaddress__oxstreet',
-                                            'oxaddress__oxstreetnr', 'oxaddress__oxzip', 'oxaddress__oxfon',
-                                            'oxaddress__oxfax' );
     /**
      * Sets oxcmp_oxuser::blIsComponent = true, fetches user error
      * code and sets it to default - 0. Executes parent::init().
@@ -492,7 +472,7 @@ class oxcmp_user extends oxView
         // second pass
         $sPassword2 = oxConfig::getParameter( 'lgn_pwd2' );
 
-        $aInvAdress = oxConfig::getParameter( 'invadr', $this->_aRawBillingFields );
+        $aInvAdress = oxConfig::getParameter( 'invadr', true );
         $aDelAdress = $this->_getDelAddressData();
 
         $oUser = oxNew( 'oxuser' );
@@ -630,7 +610,7 @@ class oxcmp_user extends oxView
         $aDelAdress = $this->_getDelAddressData();
 
         // if user company name, user name and additional info has special chars
-        $aInvAdress = oxConfig::getParameter( 'invadr', $this->_aRawBillingFields );
+        $aInvAdress = oxConfig::getParameter( 'invadr', true );
 
         $sUserName  = $oUser->oxuser__oxusername->value;
         $sPassword  = $sPassword2 = $oUser->oxuser__oxpassword->value;
@@ -682,7 +662,7 @@ class oxcmp_user extends oxView
     protected function _getDelAddressData()
     {
         // if user company name, user name and additional info has special chars
-        $aDelAdress = $aDeladr = (oxConfig::getParameter( 'blshowshipaddress' ) || oxSession::getVar( 'blshowshipaddress' )) ? oxConfig::getParameter( 'deladr', $this->_aRawShippingFields ) : array();
+        $aDelAdress = $aDeladr = (oxConfig::getParameter( 'blshowshipaddress' ) || oxSession::getVar( 'blshowshipaddress' )) ? oxConfig::getParameter( 'deladr', true ) : array();
 
         if ( is_array( $aDeladr ) ) {
             // checking if data is filled

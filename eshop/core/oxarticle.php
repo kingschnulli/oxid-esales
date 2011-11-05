@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 39227 2011-10-12 14:07:32Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 39668 2011-11-02 12:46:27Z arvydas.vapsva $
  */
 
 // defining supported link types
@@ -1112,9 +1112,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         $blHas = false;
         if ( ( $sId = $this->getId() ) ) {
-            $sArticleTable = $this->getViewName( $blForceCoreTable );
-            $oDb = oxDb::getDb();
-            $blHas = (bool) $oDb->getOne( "select 1 from $sArticleTable where oxparentid=".$oDb->quote( $sId ) );
+            if ( $this->oxarticles__oxshopid->value == $this->getConfig()->getShopId() ) {
+                $blHas = (bool) $this->oxarticles__oxvarcount->value;
+            } else {
+                $sArticleTable = $this->getViewName( $blForceCoreTable );
+                $blHas = (bool) oxDb::getDb()->getOne( "select 1 from $sArticleTable where oxparentid='{$sId}'" );
+            }
+
         }
         return $blHas;
     }
@@ -2888,12 +2892,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getPriceFromPrefix()
     {
-        $sPricePrefics = '';
+        $sPricePrefix = '';
         if ( $this->_blIsRangePrice) {
-            $sPricePrefics = oxLang::getInstance()->translateString('priceFrom').' ';
+            $sPricePrefix = oxLang::getInstance()->translateString('priceFrom').' ';
         }
 
-        return $sPricePrefics;
+        return $sPricePrefix;
     }
 
     /**

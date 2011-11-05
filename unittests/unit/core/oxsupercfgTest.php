@@ -19,8 +19,8 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsupercfgTest.php 26841 2010-03-25 13:58:15Z arvydas $
- * $Id: oxsupercfgTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxsupercfgTest.php 39692 2011-11-03 07:46:24Z arvydas.vapsva $
+ * $Id: oxsupercfgTest.php 39692 2011-11-03 07:46:24Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -28,6 +28,11 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 
 class Unit_Core_oxsupercfgTest extends OxidTestCase
 {
+    protected function tearDown()
+    {
+
+        return parent::tearDown();
+    }
     public function testSetGetConfig()
     {
         $oOxSuperCfg = new oxsupercfg();

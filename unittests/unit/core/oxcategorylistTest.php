@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylistTest.php 32794 2011-01-28 09:04:24Z sarunas $
+ * @version   SVN: $Id: oxcategorylistTest.php 39678 2011-11-02 13:56:01Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -357,9 +357,11 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
                            .' tablex.oxicon as oxicon, tablex.oxextlink as oxextlink ,';
 
            $sExpect .= 'not tablex.oxactive as oxppremove';
+           //
+           $oList = new oxCategoryList();
 
 
-        $this->assertEquals($sExpect, $this->_oList->UNITgetSqlSelectFieldsForTree('tablex'));
+        $this->assertEquals($sExpect, $oList->UNITgetSqlSelectFieldsForTree('tablex'));
     }
 
     /**
@@ -387,9 +389,11 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
                            .' tablex.oxicon as oxicon, tablex.oxextlink as oxextlink ,';
 
            $sExpect .= 'not tablex.oxactive as oxppremove';
+           //
+           $oList = new oxCategoryList();
 
 
-        $this->assertEquals($sExpect, $this->_oList->UNITgetSqlSelectFieldsForTree('tablex'));
+        $this->assertEquals($sExpect, $oList->UNITgetSqlSelectFieldsForTree('tablex'));
     }
 
 

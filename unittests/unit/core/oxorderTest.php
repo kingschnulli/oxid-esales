@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 39380 2011-10-14 08:38:54Z arvydas.vapsva $
+ * @version   SVN: $Id: oxorderTest.php 39702 2011-11-03 09:30:31Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3561,5 +3561,21 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $oOrder = new oxOrder();
         $oOrder->oxorder__oxtrackcode = new oxField( 123 );
         $this->assertEquals( $sExpected, $oOrder->getShipmentTrackingUrl() );
+    }
+
+    /**
+     * Testing oxOrder::_convertVat( $sVat )
+     *
+     * @return null
+     */
+    public function testconvertVat()
+    {
+        $oOrder = new oxOrder();
+        $this->assertEquals( 7.6, $oOrder->UNITconvertVat( "7,6" ) );
+        $this->assertEquals( 7.6, $oOrder->UNITconvertVat( "7.6" ) );
+        $this->assertEquals( 76.01, $oOrder->UNITconvertVat( "76,01" ) );
+        $this->assertEquals( 76.01, $oOrder->UNITconvertVat( "7.6,01" ) );
+        $this->assertEquals( 76.01, $oOrder->UNITconvertVat( "76.01" ) );
+        $this->assertEquals( 76.01, $oOrder->UNITconvertVat( "7,6.01" ) );
     }
 }

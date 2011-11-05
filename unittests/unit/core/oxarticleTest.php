@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 39362 2011-10-13 12:51:10Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticleTest.php 39679 2011-11-02 14:07:51Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2733,6 +2733,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         }
 
         $oArticle = new oxarticle();
+        $oArticle->setAdminMode( false );
         $oArticle->load( '1127' );
         $oCategory = $oArticle->getCategory();
 

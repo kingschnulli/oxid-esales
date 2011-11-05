@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 38211 2011-08-18 12:30:01Z alfonsas $
+ * @version   SVN: $Id: oxconfigTest.php 39611 2011-10-27 10:40:12Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -566,14 +566,36 @@ class Unit_Core_oxconfigTest extends OxidTestCase
     {
         $oConfig = new oxConfig();
         $oConfig->init();
-        $sShopId = $oConfig->getBaseShopId();
+        $sShopId  = $oConfig->getShopId();
+        $sConfKey = $oConfig->getConfigParam( 'sConfigKey' );
+        $oDb = oxDb::getDb(true);
 
-        $sQ = 'select oxvarname from oxconfig where oxvartype not in ( "bool", "arr", "aarr" )  and oxshopid="'.$sShopId.'" order by rand()';
-        $sVar = oxDb::getDb()->getOne( $sQ );
+        $aVars = array( "theme:basic#iNewBasketItemMessage",
+                        "theme:azure#iNewBasketItemMessage",
 
-        $sQ = 'select DECODE( oxvarvalue, "'.$oConfig->getConfigParam( 'sConfigKey' ).'") from oxconfig where oxshopid="'.$sShopId.'" and oxvarname="'.$sVar.'"';
-        $sVal = oxDb::getDb()->getOne( $sQ );
-        $this->assertEquals( $sVal, $oConfig->getShopConfVar( $sVar, $sShopId ) );
+                        "theme:basic#iTopNaviCatCount",
+                        "theme:azure#iTopNaviCatCount",
+
+                        "#sCatThumbnailsize",
+                        "theme:basic#sCatThumbnailsize",
+                        "theme:azure#sCatThumbnailsize",
+
+                        "#sThumbnailsize",
+                        "theme:basic#sThumbnailsize",
+                        "theme:azure#sThumbnailsize",
+
+                        "#sZoomImageSize",
+                        "theme:basic#sZoomImageSize",
+                        "theme:azure#sZoomImageSize" );
+        foreach ( $aVars as $sData ) {
+
+            $aData = explode( "#", $sData );
+            $sModule = $aData[0] ? $aData[0] : oxConfig::OXMODULE_THEME_PREFIX . $oConfig->getConfigParam('sTheme');
+            $sVar = $aData[1];
+
+            $sQ = "select DECODE( oxvarvalue, '{$sConfKey}') from oxconfig where oxshopid='{$sShopId}' and oxmodule = '{$sModule}' and  oxvarname='{$sVar}'";
+            $this->assertEquals( $oDb->getOne( $sQ ), $oConfig->getShopConfVar( $sVar, $sShopId, $sModule ), "\nshop:{$sShopId}; {$sModule}; var:{$sVar}\n" );
+        }
     }
 
     public function testgetShopConfVarCheckingDbParamWhenMoreThan1InDB()
@@ -590,6 +612,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         oxDb::getDb()->execute( $sQ1 );
         oxDb::getDb()->execute( $sQ2 );
 
+        $oConfig = new oxConfig();
         $this->assertFalse($oConfig->getShopConfVar('testVar1') == null);
 
     }
@@ -2108,4 +2131,23 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $sQ = " DECODE( oxvarvalue, '".$oConfig->getConfigParam( 'sConfigKey' )."') ";
         $this->assertEquals( $sQ, $oConfig->getDecodeValueQuery() );
     }
+
+     public function testGetShopMainUrl()
+    {
+        $oConfig = $this->getProxyClass( "oxConfig" );
+
+        $sSSLUrl = 'https://shop';
+        $sUrl = 'http://shop';
+
+        $oConfig->setConfigParam('sSSLShopURL', $sSSLUrl);
+        $oConfig->setConfigParam('sShopURL', $sUrl);
+
+        $oConfig->setNonPublicVar("_blIsSsl", false );
+        $this->assertEquals( $sUrl, $oConfig->getShopMainUrl() );
+
+        $oConfig->setNonPublicVar("_blIsSsl", true );
+        $this->assertEquals( $sSSLUrl, $oConfig->getShopMainUrl() );
+
+    }
+
 }

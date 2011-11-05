@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contactTest.php 35665 2011-05-30 13:33:34Z arunas.paskevicius $
+ * @version   SVN: $Id: contactTest.php 39524 2011-10-25 14:21:26Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -208,4 +208,35 @@ class Unit_Views_contactTest extends OxidTestCase
         $this->assertEquals(1, count($oContact->getBreadCrumb()));
     }
 
+    /**
+     * Test case for bug #0002065: Contact-Mail shows MR or MRS instead of localized salutation
+     *
+     *  @return null
+     */
+    public function testSendForBugtrackEntry0002065()
+    {
+        $aParams = array( "oxuser__oxusername" => "info@oxid-esales.com",
+                          "oxuser__oxfname"    => "admin",
+                          "oxuser__oxlname"    => "admin",
+                          "oxuser__oxsal"      => "MR" );
+
+        modConfig::setParameter( "editval", $aParams );
+        modConfig::setParameter( "c_message", "message" );
+        modConfig::setParameter( "c_subject", "subject" );
+
+        $oLang = oxLang::getInstance();
+        $sMessage = $oLang->translateString( 'CONTACT_FROM' ) . " " . $oLang->translateString( 'MR' ) ." admin admin(info@oxid-esales.com)<br /><br />message";
+
+        $oEmail = $this->getMock( "oxemail", array( "sendContactMail" ) );
+        $oEmail->expects( $this->once() )->method( 'sendContactMail')->with( $this->equalTo( 'info@oxid-esales.com' ), $this->equalTo( 'subject' ), $this->equalTo( $sMessage ) );
+
+        oxTestModules::addModuleObject( 'oxemail', $oEmail );
+
+        $oCaptcha = $this->getMock( "oxCaptcha", array( "pass" ) );
+        $oCaptcha->expects( $this->once() )->method( 'pass')->will( $this->returnValue( true ) );
+
+        $oContact = $this->getMock( "Contact", array( "getCaptcha" ) );
+        $oContact->expects( $this->once() )->method( 'getCaptcha')->will( $this->returnValue( $oCaptcha ) );
+        $oContact->send();
+    }
 }
