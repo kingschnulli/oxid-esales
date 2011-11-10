@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountTest.php 38066 2011-08-09 11:22:02Z arvydas.vapsva $
+ * @version   SVN: $Id: oxdiscountTest.php 39863 2011-11-09 09:01:53Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -181,7 +181,7 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
     // main article
     public function testIsForArticleMainArticle()
     {
-        $oDiscount = new oxDiscount();
+        $oDiscount = oxNew( 'oxDiscount' );
         $testDiscId = 'testdid';
         $oDiscount->setId( $testDiscId );
         $oDiscount->save();
@@ -212,11 +212,21 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
         oxDb::getDb()->Execute("insert into oxobject2discount VALUES( 'testIsForArticle', '".$testDiscId."','".$testAid."','oxarticles')");
         $this->assertTrue( $oDiscount->isForArticle( $oArticle ) );
 
+
+
         //global discount for all articles
+        $oDiscount = oxNew( 'oxDiscount' );
+        $testDiscId = 'testdid';
+        $oDiscount->setId( $testDiscId );
+        $oDiscount->save();
         oxDb::getDb()->Execute("delete from oxobject2discount where oxid='testIsForArticle'");
         $this->assertTrue($oDiscount->isForArticle($oArticle));
 
         //no article discount but fitting category
+        $oDiscount = oxNew( 'oxDiscount' );
+        $testDiscId = 'testdid';
+        $oDiscount->setId( $testDiscId );
+        $oDiscount->save();
         $oArticle = new oxArticle_Extended();
         $testCatId = 'testcatid';
         oxDb::getDb()->Execute("insert into oxobject2discount VALUES('testIsForArticle','".$testDiscId."','".$testCatId."','oxcategories')");
@@ -228,6 +238,8 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
         $oArticle->setId( $testAid );
         $this->assertFalse( $oDiscount->isForArticle( $oArticle ) );
     }
+
+
     //no article discount for fitting category
     public function testIsForArticleFittingOnlyCat()
     {
@@ -287,6 +299,10 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
         $this->assertTrue( $oDiscount->isForArticle( $oArticle ) );
 
         //global discount for all articles
+        $oDiscount = new oxDiscount();
+        $testDiscId = 'testdid';
+        $oDiscount->setId( $testDiscId );
+        $oDiscount->save();
         oxDb::getDb()->Execute( "delete from oxobject2discount where oxid='testIsForArticle'" );
         $this->assertTrue( $oDiscount->isForArticle( $oArticle ) );
     }
