@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 39525 2011-10-25 14:23:53Z arvydas.vapsva $
+ * @version   SVN: $Id: oxseoencoderTest.php 39880 2011-11-10 14:28:48Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -27,6 +27,13 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 
 class modSeoEncoder extends oxSeoEncoder
 {
+    public static function clearCache()
+    {
+        self::$_aFixedCache = array();
+        self::$_sCacheKey = null;
+        self::$_aCache = null;
+    }
+
     public function setProhibitedID($aProhibitedID)
     {
         $this->_aProhibitedID = $aProhibitedID;
@@ -78,6 +85,8 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
      */
     protected function setUp()
     {
+        modSeoEncoder::clearCache();
+
         parent::setUp();
 
         oxSeoEncoder::getInstance()->setPrefix('oxid');
@@ -93,6 +102,8 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
      */
     protected function tearDown()
     {
+        modSeoEncoder::clearCache();
+
         // deleting seo entries
         oxDb::getDb()->execute( 'delete from oxseo where oxtype != "static"' );
         oxDb::getDb()->execute( 'delete from oxobject2seodata' );
@@ -712,7 +723,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
 
         $sStdUrl = 'cl=stdcl';
-        $sSeoUrl = 'dynseourl/';
+        $sSeoUrl = 'en/dynseourl/';
         $sShopId   = oxConfig::getInstance()->getBaseShopId();
         $iLang     = 1;
         $sObjectId = md5( strtolower( $sShopId . $sStdUrl ) );
@@ -777,7 +788,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
     public function testGetDynamicUriExistingButPAssingNewSeoUrlCallSeq()
     {
         $sStdUrl = 'stdulr';
-        $sSeoUrl = 'seourl';
+        $sSeoUrl = 'en/seourl';
         $iLang   = 1;
         $iShopId = oxConfig::getInstance()->getBaseShopId();
         $sObjectId  = md5( strtolower( $iShopId . $sStdUrl ) );
@@ -796,7 +807,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
     public function testGetDynamicUriExistingCallSeq()
     {
         $sStdUrl = 'stdulr';
-        $sSeoUrl = 'seourl';
+        $sSeoUrl = 'en/seourl';
         $iLang   = 1;
         $iShopId = oxConfig::getInstance()->getBaseShopId();
         $sObjectId  = md5( strtolower( $iShopId . $sStdUrl ) );
@@ -1213,11 +1224,20 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
             $oEncoder = new oxSeoEncoder();
             $this->assertFalse( $oEncoder->UNITisFixed( 'static', 'test', 0, 1 ) );
             $oDb->Execute('replace into oxseo (oxobjectid, oxident, oxshopid, oxlang, oxstdurl, oxseourl, oxtype, oxexpired, oxfixed) values ("test", "test", 1, 0, "stdurl", "seourl", "static", 1, 1)');
+
+            modSeoEncoder::clearCache();
+
             $oEncoder = new oxSeoEncoder();
             $this->assertTrue( $oEncoder->UNITisFixed( 'static', 'test', 0, 1 ) );
+
+            modSeoEncoder::clearCache();
+
             $oEncoder = new oxSeoEncoder();
             $this->assertTrue( $oEncoder->UNITisFixed( 'static', 'test', 0, 1, 0, 0 ) );
             $oDb->Execute( 'delete from oxseo where oxident="test"' );
+
+            modSeoEncoder::clearCache();
+
             $oEncoder = new oxSeoEncoder();
             $this->assertFalse( $oEncoder->UNITisFixed( 'static', 'test', 0, 1 ) );
             // test finished
@@ -1675,6 +1695,8 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $oEncoder->expects( $this->once() )->method('isAdmin')->will( $this->returnValue( true ) );
         $oEncoder->expects( $this->never() )->method('getConfig');
         $this->assertFalse( $oEncoder->UNITgetCacheKey() );
+
+        modSeoEncoder::clearCache();
 
         $sViewId = "viewId";
         $oView = $this->getMock( 'oxView', array( 'getViewId' ) );

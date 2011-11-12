@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 39525 2011-10-25 14:23:53Z arvydas.vapsva $
+ * @version   SVN: $Id: oxseoencoder.php 39880 2011-11-10 14:28:48Z arvydas.vapsva $
  */
 
 /**
@@ -84,19 +84,19 @@ class oxSeoEncoder extends oxSuperCfg
      *
      * @return array
      */
-    protected $_aFixedCache = array();
+    protected static $_aFixedCache = array();
 
     /**
      * SEO Cache key for active view
      * @var string
      */
-    protected $_sCacheKey = null;
+    protected static $_sCacheKey = null;
 
     /**
      * SEO cache array
      * @var array
      */
-    protected $_aCache = null;
+    protected static $_aCache = null;
 
     /**
      * Singleton method
@@ -230,7 +230,7 @@ class oxSeoEncoder extends oxSuperCfg
 
         $sStdUrl   = $this->_trimUrl( $sStdUrl );
         $sObjectId = $this->getDynamicObjectId( $iShopId, $sStdUrl );
-        $sSeoUrl   = $this->_prepareUri( $sSeoUrl );
+        $sSeoUrl   = $this->_prepareUri( $this->addLanguageParam( $sSeoUrl, $iLang ) );
 
         //load details link from DB
         $sOldSeoUrl = $this->_loadFromDb( 'dynamic', $sObjectId, $iLang );
@@ -384,7 +384,7 @@ class oxSeoEncoder extends oxSuperCfg
         }
         $iLang = (int) $iLang;
 
-        if ( !isset( $this->_aFixedCache[$sType][$sShopId][$sId][$iLang] ) ) {
+        if ( !isset( self::$_aFixedCache[$sType][$sShopId][$sId][$iLang] ) ) {
             $oDb = oxDb::getDb( true );
 
             $sQ = "select oxfixed from oxseo where oxtype = ".$oDb->quote( $sType )."
@@ -398,9 +398,9 @@ class oxSeoEncoder extends oxSuperCfg
             }
             $sQ .= " limit 1";
 
-            $this->_aFixedCache[$sType][$sShopId][$sId][$iLang] = (bool) $oDb->getOne( $sQ );
+            self::$_aFixedCache[$sType][$sShopId][$sId][$iLang] = (bool) $oDb->getOne( $sQ );
         }
-        return $this->_aFixedCache[$sType][$sShopId][$sId][$iLang];
+        return self::$_aFixedCache[$sType][$sShopId][$sId][$iLang];
     }
 
     /**
@@ -411,13 +411,13 @@ class oxSeoEncoder extends oxSuperCfg
     protected function _getCacheKey()
     {
         // use cache in non admin mode
-        if ( $this->_sCacheKey === null ) {
-            $this->_sCacheKey = false;
+        if ( self::$_sCacheKey === null ) {
+            self::$_sCacheKey = false;
             if ( !$this->isAdmin() && ( $oView = $this->getConfig()->getActiveView() ) ) {
-                $this->_sCacheKey = md5( $oView->getViewId() ) . "seo";
+                self::$_sCacheKey = md5( $oView->getViewId() ) . "seo";
             }
         }
-        return $this->_sCacheKey;
+        return self::$_sCacheKey;
     }
 
     /**
@@ -432,15 +432,15 @@ class oxSeoEncoder extends oxSuperCfg
         startProfile( "seoencoder_loadFromCache" );
 
         $sCache = false;
-        if ( $this->_aCache === null ) {
-            $this->_aCache = false;
+        if ( self::$_aCache === null ) {
+            self::$_aCache = false;
             if ( ( $sCacheKey = $this->_getCacheKey() ) !== false ) {
-                $this->_aCache = oxUtils::getInstance()->fromFileCache( $sCacheKey );
+                self::$_aCache = oxUtils::getInstance()->fromFileCache( $sCacheKey );
             }
         }
 
-        if ( $this->_aCache && isset( $this->_aCache[$sCacheIdent] ) ) {
-            $sCache = $this->_aCache[$sCacheIdent];
+        if ( self::$_aCache && isset( self::$_aCache[$sCacheIdent] ) ) {
+            $sCache = self::$_aCache[$sCacheIdent];
         }
 
         stopProfile( "seoencoder_loadFromCache" );
@@ -461,8 +461,8 @@ class oxSeoEncoder extends oxSuperCfg
 
         $blSaved = false;
         if ( $sCache && ( $sCacheKey = $this->_getCacheKey() ) !== false ) {
-            $this->_aCache[$sCacheIdent] = $sCache;
-            $blSaved = oxUtils::getInstance()->toFileCache( $sCacheKey, $this->_aCache );
+            self::$_aCache[$sCacheIdent] = $sCache;
+            $blSaved = oxUtils::getInstance()->toFileCache( $sCacheKey, self::$_aCache );
         }
 
         stopProfile( "seoencoder_saveInCache" );

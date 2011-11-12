@@ -19,14 +19,28 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseodecoderTest.php 38552 2011-09-05 11:04:05Z arvydas.vapsva $
+ * @version   SVN: $Id: oxseodecoderTest.php 39885 2011-11-11 09:18:54Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
 
+class modSeoEncoder_for_Unit_Core_oxSeoDecoderTest extends oxSeoEncoder
+{
+    public static function clearCache()
+    {
+        self::$_aFixedCache = array();
+        self::$_sCacheKey = null;
+        self::$_aCache = null;
+    }
+}
 class Unit_Core_oxSeoDecoderTest extends OxidTestCase
 {
+    protected function setUp()
+    {
+        modSeoEncoder_for_Unit_Core_oxSeoDecoderTest::clearCache();
+        return parent::setUp();
+    }
     /**
      * Tear down the fixture.
      *
@@ -242,6 +256,7 @@ class Unit_Core_oxSeoDecoderTest extends OxidTestCase
             $sUrl1 = 'Geschenke/Bar-Equipment/Bar-Set-ABSINTH.html';
             $sUrl2 = 'en/Gifts/Bar-Equipment/Ice-Cubes-FLASH.html';
 
+        //
         $oDecoder = new oxseodecoder();
         $this->assertEquals( $sUrl1, $oDecoder->UNITgetObjectUrl( 'someid1', 'oxarticles', 0, 'oxarticle' ) );
         $this->assertEquals( $sUrl2, $oDecoder->UNITgetObjectUrl( 'someid2', 'oxarticles', 1, 'oxarticle' ) );
