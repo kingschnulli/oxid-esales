@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order_address.php 39607 2011-10-27 07:12:28Z arvydas.vapsva $
+ * @version   SVN: $Id: order_address.php 39908 2011-11-14 08:37:54Z arvydas.vapsva $
  */
 
 /**
@@ -111,6 +111,7 @@ class Order_Address extends oxAdminDetails
      */
     public function save()
     {
+        parent::save();
 
         $soxId = $this->getEditObjectId();
         $aParams = (array) oxConfig::getParameter( "editval");

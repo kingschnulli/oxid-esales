@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: user_address.php 39631 2011-10-28 07:56:29Z arvydas.vapsva $
+ * @version   SVN: $Id: user_address.php 39901 2011-11-14 08:36:07Z arvydas.vapsva $
  */
 
 /**
@@ -94,6 +94,7 @@ class User_Address extends oxAdminDetails
      */
     public function save()
     {
+        parent::save();
 
         if ( $this->_allowAdminEdit( $this->getEditObjectId() ) ) {
             $aParams = oxConfig::getParameter( "editval" );
