@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 39668 2011-11-02 12:46:27Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticle.php 40042 2011-11-18 12:39:04Z linas.kukulskis $
  */
 
 // defining supported link types
@@ -1681,18 +1681,26 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function skipDiscounts()
     {
         // allready loaded skip discounts config
-        if ( $this->_blSkipDiscounts !== null )
+        if ( $this->_blSkipDiscounts !== null ) {
             return $this->_blSkipDiscounts;
+        }
 
-        if ( $this->oxarticles__oxskipdiscounts->value )
+        if ( $this->oxarticles__oxskipdiscounts->value ) {
             return true;
+        }
 
-        $oDb = oxDb::getDb();
-        $sO2CView  = getViewName( 'oxobject2category', $this->getLanguage() );
-        $sViewName = getViewName( 'oxcategories', $this->getLanguage() );
-        $sSelect =  "select 1 from $sO2CView as $sO2CView left join {$sViewName} on {$sViewName}.oxid = $sO2CView.oxcatnid
-                     where $sO2CView.oxobjectid=".$oDb->quote( $this->getId() )." and {$sViewName}.oxactive = 1 and {$sViewName}.oxskipdiscounts = '1' ";
-        return $this->_blSkipDiscounts = ( $oDb->getOne($sSelect) == 1 );
+
+        $this->_blSkipDiscounts = false;
+        if ( oxDiscountList::getInstance()->hasSkipDiscountCategories() ) {
+
+            $oDb = oxDb::getDb();
+            $sO2CView  = getViewName( 'oxobject2category', $this->getLanguage() );
+            $sViewName = getViewName( 'oxcategories', $this->getLanguage() );
+            $sSelect =  "select 1 from $sO2CView as $sO2CView left join {$sViewName} on {$sViewName}.oxid = $sO2CView.oxcatnid
+                         where $sO2CView.oxobjectid=".$oDb->quote( $this->getId() )." and {$sViewName}.oxactive = 1 and {$sViewName}.oxskipdiscounts = '1' ";
+            $this->_blSkipDiscounts = ( $oDb->getOne($sSelect) == 1 );
+        }
+        return $this->_blSkipDiscounts;
     }
 
     /**

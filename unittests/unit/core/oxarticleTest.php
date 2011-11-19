@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 39679 2011-11-02 14:07:51Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticleTest.php 40043 2011-11-18 12:39:28Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -947,6 +947,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oArticle2 = new oxarticle();
         $oArticle2->load( '1127' );
+
+        $this->assertTrue($oDiscount->isForArticle($oArticle2));
 
         $this->assertEquals( 4, $oArticle2->getPrice()->getBruttoPrice() );
     }
@@ -2931,6 +2933,9 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oCategory->oxcategories__oxskipdiscounts = new oxField('1', oxField::T_RAW);
         $oCategory->save();
 
+        oxDiscountList::getInstance()->forceReload();
+        $this->assertTrue( oxDiscountList::getInstance()->hasSkipDiscountCategories() );
+
         // assigning article to category
         $oArt2Cat = oxNew( "oxbase" );
         $oArt2Cat->init( "oxobject2category" );
@@ -2972,16 +2977,23 @@ class Unit_Core_oxarticleTest extends OxidTestCase
             $oCategory->oxcategories__oxskipdiscounts = new oxField('1', oxField::T_RAW);
             $oCategory->save();
 
+            oxDiscountList::getInstance()->forceReload();
+            $this->assertTrue( oxDiscountList::getInstance()->hasSkipDiscountCategories(), 'we have skip dicounts' );
+
             // assigning article to category
             $oArt2Cat = oxNew( "oxbase" );
             $oArt2Cat->init( "oxobject2category" );
             $oArt2Cat->oxobject2category__oxobjectid = new oxField($this->oArticle->oxarticles__oxid->value, oxField::T_RAW);
             $oArt2Cat->oxobject2category__oxcatnid = new oxField('_testCat', oxField::T_RAW);
             $oArt2Cat->save();
+
             $this->oArticle->skipDiscounts();
+            $this->assertTrue( $this->oArticle->skipDiscounts(), 'after first usage' );
+
             $oCategory->oxcategories__oxskipdiscounts = new oxField('0', oxField::T_RAW);
             $oCategory->save();
-            $this->assertTrue( $this->oArticle->skipDiscounts());
+
+            $this->assertTrue( $this->oArticle->skipDiscounts(), 'after removing skip discount from category' );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order_overview.php 33467 2011-02-23 11:40:19Z arvydas.vapsva $
+ * @version   SVN: $Id: order_overview.php 40046 2011-11-18 13:46:45Z ramunas.skarbalius $
  */
 
 /**
@@ -273,4 +273,27 @@ class Order_Overview extends oxAdminDetails
         }
         return $blCan;
     }
+
+    /**
+     * Get information about order status
+     *
+     *  @return bool
+     */
+  public function getOrderStatus()
+  {
+    $oOrder = oxNew( "oxorder" );
+    $status = true;
+    if ( $oOrder->load( $this->getEditObjectId() ) ) {
+      if ( $oOrder->oxorder__oxstorno == "0" && $oOrder->oxorder__oxsenddate>"1" ) {
+        $status = true;
+      } else if ( $oOrder->oxorder__oxstorno == "0" && $oOrder->oxorder__oxsenddate<"1" ) {
+        $status = false;
+      } else if ( $oOrder->oxorder__oxstorno == "1" && $oOrder->oxorder__oxsenddate>"1" ) {
+        $status = false;
+      } else if ( $oOrder->oxorder__oxstorno == "1" && $oOrder->oxorder__oxsenddate<"1" ) {
+        $status = false;
+      }
+    }
+    return $status;
+  }
 }

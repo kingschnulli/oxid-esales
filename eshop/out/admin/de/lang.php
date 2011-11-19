@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 38936 2011-09-26 09:05:05Z juergen.busch $
+ * @version   SVN: $Id: lang.php 40049 2011-11-18 14:22:54Z ramunas.skarbalius $
  */
 
 $sLangName  = 'Deutsch';
@@ -275,6 +275,7 @@ $aLang = array(
 'GENERAL_SEARCHKEYS'                                       => 'Search Keys',
 'GENERAL_SENDEMAIL'                                        => 'E-Mail schicken?',
 'GENERAL_SENDON'                                           => 'Versandt am',
+'GENERAL_SENDOM_NOT'                                       => '[tr]Auftrag nicht ausgeliefert',
 'GENERAL_SETBACKSENDTIME'                                  => 'Versanddatum zurücksetzen',
 'GENERAL_SEO_FIXED'                                        => 'URL fixiert',
 
