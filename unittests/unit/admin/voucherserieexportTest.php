@@ -116,7 +116,7 @@ class Unit_Admin_VoucherSerieExportTest extends OxidTestCase
 
         $oView = $this->getMock( "VoucherSerie_Export", array( "write", "_getVoucherSerie" ) );
         $oView->expects( $this->at( 0 ) )->method( '_getVoucherSerie' )->will( $this->returnValue( $oVoucherSerie ) );
-        $oView->expects( $this->at( 1 ) )->method( 'write' )->with( $this->equalTo( "Gutschein" ) );
+        $oView->expects( $this->at( 1 ) )->method( 'write' )->with( $this->equalTo( "Gutscheine" ) );
         $oView->expects( $this->at( 2 ) )->method( 'write' )->with( $this->equalTo( "_testvoucher" ) );
         $this->assertEquals( 1, $oView->exportVouchers( 0 ) );
     }
