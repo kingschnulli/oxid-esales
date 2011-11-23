@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 39555 2011-10-26 08:24:26Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcmp_user.php 40139 2011-11-22 15:07:05Z arunas.paskevicius $
  */
 
 // defining login/logout states
@@ -161,9 +161,7 @@ class oxcmp_user extends oxView
                 oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account', false, 302 );
             }
 
-            if ( $oUser && !$oUser->isTermsAccepted() &&
-                 $oConfig->getConfigParam( 'blConfirmAGB' ) &&
-                 !in_array( $sClass, $this->_aAllowedClasses ) ) {
+            if ( $oUser && !$oUser->isTermsAccepted() && !in_array( $sClass, $this->_aAllowedClasses ) ) {
                 oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account&term=1', false, 302 );
             }
         }
@@ -303,8 +301,7 @@ class oxcmp_user extends oxView
     {
         $blAgb = oxConfig::getParameter( 'ord_agb' );
         $oConfig = $this->getConfig();
-        if ( $this->getParent()->isEnabledPrivateSales() && $blAgb !== null &&
-             $oConfig->getConfigParam( 'blConfirmAGB' ) && ( $oUser = $this->getUser() ) ) {
+        if ( $this->getParent()->isEnabledPrivateSales() && $blAgb !== null && ( $oUser = $this->getUser() ) ) {
             if ( $blAgb ) {
                 $oUser->acceptTerms();
             }

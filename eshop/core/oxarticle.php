@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 40042 2011-11-18 12:39:04Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticle.php 40141 2011-11-22 16:24:05Z linas.kukulskis $
  */
 
 // defining supported link types
@@ -2231,7 +2231,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getArticleLongDesc( $sOxid = null )
     {
         if ( $this->_oLongDesc === null ) {
-
             // initializing
             $this->_oLongDesc = new oxField();
 
@@ -2239,11 +2238,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             // choosing which to get..
             $sOxid = $sOxid === null ? $this->getId() : $sOxid;
             $sViewName = getViewName( 'oxartextends', $this->getLanguage() );
-            if ( ( $sDbValue = oxDb::getDb()->getOne( "select oxlongdesc from {$sViewName} where oxid = ?", array( $sOxid ) ) ) !== false ) {
+
+            $sDbValue = oxDb::getDb()->getOne( "select oxlongdesc from {$sViewName} where oxid = ?", array( $sOxid ) );
+            if ( !empty( $sDbValue ) ) {
                 $this->_oLongDesc->setValue( $sDbValue, oxField::T_RAW );
+            } elseif ( $this->oxarticles__oxparentid->value ) {
+                $this->_oLongDesc->setValue( $this->getParentArticle()->getArticleLongDesc()->getRawValue(), oxField::T_RAW );
             }
         }
-
         return $this->_oLongDesc;
     }
 
@@ -3681,12 +3683,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             if ( !$this->isAdmin() || ( $this->_blLoadParentData && $this->isAdmin() ) ) {
                 foreach ( $this->_aFieldNames as $sFieldName => $sVal ) {
                     $this->_assignParentFieldValue( $sFieldName );
-                }
-
-                //assing long description
-                $sLongDesc = $this->getArticleLongDesc()->getRawValue();
-                if ( $sLongDesc === null || $sLongDesc == '' ) {
-                    $this->setArticleLongDesc( $this->getParentArticle()->getArticleLongDesc()->getRawValue() );
                 }
             }
         }

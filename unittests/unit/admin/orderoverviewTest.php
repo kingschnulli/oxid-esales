@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: orderoverviewTest.php 40046 2011-11-18 13:46:45Z ramunas.skarbalius $
+ * @version   SVN: $Id: orderoverviewTest.php 40128 2011-11-22 13:48:49Z ramunas.skarbalius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -272,45 +272,44 @@ class Unit_Admin_OrderOverviewTest extends OxidTestCase
     }
 
     /**
-     * Order shipped reset test case
+     * Order shipping date reset test case
      *
      * @return null
      */
     public function testCanReset(){
-    	$soxId = '_testOrderId';
-    	// writing test order
-    	$oOrder = oxNew( "oxorder" );
-    	$oOrder->setId( $soxId );
-    	$oOrder->oxorder__oxshopid        = new oxField( oxConfig::getInstance()->getBaseShopId() );
-    	$oOrder->oxorder__oxuserid        = new oxField( "oxdefaultadmin" );
-    	$oOrder->oxorder__oxbillcompany   = new oxField( "Ihr Firmenname" );
-    	$oOrder->oxorder__oxbillemail     = new oxField( oxADMIN_LOGIN );
-    	$oOrder->oxorder__oxbillfname     = new oxField( "Hans" );
-    	$oOrder->oxorder__oxbilllname     = new oxField( "Musterm0ann" );
-    	$oOrder->oxorder__oxbillstreet    = new oxField( "Musterstr" );
-    	$oOrder->oxorder__oxstorno		  = new oxField( "0" );
-    	$oOrder->oxorder__oxsenddate	  = new oxField( "0000-00-00 00:00:00");
-    	$oOrder->save();
+        $soxId = '_testOrderId';
+        // writing test order
+        $oOrder = oxNew( "oxorder" );
+        $oOrder->setId( $soxId );
+        $oOrder->oxorder__oxshopid        = new oxField( oxConfig::getInstance()->getBaseShopId() );
+        $oOrder->oxorder__oxuserid        = new oxField( "oxdefaultadmin" );
+        $oOrder->oxorder__oxbillcompany   = new oxField( "Ihr Firmenname" );
+        $oOrder->oxorder__oxbillemail     = new oxField( oxADMIN_LOGIN );
+        $oOrder->oxorder__oxbillfname     = new oxField( "Hans" );
+        $oOrder->oxorder__oxbilllname     = new oxField( "Musterm0ann" );
+        $oOrder->oxorder__oxbillstreet    = new oxField( "Musterstr" );
+        $oOrder->oxorder__oxstorno        = new oxField( "0" );
+        $oOrder->oxorder__oxsenddate      = new oxField( "0000-00-00 00:00:00");
+        $oOrder->save();
 
+        $oView = new Order_Overview();
 
-    	$oView = new Order_Overview();
+        modConfig::setParameter( "oxid", $soxId );
+        $this->assertFalse($oView->canResetShippingDate());
 
-    	modConfig::setParameter( "oxid", $soxId );
-    	$this->assertFalse($oView->getOrderStatus());
+        $oOrder->oxorder__oxsenddate      = new oxField( date( "Y-m-d H:i:s", oxUtilsDate::getInstance()->getTime()));
+        $oOrder->save();
 
-    	$oOrder->oxorder__oxsenddate	  = new oxField( date( "Y-m-d H:i:s", oxUtilsDate::getInstance()->getTime()));
-    	$oOrder->save();
+        $this->assertTrue($oView->canResetShippingDate());
 
-    	$this->assertTrue($oView->getOrderStatus());
+        $oOrder->oxorder__oxstorno        = new oxField( "1" );
+        $oOrder->save();
 
-    	$oOrder->oxorder__oxstorno		  = new oxField( "1" );
-    	$oOrder->save();
+        $this->assertFalse($oView->canResetShippingDate());
 
-    	$this->assertFalse($oView->getOrderStatus());
+        $oOrder->oxorder__oxsenddate      = new oxField( "0000-00-00 00:00:00");
+        $oOrder->save();
 
-    	$oOrder->oxorder__oxsenddate	  = new oxField( "0000-00-00 00:00:00");
-    	$oOrder->save();
-
-    	$this->assertFalse($oView->getOrderStatus());
+        $this->assertFalse($oView->canResetShippingDate());
     }
 }
