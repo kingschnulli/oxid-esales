@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 39880 2011-11-10 14:28:48Z arvydas.vapsva $
+ * @version   SVN: $Id: oxseoencoder.php 40152 2011-11-23 09:57:04Z arvydas.vapsva $
  */
 
 /**
@@ -265,7 +265,7 @@ class oxSeoEncoder extends oxSuperCfg
     protected function _getFullUrl( $sSeoUrl, $iLang = null, $blSsl = false )
     {
         if ( $sSeoUrl ) {
-            $sFullUrl = ( $blSsl ? $this->getConfig()->getSslShopUrl( $iLang ) : $this->getConfig()->getShopUrl( $iLang ) ) . $sSeoUrl;
+            $sFullUrl = ( $blSsl ? $this->getConfig()->getSslShopUrl( $iLang ) : $this->getConfig()->getShopUrl( $iLang, false ) ) . $sSeoUrl;
             return oxUtilsUrl::getInstance()->processSeoUrl( $sFullUrl );
         }
         return false;
@@ -747,7 +747,7 @@ class oxSeoEncoder extends oxSuperCfg
     {
         $myConfig = $this->getConfig();
         $oStr = getStr();
-        $sUrl = str_replace( array( $myConfig->getShopUrl( $iLang ), $myConfig->getSslShopUrl( $iLang ) ), '', $sUrl );
+        $sUrl = str_replace( array( $myConfig->getShopUrl( $iLang, false ), $myConfig->getSslShopUrl( $iLang ) ), '', $sUrl );
         $sUrl = $oStr->preg_replace( '/(\?|&(amp;)?)(force_)?(admin_)?sid=[a-z0-9\.]+&?(amp;)?/i', '\1', $sUrl );
         $sUrl = $oStr->preg_replace( '/(\?|&(amp;)?)shp=[0-9]+&?(amp;)?/i', '\1', $sUrl );
         $sUrl = $oStr->preg_replace( '/(\?|&(amp;)?)lang=[0-9]+&?(amp;)?/i', '\1', $sUrl );

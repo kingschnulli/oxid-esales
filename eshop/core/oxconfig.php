@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 39731 2011-11-03 14:46:28Z arvydas.vapsva $
+ * @version   SVN: $Id: oxconfig.php 40252 2011-11-24 10:03:34Z arvydas.vapsva $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -308,6 +308,15 @@ class oxConfig extends oxSuperCfg
      */
     public function getConfigParam( $sName )
     {
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            if ( isset( modConfig::$unitMOD ) && is_object( modConfig::$unitMOD ) ) {
+                $sValue = modConfig::$unitMOD->getModConfigParam( $sName );
+                if ( $sValue !== null ) {
+                    return $sValue;
+                }
+            }
+        }
+
         if ( isset( $this->$sName ) ) {
             return $this->$sName;
         } elseif ( isset ( $this->_aConfigParams[$sName] ) ) {

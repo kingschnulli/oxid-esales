@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 35096 2011-05-03 14:52:43Z sarunas $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 40266 2011-11-24 14:33:39Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,7 +37,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
 
     public function testGetRequiredModules()
     {
-        $oSysReq = $this->getProxyClass('oxSysRequirements');
+        $oSysReq = new oxSysRequirements();
         $aRequiredModules = $oSysReq->getRequiredModules();
             $sCnt = 22;
         if ( isAdmin() ) {
@@ -147,8 +147,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
     public function testGetShopHostInfoFromConfig()
     {
         modConfig::getInstance()->setConfigParam('sShopURL', 'http://www.testshopurl.lt/testsubdir1/insideit2/');
-        $cl = oxTestModules::publicize('oxSysRequirements', '_getShopHostInfoFromConfig');
-        $o = new $cl();
+        $oSC = new oxSysRequirements();
         $this->assertEquals(
             array(
                 'host' => 'www.testshopurl.lt',
@@ -156,7 +155,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 'dir' => '/testsubdir1/insideit2/',
                 'ssl' => false,
             ),
-            $o->p_getShopHostInfoFromConfig()
+            $oSC->UNITgetShopHostInfoFromConfig()
         );
         modConfig::getInstance()->setConfigParam('sShopURL', 'https://www.testshopurl.lt/testsubdir1/insideit2/');
         $this->assertEquals(
@@ -166,7 +165,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 'dir' => '/testsubdir1/insideit2/',
                 'ssl' => true,
             ),
-            $o->p_getShopHostInfoFromConfig()
+            $oSC->UNITgetShopHostInfoFromConfig()
         );
         modConfig::getInstance()->setConfigParam('sShopURL', 'https://51.1586.51.15:21/testsubdir1/insideit2/');
         $this->assertEquals(
@@ -176,7 +175,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 'dir' => '/testsubdir1/insideit2/',
                 'ssl' => true,
             ),
-            $o->p_getShopHostInfoFromConfig()
+            $oSC->UNITgetShopHostInfoFromConfig()
         );
         modConfig::getInstance()->setConfigParam('sShopURL', '51.1586.51.15:21/testsubdir1/insideit2/');
         $this->assertEquals(
@@ -186,7 +185,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 'dir' => '/testsubdir1/insideit2/',
                 'ssl' => false,
             ),
-            $o->p_getShopHostInfoFromConfig()
+            $oSC->UNITgetShopHostInfoFromConfig()
         );
 
     }
@@ -203,8 +202,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         $_SERVER['SERVER_PORT'] = null;
         $_SERVER['HTTP_HOST'] = 'www.testshopurl.lt';
 
-        $cl = oxTestModules::publicize('oxSysRequirements', '_getShopHostInfoFromServerVars');
-        $o = new $cl();
+        $oSC = new oxSysRequirements();
         $this->assertEquals(
             array(
                 'host' => 'www.testshopurl.lt',
@@ -212,7 +210,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 'dir' => '/testsubdir1/insideit2/',
                 'ssl' => false,
             ),
-            $o->p_getShopHostInfoFromServerVars()
+            $oSC->UNITgetShopHostInfoFromServerVars()
         );
 
         $_SERVER['SCRIPT_NAME'] = '/testsubdir1/insideit2/setup/index.php';
@@ -226,7 +224,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 'dir' => '/testsubdir1/insideit2/',
                 'ssl' => true,
             ),
-            $o->p_getShopHostInfoFromServerVars()
+            $oSC->UNITgetShopHostInfoFromServerVars()
         );
 
         $_SERVER['SCRIPT_NAME'] = '/testsubdir1/insideit2/setup/index.php';
@@ -240,7 +238,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 'dir' => '/testsubdir1/insideit2/',
                 'ssl' => true,
             ),
-            $o->p_getShopHostInfoFromServerVars()
+            $oSC->UNITgetShopHostInfoFromServerVars()
         );
 
         $_SERVER['SCRIPT_NAME'] = '/testsubdir1/insideit2/setup/index.php';
@@ -254,7 +252,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 'dir' => '/testsubdir1/insideit2/',
                 'ssl' => false,
             ),
-            $o->p_getShopHostInfoFromServerVars()
+            $oSC->UNITgetShopHostInfoFromServerVars()
         );
     }
 
@@ -277,14 +275,13 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 ->with($this->equalTo('test1'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
 
-        modConfig::getInstance()->modAttach($oCfg);
+        $oSR = $this->getMock( 'oxSysRequirements', array( "getConfig" ) );
+        $oSR->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oCfg ) );
 
-        $sCName = oxTestModules::publicize('oxSysRequirements', '_checkTemplateBlock');
-        $oSR = new $sCName;
-        $this->assertEquals(false, $oSR->p_checkTemplateBlock('test0', 'nonimportanthere'));
-        $this->assertEquals(true,  $oSR->p_checkTemplateBlock('test1', 'block1'));
-        $this->assertEquals(true,  $oSR->p_checkTemplateBlock('test1', 'block2'));
-        $this->assertEquals(false, $oSR->p_checkTemplateBlock('test1', 'block3'));
+        $this->assertFalse( $oSR->UNITcheckTemplateBlock( 'test0', 'nonimportanthere') );
+        $this->assertTrue( $oSR->UNITcheckTemplateBlock( 'test1', 'block1') );
+        $this->assertTrue( $oSR->UNITcheckTemplateBlock( 'test1', 'block2') );
+        $this->assertFalse( $oSR->UNITcheckTemplateBlock( 'test1', 'block3') );
     }
 
     /**

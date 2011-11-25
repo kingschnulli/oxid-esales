@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 40128 2011-11-22 13:48:49Z ramunas.skarbalius $
+ * @version   SVN: $Id: lang.php 40253 2011-11-24 10:48:36Z juergen.busch $
  */
 
 /*
@@ -279,8 +279,8 @@ $aLang = array(
 'GENERAL_SEARCHKEY'                                        => 'Optional Search Keys',
 'GENERAL_SEARCHKEYS'                                       => 'Search Keys',
 'GENERAL_SENDEMAIL'                                        => 'Send e-mail?',
-'GENERAL_SENDON'                                           => 'Shipped on',
-'GENERAL_NOSENT'                                           => '[tr]Order not shipped',
+'GENERAL_SENDON'                                           => 'Shipped on ',
+'GENERAL_NOSENT'                                           => 'Order not shipped yet.',
 'GENERAL_SETBACKSENDTIME'                                  => 'Reset Shipping Date',
 'GENERAL_SEO_FIXED'                                        => 'Fixed URL',
 
