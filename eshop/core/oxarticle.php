@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 40141 2011-11-22 16:24:05Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticle.php 40291 2011-11-28 11:29:56Z vilma $
  */
 
 // defining supported link types
@@ -2240,7 +2240,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $sViewName = getViewName( 'oxartextends', $this->getLanguage() );
 
             $sDbValue = oxDb::getDb()->getOne( "select oxlongdesc from {$sViewName} where oxid = ?", array( $sOxid ) );
-            if ( !empty( $sDbValue ) ) {
+            if ( $sDbValue !== false ) {
                 $this->_oLongDesc->setValue( $sDbValue, oxField::T_RAW );
             } elseif ( $this->oxarticles__oxparentid->value ) {
                 $this->_oLongDesc->setValue( $this->getParentArticle()->getArticleLongDesc()->getRawValue(), oxField::T_RAW );

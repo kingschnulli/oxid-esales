@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 40043 2011-11-18 12:39:28Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticleTest.php 40293 2011-11-28 12:50:48Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -4428,6 +4428,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testAssignParentFieldValuesLongdesc()
     {
+        oxDb::getDB()->execute("delete from oxartextends where oxid = '_testVar'");
         $oArticle = new oxArticle();
         $oArticle->load('_testArt');
         $oArticle->setArticleLongDesc('testLongDesc');
