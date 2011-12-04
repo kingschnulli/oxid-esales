@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 39713 2011-11-03 13:00:48Z arvydas.vapsva $
+ * @version   SVN: $Id: oxbase.php 40411 2011-12-01 08:29:15Z linas.kukulskis $
  */
 
 /**
@@ -278,15 +278,6 @@ class oxBase extends oxSuperCfg
                 //as if we use it for lists then objects are loaded empty instead of lazy loading.
                 self::$_blDisableFieldCaching[get_class($this)] = true;
             }
-
-            /*
-            //save names to cache for next loading
-            if ($this->_sCacheKey) {
-                $sCacheKey = 'fieldnames_' . $this->_sCoreTable . "_" . $this->_sCacheKey;
-                $aFieldNames = oxUtils::getInstance()->fromFileCache($sCacheKey);
-                $aFieldNames[$sFieldName] = $iFieldStatus;
-                oxUtils::getInstance()->toFileCache($sCacheKey, $aFieldNames);
-            }*/
 
             oxUtilsObject::getInstance()->resetInstanceCache(get_class($this));
         }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbaseTest.php 38570 2011-09-05 12:46:43Z arvydas.vapsva $
+ * @version   SVN: $Id: oxbaseTest.php 40407 2011-11-30 16:08:30Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -589,7 +589,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oBase->init( "oxarticles" );
         $oBase->setId( "2000" );
         $sNonExistentTitle = $oBase->oxarticles__oxtitle_nonexistent;
-        $this->assertNull( $sNonExistentTitle);
+        $this->assertNull( $sNonExistentTitle );
     }
 
     /**
@@ -605,7 +605,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oBase->init( "oxarticles" );
         $oBase->setId( "2000" );
         $sNonExistentTitle = $oBase->oxarticles__oxtitle_nonexistent;
-        $this->assertNull( $sNonExistentTitle);
+        $this->assertNull( $sNonExistentTitle );
     }
 
     /**
