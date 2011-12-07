@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 40293 2011-11-28 12:50:48Z vilma $
+ * @version   SVN: $Id: oxarticleTest.php 40479 2011-12-06 15:40:18Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -541,8 +541,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testHasAnyVariant()
     {
-        $this->assertTrue( $this->oArticle->UNIThasAnyVariant() );
-        $this->assertFalse( $this->oArticle2->UNIThasAnyVariant() );
+        $oA = new oxArticle();
+        $oA->load('_testArt');
+
+        $this->assertTrue( $oA->UNIThasAnyVariant() );
+
+        $oA->load('_testVar');
+        $this->assertFalse( $oA->UNIThasAnyVariant() );
     }
 
     /**
@@ -584,8 +589,11 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oVar2->oxarticles__oxstock  = new oxField( 1 );
         $oVar2->save();
 
-        $this->assertEquals( 1, count( $oParent->getVariants( true ) ) );
-        $this->assertEquals( 2, count( $oParent->getVariants( false ) ) );
+        $oArt = new oxArticle();
+        $oArt->load('_testParentArticleId');
+
+        $this->assertEquals( 1, count( $oArt->getVariants( true ) ) );
+        $this->assertEquals( 2, count( $oArt->getVariants( false ) ) );
     }
 
 
@@ -1444,6 +1452,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         oxTestModules::addFunction('oxarticle', '_skipSaveFields', '{$this->_aSkipSaveFields=array();}');
         $oArticle = oxnew('oxarticle');
         $oArticle->load('_testArt');
+
         $oArticle->oxarticles__oxinsert = new oxField('2008/04/04');
         $oArticle->oxarticles__oxtimestamp = new oxField('2008/04/04');
         $oArticle->save();

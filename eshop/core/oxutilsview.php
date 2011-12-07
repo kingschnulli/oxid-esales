@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 40419 2011-12-01 12:10:47Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsview.php 40480 2011-12-06 15:45:42Z linas.kukulskis $
  */
 
 /**
@@ -433,24 +433,37 @@ class oxUtilsView extends oxSuperCfg
             $sFile = $m[1];
         }
 
-    $oDb = oxDb::getDb(true);
+        $aRet = array();
+        $oDb = oxDb::getDb(true);
         $sFileParam = $oDb->quote($sFile);
         $sShpIdParam = $oDb->quote($oConfig->getShopId());
-        $sSql = "select * from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam and oxtemplate=$sFileParam order by oxpos asc";
-        $rs = $oDb->Execute($sSql);
-        $aRet = array();
-        if ($rs != false && $rs->recordCount() > 0) {
-            while (!$rs->EOF) {
-                try {
-                    if (!is_array($aRet[$rs->fields['OXBLOCKNAME']])) {
-                        $aRet[$rs->fields['OXBLOCKNAME']] = array();
-                    }
-                    $aRet[$rs->fields['OXBLOCKNAME']][] = $this->_getTemplateBlock($rs->fields['OXMODULE'], $rs->fields['OXFILE']);
-                } catch (oxException $oE) {
-                    $oE->debugOut();
-                }
 
-                $rs->moveNext();
+        if ( $this->_blIsTplBlocks === null ) {
+            $this->_blIsTplBlocks = false;
+            $sSql = "select COUNT(*) from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam";
+            $rs = $oDb->getOne( $sSql );
+            if ( $rs ) {
+                $this->_blIsTplBlocks = true;
+            }
+        }
+
+        if ( $this->_blIsTplBlocks ) {
+            $sSql = "select * from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam and oxtemplate=$sFileParam order by oxpos asc";
+            $rs = $oDb->Execute($sSql);
+
+            if ($rs != false && $rs->recordCount() > 0) {
+                while (!$rs->EOF) {
+                    try {
+                        if (!is_array($aRet[$rs->fields['OXBLOCKNAME']])) {
+                            $aRet[$rs->fields['OXBLOCKNAME']] = array();
+                        }
+                        $aRet[$rs->fields['OXBLOCKNAME']][] = $this->_getTemplateBlock($rs->fields['OXMODULE'], $rs->fields['OXFILE']);
+                    } catch (oxException $oE) {
+                        $oE->debugOut();
+                    }
+
+                    $rs->moveNext();
+                }
             }
         }
 

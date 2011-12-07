@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 40411 2011-12-01 08:29:15Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 40472 2011-12-06 14:29:54Z linas.kukulskis $
  */
 
 /**
@@ -174,6 +174,13 @@ class oxBase extends oxSuperCfg
     protected $_isLoaded = false;
 
     /**
+     * store objects atributes values
+     *
+     * @var array
+     */
+    protected $_aInnerLazyCache = array();
+
+    /**
      * Class constructor, sets active shop.
      */
     public function __construct()
@@ -239,6 +246,8 @@ class oxBase extends oxSuperCfg
                 break;
         }
 
+
+
         // implementing lazy loading fields
         // This part of the code is slow and normally is called before field cache is built.
         // Make sure it is not called after first page is loaded and cache data is fully built.
@@ -250,17 +259,33 @@ class oxBase extends oxSuperCfg
                 $sFieldName = str_replace($this->_sCoreTable . "__", '', $sName);
                 $iFieldStatus = $this->_getFieldStatus($sFieldName);
 
-                $oDb = oxDb::getDb();
-                $sQ = "select $sFieldName from " . $this->getViewName() . " where oxid = " . $oDb->quote($this->getId());
+                $sViewName = $this->getViewName();
+                $sId = $this->getId();
 
                 try {
-                    $rs = $oDb->execute( $sQ );
-                    if ( $rs === false ) {
+                    if ( !isset( $this->_aInnerLazyCache[$sViewName][$sId] ) ) {
+
+                        $oDb = oxDb::getDb( true );
+                        $sQ = "SELECT * FROM " . $sViewName . " WHERE `oxid` = " . $oDb->quote($sId);
+                        $rs = $oDb->execute( $sQ );
+                        if ( $rs ) {
+                            $this->_aInnerLazyCache[$sViewName][$sId] = $rs->fields;
+                            if ( isset( $rs->fields[ strtoupper($sFieldName) ] ) ) {
+                                $sFieldValue = $rs->fields[ strtoupper($sFieldName) ];
+                            } else {
+                                return null;
+                            }
+                        } else {
+                            return null;
+                        }
+                    } elseif ( isset( $this->_aInnerLazyCache[$sViewName][$sId][strtoupper($sFieldName)] ) ) {
+                        $sFieldValue = $this->_aInnerLazyCache[$sViewName][$sId][strtoupper($sFieldName)];
+                    } else {
                         return null;
                     }
 
                     $this->_addField( $sFieldName, $iFieldStatus );
-                    $this->_setFieldData( $sFieldName, $rs->fields[0] );
+                    $this->_setFieldData( $sFieldName, $sFieldValue );
 
                     //save names to cache for next loading
                     if ($this->_sCacheKey) {

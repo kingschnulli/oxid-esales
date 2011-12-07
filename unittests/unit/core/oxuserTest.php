@@ -1921,8 +1921,13 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $sCnt = $myDB->getOne( 'select count(*) from oxobject2group where oxobjectid="'.$sUserID.'" and oxgroupsid="'.$sNewGroup.'" ' );
         $this->assertEquals( 1, $sCnt );
 
+        $oGroups = $oUser->getUserGroups();
         // checking group count after adding to new one
-        $this->assertEquals( 2, count( $oUser->getUserGroups() ) );
+        $this->assertEquals( 2, count( $oGroups ) );
+        
+        // #0003218: validating loaded groups
+        $this->assertEquals( true, isset($oGroups[$sNewGroup]) );
+        $this->assertEquals( $sNewGroup, $oGroups[$sNewGroup]->getId() );
     }
 
     public function testRemoveFromGroup()

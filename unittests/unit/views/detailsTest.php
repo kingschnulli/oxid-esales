@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 39230 2011-10-12 14:12:41Z arvydas.vapsva $
+ * @version   SVN: $Id: detailsTest.php 40477 2011-12-06 15:29:27Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -406,8 +406,12 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oArt->load('2000');
         $oArt->setId('_testArt');
         $oArt->save();
+
+        $oArticle = new oxArticle();
+        $oArticle->load('_testArt');
+
         $oDetails = $this->getProxyClass( 'details' );
-        $oDetails->setNonPublicVar( "_oProduct", $oArt );
+        $oDetails->setNonPublicVar( "_oProduct", $oArticle );
         $oDetails->addTags();
         $this->assertTrue( $oDetails->getTagCloudManager() instanceof oxTagCloud );
     }
