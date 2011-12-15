@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeed.php 33132 2011-02-10 10:31:46Z arvydas.vapsva $
+ * @version   SVN: $Id: oxrssfeed.php 38522 2011-09-02 11:13:10Z linas.kukulskis $
  */
 
 /**
@@ -200,10 +200,19 @@ class oxRssFeed extends oxSuperCfg
             }
 
             $oItem->description = trim($oItem->description);
-            if ($sIcon = $oArticle->getIconUrl()) {
-                $oItem->description = "<img src='$sIcon' border=0 align='left' hspace=5>".$oItem->description;
+            if ( $sThumb = $oArticle->getThumbnailUrl() ) {
+                $oItem->description = "<img src='$sThumb' border=0 align='left' hspace=5>".$oItem->description;
             }
             $oItem->description = $oStr->htmlspecialchars( $oItem->description );
+
+            if ( $oArticle->oxarticles__oxtimestamp->value ) {
+                list($date, $time) = explode(' ', $oArticle->oxarticles__oxtimestamp->value);
+                $date              = explode('-', $date);
+                $time              = explode(':', $time);
+                $oItem->date = date( 'D, d M Y H:i:s O', mktime($time[0], $time[1], $time[2], $date[1], $date[2], $date[0]) );
+            } else {
+                $oItem->date = date( 'D, d M Y H:i:s O', time() );
+            }
 
             $aItems[] = $oItem;
         }

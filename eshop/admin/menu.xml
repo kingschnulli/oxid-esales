@@ -35,6 +35,11 @@
                 <TAB id="tbcllanguage_main" cl="language_main" />
                 <BTN id="language_new" />
             </SUBMENU>
+            <SUBMENU id="mxmodule" cl="module" list="module_list">
+                <TAB id="tbclmodule_sortlist" cl="module_sortlist" />
+                <TAB id="tbclmodule_main" cl="module_main" />
+                <TAB id="tbclmodule_config" cl="module_config" />
+            </SUBMENU>
         </MAINMENU>
         <MAINMENU id="mxshopsett">
             <SUBMENU id="mxpaymeth" cl="admin_payment" list="payment_list">
@@ -79,6 +84,7 @@
                 <TAB id="tbclarticle_crossselling" cl="article_crossselling"/>
                 <TAB id="tbclarticle_variant" cl="article_variant"/>
                 <TAB id="tbclarticle_pictures" cl="article_pictures" />
+                <TAB id="tbclarticle_files" cl="article_files" />
                 <TAB id="tbclarticle_review" cl="article_review"/>
                 <TAB id="tbclarticle_overview" cl="article_overview" />
                 <TAB id="tbclarticle_seo" cl="article_seo" />
@@ -131,6 +137,7 @@
                 <TAB id="tbclorder_address" cl="order_address" />
                 <TAB id="tbclorder_article" cl="order_article" />
                 <TAB id="tbclorder_remark" cl="order_remark" />
+                <TAB id="tbclorder_downloads" cl="order_downloads" />
                 <BTN id="order_newremark" />
             </SUBMENU>
             <SUBMENU id="mxorderovw" cl="list_order" />

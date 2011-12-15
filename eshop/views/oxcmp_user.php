@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 35243 2011-05-10 06:47:13Z sarunas $
+ * @version   SVN: $Id: oxcmp_user.php 40245 2011-11-23 15:54:46Z linas.kukulskis $
  */
 
 // defining login/logout states
@@ -79,26 +79,6 @@ class oxcmp_user extends oxView
                                         'content',
                                         'account',
                                         );
-
-    /**
-     * Billing address fields which should be taken raw (no encoding)
-     *
-     * @var array
-     */
-    protected $_aRawBillingFields = array( 'oxuser__oxcompany', 'oxuser__oxaddinfo', 'oxuser__oxfname',
-                                           'oxuser__oxlname', 'oxuser__oxstreet', 'oxuser__oxstreetnr',
-                                           'oxuser__oxcity', 'oxuser__oxfon', 'oxuser__oxfax',
-                                           'oxuser__oxmobfon', 'oxuser__oxprivfon' );
-
-    /**
-     * Shipping addresses fields which should be taken raw (no encoding)
-     *
-     * @var array
-     */
-    protected $_aRawShippingFields = array( 'oxaddress__oxcompany', 'oxaddress__oxaddinfo', 'oxaddress__oxfname',
-                                            'oxaddress__oxlname', 'oxaddress__oxcity', 'oxaddress__oxstreet',
-                                            'oxaddress__oxstreetnr', 'oxaddress__oxzip', 'oxaddress__oxfon',
-                                            'oxaddress__oxfax' );
     /**
      * Sets oxcmp_oxuser::blIsComponent = true, fetches user error
      * code and sets it to default - 0. Executes parent::init().
@@ -124,10 +104,10 @@ class oxcmp_user extends oxView
 
         // load session user
         $this->_loadSessionUser();
-
         if ( $this->getConfig()->getConfigParam( 'blInvitationsEnabled' ) ) {
             // get invitor ID
             $this->getInvitor();
+            $this->setRecipient();
         }
 
         parent::init();
@@ -178,13 +158,11 @@ class oxcmp_user extends oxView
 
             // no session user
             if ( !$oUser && !in_array( $sClass, $this->_aAllowedClasses ) ) {
-                oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account', false );
+                oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account', false, 302 );
             }
 
-            if ( $oUser && !$oUser->isTermsAccepted() &&
-                 $oConfig->getConfigParam( 'blConfirmAGB' ) &&
-                 !in_array( $sClass, $this->_aAllowedClasses ) ) {
-                oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account&term=1', false );
+            if ( $oUser && !$oUser->isTermsAccepted() && !in_array( $sClass, $this->_aAllowedClasses ) ) {
+                oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() . 'cl=account&term=1', false, 302 );
             }
         }
     }
@@ -206,7 +184,7 @@ class oxcmp_user extends oxView
 
         // this user is blocked, deny him
         if ( $oUser->inGroup( 'oxidblocked' ) ) {
-            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() . 'cl=content&tpl=user_blocked.tpl' );
+            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() . 'cl=content&tpl=user_blocked.tpl', true, 302  );
         }
 
         // TODO: move this to a proper place
@@ -218,6 +196,7 @@ class oxcmp_user extends oxView
             }
 
             if ( $oBasket = $this->getSession()->getBasket() ) {
+                $oBasket->load();
                 $oBasket->onUpdate();
             }
         }
@@ -292,7 +271,7 @@ class oxcmp_user extends oxView
 
         // this user is blocked, deny him
         if ( $oUser->inGroup( 'oxidblocked' ) ) {
-            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL().'cl=content&tpl=user_blocked.tpl' );
+            oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL().'cl=content&tpl=user_blocked.tpl', true, 302 );
         }
 
         // adding to dyn group
@@ -322,8 +301,7 @@ class oxcmp_user extends oxView
     {
         $blAgb = oxConfig::getParameter( 'ord_agb' );
         $oConfig = $this->getConfig();
-        if ( $this->getParent()->isEnabledPrivateSales() && $blAgb !== null &&
-             $oConfig->getConfigParam( 'blConfirmAGB' ) && ( $oUser = $this->getUser() ) ) {
+        if ( $this->getParent()->isEnabledPrivateSales() && $blAgb !== null && ( $oUser = $this->getUser() ) ) {
             if ( $blAgb ) {
                 $oUser->acceptTerms();
             }
@@ -491,7 +469,7 @@ class oxcmp_user extends oxView
         // second pass
         $sPassword2 = oxConfig::getParameter( 'lgn_pwd2' );
 
-        $aInvAdress = oxConfig::getParameter( 'invadr', $this->_aRawBillingFields );
+        $aInvAdress = oxConfig::getParameter( 'invadr', true );
         $aDelAdress = $this->_getDelAddressData();
 
         $oUser = oxNew( 'oxuser' );
@@ -516,9 +494,11 @@ class oxcmp_user extends oxView
                 $oUser->acceptTerms();
             }
 
-            if ( $this->getConfig()->getConfigParam( 'blInvitationsEnabled' ) && $sUserId = oxConfig::getParameter( "su" ) ) {
+            $sUserId = oxSession::getVar( "su" );
+            $sRecEmail = oxSession::getVar( "re" );
+            if ( $this->getConfig()->getConfigParam( 'blInvitationsEnabled' ) && $sUserId && $sRecEmail ) {
                 // setting registration credit points..
-                $oUser->setCreditPointsForRegistrant( $sUserId );
+                $oUser->setCreditPointsForRegistrant( $sUserId, $sRecEmail );
             }
 
             // assigning to newsletter
@@ -627,7 +607,7 @@ class oxcmp_user extends oxView
         $aDelAdress = $this->_getDelAddressData();
 
         // if user company name, user name and additional info has special chars
-        $aInvAdress = oxConfig::getParameter( 'invadr', $this->_aRawBillingFields );
+        $aInvAdress = oxConfig::getParameter( 'invadr', true );
 
         $sUserName  = $oUser->oxuser__oxusername->value;
         $sPassword  = $sPassword2 = $oUser->oxuser__oxpassword->value;
@@ -679,7 +659,7 @@ class oxcmp_user extends oxView
     protected function _getDelAddressData()
     {
         // if user company name, user name and additional info has special chars
-        $aDelAdress = $aDeladr = (oxConfig::getParameter( 'blshowshipaddress' ) || oxSession::getVar( 'blshowshipaddress' )) ? oxConfig::getParameter( 'deladr', $this->_aRawShippingFields ) : array();
+        $aDelAdress = $aDeladr = (oxConfig::getParameter( 'blshowshipaddress' ) || oxSession::getVar( 'blshowshipaddress' )) ? oxConfig::getParameter( 'deladr', true ) : array();
 
         if ( is_array( $aDeladr ) ) {
             // checking if data is filled
@@ -763,7 +743,7 @@ class oxcmp_user extends oxView
     }
 
     /**
-     * Returns invitor id
+     * Gets from URL invitor id
      *
      * @return null
      */
@@ -772,6 +752,19 @@ class oxcmp_user extends oxView
         $sSu = oxSession::getVar( 'su' );
         if ( !$sSu && ( $sSuNew = oxConfig::getParameter( 'su' ) ) ) {
             oxSession::setVar( 'su', $sSuNew );
+        }
+    }
+
+    /**
+     * sets from URL invitor id
+     *
+     * @return null
+     */
+    public function setRecipient()
+    {
+        $sRe = oxSession::getVar( 're' );
+        if ( !$sRe && ( $sReNew = oxConfig::getParameter( 're' ) ) ) {
+            oxSession::setVar( 're', $sReNew );
         }
     }
 }

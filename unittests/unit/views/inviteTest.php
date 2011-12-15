@@ -91,41 +91,6 @@ class Unit_Views_inviteTest extends OxidTestCase
     }
 
     /**
-     * Testing method _updateStatistics()
-     *
-     * @return null
-     */
-    public function testUpdateStatistics()
-    {
-        $oView = $this->getProxyClass( 'invite' );
-
-        $oUtilsDate = $this->getMock('oxUtilsDate', array('formatDBDate'));
-        $oUtilsDate->expects($this->once())->method('formatDBDate')->will($this->returnValue("2015-10-11"));
-        oxTestModules::addModuleObject('oxUtilsDate', $oUtilsDate);
-
-        $aRecEmails = array( "test1@oxid-esales.com", "test2@oxid-esales.com" );
-        $sUserId = "_testUserId";
-
-        $oView->UNITupdateStatistics( $sUserId, $aRecEmails );
-
-        $aRec = oxDb::getDb( true )->getAll( "select * from oxinvitations order by oxemail");
-
-        $this->assertEquals( $sUserId, $aRec[0]["OXUSERID"] );
-        $this->assertEquals( "test1@oxid-esales.com", $aRec[0]["OXEMAIL"] );
-        $this->assertEquals( "2015-10-11", $aRec[0]["OXDATE"] );
-        $this->assertEquals( "1", $aRec[0]["OXPENDING"] );
-        $this->assertEquals( "0", $aRec[0]["OXACCEPTED"] );
-        $this->assertEquals( "1", $aRec[0]["OXTYPE"] );
-
-        $this->assertEquals( $sUserId, $aRec[1]["OXUSERID"] );
-        $this->assertEquals( "test2@oxid-esales.com", $aRec[1]["OXEMAIL"] );
-        $this->assertEquals( "2015-10-11", $aRec[1]["OXDATE"] );
-        $this->assertEquals( "1", $aRec[1]["OXPENDING"] );
-        $this->assertEquals( "0", $aRec[1]["OXACCEPTED"] );
-        $this->assertEquals( "1", $aRec[1]["OXTYPE"] );
-    }
-
-    /**
      * Testing method getCaptcha()
      *
      * @return null
@@ -218,11 +183,11 @@ class Unit_Views_inviteTest extends OxidTestCase
         $oCaptcha->expects($this->once())->method('pass')->will( $this->returnValue( true ) );
         oxTestModules::addModuleObject( 'oxCaptcha', $oCaptcha );
 
-        $oUser = new oxUser();
+        $oUser = $this->getMock('oxUser', array( 'updateInvitationStatistics' ) );
+        $oUser->expects($this->never())->method('updateInvitationStatistics');
 
-        $oView = $this->getMock('invite', array( '_updateStatistics', 'getUser' ) );
+        $oView = $this->getMock('invite', array( 'getUser' ) );
         $oView->expects($this->once())->method('getUser')->will( $this->returnValue( false ) );
-        $oView->expects($this->never())->method('_updateStatistics');
         $oView->send();
     }
 
@@ -243,11 +208,11 @@ class Unit_Views_inviteTest extends OxidTestCase
         $oCaptcha->expects($this->once())->method('pass')->will( $this->returnValue( true ) );
         oxTestModules::addModuleObject( 'oxCaptcha', $oCaptcha );
 
-        $oUser = new oxUser();
+        $oUser = $this->getMock('oxUser', array( 'updateInvitationStatistics' ) );
+        $oUser->expects($this->once())->method('updateInvitationStatistics')->will( $this->returnValue( true ) );
 
-        $oView = $this->getMock('invite', array( '_updateStatistics', 'getUser' ) );
+        $oView = $this->getMock('invite', array( 'getUser' ) );
         $oView->expects($this->once())->method('getUser')->will( $this->returnValue( $oUser ) );
-        $oView->expects($this->once())->method('_updateStatistics');
         $oView->send();
     }
 

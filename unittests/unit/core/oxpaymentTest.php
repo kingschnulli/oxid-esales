@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpaymentTest.php 33202 2011-02-11 09:22:02Z arvydas.vapsva $
+ * @version   SVN: $Id: oxpaymentTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -729,7 +729,7 @@ class Unit_Core_oxpaymentTest extends OxidTestCase
         $sLogMsg .= "ERROR TEXT: 5\n";
 
         $sSql = "select * from oxpaylogs where oxsessid = '_testIPaymentSessId' ";
-        $aLogs = oxDb::getDb( true )->getAll( $sSql );
+        $aLogs = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( $sSql );
 
         $this->assertEquals( '_testIPaymentSessId', $aLogs[0]['OXSESSID'] );
         $this->assertEquals( oxConfig::getInstance()->getBaseShopId(), $aLogs[0]['OXSHOPID'] );
@@ -764,7 +764,7 @@ class Unit_Core_oxpaymentTest extends OxidTestCase
         $oPayment->logIPayment( '1', '2', '3', '4', '5', '6', '7' );
 
         $sSql = "select * from oxpaylogs where oxsessid = '_testIPaymentSessId' ";
-        $aLogs = oxDb::getDb( true )->getAll( $sSql );
+        $aLogs = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( $sSql );
 
         $this->assertEquals( 0, count($aLogs) );
     }

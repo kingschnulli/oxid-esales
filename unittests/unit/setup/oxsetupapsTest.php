@@ -77,7 +77,9 @@ class Unit_Setup_oxSetupApsTest extends OxidTestCase
         $oUtils->expects( $this->at( $iAt++ ) )->method( "getEnvVar" )->with( $this->equalTo( "BASE_URL_SCHEME" ) )->will( $this->returnValue( "testSchemet" ));
         $oUtils->expects( $this->at( $iAt++ ) )->method( "getEnvVar" )->with( $this->equalTo( "BASE_URL_PATH" ) )->will( $this->returnValue( "testPath" ));
         $oUtils->expects( $this->at( $iAt++ ) )->method( "getEnvVar" )->with( $this->equalTo( "SETTINGS_check_for_updates" ) )->will( $this->returnValue( "testCheckforUpdates" ));
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "getEnvVar" )->with( $this->equalTo( "SETTINGS_location_lang" ) )->will( $this->returnValue( "testCountryLang" ));
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "getEnvVar" )->with( $this->equalTo( "SETTINGS_location_lang" ) )->will( $this->returnValue( "testLocationLang" ));
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "getEnvVar" )->with( $this->equalTo( "SETTINGS_location_lang" ) )->will( $this->returnValue( "testLocationLang" ));
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "getEnvVar" )->with( $this->equalTo( "SETTINGS_country_lang" ) )->will( $this->returnValue( "testCountryLang" ));
         $oUtils->expects( $this->at( $iAt++ ) )->method( "getEnvVar" )->with( $this->equalTo( "SETTINGS_use_dynamic_pages" ) )->will( $this->returnValue( "testUseDynPages" ));
         $oUtils->expects( $this->at( $iAt++ ) )->method( "getEnvVar" )->with( $this->equalTo( "SETTINGS_admin_user_name" ) )->will( $this->returnValue( "testAdminUserName" ));
         $oUtils->expects( $this->at( $iAt++ ) )->method( "getEnvVar" )->with( $this->equalTo( "SETTINGS_admin_user_password" ) )->will( $this->returnValue( "testAdminUserPass" ));

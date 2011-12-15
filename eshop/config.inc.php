@@ -57,6 +57,7 @@
     //  5 = Delivery Cost calculation info
     //  6 = SMTP Debug Messages
     //  7 = oxDbDebug SQL parser
+    //  8 = display smarty template names (requires /tmp cleanup)
     $this->iDebug = 0;
 
     // Log all modifications performed in Admin
@@ -93,12 +94,15 @@
                         'spider',
                         'fireball',
                         'robot',
-                        'spider',
-                        'robot',
                         'slurp',
                         'fast',
                         'altavista',
                         'teoma',
+                        'msnbot',
+                        'bingbot',
+                        'yandex',
+                        'gigabot',
+                        'scrubby'
                         );
 
     // Deactivate Static URL's for these Robots
@@ -159,3 +163,30 @@
      * note: only active if in productive mode, as the eShop in non productive more will always log such urls
      */
     $this->blSeoLogging = false;
+
+    /**
+     * To override oxubase::_aUserComponentNames use this array option:
+     * array keys are component(class) names and array values defines if component is cacheable (true/false)
+     * e.g. array("user_class" => false);
+     */
+    $this->aUserComponentNames = null;
+
+    /**
+     * saves subshopid in session
+     */
+    $this->blDeprecatedSubshopsInSessions = false;
+
+    /**
+     * Default database conection character set
+     */
+    $this->sDefaultDatabaseConnection = '';
+
+    /**
+     * Additional multi language tables
+     */
+    $this->aMultiLangTables = null;
+
+    /**
+     * Instructs shop that price update is perfomed by cron (time based job sheduler)
+     */
+    $this->blUseCron = false;

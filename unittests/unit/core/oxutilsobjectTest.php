@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobjectTest.php 32008 2010-12-17 15:10:36Z sarunas $
+ * @version   SVN: $Id: oxutilsobjectTest.php 39759 2011-11-04 10:08:37Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -202,16 +202,43 @@ class Unit_Core_oxutilsobjectTest extends OxidTestCase
         $this->assertEquals(0, count($aGotInstanceCache));
     }
 
-    public function testIsModuleActive()
+    public function testIsModuleActiveActive()
     {
         $oConfig = $this->getMock( 'oxconfig', array( 'getConfigParam' ) );
-        $oConfig->expects( $this->any() )->method( 'getConfigParam')->will( $this->returnValue( array("oxorder" => "invoicepdf/myorder") ) );
+
+        $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aModules'))->will($this->returnValue( array("oxorder" => "invoicepdf/myorder")));
+        $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array()));
 
         $oUtilsObject = $this->getMock( 'oxUtilsObject', array( 'getConfig' ) );
         $oUtilsObject->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
 
         $this->assertFalse( $oUtilsObject->isModuleActive( 'oxorder', 'aaaa' ) );
+    }
+
+    public function testIsModuleActiveInactive()
+    {
+        $oConfig = $this->getMock( 'oxconfig', array( 'getConfigParam' ) );
+
+        $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aModules'))->will($this->returnValue( array("oxorder" => "invoicepdf/myorder")));
+        $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array()));
+
+        $oUtilsObject = $this->getMock( 'oxUtilsObject', array( 'getConfig' ) );
+        $oUtilsObject->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+
         $this->assertTrue( $oUtilsObject->isModuleActive( 'oxorder', 'myorder' ) );
+    }
+
+    public function testIsModuleActiveDisabled()
+    {
+        $oConfig = $this->getMock( 'oxconfig', array( 'getConfigParam' ) );
+
+        $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aModules'))->will($this->returnValue( array("oxorder" => "invoicepdf/myorder")));
+        $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array("oxorder" => "invoicepdf/myorder")));
+
+        $oUtilsObject = $this->getMock( 'oxUtilsObject', array( 'getConfig' ) );
+        $oUtilsObject->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertFalse( $oUtilsObject->isModuleActive( 'oxorder', 'myorder' ) );
     }
 
 }

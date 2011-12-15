@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_main.php 33736 2011-03-10 15:36:39Z arvydas.vapsva $
+ * @version   SVN: $Id: article_main.php 40261 2011-11-24 13:52:22Z linas.kukulskis $
  */
 
 /**
@@ -132,10 +132,11 @@ class Article_Main extends oxAdminDetails
      */
     public function save()
     {
+        parent::save();
+
         $myConfig = $this->getConfig();
         $soxId    = $this->getEditObjectId();
         $aParams  = oxConfig::getParameter( "editval" );
-
 
         // checkbox handling
         if ( !isset( $aParams['oxarticles__oxactive'] ) ) {
@@ -176,7 +177,7 @@ class Article_Main extends oxAdminDetails
             $myConfig->getConfigParam( 'blWarnOnSameArtNums' ) &&
             $oArticle->oxarticles__oxartnum->value !=  $aParams['oxarticles__oxartnum']
             ) {
-            $sSelect  = "select oxid from ".$oArticle->getCoreTableName();
+            $sSelect  = "select oxid from ".getViewName( 'oxarticles' );
             $sSelect .= " where oxartnum = '".$aParams['oxarticles__oxartnum']."'";
             $sSelect .= " and oxid != '".$aParams['oxarticles__oxid']."'";
             if ($oArticle->assignRecord( $sSelect ))
@@ -282,9 +283,9 @@ class Article_Main extends oxAdminDetails
 
         $oNew = oxNew( "oxbase");
         $oNew->init( "oxobject2category" );
-        $oNew->oxobject2category__oxtime = new oxField(time());
-        $oNew->oxobject2category__oxobjectid = new oxField($sOXID);
-        $oNew->oxobject2category__oxcatnid = new oxField($sCatID);
+        $oNew->oxobject2category__oxtime     = new oxField( 0 );
+        $oNew->oxobject2category__oxobjectid = new oxField( $sOXID );
+        $oNew->oxobject2category__oxcatnid   = new oxField( $sCatID );
 
         $oNew->save();
 
@@ -356,6 +357,9 @@ class Article_Main extends oxAdminDetails
             //copy article extends (longdescription, tags)
             $this->_copyArtExtends( $sOldId, $sNewId);
 
+            //files
+            $this->_copyFiles( $sOldId, $sNewId );
+
                 // resetting
                 $aResetIds['vendor'][$oArticle->oxarticles__oxvendorid->value] = 1;
                 $aResetIds['manufacturer'][$oArticle->oxarticles__oxmanufacturerid->value] = 1;
@@ -405,6 +409,7 @@ class Article_Main extends oxAdminDetails
     protected function _copyCategories( $sOldId, $sNewId )
     {
         $myUtilsObject = oxUtilsObject::getInstance();
+        $oShopMetaData = oxShopMetaData::getInstance();
         $oDb = oxDb::getDb();
 
 
@@ -452,6 +457,37 @@ class Article_Main extends oxAdminDetails
                 $oAttr->setId( $myUtilsObject->generateUID() );
                 $oAttr->oxobject2attribute__oxobjectid->setValue( $sNewId );
                 $oAttr->save();
+                $oRs->moveNext();
+            }
+        }
+    }
+
+     /**
+     * Copying files
+     *
+     * @param string $sOldId Id from old article
+     * @param string $sNewId Id from new article
+     *
+     * @return null
+     */
+    protected function _copyFiles( $sOldId, $sNewId )
+    {
+        $myUtilsObject = oxUtilsObject::getInstance();
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+
+        $sQ = "SELECT * FROM `oxfiles` WHERE `oxartid` = ".$oDb->quote( $sOldId );
+        $oRs = $oDb->execute($sQ);
+        if ( $oRs !== false && $oRs->recordCount() > 0 ) {
+            while ( !$oRs->EOF ) {
+
+                $oFile = oxNew( "oxfile" );
+                $oFile->setId( $myUtilsObject->generateUID() );
+                $oFile->oxfiles__oxartid = new oxField( $sNewId );
+                $oFile->oxfiles__oxfilename =  new oxField( $oRs->fields['OXFILENAME'] );
+                $oFile->oxfiles__oxfilesize =  new oxField( $oRs->fields['OXFILESIZE'] );
+                $oFile->oxfiles__oxstorehash =  new oxField( $oRs->fields['OXSTOREHASH'] );
+                $oFile->oxfiles__oxpurchasedonly =  new oxField( $oRs->fields['OXPURCHASEDONLY'] );
+                $oFile->save();
                 $oRs->moveNext();
             }
         }

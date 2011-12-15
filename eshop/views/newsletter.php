@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletter.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
+ * @version   SVN: $Id: newsletter.php 38007 2011-08-08 08:15:59Z linas.kukulskis $
  */
 
 /**
@@ -210,6 +210,16 @@ class Newsletter extends oxUBase
     }
 
     /**
+     * simlink to function removeme bug fix #0002894
+     *
+     * @return null
+     */
+    public function rmvm()
+    {
+        $this->removeme();
+    }
+
+    /**
      * Template variable getter. Returns action articlelist
      *
      * @return object
@@ -294,7 +304,7 @@ class Newsletter extends oxUBase
         $aPath  = array();
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_INFO_NEWSLETTER_STAYINFORMED', oxLang::getInstance()->getBaseLanguage(), false );
         $aPath['link']  = $this->getLink();
-        
+
         $aPaths[] = $aPath;
         return $aPaths;
     }

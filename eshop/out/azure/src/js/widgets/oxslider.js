@@ -1,19 +1,44 @@
+/**
+ *    This file is part of OXID eShop Community Edition.
+ *
+ *    OXID eShop Community Edition is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    OXID eShop Community Edition is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @link      http://www.oxid-esales.com
+ * @package   out
+ * @copyright (C) OXID eSales AG 2003-2011
+ * @version OXID eShop CE
+ * @version   SVN: $Id: oxslider.js 35529 2011-05-23 07:31:20Z vilma $
+ */
 ( function( $ ) {
 
     oxSlider = {
             options: {
-                width                  : 940,
+                width                : 940,
                 height               : 220,
                 autoPlay             : true,
-                classPanel             : '.panel',
-                classStartStop         : '.start-stop',
-                classPromotionText     : '.promoBox',
-                classNavigation        : '.thumbNav',
+                delay				 : 6700,
+                animationTime 		 : 2700,
+                startStopped		 : false,
+                classPanel           : '.panel',
+                classStartStop       : '.start-stop',
+                classPromotionText   : '.promoBox',
+                classNavigation      : '.thumbNav',
                 classForwardArrow    : '.forward',
-                classBackArrow        : '.back',
-                classAnythingSlider    : '.anythingSlider',
-                classThumbNav        : '.thumbNav',
-                classAnythingControls    : '.anythingControls',
+                classBackArrow       	: '.back',
+                classAnythingSlider  	: '.anythingSlider',
+                classThumbNav        	: '.thumbNav',
+                classAnythingControls	: '.anythingControls',
                 elementLi             : 'li',
                 eventMouseover        : "mouseover",
                 eventMouseout        : "mouseout",
@@ -38,9 +63,9 @@
                         width               : options.width,
                         height              : options.height,
                         autoPlay            : options.autoPlay,
-                        startStopped        : false,
-                        delay               : 6700,
-                        animationTime       : 2700,
+                        startStopped        : options.startStopped,
+                        delay               : options.delay,
+                        animationTime       : options.animationTime,
                         navigationFormatter : function(i, panel){
                             return aNavigationTabs[i - 1];
                         }

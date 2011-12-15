@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountTest.php 27628 2010-05-07 11:03:21Z vilma $
+ * @version   SVN: $Id: oxdiscountTest.php 39871 2011-11-09 15:56:19Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -181,7 +181,7 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
     // main article
     public function testIsForArticleMainArticle()
     {
-        $oDiscount = new oxDiscount();
+        $oDiscount = oxNew( 'oxDiscount' );
         $testDiscId = 'testdid';
         $oDiscount->setId( $testDiscId );
         $oDiscount->save();
@@ -212,11 +212,21 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
         oxDb::getDb()->Execute("insert into oxobject2discount VALUES( 'testIsForArticle', '".$testDiscId."','".$testAid."','oxarticles')");
         $this->assertTrue( $oDiscount->isForArticle( $oArticle ) );
 
+
+
         //global discount for all articles
+        $oDiscount = oxNew( 'oxDiscount' );
+        $testDiscId = 'testdid';
+        $oDiscount->setId( $testDiscId );
+        $oDiscount->save();
         oxDb::getDb()->Execute("delete from oxobject2discount where oxid='testIsForArticle'");
         $this->assertTrue($oDiscount->isForArticle($oArticle));
 
         //no article discount but fitting category
+        $oDiscount = oxNew( 'oxDiscount' );
+        $testDiscId = 'testdid';
+        $oDiscount->setId( $testDiscId );
+        $oDiscount->save();
         $oArticle = new oxArticle_Extended();
         $testCatId = 'testcatid';
         oxDb::getDb()->Execute("insert into oxobject2discount VALUES('testIsForArticle','".$testDiscId."','".$testCatId."','oxcategories')");
@@ -228,6 +238,8 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
         $oArticle->setId( $testAid );
         $this->assertFalse( $oDiscount->isForArticle( $oArticle ) );
     }
+
+
     //no article discount for fitting category
     public function testIsForArticleFittingOnlyCat()
     {
@@ -287,6 +299,10 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
         $this->assertTrue( $oDiscount->isForArticle( $oArticle ) );
 
         //global discount for all articles
+        $oDiscount = new oxDiscount();
+        $testDiscId = 'testdid';
+        $oDiscount->setId( $testDiscId );
+        $oDiscount->save();
         oxDb::getDb()->Execute( "delete from oxobject2discount where oxid='testIsForArticle'" );
         $this->assertTrue( $oDiscount->isForArticle( $oArticle ) );
     }
@@ -760,7 +776,6 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
      */
     public function testGetSimpleDiscount()
     {
-        $myUtils = oxUtils::getInstance();
         $sShopId = oxConfig::getInstance()->getBaseShopId();
         $myDB    = oxDb::getDb();
         $sQ  = 'insert into oxdiscount ';
@@ -935,5 +950,81 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
         $oDiscount->oxdiscount__oxamount = new oxField(1, oxField::T_RAW);
         $oDiscount->applyDiscount( $oPrice, 1 );
         $this->assertEquals( 80, $oPrice->getBruttoPrice() );
+    }
+
+    /**
+     * Testing oxDiscount::_getProductCheckQuery()
+     *
+     * @return null
+     */
+    public function testGetProductCheckQuery()
+    {
+        $oProduct1 = $this->getMock( "oxStdClass", array( "getProductParentId", "getProductId" ) );
+        $oProduct1->expects( $this->once() )->method( 'getProductParentId' )->will( $this->returnValue( "ProductParentId" ) );
+        $oProduct1->expects( $this->once() )->method( 'getProductId' )->will( $this->returnValue( "ProductId" ) );
+
+        $oProduct2 = $this->getMock( "oxStdClass", array( "getProductParentId", "getProductId" ) );
+        $oProduct2->expects( $this->once() )->method( 'getProductParentId' )->will( $this->returnValue( false ) );
+        $oProduct2->expects( $this->once() )->method( 'getProductId' )->will( $this->returnValue( "ProductId" ) );
+
+        $sQ1 = " and ( oxobjectid = 'ProductId' or oxobjectid = 'ProductParentId' )";
+        $sQ2 = " and oxobjectid = 'ProductId'";
+
+        $oDiscount = new oxDiscount();
+        $this->assertEquals( $sQ1, $oDiscount->UNITgetProductCheckQuery( $oProduct1 ) );
+        $this->assertEquals( $sQ2, $oDiscount->UNITgetProductCheckQuery( $oProduct2 ) );
+    }
+
+    /**
+     * Test case for #0002599: itm discount (product) is not given for variant-product
+     *
+     * When there is itm discount created, which is applied only for some particular
+     * products, which have variants, the discount is not applied for Variant products,
+     * when these are added to basket.
+     * The problem is that only Parent-article is assigned to discount the variant-products
+     * are not valuated in this case, and discount is applied strictly for Parent-product only.
+     * This discount should be applied for Variant-products, when only Parent product is
+     * assigned to discount.
+     *
+     * @return null
+     */
+    public function testForCase2599()
+    {
+        // creating test discount
+        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", 1 );
+        $sDiscountId = '_'.uniqid( rand() );
+
+        // inserting test discount
+            $sQ = "insert into oxdiscount ( oxid, oxshopid, oxactive, oxtitle, oxamount, oxamountto, oxpriceto, oxaddsumtype, oxaddsum )
+                   values ( '{$sDiscountId}', '".oxConfig::getInstance()->getBaseShopId()."', '1', 'Test', '5', '10', '0', 'itm', '10' )";
+
+        oxDb::getDb()->Execute( $sQ );
+
+        // assigning test discount
+        $sQ = "insert into oxobject2discount ( oxid, oxdiscountid, oxobjectid, oxtype )
+               values
+               ( '_test".uniqid( rand(), true ).".', '{$sDiscountId}', 'product1', 'oxarticles' ),
+               ( '_test".uniqid( rand(), true ).".', '{$sDiscountId}', 'product2', 'oxarticles' ),
+               ( '_test".uniqid( rand(), true ).".', '{$sDiscountId}', 'product3', 'oxarticles' ) ";
+        oxDb::getDb()->Execute( $sQ );
+
+        $oParentProduct = $this->getMock( "oxArticle", array( "getProductParentId", "getProductId" ) );
+        $oParentProduct->expects( $this->once() )->method( 'getProductParentId' )->will( $this->returnValue( false ) );
+        $oParentProduct->expects( $this->once() )->method( 'getProductId' )->will( $this->returnValue( "product1" ) );
+
+        $oProduct = $this->getMock( "oxArticle", array( "getProductParentId", "getProductId" ) );
+        $oProduct->expects( $this->once() )->method( 'getProductParentId' )->will( $this->returnValue( "product1" ) );
+        $oProduct->expects( $this->once() )->method( 'getProductId' )->will( $this->returnValue( "product4" ) );
+
+        $oUnrelatedProduct = $this->getMock( "oxArticle", array( "getProductParentId", "getProductId" ) );
+        $oUnrelatedProduct->expects( $this->once() )->method( 'getProductParentId' )->will( $this->returnValue( false ) );
+        $oUnrelatedProduct->expects( $this->once() )->method( 'getProductId' )->will( $this->returnValue( "UnrelatedProductId" ) );
+
+        // testing
+        $oDiscount = new oxDiscount();
+        $oDiscount->load( $sDiscountId );
+        $this->assertTrue( $oDiscount->isForBundleItem( $oParentProduct ) );
+        $this->assertTrue( $oDiscount->isForBundleItem( $oProduct ) );
+        $this->assertFalse( $oDiscount->isForBundleItem( $oUnrelatedProduct ) );
     }
 }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 36245 2011-06-13 13:24:59Z linas.kukulskis $
+ * @version   SVN: $Id: details.php 39349 2011-10-13 08:48:54Z linas.kukulskis $
  */
 
 /**
@@ -288,17 +288,18 @@ class Details extends oxUBase
             if ( $oParent = $oProduct->getParentArticle() ) {
                 $myConfig = $this->getConfig();
 
-                $this->_aVariantList = $oParent->getVariants( false );
+                $oParent->setNoVariantLoading(false);
+                $this->_aVariantList = $oParent->getFullVariants( false );
 
                 //lets additionally add parent article if it is sellable
-                if ( $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
+                if ( count( $this->_aVariantList ) && $myConfig->getConfigParam( 'blVariantParentBuyable' ) ) {
                     //#1104S if parent is buyable load selectlists too
                     $oParent->aSelectlist = $oParent->getSelectLists();
                     $this->_aVariantList = array_merge( array( $oParent ), $this->_aVariantList->getArray() );
                 }
             } else {
                 //loading full list of variants
-                $this->_aVariantList = $oProduct->getVariants( false );
+                $this->_aVariantList = $oProduct->getFullVariants( false );
             }
 
             // setting link type for variants ..
@@ -447,33 +448,41 @@ class Details extends oxUBase
      */
     protected function _prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords = true )
     {
-        $myConfig = $this->getConfig();
-
         if ( !$sKeywords ) {
             $oProduct = $this->getProduct();
-            $aKeywords[] = trim( $this->getTitle() );
+            $sKeywords = trim( $this->getTitle() );
 
             if ( $oCatTree = $this->getCategoryTree() ) {
                 foreach ( $oCatTree->getPath() as $oCat ) {
-                    $aKeywords[] = trim( $oCat->oxcategories__oxtitle->value );
+                    $sKeywords .= ", " . trim( $oCat->oxcategories__oxtitle->value );
                 }
             }
 
-            $sKeywords = implode( ", ", $aKeywords );
-
-            $sKeywords = parent::_prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords );
-
             //adding searchkeys info
             if ( $sSearchKeys = trim( $oProduct->oxarticles__oxsearchkeys->value ) ) {
-                $sKeywords .= ", " . parent::_prepareMetaKeyword( $sSearchKeys, false );
+                $sKeywords .= ", ". $sSearchKeys;
             }
+
+            $sKeywords = parent::_prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords );
         }
 
         return $sKeywords;
     }
 
     /**
-     * Checks if rating runctionality is on and allwed to user
+     * Checks if rating functionality is active
+     *
+     * @return bool
+     */
+    public function ratingIsActive()
+    {
+        $myConfig = $this->getConfig();
+        
+        return $myConfig->getConfigParam( 'bl_perfLoadReviews' );
+    }
+
+    /**
+     * Checks if rating functionality is on and allowed to user
      *
      * @return bool
      */
@@ -484,13 +493,13 @@ class Details extends oxUBase
             $this->_blCanRate = false;
             $myConfig = $this->getConfig();
 
-            if ( $myConfig->getConfigParam( 'bl_perfLoadReviews' ) &&
-                 $oUser = $this->getUser() ) {
+            if ( $this->ratingIsActive() && $oUser = $this->getUser() ) {
 
                 $oRating = oxNew( 'oxrating' );
                 $this->_blCanRate = $oRating->allowRating( $oUser->getId(), 'oxarticle', $this->getProduct()->getId() );
             }
         }
+
         return $this->_blCanRate;
     }
 
@@ -854,6 +863,7 @@ class Details extends oxUBase
         if (is_object($oList)) {
             $oList = clone $oList;
         }
+
         $sOxid = $this->getProduct()->getId();
         if (isset($oList[$sOxid])) {
             unset($oList[$sOxid]);
@@ -891,9 +901,11 @@ class Details extends oxUBase
     /**
      * Template variable getter. Returns last seen products
      *
+     * @param int $iCnt product count
+     *
      * @return array
      */
-    public function getLastProducts()
+    public function getLastProducts( $iCnt = 4 )
     {
         if ( $this->_aLastProducts === null ) {
             //last seen products for #768CA
@@ -901,7 +913,7 @@ class Details extends oxUBase
             $sArtId = $oProduct->oxarticles__oxparentid->value?$oProduct->oxarticles__oxparentid->value:$oProduct->getId();
 
             $oHistoryArtList = oxNew( 'oxarticlelist' );
-            $oHistoryArtList->loadHistoryArticles( $sArtId );
+            $oHistoryArtList->loadHistoryArticles( $sArtId, $iCnt );
             $this->_aLastProducts = $oHistoryArtList;
         }
         return $this->_aLastProducts;
@@ -1396,7 +1408,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns if review modul is on
+     * Template variable getter. Returns if review module is on
      *
      * @return bool
      */

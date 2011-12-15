@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: discount_main.php 33306 2011-02-17 09:41:55Z sarunas $
+ * @version   SVN: $Id: discount_main.php 40194 2011-11-23 15:45:08Z linas.kukulskis $
  */
 
 /**
@@ -117,6 +117,7 @@ class Discount_Main extends oxAdminDetails
      */
     public function save()
     {
+        parent::save();
 
         $sOxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval");
@@ -153,6 +154,7 @@ class Discount_Main extends oxAdminDetails
      */
     public function saveinnlang()
     {
+        parent::save();
 
         $sOxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval");

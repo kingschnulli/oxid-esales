@@ -77,9 +77,8 @@ class Unit_Admin_StatisticsMainTest extends OxidTestCase
 
         $aTestParams["oxstatistics__oxshopid"] = oxConfig::getInstance()->getBaseShopId();
 
-        $oStatMock = $this->getMock("oxstatistic", array("load", "setReports", "assign", "save"));
+        $oStatMock = $this->getMock("oxstatistic", array("load", "assign", "save"));
         $oStatMock->expects($this->once())->method("load")->with("testId");
-        $oStatMock->expects($this->once())->method("setReports");
         $oStatMock->expects($this->once())->method("assign")->with($aTestParams);
         $oStatMock->expects($this->once())->method("save");
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerseoTest.php 28028 2010-05-31 12:20:22Z arvydas $
+ * @version   SVN: $Id: manufacturerseoTest.php 38261 2011-08-19 11:26:16Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -48,6 +48,9 @@ class Unit_Admin_ManufacturerSeoTest extends OxidTestCase
      */
     protected function tearDown()
     {
+        $sQ = "delete from oxmanufacturers where oxid like '_test%'";
+        oxDb::getDb()->execute( $sQ );
+
         oxSeoEncoderManufacturer::getInstance()->cleanup();
         parent::tearDown();
     }
@@ -61,63 +64,7 @@ class Unit_Admin_ManufacturerSeoTest extends OxidTestCase
     {
         // testing..
         $oView = new Manufacturer_Seo();
-        $sTplName = $oView->render();
-
-        // testing view data
-        $aViewData = $oView->getViewData();
-        $this->assertNull( $aViewData["allowSharedEdit"] );
-        $this->assertNull( $aViewData["malladmin"] );
-        $this->assertTrue( $aViewData["blShowSuffixEdit"] );
-        $this->assertNull( $aViewData["blShowSuffix"] );
-        $this->assertNull( $aViewData["updatelist"] );
-
-        $this->assertEquals( 'object_seo.tpl', $sTplName );
-    }
-
-    /**
-     * Manufacturer_Seo::GetSeoDataSql() test case
-     *
-     * @return null
-     */
-    public function testGetSeoDataSql()
-    {
-        // defining parameters
-        $oObject = new oxManufacturer();
-        $oObject->setId( "testManId" );
-        $iShopId = oxConfig::getInstance()->getBaseShopId();
-        $iLang   = 0;
-
-        $sQ = "select * from oxseo
-               left join oxobject2seodata on
-                   oxobject2seodata.oxobjectid = oxseo.oxobjectid and
-                   oxobject2seodata.oxshopid = oxseo.oxshopid and
-                   oxobject2seodata.oxlang = oxseo.oxlang
-               where
-                   oxseo.oxobjectid = ".oxDb::getDb()->quote( $oObject->getId() )." and
-                   oxseo.oxshopid = '{$iShopId}' and oxseo.oxlang = {$iLang} and oxparams = '' ";
-
-        $oView = new Manufacturer_Seo();
-        $sResQ = $oView->UNITgetSeoDataSql( $oObject, $iShopId, $iLang );
-
-        $this->assertEquals( str_replace( array("\n", "\r", "\t", " "), "", $sQ ), str_replace( array("\n", "\r", "\t", " "), "", $sResQ ) );
-    }
-
-    /**
-     * Manufacturer_Seo::GetSeoUrl() test case
-     *
-     * @return null
-     */
-    public function testGetSeoUrl()
-    {
-        oxTestModules::addFunction( 'oxSeoEncoderManufacturer', 'getManufacturerUrl', '{ return true; }');
-
-        // defining parameters
-        $oCategory = new oxCategory();
-
-        $oView = $this->getMock( "Manufacturer_Seo", array( "_getSeoUrlQuery" ) );
-        $oView->expects( $this->once() )->method( '_getSeoUrlQuery' )->will( $this->returnValue( "select 1" ) );
-
-        $this->assertEquals( "1", $oView->UNITgetSeoUrl( $oCategory ) );
+        $this->assertEquals( 'object_seo.tpl', $oView->render() );
     }
 
     /**
@@ -144,9 +91,95 @@ class Unit_Admin_ManufacturerSeoTest extends OxidTestCase
         modConfig::setParameter( "oxid", "testId" );
 
         // testing..
-        $oView = $this->getMock( "Manufacturer_Seo", array( "_getSeoEntryId" ) );
-        $oView->expects( $this->once() )->method( '_getSeoEntryId' )->will( $this->returnValue( false ) );
+        $oView = $this->getMock( "Manufacturer_Seo", array( "getEditObjectId" ) );
+        $oView->expects( $this->atLeastOnce() )->method( 'getEditObjectId' )->will( $this->returnValue( 123 ) );
 
         $this->assertNull( $oView->save() );
+    }
+
+    /**
+     * Manufacturer_Seo::_getEncoder() test case
+     *
+     * @return null
+     */
+    public function testGetEncoder()
+    {
+        $oView = new Manufacturer_Seo();
+        $this->assertTrue( $oView->UNITgetEncoder() instanceof oxSeoEncoderManufacturer );
+    }
+
+    /**
+     * Manufacturer_Seo::_getEncoder() test case
+     *
+     * @return null
+     */
+    public function testIsSuffixSupported()
+    {
+        $oView = new Manufacturer_Seo();
+        $this->assertTrue( $oView->isSuffixSupported() );
+    }
+
+    /**
+     * Manufacturer_Seo::_getEncoder() test case
+     *
+     * @return null
+     */
+    public function testIsEntrySuffixed()
+    {
+        $oManufacturer = new oxManufacturer();
+        $oManufacturer->setId( "_test1" );
+        $oManufacturer->oxmanufacturers__oxshowsuffix = new oxField( 1 );
+        $oManufacturer->save();
+
+        $oManufacturer = new oxManufacturer();
+        $oManufacturer->setId( "_test2" );
+        $oManufacturer->oxmanufacturers__oxshowsuffix = new oxField( 0 );
+        $oManufacturer->save();
+
+
+        $oView = $this->getMock( "Manufacturer_Seo", array( "getEditObjectId" ) );
+        $oView->expects( $this->at( 0 ) )->method( 'getEditObjectId' )->will( $this->returnValue( "_test1" ) );
+        $oView->expects( $this->at( 1 ) )->method( 'getEditObjectId' )->will( $this->returnValue( "_test2" ) );
+        $this->assertTrue( $oView->isEntrySuffixed() );
+        $this->assertFalse( $oView->isEntrySuffixed() );
+    }
+
+    /**
+     * Manufacturer_Seo::_getEncoder() test case
+     *
+     * @return null
+     */
+    public function testGetEntryUri()
+    {
+        $oManufacturer = new oxManufacturer();
+        $oManufacturer->setId( "_test1" );
+        $oManufacturer->oxmanufacturers__oxshowsuffix = new oxField( 0 );
+        $oManufacturer->save();
+
+        $oEncoder = $this->getMock( "oxSeoEncoderManufacturer", array( "getManufacturerUri" ) );
+        $oEncoder->expects( $this->once() )->method( 'getManufacturerUri' )->will( $this->returnValue( "ManufacturerUri" ) );
+
+        $oView = $this->getMock( "Manufacturer_Seo", array( "getEditObjectId", "_getEncoder" ) );
+        $oView->expects( $this->once() )->method( 'getEditObjectId' )->will( $this->returnValue( "_test1" ) );
+        $oView->expects( $this->once() )->method( '_getEncoder' )->will( $this->returnValue( $oEncoder ) );
+        $this->assertEquals( "ManufacturerUri", $oView->getEntryUri() );
+    }
+
+    /**
+     * Manufacturer_Seo::_getStdUrl() test case
+     *
+     * @return null
+     */
+    public function testGetStdUrl()
+    {
+        $oManufacturer = new oxManufacturer();
+        $oManufacturer->setId( "_test1" );
+        $oManufacturer->oxmanufacturers__oxshowsuffix = new oxField( 0 );
+        $oManufacturer->save();
+
+        $oView = $this->getMock( "Manufacturer_Seo", array( "getEditLang" ) );
+        $oView->expects( $this->once() )->method( 'getEditLang' )->will( $this->returnValue( 0 ) );
+
+        $this->assertEquals( $oManufacturer->getBaseStdLink( 0, true, false ), $oView->UNITgetStdUrl( "_test1" ) );
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategoryTest.php 33731 2011-03-10 14:39:37Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcategoryTest.php 38243 2011-08-19 11:22:25Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -43,6 +43,23 @@ class oxcategoryForoxCategoryTest extends oxcategory
     public function update()
     {
         return parent::_update();
+    }
+}
+
+/**
+ * oxCategory extension class for easier access to static variables
+ */
+class oxCategoryAttributeCacheTest extends oxCategory
+{
+    /**
+     * Sets the CACHE array for the oxCategory instance
+     * (without it you can't set values to the static variables)
+     *
+     * @param array $aCache
+     */
+    public function setAttributeCache( $aCache = array() )
+    {
+        self::$_aCatAttributes = $aCache;
     }
 }
 
@@ -700,19 +717,6 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
     {
     }
 
-    // #M366: Upload of manufacturer and categories icon does not work
-   /* public function testGetIconUrl()
-    {
-        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('icon/test_ico')->will( $this->returnValue( 'iconUrl' ) );
-
-        $oCategory = $this->getProxyClass( "oxcategory" );
-        $oCategory->oxcategories__oxicon = new oxField('test_ico');
-        $oCategory->setConfig($oConfig);
-
-        $this->assertEquals( 'iconUrl', $oCategory->getIconUrl() );
-    }*/
-
     public function testSetGetSubCats()
     {
         $oSubCat = $this->getMock( 'oxcategory', array( 'getIsVisible' ) );
@@ -935,68 +939,104 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
     public function testGetPictureUrlForType()
     {
         $oCategory = new oxcategory();
-        $oCategory->setId('l_id');
+        $oCategory->setId( 'l_id' );
 
-        $sExistingPic= '1126_th.jpg';
-        $sExistingIcon= '1126_ico.jpg';
-        $sEmptyPic = '';
+        $sExistingPic  = '1126_th.jpg';
+        $sExistingIcon = '1126_ico.jpg';
+        $sEmptyPic     = '';
 
-        $this->assertFalse($oCategory->getPictureUrlForType($sEmptyPic, '0'));
-        $this->assertFalse($oCategory->getPictureUrlForType($sEmptyPic, 'icon'));
+        $this->assertFalse( $oCategory->getPictureUrlForType( $sEmptyPic, '0' ) );
+        $this->assertFalse( $oCategory->getPictureUrlForType( $sEmptyPic, 'icon' ) );
 
-        $this->assertEquals($oCategory->getPictureUrl() . '0/' . $sExistingPic
-            , $oCategory->getPictureUrlForType($sExistingPic, '0'));
-        $this->assertEquals($oCategory->getPictureUrl() . 'icon/' . $sExistingIcon
-            , $oCategory->getPictureUrlForType($sExistingIcon, 'icon'));
+        $this->assertEquals( $oCategory->getPictureUrl() . '0/' . $sExistingPic, $oCategory->getPictureUrlForType($sExistingPic, '0' ) );
+        $this->assertEquals( $oCategory->getPictureUrl() . 'icon/' . $sExistingIcon, $oCategory->getPictureUrlForType($sExistingIcon, 'icon' ) );
     }
 
+    /**
+     * Thumb url getter test
+     *
+     * @return null
+     */
     public function testGetThumbUrl()
     {
         $oCategory = new oxcategory();
-        $oCategory->setId('l_id');
+        $oCategory->setId( 'l_id' );
 
-        $sExistingPic = '1126_th.jpg';
-        $sEmptyPic = '';
+        $sExistingPic = 'sportswear_1_tc.jpg';
+        $sEmptyPic    = '';
 
-        $oCategory->oxcategories__oxthumb = new oxField($sEmptyPic);
-        $this->assertFalse($oCategory->getThumbUrl());
+        // no image
+        $oCategory->oxcategories__oxthumb = new oxField( $sEmptyPic );
+        $this->assertNull( $oCategory->getThumbUrl() );
 
-        $oCategory->oxcategories__oxthumb = new oxField($sExistingPic);
-        $this->assertEquals($oCategory->getPictureUrl() . '0/' . $sExistingPic
-            , $oCategory->getThumbUrl());
+        // old path
+        $oCategory->oxcategories__oxthumb = new oxField( $sExistingPic );
+        $this->assertEquals( $oCategory->getPictureUrl() . 'generated/category/thumb/748_150_75/' . $sExistingPic, $oCategory->getThumbUrl() );
 
+        // new path
+        $sUrl  = oxConfig::getInstance()->getOutUrl() . basename( oxConfig::getInstance()->getPicturePath( "" ) );
+        $sUrl .= "/generated/category/thumb/748_150_75/sportswear_1_tc.jpg";
+
+        $oCategory->oxcategories__oxthumb = new oxField( "sportswear_1_tc.jpg" );
+        $this->assertEquals( $sUrl, $oCategory->getThumbUrl() );
     }
 
+    /**
+     * Icon url getter test
+     *
+     * @return null
+     */
     public function testGetIconUrl()
     {
         $oCategory = new oxcategory();
-        $oCategory->setId('l_id');
+        $oCategory->setId( 'l_id' );
 
-        $sExistingIcon= '1126_ico.jpg';
-        $sEmptyPic = '';
+        $sExistingIcon = 'access_1_cico.jpg';
+        $sEmptyPic     = '';
 
-        $oCategory->oxcategories__oxicon = new oxField($sEmptyPic);
-        $this->assertFalse($oCategory->getIconUrl());
+        // no image
+        $oCategory->oxcategories__oxicon = new oxField( $sEmptyPic );
+        $this->assertNull( $oCategory->getIconUrl() );
 
-        $oCategory->oxcategories__oxicon = new oxField($sExistingIcon);
-        $this->assertEquals($oCategory->getPictureUrl() . 'icon/' . $sExistingIcon
-            , $oCategory->getIconUrl());
+        // old path
+        $oCategory->oxcategories__oxicon = new oxField( $sExistingIcon );
+        $this->assertEquals( $oCategory->getPictureUrl() . 'generated/category/icon/168_100_75/' . $sExistingIcon, $oCategory->getIconUrl() );
+
+        // new path
+        $sUrl  = oxConfig::getInstance()->getOutUrl() . basename( oxConfig::getInstance()->getPicturePath( "" ) );
+        $sUrl .= "/generated/category/icon/168_100_75/access_1_cico.jpg";
+
+        $oCategory->oxcategories__oxicon = new oxField( "access_1_cico.jpg" );
+        $this->assertEquals( $sUrl, $oCategory->getIconUrl() );
     }
 
+    /**
+     * Promo icon url getter test
+     *
+     * @return null
+     */
     public function testGetPromotionIconUrl()
     {
         $oCategory = new oxcategory();
-        $oCategory->setId('l_id');
+        $oCategory->setId( 'l_id' );
 
-        $sExistingIcon= '1126_ico.jpg';
-        $sEmptyPic = '';
+        $sExistingIcon = 'cat_promo_pico.jpg';
+        $sEmptyPic     = '';
 
-        $oCategory->oxcategories__oxpromoicon = new oxField($sEmptyPic);
-        $this->assertFalse($oCategory->getPromotionIconUrl());
+        // no image
+        $oCategory->oxcategories__oxpromoicon = new oxField( $sEmptyPic );
+        $this->assertNull( $oCategory->getPromotionIconUrl() );
 
-        $oCategory->oxcategories__oxpromoicon = new oxField($sExistingIcon);
-        $this->assertEquals($oCategory->getPictureUrl() . 'icon/' . $sExistingIcon
-            , $oCategory->getPromotionIconUrl());
+        // old path
+        $oCategory->oxcategories__oxpromoicon = new oxField( $sExistingIcon );
+        $this->assertEquals($oCategory->getPictureUrl() . 'generated/category/promo_icon/370_107_75/' . $sExistingIcon, $oCategory->getPromotionIconUrl() );
+
+        // new path
+        $sUrl  = oxConfig::getInstance()->getOutUrl() . basename( oxConfig::getInstance()->getPicturePath( "" ) );
+        $sUrl .= "/generated/category/promo_icon/370_107_75/cat_promo_pico.jpg";
+
+        $oCategory->oxcategories__oxpromoicon = new oxField( "cat_promo_pico.jpg" );
+        $this->assertEquals( $sUrl, $oCategory->getPromotionIconUrl() );
     }
 
     public function testGetAttributes()
@@ -1014,4 +1054,36 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $this->assertEquals( $oCAttrList->getArray() , $oCategory->getAttributes()->getArray() );
     }
 
+    /**
+     * Testing oxCategory::getAttributes() when values already cached
+     */
+    public function testGetAttributesCached()
+    {
+       // instance cache array variables
+       $sCacheResult = "Result";
+       $sCacheId  = "Index";
+
+       // forming a MD5 code as an index for the cache array
+       $sCacheIndex = md5( $sCacheId . serialize( oxSession::getVar( 'session_attrfilter' ) ) );
+       $aCache = array( $sCacheIndex => $sCacheResult );
+
+       $oCatAttributes = oxNew( "oxCategoryAttributeCacheTest" );
+       $oCatAttributes->setAttributeCache( $aCache );
+       $oCatAttributes->setId( $sCacheId );
+
+       $this->assertEquals( $sCacheResult, $oCatAttributes->getAttributes() );
+    }
+
+    /**
+     * Title getter test
+     *
+     * @return null
+     */
+    public function testGetTitle()
+    {
+        $sTitle = "testtitle";
+        $oCat = new oxCategory();
+        $oCat->oxcategories__oxtitle = new oxField( "testtitle" );
+        $this->assertEquals( $sTitle, $oCat->getTitle() );
+    }
 }

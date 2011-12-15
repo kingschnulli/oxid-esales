@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: voucherserie_main.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: voucherserie_main.php 40179 2011-11-23 15:42:35Z linas.kukulskis $
  */
 
 /**
@@ -82,6 +82,7 @@ class VoucherSerie_Main extends DynExportBase
      */
     public function save()
     {
+        parent::save();
 
         // Parameter Processing
         $soxId = $this->getEditObjectId();
@@ -135,7 +136,8 @@ class VoucherSerie_Main extends DynExportBase
     {
         if ( $this->_oVoucherSerie == null ) {
             $oVoucherSerie = oxNew( "oxvoucherserie" );
-            if ( $oVoucherSerie->load( oxSession::getVar( "voucherid" ) ) ) {
+            $sId = oxConfig::getParameter( "voucherid" );
+            if ( $oVoucherSerie->load( $sId ? $sId : oxSession::getVar( "voucherid" ) ) ) {
                 $this->_oVoucherSerie = $oVoucherSerie;
             }
         }
@@ -149,7 +151,11 @@ class VoucherSerie_Main extends DynExportBase
      */
     public function start()
     {
-        parent::start();
+        $this->_aViewData['refresh'] = 0;
+        $this->_aViewData['iStart']  = 0;
+        $iEnd = $this->prepareExport();
+        oxSession::setVar( "iEnd", $iEnd );
+        $this->_aViewData['iEnd'] = $iEnd;
 
         // saving export info
         oxSession::setVar( "voucherid", oxConfig::getParameter( "voucherid" ) );

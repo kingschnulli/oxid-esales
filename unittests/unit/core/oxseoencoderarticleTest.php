@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticleTest.php 36469 2011-06-20 08:13:33Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderarticleTest.php 38612 2011-09-05 13:34:11Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -104,6 +104,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         oxDb::getDb()->execute( 'delete from oxseohistory' );
 
         $this->cleanUpTable( 'oxcategories' );
+        $this->cleanUpTable( 'oxarticles' );
         $this->cleanUpTable( 'oxrecommlists' );
 
         oxDb::getDb()->execute( 'delete from oxarticles where oxid = "testart"' );
@@ -1051,7 +1052,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         $oArticle->expects( $this->once() )->method( 'inCategory' )->will( $this->returnValue( true ) );
 
             $oArticle->loadInLang(1, '8a142c410f55ed579.98106125');
-            $sUrl = "en/".oxSeoEncoder::getInstance()->UNITprepareTitle($oCategory->oxcategories__oxtitle->value)."/Tischlampe+SPHERE+red.html";
+            $sUrl = "en/".oxSeoEncoder::getInstance()->UNITprepareTitle($oCategory->oxcategories__oxtitle->value)."/Table+Lamp+SPHERE+red.html";
 
         $oEncoder = $this->getMock('modSeoEncoderArticle', array('_loadFromDb', "_getCategory" ));
         $oEncoder->expects( $this->once() )->method( '_getCategory' )->will( $this->returnValue( $oCategory ) );
@@ -1094,7 +1095,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         $oArticle = $this->getMock( "oxarticle", array( "inCategory" ) );
         $oArticle->expects( $this->once() )->method( 'inCategory' )->will( $this->returnValue( true ) );
             $oArticle->loadInLang(0, '8a142c410f55ed579.98106125');
-            $sUrl = "en/".oxSeoEncoder::getInstance()->UNITprepareTitle($oCategory->oxcategories__oxtitle->value)."/Tischlampe+SPHERE+red.html";
+            $sUrl = "en/".oxSeoEncoder::getInstance()->UNITprepareTitle($oCategory->oxcategories__oxtitle->value)."/Table+Lamp+SPHERE+red.html";
 
         $oEncoder = $this->getMock('modSeoEncoderArticle', array('_loadFromDb', "_getCategory" ));
         $oEncoder->expects( $this->once() )->method( '_getCategory' )->will( $this->returnValue( $oCategory ) );
@@ -1289,5 +1290,60 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
         $oEncoder->expects( $this->once( ))->method( '_loadFromDb' )->will( $this->returnValue( false ) );
         $oEncoder->expects( $this->once( ))->method( '_getMainCategory' )->will( $this->returnValue( $oCategory ) );
         $this->assertEquals( $sBaseUri . "Bar-Set-ABSINTH.html", $oEncoder->UNITgetArticleUri( $oProduct, 0 ) );
+    }
+
+    /**
+     * Test case for #0002564: seo urls of variant-members without title and
+     * varselect get generic postfix instead of artnum
+     *
+     * @return null
+     */
+    public function testFor0002564()
+    {
+        $sParentId = "1126";
+
+        $oProduct1 = new oxArticle();
+        $oProduct1->setId( "_testVar1" );
+        $oProduct1->oxarticles__oxartnum = new oxField( "artnum1" );
+        $oProduct1->oxarticles__oxparentid = new oxField( $sParentId );
+        $oProduct1->save();
+
+        $oProduct2 = new oxArticle();
+        $oProduct2->setId( "_testVar2" );
+        $oProduct2->oxarticles__oxartnum = new oxField( "artnum2" );
+        $oProduct2->oxarticles__oxparentid = new oxField( $sParentId );
+        $oProduct2->save();
+
+        $oProduct3 = new oxArticle();
+        $oProduct3->setId( "_testVar3" );
+        $oProduct3->oxarticles__oxartnum = new oxField( "artnum3" );
+        $oProduct3->oxarticles__oxparentid = new oxField( $sParentId );
+        $oProduct3->save();
+
+        $oProduct4 = new oxArticle();
+        $oProduct4->setId( "_testVar4" );
+        $oProduct4->oxarticles__oxartnum = new oxField( "artnum4" );
+        $oProduct4->oxarticles__oxparentid = new oxField( $sParentId );
+        $oProduct4->save();
+
+        $oEncoder = new oxSeoEncoderArticle();
+        $sLink = $oEncoder->getArticleUri( $oProduct1, 0 );
+        $this->assertTrue( (bool) $sLink );
+        $this->assertEquals( "Bar-Set-ABSINTH-artnum1.html", basename( $sLink ) );
+
+        $oEncoder = new oxSeoEncoderArticle();
+        $sLink = $oEncoder->getArticleUri( $oProduct2, 0 );
+        $this->assertTrue( (bool) $sLink );
+        $this->assertEquals( "Bar-Set-ABSINTH-artnum2.html", basename( $sLink ) );
+
+        $oEncoder = new oxSeoEncoderArticle();
+        $sLink = $oEncoder->getArticleUri( $oProduct3, 0 );
+        $this->assertTrue( (bool) $sLink );
+        $this->assertEquals( "Bar-Set-ABSINTH-artnum3.html", basename( $sLink ) );
+
+        $oEncoder = new oxSeoEncoderArticle();
+        $sLink = $oEncoder->getArticleUri( $oProduct4, 0 );
+        $this->assertTrue( (bool) $sLink );
+        $this->assertEquals( "Bar-Set-ABSINTH-artnum4.html", basename( $sLink ) );
     }
 }

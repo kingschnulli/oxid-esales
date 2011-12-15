@@ -28,8 +28,8 @@
 $aTheme = array(
     'id'           => 'azure',
     'title'        => 'Azure',
-    'description'  => 'Azure theme for OXID eShop 4.5.0 Beta',
+    'description'  => 'Azure theme by OXID eSales AG',
     'thumbnail'    => 'theme.jpg',
-    'version'      => '0.5',
+    'version'      => '1.2',
     'author'       => 'OXID',
 );

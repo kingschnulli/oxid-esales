@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 32885 2011-02-03 13:05:07Z sarunas $
+ * @version   SVN: $Id: oxrssfeedTest.php 38661 2011-09-06 10:36:07Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -91,6 +91,8 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
                     'link' => 'http://homeurl/extra',
                 )
             );
+
+
         $this->assertEquals($expect, $oRss->getChannel());
         $oShop->oxshops__oxinfoemail = new oxField('emaiail.com');
 
@@ -214,6 +216,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oArt1->expects($this->any())->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc ) );
         $oArt1->oxarticles__oxtitle = new oxField('title1');
         $oArt1->oxarticles__oxprice = new oxField(20);
+        $oArt1->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
 
         $oLongDesc2 = new Oxstdclass();
         $oLongDesc2->value = " &nbsp;<div>";
@@ -225,6 +228,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oArt2->oxarticles__oxtitle = new oxField('title2');
         $oArt2->oxarticles__oxprice = new oxField(10);
         $oArt2->oxarticles__oxshortdesc = new oxField('shortdesc');
+        $oArt2->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
         $oArr = new oxarticlelist();
         $oArr->assign( array( $oArt1, $oArt2 ) );
 
@@ -233,14 +237,16 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oSAr1->link  = 'artlinkextra';
         $oSAr1->guid  = 'artlinkextra';
         $oSAr1->isGuidPermalink = true;
-        $oSAr1->description = "&lt;img src=&#039;".$oArt1->getIconUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;artlogndesc";
+        $oSAr1->description = "&lt;img src=&#039;".$oArt1->getThumbnailUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;artlogndesc";
+        $oSAr1->date = "Tue, 06 Sep 2011 09:46:42 +0200";
 
         $oSAr2 = new oxStdClass();
         $oSAr2->title = 'title2 10.0 EUR';
         $oSAr2->link  = 'artlinkextra';
         $oSAr2->guid  = 'artlinkextra';
         $oSAr2->isGuidPermalink = true;
-        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getIconUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;shortdesc";
+        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getThumbnailUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;shortdesc";
+        $oSAr2->date = "Tue, 06 Sep 2011 09:46:42 +0200";
 
         $this->assertEquals(array($oSAr1, $oSAr2), $oRss->UNITgetArticleItems($oArr));
     }
@@ -268,6 +274,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oArt1->expects($this->any())->method( 'getPrice')->will( $this->returnValue( null ) );
         $oArt1->oxarticles__oxtitle = new oxField('title1');
         $oArt1->oxarticles__oxprice = new oxField(20);
+        $oArt1->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
 
         $oLongDesc2 = new Oxstdclass();
         $oLongDesc2->value = " &nbsp;<div>";
@@ -279,6 +286,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oArt2->oxarticles__oxtitle = new oxField('title2');
         $oArt2->oxarticles__oxprice = new oxField(10);
         $oArt2->oxarticles__oxshortdesc = new oxField('shortdesc');
+        $oArt2->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
 
         $oArr = new oxarticlelist();
         $oArr->assign( array( $oArt1, $oArt2 ) );
@@ -288,14 +296,16 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oSAr1->link  = 'artlinkextra';
         $oSAr1->guid  = 'artlinkextra';
         $oSAr1->isGuidPermalink = true;
-        $oSAr1->description = "&lt;img src=&#039;".$oArt1->getIconUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;artlogndesc";
+        $oSAr1->description = "&lt;img src=&#039;".$oArt1->getThumbnailUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;artlogndesc";
+        $oSAr1->date = "Tue, 06 Sep 2011 09:46:42 +0200";
 
         $oSAr2 = new oxStdClass();
         $oSAr2->title = 'title2';
         $oSAr2->link  = 'artlinkextra';
         $oSAr2->guid  = 'artlinkextra';
         $oSAr2->isGuidPermalink = true;
-        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getIconUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;shortdesc";
+        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getThumbnailUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;shortdesc";
+        $oSAr2->date = "Tue, 06 Sep 2011 09:46:42 +0200";
 
         $this->assertEquals(array($oSAr1, $oSAr2), $oRss->UNITgetArticleItems($oArr));
     }
@@ -324,6 +334,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oArt1->expects($this->any())->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc ) );
         $oArt1->oxarticles__oxtitle = new oxField('title1');
         $oArt1->oxarticles__oxprice = new oxField(20);
+        $oArt1->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
 
         $oLongDesc2 = new Oxstdclass();
         $oLongDesc2->value = " <div>";
@@ -334,6 +345,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oArt2->oxarticles__oxtitle = new oxField('title2');
         $oArt2->oxarticles__oxprice = new oxField(10);
         $oArt2->oxarticles__oxshortdesc = new oxField('shortdesc');
+        $oArt2->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
         $oArr = new oxarticlelist();
         $oArr->assign( array( $oArt1, $oArt2 ) );
 
@@ -342,14 +354,16 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oSAr1->link  = 'artlinkextra';
         $oSAr1->guid  = 'artlinkextra';
         $oSAr1->isGuidPermalink = true;
-        $oSAr1->description = "&lt;img src=&#039;".$oArt1->getIconUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;artlogndesc";
+        $oSAr1->description = "&lt;img src=&#039;".$oArt1->getThumbnailUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;artlogndesc";
+        $oSAr1->date = "Tue, 06 Sep 2011 09:46:42 +0200";
 
         $oSAr2 = new oxStdClass();
         $oSAr2->title = 'title2 10,0 CHF';
         $oSAr2->link  = 'artlinkextra';
         $oSAr2->guid  = 'artlinkextra';
         $oSAr2->isGuidPermalink = true;
-        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getIconUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;shortdesc";
+        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getThumbnailUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;shortdesc";
+        $oSAr2->date = "Tue, 06 Sep 2011 09:46:42 +0200";
         $this->assertEquals(array($oSAr1, $oSAr2), $oRss->UNITgetArticleItems($oArr));
 
     }

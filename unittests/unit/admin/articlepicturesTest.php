@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlepicturesTest.php 32881 2011-02-03 11:45:36Z sarunas $
+ * @version   SVN: $Id: articlepicturesTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -66,17 +66,12 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         oxTestModules::addFunction('oxarticle', 'save', '{ return true; }');
         modConfig::getInstance()->setConfigParam( 'iPicCount', 0 );
 
-        $aTasks = array();
-        $aTasks[] = "_getUploadedMasterPicIndexes";
-        $aTasks[] = "_resetMasterPicture";
-
-        $oView = $this->getMock( "Article_Pictures", $aTasks );
+        $oView = $this->getMock( "Article_Pictures", array( "resetContentCache" ) );
+            $oView->expects( $this->never() )->method( 'resetContentCache' );
 
         $iCnt = 7;
         modConfig::getInstance()->setConfigParam( 'iPicCount', $iCnt );
 
-        $oView->expects( $this->once() )->method( '_getUploadedMasterPicIndexes' )->will( $this->returnValue( array( 1 ) ));
-        $oView->expects( $this->once() )->method( '_resetMasterPicture' );
         $oView->save();
     }
 
@@ -190,7 +185,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         modConfig::setParameter( "oxid", "_testArtId" );
         modConfig::setParameter( "masterPicIndex", "ICO" );
 
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         $oArtPic = $this->getMock( "Article_Pictures", array( "_deleteThumbnail", "_deleteMasterPicture" ) );
         $oArtPic->expects( $this->never() )->method( '_deleteThumbnail' );
@@ -213,7 +208,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
     {
         modConfig::setParameter( "oxid", "_testArtId" );
         modConfig::setParameter( "masterPicIndex", "TH" );
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         $oArtPic = $this->getMock( "Article_Pictures", array( "_deleteMainIcon", "_deleteMasterPicture" ) );
         $oArtPic->expects( $this->never() )->method( '_deleteMainIcon' );
@@ -236,7 +231,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
     {
         modConfig::setParameter( "oxid", "_testArtId" );
         modConfig::setParameter( "masterPicIndex", "2" );
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         $oArtPic = $this->getMock( "Article_Pictures", array( "_deleteMainIcon", "_deleteThumbnail" ) );
         $oArtPic->expects( $this->never() )->method( '_deleteMainIcon' );
@@ -504,7 +499,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
      */
     public function testCleanupCustomFields()
     {
-        $this->_oArticle->oxarticles__oxicon = new oxField( "nopic_ico.jpg" );
+        $this->_oArticle->oxarticles__oxicon = new oxField( "nopic.jpg" );
         $this->_oArticle->oxarticles__oxthumb = new oxField( "nopic.jpg" );
 
         $_FILES['myfile']['name']["M2"] = "value1";
@@ -602,7 +597,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
     public function testSubshopStaysSame()
     {
         $oArticle = $this->getMock('oxarticle', array('load', 'save', 'assign'));
-        $oArticle->expects($this->once())->method('load')->with($this->equalTo('asdasdasd'))->will($this->returnValue(null));
+        $oArticle->expects($this->once())->method('load')->with($this->equalTo('asdasdasd'))->will($this->returnValue(true));
         $oArticle->expects($this->once())->method('assign')->with($this->equalTo( array('s'=>'test')))->will($this->returnValue(null));
         $oArticle->expects($this->once())->method('save')->will($this->returnValue(null));
 

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: report_user_per_group.php 27070 2010-04-06 15:32:28Z arvydas $
+ * @version   SVN: $Id: report_user_per_group.php 38496 2011-08-30 11:52:14Z linas.kukulskis $
  */
 
 if ( !class_exists( "report_user_per_group")) {
@@ -93,7 +93,7 @@ class Report_user_per_group extends report_base
         else
             $graph = new PieGraph(600, 600);
 
-        $graph->setBackgroundImage( $myConfig->getAbsAdminImageDir()."/reportbgrnd.jpg", BGIMG_FILLFRAME);
+        $graph->setBackgroundImage( $myConfig->getImageDir(true)."/reportbgrnd.jpg", BGIMG_FILLFRAME);
         $graph->setShadow();
 
         // Set title and subtitle

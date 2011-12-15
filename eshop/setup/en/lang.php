@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 36505 2011-06-21 13:39:32Z juergen.busch $
+ * @version   SVN: $Id: lang.php 40444 2011-12-02 12:44:07Z vilma $
  */
 
 $aLang = array(
@@ -98,7 +98,7 @@ $aLang = array(
 'MOD_OPEN_SSL'                                  => 'OpenSSL',
 'MOD_SOAP'                                      => 'SOAP',
 'MOD_UNICODE_SUPPORT'                           => 'UTF-8 support',
-'MOD_BUG53632'                                  => 'Possible issues on server due to PHP Bug #53632',
+'MOD_BUG53632'                                  => 'Possible issues on server due to PHP Bugs',
 
 'STEP_0_ERROR_TEXT'                             => 'Your system does not fit system requirements',
 'STEP_0_ERROR_URL'                              => "http://www.oxid-esales.com/en/products/community-edition/system-requirements",
@@ -192,7 +192,7 @@ $aLang = array(
 'SELECT_SETUP_LANG'                             => "Language for installation and shop is",
 'SELECT_SETUP_LANG_HINT'                        => ". If needed, activate easily more languages in admin.",
 'SELECT_COUNTRY_LANG'                           => "Please choose your country",
-'SELECT_SELIVERY_COUNTRY'                       => "Main delivery country",
+'SELECT_DELIVERY_COUNTRY'                       => "Main delivery country",
 'SELECT_DELIVERY_COUNTRY_HINT'                  => "If needed, activate easily more delivery countries in admin",
 'SELECT_SETUP_LANG_SUBMIT'                      => "Select",
 'USE_DYNAMIC_PAGES'                             => "To increase your business success get additional information from OXID's server. You find more information in our ",

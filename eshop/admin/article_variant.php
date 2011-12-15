@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_variant.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: article_variant.php 39130 2011-10-11 12:38:50Z rimvydas.paskevicius $
  */
 
 /**
@@ -155,7 +155,6 @@ class Article_Variant extends oxAdminDetails
         if ( $sOXID != "-1" ) {
             $oArticle->loadInLang( $this->_iEditLang, $sOXID );
         }
-
 
         $oArticle->setLanguage( 0 );
         $oArticle->assign( $aParams );

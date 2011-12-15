@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: delivery_main.php 33196 2011-02-11 08:55:06Z arvydas.vapsva $
+ * @version   SVN: $Id: delivery_main.php 40196 2011-11-23 15:45:30Z linas.kukulskis $
  */
 
 /**
@@ -121,6 +121,7 @@ class Delivery_Main extends oxAdminDetails
      */
     public function save()
     {
+        parent::save();
 
         $soxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval");

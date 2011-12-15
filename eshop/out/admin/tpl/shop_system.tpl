@@ -36,7 +36,7 @@ function _groupExp(el) {
 <input type="hidden" name="oxid" value="[{ $oxid }]">
 <input type="hidden" name="editval[oxshops__oxid]" value="[{ $oxid }]">
 
-
+[{block name="admin_shop_system_form"}]
     <div class="groupExp">
         <div>
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_ORDER" }]</b></a>
@@ -175,17 +175,6 @@ function _groupExp(el) {
     <div class="groupExp">
         <div>
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_MODULES" }]</b></a>
-            <dl>
-                <dt>
-                    <textarea wrap="off" class="txtfield" style="width: 430px;" name=confaarrs[aModules] [{ $readonly }]>[{$confaarrs.aModules}]</textarea>
-                    [{ oxinputhelp ident="HELP_SHOP_SYSTEM_MODULES" }]
-                </dt>
-                <dd>
-                  [{ oxmultilang ident="SHOP_SYSTEM_MODULES" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
             <dl>
                 <dt>
                     <input type=text class="txt" style="width: 430px;" name=confstrs[sUtilModule] value="[{$confstrs.sUtilModule}]" [{ $readonly }]>
@@ -345,7 +334,7 @@ function _groupExp(el) {
 
          </div>
     </div>
-
+[{/block}]
     <br>
     <input type="submit" class="confinput" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'"" [{ $readonly }]>
 

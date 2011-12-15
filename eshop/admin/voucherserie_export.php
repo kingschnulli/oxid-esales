@@ -182,7 +182,7 @@ class VoucherSerie_Export extends VoucherSerie_Main
 
         if ( $oSerie = $this->_getVoucherSerie() ) {
 
-            $oDb = oxDb::getDb(true);
+            $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
             $sSelect = "select oxvouchernr from oxvouchers where oxvoucherserieid = ".$oDb->quote( $oSerie->getId() );
             $rs = $oDb->selectLimit( $sSelect, $this->iExportPerTick, $iStart );
@@ -192,7 +192,7 @@ class VoucherSerie_Export extends VoucherSerie_Main
 
                 // writing header text
                 if ( $iStart == 0 ) {
-                    $this->write( "Gutschein" );
+                    $this->write( oxLang::getInstance()->translateString("VOUCHERSERIE_MAIN_VOUCHERSTATISTICS", oxLang::getInstance()->getTplLanguage(), true ));
                 }
             }
 

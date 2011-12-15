@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 35810 2011-06-03 08:03:48Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticlelistTest.php 40563 2011-12-12 14:23:20Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -43,6 +43,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $myDB->execute( 'delete from oxorderarticles where oxid="_testId" or oxid="_testId2"' );
         $myDB->execute( 'delete from oxrecommlists where oxid like "testlist%" ');
         $myDB->execute( 'delete from oxobject2list where oxlistid like "testlist%" ');
+
+        $myDB->execute( 'delete from oxconfig where oxvarname="iTimeToUpdatePrices"' );
+        $myDB->execute( 'update oxarticles set oxupdatepricetime="0000-00-00 00:00:00"' );
 
         $this->cleanUpTable( 'oxorder' );
         $this->cleanUpTable( 'oxarticles' );
@@ -217,7 +220,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
                  WHERE $sArticleTable.oxid is not null
                  GROUP BY oxactionid";
 
-        $aTotalCnt = oxDb::getDb( true)->getAll( $sSql );
+        $aTotalCnt = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( $sSql );
 
         $oList = oxNew( "oxarticlelist");
 
@@ -247,7 +250,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
                  WHERE $sArticleTable.oxid is not null
                  GROUP BY oxactionid";
 
-        $aTotalCnt = oxDb::getDb( true)->getAll( $sSql );
+        $aTotalCnt = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( $sSql );
 
         $oList = oxNew( "oxarticlelist");
 
@@ -464,7 +467,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sExpt = "SELECT oxid FROM $sO2CTable as oc left join $sArticleTable
                   ON $sArticleTable.oxid = oc.oxobjectid WHERE
                   ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid
-                  = '' and oc.oxcatnid = 'testCat' GROUP BY oc.oxcatnid, oc.oxobjectid ORDER BY  oc.oxpos,oc.oxobjectid";
+                  = '' and oc.oxcatnid = 'testCat' ORDER BY  oc.oxpos,oc.oxobjectid";
 
         $sRes = $oTest->UNITgetCategorySelect( 'oxid', 'testCat', null );
         $sExpt = str_replace( array( "\n", "\r", " ", "\t" ), "", $sExpt );
@@ -496,7 +499,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sExpt = "SELECT oxid FROM $sO2CTable as oc left join $sArticleTable ON
                   $sArticleTable.oxid = oc.oxobjectid WHERE
                   ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''
-                  and oc.oxcatnid = '$sCatId' and false GROUP BY oc.oxcatnid, oc.oxobjectid ORDER BY  oc.oxpos,oc.oxobjectid";
+                  and oc.oxcatnid = '$sCatId' and false ORDER BY  oc.oxpos,oc.oxobjectid";
 
         $sRes = $oTest->UNITgetCategorySelect( 'oxid', $sCatId, array( $sCatId => array ( '0' => array( "8a142c3ee0edb75d4.80743302" => "Zeigar" ) ) ) );
         $sExpt = str_replace( array( "\n", "\r", " ", "\t" ), "", $sExpt );
@@ -523,7 +526,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sExpt = "SELECT oxid FROM $sO2CTable as oc left join $sArticleTable
                   ON $sArticleTable.oxid = oc.oxobjectid WHERE
                   ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid
-                  = '' and oc.oxcatnid = 'testCat' GROUP BY oc.oxcatnid, oc.oxobjectid ORDER BY oxtitle desc, oc.oxpos,oc.oxobjectid";
+                  = '' and oc.oxcatnid = 'testCat' ORDER BY oxtitle desc, oc.oxpos,oc.oxobjectid";
 
         $sRes = $oTest->UNITgetCategorySelect( 'oxid', 'testCat', null );
         $sExpt = str_replace( array( "\n", "\r", " ", "\t" ), "", $sExpt );
@@ -1029,7 +1032,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=12andoxvarminprice<=15and";
+        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=0andoxvarminprice<=15andoxvarminprice>=12and";
         $sExpt.= $oArticle->getSqlActiveSnippet()."and$sArticleTable.oxissearch=1orderby";
         $sExpt.= "$sArticleTable.oxvarminpriceasc,$sArticleTable.oxid";
 
@@ -1057,7 +1060,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=12andoxvarminprice<=15and";
+        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=0andoxvarminprice<=15andoxvarminprice>=12and";
         $sExpt.= $oArticle->getSqlActiveSnippet()."and$sArticleTable.oxissearch=1orderby";
         $sExpt.= "oxtitledesc,$sArticleTable.oxid";
 
@@ -1800,9 +1803,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $this->cleanTmpDir();
         $oTest->selectString("select oxid from oxarticles where oxid = '2000' or oxid = '1354' order by oxid");
         //this should be lazy loaded
-        $this->assertEquals('1/1354_p1.jpg', $oTest['1354']->oxarticles__oxpic1->value);
+        $this->assertEquals('1354_p1.jpg', $oTest['1354']->oxarticles__oxpic1->value);
         //article 2
-        $this->assertEquals('1/2000_p1.jpg', $oTest['2000']->oxarticles__oxpic1->value);
+        $this->assertEquals('2000_p1.jpg', $oTest['2000']->oxarticles__oxpic1->value);
     }
 
     /**
@@ -1816,9 +1819,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $this->cleanTmpDir();
         $oTest->selectString("select oxid from oxarticles where oxid = '2000' or oxid = '1354' order by oxid");
         //this should be lazy loaded
-        $this->assertEquals('0/1354_th.jpg', $oTest['1354']->oxarticles__oxthumb->value);
+        $this->assertEquals('1354_th.jpg', $oTest['1354']->oxarticles__oxthumb->value);
         //article 2
-        $this->assertEquals('0/2000_th.jpg', $oTest['2000']->oxarticles__oxthumb->value);
+        $this->assertEquals('2000_th.jpg', $oTest['2000']->oxarticles__oxthumb->value);
     }
 
     /**
@@ -1832,9 +1835,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $this->cleanTmpDir();
         $oTest->selectString("select oxid from oxarticles where oxid = '2000' or oxid = '1354' order by oxid");
         //this should be lazy loaded
-        $this->assertEquals('icon/1354_ico.jpg', $oTest['1354']->oxarticles__oxicon->value);
+        $this->assertEquals('1354_ico.jpg', $oTest['1354']->oxarticles__oxicon->value);
         //article 2
-        $this->assertEquals('icon/2000_ico.jpg', $oTest['2000']->oxarticles__oxicon->value);
+        $this->assertEquals('2000_ico.jpg', $oTest['2000']->oxarticles__oxicon->value);
     }
 
     /**
@@ -2073,7 +2076,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sQ = "select $sView.oxid from $sView inner join xxx on ".
               "xxx.oxid = $sView.oxid where xxx.oxissearch = 1 and ".
               "match ( $sView.oxtags ) ".
-              "against( 'zzz_' IN BOOLEAN MODE ) and 1 order by xxx.yyy ";
+              "against( '\\\"zzz_\\\"' IN BOOLEAN MODE ) and 1 order by xxx.yyy ";
 
         $oBaseObject = $this->getMock( 'oxArticle', array( 'getViewName', 'getSqlActiveSnippet' ) );
         $oBaseObject->expects( $this->once() )->method( 'getViewName' )->will( $this->returnValue( 'xxx' ) );
@@ -2118,4 +2121,278 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $this->assertTrue($oTest->getNonPublicVar("_blLoadSelectLists"));
     }
 
+    /**
+     * Test case for oxArticleList::_canUpdatePrices()
+     *
+     * @return null
+     */
+    public function testCanUpdatePrices()
+    {
+        $oList = oxNew( "oxArticleList" );
+        modConfig::getInstance()->setConfigParam( "blUseCron", false );
+        $iCurrTime = oxUtilsDate::getInstance()->getTime();
+
+        // cases
+        // 1. start time is not set
+        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", null );
+        $this->assertTrue( $oList->UNITcanUpdatePrices() );
+
+        // 2. start time > current time
+        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", $iCurrTime + 3600 * 24 );
+        $this->assertFalse( $oList->UNITcanUpdatePrices() );
+
+        // 3. start time < current time
+        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", $iCurrTime - 3600 * 24 );
+        $this->assertTrue( $oList->UNITcanUpdatePrices() );
+
+        // 4. crontab is on
+        modConfig::getInstance()->setConfigParam( "blUseCron", true );
+        $this->assertFalse( $oList->UNITcanUpdatePrices() );
+    }
+
+    /**
+     * Test case for oxArticleList::_renewPriceUpdateTime()
+     *
+     * @return null
+     */
+    public function testRenewPriceUpdateTime()
+    {
+        $oConfig = oxConfig::getInstance();
+        $iTime = time();
+        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return {$iTime}; }" );
+        $iTime += 3600 * 24;
+
+        $oList = oxNew( "oxArticleList" );
+
+        // cases
+        // 1. time in db is '0000-00-00 00:00:00'
+        $this->assertEquals( $iTime, $oList->renewPriceUpdateTime() );
+        $this->assertEquals( $iTime, $oConfig->getConfigParam( "iTimeToUpdatePrices" ) );
+
+        // 2. time in db < current time
+
+        $this->assertEquals( $iTime, $oList->renewPriceUpdateTime() );
+        $this->assertEquals( $iTime, $oConfig->getConfigParam( "iTimeToUpdatePrices" ) );
+
+        // 3. time in db > current time
+        $this->assertEquals( $iTime, $oList->renewPriceUpdateTime() );
+        $this->assertEquals( $iTime, $oConfig->getConfigParam( "iTimeToUpdatePrices" ) );
+
+        // 4. time in db > current time but < current time + 24 hours
+        oxDb::getDb()->execute( "update oxarticles set oxupdatepricetime = timestamp('".date( "Y-m-d H:i:s", $iTime - 3600 * 12 )."') limit 1" );
+        $this->assertNotEquals( $iTime, $oList->renewPriceUpdateTime() );
+        $this->assertNotEquals( $iTime, $oConfig->getConfigParam( "iTimeToUpdatePrices" ) );
+    }
+
+    /**
+     * Test case for oxArticleList::updateUpcomingPrices() mocking test
+     *
+     * @return null
+     */
+    public function testupdateUpcomingPrices()
+    {
+        $oList = $this->getMock( "oxArticleList", array( "_canUpdatePrices", "renewPriceUpdateTime" ) );
+        $oList->expects( $this->at( 0 ) )->method( "_canUpdatePrices" )->will( $this->returnValue( true ) );
+        $oList->expects( $this->at( 1 ) )->method( "renewPriceUpdateTime" )->will( $this->returnValue( true ) );
+
+        $oList->updateUpcomingPrices();
+        $oList->updateUpcomingPrices( true );
+    }
+
+    /**
+     * Inserting three tesr products and returning price update time
+     *
+     * @return int
+     */
+    protected function _insertTestProducts()
+    {
+        $iTime = time();
+
+        // adding 7 test articles
+        $oArticle1 = oxNew( "oxarticle" );
+        $oArticle1->setId( "_testProd1" );
+        $oArticle1->oxarticles__oxprice  = new oxField( 1 );
+        $oArticle1->oxarticles__oxpricea = new oxField( 2 );
+        $oArticle1->oxarticles__oxpriceb = new oxField( 3 );
+        $oArticle1->oxarticles__oxpricec = new oxField( 4 );
+        $oArticle1->oxarticles__oxupdateprice  = new oxField( 10 );
+        $oArticle1->oxarticles__oxupdatepricea = new oxField( 20 );
+        $oArticle1->oxarticles__oxupdatepriceb = new oxField( 30 );
+        $oArticle1->oxarticles__oxupdatepricec = new oxField( 40 );
+        $oArticle1->oxarticles__oxupdatepricetime = new oxField( date( "Y-m-d H:i:s", $iTime - 3600 ) );
+        $this->assertTrue( "_testProd1" === $oArticle1->save() );
+
+        $oArticle11 = oxNew( "oxarticle" );
+        $oArticle11->setId( "_testProd1.1" );
+        $oArticle11->oxarticles__oxprice  = new oxField( 21 );
+        $oArticle11->oxarticles__oxparentid  = new oxField( "_testProd1" );
+        $this->assertTrue( "_testProd1.1" === $oArticle11->save() );
+
+        $oArticle12 = oxNew( "oxarticle" );
+        $oArticle12->setId( "_testProd1.2" );
+        $oArticle12->oxarticles__oxprice  = new oxField( 30 );
+        $oArticle12->oxarticles__oxparentid  = new oxField( "_testProd1" );
+        $this->assertTrue( "_testProd1.2" === $oArticle12->save() );
+
+        $oArticle2 = oxNew( "oxarticle" );
+        $oArticle2->setId( "_testProd2" );
+        $oArticle2->oxarticles__oxprice  = new oxField( 1 );
+        $oArticle2->oxarticles__oxpricea = new oxField( 2 );
+        $oArticle2->oxarticles__oxpriceb = new oxField( 3 );
+        $oArticle2->oxarticles__oxpricec = new oxField( 4 );
+        $oArticle2->oxarticles__oxupdateprice  = new oxField( 10 );
+        $oArticle2->oxarticles__oxupdatepricea = new oxField( 20 );
+        $oArticle2->oxarticles__oxupdatepriceb = new oxField( 30 );
+        $oArticle2->oxarticles__oxupdatepricec = new oxField( 40 );
+        $oArticle2->oxarticles__oxupdatepricetime = new oxField( date( "Y-m-d H:i:s", $iTime ) );
+        $this->assertTrue( "_testProd2" === $oArticle2->save() );
+
+        $oArticle21 = oxNew( "oxarticle" );
+        $oArticle21->setId( "_testProd2.1" );
+        $oArticle21->oxarticles__oxprice  = new oxField( 5 );
+        $oArticle21->oxarticles__oxparentid  = new oxField( "_testProd2" );
+        $this->assertTrue( "_testProd2.1" === $oArticle21->save() );
+
+        $oArticle22 = oxNew( "oxarticle" );
+        $oArticle22->setId( "_testProd2.2" );
+        $oArticle22->oxarticles__oxprice  = new oxField( 15 );
+        $oArticle22->oxarticles__oxparentid  = new oxField( "_testProd2" );
+        $this->assertTrue( "_testProd2.2" === $oArticle22->save() );
+
+        $oArticle3 = oxNew( "oxarticle" );
+        $oArticle3->setId( "_testProd3" );
+        $oArticle3->oxarticles__oxprice  = new oxField( 1 );
+        $oArticle3->oxarticles__oxpricea = new oxField( 2 );
+        $oArticle3->oxarticles__oxpriceb = new oxField( 3 );
+        $oArticle3->oxarticles__oxpricec = new oxField( 4 );
+        $oArticle3->oxarticles__oxupdateprice  = new oxField( 10 );
+        $oArticle3->oxarticles__oxupdatepricea = new oxField( 20 );
+        $oArticle3->oxarticles__oxupdatepriceb = new oxField( 30 );
+        $oArticle3->oxarticles__oxupdatepricec = new oxField( 40 );
+        $oArticle3->oxarticles__oxupdatepricetime = new oxField( date( "Y-m-d H:i:s", $iTime + 3600 ) );
+        $this->assertTrue( "_testProd3" === $oArticle3->save() );
+
+
+        return $iTime;
+    }
+
+
+    /**
+     * Test case for oxArticleList::updateUpcomingPrices() database level test
+     *
+     * @return null
+     */
+    public function testupdateUpcomingPricesDb()
+    {
+        $iTime = $this->_insertTestProducts();
+
+        modConfig::getInstance()->setConfigParam( "blUseCron", false );
+        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", false );
+        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return {$iTime}; }" );
+
+        $oList = oxNew( "oxArticleList" );
+        $oList->updateUpcomingPrices();
+
+        // testing changes
+        $oDb = oxDb::getDb();
+        $sQ  = "select oxprice + oxpricea + oxpriceb + oxpricec from oxarticles where oxid=?";
+        $this->assertEquals( 100, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
+        $this->assertEquals( 100, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
+        $this->assertEquals( 10, (int) $oDb->getOne( $sQ, array( "_testProd3" ) ) );
+
+        $sQ  = "select oxupdateprice + oxupdatepricea + oxupdatepriceb + oxupdatepricec from oxarticles where oxid=?";
+        $this->assertEquals( 0, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
+
+        // testing oxvarminprice changes
+        $sQ  = "select oxvarminprice from oxarticles where oxid=?";
+        $this->assertEquals( 21, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
+        $this->assertEquals( 5, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
+
+    }
+
+    /**
+     * Test case for oxArticleList::updateUpcomingPrices() database level test
+     *
+     * @return null
+     */
+    public function testupdateUpcomingPricesDbParentBuyable()
+    {
+        $iTime = $this->_insertTestProducts();
+
+        modConfig::getInstance()->setConfigParam( "blUseCron", false );
+        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", false );
+        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", true );
+        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return {$iTime}; }" );
+
+        $oList = oxNew( "oxArticleList" );
+        $oList->updateUpcomingPrices();
+
+        // testing changes
+        $oDb = oxDb::getDb();
+
+        $sQ  = "select oxvarminprice from oxarticles where oxid=?";
+        $this->assertEquals( 10, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
+        $this->assertEquals( 5, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
+
+    }
+
+    /**
+     * Test case for oxArticleList::updateUpcomingPrices() cron level test
+     *
+     * @return null
+     */
+    public function testupdateUpcomingPricesCron()
+    {
+        $iTime = $this->_insertTestProducts();
+
+        modConfig::getInstance()->setConfigParam( "blUseCron", false );
+        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", null );
+        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return {$iTime}; }" );
+
+        $oList = oxNew( "oxArticleList" );
+        $oList->updateUpcomingPrices( true );
+
+        // testing changes
+        $oDb = oxDb::getDb();
+        $sQ  = "select oxprice + oxpricea + oxpriceb + oxpricec from oxarticles where oxid=?";
+        $this->assertEquals( 100, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
+        $this->assertEquals( 100, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
+        $this->assertEquals( 10,  (int) $oDb->getOne( $sQ, array( "_testProd3" ) ) );
+
+        $sQ  = "select oxupdateprice + oxupdatepricea + oxupdatepriceb + oxupdatepricec from oxarticles where oxid=?";
+        $this->assertEquals( 0, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
+
+         // testing oxvarminprice changes
+        $sQ  = "select oxvarminprice from oxarticles where oxid=?";
+        $this->assertEquals( 21, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
+        $this->assertEquals( 5, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
+
+    }
+
+    /**
+     * Test case for oxArticleList::updateUpcomingPrices() database level test
+     *
+     * @return null
+     */
+    public function testupdateUpcomingPricesCronParentBuyable()
+    {
+        $iTime = $this->_insertTestProducts();
+
+        modConfig::getInstance()->setConfigParam( "blUseCron", false );
+        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", null );
+        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", true );
+
+        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return {$iTime}; }" );
+
+        $oList = oxNew( "oxArticleList" );
+        $oList->updateUpcomingPrices( true );
+
+        // testing changes
+        $oDb = oxDb::getDb();
+
+        $sQ  = "select oxvarminprice from oxarticles where oxid=?";
+        $this->assertEquals( 10, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
+        $this->assertEquals( 5, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
+
+    }
 }

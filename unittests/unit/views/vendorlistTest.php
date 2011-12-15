@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorlistTest.php 32968 2011-02-07 12:51:20Z vilma $
+ * @version   SVN: $Id: vendorlistTest.php 38654 2011-09-06 08:57:31Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -41,6 +41,89 @@ class Unit_Views_vendorlistTest extends OxidTestCase
         oxNew('oxvendor')->cleanRootVendor();
 
         parent::tearDown();
+    }
+
+    /**
+     * Testing render() when passing existing vendor
+     *
+     * @return null
+     */
+    public function testRenderExistingVendor()
+    {
+            $sActVendor = "9437def212dc37c66f90cc249143510a";
+
+        $oVendorTree = oxNew( 'oxvendorlist' );
+        $oVendorTree->buildVendorTree( 'vendorlist', $sActVendor, oxConfig::getInstance()->getShopHomeURL() );
+
+        $oVendor = oxNew( 'oxvendor' );
+        $oVendor->load( $sActVendor );
+
+        $oView = $this->getMock( "vendorlist", array( "getVendorTree", "getActVendor" ) );
+        $oView->expects( $this->any() )->method( 'getVendorTree' )->will( $this->returnValue( $oVendorTree ) );
+        $oView->expects( $this->any() )->method( 'getActVendor' )->will( $this->returnValue( $oVendor ) );
+
+        $this->assertEquals( "page/list/list.tpl", $oView->render() );
+    }
+
+    /**
+     * Testign render() when passing existing vendor, but requested page number exceeds possible
+     *
+     * @return null
+     */
+    public function testRenderExistingVendorRequestedPageNumerExceedsPossible()
+    {
+        modConfig::setParameter( "pgNr", 999 );
+        oxTestModules::addFunction( "oxUtils", "redirect", "{ throw new Exception('OK'); }" );
+
+            $sActVendor = "9437def212dc37c66f90cc249143510a";
+
+        $oVendorTree = oxNew( 'oxvendorlist' );
+        $oVendorTree->buildVendorTree( 'vendorlist', $sActVendor, oxConfig::getInstance()->getShopHomeURL() );
+
+        $oVendor = oxNew( 'oxvendor' );
+        $oVendor->load( $sActVendor );
+
+        $oView = $this->getMock( "vendorlist", array( "getVendorTree", "getActVendor" ) );
+        $oView->expects( $this->any() )->method( 'getVendorTree' )->will( $this->returnValue( $oVendorTree ) );
+        $oView->expects( $this->any() )->method( 'getActVendor' )->will( $this->returnValue( $oVendor ) );
+
+        try {
+            $oView->render();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( 'OK', $oExcp->getMessage(), 'failed redirect on inactive category' );
+            return;
+        }
+
+        $this->fail( 'failed redirect on inactive category' );
+    }
+
+    /**
+     * Testign render() when passing existing vendor, but requested page number exceeds possible
+     *
+     * @return null
+     */
+    public function testRenderVendorHasNoProductsAssigned()
+    {
+        modConfig::setParameter( "pgNr", 999 );
+        oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
+
+            $sActVendor = "9437def212dc37c66f90cc249143510a";
+
+        $oVendorTree = oxNew( 'oxvendorlist' );
+        $oVendorTree->buildVendorTree( 'vendorlist', $sActVendor, oxConfig::getInstance()->getShopHomeURL() );
+
+        $oVendor = oxNew( 'oxvendor' );
+        $oVendor->setId( "123" );
+
+        $oView = $this->getMock( "vendorlist", array( "getVendorTree", "getActVendor" ) );
+        $oView->expects( $this->any() )->method( 'getVendorTree' )->will( $this->returnValue( $oVendorTree ) );
+        $oView->expects( $this->any() )->method( 'getActVendor' )->will( $this->returnValue( $oVendor ) );
+
+        try {
+            $oView->render();
+        } catch ( Exception $oExcp ) {
+            $this->fail( 'failed redirect on inactive category' );
+        }
     }
 
     public function testGetAddUrlParams()

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 33719 2011-03-10 08:40:42Z sarunas $
+ * @version   SVN: $Id: oxutilsfile.php 40557 2011-12-12 13:48:24Z linas.kukulskis $
  */
 
 /**
@@ -60,24 +60,27 @@ class oxUtilsFile extends oxSuperCfg
      *
      * @var array
      */
-    protected $_aTypeToPath = array( 'ICO'  => 'icon',
-                                     'CICO' => 'icon',
-                                     'PICO' => 'icon',
-                                     'MICO' => 'icon',
-                                     'TH'   => '0',
-                                     'TC'   => '0',
-                                     'M1'   => 'master/1',
-                                     'M2'   => 'master/2',
-                                     'M3'   => 'master/3',
-                                     'M4'   => 'master/4',
-                                     'M5'   => 'master/5',
-                                     'M6'   => 'master/6',
-                                     'M7'   => 'master/7',
-                                     'M8'   => 'master/8',
-                                     'M9'   => 'master/9',
-                                     'M10'  => 'master/10',
-                                     'M11'  => 'master/11',
-                                     'M12'  => 'master/12',
+    protected $_aTypeToPath = array( 'TC'   => 'master/category/thumb',
+                                     'CICO' => 'master/category/icon',
+                                     'PICO' => 'master/category/promo_icon',
+                                     'MICO' => 'master/manufacturer/icon',
+                                     'VICO' => 'master/vendor/icon',
+                                     'PROMO'=> self::PROMO_PICTURE_DIR,
+                                     'ICO'  => 'master/product/icon',
+                                     'TH'   => 'master/product/thumb',
+                                     'M1'   => 'master/product/1',
+                                     'M2'   => 'master/product/2',
+                                     'M3'   => 'master/product/3',
+                                     'M4'   => 'master/product/4',
+                                     'M5'   => 'master/product/5',
+                                     'M6'   => 'master/product/6',
+                                     'M7'   => 'master/product/7',
+                                     'M8'   => 'master/product/8',
+                                     'M9'   => 'master/product/9',
+                                     'M10'  => 'master/product/10',
+                                     'M11'  => 'master/product/11',
+                                     'M12'  => 'master/product/12',
+                                     //
                                      'P1'   => '1',
                                      'P2'   => '2',
                                      'P3'   => '3',
@@ -102,23 +105,21 @@ class oxUtilsFile extends oxSuperCfg
                                      'Z10'  => 'z10',
                                      'Z11'  => 'z11',
                                      'Z12'  => 'z12',
-                                     'PROMO'=> self::PROMO_PICTURE_DIR,
-                                   );
+    );
 
     /**
      * Denied file types
      *
      * @var array
      */
-    protected $_aBadFiles = array( 'php', 'jsp', 'cgi', 'cmf', 'exe' );
-
+    protected $_aBadFiles = array( 'php', 'php4', 'php5', 'jsp', 'cgi', 'cmf', 'exe' );
 
     /**
      * Allowed to upload files in demo mode ( "white list")
      *
      * @var array
      */
-    protected $_aAllowedFiles = array( 'gif', 'jpg', 'png', 'pdf' );
+    protected $_aAllowedFiles = array( 'gif', 'jpg', 'jpeg', 'png', 'pdf' );
     /**
      * Returns object instance
      *
@@ -302,11 +303,7 @@ class oxUtilsFile extends oxSuperCfg
                     $sFName = $oStr->preg_replace( '/[^a-zA-Z0-9()_\.-]/', '', implode( '.', $aFilename ) );
                 }
 
-                // removing sufix from main pictures, only zoom pictures, thumbnails
-                // and icons will have it.
-                $sSufix = ( $oStr->preg_match( "/(P|M)\d+/", $sType ) ) ? "" : "_".strtolower( $sType );
-
-                $sValue = $this->_getUniqueFileName( $sImagePath, "{$sFName}", $sFileType, $sSufix, $blUnique );
+                $sValue = $this->_getUniqueFileName( $sImagePath, "{$sFName}", $sFileType, "", $blUnique );
             }
         }
         return $sValue;
@@ -359,92 +356,6 @@ class oxUtilsFile extends oxSuperCfg
     }
 
     /**
-     * Prepares (resizes anc copies) images according to its type.
-     * Returns preparation status
-     *
-     * @param string $sType   image type
-     * @param string $sSource image location
-     * @param string $sTarget image copy location
-     *
-     * @return array
-     */
-    protected function _prepareImage( $sType, $sSource, $sTarget )
-    {
-        $oUtilsPic = oxUtilspic::getInstance();
-        $oPictureHandler = oxPictureHandler::getInstance();
-        $oStr = getStr();
-
-        // picture type
-        $sPicType = $oStr->preg_replace( "/\d*$/", "", $sType );
-
-        // numper of processable picture
-        $iPicNum  = (int) $oStr->preg_replace( "/^\D*/", "", $sType );
-        $iPicNum = $iPicNum ? abs( $iPicNum ) : 1;
-
-        $aSize = false;
-        $blResize = false;
-
-        // add file process here
-        switch ( $sPicType ) {
-            case 'TH':
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sThumbnailsize' );
-                break;
-            case 'TC':
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sCatThumbnailsize' );
-                break;
-            case 'MICO':
-                $sManufacturerIconsize = $this->getConfig()->getConfigParam( 'sManufacturerIconsize' );
-                if ( isset( $sManufacturerIconsize ) ) {
-                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sManufacturerIconsize' );
-                } else {
-                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' );
-                }
-                break;
-            case 'PICO':
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sCatPromotionsize' );
-                break;
-            case 'CICO':
-                $sCatIconsize = $this->getConfig()->getConfigParam( 'sCatIconsize' );
-                if ( isset( $sCatIconsize ) ) {
-                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sCatIconsize' );
-                } else {
-                    $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' );
-                }
-                break;
-            case 'ICO':
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sIconsize' );
-                break;
-            case 'P':
-                // pictures count is limited to 12
-                $iPicNum = ( $iPicNum > $this->_iMaxPicImgCount ) ? $this->_iMaxPicImgCount : $iPicNum;
-
-                //make an icon
-                if ( ( $aSize = $this->_getImageSize( $sType, 1, 'sIconsize' ) ) ) {
-                    $sIconTarget = dirname($sTarget) . '/' . $oPictureHandler->getIconName( $sTarget );
-                    $oUtilsPic->resizeImage( $sSource, $sIconTarget, $aSize[0], $aSize[1] );
-                }
-
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'aDetailImageSizes' );
-                break;
-            case 'M':
-            case 'WP':
-            case 'FL':
-            case 'PROMO':
-                // just copy file to target folder
-                $this->_copyFile($sSource, $sTarget);
-                break;
-            case 'Z':
-                $aSize = $this->_getImageSize( $sType, $iPicNum, 'sZoomImageSize' );
-                break;
-        }
-
-        if ( $aSize ) {
-            $blResize = $oUtilsPic->resizeImage( $sSource, $sTarget, $aSize[0], $aSize[1] );
-        }
-        return $blResize;
-    }
-
-    /**
      * Copy file from source to target location
      *
      * @param string $sSource file location
@@ -479,8 +390,6 @@ class oxUtilsFile extends oxSuperCfg
      */
     protected function _moveImage( $sSource, $sTarget )
     {
-
-
         $blDone = false;
 
         if ( $sSource === $sTarget ) {
@@ -494,18 +403,6 @@ class oxUtilsFile extends oxSuperCfg
         }
 
         return $blDone;
-    }
-
-    /**
-     * Removes temporary created image. Returns deletion state
-     *
-     * @param string $sImagePath temporary image path
-     *
-     * @return bool
-     */
-    protected function _removeTempImage( $sImagePath )
-    {
-        return unlink( $sImagePath );
     }
 
     /**
@@ -555,27 +452,17 @@ class oxUtilsFile extends oxSuperCfg
 
                         if ( $blUseMasterImage ) {
                             //using master image as source, so only copying it to
-                            //temp dir for processing
-                            $blMoved = $this->_copyFile( $sSource, $sProcessPath );
+                            $blMoved = $this->_copyFile( $sSource, $sImagePath . $sValue );
                         } else {
-                            $blMoved = $this->_moveImage( $sSource, $sProcessPath );
+                            $blMoved = $this->_moveImage( $sSource, $sImagePath . $sValue );
                         }
 
                         if ( $blMoved ) {
-                            // finding final image path
-                            if ( ( $sTarget = $sImagePath . $sValue ) ) {
-                                // processing image and moving to final location
-                                $this->_prepareImage( $sType, $sProcessPath, $sTarget );
-
-                                // assign the name
-                                if ( $oObject ) {
-                                    $oObject->{$sKey}->setValue( $sValue );
-                                }
+                            // assign the name
+                            if ( $oObject && isset( $oObject->$sKey ) ) {
+                                $oObject->{$sKey}->setValue( $sValue );
                             }
                         }
-
-                        // removing temporary file
-                        $this->_removeTempImage( $sProcessPath );
                     }
                 }
             }
@@ -658,6 +545,8 @@ class oxUtilsFile extends oxSuperCfg
      * @throws oxException if file is not valid
      *
      * @return string
+     *
+     * deprecated since 2011-08-29 4.5.2 insted use processFile() function
      */
     public function handleUploadedFile($aFileInfo, $sUploadPath)
     {
@@ -696,9 +585,61 @@ class oxUtilsFile extends oxSuperCfg
 
         //removing dublicate slashes
         $sUrl = str_replace('//', '/', $sUrl);
-        $sUrl = str_replace('http:/', 'http://', $sUrl);
+        $sUrl = str_replace(array('http:/', 'https:/'), array('http://', 'https://'), $sUrl);
 
         return $sUrl;
+    }
+
+     /**
+     * Process uploaded files. Returns unique file name, on fail false
+     *
+     * @param string $sFileName   form file item name
+     * @param string $sUploadPath RELATIVE (to config sShopDir parameter) path for uploaded file to be copied
+     *
+     * @throws oxException if file is not valid
+     *
+     * @return string
+     */
+    public function processFile( $sFileName, $sUploadPath )
+    {
+        $aFileInfo = $_FILES[$sFileName];
+
+        $sBasePath = $this->getConfig()->getConfigParam('sShopDir');
+
+        //checking params
+        if ( !isset( $aFileInfo['name'] ) || !isset( $aFileInfo['tmp_name'] ) ) {
+            throw new oxException( 'EXCEPTION_NOFILE' );
+        }
+
+        //wrong chars in file name?
+        if ( !getStr()->preg_match('/^[\-_a-z0-9\.]+$/i', $aFileInfo['name'] ) ) {
+            throw new oxException( 'EXCEPTION_FILENAMEINVALIDCHARS' );
+        }
+
+        // error uploading file ?
+        if ( isset( $aFileInfo['error'] ) && $aFileInfo['error'] ) {
+            throw new oxException( 'EXCEPTION_FILEUPLOADERROR_'.( (int) $aFileInfo['error'] ) );
+        }
+
+        $aPathInfo = pathinfo($aFileInfo['name']);
+
+        $sExt = $aPathInfo['extension'];
+        $sFileName = $aPathInfo['filename'];
+
+        $aAllowedUploadTypes = (array) $this->getConfig()->getConfigParam( 'aAllowedUploadTypes' );
+        $aAllowedUploadTypes = array_map( "strtolower", $aAllowedUploadTypes );
+
+        if ( !in_array( strtolower( $sExt ), $aAllowedUploadTypes ) ) {
+            throw new oxException( 'EXCEPTION_NOTALLOWEDTYPE' );
+        }
+
+        $sFileName = $this->_getUniqueFileName( $sBasePath . $sUploadPath, $sFileName, $sExt );
+
+        if ( $this->_moveImage( $aFileInfo['tmp_name'], $sBasePath . $sUploadPath . "/" . $sFileName ) ) {
+            return $sFileName ;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -743,7 +684,31 @@ class oxUtilsFile extends oxSuperCfg
     public function getImageDirByType( $sType )
     {
         $sFolder = array_key_exists( $sType, $this->_aTypeToPath ) ? $this->_aTypeToPath[ $sType ] : '0';
-
         return $this->normalizeDir( $sFolder );
+    }
+
+    /**
+     * Returns mime type by filename
+     *
+     * @param string $sFileName File name
+     *
+     * @return string
+     */
+    public function getMimeType($sFileName)
+    {
+        //for PHP 5.3
+        if (function_exists("finfo_file")) {
+            $rFinfo = finfo_open(FILEINFO_MIME_TYPE);
+            $sMime = finfo_file($rFinfo, $sFileName);
+            return $sMime;
+        }
+
+        //deprecated functionality
+        if (function_exists("mime_content_type")) {
+            $sMime = mime_content_type($sFileName);
+            return $sMime;
+        }
+
+        return null;
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newslettersendTest.php 27773 2010-05-17 12:26:37Z vilma $
+ * @version   SVN: $Id: newslettersendTest.php 38603 2011-09-05 13:32:16Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -51,14 +51,11 @@ class Unit_Admin_NewsletterSendTest extends OxidTestCase
      */
     public function testRender()
     {
-        //oxTestModules::addFunction( 'oxNewsLetter', 'getGroups', '{ $oGroup1 = new oxStdclass();$oGroup1->oxgroups__oxid = new oxField("oxidadmin"); $oGroup2 = new oxStdclass();$oGroup2->oxgroups__oxid = new oxField("oxidcustomer"); return array( $oGroup1, $oGroup2 ); }');
         oxTestModules::addFunction( 'oxNewsLetter', 'getGroups', '{ return array(); }');
         oxTestModules::addFunction( 'oxNewsLetter', 'send', '{ return true; }');
         oxTestModules::addFunction( 'oxNewsLetter', 'prepare', '{ return true; }');
 
         modConfig::setParameter( "id", "testId" );
-        modConfig::setParameter( "user", 100 );
-
         modConfig::getInstance()->setConfigParam( 'iCntofMails', 3 );
 
         $oNewsSubscribed = new oxbase();
@@ -87,14 +84,6 @@ class Unit_Admin_NewsletterSendTest extends OxidTestCase
         $oNewsSubscribed->oxnewssubscribed__oxsubscribed  = new oxField( "2005-07-26 19:16:09" );
         $oNewsSubscribed->save();
 
-        /*$oO2G = new oxbase();
-        $oO2G->init( "oxobject2group" );
-        $oO2G->setId( "_test1" );
-        $oO2G->oxobject2group__oxshopid   = new oxField( oxConfig::getInstance()->getBaseShopId() );
-        $oO2G->oxobject2group__oxobjectid = new oxField( $oNewsSubscribed->getId() );
-        $oO2G->oxobject2group__oxgroupsid = new oxField( "oxidadmin" );
-        $oO2G->save();*/
-
         // testing..
         $oView = $this->getMock( "Newsletter_Send", array( "_setupNavigation" ) );
         $oView->expects( $this->once() )->method( "_setupNavigation" );
@@ -102,8 +91,7 @@ class Unit_Admin_NewsletterSendTest extends OxidTestCase
 
         $aViewData = $oView->getViewData();
         $this->assertTrue( isset( $aViewData['iStart'] ) );
-        $this->assertTrue( isset( $aViewData['user'] ) );
-        $this->assertTrue( isset( $aViewData['id'] ) );
+        $this->assertTrue( isset( $aViewData['iSend'] ) );
         $this->assertNotNull(oxDb::getDb()->getOne( "select oxtext from oxremark where oxparentid='_test1'" ));
     }
 
@@ -114,22 +102,14 @@ class Unit_Admin_NewsletterSendTest extends OxidTestCase
      */
     public function testRenderAlt()
     {
-        $oCachedNewsletter = new oxStdClass();
-        $oCachedNewsletter->iStart = 1;
-        $oCachedNewsletter->iUser  = 1;
-        $oCachedNewsletter->sID    = "testId";
-
-        modSession::getInstance()->setVar( "_oNewsletter", $oCachedNewsletter );
-
         oxTestModules::addFunction( 'oxNewsLetter', 'getGroups', '{ $oGroup1 = new oxStdclass();$oGroup1->oxgroups__oxid = new oxField("oxidadmin"); $oGroup2 = new oxStdclass();$oGroup2->oxgroups__oxid = new oxField("oxidcustomer"); return array( $oGroup1, $oGroup2 ); }');
         oxTestModules::addFunction( 'oxNewsLetter', 'send', '{ return false; }');
         oxTestModules::addFunction( 'oxNewsLetter', 'prepare', '{ return true; }');
 
         modConfig::setParameter( "id", "testId" );
-        modConfig::setParameter( "user", 1 );
-
         modConfig::getInstance()->setConfigParam( 'iCntofMails', 3 );
 
+        // test data
         $oNewsSubscribed = new oxbase();
         $oNewsSubscribed->init( "oxnewssubscribed" );
         $oNewsSubscribed->setId( "_test1" );
@@ -144,61 +124,25 @@ class Unit_Admin_NewsletterSendTest extends OxidTestCase
         $oNewsSubscribed->save();
 
         // testing..
-        $oView = $this->getMock( "Newsletter_Send", array( "_setupNavigation" ) );
-        $oView->expects( $this->once() )->method( "_setupNavigation" );
+        $oView = $this->getMock( "Newsletter_Send", array( "_setupNavigation", "getUserCount" ) );
+        $oView->expects( $this->exactly( 2 ) )->method( "_setupNavigation" );
+        $oView->expects( $this->exactly( 2 ) )->method( "getUserCount" )->will( $this->returnValue( 2 ) );
+        $this->assertEquals( 'newsletter_send.tpl', $oView->render() );
+
+        $aViewData = $oView->getViewData();
+        $this->assertTrue( isset( $aViewData['iStart'] ) );
+        $this->assertTrue( isset( $aViewData['iSend'] ) );
+        $this->assertEquals( 2, $aViewData['iStart'] );
+        $this->assertEquals( 2, $aViewData['iSend'] );
+
+        modConfig::setParameter( "iStart", $aViewData['iStart'] );
+        modConfig::setParameter( "iSend", $aViewData['iSend'] );
+
         $this->assertEquals( 'newsletter_done.tpl', $oView->render() );
 
         $aViewData = $oView->getViewData();
         $this->assertTrue( isset( $aViewData['iStart'] ) );
-        $this->assertTrue( isset( $aViewData['user'] ) );
-        $this->assertTrue( isset( $aViewData['id'] ) );
-    }
-
-    /**
-     * Newsletter_Send::Render() test case
-     *
-     * @return null
-     */
-    public function testRenderAlt2()
-    {
-        $oCachedNewsletter = new oxStdClass();
-        $oCachedNewsletter->iStart = 1;
-        $oCachedNewsletter->iUser  = 1;
-        $oCachedNewsletter->sID    = "testId2";
-
-        modSession::getInstance()->setVar( "_oNewsletter", $oCachedNewsletter );
-
-        oxTestModules::addFunction( 'oxNewsLetter', 'getGroups', '{ $oGroup1 = new oxStdclass();$oGroup1->oxgroups__oxid = new oxField("oxidadmin"); $oGroup2 = new oxStdclass();$oGroup2->oxgroups__oxid = new oxField("oxidcustomer"); return array( $oGroup1, $oGroup2 ); }');
-        oxTestModules::addFunction( 'oxNewsLetter', 'send', '{ return false; }');
-        oxTestModules::addFunction( 'oxNewsLetter', 'prepare', '{ return true; }');
-
-        modConfig::setParameter( "id", "testId" );
-        modConfig::setParameter( "user", 1 );
-
-        modConfig::getInstance()->setConfigParam( 'iCntofMails', 3 );
-
-        $oNewsSubscribed = new oxbase();
-        $oNewsSubscribed->init( "oxnewssubscribed" );
-        $oNewsSubscribed->setId( "_test1" );
-        $oNewsSubscribed->oxnewssubscribed__oxuserid  = new oxField( "oxdefaultadmin" );
-        $oNewsSubscribed->oxnewssubscribed__oxsal     = new oxField( "MR" );
-        $oNewsSubscribed->oxnewssubscribed__oxfname   = new oxField( "John" );
-        $oNewsSubscribed->oxnewssubscribed__oxlname   = new oxField( "Doe" );
-        $oNewsSubscribed->oxnewssubscribed__oxemail   = new oxField( "admin@myoxideshop.com" );
-        $oNewsSubscribed->oxnewssubscribed__oxdboptin = new oxField( "1" );
-        $oNewsSubscribed->oxnewssubscribed__oxemailfailed = new oxField( 0 );
-        $oNewsSubscribed->oxnewssubscribed__oxsubscribed  = new oxField( "2005-07-26 19:16:09" );
-        $oNewsSubscribed->save();
-
-        // testing..
-        $oView = $this->getMock( "Newsletter_Send", array( "_setupNavigation" ) );
-        $oView->expects( $this->once() )->method( "_setupNavigation" );
-        $this->assertEquals( 'newsletter_done.tpl', $oView->render() );
-
-        $aViewData = $oView->getViewData();
-        $this->assertTrue( isset( $aViewData['iStart'] ) );
-        $this->assertTrue( isset( $aViewData['user'] ) );
-        $this->assertTrue( isset( $aViewData['id'] ) );
+        $this->assertTrue( isset( $aViewData['iSend'] ) );
     }
 
     /**

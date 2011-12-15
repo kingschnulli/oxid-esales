@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articleextendTest.php 26903 2010-03-26 16:03:58Z arvydas $
+ * @version   SVN: $Id: articleextendTest.php 38804 2011-09-19 14:39:05Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -134,7 +134,7 @@ class Unit_Admin_ArticleExtendTest extends OxidTestCase
         // testing..
         oxTestModules::addFunction( 'oxarticle', 'save', '{}');
         oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{ return $aA[0]; }');
-        oxTestModules::addFunction( 'oxUtilsFile', 'handleUploadedFile', '{ throw new Exception("handleUploadedFile"); }');
+        oxTestModules::addFunction( 'oxUtilsFile', 'processFile', '{ throw new Exception("handleUploadedFile"); }');
 
         modConfig::setParameter( "mediaUrl", "testUrl" );
         modConfig::setParameter( "mediaDesc", "testDesc" );
@@ -159,7 +159,7 @@ class Unit_Admin_ArticleExtendTest extends OxidTestCase
         // testing..
         oxTestModules::addFunction( 'oxarticle', 'save', '{}');
         oxTestModules::addFunction( 'oxmediaurl', 'save', '{ throw new Exception( "oxmediaurl.save" ); }');
-        oxTestModules::addFunction( 'oxUtilsFile', 'handleUploadedFile', '{}');
+        oxTestModules::addFunction( 'oxUtilsFile', 'processFile', '{}');
 
         modConfig::setParameter( "mediaUrl", "testUrl" );
         modConfig::setParameter( "mediaDesc", "testDesc" );
@@ -240,4 +240,16 @@ class Unit_Admin_ArticleExtendTest extends OxidTestCase
         $this->assertTrue( (bool) oxDb::getDb()->getOne( "select 1 from oxmediaurls where oxurl = 'testUrl' and oxdesc='testDesc' ") );
     }
 
+    /**
+     * Test case for Article_Extend::getUnitsArray()
+     *
+     * @return null
+     */
+    public function testGetUnitsArray()
+    {
+        $aArray = oxLang::getInstance()->getSimilarByKey( "_UNIT_", 0, false );
+        $oView = new Article_Extend();
+
+        $this->assertEquals( $aArray, $oView->getUnitsArray() );
+    }
 }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlist.php 33397 2011-02-21 09:47:15Z arvydas.vapsva $
+ * @version   SVN: $Id: manufacturerlist.php 38614 2011-09-05 13:34:37Z linas.kukulskis $
  */
 
 /**
@@ -101,8 +101,6 @@ class ManufacturerList extends aList
     {
         oxUBase::render();
 
-        $myConfig = $this->getConfig();
-
         // load Manufacturer
         if ( $this->getManufacturerTree() ) {
             if ( ( $oManufacturer = $this->getActManufacturer() ) ) {
@@ -110,15 +108,14 @@ class ManufacturerList extends aList
                     // load the articles
                     $this->getArticleList();
 
+                    // checking if requested page is correct
+                    $this->_checkRequestedPage();
+
                     // processing list articles
                     $this->_processListArticles();
                 }
             }
         }
-
-        // generating meta info
-        $this->setMetaDescription( null );
-        $this->setMetaKeywords( null );
 
         return $this->_sThisTemplate;
     }
@@ -282,7 +279,7 @@ class ManufacturerList extends aList
         if ( $this->_aArticleList === null ) {
             $this->_aArticleList = array();
             if ( ( $oManufacturerTree = $this->getManufacturerTree() ) ) {
-                if ( ( $oManufacturer = $this->getActManufacturer() ) && ( $oManufacturer->getId() != 'root' ) ) {
+                if ( ( $oManufacturer = $this->getActManufacturer() ) && ( $oManufacturer->getId() != 'root' ) && $oManufacturer->getIsVisible() ) {
                     list( $aArticleList, $iAllArtCnt ) = $this->_loadArticles( $oManufacturer );
                     if ( $iAllArtCnt ) {
                         $this->_aArticleList = $aArticleList;

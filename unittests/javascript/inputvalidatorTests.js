@@ -22,7 +22,6 @@ test('isEmail()', function() {
     equals(oxInputValidator.isEmail( "name_123@surname.com" ), true, "name_123@surname.com");
     equals(oxInputValidator.isEmail( "name@_123@surname.com" ), false, "name@_123@surname.com");
     equals(oxInputValidator.isEmail( "name_123.uk@surname.co.uk" ), true, "name_123.uk@surname.co.uk");
-
 });
 
 test('hasLength()', function() {
@@ -33,58 +32,32 @@ test('hasLength()', function() {
     equals(oxInputValidator.hasLength( "abc aa asdas ", 5), true, "lenght more 5: 'abc aa asdas '");
 });
 
-test('manageErrorMessage()', function() {
 
-    var sHTMLelement =
-            '<li class="oxValid">' +
-                        '<label>label 1 </label>' +
-                        '<input type="text" class="oxValidate oxValidate_notEmpty">' +
-                        '<p class="oxValidateError" style="display: none;">' +
-                            '<span class="oxError_notEmpty" style="display: none;"> not empty error message </span>' +
-                            '<span class="oxError_email" style="display: none;"> bad email error message </span>' +
-                        '</p>' +
-                    '</li>';
-
-    var oFormElement = $( sHTMLelement );
-
-    oFormElement = oxInputValidator.manageErrorMessage( oFormElement.children("input"), true, 'oxError_email');
-    equals(oFormElement.hasClass( "oxValid" ), true, "List element hide error");
-
-    oErrorParagraf = oFormElement.children("p.oxValidateError");
-    equals(oErrorParagraf.css( "display" ) == "none", true, "Hide error paragraf");
-
-    oFormElement = oxInputValidator.manageErrorMessage( oFormElement.children("input"), false, 'oxError_email');
-    equals(oFormElement.hasClass( "oxInValid" ), true, "List element show error");
-
-    oErrorParagraf = oFormElement.children("p.oxValidateError");
-    equals(oErrorParagraf.css( "display" ) == "block" || oErrorParagraf.css( "display" ) == "", true, "Show error paragraf");
-
-});
 
 test('showErrorMessage()', function() {
 
     var sHTMLelement =
             '<li class="oxValid">' +
                         '<label>label 1 </label>' +
-                        '<input type="text" class="oxValidate oxValidate_notEmpty">' +
+                        '<input type="text" class="js-oxValidate js-oxValidate_notEmpty">' +
                         '<p class="oxValidateError" style="display: none;">' +
-                            '<span class="oxError_notEmpty" style="display: none;"> not empty error message </span>' +
-                            '<span class="oxError_email" style="display: none;"> bad email error message </span>' +
+                            '<span class="js-oxError_notEmpty" style="display: none;"> not empty error message </span>' +
+                            '<span class="js-oxError_email" style="display: none;"> bad email error message </span>' +
                         '</p>' +
                     '</li>';
 
     var oFormElement = $( sHTMLelement );
 
-    oFormElement = oxInputValidator.showErrorMessage( oFormElement.children("input"), 'oxError_email');
+    oFormElement = oxInputValidator.showErrorMessage( oFormElement, 'js-oxError_email');
     equals(oFormElement.hasClass( "oxInValid" ), true, "List element shows error");
 
     oErrorParagraf = oFormElement.children("p.oxValidateError");
     equals(oErrorParagraf.css( "display" ) == "block" || oErrorParagraf.css( "display" ) == ""  , true, "Show error paragraf");
 
-    oNotEmailErrorSpan = oErrorParagraf.children( "span.oxError_email" );
+    oNotEmailErrorSpan = oErrorParagraf.children( "span.js-oxError_email" );
     equals(oNotEmailErrorSpan.css( "display" ) == "inline" || oNotEmailErrorSpan.css( "display" ) == "" , true, "Show bad email error");
 
-    oNotEmptyErrorSpan = oErrorParagraf.children("span.oxError_notEmpty");
+    oNotEmptyErrorSpan = oErrorParagraf.children("span.js-oxError_notEmpty");
     equals(oNotEmptyErrorSpan.css( "display" ), "none", "Not empty error still hidden");
 
 });
@@ -94,25 +67,25 @@ test('hideErrorMessage()', function() {
     var sHTMLelement =
             '<li class="oxInValid">' +
                         '<label>label 1 </label>' +
-                        '<input type="text" class="oxValidate oxValidate_notEmpty">' +
+                        '<input type="text" class="js-oxValidate js-oxValidate_notEmpty">' +
                         '<p class="oxValidateError" style="display: block;">' +
-                            '<span class="oxError_notEmpty" style="display: none;"> not empty error message </span>' +
-                            '<span class="oxError_email" style="display: inline;"> bad email error message </span>' +
+                            '<span class="js-oxError_notEmpty" style="display: none;"> not empty error message </span>' +
+                            '<span class="js-oxError_email" style="display: inline;"> bad email error message </span>' +
                         '</p>' +
                     '</li>';
 
     var oFormElement = $( sHTMLelement );
 
-    oFormElement = oxInputValidator.hideErrorMessage( oFormElement.children("input"), 'oxError_email');
+    oFormElement = oxInputValidator.hideErrorMessage( oFormElement );
     equals(oFormElement.hasClass( "oxValid" ), true, "List element don't shows errors");
 
     oErrorParagraf = oFormElement.children("p.oxValidateError");
     equals(oErrorParagraf.css( "display" ), "none", "Don't Show error paragraf");
 
-    oNotEmailErrorSpan = oErrorParagraf.children( "span.oxError_email" );
+    oNotEmailErrorSpan = oErrorParagraf.children( "span.js-oxError_email" );
     equals(oNotEmailErrorSpan.css( "display" ), "none", "Bad email error hidden");
 
-    oNotEmptyErrorSpan = oErrorParagraf.children("span.oxError_notEmpty");
+    oNotEmptyErrorSpan = oErrorParagraf.children("span.js-oxError_notEmpty");
     equals(oNotEmptyErrorSpan.css( "display" ), "none", "Not empty error still hidden");
 
 });
@@ -122,10 +95,10 @@ test('setDefaultState()', function() {
     var sHTMLelement =
             '<li class="oxInValid">' +
                         '<label>label 1 </label>' +
-                        '<input type="text" class="oxValidate oxValidate_notEmpty">' +
+                        '<input type="text" class="js-oxValidate js-oxValidate_notEmpty">' +
                         '<p class="oxValidateError" style="display: block;">' +
-                            '<span class="oxError_notEmpty" style="display: inline;"> not empty error message </span>' +
-                            '<span class="oxError_email" style="display: inline;"> bad email error message </span>' +
+                            '<span class="js-oxError_notEmpty" style="display: inline;"> not empty error message </span>' +
+                            '<span class="js-oxError_email" style="display: inline;"> bad email error message </span>' +
                         '</p>' +
                     '</li>';
 
@@ -137,10 +110,10 @@ test('setDefaultState()', function() {
     oErrorParagraf = oFormElement.children("p.oxValidateError");
     equals(oErrorParagraf.css( "display" ), "none", "Don't Show error paragraf");
 
-    oNotEmailErrorSpan = oErrorParagraf.children( "span.oxError_email" );
+    oNotEmailErrorSpan = oErrorParagraf.children( "span.js-oxError_email" );
     equals(oNotEmailErrorSpan.css( "display" ), "none", "Bad email error hidden");
 
-    oNotEmptyErrorSpan = oErrorParagraf.children("span.oxError_notEmpty");
+    oNotEmptyErrorSpan = oErrorParagraf.children("span.js-oxError_notEmpty");
     equals(oNotEmptyErrorSpan.css( "display" ), "none", "Not empty error still hidden");
 
 });
@@ -151,18 +124,18 @@ test('inputValidation()', function() {
                         '<label>label 1 </label>' +
                         '<input type="text" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email">' +
                         '<p class="oxValidateError" style="display: block;">' +
-                            '<span class="oxError_notEmpty" style="display: inline;"> not empty error message </span>' +
-                            '<span class="oxError_email" style="display: inline;"> bad email error message </span>' +
+                            '<span class="js-oxError_notEmpty" style="display: inline;"> not empty error message </span>' +
+                            '<span class="js-oxError_email" style="display: inline;"> bad email error message </span>' +
                         '</p>' +
                     '</li>';
 
     var oFormElement = $( sHTMLelement );
     var oInput = oFormElement.children("input");
 
-    equals( oxInputValidator.inputValidation( oInput ) , false, "Not valid element: empty");
+    equals( oxInputValidator.inputValidation( oInput ) , 'js-oxError_notEmpty', "Not valid element: empty");
 
     oInput.val('aaa');
-    equals( oxInputValidator.inputValidation( oInput ) , false, "Not valid element: not empty but not email");
+    equals( oxInputValidator.inputValidation( oInput ) , 'js-oxError_email', "Not valid element: not empty but not email");
 
     oInput.val('aaa@aaa.lt');
     equals( oxInputValidator.inputValidation( oInput ) , true, "Valid element");
@@ -176,9 +149,9 @@ test('submitValidation()', function() {
             '<ul>' +
                 '<li>' +
                         '<label> label 1 </label>' +
-                        '<input id="first" type="text" class="oxValidate oxValidate_notEmpty>' +
+                        '<input id="first" type="text" class="js-oxValidate js-oxValidate_notEmpty>' +
                         '<p class="oxValidateError" style="display: block;">' +
-                            '<span class="oxError_notEmpty" style="display: inline;"> not empty error message </span>' +
+                            '<span class="js-oxError_notEmpty" style="display: inline;"> not empty error message </span>' +
                         '</p>' +
                     '</li>'+
                     '<li>' +
@@ -187,10 +160,10 @@ test('submitValidation()', function() {
                         '</li>'+
                         '<li>' +
                             '<label> label 3 </label>' +
-                            '<input type="text" class="oxValidate oxValidate_notEmpty oxValidate_email">' +
+                            '<input type="text" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email">' +
                             '<p class="oxValidateError" style="display: block;">' +
-                                '<span class="oxError_notEmpty" style="display: inline;"> not empty error message </span>' +
-                                '<span class="oxError_email" style="display: inline;"> bad email error message </span>' +
+                                '<span class="js-oxError_notEmpty" style="display: inline;"> not empty error message </span>' +
+                                '<span class="js-oxError_email" style="display: inline;"> bad email error message </span>' +
                             '</p>' +
                         '</li>' +
             '</ul>' +
@@ -200,7 +173,7 @@ test('submitValidation()', function() {
 
     //equals( oxInputValidator.submitValidation( oForm ) , false, "has empty inputs");
 
-    $( "input", oForm ).each(	function(index) {
+    $( "input", oForm ).each(   function(index) {
         $( this ).val('aaa@aaa.lt');
     });
 
@@ -272,5 +245,3 @@ test('getLength()', function() {
     equals( oxInputValidator.getLength( oForm ), undefined, "form hasn't hidden value");
 
 });
-
-

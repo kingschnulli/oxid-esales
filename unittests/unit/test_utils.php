@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: test_utils.php 35353 2011-05-13 12:52:03Z alfonsas $
+ * @version   SVN: $Id: test_utils.php 40482 2011-12-06 16:25:25Z linas.kukulskis $
  */
 
 define ('MAX_LOOP_AMOUNT', 4);
@@ -507,12 +507,20 @@ class modConfig extends modOXID
         }
     }
 
+    public function getModConfigParam( $paramName )
+    {
+        $oInst = self::getInstance();
+        if ( array_key_exists($paramName, $oInst->_aConfigparams) ) {
+            return $oInst->_aConfigparams[$paramName];
+        }
+    }
+
     public function getConfigParam( $paramName )
     {
         $oInst = self::getInstance();
-        if ( array_key_exists($paramName, $oInst->_aConfigparams) )
-            return $oInst->_aConfigparams[$paramName];
-        else {
+        if ( ( $sValue = $this->getModConfigParam( $paramName ) ) !== null ) {
+            return $sValue;
+        } else {
             if (!$oInst->_oRealInstance) {
                 $_i = oxConfig::getInstance();
                 if ( $_i instanceof oxConfig ) {

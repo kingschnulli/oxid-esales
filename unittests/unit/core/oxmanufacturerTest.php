@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmanufacturerTest.php 32882 2011-02-03 11:45:48Z sarunas $
+ * @version   SVN: $Id: oxmanufacturerTest.php 38243 2011-08-19 11:22:25Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -80,15 +80,10 @@ class Unit_Core_oxmanufacturerTest extends OxidTestCase
 
     public function testMagicGetter()
     {
+        $oManufacturer = new oxManufacturer();
+        $oManufacturer->oxmanufacturers__oxicon = new oxField('big_matsol_1_mico.jpg');
 
-        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('icon/test_ico')->will( $this->returnValue( 'iconUrl' ) );
-
-        $oManufacturer = $this->getProxyClass( "oxManufacturer" );
-        $oManufacturer->oxmanufacturers__oxicon = new oxField('test_ico');
-        $oManufacturer->setConfig($oConfig);
-
-        $this->assertEquals( 'iconUrl', $oManufacturer->getIconUrl() );
+        $this->assertEquals( 'big_matsol_1_mico.jpg', basename( $oManufacturer->getIconUrl() ) );
 
 
         $oManufacturer = $this->getMock( 'oxManufacturer', array( 'getLink', 'getNrOfArticles', 'getIsVisible', 'getHasVisibleSubCats' ) );
@@ -328,14 +323,31 @@ class Unit_Core_oxmanufacturerTest extends OxidTestCase
     // #M366: Upload of manufacturer and categories icon does not work
     public function testGetIconUrl()
     {
-        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureUrl' ) );
-        $oConfig->expects( $this->once() )->method( 'getPictureUrl' )->with('icon/test_ico')->will( $this->returnValue( 'iconUrl' ) );
+        $oManufacturer = new oxManufacturer();
+        $oManufacturer->oxmanufacturers__oxicon = new oxField( 'big_matsol_1_mico.jpg' );
 
-        $oManufacturer = $this->getProxyClass( "oxManufacturer" );
-        $oManufacturer->oxmanufacturers__oxicon = new oxField('test_ico');
-        $oManufacturer->setConfig($oConfig);
+        $this->assertEquals( 'big_matsol_1_mico.jpg', basename( $oManufacturer->getIconUrl() ) );
+    }
 
-        $this->assertEquals( 'iconUrl', $oManufacturer->getIconUrl() );
+    /**
+     * Test case for new folder structure icon getter
+     *
+     * @return null
+     */
+    public function testGetIconUrlAccordingToNewFilesStructure()
+    {
+        $oConfig = $this->getMock( 'oxConfig', array( 'getConfigParam' ) );
+        $oConfig->expects( $this->at( 0 ) )->method( 'getConfigParam' )->with( 'sManufacturerIconsize' )->will( $this->returnValue( false ) );
+        $oConfig->expects( $this->at( 1 ) )->method( 'getConfigParam' )->with('sIconsize')->will( $this->returnValue( '87*87' ) );
+
+        $oManufacturer = $this->getMock( "oxManufacturer", array( "getConfig" ), array(), '', false );
+        $oManufacturer->expects( $this->exactly( 1 ) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oManufacturer->oxmanufacturers__oxicon = new oxField( 'big_matsol_1_mico.jpg' );
+
+        $sUrl  = oxConfig::getInstance()->getOutUrl() . basename( oxConfig::getInstance()->getPicturePath( "" ) );
+        $sUrl .= "/generated/manufacturer/icon/87_87_75/big_matsol_1_mico.jpg";
+
+        $this->assertEquals( $sUrl, $oManufacturer->getIconUrl() );
     }
 
     public function testDelete()
@@ -372,4 +384,16 @@ class Unit_Core_oxmanufacturerTest extends OxidTestCase
         $this->assertFalse($oManufacturer->getThumbUrl());
     }
 
+    /**
+     * Title getter test
+     *
+     * @return null
+     */
+    public function testGetTitle()
+    {
+        $sTitle = "testtitle";
+        $oManufacturer = new oxManufacturer();
+        $oManufacturer->oxmanufacturers__oxtitle = new oxField( "testtitle" );
+        $this->assertEquals( $sTitle, $oManufacturer->getTitle() );
+    }
 }

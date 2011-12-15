@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 34114 2011-04-01 08:32:47Z sarunas $
+ * @version   SVN: $Id: oxview.php 39799 2011-11-05 09:19:21Z linas.kukulskis $
  */
 
 /**
@@ -165,6 +165,13 @@ class oxView extends oxSuperCfg
      * @var bool
      */
     protected $_blIsCallForCache = false;
+
+    /**
+     * oxViewConfig instance
+     *
+     * @var oxViewConfig
+     */
+    protected $_oViewConf = null;
 
     /**
      * Initiates all components stored, executes oxview::addGlobalParams.
@@ -518,7 +525,7 @@ class oxView extends oxSuperCfg
                 // was not executed on any level ?
                 if ( !$this->_blIsComponent ) {
                     $oEx = oxNew( 'oxSystemComponentException' );
-                    $oEx->setMessage( 'EXCEPTION_SYSTEMCOMPONENT_FUNCTIONNOTFOUND' );
+                    $oEx->setMessage( 'ERROR_MESSAGE_SYSTEMCOMPONENT_FUNCTIONNOTFOUND' );
                     $oEx->setComponent( $sFunction );
                     throw $oEx;
                 }
@@ -562,7 +569,7 @@ class oxView extends oxSuperCfg
             $sUrl = oxUtilsUrl::getInstance()->processUrl($sUrl);
 
             //#M341 do not add redirect parameter
-            oxUtils::getInstance()->redirect( $sUrl, (bool) oxConfig::getParameter( 'redirected' ) );
+            oxUtils::getInstance()->redirect( $sUrl, (bool) oxConfig::getParameter( 'redirected' ), 302 );
         }
     }
 

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscount.php 31954 2010-12-17 13:33:40Z sarunas $
+ * @version   SVN: $Id: oxutilscount.php 39330 2011-10-13 08:40:28Z linas.kukulskis $
  */
 
 /**
@@ -171,17 +171,18 @@ class oxUtilsCount extends oxSuperCfg
         $oArticle = oxNew( 'oxarticle' );
         $sTable   = $oArticle->getViewName();
         $sO2CView = getViewName( 'oxobject2category' );
+        $oDb = oxDb::getDb();
 
         // we use distinct if article is assigned to category twice
         $sQ = "SELECT count(*) FROM (
                    SELECT count(*) FROM $sO2CView LEFT JOIN $sTable ON $sO2CView.oxobjectid=$sTable.oxid
-                       WHERE $sO2CView.oxcatnid = '".$sCatId."' AND
+                       WHERE $sO2CView.oxcatnid = ".$oDb->quote( $sCatId ) ." AND
                              $sTable.oxparentid='' AND
                              ".$oArticle->getSqlActiveSnippet() ."
                        GROUP BY $sTable.oxid
                    ) AS ox2cat";
 
-        $aCache[$sCatId][$sActIdent] = oxDb::getDb()->getOne( $sQ );
+        $aCache[$sCatId][$sActIdent] = $oDb->getOne( $sQ );
 
         $this->_setCatCache( $aCache );
         return $aCache[$sCatId][$sActIdent];
@@ -203,12 +204,9 @@ class oxUtilsCount extends oxSuperCfg
         $oArticle = oxNew( 'oxarticle' );
         $sTable   = $oArticle->getViewName();
 
-        $sSubSelect  = "select if( oxparentid='', oxid, oxparentid ) as id from {$sTable} where oxprice >= 0 ";
-        $sSubSelect .= $dPriceTo ? "and oxprice <= " . (double)$dPriceTo . " " : " ";
-        $sSubSelect .= $dPriceFrom ? "group by id having min( oxprice ) >= " . (double)$dPriceFrom . " " : " ";
-
-        $sSelect  = "select count({$sTable}.oxid) from {$sTable} where ";
-        $sSelect .= "{$sTable}.oxid in ($sSubSelect) ";
+        $sSelect  = "select count({$sTable}.oxid) from {$sTable} where oxvarminprice >= 0 ";
+        $sSelect .= $dPriceTo ? "and oxvarminprice <= " . (double)$dPriceTo . " " : " ";
+        $sSelect .= $dPriceFrom ? "and oxvarminprice  >= " . (double)$dPriceFrom . " " : " ";
         $sSelect .= "and {$sTable}.oxissearch = 1 and ".$oArticle->getSqlActiveSnippet();
 
         $aCache[$sCatId][$sActIdent] = oxDb::getDb()->getOne( $sSelect );
@@ -292,6 +290,7 @@ class oxUtilsCount extends oxSuperCfg
     {
         if ( !$sCatId ) {
             $this->getConfig()->setGlobalParameter( 'aLocalCatCache', null );
+            oxUtils::getInstance()->toFileCache( 'aLocalCatCache', '' );
         } else {
             // loading from cache
             $aCatData = $this->_getCatCache();
@@ -351,10 +350,9 @@ class oxUtilsCount extends oxSuperCfg
         $sActiveSnippet = $oArticle->getSqlActiveSnippet();
         $sViewName = getViewName( 'oxartextends', $iLang );
 
-        $sQ = "select count(*) from {$sViewName} inner join {$sArticleTable}
-               on {$sArticleTable}.oxid = {$sViewName}.oxid where {$sActiveSnippet}
-               and {$sArticleTable}.oxissearch = 1 and match( {$sViewName}.oxtags )
-               against ( ".$oDb->quote( $sTag )." IN BOOLEAN MODE ) ";
+        $sQ = "select count(*) from {$sViewName} inner join {$sArticleTable} on ".
+              "{$sArticleTable}.oxid = {$sViewName}.oxid where {$sArticleTable}.oxparentid = '' and {$sArticleTable}.oxissearch = 1 AND match ( {$sViewName}.oxtags ) ".
+              "against( ".$oDb->quote( "\"".$sTag."\"" )." IN BOOLEAN MODE ) and {$sActiveSnippet}";
 
         return $oDb->getOne( $sQ );
     }

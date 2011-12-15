@@ -31,7 +31,6 @@ try {
     return;
 }
 
-error_reporting($iOldErrorReproting);
 
 /**
  * Facebook API

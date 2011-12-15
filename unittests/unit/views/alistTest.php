@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 35805 2011-06-03 08:02:50Z linas.kukulskis $
+ * @version   SVN: $Id: alistTest.php 38654 2011-09-06 08:57:31Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -99,7 +99,7 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testGetMetaDescription()
     {
         $sCatId  = '8a142c3e60a535f16.78077188';
-        $sPrefix = "Sie sind hier  Wohnen - Uhren. Der Onlineshop für Wassersport und Sommerspass";
+        $sPrefix = "Sie sind hier  Wohnen - Uhren. Der Onlineshop";
 
         $oCategory = new oxCategory();
         $oCategory->load( $sCatId );
@@ -307,7 +307,8 @@ class Unit_Views_alistTest extends OxidTestCase
      */
     public function testRender_pageCountIsIncorrect()
     {
-        oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
+        //oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
+        oxTestModules::addFunction( "oxUtils", "redirect", "{ throw new Exception('OK'); }" );
 
         $oCat = $this->getMock( "oxcategory", array( 'canView' ) );
         $oCat->expects( $this->any() )->method( 'canView')->will( $this->returnValue( true ) );
@@ -327,6 +328,33 @@ class Unit_Views_alistTest extends OxidTestCase
         }
 
         $this->fail( 'failed redirect when page count is incorrect' );
+    }
+
+    /**
+     * Test render actual page count is 0
+     *
+     * @return null
+     */
+    public function testRender_pageCountIsZero()
+    {
+        oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
+        //oxTestModules::addFunction( "oxUtils", "redirect", "{ throw new Exception('OK'); }" );
+
+        $oCat = $this->getMock( "oxcategory", array( 'canView' ) );
+        $oCat->expects( $this->any() )->method( 'canView')->will( $this->returnValue( true ) );
+        $oCat->oxcategories__oxactive = new oxField( 1, oxField::T_RAW );
+
+        $oListView = $this->getMock( "aList", array( 'getActCategory', 'getArticleList', 'getActPage', 'getPageCount' ) );
+        $oListView->expects( $this->atLeastOnce() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
+        $oListView->expects( $this->never() )->method( 'getActPage');//->will( $this->returnValue( 12 ) );
+        $oListView->expects( $this->once() )->method( 'getPageCount')->will( $this->returnValue( 0 ) );
+        $oListView->expects( $this->atLeastOnce() )->method( 'getArticleList' );
+
+        try {
+            $oListView->render();
+        } catch ( Exception $oExcp ) {
+            $this->fail( 'failed redirect when page count is incorrect' );
+        }
     }
 
     /**
@@ -399,7 +427,7 @@ class Unit_Views_alistTest extends OxidTestCase
 
         $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
         $oListView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
-        $this->assertEquals( array( 'sortby' => getViewName( 'oxarticles' ).'.testsort', 'sortdir' => "desc" ), $oListView->getSorting( '999' ) );
+        $this->assertEquals( array( 'sortby' => 'testsort', 'sortdir' => "desc" ), $oListView->getSorting( '999' ) );
     }
 
     /**
@@ -692,7 +720,7 @@ class Unit_Views_alistTest extends OxidTestCase
         $oListView->expects( $this->any() )->method( 'getActCategory')->will($this->returnValue( $oCategory ) );
 
         $this->assertEquals(
-            'Sie sind hier  parent category - category. Der Onlineshop für Wassersport und Sommerspass',
+            'Sie sind hier  parent category - category. Der Onlineshop',
             $oListView->UNITprepareMetaDescription( $aCatPath, 1024, false )
         );
     }
@@ -888,6 +916,8 @@ class Unit_Views_alistTest extends OxidTestCase
 
             $sCatId = '8a142c3e44ea4e714.31136811';
 
+        modConfig::setParameter( 'cnid', $sCatId );
+
         $oSubj = $this->getMock( 'alist', array( '_prepareMetaKeyword' ) );
         $oSubj->expects( $this->any() )->method( '_prepareMetaKeyword')->will($this->returnValue( "aaa" ) );
 
@@ -908,6 +938,8 @@ class Unit_Views_alistTest extends OxidTestCase
     {
 
             $sCatId = '8a142c3e44ea4e714.31136811';
+
+        modConfig::setParameter( 'cnid', $sCatId );
 
         $oSubj = $this->getMock( 'alist', array( '_prepareMetaKeyword' ) );
         $oSubj->expects( $this->any() )->method( '_prepareMetaKeyword')->will($this->returnValue( "aaa" ) );

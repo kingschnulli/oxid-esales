@@ -36,7 +36,7 @@
 
 .sf-menu li:hover ul, .sf-menu li.sfHover ul {
     left: 0;
-    top: 2.8em; /* match top ul list item height */
+    top: 2.55em; /* match top ul list item height */
     z-index: 1001;
     margin-left: 5px;
 }
@@ -67,9 +67,13 @@ ul.sf-menu li li li:hover ul, ul.sf-menu li li li.sfHover ul {
 }
 
 .sf-menu a {
-    padding: .75em 1.1em;
+    padding: .54em 1.1em;
     text-decoration: none;
 }
+.sf-menu ul a {
+    padding: .8em 1em 0.9em 1em;    
+}
+
 
 .sf-menu a, .sf-menu a:visited { /* visited pseudo selector so IE6 applies text colour*/
     color: #000;
@@ -135,7 +139,7 @@ ul.sf-menu li li li:hover ul, ul.sf-menu li li li.sfHover ul {
 }
 
 a > .sf-sub-indicator { /* give all except IE6 the correct values */
-    top: 2.5em;
+    top: 2.31em;
 }
 
 /* apply hovers to modern browsers */

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsurlTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxutilsurlTest.php 40486 2011-12-06 16:32:43Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -152,15 +152,6 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         $this->assertEquals( "appendedUrl", $oUtils->processUrl( "" ) );
     }
 
-    public function testProcessSeoUrl()
-    {
-        $oUtils = $this->getMock( "oxUtilsUrl", array( "appendUrl", "getAddUrlParams" ) );
-        $oUtils->expects( $this->once() )->method( 'getAddUrlParams' );
-        $oUtils->expects( $this->once() )->method( 'appendUrl' )->will( $this->returnValue( "appendedUrl" ) );
-
-        $this->assertEquals( "appendedUrl", $oUtils->processSeoUrl( "" ) );
-    }
-
     public function testAppendParamSeparator()
     {
         $oUtils = new oxUtilsUrl();
@@ -170,5 +161,37 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         $this->assertEquals( "asd&amp;", $oUtils->appendParamSeparator("asd&amp;") );
         $this->assertEquals( "asd&amp;a?", $oUtils->appendParamSeparator("asd&amp;a") );
         $this->assertEquals( "asd?&amp;a&amp;", $oUtils->appendParamSeparator("asd?&amp;a") );
+    }
+
+    /**
+     * Test cases for oxUtilsUrl::processSeoUrl()
+     *
+     * @return null
+     */
+    // admin - should stay plain seo url - no session ids, no security tokens and shop parameter
+    // - current SHOP host url
+    public function testProcessSeoUrlAdminCurrentShopHostUrl()
+    {
+        $sUrl = oxConfig::getInstance()->getConfigParam( "sShopURL" ) . "index.php?param1=value1";
+
+        $oUtils = $this->getMock( "oxUtilsUrl", array( "isAdmin" ) );
+        $oUtils->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
+        $this->assertEquals( $sUrl, $oUtils->processSeoUrl( $sUrl ) );
+    }
+
+
+    // non admin
+    // - if needed - must be added shop id, session identifier etc..
+    public function testProcessSeoUrlNonAdmin()
+    {
+        // base shop
+        $iShopId = oxConfig::getInstance()->getBaseShopId();
+        modConfig::getInstance()->setShopId( $iShopId );
+        $sUrl = oxConfig::getInstance()->getConfigParam( "sShopURL" );
+
+        $oUtils = $this->getMock( "oxUtilsUrl", array( "isAdmin" ) );
+        $oUtils->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
+        $this->assertEquals( $sUrl, $oUtils->processSeoUrl( $sUrl ) );
+
     }
 }

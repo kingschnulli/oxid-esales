@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlelistTest.php 32003 2010-12-17 15:10:01Z sarunas $
+ * @version   SVN: $Id: articlelistTest.php 38899 2011-09-23 13:27:35Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -141,46 +141,56 @@ class Unit_Admin_ArticleListTest extends OxidTestCase
     }
 
     /**
-     * Article_List::Changeselect() test case
+     * Article_List::_buildSelectString() test case
      *
      * @return null
      */
-    public function testChangeselectCategory()
+    public function testBuildSelectStringCategory()
     {
         $sTable   = getViewName( "oxarticles" );
         $sO2CView = getViewName( "oxobject2category" );
         modConfig::setParameter( "art_category", "cat@@testCategory" );
 
+        $oProduct = new oxArticle();
+        $sQ = $oProduct->buildSelectString( null );
+        $sQ = str_replace( " from $sTable where 1 ", " from $sTable left join $sO2CView on $sTable.oxid = $sO2CView.oxobjectid where $sO2CView.oxcatnid = 'testCategory' and  1  and $sTable.oxparentid = '' ", $sQ );
+
         $oView = new Article_List();
-        $this->assertEquals( "from $sTable left join $sO2CView on $sTable.oxid = $sO2CView.oxobjectid where $sO2CView.oxcatnid = 'testCategory' and ", $oView->UNITchangeselect( "from {$sTable} where" ) );
+        $this->assertEquals( $sQ , $oView->UNITbuildSelectString( $oProduct ) );
     }
 
     /**
-     * Article_List::Changeselect() test case
+     * Article_List::_buildSelectString() test case
      *
      * @return null
      */
-    public function testChangeselectManufacturer()
+    public function testBuildSelectStringManufacturer()
     {
         $sTable   = getViewName( "oxarticles" );
         modConfig::setParameter( "art_category", "mnf@@testManufacturer" );
 
+        $oProduct = new oxArticle();
+        $sQ = $oProduct->buildSelectString( null );
+
         $oView = new Article_List();
-        $this->assertEquals( " and $sTable.oxmanufacturerid = 'testManufacturer'", $oView->UNITchangeselect( "" ) );
+        $this->assertEquals( $sQ . " and $sTable.oxparentid = ''  and $sTable.oxmanufacturerid = 'testManufacturer'", $oView->UNITbuildSelectString( $oProduct ) );
     }
 
     /**
-     * Article_List::Changeselect() test case
+     * Article_List::_buildSelectString() test case
      *
      * @return null
      */
-    public function testChangeselectVendor()
+    public function testBuildSelectStringVendor()
     {
         $sTable   = getViewName( "oxarticles" );
         modConfig::setParameter( "art_category", "vnd@@testVendor" );
 
+        $oProduct = new oxArticle();
+        $sQ = $oProduct->buildSelectString( null );
+
         $oView = new Article_List();
-        $this->assertEquals( " and $sTable.oxvendorid = 'testVendor'", $oView->UNITchangeselect( "" ) );
+        $this->assertEquals( $sQ . " and $sTable.oxparentid = ''  and $sTable.oxvendorid = 'testVendor'", $oView->UNITbuildSelectString( $oProduct ) );
     }
 
     /**
@@ -198,14 +208,17 @@ class Unit_Admin_ArticleListTest extends OxidTestCase
     }
 
     /**
-     * Article_List::PrepareWhereQuery() test case
+     * Article_List::_buildSelectString() test case
      *
      * @return null
      */
-    public function testPrepareWhereQuery()
+    public function testBuildSelectString()
     {
+        $oProduct = new oxArticle();
+        $sQ = $oProduct->buildSelectString( null );
+
         $oView = new Article_List();
-        $this->assertEquals( " and ".getViewName( 'oxarticles' ).".oxparentid = '' ", $oView->UNITprepareWhereQuery( array(), "" ) );
+        $this->assertEquals( $sQ . " and ".getViewName( 'oxarticles' ).".oxparentid = '' ", $oView->UNITbuildSelectString( $oProduct ) );
     }
 
     /**
@@ -232,4 +245,17 @@ class Unit_Admin_ArticleListTest extends OxidTestCase
     }
 
 
+    /**
+     * Test case for Article_List::getSearchFields()() getter
+     *
+     * @return null
+     */
+    public function testGetSearchFields()
+    {
+        $aSkipFields = array("oxblfixedprice", "oxvarselect", "oxamitemid", "oxamtaskid", "oxpixiexport", "oxpixiexported") ;
+        $oView = new Article_List();
+
+        $oArticle = new oxArticle();
+        $this->assertEquals( array_diff( $oArticle->getFieldNames(), $aSkipFields ), $oView->getSearchFields() );
+    }
 }

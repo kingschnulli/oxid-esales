@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseodecoder.php 32009 2010-12-17 15:10:45Z sarunas $
+ * @version   SVN: $Id: oxseodecoder.php 40372 2011-11-30 08:40:26Z linas.kukulskis $
  */
 
 /**
@@ -85,7 +85,7 @@ class oxSeoDecoder extends oxSuperCfg
         $sKey = $this->_getIdent( $sSeoUrl );
         $aRet = false;
 
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
         $oRs = $oDb->Execute( "select oxstdurl, oxlang from oxseo where oxident=" . $oDb->quote( $sKey ) . " and oxshopid='$iShopId' limit 1");
         if ( !$oRs->EOF ) {
             // primary seo language changed ?
@@ -107,7 +107,7 @@ class oxSeoDecoder extends oxSuperCfg
     protected function _decodeOldUrl( $sSeoUrl )
     {
         $oStr = getStr();
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sBaseUrl = $this->getConfig()->getShopURL();
         if ( $oStr->strpos( $sSeoUrl, $sBaseUrl ) === 0 ) {
             $sSeoUrl = $oStr->substr( $sSeoUrl, $oStr->strlen( $sBaseUrl ) );
@@ -125,8 +125,30 @@ class oxSeoDecoder extends oxSuperCfg
 
             // fetching new url
             $sUrl = $this->_getSeoUrl($oRs->fields['oxobjectid'], $oRs->fields['oxlang'], $iShopId);
+
+            // appending with $_SERVER["QUERY_STRING"]
+            $sUrl = $this->_addQueryString( $sUrl );
         }
 
+        return $sUrl;
+    }
+
+    /**
+     * Appends and returns given url with $_SERVER["QUERY_STRING"] value
+     *
+     * @param string $sUrl url to append
+     *
+     * @return string
+     */
+    protected function _addQueryString( $sUrl )
+    {
+        if ( ( $sQ = $_SERVER["QUERY_STRING"] ) ) {
+            $sUrl = rtrim( $sUrl, "&?" );
+            $sQ   = ltrim( $sQ, "&?" );
+
+            $sUrl .= ( strpos( $sUrl, '?') === false ) ? "?" : "&";
+            $sUrl .= $sQ;
+        }
         return $sUrl;
     }
 
@@ -142,7 +164,7 @@ class oxSeoDecoder extends oxSuperCfg
      */
     protected function _getSeoUrl($sObjectId, $iLang, $iShopId)
     {
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
         $aInfo = $oDb->getRow( "select oxseourl, oxtype from oxseo where oxobjectid =  " . $oDb->quote( $sObjectId ) . " and oxlang =  " . $oDb->quote( $iLang ) . " and oxshopid = " . $oDb->quote( $iShopId ) . " order by oxparams limit 1" );
         if ('oxarticle' == $aInfo['oxtype']) {
             $sMainCatId = $oDb->getOne( "select oxcatnid from ".getViewName( "oxobject2category" )." where oxobjectid = " . $oDb->quote( $sObjectId ) . " order by oxtime" );
@@ -251,7 +273,7 @@ class oxSeoDecoder extends oxSuperCfg
      */
     protected function _getObjectUrl( $sSeoId, $sTable, $iLanguage, $sType )
     {
-        $oDb     = oxDb::getDb();
+        $oDb     = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT);
         $sTable  = getViewName( $sTable, $iLanguage );
         $sSeoUrl = null;
 

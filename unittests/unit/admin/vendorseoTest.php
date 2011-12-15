@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorseoTest.php 28029 2010-05-31 12:21:51Z arvydas $
+ * @version   SVN: $Id: vendorseoTest.php 38261 2011-08-19 11:26:16Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -48,6 +48,9 @@ class Unit_Admin_VendorSeoTest extends OxidTestCase
      */
     protected function tearDown()
     {
+        $sQ = "delete from oxvendor where oxid like '_test%'";
+        oxDb::getDb()->execute( $sQ );
+
         oxSeoEncoderVendor::getInstance()->cleanup();
         parent::tearDown();
     }
@@ -60,66 +63,8 @@ class Unit_Admin_VendorSeoTest extends OxidTestCase
     public function testRender()
     {
         // testing..
-        $oView = $this->getMock( "Vendor_Seo", array( "_getObject" ) );
-        $oView->expects( $this->atLEastOnce() )->method( '_getObject');
+        $oView = new Vendor_Seo();
         $this->assertEquals( 'object_seo.tpl', $oView->render() );
-    }
-
-    /**
-     * Vendor_Seo::GetSeoDataSql() test case
-     *
-     * @return null
-     */
-    public function testGetSeoDataSql()
-    {
-        $sQ = "select * from oxseo
-               left join oxobject2seodata on
-                   oxobject2seodata.oxobjectid = oxseo.oxobjectid and
-                   oxobject2seodata.oxshopid = oxseo.oxshopid and
-                   oxobject2seodata.oxlang = oxseo.oxlang
-               where
-                   oxseo.oxobjectid = 'testId' and
-                   oxseo.oxshopid = '1' and oxseo.oxlang = 1 and oxparams = '' ";
-
-        $oObject = new oxBase();
-        $oObject->setId( "testId" );
-
-        // testing..
-        $oView = new Vendor_Seo();
-        $sResQ = $oView->UNITgetSeoDataSql( $oObject, 1, 1 );
-
-        $this->assertEquals( str_replace( array( "\n", "\r", "\t", " " ), "", $sQ ), str_replace( array( "\n", "\r", "\t", " " ), "", $sResQ ) );
-    }
-
-    /**
-     * Vendor_Seo::GetSeoUrl() test case
-     *
-     * @return null
-     */
-    public function testGetSeoUrl()
-    {
-        oxTestModules::addFunction( 'oxSeoEncoderVendor', 'getVendorUrl', '{ return true; }' );
-
-        // testing..
-        $oView = $this->getMock( "Vendor_Seo", array( "_getSeoUrlQuery" ) );
-        $oView->expects( $this->once() )->method( '_getSeoUrlQuery' )->will( $this->returnValue( "select 1+1" ) );
-        $this->assertEquals( "2", $oView->UNITgetSeoUrl( new oxVendor ) );
-    }
-
-    /**
-     * Vendor_Seo::GetObject() test case
-     *
-     * @return null
-     */
-    public function testGetObject()
-    {
-        oxTestModules::addFunction( 'oxvendor', 'loadInLang', '{ return true; }' );
-
-        // defining parameters
-        $oView = new Vendor_Seo();
-        $oObject = $oView->UNITgetObject( "testId" );
-        $this->assertNotNull( $oObject );
-        $this->assertTrue( $oObject instanceof oxvendor );
     }
 
     /**
@@ -155,5 +100,91 @@ class Unit_Admin_VendorSeoTest extends OxidTestCase
             return;
         }
         $this->fail( "Error in Vendor_Seo::save()" );
+    }
+
+    /**
+     * Vendor_Seo::_getEncoder() test case
+     *
+     * @return null
+     */
+    public function testGetEncoder()
+    {
+        $oView = new Vendor_Seo();
+        $this->assertTrue( $oView->UNITgetEncoder() instanceof oxSeoEncoderVendor );
+    }
+
+    /**
+     * Vendor_Seo::isSuffixSupported() test case
+     *
+     * @return null
+     */
+    public function testIsSuffixSupported()
+    {
+        $oView = new Vendor_Seo();
+        $this->assertTrue( $oView->isSuffixSupported() );
+    }
+
+    /**
+     * Vendor_Seo::isEntrySuffixed() test case
+     *
+     * @return null
+     */
+    public function testIsEntrySuffixed()
+    {
+        $oVendor = new oxVendor();
+        $oVendor->setId( "_test1" );
+        $oVendor->oxvendor__oxshowsuffix = new oxField( 1 );
+        $oVendor->save();
+
+        $oVendor = new oxVendor();
+        $oVendor->setId( "_test2" );
+        $oVendor->oxvendor__oxshowsuffix = new oxField( 0 );
+        $oVendor->save();
+
+
+        $oView = $this->getMock( "Vendor_Seo", array( "getEditObjectId" ) );
+        $oView->expects( $this->at( 0 ) )->method( 'getEditObjectId' )->will( $this->returnValue( "_test1" ) );
+        $oView->expects( $this->at( 1 ) )->method( 'getEditObjectId' )->will( $this->returnValue( "_test2" ) );
+        $this->assertTrue( $oView->isEntrySuffixed() );
+        $this->assertFalse( $oView->isEntrySuffixed() );
+    }
+
+    /**
+     * Vendor_Seo::getEntryUri() test case
+     *
+     * @return null
+     */
+    public function testGetEntryUri()
+    {
+        $oVendor = new oxVendor();
+        $oVendor->setId( "_test1" );
+        $oVendor->oxvendor__oxshowsuffix = new oxField( 0 );
+        $oVendor->save();
+
+        $oEncoder = $this->getMock( "oxSeoEncoderVendor", array( "getVendorUri" ) );
+        $oEncoder->expects( $this->once() )->method( 'getVendorUri' )->will( $this->returnValue( "VendorUri" ) );
+
+        $oView = $this->getMock( "Vendor_Seo", array( "getEditObjectId", "_getEncoder" ) );
+        $oView->expects( $this->once() )->method( 'getEditObjectId' )->will( $this->returnValue( "_test1" ) );
+        $oView->expects( $this->once() )->method( '_getEncoder' )->will( $this->returnValue( $oEncoder ) );
+        $this->assertEquals( "VendorUri", $oView->getEntryUri() );
+    }
+
+    /**
+     * Vendor_Seo::_getStdUrl() test case
+     *
+     * @return null
+     */
+    public function testGetStdUrl()
+    {
+        $oVendor = new oxVendor();
+        $oVendor->setId( "_test1" );
+        $oVendor->oxvendor__oxshowsuffix = new oxField( 0 );
+        $oVendor->save();
+
+        $oView = $this->getMock( "Vendor_Seo", array( "getEditLang" ) );
+        $oView->expects( $this->once() )->method( 'getEditLang' )->will( $this->returnValue( 0 ) );
+
+        $this->assertEquals( $oVendor->getBaseStdLink( 0, true, false ), $oView->UNITgetStdUrl( "_test1" ) );
     }
 }

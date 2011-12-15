@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order_overview.php 33467 2011-02-23 11:40:19Z arvydas.vapsva $
+ * @version   SVN: $Id: order_overview.php 40539 2011-12-12 13:43:17Z linas.kukulskis $
  */
 
 /**
@@ -53,7 +53,7 @@ class Order_Overview extends oxAdminDetails
 
             $this->_aViewData["edit"]          = $oOrder;
             $this->_aViewData["aProductVats"]  = $oOrder->getProductVats();
-            $this->_aViewData["orderArticles"] = $oOrder->getOrderArticles();
+            $this->_aViewData["orderArticles"] = $oOrder->getOrderArticles( true );
             $this->_aViewData["giftCard"]      = $oOrder->getGiftCard();
             $this->_aViewData["paymentType"]   = $this->_getPaymentType( $oOrder );
             $this->_aViewData["deliveryType"]  = $oOrder->getDelSet();
@@ -225,14 +225,7 @@ class Order_Overview extends oxAdminDetails
             $oOrder->save();
 
             // #1071C
-            $oOrderArticles = $oOrder->getOrderArticles();
-            foreach ( $oOrderArticles as $sOxid => $oArticle ) {
-                // remove canceled articles from list
-                if ( $oArticle->oxorderarticles__oxstorno->value == 1 ) {
-                    $oOrderArticles->offsetUnset( $sOxid );
-                }
-            }
-
+            $oOrderArticles = $oOrder->getOrderArticles( true );
             if ( ( $blMail = oxConfig::getParameter( "sendmail" ) ) ) {
                 // send eMail
                 $oEmail = oxNew( "oxemail" );
@@ -270,6 +263,25 @@ class Order_Overview extends oxAdminDetails
             $sTable = getViewName( "oxorderarticles" );
             $sQ = "select count(oxid) from {$sTable} where oxorderid = ".$oDb->quote( $sOrderId )." and oxstorno = 0";
             $blCan = (bool) $oDb->getOne( $sQ );
+        }
+        return $blCan;
+    }
+
+    /**
+     * Get information about shipping status
+     *
+     * @return bool
+     */
+    public function canResetShippingDate()
+    {
+        $oOrder = oxNew( "oxorder" );
+        $blCan = false;
+
+
+        if ( $oOrder->load( $this->getEditObjectId() ) ) {
+            if ( $oOrder->oxorder__oxstorno->value == "0" && $oOrder->oxorder__oxsenddate->value > 1 ) {
+                $blCan = true;
+            }
         }
         return $blCan;
     }

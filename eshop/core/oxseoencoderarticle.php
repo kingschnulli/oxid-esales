@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticle.php 36469 2011-06-20 08:13:33Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderarticle.php 40372 2011-11-30 08:40:26Z linas.kukulskis $
  */
 
 /**
@@ -93,6 +93,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         if ( isset( $iLang ) && $iLang != $oArticle->getLanguage() ) {
             $sId = $oArticle->getId();
             $oArticle = oxNew( 'oxarticle' );
+            $oArticle->setSkipAssign( true );
             $oArticle->loadInLang( $iLang, $sId );
         }
 
@@ -105,9 +106,25 @@ class oxSeoEncoderArticle extends oxSeoEncoder
      * @param oxarticle $oArticle article object
      * @param int       $iLang    language id
      *
+     * @deprecated since 20110810 use oxSeoEncoderArticle::getArticleRecommUri()
+     * @todo after you remove this method also change all other calls with public method
+     *
      * @return string
      */
     protected function _getArticleRecommUri( $oArticle, $iLang )
+    {
+        return $this->getArticleRecommUri( $oArticle, $iLang );
+    }
+
+    /**
+     * Returns SEO uri for passed article and active tag
+     *
+     * @param oxarticle $oArticle article object
+     * @param int       $iLang    language id
+     *
+     * @return string
+     */
+    public function getArticleRecommUri( $oArticle, $iLang )
     {
         $sSeoUri = null;
         if ( $oRecomm = $this->_getRecomm( $oArticle, $iLang ) ) {
@@ -177,9 +194,25 @@ class oxSeoEncoderArticle extends oxSeoEncoder
      * @param int       $iLang        language id
      * @param bool      $blRegenerate if TRUE forces seo url regeneration
      *
+     * @deprecated since 20110810 use oxSeoEncoderArticle::getArticleTagUri()
+     * @todo after you remove this method also change all other calls with public method
+     *
      * @return string
      */
     protected function _getArticleTagUri( $oArticle, $iLang, $blRegenerate = false )
+    {
+        return $this->getArticleTagUri( $oArticle, $iLang, $blRegenerate );
+    }
+    /**
+     * Returns SEO uri for passed article and active tag
+     *
+     * @param oxarticle $oArticle     article object
+     * @param int       $iLang        language id
+     * @param bool      $blRegenerate if TRUE forces seo url regeneration
+     *
+     * @return string
+     */
+    public function getArticleTagUri( $oArticle, $iLang, $blRegenerate = false )
     {
         $sSeoUri = null;
         if ( $sTag = $this->_getTag( $oArticle, $iLang ) ) {
@@ -264,9 +297,26 @@ class oxSeoEncoderArticle extends oxSeoEncoder
      * @param int       $iLang        language id
      * @param bool      $blRegenerate if TRUE forces seo url regeneration
      *
+     * @deprecated since 20110810 use oxSeoEncoderArticle::getArticleUri()
+     * @todo after you remove this method also change all other calls with public method
+     *
      * @return string
      */
     protected function _getArticleUri( $oArticle, $iLang, $blRegenerate = false )
+    {
+        return $this->getArticleUri( $oArticle, $iLang, $blRegenerate );
+    }
+
+    /**
+     * Returns SEO uri for passed article
+     *
+     * @param oxarticle $oArticle     article object
+     * @param int       $iLang        language id
+     * @param bool      $blRegenerate if TRUE forces seo url regeneration
+     *
+     * @return string
+     */
+    public function getArticleUri( $oArticle, $iLang, $blRegenerate = false )
     {
         startProfile(__FUNCTION__);
 
@@ -332,10 +382,22 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             $sArtId = $oArticle->oxarticles__oxparentid->value;
         }
 
-        $sMainCatId = oxDb::getDb()->getOne( "select oxcatnid from ".getViewName( "oxobject2category" )." where oxobjectid = '{$sArtId}' order by oxtime" );
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
+        // add manin category chaching;
+        $sQ = "select oxcatnid from ".getViewName( "oxobject2category" )." where oxobjectid = ".$oDb->quote( $sArtId )." order by oxtime";
+        $sIdent = md5( $sQ );
+
+        if ( ( $sMainCatId = $this->_loadFromCache( $sIdent ) ) === false ) {
+            $sMainCatId = $oDb->getOne( $sQ );
+            // storing in cache
+            $this->_saveInCache( $sIdent, $sMainCatId );
+        }
+
         if ( $sMainCatId ) {
             $oMainCat = oxNew( "oxcategory" );
-            $oMainCat->load( $sMainCatId );
+            if ( ! $oMainCat->load( $sMainCatId )) {
+                $oMainCat = null;
+            }
         }
 
         return $oMainCat;
@@ -347,9 +409,25 @@ class oxSeoEncoderArticle extends oxSeoEncoder
      * @param oxarticle $oArticle article object
      * @param int       $iLang    language id
      *
+     * @deprecated since 20110810 use oxSeoEncoderArticle::getArticleMainUri()
+     * @todo after you remove this method also change all other calls with public method
+     *
      * @return string
      */
     protected function _getArticleMainUri( $oArticle, $iLang )
+    {
+        return $this->getArticleMainUri( $oArticle, $iLang );
+    }
+
+    /**
+     * Returns SEO uri for passed article
+     *
+     * @param oxarticle $oArticle article object
+     * @param int       $iLang    language id
+     *
+     * @return string
+     */
+    public function getArticleMainUri( $oArticle, $iLang )
     {
         startProfile(__FUNCTION__);
 
@@ -413,12 +491,10 @@ class oxSeoEncoderArticle extends oxSeoEncoder
 
         // variant has varselect value
         if ( $oArticle->oxarticles__oxvarselect->value ) {
-            $sTitle .= ( $sTitle ? ' ' : '' ).$oArticle->oxarticles__oxvarselect->value . ' ';
-        }
-
-        // in case nothing was found - looking for number
-        if ( !$sTitle ) {
-            $sTitle .= $oArticle->oxarticles__oxartnum->value;
+            $sTitle .= ( $sTitle ? ' ' : '' ) . $oArticle->oxarticles__oxvarselect->value . ' ';
+        } elseif ( !$sTitle || ( $oArticle->oxarticles__oxparentid->value ) ) {
+            // in case nothing was found - looking for number
+            $sTitle .= ( $sTitle ? ' ' : '' ) . $oArticle->oxarticles__oxartnum->value;
         }
 
         return $this->_prepareTitle( $sTitle ) . '.html';
@@ -431,9 +507,26 @@ class oxSeoEncoderArticle extends oxSeoEncoder
      * @param int       $iLang        language id
      * @param bool      $blRegenerate if TRUE forces seo url regeneration
      *
+     * @deprecated since 20110810 use oxSeoEncoderArticle::getArticleVendorUri()
+     * @todo after you remove this method also change all other calls with public method
+     *
      * @return string
      */
     protected function _getArticleVendorUri( $oArticle, $iLang, $blRegenerate = false )
+    {
+        return $this->getArticleVendorUri( $oArticle, $iLang, $blRegenerate );
+    }
+
+    /**
+     * Returns vendor seo uri for current article
+     *
+     * @param oxarticle $oArticle     article object
+     * @param int       $iLang        language id
+     * @param bool      $blRegenerate if TRUE forces seo url regeneration
+     *
+     * @return string
+     */
+    public function getArticleVendorUri( $oArticle, $iLang, $blRegenerate = false )
     {
         startProfile(__FUNCTION__);
 
@@ -509,9 +602,26 @@ class oxSeoEncoderArticle extends oxSeoEncoder
      * @param int       $iLang        language id
      * @param bool      $blRegenerate if TRUE forces seo url regeneration
      *
+     * @deprecated since 20110810 use oxSeoEncoderArticle::getArticleManufacturerUri()
+     * @todo after you remove this method also change all other calls with public method
+     *
      * @return string
      */
     protected function _getArticleManufacturerUri( $oArticle, $iLang, $blRegenerate = false )
+    {
+        return $this->getArticleManufacturerUri( $oArticle, $iLang, $blRegenerate );
+    }
+
+    /**
+     * Returns manufacturer seo uri for current article
+     *
+     * @param oxarticle $oArticle     article object
+     * @param int       $iLang        language id
+     * @param bool      $blRegenerate if TRUE forces seo url regeneration
+     *
+     * @return string
+     */
+    public function getArticleManufacturerUri( $oArticle, $iLang, $blRegenerate = false )
     {
         $sSeoUri = null;
         startProfile(__FUNCTION__);
@@ -667,6 +777,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
     {
         $sSeoUrl = null;
         $oArticle = oxNew( "oxarticle" );
+        $oArticle->setSkipAssign( true );
         if ( $oArticle->loadInLang( $iLang, $sObjectId ) ) {
             // choosing URI type to generate
             switch( $this->_getListType() ) {

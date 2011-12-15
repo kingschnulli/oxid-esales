@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlistTest.php 33262 2011-02-15 12:34:30Z arvydas.vapsva $
+ * @version   SVN: $Id: manufacturerlistTest.php 38654 2011-09-06 08:57:31Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -63,15 +63,100 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
         $oManufacturer = $this->getMock( "oxStdClass", array( "getId" ) );
         $oManufacturer->expects( $this->atLeastOnce() )->method( 'getId' )->will( $this->returnValue( "testId" ) );
 
-        $oView = $this->getMock( "manufacturerlist", array( "getManufacturerTree", "getActManufacturer", "getArticleList", "_processListArticles", "setMetaDescription", "setMetaKeywords" ) );
+        $oView = $this->getMock( "manufacturerlist", array( "getManufacturerTree", "getActManufacturer", "getArticleList", "_processListArticles", "_checkRequestedPage" ) );
         $oView->expects( $this->once() )->method( 'getManufacturerTree' )->will( $this->returnValue( true ) );
         $oView->expects( $this->atLeastOnce() )->method( 'getActManufacturer' )->will( $this->returnValue( $oManufacturer ) );
         $oView->expects( $this->atLeastOnce() )->method( 'getArticleList' );
         $oView->expects( $this->once() )->method( '_processListArticles' );
-        $oView->expects( $this->once() )->method( 'setMetaDescription' );
-        $oView->expects( $this->once() )->method( 'setMetaKeywords' );
+        $oView->expects( $this->once() )->method( '_checkRequestedPage' );
 
         $this->assertEquals( "page/list/list.tpl", $oView->render() );
+    }
+
+    /**
+     * Testing render() when passing existing manufacturer
+     *
+     * @return null
+     */
+    public function testRenderExistingManufacturer()
+    {
+            $sActManufacturer = "9434afb379a46d6c141de9c9e5b94fcf";
+
+        $oManufacturerTree = oxNew( 'oxmanufacturerlist' );
+        $oManufacturerTree->buildManufacturerTree( 'manufacturerlist', $sActManufacturer, oxConfig::getInstance()->getShopHomeURL() );
+
+        $oManufacturer = oxNew( 'oxmanufacturer' );
+        $oManufacturer->load( $sActManufacturer );
+        $oManufacturer->setIsVisible( true );
+
+        $oView = $this->getMock( "manufacturerlist", array( "getManufacturerTree", "getActManufacturer" ) );
+        $oView->expects( $this->any() )->method( 'getManufacturerTree' )->will( $this->returnValue( $oManufacturerTree ) );
+        $oView->expects( $this->any() )->method( 'getActManufacturer' )->will( $this->returnValue( $oManufacturer ) );
+
+        $this->assertEquals( "page/list/list.tpl", $oView->render() );
+    }
+
+    /**
+     * Testign render() when passing existing manufacturer, but requested page number exceeds possible
+     *
+     * @return null
+     */
+    public function testRenderExistingManufacturerRequestedPageNumerExceedsPossible()
+    {
+        modConfig::setParameter( "pgNr", 999 );
+        oxTestModules::addFunction( "oxUtils", "redirect", "{ throw new Exception('OK'); }" );
+
+            $sActManufacturer = "9434afb379a46d6c141de9c9e5b94fcf";
+
+        $oManufacturerTree = oxNew( 'oxmanufacturerlist' );
+        $oManufacturerTree->buildManufacturerTree( 'manufacturerlist', $sActManufacturer, oxConfig::getInstance()->getShopHomeURL() );
+
+        $oManufacturer = oxNew( 'oxmanufacturer' );
+        $oManufacturer->load( $sActManufacturer );
+        $oManufacturer->setIsVisible( true );
+
+        $oView = $this->getMock( "manufacturerlist", array( "getManufacturerTree", "getActManufacturer" ) );
+        $oView->expects( $this->any() )->method( 'getManufacturerTree' )->will( $this->returnValue( $oManufacturerTree ) );
+        $oView->expects( $this->any() )->method( 'getActManufacturer' )->will( $this->returnValue( $oManufacturer ) );
+
+        try {
+            $oView->render();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( 'OK', $oExcp->getMessage(), 'failed redirect on inactive category' );
+            return;
+        }
+
+        $this->fail( 'failed redirect on inactive category' );
+    }
+
+    /**
+     * Testign render() when passing existing manufacturer, but requested page number exceeds possible
+     *
+     * @return null
+     */
+    public function testRenderManufacturerHasNoProductsAssigned()
+    {
+        modConfig::setParameter( "pgNr", 999 );
+        oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
+
+            $sActManufacturer = "9434afb379a46d6c141de9c9e5b94fcf";
+
+        $oManufacturerTree = oxNew( 'oxmanufacturerlist' );
+        $oManufacturerTree->buildManufacturerTree( 'manufacturerlist', $sActManufacturer, oxConfig::getInstance()->getShopHomeURL() );
+
+        $oManufacturer = oxNew( 'oxmanufacturer' );
+        $oManufacturer->setId( "123" );
+        $oManufacturer->setIsVisible( true );
+
+        $oView = $this->getMock( "manufacturerlist", array( "getManufacturerTree", "getActManufacturer" ) );
+        $oView->expects( $this->any() )->method( 'getManufacturerTree' )->will( $this->returnValue( $oManufacturerTree ) );
+        $oView->expects( $this->any() )->method( 'getActManufacturer' )->will( $this->returnValue( $oManufacturer ) );
+
+        try {
+            $oView->render();
+        } catch ( Exception $oExcp ) {
+            $this->fail( 'failed redirect on inactive category' );
+        }
     }
 
     /**
@@ -266,6 +351,8 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
 
         $oManufacturer = new oxManufacturer();
         $oManufacturer->load($sManufacturerId);
+        $oManufacturer->setIsVisible(true);
+
 
         $oManufacturerList = $this->getProxyClass( "Manufacturerlist" );
         $oManufacturerList->setManufacturerTree( $oManufacturerTree );

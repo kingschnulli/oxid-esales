@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 35792 2011-06-03 08:00:18Z linas.kukulskis $
+ * @version   SVN: $Id: detailsTest.php 40552 2011-12-12 13:46:58Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -172,12 +172,15 @@ class Unit_Views_detailsTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', true );
 
         $this->getProxyClass( 'oxarticle' );
-        $oProductParent = $this->getMock( 'oxarticlePROXY', array( 'getSelectLists' ) );
+        $oProductParent = $this->getMock( 'oxarticlePROXY', array( 'getSelectLists', 'getId' ) );
         $oProductParent->expects( $this->once() )->method( 'getSelectLists');
+        $oProductParent->expects( $this->atLeastOnce() )->method( 'getId')->will( $this->returnValue( '123' ) );
+        $oProductParent->oxarticles__oxvarcount = new oxField( 10 );
 
         $oProduct = $this->getMock( 'oxarticle', array( 'getParentArticle', 'getVariants', 'getId' ) );
         $oProduct->expects( $this->never() )->method( 'getVariants');
         $oProduct->expects( $this->atLeastOnce() )->method( 'getId')->will( $this->returnValue( 'testArtId' ) );
+        $oProduct->oxarticles__oxvarcount = new oxField( 10 );
 
         $oVar1 = new oxarticle();
         $oVar1->setId( 'var1' );
@@ -198,7 +201,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oVarList->offsetSet( $oVar3->getId(), $oVar3 );
         $oVarList->offsetSet( $oVar4->getId(), $oVar4 );
 
-        $oProductParent->setNonPublicVar( '_aVariantsWithNotOrderables', $oVarList );
+        $oProductParent->setNonPublicVar( '_aVariantsWithNotOrderables', array( "full" => $oVarList ) );
         $oProductParent->setNonPublicVar( '_blNotBuyableParent', true );
 
         $oProduct->expects( $this->any() )->method( 'getParentArticle')->will( $this->returnValue( $oProductParent ) );
@@ -403,8 +406,12 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oArt->load('2000');
         $oArt->setId('_testArt');
         $oArt->save();
+
+        $oArticle = new oxArticle();
+        $oArticle->load('_testArt');
+
         $oDetails = $this->getProxyClass( 'details' );
-        $oDetails->setNonPublicVar( "_oProduct", $oArt );
+        $oDetails->setNonPublicVar( "_oProduct", $oArticle );
         $oDetails->addTags();
         $this->assertTrue( $oDetails->getTagCloudManager() instanceof oxTagCloud );
     }
@@ -715,11 +722,11 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testGetPictureGallery()
     {
-            $sArtID = "1672";
+        $sArtID = "096a1b0849d5ffa4dd48cd388902420b";
 
         $oArticle = new oxarticle();
         $oArticle->load($sArtID);
-        $sActPic =  oxConfig::getInstance()->getPictureUrl(null).$oArticle->oxarticles__oxpic1->value;
+        $sActPic =  oxConfig::getInstance()->getPictureUrl(null)."generated/product/1/380_340_75/".basename( $oArticle->oxarticles__oxpic1->value );
 
         $oDetails = $this->getMock( 'details', array( "getPicturesProduct" ) );
         $oDetails->expects( $this->once() )->method( 'getPicturesProduct')->will( $this->returnValue( $oArticle ) );
@@ -996,7 +1003,7 @@ class Unit_Views_detailsTest extends OxidTestCase
             $sKeywords .= ", Geschenke, Bar-Equipment";
 
         $oView = new oxubase();
-        $sTestKeywords = $oView->UNITprepareMetaKeyword( $sKeywords, true ) . ", testValue1 testValue2 testValue3";
+        $sTestKeywords = $oView->UNITprepareMetaKeyword( $sKeywords, true ) . ", testvalue1, testvalue2, testvalue3";
 
         $this->assertEquals( $sTestKeywords, $oDetails->UNITprepareMetaKeyword( null ) );
     }
@@ -1339,8 +1346,8 @@ class Unit_Views_detailsTest extends OxidTestCase
         modConfig::setParameter( 'listtype', 'search' );
 
         $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
-        
-        
+
+
         modConfig::setParameter( 'listtype', 'tag' );
 
         $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
@@ -1359,7 +1366,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'getCatTreePath')->will( $this->returnValue( array($oCat1, $oCat2 ) ) );
 
         $this->assertTrue( count($oView->getBreadCrumb()) >= 1 );
-        
+
     }
 
 
@@ -1449,6 +1456,102 @@ class Unit_Views_detailsTest extends OxidTestCase
         modConfig::setParameter( 'searchparam', 'aaa' );
 
         $this->assertEquals( 'aaa', $oDetails->getSearchParamForHtml() );
+    }
+
+    /**
+     * details::ratingIsAcitve() test case
+     *
+     * @return null
+     */
+    public function testRatingIsActive()
+    {
+        $oView = $this->getProxyClass( 'details' );
+
+        modConfig::getInstance()->setConfigParam( 'bl_perfLoadReviews', false );
+        $this->assertFalse( $oView->ratingIsActive() );
+
+        modConfig::getInstance()->setConfigParam( 'bl_perfLoadReviews', true );
+        $this->assertTrue( $oView->ratingIsActive() );
+    }
+
+    /**
+     * details::canRate() test case
+     *
+     * @return null
+     */
+    public function testCanRate_ratingIsNotActive()
+    {
+        $oView = $this->getMock( "details", array( "ratingIsActive", "getUser" ) );
+        $oView->expects( $this->once() )->method( 'ratingIsActive')->will( $this->returnValue( false ) );
+        $oView->expects( $this->never() )->method( 'getUser');
+
+        $oRating = $this->getMock( "oxrating", array( "allowRating" ) );
+        $oRating->expects( $this->never() )->method( 'allowRating');
+        oxTestModules::addModuleObject( "oxrating", $oRating );
+
+        $this->assertFalse( $oView->canRate() );
+    }
+
+    /**
+     * details::canRate() test case
+     *
+     * @return null
+     */
+    public function testCanRate_userNotLoggedIn()
+    {
+        $oView = $this->getMock( "details", array( "ratingIsActive", "getUser" ) );
+        $oView->expects( $this->once() )->method( 'ratingIsActive')->will( $this->returnValue( true ) );
+        $oView->expects( $this->once() )->method( 'getUser')->will( $this->returnValue( null ) );
+
+        $oRating = $this->getMock( "oxrating", array( "allowRating" ) );
+        $oRating->expects( $this->never() )->method( 'allowRating');
+        oxTestModules::addModuleObject( "oxrating", $oRating );
+
+        $this->assertFalse( $oView->canRate() );
+    }
+    
+    /**
+     * details::canRate() test case
+     *
+     * @return null
+     */
+    public function testCanRate_userAlreadyRated()
+    {
+        $oUser    = new oxUser();
+        $oProduct = new oxArticle();
+
+        $oView = $this->getMock( "details", array( "ratingIsActive", "getUser", "getProduct" ) );
+        $oView->expects( $this->once() )->method( 'ratingIsActive')->will( $this->returnValue( true ) );
+        $oView->expects( $this->once() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
+        $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+
+        $oRating = $this->getMock( "oxrating", array( "allowRating" ) );
+        $oRating->expects( $this->once() )->method( 'allowRating')->will( $this->returnValue( false ) );
+        oxTestModules::addModuleObject( "oxrating", $oRating );
+
+        $this->assertFalse( $oView->canRate() );
+    }
+
+    /**
+     * details::canRate() test case
+     *
+     * @return null
+     */
+    public function testCanRate()
+    {
+        $oUser    = new oxUser();
+        $oProduct = new oxArticle();
+
+        $oView = $this->getMock( "details", array( "ratingIsActive", "getUser", "getProduct" ) );
+        $oView->expects( $this->once() )->method( 'ratingIsActive')->will( $this->returnValue( true ) );
+        $oView->expects( $this->once() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
+        $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+
+        $oRating = $this->getMock( "oxrating", array( "allowRating" ) );
+        $oRating->expects( $this->once() )->method( 'allowRating')->will( $this->returnValue( true ) );
+        oxTestModules::addModuleObject( "oxrating", $oRating );
+
+        $this->assertTrue( $oView->canRate() );
     }
 
 }

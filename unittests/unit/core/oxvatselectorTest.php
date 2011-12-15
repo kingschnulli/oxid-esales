@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvatselectorTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxvatselectorTest.php 39596 2011-10-26 13:41:07Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -88,8 +88,12 @@ class Unit_Core_oxVatSelectorTest extends OxidTestCase
     protected function tearDown()
     {
         // deleting demo items
-        $this->oArticle->delete();
-        $this->oCategory->delete();
+        if ( $this->oArticle ) {
+           $this->oArticle->delete();
+        }
+        if ( $this->oCategory ) {
+            $this->oCategory->delete();
+        }
 
         oxTestModules::addFunction('oxVatSelector', 'clear', '{ oxVatSelector::$_aUserVatCache = array();}');
         oxNew('oxVatSelector')->clear();
@@ -191,22 +195,24 @@ class Unit_Core_oxVatSelectorTest extends OxidTestCase
 
     public function testGetVatForArticleCategory()
     {
-        $oArticle1 = $this->getMock( 'oxarticle', array( 'getCategoryIds' ) );
         //make sure getCategories are never called
+        $oArticle1 = $this->getMock( 'oxarticle', array( 'getCategoryIds' ) );
         $oArticle1->expects($this->never())->method( 'getCategoryIds' );
-        $oVatSelector = $this->getProxyClass("oxVatSelector");
-        $this->assertSame(false, $oVatSelector->UNITgetVatForArticleCategory($oArticle1));
 
+        $oVatSelector = new oxVatSelector();
+        $this->assertFalse( $oVatSelector->UNITgetVatForArticleCategory( $oArticle1 ) );
 
-        $this->oCategory->oxcategories__oxvat = new oxField(69, oxField::T_RAW);
+        $this->oCategory->oxcategories__oxvat = new oxField( 69, oxField::T_RAW );
         $this->oCategory->save();
 
-        $this->assertSame('69', $oVatSelector->UNITgetVatForArticleCategory($this->oArticle));
+        $oVatSelector = new oxVatSelector();
+        $this->assertEquals( 69, $oVatSelector->UNITgetVatForArticleCategory( $this->oArticle ) );
 
-        $this->oCategory->oxcategories__oxvat = new oxField(null, oxField::T_RAW);
+        $this->oCategory->oxcategories__oxvat = new oxField( null, oxField::T_RAW );
         $this->oCategory->save();
 
-        $this->assertSame(false, $oVatSelector->UNITgetVatForArticleCategory($this->oArticle));
+        $oVatSelector = new oxVatSelector();
+        $this->assertFalse( $oVatSelector->UNITgetVatForArticleCategory( $this->oArticle ) );
     }
 
     public function testGetVatForArticleCategoryArtWithoutCat()

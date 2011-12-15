@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxajax.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxajax.php 40261 2011-11-24 13:52:22Z linas.kukulskis $
  */
 
 // shop path for includes
@@ -514,7 +514,7 @@ class ajaxListComponent extends oxSuperCfg
      */
     protected function _getDataFields( $sQ )
     {
-        return oxDb::getDb(true)->getArray( $sQ );
+        return oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getArray( $sQ );
     }
 
     /**
@@ -612,10 +612,11 @@ class ajaxListComponent extends oxSuperCfg
      * Marks article seo url as expired
      *
      * @param array $aArtIds article id's
+     * @param array $aCatIds ids if categories, which must be removed from oxseo
      *
      * @return null
      */
-    public function resetArtSeoUrl( $aArtIds )
+    public function resetArtSeoUrl( $aArtIds, $aCatIds = null )
     {
         if ( empty( $aArtIds ) ) {
             return;
@@ -625,9 +626,24 @@ class ajaxListComponent extends oxSuperCfg
             $aArtIds = array( $aArtIds );
         }
 
+        $blCleanCats = false;
+        if ( $aCatIds ) {
+            if ( !is_array( $aCatIds ) ) {
+                $aCatIds = array( $aCatIds );
+            }
+            $sShopId = $this->getConfig()->getShopId();
+            $sQ = "delete from oxseo where oxtype='oxarticle' and oxobjectid='%s' and
+                   oxshopid='{$sShopId}' and oxparams in ('" . implode( ",", oxDb::getInstance()->quoteArray( $aCatIds ) ) . "')";
+            $oDb = oxDb::getDb();
+            $blCleanCats = true;
+        }
+
         $sShopId = $this->getConfig()->getShopId();
         foreach ( $aArtIds as $sArtId ) {
-           oxSeoEncoder::getInstance()->markAsExpired( $sArtId, $sShopId, 1, null, "oxtype='oxarticle'" );
+            oxSeoEncoder::getInstance()->markAsExpired( $sArtId, $sShopId, 1, null, "oxtype='oxarticle'" );
+            if ( $blCleanCats ) {
+                $oDb->execute( sprintf( $sQ, $sArtId ) );
+            }
         }
     }
 
@@ -645,8 +661,6 @@ class ajaxListComponent extends oxSuperCfg
                 oxUtils::getInstance()->oxResetFileCache();
             }
     }
-
-
 
     /**
      * Resets counters values from cache. Resets price category articles, category articles,

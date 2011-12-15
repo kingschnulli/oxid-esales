@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvatselector.php 26071 2010-02-25 15:12:55Z sarunas $
+ * @version   SVN: $Id: oxvatselector.php 39810 2011-11-05 09:22:44Z linas.kukulskis $
  */
 
 /**
@@ -29,7 +29,11 @@
  */
 class oxVatSelector extends oxSuperCfg
 {
-
+    /**
+     * State is VAT calculation for category is set
+     * @var bool
+     */
+    protected $_blCatVatSet = null;
 
     /**
      * oxVatSelector instance
@@ -67,11 +71,13 @@ class oxVatSelector extends oxSuperCfg
      * @throws oxObjectException if wrong country
      * @return double | false
      */
-    public function getUserVat(oxUser $oUser, $blCacheReset = false)
+    public function getUserVat( oxUser $oUser, $blCacheReset = false )
     {
         if (!$blCacheReset) {
-            if (self::$_aUserVatCache[$oUser->getId()] !== null) {
-                return self::$_aUserVatCache[$oUser->getId()];
+            $sId = $oUser->getId();
+            if ( array_key_exists( $sId, self::$_aUserVatCache ) &&
+                 self::$_aUserVatCache[$sId] !== null) {
+                return self::$_aUserVatCache[$sId];
             }
         }
 
@@ -122,21 +128,18 @@ class oxVatSelector extends oxSuperCfg
      */
     protected function _getVatForArticleCategory(oxArticle $oArticle)
     {
-        //return false;
-        //if (count($aCats)) {
-        //$sMainCat  = $aCats[0];
-        //$aCats = $oArticle->getCategoryIds();
-
         $oDb = oxDb::getDb();
         $sCatT = getViewName('oxcategories');
-        $sSelect = "SELECT oxid
-                    FROM $sCatT
-                    WHERE oxvat IS NOT NULL LIMIT 1";
 
-        //no category specific vats in shop?
-        //then for performance reasons we just return false
-        $iCount = $oDb->getOne($sSelect);
-        if (!$iCount) {
+        if ( $this->_blCatVatSet === null ) {
+            $sSelect = "SELECT oxid FROM $sCatT WHERE oxvat IS NOT NULL LIMIT 1";
+
+            //no category specific vats in shop?
+            //then for performance reasons we just return false
+            $this->_blCatVatSet = (bool) $oDb->getOne( $sSelect );
+        }
+
+        if ( !$this->_blCatVatSet ) {
             return false;
         }
 
@@ -144,18 +147,15 @@ class oxVatSelector extends oxSuperCfg
         $sSql = "SELECT c.oxvat
                  FROM $sCatT AS c, $sO2C AS o2c
                  WHERE c.oxid=o2c.oxcatnid AND
-                       o2c.oxobjectid = '".$oArticle->getId()."' AND
+                       o2c.oxobjectid = ".$oDb->quote( $oArticle->getId() )." AND
                        c.oxvat IS NOT NULL
                  ORDER BY o2c.oxtime ";
-
-        //echo $sSql."<br>";
 
         $fVat = $oDb->getOne($sSql);
         if ($fVat !== false && $fVat !== null) {
             return $fVat;
         }
 
-        //}
         return false;
     }
 

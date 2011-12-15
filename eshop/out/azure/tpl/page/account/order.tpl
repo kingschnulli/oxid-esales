@@ -10,9 +10,8 @@
     [{foreach from=$oOrders item=order }]
         <li>
             <table class="orderitems">
-                <colgroup><col width="50%" span="2"></colgroup>
                 <tr>
-                    <td valign="top">
+                    <td>
                         <dl>
                             <dt title="[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_DATE" }]">
                                 <strong id="accOrderDate_[{$order->oxorder__oxordernr->value}]">[{ $order->oxorder__oxorderdate->value|date_format:"%B %e, %Y" }]</strong>
@@ -56,11 +55,10 @@
                             </dd>
                         </dl>
                     </td>
-                    <td valign="top">
+                    <td>
                         <h3>[{ oxmultilang ident="PAGE_ACCOUNT_ORDER_CART" }]</h3>
-                        <table class="form orderhistory" width="100%">
-                            <colgroup><col width="98%"><col width="1%"></colgroup>
-                            [{foreach from=$order->getOrderArticles() item=orderitem name=testOrderItem}]
+                        <table class="orderhistory">
+                            [{foreach from=$order->getOrderArticles(true) item=orderitem name=testOrderItem}]
                                 [{assign var=sArticleId value=$orderitem->oxorderarticles__oxartid->value }]
                                 [{assign var=oArticle value=$oArticleList[$sArticleId] }]
                                 <tr id="accOrderAmount_[{$order->oxorder__oxordernr->value}]_[{$smarty.foreach.testOrderItem.iteration}]">
@@ -76,7 +74,7 @@
                                         [{/if }]
                                     [{/foreach}]
                                   </td>
-                                  <td>
+                                  <td class="small">
                                     [{* Commented due to Trusted Shops precertification. Enable if needed *}]
                                     [{*
                                     [{oxhasrights ident="TOBASKET"}]
@@ -102,7 +100,7 @@
   [{else}]
   [{ oxmultilang ident="PAGE_ACCOUNT_ORDER_EMPTYHISTORY" }]
   [{/if }]
-[{insert name="oxid_tracker" title=$template_title }]  
+[{insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 
 

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.php 35350 2011-05-13 12:50:56Z alfonsas $
+ * @version   SVN: $Id: category_main.php 40543 2011-12-12 13:45:08Z linas.kukulskis $
  */
 
 /**
@@ -110,12 +110,15 @@ class Category_Main extends oxAdminDetails
             , "OXSTOCKTEXT", "OXNOSTOCKTEXT", "OXDELIVERY", "OXFILE", "OXSEARCHKEYS", "OXTEMPLATE"
             , "OXQUESTIONEMAIL", "OXISSEARCH", "OXISCONFIGURABLE", "OXBUNDLEID", "OXFOLDER", "OXSUBCLASS"
             , "OXREMINDACTIVE", "OXREMINDAMOUNT", "OXVENDORID", "OXMANUFACTURERID", "OXSKIPDISCOUNTS"
-            , "OXBLFIXEDPRICE", "OXICON", "OXVARSELECT", "OXAMITEMID", "OXAMTASKID", "OXPIXIEXPORT", "OXPIXIEXPORTED"
+            , "OXBLFIXEDPRICE", "OXICON", "OXVARSELECT", "OXAMITEMID", "OXAMTASKID", "OXPIXIEXPORT", "OXPIXIEXPORTED", "OXSORT"
+            , "OXUPDATEPRICE", "OXUPDATEPRICEA", "OXUPDATEPRICEB", "OXUPDATEPRICEC", "OXUPDATEPRICETIME", "OXISDOWNLOADABLE"
         );
+        $aSkipFields = array_merge($aSkipFields, oxShopMetaData::getInstance()->getShopFields());
 
         $oDbHandler = oxNew( "oxDbMetaDataHandler" );
         $aFields = array_merge( $oDbHandler->getMultilangFields( 'oxarticles' ), $oDbHandler->getSinglelangFields( 'oxarticles', 0 ) );
         $aFields = array_diff( $aFields, $aSkipFields );
+        $aFields = array_unique( $aFields );
 
         return $aFields;
     }
@@ -127,8 +130,9 @@ class Category_Main extends oxAdminDetails
      */
     public function save()
     {
-        $myConfig  = $this->getConfig();
+        parent::save();
 
+        $myConfig  = $this->getConfig();
 
         $soxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval");

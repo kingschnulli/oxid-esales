@@ -36,8 +36,8 @@
         [{assign var="actCategory" value=$oView->getActiveCategory()}]
         <div id="overviewLink">
             <a href="[{ $actCategory->toListLink }]" class="overviewLink">[{ oxmultilang ident="WIDGET_BREADCRUMB_OVERVIEW" }]</a>
-        </div>        
-        <h2 class="pageHead category">[{$sPageHeadTitle|truncate:80}]</h2>        
+        </div>
+        <h2 class="pageHead">[{$sPageHeadTitle|truncate:80}]</h2>
         <div class="detailsParams listRefine bottomRound">
             <div class="pager refineParams clear" id="detailsItemsPager">
                 [{if $actCategory->prevProductLink}]<a id="linkPrevArticle" class="prev" href="[{$actCategory->prevProductLink}]">[{oxmultilang ident="DETAILS_LOCATOR_PREVIUOSPRODUCT"}]</a>[{/if}]
@@ -48,10 +48,11 @@
             </div>
         </div>
 
-        <div id="productinfo">
+        [{* RDFa offering*}]
+        <div id="productinfo" xmlns="http://www.w3.org/1999/xhtml" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:gr="http://purl.org/goodrelations/v1#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:v="http://rdf.data-vocabulary.org/#" xml:base="[{$oView->getLink()}]" typeof="gr:Offering" about="[{$oView->getLink()}]#offeringdata">
             [{include file="page/details/inc/fullproductinfo.tpl"}]
         </div>
     </div>
-    [{ insert name="oxid_tracker" title="DETAILS_PRODUCTDETAILS"|oxmultilangassign product=$oDetailsProduct cpath=$oView->getCatTreePath() }]    
+    [{ insert name="oxid_tracker" title="DETAILS_PRODUCTDETAILS"|oxmultilangassign product=$oDetailsProduct cpath=$oView->getCatTreePath() }]
 [{/capture}]
 [{include file="layout/page.tpl" sidebar="Left"}]

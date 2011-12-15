@@ -25,6 +25,14 @@
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
 
+class myDb extends oxDb
+{
+    public static function resetDb()
+    {
+        self::$_oDB = null;
+    }
+}
+
 class Unit_Views_oxShopControlTest extends OxidTestCase
 {
     protected function tearDown()
@@ -96,7 +104,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
      *
      * @return null
      */
-    public function testStartSystemComponentExceptionThrown()
+    public function testStartSystemComponentExceptionThrown1()
     {
         modConfig::setParameter( 'cl', null );
         modConfig::setParameter( 'fnc', "testFnc" );
@@ -110,11 +118,12 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oConfig->expects( $this->at( 2 ) )->method( 'getShopHomeUrl' );
 
         $oControl = $this->getMock( "oxShopControl", array( "getConfig", "_runOnce", "isAdmin", "_process", "_isDebugMode" ), array(), '', false );
-        $oControl->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ));
-        $oControl->expects( $this->once() )->method( '_runOnce' );
-        $oControl->expects( $this->once() )->method( 'isAdmin' )->will( $this->returnValue( false ));
-        $oControl->expects( $this->once() )->method( '_process' )->with( $this->equalTo( "start" ), $this->equalTo( "testFnc" ) )->will( $this->throwException( new oxSystemComponentException ));
-        $oControl->expects( $this->once() )->method( '_isDebugMode' )->will( $this->returnValue( true ));
+        $oControl->expects( $this->at(0) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ));
+        $oControl->expects( $this->at(1) )->method( '_runOnce' );
+        $oControl->expects( $this->at(2) )->method( 'isAdmin' )->will( $this->returnValue( false ));
+        $oControl->expects( $this->at(3) )->method( '_process' )->with( $this->equalTo( "start" ), $this->equalTo( "testFnc" ) )->will( $this->throwException( new oxSystemComponentException ));
+        $oControl->expects( $this->at(4) )->method( '_isDebugMode' )->will( $this->returnValue( true ));
+        $oControl->expects( $this->at(5) )->method( '_process' )->with( $this->equalTo( "exceptionError" ), $this->equalTo( "displayExceptionError" ) );
 
         try {
             $oControl->start();
@@ -144,11 +153,11 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oConfig->expects( $this->at( 2 ) )->method( 'getShopHomeUrl' );
 
         $oControl = $this->getMock( "oxShopControl", array( "getConfig", "_runOnce", "isAdmin", "_process", "_isDebugMode" ), array(), '', false );
-        $oControl->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ));
-        $oControl->expects( $this->once() )->method( '_runOnce' );
-        $oControl->expects( $this->once() )->method( 'isAdmin' )->will( $this->returnValue( false ));
-        $oControl->expects( $this->once() )->method( '_process' )->with( $this->equalTo( "start" ), $this->equalTo( "testFnc" ) )->will( $this->throwException( new oxSystemComponentException ));
-        $oControl->expects( $this->once() )->method( '_isDebugMode' )->will( $this->returnValue( true ));
+        $oControl->expects( $this->at(0) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ));
+        $oControl->expects( $this->at(1) )->method( '_runOnce' );
+        $oControl->expects( $this->at(2) )->method( 'isAdmin' )->will( $this->returnValue( false ));
+        $oControl->expects( $this->at(3) )->method( '_process' )->with( $this->equalTo( "start" ), $this->equalTo( "testFnc" ) )->will( $this->throwException( new oxSystemComponentException ));
+        $oControl->expects( $this->at(4) )->method( '_isDebugMode' )->will( $this->returnValue( true ));
 
         try {
             $oControl->start();
@@ -167,6 +176,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
      */
     public function testStartSystemComponentExceptionThrown_onlyInDebugMode()
     {
+        modConfig::setParameter( 'iDebug', -1 );
         modConfig::setParameter( 'cl', null );
         modConfig::setParameter( 'fnc', "testFnc" );
         oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{ throw new Exception("oxAddErrorToDisplayException"); }' );
@@ -181,10 +191,8 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         try {
             $oControl->start();
         } catch ( Exception $oExcp ) {
-            $this->assertNotEquals( "oxAddErrorToDisplayException", $oExcp->getMessage() );
-            return;
+            $this->fail( "Error while executing testStartSystemComponentExceptionThrown_onlyInDebugMode()" );
         }
-        $this->fail( "Error while executing testStartSystemComponentExceptionThrown_onlyInDebugMode()" );
      }
 
     /**
@@ -255,23 +263,36 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         oxTestModules::addFunction( 'oxUtils', 'isSearchEngine', '{ return false; }' );
 
         $iAt = 0;
-        $oConfig = $this->getMock( "oxStdClass", array( "setActiveView", "getTemplatePath", "getConfigParam" ) );
+        $oConfig = $this->getMock( "oxStdClass", array( "setActiveView", "getTemplatePath", "getConfigParam", "pageClose" ) );
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'getConfigParam' )->with( $this->equalTo( "blLogging" ))->will( $this->returnValue( true ) );
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'setActiveView' );
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'getTemplatePath' );
+        $oConfig->expects( $this->at( $iAt++ ) )->method( 'pageClose' );
 
-        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor" );
+        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", '_getOutputManager', '_isDebugMode', '_executeMaintenanceTasks' );
+
+        $oOut = $this->getMock( "oxOutput", array('output', 'flushOutput', 'sendHeaders') );
+        $oOut->expects( $this->once() )->method( 'output' )->with($this->equalTo('content'));
+        $oOut->expects( $this->once() )->method( 'flushOutput' )->will( $this->returnValue( null ) );
+        $oOut->expects( $this->once() )->method( 'sendHeaders' )->will( $this->returnValue( null ) );
 
         $oControl = $this->getMock( "oxShopControl", $aTasks, array(), '', false );
-        $oControl->expects( $this->exactly(3) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oControl->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
+        $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
+        $oControl->expects( $this->any() )->method( '_isDebugMode' )->will( $this->returnValue( true ) );
+        $oControl->expects( $this->atLeastOnce() )->method( '_executeMaintenanceTasks' );
 
-        try {
-            $oControl->UNITprocess( "info", null );
-        } catch ( oxSystemComponentException $oExcp ) {
-            return;
-        }
-        $this->fail( "Error while executing testProcessTemplateNotFound()" );
+        $oEx = oxNew( 'oxSystemComponentException' );
+        $oLang = oxLang::getInstance();
+        $oEx->setMessage( 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND' );
+        $oEx->setComponent( "info.tpl" );
+
+        $oUtilsView = $this->getMock( "oxUtilsView", array( 'addErrorToDisplay' ) );
+        $oUtilsView->expects( $this->once() )->method( 'addErrorToDisplay');
+        oxTestModules::addModuleObject('oxUtilsView', $oUtilsView);
+
+        $oControl->UNITprocess( "info", null );
     }
 
     /**
@@ -294,7 +315,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'getTemplatePath' )->will( $this->returnValue( $sTplPath ) );
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'pageClose' );
 
-        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", '_getOutputManager' );
+        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", '_getOutputManager', '_executeMaintenanceTasks' );
 
         $oOut = $this->getMock( "oxOutput", array('output', 'flushOutput', 'sendHeaders') );
         $oOut->expects( $this->once() )->method( 'output' )->with($this->equalTo('content'));
@@ -305,6 +326,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oControl->expects( $this->exactly(3) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
         $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
+        $oControl->expects( $this->atLeastOnce() )->method( '_executeMaintenanceTasks' );
 
         $oControl->UNITprocess( "info", null );
     }
@@ -326,7 +348,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'getTemplatePath' )->will( $this->returnValue( $sTplPath ) );
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'pageClose' );
 
-        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", '_getOutputManager', '_getErrors' );
+        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", '_getOutputManager', '_getErrors', '_executeMaintenanceTasks' );
 
         $oOut = $this->getMock( "oxOutput", array('output', 'flushOutput', 'sendHeaders', 'setOutputFormat') );
         $oOut->expects( $this->at(0) )->method( 'setOutputFormat' )->with( $this->equalTo( oxOutput::OUTPUT_FORMAT_JSON ) );
@@ -339,6 +361,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
         $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
         $oControl->expects( $this->any() )->method( '_getErrors' )->will( $this->returnValue( array() ) );
+        $oControl->expects( $this->atLeastOnce() )->method( '_executeMaintenanceTasks' );
 
         $oControl->UNITprocess( "info", null );
     }
@@ -360,7 +383,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'getTemplatePath' )->will( $this->returnValue( $sTplPath ) );
         $oConfig->expects( $this->at( $iAt++ ) )->method( 'pageClose' );
 
-        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", '_getOutputManager', '_getErrors' );
+        $aTasks = array( "isAdmin", "_log", "_startMonitor", "getConfig", "_stopMonitor", '_getOutputManager', '_getErrors', '_executeMaintenanceTasks' );
 
         $oOut = $this->getMock( "oxOutput", array('output', 'flushOutput', 'sendHeaders', 'setOutputFormat') );
         $oOut->expects( $this->at(0) )->method( 'setOutputFormat' )->with( $this->equalTo( oxOutput::OUTPUT_FORMAT_JSON ) );
@@ -378,6 +401,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oControl->expects( $this->exactly(3) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
         $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
+        $oControl->expects( $this->atLeastOnce() )->method( '_executeMaintenanceTasks' );
         $aErrors = array();
         $oDE = new oxDisplayError();
         $oDE->setMessage('test1');
@@ -411,50 +435,33 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
 
         $oControl = $this->getMock( "oxShopControl", array( "isAdmin", '_getOutputManager' ), array(), '', false );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
-        $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
+        $oControl->expects( $this->never() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
         $oControl->UNITstartMonitor();
         $oControl->UNITstopMonitor();
+
+        oxTestModules::addFunction( 'oxDebugInfo', 'formatAdoDbPerf', '{ return ""; }' );
 
         $oOut = $this->getMock( "oxOutput", array('output'));
         $oOut->expects( $this->once() )->method( 'output' )->with($this->equalTo('debuginfo'));
 
         $oControl = $this->getMock( "oxShopControl", array( "isAdmin", '_getOutputManager' ), array(), '', false );
         $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
-        $oControl->expects( $this->any() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
+        $oControl->expects( $this->once() )->method( '_getOutputManager' )->will( $this->returnValue( $oOut ) );
         $oControl->UNITstartMonitor();
         $oControl->UNITstopMonitor();
     }
 
     /**
-     * Testing if shop is debug mode in frontend
+     * Testing if shop is debug mode
      *
      * @return null
      */
-    public function testIsDebugMode_notAdminMode()
+    public function testIsDebugMode()
     {
-
-        $oControl = $this->getMock( "oxShopControl", array( "isAdmin" ), array(), '', false );
-        $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
+        $oControl = $this->getProxyClass( "oxShopControl" );
 
         modConfig::getInstance()->setConfigParam( "iDebug", -1 );
         $this->assertTrue( $oControl->UNITisDebugMode() );
-
-        modConfig::getInstance()->setConfigParam( "iDebug", 0 );
-        $this->assertFalse( $oControl->UNITisDebugMode() );
-    }
-
-    /**
-     * Testing if shop is debug mode in frontend
-     *
-     * @return null
-     */
-    public function testIsDebugMode_adminMode()
-    {
-        $oControl = $this->getMock( "oxShopControl", array( "isAdmin" ), array(), '', false );
-        $oControl->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
-
-        modConfig::getInstance()->setConfigParam( "iDebug", -1 );
-        $this->assertFalse( $oControl->UNITisDebugMode() );
 
         modConfig::getInstance()->setConfigParam( "iDebug", 0 );
         $this->assertFalse( $oControl->UNITisDebugMode() );
@@ -491,4 +498,20 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
    }
 
 
+
+    /**
+     * Test case for oxShopControl::_executeMaintenanceTasks();
+     *
+     * @return null
+     */
+    public function testExecuteMaintenanceTasks()
+    {
+        $oList = $this->getMock( 'oxArticleList', array( 'updateUpcomingPrices' ) );
+        $oList->expects( $this->once() )->method( 'updateUpcomingPrices' );
+
+        oxTestModules::addModuleObject( 'oxarticlelist', $oList );
+
+        $oControl = oxNew( "oxShopControl" );
+        $oControl->UNITexecuteMaintenanceTasks();
+    }
 }

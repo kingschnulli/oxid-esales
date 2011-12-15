@@ -21,7 +21,7 @@
 
 [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_ORDERNOMBER" }] [{ $order->oxorder__oxordernr->value }]
 
-[{foreach from=$order->getOrderArticles() item=oOrderArticle}]
+[{foreach from=$order->getOrderArticles(true) item=oOrderArticle}]
 [{ $oOrderArticle->oxorderarticles__oxamount->value }] [{ $oOrderArticle->oxorderarticles__oxtitle->getRawValue() }] [{ $oOrderArticle->oxorderarticles__oxselvariant->getRawValue() }]
 [{/foreach}]
 

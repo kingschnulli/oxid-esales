@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: navigation.php 32007 2010-12-17 15:10:27Z sarunas $
+ * @version   SVN: $Id: navigation.php 40211 2011-11-23 15:48:10Z linas.kukulskis $
  */
  /**
  * Administrator GUI navigation manager class.
@@ -153,11 +153,11 @@ class Navigation extends oxAdminView
         }
 
         //reseting content cache if needed
-        if ( $blDeleteCache = $myConfig->getConfigParam('blClearCacheOnLogout' ) ) {
-            $this->resetContentCache($blDeleteCache);
+        if ( $myConfig->getConfigParam('blClearCacheOnLogout' ) ) {
+            $this->resetContentCache();
         }
 
-        oxUtils::getInstance()->redirect('index.php');
+        oxUtils::getInstance()->redirect( 'index.php', true, 302 );
     }
 
     /**
@@ -193,7 +193,7 @@ class Navigation extends oxAdminView
                 }
             } else {
                 // Caching not allowed, redirecting
-                $myUtils->redirect( $sUrl  );
+                $myUtils->redirect( $sUrl, true, 302 );
             }
         }
 

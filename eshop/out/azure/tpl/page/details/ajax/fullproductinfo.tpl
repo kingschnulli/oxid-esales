@@ -18,7 +18,6 @@
 [{oxscript add="$( '#reviewRating' ).oxRating({openReviewForm: false, hideReviewButton: false});"}]
 [{oxscript add="$( '#writeNewReview' ).oxReview();"}]
 [{oxscript add="$( '#variants' ).oxArticleVariant();"}]
-[{oxscript add="$( 'ul.js-articleBox' ).oxArticleBox();"}]
 [{include file="page/details/inc/fullproductinfo.tpl"}]
 
 [{oxscript}]

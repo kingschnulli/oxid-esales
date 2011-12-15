@@ -44,7 +44,7 @@
                                 [{if !$product->hidePrev}]
                                     <a id="compareLeft_[{ $product->oxarticles__oxid->value }]" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="fnc=moveleft&amp;aid=`$product->oxarticles__oxnid->value`&amp;pgNr="|cat:$oView->getActPage() }]" class="navigation movePrev">&laquo;</a>
                                 [{/if}]
-                                <span>[{ oxmultilang ident="PAGE_PRODUCT_COMPARE_MOVE" }]</span>
+                                [{ oxmultilang ident="PAGE_PRODUCT_COMPARE_MOVE" }]
                                 [{if !$product->hideNext}]
                                     <a id="compareRight_[{ $product->oxarticles__oxid->value }]" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getActiveClassName() params="fnc=moveright&amp;aid=`$product->oxarticles__oxnid->value`&amp;pgNr="|cat:$oView->getActPage() }]" class="navigation moveNext">&raquo;</a>
                                 [{/if}]

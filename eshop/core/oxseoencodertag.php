@@ -99,7 +99,7 @@ class oxSeoEncoderTag extends oxSeoEncoder
 
         $sStdUrl   = $this->_trimUrl( $sStdUrl );
         $sObjectId = $this->getDynamicObjectId( $iShopId, $sStdUrl );
-        $sSeoUrl   = $this->_prepareUri( $sSeoUrl );
+        $sSeoUrl   = $this->_prepareUri( $this->addLanguageParam( $sSeoUrl, $iLang ) );
 
         //load details link from DB
         $sOldSeoUrl = $this->_loadFromDb( 'dynamic', $sObjectId, $iLang );
@@ -122,7 +122,7 @@ class oxSeoEncoderTag extends oxSeoEncoder
                 $sQ .= " and oxid = " . oxDb::getDb()->quote( $sOxid );
             }
 
-            if ( oxDb::getDb()->getOne( $sQ ) ) {
+            if ( oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT )->getOne( $sQ ) ) {
                 // creating unique
                 $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $sObjectId, $iLang );
 

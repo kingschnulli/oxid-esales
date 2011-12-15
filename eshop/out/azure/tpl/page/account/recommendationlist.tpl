@@ -6,13 +6,15 @@
         [{assign var="_statusMessage" value="PAGE_RECOMMENDATIONS_EDIT_LISTSAVED"|oxmultilangassign}]
         [{include file="message/success.tpl" statusMessage=$_statusMessage}]
     [{/if}]
-    <div class="listmaniaView clear">
-        [{include file="form/recommendation_edit.tpl" actvrecommlist=$_actvrecommlist}]
-    </div>
-    [{if !$oView->getActiveRecommList() }]
-        [{assign var="blEdit" value=true }]
-        [{include file="page/recommendations/inc/list.tpl"}]
-    [{/if}]
+    [{block name="account_redommendationlist_content"}]
+        <div class="listmaniaView clear">
+            [{include file="form/recommendation_edit.tpl" actvrecommlist=$_actvrecommlist}]
+        </div>
+        [{if !$oView->getActiveRecommList() }]
+            [{assign var="blEdit" value=true }]
+            [{include file="page/recommendations/inc/list.tpl"}]
+        [{/if}]
+    [{/block}]
     [{insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 [{capture append="oxidBlock_sidebar"}]

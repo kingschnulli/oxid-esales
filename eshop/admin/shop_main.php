@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_main.php 33570 2011-02-28 14:27:51Z vilma $
+ * @version   SVN: $Id: shop_main.php 40186 2011-11-23 15:43:42Z linas.kukulskis $
  */
 
 
@@ -31,6 +31,13 @@
  */
 class Shop_Main extends oxAdminDetails
 {
+    /**
+     * Shop field set size, limited to 64bit by MySQL
+     *
+     * @var int
+     */
+    const SHOP_FIELD_SET_SIZE = 64;
+
     /**
      * Executes parent method parent::render(), creates oxCategoryList and
      * oxshop objects, passes it's data to Smarty engine and returns name of
@@ -81,6 +88,7 @@ class Shop_Main extends oxAdminDetails
      */
     public function save()
     {
+        parent::save();
 
         $myConfig = $this->getConfig();
         $soxId = $this->getEditObjectId();
@@ -116,7 +124,11 @@ class Shop_Main extends oxAdminDetails
         }
 
 
-        $oShop->save();
+        try {
+            $oShop->save();
+        } catch ( oxExeption $e ) {
+            return;
+        }
 
         $this->_aViewData["updatelist"] =  "1";
 
@@ -186,6 +198,8 @@ class Shop_Main extends oxAdminDetails
 
     /**
      * Returns shop id and shop name array
+     *
+     * @deprecated since 4.6.0 call oxshop::getShopIds()
      *
      * @return array
      */

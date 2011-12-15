@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: block.oxhasrights.php 32829 2011-01-31 15:44:48Z sarunas $
+ * @version   SVN: $Id: block.oxhasrights.php 38502 2011-08-30 11:53:38Z linas.kukulskis $
  */
 
 /**

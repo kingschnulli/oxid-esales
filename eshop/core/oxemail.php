@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 33545 2011-02-25 13:17:37Z vilma $
+ * @version   SVN: $Id: oxemail.php 40302 2011-11-28 15:58:33Z vilma $
  */
 /**
  * Includes PHP mailer class.
@@ -111,6 +111,20 @@ class oxEmail extends PHPMailer
      * @var string
      */
     protected $_sSenedNowTemplatePlain = "email/plain/sendednow.tpl";
+
+    /**
+     * Send ordered download links mail template
+     *
+     * @var string
+     */
+    protected $_sSendDownloadsTemplate = "email/html/senddownloadlinks.tpl";
+
+    /**
+     * Send ordered download links plain mail template
+     *
+     * @var string
+     */
+    protected $_sSendDownloadsTemplatePlain = "email/plain/senddownloadlinks.tpl";
 
     /**
      * Wishlist mail template
@@ -377,7 +391,7 @@ class oxEmail extends PHPMailer
         $this->setCharSet();
 
         if ( $this->_getUseInlineImages() ) {
-            $this->_includeImages( $myConfig->getImageDir(), $myConfig->getImageUrl( isAdmin() ), $myConfig->getPictureUrl(null, false),
+            $this->_includeImages( $myConfig->getImageDir(), $myConfig->getImageUrl( false, false ), $myConfig->getPictureUrl(null, false),
                                    $myConfig->getImageDir(), $myConfig->getPictureDir(false));
         }
 
@@ -972,26 +986,28 @@ class oxEmail extends PHPMailer
             $sHomeUrl .= "su=" . $oActiveUser->getId();
         }
 
-        $this->setViewData( "sHomeUrl", $sHomeUrl );
-
-        // Process view data array through oxoutput processor
-        $this->_processViewArray();
-
-        $this->setBody( $oSmarty->fetch( $this->_sInviteTemplate ) );
-
-        $this->setAltBody( $oSmarty->fetch( $this->_sInviteTemplatePlain ) );
-        $this->setSubject( $oParams->send_subject );
-
         if ( is_array($oParams->rec_email) && count($oParams->rec_email) > 0  ) {
             foreach ( $oParams->rec_email as $sEmail ) {
                 if ( !empty( $sEmail ) ) {
+                    $sRegisterUrl  = oxUtilsUrl::getInstance()->appendParamSeparator( $sHomeUrl );
+                    //setting recipient user email
+                    $sRegisterUrl .= "re=" . md5($sEmail);
+                    $this->setViewData( "sHomeUrl", $sRegisterUrl );
+
+                    // Process view data array through oxoutput processor
+                    $this->_processViewArray();
+
+                    $this->setBody( $oSmarty->fetch( $this->_sInviteTemplate ) );
+
+                    $this->setAltBody( $oSmarty->fetch( $this->_sInviteTemplatePlain ) );
+                    $this->setSubject( $oParams->send_subject );
+
                     $this->setRecipient( $sEmail );
                     $this->setReplyTo( $oParams->send_email, $oParams->send_name );
                     $this->send();
                     $this->clearAllRecipients();
                 }
             }
-
             return true;
         }
 
@@ -1023,6 +1039,7 @@ class oxEmail extends PHPMailer
         $oLang = oxLang::getInstance();
         $oSmarty = $this->_getSmarty();
         $this->setViewData( "order", $oOrder );
+        $this->setViewData( "shopTemplateDir", $myConfig->getTemplateDir(false) );
 
         //deprecated var
         $oUser = oxNew( 'oxuser' );
@@ -1040,9 +1057,11 @@ class oxEmail extends PHPMailer
         $oLang->setBaseLanguage( $iOrderLang );
 
         $oSmarty->security_settings['INCLUDE_ANY'] = true;
-
-        $this->setBody( $oSmarty->fetch( $myConfig->getTemplatePath( $this->_sSenedNowTemplate, false ) ) );
-        $this->setAltBody( $oSmarty->fetch( $myConfig->getTemplatePath( $this->_sSenedNowTemplatePlain, false ) ) );
+        // force non admin to get correct paths (tpl, img)
+        $myConfig->setAdminMode( false );
+        $this->setBody( $oSmarty->fetch( $this->_sSenedNowTemplate ) );
+        $this->setAltBody( $oSmarty->fetch( $this->_sSenedNowTemplatePlain ) );
+        $myConfig->setAdminMode( true );
         $oLang->setTplLanguage( $iOldTplLang );
         $oLang->setBaseLanguage( $iOldBaseLang );
         // set it back
@@ -1050,6 +1069,70 @@ class oxEmail extends PHPMailer
 
         //Sets subject to email
         $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oShop->oxshops__oxsendednowsubject->getRawValue() );
+
+        $sFullName = $oOrder->oxorder__oxbillfname->getRawValue() . " " . $oOrder->oxorder__oxbilllname->getRawValue();
+
+        $this->setRecipient( $oOrder->oxorder__oxbillemail->value, $sFullName );
+        $this->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
+
+        return $this->send();
+    }
+
+    /**
+     * Sets mailer additional settings and sends "SendDownloadLinks" mail to user.
+     * Returns true on success.
+     *
+     * @param oxOrder $oOrder   order object
+     * @param string  $sSubject user defined subject [optional]
+     *
+     * @return bool
+     */
+    public function sendDownloadLinksMail( $oOrder, $sSubject = null )
+    {
+        $myConfig = $this->getConfig();
+
+        $iOrderLang = (int) ( isset( $oOrder->oxorder__oxlang->value ) ? $oOrder->oxorder__oxlang->value : 0 );
+
+        // shop info
+        $oShop = $this->_getShop( $iOrderLang );
+
+        //set mail params (from, fromName, smtp)
+        $this->_setMailParams( $oShop );
+
+        //create messages
+        $oLang = oxLang::getInstance();
+        $oSmarty = $this->_getSmarty();
+        $this->setViewData( "order", $oOrder );
+        $this->setViewData( "shopTemplateDir", $myConfig->getTemplateDir(false) );
+
+        //deprecated var
+        $oUser = oxNew( 'oxuser' );
+        $this->setViewData( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
+
+        // Process view data array through oxoutput processor
+        $this->_processViewArray();
+
+        // dodger #1469 - we need to patch security here as we do not use standard template dir, so smarty stops working
+        $aStore['INCLUDE_ANY'] = $oSmarty->security_settings['INCLUDE_ANY'];
+        //V send email in order language
+        $iOldTplLang = $oLang->getTplLanguage();
+        $iOldBaseLang = $oLang->getTplLanguage();
+        $oLang->setTplLanguage( $iOrderLang );
+        $oLang->setBaseLanguage( $iOrderLang );
+
+        $oSmarty->security_settings['INCLUDE_ANY'] = true;
+        // force non admin to get correct paths (tpl, img)
+        $myConfig->setAdminMode( false );
+        $this->setBody( $oSmarty->fetch( $this->_sSendDownloadsTemplate ) );
+        $this->setAltBody( $oSmarty->fetch( $this->_sSendDownloadsTemplatePlain ) );
+        $myConfig->setAdminMode( true );
+        $oLang->setTplLanguage( $iOldTplLang );
+        $oLang->setBaseLanguage( $iOldBaseLang );
+        // set it back
+        $oSmarty->security_settings['INCLUDE_ANY'] = $aStore['INCLUDE_ANY'] ;
+
+        //Sets subject to email
+        $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oLang->translateString("EMAIL_SENDDOWNLOADS_SUBJECT") );
 
         $sFullName = $oOrder->oxorder__oxbillfname->getRawValue() . " " . $oOrder->oxorder__oxbilllname->getRawValue();
 
@@ -1094,8 +1177,9 @@ class oxEmail extends PHPMailer
         $blAttashSucc = true;
         $sAttPath = oxUtilsFile::getInstance()->normalizeDir($sAttPath);
         foreach ( $aAttFiles as $iNum => $sAttFile ) {
-            if ( file_exists($sAttPath . $sAttFile) && is_file($sAttPath . $sAttFile) ) {
-                $blAttashSucc = $this->addAttachment( $sAttPath, $sAttFile );
+            $sFullPath = $sAttPath . $sAttFile;
+            if ( @is_readable( $sFullPath ) && @is_file( $sFullPath ) ) {
+                $blAttashSucc = $this->addAttachment( $sFullPath, $sAttFile );
             } else {
                 $blAttashSucc = false;
                 $aError[] = array( 5, $sAttFile );   //"Error: backup file $sAttFile not found";
@@ -1251,7 +1335,6 @@ class oxEmail extends PHPMailer
         $oArticle = oxNew( "oxarticle" );
         $oArticle->setSkipAbPrice( true );
         $oArticle->loadInLang( $iAlarmLang, $aParams['aid'] );
-
         $oLang = oxLang::getInstance();
 
         // create messages
@@ -1313,7 +1396,7 @@ class oxEmail extends PHPMailer
         $this->setSubject( $oShop->oxshops__oxname->value );
 
         if ( $sBody === null ) {
-            $sBody  = $oSmarty->fetch( $this->getConfig()->getTemplatePath( $this->_sPricealamrCustomerTemplate, true ) );
+            $sBody = $oSmarty->fetch( $this->_sPricealamrCustomerTemplate );
         }
 
         $this->setBody( $sBody );
@@ -1356,6 +1439,7 @@ class oxEmail extends PHPMailer
                 $aImageCache = array();
                 $myUtils = oxUtils::getInstance();
                 $myUtilsObject = oxUtilsObject::getInstance();
+                $oImgGenerator = oxNew( "oxDynImgGenerator" );
 
                 foreach ($matches as $aImage) {
 
@@ -1369,7 +1453,11 @@ class oxEmail extends PHPMailer
                         $sFileName = $oFileUtils->normalizeDir( $sAbsImageDir ) . str_replace( $sImageDirNoSSL, '', $image );
                     }
 
-                    if ($sFileName && @is_file($sFileName)) {
+                    if ( $sFileName && !@is_readable( $sFileName ) ) {
+                        $sFileName = $oImgGenerator->getImagePath( $sFileName );
+                    }
+
+                    if ( $sFileName ) {
                         $sCId = '';
                         if ( isset( $aImageCache[$sFileName] ) && $aImageCache[$sFileName] ) {
                             $sCId = $aImageCache[$sFileName];
@@ -1714,13 +1802,11 @@ class oxEmail extends PHPMailer
      */
     public function addAttachment( $sAttPath, $sAttFile = '', $sEncoding = 'base64', $sType = 'application/octet-stream' )
     {
-        $sFullPath = $sAttPath . $sAttFile;
-
-        $this->_aAttachments[] = array( $sFullPath, $sAttFile, $sEncoding, $sType );
+        $this->_aAttachments[] = array( $sAttPath, $sAttFile, $sEncoding, $sType );
         $blResult = false;
 
         try {
-             $blResult = parent::addAttachment( $sFullPath, $sAttFile, $sEncoding, $sType );
+             $blResult = parent::addAttachment( $sAttPath, $sAttFile, $sEncoding, $sType );
         } catch( Exception $oEx ) {
         }
 
@@ -2157,6 +2243,21 @@ class oxEmail extends PHPMailer
     public function getUser()
     {
         return $this->_aViewData["oUser"];
+    }
+
+    /**
+     * Get order files
+     *
+     * @param string $sOrderId order id
+     *
+     * @return oxOrderFileList
+     */
+    public function getOrderFileList( $sOrderId )
+    {
+        $oOrderList = oxNew('oxOrderFileList');
+        $oOrderList->loadOrderFiles( $sOrderId );
+
+        return $oOrderList;
     }
 
 }

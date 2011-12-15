@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
+ * @version   SVN: $Id: oxactionsTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -89,7 +89,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $sArtOxid = 'xxx';
         $this->_oAction->addArticle( $sArtOxid );
 
-        $sCheckOxid = oxDb::getDb(true)->getOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."' and oxartid = '$sArtOxid' ");
+        $sCheckOxid = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."' and oxartid = '$sArtOxid' ");
         if ( !$sCheckOxid ) {
             $this->fail( "fail adding article" );
         }
@@ -107,7 +107,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->_oAction->addArticle( $sArtOxid );
         $this->assertTrue( $this->_oAction->removeArticle( $sArtOxid ) );
 
-        $sCheckOxid = oxDb::getDb(true)->getOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."' and oxartid = '$sArtOxid' ");
+        $sCheckOxid = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."' and oxartid = '$sArtOxid' ");
         if ( $sCheckOxid ) {
             $this->fail("fail removing article");
         }
@@ -150,7 +150,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->_oAction->addArticle( $sArtOxid );
         $this->_oAction->delete();
 
-        $sCheckOxid = oxDb::getDb(true)->GetOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."'" );
+        $sCheckOxid = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->GetOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."'" );
         $oAction = oxNew("oxactions");
         if ( $sCheckOxid || $oAction->Load( $this->sOxId ) ) {
             $this->fail("fail deleting");
@@ -428,9 +428,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     {
         $oPromo = new oxactions();
         $oPromo->oxactions__oxpic = new oxField( "noSuchPic.jpg" );
-        $oConfig = modConfig::getInstance();
-
-        $this->assertEquals( $oConfig->getPictureUrl( "0/" )."nopic.jpg", $oPromo->getBannerPictureUrl() );
+        $this->assertEquals( modConfig::getInstance()->getPictureUrl( "master/" )."nopic.jpg", $oPromo->getBannerPictureUrl() );
     }
 
     /**

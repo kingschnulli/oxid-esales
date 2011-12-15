@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: startTest.php 32964 2011-02-07 12:11:49Z vilma $
+ * @version   SVN: $Id: startTest.php 37630 2011-07-28 14:27:25Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -197,6 +197,5 @@ class Unit_Views_startTest extends OxidTestCase
         $oView->getBanners();
 
     }
-
 
 }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshopcontrol.php 34115 2011-04-01 08:50:06Z sarunas $
+ * @version   SVN: $Id: oxshopcontrol.php 39722 2011-11-03 14:12:15Z vilma $
  */
 
 /**
@@ -116,16 +116,30 @@ class oxShopControl extends oxSuperCfg
             //possible reason: class does not exist etc. --> just redirect to start page
             if ( $this->_isDebugMode() ) {
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+                $this->_process( 'exceptionError', 'displayExceptionError' );
             }
             $oEx->debugOut();
-            oxUtils::getInstance()->redirect( $myConfig->getShopHomeUrl() .'cl=start' );
+
+            if ( !$myConfig->getConfigParam( 'iDebug' ) ) {
+                oxUtils::getInstance()->redirect( $myConfig->getShopHomeUrl() .'cl=start', true, 302 );
+            }
         } catch ( oxCookieException $oEx ) {
             // redirect to start page and display the error
             if ( $this->_isDebugMode() ) {
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
             }
-            oxUtils::getInstance()->redirect( $myConfig->getShopHomeUrl() .'cl=start' );
+            oxUtils::getInstance()->redirect( $myConfig->getShopHomeUrl() .'cl=start', true, 302 );
         }
+
+        catch ( oxException $oEx) {
+            //catching other not cought exceptions
+            if ( $this->_isDebugMode() ) {
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+                $this->_process( 'exceptionError', 'displayExceptionError' );
+                $oEx->debugOut();
+            }
+        }
+
     }
 
     /**
@@ -159,7 +173,7 @@ class oxShopControl extends oxSuperCfg
         $sParameterQuoted = $oDb->quote( $sParameter );
 
         $sQ = "insert into oxlogs (oxtime, oxshopid, oxuserid, oxsessid, oxclass, oxfnc, oxcnid, oxanid, oxparameter) ".
-              "values( '$sTime', '$sShopID', $sUserIDQuoted, $sSidQuoted, $sClassQuoted, $sFncQuoted, '$sCnid', '$sAnid', $sParameterQuoted )";
+              "values( '$sTime', '$sShopID', $sUserIDQuoted, $sSidQuoted, $sClassQuoted, $sFncQuoted, ".$oDb->quote( $sCnid ).", ".$oDb->quote( $sAnid ).", $sParameterQuoted )";
         $oDb->execute( $sQ );
     }
 
@@ -188,12 +202,12 @@ class oxShopControl extends oxSuperCfg
      */
     protected function _stopMonitor( $blIsCache = false, $blIsCached = false, $sViewID = null, $aViewData = array() )
     {
-        if ( $this->_isDebugMode() ) {
-            $myConfig = $this->getConfig();
+        if ( $this->_isDebugMode() && !$this->isAdmin() ) {
             /* @var $oDebugInfo oxDebugInfo */
+            $iDebug = $this->getConfig()->getConfigParam( 'iDebug' );
             $oDebugInfo = oxNew('oxDebugInfo');
 
-            $blHidden = ($this->getConfig()->getConfigParam( 'iDebug' ) == -1);
+            $blHidden = ($iDebug == -1);
 
             $sLog = '';
             $sLogId = md5(time().rand().rand());
@@ -201,7 +215,7 @@ class oxShopControl extends oxSuperCfg
             $sLog .= "<div id='debugInfoBlock_$sLogId' style='display:".($blHidden?'none':'block')."' class='debugInfoBlock' align='left'>";
 
             // outputting template params
-            if ( $myConfig->getConfigParam( 'iDebug' ) == 4 ) {
+            if ( $iDebug == 4 ) {
                 $sLog .= $oDebugInfo->formatTemplateData($aViewData);
             }
 
@@ -212,11 +226,11 @@ class oxShopControl extends oxSuperCfg
             $sLog .= $oDebugInfo->formatMemoryUsage();
             $sLog .= $oDebugInfo->formatExecutionTime($this->getTotalTime());
 
-            if (!isAdmin() && ($iDebug == 7)) {
+            if ( $iDebug == 7 ) {
                 $sLog .= $oDebugInfo->formatDbInfo();
             }
 
-            if (!isAdmin() && ($iDebug == 2 || $iDebug == 3 || $iDebug == 4)) {
+            if ( $iDebug == 2 || $iDebug == 3 || $iDebug == 4 ) {
                 $sLog .= $oDebugInfo->formatAdoDbPerf();
             }
 
@@ -241,6 +255,18 @@ class oxShopControl extends oxSuperCfg
     }
 
     /**
+     * Executes regular maintenance functions..
+     *
+     * @return null
+     */
+    protected function _executeMaintenanceTasks()
+    {
+        startProfile('executeMaintenanceTasks');
+        oxNew("oxarticlelist")->updateUpcomingPrices();
+        stopProfile('executeMaintenanceTasks');
+    }
+
+    /**
      * Initiates object (object::init()), executes passed function
      * (oxShopControl::executeFunction(), if method returns some string - will
      * redirect page and will call another function according to returned
@@ -259,6 +285,10 @@ class oxShopControl extends oxSuperCfg
     {
         startProfile('process');
         $myConfig = $this->getConfig();
+
+        // executing maintenance tasks
+        $this->_executeMaintenanceTasks();
+
         $myUtils  = oxUtils::getInstance();
         $sViewID = null;
 
@@ -376,12 +406,20 @@ class oxShopControl extends oxSuperCfg
         // check if template dir exists
         $sTemplateFile = $this->getConfig()->getTemplatePath( $sTemplateName, $this->isAdmin() ) ;
         if ( !file_exists( $sTemplateFile)) {
+
             $oEx = oxNew( 'oxSystemComponentException' );
             $oLang = oxLang::getInstance();
             $oEx->setMessage( 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND' );
             $oEx->setComponent( $sTemplateName );
-            throw $oEx;
+
+            $sTemplateName = "message/exception.tpl";
+
+            if ( $this->_isDebugMode() ) {
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+            }
+            $oEx->debugOut();
         }
+
         $aViewData = $oViewObject->getViewData();
 
         // Output processing. This is useful for modules. As sometimes you may want to process output manually.
@@ -518,7 +556,7 @@ class oxShopControl extends oxSuperCfg
      */
     protected function _isDebugMode()
     {
-        if ( !$this->isAdmin() && $this->getConfig()->getConfigParam( 'iDebug' ) ) {
+        if ( $this->getConfig()->getConfigParam( 'iDebug' ) ) {
             return true;
         }
 

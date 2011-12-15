@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitem.php 33319 2011-02-17 12:24:17Z sarunas $
+ * @version   SVN: $Id: oxbasketitem.php 40167 2011-11-23 14:38:23Z ramunas.skarbalius $
  */
 
 /**
@@ -203,7 +203,21 @@ class oxBasketItem extends oxSuperCfg
      * @var bool
      */
     protected $_iLanguageId = null;
-    
+
+    /**
+     * Ssl mode
+     *
+     * @var bool
+     */
+    protected $_blSsl = null;
+
+    /**
+     * Icon url
+     *
+     * @var string
+     */
+    protected $_sIconUrl = null;
+
     /**
      * Assigns basic params to basket item
      *  - oxbasketitem::_setArticle();
@@ -349,6 +363,7 @@ class oxBasketItem extends oxSuperCfg
             $oEx->setArticleNr( $oArticle->oxarticles__oxartnum->value );
             $oEx->setProductId( $oArticle->getProductId() );
             $oEx->setRemainingAmount( $this->_dAmount );
+            $oEx->setBasketIndex( $sItemKey );
             throw $oEx;
         }
     }
@@ -377,6 +392,8 @@ class oxBasketItem extends oxSuperCfg
     /**
      * Getter which returns image path according to SSL mode
      *
+     * @deprecated since 2011.11.07 not used any more, call getIconUrl() instead
+     *
      * @return string
      */
     public function getImageUrl()
@@ -396,7 +413,12 @@ class oxBasketItem extends oxSuperCfg
      */
     public function getIconUrl()
     {
-        return $this->getConfig()->getIconUrl( $this->getIcon() );
+        // icon url must be (re)loaded in case icon is not set or shop was switched between ssl/nonssl
+        if ( $this->_sIconUrl === null || $this->_blSsl != $this->getConfig()->isSsl() ) {
+            $this->setLanguageId( oxLang::getInstance()->getBaseLanguage() );
+            $this->_sIconUrl = $this->getArticle()->getIconUrl();
+        }
+        return $this->_sIconUrl;
     }
 
     /**
@@ -527,21 +549,23 @@ class oxBasketItem extends oxSuperCfg
     {
         if ( $this->_sTitle === null || $this->getLanguageId() != oxLang::getInstance()->getBaseLanguage() ) {
 
-            $this->setLanguageId( oxLang::getInstance()->getBaseLanguage() );    
-            
+            $this->setLanguageId( oxLang::getInstance()->getBaseLanguage() );
+
             $oArticle = $this->getArticle( );
             $this->_sTitle = $oArticle->oxarticles__oxtitle->value;
-            
+
             if ( $oArticle->oxarticles__oxvarselect->value ) {
                 $this->_sTitle = $this->_sTitle. ', ' . $this->getVarSelect();
             }
         }
-        
+
         return $this->_sTitle;
     }
 
     /**
      * Returns product icon URL
+     *
+     * @deprecated 2011.11.07 not used any more, call getIconUrl() instead
      *
      * @return string
      */
@@ -557,7 +581,12 @@ class oxBasketItem extends oxSuperCfg
      */
     public function getLink()
     {
-        return $this->_sLink;
+        if ( $this->_sLink === null || $this->getLanguageId() != oxLang::getInstance()->getBaseLanguage() ) {
+            $this->setLanguageId( oxLang::getInstance()->getBaseLanguage() );
+            $this->_sLink = oxUtilsUrl::getInstance()->cleanUrl( $this->getArticle()->getLink(), array( 'force_sid' ) );
+        }
+
+        return $this->getSession()->processUrl( $this->_sLink );
     }
 
     /**
@@ -671,19 +700,24 @@ class oxBasketItem extends oxSuperCfg
      */
     protected function _setArticle( $sProductId )
     {
+        $oConfig = $this->getConfig();
         $oArticle = $this->getArticle( true, $sProductId );
 
         // product ID
         $this->_sProductId = $sProductId;
 
         $this->getTitle();
-       
+
         // icon and details URL's
-        $this->_sIcon = $oArticle->oxarticles__oxicon->value;
-        $this->_sLink = $oArticle->getLink();
+        $this->_sIcon    = $oArticle->oxarticles__oxicon->value;
+        $this->_sIconUrl = $oArticle->getIconUrl();
+        $this->_blSsl    = $oConfig->isSsl();
+
+        // removing force_sid from the link (incase it'll change)
+        $this->_sLink    = oxUtilsUrl::getInstance()->cleanUrl( $oArticle->getLink(), array( 'force_sid' ) );
 
         // shop Ids
-        $this->_sShopId       = $this->getConfig()->getShopId();
+        $this->_sShopId       = $oConfig->getShopId();
         $this->_sNativeShopId = $oArticle->oxarticles__oxshopid->value;
 
         // SSL/NON SSL image paths
@@ -925,10 +959,10 @@ class oxBasketItem extends oxSuperCfg
             $oArticle = $this->getArticle( );
             $this->_sVarSelect = $oArticle->oxarticles__oxvarselect->value ? $oArticle->oxarticles__oxvarselect->value : '';
         }
-        
+
         return $this->_sVarSelect;
     }
-    
+
     /**
      * Get language id
      *
@@ -938,12 +972,12 @@ class oxBasketItem extends oxSuperCfg
     {
         return $this->_iLanguageId;
     }
-    
+
     /**
      * Set language Id
      *
      * @param integer $iLanguageId language id
-     * 
+     *
      * @return none
      */
     public function setLanguageId( $iLanguageId )

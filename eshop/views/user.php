@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
+ * @version   SVN: $Id: user.php 40395 2011-11-30 15:30:30Z linas.kukulskis $
  */
 
 /**
@@ -97,7 +97,7 @@ class User extends oxUBase
 
             $oBasket = $this->getSession()->getBasket();
             if ( $this->_blIsOrderStep && $myConfig->getConfigParam( 'blPsBasketReservationEnabled' ) && (!$oBasket || ( $oBasket && !$oBasket->getProductsCount() )) ) {
-                oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() .'cl=basket' );
+                oxUtils::getInstance()->redirect( $myConfig->getShopHomeURL() .'cl=basket', true, 302 );
             }
         }
 
@@ -171,10 +171,16 @@ class User extends oxUBase
     public function getOrderRemark()
     {
         if ( $this->_sOrderRemark === null ) {
-            $this->_sOrderRemark = false;
-            if ( $sOrderRemark = oxSession::getVar( 'ordrem' ) ) {
-                $this->_sOrderRemark = oxConfig::checkSpecialChars( $sOrderRemark );
+            $sOrderRemark = false;
+            // if already connected, we can use the session
+            if ( $this->getUser() ) {
+                $sOrderRemark = oxSession::getVar( 'ordrem' );
+            } else {
+                // not connected so nowhere to save, we're gonna use what we get from post
+                $sOrderRemark = oxConfig::getParameter( 'order_remark', true );
             }
+
+            $this->_sOrderRemark = $sOrderRemark ? oxConfig::checkSpecialChars( $sOrderRemark ) : false;
         }
         return $this->_sOrderRemark;
     }
@@ -266,9 +272,26 @@ class User extends oxUBase
 
         $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_CHECKOUT_USER', oxLang::getInstance()->getBaseLanguage(), false );
         $aPath['link']  = $this->getLink();
-        
+
         $aPaths[] = $aPath;
 
         return $aPaths;
     }
+
+    /**
+     * Returns warning message if user want to buy downloadable product without registration.
+     *
+     * @return bool
+     */
+    public function isDownloadableProductWarning()
+    {
+        $oBasket = $this->getSession()->getBasket();
+        if ( $oBasket && $this->getConfig()->getConfigParam( "blEnableDownloads" ) ) {
+            if ( $oBasket->hasDownloadableProducts() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

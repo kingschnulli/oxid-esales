@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrecommlist.php 32881 2011-02-03 11:45:36Z sarunas $
+ * @version   SVN: $Id: oxrecommlist.php 40351 2011-11-29 16:16:28Z linas.kukulskis $
  */
 
 /**
@@ -176,7 +176,7 @@ class oxRecommList extends oxBase implements oxIUrl
         }
 
         $oDb = oxDb::getDb();
-        $sSelect = 'select oxdesc from oxobject2list where oxlistid = "'.$this->getId().'" and oxobjectid = '.$oDb->quote( $sOXID );
+        $sSelect = 'select oxdesc from oxobject2list where oxlistid = '.$oDb->quote( $this->getId() ).' and oxobjectid = '.$oDb->quote( $sOXID );
         return $oDb->getOne( $sSelect );
     }
 
@@ -191,7 +191,7 @@ class oxRecommList extends oxBase implements oxIUrl
     {
         if ( $sOXID ) {
             $oDb = oxDb::getDb();
-            $sQ = "delete from oxobject2list where oxobjectid = ".$oDb->quote( $sOXID ) ." and oxlistid='".$this->getId()."'";
+            $sQ = "delete from oxobject2list where oxobjectid = ".$oDb->quote( $sOXID ) ." and oxlistid=".$oDb->quote( $this->getId() );
             return $oDb->execute( $sQ );
         }
     }
@@ -209,9 +209,9 @@ class oxRecommList extends oxBase implements oxIUrl
         $blAdd = false;
         if ( $sOXID ) {
             $oDb = oxDb::getDb();
-            if ( !$oDb->getOne( "select oxid from oxobject2list where oxobjectid=".$oDb->quote( $sOXID )." and oxlistid='".$this->getId()."'" ) ) {
+            if ( !$oDb->getOne( "select oxid from oxobject2list where oxobjectid=".$oDb->quote( $sOXID )." and oxlistid=".$oDb->quote( $this->getId() ) ) ) {
                 $sUid  = oxUtilsObject::getInstance()->generateUID();
-                $sQ    = "insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( '$sUid', ".$oDb->quote( $sOXID ).", '".$this->getId()."', ".$oDb->quote( $sDesc )." )";
+                $sQ    = "insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( '$sUid', ".$oDb->quote( $sOXID ).", ".$oDb->quote( $this->getId() ).", ".$oDb->quote( $sDesc )." )";
                 $blAdd = $oDb->execute( $sQ );
             }
         }
@@ -355,7 +355,7 @@ class oxRecommList extends oxBase implements oxIUrl
 
             $sPartial = substr( $sSelect, strpos( $sSelect, ' from ' ) );
             $sSelect  = "select count( distinct rl.oxid ) $sPartial ";
-            $iCnt = oxDb::getDb()->getOne( $sSelect );
+            $iCnt = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT )->getOne( $sSelect );
         }
         return $iCnt;
     }

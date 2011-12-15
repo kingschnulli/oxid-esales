@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategory.php 35223 2011-05-10 06:46:21Z sarunas $
+ * @version   SVN: $Id: oxcategory.php 40309 2011-11-29 08:30:19Z linas.kukulskis $
  */
 
 /**
@@ -136,6 +136,12 @@ class oxCategory extends oxI18n implements oxIUrl
     protected $_aSeoUrls = array();
 
     /**
+     * Category attibutes cache
+     * @var array
+     */
+    protected static $_aCatAttributes = array();
+
+    /**
      * Class constructor, initiates parent constructor (parent::oxI18n()).
      */
     public function __construct()
@@ -212,8 +218,10 @@ class oxCategory extends oxI18n implements oxIUrl
     public function delete( $sOXID = null)
     {
         if ( !$this->getId() ) {
-            $this->load( $sOXID);
+            $this->load( $sOXID );
         }
+
+        $sOXID = isset( $sOXID ) ? $sOXID : $this->getId();
 
 
         $myConfig = $this->getConfig();
@@ -222,14 +230,13 @@ class oxCategory extends oxI18n implements oxIUrl
 
         if ( $this->oxcategories__oxright->value == ($this->oxcategories__oxleft->value+1) ) {
             $myUtilsPic = oxUtilsPic::getInstance();
+            $sDir = $myConfig->getPictureDir(false);
 
             // only delete empty categories
             // #1173M - not all pic are deleted, after article is removed
-            $myUtilsPic->safePictureDelete($this->oxcategories__oxthumb->value, $myConfig->getPictureDir(false).'/0', 'oxcategories', 'oxthumb' );
-
-            $myUtilsPic->safePictureDelete($this->oxcategories__oxicon->value, $myConfig->getPictureDir(false).'/icon', 'oxcategories', 'oxicon' );
-
-            $myUtilsPic->safePictureDelete($this->oxcategories__oxpromoicon->value, $myConfig->getPictureDir(false).'/icon', 'oxcategories', 'oxpromoicon' );
+            $myUtilsPic->safePictureDelete( $this->oxcategories__oxthumb->value, $sDir . '/master/thumb', 'oxcategories', 'oxthumb' );
+            $myUtilsPic->safePictureDelete( $this->oxcategories__oxicon->value, $sDir . '/master/icon', 'oxcategories', 'oxicon' );
+            $myUtilsPic->safePictureDelete( $this->oxcategories__oxpromoicon->value, $sDir . '/master/promo_icon', 'oxcategories', 'oxpromoicon' );
 
             $sAdd = " and oxshopid = '" . $this->getShopId() . "' ";
 
@@ -242,9 +249,9 @@ class oxCategory extends oxI18n implements oxIUrl
                             AND OXRIGHT >   ".((int) $this->oxcategories__oxright->value).$sAdd );
 
             // delete entry
-            $blRet = parent::delete();
+            $blRet = parent::delete( $sOXID );
 
-            $sOxidQuoted = $oDB->quote($this->oxcategories__oxid->value);
+            $sOxidQuoted = $oDB->quote( $sOXID );
             // delete links to articles
             $oDB->execute( "delete from oxobject2category where oxobject2category.oxcatnid=$sOxidQuoted ");
 
@@ -719,10 +726,14 @@ class oxCategory extends oxI18n implements oxIUrl
     {
         $sActCat = $this->getId();
 
-        $oAttrList = oxNew( "oxAttributeList" );
-        $oAttrList->getCategoryAttributes( $sActCat, $this->getLanguage() );
+        $sKey = md5( $sActCat . serialize( oxSession::getVar( 'session_attrfilter' ) ) );
+        if ( !isset( self::$_aCatAttributes[$sKey] ) ) {
+            $oAttrList = oxNew( "oxAttributeList" );
+            $oAttrList->getCategoryAttributes( $sActCat, $this->getLanguage() );
+            self::$_aCatAttributes[$sKey] = $oAttrList;
+        }
 
-        return $oAttrList;
+        return self::$_aCatAttributes[$sKey];
     }
 
     /**
@@ -884,7 +895,7 @@ class oxCategory extends oxI18n implements oxIUrl
 
         $oDB = oxDb::getDb();
 
-        $sOldParentID = $oDB->getOne( "select oxparentid from oxcategories where oxid = '".$this->getId()."'");
+        $sOldParentID = $oDB->getOne( "select oxparentid from oxcategories where oxid = ".$oDB->quote( $this->getId() ));
 
         if ( $this->_blIsSeoObject && $this->isAdmin() ) {
             oxSeoEncoderCategory::getInstance()->markRelatedAsExpired($this);
@@ -930,7 +941,7 @@ class oxCategory extends oxI18n implements oxIUrl
                 //echo "<br>* ) Can't asign category to it's child";
 
                 //Restoring old parentid, stoping further actions
-                $sRestoreOld = "UPDATE oxcategories SET OXPARENTID = ".$oDB->quote($sOldParentID)." WHERE oxid = '".$this->getId()."'";
+                $sRestoreOld = "UPDATE oxcategories SET OXPARENTID = ".$oDB->quote($sOldParentID)." WHERE oxid = ".$oDB->quote($this->getId());
                 $oDB->execute( $sRestoreOld );
                 return false;
             }
@@ -1004,7 +1015,15 @@ class oxCategory extends oxI18n implements oxIUrl
      */
     public function getIconUrl()
     {
-        return $this->getPictureUrlForType( $this->oxcategories__oxicon->value, 'icon');
+        if ( ( $sIcon = $this->oxcategories__oxicon->value ) ) {
+            $oConfig = $this->getConfig();
+            $sSize = $oConfig->getConfigParam( 'sCatIconsize' );
+            if ( !isset( $sSize ) ) {
+                $sSize = $oConfig->getConfigParam( 'sIconsize' );
+            }
+
+            return oxPictureHandler::getInstance()->getPicUrl( "category/icon/", $sIcon, $sSize );
+        }
     }
 
     /**
@@ -1014,7 +1033,10 @@ class oxCategory extends oxI18n implements oxIUrl
      */
     public function getThumbUrl()
     {
-        return $this->getPictureUrlForType( $this->oxcategories__oxthumb->value, '0' );
+        if ( ( $sIcon = $this->oxcategories__oxthumb->value ) ) {
+            $sSize = $this->getConfig()->getConfigParam( 'sCatThumbnailsize' );
+            return oxPictureHandler::getInstance()->getPicUrl( "category/thumb/", $sIcon, $sSize );
+        }
     }
 
     /**
@@ -1024,20 +1046,22 @@ class oxCategory extends oxI18n implements oxIUrl
      */
     public function getPromotionIconUrl()
     {
-        return $this->getPictureUrlForType( $this->oxcategories__oxpromoicon->value, 'icon');
+        if ( ( $sIcon = $this->oxcategories__oxpromoicon->value ) ) {
+            $sSize = $this->getConfig()->getConfigParam( 'sCatPromotionsize' );
+            return oxPictureHandler::getInstance()->getPicUrl( "category/promo_icon/", $sIcon, $sSize );
+        }
     }
 
     /**
-     * Retusnr category  picture url if exist, false - if not
+     * Returns category picture url if exist, false - if not
      *
      * @param string $sPicName picture name
      * @param string $sPicType picture type relatet with picture dir: icon - icon; 0 - image
      *
      * @return mixed
      */
-    public function getPictureUrlForType($sPicName, $sPicType)
+    public function getPictureUrlForType( $sPicName, $sPicType )
     {
-
         if ( $sPicName ) {
             return $this->getPictureUrl() . $sPicType . '/' . $sPicName;
         } else {
@@ -1076,6 +1100,18 @@ class oxCategory extends oxI18n implements oxIUrl
      */
     public function getLongDesc()
     {
-        return oxUtilsView::getInstance()->parseThroughSmarty( $this->oxcategories__oxlongdesc->getRawValue(), $this->getId().$this->getLanguage() );
+        if ( isset( $this->oxcategories__oxlongdesc ) && $this->oxcategories__oxlongdesc instanceof oxField ) {
+           return oxUtilsView::getInstance()->parseThroughSmarty( $this->oxcategories__oxlongdesc->getRawValue(), $this->getId().$this->getLanguage() );
+        }
+    }
+
+    /**
+     * Returns category title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->oxcategories__oxtitle->value;
     }
 }

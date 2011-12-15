@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserpayment.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxuserpayment.php 39576 2011-10-26 13:34:00Z linas.kukulskis $
  */
 
 /**
@@ -151,7 +151,8 @@ class oxUserPayment extends oxBase
 
         //encode sensitive data
         if ( $sValue = $this->oxuserpayments__oxvalue->value ) {
-            $sEncodedValue = oxDb::getDb()->getOne( "select encode( " . oxDb::getDb()->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )" );
+            $oDb = oxDb::getDb();
+            $sEncodedValue = $oDb->getOne( "select encode( " . $oDb->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )" );
             $this->oxuserpayments__oxvalue->setValue($sEncodedValue);
         }
 
@@ -172,9 +173,11 @@ class oxUserPayment extends oxBase
      */
     protected function _update()
     {
+        $oDb = oxDb::getDb();
+
         //encode sensitive data
         if ( $sValue = $this->oxuserpayments__oxvalue->value ) {
-            $sEncodedValue = oxDb::getDb()->getOne( "select encode( " . oxDb::getDb()->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )" );
+            $sEncodedValue = $oDb->getOne( "select encode( " . $oDb->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )" );
             $this->oxuserpayments__oxvalue->setValue($sEncodedValue);
         }
 
@@ -222,8 +225,10 @@ class oxUserPayment extends oxBase
     {
         $blGet = false;
         if ( $oUser && $sPaymentType != null ) {
-            $sSelect  = 'select oxid from oxuserpayments where oxpaymentsid=' . oxDb::getDb()->quote( $sPaymentType ) . ' and oxuserid="' . $oUser->getId() . '" ';
-            if ( ( $sOxId = oxDb::getDb()->getOne( $sSelect ) ) ) {
+            $oDb = oxDb::getDb();
+            $sQ  = 'select oxpaymentid from oxorder where oxpaymenttype=' . $oDb->quote( $sPaymentType ) . ' and
+                    oxuserid=' . $oDb->quote( $oUser->getId() ).' order by oxorderdate desc';
+            if ( ( $sOxId = $oDb->getOne( $sQ ) ) ) {
                 $blGet = $this->load( $sOxId );
             }
         }

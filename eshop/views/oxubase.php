@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 36412 2011-06-17 07:03:17Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 39569 2011-10-26 11:29:35Z linas.kukulskis $
  */
 
 /**
@@ -40,16 +40,16 @@ define( 'VIEW_INDEXSTATE_NOINDEXFOLLOW', 2 );   //  no index / follow
 class oxUBase extends oxView
 {
     /**
-     * Checks if feature is enabled
-     *
-     * @param string $sName feature name
-     *
-     * @return bool
+     * Facebook widget status marker
+     * @var bool
      */
-    public function isActive( $sName )
-    {
-        return $this->getConfig()->getConfigParam( "bl".$sName."Enabled" );
-    }
+    protected $_blFbWidgetsOn = null;
+
+    /**
+     * Characters which should be removed while preparing meta keywords
+     * @var string
+     */
+    protected $_sRemoveMetaChars = '.\+*?[^]$(){}=!<>|:&';
 
     /**
      * Array of component objects.
@@ -536,6 +536,39 @@ class oxUBase extends oxView
     protected $_sActiveUsername = null;
 
     /**
+     * Components which needs to be initialized/rendered (depending
+     * on cache and its cache status)
+     * @var array
+     */
+    protected static $_aCollectedComponentNames = null;
+
+    /**
+     * Returns component names
+     *
+     * @return array
+     */
+    protected function _getComponentNames()
+    {
+        if ( self::$_aCollectedComponentNames === null ) {
+            self::$_aCollectedComponentNames = array_merge( $this->_aComponentNames, $this->_aUserComponentNames );
+
+            // #1721: custom component handling. At the moment it is not possible to override this variable in oxubase,
+            // so we added this array to config.inc.php file
+            if ( ( $aUserCmps = $this->getConfig()->getConfigParam( 'aUserComponentNames' ) ) ) {
+                self::$_aCollectedComponentNames = array_merge( self::$_aCollectedComponentNames, $aUserCmps );
+            }
+
+            if ( oxConfig::getParameter( '_force_no_basket_cmp' ) ) {
+                unset( self::$_aCollectedComponentNames['oxcmp_basket'] );
+            }
+        }
+
+        // resetting array pointer
+        reset( self::$_aCollectedComponentNames );
+        return self::$_aCollectedComponentNames;
+    }
+
+    /**
      * In non admin mode checks if request was NOT processed by seo handler.
      * If NOT, then tries to load alternative SEO url and if url is available -
      * redirects to it. If no alternative path was found - 404 header is emitted
@@ -581,22 +614,12 @@ class oxUBase extends oxView
     {
         $this->_processRequest();
 
-        if ( oxConfig::getParameter( '_force_no_basket_cmp' ) ) {
-            unset( $this->_aComponentNames['oxcmp_basket'] );
-        }
-
-        // as the objects are cached by dispatcher we have to watch out, that we don't add these components twice
-        if ( !$this->_blCommonAdded ) {
-            $this->_aComponentNames = array_merge( $this->_aComponentNames, $this->_aUserComponentNames );
-            $this->_blCommonAdded = true;
-        }
-
         // storing current view
         $blInit = true;
 
 
         // init all components if there are any
-        foreach ( $this->_aComponentNames as $sComponentName => $blNotCacheable ) {
+        foreach ( $this->_getComponentNames() as $sComponentName => $blNotCacheable ) {
             // do not override initiated components
             if ( !isset( $this->_oaComponents[$sComponentName] ) ) {
                 // component objects MUST be created to support user called functions
@@ -1520,11 +1543,14 @@ class oxUBase extends oxView
     {
         $oStr = getStr();
         if ( is_array( $aInput ) ) {
-            $aStrings = $aInput;
-        } else {
-            //is String
-            $aStrings = $oStr->preg_split( "/[\s,]+/", $aInput );
+            $aInput = implode( " ", $aInput );
         }
+
+        // removing some usually met characters..
+        $aInput = $oStr->preg_replace( "/[".preg_quote( $this->_sRemoveMetaChars, "/" )."]/", " ", $aInput );
+
+        // splitting by word
+        $aStrings = $oStr->preg_split( "/[\s,]+/", $aInput );
 
         if ( $sCount = count( $aSkipTags ) ) {
             for ( $iNum = 0; $iNum < $sCount; $iNum++ ) {
@@ -1535,15 +1561,13 @@ class oxUBase extends oxView
         for ( $iNum = 0; $iNum < $sCount; $iNum++ ) {
             $aStrings[$iNum] = $oStr->strtolower( $aStrings[$iNum] );
             // removing in admin defined strings
-            if ( in_array( $aStrings[$iNum], $aSkipTags ) ) {
+            if ( !$aStrings[$iNum] || in_array( $aStrings[$iNum], $aSkipTags ) ) {
                 unset( $aStrings[$iNum] );
             }
         }
 
         // duplicates
-        $aStrings = array_unique($aStrings);
-
-        return implode( ', ', $aStrings );
+        return implode( ', ', array_unique( $aStrings ) );
     }
 
     /**
@@ -2128,10 +2152,10 @@ class oxUBase extends oxView
     }
 
     /**
-     * Adds page number parameter to url and returns modified url
+     * Adds page number parameter to url and returns modified url, if page number 0 drops from url
      *
      * @param string $sUrl  url to add page number
-     * @param string $iPage active page number
+     * @param int    $iPage active page number
      * @param int    $iLang language id
      *
      * @return string
@@ -2139,7 +2163,16 @@ class oxUBase extends oxView
     protected function _addPageNrParam( $sUrl, $iPage, $iLang = null )
     {
         if ( $iPage ) {
-            $sUrl .= ( ( strpos( $sUrl, '?' ) === false ) ? '?' : '&amp;' ) . 'pgNr='.$iPage;
+            if ( ( strpos( $sUrl, 'pgNr=' ) ) ) {
+                $sUrl = preg_replace('/pgNr=[0-9]*/', 'pgNr='.$iPage, $sUrl);
+            } else {
+                $sUrl .= ( ( strpos( $sUrl, '?' ) === false ) ? '?' : '&amp;' ) . 'pgNr='.$iPage;
+            }
+        } else {
+           $sUrl = preg_replace('/pgNr=[0-9]*/', '', $sUrl);
+           $sUrl = preg_replace('/\&amp\;\&amp\;/', '&amp;', $sUrl);
+           $sUrl = preg_replace('/\?\&amp\;/', '?', $sUrl);
+           $sUrl = preg_replace('/\&amp\;$/', '', $sUrl);
         }
         return $sUrl;
     }
@@ -3089,7 +3122,8 @@ class oxUBase extends oxView
     {
         if ( $this->_aDeliveryAddress == null ) {
             $aAddress = oxConfig::getParameter( 'deladr');
-            if ( $aAddress ) {
+            //do not show deladr if address was reloaded
+            if ( $aAddress && !oxConfig::getParameter( 'reloadaddress' )) {
                 $this->_aDeliveryAddress = $aAddress;
             }
         }
@@ -3176,11 +3210,62 @@ class oxUBase extends oxView
 
     /**
      * Returns added basket item notification message type
-     * 
+     *
      * @return int
      */
     public function getNewBasketItemMsgType()
     {
         return (int) $this->getConfig()->getConfigParam( "iNewBasketItemMessage" );
+    }
+
+    /**
+     * Returns true if tags are ON
+     *
+     * @return boolean
+     */
+    public function showTags()
+    {
+        return (bool) $this->getConfig()->getConfigParam( "blShowTags" );
+    }
+
+    /**
+     * Checks if feature is enabled
+     *
+     * @param string $sName feature name
+     *
+     * @return bool
+     */
+    public function isActive( $sName )
+    {
+        return $this->getConfig()->getConfigParam( "bl".$sName."Enabled" );
+    }
+
+    /**
+     * Returns TRUE if facebook widgets are on
+     *
+     * @return boolean
+     */
+    public function isFbWidgetVisible()
+    {
+        if ( $this->_blFbWidgetsOn === null ) {
+            $oUtils = oxUtilsServer::getInstance();
+
+            // reading ..
+            $this->_blFbWidgetsOn = (bool) $oUtils->getOxCookie( "fbwidgetson" );
+
+            // .. and setting back
+            $oUtils->setOxCookie( "fbwidgetson", $this->_blFbWidgetsOn ? 1 : 0 );
+        }
+        return $this->_blFbWidgetsOn;
+    }
+
+    /**
+     * Checks if downloadable files are turned on
+     *
+     * @return bool
+     */
+    public function isEnabledDownloadableFiles()
+    {
+        return (bool) $this->getConfig()->getConfigParam( "blEnableDownloads" );
     }
 }

@@ -85,13 +85,12 @@ class Unit_Admin_NewsletterSelectionTest extends OxidTestCase
      */
     public function testRender()
     {
-        modConfig::setParameter( "iStart", 0);
         modConfig::setParameter( "oxid", 'newstest');
         $oNewsletter = $this->getProxyClass( "Newsletter_selection" );
         $this->assertEquals( 'newsletter_selection.tpl', $oNewsletter->render() );
         $aViewData = $oNewsletter->getNonPublicVar( '_aViewData' );
 
-        $this->assertEquals( 1, $aViewData['user'] );
+        $this->assertTrue( isset( $aViewData['edit'] ) );
     }
 
     /**
@@ -100,18 +99,20 @@ class Unit_Admin_NewsletterSelectionTest extends OxidTestCase
      *
      * @return null
      */
-    public function testRenderUserHasNoGroup()
+    public function testGetUserCount()
     {
+        modConfig::setParameter( "iStart", 0);
+        modConfig::setParameter( "oxid", 'newstest');
+        $oNewsletter = new Newsletter_selection();
+        $this->assertEquals( 1, $oNewsletter->getUserCount() );
+
         $oDB = oxDb::getDb();
         $sDelete = "delete from oxobject2group where oxobjectid='_testUserId'";
         $oDB->Execute( $sDelete);
         modConfig::setParameter( "iStart", 0);
         modConfig::setParameter( "oxid", 'newstest');
-        $oNewsletter = $this->getProxyClass( "Newsletter_selection" );
-        $oNewsletter->render();
-        $aViewData = $oNewsletter->getNonPublicVar( '_aViewData' );
-
-        $this->assertEquals( 0, $aViewData['user'] );
+        $oNewsletter = new Newsletter_selection();
+        $this->assertEquals( 0, $oNewsletter->getUserCount() );
     }
 
     /**

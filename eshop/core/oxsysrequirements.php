@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 35229 2011-05-10 06:46:38Z sarunas $
+ * @version   SVN: $Id: oxsysrequirements.php 40556 2011-12-12 13:48:13Z linas.kukulskis $
  */
 
 /**
@@ -136,7 +136,7 @@ class oxSysRequirements
                                      "mod_rewrite"        => "apache_mod_rewrite_module",
                                      "server_permissions" => "Files_.26_Folder_Permission_Setup",
                                      "zend_optimizer"     => "Zend_Optimizer",
-                                     "bug53632"           => "PHP_Bug_.2353632",
+                                     "bug53632"           => "Not_recommended_PHP_versions",
                                      // "zend_platform_or_server"
                                       );
 
@@ -147,6 +147,41 @@ class oxSysRequirements
      */
     public function __construct()
     {
+    }
+
+    /**
+     * Only used for convenience in UNIT tests by doing so we avoid
+     * writing extended classes for testing protected or private methods
+     *
+     * @param string $sMethod Methods name
+     * @param array  $aArgs   Argument array
+     *
+     * @throws oxSystemComponentException Throws an exception if the called method does not exist or is not accessable in current class
+     *
+     * @return string
+     */
+    public function __call( $sMethod, $aArgs )
+    {
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            if ( substr( $sMethod, 0, 4) == "UNIT" ) {
+                $sMethod = str_replace( "UNIT", "_", $sMethod );
+            }
+            if ( method_exists( $this, $sMethod)) {
+                return call_user_func_array( array( & $this, $sMethod ), $aArgs );
+            }
+        }
+
+        throw new oxSystemComponentException( "Function '$sMethod' does not exist or is not accessible! (" . get_class($this) . ")".PHP_EOL);
+    }
+
+    /**
+     * Returns config instance
+     *
+     * @return oxConfig
+     */
+    public function getConfig()
+    {
+        return oxConfig::getInstance();
     }
 
     /**
@@ -204,6 +239,7 @@ class oxSysRequirements
      * Version check for http://bugs.php.net/53632
      * Assumme that PHP versions < 5.3.5 and < 5.2.17 may have this issue, so
      * informing users about possible issues
+     * PHP version 5.3.7 has security bug too.
      *
      * @return int
      */
@@ -211,7 +247,9 @@ class oxSysRequirements
     {
         $iState = 1;
         if ( version_compare( PHP_VERSION, "5.3", ">=" ) ) {
-            $iState = version_compare( PHP_VERSION, "5.3.5", ">=" ) ? 2 : $iState;
+            if ( version_compare( PHP_VERSION, "5.3.5", ">=" ) && version_compare( PHP_VERSION, "5.3.7", "!=" ) ) {
+                $iState = 2;
+            }
         } elseif ( version_compare( PHP_VERSION, '5.2', ">=" ) ) {
             $iState = version_compare( PHP_VERSION, "5.2.17", ">=" ) ? 2 : $iState;
         }
@@ -262,20 +300,19 @@ class oxSysRequirements
             return 0;
         }
 
-        $sTheme = 'basic';
         $sTmp = "$sPath/tmp$sVerPrefix/";
         if (class_exists('oxConfig')) {
-            $sTheme  = oxConfig::getInstance()->getConfigParam('sTheme');
-            $sCfgTmp = oxConfig::getInstance()->getConfigParam('sCompileDir');
+            $sCfgTmp = $this->getConfig()->getConfigParam('sCompileDir');
             if (strpos($sCfgTmp, '<sCompileDir_') === false) {
                 $sTmp = $sCfgTmp;
             }
         }
 
         $aPathsToCheck = array(
-                            $sPath."out/pictures{$sVerPrefix}/",
-                            $sPath."out/media/",
-                            $sPath."out/$sTheme/src/",
+                            $sPath."out/pictures{$sVerPrefix}/promo/",
+                            $sPath."out/pictures{$sVerPrefix}/media/",
+                            $sPath."out/pictures{$sVerPrefix}/master/",
+                            $sPath."out/pictures{$sVerPrefix}/generated/",
                             $sPath."log/",
                             $sTmp
                             );
@@ -319,7 +356,7 @@ class oxSysRequirements
      */
     protected function _getShopHostInfoFromConfig()
     {
-        $sShopURL = oxConfig::getInstance()->getConfigParam( 'sShopURL' );
+        $sShopURL = $this->getConfig()->getConfigParam( 'sShopURL' );
         if (preg_match('#^(https?://)?([^/:]+)(:([0-9]+))?(/.*)?$#i', $sShopURL, $m)) {
             $sHost = $m[2];
             $iPort = (int)$m[4];
@@ -556,7 +593,7 @@ class oxSysRequirements
     public function checkMysqlConnect()
     {
         // MySQL module for MySQL5
-        $iModStat = ( extension_loaded( 'mysql' ) || extension_loaded( 'mysqli' ) || extension_loaded( 'pdo_mysql' ) ) ? 2 : 0;
+        $iModStat = ( extension_loaded( 'mysql' ) || extension_loaded( 'mysqli' ) || extension_loaded( 'pdo_mysql' ) || extension_loaded( 'mysqlnd' ) ) ? 2 : 0;
         // client version must be >=5
         if ( $iModStat ) {
             $sClientVersion = mysql_get_client_info();
@@ -571,10 +608,6 @@ class oxSysRequirements
             } elseif (version_compare($sClientVersion, '5.0.40', '>') && version_compare($sClientVersion, '5.0.42', '<')) {
                 // mantis#0001877: Exclude MySQL 5.0.41 from system requirements as not fitting
                 $iModStat = 0;
-            }
-            if (strpos($sClientVersion, 'mysqlnd') !== false) {
-                // PHP 5.3 includes new mysqlnd extension
-                $iModStat = 2;
             }
         }
         return $iModStat;
@@ -716,7 +749,7 @@ class oxSysRequirements
      */
     public function checkCollation()
     {
-        $myConfig = oxConfig::getInstance();
+        $myConfig = $this->getConfig();
 
         $aCollations = array();
         $sCollation = '';
@@ -887,9 +920,7 @@ class oxSysRequirements
      */
     protected function _checkTemplateBlock($sTemplate, $sBlockName)
     {
-        $oConfig = oxConfig::getInstance();
-
-        $sTplFile = $oConfig->getTemplatePath($sTemplate, false);
+        $sTplFile = $this->getConfig()->getTemplatePath($sTemplate, false);
         if (!$sTplFile || !file_exists($sTplFile)) {
             return false;
         }
@@ -910,12 +941,15 @@ class oxSysRequirements
      */
     public function getMissingTemplateBlocks()
     {
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $aCache = array();
-        $oConfig = oxConfig::getInstance();
+        $oConfig = $this->getConfig();
 
-        $sShpIdParam = oxDb::getDb()->quote($oConfig->getShopId());
+        $sShpIdParam = $oDb->quote($oConfig->getShopId());
         $sSql = "select * from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam";
-        $rs = oxDb::getDb(true)->execute($sSql);
+        $rs = $oDb->execute($sSql);
+
+
         $aRet = array();
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {

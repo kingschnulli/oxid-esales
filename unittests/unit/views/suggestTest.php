@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: suggestTest.php 36257 2011-06-13 13:27:18Z linas.kukulskis $
+ * @version   SVN: $Id: suggestTest.php 39581 2011-10-26 13:35:01Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -178,9 +178,9 @@ class Unit_Views_suggestTest extends OxidTestCase
                     'name'=>'test',
                     'value'=>'testvalue',
                     'rec_name'=>'test1',
-                    'rec_email'=>'test2',
+                    'rec_email'=>'recmail@oxid.lt',
                     'send_name'=>'test3',
-                    'send_email'=>'test4',
+                    'send_email'=>'sendmail@oxid.lt',
                     'send_message'=>'test5',
                     'send_subject'=>'test6',
                     )
@@ -227,8 +227,7 @@ class Unit_Views_suggestTest extends OxidTestCase
             );
 
         $oEmail = $this->getMock( "stdclass", array( 'sendSuggestMail' ) );
-        $oEmail->expects( $this->once() )->method( 'sendSuggestMail')
-                ->will($this->returnValue( 0 ) );
+        $oEmail->expects( $this->never() )->method( 'sendSuggestMail');
 
         oxTestModules::addModuleObject('oxemail', $oEmail);
 
@@ -239,7 +238,7 @@ class Unit_Views_suggestTest extends OxidTestCase
         $oCaptcha->expects( $this->once() )->method( 'pass')->will($this->returnValue( true ) );
 
         $oSuggest = $this->getMock( "suggest", array( "getProduct", 'getCaptcha' ) );
-        $oSuggest->expects( $this->once() )->method( 'getProduct')->will($this->returnValue( $oProduct ) );
+        $oSuggest->expects( $this->never() )->method( 'getProduct')->will($this->returnValue( $oProduct ) );
         $oSuggest->expects( $this->once() )->method( 'getCaptcha')->will($this->returnValue( $oCaptcha ) );
 
         $oUtilsView = $this->getMock( "stdclass", array( 'addErrorToDisplay' ) );

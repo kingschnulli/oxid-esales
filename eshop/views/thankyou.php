@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: thankyou.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
+ * @version   SVN: $Id: thankyou.php 38897 2011-09-23 13:27:00Z linas.kukulskis $
  */
 
 /**
@@ -134,13 +134,13 @@ class Thankyou extends oxUBase
     public function render()
     {
         if ( !$this->_oBasket || !$this->_oBasket->getProductsCount() ) {
-            oxUtils::getInstance()->redirect( $this->getConfig()->getShopHomeURL().'&cl=start' );
+            oxUtils::getInstance()->redirect( $this->getConfig()->getShopHomeURL().'&cl=start', true, 302 );
         }
 
         parent::render();
 
         $oUser = $this->getUser();
-        
+
         // removing also unregistered user info (#2580)
         if ( !$oUser || !$oUser->oxuser__oxpassword->value) {
             oxSession::deleteVar( 'usr' );
@@ -163,7 +163,7 @@ class Thankyou extends oxUBase
     /**
      * Template variable getter. Returns active basket
      *
-     * @return string
+     * @return oxBasket
      */
     public function getBasket()
     {
@@ -295,7 +295,7 @@ class Thankyou extends oxUBase
     /**
      * Template variable getter. Returns mail error
      *
-     * @return string
+     * @return oxOrder
      */
     public function getOrder()
     {

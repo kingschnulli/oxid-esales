@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminview.php 33911 2011-03-23 08:29:55Z sarunas $
+ * @version   SVN: $Id: oxadminview.php 38897 2011-09-23 13:27:00Z linas.kukulskis $
  */
 
 /**
@@ -161,7 +161,7 @@ class oxAdminView extends oxView
 
         // authorization check
         if ( !$this->_authorize() ) {
-            oxUtils::getInstance()->redirect( 'index.php');
+            oxUtils::getInstance()->redirect( 'index.php', true, 302 );
             exit;
         }
 
@@ -598,29 +598,6 @@ class oxAdminView extends oxView
         // resetting tag cache
         $oTagCloud = oxNew('oxtagcloud');
         $oTagCloud->resetTagCache();
-    }
-
-    /**
-     * Marks article seo url as expired
-     *
-     * @param array $aArtIds article id's
-     *
-     * @return null
-     */
-    public function resetArtSeoUrl( $aArtIds )
-    {
-        if ( empty( $aArtIds ) ) {
-            return;
-        }
-
-        if ( !is_array($aArtIds) ) {
-            $aArtIds = array($aArtIds);
-        }
-
-        $sShopId = $this->getConfig()->getShopId();
-        foreach ( $aArtIds as $sArtId ) {
-           oxSeoEncoder::getInstance()->markAsExpired( $sArtId, $sShopId, 1, null, "oxtype='oxarticle'" );
-        }
     }
 
     /**

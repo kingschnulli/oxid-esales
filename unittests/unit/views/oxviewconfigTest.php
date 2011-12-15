@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 35278 2011-05-10 06:48:32Z sarunas $
+ * @version   SVN: $Id: oxviewconfigTest.php 36890 2011-07-11 07:40:22Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -644,5 +644,21 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $blExp = (bool) oxConfig::getINstance()->getConfigParam( 'bl_perfLoadSelectLists' ) && (bool) oxConfig::getINstance()->getConfigParam( 'bl_perfLoadSelectLists' );
         $oVC = new oxViewConfig();
         $this->assertEquals( $blExp, $oVC->showSelectLists() );
+    }
+
+    /**
+     * oxViewconfig::getImageUrl() test case
+     *
+     * @return null
+     */
+    public function testGetImageUrl()
+    {
+        $oViewConf = $this->getMock( "oxConfig", array( "getImageUrl" ) );
+        $oViewConf->expects( $this->once() )->method( "getImageUrl" )->will( $this->returnValue( "shopUrl/out/theme/img/imgFile" ) );
+        $this->assertEquals( "shopUrl/out/theme/img/imgFile", $oViewConf->getImageUrl('imgFile') );
+
+        $oViewConf = $this->getMock( "oxConfig", array( "getImageUrl" ) );
+        $oViewConf->expects( $this->once() )->method( "getImageUrl" )->will( $this->returnValue( "shopUrl/out/theme/img/" ) );
+        $this->assertEquals( "shopUrl/out/theme/img/", $oViewConf->getImageUrl() );
     }
 }

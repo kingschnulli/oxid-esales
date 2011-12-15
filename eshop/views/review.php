@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: review.php 32957 2011-02-07 10:29:20Z vilma $
+ * @version   SVN: $Id: review.php 39857 2011-11-09 08:14:14Z rimvydas.paskevicius $
  */
 
 /**
@@ -98,13 +98,13 @@ class Review extends Details
      * Current class template name.
      * @var string
      */
-    protected $_sThisTemplate = 'review.tpl';
+    protected $_sThisTemplate = 'page/review/review.tpl';
 
     /**
      * Current class login template name.
      * @var string
      */
-    protected $_sThisLoginTemplate = 'review_login.tpl';
+    protected $_sThisLoginTemplate = 'page/review/review_login.tpl';
 
     /**
      * Current view search engine indexing state
@@ -131,7 +131,7 @@ class Review extends Details
     public function init()
     {
         if ( oxConfig::getParameter( 'recommid' ) && !$this->getActiveRecommList() ) {
-            oxUtils::getInstance()->redirect( $this->getConfig()->getShopHomeURL() );
+            oxUtils::getInstance()->redirect( $this->getConfig()->getShopHomeURL(), true, 302 );
         }
 
         oxUBase::init();

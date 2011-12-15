@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 34004 2011-03-25 12:50:15Z sarunas $
+ * @version   SVN: $Id: oxutilsview.php 40571 2011-12-13 09:48:10Z linas.kukulskis $
  */
 
 /**
@@ -47,6 +47,13 @@ class oxUtilsView extends oxSuperCfg
      * @var array
      */
     protected $_aTemplateDir = array();
+
+    /**
+     * Templates directories array
+     *
+     * @var array
+     */
+    protected $_blIsTplBlocks = null;
 
     /**
      * Utility instance getter
@@ -84,7 +91,7 @@ class oxUtilsView extends oxSuperCfg
     public function getSmarty( $blReload = false )
     {
         if ( !self::$_oSmarty || $blReload ) {
-            self::$_oSmarty = new Smarty;
+            self::$_oSmarty = new Smarty();
             $this->_fillCommonSmartyProperties( self::$_oSmarty );
             $this->_smartyCompileCheck( self::$_oSmarty );
         }
@@ -311,7 +318,6 @@ class oxUtilsView extends oxSuperCfg
     protected function _fillCommonSmartyProperties( $oSmarty )
     {
         $myConfig = $this->getConfig();
-
         $oSmarty->left_delimiter  = '[{';
         $oSmarty->right_delimiter = '}]';
 
@@ -337,6 +343,11 @@ class oxUtilsView extends oxSuperCfg
             $oSmarty->debugging = true;
         }
 
+        if ($iDebug == 8 && !$myConfig->isAdmin()) {
+            include_once getShopBasePath().'core/smarty/plugins/prefilter.oxtpldebug.php';
+            $oSmarty->register_prefilter('smarty_prefilter_oxtpldebug');
+        }
+
         //demoshop security
         if ( !$myConfig->isDemoShop() ) {
             $oSmarty->php_handling = (int) $myConfig->getConfigParam( 'iSmartyPhpHandling' );
@@ -353,8 +364,6 @@ class oxUtilsView extends oxSuperCfg
             $oSmarty->security_settings['ALLOW_CONSTANTS'] = true;
             $oSmarty->secure_dir = $oSmarty->template_dir;
         }
-
-
     }
 
     /**
@@ -434,25 +443,40 @@ class oxUtilsView extends oxSuperCfg
             $sFile = $m[1];
         }
 
-        $sFileParam = oxDb::getDb()->quote($sFile);
-        $sShpIdParam = oxDb::getDb()->quote($oConfig->getShopId());
-        $sSql = "select * from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam and oxtemplate=$sFileParam order by oxpos asc";
-        $rs = oxDb::getDb(true)->Execute($sSql);
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
+        $sFileParam = $oDb->quote($sFile);
+        $sShpIdParam = $oDb->quote($oConfig->getShopId());
         $aRet = array();
-        if ($rs != false && $rs->recordCount() > 0) {
-            while (!$rs->EOF) {
-                try {
-                    if (!is_array($aRet[$rs->fields['OXBLOCKNAME']])) {
-                        $aRet[$rs->fields['OXBLOCKNAME']] = array();
-                    }
-                    $aRet[$rs->fields['OXBLOCKNAME']][] = $this->_getTemplateBlock($rs->fields['OXMODULE'], $rs->fields['OXFILE']);
-                } catch (oxException $oE) {
-                    $oE->debugOut();
-                }
 
-                $rs->moveNext();
+        if ( $this->_blIsTplBlocks === null ) {
+            $this->_blIsTplBlocks = false;
+            $sSql = "select COUNT(*) from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam";
+            $rs = $oDb->getOne( $sSql );
+            if ( $rs ) {
+                $this->_blIsTplBlocks = true;
             }
         }
+
+        if ( $this->_blIsTplBlocks ) {
+            $sSql = "select * from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam and oxtemplate=$sFileParam order by oxpos asc";
+            $rs = $oDb->Execute($sSql);
+
+            if ($rs != false && $rs->recordCount() > 0) {
+                while (!$rs->EOF) {
+                    try {
+                        if (!is_array($aRet[$rs->fields['OXBLOCKNAME']])) {
+                            $aRet[$rs->fields['OXBLOCKNAME']] = array();
+                        }
+                        $aRet[$rs->fields['OXBLOCKNAME']][] = $this->_getTemplateBlock($rs->fields['OXMODULE'], $rs->fields['OXFILE']);
+                    } catch (oxException $oE) {
+                        $oE->debugOut();
+                    }
+
+                    $rs->moveNext();
+                }
+            }
+        }
+
         return $aRet;
     }
 }

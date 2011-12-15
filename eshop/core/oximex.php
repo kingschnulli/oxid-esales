@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oximex.php 33731 2011-03-10 14:39:37Z arvydas.vapsva $
+ * @version   SVN: $Id: oximex.php 38382 2011-08-24 12:39:46Z arvydas.vapsva $
  */
 
 /**
@@ -350,7 +350,7 @@ class oxImex extends oxBase
             $dSumNetPrice = 0;
             $dSumBrutPrice = 0;
 
-            $oOrderArticles = $oOrder->getOrderArticles();
+            $oOrderArticles = $oOrder->getOrderArticles( true );
             foreach ($oOrderArticles->arrayKeys() as $key) {
                 $oOrderArt = $oOrderArticles->offsetGet($key);
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbaseTest.php 32051 2010-12-20 12:05:18Z sarunas $
+ * @version   SVN: $Id: oxbaseTest.php 40537 2011-12-12 13:41:54Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -589,7 +589,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oBase->init( "oxarticles" );
         $oBase->setId( "2000" );
         $sNonExistentTitle = $oBase->oxarticles__oxtitle_nonexistent;
-        $this->assertNull( $sNonExistentTitle);
+        $this->assertNull( $sNonExistentTitle );
     }
 
     /**
@@ -605,7 +605,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oBase->init( "oxarticles" );
         $oBase->setId( "2000" );
         $sNonExistentTitle = $oBase->oxarticles__oxtitle_nonexistent;
-        $this->assertNull( $sNonExistentTitle);
+        $this->assertNull( $sNonExistentTitle );
     }
 
     /**
@@ -1013,7 +1013,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
      */
     public function testAssign()
     {
-        $oDB = oxDb::getDB(true);
+        $oDB = oxDb::getDB( oxDB::FETCH_MODE_ASSOC );
         $oBase = new _oxBase();
         $oBase->init("oxactions");
         $select = "select * from oxactions where oxid = 'oxstart'";
@@ -1029,7 +1029,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
      */
     public function testAssignWithoutShopId()
     {
-        $oDB = oxDb::getDb(true);
+        $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $oBase = new _oxBase();
         $oBase->init("oxactions");
         $oBase->oxactions__oxid = new oxField("oxstart", oxField::T_RAW);
@@ -1661,7 +1661,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
      */
     public function  testSaveIfExistsInAdminTimeStamp()
     {
-        $myDB    = oxDb::getDb(true);
+        $myDB    = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
             $sInsert = "Insert into oxarticles (`OXID`,`OXTITLE`) values ('_test','test')";
         $myDB->Execute($sInsert);
         //oxConfig::getInstance()->blAdmin = true;
@@ -1673,7 +1673,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
 
         //oxConfig::getInstance()->blAdmin = false;
         $this->assertNotNull( $sResult );
-        $myDB    = oxDb::getDb(true);
+        $myDB    = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $res = $myDB->Execute("select oxtimestamp from oxarticles where oxid='_test'");
         $this->assertEquals( "2007-07-07 00:00:00", $res->fields['oxtimestamp'] );
     }
@@ -1706,7 +1706,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
      */
     public function  testSaveIfNewInAdminDate()
     {
-        $myDB    = oxDb::getDb(true);
+        $myDB    = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         //oxConfig::getInstance()->blAdmin = true;
         $oBase = new _oxBase();
         $oBase->init('oxnews');
@@ -1716,7 +1716,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $sResult = $oBase->save();
         //oxConfig::getInstance()->blAdmin = false;
         $this->assertNotNull( $sResult );
-        $myDB    = oxDb::getDb(true);
+        $myDB    = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $res = $myDB->Execute("select oxdate from oxnews where oxshortdesc='oxbasetest'");
         $this->assertEquals( $res->fields['oxdate'], "2007-07-07" );
     }
@@ -1756,7 +1756,7 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oBase->oxarticles__oxtitle = new oxField('changed title', oxField::T_RAW);
         $sResult = $oBase->update();
         $this->assertNotNull( $sResult );
-        $myDB    = oxDb::getDb(true);
+        $myDB    = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $res = $myDB->Execute("select oxtitle from oxarticles where oxid='_test'");
         $this->assertEquals( $res->fields['oxtitle'], "changed title" );
     }
@@ -2575,4 +2575,22 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oSubj->setNonPublicVar("_blIsInList", true);
         $this->assertTrue($oSubj->UNITisInList());
     }
+
+    /**
+     * Field names getter test
+     *
+     * @return null
+     */
+    public function testGetFieldNames()
+    {
+        $oBase = new oxBase();
+        $this->assertEquals( array( "oxid" ), $oBase->getFieldNames() );
+
+        $oBase->init( "oxarticles" );
+        $aFieldNames = $oBase->getFieldNames();
+
+        $this->assertTrue( is_array( $aFieldNames ) && count( $aFieldNames ) > 0 );
+        $this->assertTrue( in_array( "oxtitle", $aFieldNames ) );
+    }
+
 }

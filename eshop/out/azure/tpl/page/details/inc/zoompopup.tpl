@@ -2,7 +2,7 @@
     [{assign var="aZoomPics" value=$oView->getZoomPics()}]
     [{assign var="iZoomPic" value=$oView->getActZoomPic()}]
     <div id="zoomModal" class="popupBox corners FXgradGreyLight glowShadow">
-        <img src="[{$oViewConf->getImageUrl()}]x.png" alt="" class="closePop">
+        <img src="[{$oViewConf->getImageUrl('x.png')}]" alt="" class="closePop">
         <div class="zoomHead">
             [{oxmultilang ident="PAGE_DETAILS_ZOOMPOP"}]
             <a href="#zoom"><span></span></a>
@@ -18,7 +18,7 @@
             [{assign var="_sZoomPic" value=$aZoomPics[$iPicNr].file}]
                 <li>
                     <a class="ox-zoompic ox-picnr-[{$iPicNr}] [{if $iPicNr == 1}]selected[{/if}]" href="[{$_sZoomPic}]">
-                        <span class="marker"><img src="[{$oViewConf->getImageUrl()}]marker.png" alt=""></span>
+                        <span class="marker"><img src="[{$oViewConf->getImageUrl('marker.png')}]" alt=""></span>
                         [{$_zoomPic.id}]
                     </a>
                 </li>

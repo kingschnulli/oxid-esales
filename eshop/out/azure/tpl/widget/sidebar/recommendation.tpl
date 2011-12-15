@@ -7,7 +7,7 @@
     [{assign var='rsslinks' value=$oView->getRssLinks() }]
     [{if $rsslinks.recommlists}]
         <a class="rss js-external" id="rssRecommLists" href="[{$rsslinks.recommlists.link}]" title="[{$rsslinks.recommlists.title}]">
-            <img src="[{$oViewConf->getImageUrl()}]rss.png" alt="[{$rsslinks.recommlists.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.recommlists.title}]</span>
+            <img src="[{$oViewConf->getImageUrl('rss.png')}]" alt="[{$rsslinks.recommlists.title}]"><span class="FXgradOrange corners glowShadow">[{$rsslinks.recommlists.title}]</span>
         </a>
     [{/if}]
     </h3>

@@ -40,7 +40,8 @@ class Unit_Maintenance_moduleFileInclusionTest extends OxidTestCase
     {
         $oCfg = $this->getMock('oxConfig', array('getConfigParam'));
         $oCfg->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aModules'))->will($this->returnValue(array('oxarticle'=>'testmod')));
-        $oCfg->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('sShopDir'))->will($this->returnValue(dirname(__FILE__)));
+        $oCfg->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array()));
+        $oCfg->expects($this->at(2))->method('getConfigParam')->with($this->equalTo('sShopDir'))->will($this->returnValue(dirname(__FILE__)));
 
         $oUO = $this->getMock('oxUtilsObject', array('getConfig'));
         $oUO->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticle.php 33402 2011-02-21 12:25:32Z linas.kukulskis $
+ * @version   SVN: $Id: oxorderarticle.php 40439 2011-12-02 09:34:58Z linas.kukulskis $
  */
 
 /**
@@ -29,6 +29,12 @@
  */
 class oxOrderArticle extends oxBase implements oxIArticle
 {
+
+    /**
+     * Order cache
+     */
+    protected static $_aOrderCache = array();
+
     /**
      * Current class name
      *
@@ -65,11 +71,26 @@ class oxOrderArticle extends oxBase implements oxIArticle
     protected $_oOrderArticle = null;
 
     /**
+     * Article instance
+     *
+     * @var oxarticle
+     */
+    protected $_oArticle = null;
+
+    /**
      * New order article marker
      *
      * @var bool
      */
     protected $_blIsNewOrderItem = false;
+
+    /**
+     * Array of fields to skip when saving
+     * Overrids oxBase variable
+     *
+     * @var array
+     */
+    protected $_aSkipSaveFields = array( 'oxtimestamp' );
 
     /**
      * Class constructor, initiates class constructor (parent::oxbase()).
@@ -94,7 +115,15 @@ class oxOrderArticle extends oxBase implements oxIArticle
         foreach ( $aObjectVars as $sName => $sValue ) {
             if ( isset( $oProduct->$sName->value ) ) {
                 $sFieldName = preg_replace('/oxarticles__/', 'oxorderarticles__', $sName);
-                $this->$sFieldName = $oProduct->$sName;
+                if ( $sFieldName != "oxorderarticles__oxtimestamp" ) {
+                    $this->$sFieldName = $oProduct->$sName;
+                }
+                // formatting view
+                if ( !$this->getConfig()->getConfigParam( 'blSkipFormatConversion' ) ) {
+                    if ( $sFieldName == "oxorderarticles__oxinsert" ) {
+                        oxDb::getInstance()->convertDBDate( $this->$sFieldName, true );
+                    }
+                }
             }
         }
 
@@ -135,7 +164,6 @@ class oxOrderArticle extends oxBase implements oxIArticle
         $iStockCount = $this->_getArtStock( $dAddAmount, $blAllowNegativeStock );
         $oDb = oxDb::getDb();
 
-        // #874A. added oxarticles.oxtimestamp = oxarticles.oxtimestamp to keep old timestamp value
         $oArticle->oxarticles__oxstock = new oxField($iStockCount);
         $oDb->execute( 'update oxarticles set oxarticles.oxstock = '.$oDb->quote( $iStockCount ).' where oxarticles.oxid = '.$oDb->quote( $this->oxorderarticles__oxartid->value ) );
         $oArticle->onChange( ACTION_UPDATE_STOCK );
@@ -636,6 +664,9 @@ class oxOrderArticle extends oxBase implements oxIArticle
                 }
             }
 
+            // seting downloadable products article files
+            $this->_setOrderFiles();
+
             // marking object as "non new" disable further stock changes
             $this->setIsNewOrderItem( false );
         }
@@ -677,7 +708,9 @@ class oxOrderArticle extends oxBase implements oxIArticle
     public function getTotalBrutPriceFormated()
     {
         $oLang = oxLang::getInstance();
-        return $oLang->formatCurrency( $this->oxorderarticles__oxbrutprice->value );
+        $oOrder = $this->getOrder();
+        $oCurrency = $this->getConfig()->getCurrencyObject( $oOrder->oxorder__oxcurrency->value );
+        return $oLang->formatCurrency( $this->oxorderarticles__oxbrutprice->value, $oCurrency );
     }
 
     /**
@@ -688,7 +721,9 @@ class oxOrderArticle extends oxBase implements oxIArticle
     public function getBrutPriceFormated()
     {
         $oLang = oxLang::getInstance();
-        return $oLang->formatCurrency(  $this->oxorderarticles__oxbprice->value );
+        $oOrder = $this->getOrder();
+        $oCurrency = $this->getConfig()->getCurrencyObject( $oOrder->oxorder__oxcurrency->value );
+        return $oLang->formatCurrency(  $this->oxorderarticles__oxbprice->value, $oCurrency );
     }
 
     /**
@@ -699,7 +734,119 @@ class oxOrderArticle extends oxBase implements oxIArticle
     public function getNetPriceFormated()
     {
         $oLang = oxLang::getInstance();
-        return $oLang->formatCurrency(  $this->oxorderarticles__oxnprice->value );
+        $oOrder = $this->getOrder();
+        $oCurrency = $this->getConfig()->getCurrencyObject( $oOrder->oxorder__oxcurrency->value );
+        return $oLang->formatCurrency(  $this->oxorderarticles__oxnprice->value, $oCurrency );
     }
 
+    /**
+     * Returns oxOrder object that the article belongs to
+     *
+     * @return mixed - on success returns oxOrder object, else returns null
+     */
+    public function getOrder()
+    {
+        if ( $this->oxorderarticles__oxorderid->value ) {
+            // checking if the object already exists in the cache
+            if ( isset( $this->_aOrderCache[ $this->oxorderarticles__oxorderid->value ] )) {
+                // returning the cached object
+                return $this->_aOrderCache[ $this->oxorderarticles__oxorderid->value ];
+            }
+            // creatina new order object and trying to load it
+            $oOrder = oxNew( 'oxOrder' );
+            if ( $oOrder->load( $this->oxorderarticles__oxorderid->value )) {
+                return $this->_aOrderCache[$this->oxorderarticles__oxorderid->value] = $oOrder;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Sets article creation date
+     * (oxorderarticle::oxorderarticles__oxtimestamp). Then executes parent method
+     * parent::_insert() and returns insertion status.
+     *
+     * @return bool
+     */
+    protected function _insert()
+    {
+        $iInsertTime = time();
+        $now = date('Y-m-d H:i:s', $iInsertTime);
+        $this->oxorderarticles__oxtimestamp = new oxField( $now );
+
+        return parent::_insert();
+    }
+
+
+    /**
+     * Set article
+     *
+     * @param object $oArticle - article object
+     *
+     * @return void
+     */
+    public function setArticle( $oArticle )
+    {
+        $this->_oArticle = $oArticle;
+    }
+
+    /**
+     * Get article
+     *
+     * @return object
+     */
+    public function getArticle()
+    {
+        if ( $this->_oArticle === null ) {
+            $oArticle = oxNew( 'oxArticle' );
+            $oArticle->load($this->oxorderarticles__oxartid->value);
+            $this->_oArticle = $oArticle;
+        }
+
+        return $this->_oArticle;
+    }
+
+
+
+    /**
+     * Set order files
+     *
+     *@return void
+     */
+    public function _setOrderFiles()
+    {
+        $oArticle = $this->getArticle();
+        
+        if ( $oArticle->oxarticles__oxisdownloadable->value ) {
+
+            $oConfig 		 = $this->getConfig();
+            $sOrderId 		 = $this->oxorderarticles__oxorderid->value;
+            $sOrderArticleId = $this->getId();
+            $sShopId 		 = $oConfig->getShopId();
+
+            $oUser			 = $oConfig->getUser();
+
+            $oFiles = $oArticle->getArticleFiles( true );
+
+            if ( $oFiles ) {
+                foreach ($oFiles as $oFile) {
+                    $oOrderFile = oxNew( 'oxOrderFile' );
+                    $oOrderFile->setOrderId( $sOrderId );
+                    $oOrderFile->setOrderArticleId( $sOrderArticleId );
+                    $oOrderFile->setShopId( $sShopId );
+                    $iMaxDownloadCount = (!empty($oUser) && !$oUser->hasAccount()) ? $oFile->getMaxUnregisteredDownloadsCount() :  $oFile->getMaxDownloadsCount();
+                    $oOrderFile->setFile(
+                        $oFile->oxfiles__oxfilename->value,
+                        $oFile->getId(),
+                        $iMaxDownloadCount * $this->oxorderarticles__oxamount->value,
+                        $oFile->getLinkExpirationTime(),
+                        $oFile->getDownloadExpirationTime()
+                    );
+
+                    $oOrderFile->save();
+                }
+            }
+        }
+    }
 }

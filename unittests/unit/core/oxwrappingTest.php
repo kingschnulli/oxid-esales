@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrappingTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxwrappingTest.php 37738 2011-07-28 15:12:29Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -401,7 +401,10 @@ class Unit_Core_oxwrappingTest extends OxidTestCase
     public function testGetPictureUrl()
     {
         $oWrap = oxNew( 'oxwrapping' );
-        $this->assertEquals( modConfig::getInstance()->getPictureUrl(null, false, null, null, 1 ), $oWrap->getPictureUrl() );
+        $this->assertNull( $oWrap->getPictureUrl() );
+
+        $oWrap->load( "a6840cc0ec80b3991.74884864" );
+        $this->assertEquals( modConfig::getInstance()->getPictureUrl( "master/wrapping/img_geschenkpapier_1_wp.gif", false, null, null, 1 ), $oWrap->getPictureUrl() );
     }
 
 }

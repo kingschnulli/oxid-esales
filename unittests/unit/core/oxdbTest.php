@@ -19,27 +19,11 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxdbTest.php 40470 2011-12-06 10:56:42Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
-
-//P
-/*
-class Unit_oxdbTest_config
-{
-    public function getShopLanguage()
-    {
-        return 1;
-    }
-
-    public function getConfigParam( $sParam )
-    {
-        return oxConfig::getInstance()->getConfigParam( $sParam );
-    }
-}
-*/
 
 class Unit_oxdbTest_config_2
 {
@@ -54,6 +38,17 @@ class Unit_oxdbTest_config_2
 
 class Unit_Core_oxdbTest extends OxidTestCase
 {
+    /**
+     * Clean-up oxarticles table + parent::tearDown()
+     *
+     * @return null
+     */
+    protected function tearDown()
+    {
+        $this->cleanUpTable( 'oxarticles' );
+        return parent::tearDown();
+    }
+
 
 
     /**
@@ -485,9 +480,14 @@ class Unit_Core_oxdbTest extends OxidTestCase
     public function testEscapeString()
     {
         $sString = "\x00 \n \r ' \, \" \x1a";
-        $sEscapedChars = mysql_real_escape_string( $sString );
+		
+		$oDb = oxDb::getInstance();
+		
+        if ( 'mysql' == oxConfig::getInstance()->getConfigParam( "dbType" ))
+            $sEscapedChars = mysql_real_escape_string( $sString, $oDb->UNITgetConnectionId() );
+        if ( 'mysqli' == oxConfig::getInstance()->getConfigParam( "dbType" ))
+           $sEscapedChars = mysqli_real_escape_string( $oDb->UNITgetConnectionId(), $sString );
 
-        $oDb = oxDb::getInstance();
         $this->assertEquals( bin2hex($sEscapedChars), bin2hex($oDb->escapeString( $sString )) );
     }
 
@@ -512,10 +512,159 @@ class Unit_Core_oxdbTest extends OxidTestCase
         $aRes = $oDb->getDb();
         $this->assertEquals($ADODB_FETCH_MODE, ADODB_FETCH_NUM);
 
-        $aRes = $oDb->getDb(true);
+        $aRes = $oDb->getDb(oxDb::FETCH_MODE_ASSOC);
         $this->assertEquals($ADODB_FETCH_MODE, ADODB_FETCH_ASSOC);
 
-        $aRes = $oDb->getDb(false);
+        $aRes = $oDb->getDb(oxDb::FETCH_MODE_NUM);
         $this->assertEquals($ADODB_FETCH_MODE, ADODB_FETCH_NUM);
+
+
+
     }
+
+    /**
+     * Test case for oxDb::startTransaction(), oxDb::commitTransaction() and
+     * oxDb::rollbackTransaction()
+     *
+     * @return null
+     */
+    public function testTransactions()
+    {
+
+            $sQ1 = "INSERT INTO `oxarticles` (`OXID`, `OXSHOPID`, `OXPARENTID`, `OXACTIVE`, `OXACTIVEFROM`, `OXACTIVETO`, `OXARTNUM`, `OXEAN`, `OXDISTEAN`, `OXMPN`, `OXTITLE`, `OXSHORTDESC`, `OXPRICE`, `OXBLFIXEDPRICE`, `OXPRICEA`, `OXPRICEB`, `OXPRICEC`, `OXBPRICE`, `OXTPRICE`, `OXUNITNAME`, `OXUNITQUANTITY`, `OXEXTURL`, `OXURLDESC`, `OXURLIMG`, `OXVAT`, `OXTHUMB`, `OXICON`, `OXPICSGENERATED`, `OXPIC1`, `OXPIC2`, `OXPIC3`, `OXPIC4`, `OXPIC5`, `OXPIC6`, `OXPIC7`, `OXPIC8`, `OXPIC9`, `OXPIC10`, `OXPIC11`, `OXPIC12`, `OXWEIGHT`, `OXSTOCK`, `OXSTOCKFLAG`, `OXSTOCKTEXT`, `OXNOSTOCKTEXT`, `OXDELIVERY`, `OXINSERT`, `OXTIMESTAMP`, `OXLENGTH`, `OXWIDTH`, `OXHEIGHT`, `OXFILE`, `OXSEARCHKEYS`, `OXTEMPLATE`, `OXQUESTIONEMAIL`, `OXISSEARCH`, `OXISCONFIGURABLE`, `OXVARNAME`, `OXVARSTOCK`, `OXVARCOUNT`, `OXVARSELECT`, `OXVARMINPRICE`, `OXVARNAME_1`, `OXVARSELECT_1`, `OXVARNAME_2`, `OXVARSELECT_2`, `OXVARNAME_3`, `OXVARSELECT_3`, `OXTITLE_1`, `OXSHORTDESC_1`, `OXURLDESC_1`, `OXSEARCHKEYS_1`, `OXTITLE_2`, `OXSHORTDESC_2`, `OXURLDESC_2`, `OXSEARCHKEYS_2`, `OXTITLE_3`, `OXSHORTDESC_3`, `OXURLDESC_3`, `OXSEARCHKEYS_3`, `OXBUNDLEID`, `OXFOLDER`, `OXSUBCLASS`, `OXSTOCKTEXT_1`, `OXSTOCKTEXT_2`, `OXSTOCKTEXT_3`, `OXNOSTOCKTEXT_1`, `OXNOSTOCKTEXT_2`, `OXNOSTOCKTEXT_3`, `OXSORT`, `OXSOLDAMOUNT`, `OXNONMATERIAL`, `OXFREESHIPPING`, `OXREMINDACTIVE`, `OXREMINDAMOUNT`, `OXAMITEMID`, `OXAMTASKID`, `OXVENDORID`, `OXMANUFACTURERID`, `OXSKIPDISCOUNTS`, `OXRATING`, `OXRATINGCNT`, `OXMINDELTIME`, `OXMAXDELTIME`, `OXDELTIMEUNIT`) VALUES
+                    ('_testArtId', 'oxbaseshop', '', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0802-85-823-7-1', '', '', '', '', '', 109, 0, 0, 0, 0, 0, 0, '', 0, '', '', '', NULL, '', '', 0, '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 1, '', '', '0000-00-00', '0000-00-00', '2010-03-02 20:07:21', 0, 0, 0, '', '', '', '', 0, 0, '', 0, 0, 'W 32/L 30 | Blau', 0, '', 'W 32/L 30 | Blue ', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 12001, 0, 0, 0, 0, 0, '', '', '', '', 0, 0, 0, 0, 0, '')";
+
+        $sQ2 = 'select 1 from oxarticles where oxid = "_testArtId"';
+        $sQ3 = 'delete from oxarticles where oxid = "_testArtId"';
+
+        $oDb = oxNew( "oxDb" );
+        $oDbInst = $oDb->getDb();
+
+        /** Test 1 **/ // commiting transaction
+        $oDb->startTransaction();
+        $oDbInst->execute( $sQ1 );
+        $oDb->commitTransaction();
+
+        // testing
+        $this->assertTrue( (bool) $oDbInst->getOne( $sQ2 ) );
+
+        // deleting
+        $oDbInst->execute( $sQ3 );
+
+        /** Test 2 **/ // rollbacking transaction
+        $oDb->startTransaction();
+        $oDbInst->execute( $sQ1 );
+        $oDb->rollbackTransaction();
+
+        // testing
+        $this->assertFalse( (bool) $oDbInst->getOne( $sQ2 ) );
+    }
+
+    /**
+     * Test case for oxDb::_getModules()
+     *
+     * @return null
+     */
+    public function testGetModules()
+    {
+        // admin logging + debug level = 7
+        $oConfig = $this->getMock( "oxConfig", array( "getConfigParam", "isAdmin" ) );
+        $oConfig->expects( $this->at( 0 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'iDebug' ) )->will( $this->returnValue( 7 ) );
+        $oConfig->expects( $this->at( 1 ) )->method( 'isAdmin' )->will( $this->returnValue( true ) );
+        $oConfig->expects( $this->at( 2 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'blLogChangesInAdmin' ) )->will( $this->returnValue( true ) );
+
+        $oDb = $this->getMock( "oxDb", array( "getConfig" ) );
+        $oDb->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $this->assertEquals( "perfmon:oxadminlog", $oDb->UNITgetModules() );
+
+        // debug level = 0
+        $oConfig = $this->getMock( "oxConfig", array( "getConfigParam", "isAdmin" ) );
+        $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( 'iDebug' ) )->will( $this->returnValue( 0 ) );
+        $oConfig->expects( $this->once() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
+
+        $oDb = $this->getMock( "oxDb", array( "getConfig" ) );
+        $oDb->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $this->assertEquals( "", $oDb->UNITgetModules() );
+    }
+
+    /**
+     * Test case for oxDb::_setUp()
+     *
+     * @return null
+     */
+    public function testSetUp()
+    {
+        // UTF
+        $oDbInst = $this->getMock( "oxDb", array( "execute", "logSQL" ) );
+        $oDbInst->expects( $this->at( 0 ) )->method( 'execute' )->with( $this->equalTo( 'truncate table adodb_logsql' ) );
+        $oDbInst->expects( $this->at( 1 ) )->method( 'logSQL' )->with( $this->equalTo( true ) );
+        $oDbInst->expects( $this->at( 2 ) )->method( 'execute' )->with( $this->equalTo( 'SET @@session.sql_mode = ""' ) );
+        $oDbInst->expects( $this->at( 3 ) )->method( 'execute' )->with( $this->equalTo( 'SET NAMES "utf8"' ) );
+        $oDbInst->expects( $this->at( 4 ) )->method( 'execute' )->with( $this->equalTo( 'SET CHARACTER SET utf8' ) );
+        $oDbInst->expects( $this->at( 5 ) )->method( 'execute' )->with( $this->equalTo( 'SET CHARACTER_SET_CONNECTION = utf8' ) );
+        $oDbInst->expects( $this->at( 6 ) )->method( 'execute' )->with( $this->equalTo( 'SET CHARACTER_SET_DATABASE = utf8' ) );
+        $oDbInst->expects( $this->at( 7 ) )->method( 'execute' )->with( $this->equalTo( 'SET character_set_results = utf8' ) );
+        $oDbInst->expects( $this->at( 8 ) )->method( 'execute' )->with( $this->equalTo( 'SET character_set_server = utf8' ) );
+
+        $oConfig = $this->getMock( "oxConfig", array( "getConfigParam", "isUtf" ) );
+        $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( 'iDebug' ) )->will( $this->returnValue( 7 ) );
+        $oConfig->expects( $this->once() )->method( 'isUtf' )->will( $this->returnValue( true ) );
+
+        $oDb = $this->getMock( "oxDb", array( "getConfig" ) );
+        $oDb->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oDb->UNITsetUp( $oDbInst );
+
+        // non-UTF
+        $oDbInst = $this->getMock( "oxDb", array( "execute", "logSQL" ) );
+        $oDbInst->expects( $this->at( 0 ) )->method( 'execute' )->with( $this->equalTo( 'truncate table adodb_logsql' ) );
+        $oDbInst->expects( $this->at( 1 ) )->method( 'logSQL' )->with( $this->equalTo( true ) );
+        $oDbInst->expects( $this->at( 2 ) )->method( 'execute' )->with( $this->equalTo( 'SET @@session.sql_mode = ""' ) );
+        $oDbInst->expects( $this->at( 3 ) )->method( 'execute' )->with( $this->equalTo( 'SET NAMES "nonutf"' ) );
+
+        $oConfig = $this->getMock( "oxConfig", array( "getConfigParam", "isUtf" ) );
+        $oConfig->expects( $this->at( 0 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'iDebug' ) )->will( $this->returnValue( 7 ) );
+        $oConfig->expects( $this->at( 1 ) )->method( 'isUtf' )->will( $this->returnValue( false ) );
+        $oConfig->expects( $this->at( 2 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'sDefaultDatabaseConnection' ) )->will( $this->returnValue( "nonutf" ) );
+
+        $oDb = $this->getMock( "oxDb", array( "getConfig" ) );
+        $oDb->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oDb->UNITsetUp( $oDbInst );
+    }
+
+    /**
+     * Test case for oxDb::_notifyConnectionErrors()
+     *
+     * @expectedException oxConnectionException
+     *
+     * @return null
+     */
+    public function testNotifyConnectionErrors()
+    {
+        $oDbInst = $this->getMock( "oxDb", array( "errorMsg", "errorNo" ) );
+        $oDbInst->expects( $this->at( 0 ) )->method( 'errorMsg' )->will( $this->returnValue( "errormsg" ) );
+        $oDbInst->expects( $this->at( 1 ) )->method( 'errorNo' )->will( $this->returnValue( "errornr" ) );
+        $oDbInst->expects( $this->at( 2 ) )->method( 'errorMsg' )->will( $this->returnValue( "errormsg" ) );
+
+        $oConfig = $this->getMock( "oxConfig", array( "getConfigParam" ) );
+        $oConfig->expects( $this->at( 0 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'sAdminEmail' ) )->will( $this->returnValue( "adminemail" ) );
+        $oConfig->expects( $this->at( 1 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'dbUser' ) )->will( $this->returnValue( "dbuser" ) );
+
+        $oDb = $this->getMock( "oxDb", array( "getConfig", "_sendMail" ) );
+        $oDb->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oDb->expects( $this->once() )->method( '_sendMail' )->with( $this->equalTo( 'adminemail' ), $this->equalTo( 'Offline warning!' ) );
+        $oDb->UNITnotifyConnectionErrors( $oDbInst );
+    }
+
+    /**
+     * Test case for oxDb::_onConnectionError()
+     *
+     * @return null
+     */
+    public function testOnConnectionError()
+    {
+        $oDb = $this->getMock( "oxDb", array( "_notifyConnectionErrors" ) );
+        $oDb->expects( $this->once() )->method( '_notifyConnectionErrors' )->with( $this->equalTo( 'odb' ) );
+        $oDb->UNITonConnectionError( 'odb' );
+    }
+
 }

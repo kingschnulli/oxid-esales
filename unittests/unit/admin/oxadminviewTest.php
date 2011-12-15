@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 33189 2011-02-10 15:55:32Z arvydas.vapsva $
+ * @version   SVN: $Id: oxadminviewTest.php 38609 2011-09-05 13:33:33Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -306,42 +306,6 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
         $this->assertEquals( null, $_GET["testReset"]["catCount"] );
         $this->assertEquals( null, $_GET["testReset"]["vendorCount"] );
         $this->assertEquals( null, $_GET["testReset"]["manufacturerCount"] );
-    }
-
-    /**
-     * Checking reseting article seo urls
-     *
-     * @return null
-     */
-    public function testResetArtSeoUrl()
-    {
-        $sShopId = oxConfig::getInstance()->getShopId();
-        $myDB = oxDb::getDB();
-        $myDB->execute("insert into oxseo set oxobjectid = '_testArt', oxident = MD5('_testArt'), oxshopid = '{$sShopId}', oxlang = '1', oxtype='oxarticle' ");
-        $oAdminView = oxNew( 'oxAdminView' );
-        $oAdminView->resetArtSeoUrl('_testArt');
-        $this->assertEquals( 1, $myDB->getOne("select oxexpired from oxseo where oxobjectid='_testArt'") );
-    }
-
-    /**
-     * Checking reseting seo urls - reset should be not called if param is empty
-     *
-     * @return null
-     */
-    public function testResetArtSeoUrl_paramIsEmpty()
-    {
-        $myDB = oxDb::getDB();
-        $myDB->execute("insert into oxseo set oxobjectid = '_testArt', oxident = MD5('_testArt'), oxshopid = '1', oxlang = '1'");
-
-        // testing functions calls
-        $oSeoEncoder = $this->getMock( 'oxSeoEncoder', array( 'markAsExpired' ) );
-        $oSeoEncoder->expects( $this->never() )->method( 'markAsExpired' );
-        modInstances::addMod( "oxSeoEncoder", $oSeoEncoder );
-
-        $oAdminView = oxNew( 'oxAdminView' );
-        $oAdminView->resetArtSeoUrl( null );
-        $oAdminView->resetArtSeoUrl( '' );
-        $oAdminView->resetArtSeoUrl( array() );
     }
 
     public function testAddGlobalParamsAddsSid()

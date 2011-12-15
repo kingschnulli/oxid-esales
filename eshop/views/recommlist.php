@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: recommlist.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
+ * @version   SVN: $Id: recommlist.php 38062 2011-08-09 10:37:29Z linas.kukulskis $
  */
 
 /**
@@ -301,7 +301,7 @@ class RecommList extends aList
     }
 
     /**
-     * Template variable getter. Returns if review modul is on
+     * Template variable getter. Returns if review module is on
      *
      * @return bool
      */

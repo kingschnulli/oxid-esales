@@ -1,3 +1,25 @@
+/**
+ *    This file is part of OXID eShop Community Edition.
+ *
+ *    OXID eShop Community Edition is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    OXID eShop Community Edition is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @link      http://www.oxid-esales.com
+ * @package   out
+ * @copyright (C) OXID eSales AG 2003-2011
+ * @version OXID eShop CE
+ * @version   SVN: $Id: oxarticlevariant.js 35529 2011-05-23 07:31:20Z vilma $
+ */
 ( function ( $ ) {
 
     oxArticleVariant = {
@@ -23,7 +45,7 @@
 
                 // setting new selection
                 if ( obj.parents().hasClass("js-fnSubmit") ){
-                    obj.parent('li').parent('ul').siblings('input:hidden').attr( "value", obj.attr("rel") );
+                    obj.parent('li').parent('ul').siblings('input:hidden').attr( "value", obj.attr("data-seletion-id") );
 
                     var form = obj.closest("form");
                     $('input[name=fnc]', form).val("");
@@ -53,7 +75,7 @@
                             aSelectionInputs.not("*[value='']").each(function(i){
                                 hash = hash+i+':'+$(this).val()+"|";
                             });
-                            if ( jQuery.inArray( hash, oxVariantSelections ) ) {
+                            if ( jQuery.inArray( hash, oxVariantSelections ) === -1 ) {
                                 return self.reloadProductPartially( $("form.js-oxProductForm"), 'detailsMain', $("#detailsMain"), $("#detailsMain")[0]);
                             }
                         }
@@ -105,4 +127,4 @@
 
     $.widget("ui.oxArticleVariant", oxArticleVariant );
 
-})( jQuery )
+})( jQuery );

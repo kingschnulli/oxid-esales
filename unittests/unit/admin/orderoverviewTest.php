@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: orderoverviewTest.php 26806 2010-03-24 16:01:05Z sarunas $
+ * @version   SVN: $Id: orderoverviewTest.php 40244 2011-11-23 15:54:36Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -269,5 +269,47 @@ class Unit_Admin_OrderOverviewTest extends OxidTestCase
         // testing..
         $oView = new Order_Overview();
         $this->assertFalse( $oView->canExport() );
+    }
+
+    /**
+     * Order shipping date reset test case
+     *
+     * @return null
+     */
+    public function testCanReset(){
+        $soxId = '_testOrderId';
+        // writing test order
+        $oOrder = oxNew( "oxorder" );
+        $oOrder->setId( $soxId );
+        $oOrder->oxorder__oxshopid        = new oxField( oxConfig::getInstance()->getBaseShopId() );
+        $oOrder->oxorder__oxuserid        = new oxField( "oxdefaultadmin" );
+        $oOrder->oxorder__oxbillcompany   = new oxField( "Ihr Firmenname" );
+        $oOrder->oxorder__oxbillemail     = new oxField( oxADMIN_LOGIN );
+        $oOrder->oxorder__oxbillfname     = new oxField( "Hans" );
+        $oOrder->oxorder__oxbilllname     = new oxField( "Musterm0ann" );
+        $oOrder->oxorder__oxbillstreet    = new oxField( "Musterstr" );
+        $oOrder->oxorder__oxstorno        = new oxField( "0" );
+        $oOrder->oxorder__oxsenddate      = new oxField( "0000-00-00 00:00:00");
+        $oOrder->save();
+
+        $oView = new Order_Overview();
+
+        modConfig::setParameter( "oxid", $soxId );
+        $this->assertFalse($oView->canResetShippingDate());
+
+        $oOrder->oxorder__oxsenddate      = new oxField( date( "Y-m-d H:i:s", oxUtilsDate::getInstance()->getTime()));
+        $oOrder->save();
+
+        $this->assertTrue($oView->canResetShippingDate());
+
+        $oOrder->oxorder__oxstorno        = new oxField( "1" );
+        $oOrder->save();
+
+        $this->assertFalse($oView->canResetShippingDate());
+
+        $oOrder->oxorder__oxsenddate      = new oxField( "0000-00-00 00:00:00");
+        $oOrder->save();
+
+        $this->assertFalse($oView->canResetShippingDate());
     }
 }

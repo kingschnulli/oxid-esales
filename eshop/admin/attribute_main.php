@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_main.php 33474 2011-02-23 13:29:51Z arvydas.vapsva $
+ * @version   SVN: $Id: attribute_main.php 40201 2011-11-23 15:46:18Z linas.kukulskis $
  */
 
 /**
@@ -41,7 +41,7 @@ class Attribute_Main extends oxAdminDetails
     {   $myConfig = $this->getConfig();
 
         parent::render();
-
+        $oAttr = oxNew( "oxattribute" );
         $soxId = $this->_aViewData["oxid"] = $this->getEditObjectId();
         $sArticleTable = getViewName('oxarticles');
 
@@ -50,9 +50,7 @@ class Attribute_Main extends oxAdminDetails
         if ( $soxId != "-1" && isset( $soxId)) {
             // generating category tree for select list
             $sChosenArtCat = $this->_getCategoryTree( "artcattree", $sChosenArtCat, $soxId);
-
             // load object
-            $oAttr = oxNew( "oxattribute" );
             $oAttr->loadInLang( $this->_iEditLang, $soxId );
 
 
@@ -61,8 +59,6 @@ class Attribute_Main extends oxAdminDetails
                 // echo "language entry doesn't exist! using: ".key($oOtherLang);
                 $oAttr->loadInLang( key($oOtherLang), $soxId );
             }
-
-            $this->_aViewData["edit"] =  $oAttr;
 
             // remove already created languages
             $aLang = array_diff ( oxLang::getInstance()->getLanguageNames(), $oOtherLang);
@@ -76,6 +72,9 @@ class Attribute_Main extends oxAdminDetails
                 $this->_aViewData["otherlang"][$id] =  clone $oLang;
             }
         }
+
+        $this->_aViewData["edit"] =  $oAttr;
+
         if ( oxConfig::getParameter("aoc") ) {
 
             $aColumns = array();
@@ -94,6 +93,7 @@ class Attribute_Main extends oxAdminDetails
      */
     public function save()
     {
+        parent::save();
 
         $soxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval");
@@ -125,6 +125,7 @@ class Attribute_Main extends oxAdminDetails
      */
     public function saveinnlang()
     {
+        parent::save();
 
         $soxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval");

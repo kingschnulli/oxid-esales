@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 35278 2011-05-10 06:48:32Z sarunas $
+ * @version   SVN: $Id: oxviewconfig.php 39388 2011-10-14 12:46:08Z linas.kukulskis $
  */
 
 /**
@@ -157,11 +157,12 @@ class oxViewConfig extends oxSuperCfg
             $sAddQ    = "oxshopid = '".$oConfig->getShopId()."' and oxactive = 1 and";
             $sViewName = getViewName( 'oxcontents' );
 
+            $oDb = oxDb::getDb();
             // checking if there is a custom content for help page
-            $sQ  = "select oxid from {$sViewName} where {$sAddQ} oxloadid = 'oxhelp".strtolower( $sClass )."' union ";
+            $sQ  = "select oxid from {$sViewName} where {$sAddQ} oxloadid = ".$oDb->quote( 'oxhelp'.strtolower( $sClass ) )." union ";
             $sQ .= "select oxid from {$sViewName} where {$sAddQ} oxloadid = 'oxhelpdefault'";
 
-            if ( $sContentId = oxDb::getDb()->getOne( $sQ ) ) {
+            if ( $sContentId = $oDb->getOne( $sQ ) ) {
                 $oContent = oxNew( "oxcontent" );
                 $oContent->load( $sContentId );
                 $sLink = $oContent->getLink();
@@ -374,7 +375,13 @@ class oxViewConfig extends oxSuperCfg
     public function getBaseDir()
     {
         if ( ( $sValue = $this->getViewConfigParam( 'basedir' ) ) === null ) {
-            $sValue = $this->getConfig()->getShopURL();
+
+            if ( $this->getConfig()->isSsl() ) {
+                $sValue = $this->getConfig()->getSSLShopURL();
+            } else {
+                $sValue = $this->getConfig()->getShopURL();
+            }
+
             $this->setViewConfigParam( 'basedir', $sValue );
         }
         return $sValue;
@@ -495,12 +502,14 @@ class oxViewConfig extends oxSuperCfg
     /**
      * Returns shops resource url
      *
+     * @param string $sFile resource file name
+     *
      * @return string
      */
-    public function getResourceUrl()
+    public function getResourceUrl( $sFile = null )
     {
         if ( ( $sValue = $this->getViewConfigParam( 'basetpldir' ) ) === null ) {
-            $sValue = $this->getConfig()->getResourceUrl( null, $this->isAdmin() );
+            $sValue = $this->getConfig()->getResourceUrl( $sFile, $this->isAdmin() );
             $this->setViewConfigParam( 'basetpldir', $sValue );
         }
         return $sValue;
@@ -537,12 +546,17 @@ class oxViewConfig extends oxSuperCfg
     /**
      * Returns image url
      *
+     * @param string $sFile Image file name
+     * @param bool   $bSsl  Whether to force SSL
+     *
      * @return string
      */
-    public function getImageUrl()
+    public function getImageUrl( $sFile = null, $bSsl = null )
     {
-        if ( ( $sValue = $this->getViewConfigParam( 'imagedir' ) ) === null ) {
-            $sValue = $this->getConfig()->getImageUrl( $this->isAdmin() );
+        if ($sFile) {
+           $sValue = $this->getConfig()->getImageUrl( $this->isAdmin(), $bSsl, null, $sFile );
+        } elseif ( ( $sValue = $this->getViewConfigParam( 'imagedir' ) ) === null ) {
+            $sValue = $this->getConfig()->getImageUrl( $this->isAdmin(), $bSsl );
             $this->setViewConfigParam( 'imagedir', $sValue );
         }
         return $sValue;
@@ -806,6 +820,16 @@ class oxViewConfig extends oxSuperCfg
             $this->setViewConfigParam( 'lang', $sValue );
         }
         return $sValue;
+    }
+
+     /**
+     * Returns session language id
+     *
+     * @return string
+     */
+    public function getActLanguageAbbr()
+    {
+        return oxLang::getInstance()->getLanguageAbbr( $this->getActLanguageId() );
     }
 
     /**

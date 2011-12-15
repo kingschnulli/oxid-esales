@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlistTest.php 29921 2010-09-21 12:18:02Z sarunas $
+ * @version   SVN: $Id: oxdiscountlistTest.php 40230 2011-11-23 15:51:52Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -44,6 +44,7 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
     {
         oxRemClassModule( 'modOxUtilsDate' );
         $this->cleanUpTable( 'oxobject2discount' );
+        $this->cleanUpTable( 'oxcategories' );
         parent::tearDown();
     }
 
@@ -550,4 +551,33 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
         $this->assertTrue( $oList->getNonPublicVar( '_blReload' ) );
     }
 
+    public function testHasSkipDiscountCategories()
+    {
+           // making category
+        $oCategory = oxNew( 'oxcategory' );
+        $oCategory->setId( '_testCat' );
+        $oCategory->oxcategories__oxparentid = new oxField('oxrootid', oxField::T_RAW);
+        $oCategory->oxcategories__oxrootid = new oxField('_testCat', oxField::T_RAW);
+        $oCategory->oxcategories__oxactive = new oxField(1, oxField::T_RAW);
+        $oCategory->oxcategories__oxshopid = new oxField(oxConfig::getInstance()->getShopId(), oxField::T_RAW);
+        $oCategory->oxcategories__oxtitle = new oxField('Test category 1', oxField::T_RAW);
+        $oCategory->oxcategories__oxskipdiscounts = new oxField('1', oxField::T_RAW);
+        $oCategory->save();
+
+        oxDiscountList::getInstance()->forceReload();
+        $this->assertTrue( oxDiscountList::getInstance()->hasSkipDiscountCategories() );
+
+        $oCategory->oxcategories__oxskipdiscounts = new oxField('0', oxField::T_RAW);
+        $oCategory->save();
+
+        oxDiscountList::getInstance()->forceReload();
+        $this->assertFalse( oxDiscountList::getInstance()->hasSkipDiscountCategories() );
+
+
+        $oCategory->oxcategories__oxskipdiscounts = new oxField('1', oxField::T_RAW);
+        $oCategory->save();
+
+        oxDiscountList::getInstance()->forceReload();
+        $this->assertTrue( oxDiscountList::getInstance()->hasSkipDiscountCategories() );
+    }
 }

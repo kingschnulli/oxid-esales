@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 35269 2011-05-10 06:48:11Z sarunas $
+ * @version   SVN: $Id: userTest.php 40414 2011-12-01 09:37:01Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -108,12 +108,42 @@ class Unit_Views_userTest extends OxidTestCase
          $oUserView = new user();
          $this->assertEquals( 0, $oUserView->getLoginOption() );
     }
-
-    public function testGetOrderRemark()
+    /**
+     * Tests User::getOrderRemark() when not logged in and form was't submited
+     */
+    public function testGetOrderRemarkNoRemark()
     {
-         modSession::getInstance()->setVar( 'ordrem', "test" );
-         $oUserView = new user();
-         $this->assertEquals( "test", $oUserView->getOrderRemark() );
+        // get user returns false (not logged in)
+        $oUserView = $this->getMock( 'user', array( 'getUser' ) );
+        $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
+
+        // not connected and no post (will return false)
+        $this->assertFalse( $oUserView->getOrderRemark() );
+    }
+
+    /**
+     * Tests User::getOrderRemark() when logged in
+     */
+    public function testGetOrderRemarkFromPost()
+    {
+        // gettin order remark from post (when not logged in)
+        modConfig::setParameter( 'order_remark', 'test' );
+
+        // get user returns false (not logged in)
+        $oUserView = $this->getMock( 'user', array( 'getUser' ) );
+        $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
+        $this->assertEquals( 'test', $oUserView->getOrderRemark() );
+    }
+    /**
+     * Tests User::getOrderRemark() when not logged in and form was submited
+     */
+    public function testGetOrderRemarkFromSession()
+    {
+        // setting the variable
+        modSession::getInstance()->setVar( 'ordrem', "test" );
+        $oUserView = $this->getMock( 'user', array( 'getUser' ) );
+        $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( true ) );
+        $this->assertEquals( 'test', $oUserView->getOrderRemark() );
     }
 
     public function testIsNewsSubscribed()
@@ -313,5 +343,52 @@ class Unit_Views_userTest extends OxidTestCase
         $aViewData = $oView->getNonPublicVar( "_aViewData" );
         $this->assertEquals( "testValue1", $aViewData["invadr"]["oxuser__oxfname"] );
         $this->assertEquals( "testValue2",  $aViewData["invadr"]["oxuser__oxlname"] );
+    }
+
+    public function testIsDownloadableProductWarning()
+    {
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "blEnableDownloads", true );
+
+        $oB = $this->getMock('oxbasket', array('hasDownloadableProducts'));
+        $oB->expects($this->once())->method('hasDownloadableProducts')->will($this->returnValue(true));
+
+        $oS = $this->getMock('oxsession', array('getBasket'));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
+
+        $oO = $this->getMock('user', array('getSession'));
+        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $this->assertTrue($oO->isDownloadableProductWarning());
+    }
+
+    public function testISDownloadableProductWarningFalse()
+    {
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "blEnableDownloads", true );
+
+        $oS = $this->getMock('oxsession', array('getBasket'));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue(false));
+
+        $oO = $this->getMock('user', array('getSession'));
+        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $this->assertFalse($oO->isDownloadableProductWarning());
+    }
+
+    public function testIsDownloadableProductWarningFeatureOff()
+    {
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "blEnableDownloads", false );
+
+        $oB = new oxBasket();
+
+        $oS = $this->getMock('oxsession', array('getBasket'));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
+
+        $oO = $this->getMock('user', array('getSession'));
+        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $this->assertFalse($oO->isDownloadableProductWarning());
     }
 }

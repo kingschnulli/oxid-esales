@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 36372 2011-06-16 07:34:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 39804 2011-11-05 09:21:25Z linas.kukulskis $
  */
 
 /**
@@ -968,24 +968,23 @@ class oxUtils extends oxSuperCfg
      *
      * @param int $iShopId current shop id
      *
+     * @deprecated use oxShopMetaData::getInstance()->getShopBit since 4.6
+     *
      * @return int
      */
     public function getShopBit( $iShopId )
     {
-        $iShopId = (int) $iShopId;
-        //this works for large numbers when $sShopNr is up to (inclusive) 64
-        $iRes = oxDb::getDb()->getOne( "select 1 << ( $iShopId - 1 ) as shopbit" );
-
-        //as php ints supports only 32 bits, we return string.
-        return $iRes;
+        return oxShopMetaData::getInstance()->getShopBit( $iShopId );
     }
 
-    /**
+   /**
      * Binary AND implementation.
      * We use mySQL to calculate that, as currently php int size is only 32 bit.
      *
      * @param int $iVal1 value nr 1
      * @param int $iVal2 value nr 2
+     *
+     * @deprecated use oxShopMetaData::getInstance()->isIncludedInShop or oxShopMetaData::getInstance()->isExcludedFromShop since 4.6
      *
      * @return int
      */
@@ -1004,6 +1003,8 @@ class oxUtils extends oxSuperCfg
      *
      * @param int $iVal1 value nr 1
      * @param int $iVal2 value nr 2
+     *
+     * @deprecated since 4.6
      *
      * @return int
      */
@@ -1050,6 +1051,10 @@ class oxUtils extends oxSuperCfg
      * @param string $sUrl               URL to be redirected
      * @param bool   $blAddRedirectParam add "redirect" param
      * @param int    $iHeaderCode        header code, default 301
+     *
+     * @TODO change $iHeaderCode default value to 302, because
+     * ONLY if page was removed permanently 301 header must be
+     * send. On most redirects we only transfer to different page
      *
      * @return null or exit
      */
@@ -1157,14 +1162,14 @@ class oxUtils extends oxSuperCfg
     protected function _fillExplodeArray( $aName, $dVat = null)
     {
         $myConfig = $this->getConfig();
-        $oObject = new OxstdClass();
+        $oObject = new oxStdClass();
         $aPrice = explode( '!P!', $aName[0]);
 
         if ( ( $myConfig->getConfigParam( 'bl_perfLoadSelectLists' ) && $myConfig->getConfigParam( 'bl_perfUseSelectlistPrice' ) && isset( $aPrice[0] ) && isset( $aPrice[1] ) ) || $this->isAdmin() ) {
 
             // yes, price is there
-            $oObject->price = $aPrice[1];
-            $aName[0] = $aPrice[0];
+            $oObject->price = isset( $aPrice[1] ) ? $aPrice[1] : 0;
+            $aName[0] = isset( $aPrice[0] ) ? $aPrice[0] : '';
 
             $iPercPos = getStr()->strpos( $oObject->price, '%' );
             if ( $iPercPos !== false ) {

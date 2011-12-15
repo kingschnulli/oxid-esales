@@ -19,17 +19,19 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
+ * @version   SVN: $Id: article_extend.inc.php 39394 2011-10-14 13:38:55Z arvydas.vapsva $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
                                         array( 'oxtitle', 'oxcategories', 1, 1, 0 ),
                                         array( 'oxdesc',  'oxcategories', 1, 1, 0 ),
+                                        array( 'oxid',    'oxcategories', 0, 0, 0 ),
                                         array( 'oxid',    'oxcategories', 0, 0, 1 )
                                         ),
                      'container2' => array(
                                         array( 'oxtitle', 'oxcategories', 1, 1, 0 ),
                                         array( 'oxdesc',  'oxcategories', 1, 1, 0 ),
+                                        array( 'oxid',    'oxcategories', 0, 0, 0 ),
                                         array( 'oxid',    'oxobject2category', 0, 0, 1 ),
                                         array( 'oxtime',  'oxobject2category', 0, 0, 1 ),
                                         array( 'oxid',    'oxcategories',      0, 0, 1 )
@@ -115,27 +117,32 @@ class ajaxComponent extends ajaxListComponent
      */
     public function removecat()
     {
-        $myConfig   = $this->getConfig();
-        $aRemoveCat = $this->_getActionIds( 'oxobject2category.oxid' );
-        $soxId      = oxConfig::getParameter( 'oxid' );
-        $sShopID    = $myConfig->getShopId();
-        $sO2CView = $this->_getViewName( 'oxobject2category' );
+        $myConfig = $this->getConfig();
+        $aRemoveCat = $this->_getActionIds( 'oxcategories.oxid' );
+
+        $soxId   = oxConfig::getParameter( 'oxid' );
+        $sShopID = $myConfig->getShopId();
         $oDb = oxDb::getDb();
 
-        // removing all
+            // adding
         if ( oxConfig::getParameter( 'all' ) ) {
-
-            $sQ = $this->_addFilter( "delete $sO2CView.* ".$this->_getQuery() );
-            $oDb->Execute( $sQ );
-
-        } elseif ( is_array( $aRemoveCat ) && count( $aRemoveCat ) ) {
-
-            $sQ = 'delete from oxobject2category where oxid in (' . implode( ', ', oxDb::getInstance()->quoteArray( $aRemoveCat ) ) . ')';
-            $oDb->Execute( $sQ );
-
+            $sCategoriesTable = $this->_getViewName( 'oxcategories' );
+            $aRemoveCat = $this->_getAll( $this->_addFilter( "select {$sCategoriesTable}.oxid ".$this->_getQuery() ) );
         }
 
-        $this->resetArtSeoUrl( $soxId );
+        // removing all
+        if ( is_array( $aRemoveCat ) && count( $aRemoveCat ) ) {
+
+            $sQ = "delete from oxobject2category where oxobject2category.oxobjectid= " . oxDb::getDb()->quote( $soxId ) . " and ";
+            $sQ .= " oxcatnid in (" . implode( ', ', oxDb::getInstance()->quoteArray( $aRemoveCat ) ) . ')';
+            $oDb->Execute( $sQ );
+
+
+            // updating oxtime values
+            $this->_updateOxTime( $soxId );
+        }
+
+        $this->resetArtSeoUrl( $soxId, $aRemoveCat );
         $this->resetContentCache();
     }
 
@@ -175,17 +182,41 @@ class ajaxComponent extends ajaxListComponent
                     continue;
 
                 $oNew->setId( $myUtilsObj->generateUID() );
-                $oNew->oxobject2category__oxobjectid = new oxField($soxId);
-                $oNew->oxobject2category__oxcatnid   = new oxField($sAdd);
-                $oNew->oxobject2category__oxtime     = new oxField(time());
+                $oNew->oxobject2category__oxobjectid = new oxField( $soxId );
+                $oNew->oxobject2category__oxcatnid   = new oxField( $sAdd );
+                $oNew->oxobject2category__oxtime     = new oxField( time() );
 
 
                 $oNew->save();
             }
 
+            $this->_updateOxTime( $soxId );
+
             $this->resetArtSeoUrl( $soxId );
             $this->resetContentCache();
         }
+    }
+
+    /**
+     * Updates oxtime value for product
+     *
+     * @param string $soxId product id
+     *
+     * @return null
+     */
+    protected function _updateOxTime( $soxId )
+    {
+        $oDb = oxDb::getDb();
+        $sO2CView = $this->_getViewName('oxobject2category');
+        $soxId = $oDb->quote( $soxId );
+
+        // updating oxtime values
+        $sQ  = "update oxobject2category set oxtime = 0 where oxobjectid = {$soxId} and oxid = (
+                    select oxid from (
+                        select oxid from {$sO2CView} where oxobjectid = {$soxId} order by oxtime limit 1
+                    ) as _tmp
+                )";
+        $oDb->execute( $sQ );
     }
 
     /**

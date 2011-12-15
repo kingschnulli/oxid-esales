@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: news.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
+ * @version   SVN: $Id: news.php 38755 2011-09-14 12:06:26Z linas.kukulskis $
  */
 
 /**
@@ -33,7 +33,6 @@ class News extends oxUBase
      * @var object
      */
     protected $_oNewsList = null;
-
     /**
      * Current class login template name.
      * @var string
@@ -71,6 +70,7 @@ class News extends oxUBase
         return $this->_oNewsList;
     }
 
+    
     /**
      * Returns Bread Crumb - you are here page1/page2/page3...
      *

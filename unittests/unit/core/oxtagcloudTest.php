@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloudTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxtagcloudTest.php 40162 2011-11-23 14:03:20Z justinas.straksys $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -295,7 +295,27 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $this->assertEquals('a b', $oTagCloud->stripMetaChars('a*b'));
         $this->assertEquals('a b', $oTagCloud->stripMetaChars('a"b'));
         $this->assertEquals('a b', $oTagCloud->stripMetaChars('a\'b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a\\b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a\\b'));	
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a[]{};:./|!@#$%^&?=`b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a[b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a]b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a{b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a}b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a;b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a:b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a.b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a/b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a|b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a!b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a@b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a#b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a$b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a%b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a^b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a&b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a?b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a=b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a`b'));
     }
 
     public function testPrepareTags()
@@ -318,6 +338,8 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $this->assertEquals('barr sett', $oTagCloud->prepareTags('barr-sett'));
         $this->assertEquals('foo_ bar_', $oTagCloud->prepareTags('"foo-bar"'));
         $this->assertEquals('foo_', $oTagCloud->prepareTags('\\foo\\'));
+        $this->assertEquals('long testing string long testing string long testing string', $oTagCloud->prepareTags('Long testing string long testing string long testing string long testing string'));
+		$this->assertEquals('a___ long testing string long testing string long testing strin', $oTagCloud->prepareTags('A long testing string long testing string long testing string long testing string'));
     }
 
     public function testTrimTags()

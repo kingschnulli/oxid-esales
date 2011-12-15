@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryTest.php 34923 2011-04-26 08:58:41Z sarunas $
+ * @version   SVN: $Id: oxdeliveryTest.php 39818 2011-11-05 09:32:12Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -392,6 +392,32 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
         $this->assertTrue( $oDelivery->isForBasket( $oBasket ) );
     }
 
+    // #1130: Single article in Basket, checked as free shipping, is not buyable (step 3 no payments found)
+    public function testIsForBasketPriceDeliveryIsFixed()
+    {
+        $oDelivery = new oxDelivery();
+        $oDelivery->setId( '_testdelivery' );
+        $oDelivery->oxdelivery__oxshopid = new oxField(oxConfig::getInstance()->getBaseShopId(), oxField::T_RAW);
+        $oDelivery->oxdelivery__oxshopincl = new oxField($oDelivery->oxdelivery__oxshopid->value, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxactive = new oxField(1, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxtitle = new oxField('_testdelivery', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxaddsumtype = new oxField('abs', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxaddsum = new oxField('10', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxdeltype = new oxField('p', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxfixed = new oxField('2', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxparam = new oxField(0, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxparamend = new oxField(0, oxField::T_RAW);
+        $oDelivery->save();
+
+        $oBasket = new oxBasket();
+        modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );
+        modConfig::getInstance()->setConfigParam( 'blExclNonMaterialFromDelivery', true );
+        $oBasket->addToBasket( '1354', 5 );
+        $oBasket->calculateBasket();
+
+        $this->assertFalse( $oDelivery->isForBasket( $oBasket ) );
+    }
+
     public function testIsForBasketRegularDeliveryOncePerArticle()
     {
         $oDelivery = new oxDelivery();
@@ -597,13 +623,20 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
      */
     public function test_getDeliveryAmountFreeShipping()
     {
-        $this->_oBasketItem->getArticle()->oxarticles__oxfreeshipping = new oxField(true, oxField::T_RAW);
+        $this->_oBasketItem->getArticle()->oxarticles__oxfreeshipping = new oxField( true );
 
         $oDelivery = oxNew( 'oxdelivery' );
         $oDelivery->oxdelivery__oxdeltype = new oxField('p', oxField::T_RAW);
 
-        $this->assertEquals( 512, $oDelivery->getDeliveryAmount($this->_oBasketItem) );
+        $this->assertEquals( 0, $oDelivery->getDeliveryAmount($this->_oBasketItem) );
         $this->assertTrue( $oDelivery->getblFreeShipping() );
+
+        // non free shiping
+        $this->_oBasketItem->getArticle()->oxarticles__oxfreeshipping = new oxField( false );
+
+        $this->assertEquals( 512, $oDelivery->getDeliveryAmount($this->_oBasketItem) );
+        $this->assertFalse( $oDelivery->getblFreeShipping() );
+
     }
 
     /*
@@ -612,17 +645,25 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
     public function test_getDeliveryAmountIfArtOffline()
     {
         $oArt = $this->_oBasketItem->getArticle();
-        $oArt->oxarticles__oxfreeshipping = new oxField(true, oxField::T_RAW);
-        $oArt->oxarticles__oxstock = new oxField(0, oxField::T_RAW);
-        $oArt->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
+        $oArt->oxarticles__oxfreeshipping = new oxField( true );
+        $oArt->oxarticles__oxstock        = new oxField( 0 );
+        $oArt->oxarticles__oxstockflag    = new oxField( 2 );
         $oArt->save();
-        $this->_oBasketItem->setNonPublicVar( "_oArticle", null );
 
         $oDelivery = oxNew( 'oxdelivery' );
-        $oDelivery->oxdelivery__oxdeltype = new oxField('p', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxdeltype = new oxField( 'p' );
 
-        $this->assertEquals( 512, $oDelivery->getDeliveryAmount($this->_oBasketItem) );
+        $this->assertEquals( 0, $oDelivery->getDeliveryAmount( $this->_oBasketItem ) );
         $this->assertTrue( $oDelivery->getblFreeShipping() );
+
+        // non free shiping
+        $oArt->oxarticles__oxfreeshipping = new oxField( false );
+
+        $oDelivery = oxNew( 'oxdelivery' );
+        $oDelivery->oxdelivery__oxdeltype = new oxField( 'p' );
+
+        $this->assertEquals( 512, $oDelivery->getDeliveryAmount( $this->_oBasketItem ) );
+        $this->assertFalse( $oDelivery->getblFreeShipping() );
     }
 
     /*
@@ -775,21 +816,26 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
      */
     public function testGetDeliveryAmountIfOneArtFreeShipped()
     {
-        // test for delivery by amount
-        $oDelivery = oxNew( 'oxdelivery' );
-        $oDelivery->oxdelivery__oxdeltype = new oxField('p', oxField::T_RAW);
-
-        $aBasketContents[0] = $this->_oBasketItem;
-        $oBasketItem = oxNew( "oxBasketItem" );
-        $oBasketItem->init('_testArticleId2', 2 );
-
         $oPrice = oxNew( 'oxprice' );
         $oPrice->setPrice( 256, 0 );
-        $oBasketItem->setPrice( $oPrice );
-        $oBasketItem->getArticle()->oxarticles__oxfreeshipping = new oxField(true, oxField::T_RAW);
-        $aBasketContents[1] = $oBasketItem;
+
+        $oBasketItem1 = oxNew( "oxBasketItem" );
+        $oBasketItem1->init( '_testArticleId2', 2 );
+        $oBasketItem1->setPrice( $oPrice );
+        $oBasketItem1->getArticle()->oxarticles__oxfreeshipping = new oxField( true );
+
+        $oBasketItem2 = oxNew( "oxBasketItem" );
+        $oBasketItem2->init( '_testArticleId2', 2 );
+        $oBasketItem2->setPrice( $oPrice );
+        $oBasketItem2->getArticle()->oxarticles__oxfreeshipping = new oxField( false );
 
         // 2 basket items
+        $aBasketContents = array( $this->_oBasketItem, $oBasketItem1, $oBasketItem2 );
+
+        // test for delivery by amount
+        $oDelivery = oxNew( 'oxdelivery' );
+        $oDelivery->oxdelivery__oxdeltype = new oxField( 'p' );
+
         foreach ( $aBasketContents as $oBasketItem ) {
             $oDelivery->getDeliveryAmount( $oBasketItem );
         }

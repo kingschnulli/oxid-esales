@@ -13,7 +13,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=[{$oEmailView->getCharset()}]">
   </head>
   <body bgcolor="#FFFFFF" link="#355222" alink="#355222" vlink="#355222" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;">
-    <img src="[{$oViewConf->getImageUrl()}]logo_white.gif" border="0" hspace="0" vspace="0" alt="[{ $shop->oxshops__oxname->value }]" align="texttop"><br><br>
+    <img src="[{$oViewConf->getImageUrl('logo_white.gif', false)}]" border="0" hspace="0" vspace="0" alt="[{ $shop->oxshops__oxname->value }]" align="texttop"><br><br>
     [{if $payment->oxuserpayments__oxpaymentsid->value == "oxempty"}]
       [{oxcontent ident="oxadminordernpemail"}]
     [{else}]
@@ -45,14 +45,14 @@
       [{assign var="basketproduct" value=$basketitemlist.$basketindex }]
         <tr>
           <td valign="top" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;">
-            <img src="[{$basketproduct->getThumbnailUrl() }]" border="0" hspace="0" vspace="0" alt="[{ $basketproduct->oxarticles__oxtitle->value|strip_tags }]" align="texttop">
+            <img src="[{$basketproduct->getThumbnailUrl(false) }]" border="0" hspace="0" vspace="0" alt="[{$basketitem->getTitle()|strip_tags}]" align="texttop">
               [{if $oViewConf->getShowGiftWrapping() }]
                 [{assign var="oWrapping" value=$basketitem->getWrapping() }]
                 <br><b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_WRAPPING" }]&nbsp;</b>[{ if !$basketitem->getWrappingId() }][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_NONE" }][{else}][{$oWrapping->oxwrapping__oxname->value}][{/if}]
               [{/if}]
           </td>
           <td valign="top" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;">
-            <b>[{ $basketproduct->oxarticles__oxtitle->value }][{ if $basketproduct->oxarticles__oxvarselect->value}], [{ $basketproduct->oxarticles__oxvarselect->value}][{/if}]</b>
+            <b>[{$basketitem->getTitle()}]</b>
             [{ if $basketitem->getChosenSelList() }],
               [{foreach from=$basketitem->getChosenSelList() item=oList}]
                 [{ $oList->name }] [{ $oList->value }]&nbsp;
@@ -104,7 +104,7 @@
         <tr>
           <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top">
             <b>[{ oxmultilang ident="EMAIL_ORDER_OWNER_HTML_ATENTIONGREETINGCARD" }]</b><br>
-            <img src="[{$basket->oCard->getNoSslDynImageDir()}]/0/[{$basket->oCard->oxwrapping__oxpic->value}]" alt="[{$basket->oCard->oxwrapping__oxname->value}]" hspace="0" vspace="0" border="0" align="top"><br><br>
+            <img src="[{$basket->oCard->getPictureUrl()}]" alt="[{$basket->oCard->oxwrapping__oxname->value}]" hspace="0" vspace="0" border="0" align="top"><br><br>
           </td>
           <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top">
             [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_YOURMESSAGE" }]<br>
@@ -132,12 +132,13 @@
               </tr>
             [{/if}]
             [{ foreach from=$order->getVoucherList() item=voucher}]
+              [{ assign var="voucherseries" value=$voucher->getSerie() }]
               <tr>
                   <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top">
-                    [{$voucher->oxmodvouchers__oxvouchernr->value}]
+                    [{$voucher->oxvouchers__oxvouchernr->value}]
                   </td>
                   <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" valign="top">
-                    [{$voucher->oxmodvouchers__oxdiscount->value}] [{ if $voucher->oxmodvouchers__oxdiscounttype->value == "absolute"}][{ $currency->sign}][{else}]%[{/if}]
+                    [{$voucherseries->oxvoucherseries__oxdiscount->value}] [{ if $voucherseries->oxvoucherseries__oxdiscounttype->value == "absolute"}][{ $currency->sign}][{else}]%[{/if}]
                   </td>
               </tr>
             [{/foreach }]

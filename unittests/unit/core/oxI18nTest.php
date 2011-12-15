@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxI18nTest.php 34547 2011-04-09 14:24:32Z sarunas $
+ * @version   SVN: $Id: oxI18nTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -52,6 +52,10 @@ class Unit_Core_oxi18ntest extends OxidTestCase
 
     protected  function setUp()
     {
+        if ( $this->getName() == "testMultilangObjectDeletion" ) {
+            $this->_insertTestLanguage();
+        }
+
         parent::setUp();
     }
 
@@ -68,6 +72,11 @@ class Unit_Core_oxi18ntest extends OxidTestCase
             $oDB->execute( "delete from oxarticles where oxid='testa'" );
             $oDB->execute( "delete from oxartextends where oxid='testa'" );
         }
+
+        if ( $this->getName() == "testMultilangObjectDeletion" ) {
+            $this->_deleteTestLanguage();
+        }
+
         parent::tearDown();
     }
 
@@ -719,8 +728,9 @@ class Unit_Core_oxi18ntest extends OxidTestCase
             $oObj->UNITgetLanguageSetTables()
         );
 
-        $oLang = $this->getMock('stdclass', array('getLanguageIds'));
+        $oLang = $this->getMock('oxLang', array('getLanguageIds'));
         $oLang->expects($this->any())->method('getLanguageIds')->will($this->returnValue(array(0=>'de', 1=>'en', 90=>'lt')));
+
         modInstances::addMod('oxLang', $oLang);
 
         $this->assertEquals(
@@ -744,9 +754,10 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $oObj->setId("test_insert");
         $oObj->oxstates__oxtitle = new oxField('test_x');
 
-        $oDb = $this->getMock('stdclass', array('execute', 'quote'));
+        $oDb = $this->getMock('stdclass', array('execute', 'quote', 'getOne'));
         $oDb->expects($this->any())->method('execute')->will($this->evalFunction('{Unit_Core_oxi18ntest::$aLoggedSqls[] = $args[0];return true;}'));
         $oDb->expects($this->any())->method('quote')->will($this->evalFunction('{return "\'".mysql_real_escape_string($args[0])."\'";}'));
+        $oDb->expects($this->any())->method('getOne');
         modDb::getInstance()->modAttach($oDb);
 
         $oObj->setLanguage(0);
@@ -847,5 +858,158 @@ class Unit_Core_oxi18ntest extends OxidTestCase
 
         $this->assertSame("''", $oObj->UNITgetUpdateFieldValue('oxid_10', new oxField(null)));
         $this->assertSame('null', $oObj->UNITgetUpdateFieldValue('oxvat_10', new oxField(null)));
+    }
+
+    /**
+     * Test for #0003138: Multilanguage fields having different
+     * character case are not always detected as multilanguage
+     *
+     * @return null
+     */
+    public function testIsMultilingualFieldFor0003138()
+    {
+        $oArticle = new oxArticle();
+        $this->assertTrue( $oArticle->isMultilingualField( "oxtitle" ) );
+        $this->assertTrue( $oArticle->isMultilingualField( "OXTITLE" ) );
+        $this->assertTrue( $oArticle->isMultilingualField( "oXtItLe" ) );
+    }
+
+    protected $_aLangTables = array();
+
+    /**
+     * Inserts new test language tables
+     *
+     * @return null
+     */
+    protected function _insertTestLanguage()
+    {
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+
+        $this->_aLangTables["oxactions"]  = "oxactions";
+        $this->_aLangTables["oxcategory"] = "oxcategories";
+        $this->_aLangTables["oxcontent"]  = "oxcontents";
+        $this->_aLangTables["oxcountry"]  = "oxcountry";
+        $this->_aLangTables["oxdelivery"] = "oxdelivery";
+        $this->_aLangTables["oxdiscount"] = "oxdiscount";
+        $this->_aLangTables["oxgroups"]   = "oxgroups";
+        $this->_aLangTables["oxlinks"]    = "oxlinks";
+        $this->_aLangTables["oxmediaurl"] = "oxmediaurls";
+        $this->_aLangTables["oxnews"]     = "oxnews";
+        $this->_aLangTables["oxpayment"]  = "oxpayments";
+        $this->_aLangTables["oxreview"]   = "oxreviews";
+        $this->_aLangTables["oxstate"]    = "oxstates";
+        $this->_aLangTables["oxvendor"]   = "oxvendor";
+        $this->_aLangTables["oxwrapping"] = "oxwrapping";
+        $this->_aLangTables["oxattribute"] = "oxattribute";
+        $this->_aLangTables["oxselectlist"] = "oxselectlist";
+        $this->_aLangTables["oxdeliveryset"] = "oxdeliveryset";
+        $this->_aLangTables["oxmanufacturer"] = "oxmanufacturers";
+
+        // creating language set tables and inserting by one test record
+        foreach ( $this->_aLangTables as $iPos => $sTable ) {
+            $sQ = "show create table {$sTable}";
+            $rs = $oDb->execute( $sQ );
+
+            // creating table
+            $sQ = end( $rs->fields );
+            if ( ( stripos( $sTable, "oxartextends" ) === false && stripos( $sTable, "oxshops" ) === false ) &&
+                 !preg_match( "/oxshopid/i", $sQ ) ) {
+                unset( $this->_aLangTables[$iPos] );
+                continue;
+            }
+
+
+            $sQ = str_replace( $sTable, $sTable . "_set1", $sQ );
+            $oDb->execute( $sQ );
+        }
+
+        $sShopId = $this->_sOXID;
+
+        // inserting test records
+        foreach ( $this->_aLangTables as $sTable ) {
+
+            // do not insert data into shops table..
+            if ( stripos( $sTable, "oxshops" ) !== false ) {
+                continue;
+            }
+
+            $sQVal = "";
+            $sQ = "show columns from {$sTable}";
+            $rs = $oDb->execute( $sQ );
+            if ( $rs != false && $rs->recordCount() > 0 ) {
+                while ( !$rs->EOF ) {
+                    $sValue = $rs->fields["Default"];
+                    $sType  = $rs->fields["Type"];
+                    $sField = $rs->fields["Field"];
+
+                    // overwriting default values
+                    if ( stripos( $sField, "oxshopid" ) !== false ) {
+                        $sValue = $sShopId;
+                    }
+                    if ( stripos( $sField, "oxid" ) !== false ) {
+                        $sValue = "_testRecordForTest";
+                    }
+
+
+                    if ( $sQVal ) {
+                        $sQVal .= ", ";
+                    }
+                    $sQVal .= "'$sValue'";
+                    $rs->moveNext();
+                }
+            }
+
+            $oDb->execute( "insert into {$sTable} values ({$sQVal})" );
+            $oDb->execute( "insert into {$sTable}_set1 values ({$sQVal})" );
+        }
+    }
+
+    /**
+     * Removes test language tables
+     *
+     * @return null
+     */
+    protected function _deleteTestLanguage()
+    {
+        // dropping language set tables
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        foreach ( $this->_aLangTables as $sTable ) {
+            $oDb->execute( "drop table {$sTable}_set1" );
+            $oDb->execute( "delete from {$sTable} where oxid like '_test%'" );
+        }
+    }
+
+    /**
+     * Testing how multilanguage objects are deleted..
+     *
+     * @return null
+     */
+    public function testMultilangObjectDeletion()
+    {
+        $sId = "_testRecordForTest";
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+
+        modConfig::getInstance()->setConfigParam( "iLangPerTable", 4 );
+        oxTestModules::addFunction( "oxLang", "getLanguageIds", "{return array('0' => 'de', '1' => 'de', '2' => 'lt', '3' => 'ru', '4' => 'pl', '5' => 'cz');}");
+
+        foreach ( $this->_aLangTables as $sObjectType => $sTableName ) {
+
+            $this->assertTrue( (bool) $oDb->getOne( "select 1 from {$sTableName} where oxid = '{$sId}'" ), "Missing data for table {$sTableName} table" );
+            $this->assertTrue( (bool) $oDb->getOne( "select 1 from {$sTableName}_set1 where oxid = '{$sId}'" ), "Missing data for table {$sTableName}_set1 table" );
+
+            $oObject = oxNew( $sObjectType );
+            $oObject->setId( $sId );
+
+            // some fine tuning..
+            if ( $sObjectType == "oxcategory" ) {
+                $oObject->oxcategories__oxright = new oxField( 11 );
+                $oObject->oxcategories__oxleft  = new oxField( 10 );
+            }
+
+            $this->assertTrue( $oObject->delete( $sId ), "Unable to delete $sObjectType type object" );
+
+            $this->assertFalse( (bool) $oDb->getOne( "select 1 from {$sTableName} where oxid = '{$sId}'" ), "Not cleaned {$sTableName} table" );
+            $this->assertFalse( (bool) $oDb->getOne( "select 1 from {$sTableName}_set1 where oxid = '{$sId}'" ), "Not cleaned {$sTableName}_set1 table" );
+        }
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 34014 2011-03-25 14:06:07Z sarunas $
+ * @version   SVN: $Id: paymentTest.php 39577 2011-10-26 13:34:13Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -76,6 +76,9 @@ class Unit_Views_paymentTest extends OxidTestCase
         unset($_GET["dynvalue"]["kkmonth"]);
         unset($_GET["dynvalue"]["kkyear"]);
         unset($_GET["dynvalue"]["kkpruef"]);
+
+        $this->cleanUpTable( 'oxuserpayments' );
+        $this->cleanUpTable( 'oxorder' );
 
         parent::tearDown();
     }
@@ -293,8 +296,31 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->assertEquals( 'test2', $oPayment->getDynValue() );
     }
 
+    /**
+     * Inserting test orders
+     */
+    protected function _insertTestOrders( $aUserPaymentId, $sUserId )
+    {
+        $oDb = oxDb::getDb();
+
+        $sQ = "INSERT INTO `oxorder`
+                   (`OXID`, `OXSHOPID`, `OXUSERID`, `OXORDERDATE`, `OXORDERNR`, `OXBILLCOMPANY`, `OXBILLEMAIL`, `OXBILLFNAME`, `OXBILLLNAME`, `OXBILLSTREET`, `OXBILLSTREETNR`, `OXBILLADDINFO`, `OXBILLUSTID`, `OXBILLCITY`, `OXBILLCOUNTRYID`, `OXBILLSTATEID`, `OXBILLZIP`, `OXBILLFON`, `OXBILLFAX`, `OXBILLSAL`, `OXDELCOMPANY`, `OXDELFNAME`, `OXDELLNAME`, `OXDELSTREET`, `OXDELSTREETNR`, `OXDELADDINFO`, `OXDELCITY`, `OXDELCOUNTRYID`, `OXDELSTATEID`, `OXDELZIP`, `OXDELFON`, `OXDELFAX`, `OXDELSAL`, `OXPAYMENTID`, `OXPAYMENTTYPE`, `OXTOTALNETSUM`, `OXTOTALBRUTSUM`, `OXTOTALORDERSUM`, `OXARTVAT1`, `OXARTVATPRICE1`, `OXARTVAT2`, `OXARTVATPRICE2`, `OXDELCOST`, `OXDELVAT`, `OXPAYCOST`, `OXPAYVAT`, `OXWRAPCOST`, `OXWRAPVAT`, `OXCARDID`, `OXCARDTEXT`, `OXDISCOUNT`, `OXEXPORT`, `OXBILLNR`, `OXTRACKCODE`, `OXSENDDATE`, `OXREMARK`, `OXVOUCHERDISCOUNT`, `OXCURRENCY`, `OXCURRATE`, `OXFOLDER`, `OXTRANSID`, `OXPAYID`, `OXXID`, `OXPAID`, `OXSTORNO`, `OXIP`, `OXTRANSSTATUS`, `OXLANG`, `OXINVOICENR`, `OXDELTYPE`)
+               VALUES
+                   (?, ?, ?, ?, ?, '', 'info@oxid-esales.com', 'Marc', 'Muster', 'Hauptstr.', '13', '', '', 'Freiburg', 'a7c40f631fc920687.20179984', 'BW', '79098', '', '', 'MR', '', '', '', '', '', '', '', '', '', '', '', '', '', ?, 'oxiddebitnote', 1639.15, 2108.39, 1950.59, 19, 311.44, 0, 0, 0, 19, 0, 0, 0, 0, '', '', 157.8, 0, '', '', '0000-00-00 00:00:00', 'Hier können Sie uns noch etwas mitteilen.', 0, 'EUR', 1, 'ORDERFOLDER_NEW', '', '', '', '0000-00-00 00:00:00', 0, '', 'OK', 0, 0, 'oxidstandard')";
+
+        $sShopId = oxConfig::getInstance()->GetBaseShopId();
+        foreach ( $aUserPaymentId as $iCnt => $sUserPaymentId ) {
+
+            $sOrderId = "_test" . ( time() + $iCnt );
+            $sOrderDate = "2011-03-1{$iCnt} 10:55:13";
+
+            $oDb->execute( $sQ, array( $sOrderId, $sShopId, $sUserId, $sOrderDate, $iCnt + 1, $sUserPaymentId ) );
+        }
+    }
+
     public function testGetDynValueIfDebitNoteIsSet()
     {
+        $this->_insertTestOrders( array( '_testOxId3', '_testOxId2', '_testOxId' ), "oxdefaultadmin" );
         modSession::getInstance()->setVar('dynvalue', array('lsbankname'=>''));
 
         $oUser = new oxuser();
@@ -307,11 +333,9 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oUpay->oxuserpayments__oxpaymentsid = new oxField('oxiddebitnote', oxField::T_RAW);
         $oUpay->save();
 
-        $oPayment = $this->getProxyClass( "payment" );
-        $oPayment->setUser($oUser);
-        $oPaymentList = array();
-        $oPaymentList['oxiddebitnote'] = true;
-        $oPayment->setNonPublicVar( "_oPaymentList", $oPaymentList );
+        $oPayment = $this->getMock( "payment", array( "getPaymentList" ) );
+        $oPayment->expects( $this->once() )->method( 'getPaymentList')->will( $this->returnValue( array( 'oxiddebitnote' => true ) ) );
+        $oPayment->setUser( $oUser );
         $this->assertEquals( array('lsbankname'=>'test'), $oPayment->getDynValue() );
     }
 

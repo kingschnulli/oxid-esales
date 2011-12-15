@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: account.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
+ * @version   SVN: $Id: account.php 39812 2011-11-05 09:30:32Z linas.kukulskis $
  */
 
 /**
@@ -105,6 +105,20 @@ class Account extends oxUBase
      * @var int
      */
     protected $_iViewIndexState = VIEW_INDEXSTATE_NOINDEXNOFOLLOW;
+
+    /**
+     * Start page meta description CMS ident
+     *
+     * @var string
+     */
+    protected $_sMetaDescriptionIdent = 'oxstartmetadescription';
+
+    /**
+     * Start page meta keywords CMS ident
+     *
+     * @var string
+     */
+    protected $_sMetaKeywordsIdent = 'oxstartmetakeywords';
 
     /**
      * Sign if to load and show top5articles action
@@ -216,17 +230,17 @@ class Account extends oxUBase
     {
         // in case source class is provided - redirecting back to it with all default parameters
         if ( ( $sSource = oxConfig::getParameter( "sourcecl" ) ) &&
-             $this->_oaComponents['oxcmp_user']->getLoginStatus() === USER_LOGIN_SUCCESS ) {
+            $this->_oaComponents['oxcmp_user']->getLoginStatus() === USER_LOGIN_SUCCESS ) {
 
-            $sParams = '';
+            $sRedirectUrl = $this->getConfig()->getShopUrl().'index.php?cl='.rawurlencode( $sSource );
             // building redirect link
+
             foreach ( $this->getNavigationParams() as $sName => $sValue ) {
                 if ( $sValue && $sName != "sourcecl" ) {
-                    $sParams .= '&'.rawurlencode( $sName ) . "=" . rawurlencode( $sValue );
+                    $sRedirectUrl .= '&'.rawurlencode( $sName ) . "=" . rawurlencode( $sValue );
                 }
             }
-
-            return oxUtils::getInstance()->redirect( $this->getConfig()->getShopUrl().'index.php?cl='.rawurlencode( $sSource ).$sParams );
+            return oxUtils::getInstance()->redirect( oxUtilsUrl::getInstance()->processUrl( $sRedirectUrl ), true, 302 );
         }
     }
 
@@ -371,9 +385,9 @@ class Account extends oxUBase
         $aPaths = array();
         $aPath  = array();
         if ( $oUser = $this->getUser() ) {
-            $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_DASHBOARD_MYACCOUNT', oxLang::getInstance()->getBaseLanguage(), false ) . $oUser->oxuser__oxusername->value;            
-        } else {            
-            $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_INC_LOGIN_LOGIN', oxLang::getInstance()->getBaseLanguage(), false );            
+            $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_DASHBOARD_MYACCOUNT', oxLang::getInstance()->getBaseLanguage(), false ) . $oUser->oxuser__oxusername->value;
+        } else {
+            $aPath['title'] = oxLang::getInstance()->translateString( 'PAGE_ACCOUNT_INC_LOGIN_LOGIN', oxLang::getInstance()->getBaseLanguage(), false );
         }
         $aPath['link'] = $this->getLink();
         $aPaths[] = $aPath;

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order_remark.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
+ * @version   SVN: $Id: order_remark.php 40189 2011-11-23 15:44:16Z linas.kukulskis $
  */
 
 /**
@@ -80,6 +80,7 @@ class Order_Remark extends oxAdminDetails
      */
     public function save()
     {
+        parent::save();
 
         $oOrder = oxNew( "oxorder" );
         if ( $oOrder->load( $this->getEditObjectId() ) ) {

@@ -19,17 +19,19 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: discount_categories.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
+ * @version   SVN: $Id: discount_categories.inc.php 39394 2011-10-14 13:38:55Z arvydas.vapsva $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
                                         array( 'oxtitle', 'oxcategories', 1, 1, 0 ),
                                         array( 'oxdesc',  'oxcategories', 1, 1, 0 ),
+                                        array( 'oxid',    'oxcategories', 0, 0, 0 ),
                                         array( 'oxid',    'oxcategories', 0, 0, 1 )
                                         ),
                      'container2' => array(
                                         array( 'oxtitle', 'oxcategories', 1, 1, 0 ),
                                         array( 'oxdesc',  'oxcategories', 1, 1, 0 ),
+                                        array( 'oxid',    'oxcategories', 0, 0, 0 ),
                                         array( 'oxid',    'oxobject2discount', 0, 0, 1 ),
                                         array( 'oxid',    'oxcategories',      0, 0, 1 )
                                         ),
@@ -46,7 +48,8 @@ class ajaxComponent extends ajaxListComponent
      */
     protected function _getQuery()
     {
-        $sId      = oxConfig::getParameter( 'oxid' );
+        $oDb = oxDb::getDb();
+        $sId = oxConfig::getParameter( 'oxid' );
         $sSynchId = oxConfig::getParameter( 'synchoxid' );
 
         $sCategoryTable = $this->_getViewName('oxcategories');
@@ -56,13 +59,13 @@ class ajaxComponent extends ajaxListComponent
             $sQAdd  = " from $sCategoryTable";
         } else {
             $sQAdd  = " from oxobject2discount, $sCategoryTable where $sCategoryTable.oxid=oxobject2discount.oxobjectid ";
-            $sQAdd .= " and oxobject2discount.oxdiscountid = '$sId' and oxobject2discount.oxtype = 'oxcategories' ";
+            $sQAdd .= " and oxobject2discount.oxdiscountid = ".$oDb->quote( $sId )." and oxobject2discount.oxtype = 'oxcategories' ";
         }
 
         if ( $sSynchId && $sSynchId != $sId) {
             // dodger performance
             $sSubSelect  = " select $sCategoryTable.oxid from oxobject2discount, $sCategoryTable where $sCategoryTable.oxid=oxobject2discount.oxobjectid ";
-            $sSubSelect .= " and oxobject2discount.oxdiscountid = '$sSynchId' and oxobject2discount.oxtype = 'oxcategories' ";
+            $sSubSelect .= " and oxobject2discount.oxdiscountid = ".$oDb->quote( $sSynchId )." and oxobject2discount.oxtype = 'oxcategories' ";
             if ( stristr( $sQAdd, 'where' ) === false )
                 $sQAdd .= ' where ';
             else

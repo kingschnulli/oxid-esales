@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: tag.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
+ * @version   SVN: $Id: tag.php 38614 2011-09-05 13:34:37Z linas.kukulskis $
  */
 
 /**
@@ -82,12 +82,10 @@ class Tag extends aList
     {
         oxUBase::render();
 
-        $myConfig = $this->getConfig();
-
         $oArticleList = $this->getArticleList();
 
-        //if no articles - showing 404 header (#2139)
-        if ( !$oArticleList || count( $oArticleList ) < 1 ) {
+        // if tags are off or no articles - showing 404 header (#2139)
+        if ( !$this->showTags() || !$oArticleList || count( $oArticleList ) < 1 ) {
             error_404_handler();
         }
 
@@ -137,7 +135,7 @@ class Tag extends aList
         $oArtList = oxNew( 'oxarticlelist' );
         $oArtList->setSqlLimit( $iNrofCatArticles * $this->_getRequestPageNr(), $iNrofCatArticles );
         $oArtList->setCustomSorting( $this->getSortingSql( 'oxtags' ) );
-
+;
         // load the articles
         $this->_iAllArtCnt = $oArtList->loadTagArticles( $this->getTag(), oxLang::getInstance()->getBaseLanguage());
         $this->_iCntPages  = round( $this->_iAllArtCnt / $iNrofCatArticles + 0.49 );
@@ -342,7 +340,7 @@ class Tag extends aList
     {
         if ( ( $iPage = $this->getActPage() ) ) {
             return $this->_addPageNrParam( $this->generatePageNavigationUrl(), $iPage );
-        } elseif ( ( $sTag = $this->getTag() ) ) {        
+        } elseif ( ( $sTag = $this->getTag() ) ) {
             return oxSeoEncoderTag::getInstance()->getTagUrl( $sTag );
         }
     }
@@ -360,7 +358,7 @@ class Tag extends aList
         $aCatPath['title'] = oxLang::getInstance()->translateString( 'TAGS', oxLang::getInstance()->getBaseLanguage(), false );
         $aCatPath['link']  = oxSeoEncoder::getInstance()->getStaticUrl( $this->getViewConfig()->getSelfLink() . 'cl=tags' );
         $aPaths[] = $aCatPath;
-        
+
         $aCatPath['title'] = $this->getTitle();
         $aCatPath['link']  = $this->getCanonicalUrl();
         $aPaths[] = $aCatPath;

@@ -86,6 +86,8 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
 
             $this->cleanUpTable( 'oxstatistics' );
+        $sQ = 'delete from oxshops where oxid > "1" ';
+        oxDb::getDb()->Execute( $sQ );
 
         oxConfig::getInstance()->setActiveView( null );
         parent::tearDown();
@@ -218,7 +220,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
     public function testOxArticleSetAndGetTags()
     {
         $sValue  = 'nekilnojamojo turto agentūrų verslo sėkme Литовские европарламентарии, срок полномочий которых в 2009 году подходит к концу Der Umstieg war für uns ein voller erfolg. OXID eShop ist flexibel und benutzerfreundlich';
-        $sResult = 'nekilnojamojo turto agentūrų verslo sėkme литовские европарламентарии,срок полномочий которых в 2009 году подходит к концу der umstieg war für uns ein voller erfolg. oxid eshop ist flexibel und benutzerfreundlich,sėkme литовские für';
+        $sResult = 'nekilnojamojo turto agentūrų verslo sėkme литовские европарл,срок полномочий которых в 2009 году подходит к концу der ums,sėkme литовские für';
 
         $oArticle = new oxarticle();
         $oArticle->setId( '_testArticle' );
@@ -578,6 +580,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oCat->load( $sCatId );
         $aAttr = $oCat->getAttributes();
         $oAttr = $aAttr->offsetGet('_testAttribute1');
+        $this->assertTrue( $oAttr instanceof oxattribute );
         $this->assertEquals( 'für', $oAttr->getTitle());
     }
 
@@ -973,7 +976,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
                           'oxorder__oxdelfax', 'oxorder__oxdelsal', 'oxorder__oxbillnr',
                           'oxorder__oxtrackcode', 'oxorder__oxremark', 'oxorder__oxcurrency',
                           'oxorder__oxtransid', 'oxorder__oxcardtext',
-                          'oxorder__oxxid', 'oxorder__oxip', 'oxorder__oxtransstatus' );
+                          'oxorder__oxxid', 'oxorder__oxip' );
 
         $oOrder = oxNew( 'oxorder' );
         $oOrder->setId( '_testOrder' );
@@ -1206,6 +1209,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oArt2->oxarticles__oxtitle = new oxField('title2');
         $oArt2->oxarticles__oxprice = new oxField(10);
         $oArt2->oxarticles__oxshortdesc = new oxField($sValue);
+        $oArt2->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
         $oArr = new oxarticlelist();
         $oArr->assign( array( $oArt2 ) );
 
@@ -1214,7 +1218,8 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oSAr2->link  = 'artlinkextra';
         $oSAr2->guid  = 'artlinkextra';
         $oSAr2->isGuidPermalink = true;
-        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getIconUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;".$sValue;
+        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getThumbnailUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;".$sValue;
+        $oSAr2->date = "Tue, 06 Sep 2011 09:46:42 +0200";
 
         $this->assertEquals(array($oSAr2), $oRss->UNITgetArticleItems($oArr));
 
@@ -1374,14 +1379,14 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
 
         $oShop = oxNew( 'oxshop' );
-        $oShop->setId( '_testShop' );
+        $oShop->setId( 5 );
         foreach ( $aFields as $sFieldName ) {
             $oShop->{$sFieldName} = new oxField( $sValue );
         }
         $oShop->save();
 
         $oShop = oxNew( 'oxshop' );
-        $oShop->load( '_testShop' );
+        $oShop->load( 5 );
 
         foreach ( $aFields as $sFieldName ) {
             $this->assertTrue( strcmp( $oShop->{$sFieldName}->value, $sValue ) === 0, "$sFieldName (".$oShop->{$sFieldName}->value.")" );
@@ -1886,7 +1891,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oView->expects( $this->any() )->method( 'getProduct' )->will( $this->returnValue( $oArt ) );
 
         $this->assertEquals( 'agentūЛитовfür test, best nest fest - agentūЛитовfür test, best nest fest', $oView->getMetaDescription() );
-        $this->assertEquals( 'agentūлитовfür, test, best, nest, fest, agentūЛитовfür test, best nest fest', $oView->getMetaKeywords() );
+        $this->assertEquals( 'agentūлитовfür, test, best, nest, fest', $oView->getMetaKeywords() );
     }
 
     public function testDetailsAddTags()

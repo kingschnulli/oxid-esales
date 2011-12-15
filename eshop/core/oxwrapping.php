@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrapping.php 34922 2011-04-26 08:58:39Z sarunas $
+ * @version   SVN: $Id: oxwrapping.php 37734 2011-07-28 15:11:39Z linas.kukulskis $
  */
 
 /**
@@ -178,7 +178,8 @@ class oxWrapping extends oxI18n
      */
     public function getPictureUrl()
     {
-        return $this->getConfig()->getPictureUrl(null, false, $this->getConfig()->isSsl(), null, $this->oxwrapping__oxshopid->value );
+        if ( $this->oxwrapping__oxpic->value ) {
+           return $this->getConfig()->getPictureUrl( "master/wrapping/".$this->oxwrapping__oxpic->value, false, $this->getConfig()->isSsl(), null, $this->oxwrapping__oxshopid->value );
+        }
     }
-
 }

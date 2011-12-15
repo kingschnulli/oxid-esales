@@ -38,7 +38,7 @@
         [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_PRODUCTRATING" }]
       </td>
     </tr>
-    [{foreach from=$order->getOrderArticles() item=oOrderArticle}]
+    [{foreach from=$order->getOrderArticles(true) item=oOrderArticle}]
       <tr>
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
           [{ $oOrderArticle->oxorderarticles__oxamount->value }]
@@ -53,6 +53,7 @@
       </tr>
     [{/foreach}]
     </table>
+
     <br><br>
     [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_YUORTEAM1" }] [{ $shop->oxshops__oxname->value }] [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_YUORTEAM2" }]<br>
     [{if $oViewConf->showTs("ORDERCONFEMAIL") && $oViewConf->getTsId() }]

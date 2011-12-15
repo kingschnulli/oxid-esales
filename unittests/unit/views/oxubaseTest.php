@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 36420 2011-06-17 07:04:47Z linas.kukulskis $
+ * @version   SVN: $Id: oxubaseTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -52,6 +52,11 @@ class testOxViewComponent extends oxUBase
     {
         $this->setThisActionWasCalled = true;
     }
+
+    public static function resetComponentNames()
+    {
+        self::$_aCollectedComponentNames = null;
+    }
 }
 
 
@@ -70,6 +75,8 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     protected function setUp()
     {
+        testOxViewComponent::resetComponentNames();
+
         // adding article to recommendlist
         $sQ = 'insert into oxrecommlists ( oxid, oxuserid, oxtitle, oxdesc, oxshopid ) values ( "testlist", "oxdefaultadmin", "oxtest", "oxtest", "'.oxConfig::getInstance()->getShopId().'" ) ';
         oxDb::getDB()->Execute( $sQ );
@@ -101,7 +108,36 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oUBase = new oxUbase();
         $oUBase->getSession()->setBasket( null );
 
+        testOxViewComponent::resetComponentNames();
+
         parent::tearDown();
+    }
+
+    /**
+     * Test case for oxUBase::_getComponentNames()
+     *
+     * @return null
+     */
+    public function testGetComponentNames()
+    {
+        $sCmpName = "testCmp".time();
+        eval( "class {$sCmpName} extends oxUbase {}" );
+
+        modConfig::getInstance()->setConfigParam( 'aUserComponentNames', array( $sCmpName => 1 ) );
+
+        $aComponentNames = array(
+                                 'oxcmp_user'       => 1, // 0 means dont init if cached
+                                 'oxcmp_lang'       => 0,
+                                 'oxcmp_cur'        => 1,
+                                 'oxcmp_shop'       => 1,
+                                 'oxcmp_categories' => 0,
+                                 'oxcmp_utils'      => 1,
+                                 'oxcmp_news'       => 0,
+                                 'oxcmp_basket'     => 1,
+                                 $sCmpName          => 1
+                                );
+        $oView = new oxUBase();
+        $this->assertEquals( $aComponentNames, $oView->UNITgetComponentNames() );
     }
 
     /**
@@ -400,6 +436,22 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $this->assertEquals( 1, count( $aComponents ) );
         $this->assertEquals( "oxcmp_lang", $aComponents["oxcmp_lang"]->getThisAction() );
         $this->assertEquals( "oxubaseproxy", $aComponents["oxcmp_lang"]->getParent()->getThisAction() );
+    }
+
+    /*
+     * Testing initiating components
+     */
+    public function testInitUserDefinedComponents()
+    {
+        $oView = $this->getMock( 'oxubase', array( "_getComponentNames" ) );
+        $oView->expects( $this->once() )->method( '_getComponentNames' )->will( $this->returnValue( array( "oxcmp_cur" => false, "oxcmp_lang" => false ) ) );
+        $oView->init();
+
+        $aComponents = $oView->getComponents();
+        $this->assertEquals( 2, count( $aComponents ) );
+        $this->assertEquals( "oxcmp_lang", $aComponents["oxcmp_lang"]->getThisAction() );
+        $this->assertEquals( "oxcmp_cur", $aComponents["oxcmp_cur"]->getThisAction() );
+        $this->assertEquals( strtolower( get_class( $oView ) ), $aComponents["oxcmp_lang"]->getParent()->getThisAction() );
     }
 
     /*
@@ -760,7 +812,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView = new oxubase();
         $sResult = $oView->UNITprepareMetaKeyword( $sDesc );
 
-        $this->assertEquals( "aaa, bbb, ccc.", $sResult);
+        $this->assertEquals( "aaa, bbb, ccc", $sResult);
     }
 
     /*
@@ -790,7 +842,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView = new oxubase();
         $sResult = $oView->UNITprepareMetaKeyword( $sDesc );
 
-        $this->assertEquals( "lady, gaga, pokerface.", $sResult);
+        $this->assertEquals( "lady, gaga, pokerface", $sResult);
     }
         /*
      * Test prepearing meta keywords - removing spec. chars skips dots and commas
@@ -812,12 +864,14 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     public function testsRemoveDuplicatedWords()
     {
-        $sDesc = 'aaa ccc bbb ccc ddd ccc';
+        $aIn = array( "aaa ccc bbb ccc ddd ccc" => "aaa, ccc, bbb, ddd",
+                      "kuyichi, t-shirt, tiger, bekleidung, fashion, ihn, shirts, &, co., shirt, tiger, organic, men" => "kuyichi, t-shirt, tiger, bekleidung, fashion, ihn, shirts, co, shirt, organic, men",
+                    );
 
         $oView = new oxubase();
-        $sResult = $oView->UNITremoveDuplicatedWords( $sDesc );
-
-        $this->assertEquals( "aaa, ccc, bbb, ddd", $sResult);
+        foreach ( $aIn as $sIn => $sOut ) {
+            $this->assertEquals( $sOut, $oView->UNITremoveDuplicatedWords( $sIn ) );
+        }
     }
 
     /*
@@ -957,7 +1011,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     public function testGetContentId()
     {
         $oView = $this->getProxyClass( 'oxubase' );
-        $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
+        $sContentId = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
         $this->assertEquals( $sContentId, $oView->getContentId() );
     }
 
@@ -1656,12 +1710,23 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     {
         $oUBase = $this->getProxyClass( 'oxubase' );
         $this->assertEquals("aaa", $oUBase->UNITaddPageNrParam("aaa", 0));
+
+        $this->assertEquals("aaa?bb", $oUBase->UNITaddPageNrParam("aaa?bb&amp;pgNr=2", 0));
+        $this->assertEquals("aaa?param=value", $oUBase->UNITaddPageNrParam("aaa?pgNr=11&amp;param=value", 0));
+        $this->assertEquals("aaa?", $oUBase->UNITaddPageNrParam("aaa?pgNr=11", 0));
+        $this->assertEquals("aaa?bb&amp;param=value", $oUBase->UNITaddPageNrParam("aaa?bb&amp;pgNr=99&amp;param=value", 0));
     }
 
     public function testAddPageNrParam()
     {
         $oUBase = $this->getProxyClass( 'oxubase' );
+
         $this->assertEquals("aaa?bb&amp;pgNr=2", $oUBase->UNITaddPageNrParam("aaa?bb", 2));
+
+        $this->assertEquals("aaa?bb&amp;pgNr=1", $oUBase->UNITaddPageNrParam("aaa?bb&amp;pgNr=2", 1));
+        $this->assertEquals("aaa?pgNr=11&amp;param=value", $oUBase->UNITaddPageNrParam("aaa?pgNr=13&amp;param=value", 11));
+        $this->assertEquals("aaa?bb&amp;pgNr=919&amp;param=value", $oUBase->UNITaddPageNrParam("aaa?bb&amp;pgNr=155&amp;param=value", 919));
+
     }
 
     public function testSetGetRootVendor()
@@ -2076,5 +2141,47 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     {
         $oView = new oxUbase();
         $this->assertEquals( (int) oxConfig::getInstance()->getConfigParam( "iNewBasketItemMessage" ), $oView->getNewBasketItemMsgType() );
+    }
+
+    /**
+     * oxUBase::showTags() test case
+     *
+     * @return null
+     */
+    public function testShowTags()
+    {
+        modConfig::getInstance()->setConfigParam( "blShowTags", true );
+
+        $oView = new oxUbase();
+        $this->assertTrue( $oView->showTags() );
+    }
+
+    /**
+     * oxUBase::isFbWidgetWisible()
+     *
+     * @return null
+     */
+    public function testisFbWidgetVisible()
+    {
+        // cookie OFF
+        oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 0;}");
+        $oView = new oxUbase();
+        $this->assertFalse( $oView->isFbWidgetVisible() );
+
+        // cookie ON
+        oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 1;}");
+        $oView = new oxUbase();
+        $this->assertTrue( $oView->isFbWidgetVisible() );
+    }
+
+     /**
+     * oxUbase::isEnabledDownloadabaleFiles() test case
+     *
+     * @return null
+     */
+    public function testIsEnabledDownloadableFiles()
+    {
+        $oView = new oxUbase();
+        $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "blEnableDownloads" ), $oView->isEnabledDownloadableFiles() );
     }
 }

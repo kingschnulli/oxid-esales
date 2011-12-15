@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 33967 2011-03-24 11:25:33Z arvydas.vapsva $
+ * @version   SVN: $Id: oxorder.php 40309 2011-11-29 08:30:19Z linas.kukulskis $
  */
 
 /**
@@ -71,6 +71,18 @@ class oxOrder extends oxBase
      * @var int
      */
     const ORDER_STATE_INVALIDTSPROTECTION = 6;
+
+    /**
+     * Protection parameters used for some data in order are invalid
+     * @var int
+     */
+    const ORDER_STATE_INVALIDDElADDRESSCHANGED = 7;
+
+    /**
+     * Basket price < minimum order price
+     * @var int
+     */
+    const ORDER_STATE_BELOWMINPRICE = 8;
 
     /**
      * Skip update fields
@@ -206,6 +218,13 @@ class oxOrder extends oxBase
     protected $_oOrderCurrency = null;
 
     /**
+     * Current order files object
+     *
+     * @var object
+     */
+    protected $_oOrderFiles = null;
+
+    /**
      * Class constructor, initiates parent constructor (parent::oxBase()).
      */
     public function __construct()
@@ -271,7 +290,7 @@ class oxOrder extends oxBase
         $sTitle = null;
         if ( $sCountryId && $sCountryId != '-1' ) {
             $oCountry = oxNew( 'oxcountry' );
-            $oCountry->load( $sCountryId );
+            $oCountry->loadInLang( $this->getOrderLanguage(), $sCountryId );
             $sTitle = $oCountry->oxcountry__oxtitle->value;
         }
 
@@ -460,6 +479,9 @@ class oxOrder extends oxBase
             $this->_setFolder();
         }
 
+        // marking as not finished
+        $this->_setOrderStatus( 'NOT_FINISHED' );
+
         //saving all order data to DB
         $this->save();
 
@@ -523,11 +545,28 @@ class oxOrder extends oxBase
     protected function _setOrderStatus( $sStatus )
     {
         $oDb = oxDb::getDb();
-        $sQ = 'update oxorder set oxtransstatus='.$oDb->quote( $sStatus ).' where oxid="'.$this->getId().'" ';
+        $sQ = 'update oxorder set oxtransstatus='.$oDb->quote( $sStatus ).' where oxid='.$oDb->quote( $this->getId() );
         $oDb->execute( $sQ );
 
         //updating order object
         $this->oxorder__oxtransstatus = new oxField( $sStatus, oxField::T_RAW );
+    }
+
+    /**
+     * Converts string VAT representation into float e.g. 7,6 to 7.6
+     *
+     * @param string $sVat vat value
+     *
+     * @return float
+     */
+    protected function _convertVat( $sVat )
+    {
+        if ( strpos( $sVat, '.' ) < strpos( $sVat, ',' ) ) {
+            $sVat = str_replace( array( '.', ',' ), array( '', '.' ), $sVat );
+        } else {
+            $sVat = str_replace( ',', '', $sVat );
+        }
+        return (float) $sVat;
     }
 
     /**
@@ -557,7 +596,7 @@ class oxOrder extends oxBase
         // copying discounted VAT info
         $iVatIndex = 1;
         foreach ( $oBasket->getProductVats(false) as $iVat => $dPrice ) {
-            $this->{"oxorder__oxartvat$iVatIndex"}      = new oxField($iVat, oxField::T_RAW);
+            $this->{"oxorder__oxartvat$iVatIndex"}      = new oxField( $this->_convertVat( $iVat ), oxField::T_RAW);
             $this->{"oxorder__oxartvatprice$iVatIndex"} = new oxField($dPrice, oxField::T_RAW);
             $iVatIndex ++;
         }
@@ -577,7 +616,7 @@ class oxOrder extends oxBase
         }
 
         // user remark
-        if ( $this->oxorder__oxremark->value === null ) {
+        if ( !isset( $this->oxorder__oxremark ) || $this->oxorder__oxremark->value === null ) {
             $this->oxorder__oxremark = new oxField(oxSession::getVar( 'ordrem' ), oxField::T_RAW);
         }
 
@@ -806,6 +845,8 @@ class oxOrder extends oxBase
             //P
             //TODO: check if this assign is needed at all
             $oOrderArticle->oProduct = $oProduct;
+
+            $oOrderArticle->setArticle( $oProduct );
 
             // simulatin order article list
             $this->_oArticles->offsetSet( $oOrderArticle->getId(), $oOrderArticle );
@@ -1130,22 +1171,52 @@ class oxOrder extends oxBase
         } else {
             $this->oxorder__oxorderdate = new oxField( $oUtilsDate->formatDBDate( $this->oxorder__oxorderdate->value, true ));
         }
-        $this->oxorder__oxshopid    = new oxField($myConfig->getShopId(), oxField::T_RAW);
 
+        $this->oxorder__oxshopid    = new oxField($myConfig->getShopId(), oxField::T_RAW);
         $this->oxorder__oxsenddate  = new oxField( $oUtilsDate->formatDBDate( $this->oxorder__oxsenddate->value, true ));
 
         if ( ( $blInsert = parent::_insert() ) ) {
             // setting order number
             if ( !$this->oxorder__oxordernr->value ) {
-                $aWhere = '';
-                // separate order numbers for shops ...
-                if ( $this->_blSeparateNumbering ) {
-                    $aWhere = array( 'oxshopid = "'.$myConfig->getShopId().'"' );
-                }
-                $this->_setRecordNumber( 'oxordernr', $aWhere );
+               $blInsert = $this->_setNumber();
+            } else {
+                oxNew( 'oxCounter' )->update( $this->_getCounterIdent(), $this->oxorder__oxordernr->value );
             }
         }
+
         return $blInsert;
+    }
+
+    /**
+     * creates counter ident
+     *
+     * @return String
+     */
+    protected function _getCounterIdent()
+    {
+        $sCounterIdent = ( $this->_blSeparateNumbering ) ? 'oxOrder_' . $this->getConfig()->getShopId() : 'oxOrder';
+        return $sCounterIdent;
+    }
+
+
+    /**
+     * Tries to fetch and set next record number in DB. Returns true on success
+     *
+     * @return bool
+     */
+    protected function _setNumber()
+    {
+        $oDb = oxDb::getDb();
+
+        $iCnt = oxNew( 'oxCounter' )->getNext( $this->_getCounterIdent() );
+        $sQ = "update oxorder set oxordernr = $iCnt where oxid = ?";
+        $blUpdate = ( bool ) $oDb->execute( $sQ, array( $this->getId() ) );
+
+        if ( $blUpdate ) {
+            $this->oxorder__oxordernr = new oxField( $iCnt );
+        }
+
+        return $blUpdate;
     }
 
     /**
@@ -1281,12 +1352,13 @@ class oxOrder extends oxBase
         $this->_oOrderBasket->setCardMessage( $this->oxorder__oxcardtext->value );
 
         if ( $this->_blReloadDiscount ) {
+            $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
             // disabling availability check
             $this->_oOrderBasket->setSkipVouchersChecking( true );
 
             // add previously used vouchers
-            $sQ = 'select oxid from oxvouchers where oxorderid = "'.$this->getId().'"';
-            $aVouchers = oxDb::getDb( true )->getAll( $sQ );
+            $sQ = 'select oxid from oxvouchers where oxorderid = '.$oDb->quote( $this->getId() );
+            $aVouchers = $oDb->getAll( $sQ );
             foreach ( $aVouchers as $aVoucher ) {
                 $this->_oOrderBasket->addVoucher( $aVoucher['oxid'] );
             }
@@ -1444,7 +1516,7 @@ class oxOrder extends oxBase
         $oBasket = $this->_getOrderBasket( false );
 
         // add this order articles to basket and recalculate basket
-        $this->_addOrderArticlesToBasket( $oBasket, $this->getOrderArticles() );
+        $this->_addOrderArticlesToBasket( $oBasket, $this->getOrderArticles( true ) );
 
         // recalculating basket
         $oBasket->calculateBasket( true );
@@ -1463,7 +1535,7 @@ class oxOrder extends oxBase
      */
     public function getVoucherNrList()
     {
-        $oDB = oxDb::getDb( true );
+        $oDB = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $aVouchers = array();
         $sSelect = "select oxvouchernr from oxvouchers where oxorderid = ".$oDB->quote( $this->oxorder__oxid->value );
         $rs = $oDB->execute( $sSelect);
@@ -1869,8 +1941,86 @@ class oxOrder extends oxBase
             $iValidState = $this->validatePayment( $oBasket );
         }
 
+        if ( !$iValidState ) {
+            //0003110 validating delivewry address, it is not be changed during checkout process
+            $iValidState = $this->validateDeliveryAddress( $oUser );
+        }
+
+        if ( !$iValidState ) {
+            // validatign minimum price
+            $iValidState = $this->validateBasket( $oBasket );
+        }
         return $iValidState;
     }
+
+    /**
+     * Validates basket. Currently checks if minimum order price > basket price
+     *
+     * @param oxBasket $oBasket basket object
+     *
+     * @return bool
+     */
+    public function validateBasket( $oBasket )
+    {
+        return $oBasket->isBelowMinOrderPrice() ? self::ORDER_STATE_BELOWMINPRICE : null;
+    }
+
+    /**
+     * Checks if delivery address (billing or shipping) was not changed during checkout
+     * Throws exception if not available
+     *
+     * @param oxUser $oUser user object
+     *
+     * @return null
+     */
+    public function validateDeliveryAddress( $oUser )
+    {
+        $sDelAddressMD5 =  oxConfig::getParameter( 'sDeliveryAddressMD5' );
+
+        // bill address
+        $sDelAddress = '';
+        $sDelAddress .= $oUser->oxuser__oxcompany;
+        $sDelAddress .= $oUser->oxuser__oxusername;
+        $sDelAddress .= $oUser->oxuser__oxfname;
+        $sDelAddress .= $oUser->oxuser__oxlname;
+        $sDelAddress .= $oUser->oxuser__oxstreet;
+        $sDelAddress .= $oUser->oxuser__oxstreetnr;
+        $sDelAddress .= $oUser->oxuser__oxaddinfo;
+        $sDelAddress .= $oUser->oxuser__oxustid;
+        $sDelAddress .= $oUser->oxuser__oxcity;
+        $sDelAddress .= $oUser->oxuser__oxcountryid;
+        $sDelAddress .= $oUser->oxuser__oxstateid;
+        $sDelAddress .= $oUser->oxuser__oxzip;
+        $sDelAddress .= $oUser->oxuser__oxfon;
+        $sDelAddress .= $oUser->oxuser__oxfax;
+        $sDelAddress .= $oUser->oxuser__oxsal;
+
+        // delivery address
+        if ( ( $oDelAdress = $this->getDelAddressInfo() ) ) {
+            // set delivery address
+            $sDelAddress .= $oDelAdress->oxaddress__oxcompany;
+            $sDelAddress .= $oDelAdress->oxaddress__oxfname;
+            $sDelAddress .= $oDelAdress->oxaddress__oxlname;
+            $sDelAddress .= $oDelAdress->oxaddress__oxstreet;
+            $sDelAddress .= $oDelAdress->oxaddress__oxstreetnr;
+            $sDelAddress .= $oDelAdress->oxaddress__oxaddinfo;
+            $sDelAddress .= $oDelAdress->oxaddress__oxcity;
+            $sDelAddress .= $oDelAdress->oxaddress__oxcountryid;
+            $sDelAddress .= $oDelAdress->oxaddress__oxstateid;
+            $sDelAddress .= $oDelAdress->oxaddress__oxzip;
+            $sDelAddress .= $oDelAdress->oxaddress__oxfon;
+            $sDelAddress .= $oDelAdress->oxaddress__oxfax;
+            $sDelAddress .= $oDelAdress->oxaddress__oxsal;
+        }
+
+        if ($sDelAddressMD5 != md5($sDelAddress)) {
+            return self::ORDER_STATE_INVALIDDElADDRESSCHANGED;
+        }
+
+        return;
+    }
+
+
 
     /**
      * Checks if delivery set used for current order is available and active.
@@ -1893,7 +2043,7 @@ class oxOrder extends oxBase
         $sTable = $oDelSet->getViewName();
 
         $sQ = "select 1 from {$sTable} where {$sTable}.oxid=".
-              $oDb->quote( $oBasket->getShippingId() )." and ".$oDelSet->getSqlActiveSnippet();
+         $oDb->quote( $oBasket->getShippingId() )." and ".$oDelSet->getSqlActiveSnippet();
 
         if ( !$oDb->getOne( $sQ ) ) {
             // throwing exception
@@ -1917,7 +2067,7 @@ class oxOrder extends oxBase
         $sTable = $oPayment->getViewName();
 
         $sQ = "select 1 from {$sTable} where {$sTable}.oxid=".
-              $oDb->quote( $oBasket->getPaymentId() )." and ".$oPayment->getSqlActiveSnippet();
+        $oDb->quote( $oBasket->getPaymentId() )." and ".$oPayment->getSqlActiveSnippet();
 
         if ( !$oDb->getOne( $sQ ) ) {
             return self::ORDER_STATE_INVALIDPAYMENT;
@@ -1963,10 +2113,10 @@ class oxOrder extends oxBase
         $sPaymentId = $oBasket->getPaymentId();
         $oTsProtection = oxNew('oxtsprotection');
         $blRes = $oTsProtection->requestForTsProtection( $aValues, $sPaymentId );
-        if ( !$blRes ) {
+        /*if ( !$blRes ) {
             $this->delete();
             return self::ORDER_STATE_INVALIDTSPROTECTION;
-        }
+        }*/
         return true; // everything fine
     }
 
@@ -2063,4 +2213,5 @@ class oxOrder extends oxBase
 
         return $this->_sShipTrackUrl;
     }
+
 }

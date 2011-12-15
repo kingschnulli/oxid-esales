@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.php 36259 2011-06-13 13:27:42Z linas.kukulskis $
+ * @version   SVN: $Id: article_extend.php 40205 2011-11-23 15:47:00Z linas.kukulskis $
  */
 
 /**
@@ -32,6 +32,12 @@
  */
 class Article_Extend extends oxAdminDetails
 {
+    /**
+     * Unit array
+     * @var array
+     */
+    protected $_aUnitsArray = null;
+
     /**
      * Collects available article axtended parameters, passes them to
      * Smarty engine and returns tamplate file name "article_extend.tpl".
@@ -133,6 +139,7 @@ class Article_Extend extends oxAdminDetails
      */
     public function save()
     {
+        parent::save();
 
         $soxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval");
@@ -171,24 +178,24 @@ class Article_Extend extends oxAdminDetails
         $sMediaDesc = oxConfig::getParameter( "mediaDesc");
         $aMediaFile = $this->getConfig()->getUploadedFile( "mediaFile");
 
-        if ($sMediaUrl || $aMediaFile['name'] || $sMediaDesc) {
+        if ( ( $sMediaUrl && $sMediaUrl != 'http://' ) || $aMediaFile['name'] || $sMediaDesc ) {
 
             if ( !$sMediaDesc ) {
                 return oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_NODESCRIPTIONADDED' );
             }
 
-            if ( !$sMediaUrl && !$aMediaFile['name'] ) {
+            if ( ( !$sMediaUrl || $sMediaUrl == 'http://' ) && !$aMediaFile['name'] ) {
                 return oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_NOMEDIAADDED' );
             }
 
-            $oMediaUrl = oxNew("oxMediaUrl");
+            $oMediaUrl = oxNew( "oxMediaUrl" );
             $oMediaUrl->setLanguage( $this->_iEditLang );
-            $oMediaUrl->oxmediaurls__oxisuploaded = new oxField( 0, oxField::T_RAW);
+            $oMediaUrl->oxmediaurls__oxisuploaded = new oxField( 0, oxField::T_RAW );
 
             //handle uploaded file
             if ($aMediaFile['name']) {
                 try {
-                    $sMediaUrl = oxUtilsFile::getInstance()->handleUploadedFile($aMediaFile, 'out/media/');
+                    $sMediaUrl = oxUtilsFile::getInstance()->processFile( 'mediaFile', 'out/media/' );
                     $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(1, oxField::T_RAW);
                 } catch (Exception $e) {
                     return oxUtilsView::getInstance()->addErrorToDisplay( $e->getMessage() );
@@ -197,11 +204,13 @@ class Article_Extend extends oxAdminDetails
 
             //save media url
             $oMediaUrl->oxmediaurls__oxobjectid = new oxField($soxId, oxField::T_RAW);
-            $oMediaUrl->oxmediaurls__oxurl = new oxField($sMediaUrl, oxField::T_RAW);
-            $oMediaUrl->oxmediaurls__oxdesc = new oxField(oxConfig::getParameter( "mediaDesc"), oxField::T_RAW);
+            $oMediaUrl->oxmediaurls__oxurl      = new oxField($sMediaUrl, oxField::T_RAW);
+            $oMediaUrl->oxmediaurls__oxdesc     = new oxField($sMediaDesc, oxField::T_RAW);
             $oMediaUrl->save();
-
         }
+
+        // renew price update time
+        oxNew( "oxArticleList" )->renewPriceUpdateTime();
     }
 
     /**
@@ -254,5 +263,18 @@ class Article_Extend extends oxAdminDetails
                 }
             }
         }
+    }
+
+    /**
+     * Returns array of possible unit combination and its translation for edit language
+     *
+     * @return array
+     */
+    public function getUnitsArray()
+    {
+        if ( $this->_aUnitsArray === null ) {
+           $this->_aUnitsArray = oxLang::getInstance()->getSimilarByKey( "_UNIT_", $this->_iEditLang, false );
+        }
+        return $this->_aUnitsArray;
     }
 }

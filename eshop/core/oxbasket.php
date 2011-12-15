@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 36493 2011-06-21 09:53:24Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasket.php 40395 2011-11-30 15:30:30Z linas.kukulskis $
  */
 
 /**
@@ -249,6 +249,12 @@ class oxBasket extends oxSuperCfg
      * @var bool
      */
     protected $_blNewITemAdded = null;
+
+    /**
+     * if basket has downloadable product
+     * @var bool
+     */
+    protected $_blDownloadableProducts = null;
 
     /**
      * Checks if configuration allows basket usage or if user agent is search engine
@@ -1502,7 +1508,10 @@ class oxBasket extends oxSuperCfg
 
                 //then save
                 foreach ( $this->_aBasketContents as $oBasketItem ) {
-                    $oSavedBasket->addItemToBasket( $oBasketItem->getProductId(), $oBasketItem->getAmount(), $oBasketItem->getSelList(), true, $oBasketItem->getPersParams() );
+                    // discount or bundled products will be added automatically if available
+                    if ( !$oBasketItem->isBundle() && !$oBasketItem->isDiscountArticle() ) {
+                       $oSavedBasket->addItemToBasket( $oBasketItem->getProductId(), $oBasketItem->getAmount(), $oBasketItem->getSelList(), true, $oBasketItem->getPersParams() );
+                    }
                 }
             }
         }
@@ -1873,8 +1882,11 @@ class oxBasket extends oxSuperCfg
 
         $oUtils = oxUtils::getInstance();
         foreach ( $this->_aDiscountedVats as $sKey => $dVat ) {
+            if ( !isset( $aVats[$sKey] ) ) {
+                $aVats[$sKey] = 0;
+            }
             // add prices of the same discounts
-            $aVats[$sKey] += $oUtils->fRound( $dVat, $this->_oCurrency);
+            $aVats[$sKey] += $oUtils->fRound( $dVat, $this->_oCurrency );
         }
 
         if ( $blFormatCurrency ) {
@@ -2276,7 +2288,7 @@ class oxBasket extends oxSuperCfg
     public function getFDeliveryCosts()
     {
         $oDeliveryCost = $this->getCosts( 'oxdelivery' );
-        if ( $oDeliveryCost && $oDeliveryCost->getBruttoPrice()) {
+        if ( $oDeliveryCost ) {
             return oxLang::getInstance()->formatCurrency( $oDeliveryCost->getBruttoPrice(), $this->getBasketCurrency() );
         }
         return false;
@@ -2653,4 +2665,23 @@ class oxBasket extends oxSuperCfg
         }
         return $this->_blNewITemAdded;
     }
+
+    /**
+     * Returns true if at least one product is downloadable in basket
+     *
+     * @return bool
+     */
+    public function hasDownloadableProducts()
+    {
+        $this->_blDownloadableProducts = false;
+        foreach ( $this->_aBasketContents as $sItemKey => $oOrderArticle ) {
+            if ( $oOrderArticle->getArticle()->isDownloadable() ) {
+                $this->_blDownloadableProducts = true;
+                break;
+            }
+        }
+
+        return $this->_blDownloadableProducts;
+    }
+
 }

@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: function.oxscript.php 36258 2011-06-13 13:27:28Z linas.kukulskis $
+ * @version   SVN: $Id: function.oxscript.php 39553 2011-10-26 07:55:59Z rimvydas.paskevicius $
  */
 
 /**
@@ -56,14 +56,14 @@ function smarty_function_oxscript($params, &$smarty)
     if ( $params['add'] ) {
         $sScriptToken = trim( $params['add'] );
         if ( !in_array($sScriptToken, $aScript)) {
-            $aScript[] = $sScriptToken;    
-        }         
+            $aScript[] = $sScriptToken;
+        }
         $myConfig->setGlobalParameter($sScripts, $aScript);
 
     } elseif ( $params['include'] ) {
         $sUrl = $params['include'];
         if (!preg_match('#^https?://#', $sUrl)) {
-            $sUrl = $myConfig->getResourceUrl($sUrl);
+            $sUrl = $myConfig->getResourceUrl($sUrl, isAdmin() );
         }
 
         $iPriority = ( $params['priority'] ) ? $params['priority'] : $iDefaultPriority;
@@ -79,19 +79,29 @@ function smarty_function_oxscript($params, &$smarty)
     } else {
         ksort( $aInclude );
 
+        $aOutUrls = array();
+
         foreach ($aInclude as $aPriority) {
             foreach ($aPriority as $sSrc) {
-                $sOutput .= '<script type="text/javascript" src="'.$sSrc.'"></script>'.PHP_EOL;
+                //checking for dublicates #3062
+                if (!in_array($sSrc, $aOutUrls)) {
+                    $sOutput .= '<script type="text/javascript" src="'.$sSrc.'"></script>'.PHP_EOL;
+                }
+                $aOutUrls[] = $sSrc;
             }
         }
-        
+        $myConfig->setGlobalParameter($sIncludes, null);
+
         if (count($aScript)) {
             $sOutput .= '<script type="text/javascript">' . "\n";
             foreach ($aScript as $sScriptToken) {
                 $sOutput .= $sScriptToken. "\n";
             }
             $sOutput .= '</script>' . PHP_EOL;
+
+            $myConfig->setGlobalParameter($sScripts, null);
         }
+
     }
 
     return $sOutput;
