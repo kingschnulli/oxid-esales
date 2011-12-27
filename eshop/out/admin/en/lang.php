@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 40458 2011-12-06 09:01:50Z justinas.straksys $
+ * @version   SVN: $Id: lang.php 40608 2011-12-14 13:36:58Z juergen.busch $
  */
 
 /*
@@ -1072,7 +1072,7 @@ $aLang = array(
 'SHOP_CONFIG_BIDIRECTCROSS'                                => 'Enable bidirectional Crosselling',
 'SHOP_CONFIG_CONFIRMAGB'                                   => 'Users have to Confirm General Terms and Conditions during Check-Out',
 'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'                      => 'Show an additional "Submit Order" Button at the Top in 4th Order Step (By default "Submit Order" Button is shown only on the Bottom of the Page).',
-'SHOP_CONFIG_CALCULATEVATFORDELIVERY'                      => '[tr]Display shipping costs as net and VAT (instead of gross) in shopping cart and invoice',
+'SHOP_CONFIG_CALCULATEVATFORDELIVERY'                      => 'Display shipping costs as net price and VAT (instead of gross) in shopping cart and invoice',
 'SHOP_CONFIG_CALCDELVATONTOP'                              => 'Enter Shipping Costs as net Price (plus VAT)',
 'SHOP_CONFIG_CALCULATEVATFORWRAPPING'                      => 'Display VAT contained in Gift Wrapping in Shopping Cart and Invoice',
 'SHOP_CONFIG_CALCWRAPVATONTOP'                             => 'Enter Gift Wrapping Prices as net Price (plus VAT)',

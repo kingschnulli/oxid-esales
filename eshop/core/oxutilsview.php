@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 40480 2011-12-06 15:45:42Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsview.php 40560 2011-12-12 14:07:17Z linas.kukulskis $
  */
 
 /**
@@ -47,6 +47,13 @@ class oxUtilsView extends oxSuperCfg
      * @var array
      */
     protected $_aTemplateDir = array();
+
+    /**
+     * Templates directories array
+     *
+     * @var array
+     */
+    protected $_blIsTplBlocks = null;
 
     /**
      * Utility instance getter

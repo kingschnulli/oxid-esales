@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 33539 2011-02-25 11:39:38Z sarunas $
+ * @version   SVN: $Id: contentTest.php 40522 2011-12-12 12:40:30Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -473,5 +473,17 @@ class Unit_Views_contentTest extends OxidTestCase
         $oContent = new Content();
 
         $this->assertEquals(1, count($oContent->getBreadCrumb()));
+    }
+
+    /**
+     * Test get content title.
+     *
+     * @return null
+     */
+    public function testGetTitle()
+    {
+        modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
+        $oContent = new content();
+        $this->assertEquals( 'test', $oContent->getTitle() );
     }
 }

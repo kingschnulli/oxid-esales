@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 40472 2011-12-06 14:29:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 40604 2011-12-14 13:15:57Z arvydas.vapsva $
  */
 
 /**
@@ -178,7 +178,7 @@ class oxBase extends oxSuperCfg
      *
      * @var array
      */
-    protected $_aInnerLazyCache = array();
+    protected $_aInnerLazyCache = null;
 
     /**
      * Class constructor, sets active shop.
@@ -256,30 +256,31 @@ class oxBase extends oxSuperCfg
             if ( $this->getId() ) {
 
                 //lazy load it
-                $sFieldName = str_replace($this->_sCoreTable . "__", '', $sName);
-                $iFieldStatus = $this->_getFieldStatus($sFieldName);
+                $sFieldName      = str_replace( $this->_sCoreTable . "__", '', $sName );
+                $sCacheFieldName = strtoupper( $sFieldName );
 
-                $sViewName = $this->getViewName();
+                $iFieldStatus = $this->_getFieldStatus( $sFieldName );
+                $sViewName    = $this->getViewName();
                 $sId = $this->getId();
 
                 try {
-                    if ( !isset( $this->_aInnerLazyCache[$sViewName][$sId] ) ) {
+                    if ( $this->_aInnerLazyCache === null ) {
 
                         $oDb = oxDb::getDb( true );
-                        $sQ = "SELECT * FROM " . $sViewName . " WHERE `oxid` = " . $oDb->quote($sId);
+                        $sQ = "SELECT * FROM " . $sViewName . " WHERE `oxid` = " . $oDb->quote( $sId );
                         $rs = $oDb->execute( $sQ );
                         if ( $rs ) {
-                            $this->_aInnerLazyCache[$sViewName][$sId] = $rs->fields;
-                            if ( isset( $rs->fields[ strtoupper($sFieldName) ] ) ) {
-                                $sFieldValue = $rs->fields[ strtoupper($sFieldName) ];
+                            $this->_aInnerLazyCache = $rs->fields;
+                            if ( array_key_exists( $sCacheFieldName, $rs->fields ) ) {
+                                $sFieldValue = $rs->fields[$sCacheFieldName];
                             } else {
                                 return null;
                             }
                         } else {
                             return null;
                         }
-                    } elseif ( isset( $this->_aInnerLazyCache[$sViewName][$sId][strtoupper($sFieldName)] ) ) {
-                        $sFieldValue = $this->_aInnerLazyCache[$sViewName][$sId][strtoupper($sFieldName)];
+                    } elseif ( array_key_exists( $sCacheFieldName, $this->_aInnerLazyCache ) ) {
+                        $sFieldValue = $this->_aInnerLazyCache[$sCacheFieldName];
                     } else {
                         return null;
                     }
@@ -291,9 +292,9 @@ class oxBase extends oxSuperCfg
                     if ($this->_sCacheKey) {
                         $myUtils = oxUtils::getInstance();
                         $sCacheKey = 'fieldnames_' . $this->_sCoreTable . "_" . $this->_sCacheKey;
-                        $aFieldNames = $myUtils->fromFileCache($sCacheKey);
+                        $aFieldNames = $myUtils->fromFileCache( $sCacheKey );
                         $aFieldNames[$sFieldName] = $iFieldStatus;
-                        $myUtils->toFileCache($sCacheKey, $aFieldNames);
+                        $myUtils->toFileCache( $sCacheKey, $aFieldNames );
                     }
                 } catch ( Exception $e ) {
                     return null;
@@ -301,7 +302,7 @@ class oxBase extends oxSuperCfg
 
                 //do not use field cache for this page
                 //as if we use it for lists then objects are loaded empty instead of lazy loading.
-                self::$_blDisableFieldCaching[get_class($this)] = true;
+                self::$_blDisableFieldCaching[get_class( $this )] = true;
             }
 
             oxUtilsObject::getInstance()->resetInstanceCache(get_class($this));

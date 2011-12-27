@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 40458 2011-12-06 09:01:50Z justinas.straksys $
+ * @version   SVN: $Id: lang.php 40609 2011-12-14 13:37:31Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -1065,7 +1065,7 @@ $aLang = array(
 'SHOP_CONFIG_BIDIRECTCROSS'                                => 'Bidirektionales Crossselling aktivieren',
 'SHOP_CONFIG_CONFIRMAGB'                                   => 'Kunden müssen die AGB bestätigen, um bestellen zu können',
 'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'                      => 'Im 4ten Bestellschritt einen zusätzlichen "Bestellung absenden" Button oben anzeigen (Wenn die Einstellung nicht aktiv ist, wird nur der "Bestellung absenden" Button weiter unten angezeigt).',
-'SHOP_CONFIG_CALCULATEVATFORDELIVERY'                      => '[tr]Im Warenkorb und in der Rechnung die Versandkosten als Nettobetrag und Mehrwertsteuer anstatt als Bruttobetrag anzeigen',
+'SHOP_CONFIG_CALCULATEVATFORDELIVERY'                      => 'Im Warenkorb und in der Rechnung die Versandkosten als Nettobetrag und Mehrwertsteuer anstatt als Bruttobetrag anzeigen',
 'SHOP_CONFIG_CALCDELVATONTOP'                              => 'Versandkosten als Nettopreise eingeben (Versandkosten zuzüglich MwSt.)',
 'SHOP_CONFIG_CALCULATEVATFORWRAPPING'                      => 'Die in den Geschenkverpackungskosten enthaltene Mehrwertsteuer im Warenkorb und in der Rechnung anzeigen',
 'SHOP_CONFIG_CALCWRAPVATONTOP'                             => 'Verpackungskosten als Nettopreise eingeben (Verpackungskosten zuzüglich MwSt.)',
