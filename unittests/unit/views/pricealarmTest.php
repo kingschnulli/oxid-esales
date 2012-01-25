@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: pricealarmTest.php 34362 2011-04-07 11:44:14Z arvydas.vapsva $
  */

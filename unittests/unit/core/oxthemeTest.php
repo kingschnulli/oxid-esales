@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxcaptchaTest.php 26841 2010-03-25 13:58:15Z arvydas $
  */
@@ -234,5 +234,13 @@ class Unit_Core_oxthemeTest extends OxidTestCase
         $oTheme->expects($this->at(1))->method('getParent')->will($this->returnValue($oParent));
         $oTheme->expects($this->at(2))->method('getInfo')->with($this->equalTo('parentVersions'))->will($this->returnValue(array(1, 2, 5)));
         $this->assertFalse($oTheme->checkForActivationErrors());
+    }
+
+    public function testGetId()
+    {
+        $oTheme = new oxTheme();
+        $oTheme->load( "azure" );
+
+        $this->assertEquals('azure', $oTheme->getId());
     }
 }

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 40473 2011-12-06 14:44:46Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxuser.php 40921 2012-01-02 15:34:44Z linas.kukulskis $
  */
 
 /**
@@ -2396,6 +2396,24 @@ class oxUser extends oxBase
                 $oDb->execute( $sSql );
             }
         }
+    }
+
+    /**
+     * retruns user id by user name
+     *
+     * @param string $sUserName user name
+     *
+     * @return string
+     */
+    public function getIdByUserName( $sUserName )
+    {
+        $sQ = "SELECT `oxid` FROM `oxuser` WHERE `oxusername` = ". oxDb::getDb()->quote( $sUserName );
+        if ( !$this->getConfig()->getConfigParam( 'blMallUsers' ) ) {
+            $sQ .= " AND `oxshopid` = ". oxDb::getDb()->quote( $this->getConfig()->getShopId() );
+        }
+
+        return oxDb::getDb()->getOne( $sQ );
+
     }
 
 }

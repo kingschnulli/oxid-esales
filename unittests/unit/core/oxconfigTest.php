@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 39611 2011-10-27 10:40:12Z linas.kukulskis $
+ * @version   SVN: $Id: oxconfigTest.php 41683 2012-01-23 15:29:00Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1267,6 +1267,44 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->init();
         $sUrl = $oConfig->getConfigParam( 'sShopURL' ).'/example.php';
         $this->assertFalse( $oConfig->isCurrentUrl( $sUrl ) );
+    }
+
+    public function testIsCurrentUrlBugFixTest()
+    {
+        $sUrl = 'http://www.example.com.ru';
+        $oConfig = new oxConfig();
+        $oConfig->init();
+        $_SERVER['HTTP_HOST'] = 'http://www.example.com';
+        $_SERVER['SCRIPT_NAME'] = '';
+        $this->assertfalse( $oConfig->isCurrentUrl( $sUrl ) );
+
+        $sUrl = 'www.example.com.ru';
+        $oConfig = new oxConfig();
+        $oConfig->init();
+        $_SERVER['HTTP_HOST'] = 'www.example.com';
+        $_SERVER['SCRIPT_NAME'] = '';
+        $this->assertFalse( $oConfig->isCurrentUrl( $sUrl ) );
+
+        $sUrl = 'http://www.example.com';
+        $oConfig = new oxConfig();
+        $oConfig->init();
+        $_SERVER['HTTP_HOST'] = 'http://www.example.com.ru';
+        $_SERVER['SCRIPT_NAME'] = '';
+        $this->assertfalse( $oConfig->isCurrentUrl( $sUrl ) );
+
+        $sUrl = 'www.example.com';
+        $oConfig = new oxConfig();
+        $oConfig->init();
+        $_SERVER['HTTP_HOST'] = 'www.example.com.ru';
+        $_SERVER['SCRIPT_NAME'] = '';
+        $this->assertFalse( $oConfig->isCurrentUrl( $sUrl ) );
+
+        $sUrl = 'www.example.com.ru';
+        $oConfig = new oxConfig();
+        $oConfig->init();
+        $_SERVER['HTTP_HOST'] = 'www.example.com.ru';
+        $_SERVER['SCRIPT_NAME'] = '';
+        $this->assertTrue( $oConfig->isCurrentUrl( $sUrl ) );
     }
 
 

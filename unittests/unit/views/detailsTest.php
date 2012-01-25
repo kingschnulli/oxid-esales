@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 40477 2011-12-06 15:29:27Z linas.kukulskis $
+ * @version   SVN: $Id: detailsTest.php 40846 2011-12-27 15:05:04Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -531,7 +531,7 @@ class Unit_Views_detailsTest extends OxidTestCase
 
         $oExpect = new oxlist();
         $oExpect->assign(array('asd' => $oKeep2));
-        $this->assertEquals($oExpect, $aRet);
+        $this->assertEquals($oExpect->getArray(), $aRet->getArray());
 
         // do not reload nor clone articles
         $this->assertSame($oKeep2, $aRet['asd']);

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryTest.php 39781 2011-11-05 08:56:15Z arvydas.vapsva $
+ * @version   SVN: $Id: oxdeliveryTest.php 40921 2012-01-02 15:34:44Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1060,6 +1060,12 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
         $oDelivery->load( '_testDeliveryId' );
         $blReturn = $oDelivery->UNITisForArticle( $this->_oBasketItem, 2 );
         $this->assertFalse( $blReturn );
+    }
+
+    public function testGetIdByName()
+    {
+        $oD = new oxDelivery();
+        $this->assertEquals('_testDeliveryId', $oD->getIdByName( 'test_oxDelivery' ) );
     }
 
 }

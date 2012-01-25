@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariantTest.php 37026 2011-07-14 11:52:21Z vilma $
+ * @version   SVN: $Id: oxsimplevariantTest.php 41730 2012-01-24 13:36:30Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -251,10 +251,10 @@ class Unit_Core_oxsimpleVariantTest extends OxidTestCase
     }
 
     // #2231: Admin settings for "apply VAT in cart" and "net product pricing" don't work for Variants
-    public function testApplyParentVatEnterNetPrice()
+    public function testApplyParentVatCalcVatOnlyForBasketOrder()
     {
         $oPrice = new oxPrice();
-        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', true );
+        modConfig::getInstance()->setConfigParam( 'bl_perfCalcVatOnlyForBasketOrder', true );
 
         $oParent = $this->getMock( 'oxArticle', array( 'applyVats' ) );
         $oParent->expects( $this->never() )->method( 'applyVats');
@@ -441,5 +441,6 @@ class Unit_Core_oxsimpleVariantTest extends OxidTestCase
         $oSubj->UNITsetLongDesc( '[{if 1}]ads[{/if}]dsa' );
         $this->assertEquals( '', $oSubj->oxarticles__oxlongdesc->value);
     }
+
 
 }

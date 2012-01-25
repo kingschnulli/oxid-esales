@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   main
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxseo.php 30026 2010-09-28 09:36:28Z sarunas $
  */
