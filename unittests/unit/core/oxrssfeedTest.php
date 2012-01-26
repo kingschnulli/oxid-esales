@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 38661 2011-09-06 10:36:07Z linas.kukulskis $
+ * @version   SVN: $Id: oxrssfeedTest.php 41213 2012-01-12 07:25:47Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -808,7 +808,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         oxTestModules::addFunction('oxrssfeed', 'getSearchArticlesTitle', '{ return "dastitle"; }');
 
         oxTestModules::addFunction('oxsearch', 'getSearchArticles', '{ return "loaded".$aA[0].$aA[1].$aA[2].$aA[3].$aA[4]; }');
-        oxTestModules::addFunction('oxrssfeed', '_getArticleItems', '{ return $aA[0]; }');
+        oxTestModules::addFunction('oxrssfeed', '_getArticleItems($a)', '{ return $aA[0]; }');
         oxTestModules::addFunction('oxrssfeed', '_getShopUrl', '{ return "shopurl?"; }');
 
         $oRss = oxNew('oxrssfeed');

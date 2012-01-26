@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: dbMaintenance.php, v 1.0 2007.9.3 09.46.26 mathiasf$
  */
@@ -245,6 +245,7 @@ class dbMaintenance
     public function dumpDB()
     {
         $sDbName = oxConfig::getInstance()->getConfigParam('dbName');
+        
         $time = microtime (true);
         $this->myDB = oxDb::getDb();
         $myConfig = oxConfig::getInstance();
@@ -318,7 +319,7 @@ class dbMaintenance
                 $sEntry = 'null';
                 $sValues.='null,';
             } else {
-                $sEntry = mysql_escape_string($sEntry);
+                $sEntry = mysql_real_escape_string($sEntry);
                 $sValues.='"'.$sEntry.'",';
             }
 

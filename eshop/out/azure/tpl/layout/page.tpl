@@ -1,4 +1,7 @@
 [{capture append="oxidBlock_pageBody"}]
+    [{if $oView->showRDFa()}]
+        [{ include file="rdfa/rdfa.tpl" }]
+    [{/if}]
     <div id="page" class="[{if $sidebar}] sidebar[{$sidebar}][{/if}]">
         [{include file="layout/header.tpl"}]
         [{if $oView->getClassName() ne "start" && !$blHideBreadcrumb}]

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 40400 2011-11-30 15:55:39Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasketTest.php 41739 2012-01-24 15:48:16Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2186,7 +2186,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         // forcing some config params for deeper execution
         modConfig::getInstance()->setConfigParam( 'blCalcVatForWrapping', true );
-        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', true );
+        modConfig::getInstance()->setConfigParam( 'blWrappingVatOnTop', true );
 
         // deleting discounts
         foreach ( $this->aDiscounts as $oDiscount ) {

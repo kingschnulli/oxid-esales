@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrappingTest.php 37738 2011-07-28 15:12:29Z linas.kukulskis $
+ * @version   SVN: $Id: oxwrappingTest.php 41739 2012-01-24 15:48:16Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -248,13 +248,12 @@ class Unit_Core_oxwrappingTest extends OxidTestCase
 
     public function testGetWrapPriceVatOnTop()
     {
-        $myUtils  = oxUtils::getInstance();
+        modConfig::getInstance()->setConfigParam( 'blWrappingVatOnTop', true );
         $oWrap = oxNew( 'oxwrapping' );
         if (!$oWrap->Load($this->_sWrapOxid)) {
             $this->fail('can not load wrapping');
         }
 
-        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', true );
         $oWrap->setWrappingVat( $this->_dDefaultVAT );
         $oWrapPrice = $oWrap->getWrappingPrice( 2 );
 

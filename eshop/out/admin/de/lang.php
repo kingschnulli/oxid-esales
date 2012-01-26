@@ -17,12 +17,26 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 40605 2011-12-14 13:16:27Z juergen.busch $
+ * @version   SVN: $Id: lang.php 41655 2012-01-23 09:53:10Z arvydas.vapsva $
  */
 
 $sLangName  = 'Deutsch';
+
+/**
+ * Character list for replacement in SEO URL's
+ * @var array SEO replacement list
+ */
+$aSeoReplaceChars = array(
+    'ä' => 'ae',
+    'ö' => 'oe',
+    'ü' => 'ue',
+    'Ä' => 'AE',
+    'Ö' => 'OE',
+    'Ü' => 'UE',
+    'ß' => 'ss',
+);
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
@@ -370,6 +384,8 @@ $aLang = array(
 'ARTICLE_EXTEND_FILEUPLOAD'                                => 'Datei hochladen',
 'ARTICLE_EXTEND_ALLCATS'                                   => 'Alle Kategorien',
 'ARTICLE_EXTEND_WEIGHT'                                    => 'Gewicht',
+'ARTICLE_EXTEND_WEIGHT_UNIT'                               => 'kg',
+'ARTICLE_EXTEND_DIMENSIONS_UNIT'                           => 'm',
 'ARTICLE_EXTEND_LENGTH'                                    => 'L:',
 'ARTICLE_EXTEND_WIDTH'                                     => 'B:',
 'ARTICLE_EXTEND_HEIGHT'                                    => 'H:',
@@ -573,6 +589,7 @@ $aLang = array(
 'CATEGORY_MAIN_SKIPDISCOUNTS'                              => 'Alle neg. Nachlässe ignorieren.<br>(Rabatte, Gutscheine, Zahlungsarten ...)',
 'CATEGORY_MALL_ASSIGNONLYPARENTWARNING'                    => 'Sie können nur einen kompletten Kat. Baum einem Subshop zuweisen.',
 'CATEGORY_MALL_CLICKHEREFORPARENT'                         => 'Hier klicken um Eltern Verknüfpung zu editieren.',
+'CATEGORY_PICTURES_UPLOADISDISABLED'                       => 'Dies ist ein Demoshop. Das Hochladen/Löschen von Bildern wurde aus Sicherheitsgründen abgeschaltet.',
 'CATEGORY_ORDER_ACTSORT'                                   => 'Aktuelle Sortierung',
 'CATEGORY_ORDER_NEWSORT'                                   => 'Neue Sortierung',
 'CATEGORY_ORDER_NEWSORTSAVE'                               => 'Neue Sortierung speichern',
@@ -824,6 +841,8 @@ $aLang = array(
 'EMAIL_SENDEDNOW_HTML_ORDERNUM'                            => 'Ihre Bestellnr.',
 'EMAIL_SENDEDNOW_HTML_RATE'                                => 'bewerten',
 'EMAIL_SENDEDNOW_HTML_TS_RATINGS_RATEUS'                   => 'Bitte nehmen Sie sich eine Minute, um unseren Shop zu bewerten.',
+'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKING'                    => '[tr] Your shipment tracking URL:',
+'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKINGURL'                 => '[tr] click here',
 'EXCEPTION_USER_NOVALIDLOGIN'                              => 'Falsche E-Mail oder Passwort!',
 'EXCEPTION_USER_USEREXISTS'                                => 'Dieser Benutzer existiert bereits!',
 'EXCEPTION_CONNECTION_NODB'                                => 'Keine Verbindung zur Datenbank möglich!',
@@ -1731,7 +1750,8 @@ $aLang = array(
 'mxsysreq'                                                 => 'Systemgesundheit',
 'mxtools'                                                  => 'Tools',
 'mxtheme'                                                  => 'Themes',
-'mxmodule'                                                 => 'Extensions',
+'mxmodule'                                                 => 'Module',
+'mxextensions'                                             => 'Erweiterungen',
 'mxuadmin'                                                 => 'Benutzer verwalten',
 'mxurls'                                                   => 'Links',
 'mxugroups'                                                => 'Benutzergruppen',
@@ -1788,6 +1808,7 @@ $aLang = array(
 'tbcldeliveryset_main'                                     => 'Stamm',
 'tbcldeliveryset_payment'                                  => 'Zahlungsarten',
 'tbcldeliveryset_users'                                    => 'Benutzer',
+'tbcldeliveryset_rdfa'                                     => 'RDFa',
 //  discount_list',
 'tbcldiscount_main'                                        => 'Stamm',
 'tbcldiscount_articles'                                    => 'Artikel',
@@ -1807,6 +1828,7 @@ $aLang = array(
 //  payment_list',
 'tbclpayment_main'                                         => 'Stamm',
 'tbclpayment_country'                                      => 'Länder',
+'tbclpayment_rdfa'                                         => 'RDFa',
 //  Pricealarm',
 'tbclpricealarm_main'                                      => 'Stamm',
 'tbclpricealarm_mail'                                      => 'E-Mail',
@@ -1877,6 +1899,7 @@ $aLang = array(
 'tbclcategory_rights'                                      => 'Rechte',
 'tbclshop_cache'                                           => 'Caching',
 'tbclshop_mall'                                            => 'Mall',
+'tbclshop_rdfa'                                            => 'RDFa',
 'tbclroles_femain'                                         => 'Stamm',
 'tbclroles_feuser'                                         => 'Benutzer',
 'tbclroles_bemain'                                         => 'Stamm',
@@ -1962,6 +1985,90 @@ $aLang = array(
 'PROMOTIONS_ARTICLE_UNASSIGNARTICLE'                       => 'Produktzuordnung löschen',
 'PROMOTIONS_ARTICLE_ASSIGNEDARTICLE'                       => 'Zugeordnetes Produkt:',
 'PROMOTIONS_ARTICLE_ALLITEMS'                              => 'Alle verfügbaren Produkte',
+
+'SHOP_RDFA_TECH_CONFIG'			                           => 'Technische Einstellungen',
+'SHOP_RDFA_EMBEDDING'									   => 'Automatische Einbettung der Daten konfigurieren',
+'SHOP_RDFA_CONTENT_OFFERER'								   => 'In welche Content-Seite sollen die RDF-Daten des <b>Anbieters</b> eingebettet werden?',
+'SHOP_RDFA_CONTENT_PAYMENT'								   => 'In welche Content-Seite sollen die RDF-Daten der <b>Zahlungsarten</b> eingebettet werden?',
+'SHOP_RDFA_CONTENT_DELIVERY'                               => 'In welche Content-Seite sollen die RDF-Daten der <b>Versandarten</b> eingebettet werden?',
+'SHOP_RDFA_RATING_MIN'			                           => 'Mit wie vielen Punkten können Kunden einen Artikel <b>minimal</b> bewerten?',
+'SHOP_RDFA_RATING_MAX'			                           => 'Mit wie vielen Punkten können Kunden einen Artikel <b>maximal</b> bewerten?',
+'SHOP_RDFA_DATA_OFFERER'	                               => 'Anbieterdaten',
+'SHOP_RDFA_DATA_MASTER'			                           => 'Stammdaten',
+'SHOP_RDFA_DATA_EXTENDED'		                           => 'Erweiterte Anbieterdaten',
+'SHOP_RDFA_LOGO_URL'			                           => 'Logo-URL',
+'SHOP_RDFA_GEO_LONGITUDE'			                       => 'Geoposition: geogr. Länge (Longitude)',
+'SHOP_RDFA_GEO_LATITUDE'			                       => 'Geoposition: geogr. Breite (Latitude)',
+'SHOP_RDFA_GLN'				                               => 'GLN',
+'SHOP_RDFA_NAICS'			                               => 'NAICS',
+'SHOP_RDFA_ISIC'				                           => 'ISIC',
+'SHOP_RDFA_DUNS'				                           => 'D-U-N-S',
+'SHOP_RDFA_GLOBAL_OFFERING_DATA'		                   => 'Globale Angebotsdaten',
+'SHOP_RDFA_VAT'				                               => 'Sind die dem Kunden angezeigten Preise <b>inkl.</b> oder <b>exkl.</b> der <b>gesetzlichen MwSt.</b>?',
+'SHOP_RDFA_VAT_INC'			                               => 'inkl. MwSt.',
+'SHOP_RDFA_VAT_EX'			                               => 'exkl. MwSt.',
+'SHOP_RDFA_COND'				                           => 'Wie ist der <b>Zustand</b> der angebotenen Artikel?',
+'SHOP_RDFA_COND_NEW'			                           => 'neu',
+'SHOP_RDFA_COND_USED'			                           => 'gebraucht',
+'SHOP_RDFA_COND_REFURBISHED'		                       => 'aufgearbeitet',
+'SHOP_RDFA_FNC'				                               => 'Welche <b>Funktion</b> erfüllen Ihre Angebote?',
+'SHOP_RDFA_FNC_SELL'			                           => 'Verkauf',
+'SHOP_RDFA_FNC_LEASEOUT'			                       => 'Vermietung',
+'SHOP_RDFA_FNC_REPAIR'			                           => 'Reparatur',
+'SHOP_RDFA_FNC_MAINTAIN'			                       => 'Pflege',
+'SHOP_RDFA_FNC_CONSTINST'		                           => 'Aufbau/Installation',
+'SHOP_RDFA_FNC_SERVICE'			                           => 'Dienstleistung',
+'SHOP_RDFA_FNC_DISPOSE'			                           => 'Entsorgung',
+'SHOP_RDFA_FNC_NONE'			                           => 'Keine der vorhandenen',
+'SHOP_RDFA_COSTUMER'			                           => 'Welche <b>Kundengruppen</b> werden mit Ihren Angeboten angesprochen?',
+'SHOP_RDFA_COSTUMER_ENDUSER'		                       => 'Endverbraucher',
+'SHOP_RDFA_COSTUMER_RESELLER'		                       => 'Wiederverkäufer',
+'SHOP_RDFA_COSTUMER_BUSINESS'		                       => 'Unternehmen/Gewerbetreibende',
+'SHOP_RDFA_COSTUMER_PUBLIC'		                           => 'Öffentliche Einrichtungen',
+'SHOP_RDFA_DURATION_OFFERINGS'			                   => 'Welche <b>Gültigkeitsdauer</b> haben Ihre <b>Angebote</b>?',
+'SHOP_RDFA_DURATION_PRICES'			                       => 'Welche <b>Gültigkeitsdauer</b> haben Ihre <b>Angebotspreise</b>?',
+'SHOP_RDFA_1_DAY'			                               => '1 Tag',
+'SHOP_RDFA_3_DAYS'			                               => '3 Tage',
+'SHOP_RDFA_7_DAYS'			                               => '7 Tage (1 Woche)',
+'SHOP_RDFA_14_DAYS'			                               => '14 Tage (2 Wochen)',
+'SHOP_RDFA_30_DAYS'			                               => '30 Tage (1 Monat)',
+'SHOP_RDFA_178_DAYS'			                           => '178 Tage (6 Monate)',
+'SHOP_RDFA_356_DAYS'			                           => '356 Tage (1 Jahr)',
+
+'PAYMENT_RDFA_ASIGN_PAYMENT'		                       => 'Zahlungsart zuordnen',
+'PAYMENT_RDFA_ADVICE_START'		                           => '<b>Hinweis:</b> Bitte wählen Sie nur die in GoodRelations vordefinierten Zahlungsarten aus, die Ihren Zahlungsarten ',
+'PAYMENT_RDFA_ADVICE_END'		                           => 'entsprechen',
+'PAYMENT_RDFA_GENERAL'			                           => 'Allgemeine Zahlungsarten',
+'PAYMENT_RDFA_CASH'			                               => 'Barzahlung',
+'PAYMENT_RDFA_GOOGLECHECKOUT'		                       => 'Google Checkout',
+'PAYMENT_RDFA_DIRECTDEBIT'		                           => 'Bankeinzug',
+'PAYMENT_RDFA_COD'			                               => 'Nachnahme',
+'PAYMENT_RDFA_PAYPAL'			                           => 'PayPal',
+'PAYMENT_RDFA_PAYSWARM'			                           => 'PaySwarm',
+'PAYMENT_RDFA_BYINVOICE'			                       => 'Rechnung',
+'PAYMENT_RDFA_CHECKINADVANCE'			                   => 'Barscheck',
+'PAYMENT_RDFA_BYBANKTRANSFERINADVANCE'		               => 'Vorauskasse',
+'PAYMENT_RDFA_CREDITCARD'		                           => 'Kreditkartenzahlung',
+'PAYMENT_RDFA_AMERICANEXPRESS'		                       => 'American Express',
+'PAYMENT_RDFA_DINERSCLUB'		                           => 'Diners Club',
+'PAYMENT_RDFA_DISCOVER'			                           => 'Discover',
+'PAYMENT_RDFA_JCB'			                               => 'JCB',
+'PAYMENT_RDFA_MASTERCARD'		                           => 'MasterCard',
+'PAYMENT_RDFA_VISA'			                               => 'VISA',
+
+'DELIVERY_RDFA_ASIGN_DELIVERY'		                       => 'Versandarten zuordnen',
+'DELIVERY_RDFA_ADVICE_START'		                       => '<b>Hinweis:</b> Bitte wählen Sie nur die in GoodRelations vordefinierten Versandarten aus, die Ihren Versandarten',
+'DELIVERY_RDFA_ADVICE_END'		                           => 'entsprechen',
+'DELIVERY_RDFA_GENERAL'			                           => 'Allgemeine Versandarten',
+'DELIVERY_RDFA_DELIVERYMODEDIRECTDOWNLOAD'			       => 'Download',
+'DELIVERY_RDFA_DELIVERYMODEOWNFLEET'			           => 'Eigener Fuhrpark',
+'DELIVERY_RDFA_DELIVERYMODEMAIL'			               => 'Briefpost',
+'DELIVERY_RDFA_DELIVERYMODEPICKUP'			               => 'Selbstabholung',
+'DELIVERY_RDFA_DELIVERYMODEFREIGHT'			               => 'Fracht',
+'DELIVERY_RDFA_PARCELSERVICE'		                       => 'Paketdienst',
+'DELIVERY_RDFA_DHL'			                               => 'DHL',
+'DELIVERY_RDFA_FEDERALEXPRESS'			                   => 'FedEx',
+'DELIVERY_RDFA_UPS'			                               => 'UPS',
 
 );
 

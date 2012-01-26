@@ -89,7 +89,7 @@ function processUnitInput( oSelect, sInputId )
                   [{ oxmultilang ident="ARTICLE_EXTEND_WEIGHT" }]
                 </td>
                 <td class="edittext">
-                  <input type="text" class="editinput" size="10" maxlength="[{$edit->oxarticles__oxweight->fldmax_length}]" name="editval[oxarticles__oxweight]" value="[{$edit->oxarticles__oxweight->value}]" [{ $readonly }]>kg
+                  <input type="text" class="editinput" size="10" maxlength="[{$edit->oxarticles__oxweight->fldmax_length}]" name="editval[oxarticles__oxweight]" value="[{$edit->oxarticles__oxweight->value}]" [{ $readonly }]>[{oxmultilang ident="ARTICLE_EXTEND_WEIGHT_UNIT"}]
                   [{ oxinputhelp ident="HELP_ARTICLE_EXTEND_WEIGHT" }]
                 </td>
               </tr>
@@ -98,9 +98,9 @@ function processUnitInput( oSelect, sInputId )
                   [{ oxmultilang ident="ARTICLE_EXTEND_MASS" }]
                 </td>
                 <td class="edittext">
-                  [{ oxmultilang ident="ARTICLE_EXTEND_LENGTH" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_length}]" name="editval[oxarticles__oxlength]" value="[{$edit->oxarticles__oxlength->value}]" [{ $readonly }]>m
-                  [{ oxmultilang ident="ARTICLE_EXTEND_WIDTH" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_width}]" name="editval[oxarticles__oxwidth]" value="[{$edit->oxarticles__oxwidth->value}]" [{ $readonly }]>m
-                  [{ oxmultilang ident="ARTICLE_EXTEND_HEIGHT" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_height}]" name="editval[oxarticles__oxheight]" value="[{$edit->oxarticles__oxheight->value}]" [{ $readonly }]>m
+                  [{ oxmultilang ident="ARTICLE_EXTEND_LENGTH" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_length}]" name="editval[oxarticles__oxlength]" value="[{$edit->oxarticles__oxlength->value}]" [{ $readonly }]>[{oxmultilang ident="ARTICLE_EXTEND_DIMENSIONS_UNIT"}]
+                  [{ oxmultilang ident="ARTICLE_EXTEND_WIDTH" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_width}]" name="editval[oxarticles__oxwidth]" value="[{$edit->oxarticles__oxwidth->value}]" [{ $readonly }]>[{oxmultilang ident="ARTICLE_EXTEND_DIMENSIONS_UNIT"}]
+                  [{ oxmultilang ident="ARTICLE_EXTEND_HEIGHT" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_height}]" name="editval[oxarticles__oxheight]" value="[{$edit->oxarticles__oxheight->value}]" [{ $readonly }]>[{oxmultilang ident="ARTICLE_EXTEND_DIMENSIONS_UNIT"}]
                   [{ oxinputhelp ident="HELP_ARTICLE_EXTEND_MASS" }]
                 </td>
               </tr>

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxratingTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxratingTest.php 41752 2012-01-25 09:46:08Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -91,6 +91,37 @@ class Unit_Core_oxratingTest extends OxidTestCase
         $oRating = oxNew( 'oxrating' );
         modConfig::getInstance()->setConfigParam( 'iRatingLogsTimeout', 1);
         $this->assertTrue( $oRating->allowRating( 'oxdefaultadmin', 'oxarticle', '1651'));
+    }
+
+    public function testGetRatingAverage()
+    {
+        // inserting few test records
+        $oRev = new oxreview();
+        $oRev->setId( '_testrev1' );
+        $oRev->oxreviews__oxobjectid = new oxField( 'xxx' );
+        $oRev->oxreviews__oxtype     = new oxField( 'oxarticle' );
+        $oRev->oxreviews__oxrating    = new oxField( 3 );
+        $oRev->save();
+
+        $oRev = new oxreview();
+        $oRev->setId( '_testrev2' );
+        $oRev->oxreviews__oxobjectid = new oxField( 'xxx' );
+        $oRev->oxreviews__oxtype     = new oxField( 'oxarticle' );
+        $oRev->oxreviews__oxrating     = new oxField( 1 );
+        $oRev->save();
+
+        $oRev = new oxreview();
+        $oRev->setId( '_testrev3' );
+        $oRev->oxreviews__oxobjectid = new oxField( 'yyy' );
+        $oRev->oxreviews__oxtype     = new oxField( 'oxarticle' );
+        $oRev->oxreviews__oxrating     = new oxField( 5 );
+        $oRev->save();
+
+        $oRating = new oxRating();
+        $this->assertEquals( 2 , $oRating->getRatingAverage('xxx', 'oxarticle'));
+        $this->assertEquals( 2 , $oRating->getRatingCount('xxx', 'oxarticle'));
+        $this->assertEquals( 3 , $oRating->getRatingAverage('xxx', 'oxarticle', array('yyy')));
+        $this->assertEquals( 3 , $oRating->getRatingCount('xxx', 'oxarticle' , array('yyy')));
     }
 
 }

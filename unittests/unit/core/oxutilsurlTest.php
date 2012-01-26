@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsurlTest.php 40486 2011-12-06 16:32:43Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsurlTest.php 41698 2012-01-24 09:06:06Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -161,6 +161,21 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         $this->assertEquals( "asd&amp;", $oUtils->appendParamSeparator("asd&amp;") );
         $this->assertEquals( "asd&amp;a?", $oUtils->appendParamSeparator("asd&amp;a") );
         $this->assertEquals( "asd?&amp;a&amp;", $oUtils->appendParamSeparator("asd?&amp;a") );
+    }
+
+    /**
+     * Test cases for oxUtilsUrl::cleanUrlParams()
+     * URL cleanup check, remove dublicate GET parameters and clean &amp; and dublicate &
+     *
+     * @return null
+     */
+    public function testCleanUrlParams()
+    {
+        $sTestUrl = oxConfig::getInstance()->getConfigParam('sShopURL') . 'index.php?&&&p1=v1&p2=v2&aTest[]=test1&aTest[]=test2&assoc[test]=t1&assoc[test]=t2&amp;amp;amp;&&p1=test1 space&p2=';
+        $sExpUrl  = oxConfig::getInstance()->getConfigParam('sShopURL') . 'index.php?p1=test1+space&amp;p2=&amp;aTest[0]=test1&amp;aTest[1]=test2&amp;assoc[test]=t2';
+
+        $oUtils = oxUtilsUrl::getInstance();
+        $this->assertSame( $sExpUrl, $oUtils->cleanUrlParams( $sTestUrl ) );
     }
 
     /**

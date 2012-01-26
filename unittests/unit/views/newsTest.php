@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: newsTest.php 35792 2011-06-03 08:00:18Z linas.kukulskis $
+ * @version   SVN: $Id: newsTest.php 40677 2011-12-19 08:21:54Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -114,10 +114,10 @@ class Unit_Views_newsTest extends OxidTestCase
         $oNews    = new News();
         $aResult  = array();
         $aResults = array();
-        
+
         $aResult["title"] = oxLang::getInstance()->translateString( 'PAGE_INFO_NEWS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
         $aResult["link"]  = $oNews->getLink();
-        
+
         $aResults[] = $aResult;
 
         $this->assertEquals( $aResults, $oNews->getBreadCrumb() );

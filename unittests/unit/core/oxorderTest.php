@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxorderTest.php 40959 2012-01-05 07:54:41Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2726,7 +2726,9 @@ class Unit_Core_oxorderTest extends OxidTestCase
 
     public function testValidateStockThrowsExeptionWhenOutOfStock()
     {
-        $oArticle = oxNew( 'oxArticle' );
+        //$oArticle = oxNew( 'oxArticle' );
+        $oArticle = $this->getMock( 'oxArticle', array('checkForStock') );
+        $oArticle->expects( $this->once() )->method('checkForStock')->will($this->returnValue(5));
         $oArticle->setId( '_testArticleId' );
         $oArticle->oxarticles__oxstock = new oxField('2', oxField::T_RAW);
         $oArticle->oxarticles__oxstockflag = new oxField(0, oxField::T_RAW);
@@ -2747,6 +2749,7 @@ class Unit_Core_oxorderTest extends OxidTestCase
         } catch (Exception $e) {
             // OK
             $this->assertEquals('oxOutOfStockException', get_class($e) );
+            $this->assertEquals(5, $e->getRemainingAmount());
             return;
         }
 

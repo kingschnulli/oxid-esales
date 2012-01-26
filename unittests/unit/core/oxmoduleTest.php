@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxcaptchaTest.php 26841 2010-03-25 13:58:15Z arvydas $
  */
@@ -64,7 +64,7 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
                 'description'  => 'Module for making invoice PDF files.',
                 'thumbnail'    => 'picture.png',
                 'version'      => '1.0',
-                'author'       => 'OXID',
+                'author'       => 'OXID eSales AG',
                 'active'       => true,
                 'extend'       => array ('oxorder' => 'invoicepdf/myorder')
             );
@@ -88,7 +88,7 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
                 'description'  => 'Module for making invoice PDF files.',
                 'thumbnail'    => 'picture.png',
                 'version'      => '1.0',
-                'author'       => 'OXID',
+                'author'       => 'OXID eSales AG',
                 'active'       => true,
                 'extend'       => array ()
             );

@@ -461,6 +461,18 @@ function showInvitations()
 
             <dl>
                 <dt>
+                    <input type=hidden name=confbools[blWrappingVatOnTop] value=false>
+                    <input type=checkbox name=confbools[blWrappingVatOnTop] value=true  [{if ($confbools.blWrappingVatOnTop)}]checked[{/if}] [{ $readonly}]>
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_CALCWRAPVATONTOP" }]
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_CALCWRAPVATONTOP" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
+            <dl>
+                <dt>
                     <input type=hidden name=confbools[blShippingCountryVat] value=false>
                     <input type=checkbox name=confbools[blShippingCountryVat] value=true  [{if ($confbools.blShippingCountryVat)}]checked[{/if}] [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHIPPINGCOUNTRYVAT" }]

@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id$
  */
@@ -50,25 +50,4 @@ class Unit_Admin_ModuleConfigTest extends OxidTestCase
         $this->assertEquals( 'module:testModuleId', $oView->UNITgetModuleForConfigVars() );
     }
 
-    public function testGetTemplateOptionsLanguageFile()
-    {
-
-            $oView = $this->getProxyClass( 'Module_Config' );
-            $sFilePath = $oView->getConfig()->getModulesDir() . "invoicepdf/de/module_options.php";
-
-            $this->assertEquals( $sFilePath, $oView->UNITgetModuleOptionsLanguageFile( "invoicepdf" ) );
-    }
-
-    public function testGetTemplateOptionsLanguageFile_fileNotFound()
-    {
-        $oView = $this->getProxyClass( 'Module_Config' );
-
-        try {
-            $oView->UNITgetModuleOptionsLanguageFile( "noSuchModule" );
-            $this->fail('no exception');
-        } catch (oxFileException $e) {
-            $this->assertEquals('EXCEPTION_FILENOTFOUND', $e->getMessage());
-            $this->assertEquals('module_options.php for the module "noSuchModule"', $e->getFileName());
-        }
-    }
 }

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_variant.php 39130 2011-10-11 12:38:50Z rimvydas.paskevicius $
+ * @version   SVN: $Id: article_variant.php 40727 2011-12-21 12:01:42Z mindaugas.rimgaila $
  */
 
 /**
@@ -223,7 +223,6 @@ class Article_Variant extends oxAdminDetails
     public function changename()
     {
         $soxId = $this->getEditObjectId();
-
         $aParams = oxConfig::getParameter( "editval");
 
 

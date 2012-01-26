@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 38016 2011-08-08 08:17:42Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewTest.php 41394 2012-01-16 12:58:30Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -635,6 +635,12 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oView = new oxview();
         $oView->setIsCallForCache( '123456789' );
         $this->assertEquals( '123456789', $oView->getIsCallForCache() );
+    }
+
+    public function testShowRdfa()
+    {
+        $oView = new oxview();
+        $this->assertFalse( $oView->showRdfa() );
     }
 
 }

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliverysetlistTest.php 34994 2011-04-27 13:56:19Z sarunas $
+ * @version   SVN: $Id: oxdeliverysetlistTest.php 41419 2012-01-16 15:53:27Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -823,5 +823,81 @@ class Unit_Core_oxDeliverysetListTest extends OxidTestCase
         $this->assertEquals( 100, modOxDeliverySetList_paymentList::$dBasketPrice );
     }
 
+    /**
+     * Testing oxdeliverysetlist::loadNonRDFaDeliverySetList()
+     */
+    public function testLoadNonRDFaDeliverySetList()
+    {
+        $oP2DelSet1 = new oxbase();
+        $oP2DelSet1->init( 'oxobject2delivery' );
+        $oP2DelSet1->setId( '_testoxobject2delivery1' );
+        $oP2DelSet1->oxobject2delivery__oxdeliveryid = new oxField('oxidstandard', oxField::T_RAW);
+        $oP2DelSet1->oxobject2delivery__oxobjectid = new oxField('DHL', oxField::T_RAW);
+        $oP2DelSet1->oxobject2delivery__oxtype = new oxField("rdfadeliveryset", oxField::T_RAW);
+        $oP2DelSet1->save();
+
+        $oDeliverySetList = new oxDeliverySetList();
+        $oDeliverySetList->loadNonRDFaDeliverySetList();
+        $this->assertEquals( 2, $oDeliverySetList->count());
+    }
+
+    /**
+     * Testing oxdeliverysetlist::loadRDFaDeliverySetList()
+     */
+    public function testLoadRDFaDeliverySetList()
+    {
+        $oP2DelSet1 = new oxbase();
+        $oP2DelSet1->init( 'oxobject2delivery' );
+        $oP2DelSet1->setId( '_testoxobject2delivery1' );
+        $oP2DelSet1->oxobject2delivery__oxdeliveryid = new oxField('oxidstandard', oxField::T_RAW);
+        $oP2DelSet1->oxobject2delivery__oxobjectid = new oxField('DHL', oxField::T_RAW);
+        $oP2DelSet1->oxobject2delivery__oxtype = new oxField("rdfadeliveryset", oxField::T_RAW);
+        $oP2DelSet1->save();
+
+        $oDeliverySetList = new oxDeliverySetList();
+        $oDeliverySetList->loadRDFaDeliverySetList();
+        $this->assertEquals( 3, $oDeliverySetList->count());
+        foreach ($oDeliverySetList as $oDel) {
+            if ($oDel->getId() == 'oxidstandard') {
+                $this->assertEquals( 'DHL', $oDel->oxdeliveryset__oxobjectid->value);
+            } else {
+                $this->assertNull( $oDel->oxdeliveryset__oxobjectid->value);
+            }
+        }
+    }
+
+    /**
+     * Testing oxdeliverysetlist::loadRDFaDeliverySetList()
+     */
+    public function testLoadRDFaDeliverySetListForDeliveryId()
+    {
+        $oP2DelSet1 = new oxbase();
+        $oP2DelSet1->init( 'oxobject2delivery' );
+        $oP2DelSet1->setId( '_testoxobject2delivery1' );
+        $oP2DelSet1->oxobject2delivery__oxdeliveryid = new oxField('oxidstandard', oxField::T_RAW);
+        $oP2DelSet1->oxobject2delivery__oxobjectid = new oxField('DHL', oxField::T_RAW);
+        $oP2DelSet1->oxobject2delivery__oxtype = new oxField("rdfadeliveryset", oxField::T_RAW);
+        $oP2DelSet1->save();
+
+        // Deliverycost 1 => Deliveryset 1
+        $oD2DelSet1 = new oxbase();
+        $oD2DelSet1->init( 'oxdel2delset' );
+        $oD2DelSet1->setId( '_testoxdel2delset1' );
+        $oD2DelSet1->oxdel2delset__oxdelid = new oxField('1b842e73470578914.54719298', oxField::T_RAW);
+        $oD2DelSet1->oxdel2delset__oxdelsetid = new oxField('1b842e732a23255b1.91207750', oxField::T_RAW);
+        $oD2DelSet1->save();
+
+        $oDeliverySetList = new oxDeliverySetList();
+        // standart delivery costs for DE
+        $oDeliverySetList->loadRDFaDeliverySetList('1b842e73470578914.54719298');
+        $this->assertEquals( 2, $oDeliverySetList->count());
+        foreach ($oDeliverySetList as $oDel) {
+            if ($oDel->getId() == 'oxidstandard') {
+                $this->assertEquals( 'DHL', $oDel->oxdeliveryset__oxobjectid->value);
+            } else {
+                $this->assertNull( $oDel->oxdeliveryset__oxobjectid->value);
+            }
+        }
+    }
 
 }

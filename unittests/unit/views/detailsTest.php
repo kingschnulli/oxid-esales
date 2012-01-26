@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 40552 2011-12-12 13:46:58Z linas.kukulskis $
+ * @version   SVN: $Id: detailsTest.php 41484 2012-01-17 15:56:38Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -531,7 +531,7 @@ class Unit_Views_detailsTest extends OxidTestCase
 
         $oExpect = new oxlist();
         $oExpect->assign(array('asd' => $oKeep2));
-        $this->assertEquals($oExpect, $aRet);
+        $this->assertEquals($oExpect->getArray(), $aRet->getArray());
 
         // do not reload nor clone articles
         $this->assertSame($oKeep2, $aRet['asd']);
@@ -1509,7 +1509,7 @@ class Unit_Views_detailsTest extends OxidTestCase
 
         $this->assertFalse( $oView->canRate() );
     }
-    
+
     /**
      * details::canRate() test case
      *
@@ -1552,6 +1552,117 @@ class Unit_Views_detailsTest extends OxidTestCase
         oxTestModules::addModuleObject( "oxrating", $oRating );
 
         $this->assertTrue( $oView->canRate() );
+    }
+
+    public function testShowRdfa()
+    {
+        modConfig::getInstance()->setConfigParam( 'blRDFaEmbedding', true );
+        $oView = new details();
+        $this->assertTrue( $oView->showRdfa() );
+    }
+
+    public function testGetRDFaNormalizedRating()
+    {
+        modConfig::getInstance()->setConfigParam( 'iRDFaMinRating', 1 );
+        modConfig::getInstance()->setConfigParam( 'iRDFaMaxRating', 5 );
+        $oProduct = new oxArticle();
+        $oProduct->oxarticles__oxratingcnt = new oxField('2');
+        $oProduct->oxarticles__oxrating = new oxField('5');
+
+        $oView = $this->getMock( "details", array( "getProduct" ) );
+        $oView->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+        $aNomalizedRating = $oView->getRDFaNormalizedRating();
+
+        $this->assertEquals( 2, $aNomalizedRating["count"] );
+        $this->assertEquals( 5, $aNomalizedRating["value"] );
+    }
+
+    public function testGetRDFaValidityPeriod()
+    {
+        modConfig::getInstance()->setConfigParam( 'testvar', 2 );
+        $startTime = time()- (2*60*60);
+        $endTime = $startTime + (2 * 24 * 60 * 60);
+        $oView = new details();
+        $aValidity = $oView->getRDFaValidityPeriod('testvar');
+        $this->assertTrue( date('Y-m-d\TH:i:s', $startTime) <= $aValidity["from"] );
+        $this->assertTrue( date('Y-m-d\TH:i:s', $endTime) <= $aValidity["through"] );
+    }
+
+    public function testGetRDFaBusinessFnc()
+    {
+        modConfig::getInstance()->setConfigParam( 'sRDFaBusinessFnc', "test" );
+        $oView = new details();
+        $this->assertEquals( "test", $oView->getRDFaBusinessFnc() );
+    }
+
+    public function testGetRDFaCustomers()
+    {
+        modConfig::getInstance()->setConfigParam( 'aRDFaCustomers', "test" );
+        $oView = new details();
+        $this->assertEquals( "test", $oView->getRDFaCustomers() );
+    }
+
+    public function testGetRDFaVAT()
+    {
+        modConfig::getInstance()->setConfigParam( 'iRDFaVAT', "test" );
+        $oView = new details();
+        $this->assertEquals( "test", $oView->getRDFaVAT() );
+    }
+
+    public function testGetRDFaGenericCondition()
+    {
+        modConfig::getInstance()->setConfigParam( 'iRDFaCondition', "test" );
+        $oView = new details();
+        $this->assertEquals( "test", $oView->getRDFaGenericCondition() );
+    }
+
+    public function testGetBundleArticle()
+    {
+        if (OXID_VERSION_EE) {
+            return;// pe only
+        }
+        $oProduct = new oxArticle();
+        $oProduct->oxarticles__oxbundleid = new oxField('1126');
+
+        $oView = $this->getMock( "details", array( "getProduct" ) );
+        $oView->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+        $oArt = $oView->getBundleArticle();
+
+        $this->assertTrue( $oArt instanceof oxarticle );
+        $this->assertEquals( '1126', $oArt->getId() );
+    }
+
+    public function testGetRDFaPaymentMethods()
+    {
+        $oProduct = $this->getMock( 'oxarticle', array( 'getId', 'getPrice' ) );
+        $oProduct->expects( $this->any() )->method( 'getId')->will( $this->returnValue( 'test' ) );
+        $oProduct->expects( $this->any() )->method( 'getPrice')->will( $this->returnValue( new oxPrice(10) ) );
+
+        $oView = $this->getMock( "details", array( "getProduct" ) );
+        $oView->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+        $oList = $oView->getRDFaPaymentMethods();
+
+        $this->assertTrue( $oList instanceof oxpaymentlist );
+        $this->assertEquals( 5, $oList->count() );
+    }
+
+    public function testGetRDFaDeliverySetMethods()
+    {
+        $oView = new Details();
+        $this->assertTrue( $oView->getRDFaDeliverySetMethods() instanceof oxdeliverysetlist );
+        $this->assertEquals( 3, $oView->getRDFaDeliverySetMethods()->count() );
+    }
+
+    public function testGetProductsDeliveryList()
+    {
+        $oProduct = $this->getMock( 'oxarticle', array( 'getId', 'getPrice' ) );
+        $oProduct->expects( $this->any() )->method( 'getId')->will( $this->returnValue( 'test' ) );
+        $oProduct->expects( $this->any() )->method( 'getPrice')->will( $this->returnValue( new oxPrice(10) ) );
+
+        $oView = $this->getMock( "details", array( "getProduct" ) );
+        $oView->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+
+        $this->assertEquals( 4, $oView->getProductsDeliveryList()->count() );
     }
 
 }

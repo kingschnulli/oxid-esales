@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcountryTest.php 33785 2011-03-16 06:57:29Z vilma $
+ * @version   SVN: $Id: oxcountryTest.php 40985 2012-01-05 11:43:05Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -135,5 +135,16 @@ class Unit_Core_oxCountryTest extends OxidTestCase
         $aStates = $oSubj->getStates();
         $this->assertEquals('Manitoba', $aStates['MB']->oxstates__oxtitle->value);
 
+    }
+
+    /**
+     * Tests state getter
+     *
+     * @return null;
+     */
+    public function testGetIdByCode()
+    {
+        $oSubj = new oxCountry();
+        $this->assertEquals('a7c40f631fc920687.20179984', $oSubj->getIdByCode('DE'));
     }
 }

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: langFileIntegrityTest.php 40513 2011-12-09 14:14:29Z vilma $
+ * @version   SVN: $Id: langFileIntegrityTest.php 41471 2012-01-17 14:13:31Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -53,8 +53,8 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE = array_keys( $this->_getLanguageArray('', 1, 'de') );
         $aLangIdentsEN = array_keys( $this->_getLanguageArray('', 1, 'en') );
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
-        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match EN misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match DE misses');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
@@ -66,12 +66,12 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
      */
     public function testGenericTemplateSetIdentMatchForFrench()
     {
-        $this->markTestSkipped("French translations needed");
+        //$this->markTestSkipped("French translations needed");
         $aLangIdentsDE = array_keys( $this->_getLanguageArray('', 1, 'de') );
         $aLangIdentsFR = array_keys( $this->_getLanguageArray('', 1, 'fr') );
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsFR), 'ident does not match');
-        $this->assertEquals( array(), array_diff($aLangIdentsFR, $aLangIdentsDE), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsFR), 'ident does not match FR misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsFR, $aLangIdentsDE), 'ident does not match DE misses');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsFR), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
@@ -92,8 +92,8 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE    = array_keys(array_merge($aGenericIdentsDE, $aMapIdentsDE, $aBasicIdentsDE));
         $aLangIdentsEN    = array_keys(array_merge($aGenericIdentsEN, $aMapIdentsEN, $aBasicIdentsEN));
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
-        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match EN misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match DE misses');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
@@ -105,7 +105,7 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
      */
     public function testBasicTemplateSetIdentMatchForFrench()
     {
-        $this->markTestSkipped("French translations needed");
+        //$this->markTestSkipped("French translations needed");
         $aGenericIdentsDE = $this->_getLanguageArray('', 1, 'de');
         $aGenericIdentsFR = $this->_getLanguageArray('', 1, 'fr');
         $aMapIdentsDE     = $this->_getLanguageMapArray('basic', 'de');
@@ -115,8 +115,8 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE    = array_keys(array_merge($aGenericIdentsDE, $aMapIdentsDE, $aBasicIdentsDE));
         $aLangIdentsFR    = array_keys(array_merge($aGenericIdentsFR, $aMapIdentsFR, $aBasicIdentsFR));
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsFR), 'ident does not match');
-        $this->assertEquals( array(), array_diff($aLangIdentsFR, $aLangIdentsDE), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsFR), 'ident does not match FR misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsFR, $aLangIdentsDE), 'ident does not match DE misses');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsFR), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
@@ -137,8 +137,8 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE    = array_keys(array_merge($aGenericIdentsDE, $aMapIdentsDE, $aAzureIdentsDE));
         $aLangIdentsEN    = array_keys(array_merge($aGenericIdentsEN, $aMapIdentsEN, $aAzureIdentsEN));
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
-        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match EN misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match DE misses');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
@@ -150,7 +150,7 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
      */
     public function testAzureTemplateSetIdentMatchForFrench()
     {
-        $this->markTestSkipped("French translations needed");
+        //$this->markTestSkipped("French translations needed");
         $aGenericIdentsDE = $this->_getLanguageArray('', 1, 'de');
         $aGenericIdentsFR = $this->_getLanguageArray('', 1, 'fr');
         $aMapIdentsDE     = $this->_getLanguageMapArray('azure', 'de');
@@ -160,8 +160,8 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE    = array_keys(array_merge($aGenericIdentsDE, $aMapIdentsDE, $aAzureIdentsDE));
         $aLangIdentsFR    = array_keys(array_merge($aGenericIdentsFR, $aMapIdentsFR, $aAzureIdentsFR));
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsFR), 'ident does not match');
-        $this->assertEquals( array(), array_diff($aLangIdentsFR, $aLangIdentsDE), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsFR), 'ident does not match FR misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsFR, $aLangIdentsDE), 'ident does not match DE misses');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsFR), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
@@ -176,8 +176,8 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE = array_keys( $this->_getLanguageArray( 'admin', 1, 'de') );
         $aLangIdentsEN = array_keys( $this->_getLanguageArray( 'admin', 1, 'en') );
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
-        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match EN misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match DE misses');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
@@ -189,12 +189,12 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
      */
     public function testAdminIdentMatchForFrench()
     {
-        $this->markTestSkipped("French translations needed");
+        //$this->markTestSkipped("French translations needed");
         $aLangIdentsDE = array_keys( $this->_getLanguageArray( 'admin', 1, 'de') );
         $aLangIdentsFR = array_keys( $this->_getLanguageArray( 'admin', 1, 'fr') );
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsFR), 'ident does not match');
-        $this->assertEquals( array(), array_diff($aLangIdentsFR, $aLangIdentsDE), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsFR), 'ident does not match FR misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsFR, $aLangIdentsDE), 'ident does not match DE misses');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsFR), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }

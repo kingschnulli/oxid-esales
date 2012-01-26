@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.php 40543 2011-12-12 13:45:08Z linas.kukulskis $
+ * @version   SVN: $Id: category_main.php 41256 2012-01-12 13:34:23Z mindaugas.rimgaila $
  */
 
 /**
@@ -158,11 +158,12 @@ class Category_Main extends oxAdminDetails
             $this->resetCounter( "catArticle", $soxId );
             $oCategory->load( $soxId);
             $oCategory->loadInLang( $this->_iEditLang, $soxId );
-                $myUtilsPic = oxUtilsPic::getInstance();
-                // #1173M - not all pic are deleted, after article is removed
-                $myUtilsPic->overwritePic( $oCategory, 'oxcategories', 'oxthumb', 'TC', '0', $aParams, $myConfig->getPictureDir(false) );
-                $myUtilsPic->overwritePic( $oCategory, 'oxcategories', 'oxicon', 'CICO', 'icon', $aParams, $myConfig->getPictureDir(false) );
-                $myUtilsPic->overwritePic( $oCategory, 'oxcategories', 'oxpromoicon', 'PICO', 'icon', $aParams, $myConfig->getPictureDir(false) );
+
+            $myUtilsPic = oxUtilsPic::getInstance();
+            // #1173M - not all pic are deleted, after article is removed
+            $myUtilsPic->overwritePic( $oCategory, 'oxcategories', 'oxthumb', 'TC', '0', $aParams, $myConfig->getPictureDir(false) );
+            $myUtilsPic->overwritePic( $oCategory, 'oxcategories', 'oxicon', 'CICO', 'icon', $aParams, $myConfig->getPictureDir(false) );
+            $myUtilsPic->overwritePic( $oCategory, 'oxcategories', 'oxpromoicon', 'PICO', 'icon', $aParams, $myConfig->getPictureDir(false) );
 
         } else {
             //#550A - if new category is made then is must be default activ
@@ -207,5 +208,75 @@ class Category_Main extends oxAdminDetails
     public function saveinnlang()
     {
         $this->save();
+    }
+
+    /**
+     * Deletes selected master picture.
+     *
+     * @return null
+     */
+    public function deletePicture()
+    {
+        $myConfig = $this->getConfig();
+
+        if ( $myConfig->isDemoShop() ) {
+            // disabling uploading pictures if this is demo shop
+            $oEx = new oxExceptionToDisplay();
+            $oEx->setMessage( 'CATEGORY_PICTURES_UPLOADISDISABLED' );
+            oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false );
+
+            return;
+        }
+
+        $sOxId = $this->getEditObjectId();
+        $sField = oxConfig::getParameter('masterPicField');
+        if (empty($sField)) {
+            return;
+        }
+
+        $oItem = oxNew('oxCategory');
+        $oItem->load($sOxId);
+        $this->_deleteCatPicture($oItem, $sField);
+    }
+
+    /**
+     * Delete category picture, specified in $sField parameter
+     *
+     * @param oxCategory $oItem  active category object
+     * @param string     $sField picture field name
+     *
+     * @return null
+     */
+    protected function _deleteCatPicture(oxCategory $oItem, $sField)
+    {
+        $myConfig = $this->getConfig();
+        $sItemKey = 'oxcategories__'.$sField;
+
+
+        switch ($sField) {
+            case 'oxthumb':
+                $sImgType = 'TC';
+                break;
+
+            case 'oxicon':
+                $sImgType = 'CICO';
+                break;
+
+            case 'oxpromoicon':
+                $sImgType = 'PICO';
+                break;
+
+            default:
+                $sImgType = false;
+        }
+
+        if ($sImgType !== false) {
+            $myUtilsPic = oxUtilsPic::getInstance();
+            $sDir = $myConfig->getPictureDir(false);
+            $myUtilsPic->safePictureDelete($oItem->$sItemKey->value, $sDir . oxUtilsFile::getInstance()->getImageDirByType($sImgType), 'oxcategories', $sField);
+
+            $oItem->$sItemKey = new oxField();
+            $oItem->save();
+        }
     }
 }

@@ -17,7 +17,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  */
 
@@ -32,4 +32,16 @@ class Unit_Core_oxstateTest extends OxidTestCase
         $oSubj->load('MB');
         $this->assertEquals('Manitoba', $oSubj->oxstates__oxtitle->value);
     }
+
+    /**
+     * Tests state getter
+     *
+     * @return null;
+     */
+    public function testGetIdByCode()
+    {
+        $oSubj = new oxState();
+        $this->assertEquals( 'MB', $oSubj->getIdByCode( 'MB', '8f241f11095649d18.02676059' ) );
+    }
+
 }

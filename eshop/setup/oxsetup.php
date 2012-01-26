@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   setup
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 25584 2010-02-03 12:11:40Z arvydas $
  */
@@ -868,6 +868,11 @@ class OxSetupDb extends oxSetupCore
 
         $this->execSql( "update oxcountry set oxactive = '0'" );
         $this->execSql( "update oxcountry set oxactive = '1' where oxid = '$sCountryLang'" );
+
+        // if it is international eshop, setting admin user country to selected one
+        if ( $oSession->getSessionParam('location_lang') != "de" ) {
+             $this->execSql( "UPDATE oxuser SET oxcountryid = '$sCountryLang' where oxid='oxdefaultadmin'" );
+        }
 
         $this->execSql( "delete from oxconfig where oxvarname = 'blLoadDynContents'" );
         $this->execSql( "delete from oxconfig where oxvarname = 'sShopCountry'" );

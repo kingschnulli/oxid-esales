@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 40557 2011-12-12 13:48:24Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsfile.php 40667 2011-12-19 08:15:13Z linas.kukulskis $
  */
 
 /**
@@ -112,7 +112,7 @@ class oxUtilsFile extends oxSuperCfg
      *
      * @var array
      */
-    protected $_aBadFiles = array( 'php', 'php4', 'php5', 'jsp', 'cgi', 'cmf', 'exe' );
+    protected $_aBadFiles = array( 'php', 'php3', 'php4', 'php5', 'phps', 'php6', 'jsp', 'cgi', 'cmf', 'exe' );
 
     /**
      * Allowed to upload files in demo mode ( "white list")

@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxutils.php 23456 2009-10-21 14:49:35Z sarunas $
  */
@@ -346,7 +346,53 @@ class oxUtilsUrl extends oxSuperCfg
         if ( !$this->isAdmin() ) {
             $sUrl = $this->getSession()->processUrl( $this->appendUrl( $sUrl, $this->getAddUrlParams() ) );
         }
+
+        $sUrl = $this->cleanUrlParams($sUrl);
         return getStr()->preg_replace( '/(\?|&(amp;)?)$/', '', $sUrl );
+    }
+
+    /**
+     * Remove dublicate GET parameters and clean &amp; and dublicate &
+     *
+     * @param string $sUrl 	     url to proccess
+     * @param string $sConnector GET elements connector
+     *
+     * @return string
+     */
+    public function cleanUrlParams($sUrl, $sConnector = '&amp;')
+    {
+        $aUrlParts = explode('?', $sUrl);
+
+        // check for params part
+        if (
+            !is_array($aUrlParts)
+            || count($aUrlParts) != 2
+        ) {
+            return $sUrl;
+        }
+
+        $sUrl = $aUrlParts[0];
+        $sUrlParams = $aUrlParts[1];
+
+        $oStrUtils = getStr();
+        $sUrlParams = $oStrUtils->preg_replace(
+            array('@(\&(amp;){1,})@ix', '@\&{1,}@', '@\?&@x'),
+            array('&', '&', '?'),
+            $sUrlParams
+        );
+
+        // remove dublicate entries
+        parse_str($sUrlParams, $aUrlParams);
+        $sUrl .= '?'.http_build_query($aUrlParams, '', $sConnector);
+
+        // replace brackets
+        $sUrl = str_replace(
+            array('%5B', '%5D'),
+            array('[', ']'),
+            $sUrl
+        );
+
+        return $sUrl;
     }
 
     /**

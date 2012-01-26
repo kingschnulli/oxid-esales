@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfileTest.php 39628 2011-10-27 15:37:42Z tomas $
+ * @version   SVN: $Id: oxutilsfileTest.php 40667 2011-12-19 08:15:13Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -191,20 +191,18 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
 
     public function testProcessFilesSkipBadFiles()
     {
-        $_FILES['myfile']['name'] = array('testname.php');
+        $this->setExpectedException('Exception', 'this is ok');
+
+        $_FILES['myfile']['name'] = array('testname.php5');
         $_FILES['myfile']['tmp_name'] = 'testname';
         $oConfig = $this->getMock('oxConfig', array('isDemoShop'));
         $oConfig->expects( $this->once() )->method('isDemoShop')->will( $this->returnValue( false ) );
         $oUF = oxUtilsFile::getInstance();
         $oUF->setConfig($oConfig);
         oxTestModules::addFunction('oxUtils', 'showMessageAndExit', '{throw new Exception("this is ok");}');
-        try {
-            $oUF->processFiles();
-            $this->fail();
-        } catch (Exception $e) {
-            $this->assertEquals('this is ok', $e->getMessage());
-        }
+        $oUF->processFiles();
     }
+
     public function testProcessFilesAllowsOnlySomeFilesOnDemo()
     {
         $_FILES['myfile']['name'] = array('testname.unknown');

@@ -32,10 +32,6 @@
 [{/oxhasrights}]
 
 <div class="detailsInfo clear">
-    <meta property="gr:hasStockKeepingUnit" content="[{$oDetailsProduct->oxarticles__oxartnum->value}]" datatype="xsd:string">
-    [{if $oProduct->oxarticles__oxmpn->value}]
-    <meta property="gr:hasMPN" content="[{$oDetailsProductt->oxarticles__oxmpn->value}]" datatype="xsd:string">
-    [{/if}]
     [{* article picture with zoom *}]
     [{block name="details_productmain_zoom"}]
         [{if $oView->showZoomPics()}]
@@ -47,12 +43,12 @@
             [{oxscript add="$('.cloud-zoom, .cloud-zoom-gallery').CloudZoom();"}]
             <div class="picture">
                 <a href="[{$oPictureProduct->getMasterZoomPictureUrl(1)}]" class="cloud-zoom" id="zoom1" rel='' data-zoomparams="adjustY:-2, zoomWidth:'354', fixZoomWindow:'390', trImg:'[{$oViewConf->getImageUrl('dot.png')}]', loadingText:'[{oxmultilang ident="PAGE_DETAILS_ZOOM_LOADING"}]'">
-                    <img rel="foaf:depiction v:image" src="[{$oView->getActPicture()}]" alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">
+                    <img src="[{$oView->getActPicture()}]" alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">
                 </a>
             </div>
         [{else}]
             <div class="picture">
-                <img rel="foaf:depiction v:image" src="[{$oView->getActPicture()}]" alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">
+                <img src="[{$oView->getActPicture()}]" alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">
             </div>
         [{/if}]
     [{/block}]
@@ -68,7 +64,7 @@
 
             [{* Product title *}]
             [{block name="details_productmain_title"}]
-                <h1 id="productTitle"><span property="gr:name">[{$oDetailsProduct->oxarticles__oxtitle->value}] [{$oDetailsProduct->oxarticles__oxvarselect->value}]</span></h1>
+                <h1 id="productTitle"><span>[{$oDetailsProduct->oxarticles__oxtitle->value}] [{$oDetailsProduct->oxarticles__oxvarselect->value}]</span></h1>
             [{/block}]
 
             [{* Actions select list: to listmania and etc. *}]
@@ -147,7 +143,7 @@
         [{block name="details_productmain_shortdesc"}]
             [{oxhasrights ident="SHOWSHORTDESCRIPTION"}]
                 [{if $oDetailsProduct->oxarticles__oxshortdesc->value}]
-                    <div class="shortDescription description" id="productShortdesc" property="gr:description">[{$oDetailsProduct->oxarticles__oxshortdesc->value}]</div>
+                    <div class="shortDescription description" id="productShortdesc">[{$oDetailsProduct->oxarticles__oxshortdesc->value}]</div>
                 [{/if}]
             [{/oxhasrights}]
         [{/block}]
@@ -236,7 +232,7 @@
                 [{/oxhasrights}]
             [{/block}]
 
-            <div class="tobasketFunction clear" rel="gr:hasPriceSpecification">
+            <div class="tobasketFunction clear">
                 [{block name="details_productmain_price"}]
                     [{oxhasrights ident="SHOWARTICLEPRICE"}]
                         [{if $oDetailsProduct->getFPrice()}]
@@ -251,9 +247,9 @@
                                 [{/if}]
 
                                 <strong >
-                                    <span property="gr:hasCurrencyValue" datatype="xsd:float">[{$fPrice}]</span>
-                                    <span property="gr:hasCurrency" content="[{$currency->name}]" datatype="xsd:string">[{ $currency->sign}]</span>
-                                    <span property="gr:valueAddedTaxIncluded" content="true" datatype="xsd:boolean">*</>
+                                    <span>[{$fPrice}]</span>
+                                    <span>[{ $currency->sign}]</span>
+                                    <span>*</>
                                 </strong>
 
                             </label>
@@ -284,10 +280,8 @@
                 [{/block}]
 
                 [{block name="details_productmain_stockstatus"}]
-                    <span property="gr:hasStockKeepingUnit" content="[{$oDetailsProduct->oxarticles__oxartnum->value}]" datatype="xsd:string">
                     [{if $oDetailsProduct->getStockStatus() == -1}]
-                        <span class="stockFlag notOnStock" typeof="gr:QuantitativeValue">
-                            <span property="gr:hasMinValue" content="0" datatype="xsd:float">
+                        <span class="stockFlag notOnStock">
                             [{if $oDetailsProduct->oxarticles__oxnostocktext->value}]
                                 [{$oDetailsProduct->oxarticles__oxnostocktext->value}]
                             [{elseif $oViewConf->getStockOffDefaultMessage()}]
@@ -298,12 +292,11 @@
                             [{/if}]
                         </span>
                     [{elseif $oDetailsProduct->getStockStatus() == 1}]
-                        <span class="stockFlag lowStock" typeof="gr:QuantitativeValue">
-                            <span property="gr:hasMinValue" content="1" datatype="xsd:float">[{oxmultilang ident="DETAILS_LOWSTOCK"}]
+                        <span class="stockFlag lowStock">
+                            [{oxmultilang ident="DETAILS_LOWSTOCK"}]
                         </span>
                     [{elseif $oDetailsProduct->getStockStatus() == 0}]
-                        <span class="stockFlag" typeof="gr:QuantitativeValue">
-                            <span property="gr:hasMinValue" content="1" datatype="xsd:float">
+                        <span class="stockFlag">
                             [{if $oDetailsProduct->oxarticles__oxstocktext->value}]
                                 [{$oDetailsProduct->oxarticles__oxstocktext->value}]
                             [{elseif $oViewConf->getStockOnDefaultMessage()}]

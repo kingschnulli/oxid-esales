@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticleTest.php 38612 2011-09-05 13:34:11Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderarticleTest.php 40864 2011-12-29 10:01:50Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -664,7 +664,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
 
     public function testCreateArticleSeoUrlWhenTitleContainsOnlyBadChars()
     {
-        modConfig::getInstance()->setConfigParam( 'aSeoReplaceChars', array() );
+        oxTestModules::addFunction("oxlang", "getSeoReplaceChars", "{return array();}");
 
         $oArticle = $this->getMock('oxArticle', array('getCategory'));
         $oArticle = new oxArticle();

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: priceCalculationTest.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: priceCalculationTest.php 41753 2012-01-25 11:39:43Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -121,11 +121,10 @@ class testArticleBasePrices extends Unit_Maintenance_priceCalculationTest
                 continue;
             }
             $data[1] = str_replace(',', '.', $data[1]);
-            if (!is_numeric($data[1])) {
+            if (!is_numeric(trim($data[1]))) {
                 continue;
             }
             $aData = array('oxid'=>$data[0], 'oxprice'=>str_replace(',', '.', $data[1]), 'oxpricea'=>str_replace(',', '.', $data[2]), 'oxpriceb'=>str_replace(',', '.', $data[3]), 'oxpricec'=>str_replace(',', '.', $data[4]));
-
             switch ($data[5]) {
                 case "A":
                     $sGroup = 'oxidpricea';
@@ -162,7 +161,7 @@ class testArticleBasePrices extends Unit_Maintenance_priceCalculationTest
         $blParam = oxConfig::getInstance()->getConfigParam( 'blOverrideZeroABCPrices' ) ;
         oxConfig::getInstance()->setConfigParam( 'blOverrideZeroABCPrices', 1) ;
 
-        $this->checkEquals($dExpected, $oArticle->getBasePrice());
+        $this->checkEquals($dExpected, $oArticle->getBasePrice(), "from article: ".$oArticle->getId().", if expected: $dExpected");
 
         oxConfig::getInstance()->setConfigParam( 'blOverrideZeroABCPrices', $blParam) ;
     }
@@ -546,6 +545,7 @@ class testAdvBasketPrices extends Unit_Maintenance_priceCalculationTest
                 // netto prices ?
                 if ( strlen(trim( $data[4] )) ) {
                    modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', (bool)$data[4] );
+                   modConfig::getInstance()->setConfigParam( 'blWrappingVatOnTop', (bool)$data[4] );
                 }
 
                 // VAT for wrapping ?

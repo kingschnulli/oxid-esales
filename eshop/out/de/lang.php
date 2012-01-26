@@ -17,13 +17,26 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
 
 $sLangName  = "Deutsch";
 
+/**
+ * Character list for replacement in SEO URL's
+ * @var array SEO replacement list
+ */
+$aSeoReplaceChars = array(
+    'ä' => 'ae',
+    'ö' => 'oe',
+    'ü' => 'ue',
+    'Ä' => 'AE',
+    'Ö' => 'OE',
+    'Ü' => 'UE',
+    'ß' => 'ss',
+);
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------

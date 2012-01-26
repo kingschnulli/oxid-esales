@@ -85,6 +85,14 @@
         </p>
     [{/block}]
 
+    [{block name="email_html_sendednow_shipmenttrackingurl"}]
+        [{if $order->getShipmentTrackingUrl()}]
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+                [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKING" }] <a href="[{ $order->getShipmentTrackingUrl()}]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" target="_blank" title="[{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKING" }]">[{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKINGURL" }]</a>
+            </p>
+        [{/if}]
+    [{/block}]
+
     [{block name="email_html_sendednow_ts"}]
         [{if $oViewConf->showTs("ORDERCONFEMAIL") && $oViewConf->getTsId() }]
             <h3 style="font-weight: bold; margin: 20px 0 7px; padding: 0; line-height: 35px; font-size: 12px;font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; border-bottom: 4px solid #ddd;">

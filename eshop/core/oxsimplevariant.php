@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariant.php 37526 2011-07-28 13:47:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxsimplevariant.php 41701 2012-01-24 09:21:56Z linas.kukulskis $
  */
 
 /**
@@ -190,6 +190,7 @@ class oxSimpleVariant extends oxI18n implements oxIUrl
 
         return $dPrice;
     }
+
 
     /**
      * Implementing (faking) performance friendly method from oxArticle

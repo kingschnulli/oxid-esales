@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 40395 2011-11-30 15:30:30Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasket.php 41739 2012-01-24 15:48:16Z vilma $
  */
 
 /**
@@ -1109,22 +1109,27 @@ class oxBasket extends oxSuperCfg
 
         // wrapping VAT
         if ( $myConfig->getConfigParam( 'blCalcVatForWrapping' ) ) {
-            $oWrappingPrice->setVat( $this->getMostUsedVatPercent() );
+            $dWrappingVATPercent = $this->getMostUsedVatPercent();
+            $oWrappingPrice->setVat( $dWrappingVATPercent );
         }
 
         // calculating basket items wrapping
         foreach ( $this->_aBasketContents as $oBasketItem ) {
 
             if ( ( $oWrapping = $oBasketItem->getWrapping() ) ) {
-                $oWrapPrice = $oWrapping->getWrappingPrice( $oBasketItem->getAmount() );
-                $oWrappingPrice->add( $oWrapPrice->getBruttoPrice() );
+                if ($dWrappingVATPercent !== null) {
+                    $oWrapping->setWrappingVat($dWrappingVATPercent);
+                }
+                $oWrappingPrice->addPrice( $oWrapping->getWrappingPrice( $oBasketItem->getAmount() ) );
             }
         }
 
         // gift card price calculation
         if ( ( $oCard = $this->getCard() ) ) {
-            $oCardPrice = $oCard->getWrappingPrice();
-            $oWrappingPrice->add( $oCardPrice->getBruttoPrice() );
+            if ($dWrappingVATPercent !== null) {
+                $oCard->setWrappingVat($dWrappingVATPercent);
+            }
+            $oWrappingPrice->addPrice( $oCard->getWrappingPrice() );
         }
 
         return $oWrappingPrice;

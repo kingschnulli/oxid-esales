@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 40606 2011-12-14 13:17:23Z juergen.busch $
+ * @version   SVN: $Id: lang.php 41655 2012-01-23 09:53:10Z arvydas.vapsva $
  */
 
 /*
@@ -28,6 +28,12 @@
  * All nouns are capitalized
  */
 $sLangName  = 'English';
+
+/**
+ * Character list for replacement in SEO URL's
+ * @var array SEO replacement list
+ */
+$aSeoReplaceChars = array();
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
@@ -375,6 +381,8 @@ $aLang = array(
 'ARTICLE_EXTEND_FILEUPLOAD'                                => 'File Upload: ',
 'ARTICLE_EXTEND_ALLCATS'                                   => 'All available Categories',
 'ARTICLE_EXTEND_WEIGHT'                                    => 'Weight',
+'ARTICLE_EXTEND_WEIGHT_UNIT'                               => 'kg',
+'ARTICLE_EXTEND_DIMENSIONS_UNIT'                           => 'm',
 'ARTICLE_EXTEND_LENGTH'                                    => 'L:',
 'ARTICLE_EXTEND_WIDTH'                                     => 'W:',
 'ARTICLE_EXTEND_HEIGHT'                                    => 'H:',
@@ -575,10 +583,10 @@ $aLang = array(
 'CATEGORY_MAIN_TITLE'                                      => 'Title',
 'CATEGORY_MAIN_PARENTID'                                   => 'Subcategory of',
 'CATEGORY_MAIN_THUMB'                                      => 'Picture Name',
-
 'CATEGORY_MAIN_SKIPDISCOUNTS'                              => 'Skip all negative Discounts<br> (Discounts, Vouchers, Delivery ...)',
 'CATEGORY_MALL_ASSIGNONLYPARENTWARNING'                    => 'You can only assign full category tree to other subshops.',
 'CATEGORY_MALL_CLICKHEREFORPARENT'                         => 'Click here to edit parent assignment.',
+'CATEGORY_PICTURES_UPLOADISDISABLED'                       => 'This is a demoshop. Uploading or deleting images has been switched off due to security reasons.',
 'CATEGORY_ORDER_ACTSORT'                                   => 'Current Sorting',
 'CATEGORY_ORDER_NEWSORT'                                   => 'New Sorting',
 'CATEGORY_ORDER_NEWSORTSAVE'                               => 'Save new sorting',
@@ -830,6 +838,8 @@ $aLang = array(
 'EMAIL_SENDEDNOW_HTML_ORDERNUM'                            => 'Your Order No.',
 'EMAIL_SENDEDNOW_HTML_RATE'                                => 'rate',
 'EMAIL_SENDEDNOW_HTML_TS_RATINGS_RATEUS'                   => 'Please take a minute to rate our shop.',
+'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKING'                    => '[tr] Your shipment tracking URL:',
+'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKINGURL'                 => '[tr] click here',
 'EXCEPTION_USER_NOVALIDLOGIN'                              => 'Wrong e-mail or password!',
 'EXCEPTION_USER_USEREXISTS'                                => 'This user allready exists!',
 'EXCEPTION_CONNECTION_NODB'                                => 'No connection to database!',
@@ -869,12 +879,12 @@ $aLang = array(
 'MODULE_ACTIVATE'                                          => 'Activate',
 'MODULE_DEACTIVATE'                                        => 'Deactivate',
 'MODULE_DRAGANDDROP'                                       => 'Drag items to change modules order. After changing order press Save button to save current modules order.',
-'MODULE_EDITEXTENSION'                                     => 'Edit module information of extension',
-'MODULE_ENABLEACTIVATIONTEXT'                              => 'Extension has no metadata file, so for registering extension you must manually enter which classes extension modules extend (e.g. oxorder => myExtension/myModuleOxorder). This must be done only once.',
-'MODULE_ENTERMODULENAME'                                   => 'Extension name',
+'MODULE_EDITEXTENSION'                                     => 'Edit module information',
+'MODULE_ENABLEACTIVATIONTEXT'                              => 'Module has no metadata file, so for registering module you must manually enter which classes module extends (e.g. oxorder => myModule/myModuleOxorder). This must be done only once.',
+'MODULE_ENTERMODULENAME'                                   => 'Module name',
 'MODULE_ENTERMODULEEXTENDSCLASSES'                         => 'Extended classes',
-'MODULE_STANDALONEFILE'                                    => 'This module is a standalone php file. Analogous to extensions, the module should be saved inside a directory!',
-'MODULE_EXTENSIONISDELETED'                                => 'There are extensions which are registered in eShop, but extension directory is missing.',
+'MODULE_STANDALONEFILE'                                    => 'This module is a standalone php file. The module should be saved inside a directory!',
+'MODULE_EXTENSIONISDELETED'                                => 'There are modules which are registered in eShop, but module directory is missing.',
 'MODULE_DELETEEXTENSION'                                   => 'Do you want to remove all module information including config options and block information for templates?',
 'LANGUAGE_ERRORGENERATEVIEWS'                              => "Please don't forget to update the database views under Service->Tools",
 'LANGUAGE_ACTIVE'                                          => 'Active in frontend',
@@ -1737,7 +1747,8 @@ $aLang = array(
 'mxsysreq'                                                 => 'System health',
 'mxtools'                                                  => 'Tools',
 'mxtheme'                                                  => 'Themes',
-'mxmodule'                                                 => 'Extensions',
+'mxmodule'                                                 => 'Modules',
+'mxextensions'                                             => 'Extensions',
 'mxuadmin'                                                 => 'Administer Users',
 'mxurls'                                                   => 'Links',
 'mxugroups'                                                => 'User Groups',
@@ -1825,6 +1836,7 @@ $aLang = array(
 'tbcldeliveryset_main'                                     => 'Main',
 'tbcldeliveryset_payment'                                  => 'Payment',
 'tbcldeliveryset_users'                                    => 'Users',
+'tbcldeliveryset_rdfa'                                     => 'RDFa',
 //  discount_list',
 'tbcldiscount_main'                                        => 'Main',
 'tbcldiscount_articles'                                    => 'Products',
@@ -1844,6 +1856,7 @@ $aLang = array(
 //  payment_list',
 'tbclpayment_main'                                         => 'Main',
 'tbclpayment_country'                                      => 'Country',
+'tbclpayment_rdfa'                                         => 'RDFa',
 //  Pricealarm',
 'tbclpricealarm_main'                                      => 'Main',
 'tbclpricealarm_mail'                                      => 'Mail',
@@ -1858,6 +1871,7 @@ $aLang = array(
 'tbclshop_license'                                         => 'License',
 'tbclshop_performance'                                     => 'Perform.',
 'tbclshop_seo'                                             => 'SEO',
+'tbclshop_rdfa'                                            => 'RDFa',
 //  Service Tools',
 'tbcltools_main'                                           => 'SQL',
 //  Theme,
@@ -1966,6 +1980,89 @@ $aLang = array(
 'PROMOTIONS_ARTICLE_ASSIGNEDARTICLE'                       => 'Assigned Product:',
 'PROMOTIONS_ARTICLE_ALLITEMS'                              => 'All available Products',
 
+'SHOP_RDFA_TECH_CONFIG'			                           => 'Technical configuration',
+'SHOP_RDFA_EMBEDDING'			                           => 'Configure automatic data embedding',
+'SHOP_RDFA_CONTENT_OFFERER'		                           => 'In which content page the RDF data of the <b>provider</b> shall be embedded?',
+'SHOP_RDFA_CONTENT_PAYMENT'		                           => 'In which content page the RDF data of the <b>payment method</b> shall be embedded?',
+'SHOP_RDFA_CONTENT_DELIVERY'                               => 'In which content page the RDF data of the <b>shipping method</b> shall be embedded?',
+'SHOP_RDFA_RATING_MIN'			                           => 'How many stars can purchasers assign to a product <b>minimum</b>?',
+'SHOP_RDFA_RATING_MAX'			                           => 'How many stars can purchasers assign to a product <b>maximum</b>?',
+'SHOP_RDFA_DATA_OFFERER'	                               => 'Provider information',
+'SHOP_RDFA_DATA_MASTER'			                           => 'Main provider data',
+'SHOP_RDFA_DATA_EXTENDED'		                           => 'Extended provider data',
+'SHOP_RDFA_LOGO_URL'			                           => 'URL of the logo',
+'SHOP_RDFA_GEO_LONGITUDE'			                       => 'Geo-position: Longitude',
+'SHOP_RDFA_GEO_LATITUDE'			                       => 'Geo-position: Latitude',
+'SHOP_RDFA_GLN'			    	                           => 'GLN',
+'SHOP_RDFA_NAICS'			                               => 'NAICS',
+'SHOP_RDFA_ISIC'				                           => 'ISIC',
+'SHOP_RDFA_DUNS'				                           => 'D-U-N-S',
+'SHOP_RDFA_GLOBAL_OFFERING_DATA'		                   => 'Global special offer data',
+'SHOP_RDFA_VAT'				                               => 'Are the prices shown to the purchaser <b>incl.</b> or <b>excl. VAT</b>?',
+'SHOP_RDFA_VAT_INC'			                               => 'incl. VAT.',
+'SHOP_RDFA_VAT_EX'			                               => 'excl. VAT.',
+'SHOP_RDFA_COND'				                           => 'In which <b>condition</b> are the offered product items?',
+'SHOP_RDFA_COND_NEW'			                           => 'new',
+'SHOP_RDFA_COND_USED'			                           => 'used',
+'SHOP_RDFA_COND_REFURBISHED'		                       => 'refurbished',
+'SHOP_RDFA_FNC'				                               => 'Which <b>function</b> do your offers have?',
+'SHOP_RDFA_FNC_SELL'			                           => 'Sell',
+'SHOP_RDFA_FNC_LEASEOUT'			                       => 'Lease out',
+'SHOP_RDFA_FNC_REPAIR'			                           => 'Repair',
+'SHOP_RDFA_FNC_MAINTAIN'			                       => 'Maintain',
+'SHOP_RDFA_FNC_CONSTINST'		                           => 'Construction/Installation',
+'SHOP_RDFA_FNC_SERVICE'			                           => 'Provide service',
+'SHOP_RDFA_FNC_DISPOSE'			                           => 'Dispose',
+'SHOP_RDFA_FNC_NONE'			                           => 'None of the shown',
+'SHOP_RDFA_COSTUMER'			                           => 'Which <b>customer group</b> is addressed by your offers?',
+'SHOP_RDFA_COSTUMER_ENDUSER'		                       => 'End user',
+'SHOP_RDFA_COSTUMER_RESELLER'		                       => 'Reseller',
+'SHOP_RDFA_COSTUMER_BUSINESS'		                       => 'Business',
+'SHOP_RDFA_COSTUMER_PUBLIC'		                           => 'Public',
+'SHOP_RDFA_DURATION_OFFERINGS'			                   => 'Which <b>duration</b> do your <b>offerings</b> have?',
+'SHOP_RDFA_DURATION_PRICES'			                       => 'Which <b>duration</b> do your <b>offered prices</b> have?',
+'SHOP_RDFA_1_DAY'			                               => '1 day',
+'SHOP_RDFA_3_DAYS'			                               => '3 days',
+'SHOP_RDFA_7_DAYS'			                               => '7 days (1 week)',
+'SHOP_RDFA_14_DAYS'			                               => '14 days (2 weeks)',
+'SHOP_RDFA_30_DAYS'			                               => '30 days (1 month)',
+'SHOP_RDFA_178_DAYS'			                           => '178 days (6 months)',
+'SHOP_RDFA_356_DAYS'			                           => '356 days (1 year)',
+
+'PAYMENT_RDFA_ASIGN_PAYMENT'		                       => 'Assign payment',
+'PAYMENT_RDFA_ADVICE_START'		                           => '<b>Hint:</b> Please choose only those payment methods, pre-defined in GoodRelations, that comply with your payment methods.',
+'PAYMENT_RDFA_ADVICE_END'		                           => '',
+'PAYMENT_RDFA_GENERAL'			                           => 'General payment methods',
+'PAYMENT_RDFA_CASH'		                                   => 'Cash',
+'PAYMENT_RDFA_GOOGLECHECKOUT'		                       => 'Google Checkout',
+'PAYMENT_RDFA_DIRECTDEBIT'		                           => 'Direct debit',
+'PAYMENT_RDFA_COD'			                               => 'Cash on delivery',
+'PAYMENT_RDFA_PAYPAL'			                           => 'PayPal',
+'PAYMENT_RDFA_PAYSWARM'			                           => 'PaySwarm',
+'PAYMENT_RDFA_BYINVOICE'			                       => 'Invoice',
+'PAYMENT_RDFA_CHECKINADVANCE'                              => 'Check in advance',
+'PAYMENT_RDFA_BYBANKTRANSFERINADVANCE'		               => 'Cash in advance',
+'PAYMENT_RDFA_CREDITCARD'		                           => 'Credit card payment',
+'PAYMENT_RDFA_AMERICANEXPRESS'		                       => 'American Express',
+'PAYMENT_RDFA_DINERSCLUB'		                           => 'Diners Club',
+'PAYMENT_RDFA_DISCOVER'			                           => 'Discover',
+'PAYMENT_RDFA_JCB'			                               => 'JCB',
+'PAYMENT_RDFA_MASTERCARD'		                           => 'MasterCard',
+'PAYMENT_RDFA_VISA'			                               => 'VISA',
+
+'DELIVERY_RDFA_ASIGN_DELIVERY'		                       => 'Assign delivery method',
+'DELIVERY_RDFA_ADVICE_START'		                       => '<b>Hint:</b> Please choose only those delivery methods, pre-defined in GoodRelations, that comply with your delivery methods. ',
+'DELIVERY_RDFA_ADVICE_END'		                           => '',
+'DELIVERY_RDFA_GENERAL'			                           => 'General delivery methods',
+'DELIVERY_RDFA_DELIVERYMODEDIRECTDOWNLOAD'			       => 'Download',
+'DELIVERY_RDFA_DELIVERYMODEOWNFLEET'			           => 'Own fleet',
+'DELIVERY_RDFA_DELIVERYMODEMAIL'			               => 'Snail Mail',
+'DELIVERY_RDFA_DELIVERYMODEPICKUP'			               => 'Pick up',
+'DELIVERY_RDFA_DELIVERYMODEFREIGHT'			               => 'Freight',
+'DELIVERY_RDFA_PARCELSERVICE'		                       => 'Parcel Services',
+'DELIVERY_RDFA_DHL'			                               => 'DHL',
+'DELIVERY_RDFA_FEDERALEXPRESS'			                   => 'FedEx',
+'DELIVERY_RDFA_UPS'			                               => 'UPS',
 
 );
 

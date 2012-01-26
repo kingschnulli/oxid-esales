@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: deliveryset_main.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
@@ -59,11 +59,6 @@ class Module_Config extends Shop_Config
                     $this->_aViewData[$sParam] = $aDbVariables['vars'][$sType];
                     $iCount += count($aDbVariables['vars'][$sType]);
                 }
-
-                // Load language viles if module has any aptions
-                if ($iCount) {
-                     oxLang::getInstance()->registerAdditionalLangFile( $this->_getModuleOptionsLanguageFile( $sModuleId ) );
-                }
             } catch (oxException $oEx) {
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
                 $oEx->debugOut();
@@ -87,27 +82,6 @@ class Module_Config extends Shop_Config
         return oxConfig::OXMODULE_MODULE_PREFIX . $this->_sModuleId;
     }
 
-    /**
-     * return additional language file to load for module options language constants
-     *
-     * @param string $sModuleId module ID
-     *
-     * @return string
-     */
-    protected function _getModuleOptionsLanguageFile( $sModuleId )
-    {
-        $iLang = oxLang::getInstance()->getTplLanguage();
-        $sFile = $this->getConfig()->getModulesDir() . $sModuleId . "/" . oxLang::getInstance()->getLanguageAbbr( $iLang ) . "/module_options.php";
-
-        if ( !file_exists( $sFile ) ) {
-            $oErr = new oxFileException('EXCEPTION_FILENOTFOUND');
-            $oErr->setFileName('module_options.php for the module "' . $sModuleId . '"');
-            oxUtilsView::getInstance()->addErrorToDisplay( $oErr );
-            throw $oErr;
-        }
-
-        return $sFile;
-    }
 
     /**
      * Saves shop configuration variables

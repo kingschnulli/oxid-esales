@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryTest.php 39818 2011-11-05 09:32:12Z linas.kukulskis $
+ * @version   SVN: $Id: oxdeliveryTest.php 41373 2012-01-16 10:46:01Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1062,4 +1062,22 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
         $this->assertFalse( $blReturn );
     }
 
+    public function testGetIdByName()
+    {
+        $oD = new oxDelivery();
+        $this->assertEquals('_testDeliveryId', $oD->getIdByName( 'test_oxDelivery' ) );
+    }
+
+    /**
+     * Test get payment countries
+     */
+    public function testGetCountriesISO()
+    {
+        $oD = new oxDelivery();
+        //standart delivery id for rest EU
+        $oD->load( '1b842e7352422a708.01472527' );
+        $aCountries = $oD->getCountriesISO();
+        $this->assertEquals(2, count( $aCountries ), "Failed getting countries code" );
+        $this->assertEquals(array("AT", "CH"), $aCountries);
+    }
 }
