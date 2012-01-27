@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 41655 2012-01-23 09:53:10Z arvydas.vapsva $
+ * @version   SVN: $Id: lang.php 41773 2012-01-26 09:31:43Z vilma $
  */
 
 /*
@@ -1263,6 +1263,7 @@ $aLang = array(
 'SHOP_CONFIG_CALCULATEVATFORWRAPPING'                      => 'Display VAT contained in Gift Wrapping in Shopping Cart and Invoice',
 'SHOP_CONFIG_CALCWRAPVATONTOP'                             => 'Enter Gift Wrapping Prices as net Price (plus VAT)',
 'SHOP_CONFIG_CALCULATEVATOFORPAYCHARGE'                    => 'Display VAT contained in Payment Method Charges in Shopping Cart and Invoice',
+'SHOP_CONFIG_CALCPAYVATONTOP'                              => '[tr]Enter Payment Method Charges as net Price (plus VAT)',
 'SHOP_CONFIG_CMSFOLDER'                                    => 'CMS Page Folders',
 'SHOP_CONFIG_CNTOFNEWS'                                    => 'Number of News which are displayed in the News Box',
 'SHOP_CONFIG_DATEFORMAT'                                   => 'Date Format in eShop Admin',
@@ -1270,7 +1271,7 @@ $aLang = array(
 'SHOP_CONFIG_DEFAULTVAT'                                   => 'Default VAT for all Products',
 'SHOP_CONFIG_DEFAULTLANGUAGE'                              => 'Default Language (0, 1, 2 ...) - 0 for German, 1 for English',
 'SHOP_CONFIG_EXCLUDENONMATERIALPRODUCTS'                   => "Don't consider intangible Products (e.g. Gift Certificates) in Shipping Costs Calculation",
-'SHOP_CONFIG_ENTERNETPRICE'                                => 'Product and Gift Wrapping prices entered/displayed in Admin are Net Prices',
+'SHOP_CONFIG_ENTERNETPRICE'                                => '[tr]Product prices entered/displayed in Admin are Net Prices',
 'SHOP_CONFIG_INLANDCUSTOMERS'                              => 'Domestic Customers - Customers living in the <b>selected</b> Countries are assigned to the User Group "Domestic Customers". For multiple selections use STRG key.',
 'SHOP_CONFIG_LARGECUSTOMERPRICE'                           => 'Purchase Price Threshold from which Users are assigned to User Group "Huge Turnover"',
 'SHOP_CONFIG_MAXGBENTRIESPERDAY'                           => 'Number of Guestbook Entries each User is allowed to enter per Day',

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 41655 2012-01-23 09:53:10Z arvydas.vapsva $
+ * @version   SVN: $Id: lang.php 41773 2012-01-26 09:31:43Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -1265,6 +1265,7 @@ $aLang = array(
 'SHOP_CONFIG_CALCDELVATONTOP'                              => 'Versandkosten als Nettopreise eingeben (Versandkosten zuzüglich MwSt.)',
 'SHOP_CONFIG_CALCULATEVATFORWRAPPING'                      => 'Die in den Geschenkverpackungskosten enthaltene Mehrwertsteuer im Warenkorb und in der Rechnung anzeigen',
 'SHOP_CONFIG_CALCWRAPVATONTOP'                             => 'Verpackungskosten als Nettopreise eingeben (Verpackungskosten zuzüglich MwSt.)',
+'SHOP_CONFIG_CALCPAYVATONTOP'                              => '[tr]Zahlungsarten-Gebühren als Nettopreise eingeben (Zahlungsarten-Gebühren zuzüglich MwSt.)',
 'SHOP_CONFIG_CALCULATEVATOFORPAYCHARGE'                    => 'Die in den Zahlungsarten-Gebühren enthaltene Mehrwertsteuer im Warenkorb und in der Rechnung anzeigen',
 'SHOP_CONFIG_CMSFOLDER'                                    => 'Ordner für CMS-Seiten',
 'SHOP_CONFIG_CNTOFNEWS'                                    => 'Anzahl der Nachrichten, die in der Nachrichten-Box links angezeigt werden',
@@ -1273,7 +1274,7 @@ $aLang = array(
 'SHOP_CONFIG_DEFAULTVAT'                                   => 'Standard-MwSt.-Satz für alle Artikel',
 'SHOP_CONFIG_DEFAULTLANGUAGE'                              => 'Standardsprache (0, 1, 2 ...) - 0 bedeutet die erste Sprache Deutsch',
 'SHOP_CONFIG_EXCLUDENONMATERIALPRODUCTS'                   => 'Nicht materielle Artikel nicht in die Berechnung der Versandkosten einbeziehen',
-'SHOP_CONFIG_ENTERNETPRICE'                                => 'Artikel- und Geschenkverpackungspreise netto eingeben (zuzüglich MwSt.)',
+'SHOP_CONFIG_ENTERNETPRICE'                                => '[tr]Artikelpreise netto eingeben (zuzüglich MwSt.)',
 'SHOP_CONFIG_INLANDCUSTOMERS'                              => 'Inlandskunden - Kunden, die aus den markierten Ländern stammen, werden der Benutzergruppe "Inlandskunde" zugeordnet<br>Für Mehrfachmarkierung STRG-Taste gedrückt halten',
 'SHOP_CONFIG_LARGECUSTOMERPRICE'                           => 'Einkaufswert, ab der Kunden der Benutzergruppe "Großer Umsatz" zugeordnet werden',
 'SHOP_CONFIG_MAXGBENTRIESPERDAY'                           => 'Anzahl der Gästebuch-Einträge, die jeder Kunde pro Tag maximal verfassen darf',

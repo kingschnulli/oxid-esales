@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryTest.php 41373 2012-01-16 10:46:01Z vilma $
+ * @version   SVN: $Id: oxdeliveryTest.php 41773 2012-01-26 09:31:43Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1079,5 +1079,12 @@ class Unit_Core_oxdeliveryTest extends OxidTestCase
         $aCountries = $oD->getCountriesISO();
         $this->assertEquals(2, count( $aCountries ), "Failed getting countries code" );
         $this->assertEquals(array("AT", "CH"), $aCountries);
+    }
+
+    public function testSetDelVatOnTop()
+    {
+        $oDelivery = $this->getProxyClass( "oxdelivery" );
+        $oDelivery->setDelVatOnTop( true );
+        $this->assertTrue( $oDelivery->getNonPublicVar( "_blDelVatOnTop" ));
     }
 }
