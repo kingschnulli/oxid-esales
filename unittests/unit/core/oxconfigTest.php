@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 41683 2012-01-23 15:29:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxconfigTest.php 41767 2012-01-26 08:34:22Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1995,14 +1995,20 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->setConfigParam( 'blNativeImages', true );
         $this->assertEquals( $sMallURL.$sDir, $oConfig->getPictureUrl( null, false) );
     }
-    public function testGetPictureUrlForAltImageDir()
+    public function testGetPictureUrlForAltImageDirA()
     {
+        $sDir = 'http://www.example.com/test.gif';
+
+        $oPH = $this->getMock( 'oxPictureHandler', array( 'getAltImageUrl' ) );
+        $oPH->expects($this->once())->method('getAltImageUrl')->will($this->returnValue($sDir));
+        modInstances::addMod('oxPictureHandler', $oPH);
+
         $oConfig = new oxConfig();
         $oConfig->init();
-        $oConfig->setConfigParam( 'sAltImageDir', 'http://www.example.com' );
-        $sDir = 'http://www.example.com/test.gif';
+
         $this->assertEquals( $sDir, $oConfig->getPictureUrl( "/test.gif", false) );
     }
+
     public function testGetPictureUrlFormerTplSupport()
     {
         $oConfig = new oxConfig();

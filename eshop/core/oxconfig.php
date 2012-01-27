@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 41735 2012-01-24 14:46:48Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxconfig.php 41769 2012-01-26 08:36:49Z alfonsas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -1266,26 +1266,12 @@ class oxConfig extends oxSuperCfg
      */
     public function getPictureUrl( $sFile, $blAdmin = false, $blSSL = null, $iLang = null, $iShopId = null, $sDefPic = "master/nopic.jpg" )
     {
-        if (!isset($blSSL)) {
-            $blSSL = $this->isSsl();
-        }
-        if ( $sAltUrl = $this->getConfigParam( 'sAltImageDir' ) ) {
-
-            if ( $this->isSsl() && $blSSL && $sSslAltUrl = $this->getConfigParam( 'sSSLAltImageDir' ) ) {
-                $sAltUrl = $sSslAltUrl;
-            }
-
-            if ( !is_null( $sFile ) ) {
-                $sAltUrl .= $sFile;
-            }
-
+        if ( $sAltUrl = oxPictureHandler::getInstance()->getAltImageUrl('/', $sFile, $blSSL) ) {
             return $sAltUrl;
         }
 
         $blNativeImg = $this->getConfigParam( 'blNativeImages' );
-
         $sUrl = $this->getUrl( $sFile, $this->_sPictureDir, $blAdmin, $blSSL, $blNativeImg, $iLang, $iShopId );
-
 
         //anything is better than empty name, because <img src=""> calls shop once more = x2 SLOW.
         if ( !$sUrl && $sDefPic ) {
