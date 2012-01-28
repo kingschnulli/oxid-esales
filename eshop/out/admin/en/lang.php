@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 41773 2012-01-26 09:31:43Z vilma $
+ * @version   SVN: $Id: lang.php 41848 2012-01-27 15:46:38Z rimvydas.paskevicius $
  */
 
 /*
@@ -1650,7 +1650,7 @@ $aLang = array(
 'SHOP_PERF_LOADTREEFORSEARCH'                              => 'Load complete Category Tree for Search',
 'SHOP_PERF_LOADFULLTREE'                                   => 'Load complete Category Tree for Navigation (May cause Performance Problems if much Categories exist)',
 'SHOP_PERF_LOADACTION'                                     => 'Load Promotions',
-'SHOP_PERF_LOADREVIEWS'                                    => 'Enable Ratings and Reviews',
+'SHOP_PERF_LOADREVIEWS'                                    => 'Activate user Reviews and Ratings',
 'SHOP_PERF_LOADCROSSSELLING'                               => 'Load Crossselling',
 'SHOP_PERF_LOADACCESSOIRES'                                => 'Load Accessories',
 'SHOP_PERF_LOADCUSTOMERWHOBOUGHTTHIS'                      => 'Load "Customers who bought this product also purchased ..."',

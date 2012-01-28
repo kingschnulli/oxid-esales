@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: discountusersTest.php 26325 2010-03-05 13:02:02Z arvydas $
  */

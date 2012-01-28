@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: alistTest.php 38654 2011-09-06 08:57:31Z linas.kukulskis $
  */

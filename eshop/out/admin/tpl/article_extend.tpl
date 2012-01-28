@@ -300,25 +300,24 @@ function processUnitInput( oSelect, sInputId )
           <legend>[{ oxmultilang ident="ARTICLE_EXTEND_MEDIAURLS" }]</legend><br>
 
             <table cellspacing="0" cellpadding="0" border="0">
-                [{block name="admin_article_extend_media"}]
-                    [{foreach from=$aMediaUrls item=oMediaUrl}]
-                      <tr>
-                      [{if $oddclass == 2}]
-                        [{assign var=oddclass value=""}]
-                      [{else}]
-                        [{assign var=oddclass value="2"}]
-                      [{/if}]
-                        <td class=listitem[{$oddclass}]>
-                          &nbsp;<a href="[{ $oMediaUrl->oxmediaurls__oxurl->value }]" target="_blank">&raquo;&raquo;</a>&nbsp;
-                        </td>
-                        <td class=listitem[{$oddclass}]>
-                          &nbsp;<a href="[{$oViewConf->getSelfLink()}]&cl=article_extend&amp;mediaid=[{$oMediaUrl->oxmediaurls__oxid->value}]&amp;fnc=deletemedia&amp;oxid=[{$oxid}]&amp;editlanguage=[{ $editlanguage }]" onClick='return confirm("[{ oxmultilang ident="GENERAL_YOUWANTTODELETE" }]")'><img src="[{$oViewConf->getImageUrl()}]/delete_button.gif" border=0></a>&nbsp;
-                        </td>
-                        <td class="listitem[{$oddclass}]" width=250>
-                          <input style="width:100%" class="edittext" type="text" name="aMediaUrls[[{ $oMediaUrl->oxmediaurls__oxid->value }]][oxmediaurls__oxdesc]" value="[{ $oMediaUrl->oxmediaurls__oxdesc->value }]">
-                        </td>
-                      </tr>
-                    [{/foreach}]
+            [{foreach from=$aMediaUrls item=oMediaUrl}]
+              <tr>
+              [{if $oddclass == 2}]
+                [{assign var=oddclass value=""}]
+              [{else}]
+                [{assign var=oddclass value="2"}]
+              [{/if}]
+                <td class=listitem[{$oddclass}]>
+                  &nbsp;<a href="[{ $oMediaUrl->getLink() }]" target="_blank">&raquo;&raquo;</a>&nbsp;
+                </td>
+                <td class=listitem[{$oddclass}]>
+                  &nbsp;<a href="[{$oViewConf->getSelfLink()}]&cl=article_extend&amp;mediaid=[{$oMediaUrl->oxmediaurls__oxid->value}]&amp;fnc=deletemedia&amp;oxid=[{$oxid}]&amp;editlanguage=[{ $editlanguage }]" onClick='return confirm("[{ oxmultilang ident="GENERAL_YOUWANTTODELETE" }]")'><img src="[{$oViewConf->getImageUrl()}]/delete_button.gif" border=0></a>&nbsp;
+                </td>
+                <td class="listitem[{$oddclass}]" width=250>
+                  <input style="width:100%" class="edittext" type="text" name="aMediaUrls[[{ $oMediaUrl->oxmediaurls__oxid->value }]][oxmediaurls__oxdesc]" value="[{ $oMediaUrl->oxmediaurls__oxdesc->value }]">
+                </td>
+              </tr>
+            [{/foreach}]
 
                     [{if $aMediaUrls->count()}]
                     <tr>

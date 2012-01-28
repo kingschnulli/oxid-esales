@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: oxoutputTest.php 25404 2010-01-28 01:26:44Z alfonsas $
  */
@@ -479,22 +479,16 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
 
         $cl = oxTestModules::publicize('oxPictureHandler', '_getPictureInfo');
         $oPicHandler = $this->getMock($cl, array('getConfig'));
-        $oPicHandler->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
+        $oPicHandler->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
 
         $this->assertEquals(array ('path' => '/qqq/pic/mic.jpg','url' => 'http://qqq/pic/mic.jpg',), $oPicHandler->p_getPictureInfo('master/product/', 'nopic.jpg'));
     }
 
     public function testGetPictureInfoAltImgUrl()
     {
-        $oCfg = $this->getMock('oxConfig', array('getPicturePath', 'getOutDir', 'getOutUrl', 'getConfigParam'));
-        $oCfg->expects($this->never())->method('getPicturePath');
-        $oCfg->expects($this->never())->method('getOutDir');
-        $oCfg->expects($this->never())->method('getOutUrl');
-        $oCfg->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('sAltImageUrl'))->will($this->returnValue('http://aqqa/'));
-
         $cl = oxTestModules::publicize('oxPictureHandler', '_getPictureInfo');
-        $oPicHandler = $this->getMock($cl, array('getConfig'));
-        $oPicHandler->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
+        $oPicHandler = $this->getMock($cl, array('getAltImageUrl'));
+        $oPicHandler->expects($this->any())->method('getAltImageUrl')->will($this->returnValue('http://aqqa/master/product/nopic.jpg'));
 
         $this->assertEquals(array ('path' => false,'url' => 'http://aqqa/master/product/nopic.jpg',), $oPicHandler->p_getPictureInfo('master/product/', 'nopic.jpg'));
     }
@@ -502,18 +496,9 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
 
     public function testGetPictureInfoAltImgUrlSsl()
     {
-        $oCfg = $this->getMock('oxConfig', array('getPicturePath', 'getOutDir', 'getOutUrl', 'getConfigParam', 'isSsl'));
-        $oCfg->expects($this->never())->method('getPicturePath');
-        $oCfg->expects($this->never())->method('getOutDir');
-        $oCfg->expects($this->never())->method('getOutUrl');
-        $oCfg->expects($this->at(0))->method('isSsl')->will($this->returnValue(true));
-        $oCfg->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('sAltImageUrl'))->will($this->returnValue('http://aqqa/'));
-        $oCfg->expects($this->at(2))->method('isSsl')->will($this->returnValue(true));
-        $oCfg->expects($this->at(3))->method('getConfigParam')->with($this->equalTo('sSSLAltImageUrl'))->will($this->returnValue('https://aqqa/'));
-
         $cl = oxTestModules::publicize('oxPictureHandler', '_getPictureInfo');
-        $oPicHandler = $this->getMock($cl, array('getConfig'));
-        $oPicHandler->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
+        $oPicHandler = $this->getMock($cl, array('getAltImageUrl'));
+        $oPicHandler->expects($this->any())->method('getAltImageUrl')->will($this->returnValue('https://aqqa/master/product/nopic.jpg'));
 
         $this->assertEquals(array ('path' => false,'url' => 'https://aqqa/master/product/nopic.jpg',), $oPicHandler->p_getPictureInfo('master/product/', 'nopic.jpg'));
     }
@@ -527,9 +512,33 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
 
         $cl = oxTestModules::publicize('oxPictureHandler', '_getPictureInfo');
         $oPicHandler = $this->getMock($cl, array('getConfig'));
-        $oPicHandler->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
+        $oPicHandler->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
 
         $this->assertEquals(array ('path' => false,'url' => false,), $oPicHandler->p_getPictureInfo('master/product/', 'nopic.jpg' ) );
+    }
+
+    public function testGetAltImageUrlNotSet()
+    {
+        $oCfg = $this->getMock('oxConfig', array('getConfigParam'));
+        $oCfg->expects($this->any())->method('getConfigParam')->will($this->returnValue(false));
+
+        $oPicHandler = $this->getMock('oxPictureHandler', array('getConfig'));
+        $oPicHandler->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
+
+        $this->assertEquals(null, $oPicHandler->getAltImageUrl('master/product/', 'nopic.jpg' ) );
+    }
+
+    public function testGetAltImageUrlAltUrl()
+    {
+        $oCfg = $this->getMock('oxConfig', array('getConfigParam'));
+        $oCfg->expects($this->any())->method('getConfigParam')
+            ->with($this->equalTo('sAltImageUrl'))
+            ->will($this->returnValue('http://alt/image/url'));
+
+        $oPicHandler = $this->getMock('oxPictureHandler', array('getConfig'));
+        $oPicHandler->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
+
+        $this->assertEquals('http://alt/image/url/master/product/nopic.jpg', $oPicHandler->getAltImageUrl('master/product/', 'nopic.jpg' ) );
     }
 
     /**

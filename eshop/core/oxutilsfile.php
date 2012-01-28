@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 40667 2011-12-19 08:15:13Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsfile.php 41833 2012-01-27 15:32:24Z linas.kukulskis $
  */
 
 /**
@@ -105,6 +105,9 @@ class oxUtilsFile extends oxSuperCfg
                                      'Z10'  => 'z10',
                                      'Z11'  => 'z11',
                                      'Z12'  => 'z12',
+                                     //
+                                     'WP'   => 'master/wrapping',
+                                     'FL'   => 'media',
     );
 
     /**

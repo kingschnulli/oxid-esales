@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 41731 2012-01-24 13:42:58Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 41827 2012-01-27 15:26:13Z linas.kukulskis $
  */
 
 /**
@@ -689,13 +689,15 @@ class oxBase extends oxSuperCfg
     /**
      * Function builds the field list used in select.
      *
+     * @param bool $blForceCoreTableUsage (optional) use core views
+     *
      * @return string
      */
-    public function getSelectFields()
+    public function getSelectFields( $blForceCoreTableUsage = null )
     {
         $aSelectFields = array();
 
-        $sViewName = $this->getViewName();
+        $sViewName = $this->getViewName( $blForceCoreTableUsage );
 
         foreach ( $this->_aFieldNames as $sKey => $sField ) {
             $aSelectFields[] = $sViewName . '.' . $sKey;

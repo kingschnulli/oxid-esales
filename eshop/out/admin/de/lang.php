@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 41773 2012-01-26 09:31:43Z vilma $
+ * @version   SVN: $Id: lang.php 41848 2012-01-27 15:46:38Z rimvydas.paskevicius $
  */
 
 $sLangName  = 'Deutsch';
@@ -1653,7 +1653,7 @@ $aLang = array(
 'SHOP_PERF_LOADTREEFORSEARCH'                              => 'Kategoriebaum für die Suche laden (Die Suche kann auf einzelne Kategorien beschränkt werden)',
 'SHOP_PERF_LOADFULLTREE'                                   => 'Den kompletten Kategoriebaum für die Navigation laden (belastet die Performance, wenn viele Kategorien vorhanden sind)',
 'SHOP_PERF_LOADACTION'                                     => 'Aktionen laden',
-'SHOP_PERF_LOADREVIEWS'                                    => 'Kommentare und Bewertungen zu Artikeln anzeigen',
+'SHOP_PERF_LOADREVIEWS'                                    => '[tr] Activate user Reviews and Ratings',
 'SHOP_PERF_LOADCROSSSELLING'                               => 'Crossselling laden',
 'SHOP_PERF_LOADACCESSOIRES'                                => 'Zubehör laden',
 'SHOP_PERF_LOADCUSTOMERWHOBOUGHTTHIS'                      => '"Kunden, die diese Artikel gekauft haben, kauften auch" laden',

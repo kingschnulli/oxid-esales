@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   smarty_plugins
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: modifier.oxaddparams.php 41698 2012-01-24 09:06:06Z linas.kukulskis $
  */

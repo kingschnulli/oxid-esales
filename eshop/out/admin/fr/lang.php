@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: $
  */
@@ -1527,7 +1527,7 @@ $aLang = array(
 'SHOP_PERF_LOADNEWSONLYSTART' => 'Charger les News uniquement sur la page d\'accueil',
 'SHOP_PERF_LOADPRICE' => 'Calculer les prix des Produits',
 'SHOP_PERF_LOADPRICEFORADDLIST' => 'Afficher les prix dans \"Meilleures ventes\" et \"Derniers arrivages!\"',
-'SHOP_PERF_LOADREVIEWS' => 'Charger les Avis clients',
+'SHOP_PERF_LOADREVIEWS' => '[tr] Activate user Reviews and Ratings',
 'SHOP_PERF_LOADSELECTLIST' => 'Charger les listes de sélection',
 'SHOP_PERF_LOADSELECTLISTSINALIST' => 'Charger les listes de sélection dans les listes Produits',
 'SHOP_PERF_LOADSIMILAR' => 'Charger les produits similaires',

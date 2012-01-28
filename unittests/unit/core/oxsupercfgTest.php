@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: oxsupercfgTest.php 39796 2011-11-05 09:14:33Z linas.kukulskis $
  * $Id: oxsupercfgTest.php 39796 2011-11-05 09:14:33Z linas.kukulskis $

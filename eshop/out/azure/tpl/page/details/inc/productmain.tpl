@@ -254,8 +254,8 @@
 
                             </label>
                         [{/if}]
-                        [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]
                         [{if $oDetailsProduct->loadAmountPriceInfo()}]
+                            [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]
                             [{include file="page/details/inc/priceinfo.tpl"}]
                         [{/if}]
                     [{/oxhasrights}]
