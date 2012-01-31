@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 40664 2011-12-16 16:13:01Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticleTest.php 41690 2012-01-24 07:46:19Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -143,6 +143,29 @@ class modUtilsObject_oxarticle extends oxUtilsObject
  */
 class Unit_Core_oxarticleTest extends OxidTestCase
 {
+    /**
+     * Test case for #0003393: getSqlActiveSnippet(true) does not force core table usage
+     *
+     * @return null
+     */
+    public function testGgg()
+    {
+        //
+        $oProduct = new oxArticle();
+        $this->assertEquals( "oxarticles", $oProduct->getViewName( true ) );
+        $this->assertNotEquals( "oxarticles", $oProduct->getViewName() );
+
+        //
+        $oCategory = new oxCategory();
+        $this->assertEquals( "oxcategories", $oCategory->getViewName( true ) );
+        $this->assertNotEquals( "oxcategories", $oCategory->getViewName() );
+
+        //
+        $oAddress = new oxAddress();
+        $this->assertEquals( "oxaddress", $oAddress->getViewName( true ) );
+        $this->assertEquals( "oxaddress", $oAddress->getViewName( true ) );
+    }
+
     /**
      * A object of a test article 1
      *

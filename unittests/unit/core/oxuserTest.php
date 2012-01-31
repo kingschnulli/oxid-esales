@@ -92,7 +92,7 @@ class Unit_oxuserTest_oxUtilsServer2 extends oxUtilsServer
      */
     protected $_aCookieVars = array();
 
-    public function setOxCookie( $sVar, $sVal = "", $iExpire = 0, $sPath = '/', $sDomain = null, $blToSession = true )
+    public function setOxCookie( $sVar, $sVal = "", $iExpire = 0, $sPath = '/', $sDomain = null, $blToSession = true, $blSecure = false )
     {
         //unsetting cookie
         if (!isset($sVar) && !isset($sVal)) {
@@ -1924,7 +1924,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oGroups = $oUser->getUserGroups();
         // checking group count after adding to new one
         $this->assertEquals( 2, count( $oGroups ) );
-        
+
         // #0003218: validating loaded groups
         $this->assertEquals( true, isset($oGroups[$sNewGroup]) );
         $this->assertEquals( $sNewGroup, $oGroups[$sNewGroup]->getId() );
@@ -2933,7 +2933,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
 
-        $sVal = oxADMIN_LOGIN . '@@@' . crypt( $oActUser->encodePassword( oxADMIN_PASSWD, oxDb::getDb()->getOne('select OXPASSSALT from oxuser where OXID="oxdefaultadmin"') ), 'ox' );
+        $sVal = oxADMIN_LOGIN . '@@@' . crypt( $oActUser->encodePassword( oxADMIN_PASSWD, oxDb::getDb()->getOne('select OXPASSSALT from oxuser where OXID="oxdefaultadmin"') ), '61646D696E' );
         oxUtilsServer::getInstance()->setOxCookie( 'oxid_'.$sShopId, $sVal );
 
         $oActUser->loadActiveUser();
@@ -3424,10 +3424,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
     {
         oxTestModules::addFunction( "oxUtilsDate", "getTime", "{return 0;}" );
 
-        $sCryptedVal = oxADMIN_LOGIN.'@@@' . crypt( oxADMIN_PASSWD, 'ox' );
+        $sCryptedVal = oxADMIN_LOGIN.'@@@' . crypt( oxADMIN_PASSWD, '61646D696E' );
         $oUser = oxNew( 'oxuser' );
         $this->assertEquals( '', $oUser->UNITgetUserCookie() );
-        $oUser->UNITsetUserCookie( oxADMIN_LOGIN, oxADMIN_PASSWD );
+        $oUser->UNITsetUserCookie( oxADMIN_LOGIN, oxADMIN_PASSWD, null, 31536000, '61646D696E' );
         $this->assertEquals( $sCryptedVal, $oUser->UNITgetUserCookie() );
         $oUser->UNITdeleteUserCookie();
         $this->assertNull( $oUser->UNITgetUserCookie() );
@@ -3719,4 +3719,33 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertTrue( $oUser->addToGroup( oxDb::getDb()->getOne( $sQ ) ) );
         $this->assertFalse( $oUser->addToGroup( "nonsense" ) );
     }
+
+
+
+    public function testGetIdByUserName()
+    {
+        $oUser = new oxUser();
+        $oUser->setId( "_testId_1" );
+        $oUser->oxuser__oxusername = new oxField( "aaa@bbb.lt", oxField::T_RAW );
+        $oUser->oxuser__oxshopid   = new oxField( oxConfig::getInstance()->getBaseShopId(), oxField::T_RAW );
+        $oUser->save();
+
+        $oUser = new oxUser();
+        $oUser->setId( "_testId_2" );
+        $oUser->oxuser__oxusername = new oxField( "bbb@ccc.lt", oxField::T_RAW );
+        $oUser->oxuser__oxshopid   = new oxField( 'xxx' );
+        $oUser->save();
+
+        $oU = new oxUser();
+
+        modConfig::getInstance()->setConfigParam( 'blMallUsers', false );
+        $this->assertEquals('_testId_1', $oU->getIdByUserName( 'aaa@bbb.lt' ) );
+        $this->assertFalse($oU->getIdByUserName( 'bbb@ccc.lt' ) );
+
+        modConfig::getInstance()->setConfigParam( 'blMallUsers', true );
+        $this->assertEquals('_testId_1', $oU->getIdByUserName( 'aaa@bbb.lt' ) );
+        $this->assertEquals('_testId_2', $oU->getIdByUserName( 'bbb@ccc.lt' ) );
+    }
+
+
 }

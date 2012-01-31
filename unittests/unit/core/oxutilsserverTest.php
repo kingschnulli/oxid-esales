@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsserverTest.php 30610 2010-10-28 09:38:11Z sarunas $
+ * @version   SVN: $Id: oxutilsserverTest.php 41891 2012-01-30 14:57:33Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -46,7 +46,7 @@ class Unit_Core_oxUtilsServerTest extends OxidTestCase
     public function testSetOxCookieForSaveSessionCookie()
     {
         $this->markTestSkipped();
-            
+
         $oUtilsServer = $this->getMock( "oxUtilsServer", array( "_saveSessionCookie" ));
         $oUtilsServer->expects( $this->once() )->method( '_saveSessionCookie' );
         $oUtilsServer->setOxCookie( "testName1", $sValue );
@@ -285,16 +285,14 @@ var_dump($aCookie);
     public function testGetSetAndDeleteUserCookie()
     {
         oxTestModules::addFunction( "oxUtilsDate", "getTime", "{return 0;}" );
-
         $sCryptedVal = 'admin@@@' . crypt( 'admin', 'ox' );
-        $oUtils = $this->getMock( 'oxutilsserver', array( 'setOxCookie', 'getOxCookie' ) );
-        $oUtils->expects( $this->at( 1 ) )->method( 'setOxCookie' )->with( $this->equalTo( 'oxid_'.oxConfig::getInstance()->getShopId() ), $this->equalTo( $sCryptedVal ), $this->equalTo( 31536000 ), $this->equalTo( '/' ) );
-        $oUtils->expects( $this->at( 2 ) )->method( 'setOxCookie' )->with( $this->equalTo( 'oxid_'.oxConfig::getInstance()->getShopId() ), $this->equalTo( '' ), $this->equalTo( - 3600 ), $this->equalTo( '/' ) );
-        $oUtils->expects( $this->once() )->method( 'getOxCookie' )->with( $this->equalTo( 'oxid_'.oxConfig::getInstance()->getShopId() ) )->will( $this->returnValue( $sCryptedVal ) );
+        $oUtils = new oxutilsserver();
 
-        $this->assertEquals( $sCryptedVal, $oUtils->getUserCookie() );
+        $this->assertNull( $oUtils->getUserCookie() );
+
         $oUtils->setUserCookie( 'admin', 'admin' );
         $this->assertEquals( $sCryptedVal, $oUtils->getUserCookie() );
+
         $oUtils->deleteUserCookie();
         $this->assertNull( $oUtils->getUserCookie() );
     }

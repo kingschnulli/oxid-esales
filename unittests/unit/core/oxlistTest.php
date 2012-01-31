@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlistTest.php 35560 2011-05-24 07:55:08Z arvydas.vapsva $
+ * @version   SVN: $Id: oxlistTest.php 40826 2011-12-27 10:23:02Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -341,4 +341,42 @@ class Unit_Core_oxlistTest extends OxidTestCase
         $this->assertEquals($sCoreTable . "__" . $sFieldName, $oSubj->UNITgetFieldLongName($sFieldName));
     }
 
+    public function testUnsetForeach()
+    {
+        $oList = new oxlist();
+        $oList->offsetSet( 'k1', 'cnt4' );
+        $oList->offsetSet( 'k2', 'cnt3' );
+        $oList->offsetSet( 'k3', 'cnt2' );
+        $oList->offsetSet( 'k4', 'cnt1' );
+
+        $iTotal = count($oList);
+        $this->assertEquals( 4, $iTotal );
+        foreach ($oList as $sKey => $sVal) {
+            $this->assertEquals( $iTotal, count($oList) );
+            $this->assertEquals( 'cnt'.$iTotal, $sVal );
+
+            $iTotal--;
+            unset($oList[$sKey]);
+        }
+    }
+
+    public function testUnsetWhile()
+    {
+        $oList = new oxlist();
+        $oList->offsetSet( 'k1', 'cnt4' );
+        $oList->offsetSet( 'k2', 'cnt3' );
+        $oList->offsetSet( 'k3', 'cnt2' );
+        $oList->offsetSet( 'k4', 'cnt1' );
+
+        $iTotal = count($oList);
+        $this->assertEquals( 4, $iTotal );
+        reset($oList);
+        while (list($sKey, $sVal) = each($oList->aList)) {
+            $this->assertEquals( $iTotal, count($oList) );
+            $this->assertEquals( 'cnt'.$iTotal, $sVal );
+
+            $iTotal--;
+            unset($oList[$sKey]);
+        }
+    }
 }

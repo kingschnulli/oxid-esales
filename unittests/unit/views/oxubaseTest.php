@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 39230 2011-10-12 14:12:41Z arvydas.vapsva $
+ * @version   SVN: $Id: oxubaseTest.php 41881 2012-01-30 12:34:50Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2172,5 +2172,18 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 1;}");
         $oView = new oxUbase();
         $this->assertTrue( $oView->isFbWidgetWisible() );
+    }
+
+    /**
+     * oxUBase::showRememberMe() test case
+     *
+     * @return null
+     */
+    public function testShowRememberMe()
+    {
+        modConfig::getInstance()->setConfigParam('blShowRememberMe', true );
+
+        $oView = new oxUbase();
+        $this->assertTrue( $oView->showRememberMe() );
     }
 }
