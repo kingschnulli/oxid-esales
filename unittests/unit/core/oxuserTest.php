@@ -1924,7 +1924,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oGroups = $oUser->getUserGroups();
         // checking group count after adding to new one
         $this->assertEquals( 2, count( $oGroups ) );
-
+        
         // #0003218: validating loaded groups
         $this->assertEquals( true, isset($oGroups[$sNewGroup]) );
         $this->assertEquals( $sNewGroup, $oGroups[$sNewGroup]->getId() );
@@ -3719,33 +3719,4 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertTrue( $oUser->addToGroup( oxDb::getDb()->getOne( $sQ ) ) );
         $this->assertFalse( $oUser->addToGroup( "nonsense" ) );
     }
-
-
-
-    public function testGetIdByUserName()
-    {
-        $oUser = new oxUser();
-        $oUser->setId( "_testId_1" );
-        $oUser->oxuser__oxusername = new oxField( "aaa@bbb.lt", oxField::T_RAW );
-        $oUser->oxuser__oxshopid   = new oxField( oxConfig::getInstance()->getBaseShopId(), oxField::T_RAW );
-        $oUser->save();
-
-        $oUser = new oxUser();
-        $oUser->setId( "_testId_2" );
-        $oUser->oxuser__oxusername = new oxField( "bbb@ccc.lt", oxField::T_RAW );
-        $oUser->oxuser__oxshopid   = new oxField( 'xxx' );
-        $oUser->save();
-
-        $oU = new oxUser();
-
-        modConfig::getInstance()->setConfigParam( 'blMallUsers', false );
-        $this->assertEquals('_testId_1', $oU->getIdByUserName( 'aaa@bbb.lt' ) );
-        $this->assertFalse($oU->getIdByUserName( 'bbb@ccc.lt' ) );
-
-        modConfig::getInstance()->setConfigParam( 'blMallUsers', true );
-        $this->assertEquals('_testId_1', $oU->getIdByUserName( 'aaa@bbb.lt' ) );
-        $this->assertEquals('_testId_2', $oU->getIdByUserName( 'bbb@ccc.lt' ) );
-    }
-
-
 }

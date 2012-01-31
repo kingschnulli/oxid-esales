@@ -366,7 +366,8 @@ class oxUtilsUrl extends oxSuperCfg
         // check for params part
         if (
             !is_array($aUrlParts)
-            || count($aUrlParts) != 2
+            || count($aUrlParts) <= 1
+            || count($aUrlParts) > 2
         ) {
             return $sUrl;
         }
@@ -384,13 +385,6 @@ class oxUtilsUrl extends oxSuperCfg
         // remove dublicate entries
         parse_str($sUrlParams, $aUrlParams);
         $sUrl .= '?'.http_build_query($aUrlParams, '', $sConnector);
-
-        // replace brackets
-        $sUrl = str_replace(
-            array('%5B', '%5D'),
-            array('[', ']'),
-            $sUrl
-        );
 
         return $sUrl;
     }

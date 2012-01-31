@@ -55,6 +55,10 @@ class Theme_Config extends Shop_Config
             $this->_aViewData["oTheme"] =  $oTheme;
 
             try {
+                oxLang::getInstance()->registerAdditionalLangFile(
+                    $this->_getTemplateOptionsLanguageFile()
+                );
+
                 $aDbVariables = $this->_loadConfVars($sShopId, $this->_getModuleForConfigVars());
                 $this->_aViewData["var_constraints"] = $aDbVariables['constraints'];
                 $this->_aViewData["var_grouping"]    = $aDbVariables['grouping'];
@@ -92,6 +96,32 @@ class Theme_Config extends Shop_Config
     protected function _getModuleForConfigVars()
     {
         return oxConfig::OXMODULE_THEME_PREFIX.$this->_sTheme;
+    }
+
+    /**
+     * return additional language file to load for theme options language constants
+     *
+     * @return string
+     */
+    protected function _getTemplateOptionsLanguageFile()
+    {
+        $iLang = oxLang::getInstance()->getTplLanguage();
+        $sFile = $this->getConfig()->getDir(
+                "theme_options.php",
+                oxLang::getInstance()->getLanguageAbbr( $iLang ),
+                false,
+                $iLang,
+                null,
+                $this->_sTheme,
+                true,
+                true
+        );
+        if (!$sFile) {
+            $oErr = new oxFileException('EXCEPTION_FILENOTFOUND');
+            $oErr->setFileName('theme_options.php for the theme "'.$this->_sTheme.'"');
+            throw $oErr;
+        }
+        return $sFile;
     }
 
     /**

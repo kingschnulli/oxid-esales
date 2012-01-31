@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 41754 2012-01-25 11:41:04Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 40604 2011-12-14 13:15:57Z arvydas.vapsva $
  */
 
 /**
@@ -181,13 +181,6 @@ class oxBase extends oxSuperCfg
     protected $_aInnerLazyCache = null;
 
     /**
-     * Marker that multilanguage is OFF
-     *
-     * @var bool
-     */
-    protected $_blEmployMultilanguage = false;
-
-    /**
      * Class constructor, sets active shop.
      */
     public function __construct()
@@ -253,6 +246,8 @@ class oxBase extends oxSuperCfg
                 break;
         }
 
+
+
         // implementing lazy loading fields
         // This part of the code is slow and normally is called before field cache is built.
         // Make sure it is not called after first page is loaded and cache data is fully built.
@@ -274,8 +269,8 @@ class oxBase extends oxSuperCfg
                         $oDb = oxDb::getDb( true );
                         $sQ = "SELECT * FROM " . $sViewName . " WHERE `oxid` = " . $oDb->quote( $sId );
                         $rs = $oDb->execute( $sQ );
-                        if (  $rs && $rs->RecordCount() ) {
-                            $this->_aInnerLazyCache = array_change_key_case( $rs->fields, CASE_UPPER );
+                        if ( $rs ) {
+                            $this->_aInnerLazyCache = $rs->fields;
                             if ( array_key_exists( $sCacheFieldName, $rs->fields ) ) {
                                 $sFieldValue = $rs->fields[$sCacheFieldName];
                             } else {
@@ -507,17 +502,13 @@ class oxBase extends oxSuperCfg
     public function getViewName($blForceCoreTableUsage = null)
     {
         if (!$this->_sViewTable || ($blForceCoreTableUsage !== null)) {
-            if ( $blForceCoreTableUsage === true ) {
-                return $this->_sCoreTable;
-            }
-
-            if ( ( $blForceCoreTableUsage !== null ) ? $blForceCoreTableUsage : $this->_blForceCoreTableUsage ) {
+            if ( ($blForceCoreTableUsage !== null)?$blForceCoreTableUsage:$this->_blForceCoreTableUsage ) {
                 $iShopId = -1;
             } else {
                 $iShopId = oxConfig::getInstance()->getShopId();
             }
-            $sViewName = getViewName( $this->_sCoreTable, $this->_blEmployMultilanguage == false ? -1 : $this->getLanguage(), $iShopId );
-            if ( $blForceCoreTableUsage !== null ) {
+            $sViewName = getViewName( $this->_sCoreTable, -1, $iShopId);
+            if ($blForceCoreTableUsage !== null) {
                 return $sViewName;
             }
             $this->_sViewTable = $sViewName;
@@ -689,15 +680,13 @@ class oxBase extends oxSuperCfg
     /**
      * Function builds the field list used in select.
      *
-     * @param bool $blForceCoreTableUsage (optional) use core views
-     *
      * @return string
      */
-    public function getSelectFields( $blForceCoreTableUsage = null )
+    public function getSelectFields()
     {
         $aSelectFields = array();
 
-        $sViewName = $this->getViewName( $blForceCoreTableUsage );
+        $sViewName = $this->getViewName();
 
         foreach ( $this->_aFieldNames as $sKey => $sField ) {
             $aSelectFields[] = $sViewName . '.' . $sKey;
@@ -1531,15 +1520,5 @@ class oxBase extends oxSuperCfg
     public function getFieldNames()
     {
         return array_keys( $this->_aFieldNames );
-    }
-
-    /**
-     * Returns -1, means object is not multilanguage
-     *
-     * @return int
-     */
-    public function getLanguage()
-    {
-        return -1;
     }
 }

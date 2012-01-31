@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 40953 2012-01-04 13:46:55Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsTest.php 32883 2011-02-03 11:45:58Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -463,13 +463,6 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $this->assertEquals('0', oxUtils::getInstance()->fRound('blafoo'));
         $this->assertEquals('9', oxUtils::getInstance()->fRound('9,849'));
 
-        //negative
-        $this->assertEquals('-9.84', oxUtils::getInstance()->fRound('-9.844'));
-        $this->assertEquals('-9.85', oxUtils::getInstance()->fRound('-9.845'));
-        $this->assertEquals('-9.85', oxUtils::getInstance()->fRound('-9.849'));
-        $this->assertEquals('-9', oxUtils::getInstance()->fRound('-9,849'));
-
-
         $aCur = $myConfig->getCurrencyArray();
         $oCur = $aCur[1];
         $this->assertEquals('9.84', oxUtils::getInstance()->fRound('9.844', $oCur));
@@ -477,13 +470,6 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $this->assertEquals('9.85', oxUtils::getInstance()->fRound('9.849', $oCur));
         $this->assertEquals('0', oxUtils::getInstance()->fRound('blafoo', $oCur));
         $this->assertEquals('9', oxUtils::getInstance()->fRound('9,849', $oCur));
-
-        $this->assertEquals('-9.84', oxUtils::getInstance()->fRound('-9.844', $oCur));
-        $this->assertEquals('-9.85', oxUtils::getInstance()->fRound('-9.845', $oCur));
-        $this->assertEquals('-9.85', oxUtils::getInstance()->fRound('-9.849', $oCur));
-        $this->assertEquals('-9', oxUtils::getInstance()->fRound('-9,849', $oCur));
-
-
     }
 
     public function testToFromStaticCache()

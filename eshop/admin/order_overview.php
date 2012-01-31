@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order_overview.php 41852 2012-01-28 13:54:58Z arvydas.vapsva $
+ * @version   SVN: $Id: order_overview.php 40417 2011-12-01 10:07:16Z linas.kukulskis $
  */
 
 /**
@@ -283,9 +283,13 @@ class Order_Overview extends oxAdminDetails
     {
         $oOrder = oxNew( "oxorder" );
         $blCan = false;
+
+
         if ( $oOrder->load( $this->getEditObjectId() ) ) {
-            $blCan = $oOrder->oxorder__oxstorno->value == "0" &&
-                     !( $oOrder->oxorder__oxsenddate->value == "0000-00-00 00:00:00" || $oOrder->oxorder__oxsenddate->value == "-" );
+
+            if ( $oOrder->oxorder__oxstorno->value == "0" && $oOrder->oxorder__oxsenddate->value > 1 ) {
+                $blCan = true;
+            }
         }
         return $blCan;
     }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxi18n.php 41682 2012-01-23 15:26:34Z arvydas.vapsva $
+ * @version   SVN: $Id: oxi18n.php 39225 2011-10-12 14:03:49Z arvydas.vapsva $
  */
 
 /**
@@ -526,6 +526,33 @@ class oxI18n extends oxBase
             $sShopID = -1;
         }
         return getViewName( $sTable, $this->getLanguage(), $sShopID);
+    }
+
+    /**
+     * Returns main table data is actually selected from (could be a view name as well)
+     *
+     * @param bool $blForceCoreTableUsage (optional) use core views
+     *
+     * @return string
+     */
+    public function getViewName($blForceCoreTableUsage = null)
+    {
+        if (!$this->_blEmployMultilanguage) {
+            return parent::getViewName($blForceCoreTableUsage);
+        }
+        if (!$this->_sViewTable || ($blForceCoreTableUsage !== null)) {
+            if ( ($blForceCoreTableUsage !== null)?$blForceCoreTableUsage:$this->_blForceCoreTableUsage ) {
+                $iShopId = -1;
+            } else {
+                $iShopId = oxConfig::getInstance()->getShopId();
+            }
+            $sViewName = getViewName($this->_sCoreTable, $this->getLanguage(), $iShopId);
+            if ($blForceCoreTableUsage !== null) {
+                return $sViewName;
+            }
+            $this->_sViewTable = $sViewName;
+        }
+        return $this->_sViewTable;
     }
 
     /**

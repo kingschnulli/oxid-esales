@@ -45,17 +45,5 @@ class oxState extends oxI18n
         $this->init("oxstates");
     }
 
-    /**
-     * Returns caountry id by code
-     *
-     * @param string $sCode      country code
-     * @param string $sCountryId country id
-     *
-     * @return string
-     */
-    public function getIdByCode( $sCode, $sCountryId )
-    {
-        return oxDb::getDb()->getOne( "select oxid from oxstates where oxisoalpha2 = ? AND oxcountryid = ?", array( $sCode, $sCountryId ) );
-    }
 
 }

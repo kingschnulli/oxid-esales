@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 41755 2012-01-25 11:41:47Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticle.php 40662 2011-12-16 16:06:11Z linas.kukulskis $
  */
 
 // defining supported link types
@@ -1150,7 +1150,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getVariantSelections( $aFilterIds = null, $sActVariantId = null, $iLimit = 0 )
     {
-
         $iLimit = (int) $iLimit;
         if ( !isset( $this->_aVariantSelections[$iLimit] ) ) {
             $this->_aVariantSelections[$iLimit] = false;
@@ -1281,11 +1280,10 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
                 $sArticleTable = $this->getViewName( $blUseCoreTable );
 
-                $sSelect = "select ".$oBaseObject->getSelectFields( $blUseCoreTable )." from $sArticleTable where " .
+                $sSelect = "select ".$oBaseObject->getSelectFields()." from $sArticleTable where " .
                            $this->getActiveCheckQuery( $blUseCoreTable ) .
                            $this->getVariantsQuery( $blRemoveNotOrderables, $blUseCoreTable ) .
                            " order by $sArticleTable.oxsort";
-
 
                 $oVariants->selectString( $sSelect );
 
@@ -4200,8 +4198,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         if ( $this->isParentNotBuyable() && !$this->getConfig()->getConfigParam( 'blLoadVariants' )) {
             //#2509 we cannot force brutto price here, as netto price can be added to DB
             // $this->getPrice()->setBruttoPriceMode();
-            $dPrice = $this->oxarticles__oxvarminprice->value;
-            $this->getPrice()->setPrice($dPrice);
+            $this->getPrice()->setPrice($this->oxarticles__oxvarminprice->value);
             $this->_blIsRangePrice = true;
             $this->_calculatePrice( $this->getPrice() );
             return;

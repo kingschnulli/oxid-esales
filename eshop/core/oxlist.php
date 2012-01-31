@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlist.php 40845 2011-12-27 14:40:28Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxlist.php 33859 2011-03-21 12:43:22Z sarunas $
  */
 
 /**
@@ -35,14 +35,6 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      * @var array $_aArray
      */
     protected $_aArray = array();
-
-    /**
-     * Save the state, that active element was unsetted
-     * needed for proper foreach iterator functionality
-     *
-     * @var bool $_blRemovedActive
-     */
-    protected $_blRemovedActive = false;
 
     /**
      * Template object used for some methods before the list is built.
@@ -134,11 +126,6 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      */
     public function offsetUnset( $offset )
     {
-        if (strcmp($offset, $this->key()) === 0) {
-            // #0002184: active element removed, next element will be prev / first
-            $this->_blRemovedActive = true;
-        }
-
         unset( $this->_aArray[$offset] );
     }
 
@@ -183,35 +170,13 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
     }
 
     /**
-     * previous / first array element
-     *
-     * @return prev array element
-     */
-    public function prev()
-    {
-        $oVar = prev($this->_aArray);
-        if ($oVar === false) {
-            // the first element, reset pointer
-            $oVar = reset($this->_aArray);
-        }
-        $this->_blRemovedActive = false;
-        return $oVar;
-    }
-
-    /**
      * next for SPL
      *
      * @return null;
      */
     public function next()
     {
-        if ($this->_blRemovedActive === true && current($this->_aArray)) {
-            $oVar = $this->prev();
-        } else {
-            $oVar = next($this->_aArray);
-        }
-
-        $this->_blValid = ( false !== $oVar );
+        $this->_blValid = ( false !== next( $this->_aArray ) );
     }
 
     /**

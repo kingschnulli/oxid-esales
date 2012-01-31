@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryset.php 41196 2012-01-11 15:29:50Z linas.kukulskis $
+ * @version   SVN: $Id: oxdeliveryset.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 /**
@@ -77,20 +77,5 @@ class oxDeliverySet extends oxI18n
         $oDb->execute( 'delete from oxdel2delset where oxdelsetid = '.$sOxidQuoted);
 
         return parent::delete( $sOxId );
-    }
-
-    /**
-     * returns delivery set id
-     *
-     * @param string $sTitle delivery name
-     *
-     * @return string
-     */
-    public function getIdByName( $sTitle )
-    {
-        $sQ = "SELECT `oxid` FROM `" . getViewName( 'oxdeliveryset' ) . "` WHERE  `oxtitle` = " . oxDb::getDb()->quote( $sTitle );
-        $sId = oxDb::getDb()->getOne( $sQ );
-
-        return $sId;
     }
 }

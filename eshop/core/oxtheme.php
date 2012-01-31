@@ -76,9 +76,9 @@ class oxTheme extends oxSuperCfg
         $sParent = $this->getInfo('parentTheme');
         if ($sParent) {
             $this->getConfig()->saveShopConfVar("str", 'sTheme', $sParent);
-            $this->getConfig()->saveShopConfVar("str", 'sCustomTheme', $this->getId());
+            $this->getConfig()->saveShopConfVar("str", 'sCustomTheme', $this->getInfo('id'));
         } else {
-            $this->getConfig()->saveShopConfVar("str", 'sTheme', $this->getId());
+            $this->getConfig()->saveShopConfVar("str", 'sTheme', $this->getInfo('id'));
             $this->getConfig()->saveShopConfVar("str", 'sCustomTheme', '');
         }
     }
@@ -156,7 +156,7 @@ class oxTheme extends oxSuperCfg
      */
     public function checkForActivationErrors()
     {
-        if (!$this->getId()) {
+        if (!$this->getInfo('id')) {
             return 'EXCEPTION_THEME_NOT_LOADED';
         }
         $oParent = $this->getParent();
@@ -176,16 +176,6 @@ class oxTheme extends oxSuperCfg
             return 'EXCEPTION_PARENT_THEME_NOT_FOUND';
         }
         return false;
-    }
-
-    /**
-     * Get theme ID
-     *
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->getInfo( "id" );
     }
 }
 

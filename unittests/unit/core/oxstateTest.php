@@ -32,16 +32,4 @@ class Unit_Core_oxstateTest extends OxidTestCase
         $oSubj->load('MB');
         $this->assertEquals('Manitoba', $oSubj->oxstates__oxtitle->value);
     }
-
-    /**
-     * Tests state getter
-     *
-     * @return null;
-     */
-    public function testGetIdByCode()
-    {
-        $oSubj = new oxState();
-        $this->assertEquals( 'MB', $oSubj->getIdByCode( 'MB', '8f241f11095649d18.02676059' ) );
-    }
-
 }
