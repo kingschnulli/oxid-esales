@@ -15,8 +15,8 @@ function SchnellSortManager(oObj)
 function DeletePic( sField )
 {
     var oForm = document.getElementById("myedit");
-    oForm.fnc.value="deletePicture";
-    oForm.masterPicField.value=sField;
+    document.getElementById(sField).value="";
+    oForm.fnc.value='save';
     oForm.submit();
 }
 
@@ -63,7 +63,6 @@ function LockAssignment(obj)
 <input type="hidden" name="fnc" value="">
 <input type="hidden" name="oxid" value="[{ $oxid }]">
 <input type="hidden" name="editval[oxcategories__oxid]" value="[{ $oxid }]">
-<input type="hidden" name="masterPicField" value="">
 
 <table cellspacing="0" cellpadding="0" border="0" width="98%">
 <tr>

@@ -19,7 +19,7 @@
  * @package   utils
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: verificationimg.php 41676 2012-01-23 14:36:59Z mindaugas.rimgaila $
+ * @version   SVN: $Id: verificationimg.php 38583 2011-09-05 13:27:48Z linas.kukulskis $
  */
 
 /**
@@ -34,8 +34,6 @@ function getShopBasePath()
 }
 
 
-// skip session start for this file
-$_GET['skipSession'] = 1;
 
 /**
  * Includes utils class

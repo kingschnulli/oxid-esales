@@ -96,8 +96,7 @@
                         <strong>[{$product->getFPrice()}] [{$currency->sign}]</strong>
                     </label>
                     [{if $product->loadAmountPriceInfo()}]
-                        [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]
-                        [{include file="page/details/inc/priceinfo.tpl" oDetailsProduct=$product}]
+                        <a class="selector corners FXgradBlueDark" href="#priceinfo"><img src="[{$oViewConf->getImageUrl('selectbutton.png')}]" alt="Select"></a>
                     [{/if}]
 
                 [{/oxhasrights}]

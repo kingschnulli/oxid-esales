@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilspicTest.php 41256 2012-01-12 13:34:23Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxutilspicTest.php 37578 2011-07-28 14:15:54Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -243,34 +243,26 @@ class Unit_Core_oxUtilsPicTest extends OxidTestCase
     // all is fine
     public function testOverwritePicGoodParams()
     {
-        $oFiles = $this->getMock('oxUtilsFile', array('getImageDirByType'));
-        $oFiles->expects( $this->atLeastOnce() )->method('getImageDirByType')->will( $this->returnValue('/test_image_dir/') );
-        modInstances::addMod('oxUtilsFile', $oFiles);
-
         $oUtilsPic = $this->getMock( 'oxutilspic', array( 'safePictureDelete' ) );
-        $oUtilsPic->expects( $this->once() )->method( 'safePictureDelete')->with( $this->equalTo( 'yyy' ), $this->equalTo( 'yyy/test_image_dir/' ), $this->equalTo( 'oxtbl' ), $this->equalTo( 'oxpic' ) )->will( $this->returnValue( true ) );
+        $oUtilsPic->expects( $this->once() )->method( 'safePictureDelete')->with( $this->equalTo( 'yyy' ), $this->equalTo( 'yyy' ), $this->equalTo( 'oxtbl' ), $this->equalTo( 'oxpic' ) )->will( $this->returnValue( true ) );
 
         $oObject = new Oxstdclass();
         $oObject->oxtbl__oxpic = new oxField('yyy', oxField::T_RAW);
 
-        $blTrue = $oUtilsPic->overwritePic( $oObject, 'oxtbl', 'oxpic', 'TEST_TYPE', '', array( 'oxtbl__oxpic' => 'xxx' ), 'yyy' );
+        $blTrue = $oUtilsPic->overwritePic( $oObject, 'oxtbl', 'oxpic', '', '', array( 'oxtbl__oxpic' => 'xxx' ), 'yyy' );
         $this->assertTrue( $blTrue );
     }
 
     // Test if corect path to file is generated (M:1268)
     public function testOverwritePic_generatesCorectFilePath()
     {
-        $oFiles = $this->getMock('oxUtilsFile', array('getImageDirByType'));
-        $oFiles->expects( $this->atLeastOnce() )->method('getImageDirByType')->will( $this->returnValue('/testType_dir/') );
-        modInstances::addMod('oxUtilsFile', $oFiles);
-
         $oUtilsPic = $this->getMock( 'oxutilspic', array( 'safePictureDelete' ) );
-        $oUtilsPic->expects( $this->once() )->method( 'safePictureDelete')->with( $this->equalTo( 'testPictureName' ), $this->equalTo( 'testAbsPath/testType_dir/' ) );
+        $oUtilsPic->expects( $this->once() )->method( 'safePictureDelete')->with( $this->equalTo( 'testPictureName' ), $this->equalTo( 'testAbsPath/testPath' ) );
 
         $oObject = new Oxstdclass();
         $oObject->oxtbl__oxpic = new oxField('testPictureName', oxField::T_RAW);
 
-        $blTrue = $oUtilsPic->overwritePic( $oObject, 'oxtbl', 'oxpic', 'testType', 'testPath', array( 'oxtbl__oxpic' => 'xxx' ), 'testAbsPath' );
+        $blTrue = $oUtilsPic->overwritePic( $oObject, 'oxtbl', 'oxpic', 'testType', 'testPath', array( 'oxtbl__oxpic' => 'xxx' ), 'testAbsPath/' );
     }
 
     /**

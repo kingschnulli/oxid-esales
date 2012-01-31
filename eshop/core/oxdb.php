@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdb.php 41608 2012-01-19 08:45:13Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxdb.php 40453 2011-12-05 16:26:56Z linas.kukulskis $
  */
 
 
@@ -250,7 +250,7 @@ class oxDb extends oxSuperCfg
         if ( strpos( $sConfig, '<dbHost'.$sVerPrefix.'>' ) !== false &&
              strpos( $sConfig, '<dbName'.$sVerPrefix.'>' ) !== false ) {
             // pop to setup as there is something wrong
-            oxUtils::getInstance()->redirect( "setup/index.php", true, 302 );
+            oxUtils::getInstance()->redirect( "setup/index.php" );
         } else {
             // notifying about connection problems
             $this->_notifyConnectionErrors( $oDb );
@@ -271,9 +271,10 @@ class oxDb extends oxSuperCfg
         $sHost = $myConfig->getConfigParam( "dbHost" );
 
 
+
         $oDb = ADONewConnection( $myConfig->getConfigParam( 'dbType' ), $this->_getModules() );
 
-        if ( !$oDb->connect( $sHost,
+        if ( !$oDb->connect( $myConfig->getConfigParam( $sHost ),
                              $myConfig->getConfigParam( "dbUser" ),
                              $myConfig->getConfigParam( "dbPwd" ),
                              $myConfig->getConfigParam( "dbName" ) ) ) {
@@ -298,11 +299,6 @@ class oxDb extends oxSuperCfg
      */
     public static function getDb( $iFetchMode = oxDb::FETCH_MODE_NUM )
     {
-        //Added for 0003480 bug; needed as backward compatibility; @deprecated in 4.6 since 2012-01-15; must be removed;
-        if ( $iFetchMode === true ) {
-            $iFetchMode = oxDb::FETCH_MODE_ASSOC;
-        }
-
 
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             if ( isset( modDB::$unitMOD ) && is_object( modDB::$unitMOD ) ) {

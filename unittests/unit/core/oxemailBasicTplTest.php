@@ -201,8 +201,8 @@ class Unit_Core_oxemailBasicTplTest extends OxidTestCase
 
         // A. very special case for user password reminder
         if ( $sFuncName == 'testSendForgotPwdEmail' ) {
-            $sExpectedBody = preg_replace("/uid=[0-9a-zA-Z]+\&amp;/", "", $sExpectedBody);
-            $sBody = preg_replace("/uid=[0-9a-zA-Z]+\&amp;/", "", $sBody);
+            $sExpectedBody = preg_replace("/uid=[0-9a-zA-Z]+\&/", "", $sExpectedBody);
+            $sBody = preg_replace("/uid=[0-9a-zA-Z]+\&/", "", $sBody);
         }
 
         $sExpectedBody = preg_replace("/\s+/", " ", $sExpectedBody);

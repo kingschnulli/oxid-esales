@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 40962 2012-01-05 07:55:13Z linas.kukulskis $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 40429 2011-12-02 08:28:55Z justinas.straksys $
  */
 
 /**
@@ -743,11 +743,11 @@ class oxArticleList extends oxList
             $this->clear();
             return;
         }
-
+        
         foreach ($aIds as $iKey => $sVal) {
             $aIds[$iKey] = oxDb::getInstance()->escapeString($sVal);
         }
-
+        
         $oBaseObject    = $this->getBaseObject();
         $sArticleTable  = $oBaseObject->getViewName();
         $sArticleFields = $oBaseObject->getSelectFields();

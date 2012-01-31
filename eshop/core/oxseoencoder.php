@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 41202 2012-01-11 15:52:59Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxseoencoder.php 40351 2011-11-29 16:16:28Z linas.kukulskis $
  */
 
 /**
@@ -230,7 +230,7 @@ class oxSeoEncoder extends oxSuperCfg
 
         $sStdUrl   = $this->_trimUrl( $sStdUrl );
         $sObjectId = $this->getDynamicObjectId( $iShopId, $sStdUrl );
-        $sSeoUrl   = $this->_prepareUri( $this->addLanguageParam( $sSeoUrl, $iLang ), $iLang );
+        $sSeoUrl   = $this->_prepareUri( $this->addLanguageParam( $sSeoUrl, $iLang ) );
 
         //load details link from DB
         $sOldSeoUrl = $this->_loadFromDb( 'dynamic', $sObjectId, $iLang );
@@ -324,7 +324,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _getUniqueSeoUrl( $sSeoUrl, $sObjectId = null, $iObjectLang = null )
     {
-        $sSeoUrl = $this->_prepareUri( $sSeoUrl, $iObjectLang );
+        $sSeoUrl = $this->_prepareUri( $sSeoUrl );
         $oStr = getStr();
         $sExt = '';
         if ( $oStr->preg_match( '/(\.html?|\/)$/i', $sSeoUrl, $aMatched ) ) {
@@ -574,15 +574,14 @@ class oxSeoEncoder extends oxSuperCfg
     /**
      * Makes safe seo uri - removes unsupported/reserved characters
      *
-     * @param string $sUri  seo uri
-     * @param int    $iLang language ID, for which URI should be prepared
+     * @param string $sUri seo uri
      *
      * @return string
      */
-    protected function _prepareUri( $sUri, $iLang = false )
+    protected function _prepareUri( $sUri )
     {
         // decoding entities
-        $sUri = $this->encodeString( $sUri, true, $iLang );
+        $sUri = $this->encodeString( $sUri );
 
         // basic string preparation
         $sUri = strip_tags( $sUri );
@@ -610,7 +609,7 @@ class oxSeoEncoder extends oxSuperCfg
 
         // SEO id is empty ?
         if ( !$sUri && self::$_sPrefix ) {
-            $sUri = $this->_prepareUri( self::$_sPrefix, $iLang );
+            $sUri = $this->_prepareUri( self::$_sPrefix );
         }
 
         $sAdd = '';
@@ -638,13 +637,12 @@ class oxSeoEncoder extends oxSuperCfg
      *
      * @param string $sTitle         Original object title
      * @param bool   $blSkipTruncate Truncate title into defined lenght or not
-     * @param int    $iLang          language ID, for which to prepare the title
      *
      * @return string
      */
-    protected function _prepareTitle( $sTitle, $blSkipTruncate = false, $iLang = false )
+    protected function _prepareTitle( $sTitle, $blSkipTruncate = false )
     {
-        $sTitle = $this->encodeString( $sTitle, true, $iLang );
+        $sTitle = $this->encodeString( $sTitle );
         $sSep = self::$_sSeparator;
         if (!$sSep || ('/' == $sSep)) {
             $sSep = '_';
@@ -780,22 +778,17 @@ class oxSeoEncoder extends oxSuperCfg
      * Replaces special chars in text
      *
      * @param string $sString        string to encode
-     * @param bool   $blReplaceChars is true, replaces user defined (oxlang::getSeoReplaceChars) characters into alternative
-     * @param int    $iLang          language, for which to encode the string
+     * @param bool   $blReplaceChars is true, replaces user defined (oxconfig::aSeoReplaceChars) characters into alternative
      *
      * @return string
      */
-    public function encodeString( $sString, $blReplaceChars = true, $iLang = false )
+    public function encodeString( $sString, $blReplaceChars = true )
     {
         // decoding entities
         $sString = getStr()->html_entity_decode( $sString );
 
         if ( $blReplaceChars ) {
-            if ($iLang === false || !is_numeric($iLang)) {
-                $iLang = oxLang::getInstance()->getEditLanguage();
-            }
-
-            if ( $aReplaceChars = oxLang::getInstance()->getSeoReplaceChars($iLang) ) {
+            if ( $aReplaceChars = $this->getConfig()->getConfigParam( 'aSeoReplaceChars' ) ) {
                 $sString = str_replace( array_keys( $aReplaceChars ), array_values( $aReplaceChars ), $sString );
             }
         }
@@ -1095,7 +1088,7 @@ class oxSeoEncoder extends oxSuperCfg
 
             $oStr = getStr();
             if ( $sKeywords !== false ) {
-                $sKeywords = $oDb->quote( $oStr->htmlspecialchars( $this->encodeString( strip_tags( $sKeywords ), false, $iLang ) ) );
+                $sKeywords = $oDb->quote( $oStr->htmlspecialchars( $this->encodeString( strip_tags( $sKeywords ), false ) ) );
             }
 
             if ( $sDescription !== false ) {

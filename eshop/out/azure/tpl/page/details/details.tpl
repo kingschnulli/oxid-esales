@@ -49,7 +49,7 @@
         </div>
 
         [{* RDFa offering*}]
-        <div id="productinfo">
+        <div id="productinfo" xmlns="http://www.w3.org/1999/xhtml" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:gr="http://purl.org/goodrelations/v1#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:v="http://rdf.data-vocabulary.org/#" xml:base="[{$oView->getLink()}]" typeof="gr:Offering" about="[{$oView->getLink()}]#offeringdata">
             [{include file="page/details/inc/fullproductinfo.tpl"}]
         </div>
     </div>

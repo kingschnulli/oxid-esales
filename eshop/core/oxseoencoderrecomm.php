@@ -81,7 +81,7 @@ class oxSeoEncoderRecomm extends oxSeoEncoder
                         $iLang
                     )
                     .
-                    $this->_prepareTitle( $oRecomm->oxrecommlists__oxtitle->value, false, $iLang );
+                    $this->_prepareTitle( $oRecomm->oxrecommlists__oxtitle->value );
 
             // creating unique
             $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $oRecomm->getId(), $iLang );

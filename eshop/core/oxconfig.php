@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 41844 2012-01-27 15:37:28Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxconfig.php 40580 2011-12-13 13:29:37Z tomas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -439,11 +439,6 @@ class oxConfig extends oxSuperCfg
             // loading theme config
             $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_THEME_PREFIX . $this->getConfigParam('sTheme') );
 
-            // checking if custom theme (which has defined parent theme) config options should be loaded over parent theme (#3362)
-            if ( $this->getConfigParam('sCustomTheme') ) {
-                $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_THEME_PREFIX . $this->getConfigParam('sCustomTheme') );
-            }
-
             // loading modules config
             $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_MODULE_PREFIX );
 
@@ -813,25 +808,18 @@ class oxConfig extends oxSuperCfg
         }
 
         $oUtilsServer = oxUtilsServer::getInstance();
+        $sHost = $oUtilsServer->getServerVar( 'HTTP_HOST' );
+        $sScriptName = $oUtilsServer->getServerVar( 'SCRIPT_NAME' );
 
-        preg_match("/^(http:\/\/)?([^\/]+)/i", $sURL, $matches);
-        $sUrlHost = $matches[2];
-
-        preg_match("/^(http:\/\/)?([^\/]+)/i", $oUtilsServer->getServerVar( 'HTTP_HOST' ), $matches);
-        $sRealHost = $matches[2];
-
-        $sCurrentHost = preg_replace( '/\/\w*\.php.*/', '', $oUtilsServer->getServerVar( 'HTTP_HOST' ) . $oUtilsServer->getServerVar( 'SCRIPT_NAME' ) );
+        $sCurrentHost = preg_replace( '/\/\w*\.php.*/', '', $sHost . $sScriptName );
 
         //remove double slashes all the way
         $sCurrentHost = str_replace( '/', '', $sCurrentHost );
         $sURL = str_replace( '/', '', $sURL );
 
+        //so far comparing for the host is enought for us
         if ( getStr()->strpos( $sURL, $sCurrentHost ) !== false ) {
-
-            //bug fix #0002991
-            if ( $sUrlHost == $sRealHost ) {
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -1313,12 +1301,26 @@ class oxConfig extends oxSuperCfg
      */
     public function getPictureUrl( $sFile, $blAdmin = false, $blSSL = null, $iLang = null, $iShopId = null, $sDefPic = "master/nopic.jpg" )
     {
-        if ( $sAltUrl = oxPictureHandler::getInstance()->getAltImageUrl('/', $sFile, $blSSL) ) {
+        if (!isset($blSSL)) {
+            $blSSL = $this->isSsl();
+        }
+        if ( $sAltUrl = $this->getConfigParam( 'sAltImageDir' ) ) {
+
+            if ( $this->isSsl() && $blSSL && $sSslAltUrl = $this->getConfigParam( 'sSSLAltImageDir' ) ) {
+                $sAltUrl = $sSslAltUrl;
+            }
+
+            if ( !is_null( $sFile ) ) {
+                $sAltUrl .= $sFile;
+            }
+
             return $sAltUrl;
         }
 
         $blNativeImg = $this->getConfigParam( 'blNativeImages' );
+
         $sUrl = $this->getUrl( $sFile, $this->_sPictureDir, $blAdmin, $blSSL, $blNativeImg, $iLang, $iShopId );
+
 
         //anything is better than empty name, because <img src=""> calls shop once more = x2 SLOW.
         if ( !$sUrl && $sDefPic ) {

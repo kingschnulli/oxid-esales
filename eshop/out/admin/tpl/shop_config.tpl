@@ -402,29 +402,6 @@ function showInvitations()
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_VAT" }]</b></a>
             <dl>
                 <dt>
-                    <input type=text class="txt" style="width:70" name=confstrs[dDefaultVAT] value="[{$confstrs.dDefaultVAT}]" [{ $readonly}]>
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_DEFAULTVAT" }]
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_DEFAULTVAT" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
-             <dl>
-                <dt>
-            <input type=hidden name=confbools[blEnterNetPrice] value=false>
-            <input type=checkbox name=confbools[blEnterNetPrice] value=true  [{if ($confbools.blEnterNetPrice)}]checked[{/if}] [{ $readonly}]>
-            [{ oxinputhelp ident="HELP_SHOP_CONFIG_ENTERNETPRICE" }]
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_ENTERNETPRICE" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
-            <dl>
-                <dt>
                     <input type=hidden name=confbools[blCalcVATForDelivery] value=false>
                     <input type=checkbox name=confbools[blCalcVATForDelivery] value=true  [{if ($confbools.blCalcVATForDelivery)}]checked[{/if}] [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_CALCULATEVATFORDELIVERY" }]
@@ -461,12 +438,11 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <input type=hidden name=confbools[blPaymentVatOnTop] value=false>
-                    <input type=checkbox name=confbools[blPaymentVatOnTop] value=true  [{if ($confbools.blPaymentVatOnTop)}]checked[{/if}] [{ $readonly}]>
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_CALCPAYVATONTOP" }]
+                    <input type=text class="txt" style="width:70" name=confstrs[dDefaultVAT] value="[{$confstrs.dDefaultVAT}]" [{ $readonly}]>
+                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_DEFAULTVAT" }]
                 </dt>
                 <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_CALCPAYVATONTOP" }]
+                    [{ oxmultilang ident="SHOP_CONFIG_DEFAULTVAT" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>
@@ -485,24 +461,24 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <input type=hidden name=confbools[blWrappingVatOnTop] value=false>
-                    <input type=checkbox name=confbools[blWrappingVatOnTop] value=true  [{if ($confbools.blWrappingVatOnTop)}]checked[{/if}] [{ $readonly}]>
-                    [{ oxinputhelp ident="HELP_SHOP_CONFIG_CALCWRAPVATONTOP" }]
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_CONFIG_CALCWRAPVATONTOP" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
-            <dl>
-                <dt>
                     <input type=hidden name=confbools[blShippingCountryVat] value=false>
                     <input type=checkbox name=confbools[blShippingCountryVat] value=true  [{if ($confbools.blShippingCountryVat)}]checked[{/if}] [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_SHIPPINGCOUNTRYVAT" }]
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_CONFIG_SHIPPINGCOUNTRYVAT" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
+             <dl>
+                <dt>
+            <input type=hidden name=confbools[blEnterNetPrice] value=false>
+            <input type=checkbox name=confbools[blEnterNetPrice] value=true  [{if ($confbools.blEnterNetPrice)}]checked[{/if}] [{ $readonly}]>
+            [{ oxinputhelp ident="HELP_SHOP_CONFIG_ENTERNETPRICE" }]
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_CONFIG_ENTERNETPRICE" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>

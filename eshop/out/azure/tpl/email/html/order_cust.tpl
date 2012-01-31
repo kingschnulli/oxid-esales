@@ -92,6 +92,11 @@
                         </p>
                     </td>
                     <td style="padding: 5px; border-bottom: 4px solid #ddd;" align="right">
+                      <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0;">
+                        <b>[{$basketitem->getAmount()}]</b>
+                      </p>
+                    </td>
+                    <td style="padding: 5px; border-bottom: 4px solid #ddd;" align="right">
                         <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0;">
                             <b>[{if $basketitem->getFUnitPrice() }][{ $basketitem->getFUnitPrice() }] [{ $currency->sign}][{/if}]</b>
                         </p>
@@ -111,11 +116,6 @@
                                 [{ $basketproduct->oxarticles__oxorderinfo->value }]
                             </p>
                         [{/if}]
-                    </td>
-                    <td style="padding: 5px; border-bottom: 4px solid #ddd;" align="right">
-                      <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0;">
-                        <b>[{$basketitem->getAmount()}]</b>
-                      </p>
                     </td>
                     <td style="padding: 5px; border-bottom: 4px solid #ddd;" align="right">
                         <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0;">

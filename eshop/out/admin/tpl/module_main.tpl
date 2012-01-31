@@ -55,7 +55,7 @@
                 <input type="hidden" name="cl" value="module_main">
                 <input type="hidden" name="updatelist" value="1">
                 <input type="hidden" name="oxid" value="[{$oModule->getInfo('id')}]">
-                [{if $oModule->isExtended() || $oModule->isLegacy()}]
+                [{if $oModule->isExtended()}]
                     [{if $oModule->isActive()}]
                     <input type="hidden" name="fnc" value="deactivateModule">
                     <div align="center">

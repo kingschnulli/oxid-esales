@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpaymentlist.php 41430 2012-01-16 16:00:40Z vilma $
+ * @version   SVN: $Id: oxpaymentlist.php 32007 2010-12-17 15:10:27Z sarunas $
  */
 
 /**
@@ -29,8 +29,8 @@
 class oxPaymentList extends oxList
 {
     /**
-     * oxPaymentList instance
-     * @var oxPaymentList
+     * oxDeliveryList instance
+     * @var oxDeliveryList
      */
     protected static $_instance = null;
 
@@ -180,38 +180,4 @@ class oxPaymentList extends oxList
         $this->selectString( $this->_getFilterSelect( $sShipSetId, $dPrice, $oUser ) );
         return $this->_aArray;
     }
-
-    /**
-     * Loads an object including all payments which are not mapped to a
-     * predefined GoodRelations payment method.
-     *
-     * @return null
-     */
-    public function loadNonRDFaPaymentList()
-    {
-        $sTable = getViewName( 'oxpayments' );
-        $sSubSql = "SELECT * FROM oxobject2payment WHERE oxobject2payment.OXPAYMENTID = $sTable.OXID AND oxobject2payment.OXTYPE = 'rdfapayment'";
-        $this->selectString( "SELECT $sTable.* FROM $sTable WHERE NOT EXISTS($sSubSql) AND $sTable.OXACTIVE = 1" );
-    }
-
-    /**
-     * Loads payments mapped to a
-     * predefined GoodRelations payment method.
-     *
-     * @param double $dPrice product price
-     *
-     * @return array
-     */
-    public function loadRDFaPaymentList($dPrice = null)
-    {
-        $oDb = oxDb::getDb();
-        $sTable = getViewName( 'oxpayments' );
-        $sQ  = "select $sTable.*, oxobject2payment.oxobjectid from $sTable left join (select oxobject2payment.* from oxobject2payment where oxobject2payment.oxtype = 'rdfapayment') as oxobject2payment on oxobject2payment.oxpaymentid=$sTable.oxid ";
-        $sQ .= "where $sTable.oxactive = 1 ";
-        if ( $dPrice !== null ) {
-            $sQ .= "and $sTable.oxfromamount <= ".$oDb->quote( $dPrice ) ." and $sTable.oxtoamount >= ".$oDb->quote( $dPrice );
-        }
-        $this->selectString( $sQ );
-    }
-
 }

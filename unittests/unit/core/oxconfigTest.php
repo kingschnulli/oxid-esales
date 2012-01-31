@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 41829 2012-01-27 15:26:36Z linas.kukulskis $
+ * @version   SVN: $Id: oxconfigTest.php 40577 2011-12-13 11:55:56Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1280,44 +1280,6 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $this->assertFalse( $oConfig->isCurrentUrl( $sUrl ) );
     }
 
-    public function testIsCurrentUrlBugFixTest()
-    {
-        $sUrl = 'http://www.example.com.ru';
-        $oConfig = new oxConfig();
-        $oConfig->init();
-        $_SERVER['HTTP_HOST'] = 'http://www.example.com';
-        $_SERVER['SCRIPT_NAME'] = '';
-        $this->assertfalse( $oConfig->isCurrentUrl( $sUrl ) );
-
-        $sUrl = 'www.example.com.ru';
-        $oConfig = new oxConfig();
-        $oConfig->init();
-        $_SERVER['HTTP_HOST'] = 'www.example.com';
-        $_SERVER['SCRIPT_NAME'] = '';
-        $this->assertFalse( $oConfig->isCurrentUrl( $sUrl ) );
-
-        $sUrl = 'http://www.example.com';
-        $oConfig = new oxConfig();
-        $oConfig->init();
-        $_SERVER['HTTP_HOST'] = 'http://www.example.com.ru';
-        $_SERVER['SCRIPT_NAME'] = '';
-        $this->assertfalse( $oConfig->isCurrentUrl( $sUrl ) );
-
-        $sUrl = 'www.example.com';
-        $oConfig = new oxConfig();
-        $oConfig->init();
-        $_SERVER['HTTP_HOST'] = 'www.example.com.ru';
-        $_SERVER['SCRIPT_NAME'] = '';
-        $this->assertFalse( $oConfig->isCurrentUrl( $sUrl ) );
-
-        $sUrl = 'www.example.com.ru';
-        $oConfig = new oxConfig();
-        $oConfig->init();
-        $_SERVER['HTTP_HOST'] = 'www.example.com.ru';
-        $_SERVER['SCRIPT_NAME'] = '';
-        $this->assertTrue( $oConfig->isCurrentUrl( $sUrl ) );
-    }
-
 
     /**
      * Testing getImageDir getter
@@ -2007,20 +1969,14 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->setConfigParam( 'blNativeImages', true );
         $this->assertEquals( $sMallURL.$sDir, $oConfig->getPictureUrl( null, false) );
     }
-    public function testGetPictureUrlForAltImageDirA()
+    public function testGetPictureUrlForAltImageDir()
     {
-        $sDir = 'http://www.example.com/test.gif';
-
-        $oPH = $this->getMock( 'oxPictureHandler', array( 'getAltImageUrl' ) );
-        $oPH->expects($this->once())->method('getAltImageUrl')->will($this->returnValue($sDir));
-        modInstances::addMod('oxPictureHandler', $oPH);
-
         $oConfig = new oxConfig();
         $oConfig->init();
-
+        $oConfig->setConfigParam( 'sAltImageDir', 'http://www.example.com' );
+        $sDir = 'http://www.example.com/test.gif';
         $this->assertEquals( $sDir, $oConfig->getPictureUrl( "/test.gif", false) );
     }
-
     public function testGetPictureUrlFormerTplSupport()
     {
         $oConfig = new oxConfig();

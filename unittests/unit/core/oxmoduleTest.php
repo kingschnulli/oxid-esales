@@ -64,7 +64,7 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
                 'description'  => 'Module for making invoice PDF files.',
                 'thumbnail'    => 'picture.png',
                 'version'      => '1.0',
-                'author'       => 'OXID eSales AG',
+                'author'       => 'OXID',
                 'active'       => true,
                 'extend'       => array ('oxorder' => 'invoicepdf/myorder')
             );
@@ -88,7 +88,7 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
                 'description'  => 'Module for making invoice PDF files.',
                 'thumbnail'    => 'picture.png',
                 'version'      => '1.0',
-                'author'       => 'OXID eSales AG',
+                'author'       => 'OXID',
                 'active'       => true,
                 'extend'       => array ()
             );

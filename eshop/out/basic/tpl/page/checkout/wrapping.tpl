@@ -91,14 +91,14 @@
               <td colspan="2">
                 <table width="100%" class="wrapping_items">
                   <tr onclick="JavaScript:document.getElementsByName('wrapping[[{$basketindex}]]')[0].checked=true;">
-                    <td><input id="test_WrapItem_[{$basketitem->getProductId()}]_NONE" type="radio" name="wrapping[[{$basketindex}]]" value="0" [{ if !$basketitem->getWrappingId()}]CHECKED[{/if}]></td>
+                    <td><input id="test_WrapItem_[{$basketitem->getProductId()}]_NONE" type="radio" name="wrapping[[{$basketindex}]]" value="0" [{ if !$basketitem->wrapping}]CHECKED[{/if}]></td>
                     <td>[{ oxmultilang ident="WRAPPING_NONE" }]</td>
                     <td align="right">0,00 [{ $currency->sign}]</td>
                   </tr>
                     [{assign var="ictr" value="1"}]
                     [{foreach from=$oView->getWrappingList() item=wrapping name=Wraps}]
                       <tr onclick="JavaScript:document.getElementsByName('wrapping[[{$basketindex}]]')['[{$ictr}]'].checked=true;">
-                        <td><input id="test_WrapItem_[{$basketitem->getProductId()}]_[{$smarty.foreach.Wraps.iteration}]" type="radio" name="wrapping[[{$basketindex}]]" value="[{$wrapping->oxwrapping__oxid->value}]" [{ if $basketitem->getWrappingId() == $wrapping->oxwrapping__oxid->value}]CHECKED[{/if}]></td>
+                        <td><input id="test_WrapItem_[{$basketitem->getProductId()}]_[{$smarty.foreach.Wraps.iteration}]" type="radio" name="wrapping[[{$basketindex}]]" value="[{$wrapping->oxwrapping__oxid->value}]" [{ if $basketitem->wrapping == $wrapping->oxwrapping__oxid->value}]CHECKED[{/if}]></td>
                         <td id="test_WrapItemName_[{ $basketitem->getProductId()}]_[{$smarty.foreach.Wraps.iteration}]">[{$wrapping->oxwrapping__oxname->value}]</td>
                         <td id="test_WrapItemPrice_[{ $basketitem->getProductId()}]_[{$smarty.foreach.Wraps.iteration}]" align="right">[{$wrapping->getFPrice()}] [{ $currency->sign}]</td>
                       </tr>

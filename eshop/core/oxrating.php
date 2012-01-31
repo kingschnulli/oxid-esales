@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrating.php 41749 2012-01-25 09:22:39Z linas.kukulskis $
+ * @version   SVN: $Id: oxrating.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 /**
@@ -78,7 +78,6 @@ class oxRating extends oxBase
     {
         $oDB = oxDb::getDb();
         $myConfig = $this->getConfig();
-
         if ( $iRatingLogsTimeout = $myConfig->getConfigParam( 'iRatingLogsTimeout' ) ) {
             $sExpDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() - $iRatingLogsTimeout*24*60*60);
             $oDB->execute( "delete from oxratings where oxtimestamp < '$sExpDate'" );
@@ -89,79 +88,6 @@ class oxRating extends oxBase
         }
 
         return true;
-    }
-
-
-    /**
-     * calculates and return objects rating
-     *
-     * @param string $sObjectId           object id
-     * @param string $sType               object type
-     * @param array  $aIncludedObjectsIds array of ids
-     *
-     * @return float
-     */
-    public function getRatingAverage( $sObjectId, $sType, $aIncludedObjectsIds = null )
-    {
-        $oDB = oxDb::getDb();
-
-        $sQuerySnipet = '';
-        if ( is_array( $aIncludedObjectsIds ) && count( $aIncludedObjectsIds ) > 0 ) {
-            $sQuerySnipet = " AND ( `oxobjectid` = ".$oDB->quote( $sObjectId ) . " OR `oxobjectid` in ('" .implode("', '", $aIncludedObjectsIds). "') )";
-        } else {
-            $sQuerySnipet = " AND `oxobjectid` = ".$oDB->quote( $sObjectId );
-        }
-
-        $sSelect = "
-            SELECT
-                AVG(`oxrating`)
-            FROM `oxreviews`
-            WHERE `oxrating` > 0
-                 AND `oxtype` = " . $oDB->quote( $sType )
-               . $sQuerySnipet . "
-            LIMIT 1";
-
-        $fRating = 0;
-        if ( $fRating = $oDB->getOne( $sSelect ) ) {
-            $fRating = round( $fRating, 1 );
-        }
-
-        return $fRating;
-    }
-
-    /**
-     * calculates and return objects rating count
-     *
-     * @param string $sObjectId           object id
-     * @param string $sType               object type
-     * @param array  $aIncludedObjectsIds array of ids
-     *
-     * @return integer
-     */
-    public function getRatingCount( $sObjectId, $sType, $aIncludedObjectsIds = null )
-    {
-        $oDB = oxDb::getDb();
-
-        $sQuerySnipet = '';
-        if ( is_array( $aIncludedObjectsIds ) && count( $aIncludedObjectsIds ) > 0 ) {
-            $sQuerySnipet = " AND ( `oxobjectid` = ".$oDB->quote( $sObjectId ) . " OR `oxobjectid` in ('" .implode("', '", $aIncludedObjectsIds). "') )";
-        } else {
-            $sQuerySnipet = " AND `oxobjectid` = ".$oDB->quote( $sObjectId );
-        }
-
-        $sSelect = "
-            SELECT
-                COUNT(*)
-            FROM `oxreviews`
-            WHERE `oxrating` > 0
-                AND `oxtype` = " . $oDB->quote( $sType )
-               . $sQuerySnipet . "
-            LIMIT 1";
-
-        $iCount = 0;
-        $iCount = $oDB->getOne( $sSelect );
-
-        return $iCount;
     }
 
 }

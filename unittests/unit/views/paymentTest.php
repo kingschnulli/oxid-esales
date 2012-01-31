@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 40676 2011-12-19 08:21:44Z linas.kukulskis $
+ * @version   SVN: $Id: paymentTest.php 39577 2011-10-26 13:34:13Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -686,50 +686,6 @@ class Unit_Views_paymentTest extends OxidTestCase
             return;
         }
         $this->fail("no Exception thrown in redirect");
-    }
-
-    public function testRenderNoUserWithBasket()
-    {
-        $sRedirUrl = oxConfig::getInstance()->getShopHomeURL().'cl=basket';
-        $this->setExpectedException('Exception', $sRedirUrl);
-
-        oxTestModules::addFunction('oxUtils', 'redirect($url)', '{throw new Exception($url);}');
-        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
-        // skip redirect to SSL
-        modConfig::setParameter( 'sslredirect', 'forced' );
-
-        $oB = $this->getMock('oxbasket', array('getProductsCount'));
-        $oB->expects($this->once())->method('getProductsCount')->will($this->returnValue(1));
-
-        $oS = $this->getMock('oxsession', array('getBasketReservations', 'getBasket'));
-        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
-
-        $oO = $this->getMock('payment', array('getSession', 'getUser'));
-        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
-        $oO->expects($this->any())->method('getUser')->will($this->returnValue(null));
-        $oO->render();
-    }
-
-    public function testRenderNoUserEmptyBasket()
-    {
-        $sRedirUrl = oxConfig::getInstance()->getShopHomeURL().'cl=start';
-        $this->setExpectedException('Exception', $sRedirUrl);
-
-        oxTestModules::addFunction('oxUtils', 'redirect($url)', '{throw new Exception($url);}');
-        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
-        // skip redirect to SSL
-        modConfig::setParameter( 'sslredirect', 'forced' );
-
-        $oB = $this->getMock('oxbasket', array('getProductsCount'));
-        $oB->expects($this->once())->method('getProductsCount')->will($this->returnValue(0));
-
-        $oS = $this->getMock('oxsession', array('getBasketReservations', 'getBasket'));
-        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
-
-        $oO = $this->getMock('payment', array('getSession', 'getUser'));
-        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
-        $oO->expects($this->any())->method('getUser')->will($this->returnValue(null));
-        $oO->render();
     }
 
     public function testGetTsProtections()

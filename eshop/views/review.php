@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: review.php 41843 2012-01-27 15:35:19Z rimvydas.paskevicius $
+ * @version   SVN: $Id: review.php 39857 2011-11-09 08:14:14Z rimvydas.paskevicius $
  */
 
 /**
@@ -147,12 +147,6 @@ class Review extends Details
      */
     public function render()
     {
-        $oConfig = $this->getConfig();
-
-        if ( !$oConfig->getConfigParam( "bl_perfLoadReviews" ) ) {
-            oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() );
-        }
-
         oxUBase::render();
         if ( ! ( $this->getReviewUser() ) ) {
             $this->_sThisTemplate = $this->_sThisLoginTemplate;

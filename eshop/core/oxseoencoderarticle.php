@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticle.php 41202 2012-01-11 15:52:59Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxseoencoderarticle.php 40372 2011-11-30 08:40:26Z linas.kukulskis $
  */
 
 /**
@@ -497,7 +497,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             $sTitle .= ( $sTitle ? ' ' : '' ) . $oArticle->oxarticles__oxartnum->value;
         }
 
-        return $this->_prepareTitle( $sTitle, false, $oArticle->getLanguage() ) . '.html';
+        return $this->_prepareTitle( $sTitle ) . '.html';
     }
 
     /**

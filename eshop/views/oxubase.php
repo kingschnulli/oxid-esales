@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 40958 2012-01-05 07:54:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 39569 2011-10-26 11:29:35Z linas.kukulskis $
  */
 
 /**
@@ -668,15 +668,6 @@ class oxUBase extends oxView
             $this->_sViewId =  "ox|$iLang|$iCur";
 
         $this->_sViewId .= "|".( (int) $this->_blForceNoIndex ).'|'.((int)$this->isRootCatChanged());
-
-        // #0002866: external global viewID addition
-        if (function_exists('customGetViewId')) {
-            $oExtViewId = customGetViewId();
-
-            if ($oExtViewId !== null) {
-                $this->_sViewId .= '|'.md5(serialize($oExtViewId));
-            }
-        }
 
         return $this->_sViewId;
     }

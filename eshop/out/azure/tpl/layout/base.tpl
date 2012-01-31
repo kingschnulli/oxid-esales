@@ -66,6 +66,7 @@
         [{/foreach}]
     [{/block}]
 
+    <base href="[{ $oViewConf->getBaseDir() }]">
 [{/capture}]
 <!DOCTYPE HTML>
 <html lang="[{ $oView->getActiveLangAbbr() }]" [{if $oViewConf->getShowFbConnect() }]xmlns:fb="http://www.facebook.com/2008/fbml"[{/if}]>

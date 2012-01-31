@@ -28,9 +28,11 @@
             </a>
          </li>
     [{/section}]
-    <li class="ratingValue">
-        <a id="itemRatingText" class="rates" rel="nofollow" [{if $sRateUrl}]href="[{if !$oxcmp_user}][{oxgetseourl ident=$sRateUrl params=$sRateUrlParams}][{else}][{$sRateUrl}][{/if}]#review"[{/if}]>
+    <li class="ratingValue"  rel="v:hasReview">
+        <a id="itemRatingText" class="rates" typeof="v:Review-aggregate" rel="nofollow" rel="nofollow" [{if $sRateUrl}]href="[{if !$oxcmp_user}][{oxgetseourl ident=$sRateUrl params=$sRateUrlParams}][{else}][{$sRateUrl}][{/if}]#review"[{/if}]>
             [{if $oView->getRatingCount()}]
+                <div property="v:count" content="[{$oView->getRatingCount()}]" datatype="xsd:float"></div>
+                <div property="v:rating" content="[{$oView->getRatingValue()}]" datatype="xsd:float"></div>
                 ([{$oView->getRatingCount()}])
             [{else}]
                 [{oxmultilang ident="DETAILS_NORATINGS"}]

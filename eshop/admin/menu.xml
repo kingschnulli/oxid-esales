@@ -9,7 +9,6 @@
                 <TAB id="tbclshop_license" cl="shop_license" disableForDemoShop="1" />
                 <TAB id="tbclshop_performance" cl="shop_performance" />
                 <TAB id="tbclshop_seo" cl="shop_seo" />
-                <TAB id="tbclshop_rdfa" cl="shop_rdfa" />
                 <BTN id="shop_new" />
             </SUBMENU>
             <SUBMENU id="mxcountries" cl="country" list="country_list">
@@ -28,16 +27,24 @@
                 <BTN id="manufacturer_new" />
                 <BTN id="manufacturer_resetnrofarticles" />
             </SUBMENU>
+            <SUBMENU id="mxtheme" cl="theme" list="theme_list">
+                <TAB id="tbcltheme_main" cl="theme_main" />
+                <TAB id="tbcltheme_config" cl="theme_config" />
+            </SUBMENU>
             <SUBMENU id="mxlanguages" cl="language" list="language_list">
                 <TAB id="tbcllanguage_main" cl="language_main" />
                 <BTN id="language_new" />
+            </SUBMENU>
+            <SUBMENU id="mxmodule" cl="module" list="module_list">
+                <TAB id="tbclmodule_sortlist" cl="module_sortlist" />
+                <TAB id="tbclmodule_main" cl="module_main" />
+                <TAB id="tbclmodule_config" cl="module_config" />
             </SUBMENU>
         </MAINMENU>
         <MAINMENU id="mxshopsett">
             <SUBMENU id="mxpaymeth" cl="admin_payment" list="payment_list">
                 <TAB id="tbclpayment_main" cl="payment_main" />
                 <TAB id="tbclpayment_country" cl="payment_country" />
-                <TAB id="tbclpayment_rdfa" cl="payment_rdfa" />
                 <BTN id="payment_new"/>
             </SUBMENU>
             <SUBMENU id="mxdiscount" cl="discount" list="discount_list">
@@ -50,7 +57,6 @@
                 <TAB id="tbcldeliveryset_main" cl="deliveryset_main" />
                 <TAB id="tbcldeliveryset_payment" cl="deliveryset_payment" />
                 <TAB id="tbcldeliveryset_users" cl="deliveryset_users" />
-                <TAB id="tbcldeliveryset_rdfa" cl="deliveryset_rdfa" />
                 <BTN id="deliveryset_new"/>
             </SUBMENU>
             <SUBMENU id="mxshipping" cl="delivery" list="delivery_list">
@@ -67,17 +73,6 @@
             <SUBMENU id="mxwrapping" cl="admin_wrapping" list="wrapping_list">
                 <TAB id="tbclwrapping_main" cl="wrapping_main" />
                 <BTN id="wrapping_new" />
-            </SUBMENU>
-        </MAINMENU>
-        <MAINMENU id="mxextensions">
-            <SUBMENU id="mxtheme" cl="theme" list="theme_list">
-                <TAB id="tbcltheme_main" cl="theme_main" />
-                <TAB id="tbcltheme_config" cl="theme_config" />
-            </SUBMENU>
-            <SUBMENU id="mxmodule" cl="module" list="module_list">
-                <TAB id="tbclmodule_sortlist" cl="module_sortlist" />
-                <TAB id="tbclmodule_main" cl="module_main" />
-                <TAB id="tbclmodule_config" cl="module_config" />
             </SUBMENU>
         </MAINMENU>
         <MAINMENU id="mxmanageprod">

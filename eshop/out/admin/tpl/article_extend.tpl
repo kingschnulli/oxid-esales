@@ -89,7 +89,7 @@ function processUnitInput( oSelect, sInputId )
                   [{ oxmultilang ident="ARTICLE_EXTEND_WEIGHT" }]
                 </td>
                 <td class="edittext">
-                  <input type="text" class="editinput" size="10" maxlength="[{$edit->oxarticles__oxweight->fldmax_length}]" name="editval[oxarticles__oxweight]" value="[{$edit->oxarticles__oxweight->value}]" [{ $readonly }]>[{oxmultilang ident="ARTICLE_EXTEND_WEIGHT_UNIT"}]
+                  <input type="text" class="editinput" size="10" maxlength="[{$edit->oxarticles__oxweight->fldmax_length}]" name="editval[oxarticles__oxweight]" value="[{$edit->oxarticles__oxweight->value}]" [{ $readonly }]>kg
                   [{ oxinputhelp ident="HELP_ARTICLE_EXTEND_WEIGHT" }]
                 </td>
               </tr>
@@ -98,9 +98,9 @@ function processUnitInput( oSelect, sInputId )
                   [{ oxmultilang ident="ARTICLE_EXTEND_MASS" }]
                 </td>
                 <td class="edittext">
-                  [{ oxmultilang ident="ARTICLE_EXTEND_LENGTH" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_length}]" name="editval[oxarticles__oxlength]" value="[{$edit->oxarticles__oxlength->value}]" [{ $readonly }]>[{oxmultilang ident="ARTICLE_EXTEND_DIMENSIONS_UNIT"}]
-                  [{ oxmultilang ident="ARTICLE_EXTEND_WIDTH" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_width}]" name="editval[oxarticles__oxwidth]" value="[{$edit->oxarticles__oxwidth->value}]" [{ $readonly }]>[{oxmultilang ident="ARTICLE_EXTEND_DIMENSIONS_UNIT"}]
-                  [{ oxmultilang ident="ARTICLE_EXTEND_HEIGHT" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_height}]" name="editval[oxarticles__oxheight]" value="[{$edit->oxarticles__oxheight->value}]" [{ $readonly }]>[{oxmultilang ident="ARTICLE_EXTEND_DIMENSIONS_UNIT"}]
+                  [{ oxmultilang ident="ARTICLE_EXTEND_LENGTH" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_length}]" name="editval[oxarticles__oxlength]" value="[{$edit->oxarticles__oxlength->value}]" [{ $readonly }]>m
+                  [{ oxmultilang ident="ARTICLE_EXTEND_WIDTH" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_width}]" name="editval[oxarticles__oxwidth]" value="[{$edit->oxarticles__oxwidth->value}]" [{ $readonly }]>m
+                  [{ oxmultilang ident="ARTICLE_EXTEND_HEIGHT" }]&nbsp;<input type="text" class="editinput" size="3" maxlength="[{$edit->oxarticles__oxlength->fldmax_height}]" name="editval[oxarticles__oxheight]" value="[{$edit->oxarticles__oxheight->value}]" [{ $readonly }]>m
                   [{ oxinputhelp ident="HELP_ARTICLE_EXTEND_MASS" }]
                 </td>
               </tr>
@@ -300,24 +300,25 @@ function processUnitInput( oSelect, sInputId )
           <legend>[{ oxmultilang ident="ARTICLE_EXTEND_MEDIAURLS" }]</legend><br>
 
             <table cellspacing="0" cellpadding="0" border="0">
-            [{foreach from=$aMediaUrls item=oMediaUrl}]
-              <tr>
-              [{if $oddclass == 2}]
-                [{assign var=oddclass value=""}]
-              [{else}]
-                [{assign var=oddclass value="2"}]
-              [{/if}]
-                <td class=listitem[{$oddclass}]>
-                  &nbsp;<a href="[{ $oMediaUrl->getLink() }]" target="_blank">&raquo;&raquo;</a>&nbsp;
-                </td>
-                <td class=listitem[{$oddclass}]>
-                  &nbsp;<a href="[{$oViewConf->getSelfLink()}]&cl=article_extend&amp;mediaid=[{$oMediaUrl->oxmediaurls__oxid->value}]&amp;fnc=deletemedia&amp;oxid=[{$oxid}]&amp;editlanguage=[{ $editlanguage }]" onClick='return confirm("[{ oxmultilang ident="GENERAL_YOUWANTTODELETE" }]")'><img src="[{$oViewConf->getImageUrl()}]/delete_button.gif" border=0></a>&nbsp;
-                </td>
-                <td class="listitem[{$oddclass}]" width=250>
-                  <input style="width:100%" class="edittext" type="text" name="aMediaUrls[[{ $oMediaUrl->oxmediaurls__oxid->value }]][oxmediaurls__oxdesc]" value="[{ $oMediaUrl->oxmediaurls__oxdesc->value }]">
-                </td>
-              </tr>
-            [{/foreach}]
+                [{block name="admin_article_extend_media"}]
+                    [{foreach from=$aMediaUrls item=oMediaUrl}]
+                      <tr>
+                      [{if $oddclass == 2}]
+                        [{assign var=oddclass value=""}]
+                      [{else}]
+                        [{assign var=oddclass value="2"}]
+                      [{/if}]
+                        <td class=listitem[{$oddclass}]>
+                          &nbsp;<a href="[{ $oMediaUrl->oxmediaurls__oxurl->value }]" target="_blank">&raquo;&raquo;</a>&nbsp;
+                        </td>
+                        <td class=listitem[{$oddclass}]>
+                          &nbsp;<a href="[{$oViewConf->getSelfLink()}]&cl=article_extend&amp;mediaid=[{$oMediaUrl->oxmediaurls__oxid->value}]&amp;fnc=deletemedia&amp;oxid=[{$oxid}]&amp;editlanguage=[{ $editlanguage }]" onClick='return confirm("[{ oxmultilang ident="GENERAL_YOUWANTTODELETE" }]")'><img src="[{$oViewConf->getImageUrl()}]/delete_button.gif" border=0></a>&nbsp;
+                        </td>
+                        <td class="listitem[{$oddclass}]" width=250>
+                          <input style="width:100%" class="edittext" type="text" name="aMediaUrls[[{ $oMediaUrl->oxmediaurls__oxid->value }]][oxmediaurls__oxdesc]" value="[{ $oMediaUrl->oxmediaurls__oxdesc->value }]">
+                        </td>
+                      </tr>
+                    [{/foreach}]
 
                     [{if $aMediaUrls->count()}]
                     <tr>

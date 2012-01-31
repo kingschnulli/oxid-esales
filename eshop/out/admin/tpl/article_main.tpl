@@ -86,7 +86,6 @@ window.onload = function ()
                         [{ oxmultilang ident="ARTICLE_MAIN_ACTIVE" }]
                       </td>
                       <td class="edittext">
-                        <input type="hidden" name="editval[oxarticles__oxactive]" value="0">
                         <input class="edittext" type="checkbox" name="editval[oxarticles__oxactive]" value='1' [{if $edit->oxarticles__oxactive->value == 1}]checked[{/if}] [{ $readonly }]>
                         [{ oxinputhelp ident="HELP_ARTICLE_MAIN_ACTIVE" }]
                       </td>

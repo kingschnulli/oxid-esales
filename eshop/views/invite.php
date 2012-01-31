@@ -77,25 +77,6 @@ class Invite extends oxUBase
      */
     protected $_iMailStatus = null;
 
-   /**
-     * Executes parent::render(), if invitation is disabled - redirects to main page
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $oConfig = $this->getConfig();
-
-        if ( !$oConfig->getConfigParam( "blInvitationsEnabled" ) ) {
-            oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() );
-            return;
-        }
-
-        parent::render();
-
-        return $this->_sThisTemplate;
-    }
-
     /**
      * Sends product suggestion mail and returns a URL according to
      * URL formatting rules.
@@ -104,12 +85,6 @@ class Invite extends oxUBase
      */
     public function send()
     {
-        $oConfig = $this->getConfig();
-
-        if ( !$oConfig->getConfigParam( "blInvitationsEnabled" ) ) {
-            oxUtils::getInstance()->redirect( $oConfig->getShopHomeURL() );
-        }
-
         $aParams = oxConfig::getParameter( 'editval', true );
         if ( !is_array( $aParams ) ) {
             return;

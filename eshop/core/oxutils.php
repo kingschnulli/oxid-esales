@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 40989 2012-01-05 11:43:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 39804 2011-11-05 09:21:25Z linas.kukulskis $
  */
 
 /**
@@ -416,9 +416,11 @@ class oxUtils extends oxSuperCfg
             }
             $dprez = pow(10, -$prez);
         }
+
+
         stopProfile('fround');
 
-        return round($sVal + $dprez * ( $sVal >= 0 ? 1 : -1 ), $iCurPrecision);
+        return round($sVal + $dprez, $iCurPrecision);
     }
 
     /**

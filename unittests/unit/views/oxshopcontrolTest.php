@@ -135,58 +135,6 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
      }
 
     /**
-     * Test unhandled exception with Debug ON
-     *
-     * @return null
-     */
-    public function testStartExceptionWithDebug()
-    {
-        $this->setExpectedException('Exception', 'log debug');
-
-        modConfig::getInstance()->setParameter( 'cl', 'testClass' );
-        modConfig::setParameter( 'fnc', 'testFnc' );
-
-        $oUtilsView = $this->getMock('oxUtilsView', array('addErrorToDisplay'), array(), '', false);
-        $oUtilsView->expects( $this->any() )->method( 'addErrorToDisplay' );
-
-        $oMockEx = $this->getMock('oxException', array('debugOut'));
-        $oMockEx->expects( $this->once() )->method( 'debugOut' )->will( $this->throwException( new Exception('log debug') ));
-
-        $oControl = $this->getMock( "oxShopControl", array( "getConfig", "_runOnce", "isAdmin", "_process", "_isDebugMode" ), array(), '', false, false, true );
-        $oControl->expects( $this->at(0) )->method( 'getConfig' );
-        $oControl->expects( $this->at(1) )->method( '_runOnce' );
-        $oControl->expects( $this->at(2) )->method( '_process' )->with( $this->equalTo( "testClass" ), $this->equalTo( "testFnc" ) )->will( $this->throwException( $oMockEx ));
-        $oControl->expects( $this->at(3) )->method( '_isDebugMode' )->will( $this->returnValue( true ));
-        $oControl->expects( $this->at(4) )->method( '_process' )->with( $this->equalTo( "exceptionError" ), $this->equalTo( "displayExceptionError" ));
-
-        $oControl->start();
-    }
-
-    /**
-     * Test unhandled exception with debug OFF
-     *
-     * @return null
-     */
-    public function testStartExceptionNoDebug()
-    {
-        $this->setExpectedException('Exception', 'log debug');
-
-        modConfig::getInstance()->setParameter( 'cl', 'testClass' );
-        modConfig::setParameter( 'fnc', 'testFnc' );
-
-        $oMockEx = $this->getMock('oxException', array('debugOut'));
-        $oMockEx->expects( $this->once() )->method( 'debugOut' )->will( $this->throwException( new Exception('log debug') ));
-
-        $oControl = $this->getMock( "oxShopControl", array( "getConfig", "_runOnce", "_process", "_isDebugMode" ), array(), '', false, false, true );
-        $oControl->expects( $this->at(0) )->method( 'getConfig' );
-        $oControl->expects( $this->at(1) )->method( '_runOnce' );
-        $oControl->expects( $this->once() )->method( '_process' )->with( $this->equalTo( "testClass" ), $this->equalTo( "testFnc" ) )->will( $this->throwException( $oMockEx ));
-        $oControl->expects( $this->at(3) )->method( '_isDebugMode' )->will( $this->returnValue( false ));
-
-        $oControl->start();
-    }
-
-    /**
      * Testing oxShopControl::start()
      *
      * @return null

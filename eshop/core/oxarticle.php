@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 41828 2012-01-27 15:26:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticle.php 40555 2011-12-12 13:48:01Z linas.kukulskis $
  */
 
 // defining supported link types
@@ -412,11 +412,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     protected static $_aCategoryCache = null;
 
-    /**
-     * stores if are stored any amount price
-     * @var bool
-     */
-    protected static $_blHasAmountPrice = null;
 
     /**
      * stores downloadable file list
@@ -890,7 +885,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      *
      * @return null
      */
-    public function addToRatingAverage( $iRating )
+    public function addToRatingAverage( $iRating)
     {
         $dOldRating = $this->oxarticles__oxrating->value;
         $dOldCnt    = $this->oxarticles__oxratingcnt->value;
@@ -904,63 +899,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Set product rating average
-     *
-     * @param integer $iRating new rating value
-     *
-     * @return null
-     */
-    public function setRatingAverage( $iRating )
-    {
-         $this->oxarticles__oxrating = new oxField( $iRating );
-    }
-
-    /**
-     * Set product rating count
-     *
-     * @param integer $iRatingCnt new rating count
-     *
-     * @return null
-     */
-    public function setRatingCount( $iRatingCnt )
-    {
-         $this->oxarticles__oxratingcnt = new oxField( $iRatingCnt );
-    }
-
-    /**
      * Returns product rating average
      *
-     * @param bool $blIncludeVariants - include variant ratings
-     *
      * @return double
      */
-    public function getArticleRatingAverage( $blIncludeVariants = false )
+    public function getArticleRatingAverage()
     {
-        if ( !$blIncludeVariants ) {
-            return round( $this->oxarticles__oxrating->value, 1);
-        } else {
-            $oRating = oxNew( 'oxRating' );
-            return $oRating->getRatingAverage( $this->getId(), 'oxarticle', $this->_getVariantsIds() );
-        }
+        return round( $this->oxarticles__oxrating->value, 1);
     }
-
-    /**
-     * Returns product rating count
-     *
-     *@param bool $blIncludeVariants - include variant ratings
-     *
-     * @return double
-     */
-    public function getArticleRatingCount( $blIncludeVariants = false )
-    {
-        if ( !$blIncludeVariants ) {
-            return $this->oxarticles__oxratingcnt->value;
-        } else {
-            $oRating = oxNew( 'oxRating' );
-            return $oRating->getRatingCount( $this->getId(), 'oxarticle', $this->_getVariantsIds() );
-        }
-    }
-
 
     /**
      * Collects user written reviews about an article.
@@ -1102,7 +1048,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function loadAmountPriceInfo()
     {
         $myConfig = $this->getConfig();
-        if ( !$myConfig->getConfigParam( 'bl_perfLoadPrice' ) || !$this->_blLoadPrice || !$this->_blCalcPrice || !$this->hasAmountPrice() ) {
+        if ( !$myConfig->getConfigParam( 'bl_perfLoadPrice' ) || !$this->_blLoadPrice || !$this->_blCalcPrice) {
             return array();
         }
 
@@ -1110,6 +1056,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $this->_oAmountPriceInfo = array();
             if ( count( ( $oAmPriceList = $this->_getAmountPriceList() ) ) ) {
                 $this->_oAmountPriceInfo = $this->_fillAmountPriceList( $oAmPriceList );
+
             }
         }
         return $this->_oAmountPriceInfo;
@@ -1207,7 +1154,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function getVariantSelections( $aFilterIds = null, $sActVariantId = null, $iLimit = 0 )
     {
-
         $iLimit = (int) $iLimit;
         if ( !isset( $this->_aVariantSelections[$iLimit] ) ) {
             $this->_aVariantSelections[$iLimit] = false;
@@ -1338,11 +1284,10 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
                 $sArticleTable = $this->getViewName( $blUseCoreTable );
 
-                $sSelect = "select ".$oBaseObject->getSelectFields( $blUseCoreTable )." from $sArticleTable where " .
+                $sSelect = "select ".$oBaseObject->getSelectFields()." from $sArticleTable where " .
                            $this->getActiveCheckQuery( $blUseCoreTable ) .
                            $this->getVariantsQuery( $blRemoveNotOrderables, $blUseCoreTable ) .
                            " order by $sArticleTable.oxsort";
-
 
                 $oVariants->selectString( $sSelect );
 
@@ -4258,8 +4203,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         if ( $this->isParentNotBuyable() && !$this->getConfig()->getConfigParam( 'blLoadVariants' )) {
             //#2509 we cannot force brutto price here, as netto price can be added to DB
             // $this->getPrice()->setBruttoPriceMode();
-            $dPrice = $this->oxarticles__oxvarminprice->value;
-            $this->getPrice()->setPrice($dPrice);
+            $this->getPrice()->setPrice($this->oxarticles__oxvarminprice->value);
             $this->_blIsRangePrice = true;
             $this->_calculatePrice( $this->getPrice() );
             return;
@@ -4540,25 +4484,4 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         return $this->oxarticles__oxisdownloadable->value;
     }
 
-     /**
-     * Checks if article has amount price
-     *
-     * @return bool
-     */
-    public function hasAmountPrice()
-    {
-        if ( self::$_blHasAmountPrice === null ) {
-
-            self::$_blHasAmountPrice = false;
-
-            $oDb = oxDb::getDb();
-            $sQ = "SELECT 1 FROM `oxprice2article` LIMIT 1";
-
-            if ( $oDb->getOne( $sQ ) ) {
-                self::$_blHasAmountPrice = true;
-            }
-        }
-
-        return self::$_blHasAmountPrice;
-    }
 }

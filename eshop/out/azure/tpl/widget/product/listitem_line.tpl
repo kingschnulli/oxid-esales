@@ -106,10 +106,11 @@
                         </label>
                     [{/block}]
 
+                    [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]
                     [{if $product->loadAmountPriceInfo()}]
-                        [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]
                         [{include file="page/details/inc/priceinfo.tpl" oDetailsProduct=$product}]
                     [{/if}]
+
 
                     [{if $product->getPricePerUnit()}]
                         <span id="productPricePerUnit_[{$testid}]" class="pricePerUnit">

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pluginsmartyoxcontentTest.php 41161 2012-01-11 12:15:52Z linas.kukulskis $
+ * @version   SVN: $Id: pluginsmartyoxcontentTest.php 32082 2010-12-20 14:08:07Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -48,14 +48,10 @@ class Unit_Maintenance_pluginSmartyOxContentTest extends OxidTestCase
 
     public function testGetContentLoadByIdent()
     {
-
-            $sShopId = 'oxbaseshop';
-
-
         $aParams['ident'] = 'oxsecurityinfo';
         $oSmarty = $this->getMock( "smarty", array( "fetch" ) );
         $oSmarty->expects( $this->once() )->method( 'fetch')
-            ->with( $this->equalTo( 'ox:oxsecurityinfooxcontent0'.$sShopId ) )
+            ->with( $this->equalTo( 'ox:oxsecurityinfooxcontent00' ) )
             ->will( $this->returnValue( 'testvalue' ) );
 
         $sText = "<b>content not found ! check ident(".$aParams['ident'].") !</b>";
@@ -63,34 +59,31 @@ class Unit_Maintenance_pluginSmartyOxContentTest extends OxidTestCase
         $this->assertEquals( 'testvalue', smarty_function_oxcontent( $aParams, $oSmarty ) );
     }
 
-    public function testGetContentLoadByIdentLangChange()
+    public function testGetContentLoadByIdentLangAndCurChange()
     {
-            $sShopId = 'oxbaseshop';
-
         $aParams['ident'] = 'oxsecurityinfo';
         $oSmarty = $this->getMock( "smarty", array( "fetch" ) );
         $oSmarty->expects( $this->once() )->method( 'fetch')
-            ->with( $this->equalTo( 'ox:oxsecurityinfooxcontent1'.$sShopId ) )
+            ->with( $this->equalTo( 'ox:oxsecurityinfooxcontent12' ) )
             ->will( $this->returnValue( 'testvalue' ) );
 
         $sText = "<b>content not found ! check ident(".$aParams['ident'].") !</b>";
 
         oxTestModules::addFunction('oxLang', 'getBaseLanguage', '{return 1;}');
+        modConfig::getInstance()->setParameter('currency', 2);
 
         $this->assertEquals( 'testvalue', smarty_function_oxcontent( $aParams, $oSmarty ) );
     }
 
     public function testGetContentLoadByOxId()
     {
-            $sShopId = 'oxbaseshop';
-
         $sText = "<b>content not found ! check ident() !</b>";
 
         $aParams['oxid'] = 'f41427a099a603773.44301043';
         $aParams['assign'] = true;
 
         $oSmarty = $this->getMock( "smarty", array( "fetch", "assign" ) );
-        $oSmarty->expects( $this->once() )->method( 'fetch')->with($this->equalTo('ox:f41427a099a603773.44301043oxcontent0'.$sShopId))->will( $this->returnValue( 'testvalue' ) );
+        $oSmarty->expects( $this->once() )->method( 'fetch')->with($this->equalTo('ox:f41427a099a603773.44301043oxcontent00'))->will( $this->returnValue( 'testvalue' ) );
         $oSmarty->expects( $this->once() )->method( 'assign')->with( $this->equalTo( $sText ) );
 
         smarty_function_oxcontent( $aParams, $oSmarty );

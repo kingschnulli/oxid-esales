@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlemainTest.php 41284 2012-01-12 16:23:46Z mindaugas.rimgaila $
+ * @version   SVN: $Id: articlemainTest.php 39768 2011-11-04 13:19:51Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -479,7 +479,7 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
 
         modConfig::setParameter( "oxid", -1 );
         modConfig::setParameter( "oxparentid", "-1" );
-        modConfig::setParameter( "editval", array( 'tags' => 'test tags', "oxarticles__oxparentid" => "-1", "oxarticles__oxartnum" => "123", "oxarticles__oxprice" => "123", "oxarticles__oxactive" => 1 ) );
+        modConfig::setParameter( "editval", array( "oxarticles__oxparentid" => "-1", "oxarticles__oxartnum" => "123", "oxarticles__oxprice" => "123", "oxarticles__oxactive" => 1 ) );
 
         $oArtView = new article_main();
 
@@ -505,7 +505,7 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
 
         modConfig::setParameter( "oxid", -1 );
         modConfig::setParameter( "oxparentid", "132" );
-        modConfig::setParameter( "editval", array( 'tags' => 'test tags', "oxarticles__oxparentid" => "-1", "oxarticles__oxartnum" => "123", "oxarticles__oxprice" => "123", "oxarticles__oxactive" => 1 ) );
+        modConfig::setParameter( "editval", array( "oxarticles__oxparentid" => "-1", "oxarticles__oxartnum" => "123", "oxarticles__oxprice" => "123", "oxarticles__oxactive" => 1 ) );
 
         $oArtView = new article_main();
 

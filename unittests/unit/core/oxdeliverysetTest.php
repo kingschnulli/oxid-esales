@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliverysetTest.php 41198 2012-01-11 15:31:09Z linas.kukulskis $
+ * @version   SVN: $Id: oxdeliverysetTest.php 26841 2010-03-25 13:58:15Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -38,7 +38,6 @@ class Unit_Core_oxDeliverySetTest extends OxidTestCase
         parent::setUp();
         $oDelSet = oxNew( 'oxdeliveryset' );
         $oDelSet->setId( '_testDeliverySetId' );
-        $oDelSet->oxdeliveryset__oxtitle = new oxField( '_testDeliverySetTitle' );
         $oDelSet->save();
 
         // generating relations
@@ -120,10 +119,4 @@ class Unit_Core_oxDeliverySetTest extends OxidTestCase
         $this->assertFalse( (bool)$oDB->getOne( 'select count(*) from oxdeliveryset where oxid = "'.$oDelSet->getId().'" ' ) );
     }
 
-
-     public function testGetIdByName()
-    {
-        $oD = new oxDeliverySet();
-        $this->assertEquals('_testDeliverySetId', $oD->getIdByName( '_testDeliverySetTitle' ) );
-    }
 }

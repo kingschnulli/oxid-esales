@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdelivery.php 41739 2012-01-24 15:48:16Z vilma $
+ * @version   SVN: $Id: oxdelivery.php 40351 2011-11-29 16:16:28Z linas.kukulskis $
  */
 
 /**
@@ -103,25 +103,11 @@ class oxDelivery extends oxI18n
     protected static $_aProductList = array();
 
     /**
-     * Delivery VAT config
+     * Wrapping VAT config
      *
      * @var bool
      */
     protected $_blDelVatOnTop = false;
-
-    /**
-     * Countries ISO assigned to current delivery.
-     *
-     * @var array
-     */
-    protected $_aCountriesISO = null;
-
-    /**
-     * RDFa delivery sets assigned to current delivery.
-     *
-     * @var array
-     */
-    protected $_aRDFaDeliverySet = null;
 
     /**
      * Class constructor, initiates parent constructor (parent::oxBase()).
@@ -521,42 +507,4 @@ class oxDelivery extends oxI18n
 
         return false;
     }
-
-    /**
-     * returns delivery id
-     *
-     * @param string $sTitle delivery name
-     *
-     * @return string
-     */
-    public function getIdByName( $sTitle )
-    {
-        $sQ = "SELECT `oxid` FROM `" . getViewName( 'oxdelivery' ) . "` WHERE  `oxtitle` = " . oxDb::getDb()->quote( $sTitle );
-        $sId = oxDb::getDb()->getOne( $sQ );
-
-        return $sId;
-    }
-
-    /**
-     * Returns array of country ISO's which are assigned to current delivery
-     *
-     * @return array
-     */
-    public function getCountriesISO()
-    {
-        if ( $this->_aCountriesISO === null ) {
-            $oDb = oxDb::getDb();
-            $this->_aCountriesISO = array();
-            $sSelect = 'select oxcountry.oxisoalpha2 from oxcountry left join oxobject2delivery on oxobject2delivery.oxobjectid = oxcountry.oxid where oxobject2delivery.oxdeliveryid='.$oDb->quote( $this->getId() ).' and oxobject2delivery.oxtype = "oxcountry" ';
-            $rs = $oDb->execute( $sSelect );
-            if ( $rs && $rs->recordCount()) {
-                while ( !$rs->EOF ) {
-                    $this->_aCountriesISO[] = $rs->fields[0];
-                    $rs->moveNext();
-                }
-            }
-        }
-        return $this->_aCountriesISO;
-    }
-
 }

@@ -62,26 +62,26 @@
 
             window.fbAsyncInit = function() {
 
-                FB.init({appId: sFbAppId, status: true, cookie: true, xfbml: true, oauth: true});
+                FB.init({appId: sFbAppId, status: true, cookie: true, xfbml: true});
                 FB.Event.subscribe('auth.login', function(response) {
                     // redirecting after successfull login
-                    setTimeout(function(){oxFacebook.redirectPage(sLoginUrl);}, 0);
+                    oxFacebook.redirectPage( sLoginUrl );
 
-                    if ( FB.XFBML.Host !== undefined && FB.XFBML.Host.parseDomTree )
-                          setTimeout(function(){FB.XFBML.Host.parseDomTree;}, 0 );
+                    if ( FB.XFBML.Host.parseDomTree )
+                          setTimeout( FB.XFBML.Host.parseDomTree, 0 );
                 });
 
                 FB.Event.subscribe('auth.logout', function(response) {
                     // redirecting after logout
-                    setTimeout(function(){oxFacebook.redirectPage(sLogoutUrl);}, 0);
+                    oxFacebook.redirectPage( sLogoutUrl );
                 });
             };
 
             // loading FB script file
             var e   = document.createElement('script');
             e.type  = 'text/javascript';
-            e.async = true;
             e.src   = document.location.protocol + '//connect.facebook.net/' + sLocale + '/all.js';
+            e.async = true;
             $('#fb-root').append(e);
         },
 
@@ -89,6 +89,7 @@
          * Redicrecting page to given url
          */
         redirectPage: function ( sUrl ) {
+
            sUrl = sUrl.toString().replace(/&amp;/g,"&");
            document.location.href = sUrl;
         },

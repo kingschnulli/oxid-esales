@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 40988 2012-01-05 11:43:36Z linas.kukulskis $
+ * @version   SVN: $Id: oxsysrequirements.php 40556 2011-12-12 13:48:13Z linas.kukulskis $
  */
 
 /**
@@ -593,8 +593,7 @@ class oxSysRequirements
     public function checkMysqlConnect()
     {
         // MySQL module for MySQL5
-        $iModStat = ( extension_loaded( 'mysql' ) || extension_loaded( 'mysqli' ) || extension_loaded( 'pdo_mysql' ) ) ? 2 : 0;
-
+        $iModStat = ( extension_loaded( 'mysql' ) || extension_loaded( 'mysqli' ) || extension_loaded( 'pdo_mysql' ) || extension_loaded( 'mysqlnd' ) ) ? 2 : 0;
         // client version must be >=5
         if ( $iModStat ) {
             $sClientVersion = mysql_get_client_info();
@@ -609,10 +608,6 @@ class oxSysRequirements
             } elseif (version_compare($sClientVersion, '5.0.40', '>') && version_compare($sClientVersion, '5.0.42', '<')) {
                 // mantis#0001877: Exclude MySQL 5.0.41 from system requirements as not fitting
                 $iModStat = 0;
-            }
-            if ( strpos($sClientVersion, 'mysqlnd') !== false ) {
-                // PHP 5.3 includes new mysqlnd extension
-                $iModStat = 2;
             }
         }
         return $iModStat;

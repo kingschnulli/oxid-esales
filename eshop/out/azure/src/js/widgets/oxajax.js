@@ -201,34 +201,22 @@
         },
 
         /**
-         * If it's possible report JS error
-         *
-         * @param e JS exception
-         */
-        reportJSError: function(e) {
-            if (typeof console != 'undefined' && typeof console.error != 'undefined') {
-                console.error(e);
-            }
-        },
-
-        /**
          * Evals returned html and executes javascript after reload
          *
          * @container - witch javascript must be restarted
          */
         evalScripts : function(container){
-            var self = this;
             try {
                 $("script", container).each(function(){
                     try {
                         eval(this.innerHTML);
                     } catch (e) {
-                       self.reportJSError(e);
+                       //  console.error(e);
                     }
                     $(this).remove();
                 });
             } catch (e) {
-               self.reportJSError(e);
+               //  console.error(e);
             }
         }
     };

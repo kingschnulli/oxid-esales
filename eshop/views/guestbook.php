@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: guestbook.php 41001 2012-01-06 08:53:15Z linas.kukulskis $
+ * @version   SVN: $Id: guestbook.php 35786 2011-06-03 07:59:07Z linas.kukulskis $
  */
 
 /**
@@ -50,13 +50,13 @@ class GuestBook extends oxUBase
      * Order by
      * @var string
      */
-    protected $_sListOrderBy = false;
+    protected $_sSortBy = false;
 
     /**
      * Oreder directory
      * @var string
      */
-    protected $_sListOrderDir = false;
+    protected $_sSortDir = false;
 
     /**
      * Flood protection
@@ -139,7 +139,7 @@ class GuestBook extends oxUBase
      */
     public function getGbSortBy()
     {
-        return $this->_sListOrderBy;
+        return $this->_sSortBy;
     }
 
     /**
@@ -149,7 +149,7 @@ class GuestBook extends oxUBase
      */
     public function getGbSortDir()
     {
-        return $this->_sListOrderDir;
+        return $this->_sSortDir;
     }
 
     /**
@@ -231,7 +231,7 @@ class GuestBook extends oxUBase
     {
         $oUtils = oxUtils::getInstance();
 
-        $this->_aSortColumns  = array( 'author', 'date' );
+        $this->_aSortColumns  = array( 'oxuser.oxusername', 'oxgbentries.oxcreate' );
 
         $sSortBy  = oxConfig::getParameter( $this->getSortOrderByParameterName() );
         $sSortDir = oxConfig::getParameter( $this->getSortOrderParameterName() );
@@ -243,15 +243,15 @@ class GuestBook extends oxUBase
 
         // finally setting defaults
         if ( !$sSortBy ) {
-            $sSortBy  = 'date';
+            $sSortBy  = 'oxgbentries.oxcreate';
             $sSortDir = 'desc';
         }
 
         if ( $sSortBy && oxDb::getInstance()->isValidFieldName( $sSortBy ) &&
              $sSortDir && oxUtils::getInstance()->isValidAlpha( $sSortDir ) ) {
 
-            $this->_sListOrderBy  = $sSortBy;
-            $this->_sListOrderDir = $sSortDir;
+            $this->_sSortBy  = $sSortBy;
+            $this->_sSortDir = $sSortDir;
 
             // caching sorting config
             $this->setItemSorting( 'oxgb', $sSortBy, $sSortDir );

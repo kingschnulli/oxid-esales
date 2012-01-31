@@ -55,11 +55,6 @@
     </table>
 
     <br><br>
-    [{if $order->getShipmentTrackingUrl()}]
-        [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKING" }]
-        <a href="[{$order->getShipmentTrackingUrl()}]" target="_blank" title="[{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKING" }]">[{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKINGURL" }]</a>
-        <br><br>
-    [{/if}]
     [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_YUORTEAM1" }] [{ $shop->oxshops__oxname->value }] [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_YUORTEAM2" }]<br>
     [{if $oViewConf->showTs("ORDERCONFEMAIL") && $oViewConf->getTsId() }]
     <br><br>

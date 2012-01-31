@@ -15,21 +15,18 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link http://www.oxid-esales.com
- * @package tests
+ * @link      http://www.oxid-esales.com
+ * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
+ * @version   SVN: $Id: theme_lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
 
-require_once realpath( "." ).'/unit/OxidTestCase.php';
-require_once realpath( "." ).'/unit/test_config.inc.php';
+$aLang = array(
+'charset'                                       => 'ISO-8859-15',
 
-class Unit_Core_oxstateTest extends OxidTestCase
-{
-    public function testInit()
-    {
-        $oSubj = new oxstate();
-        $oSubj->load('MB');
-        $this->assertEquals('Manitoba', $oSubj->oxstates__oxtitle->value);
-    }
-}
+//'SHOP_MODULE_GROUP_features'                     => 'Features',
+//'SHOP_MODULE_bl_showSomeFeature'                 => 'Use some feature',
+//'HELP_SHOP_MODULE_bl_showSomeFeatureHelpText'    => 'Help text for some feature',
+
+);

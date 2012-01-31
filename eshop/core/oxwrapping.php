@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrapping.php 41739 2012-01-24 15:48:16Z vilma $
+ * @version   SVN: $Id: oxwrapping.php 37734 2011-07-28 15:11:39Z linas.kukulskis $
  */
 
 /**
@@ -58,13 +58,6 @@ class oxWrapping extends oxI18n
     protected $_dVat = 0;
 
     /**
-     * Wrapping VAT config
-     *
-     * @var bool
-     */
-    protected $_blWrappingVatOnTop = false;
-
-    /**
      * Class constructor, initiates parent constructor (parent::oxBase()), loads
      * base shop objects.
      *
@@ -72,9 +65,7 @@ class oxWrapping extends oxI18n
      */
     public function __construct()
     {
-        $oConfig = $this->getConfig();
-        $this->setWrappingVat( $oConfig->getConfigParam( 'dDefaultVAT' ) );
-        $this->setWrappingVatOnTop( $oConfig->getConfigParam( 'blWrappingVatOnTop' ) );
+        $this->setWrappingVat( $this->getConfig()->getConfigParam( 'dDefaultVAT' ) );
         parent::__construct();
         $this->init( 'oxwrapping' );
     }
@@ -89,18 +80,6 @@ class oxWrapping extends oxI18n
     public function setWrappingVat( $dVat )
     {
         $this->_dVat = $dVat;
-    }
-
-    /**
-     * Wrapping VAT config setter
-     *
-     * @param bool $blOnTop wrapping vat config
-     *
-     * @return null
-     */
-    public function setWrappingVatOnTop( $blOnTop )
-    {
-        $this->_blWrappingVatOnTop = $blOnTop;
     }
 
     /**
@@ -130,12 +109,6 @@ class oxWrapping extends oxI18n
     {
         if ( $this->_oPrice === null ) {
             $this->_oPrice = oxNew( 'oxprice' );
-
-            if ( !$this->_blWrappingVatOnTop ) {
-                $this->_oPrice->setBruttoPriceMode();
-            } else {
-                $this->_oPrice->setNettoPriceMode();
-            }
 
             $oCur = $this->getConfig()->getActShopCurrencyObject();
             $this->_oPrice->setPrice( $this->oxwrapping__oxprice->value * $oCur->rate, $this->_dVat );

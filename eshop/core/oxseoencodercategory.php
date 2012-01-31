@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercategory.php 41202 2012-01-11 15:52:59Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxseoencodercategory.php 39341 2011-10-13 08:42:51Z linas.kukulskis $
  */
 
 /**
@@ -154,7 +154,7 @@ class oxSeoEncoderCategory extends oxSeoEncoder
                 }
 
                 // prepare oCat title part
-                $sTitle = $this->_prepareTitle( $oCat->oxcategories__oxtitle->value, false, $oCat->getLanguage() );
+                $sTitle = $this->_prepareTitle( $oCat->oxcategories__oxtitle->value );
 
                 foreach ( array_keys( $aCacheMap ) as $id ) {
                     $aCacheMap[$id] = $sTitle . '/' . $aCacheMap[$id];

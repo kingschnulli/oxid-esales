@@ -284,7 +284,6 @@ class Unit_Setup_oxSetupDbTest extends OxidTestCase
         $oDb->expects( $this->at( $iAt++ ) )->method( "getInstance" )->with( $this->equalTo( "oxSetup" ) )->will( $this->returnValue( $oSetup ) );
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "update oxcountry set oxactive = '0'" ) );
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "update oxcountry set oxactive = '1' where oxid = ''" ) );
-        $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "UPDATE oxuser SET oxcountryid = '' where oxid='oxdefaultadmin'" ) );
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "delete from oxconfig where oxvarname = 'blLoadDynContents'" ) );
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "delete from oxconfig where oxvarname = 'sShopCountry'" ) );
         $oDb->expects( $this->at( $iAt++ ) )->method( "execSql" )->with( $this->equalTo( "delete from oxconfig where oxvarname = 'blCheckForUpdates'" ) );

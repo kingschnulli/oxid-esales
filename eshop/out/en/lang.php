@@ -24,11 +24,6 @@
 
 $sLangName  = "English";
 
-/**
- * Character list for replacement in SEO URL's
- * @var array SEO replacement list
- */
-$aSeoReplaceChars = array();
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
