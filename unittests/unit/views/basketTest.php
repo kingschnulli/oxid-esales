@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: basketTest.php 35809 2011-06-03 08:03:39Z linas.kukulskis $
+ * @version   SVN: $Id: basketTest.php 41916 2012-01-31 13:26:57Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -99,7 +99,7 @@ class Unit_Views_basketTest extends OxidTestCase
      */
     public function testRenderNoSE()
     {
-        oxTestModules::addFunction('oxUtils', 'isSearchEngine()', '{return false;}');
+        oxTestModules::addFunction('oxUtils', 'isSearchEngine($sClient = NULL)', '{return false;}');
         $oBasket = new basket();
 
         $this->assertEquals('page/checkout/basket.tpl', $oBasket->render());
@@ -112,7 +112,7 @@ class Unit_Views_basketTest extends OxidTestCase
      */
     public function testRenderSE()
     {
-        oxTestModules::addFunction('oxUtils', 'isSearchEngine()', '{return true;}');
+        oxTestModules::addFunction('oxUtils', 'isSearchEngine($sClient = NULL)', '{return true;}');
         $oBasket = $this->getMock( "basket", array( "getBasketArticles", 'getBasketSimilarList', 'getSimilarRecommLists', 'showBackToShop' ) );
         $oBasket->expects( $this->never() )->method( 'getBasketArticles')->will($this->returnValue( 'getBasketArticles' ) );
         $oBasket->expects( $this->never() )->method( 'getBasketSimilarList')->will($this->returnValue( 'getBasketSimilarList' ) );

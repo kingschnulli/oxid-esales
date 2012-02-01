@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariant.php 37526 2011-07-28 13:47:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxsimplevariant.php 41824 2012-01-27 15:19:47Z linas.kukulskis $
  */
 
 /**
@@ -191,6 +191,7 @@ class oxSimpleVariant extends oxI18n implements oxIUrl
         return $dPrice;
     }
 
+
     /**
      * Implementing (faking) performance friendly method from oxArticle
      *
@@ -255,7 +256,7 @@ class oxSimpleVariant extends oxI18n implements oxIUrl
      */
     protected function _applyParentVat( $oPrice )
     {
-        if ( ( $oParent = $this->getParent() ) && !$this->getConfig()->getConfigParam( 'blEnterNetPrice' ) ) {
+        if ( ( $oParent = $this->getParent() ) && !$this->getConfig()->getConfigParam( 'bl_perfCalcVatOnlyForBasketOrder' ) ) {
             $oParent->applyVats($oPrice);
         }
     }

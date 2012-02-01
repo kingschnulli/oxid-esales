@@ -5,13 +5,13 @@
 <li><span><h4>[{oxmultilang ident="DETAILS_MOREYOUBUYMOREYOUSAVE"}]</h4></span></li>
 <li><label>[{oxmultilang ident="DETAILS_FROM"}]</label><span>[{oxmultilang ident="DETAILS_PCS"}]</span></li>
 [{foreach from=$oDetailsProduct->loadAmountPriceInfo() item=priceItem name=amountPrice}]
-    <li rel="gr:hasEligibleQuantity">
-        <label typeof="gr:QuantitativeValue">[{$priceItem->oxprice2article__oxamount->value}]</label>
+    <li>
+        <label>[{$priceItem->oxprice2article__oxamount->value}]</label>
         <span>
         [{if $priceItem->oxprice2article__oxaddperc->value}]
             [{$priceItem->oxprice2article__oxaddperc->value}] [{oxmultilang ident="DETAILS_DISCOUNT"}]
         [{else}]
-            <span property="gr:hasCurrencyValue" datatype="xsd:float">[{$priceItem->fbrutprice}]</span> [{$currency->sign}]
+            <span>[{$priceItem->fbrutprice}]</span> [{$currency->sign}]
         [{/if}]
         </span>
     </li>

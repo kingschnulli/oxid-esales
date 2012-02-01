@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbTest.php 40470 2011-12-06 10:56:42Z linas.kukulskis $
+ * @version   SVN: $Id: oxdbTest.php 40993 2012-01-05 12:19:22Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -480,9 +480,9 @@ class Unit_Core_oxdbTest extends OxidTestCase
     public function testEscapeString()
     {
         $sString = "\x00 \n \r ' \, \" \x1a";
-		
-		$oDb = oxDb::getInstance();
-		
+
+        $oDb = oxDb::getInstance();
+
         if ( 'mysql' == oxConfig::getInstance()->getConfigParam( "dbType" ))
             $sEscapedChars = mysql_real_escape_string( $sString, $oDb->UNITgetConnectionId() );
         if ( 'mysqli' == oxConfig::getInstance()->getConfigParam( "dbType" ))
@@ -511,6 +511,9 @@ class Unit_Core_oxdbTest extends OxidTestCase
 
         $aRes = $oDb->getDb();
         $this->assertEquals($ADODB_FETCH_MODE, ADODB_FETCH_NUM);
+
+        $aRes = $oDb->getDb(true);
+        $this->assertEquals($ADODB_FETCH_MODE, ADODB_FETCH_ASSOC);
 
         $aRes = $oDb->getDb(oxDb::FETCH_MODE_ASSOC);
         $this->assertEquals($ADODB_FETCH_MODE, ADODB_FETCH_ASSOC);

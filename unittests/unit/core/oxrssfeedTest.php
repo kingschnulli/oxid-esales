@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 38661 2011-09-06 10:36:07Z linas.kukulskis $
+ * @version   SVN: $Id: oxrssfeedTest.php 41930 2012-01-31 15:27:14Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -797,7 +797,6 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oCfg = $this->getMock( 'oxconfig', array( 'getActiveShop', 'getShopHomeUrl', 'getImageDir' ) );
         $oRss = oxNew('oxrssfeed');
         $oRss->setConfig($oCfg);
-        $oCat = oxNew('oxcategory');
 
         modConfig::getInstance()->setConfigParam( 'iRssItemsCount', 50);
         oxTestModules::addFunction('oxLang', 'getBaseLanguage', '{return 1;}');
@@ -807,19 +806,30 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         oxTestModules::addFunction('oxrssfeed', 'getSearchArticlesUrl', '{ return "surl"; }');
         oxTestModules::addFunction('oxrssfeed', 'getSearchArticlesTitle', '{ return "dastitle"; }');
 
-        oxTestModules::addFunction('oxsearch', 'getSearchArticles', '{ return "loaded".$aA[0].$aA[1].$aA[2].$aA[3].$aA[4]; }');
+        oxTestModules::addFunction('oxsearch', 'getSearchArticles', '{
+            $oArtList = new oxArticleList();
+            $oArt = new oxArticle();
+            $oArt->setId("loaded".$aA[0].$aA[1].$aA[2].$aA[3].$aA[4]);
+            $oArtList->offsetSet(\'test_item\', $oArt);
+            return $oArtList;
+        }');
         oxTestModules::addFunction('oxrssfeed', '_getArticleItems', '{ return $aA[0]; }');
         oxTestModules::addFunction('oxrssfeed', '_getShopUrl', '{ return "shopurl?"; }');
 
         $oRss = oxNew('oxrssfeed');
         $oRss->loadSearchArticles("AA", "BB", "CC", "DD");
 
+        $oArtList = new oxArticleList();
+        $oArt = new oxArticle();
+        $oArt->setId('loadedAABBCCDD'.oxNew('oxarticle')->getViewName().'.oxtimestamp desc');
+        $oArtList->offsetSet('test_item', $oArt);
+
         $aChannel = array(
             'data' => array(
                 '0' => null,
                 '1' => 'dastitle',
                 '2' => 'RSS_SEARCHARTICLES_DESCRIPTIONtr',
-                '3' => 'loadedAABBCCDD'.oxNew('oxarticle')->getViewName().'.oxtimestamp desc',
+                '3' => $oArtList,//'loadedAABBCCDD'.oxNew('oxarticle')->getViewName().'.oxtimestamp desc',
                 '4' => 'surl',
                 '5' => 'shopurl?cl=search&amp;klnk'
             )

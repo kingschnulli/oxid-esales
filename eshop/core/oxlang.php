@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 39152 2011-10-11 14:07:46Z arvydas.vapsva $
+ * @version   SVN: $Id: oxlang.php 41729 2012-01-24 12:56:19Z linas.kukulskis $
  */
 
 /**
@@ -455,6 +455,7 @@ class oxLang extends oxSuperCfg
      * @param string $sFile file name
      *
      * @return null
+     * @deprecated since 2012-01-24 marked in version 4.5.7
      */
     public function registerAdditionalLangFile($sFile)
     {
@@ -695,18 +696,26 @@ class oxLang extends oxSuperCfg
     /**
      * Goes through language array and recodes its values. Returns recoded data
      *
-     * @param array  $aLangArray language data
-     * @param string $sCharset   charset which was used while making file
+     * @param array  $aLangArray   language data
+     * @param string $sCharset     charset which was used while making file
+     * @param bool   $blRecodeKeys leave keys untouched or recode it
      *
      * @return array
      */
-    protected function _recodeLangArray( $aLangArray, $sCharset )
+    protected function _recodeLangArray( $aLangArray, $sCharset, $blRecodeKeys = false )
     {
+        $aLangs = array();
         foreach ( $aLangArray as $sKey => $sValue ) {
-            $aLangArray[$sKey] = iconv( $sCharset, 'UTF-8', $sValue );
+            $sItemKey = $sKey;
+            if ($blRecodeKeys === true) {
+                $sItemKey = iconv($sCharset, 'UTF-8', $sItemKey);
+            }
+
+            $aLangs[$sItemKey] = iconv( $sCharset, 'UTF-8', $sValue );
+            unset($aLangArray[$sKey]);
         }
 
-        return $aLangArray;
+        return $aLangs;
     }
 
     /**
@@ -729,13 +738,33 @@ class oxLang extends oxSuperCfg
         $sShopId        = $myConfig->getShopId();
 
         if ( $blAdmin ) {
-
+            // admin lang files
             $sAdminPath = $sOutDir . 'admin/' . $sLang . '/';
             $aLangFiles[] = $sAdminPath . "lang.php";
             $aTmpFiles = glob( $sAdminPath."*_lang.php" );
             if ( is_array( $aTmpFiles ) && count( $aTmpFiles ) ) {
                 $aLangFiles = array_merge( $aLangFiles, $aTmpFiles);
             }
+
+            // themes options lang files
+            $sThemePath = $sOutDir . '*/' . $sLang . '/theme_options.php';
+            $aTmpFiles = glob( $sThemePath );
+            if ( is_array( $aTmpFiles ) && count( $aTmpFiles ) ) {
+                $aLangFiles = array_merge( $aLangFiles, $aTmpFiles);
+            }
+
+            //load admin modules lang files
+            $aModuleFiles = glob( $myConfig->getModulesDir().'*/out/admin/' . $sLang . '/*_lang.php' );
+            if ( is_array( $aModuleFiles ) && count( $aModuleFiles ) ) {
+                $aLangFiles = array_merge( $aLangFiles, $aModuleFiles );
+            }
+
+            //load admin modules options lang files
+            $aModuleOptionsFiles = glob( $myConfig->getModulesDir().'*/out/admin/' . $sLang . '/module_options.php' );
+            if ( is_array( $aModuleOptionsFiles ) && count( $aModuleOptionsFiles ) ) {
+                $aLangFiles = array_merge( $aLangFiles, $aModuleOptionsFiles );
+            }
+
             return count( $aLangFiles ) ? $aLangFiles : false;
         }
 
@@ -790,7 +819,7 @@ class oxLang extends oxSuperCfg
         }
 
         //modules language files
-        $aModuleFiles = glob(getShopBasePath().'/modules/*/out/lang/' . $sLang . '/*_lang.php');
+        $aModuleFiles = glob( $myConfig->getModulesDir() . '*/out/lang/' . $sLang . '/*_lang.php');
         if (is_array($aModuleFiles) && count($aModuleFiles)) {
             $aLangFiles = array_merge( $aLangFiles, $aModuleFiles );
         }
@@ -839,6 +868,8 @@ class oxLang extends oxSuperCfg
         if ( !$aLangCache && $aLangFiles ) {
             $aLangCache = array();
             $sBaseCharset = false;
+            $aLang = array();
+            $aLangSeoReplaceChars = array();
             foreach ( $aLangFiles as $sLangFile ) {
 
                 if ( file_exists( $sLangFile ) && is_readable( $sLangFile ) ) {
@@ -851,8 +882,16 @@ class oxLang extends oxSuperCfg
                         if ( $myConfig->isUtf() ) {
                             $aLang = $this->_recodeLangArray( $aLang, $aLang['charset'] );
 
+                            if (isset($aSeoReplaceChars) && is_array($aSeoReplaceChars)) {
+                                $aSeoReplaceChars = $this->_recodeLangArray( $aSeoReplaceChars, $aLang['charset'], true );
+                            }
+
                             // overriding charset
                             $aLang['charset'] = 'UTF-8';
+                        }
+
+                        if (isset($aSeoReplaceChars) && is_array($aSeoReplaceChars)) {
+                            $aLangSeoReplaceChars = array_merge($aLangSeoReplaceChars, $aSeoReplaceChars);
                         }
 
                         if ( !$sBaseCharset ) {
@@ -868,6 +907,9 @@ class oxLang extends oxSuperCfg
             if ( $sBaseCharset ) {
                 $aLangCache['charset'] = $sBaseCharset;
             }
+
+            // special character replacement list
+            $aLangCache['_aSeoReplaceChars'] = $aLangSeoReplaceChars;
 
             //save to cache
             $myUtils->setLangCache( $sCacheName, $aLangCache );
@@ -1151,5 +1193,30 @@ class oxLang extends oxSuperCfg
         }
 
         return $aTables;
+    }
+
+    /**
+     * Get SEO spec. chars replacement list for current language
+     *
+     * @param int $iLang language ID
+     *
+     * @return null
+     */
+    public function getSeoReplaceChars($iLang)
+    {
+        // compatibility: check for global settings
+        $aGlobalSeoReplaceChars = $this->getConfig()->getConfigParam('aSeoReplaceChars');
+        if (!is_array($aGlobalSeoReplaceChars)) {
+            $aGlobalSeoReplaceChars = array();
+        }
+
+        // get language replace chars
+        $aSeoReplaceChars = $this->translateString('_aSeoReplaceChars', $iLang);
+        if (!is_array($aSeoReplaceChars)) {
+            $aSeoReplaceChars = array();
+        }
+
+        $aSeoReplaceChars = array_merge($aGlobalSeoReplaceChars, $aSeoReplaceChars);
+        return $aSeoReplaceChars;
     }
 }

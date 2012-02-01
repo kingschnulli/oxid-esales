@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: orderTest.php 38449 2011-08-26 11:24:00Z arvydas.vapsva $
+ * @version   SVN: $Id: orderTest.php 41912 2012-01-31 11:50:41Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -270,31 +270,55 @@ class Unit_Views_orderTest extends OxidTestCase
     }
 
     /**
-     * Testing render() - if active user not set, visitor shoud be redirected to shop home url
+     * Testing render() - if active user not set and basket not empty,
+     * visitor shoud be redirected to basket step
      *
      * @return null
      */
-    public function testRenderWhenNoActiveUserExist()
+    public function testRenderWhenNoActiveUserExistWithBasket()
     {
-        $myConfig  = oxConfig::getInstance();
-        $mySession = oxSession::getInstance();;
+        $sRedirUrl = oxConfig::getInstance()->getShopHomeURL().'cl=basket';
+        $this->setExpectedException('Exception', $sRedirUrl);
 
-        //basket name in session will be "basket"
-        $myConfig->setConfigParam( 'blMallSharedBasket', 1 );
+        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
 
-        //basket is set, no user
-        $oBasket = oxNew( 'oxBasket' );
-        $mySession->setBasket( $oBasket );
-        //oxSession::setVar( 'basket', $oBasket );
-        oxSession::setVar( 'usr', null );
+        $oB = $this->getMock('oxbasket', array('getProductsCount'));
+        $oB->expects($this->once())->method('getProductsCount')->will($this->returnValue(1));
 
-        $oOrder = oxNew( "order" );
+        $oS = $this->getMock('oxsession', array('getBasketReservations', 'getBasket'));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
 
-        try {
-            $oOrder->render();
-        } catch (Exception $e) {
-            $this->assertEquals( $myConfig->getShopHomeURL(), $e->getMessage() );
-        }
+        $oO = $this->getMock('order', array('getSession', 'getUser'));
+        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+        $oO->expects($this->any())->method('getUser')->will($this->returnValue(null));
+        $oO->render();
+    }
+
+    /**
+     * Testing render() - if active user not set and basket is empty,
+     * visitor shoud be redirected to basket step
+     *
+     * @return null
+     */
+    public function testRenderWhenNoActiveUserExistNoBasket()
+    {
+        $sRedirUrl = oxConfig::getInstance()->getShopHomeURL();
+        $this->setExpectedException('Exception', $sRedirUrl);
+
+        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
+
+        $oB = $this->getMock('oxbasket', array('getProductsCount'));
+        $oB->expects($this->any())->method('getProductsCount')->will($this->returnValue(0));
+
+        $oS = $this->getMock('oxsession', array('getBasketReservations', 'getBasket'));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
+
+        $oO = $this->getMock('order', array('getSession', 'getUser'));
+        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+        $oO->expects($this->any())->method('getUser')->will($this->returnValue(null));
+        $oO->render();
     }
 
     /**

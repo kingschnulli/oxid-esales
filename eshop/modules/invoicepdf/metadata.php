@@ -31,7 +31,7 @@ $aModule = array(
     'description'  => 'Module for making invoice PDF files.',
     'thumbnail'    => 'picture.png',
     'version'      => '1.0',
-    'author'       => 'OXID',
+    'author'       => 'OXID eSales AG',
     'extend'      => array(
         'oxorder' => 'invoicepdf/myorder'
     )

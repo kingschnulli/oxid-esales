@@ -235,4 +235,12 @@ class Unit_Core_oxthemeTest extends OxidTestCase
         $oTheme->expects($this->at(2))->method('getInfo')->with($this->equalTo('parentVersions'))->will($this->returnValue(array(1, 2, 5)));
         $this->assertFalse($oTheme->checkForActivationErrors());
     }
+
+    public function testGetId()
+    {
+        $oTheme = new oxTheme();
+        $oTheme->load( "azure" );
+
+        $this->assertEquals('azure', $oTheme->getId());
+    }
 }

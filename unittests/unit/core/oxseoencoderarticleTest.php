@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticleTest.php 38612 2011-09-05 13:34:11Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderarticleTest.php 41930 2012-01-31 15:27:14Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -664,7 +664,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
 
     public function testCreateArticleSeoUrlWhenTitleContainsOnlyBadChars()
     {
-        modConfig::getInstance()->setConfigParam( 'aSeoReplaceChars', array() );
+        oxTestModules::addFunction("oxlang", "getSeoReplaceChars", "{return array();}");
 
         $oArticle = $this->getMock('oxArticle', array('getCategory'));
         $oArticle = new oxArticle();
@@ -1208,7 +1208,7 @@ class Unit_Core_oxSeoEncoderArticleTest extends OxidTestCase
 
     public function testCreateArticleCategoryUri()
     {
-        oxTestModules::addFunction('oxSeoEncoderCategory', 'getCategoryUri($c, $l)', '{return "caturl".$c->getId().$l;}');
+        oxTestModules::addFunction('oxSeoEncoderCategory', 'getCategoryUri($c, $l = NULL, $blRegenerate = false)', '{return "caturl".$c->getId().$l;}');
         $oA   = $this->getMock('oxarticle', array('getLanguage', 'getId', 'getBaseStdLink'));
         $oA->expects($this->never())->method('getLanguage');
         $oA->expects($this->any())->method('getId')->will($this->returnValue('articleId'));

@@ -206,7 +206,7 @@
                   [{/if}]
                   <tr onclick="oxid.form.select('paymentid',[{$inptcounter}]);">
                     <td></td>
-                    <td id="test_PaymentLongDesc_[{$sPaymentID}]" colspan="2">[{ $paymentmethod->oxpayments__oxlongdesc->value}]</td>
+                    <td id="test_PaymentLongDesc_[{$sPaymentID}]" colspan="2">[{ $paymentmethod->oxpayments__oxlongdesc->getRawValue()}]</td>
                   </tr>
                     [{if $inptcounter > -1 && $inptcounter < ($oView->getPaymentCnt()-1) }]
                     <tr class="tr_sep">

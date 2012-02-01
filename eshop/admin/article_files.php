@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: article_extend.php 39045 2011-10-05 13:01:43Z arvydas.vapsva $
  */
@@ -182,6 +182,10 @@ class Article_Files extends oxAdminDetails
      */
     protected function _processOptions($aParams)
     {
+        if (!is_array($aParams)) {
+            $aParams = array();
+        }
+
         if (!isset($aParams["oxfiles__oxdownloadexptime"]) || $aParams["oxfiles__oxdownloadexptime"] == "") {
             $aParams["oxfiles__oxdownloadexptime"] = -1;
         }

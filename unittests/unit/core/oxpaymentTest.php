@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpaymentTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxpaymentTest.php 41773 2012-01-26 09:31:43Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -250,6 +250,46 @@ class Unit_Core_oxpaymentTest extends OxidTestCase
         $this->assertEquals( 60, $oPrice->getBruttoPrice() );
         $this->assertEquals( 60/1.5, $oPrice->getNettoPrice() );
         $this->assertEquals( 60-60/1.5, $oPrice->getVatValue() );
+    }
+
+    public function testGetPaymentPriceVatOnTop()
+    {
+        $oProductsPrice = $this->getMock( "oxpricelist", array( "getBruttoSum" ) );
+        $oProductsPrice->expects( $this->once() )->method( 'getBruttoSum' )->will( $this->returnValue( 30 ) );
+
+        $oTotalDiscount = $this->getMock( "oxprice", array( "getBruttoPrice" ) );
+        $oTotalDiscount->expects( $this->once() )->method( 'getBruttoPrice' )->will( $this->returnValue( 10 ) );
+
+        $oDeliveryCosts = $this->getMock( "oxprice", array( "getBruttoPrice" ) );
+        $oDeliveryCosts->expects( $this->once() )->method( 'getBruttoPrice' )->will( $this->returnValue( 10 ) );
+
+        $oWrappingCosts = $this->getMock( "oxprice", array( "getBruttoPrice" ) );
+        $oWrappingCosts->expects( $this->once() )->method( 'getBruttoPrice' )->will( $this->returnValue( 10 ) );
+
+        // preparing basket for input
+        $oBasket = $this->getMock( 'oxbasket', array('getProductsPrice', 'getTotalDiscount', 'getVoucherDiscValue', 'getCosts', 'getMostUsedVatPercent') );
+        $oBasket->expects( $this->at( 0 ) )->method( 'getProductsPrice' )->will( $this->returnValue( $oProductsPrice ) );
+        $oBasket->expects( $this->at( 1 ) )->method( 'getTotalDiscount' )->will( $this->returnValue( $oTotalDiscount ) );
+        $oBasket->expects( $this->at( 2 ) )->method( 'getVoucherDiscValue' )->will( $this->returnValue( 10 ) );
+        $oBasket->expects( $this->at( 3 ) )->method( 'getCosts' )->with( 'oxdelivery' )->will( $this->returnValue( $oDeliveryCosts ) );
+        $oBasket->expects( $this->at( 4 ) )->method( 'getCosts' )->with( 'oxwrapping' )->will( $this->returnValue( $oWrappingCosts ) );
+        $oBasket->expects( $this->at( 5 ) )->method( 'getMostUsedVatPercent' )->will( $this->returnValue( 50 ) );
+
+        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
+        modConfig::getInstance()->setConfigParam( 'blPaymentVatOnTop', true );
+
+        // preparing payment for test
+        $oPayment = $this->getMock( 'oxPayment', array('getPaymentValue') );
+        $oPayment->expects( $this->once() )->method( 'getPaymentValue')->with( 30 )->will( $this->returnValue( 60 ) );
+        $oPayment->oxpayments__oxaddsum = new oxField(60, oxField::T_RAW);
+        $oPayment->oxpayments__oxaddsumrules = new oxField(31, oxField::T_RAW);
+        $oPrice = $oPayment->getPaymentPrice( $oBasket );
+
+        // testing
+        $this->assertEquals( 50, $oPrice->getVat() );
+        $this->assertEquals( 60, $oPrice->getNettoPrice() );
+        $this->assertEquals( 60*1.5, $oPrice->getBruttoPrice() );
+        $this->assertEquals( 60*1.5-60, $oPrice->getVatValue() );
     }
 
 /*
@@ -706,6 +746,15 @@ class Unit_Core_oxpaymentTest extends OxidTestCase
         $this->assertEquals(2, $oPayment->getPaymentErrorNumber() );
     }
 
+    /**
+     * Test payment config setter
+     */
+    public function testSetPaymentVatOnTop()
+    {
+        $oPayment = $this->getProxyClass( "oxPayment" );
+        $oPayment->setPaymentVatOnTop( true );
+        $this->assertTrue( $oPayment->getNonPublicVar( "_blPaymentVatOnTop" ));
+    }
     /**
      * Test logging ipayment action
      */

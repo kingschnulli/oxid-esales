@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.inc.php 39298 2011-10-13 08:33:42Z linas.kukulskis $
+ * @version   SVN: $Id: category_main.inc.php 40980 2012-01-05 11:22:13Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -80,7 +80,7 @@ class ajaxComponent extends ajaxListComponent
             $sQAdd  = ' from '.$sArticleTable.' where 1 ';
         } else {
 
-            // copied from oxadminview (not sure if this works)
+            // copied from oxadminview
             $sJoin = " {$sArticleTable}.oxid={$sO2CView}.oxobjectid ";
 
             $sSubSelect = '';

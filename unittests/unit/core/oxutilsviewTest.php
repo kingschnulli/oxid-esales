@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsviewTest.php 34014 2011-03-25 14:06:07Z sarunas $
+ * @version   SVN: $Id: oxutilsviewTest.php 41823 2012-01-27 15:19:16Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -349,7 +349,7 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
                          'compile_dir'     => $myConfig->getConfigParam( 'sCompileDir' ),
                          'cache_dir'       => $myConfig->getConfigParam( 'sCompileDir' ),
                          'template_dir'    => $aTemplatesDir,
-                         'compile_id'      => md5($myConfig->getTemplateDir( false )),
+                         'compile_id'      => md5($myConfig->getTemplateDir( false ).'__'.$myConfig->getShopId()),
                          'debugging'       => true,
                          'compile_check'   => true,
                          'security_settings' => array (
@@ -440,7 +440,7 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
                          'compile_dir'     => $myConfig->getConfigParam( 'sCompileDir' ),
                          'cache_dir'       => $myConfig->getConfigParam( 'sCompileDir' ),
                          'template_dir'    => $aTemplatesDir,
-                         'compile_id'      => md5($myConfig->getTemplateDir( false )),
+                         'compile_id'      => md5($myConfig->getTemplateDir( false ).'__'.$myConfig->getShopId()),
                          'debugging'       => true,
                          'compile_check'   => true );
 

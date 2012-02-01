@@ -1257,7 +1257,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         oxTestModules::addFunction('oxrssfeed', 'getSearchArticlesTitle', '{ return "dastitle"; }');
 
         oxTestModules::addFunction('oxsearch', 'getSearchArticles', '{ return "loaded".$aA[0].$aA[1].$aA[2].$aA[3].$aA[4]; }');
-        oxTestModules::addFunction('oxrssfeed', '_getArticleItems', '{ return $aA[0]; }');
+        oxTestModules::addFunction('oxrssfeed', '_getArticleItems($a)', '{ return $aA[0]; }');
         oxTestModules::addFunction('oxrssfeed', '_getShopUrl', '{ return "shopurl?"; }');
 
         $oRss = oxNew('oxrssfeed');

@@ -52,48 +52,4 @@ class Unit_Admin_ThemeConfigTest extends OxidTestCase
         $this->assertEquals('theme:azure', $oTest->p_getModuleForConfigVars());
     }
 
-    public function testGetTemplateOptionsLanguageFile()
-    {
-        $this->markTestIncomplete();
-        $oCfg = $this->getMock('oxconfig', array('getLanguagePath', 'getConfigParam'));
-        $oCfg->expects($this->once())->method('getLanguagePath')
-                ->with(
-                    $this->equalTo("theme_options.php"),
-                    $this->equalTo(false),
-                    $this->equalTo(oxLang::getInstance()->getTplLanguage()),
-                    $this->equalTo(null),
-                    $this->equalTo('basicx')
-                )
-                ->will($this->returnValue('filenametoload'));
-        $oCfg->expects($this->once())->method('getConfigParam')
-                ->with($this->equalTo("sTheme"))
-                ->will($this->returnValue('basicx'));
-
-        $oT = $this->getMock('Shop_Theme', array('getConfig'), array(), '', false);
-        $oT->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
-
-        $this->assertEquals('filenametoload', $oT->UNITgetTemplateOptionsLanguageFile());
-    }
-
-    public function testGetTemplateOptionsLanguageFileNoFile()
-    {
-        $this->markTestIncomplete();
-        $oCfg = $this->getMock('oxconfig', array('getLanguagePath', 'getConfigParam'));
-        $oCfg->expects($this->once())->method('getLanguagePath')
-                ->will($this->returnValue(''));
-        $oCfg->expects($this->any())->method('getConfigParam')
-                ->with($this->equalTo("sTheme"))
-                ->will($this->returnValue('basicx'));
-
-        $oT = $this->getMock('Shop_Theme', array('getConfig'), array(), '', false);
-        $oT->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
-
-        try {
-            $oT->UNITgetTemplateOptionsLanguageFile();
-            $this->fail('no exception');
-        } catch (oxFileException $e) {
-            $this->assertEquals('EXCEPTION_FILENOTFOUND', $e->getMessage());
-            $this->assertEquals('theme_options.php for the theme "basicx"', $e->getFileName());
-        }
-    }
 }

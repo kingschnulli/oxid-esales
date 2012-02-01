@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 40569 2011-12-13 08:43:15Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 41827 2012-01-27 15:26:13Z linas.kukulskis $
  */
 
 /**
@@ -178,7 +178,14 @@ class oxBase extends oxSuperCfg
      *
      * @var array
      */
-    protected $_aInnerLazyCache = array();
+    protected $_aInnerLazyCache = null;
+
+    /**
+     * Marker that multilanguage is OFF
+     *
+     * @var bool
+     */
+    protected $_blEmployMultilanguage = false;
 
     /**
      * Class constructor, sets active shop.
@@ -254,30 +261,31 @@ class oxBase extends oxSuperCfg
             if ( $this->getId() ) {
 
                 //lazy load it
-                $sFieldName = str_replace($this->_sCoreTable . "__", '', $sName);
-                $iFieldStatus = $this->_getFieldStatus($sFieldName);
+                $sFieldName      = str_replace( $this->_sCoreTable . "__", '', $sName );
+                $sCacheFieldName = strtoupper( $sFieldName );
 
-                $sViewName = $this->getViewName();
+                $iFieldStatus = $this->_getFieldStatus( $sFieldName );
+                $sViewName    = $this->getViewName();
                 $sId = $this->getId();
 
                 try {
-                    if ( !isset( $this->_aInnerLazyCache[$sViewName][$sId] ) ) {
+                    if ( $this->_aInnerLazyCache === null ) {
 
                         $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
-                        $sQ = "SELECT * FROM " . $sViewName . " WHERE `oxid` = " . $oDb->quote($sId);
+                        $sQ = "SELECT * FROM " . $sViewName . " WHERE `oxid` = " . $oDb->quote( $sId );
                         $rs = $oDb->execute( $sQ );
-                        if ( $rs ) {
-                            $this->_aInnerLazyCache[$sViewName][$sId] = $rs->fields;
-                            if ( isset( $rs->fields[ strtoupper($sFieldName) ] ) ) {
-                                $sFieldValue = $rs->fields[ strtoupper($sFieldName) ];
+                        if ( $rs && $rs->RecordCount() ) {
+                            $this->_aInnerLazyCache = array_change_key_case( $rs->fields, CASE_UPPER );
+                            if ( array_key_exists( $sCacheFieldName, $rs->fields ) ) {
+                                $sFieldValue = $rs->fields[$sCacheFieldName];
                             } else {
                                 return null;
                             }
                         } else {
                             return null;
                         }
-                    } elseif ( isset( $this->_aInnerLazyCache[$sViewName][$sId][strtoupper($sFieldName)] ) ) {
-                        $sFieldValue = $this->_aInnerLazyCache[$sViewName][$sId][strtoupper($sFieldName)];
+                    } elseif ( array_key_exists( $sCacheFieldName, $this->_aInnerLazyCache ) ) {
+                        $sFieldValue = $this->_aInnerLazyCache[$sCacheFieldName];
                     } else {
                         return null;
                     }
@@ -289,9 +297,9 @@ class oxBase extends oxSuperCfg
                     if ($this->_sCacheKey) {
                         $myUtils = oxUtils::getInstance();
                         $sCacheKey = 'fieldnames_' . $this->_sCoreTable . "_" . $this->_sCacheKey;
-                        $aFieldNames = $myUtils->fromFileCache($sCacheKey);
+                        $aFieldNames = $myUtils->fromFileCache( $sCacheKey );
                         $aFieldNames[$sFieldName] = $iFieldStatus;
-                        $myUtils->toFileCache($sCacheKey, $aFieldNames);
+                        $myUtils->toFileCache( $sCacheKey, $aFieldNames );
                     }
                 } catch ( Exception $e ) {
                     return null;
@@ -299,7 +307,7 @@ class oxBase extends oxSuperCfg
 
                 //do not use field cache for this page
                 //as if we use it for lists then objects are loaded empty instead of lazy loading.
-                self::$_blDisableFieldCaching[get_class($this)] = true;
+                self::$_blDisableFieldCaching[get_class( $this )] = true;
             }
 
             oxUtilsObject::getInstance()->resetInstanceCache(get_class($this));
@@ -499,13 +507,17 @@ class oxBase extends oxSuperCfg
     public function getViewName($blForceCoreTableUsage = null)
     {
         if (!$this->_sViewTable || ($blForceCoreTableUsage !== null)) {
-            if ( ($blForceCoreTableUsage !== null)?$blForceCoreTableUsage:$this->_blForceCoreTableUsage ) {
+            if ( $blForceCoreTableUsage === true ) {
+                return $this->_sCoreTable;
+            }
+
+            if ( ( $blForceCoreTableUsage !== null ) ? $blForceCoreTableUsage : $this->_blForceCoreTableUsage ) {
                 $iShopId = -1;
             } else {
                 $iShopId = oxConfig::getInstance()->getShopId();
             }
-            $sViewName = getViewName( $this->_sCoreTable, -1, $iShopId);
-            if ($blForceCoreTableUsage !== null) {
+            $sViewName = getViewName( $this->_sCoreTable, $this->_blEmployMultilanguage == false ? -1 : $this->getLanguage(), $iShopId );
+            if ( $blForceCoreTableUsage !== null ) {
                 return $sViewName;
             }
             $this->_sViewTable = $sViewName;
@@ -677,13 +689,15 @@ class oxBase extends oxSuperCfg
     /**
      * Function builds the field list used in select.
      *
+     * @param bool $blForceCoreTableUsage (optional) use core views
+     *
      * @return string
      */
-    public function getSelectFields()
+    public function getSelectFields( $blForceCoreTableUsage = null )
     {
         $aSelectFields = array();
 
-        $sViewName = $this->getViewName();
+        $sViewName = $this->getViewName( $blForceCoreTableUsage );
 
         foreach ( $this->_aFieldNames as $sKey => $sField ) {
             $aSelectFields[] = $sViewName . '.' . $sKey;
@@ -1538,4 +1552,14 @@ class oxBase extends oxSuperCfg
         $this->_aFieldNames[$sName] = 0;
     }
 
+
+    /**
+     * Returns -1, means object is not multilanguage
+     *
+     * @return int
+     */
+    public function getLanguage()
+    {
+        return -1;
+    }
 }

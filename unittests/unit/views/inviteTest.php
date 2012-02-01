@@ -109,6 +109,7 @@ class Unit_Views_inviteTest extends OxidTestCase
     public function testSend_noUserInput()
     {
         modConfig::setParameter( 'editval', null );
+        modConfig::getInstance()->setConfigParam( "blInvitationsEnabled", true );
 
         $oEmail = $this->getMock('oxEmail', array( 'sendInviteMail' ) );
         $oEmail->expects($this->never())->method('sendInviteMail');
@@ -128,6 +129,7 @@ class Unit_Views_inviteTest extends OxidTestCase
     public function testSend_withoutCaptcha()
     {
         modConfig::setParameter( 'editval', array( 'rec_email' => 'testRecEmail@oxid-esales.com', 'send_name' => 'testSendName', 'send_email' => 'testSendEmail@oxid-esales.com', 'send_message' => 'testSendMessage', 'send_subject' => 'testSendSubject' ) );
+        modConfig::getInstance()->setConfigParam( "blInvitationsEnabled", true );
 
         $oEmail = $this->getMock('oxEmail', array( 'sendInviteMail' ) );
         $oEmail->expects($this->never())->method('sendInviteMail');
@@ -137,10 +139,10 @@ class Unit_Views_inviteTest extends OxidTestCase
         $oCaptcha->expects($this->once())->method('pass')->will( $this->returnValue( false ) );
         oxTestModules::addModuleObject( 'oxCaptcha', $oCaptcha );
 
-        $oView = $this->getProxyClass( "invite" );
+        $oView = $this->getMock( "invite", array( "getUser" ) );
+        $oView->expects($this->once())->method('getUser')->will( $this->returnValue( true ) );
         $oView->send();
-
-        $this->assertNull( $oView->getNonPublicVar( "_iMailStatus" ) );
+        $this->assertFalse( $oView->getInviteSendStatus() );
     }
 
     /**
@@ -151,6 +153,7 @@ class Unit_Views_inviteTest extends OxidTestCase
     public function testSend()
     {
         modConfig::setParameter( 'editval', array( 'rec_email' => array('testRecEmail@oxid-esales.com'), 'send_name' => 'testSendName', 'send_email' => 'testSendEmail@oxid-esales.com', 'send_message' => 'testSendMessage', 'send_subject' => 'testSendSubject' ) );
+        modConfig::getInstance()->setConfigParam( "blInvitationsEnabled", true );
 
         $oEmail = $this->getMock('oxEmail', array( 'sendInviteMail' ) );
         $oEmail->expects($this->once())->method('sendInviteMail')->will( $this->returnValue( true ) );
@@ -160,34 +163,27 @@ class Unit_Views_inviteTest extends OxidTestCase
         $oCaptcha->expects($this->once())->method('pass')->will( $this->returnValue( true ) );
         oxTestModules::addModuleObject( 'oxCaptcha', $oCaptcha );
 
-        $oView = $this->getProxyClass( "invite" );
+        $oView = $this->getMock( "invite", array( "getUser" ) );
+        $oView->expects($this->any())->method('getUser')->will( $this->returnValue( new oxUser() ) );
         $oView->send();
-
-        $this->assertEquals( "1", $oView->getNonPublicVar( "_iMailStatus" ) );
+        $this->assertTrue( $oView->getInviteSendStatus() );
     }
 
     /**
-     * Testing method send() - on success updated statistics
+     * Testing method send()
      *
      * @return null
      */
-    public function testSend_updatesStatistics_noActiveUser()
+    public function testSend_invitationNotActive()
     {
-        modConfig::setParameter( 'editval', array( 'rec_email' => array('testRecEmail@oxid-esales.com'), 'send_name' => 'testSendName', 'send_email' => 'testSendEmail@oxid-esales.com', 'send_message' => 'testSendMessage', 'send_subject' => 'testSendSubject' ) );
+        $oConfig = oxConfig::getInstance();
+        $oConfig->setConfigParam( "blInvitationsEnabled", false );
 
-        $oEmail = $this->getMock('oxEmail', array( 'sendInviteMail' ) );
-        $oEmail->expects($this->once())->method('sendInviteMail')->will( $this->returnValue( true ) );
-        oxTestModules::addModuleObject( 'oxEmail', $oEmail );
+        $oUtils = $this->getMock('oxUtils', array( 'redirect' ) );
+        $oUtils->expects($this->once())->method('redirect')->with( $this->equalTo( $oConfig->getShopHomeURL() ) );
+        oxTestModules::addModuleObject( 'oxUtils', $oUtils );
 
-        $oCaptcha = $this->getMock('oxCaptcha', array( 'pass' ) );
-        $oCaptcha->expects($this->once())->method('pass')->will( $this->returnValue( true ) );
-        oxTestModules::addModuleObject( 'oxCaptcha', $oCaptcha );
-
-        $oUser = $this->getMock('oxUser', array( 'updateInvitationStatistics' ) );
-        $oUser->expects($this->never())->method('updateInvitationStatistics');
-
-        $oView = $this->getMock('invite', array( 'getUser' ) );
-        $oView->expects($this->once())->method('getUser')->will( $this->returnValue( false ) );
+        $oView = $this->getProxyClass( "invite" );
         $oView->send();
     }
 
@@ -199,6 +195,7 @@ class Unit_Views_inviteTest extends OxidTestCase
     public function testSend_updatesStatistics()
     {
         modConfig::setParameter( 'editval', array( 'rec_email' => array('testRecEmail@oxid-esales.com'), 'send_name' => 'testSendName', 'send_email' => 'testSendEmail@oxid-esales.com', 'send_message' => 'testSendMessage', 'send_subject' => 'testSendSubject' ) );
+        modConfig::getInstance()->setConfigParam( "blInvitationsEnabled", true );
 
         $oEmail = $this->getMock('oxEmail', array( 'sendInviteMail' ) );
         $oEmail->expects($this->once())->method('sendInviteMail')->will( $this->returnValue( true ) );
@@ -212,7 +209,7 @@ class Unit_Views_inviteTest extends OxidTestCase
         $oUser->expects($this->once())->method('updateInvitationStatistics')->will( $this->returnValue( true ) );
 
         $oView = $this->getMock('invite', array( 'getUser' ) );
-        $oView->expects($this->once())->method('getUser')->will( $this->returnValue( $oUser ) );
+        $oView->expects($this->exactly( 2 ))->method('getUser')->will( $this->returnValue( $oUser ) );
         $oView->send();
     }
 
@@ -223,7 +220,10 @@ class Unit_Views_inviteTest extends OxidTestCase
      */
     public function testRender()
     {
-        $oView = $this->getProxyClass( 'invite' );
+        modConfig::getInstance()->setConfigParam( "blInvitationsEnabled", true );
+
+        $oView = $this->getMock( "invite", array( "getUser" ) );
+        $oView->expects($this->any())->method('getUser')->will( $this->returnValue( new oxUser() ) );
 
         $this->assertEquals( 'page/privatesales/invite.tpl', $oView->render() );
     }
@@ -235,11 +235,32 @@ class Unit_Views_inviteTest extends OxidTestCase
      */
     public function testRender_mailWasSent()
     {
+        modConfig::getInstance()->setConfigParam( "blInvitationsEnabled", true );
+
         $oView = $this->getProxyClass( 'invite' );
         $oView->setNonPublicVar( "_iMailStatus", 1 );
         $oView->render();
 
         $this->assertTrue( $oView->getInviteSendStatus() );
+    }
+
+    /**
+     * Testing method render()
+     *
+     * @return null
+     */
+    public function testRender_invitationNotActive()
+    {
+        $oConfig = oxConfig::getInstance();
+        $oConfig->setConfigParam( "blInvitationsEnabled", false );
+
+        $oUtils = $this->getMock('oxUtils', array( 'redirect' ) );
+        $oUtils->expects($this->once())->method('redirect')->with( $this->equalTo( $oConfig->getShopHomeURL() ) );
+        oxTestModules::addModuleObject( 'oxUtils', $oUtils );
+
+        $oView = $this->getProxyClass( "invite" );
+
+        $this->assertEquals( null, $oView->render() );
     }
 
 }

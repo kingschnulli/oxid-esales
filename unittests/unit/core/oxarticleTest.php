@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 40555 2011-12-12 13:48:01Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticleTest.php 41916 2012-01-31 13:26:57Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -109,6 +109,16 @@ class _oxArticle extends oxArticle
         self::$_aArticleVendors = array();
         self::$_aArticleManufacturers = array();
     }
+
+    /**
+     * Reset cached private variable values.
+     *
+     * @return null
+     */
+    public static function resetAmountPrice(){
+        parent::$_blHasAmountPrice = null;
+    }
+
 }
 
 /**
@@ -133,6 +143,29 @@ class modUtilsObject_oxarticle extends oxUtilsObject
  */
 class Unit_Core_oxarticleTest extends OxidTestCase
 {
+    /**
+     * Test case for #0003393: getSqlActiveSnippet(true) does not force core table usage
+     *
+     * @return null
+     */
+    public function testGgg()
+    {
+        //
+        $oProduct = new oxArticle();
+        $this->assertEquals( "oxarticles", $oProduct->getViewName( true ) );
+        $this->assertNotEquals( "oxarticles", $oProduct->getViewName() );
+
+        //
+        $oCategory = new oxCategory();
+        $this->assertEquals( "oxcategories", $oCategory->getViewName( true ) );
+        $this->assertNotEquals( "oxcategories", $oCategory->getViewName() );
+
+        //
+        $oAddress = new oxAddress();
+        $this->assertEquals( "oxaddress", $oAddress->getViewName( true ) );
+        $this->assertEquals( "oxaddress", $oAddress->getViewName( true ) );
+    }
+
     /**
      * A object of a test article 1
      *
@@ -1627,8 +1660,36 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testGetArticleRatingAverage()
     {
         $this->oArticle->oxarticles__oxrating = new oxField(3.52345, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxratingcnt = new oxField(1, oxField::T_RAW);
 
         $this->assertEquals( 3.5, $this->oArticle->getArticleRatingAverage());
+        $this->assertEquals( 1, $this->oArticle->getArticleRatingCount());
+
+        // inserting few test records
+        $oRev = new oxreview();
+        $oRev->setId( '_testrev1' );
+        $oRev->oxreviews__oxobjectid = new oxField( '_testArt' );
+        $oRev->oxreviews__oxtype     = new oxField( 'oxarticle' );
+        $oRev->oxreviews__oxrating    = new oxField( 3 );
+        $oRev->save();
+
+        $oRev = new oxreview();
+        $oRev->setId( '_testrev2' );
+        $oRev->oxreviews__oxobjectid = new oxField( '_testArt' );
+        $oRev->oxreviews__oxtype     = new oxField( 'oxarticle' );
+        $oRev->oxreviews__oxrating     = new oxField( 1 );
+        $oRev->save();
+
+        $oRev = new oxreview();
+        $oRev->setId( '_testrev3' );
+        $oRev->oxreviews__oxobjectid = new oxField( '_testVar' );
+        $oRev->oxreviews__oxtype     = new oxField( 'oxarticle' );
+        $oRev->oxreviews__oxrating     = new oxField( 5 );
+        $oRev->save();
+
+        $this->assertEquals( 3, $this->oArticle->getArticleRatingAverage( true ));
+        $this->assertEquals( 3, $this->oArticle->getArticleRatingCount( true ));
+
     }
 
     /**
@@ -1963,7 +2024,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testLoadAmountPriceInfo()
     {
-        modConfig::getInstance()->setConfigParam( 'staffelpreis', true );
+        _oxArticle::resetAmountPrice();
         $oArticle = new _oxArticle();
         $oArticle->load('1651');
         $oArticle->setVar( 'blCalcPrice', true);
@@ -1979,7 +2040,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testLoadAmountPriceInfoDontCalcPrice()
     {
-        modConfig::getInstance()->setConfigParam( 'staffelpreis', true );
         $oArticle = new _oxArticle();
         $oArticle->load('1651');
         $oArticle->setVar( 'blCalcPrice', false);
@@ -1995,7 +2055,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testLoadAmountPriceInfoWithoutAmountPrice()
     {
-        modConfig::getInstance()->setConfigParam( 'staffelpreis', true );
         $oArticle = new _oxArticle();
         $oArticle->load('2000');
         $oArticle->setVar( 'blCalcPrice', true);
@@ -2015,7 +2074,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $sSql  = "insert into oxprice2article (oxid, oxartid, oxshopid, oxaddperc, oxamount, oxamountto)";
         $sSql .= " values ('test1', '_testArt', '".$sShopId."', 10, 10, 99999999 )";
         oxDb::getDB()->execute($sSql);
-        modConfig::getInstance()->setConfigParam( 'staffelpreis', true );
         modConfig::getInstance()->setConfigParam( 'blVariantInheritAmountPrice', true );
         $oArticle = new _oxArticle();
         $oArticle->load('_testVar');
@@ -3596,9 +3654,9 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     }
 
 
-    
 
-    
+
+
     /**
      * Test amount price loading for variants.
      *
@@ -5845,7 +5903,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testGetMoreDetailLinkTestingIfAllRequestParamsAreSet()
     {
-        oxTestModules::addFunction('oxUtilsUrl', 'processUrl($url, $final)', '{return "PROC".$url.(int)$final."CORP";}');
+        oxTestModules::addFunction('oxUtilsUrl', 'processUrl($url, $blFinalUrl = true, $aParams = NULL, $iLang = NULL)', '{return "PROC".$url.(int)$final."CORP";}');
 
         modConfig::setParameter( 'cnid', 'yyy' );
         $oArticle = $this->getMock( "oxarticle", array( 'getId' ) );
@@ -5877,7 +5935,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         modConfig::setParameter( 'cl', 'thankyou' );
         modConfig::setParameter( 'tpl', '/my/tpl/file.tpl' );
 
-        oxTestModules::addFunction('oxUtilsUrl', 'processUrl($url, $final)', '{return "PROC".$url.(int)$final."CORP";}');
+        oxTestModules::addFunction('oxUtilsUrl', 'processUrl($url, $blFinalUrl = true, $aParams = NULL, $iLang = NULL)', '{return "PROC".$url.(int)$final."CORP";}');
 
         $oArticle = $this->getMock( "oxarticle", array( 'getId' ) );
         $oArticle->expects( $this->exactly( 2 ) )->method( 'getId' )->will($this->returnValue( 'xxx' ) );
@@ -7120,6 +7178,69 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->oxarticles__oxisdownloadable = new oxField( true );
 
         $this->assertTrue( $oArticle->isDownloadable() );
+    }
+
+/**
+     * Test has amount price
+     *
+     * @return null
+     */
+    public function testHasAmountPriceEmpty()
+    {
+        _oxArticle::resetAmountPrice();
+
+        oxDb::getDb()->execute('TRUNCATE TABLE `oxprice2article`');
+
+        $oProduct = new oxArticle();
+        $oProduct->load( "1126" );
+
+        $this->assertFalse( $oProduct->hasAmountPrice() );
+    }
+
+    /**
+     * Test has amount price
+     *
+     * @return null
+     */
+    public function testHasAmountPrice()
+    {
+        _oxArticle::resetAmountPrice();
+
+        // assign scale price Amount 2-2 Price 11.95
+        $oPrice2Prod = new oxBase();
+        $oPrice2Prod->init( 'oxprice2article' );
+        $oPrice2Prod->setId( '_testPrice2article' );
+        $oPrice2Prod->oxprice2article__oxshopid   = new oxField( oxConfig::getInstance()->getBaseShopId() );
+        $oPrice2Prod->oxprice2article__oxartid    = new oxField( "1126" );
+        $oPrice2Prod->oxprice2article__oxaddabs   = new oxField( 17 );
+        $oPrice2Prod->oxprice2article__oxamount   = new oxField( 2 );
+        $oPrice2Prod->oxprice2article__oxamountto = new oxField( 2 );
+        $oPrice2Prod->save();
+
+        $oProduct = new oxArticle();
+        $oProduct->load( "1126" );
+
+        $this->assertTrue( $oProduct->hasAmountPrice() );
+    }
+
+    /**
+     * Test has amount price
+     *
+     * @return null
+     */
+    public function testSetRating()
+    {
+        $oProduct = new oxArticle();
+        $oProduct->load( "1126" );
+        $oProduct->setRatingAverage( 4 );
+        $oProduct->setRatingCount( 13 );
+        $oProduct->save();
+
+        $oP = new oxArticle();
+        $oP->load( "1126" );
+
+        $this->assertEquals( 4, $oP->oxarticles__oxrating->value );
+        $this->assertEquals( 13, $oP->oxarticles__oxratingcnt->value );
     }
 
 }

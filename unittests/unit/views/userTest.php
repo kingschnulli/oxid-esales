@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 40414 2011-12-01 09:37:01Z linas.kukulskis $
+ * @version   SVN: $Id: userTest.php 41916 2012-01-31 13:26:57Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -224,7 +224,7 @@ class Unit_Views_userTest extends OxidTestCase
     }
     public function testRenderReturnsToBasketIfReservationOnAndBasketEmpty()
     {
-        oxTestModules::addFunction('oxutils', 'redirect($url)', '{throw new Exception($url);}');
+        oxTestModules::addFunction('oxutils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
         modInstances::addMod('oxutils', oxNew('oxutils'));
 
         modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);

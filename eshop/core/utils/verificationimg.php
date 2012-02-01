@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   utils
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: verificationimg.php 38583 2011-09-05 13:27:48Z linas.kukulskis $
+ * @version   SVN: $Id: verificationimg.php 41676 2012-01-23 14:36:59Z mindaugas.rimgaila $
  */
 
 /**
@@ -34,6 +34,8 @@ function getShopBasePath()
 }
 
 
+// skip session start for this file
+$_GET['skipSession'] = 1;
 
 /**
  * Includes utils class
