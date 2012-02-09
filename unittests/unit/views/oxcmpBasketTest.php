@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpBasketTest.php 41930 2012-01-31 15:27:14Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxcmpBasketTest.php 41947 2012-02-01 09:29:57Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -485,7 +485,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
         modConfig::setParameter( 'anid', 'b:artidn');
         modConfig::setParameter( 'am', 'b:am');
         modConfig::setParameter( 'sel', 'b:sel');
-        modConfig::setParameter( 'persparam', 'b:persparam');
+        modConfig::setParameter( 'persparam', array('details' => 'b:persparam'));
         modConfig::setParameter( 'bindex', 'bindex');
 
         $o =new oxcmp_basket();
@@ -495,13 +495,28 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                     (
                         'am' => 'b:am',
                         'sel' => 'b:sel',
-                        'persparam' => 'b:persparam',
+                        'persparam' => array('details' => 'b:persparam'),
                         'override' => false,
                         'basketitemid' => 'bindex',
                     )
 
             ),
             $o->UNITgetItems());
+
+        modConfig::setParameter( 'persparam', 'b:persparam');
+        $this->assertSame(array
+            (
+                'b:artid' => array
+                    (
+                        'am' => 'b:am',
+                        'sel' => 'b:sel',
+                        'persparam' => null,
+                        'override' => false,
+                        'basketitemid' => 'bindex',
+                    )
+
+            ),
+            $o->UNITgetItems(), '"Details" field in persparams is mandatory');
     }
 
 

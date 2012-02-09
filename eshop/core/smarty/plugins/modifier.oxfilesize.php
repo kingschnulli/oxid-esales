@@ -25,16 +25,34 @@
 /**
  * Smarty modifier
  * -------------------------------------------------------------
- * Name:     oxenclose<br>
- * Purpose:  {$var|oxenclose:"'"}
+ * Name:     oxfilesize<br>
+ * Purpose:  {$var|oxfilesize} Convert integer file size to readable format
  * -------------------------------------------------------------
  *
- * @param string $sString   string to enclose
- * @param string $sEncloser enclose with
+ * @param int $iSize Integer size value
  *
  * @return string
  */
-function smarty_modifier_oxenclose($sString, $sEncloser = "'")
+function smarty_modifier_oxfilesize($iSize)
 {
-    return $sEncloser . $sString . $sEncloser;
+    if ($iSize < 1024) {
+        return $iSize. " B";
+    }
+
+    $iSize = $iSize/1024;
+
+    if ($iSize < 1024) {
+        return sprintf("%.1f KB", $iSize);
+    }
+
+    $iSize = $iSize/1024;
+
+    if ($iSize < 1024) {
+        return sprintf("%.1f MB", $iSize);
+    }
+
+    $iSize = $iSize/1024;
+
+    return sprintf("%.1f GB", $iSize);
+
 }

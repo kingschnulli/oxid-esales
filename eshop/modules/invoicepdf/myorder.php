@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   modules
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: myorder.php 38382 2011-08-24 12:39:46Z arvydas.vapsva $
+ * @version   SVN: $Id: myorder.php 41978 2012-02-02 09:21:05Z mindaugas.rimgaila $
  */
 
 /**
@@ -1191,7 +1191,12 @@ class MyOrder extends MyOrder_parent
         // so this part must be enabled. Now it works with html references like &#123;
         if ($blReverse) {
             // replace now
-            $aTransTbl = get_html_translation_table (HTML_ENTITIES);
+            if (version_compare(PHP_VERSION, '5.3.4') >= 0) {
+                $aTransTbl = get_html_translation_table (HTML_ENTITIES, ENT_COMPAT, 'ISO-8859-1');
+            } else {
+                $aTransTbl = get_html_translation_table (HTML_ENTITIES, ENT_COMPAT);
+            }
+
             $aTransTbl = array_flip ($aTransTbl) + array_flip ($aReplace);
             $sValue = strtr($sValue, $aTransTbl);
             $sValue = getStr()->preg_replace('/\&\#([0-9]+)\;/me', "chr('\\1')", $sValue);

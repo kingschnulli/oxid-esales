@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: myorderTest.php 38457 2011-08-26 13:58:29Z arvydas.vapsva $
+ * @version   SVN: $Id: myorderTest.php 41972 2012-02-01 14:42:12Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -987,7 +987,8 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
     {
         $oMyOrder = $this->getProxyClass( "MyOrder" );
 
-        $sStr = $oMyOrder->UNITreplaceExtendedChars(" &euro; &copy; &quot; &#039; &#97; &#98; some text", true);
+        $sInput = " &euro; &copy; &quot; &#039; &#97; &#98; some text";
+        $sStr = $oMyOrder->UNITreplaceExtendedChars($sInput, true);
         $this->assertEquals( " " . chr(128) . " " . chr(169) . " \" ' a b some text", $sStr );
     }
 

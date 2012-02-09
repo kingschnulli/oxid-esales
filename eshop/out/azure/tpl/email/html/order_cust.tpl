@@ -42,9 +42,11 @@
             <td style="padding: 5px; border-bottom: 4px solid #ddd;">
               <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0; padding: 0; color: #555;"><b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TOTAL" }]</b></p>
             </td>
+            [{if $blShowReviewLink}]
             <td style="padding: 5px; border-bottom: 4px solid #ddd;">
               <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0; padding: 0; color: #555;"><b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PRODUCTREVIEW" }]</b></p>
             </td>
+            [{/if}]
           </tr>
 
         [{assign var="basketitemlist" value=$basket->getBasketArticles() }]
@@ -127,9 +129,11 @@
                             <b>[{ $basketitem->getFTotalPrice() }] [{ $currency->sign}]</b>
                         </p>
                     </td>
+                    [{if $blShowReviewLink}]
                     <td style="padding: 5px; border-bottom: 4px solid #ddd;">
                         <a href="[{ $oConf->getShopURL() }]index.php?shp=[{$shop->oxshops__oxid->value}]&amp;anid=[{$basketitem->getProductId()}]&amp;cl=review&amp;reviewuserhash=[{$user->getReviewUserHash($user->getId())}]" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" target="_blank">[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_REVIEW" }]</a>
                     </td>
+                    [{/if}]
                 </tr>
             [{/block}]
         [{/foreach}]
@@ -523,7 +527,7 @@
             [{foreach from=$oOrderFileList item="oOrderFile"}]
               <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
               [{if $order->oxorder__oxpaid->value}]
-                <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=download" params="sorderfileid="|cat:$oOrderFile->getId()}]" rel="nofollow">[{$oOrderFile->oxorderfiles__oxfilename->value}]</a>
+                <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=download" params="sorderfileid="|cat:$oOrderFile->getId()}]" rel="nofollow">[{$oOrderFile->oxorderfiles__oxfilename->value}]</a> [{$oOrderFile->getFileSize()|oxfilesize}]
               [{else}]
                 <span>[{$oOrderFile->oxorderfiles__oxfilename->value}]</span>
                 <strong>[{ oxmultilang ident="DOWNLOADS_PAYMENT_PENDING" }]</strong>
@@ -612,7 +616,7 @@
     [{block name="email_html_order_cust_paymentinfo"}]
         [{if $payment->oxuserpayments__oxpaymentsid->value == "oxidpayadvance"}]
             <h3 style="font-weight: bold; margin: 20px 0 7px; padding: 0; line-height: 35px; font-size: 12px;font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; border-bottom: 4px solid #ddd;">
-                [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_SHIPPINGCARRIER" }]
+                [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD" }]
             </h3>
             <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
                 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_BANK" }] [{$shop->oxshops__oxbankname->value}]<br>

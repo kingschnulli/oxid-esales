@@ -49,11 +49,13 @@
               <b>[{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_PRODUCT" }]</b>
           </p>
       </td>
+      [{if $blShowReviewLink}]
       <td style="padding: 5px; border-bottom: 4px solid #ddd;" width="150" align="right">
           <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0;">
               [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_PRODUCTRATING" }]
           </p>
       </td>
+      [{/if}]
     </tr>
     [{block name="email_html_sendednow_orderarticles"}]
         [{foreach from=$order->getOrderArticles(true) item=oOrderArticle}]
@@ -69,11 +71,13 @@
                     <br>[{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_ARTNOMBER" }] [{ $oOrderArticle->oxorderarticles__oxartnum->value }]
                 </p>
             </td>
+            [{if $blShowReviewLink}]
             <td style="padding: 5px; border-bottom: 1px solid #ddd;" align="right">
                 <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0;">
                     <a href="[{ $oViewConf->getBaseDir() }]index.php?shp=[{$shop->oxshops__oxid->value}]&amp;anid=[{ $oOrderArticle->oxorderarticles__oxartid->value }]&amp;cl=review&amp;reviewuserhash=[{$reviewuserhash}]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" target="_blank">[{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_REVIEW" }]</a>
                 </p>
             </td>
+            [{/if}]
           </tr>
         [{/foreach}]
     [{/block}]

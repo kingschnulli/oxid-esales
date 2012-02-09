@@ -20,25 +20,11 @@
                     [{foreach from=$oOrderArticle.oxorderfiles item="oOrderFile"}]
                     <dd>
                            [{if $oOrderFile->isPaid() || !$oOrderFile->oxorderfiles__oxpurchasedonly->value }]
-                                [{if $oOrderFile->isValid() }]
+                             [{if $oOrderFile->isValid() }]
                                    <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=download" params="sorderfileid="|cat:$oOrderFile->getId() }]" rel="nofollow">[{$oOrderFile->oxorderfiles__oxfilename->value}]</a>
-                               [{if $oOrderFile->oxorderfiles__oxdownloadcount->value == 0 && $oOrderFile->getValidUntil() != "0000-00-00 00:00"  }]
-                                    [{if $oOrderFile->oxorderfiles__oxlinkexpirationtime->value || $oOrderFile->oxorderfiles__oxdownloadxpirationtime->value }]
-                                        [{ oxmultilang ident="START_DOWNLOADING_UNTIL" }] [{$oOrderFile->getValidUntil()}]
-                                    [{/if}]
-                                    [{if $oOrderFile->oxorderfiles__oxmaxdownloadcount->value != 0 }]
-                                        [{ oxmultilang ident="LEFT_DOWNLOADS" }] : [{ $oOrderFile->getLeftDownloadCount() }]
-                                    [{/if}]
-                                [{else}]
-                                    [{if $oOrderFile->getValidUntil() != "0000-00-00 00:00"  }]
-                                        [{if $oOrderFile->oxorderfiles__oxlinkexpirationtime->value || $oOrderFile->oxorderfiles__oxdownloadxpirationtime->value }]
-                                            [{ oxmultilang ident="LINK_VALID_UNTIL" }] : [{ $oOrderFile->getValidUntil() }].
-                                        [{/if}]
-                                    [{/if}]
-                                    [{if $oOrderFile->oxorderfiles__oxmaxdownloadcount->value != 0 }]
-                                        [{ oxmultilang ident="LEFT_DOWNLOADS" }] : [{ $oOrderFile->getLeftDownloadCount() }]
-                                    [{/if}]
-                                [{/if}]
+                                   
+                                   [{include file="page/account/inc/file_attributes.tpl"}]
+                                
                             [{else}]
                                 [{$oOrderFile->oxorderfiles__oxfilename->value}]
                                 [{oxmultilang ident="DOWNLOAD_LINK_EXPIRED_OR_MAX_COUNT_RECEIVED"}]

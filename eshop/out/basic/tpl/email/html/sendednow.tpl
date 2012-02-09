@@ -34,9 +34,11 @@
       <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; background-color: #494949; color: #FFFFFF;" height="15" width="100">
         &nbsp;&nbsp;<b>[{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_PRODUCT" }]</b>
       </td>
+      [{if $blShowReviewLink}]
       <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; background-color: #494949; color: #FFFFFF;" align="right" width="150">
         [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_PRODUCTRATING" }]
       </td>
+      [{/if}]
     </tr>
     [{foreach from=$order->getOrderArticles(true) item=oOrderArticle}]
       <tr>
@@ -47,9 +49,11 @@
           &nbsp;&nbsp;[{ $oOrderArticle->oxorderarticles__oxtitle->value }] [{ $oOrderArticle->oxorderarticles__oxselvariant->value }]
           <br>&nbsp;&nbsp;[{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_ARTNOMBER" }] [{ $oOrderArticle->oxorderarticles__oxartnum->value }]
         </td>
+        [{if $blShowReviewLink}]
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
           <a href="[{ $oViewConf->getBaseDir() }]index.php?shp=[{$shop->oxshops__oxid->value}]&amp;anid=[{ $oOrderArticle->oxorderarticles__oxartid->value }]&amp;cl=review&amp;reviewuserhash=[{$reviewuserhash}]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" target="_blank">[{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_REVIEW" }]</a>
         </td>
+        [{/if}]
       </tr>
     [{/foreach}]
     </table>

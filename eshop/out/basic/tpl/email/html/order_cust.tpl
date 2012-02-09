@@ -16,7 +16,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=[{$oEmailView->getCharset()}]">
   </head>
   <body bgcolor="#FFFFFF" link="#355222" alink="#355222" vlink="#355222" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;">
-    <img src="[{$oViewConf->getImageUrl('logo_white.gif', false)}]" border="0" hspace="0" vspace="0" alt="[{ $shop->oxshops__oxname->value }]" align="texttop"><br><br>
+      <img src="[{$oViewConf->getImageUrl('logo_white.gif', false)}]" border="0" hspace="0" vspace="0" alt="[{ $shop->oxshops__oxname->value }]" align="texttop"><br><br>
     [{if $payment->oxuserpayments__oxpaymentsid->value == "oxempty"}]
       [{oxcontent ident="oxuserordernpemail"}]
     [{else}]
@@ -43,9 +43,11 @@
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; background-color: #494949; color: #FFFFFF;" align="right" width="70">
           <b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TOTAL" }]</b>
         </td>
+        [{if $blShowReviewLink}]
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; background-color: #494949; color: #FFFFFF;" align="right" width="70">
           [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PRODUCTREVIEW" }]
         </td>
+        [{/if}]
       </tr>
     [{assign var="basketitemlist" value=$basket->getBasketArticles() }]
     [{foreach key=basketindex from=$basket->getContents() item=basketitem}]
@@ -94,9 +96,12 @@
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
           <b>[{ $basketitem->getFTotalPrice() }] [{ $currency->sign}]</b>
         </td>
+        [{if $blShowReviewLink}]
         <td style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px; padding-top: 10px;" valign="top" align="right">
           <a href="[{ $oConf->getShopURL() }]index.php?shp=[{$shop->oxshops__oxid->value}]&amp;anid=[{$basketitem->getProductId()}]&amp;cl=review&amp;reviewuserhash=[{$user->getReviewUserHash($user->getId())}]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;" target="_blank">[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_REVIEW" }]</a>
-        </td>      </tr>
+        </td>
+        [{/if}]
+      </tr>
     [{/foreach}]
     <tr>
       <td height="1" bgcolor="#BEBEBE"></td>
@@ -364,7 +369,7 @@
         <br><b>[{ oxmultilang ident="MY_DOWNLOADS_DESC" }]</b>
         [{foreach from=$oOrderFileList item="oOrderFile"}]
           [{if $order->oxorder__oxpaid->value}]
-            <br><a href="[{ oxgetseourl ident=$oConf->getSelfLink()|cat:"cl=download" params="sorderfileid="|cat:$oOrderFile->getId() }]" rel="nofollow">[{$oOrderFile->oxorderfiles__oxfilename->value}]</a>
+            <br><a href="[{ oxgetseourl ident=$oConf->getSelfLink()|cat:"cl=download" params="sorderfileid="|cat:$oOrderFile->getId() }]" rel="nofollow">[{$oOrderFile->oxorderfiles__oxfilename->value}]</a> [{$oOrderFile->getFileSize()|oxfilesize}]
           [{else}]
             <br>[{$oOrderFile->oxorderfiles__oxfilename->value}] <b>[{ oxmultilang ident="DOWNLOADS_PAYMENT_PENDING" }]</b>
           [{/if}]

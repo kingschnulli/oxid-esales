@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxorderfile.php 39347 2011-10-13 08:45:52Z linas.kukulskis $
  */
@@ -130,6 +130,18 @@ class oxOrderFile extends oxBase
         $this->oxorderfiles__oxlinkexpirationtime = new oxField( $iExpirationTime );
         $this->oxorderfiles__oxdownloadexpirationtime = new oxField( $iExpirationDownloadTime );
         $this->oxorderfiles__oxvaliduntil = new oxField( $sDate );
+    }
+
+    /**
+     * Returns downloadable file size in bytes.
+     *
+     * @return int
+     */
+    public function getFileSize()
+    {
+        $oFile = oxNew("oxfile");
+        $oFile->load($this->oxorderfiles__oxfileid->value);
+        return $oFile->getSize();
     }
 
     /**

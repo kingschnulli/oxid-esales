@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxfile.php 39347 2011-10-13 08:45:52Z linas.kukulskis $
  */
@@ -449,6 +449,21 @@ class oxFile extends oxBase
             $iExpTime = $this->getConfig()->getConfigParam( "iDownloadExpirationTime" );
         }
         return $iExpTime;
+    }
+
+    /**
+     * Returns file size in bytes
+     *
+     * @return int
+     */
+    public function getSize()
+    {
+        $iSize = null;
+        $sFilename = $this->getStoreLocation();
+        if (file_exists($sFilename)) {
+            return filesize($sFilename);
+        }
+        return $iSize;
     }
 
 }

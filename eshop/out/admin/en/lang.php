@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 41848 2012-01-27 15:46:38Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 42034 2012-02-06 16:07:55Z juergen.busch $
  */
 
 /*
@@ -701,7 +701,7 @@ $aLang = array(
 'DYN_IPAYMENT_QUESTIONPAYMONEYBACK'                        => 'Do you really want to payback the money?',
 'DYN_IPAYMENT_ODERSESSIONLOG'                              => 'Order Session Log',
 'DYN_IPAYMENT_NOIPAYMENT'                                  => 'The payment was not made via IPAYMENT.',
-'DYN_IPAYMENT_PAYMENTONLYRESERVED'                         => 'Payment only reserved, no caputre happend!',
+'DYN_IPAYMENT_PAYMENTONLYRESERVED'                         => 'Payment only reserved, no capture happend!',
 'DYN_IPAYMENT_QUESTIONWANTTODOBOOKING'                     => 'Do you want to make a capture now? Click ',
 'DYN_IPAYMENT_HERE'                                        => 'here',
 'DYN_IPAYMENT_QUESTIONWANTTODOCANCELATION'                 => 'Do you want make a reverse now? Click ',
@@ -715,7 +715,7 @@ $aLang = array(
 'DYN_IPAYMENT_CANCELATIONSUCCESSFUL'                       => 'Reverse successful!',
 'DYN_IPAYMENT_REFUNDSUCCESSFUL'                            => 'Refund successful finished!',
 'DYN_IPAYMENT_QUESTIONCANCELPAYMENTMANUAL_NOTE'            => '(e.g. because of manual reverse in the payshow)? Click ',
-'DYN_IPAYMENT_ORDERCANCELD'                                => 'Order canceld',
+'DYN_IPAYMENT_ORDERCANCELD'                                => 'Order canceled',
 'DYN_IPAYMENT_ORDERREFUNDED'                               => 'Order refunded',
 'DYN_IPAYMENT_QUESTIONORDERMANUALRESET'                    => 'Rest payment manual?',
 'DYN_IPAYMENT_QUESTIONORDERMANUALRESET_NOTE'               => '(e.g. because of manual reverse in the payshow)? Click ',
@@ -838,8 +838,8 @@ $aLang = array(
 'EMAIL_SENDEDNOW_HTML_ORDERNUM'                            => 'Your Order No.',
 'EMAIL_SENDEDNOW_HTML_RATE'                                => 'rate',
 'EMAIL_SENDEDNOW_HTML_TS_RATINGS_RATEUS'                   => 'Please take a minute to rate our shop.',
-'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKING'                    => '[tr] Your shipment tracking URL:',
-'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKINGURL'                 => '[tr] click here',
+'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKING'                    => 'Your shipment tracking URL:',
+'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKINGURL'                 => 'click here',
 'EXCEPTION_USER_NOVALIDLOGIN'                              => 'Wrong e-mail or password!',
 'EXCEPTION_USER_USEREXISTS'                                => 'This user allready exists!',
 'EXCEPTION_CONNECTION_NODB'                                => 'No connection to database!',
@@ -1263,7 +1263,7 @@ $aLang = array(
 'SHOP_CONFIG_CALCULATEVATFORWRAPPING'                      => 'Display VAT contained in Gift Wrapping in Shopping Cart and Invoice',
 'SHOP_CONFIG_CALCWRAPVATONTOP'                             => 'Enter Gift Wrapping Prices as net Price (plus VAT)',
 'SHOP_CONFIG_CALCULATEVATOFORPAYCHARGE'                    => 'Display VAT contained in Payment Method Charges in Shopping Cart and Invoice',
-'SHOP_CONFIG_CALCPAYVATONTOP'                              => '[tr]Enter Payment Method Charges as net Price (plus VAT)',
+'SHOP_CONFIG_CALCPAYVATONTOP'                              => 'Enter Payment Method Charges as net Price (plus VAT)',
 'SHOP_CONFIG_CMSFOLDER'                                    => 'CMS Page Folders',
 'SHOP_CONFIG_CNTOFNEWS'                                    => 'Number of News which are displayed in the News Box',
 'SHOP_CONFIG_DATEFORMAT'                                   => 'Date Format in eShop Admin',
@@ -1271,7 +1271,7 @@ $aLang = array(
 'SHOP_CONFIG_DEFAULTVAT'                                   => 'Default VAT for all Products',
 'SHOP_CONFIG_DEFAULTLANGUAGE'                              => 'Default Language (0, 1, 2 ...) - 0 for German, 1 for English',
 'SHOP_CONFIG_EXCLUDENONMATERIALPRODUCTS'                   => "Don't consider intangible Products (e.g. Gift Certificates) in Shipping Costs Calculation",
-'SHOP_CONFIG_ENTERNETPRICE'                                => '[tr]Product prices entered/displayed in Admin are Net Prices',
+'SHOP_CONFIG_ENTERNETPRICE'                                => 'Enter Product prices as net Price (plus VAT)',
 'SHOP_CONFIG_INLANDCUSTOMERS'                              => 'Domestic Customers - Customers living in the <b>selected</b> Countries are assigned to the User Group "Domestic Customers". For multiple selections use STRG key.',
 'SHOP_CONFIG_LARGECUSTOMERPRICE'                           => 'Purchase Price Threshold from which Users are assigned to User Group "Huge Turnover"',
 'SHOP_CONFIG_MAXGBENTRIESPERDAY'                           => 'Number of Guestbook Entries each User is allowed to enter per Day',

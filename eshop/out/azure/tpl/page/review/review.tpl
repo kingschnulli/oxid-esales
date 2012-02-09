@@ -1,4 +1,4 @@
-[{assign var="template_title" value="LOGIN"|oxmultilangassign }]
+[{assign var="template_title" value="REVIEW_YOURREVIEW"|oxmultilangassign }]
 
 [{capture append="oxidBlock_content"}]
 

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 41848 2012-01-27 15:46:38Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 42033 2012-02-06 16:07:33Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -841,8 +841,8 @@ $aLang = array(
 'EMAIL_SENDEDNOW_HTML_ORDERNUM'                            => 'Ihre Bestellnr.',
 'EMAIL_SENDEDNOW_HTML_RATE'                                => 'bewerten',
 'EMAIL_SENDEDNOW_HTML_TS_RATINGS_RATEUS'                   => 'Bitte nehmen Sie sich eine Minute, um unseren Shop zu bewerten.',
-'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKING'                    => '[tr] Your shipment tracking URL:',
-'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKINGURL'                 => '[tr] click here',
+'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKING'                    => 'Ihr Link zur Sendungsverfolgung:',
+'EMAIL_SENDEDNOW_HTML_SHIPMENTTRACKINGURL'                 => 'hier klicken',
 'EXCEPTION_USER_NOVALIDLOGIN'                              => 'Falsche E-Mail oder Passwort!',
 'EXCEPTION_USER_USEREXISTS'                                => 'Dieser Benutzer existiert bereits!',
 'EXCEPTION_CONNECTION_NODB'                                => 'Keine Verbindung zur Datenbank möglich!',
@@ -1262,10 +1262,10 @@ $aLang = array(
 'SHOP_CONFIG_CONFIRMAGB'                                   => 'Kunden müssen die AGB bestätigen, um bestellen zu können',
 'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'                      => 'Im 4ten Bestellschritt einen zusätzlichen "Bestellung absenden" Button oben anzeigen (Wenn die Einstellung nicht aktiv ist, wird nur der "Bestellung absenden" Button weiter unten angezeigt).',
 'SHOP_CONFIG_CALCULATEVATFORDELIVERY'                      => 'Im Warenkorb und in der Rechnung die Versandkosten als Nettobetrag und Mehrwertsteuer anstatt als Bruttobetrag anzeigen',
-'SHOP_CONFIG_CALCDELVATONTOP'                              => 'Versandkosten als Nettopreise eingeben (Versandkosten zuzüglich MwSt.)',
+'SHOP_CONFIG_CALCDELVATONTOP'                              => 'Versandkosten als Nettopreise eingeben (zuzüglich MwSt.)',
 'SHOP_CONFIG_CALCULATEVATFORWRAPPING'                      => 'Die in den Geschenkverpackungskosten enthaltene Mehrwertsteuer im Warenkorb und in der Rechnung anzeigen',
-'SHOP_CONFIG_CALCWRAPVATONTOP'                             => 'Verpackungskosten als Nettopreise eingeben (Verpackungskosten zuzüglich MwSt.)',
-'SHOP_CONFIG_CALCPAYVATONTOP'                              => '[tr]Zahlungsarten-Gebühren als Nettopreise eingeben (Zahlungsarten-Gebühren zuzüglich MwSt.)',
+'SHOP_CONFIG_CALCWRAPVATONTOP'                             => 'Verpackungskosten als Nettopreise eingeben (zuzüglich MwSt.)',
+'SHOP_CONFIG_CALCPAYVATONTOP'                              => 'Zahlungsarten-Gebühren als Nettopreise eingeben (zuzüglich MwSt.)',
 'SHOP_CONFIG_CALCULATEVATOFORPAYCHARGE'                    => 'Die in den Zahlungsarten-Gebühren enthaltene Mehrwertsteuer im Warenkorb und in der Rechnung anzeigen',
 'SHOP_CONFIG_CMSFOLDER'                                    => 'Ordner für CMS-Seiten',
 'SHOP_CONFIG_CNTOFNEWS'                                    => 'Anzahl der Nachrichten, die in der Nachrichten-Box links angezeigt werden',
@@ -1274,7 +1274,7 @@ $aLang = array(
 'SHOP_CONFIG_DEFAULTVAT'                                   => 'Standard-MwSt.-Satz für alle Artikel',
 'SHOP_CONFIG_DEFAULTLANGUAGE'                              => 'Standardsprache (0, 1, 2 ...) - 0 bedeutet die erste Sprache Deutsch',
 'SHOP_CONFIG_EXCLUDENONMATERIALPRODUCTS'                   => 'Nicht materielle Artikel nicht in die Berechnung der Versandkosten einbeziehen',
-'SHOP_CONFIG_ENTERNETPRICE'                                => '[tr]Artikelpreise netto eingeben (zuzüglich MwSt.)',
+'SHOP_CONFIG_ENTERNETPRICE'                                => 'Artikelpreise netto eingeben (zuzüglich MwSt.)',
 'SHOP_CONFIG_INLANDCUSTOMERS'                              => 'Inlandskunden - Kunden, die aus den markierten Ländern stammen, werden der Benutzergruppe "Inlandskunde" zugeordnet<br>Für Mehrfachmarkierung STRG-Taste gedrückt halten',
 'SHOP_CONFIG_LARGECUSTOMERPRICE'                           => 'Einkaufswert, ab der Kunden der Benutzergruppe "Großer Umsatz" zugeordnet werden',
 'SHOP_CONFIG_MAXGBENTRIESPERDAY'                           => 'Anzahl der Gästebuch-Einträge, die jeder Kunde pro Tag maximal verfassen darf',
@@ -1653,7 +1653,7 @@ $aLang = array(
 'SHOP_PERF_LOADTREEFORSEARCH'                              => 'Kategoriebaum für die Suche laden (Die Suche kann auf einzelne Kategorien beschränkt werden)',
 'SHOP_PERF_LOADFULLTREE'                                   => 'Den kompletten Kategoriebaum für die Navigation laden (belastet die Performance, wenn viele Kategorien vorhanden sind)',
 'SHOP_PERF_LOADACTION'                                     => 'Aktionen laden',
-'SHOP_PERF_LOADREVIEWS'                                    => '[tr] Activate user Reviews and Ratings',
+'SHOP_PERF_LOADREVIEWS'                                    => 'Kommentare und Bewertungen aktivieren',
 'SHOP_PERF_LOADCROSSSELLING'                               => 'Crossselling laden',
 'SHOP_PERF_LOADACCESSOIRES'                                => 'Zubehör laden',
 'SHOP_PERF_LOADCUSTOMERWHOBOUGHTTHIS'                      => '"Kunden, die diese Artikel gekauft haben, kauften auch" laden',

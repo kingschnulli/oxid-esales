@@ -62,7 +62,7 @@ dl dd ul a {color:#535353}
 a.delete, a.unasign  {width: 15px;height: 15px;display:block;float:right;background:transparent url(bg/ico_delete.gif) 0 center no-repeat;margin:0 1px;line-height: 1px;}
 a.delete:hover, a.unasign:hover{background-position:-15px center;}
 
-a.deleteText, a.zoomText {color: #333;} 
+a.deleteText, a.zoomText {color: #333;}
 a.deleteText span.ico {width: 15px; height: 15px; -right: 25px; float: left; background:transparent url(bg/ico_delete.gif) 0 1px no-repeat;margin:0 1px;line-height: 1px; margin-right: 3px;}
 a.deleteText:hover span.ico {background-position:-15px 1px;}
 
@@ -164,7 +164,7 @@ ul.req li.null{border-color:gray;}
 ul.req ul{padding:0;margin:0;}
 ul.req li.group {border:none;float:left;font-weight:bold;width:32%;}
 ul.req li.coll {border:none;float:left;font-weight:bold;width:32%;}
-ul.req li.clear{clear:left;diplay:none;border:none;visibility:collapse;height:0px;padding:0;margin:0;display:block;line-height: 0;}
+ul.req li.clear{clear:left;display:none;border:none;visibility:collapse;height:0px;padding:0;margin:0;display:block;line-height: 0;}
 
 /* Input fields help button and help text panel */
 .helpPanelText {display: none;}
@@ -316,13 +316,13 @@ a.themetitle:hover {color: #000;}
 
 #infoContent {
     overflow:auto;
-	padding-bottom: 55px;
+    padding-bottom: 55px;
 }
 
 #footerBox {
     position: relative;
-	margin-top: -55px; /* negative value of footer height */
-	height: 55px;
+    margin-top: -55px; /* negative value of footer height */
+    height: 55px;
     border-top: 2px solid #ddd;
     background: #fff;
 }

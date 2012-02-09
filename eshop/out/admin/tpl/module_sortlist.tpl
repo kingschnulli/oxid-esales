@@ -33,6 +33,7 @@
                         <input type="hidden" name="fnc" value="remove">
                         <input type="hidden" name="oxid" value="[{ $oxid }]">
                         <input type="hidden" name="aModules" value="">
+                        <input type="hidden" name="updatelist" value="1">
                         <input type="submit" name="yesButton" class="saveButton" value="[{oxmultilang ident="GENERAL_YES"}]">
                         <input type="submit" name="noButton" class="saveButton" value="[{oxmultilang ident="GENERAL_NO"}]">
                     </form>

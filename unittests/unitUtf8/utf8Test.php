@@ -1256,19 +1256,30 @@ class UnitUtf8_utf8Test extends OxidTestCase
         oxTestModules::addFunction('oxrssfeed', 'getSearchArticlesUrl', '{ return "surl"; }');
         oxTestModules::addFunction('oxrssfeed', 'getSearchArticlesTitle', '{ return "dastitle"; }');
 
-        oxTestModules::addFunction('oxsearch', 'getSearchArticles', '{ return "loaded".$aA[0].$aA[1].$aA[2].$aA[3].$aA[4]; }');
-        oxTestModules::addFunction('oxrssfeed', '_getArticleItems($a)', '{ return $aA[0]; }');
+        oxTestModules::addFunction('oxsearch', 'getSearchArticles', '{
+            $oArtList = new oxArticleList();
+            $oArt = new oxArticle();
+            $oArt->setId("loaded".$aA[0].$aA[1].$aA[2].$aA[3].$aA[4]);
+            $oArtList->offsetSet(\'test_item\', $oArt);
+            return $oArtList;
+        }');
+        oxTestModules::addFunction('oxrssfeed', '_getArticleItems', '{ return $aA[0]; }');
         oxTestModules::addFunction('oxrssfeed', '_getShopUrl', '{ return "shopurl?"; }');
 
         $oRss = oxNew('oxrssfeed');
         $oRss->loadSearchArticles( $sValue, "BB", "CC", "DD");
+
+        $oArtList = new oxArticleList();
+        $oArt = new oxArticle();
+        $oArt->setId('loaded'.$sValue.'BBCCDD'.oxNew('oxarticle')->getViewName().'.oxtimestamp desc');
+        $oArtList->offsetSet('test_item', $oArt);
 
         $aChannel = array(
             'data' => array (
                 '0' => null,
                 '1' => 'dastitle',
                 '2' => 'RSS_SEARCHARTICLES_DESCRIPTIONtr',
-                '3' => 'loaded'.$sValue.'BBCCDD'.oxNew('oxarticle')->getViewName().'.oxtimestamp desc',
+                '3' => $oArtList,
                 '4' => 'surl',
                 '5' => 'shopurl?cl=search&amp;klnk'
             )

@@ -435,6 +435,7 @@ CREATE TABLE `oxconfig` (
 #
 
 INSERT INTO `oxconfig` VALUES('8563fba1965a11df3.34244997', 'oxbaseshop', '', 'blEnterNetPrice', 'bool', '');
+INSERT INTO `oxconfig` VALUES('8563fba1965a11df3.12345678', 'oxbaseshop', '', 'blWrappingVatOnTop', 'bool', '');
 INSERT INTO `oxconfig` VALUES('8563fba1965a1cc34.52696792', 'oxbaseshop', '', 'blCalculateDelCostIfNotLoggedIn', 'bool', '');
 INSERT INTO `oxconfig` VALUES('8563fba1965a1f266.82484369', 'oxbaseshop', '', 'blAllowUnevenAmounts', 'bool', '');
 INSERT INTO `oxconfig` VALUES('8563fba1965a219c9.51133344', 'oxbaseshop', '', 'blUseStock', 'bool', 0x07);

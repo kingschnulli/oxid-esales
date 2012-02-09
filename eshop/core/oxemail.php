@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 40302 2011-11-28 15:58:33Z vilma $
+ * @version   SVN: $Id: oxemail.php 42076 2012-02-08 13:00:02Z rimvydas.paskevicius $
  */
 /**
  * Includes PHP mailer class.
@@ -537,6 +537,10 @@ class oxEmail extends PHPMailer
         $oSmarty = $this->_getSmarty();
         $this->setViewData( "order", $oOrder);
 
+        if ( $myConfig->getConfigParam( "bl_perfLoadReviews" ) ) {
+            $this->setViewData( "blShowReviewLink", true );
+        }
+
         // Process view data array through oxoutput processor
         $this->_processViewArray();
 
@@ -1041,10 +1045,13 @@ class oxEmail extends PHPMailer
         $this->setViewData( "order", $oOrder );
         $this->setViewData( "shopTemplateDir", $myConfig->getTemplateDir(false) );
 
-        //deprecated var
-        $oUser = oxNew( 'oxuser' );
-        $this->setViewData( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
-
+        if ( $myConfig->getConfigParam( "bl_perfLoadReviews" ) ) {
+            $this->setViewData( "blShowReviewLink", true );
+            //deprecated var
+            $oUser = oxNew( 'oxuser' );
+            $this->setViewData( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
+        }
+        
         // Process view data array through oxoutput processor
         $this->_processViewArray();
 

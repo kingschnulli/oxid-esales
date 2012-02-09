@@ -26,7 +26,7 @@
             [{foreach from=$oOrderFileList item="oOrderFile"}]
               <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
               [{if $order->oxorder__oxpaid->value}]
-                <a href="[{ oxgetseourl ident=$oViewConf->getBaseDir()|cat:"index.php?cl=download" params="sorderfileid="|cat:$oOrderFile->getId() }]" rel="nofollow">[{$oOrderFile->oxorderfiles__oxfilename->value}]</a>
+                <a href="[{ oxgetseourl ident=$oViewConf->getBaseDir()|cat:"index.php?cl=download" params="sorderfileid="|cat:$oOrderFile->getId() }]" rel="nofollow">[{$oOrderFile->oxorderfiles__oxfilename->value}]</a> [{$oOrderFile->getFileSize()|oxfilesize}]
               [{else}]
                 <span>[{$oOrderFile->oxorderfiles__oxfilename->value}]</span>
                 <strong>[{ oxmultilang ident="EMAIL_SENDDOWNLOADS_PAYMENT_PENDING" }]</strong>

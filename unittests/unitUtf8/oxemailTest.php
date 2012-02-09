@@ -1318,12 +1318,11 @@ class UnitUtf8_oxemailTest extends OxidTestCase
         $iErrorReporting = error_reporting( E_ALL ^ E_NOTICE );
         $e = null;
         try {
-            $oParams = new Oxstdclass();
-
+            $aParams = array();
             $aParams['email'] = 'username@useremail.nl';
             $aParams['aid']   = '_testArticleId';
 
-            $oAlarm = & oxNew( "oxpricealarm");
+            $oAlarm = oxNew( "oxpricealarm");
             $oAlarm->oxpricealarm__oxprice = new oxField('123', oxField::T_RAW);
 
             $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop", "_getUseInlineImages" ) );
@@ -1335,6 +1334,7 @@ class UnitUtf8_oxemailTest extends OxidTestCase
             $this->assertTrue( $blRet, 'Price alarm mail was not sent to user' );
 
             // check mail fields
+            $aFields = array();
             $aFields['sRecipient']     = 'orderemail@orderemail.nl';
             $aFields['sRecipientName'] = 'testShopName';
             $aFields['sSubject']       = oxLang::getInstance()->translateString('EMAIL_PRICEALARM_OWNER_SUBJECT', 0 ) . " testArticle";
@@ -1349,7 +1349,8 @@ class UnitUtf8_oxemailTest extends OxidTestCase
             //uncoment line to generate template for checking mail body
             //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
-            if ( !$this->checkMailBody('testSendPriceAlarmNotification', $oEmail->getBody()) ) {
+            $sMailBody = $oEmail->getBody();
+            if ( !$this->checkMailBody('testSendPriceAlarmNotification', $sMailBody) ) {
                 $this->fail('Incorect mail body');
             }
         }
