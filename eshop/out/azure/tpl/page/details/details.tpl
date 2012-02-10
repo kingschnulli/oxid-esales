@@ -48,7 +48,8 @@
             </div>
         </div>
 
-        <div id="productinfo" itemscope itemtype="http://schema.org/Product">
+        [{* RDFa offering*}]
+        <div id="productinfo">
             [{include file="page/details/inc/fullproductinfo.tpl"}]
         </div>
     </div>

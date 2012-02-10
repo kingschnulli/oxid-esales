@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 41770 2012-01-26 08:45:35Z arvydas.vapsva $
+ * @version   SVN: $Id: oxutilsfile.php 41833 2012-01-27 15:32:24Z linas.kukulskis $
  */
 
 /**
@@ -688,5 +688,30 @@ class oxUtilsFile extends oxSuperCfg
     {
         $sFolder = array_key_exists( $sType, $this->_aTypeToPath ) ? $this->_aTypeToPath[ $sType ] : '0';
         return $this->normalizeDir( $sFolder );
+    }
+
+    /**
+     * Returns mime type by filename
+     *
+     * @param string $sFileName File name
+     *
+     * @return string
+     */
+    public function getMimeType($sFileName)
+    {
+        //for PHP 5.3
+        if (function_exists("finfo_file")) {
+            $rFinfo = finfo_open(FILEINFO_MIME_TYPE);
+            $sMime = finfo_file($rFinfo, $sFileName);
+            return $sMime;
+        }
+
+        //deprecated functionality
+        if (function_exists("mime_content_type")) {
+            $sMime = mime_content_type($sFileName);
+            return $sMime;
+        }
+
+        return null;
     }
 }

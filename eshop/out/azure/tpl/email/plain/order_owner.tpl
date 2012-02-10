@@ -18,8 +18,9 @@
 
 [{block name="email_plain_order_ownervoucherdiscount"}]
 [{if $oViewConf->getShowVouchers() }]
-[{ foreach from=$vouchers item=voucher}]
-[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_USEDCOUPONS" }] [{$voucher->oxmodvouchers__oxvouchernr->value}] - [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_DICOUNT" }] [{$voucher->oxmodvouchers__oxdiscount->value}] [{ if $voucher->oxmodvouchers__oxdiscounttype->value == "absolute"}][{ $currency->name}][{else}]%[{/if}]
+[{ foreach from=$order->getVoucherList() item=voucher}]
+[{ assign var="voucherseries" value=$voucher->getSerie() }]
+[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_USEDCOUPONS" }] [{$voucher->oxvouchers__oxvouchernr->value}] - [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_DICOUNT" }] [{$voucherseries->oxvoucherseries__oxdiscount->value}] [{ if $voucherseries->oxvoucherseries__oxdiscounttype->value == "absolute"}][{ $currency->sign}][{else}]%[{/if}]
 [{/foreach }]
 [{/if}]
 [{/block}]

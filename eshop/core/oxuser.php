@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 41881 2012-01-30 12:34:50Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxuser.php 41005 2012-01-06 14:18:31Z vilma $
  */
 
 /**
@@ -1360,8 +1360,8 @@ class oxUser extends oxBase
             }
 
             // cookie must be set ?
-            if ( $blCookie && $myConfig->getConfigParam( 'blShowRememberMe' ) ) {
-                oxUtilsServer::getInstance()->setUserCookie( $this->oxuser__oxusername->value, $this->oxuser__oxpassword->value, $myConfig->getShopId(), 31536000, $this->oxuser__oxpasssalt->value );
+            if ( $blCookie ) {
+                oxUtilsServer::getInstance()->setUserCookie( $this->oxuser__oxusername->value, $this->oxuser__oxpassword->value, $myConfig->getShopId() );
             }
 
             //load basket from the database
@@ -1430,20 +1430,20 @@ class oxUser extends oxBase
         $blFoundInCookie = false;
 
         //trying automatic login (by 'remember me' cookie)
-        if ( !$sUserID && !$blAdmin && $myConfig->getConfigParam('blShowRememberMe') ) {
+        if ( !$sUserID && !$blAdmin ) {
             $sShopID = $myConfig->getShopId();
             if ( ( $sSet = oxUtilsServer::getInstance()->getUserCookie( $sShopID ) ) ) {
                 $aData = explode( '@@@', $sSet );
                 $sUser = $aData[0];
                 $sPWD  = @$aData[1];
 
-                $sSelect =  'select oxid, oxpassword, oxpasssalt from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$oDB->quote($sUser);
+                $sSelect =  'select oxid, oxpassword from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$oDB->quote($sUser);
 
 
                 $rs = $oDB->execute( $sSelect );
                 if ( $rs != false && $rs->recordCount() > 0 ) {
                     while (!$rs->EOF) {
-                        $sTest = crypt( $rs->fields[1], $rs->fields[2] );
+                        $sTest = crypt( $rs->fields[1], 'ox' );
                         if ( $sTest == $sPWD ) {
                             // found
                             $sUserID = $rs->fields[0];
@@ -1604,26 +1604,6 @@ class oxUser extends oxBase
 
         // leaving as it was set ...
         return $this->oxuser__oxrights->value;
-    }
-
-    /**
-     * Tries to fetch and set next record number in DB. Returns true on success
-     *
-     * @param string $sMaxField  field name where record number is stored
-     * @param array  $aWhere     (optional) shop filter add SQL string
-     * @param int    $iMaxTryCnt (optional) max number of tryouts
-     *
-     * @return bool
-     */
-    protected function _setRecordNumber( $sMaxField, $aWhere = null ,$iMaxTryCnt = 5 )
-    {
-
-        /*if ( !$myConfig->blMallUsers ) {
-            $sShopID = $myConfig->getShopId();
-            $aWhere = array(" {$this->getViewName()}.oxshopid = '$sShopID' ");
-        }*/
-
-        return parent::_setRecordNumber( $sMaxField, $aWhere, $iMaxTryCnt );
     }
 
     /**
@@ -1990,15 +1970,14 @@ class oxUser extends oxBase
      * @param string  $sPassword password
      * @param string  $sShopId   shop ID (default null)
      * @param integer $iTimeout  timeout value (default 31536000)
-     * @param string  $sSalt     encryption salt
      *
      * @deprecated should be used oxUtilsServer::setUserCookie()
      *
      * @return null
      */
-    protected function _setUserCookie( $sUser, $sPassword,  $sShopId = null, $iTimeout = 31536000, $sSalt = 'ox' )
+    protected function _setUserCookie( $sUser, $sPassword,  $sShopId = null, $iTimeout = 31536000 )
     {
-        oxUtilsServer::getInstance()->setUserCookie( $sUser, $sPassword, $sShopId, $iTimeout, $sSalt );
+        oxUtilsServer::getInstance()->setUserCookie( $sUser, $sPassword, $sShopId, $iTimeout );
     }
 
     /**
@@ -2385,7 +2364,7 @@ class oxUser extends oxBase
      */
     public function updateInvitationStatistics( $aRecEmail )
     {
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sUserId = $this->getId();
 
         if ( $sUserId && is_array( $aRecEmail ) && count( $aRecEmail ) > 0 ) {
@@ -2417,4 +2396,16 @@ class oxUser extends oxBase
 
     }
 
+    /**
+     * returns true if user registered and have account
+     *
+     * @return bool
+     */
+    public function hasAccount()
+    {
+
+        return (bool) $this->oxuser__oxpassword->value;
+
+    }
+    
 }

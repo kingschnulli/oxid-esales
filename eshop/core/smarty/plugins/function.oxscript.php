@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: function.oxscript.php 38109 2011-08-10 14:56:40Z tomas $
+ * @version   SVN: $Id: function.oxscript.php 39553 2011-10-26 07:55:59Z rimvydas.paskevicius $
  */
 
 /**
@@ -63,7 +63,7 @@ function smarty_function_oxscript($params, &$smarty)
     } elseif ( $params['include'] ) {
         $sUrl = $params['include'];
         if (!preg_match('#^https?://#', $sUrl)) {
-            $sUrl = $myConfig->getResourceUrl($sUrl);
+            $sUrl = $myConfig->getResourceUrl($sUrl, isAdmin() );
         }
 
         $iPriority = ( $params['priority'] ) ? $params['priority'] : $iDefaultPriority;

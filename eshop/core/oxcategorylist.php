@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylist.php 41851 2012-01-28 12:20:54Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcategorylist.php 39803 2011-11-05 09:21:11Z linas.kukulskis $
  */
 
 
@@ -109,6 +109,8 @@ class oxCategoryList extends oxList
             }
             return "$sTable.".implode(", $sTable.", $aColumns);
         }
+
+        $oBaseObject = $this->getBaseObject();
 
         $sFieldList = "$sTable.oxid as oxid, $sTable.oxactive as oxactive,"
                     ." $sTable.oxhidden as oxhidden, $sTable.oxparentid as oxparentid,"

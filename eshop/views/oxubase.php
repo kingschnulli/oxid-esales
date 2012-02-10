@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 41876 2012-01-30 10:15:28Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxubase.php 40958 2012-01-05 07:54:27Z linas.kukulskis $
  */
 
 /**
@@ -3131,7 +3131,8 @@ class oxUBase extends oxView
     {
         if ( $this->_aDeliveryAddress == null ) {
             $aAddress = oxConfig::getParameter( 'deladr');
-            if ( $aAddress ) {
+            //do not show deladr if address was reloaded
+            if ( $aAddress && !oxConfig::getParameter( 'reloadaddress' )) {
                 $this->_aDeliveryAddress = $aAddress;
             }
         }
@@ -3253,7 +3254,7 @@ class oxUBase extends oxView
      *
      * @return boolean
      */
-    public function isFbWidgetWisible()
+    public function isFbWidgetVisible()
     {
         if ( $this->_blFbWidgetsOn === null ) {
             $oUtils = oxUtilsServer::getInstance();
@@ -3268,12 +3269,12 @@ class oxUBase extends oxView
     }
 
     /**
-     * Returns true if "Remember me" are ON
+     * Checks if downloadable files are turned on
      *
-     * @return boolean
+     * @return bool
      */
-    public function showRememberMe()
+    public function isEnabledDownloadableFiles()
     {
-        return (bool)$this->getConfig()->getConfigParam('blShowRememberMe');
+        return (bool) $this->getConfig()->getConfigParam( "blEnableDownloads" );
     }
 }

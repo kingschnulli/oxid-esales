@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 41876 2012-01-30 10:15:28Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxsession.php 41930 2012-01-31 15:27:14Z mindaugas.rimgaila $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -791,14 +791,11 @@ class oxSession extends oxSuperCfg
     protected function _allowSessionStart()
     {
         $blAllowSessionStart = true;
-        $myConfig = oxConfig::getInstance();
 
         // special handling only in non-admin mode
         if ( !$this->isAdmin() ) {
             if ( oxUtils::getInstance()->isSearchEngine() || oxConfig::getParameter( 'skipSession' ) ) {
                 $blAllowSessionStart = false;
-            } elseif (oxUtilsServer::getInstance()->getOxCookie( 'oxid_'.$myConfig->getShopId().'_autologin' ) === '1') {
-                $blAllowSessionStart = true;
             } elseif ( !$this->_forceSessionStart() && !oxUtilsServer::getInstance()->getOxCookie( 'sid_key' ) ) {
 
                 // session is not needed to start when it is not necessary:
@@ -916,7 +913,7 @@ class oxSession extends oxSuperCfg
         $sCurrUrl  = $myConfig->isSsl() ? $myConfig->getSslShopUrl( 0 ) : $myConfig->getShopUrl( 0 );
 
         $blSessCookieSetOnce = false;
-        if ( isset( $aSessCookieSetOnce[$sCurrUrl] ) ) {
+        if ( is_array($aSessCookieSetOnce) && isset( $aSessCookieSetOnce[$sCurrUrl] ) ) {
             $blSessCookieSetOnce = $aSessCookieSetOnce[$sCurrUrl];
         }
 
@@ -933,6 +930,10 @@ class oxSession extends oxSuperCfg
 
         //if we detect the cookie then set session var for possible later use
         if ( $sCookieSid == "oxid" && !$blSessCookieSetOnce ) {
+            if (!is_array($aSessCookieSetOnce)) {
+                $aSessCookieSetOnce = array();
+            }
+
             $aSessCookieSetOnce[$sCurrUrl] = "ox_true";
             self::setVar( "sessioncookieisset", $aSessCookieSetOnce );
         }

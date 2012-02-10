@@ -68,7 +68,7 @@ require "_header.php"; ?>
         </td>
     </tr>
     <tr>
-        <td style="padding-top: 5px;"><?php $this->getText('SELECT_SELIVERY_COUNTRY'); ?>: </td>
+        <td style="padding-top: 5px;"><?php $this->getText('SELECT_DELIVERY_COUNTRY'); ?>: </td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" height="29">
                 <tr>

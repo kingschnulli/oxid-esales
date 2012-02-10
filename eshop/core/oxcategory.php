@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategory.php 39706 2011-11-03 12:51:11Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcategory.php 41256 2012-01-12 13:34:23Z mindaugas.rimgaila $
  */
 
 /**
@@ -234,9 +234,9 @@ class oxCategory extends oxI18n implements oxIUrl
 
             // only delete empty categories
             // #1173M - not all pic are deleted, after article is removed
-            $myUtilsPic->safePictureDelete( $this->oxcategories__oxthumb->value, $sDir . '/master/thumb', 'oxcategories', 'oxthumb' );
-            $myUtilsPic->safePictureDelete( $this->oxcategories__oxicon->value, $sDir . '/master/icon', 'oxcategories', 'oxicon' );
-            $myUtilsPic->safePictureDelete( $this->oxcategories__oxpromoicon->value, $sDir . '/master/promo_icon', 'oxcategories', 'oxpromoicon' );
+            $myUtilsPic->safePictureDelete( $this->oxcategories__oxthumb->value, $sDir . oxUtilsFile::getInstance()->getImageDirByType('TC'), 'oxcategories', 'oxthumb' );
+            $myUtilsPic->safePictureDelete( $this->oxcategories__oxicon->value, $sDir . oxUtilsFile::getInstance()->getImageDirByType('CICO'), 'oxcategories', 'oxicon' );
+            $myUtilsPic->safePictureDelete( $this->oxcategories__oxpromoicon->value, $sDir . oxUtilsFile::getInstance()->getImageDirByType('PICO'), 'oxcategories', 'oxpromoicon' );
 
             $sAdd = " and oxshopid = '" . $this->getShopId() . "' ";
 

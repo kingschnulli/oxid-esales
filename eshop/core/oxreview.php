@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxreview.php 39189 2011-10-12 13:24:44Z arvydas.vapsva $
+ * @version   SVN: $Id: oxreview.php 39311 2011-10-13 08:36:48Z linas.kukulskis $
  */
 
 /**

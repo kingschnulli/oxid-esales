@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 41881 2012-01-30 12:34:50Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxsessionTest.php 41934 2012-01-31 16:04:13Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -34,7 +34,7 @@ class Unit_oxsessionTest_oxUtilsServer extends oxUtilsServer
      */
     protected $_aCookieVars = array();
 
-    public function setOxCookie( $sVar, $sVal = "", $iExpire = 0, $sPath = '/', $sDomain = null, $blToSession = true, $blSecure = false )
+    public function setOxCookie( $sVar, $sVal = "", $iExpire = 0, $sPath = '/', $sDomain = null, $blToSession = true )
     {
         //unsetting cookie
         if (!isset($sVar) && !isset($sVal)) {
@@ -808,8 +808,8 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $this->assertFalse( $this->oSession->UNITcheckCookies( "oxid", null) );
         $aSessCookSet = $this->oSession->getVar( "sessioncookieisset");
         $this->assertEquals( "ox_true", $aSessCookSet[$myConfig->getCurrentShopURL()] );
-        $this->assertFalse( $this->oSession->UNITcheckCookies( "oxid", "ox_true" ) );
-        $this->assertTrue( $this->oSession->UNITcheckCookies( null, "ox_true" ) );
+        $this->assertFalse( $this->oSession->UNITcheckCookies( "oxid", $aSessCookSet ) );
+        $this->assertTrue( $this->oSession->UNITcheckCookies( null, $aSessCookSet ) );
         $this->assertEquals( "oxid", oxUtilsServer::getInstance()->getOxCookie( 'sid_key' ) );
 
         modConfig::getInstance()->setConfigParam('blSessionUseCookies', 1);

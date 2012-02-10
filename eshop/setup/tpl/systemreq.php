@@ -32,6 +32,7 @@ require "_header.php"; ?>
             <select name="setup_lang" onChange="document.getElementById('langSelectionForm').submit();" style="font-size: 11px;">
                 <option value="en">English</option>
                 <option value="de" <?php if ( $this->getViewParam( "sSetupLang" ) == 'de' ) echo 'selected'; ?>>Deutsch</option>
+                <option value="fr" <?php if ( $this->getViewParam( "sSetupLang" ) == 'fr' ) echo 'selected'; ?>>Français</option>
             </select>
             <noscript>
             <input type="submit" name="setup_lang_submit" value="<?php $this->getText('SELECT_SETUP_LANG_SUBMIT'); ?>" style="font-size: 11px;">

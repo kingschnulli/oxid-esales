@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercategoryTest.php 39131 2011-10-11 12:41:45Z arunas.paskevicius $
+ * @version   SVN: $Id: oxseoencodercategoryTest.php 39293 2011-10-13 08:30:25Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrecommlist.php 39190 2011-10-12 13:25:05Z arvydas.vapsva $
+ * @version   SVN: $Id: oxrecommlist.php 40351 2011-11-29 16:16:28Z linas.kukulskis $
  */
 
 /**
@@ -355,7 +355,7 @@ class oxRecommList extends oxBase implements oxIUrl
 
             $sPartial = substr( $sSelect, strpos( $sSelect, ' from ' ) );
             $sSelect  = "select count( distinct rl.oxid ) $sPartial ";
-            $iCnt = oxDb::getDb()->getOne( $sSelect );
+            $iCnt = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT )->getOne( $sSelect );
         }
         return $iCnt;
     }

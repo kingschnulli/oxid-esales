@@ -25,7 +25,7 @@
         <tt class="identifier" id="test_no_[{$testid}]">
             [{if $product->getPricePerUnit()}]
                 <div id="test_product_price_unit_[{$testid}]" class="pperunit">
-                    [{$product->oxarticles__oxunitquantity->value}] [{$product->oxarticles__oxunitname->value}] | [{$product->getPricePerUnit()}] [{ $currency->sign}]/[{$product->oxarticles__oxunitname->value}]
+                    [{$product->oxarticles__oxunitquantity->value}] [{$product->getUnitName()}] | [{$product->getPricePerUnit()}] [{ $currency->sign}]/[{$product->getUnitName()}]
                 </div>
             [{elseif $product->oxarticles__oxweight->value  }]
                 <span class="type" title="weight">[{ oxmultilang ident="INC_PRODUCTITEM_ARTWEIGHT" }]</span>
@@ -148,7 +148,7 @@
     [{if $size!='big'}] [{$smarty.capture.product_price}] [{/if}]
 
     [{oxhasrights ident="TOBASKET"}]
-        [{ if !$product->isNotBuyable() && !$product->hasMdVariants() }]
+        [{ if !$product->isNotBuyable() && !$product->hasMdVariants() && !$blDisableToCart }]
 
         [{if $size=='thin' || $size=='thinest'}]
         <div class="amount">
@@ -159,7 +159,7 @@
         [{/if}]
     [{/oxhasrights}]
 
-    [{if $product->hasMdVariants() }]
+    [{if $product->hasMdVariants() || $blDisableToCart }]
     <span class="btn moreinfo">
         <a id="test_variantMoreInfo_[{$testid}]" class="" href="[{ $_productLink }]" onclick="oxid.mdVariants.getMdVariantUrl('mdVariant_[{$testid}]'); return false;">[{ oxmultilang ident="INC_PRODUCT_VARIANTS_MOREINFO" }]</a>
     </span>

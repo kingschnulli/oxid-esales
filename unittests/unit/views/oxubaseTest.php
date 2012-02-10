@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 41881 2012-01-30 12:34:50Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxubaseTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1011,7 +1011,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     public function testGetContentId()
     {
         $oView = $this->getProxyClass( 'oxubase' );
-        $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
+        $sContentId = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
         $this->assertEquals( $sContentId, $oView->getContentId() );
     }
 
@@ -2161,29 +2161,27 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      *
      * @return null
      */
-    public function testisFbWidgetWisible()
+    public function testisFbWidgetVisible()
     {
         // cookie OFF
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 0;}");
         $oView = new oxUbase();
-        $this->assertFalse( $oView->isFbWidgetWisible() );
+        $this->assertFalse( $oView->isFbWidgetVisible() );
 
         // cookie ON
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 1;}");
         $oView = new oxUbase();
-        $this->assertTrue( $oView->isFbWidgetWisible() );
+        $this->assertTrue( $oView->isFbWidgetVisible() );
     }
 
-    /**
-     * oxUBase::showRememberMe() test case
+     /**
+     * oxUbase::isEnabledDownloadabaleFiles() test case
      *
      * @return null
      */
-    public function testShowRememberMe()
+    public function testIsEnabledDownloadableFiles()
     {
-        modConfig::getInstance()->setConfigParam('blShowRememberMe', true );
-
         $oView = new oxUbase();
-        $this->assertTrue( $oView->showRememberMe() );
+        $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "blEnableDownloads" ), $oView->isEnabledDownloadableFiles() );
     }
 }

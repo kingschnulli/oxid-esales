@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucher.php 39222 2011-10-12 13:55:27Z arvydas.vapsva $
+ * @version   SVN: $Id: oxvoucher.php 41863 2012-01-30 08:12:42Z arvydas.vapsva $
  */
 
 /**
@@ -171,11 +171,11 @@ class oxVoucher extends oxBase
     public function getDiscountValue( $dPrice )
     {
         if ($this->_isProductVoucher()) {
-            return $this->_getProductDiscoutValue( $dPrice );
+            return $this->_getProductDiscoutValue( (double) $dPrice );
         } elseif ($this->_isCategoryVoucher()) {
-            return $this->_getCategoryDiscoutValue( $dPrice );
+            return $this->_getCategoryDiscoutValue( (double) $dPrice );
         } else {
-            return $this->_getGenericDiscoutValue( $dPrice );
+            return $this->_getGenericDiscoutValue( (double) $dPrice );
         }
     }
 
@@ -660,10 +660,7 @@ class oxVoucher extends oxBase
         }
 
         if ( $dDiscount > $dPrice ) {
-            $oEx = oxNew( 'oxVoucherException' );
-            $oEx->setMessage('EXCEPTION_VOUCHER_TOTALBELOWZERO');
-            $oEx->setVoucherNr($this->oxvouchers__oxvouchernr->value);
-            throw $oEx;
+            $dDiscount = $dPrice;
         }
 
         return $dDiscount;

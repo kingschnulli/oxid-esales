@@ -15,4 +15,7 @@
         <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_wishlist" }]" rel="nofollow">[{ oxmultilang ident="WIDGET_SERVICES_MYWISHLIST" }]</a></li>
         <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wishlist" params="wishid="|cat:$oView->getWishlistUserId() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_SERVICES_PUBLICWISHLIST" }]</a></li>
     [{/if}]
+    [{if $oView->isEnabledDownloadableFiles()}]
+        <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_downloads" }]" rel="nofollow">[{ oxmultilang ident="MY_DOWNLOADS" }]</a></li>
+    [{/if}]
 </ul>

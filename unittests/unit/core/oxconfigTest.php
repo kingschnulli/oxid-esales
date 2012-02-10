@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 41767 2012-01-26 08:34:22Z alfonsas $
+ * @version   SVN: $Id: oxconfigTest.php 41829 2012-01-27 15:26:36Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -41,6 +41,17 @@ class modForTestInitNoConnection extends oxConfig
         throw $oEx;
     }
 }
+
+class modForTestInitLoadingPriority extends oxConfig
+{
+    public $iDebug;
+
+    public function _loadVarsFromDb($sShopID, $aOnlyVars = null, $sModule = '')
+    {
+        $this->iDebug = 33;
+    }
+}
+
 // P
 /*
 class modForTestGetTemplateDirExpectsDefault extends oxConfig
@@ -568,7 +579,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->init();
         $sShopId  = $oConfig->getShopId();
         $sConfKey = $oConfig->getConfigParam( 'sConfigKey' );
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         $aVars = array( "theme:basic#iNewBasketItemMessage",
                         "theme:azure#iNewBasketItemMessage",
@@ -1923,6 +1934,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
 
 
 
+
     public function testGetOutDir()
     {
         $oConfig = new oxConfig();
@@ -2176,7 +2188,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $this->assertEquals( $sQ, $oConfig->getDecodeValueQuery() );
     }
 
-     public function testGetShopMainUrl()
+    public function testGetShopMainUrl()
     {
         $oConfig = $this->getProxyClass( "oxConfig" );
 
@@ -2192,6 +2204,18 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->setNonPublicVar("_blIsSsl", true );
         $this->assertEquals( $sSSLUrl, $oConfig->getShopMainUrl() );
 
+    }
+
+    /**
+     * Checks if config variables loaded from congfig.inc.php file
+     * takes higher priority compared to the ones loaded from db.
+     * This is a test case for bug #3427
+     */
+    public function testConfigFilePriority()
+    {
+        $oConfig = new modForTestInitLoadingPriority();
+        $oConfig->init();
+        $this->assertNotEquals(33, $oConfig->iDebug);
     }
 
 }

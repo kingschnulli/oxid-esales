@@ -40,76 +40,78 @@ function ThisDate( sID)
     <td valign="top" class="edittext">
 
         <table cellspacing="0" cellpadding="0" border="0">
-        <tr>
-            <td class="edittext">
-            [{ oxmultilang ident="ORDER_MAIN_IPADDRESS" }]
-            </td>
-            <td class="edittext">
-            [{$edit->oxorder__oxip->value }]
-            </td>
-        </tr>
-        <tr>
-            <td class="edittext">
-            [{ oxmultilang ident="GENERAL_ORDERNUM" }]
-            </td>
-            <td class="edittext">
-            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxordernr->fldmax_length}]" name="editval[oxorder__oxordernr]" value="[{$edit->oxorder__oxordernr->value }]" [{ $readonly }]>
-            [{ oxinputhelp ident="HELP_GENERAL_ORDERNUM" }]
-            </td>
-        </tr>
-        <tr>
-            <td class="edittext">
-            [{ oxmultilang ident="ORDER_MAIN_BILLNUM" }]
-            </td>
-            <td class="edittext">
-            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxbillnr->fldmax_length}]" name="editval[oxorder__oxbillnr]" value="[{$edit->oxorder__oxbillnr->value }]" [{ $readonly }]>
-            [{ oxinputhelp ident="HELP_ORDER_MAIN_BILLNUM" }]
-            </td>
-        </tr>
-        <tr>
-            <td class="edittext">
-            [{ oxmultilang ident="ORDER_MAIN_TRACKCODE" }]&nbsp;&nbsp;
-            </td>
-            <td class="edittext">
-            <input type="text" class="editinput" size="25" maxlength="[{$edit->oxorder__oxtrackcode->fldmax_length}]" name="editval[oxorder__oxtrackcode]" value="[{$edit->oxorder__oxtrackcode->value }]" [{ $readonly }]>
-            [{ oxinputhelp ident="HELP_ORDER_MAIN_TRACKCODE" }]
-            </td>
-        </tr>
-        <tr>
-            <td class="edittext">
-            [{ oxmultilang ident="GENERAL_DELIVERYCOST" }]
-            </td>
-            <td class="edittext">
-            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxdelcost->fldmax_length}]" name="editval[oxorder__oxdelcost]" value="[{$edit->oxorder__oxdelcost->value }]" [{ $readonly }]> ([{ $edit->oxorder__oxcurrency->value }])
-            [{ oxinputhelp ident="HELP_GENERAL_DELIVERYCOST" }]
-            </td>
-        </tr>
-        <tr>
-            <td class="edittext">
-            [{ oxmultilang ident="ORDER_MAIN_DISCOUNT" }]
-            </td>
-            <td class="edittext">
-            <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxdiscount->fldmax_length}]" name="editval[oxorder__oxdiscount]" value="[{$edit->oxorder__oxdiscount->value }]" [{ $readonly }]> ([{ $edit->oxorder__oxcurrency->value }])
-            [{ oxinputhelp ident="HELP_ORDER_MAIN_DISCOUNT" }]
-            </td>
-        </tr>
-        <tr>
-            <td class="edittext">
-                [{ oxmultilang ident="ORDER_MAIN_PAIDON" }]
-            </td>
-            <td class="edittext">[{assign var=date value=$edit->oxorder__oxpaid->value|replace:"0000-00-00 00:00:00":""}]
-                <input type="text" class="editinput" size="25" name="editval[oxorder__oxpaid]" value="[{$edit->oxorder__oxpaid|oxformdate }]" [{include file="help.tpl" helpid=article_vonbis}] [{ $readonly }]>&nbsp;<a href="Javascript:ThisDate('[{$sNowValue|oxformdate:'datetime':true}]');" class="edittext" [{if $readonly }]onclick="JavaScript:return false;"[{/if}]><u>[{ oxmultilang ident="ORDER_MAIN_CURRENT_DATE" }]</u></a>
-                [{ oxinputhelp ident="HELP_ORDER_MAIN_PAIDON" }]
-            </td>
-        </tr>
-        <tr>
-            <td class="edittext" valign="middle">
-            <b>[{ oxmultilang ident="GENERAL_SENDON" }]</b>
-            </td>
-            <td class="edittext" valign="bottom">
-            <b>[{ $edit->oxorder__oxsenddate->value|oxformdate:'datetime':true }]</b>
-            </td>
-        </tr>
+        [{block name="admin_order_main_form"}]
+            <tr>
+                <td class="edittext">
+                [{ oxmultilang ident="ORDER_MAIN_IPADDRESS" }]
+                </td>
+                <td class="edittext">
+                [{$edit->oxorder__oxip->value }]
+                </td>
+            </tr>
+            <tr>
+                <td class="edittext">
+                [{ oxmultilang ident="GENERAL_ORDERNUM" }]
+                </td>
+                <td class="edittext">
+                <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxordernr->fldmax_length}]" name="editval[oxorder__oxordernr]" value="[{$edit->oxorder__oxordernr->value }]" [{ $readonly }]>
+                [{ oxinputhelp ident="HELP_GENERAL_ORDERNUM" }]
+                </td>
+            </tr>
+            <tr>
+                <td class="edittext">
+                [{ oxmultilang ident="ORDER_MAIN_BILLNUM" }]
+                </td>
+                <td class="edittext">
+                <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxbillnr->fldmax_length}]" name="editval[oxorder__oxbillnr]" value="[{$edit->oxorder__oxbillnr->value }]" [{ $readonly }]>
+                [{ oxinputhelp ident="HELP_ORDER_MAIN_BILLNUM" }]
+                </td>
+            </tr>
+            <tr>
+                <td class="edittext">
+                [{ oxmultilang ident="ORDER_MAIN_TRACKCODE" }]&nbsp;&nbsp;
+                </td>
+                <td class="edittext">
+                <input type="text" class="editinput" size="25" maxlength="[{$edit->oxorder__oxtrackcode->fldmax_length}]" name="editval[oxorder__oxtrackcode]" value="[{$edit->oxorder__oxtrackcode->value }]" [{ $readonly }]>
+                [{ oxinputhelp ident="HELP_ORDER_MAIN_TRACKCODE" }]
+                </td>
+            </tr>
+            <tr>
+                <td class="edittext">
+                [{ oxmultilang ident="GENERAL_DELIVERYCOST" }]
+                </td>
+                <td class="edittext">
+                <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxdelcost->fldmax_length}]" name="editval[oxorder__oxdelcost]" value="[{$edit->oxorder__oxdelcost->value }]" [{ $readonly }]> ([{ $edit->oxorder__oxcurrency->value }])
+                [{ oxinputhelp ident="HELP_GENERAL_DELIVERYCOST" }]
+                </td>
+            </tr>
+            <tr>
+                <td class="edittext">
+                [{ oxmultilang ident="ORDER_MAIN_DISCOUNT" }]
+                </td>
+                <td class="edittext">
+                <input type="text" class="editinput" size="15" maxlength="[{$edit->oxorder__oxdiscount->fldmax_length}]" name="editval[oxorder__oxdiscount]" value="[{$edit->oxorder__oxdiscount->value }]" [{ $readonly }]> ([{ $edit->oxorder__oxcurrency->value }])
+                [{ oxinputhelp ident="HELP_ORDER_MAIN_DISCOUNT" }]
+                </td>
+            </tr>
+            <tr>
+                <td class="edittext">
+                    [{ oxmultilang ident="ORDER_MAIN_PAIDON" }]
+                </td>
+                <td class="edittext">[{assign var=date value=$edit->oxorder__oxpaid->value|replace:"0000-00-00 00:00:00":""}]
+                    <input type="text" class="editinput" size="25" name="editval[oxorder__oxpaid]" value="[{$edit->oxorder__oxpaid|oxformdate }]" [{include file="help.tpl" helpid=article_vonbis}] [{ $readonly }]>&nbsp;<a href="Javascript:ThisDate('[{$sNowValue|oxformdate:'datetime':true}]');" class="edittext" [{if $readonly }]onclick="JavaScript:return false;"[{/if}]><u>[{ oxmultilang ident="ORDER_MAIN_CURRENT_DATE" }]</u></a>
+                    [{ oxinputhelp ident="HELP_ORDER_MAIN_PAIDON" }]
+                </td>
+            </tr>
+            <tr>
+                <td class="edittext" valign="middle">
+                <b>[{ oxmultilang ident="GENERAL_SENDON" }]</b>
+                </td>
+                <td class="edittext" valign="bottom">
+                <b>[{ $edit->oxorder__oxsenddate->value|oxformdate:'datetime':true }]</b>
+                </td>
+            </tr>
+        [{/block}]
         <tr>
             <td class="edittext">
             </td>
@@ -252,6 +254,24 @@ function ThisDate( sID)
             </td>
             <td class="edittext"><br>
                 <input type="submit" class="edittext" name="save" value="[{ oxmultilang ident="GENERAL_SETBACKSENDTIME" }]" [{ $readonly }]>
+            </td>
+        </tr>
+        </form>
+        <br>
+        <br>
+        <form name="senddownloadlinks" id="senddownloadlinks" action="[{ $oViewConf->getSelfLink() }]" method="post">
+        [{ $oViewConf->getHiddenSid() }]
+        <input type="hidden" name="cur" value="[{ $oCurr->id }]">
+        <input type="hidden" name="cl" value="order_main">
+        <input type="hidden" name="fnc" value="senddownloadlinks">
+        <input type="hidden" name="oxid" value="[{ $oxid }]">
+        <input type="hidden" name="editval[oxorder__oxid]" value="[{ $oxid }]">
+        <tr>
+            <td class="edittext">
+            </td>
+            <td class="edittext" style="border : 1px #A9A9A9; border-style : solid solid solid solid; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; padding-left: 5px;">
+                [{ oxmultilang ident="ORDER_MAIN_SEND_DOWNLOADS" }] <br>
+                <input type="submit" class="edittext" name="save" value="&nbsp;&nbsp;[{ oxmultilang ident="GENERAL_SEND" }]&nbsp;&nbsp;" [{ $readonly }]>
             </td>
         </tr>
         </form>

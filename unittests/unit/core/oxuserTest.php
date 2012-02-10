@@ -92,7 +92,7 @@ class Unit_oxuserTest_oxUtilsServer2 extends oxUtilsServer
      */
     protected $_aCookieVars = array();
 
-    public function setOxCookie( $sVar, $sVal = "", $iExpire = 0, $sPath = '/', $sDomain = null, $blToSession = true, $blSecure = false )
+    public function setOxCookie( $sVar, $sVal = "", $iExpire = 0, $sPath = '/', $sDomain = null, $blToSession = true )
     {
         //unsetting cookie
         if (!isset($sVar) && !isset($sVal)) {
@@ -1374,28 +1374,6 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oUser = $this->getProxyClass("oxUser");
         $oUser->oxuser__oxrights = new oxField('malladmin', oxField::T_RAW);
         $this->assertEquals( "user", $oUser->UNITgetUserRights() );
-    }
-
-    /**
-     * Testing method which sets customer number
-     */
-    public function testSetRecordNumber()
-    {
-        $myUtils  = oxUtils::getInstance();
-        $myDB     = oxDb::getDB();
-        $myConfig = oxConfig::getInstance();
-
-        // getting possible next number
-        $sQ = 'select (max(oxcustnr) + 1) as umax from oxuser';
-        $iNext = (int) $myDB->getOne( $sQ );
-
-        $sUserID = $this->_aUsers[ $this->_aShops[ rand(0, count( $this->_aShops ) - 1 ) ] ][ rand( 0, count( $this->_aUsers[ 0 ] ) - 1 ) ];
-        $oUser = $this->getProxyClass("oxUser");
-        $oUser->Load( $sUserID );
-        $oUser->UNITsetRecordNumber( 'oxcustnr' );
-
-        // testing
-        $this->assertEquals( $iNext, $oUser->oxuser__oxcustnr->value );
     }
 
     /**
@@ -2933,7 +2911,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
 
-        $sVal = oxADMIN_LOGIN . '@@@' . crypt( $oActUser->encodePassword( oxADMIN_PASSWD, oxDb::getDb()->getOne('select OXPASSSALT from oxuser where OXID="oxdefaultadmin"') ), '61646D696E' );
+        $sVal = oxADMIN_LOGIN . '@@@' . crypt( $oActUser->encodePassword( oxADMIN_PASSWD, oxDb::getDb()->getOne('select OXPASSSALT from oxuser where OXID="oxdefaultadmin"') ), 'ox' );
         oxUtilsServer::getInstance()->setOxCookie( 'oxid_'.$sShopId, $sVal );
 
         $oActUser->loadActiveUser();
@@ -3424,10 +3402,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
     {
         oxTestModules::addFunction( "oxUtilsDate", "getTime", "{return 0;}" );
 
-        $sCryptedVal = oxADMIN_LOGIN.'@@@' . crypt( oxADMIN_PASSWD, '61646D696E' );
+        $sCryptedVal = oxADMIN_LOGIN.'@@@' . crypt( oxADMIN_PASSWD, 'ox' );
         $oUser = oxNew( 'oxuser' );
         $this->assertEquals( '', $oUser->UNITgetUserCookie() );
-        $oUser->UNITsetUserCookie( oxADMIN_LOGIN, oxADMIN_PASSWD, null, 31536000, '61646D696E' );
+        $oUser->UNITsetUserCookie( oxADMIN_LOGIN, oxADMIN_PASSWD );
         $this->assertEquals( $sCryptedVal, $oUser->UNITgetUserCookie() );
         $oUser->UNITdeleteUserCookie();
         $this->assertNull( $oUser->UNITgetUserCookie() );
@@ -3589,7 +3567,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oUser->load("oxdefaultadmin");
         $oUser->updateInvitationStatistics( $aRecEmails );
 
-        $aRec = oxDb::getDb( true )->getAll( "select * from oxinvitations order by oxemail");
+        $aRec = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( "select * from oxinvitations order by oxemail");
 
         $this->assertEquals( "oxdefaultadmin", $aRec[0]["OXUSERID"] );
         $this->assertEquals( "test1@oxid-esales.com", $aRec[0]["OXEMAIL"] );

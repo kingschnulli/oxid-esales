@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order_overview.php 41852 2012-01-28 13:54:58Z arvydas.vapsva $
+ * @version   SVN: $Id: order_overview.php 40539 2011-12-12 13:43:17Z linas.kukulskis $
  */
 
 /**
@@ -53,7 +53,7 @@ class Order_Overview extends oxAdminDetails
 
             $this->_aViewData["edit"]          = $oOrder;
             $this->_aViewData["aProductVats"]  = $oOrder->getProductVats();
-            $this->_aViewData["orderArticles"] = $oOrder->getOrderArticles();
+            $this->_aViewData["orderArticles"] = $oOrder->getOrderArticles( true );
             $this->_aViewData["giftCard"]      = $oOrder->getGiftCard();
             $this->_aViewData["paymentType"]   = $this->_getPaymentType( $oOrder );
             $this->_aViewData["deliveryType"]  = $oOrder->getDelSet();
@@ -225,14 +225,7 @@ class Order_Overview extends oxAdminDetails
             $oOrder->save();
 
             // #1071C
-            $oOrderArticles = $oOrder->getOrderArticles();
-            foreach ( $oOrderArticles as $sOxid => $oArticle ) {
-                // remove canceled articles from list
-                if ( $oArticle->oxorderarticles__oxstorno->value == 1 ) {
-                    $oOrderArticles->offsetUnset( $sOxid );
-                }
-            }
-
+            $oOrderArticles = $oOrder->getOrderArticles( true );
             if ( ( $blMail = oxConfig::getParameter( "sendmail" ) ) ) {
                 // send eMail
                 $oEmail = oxNew( "oxemail" );
@@ -283,9 +276,12 @@ class Order_Overview extends oxAdminDetails
     {
         $oOrder = oxNew( "oxorder" );
         $blCan = false;
+
+
         if ( $oOrder->load( $this->getEditObjectId() ) ) {
-            $blCan = $oOrder->oxorder__oxstorno->value == "0" &&
-                     !( $oOrder->oxorder__oxsenddate->value == "0000-00-00 00:00:00" || $oOrder->oxorder__oxsenddate->value == "-" );
+            if ( $oOrder->oxorder__oxstorno->value == "0" && $oOrder->oxorder__oxsenddate->value > 1 ) {
+                $blCan = true;
+            }
         }
         return $blCan;
     }

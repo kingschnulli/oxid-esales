@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticle.php 40048 2011-11-18 14:20:25Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderarticle.php 41202 2012-01-11 15:52:59Z mindaugas.rimgaila $
  */
 
 /**
@@ -382,7 +382,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             $sArtId = $oArticle->oxarticles__oxparentid->value;
         }
 
-        $oDb = oxDb::getDb();
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
         // add manin category chaching;
         $sQ = "select oxcatnid from ".getViewName( "oxobject2category" )." where oxobjectid = ".$oDb->quote( $sArtId )." order by oxtime";
         $sIdent = md5( $sQ );
@@ -497,7 +497,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             $sTitle .= ( $sTitle ? ' ' : '' ) . $oArticle->oxarticles__oxartnum->value;
         }
 
-        return $this->_prepareTitle( $sTitle ) . '.html';
+        return $this->_prepareTitle( $sTitle, false, $oArticle->getLanguage() ) . '.html';
     }
 
     /**

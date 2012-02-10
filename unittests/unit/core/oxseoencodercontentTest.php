@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercontentTest.php 28421 2010-06-18 08:54:27Z sarunas $
+ * @version   SVN: $Id: oxseoencodercontentTest.php 41215 2012-01-12 08:08:37Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -208,7 +208,7 @@ class Unit_Core_oxSeoEncoderContentTest extends OxidTestCase
         $oContent = $this->getMock( 'oxcontent', array( 'getLanguage', 'getId', 'getBaseStdLink', 'loadInLang' ) );
         $oContent->oxcontents__oxcatid = new oxField('xxx', oxField::T_RAW);
         $oContent->oxcontents__oxtitle = new oxField('content title', oxField::T_RAW);
-        $oContent->expects( $this->once() )->method('getLanguage')->will( $this->returnValue( 0 ) );
+        $oContent->expects( $this->atLeastOnce() )->method('getLanguage')->will( $this->returnValue( 0 ) );
         $oContent->expects( $this->exactly( 3 ) )->method('getId')->will( $this->returnValue( 'contentid' ) );
         $oContent->expects( $this->once() )->method('getBaseStdLink')->will( $this->returnValue( 'stdlink' ) );
 

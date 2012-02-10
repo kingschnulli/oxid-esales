@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: test_utils.php 40252 2011-11-24 10:03:34Z arvydas.vapsva $
+ * @version   SVN: $Id: test_utils.php 41212 2012-01-12 01:38:40Z alfonsas $
  */
 
 define ('MAX_LOOP_AMOUNT', 4);
@@ -172,7 +172,31 @@ class oxTestModules
         $iErrorReportinc = error_reporting( E_ALL ^ E_NOTICE );
 
         if (strpos($fncName, '(') === false) {
-            $fncName.='()';
+
+	    if (method_exists($last, $fncName)) {
+                $oReflection   = new ReflectionClass($last);
+                $aMethodParams = $oReflection->getMethod($fncName)->getParameters();
+
+                $fncName.='(';
+                $blFirst = true;
+                foreach ($aMethodParams AS $oParam) {
+                    if(!$blFirst) {
+                        $fncName.=', ';
+                    }else{
+                        $blFirst = false;
+                    }
+                    if($oParam->getClass()){
+                        $fncName.= $oParam->getClass()->getName().' ';
+                    }
+                    $fncName.= '$'.$oParam->getName();
+                    if($oParam->isDefaultValueAvailable() ) {
+                        $fncName .= ' = '.var_export($oParam->getDefaultValue(),true);
+                    }
+                }
+                $fncName.=')';
+	    } else {
+                $fncName.='($p1=null, $p2=null, $p3=null, $p4=null, $p5=null, $p6=null, $p7=null, $p8=null, $p9=null, $p10=null)';
+            }
         }
         eval ("class $name extends $last { function $fncName { $sCode }}");
         oxAddClassModule($name, $class);
