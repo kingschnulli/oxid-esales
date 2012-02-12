@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -69,6 +69,7 @@ $aLang = array(
 'BACK_TO_SHOP'                                                => "Back to Shop",
 'BACK_TO_START_PAGE'                                          => "back to Startpage",
 'BANK'                                                        => "Bank",
+'BANK_DETAILS'                                                => "Bank details",
 'BANK_2'                                                      => "Bank:",
 'BANK_ACCOUNT_HOLDER'                                         => "Account Holder",
 'BANK_ACCOUNT_HOLDER_2'                                       => "Account Holder:",
@@ -518,7 +519,7 @@ $aLang = array(
 'POST_CARD_FROM'                                              => "A Postcard from",
 'PREVIOUS'                                                    => "Previous",
 'PREVIOUS_STEP'                                               => "Previous Step",
-'PREVIUOS_PRODUCT'                                            => "Previous Product",
+'PREVIOUS_PRODUCT'                                            => "Previous Product",
 'PRICE'                                                       => "Price",
 'PRICE_ALERT'                                                 => "[!] Price Alert",
 'PRICE_ALERT_AT'                                              => "Price alert at",

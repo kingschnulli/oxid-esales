@@ -163,7 +163,7 @@
                         [{if $oList->getActiveSelection()}]
                             [{assign var="blHasActiveSelections" value=true}]
                         [{/if}]
-                        [{include file="widget/product/selectbox.tpl" oSelectionList=$oList iKey=$iKey}]
+                        [{include file="widget/product/selectbox.tpl" oSelectionList=$oList iKey=$iKey blInDetails=true}]
                     [{/foreach}]
 
                 </div>
@@ -191,6 +191,9 @@
                         [{assign var="blCanBuy" value=true}]
                     [{/if}]
                 [{/if}]
+                    [{if !$blCanBuy }]
+                        <div class="variantMessage">[{oxmultilang ident="DETAILS_CHOOSEVARIANT"}]</div>
+                    [{/if}]
 
             [{/if}]
         [{/block}]

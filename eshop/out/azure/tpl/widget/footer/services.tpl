@@ -1,5 +1,5 @@
 <ul class="list services">
-    <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=contact" }]">[{ oxmultilang ident="WIDGET_SERVICES_CONTACTS" }]</a></li>
+    <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=contact" }]">[{ oxmultilang ident="CONTACT" }]</a></li>
     <li><a href="[{ $oViewConf->getHelpPageLink() }]">[{ oxmultilang ident="WIDGET_SERVICES_HELP" }]</a></li>
     <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=links" }]">[{ oxmultilang ident="WIDGET_SERVICES_LINKS" }]</a></li>
     <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=guestbook" }]">[{ oxmultilang ident="WIDGET_SERVICES_GUESTBOOK" }]</a></li>

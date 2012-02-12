@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -584,7 +584,7 @@ $aMap = array(
 'INC_COMPARE_LOCATOR_PAGE'                                    => 'PAGE',
 'INC_DETAILS_LOCATOR_BACKTOOVERVIEW'                          => 'BACK_TO_OVERVIEW',
 'INC_DETAILS_LOCATOR_NEXTPRODUCT'                             => 'NEXT_PRODUCT',
-'INC_DETAILS_LOCATOR_PREVIUOSPRODUCT'                         => 'PREVIUOS_PRODUCT',
+'INC_DETAILS_LOCATOR_PREVIOUSPRODUCT'                         => 'PREVIOUS_PRODUCT',
 'INC_DETAILS_LOCATOR_PRODUCT'                                 => 'PRODUCT',
 'INC_FOOTER_CART'                                             => 'CART',
 'INC_FOOTER_CONTACT'                                          => 'CONTACT',

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42034 2012-02-06 16:07:55Z juergen.busch $
+ * @version   SVN: $Id: lang.php 42134 2012-02-10 07:41:47Z vilma $
  */
 
 /*
@@ -2064,6 +2064,7 @@ $aLang = array(
 'DELIVERY_RDFA_DHL'			                               => 'DHL',
 'DELIVERY_RDFA_FEDERALEXPRESS'			                   => 'FedEx',
 'DELIVERY_RDFA_UPS'			                               => 'UPS',
+'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Show "Remember me" option in login box',
 
 );
 

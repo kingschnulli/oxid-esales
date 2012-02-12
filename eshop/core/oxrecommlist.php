@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrecommlist.php 40351 2011-11-29 16:16:28Z linas.kukulskis $
+ * @version   SVN: $Id: oxrecommlist.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
  */
 
 /**
@@ -510,7 +510,7 @@ class oxRecommList extends oxBase implements oxIUrl
     public function save()
     {
         if (!$this->oxrecommlists__oxtitle->value) {
-            throw new oxObjectException('EXCEPTION_RECOMMLIST_NOTITLE');
+            throw oxNew( "oxObjectException", 'EXCEPTION_RECOMMLIST_NOTITLE');
         }
         return parent::save();
     }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucher.php 41863 2012-01-30 08:12:42Z arvydas.vapsva $
+ * @version   SVN: $Id: oxvoucher.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
  */
 
 /**
@@ -489,7 +489,7 @@ class oxVoucher extends oxBase
         }
         $oSerie = oxNew('oxvoucherserie');
         if (!$oSerie->load($this->oxvouchers__oxvoucherserieid->value)) {
-            throw new oxObjectException();
+            throw oxNew( "oxObjectException" );
         }
         $this->_oSerie = $oSerie;
         return $oSerie;

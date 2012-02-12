@@ -92,7 +92,7 @@ class Unit_oxuserTest_oxUtilsServer2 extends oxUtilsServer
      */
     protected $_aCookieVars = array();
 
-    public function setOxCookie( $sVar, $sVal = "", $iExpire = 0, $sPath = '/', $sDomain = null, $blToSession = true )
+    public function setOxCookie( $sVar, $sVal = "", $iExpire = 0, $sPath = '/', $sDomain = null, $blToSession = true, $blSecure = false )
     {
         //unsetting cookie
         if (!isset($sVar) && !isset($sVal)) {
@@ -2911,7 +2911,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
 
-        $sVal = oxADMIN_LOGIN . '@@@' . crypt( $oActUser->encodePassword( oxADMIN_PASSWD, oxDb::getDb()->getOne('select OXPASSSALT from oxuser where OXID="oxdefaultadmin"') ), 'ox' );
+        $sVal = oxADMIN_LOGIN . '@@@' . crypt( $oActUser->encodePassword( oxADMIN_PASSWD, oxDb::getDb()->getOne('select OXPASSSALT from oxuser where OXID="oxdefaultadmin"') ), '61646D696E' );
         oxUtilsServer::getInstance()->setOxCookie( 'oxid_'.$sShopId, $sVal );
 
         $oActUser->loadActiveUser();
@@ -3402,10 +3402,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
     {
         oxTestModules::addFunction( "oxUtilsDate", "getTime", "{return 0;}" );
 
-        $sCryptedVal = oxADMIN_LOGIN.'@@@' . crypt( oxADMIN_PASSWD, 'ox' );
+        $sCryptedVal = oxADMIN_LOGIN.'@@@' . crypt( oxADMIN_PASSWD, '61646D696E' );
         $oUser = oxNew( 'oxuser' );
         $this->assertEquals( '', $oUser->UNITgetUserCookie() );
-        $oUser->UNITsetUserCookie( oxADMIN_LOGIN, oxADMIN_PASSWD );
+        $oUser->UNITsetUserCookie( oxADMIN_LOGIN, oxADMIN_PASSWD, null, 31536000, '61646D696E' );
         $this->assertEquals( $sCryptedVal, $oUser->UNITgetUserCookie() );
         $oUser->UNITdeleteUserCookie();
         $this->assertNull( $oUser->UNITgetUserCookie() );

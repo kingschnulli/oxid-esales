@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -45,6 +45,7 @@ $aLang = array(
 'DETAILS_PRICEALARM'                                          => "<b>[!]</b> Price Alert",
 'DETAILS_VPE_MESSAGE_1'                                       => "This product can only be ordered in packaging units of ",
 'DETAILS_VPE_MESSAGE_2'                                       => "",
+'DETAILS_CHOOSEVARIANT'                                       => "Please select a variant",
 'EMAIL_INVITE_HTML_INVITETOSHOP'                              => "An invitation from",
 'EMAIL_INVITE_HTML_INVITETOSHOP2'                             => "to visit",
 'EMAIL_INVITE_HTML_INVITETOSHOP3'                             => "",

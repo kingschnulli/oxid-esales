@@ -7,7 +7,7 @@
         [{if $oActiveSelection}]
             <span>[{$oActiveSelection->getName()}]</span>
         [{elseif !$blHideDefault}]
-            <span>[{ oxmultilang ident="WIDGET_PRODUCT_ATTRIBUTES_PLEASECHOOSE"}]</span>
+            <span [{if $blInDetails}]class="selectMessage"[{/if}]>[{ oxmultilang ident="WIDGET_PRODUCT_ATTRIBUTES_PLEASECHOOSE"}]</span>
         [{/if}]
     </p>
     [{if $editable !== false}]

@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -76,6 +76,7 @@ $aLang = array(
 'BACK_TO_OVERVIEW'                                            => "Zurück zur Übersicht",
 'BACK_TO_SHOP'                                                => "Zurück zum Shop",
 'BACK_TO_START_PAGE'                                          => "weiter zur Startseite",
+'BANK_DETAILS'                                                => "Bankdetails",
 'BANK'                                                        => "Bankname",
 'BANK_2'                                                      => "Bankname:",
 'BANK_ACCOUNT_HOLDER'                                         => "Kontoinhaber",
@@ -526,7 +527,7 @@ $aLang = array(
 'POST_CARD_FROM'                                              => "Eine Postkarte von",
 'PREVIOUS'                                                    => "Voriges",
 'PREVIOUS_STEP'                                               => "Zurück",
-'PREVIUOS_PRODUCT'                                            => "Artikel zurück",
+'PREVIOUS_PRODUCT'                                            => "Artikel zurück",
 'PRICE'                                                       => "Preis",
 'PRICE_ALERT'                                                 => "Preisalarm",
 'PRICE_ALERT_AT'                                              => "Preisalarm im",
@@ -749,7 +750,7 @@ $aLang = array(
 'OXUNITQUANTITY'                                              => 'Mengeneinheit',
 'OXURLDESC'                                                   => 'URL Beschreibung',
 'OXURLIMG'                                                    => 'Bild für externe URL',
-'OXVAT'                                                       => 'Artikel Mwst.',
+'OXVAT'                                                       => 'Artikel MwSt.',
 'OXTHUMB'                                                     => 'Vorschaubild',
 'OXICON'                                                      => 'oxicon',
 'OXPICSGENERATED'                                             => 'Bilder erzeugt',

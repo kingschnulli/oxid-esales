@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 41930 2012-01-31 15:27:14Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxsession.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -280,7 +280,7 @@ class oxSession extends oxSuperCfg
 
                 // passing notification about session problems
                 if ( $this->_sErrorMsg && $myConfig->getConfigParam( 'iDebug' ) ) {
-                    oxUtilsView::getInstance()->addErrorToDisplay( new oxException( $this->_sErrorMsg ) );
+                    oxUtilsView::getInstance()->addErrorToDisplay( oxNew( "oxException", $this->_sErrorMsg ) );
                 }
             } elseif ( !$blSwapped ) {
                 // transferring cookies between hosts
@@ -791,11 +791,14 @@ class oxSession extends oxSuperCfg
     protected function _allowSessionStart()
     {
         $blAllowSessionStart = true;
+        $myConfig = oxConfig::getInstance();
 
         // special handling only in non-admin mode
         if ( !$this->isAdmin() ) {
             if ( oxUtils::getInstance()->isSearchEngine() || oxConfig::getParameter( 'skipSession' ) ) {
                 $blAllowSessionStart = false;
+            } elseif (oxUtilsServer::getInstance()->getOxCookie( 'oxid_'.$myConfig->getShopId().'_autologin' ) === '1') {
+                $blAllowSessionStart = true;
             } elseif ( !$this->_forceSessionStart() && !oxUtilsServer::getInstance()->getOxCookie( 'sid_key' ) ) {
 
                 // session is not needed to start when it is not necessary:

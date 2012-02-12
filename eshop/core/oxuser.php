@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 41005 2012-01-06 14:18:31Z vilma $
+ * @version   SVN: $Id: oxuser.php 42149 2012-02-10 12:19:06Z vilma $
  */
 
 /**
@@ -1360,8 +1360,8 @@ class oxUser extends oxBase
             }
 
             // cookie must be set ?
-            if ( $blCookie ) {
-                oxUtilsServer::getInstance()->setUserCookie( $this->oxuser__oxusername->value, $this->oxuser__oxpassword->value, $myConfig->getShopId() );
+            if ( $blCookie && $myConfig->getConfigParam( 'blShowRememberMe' ) ) {
+                oxUtilsServer::getInstance()->setUserCookie( $this->oxuser__oxusername->value, $this->oxuser__oxpassword->value, $myConfig->getShopId(), 31536000, $this->oxuser__oxpasssalt->value );
             }
 
             //load basket from the database
@@ -1430,20 +1430,20 @@ class oxUser extends oxBase
         $blFoundInCookie = false;
 
         //trying automatic login (by 'remember me' cookie)
-        if ( !$sUserID && !$blAdmin ) {
+        if ( !$sUserID && !$blAdmin && $myConfig->getConfigParam('blShowRememberMe') ) {
             $sShopID = $myConfig->getShopId();
             if ( ( $sSet = oxUtilsServer::getInstance()->getUserCookie( $sShopID ) ) ) {
                 $aData = explode( '@@@', $sSet );
                 $sUser = $aData[0];
                 $sPWD  = @$aData[1];
 
-                $sSelect =  'select oxid, oxpassword from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$oDB->quote($sUser);
+                $sSelect =  'select oxid, oxpassword, oxpasssalt from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$oDB->quote($sUser);
 
 
                 $rs = $oDB->execute( $sSelect );
                 if ( $rs != false && $rs->recordCount() > 0 ) {
                     while (!$rs->EOF) {
-                        $sTest = crypt( $rs->fields[1], 'ox' );
+                        $sTest = crypt( $rs->fields[1], $rs->fields[2] );
                         if ( $sTest == $sPWD ) {
                             // found
                             $sUserID = $rs->fields[0];
@@ -1970,14 +1970,15 @@ class oxUser extends oxBase
      * @param string  $sPassword password
      * @param string  $sShopId   shop ID (default null)
      * @param integer $iTimeout  timeout value (default 31536000)
+     * @param string  $sSalt     encryption salt
      *
      * @deprecated should be used oxUtilsServer::setUserCookie()
      *
      * @return null
      */
-    protected function _setUserCookie( $sUser, $sPassword,  $sShopId = null, $iTimeout = 31536000 )
+    protected function _setUserCookie( $sUser, $sPassword,  $sShopId = null, $iTimeout = 31536000, $sSalt = 'ox' )
     {
-        oxUtilsServer::getInstance()->setUserCookie( $sUser, $sPassword, $sShopId, $iTimeout );
+        oxUtilsServer::getInstance()->setUserCookie( $sUser, $sPassword, $sShopId, $iTimeout, $sSalt );
     }
 
     /**
@@ -2407,5 +2408,5 @@ class oxUser extends oxBase
         return (bool) $this->oxuser__oxpassword->value;
 
     }
-    
+
 }
