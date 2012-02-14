@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_main.php 41284 2012-01-12 16:23:46Z mindaugas.rimgaila $
+ * @version   SVN: $Id: article_main.php 42205 2012-02-13 13:26:04Z linas.kukulskis $
  */
 
 /**
@@ -117,7 +117,7 @@ class Article_Main extends oxAdminDetails
     {
         $sEditObjectValue = '';
         if ( $oObject ) {
-            $oDescField = $oObject->getArticleLongDesc();
+            $oDescField = $oObject->getLongDescription();
             $sEditObjectValue = $this->_processEditValue( $oDescField->getRawValue() );
             $oDescField = new oxField( $sEditObjectValue, oxField::T_RAW );
         }

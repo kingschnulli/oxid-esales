@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmanufacturer.php 38243 2011-08-19 11:22:25Z linas.kukulskis $
+ * @version   SVN: $Id: oxmanufacturer.php 42193 2012-02-13 09:12:50Z linas.kukulskis $
  */
 
 /**
@@ -360,9 +360,9 @@ class oxManufacturer extends oxI18n implements oxIUrl
     }
 
     /**
-     * Returns article picture
+     * Returns manufacture icon
      *
-     * @return strin
+     * @return string
      */
     public function getIconUrl()
     {
@@ -378,9 +378,9 @@ class oxManufacturer extends oxI18n implements oxIUrl
     }
 
     /**
-     * Returns category thumbnail picture url if exist, false - if not
+     * Returns false, becouse manufacturer has not thumbnail
      *
-     * @return mixed
+     * @return false
      */
     public function getThumbUrl()
     {

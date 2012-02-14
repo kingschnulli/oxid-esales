@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxubaseTest.php 42112 2012-02-09 14:55:11Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2183,5 +2183,18 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     {
         $oView = new oxUbase();
         $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "blEnableDownloads" ), $oView->isEnabledDownloadableFiles() );
+    }
+
+    /**
+     * oxUBase::showRememberMe() test case
+     *
+     * @return null
+     */
+    public function testShowRememberMe()
+    {
+        modConfig::getInstance()->setConfigParam('blShowRememberMe', true );
+
+        $oView = new oxUbase();
+        $this->assertTrue( $oView->showRememberMe() );
     }
 }

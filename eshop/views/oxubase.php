@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 40958 2012-01-05 07:54:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 42112 2012-02-09 14:55:11Z mindaugas.rimgaila $
  */
 
 /**
@@ -3276,5 +3276,15 @@ class oxUBase extends oxView
     public function isEnabledDownloadableFiles()
     {
         return (bool) $this->getConfig()->getConfigParam( "blEnableDownloads" );
+    }
+
+    /**
+     * Returns true if "Remember me" are ON
+     *
+     * @return boolean
+     */
+    public function showRememberMe()
+    {
+        return (bool)$this->getConfig()->getConfigParam('blShowRememberMe');
     }
 }

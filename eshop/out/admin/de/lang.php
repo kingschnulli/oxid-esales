@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42033 2012-02-06 16:07:33Z juergen.busch $
+ * @version   SVN: $Id: lang.php 42160 2012-02-10 14:31:32Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -106,7 +106,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXUNITQUANTITY'                           => 'Mengeneinheit',
 'GENERAL_ARTICLE_OXURLDESC'                                => 'URL Beschreibung',
 'GENERAL_ARTICLE_OXURLIMG'                                 => 'Bild für externe URL',
-'GENERAL_ARTICLE_OXVAT'                                    => 'Artikel Mwst.',
+'GENERAL_ARTICLE_OXVAT'                                    => 'Artikel MwSt.',
 'GENERAL_ARTICLE_OXTHUMB'                                  => 'Vorschaubild',
 'GENERAL_ARTICLE_OXICON'                                   => 'Icon',
 'GENERAL_ARTICLE_OXPICSGENERATED'                          => 'Bilder erzeugt',
@@ -1493,7 +1493,7 @@ $aLang = array(
 'TOOLS_MAIN_UPDATEVIEWSCONFIRM'                            => 'Sind Sie sicher das Sie die VIEWS jetzt updaten wollen',
 'TOOLTIPS_ADDSUMTYPE'                                      => 'Absoluter oder<br>prozentualer<br>Auf/Abschlag',
 'TOOLTIPS_ADDSUMITMTYPE'                                   => 'Absoluter, prozentualer<br> oder Artikel<br>Auf/Abschlag',
-'TOOLTIPS_ARTICLEVAT'                                      => 'Nur falls spezielle Mwst. hier ausfüllen',
+'TOOLTIPS_ARTICLEVAT'                                      => 'Nur falls spezielle MwSt. hier ausfüllen',
 'TOOLTIPS_ARTICLEREVIEW'                                   => 'Artikel Vorschau öffnen',
 'TOOLTIPS_ARTICLESTOCK'                                    => 'Anzahl Artikel auf Lager',
 'TOOLTIPS_ARTICLEDELIVERY'                                 => 'Zeit Format: ',
@@ -1528,7 +1528,7 @@ $aLang = array(
 'TOOLTIPS_NEWVAR3'                                         => 'Variante anlegen',
 'TOOLTIPS_NEWSELECTLIST'                                   => 'Neue Auswahlliste anlegen',
 'TOOLTIPS_NEWDISCOUNT'                                     => 'Neuen Rabatt anlegen',
-'TOOLTIPS_NEWMWST'                                         => 'Neuen Mwst. Satz anlegen',
+'TOOLTIPS_NEWMWST'                                         => 'Neuen MwSt. Satz anlegen',
 'TOOLTIPS_NEWDELIVERY'                                     => 'Neue Versandkostenregel anlegen',
 'TOOLTIPS_NEWDELIVERYSET'                                  => 'Neue Versandart anlegen',
 'TOOLTIPS_NEWNEWS'                                         => 'Neue Nachricht anlegen',
@@ -2070,6 +2070,7 @@ $aLang = array(
 'DELIVERY_RDFA_DHL'			                               => 'DHL',
 'DELIVERY_RDFA_FEDERALEXPRESS'			                   => 'FedEx',
 'DELIVERY_RDFA_UPS'			                               => 'UPS',
+'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Option "Passwort merken" beim Login anzeigen',
 
 );
 

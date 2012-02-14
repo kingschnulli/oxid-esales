@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 41739 2012-01-24 15:48:16Z vilma $
+ * @version   SVN: $Id: oxbasket.php 42183 2012-02-13 09:09:31Z linas.kukulskis $
  */
 
 /**
@@ -1719,7 +1719,7 @@ class oxBasket extends oxSuperCfg
                     if ( is_array( $aSelList ) && ( $aSelectlist = $oProduct->getSelectLists( $sItemKey ) ) ) {
                         reset( $aSelList );
                         while ( list( $conkey, $iSel ) = each( $aSelList ) ) {
-                            $aSelectlist[$conkey][$iSel] = clone $aSelectlist[$conkey][$iSel];
+                            $aSelectlist[$conkey][$iSel] = $aSelectlist[$conkey][$iSel];
                             $aSelectlist[$conkey][$iSel]->selected = 1;
                         }
                         $oProduct->setSelectlist( $aSelectlist );

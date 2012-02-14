@@ -21,6 +21,6 @@
                 <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
-        <li><button type="submit" class="submitButton">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</button></li>
+        <li><button type="submit" class="submitButton">[{ oxmultilang ident="LOGIN" }]</button></li>
     </ul>
 </form>

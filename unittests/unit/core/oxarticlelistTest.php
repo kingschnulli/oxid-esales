@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 40563 2011-12-12 14:23:20Z vilma $
+ * @version   SVN: $Id: oxarticlelistTest.php 42196 2012-02-13 09:13:31Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1387,6 +1387,32 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
 
         modConfig::getInstance()->setConfigParam( 'iTop5Mode', 2 );
         $oTest->loadTop5Articles();
+    }
+
+    /**
+     * Test load top5 articles select.
+     *
+     * @return null
+     */
+    public function testLoadTop5ArticlesSelect10()
+    {
+        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
+        oxUtilsDate::getInstance()->UNITSetTime(100);
+        $sArticleTable = $this->_getArticleTable();
+        $oArticle = new oxarticle();
+
+        $sExpt  = "select * from";
+        $sExpt .= " $sArticleTable where ".$oArticle->getSqlActiveSnippet()." and";
+        $sExpt .= " $sArticleTable.oxissearch = 1 and $sArticleTable.oxparentid = ''";
+        $sExpt .= " and $sArticleTable.oxsoldamount>0 order by $sArticleTable.oxsoldamount desc limit 10";
+
+        //testing over mock
+        $oTest = $this->getMock('oxArticleList', array('selectString'));
+        $oTest->expects($this->once())->method('selectString')
+                                      ->with( $sExpt );
+
+        modConfig::getInstance()->setConfigParam( 'iTop5Mode', 2 );
+        $oTest->loadTop5Articles( 10 );
     }
 
     /**

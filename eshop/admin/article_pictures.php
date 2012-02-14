@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_pictures.php 40209 2011-11-23 15:47:48Z linas.kukulskis $
+ * @version   SVN: $Id: article_pictures.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
  */
 
 /**
@@ -74,7 +74,7 @@ class Article_Pictures extends oxAdminDetails
 
         if ( $myConfig->isDemoShop() ) {
             // disabling uploading pictures if this is demo shop
-            $oEx = new oxExceptionToDisplay();
+            $oEx = oxNew( "oxExceptionToDisplay" );
             $oEx->setMessage( 'ARTICLE_PICTURES_UPLOADISDISABLED' );
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false );
 
@@ -104,7 +104,7 @@ class Article_Pictures extends oxAdminDetails
 
         if ( $myConfig->isDemoShop() ) {
             // disabling uploading pictures if this is demo shop
-            $oEx = new oxExceptionToDisplay();
+            $oEx = oxNew( "oxExceptionToDisplay" );
             $oEx->setMessage( 'ARTICLE_PICTURES_UPLOADISDISABLED' );
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false );
 

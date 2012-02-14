@@ -2040,5 +2040,6 @@ $aLang = array(
 'tbcldeliveryset_rdfa'                     => 'RDFa',
 'tbclpayment_rdfa'                         => 'RDFa',
 'tbclshop_rdfa'                            => 'RDFa',
+'SHOP_SYSTEM_SHOWREMEMBERME'               => 'Afficher l\'option "Se souvenir de moi" dans la zone de connexion',
 
 );

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvatselector.php 39810 2011-11-05 09:22:44Z linas.kukulskis $
+ * @version   SVN: $Id: oxvatselector.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
  */
 
 /**
@@ -88,7 +88,7 @@ class oxVatSelector extends oxSuperCfg
         if ($sCountryId) {
             $oCountry = oxNew('oxcountry');
             if (!$oCountry->load($sCountryId)) {
-                throw new oxObjectException();
+                throw oxNew( "oxObjectException" );
             }
             if ($oCountry->isForeignCountry()) {
                 $ret = $this->_getForeignCountryUserVat($oUser, $oCountry);

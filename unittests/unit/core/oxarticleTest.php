@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 41916 2012-01-31 13:26:57Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxarticleTest.php 42214 2012-02-13 13:33:42Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -306,7 +306,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle = new oxArticle();
         $oArticle->oxarticles__oxlongdesc = new oxField( "test" );
 
-        $oDesc = $oArticle->getArticleLongDesc();
+        $oDesc = $oArticle->getLongDescription();
         $this->assertTrue( $oDesc instanceof oxField );
         $this->assertEquals( "test", $oDesc->value );
     }
@@ -909,7 +909,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetArticleLongDescSmartyProcessing()
+    public function testGetLongDescriptionSmartyProcessing()
     {
         modConfig::getInstance()->setConfigParam( 'blExport', 1 );
         modConfig::getInstance()->setConfigParam( 'blProductive', 1 );
@@ -4314,11 +4314,12 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetArticleLongDesc()
+    public function testGetLongDescription()
     {
         oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', 'test &amp;')");
         $oArticle = new oxArticle();
-        $this->assertEquals( 'test &amp;', $oArticle->getArticleLongDesc( '_testArt' )->value);
+        $oArticle->load( '_testArt' );
+        $this->assertEquals( 'test &amp;', $oArticle->getLongDescription()->value);
     }
 
     /**
@@ -4326,14 +4327,15 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetArticleLongDescInOtherLang()
+    public function testGetLongDescriptionInOtherLang()
     {
         oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc_1) values ( '_testArt', 'lang 1 test &amp;')");
 
         $oArticle = new oxArticle();
+        $oArticle->load( '_testArt' );
         $oArticle->setLanguage( 1 );
         $oArticle->aaa = true;
-        $this->assertEquals( 'lang 1 test &amp;', $oArticle->getArticleLongDesc( '_testArt' )->value);
+        $this->assertEquals( 'lang 1 test &amp;', $oArticle->getLongDescription( '_testArt' )->value);
     }
 
     /**
@@ -4343,7 +4345,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetArticleLongDescWithSmartyTags()
+    public function testGetLongDescriptionWithSmartyTags()
     {
         modConfig::getInstance()->setConfigParam( 'bl_perfParseLongDescinSmarty', true );
         $sDesc = 'aa[{* smarty comment *}]zz';
@@ -4360,13 +4362,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetArticleLongDescCached()
+    public function testGetLongDescriptionCached()
     {
         oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', 'aaaad')");
 
         $oArticle = new oxArticle();
         $oArticle->load( $this->oArticle->getId() );
-        $this->assertEquals( 'aaaad', $oArticle->getArticleLongDesc()->value);
+        $this->assertEquals( 'aaaad', $oArticle->getLongDescription()->value);
     }
 
     /**
@@ -4506,7 +4508,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oArticle2 = new _oxArticle();
         $oArticle2->load('_testVar');
-        $this->assertEquals( $oArticle2->getArticleLongDesc()->value, 'testLongDesc');
+        $this->assertEquals( $oArticle2->getLongDescription()->value, 'testLongDesc');
     }
 
     /**
@@ -6473,7 +6475,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oArticle = oxNew( "oxarticle" );
         $this->assertTrue( $oArticle->load( 'test_SubshopFields_savesRawValue' ) );
-        $this->assertEquals( 'lalaal&!<b><', $oArticle->getArticleLongDesc()->getRawValue() );
+        $this->assertEquals( 'lalaal&!<b><', $oArticle->getLongDescription()->getRawValue() );
 
         // lang 1
         $oArticle = oxNew("oxarticle");
@@ -6484,13 +6486,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oArticle = oxNew( "oxarticle" );
         $this->assertTrue( $oArticle->loadInLang( 1, 'test_SubshopFields_savesRawValue' ) );
-        $this->assertEquals( 'lalaal&!<b><a', $oArticle->getArticleLongDesc()->getRawValue() );
+        $this->assertEquals( 'lalaal&!<b><a', $oArticle->getLongDescription()->getRawValue() );
 
         // back in 0 lang
         $oArticle = oxNew( "oxarticle" );
         $oArticle->setLanguage(0);
         $this->assertTrue( $oArticle->load( 'test_SubshopFields_savesRawValue' ) );
-        $this->assertEquals( 'lalaal&!<b><', $oArticle->getArticleLongDesc()->getRawValue() );
+        $this->assertEquals( 'lalaal&!<b><', $oArticle->getLongDescription()->getRawValue() );
     }
 
     /**

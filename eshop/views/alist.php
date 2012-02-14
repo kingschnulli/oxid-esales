@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 38897 2011-09-23 13:27:00Z linas.kukulskis $
+ * @version   SVN: $Id: alist.php 42213 2012-02-13 13:29:53Z linas.kukulskis $
  */
 
 /**
@@ -576,7 +576,7 @@ class aList extends oxUBase
         if ( count( $aArticleList = $this->getArticleList() ) ) {
             $oStr = getStr();
             foreach ( $aArticleList as $oProduct ) {
-                $sDesc = strip_tags( trim( $oStr->strtolower( $oProduct->getArticleLongDesc()->value ) ) );
+                $sDesc = strip_tags( trim( $oStr->strtolower( $oProduct->getLongDescription()->value ) ) );
 
                 //removing dots from string (they are not cleaned up during general string cleanup)
                 $sDesc = $oStr->preg_replace( "/\./", " ", $sDesc );
