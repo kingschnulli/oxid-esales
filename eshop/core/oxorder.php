@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 40959 2012-01-05 07:54:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxorder.php 42194 2012-02-13 09:13:02Z linas.kukulskis $
  */
 
 /**
@@ -122,7 +122,7 @@ class oxOrder extends oxBase
     /**
      * User payment
      *
-     * @var oxPayment
+     * @var oxUserPayment
      */
     protected $_oPayment = null;
 
@@ -907,7 +907,7 @@ class oxOrder extends oxBase
      *
      * @param string $sPaymentid used payment id
      *
-     * @return object $oUserpayment payment object
+     * @return oxUserPayment
      */
     protected function _setPayment( $sPaymentid )
     {
@@ -1519,8 +1519,16 @@ class oxOrder extends oxBase
 
         $oBasket = $this->_getOrderBasket( false );
 
+        // unsetting bundles
+        $oOrderArticles = $this->getOrderArticles();
+        foreach ( $oOrderArticles as $sItemId => $oItem ) {
+            if ( $oItem->isBundle() ) {
+                $oOrderArticles->offsetUnset( $sItemId );
+            }
+        }
+
         // add this order articles to basket and recalculate basket
-        $this->_addOrderArticlesToBasket( $oBasket, $this->getOrderArticles( true ) );
+        $this->_addOrderArticlesToBasket( $oBasket, $oOrderArticles );
 
         // recalculating basket
         $oBasket->calculateBasket( true );
@@ -1615,9 +1623,9 @@ class oxOrder extends oxBase
     /**
      * Send order to shop owner and user
      *
-     * @param oxUser    $oUser    order user
-     * @param oxBasket  $oBasket  current order basket
-     * @param oxPayment $oPayment order payment
+     * @param oxUser        $oUser    order user
+     * @param oxBasket      $oBasket  current order basket
+     * @param oxUserPayment $oPayment order payment
      *
      * @return bool
      */
@@ -1657,7 +1665,7 @@ class oxOrder extends oxBase
     /**
      * Returns order payment
      *
-     * @return oxBasket
+     * @return oxUserPayment
      */
     public function getPayment()
     {

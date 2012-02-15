@@ -57,6 +57,16 @@
             </p>
              [{/if }]
         </li>
+        <li [{if $aErrors.oxaddress__oxaddinfo}]class="oxInValid"[{/if}]>
+            <label [{if $oView->isFieldRequired(oxaddress__oxaddinfo) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_ADDITIONALINFO2" }]</label>
+              <input [{if $oView->isFieldRequired(oxaddress__oxaddinfo) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if }] type="text" size="37" maxlength="255" name="deladr[oxaddress__oxaddinfo]" value="[{if isset( $deladr.oxaddress__oxaddinfo ) }][{ $deladr.oxaddress__oxaddinfo }][{else}][{ $delivadr->oxaddress__oxaddinfo->value }][{/if }]">
+              [{if $oView->isFieldRequired(oxaddress__oxaddinfo) }]
+              <p class="oxValidateError">
+                <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+                [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxaddress__oxaddinfo}]
+            </p>
+              [{/if }]
+        </li>
         <li [{if $aErrors.oxaddress__oxstreet}]class="oxInValid"[{/if}]>
             <label [{if $oView->isFieldRequired(oxaddress__oxstreet) || $oView->isFieldRequired(oxaddress__oxstreetnr) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_STREETANDSTREETNO2" }]</label>
               <input [{if $oView->isFieldRequired(oxaddress__oxstreet) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if }] type="text" data-fieldsize="pair-xsmall" maxlength="255" name="deladr[oxaddress__oxstreet]" value="[{if isset( $deladr.oxaddress__oxstreet ) }][{ $deladr.oxaddress__oxstreet }][{else}][{ $delivadr->oxaddress__oxstreet->value }][{/if }]">
@@ -80,16 +90,7 @@
             </p>
           [{/if }]
         </li>
-        <li [{if $aErrors.oxaddress__oxaddinfo}]class="oxInValid"[{/if}]>
-            <label [{if $oView->isFieldRequired(oxaddress__oxaddinfo) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_ADDITIONALINFO2" }]</label>
-              <input [{if $oView->isFieldRequired(oxaddress__oxaddinfo) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if }] type="text" size="37" maxlength="255" name="deladr[oxaddress__oxaddinfo]" value="[{if isset( $deladr.oxaddress__oxaddinfo ) }][{ $deladr.oxaddress__oxaddinfo }][{else}][{ $delivadr->oxaddress__oxaddinfo->value }][{/if }]">
-              [{if $oView->isFieldRequired(oxaddress__oxaddinfo) }]
-              <p class="oxValidateError">
-                <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
-                [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxaddress__oxaddinfo}]
-            </p>
-              [{/if }]
-        </li>
+
         <li [{if $aErrors.oxaddress__oxcountryid}]class="oxInValid"[{/if}]>
             <label [{if $oView->isFieldRequired(oxaddress__oxcountryid) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_COUNTRY2" }]</label>
               <select [{if $oView->isFieldRequired(oxaddress__oxcountryid) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if }] id="delCountrySelect" name="deladr[oxaddress__oxcountryid]">

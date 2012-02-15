@@ -159,7 +159,6 @@
 
 [{block name="email_plain_order_cust_paymentinfo"}]
 [{if $payment->oxuserpayments__oxpaymentsid->value != "oxempty"}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD" }] [{ $payment->oxpayments__oxdesc->getRawValue() }] [{ if $basket->getPaymentCosts() }]([{ $basket->getFPaymentCosts() }] [{ $currency->sign}])[{/if}]
-[{ $payment->oxpayments__oxlongdesc->value }]
 [{/if}]
 [{/block}]
 

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeed.php 38522 2011-09-02 11:13:10Z linas.kukulskis $
+ * @version   SVN: $Id: oxrssfeed.php 42207 2012-02-13 13:27:12Z linas.kukulskis $
  */
 
 /**
@@ -194,7 +194,7 @@ class oxRssFeed extends oxSuperCfg
             $oItem->title                   = strip_tags($oArticle->oxarticles__oxtitle->value . $sPrice);
             $oItem->guid     = $oItem->link = $myUtilsUrl->prepareUrlForNoSession($oArticle->getLink());
             $oItem->isGuidPermalink         = true;
-            $oItem->description             = $oArticle->getArticleLongDesc()->value; //oxarticles__oxshortdesc->value;
+            $oItem->description             = $oArticle->getLongDescription()->value; //oxarticles__oxshortdesc->value;
             if (trim(str_replace('&nbsp;', '', (strip_tags($oItem->description)))) == '') {
                 $oItem->description             = $oArticle->oxarticles__oxshortdesc->value;
             }
@@ -355,7 +355,7 @@ class oxRssFeed extends oxSuperCfg
         }
 
         $oArtList = oxNew( 'oxarticlelist' );
-        $oArtList->loadTop5Articles();
+        $oArtList->loadTop5Articles( $this->getConfig()->getConfigParam( 'iRssItemsCount' ) );
 
         $oLang = oxLang::getInstance();
         $this->_loadData(
@@ -854,7 +854,7 @@ class oxRssFeed extends oxSuperCfg
         }
 
         $oArtList = oxNew( 'oxarticlelist' );
-        $oArtList->loadAktionArticles( 'OXBARGAIN' );
+        $oArtList->loadAktionArticles( 'OXBARGAIN', $this->getConfig()->getConfigParam( 'iRssItemsCount' ) );
 
         $oLang = oxLang::getInstance();
         $this->_loadData(

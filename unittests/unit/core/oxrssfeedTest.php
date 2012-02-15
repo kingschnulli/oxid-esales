@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 41930 2012-01-31 15:27:14Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxrssfeedTest.php 42216 2012-02-13 13:34:35Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -211,9 +211,9 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oLongDesc = new Oxstdclass();
         $oLongDesc->value = "artlogndesc";
 
-        $oArt1 = $this->getMock( 'oxarticle', array( "getLink", "getArticleLongDesc" ));
+        $oArt1 = $this->getMock( 'oxarticle', array( "getLink", "getLongDescription" ));
         $oArt1->expects($this->any())->method( 'getLink')->will( $this->returnValue( "artlink" ) );
-        $oArt1->expects($this->any())->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc ) );
+        $oArt1->expects($this->any())->method( 'getLongDescription')->will( $this->returnValue( $oLongDesc ) );
         $oArt1->oxarticles__oxtitle = new oxField('title1');
         $oArt1->oxarticles__oxprice = new oxField(20);
         $oArt1->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
@@ -222,9 +222,9 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oLongDesc2->value = " &nbsp;<div>";
 
         $oArt2 = oxNew('oxarticle');
-        $oArt2 = $this->getMock( 'oxarticle', array( "getLink", "getArticleLongDesc" ));
+        $oArt2 = $this->getMock( 'oxarticle', array( "getLink", "getLongDescription" ));
         $oArt2->expects($this->any())->method( 'getLink')->will( $this->returnValue( "artlink" ) );
-        $oArt2->expects($this->any())->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc2 ) );
+        $oArt2->expects($this->any())->method( 'getLongDescription')->will( $this->returnValue( $oLongDesc2 ) );
         $oArt2->oxarticles__oxtitle = new oxField('title2');
         $oArt2->oxarticles__oxprice = new oxField(10);
         $oArt2->oxarticles__oxshortdesc = new oxField('shortdesc');
@@ -268,9 +268,9 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oLongDesc = new Oxstdclass();
         $oLongDesc->value = "artlogndesc";
 
-        $oArt1 = $this->getMock( 'oxarticle', array( "getLink", "getArticleLongDesc", "getPrice" ));
+        $oArt1 = $this->getMock( 'oxarticle', array( "getLink", "getLongDescription", "getPrice" ));
         $oArt1->expects($this->any())->method( 'getLink')->will( $this->returnValue( "artlink" ) );
-        $oArt1->expects($this->any())->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc ) );
+        $oArt1->expects($this->any())->method( 'getLongDescription')->will( $this->returnValue( $oLongDesc ) );
         $oArt1->expects($this->any())->method( 'getPrice')->will( $this->returnValue( null ) );
         $oArt1->oxarticles__oxtitle = new oxField('title1');
         $oArt1->oxarticles__oxprice = new oxField(20);
@@ -279,9 +279,9 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oLongDesc2 = new Oxstdclass();
         $oLongDesc2->value = " &nbsp;<div>";
 
-        $oArt2 = $this->getMock( 'oxarticle', array( "getLink", "getArticleLongDesc", "getPrice" ));
+        $oArt2 = $this->getMock( 'oxarticle', array( "getLink", "getLongDescription", "getPrice" ));
         $oArt2->expects($this->any())->method( 'getLink')->will( $this->returnValue( "artlink" ) );
-        $oArt2->expects($this->any())->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc2 ) );
+        $oArt2->expects($this->any())->method( 'getLongDescription')->will( $this->returnValue( $oLongDesc2 ) );
         $oArt2->expects($this->any())->method( 'getPrice')->will( $this->returnValue( null ) );
         $oArt2->oxarticles__oxtitle = new oxField('title2');
         $oArt2->oxarticles__oxprice = new oxField(10);
@@ -329,9 +329,9 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oLongDesc = new Oxstdclass();
         $oLongDesc->value = "artlogndesc";
 
-        $oArt1 = $this->getMock( 'oxarticle', array( "getLink", "getArticleLongDesc" ));
+        $oArt1 = $this->getMock( 'oxarticle', array( "getLink", "getLongDescription" ));
         $oArt1->expects($this->any())->method( 'getLink')->will( $this->returnValue( "artlink" ) );
-        $oArt1->expects($this->any())->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc ) );
+        $oArt1->expects($this->any())->method( 'getLongDescription')->will( $this->returnValue( $oLongDesc ) );
         $oArt1->oxarticles__oxtitle = new oxField('title1');
         $oArt1->oxarticles__oxprice = new oxField(20);
         $oArt1->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
@@ -339,9 +339,9 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oLongDesc2 = new Oxstdclass();
         $oLongDesc2->value = " <div>";
 
-        $oArt2 = $this->getMock( 'oxarticle', array( "getLink", "getArticleLongDesc" ));
+        $oArt2 = $this->getMock( 'oxarticle', array( "getLink", "getLongDescription" ));
         $oArt2->expects($this->any())->method( 'getLink')->will( $this->returnValue( "artlink" ) );
-        $oArt2->expects($this->any())->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc2 ) );
+        $oArt2->expects($this->any())->method( 'getLongDescription')->will( $this->returnValue( $oLongDesc2 ) );
         $oArt2->oxarticles__oxtitle = new oxField('title2');
         $oArt2->oxarticles__oxprice = new oxField(10);
         $oArt2->oxarticles__oxshortdesc = new oxField('shortdesc');

@@ -350,8 +350,8 @@
       <br><b>[{ oxmultilang ident="EMAIL_ORDER_OWNER_HTML_MESSAGE" }] </b>[{ $order->oxorder__oxremark->value|oxescape }]<br>
     [{/if}]
     [{if $payment->oxuserpayments__oxpaymentsid->value != "oxempty"}]<b>[{ oxmultilang ident="EMAIL_ORDER_OWNER_HTML_PAYMENTINFO" }]</b><br>
-    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD" }] [{ $payment->oxpayments__oxdesc->value }] [{ if $basket->getPaymentCosts() }]([{ $basket->getFPaymentCosts() }] [{ $currency->sign}])[{/if}]<br>
-    [{ $payment->oxpayments__oxlongdesc->value }]<br><br>
+    [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD" }] [{ $payment->oxpayments__oxdesc->value }] [{ if $basket->getPaymentCosts() }]([{ $basket->getFPaymentCosts() }] [{ $currency->sign}])[{/if}]
+    <br><br>
     [{ oxmultilang ident="EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF" }]<br>
     [{*
     [{foreach from=$payment->aDynValues item=value}]

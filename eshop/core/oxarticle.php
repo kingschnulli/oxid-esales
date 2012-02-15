@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 41828 2012-01-27 15:26:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticle.php 42204 2012-02-13 13:25:32Z linas.kukulskis $
  */
 
 // defining supported link types
@@ -457,9 +457,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function __get($sName)
     {
         $myUtils = oxUtils::getInstance();
-        // deprecated since 2011.03.10, should be used getArticleLongDesc() / getLongDesc()
+        // deprecated since 2011.03.10, should be used getLongDescription() / getLongDesc()
         if ( strpos( $sName, 'oxarticles__oxlongdesc' ) === 0 ) {
-            return $this->getArticleLongDesc();
+            return $this->getLongDescription();
         }
 
         $this->$sName = parent::__get($sName);
@@ -2292,8 +2292,20 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * @param string $sOxid Article ID
      *
      * @return object $oField field object
+     *
+     * @deprecated since 2012-02-13 in version 4.6.0; use getLongDescription()
      */
     public function getArticleLongDesc( $sOxid = null )
+    {
+        return $this->getLongDescription();
+    }
+
+    /**
+     * Get article long description
+     *
+     * @return object $oField field object
+     */
+    public function getLongDescription()
     {
         if ( $this->_oLongDesc === null ) {
             // initializing
@@ -2301,14 +2313,14 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
 
             // choosing which to get..
-            $sOxid = $sOxid === null ? $this->getId() : $sOxid;
+            $sOxid = $this->getId();
             $sViewName = getViewName( 'oxartextends', $this->getLanguage() );
 
             $sDbValue = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT )->getOne( "select oxlongdesc from {$sViewName} where oxid = ?", array( $sOxid ) );
             if ( $sDbValue !== false ) {
                 $this->_oLongDesc->setValue( $sDbValue, oxField::T_RAW );
             } elseif ( $this->oxarticles__oxparentid->value ) {
-                $this->_oLongDesc->setValue( $this->getParentArticle()->getArticleLongDesc()->getRawValue(), oxField::T_RAW );
+                $this->_oLongDesc->setValue( $this->getParentArticle()->getLongDescription()->getRawValue(), oxField::T_RAW );
             }
         }
         return $this->_oLongDesc;
@@ -2330,13 +2342,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
     /**
      * get long description, parsed through smarty. should only be used by exports or so.
-     * In templates use [{oxeval var=$oProduct->getArticleLongDesc()->getRawValue()}]
+     * In templates use [{oxeval var=$oProduct->getLongDescription()->getRawValue()}]
      *
      * @return string
      */
     public function getLongDesc()
     {
-        return oxUtilsView::getInstance()->parseThroughSmarty( $this->getArticleLongDesc()->getRawValue(), $this->getId().$this->getLanguage() );
+        return oxUtilsView::getInstance()->parseThroughSmarty( $this->getLongDescription()->getRawValue(), $this->getId().$this->getLanguage() );
     }
 
     /**
@@ -2991,7 +3003,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         }
 
         if ($this->_blEmployMultilanguage) {
-            $sValue = $this->getArticleLongDesc()->getRawValue();
+            $sValue = $this->getLongDescription()->getRawValue();
             if ( $sValue !== null ) {
                 $oArtExt = oxNew('oxI18n');
                 $oArtExt->init('oxartextends');

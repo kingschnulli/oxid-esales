@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: startTest.php 37630 2011-07-28 14:27:25Z linas.kukulskis $
+ * @version   SVN: $Id: startTest.php 42218 2012-02-13 13:35:13Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -140,8 +140,8 @@ class Unit_Views_startTest extends OxidTestCase
     {
         modConfig::getInstance()->setConfigParam( 'bl_perfLoadAktion', 1 );
 
-        $oArticle = $this->getMock( 'oxarticle', array( 'getArticleLongDesc' ) );
-        $oArticle->expects( $this->once() )->method( 'getArticleLongDesc')->will( $this->returnValue( new oxField( 'testlongdesc' ) ) );
+        $oArticle = $this->getMock( 'oxarticle', array( 'getLongDescription' ) );
+        $oArticle->expects( $this->once() )->method( 'getLongDescription')->will( $this->returnValue( new oxField( 'testlongdesc' ) ) );
 
         $oStart = $this->getMock( 'start', array( 'getFirstArticle' ) );
         $oStart->expects( $this->once() )->method( 'getFirstArticle')->will( $this->returnValue( $oArticle ) );
@@ -165,8 +165,8 @@ class Unit_Views_startTest extends OxidTestCase
     {
         modConfig::getInstance()->setConfigParam( 'bl_perfLoadAktion', 1 );
 
-        $oArticle = $this->getMock( 'oxarticle', array( 'getArticleLongDesc' ) );
-        $oArticle->expects( $this->once() )->method( 'getArticleLongDesc')->will( $this->returnValue( new oxField( 'testlongdesc' ) ) );
+        $oArticle = $this->getMock( 'oxarticle', array( 'getLongDescription' ) );
+        $oArticle->expects( $this->once() )->method( 'getLongDescription')->will( $this->returnValue( new oxField( 'testlongdesc' ) ) );
 
         $oStart = $this->getMock( 'start', array( 'getFirstArticle' ) );
         $oStart->expects( $this->once() )->method( 'getFirstArticle')->will( $this->returnValue( $oArticle ) );

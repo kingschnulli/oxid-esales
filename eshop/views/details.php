@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 42113 2012-02-09 15:05:26Z linas.kukulskis $
+ * @version   SVN: $Id: details.php 42211 2012-02-13 13:28:45Z linas.kukulskis $
  */
 
 /**
@@ -425,7 +425,7 @@ class Details extends oxUBase
         if ( !$sMeta ) {
             $oProduct = $this->getProduct();
 
-            $sMeta = $oProduct->getArticleLongDesc()->value;
+            $sMeta = $oProduct->getLongDescription()->value;
             $sMeta = str_replace( array( '<br>', '<br />', '<br/>' ), "\n", $sMeta );
             $sMeta = $oProduct->oxarticles__oxtitle->value.' - '.$sMeta;
             $sMeta = strip_tags( $sMeta );

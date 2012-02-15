@@ -3,7 +3,7 @@
 
 [{block name="details_tabs_longdescription"}]
     [{oxhasrights ident="SHOWLONGDESCRIPTION"}]
-        [{assign var="oLongdesc" value=$oDetailsProduct->getArticleLongDesc()}]
+        [{assign var="oLongdesc" value=$oDetailsProduct->getLongDescription()}]
         [{if $oLongdesc->value}]
             [{capture append="tabs"}]<a href="#description">[{oxmultilang ident="PAGE_DETAILS_TABS_DESCRIPTION"}]</a>[{/capture}]
             [{capture append="tabsContent"}]
