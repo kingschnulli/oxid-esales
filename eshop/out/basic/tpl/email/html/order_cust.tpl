@@ -378,9 +378,6 @@
 
   <br>
   [{if $payment->oxuserpayments__oxpaymentsid->value != "oxempty"}][{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD" }] <b>[{ $payment->oxpayments__oxdesc->value }] [{ if $basket->getPaymentCosts() }]([{ $basket->getFPaymentCosts() }] [{ $currency->sign}])[{/if}]</b><br>
-      [{if $payment->oxpayments__oxlongdesc->value}]
-         [{ $payment->oxpayments__oxlongdesc->getRawValue() }]
-    [{/if}]<br>
   [{/if}]<br>
   [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_EMAILADDRESS" }] [{ $user->oxuser__oxusername->value }]<br>
   <br>

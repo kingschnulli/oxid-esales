@@ -544,10 +544,6 @@
             </h3>
             <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
                 <b>[{ $payment->oxpayments__oxdesc->value }] [{ if $basket->getPaymentCosts() }]([{ $basket->getFPaymentCosts() }] [{ $currency->sign}])[{/if}]</b>
-                <br>
-                [{if $payment->oxpayments__oxlongdesc->value}]
-                    [{ $payment->oxpayments__oxlongdesc->getRawValue() }]
-                [{/if}]
             </p>
         [{/if}]
     [{/block}]

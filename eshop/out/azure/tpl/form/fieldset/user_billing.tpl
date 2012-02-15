@@ -33,6 +33,16 @@
         </p>
           [{/if}]
     </li>
+    <li [{if $aErrors.oxuser__oxaddinfo}]class="oxInValid"[{/if}]>
+        <label [{if $oView->isFieldRequired(oxuser__oxaddinfo) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_ADDITIONALINFO" }]</label>
+          <input [{if $oView->isFieldRequired(oxuser__oxaddinfo) }]class="js-oxValidate js-oxValidate_notEmpty" [{/if}]type="text" size="37" maxlength="255" name="invadr[oxuser__oxaddinfo]" value="[{if isset( $invadr.oxuser__oxaddinfo ) }][{ $invadr.oxuser__oxaddinfo }][{else }][{ $oxcmp_user->oxuser__oxaddinfo->value }][{/if}]">
+          [{if $oView->isFieldRequired(oxuser__oxaddinfo) }]
+        <p class="oxValidateError">
+            <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+            [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxaddinfo}]
+        </p>
+          [{/if}]
+    </li>
     <li [{if $aErrors.oxuser__oxstreet}]class="oxInValid"[{/if}]>
         <label [{if $oView->isFieldRequired(oxuser__oxstreet) || $oView->isFieldRequired(oxuser__oxstreetnr) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_STREETANDSTREETNO" }]</label>
           <input [{if $oView->isFieldRequired(oxuser__oxstreet) }]class="js-oxValidate js-oxValidate_notEmpty" [{/if}]type="text" data-fieldsize="pair-xsmall" maxlength="255" name="invadr[oxuser__oxstreet]" value="[{if isset( $invadr.oxuser__oxstreet ) }][{ $invadr.oxuser__oxstreet }][{else }][{ $oxcmp_user->oxuser__oxstreet->value }][{/if}]">
@@ -65,16 +75,7 @@
         </p>
           [{/if}]
     </li>
-    <li [{if $aErrors.oxuser__oxaddinfo}]class="oxInValid"[{/if}]>
-        <label [{if $oView->isFieldRequired(oxuser__oxaddinfo) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_ADDITIONALINFO" }]</label>
-          <input [{if $oView->isFieldRequired(oxuser__oxaddinfo) }]class="js-oxValidate js-oxValidate_notEmpty" [{/if}]type="text" size="37" maxlength="255" name="invadr[oxuser__oxaddinfo]" value="[{if isset( $invadr.oxuser__oxaddinfo ) }][{ $invadr.oxuser__oxaddinfo }][{else }][{ $oxcmp_user->oxuser__oxaddinfo->value }][{/if}]">
-          [{if $oView->isFieldRequired(oxuser__oxaddinfo) }]
-        <p class="oxValidateError">
-            <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
-            [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxaddinfo}]
-        </p>
-          [{/if}]
-    </li>
+
     <li [{if $aErrors.oxuser__oxcountryid}]class="oxInValid"[{/if}]>
         <label [{if $oView->isFieldRequired(oxuser__oxcountryid) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_COUNTRY" }]</label>
           <select [{if $oView->isFieldRequired(oxuser__oxcountryid) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if}] id="invCountrySelect" name="invadr[oxuser__oxcountryid]">

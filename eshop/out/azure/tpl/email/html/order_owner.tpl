@@ -490,10 +490,6 @@
                     </h3>
                     <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
                         <b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD" }] [{ $payment->oxpayments__oxdesc->value }] [{ if $basket->getPaymentCosts() }]([{ $basket->getFPaymentCosts() }] [{ $currency->sign}])[{/if}]</b>
-                        <br>
-                        [{if $payment->oxpayments__oxlongdesc->value}]
-                            [{ $payment->oxpayments__oxlongdesc->getRawValue() }]
-                        [{/if}]
                         <br><br>
                         [{ oxmultilang ident="EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF" }]
                     </p>
