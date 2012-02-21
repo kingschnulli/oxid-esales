@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewconfig.php 42331 2012-02-20 12:04:30Z rimvydas.paskevicius $
  */
 
 /**
@@ -1303,4 +1303,5 @@ class oxViewConfig extends oxSuperCfg
     {
         return $this->showSelectLists() && (bool) $this->getConfig()->getConfigParam( 'bl_perfLoadSelectListsInAList' );
     }
+
 }

@@ -81,4 +81,40 @@ class shop_rdfa extends Shop_Config
         }
         return $aCustomers;
     }
+
+    /**
+     * Submits shop main page to web search engines
+     *
+     * @return null
+     */
+    public function submitUrl()
+    {
+        $aParams = oxConfig::getParameter( "aSubmitUrl" );
+        if ($aParams['url']) {
+            $sNotificationUrl = "http://gr-notify.appspot.com/submit?uri=".urlencode($aParams['url'])."&agent=oxid";
+            if ( $aParams['email'] ) {
+                $sNotificationUrl .= "&contact=".urlencode($aParams['email']);
+            }
+            $aHeaders = $this->getHttpResponseCode($sNotificationUrl);
+            if (substr($aHeaders[2], -4) === "True") {
+                $this->_aViewData["submitMessage"] = 'SHOP_RDFA_SUBMITED_SUCCESSFULLY';
+            } else {
+                oxUtilsView::getInstance()->addErrorToDisplay(substr($aHeaders[3], strpos($aHeaders[3], ":") + 2));
+            }
+        } else {
+            oxUtilsView::getInstance()->addErrorToDisplay('SHOP_RDFA_MESSAGE_NOURL');
+        }
+    }
+
+    /**
+     * Returns an array with the headers
+     *
+     * @param string $sURL target URL
+     *
+     * @return array
+     */
+    function getHttpResponseCode( $sURL )
+    {
+        return get_headers($sURL);
+    }
 }

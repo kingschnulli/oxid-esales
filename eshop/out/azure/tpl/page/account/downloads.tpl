@@ -1,5 +1,5 @@
 [{capture append="oxidBlock_content"}]
-    [{assign var="template_title" value="MY_DOWNLOADS'"|oxmultilangassign }]
+    [{assign var="template_title" value="MY_DOWNLOADS"|oxmultilangassign }]
     <h1 class="pageHead">[{ oxmultilang ident="MY_DOWNLOADS" }]</h1>
     [{if $oView->getOrderFilesList()|count }]
     <ul class="downloadList">
@@ -14,9 +14,9 @@
                    [{if $oOrderFile->isPaid() || !$oOrderFile->oxorderfiles__oxpurchasedonly->value  }]
                          [{if $oOrderFile->isValid() }]
                            <a class="downloadableFile" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=download" params="sorderfileid="|cat:$oOrderFile->getId() }]" rel="nofollow">[{$oOrderFile->oxorderfiles__oxfilename->value}]</a>
-                            
+
                             [{include file="page/account/inc/file_attributes.tpl"}]
-                            
+
                         [{else}]
                             [{$oOrderFile->oxorderfiles__oxfilename->value}]
                                 [{oxmultilang ident="DOWNLOAD_LINK_EXPIRED_OR_MAX_COUNT_RECEIVED"}]

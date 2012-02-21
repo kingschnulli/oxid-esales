@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxi18n.php 41709 2012-01-24 09:26:21Z linas.kukulskis $
+ * @version   SVN: $Id: oxi18n.php 42361 2012-02-20 15:10:53Z linas.kukulskis $
  */
 
 /**
@@ -520,10 +520,6 @@ class oxI18n extends oxBase
     {
         if (!$this->_blEmployMultilanguage) {
             return parent::_getObjectViewName($sTable, $sShopID);
-        }
-
-        if ( $this->_blForceCoreTableUsage ) {
-            $sShopID = -1;
         }
         return getViewName( $sTable, $this->getLanguage(), $sShopID);
     }

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42134 2012-02-10 07:41:47Z vilma $
+ * @version   SVN: $Id: lang.php 42373 2012-02-20 16:16:33Z juergen.busch $
  */
 
 /*
@@ -911,6 +911,7 @@ $aLang = array(
 'LOGIN_LANGUAGE'                                           => 'Language',
 'LOGIN_PROFILE'                                            => 'Profile',
 'LOGIN_START'                                              => 'Start OXID eShop Admin',
+'LOGIN_STAGINGMODE_NOTIFY'                                 => 'Functionality is limited to staging mode',
 'MAIN_TITLE'                                               => '[OXID Startpage]',
 'MAIN_INFO'                                                => 'Information',
 'MR'                                                       => 'Mr',
@@ -1981,16 +1982,18 @@ $aLang = array(
 'PROMOTIONS_ARTICLE_ASSIGNEDARTICLE'                       => 'Assigned Product:',
 'PROMOTIONS_ARTICLE_ALLITEMS'                              => 'All available Products',
 
-'SHOP_RDFA_TECH_CONFIG'			                           => 'Technical configuration',
-'SHOP_RDFA_EMBEDDING'			                           => 'Configure automatic data embedding',
-'SHOP_RDFA_CONTENT_OFFERER'		                           => 'In which content page the RDF data of the <b>provider</b> shall be embedded?',
-'SHOP_RDFA_CONTENT_PAYMENT'		                           => 'In which content page the RDF data of the <b>payment method</b> shall be embedded?',
-'SHOP_RDFA_CONTENT_DELIVERY'                               => 'In which content page the RDF data of the <b>shipping method</b> shall be embedded?',
+'SHOP_RDFA_TECH_CONFIG'			                           => 'Global configuration',
+'SHOP_RDFA_EMBEDDING'			                           => 'Enable automatic data embedding',
+'SHOP_RDFA_CONTENT_OFFERER'		                           => 'In which content page the RDF data of the <b>eShop</b> shall be embedded?',
+'SHOP_RDFA_ASSIGN_PAYMENT'                                 => 'To assign your payment methods to RDFa payment methods go to: Shop Settings -> Payment Methods -> RDFa.',
+'SHOP_RDFA_ASSIGN_DELIVERY'                                => 'To assign your shipping methods to RDFa shipping methods go to: Shop Settings -> Shipping Methods -> RDFa.',
+'SHOP_RDFA_CONTENT_PAYMENT'		                           => 'In which content page the RDF data of not assigned <b>payment methods</b> shall be embedded?',
+'SHOP_RDFA_CONTENT_DELIVERY'                               => 'In which content page the RDF data of not assigned <b>shipping methods</b> shall be embedded?',
 'SHOP_RDFA_RATING_MIN'			                           => 'How many stars can purchasers assign to a product <b>minimum</b>?',
 'SHOP_RDFA_RATING_MAX'			                           => 'How many stars can purchasers assign to a product <b>maximum</b>?',
-'SHOP_RDFA_DATA_OFFERER'	                               => 'Provider information',
-'SHOP_RDFA_DATA_MASTER'			                           => 'Main provider data',
-'SHOP_RDFA_DATA_EXTENDED'		                           => 'Extended provider data',
+'SHOP_RDFA_DATA_OFFERER'	                               => 'Shop information',
+'SHOP_RDFA_DATA_MASTER'			                           => 'Main shop data',
+'SHOP_RDFA_DATA_EXTENDED'		                           => 'Extended shop data',
 'SHOP_RDFA_LOGO_URL'			                           => 'URL of the logo',
 'SHOP_RDFA_GEO_LONGITUDE'			                       => 'Geo-position: Longitude',
 'SHOP_RDFA_GEO_LATITUDE'			                       => 'Geo-position: Latitude',
@@ -1998,8 +2001,8 @@ $aLang = array(
 'SHOP_RDFA_NAICS'			                               => 'NAICS',
 'SHOP_RDFA_ISIC'				                           => 'ISIC',
 'SHOP_RDFA_DUNS'				                           => 'D-U-N-S',
-'SHOP_RDFA_GLOBAL_OFFERING_DATA'		                   => 'Global special offer data',
-'SHOP_RDFA_VAT'				                               => 'Are the prices shown to the purchaser <b>incl.</b> or <b>excl. VAT</b>?',
+'SHOP_RDFA_GLOBAL_OFFERING_DATA'		                   => 'Special product information',
+'SHOP_RDFA_VAT'				                               => 'Are the prices and costs shown to the purchaser <b>incl.</b> or <b>excl. VAT</b>?',
 'SHOP_RDFA_VAT_INC'			                               => 'incl. VAT.',
 'SHOP_RDFA_VAT_EX'			                               => 'excl. VAT.',
 'SHOP_RDFA_COND'				                           => 'In which <b>condition</b> are the offered product items?',
@@ -2020,8 +2023,8 @@ $aLang = array(
 'SHOP_RDFA_COSTUMER_RESELLER'		                       => 'Reseller',
 'SHOP_RDFA_COSTUMER_BUSINESS'		                       => 'Business',
 'SHOP_RDFA_COSTUMER_PUBLIC'		                           => 'Public',
-'SHOP_RDFA_DURATION_OFFERINGS'			                   => 'Which <b>duration</b> do your <b>offerings</b> have?',
-'SHOP_RDFA_DURATION_PRICES'			                       => 'Which <b>duration</b> do your <b>offered prices</b> have?',
+'SHOP_RDFA_DURATION_OFFERINGS'			                   => 'Select the time of the validity of your products.',
+'SHOP_RDFA_DURATION_PRICES'			                       => 'Select the time of the validity of your prices and costs (products, payment and shipping methods.',
 'SHOP_RDFA_1_DAY'			                               => '1 day',
 'SHOP_RDFA_3_DAYS'			                               => '3 days',
 'SHOP_RDFA_7_DAYS'			                               => '7 days (1 week)',
@@ -2029,6 +2032,13 @@ $aLang = array(
 'SHOP_RDFA_30_DAYS'			                               => '30 days (1 month)',
 'SHOP_RDFA_178_DAYS'			                           => '178 days (6 months)',
 'SHOP_RDFA_356_DAYS'			                           => '356 days (1 year)',
+'SHOP_RDFA_SUBMIT_URL'			                           => 'Submit URL',
+'SHOP_RDFA_URL'		         	                           => 'Shop URL',
+'SHOP_RDFA_EMAIL'	    		                           => 'Contact (e-mail)',
+'SHOP_RDFA_SUBMITED_SUCCESSFULLY'                          => 'Your shop data were successfully submitted',
+'SHOP_RDFA_MESSAGE_NOURL'	    		                   => 'Please add shop URL',
+'SHOP_RDFA_SUBMIT'	    		                           => 'Submit',
+'SHOP_RDFA_SHOW_PRODUCTSTOCK'	    		               => 'Show real available product stock',
 
 'PAYMENT_RDFA_ASIGN_PAYMENT'		                       => 'Assign payment',
 'PAYMENT_RDFA_ADVICE_START'		                           => '<b>Hint:</b> Please choose only those payment methods, pre-defined in GoodRelations, that comply with your payment methods.',

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 42194 2012-02-13 09:13:02Z linas.kukulskis $
+ * @version   SVN: $Id: oxorder.php 42356 2012-02-20 15:09:34Z linas.kukulskis $
  */
 
 /**
@@ -298,30 +298,45 @@ class oxOrder extends oxBase
     }
 
     /**
+     * returned assigned orderarticles from order
+     *
+     * @param bool $blExcludeCanceled excludes canceled items from list
+     *
+     * @return oxList
+     */
+    protected function _getArticles( $blExcludeCanceled = false )
+    {
+        $sSelect = "SELECT `oxorderarticles`.* FROM `oxorderarticles`
+                        WHERE `oxorderarticles`.`oxorderid` = '".$this->getId() . "'" .
+                        ( $blExcludeCanceled ? " AND `oxorderarticles`.`oxstorno` != 1 ": " " ) ."
+                        ORDER BY `oxorderarticles`.`oxartid`";
+
+            // order articles
+        $oArticles = oxNew( 'oxlist' );
+        $oArticles->init( 'oxorderarticle' );
+        $oArticles->selectString( $sSelect );
+
+        return $oArticles;
+    }
+
+    /**
      * Assigns data, stored in oxorderarticles to oxorder object .
      *
      * @param bool $blExcludeCanceled excludes canceled items from list
      *
-     * @return null
+     * @return oxList
      */
     public function getOrderArticles( $blExcludeCanceled = false )
     {
         // checking set value
-        if ( $this->_oArticles === null  ) {
-            $sTable = getViewName( "oxorderarticles" );
-            $sSelect = "select {$sTable}.* from {$sTable}
-                        where {$sTable}.oxorderid = '".$this->getId() . "'" .
-                        ( $blExcludeCanceled ? " and {$sTable}.oxstorno != 1 ": " " ) ."
-                        order by {$sTable}.oxartid";
+        if ( $blExcludeCanceled ) {
 
-            // order articles
-            $oArticles = oxNew( 'oxlist' );
-            $oArticles->init( 'oxorderarticle' );
-            $oArticles->selectString( $sSelect );
+            return $this->_getArticles( true );
 
-            // is value was not set, just returning it
-            return $oArticles;
+        } elseif ( $this->_oArticles === null  ) {
+                $this->_oArticles = $this->_getArticles();
         }
+
         return $this->_oArticles;
     }
 
@@ -1898,8 +1913,12 @@ class oxOrder extends oxBase
     {
         $this->oxorder__oxstorno = new oxField( 1 );
         if ( $this->save() ) {
+
+
             // canceling ordered products
             foreach ( $this->getOrderArticles() as $oOrderArticle ) {
+
+
                 $oOrderArticle->cancelOrderArticle();
             }
         }

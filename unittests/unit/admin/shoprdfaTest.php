@@ -77,4 +77,53 @@ class Unit_Admin_ShopRDFaTest extends OxidTestCase
         $oView->setConfig($oConf);
         $this->assertEquals( array(), $oView->getCustomers() );
     }
+
+    /**
+     * Shop_RDFa::submitUrl()
+     *
+     * @return null
+     */
+    public function testSubmitUrl()
+    {
+        modConfig::setParameter('aSubmitUrl', array( "url" => "http://www.myshop.com", "email" => "test@email"));
+        $aHeaders = array(2 => "Return: True", 3 => "Return message: Success");
+        $oView = $this->getMock( 'Shop_RDFa', array( "getHttpResponseCode" ) );
+        $oView->expects( $this->any() )->method( 'getHttpResponseCode' )->will( $this->returnValue( $aHeaders ) );
+        $oView->submitUrl();
+        $aViewData = $oView->getViewData();
+        $this->assertEquals( 'SHOP_RDFA_SUBMITED_SUCCESSFULLY', $aViewData["submitMessage"] );
+    }
+
+    /**
+     * Shop_RDFa::submitUrl()
+     *
+     * @return null
+     */
+    public function testSubmitUrlNoEntry()
+    {
+        modConfig::setParameter('aSubmitUrl', null);
+        $oView = $this->getProxyClass('Shop_RDFA');
+        $oView->submitUrl();
+        $aErr = oxSession::getVar( 'Errors' );
+        $oErr = unserialize($aErr['default'][0]);
+        $this->assertNotNull( $oErr->getOxMessage());
+    }
+
+    /**
+     * Shop_RDFa::submitUrl()
+     *
+     * @return null
+     */
+    public function testSubmitUrlReturnFalse()
+    {
+        modConfig::setParameter('aSubmitUrl', array( "url" => "http://www.myshop.com"));
+        $aHeaders = array(2 => "Return: False", 3 => "Return message: To many times submited");
+        $oView = $this->getMock( 'Shop_RDFa', array( "getHttpResponseCode" ) );
+        $oView->expects( $this->any() )->method( 'getHttpResponseCode' )->will( $this->returnValue( $aHeaders ) );
+        $oView->submitUrl();
+        $aErr = oxSession::getVar( 'Errors' );
+        $oErr = unserialize($aErr['default'][0]);
+        $this->assertEquals( 'To many times submited', $oErr->getOxMessage());
+    }
+
 }

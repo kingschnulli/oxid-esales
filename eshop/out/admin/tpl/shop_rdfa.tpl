@@ -66,6 +66,8 @@ function _groupExp(el) {
             </dl>
 
             <dl>
+                <div class="spacer"></div>
+                <div>[{ oxmultilang ident="SHOP_RDFA_ASSIGN_PAYMENT" }]</div>
                 <dt>
                     <select name="confstrs[sRDFaPaymentChargeSpecLoc]" class="select" [{ $readonly}]>
                         [{foreach key=key item=item from=$aContents}]
@@ -81,6 +83,8 @@ function _groupExp(el) {
             </dl>
 
             <dl>
+                <div class="spacer"></div>
+                <div>[{ oxmultilang ident="SHOP_RDFA_ASSIGN_DELIVERY" }]</div>
                 <dt>
                     <select name="confstrs[sRDFaDeliveryChargeSpecLoc]" class="select" [{ $readonly}]>
                         [{foreach key=key item=item from=$aContents}]
@@ -91,6 +95,41 @@ function _groupExp(el) {
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_RDFA_CONTENT_DELIVERY" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
+            <dl>
+                <dt>
+                    <select name="confstrs[iRDFaVAT]" class="select" [{ $readonly}]>
+                        <option value="0" [{if ($confstrs.iRDFaVAT == 0)}]selected[{/if}]>-</option>
+                        <option value="1" [{if ($confstrs.iRDFaVAT == 1)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_VAT_INC" }]</option>
+                        <option value="2" [{if ($confstrs.iRDFaVAT == 2)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_VAT_EX" }]</option>
+                    </select>
+                    [{ oxinputhelp ident="HELP_SHOP_RDFA_VAT" }]
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_RDFA_VAT" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+
+            <dl>
+                <dt>
+                    <select name="confstrs[iRDFaPriceValidity]" [{ $readonly }]>
+                        <option value="0" [{if ($confstrs.iRDFaPriceValidity == 0)}]selected[{/if}]>-</option>
+                        <option value="1" [{if ($confstrs.iRDFaPriceValidity == 1)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_1_DAY" }]</option>
+                        <option value="3" [{if ($confstrs.iRDFaPriceValidity == 3)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_3_DAYS" }]</option>
+                        <option value="7" [{if ($confstrs.iRDFaPriceValidity == 7)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_7_DAYS" }]</option>
+                        <option value="14" [{if ($confstrs.iRDFaPriceValidity == 14)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_14_DAYS" }]</option>
+                        <option value="30" [{if ($confstrs.iRDFaPriceValidity == 30)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_30_DAYS" }]</option>
+                        <option value="178" [{if ($confstrs.iRDFaPriceValidity == 178)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_178_DAYS" }]</option>
+                        <option value="356" [{if ($confstrs.iRDFaPriceValidity == 356)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_356_DAYS" }]</option>
+                    </select>
+                    [{ oxinputhelp ident="HELP_SHOP_RDFA_DURATION_PRICES" }]
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_RDFA_DURATION_PRICES" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>
@@ -111,12 +150,14 @@ function _groupExp(el) {
                 <dd>
                     [{ oxmultilang ident="SHOP_MAIN_COMPANY" }]
                 </dd>
+                <div class="spacer"></div>
                 <dt>
                     <input type="text" class="editinput" size="35" maxlength="128" value="[{$edit->oxshops__oxstreet->value}]" style="color: #777777;" readonly>
                 </dt>
                 <dd>
                     [{ oxmultilang ident="GENERAL_STREETNUM" }]
                 </dd>
+                <div class="spacer"></div>
                 <dt>
                     <input type="text" class="editinput" size="5" maxlength="255" value="[{$edit->oxshops__oxzip->value}]" style="color: #777777;" readonly>
                     <input type="text" class="editinput" size="26" maxlength="255" value="[{$edit->oxshops__oxcity->value}]" style="color: #777777;" readonly>
@@ -124,24 +165,28 @@ function _groupExp(el) {
                 <dd>
                     [{ oxmultilang ident="GENERAL_ZIPCITY" }]
                 </dd>
+                <div class="spacer"></div>
                 <dt>
                     <input type="text" class="editinput" size="35" maxlength="128" value="[{$edit->oxshops__oxcountry->value}]" style="color: #777777;" readonly>
                 </dt>
                 <dd>
                     [{ oxmultilang ident="GENERAL_COUNTRY" }]
                 </dd>
+                <div class="spacer"></div>
                 <dt>
                     <input type="text" class="editinput" size="35" maxlength="128" value="[{$edit->oxshops__oxtelefon->value}]" style="color: #777777;" readonly>
                 </dt>
                 <dd>
                     [{ oxmultilang ident="GENERAL_TELEPHONE" }]
                 </dd>
+                <div class="spacer"></div>
                 <dt>
                     <input type="text" class="editinput" size="35" maxlength="128" value="[{$edit->oxshops__oxtelefax->value}]" style="color: #777777;" readonly>
                 </dt>
                 <dd>
                     [{ oxmultilang ident="GENERAL_FAX" }]
                 </dd>
+                <div class="spacer"></div>
                 <dt>
                     <input type="text" class="editinput" size="35" maxlength="128" value="[{$edit->oxshops__oxurl->value}]" style="color: #777777;" readonly>
                 </dt>
@@ -169,6 +214,7 @@ function _groupExp(el) {
                 <dd>
                     [{ oxmultilang ident="SHOP_RDFA_GEO_LONGITUDE" }]
                 </dd>
+                <div class="spacer"></div>
                 <dt>
                     <input type=text class="txt" name=confstrs[sRDFaLatitude] value="[{$confstrs.sRDFaLatitude}]">
                     [{ oxinputhelp ident="HELP_SHOP_RDFA_GEO_LATITUDE" }]
@@ -228,7 +274,17 @@ function _groupExp(el) {
     <div class="groupExp">
         <div>
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_RDFA_GLOBAL_OFFERING_DATA" }]</b></a>
-
+            <dl>
+                <dt>
+                    <input type=hidden name="confbools[blShowRDFaProductStock]" value="false">
+                    <input type=checkbox name="confbools[blShowRDFaProductStock]" value="true"  [{if ($confbools.blShowRDFaProductStock)}]checked[{/if}] [{ $readonly}]>
+                    [{ oxinputhelp ident="HELP_SHOP_RDFA_SHOW_PRODUCTSTOCK }]
+                </dt>
+                <dd>
+                    [{ oxmultilang ident="SHOP_RDFA_SHOW_PRODUCTSTOCK" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
             <dl>
                 <dt>
                     <input type=text class="txt" name=confstrs[iRDFaMinRating] value="[{$confstrs.iRDFaMinRating}]">
@@ -247,21 +303,6 @@ function _groupExp(el) {
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_RDFA_RATING_MAX" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
-            <dl>
-                <dt>
-                    <select name="confstrs[iRDFaVAT]" class="select" [{ $readonly}]>
-                        <option value="0" [{if ($confstrs.iRDFaVAT == 0)}]selected[{/if}]>-</option>
-                        <option value="1" [{if ($confstrs.iRDFaVAT == 1)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_VAT_INC" }]</option>
-                        <option value="2" [{if ($confstrs.iRDFaVAT == 2)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_VAT_EX" }]</option>
-                    </select>
-                    [{ oxinputhelp ident="HELP_SHOP_RDFA_VAT" }]
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_RDFA_VAT" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>
@@ -338,26 +379,6 @@ function _groupExp(el) {
                 <div class="spacer"></div>
             </dl>
 
-            <dl>
-                <dt>
-                    <select name="confstrs[iRDFaPriceValidity]" [{ $readonly }]>
-                        <option value="0" [{if ($confstrs.iRDFaPriceValidity == 0)}]selected[{/if}]>-</option>
-                        <option value="1" [{if ($confstrs.iRDFaPriceValidity == 1)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_1_DAY" }]</option>
-                        <option value="3" [{if ($confstrs.iRDFaPriceValidity == 3)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_3_DAYS" }]</option>
-                        <option value="7" [{if ($confstrs.iRDFaPriceValidity == 7)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_7_DAYS" }]</option>
-                        <option value="14" [{if ($confstrs.iRDFaPriceValidity == 14)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_14_DAYS" }]</option>
-                        <option value="30" [{if ($confstrs.iRDFaPriceValidity == 30)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_30_DAYS" }]</option>
-                        <option value="178" [{if ($confstrs.iRDFaPriceValidity == 178)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_178_DAYS" }]</option>
-                        <option value="356" [{if ($confstrs.iRDFaPriceValidity == 356)}]selected[{/if}]>[{ oxmultilang ident="SHOP_RDFA_356_DAYS" }]</option>
-                    </select>
-                    [{ oxinputhelp ident="HELP_SHOP_RDFA_DURATION_PRICES" }]
-                </dt>
-                <dd>
-                    [{ oxmultilang ident="SHOP_RDFA_DURATION_PRICES" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-
          </div>
     </div>
 [{/block}]
@@ -365,6 +386,51 @@ function _groupExp(el) {
 <input type="submit" class="edittext" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'" [{ $readonly }]>
 
 </form>
+<br><br>
+
+[{block name="admin_shop_rdfa_submiturl"}]
+<form name="submitUrl" id="submitUrl" action="[{ $oViewConf->getSelfLink() }]" method="post">
+    [{ $oViewConf->getHiddenSid() }]
+    <input type="hidden" name="cl" value="shop_rdfa">
+    <input type="hidden" name="fnc" value="submitUrl">
+    <input type="hidden" name="oxid" value="[{ $oxid }]">
+    <input type="hidden" name="editval[oxshops__oxid]" value="[{ $oxid }]">
+        <fieldset title="[{ oxmultilang ident="SHOP_RDFA_SUBMIT_URL" }]" style="padding-left: 5px;width:120px;">
+            <legend>[{ oxmultilang ident="SHOP_RDFA_SUBMIT_URL" }] [{ oxinputhelp ident="HELP_SHOP_RDFA_SUBMIT_URL" }]</legend><br>
+            <table cellspacing="0" cellpadding="0" border="0" width="120">
+                [{if $submitMessage }]
+                    <tr>
+                        <td colspan="2">
+                            <div>[{ oxmultilang ident=$submitMessage }]</div>
+                      </td>
+                    </tr>
+                [{/if}]
+                <tr>
+                   <td class="edittext" width="120">
+                        [{ oxmultilang ident="SHOP_RDFA_URL" }]
+                    </td>
+                    <td class="edittext">
+                        <input class="edittext" type="text" name="aSubmitUrl[url]" class="edittext" [{$readonly}]>
+                    </td>
+                </tr>
+                <tr>
+                   <td class="edittext" width="120">
+                        [{ oxmultilang ident="SHOP_RDFA_EMAIL" }]
+                    </td>
+                    <td class="edittext">
+                        <input class="edittext" type="text" name="aSubmitUrl[email]" class="edittext" [{$readonly}]>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                      <input type="submit" class="edittext" value="[{ oxmultilang ident="SHOP_RDFA_SUBMIT" }]" onClick="Javascript:document.submitUrl.fnc.value='submitUrl'" [{ $readonly }]>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </form>
+[{/block}]
+
 
 [{include file="bottomnaviitem.tpl"}]
 [{include file="bottomitem.tpl"}]

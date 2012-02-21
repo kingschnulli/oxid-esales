@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 42211 2012-02-13 13:28:45Z linas.kukulskis $
+ * @version   SVN: $Id: details.php 42278 2012-02-15 12:39:09Z vilma $
  */
 
 /**
@@ -1796,6 +1796,16 @@ class Details extends oxUBase
     public function getRDFaBusinessEntityLoc()
     {
         return $this->getConfig()->getConfigParam("sRDFaBusinessEntityLoc");
+    }
+
+    /**
+     * Returns if to show products left stock
+     *
+     * @return string
+     */
+    public function showRDFaProductStock()
+    {
+        return $this->getConfig()->getConfigParam("blShowRDFaProductStock");
     }
 
 }

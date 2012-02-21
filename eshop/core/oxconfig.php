@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 41844 2012-01-27 15:37:28Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxconfig.php 42297 2012-02-15 16:15:36Z rimvydas.paskevicius $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -319,6 +319,7 @@ class oxConfig extends oxSuperCfg
      * @var integer
      */
     const OXMAX_SHOP_COUNT = 256;
+
 
     /**
      * Returns config parameter value if such parameter exists
@@ -1608,6 +1609,7 @@ class oxConfig extends oxSuperCfg
     {
         return $this->getConfigParam('blDemoShop');
     }
+
 
     /**
      * Returns OXID eShop edition

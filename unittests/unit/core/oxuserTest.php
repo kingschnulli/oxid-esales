@@ -3615,36 +3615,72 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( 1, $sPassword, $sShopID, $blAdmin ) );
 
         // admin
+        //
+
         $sQ  = "select {$sWhat} from oxuser where oxuser.oxactive = 1 and  ";
         $sQ .= "oxuser.oxpassword = MD5( CONCAT( ".$oDb->quote( $sPassword ).", UNHEX( oxuser.oxpasssalt ) ) )  and ";
         $sQ .= "oxuser.oxusername = " . $oDb->quote( $sUser ) . " ";
         $sQ .= " and ( oxrights != 'user' )  ";
         $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( $sUser, $sPassword, $sShopID, true ) );
 
-        // demoshop + admin
-        $oConfig = $this->getMock( "oxConfig", array( "isDemoShop", "getConfigParam" ) );
-        $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
+    }
 
-            $oConfig->expects( $this->never() )->method( 'getConfigParam');
+    /**
+     * Test case for oxUSer::_getLoginQuery() - demoshop + admin mode
+     *
+     * @return null
+     */
+    public function testGetLoginQuery_demoShopAdminMode()
+    {
+        // demoshop + admin
+        
+            $oConfig = $this->getMock( "oxConfig", array( "isDemoShop" ) );
+            $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
+            $sWhat = "oxid";
 
         $oUser = $this->getMock( "oxUser", array( "getConfig" ), array(), '', false );
         $oUser->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
-        $sQ = "select $sWhat from oxuser where oxrights = 'malladmin'  and ( oxrights != 'user' )  ";
-        $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( "admin", "admin", $sShopID, true ) );
 
-        // demoshop + admin, but pass or user name are not "admin"
-        $oConfig = $this->getMock( "oxConfig", array( "getConfigParam", "isDemoShop" ) );
-            $oConfig->expects( $this->never() )->method( 'getConfigParam');
-        $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
+        $sQ = "select $sWhat from oxuser where oxrights = 'malladmin' ";
 
-        try {
-            $oUser = $this->getMock( "oxUser", array( "getConfig" ), array(), '', false );
-            $oUser->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
-            $oUser->UNITgetLoginQuery( $sUser, $sPassword, $sShopID, true );
-        } catch ( oxUserException $oExcp ) {
-            //
-        }
+        $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( "admin", "admin", "testShopId", true ) );
+    }
 
+    /**
+     * Test case for oxUSer::_getLoginQuery() - staging mode
+     *
+     * @return null
+     */
+    public function testGetLoginQuery_demoShopAdminMode_InvalidLogin()
+    {
+        // demoshop + admin
+
+            $oConfig = $this->getMock( "oxConfig", array( "isDemoShop" ) );
+            $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
+
+        $oUser = $this->getMock( "oxUser", array( "getConfig" ), array(), '', false );
+        $oUser->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->setExpectedException( 'oxUserException' );
+        $oUser->UNITgetLoginQuery( "notadmin", "notadmin", "testShopId", true );
+    }
+
+    /**
+     * Test case for oxUSer::_getLoginQuery() - staging mode
+     *
+     * @return null
+     */
+    public function testGetLoginQuery_stagingMode()
+    {
+    }
+
+    /**
+     * Test case for oxUSer::_getLoginQuery() - staging mode
+     *
+     * @return null
+     */
+    public function testGetLoginQuery_stagingMode_InvalidLogin()
+    {
     }
 
     /**

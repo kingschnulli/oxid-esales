@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 41926 2012-01-31 14:43:13Z vilma $
+ * @version   SVN: $Id: detailsTest.php 42278 2012-02-15 12:39:09Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1684,6 +1684,13 @@ class Unit_Views_detailsTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( 'sRDFaBusinessEntityLoc', "test" );
         $oView = new details();
         $this->assertEquals( "test", $oView->getRDFaBusinessEntityLoc() );
+    }
+
+    public function testShowRDFaProductStock()
+    {
+        modConfig::getInstance()->setConfigParam( 'blShowRDFaProductStock', true );
+        $oView = new details();
+        $this->assertTrue( $oView->showRDFaProductStock() );
     }
 
 }

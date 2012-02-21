@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42160 2012-02-10 14:31:32Z juergen.busch $
+ * @version   SVN: $Id: lang.php 42372 2012-02-20 16:16:15Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -251,7 +251,7 @@ $aLang = array(
 'GENERAL_IDENT'                                            => 'Ident',
 'GENERAL_INGROUP'                                          => 'In Benutzergruppe',
 'GENERAL_INETTO'                                           => 'Artikel netto',
-'GENERAL_IVAT'                                             => 'VAT',
+'GENERAL_IVAT'                                             => 'MwSt',
 'GENERAL_INFOLDER'                                         => 'Ordner',
 'GENERAL_LIST_FIRST'                                       => 'Erste Seite',
 'GENERAL_LIST_PREV'                                        => 'zurück',
@@ -914,6 +914,7 @@ $aLang = array(
 'LOGIN_LANGUAGE'                                           => 'Sprache',
 'LOGIN_PROFILE'                                            => 'Profil',
 'LOGIN_START'                                              => 'OXID eShop Admin starten',
+'LOGIN_STAGINGMODE_NOTIFY'                                 => 'Funktionalität ist durch Staging-Modus eingeschränkt',
 'MAIN_TITLE'                                               => '[OXID Startpage]',
 'MAIN_INFO'                                                => 'Information',
 'MR'                                                       => 'Herr',
@@ -1987,16 +1988,18 @@ $aLang = array(
 'PROMOTIONS_ARTICLE_ASSIGNEDARTICLE'                       => 'Zugeordnetes Produkt:',
 'PROMOTIONS_ARTICLE_ALLITEMS'                              => 'Alle verfügbaren Produkte',
 
-'SHOP_RDFA_TECH_CONFIG'			                           => 'Technische Einstellungen',
-'SHOP_RDFA_EMBEDDING'									   => 'Automatische Einbettung der Daten konfigurieren',
-'SHOP_RDFA_CONTENT_OFFERER'								   => 'In welche Content-Seite sollen die RDF-Daten des <b>Anbieters</b> eingebettet werden?',
-'SHOP_RDFA_CONTENT_PAYMENT'								   => 'In welche Content-Seite sollen die RDF-Daten der <b>Zahlungsarten</b> eingebettet werden?',
-'SHOP_RDFA_CONTENT_DELIVERY'                               => 'In welche Content-Seite sollen die RDF-Daten der <b>Versandarten</b> eingebettet werden?',
+'SHOP_RDFA_TECH_CONFIG'			                           => 'Globale Einstellungen',
+'SHOP_RDFA_EMBEDDING'									   => 'Aktivieren Sie die automatische Einbettung der Daten',
+'SHOP_RDFA_CONTENT_OFFERER'								   => 'In welche Content-Seite sollen die RDF-Daten des <b>eShop</b> eingebettet werden?',
+'SHOP_RDFA_ASSIGN_PAYMENT'                                 => 'Um Ihre Zahlungsarten den RDFa Zahlungsarten zuzuweisen, gehen Sie zu Shopeinstellungen -> Zahlungsarten -> RDFa.',
+'SHOP_RDFA_ASSIGN_DELIVERY'                                => 'Um Ihre Versandarten den RDFa Versandarten zuzweisen, gehen Sie zu Shopeinstellungen -> Versandarten -> RDFa.',
+'SHOP_RDFA_CONTENT_PAYMENT'		                           => 'In welche Content-Seite sollen die RDF-Daten von nicht zugewiesenen <b>Zahlungsarten</b> eingebettet werden?',
+'SHOP_RDFA_CONTENT_DELIVERY'                               => 'In welche Content-Seite sollen die RDF-Daten von nicht zugewiesenen <b>Versandarten</b> eingebettet werden?',
 'SHOP_RDFA_RATING_MIN'			                           => 'Mit wie vielen Punkten können Kunden einen Artikel <b>minimal</b> bewerten?',
 'SHOP_RDFA_RATING_MAX'			                           => 'Mit wie vielen Punkten können Kunden einen Artikel <b>maximal</b> bewerten?',
-'SHOP_RDFA_DATA_OFFERER'	                               => 'Anbieterdaten',
+'SHOP_RDFA_DATA_OFFERER'	                               => 'Shop-Informationen',
 'SHOP_RDFA_DATA_MASTER'			                           => 'Stammdaten',
-'SHOP_RDFA_DATA_EXTENDED'		                           => 'Erweiterte Anbieterdaten',
+'SHOP_RDFA_DATA_EXTENDED'		                           => 'Erweiterte Shop-Daten',
 'SHOP_RDFA_LOGO_URL'			                           => 'Logo-URL',
 'SHOP_RDFA_GEO_LONGITUDE'			                       => 'Geoposition: geogr. Länge (Longitude)',
 'SHOP_RDFA_GEO_LATITUDE'			                       => 'Geoposition: geogr. Breite (Latitude)',
@@ -2004,8 +2007,8 @@ $aLang = array(
 'SHOP_RDFA_NAICS'			                               => 'NAICS',
 'SHOP_RDFA_ISIC'				                           => 'ISIC',
 'SHOP_RDFA_DUNS'				                           => 'D-U-N-S',
-'SHOP_RDFA_GLOBAL_OFFERING_DATA'		                   => 'Globale Angebotsdaten',
-'SHOP_RDFA_VAT'				                               => 'Sind die dem Kunden angezeigten Preise <b>inkl.</b> oder <b>exkl.</b> der <b>gesetzlichen MwSt.</b>?',
+'SHOP_RDFA_GLOBAL_OFFERING_DATA'		                   => 'Spezielle Artikel-Informationen',
+'SHOP_RDFA_VAT'				                               => 'Sind die dem Kunden angezeigten Preise und Kosten <b>inkl.</b> oder <b>exkl.</b> der <b>gesetzlichen MwSt.</b>?',
 'SHOP_RDFA_VAT_INC'			                               => 'inkl. MwSt.',
 'SHOP_RDFA_VAT_EX'			                               => 'exkl. MwSt.',
 'SHOP_RDFA_COND'				                           => 'Wie ist der <b>Zustand</b> der angebotenen Artikel?',
@@ -2026,8 +2029,8 @@ $aLang = array(
 'SHOP_RDFA_COSTUMER_RESELLER'		                       => 'Wiederverkäufer',
 'SHOP_RDFA_COSTUMER_BUSINESS'		                       => 'Unternehmen/Gewerbetreibende',
 'SHOP_RDFA_COSTUMER_PUBLIC'		                           => 'Öffentliche Einrichtungen',
-'SHOP_RDFA_DURATION_OFFERINGS'			                   => 'Welche <b>Gültigkeitsdauer</b> haben Ihre <b>Angebote</b>?',
-'SHOP_RDFA_DURATION_PRICES'			                       => 'Welche <b>Gültigkeitsdauer</b> haben Ihre <b>Angebotspreise</b>?',
+'SHOP_RDFA_DURATION_OFFERINGS'			                   => 'Wählen Sie den Gültigkeitszeitraum Ihrer Artikel.',
+'SHOP_RDFA_DURATION_PRICES'			                       => 'Wählen Sie den Gültigkeitszeitraum Ihrer Preise und Kosten (Artikel, Zahlungs- und Versandarten).',
 'SHOP_RDFA_1_DAY'			                               => '1 Tag',
 'SHOP_RDFA_3_DAYS'			                               => '3 Tage',
 'SHOP_RDFA_7_DAYS'			                               => '7 Tage (1 Woche)',
@@ -2035,6 +2038,13 @@ $aLang = array(
 'SHOP_RDFA_30_DAYS'			                               => '30 Tage (1 Monat)',
 'SHOP_RDFA_178_DAYS'			                           => '178 Tage (6 Monate)',
 'SHOP_RDFA_356_DAYS'			                           => '356 Tage (1 Jahr)',
+'SHOP_RDFA_SUBMIT_URL'			                           => 'URL übertragen',
+'SHOP_RDFA_URL'		         	                           => 'Shop URL',
+'SHOP_RDFA_EMAIL'	    		                           => 'Kontakt (E-Mail)',
+'SHOP_RDFA_SUBMITED_SUCCESSFULLY'                          => 'Ihre Shop-Daten wurden erfolgreich übertragen',
+'SHOP_RDFA_MESSAGE_NOURL'	    		                   => 'Bitte Shop URL eintragen',
+'SHOP_RDFA_SUBMIT'	    		                           => 'Übertragen',
+'SHOP_RDFA_SHOW_PRODUCTSTOCK'	    		               => 'Den tatsächlichen Lagerbestand der Artikel anzeigen',
 
 'PAYMENT_RDFA_ASIGN_PAYMENT'		                       => 'Zahlungsart zuordnen',
 'PAYMENT_RDFA_ADVICE_START'		                           => '<b>Hinweis:</b> Bitte wählen Sie nur die in GoodRelations vordefinierten Zahlungsarten aus, die Ihren Zahlungsarten ',

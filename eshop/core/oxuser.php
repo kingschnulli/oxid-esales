@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 42149 2012-02-10 12:19:06Z vilma $
+ * @version   SVN: $Id: oxuser.php 42297 2012-02-15 16:15:36Z rimvydas.paskevicius $
  */
 
 /**
@@ -1269,12 +1269,13 @@ class oxUser extends oxBase
             $sShopSelect = " and ( oxrights != 'user' ) ";
         }
 
+        $blStagingMode = false;
         $sWhat = "oxid";
 
         $sSelect = "select $sWhat from oxuser where oxuser.oxactive = 1 and {$sPassSelect} and {$sUserSelect} {$sShopSelect} ";
-        if ( $myConfig->isDemoShop() && $blAdmin ) {
+        if ( ( $myConfig->isDemoShop() || $blStagingMode ) && $blAdmin ) {
             if ( $sPassword == "admin" && $sUser == "admin" ) {
-                $sSelect = "select $sWhat from oxuser where oxrights = 'malladmin' {$sShopSelect} ";
+                $sSelect = "select $sWhat from oxuser where oxrights = 'malladmin' ";
             } else {
                 $oEx = oxNew( 'oxUserException' );
                 $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );

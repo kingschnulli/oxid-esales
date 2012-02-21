@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 40989 2012-01-05 11:43:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 42359 2012-02-20 15:10:29Z linas.kukulskis $
  */
 
 /**
@@ -648,6 +648,9 @@ class oxUtils extends oxSuperCfg
             startProfile("!__SAVING CACHE__! (warning)");
             foreach ( $this->_aLockedFileHandles[LOCK_EX] as $sKey => $rHandle ) {
                 if ( $rHandle !== false && isset( $this->_aFileCacheContents[$sKey] ) ) {
+
+                    // #0002931A truncate file once more before writing
+                    ftruncate( $rHandle, 0 );
 
                     // writing cache
                     fwrite( $rHandle, $this->_processCache( $sKey, $this->_aFileCacheContents[$sKey] ) );

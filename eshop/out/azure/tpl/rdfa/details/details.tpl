@@ -39,12 +39,14 @@
         </div>
     </div>
 [{/if}]
+[{if $oView->showRDFaProductStock()}]
     <div rel="gr:hasInventoryLevel">
         <div typeof="gr:QuantitativeValue">
-            <div property="gr:hasMinValue" content="[{if $oProduct->getStockStatus() == -1}]0[{else}]1[{/if}]" datatype="xsd:float"></div>
+            <div property="gr:hasMinValue" content="[{if $oProduct->getStockStatus() == -1}]0[{else}]$oProduct->oxarticles__oxstock->value[{/if}]" datatype="xsd:float"></div>
             <div property="gr:hasUnitOfMeasurement" content="C62" datatype="xsd:string"></div>
         </div>
     </div>
+[{/if}]
 [{oxhasrights ident="SHOWARTICLEPRICE"}]
 [{include file="rdfa/details/inc/price.tpl"}]
 [{/oxhasrights}]

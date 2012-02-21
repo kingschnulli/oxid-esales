@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 42182 2012-02-13 09:09:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxorderTest.php 42357 2012-02-20 15:09:53Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -428,7 +428,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $oOrder = new oxOrder();
         $oOrder->setId( "_testOrderId" );
         $oOrder->oxorder__oxshopid = new oxField( $sShopId );
-        $oOrder->save();
 
         // test order products
         $oOrderProd = new oxOrderArticle();
@@ -439,8 +438,13 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $oOrderProd->oxorderarticles__oxstorno  = new oxField( 0 );
         $oOrderProd->save();
 
+        $oOrder->save();
+
         // canceling order
         $oOrder->cancelOrder();
+
+        $this->assertEquals(1, count($oOrder->getOrderArticles()) );
+        $this->assertEquals(0, count($oOrder->getOrderArticles(true)) );
 
         // checking order products
         $oOrderProd = new oxOrderArticle();
@@ -634,7 +638,7 @@ class Unit_Core_oxorderTest extends OxidTestCase
 
         $oOrder = new oxOrder();
         $oOrder->setOrderArticleList( $aOrderArticleList );
-        $this->assertEquals( $aOrderArticleList, $oOrder->getOrderArticles( null ) );
+        $this->assertEquals( $aOrderArticleList, $oOrder->getOrderArticles() );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpaymentlist.php 41430 2012-01-16 16:00:40Z vilma $
+ * @version   SVN: $Id: oxpaymentlist.php 42289 2012-02-15 14:15:54Z vilma $
  */
 
 /**
@@ -211,7 +211,16 @@ class oxPaymentList extends oxList
         if ( $dPrice !== null ) {
             $sQ .= "and $sTable.oxfromamount <= ".$oDb->quote( $dPrice ) ." and $sTable.oxtoamount >= ".$oDb->quote( $dPrice );
         }
-        $this->selectString( $sQ );
+        $rs = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT )->Execute( $sQ);
+        if ($rs != false && $rs->recordCount() > 0) {
+            $oSaved = clone $this->getBaseObject();
+            while (!$rs->EOF) {
+                $oListObject = clone $oSaved;
+                $this->_assignElement($oListObject, $rs->fields);
+                $this->_aArray[] = $oListObject;
+                $rs->moveNext();
+            }
+        }
     }
 
 }

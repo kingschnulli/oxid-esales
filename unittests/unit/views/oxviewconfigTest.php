@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 36890 2011-07-11 07:40:22Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewconfigTest.php 42331 2012-02-20 12:04:30Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -661,4 +661,5 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oViewConf->expects( $this->once() )->method( "getImageUrl" )->will( $this->returnValue( "shopUrl/out/theme/img/" ) );
         $this->assertEquals( "shopUrl/out/theme/img/", $oViewConf->getImageUrl() );
     }
+
 }
