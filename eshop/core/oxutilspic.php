@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilspic.php 41256 2012-01-12 13:34:23Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxutilspic.php 39206 2011-10-12 13:30:56Z arvydas.vapsva $
  */
 
 /**
@@ -191,7 +191,7 @@ class oxUtilsPic extends oxSuperCfg
         if ( isset( $oObject->{$sPic} ) &&
              ( $_FILES['myfile']['size'][$sPicType.'@'.$sPic] > 0 || $aParams[$sPic] != $oObject->{$sPic}->value ) ) {
 
-            $sImgDir = $sAbsDynImageDir . oxUtilsFile::getInstance()->getImageDirByType($sPicType);
+            $sImgDir = $sAbsDynImageDir . $sPicDir;
             $blDelete = $this->safePictureDelete($oObject->{$sPic}->value, $sImgDir, $sPicTable, $sPicField );
         }
 

@@ -1377,6 +1377,28 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
+     * Testing method which sets customer number
+     */
+    public function testSetRecordNumber()
+    {
+        $myUtils  = oxUtils::getInstance();
+        $myDB     = oxDb::getDB();
+        $myConfig = oxConfig::getInstance();
+
+        // getting possible next number
+        $sQ = 'select (max(oxcustnr) + 1) as umax from oxuser';
+        $iNext = (int) $myDB->getOne( $sQ );
+
+        $sUserID = $this->_aUsers[ $this->_aShops[ rand(0, count( $this->_aShops ) - 1 ) ] ][ rand( 0, count( $this->_aUsers[ 0 ] ) - 1 ) ];
+        $oUser = $this->getProxyClass("oxUser");
+        $oUser->Load( $sUserID );
+        $oUser->UNITsetRecordNumber( 'oxcustnr' );
+
+        // testing
+        $this->assertEquals( $iNext, $oUser->oxuser__oxcustnr->value );
+    }
+
+    /**
      * Testing if inGroup method works OK
      */
     public function testInGroupWrongGroup()
@@ -3567,7 +3589,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oUser->load("oxdefaultadmin");
         $oUser->updateInvitationStatistics( $aRecEmails );
 
-        $aRec = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( "select * from oxinvitations order by oxemail");
+        $aRec = oxDb::getDb( true )->getAll( "select * from oxinvitations order by oxemail");
 
         $this->assertEquals( "oxdefaultadmin", $aRec[0]["OXUSERID"] );
         $this->assertEquals( "test1@oxid-esales.com", $aRec[0]["OXEMAIL"] );

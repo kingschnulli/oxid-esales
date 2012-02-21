@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfileTest.php 40667 2011-12-19 08:15:13Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsfileTest.php 40562 2011-12-12 14:20:20Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -478,18 +478,6 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
             return;
         }
         $this->fail('Wrongfile type slipped');
-    }
-
-    /**
-     * Tests oxUtilsFile::getMimeType() method
-     */
-    public function testGetMimeType()
-    {
-        $this->markTestSkipped("Fixing build until tomorrow");
-        $this->assertEquals("plain/txt", oxUtilsFile::getInstance()->getMimeType("out/text.txt"));
-        $this->assertEquals("application/php", oxUtilsFile::getInstance()->getMimeType("out/index.php"));
-        $this->assertEquals("image/jpg", oxUtilsFile::getInstance()->getMimeType("out/pic.jpg"));
-        $this->assertEquals("mp3", oxUtilsFile::getInstance()->getMimeType("out/music.mp3"));
     }
 
     // 20070720-AS - End setup

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactions.php 40309 2011-11-29 08:30:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxactions.php 39184 2011-10-12 13:22:30Z arvydas.vapsva $
  */
 
 /**
@@ -76,7 +76,7 @@ class oxActions extends oxI18n
     public function removeArticle( $sOxId )
     {
         // remove actions from articles also
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(true);
         $sDelete = "delete from oxactions2article where oxactionid = ".$oDb->quote( $this->getId() )." and oxartid = ".$oDb->quote($sOxId)." and oxshopid = '" . $this->getShopId() . "'";
         $oDb->execute( $sDelete );
 
@@ -103,7 +103,7 @@ class oxActions extends oxI18n
 
 
         // remove actionss from articles also
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(true);
         $sDelete = "delete from oxactions2article where oxactionid = ".$oDb->quote($sOxId)." and oxshopid = '" . $this->getShopId() . "'";
         $oDb->execute( $sDelete );
 

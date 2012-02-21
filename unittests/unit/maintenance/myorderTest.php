@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: myorderTest.php 41972 2012-02-01 14:42:12Z mindaugas.rimgaila $
+ * @version   SVN: $Id: myorderTest.php 29921 2010-09-21 12:18:02Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -834,19 +834,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
      */
     public function testMyOrder_exportStandartWhenOrderIsCanceled()
     {
-        // marking order article as variant ..
-        $oSelVariantField = $this->getMock( 'oxfield', array( '__get' ) );
-        $oSelVariantField->expects( $this->once() )->method( '__get');
-
         $this->_insertTestOrder();
-        $oArticle = $this->_insertTestOrderArticle();
-        $oArticle->oxorderarticles__oxtitle = new oxField("testtitle");
-        $oArticle->oxorderarticles__oxselvariant = $oSelVariantField;
+        $this->_insertTestOrderArticle();
 
         $oPdf = new oxPdf;
 
-        $oMyOrder = $this->getMock( "myOrder", array( "getOrderArticles" ) );
-        $oMyOrder->expects( $this->any() )->method( 'getOrderArticles')->will( $this->returnValue( array( $oArticle->getId() => $oArticle ) ) );
+        $oMyOrder = new myOrder();
         $oMyOrder->load('_testOrderId');
 
         //
@@ -861,6 +854,13 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         // marking as canceled
         $oMyOrder->oxorder__oxstorno = new oxField( 1 );
+
+        // marking order article as variant ..
+        $oSelVariantField = $this->getMock( 'oxfield', array( '__get' ) );
+        $oSelVariantField->expects( $this->once() )->method( '__get');
+
+        $aOrderArticles = $oMyOrder->getOrderArticles();
+        $aOrderArticles->current()->oxorderarticles__oxselvariant = $oSelVariantField;
 
         $oMyOrder->exportStandart( $oPdf );
     }
@@ -987,8 +987,7 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
     {
         $oMyOrder = $this->getProxyClass( "MyOrder" );
 
-        $sInput = " &euro; &copy; &quot; &#039; &#97; &#98; some text";
-        $sStr = $oMyOrder->UNITreplaceExtendedChars($sInput, true);
+        $sStr = $oMyOrder->UNITreplaceExtendedChars(" &euro; &copy; &quot; &#039; &#97; &#98; some text", true);
         $this->assertEquals( " " . chr(128) . " " . chr(169) . " \" ' a b some text", $sStr );
     }
 

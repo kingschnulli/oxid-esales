@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -39,13 +39,10 @@ $sLangName  = "English";
 $aLang = array(
 'ADD_RECOMM_ADDRECOMMLINK1'                                   => "There is no Listmania lists at the moment. To create new, click",
 'ADD_RECOMM_ADDRECOMMLINK2'                                   => "here",
-'BETA_NOTE'                                                   => "Welcome to beta version 2 for OXID eShop 4.6.0. Please refer to our <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">FAQ</a> if you have any questions.",
-'BETA_NOTE_CLOSE'                                             => "Dismiss message",
 'DETAILS_LOCATOR_PRODUCT'                                     => "PRODUCT",
 'DETAILS_PRICEALARM'                                          => "<b>[!]</b> Price Alert",
 'DETAILS_VPE_MESSAGE_1'                                       => "This product can only be ordered in packaging units of ",
 'DETAILS_VPE_MESSAGE_2'                                       => "",
-'DETAILS_CHOOSEVARIANT'                                       => "Please select a variant",
 'EMAIL_INVITE_HTML_INVITETOSHOP'                              => "An invitation from",
 'EMAIL_INVITE_HTML_INVITETOSHOP2'                             => "to visit",
 'EMAIL_INVITE_HTML_INVITETOSHOP3'                             => "",
@@ -53,6 +50,11 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEVAT1'                     => "Payment Charge VAT",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFO'                          => "",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'                       => "",
+'FACEBOOK_ENABLEINFOLINK'                                     => "View information about the data transmission.",
+'FACEBOOK_ENABLELINK'                                         => "DISPLAY FACEBOOK CONTENT",
+'FACEBOOK_ENABLETEXT'                                         => "Data is transmitted to Facebook.",
+'FACEBOOK_ENABLE_INFOTEXT'                                    => 'Here you can leave information about the transmission of personal data to Facebook.<br><br>While using Facebook plug-ins, a connection is established enabling the share of content with other users. Using plug-ins while browsing through the online shop being logged in on Facebook at the same time, your personal data is automatically transmitted to Facebook. You can find more information about collecting, using and processing of your personal data on <a href="http://www.facebook.com/policy.php" target="_blank">Facebook\'s Privacy Policy</a>.',
+'FACEBOOK_ENABLE_INFOTEXTHEADER'                              => "Notes on data protection using Facebook plug-ins",
 'FOOTER_CATEGORIES'                                           => "CATEGORIES",
 'FOOTER_DISTRIBUTORS'                                         => "DISTRIBUTORS",
 'FOOTER_INFORMATION'                                          => "INFORMATION",

@@ -33,10 +33,6 @@
                         <input type="hidden" name="recommid" value="[{$_actvrecommlist->oxrecommlists__oxid->value}]">
                     [{/if}]
 
-                    [{if $sReviewUserHash}]
-                        <input type="hidden" name="reviewuserhash" value="[{$sReviewUserHash}]">
-                    [{/if}]
-
                     <textarea  rows="15" name="rvw_txt" class="areabox"></textarea><br>
                     <button id="reviewSave" type="submit" title="[{oxmultilang ident="DETAILS_SAVEREVIEW"}]" class="submitButton">[{oxmultilang ident="DETAILS_SAVEREVIEW"}]</button>
                 </div>
@@ -47,25 +43,27 @@
         [{/if}]
     [{/block}]
 
-
+    
     [{if $oView->getReviews()}]
         [{foreach from=$oView->getReviews() item=review name=ReviewsCounter}]
-            <dl>
+            <dl itemprop="reviews" itemscope itemtype="http://schema.org/Review">
                 [{block name="widget_reviews_record"}]
                     <dt id="reviewName_[{$smarty.foreach.ReviewsCounter.iteration}]" class="clear item">
                         <span>
-                            <span>[{$review->oxuser__oxfname->value}]</span> [{oxmultilang ident="DETAILS_WRITES"}]
+                            <span itemprop="author">[{$review->oxuser__oxfname->value}]</span> [{oxmultilang ident="DETAILS_WRITES"}]
+                            <meta itemprop="publishDate" content="[{$review->oxreviews__oxcreate->value|date_format:"%Y-%m-%d"}]">
                             <span>[{$review->oxreviews__oxcreate->value|date_format:"%d.%m.%Y"}]</span>
                         </span>
                         [{if $review->oxreviews__oxrating->value}]
                             [{math equation="x*y" x=20 y=$review->oxreviews__oxrating->value assign="iRatingAverage"}]
-                            <ul class="rating">
+                            <ul class="rating" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                                <meta itemprop="ratingValue" content="[{$review->oxreviews__oxrating->value}]">
                                 <li class="currentRate" style="width: [{$iRatingAverage}]%;"></li>
                             </ul>
                         [{/if}]
                     </dt>
                     <dd>
-                        <div id="reviewText_[{$smarty.foreach.ReviewsCounter.iteration}]" class="description">[{$review->oxreviews__oxtext->value}]</div>
+                        <div id="reviewText_[{$smarty.foreach.ReviewsCounter.iteration}]" class="description" itemprop="reviewBody">[{$review->oxreviews__oxtext->value}]</div>
                     </dd>
                 [{/block}]
             </dl>
@@ -78,5 +76,5 @@
             <dd></dd>
         </dl>
     [{/if}]
-
+    
 </div>

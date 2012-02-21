@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloud.php 40351 2011-11-29 16:16:28Z linas.kukulskis $
+ * @version   SVN: $Id: oxtagcloud.php 33272 2011-02-15 13:51:28Z vilma $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -89,21 +89,12 @@ class oxTagCloud extends oxSuperCfg
     protected $_sSeparator = ' ';
 
     /**
-     * Maximum tag's length
-     * Maximum size of one tag in admin area and limits tag input field in front end
-     *
-     * @var int
-     */
-    protected $_iTagMaxLength = 60;
-
-    /**
      * Meta characters.
      * Array of meta chars used for FULLTEXT index.
      *
      * @var array
      */
-
-    protected $_aMetaChars = array('+','-','>','<','(',')','~','*','"','\'','\\','[',']','{','}',';',':','.','/','|','!','@','#','$','%','^','&','?','=','`');
+    protected $_aMetaChars = array('+','-','>','<','(',')','~','*','"','\'','\\');
 
     /**
      * Object constructor. Initializes separator.
@@ -173,16 +164,6 @@ class oxTagCloud extends oxSuperCfg
     public function getProductId()
     {
         return $this->_sProductId;
-    }
-
-    /**
-     * Returns current maximum tag length
-     *
-     * @return int
-     */
-    public function getTagMaxLength()
-    {
-        return $this->_iTagMaxLength;
     }
 
     /**
@@ -306,7 +287,7 @@ class oxTagCloud extends oxSuperCfg
      */
     public function getTags( $sArtId = null, $blExtended = false, $iLang = null )
     {
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
+        $oDb = oxDb::getDb(true);
         if ($blExtended) {
             $iAmount = OXTAGCLOUD_EXTENDEDCOUNT;
         } else {
@@ -316,16 +297,13 @@ class oxTagCloud extends oxSuperCfg
         $sArtView  = getViewName( 'oxarticles', $iLang );
         $sViewName = getViewName( 'oxartextends', $iLang );
 
-        $sQ = "SELECT {$sViewName}.`oxtags` AS `oxtags`
-            FROM {$sArtView} AS `oxarticles`
-                LEFT JOIN {$sViewName} ON `oxarticles`.`oxid` = {$sViewName}.`oxid`
-            WHERE `oxarticles`.`oxactive` = 1";
-
+        $sArticleSelect = " 1 ";
         if ( $sArtId ) {
-            $sQ = "SELECT {$sViewName}.`oxtags` AS `oxtags` FROM {$sViewName} WHERE `oxid` = " . $oDb->quote( $sArtId );
+            $sArticleSelect = " oxarticles.oxid = ".$oDb->quote( $sArtId )." ";
             $iAmount = 0;
         }
 
+        $sQ = "select {$sViewName}.oxtags as oxtags from $sArtView as oxarticles left join {$sViewName} on oxarticles.oxid={$sViewName}.oxid where oxarticles.oxactive=1 AND $sArticleSelect";
         $rs = $oDb->execute( $sQ );
         $aTags = array();
         while ( $rs && $rs->recordCount() && !$rs->EOF ) {
@@ -360,7 +338,7 @@ class oxTagCloud extends oxSuperCfg
     protected function _sortTags( $aTags, $iLang = null )
     {
         if ( is_array( $aTags ) && count( $aTags ) ) {
-            $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
+            $oDb = oxDb::getDb( true );
             $sSubQ = '';
             foreach ( $aTags as $sKey => $sTag ) {
                 if ( $sSubQ ) {
@@ -458,7 +436,6 @@ class oxTagCloud extends oxSuperCfg
     /**
      * Takes tags string, checks each tag length and makes shorter tags longer if needed.
      * This is needed for FULLTEXT index
-     * Also if tag is longer than tag's max length - cuts it.
      *
      * @param string $sTags given tag
      *
@@ -474,11 +451,6 @@ class oxTagCloud extends oxSuperCfg
         foreach ( $aTags as $sTag ) {
             if ( ( $sTag = trim( $sTag ) ) ) {
                 $sRes = '';
-                $iLen = $oStr->strlen( $sTag );
-                if ( $iLen > $this->_iTagMaxLength ) {
-                    $sTag = $oStr->substr($sTag, 0, $this->_iTagMaxLength);
-                }
-                $sTag = trim( $sTag );
                 $aMatches = explode(' ', $sTag);
                 foreach ( $aMatches as $iKey => $sMatch ) {
                     $sRes .= $oStr->strtolower( $this->_fixTagLength($sMatch ) )." ";

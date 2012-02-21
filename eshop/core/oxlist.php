@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlist.php 40976 2012-01-05 11:21:37Z linas.kukulskis $
+ * @version   SVN: $Id: oxlist.php 40845 2011-12-27 14:40:28Z mindaugas.rimgaila $
  */
 
 /**
@@ -385,14 +385,14 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      *
      * @return null;
      */
-    public function selectString( $sSql )
+    public function selectString( $sSql)
     {
         $this->clear();
 
         if ( $this->_aSqlLimit[0] || $this->_aSqlLimit[1]) {
-            $rs = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT )->SelectLimit( $sSql, $this->_aSqlLimit[1], $this->_aSqlLimit[0]);
+            $rs = oxDb::getDb(true)->SelectLimit( $sSql, $this->_aSqlLimit[1], $this->_aSqlLimit[0]);
         } else {
-            $rs = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT )->Execute( $sSql);
+            $rs = oxDb::getDb(true)->Execute( $sSql);
         }
 
         if ($rs != false && $rs->recordCount() > 0) {

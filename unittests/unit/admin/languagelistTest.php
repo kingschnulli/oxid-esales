@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: languagelistTest.php 40461 2011-12-06 09:40:27Z vilma $
+ * @version   SVN: $Id: languagelistTest.php 25400 2010-01-27 22:42:50Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -106,18 +106,8 @@ class Unit_Admin_LanguageListTest extends OxidTestCase
         $oLang2->selected = 0;
         $oLang2->default = false;
 
-        $oLang3 = new oxStdClass();
-        $oLang3->id = 2;
-        $oLang3->oxid = 'fr';
-        $oLang3->abbr = 'fr';
-        $oLang3->name = 'Français';
-        $oLang3->active = "1";
-        $oLang3->sort = "3";
-        $oLang3->selected = 0;
-        $oLang3->default = false;
-
         $oView = new Language_List();
-        $this->assertEquals( array( $oLang1, $oLang2, $oLang3 ), $oView->UNITgetLanguagesList() );
+        $this->assertEquals( array( $oLang1, $oLang2 ), $oView->UNITgetLanguagesList() );
     }
 
     /**

@@ -50,7 +50,6 @@
         [{oxstyle include="css/oxid.css"}]
         [{oxstyle include="css/ie7.css" if="IE 7"}]
         [{oxstyle include="css/ie8.css" if="IE 8"}]
-        [{oxstyle include="css/libs/jscrollpane.css"}]
     [{/block}]
 
     [{assign var='rsslinks' value=$oView->getRssLinks() }]
@@ -66,6 +65,7 @@
         [{/foreach}]
     [{/block}]
 
+    <base href="[{ $oViewConf->getBaseDir() }]">
 [{/capture}]
 <!DOCTYPE HTML>
 <html lang="[{ $oView->getActiveLangAbbr() }]" [{if $oViewConf->getShowFbConnect() }]xmlns:fb="http://www.facebook.com/2008/fbml"[{/if}]>
@@ -104,7 +104,7 @@
     [{/foreach}]
 
     <!--[if (gte IE 6)&(lte IE 8)]>
-        <script type="text/javascript" src="[{ $oViewConf->getResourceUrl('js/libs/IE9.js') }]"></script>
+        <script type="text/javascript" src="[{ $oViewConf->getResourceUrl() }]js/libs/IE9.js"></script>
     <![endif]-->
 
 

@@ -123,7 +123,7 @@ class Unit_Setup_oxSetupDbTest extends OxidTestCase
      */
     public function testGetDatabaseVersion()
     {
-        $aVersionInfo = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( "SHOW VARIABLES LIKE 'version'" );
+        $aVersionInfo = oxDb::getDb(true)->getAll( "SHOW VARIABLES LIKE 'version'" );
         $sVersion = $aVersionInfo[0]["Value"];
 
         $myConfig = oxConfig::getInstance();

@@ -14,7 +14,7 @@
         <img src="[{$oViewConf->getImageUrl('x.png')}]" alt="" class="closePop">
         [{include file="form/forgotpwd_email.tpl" idPrefix="Popup"}]
     </div>
-    <a href="#" id="loginBoxOpener" title="[{ oxmultilang ident="LOGIN" }]">[{ oxmultilang ident="LOGIN" }]</a>
+    <a href="#" id="loginBoxOpener" title="[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</a>
     <form id="login" name="login" action="[{ $oViewConf->getSslSelfLink() }]" method="post">
         <div id="loginBox" class="loginBox" [{if $bIsError}]style="display: block;"[{/if}]>
             [{ $oViewConf->getHiddenSid() }]
@@ -28,7 +28,7 @@
                 <input type="hidden" name="anid" value="[{ $product->oxarticles__oxnid->value }]">
             [{/if}]
             <div class="loginForm corners">
-                <h4>[{ oxmultilang ident="LOGIN" }]</h4>
+                <h4>[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</h4>
                 <p>
                     [{oxscript include="js/widgets/oxinnerlabel.js" priority=10 }]
                     [{oxscript add="$( '#loginEmail' ).oxInnerLabel();"}]
@@ -48,15 +48,13 @@
                 </p>
                 [{/if}]
                 <p>
-                    <button type="submit" class="submitButton">[{ oxmultilang ident="LOGIN" }]</button>
+                    <button type="submit" class="submitButton">[{ oxmultilang ident="WIDGET_LOGINBOX_LOGIN" }]</button>
                 </p>
             </div>
             [{if $oViewConf->getShowFbConnect()}]
                 <div class="altLoginBox corners clear">
                     <span>[{ oxmultilang ident="WIDGET_LOGINBOX_WITH" }]</span>
-                    <div id="loginboxFbConnect">
-                        [{include file="widget/facebook/enable.tpl" source="widget/facebook/connect.tpl" ident="#loginboxFbConnect" }]
-                    </div>
+                    <fb:login-button size="medium" autologoutlink="true" length="short"></fb:login-button>
                 </div>
             [{/if}]
         </div>

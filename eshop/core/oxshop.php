@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshop.php 39450 2011-10-19 08:58:16Z vilma $
+ * @version   SVN: $Id: oxshop.php 39228 2011-10-12 14:09:15Z arvydas.vapsva $
  */
 
 /**
@@ -77,12 +77,12 @@ class oxShop extends oxI18n
     /**
      * (Re)generates shop views
      *
-     * @param bool  $blMultishopInheritCategories config option blMultishopInherit
-     * @param array $aMallInherit                 array of config options blMallInherit
+     * @param bool  $blMultishopInherit config option blMultishopInherit
+     * @param array $aMallInherit       array of config options blMallInherit
      *
      * @return null
      */
-    public function generateViews( $blMultishopInheritCategories = false, $aMallInherit = null )
+    public function generateViews( $blMultishopInherit = false, $aMallInherit = null )
     {
         $oDB        = oxDb::getDb();
         $aLanguages = oxLang::getInstance()->getLanguageIds();
@@ -93,11 +93,11 @@ class oxShop extends oxI18n
 
         // Generate multitable views
         foreach ( $aTables as $sTable ) {
-            $aQ[] = 'CREATE OR REPLACE SQL SECURITY INVOKER VIEW oxv_'.$sTable.' AS SELECT * FROM '.$sTable.' '.$this->_getViewJoinAll($sTable);
+            $aQ[] = 'CREATE OR REPLACE VIEW oxv_'.$sTable.' AS SELECT * FROM '.$sTable.' '.$this->_getViewJoinAll($sTable);
 
             if (in_array($sTable, $aMultilangTables)) {
                 foreach ($aLanguages as $iLang => $sLang) {
-                    $aQ[] = 'CREATE OR REPLACE SQL SECURITY INVOKER VIEW oxv_'.$sTable.'_'.$sLang.' AS SELECT '.$this->_getViewSelect($sTable, $iLang).' FROM '.$sTable.' '.$this->_getViewJoinLang($sTable, $iLang);
+                    $aQ[] = 'CREATE OR REPLACE VIEW oxv_'.$sTable.'_'.$sLang.' AS SELECT '.$this->_getViewSelect($sTable, $iLang).' FROM '.$sTable.' '.$this->_getViewJoinLang($sTable, $iLang);
                 }
             }
         }

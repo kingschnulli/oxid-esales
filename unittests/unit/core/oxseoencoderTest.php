@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderTest.php 42280 2012-02-15 13:00:56Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -604,7 +604,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
     public function testSettingEmptyMetaDataWhileUpdatingObjectSeoInfo()
     {
         $iShopId = oxConfig::getInstance()->getBaseShopId();
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(true);
 
         $oEncoder = new oxSeoEncoder();
         $oEncoder->addSeoEntry( 'testid', $iShopId, 0, 'index.php?cl=std', 'seo/url/', 'oxcategory', 0, 'oxkeywords', 'oxdescription', '' );
@@ -1083,7 +1083,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
     public function testSaveToDb_forExpiredLinksAndRootCateogoriesIds()
     {
         $iShopId = oxConfig::getInstance()->getBaseShopId();
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb( true );
 
         // seo urls
         $sObjectId = '_testId1';
@@ -1359,9 +1359,10 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $sBaseUrl = modConfig::getInstance()->getConfigParam( "sShopURL" );
         $sSslUrl  = str_replace( "http:", "https:", $sBaseUrl );
 
-        $oConfig = $this->getMock( "oxStdClas", array( "getShopURL", "getSslShopUrl" ) );
+        $oConfig = $this->getMock( "oxStdClas", array( "getShopURL", "getSslShopUrl", "getConfigParam" ) );
         $oConfig->expects( $this->any() )->method( 'getShopURL' )->will( $this->returnValue( $sBaseUrl ) );
         $oConfig->expects( $this->any() )->method( 'getSslShopUrl' )->will( $this->returnValue( $sSslUrl ) );
+        $oConfig->expects( $this->any() )->method( 'getConfigParam' )->will( $this->returnValue( 0 ) );
 
         $oE = $this->getMock( "oxseoencoder", array( "getConfig" ), array(), '', false );
         $oE->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
@@ -1383,6 +1384,10 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $this->assertEquals( 'aa', $oE->UNITtrimUrl( $sSslUrl .'aa?sid=as23.&', 1 ) );
 
         $this->assertEquals( 'aa?a=2', $oE->UNITtrimUrl( $sSslUrl . 'aa?cur=5&a=2', 0 ) );
+
+        // checking length
+        $sUrl = 'aa?a=' . str_repeat( "1", 3000 );
+        $this->assertEquals( substr( $sUrl, 0, 2048 ), $oE->UNITtrimUrl( $sUrl, 0 ) );
     }
 
     public function testSaveToDbCreatesGoodMd5()
@@ -1694,7 +1699,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $oEncoder = $this->getMock( 'oxSeoEncoder', array( 'isAdmin', 'getConfig' ), array(), '', false );
         $oEncoder->expects( $this->once() )->method('isAdmin')->will( $this->returnValue( true ) );
         $oEncoder->expects( $this->never() )->method('getConfig');
-        $this->assertFalse( $oEncoder->UNITgetCacheKey() );
+        $this->assertFalse( $oEncoder->UNITgetCacheKey( "any" ) );
 
         modSeoEncoder::clearCache();
 
@@ -1707,12 +1712,15 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
 
         // non admin
         $oEncoder = $this->getMock( 'oxSeoEncoder', array( 'isAdmin', 'getConfig' ), array(), '', false );
-        $oEncoder->expects( $this->once() )->method('isAdmin')->will( $this->returnValue( false ) );
+        $oEncoder->expects( $this->exactly( 3 ) )->method('isAdmin')->will( $this->returnValue( false ) );
         $oEncoder->expects( $this->once() )->method('getConfig')->will( $this->returnValue( $oConfig ) );
-        $this->assertEquals( md5( $sViewId ) . "seo", $oEncoder->UNITgetCacheKey() );
+        $this->assertEquals( md5( $sViewId ) . "seo", $oEncoder->UNITgetCacheKey( "oxarticle" ) );
 
         // + cache check
-        $this->assertEquals( md5( $sViewId ) . "seo", $oEncoder->UNITgetCacheKey() );
+        $this->assertEquals( md5( $sViewId ) . "seo", $oEncoder->UNITgetCacheKey( "oxarticle" ) );
+
+        // #3381
+        $this->assertEquals( "any00seo", $oEncoder->UNITgetCacheKey( "any", 0, 0, '' ) );
     }
 
     /**
@@ -1730,14 +1738,14 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $oEncoder = $this->getMock( 'oxSeoEncoder', array( '_getCacheKey' ), array(), '', false );
         $oEncoder->expects( $this->any() )->method('_getCacheKey')->will( $this->returnValue( false ) );
 
-        $this->assertFalse( $oEncoder->UNITsaveInCache( $sCacheIdent, $sCache ) );
-        $this->assertFalse( $oEncoder->UNITloadFromCache( $sCacheIdent ) );
+        $this->assertFalse( $oEncoder->UNITsaveInCache( $sCacheIdent, $sCache, "any" ) );
+        $this->assertFalse( $oEncoder->UNITloadFromCache( $sCacheIdent, "any" ) );
 
         // cache key + saved to cache
         $oEncoder = $this->getMock( 'oxSeoEncoder', array( '_getCacheKey' ), array(), '', false );
         $oEncoder->expects( $this->any() )->method('_getCacheKey')->will( $this->returnValue( $sCacheKey ) );
 
-        $this->assertTrue( $oEncoder->UNITsaveInCache( $sCacheIdent, $sCache ) );
-        $this->assertEquals( $sCache, $oEncoder->UNITloadFromCache( $sCacheIdent ) );
+        $this->assertTrue( $oEncoder->UNITsaveInCache( $sCacheIdent, $sCache, "any" ) );
+        $this->assertEquals( $sCache, $oEncoder->UNITloadFromCache( $sCacheIdent, "any" ) );
     }
 }

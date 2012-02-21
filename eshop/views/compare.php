@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: compare.php 41841 2012-01-27 15:35:11Z linas.kukulskis $
+ * @version   SVN: $Id: compare.php 41805 2012-01-27 08:52:12Z arvydas.vapsva $
  */
 
 /**

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxattribute.php 39320 2011-10-13 08:38:28Z linas.kukulskis $
+ * @version   SVN: SVN: $Id: oxattribute.php 39198 2011-10-12 13:27:52Z arvydas.vapsva $
  */
 
 /**

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 40989 2012-01-05 11:43:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 42259 2012-02-14 13:33:40Z arvydas.vapsva $
  */
 
 /**
@@ -649,6 +649,9 @@ class oxUtils extends oxSuperCfg
             foreach ( $this->_aLockedFileHandles[LOCK_EX] as $sKey => $rHandle ) {
                 if ( $rHandle !== false && isset( $this->_aFileCacheContents[$sKey] ) ) {
 
+                    // #0002931A truncate file once more before writing
+                    ftruncate( $rHandle, 0 );
+
                     // writing cache
                     fwrite( $rHandle, $this->_processCache( $sKey, $this->_aFileCacheContents[$sKey] ) );
 
@@ -966,23 +969,24 @@ class oxUtils extends oxSuperCfg
      *
      * @param int $iShopId current shop id
      *
-     * @deprecated use oxShopMetaData::getInstance()->getShopBit since 4.6
-     *
      * @return int
      */
     public function getShopBit( $iShopId )
     {
-        return oxShopMetaData::getInstance()->getShopBit( $iShopId );
+        $iShopId = (int) $iShopId;
+        //this works for large numbers when $sShopNr is up to (inclusive) 64
+        $iRes = oxDb::getDb()->getOne( "select 1 << ( $iShopId - 1 ) as shopbit" );
+
+        //as php ints supports only 32 bits, we return string.
+        return $iRes;
     }
 
-   /**
+    /**
      * Binary AND implementation.
      * We use mySQL to calculate that, as currently php int size is only 32 bit.
      *
      * @param int $iVal1 value nr 1
      * @param int $iVal2 value nr 2
-     *
-     * @deprecated use oxShopMetaData::getInstance()->isIncludedInShop or oxShopMetaData::getInstance()->isExcludedFromShop since 4.6
      *
      * @return int
      */
@@ -1001,8 +1005,6 @@ class oxUtils extends oxSuperCfg
      *
      * @param int $iVal1 value nr 1
      * @param int $iVal2 value nr 2
-     *
-     * @deprecated since 4.6
      *
      * @return int
      */

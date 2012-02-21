@@ -19,19 +19,17 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.inc.php 39394 2011-10-14 13:38:55Z arvydas.vapsva $
+ * @version   SVN: $Id: article_extend.inc.php 38555 2011-09-05 11:12:26Z arvydas.vapsva $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
                                         array( 'oxtitle', 'oxcategories', 1, 1, 0 ),
                                         array( 'oxdesc',  'oxcategories', 1, 1, 0 ),
-                                        array( 'oxid',    'oxcategories', 0, 0, 0 ),
                                         array( 'oxid',    'oxcategories', 0, 0, 1 )
                                         ),
                      'container2' => array(
                                         array( 'oxtitle', 'oxcategories', 1, 1, 0 ),
                                         array( 'oxdesc',  'oxcategories', 1, 1, 0 ),
-                                        array( 'oxid',    'oxcategories', 0, 0, 0 ),
                                         array( 'oxid',    'oxobject2category', 0, 0, 1 ),
                                         array( 'oxtime',  'oxobject2category', 0, 0, 1 ),
                                         array( 'oxid',    'oxcategories',      0, 0, 1 )

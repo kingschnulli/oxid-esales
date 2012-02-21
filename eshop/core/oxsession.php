@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
+ * @version   SVN: $Id: oxsession.php 42088 2012-02-08 14:24:08Z arvydas.vapsva $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -916,7 +916,7 @@ class oxSession extends oxSuperCfg
         $sCurrUrl  = $myConfig->isSsl() ? $myConfig->getSslShopUrl( 0 ) : $myConfig->getShopUrl( 0 );
 
         $blSessCookieSetOnce = false;
-        if ( is_array($aSessCookieSetOnce) && isset( $aSessCookieSetOnce[$sCurrUrl] ) ) {
+        if ( isset( $aSessCookieSetOnce[$sCurrUrl] ) ) {
             $blSessCookieSetOnce = $aSessCookieSetOnce[$sCurrUrl];
         }
 
@@ -933,10 +933,6 @@ class oxSession extends oxSuperCfg
 
         //if we detect the cookie then set session var for possible later use
         if ( $sCookieSid == "oxid" && !$blSessCookieSetOnce ) {
-            if (!is_array($aSessCookieSetOnce)) {
-                $aSessCookieSetOnce = array();
-            }
-
             $aSessCookieSetOnce[$sCurrUrl] = "ox_true";
             self::setVar( "sessioncookieisset", $aSessCookieSetOnce );
         }

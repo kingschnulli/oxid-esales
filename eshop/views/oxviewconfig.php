@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewconfig.php 42088 2012-02-08 14:24:08Z arvydas.vapsva $
  */
 
 /**
@@ -502,14 +502,12 @@ class oxViewConfig extends oxSuperCfg
     /**
      * Returns shops resource url
      *
-     * @param string $sFile resource file name
-     *
      * @return string
      */
-    public function getResourceUrl( $sFile = null )
+    public function getResourceUrl()
     {
         if ( ( $sValue = $this->getViewConfigParam( 'basetpldir' ) ) === null ) {
-            $sValue = $this->getConfig()->getResourceUrl( $sFile, $this->isAdmin() );
+            $sValue = $this->getConfig()->getResourceUrl( null, $this->isAdmin() );
             $this->setViewConfigParam( 'basetpldir', $sValue );
         }
         return $sValue;
@@ -547,16 +545,15 @@ class oxViewConfig extends oxSuperCfg
      * Returns image url
      *
      * @param string $sFile Image file name
-     * @param bool   $bSsl  Whether to force SSL
      *
      * @return string
      */
-    public function getImageUrl( $sFile = null, $bSsl = null )
+    public function getImageUrl( $sFile = null )
     {
         if ($sFile) {
-           $sValue = $this->getConfig()->getImageUrl( $this->isAdmin(), $bSsl, null, $sFile );
+           $sValue = $this->getConfig()->getImageUrl( $this->isAdmin(), null, null, $sFile );
         } elseif ( ( $sValue = $this->getViewConfigParam( 'imagedir' ) ) === null ) {
-            $sValue = $this->getConfig()->getImageUrl( $this->isAdmin(), $bSsl );
+            $sValue = $this->getConfig()->getImageUrl( $this->isAdmin() );
             $this->setViewConfigParam( 'imagedir', $sValue );
         }
         return $sValue;
@@ -820,16 +817,6 @@ class oxViewConfig extends oxSuperCfg
             $this->setViewConfigParam( 'lang', $sValue );
         }
         return $sValue;
-    }
-
-     /**
-     * Returns session language id
-     *
-     * @return string
-     */
-    public function getActLanguageAbbr()
-    {
-        return oxLang::getInstance()->getLanguageAbbr( $this->getActLanguageId() );
     }
 
     /**

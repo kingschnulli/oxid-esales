@@ -15,14 +15,8 @@
                     [{block name="footer_deliveryinfo"}]
                         <div class="deliveryinfo">
                             [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-                                [{if $oView->getUser()}]
-                                    [{assign var="oUser" value=$oView->getUser() }]
-                                    [{ if $oUser->oxuser__oxustid->value && $oUser->oxuser__oxcompany->value }] <a href="[{ $oCont->getLink() }]" rel="nofollow"> [{ oxmultilang ident="PLUS_SHIPPING3" }]</a> [{else}] <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="FOOTER_INCLTAXANDPLUSSHIPPING" }]</a> [{/if}]
-                                [{else}]
-                                    <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="FOOTER_INCLTAXANDPLUSSHIPPING" }]</a>
-                                [{/if}]
+                                <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="FOOTER_INCLTAXANDPLUSSHIPPING" }]</a>
                             [{/oxifcontent}]
-                            
                         </div>
                     [{/block}]
                 </div>

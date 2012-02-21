@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 42149 2012-02-10 12:19:06Z vilma $
+ * @version   SVN: $Id: oxuser.php 41881 2012-01-30 12:34:50Z mindaugas.rimgaila $
  */
 
 /**
@@ -1607,6 +1607,26 @@ class oxUser extends oxBase
     }
 
     /**
+     * Tries to fetch and set next record number in DB. Returns true on success
+     *
+     * @param string $sMaxField  field name where record number is stored
+     * @param array  $aWhere     (optional) shop filter add SQL string
+     * @param int    $iMaxTryCnt (optional) max number of tryouts
+     *
+     * @return bool
+     */
+    protected function _setRecordNumber( $sMaxField, $aWhere = null ,$iMaxTryCnt = 5 )
+    {
+
+        /*if ( !$myConfig->blMallUsers ) {
+            $sShopID = $myConfig->getShopId();
+            $aWhere = array(" {$this->getViewName()}.oxshopid = '$sShopID' ");
+        }*/
+
+        return parent::_setRecordNumber( $sMaxField, $aWhere, $iMaxTryCnt );
+    }
+
+    /**
      * Inserts user object data to DB. Returns true on success.
      *
      * @return bool
@@ -2365,7 +2385,7 @@ class oxUser extends oxBase
      */
     public function updateInvitationStatistics( $aRecEmail )
     {
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb( true );
         $sUserId = $this->getId();
 
         if ( $sUserId && is_array( $aRecEmail ) && count( $aRecEmail ) > 0 ) {
@@ -2394,18 +2414,6 @@ class oxUser extends oxBase
         }
 
         return oxDb::getDb()->getOne( $sQ );
-
-    }
-
-    /**
-     * returns true if user registered and have account
-     *
-     * @return bool
-     */
-    public function hasAccount()
-    {
-
-        return (bool) $this->oxuser__oxpassword->value;
 
     }
 

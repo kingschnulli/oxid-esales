@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: voucherserie_main.php 40179 2011-11-23 15:42:35Z linas.kukulskis $
+ * @version   SVN: $Id: voucherserie_main.php 39896 2011-11-14 08:34:17Z arvydas.vapsva $
  */
 
 /**

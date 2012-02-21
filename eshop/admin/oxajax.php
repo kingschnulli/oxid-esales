@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxajax.php 40261 2011-11-24 13:52:22Z linas.kukulskis $
+ * @version   SVN: $Id: oxajax.php 40034 2011-11-18 07:54:26Z arvydas.vapsva $
  */
 
 // shop path for includes
@@ -514,7 +514,7 @@ class ajaxListComponent extends oxSuperCfg
      */
     protected function _getDataFields( $sQ )
     {
-        return oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getArray( $sQ );
+        return oxDb::getDb(true)->getArray( $sQ );
     }
 
     /**

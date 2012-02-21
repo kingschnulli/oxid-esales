@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmanufacturer.php 42193 2012-02-13 09:12:50Z linas.kukulskis $
+ * @version   SVN: $Id: oxmanufacturer.php 42170 2012-02-10 15:04:39Z linas.kukulskis $
  */
 
 /**

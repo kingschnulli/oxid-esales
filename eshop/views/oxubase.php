@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 42112 2012-02-09 14:55:11Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxubase.php 42291 2012-02-15 14:50:54Z linas.kukulskis $
  */
 
 /**
@@ -916,6 +916,8 @@ class oxUBase extends oxView
 
     /**
      * Returns if show/hide vendors
+     *
+     * @deprecated in v.4.5.7, since 2012-02-15; config option removed bug #0003385
      *
      * @return bool
      */
@@ -3131,8 +3133,7 @@ class oxUBase extends oxView
     {
         if ( $this->_aDeliveryAddress == null ) {
             $aAddress = oxConfig::getParameter( 'deladr');
-            //do not show deladr if address was reloaded
-            if ( $aAddress && !oxConfig::getParameter( 'reloadaddress' )) {
+            if ( $aAddress ) {
                 $this->_aDeliveryAddress = $aAddress;
             }
         }
@@ -3254,7 +3255,7 @@ class oxUBase extends oxView
      *
      * @return boolean
      */
-    public function isFbWidgetVisible()
+    public function isFbWidgetWisible()
     {
         if ( $this->_blFbWidgetsOn === null ) {
             $oUtils = oxUtilsServer::getInstance();
@@ -3266,16 +3267,6 @@ class oxUBase extends oxView
             $oUtils->setOxCookie( "fbwidgetson", $this->_blFbWidgetsOn ? 1 : 0 );
         }
         return $this->_blFbWidgetsOn;
-    }
-
-    /**
-     * Checks if downloadable files are turned on
-     *
-     * @return bool
-     */
-    public function isEnabledDownloadableFiles()
-    {
-        return (bool) $this->getConfig()->getConfigParam( "blEnableDownloads" );
     }
 
     /**
