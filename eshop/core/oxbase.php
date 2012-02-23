@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 42361 2012-02-20 15:10:53Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -78,6 +78,15 @@ class oxBase extends oxSuperCfg
      * @var string
      */
     protected $_sCoreTable = null;
+
+    /**
+     * Object core table name, used in core classes
+     *
+     * @deprecated since v4.6.0 (2012-02-21); Use $_sCoreTable.
+     *
+     * @var string
+     */
+    protected $_sCoreTbl = null;
 
     /**
      * Current view name where object record is supposed to be SELECTED from.
@@ -385,6 +394,9 @@ class oxBase extends oxSuperCfg
         } else {
             $this->_sCoreTable = $sTableName;
         }
+
+        // compatibility due to parameter deprecation
+        $this->_sCoreTbl = $sTableName;
 
         // reset view table
         $this->_sViewTable = false;

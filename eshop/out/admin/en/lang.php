@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42373 2012-02-20 16:16:33Z juergen.busch $
+ * @version   SVN: $Id: lang.php 42397 2012-02-22 11:10:09Z juergen.busch $
  */
 
 /*
@@ -2041,7 +2041,7 @@ $aLang = array(
 'SHOP_RDFA_SHOW_PRODUCTSTOCK'	    		               => 'Show real available product stock',
 
 'PAYMENT_RDFA_ASIGN_PAYMENT'		                       => 'Assign payment',
-'PAYMENT_RDFA_ADVICE_START'		                           => '<b>Hint:</b> Please choose only those payment methods, pre-defined in GoodRelations, that comply with your payment methods.',
+'PAYMENT_RDFA_ADVICE_START'		                           => '<b>Hint:</b> Please choose only those payment methods, pre-defined in GoodRelations, that comply with your payment method',
 'PAYMENT_RDFA_ADVICE_END'		                           => '',
 'PAYMENT_RDFA_GENERAL'			                           => 'General payment methods',
 'PAYMENT_RDFA_CASH'		                                   => 'Cash',
@@ -2062,7 +2062,7 @@ $aLang = array(
 'PAYMENT_RDFA_VISA'			                               => 'VISA',
 
 'DELIVERY_RDFA_ASIGN_DELIVERY'		                       => 'Assign delivery method',
-'DELIVERY_RDFA_ADVICE_START'		                       => '<b>Hint:</b> Please choose only those delivery methods, pre-defined in GoodRelations, that comply with your delivery methods. ',
+'DELIVERY_RDFA_ADVICE_START'		                       => '<b>Hint:</b> Please choose only those delivery methods, pre-defined in GoodRelations, that comply with your shipping method',
 'DELIVERY_RDFA_ADVICE_END'		                           => '',
 'DELIVERY_RDFA_GENERAL'			                           => 'General delivery methods',
 'DELIVERY_RDFA_DELIVERYMODEDIRECTDOWNLOAD'			       => 'Download',

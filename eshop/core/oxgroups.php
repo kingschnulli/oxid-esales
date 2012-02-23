@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxgroups.php 28010 2010-05-28 09:23:10Z sarunas $
+ * @version   SVN: $Id: oxgroups.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -29,13 +29,6 @@
  */
 class oxGroups extends oxI18n
 {
-
-    /**
-     * Core database table name. $sCoreTbl could be only original data table name and not view name.
-     * @var string
-     */
-    protected $_sCoreTbl   = 'oxgroups';
-
     /**
      * Name of current class
      * @var string

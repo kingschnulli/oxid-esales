@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrapping.php 41739 2012-01-24 15:48:16Z vilma $
+ * @version   SVN: $Id: oxwrapping.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -29,13 +29,6 @@
  */
 class oxWrapping extends oxI18n
 {
-    /**
-     * Core table name
-     *
-     * @var string name of object core table
-     */
-    protected $_sCoreTbl = 'oxwrapping';
-
     /**
      * Class name
      *

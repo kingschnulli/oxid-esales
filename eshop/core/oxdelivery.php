@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdelivery.php 41739 2012-01-24 15:48:16Z vilma $
+ * @version   SVN: $Id: oxdelivery.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -29,13 +29,6 @@
  */
 class oxDelivery extends oxI18n
 {
-    /**
-     * Object core table name
-     *
-     * @var string
-     */
-    protected $_sCoreTbl = 'oxdelivery';
-
     /**
      * Current class name
      *

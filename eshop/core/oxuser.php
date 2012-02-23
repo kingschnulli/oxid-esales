@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 42297 2012-02-15 16:15:36Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxuser.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -41,12 +41,6 @@ class oxUser extends oxBase
      * @var object
      */
     protected $_oNewsSubscription = null;
-
-    /**
-     * Core database table name. $_sCoreTbl could be only original data table name and not view name.
-     * @var string
-     */
-    protected $_sCoreTbl = 'oxuser';
 
     /**
      * Current object class name

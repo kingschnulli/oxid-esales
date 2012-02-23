@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 42364 2012-02-20 15:11:38Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticle.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 // defining supported link types
@@ -39,13 +39,6 @@ define( 'OXARTICLE_LINKTYPE_RECOMM', 5 );
  */
 class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 {
-    /**
-     * Object core table name
-     *
-     * @var string
-     */
-    protected $_sCoreTbl = 'oxarticles';
-
     /**
      * Current class name
      *

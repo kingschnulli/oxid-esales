@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxobject2group.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxobject2group.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -27,14 +27,6 @@
  */
 class oxObject2Group extends oxBase
 {
-
-    /**
-     * Core database table name. $_sCoreTbl could be only original data table name and not view name.
-     *
-     * @var string
-     */
-    protected $_sCoreTbl = 'oxobject2group';
-
     /**
      * Load the relation even if from other shop
      *

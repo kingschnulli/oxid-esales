@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42372 2012-02-20 16:16:15Z juergen.busch $
+ * @version   SVN: $Id: lang.php 42396 2012-02-22 11:09:47Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -2047,7 +2047,7 @@ $aLang = array(
 'SHOP_RDFA_SHOW_PRODUCTSTOCK'	    		               => 'Den tatsächlichen Lagerbestand der Artikel anzeigen',
 
 'PAYMENT_RDFA_ASIGN_PAYMENT'		                       => 'Zahlungsart zuordnen',
-'PAYMENT_RDFA_ADVICE_START'		                           => '<b>Hinweis:</b> Bitte wählen Sie nur die in GoodRelations vordefinierten Zahlungsarten aus, die Ihren Zahlungsarten ',
+'PAYMENT_RDFA_ADVICE_START'		                           => '<b>Hinweis:</b> Bitte wählen Sie nur die in GoodRelations vordefinierten Zahlungsarten aus, die Ihrer Zahlungsart ',
 'PAYMENT_RDFA_ADVICE_END'		                           => 'entsprechen',
 'PAYMENT_RDFA_GENERAL'			                           => 'Allgemeine Zahlungsarten',
 'PAYMENT_RDFA_CASH'			                               => 'Barzahlung',
@@ -2068,7 +2068,7 @@ $aLang = array(
 'PAYMENT_RDFA_VISA'			                               => 'VISA',
 
 'DELIVERY_RDFA_ASIGN_DELIVERY'		                       => 'Versandarten zuordnen',
-'DELIVERY_RDFA_ADVICE_START'		                       => '<b>Hinweis:</b> Bitte wählen Sie nur die in GoodRelations vordefinierten Versandarten aus, die Ihren Versandarten',
+'DELIVERY_RDFA_ADVICE_START'		                       => '<b>Hinweis:</b> Bitte wählen Sie nur die in GoodRelations vordefinierten Versandarten aus, die Ihrer Versandart ',
 'DELIVERY_RDFA_ADVICE_END'		                           => 'entsprechen',
 'DELIVERY_RDFA_GENERAL'			                           => 'Allgemeine Versandarten',
 'DELIVERY_RDFA_DELIVERYMODEDIRECTDOWNLOAD'			       => 'Download',

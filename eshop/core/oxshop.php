@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshop.php 39450 2011-10-19 08:58:16Z vilma $
+ * @version   SVN: $Id: oxshop.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -30,13 +30,6 @@
  */
 class oxShop extends oxI18n
 {
-    /**
-     * Core database table name. $sCoreTbl could be only original data table name and not view name.
-     *
-     * @var string
-     */
-    protected $_sCoreTbl = 'oxshops';
-
     /**
      * Name of current class.
      *

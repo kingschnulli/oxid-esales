@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcontent.php 42179 2012-02-13 08:42:24Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcontent.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -30,13 +30,6 @@
  */
 class oxContent extends oxI18n implements oxIUrl
 {
-    /**
-     * Core database table name. $_sCoreTbl could be only original data table name and not view name.
-     *
-     * @var string
-     */
-    protected $_sCoreTbl = 'oxcontents';
-
     /**
      * Current class name
      *

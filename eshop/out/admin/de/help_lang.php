@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 42370 2012-02-20 15:38:49Z vilma $
+ * @version   SVN: $Id: help_lang.php 42399 2012-02-22 13:09:02Z juergen.busch $
  */
 
 /**
@@ -591,7 +591,7 @@ $aLang =  array(
 
 'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'       => 'Laden Sie ein Bild für den großen Startseitenbanner hoch und geben die URL für den Klick auf den Banner an. Falls ein Artikel zugeordnet wird, wird dessen URL automatisch als Banner-URL verwendet.',
 
-'HELP_SHOP_RDFA_SUBMIT_URL'                   => '[tr]Submits your shop URL to GR-Notify page. Where your URIs are saved and forwarded them to Linked Open Commerce & Semantic Web search engines and enpoints.',
+'HELP_SHOP_RDFA_SUBMIT_URL'                   => 'Überträgt Ihre Shop URL zur GR-Notify-Seite. Dort wird die URL gespeichert und an Suchmaschinen und Endpunkte von Linked Open Commerce & Semantic Web weitergeleitet.',
 'HELP_SHOP_RDFA_CONTENT_OFFERER'              => '[tr]You have to select in which content page main eShop information is displayed, e.g.  “About Us”.',
 'HELP_SHOP_RDFA_CONTENT_PAYMENT'              => '[tr]You have to select in which content page not assigned to RDFa payment information is displayed, e.g.  “Terms and Conditions. To Assign your shipping methods to RDFa shipping methods go to: Shop Settings -> Shipping Methods -> RDFa.',
 'HELP_SHOP_RDFA_CONTENT_DELIVERY'             => '[tr]You have to select in which content page not assigned to RDFa shipping information is displayed, e.g.  “Shipping and charges”. To Assign your payment methods to RDFa payment methods go to: Shop Settings -> Payment Methods -> RDFa.',
