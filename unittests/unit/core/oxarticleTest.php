@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 41690 2012-01-24 07:46:19Z arvydas.vapsva $
+ * @version   SVN: $Id: oxarticleTest.php 42414 2012-02-23 16:10:13Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -4290,7 +4290,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', 'test &amp;')");
         $oArticle = new oxArticle();
-        $this->assertEquals( 'test &amp;', $oArticle->getArticleLongDesc( '_testArt' )->value);
+        $oArticle->load( '_testArt' );
+        $this->assertEquals( 'test &amp;', $oArticle->getArticleLongDesc()->value);
+
+        $oArticleVar = new oxArticle();
+        $oArticleVar->load( '_testVar' );
+        $this->assertEquals( 'test &amp;', $oArticleVar->getArticleLongDesc()->value );
+
     }
 
     /**
