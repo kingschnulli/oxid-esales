@@ -21,6 +21,9 @@
             [{ $oViewConf->getNavFormParams() }]
             <input type="hidden" name="fnc" value="login_noredirect">
             <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
+            [{if $oView->getClassName() eq "content"}]
+                <input type="hidden" name="oxcid" value="[{ $oView->getContentId() }]">
+            [{/if}]
             <input type="hidden" name="pgNr" value="[{$oView->getActPage()}]">
             <input type="hidden" name="CustomError" value="loginBoxErrors">
             [{if $oView->getProduct()}]
