@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvatselectorTest.php 39525 2011-10-25 14:23:53Z arvydas.vapsva $
+ * @version   SVN: $Id: oxvatselectorTest.php 39596 2011-10-26 13:41:07Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -88,8 +88,12 @@ class Unit_Core_oxVatSelectorTest extends OxidTestCase
     protected function tearDown()
     {
         // deleting demo items
-        $this->oArticle->delete();
-        $this->oCategory->delete();
+        if ( $this->oArticle ) {
+           $this->oArticle->delete();
+        }
+        if ( $this->oCategory ) {
+            $this->oCategory->delete();
+        }
 
         oxTestModules::addFunction('oxVatSelector', 'clear', '{ oxVatSelector::$_aUserVatCache = array();}');
         oxNew('oxVatSelector')->clear();

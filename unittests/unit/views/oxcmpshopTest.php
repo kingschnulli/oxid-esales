@@ -46,7 +46,7 @@ class Unit_Views_oxCmpShopTest extends OxidTestCase
         $oShop = new oxStdClass();
         $oShop->oxshops__oxactive = new oxField( 0 );
 
-        oxTestModules::addFunction('oxUtils', 'redirect($url)', '{throw new Exception($url);}');
+        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
 
         $oConfig = $this->getMock( "oxStdClass", array( "getConfigParam", "getActiveView", "getActiveShop" ) );
         $oConfig->expects( $this->once() )->method('getActiveView')->will( $this->returnValue( $oView ) );

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdb.php 39237 2011-10-12 14:49:10Z arvydas.vapsva $
+ * @version   SVN: $Id: oxdb.php 42447 2012-02-27 12:08:27Z linas.kukulskis $
  */
 
 
@@ -32,6 +32,30 @@ require_once getShopBasePath() . 'core/adodblite/adodb.inc.php';
 class oxDb extends oxSuperCfg
 {
     /**
+     * Fetch mode - numeric
+     * @var int
+     */
+    const FETCH_MODE_NUM = 0;
+
+    /**
+     * Fetch mode - associative
+     * @var int
+     */
+    const FETCH_MODE_ASSOC = 1;
+
+    /**
+     * Fetch mode - numeric + identifies heavy queries
+     * @var int
+     */
+    const FETCH_MODE_NUM_EXT = 2;
+
+    /**
+     * Fetch mode - associative + identifies heavy queries
+     * @var int
+     */
+    const FETCH_MODE_ASSOC_EXT = 3;
+
+    /**
      * oxDb instance.
      *
      * @var oxdb
@@ -39,11 +63,18 @@ class oxDb extends oxSuperCfg
     protected static $_instance = null;
 
     /**
-     * Database object
+     * Database connection object
      *
      * @var oxdb
      */
-    protected static  $_oDB = null;
+    protected static $_oDB = null;
+
+    /**
+     * Slave database connection object
+     *
+     * @var oxdb
+     */
+    protected static $_oSlaveDb = null;
 
     /**
      * Database tables descriptions cache array
@@ -64,7 +95,6 @@ class oxDb extends oxSuperCfg
             self::$_instance = modInstances::getMod( __CLASS__ );
         }
 
-
         if ( !self::$_instance instanceof oxDb ) {
 
             //do not use simple oxNew here as it goes to eternal cycle
@@ -78,67 +108,17 @@ class oxDb extends oxSuperCfg
     }
 
     /**
-     * Returns database object
+     * Returns adodb modules string
      *
-     * @param boolean $blAssoc default false
-     *
-     * @throws oxConnectionException error while initiating connection to DB
-     *
-     * @return ADOConnection
+     * @return string
      */
-    public static function getDb( $blAssoc = false )
+    protected function _getModules()
     {
-        global $ADODB_FETCH_MODE;
-
-        if ( $blAssoc ) {
-            $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
-        } else {
-            $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-        }
-
-        if ( defined( 'OXID_PHP_UNIT' ) ) {
-            if ( isset( modDB::$unitMOD ) && is_object( modDB::$unitMOD ) ) {
-                return modDB::$unitMOD;
-            }
-        }
-
-        if ( self::$_oDB !== null ) {
-            return self::$_oDB;
-        }
-
-        global  $ADODB_CACHE_DIR;
-        global  $ADODB_DRIVER,
-                $ADODB_SESSION_TBL,
-                $ADODB_SESSION_CONNECT,
-                $ADODB_SESSION_DRIVER,
-                $ADODB_SESSION_USER,
-                $ADODB_SESSION_PWD,
-                $ADODB_SESSION_DB,
-                $ADODB_SESS_LIFE,
-                $ADODB_SESS_DEBUG;
-
         //adding exception handler for SQL errors
-        $myConfig = self::getInstance()->getConfig();
-        $iDebug = $myConfig->getConfigParam( 'iDebug' );
-        if ( $iDebug ) {
+        $myConfig = $this->getConfig();
+        if ( ( $iDebug = $myConfig->getConfigParam( 'iDebug' ) ) ) {
             include_once getShopBasePath() . 'core/adodblite/adodb-exceptions.inc.php';
         }
-
-        // session related parameters. don't change.
-
-        //Tomas
-        //the default setting is 3000 * 60, but actually changing this will give no effect as now redefinition of this constant
-        //appears after OXID custom settings are loaded and $ADODB_SESS_LIFE depends on user settings.
-        //You can find the redefinition of ADODB_SESS_LIFE @ oxconfig.php:: line ~ 390.
-        $ADODB_SESS_LIFE       = 3000 * 60;
-        $ADODB_SESSION_TBL     = "oxsessions";
-        $ADODB_SESSION_DRIVER  = $myConfig->getConfigParam( 'dbType' );
-        $ADODB_SESSION_USER    = $myConfig->getConfigParam( 'dbUser' );
-        $ADODB_SESSION_PWD     = $myConfig->getConfigParam( 'dbPwd' );
-        $ADODB_SESSION_DB      = $myConfig->getConfigParam( 'dbName' );
-        $ADODB_SESSION_CONNECT = $myConfig->getConfigParam( 'dbHost' );
-        $ADODB_SESS_DEBUG      = false;
-        $ADODB_CACHE_DIR       = $myConfig->getConfigParam( 'sCompileDir' );
 
         $sModules = '';
         if (  $iDebug == 2 || $iDebug == 3 || $iDebug == 4 || $iDebug == 7  ) {
@@ -147,84 +127,223 @@ class oxDb extends oxSuperCfg
 
         // log admin changes ?
         if ( $myConfig->isAdmin() && $myConfig->getConfigParam( 'blLogChangesInAdmin' ) ) {
-            $sModules = ( $sModules ? ':' : '' ) . 'oxadminlog';
+            $sModules .= ( $sModules ? ':' : '' ) . 'oxadminlog';
         }
 
-        self::$_oDB = ADONewConnection( $myConfig->getConfigParam( 'dbType' ), $sModules );
+        return $sModules;
+    }
 
+    /**
+     * Setting up connection parameters - sql mode, encoding, logging etc
+     *
+     * @param ADOConnection $oDb database connection instance
+     *
+     * @return null
+     */
+    protected function _setUp( $oDb )
+    {
+        $myConfig = $this->getConfig();
+        $iDebug = $myConfig->getConfigParam( 'iDebug' );
+        if ( $iDebug == 2 || $iDebug == 3 || $iDebug == 4  || $iDebug == 7 ) {
+            try {
+                $oDb->execute( 'truncate table adodb_logsql' );
+            } catch ( ADODB_Exception $e ) {
+                // nothing
+            }
+            if ( method_exists( $oDb, "logSQL" ) ) {
+                $oDb->logSQL( true );
+            }
+        }
+
+        $oDb->cacheSecs = 60 * 10; // 10 minute caching
+        $oDb->execute( 'SET @@session.sql_mode = ""' );
+
+        if ( $myConfig->isUtf() ) {
+            $oDb->execute( 'SET NAMES "utf8"' );
+            $oDb->execute( 'SET CHARACTER SET utf8' );
+            $oDb->execute( 'SET CHARACTER_SET_CONNECTION = utf8' );
+            $oDb->execute( 'SET CHARACTER_SET_DATABASE = utf8' );
+            $oDb->execute( 'SET character_set_results = utf8' );
+            $oDb->execute( 'SET character_set_server = utf8' );
+        } elseif ( ( $sConn = $myConfig->getConfigParam('sDefaultDatabaseConnection') ) != '' ) {
+            $oDb->execute( 'SET NAMES "' . $sConn . '"' );
+        }
+    }
+
+    /**
+     * Returns $oMailer instance
+     *
+     * @param string $sEmail   email address
+     * @param string $sSubject subject
+     * @param string $sBody    email body
+     *
+     * @return phpmailer
+     */
+    protected function _sendMail( $sEmail, $sSubject, $sBody )
+    {
+        include_once getShopBasePath() . 'core/phpmailer/class.phpmailer.php';
+        $oMailer = new phpmailer();
+        $oMailer->isMail();
+
+        $oMailer->From = $sEmail;
+        $oMailer->AddAddress( $sEmail );
+        $oMailer->Subject = $sSubject;
+        $oMailer->Body = $sBody;
+        return $oMailer->send();
+    }
+
+    /**
+     * Notifying shop owner about connection problems
+     *
+     * @param ADOConnection $oDb database connection instance
+     *
+     * @return null
+     */
+    protected function _notifyConnectionErrors( $oDb )
+    {
+        $myConfig = $this->getConfig();
+        // notifying shop owner about connection problems
+        if ( ( $sAdminEmail = $myConfig->getConfigParam( 'sAdminEmail' ) ) ) {
+            $sFailedShop = isset( $_REQUEST['shp'] ) ? addslashes( $_REQUEST['shp'] ) : 'Base shop';
+
+            $sDate = date( 'l dS of F Y h:i:s A');
+            $sScript  = $_SERVER['SCRIPT_NAME'] . '?' . $_SERVER['QUERY_STRING'];
+            $sReferer = $_SERVER['HTTP_REFERER'];
+
+            //sending a message to admin
+            $sWarningSubject = 'Offline warning!';
+            $sWarningBody = "
+                Database error in OXID eShop:
+                Date: {$sDate}
+                Shop: {$sFailedShop}
+
+                mysql error: " . $oDb->errorMsg()."
+                mysql error no: " . $oDb->errorNo()."
+
+                Script: {$sScript}
+                Referer: {$sReferer}";
+
+            $this->_sendMail( $sAdminEmail, $sWarningSubject, $sWarningBody );
+        }
+
+        //only exception to default construction method
+        $oEx = new oxConnectionException();
+        $oEx->setMessage( 'EXCEPTION_CONNECTION_NODB' );
+        $oEx->setConnectionError( $myConfig->getConfigParam( 'dbUser' ) . 's' . getShopBasePath() . $oDb->errorMsg() );
+        throw $oEx;
+    }
+
+    /**
+     * In case of connection is errorous - redirects to setup
+     * or send notification message for shop owner
+     *
+     * @param ADOConnection $oDb database connection instance
+     *
+     * @return null
+     */
+    protected function _onConnectionError( $oDb )
+    {
         $sVerPrefix = '';
             $sVerPrefix = '_ce';
 
-        if ( !self::$_oDB->connect( $myConfig->getConfigParam( 'dbHost' ), $myConfig->getConfigParam( 'dbUser' ), $myConfig->getConfigParam( 'dbPwd' ), $myConfig->getConfigParam( 'dbName' ) ) ) {
-            $sConfig = join( '', file( getShopBasePath().'config.inc.php' ) );
-            if ( strpos( $sConfig, '<dbHost'.$sVerPrefix.'>' ) !== false &&
-                 strpos( $sConfig, '<dbName'.$sVerPrefix.'>' ) !== false ) {
-                header( 'location:setup/index.php' ); // pop to setup as there is something wrong
-                oxUtils::getInstance()->showMessageAndExit( "" );
-            } else {
+        $sConfig = join( '', file( getShopBasePath().'config.inc.php' ) );
+        if ( strpos( $sConfig, '<dbHost'.$sVerPrefix.'>' ) !== false &&
+             strpos( $sConfig, '<dbName'.$sVerPrefix.'>' ) !== false ) {
+            // pop to setup as there is something wrong
+            oxUtils::getInstance()->redirect( "setup/index.php", true, 302 );
+        } else {
+            // notifying about connection problems
+            $this->_notifyConnectionErrors( $oDb );
+        }
+    }
 
-                // notifying shop owner about connection problems
-                $sFailedShop = isset( $_REQUEST['shp'] )?addslashes( $_REQUEST['shp'] ):'Base shop';
+    /**
+     * Returns database instance object for given type
+     *
+     * @param int $iInstType instance type
+     *
+     * @return ADONewConnection
+     */
+    protected function _getDbInstance( $iInstType = 0 )
+    {
+        $myConfig = $this->getConfig();
 
-                $sDate = date( 'l dS of F Y h:i:s A');
-                $sScript  = $_SERVER['SCRIPT_NAME'].'?'.$_SERVER['QUERY_STRING'];
-                $sReferer = $_SERVER['HTTP_REFERER'];
+        $sHost = $myConfig->getConfigParam( "dbHost" );
 
-                //sending a message to admin
-                $sWarningSubject = 'Offline warning!';
-                $sWarningBody = "
-                Database error in OXID eShop:
-                Date: $sDate
-                Shop: $sFailedShop
 
-                mysql error: ".self::$_oDB->errorMsg()."
-                mysql error no: ".self::$_oDB->errorNo()."
+        $oDb = ADONewConnection( $myConfig->getConfigParam( 'dbType' ), $this->_getModules() );
 
-                Script: $sScript
-                Referer: $sReferer";
+        if ( !$oDb->connect( $sHost,
+                             $myConfig->getConfigParam( "dbUser" ),
+                             $myConfig->getConfigParam( "dbPwd" ),
+                             $myConfig->getConfigParam( "dbName" ) ) ) {
 
-                if ( ( $sAdminEmail = $myConfig->getConfigParam( 'sAdminEmail' ) ) ) {
-                    include 'core/phpmailer/class.phpmailer.php';
+            // various actions on connection error..
+            $this->_onConnectionError( $oDb );
+        }
 
-                    $oMailer = new phpmailer();
-                    $oMailer->isMail();
-                    $oMailer->From = $sAdminEmail;
-                    $oMailer->AddAddress( $sAdminEmail );
-                    $oMailer->Subject = $sWarningSubject;
-                    $oMailer->Body = $sWarningBody;
-                    $oMailer->send();
-                }
+        $this->_setUp( $oDb );
+        return $oDb;
+    }
 
-                //only exception to default construction method
-                $oEx = new oxConnectionException();
-                $oEx->setMessage( 'EXCEPTION_CONNECTION_NODB' );
-                $oEx->setConnectionError( $myConfig->getConfigParam( 'dbUser' ).'s'.getShopBasePath().self::$_oDB->errorMsg() );
-                throw $oEx;
+
+    /**
+     * Returns database object
+     *
+     * @param boolean $iFetchMode - fetche mode default numeric - 0
+     *
+     * @throws oxConnectionException error while initiating connection to DB
+     *
+     * @return ADOConnection
+     */
+    public static function getDb( $iFetchMode = oxDb::FETCH_MODE_NUM )
+    {
+        //Added for 0003480 bug; needed as backward compatibility; @deprecated in 4.6 since 2012-01-15; must be removed;
+        if ( $iFetchMode === true ) {
+            $iFetchMode = oxDb::FETCH_MODE_ASSOC;
+        }
+
+
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            if ( isset( modDB::$unitMOD ) && is_object( modDB::$unitMOD ) ) {
+                return modDB::$unitMOD;
             }
         }
 
-        if (  $iDebug == 2 || $iDebug == 3 || $iDebug == 4  || $iDebug == 7 ) {
-            try {
-                self::$_oDB->execute('truncate table adodb_logsql;');
-            } catch (ADODB_Exception $e) {
-                // nothing
-            }
-            self::$_oDB->logSQL( true );
+        if ( self::$_oDB === null ) {
+
+            global  $ADODB_SESSION_TBL,
+                    $ADODB_SESSION_CONNECT,
+                    $ADODB_SESSION_DRIVER,
+                    $ADODB_SESSION_USER,
+                    $ADODB_SESSION_PWD,
+                    $ADODB_SESSION_DB,
+                    $ADODB_SESS_LIFE,
+                    $ADODB_SESS_DEBUG;
+
+            //adding exception handler for SQL errors
+            $oInst = self::getInstance();
+            $myConfig = $oInst->getConfig();
+
+            // session related parameters. don't change.
+
+            //Tomas
+            //the default setting is 3000 * 60, but actually changing this will give no effect as now redefinition of this constant
+            //appears after OXID custom settings are loaded and $ADODB_SESS_LIFE depends on user settings.
+            //You can find the redefinition of ADODB_SESS_LIFE @ oxconfig.php:: line ~ 390.
+            $ADODB_SESS_LIFE       = 3000 * 60;
+            $ADODB_SESSION_TBL     = "oxsessions";
+            $ADODB_SESSION_DRIVER  = $myConfig->getConfigParam( 'dbType' );
+            $ADODB_SESSION_USER    = $myConfig->getConfigParam( 'dbUser' );
+            $ADODB_SESSION_PWD     = $myConfig->getConfigParam( 'dbPwd' );
+            $ADODB_SESSION_DB      = $myConfig->getConfigParam( 'dbName' );
+            $ADODB_SESSION_CONNECT = $myConfig->getConfigParam( 'dbHost' );
+            $ADODB_SESS_DEBUG      = false;
+
+            self::$_oDB = $oInst->_getDbInstance();
         }
 
-        self::$_oDB->cacheSecs = 60 * 10; // 10 minute caching
-        self::$_oDB->execute( 'SET @@session.sql_mode = ""' );
-
-        if ( $myConfig->isUtf() ) {
-            self::$_oDB->execute( 'SET NAMES "utf8"' );
-            self::$_oDB->execute( 'SET CHARACTER SET utf8' );
-            self::$_oDB->execute( 'SET CHARACTER_SET_CONNECTION = utf8' );
-            self::$_oDB->execute( 'SET CHARACTER_SET_DATABASE = utf8' );
-            self::$_oDB->execute( 'SET character_set_results = utf8' );
-            self::$_oDB->execute( 'SET character_set_server = utf8' );
-        } elseif ( $myConfig->getConfigParam('sDefaultDatabaseConnection') != '' ) {
-            self::$_oDB->execute( 'SET NAMES ' . $myConfig->getConfigParam('sDefaultDatabaseConnection') );
-        }
+        self::$_oDB->setFetchMode( ( $iFetchMode == oxDb::FETCH_MODE_ASSOC_EXT || $iFetchMode == oxDb::FETCH_MODE_ASSOC ) ? ADODB_FETCH_ASSOC : ADODB_FETCH_NUM );
 
         return self::$_oDB;
     }
@@ -268,10 +387,11 @@ class oxDb extends oxSuperCfg
      *
      * @return array
      */
-    public function quoteArray( $aStrArray)
+    public function quoteArray( $aStrArray )
     {
+        $oDb = self::getDb();
         foreach ( $aStrArray as $sKey => $sString ) {
-            $aStrArray[$sKey] = self::getDb()->quote($sString);
+            $aStrArray[$sKey] = $oDb->quote( $sString );
         }
         return $aStrArray;
     }
@@ -523,7 +643,7 @@ class oxDb extends oxSuperCfg
      */
     static public function startTransaction()
     {
-        self::$_oDB->execute( 'START TRANSACTION' );
+        return self::getDb()->execute( 'START TRANSACTION' );
     }
 
     /**
@@ -533,7 +653,7 @@ class oxDb extends oxSuperCfg
      */
     static public function commitTransaction()
     {
-        self::$_oDB->execute( 'COMMIT' );
+        return self::getDb()->execute( 'COMMIT' );
     }
 
     /**
@@ -543,7 +663,7 @@ class oxDb extends oxSuperCfg
      */
     static public function rollbackTransaction()
     {
-        self::$_oDB->execute( 'ROLLBACK' );
+        return self::getDb()->execute( 'ROLLBACK' );
     }
 
     /**
@@ -557,9 +677,8 @@ class oxDb extends oxSuperCfg
     static public function setTransactionIsolationLevel( $sLevel = null )
     {
         $aLevels = array( 'READ UNCOMMITTED', 'READ COMMITTED', 'REPEATABLE READ', 'SERIALIZABLE' );
-
-        if (in_array(strtoupper($sLevel), $aLevels)) {
-            self::$_oDB->execute( 'SET TRANSACTION ISOLATION LEVEL ' . $sLevel );
+        if ( in_array( strtoupper( $sLevel ), $aLevels ) ) {
+            return self::getDb()->execute( 'SET TRANSACTION ISOLATION LEVEL ' . $sLevel );
         }
     }
 
@@ -838,11 +957,7 @@ class oxDb extends oxSuperCfg
      */
     protected function _getConnectionId()
     {
-        if ( self::$_oDB !== null ) {
-           return self::$_oDB->connectionId;
-        }
-
-        return null;
+        return self::getDb()->connectionId;
     }
 
     /**
@@ -854,7 +969,14 @@ class oxDb extends oxSuperCfg
      */
     public function escapeString( $sString )
     {
-        return mysql_real_escape_string( $sString, $this->_getConnectionId() );
+        $myConfig  = $this->getConfig();
+        if ( 'mysql' == $myConfig->getConfigParam( "dbType" )) {
+            return mysql_real_escape_string( $sString, $this->_getConnectionId() );
+        } elseif ( 'mysqli' == $myConfig->getConfigParam( "dbType" )) {
+            return mysqli_real_escape_string( $this->_getConnectionId(), $sString );
+        } else {
+            return mysql_real_escape_string( $sString, $this->_getConnectionId() );
+        }
     }
 
     /**
@@ -866,8 +988,9 @@ class oxDb extends oxSuperCfg
      */
     public function updateViews( $aTables = null )
     {
-        $myConfig  = $this->getConfig();
+        set_time_limit(0);
 
+        $myConfig  = $this->getConfig();
         $oShopList = oxNew("oxshoplist" );
         $oShopList->selectString( "select * from oxshops"); // Shop view may not exist at this point
 

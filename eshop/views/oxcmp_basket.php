@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_basket.php 38682 2011-09-08 11:07:55Z vilma $
+ * @version   SVN: $Id: oxcmp_basket.php 41947 2012-02-01 09:29:57Z mindaugas.rimgaila $
  */
 
 /**
@@ -326,7 +326,12 @@ class oxcmp_basket extends oxView
             $aSel = isset( $aSel )?$aSel:oxConfig::getParameter( 'sel' );
 
             // persistent parameters
-            $aPersParam = $aPersParam?$aPersParam:oxConfig::getParameter( 'persparam' );
+            if ( empty($aPersParam) ) {
+                $aPersParam = oxConfig::getParameter( 'persparam' );
+                if ( !is_array($aPersParam) || empty($aPersParam['details']) ) {
+                    $aPersParam = null;
+                }
+            }
 
             $sBasketItemId = oxConfig::getParameter( 'bindex' );
 

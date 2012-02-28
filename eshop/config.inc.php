@@ -57,6 +57,7 @@
     //  5 = Delivery Cost calculation info
     //  6 = SMTP Debug Messages
     //  7 = oxDbDebug SQL parser
+    //  8 = display smarty template names (requires /tmp cleanup)
     $this->iDebug = 0;
 
     // Log all modifications performed in Admin
@@ -170,7 +171,7 @@
      */
     $this->aUserComponentNames = null;
 
-     /**
+    /**
      * saves subshopid in session
      */
     $this->blDeprecatedSubshopsInSessions = false;
@@ -184,3 +185,8 @@
      * Additional multi language tables
      */
     $this->aMultiLangTables = null;
+
+    /**
+     * Instructs shop that price update is perfomed by cron (time based job sheduler)
+     */
+    $this->blUseCron = false;

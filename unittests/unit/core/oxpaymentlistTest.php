@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpaymentlistTest.php 32008 2010-12-17 15:10:36Z sarunas $
+ * @version   SVN: $Id: oxpaymentlistTest.php 41419 2012-01-16 15:53:27Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -745,4 +745,61 @@ class Unit_Core_oxpaymentlistTest extends OxidTestCase
 
         $this->assertEquals( array( $this->_aPayList[0]->getId(), $this->_aPayList[2]->getId(), $this->_aPayList[3]->getId(), $this->_aPayList[1]->getId() ), array_keys( oxPaymentList::getInstance()->getPaymentList( $this->oDelSet->getId(), 55, $this->oUser ) ) );
     }
+
+    /**
+     * Testing oxpaymentlist::loadNonRDFaPaymentList()
+     */
+    public function testLoadNonRDFaPaymentList()
+    {
+        // making payments active
+        foreach ( $this->_aPayList as $oPayment ) {
+            $oPayment->oxpayments__oxactive = new oxField(1, oxField::T_RAW);
+            $oPayment->save();
+        }
+
+        $oObjectToPayment = new oxbase();
+        $oObjectToPayment->init( 'oxobject2payment' );
+        $oObjectToPayment->setId('_testoxobject2payment');
+        $oObjectToPayment->oxobject2payment__oxpaymentid = new oxField( $this->_aPayList[0]->getId() );
+        $oObjectToPayment->oxobject2payment__oxobjectid  = new oxField( 'VISA' );
+        $oObjectToPayment->oxobject2payment__oxtype      = new oxField( 'rdfapayment' );
+        $oObjectToPayment->save();
+
+        $oPaymentList = new oxPaymentList();
+        $oPaymentList->loadNonRDFaPaymentList();
+        $this->assertEquals( 3, $oPaymentList->count());
+    }
+
+    /**
+     * Testing oxpaymentlist::loadRDFaPaymentList()
+     */
+    public function testLoadRDFaPaymentList()
+    {
+        // making payments active
+        foreach ( $this->_aPayList as $oPayment ) {
+            $oPayment->oxpayments__oxactive = new oxField(1, oxField::T_RAW);
+            $oPayment->save();
+        }
+
+        $oObjectToPayment = new oxbase();
+        $oObjectToPayment->init( 'oxobject2payment' );
+        $oObjectToPayment->setId('_testoxobject2payment');
+        $oObjectToPayment->oxobject2payment__oxpaymentid = new oxField( $this->_aPayList[0]->getId() );
+        $oObjectToPayment->oxobject2payment__oxobjectid  = new oxField( 'VISA' );
+        $oObjectToPayment->oxobject2payment__oxtype      = new oxField( 'rdfapayment' );
+        $oObjectToPayment->save();
+
+        $oPaymentList = new oxPaymentList();
+        $oPaymentList->loadRDFaPaymentList(12);
+
+        $this->assertEquals( 4, $oPaymentList->count());
+        foreach ($oPaymentList as $oPayment) {
+            if ($oPayment->getId() == $this->_aPayList[0]->getId()) {
+                $this->assertEquals( 'VISA', $oPayment->oxpayments__oxobjectid->value);
+            } else {
+                $this->assertNull( $oPayment->oxpayments__oxobjectid->value);
+            }
+        }
+    }
+
 }

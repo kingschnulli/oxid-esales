@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylist.php 41851 2012-01-28 12:20:54Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcategorylist.php 42114 2012-02-09 15:05:36Z linas.kukulskis $
  */
 
 

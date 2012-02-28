@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 41881 2012-01-30 12:34:50Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxuser.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -41,12 +41,6 @@ class oxUser extends oxBase
      * @var object
      */
     protected $_oNewsSubscription = null;
-
-    /**
-     * Core database table name. $_sCoreTbl could be only original data table name and not view name.
-     * @var string
-     */
-    protected $_sCoreTbl = 'oxuser';
 
     /**
      * Current object class name
@@ -1269,12 +1263,13 @@ class oxUser extends oxBase
             $sShopSelect = " and ( oxrights != 'user' ) ";
         }
 
+        $blStagingMode = false;
         $sWhat = "oxid";
 
         $sSelect = "select $sWhat from oxuser where oxuser.oxactive = 1 and {$sPassSelect} and {$sUserSelect} {$sShopSelect} ";
-        if ( $myConfig->isDemoShop() && $blAdmin ) {
+        if ( ( $myConfig->isDemoShop() || $blStagingMode ) && $blAdmin ) {
             if ( $sPassword == "admin" && $sUser == "admin" ) {
-                $sSelect = "select $sWhat from oxuser where oxrights = 'malladmin' {$sShopSelect} ";
+                $sSelect = "select $sWhat from oxuser where oxrights = 'malladmin' ";
             } else {
                 $oEx = oxNew( 'oxUserException' );
                 $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
@@ -1604,26 +1599,6 @@ class oxUser extends oxBase
 
         // leaving as it was set ...
         return $this->oxuser__oxrights->value;
-    }
-
-    /**
-     * Tries to fetch and set next record number in DB. Returns true on success
-     *
-     * @param string $sMaxField  field name where record number is stored
-     * @param array  $aWhere     (optional) shop filter add SQL string
-     * @param int    $iMaxTryCnt (optional) max number of tryouts
-     *
-     * @return bool
-     */
-    protected function _setRecordNumber( $sMaxField, $aWhere = null ,$iMaxTryCnt = 5 )
-    {
-
-        /*if ( !$myConfig->blMallUsers ) {
-            $sShopID = $myConfig->getShopId();
-            $aWhere = array(" {$this->getViewName()}.oxshopid = '$sShopID' ");
-        }*/
-
-        return parent::_setRecordNumber( $sMaxField, $aWhere, $iMaxTryCnt );
     }
 
     /**
@@ -2385,7 +2360,7 @@ class oxUser extends oxBase
      */
     public function updateInvitationStatistics( $aRecEmail )
     {
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sUserId = $this->getId();
 
         if ( $sUserId && is_array( $aRecEmail ) && count( $aRecEmail ) > 0 ) {
@@ -2414,6 +2389,18 @@ class oxUser extends oxBase
         }
 
         return oxDb::getDb()->getOne( $sQ );
+
+    }
+
+    /**
+     * returns true if user registered and have account
+     *
+     * @return bool
+     */
+    public function hasAccount()
+    {
+
+        return (bool) $this->oxuser__oxpassword->value;
 
     }
 

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnews.php 33763 2011-03-15 09:02:55Z arvydas.vapsva $
+ * @version   SVN: $Id: oxnews.php 41916 2012-01-31 13:26:57Z mindaugas.rimgaila $
  */
 
 /**
@@ -103,7 +103,7 @@ class oxNews extends oxI18n
     public function inGroup( $sGroupID )
     {
         $blResult = false;
-        $aGroups  = &$this->getGroups();
+        $aGroups  = $this->getGroups();
         foreach ( $aGroups as $oObject ) {
             if ( $oObject->_sOXID == $sGroupID ) {
                 $blResult = true;

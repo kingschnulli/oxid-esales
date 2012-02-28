@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucherserie.php 39202 2011-10-12 13:29:14Z arvydas.vapsva $
+ * @version   SVN: $Id: oxvoucherserie.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -37,11 +37,6 @@ class oxVoucherSerie extends oxBase
     protected $_oGroups = null;
 
     /**
-     * @var string name of object core table
-     */
-    protected $_sCoreTbl = 'oxvoucherseries';
-
-    /**
      * @var string name of current class
      */
     protected $_sClassName = 'oxvoucherserie';
@@ -52,7 +47,7 @@ class oxVoucherSerie extends oxBase
     public function __construct()
     {
         parent::__construct();
-        $this->init( $this->_sCoreTbl);
+        $this->init('oxvoucherseries');
     }
 
     /**

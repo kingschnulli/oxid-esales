@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 42145 2012-02-10 09:44:54Z arvydas.vapsva $
+ * @version   SVN: $Id: oxbasket.php 42183 2012-02-13 09:09:31Z linas.kukulskis $
  */
 
 /**
@@ -249,6 +249,12 @@ class oxBasket extends oxSuperCfg
      * @var bool
      */
     protected $_blNewITemAdded = null;
+
+    /**
+     * if basket has downloadable product
+     * @var bool
+     */
+    protected $_blDownloadableProducts = null;
 
     /**
      * Checks if configuration allows basket usage or if user agent is search engine
@@ -1103,22 +1109,27 @@ class oxBasket extends oxSuperCfg
 
         // wrapping VAT
         if ( $myConfig->getConfigParam( 'blCalcVatForWrapping' ) ) {
-            $oWrappingPrice->setVat( $this->getMostUsedVatPercent() );
+            $dWrappingVATPercent = $this->getMostUsedVatPercent();
+            $oWrappingPrice->setVat( $dWrappingVATPercent );
         }
 
         // calculating basket items wrapping
         foreach ( $this->_aBasketContents as $oBasketItem ) {
 
             if ( ( $oWrapping = $oBasketItem->getWrapping() ) ) {
-                $oWrapPrice = $oWrapping->getWrappingPrice( $oBasketItem->getAmount() );
-                $oWrappingPrice->add( $oWrapPrice->getBruttoPrice() );
+                if ($dWrappingVATPercent !== null) {
+                    $oWrapping->setWrappingVat($dWrappingVATPercent);
+                }
+                $oWrappingPrice->addPrice( $oWrapping->getWrappingPrice( $oBasketItem->getAmount() ) );
             }
         }
 
         // gift card price calculation
         if ( ( $oCard = $this->getCard() ) ) {
-            $oCardPrice = $oCard->getWrappingPrice();
-            $oWrappingPrice->add( $oCardPrice->getBruttoPrice() );
+            if ($dWrappingVATPercent !== null) {
+                $oCard->setWrappingVat($dWrappingVATPercent);
+            }
+            $oWrappingPrice->addPrice( $oCard->getWrappingPrice() );
         }
 
         return $oWrappingPrice;
@@ -2659,4 +2670,23 @@ class oxBasket extends oxSuperCfg
         }
         return $this->_blNewITemAdded;
     }
+
+    /**
+     * Returns true if at least one product is downloadable in basket
+     *
+     * @return bool
+     */
+    public function hasDownloadableProducts()
+    {
+        $this->_blDownloadableProducts = false;
+        foreach ( $this->_aBasketContents as $sItemKey => $oOrderArticle ) {
+            if ( $oOrderArticle->getArticle()->isDownloadable() ) {
+                $this->_blDownloadableProducts = true;
+                break;
+            }
+        }
+
+        return $this->_blDownloadableProducts;
+    }
+
 }

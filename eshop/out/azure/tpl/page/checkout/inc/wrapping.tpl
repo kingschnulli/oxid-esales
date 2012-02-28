@@ -38,12 +38,12 @@
                                 [{assign var="basketproduct" value=$basketitemlist.$basketindex }]
                                 <tr>
                                     <td>
-                                        <a href="[{ $basketproduct->getLink()}]">
-                                            <img src="[{$basketproduct->getThumbnailUrl() }]" alt="[{ $basketproduct->oxarticles__oxtitle->value|strip_tags }]">
+                                        <a href="[{$basketitem->getLink()}]">
+                                            <img src="[{$basketproduct->getThumbnailUrl() }]" alt="[{$basketitem->getTitle()|strip_tags}]">
                                         </a>
                                     </td>
                                     <td>
-                                        <a rel="nofollow" href="[{ $basketproduct->getLink()}]">[{ $basketproduct->oxarticles__oxtitle->value }][{ if $basketproduct->oxarticles__oxvarselect->value}], [{ $basketproduct->oxarticles__oxvarselect->value}][{/if}]</a>
+                                        <a rel="nofollow" href="[{$basketitem->getLink()}]">[{$basketitem->getTitle()}]</a>
                                     </td>
                                     <td>
                                         <ul id="wrapp_[{$smarty.foreach.wrappArt.iteration}]">

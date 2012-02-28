@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobject.php 42088 2012-02-08 14:24:08Z arvydas.vapsva $
+ * @version   SVN: $Id: oxutilsobject.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
  */
 
 /**
@@ -238,6 +238,7 @@ class oxUtilsObject extends oxSuperCfg
     }
 
 
+
     /**
      * Returns name of class file, according to class name.
      *
@@ -247,14 +248,24 @@ class oxUtilsObject extends oxSuperCfg
      */
     public function getClassName( $sClassName )
     {
-
         $aModules = $this->getConfig()->getConfigParam( 'aModules' );
+        $aClassChain = array();
+
         if ( is_array( $aModules ) && array_key_exists( $sClassName, $aModules ) ) {
             //multiple inheritance implementation
             //in case we have multiple modules:
             //like oxoutput => sub/suboutput1&sub/suboutput2&sub/suboutput3
             $aClassChain = explode( "&", $aModules[$sClassName] );
 
+            // Exclude disabled modules from chain unfortunatelly can not use oxmodule::getActiveModules()
+            $aDisabledModules = $this->getConfig()->getConfigParam( 'aDisabledModules' );
+            if (is_array( $aDisabledModules ) && isset($aDisabledModules[$sClassName] )) {
+                $aDissabledClassChain = explode( "&", $aDisabledModules[$sClassName] );
+                $aClassChain = array_diff($aClassChain, $aDissabledClassChain);
+            }
+        }
+
+        if (count($aClassChain)) {
             $sParent = $sClassName;
 
             //security: just preventing string termination
@@ -283,6 +294,14 @@ class oxUtilsObject extends oxSuperCfg
         $aModules = $this->getConfig()->getConfigParam( 'aModules' );
         if ( is_array( $aModules ) && array_key_exists( $sClassName, $aModules ) ) {
             $aClassChain = explode( "&", $aModules[$sClassName] );
+
+            // Exclude disabled modules from chain unfortunatelly can not use oxmodule::getActiveModules()
+            $aDisabledModules = $this->getConfig()->getConfigParam( 'aDisabledModules' );
+            if (is_array( $aDisabledModules ) && isset($aDisabledModules[$sClassName] )) {
+                $aDissabledClassChain = explode( "&", $aDisabledModules[$sClassName] );
+                $aClassChain = array_diff($aClassChain, $aDissabledClassChain);
+            }
+
             foreach ($aClassChain as $sModule) {
                 if ( basename($sModule) == $sModuleName ) {
                     return true;
@@ -347,7 +366,7 @@ class oxUtilsObject extends oxSuperCfg
         }
 
         //returning the last module from the chain
-        $sClassName = $aClassChain[count($aClassChain) - 1];
+        $sClassName = end($aClassChain);
         return $sClassName;
     }
 }

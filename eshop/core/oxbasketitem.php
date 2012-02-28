@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitem.php 37125 2011-07-18 13:12:47Z arvydas.vapsva $
+ * @version   SVN: $Id: oxbasketitem.php 40167 2011-11-23 14:38:23Z ramunas.skarbalius $
  */
 
 /**
@@ -363,6 +363,7 @@ class oxBasketItem extends oxSuperCfg
             $oEx->setArticleNr( $oArticle->oxarticles__oxartnum->value );
             $oEx->setProductId( $oArticle->getProductId() );
             $oEx->setRemainingAmount( $this->_dAmount );
+            $oEx->setBasketIndex( $sItemKey );
             throw $oEx;
         }
     }
@@ -390,6 +391,8 @@ class oxBasketItem extends oxSuperCfg
 
     /**
      * Getter which returns image path according to SSL mode
+     *
+     * @deprecated since 2011.11.07 not used any more, call getIconUrl() instead
      *
      * @return string
      */
@@ -562,6 +565,8 @@ class oxBasketItem extends oxSuperCfg
     /**
      * Returns product icon URL
      *
+     * @deprecated 2011.11.07 not used any more, call getIconUrl() instead
+     *
      * @return string
      */
     public function getIcon()
@@ -576,6 +581,11 @@ class oxBasketItem extends oxSuperCfg
      */
     public function getLink()
     {
+        if ( $this->_sLink === null || $this->getLanguageId() != oxLang::getInstance()->getBaseLanguage() ) {
+            $this->setLanguageId( oxLang::getInstance()->getBaseLanguage() );
+            $this->_sLink = oxUtilsUrl::getInstance()->cleanUrl( $this->getArticle()->getLink(), array( 'force_sid' ) );
+        }
+
         return $this->getSession()->processUrl( $this->_sLink );
     }
 
@@ -701,12 +711,10 @@ class oxBasketItem extends oxSuperCfg
         // icon and details URL's
         $this->_sIcon    = $oArticle->oxarticles__oxicon->value;
         $this->_sIconUrl = $oArticle->getIconUrl();
-        $this->_sLink    = $oArticle->getLink();
         $this->_blSsl    = $oConfig->isSsl();
 
         // removing force_sid from the link (incase it'll change)
-        $oUrlUtils = oxUtilsUrl::getInstance();
-        $this->_sLink    = $oUrlUtils->cleanUrl( $oArticle->getLink(), array( 'force_sid' ) );
+        $this->_sLink    = oxUtilsUrl::getInstance()->cleanUrl( $oArticle->getLink(), array( 'force_sid' ) );
 
         // shop Ids
         $this->_sShopId       = $oConfig->getShopId();

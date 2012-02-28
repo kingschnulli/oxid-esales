@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 40953 2012-01-04 13:46:55Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsTest.php 40990 2012-01-05 11:43:54Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -762,34 +762,6 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
         if ($e) {
             throw $e;
-        }
-    }
-
-    public function testGetShopBit()
-    {
-
-        // create an array with corresponding test data (not all just a random mix)
-        $aArray = array(   0 => '0',
-                           1 => '1',
-                           2 => '2',
-                           3 => '4',
-                           4 => '8',
-                           5=> '16',
-                           6 => '32',
-                           7 => '64',
-                           39 => '274877906944',
-                           52 => '2251799813685248',
-                           53 => '4503599627370496',
-                           62 => '2305843009213693952',
-                           63 => '4611686018427387904',
-                           64 => '9223372036854775808',
-                           65 => '0',
-                           66 => '0',
-                           100 => '0');
-
-        foreach ($aArray as $key => $value) {
-            //echo "\n".$key." => '".$value."', ";
-            $this->assertEquals(oxUtils::getInstance()->getShopBit($key), $value);
         }
     }
 

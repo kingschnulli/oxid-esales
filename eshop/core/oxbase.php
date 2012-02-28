@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 42279 2012-02-15 13:00:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
  */
 
 /**
@@ -78,6 +78,15 @@ class oxBase extends oxSuperCfg
      * @var string
      */
     protected $_sCoreTable = null;
+
+    /**
+     * Object core table name, used in core classes
+     *
+     * @deprecated since v4.6.0 (2012-02-21); Use $_sCoreTable.
+     *
+     * @var string
+     */
+    protected $_sCoreTbl = null;
 
     /**
      * Current view name where object record is supposed to be SELECTED from.
@@ -271,10 +280,10 @@ class oxBase extends oxSuperCfg
                 try {
                     if ( $this->_aInnerLazyCache === null ) {
 
-                        $oDb = oxDb::getDb( true );
+                        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
                         $sQ = "SELECT * FROM " . $sViewName . " WHERE `oxid` = " . $oDb->quote( $sId );
                         $rs = $oDb->execute( $sQ );
-                        if (  $rs && $rs->RecordCount() ) {
+                        if ( $rs && $rs->RecordCount() ) {
                             $this->_aInnerLazyCache = array_change_key_case( $rs->fields, CASE_UPPER );
                             if ( array_key_exists( $sCacheFieldName, $rs->fields ) ) {
                                 $sFieldValue = $rs->fields[$sCacheFieldName];
@@ -385,6 +394,9 @@ class oxBase extends oxSuperCfg
         } else {
             $this->_sCoreTable = $sTableName;
         }
+
+        // compatibility due to parameter deprecation
+        $this->_sCoreTbl = $sTableName;
 
         // reset view table
         $this->_sViewTable = false;
@@ -636,7 +648,7 @@ class oxBase extends oxSuperCfg
      */
     public function buildSelectString( $aWhere = null)
     {
-        $oDB = oxDb::getDb(true);
+        $oDB = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
         $myUtils = oxUtils::getInstance();
 
         $sGet = $this->getSelectFields();
@@ -665,7 +677,7 @@ class oxBase extends oxSuperCfg
     {
         $blRet = false;
 
-        $oDB = oxDb::getDb(true);
+        $oDB = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
 
         $rs = $oDB->execute( $sSelect);
         if ($rs != false && $rs->recordCount() > 0) {
@@ -733,7 +745,7 @@ class oxBase extends oxSuperCfg
         }
 
 
-        $oDB = oxDb::getDb(true);
+        $oDB = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sDelete = "delete from $this->_sCoreTable where oxid = ".$oDB->quote( $sOXID );
         $rs = $oDB->execute( $sDelete );
         if ( $blDelete = ( bool ) $oDB->affected_Rows() ) {
@@ -829,7 +841,7 @@ class oxBase extends oxSuperCfg
         }
 
         $sViewName = $this->getCoreTableName();
-        $oDB = oxDb::getDb( true );
+        $oDB = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sSelect= "select {$this->_sExistKey} from {$sViewName} where {$this->_sExistKey} = ".$oDB->quote( $sOXID );
 
         return ( bool ) $oDB->getOne( $sSelect );
@@ -1367,7 +1379,7 @@ class oxBase extends oxSuperCfg
 
         $sIDKey = oxUtils::getInstance()->getArrFldName( $this->_sCoreTable.".oxid");
         $this->$sIDKey = new oxField($this->getId(), oxField::T_RAW);
-        $oDb = oxDB::getDb();
+        $oDb = oxDb::getDb();
 
         $sUpdate= "update {$this->_sCoreTable} set ".$this->_getUpdateFields()
                  ." where {$this->_sCoreTable}.oxid = ".$oDb->quote( $this->getId() );
@@ -1391,7 +1403,7 @@ class oxBase extends oxSuperCfg
     protected function _insert()
     {
 
-        $oDB      = oxDb::getDb(true);
+        $oDB      = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $myConfig = $this->getConfig();
         $myUtils  = oxUtils::getInstance();
 
@@ -1406,8 +1418,11 @@ class oxBase extends oxSuperCfg
 
         //setting oxshopid
         $sShopField = $myUtils->getArrFldName($this->_sCoreTable.".oxshopid");
-        if (isset($this->$sShopField) && !$this->$sShopField->value)
+
+        if (isset($this->$sShopField) && !$this->$sShopField->value) {
             $this->$sShopField = new oxField($myConfig->getShopId(), oxField::T_RAW);
+        }
+
 
         $sInsert .= $this->_getUpdateFields( false );
         $blRet = (bool) $oDB->execute( $sInsert);
@@ -1438,6 +1453,8 @@ class oxBase extends oxSuperCfg
      * @param string $aWhere     where condition array
      * @param int    $iMaxTryCnt max number of tryouts
      *
+     * @deprecated - set from 2011.10.07 in version 4.6; in oxOrder class use _setNumber
+     *
      * @return bool
      */
     protected function _setRecordNumber( $sMaxField, $aWhere = null, $iMaxTryCnt = 5 )
@@ -1447,7 +1464,7 @@ class oxBase extends oxSuperCfg
         if ( is_array( $aWhere ) && count( $aWhere ) > 0) {
             $sWhere = implode(" and ", $aWhere).' and ';
         }
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
 
         // SQL to set record number
         $sUpdate = "update {$this->getViewName()} as t1, (select (max($sMaxField)+1) as t2max from {$this->getViewName()} where $sWhere 1) as t2 set t1.$sMaxField=t2.t2max where t1.oxid = ".$oDb->quote( $this->getId() );
@@ -1532,6 +1549,21 @@ class oxBase extends oxSuperCfg
     {
         return array_keys( $this->_aFieldNames );
     }
+
+    /**
+     * Adds additional field name to meta structure
+     *
+     * @param string $sName Field name
+     *
+     * @return null;
+     */
+    public function addFieldName( $sName )
+    {
+        //preparation
+        $sName = strtolower( $sName );
+        $this->_aFieldNames[$sName] = 0;
+    }
+
 
     /**
      * Returns -1, means object is not multilanguage

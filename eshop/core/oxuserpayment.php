@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserpayment.php 39380 2011-10-14 08:38:54Z arvydas.vapsva $
+ * @version   SVN: $Id: oxuserpayment.php 39576 2011-10-26 13:34:00Z linas.kukulskis $
  */
 
 /**

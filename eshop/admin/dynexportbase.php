@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbase.php 35975 2011-06-07 06:45:11Z vilma $
+ * @version   SVN: $Id: dynexportbase.php 40261 2011-11-24 13:52:22Z linas.kukulskis $
  */
 
 /**
@@ -556,7 +556,7 @@ class DynExportBase extends oxAdminDetails
 
         //if MySQL >= 4.1.0 set charsets and collations
         if ( version_compare( $sMysqlVersion, '4.1.0', '>=' ) > 0 ) {
-            $oDB = oxDb::getDb( true );
+            $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
             $oRs = $oDB->execute( "SHOW FULL COLUMNS FROM `oxarticles` WHERE field like 'OXID'" );
             if ( isset( $oRs->fields['Collation'] ) && ( $sMysqlCollation = $oRs->fields['Collation'] ) ) {
                 $oRs = $oDB->execute( "SHOW COLLATION LIKE '{$sMysqlCollation}'" );

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 42088 2012-02-08 14:24:08Z arvydas.vapsva $
+ * @version   SVN: $Id: oxutilsview.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
  */
 
 /**
@@ -91,7 +91,7 @@ class oxUtilsView extends oxSuperCfg
     public function getSmarty( $blReload = false )
     {
         if ( !self::$_oSmarty || $blReload ) {
-            self::$_oSmarty = new Smarty;
+            self::$_oSmarty = new Smarty();
             $this->_fillCommonSmartyProperties( self::$_oSmarty );
             $this->_smartyCompileCheck( self::$_oSmarty );
         }
@@ -343,6 +343,11 @@ class oxUtilsView extends oxSuperCfg
             $oSmarty->debugging = true;
         }
 
+        if ($iDebug == 8 && !$myConfig->isAdmin()) {
+            include_once getShopBasePath().'core/smarty/plugins/prefilter.oxtpldebug.php';
+            $oSmarty->register_prefilter('smarty_prefilter_oxtpldebug');
+        }
+
         //demoshop security
         if ( !$myConfig->isDemoShop() ) {
             $oSmarty->php_handling = (int) $myConfig->getConfigParam( 'iSmartyPhpHandling' );
@@ -359,8 +364,6 @@ class oxUtilsView extends oxSuperCfg
             $oSmarty->security_settings['ALLOW_CONSTANTS'] = true;
             $oSmarty->secure_dir = $oSmarty->template_dir;
         }
-
-
     }
 
     /**
@@ -440,10 +443,10 @@ class oxUtilsView extends oxSuperCfg
             $sFile = $m[1];
         }
 
-        $aRet = array();
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
         $sFileParam = $oDb->quote($sFile);
         $sShpIdParam = $oDb->quote($oConfig->getShopId());
+        $aRet = array();
 
         if ( $this->_blIsTplBlocks === null ) {
             $this->_blIsTplBlocks = false;

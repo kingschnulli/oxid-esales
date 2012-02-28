@@ -7,7 +7,7 @@
         [{if $oActiveSelection}]
             <span>[{$oActiveSelection->getName()}]</span>
         [{elseif !$blHideDefault}]
-            <span>[{ oxmultilang ident="WIDGET_PRODUCT_ATTRIBUTES_PLEASECHOOSE"}]</span>
+            <span [{if $blInDetails}]class="selectMessage"[{/if}]>[{ oxmultilang ident="WIDGET_PRODUCT_ATTRIBUTES_PLEASECHOOSE"}]</span>
         [{/if}]
     </p>
     [{if $editable !== false}]
@@ -18,7 +18,7 @@
             [{/if}]
             [{foreach from=$oSelectionList->getSelections() item=oSelection}]
                 <li class="[{if $oSelection->isDisabled()}]js-disabled disabled[{/if}]">
-                    <a rel="[{$oSelection->getValue()}]" href="[{$oSelection->getLink()}]" class="[{if $oSelection->isActive()}]selected[{/if}]">[{$oSelection->getName()}]</a>
+                    <a data-seletion-id="[{$oSelection->getValue()}]" href="[{$oSelection->getLink()}]" class="[{if $oSelection->isActive()}]selected[{/if}]">[{$oSelection->getName()}]</a>
                 </li>
             [{/foreach}]
         </ul>
