@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryset.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxdeliveryset.php 41196 2012-01-11 15:29:50Z linas.kukulskis $
  */
 
 /**
@@ -29,6 +29,13 @@
  */
 class oxDeliverySet extends oxI18n
 {
+    /**
+     * Core database table name. $sCoreTbl could be only original data table name and not view name.
+     *
+     * @var string
+     */
+    protected $_sCoreTbl = 'oxdeliveryset';
+
     /**
      * Current object class name
      *

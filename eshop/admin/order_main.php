@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: order_main.php 40302 2011-11-28 15:58:33Z vilma $
+ * @version   SVN: $Id: order_main.php 39907 2011-11-14 08:37:38Z arvydas.vapsva $
  */
 
 /**
@@ -139,28 +139,20 @@ class Order_Main extends oxAdminDetails
             $oOrder->save();
 
             // #1071C
-            $oOrderArticles = $oOrder->getOrderArticles( true );
+            $oOrderArticles = $oOrder->getOrderArticles();
+            foreach ( $oOrderArticles as $sOxId => $oArticle ) {
+                // remove canceled articles from list
+                if ( $oArticle->oxorderarticles__oxstorno->value == 1 ) {
+                    $oOrderArticles->offsetUnset( $sOxId );
+                }
+            }
+
             if ( oxConfig::getParameter( "sendmail" ) ) {
                 // send eMail
                 $oEmail = oxNew( "oxemail" );
                 $oEmail->sendSendedNowMail( $oOrder );
             }
 
-        }
-    }
-
-    /**
-     * Sends download links.
-     *
-     * @return null
-     */
-    public function senddownloadlinks()
-    {
-        $soxId = $this->getEditObjectId();
-        $oOrder = oxNew( "oxorder" );
-        if ( $oOrder->load( $soxId ) ) {
-            $oEmail = oxNew( "oxemail" );
-            $oEmail->sendDownloadLinksMail( $oOrder );
         }
     }
 

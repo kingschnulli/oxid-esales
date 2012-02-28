@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 40607 2011-12-14 13:24:39Z juergen.busch $
+ * @version   SVN: $Id: lang.php 37318 2011-07-25 13:59:28Z vilma $
  */
 
 
@@ -37,6 +37,7 @@ $sLangName  = "English";
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
 $aLang = array(
+'ACCOUNT_PASSWORD_ERRINCORRECTCURRENTPASSW'                   => "Error: Your current Password is incorrect.",
 'ACCOUNT_PASSWORD_PASSWORDMINLENGTH'                          => "The Password minimum length is 6 characters.",
 'ACCOUNT_RECOMM_TITLE'                                        => "My Listmania lists",
 'ACCOUNT_USER_COMPLETEMARKEDFIELDS'                           => '(Please complete all fields marked with a <span class="req">*</span>)',
@@ -164,7 +165,7 @@ $aLang = array(
 'ORDER_NONE'                                                  => "NONE",
 'ORDER_OTHERINTRESTINGARTICLES'                               => "Other products that may interest you:",
 'ORDER_PAYMENTCHARGETAX1'                                     => "Payment Charge VAT",
-'ORDER_RIGHTOFWITHDRAWAL'                                     => "Right of Withdrawal",
+'ORDER_RIGHTOFWITHDRAWAL'                                     => "Right to Cancel",
 'ORDER_RIGHTOFWITHDRAWAL_MOREINFO1'                           => "Click here for details about your ",
 'ORDER_RIGHTOFWITHDRAWAL_TEXT'                                => "Each consumer is allowed to revoke his/her contractual declaration in written form (e.g. letter, fax, e-mail) or by returning the delivered products within two weeks without any indication of reasons. The time limit commences no earlier than with receipt of the goods and this policy in detail and in text form. The timely sending of the revocation or the goods shall be sufficient to determine compliance with the time limit for revocation. The revocation shall be addressed to: ",
 'ORDER_SHIPPINGANDPAYMENT'                                    => "Shipping carrier and payment method",

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmmainTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: pricealarmmainTest.php 33421 2011-02-22 08:08:51Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -106,7 +106,7 @@ class Unit_Admin_PriceAlarmMainTest extends OxidTestCase
     public function testRender_countinPriceAlarmArticles()
     {
         $myConfig = oxConfig::getInstance();
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb( true );
 
 
         $sInsert = "insert into oxarticles (`OXID`,`OXSHOPID`,`OXTITLE`,`OXSTOCKFLAG`,`OXSTOCK`,`OXPRICE`)
@@ -233,7 +233,7 @@ class Unit_Admin_PriceAlarmMainTest extends OxidTestCase
      */
     public function testSend_parseThroughSmarty()
     {
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb( true );
         $myConfig = oxConfig::getInstance();
 
         $sInsert = "insert into oxarticles (`OXID`,`OXSHOPID`,`OXTITLE`,`OXSTOCKFLAG`,`OXSTOCK`,`OXPRICE`)

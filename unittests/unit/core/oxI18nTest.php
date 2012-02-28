@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxI18nTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxI18nTest.php 39362 2011-10-13 12:51:10Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -754,10 +754,9 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $oObj->setId("test_insert");
         $oObj->oxstates__oxtitle = new oxField('test_x');
 
-        $oDb = $this->getMock('stdclass', array('execute', 'quote', 'getOne'));
+        $oDb = $this->getMock('stdclass', array('execute', 'quote'));
         $oDb->expects($this->any())->method('execute')->will($this->evalFunction('{Unit_Core_oxi18ntest::$aLoggedSqls[] = $args[0];return true;}'));
         $oDb->expects($this->any())->method('quote')->will($this->evalFunction('{return "\'".mysql_real_escape_string($args[0])."\'";}'));
-        $oDb->expects($this->any())->method('getOne');
         modDb::getInstance()->modAttach($oDb);
 
         $oObj->setLanguage(0);
@@ -883,7 +882,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
      */
     protected function _insertTestLanguage()
     {
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(true);
 
         $this->_aLangTables["oxactions"]  = "oxactions";
         $this->_aLangTables["oxcategory"] = "oxcategories";
@@ -972,7 +971,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
     protected function _deleteTestLanguage()
     {
         // dropping language set tables
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(true);
         foreach ( $this->_aLangTables as $sTable ) {
             $oDb->execute( "drop table {$sTable}_set1" );
             $oDb->execute( "delete from {$sTable} where oxid like '_test%'" );
@@ -987,7 +986,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
     public function testMultilangObjectDeletion()
     {
         $sId = "_testRecordForTest";
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(true);
 
         modConfig::getInstance()->setConfigParam( "iLangPerTable", 4 );
         oxTestModules::addFunction( "oxLang", "getLanguageIds", "{return array('0' => 'de', '1' => 'de', '2' => 'lt', '3' => 'ru', '4' => 'pl', '5' => 'cz');}");

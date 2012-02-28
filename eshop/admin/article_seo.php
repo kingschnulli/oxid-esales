@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_seo.php 40261 2011-11-24 13:52:22Z linas.kukulskis $
+ * @version   SVN: $Id: article_seo.php 38325 2011-08-22 12:30:00Z arvydas.vapsva $
  */
 
 /**
@@ -166,7 +166,7 @@ class Article_Seo extends Object_Seo
 
         // adding categories
         $sO2CView = getViewName( 'oxobject2category');
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb( true );
         $sQ = "select oxobject2category.oxcatnid as oxid from $sO2CView as oxobject2category where oxobject2category.oxobjectid="
               . $oDb->quote( $oArticle->getId() ) . " union ".$oArticle->getSqlForPriceCategories('oxid');
 

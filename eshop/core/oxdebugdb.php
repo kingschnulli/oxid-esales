@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdebugdb.php 40309 2011-11-29 08:30:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxdebugdb.php 26908 2010-03-26 17:20:25Z tomas $
  */
 
 /**
@@ -181,7 +181,7 @@ class oxDebugDb
             return false;
         }
 
-        $rs = oxDb::getDb( oxDb::FETCH_MODE_ASSOC )->execute( "explain $sSql" );
+        $rs = oxDb::getDb(true)->execute( "explain $sSql" );
         if ( $rs != false && $rs->recordCount() > 0 ) {
             while (!$rs->EOF) {
                 if ( $this->_missingKeysChecker( $rs->fields ) ) {

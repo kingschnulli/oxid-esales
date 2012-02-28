@@ -4,6 +4,10 @@
 [{assign var="homeSelected" value="false"}]
 [{if $oView->getClassName() == 'start'}]
     [{assign var="homeSelected" value="true"}]
+    [{assign var="expandedCategory" value=$oView->getActCategory()}]
+    [{if $expandedCategory && $expandedCategory->getExpanded()}]
+        [{assign var="homeSelected" value="false"}]
+    [{/if}] 
 [{/if}]
 <ul id="navigation" class="sf-menu">
     <li [{if $homeSelected == 'true' }]class="current"[{/if}]><a [{if $homeSelected == 'true'}]class="current"[{/if}] href="[{$oViewConf->getHomeLink()}]">[{oxmultilang ident="TOP_CATEGORIES_HOME"}]</a></li>
@@ -42,8 +46,8 @@
                  [{assign var="iCatCnt" value=$iCatCnt+1}]
         [{/if}]
         [{if $iCatCnt <= $oView->getTopNavigationCatCnt()}]
-            <li [{if $homeSelected == 'false' && $ocat->expanded}]class="current"[{/if}]>
-                <a  [{if $homeSelected == 'false' && $ocat->expanded}]class="current"[{/if}] href="[{$ocat->getLink()}]">[{$ocat->oxcategories__oxtitle->value}][{ if $oView->showCategoryArticlesCount() && ($ocat->getNrOfArticles() > 0) }] ([{$ocat->getNrOfArticles()}])[{/if}]</a>
+            <li [{if $ocat->expanded}]class="current"[{/if}]>
+                <a  [{if $ocat->expanded}]class="current"[{/if}] href="[{$ocat->getLink()}]">[{$ocat->oxcategories__oxtitle->value}][{ if $oView->showCategoryArticlesCount() && ($ocat->getNrOfArticles() > 0) }] ([{$ocat->getNrOfArticles()}])[{/if}]</a>
                 [{if $ocat->getSubCats()}]
                     <ul>
                     [{foreach from=$ocat->getSubCats() item=osubcat key=subcatkey name=SubCat}]
@@ -52,7 +56,7 @@
                                 <li><a href="[{$ocont->getLink()}]">[{$ocont->oxcontents__oxtitle->value}]</a></li>
                             [{/foreach}]
                             [{if $osubcat->getIsVisible() }]
-                                <li [{if $homeSelected == 'false' && $osubcat->expanded}]class="current"[{/if}] ><a [{if $homeSelected == 'false' && $osubcat->expanded}]class="current"[{/if}] href="[{$osubcat->getLink()}]">[{$osubcat->oxcategories__oxtitle->value}] [{ if $oView->showCategoryArticlesCount() && ($osubcat->getNrOfArticles() > 0)}] ([{$osubcat->getNrOfArticles()}])[{/if}]</a></li>
+                                <li [{if $osubcat->expanded}]class="current"[{/if}] ><a [{if $osubcat->expanded}]class="current"[{/if}] href="[{$osubcat->getLink()}]">[{$osubcat->oxcategories__oxtitle->value}] [{ if $oView->showCategoryArticlesCount() && ($osubcat->getNrOfArticles() > 0)}] ([{$osubcat->getNrOfArticles()}])[{/if}]</a></li>
                             [{/if}]
                         [{/if}]
                     [{/foreach}]
@@ -61,7 +65,7 @@
             </li>
         [{else}]
             [{capture append="moreLinks"}]
-               <li [{if $homeSelected == 'false' && $ocat->expanded}]class="current"[{/if}]>
+               <li [{if $ocat->expanded}]class="current"[{/if}]>
                     <a href="[{$ocat->getLink()}]">[{$ocat->oxcategories__oxtitle->value}][{ if $oView->showCategoryArticlesCount() && ($ocat->getNrOfArticles() > 0)}] ([{$ocat->getNrOfArticles()}])[{/if}]</a>
                </li>
             [{/capture}]

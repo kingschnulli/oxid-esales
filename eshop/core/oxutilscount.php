@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscount.php 41923 2012-01-31 14:21:43Z tomas $
+ * @version   SVN: $Id: oxutilscount.php 39208 2011-10-12 13:31:26Z arvydas.vapsva $
  */
 
 /**
@@ -268,20 +268,11 @@ class oxUtilsCount extends oxSuperCfg
         $sManTable = getViewName('oxmanufacturers');
 
         // select each Manufacturer articles count
-        //#3485
-        //$sQ = "select oxmanufacturers.oxid, count($sArtTable.oxid) from $sManTable as oxmanufacturers left outer join $sArtTable on $sArtTable.oxmanufacturerid=oxmanufacturers.oxid and $sArtTable.oxparentid = '' and ".$oArticle->getSqlActiveSnippet()." group by oxmanufacturers.oxid";
-        $sQ = "select oxmanufacturerid, count($sArtTable.oxid) from $sArtTable where $sArtTable.oxparentid = '' and oxmanufacturerid <> '' and ".$oArticle->getSqlActiveSnippet()." group by oxmanufacturerid ";
-
+        $sQ = "select oxmanufacturers.oxid, count($sArtTable.oxid) from $sManTable as oxmanufacturers left outer join $sArtTable on $sArtTable.oxmanufacturerid=oxmanufacturers.oxid and $sArtTable.oxparentid = '' and ".$oArticle->getSqlActiveSnippet()." group by oxmanufacturers.oxid";
         $aDbResult = oxDb::getDb()->getAssoc( $sQ );
 
         foreach ( $aDbResult as $sKey => $sValue ) {
             $aCache[$sKey][$sActIdent] = (int) $sValue;
-        }
-
-        //#3485
-        //don't forget the zero hits
-        if ( !isset($aCache[$sCatId][$sActIdent]) ) {
-          $aCache[$sCatId][$sActIdent] = 0;
         }
 
         $this->_setManufacturerCache( $aCache );

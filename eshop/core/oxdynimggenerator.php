@@ -447,7 +447,7 @@ class oxDynImgGenerator
         if ( $iWidth && $iHeight && $sQuality ) {
 
             $oConfig = getConfig();
-            $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+            $oDb = oxDb::getDb(true);
 
             // parameter names
             $sNames = '';

@@ -16,7 +16,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   out
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: oxajax.js 35529 2011-05-23 07:31:20Z vilma $
  */
@@ -201,38 +201,26 @@
         },
 
         /**
-         * If it's possible report JS error
-         *
-         * @param e JS exception
-         */
-        reportJSError: function(e) {
-            if (typeof console != 'undefined' && typeof console.error != 'undefined') {
-                console.error(e);
-            }
-        },
-
-        /**
          * Evals returned html and executes javascript after reload
          *
          * @container - witch javascript must be restarted
          */
         evalScripts : function(container){
-            var self = this;
             try {
                 $("script", container).each(function(){
                     try {
                         eval(this.innerHTML);
                     } catch (e) {
-                       self.reportJSError(e);
+                       //  console.error(e);
                     }
                     $(this).remove();
                 });
             } catch (e) {
-               self.reportJSError(e);
+               //  console.error(e);
             }
         }
     };
 
     $.widget("ui.oxAjax", oxAjax );
 
-})( jQuery );
+})( jQuery )

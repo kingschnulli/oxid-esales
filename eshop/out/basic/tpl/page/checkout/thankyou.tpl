@@ -139,7 +139,7 @@
 
       <strong class="head2">[{ oxmultilang ident="THANKYOU_ALSOBOUGHT"}]</strong>
       [{foreach from=$oView->getAlsoBoughtTheseProducts() item=actionproduct}]
-          [{include file="inc/product.tpl" product=$actionproduct size="small" testid="AlsoBought_"|cat:$actionproduct->oxarticles__oxid->value blDisableToCart=true}]
+          [{include file="inc/product.tpl" product=$actionproduct size="small" testid="AlsoBought_"|cat:$actionproduct->oxarticles__oxid->value }]
       [{/foreach}]
 
     [{/if}]

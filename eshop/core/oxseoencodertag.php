@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: oxseoencodercontent.php 17768 2009-04-02 10:52:12Z sarunas $
  */
@@ -99,7 +99,7 @@ class oxSeoEncoderTag extends oxSeoEncoder
 
         $sStdUrl   = $this->_trimUrl( $sStdUrl );
         $sObjectId = $this->getDynamicObjectId( $iShopId, $sStdUrl );
-        $sSeoUrl   = $this->_prepareUri( $this->addLanguageParam( $sSeoUrl, $iLang ), $iLang );
+        $sSeoUrl   = $this->_prepareUri( $this->addLanguageParam( $sSeoUrl, $iLang ) );
 
         //load details link from DB
         $sOldSeoUrl = $this->_loadFromDb( 'dynamic', $sObjectId, $iLang );
@@ -122,7 +122,7 @@ class oxSeoEncoderTag extends oxSeoEncoder
                 $sQ .= " and oxid = " . oxDb::getDb()->quote( $sOxid );
             }
 
-            if ( oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT )->getOne( $sQ ) ) {
+            if ( oxDb::getDb()->getOne( $sQ ) ) {
                 // creating unique
                 $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $sObjectId, $iLang );
 

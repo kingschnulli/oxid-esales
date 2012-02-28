@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvendor.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxvendor.php 38134 2011-08-11 13:22:49Z arvydas.vapsva $
  */
 
 /**
@@ -29,6 +29,10 @@ class oxVendor extends oxI18n implements oxIUrl
 {
 
     protected static $_aRootVendor = array();
+    /**
+     * @var string name of object core table
+     */
+    protected $_sCoreTbl   = 'oxvendor';
 
     /**
      * @var string Name of current class

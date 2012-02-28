@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlemainTest.php 41284 2012-01-12 16:23:46Z mindaugas.rimgaila $
+ * @version   SVN: $Id: articlemainTest.php 33740 2011-03-10 16:17:03Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -145,27 +145,6 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
         $oView->UNITcopySelectlists( "_testArtId", "_testArtId2" );
 
         $this->assertEquals( 2, $oDb->getOne( "select count(*) from oxobject2selectlist where oxobjectid = '_testArtId2'" ) );
-    }
-
-    /**
-     * Copying files
-     *
-     * @return null
-     */
-    public function testCopyFiles()
-    {
-        $oDb     = oxDb::getDb();
-        $oUtils  = oxUtilsObject::getInstance();
-        $iShopId = oxConfig::getInstance()->getShopId();
-
-        // creating few files records
-        $oDb->execute( "INSERT INTO `oxfiles` (`OXID`, `OXARTID`, `OXFILENAME`) VALUES ('".$oUtils->generateUId()."', '_testArtId', '_testObjId');" );
-        $oDb->execute( "INSERT INTO `oxfiles` (`OXID`, `OXARTID`, `OXFILENAME`) VALUES ('".$oUtils->generateUId()."', '_testArtId', '_testObjId');" );
-
-        $oView = new Article_Main();
-        $oView->UNITcopyFiles( "_testArtId", "_testArtId2" );
-
-        $this->assertEquals( 2, $oDb->getOne( "SELECT COUNT(*) FROM `oxfiles` WHERE `oxartid` = '_testArtId2'" ) );
     }
 
     /**
@@ -479,7 +458,7 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
 
         modConfig::setParameter( "oxid", -1 );
         modConfig::setParameter( "oxparentid", "-1" );
-        modConfig::setParameter( "editval", array( 'tags' => 'test tags', "oxarticles__oxparentid" => "-1", "oxarticles__oxartnum" => "123", "oxarticles__oxprice" => "123", "oxarticles__oxactive" => 1 ) );
+        modConfig::setParameter( "editval", array( "oxarticles__oxparentid" => "-1", "oxarticles__oxartnum" => "123", "oxarticles__oxprice" => "123", "oxarticles__oxactive" => 1 ) );
 
         $oArtView = new article_main();
 
@@ -505,7 +484,7 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
 
         modConfig::setParameter( "oxid", -1 );
         modConfig::setParameter( "oxparentid", "132" );
-        modConfig::setParameter( "editval", array( 'tags' => 'test tags', "oxarticles__oxparentid" => "-1", "oxarticles__oxartnum" => "123", "oxarticles__oxprice" => "123", "oxarticles__oxactive" => 1 ) );
+        modConfig::setParameter( "editval", array( "oxarticles__oxparentid" => "-1", "oxarticles__oxartnum" => "123", "oxarticles__oxprice" => "123", "oxarticles__oxactive" => 1 ) );
 
         $oArtView = new article_main();
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletterTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: newsletterTest.php 32923 2011-02-04 14:35:22Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -274,7 +274,7 @@ class Unit_Views_newsletterTest extends OxidTestCase
         oxTestModules::addFunction( "oxemail", "send", "{return true;}" );
         oxTestModules::addFunction( "oxemail", "sendNewsletterDbOptInMail", "{return true;}" );
 
-        $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDB = oxDb::getDb( true );
         $sSql = "select oxusername from oxuser where oxusername='test@test.de'";
         $sUserName = $oDB->getOne( $sSql );
         $this->assertFalse( $sUserName );

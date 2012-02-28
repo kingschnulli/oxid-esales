@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbaseTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: dynexportbaseTest.php 29921 2010-09-21 12:18:02Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -582,7 +582,7 @@ class Unit_Admin_DynExportBaseTest extends OxidTestCase
         $oView = new DynExportBase();
         $aCats = $oView->UNITloadRootCats();
 
-        $aCatIds = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( "select oxid from oxcategories" );
+        $aCatIds = oxDb::getDb(true)->getAll( "select oxid from oxcategories" );
         foreach ( $aCatIds as $aCatInfo ) {
             if ( !isset($aCats[$aCatInfo["oxid"]])) {
                 $this->fail( "missing category" );

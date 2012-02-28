@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.inc.php 40980 2012-01-05 11:22:13Z linas.kukulskis $
+ * @version   SVN: $Id: category_main.inc.php 40915 2012-01-02 12:15:02Z vilma $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -163,7 +163,6 @@ class ajaxComponent extends ajaxListComponent
                 $oNew->oxobject2category__oxobjectid = new oxField( $sAdd );
                 $oNew->oxobject2category__oxcatnid   = new oxField( $sCategoryID );
                 $oNew->oxobject2category__oxtime     = new oxField( time() );
-                
                 $oNew->save();
 
                 if ( $sProdIds ) {

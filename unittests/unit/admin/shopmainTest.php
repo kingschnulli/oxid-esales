@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shopmainTest.php 38998 2011-10-03 14:55:28Z vilma $
+ * @version   SVN: $Id: shopmainTest.php 25334 2010-01-22 07:14:37Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -65,4 +65,26 @@ class Unit_Admin_ShopMainTest extends OxidTestCase
         $this->fail( "error in Shop_Main::save()" );
     }
 
+    /**
+     * Shop_Main::GetShopIds() test case
+     *
+     * @return null
+     */
+    public function testGetShopIds()
+    {
+        $aShopIds = array();
+        $sRs = oxDb::getDb()->execute( "select oxid, oxname from oxshops" );
+        if ($sRs != false && $sRs->recordCount() > 0) {
+            while ( !$sRs->EOF ) {
+                $aShopIds[$sRs->fields[0]] = new oxStdClass();
+                $aShopIds[$sRs->fields[0]]->oxid   = $sRs->fields[0];
+                $aShopIds[$sRs->fields[0]]->oxname = $sRs->fields[1];
+                $sRs->moveNext();
+            }
+        }
+
+        // testing..
+        $oView = new Shop_Main();
+        $this->assertEquals( $aShopIds, $oView->UNITgetShopIds() );
+    }
 }

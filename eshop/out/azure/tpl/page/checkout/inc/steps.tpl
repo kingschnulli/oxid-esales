@@ -42,7 +42,6 @@
                     [{if $showStepLinks}]</a>[{/if}]
                 </span>
             </li>
-            [{oxscript add="$('#paymentStep').click( function() { $('#userNextStepBottom').click();return false;});"}]
         [{/block}]
 
         [{assign var=showStepLinks value=false}]
@@ -58,7 +57,6 @@
                     [{if $showStepLinks}]</a>[{/if}]
                 </span>
             </li>
-            [{oxscript add="$('#orderStep').click( function() { $('#paymentNextStepBottom').click();return false;});"}]
         [{/block}]
 
         [{block name="checkout_steps_laststep"}]

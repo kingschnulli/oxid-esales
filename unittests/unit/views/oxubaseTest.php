@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 42112 2012-02-09 14:55:11Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxubaseTest.php 41881 2012-01-30 12:34:50Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1011,7 +1011,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     public function testGetContentId()
     {
         $oView = $this->getProxyClass( 'oxubase' );
-        $sContentId = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
+        $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
         $this->assertEquals( $sContentId, $oView->getContentId() );
     }
 
@@ -2161,28 +2161,17 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      *
      * @return null
      */
-    public function testisFbWidgetVisible()
+    public function testisFbWidgetWisible()
     {
         // cookie OFF
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 0;}");
         $oView = new oxUbase();
-        $this->assertFalse( $oView->isFbWidgetVisible() );
+        $this->assertFalse( $oView->isFbWidgetWisible() );
 
         // cookie ON
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 1;}");
         $oView = new oxUbase();
-        $this->assertTrue( $oView->isFbWidgetVisible() );
-    }
-
-     /**
-     * oxUbase::isEnabledDownloadabaleFiles() test case
-     *
-     * @return null
-     */
-    public function testIsEnabledDownloadableFiles()
-    {
-        $oView = new oxUbase();
-        $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "blEnableDownloads" ), $oView->isEnabledDownloadableFiles() );
+        $this->assertTrue( $oView->isFbWidgetWisible() );
     }
 
     /**

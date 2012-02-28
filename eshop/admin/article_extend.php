@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.php 41700 2012-01-24 09:21:42Z linas.kukulskis $
+ * @version   SVN: $Id: article_extend.php 41407 2012-01-16 14:35:55Z mindaugas.rimgaila $
  */
 
 /**
@@ -32,12 +32,6 @@
  */
 class Article_Extend extends oxAdminDetails
 {
-    /**
-     * Unit array
-     * @var array
-     */
-    protected $_aUnitsArray = null;
-
     /**
      * Collects available article axtended parameters, passes them to
      * Smarty engine and returns tamplate file name "article_extend.tpl".
@@ -208,9 +202,6 @@ class Article_Extend extends oxAdminDetails
             $oMediaUrl->oxmediaurls__oxdesc     = new oxField($sMediaDesc, oxField::T_RAW);
             $oMediaUrl->save();
         }
-
-        // renew price update time
-        oxNew( "oxArticleList" )->renewPriceUpdateTime();
     }
 
     /**
@@ -263,18 +254,5 @@ class Article_Extend extends oxAdminDetails
                 }
             }
         }
-    }
-
-    /**
-     * Returns array of possible unit combination and its translation for edit language
-     *
-     * @return array
-     */
-    public function getUnitsArray()
-    {
-        if ( $this->_aUnitsArray === null ) {
-           $this->_aUnitsArray = oxLang::getInstance()->getSimilarByKey( "_UNIT_", $this->_iEditLang, false );
-        }
-        return $this->_aUnitsArray;
     }
 }

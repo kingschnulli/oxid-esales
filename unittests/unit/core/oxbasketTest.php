@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 41773 2012-01-26 09:31:43Z vilma $
+ * @version   SVN: $Id: oxbasketTest.php 37280 2011-07-22 13:46:21Z arunas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2186,7 +2186,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         // forcing some config params for deeper execution
         modConfig::getInstance()->setConfigParam( 'blCalcVatForWrapping', true );
-        modConfig::getInstance()->setConfigParam( 'blWrappingVatOnTop', true );
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', true );
 
         // deleting discounts
         foreach ( $this->aDiscounts as $oDiscount ) {
@@ -2237,35 +2237,6 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $this->assertEquals( 7.5, $oPayCost->getBruttoPrice() );
         $this->assertEquals( 7.5, $oPayCost->getNettoPrice() );
         $this->assertEquals( 0, $oPayCost->getVat() );
-    }
-
-    /**
-     * Testing payment costs calculation
-     *
-     * @return null
-     */
-    public function testCalcPaymentCostInNetto()
-    {
-        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
-        modConfig::getInstance()->setConfigParam( 'blPaymentVatOnTop', true );
-
-        // deleting discounts
-        foreach ( $this->aDiscounts as $oDiscount ) {
-            $oDiscount->delete();
-        }
-
-        // choosing first payment which is active and has costs
-        $oBasket = new oxbasket();
-        $oBasket->addToBasket( $this->oArticle->getId(), 2 );
-        $oBasket->addToBasket( $this->oVariant->getId(), 3 );
-        $oBasket->calculateBasket( false );
-        $oBasket->setPayment( 'oxidcashondel' );
-
-        $oPayCost = $oBasket->UNITcalcPaymentCost( false, false );
-
-        $this->assertEquals( 8.93, $oPayCost->getBruttoPrice() );
-        $this->assertEquals( 7.5, $oPayCost->getNettoPrice() );
-        $this->assertEquals( 19, $oPayCost->getVat() );
     }
 
     /**
@@ -2582,7 +2553,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testRemoveVoucher()
     {
-        $myDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $myDb = oxDb::getDb( true );
 
         $sVoucherNr = key( $this->aVouchers );
         $sVoucherId = $this->aVouchers[$sVoucherNr]->getId();
@@ -4649,22 +4620,5 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $this->assertTrue( $oBasket->isNewItemAdded() );
         $this->assertNull( oxSession::getVar( "blAddedNewItem" ) );
 
-    }
-
-    /**
-     * Testing oxbasket::hasDownloadableProducts getter
-     *
-     * @return null
-     */
-    public function testHasDownloadableProducts()
-    {
-        $oArticle = new oxArticle();
-        $oArticle->load('_testArt');
-        $oArticle->oxarticles__oxisdownloadable = new oxField( true );
-        $oOrderArticle = $this->getMock( 'oxorderarticle', array( 'getArticle' ) );
-        $oOrderArticle->expects( $this->any() )->method( 'getArticle' )->will( $this->returnValue( $oArticle ) );
-        $oBasket = $this->getProxyClass( "oxbasket" );
-        $oBasket->setNonPublicVar( "_aBasketContents", array($oOrderArticle) );
-        $this->assertTrue( $oBasket->hasDownloadableProducts() );
     }
 }
