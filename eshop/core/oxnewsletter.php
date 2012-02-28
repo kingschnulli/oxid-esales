@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsletter.php 40592 2011-12-14 09:30:59Z arvydas.vapsva $
+ * @version   SVN: $Id: oxnewsletter.php 40669 2011-12-19 08:20:25Z linas.kukulskis $
  */
 
 /**

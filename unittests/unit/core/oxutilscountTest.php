@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscountTest.php 37889 2011-08-02 07:09:35Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilscountTest.php 41924 2012-01-31 14:22:59Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -610,22 +610,26 @@ class Unit_Core_oxUtilsCountTest extends OxidTestCase
         $myUtilsTest = $this->getMock('oxutilscount', array('_setManufacturerCache'));
             $myUtilsTest->expects($this->once())->method('_setManufacturerCache')->with($this->equalTo(
                     array(
-                          '6b6e5b1ae04ed72db0e72e74612c4b77' =>
-                          array (
-                            '973fb5f4ea0bcdf38b56557db40cb509' => 3,
-                          ),
-                          '9434afb379a46d6c141de9c9e5b94fcf' =>
-                          array (
-                            '973fb5f4ea0bcdf38b56557db40cb509' => 7,
-                          ),
-                          'ee4948794e28d488cf1c8101e716a3f4' =>
-                          array (
+                          '2536d76675ebe5cb777411914a2fc8fb' =>
+                           array (
                             '973fb5f4ea0bcdf38b56557db40cb509' => 1,
-                          ),
-                          'fe07958b49de225bd1dbc7594fb9a6b0' =>
-                          array (
+                           ),
+                          '6b6e5b1ae04ed72db0e72e74612c4b77' =>
+                           array (
+                            '973fb5f4ea0bcdf38b56557db40cb509' => 3,
+                           ),
+                           '9434afb379a46d6c141de9c9e5b94fcf' =>
+                           array (
+                            '973fb5f4ea0bcdf38b56557db40cb509' => 7,
+                           ),
+                           'ee4948794e28d488cf1c8101e716a3f4' =>
+                           array (
+                            '973fb5f4ea0bcdf38b56557db40cb509' => 1,
+                           ),
+                           'fe07958b49de225bd1dbc7594fb9a6b0' =>
+                           array (
                             '973fb5f4ea0bcdf38b56557db40cb509' => 5,
-                          ),
+                           ),
                           '_testManufacturerId' =>
                           array (
                             '973fb5f4ea0bcdf38b56557db40cb509' => 0,

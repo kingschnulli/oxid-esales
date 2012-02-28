@@ -5,7 +5,12 @@
         <div class="bar copy">
             <div class="left" id="delivery_link">
                 [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-                <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_INCLTAXANDPLUSSHIPPING" }]</a>
+                    [{if $oView->getUser()}]
+                        [{assign var="oUser" value=$oView->getUser() }]
+                        [{ if $oUser->oxuser__oxustid->value && $oUser->oxuser__oxcompany->value }] <a href="[{ $oCont->getLink() }]" rel="nofollow"> [{ oxmultilang ident="PLUS_SHIPPING3" }]</a> [{else}] <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_INCLTAXANDPLUSSHIPPING" }]</a> [{/if}]
+                    [{else}]
+                        <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_INCLTAXANDPLUSSHIPPING" }]</a>
+                    [{/if}]
                 [{/oxifcontent}]
             </div>
             <div class="right">
@@ -34,6 +39,9 @@
             [{if $oViewConf->getShowWishlist()}]
               | <a id="test_link_footer_wishlist" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_wishlist" }]" rel="nofollow"> [{ oxmultilang ident="INC_FOOTER_MYWISHLIST" }]</a>
               | <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wishlist" params="wishid="|cat:$oView->getWishlistUserId() }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_PUBLICWISHLIST" }]</a>
+            [{/if}]
+            [{if $oView->isEnabledDownloadableFiles()}]
+              | <a id="test_link_footer_downloads" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_downloads" }]" rel="nofollow"> [{ oxmultilang ident="MY_DOWNLOADS" }]</a>
             [{/if}]
         </div>
         <div class="bar icons">

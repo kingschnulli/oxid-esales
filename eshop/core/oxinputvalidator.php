@@ -20,7 +20,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxinputvalidator.php 36403 2011-06-16 13:48:20Z arunas.paskevicius $
+ * @version   SVN: $Id: oxinputvalidator.php 36422 2011-06-17 07:05:13Z linas.kukulskis $
  */
 
 /**

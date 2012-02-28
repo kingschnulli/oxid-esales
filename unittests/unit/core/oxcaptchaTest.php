@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptchaTest.php 36148 2011-06-10 11:20:53Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcaptchaTest.php 36271 2011-06-13 13:30:37Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: ordermainTest.php 33189 2011-02-10 15:55:32Z arvydas.vapsva $
+ * @version   SVN: $Id: ordermainTest.php 40302 2011-11-28 15:58:33Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -115,6 +115,30 @@ class Unit_Admin_OrderMainTest extends OxidTestCase
             return;
         }
         $this->fail( "error in Order_Main::sendorder()" );
+    }
+
+    /**
+     * Order_Main::senddownloadlinks() test case
+     *
+     * @return null
+     */
+    public function testSenddownloadlinks()
+    {
+        //
+        oxTestModules::addFunction( 'oxorder', 'load', '{ return true; }');
+        oxTestModules::addFunction( 'oxemail', 'sendDownloadLinksMail', '{ throw new Exception( "sendDownloadLinksMail" ); }');
+
+        modConfig::setParameter( "oxid", "testId" );
+
+        // testing..
+        try {
+            $oView = new Order_Main();
+            $oView->senddownloadlinks();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( "sendDownloadLinksMail", $oExcp->getMessage(), "error in Order_Main::senddownloadlinks()" );
+            return;
+        }
+        $this->fail( "error in Order_Main::senddownloadlinks()" );
     }
 
     /**

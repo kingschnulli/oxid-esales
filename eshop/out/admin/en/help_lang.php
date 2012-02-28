@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 40995 2012-01-05 12:36:29Z linas.kukulskis $
+ * @version   SVN: $Id: help_lang.php 42400 2012-02-22 13:09:19Z juergen.busch $
  */
 
 /**
@@ -177,21 +177,19 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKAPPID'  => 'To connect your website to facebook you need to enter Application ID. ' .
                                                  'How to connect your website to Facebook, you can read in ' .
-                                                 '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank" target="_blank">tutorial</a>.',
+                                                 '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank">tutorial</a>.',
 
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONFIRM'=> 'To protect customer privacy, the display of the Facebook social plugins must be explicitly confirmed. Only after confirmation data is shared with Facebook.',
 
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FBSECRETKEY'    => 'To ensure secure connection between your site and facebook, you must ' .
                                                  'enter Secure Key which you get when registering your website to ' .
-                                                 'Facebook. Read in <a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank" target="_blank">tutorial</a> ' .
+                                                 'Facebook. Read in <a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank">tutorial</a> ' .
                                                  'how to connect your website to Facebook.',
 
 'HELP_SHOP_CONFIG_FBCOMMENTS'                 => "Comments box easily enables shop visitors to comment on your shop's content.",
 
 'HELP_SHOP_CONFIG_FBFACEPILE'                 => "Facepile shows profile pictures of shops's visitor's friends who " .
                                                  "have already signed up in Facebook for your site.",
-
-'HELP_SHOP_CONFIG_FBLIVESTREAM'               => 'Live stream lets users visiting your shop share activity and comments in real time.',
 
 'HELP_SHOP_CONFIG_FBINVITE'                   => 'Shows visitor\'s friends list and allows them to invite friends to your eShop.',
 
@@ -205,6 +203,22 @@ $aLang =  array(
 'HELP_SHOP_CONFIG_ATTENTION'                  => 'Caution: Even if encryption is used, Credit Card contracts usually prohibit this strictly!',
 
 'HELP_SHOP_CONFIG_SHOWTAGS'                   => 'If not checked, no tags will be displayed in eShop. Pages that could be called via tag URL, are not accessible.',
+
+'HELP_SHOP_CONFIG_DOWNLOADS'                  => 'Shop with downloadable products. Activate here, that products can be ordered and downloaded.',
+
+'HELP_SHOP_CONFIG_DOWNLOADS_PATH'             => 'Path where files of downloadable products are stored.',
+
+'HELP_SHOP_CONFIG_MAX_DOWNLOADS_COUNT'        => 'Here you can define how many times user can download from the same link after order. This is the default setting for all products.'.
+                                                 'You can change this value for every file of product in Administer Products -> Products -> Downloads.',
+
+'HELP_SHOP_CONFIG_LINK_EXPIRATION_TIME_UNREGISTERED' => 'Here you can define how many times user can download from the same link, if user ordered without registration. This is the default setting for all products.'.
+                                                 'You can change this value for every file of product in Administer Products -> Products -> Downloads.',
+
+'HELP_SHOP_CONFIG_LINK_EXPIRATION_TIME'       => 'Specify the time in hours, the download link is valid after order. This is the default setting for all products.'.
+                                                 'You can change this value for every file of product in Administer Products -> Products -> Downloads.',
+
+'HELP_SHOP_CONFIG_DOWNLOAD_EXPIRATION_TIME'   => 'Specify the time in hours, the download link is valid after the first download. This is the default setting for all products.'.
+                                                 'You can change this value for every file of product in Administer Products -> Products -> Downloads.',
 
 'HELP_SHOP_MALL_MALLMODE'                     => 'Here you can set what is shown as front page of this eShop:' .
                                                  '<ul><li><span class="navipath_or_inputname">Show shop selector</span>: A page where the different eShops can be selected is shown.</li>' .
@@ -246,7 +260,7 @@ $aLang =  array(
 'HELP_SHOP_PERF_LOADSELECTLISTSINALIST'       => 'Normally selection lists are only shown in the detail view of a product. If you activate this setting, the selection lists are also shown in product lists (e. g. search results, categories).',
 
 'HELP_SHOP_PERF_CHECKIFTPLCOMPILE'            => 'If this setting is activated the eShop checks on each call if any templates were changed. If so, the output is  recalculated. Activate this setting when adapting templates, deactivate it if the eShop is live for better performance. <br>' .
-                                                 'Further information can be found in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/advices-adepting-templates" target="_blank" target="_blank">caching article in the manual</a>.',
+                                                 'Further information can be found in the <a href="http://www.oxid-esales.com/en/resources/help-faq/eshop-manual/advices-adepting-templates" target="_blank">caching article in the manual</a>.',
 
 'HELP_SHOP_PERF_CLEARCACHEONLOGOUT'           => 'Usually the complete cache is emptied as soon as you save any changes in the eShop admin. This can lead to performance problems in admin. If this setting is activated, the cache is only emptied when you log out from eShop admin.',
 
@@ -298,9 +312,7 @@ $aLang =  array(
 
 'HELP_ARTICLE_MAIN_TAGS'                      => 'Here you can enter tags for the product. From these tags the tag cloud on the front page is generated. The tags are separated by a comma.',
 
-
-
-'HELP_ARTICLE_EXTEND_UNITQUANTITY'            => 'With <span class="navipath_or_inputname">Quantity</span> and <span class="navipath_or_inputname">Unit</span> you can display the price per quantity unit (e. g. 1.43 EUR per liter). In <span class="navipath_or_inputname">Quantity</span>, enter the amount of the product (e. g. <span class="userinput_or_code">1.5</span>), in <span class="navipath_or_inputname">Unit</span> the according quantity unit (e. g. <span class="userinput_or_code">liter</span>). The price per quantity unit is calculated and displayed with the product.',
+'HELP_ARTICLE_EXTEND_UNITQUANTITY'            => 'With <span class="navipath_or_inputname">Quantity</span> and <span class="navipath_or_inputname">Unit</span> you can set the price per quantity unit. The price per quantity unit is calculated and displayed with the product (e.g. 1.43 EUR per liter). In <span class="navipath_or_inputname">Quantity</span>, enter the amount of the product (e.g. <span class="userinput_or_code">1.5</span>), in <span class="navipath_or_inputname">Unit</span> define the according quantity unit (e.g. <span class="userinput_or_code">liter</span>). You can choose unit type from given values or, by selecting blank unit type "-", enter unit type manually. If you wish to append existing type list, please follow this <a href="http://wiki.oxidforge.org/Tutorials/Adding_new_unit_types" target="_blank">link</a> for instructions.',
 
 'HELP_ARTICLE_EXTEND_EXTURL'                  => 'In <span class="navipath_or_inputname">External URL</span> you can enter a link where further information about the product is available (e. g. on the manufacturer\'s website). In <span class="navipath_or_inputname">Text for external URL</span> you can enter the text which is linked, e .g. <span class="userinput_or_code">Further information on the manufacturer\'s website</span>.',
 
@@ -319,6 +331,15 @@ $aLang =  array(
 'HELP_ARTICLE_EXTEND_ISCONFIGURABLE'          => 'If the product is customizable, an additional input field is displayed on the products detail page and in the shopping cart. Here customers can enter text for customizing the product.<br><br>'.
                                                  'A typical example are t-shirts which can be imprinted with custom text. In the input field customers can enter the text to be printed on the t-shirt.',
 
+'HELP_ARTICLE_EXTEND_UPDATEPRICE'             => 'Prices can be changed on a defined time. Given fields update standard prices. If you leave price values "0", prices will not be updated.',
+
+'HELP_ARTICLE_FILES_MAX_DOWNLOADS_COUNT'      => 'Here you can define how many times user can download from the same link after order. For this file you can overwrite the default setting, which was defined in Master Settings -> Core Setting -> Settings -> Downloads for all products.',
+
+'HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME_UNREGISTERED' => 'Here you can define how many times user can download from the same link, if user ordered without registration. For this file you can overwrite the default setting, which was defined in Master Settings -> Core Setting -> Settings -> Downloads for all products.',
+
+'HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME'     => 'Specify the time in hours, the download link is valid after order. For this file you can overwrite the default setting, which was defined in Master Settings -> Core Setting -> Settings -> Downloads for all products.',
+
+'HELP_ARTICLE_FILES_DOWNLOAD_EXPIRATION_TIME' => 'Specify the time in hours, the download link is valid after the first download. For this file you can overwrite the default setting, which was defined in Master Settings -> Core Setting -> Settings -> Downloads for all products.',
 
 'HELP_ARTICLE_PICTURES_ICON'                  => 'Icons are the smallest pictures of a product. For example, they are used in the shopping cart.<br>'.
                                                  'Uploading custom icon will override icon, generated from the first product picture.<br>' .
@@ -347,6 +368,8 @@ $aLang =  array(
                                                  '<li><span class="userinput_or_code">External storehouse</span>: The product can always be purchased and is always displayed as <span class="filename_filepath_or_italic">in stock</span>. (The stock level cannot be given for external storehouse. Therefore, the product is always shown as <span class="filename_filepath_or_italic">in stock</span>).</li>' .
                                                  '<li><span class="userinput_or_code">If out of stock, offline</span>: The product is not displayed if it is sold out.</li>' .
                                                  '<li><span class="userinput_or_code">If out of stock, not orderable</span>: The product is displayed if it is sold out but it cannot be ordered.</li></ul>',
+
+'HELP_ARTICLE_IS_DOWNLOADABLE'                => 'Files of this article can be downloaded.',
 
 'HELP_ARTICLE_STOCK_REMINDAMAOUNT'            => 'With <span class="navipath_or_inputname">Send e-mail if stock falls below value</span> you can specify that an e-mail will be sent as soon as the stock level falls below the value entered. Select the check box and then enter the level at which you want to be notified.',
 
@@ -564,5 +587,24 @@ $aLang =  array(
 
 'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'       => 'Upload banner image and enter banner URL which will be used when clicking on banner. If article is assigned to banner and URL is not entered, link to assigned article will be used when clicking on banner.',
 
-
+'HELP_SHOP_RDFA_SUBMIT_URL'                   => 'Submits your shop URL to GR-Notify page. There the URL is saved and forwarded to Linked Open Commerce & Semantic Web search engines and endpoints.',
+'HELP_SHOP_RDFA_CONTENT_OFFERER'              => '[tr]You have to select in which content page main eShop information is displayed, e.g.  “About Us”.',
+'HELP_SHOP_RDFA_CONTENT_PAYMENT'              => '[tr]You have to select in which content page not assigned to RDFa payment information is displayed, e.g.  “Terms and Conditions. To Assign your shipping methods to RDFa shipping methods go to: Shop Settings -> Shipping Methods -> RDFa.',
+'HELP_SHOP_RDFA_CONTENT_DELIVERY'             => '[tr]You have to select in which content page not assigned to RDFa shipping information is displayed, e.g.  “Shipping and charges”. To Assign your payment methods to RDFa payment methods go to: Shop Settings -> Payment Methods -> RDFa.',
+'HELP_SHOP_RDFA_VAT'                          => '[tr]This option specifies whether the tax (VAT) is included in the price and delivery/payment costs or not.',
+'HELP_SHOP_RDFA_DURATION_PRICES'              => '[tr]Specify the time of the validity of the shipping costs (e.g. 1 day, 1 week)',
+'HELP_SHOP_RDFA_LOGO_URL'                     => '[tr]The Web address (URL) of a logo or image.',
+'HELP_SHOP_RDFA_GEO_LONGITUDE'                => '[tr]Geo-position (please enter only numbers) - The geo position of the store as longitude',
+'HELP_SHOP_RDFA_GEO_LATITUDE'                 => '[tr]Geo-position (please enter only numbers) - The geo position of the store as latitude',
+'HELP_SHOP_RDFA_GLN'                          => '[tr]Global Location Number (GLN) for the company. The Global Location Number is a thirteen-digit number used to identify parties and physical locations.',
+'HELP_SHOP_RDFA_NAICS'                        => '[tr]North American Industry Classification System (NAICS) code for your company ( see http://www.census.gov/eos/www/naics/).',
+'HELP_SHOP_RDFA_ISIC'                         => '[tr]The International Standard of Industrial Classification of All Economic Activities (ISIC) code for your company. See http://unstats.un.org/unsd/cr/registry/isic-4.asp for more information. ',
+'HELP_SHOP_RDFA_DUNS'                         => '[tr]The Dun & Bradstreet DUNS is a nine-digit number used to identify legal entities (but usually not branches or locations of logistical importance only).',
+'HELP_SHOP_RDFA_SHOW_PRODUCTSTOCK'            => '[tr]If option is on, embeds the real product stock. If option off, skips the stock at all.',
+'HELP_SHOP_RDFA_RATING_MIN'                   => '[tr]The min/max values refer to the scale used for ratings in your shop system, NOT for the lowest/highest actual rating. So if you have zero reviews for an item and you are using a scale from 0 to 5, it would be min = 0 and max = 5.',
+'HELP_SHOP_RDFA_RATING_MAX'                   => '[tr]The min/max values refer to the scale used for ratings in your shop system, NOT for the lowest/highest actual rating. So if you have zero reviews for an item and you are using a scale from 0 to 5, it would be min = 0 and max = 5.',
+'HELP_SHOP_RDFA_COND'                         => '[tr]It is a description of the condition of the product (new, used and refurbished).',
+'HELP_SHOP_RDFA_FNC'                          => '[tr]This specifies the business function of the product, i.e. whether the company is offering to sell, to lease, or to repair the particular type of product.',
+'HELP_SHOP_RDFA_COSTUMER'                     => '[tr]The types of customers for which shop products are valid (End user, Reseller, Business and Public).',
+'HELP_SHOP_RDFA_DURATION_OFFERINGS'           => '[tr]This property specifies the time of the validity of the products.',
 );

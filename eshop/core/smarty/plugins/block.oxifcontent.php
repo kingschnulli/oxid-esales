@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   smarty_plugins
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: block.oxid_content.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
@@ -58,7 +58,7 @@ function smarty_block_oxifcontent( $params, $content, &$smarty, &$repeat)
                 $oContent = $sOxid ? $aContentCache[$sOxid] : $aContentCache[$sIdent];
             } else {
                 $oContent = oxNew( "oxcontent" );
-                $blLoaded = $sOxid ? $oContent->load( $sOxid ) : $oContent->loadbyIdent( $sIdent );
+                $blLoaded = $sOxid ? $oContent->load( $sOxid ) : ( $sIdent === "oxcredits" ? $oContent->loadCredits( $sIdent ) : $oContent->loadbyIdent( $sIdent ) );
                 if ( $blLoaded ) {
                     $aContentCache[$oContent->getId()] = $aContentCache[$oContent->oxcontents__oxloadid->value] = $oContent;
                 } else {
@@ -71,7 +71,7 @@ function smarty_block_oxifcontent( $params, $content, &$smarty, &$repeat)
                 }
             }
 
-            if ( $oContent && $oContent->oxcontents__oxactive->value ) {
+            if ( $oContent && $oContent->oxcontents__oxactive->value || $sIdent === "oxcredits" ) {
                 $smarty->assign($sObject, $oContent);
                 $blLoaded = true;
             }

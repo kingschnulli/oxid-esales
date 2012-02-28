@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oximex.php 42258 2012-02-14 13:19:38Z linas.kukulskis $
+ * @version   SVN: $Id: oximex.php 42358 2012-02-20 15:10:10Z linas.kukulskis $
  */
 
 /**
@@ -349,7 +349,7 @@ class oxImex extends oxBase
             $dSumNetPrice = 0;
             $dSumBrutPrice = 0;
 
-            $oOrderArticles = $oOrder->getOrderArticles();
+            $oOrderArticles = $oOrder->getOrderArticles( true );
             foreach ($oOrderArticles as $oOrderArt) {
 
                 $dVATSet = array_search( $oOrderArt->oxorderarticles__oxvat->value, $myConfig->getConfigParam( 'aLexwareVAT' ) );

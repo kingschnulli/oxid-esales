@@ -27,8 +27,10 @@
             [{block name="checkout_thankyou_proceed"}]
                 [{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_YOUCANGO" }]
                 <a id="backToShop" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getHomeLink() }]" class="link">[{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_BACKTOSHOP" }]</a>
-                [{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_OR" }]
-                <a id="orderHistory" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_order" }]" class="link">[{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_ORDERHISTORY" }]</a>.
+                [{if $oxcmp_user->oxuser__oxpassword->value }]
+                    [{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_OR" }]
+                    <a id="orderHistory" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_order" }]" class="link">[{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_ORDERHISTORY" }]</a>.
+                [{/if}]
             [{/block}]
 
             [{block name="checkout_thankyou_ts"}]

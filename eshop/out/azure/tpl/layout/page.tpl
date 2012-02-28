@@ -1,4 +1,7 @@
 [{capture append="oxidBlock_pageBody"}]
+    [{if $oView->showRDFa()}]
+        [{ include file="rdfa/rdfa.tpl" }]
+    [{/if}]
     <div id="page" class="[{if $sidebar}] sidebar[{$sidebar}][{/if}]">
         [{include file="layout/header.tpl"}]
         [{if $oView->getClassName() ne "start" && !$blHideBreadcrumb}]
@@ -19,7 +22,14 @@
     </div>
     [{include file="widget/facebook/init.tpl"}]
     [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-        <div id="incVatMessage">*: <span class="deliveryInfo">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2" }]</a></span></div>
+        <div id="incVatMessage">
+            [{if $oView->getUser()}]
+                [{assign var="oUser" value=$oView->getUser() }]
+                [{ if $oUser->oxuser__oxustid->value && $oUser->oxuser__oxcompany->value }] * <span class="deliveryInfo">[{ oxmultilang ident="PLUS" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="PLUS_SHIPPING2" }]</a></span> [{else}] * <span class="deliveryInfo">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2" }]</a></span> [{/if}]
+            [{else}]
+                 * <span class="deliveryInfo">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2" }]</a></span>
+            [{/if}]
+        </div>
     [{/oxifcontent }]
 [{/capture}]
 [{include file="layout/base.tpl"}]

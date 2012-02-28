@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 42291 2012-02-15 14:50:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 42364 2012-02-20 15:11:38Z linas.kukulskis $
  */
 
 /**
@@ -3133,7 +3133,8 @@ class oxUBase extends oxView
     {
         if ( $this->_aDeliveryAddress == null ) {
             $aAddress = oxConfig::getParameter( 'deladr');
-            if ( $aAddress ) {
+            //do not show deladr if address was reloaded
+            if ( $aAddress && !oxConfig::getParameter( 'reloadaddress' )) {
                 $this->_aDeliveryAddress = $aAddress;
             }
         }
@@ -3255,7 +3256,7 @@ class oxUBase extends oxView
      *
      * @return boolean
      */
-    public function isFbWidgetWisible()
+    public function isFbWidgetVisible()
     {
         if ( $this->_blFbWidgetsOn === null ) {
             $oUtils = oxUtilsServer::getInstance();
@@ -3267,6 +3268,16 @@ class oxUBase extends oxView
             $oUtils->setOxCookie( "fbwidgetson", $this->_blFbWidgetsOn ? 1 : 0 );
         }
         return $this->_blFbWidgetsOn;
+    }
+
+    /**
+     * Checks if downloadable files are turned on
+     *
+     * @return bool
+     */
+    public function isEnabledDownloadableFiles()
+    {
+        return (bool) $this->getConfig()->getConfigParam( "blEnableDownloads" );
     }
 
     /**

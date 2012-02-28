@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -51,7 +51,7 @@ $aMap = array(
 'DETAILS_FROM'                                                    => 'FROM_3',
 'DETAILS_LOCATOR_FROM'                                            => 'OF',
 'DETAILS_LOCATOR_NEXTPRODUCT'                                     => 'NEXT_PRODUCT',
-'DETAILS_LOCATOR_PREVIUOSPRODUCT'                                 => 'PREVIUOS_PRODUCT',
+'DETAILS_LOCATOR_PREVIOUSPRODUCT'                                 => 'PREVIOUS_PRODUCT',
 'DETAILS_LOGIN'                                                   => 'MESSAGE_LOGIN_TO_RATE',
 'DETAILS_LOGINTOACCESSNOTICELIST'                                 => 'LOGIN_TO_ACCESS_WISH_LIST',
 'DETAILS_LOGINTOACCESSRECOMMLIST'                                 => 'LOGIN_TO_ACCESS_LISTMANIA',
@@ -225,7 +225,7 @@ $aMap = array(
 'EXCEPTION_VOUCHER_NOTVALIDUSERGROUP'                             => 'ERROR_MESSAGE_VOUCHER_NOTVALIDUSERGROUP',
 'EXCEPTION_VOUCHER_NOVOUCHER'                                     => 'ERROR_MESSAGE_VOUCHER_NOVOUCHER',
 'EXCEPTION_VOUCHER_TOTALBELOWZERO'                                => 'ERROR_MESSAGE_VOUCHER_TOTALBELOWZERO',
-'FACEBOOK_CHAT'                                                   => 'FACEBOOK_LIVE_STREAM',
+'EXCEPTION_CURRENT_PASSWORD_INVALID'                              => 'ERROR_MESSAGE_CURRENT_PASSWORD_INVALID',
 'FACEBOOK_ENABLEBUTTONTEXT'                                       => 'ENABLE',
 'FACEBOOK_INVITEBUTTONTEXT'                                       => 'FACEBOOK_OPEN_WEBSITE',
 'FACEBOOK_INVITEHEADER'                                           => 'FACEBOOK_INVITE_YOUR_FRIENDS',
@@ -849,14 +849,12 @@ $aMap = array(
 'WIDGET_LOCATOR_SORT_OXPRICE'                                     => 'PRICE',
 'WIDGET_LOCATOR_SORT_OXRATING'                                    => 'RATING',
 'WIDGET_LOCATOR_SORT_OXSTOCK'                                     => 'STOCK',
-'WIDGET_LOCATOR_SORT_OXTITLE'                                     => 'TITLE',
 'WIDGET_LOCATOR_SORT_OXUSER.OXUSERNAME'                           => 'AUTHOR',
 'WIDGET_LOCATOR_SORT_OXVARMINPRICE'                               => 'PRICE',
 'WIDGET_LOCATOR_SORT_SORTBY'                                      => 'SORT_BY',
 'WIDGET_LOGINBOX_EMAIL_ADDRESS'                                   => 'EMAIL_ADDRESS',
 'WIDGET_LOGINBOX_FORGOT_PASSWORD'                                 => 'FORGOT_PASSWORD',
 'WIDGET_LOGINBOX_GREETING'                                        => 'GREETING',
-'WIDGET_LOGINBOX_LOGIN'                                           => 'LOGIN',
 'WIDGET_LOGINBOX_LOGOUT'                                          => 'LOGOUT',
 'WIDGET_LOGINBOX_PASSWORD'                                        => 'PASSWORD',
 'WIDGET_LOGINBOX_REMEMBER_ME'                                     => 'REMEMBER_ME',
@@ -899,7 +897,6 @@ $aMap = array(
 'WIDGET_RECOMMENDATIONLIST_SEARCHFORLISTS'                        => 'SEARCH_FOR_LISTS',
 'WIDGET_SERVICES_ACCOUNT'                                         => 'ACCOUNT',
 'WIDGET_SERVICES_BASKET'                                          => 'BASKET',
-'WIDGET_SERVICES_CONTACTS'                                        => 'CONTACTS',
 'WIDGET_SERVICES_GUESTBOOK'                                       => 'GUESTBOOK',
 'WIDGET_SERVICES_HELP'                                            => 'HELP',
 'WIDGET_SERVICES_HOME'                                            => 'HOME',

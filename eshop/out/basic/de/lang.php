@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42166 2012-02-10 14:44:10Z juergen.busch $
+ * @version   SVN: $Id: lang.php 42192 2012-02-13 09:12:39Z linas.kukulskis $
  */
 
 
@@ -38,7 +38,6 @@ $sLangName  = "Deutsch";
 // -------------------------------
 $aLang = array(
 'ACCOUNT_PASSWORD_CONFIRMPASSWORD'                            => "Passwort wiederholen:",
-'ACCOUNT_PASSWORD_ERRINCORRECTCURRENTPASSW'                   => "Fehler: Ihr aktuelles Passwort ist falsch.",
 'ACCOUNT_PASSWORD_PASSWORDMINLENGTH'                          => "Die Mindestlänge des Passwortes beträgt 6 Zeichen.",
 'ACCOUNT_RECOMM_LISTTITLE'                                    => "Überschrift",
 'ACCOUNT_USER_BILLINGADDRESS'                                 => "Rechnungsadresse",

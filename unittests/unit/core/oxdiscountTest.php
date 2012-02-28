@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountTest.php 39863 2011-11-09 09:01:53Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscountTest.php 39871 2011-11-09 15:56:19Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -776,7 +776,6 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
      */
     public function testGetSimpleDiscount()
     {
-        $myUtils = oxUtils::getInstance();
         $sShopId = oxConfig::getInstance()->getBaseShopId();
         $myDB    = oxDb::getDb();
         $sQ  = 'insert into oxdiscount ';

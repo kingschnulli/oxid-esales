@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: reviewTest.php 32957 2011-02-07 10:29:20Z vilma $
+ * @version   SVN: $Id: reviewTest.php 41843 2012-01-27 15:35:19Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -103,6 +103,8 @@ class Unit_Views_reviewTest extends OxidTestCase
 
     public function testRender()
     {
+        modConfig::getInstance()->setConfigParam( "bl_perfLoadReviews", true );
+
         $oProduct = new oxArticle();
         $oProduct->load( "1126" );
 
@@ -124,8 +126,10 @@ class Unit_Views_reviewTest extends OxidTestCase
         $oReview->render();
     }
 
-    public function testRenderReviewOff()
+    public function testRender_NoUser()
     {
+        modConfig::getInstance()->setConfigParam( "bl_perfLoadReviews", true );
+        
         $oProduct = new oxArticle();
         $oProduct->load( "1126" );
 
@@ -136,6 +140,20 @@ class Unit_Views_reviewTest extends OxidTestCase
         $oReview->expects( $this->once() )->method( 'getReviewUser');
         $oReview->expects( $this->never() )->method( 'getActiveRecommList');
         $oReview->expects( $this->never() )->method( 'getActiveRecommItems');
+        $oReview->render();
+    }
+
+    public function testRender_reviewDisabled()
+    {
+        $oConfig = oxConfig::getInstance();
+        $oConfig->setConfigParam( "bl_perfLoadReviews", false );
+
+        $oUtils = $this->getMock('oxUtils', array( 'redirect' ) );
+        $oUtils->expects($this->once())->method('redirect')->with( $this->equalTo( $oConfig->getShopHomeURL() ) );
+        oxTestModules::addModuleObject( 'oxUtils', $oUtils );
+
+        $oReview = new Review();
+
         $oReview->render();
     }
 
