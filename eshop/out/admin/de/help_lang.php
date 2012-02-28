@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 42399 2012-02-22 13:09:02Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 40995 2012-01-05 12:36:29Z linas.kukulskis $
  */
 
 /**
@@ -174,17 +174,19 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKAPPID'  => 'Um Ihren eShop mit Facebook zu verbinden müssen Sie die Facebook \'Application ID\' angeben. ' .
                                                  'Weitere Informationen finden Sie im ' .
-                                                 '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank">Tutorial</a>.',
+                                                 '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank" target="_blank">Tutorial</a>.',
 
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FACEBOOKCONFIRM'=> 'Um die Privatsphäre des Kunden zu schützen, muss die Anzeige der Facebook Social Plugins explizit bestätigt werden. Erst nach Bestätigung werden Daten mit Facebook ausgetauscht.',
 
 'HELP_SHOP_CONFIG_SHOP_CONFIG_FBSECRETKEY'    => 'Um die Verbindung zwischen eShop und Facebook abzusichern, geben Sie den \'Secure Key\' hier ein. ' .
                                                  'Weitere Informationen finden Sie im ' .
-                                                 '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank">Tutorial</a>.',
+                                                 '<a href="http://wiki.oxidforge.org/Tutorials/Connecting_website_to_facebook" target="_blank" target="_blank">Tutorial</a>.',
 
 'HELP_SHOP_CONFIG_FBCOMMENTS'                 => 'Erlaubt den Shopbesuchern, Kommentare zu Produkten abzugeben.',
 
 'HELP_SHOP_CONFIG_FBFACEPILE'                 => 'Zeigt Ihren Shopbesuchern, wer von deren Freunden in Facebook ein Freund Ihres Shops ist.',
+
+'HELP_SHOP_CONFIG_FBLIVESTREAM'               => 'Lässt die Besucher Ihres Shops miteinander in Echtzeit über Produkte Ihres Shops diskutieren',
 
 'HELP_SHOP_CONFIG_FBINVITE'                   => 'Erlaubt Ihren Besuchern, Freunde über Facebook einladen',
 
@@ -205,21 +207,6 @@ $aLang =  array(
 'HELP_SHOP_MALL_PRICEADDITION'                => 'Sie haben die Möglichkeit, auf alle Artikelpreise einen Aufschlag zu berechnen: Geben Sie den entsprechenden Aufschlag ein und wählen Sie in der Auswahlliste aus, ob er prozentual (<span class="userinput_or_code">%</span>) oder absolut (<span class="userinput_or_code">abs</span>) berechnet werden soll.',
 
 
-'HELP_SHOP_CONFIG_DOWNLOADS'                  => 'Shop mit Artikel-Downloads. Aktivieren Sie hier, dass Artikel bestellt und heruntergeladen werden können.',
-
-'HELP_SHOP_CONFIG_DOWNLOADS_PATH'             => 'Pfad, in dem Dateien für Artikel-Downloads gespeichert werden.',
-
-'HELP_SHOP_CONFIG_MAX_DOWNLOADS_COUNT'        => 'Geben Sie hier an, wie oft Benutzer nach einer Bestellung den Link zum Download verwenden können. Das ist die Standardeinstellung für alle Artikel.'.
-                                                 'Sie können diesen Wert für jede Datei des Artikels unter Artikel verwalten -> Artikel -> Downloads ändern.',
-
-'HELP_SHOP_CONFIG_LINK_EXPIRATION_TIME_UNREGISTERED' => 'Geben Sie hier an, wie oft Benutzer, die ohne Registrierung bestellt haben, den Link zum Download verwenden können. Das ist die Standardeinstellung für alle Artikel.'.
-                                                 'Sie können diesen Wert für jede Datei des Artikels unter Artikel verwalten -> Artikel -> Downloads ändern.',
-
-'HELP_SHOP_CONFIG_LINK_EXPIRATION_TIME'       => 'Geben Sie die Zeit in Stunden an, die der Downloadlink nach der Bestellung gültig ist. Das ist die Standardeinstellung für alle Artikel.'.
-                                                 'Sie können diesen Wert für jede Datei des Artikels unter Artikel verwalten -> Artikel -> Downloads ändern.',
-
-'HELP_SHOP_CONFIG_DOWNLOAD_EXPIRATION_TIME'   => 'Geben Sie die Zeit in Stunden an, die der Downloadlink nach dem ersten Download gültig ist. Das ist die Standardeinstellung für alle Artikel.'.
-                                                 'Sie können diesen Wert für jede Datei des Artikels unter Artikel verwalten -> Artikel -> Downloads ändern.',
 
 'HELP_SHOP_PERF_NEWESTARTICLES'               => 'In Ihrem eShop wird eine Liste mit den neusten Artikeln (Frisch eingetroffen!) angezeigt. Hier können Sie einstellen, wie die Liste generiert wird:' .
                                                  '<ul><li><span class="userinput_or_code">ausgeschaltet</span>: Die Liste wird nicht angezeigt.</li>' .
@@ -306,7 +293,9 @@ $aLang =  array(
 
 'HELP_ARTICLE_MAIN_TAGS'                      => 'Hier können Sie passende Stichworte zum Artikel eingeben. Aus diesen Stichworten wird die Tagcloud (Stichwortwolke) auf der Startseite generiert. Tags werden durch Komma getrennt.',
 
-'HELP_ARTICLE_EXTEND_UNITQUANTITY'            => 'Mit <span class="navipath_or_inputname">Menge</span> und <span class="navipath_or_inputname">Mengeneinheit</span> können Sie den Grundpreis des Artikels (Preis pro Mengeneinheit) einstellen. Dieser wird berechnet und beim Artikel angezeigt (z.B. 1,43 EUR pro Liter). Geben Sie bei <span class="navipath_or_inputname">Menge</span> die Menge des Artikels (z.B. 1,5) ein und legen Sie bei <span class="navipath_or_inputname">Mengeneinheit</span> die entsprechende Mengeneinheit (z.B. Liter) fest. Sie können eine Mengeneinheit aus der Liste auswählen oder eine Mengeneinheit eintragen, ohne eine Mengeneinheit auszuwählen ("-"). </br> Wie Sie die Liste der Mengeneinheiten erweitern können, wird in diesem <a href="http://wiki.oxidforge.org/Tutorials/Adding_new_unit_types" target="_blank">Tutorial</a> beschrieben.',
+
+
+'HELP_ARTICLE_EXTEND_UNITQUANTITY'            => 'Mit <span class="navipath_or_inputname">Menge</span> und <span class="navipath_or_inputname">Mengeneinheit</span> können Sie den Grundpreis des Artikels (Preis pro Mengeneinheit) einstellen (z. B. 1,43 EUR pro Liter): Geben Sie bei <span class="navipath_or_inputname">Menge</span> die Menge des Artikels (z. B. 1,5) und bei <span class="navipath_or_inputname">Mengeneinheit</span> die entsprechende Mengeneinheit (z. B. Liter) ein. Dann wird der Grundpreis pro Mengeneinheit berechnet und beim Artikel angezeigt.',
 
 'HELP_ARTICLE_EXTEND_EXTURL'                  => 'Bei <span class="navipath_or_inputname">Externe URL</span> können Sie einen Link eingeben, wo weitere Informationen zu dem Artikel erhältlich sind (z. B. auf der Hersteller-Website). Bei <span class="navipath_or_inputname">Text für ext. URL</span> können Sie den Text eingeben, der verlinkt wird (z. B. <span class="userinput_or_code">weitere Informationen vom Hersteller</span>).',
 
@@ -326,15 +315,7 @@ $aLang =  array(
 'HELP_ARTICLE_EXTEND_ISCONFIGURABLE'          => 'Wenn der Artikel individualisierbar ist, wird den Kunden ein zusätzliches Eingabefeld auf der Detailseite des Artikels und im Warenkorb angezeigt. In dieses Eingabefeld können Kunden Text eingeben, um den Artikel zu individualisieren.<br><br>'.
                                                  'Ein typisches Beispiel sind T-Shirts, die bedruckt werden können. In das Eingabefeld können Kunden den Text eingeben, mit dem ein T-Shirt bedruckt werden soll.',
 
-'HELP_ARTICLE_EXTEND_UPDATEPRICE'             => 'Preise können zu einem festgelegten Zeitpunkt geändert werden. Die eingetragenen Preise aktualisieren die Standardpreise. Hat ein Preis den Wert "0", wird er nicht aktualisiert.',
 
-'HELP_ARTICLE_FILES_MAX_DOWNLOADS_COUNT'      => 'Geben Sie hier an, wie oft Benutzer nach einer Bestellung den Link zum Download verwenden können. Hier können Sie für diese Datei die Standardeinstellung überschreiben, die in Stammdaten -> Grundeinstellung -> Einstell. -> Downloads für alle Artikel gesetzt wurde.',
-
-'HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME_UNREGISTERED' => 'Geben Sie hier an, wie oft Benutzer, die ohne Registrierung bestellt haben, den Link zum Download verwenden können. Hier können Sie für diese Datei die Standardeinstellung überschreiben, die in Stammdaten -> Grundeinstellung -> Einstell. -> Downloads für alle Artikel gesetzt wurde.',
-
-'HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME'     => 'Geben Sie die Zeit in Stunden an, die der Downloadlink nach der Bestellung gültig ist. Hier können Sie für diese Datei die Standardeinstellung überschreiben, die in Stammdaten -> Grundeinstellung -> Einstell. -> Downloads für alle Artikel gesetzt wurde.',
-
-'HELP_ARTICLE_FILES_DOWNLOAD_EXPIRATION_TIME' => 'Geben Sie die Zeit in Stunden an, die der Downloadlink nach dem ersten Download gültig ist. Hier können Sie für diese Datei die Standardeinstellung überschreiben, die in Stammdaten -> Grundeinstellung -> Einstell. -> Downloads für alle Artikel gesetzt wurde.',
 
 'HELP_ARTICLE_PICTURES_ICON'                  => 'Icons sind die kleinsten Bilder eines Artikels, sie werden z. B. im Warenkorb verwendet. <br>'.
                                                  'Wenn Sie ein Icon manuell hochladen, wird das automatisch erzeugte Icon überschrieben.<br>' .
@@ -390,7 +371,7 @@ $aLang =  array(
 'HELP_ARTICLE_VARIANT_VARNAME'                => 'Bei <span class="navipath_or_inputname">Name der Auswahl</span> können Sie einstellen, wie die Auswahl zwischen den verschiedenen Varianten heißen soll, z. B. <span class="userinput_or_code">Farbe</span> oder <span class="userinput_or_code">Größe</span>.<br> '.
                                                  'Weitere Informationen zu Varianten finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/varianten-eines-artikels-anlegen" target="_blank">Varianten-Kapitel des Handbuchs</a>.',
 
-'HELP_ARTICLE_IS_DOWNLOADABLE'                => 'Dateien dieses Artikels können heruntergeladen werden.',
+
 
 'HELP_CATEGORY_MAIN_HIDDEN'                   => 'Mit <span class="navipath_or_inputname">Versteckt</span> können Sie einstellen, ob die Kategorie den Benutzern angezeigt werden soll. Wenn eine Kategorie versteckt ist, wird Sie den Benutzern nicht angezeigt, auch wenn die Kategorie aktiv ist.',
 
@@ -591,24 +572,4 @@ $aLang =  array(
 
 'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'       => 'Laden Sie ein Bild für den großen Startseitenbanner hoch und geben die URL für den Klick auf den Banner an. Falls ein Artikel zugeordnet wird, wird dessen URL automatisch als Banner-URL verwendet.',
 
-'HELP_SHOP_RDFA_SUBMIT_URL'                   => 'Überträgt Ihre Shop URL zur GR-Notify-Seite. Dort wird die URL gespeichert und an Suchmaschinen und Endpunkte von Linked Open Commerce & Semantic Web weitergeleitet.',
-'HELP_SHOP_RDFA_CONTENT_OFFERER'              => '[tr]You have to select in which content page main eShop information is displayed, e.g.  “About Us”.',
-'HELP_SHOP_RDFA_CONTENT_PAYMENT'              => '[tr]You have to select in which content page not assigned to RDFa payment information is displayed, e.g.  “Terms and Conditions. To Assign your shipping methods to RDFa shipping methods go to: Shop Settings -> Shipping Methods -> RDFa.',
-'HELP_SHOP_RDFA_CONTENT_DELIVERY'             => '[tr]You have to select in which content page not assigned to RDFa shipping information is displayed, e.g.  “Shipping and charges”. To Assign your payment methods to RDFa payment methods go to: Shop Settings -> Payment Methods -> RDFa.',
-'HELP_SHOP_RDFA_VAT'                          => '[tr]This option specifies whether the tax (VAT) is included in the price and delivery/payment costs or not.',
-'HELP_SHOP_RDFA_DURATION_PRICES'              => '[tr]Specify the time of the validity of the shipping costs (e.g. 1 day, 1 week)',
-'HELP_SHOP_RDFA_LOGO_URL'                     => '[tr]The Web address (URL) of a logo or image.',
-'HELP_SHOP_RDFA_GEO_LONGITUDE'                => '[tr]Geo-position (please enter only numbers) - The geo position of the store as longitude',
-'HELP_SHOP_RDFA_GEO_LATITUDE'                 => '[tr]Geo-position (please enter only numbers) - The geo position of the store as latitude',
-'HELP_SHOP_RDFA_GLN'                          => '[tr]Global Location Number (GLN) for the company. The Global Location Number is a thirteen-digit number used to identify parties and physical locations.',
-'HELP_SHOP_RDFA_NAICS'                        => '[tr]North American Industry Classification System (NAICS) code for your company ( see http://www.census.gov/eos/www/naics/).',
-'HELP_SHOP_RDFA_ISIC'                         => '[tr]The International Standard of Industrial Classification of All Economic Activities (ISIC) code for your company. See http://unstats.un.org/unsd/cr/registry/isic-4.asp for more information. ',
-'HELP_SHOP_RDFA_DUNS'                         => '[tr]The Dun & Bradstreet DUNS is a nine-digit number used to identify legal entities (but usually not branches or locations of logistical importance only).',
-'HELP_SHOP_RDFA_SHOW_PRODUCTSTOCK'            => '[tr]If option is on, embeds the real product stock. If option off, skips the stock at all.',
-'HELP_SHOP_RDFA_RATING_MIN'                   => '[tr]The min/max values refer to the scale used for ratings in your shop system, NOT for the lowest/highest actual rating. So if you have zero reviews for an item and you are using a scale from 0 to 5, it would be min = 0 and max = 5.',
-'HELP_SHOP_RDFA_RATING_MAX'                   => '[tr]The min/max values refer to the scale used for ratings in your shop system, NOT for the lowest/highest actual rating. So if you have zero reviews for an item and you are using a scale from 0 to 5, it would be min = 0 and max = 5.',
-'HELP_SHOP_RDFA_COND'                         => '[tr]It is a description of the condition of the product (new, used and refurbished).',
-'HELP_SHOP_RDFA_FNC'                          => '[tr]This specifies the business function of the product, i.e. whether the company is offering to sell, to lease, or to repair the particular type of product.',
-'HELP_SHOP_RDFA_COSTUMER'                     => '[tr]The types of customers for which shop products are valid (End user, Reseller, Business and Public).',
-'HELP_SHOP_RDFA_DURATION_OFFERINGS'           => '[tr]This property specifies the time of the validity of the products.',
 );

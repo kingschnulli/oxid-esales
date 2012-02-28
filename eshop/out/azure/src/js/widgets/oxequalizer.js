@@ -36,13 +36,12 @@
         {
             var self    = this;
 
-            if ( target ) {
+            if (target) {
                 if (group.height() < target.height()){
-                	var h = target.height() - (group.innerHeight() - group.height());
-                    group.css("height", h);
+                    group.css("height", target.height());
                 }
             } else {
-                tallest = self.getTallest( group );
+                tallest = self.getTallest(group);
                 group.each(function(){
                     if( $(this).hasClass('catPicOnly') && $(this).height() < tallest  ){
                         $(this).height(tallest+20);
@@ -77,4 +76,4 @@
      */
     $.widget("ui.oxEqualizer", oxEqualizer );
 
-})( jQuery );
+})( jQuery )

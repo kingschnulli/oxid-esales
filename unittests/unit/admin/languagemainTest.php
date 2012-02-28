@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: languagemainTest.php 40464 2011-12-06 09:58:38Z vilma $
+ * @version   SVN: $Id: languagemainTest.php 26071 2010-02-25 15:12:55Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -188,12 +188,11 @@ class Unit_Admin_LanguageMainTest extends OxidTestCase
      */
     public function testGetLanguages()
     {
-        $aLangData['params']['de'] = array("baseId" => 0, "active" => 1, "sort" => 1, "default" => 1);
-        $aLangData['params']['en'] = array("baseId" => 1, "active" => 1, "sort" => 2, "default" => "");
-        $aLangData['params']['fr'] = array("baseId" => 2, "active" => 1, "default" => "", "sort" => 3);
-        $aLangData['lang'] = array("de" => "Deutsch", "en" => "English", "fr" => "Français");
-        $aLangData['urls'] = array(0 => "", 1 => "");
-        $aLangData['sslUrls'] = array(0 => "", 1 => "");
+        $aLangData['params']['de'] = array("baseId" => 0, "active" => 1, "sort" => 1);
+        $aLangData['params']['en'] = array("baseId" => 1, "active" => 1, "sort" => 2);
+        $aLangData['lang'] = array("de" => "Deutsch", "en" => "English");
+        $aLangData['urls'] = array(0 => "", 1 => "" );
+        $aLangData['sslUrls'] = array(0 => "", 1 => "" );
 
         $oView = $this->getProxyClass( "Language_Main" );
 

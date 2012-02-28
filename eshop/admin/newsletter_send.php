@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletter_send.php 40261 2011-11-24 13:52:22Z linas.kukulskis $
+ * @version   SVN: $Id: newsletter_send.php 39171 2011-10-12 13:08:53Z arvydas.vapsva $
  */
 
 /**
@@ -57,7 +57,7 @@ class Newsletter_Send extends Newsletter_Selection
         $oNewsletterGroups = $oNewsletter->getGroups();
 
         // send emails....
-        $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDB = oxDb::getDb(true);
         $sQGroups = " ( oxobject2group.oxgroupsid in ( ";
         $blSep = false;
         foreach ( $oNewsletterGroups as $sInGroup ) {

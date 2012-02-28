@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseodecoder.php 40671 2011-12-19 08:20:49Z linas.kukulskis $
+ * @version   SVN: $Id: oxseodecoder.php 40596 2011-12-14 12:08:05Z arvydas.vapsva $
  */
 
 /**
@@ -85,7 +85,7 @@ class oxSeoDecoder extends oxSuperCfg
         $sKey = $this->_getIdent( $sSeoUrl );
         $aRet = false;
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
+        $oDb = oxDb::getDb(true);
         $oRs = $oDb->Execute( "select oxstdurl, oxlang from oxseo where oxident=" . $oDb->quote( $sKey ) . " and oxshopid='$iShopId' limit 1");
         if ( !$oRs->EOF ) {
             // primary seo language changed ?
@@ -107,7 +107,7 @@ class oxSeoDecoder extends oxSuperCfg
     protected function _decodeOldUrl( $sSeoUrl )
     {
         $oStr = getStr();
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(true);
         $sBaseUrl = $this->getConfig()->getShopURL();
         if ( $oStr->strpos( $sSeoUrl, $sBaseUrl ) === 0 ) {
             $sSeoUrl = $oStr->substr( $sSeoUrl, $oStr->strlen( $sBaseUrl ) );
@@ -164,7 +164,7 @@ class oxSeoDecoder extends oxSuperCfg
      */
     protected function _getSeoUrl($sObjectId, $iLang, $iShopId)
     {
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
+        $oDb = oxDb::getDb(true);
         $aInfo = $oDb->getRow( "select oxseourl, oxtype from oxseo where oxobjectid =  " . $oDb->quote( $sObjectId ) . " and oxlang =  " . $oDb->quote( $iLang ) . " and oxshopid = " . $oDb->quote( $iShopId ) . " order by oxparams limit 1" );
         if ('oxarticle' == $aInfo['oxtype']) {
             $sMainCatId = $oDb->getOne( "select oxcatnid from ".getViewName( "oxobject2category" )." where oxobjectid = " . $oDb->quote( $sObjectId ) . " order by oxtime" );
@@ -273,7 +273,7 @@ class oxSeoDecoder extends oxSuperCfg
      */
     protected function _getObjectUrl( $sSeoId, $sTable, $iLanguage, $sType )
     {
-        $oDb     = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT);
+        $oDb     = oxDb::getDb();
         $sTable  = getViewName( $sTable, $iLanguage );
         $sSeoUrl = null;
 

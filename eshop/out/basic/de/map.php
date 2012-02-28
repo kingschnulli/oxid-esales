@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -83,7 +83,6 @@ $aMap = array(
 'ACCOUNT_PASSWORD_SAVE'                                       => 'SAVE',
 'ACCOUNT_PASSWORD_TITLE'                                      => 'PERSONAL_SETTINGS',
 'ACCOUNT_PASSWORD_TOCHANGEPASSWORD'                           => 'CHANGE_PASSWORD',
-'ACCOUNT_PASSWORD_ERRINCORRECTCURRENTPASSW'                   => 'ERROR_MESSAGE_CURRENT_PASSWORD_INVALID',
 'ACCOUNT_RECOMM_BACKTOSHOP'                                   => 'BACK_TO_SHOP',
 'ACCOUNT_RECOMM_LISTAUTHOR'                                   => 'AUTHOR',
 'ACCOUNT_RECOMM_LISTDESC'                                     => 'INTRODUCTION',
@@ -455,6 +454,7 @@ $aMap = array(
 'EXCEPTION_VOUCHER_NOTVALIDUSERGROUP'                         => 'ERROR_MESSAGE_VOUCHER_NOTVALIDUSERGROUP',
 'EXCEPTION_VOUCHER_NOVOUCHER'                                 => 'ERROR_MESSAGE_VOUCHER_NOVOUCHER',
 'EXCEPTION_VOUCHER_TOTALBELOWZERO'                            => 'ERROR_MESSAGE_VOUCHER_TOTALBELOWZERO',
+'FACEBOOK_CHAT'                                               => 'FACEBOOK_LIVE_STREAM',
 'FACEBOOK_INVITEBUTTONTEXT'                                   => 'FACEBOOK_OPEN_WEBSITE',
 'FACEBOOK_INVITEHEADER'                                       => 'FACEBOOK_INVITE_YOUR_FRIENDS',
 'FACEBOOK_POPUP_CLOSEBTN'                                     => 'CLOSE',
@@ -553,7 +553,7 @@ $aMap = array(
 'INC_COMPARE_LOCATOR_PAGE'                                    => 'PAGE',
 'INC_DETAILS_LOCATOR_BACKTOOVERVIEW'                          => 'BACK_TO_OVERVIEW',
 'INC_DETAILS_LOCATOR_NEXTPRODUCT'                             => 'NEXT_PRODUCT',
-'INC_DETAILS_LOCATOR_PREVIOUSPRODUCT'                         => 'PREVIOUS_PRODUCT',
+'INC_DETAILS_LOCATOR_PREVIUOSPRODUCT'                         => 'PREVIUOS_PRODUCT',
 'INC_DETAILS_LOCATOR_PRODUCT'                                 => 'PRODUCT',
 'INC_FOOTER_CART'                                             => 'BASKET',
 'INC_FOOTER_CONTACT'                                          => 'CONTACT',
@@ -981,5 +981,4 @@ $aMap = array(
 'WRAPPING_PERSONALMESSAGE'                                    => 'WRAPPING_DESCRIPTION',
 'WRAPPING_PRODUCT'                                            => 'PRODUCT',
 'WRAPPING_TITLE'                                              => 'GIFTWRAPPER',
-'FACEBOOK_ENABLEBUTTONTEXT'                                       => 'ENABLE'
 );

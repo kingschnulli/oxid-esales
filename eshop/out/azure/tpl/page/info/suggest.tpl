@@ -11,4 +11,4 @@
     [{include file="form/suggest.tpl"}]
     [{ insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
-[{include file="layout/page.tpl" sidebar="Left"}]
+[{include file="layout/page.tpl" sidebar="Right"}]

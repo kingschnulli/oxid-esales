@@ -6,8 +6,8 @@
     [{/if }]
     <h1 class="pageHead">[{ $oxcmp_shop->oxshops__oxcompany->value }]</h1>
     <ul>
-        <li>[{ $oxcmp_shop->oxshops__oxstreet->value }]</li>
         <li>[{ $oxcmp_shop->oxshops__oxzip->value }]&nbsp;[{ $oxcmp_shop->oxshops__oxcity->value }]</li>
+        <li>[{ $oxcmp_shop->oxshops__oxstreet->value }]</li>
         <li>[{ $oxcmp_shop->oxshops__oxcountry->value }]</li>
         [{ if $oxcmp_shop->oxshops__oxtelefon->value}]
             <li>[{ oxmultilang ident="PAGE_INFO_CONTACT_PHONE" }] [{ $oxcmp_shop->oxshops__oxtelefon->value }]</li>
@@ -23,4 +23,4 @@
     [{ insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 
-[{include file="layout/page.tpl" sidebar="Left"}]
+[{include file="layout/page.tpl" sidebar="Right"}]

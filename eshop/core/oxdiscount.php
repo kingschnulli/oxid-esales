@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscount.php 40351 2011-11-29 16:16:28Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscount.php 39868 2011-11-09 15:09:45Z linas.kukulskis $
  */
 
 /**
@@ -186,7 +186,7 @@ class oxDiscount extends oxI18n
             return false;
         }
 
-        $myDB = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
+        $myDB = oxDb::getDb();
 
         // check if this article is assigned
         $sQ  = "select 1 from oxobject2discount where oxdiscountid = ".$myDB->quote( $this->oxdiscount__oxid->value)." and oxtype = 'oxarticles' ";
@@ -287,7 +287,7 @@ class oxDiscount extends oxI18n
         // oxobject2discount configuration check
         $sQ = 'select 1 from oxobject2discount where oxdiscountid = '.oxDb::getDb()->quote($this->oxdiscount__oxid->value).' and oxtype in ("oxarticles", "oxcategories" ) ';
 
-        return !( (bool) oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT )->getOne( $sQ ) );
+        return !( (bool) oxDb::getDb()->getOne( $sQ ) );
     }
 
     /**
@@ -303,7 +303,7 @@ class oxDiscount extends oxI18n
             return false;
         }
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
+        $oDb = oxDb::getDb();
         $sQ  = "select 1 from oxobject2discount where oxdiscountid=".$oDb->quote( $this->getId() );
         $sQ .= $this->_getProductCheckQuery( $oArticle );
         if ( !( $blOk = (bool) $oDb->getOne( $sQ ) ) ) {
@@ -414,7 +414,7 @@ class oxDiscount extends oxI18n
 
         $sCatIds = "(".implode(",", oxDb::getInstance()->quoteArray($aCatIds)).")";
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
+        $oDb = oxDb::getDb();
         // getOne appends limit 1, so this one should be fast enough
         $sQ = "select oxobjectid from oxobject2discount where oxdiscountid = ".$oDb->quote($this->oxdiscount__oxid->value)." and oxobjectid in $sCatIds and oxtype = 'oxcategories'";
 

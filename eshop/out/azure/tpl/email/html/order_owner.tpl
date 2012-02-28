@@ -1,6 +1,5 @@
 [{ assign var="shop"      value=$oEmailView->getShop() }]
 [{ assign var="oViewConf" value=$oEmailView->getViewConfig() }]
-[{ assign var="oConf"     value=$oViewConf->getConfig() }]
 [{ assign var="currency"  value=$oEmailView->getCurrency() }]
 [{ assign var="user"      value=$oEmailView->getUser() }]
 [{ assign var="basket"    value=$order->getBasket() }]
@@ -48,7 +47,7 @@
                         [{assign var="basketproduct" value=$basketitemlist.$basketindex }]
                         <tr valign="top">
                             <td style="padding: 5px; border-bottom: 4px solid #ddd;">
-                                <img src="[{$basketproduct->getThumbnailUrl(false) }]" border="0" hspace="0" vspace="0" alt="[{$basketitem->getTitle()|strip_tags}]" align="texttop">
+                                <img src="[{$basketproduct->getThumbnailUrl() }]" border="0" hspace="0" vspace="0" alt="[{ $basketproduct->oxarticles__oxtitle->value|strip_tags }]" align="texttop">
                                 [{if $oViewConf->getShowGiftWrapping() }]
                                 <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0; padding: 10px 0;">
                                     [{assign var="oWrapping" value=$basketitem->getWrapping() }]
@@ -58,7 +57,7 @@
                             </td>
                             <td style="padding: 5px; border-bottom: 4px solid #ddd;">
                                 <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0; padding: 10px 0;">
-                                    <b>[{$basketitem->getTitle()}]</b>
+                                    <b>[{ $basketproduct->oxarticles__oxtitle->value }][{ if $basketproduct->oxarticles__oxvarselect->value}], [{ $basketproduct->oxarticles__oxvarselect->value}][{/if}]</b>
                                     [{ if $basketitem->getChosenSelList() }],
                                     [{foreach from=$basketitem->getChosenSelList() item=oList}]
                                     [{ $oList->name }] [{ $oList->value }]&nbsp;
@@ -152,16 +151,15 @@
                                     </tr>
                                     [{/if}]
                                     [{ foreach from=$order->getVoucherList() item=voucher}]
-                                    [{ assign var="voucherseries" value=$voucher->getSerie() }]
                                     <tr valign="top">
                                         <td style="padding: 5px 20px 5px 5px;">
                                             <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0;">
-                                                [{$voucher->oxvouchers__oxvouchernr->value}]
+                                                [{$voucher->oxmodvouchers__oxvouchernr->value}]
                                             </p>
                                         </td>
                                         <td style="padding: 5px 20px 5px 5px;">
                                             <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0;">
-                                                [{$voucherseries->oxvoucherseries__oxdiscount->value}] [{ if $voucherseries->oxvoucherseries__oxdiscounttype->value == "absolute"}][{ $currency->sign}][{else}]%[{/if}]
+                                                [{$voucher->oxmodvouchers__oxdiscount->value}] [{ if $voucher->oxmodvouchers__oxdiscounttype->value == "absolute"}][{ $currency->sign}][{else}]%[{/if}]
                                             </p>
                                         </td>
                                     </tr>
@@ -490,6 +488,8 @@
                     </h3>
                     <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
                         <b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PAYMENTMETHOD" }] [{ $payment->oxpayments__oxdesc->value }] [{ if $basket->getPaymentCosts() }]([{ $basket->getFPaymentCosts() }] [{ $currency->sign}])[{/if}]</b>
+                        <br>
+                        [{ $payment->oxpayments__oxlongdesc->value }]
                         <br><br>
                         [{ oxmultilang ident="EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF" }]
                     </p>

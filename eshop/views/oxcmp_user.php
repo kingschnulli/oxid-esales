@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 40245 2011-11-23 15:54:46Z linas.kukulskis $
+ * @version   SVN: $Id: oxcmp_user.php 40139 2011-11-22 15:07:05Z arunas.paskevicius $
  */
 
 // defining login/logout states

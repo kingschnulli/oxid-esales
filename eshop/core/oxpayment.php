@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpayment.php 41773 2012-01-26 09:31:43Z vilma $
+ * @version   SVN: $Id: oxpayment.php 39192 2011-10-12 13:25:31Z arvydas.vapsva $
  */
 
 /**
@@ -96,32 +96,12 @@ class oxPayment extends oxI18n
     protected $_iPaymentError = null;
 
     /**
-     * Payment VAT config
-     *
-     * @var bool
-     */
-    protected $_blPaymentVatOnTop = false;
-
-    /**
      * Class constructor, initiates parent constructor (parent::oxI18n()).
      */
     public function __construct()
     {
-        $this->setPaymentVatOnTop( $this->getConfig()->getConfigParam( 'blPaymentVatOnTop' ) );
         parent::__construct();
         $this->init( 'oxpayments' );
-    }
-
-    /**
-     * Payment VAT config setter
-     *
-     * @param bool $blOnTop Payment vat config
-     *
-     * @return null
-     */
-    public function setPaymentVatOnTop( $blOnTop )
-    {
-        $this->_blPaymentVatOnTop = $blOnTop;
     }
 
     /**
@@ -273,12 +253,7 @@ class oxPayment extends oxI18n
 
         // calculating total price
         $oPrice = oxNew( 'oxPrice' );
-        if ( !$this->_blPaymentVatOnTop ) {
-            $oPrice->setBruttoPriceMode();
-        } else {
-            $oPrice->setNettoPriceMode();
-        }
-
+        $oPrice->setBruttoPriceMode();
         $oPrice->setPrice( $dPrice );
 
         if ( $this->getConfig()->getConfigParam( 'blCalcVATForPayCharge' ) && $dPrice > 0 ) {

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpicturehandler.php 41831 2012-01-27 15:32:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxpicturehandler.php 41768 2012-01-26 08:35:54Z alfonsas $
  */
 
 /**
@@ -366,16 +366,15 @@ class oxPictureHandler extends oxSuperCfg
      * @param string $sSize    picture sizes (x, y)
      * @param string $sIndex   picture index [optional]
      * @param string $sAltPath alternative picture path [optional]
-     * @param bool   $bSsl     Whether to force SSL
      *
      * @return string | bool
      */
-    public function getPicUrl( $sPath, $sFile, $sSize, $sIndex = null, $sAltPath = false, $bSsl = null )
+    public function getPicUrl( $sPath, $sFile, $sSize, $sIndex = null, $sAltPath = false)
     {
         $sUrl = null;
         if ( $sPath && $sFile && ( $aSize = $this->getImageSize( $sSize, $sIndex ) ) ) {
 
-            $aPicInfo = $this->_getPictureInfo( "master/" . ( $sAltPath ? $sAltPath : $sPath ), $sFile, $this->isAdmin(), $bSsl );
+            $aPicInfo = $this->_getPictureInfo( "master/" . ( $sAltPath ? $sAltPath : $sPath ), $sFile, $this->isAdmin() );
             if ( $aPicInfo['url'] && $aSize[0] && $aSize[1] ) {
                 $sDirName = "{$aSize[0]}_{$aSize[1]}_" . $this->getConfig()->getConfigParam( 'sDefaultImageQuality' );
                 $sUrl = str_replace( "/master/" . ( $sAltPath ? $sAltPath : $sPath ), "/generated/{$sPath}{$sDirName}/", $aPicInfo['url'] );
@@ -391,15 +390,14 @@ class oxPictureHandler extends oxSuperCfg
      * @param string $sFile  picture file name
      * @param string $sSize  picture sizes (x, y)
      * @param string $sIndex picture index [optional]
-     * @param bool   $bSsl   Whether to force SSL
      *
      * @return string | bool
      */
-    public function getProductPicUrl( $sPath, $sFile, $sSize, $sIndex = null, $bSsl = null )
+    public function getProductPicUrl( $sPath, $sFile, $sSize, $sIndex = null )
     {
         $sUrl = null;
-        if ( !$sFile || !( $sUrl = $this->getPicUrl( $sPath, $sFile, $sSize, $sIndex, false, $bSsl ) ) ) {
-            $sUrl = $this->getPicUrl( $sPath, "nopic.jpg", $sSize, $sIndex, "/", $bSsl );
+        if ( !$sFile || !( $sUrl = $this->getPicUrl( $sPath, $sFile, $sSize, $sIndex ) ) ) {
+            $sUrl = $this->getPicUrl( $sPath, "nopic.jpg", $sSize, $sIndex, "/" );
         }
         return $sUrl;
     }

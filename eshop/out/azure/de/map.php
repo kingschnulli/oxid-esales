@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -50,7 +50,7 @@ $aMap = array(
 'DETAILS_FROM'                                                    => 'FROM_3',
 'DETAILS_LOCATOR_FROM'                                            => 'OF',
 'DETAILS_LOCATOR_NEXTPRODUCT'                                     => 'NEXT_PRODUCT',
-'DETAILS_LOCATOR_PREVIOUSPRODUCT'                                 => 'PREVIOUS_PRODUCT',
+'DETAILS_LOCATOR_PREVIUOSPRODUCT'                                 => 'PREVIUOS_PRODUCT',
 'DETAILS_LOGIN'                                                   => 'MESSAGE_LOGIN_TO_RATE',
 'DETAILS_LOGINTOACCESSNOTICELIST'                                 => 'LOGIN_TO_ACCESS_WISH_LIST',
 'DETAILS_LOGINTOACCESSRECOMMLIST'                                 => 'LOGIN_TO_ACCESS_LISTMANIA',
@@ -214,7 +214,7 @@ $aMap = array(
 'EXCEPTION_VOUCHER_NOTVALIDUSERGROUP'                             => 'MESSAGE_COUNPON_INVALID_USER_GROUP',
 'EXCEPTION_VOUCHER_NOVOUCHER'                                     => 'MESSAGE_COUPON_INVALID',
 'EXCEPTION_VOUCHER_TOTALBELOWZERO'                                => 'ERROR_MESSAGE_VOUCHER_TOTALBELOWZERO',
-'EXCEPTION_CURRENT_PASSWORD_INVALID'                              => 'ERROR_MESSAGE_CURRENT_PASSWORD_INVALID',
+'FACEBOOK_CHAT'                                                   => 'FACEBOOK_LIVE_STREAM',
 'FACEBOOK_ENABLEBUTTONTEXT'                                       => 'ENABLE',
 'FACEBOOK_INVITEBUTTONTEXT'                                       => 'FACEBOOK_OPEN_WEBSITE',
 'FACEBOOK_INVITEHEADER'                                           => 'FACEBOOK_INVITE_YOUR_FRIENDS',
@@ -830,7 +830,6 @@ $aMap = array(
 'WIDGET_PRODUCT_PRODUCT_NOWONLY'                                  => 'NOWONLY',
 'WIDGET_PRODUCT_PRODUCT_NR'                                       => 'PRODUCT_NO',
 'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING'                             => 'PLUS_SHIPPING',
-'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2'                            => 'PLUS_SHIPPING2',
 'WIDGET_PRODUCT_PRODUCT_REDUCEDFROM'                              => 'REDUCED_FROM_2',
 'WIDGET_PRODUCT_PRODUCT_REMOVE'                                   => 'REMOVE_2',
 'WIDGET_PRODUCT_RELATED_PRODUCTS_ACCESSORIES_HEADER'              => 'ACCESSORIES',
@@ -843,6 +842,7 @@ $aMap = array(
 'WIDGET_RECOMMENDATIONLIST_SEARCHFORLISTS'                        => 'SEARCH_FOR_LISTS',
 'WIDGET_SERVICES_ACCOUNT'                                         => 'ACCOUNT',
 'WIDGET_SERVICES_BASKET'                                          => 'BASKET',
+'WIDGET_SERVICES_CONTACTS'                                        => 'CONTACTS',
 'WIDGET_SERVICES_HELP'                                            => 'HELP',
 'WIDGET_SERVICES_INVITEFRIENDS'                                   => 'FACEBOOK_INVITE_YOUR_FRIENDS',
 'WIDGET_SERVICES_LINKS'                                           => 'LINKS',

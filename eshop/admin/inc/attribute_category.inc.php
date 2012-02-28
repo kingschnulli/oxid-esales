@@ -19,19 +19,17 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_category.inc.php 39394 2011-10-14 13:38:55Z arvydas.vapsva $
+ * @version   SVN: $Id: attribute_category.inc.php 33353 2011-02-18 13:44:54Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
                                         array( 'oxtitle', 'oxcategories', 1, 1, 0 ),
                                         array( 'oxdesc',  'oxcategories', 1, 1, 0 ),
-                                        array( 'oxid',    'oxcategories', 0, 0, 0 ),
                                         array( 'oxid',    'oxcategories', 0, 0, 1 )
                                         ),
                      'container2' => array(
                                         array( 'oxtitle', 'oxcategories', 1, 1, 0 ),
                                         array( 'oxdesc',  'oxcategories', 1, 1, 0 ),
-                                        array( 'oxid',    'oxcategories', 0, 0, 0 ),
                                         array( 'oxid',    'oxcategory2attribute', 0, 0, 1 ),
                                         array( 'oxid',    'oxcategories', 0, 0, 1 )
                                         ),

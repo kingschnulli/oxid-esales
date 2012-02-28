@@ -277,7 +277,7 @@ class oxBasketReservation extends oxSuperCfg
      */
     public function discardUnusedReservations($iLimit)
     {
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(true);
         $iStartTime = oxUtilsDate::getInstance()->getTime() - (int) $this->getConfig()->getConfigParam( 'iPsBasketReservationTimeout' );
         $oRs = $oDb->execute("select oxid from oxuserbaskets where oxtitle = 'reservations' and oxupdate <= $iStartTime limit $iLimit");
         if ($oRs->EOF) {

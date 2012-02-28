@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxoutofstockexceptionTest.php 40167 2011-11-23 14:38:23Z ramunas.skarbalius $
+ * @version   SVN: $Id: oxoutofstockexceptionTest.php 26841 2010-03-25 13:58:15Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -31,7 +31,6 @@ class Unit_Core_oxoutofstockexceptionTest extends OxidTestCase
     private $_oTestObject = null;
     private $_sMsg = 'Erik was here..';
     private $_iAmount = 13;
-    private $_sBasketIndex = "05848170643ab0deb9914566391c0c63";
 
     /**
      * Initialize the fixture.
@@ -44,7 +43,6 @@ class Unit_Core_oxoutofstockexceptionTest extends OxidTestCase
         $this->_oTestObject = oxNew( 'oxOutOfStockException', $this->_sMsg);
         $this->assertEquals('oxOutOfStockException', get_class($this->_oTestObject) );
         $this->_oTestObject->setRemainingAmount($this->_iAmount);
-        $this->_oTestObject->setBasketIndex( $this->_sBasketIndex );
     }
 
     public function testSetDestination()
@@ -74,7 +72,6 @@ class Unit_Core_oxoutofstockexceptionTest extends OxidTestCase
         $aRes = $this->_oTestObject->getValues();
         $this->assertArrayHasKey('remainingAmount', $aRes);
         $this->assertTrue($this->_iAmount === $aRes['remainingAmount']);
-        $this->assertTrue( $this->_sBasketIndex === $aRes['basketIndex'] );
     }
 
 }

@@ -40,7 +40,7 @@
         <h2 class="pageHead">[{$sPageHeadTitle|truncate:80}]</h2>
         <div class="detailsParams listRefine bottomRound">
             <div class="pager refineParams clear" id="detailsItemsPager">
-                [{if $actCategory->prevProductLink}]<a id="linkPrevArticle" class="prev" href="[{$actCategory->prevProductLink}]">[{oxmultilang ident="DETAILS_LOCATOR_PREVIOUSPRODUCT"}]</a>[{/if}]
+                [{if $actCategory->prevProductLink}]<a id="linkPrevArticle" class="prev" href="[{$actCategory->prevProductLink}]">[{oxmultilang ident="DETAILS_LOCATOR_PREVIUOSPRODUCT"}]</a>[{/if}]
                 <span class="page">
                    [{oxmultilang ident="DETAILS_LOCATOR_PRODUCT"}] [{$actCategory->iProductPos}] [{oxmultilang ident="DETAILS_LOCATOR_FROM"}] [{$actCategory->iCntOfProd}]
                 </span>
@@ -48,8 +48,7 @@
             </div>
         </div>
 
-        [{* RDFa offering*}]
-        <div id="productinfo">
+        <div id="productinfo" itemscope itemtype="http://schema.org/Product">
             [{include file="page/details/inc/fullproductinfo.tpl"}]
         </div>
     </div>

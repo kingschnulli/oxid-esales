@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeed.php 42207 2012-02-13 13:27:12Z linas.kukulskis $
+ * @version   SVN: $Id: oxrssfeed.php 42151 2012-02-10 12:44:51Z linas.kukulskis $
  */
 
 /**
@@ -194,25 +194,16 @@ class oxRssFeed extends oxSuperCfg
             $oItem->title                   = strip_tags($oArticle->oxarticles__oxtitle->value . $sPrice);
             $oItem->guid     = $oItem->link = $myUtilsUrl->prepareUrlForNoSession($oArticle->getLink());
             $oItem->isGuidPermalink         = true;
-            $oItem->description             = $oArticle->getLongDescription()->value; //oxarticles__oxshortdesc->value;
+            $oItem->description             = $oArticle->getArticleLongDesc()->value; //oxarticles__oxshortdesc->value;
             if (trim(str_replace('&nbsp;', '', (strip_tags($oItem->description)))) == '') {
                 $oItem->description             = $oArticle->oxarticles__oxshortdesc->value;
             }
 
             $oItem->description = trim($oItem->description);
-            if ( $sThumb = $oArticle->getThumbnailUrl() ) {
-                $oItem->description = "<img src='$sThumb' border=0 align='left' hspace=5>".$oItem->description;
+            if ($sIcon = $oArticle->getIconUrl()) {
+                $oItem->description = "<img src='$sIcon' border=0 align='left' hspace=5>".$oItem->description;
             }
             $oItem->description = $oStr->htmlspecialchars( $oItem->description );
-
-            if ( $oArticle->oxarticles__oxtimestamp->value ) {
-                list($date, $time) = explode(' ', $oArticle->oxarticles__oxtimestamp->value);
-                $date              = explode('-', $date);
-                $time              = explode(':', $time);
-                $oItem->date = date( 'D, d M Y H:i:s O', mktime($time[0], $time[1], $time[2], $date[1], $date[2], $date[0]) );
-            } else {
-                $oItem->date = date( 'D, d M Y H:i:s O', time() );
-            }
 
             $aItems[] = $oItem;
         }

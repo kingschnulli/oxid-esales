@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: efiredownloaderTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: efiredownloaderTest.php 25400 2010-01-27 22:42:50Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -53,7 +53,7 @@ class Unit_Admin_EFireDownloaderTest extends OxidTestCase
 
         $oView = new EFire_Downloader();
         $oAdminUserList = $oView->getAdminList();
-        $aUserList = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( "select oxid from oxuser" );
+        $aUserList = oxDb::getDb(true)->getAll( "select oxid from oxuser" );
 
         foreach ( $aUserList as $iKey => $aUserData ) {
             $this->assertTrue( $oAdminUserList->offsetExists( $aUserData['oxid'] ) );

@@ -55,8 +55,8 @@
                     [{block name="checkout_basketcontents_basketitem_image"}]
                         [{* product image *}]
                         <td class="basketImage">
-                            <a href="[{$basketitem->getLink()}]" rel="nofollow">
-                                <img src="[{$basketitem->getIconUrl()}]" alt="[{$basketitem->getTitle()|strip_tags}]">
+                            <a href="[{ $basketproduct->getLink() }]" rel="nofollow">
+                                <img src="[{ $basketproduct->getIconUrl() }]" alt="[{ $basketproduct->oxarticles__oxtitle->value|strip_tags }]">
                             </a>
                         </td>
                     [{/block}]
@@ -65,7 +65,7 @@
                         [{* product title & number *}]
                         <td>
                             <div>
-                                <a rel="nofollow" href="[{$basketitem->getLink()}]">[{$basketitem->getTitle()}]</a>[{if $basketitem->isSkipDiscount() }] <sup><a rel="nofollow" href="#SkipDiscounts_link" >**</a></sup>[{/if}]
+                                <a rel="nofollow" href="[{ $basketproduct->getLink() }]">[{ $basketproduct->oxarticles__oxtitle->value }][{if $basketproduct->oxarticles__oxvarselect->value }], [{ $basketproduct->oxarticles__oxvarselect->value }][{/if }]</a>[{if $basketitem->isSkipDiscount() }] <sup><a rel="nofollow" href="#SkipDiscounts_link" >**</a></sup>[{/if}]
                             </div>
                             <div>
                                 [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ARTNOMBER" }] [{ $basketproduct->oxarticles__oxartnum->value }]
@@ -85,9 +85,9 @@
                             [{/if }]
 
                             [{if !$editable }]
-                                [{foreach key=sVar from=$basketitem->getPersParams() item=aParam }]
-                                    <p class="persparamBox"><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> [{ $aParam }]</p>
-                                [{/foreach}]
+                            [{foreach key=sVar from=$basketitem->getPersParams() item=aParam }]
+                                <p class="persparamBox"><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> [{ $aParam }]</p>
+                            [{/foreach}]
                             [{/if}]
                         </td>
                     [{/block}]
@@ -126,16 +126,9 @@
                                 [{/if}]
 
                                 [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
-
-                                    [{if $basketproduct->oxarticles__oxisconfigurable->value}]
-                                        [{if $basketitem->getPersParams()}]
-                                            [{foreach key=sVar from=$basketitem->getPersParams() item=aParam }]
-                                                <p><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> <input class="textbox persParam" type="text" name="aproducts[[{ $basketindex }]][persparam][[{ $sVar }]]" value="[{ $aParam }]"></p>
-                                            [{/foreach }]
-                                        [{ else }]
-                                            <p><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> <input class="textbox persParam" type="text" name="aproducts[[{ $basketindex }]][persparam][details]" value=""></p>
-                                        [{/if}]
-                                    [{/if}]
+                                    [{foreach key=sVar from=$basketitem->getPersParams() item=aParam }]
+                                        <p><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> <input class="textbox persParam" type="text" name="aproducts[[{ $basketindex }]][persparam][[{ $sVar }]]" value="[{ $aParam }]"></p>
+                                    [{/foreach }]
                                     <p>
                                         <input id="am_[{$smarty.foreach.basketContents.iteration}]" type="text" class="textbox" name="aproducts[[{ $basketindex }]][am]" value="[{ $basketitem->getAmount() }]" size="2">
                                     </p>
@@ -184,7 +177,7 @@
                 [{foreach from=$Errors.basket item=oEr key=key }]
                     [{if $oEr->getErrorClassType() == 'oxOutOfStockException'}]
                         [{* display only the exceptions for the current article *}]
-                        [{if $basketindex == $oEr->getValue('basketIndex') }]
+                        [{if $basketproduct->oxarticles__oxid->value == $oEr->getValue('productId') }]
                             <tr class="basketError">
                                 [{if $editable }]<td></td>[{/if}]
                                     <td colspan="5">
@@ -196,11 +189,11 @@
                         [{/if}]
                     [{/if}]
                     [{if $oEr->getErrorClassType() == 'oxArticleInputException'}]
-                        [{if $basketitem->getProductId() == $oEr->getValue('productId') }]
-                            <tr class="basketError">
+                        [{if $basketproduct->oxarticles__oxid->value == $oEr->getValue('productId') }]
+                            <tr>
                                 [{if $editable }]<td></td>[{/if}]
                                 <td colspan="5">
-                                    <span class="inlineError">[{ $oEr->getOxMessage() }]</span>
+                                    [{ $oEr->getOxMessage() }]
                                 </td>
                                 [{if $oView->isWrapping() }]<td></td>[{/if}]
                                 <td></td>

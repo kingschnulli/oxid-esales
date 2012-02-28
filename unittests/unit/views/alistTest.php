@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 42217 2012-02-13 13:34:58Z linas.kukulskis $
+ * @version   SVN: $Id: alistTest.php 38641 2011-09-06 07:36:48Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -544,8 +544,8 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testCollectMetaKeyword()
     {
         $oLongDesc = new oxField('testtitle');
-        $oArticle = $this->getMock( 'oxarticle', array( 'getLongDescription' ) );
-        $oArticle->expects( $this->exactly( 2 ) )->method( 'getLongDescription')->will( $this->returnValue( $oLongDesc ) );
+        $oArticle = $this->getMock( 'oxarticle', array( 'getArticleLongDesc' ) );
+        $oArticle->expects( $this->exactly( 2 ) )->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc ) );
 
         $oArtList = new oxlist();
         $oArtList->offsetSet( 0, $oArticle );
@@ -569,8 +569,8 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testCollectMetaKeywordLongerThen60()
     {
         $oLongDesc = new oxField('testtitle Originelle, witzige Geschenkideen - Lifestyle, Trends, Accessoires');
-        $oArticle = $this->getMock( 'oxarticle', array( 'getLongDescription' ) );
-        $oArticle->expects( $this->exactly( 1 ) )->method( 'getLongDescription')->will( $this->returnValue( $oLongDesc ) );
+        $oArticle = $this->getMock( 'oxarticle', array( 'getArticleLongDesc' ) );
+        $oArticle->expects( $this->exactly( 1 ) )->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc ) );
 
         $oArtList = new oxlist();
         $oArtList->offsetSet( 0, $oArticle );

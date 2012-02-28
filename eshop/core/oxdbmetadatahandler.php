@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandler.php 39419 2011-10-17 14:16:04Z vilma $
+ * @version   SVN: $Id: oxdbmetadatahandler.php 38187 2011-08-17 08:06:12Z linas.kukulskis $
  */
 
 /**
@@ -172,19 +172,24 @@ class oxDbMetaDataHandler extends oxSuperCfg
     /**
      * Get sql for new multilang field creation
      *
-     * @param string $sTable     core table name
-     * @param string $sField     field name
-     * @param string $sNewField  new field name
-     * @param string $sPrevField previous field in table
-     * @param string $sTableSet  table to change (if not setted take core table)
+     * @param string $sTable core table name
+     * @param string $sField field name
+     * @param string $iLang  new language id
      *
      * @return string
      */
-    public function getAddFieldSql( $sTable, $sField, $sNewField, $sPrevField, $sTableSet = null )
+    protected function _getAddFieldSql( $sTable, $sField, $iLang )
     {
-        if (!$sTableSet) {
-            $sTableSet = $sTable;
+        $sTableSet = getLangTableName($sTable, $iLang);
+        $sNewField = $sField.'_'.$iLang;
+
+        if ($iLang>1) {
+            $iPrevLang = $iLang-1;
+            $sPrevField = $sField.'_'.$iPrevLang;
+        } else {
+            $sPrevField = $sField;
         }
+
         $aRes = oxDb::getDb()->getAll("show create table {$sTable}");
         $sTableSql = $aRes[0][1];
 
@@ -205,20 +210,18 @@ class oxDbMetaDataHandler extends oxSuperCfg
 
 
     /**
-     * Get sql for new multilang field index creation
+     *Get sql for new multilang field index creation
      *
-     * @param string $sTable    core table name
-     * @param string $sField    field name
-     * @param string $sNewField new field name
-     * @param string $sTableSet table to change (if not setted take core table)
+     * @param string $sTable core table name
+     * @param string $sField field name
+     * @param string $iLang  new language id
      *
      * @return string
      */
-    public function getAddFieldIndexSql( $sTable, $sField, $sNewField, $sTableSet = null )
+    protected function _getAddFieldIndexSql( $sTable, $sField, $iLang )
     {
-        if (!$sTableSet) {
-            $sTableSet = $sTable;
-        }
+        $sTableSet = getLangTableName($sTable, $iLang);
+        $sNewField = $sField.'_'.$iLang;
 
         $aRes = oxDb::getDb()->getAll("show create table {$sTable}");
         $sTableSql = $aRes[0][1];
@@ -227,7 +230,6 @@ class oxDbMetaDataHandler extends oxSuperCfg
         $aIndex = $aMatch[0];
 
         $aIndexSql = array();
-        $aSql      = array();
         if ( count($aIndex) ) {
             foreach ( $aIndex as $sIndexSql ) {
                 if ( preg_match("/\([^)]*\b" . $sField . "\b[^)]*\)/i", $sIndexSql )  ) {
@@ -238,15 +240,12 @@ class oxDbMetaDataHandler extends oxSuperCfg
                     //replacing previous field name with new one
                     $sIndexSql = preg_replace("/\b" . $sField . "\b/", $sNewField, $sIndexSql );
 
-                    $aIndexSql[] =  "ADD ". $sIndexSql;
+                    $aIndexSql[] =  "ALTER TABLE `$sTableSet` ADD ". $sIndexSql;
                 }
-            }
-            if ( count($aIndexSql) ) {
-                $aSql = array("ALTER TABLE `$sTableSet` ".implode(", ", $aIndexSql));
             }
         }
 
-        return $aSql;
+        return $aIndexSql;
     }
 
     /**
@@ -354,24 +353,17 @@ class oxDbMetaDataHandler extends oxSuperCfg
         if ( is_array($aFields) && count($aFields) > 0 ) {
             foreach ( $aFields as $sField ) {
                 $sNewFieldName = $sField . "_" . $iNewLang;
-                if ($iNewLang>1) {
-                    $iPrevLang = $iNewLang-1;
-                    $sPrevField = $sField.'_'.$iPrevLang;
-                } else {
-                    $sPrevField = $sField;
-                }
-
                 if ( !$this->tableExists($sTableSet) || !$this->fieldExists( $sNewFieldName, $sTableSet ) ) {
 
                     //getting add field sql
-                    $aSql[] = $this->getAddFieldSql( $sTable, $sField, $sNewFieldName, $sPrevField, $sTableSet );
+                    $aSql[] = $this->_getAddFieldSql($sTable, $sField, $iNewLang);
 
                     //getting add index sql on added field
-                    $aSql = array_merge($aSql, (array) $this->getAddFieldIndexSql($sTable, $sField, $sNewFieldName, $sTableSet));
+                    $aSql = array_merge($aSql, (array) $this->_getAddFieldIndexSql($sTable, $sField, $iNewLang));
                 }
             }
         }
-        $this->executeSql($aSql);
+        $this->_executeSql($aSql);
     }
 
     /**
@@ -406,7 +398,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
         }
 
         if ( !empty($aSql) ) {
-            $this->executeSql( $aSql );
+            $this->_executeSql( $aSql );
         }
     }
 
@@ -467,7 +459,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
      *
      * @return null
      */
-    public function executeSql( $aSql )
+    protected function _executeSql( $aSql )
     {
         $oDb = oxDb::getDb();
 
