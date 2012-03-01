@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 37146 2011-07-19 12:21:36Z arvydas.vapsva $
+ * @version   SVN: $Id: oxemailTest.php 42525 2012-02-29 11:35:41Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1014,6 +1014,64 @@ class Unit_Core_oxemailTest extends OxidTestCase
         $this->assertEquals( "hostname:23", $oEmail->UNITsetSmtpProtocol('ssl://hostname:23') );
         $this->assertEquals( "hostname:23", $oEmail->UNITsetSmtpProtocol('tls://hostname:23') );
         $this->assertEquals( "ssx://hostname:23", $oEmail->UNITsetSmtpProtocol('ssx://hostname:23') );
+    }
+
+    /**
+     * Testing the correct recipient (#1964)
+     */
+    public function testSendOrderEmailToOwnerCorrectSenderReceiver()
+    {
+        $oSmartyMock = $this->getMock("Smarty", array("fetch"));
+        $oSmartyMock->expects($this->any())->method("fetch")->will($this->returnValue(true));
+
+        $oEmail = $this->getMock("oxEmail", array("_sendMail", "_getSmarty"));
+        $oEmail->expects($this->once())->method("_sendMail")->will($this->returnValue(true));
+        $oEmail->expects($this->any())->method("_getSmarty")->will($this->returnValue($oSmartyMock));
+
+        $oUser = new oxUser();
+        $oUser->load("oxdefaultadmin");
+        //oxOrder mock
+        $oOrder = $this->getMock("oxOrder", array("getOrderUser"));
+        $oOrder->expects($this->once())->method("getOrderUser")->will($this->returnValue($oUser));
+
+        $oEmail->sendOrderEmailToOwner( $oOrder );
+
+        //testing actual From field Value
+        $this->assertEquals("order@myoxideshop.com", $oEmail->getFrom());
+        //testing actual To field Value
+        $aTo = array();
+        $aTo[0][0] = 'order@myoxideshop.com';
+        $aTo[0][1] = 'order';
+        $this->assertEquals($aTo, $oEmail->getRecipient());
+    }
+
+    /**
+     * Testing the correct recipient (#3586)
+     */
+    public function testSendSuggestMailCorrectSender()
+    {
+        $oSmartyMock = $this->getMock("Smarty", array("fetch"));
+        $oSmartyMock->expects($this->any())->method("fetch")->will($this->returnValue(true));
+        
+        $oEmail = $this->getMock("oxEmail", array("send", "_getSmarty"));
+        $oEmail->expects($this->once())->method("send")->will($this->returnValue(true));
+        $oEmail->expects($this->any())->method("_getSmarty")->will($this->returnValue($oSmartyMock));
+        
+        // oxParams mock
+        $oParams = $this->getMock("oxParams");
+        
+        // oxProduct mock
+        $oProduct = $this->getMock("oxProduct", array("getId", "getLanguage", "setLanguage", "load", "getLink"));
+        $oProduct->expects($this->once())->method("getId")->will($this->returnValue(true));
+        $oProduct->expects($this->once())->method("getLanguage")->will($this->returnValue(true));
+        $oProduct->expects($this->once())->method("setLanguage")->will($this->returnValue(true));
+        $oProduct->expects($this->once())->method("load")->will($this->returnValue(true));
+        $oProduct->expects($this->once())->method("getLink")->will($this->returnValue(true));
+        
+        $oEmail->sendSuggestMail( $oParams, $oProduct  );
+    	
+        //testing actual From field Value
+        $this->assertEquals("info@myoxideshop.com", $oEmail->getFrom());
     }
 
 }
