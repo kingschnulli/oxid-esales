@@ -1103,4 +1103,26 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
 
         $oModule->_removeFromDatabase( $aDeletedExtIds );
     }
+
+     /**
+     * oxmodule::_changeBlockStatus() test case
+     *
+     * @return null
+     */
+    public function testChangeBlockStatus()
+    {
+        $oDb = oxDb::getDb();
+        $oConfig = new oxConfig();
+        $sShopId = $oConfig->getBaseShopId();
+
+        $sQ = "insert into oxtplblocks (oxid, oxactive, oxshopid, oxblockname, oxmodule) values
+                                     ('_test1', '0', '$sShopId', 'testBlockName1', 'testext')";
+
+        $oDb->execute( $sQ );
+
+        $oModule = $this->getProxyClass('oxmodule');
+        $oModule->UNITchangeBlockStatus( 'testext', '1' );
+        $iActive = $oDb->getOne( "select oxactive from oxtplblocks where oxmodule='testext'" );
+        $this->assertEquals( '1', $iActive );
+    }
 }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 42362 2012-02-20 15:11:08Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoder.php 42521 2012-02-29 11:02:13Z linas.kukulskis $
  */
 
 /**
@@ -459,7 +459,7 @@ class oxSeoEncoder extends oxSuperCfg
         $sCacheKey = $this->_getCacheKey( $sType, $iLang, $iShopId, $sParams );
         $sCache = false;
 
-        if ( $sCacheKey && !isset( $sCacheKey, self::$_aCache ) ) {
+        if ( $sCacheKey && !isset( self::$_aCache[$sCacheKey] ) ) {
             self::$_aCache[$sCacheKey] = oxUtils::getInstance()->fromFileCache( $sCacheKey );
         }
 

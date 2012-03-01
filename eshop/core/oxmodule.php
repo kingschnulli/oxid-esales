@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: $
  */
@@ -406,6 +406,9 @@ class oxModule extends oxSuperCfg
             $this->getConfig()->setConfigParam('aDisabledModules', $aDisabledModules);
             $this->getConfig()->saveShopConfVar('aarr', 'aDisabledModules', $aDisabledModules);
 
+            //activate oxblocks too
+            $this->_changeBlockStatus( $this->getId(), "1" );
+
             return true;
         }
         return false;
@@ -428,9 +431,25 @@ class oxModule extends oxSuperCfg
             $this->getConfig()->setConfigParam('aDisabledModules', $aModules);
             $this->getConfig()->saveShopConfVar('aarr', 'aDisabledModules', $aModules);
 
-            return true;
+            //deactivate oxblocks too
+            $this->_changeBlockStatus( $this->getId() );
         }
         return false;
+    }
+
+    /**
+     * Deactivates or activates oxblocks of a module
+     *
+     * @param string  $sModule Module name
+     * @param integer $iStatus 0 or 1 to (de)activate blocks
+     *
+     * @return null
+     */
+    protected function _changeBlockStatus( $sModule, $iStatus = '0' )
+    {
+        $oDb = oxDb::getDb();
+        $oDb->execute("UPDATE oxtplblocks SET oxactive = '".(int) $iStatus."' where oxmodule =". $oDb->quote($sModule));
+        return true;
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdb.php 42447 2012-02-27 12:08:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxdb.php 42488 2012-02-28 09:15:20Z linas.kukulskis $
  */
 
 
@@ -75,6 +75,14 @@ class oxDb extends oxSuperCfg
      * @var oxdb
      */
     protected static $_oSlaveDb = null;
+
+    /**
+     * GetDb call count
+     *
+     * @var int
+     */
+    protected static $_iCallCount = 0;
+
 
     /**
      * Database tables descriptions cache array
@@ -267,7 +275,6 @@ class oxDb extends oxSuperCfg
     protected function _getDbInstance( $iInstType = 0 )
     {
         $myConfig = $this->getConfig();
-
         $sHost = $myConfig->getConfigParam( "dbHost" );
 
 
@@ -298,6 +305,8 @@ class oxDb extends oxSuperCfg
      */
     public static function getDb( $iFetchMode = oxDb::FETCH_MODE_NUM )
     {
+        self::$_iCallCount++;
+        
         //Added for 0003480 bug; needed as backward compatibility; @deprecated in 4.6 since 2012-01-15; must be removed;
         if ( $iFetchMode === true ) {
             $iFetchMode = oxDb::FETCH_MODE_ASSOC;
