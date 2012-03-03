@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 40266 2011-11-24 14:33:39Z arvydas.vapsva $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 42554 2012-03-01 07:40:25Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -186,6 +186,57 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 'ssl' => false,
             ),
             $oSC->UNITgetShopHostInfoFromConfig()
+        );
+
+    }
+
+    /**
+     * Testing oxSysRequirements::_getShopSSLHostInfoFromConfig()
+     *
+     * @return null
+     */
+    public function testGetShopSSLHostInfoFromConfig()
+    {
+        modConfig::getInstance()->setConfigParam('sSSLShopURL', 'http://www.testshopurl.lt/testsubdir1/insideit2/');
+        $oSC = new oxSysRequirements();
+        $this->assertEquals(
+            array(
+                'host' => 'www.testshopurl.lt',
+                'port' => 80,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => false,
+            ),
+            $oSC->UNITgetShopSSLHostInfoFromConfig()
+        );
+        modConfig::getInstance()->setConfigParam('sSSLShopURL', 'https://www.testshopurl.lt/testsubdir1/insideit2/');
+        $this->assertEquals(
+            array(
+                'host' => 'www.testshopurl.lt',
+                'port' => 443,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => true,
+            ),
+            $oSC->UNITgetShopSSLHostInfoFromConfig()
+        );
+        modConfig::getInstance()->setConfigParam('sSSLShopURL', 'https://51.1586.51.15:21/testsubdir1/insideit2/');
+        $this->assertEquals(
+            array(
+                'host' => '51.1586.51.15',
+                'port' => 21,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => true,
+            ),
+            $oSC->UNITgetShopSSLHostInfoFromConfig()
+        );
+        modConfig::getInstance()->setConfigParam('sSSLShopURL', '51.1586.51.15:21/testsubdir1/insideit2/');
+        $this->assertEquals(
+            array(
+                'host' => '51.1586.51.15',
+                'port' => 21,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => false,
+            ),
+            $oSC->UNITgetShopSSLHostInfoFromConfig()
         );
 
     }

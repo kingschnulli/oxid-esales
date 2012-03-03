@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 41876 2012-01-30 10:15:28Z mindaugas.rimgaila $
+ * @version   SVN: $Id: lang.php 42565 2012-03-01 11:30:48Z saulius.stasiukaitis $
  */
 
 /*
@@ -776,6 +776,7 @@ $aLang = array(
 'EXCEPTION_UNSPECIFIED_PARENT_VERSIONS'                    => 'Compatible parent theme versions not specified',
 'EXCEPTION_PARENT_VERSION_MISMATCH'                        => 'Parent theme version is not compatible',
 'EXCEPTION_PARENT_THEME_NOT_FOUND'                         => 'Cannot find parent theme',
+'NO_PICTURES_CHANGES'                                      => '[TR]_No pictures changes',
 
 'THEME_AUTHOR'                                             => 'Author',
 'THEME_VERSION'                                            => 'Version',
