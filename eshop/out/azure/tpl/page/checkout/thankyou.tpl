@@ -35,11 +35,12 @@
 
             [{block name="checkout_thankyou_ts"}]
                 [{if $oViewConf->showTs("THANKYOU") && $oViewConf->getTsId() }]
+                    [{assign var="sTSRatingImg" value="https://www.trustedshops.com/bewertung/widget/img/bewerten_"|cat:$oView->getActiveLangAbbr()|cat:".gif"}]
                     <h3 class="blockHead">[{ oxmultilang ident="TS_RATINGS" }]</h3>
                     [{ oxmultilang ident="TS_RATINGS_RATEUS" }]
                     <div class="etrustTsRatingButton">
                         <a href="[{ $oViewConf->getTsRatingUrl() }]" target="_blank" title="[{ oxmultilang ident="TS_RATINGS_URL_TITLE" }]">
-                            <img src="https://www.trustedshops.com/bewertung/widget/img/bewerten_de.gif" border="0" alt="[{ oxmultilang ident="TS_RATINGS_BUTTON_ALT" }]" align="middle">
+                            <img src="[{$sTSRatingImg}]" border="0" alt="[{ oxmultilang ident="TS_RATINGS_BUTTON_ALT" }]" align="middle">
                         </a>
                     </div>
                 [{/if}]
