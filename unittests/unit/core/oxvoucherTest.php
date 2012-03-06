@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucherTest.php 37920 2011-08-03 12:11:14Z arvydas.vapsva $
+ * @version   SVN: $Id: oxvoucherTest.php 42606 2012-03-05 07:53:55Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -280,6 +280,62 @@ class Unit_Core_oxvoucherTest extends OxidTestCase
     {
         $oNewVoucher = oxNew( 'oxvoucher' );
         $this->assertNull($oNewVoucher->getVoucherByNr( null, array(), true ));
+    }
+    /**
+     * Testing the correct (#2133)
+     */
+    public function testGetVoucherByNrUsedDateUsed()
+    {
+        // Create new voucher
+        $sVoucherNr = '_test_testGetVoucherByNrNoDateUsed';
+        
+        $oNewVoucher = oxNew( "oxvoucher" );
+        $oNewVoucher->oxvouchers__oxvouchernr      = new oxField( $sVoucherNr );
+        $oNewVoucher->oxvouchers__oxvoucherserieid = new oxField( $this->_aSerieOxid[0] );
+        $oNewVoucher->setId( '_test_testGetVoucherByNrNoDateUsed' );
+        $oNewVoucher->save();
+        
+        $oNewVoucher = oxNew( 'oxvoucher' );
+        $oNewVoucher->getVoucherByNr( $sVoucherNr );
+        
+        $oNewVoucher->oxvouchers__oxdateused       = new oxField( date('Y-m-d') );
+        $oNewVoucher->save();
+        
+        $oNewVoucher = oxNew( 'oxvoucher' );
+        try {
+            $oNewVoucher->getVoucherByNr( $sVoucherNr );
+        } catch ( oxVoucherException $oEx ) {
+            return; // OK
+        }
+        $this->fail();
+    }
+    /**
+     * Testing the correct (#2133)
+     */
+    public function testGetVoucherByNrUsedOrderId()
+    {
+        // Create new voucher
+        $sVoucherNr = '_test_testGetVoucherByNrUsedOrderId';
+        
+        $oNewVoucher = oxNew( "oxvoucher" );
+        $oNewVoucher->oxvouchers__oxvouchernr      = new oxField( $sVoucherNr );
+        $oNewVoucher->oxvouchers__oxvoucherserieid = new oxField( $this->_aSerieOxid[0] );
+        $oNewVoucher->setId( '_test_testGetVoucherByNrUsedOrderId' );
+        $oNewVoucher->save();
+        
+        $oNewVoucher = oxNew( 'oxvoucher' );
+        $oNewVoucher->getVoucherByNr( $sVoucherNr );
+        
+        $oNewVoucher->oxvouchers__oxorderid        = new oxField( oxUtilsObject::getInstance()->generateUID() );
+        $oNewVoucher->save();
+        
+        $oNewVoucher = oxNew( 'oxvoucher' );
+        try {
+            $oNewVoucher->getVoucherByNr( $sVoucherNr );
+        } catch ( oxVoucherException $oEx ) {
+            return; // OK
+        }
+        $this->fail();
     }
 
     /**
@@ -918,6 +974,37 @@ class Unit_Core_oxvoucherTest extends OxidTestCase
 
         $sOXID = $this->_aVoucherOxid[$this->_aSerieOxid[0]][getRandLTAmnt()];
         $sQ = 'update oxvouchers set oxuserid = "oxdefaultadmin", oxorderid = "testorder" where oxid = "'.$sOXID.'"';
+        $myDB->Execute( $sQ );
+
+        $oNewVoucher = oxNew( 'oxvoucher' );
+        if ( !$oNewVoucher->Load( $sOXID ) ) {
+            $this->fail( 'can not load voucher' );
+            return;
+        }
+
+        $oUser = oxNew( 'oxuser' );
+        if ( !$oUser->Load( 'oxdefaultadmin' ) ) {
+            $this->fail( 'user is not available - cannot test' );
+            return;
+        }
+
+        try {
+            $oNewVoucher->UNITisAvailableInOtherOrder( $oUser );
+        } catch ( oxVoucherException $oEx) {
+            return; //OK
+        }
+        $this->fail();
+    }
+
+    /**
+     * Testing the correct (#2133)
+     */
+    public function testIsAvailableInOtherOrderUsedDateUsed()
+    {
+        $myDB    = oxDb::getDb();
+
+        $sOXID = $this->_aVoucherOxid[$this->_aSerieOxid[0]][getRandLTAmnt()];
+        $sQ = 'update oxvouchers set oxuserid = "oxdefaultadmin", oxdateused = NOW() where oxid = "'.$sOXID.'"';
         $myDB->Execute( $sQ );
 
         $oNewVoucher = oxNew( 'oxvoucher' );

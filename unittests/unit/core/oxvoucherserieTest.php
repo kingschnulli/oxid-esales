@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucherserieTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxvoucherserieTest.php 42606 2012-03-05 07:53:55Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -93,6 +93,8 @@ class Unit_Core_oxvoucherserieTest extends OxidTestCase
         }
 
         $this->_remAdditionalInfo();
+        
+        $this->cleanUpTable( 'oxvouchers' );
 
         parent::tearDown();
     }
@@ -364,6 +366,64 @@ class Unit_Core_oxvoucherserieTest extends OxidTestCase
             // checking
             $this->assertEquals( 10, $aStatus['total'], 'Incorect number of total vouchers' );
             $this->assertEquals( 0, $aStatus['used'], 'Incorect number of used vouchers' );
+            $this->assertEquals( 10, $aStatus['available'], 'Incorect number of available vouchers' );
+        }
+    }
+
+    /**
+     * Test counting vouchers. Check if dataused makes voucher used. #2133
+     */
+    public function testCountVouchersUsedDateUsed()
+    {
+        $myUtils = oxUtils::getInstance();
+
+        foreach ( $this->_aIds as $sOxid ) {
+            $oSerie = oxNew( 'oxvoucherserie' );
+            if ( !$oSerie->Load( $sOxid ) ) {
+                $this->fail( 'can not load oxvoucherserie' );
+            }
+            
+            // Create new used voucher
+            $oNewVoucher = oxNew( "oxvoucher" );
+            $oNewVoucher->oxvouchers__oxvouchernr      = new oxField( '_test_'.$sOxid );
+            $oNewVoucher->oxvouchers__oxvoucherserieid = new oxField( $sOxid );
+            $oNewVoucher->oxvouchers__oxdateused         = new oxField( date('Y-m-d') );
+            $oNewVoucher->setId( '_test_'.$sOxid );
+            $oNewVoucher->save();
+
+            $aStatus = $oSerie->countVouchers();
+            // checking
+            $this->assertEquals( 11, $aStatus['total'], 'Incorect number of total vouchers' );
+            $this->assertEquals( 1, $aStatus['used'], 'Incorect number of used vouchers' );
+            $this->assertEquals( 10, $aStatus['available'], 'Incorect number of available vouchers' );
+        }
+    }
+
+    /**
+     * Test counting vouchers. Check if orderid makes voucher used. #2133
+     */
+    public function testCountVouchersUsedOrderId()
+    {
+        $myUtils = oxUtils::getInstance();
+
+        foreach ( $this->_aIds as $sOxid ) {
+            $oSerie = oxNew( 'oxvoucherserie' );
+            if ( !$oSerie->Load( $sOxid ) ) {
+                $this->fail( 'can not load oxvoucherserie' );
+            }
+            
+            // Create new used voucher
+            $oNewVoucher = oxNew( "oxvoucher" );
+            $oNewVoucher->oxvouchers__oxvouchernr      = new oxField( '_test_'.$sOxid );
+            $oNewVoucher->oxvouchers__oxvoucherserieid = new oxField( $sOxid );
+            $oNewVoucher->oxvouchers__oxorderid        = new oxField( oxUtilsObject::getInstance()->generateUID() );
+            $oNewVoucher->setId( '_test_'.$sOxid );
+            $oNewVoucher->save();
+
+            $aStatus = $oSerie->countVouchers();
+            // checking
+            $this->assertEquals( 11, $aStatus['total'], 'Incorect number of total vouchers' );
+            $this->assertEquals( 1, $aStatus['used'], 'Incorect number of used vouchers' );
             $this->assertEquals( 10, $aStatus['available'], 'Incorect number of available vouchers' );
         }
     }
