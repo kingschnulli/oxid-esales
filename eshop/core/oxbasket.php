@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 42145 2012-02-10 09:44:54Z arvydas.vapsva $
+ * @version   SVN: $Id: oxbasket.php 42640 2012-03-06 09:24:49Z vilma $
  */
 
 /**
@@ -532,16 +532,15 @@ class oxBasket extends oxSuperCfg
      * Returns array of bundled discount articles
      *
      * @param object $oBasketItem basket item object
+     * @param array  $aBundles    array of found bundles
      *
      * @return array
      */
-    protected function _getItemBundles( $oBasketItem )
+    protected function _getItemBundles( $oBasketItem, $aBundles = array() )
     {
         if ( $oBasketItem->isBundle() ) {
             return array();
         }
-
-        $aBundles = array();
 
         // does this object still exists ?
         if ( $oArticle = $oBasketItem->getArticle() ) {
@@ -556,7 +555,11 @@ class oxBasket extends oxSuperCfg
                         $aBundles[$oDiscount->oxdiscount__oxitmartid->value] = 0;
                     }
 
-                    $aBundles[$oDiscount->oxdiscount__oxitmartid->value] += $iAmnt;
+                    if ($oDiscount->oxdiscount__oxitmmultiple->value) {
+                        $aBundles[$oDiscount->oxdiscount__oxitmartid->value] += $iAmnt;
+                    } else {
+                        $aBundles[$oDiscount->oxdiscount__oxitmartid->value] = $iAmnt;
+                    }
                 }
             }
         }
@@ -567,11 +570,12 @@ class oxBasket extends oxSuperCfg
     /**
      * Returns array of bundled discount articles for whole basket
      *
+     * @param array $aBundles array of found bundles
+     *
      * @return array
      */
-    protected function _getBasketBundles()
+    protected function _getBasketBundles( $aBundles = array() )
     {
-        $aBundles = array();
         $aDiscounts = oxDiscountList::getInstance()->getBasketBundleDiscounts( $this, $this->getBasketUser() );
 
         // calculating amount of non bundled/discount items
@@ -603,23 +607,22 @@ class oxBasket extends oxSuperCfg
      */
     protected function _addBundles()
     {
+        $aBundles = array();
         // iterating through articles and binding bundles
         foreach ( $this->_aBasketContents as $key => $oBasketItem ) {
             try {
                 // adding discount type bundles
                 if ( !$oBasketItem->isDiscountArticle() && !$oBasketItem->isBundle() ) {
-                    $aBundles = $this->_getItemBundles( $oBasketItem );
+                    $aBundles = $this->_getItemBundles( $oBasketItem, $aBundles );
                 } else {
                     continue;
                 }
 
-                $this->_addBundlesToBasket( $aBundles );
-
                     // adding item type bundles
-                    $aBundles = $this->_getArticleBundles( $oBasketItem );
+                    $aArtBundles = $this->_getArticleBundles( $oBasketItem );
 
                     // adding bundles to basket
-                    $this->_addBundlesToBasket( $aBundles );
+                    $this->_addBundlesToBasket( $aArtBundles );
             } catch ( oxNoArticleException $oEx ) {
                 $this->removeItem( $key );
                 oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
@@ -630,10 +633,12 @@ class oxBasket extends oxSuperCfg
         }
 
         // adding global basket bundles
-        if ( $aBundles = $this->_getBasketBundles() ) {
+        $aBundles = $this->_getBasketBundles( $aBundles );
+
+        // adding all bundles to basket
+        if ( $aBundles ) {
             $this->_addBundlesToBasket( $aBundles );
         }
-
     }
 
     /**

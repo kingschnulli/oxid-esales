@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 42259 2012-02-14 13:33:40Z arvydas.vapsva $
+ * @version   SVN: $Id: oxutils.php 42643 2012-03-06 11:55:25Z linas.kukulskis $
  */
 
 /**
@@ -329,6 +329,8 @@ class oxUtils extends oxSuperCfg
 
     /**
      * Clears Smarty cache data.
+     *
+     * @deprecated since v4.5.9 (2012-03-06); Not needed from 3.0
      *
      * @return null
      */

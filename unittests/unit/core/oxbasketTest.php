@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 37280 2011-07-22 13:46:21Z arunas.paskevicius $
+ * @version   SVN: $Id: oxbasketTest.php 42650 2012-03-06 13:58:53Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1369,11 +1369,31 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testGetItemBundlesItemHasBundles()
     {
-        $aArray = array( 'xxx' => (double) 4 );
+        $this->aDiscounts[1]->oxdiscount__oxitmmultiple = new oxField(0, oxField::T_RAW);
+        $this->aDiscounts[1]->save();
+
+        $this->aDiscounts[0]->oxdiscount__oxitmmultiple = new oxField(0, oxField::T_RAW);
+        $this->aDiscounts[0]->save();
+        $aArray = array( 'xxx' => (double) 2 );
 
         $oBasket = new oxbasket();
         $oItem = $oBasket->addToBasket( $this->oArticle->getId(), 1 );
-        $this->assertEquals( $aArray, $oBasket->UNITgetItemBundles( $oItem ) );
+        $this->assertEquals( $aArray, $oBasket->UNITgetItemBundles( $oItem, $aArray ) );
+    }
+
+    /**
+     * Testing how correctly bundle information is loaded
+     * basket item has some bundled items
+     *
+     * @return null
+     */
+    public function testGetItemBundlesItemHasBundlesMultiplay()
+    {
+        $aArray = array( 'xxx' => (double) 2 );
+
+        $oBasket = new oxbasket();
+        $oItem = $oBasket->addToBasket( $this->oArticle->getId(), 1 );
+        $this->assertEquals( array( 'xxx' => (double) 6 ), $oBasket->UNITgetItemBundles( $oItem, $aArray ) );
     }
 
     /**
@@ -1386,9 +1406,10 @@ class Unit_Core_oxbasketTest extends OxidTestCase
     {
         $aArray = array( 'yyy' => (double) 2 );
 
-        $oBasket = new oxbasket();
+        $oBasket = $this->getProxyClass( "oxbasket" );
         $oItem   = $oBasket->addToBasket( $this->oArticle->getId(), 1 );
-        $this->assertEquals( $aArray, $oBasket->UNITgetBasketBundles( $oItem ) );
+     //   $oBasket->setNonPublicVar( "_aBasketContents", $oItem );
+        $this->assertEquals( $aArray, $oBasket->UNITgetBasketBundles() );
     }
 
     // has no bundle items
@@ -1400,7 +1421,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $oBasket = new oxbasket();
         $oItem   = $oBasket->addToBasket( $this->oArticle->getId(), 1 );
-        $this->assertEquals( array(), $oBasket->UNITgetBasketBundles( $oItem ) );
+        $this->assertEquals( array(), $oBasket->UNITgetBasketBundles() );
     }
 
     /**
@@ -1417,7 +1438,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $oBasket = $this->getMock( 'modForTestAddBundles', array( '_getItemBundles',  'addToBasket', '_getBasketBundles' ) );
         $oBasket->expects( $this->once() )->method( '_getItemBundles' )->will( $this->returnValue( array( 'x' => 1 ) ) );
-        $oBasket->expects( $this->exactly( 2 ) )->method( 'addToBasket' )->will( $this->returnValue( $oBasketItem ) );
+        $oBasket->expects( $this->exactly( 1 ) )->method( 'addToBasket' )->will( $this->returnValue( $oBasketItem ) );
         $oBasket->expects( $this->once() )->method( '_getBasketBundles' )->will( $this->returnValue( array( 'x' => 1 ) ) );
 
         // testing
@@ -1496,6 +1517,56 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         // testing
         $oBasket->setBasket( array( $oBasketItem ) );
+        modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );
+        $oBasket->UNITaddBundles();
+    }
+
+    /**
+     * Testing bundles adding method
+     * #2576
+     *
+     * @return null
+     */
+    public function testAddBundlesIfAssignedCategory()
+    {
+        $oArticle = oxNew( 'oxarticle' );
+        $oArticle->setId( '_testArticle' );
+        $oArticle->oxarticles__oxweight = new oxField(10, oxField::T_RAW);
+        $oArticle->oxarticles__oxstock = new oxField(100, oxField::T_RAW);
+        $oArticle->oxarticles__oxprice = new oxField(19, oxField::T_RAW);
+        $oArticle->oxarticles__oxstockflag = new oxField(2, oxField::T_RAW);
+        $oArticle->save();
+
+        // assigning article to category
+        $oArt2Cat = oxNew( "oxbase" );
+        $oArt2Cat->init( "oxobject2category" );
+        $oArt2Cat->oxobject2category__oxobjectid = new oxField('_testArticle', oxField::T_RAW);
+        $oArt2Cat->oxobject2category__oxcatnid = new oxField($this->oCategory->getId(), oxField::T_RAW);
+        $oArt2Cat->save();
+
+        $this->aDiscounts[2]->oxdiscount__oxitmmultiple = new oxField(0, oxField::T_RAW);
+        $this->aDiscounts[2]->save();
+
+        $oDisc2Art = oxNew( "oxbase" );
+        $oDisc2Art->init( "oxobject2discount" );
+        $oDisc2Art->setId("_dsci3");
+        $oDisc2Art->oxobject2discount__oxdiscountid = new oxField($this->aDiscounts[2]->getId(), oxField::T_RAW);
+        $oDisc2Art->oxobject2discount__oxobjectid = new oxField($this->oCategory->getId(), oxField::T_RAW);
+        $oDisc2Art->oxobject2discount__oxtype = new oxField('oxcategories', oxField::T_RAW);
+        $oDisc2Art->save();
+
+        // simulating basket contents
+        $oBasketItem = new oxbasketitem();
+        $oBasketItem->init( $this->oArticle->getId(), 1 );
+
+        $oBasketItem2 = new oxbasketitem();
+        $oBasketItem2->init( $oArticle->getId(), 1 );
+
+        $oBasket = $this->getMock( 'modForTestAddBundles', array( '_addBundlesToBasket' ) );
+            $oBasket->expects( $this->exactly(3) )->method( '_addBundlesToBasket' );
+
+        // testing
+        $oBasket->setBasket( array( $oBasketItem, $oBasketItem2 ) );
         modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );
         $oBasket->UNITaddBundles();
     }
