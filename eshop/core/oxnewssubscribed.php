@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewssubscribed.php 25467 2010-02-01 14:14:26Z alfonsas $
+ * @version   SVN: $Id: oxnewssubscribed.php 42674 2012-03-09 11:57:23Z saulius.stasiukaitis $
  */
 
 /**
@@ -127,6 +127,13 @@ class oxNewsSubscribed extends oxBase
         if ( $this->_blWasSubscribed && !$this->oxnewssubscribed__oxdboptin->value ) {
             // set unsubscription date
             $this->oxnewssubscribed__oxunsubscribed->setValue(date( 'Y-m-d H:i:s' ));
+            // 0001974 Same object can be called many times without requiring to renew date.
+            // If so happens, it would have _aSkipSaveFields set to skip date field. So need to check and
+            // release if _aSkipSaveFields are set for field oxunsubscribed.
+            $aSkipSaveFieldsKeys = array_keys( $this->_aSkipSaveFields, 'oxunsubscribed' );
+            foreach ( $aSkipSaveFieldsKeys as $iSkipSaveFieldKey ) {
+                unset ( $this->_aSkipSaveFields[ $iSkipSaveFieldKey ] );
+            }
         } else {
             // don't update date
             $this->_aSkipSaveFields[] = 'oxunsubscribed';
