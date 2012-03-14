@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 42643 2012-03-06 11:55:25Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 42762 2012-03-13 11:25:50Z linas.kukulskis $
  */
 
 /**
@@ -52,7 +52,7 @@ class oxUtils extends oxSuperCfg
      *
      * @var string
      */
-    protected $_sEmailTpl = "/^([-!#\$%&'*+.\/0-9=?A-Z^_`a-z{|}~\177])+@([-!#\$%&'*+\/0-9=?A-Z^_`a-z{|}~\177]+\\.)+[a-zA-Z]{2,6}\$/i";
+    protected $_sEmailTpl = "/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/i";
 
     /**
      * Some files, like object structure should not be deleted, because thay are changed rarely

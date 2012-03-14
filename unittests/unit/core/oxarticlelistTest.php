@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 42178 2012-02-13 08:12:43Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticlelistTest.php 42779 2012-03-13 14:12:36Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2097,7 +2097,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $aReturn = array( 'aaa' => 'bbb' );
         $sView = getViewName('oxartextends', 5);
         $sQ = "select $sView.oxid from $sView inner join xxx on ".
-              "xxx.oxid = $sView.oxid where xxx.oxissearch = 1 and ".
+              "xxx.oxid = $sView.oxid where xxx.oxparentid = '' and xxx.oxissearch = 1 and ".
               "match ( $sView.oxtags ) ".
               "against( '\\\"zzz_\\\"' IN BOOLEAN MODE ) and 1 order by xxx.yyy ";
 

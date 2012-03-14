@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 40953 2012-01-04 13:46:55Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsTest.php 42762 2012-03-13 11:25:50Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -433,7 +433,12 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     public function testIsValidEmail()
     {
         $this->assertTrue( oxUtils::getInstance()->isValidEmail( 'mathias.krieck@oxid-esales.com' ) );
+        $this->assertTrue( oxUtils::getInstance()->isValidEmail( 'mytest@com.org' ) );
         $this->assertFalse( oxUtils::getInstance()->isValidEmail( 'ßmathias.krieck@oxid-esales.com' ) );
+        $this->assertFalse( oxUtils::getInstance()->isValidEmail( 'my/test@com.org' ) );
+        $this->assertFalse( oxUtils::getInstance()->isValidEmail( '@com.org' ) );
+        $this->assertFalse( oxUtils::getInstance()->isValidEmail( 'mytestcom.org' ) );
+        $this->assertFalse( oxUtils::getInstance()->isValidEmail( 'mytest@com' ) );
     }
 
     public function testLoadAdminProfile()

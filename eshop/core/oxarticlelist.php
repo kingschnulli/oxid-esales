@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 42708 2012-03-12 11:50:32Z linas.kukulskis $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 42779 2012-03-13 14:12:36Z vilma $
  */
 
 /**
@@ -149,13 +149,15 @@ class oxArticleList extends oxList
 
         $aHistoryArticles = array_values( $aHistoryArticles );
         $this->loadIds( $aHistoryArticles );
-        $this->_sortByIds( $aHistoryArticles );
+        $this->sortByIds( $aHistoryArticles );
     }
 
     /**
      * sort this list by given order.
      *
      * @param array $aIds ordered ids
+     *
+     * @depricated since v4.5.9 (2012-03-13); _sortByIds - become public method
      *
      * @return null
      */
@@ -166,7 +168,20 @@ class oxArticleList extends oxList
     }
 
     /**
-     * callback function only used from _sortByIds
+     * sort this list by given order.
+     *
+     * @param array $aIds ordered ids
+     *
+     * @return null
+     */
+    protected function sortByIds($aIds)
+    {
+        $this->_aOrderMap = array_flip($aIds);
+        uksort($this->_aArray, array($this, '_sortByOrderMapCallback'));
+    }
+
+    /**
+     * callback function only used from sortByIds
      *
      * @param string $key1 1st key
      * @param string $key2 2nd key
@@ -717,7 +732,7 @@ class oxArticleList extends oxList
         $sTag = $oTagHandler->prepareTags( $sTag );
 
         $sQ = "select {$sViewName}.oxid from {$sViewName} inner join {$sArticleTable} on ".
-              "{$sArticleTable}.oxid = {$sViewName}.oxid where {$sArticleTable}.oxissearch = 1 and ".
+              "{$sArticleTable}.oxid = {$sViewName}.oxid where {$sArticleTable}.oxparentid = '' and {$sArticleTable}.oxissearch = 1 and ".
               "match ( {$sViewName}.oxtags ) ".
               "against( ".oxDb::getDb()->quote( "\"".$sTag."\"" )." IN BOOLEAN MODE )";
 
