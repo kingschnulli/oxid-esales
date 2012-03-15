@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 42650 2012-03-06 13:58:53Z vilma $
+ * @version   SVN: $Id: oxbasketTest.php 42869 2012-03-14 14:31:06Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2908,7 +2908,6 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->iniTestContents();
 
         $oBasket->setOrderId( 'xxx' );
-        oxConfig::getInstance()->setGlobalParameter( 'blPerfNoBasketSaving', false );
         $oBasket->deleteBasket();
 
         // now loading and testing if its the same
@@ -2934,7 +2933,6 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->expects($this->any())->method('getSession')->will($this->returnValue($oS));
 
         $oBasket->setOrderId( 'xxx' );
-        oxConfig::getInstance()->setGlobalParameter( 'blPerfNoBasketSaving', false );
         $oBasket->deleteBasket();
 
         // now loading and testing if its the same

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 42762 2012-03-13 11:25:50Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 42842 2012-03-14 09:30:45Z vilma $
  */
 
 /**
@@ -46,13 +46,6 @@ class oxUtils extends oxSuperCfg
      * @var int
      */
     protected $_iCurPrecision = null;
-
-    /**
-     * Email validation regular expression
-     *
-     * @var string
-     */
-    protected $_sEmailTpl = "/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/i";
 
     /**
      * Some files, like object structure should not be deleted, because thay are changed rarely
@@ -321,7 +314,8 @@ class oxUtils extends oxSuperCfg
     {
         $blValid = true;
         if ( $sEmail != 'admin' ) {
-            $blValid = ( getStr()->preg_match( $this->_sEmailTpl, $sEmail ) != 0 );
+            $sEmailTpl = "/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/i";
+            $blValid = ( getStr()->preg_match( $sEmailTpl, $sEmail ) != 0 );
         }
 
         return $blValid;

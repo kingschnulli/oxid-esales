@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 42640 2012-03-06 09:24:49Z vilma $
+ * @version   SVN: $Id: oxbasket.php 42869 2012-03-14 14:31:06Z vilma $
  */
 
 /**
@@ -1611,9 +1611,7 @@ class oxBasket extends oxSuperCfg
         }
 
         // merging basket history
-        if ( !$this->getConfig()->getConfigParam( 'blPerfNoBasketSaving' ) ) {
-            $this->_deleteSavedBasket();
-        }
+        $this->_deleteSavedBasket();
     }
 
     /**

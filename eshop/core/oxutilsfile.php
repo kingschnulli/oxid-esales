@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 42565 2012-03-01 11:30:48Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxutilsfile.php 42849 2012-03-14 10:52:27Z saulius.stasiukaitis $
  */
 
 /**
@@ -474,21 +474,18 @@ class oxUtilsFile extends oxSuperCfg
                         }
 
                         if ( $blMoved ) {
+                            // New image successfully add
+                            $iNewImagesCounter++;
                             // assign the name
                             if ( $oObject && isset( $oObject->$sKey ) ) {
                                 $oObject->{$sKey}->setValue( $sValue );
+                                
+                                // Return that no new image added
+                                $oObject->iNewImagesCounter = $iNewImagesCounter;
                             }
-                            // New image successfully add
-                            $iNewImagesCounter++;
                         }
                     }
                 }
-            }
-            // Show to user that no new image added
-            if ( $iNewImagesCounter <= 0 ) {
-                $oEx = oxNew( "oxExceptionToDisplay" );
-                $oEx->setMessage( 'NO_PICTURES_CHANGES' );
-                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false );
             }
         }
 

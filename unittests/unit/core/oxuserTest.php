@@ -3683,6 +3683,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oUser->UNITloadSavedUserBasketAfterLogin();
 
         // non admin
+        modConfig::getInstance()->setConfigParam( "blPerfNoBasketSaving", false );
         $oBasket = $this->getMock( "oxBasket", array( "load" ) );
         $oBasket->expects( $this->once() )->method( 'load' )->will( $this->throwException( new Exception() ) );
 

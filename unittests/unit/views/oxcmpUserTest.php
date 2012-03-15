@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 42674 2012-03-09 11:57:23Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxcmpUserTest.php 42869 2012-03-14 14:31:06Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -523,7 +523,7 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
      */
     public function testLoadSessionUser()
     {
-        modConfig::setParameter('blPerfNoBasketSaving', true);
+        modConfig::setParameter('blPerfNoBasketSaving', false);
         $oBasket = $this->getMock( 'oxBasket', array( 'onUpdate' ) );
         $oBasket->expects( $this->once() )->method( 'onUpdate');
         $oSession = $this->getMock( 'oxSession', array( 'getBasket' ) );
