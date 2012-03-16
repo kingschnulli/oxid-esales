@@ -34,7 +34,8 @@
           [{/if}]
     </li>
     <li [{if $aErrors.oxuser__oxaddinfo}]class="oxInValid"[{/if}]>
-        <label [{if $oView->isFieldRequired(oxuser__oxaddinfo) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_ADDITIONALINFO" }]</label>
+        [{assign var="_address_addinfo_tooltip" value="FORM_FIELDSET_USER_BILLING_ADDITIONALINFO_TOOLTIP"|oxmultilangassign }]
+        <label [{if $_address_addinfo_tooltip}]title="[{$_address_addinfo_tooltip}]" class="tooltip"[{/if}] [{if $oView->isFieldRequired(oxuser__oxaddinfo) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_ADDITIONALINFO" }]</label>
           <input [{if $oView->isFieldRequired(oxuser__oxaddinfo) }]class="js-oxValidate js-oxValidate_notEmpty" [{/if}]type="text" size="37" maxlength="255" name="invadr[oxuser__oxaddinfo]" value="[{if isset( $invadr.oxuser__oxaddinfo ) }][{ $invadr.oxuser__oxaddinfo }][{else }][{ $oxcmp_user->oxuser__oxaddinfo->value }][{/if}]">
           [{if $oView->isFieldRequired(oxuser__oxaddinfo) }]
         <p class="oxValidateError">

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlistTest.php 40230 2011-11-23 15:51:52Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscountlistTest.php 42685 2012-03-09 15:20:13Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -193,7 +193,7 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
 
         $this->assertEquals( 1, count($oResDiscount) );
         $this->assertEquals( '_testDiscountId', $aResDiscountKeys[0] );
-        $this->assertEquals( '_testDiscountId', $oResDiscount->sOXID );
+        $this->assertEquals( '_testDiscountId', $oResDiscount->sOXID);
         $this->assertEquals( 'testDiscountTitle', $oResDiscount->sDiscount );
         $this->assertEquals( 2.5, $oResDiscount->dDiscount );
         $this->assertEquals( 23.75, $oPrice->getBruttoPrice());
@@ -236,6 +236,83 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
         $this->assertTrue( isset( $aUsedDiscounts['xxx'] ) );
         $this->assertEquals( 25, $aUsedDiscounts['xxx']->dDiscount );
         $this->assertEquals( 95, $oPrice->getBruttoPrice());
+    }
+
+    /**
+     * Testing #3587 case. We are using price information reported in bug entry.
+     * %2 from 2.98*200 is 11.92 and not 12.00 like it was before the bug fix
+     */
+    public function testApplyBaskketDiscountsLargeAmountDiscountPrecission()
+    {
+        //INIT
+        $dInitialPrice = 2.98;
+        $dDiscountValue = 2;//%
+        $dAmount = 200;
+        $dExpectedDiscountValue = 11.92;
+        $dExpectedDiscountedPrice = 2.92;
+
+        //IMPLEMENT
+        //price information
+        $oPrice = new oxPrice();
+        $oPrice->setPrice($dInitialPrice);
+
+        $oDiscount = new oxDiscount();
+        $oDiscount->setId( 'testDiscount' );
+        $oDiscount->oxdiscount__oxaddsumtype = new oxField('%', oxField::T_RAW);
+        $oDiscount->oxdiscount__oxaddsum = new oxField($dDiscountValue, oxField::T_RAW);
+
+        $oDiscountList = new oxDiscountList();
+        $aUsedDiscounts = $oDiscountList->applyBasketDiscounts( $oPrice, array( $oDiscount ), $dAmount );
+
+        $this->assertTrue( isset( $aUsedDiscounts['testDiscount'] ) );
+        //rounding the result due to strange double conversion error:
+        //"Failed asserting that <double:11.92> matches expected <double:11.92>."
+        $this->assertEquals( $dExpectedDiscountValue, round($aUsedDiscounts['testDiscount']->dDiscount, 12) );
+        $this->assertEquals( $dExpectedDiscountedPrice, $oPrice->getBruttoPrice());
+    }
+
+    /**
+     * Testing #3587 case. Here we are using price information reported in bug entry.
+     * %2 from 2.98*200 is 11.92 and not 12.00 like it was before the bug fix.
+     *
+     * Also adding additional discount for discount combination testing
+     */
+    public function testApplyBaskketDiscountsLargeAmountDiscountPrecissionCombined()
+    {
+        //INIT
+        $dInitialPrice = 2.98;
+        $dDiscountValue1 = 2;//%
+        $dDiscountValue2 = 1;//abs
+        $dAmount = 200;
+        $dExpectedDiscountValue1 = 11.92;
+        $dExpectedDiscountValue2 = 200.0;
+        $dExpectedDiscountedPrice1 = 1.92;
+
+        //IMPLEMENT
+        //price information
+        $oPrice = new oxPrice();
+        $oPrice->setPrice($dInitialPrice);
+
+        $oDiscount1 = new oxDiscount();
+        $oDiscount1->setId( 'testDiscount1' );
+        $oDiscount1->oxdiscount__oxaddsumtype = new oxField('%', oxField::T_RAW);
+        $oDiscount1->oxdiscount__oxaddsum = new oxField($dDiscountValue1, oxField::T_RAW);
+
+        $oDiscount2 = new oxDiscount();
+        $oDiscount2->setId( 'testDiscount2' );
+        $oDiscount2->oxdiscount__oxaddsumtype = new oxField('abs', oxField::T_RAW);
+        $oDiscount2->oxdiscount__oxaddsum = new oxField($dDiscountValue2, oxField::T_RAW);
+
+        $oDiscountList = new oxDiscountList();
+        $aUsedDiscounts = $oDiscountList->applyBasketDiscounts( $oPrice, array( $oDiscount1, $oDiscount2 ), $dAmount );
+
+        $this->assertTrue( isset( $aUsedDiscounts['testDiscount1'] ) );
+        $this->assertTrue( isset( $aUsedDiscounts['testDiscount2'] ) );
+        //rounding the result due to strange double conversion error:
+        //"Failed asserting that <double:11.92> matches expected <double:11.92>."
+        $this->assertEquals( $dExpectedDiscountValue1, round($aUsedDiscounts['testDiscount1']->dDiscount, 12) );
+        $this->assertEquals( $dExpectedDiscountValue2, round($aUsedDiscounts['testDiscount2']->dDiscount, 12) );
+        $this->assertEquals( $dExpectedDiscountedPrice1, $oPrice->getBruttoPrice());
     }
 
     /**
@@ -580,4 +657,6 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
         oxDiscountList::getInstance()->forceReload();
         $this->assertTrue( oxDiscountList::getInstance()->hasSkipDiscountCategories() );
     }
+
+
 }

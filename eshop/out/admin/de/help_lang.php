@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 42399 2012-02-22 13:09:02Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 42951 2012-03-16 14:43:01Z juergen.busch $
  */
 
 /**
@@ -592,23 +592,23 @@ $aLang =  array(
 'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'       => 'Laden Sie ein Bild für den großen Startseitenbanner hoch und geben die URL für den Klick auf den Banner an. Falls ein Artikel zugeordnet wird, wird dessen URL automatisch als Banner-URL verwendet.',
 
 'HELP_SHOP_RDFA_SUBMIT_URL'                   => 'Überträgt Ihre Shop URL zur GR-Notify-Seite. Dort wird die URL gespeichert und an Suchmaschinen und Endpunkte von Linked Open Commerce & Semantic Web weitergeleitet.',
-'HELP_SHOP_RDFA_CONTENT_OFFERER'              => '[tr]You have to select in which content page main eShop information is displayed, e.g.  “About Us”.',
-'HELP_SHOP_RDFA_CONTENT_PAYMENT'              => '[tr]You have to select in which content page not assigned to RDFa payment information is displayed, e.g.  “Terms and Conditions. To Assign your shipping methods to RDFa shipping methods go to: Shop Settings -> Shipping Methods -> RDFa.',
-'HELP_SHOP_RDFA_CONTENT_DELIVERY'             => '[tr]You have to select in which content page not assigned to RDFa shipping information is displayed, e.g.  “Shipping and charges”. To Assign your payment methods to RDFa payment methods go to: Shop Settings -> Payment Methods -> RDFa.',
-'HELP_SHOP_RDFA_VAT'                          => '[tr]This option specifies whether the tax (VAT) is included in the price and delivery/payment costs or not.',
-'HELP_SHOP_RDFA_DURATION_PRICES'              => '[tr]Specify the time of the validity of the shipping costs (e.g. 1 day, 1 week)',
-'HELP_SHOP_RDFA_LOGO_URL'                     => '[tr]The Web address (URL) of a logo or image.',
-'HELP_SHOP_RDFA_GEO_LONGITUDE'                => '[tr]Geo-position (please enter only numbers) - The geo position of the store as longitude',
-'HELP_SHOP_RDFA_GEO_LATITUDE'                 => '[tr]Geo-position (please enter only numbers) - The geo position of the store as latitude',
-'HELP_SHOP_RDFA_GLN'                          => '[tr]Global Location Number (GLN) for the company. The Global Location Number is a thirteen-digit number used to identify parties and physical locations.',
-'HELP_SHOP_RDFA_NAICS'                        => '[tr]North American Industry Classification System (NAICS) code for your company ( see http://www.census.gov/eos/www/naics/).',
-'HELP_SHOP_RDFA_ISIC'                         => '[tr]The International Standard of Industrial Classification of All Economic Activities (ISIC) code for your company. See http://unstats.un.org/unsd/cr/registry/isic-4.asp for more information. ',
-'HELP_SHOP_RDFA_DUNS'                         => '[tr]The Dun & Bradstreet DUNS is a nine-digit number used to identify legal entities (but usually not branches or locations of logistical importance only).',
-'HELP_SHOP_RDFA_SHOW_PRODUCTSTOCK'            => '[tr]If option is on, embeds the real product stock. If option off, skips the stock at all.',
-'HELP_SHOP_RDFA_RATING_MIN'                   => '[tr]The min/max values refer to the scale used for ratings in your shop system, NOT for the lowest/highest actual rating. So if you have zero reviews for an item and you are using a scale from 0 to 5, it would be min = 0 and max = 5.',
-'HELP_SHOP_RDFA_RATING_MAX'                   => '[tr]The min/max values refer to the scale used for ratings in your shop system, NOT for the lowest/highest actual rating. So if you have zero reviews for an item and you are using a scale from 0 to 5, it would be min = 0 and max = 5.',
-'HELP_SHOP_RDFA_COND'                         => '[tr]It is a description of the condition of the product (new, used and refurbished).',
-'HELP_SHOP_RDFA_FNC'                          => '[tr]This specifies the business function of the product, i.e. whether the company is offering to sell, to lease, or to repair the particular type of product.',
-'HELP_SHOP_RDFA_COSTUMER'                     => '[tr]The types of customers for which shop products are valid (End user, Reseller, Business and Public).',
-'HELP_SHOP_RDFA_DURATION_OFFERINGS'           => '[tr]This property specifies the time of the validity of the products.',
+'HELP_SHOP_RDFA_CONTENT_OFFERER'              => 'Wählen Sie hier aus, welche Content-Seite die Hauptinformationen zum eShop anzeigt, beispielsweise "Impressum".',
+'HELP_SHOP_RDFA_CONTENT_PAYMENT'              => 'Wählen Sie hier aus, welche Content-Seite (beispielsweise "AGB") Zahlungsinformationen anzeigt, die RDFa nicht zugewiesen wurden. Um Ihre Zahlungsarten den RDFa-Zahlungsarten generell zuzuordnen, gehen Sie zu Shopeinstellungen -> Zahlungsarten -> RDFa.',
+'HELP_SHOP_RDFA_CONTENT_DELIVERY'             => 'Wählen Sie hier aus, welche Content-Seite (beispielsweise "Versand und Kosten") Versandinformationen anzeigt, die RDFa nicht zugewiesen wurden. Um Ihre Versandarten den RDFa-Versandarten generell zuzuordnen, gehen Sie zu Shopeinstellungen -> Versandarten -> RDFa.',
+'HELP_SHOP_RDFA_VAT'                          => 'Diese Option gibt an, ob die MwSt. im Preis und in den Zahlungs- und Lieferkosten enthalten ist oder nicht.',
+'HELP_SHOP_RDFA_DURATION_PRICES'              => 'Geben Sie hier den Gültigkeitszeitraum für die Kosten von Artikeln, Zahlungs- und Versandarten an (z.B.: 1 Tag, 1 Woche).',
+'HELP_SHOP_RDFA_LOGO_URL'                     => 'Die Webadresse (URL) eines Logos oder Bildes.',
+'HELP_SHOP_RDFA_GEO_LONGITUDE'                => 'Die geografische Länge (Longitude) des Ladengeschäftes als Bestandteil der Geoposition. Bitte nur Zahlen eingeben.',
+'HELP_SHOP_RDFA_GEO_LATITUDE'                 => 'Die geografische Breite (Latitude) des Ladengeschäftes als Bestandteil der Geoposition. Bitte nur Zahlen eingeben.', 
+'HELP_SHOP_RDFA_GLN'                          => 'Global Location Number (GLN) der Firma. Die Global Location Number ist eine 13-stellige Zahl, mit der Firmen und Firmensitz identifiziert werden.',
+'HELP_SHOP_RDFA_NAICS'                        => 'Schlüssel Ihrer Firma im North American Industry Classification System (NAICS). Siehe http://www.census.gov/eos/www/naics/.',
+'HELP_SHOP_RDFA_ISIC'                         => 'Schlüssel Ihrer Firma im International Standard of Industrial Classification of All Economic Activities (ISIC). Siehe http://unstats.un.org/unsd/cr/registry/isic-4.asp.',
+'HELP_SHOP_RDFA_DUNS'                         => 'Die Dun & Bradstreet D-U-N-S ist ein neunstelliger Zahlenschlüssel zur Identifizierung von Unternehmen.',
+'HELP_SHOP_RDFA_SHOW_PRODUCTSTOCK'            => 'Ist diese Option aktiviert, bedeutet das, dass der tatsächliche Lagerbestand angezeigt wird.',
+'HELP_SHOP_RDFA_RATING_MIN'                   => 'Möglicher Minimalwert für die Bewertung im Shop. Dieser Wert ist nicht die aktuell niedrigste Bewertung eines Artikels!',
+'HELP_SHOP_RDFA_RATING_MAX'                   => 'Möglicher Maximalwert für die Bewertung im Shop. Dieser Wert ist nicht die aktuell höchste Bewertung eines Artikels!', 
+'HELP_SHOP_RDFA_COND'                         => 'Wählen Sie aus, was den Zustand der Artikel beschreibt (neu, gebraucht oder aufgearbeitet).',
+'HELP_SHOP_RDFA_FNC'                          => 'Wählen Sie hier die geschäftliche Funktion der Artikel. Werden diese beispielsweise verkauft, vermietet oder repariert?',
+'HELP_SHOP_RDFA_COSTUMER'                     => 'Gibt den Kundentypen an, dem die Artikel des Shops gelten (Endverbraucher, Wiederverkäufer, Unternehmen/Gewerbe und/oder Öffentliche Einrichtungen).',
+'HELP_SHOP_RDFA_DURATION_OFFERINGS'           => 'Diese Eigenschaft kennzeichnet den Gültigkeitszeitraum von Artikeln, beispielsweise 1 Tag, 1 Woche oder 1 Monat.',
 );

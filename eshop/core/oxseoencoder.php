@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 42521 2012-02-29 11:02:13Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoder.php 42844 2012-03-14 09:54:23Z linas.kukulskis $
  */
 
 /**
@@ -442,7 +442,7 @@ class oxSeoEncoder extends oxSuperCfg
     }
 
     /**
-     * Loads seo tada from cache for active view (in non admin mode)
+     * Loads seo data from cache for active view (in non admin mode)
      *
      * @param string $sCacheIdent cache identifier
      * @param string $sType       object type
@@ -546,7 +546,7 @@ class oxSeoEncoder extends oxSuperCfg
 
         // looking in cache
         if ( ( $sSeoUrl = $this->_loadFromCache( $sIdent, $sType, $iLang, $iShopId, $sParams ) ) === false ) {
-
+            $oDb = oxDb::getDb( true );
             $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
             $oRs = $oDb->execute( $sQ );
 
@@ -847,6 +847,7 @@ class oxSeoEncoder extends oxSuperCfg
                 $sString = str_replace( array_keys( $aReplaceChars ), array_values( $aReplaceChars ), $sString );
             }
         }
+
 
         // special chars
         $aReplaceWhat = array( '&amp;', '&quot;', '&#039;', '&lt;', '&gt;' );

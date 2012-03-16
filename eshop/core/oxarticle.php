@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 42420 2012-02-24 08:54:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticle.php 42806 2012-03-13 15:06:49Z linas.kukulskis $
  */
 
 // defining supported link types

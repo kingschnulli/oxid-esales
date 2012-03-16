@@ -163,7 +163,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
 
         if ( $aFields['sReplyToName'] ) {
             $aReplyTo = $oEmail->getReplyTo();
-            $this->assertEquals( $aFields['sFromName'], $aReplyTo[0][1], 'Incorect mail reply to name' );
+            $this->assertEquals( $aFields['sReplyToName'], $aReplyTo[0][1], 'Incorect mail reply to name' );
         }
 
         if ( $aFields['sBody'] ) {
@@ -394,8 +394,8 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $aFields['sRecipient']     = 'shopOwner@shopOwnerEmail.nl';
         $aFields['sRecipientName'] = 'order';
         $aFields['sSubject']       = 'testOrderSubject (#987654321)';
-        $aFields['sFrom']          = 'username@useremail.nl';
-        $aFields['sFromName']      = 'testUserFName testUserLName';
+        $aFields['sFrom']          = 'shopOwner@shopOwnerEmail.nl';
+        $aFields['sFromName']      = '';
         $aFields['sReplyTo']       = 'username@useremail.nl';
         $aFields['sReplyToName']   = 'testUserFName testUserLName';
 
@@ -458,8 +458,8 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $aFields['sRecipient']     = 'shopOwner@shopOwnerEmail.nl';
         $aFields['sRecipientName'] = 'order';
         $aFields['sSubject']       = 'testOrderSubject_en (#)';
-        $aFields['sFrom']          = 'username@useremail.nl';
-        $aFields['sFromName']      = 'testUserFName testUserLName';
+        $aFields['sFrom']          = 'shopOwner@shopOwnerEmail.nl';
+        $aFields['sFromName']      = '';
         $aFields['sReplyTo']       = 'username@useremail.nl';
         $aFields['sReplyToName']   = 'testUserFName testUserLName';
 
@@ -684,8 +684,8 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $aFields['sRecipient']     = $oParams->rec_email;
         $aFields['sRecipientName'] = $oParams->rec_name;
         $aFields['sSubject']       = $oParams->send_subject;
-        $aFields['sFrom']          = $oParams->send_email;
-        $aFields['sFromName']      = $oParams->send_name;
+        $aFields['sFrom']          = 'shopInfoEmail@shopOwnerEmail.nl';
+        $aFields['sFromName']      = '';
         $aFields['sReplyTo']       = $oParams->send_email;
         $aFields['sReplyToName']   = $oParams->send_name;
 

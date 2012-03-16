@@ -19,7 +19,7 @@
         [{/block}]
         [{block name="email_html_senddownloadlinks_download_link"}]
             [{foreach from=$oOrderFileList item="oOrderFile"}]
-              [{if $order->oxorder__oxpaid->value}]
+              [{if $order->oxorder__oxpaid->value || !$oOrderFile->oxorderfiles__oxpurchasedonly->value}]
                 [{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=download" params="sorderfileid="|cat:$oOrderFile->getId() }] [{$oOrderFile->oxorderfiles__oxfilename->value}]
               [{else}]
                 [{$oOrderFile->oxorderfiles__oxfilename->value}] [{ oxmultilang ident="EMAIL_SENDDOWNLOADS_PAYMENT_PENDING" }]

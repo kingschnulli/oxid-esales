@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 42331 2012-02-20 12:04:30Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfigTest.php 42754 2012-03-13 08:34:31Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -660,6 +660,22 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oViewConf = $this->getMock( "oxConfig", array( "getImageUrl" ) );
         $oViewConf->expects( $this->once() )->method( "getImageUrl" )->will( $this->returnValue( "shopUrl/out/theme/img/" ) );
         $this->assertEquals( "shopUrl/out/theme/img/", $oViewConf->getImageUrl() );
+    }
+
+    /**
+     * Checks if shop licenze is in staging mode
+     */
+    public function testHasDemoKey()
+    {
+            return;
+
+        $oConfig = $this->getMock( "oxConfig", array( "hasDemoKey" ) );
+        $oConfig->expects( $this->once() )->method( "hasDemoKey" )->will( $this->returnValue( true ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertTrue( $oViewConfig->hasDemoKey() );
     }
 
 }

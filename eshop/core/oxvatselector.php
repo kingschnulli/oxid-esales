@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvatselector.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
+ * @version   SVN: $Id: oxvatselector.php 42861 2012-03-14 12:35:38Z linas.kukulskis $
  */
 
 /**
@@ -105,7 +105,7 @@ class oxVatSelector extends oxSuperCfg
      * @param oxUser    $oUser    given user object
      * @param oxCountry $oCountry given country object
      *
-     * @return unknown
+     * @return mixed
      */
     protected function _getForeignCountryUserVat(oxUser $oUser, oxCountry $oCountry )
     {

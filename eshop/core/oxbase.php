@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxbase.php 42776 2012-03-13 13:00:39Z linas.kukulskis $
  */
 
 /**
@@ -1303,6 +1303,26 @@ class oxBase extends oxSuperCfg
         return false;
     }
 
+
+    /**
+     * returns default field value
+     *
+     * @param string $sFieldName db field name
+     *
+     * @return mixed
+     */
+    protected function _getFieldDefaultValue( $sFieldName )
+    {
+        $aMetaData = $this->_getAllFields();
+        foreach ( $aMetaData as $oMetaInfo ) {
+            if ( strcasecmp( $oMetaInfo->name, $sFieldName ) == 0 ) {
+                return $oMetaInfo->default_value;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * returns quoted field value for using in update statement
      *
@@ -1319,10 +1339,16 @@ class oxBase extends oxSuperCfg
         } elseif ( isset( $oField->value ) ) {
             $mValue = $oField->value;
         }
-        // Sarunas. check if this field value is null AND it can be null according to table description
-        if ( ( null === $mValue ) && $this->_canFieldBeNull( $sFieldName ) ) {
-            return 'null';
+
+        //Check if this field value is null AND it can be null according if not returning default value
+        if ( ( null === $mValue ) ) {
+            if ( $this->_canFieldBeNull( $sFieldName ) ) {
+                return 'null';
+            } //elseif ( $mValue = $this->_getFieldDefaultValue( $sFieldName ) ) {
+              //  return oxDb::getDb()->quote( $mValue );
+            //}
         }
+
         return oxDb::getDb()->quote( $mValue );
     }
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 40523 2011-12-12 12:51:51Z linas.kukulskis $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 42956 2012-03-16 15:08:15Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -191,6 +191,57 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
     }
 
     /**
+     * Testing oxSysRequirements::_getShopSSLHostInfoFromConfig()
+     *
+     * @return null
+     */
+    public function testGetShopSSLHostInfoFromConfig()
+    {
+        modConfig::getInstance()->setConfigParam('sSSLShopURL', 'http://www.testshopurl.lt/testsubdir1/insideit2/');
+        $oSC = new oxSysRequirements();
+        $this->assertEquals(
+            array(
+                'host' => 'www.testshopurl.lt',
+                'port' => 80,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => false,
+            ),
+            $oSC->UNITgetShopSSLHostInfoFromConfig()
+        );
+        modConfig::getInstance()->setConfigParam('sSSLShopURL', 'https://www.testshopurl.lt/testsubdir1/insideit2/');
+        $this->assertEquals(
+            array(
+                'host' => 'www.testshopurl.lt',
+                'port' => 443,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => true,
+            ),
+            $oSC->UNITgetShopSSLHostInfoFromConfig()
+        );
+        modConfig::getInstance()->setConfigParam('sSSLShopURL', 'https://51.1586.51.15:21/testsubdir1/insideit2/');
+        $this->assertEquals(
+            array(
+                'host' => '51.1586.51.15',
+                'port' => 21,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => true,
+            ),
+            $oSC->UNITgetShopSSLHostInfoFromConfig()
+        );
+        modConfig::getInstance()->setConfigParam('sSSLShopURL', '51.1586.51.15:21/testsubdir1/insideit2/');
+        $this->assertEquals(
+            array(
+                'host' => '51.1586.51.15',
+                'port' => 21,
+                'dir' => '/testsubdir1/insideit2/',
+                'ssl' => false,
+            ),
+            $oSC->UNITgetShopSSLHostInfoFromConfig()
+        );
+
+    }
+
+    /**
      * Testing oxSysRequirements::_getShopHostInfoFromServerVars()
      *
      * @return null
@@ -266,12 +317,15 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 ->with($this->equalTo('test0'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl_nonexisting.tpl'));
         $oCfg->expects($this->at(1))->method('getTemplatePath')
-                ->with($this->equalTo('test1'), $this->equalTo(false))
-                ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
+                ->with($this->equalTo('test0'), $this->equalTo(true))
+                ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl_nonexisting.tpl'));
         $oCfg->expects($this->at(2))->method('getTemplatePath')
                 ->with($this->equalTo('test1'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
         $oCfg->expects($this->at(3))->method('getTemplatePath')
+                ->with($this->equalTo('test1'), $this->equalTo(false))
+                ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
+        $oCfg->expects($this->at(4))->method('getTemplatePath')
                 ->with($this->equalTo('test1'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
 

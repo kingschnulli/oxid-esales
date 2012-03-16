@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42397 2012-02-22 11:10:09Z juergen.busch $
+ * @version   SVN: $Id: lang.php 42939 2012-03-16 11:16:54Z juergen.busch $
  */
 
 /*
@@ -107,7 +107,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXTHUMB'                                  => 'Preview Picture',
 'GENERAL_ARTICLE_OXICON'                                   => 'Icon',
 'GENERAL_ARTICLE_OXPICSGENERATED'                          => 'Pictures generated',
-'GENERAL_ARTICLE_PICTURES'                                 => 'Article pictures',
+'GENERAL_ARTICLE_PICTURES'                                 => 'Product pictures',
 'GENERAL_ARTICLE_OXPIC1'                                   => 'Picture1',
 'GENERAL_ARTICLE_OXPIC2'                                   => 'Picture2',
 'GENERAL_ARTICLE_OXPIC3'                                   => 'Picture3',
@@ -298,6 +298,7 @@ $aLang = array(
 'GENERAL_SEARCHKEYS'                                       => 'Search Keys',
 'GENERAL_SENDEMAIL'                                        => 'Send e-mail?',
 'GENERAL_SENDON'                                           => 'Shipped on ',
+'GENERAL_SEND'                                             => 'Send',
 'GENERAL_NOSENT'                                           => 'Order not shipped yet.',
 'GENERAL_SETBACKSENDTIME'                                  => 'Reset Shipping Date',
 'GENERAL_SEO_FIXED'                                        => 'Fixed URL',
@@ -865,6 +866,7 @@ $aLang = array(
 'EXCEPTION_UNSPECIFIED_PARENT_VERSIONS'                    => 'Compatible parent theme versions not specified',
 'EXCEPTION_PARENT_VERSION_MISMATCH'                        => 'Parent theme version is not compatible',
 'EXCEPTION_PARENT_THEME_NOT_FOUND'                         => 'Cannot find parent theme',
+'NO_PICTURES_CHANGES'                                      => 'No pictures changes',
 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'               => 'Template "%s" not found',
 'EXCEPTION_DISABLED_DOWNLOADABLE_PRODUCTS'                 => 'To use this feature in frontend, you have to enable config option \'Enable downloadable products\' in Master Settings -> Core Settings -> Settings -> Downloadable products.',
 'ERROR_MESSAGE_SYSTEMCOMPONENT_CLASSNOTFOUND'              => 'Class "%s" not found',
@@ -911,7 +913,8 @@ $aLang = array(
 'LOGIN_LANGUAGE'                                           => 'Language',
 'LOGIN_PROFILE'                                            => 'Profile',
 'LOGIN_START'                                              => 'Start OXID eShop Admin',
-'LOGIN_STAGINGMODE_NOTIFY'                                 => 'Functionality is limited to staging mode',
+'LOGIN_STAGINGMODE_NOTIFY'                                 => 'Functionality is limited in staging mode',
+'LOGIN_DEMOMODE_NOTIFY'                                    => 'Functionality is limited in demoshop mode',
 'MAIN_TITLE'                                               => '[OXID Startpage]',
 'MAIN_INFO'                                                => 'Information',
 'MR'                                                       => 'Mr',
@@ -2024,7 +2027,7 @@ $aLang = array(
 'SHOP_RDFA_COSTUMER_BUSINESS'		                       => 'Business',
 'SHOP_RDFA_COSTUMER_PUBLIC'		                           => 'Public',
 'SHOP_RDFA_DURATION_OFFERINGS'			                   => 'Select the time of the validity of your products.',
-'SHOP_RDFA_DURATION_PRICES'			                       => 'Select the time of the validity of your prices and costs (products, payment and shipping methods.',
+'SHOP_RDFA_DURATION_PRICES'			                       => 'Select the time of the validity of your prices and costs.',
 'SHOP_RDFA_1_DAY'			                               => '1 day',
 'SHOP_RDFA_3_DAYS'			                               => '3 days',
 'SHOP_RDFA_7_DAYS'			                               => '7 days (1 week)',

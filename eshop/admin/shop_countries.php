@@ -17,30 +17,30 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_countries.php 40444 2011-12-02 12:44:07Z vilma $
+ * @version   SVN: $Id: shop_countries.php 42731 2012-03-12 15:12:18Z vilma $
  */
 
 //shop location countries - used when loading dynamic content from oxid servers
 
 $aLocationCountries['en'] = array (
 
-''     => 'International',
+'en'   => 'International',
 'de'   => 'Germany, Austria, Switzerland',
 
 );
 
 $aLocationCountries['de'] = array (
 
-''     => 'International',
+'en'   => 'International',
 'de'   => 'Deutschland, &Ouml;sterreich, Schweiz',
 
 );
 
 $aLocationCountries['fr'] = array (
 
-''     => 'International',
+'en'   => 'International',
 'de'   => 'Allemagne, Autriche, Suisse',
 
 );

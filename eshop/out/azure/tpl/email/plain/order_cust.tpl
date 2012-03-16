@@ -148,7 +148,7 @@
     [{ if $oOrderFileList }]
         [{ oxmultilang ident="MY_DOWNLOADS_DESC" }]
         [{foreach from=$oOrderFileList item="oOrderFile"}]
-          [{if $order->oxorder__oxpaid->value}]
+          [{if $order->oxorder__oxpaid->value || !$oOrderFile->oxorderfiles__oxpurchasedonly->value}]
             [{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=download" params="sorderfileid="|cat:$oOrderFile->getId()}]
           [{else}]
             [{$oOrderFile->oxorderfiles__oxfilename->value}] [{ oxmultilang ident="DOWNLOADS_PAYMENT_PENDING" }]

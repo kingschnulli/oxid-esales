@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmdvariantTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxmdvariantTest.php 42820 2012-03-13 15:09:38Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -369,6 +369,24 @@ class Unit_Core_oxmdvariantTest extends OxidTestCase
         $this->assertEquals('<span class="pricefrom">ab</span> 1,00 ¤', $this->_oSubj->getMdSubvariantByName("Red")->getMdSubvariantByName("L")->getFPrice());
         $this->assertEquals('1,00 ¤', $this->_oSubj->getMdSubvariantByName("Red")->getMdSubvariantByName("L")->getMdSubvariantByName("Silk")->getFPrice());
         $this->assertEquals('2,00 ¤', $this->_oSubj->getMdSubvariantByName("Red")->getMdSubvariantByName("L")->getMdSubvariantByName("Wool")->getFPrice());
+    }
+
+    /**
+     * 0002030: Option "Calculate Product Price" does not work with variants.
+     * Check if no price returned when unset Calculate Product Price.
+     */
+    function testGetPriceNoPriceCalculate()
+    {
+        oxConfig::getInstance()->setConfigParam( 'bl_perfLoadPrice', false );
+
+        $oSubj = new oxMdVariant();
+        $sArtId = '';
+        $aNames = array(); 
+        $dPrice = 10.10; 
+        $sUrl = '';
+        $oSubj->addNames( $sArtId, $aNames, $dPrice, $sUrl );
+        $iPrice = $oSubj->getFPrice();
+        $this->assertTrue( empty( $iPrice ) );
     }
 
 }

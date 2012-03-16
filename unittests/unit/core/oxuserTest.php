@@ -3633,7 +3633,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
     public function testGetLoginQuery_demoShopAdminMode()
     {
         // demoshop + admin
-        
+
             $oConfig = $this->getMock( "oxConfig", array( "isDemoShop" ) );
             $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
             $sWhat = "oxid";
@@ -3697,6 +3697,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oUser->UNITloadSavedUserBasketAfterLogin();
 
         // non admin
+        modConfig::getInstance()->setConfigParam( "blPerfNoBasketSaving", false );
         $oBasket = $this->getMock( "oxBasket", array( "load" ) );
         $oBasket->expects( $this->once() )->method( 'load' )->will( $this->throwException( new Exception() ) );
 

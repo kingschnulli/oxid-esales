@@ -4,14 +4,15 @@
         <div id="footer">
         <div class="bar copy">
             <div class="left" id="delivery_link">
-                [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-                    [{if $oView->getUser()}]
-                        [{assign var="oUser" value=$oView->getUser() }]
-                        [{ if $oUser->oxuser__oxustid->value && $oUser->oxuser__oxcompany->value }] <a href="[{ $oCont->getLink() }]" rel="nofollow"> [{ oxmultilang ident="PLUS_SHIPPING3" }]</a> [{else}] <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_INCLTAXANDPLUSSHIPPING" }]</a> [{/if}]
-                    [{else}]
-                        <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_INCLTAXANDPLUSSHIPPING" }]</a>
-                    [{/if}]
-                [{/oxifcontent}]
+                [{if $oView->isPriceCalculated() }]
+                    [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
+                        [{if $oView->isVatIncluded()}]
+                            <a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="INC_FOOTER_INCLTAXANDPLUSSHIPPING" }]</a>
+                        [{else}]
+                            <a href="[{ $oCont->getLink() }]" rel="nofollow"> [{ oxmultilang ident="PLUS_SHIPPING3" }]</a>
+                        [{/if}]
+                    [{/oxifcontent}]
+                [{/if}]
             </div>
             <div class="right">
                 &copy; <a href="[{ oxmultilang ident="OXID_ESALES_URL" }]" title="[{ oxmultilang ident="OXID_ESALES_URL_TITLE" }]">[{ oxmultilang ident="INC_FOOTER_SOFTWAREFROMOXIDESALES" }]</a>

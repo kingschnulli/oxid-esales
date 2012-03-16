@@ -62,14 +62,18 @@ class oxOrderFile extends oxBase
      */
     public function reset()
     {
-        $this->oxorderfiles__oxdownloadcount = new oxField( 0 );
-        $this->oxorderfiles__oxfirstdownload = new oxField( '0000-00-00 00:00:00' );
-        $this->oxorderfiles__oxlastdownload = new oxField( '0000-00-00 00:00:00' );
-        $iExpirationTime = $this->oxorderfiles__oxlinkexpirationtime->value * 3600;
-        $sNow = oxUtilsDate::getInstance()->getTime();
-        $sDate = date( 'Y-m-d H:i:s', $sNow + $iExpirationTime );
-        $this->oxorderfiles__oxvaliduntil = new oxField( $sDate );
-        $this->oxorderfiles__oxresetcount = new oxField( $this->oxorderfiles__oxresetcount->value + 1 );
+        $oArticleFile = oxNew('oxFile');
+        $oArticleFile->load($this->oxorderfiles__oxfileid->value);
+        if ( file_exists($oArticleFile->getStoreLocation()) ) {
+            $this->oxorderfiles__oxdownloadcount = new oxField( 0 );
+            $this->oxorderfiles__oxfirstdownload = new oxField( '0000-00-00 00:00:00' );
+            $this->oxorderfiles__oxlastdownload = new oxField( '0000-00-00 00:00:00' );
+            $iExpirationTime = $this->oxorderfiles__oxlinkexpirationtime->value * 3600;
+            $sNow = oxUtilsDate::getInstance()->getTime();
+            $sDate = date( 'Y-m-d H:i:s', $sNow + $iExpirationTime );
+            $this->oxorderfiles__oxvaliduntil = new oxField( $sDate );
+            $this->oxorderfiles__oxresetcount = new oxField( $this->oxorderfiles__oxresetcount->value + 1 );
+        }
     }
 
     /**

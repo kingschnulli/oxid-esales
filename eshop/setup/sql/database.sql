@@ -556,6 +556,7 @@ INSERT INTO `oxconfig` VALUES('5i1d215fe1d6f0e1061ba1134e0ee4f2', 'oxbaseshop', 
 INSERT INTO `oxconfig` VALUES('l8g3e140a4bc7993d7d715df951dfe25', 'oxbaseshop', '', 'iMaxDownloadsCountUnregistered', 'str', 0x07);
 INSERT INTO `oxconfig` VALUES('l8g957be9e7b13412960c7670f71ba3b', 'oxbaseshop', '', 'iMaxDownloadsCount', 'str', 0xde);
 INSERT INTO `oxconfig` VALUES('mhjf24905a5b49c8d60aa31087b9797f', 'oxbaseshop', '', 'blShowRememberMe', 'bool', 0x07);
+INSERT INTO `oxconfig` VALUES('omc4555952125c3c2.98253113', 'oxbaseshop', '', 'blDisableNavBars', 'bool', 0x07);
 
 -- default unconfigurable values to fallback if theme does not provide alternatives
 INSERT INTO `oxconfig` VALUES('8563fba1baec57c19.08644217', 'oxbaseshop', '', 'sThumbnailsize', 'str', 0x07c4b144c7b838);
@@ -584,7 +585,6 @@ INSERT INTO `oxconfig` VALUES('01296159b7641d31b93423972af6150b', 'oxbaseshop', 
 INSERT INTO `oxconfig` VALUES('073455b29d0db9ee774b788731623955', 'oxbaseshop', 'theme:basic', 'blShowFinalStep', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('0ec42a395d0595ee7741091898848474', 'oxbaseshop', 'theme:basic', 'iNewBasketItemMessage', 'select', 0xb6);
 INSERT INTO `oxconfig` VALUES('0545423fe8ce213a06.20230295', 'oxbaseshop', 'theme:basic', 'aNrofCatArticles', 'arr', 0x4dbace2972e14bf2cbd3a9a4113b83ad1c8f7b704f710ba39fd1ecd29b438b41809712e316c6f4fdc92741f7876cc6fca127d78994e604dcc99519);
-INSERT INTO `oxconfig` VALUES('omc4555952125c3c2.98253113', 'oxbaseshop', 'theme:basic', 'blDisableNavBars', 'bool', 0x07);
 
 INSERT INTO `oxconfig` VALUES('c20424bf2f8e71271.429555451', 'oxbaseshop', 'theme:basic', 'bl_perfLoadTreeForSearch', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('79e417a442934fcb9.117331841', 'oxbaseshop', 'theme:basic', 'bl_perfLoadCatTree', 'bool', 0x07);
@@ -650,7 +650,6 @@ INSERT INTO `oxconfigdisplay` VALUES('01296159b7641d31b93423972af6150b', 'theme:
 INSERT INTO `oxconfigdisplay` VALUES('073455b29d0db9ee774b788731623955', 'theme:basic', 'blShowFinalStep',          'display',  '', 360);
 INSERT INTO `oxconfigdisplay` VALUES('0ec42a395d0595ee7741091898848474', 'theme:basic', 'iNewBasketItemMessage',    'display',  '0|1|2|3', 370);
 INSERT INTO `oxconfigdisplay` VALUES('0545423fe8ce213a06.20230295',      'theme:basic', 'aNrofCatArticles',         'display',   '', 380);
-INSERT INTO `oxconfigdisplay` VALUES('omc4555952125c3c2.98253113',       'theme:basic', 'blDisableNavBars',         'display',   '', 390);
 INSERT INTO `oxconfigdisplay` VALUES('79e417a442934fcb9.11733184',       'theme:basic', 'bl_perfLoadCatTree',       'navigation', '', 410);
 INSERT INTO `oxconfigdisplay` VALUES('c20424bf2f8e71271.42955545',       'theme:basic', 'bl_perfLoadTreeForSearch', 'navigation', '', 420);
 INSERT INTO `oxconfigdisplay` VALUES('01296159b2341d31b93423972af6150b', 'theme:basic', 'blTopNaviLayout',          'navigation', '', 430);

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 42359 2012-02-20 15:10:29Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 42845 2012-03-14 09:54:52Z linas.kukulskis $
  */
 
 /**
@@ -321,7 +321,8 @@ class oxUtils extends oxSuperCfg
     {
         $blValid = true;
         if ( $sEmail != 'admin' ) {
-            $blValid = ( getStr()->preg_match( $this->_sEmailTpl, $sEmail ) != 0 );
+            $sEmailTpl = "/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/i";
+            $blValid = ( getStr()->preg_match( $sEmailTpl, $sEmail ) != 0 );
         }
 
         return $blValid;
@@ -329,6 +330,8 @@ class oxUtils extends oxSuperCfg
 
     /**
      * Clears Smarty cache data.
+     *
+     * @deprecated since v4.5.9 (2012-03-06); Not needed from 3.0
      *
      * @return null
      */

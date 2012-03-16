@@ -3,12 +3,10 @@
 [{oxscript add="$('#checkAll, #basketRemoveAll').oxBasketChecks();"}]
 [{assign var="currency" value=$oView->getActCurrency()}]
 <form name="basket[{ $basketindex }]" action="[{ $oViewConf->getSelfActionLink() }]" method="post">
-    <div>
-        [{ $oViewConf->getHiddenSid() }]
-        <input type="hidden" name="cl" value="basket">
-        <input type="hidden" name="fnc" value="changebasket">
-        <input type="hidden" name="CustomError" value='basket'>
-    </div>
+    [{ $oViewConf->getHiddenSid() }]
+    <input type="hidden" name="cl" value="basket">
+    <input type="hidden" name="fnc" value="changebasket">
+    <input type="hidden" name="CustomError" value='basket'>
     <table id="basket" class="basketitems[{if $oViewConf->getActiveClassName() == 'order' }] orderBasketItems[{/if}]">
         <colgroup>
             [{if $editable }]<col class="editCol">[{/if}]

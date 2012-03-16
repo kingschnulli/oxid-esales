@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42396 2012-02-22 11:09:47Z juergen.busch $
+ * @version   SVN: $Id: lang.php 42938 2012-03-16 11:16:35Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -301,6 +301,7 @@ $aLang = array(
 'GENERAL_SEARCHKEYS'                                       => 'Search Keys',
 'GENERAL_SENDEMAIL'                                        => 'E-Mail schicken?',
 'GENERAL_SENDON'                                           => 'Versandt am ',
+'GENERAL_SEND'                                             => 'Versenden',
 'GENERAL_NOSENT'                                           => 'Bestellung wurde noch nicht versandt.',
 'GENERAL_SETBACKSENDTIME'                                  => 'Versanddatum zurücksetzen',
 'GENERAL_SEO_FIXED'                                        => 'URL fixiert',
@@ -868,6 +869,7 @@ $aLang = array(
 'EXCEPTION_UNSPECIFIED_PARENT_VERSIONS'                    => 'Kompabitble Versionsnummer des Eltern-Themes konnte nicht gefunden werden',
 'EXCEPTION_PARENT_VERSION_MISMATCH'                        => 'Eltern-Theme Version ist nicht kompatibel',
 'EXCEPTION_PARENT_THEME_NOT_FOUND'                         => 'Eltern-Theme kann wurde nicht gefunden',
+'NO_PICTURES_CHANGES'                                      => 'Keine Änderungen bei den Bildern',
 'EXCEPTION_SYSTEMCOMPONENT_TEMPLATENOTFOUND'               => 'Template "%s" nicht gefunden',
 'EXCEPTION_DISABLED_DOWNLOADABLE_PRODUCTS'                 => 'Um dieses Feature im Shop verwenden zu können, muss die Option \'Download-Artikel erlauben\' in Stammdaten -> Grundeinstellungen -> Einstell. -> Download-Artikel aktiviert sein.',
 'ERROR_MESSAGE_SYSTEMCOMPONENT_CLASSNOTFOUND'              => 'Class "%s" nicht gefunden',
@@ -914,7 +916,8 @@ $aLang = array(
 'LOGIN_LANGUAGE'                                           => 'Sprache',
 'LOGIN_PROFILE'                                            => 'Profil',
 'LOGIN_START'                                              => 'OXID eShop Admin starten',
-'LOGIN_STAGINGMODE_NOTIFY'                                 => 'Funktionalität ist durch Staging-Modus eingeschränkt',
+'LOGIN_STAGINGMODE_NOTIFY'                                 => 'Funktionalität ist im Staging-Modus eingeschränkt',
+'LOGIN_DEMOMODE_NOTIFY'                                    => 'Funktionalität ist im Demoshop-Modus eingeschränkt',
 'MAIN_TITLE'                                               => '[OXID Startpage]',
 'MAIN_INFO'                                                => 'Information',
 'MR'                                                       => 'Herr',
@@ -2030,7 +2033,7 @@ $aLang = array(
 'SHOP_RDFA_COSTUMER_BUSINESS'		                       => 'Unternehmen/Gewerbetreibende',
 'SHOP_RDFA_COSTUMER_PUBLIC'		                           => 'Öffentliche Einrichtungen',
 'SHOP_RDFA_DURATION_OFFERINGS'			                   => 'Wählen Sie den Gültigkeitszeitraum Ihrer Artikel.',
-'SHOP_RDFA_DURATION_PRICES'			                       => 'Wählen Sie den Gültigkeitszeitraum Ihrer Preise und Kosten (Artikel, Zahlungs- und Versandarten).',
+'SHOP_RDFA_DURATION_PRICES'			                       => 'Wählen Sie den Gültigkeitszeitraum Ihrer Preise und Kosten.',
 'SHOP_RDFA_1_DAY'			                               => '1 Tag',
 'SHOP_RDFA_3_DAYS'			                               => '3 Tage',
 'SHOP_RDFA_7_DAYS'			                               => '7 Tage (1 Woche)',
@@ -2042,7 +2045,7 @@ $aLang = array(
 'SHOP_RDFA_URL'		         	                           => 'Shop URL',
 'SHOP_RDFA_EMAIL'	    		                           => 'Kontakt (E-Mail)',
 'SHOP_RDFA_SUBMITED_SUCCESSFULLY'                          => 'Ihre Shop-Daten wurden erfolgreich übertragen',
-'SHOP_RDFA_MESSAGE_NOURL'	    		                   => 'Bitte Shop URL eintragen',
+'SHOP_RDFA_MESSAGE_NOURL'	    		                   => 'Bitte Shop-URL eintragen',
 'SHOP_RDFA_SUBMIT'	    		                           => 'Übertragen',
 'SHOP_RDFA_SHOW_PRODUCTSTOCK'	    		               => 'Den tatsächlichen Lagerbestand der Artikel anzeigen',
 

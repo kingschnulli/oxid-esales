@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_variant.php 40727 2011-12-21 12:01:42Z mindaugas.rimgaila $
+ * @version   SVN: $Id: article_variant.php 42806 2012-03-13 15:06:49Z linas.kukulskis $
  */
 
 /**
@@ -249,7 +249,8 @@ class Article_Variant extends oxAdminDetails
     public function addsel()
     {
         $oArticle = oxNew("oxarticle");
-        $oArticle->setEnableMultilang( false );
+        //#3644
+        //$oArticle->setEnableMultilang( false );
         if ( $oArticle->load( $this->getEditObjectId() ) ) {
 
 

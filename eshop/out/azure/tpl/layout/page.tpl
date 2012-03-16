@@ -21,15 +21,16 @@
         [{include file="layout/footer.tpl"}]
     </div>
     [{include file="widget/facebook/init.tpl"}]
-    [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
-        <div id="incVatMessage">
-            [{if $oView->getUser()}]
-                [{assign var="oUser" value=$oView->getUser() }]
-                [{ if $oUser->oxuser__oxustid->value && $oUser->oxuser__oxcompany->value }] * <span class="deliveryInfo">[{ oxmultilang ident="PLUS" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="PLUS_SHIPPING2" }]</a></span> [{else}] * <span class="deliveryInfo">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2" }]</a></span> [{/if}]
-            [{else}]
-                 * <span class="deliveryInfo">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2" }]</a></span>
-            [{/if}]
-        </div>
-    [{/oxifcontent }]
+    [{if $oView->isPriceCalculated() }]
+        [{oxifcontent ident="oxdeliveryinfo" object="oCont"}]
+            <div id="incVatMessage">
+                [{if $oView->isVatIncluded()}]
+                    * <span class="deliveryInfo">[{ oxmultilang ident="PLUS_SHIPPING" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="PLUS_SHIPPING2" }]</a></span>
+                [{else}]
+                    * <span class="deliveryInfo">[{ oxmultilang ident="PLUS" }]<a href="[{ $oCont->getLink() }]" rel="nofollow">[{ oxmultilang ident="PLUS_SHIPPING2" }]</a></span>
+                [{/if}]
+            </div>
+        [{/oxifcontent }]
+    [{/if}]
 [{/capture}]
 [{include file="layout/base.tpl"}]

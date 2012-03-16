@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 42297 2012-02-15 16:15:36Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxconfigTest.php 42754 2012-03-13 08:34:31Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2216,6 +2216,22 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig = new modForTestInitLoadingPriority();
         $oConfig->init();
         $this->assertNotEquals(33, $oConfig->iDebug);
+    }
+
+    /**
+     * Checks if shop license has demo mode
+     */
+    public function testHasDemoKey()
+    {
+            return;
+        // all modules off
+        $oSerial = $this->getMock( 'oxSerial', array( "isFlagEnabled" ) );
+        $oSerial->expects( $this->once() )->method( 'isFlagEnabled')->will( $this->returnValue( true ) );
+
+        $oConfig = $this->getMock( 'oxconfig', array( "getSerial" ) );
+        $oConfig->expects( $this->once() )->method( 'getSerial')->will( $this->returnValue( $oSerial ) );
+
+        $this->assertTrue( $oConfig->hasDemoKey() );
     }
 
 }

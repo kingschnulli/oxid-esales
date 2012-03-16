@@ -47,24 +47,25 @@ function _groupExp(el) {
     <input type="hidden" name="editlanguage" value="[{ $editlanguage }]">
 </form>
 
+[{assign var="oFiles" value=$edit->getArticleFiles()}]
 <table cellspacing="0" cellpadding="0" border="0" width="98%">
-    <colgroup>
-        <col width="50%">
-        <col width="50%">
-    </colgroup>
+    [{if count( $oFiles )}]
+        <colgroup>
+            <col width="50%">
+            <col width="50%">
+        </colgroup>
+    [{/if}]
     <tr>
-      <td valign="top" class="edittext">
-        <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">
-        [{$oViewConf->getHiddenSid()}]
-          <input type="hidden" name="cl" value="article_files">
-          <input type="hidden" name="fnc" value="">
-          <input type="hidden" name="oxid" value="[{ $oxid }]">
-          <input type="hidden" name="editval[article__oxid]" value="[{ $oxid }]">
-          <input type="hidden" name="voxid" value="[{ $oxid }]">
-          <input type="hidden" name="oxparentid" value="[{ $oxparentid }]">
-
-          [{assign var="oFiles" value=$edit->getArticleFiles()}]
-          [{if count( $oFiles )}]
+      [{if count( $oFiles )}]
+          <td valign="top" class="edittext">
+            <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">
+                [{$oViewConf->getHiddenSid()}]
+                  <input type="hidden" name="cl" value="article_files">
+                  <input type="hidden" name="fnc" value="">
+                  <input type="hidden" name="oxid" value="[{ $oxid }]">
+                  <input type="hidden" name="editval[article__oxid]" value="[{ $oxid }]">
+                  <input type="hidden" name="voxid" value="[{ $oxid }]">
+                  <input type="hidden" name="oxparentid" value="[{ $oxparentid }]">
                 <p><b>[{ oxmultilang ident="ARTICLE_FILES_TABLE_UPLOADEDFILES" }]</b></p>
                 [{foreach from=$oFiles item=oArticleFile}]
 
@@ -148,10 +149,9 @@ function _groupExp(el) {
                     [{/block}]
                 [{/foreach}]
                 <input type="submit" class="saveButton" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'">
-
-            [{/if}]
-        </form>
-     </td>
+            </form>
+         </td>
+     [{/if}]
      <td valign="top" class="edittext" align="right">
           <form name="newFileUpload" id="newFileUpload" action="[{ $oViewConf->getSelfLink() }]" enctype="multipart/form-data" method="post">
           <input type="hidden" name="MAX_FILE_SIZE" value="[{$iMaxUploadFileSize}]">

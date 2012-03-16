@@ -10,7 +10,7 @@
     [{ if $oOrderFileList }]
         [{ oxmultilang ident="EMAIL_SENDDOWNLOADS_DOWNLOADS_DESC" }]
             [{foreach from=$oOrderFileList item="oOrderFile"}]
-              [{if $order->oxorder__oxpaid->value}]
+              [{if $order->oxorder__oxpaid->value || !$oOrderFile->oxorderfiles__oxpurchasedonly->value}]
                 [{ oxgetseourl ident=$oViewConf->getBaseDir()|cat:"index.php?cl=download" params="sorderfileid="|cat:$oOrderFile->getId() }] [{$oOrderFile->oxorderfiles__oxfilename->value}]
               [{else}]
                 [{$oOrderFile->oxorderfiles__oxfilename->value}] [{ oxmultilang ident="EMAIL_SENDDOWNLOADS_PAYMENT_PENDING" }]

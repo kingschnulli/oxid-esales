@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_pictures.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
+ * @version   SVN: $Id: article_pictures.php 42854 2012-03-14 11:20:36Z linas.kukulskis $
  */
 
 /**
@@ -86,7 +86,15 @@ class Article_Pictures extends oxAdminDetails
         $oArticle = oxNew( "oxarticle");
         if ( $oArticle->load( $this->getEditObjectId() ) ) {
             $oArticle->assign( oxConfig::getParameter( "editval") );
-            oxUtilsFile::getInstance()->processFiles( $oArticle );
+            $oFilesUpload = oxUtilsFile::getInstance()->processFiles( $oArticle );
+
+            // Show that no new image added
+            if ( $oFilesUpload->iNewImagesCounter  <= 0 ) {
+                $oEx = oxNew( "oxExceptionToDisplay" );
+                $oEx->setMessage( 'NO_PICTURES_CHANGES' );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false );
+            }
+
             $oArticle->save();
         }
     }

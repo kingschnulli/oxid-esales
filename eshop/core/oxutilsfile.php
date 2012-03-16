@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsfile.php 42854 2012-03-14 11:20:36Z linas.kukulskis $
  */
 
 /**
@@ -433,17 +433,30 @@ class oxUtilsFile extends oxSuperCfg
             // folder where images will be processed
             $sTmpFolder = $oConfig->getConfigParam( "sCompileDir" );
 
+            $iNewImagesCounter = 0;
+            $aSource   = $aFiles['myfile']['tmp_name'];
+            $aError    = $aFiles['myfile']['error'];
+            $sErrorsDescription = '';
+
+            $oEx = oxNew( "oxExceptionToDisplay" );
             // process all files
             while ( list( $sKey, $sValue ) = each( $aFiles['myfile']['name'] ) ) {
 
-                $aSource   = $aFiles['myfile']['tmp_name'];
                 $sSource   = $aSource[$sKey];
+                $iError    = $aError[$sKey];
                 $aFiletype = explode( "@", $sKey );
                 $sKey      = $aFiletype[1];
                 $sType     = $aFiletype[0];
 
                 $sValue  = strtolower( $sValue );
                 $sImagePath = $this->_getImagePath( $sType );
+                
+                // Should translate error to user if file was uploaded
+                if ( UPLOAD_ERR_OK !== $iError && UPLOAD_ERR_NO_FILE !== $iError ) {
+                    $sErrorsDescription = $this->translateError( $iError );
+                    $oEx->setMessage( $sErrorsDescription );
+                    oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false );
+                }
 
                 // checking file type and building final file name
                 if ( $sSource && ( $sValue = $this->_prepareImageName( $sValue, $sType, $blDemo, $sImagePath, $blUnique ) ) ) {
@@ -461,9 +474,14 @@ class oxUtilsFile extends oxSuperCfg
                         }
 
                         if ( $blMoved ) {
+                            // New image successfully add
+                            $iNewImagesCounter++;
                             // assign the name
                             if ( $oObject && isset( $oObject->$sKey ) ) {
                                 $oObject->{$sKey}->setValue( $sValue );
+                                
+                                // Return that no new image added
+                                $oObject->iNewImagesCounter = $iNewImagesCounter;
                             }
                         }
                     }
@@ -688,6 +706,24 @@ class oxUtilsFile extends oxSuperCfg
     {
         $sFolder = array_key_exists( $sType, $this->_aTypeToPath ) ? $this->_aTypeToPath[ $sType ] : '0';
         return $this->normalizeDir( $sFolder );
+    }
+    
+    /**
+     * Translate php file upload errors to user readable format.
+     * 
+     * @param integer $iError php file upload error number
+     * 
+     * @return string
+     */
+    function translateError( $iError )
+    {
+        $message = '';
+        // Translate only if translation exist
+        if ( $iError > 0 && $iError < 9 && 5 !== $iError ) {
+            $message = 'EXCEPTION_FILEUPLOADERROR_'.( (int) $iError );
+        }
+        
+        return $message; 
     }
 
     /**

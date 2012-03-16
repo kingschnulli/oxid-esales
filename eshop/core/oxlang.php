@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
+ * @version   SVN: $Id: oxlang.php 42867 2012-03-14 13:14:16Z linas.kukulskis $
  */
 
 /**
@@ -28,7 +28,7 @@
 class oxLang extends oxSuperCfg
 {
     /**
-     * oxUtilsCount instance.
+     * oxLang instance.
      *
      * @var oxlang
      */

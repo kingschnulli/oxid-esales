@@ -22,7 +22,7 @@
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
 
-$sLangName  = "Deutsch";
+$sLangName  = "Français";
 
 
 $aMap = array(
@@ -829,8 +829,6 @@ $aMap = array(
 'WIDGET_PRODUCT_PRODUCT_MOREINFO'                                 => 'MORE_INFO',
 'WIDGET_PRODUCT_PRODUCT_NOWONLY'                                  => 'NOWONLY',
 'WIDGET_PRODUCT_PRODUCT_NR'                                       => 'PRODUCT_NO',
-'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING'                             => 'PLUS_SHIPPING',
-'WIDGET_PRODUCT_PRODUCT_PLUSSHIPPING2'                            => 'PLUS_SHIPPING2',
 'WIDGET_PRODUCT_PRODUCT_REDUCEDFROM'                              => 'REDUCED_FROM_2',
 'WIDGET_PRODUCT_PRODUCT_REMOVE'                                   => 'REMOVE_2',
 'WIDGET_PRODUCT_RELATED_PRODUCTS_ACCESSORIES_HEADER'              => 'ACCESSORIES',

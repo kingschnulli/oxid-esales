@@ -113,21 +113,21 @@
 
         [{if $product->hasMdVariants() }]
             <select id="mdVariant_[{$testid}]" name="mdVariant_[{$testid}]">
-            [{if !$product->isParentNotBuyable()}]
-              <option value="[{$product->getId()}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]*[{/oxhasrights}]</option>
+            [{if !$product->isParentNotBuyable() && $product->getFPrice() }]
+              <option value="[{$product->getLink()}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]* [{/oxhasrights}]</option>
             [{/if}]
 
             [{foreach from=$product->getMdSubvariants() item=mdVariant}]
-              <option value="[{$mdVariant->getLink()}]?[{$oViewConf->getNavUrlParams()}]">[{ $mdVariant->getName() }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $mdVariant->getFPrice()|strip_tags }]* [{/oxhasrights}]</option>
+              <option value="[{$mdVariant->getLink()}]?[{$oViewConf->getNavUrlParams()}]">[{ $mdVariant->getName() }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{if $mdVariant->getFPrice() }] [{ $mdVariant->getFPrice()|strip_tags }]* [{/if }] [{/oxhasrights}]</option>
             [{/foreach}]
             </select>
         [{else}]
             <select id="varSelect_[{$testid}]" name="aid">
-            [{ if !$product->isParentNotBuyable()}]
-                <option value="[{$product->getId()}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]*[{/oxhasrights}]</option>
+            [{ if !$product->isParentNotBuyable() && $product->getFPrice() }]
+                <option value="[{$product->getId()}]">[{ $product->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $product->getFPrice() }] [{ $currency->sign|strip_tags}]* [{/oxhasrights}]</option>
             [{/if}]
             [{foreach from=$product->getVariantList() item=variant}]
-                <option value="[{$variant->getId()}]">[{ $variant->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{ $variant->getFPrice() }] [{ $currency->sign|strip_tags}]* [{/oxhasrights}]</option>
+                <option value="[{$variant->getId()}]">[{ $variant->oxarticles__oxvarselect->value }] [{oxhasrights ident="SHOWARTICLEPRICE"}] [{if $variant->getFPrice() }] [{ $variant->getFPrice() }] [{ $currency->sign|strip_tags}]* [{/if }] [{/oxhasrights}]</option>
             [{/foreach}]
             </select>
         [{/if}]

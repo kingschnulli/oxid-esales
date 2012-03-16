@@ -4003,6 +4003,10 @@ span.verificationCode {
     line-height: 18px;
 }
 
+.form label.tooltip{
+    background:url(../../img/help-icon.png) 95% center no-repeat;
+}
+
 .form li.checkFields {
     padding-left: 150px;
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 42196 2012-02-13 09:13:31Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticlelistTest.php 42846 2012-03-14 09:55:02Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1556,13 +1556,13 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
         modSession::getInstance()->addClassFunction('getId', create_function('', 'return "ok";'));
 
-        $oTest = $this->getMock("oxArticleList", array('loadIds', '_sortByIds'));
+        $oTest = $this->getMock("oxArticleList", array('loadIds', 'sortByIds'));
         $oTest->expects($this->any())->method("loadIds")->will($this->returnValue(true));
-        $oTest->expects($this->any())->method("_sortByIds")->will($this->returnValue(true));
+        $oTest->expects($this->any())->method("sortByIds")->will($this->returnValue(true));
         $oTest->loadHistoryArticles(1);
 
         $oTest->expects($this->once())->method('loadIds')->with(array())->will($this->returnValue(true));
-        $oTest->expects($this->once())->method("_sortByIds")->will($this->returnValue(true));
+        $oTest->expects($this->once())->method("sortByIds")->will($this->returnValue(true));
         $oTest->loadHistoryArticles(1);
     }
 
@@ -1593,15 +1593,15 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
         modSession::getInstance()->addClassFunction('getId', create_function('', 'return "ok";'));
 
-        $oTest = $this->getMock("oxArticleList", array('loadIds', '_sortByIds'));
+        $oTest = $this->getMock("oxArticleList", array('loadIds', 'sortByIds'));
         $oTest->expects($this->any())->method("loadIds")->will($this->returnValue(true));
-        $oTest->expects($this->any())->method("_sortByIds")->will($this->returnValue(true));
+        $oTest->expects($this->any())->method("sortByIds")->will($this->returnValue(true));
         $oTest->loadHistoryArticles(1);
         $oTest->loadHistoryArticles(2);
         $oTest->loadHistoryArticles(3);
 
         $oTest->expects($this->once())->method('loadIds')->with(array(1, 2, 3))->will($this->returnValue(true));
-        $oTest->expects($this->once())->method('_sortByIds')->with(array(1, 2, 3))->will($this->returnValue(true));
+        $oTest->expects($this->once())->method('sortByIds')->with(array(1, 2, 3))->will($this->returnValue(true));
         $oTest->loadHistoryArticles(4);
     }
 
@@ -2100,7 +2100,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $aReturn = array( 'aaa' => 'bbb' );
         $sView = getViewName('oxartextends', 5);
         $sQ = "select $sView.oxid from $sView inner join xxx on ".
-              "xxx.oxid = $sView.oxid where xxx.oxissearch = 1 and ".
+              "xxx.oxid = $sView.oxid where xxx.oxparentid = '' and xxx.oxissearch = 1 and ".
               "match ( $sView.oxtags ) ".
               "against( '\\\"zzz_\\\"' IN BOOLEAN MODE ) and 1 order by xxx.yyy ";
 

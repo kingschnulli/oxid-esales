@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxuser.php 42868 2012-03-14 14:02:28Z vilma $
  */
 
 /**
@@ -1264,13 +1264,17 @@ class oxUser extends oxBase
         }
 
         $blStagingMode = false;
+        $blDemoMode = false;
         $sWhat = "oxid";
+            if ($myConfig->isDemoShop()) {
+                $blDemoMode = true;
+            }
 
         $sSelect = "select $sWhat from oxuser where oxuser.oxactive = 1 and {$sPassSelect} and {$sUserSelect} {$sShopSelect} ";
-        if ( ( $myConfig->isDemoShop() || $blStagingMode ) && $blAdmin ) {
+        if ( ( $blDemoMode || $blStagingMode ) && $blAdmin ) {
             if ( $sPassword == "admin" && $sUser == "admin" ) {
                 $sSelect = "select $sWhat from oxuser where oxrights = 'malladmin' ";
-            } else {
+            } elseif ( $blDemoMode ) {
                 $oEx = oxNew( 'oxUserException' );
                 $oEx->setMessage( 'EXCEPTION_USER_NOVALIDLOGIN' );
                 throw $oEx;
@@ -1289,7 +1293,7 @@ class oxUser extends oxBase
      */
     protected function _loadSavedUserBasketAfterLogin()
     {
-        if ( !$this->isAdmin() ) {
+        if ( !$this->isAdmin() && !$this->getConfig()->getConfigParam( 'blPerfNoBasketSaving' )) {
             //load basket from the database
             try {
                 if ( $oBasket = $this->getSession()->getBasket() ) {

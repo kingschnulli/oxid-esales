@@ -773,7 +773,7 @@ Si vous commandez avec votre compte client, Les liens de téléchargement apparaît
 'SUBJECT' => 'Sujet:',
 'SUBMIT' => 'Envoyer',
 'SUBMIT_COUPON' => 'Soumettre le bon de réduction',
-'SUBMIT_ORDER' => 'Confirmer la commande',
+'SUBMIT_ORDER' => 'Acheter',
 'SUBSCRIBE' => 'S\'inscrire',
 'SUBSCRIBE_NEWSLETTER' => 'Inscription Newsletter:',
 'SUBSCRIBE_NEWSLETTER_MESSAGE' => 'Vous aurez la possibilité de vous désincrire à tout moment.',

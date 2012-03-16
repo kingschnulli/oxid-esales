@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsimplevariantTest.php 41824 2012-01-27 15:19:47Z linas.kukulskis $
+ * @version   SVN: $Id: oxsimplevariantTest.php 42815 2012-03-13 15:08:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -443,4 +443,18 @@ class Unit_Core_oxsimpleVariantTest extends OxidTestCase
     }
 
 
+
+    /**
+     * 0002030: Option "Calculate Product Price" does not work with variants.
+     * Check if no price returned when unset Calculate Product Price.
+     */
+    function testGetPriceNoPriceCalculate()
+    {
+        oxConfig::getInstance()->setConfigParam( 'bl_perfLoadPrice', false );
+
+        $oSubj = new oxSimpleVariant();
+        $oSubj->setPrice( 10 );
+        $iPrice = $oSubj->getPrice();
+        $this->assertTrue( empty( $iPrice ) );
+    }
 }

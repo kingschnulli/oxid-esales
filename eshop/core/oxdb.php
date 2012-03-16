@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdb.php 42488 2012-02-28 09:15:20Z linas.kukulskis $
+ * @version   SVN: $Id: oxdb.php 42728 2012-03-12 15:02:44Z vilma $
  */
 
 
@@ -306,7 +306,7 @@ class oxDb extends oxSuperCfg
     public static function getDb( $iFetchMode = oxDb::FETCH_MODE_NUM )
     {
         self::$_iCallCount++;
-        
+
         //Added for 0003480 bug; needed as backward compatibility; @deprecated in 4.6 since 2012-01-15; must be removed;
         if ( $iFetchMode === true ) {
             $iFetchMode = oxDb::FETCH_MODE_ASSOC;

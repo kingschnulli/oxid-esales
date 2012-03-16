@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 38239 2011-08-19 11:21:35Z linas.kukulskis $
+ * @version   SVN: $Id: oxcmpUserTest.php 42868 2012-03-14 14:02:28Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -60,6 +60,9 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         oxDb::getDb()->execute( $sQ );
         $sQ = 'delete from oxaddress where oxid like "test%" ';
         oxDb::getDb()->execute( $sQ );
+
+        $this->cleanUpTable('oxuser');
+        $this->cleanUpTable('oxnewssubscribed');
 
         parent::tearDown();
     }
@@ -520,7 +523,7 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
      */
     public function testLoadSessionUser()
     {
-        modConfig::setParameter('blPerfNoBasketSaving', true);
+        modConfig::setParameter('blPerfNoBasketSaving', false);
         $oBasket = $this->getMock( 'oxBasket', array( 'onUpdate' ) );
         $oBasket->expects( $this->once() )->method( 'onUpdate');
         $oSession = $this->getMock( 'oxSession', array( 'getBasket' ) );
@@ -1048,6 +1051,63 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( new oxUser() ) );
         $oUserView->expects( $this->any() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
         $this->assertNull( $oUserView->UNITchangeUser_noRedirect() );
+    }
+
+    /**
+     * Test _changeUser_noRedirect()().
+     *
+     * @return null
+     */
+    public function testChangeUserNoRedirectSetUnsubscribed()
+    {
+        // Any big number, bigger then possible test data. Row will be deleted in teardown.
+        $iLastCustNr = 999;
+        $sPassword   = $sPassword2 = crc32( '_Test@oxid.de' );
+        $aInvAddress = array(
+                 'oxuser__oxfname' => 'fname',
+                 'oxuser__oxlname' => 'lname',
+                 'oxuser__oxstreet' => 'street',
+                 'oxuser__oxstreetnr' => 'nr',
+                 'oxuser__oxzip' => 'zip',
+                 'oxuser__oxcity' => 'city',
+                 'oxuser__oxcountryid' => 'a7c40f631fc920687.20179984'
+        );
+        $aDelAddress = array(
+                 'oxaddress__oxfname' => 'fname',
+                 'oxaddress__oxlname' => 'lname',
+                 'oxaddress__oxstreetnr' => 'nr',
+                 'oxaddress__oxstreet' => 'street',
+                 'oxaddress__oxzip' => 'zip',
+                 'oxaddress__oxcity' => 'city',
+                 'oxaddress__oxsal' => 'MSR',
+                 'oxaddress__oxcountryid' => 'a7c40f631fc920687.20179984'
+        );
+        $sUser = '_test@oxid.de';
+        $oUser = new oxUser();
+        $oUser->setId('_test_oxuserid');
+        $oUser->oxuser__oxactive    = new oxField( '1', oxField::T_RAW );
+        $oUser->oxuser__oxrights    = new oxField( 'user', oxField::T_RAW );
+        $oUser->oxuser__oxusername  = new oxField( $sUser, oxField::T_RAW );
+        $oUser->oxuser__oxpassword  = new oxField( $sPassword );
+        $oUser->oxuser__oxcustnr    = new oxField( $iLastCustNr, oxField::T_RAW );
+        $oUser->oxuser__oxshopid    = new oxField( modConfig::getInstance()->getShopId(), oxField::T_RAW );
+        $oUser->oxuser__oxcountryid = new oxField( "testCountry", oxField::T_RAW );
+        $oUser->oxuser__oxcreate    = new oxField( date('Y-m-d'), oxField::T_RAW );
+        $oUser->oxuser__oxregister  = new oxField( date('Y-m-d'), oxField::T_RAW );
+        $oUser->save();
+
+        $oNewsSubscribed = new oxNewsSubscribed();
+        $oNewsSubscribed->setId( '_test_9191965231c39c27141aab0431' );
+        $oNewsSubscribed->oxnewssubscribed__oxdboptin = new oxField( '1', oxField::T_RAW );
+        $oNewsSubscribed->oxnewssubscribed__oxuserid  = new oxField( '_test_oxuserid', oxField::T_RAW );
+        $oNewsSubscribed->oxnewssubscribed__oxemail   = new oxField( '_test@oxid.de', oxField::T_RAW );
+        $oNewsSubscribed->save();
+
+        $oUser->changeUserData( $sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress );
+        $oUser->setNewsSubscription( false, false );
+
+        $oNewsSubscribed->load( '_test_9191965231c39c27141aab0431' );
+        $this->assertNotEquals( $oNewsSubscribed->oxnewssubscribed__oxunsubscribed->value, '0000-00-00 00:00:00' );
     }
 
     /**

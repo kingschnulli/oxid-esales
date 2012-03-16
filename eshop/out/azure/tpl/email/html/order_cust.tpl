@@ -526,7 +526,7 @@
             </h3>
             [{foreach from=$oOrderFileList item="oOrderFile"}]
               <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
-              [{if $order->oxorder__oxpaid->value}]
+              [{if $order->oxorder__oxpaid->value || !$oOrderFile->oxorderfiles__oxpurchasedonly->value}]
                 <a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=download" params="sorderfileid="|cat:$oOrderFile->getId()}]" rel="nofollow">[{$oOrderFile->oxorderfiles__oxfilename->value}]</a> [{$oOrderFile->getFileSize()|oxfilesize}]
               [{else}]
                 <span>[{$oOrderFile->oxorderfiles__oxfilename->value}]</span>

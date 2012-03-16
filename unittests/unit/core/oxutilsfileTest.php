@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfileTest.php 40667 2011-12-19 08:15:13Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsfileTest.php 42800 2012-03-13 15:04:18Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -478,6 +478,55 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
             return;
         }
         $this->fail('Wrongfile type slipped');
+    }
+    
+    public function testTranslateError()
+    {
+    	$oUF = new oxUtilsFile();
+    	$this->assertEquals(
+    	   '',
+    	   $oUF->getInstance()->translateError( 0, 'fileName' )
+    	);
+        $this->assertEquals(
+           'EXCEPTION_FILEUPLOADERROR_1',
+           $oUF->getInstance()->translateError( 1, 'fileName' )
+        );
+        $this->assertEquals(
+           'EXCEPTION_FILEUPLOADERROR_2',
+           $oUF->getInstance()->translateError( 2, 'fileName' )
+        );
+        $this->assertEquals(
+           'EXCEPTION_FILEUPLOADERROR_3',
+           $oUF->getInstance()->translateError( 3, 'fileName' )
+        );
+        $this->assertEquals(
+           'EXCEPTION_FILEUPLOADERROR_4',
+           $oUF->getInstance()->translateError( 4, 'fileName' )
+        );
+        $this->assertEquals(
+           '',
+           $oUF->getInstance()->translateError( 5, 'fileName' )
+        );
+        $this->assertEquals(
+           'EXCEPTION_FILEUPLOADERROR_6',
+           $oUF->getInstance()->translateError( 6, 'fileName' )
+        );
+        $this->assertEquals(
+           'EXCEPTION_FILEUPLOADERROR_7',
+           $oUF->getInstance()->translateError( 7, 'fileName' )
+        );
+        $this->assertEquals(
+           'EXCEPTION_FILEUPLOADERROR_8',
+           $oUF->getInstance()->translateError( 8, 'fileName' )
+        );
+        $this->assertEquals(
+           '',
+           $oUF->getInstance()->translateError( 9, 'fileName' )
+        );
+        $this->assertEquals(
+           '',
+           $oUF->getInstance()->translateError( -1, 'fileName' )
+        );
     }
 
     /**
