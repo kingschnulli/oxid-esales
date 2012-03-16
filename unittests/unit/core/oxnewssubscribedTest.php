@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewssubscribedTest.php 26841 2010-03-25 13:58:15Z arvydas $
+ * @version   SVN: $Id: oxnewssubscribedTest.php 42894 2012-03-15 07:24:20Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -81,6 +81,9 @@ class Unit_Core_oxnewssubscribedTest extends OxidTestCase
         $this->_oNewsSub->delete( '_testNewsSubscr2Id' );
         $this->_oUser->delete();
 
+        $this->cleanUpTable('oxuser');
+        $this->cleanUpTable('oxnewssubscribed');
+        
         parent::tearDown();
     }
 
@@ -298,5 +301,19 @@ class Unit_Core_oxnewssubscribedTest extends OxidTestCase
         $this->assertEquals( 'newuserfname', $oNewsSubscribed->oxnewssubscribed__oxfname->value );
         $this->assertEquals( 'newuserlname', $oNewsSubscribed->oxnewssubscribed__oxlname->value );
         $this->assertEquals( 'useremail@useremail.nl', $oNewsSubscribed->oxnewssubscribed__oxemail->value );
+    }
+
+    /**
+     * Check if return right result after subscribe and unsubscribe.
+     */
+    function testWasUnsubscribed() 
+    {
+        $oUser = $this->_oUser;
+        $oNewsSubscribed = $this->_oNewsSub;
+
+        $this->assertEquals( $oNewsSubscribed->wasUnsubscribed(), false );
+        $oUser->setNewsSubscription( false, false );
+        $oNewsSubscribed->load( '_testNewsSubscrId' );
+        $this->assertEquals( $oNewsSubscribed->wasUnsubscribed(), true );
     }
 }
