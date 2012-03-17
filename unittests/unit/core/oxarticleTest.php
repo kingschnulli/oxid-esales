@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 42414 2012-02-23 16:10:13Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticleTest.php 42945 2012-03-16 13:47:11Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1168,7 +1168,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testFillAmountPriceListCalls_applyVAT()
     {
         $oArticle = $this->getMock( 'oxarticle', array( '_applyVAT' )/*, array(), '', false*/ );
-        $oArticle->expects( $this->exactly(1) )->method( '_applyVAT' );
+        $oArticle->expects( $this->exactly(0) )->method( '_applyVAT' );
         $oArticle->load( '1126' );
         $dArticlePrice = $oArticle->UNITgetGroupPrice();
 
@@ -1186,7 +1186,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oArticle = $this->getMock( 'oxarticle', array( '_applyVAT' )/*, array(), '', false*/ );
         // one for main, two for am prices
-        $oArticle->expects( $this->exactly(3) )->method( '_applyVAT' );
+        $oArticle->expects( $this->exactly(2) )->method( '_applyVAT' );
         $oArticle->getConfig()->setConfigParam( 'bl_perfCalcVatOnlyForBasketOrder', 0 );
         $oArticle->load( '1126' );
 

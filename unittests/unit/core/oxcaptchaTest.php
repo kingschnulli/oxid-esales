@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptchaTest.php 36148 2011-06-10 11:20:53Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcaptchaTest.php 42936 2012-03-16 10:49:46Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -104,7 +104,7 @@ class Unit_Core_oxcaptchaTest extends OxidTestCase
     public function testGetImageUrl()
     {
         $this->_oCaptcha->setNonPublicVar('_sText', 'test1');
-        $this->assertEquals(modConfig::getInstance()->getShopUrl()."core/utils/verificationimg.php?e_mac=ox_DRMOFldVAkJE", $this->_oCaptcha->getImageUrl());
+        $this->assertEquals(modConfig::getInstance()->getShopUrl()."core/utils/verificationimg.php?e_mac=ox_BBpTRzc0AU8u", $this->_oCaptcha->getImageUrl());
     }
 
     /**
