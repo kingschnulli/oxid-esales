@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountTest.php 39871 2011-11-09 15:56:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscountTest.php 43004 2012-03-19 11:13:14Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -934,7 +934,27 @@ class Unit_Core_oxDiscountTest extends OxidTestCase
         $oDiscount->oxdiscount__oxamount = new oxField(1, oxField::T_RAW);
         $oDiscount->applyDiscount( $oPrice, 1 );
         $this->assertEquals( 90, $oPrice->getBruttoPrice() );
+
     }
+
+    public function testApplyDiscountBigerThenPrice()
+    {
+        $oDiscount  = new oxDiscount();
+        $testDiscId = 'testIsForItem';
+        $oDiscount->setId( $testDiscId );
+
+        $oPrice  = new oxPrice();
+        $oPrice->setPrice(100);
+
+        //an discount with amount or price should return false
+        $oDiscount->oxdiscount__oxaddsumtype = new oxField('abs', oxField::T_RAW);
+        $oDiscount->oxdiscount__oxaddsum = new oxField(200, oxField::T_RAW);
+        $oDiscount->oxdiscount__oxamount = new oxField(0, oxField::T_RAW);
+        $oDiscount->applyDiscount( $oPrice, 1 );
+        $this->assertEquals( 0, $oPrice->getBruttoPrice() );
+
+    }
+
     public function testApplyDiscountInPercent()
     {
         $oDiscount  = new oxDiscount();

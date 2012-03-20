@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 42278 2012-02-15 12:39:09Z vilma $
+ * @version   SVN: $Id: details.php 43015 2012-03-19 13:30:33Z mindaugas.rimgaila $
  */
 
 /**
@@ -380,7 +380,7 @@ class Details extends oxUBase
         }
 
         if ( ( $sTplName = oxConfig::getParameter( 'tpl' ) ) ) {
-            $this->_sThisTemplate = basename ( $sTplName );
+            $this->_sThisTemplate = 'custom/'.basename ( $sTplName );
         }
 
         parent::render();

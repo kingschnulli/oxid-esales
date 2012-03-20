@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobject.php 42124 2012-02-09 15:14:59Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsobject.php 43014 2012-03-19 12:52:43Z linas.kukulskis $
  */
 
 /**
@@ -251,28 +251,34 @@ class oxUtilsObject extends oxSuperCfg
         $aModules = $this->getConfig()->getConfigParam( 'aModules' );
         $aClassChain = array();
 
-        if ( is_array( $aModules ) && array_key_exists( $sClassName, $aModules ) ) {
-            //multiple inheritance implementation
-            //in case we have multiple modules:
-            //like oxoutput => sub/suboutput1&sub/suboutput2&sub/suboutput3
-            $aClassChain = explode( "&", $aModules[$sClassName] );
 
-            // Exclude disabled modules from chain unfortunatelly can not use oxmodule::getActiveModules()
-            $aDisabledModules = $this->getConfig()->getConfigParam( 'aDisabledModules' );
-            if (is_array( $aDisabledModules ) && isset($aDisabledModules[$sClassName] )) {
-                $aDissabledClassChain = explode( "&", $aDisabledModules[$sClassName] );
-                $aClassChain = array_diff($aClassChain, $aDissabledClassChain);
+        if (is_array( $aModules )) {
+
+            $aModules = array_change_key_case( $aModules );
+
+            if ( array_key_exists( $sClassName, $aModules ) ) {
+                //multiple inheritance implementation
+                //in case we have multiple modules:
+                //like oxoutput => sub/suboutput1&sub/suboutput2&sub/suboutput3
+                $aClassChain = explode( "&", $aModules[$sClassName] );
+
+                // Exclude disabled modules from chain unfortunatelly can not use oxmodule::getActiveModules()
+                $aDisabledModules = $this->getConfig()->getConfigParam( 'aDisabledModules' );
+                if (is_array( $aDisabledModules ) && isset($aDisabledModules[$sClassName] )) {
+                    $aDissabledClassChain = explode( "&", $aDisabledModules[$sClassName] );
+                    $aClassChain = array_diff($aClassChain, $aDissabledClassChain);
+                }
             }
-        }
 
-        if (count($aClassChain)) {
-            $sParent = $sClassName;
+            if (count($aClassChain)) {
+                $sParent = $sClassName;
 
-            //security: just preventing string termination
-            $sParent = str_replace(chr(0), '', $sParent);
+                //security: just preventing string termination
+                $sParent = str_replace(chr(0), '', $sParent);
 
-            //building middle classes if needed
-            $sClassName = $this->_makeSafeModuleClassParents( $aClassChain, $sParent );
+                //building middle classes if needed
+                $sClassName = $this->_makeSafeModuleClassParents( $aClassChain, $sParent );
+            }
         }
 
         // check if there is a path, if yes, remove it

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 42217 2012-02-13 13:34:58Z linas.kukulskis $
+ * @version   SVN: $Id: alistTest.php 43015 2012-03-19 13:30:33Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -608,7 +608,7 @@ class Unit_Views_alistTest extends OxidTestCase
         modConfig::setParameter( 'tpl', 'http://www.shop.com/somepath/test2.tpl' );
 
         // template name passed by request param
-        $this->assertEquals( 'test2.tpl', $oListView->getTemplateName() );
+        $this->assertSame( 'custom/test2.tpl', $oListView->getTemplateName() );
     }
 
     /**

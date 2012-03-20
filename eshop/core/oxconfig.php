@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 42903 2012-03-15 09:39:35Z tomas $
+ * @version   SVN: $Id: oxconfig.php 42998 2012-03-19 09:14:53Z linas.kukulskis $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -436,7 +436,7 @@ class oxConfig extends oxSuperCfg
             // loading shop config
             $this->_loadVarsFromDb( $sShopID );
 
-            // loading theme config
+            // loading theme config options
             $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_THEME_PREFIX . $this->getConfigParam('sTheme') );
 
             // checking if custom theme (which has defined parent theme) config options should be loaded over parent theme (#3362)
@@ -780,7 +780,7 @@ class oxConfig extends oxSuperCfg
             $aHttpsServerVar = $myUtilsServer->getServerVar( 'HTTPS' );
 
             $this->_blIsSsl = false;
-            if (isset( $aHttpsServerVar ) && ($aHttpsServerVar === 'on' || $aHttpsServerVar == '1' )) {
+            if (isset( $aHttpsServerVar ) && ($aHttpsServerVar === 'on' || $aHttpsServerVar === 'ON' || $aHttpsServerVar == '1' )) {
                 // "1&1" hoster provides "1"
                 $this->_blIsSsl = ($this->getConfigParam('sSSLShopURL') || $this->getConfigParam('sMallSSLShopURL'));
                 if ($this->isAdmin() && !$this->_blIsSsl) {

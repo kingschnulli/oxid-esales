@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 42736 2012-03-12 16:20:42Z vilma $
+ * @version   SVN: $Id: oxviewconfig.php 42999 2012-03-19 09:15:04Z linas.kukulskis $
  */
 
 /**
@@ -1262,7 +1262,7 @@ class oxViewConfig extends oxSuperCfg
         }
         // check if file exists
         $this->getModulePath($sModule, $sFile);
-        return rtrim($this->getConfig()->getCurrentShopUrl(), '/').'/modules/'.basename($sModule).$sFile;
+        return rtrim($this->getConfig()->getCurrentShopUrl( false ), '/').'/modules/'.basename($sModule).$sFile;
     }
 
     /**

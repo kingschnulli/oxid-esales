@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 42806 2012-03-13 15:06:49Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticle.php 42992 2012-03-19 08:55:56Z linas.kukulskis $
  */
 
 // defining supported link types
@@ -125,6 +125,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * @var bool
      */
     protected $_blNotBuyableParent  = false;
+
 
     /**
      * $_blHasVariants is set to true if article has any variants.
@@ -3825,13 +3826,13 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 $iOnStock += $this->getSession()->getBasketReservations()->getReservedAmount($this->getId());
             }
             if ($iOnStock <= 0) {
-                $this->_blNotBuyable = true;
+                $this->setBuyableState( false );
             }
         }
 
         //exceptional handling for variant parent stock:
         if ($this->_blNotBuyable && $this->oxarticles__oxvarstock->value ) {
-            $this->_blNotBuyable = false;
+            $this->setBuyableState( true );
             //but then at least setting notBuaybleParent to true
             $this->_blNotBuyableParent = true;
         }
@@ -3840,12 +3841,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         //then we just hide "to basket" button.
         //if variants are not loaded in the list and this article has variants and parent is not buyable then this article is not buyable
         if ( !$myConfig->getConfigParam( 'blVariantParentBuyable' ) && !$myConfig->getConfigParam( 'blLoadVariants' ) && $this->oxarticles__oxvarstock->value) {
-            $this->_blNotBuyable = true;
+            $this->setBuyableState( false );
         }
 
         //setting to non buyable when variant list is empty (for example not loaded or inactive) and $this is non buyable parent
         if (!$this->_blNotBuyable && $this->_blNotBuyableParent && $this->oxarticles__oxvarcount->value == 0) {
-            $this->_blNotBuyable = true;
+            $this->setBuyableState( false );
         }
     }
 
@@ -3863,12 +3864,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             return;
         }
 
-        // compute price
-        $dPrice = $this->getPrice()->getBruttoPrice();
-
-        $oCur = $myConfig->getActShopCurrencyObject();
         //price per unit handling
         if ((double) $this->oxarticles__oxunitquantity->value && $this->oxarticles__oxunitname->value) {
+            // compute price
+            $dPrice = $this->getPrice()->getBruttoPrice();
+            $oCur = $myConfig->getActShopCurrencyObject();
             $this->_fPricePerUnit = oxLang::getInstance()->formatCurrency($dPrice / (double) $this->oxarticles__oxunitquantity->value, $oCur);
         }
 

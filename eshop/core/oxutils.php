@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 42845 2012-03-14 09:54:52Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 43007 2012-03-19 11:57:19Z linas.kukulskis $
  */
 
 /**
@@ -46,13 +46,6 @@ class oxUtils extends oxSuperCfg
      * @var int
      */
     protected $_iCurPrecision = null;
-
-    /**
-     * Email validation regular expression
-     *
-     * @var string
-     */
-    protected $_sEmailTpl = "/^([-!#\$%&'*+.\/0-9=?A-Z^_`a-z{|}~\177])+@([-!#\$%&'*+\/0-9=?A-Z^_`a-z{|}~\177]+\\.)+[a-zA-Z]{2,6}\$/i";
 
     /**
      * Some files, like object structure should not be deleted, because thay are changed rarely
@@ -147,13 +140,13 @@ class oxUtils extends oxSuperCfg
      */
     public function strMan( $sVal, $sKey = null )
     {
-        $sKey = $sKey?$sKey:'oxid123456789';
+        $sKey = $sKey ? $sKey : $this->getConfig()->getConfigParam('sConfigKey');
         $sVal = "ox{$sVal}id";
 
         $sKey = str_repeat( $sKey, strlen( $sVal ) / strlen( $sKey ) + 5 );
         $sVal = $this->strRot13( $sVal );
         $sVal = $sVal ^ $sKey;
-        $sVal = base64_encode( $sVal );
+        $sVal = base64_encode ( $sVal );
         $sVal = str_replace( "=", "!", $sVal );
 
         return "ox_$sVal";
@@ -169,7 +162,7 @@ class oxUtils extends oxSuperCfg
      */
     public function strRem( $sVal, $sKey = null )
     {
-        $sKey = $sKey?$sKey:'oxid123456789';
+        $sKey = $sKey ? $sKey : $this->getConfig()->getConfigParam('sConfigKey');
         $sKey = str_repeat( $sKey, strlen( $sVal ) / strlen( $sKey ) + 5 );
 
         $sVal = substr( $sVal, 3 );

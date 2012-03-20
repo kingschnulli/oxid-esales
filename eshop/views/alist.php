@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 42213 2012-02-13 13:29:53Z linas.kukulskis $
+ * @version   SVN: $Id: alist.php 43015 2012-03-19 13:30:33Z mindaugas.rimgaila $
  */
 
 /**
@@ -614,7 +614,7 @@ class aList extends oxUBase
     {
         // assign template name
         if ( ( $sTplName = basename( oxConfig::getParameter( 'tpl' ) ) ) ) {
-            $this->_sThisTemplate = $sTplName;
+            $this->_sThisTemplate = 'custom/'.$sTplName;
         } elseif ( ( $oCategory = $this->getActCategory() ) && $oCategory->oxcategories__oxtemplate->value ) {
             $this->_sThisTemplate = $oCategory->oxcategories__oxtemplate->value;
         }

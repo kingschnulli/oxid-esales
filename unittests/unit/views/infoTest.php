@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: infoTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: infoTest.php 43015 2012-03-19 13:30:33Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -52,7 +52,7 @@ class Unit_Views_infoTest extends OxidTestCase
         modConfig::setParameter( 'tpl', "test.tpl");
         $oInfo = $this->getProxyClass( 'info' );
         $oInfo->info();
-        $this->assertEquals( 'test.tpl', $oInfo->getTemplateName() );
+        $this->assertSame( 'custom/test.tpl', $oInfo->getTemplateName() );
     }
 
     /**
@@ -89,7 +89,7 @@ class Unit_Views_infoTest extends OxidTestCase
         modConfig::setParameter( 'tpl', "test.tpl");
         $oInfo = $this->getProxyClass( 'info' );
         $oInfo->info();
-        $this->assertEquals( 'test.tpl', $oInfo->render() );
+        $this->assertEquals( 'custom/test.tpl', $oInfo->render() );
     }
 
     /**
