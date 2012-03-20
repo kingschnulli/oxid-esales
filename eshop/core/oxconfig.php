@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 42948 2012-03-16 14:11:05Z linas.kukulskis $
+ * @version   SVN: $Id: oxconfig.php 43009 2012-03-19 12:20:26Z mindaugas.rimgaila $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -428,6 +428,11 @@ class oxConfig extends oxSuperCfg
             }
 
 
+            // TODO: refactor shop bootstrap and parse url params as soon as possible
+            if (isSearchEngineUrl()) {
+                oxNew('oxSeoDecoder')->processSeoCall();
+            }
+
             //starting up the session
             $this->getSession()->start();
         } catch ( oxConnectionException $oEx ) {
@@ -442,6 +447,10 @@ class oxConfig extends oxSuperCfg
                 header( "Connection: close");
             }
         } catch ( oxCookieException $oEx ) {
+            // TODO: refactor shop bootstrap and parse url params as soon as possible
+            if (isSearchEngineUrl()) {
+                oxNew('oxSeoDecoder')->processSeoCall();
+            }
 
             //starting up the session
             $this->getSession()->start();

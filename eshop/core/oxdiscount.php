@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscount.php 39868 2011-11-09 15:09:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscount.php 42984 2012-03-19 08:50:01Z linas.kukulskis $
  */
 
 /**
@@ -370,11 +370,15 @@ class oxDiscount extends oxI18n
             $oDiscountPrice->setBruttoPriceMode();
             $oDiscountPrice->setPrice( $oPrice->getBruttoPrice() / 100 * $this->oxdiscount__oxaddsum->value, $oPrice->getVat() );
 
-
-
         }
         $oDiscountPrice->multiply( $dAmount * -1 );
+
         $oPrice->addPrice( $oDiscountPrice );
+
+        if ( $oPrice->getBruttoPrice() < 0 || $oPrice->getNettoPrice() < 0 ) {
+            $oPrice->setPrice(0);
+        }
+
     }
 
     /**
