@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 42776 2012-03-13 13:00:39Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 43046 2012-03-20 15:49:28Z linas.kukulskis $
  */
 
 /**
@@ -1344,9 +1344,9 @@ class oxBase extends oxSuperCfg
         if ( ( null === $mValue ) ) {
             if ( $this->_canFieldBeNull( $sFieldName ) ) {
                 return 'null';
-            } //elseif ( $mValue = $this->_getFieldDefaultValue( $sFieldName ) ) {
-              //  return oxDb::getDb()->quote( $mValue );
-            //}
+            } elseif ( $mValue = $this->_getFieldDefaultValue( $sFieldName ) ) {
+                return oxDb::getDb()->quote( $mValue );
+            }
         }
 
         return oxDb::getDb()->quote( $mValue );

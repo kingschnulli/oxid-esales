@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxI18nTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxI18nTest.php 43053 2012-03-21 07:30:03Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -378,7 +378,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $oObj->setLanguage(0);
 
 
-            $sExpRes = "oxid = '',oxshopid = '',oxtitle = '',oxpos = ''";
+            $sExpRes = "oxid = '',oxshopid = '',oxtitle = '',oxpos = '9999'";
 
         $this->assertEquals($sExpRes, $oObj->UNITgetUpdateFields());
 
@@ -404,7 +404,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $oObj->setLanguage(1);
 
 
-            $sExpRes = "oxid = '',oxshopid = '',oxtitle_1 = '',oxpos = ''";
+            $sExpRes = "oxid = '',oxshopid = '',oxtitle_1 = '',oxpos = '9999'";
 
         $this->assertEquals($sExpRes, $oObj->UNITgetUpdateFields());
     }
@@ -430,7 +430,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $oObj->setLanguage(1);
 
 
-            $sExpRes = "oxid = '',oxshopid = '',oxtitle = '',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '',oxpos = ''";
+            $sExpRes = "oxid = '',oxshopid = '',oxtitle = '',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '',oxpos = '9999'";
 
         $this->assertEquals($sExpRes, $oObj->UNITgetUpdateFields());
     }

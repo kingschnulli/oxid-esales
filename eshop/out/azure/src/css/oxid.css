@@ -2487,7 +2487,7 @@ a.tagText img{
 .basketItems {
     width: 250px;
     height:230px;
-    oveflow:hidden;
+    overflow:hidden;
 }
 
 .scrollable .scrollbarBox {
@@ -4876,7 +4876,7 @@ td.alignTop{
 .errorBox a:hover {color:#666;}
 .errorBox .errHead {background: #D81F01; color: #fff; padding: 5px 15px;}
 .errorBox .errBody {border: 1px solid #D81F01; padding: 15px;}
-.errorBox .stackTrace { font-size: 11px; color #000; font-weight: normal; margin: 10px 0; padding: 10px 0; border-top: 2px solid #EED8D2}
+.errorBox .stackTrace { font-size: 11px; color: #000; font-weight: normal; margin: 10px 0; padding: 10px 0; border-top: 2px solid #EED8D2}
 
 
 /* --- article box ------------------------ */

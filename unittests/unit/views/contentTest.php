@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 41904 2012-01-31 08:26:55Z vilma $
+ * @version   SVN: $Id: contentTest.php 43057 2012-03-21 08:08:10Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -633,6 +633,8 @@ class Unit_Views_contentTest extends OxidTestCase
         $oDelivery->oxdelivery__oxparam = new oxField(0, oxField::T_RAW);
         $oDelivery->oxdelivery__oxparamend = new oxField(999999, oxField::T_RAW);
         $oDelivery->oxdelivery__oxaddsum = new oxField(10, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxaddsumtype = new oxField('%', oxField::T_RAW);
+
         $oDelivery->save();
 
         $oDel2Delset = oxNew( 'oxbase' );
@@ -644,6 +646,7 @@ class Unit_Views_contentTest extends OxidTestCase
 
         $oView = new Content();
         $oResp = $oView->getDeliveryChargeSpecs();
+
         $this->assertEquals(5, count($oResp));
         foreach ( $oResp as $oDelivery ) {
             $this->assertTrue($oDelivery instanceof oxdelivery);
