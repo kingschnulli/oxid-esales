@@ -19,7 +19,7 @@
  * @package   modules
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: myorder.php 41978 2012-02-02 09:21:05Z mindaugas.rimgaila $
+ * @version   SVN: $Id: myorder.php 43133 2012-03-23 14:20:10Z vilma $
  */
 
 /**
@@ -450,7 +450,7 @@ class PdfArticleSummary extends PdfBlock
     {
         $oLang   = oxLang::getInstance();
         $oConfig = oxConfig::getInstance();
-        if ( $oConfig->getConfigParam( 'blCalcVATForPayCharge' ) ) {
+        if ( $oConfig->getConfigParam( 'blShowVATForPayCharge' ) ) {
 
             // payment netto
             $iStartPos += 4;

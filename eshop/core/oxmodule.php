@@ -393,6 +393,7 @@ class oxModule extends oxSuperCfg
 
             $aInstalledModules = $this->parseModuleChains($this->getConfig()->getConfigParam('aModules'));
             $aDisabledModules  = $this->parseModuleChains($this->getConfig()->getConfigParam('aDisabledModules'));
+            $aModulesPath      = $this->getConfig()->getConfigParam('aModulesPath');
 
             $aModules = $this->mergeModuleArrays($aInstalledModules, $aAddModules);
             $aModules = $this->buildModuleChains($aModules);
@@ -400,11 +401,16 @@ class oxModule extends oxSuperCfg
             $aDisabledModules = $this->diffModuleArrays($aDisabledModules, $aAddModules);
             $aDisabledModules = $this->buildModuleChains($aDisabledModules);
 
+            $aModulesPath[$this->_aModule['id']] = $this->_aModule['id'];
+
             $this->getConfig()->setConfigParam('aModules', $aModules);
             $this->getConfig()->saveShopConfVar('aarr', 'aModules', $aModules);
 
             $this->getConfig()->setConfigParam('aDisabledModules', $aDisabledModules);
             $this->getConfig()->saveShopConfVar('aarr', 'aDisabledModules', $aDisabledModules);
+
+            $this->getConfig()->setConfigParam('aModulesPath', $aModulesPath);
+            $this->getConfig()->saveShopConfVar('aarr', 'aModulesPath', $aModulesPath);
 
             //activate oxblocks too
             $this->_changeBlockStatus( $this->getId(), "1" );

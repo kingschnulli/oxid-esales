@@ -114,6 +114,7 @@ $aLang = array(
 'CHECKOUT'                                                    => "Checkout",
 'CHECK_YOUR_ORDER_HISTORY'                                    => "check your Order History",
 'CHOOSE'                                                      => "Choose",
+'CHOOSE_VARIANT'                                              => "Choose variant",
 'CLICK_HERE'                                                  => "click here.",
 'CLICK_HERE_TO_WRITE_ENTRY'                                   => "Click here to write an entry",
 'CLOSE'                                                       => "Close",

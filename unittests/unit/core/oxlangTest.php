@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 41756 2012-01-25 12:14:13Z linas.kukulskis $
+ * @version   SVN: $Id: oxlangTest.php 43110 2012-03-23 09:36:00Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -859,16 +859,7 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oEng->sort = '2';
         $oEng->selected = 0;
 
-        $oFr = clone $oDe;
-        $oFr->id = 2;
-        $oFr->abbr = 'fr';
-        $oFr->oxid = 'fr';
-        $oFr->name = 'Français';
-        $oFr->active = '1';
-        $oFr->sort = '3';
-        $oFr->selected = 0;
-
-        $aLangArray = array( $oDe, $oEng, $oFr );
+        $aLangArray = array( $oDe, $oEng );
 
         $oLang = new oxLang();
         $this->assertEquals( $aLangArray, $oLang->getLanguageArray( 0, true, true ) );
@@ -934,16 +925,7 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oEng->sort = '2';
         $oEng->selected = 1;
 
-        $oFr = clone $oEng;
-        $oFr->id = 2;
-        $oFr->abbr = 'fr';
-        $oFr->oxid = 'fr';
-        $oFr->name = 'Français';
-        $oFr->active = '1';
-        $oFr->sort = '3';
-        $oFr->selected = 0;
-
-        $aLangArray = array( 1 => $oEng, 2 => $oFr );
+        $aLangArray = array( 1 => $oEng );
 
         $oConfig = modConfig::getInstance();
         $aLangParams = $oConfig->getConfigParam( 'aLanguageParams' );
@@ -1096,14 +1078,13 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oLang = new oxLang();
 
         $this->assertEquals( 1, $oLang->validateLanguage( 1 ) );
-        $this->assertEquals( 2, $oLang->validateLanguage( 2 ) );
         $this->assertEquals( 0, $oLang->validateLanguage( 3 ) );
         $this->assertEquals( 0, $oLang->validateLanguage( 'xxx' ) );
     }
 
     public function testGetLanguageNames()
     {
-        $this->assertEquals(array(0=>'Deutsch',1=>'English',2=>'Français'), oxLang::getInstance()->getLanguageNames());
+        $this->assertEquals(array(0=>'Deutsch',1=>'English'), oxLang::getInstance()->getLanguageNames());
     }
 
     //#1290: impossible to switch languages in admin, if third language is created as default and only one active
@@ -1455,19 +1436,11 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oEn->selected = 0;
         $oEn->active   = 0;
 
-        $oFr = new oxStdClass();
-        $oFr->name = 'Français';
-        $oFr->abbr = 'fr';
-        $oFr->sort = 4;
-        $oFr->id   = 4;
-        $oFr->selected = 0;
-        $oFr->active   = 0;
-
         $oLang = $this->getMock( 'oxlang', array( 'getLanguageIds', 'getLanguageArray' ) );
         $oLang->expects( $this->once() )->method( 'getLanguageIds')->will( $this->returnValue( array( "lt", "lv" ) ) );
         $oLang->expects( $this->once() )->method( 'getLanguageArray')->will( $this->returnValue( array( $oLt, $oLv ) ) );
 
-        $this->assertEquals( array( $oLt, $oLv, $oDe, $oEn, $oFr     ), $oLang->getAdminTplLanguageArray() );
+        $this->assertEquals( array( $oLt, $oLv, $oDe, $oEn     ), $oLang->getAdminTplLanguageArray() );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: loginTest.php 40464 2011-12-06 09:58:38Z vilma $
+ * @version   SVN: $Id: loginTest.php 43112 2012-03-23 09:44:33Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -116,17 +116,6 @@ class Unit_Admin_loginTest extends OxidTestCase
 
         $aLanguages[] = $oLang;
 
-        $oLang = new oxStdClass();
-        $oLang->id = 2;
-        $oLang->oxid = 'fr';
-        $oLang->abbr = 'fr';
-        $oLang->name = 'Français';
-        $oLang->active = "1";
-        $oLang->sort = "3";
-        $oLang->selected = 0;
-
-        $aLanguages[] = $oLang;
-
         $oLogin = $this->getMock( 'login', array( '_getBrowserLanguage' ) );
         $oLogin->expects( $this->once() )->method( '_getBrowserLanguage' )->will( $this->returnValue( 'de' ) );
 
@@ -164,17 +153,6 @@ class Unit_Admin_loginTest extends OxidTestCase
 
         $aLanguages[] = $oLang;
 
-        $oLang = new oxStdClass();
-        $oLang->id = 2;
-        $oLang->oxid = 'fr';
-        $oLang->abbr = 'fr';
-        $oLang->name = 'Français';
-        $oLang->active = "1";
-        $oLang->sort = "3";
-        $oLang->selected = 0;
-
-        $aLanguages[] = $oLang;
-
         $oLogin = $this->getMock( 'login', array( '_getBrowserLanguage' ) );
         $oLogin->expects( $this->once() )->method( '_getBrowserLanguage' )->will( $this->returnValue( 'en' ) );
 
@@ -209,17 +187,6 @@ class Unit_Admin_loginTest extends OxidTestCase
         $oLang->active = 1;
         $oLang->sort = 2;
         $oLang->selected = 1;
-
-        $aLanguages[] = $oLang;
-
-        $oLang = new oxStdClass();
-        $oLang->id = 2;
-        $oLang->oxid = 'fr';
-        $oLang->abbr = 'fr';
-        $oLang->name = 'Français';
-        $oLang->active = "1";
-        $oLang->sort = "3";
-        $oLang->selected = 0;
 
         $aLanguages[] = $oLang;
 

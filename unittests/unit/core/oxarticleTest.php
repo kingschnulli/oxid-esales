@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 42993 2012-03-19 08:56:08Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticleTest.php 43103 2012-03-23 07:58:20Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1515,7 +1515,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle = $this->getProxyClass( "oxArticle" );
         $oArticle->load('_testArt');
         $oArticle->oxarticles__oxshopid = new oxField('2', oxField::T_RAW);
-        $aSkipFields = array( 'oxtimestamp', 'oxinsert', 'oxparentid', 'oxprice', 'oxpricea', 'oxpriceb', 'oxpricec', 'oxshortdesc', 'oxshortdesc_1', 'oxshortdesc_2' );
+        $aSkipFields = array( 'oxtimestamp', 'oxinsert', 'oxparentid', 'oxprice', 'oxpricea', 'oxpriceb', 'oxpricec', 'oxshortdesc', 'oxshortdesc_1' );
             $aSkipFields = array( 'oxtimestamp', 'oxinsert', 'oxparentid' );
         $oArticle->UNITskipSaveFields();
 

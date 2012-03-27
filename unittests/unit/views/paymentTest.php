@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 41912 2012-01-31 11:50:41Z mindaugas.rimgaila $
+ * @version   SVN: $Id: paymentTest.php 43132 2012-03-23 14:19:06Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -735,7 +735,6 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testGetTsProtections()
     {
         modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
-        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
         $oP = $this->getMock('oxprice', array('getBruttoPrice'));
         $oP->expects($this->once())->method('getBruttoPrice')->will($this->returnValue(50));
         $oB = $this->getMock('oxbasket', array('getPrice'));

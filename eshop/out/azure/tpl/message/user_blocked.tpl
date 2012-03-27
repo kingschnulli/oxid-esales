@@ -1,5 +1,7 @@
 [{capture append="oxidBlock_content"}]
-    <p>[{ oxcontent ident="oxblocked" }]</p>
+    <p>[{oxifcontent ident="oxblocked" object="oCont"}]
+           [{ $oCont->oxcontents__oxcontent->value }]
+      [{/oxifcontent}]</p>
     [{ insert name="oxid_tracker"}]
 [{/capture}]
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 42357 2012-02-20 15:09:53Z linas.kukulskis $
+ * @version   SVN: $Id: oxorderTest.php 43132 2012-03-23 14:19:06Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2071,7 +2071,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
         //$myConfig = $this->getMock( 'oxConfig', array('hasModule') );
         //$myConfig->expects($this->any())->method( 'hasModule' )->will($this->returnValue( true ));
         $myConfig = new oxConfig();
-        $myConfig->setConfigParam( 'blCalcVatForWrapping', true );
 
         $oPrice = oxNew( 'oxPrice' );
         $oPrice->setPrice( 119, 19 );

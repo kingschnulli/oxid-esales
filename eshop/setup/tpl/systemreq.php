@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   setup
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 25584 2010-02-03 12:11:40Z arvydas $
  */
@@ -32,7 +32,6 @@ require "_header.php"; ?>
             <select name="setup_lang" onChange="document.getElementById('langSelectionForm').submit();" style="font-size: 11px;">
                 <option value="en">English</option>
                 <option value="de" <?php if ( $this->getViewParam( "sSetupLang" ) == 'de' ) echo 'selected'; ?>>Deutsch</option>
-                <option value="fr" <?php if ( $this->getViewParam( "sSetupLang" ) == 'fr' ) echo 'selected'; ?>>Français</option>
             </select>
             <noscript>
             <input type="submit" name="setup_lang_submit" value="<?php $this->getText('SELECT_SETUP_LANG_SUBMIT'); ?>" style="font-size: 11px;">

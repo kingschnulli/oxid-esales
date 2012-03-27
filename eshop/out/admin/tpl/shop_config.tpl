@@ -425,8 +425,8 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <input type=hidden name=confbools[blCalcVATForDelivery] value=false>
-                    <input type=checkbox name=confbools[blCalcVATForDelivery] value=true  [{if ($confbools.blCalcVATForDelivery)}]checked[{/if}] [{ $readonly}]>
+                    <input type=hidden name=confbools[blShowVATForDelivery] value=false>
+                    <input type=checkbox name=confbools[blShowVATForDelivery] value=true  [{if ($confbools.blShowVATForDelivery)}]checked[{/if}] [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_CALCULATEVATFORDELIVERY" }]
                 </dt>
                 <dd>
@@ -449,8 +449,8 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <input type=hidden name=confbools[blCalcVATForPayCharge] value=false>
-                    <input type=checkbox name=confbools[blCalcVATForPayCharge] value=true  [{if ($confbools.blCalcVATForPayCharge)}]checked[{/if}] [{ $readonly}]>
+                    <input type=hidden name=confbools[blShowVATForPayCharge] value=false>
+                    <input type=checkbox name=confbools[blShowVATForPayCharge] value=true  [{if ($confbools.blShowVATForPayCharge)}]checked[{/if}] [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_CALCULATEVATOFORPAYCHARGE" }]
                 </dt>
                 <dd>
@@ -473,8 +473,8 @@ function showInvitations()
 
             <dl>
                 <dt>
-                    <input type=hidden name=confbools[blCalcVatForWrapping] value=false>
-                    <input type=checkbox name=confbools[blCalcVatForWrapping] value=true  [{if ($confbools.blCalcVatForWrapping)}]checked[{/if}] [{ $readonly}]>
+                    <input type=hidden name=confbools[blShowVATForWrapping] value=false>
+                    <input type=checkbox name=confbools[blShowVATForWrapping] value=true  [{if ($confbools.blShowVATForWrapping)}]checked[{/if}] [{ $readonly}]>
                     [{ oxinputhelp ident="HELP_SHOP_CONFIG_CALCULATEVATFORWRAPPING" }]
                 </dt>
                 <dd>

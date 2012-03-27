@@ -446,9 +446,10 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
     {
         $aModulesBefore = array();
         $aModulesAfter  = array('oxtest' => 'test/mytest');
+        $aModulesPath   = array('test' => 'test');
 
         $oModule = $this->getProxyClass('oxmodule');
-        $aExtend  = array('extend' => array('oxtest' => 'test/mytest'));
+        $aExtend  = array('extend' => array('oxtest' => 'test/mytest'), 'id' => 'test');
         $oModule->setNonPublicVar( "_aModule", $aExtend );
 
         modConfig::getInstance()->setConfigParam( "aModules", $aModulesBefore );
@@ -457,6 +458,8 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
         $this->assertTrue($oModule->activate());
         $this->assertEquals($aModulesAfter, modConfig::getInstance()->getConfigParam("aModules") );
         $this->assertEquals($aModulesAfter, modConfig::getInstance()->getShopConfVar("aModules") );
+        $this->assertEquals($aModulesPath, modConfig::getInstance()->getConfigParam("aModulesPath") );
+        $this->assertEquals($aModulesPath, modConfig::getInstance()->getShopConfVar("aModulesPath") );
     }
 
     /**

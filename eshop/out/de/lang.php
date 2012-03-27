@@ -122,6 +122,7 @@ $aLang = array(
 'CHECKOUT'                                                    => "Zur Kasse",
 'CHECK_YOUR_ORDER_HISTORY'                                    => "Ihre Bestellhistorie aufrufen",
 'CHOOSE'                                                      => "Wählen",
+'CHOOSE_VARIANT'                                              => "Variante wählen",
 'CLICK_HERE'                                                  => "hier klicken.",
 'CLICK_HERE_TO_WRITE_ENTRY'                                   => "Hier klicken, um einen Eintrag zu schreiben",
 'CLOSE'                                                       => "Schließen",

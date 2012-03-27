@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeed.php 42207 2012-02-13 13:27:12Z linas.kukulskis $
+ * @version   SVN: $Id: oxrssfeed.php 43092 2012-03-22 13:07:15Z linas.kukulskis $
  */
 
 /**
@@ -74,7 +74,7 @@ class oxRssFeed extends oxSuperCfg
     {
         $oShop = $this->getConfig()->getActiveShop();
         $this->_aChannel['title'] = $oShop->oxshops__oxname->value;
-        $this->_aChannel['link']  = oxUtilsUrl::getInstance()->prepareUrlForNoSession($this->getConfig()->getShopHomeURL());
+        $this->_aChannel['link']  = oxUtilsUrl::getInstance()->prepareUrlForNoSession($this->getConfig()->getShopUrl());
         $this->_aChannel['description'] = '';
         $oLang = oxLang::getInstance();
         $aLangIds = $oLang->getLanguageIds();

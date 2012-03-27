@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   main
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: index.php 39680 2011-11-02 14:27:44Z vilma $
+ * @version   SVN: $Id: index.php 43087 2012-03-22 13:04:00Z linas.kukulskis $
  */
 
 // Setting error reporting mode
@@ -92,11 +92,6 @@ if ( isAdmin() ) {
         $myConfig->setConfigParam( 'sAdminDir', $sAdminDir );
     else
         $myConfig->setConfigParam( 'sAdminDir', "admin" );
-}
-
-//Invoked over search engine URLs
-if (isSearchEngineUrl()) {
-    oxNew('oxSeoDecoder')->processSeoCall();
 }
 
 //Starting the shop

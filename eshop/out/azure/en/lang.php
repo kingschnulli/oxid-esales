@@ -39,7 +39,7 @@ $sLangName  = "English";
 $aLang = array(
 'ADD_RECOMM_ADDRECOMMLINK1'                                   => "There is no Listmania lists at the moment. To create new, click",
 'ADD_RECOMM_ADDRECOMMLINK2'                                   => "here",
-'BETA_NOTE'                                                   => "Welcome to beta version 2 for OXID eShop 4.6.0. Please refer to our <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">FAQ</a> if you have any questions.",
+'BETA_NOTE'                                                   => "Welcome to beta version 3 for OXID eShop 4.6.0. Please refer to our <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">FAQ</a> if you have any questions.",
 'BETA_NOTE_CLOSE'                                             => "Dismiss message",
 'DETAILS_LOCATOR_PRODUCT'                                     => "PRODUCT",
 'DETAILS_PRICEALARM'                                          => "<b>[!]</b> Price Alert",

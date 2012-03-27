@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscount.php 43008 2012-03-19 12:12:25Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscount.php 43090 2012-03-22 13:06:51Z linas.kukulskis $
  */
 
 /**
@@ -381,7 +381,6 @@ class oxDiscount extends oxI18n
         if ( $oPrice->getBruttoPrice() < 0 || $oPrice->getNettoPrice() < 0 ) {
             $oPrice->setPrice(0);
         }
-
     }
 
     /**

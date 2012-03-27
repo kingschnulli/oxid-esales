@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 43046 2012-03-20 15:49:28Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 43091 2012-03-22 13:07:04Z linas.kukulskis $
  */
 
 /**
@@ -285,8 +285,8 @@ class oxBase extends oxSuperCfg
                         $rs = $oDb->execute( $sQ );
                         if ( $rs && $rs->RecordCount() ) {
                             $this->_aInnerLazyCache = array_change_key_case( $rs->fields, CASE_UPPER );
-                            if ( array_key_exists( $sCacheFieldName, $rs->fields ) ) {
-                                $sFieldValue = $rs->fields[$sCacheFieldName];
+                            if ( array_key_exists( $sCacheFieldName, $this->_aInnerLazyCache ) ) {
+                                $sFieldValue = $this->_aInnerLazyCache[$sCacheFieldName];
                             } else {
                                 return null;
                             }

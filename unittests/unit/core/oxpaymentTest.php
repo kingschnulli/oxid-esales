@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpaymentTest.php 41773 2012-01-26 09:31:43Z vilma $
+ * @version   SVN: $Id: oxpaymentTest.php 43132 2012-03-23 14:19:06Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -194,8 +194,6 @@ class Unit_Core_oxpaymentTest extends OxidTestCase
         //$oBasket->expects( $this->at( 4 ) )->method( 'getCosts' )->with( 'oxwrapping' )->will( $this->returnValue( $oWrappingCosts ) );
         $oBasket->expects( $this->at( 4 ) )->method( 'getMostUsedVatPercent' )->will( $this->returnValue( 50 ) );
 
-        oxConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
-
         // preparing payment for test
         $oPayment = $this->getMock( 'oxPayment', array('getPaymentValue') );
         $oPayment->expects( $this->once() )->method( 'getPaymentValue')->with( 20 )->will( $this->returnValue( 60 ) );
@@ -236,8 +234,6 @@ class Unit_Core_oxpaymentTest extends OxidTestCase
         $oBasket->expects( $this->at( 4 ) )->method( 'getCosts' )->with( 'oxwrapping' )->will( $this->returnValue( $oWrappingCosts ) );
         $oBasket->expects( $this->at( 5 ) )->method( 'getMostUsedVatPercent' )->will( $this->returnValue( 50 ) );
 
-        oxConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
-
         // preparing payment for test
         $oPayment = $this->getMock( 'oxPayment', array('getPaymentValue') );
         $oPayment->expects( $this->once() )->method( 'getPaymentValue')->with( 30 )->will( $this->returnValue( 60 ) );
@@ -275,7 +271,6 @@ class Unit_Core_oxpaymentTest extends OxidTestCase
         $oBasket->expects( $this->at( 4 ) )->method( 'getCosts' )->with( 'oxwrapping' )->will( $this->returnValue( $oWrappingCosts ) );
         $oBasket->expects( $this->at( 5 ) )->method( 'getMostUsedVatPercent' )->will( $this->returnValue( 50 ) );
 
-        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
         modConfig::getInstance()->setConfigParam( 'blPaymentVatOnTop', true );
 
         // preparing payment for test

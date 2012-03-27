@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 42356 2012-02-20 15:09:34Z linas.kukulskis $
+ * @version   SVN: $Id: oxorder.php 43132 2012-03-23 14:19:06Z vilma $
  */
 
 /**
@@ -756,10 +756,8 @@ class oxOrder extends oxBase
         if ( ( $oWrappingCost = $oBasket->getCosts( 'oxwrapping' ) ) ) {
             $this->oxorder__oxwrapcost = new oxField($oWrappingCost->getBruttoPrice(), oxField::T_RAW);
 
-            // wrapping VAT
-            if ( $myConfig->getConfigParam( 'blCalcVatForWrapping' ) ) {
-                $this->oxorder__oxwrapvat = new oxField($oWrappingCost->getVAT(), oxField::T_RAW);
-            }
+            // wrapping VAT will be always calculated (#3757)
+            $this->oxorder__oxwrapvat = new oxField($oWrappingCost->getVAT(), oxField::T_RAW);
         }
 
         // greetings card

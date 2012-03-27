@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 42216 2012-02-13 13:34:35Z linas.kukulskis $
+ * @version   SVN: $Id: oxrssfeedTest.php 43093 2012-03-22 13:07:26Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -66,12 +66,12 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         oxTestModules::publicize('oxrssfeed', '_loadBaseChannel');
         $oRss = oxNew('oxrssfeed');
 
-        $oCfg = $this->getMock( 'oxconfig', array( 'getActiveShop', 'getShopHomeUrl', 'getImageUrl' ) );
+        $oCfg = $this->getMock( 'oxconfig', array( 'getActiveShop', 'getShopUrl', 'getImageUrl' ) );
         $oShop = new oxStdClass();
         $oShop->oxshops__oxname = new oxField('name');
         $oShop->oxshops__oxversion = new oxField('oxversion');
         $oCfg->expects($this->any())->method( 'getActiveShop')->will( $this->returnValue( $oShop ) );
-        $oCfg->expects($this->any())->method( 'getShopHomeUrl')->will( $this->returnValue( "http://homeurl/" ) );
+        $oCfg->expects($this->any())->method( 'getShopUrl')->will( $this->returnValue( "http://homeurl/" ) );
         $oCfg->expects($this->any())->method( 'getImageUrl')->will( $this->returnValue( "http://homeurl/lalala/" ) );
 
         $oRss->setConfig($oCfg);

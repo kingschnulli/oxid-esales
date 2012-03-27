@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpayment.php 41773 2012-01-26 09:31:43Z vilma $
+ * @version   SVN: $Id: oxpayment.php 43132 2012-03-23 14:19:06Z vilma $
  */
 
 /**
@@ -281,7 +281,10 @@ class oxPayment extends oxI18n
 
         $oPrice->setPrice( $dPrice );
 
-        if ( $this->getConfig()->getConfigParam( 'blCalcVATForPayCharge' ) && $dPrice > 0 ) {
+        // VAT will be always calculated(#3757)
+        // blCalcVATForPayCharge option is @deprecated since 2012-03-23 in version 4.6
+        // blShowVATForPayCharge option will be used only for displaying
+        if ( $dPrice > 0 ) {
             $oPrice->setVat( $oBasket->getMostUsedVatPercent() );
         }
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: priceCalculationTest.php 41753 2012-01-25 11:39:43Z vilma $
+ * @version   SVN: $Id: priceCalculationTest.php 43166 2012-03-26 08:50:28Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -550,12 +550,12 @@ class testAdvBasketPrices extends Unit_Maintenance_priceCalculationTest
 
                 // VAT for wrapping ?
                 if ( strlen(trim( $data[20] )) ) {
-                    modConfig::getInstance()->setConfigParam( 'blCalcVatForWrapping', (bool)$data[20] );
+                    modConfig::getInstance()->setConfigParam( 'blShowVATForWrapping', (bool)$data[20] );
                 }
 
                 // VAT for delivery ?
                 if ( strlen(trim( $data[24] )) ) {
-                    modConfig::getInstance()->setConfigParam( 'blCalcVATForDelivery', (bool)$data[24] );
+                    modConfig::getInstance()->setConfigParam( 'blShowVATForDelivery', (bool)$data[24] );
                 }
 
                 // currency rate ?

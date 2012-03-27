@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlist.php 42686 2012-03-09 15:22:59Z tomas $
+ * @version   SVN: $Id: oxdiscountlist.php 43089 2012-03-22 13:06:40Z linas.kukulskis $
  */
 
 /**
@@ -365,7 +365,6 @@ class oxDiscountList extends oxList
 
         return $aDiscLog;
     }
-
     /**
      * Applies discounts which are supposed to be applied on amounts greater than zero.
      * Returns applied discounts.
