@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 41881 2012-01-30 12:34:50Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxsessionTest.php 43232 2012-03-28 07:29:41Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1447,7 +1447,7 @@ class Unit_Core_oxsessionTest extends OxidTestCase
             $_SERVER['REQUEST_METHOD'] = 'GET';
             $this->assertEquals(false, $oSess->UNITisSessionRequiredAction());
             $_SERVER['REQUEST_METHOD'] = 'POST';
-            $this->assertEquals(true, $oSess->UNITisSessionRequiredAction());
+            $this->assertEquals(false, $oSess->UNITisSessionRequiredAction());
         } catch (Exception $e) {
         }
         $_SERVER['REQUEST_METHOD'] = $sInitial;

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 42841 2012-03-14 09:08:36Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoder.php 43254 2012-03-28 12:38:14Z linas.kukulskis $
  */
 
 /**
@@ -400,13 +400,12 @@ class oxSeoEncoder extends oxSuperCfg
                    AND `oxshopid` = ".$oDb->quote( $iShopId )."
                    AND `oxlang` = '{$iLang}'";
 
-
-            if ( $sParams ) {
-                $sQ .= " AND `oxparams` = '{$sParams}'";
-            } elseif ( ! $blStrictParamsCheck ) {
-                $sQ .= " ORDER BY `oxparams` ASC" ;
+            $sParams = $sParams ? $oDb->quote( $sParams ) : "''";
+            if ( $sParams && $blStrictParamsCheck ) {
+                $sQ .= " AND `oxparams` = {$sParams}";
+            } else {
+                $sQ .= " ORDER BY `oxparams` ASC";
             }
-
             $sQ .= " LIMIT 1";
 
             self::$_aFixedCache[$sType][$sShopId][$sId][$iLang] = (bool) $oDb->getOne( $sQ );
@@ -532,13 +531,14 @@ class oxSeoEncoder extends oxSuperCfg
                AND `oxshopid` = ".oxDb::getDb()->quote( $iShopId )."
                AND `oxlang` = '{$iLang}'";
 
-        if ( $sParams ) {
+        $sParams = $sParams ? $sParams : '';
+        if ( $sParams && $blStrictParamsCheck ) {
             $sQ .= " AND `oxparams` = '{$sParams}'";
-        } elseif ( ! $blStrictParamsCheck) {
-            $sQ .= " ORDER BY `oxparams` ASC" ;
+        } else {
+            $sQ .= " ORDER BY `oxparams` ASC";
         }
-
         $sQ .= " LIMIT 1";
+
 
         // caching to avoid same queries..
         $sIdent = md5( $sQ );

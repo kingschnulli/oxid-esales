@@ -3094,6 +3094,23 @@ class Unit_Core_oxuserTest extends OxidTestCase
     /**
      * oxuser::login() and oxuser::logout() test
      */
+    public function testLoginCookie_disabled()
+    {
+        oxTestModules::addFunction('oxUtilsServer', 'setUserCookie', '{ throw new Exception( "cookie is set" ); }');
+        modConfig::getInstance()->setConfigParam( 'blShowRememberMe', 0 );
+
+        $oUser = new oxuser();
+        try {
+            $this->assertTrue( $oUser->login( oxADMIN_LOGIN, oxADMIN_PASSWD, true ) );
+        } catch ( Exception $oExcp ) {
+            $this->fail('Cookie should not be set, it\'s disabled.');
+            return;
+        }
+    }
+
+    /**
+     * oxuser::login() and oxuser::logout() test
+     */
     public function testLoginIsDemoAndAdminButNonAdminUser_Logout()
     {
         oxTestModules::addFunction('oxUtilsServer', 'getOxCookie', '{ return ""; }');
@@ -3214,7 +3231,8 @@ class Unit_Core_oxuserTest extends OxidTestCase
 
         $oUser->UNITassignAddress( $aDelAddress );
         $myDB = oxDb::getDB();
-        $sSelect = 'select oxaddress.oxcountry from oxaddress where oxaddress.oxuserid = "'.$sUserId.'" ';
+        $sSelect = 'select oxaddress.oxcountry from oxaddress where oxaddress.oxid = "xxx" AND oxaddress.oxuserid = "'.$sUserId.'" ';
+
         $sCountry = $myDB->getOne( $sSelect);
         $this->assertEquals( 'xxx', oxSession::getVar( 'deladrid' ) );
         $this->assertEquals( 'Deutschland', $sCountry );
