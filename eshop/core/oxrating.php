@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrating.php 41749 2012-01-25 09:22:39Z linas.kukulskis $
+ * @version   SVN: $Id: oxrating.php 43310 2012-03-29 13:18:45Z linas.kukulskis $
  */
 
 /**
@@ -84,7 +84,7 @@ class oxRating extends oxBase
             $oDB->execute( "delete from oxratings where oxtimestamp < '$sExpDate'" );
         }
         $sSelect = "select oxid from oxratings where oxuserid = ".$oDB->quote( $sUserId )." and oxtype=".$oDB->quote( $sType )." and oxobjectid = ".$oDB->quote( $sObjectId );
-        if ( $oDB->getOne( $sSelect ) ) {
+        if ( oxDb::getInstance()->getOne( $sSelect ) ) {
             return false;
         }
 
@@ -122,7 +122,7 @@ class oxRating extends oxBase
             LIMIT 1";
 
         $fRating = 0;
-        if ( $fRating = $oDB->getOne( $sSelect ) ) {
+        if ( $fRating = oxDb::getInstance()->getOne( $sSelect ) ) {
             $fRating = round( $fRating, 1 );
         }
 
@@ -159,7 +159,7 @@ class oxRating extends oxBase
             LIMIT 1";
 
         $iCount = 0;
-        $iCount = $oDB->getOne( $sSelect );
+        $iCount = oxDb::getInstance()->getOne( $sSelect );
 
         return $iCount;
     }

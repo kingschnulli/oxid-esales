@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseodecoder.php 40671 2011-12-19 08:20:49Z linas.kukulskis $
+ * @version   SVN: $Id: oxseodecoder.php 43306 2012-03-29 13:16:25Z linas.kukulskis $
  */
 
 /**
@@ -85,8 +85,8 @@ class oxSeoDecoder extends oxSuperCfg
         $sKey = $this->_getIdent( $sSeoUrl );
         $aRet = false;
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
-        $oRs = $oDb->Execute( "select oxstdurl, oxlang from oxseo where oxident=" . $oDb->quote( $sKey ) . " and oxshopid='$iShopId' limit 1");
+        $oDb = oxDb::getDb();
+        $oRs = oxDb::getInstance()->select( "select oxstdurl, oxlang from oxseo where oxident=" . $oDb->quote( $sKey ) . " and oxshopid='$iShopId' limit 1");
         if ( !$oRs->EOF ) {
             // primary seo language changed ?
             $aRet = $this->parseStdUrl( $oRs->fields['oxstdurl'] );
@@ -107,7 +107,7 @@ class oxSeoDecoder extends oxSuperCfg
     protected function _decodeOldUrl( $sSeoUrl )
     {
         $oStr = getStr();
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb();
         $sBaseUrl = $this->getConfig()->getShopURL();
         if ( $oStr->strpos( $sSeoUrl, $sBaseUrl ) === 0 ) {
             $sSeoUrl = $oStr->substr( $sSeoUrl, $oStr->strlen( $sBaseUrl ) );
@@ -118,7 +118,7 @@ class oxSeoDecoder extends oxSuperCfg
         $sKey = $this->_getIdent( $sSeoUrl, true );
 
         $sUrl = false;
-        $oRs = $oDb->execute( "select oxobjectid, oxlang from oxseohistory where oxident = " . $oDb->quote( $sKey ) . " and oxshopid = '{$iShopId}' limit 1");
+        $oRs = oxDb::getInstance()->select( "select oxobjectid, oxlang from oxseohistory where oxident = " . $oDb->quote( $sKey ) . " and oxshopid = '{$iShopId}' limit 1");
         if ( !$oRs->EOF ) {
             // updating hit info (oxtimestamp field will be updated automatically)
             $oDb->execute( "update oxseohistory set oxhits = oxhits + 1 where oxident = " . $oDb->quote( $sKey ) . " and oxshopid = '{$iShopId}' limit 1" );
@@ -164,12 +164,13 @@ class oxSeoDecoder extends oxSuperCfg
      */
     protected function _getSeoUrl($sObjectId, $iLang, $iShopId)
     {
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
-        $aInfo = $oDb->getRow( "select oxseourl, oxtype from oxseo where oxobjectid =  " . $oDb->quote( $sObjectId ) . " and oxlang =  " . $oDb->quote( $iLang ) . " and oxshopid = " . $oDb->quote( $iShopId ) . " order by oxparams limit 1" );
+        $oDb = oxDb::getDb();
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_ASSOC );
+        $aInfo = oxDb::getInstance()->getRow( "select oxseourl, oxtype from oxseo where oxobjectid =  " . $oDb->quote( $sObjectId ) . " and oxlang =  " . $oDb->quote( $iLang ) . " and oxshopid = " . $oDb->quote( $iShopId ) . " order by oxparams limit 1" );
         if ('oxarticle' == $aInfo['oxtype']) {
-            $sMainCatId = $oDb->getOne( "select oxcatnid from ".getViewName( "oxobject2category" )." where oxobjectid = " . $oDb->quote( $sObjectId ) . " order by oxtime" );
+            $sMainCatId = oxDb::getInstance()->getOne( "select oxcatnid from ".getViewName( "oxobject2category" )." where oxobjectid = " . $oDb->quote( $sObjectId ) . " order by oxtime" );
             if ($sMainCatId) {
-                $sUrl = $oDb->getOne( "select oxseourl from oxseo where oxobjectid =  " . $oDb->quote( $sObjectId ) . " and oxlang =  " . $oDb->quote( $iLang ) . " and oxshopid = " . $oDb->quote( $iShopId ) . " and oxparams = " . $oDb->quote( $sMainCatId ) . "  order by oxexpired" );
+                $sUrl = oxDb::getInstance()->getOne( "select oxseourl from oxseo where oxobjectid =  " . $oDb->quote( $sObjectId ) . " and oxlang =  " . $oDb->quote( $iLang ) . " and oxshopid = " . $oDb->quote( $iShopId ) . " and oxparams = " . $oDb->quote( $sMainCatId ) . "  order by oxexpired" );
                 if ($sUrl) {
                     return $sUrl;
                 }
@@ -273,15 +274,15 @@ class oxSeoDecoder extends oxSuperCfg
      */
     protected function _getObjectUrl( $sSeoId, $sTable, $iLanguage, $sType )
     {
-        $oDb     = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT);
+        $oDb     = oxDb::getDb();
         $sTable  = getViewName( $sTable, $iLanguage );
         $sSeoUrl = null;
 
         // first checking of field exists at all
-        if ( $oDb->getOne( "show columns from {$sTable} where field = 'oxseoid'" ) ) {
+        if ( oxDb::getInstance()->getOne( "show columns from {$sTable} where field = 'oxseoid'" ) ) {
             // if field exists - searching for object id
-            if ( $sObjectId = $oDb->getOne( "select oxid from {$sTable} where oxseoid = ".$oDb->quote( $sSeoId ) ) ) {
-                $sSeoUrl = $oDb->getOne( "select oxseourl from oxseo where oxtype = " . $oDb->quote( $sType ) . " and oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxlang = " . $oDb->quote( $iLanguage ) . " " );
+            if ( $sObjectId = oxDb::getInstance()->getOne( "select oxid from {$sTable} where oxseoid = ".$oDb->quote( $sSeoId ) ) ) {
+                $sSeoUrl = oxDb::getInstance()->getOne( "select oxseourl from oxseo where oxtype = " . $oDb->quote( $sType ) . " and oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxlang = " . $oDb->quote( $iLanguage ) . " " );
             }
         }
 

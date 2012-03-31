@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 43166 2012-03-26 08:50:28Z vilma $
+ * @version   SVN: $Id: oxbasket.php 43339 2012-03-29 13:54:12Z linas.kukulskis $
  */
 
 /**
@@ -2517,7 +2517,7 @@ class oxBasket extends oxSuperCfg
         $sCatTable = getViewName( 'oxcategories' );
 
         $oDb = oxDb::getDb();
-        $sParentId  = $oDb->getOne( "select oxparentid from oxarticles where oxid = ".$oDb->quote( $sProductId ) );
+        $sParentId  = oxDb::getInstance()->getOne( "select oxparentid from oxarticles where oxid = ".$oDb->quote( $sProductId ) );
         $sProductId = $sParentId ? $sParentId : $sProductId;
 
         $sQ = "select 1 from {$sO2CTable}
@@ -2525,7 +2525,7 @@ class oxBasket extends oxSuperCfg
                  where {$sO2CTable}.oxobjectid = ".$oDb->quote( $sProductId )." and
                        {$sCatTable}.oxrootid = ".$oDb->quote( $sRootCatId );
 
-        return (bool) $oDb->getOne( $sQ );
+        return (bool) oxDb::getInstance()->getOne( $sQ );
     }
 
     /**

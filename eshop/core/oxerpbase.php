@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpbase.php 40309 2011-11-29 08:30:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxerpbase.php 43323 2012-03-29 13:38:31Z linas.kukulskis $
  */
 
 /**
@@ -361,9 +361,9 @@ abstract class oxERPBase
         $save = $ADODB_FETCH_MODE;
 
         if (isset($iCount) || isset($iStart)) {
-            $rs = oxDb::getDb( oxDb::FETCH_MODE_ASSOC )->SelectLimit($sSQL, $iCount, $iStart);
+            $rs = oxDb::getInstance()->selectLimit( $sSQL, $iCount, $iStart );
         } else {
-            $rs = oxDb::getDb( oxDb::FETCH_MODE_ASSOC )->Execute($sSQL);
+            $rs = oxDb::getInstance()->select( $sSQL );
         }
 
         if ($rs != false && $rs->recordCount() > 0) {

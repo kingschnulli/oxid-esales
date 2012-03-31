@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscount.php 43090 2012-03-22 13:06:51Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscount.php 43327 2012-03-29 13:41:44Z linas.kukulskis $
  */
 
 /**
@@ -129,7 +129,7 @@ class oxDiscount extends oxI18n
 
             $this->_blIsForArticleOrForCategory = false;
             $sQ = "select 1 from oxobject2discount where oxdiscountid = $sDiscountIdQuoted and ( oxtype = 'oxarticles' or oxtype = 'oxcategories')";
-            if ( !$myDB->getOne( $sQ ) ) {
+            if ( ! oxDb::getInstance()->getOne( $sQ ) ) {
                 $this->_blIsForArticleOrForCategory = true;
                 return true;
             }
@@ -145,7 +145,7 @@ class oxDiscount extends oxI18n
             $sQ  = "select 1 from oxobject2discount where oxdiscountid = {$sDiscountIdQuoted} and oxtype = 'oxarticles' ";
             $sQ .= $this->_getProductCheckQuery( $oArticle );
 
-            if ( $myDB->getOne( $sQ ) ) {
+            if ( oxDb::getInstance()->getOne( $sQ ) ) {
                 $this->_aHasArticleDiscounts[ $sArticleId ] = true;
                 return true;
             } else {
@@ -158,7 +158,7 @@ class oxDiscount extends oxI18n
                 $sCatIds = "(".implode(",", oxDb::getInstance()->quoteArray($aCatIds)).")";
                 // getOne appends limit 1, so this one should be fast enough
                 $sQ = "select 1 from oxobject2discount where oxdiscountid = {$sDiscountIdQuoted} and oxobjectid in $sCatIds and oxtype = 'oxcategories'";
-                if ( $myDB->getOne( $sQ ) ) {
+                if ( oxDb::getInstance()->getOne( $sQ ) ) {
                     $this->_aHasArticleDiscounts[ $sArticleId ] = true;
                     return true;
                 }
@@ -186,12 +186,12 @@ class oxDiscount extends oxI18n
             return false;
         }
 
-        $myDB = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
+        $myDB = oxDb::getDb();
 
         // check if this article is assigned
         $sQ  = "select 1 from oxobject2discount where oxdiscountid = ".$myDB->quote( $this->oxdiscount__oxid->value)." and oxtype = 'oxarticles' ";
         $sQ .= $this->_getProductCheckQuery( $oArticle );
-        if ( !( $blOk = ( bool ) $myDB->getOne( $sQ ) ) ) {
+        if ( !( $blOk = ( bool ) oxDb::getInstance()->getOne( $sQ ) ) ) {
 
             // checkin article cateogry
             $blOk = $this->_checkForArticleCategories( $oArticle );
@@ -287,7 +287,7 @@ class oxDiscount extends oxI18n
         // oxobject2discount configuration check
         $sQ = 'select 1 from oxobject2discount where oxdiscountid = '.oxDb::getDb()->quote($this->oxdiscount__oxid->value).' and oxtype in ("oxarticles", "oxcategories" ) ';
 
-        return !( (bool) oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT )->getOne( $sQ ) );
+        return !( (bool) oxDb::getInstance()->getOne( $sQ ) );
     }
 
     /**
@@ -303,10 +303,10 @@ class oxDiscount extends oxI18n
             return false;
         }
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
+        $oDb = oxDb::getDb();
         $sQ  = "select 1 from oxobject2discount where oxdiscountid=".$oDb->quote( $this->getId() );
         $sQ .= $this->_getProductCheckQuery( $oArticle );
-        if ( !( $blOk = (bool) $oDb->getOne( $sQ ) ) ) {
+        if ( !( $blOk = (bool) oxDb::getInstance()->getOne( $sQ ) ) ) {
             // additional checks for amounts and other dependencies
             $blOk = $this->_checkForArticleCategories( $oArticle );
         }
@@ -420,11 +420,11 @@ class oxDiscount extends oxI18n
 
         $sCatIds = "(".implode(",", oxDb::getInstance()->quoteArray($aCatIds)).")";
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
+        $oDb = oxDb::getDb();
         // getOne appends limit 1, so this one should be fast enough
         $sQ = "select oxobjectid from oxobject2discount where oxdiscountid = ".$oDb->quote($this->oxdiscount__oxid->value)." and oxobjectid in $sCatIds and oxtype = 'oxcategories'";
 
-        return $oDb->getOne( $sQ );
+        return oxDb::getInstance()->getOne( $sQ );
     }
 
     /**

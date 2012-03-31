@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucherserie.php 42807 2012-03-13 15:07:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxvoucherserie.php 43289 2012-03-29 13:00:36Z linas.kukulskis $
  */
 
 /**
@@ -149,10 +149,10 @@ class oxVoucherSerie extends oxBase
 
         $oDB = oxDb::getDb();
         $sQuery = 'select count(*) as total from oxvouchers where oxvoucherserieid = ' .$oDB->quote( $this->getId() );
-        $aStatus['total'] = $oDB->getOne( $sQuery );
+        $aStatus['total'] = oxDb::getInstance()->getOne( $sQuery );
 
         $sQuery = 'select count(*) as used from oxvouchers where oxvoucherserieid = ' . $oDB->quote( $this->getId() ) . ' and ((oxorderid is not NULL and oxorderid != "") or (oxdateused is not NULL and oxdateused != 0))';
-        $aStatus['used'] = $oDB->getOne( $sQuery );
+        $aStatus['used'] = oxDb::getInstance()->getOne( $sQuery );
 
         $aStatus['available'] = $aStatus['total'] - $aStatus['used'];
 

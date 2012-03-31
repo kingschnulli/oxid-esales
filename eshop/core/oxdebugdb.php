@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdebugdb.php 40309 2011-11-29 08:30:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxdebugdb.php 43329 2012-03-29 13:43:27Z linas.kukulskis $
  */
 
 /**
@@ -93,7 +93,8 @@ class oxDebugDb
         if (method_exists($oDb, "logSQL")) {
             $iLastDbgState = $oDb->logSQL( false );
         }
-        $rs = $oDb->execute( "select sql0, sql1, tracer from adodb_logsql order by created limit 5000" );
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $rs = oxDb::getInstance()->select( "select sql0, sql1, tracer from adodb_logsql order by created limit 5000" );
         if ($rs != false && $rs->recordCount() > 0 ) {
             $aLastRecord = null;
             while ( !$rs->EOF ) {
@@ -151,7 +152,8 @@ class oxDebugDb
         $oDb = oxDb::getDb();
         foreach ($aInput as $fnc => $aWarnings) {
             $ids = implode(",", oxDb::getInstance()->quoteArray(array_keys($aWarnings)));
-            $rs = $oDb->execute("select sql1, timer, tracer from adodb_logsql where sql0 in ($ids)");
+            oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+            $rs = oxDb::getInstance()->select("select sql1, timer, tracer from adodb_logsql where sql0 in ($ids)");
             if ($rs != false && $rs->recordCount() > 0) {
                 while (!$rs->EOF) {
                     $aOutputEntry = array();

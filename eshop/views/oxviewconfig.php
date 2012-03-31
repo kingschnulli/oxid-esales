@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 42999 2012-03-19 09:15:04Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewconfig.php 43403 2012-03-30 13:46:42Z vilma $
  */
 
 /**
@@ -1236,7 +1236,9 @@ class oxViewConfig extends oxSuperCfg
         if (!$sFile || ($sFile[0] != '/')) {
             $sFile = '/'.$sFile;
         }
-        $sFile = rtrim(getShopBasePath(), '/').'/modules/'.basename($sModule).$sFile;
+        $oModule = oxNew("oxmodule");
+        $sModulePath = $oModule->getModulePath($sModule);
+        $sFile = $this->getConfig()->getModulesDir().$sModulePath.$sFile;
         if (file_exists($sFile) || is_dir($sFile)) {
             return $sFile;
         }
@@ -1257,12 +1259,12 @@ class oxViewConfig extends oxSuperCfg
      */
     public function getModuleUrl($sModule, $sFile = '')
     {
-        if (!$sFile || ($sFile[0] != '/')) {
-            $sFile = '/'.$sFile;
-        }
-        // check if file exists
-        $this->getModulePath($sModule, $sFile);
-        return rtrim($this->getConfig()->getCurrentShopUrl( false ), '/').'/modules/'.basename($sModule).$sFile;
+        $sUrl = str_replace(
+                    rtrim($this->getConfig()->getConfigParam('sShopDir'), '/'),
+                    rtrim($this->getConfig()->getCurrentShopUrl( false ), '/'),
+                    $this->getModulePath($sModule, $sFile)
+                           );
+        return $sUrl;
     }
 
     /**

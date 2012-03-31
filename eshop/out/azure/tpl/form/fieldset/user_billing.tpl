@@ -1,4 +1,26 @@
 [{assign var="invadr" value=$oView->getInvoiceAddress()}]
+[{assign var="blBirthdayRequired" value=$oView->isFieldRequired(oxuser__oxbirthdate)}]
+[{if isset( $invadr.oxuser__oxbirthdate.month ) }]
+    [{assign var="iBirthdayMonth" value=$invadr.oxuser__oxbirthdate.month }]
+[{elseif $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00" }]
+    [{assign var="iBirthdayMonth" value=$oxcmp_user->oxuser__oxbirthdate->value|regex_replace:"/^([0-9]{4})[-]/":""|regex_replace:"/[-]([0-9]{1,2})$/":"" }]
+[{else}]
+    [{assign var="iBirthdayMonth" value=0}]
+[{/if}]
+[{if isset( $invadr.oxuser__oxbirthdate.day ) }]
+    [{assign var="iBirthdayDay" value=$invadr.oxuser__oxbirthdate.day}]
+[{elseif $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00"}]
+    [{assign var="iBirthdayDay" value=$oxcmp_user->oxuser__oxbirthdate->value|regex_replace:"/^([0-9]{4})[-]([0-9]{1,2})[-]/":"" }]
+[{else}]
+    [{assign var="iBirthdayDay" value=0}]
+[{/if}]
+[{if isset( $invadr.oxuser__oxbirthdate.year ) }]
+    [{assign var="iBirthdayYear" value=$invadr.oxuser__oxbirthdate.year }]
+[{elseif $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00" }]
+    [{assign var="iBirthdayYear" value=$oxcmp_user->oxuser__oxbirthdate->value|regex_replace:"/[-]([0-9]{1,2})[-]([0-9]{1,2})$/":"" }]
+[{else}]
+    [{assign var="iBirthdayYear" value=0}]
+[{/if}]
     <li>
         <label [{if $oView->isFieldRequired(oxuser__oxsal)}]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_TITLE" }]</label>
         [{include file="form/fieldset/salutation.tpl" name="invadr[oxuser__oxsal]" value=$oxcmp_user->oxuser__oxsal->value }]
@@ -150,18 +172,29 @@
         [{/if}]
     </li>
     [{if $oViewConf->showBirthdayFields() }]
-    <li [{if $aErrors.oxuser__oxbirthdate}]class="oxInValid"[{/if}]>
+    <li class="oxDate[{if $aErrors.oxuser__oxbirthdate}] oxInValid[{/if}]">
         <label [{if $oView->isFieldRequired(oxuser__oxbirthdate) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_BIRTHDATE" }]</label>
-          <input [{if $oView->isFieldRequired(oxuser__oxbirthdate) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if}] type="text" data-fieldsize="small" maxlength="2" name="invadr[oxuser__oxbirthdate][day]" value="[{if isset( $invadr.oxuser__oxbirthdate.day ) }][{$invadr.oxuser__oxbirthdate.day }][{elseif $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00"}][{$oxcmp_user->oxuser__oxbirthdate->value|regex_replace:"/^([0-9]{4})[-]([0-9]{1,2})[-]/":"" }][{/if}]">
-          <input [{if $oView->isFieldRequired(oxuser__oxbirthdate) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if}] type="text" data-fieldsize="small" maxlength="2" name="invadr[oxuser__oxbirthdate][month]" value="[{if isset( $invadr.oxuser__oxbirthdate.month ) }][{$invadr.oxuser__oxbirthdate.month }][{elseif $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00" }][{$oxcmp_user->oxuser__oxbirthdate->value|regex_replace:"/^([0-9]{4})[-]/":""|regex_replace:"/[-]([0-9]{1,2})$/":"" }][{/if}]">
-         <input [{if $oView->isFieldRequired(oxuser__oxbirthdate) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if}] type="text" data-fieldsize="small" maxlength="4" name="invadr[oxuser__oxbirthdate][year]" value="[{if isset( $invadr.oxuser__oxbirthdate.year ) }][{$invadr.oxuser__oxbirthdate.year }][{elseif $oxcmp_user->oxuser__oxbirthdate->value && $oxcmp_user->oxuser__oxbirthdate->value != "0000-00-00" }][{$oxcmp_user->oxuser__oxbirthdate->value|regex_replace:"/[-]([0-9]{1,2})[-]([0-9]{1,2})$/":"" }][{/if}]">
-
-          [{if $oView->isFieldRequired(oxuser__oxbirthdate) }]
+        <select class='oxMonth js-oxValidate js-oxValidate_date [{if $oView->isFieldRequired(oxuser__oxbirthdate) }] js-oxValidate_notEmpty [{/if}]' name='invadr[oxuser__oxbirthdate][month]'>
+            <option value="" label="-">-</option>
+            [{section name="month" start=1 loop=13 }]
+            <option value="[{$smarty.section.month.index}]" label="[{$smarty.section.month.index}]" [{if $iBirthdayMonth == $smarty.section.month.index}] selected="selected" [{/if}]>
+                [{oxmultilang ident="MONTH_NAME_"|cat:$smarty.section.month.index}]
+            </option>
+            [{/section}]
+        </select>
+        <label class="innerLabel" for="oxDay">[{ oxmultilang ident="DAY_2" }]</label>
+        <input id="oxDay" class='oxDay js-oxValidate' name='invadr[oxuser__oxbirthdate][day]' type="text" data-fieldsize="xsmall" maxlength="2" value="[{if $iBirthdayDay > 0 }][{$iBirthdayDay }][{/if}]" />
+        [{oxscript include="js/widgets/oxinnerlabel.js" priority=10 }]
+        [{oxscript add="$( '#oxDay' ).oxInnerLabel();"}]
+        <label class="innerLabel" for="oxYear">[{ oxmultilang ident="YEAR" }]</label>
+        <input id="oxYear" class='oxYear js-oxValidate' name='invadr[oxuser__oxbirthdate][year]' type="text" data-fieldsize="small" maxlength="4" value="[{if $iBirthdayYear }][{$iBirthdayYear }][{/if}]" />
+        [{oxscript include="js/widgets/oxinnerlabel.js" priority=10 }]
+        [{oxscript add="$( '#oxYear' ).oxInnerLabel();"}]
         <p class="oxValidateError">
             <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
+            <span class="js-oxError_incorrectDate">[{ oxmultilang ident="ERROR_MESSAGE_INCORRECT_DATE" }]</span>
             [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxbirthdate}]
         </p>
-          [{/if}]
     </li>
     [{/if}]
 

@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxutilspic.php 32881 2011-02-03 11:45:36Z sarunas $
  */
@@ -447,7 +447,7 @@ class oxDynImgGenerator
         if ( $iWidth && $iHeight && $sQuality ) {
 
             $oConfig = getConfig();
-            $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+            $oDb = oxDb::getDb();
 
             // parameter names
             $sNames = '';
@@ -473,7 +473,7 @@ class oxDynImgGenerator
                 $sQ = "select oxshopid from oxconfig where oxvarname = 'sDefaultImageQuality' and
                        {$sDecodeField} = " . $oDb->quote( $sQuality );
 
-                $aShopIds = $oDb->getAll( $sQ );
+                $aShopIds = oxDb::getInstance()->getAll( $sQ );
 
                 // building query:
                 // shop id
@@ -499,7 +499,7 @@ class oxDynImgGenerator
                     $sQ = "select oxvartype, {$sDecodeField} as oxvarvalue from oxconfig
                            where oxvarname in ( {$sNames} ) and oxshopid in ( {$sShopIds} ) order by oxshopid";
 
-                    $aValues = $oDb->getAll( $sQ );
+                    $aValues = oxDb::getInstance()->getAll( $sQ );
                     foreach ( $aValues as $aValue ) {
                         $aConfValues = (array) $oConfig->decodeValue( $aValue["oxvartype"], $aValue["oxvarvalue"] );
                         foreach ( $aConfValues as $sValue ) {

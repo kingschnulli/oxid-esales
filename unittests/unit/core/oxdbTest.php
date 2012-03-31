@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbTest.php 40993 2012-01-05 12:19:22Z linas.kukulskis $
+ * @version   SVN: $Id: oxdbTest.php 43411 2012-03-30 14:54:17Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -522,7 +522,6 @@ class Unit_Core_oxdbTest extends OxidTestCase
         $this->assertEquals($ADODB_FETCH_MODE, ADODB_FETCH_NUM);
 
 
-
     }
 
     /**
@@ -670,4 +669,18 @@ class Unit_Core_oxdbTest extends OxidTestCase
         $oDb->UNITonConnectionError( 'odb' );
     }
 
+
+     /**
+     * Test case for oxDb::setFetchMode()
+     *
+     * @return null
+     */
+    public function testSetFetchMode()
+    {
+        $this->assertEquals( oxDb::FETCH_MODE_ASSOC, oxdb::getInstance()->getFetchMode() );
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $this->assertEquals( oxDb::FETCH_MODE_NUM, oxdb::getInstance()->getFetchMode() );
+        oxDb::getInstance()->setFetchMode();
+        $this->assertEquals( oxDb::FETCH_MODE_ASSOC, oxdb::getInstance()->getFetchMode() );
+    }
 }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandler.php 43088 2012-03-22 13:04:09Z linas.kukulskis $
+ * @version   SVN: $Id: oxdbmetadatahandler.php 43330 2012-03-29 13:44:09Z linas.kukulskis $
  */
 
 /**
@@ -81,7 +81,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
      */
     public function tableExists( $sTableName )
     {
-        $aTables = oxDb::getDb()->getAll("show tables like ".oxDb::getDb()->quote($sTableName));
+        $aTables = oxDb::getInstance()->getAll("show tables like ".oxDb::getDb()->quote($sTableName));
         return count($aTables) > 0;
     }
 
@@ -119,7 +119,8 @@ class oxDbMetaDataHandler extends oxSuperCfg
     {
         if ( empty($this->_aTables) ) {
 
-            $aTables = oxDb::getDb()->getAll("show tables");
+            oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+            $aTables = oxDb::getInstance()->getAll("show tables");
 
             foreach ( $aTables as $aTableInfo) {
                 $sTableName = $aTableInfo[0];
@@ -162,7 +163,8 @@ class oxDbMetaDataHandler extends oxSuperCfg
     {
         $sTableSet = getLangTableName($sTable, $iLang);
 
-        $aRes = oxDb::getDb()->getAll("show create table {$sTable}");
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $aRes = oxDb::getInstance()->getAll( "show create table {$sTable}" );
         $sSql = "CREATE TABLE `{$sTableSet}` (".
                 "`OXID` char(32) COLLATE latin1_general_ci NOT NULL, ".
                 "PRIMARY KEY (`OXID`)".
@@ -186,7 +188,8 @@ class oxDbMetaDataHandler extends oxSuperCfg
         if (!$sTableSet) {
             $sTableSet = $sTable;
         }
-        $aRes = oxDb::getDb()->getAll("show create table {$sTable}");
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $aRes = oxDb::getInstance()->getAll( "show create table {$sTable}" );
         $sTableSql = $aRes[0][1];
 
         preg_match( "/.*,\s+(['`]?".preg_quote($sField, '/')."['`]?\s+[^,]+),.*/", $sTableSql, $aMatch );
@@ -221,7 +224,9 @@ class oxDbMetaDataHandler extends oxSuperCfg
             $sTableSet = $sTable;
         }
 
-        $aRes = oxDb::getDb()->getAll("show create table {$sTable}");
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $aRes = oxDb::getInstance()->getAll( "show create table {$sTable}" );
+
         $sTableSql = $aRes[0][1];
 
         preg_match_all("/([\w]+\s+)?\bKEY\s+(`[^`]+`)?\s*\([^)]+\)/iU", $sTableSql, $aMatch);

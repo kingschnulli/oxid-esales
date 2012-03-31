@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnavigationtree.php 39789 2011-11-05 09:13:06Z linas.kukulskis $
+ * @version   SVN: $Id: oxnavigationtree.php 43363 2012-03-30 07:25:08Z vilma $
  */
 
 /**
@@ -506,29 +506,20 @@ class OxNavigationTree extends oxSuperCfg
 
         // including module menu files
         $sPath = getShopBasePath();
-        $aPathsToCheck = array( 'modules/' );
-        $sPathToCheck  = reset( $aPathsToCheck );
-        while ( $sPathToCheck ) {
-            $sFullPath = $sPath.$sPathToCheck;
-
-            // missing file/folder?
-            if ( is_dir( $sFullPath ) ) {
-
-                // adding subfolders
-                $aSubF = glob( $sFullPath."*", GLOB_ONLYDIR );
-                if ( is_array( $aSubF ) ) {
-                    foreach ( $aSubF as $sNewFolder ) {
-                        $aPathsToCheck[] = str_replace( $sPath, "", $sNewFolder ) . "/";
+        $oModulelist = oxNew('oxmodulelist');
+        $aActiveModuleInfo = $oModulelist->getActiveModuleInfo();
+        if (is_array($aActiveModuleInfo)) {
+            foreach ( $aActiveModuleInfo as $sModulePath ) {
+                $sFullPath = $sPath. "modules/" . $sModulePath;
+                // missing file/folder?
+                if ( is_dir( $sFullPath ) ) {
+                    // including menu file
+                    $sMenuFile = $sFullPath . "/menu.xml";
+                    if ( file_exists( $sMenuFile ) && is_readable( $sMenuFile ) ) {
+                        $aFilesToLoad[] = $sMenuFile;
                     }
                 }
-
-                // including menu file
-                $sMenuFile = "{$sFullPath}menu.xml";
-                if ( file_exists( $sMenuFile ) && is_readable( $sMenuFile ) ) {
-                    $aFilesToLoad[] = $sMenuFile;
-                }
             }
-            $sPathToCheck = next( $aPathsToCheck );
         }
 
         $blLoadDynContents = $myConfig->getConfigParam( 'blLoadDynContents' );

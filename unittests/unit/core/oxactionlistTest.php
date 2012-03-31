@@ -212,19 +212,29 @@ class Unit_Core_oxActionListTest extends OxidTestCase
      *
      * @return null
      */
-    public function testAreAnyActivePromotions()
+    public function testAreAnyActivePromotionsIs()
     {
-        $sShopId = modConfig::getInstance()->getShopId();
-        $sView = getViewName('oxactions');
-        $sSql = "select 1 from $sView where oxtype=2 and oxactive=1 and oxshopid='".$sShopId."' limit 1";
-        modDB::getInstance()->addClassFunction('getOne', create_function('$sql', 'return $sql === "'.$sSql.'";'));
+        $oDb = $this->getMock( "oxDb", array( 'getOne') );
+        $oDb->expects( $this->any() )->method( 'getOne' )->will( $this->returnValue( true ) );
+        oxTestModules::addModuleObject( 'oxDb', $oDb );
         $oAL = new oxActionList();
         $this->assertTrue($oAL->areAnyActivePromotions());
-        modDB::getInstance()->addClassFunction('getOne', create_function('$sql', 'return $sql !== "'.$sSql.'";'));
+    }
+
+    /**
+     * oxActionList::areAnyActivePromotions() test case
+     * test if return value is in the true case "true" and the other way around
+     *
+     * @return null
+     */
+    public function testAreAnyActivePromotionsNo()
+    {
+        $oDb = $this->getMock( "oxDb", array( 'getOne') );
+        $oDb->expects( $this->any() )->method( 'getOne' )->will( $this->returnValue(false ) );
+        oxTestModules::addModuleObject( 'oxDb', $oDb );
         $oAL = new oxActionList();
         $this->assertFalse($oAL->areAnyActivePromotions());
     }
-
 
 
     /**

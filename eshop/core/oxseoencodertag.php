@@ -122,7 +122,7 @@ class oxSeoEncoderTag extends oxSeoEncoder
                 $sQ .= " and oxid = " . oxDb::getDb()->quote( $sOxid );
             }
 
-            if ( oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT )->getOne( $sQ ) ) {
+            if ( oxDb::getInstance()->getOne( $sQ ) ) {
                 // creating unique
                 $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $sObjectId, $iLang );
 

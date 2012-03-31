@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: deliveryset_main.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
@@ -42,19 +42,17 @@ class Module_Sortlist extends oxAdminDetails
     {
         $sOxId = $this->getEditObjectId();
 
-        $oConfig = $this->getConfig();
-
         parent::render();
 
-        $oModule = oxNew( "oxModule" );
+        $oModulelist = oxNew( "oxModulelist" );
 
-        $this->_aViewData["aExtClasses"] = $oModule->getAllModules();
+        $this->_aViewData["aExtClasses"] = $this->getConfig()->getAllModules();
 
-        $this->_aViewData["aDisabledModules"] = $oModule->getDisabledModules();
+        $this->_aViewData["aDisabledModules"] = $oModulelist->getDisabledModuleClasses();
 
         // checking if there are any deleted extensions
         if ( oxSession::getVar( "blSkipDeletedExtCheking" ) == false ) {
-            $aDeletedExt = $oModule->getDeletedExtensions();
+            $aDeletedExt = $oModulelist->getDeletedExtensions();
         }
 
         if ( !empty($aDeletedExt) ) {
@@ -94,7 +92,7 @@ class Module_Sortlist extends oxAdminDetails
             return;
         }
 
-        $oModule = oxNew( "oxModule" );
-        $oModule->remove();
+        $oModulelist = oxNew( "oxModulelist" );
+        $oModulelist->cleanup();
     }
 }

@@ -3918,6 +3918,16 @@ dl.review .param {
     float: left;
 }
 
+.form .oxDate select {
+    float:left;
+    width:100px;
+}
+
+.form .oxDate .innerLabel {
+     margin-top: 1px;
+     text-transform: none;
+}
+
 .form input[type="password"],
 .form input[type="text"] {
     width: 190px;

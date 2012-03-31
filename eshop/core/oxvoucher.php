@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucher.php 42807 2012-03-13 15:07:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxvoucher.php 43287 2012-03-29 12:59:21Z linas.kukulskis $
  */
 
 /**
@@ -311,13 +311,13 @@ class oxVoucher extends oxBase
                 // just search for vouchers with different series
                 $sSql  = "select 1 from oxvouchers where oxvouchers.oxid in ($sIds) and ";
                 $sSql .= "oxvouchers.oxvoucherserieid != " . $myDB->quote( $this->oxvouchers__oxvoucherserieid->value ) ;
-                $blAvailable &= !$myDB->getOne($sSql);
+                $blAvailable &= !oxDb::getInstance()->getOne($sSql);
             } else {
                 // search for vouchers with different series and those vouchers do not allow other series
                 $sSql  = "select 1 from oxvouchers left join oxvoucherseries on oxvouchers.oxvoucherserieid=oxvoucherseries.oxid ";
                 $sSql .= "where oxvouchers.oxid in ($sIds) and oxvouchers.oxvoucherserieid != " . $myDB->quote( $this->oxvouchers__oxvoucherserieid->value );
                 $sSql .= "and not oxvoucherseries.oxallowotherseries";
-                $blAvailable &= !$myDB->getOne($sSql);
+                $blAvailable &= !oxDb::getInstance()->getOne($sSql);
             }
             if ( !$blAvailable ) {
                     $oEx = oxNew( 'oxVoucherException' );
@@ -419,7 +419,7 @@ class oxVoucher extends oxBase
             $sSelect .= 'oxvoucherserieid = ' . $myDB->quote( $this->oxvouchers__oxvoucherserieid->value ) . ' and ';
             $sSelect .= '((oxorderid is not NULL and oxorderid != "") or (oxdateused is not NULL and oxdateused != 0)) ';
 
-            if ( $myDB->getOne( $sSelect )) {
+            if ( oxDb::getInstance()->getOne( $sSelect )) {
                 $oEx = oxNew( 'oxVoucherException' );
                 $oEx->setMessage('EXCEPTION_VOUCHER_NOTAVAILABLEINOTHERORDER');
                 $oEx->setVoucherNr($this->oxvouchers__oxvouchernr->value);
@@ -506,7 +506,7 @@ class oxVoucher extends oxBase
         $myDB    = oxDb::getDb();
         $oSerie  = $this->getSerie();
         $sSelect = "select 1 from oxobject2discount where oxdiscountid = ".$myDB->quote( $oSerie->getId() )." and oxtype = 'oxarticles'";
-        $blOk    = ( bool ) $myDB->getOne( $sSelect );
+        $blOk    = ( bool ) oxDb::getInstance()->getOne( $sSelect );
 
         return $blOk;
     }
@@ -521,7 +521,7 @@ class oxVoucher extends oxBase
         $myDB    = oxDb::getDb();
         $oSerie  = $this->getSerie();
         $sSelect = "select 1 from oxobject2discount where oxdiscountid = ". $myDB->quote( $oSerie->getId() )." and oxtype = 'oxcategories'";
-        $blOk    = ( bool ) $myDB->getOne( $sSelect );
+        $blOk    = ( bool ) oxDb::getInstance()->getOne( $sSelect );
 
         return $blOk;
     }

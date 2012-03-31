@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 43103 2012-03-23 07:58:20Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxarticleTest.php 43364 2012-03-30 07:49:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -6678,26 +6678,41 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testInPriceCategory( )
+    public function testInPriceCategoryIn( )
     {
         $oA = new oxarticle();
         $oA->setId('_testx');
         $oA->oxarticles__oxprice = new oxField(95);
-        modDb::getInstance()->addClassFunction('getOne', create_function('$s', 'return 1;'));
-        $this->assertTrue($oA->inPriceCategory( 'sCatNid' ));
 
-        modDb::getInstance()->addClassFunction('getOne', create_function('$s', 'return 0;'));
+
+        $oDb = $this->getMock( "oxDb", array( 'getOne') );
+        $oDb->expects( $this->any() )->method( 'getOne' )->will( $this->returnValue( 1 ) );
+        oxTestModules::addModuleObject( 'oxDb', $oDb );
+
+       $this->assertTrue($oA->inPriceCategory( 'sCatNid' ));
+
+    }
+
+    /**
+     * Tes in price category.
+     *
+     * @return null
+     */
+    public function testInPriceCategoryNo( )
+    {
+        $oA = new oxarticle();
+        $oA->setId('_testx');
+        $oA->oxarticles__oxprice = new oxField(95);
+
+        $oDb = $this->getMock( "oxDb", array( 'getOne') );
+        $oDb->expects( $this->any() )->method( 'getOne' )->will( $this->returnValue( 0 ) );
+        oxTestModules::addModuleObject( 'oxDb', $oDb );
+
         $this->assertFalse($oA->inPriceCategory( 'sCatNid' ));
 
-        modDb::getInstance()->addClassFunction('getOne', create_function('$s', 'throw new Exception($s);'));
-        try {
-            $oA->inPriceCategory( 'sCatNid' );
-        } catch (Exception $e) {
-                $this->assertEquals("select 1 from oxv_oxcategories_de where oxid='sCatNid' and(   (oxpricefrom != 0 and oxpriceto != 0 and oxpricefrom <= '95' and oxpriceto >= '95') or (oxpricefrom != 0 and oxpriceto = 0 and oxpricefrom <= '95') or (oxpricefrom = 0 and oxpriceto != 0 and oxpriceto >= '95'))", $e->getMessage());
-            return;
-        }
-        $this->fail('exception from oxdb not thrown');
+
     }
+
 
     /**
      * Check if method "onChange" calls method "_onChangeStockResetCount" when

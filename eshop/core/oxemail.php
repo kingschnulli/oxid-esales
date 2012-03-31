@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 42789 2012-03-13 14:33:18Z linas.kukulskis $
+ * @version   SVN: $Id: oxemail.php 43324 2012-03-29 13:39:17Z linas.kukulskis $
  */
 /**
  * Includes PHP mailer class.
@@ -744,7 +744,7 @@ class oxEmail extends PHPMailer
         }
 
         $sSelect = "select oxid from oxuser where $sWhere $sOrder";
-        if ( ( $sOxId = $oDb->getOne( $sSelect ) ) ) {
+        if ( ( $sOxId = oxDb::getInstance()->getOne( $sSelect ) ) ) {
 
             $oUser = oxNew( 'oxuser' );
             if ( $oUser->load($sOxId) ) {
@@ -1053,7 +1053,7 @@ class oxEmail extends PHPMailer
             $oUser = oxNew( 'oxuser' );
             $this->setViewData( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
         }
-        
+
         // Process view data array through oxoutput processor
         $this->_processViewArray();
 

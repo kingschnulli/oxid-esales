@@ -18,9 +18,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxinputvalidator.php 36422 2011-06-17 07:05:13Z linas.kukulskis $
+ * @version   SVN: $Id: oxinputvalidator.php 43315 2012-03-29 13:34:09Z linas.kukulskis $
  */
 
 /**
@@ -386,7 +386,7 @@ class oxInputValidator extends oxSuperCfg
 
         // checking
         foreach ( $aMustFields as $sMustField ) {
-            
+
             // A. not nice, but we keep all fields info in one config array, and must support baskwards compat.
             if ( !$blCheckDel && strpos( $sMustField, 'oxaddress__' ) === 0 ) {
                 continue;
@@ -449,7 +449,7 @@ class oxInputValidator extends oxSuperCfg
                               ( select oxactive from oxcountry where oxid = ".$oDb->quote( $sDelCtry )." ) ";
             }
 
-            if ( !$oDb->getOne( $sQ ) ) {
+            if ( !oxDb::getInstance()->getOne( $sQ ) ) {
                 $oEx = oxNew( 'oxUserException' );
                 $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS' );
 

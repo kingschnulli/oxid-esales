@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42939 2012-03-16 11:16:54Z juergen.busch $
+ * @version   SVN: $Id: lang.php 43250 2012-03-28 12:18:21Z rimvydas.paskevicius $
  */
 
 /*
@@ -884,6 +884,7 @@ $aLang = array(
 'MODULE_EDITEXTENSION'                                     => 'Edit module information',
 'MODULE_ENABLEACTIVATIONTEXT'                              => 'Module has no metadata file, so for registering module you must manually enter which classes module extends (e.g. oxorder => myModule/myModuleOxorder). This must be done only once.',
 'MODULE_ENTERMODULENAME'                                   => 'Module name',
+'MODULE_ENTERMODULEID'                                     => 'Module ID',
 'MODULE_ENTERMODULEEXTENDSCLASSES'                         => 'Extended classes',
 'MODULE_STANDALONEFILE'                                    => 'This module is a standalone php file. The module should be saved inside a directory!',
 'MODULE_EXTENSIONISDELETED'                                => 'There are modules which are registered in eShop, but module directory is missing.',

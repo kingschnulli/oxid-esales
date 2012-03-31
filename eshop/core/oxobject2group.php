@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxobject2group.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxobject2group.php 43380 2012-03-30 11:45:18Z linas.kukulskis $
  */
 
 /**
@@ -63,7 +63,7 @@ class oxObject2Group extends oxBase
         $sQ .= " and oxobjectid = ". $oDb->quote( $this->oxobject2group__oxobjectid->value );
 
         // does not exist
-        if ( !$oDb->getOne( $sQ ) ) {
+        if ( !oxDb::getInstance()->getOne( $sQ ) ) {
             return parent::save();
         }
     }

@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxbase.php 38562 2011-09-05 11:20:59Z arvydas.vapsva $
  */
@@ -41,9 +41,10 @@ class oxCounter
         $oDb = oxDb::getDb();
         oxDb::startTransaction();
 
-        $sQ = "SELECT `oxcount` FROM `oxcounters` WHERE `oxident` = ? FOR UPDATE";
+        $sQ = "SELECT `oxcount` FROM `oxcounters` WHERE `oxident` = " . $oDb->quote( $sIdent ) . " FOR UPDATE";
 
-        if ( ( $iCnt = $oDb->getOne( $sQ, array( $sIdent ) ) ) === false ) {
+
+        if ( ( $iCnt = oxDb::getInstance()->getOne( $sQ, false ) ) === false ) {
             $sQ = "INSERT INTO `oxcounters` (`oxident`, `oxcount`) VALUES (?, '0')";
             $oDb->execute( $sQ, array( $sIdent ) );
         }
@@ -71,9 +72,9 @@ class oxCounter
         $oDb = oxDb::getDb();
         oxDb::startTransaction();
 
-        $sQ = "SELECT `oxcount` FROM `oxcounters` WHERE `oxident` = ? FOR UPDATE";
+        $sQ = "SELECT `oxcount` FROM `oxcounters` WHERE `oxident` = " . $oDb->quote( $sIdent ) . " FOR UPDATE";
 
-        if ( ( $iCnt = $oDb->getOne( $sQ, array( $sIdent ) ) ) === false ) {
+        if ( ( $iCnt = oxDb::getInstance()->getOne( $sQ, false ) ) === false ) {
             $sQ = "INSERT INTO `oxcounters` (`oxident`, `oxcount`) VALUES (?, ?)";
             $blResult = $oDb->execute( $sQ, array( $sIdent, $iCount ) );
         } else {

@@ -16,7 +16,7 @@
     <tr>
         <td width="245" valign="top">
             [{if $oModule->getInfo('thumbnail')}]
-            <img src="[{ $oViewConf->getBaseDir() }]/modules/[{$oModule->getInfo('id')}]/[{$oModule->getInfo('thumbnail')}]" hspace="20" vspace="10"></td>
+            <img src="[{ $oViewConf->getBaseDir() }]/modules/[{$oModule->getInfo('dir')}]/[{$oModule->getInfo('thumbnail')}]" hspace="20" vspace="10"></td>
         [{else}]
     <img src="[{ $oViewConf->getResourceUrl() }]bg/module.png" hspace="20" vspace="10"></td>
     [{/if}]
@@ -24,10 +24,24 @@
         <h1 style="color:#000;font-size:25px;">[{$oModule->getTitle()}]</h1>
         <p>[{$oModule->getDescription()}]</p>
         <hr>
-        <p style="color:#aaa;">
-            <b>[{ oxmultilang ident="MODULE_AUTHOR" }]</b> [{$oModule->getInfo('author')|default:'-'}]<br><br>
-            [{ oxmultilang ident="MODULE_VERSION" }] [{$oModule->getInfo('version')|default:'-'}]
-        </p>
+        <table cellspacing="" cellpadding="" border="0" style="color:#aaa;">
+            <tr>
+                <td><b>[{ oxmultilang ident="MODULE_VERSION" }]</b></td>
+                <td>[{$oModule->getInfo('version')|default:'-'}]</td>
+            </tr>
+            <tr>
+                <td><b>[{ oxmultilang ident="MODULE_AUTHOR" }]</b></td>
+                <td>[{$oModule->getInfo('author')|default:'-'}]</td>
+            </tr>
+            <tr>
+                <td><b>[{ oxmultilang ident="GENERAL_EMAIL" }]</b></td>
+                <td>[{$oModule->getInfo('email')|default:'-'}]</td>
+            </tr>
+            <tr>
+                <td><b>[{ oxmultilang ident="GENERAL_URL" }]</b></td>
+                <td>[{$oModule->getInfo('url')|default:'-'}]</td>
+            </tr>
+        </table>
     </td>
 
     <td width="25" style="border-right: 1px solid #ddd;">
@@ -54,7 +68,7 @@
                 [{ $oViewConf->getHiddenSid() }]
                 <input type="hidden" name="cl" value="module_main">
                 <input type="hidden" name="updatelist" value="1">
-                <input type="hidden" name="oxid" value="[{$oModule->getInfo('id')}]">
+                <input type="hidden" name="oxid" value="[{$oModule->getId()}]">
                 [{if $oModule->isExtended() || $oModule->isLegacy()}]
                     [{if $oModule->isActive()}]
                     <input type="hidden" name="fnc" value="deactivateModule">
@@ -78,7 +92,7 @@
             <div>
                 [{ $oViewConf->getHiddenSid() }]
                 <input type="hidden" name="cl" value="module_main">
-                <input type="hidden" name="oxid" value="[{$oModule->getInfo('id')}]">
+                <input type="hidden" name="oxid" value="[{$oModule->getId()}]">
                 <input type="hidden" name="updatelist" value="1">
                 <input type="hidden" name="fnc" value="enableActivation">
 
@@ -94,7 +108,14 @@
                         <div class="fieldDesc">
                             [{ oxmultilang ident="MODULE_ENTERMODULENAME" }]:
                         </div>
-                        <input type="text" name="moduleName" style="width: 233px;" value="[{$oModule->getInfo('title')}]">
+                        <input type="text" name="moduleName" style="width: 233px;" value="[{$sModuleName}]">
+                    </fieldset>
+
+                    <fieldset>
+                        <div class="fieldDesc">
+                            [{ oxmultilang ident="MODULE_ENTERMODULEID" }]:
+                        </div>
+                        <input type="text" name="moduleId" style="width: 233px;" value="[{$sModuleId}]">
                     </fieldset>
 
                     <fieldset>

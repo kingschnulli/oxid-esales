@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloud.php 40351 2011-11-29 16:16:28Z linas.kukulskis $
+ * @version   SVN: $Id: oxtagcloud.php 43295 2012-03-29 13:05:54Z linas.kukulskis $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -306,7 +306,7 @@ class oxTagCloud extends oxSuperCfg
      */
     public function getTags( $sArtId = null, $blExtended = false, $iLang = null )
     {
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
+        $oDb = oxDb::getDb();
         if ($blExtended) {
             $iAmount = OXTAGCLOUD_EXTENDEDCOUNT;
         } else {
@@ -326,7 +326,7 @@ class oxTagCloud extends oxSuperCfg
             $iAmount = 0;
         }
 
-        $rs = $oDb->execute( $sQ );
+        $rs = oxDb::getInstance()->select( $sQ );
         $aTags = array();
         while ( $rs && $rs->recordCount() && !$rs->EOF ) {
             $sTags = $this->trimTags( $rs->fields['oxtags'] );
@@ -360,7 +360,7 @@ class oxTagCloud extends oxSuperCfg
     protected function _sortTags( $aTags, $iLang = null )
     {
         if ( is_array( $aTags ) && count( $aTags ) ) {
-            $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
+            $oDb = oxDb::getDb();
             $sSubQ = '';
             foreach ( $aTags as $sKey => $sTag ) {
                 if ( $sSubQ ) {
@@ -376,7 +376,7 @@ class oxTagCloud extends oxSuperCfg
             $sQ = "select _oxtable._oxsort, _oxtable._oxval from ( {$sSubQ} ) as _oxtable order by _oxtable._oxsort desc";
 
             $aTags = array();
-            $oRs = $oDb->execute( $sQ );
+            $oRs = oxDb::getInstance()->select( $sQ );
             while ( $oRs && $oRs->recordCount() && !$oRs->EOF ) {
                 if ( $oRs->fields['_oxval'] != 'ox_skip' ) {
                     $aTags[$oRs->fields['_oxsort']] = $oRs->fields['_oxval'];

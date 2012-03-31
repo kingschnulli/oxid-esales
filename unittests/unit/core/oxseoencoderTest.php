@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 42362 2012-02-20 15:11:08Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderTest.php 43360 2012-03-30 06:55:14Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1513,18 +1513,16 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
     {
         $oEncoder = new oxSeoEncoder();
 
-        $this->aSQL = array();
-        $this->aRET = array();
+        $iShopId = oxConfig::getInstance()->getBaseShopId();
+        $sQ = "select yyy from oxobject2seodata where oxobjectid = 'xxx' and oxshopid = '{$iShopId}' and oxlang = '0'";
 
-        $oDb = modDB::getInstance();
-        $oDb->addClassFunction( 'GetOne', array( $this, '__SaveToDbCreatesGoodMd5Callback' ) );
+        $oDb = $this->getMock( "oxDb", array( 'getOne') );
+        $oDb->expects( $this->once() )->method( 'getOne' )->with( $this->equalTo( $sQ ) );
+        oxTestModules::addModuleObject( 'oxDb', $oDb );
 
         $oEncoder->getMetaData( 'xxx', 'yyy' );
 
-        $iShopId = oxConfig::getInstance()->getBaseShopId();
 
-        $sQ = "select yyy from oxobject2seodata where oxobjectid = 'xxx' and oxshopid = '{$iShopId}' and oxlang = '0'";
-        $this->assertEquals( $sQ, $this->aSQL[0] );
     }
 
     public function testGetSeoIdent()

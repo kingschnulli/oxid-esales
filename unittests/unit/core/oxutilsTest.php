@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 42821 2012-03-13 15:09:52Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsTest.php 43361 2012-03-30 07:06:37Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -728,7 +728,10 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
         $e = null;
         try {
-            modDB::getInstance()->addClassFunction('getOne', create_function('$sql', 'return 1;'));
+            $oDb = $this->getMock( "oxDb", array( 'getOne') );
+            $oDb->expects( $this->any() )->method( 'getOne' )->will( $this->returnValue( 1 ) );
+            oxTestModules::addModuleObject( 'oxDb', $oDb );
+
             $mySession->setVar( "auth", "blafooUser");
             $this->assertEquals(true, oxUtils::getInstance()->checkAccessRights());
             modConfig::setParameter('fnc', 'chshp');

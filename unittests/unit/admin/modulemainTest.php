@@ -59,4 +59,32 @@ class Unit_Admin_ModuleMainTest extends OxidTestCase
             $oModule = $aViewData['oModule'];
             $this->assertEquals( "invoicepdf", $oModule->getInfo("id") );
     }
+
+    /**
+     * Theme_Main::Render() test case - loading module object
+     *
+     * @return null
+     */
+    public function testUpdateModuleConfigVars()
+    {
+        // prepearing test data
+        $aTestModulePaths     = array( "dir1/module1" => "dir1/module1", "dir2/module2" => "dir2/module2" );
+        $aTestDisabledModules = array( "dir2/module2", "dir4/module4" );
+        
+        modConfig::getInstance()->setConfigParam( "aModulePaths", $aTestModulePaths );
+        modConfig::getInstance()->setConfigParam( "aDisabledModules", $aTestDisabledModules );
+
+        // result data
+        $aModulePaths     = array( "dir1/module1" => "dir1/module1", "dir2Module" => "dir2/module2" );
+        $aDisabledModules = array( "dir2Module", "dir4/module4" );
+
+        $oConfig = $this->getMock( 'oxConfig', array('saveShopConfVar') );
+        $oConfig->expects( $this->at(0) )->method('saveShopConfVar')->with($this->equalTo("aarr"), $this->equalTo("aModulePaths"), $this->equalTo($aModulePaths) );
+        $oConfig->expects( $this->at(1) )->method('saveShopConfVar')->with($this->equalTo("arr"), $this->equalTo("aDisabledModules"), $this->equalTo($aDisabledModules) );
+
+        $oModuleMain = $this->getMock( 'Module_Main', array('getConfig'), array(), "", false );
+        $oModuleMain->expects( $this->any() )->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $oModuleMain->_updateModuleConfigVars( "dir2/module2", "dir2Module" );
+    }
 }

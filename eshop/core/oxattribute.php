@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxattribute.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
+ * @version   SVN: SVN: $Id: oxattribute.php 43341 2012-03-29 13:55:23Z linas.kukulskis $
  */
 
 /**
@@ -150,7 +150,7 @@ class oxAttribute extends oxI18n
     {
         $oDb = oxDb::getDB();
         $sAttViewName = getViewName('oxattribute');
-        return $oDb->getOne("select oxid from $sAttViewName where LOWER(oxtitle) = " . $oDb->quote(getStr()->strtolower($sSelTitle)));
+        return oxDb::getInstance()->getOne("select oxid from $sAttViewName where LOWER(oxtitle) = " . $oDb->quote(getStr()->strtolower($sSelTitle)));
     }
 
     /**
@@ -191,7 +191,8 @@ class oxAttribute extends oxI18n
             $sSelect .= "where o2a.oxobjectid = ".$oDb->quote( $sArtId )." order by o2a.oxpos";
 
             $aIds = array();
-            $rs = $oDb->execute( $sSelect );
+            oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+            $rs = oxDb::getInstance()->select( $sSelect );
             if ($rs != false && $rs->recordCount() > 0) {
                 while (!$rs->EOF) {
                     $aIds[] = $rs->fields[0];

@@ -19,9 +19,8 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpaymentlist.php 42289 2012-02-15 14:15:54Z vilma $
+ * @version   SVN: $Id: oxpaymentlist.php 43314 2012-03-29 13:32:58Z linas.kukulskis $
  */
-
 /**
  * Payment list manager.
  * @package core
@@ -211,7 +210,7 @@ class oxPaymentList extends oxList
         if ( $dPrice !== null ) {
             $sQ .= "and $sTable.oxfromamount <= ".$oDb->quote( $dPrice ) ." and $sTable.oxtoamount >= ".$oDb->quote( $dPrice );
         }
-        $rs = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT )->Execute( $sQ);
+        $rs = oxDb::getInstance()->select( $sQ );
         if ($rs != false && $rs->recordCount() > 0) {
             $oSaved = clone $this->getBaseObject();
             while (!$rs->EOF) {

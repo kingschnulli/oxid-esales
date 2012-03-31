@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 43094 2012-03-22 13:07:38Z linas.kukulskis $
+ * @version   SVN: $Id: oxconfig.php 43334 2012-03-29 13:47:10Z linas.kukulskis $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -571,8 +571,8 @@ class oxConfig extends oxSuperCfg
             }
             $sQ .= ' and oxvarname in ( '.$sIn.' ) ';
         }
-
-        $oRs = $oDb->execute( $sQ );
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $oRs = oxDb::getInstance()->select( $sQ );
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
             while ( !$oRs->EOF ) {
                 $sVarName = $oRs->fields[0];
@@ -1762,7 +1762,7 @@ class oxConfig extends oxSuperCfg
             $this->setConfigParam( $sVarName, $sVarVal );
         }
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb();
 
         $sShopIdQuoted     = $oDb->quote($sShopId);
         $sModuleQuoted     = $oDb->quote($sModule);
@@ -1805,7 +1805,7 @@ class oxConfig extends oxSuperCfg
 
         $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sQ  = "select oxvartype, ".$this->getDecodeValueQuery()." as oxvarvalue from oxconfig where oxshopid = '{$sShopId}' and oxmodule = '{$sModule}' and oxvarname = ".$oDb->quote($sVarName);
-        $oRs = $oDb->execute( $sQ );
+        $oRs = oxDb::getInstance()->select( $sQ );
 
         $sValue = null;
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
@@ -1862,7 +1862,7 @@ class oxConfig extends oxSuperCfg
         $blProductive = $this->getConfigParam( 'blProductive' );
         if ( !isset( $blProductive ) ) {
             $sQ = 'select oxproductive from oxshops where oxid = "'.$this->getShopId().'"';
-            $blProductive = ( bool ) oxDb::getDb()->getOne( $sQ );
+            $blProductive = ( bool ) oxDb::getInstance()->getOne( $sQ );
             $this->setConfigParam( 'blProductive', $blProductive );
         }
 
@@ -1967,4 +1967,40 @@ class oxConfig extends oxSuperCfg
     {
         return $this->isSsl() ? $this->getConfigParam( 'sSSLShopURL' ) : $this->getConfigParam( 'sShopURL' );
     }
+
+    /**
+     * Get parsed modules
+     *
+     * @return array
+     */
+    public function getAllModules()
+    {
+        return $this->parseModuleChains($this->getConfigParam('aModules'));
+    }
+
+    /**
+     * Parse array of module chains to nested array
+     *
+     * @param array $aModules Module array (config format)
+     *
+     * @return array
+     */
+    public function parseModuleChains($aModules)
+    {
+        $aModuleArray = array();
+
+        if (is_array($aModules)) {
+            foreach ($aModules as $sClass => $sModuleChain) {
+                if (strstr($sModuleChain, '&')) {
+                    $aModuleChain = explode('&', $sModuleChain);
+                } else {
+                    $aModuleChain = array($sModuleChain);
+                }
+                $aModuleArray[$sClass] = $aModuleChain;
+            }
+        }
+
+        return $aModuleArray;
+    }
+
 }

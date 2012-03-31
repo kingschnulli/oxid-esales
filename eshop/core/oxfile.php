@@ -309,10 +309,8 @@ class oxFile extends oxBase
             return false;
         }
         $sHash = $this->oxfiles__oxstorehash->value;
-        $iCount = oxDb::getDb()->GetOne(
-            'SELECT COUNT(*) FROM `oxfiles` WHERE `OXSTOREHASH` = ?',
-            array($sHash)
-        );
+        $iCount = oxDb::getInstance()->getOne(
+            'SELECT COUNT(*) FROM `oxfiles` WHERE `OXSTOREHASH` = ' . oxDb::getDb()->quote($sHash) );
         if (!$iCount) {
             $sPath  = $this->getStoreLocation();
             unlink($sPath);
@@ -384,7 +382,7 @@ class oxFile extends oxBase
                         AND `oxorder`.`oxstorno` = 0
                         AND `oxorderarticles`.`oxstorno` = 0";
 
-            if ( oxDb::getDB()->getOne( $sSql ) ) {
+            if ( oxDb::getInstance()->getOne( $sSql ) ) {
                 $this->_blHasValidDownloads = true;
             }
         }

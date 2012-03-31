@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrapping.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxwrapping.php 43285 2012-03-29 12:47:22Z linas.kukulskis $
  */
 
 /**
@@ -168,7 +168,7 @@ class oxWrapping extends oxI18n
     {
         $sWrappingViewName = getViewName( 'oxwrapping' );
         $sQ = "select count(*) from $sWrappingViewName where $sWrappingViewName.oxactive = '1' and $sWrappingViewName.oxtype = " . oxDb::getDb()->quote( $sWrapType );
-        return (int) oxDb::getDb()->getOne( $sQ );
+        return (int) oxDb::getInstance()->getOne( $sQ );
     }
 
     /**

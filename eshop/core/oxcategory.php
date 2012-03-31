@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategory.php 41256 2012-01-12 13:34:23Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxcategory.php 43366 2012-03-30 08:08:47Z linas.kukulskis $
  */
 
 /**
@@ -807,7 +807,7 @@ class oxCategory extends oxI18n implements oxIUrl
             return;
         }
 
-        return oxDb::getDb()->getOne( 'select oxrootid from '.getViewName('oxcategories').' where oxid = ?', array( $sCategoryId ) );
+        return oxDb::getInstance()->getOne( 'select oxrootid from '.getViewName('oxcategories').' where oxid = ' . oxDb::getDb()->quote( $sCategoryId ) );
     }
 
 
@@ -894,8 +894,7 @@ class oxCategory extends oxI18n implements oxIUrl
     {
 
         $oDB = oxDb::getDb();
-
-        $sOldParentID = $oDB->getOne( "select oxparentid from oxcategories where oxid = ".$oDB->quote( $this->getId() ));
+        $sOldParentID = oxDb::getInstance()->getOne( "select oxparentid from oxcategories where oxid = ".$oDB->quote( $this->getId() ) );
 
         if ( $this->_blIsSeoObject && $this->isAdmin() ) {
             oxSeoEncoderCategory::getInstance()->markRelatedAsExpired($this);
@@ -918,7 +917,7 @@ class oxCategory extends oxI18n implements oxIUrl
 
             $iTreeSize = $sOldParentRight-$sOldParentLeft+1;
 
-            $sNewRootID = $oDB->getOne( "select oxrootid from oxcategories where oxid = ".$oDB->quote($this->oxcategories__oxparentid->value));
+            $sNewRootID = oxDb::getInstance()->getOne( "select oxrootid from oxcategories where oxid = ".$oDB->quote($this->oxcategories__oxparentid->value));
 
             //If empty rootID, we set it to categorys oxid
             if ( $sNewRootID == "") {
@@ -926,7 +925,7 @@ class oxCategory extends oxI18n implements oxIUrl
                 $sNewRootID = $this->getId();
             }
 
-            $sNewParentLeft = $oDB->getOne( "select oxleft from oxcategories where oxid = ".$oDB->quote($this->oxcategories__oxparentid->value));
+            $sNewParentLeft = oxDb::getInstance()->getOne( "select oxleft from oxcategories where oxid = ".$oDB->quote($this->oxcategories__oxparentid->value));
 
             //if(!$sNewParentLeft){
                 //the current node has become root node, (oxrootid == "oxrootid")

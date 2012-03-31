@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxactionsTest.php 43382 2012-03-30 11:52:17Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -316,25 +316,13 @@ class Unit_Core_oxactionsTest extends OxidTestCase
      */
     public function testGetBannerArticle_notAssigned()
     {
-        $oDb = $this->getMock('stdClass', array('getOne', 'quote'));
-
-        $oDb->expects($this->once())->method('quote')
-                ->with($this->equalTo('promoid'))
-                ->will($this->returnValue("'promoid'"));
-
-        $oDb->expects($this->once())->method('getOne')
-                ->with($this->equalTo('select oxobjectid from oxobject2action where oxactionid=\'promoid\' and oxclass="oxarticle"'))
-                ->will($this->returnValue(false));
-
-        modDb::getInstance()->modAttach($oDb);
-
-        $oArticle = $this->getMock('stdclass', array('load'));
-        $oArticle->expects($this->never())->method('load');
-
-        oxTestModules::addModuleObject('oxarticle', $oArticle);
+        $oDb = $this->getMock( "oxDb", array( 'getOne') );
+        $oDb->expects( $this->once() )->method( 'getOne' )->will( $this->returnValue( false ) );
+        oxTestModules::addModuleObject( 'oxDb', $oDb );
 
         $oPromo = new oxactions();
         $oPromo->setId('promoid');
+
         $this->assertNull($oPromo->getBannerArticle());
     }
 
@@ -343,17 +331,10 @@ class Unit_Core_oxactionsTest extends OxidTestCase
      */
     public function testGetBannerArticle_notExisting()
     {
-        $oDb = $this->getMock('stdClass', array('getOne', 'quote'));
 
-        $oDb->expects($this->once())->method('quote')
-                ->with($this->equalTo('promoid'))
-                ->will($this->returnValue("'promoid'"));
-
-        $oDb->expects($this->once())->method('getOne')
-                ->with($this->equalTo('select oxobjectid from oxobject2action where oxactionid=\'promoid\' and oxclass="oxarticle"'))
-                ->will($this->returnValue('asdabsdbdsf'));
-
-        modDb::getInstance()->modAttach($oDb);
+        $oDb = $this->getMock( "oxDb", array( 'getOne') );
+        $oDb->expects( $this->once() )->method( 'getOne' )->will( $this->returnValue( true ) );
+        oxTestModules::addModuleObject( 'oxDb', $oDb );
 
         $oArticle = $this->getMock('stdclass', array('load'));
         $oArticle->expects($this->once())->method('load')
@@ -372,17 +353,9 @@ class Unit_Core_oxactionsTest extends OxidTestCase
      */
     public function testGetBannerArticle_Existing()
     {
-        $oDb = $this->getMock('stdClass', array('getOne', 'quote'));
-
-        $oDb->expects($this->once())->method('quote')
-                ->with($this->equalTo('promoid'))
-                ->will($this->returnValue("'promoid'"));
-
-        $oDb->expects($this->once())->method('getOne')
-                ->with($this->equalTo('select oxobjectid from oxobject2action where oxactionid=\'promoid\' and oxclass="oxarticle"'))
-                ->will($this->returnValue('2000'));
-
-        modDb::getInstance()->modAttach($oDb);
+        $oDb = $this->getMock( "oxDb", array( 'getOne') );
+        $oDb->expects( $this->once() )->method( 'getOne' )->will( $this->returnValue( 2000 ) );
+        oxTestModules::addModuleObject( 'oxDb', $oDb );
 
         $oArticle = $this->getMock('stdclass', array('load'));
         $oArticle->expects($this->once())->method('load')

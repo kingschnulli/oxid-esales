@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxattributelist.php 40433 2011-12-02 08:36:29Z justinas.straksys $
+ * @version   SVN: $Id: oxattributelist.php 43340 2012-03-29 13:54:48Z linas.kukulskis $
  */
 
 /**
@@ -77,7 +77,8 @@ class oxAttributeList extends oxList
     protected function _createAttributeListFromSql( $sSelect )
     {
         $aAttributes = array();
-        $rs = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT )->execute( $sSelect);
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $rs = oxDb::getInstance()->select( $sSelect );
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
                 if ( !isset( $aAttributes[$rs->fields[0]])) {
@@ -154,7 +155,8 @@ class oxAttributeList extends oxList
                        "WHERE att.oxid = o2a.oxattrid AND c2a.oxobjectid = $sActCatQuoted AND c2a.oxattrid = att.oxid AND o2a.oxvalue !='' AND o2a.oxobjectid IN ($sArtIds) ".
                        "ORDER BY c2a.oxsort , att.oxpos, att.oxtitle, o2a.oxvalue";
 
-            $rs = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT )->execute( $sSelect );
+            oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+            $rs = oxDb::getInstance()->select( $sSelect );
 
             if ( $rs != false && $rs->recordCount() > 0 ) {
                 while ( !$rs->EOF && list( $sAttId, $sAttTitle, $sAttValue ) = $rs->fields ) {

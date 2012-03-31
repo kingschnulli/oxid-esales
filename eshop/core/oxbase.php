@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 43091 2012-03-22 13:07:04Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 43286 2012-03-29 12:57:46Z linas.kukulskis $
  */
 
 /**
@@ -280,9 +280,9 @@ class oxBase extends oxSuperCfg
                 try {
                     if ( $this->_aInnerLazyCache === null ) {
 
-                        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
+                        $oDb = oxDb::getDb();
                         $sQ = "SELECT * FROM " . $sViewName . " WHERE `oxid` = " . $oDb->quote( $sId );
-                        $rs = $oDb->execute( $sQ );
+                        $rs = oxDb::getInstance()->select( $sQ );
                         if ( $rs && $rs->RecordCount() ) {
                             $this->_aInnerLazyCache = array_change_key_case( $rs->fields, CASE_UPPER );
                             if ( array_key_exists( $sCacheFieldName, $this->_aInnerLazyCache ) ) {
@@ -648,7 +648,7 @@ class oxBase extends oxSuperCfg
      */
     public function buildSelectString( $aWhere = null)
     {
-        $oDB = oxDb::getDb( oxDb::FETCH_MODE_ASSOC_EXT );
+        $oDB = oxDb::getDb();
         $myUtils = oxUtils::getInstance();
 
         $sGet = $this->getSelectFields();
@@ -673,13 +673,12 @@ class oxBase extends oxSuperCfg
      *
      * @return bool
      */
-    public function assignRecord( $sSelect)
+    public function assignRecord( $sSelect )
     {
         $blRet = false;
 
-        $oDB = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $rs = oxDb::getInstance()->select( $sSelect );
 
-        $rs = $oDB->execute( $sSelect);
         if ($rs != false && $rs->recordCount() > 0) {
             $blRet = true;
             $this->assign( $rs->fields);
@@ -844,7 +843,7 @@ class oxBase extends oxSuperCfg
         $oDB = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sSelect= "select {$this->_sExistKey} from {$sViewName} where {$this->_sExistKey} = ".$oDB->quote( $sOXID );
 
-        return ( bool ) $oDB->getOne( $sSelect );
+        return ( bool ) oxDb::getInstance()->getOne( $sSelect );
     }
 
     /**
@@ -1505,11 +1504,11 @@ class oxBase extends oxSuperCfg
                 return false;
             }
 
-            $iChkCnt = $oDb->getOne( $sCheck );
+            $iChkCnt = oxDb::getInstance()->getOne( $sCheck );
         } while ( ( $iChkCnt > 1 ) && $iMaxTryCnt-- );
 
         $sFieldName = $this->getViewName().'__'.$sMaxField;
-        $this->$sFieldName = new oxField( $oDb->getOne( $sMaxSelect ), oxField::T_RAW);//int value
+        $this->$sFieldName = new oxField( oxDb::getInstance()->getOne( $sMaxSelect ), oxField::T_RAW);//int value
 
         return ( $iChkCnt == 1 );
     }

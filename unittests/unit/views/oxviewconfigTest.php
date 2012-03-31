@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 42754 2012-03-13 08:34:31Z vilma $
+ * @version   SVN: $Id: oxviewconfigTest.php 43405 2012-03-30 14:18:28Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -562,21 +562,24 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
     {
         $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
 
-        $oVC = new oxViewConfig();
-        overrideGetShopBasePath($sMdir);
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "sShopDir", $sMdir."/" );
 
-        $this->assertEquals("$sMdir/modules/test1/out", $oVC->getModulePath('test1', 'out'));
-        $this->assertEquals("$sMdir/modules/test1/out/", $oVC->getModulePath('test1', '/out/'));
+        $oVC = $this->getMock( 'oxViewConfig', array( 'getConfig' ) );
+        $oVC->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $myConfig ) );
 
-        $this->assertEquals("$sMdir/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', 'out/blocks/test2.tpl'));
-        $this->assertEquals("$sMdir/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', '/out/blocks/test2.tpl'));
+        $this->assertEquals($sMdir."/modules/test1/out", $oVC->getModulePath('test1', 'out'));
+        $this->assertEquals($sMdir."/modules/test1/out/", $oVC->getModulePath('test1', '/out/'));
+
+        $this->assertEquals($sMdir."/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', 'out/blocks/test2.tpl'));
+        $this->assertEquals($sMdir."/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', '/out/blocks/test2.tpl'));
 
         // check exception throwing
         try {
             $oVC->getModulePath('test1', '/out/blocks/test1.tpl');
             $this->fail("should have thrown");
         } catch (oxFileException $e) {
-            $this->assertEquals("Requested file not found for module test1 ($sMdir/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
+            $this->assertEquals("Requested file not found for module test1 (".$sMdir."/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
         }
     }
 
@@ -585,8 +588,11 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $sBaseUrl  = oxConfig::getInstance()->getCurrentShopUrl();
         $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
 
-        $oVC = new oxViewConfig();
-        overrideGetShopBasePath($sMdir);
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "sShopDir", $sMdir."/" );
+
+        $oVC = $this->getMock( 'oxViewConfig', array( 'getConfig' ) );
+        $oVC->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $myConfig ) );
 
         $this->assertEquals("{$sBaseUrl}modules/test1/out", $oVC->getModuleUrl('test1', 'out'));
         $this->assertEquals("{$sBaseUrl}modules/test1/out/", $oVC->getModuleUrl('test1', '/out/'));
@@ -599,7 +605,8 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
             $oVC->getModuleUrl('test1', '/out/blocks/test1.tpl');
             $this->fail("should have thrown");
         } catch (oxFileException $e) {
-            $this->assertEquals("Requested file not found for module test1 ($sMdir/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
+            $sBaseUrl  = oxConfig::getInstance()->getConfigParam('sShopDir');
+            $this->assertEquals("Requested file not found for module test1 (".$sMdir."/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
         }
     }
 

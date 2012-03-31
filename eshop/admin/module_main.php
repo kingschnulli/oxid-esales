@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: deliveryset_main.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
@@ -40,13 +40,19 @@ class Module_Main extends oxAdminDetails
      */
     public function render()
     {
-        $sOxId = $this->getEditObjectId();
+        if ( oxConfig::getParameter("moduleId") ) {
+            $sModuleId = oxConfig::getParameter("moduleId");
+        } else {
+            $sModuleId = $this->getEditObjectId();
+        }
 
         $oModule = oxNew('oxModule');
 
-        if ( $sOxId ) {
-            if ( $oModule->load( $sOxId ) ) {
-                $this->_aViewData["oModule"] =  $oModule;
+        if ( $sModuleId ) {
+            if ( $oModule->load( $sModuleId ) ) {
+                $this->_aViewData["oModule"]     =  $oModule;
+                $this->_aViewData["sModuleName"] = basename( $oModule->getInfo('title') );
+                $this->_aViewData["sModuleId"]   = str_replace( "/", "_", $oModule->getModulePath() );
             } else {
                 oxUtilsView::getInstance()->addErrorToDisplay( new oxException('EXCEPTION_MODULE_NOT_LOADED') );
             }
@@ -56,7 +62,6 @@ class Module_Main extends oxAdminDetails
 
         return 'module_main.tpl';
     }
-
 
     /**
      * Activate module
@@ -106,15 +111,16 @@ class Module_Main extends oxAdminDetails
      * Enables modules that dont have metadata file activation/deactivation by
      * writing to "aLegacyModules" config variable classes that current module
      * extedens
-     * 
+     *
      * @return bool
      */
     public function enableActivation()
     {
         $aLegacyModules = $this->getConfig()->getConfigParam( "aLegacyModules" );
-        $sModuleId = oxConfig::getParameter( "oxid" );
 
         $aModuleInfo = explode( "\n", trim( oxConfig::getParameter("aExtendedClasses") ) );
+        $sModuleLegacyId = trim( oxConfig::getParameter("oxid") );
+        $sModuleId = trim( oxConfig::getParameter("moduleId") );
         $sModuleName = trim( oxConfig::getParameter("moduleName") );
 
         if ( !empty( $aModuleInfo ) ) {
@@ -131,8 +137,44 @@ class Module_Main extends oxAdminDetails
             }
         }
 
+        $this->_updateModuleConfigVars( $sModuleLegacyId, $sModuleId );
+
         if ( !empty( $aLegacyModules[$sModuleId]['extend'] ) ) {
             $this->getConfig()->saveShopConfVar( "aarr", "aLegacyModules", $aLegacyModules );
+        }
+    }
+
+    /**
+     * Update module ID in modules config variables aModulePaths and aDisabledModules.
+     *
+     * @param string $sModuleLegacyId Old module ID
+     * @param string $sModuleId       New module ID
+     *
+     * @return null
+     */
+    protected function _updateModuleConfigVars( $sModuleLegacyId, $sModuleId )
+    {
+        $oConfig = $this->getConfig();
+
+        // updating module ID in aModulePaths config var
+        $aModulePaths = $oConfig->getConfigParam( 'aModulePaths' );
+
+        if ( isset($aModulePaths[$sModuleLegacyId]) ) {
+            $aModulePaths[$sModuleId] = $aModulePaths[$sModuleLegacyId];
+            unset( $aModulePaths[$sModuleLegacyId] );
+            $oConfig->saveShopConfVar( 'aarr', 'aModulePaths', $aModulePaths );
+        }
+
+        // updating module ID in aDisabledModules config var
+        $aDisabledModules = $oConfig->getConfigParam( 'aDisabledModules' );
+
+        if ( is_array($aDisabledModules) ) {
+            $iOldKey = array_search( $sModuleLegacyId, $aDisabledModules );
+            if ( $iOldKey !== false ) {
+                unset( $aDisabledModules[$iOldKey] );
+                $aDisabledModules[$iOldKey] = $sModuleId;
+                $oConfig->saveShopConfVar( 'arr', 'aDisabledModules', $aDisabledModules );
+            }
         }
     }
 }

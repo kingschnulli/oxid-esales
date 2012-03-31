@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvatselector.php 42861 2012-03-14 12:35:38Z linas.kukulskis $
+ * @version   SVN: $Id: oxvatselector.php 43288 2012-03-29 12:59:50Z linas.kukulskis $
  */
 
 /**
@@ -136,7 +136,7 @@ class oxVatSelector extends oxSuperCfg
 
             //no category specific vats in shop?
             //then for performance reasons we just return false
-            $this->_blCatVatSet = (bool) $oDb->getOne( $sSelect );
+            $this->_blCatVatSet = (bool) oxDb::getInstance()->getOne( $sSelect );
         }
 
         if ( !$this->_blCatVatSet ) {
@@ -151,7 +151,7 @@ class oxVatSelector extends oxSuperCfg
                        c.oxvat IS NOT NULL
                  ORDER BY o2c.oxtime ";
 
-        $fVat = $oDb->getOne($sSql);
+        $fVat = oxDb::getInstance()->getOne($sSql);
         if ($fVat !== false && $fVat !== null) {
             return $fVat;
         }

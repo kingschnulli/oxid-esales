@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactions.php 40309 2011-11-29 08:30:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxactions.php 43382 2012-03-30 11:52:17Z linas.kukulskis $
  */
 
 /**
@@ -55,7 +55,7 @@ class oxActions extends oxI18n
     {
         $oDb = oxDb::getDb();
         $sQ = "select max(oxsort) from oxactions2article where oxactionid = ".$oDb->quote( $this->getId() )." and oxshopid = '".$this->getShopId()."'";
-        $iSort = ( (int) $oDb->getOne( $sQ ) ) + 1;
+        $iSort = ( (int) oxDb::getInstance()->getOne( $sQ ) ) + 1;
 
         $oNewGroup = oxNew( 'oxbase' );
         $oNewGroup->init( 'oxactions2article' );
@@ -76,7 +76,7 @@ class oxActions extends oxI18n
     public function removeArticle( $sOxId )
     {
         // remove actions from articles also
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb();
         $sDelete = "delete from oxactions2article where oxactionid = ".$oDb->quote( $this->getId() )." and oxartid = ".$oDb->quote($sOxId)." and oxshopid = '" . $this->getShopId() . "'";
         $oDb->execute( $sDelete );
 
@@ -103,7 +103,7 @@ class oxActions extends oxI18n
 
 
         // remove actionss from articles also
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb();
         $sDelete = "delete from oxactions2article where oxactionid = ".$oDb->quote($sOxId)." and oxshopid = '" . $this->getShopId() . "'";
         $oDb->execute( $sDelete );
 
@@ -210,7 +210,7 @@ class oxActions extends oxI18n
     public function getBannerArticle()
     {
         $oDb = oxDb::getDb();
-        $sArtId = $oDb->getOne(
+        $sArtId = oxDb::getInstance()->getOne(
             'select oxobjectid from oxobject2action '
           . 'where oxactionid='.$oDb->quote($this->getId())
           . ' and oxclass="oxarticle"'

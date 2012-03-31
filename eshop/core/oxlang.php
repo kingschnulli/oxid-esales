@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 42867 2012-03-14 13:14:16Z linas.kukulskis $
+ * @version   SVN: $Id: oxlang.php 43354 2012-03-29 14:57:06Z vilma $
  */
 
 /**
@@ -97,6 +97,12 @@ class oxLang extends oxSuperCfg
      */
     protected $_aLangMap = array();
 
+    /**
+     * Active module Ids and paths array
+     *
+     * @var array
+     */
+    protected $_aActiveModuleInfo = null;
 
     /**
      * resturns a single instance of this class
@@ -736,6 +742,7 @@ class oxLang extends oxSuperCfg
         $sTheme         = $myConfig->getConfigParam( "sTheme" );
         $sCustomTheme   = $myConfig->getConfigParam( "sCustomTheme" );
         $sShopId        = $myConfig->getShopId();
+        $aModuleInfo    = $this->_getActiveModuleInfo();
 
         if ( $blAdmin ) {
             // admin lang files
@@ -754,15 +761,16 @@ class oxLang extends oxSuperCfg
             }
 
             //load admin modules lang files
-            $aModuleFiles = glob( $myConfig->getModulesDir().'*/out/admin/' . $sLang . '/*_lang.php' );
-            if ( is_array( $aModuleFiles ) && count( $aModuleFiles ) ) {
-                $aLangFiles = array_merge( $aLangFiles, $aModuleFiles );
-            }
+            if ( is_array( $aModuleInfo ) ) {
+                foreach ( $aModuleInfo as $sPath ) {
+                    $aModuleFiles = glob( $myConfig->getModulesDir().$sPath.'/out/admin/' . $sLang . '/*_lang.php' );
+                    if ( is_array( $aModuleFiles ) && count( $aModuleFiles ) ) {
+                        $aLangFiles = array_merge( $aLangFiles, $aModuleFiles );
+                    }
 
-            //load admin modules options lang files
-            $aModuleOptionsFiles = glob( $myConfig->getModulesDir().'*/out/admin/' . $sLang . '/module_options.php' );
-            if ( is_array( $aModuleOptionsFiles ) && count( $aModuleOptionsFiles ) ) {
-                $aLangFiles = array_merge( $aLangFiles, $aModuleOptionsFiles );
+                    //load admin modules options lang files
+                    $aLangFiles[] = $myConfig->getModulesDir().$sPath.'/out/admin/' . $sLang . '/module_options.php';
+                }
             }
 
             return count( $aLangFiles ) ? $aLangFiles : false;
@@ -819,9 +827,13 @@ class oxLang extends oxSuperCfg
         }
 
         //modules language files
-        $aModuleFiles = glob( $myConfig->getModulesDir() . '*/out/lang/' . $sLang . '/*_lang.php');
-        if (is_array($aModuleFiles) && count($aModuleFiles)) {
-            $aLangFiles = array_merge( $aLangFiles, $aModuleFiles );
+        if ( is_array( $aModuleInfo ) ) {
+            foreach ( $aModuleInfo as $sPath ) {
+                $aModuleFiles = glob( $myConfig->getModulesDir() . $sPath . '/out/lang/' . $sLang . '/*_lang.php');
+                if (is_array($aModuleFiles) && count($aModuleFiles)) {
+                    $aLangFiles = array_merge( $aLangFiles, $aModuleFiles );
+                }
+            }
         }
 
         return count( $aLangFiles ) ? $aLangFiles : false;
@@ -1219,4 +1231,19 @@ class oxLang extends oxSuperCfg
         $aSeoReplaceChars = array_merge($aGlobalSeoReplaceChars, $aSeoReplaceChars);
         return $aSeoReplaceChars;
     }
+
+    /**
+     * Returns active module Ids
+     *
+     * @return array
+     */
+    protected function _getActiveModuleInfo()
+    {
+        if ($this->_aActiveModuleInfo === null) {
+            $oModulelist = oxNew('oxmodulelist');
+            $this->_aActiveModuleInfo = $oModulelist->getActiveModuleInfo();
+        }
+        return $this->_aActiveModuleInfo;
+    }
+
 }

@@ -16,7 +16,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   out
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxinputvalidator.js 35529 2011-05-23 07:31:20Z vilma $
  */
@@ -24,25 +24,27 @@
 
     oxInputValidator = {
             options: {
-                classValid            : "oxValid",
-                classInValid          : "oxInValid",
-                errorParagraf         : "p.oxValidateError",
-                errorMessageNotEmpty  : "js-oxError_notEmpty",
-                errorMessageNotEmail  : "js-oxError_email",
-                errorMessageShort     : "js-oxError_length",
-                errorMessageNotEqual  : "js-oxError_match",
-                metodValidate         : "js-oxValidate",
-                metodValidateEmail    : "js-oxValidate_email",
-                metodValidateNotEmpty : "js-oxValidate_notEmpty",
-                metodValidateLength   : "js-oxValidate_length",
-                metodValidateMatch    : "js-oxValidate_match",
-                idPasswordLength      : "#passwordLength",
-                listItem              : "li",
-                list                  : "ul",
-                paragraf              : "p",
-                span                  : "span",
-                form                  : "form",
-                visible               : ":visible"
+                classValid                 : "oxValid",
+                classInValid               : "oxInValid",
+                errorParagraf              : "p.oxValidateError",
+                errorMessageNotEmpty       : "js-oxError_notEmpty",
+                errorMessageNotEmail       : "js-oxError_email",
+                errorMessageShort          : "js-oxError_length",
+                errorMessageNotEqual       : "js-oxError_match",
+                errorMessageIncorrectDate  : "js-oxError_incorrectDate",
+                metodValidate              : "js-oxValidate",
+                metodValidateEmail         : "js-oxValidate_email",
+                metodValidateNotEmpty      : "js-oxValidate_notEmpty",
+                metodValidateLength        : "js-oxValidate_length",
+                metodValidateMatch         : "js-oxValidate_match",
+                metodValidateDate          : "js-oxValidate_date",
+                idPasswordLength           : "#passwordLength",
+                listItem                   : "li",
+                list                       : "ul",
+                paragraf                   : "p",
+                span                       : "span",
+                form                       : "form",
+                visible                    : ":visible"
             },
 
             _create: function() {
@@ -61,10 +63,12 @@
                     setTimeout(function(){
                         if ( $( oTrigger ).is(options.visible) ) {
                             var oFieldSet = self.getFieldSet( oTrigger );
-                            var blIsValid = self.isFieldSetValid( oFieldSet, true );
-                            self.hideErrorMessage( oFieldSet );
-                            if ( blIsValid != true ){
-                                self.showErrorMessage( oFieldSet, blIsValid );
+                            if ( oFieldSet.children( '.'+options.metodValidateDate ).length <= 0 ) {
+                                var blIsValid = self.isFieldSetValid( oFieldSet, true );
+                                self.hideErrorMessage( oFieldSet );
+                                if ( blIsValid != true ){
+                                    self.showErrorMessage( oFieldSet, blIsValid );
+                                }
                             }
                         }
                     }, 50);
@@ -127,6 +131,29 @@
 
                             if( !self.isEqual($(inputs[0]).val(), $(inputs[1]).val()) ) {
                                 return oOptions.errorMessageNotEqual;
+                            }
+                        }
+                    }
+
+                    if ( $( oInput ).hasClass( oOptions.metodValidateDate ) ) {
+                        oDay   = $( oInput ).parent().children( '.oxDay' );
+                        oMonth = $( oInput ).parent().children( '.oxMonth' );
+                        oYear  = $( oInput ).parent().children( '.oxYear' );
+                        
+                        if ( !( oDay.val() && oMonth.val() && oYear.val() ) && !( !oDay.val() && !oMonth.val() && !oYear.val() ) ) {
+                            return oOptions.errorMessageNotEmpty;
+                        } else if ( oDay.val() && oMonth.val() && oYear.val() ) {
+                            RE = /^\d+$/;
+                            blDayOnlyDigits  = RE.test( oDay.val() );
+                            blYearOnlyDigits = RE.test( oYear.val() );
+                            if ( !blDayOnlyDigits || !blYearOnlyDigits ) {
+                                return oOptions.errorMessageIncorrectDate;
+                            } else {
+                                iMonthDays = new Date((new Date(oYear.val(), oMonth.val(), 1))-1).getDate();
+                                
+                                if ( oDay.val() <= 0 || oYear.val() <= 0 || oDay.val() > iMonthDays ) {
+                                    return oOptions.errorMessageIncorrectDate;
+                                }
                             }
                         }
                     }

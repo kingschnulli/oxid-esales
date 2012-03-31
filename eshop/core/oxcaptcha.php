@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptcha.php 36272 2011-06-13 13:30:47Z linas.kukulskis $
+ * @version   SVN: $Id: oxcaptcha.php 43336 2012-03-29 13:48:26Z linas.kukulskis $
  */
 
 /**
@@ -94,7 +94,7 @@ class oxCaptcha extends oxSuperCfg
         } else {
             $sQ = "insert into oxcaptcha ( oxhash, oxtime ) values ( '{$sTextHash}', '{$iTime}' )";
             oxDb::getDb()->execute( $sQ );
-            $sHash = oxDb::getDb()->getOne( "select LAST_INSERT_ID()" );
+            $sHash = oxDb::getInstance()->getOne( "select LAST_INSERT_ID()" );
         }
         return $sHash;
     }
@@ -173,7 +173,7 @@ class oxCaptcha extends oxSuperCfg
 
         $oDb = oxDb::getDb();
         $sQ  = "select 1 from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
-        if ( ( $blPass = (bool) $oDb->getOne( $sQ ) ) ) {
+        if ( ( $blPass = (bool) oxDb::getInstance()->getOne( $sQ ) ) ) {
             // cleanup
             $sQ = "delete from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
             $oDb->execute( $sQ );

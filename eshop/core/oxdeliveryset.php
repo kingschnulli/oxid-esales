@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryset.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxdeliveryset.php 43328 2012-03-29 13:42:11Z linas.kukulskis $
  */
 
 /**
@@ -82,7 +82,7 @@ class oxDeliverySet extends oxI18n
     public function getIdByName( $sTitle )
     {
         $sQ = "SELECT `oxid` FROM `" . getViewName( 'oxdeliveryset' ) . "` WHERE  `oxtitle` = " . oxDb::getDb()->quote( $sTitle );
-        $sId = oxDb::getDb()->getOne( $sQ );
+        $sId = oxDb::getInstance()->getOne( $sQ );
 
         return $sId;
     }

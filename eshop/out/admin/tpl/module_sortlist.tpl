@@ -41,23 +41,25 @@
             </div>
          [{else}]
 
-             <ul class="sortable" id="aModulesList">
-             [{foreach from=$aExtClasses item=aModuleNames key=sClassName }]
-                 <li id="[{$sClassName}]">
-                     <span>[{$sClassName}]</span>
-                     <ul class="sortable2" id="[{$sClassName}]_modules">
-                         [{foreach from=$aModuleNames item=sModule }]
-                             [{if is_array($aDisabledModules[$sClassName]) && in_array($sModule, $aDisabledModules[$sClassName])}]
-                             [{assign var="cssDisabled" value="disabled"}]
-                             [{else}]
-                             [{assign var="cssDisabled" value=""}]
-                             [{/if}]
-                             <li id="[{$sModule}]"><span class="[{$cssDisabled}]">[{$sModule}]</span></li>
-                         [{/foreach}]
-                     </ul>
-                 </li>
-             [{/foreach}]
-             </ul>
+             [{if $aExtClasses}]
+                <ul class="sortable" id="aModulesList">
+                [{foreach from=$aExtClasses item=aModuleNames key=sClassName }]
+                    <li id="[{$sClassName}]">
+                        <span>[{$sClassName}]</span>
+                        <ul class="sortable2" id="[{$sClassName}]_modules">
+                            [{foreach from=$aModuleNames item=sModule }]
+                                [{if is_array($aDisabledModules) && in_array($sModule, $aDisabledModules)}]
+                                [{assign var="cssDisabled" value="disabled"}]
+                                [{else}]
+                                [{assign var="cssDisabled" value=""}]
+                                [{/if}]
+                                <li id="[{$sModule}]"><span class="[{$cssDisabled}]">[{$sModule}]</span></li>
+                            [{/foreach}]
+                        </ul>
+                    </li>
+                [{/foreach}]
+                </ul>
+             [{/if}]
          [{/if}]
      </div>
 
@@ -72,7 +74,7 @@
 
 </div>
 
-[{ if !$aDeletedExt }]
+[{ if !$aDeletedExt && $aExtClasses}]
     <div id="footerBox">
         <div class="buttonsBox">
             <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">

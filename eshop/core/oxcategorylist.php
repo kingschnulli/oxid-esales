@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylist.php 42114 2012-02-09 15:05:36Z linas.kukulskis $
+ * @version   SVN: $Id: oxcategorylist.php 43335 2012-03-29 13:47:41Z linas.kukulskis $
  */
 
 
@@ -545,7 +545,8 @@ class oxCategoryList extends oxList
         $oDB->execute("update oxcategories set oxleft = 1, oxright = 2 where oxparentid = 'oxrootid' and $sWhere");
 
         // Get all root categories
-        $rs = $oDB->execute("select oxid, oxtitle from oxcategories where oxparentid = 'oxrootid' and $sWhere order by oxsort");
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $rs = oxDb::getInstance()->select("select oxid, oxtitle from oxcategories where oxparentid = 'oxrootid' and $sWhere order by oxsort" );
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
                 $this->_aUpdateInfo[] = "<b>Processing : ".$rs->fields[1]."</b>(".$rs->fields[0].")<br>";
@@ -589,7 +590,8 @@ class oxCategoryList extends oxList
 
         // Get sub categories of root categorie
         $rs = $oDB->execute("update oxcategories set oxrootid = ".$oDB->quote($thisRoot)." where oxparentid = ".$oDB->quote($oxRootId));
-        $rs = $oDB->execute("select oxid, oxparentid from oxcategories where oxparentid = ".$oDB->quote($oxRootId)." order by oxsort");
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $rs = oxDb::getInstance()->select("select oxid, oxparentid from oxcategories where oxparentid = ".$oDB->quote($oxRootId)." order by oxsort");
         // If there are sub categories
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
@@ -598,7 +600,8 @@ class oxCategoryList extends oxList
                 $sActOxidQuoted = $oDB->quote($actOxid);
 
                 // Get the data of the parent category to the current Cat
-                $rs3 = $oDB->execute("select oxrootid, oxright from oxcategories where oxid = ".$oDB->quote($parentId));
+                oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+                $rs3 = oxDb::getInstance()->select("select oxrootid, oxright from oxcategories where oxid = ".$oDB->quote($parentId) );
                 while (!$rs3->EOF) {
                     $parentOxRootId = $rs3->fields[0];
                     $parentRight    = (int)$rs3->fields[1];

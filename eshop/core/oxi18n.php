@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxi18n.php 42361 2012-02-20 15:10:53Z linas.kukulskis $
+ * @version   SVN: $Id: oxi18n.php 43317 2012-03-29 13:35:16Z linas.kukulskis $
  */
 
 /**
@@ -232,9 +232,9 @@ class oxI18n extends oxBase
         }
 
         // select from non-multilanguage core view (all ml tables joined to one)
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb();
         $query = "select * from ".getViewName($this->_sCoreTable, -1, -1)." where oxid = " . $oDb->quote( $this->getId() );
-        $rs = $oDb->getAll($query);
+        $rs = oxDb::getInstance()->getAll($query);
 
         $aNotInLang = $aLanguages;
 

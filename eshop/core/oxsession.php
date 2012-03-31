@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 43087 2012-03-22 13:04:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxsession.php 43301 2012-03-29 13:12:40Z linas.kukulskis $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -888,7 +888,7 @@ class oxSession extends oxSuperCfg
     {
         $oDb = oxDb::getDb();
         //matze changed sesskey to SessionID because structure of oxsession changed!!
-        $sSID = $oDb->GetOne("select SessionID from oxsessions where SessionID = ".$oDb->quote( $this->getId() ));
+        $sSID = oxDb::getInstance()->getOne("select SessionID from oxsessions where SessionID = ".$oDb->quote( $this->getId() ));
 
         //2007-05-14
         //we check _blNewSession as well as this may be actually new session not written to db yet

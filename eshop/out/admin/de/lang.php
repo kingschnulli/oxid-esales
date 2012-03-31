@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42938 2012-03-16 11:16:35Z juergen.busch $
+ * @version   SVN: $Id: lang.php 43250 2012-03-28 12:18:21Z rimvydas.paskevicius $
  */
 
 $sLangName  = 'Deutsch';
@@ -887,6 +887,7 @@ $aLang = array(
 'MODULE_EDITEXTENSION'                                     => 'Modulinformation der Erweiterung editieren',
 'MODULE_ENABLEACTIVATIONTEXT'                              => 'Die Erweiterung hat keine Metadata-Datei. Um die Erweiterung zu registrieren, muss einmalig eingetragen werden, welche Klassen deren Module erweitern (Beispiel: oxorder => myModule/myModuleOxorder).',
 'MODULE_ENTERMODULENAME'                                   => 'Name der Erweiterung',
+'MODULE_ENTERMODULEID'                                     => '[TR]Module ID',
 'MODULE_ENTERMODULEEXTENDSCLASSES'                         => 'Klassen, die erweitert werden',
 'MODULE_STANDALONEFILE'                                    => 'Das Modul ist ein einzelne .php-Datei. Analog zu Erweiterungen sollte das Modul in einem Verzeichnis gespeichert sein!',
 'MODULE_EXTENSIONISDELETED'                                => 'Es gibt registrierte Erweiterungen im eShop, deren Verzeichnis nicht vorhanden ist.',

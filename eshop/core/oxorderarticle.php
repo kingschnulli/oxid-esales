@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticle.php 40439 2011-12-02 09:34:58Z linas.kukulskis $
+ * @version   SVN: $Id: oxorderarticle.php 43379 2012-03-30 11:44:34Z linas.kukulskis $
  */
 
 /**
@@ -186,7 +186,7 @@ class oxOrderArticle extends oxBase implements oxIArticle
 
         // #1592A. must take real value
         $sQ = 'select oxstock from oxarticles where oxid = '.$oDb->quote( $this->oxorderarticles__oxartid->value );
-        $iStockCount  = ( float ) $oDb->getOne( $sQ );
+        $iStockCount  = ( float ) oxDb::getInstance()->getOne( $sQ );
 
         $iStockCount += $dAddAmount;
 
@@ -295,7 +295,7 @@ class oxOrderArticle extends oxBase implements oxIArticle
         $oDb = oxDb::getDb();
         $oArticle = oxNew( "oxarticle" );
         $sQ = "select oxparentid from " . $oArticle->getViewName() . " where oxid=" . $oDb->quote( $this->getProductId() );
-        $this->oxarticles__oxparentid = new oxField( $oDb->getOne( $sQ ) );
+        $this->oxarticles__oxparentid = new oxField( oxDb::getInstance()->getOne( $sQ ) );
         return $this->oxarticles__oxparentid->value;
     }
 
@@ -817,15 +817,15 @@ class oxOrderArticle extends oxBase implements oxIArticle
     public function _setOrderFiles()
     {
         $oArticle = $this->getArticle();
-        
+
         if ( $oArticle->oxarticles__oxisdownloadable->value ) {
 
-            $oConfig 		 = $this->getConfig();
-            $sOrderId 		 = $this->oxorderarticles__oxorderid->value;
+            $oConfig          = $this->getConfig();
+            $sOrderId          = $this->oxorderarticles__oxorderid->value;
             $sOrderArticleId = $this->getId();
-            $sShopId 		 = $oConfig->getShopId();
+            $sShopId          = $oConfig->getShopId();
 
-            $oUser			 = $oConfig->getUser();
+            $oUser             = $oConfig->getUser();
 
             $oFiles = $oArticle->getArticleFiles( true );
 

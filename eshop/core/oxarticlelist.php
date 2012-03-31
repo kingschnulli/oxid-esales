@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 42823 2012-03-13 15:10:15Z linas.kukulskis $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 43377 2012-03-30 11:39:42Z linas.kukulskis $
  */
 
 /**
@@ -440,7 +440,7 @@ class oxArticleList extends oxList
         // #1970C - if any filters are used, we can not use cached category article count
         $iArticleCount = null;
         if ( $aSessionFilter) {
-            $iArticleCount = oxDb::getDb()->getOne( $this->_getCategoryCountSelect( $sCatId, $aSessionFilter ) );
+            $iArticleCount = oxDb::getInstance()->getOne( $this->_getCategoryCountSelect( $sCatId, $aSessionFilter ) );
         }
 
         if ($iLimit = (int) $iLimit) {
@@ -864,7 +864,7 @@ class oxArticleList extends oxList
 
         // fetching next update time
         $sQ = "select unix_timestamp( oxupdatepricetime ) from %s where oxupdatepricetime > 0 order by oxupdatepricetime asc";
-        $iTimeToUpdate = $oDb->getOne( sprintf( $sQ, "`oxarticles`" ) );
+        $iTimeToUpdate = oxDb::getInstance()->getOne( sprintf( $sQ, "`oxarticles`" ) );
 
 
         // next day?
@@ -958,7 +958,7 @@ class oxArticleList extends oxList
      */
     protected function _createIdListFromSql( $sSql)
     {
-        $rs = oxDb::getDb( oxDb::FETCH_MODE_ASSOC )->execute( $sSql);
+        $rs = oxDb::getInstance()->select( $sSql );
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
                 $rs->fields = array_change_key_case($rs->fields, CASE_LOWER);
@@ -1017,9 +1017,8 @@ class oxArticleList extends oxList
      */
     protected function _getFilterSql( $sCatId, $aFilter )
     {
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sArticleTable = getViewName( 'oxarticles' );
-        $aIds = $oDb->getAll( $this->_getFilterIdsSql( $sCatId, $aFilter ) );
+        $aIds = oxDb::getInstance()->getAll( $this->_getFilterIdsSql( $sCatId, $aFilter ) );
         $sIds = '';
 
         if ( $aIds ) {
@@ -1027,7 +1026,7 @@ class oxArticleList extends oxList
                 if ( $sIds ) {
                     $sIds .= ', ';
                 }
-                $sIds .= $oDb->quote( current( $aArt ) );
+                $sIds .= oxDb::getDb()->quote( current( $aArt ) );
             }
 
             if ( $sIds ) {

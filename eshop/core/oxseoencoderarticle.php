@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticle.php 42362 2012-02-20 15:11:08Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderarticle.php 43305 2012-03-29 13:14:46Z linas.kukulskis $
  */
 
 /**
@@ -382,13 +382,13 @@ class oxSeoEncoderArticle extends oxSeoEncoder
             $sArtId = $oArticle->oxarticles__oxparentid->value;
         }
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
+        $oDb = oxDb::getDb();
         // add manin category chaching;
         $sQ = "select oxcatnid from ".getViewName( "oxobject2category" )." where oxobjectid = ".$oDb->quote( $sArtId )." order by oxtime";
         $sIdent = md5( $sQ );
 
         if ( ( $sMainCatId = $this->_loadFromCache( $sIdent, "oxarticle" ) ) === false ) {
-            $sMainCatId = $oDb->getOne( $sQ );
+            $sMainCatId = oxDb::getInstance()->getOne( $sQ );
             // storing in cache
             $this->_saveInCache( $sIdent, $sMainCatId, "oxarticle" );
         }
@@ -483,7 +483,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 if ( !isset( self::$_aTitleCache[$sParentId] ) ) {
                     $oDb = oxDb::getDb();
                     $sQ = "select oxtitle from ".$oArticle->getViewName()." where oxid = ".$oDb->quote( $sParentId );
-                    self::$_aTitleCache[$sParentId] = $oDb->getOne( $sQ );
+                    self::$_aTitleCache[$sParentId] = oxDb::getInstance()->getOne( $sQ );
                 }
                 $sTitle = self::$_aTitleCache[$sParentId];
             }

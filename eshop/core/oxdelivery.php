@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdelivery.php 42403 2012-02-22 14:30:06Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxdelivery.php 43353 2012-03-29 14:44:54Z linas.kukulskis $
  */
 
 /**
@@ -149,9 +149,10 @@ class oxDelivery extends oxI18n
             return $this->_aArtIds;
         }
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
+        $oDb = oxDb::getDb();
         $sQ = "select oxobjectid from oxobject2delivery where oxdeliveryid=".$oDb->quote($this->getId())." and oxtype = 'oxarticles'";
-        $aArtIds = $oDb->getArray( $sQ );
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $aArtIds = oxDb::getInstance()->getAll( $sQ );
 
         //make single dimension array
         foreach ( $aArtIds as $aItem ) {
@@ -173,9 +174,10 @@ class oxDelivery extends oxI18n
             return $this->_aCatIds;
         }
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_NUM_EXT );
+        $oDb = oxDb::getDb();
         $sQ = "select oxobjectid from oxobject2delivery where oxdeliveryid=".$oDb->quote($this->getId())." and oxtype = 'oxcategories'";
-        $aCatIds = $oDb->getAll( $sQ );
+        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+        $aCatIds = oxDb::getInstance()->getAll( $sQ );
 
         //make single dimension array
         foreach ( $aCatIds AS $aItem ) {
@@ -525,7 +527,7 @@ class oxDelivery extends oxI18n
     public function getIdByName( $sTitle )
     {
         $sQ = "SELECT `oxid` FROM `" . getViewName( 'oxdelivery' ) . "` WHERE  `oxtitle` = " . oxDb::getDb()->quote( $sTitle );
-        $sId = oxDb::getDb()->getOne( $sQ );
+        $sId = oxDb::getInstance()->getOne( $sQ );
 
         return $sId;
     }
@@ -541,7 +543,8 @@ class oxDelivery extends oxI18n
             $oDb = oxDb::getDb();
             $this->_aCountriesISO = array();
             $sSelect = 'select oxcountry.oxisoalpha2 from oxcountry left join oxobject2delivery on oxobject2delivery.oxobjectid = oxcountry.oxid where oxobject2delivery.oxdeliveryid='.$oDb->quote( $this->getId() ).' and oxobject2delivery.oxtype = "oxcountry" ';
-            $rs = $oDb->execute( $sSelect );
+            oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
+            $rs = oxDb::getInstance()->select( $sSelect );
             if ( $rs && $rs->recordCount()) {
                 while ( !$rs->EOF ) {
                     $this->_aCountriesISO[] = $rs->fields[0];

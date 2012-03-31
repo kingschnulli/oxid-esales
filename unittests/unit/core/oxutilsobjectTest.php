@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobjectTest.php 39759 2011-11-04 10:08:37Z alfonsas $
+ * @version   SVN: $Id: oxutilsobjectTest.php 43243 2012-03-28 11:09:15Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -59,6 +59,15 @@ class _oxutils_test
     public function __construct( $a = false, $b = false, $c = false, $d = false, $e = false )
     {
     }
+}
+
+class oxModuleUtilsObject extends oxUtilsObject
+{
+    public function getActiveModuleChain($aClassChain)
+    {
+        return parent::_getActiveModuleChain($aClassChain);
+    }
+
 }
 
 class Unit_Core_oxutilsobjectTest extends OxidTestCase
@@ -202,43 +211,78 @@ class Unit_Core_oxutilsobjectTest extends OxidTestCase
         $this->assertEquals(0, count($aGotInstanceCache));
     }
 
-    public function testIsModuleActiveActive()
+    public function testGetActiveModuleChain()
     {
+        $aModuleChain = array("oe/invoicepdf2/myorder");
         $oConfig = $this->getMock( 'oxconfig', array( 'getConfigParam' ) );
+        $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array("invoicepdf")));
+        $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aModulePaths'))->will($this->returnValue(array("invoicepdf2" => "oe/invoicepdf2", "invoicepdf" => "oe/invoicepdf")));
 
-        $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aModules'))->will($this->returnValue( array("oxorder" => "invoicepdf/myorder")));
-        $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array()));
-
-        $oUtilsObject = $this->getMock( 'oxUtilsObject', array( 'getConfig' ) );
+        $this->getProxyClass( "oxUtilsObject" );
+        $oUtilsObject = $this->getMock( 'oxUtilsObjectPROXY', array( 'getConfig' ) );
         $oUtilsObject->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
 
-        $this->assertFalse( $oUtilsObject->isModuleActive( 'oxorder', 'aaaa' ) );
+        $this->assertEquals( $aModuleChain, $oUtilsObject->UNITgetActiveModuleChain( $aModuleChain ) );
     }
 
-    public function testIsModuleActiveInactive()
+    public function testGetActiveModuleChainIfDisabled()
     {
+        $aModuleChain = array("oe/invoicepdf/myorder");
+        $aModuleChainResult = array();
         $oConfig = $this->getMock( 'oxconfig', array( 'getConfigParam' ) );
+        $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array("invoicepdf")));
+        $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aModulePaths'))->will($this->returnValue(array("invoicepdf" => "oe/invoicepdf")));
 
-        $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aModules'))->will($this->returnValue( array("oxorder" => "invoicepdf/myorder")));
-        $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array()));
-
-        $oUtilsObject = $this->getMock( 'oxUtilsObject', array( 'getConfig' ) );
+        $this->getProxyClass( "oxUtilsObject" );
+        $oUtilsObject = $this->getMock( 'oxUtilsObjectPROXY', array( 'getConfig' ) );
         $oUtilsObject->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
 
-        $this->assertTrue( $oUtilsObject->isModuleActive( 'oxorder', 'myorder' ) );
+        $this->assertEquals( $aModuleChainResult, $oUtilsObject->UNITgetActiveModuleChain( $aModuleChain ) );
     }
 
-    public function testIsModuleActiveDisabled()
+    public function testGetActiveModuleChainIfDisabledWithoutPath()
     {
+        $aModuleChain = array("invoicepdf/myorder");
+        $aModuleChainResult = array();
         $oConfig = $this->getMock( 'oxconfig', array( 'getConfigParam' ) );
+        $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array("invoicepdf")));
+        $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aModulePaths'))->will($this->returnValue(array("invoicepdf2" => "oe/invoicepdf2")));
 
-        $oConfig->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aModules'))->will($this->returnValue( array("oxorder" => "invoicepdf/myorder")));
-        $oConfig->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array("oxorder" => "invoicepdf/myorder")));
-
-        $oUtilsObject = $this->getMock( 'oxUtilsObject', array( 'getConfig' ) );
+        $this->getProxyClass( "oxUtilsObject" );
+        $oUtilsObject = $this->getMock( 'oxUtilsObjectPROXY', array( 'getConfig' ) );
         $oUtilsObject->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
 
-        $this->assertFalse( $oUtilsObject->isModuleActive( 'oxorder', 'myorder' ) );
+        $this->assertEquals( $aModuleChainResult, $oUtilsObject->UNITgetActiveModuleChain( $aModuleChain ) );
+    }
+
+    public function testDisableModule()
+    {
+        $aDisabledModules = array('test1');
+        $aModulePaths     = array("invoicepdf2" => "oe/invoicepdf2", "invoicepdf" => "oe/invoicepdf");
+        modConfig::getInstance()->setConfigParam( "aDisabledModules", $aDisabledModules );
+        modConfig::getInstance()->setConfigParam( "aModulePaths", $aModulePaths );
+        $sModule = "oe/invoicepdf2/myorder";
+        $aDisabledModulesResult = array('test1', 'invoicepdf2');
+
+        $oUtilsObject = $this->getProxyClass( "oxUtilsObject" );
+        $oUtilsObject->UNITdisableModule( $sModule );
+        modConfig::getInstance()->getConfigParam( "aDisabledModules" );
+        $this->assertEquals( $aDisabledModulesResult, modConfig::getInstance()->getConfigParam( "aDisabledModules" ) );
+    }
+
+    public function testDisableModuleUnknownPath()
+    {
+        $aDisabledModules = array('test1');
+        $aModulePaths     = array("invoicepdf2" => "oe/invoicepdf2");
+        modConfig::getInstance()->setConfigParam( "aDisabledModules", $aDisabledModules );
+        modConfig::getInstance()->setConfigParam( "aModulePaths", $aModulePaths );
+        $sModule = "invoicepdf/myorder";
+        $aDisabledModulesResult = array('test1', 'invoicepdf');
+
+        $oUtilsObject = $this->getProxyClass( "oxUtilsObject" );
+        $oUtilsObject->UNITdisableModule( $sModule );
+        modConfig::getInstance()->getConfigParam( "aDisabledModules" );
+        $this->assertEquals( $aDisabledModulesResult, modConfig::getInstance()->getConfigParam( "aDisabledModules" ) );
     }
 
 }

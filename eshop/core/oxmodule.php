@@ -64,6 +64,13 @@ class oxModule extends oxSuperCfg
     protected $_blLegacy     = false;
 
     /**
+     * Module main path
+     *
+     * @var string
+     */
+    protected $_sModulePath   = null;
+
+    /**
      * Load module info
      *
      * @param string $sModuleId Module ID
@@ -72,13 +79,36 @@ class oxModule extends oxSuperCfg
      */
     public function load( $sModuleId )
     {
-        if ($this->loadModule($sModuleId)) return true;
+        if ( $this->loadModule($sModuleId) ) return true;
 
-        if ($this->loadLegacyModule($sModuleId)) return true;
+        if ( $this->loadLegacyModule($sModuleId) ) return true;
 
-        if ($this->loadUnregisteredModule($sModuleId)) return true;
+        if ( $this->loadUnregisteredModule($sModuleId) ) return true;
 
         return false;
+    }
+
+    /**
+     * Load module by dir name
+     *
+     * @param string $sModuleDir Module dir name
+     *
+     * @return bool
+     */
+    public function loadByDir( $sModuleDir )
+    {
+        $aModulePaths = $this->getModulePaths();
+
+        if ( is_array($aModulePaths) ) {
+            $sModuleId = array_search( $sModuleDir, $aModulePaths);
+        }
+
+        // if no module id defined, using module dir as id
+        if ( !$sModuleId ) {
+            $sModuleId = $sModuleDir;
+        }
+
+        return $this->load( $sModuleId );
     }
 
     /**
@@ -88,14 +118,15 @@ class oxModule extends oxSuperCfg
      *
      * @return bool
      */
-    public function loadModule($sModuleId)
+    public function loadModule( $sModuleId )
     {
-        $sFilePath = $this->getConfig()->getModulesDir() . $sModuleId . "/metadata.php";
+        $sModuleDir = $this->getModulePath( $sModuleId );
+
+        $sFilePath = $this->getConfig()->getModulesDir() . $sModuleDir . "/metadata.php";
         if ( file_exists( $sFilePath ) && is_readable( $sFilePath ) ) {
             $aModule = array();
             include $sFilePath;
             $this->_aModule = $aModule;
-            $this->_aModule['id'] = $sModuleId;
             $this->_blLegacy      = false;
             $this->_blRegistered  = true;
             $this->_blMetadata    = true;
@@ -113,18 +144,18 @@ class oxModule extends oxSuperCfg
      *
      * @return bool
      */
-    public function loadLegacyModule($sModuleId)
+    public function loadLegacyModule( $sModuleId )
     {
         $aLegacyModules = $this->getLegacyModules();
+        $sModuleDir = $this->getModulePath( $sModuleId );
 
         // registered legacy module
         if ( isset( $aLegacyModules[$sModuleId] ) ) {
             $this->_aModule = $aLegacyModules[$sModuleId];
-            $this->_aModule['id'] = $sModuleId;
             $this->_blLegacy      = true;
             $this->_blRegistered  = true;
             $this->_blMetadata    = false;
-            $this->_blFile        = !is_dir($this->getConfig()->getModulesDir() . $sModuleId);
+            $this->_blFile        = empty( $sModuleDir );
             $this->_aModule['active'] = $this->isActive();
             return true;
         }
@@ -138,11 +169,13 @@ class oxModule extends oxSuperCfg
      *
      * @return bool
      */
-    public function loadUnregisteredModule($sModuleId)
+    public function loadUnregisteredModule( $sModuleId )
     {
         $aModules = $this->getAllModules();
 
-        $sFilePath = $this->getConfig()->getModulesDir() . $sModuleId ;
+        $sModuleDir = $this->getModulePath( $sModuleId );
+
+        $sFilePath = $this->getConfig()->getModulesDir() . $sModuleDir ;
         if ( file_exists( $sFilePath ) && is_readable( $sFilePath ) ) {
             $this->_aModule = array();
             $this->_aModule['id'] = $sModuleId;
@@ -230,77 +263,6 @@ class oxModule extends oxSuperCfg
     }
 
     /**
-     * Get parsed modules
-     *
-     * @return array
-     */
-    public function getAllModules()
-    {
-        return $this->parseModuleChains($this->getConfig()->getConfigParam('aModules'));
-    }
-
-    /**
-     * Get parsed active modules
-     *
-     * @return array
-     */
-    public function getActiveModules()
-    {
-        $aAllModules      = $this->parseModuleChains($this->getConfig()->getConfigParam('aModules'));
-        $aDisabledModules = $this->parseModuleChains($this->getConfig()->getConfigParam('aDisabledModules'));
-
-        return $this->diffModuleArrays($aAllModules, $aDisabledModules);
-    }
-
-    /**
-     * Get legacy modules list
-     *
-     * @return array
-     */
-    public function getLegacyModules()
-    {
-        return $this->getConfig()->getConfigParam('aLegacyModules');
-    }
-
-
-    /**
-     * Get parsed disabled modules
-     *
-     * @return array
-     */
-    public function getDisabledModules()
-    {
-        return $this->parseModuleChains($this->getConfig()->getConfigParam('aDisabledModules'));
-    }
-
-    /**
-     * Checks moduels list - if there is extensions that are registered, but
-     * extension directory is missing
-     *
-     * @return null
-     */
-    public function getDeletedExtensions()
-    {
-        $aModules = $this->getAllModules();
-
-        foreach ( $aModules as $sOxClass => $aModulesList ) {
-            foreach ( $aModulesList as $sModulePath ) {
-                if (  strpos( $sModulePath, "/" ) ) {
-                    $sExtDir = substr( $sModulePath, 0, strpos( $sModulePath, "/" ) );
-                    $sExtPath = $this->getConfig()->getModulesDir() . $sExtDir;
-
-                    if ( !is_dir( $sExtPath ) ) {
-                        $aDeletedExt[$sOxClass][] = $sModulePath;
-                    }
-                }
-            }
-        }
-
-        return $aDeletedExt;
-    }
-
-
-    /**
      * Check if extension is active
      *
      * @return bool
@@ -308,22 +270,27 @@ class oxModule extends oxSuperCfg
     public function isActive()
     {
         $blActive = false;
-        if (isset($this->_aModule['extend']) && is_array($this->_aModule['extend'])) {
-            $aAddModules = $this->_aModule['extend'];
-            $aInstalledModules = $this->parseModuleChains($this->getConfig()->getConfigParam('aModules'));
-            $aDisabledModules  = $this->parseModuleChains($this->getConfig()->getConfigParam('aDisabledModules'));
+        $sId = $this->getId();
+        if (isset($sId)) {
+            if (isset($this->_aModule['extend']) && is_array($this->_aModule['extend'])) {
+                $aAddModules = $this->_aModule['extend'];
+                $aInstalledModules = $this->getAllModules();
+                $iClCount = count($aAddModules);
+                $iActive  = 0;
 
-            $iClCount = count($aAddModules);
-            $iActive  = 0;
+                foreach ($aAddModules as $sClass => $sModule) {
+                    if ( (isset($aInstalledModules[$sClass]) && in_array($sModule, $aInstalledModules[$sClass])) ) {
+                        $iActive ++;
+                    }
+                }
+                $blActive = $iClCount > 0 && $iActive == $iClCount;
 
-            foreach ($aAddModules as $sClass => $sModule) {
-                if ( (isset($aInstalledModules[$sClass]) && in_array($sModule, $aInstalledModules[$sClass])) && !(isset($aDisabledModules[$sClass]) && in_array($sModule, $aDisabledModules[$sClass])) ) {
-                    $iActive ++;
+                $aDisabledModules = $this->getDisabledModules();
+                if ( $blActive && ( is_array($aDisabledModules) && in_array($sId, $aDisabledModules) ) ) {
+                    $blActive = false;
                 }
             }
-            $blActive = $iClCount > 0 && $iActive == $iClCount;
         }
-
         return $blActive;
     }
 
@@ -389,32 +356,35 @@ class oxModule extends oxSuperCfg
     public function activate()
     {
         if (isset($this->_aModule['extend']) && is_array($this->_aModule['extend'])) {
+            $oConfig     = $this->getConfig();
             $aAddModules = $this->_aModule['extend'];
+            $sModuleId   = $this->getId();
 
-            $aInstalledModules = $this->parseModuleChains($this->getConfig()->getConfigParam('aModules'));
-            $aDisabledModules  = $this->parseModuleChains($this->getConfig()->getConfigParam('aDisabledModules'));
-            $aModulesPath      = $this->getConfig()->getConfigParam('aModulesPath');
+            $aInstalledModules = $this->getAllModules();
+            $aDisabledModules  = $this->getDisabledModules();
 
             $aModules = $this->mergeModuleArrays($aInstalledModules, $aAddModules);
             $aModules = $this->buildModuleChains($aModules);
 
-            $aDisabledModules = $this->diffModuleArrays($aDisabledModules, $aAddModules);
-            $aDisabledModules = $this->buildModuleChains($aDisabledModules);
+            $oConfig->setConfigParam('aModules', $aModules);
+            $oConfig->saveShopConfVar('aarr', 'aModules', $aModules);
 
-            $aModulesPath[$this->_aModule['id']] = $this->_aModule['id'];
+            if ( isset($aDisabledModules) && is_array($aDisabledModules) ) {
+                $aDisabledModules = array_diff($aDisabledModules, array($sModuleId));
 
-            $this->getConfig()->setConfigParam('aModules', $aModules);
-            $this->getConfig()->saveShopConfVar('aarr', 'aModules', $aModules);
+                $oConfig->setConfigParam('aDisabledModules', $aDisabledModules);
+                $oConfig->saveShopConfVar('arr', 'aDisabledModules', $aDisabledModules);
+            }
 
-            $this->getConfig()->setConfigParam('aDisabledModules', $aDisabledModules);
-            $this->getConfig()->saveShopConfVar('aarr', 'aDisabledModules', $aDisabledModules);
-
-            $this->getConfig()->setConfigParam('aModulesPath', $aModulesPath);
-            $this->getConfig()->saveShopConfVar('aarr', 'aModulesPath', $aModulesPath);
-
-            //activate oxblocks too
-            $this->_changeBlockStatus( $this->getId(), "1" );
-
+            // checking if module has tpl blocks and they are installed
+            if ( !$this->_hasInstalledTplBlocks($sModuleId) ) {
+                // installing module blocks
+                $this->_addTplBlocks( $this->getInfo("tplblocks") );
+            } else {
+                //activate oxblocks
+                $this->_changeBlockStatus( $sModuleId, "1" );
+            }
+            
             return true;
         }
         return false;
@@ -427,18 +397,22 @@ class oxModule extends oxSuperCfg
      */
     public function deactivate()
     {
-        if (isset($this->_aModule['extend']) && is_array($this->_aModule['extend'])) {
-            $aAddModules = $this->_aModule['extend'];
-            $aDisabledModules = $this->parseModuleChains($this->getConfig()->getConfigParam('aDisabledModules'));
+        $sModuleId = $this->getId();
+        if (isset($sModuleId)) {
+            $aDisabledModules = $this->getDisabledModules();
 
-            $aModules = $this->mergeModuleArrays($aDisabledModules, $aAddModules);
-            $aModules = $this->buildModuleChains($aModules);
+            if (!is_array($aDisabledModules)) {
+                $aDisabledModules = array();
+            }
+            $aModules = array_merge($aDisabledModules, array($sModuleId));
 
             $this->getConfig()->setConfigParam('aDisabledModules', $aModules);
-            $this->getConfig()->saveShopConfVar('aarr', 'aDisabledModules', $aModules);
+            $this->getConfig()->saveShopConfVar('arr', 'aDisabledModules', $aModules);
 
             //deactivate oxblocks too
             $this->_changeBlockStatus( $this->getId() );
+
+            return true;
         }
         return false;
     }
@@ -456,148 +430,6 @@ class oxModule extends oxSuperCfg
         $oDb = oxDb::getDb();
         $oDb->execute("UPDATE oxtplblocks SET oxactive = '".(int) $iStatus."' where oxmodule =". $oDb->quote($sModule));
         return true;
-    }
-
-    /**
-     * Removes extension metadata from eshop
-     *
-     * @return null
-     */
-    public function remove()
-    {
-        $aDeletedExt = $this->getDeletedExtensions();
-
-        //collectind deleted extensions ID's
-        $aDeletedExtIds = array();
-        if ( !empty($aDeletedExt) ) {
-            foreach ( $aDeletedExt as $sOxClass => $aDeletedModules ) {
-                foreach ( $aDeletedModules as $sModulePath ) {
-                     $aDeletedExtIds[] = substr( $sModulePath, 0, strpos( $sModulePath, "/" ) );
-                }
-            }
-        }
-
-        if ( !empty( $aDeletedExtIds ) ) {
-            $aDeletedExtIds = array_unique( $aDeletedExt );
-        }
-
-        // removing from aModules config varviable
-        $this->_removeFromModulesArray( $aDeletedExt );
-
-        // removing from aDisabledModules config varviable
-        $this->_removeFromDisabledModulesArray( $aDeletedExt );
-
-        // removing from aLegacyModules array
-        $this->_removeFromLegacyModulesArray( $aDeletedExtIds );
-
-        //removing from config tables and templates blocks table
-        $this->_removeFromDatabase( $aDeletedExtIds );
-    }
-
-    /**
-     * Removes extension from modules array
-     *
-     * @param array $aDeletedExt Deleated extendion array
-     *
-     * @return null
-     */
-    protected function _removeFromModulesArray( $aDeletedExt )
-    {
-        $aExt = $this->getAllModules();
-
-        $aUpdatedExt = $this->diffModuleArrays( $aExt, $aDeletedExt );
-        $aUpdatedExt = $this->buildModuleChains( $aUpdatedExt );
-
-        $this->getConfig()->saveShopConfVar( 'aarr', 'aModules', $aUpdatedExt );
-    }
-
-    /**
-     * Removes extension from disabled modules array
-     *
-     * @param array $aDeletedExt Deleated extendion array
-     *
-     * @return null
-     */
-    protected function _removeFromDisabledModulesArray( $aDeletedExt )
-    {
-        $aDisabledExt = $this->getDisabledModules();
-        $aUpdatedExt  = $this->diffModuleArrays( $aDisabledExt, $aDeletedExt );
-        $aUpdatedExt  = $this->buildModuleChains( $aUpdatedExt );
-        $this->getConfig()->saveShopConfVar( 'aarr', 'aDisabledModules', $aUpdatedExt );
-    }
-
-    /**
-     * Removes extension from legacy modules array
-     *
-     * @param array $aDeletedExtIds deleted extensions ID's
-     *
-     * @return null
-     */
-    protected function _removeFromLegacyModulesArray( $aDeletedExtIds )
-    {
-        $aLegacyExt = $this->getLegacyModules();
-
-        foreach ( $aDeletedExtIds as $sDeletedExtId ) {
-            if ( isset($aLegacyExt[$sDeletedExtId]) ) {
-                unset( $aLegacyExt[$sDeletedExtId] );
-            }
-        }
-
-        $this->getConfig()->saveShopConfVar( 'aarr', 'aLegacyModules', $aLegacyExt );
-    }
-
-    /**
-     * Removes extension from database - oxconfig, oxconfigdisplay and oxtplblocks tables
-     *
-     * @param array $aDeletedExtIds deleted extensions ID's
-     *
-     * @return null
-     */
-    protected function _removeFromDatabase( $aDeletedExtIds )
-    {
-        $sDelExtIds = array();
-
-        foreach ( $aDeletedExtIds as $sDeletedExtId ) {
-            $aConfigIds[] = "'module:" . $sDeletedExtId . "'";
-            $sDelExtIds[] = "'" . $sDeletedExtId . "'";
-        }
-
-        $sConfigIds = implode( ", ", $aConfigIds );
-        $sDelExtIds = implode( ", ", $sDelExtIds );
-
-        $aSql[] = "DELETE FROM oxconfig where oxmodule IN ($sConfigIds)";
-        $aSql[] = "DELETE FROM oxconfigdisplay where oxcfgmodule IN ($sConfigIds)";
-        $aSql[] = "DELETE FROM oxtplblocks where oxmodule IN ($sDelExtIds)";
-
-        $oDb = oxDb::getDb();
-        foreach ( $aSql as $sQuery ) {
-            $oDb->execute( $sQuery );
-        }
-    }
-
-    /**
-     * Parse array of module chains to nested array
-     *
-     * @param array $aModules Module array (config format)
-     *
-     * @return array
-     */
-    public function parseModuleChains($aModules)
-    {
-        $aModuleArray = array();
-
-        if (is_array($aModules)) {
-            foreach ($aModules as $sClass => $sModuleChain) {
-                if (strstr($sModuleChain, '&')) {
-                    $aModuleChain = explode('&', $sModuleChain);
-                } else {
-                    $aModuleChain = array($sModuleChain);
-                }
-                $aModuleArray[$sClass] = $aModuleChain;
-            }
-        }
-
-        return $aModuleArray;
     }
 
     /**
@@ -650,45 +482,6 @@ class oxModule extends oxSuperCfg
     }
 
     /**
-     * Diff two nested module arrays together so that the values of
-     * $aRmModuleArray are removed from $aAllModuleArray
-     *
-     * @param array $aAllModuleArray All Module array (nested format)
-     * @param array $aRemModuleArray Remove Module array (nested format)
-     *
-     * @return array
-     */
-    public function diffModuleArrays($aAllModuleArray, $aRemModuleArray)
-    {
-       if (is_array($aAllModuleArray) && is_array($aRemModuleArray)) {
-            foreach ($aAllModuleArray as $sClass => $aModuleChain) {
-                if (!is_array($aModuleChain)) {
-                    $aModuleChain = array($aModuleChain);
-                }
-                if (isset($aRemModuleArray[$sClass])) {
-                    if (!is_array($aRemModuleArray[$sClass])) {
-                        $aRemModuleArray[$sClass] = array($aRemModuleArray[$sClass]);
-                    }
-                    $aAllModuleArray[$sClass] = array();
-                    foreach ($aModuleChain as $sModule) {
-                        if (!in_array($sModule, $aRemModuleArray[$sClass])) {
-                            $aAllModuleArray[$sClass][] = $sModule;
-                        }
-                    }
-                    if (!count($aAllModuleArray[$sClass])) {
-                        unset ($aAllModuleArray[$sClass]);
-                    }
-                } else {
-                    $aAllModuleArray[$sClass] = $aModuleChain;
-                }
-            }
-
-       }
-
-        return $aAllModuleArray;
-    }
-
-    /**
      * Filter module array using modue id
      *
      * @param array  $aModules  Module array (nested format)
@@ -707,5 +500,115 @@ class oxModule extends oxSuperCfg
             }
         }
         return $aFilteredModules;
+    }
+
+    /**
+     * Get module dir
+     *
+     * @param array $sModuleId Module ID
+     *
+     * @return string
+     */
+    public function getModulePath( $sModuleId = null )
+    {
+        if ( $this->_sModulePath !== null ) {
+            return $this->_sModulePath;
+        }
+
+        if ( !$sModuleId ) {
+            $sModuleId = $this->getId();
+        }
+
+        $aModulePaths = $this->getModulePaths();
+
+        $this->_sModulePath = $aModulePaths[$sModuleId];
+
+        // if still no module dir, try using module ID as dir name
+        if ( !$this->_sModulePath && is_dir($this->getConfig()->getModulesDir().$sModuleId) ) {
+            $this->_sModulePath = $sModuleId;
+        }
+
+        return $this->_sModulePath;
+    }
+
+    /**
+     * Get parsed modules
+     *
+     * @return array
+     */
+    public function getAllModules()
+    {
+        return $this->getConfig()->getAllModules();
+    }
+
+    /**
+     * Get legacy modules list
+     *
+     * @return array
+     */
+    public function getLegacyModules()
+    {
+        return $this->getConfig()->getConfigParam('aLegacyModules');
+    }
+
+    /**
+     * Get disabled module id's
+     *
+     * @return array
+     */
+    public function getDisabledModules()
+    {
+        return $this->getConfig()->getConfigParam('aDisabledModules');
+    }
+
+    /**
+     * Get module id's with path
+     *
+     * @return array
+     */
+    public function getModulePaths()
+    {
+        return $this->getConfig()->getConfigParam('aModulePaths');
+    }
+
+    /**
+     * Checks if module has installed tpl blocks
+     *
+     * @param string $sModuleId Module ID
+     *
+     * @return bool
+     */
+    protected function _hasInstalledTplBlocks( $sModuleId )
+    {
+        $sShopId   = $this->getConfig()->getShopId();
+        $blRes = oxDb::getInstance()->getOne( "select 1 from oxtplblocks where OXMODULE = '$sModuleId' and OXSHOPID = '$sShopId' limit 1 " );
+
+        return (bool) $blRes;
+    }
+
+    /**
+     * Add module templates to database.
+     *
+     * @param array $aModuleBlocks Module blocks array
+     *
+     * @return null
+     */
+    protected function _addTplBlocks( $aModuleBlocks )
+    {
+        $sShopId   = $this->getConfig()->getShopId();
+        $sModuleId = $this->getId();
+        $oDb       = oxDb::getDb();
+        
+        if ( is_array($aModuleBlocks) ) {
+
+            foreach ( $aModuleBlocks as $aValue ) {
+                $sOxId = oxUtilsObject::getInstance()->generateUId();
+
+                $sSql = "INSERT INTO `oxtplblocks` (`OXID`, `OXACTIVE`, `OXSHOPID`, `OXTEMPLATE`, `OXBLOCKNAME`, `OXPOS`, `OXFILE`, `OXMODULE`)
+                         VALUES ('$sOxId', 1, '$sShopId', '{$aValue["shopTpl"]}', '{$aValue["blockName"]}', '{$aValue["blockPos"]}', '{$aValue["blockTpl"]}', '$sModuleId')";
+
+                $oDb->execute( $sSql );
+            }
+        }
     }
 }

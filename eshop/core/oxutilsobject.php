@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobject.php 43014 2012-03-19 12:52:43Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsobject.php 43298 2012-03-29 13:10:18Z vilma $
  */
 
 /**
@@ -261,13 +261,7 @@ class oxUtilsObject extends oxSuperCfg
                 //in case we have multiple modules:
                 //like oxoutput => sub/suboutput1&sub/suboutput2&sub/suboutput3
                 $aClassChain = explode( "&", $aModules[$sClassName] );
-
-                // Exclude disabled modules from chain unfortunatelly can not use oxmodule::getActiveModules()
-                $aDisabledModules = $this->getConfig()->getConfigParam( 'aDisabledModules' );
-                if (is_array( $aDisabledModules ) && isset($aDisabledModules[$sClassName] )) {
-                    $aDissabledClassChain = explode( "&", $aDisabledModules[$sClassName] );
-                    $aClassChain = array_diff($aClassChain, $aDissabledClassChain);
-                }
+                $aClassChain = $this->_getActiveModuleChain($aClassChain);
             }
 
             if (count($aClassChain)) {
@@ -293,6 +287,8 @@ class oxUtilsObject extends oxSuperCfg
      * @param string $sClassName  Class name
      * @param string $sModuleName Modul name
      *
+     * @deprecated in 4.6.0, since 2012-03-28; use oxModule::isActive()
+     *
      * @return bool
      */
     public function isModuleActive( $sClassName, $sModuleName )
@@ -301,12 +297,9 @@ class oxUtilsObject extends oxSuperCfg
         if ( is_array( $aModules ) && array_key_exists( $sClassName, $aModules ) ) {
             $aClassChain = explode( "&", $aModules[$sClassName] );
 
-            // Exclude disabled modules from chain unfortunatelly can not use oxmodule::getActiveModules()
-            $aDisabledModules = $this->getConfig()->getConfigParam( 'aDisabledModules' );
-            if (is_array( $aDisabledModules ) && isset($aDisabledModules[$sClassName] )) {
-                $aDissabledClassChain = explode( "&", $aDisabledModules[$sClassName] );
-                $aClassChain = array_diff($aClassChain, $aDissabledClassChain);
-            }
+            // Exclude disabled modules from chain unfortunatelly can not use oxmodule::getActiveModuleInfo()
+            // If you call onNew in oxNew, you will get infinit recursion...
+            $aClassChain = $this->_getActiveModuleChain($aClassChain);
 
             foreach ($aClassChain as $sModule) {
                 if ( basename($sModule) == $sModuleName ) {
@@ -315,6 +308,72 @@ class oxUtilsObject extends oxSuperCfg
             }
         }
         return false;
+    }
+
+    /**
+     * Checks if module is disabled, added to aDisabledModules config.
+     *
+     * @param array $aClassChain Module names
+     *
+     * @return array
+     */
+    protected function _getActiveModuleChain( $aClassChain )
+    {
+        $myConfig = $this->getConfig();
+        // Exclude disabled modules from chain unfortunatelly can not use oxmodule::getActiveModuleInfo()
+        // If you call oxNew in oxNew, you will get infinit recursion...
+        $aDisabledModules = $myConfig->getConfigParam( 'aDisabledModules' );
+        $aModulePaths     = $myConfig->getConfigParam( 'aModulePaths' );
+        if (is_array( $aDisabledModules ) && count($aDisabledModules) > 0) {
+            foreach ($aDisabledModules as $sId) {
+                $sPath = $aModulePaths[$sId];
+                if (!isset($sPath)) {
+                    $sPath = $sId;
+                }
+                foreach ( $aClassChain as $sKey => $sModuleClass ) {
+                    if (strpos($sModuleClass, $sPath."/") === 0 ) {
+                        unset($aClassChain[$sKey]);
+                    }
+                }
+            }
+        }
+
+        return $aClassChain;
+    }
+
+    /**
+     * Disables module, adds to aDisabledModules config.
+     *
+     * @param array $sModule Module name
+     *
+     * @return null
+     */
+    protected function _disableModule( $sModule )
+    {
+        $myConfig = $this->getConfig();
+        // Exclude disabled modules from chain unfortunatelly can not use oxmodule::deactivate()
+        // If you call oxNew in oxNew, you will get infinit recursion...
+        $aModulePaths     = $myConfig->getConfigParam( 'aModulePaths' );
+        $sModuleId = null;
+        if (is_array( $aModulePaths )) {
+            foreach ($aModulePaths as $sId => $sPath) {
+                if (strpos($sModule, $sPath."/") === 0 ) {
+                    $sModuleId = $sId;
+                }
+            }
+        }
+        if (!$sModuleId) {
+            $sModuleId = substr( $sModule, 0, strpos( $sModule, "/" ) );
+        }
+
+        $aDisabledModules = $this->getConfig()->getConfigParam('aDisabledModules');
+
+        if (!is_array($aDisabledModules)) {
+            $aDisabledModules = array();
+        }
+        $aModules = array_merge($aDisabledModules, array($sModuleId));
+        $myConfig->setConfigParam('aDisabledModules', $aModules);
+        $myConfig->saveShopConfVar('arr', 'aDisabledModules', $aModules);
     }
 
     /**
@@ -361,6 +420,8 @@ class oxUtilsObject extends oxSuperCfg
                 if ( file_exists( $sParentPath ) ) {
                     include_once $sParentPath;
                 } elseif ( !class_exists( $sModuleClass ) ) {
+                    // disable module if extendet class is not found
+                    $this->_disableModule( $sModule );
                     //to avoid problems with unitest and only throw a exception if class does not exists MAFI
                     $oEx = oxNew( "oxSystemComponentException" );
                     $oEx->setMessage('EXCEPTION_SYSTEMCOMPONENT_CLASSNOTFOUND');

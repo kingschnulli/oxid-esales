@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oximex.php 42358 2012-02-20 15:10:10Z linas.kukulskis $
+ * @version   SVN: $Id: oximex.php 43316 2012-03-29 13:34:42Z linas.kukulskis $
  */
 
 /**
@@ -44,7 +44,7 @@ class oxImex extends oxBase
         $sArticleTable = getViewName('oxarticles');
 
         $sSelect = "select count(oxid) from $sArticleTable ";
-        $iSize = $oDB->getOne( $sSelect);
+        $iSize = oxDb::getInstance()->getOne( $sSelect );
 
         if ( $iStart < $iSize) {
             $fp = fopen( $sFilepath, "ab");
@@ -54,7 +54,7 @@ class oxImex extends oxBase
             }
             $oldMode = $oDB->setFetchMode( ADODB_FETCH_ASSOC);
             $sSelect = "select * from $sArticleTable ";
-            $rs = $oDB->selectLimit( $sSelect, $iLines, $iStart);
+            $rs = oxDb::getInstance()->selectLimit( $sSelect, $iLines, $iStart);
             $oDB->setFetchMode( $oldMode);
 
             while (!$rs->EOF) {
@@ -66,7 +66,7 @@ class oxImex extends oxBase
                 $this->setAdminMode( $blAdmin );
 
                 $sSelect = "select oxtitle from ".$oArticle->getViewName()." where oxid = " . $oDB->quote( $oArticle->oxarticles__oxparentid->value );
-                $oTitle = $oDB->getOne( $sSelect);
+                $oTitle = oxDb::getInstance()->getOne( $sSelect );
                 if ($oTitle != false && strlen ($oTitle)) {
                     $nTitle = $this->interForm($oTitle);
                 } else {

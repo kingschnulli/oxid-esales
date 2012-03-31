@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerptype.php 39327 2011-10-13 08:39:50Z linas.kukulskis $
+ * @version   SVN: $Id: oxerptype.php 43385 2012-03-30 11:58:58Z linas.kukulskis $
  */
 
 /**
@@ -346,7 +346,7 @@ class oxERPType
         $oDb = oxDb::getDb();
         $sSql = "select oxshopid from ".$this->_sTableName." where oxid = " . $oDb->quote( $sId );
         try {
-            $iShopId = $oDb->getOne($sSql);
+            $iShopId = oxDb::getInstance()->getOne($sSql);
         } catch (Exception $e) {
             // no shopid was found
             return;
@@ -529,7 +529,7 @@ class oxERPType
 
         if ($blAllKeys) {
             $sSelect = 'SELECT OXID FROM '.$this->getTableName().' WHERE '.implode(' AND ', $aWhere);
-            return $oDB->getOne($sSelect);
+            return oxDb::getInstance()->getOne( $sSelect );
         }
 
         return null;

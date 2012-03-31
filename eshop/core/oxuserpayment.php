@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserpayment.php 39576 2011-10-26 13:34:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxuserpayment.php 43293 2012-03-29 13:03:53Z linas.kukulskis $
  */
 
 /**
@@ -152,7 +152,7 @@ class oxUserPayment extends oxBase
         //encode sensitive data
         if ( $sValue = $this->oxuserpayments__oxvalue->value ) {
             $oDb = oxDb::getDb();
-            $sEncodedValue = $oDb->getOne( "select encode( " . $oDb->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )" );
+            $sEncodedValue = oxDb::getInstance()->getOne( "select encode( " . $oDb->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )");
             $this->oxuserpayments__oxvalue->setValue($sEncodedValue);
         }
 
@@ -177,7 +177,7 @@ class oxUserPayment extends oxBase
 
         //encode sensitive data
         if ( $sValue = $this->oxuserpayments__oxvalue->value ) {
-            $sEncodedValue = $oDb->getOne( "select encode( " . $oDb->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )" );
+            $sEncodedValue = oxDb::getInstance()->getOne( "select encode( " . $oDb->quote( $sValue ) . ", '" . $this->getPaymentKey() . "' )");
             $this->oxuserpayments__oxvalue->setValue($sEncodedValue);
         }
 
@@ -228,7 +228,7 @@ class oxUserPayment extends oxBase
             $oDb = oxDb::getDb();
             $sQ  = 'select oxpaymentid from oxorder where oxpaymenttype=' . $oDb->quote( $sPaymentType ) . ' and
                     oxuserid=' . $oDb->quote( $oUser->getId() ).' order by oxorderdate desc';
-            if ( ( $sOxId = $oDb->getOne( $sQ ) ) ) {
+            if ( ( $sOxId = oxDb::getInstance()->getOne( $sQ ) ) ) {
                 $blGet = $this->load( $sOxId );
             }
         }
