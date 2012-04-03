@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: priceCalculationTest.php 43269 2012-03-29 08:36:42Z mindaugas.rimgaila $
+ * @version   SVN: $Id: priceCalculationTest.php 43439 2012-04-02 12:55:55Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -95,7 +95,7 @@ class Unit_Maintenance_priceCalculationTest extends OxidTestCase
     }
     public function testBasketPrices()
     {
-        $this->markTestIncomplete('Test impossible, incorrect CSV data file.');
+        //$this->markTestIncomplete('Test impossible, incorrect CSV data file.');
         $oTest = new testBasketPrices();
         $oTest->runTests();
         $this->assertErrors();
@@ -320,15 +320,18 @@ class testBasketPrices extends Unit_Maintenance_priceCalculationTest
         $oUser = new  oxUser();
         $oUser->setId('test_'.$data[0].rand(0, 1000).time());
 
-        $aEnv = array('discount'=>trim(str_replace(',', '.', $data[2])), 'enternetprice'=>$data[5], 'currate'=>trim(str_replace(',', '.', $data[7])));
+        //$aEnv = array('discount'=>trim(str_replace(',', '.', $data[7])), 'enternetprice'=>0, 'currate'=>trim(str_replace(',', '.', $data[2])));
 
         $oConfig = $this->getMock('oxconfig', array('getActShopCurrencyObject'));
         $oConfig->expects($this->any())->method( 'getActShopCurrencyObject')->will( $this->returnValue( $this->_getCurencyObject(trim(str_replace(',', '.', $data[2])))));
         $oConfig->setConfigParam( 'bl_perfLoadPrice', true );
 
+        /**
         $oArticle = $this->getMock('oxarticle', array('getUser'));
         $oArticle->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
         $oArticle->setConfig($oConfig);
+        **/
+        $oArticle = oxNew('oxArticle');
 
         $oArticle->disableLazyLoading();
 
@@ -355,6 +358,23 @@ class testBasketPrices extends Unit_Maintenance_priceCalculationTest
             if (!$iOrderType) {
                 continue;
             }
+                modConfig::getInstance()->setConfigParam( 'bl_perfLoadPrice', true );
+                modConfig::getInstance()->setConfigParam( 'blUseStock', false );
+
+                // netto prices ?
+                   modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
+
+                // VAT for wrapping ?
+                    modConfig::getInstance()->setConfigParam( 'blCalcVatForWrapping', true );
+
+                // VAT for delivery ?
+                    modConfig::getInstance()->setConfigParam( 'blCalcVATForDelivery', true );
+
+                // currency rate ?
+                if ( strlen(trim( $data[2] )) ) {
+                     $aCurr = array( "EUR@{$data[2]}@ ,@ .@EUR@ 2" );
+                     modConfig::getInstance()->setConfigParam( 'modaCurrencies', $aCurr );
+                }
 
             if (!$sOrderID && preg_match('/ order$/i', $data[0])) {
                 // starting order definition with order id
@@ -390,8 +410,8 @@ class testBasketPrices extends Unit_Maintenance_priceCalculationTest
                     $aData['output']['totalnetto'][$oArt->getId()] = trim(str_replace(',', '.', $data[13]));
 
                 } elseif ($iOrderType == 2) {
-                    $aData['env']['disc'][$oArt->getId()] =  trim(str_replace(',', '.', $data[7])) /  trim(str_replace(',', '.', $data[6]));
-                    $aData['env']['wrap'][$oArt->getId()] =  trim(str_replace(',', '.', $data[9])) /  trim(str_replace(',', '.', $data[6]));
+                    $aData['env']['disc'][$oArt->getId()] =  trim(str_replace(',', '.', $data[7])); // /  trim(str_replace(',', '.', $data[6]));
+                    $aData['env']['wrap'][$oArt->getId()] =  trim(str_replace(',', '.', $data[9])); // /  trim(str_replace(',', '.', $data[6]));
                     $aData['output']['totalbrutto'][$oArt->getId()] = trim(str_replace(',', '.', $data[16]));
                     $aData['output']['totalnetto'][$oArt->getId()] = trim(str_replace(',', '.', $data[17]));
                 }
@@ -412,6 +432,7 @@ class testBasketPrices extends Unit_Maintenance_priceCalculationTest
                 $deliv    =  trim(str_replace(',', '.', $data[11]));
                 $delivVat =  trim(str_replace(',', '.', $data[10]));
                 $payment =  trim(str_replace(',', '.', $data[12]));
+                $dTotalWrapBrutto = trim(str_replace(',', '.', $data[9]));
             }
 
             if (is_numeric($dBasketTotalBrutto) && is_numeric($dBasketTotalNetto) && is_numeric($dBasketTotalNettoAbs) && is_numeric($prodsTotalBrutto) && is_numeric($prodsTotalNetto)) {
@@ -430,6 +451,10 @@ class testBasketPrices extends Unit_Maintenance_priceCalculationTest
             if (is_numeric($payment)) {
                 $aData['env']['payment'] = $payment;
             }
+
+            if ($dBasketTotalBrutto && $dTotalWrapBrutto) {
+                $aData['output']['wraptotalbrutto'] = $dTotalWrapBrutto;
+            }
         }
         if ($sOrderID && $iOrderType && is_array($aData)) {
             // flush order checking
@@ -437,7 +462,6 @@ class testBasketPrices extends Unit_Maintenance_priceCalculationTest
             $blAnyTestRunned = true;
         }
         fclose($hFile);
-        oxConfig::getInstance()->setConfigParam( 'blEnterNetPrice', $blEnterNetPrice );
 
         if (!$blAnyTestRunned) {
             $this->fail('No tests had been run.');
@@ -450,6 +474,7 @@ class testBasketPrices extends Unit_Maintenance_priceCalculationTest
             $sDiscount = "
                     \$oDiscount = new oxDiscount();
                     \$oDiscount->setConfig(\$o->getConfig());
+                    \$oDiscount->oxdiscount__oxtitle = new oxField('Article discount');
                     \$oDiscount->oxdiscount__oxaddsumtype = new oxField('abs');
                     \$oDiscount->oxdiscount__oxaddsum = new oxField($dDiscount);
                     return array('disc_$sId'=>\$oDiscount);
@@ -464,6 +489,30 @@ class testBasketPrices extends Unit_Maintenance_priceCalculationTest
                     $sDiscount;
                 }
                 return parent::getArticleDiscounts(\$aA[0], \$aA[1]);
+            }");
+    }
+
+    protected function _setOrderItemDiscount($sId, $dDiscount)
+    {
+        if ( $dDiscount) {
+            $sDiscount = "
+                    \$oDiscount = new oxDiscount();
+                    \$oDiscount->setConfig(\$o->getConfig());
+                    \$oDiscount->oxdiscount__oxtitle = new oxField('Article order item discount');
+                    \$oDiscount->oxdiscount__oxaddsumtype = new oxField('abs');
+                    \$oDiscount->oxdiscount__oxaddsum = new oxField($dDiscount);
+                    return array('disc_$sId'=>\$oDiscount);
+                    ";
+        } else {
+            $sDiscount = 'return array();';
+        }
+
+        oxTestModules::addFunction('oxdiscountlist', 'getBasketItemDiscounts', "{
+                \$o = \$aA[0];
+                if ( \$o->getId() == '$sId') {
+                    $sDiscount;
+                }
+                return parent::getBasketItemDiscounts(\$aA[0], \$aA[1], \$aA[2] );
             }");
     }
 
@@ -488,35 +537,38 @@ class testBasketPrices extends Unit_Maintenance_priceCalculationTest
             return $oP;
         }');
 
-        $oBasket = oxNew('oxbasket');
+        modConfig::getInstance()->setConfigParam( 'blPerfNoBasketSaving', true );
         modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );
+        $oBasket = oxNew('oxbasket');
         foreach ($aData['articles'] as $oArticle) {
             self::$currentArt = $oArticle;
 
-            $this->_setArticleDiscount($oArticle->getId(), $aData['env']['disc'][$oArticle->getId()]);
+            $dCount = $aData['env']['artcnt'][$oArticle->getId()];
+
+            $this->_setArticleDiscount($oArticle->getId(), $aData['env']['disc'][$oArticle->getId()] / $dCount);
 
             if ($wrapcost = $aData['env']['wrap'][$oArticle->getId()]) {
+                $wrapcost = $wrapcost / $dCount;
                 oxTestModules::addFunction('oxbasketitem', 'getWrapping', '{$o=new oxwrapping; $o->oxwrapping__oxprice = new oxField('.$wrapcost.', oxField::T_RAW); return $o;}');
             } else {
                 oxTestModules::addFunction('oxbasketitem', 'getWrapping', '{return null;}');
             }
-            $oBasket->addToBasket( $oArticle->getId(), $aData['env']['artcnt'][$oArticle->getId()]);
+
+            $oBasket->addToBasket( $oArticle->getId(), $dCount);
         }
 
         $oBasket->calculateBasket();
-        foreach ($oBasket->getContents() as $oContent) {
-            $sId = $oContent->getArticle()->getId();
-            $this->checkEquals((double)$aData['output']['totalbrutto'][$sId], round($oContent->dtotalprice, 2), 'article total brutto ('.$sOrderID.' - '.$iOrderType.')', 0.000001);
-            $this->checkEquals((double)$aData['output']['totalnetto'][$sId], $myUtils->fRound((double)$oContent->dtotalnetprice), 'article total netto ('.$sOrderID.')', 0.000001);
+        foreach ($oBasket->getContents() as $oBasketItem) {
+            $sId = $oBasketItem->getArticle()->getId();
+            $this->checkEquals((double)$aData['output']['totalbrutto'][$sId], round( $oBasketItem->getPrice()->getBruttoPrice(), 2 ), 'article total brutto ('.$sOrderID.' - '.$iOrderType.')', 0.000001);
+            $this->checkEquals((double)$aData['output']['totalnetto'][$sId], round( $oBasketItem->getPrice()->getNettoPrice(), 2 ), 'article total netto ('.$sOrderID.')', 0.000001);
         }
 
-        $this->checkEquals((double)$aData['output']['prodstotalbrutto'], round($myUtils->fRound($oBasket->getProductsPrice()->getBruttoSum()), 2), 'basket products price brutto ('.$sOrderID.' order - '.$iOrderType.')', 0.0000001);
-        $this->checkEquals((double)$aData['output']['baskettotalbrutto'], round($oBasket->getPrice()->getBruttoPrice(), 2), 'basket products price brutto ('.$sOrderID.' - '.$iOrderType.')', 0.0000001);
+        $this->checkEquals((double)$aData['output']['prodstotalbrutto'], round($oBasket->getProductsPrice()->getBruttoSum(), 2), 'basket products price brutto ('.$sOrderID.' order - '.$iOrderType.')', 0.0000001);
+        $this->checkEquals((double)$aData['output']['baskettotalbrutto'], round($oBasket->getPrice()->getBruttoPrice(), 2), 'basket price brutto ('.$sOrderID.' - '.$iOrderType.')', 0.0000001);
+        $this->checkEquals((double)$aData['output']['wraptotalbrutto'], $oBasket->getCosts( 'oxwrapping' )->getBruttoPrice(), 'basket total wrapping brutto ('.$sOrderID.' - '.$iOrderType.')', 0.0000001);
         //TODO same as above                    $this->assertEquals((double)$aData['output']['baskettotalnetto'], $oBasket->getProductsPrice()->getNettoSum(), 'basket products price netto', 0.0000001);
 
-
-        modConfig::getInstance()->cleanup();
-        oxConfig::getInstance()->setConfigParam( 'blEnterNetPrice', $blEnterNetPrice );
         oxTestModules::cleanUp();
     }
 }
