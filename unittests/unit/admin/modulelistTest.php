@@ -44,32 +44,4 @@ class Unit_Admin_ModuleListTest extends OxidTestCase
             $this->assertTrue( isset( $aViewData['mylist'] ) );
             $this->assertEquals( 1, count($aViewData['mylist']) );
     }
-
-    /**
-     * Module_List::_extendsClasses() test case
-     *
-     * @return null
-     */
-    public function testExtendsClasses()
-    {
-        $aModules = array(
-            'oxarticle' => 'mod/testModule&mod2/testModule2/&mod3/dir3/testModule3',
-            'oxorder'   => 'mod7/testModuleOrder&myext/myextclass',
-
-        );
-
-        modConfig::getInstance()->setConfigParam( "aModules", $aModules );
-
-        $oModuleList = $this->getProxyClass( 'Module_List' );
-        $oModuleList->setNonPublicVar( "_aModule", $aModules );
-
-        $this->assertTrue( $oModuleList->_extendsClasses("mod3/dir3") );
-        $this->assertTrue( $oModuleList->_extendsClasses("mod") );
-        $this->assertTrue( $oModuleList->_extendsClasses("myext") );
-        $this->assertFalse( $oModuleList->_extendsClasses("mo") );
-        $this->assertFalse( $oModuleList->_extendsClasses("mod4") );
-        $this->assertFalse( $oModuleList->_extendsClasses("mod3/dir") );
-        $this->assertFalse( $oModuleList->_extendsClasses("od3/dir") );
-        $this->assertFalse( $oModuleList->_extendsClasses("dir3/testModule3") );
-    }
 }

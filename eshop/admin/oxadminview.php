@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminview.php 42731 2012-03-12 15:12:18Z vilma $
+ * @version   SVN: $Id: oxadminview.php 43420 2012-04-02 05:10:54Z alfonsas $
  */
 
 /**
@@ -445,6 +445,28 @@ class oxAdminView extends oxView
             if ( !$blDeleteCacheOnLogout  || $blForceReset ) {
                 oxUtils::getInstance()->oxResetFileCache();
             }
+    }
+
+    /**
+     * Reset template cache
+     *
+     * @param array $aTemplates templates to reset
+     *
+     * @return null
+     */
+    public function resetTemplateCache( $aTemplates )
+    {
+        oxUtils::getInstance()->resetTemplateCache($aTemplates);
+    }
+
+    /**
+     * Reset language cache
+     *
+     * @return null
+     */
+    public function resetLanguageCache()
+    {
+        oxUtils::getInstance()->resetLanguageCache();
     }
 
     /**

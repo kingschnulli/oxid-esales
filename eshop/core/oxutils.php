@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 43346 2012-03-29 14:19:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 43435 2012-04-02 08:15:12Z alfonsas $
  */
 
 /**
@@ -55,6 +55,20 @@ class oxUtils extends oxSuperCfg
      * @var string
      */
     protected $_sPermanentCachePattern = "/c_fieldnames_/";
+
+    /**
+     * Pattern used to filter needed to remove language cache files.
+     *
+     * @var string
+     */
+    protected $_sLanguageCachePattern = "/c_langcache_/i";
+
+    /**
+     * Pattern used to filter needed to remove admin menu cache files.
+     *
+     * @var string
+     */
+    protected $_sMenuCachePattern = "/c_menu_/i";
 
     /**
      * File cache contents.
@@ -751,12 +765,72 @@ class oxUtils extends oxSuperCfg
      */
     public function oxResetFileCache()
     {
-        $aPathes = glob( $this->getCacheFilePath( null, true ) . '*' );
-        if ( is_array( $aPathes ) ) {
+        $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
+        if ( is_array( $aFiles ) ) {
             // delete all the files, except cached tables fieldnames
-            $aPathes = preg_grep( $this->_sPermanentCachePattern, $aPathes, PREG_GREP_INVERT );
-            foreach ( $aPathes as $sFilename ) {
-                @unlink( $sFilename );
+            $aFiles = preg_grep( $this->_sPermanentCachePattern, $aFiles, PREG_GREP_INVERT );
+            foreach ( $aFiles as $sFile ) {
+                @unlink( $sFile );
+            }
+        }
+    }
+
+    /**
+     * Removes smarty template cache for given templates
+     *
+     * @param array $aTemplates Template name array
+     *
+     * @return null
+     */
+    public function resetTemplateCache($aTemplates)
+    {
+        $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
+        if ( is_array( $aFiles ) ) {
+            // delete all template cache files
+            foreach ($aTemplates as &$sTemplate) {
+                $sTemplate = preg_quote(basename(strtolower($sTemplate), '.tpl'));
+            }
+
+            $sPattern = sprintf("/%%[%s]+\.tpl\.php$/i", implode('|', $aTemplates));
+            $aFiles = preg_grep( $sPattern, $aFiles );
+            foreach ( $aFiles as $sFile ) {
+                @unlink( $sFile );
+            }
+        }
+    }
+
+    /**
+     * Removes language constant cache
+     *
+     * @return null
+     */
+    public function resetLanguageCache()
+    {
+        $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
+        if ( is_array( $aFiles ) ) {
+            // delete all language cache files
+            $sPattern = $this->_sLanguageCachePattern;
+            $aFiles = preg_grep( $sPattern, $aFiles );
+            foreach ( $aFiles as $sFile ) {
+                @unlink( $sFile );
+            }
+        }
+    }
+
+    /**
+     * Removes admin menu cache
+     *
+     * @return null
+     */
+    public function resetMenuCache()
+    {
+        $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
+        if ( is_array( $aFiles ) ) {
+            // delete all menu cache files
+            $sPattern = $this->_sMenuCachePattern;
+            $aFiles = preg_grep( $sPattern, $aFiles );
+            foreach ( $aFiles as $sFile ) {
+                @unlink( $sFile );
             }
         }
     }

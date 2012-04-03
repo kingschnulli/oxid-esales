@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 43347 2012-03-29 14:21:16Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsview.php 43418 2012-04-02 05:08:24Z alfonsas $
  */
 
 /**
@@ -316,6 +316,19 @@ class oxUtilsView extends oxSuperCfg
     }
 
     /**
+     * Get template compile id.
+     *
+     * @return string
+     */
+    public function getTemplateCompileId()
+    {
+        $sShopId = $this->getConfig()->getShopId();
+        $aDirs   = $this->getTemplateDirs();
+        $sDir    = reset($aDirs);
+        return md5( $sDir.'__'.$sShopId );
+    }
+
+    /**
      * sets properties of smarty object
      *
      * @param object $oSmarty template processor object (smarty)
@@ -338,7 +351,7 @@ class oxUtilsView extends oxSuperCfg
         $oSmarty->compile_dir  = $myConfig->getConfigParam( 'sCompileDir' );
         $oSmarty->cache_dir    = $myConfig->getConfigParam( 'sCompileDir' );
         $oSmarty->template_dir = $this->getTemplateDirs();
-        $oSmarty->compile_id   = md5( $oSmarty->template_dir[0].'__'.$myConfig->getShopId() );
+        $oSmarty->compile_id   = $this->getTemplateCompileId();
 
         $oSmarty->default_template_handler_func = array(oxUtilsView::getInstance(),'_smartyDefaultTemplateHandler');
 

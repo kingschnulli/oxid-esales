@@ -78,7 +78,10 @@ class Module_Main extends oxAdminDetails
         }
         try {
             $oModule->activate();
-            $this->resetContentCache();
+            $aTemplates = $oModule->getTemplates();
+            $this->resetTemplateCache($aTemplates);
+            $this->resetLanguageCache();
+            $this->resetMenuCache();
         } catch (oxException $oEx) {
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
             $oEx->debugOut();
@@ -100,7 +103,10 @@ class Module_Main extends oxAdminDetails
         }
         try {
             $oModule->deactivate();
-            $this->resetContentCache();
+            $aTemplates = $oModule->getTemplates();
+            $this->resetTemplateCache($aTemplates);
+            $this->resetLanguageCache();
+            $this->resetMenuCache();
         } catch (oxException $oEx) {
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
             $oEx->debugOut();
@@ -158,6 +164,10 @@ class Module_Main extends oxAdminDetails
 
         // updating module ID in aModulePaths config var
         $aModulePaths = $oConfig->getConfigParam( 'aModulePaths' );
+        $aModulePaths[$sModuleId] = $aModulePaths[$sModuleLegacyId];
+        unset( $aModulePaths[$sModuleLegacyId] );
+
+        $oConfig->saveShopConfVar( 'aarr', 'aModulePaths', $aModulePaths );
 
         if ( isset($aModulePaths[$sModuleLegacyId]) ) {
             $aModulePaths[$sModuleId] = $aModulePaths[$sModuleLegacyId];

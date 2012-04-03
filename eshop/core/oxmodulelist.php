@@ -19,15 +19,30 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmodulelist.php 43312 2012-03-29 13:22:30Z alfonsas $
+ * @version   SVN: $Id: oxmodulelist.php 43449 2012-04-02 15:14:22Z rimvydas.paskevicius $
  */
 
 /**
  * Class handling shop modules.
  *
  */
-class oxModulelist extends oxSuperCfg
+class oxModuleList extends oxSuperCfg
 {
+    /**
+     * Modules info array
+     *
+     * @var array
+     */
+    protected $_aModule = array();
+
+    /**
+     * List of files that should be skipped while scaning modules dir
+     *
+     * @var array
+     */
+    protected $_aSkipFiles = array( "functions.php", "vendormetadata.php" );
+
+
     /**
      * Get parsed modules
      *
@@ -126,7 +141,6 @@ class oxModulelist extends oxSuperCfg
                     }
                 }
             }
-
         }
 
         return $aDisabledModuleClasses;
@@ -331,4 +345,110 @@ class oxModulelist extends oxSuperCfg
             $oDb->execute( $sQuery );
         }
     }
+
+    /**
+     * Scans modules dir and returns colected modules list. Recursively loads also modules that
+     * are in vendor directory.
+     *
+     * @param string $sModulesDir Main module dir path
+     * @param string $sVendorDir  Vendor directory name
+     *
+     * @return array
+     */
+    public function getModulesFromDir( $sModulesDir, $sVendorDir = null )
+    {
+        $sModulesDir  = oxUtilsFile::getInstance()->normalizeDir( $sModulesDir );
+
+        foreach ( glob( $sModulesDir."*" ) as $sModuleDirPath ) {
+
+            $sModuleDirPath .= ( is_dir( $sModuleDirPath ) ) ? "/" : "";
+            $sModuleDirName  = basename( $sModuleDirPath );
+
+            // skipping some file
+            if ( in_array( $sModuleDirName, $this->_aSkipFiles ) ) {
+                continue;
+            }
+
+            if ( $this->_isVendorDir( $sModuleDirPath ) ) {
+                // scaning modules vendor directory
+                $this->getModulesFromDir( $sModuleDirPath, basename( $sModuleDirPath ) );
+            } else {
+                // loading module info
+                $oModule = oxNew( "oxModule" );
+                $sModuleDirName = ( !empty($sVendorDir) ) ? $sVendorDir."/".$sModuleDirName : $sModuleDirName;
+                $oModule->loadByDir( $sModuleDirName );
+                $sModuleId = $oModule->getId();
+                $this->_aModules[$sModuleId] = $oModule;
+
+                $aModulePaths = $this->getModulePaths();
+
+                if ( !is_array($aModulePaths) || !array_key_exists( $sModuleId, $aModulePaths ) ) {
+                    // saving module path info
+                    $this->_saveModulePath( $sModuleId, $sModuleDirName );
+
+                    //checking if this is new module and if it extends any eshop class
+                    if ( !$this->_extendsClasses( $sModuleDirName ) ) {
+                        // if not - marking it as disabled by default
+                        $oModule->deactivate();
+                    }
+                }
+            }
+        }
+
+        return $this->_aModules;
+    }
+
+    /**
+     * Checks if directory is vedor directory.
+     *
+     * @param string $sModuleDir dir path
+     *
+     * @return bool
+     */
+    protected function _isVendorDir( $sModuleDir )
+    {
+        if ( is_dir( $sModuleDir ) && file_exists( $sModuleDir . "vendormetadata.php" ) ) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
+     * Checks if module extends any shop class.
+     *
+     * @param string $sModuleDir dir path
+     *
+     * @return bool
+     */
+    protected function _extendsClasses ( $sModuleDir )
+    {
+        $aModules = $this->getConfig()->getConfigParam( "aModules" );
+        if (is_array($aModules)) {
+            $sModules = implode( "&", $aModules );
+
+            if ( preg_match("@(^|&+)".$sModuleDir."\b@", $sModules ) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Saving module path info. Module path is saved to config variable "aModulePaths".
+     *
+     * @param string $sModuleId   Module ID
+     * @param string $sModulePath Module path
+     *
+     * @return null
+     */
+    protected function _saveModulePath( $sModuleId, $sModulePath )
+    {
+        $aModulePaths = $this->getModulePaths();
+
+        $aModulePaths[$sModuleId] = $sModulePath;
+        $this->getConfig()->saveShopConfVar( 'aarr', 'aModulePaths', $aModulePaths );
+    }
+
 }

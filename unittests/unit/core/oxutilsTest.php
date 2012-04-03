@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 43361 2012-03-30 07:06:37Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsTest.php 43422 2012-04-02 05:12:27Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -679,6 +679,57 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
         @unlink( $aPathes[0] ); //deleting test cache file
         $this->assertEquals( 1, count($aPathes) );
+    }
+
+    public function testResetTemplateCache()
+    {
+        $myConfig = oxConfig::getInstance();
+
+        $oUtils  = oxUtils::getInstance();
+        $oSmarty = oxUtilsview::getInstance()->getSmarty(true);
+        $sTmpDir = $myConfig->getConfigParam( 'sCompileDir' );
+
+        $aTemplates = array('message/success.tpl', 'message/notice.tpl','message/errors.tpl',);
+        foreach ($aTemplates as $sTpl) {
+            $oSmarty->fetch($sTpl);
+        }
+
+        $sRemoveTemplate = basename(reset($aTemplates));
+        $sLeaveTemplate  = basename(array_pop($aTemplates));
+
+        //checking if test files were written to temp dir
+        $this->assertEquals( 1, count(glob("{$sTmpDir}/*{$sRemoveTemplate}.php")), "File written ".$sRemoveTemplate );
+        $this->assertEquals( 1, count(glob("{$sTmpDir}/*{$sLeaveTemplate}.php")), "File written ".$sLeaveTemplate );
+
+        //Remove templates
+        $this->assertNull( $oUtils->resetTemplateCache($aTemplates));
+        $this->assertEquals( 0, count(glob("{$sTmpDir}/*{$sRemoveTemplate}.php")), "Filr removed ".$sRemoveTemplate );
+        $this->assertEquals( 1, count(glob("{$sTmpDir}/*{$sLeaveTemplate}.php")), "File left ".$sLeaveTemplate );
+    }
+
+    public function testResetLanguageCache()
+    {
+        $myConfig = oxConfig::getInstance();
+
+        $oUtils  = oxUtils::getInstance();
+        $oSmarty = oxUtilsview::getInstance()->getSmarty(true);
+        $sTmpDir = $myConfig->getConfigParam( 'sCompileDir' );
+
+        $aFiles = array('langcache_1_a', 'langcache_1_b','langcache_1_c');
+        foreach ($aFiles as $sFile) {
+            $oUtils->setLangCache( $sFile, array($sFile) );
+        }
+
+        foreach ($aFiles as $sFile) {
+            $this->assertEquals(array($sFile), $oUtils->getLangCache( $sFile));
+        }
+
+        $this->assertNull( $oUtils->resetLanguageCache($aTemplates));
+
+        foreach ($aFiles as $sFile) {
+            $this->assertNull($oUtils->getLangCache( $sFile));
+        }
+
     }
 
     public function testGetRemoteCachePath()

@@ -428,7 +428,6 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
 
         $this->assertTrue($oModule->activate());
         $this->assertEquals($aModulesAfter, modConfig::getInstance()->getConfigParam("aModules") );
-        $this->assertEquals($aModulesAfter, modConfig::getInstance()->getShopConfVar("aModules") );
     }
 
     /**
@@ -454,9 +453,7 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
 
         $this->assertTrue($oModule->activate());
         $this->assertEquals($aModulesAfter, modConfig::getInstance()->getConfigParam("aModules") );
-        $this->assertEquals($aModulesAfter, modConfig::getInstance()->getShopConfVar("aModules") );
         $this->assertEquals($aDisabledModulesAfter, modConfig::getInstance()->getConfigParam("aDisabledModules") );
-        $this->assertEquals($aDisabledModulesAfter, modConfig::getInstance()->getShopConfVar("aDisabledModules") );
     }
 
     /**
@@ -478,7 +475,6 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
 
         $this->assertTrue($oModule->activate());
         $this->assertEquals($aModulesAfter, modConfig::getInstance()->getConfigParam("aModules") );
-        $this->assertEquals($aModulesAfter, modConfig::getInstance()->getShopConfVar("aModules") );
     }
 
     /**
@@ -488,19 +484,15 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
      */
     public function testDeactivate()
     {
-        $aDisabledModulesBefore = array();
-        $aDisabledModulesAfter  = array('test');
+        $oConfig = $this->getMock( 'oxConfig', array('saveShopConfVar') );
+        $oConfig->expects( $this->once() )->method('saveShopConfVar')->with($this->equalTo("arr"), $this->equalTo("aDisabledModules"), $this->equalTo(array("testId1", "testId2")) );
 
-        $oModule = $this->getProxyClass('oxmodule');
-        $aExtend = array('id' => 'test');
-        $oModule->setNonPublicVar( "_aModule", $aExtend );
+        $oModule = $this->getMock( 'oxModule', array('getId', 'getDisabledModules', 'getConfig'), array(), "", false );
+        $oModule->expects( $this->any() )->method('getId')->will( $this->returnValue( "testId2" ) );
+        $oModule->expects( $this->once() )->method('getDisabledModules')->will( $this->returnValue( array("testId1") ) );
+        $oModule->expects( $this->once() )->method('getConfig')->will( $this->returnValue( $oConfig ) );
 
-        modConfig::getInstance()->setConfigParam( "aDisabledModules", $aDisabledModulesBefore );
-        $this->assertEquals($aDisabledModulesBefore, modConfig::getInstance()->getConfigParam("aDisabledModules") );
-
-        $this->assertTrue($oModule->deactivate());
-        $this->assertEquals($aDisabledModulesAfter, modConfig::getInstance()->getConfigParam("aDisabledModules") );
-        $this->assertEquals($aDisabledModulesAfter, modConfig::getInstance()->getShopConfVar("aDisabledModules") );
+        $this->assertTrue( $oModule->deactivate() );
     }
 
     /**

@@ -29,7 +29,7 @@
 class oxModule extends oxSuperCfg
 {
     /**
-     * Theme info array
+     * Modules info array
      *
      * @var array
      */
@@ -62,13 +62,6 @@ class oxModule extends oxSuperCfg
      * @var bool
      */
     protected $_blLegacy     = false;
-
-    /**
-     * Module main path
-     *
-     * @var string
-     */
-    protected $_sModulePath   = null;
 
     /**
      * Load module info
@@ -384,7 +377,7 @@ class oxModule extends oxSuperCfg
                 //activate oxblocks
                 $this->_changeBlockStatus( $sModuleId, "1" );
             }
-            
+
             return true;
         }
         return false;
@@ -406,7 +399,6 @@ class oxModule extends oxSuperCfg
             }
             $aModules = array_merge($aDisabledModules, array($sModuleId));
 
-            $this->getConfig()->setConfigParam('aDisabledModules', $aModules);
             $this->getConfig()->saveShopConfVar('arr', 'aDisabledModules', $aModules);
 
             //deactivate oxblocks too
@@ -429,7 +421,6 @@ class oxModule extends oxSuperCfg
     {
         $oDb = oxDb::getDb();
         $oDb->execute("UPDATE oxtplblocks SET oxactive = '".(int) $iStatus."' where oxmodule =". $oDb->quote($sModule));
-        return true;
     }
 
     /**
@@ -505,30 +496,26 @@ class oxModule extends oxSuperCfg
     /**
      * Get module dir
      *
-     * @param array $sModuleId Module ID
+     * @param string $sModuleId Module ID
      *
      * @return string
      */
     public function getModulePath( $sModuleId = null )
     {
-        if ( $this->_sModulePath !== null ) {
-            return $this->_sModulePath;
-        }
-
         if ( !$sModuleId ) {
             $sModuleId = $this->getId();
         }
 
         $aModulePaths = $this->getModulePaths();
 
-        $this->_sModulePath = $aModulePaths[$sModuleId];
+        $sModulePath = $aModulePaths[$sModuleId];
 
         // if still no module dir, try using module ID as dir name
-        if ( !$this->_sModulePath && is_dir($this->getConfig()->getModulesDir().$sModuleId) ) {
-            $this->_sModulePath = $sModuleId;
+        if ( !$sModulePath && is_dir($this->getConfig()->getModulesDir().$sModuleId) ) {
+            $sModulePath = $sModuleId;
         }
 
-        return $this->_sModulePath;
+        return $sModulePath;
     }
 
     /**
@@ -598,7 +585,7 @@ class oxModule extends oxSuperCfg
         $sShopId   = $this->getConfig()->getShopId();
         $sModuleId = $this->getId();
         $oDb       = oxDb::getDb();
-        
+
         if ( is_array($aModuleBlocks) ) {
 
             foreach ( $aModuleBlocks as $aValue ) {
@@ -611,4 +598,35 @@ class oxModule extends oxSuperCfg
             }
         }
     }
+
+    /**
+     * Return tempate blocks for givrn template id.
+     *
+     * @param string $sModuleId Module id
+     *
+     * @return array
+     */
+    public function getTemplates( $sModuleId = null )
+    {
+        if (is_null($sModuleId)) {
+            $sModuleId = $this->getId();
+        }
+
+        if (!$sModuleId) {
+            return;
+        }
+
+        $sShopId   = $this->getConfig()->getShopId();
+        $rs = oxDb::getInstance()->select("select OXTEMPLATE from oxtplblocks where OXMODULE = '$sModuleId' and OXSHOPID = '$sShopId'" );
+
+        $aTemplates = array();
+        if ($rs != false && $rs->recordCount() > 0) {
+            while (!$rs->EOF) {
+                $aTemplates[] =  $rs->fields[0];
+                $rs->moveNext();
+            }
+        }
+        return $aTemplates;
+    }
+
 }

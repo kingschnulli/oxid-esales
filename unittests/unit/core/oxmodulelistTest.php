@@ -508,4 +508,80 @@ class Unit_Core_oxmodulelistTest extends OxidTestCase
         $omodulelist->cleanup();
     }
 
+    /**
+     * oxmodulelist::_extendsClasses() test case
+     *
+     * @return null
+     */
+    public function testExtendsClasses()
+    {
+        $aModules = array(
+            'oxarticle' => 'mod/testModule&mod2/testModule2/&mod3/dir3/testModule3',
+            'oxorder'   => 'mod7/testModuleOrder&myext/myextclass',
+        );
+
+        modConfig::getInstance()->setConfigParam( "aModules", $aModules );
+
+        $oModuleList = $this->getProxyClass( 'oxModuleList' );
+        $oModuleList->setNonPublicVar( "_aModule", $aModules );
+
+        $this->assertTrue( $oModuleList->_extendsClasses("mod3/dir3") );
+        $this->assertTrue( $oModuleList->_extendsClasses("mod") );
+        $this->assertTrue( $oModuleList->_extendsClasses("myext") );
+        $this->assertFalse( $oModuleList->_extendsClasses("mo") );
+        $this->assertFalse( $oModuleList->_extendsClasses("mod4") );
+        $this->assertFalse( $oModuleList->_extendsClasses("mod3/dir") );
+        $this->assertFalse( $oModuleList->_extendsClasses("od3/dir") );
+        $this->assertFalse( $oModuleList->_extendsClasses("dir3/testModule3") );
+    }
+
+    /**
+     * oxmodulelist::_saveModulePath() test case
+     *
+     * @return null
+     */
+    public function testSaveModulePath()
+    {
+        $aModulePaths    = array( "testId1"=>"testpPath1", "testId2"=>"testPath2" );
+        $aModulePathsRes = array_merge( $aModulePaths, array("testId3"=>"testPath3") );
+
+        $oConfig = $this->getMock( 'oxConfig', array('saveShopConfVar') );
+        $oConfig->expects( $this->once() )->method('saveShopConfVar')->with($this->equalTo("aarr"), $this->equalTo("aModulePaths"), $this->equalTo($aModulePathsRes) );
+
+        $oModuleList = $this->getMock( 'oxModuleList', array('getModulePaths', 'getConfig') );
+        $oModuleList->expects( $this->once() )->method( 'getModulePaths' )->will( $this->returnValue($aModulePaths) );
+        $oModuleList->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue($oConfig) );
+
+        $oModuleList->_saveModulePath( "testId3", "testPath3" );
+    }
+
+    /**
+     * oxmodulelist::getModulesFromDir() test case
+     *
+     * @return null
+     */
+    public function testGetModulesFromDir()
+    {
+            $sModulesDir = oxConfig::getInstance()->getModulesDir();
+
+            $oModuleList = new oxModuleList;
+            $aModules = $oModuleList->getModulesFromDir( $sModulesDir );
+
+            $oModule = $aModules["invoicepdf"];
+            $this->assertEquals( "invoicepdf", $oModule->getId() );
+    }
+
+    /**
+     * oxmodulelist::_isVendorDir() test case
+     *
+     * @return null
+     */
+    public function testIsVendorDir()
+    {
+            $sModulesDir = oxConfig::getInstance()->getModulesDir();
+
+            $oModuleList = new oxModuleList;
+
+            $this->assertFalse( $oModuleList->_isVendorDir( $sModulesDir."/invoicepdf" ) );
+    }
 }
