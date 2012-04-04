@@ -49,14 +49,14 @@ function _groupExp(el) {
 
 [{assign var="oFiles" value=$edit->getArticleFiles()}]
 <table cellspacing="0" cellpadding="0" border="0" width="98%">
-    [{if count( $oFiles )}]
+    [{if count( $oFiles ) > 0 }]
         <colgroup>
             <col width="50%">
             <col width="50%">
         </colgroup>
     [{/if}]
     <tr>
-      [{if count( $oFiles )}]
+      [{if count( $oFiles ) > 0 }]
           <td valign="top" class="edittext">
             <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">
                 [{$oViewConf->getHiddenSid()}]
@@ -152,7 +152,7 @@ function _groupExp(el) {
             </form>
          </td>
      [{/if}]
-     <td valign="top" class="edittext" align="right">
+     <td valign="top" class="edittext" [{if count( $oFiles ) > 0 }]align="right"[{/if}]>
           <form name="newFileUpload" id="newFileUpload" action="[{ $oViewConf->getSelfLink() }]" enctype="multipart/form-data" method="post">
           <input type="hidden" name="MAX_FILE_SIZE" value="[{$iMaxUploadFileSize}]">
           [{$oViewConf->getHiddenSid()}]

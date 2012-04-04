@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43250 2012-03-28 12:18:21Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 43469 2012-04-03 13:56:16Z vilma $
  */
 
 /*
@@ -998,6 +998,8 @@ $aLang = array(
 'ORDER_MAIN_DELTYPE'                                       => 'Shipped with',
 'ORDER_MAIN_UPDATE_DELPAY'                                 => 'Update',
 'ORDER_MAIN_SEND_DOWNLOADS'                                => 'Ordered download links',
+'ORDER_MAIN_PAYMENT_INFORMATION'                           => "Payment Information",
+'ORDER_MAIN_SHIPPING_INFORMATION'                          => "[tr]Shipping Information",
 'ORDER_REMARK_REMARK'                                      => '[Remark]',
 'ORDER_REMARK_ORDER'                                       => '[Order]',
 'ORDER_REMARK_USER'                                        => '[Reg.]',
@@ -1262,7 +1264,7 @@ $aLang = array(
 'SHOP_CONFIG_ALLOWUNEVENAMOUNTS'                           => 'Allow fraction Quantities (e.g. 1.5)',
 'SHOP_CONFIG_BIDIRECTCROSS'                                => 'Enable bidirectional Crosselling',
 'SHOP_CONFIG_CONFIRMAGB'                                   => 'Users have to Confirm General Terms and Conditions during Check-Out',
-'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'                      => 'Show an additional "Submit Order" Button at the Top in 4th Order Step (By default "Submit Order" Button is shown only on the Bottom of the Page).',
+'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'                      => 'Show an additional "Purchase" Button at the Top in 4th Order Step (By default "Purchase" Button is shown only on the Bottom of the Page).',
 'SHOP_CONFIG_CALCULATEVATFORDELIVERY'                      => 'Display shipping costs as net price and VAT (instead of gross) in shopping cart and invoice',
 'SHOP_CONFIG_CALCDELVATONTOP'                              => 'Enter Shipping Costs as net Price (plus VAT)',
 'SHOP_CONFIG_CALCULATEVATFORWRAPPING'                      => 'Display VAT contained in Gift Wrapping in Shopping Cart and Invoice',

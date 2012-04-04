@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43250 2012-03-28 12:18:21Z rimvydas.paskevicius $
+ * @version   SVN: $Id: lang.php 43469 2012-04-03 13:56:16Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -1001,6 +1001,8 @@ $aLang = array(
 'ORDER_MAIN_DELTYPE'                                       => 'Versandart',
 'ORDER_MAIN_UPDATE_DELPAY'                                 => 'Aktualisieren',
 'ORDER_MAIN_SEND_DOWNLOADS'                                => 'Bestellte Downloadlinks',
+'ORDER_MAIN_PAYMENT_INFORMATION'                           => "Bezahlinformation",
+'ORDER_MAIN_SHIPPING_INFORMATION'                          => "[tr]Shipping information",
 'ORDER_REMARK_REMARK'                                      => '[Bem.]',
 'ORDER_REMARK_ORDER'                                       => '[Best.]',
 'ORDER_REMARK_USER'                                        => '[Reg.]',
@@ -1265,7 +1267,7 @@ $aLang = array(
 'SHOP_CONFIG_ALLOWUNEVENAMOUNTS'                           => 'Nicht ganzzahlige Eingaben bei Artikelmengen erlauben (z.B. 1,5)',
 'SHOP_CONFIG_BIDIRECTCROSS'                                => 'Bidirektionales Crossselling aktivieren',
 'SHOP_CONFIG_CONFIRMAGB'                                   => 'Kunden müssen die AGB bestätigen, um bestellen zu können',
-'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'                      => 'Im 4ten Bestellschritt einen zusätzlichen "Bestellung absenden" Button oben anzeigen (Wenn die Einstellung nicht aktiv ist, wird nur der "Bestellung absenden" Button weiter unten angezeigt).',
+'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'                      => 'Im 4ten Bestellschritt einen zusätzlichen "Kostenpflichtig Bestellen" Button oben anzeigen (Wenn die Einstellung nicht aktiv ist, wird nur der "Kostenpflichtig Bestellen" Button weiter unten angezeigt).',
 'SHOP_CONFIG_CALCULATEVATFORDELIVERY'                      => 'Im Warenkorb und in der Rechnung die Versandkosten als Nettobetrag und Mehrwertsteuer anstatt als Bruttobetrag anzeigen',
 'SHOP_CONFIG_CALCDELVATONTOP'                              => 'Versandkosten als Nettopreise eingeben (zuzüglich MwSt.)',
 'SHOP_CONFIG_CALCULATEVATFORWRAPPING'                      => 'Die in den Geschenkverpackungskosten enthaltene Mehrwertsteuer im Warenkorb und in der Rechnung anzeigen',
