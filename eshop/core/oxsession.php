@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 43217 2012-03-27 13:31:04Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxsession.php 43532 2012-04-04 13:20:44Z mindaugas.rimgaila $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -625,10 +625,33 @@ class oxSession extends oxSuperCfg
             oxNew('oxbasketitem');
 
             $oBasket = ( $sBasket && ( $oBasket = unserialize( $sBasket ) ) ) ? $oBasket : oxNew( 'oxbasket' );
+            $this->_validateBasket($oBasket);
             $this->setBasket( $oBasket );
         }
 
         return $this->_oBasket;
+    }
+
+    /**
+     * Validate loaded from session basket content. Check for language change.
+     *
+     * @param oxBasket $oBasket Basket object loaded from session.
+     *
+     * @return null
+     */
+    protected function _validateBasket(oxBasket $oBasket)
+    {
+        $aCurrContent = $oBasket->getContents();
+        if (empty($aCurrContent)) {
+            return;
+        }
+
+        $iCurrLang = oxLang::getInstance()->getBaseLanguage();
+        foreach ($aCurrContent as $oContent) {
+            if ($oContent->getLanguageId() != $iCurrLang) {
+                $oContent->setLanguageId($iCurrLang);
+            }
+        }
     }
 
     /**

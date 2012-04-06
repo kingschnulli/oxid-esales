@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42703 2012-03-12 10:47:50Z juergen.busch $
+ * @version   SVN: $Id: lang.php 43527 2012-04-04 11:58:40Z juergen.busch $
  */
 
 /*
@@ -484,7 +484,7 @@ $aLang = array(
 'ARTICLE_STOCK_MONTHS'                                     => 'Months',
 'ARTICLE_STOCK_WEEKS'                                      => 'Weeks',
 'ARTICLE_USERDEF_USERDEFRANGE'                             => 'User-defined Area - here you can add your own fields.',
-'ARTICLE_VARIANT_YOUWANTTODELETE'                          => 'Do you really want to delete this Variant ?',
+'ARTICLE_VARIANT_YOUWANTTODELETE'                          => 'Do you really want to delete this Variant?',
 'ARTICLE_VARIANT_EDIT'                                     => 'Edit',
 'ARTICLE_VARIANT_ARTSAVE'                                  => 'Save Selection',
 'ARTICLE_VARIANT_NEWVAR'                                   => 'New Variant',
@@ -848,8 +848,8 @@ $aLang = array(
 'NEWSLETTER_SEND_TITLE'                                    => 'OXID Newsletter',
 'NEWSLETTER_SEND_SEND1'                                    => 'Send',
 'NEWSLETTER_SEND_SEND2'                                    => 'of overall',
-'ORDER_ARTICLE_YOUWANTTODELETE'                            => 'Do you really want to delete this product ?',
-'ORDER_ARTICLE_YOUWANTTOSTORNO'                            => 'Do you really want to cancel this product ?',
+'ORDER_ARTICLE_YOUWANTTODELETE'                            => 'Do you really want to delete this product?',
+'ORDER_ARTICLE_YOUWANTTOSTORNO'                            => 'Do you really want to cancel this product?',
 'ORDER_ARTICLE_ENETTO'                                     => 'Net',
 'ORDER_ARTICLE_EBRUTTO'                                    => 'Gross',
 'ORDER_ARTICLE_MWST'                                       => 'VAT',
@@ -861,7 +861,7 @@ $aLang = array(
 'ORDER_ARTICLE_UPDATE_STOCK'                               => 'Update',
 'ORDER_SEARCH_FIELD_ARTID'                                 => 'Product',
 'ORDER_SEARCH_FIELD_PAYMENT'                               => 'Payment',
-'ORDER_LIST_YOUWANTTOSTORNO'                               => 'Do you really want to cancel this order ?',
+'ORDER_LIST_YOUWANTTOSTORNO'                               => 'Do you really want to cancel this order?',
 'ORDER_LIST_FOLDER_ALL'                                    => 'all',
 'ORDER_LIST_ORDERTIME'                                     => 'Order Time',
 'ORDER_LIST_PAID'                                          => 'Payment Date',

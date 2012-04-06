@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloudTest.php 32883 2011-02-03 11:45:58Z sarunas $
+ * @version   SVN: $Id: oxtagcloudTest.php 43562 2012-04-05 13:42:03Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -255,6 +255,32 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $oTagCloud->resetTagCache();
         $aTags = $oTagCloud->getTags('test');
         $this->assertEquals(0, count($aTags));
+    }
+
+    public function testGetTags_ArticleTimeRange()
+    {
+        $blParam = oxConfig::getInstance()->getConfigParam( 'blUseTimeCheck' ) ;
+        oxConfig::getInstance()->setConfigParam( 'blUseTimeCheck', 1) ;
+
+        $oArticle = oxNew('oxarticle');
+        $oArticle->load('1126');
+        $oArticle->oxarticles__oxactive->value = 0;
+        $oArticle->oxarticles__oxactivefrom->value = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() - 100 );
+        $oArticle->oxarticles__oxactiveto->value = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() + 100 );
+        $oArticle->save();
+
+        $oTagCloud = new oxTagCloud();
+        $oTagCloud->resetTagCache();
+        $aTags = $oTagCloud->getTags('1126', true );
+
+            $this->assertEquals(9, count($aTags));
+            $this->assertTrue(isset($aTags['fee']));
+
+        oxConfig::getInstance()->setConfigParam( 'blUseTimeCheck', $blParam) ;
+        $oArticle->oxarticles__oxactive->value = 1;
+        $oArticle->oxarticles__oxactivefrom->value = '0000-00-00 00:00:00';
+        $oArticle->oxarticles__oxactiveto->value = '0000-00-00 00:00:00';
+        $oArticle->save();
     }
 
     public function testGetFontSize()
