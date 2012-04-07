@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloud.php 43562 2012-04-05 13:42:03Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxtagcloud.php 43575 2012-04-06 09:45:38Z vilma $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -304,13 +304,9 @@ class oxTagCloud extends oxSuperCfg
         }
 
         // check if article is still active
-        $sArtActive = " oxarticles.oxactive = 1 ";
-
-        // enabled time range check ?
-        if ( $this->getConfig()->getConfigParam( 'blUseTimeCheck' ) ) {
-            $sDate = date( 'Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime() );
-            $sArtActive = "( $sArtActive or ( oxarticles.oxactivefrom < '$sDate' and oxarticles.oxactiveto > '$sDate' ) ) ";
-        }
+        $oArticle   = oxNew( 'oxarticle' );
+        $oArticle->setLanguage( $iLang );
+        $sArtActive = $oArticle->getActiveCheckQuery(true);
 
         $sQ = "select {$sViewName}.oxtags as oxtags from $sArtView as oxarticles left join {$sViewName} on oxarticles.oxid={$sViewName}.oxid where $sArtActive AND $sArticleSelect";
         $rs = $oDb->execute( $sQ );
