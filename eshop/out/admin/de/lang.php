@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 42702 2012-03-12 10:47:20Z juergen.busch $
+ * @version   SVN: $Id: lang.php 43691 2012-04-10 14:26:48Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -408,7 +408,7 @@ $aLang = array(
 'ARTICLE_MAIN_INCATEGORY'                                  => 'In Kategorie',
 'ARTICLE_MAIN_EAN'                                         => 'EAN',
 'ARTICLE_MAIN_DISTEAN'                                     => 'Hersteller EAN',
-'ARTICLE_MAIN_MPN'                                         => 'Hersteller-Artikelnummer',
+'ARTICLE_MAIN_MPN'                                         => 'Hersteller-Artikelnummer (MPN)',
 'ARTICLE_MAIN_MANUFACTURERID'                              => 'Hersteller',
 'ARTICLE_OVERVIEW_ARTMADEON'                               => 'Art. erstellt am',
 'ARTICLE_OVERVIEW_LASTCHANGE'                              => 'Letzte Änderung am',

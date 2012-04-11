@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43527 2012-04-04 11:58:40Z juergen.busch $
+ * @version   SVN: $Id: lang.php 43693 2012-04-10 14:29:47Z juergen.busch $
  */
 
 /*
@@ -1085,7 +1085,7 @@ $aLang = array(
 'SHOP_CONFIG_DEFAULTLANGUAGE'                              => 'Default Language (0, 1, 2 ...) - 0 for German, 1 for English',
 'SHOP_CONFIG_EXCLUDENONMATERIALPRODUCTS'                   => "Don't consider intangible Products (e.g. Gift Certificates) in Shipping Costs Calculation",
 'SHOP_CONFIG_ENTERNETPRICE'                                => 'Product and Gift Wrapping prices entered/displayed in Admin are Net Prices',
-'SHOP_CONFIG_INLANDCUSTOMERS'                              => 'Domestic Customers - Customers living in the <b>selected</b> Countries are assigned to the User Group "Domestic Customers". For multiple selections use STRG key.',
+'SHOP_CONFIG_INLANDCUSTOMERS'                              => 'Domestic Customers - Customers living in the <b>selected</b> Countries are assigned to the User Group "Domestic Customers". For multiple selections use CTRL key.',
 'SHOP_CONFIG_LARGECUSTOMERPRICE'                           => 'Purchase Price Threshold from which Users are assigned to User Group "Huge Turnover"',
 'SHOP_CONFIG_MAXGBENTRIESPERDAY'                           => 'Number of Guestbook Entries each User is allowed to enter per Day',
 'SHOP_CONFIG_MIDLLECUSTOMERPRICE'                          => 'Purchase Price Threshold from which Users are assigned to User Group "Medium Turnover"',

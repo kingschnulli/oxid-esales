@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfileTest.php 42565 2012-03-01 11:30:48Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxutilsfileTest.php 43650 2012-04-10 09:00:56Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -527,6 +527,25 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
            '',
            $oUF->getInstance()->translateError( -1, 'fileName' )
         );
+    }
+
+    public function testProcessFilesNewCounter()
+    {
+        oxTestModules::addFunction( 'oxUtilspic', 'resizeImage', '{return true;}' );
+
+        $_FILES['myfile']['name']     = array( 'P1@oxarticles__oxpic1' => 'testname.gif', 'P1@oxarticles__oxpic2' => 'testname2.gif' );
+        $_FILES['myfile']['tmp_name'] = array( 'P1@oxarticles__oxpic1' => 'testimagesource', 'P1@oxarticles__oxpic2' => 'testimagesource2' );
+
+        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureDir' ) );
+        $oConfig->expects( $this->any() )->method( 'getPictureDir' )->will( $this->returnValue( getTestsBasePath().'/unit/out/pictures' ) );
+
+        $oUtilsFile = $this->getMock( "oxUtilsFile", array( "_moveImage" ) );
+        $oUtilsFile->expects( $this->any() )->method( '_moveImage' )->will( $this->returnValue( true ) );
+
+        $oUtilsFile->setConfig( $oConfig );
+        $oUtilsFile->processFiles( new oxArticle() );
+        
+        $this->assertEquals( $oUtilsFile->getNewFilesCounter(), 2, "Check how much new files add.");
     }
 
     // 20070720-AS - End setup
