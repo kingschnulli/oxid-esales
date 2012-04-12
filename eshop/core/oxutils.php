@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 43435 2012-04-02 08:15:12Z alfonsas $
+ * @version   SVN: $Id: oxutils.php 43756 2012-04-11 09:00:15Z linas.kukulskis $
  */
 
 /**
@@ -785,18 +785,22 @@ class oxUtils extends oxSuperCfg
     public function resetTemplateCache($aTemplates)
     {
         $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
-        if ( is_array( $aFiles ) ) {
+        if ( is_array( $aFiles ) && is_array( $aTemplates ) && count($aTemplates) ) {
             // delete all template cache files
             foreach ($aTemplates as &$sTemplate) {
                 $sTemplate = preg_quote(basename(strtolower($sTemplate), '.tpl'));
             }
 
-            $sPattern = sprintf("/%%[%s]+\.tpl\.php$/i", implode('|', $aTemplates));
+            $sPattern = sprintf("/%%(%s)\.tpl\.php$/i", implode('|', $aTemplates));
             $aFiles = preg_grep( $sPattern, $aFiles );
-            foreach ( $aFiles as $sFile ) {
-                @unlink( $sFile );
+            
+            if (is_array( $aFiles ) ) {
+                foreach ( $aFiles as $sFile ) {
+                    @unlink( $sFile );
+                }
             }
         }
+
     }
 
     /**
@@ -902,8 +906,9 @@ class oxUtils extends oxSuperCfg
              ( $sAdminSid = oxUtilsServer::getInstance()->getOxCookie( 'admin_sid' ) ) ) {
 
             $sTable = getViewName( 'oxuser' );
-            $sQ = "select 1 from $sTable where MD5( CONCAT( ".oxDb::getDb()->quote($sAdminSid).", {$sTable}.oxid, {$sTable}.oxpassword, {$sTable}.oxrights ) ) = ".oxDb::getDb()->quote($sPrevId);
-            $blCan = (bool) oxDb::getInstance()->getOne( $sQ );
+            $oDb = oxDb::getDb();
+            $sQ = "select 1 from $sTable where MD5( CONCAT( ".$oDb->quote($sAdminSid).", {$sTable}.oxid, {$sTable}.oxpassword, {$sTable}.oxrights ) ) = ".oxDb::getDb()->quote($sPrevId);
+            $blCan = (bool) $oDb->getOne( $sQ );
         }
 
         return $blCan;
@@ -946,7 +951,7 @@ class oxUtils extends oxSuperCfg
         if ( $sUserID) {
             // escaping
             $oDb = oxDb::getDb();
-            $sRights = oxDb::getInstance()->getOne("select oxrights from oxuser where oxid = ".$oDb->quote($sUserID));
+            $sRights = $oDb->getOne("select oxrights from oxuser where oxid = ".$oDb->quote($sUserID));
 
             if ( $sRights != "user") {
                 // malladmin ?
@@ -965,7 +970,7 @@ class oxUtils extends oxSuperCfg
                     $blIsAuth = true;
                 } else {
                     // Shopadmin... check if this shop is valid and exists
-                    $sShopID = oxDb::getInstance()->getOne("select oxid from oxshops where oxid = " . $oDb->quote( $sRights ) );
+                    $sShopID = $oDb->getOne("select oxid from oxshops where oxid = " . $oDb->quote( $sRights ) );
                     if ( isset( $sShopID) && $sShopID) {
                         // success, this shop exists
 
@@ -1062,7 +1067,7 @@ class oxUtils extends oxSuperCfg
     public function bitwiseAnd( $iVal1, $iVal2 )
     {
         //this works for large numbers when $sShopNr is up to (inclusive) 64
-        $iRes = oxDb::getInstance()->getOne( "select ($iVal1 & $iVal2) as bitwiseAnd" );
+        $iRes = oxDb::getDb()->getOne( "select ($iVal1 & $iVal2) as bitwiseAnd" );
 
         //as php ints supports only 32 bits, we return string.
         return $iRes;
@@ -1082,7 +1087,7 @@ class oxUtils extends oxSuperCfg
     public function bitwiseOr( $iVal1, $iVal2 )
     {
         //this works for large numbers when $sShopNr is up to (inclusive) 64
-        $iRes = oxDb::getInstance()->getOne( "select ($iVal1 | $iVal2) as bitwiseOr" );
+        $iRes = oxDb::getDb()->getOne( "select ($iVal1 | $iVal2) as bitwiseOr" );
 
         //as php ints supports only 32 bits, we return string.
         return $iRes;

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 43324 2012-03-29 13:39:17Z linas.kukulskis $
+ * @version   SVN: $Id: oxemail.php 43724 2012-04-11 07:22:33Z linas.kukulskis $
  */
 /**
  * Includes PHP mailer class.
@@ -744,7 +744,7 @@ class oxEmail extends PHPMailer
         }
 
         $sSelect = "select oxid from oxuser where $sWhere $sOrder";
-        if ( ( $sOxId = oxDb::getInstance()->getOne( $sSelect ) ) ) {
+        if ( ( $sOxId = $oDb->getOne( $sSelect ) ) ) {
 
             $oUser = oxNew( 'oxuser' );
             if ( $oUser->load($sOxId) ) {

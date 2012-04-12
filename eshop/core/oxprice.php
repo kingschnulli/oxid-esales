@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxprice.php 35056 2011-05-03 07:53:56Z sarunas $
+ * @version   SVN: $Id: oxprice.php 43499 2012-04-04 07:21:09Z linas.kukulskis $
  */
 
 /**
@@ -399,7 +399,7 @@ class oxPrice extends oxSuperCfg
     }
 
     /**
-     * Calculates price depending on price entering mode
+     * Calculates price depending on price entering mode.
      *
      * @access protected
      *
@@ -408,16 +408,11 @@ class oxPrice extends oxSuperCfg
     protected function _recalculate()
     {
         if ( $this->_blNetPriceMode ) {
-            // rounding base price in netto mode
-            $this->_dNetto  = oxUtils::getInstance()->fRound( $this->_dNetto );
             $this->_dBrutto = self::netto2Brutto($this->_dNetto, $this->_dVat);
-
-            // rounding brutto price value after each operation
-            $this->_dBrutto = oxUtils::getInstance()->fRound( $this->_dBrutto );
         } else {
-            $this->_dBrutto = oxUtils::getInstance()->fRound( $this->_dBrutto );
             $this->_dNetto  = self::brutto2Netto($this->_dBrutto, $this->_dVat);
         }
+        $this->_dBrutto = oxUtils::getInstance()->fRound($this->_dBrutto);
     }
 
     /**

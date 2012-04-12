@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   setup
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 40444 2011-12-02 12:44:07Z vilma $
+ * @version   SVN: $Id: lang.php 43759 2012-04-11 09:15:46Z vilma $
  */
 
 $aLang = array(
@@ -189,11 +189,13 @@ $aLang = array(
 'SETUP_DIR_DELETE_NOTICE'                       => "WICHTIG: Bitte löschen Sie Ihr Setup Verzeichnis falls dieses nicht bereits automatisch entfernt wurde!",
 'SETUP_CONFIG_PERMISSIONS'                      => "WICHTIG: Aus Sicherheitsgründen setzen Sie Ihre config.inc.php Datei auf read-only-Modus!",
 
-'SELECT_SETUP_LANG'                             => "Sprache für Installation und Shop",
-'SELECT_SETUP_LANG_HINT'                        => ". Aktivieren Sie weitere Sprachen im Admin, falls gewünscht.",
-'SELECT_COUNTRY_LANG'                           => "Shop-Standort",
+'SELECT_SETUP_LANG'                             => "[tr]Sprache für Installation",
+'SELECT_SHOP_LOCATION'                          => "[tr]Please choose your Market",
+'SELECT_SHOP_LOCATION_HINT'                     => "[tr]Please choose the Market place to which Shop is focused. According to it, additional eCommerce Services will be loaded from OXID server.",
 'SELECT_DELIVERY_COUNTRY'                       => "Haupt Lieferland",
 'SELECT_DELIVERY_COUNTRY_HINT'                  => "Aktivieren Sie weitere Lieferländer im Admin, falls benötigt",
+'SELECT_SHOP_LANG'                              => "[tr]Sprache für Shop",
+'SELECT_SHOP_LANG_HINT'                         => "Aktivieren Sie weitere Sprachen im Admin, falls gewünscht.",
 'SELECT_SETUP_LANG_SUBMIT'                      => "Auswählen",
 'USE_DYNAMIC_PAGES'                             => "Um Ihren Geschäftserfolg zu vergrößern, laden Sie weitere Informationen vom OXID Server nach. <br>Mehr Informationen in unserern ",
 'PRIVACY_POLICY'                                => "Datenschutzerläuterungen",

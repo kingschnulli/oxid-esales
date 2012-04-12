@@ -115,14 +115,15 @@ class oxSeoEncoderTag extends oxSeoEncoder
             $oTagCloud = oxNew('oxtagcloud');
             $sTag = $oTagCloud->prepareTags($sTag);
             $sViewName = getViewName( 'oxartextends', $iLang );
+            $oDb = oxDb::getDb();
             $sQ = "select 1 from {$sViewName} where match ( {$sViewName}.oxtags )
-                   against( ".oxDb::getDb()->quote( "\"".$sTag."\"" )." IN BOOLEAN MODE )";
+                   against( ".$oDb->quote( "\"".$sTag."\"" )." IN BOOLEAN MODE )";
 
             if ( $sOxid ) {
-                $sQ .= " and oxid = " . oxDb::getDb()->quote( $sOxid );
+                $sQ .= " and oxid = " . $oDb->quote( $sOxid );
             }
 
-            if ( oxDb::getInstance()->getOne( $sQ ) ) {
+            if ( $oDb->getOne( $sQ ) ) {
                 // creating unique
                 $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $sObjectId, $iLang );
 

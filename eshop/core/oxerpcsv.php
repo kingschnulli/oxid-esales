@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpcsv.php 43323 2012-03-29 13:38:31Z linas.kukulskis $
+ * @version   SVN: $Id: oxerpcsv.php 43726 2012-04-11 07:27:01Z linas.kukulskis $
  */
 
 /**
@@ -510,7 +510,7 @@ class oxErpCsv extends oxERPBase
         $oDb = oxDb::getDb();
 
         $sSql = "select OXID from oxobject2category where oxobjectid = ".$oDb->quote( $aRow['OXOBJECTID'] )." and OXCATNID = ".$oDb->quote( $aRow['OXCATNID'] );
-        $aRow['OXID'] = oxDb::getInstance()->getOne( $sSql );
+        $aRow['OXID'] = $oDb->getOne( $sSql, false, false );
 
         $sResult = $this->_save( $oType, $aRow);
         if ((boolean) $sResult) {

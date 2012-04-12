@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticle.php 43305 2012-03-29 13:14:46Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderarticle.php 43749 2012-04-11 08:16:16Z linas.kukulskis $
  */
 
 /**
@@ -388,7 +388,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         $sIdent = md5( $sQ );
 
         if ( ( $sMainCatId = $this->_loadFromCache( $sIdent, "oxarticle" ) ) === false ) {
-            $sMainCatId = oxDb::getInstance()->getOne( $sQ );
+            $sMainCatId = $oDb->getOne( $sQ );
             // storing in cache
             $this->_saveInCache( $sIdent, $sMainCatId, "oxarticle" );
         }
@@ -483,7 +483,7 @@ class oxSeoEncoderArticle extends oxSeoEncoder
                 if ( !isset( self::$_aTitleCache[$sParentId] ) ) {
                     $oDb = oxDb::getDb();
                     $sQ = "select oxtitle from ".$oArticle->getViewName()." where oxid = ".$oDb->quote( $sParentId );
-                    self::$_aTitleCache[$sParentId] = oxDb::getInstance()->getOne( $sQ );
+                    self::$_aTitleCache[$sParentId] = $oDb->getOne( $sQ );
                 }
                 $sTitle = self::$_aTitleCache[$sParentId];
             }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 43286 2012-03-29 12:57:46Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 43707 2012-04-11 06:27:11Z linas.kukulskis $
  */
 
 /**
@@ -280,9 +280,9 @@ class oxBase extends oxSuperCfg
                 try {
                     if ( $this->_aInnerLazyCache === null ) {
 
-                        $oDb = oxDb::getDb();
+                        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
                         $sQ = "SELECT * FROM " . $sViewName . " WHERE `oxid` = " . $oDb->quote( $sId );
-                        $rs = oxDb::getInstance()->select( $sQ );
+                        $rs = $oDb->select( $sQ );
                         if ( $rs && $rs->RecordCount() ) {
                             $this->_aInnerLazyCache = array_change_key_case( $rs->fields, CASE_UPPER );
                             if ( array_key_exists( $sCacheFieldName, $this->_aInnerLazyCache ) ) {
@@ -677,7 +677,7 @@ class oxBase extends oxSuperCfg
     {
         $blRet = false;
 
-        $rs = oxDb::getInstance()->select( $sSelect );
+        $rs = oxDb::getDb( oxDb::FETCH_MODE_ASSOC )->select( $sSelect );
 
         if ($rs != false && $rs->recordCount() > 0) {
             $blRet = true;
@@ -840,10 +840,10 @@ class oxBase extends oxSuperCfg
         }
 
         $sViewName = $this->getCoreTableName();
-        $oDB = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
-        $sSelect= "select {$this->_sExistKey} from {$sViewName} where {$this->_sExistKey} = ".$oDB->quote( $sOXID );
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $sSelect= "select {$this->_sExistKey} from {$sViewName} where {$this->_sExistKey} = ".$oDb->quote( $sOXID );
 
-        return ( bool ) oxDb::getInstance()->getOne( $sSelect );
+        return ( bool ) $oDb->getOne( $sSelect );
     }
 
     /**
@@ -1339,16 +1339,17 @@ class oxBase extends oxSuperCfg
             $mValue = $oField->value;
         }
 
+        $oDb = oxDb::getDb();
         //Check if this field value is null AND it can be null according if not returning default value
         if ( ( null === $mValue ) ) {
             if ( $this->_canFieldBeNull( $sFieldName ) ) {
                 return 'null';
             } elseif ( $mValue = $this->_getFieldDefaultValue( $sFieldName ) ) {
-                return oxDb::getDb()->quote( $mValue );
+                return $oDb->quote( $mValue );
             }
         }
 
-        return oxDb::getDb()->quote( $mValue );
+        return $oDb->quote( $mValue );
     }
 
     /**
@@ -1428,7 +1429,7 @@ class oxBase extends oxSuperCfg
     protected function _insert()
     {
 
-        $oDB      = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb      = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $myConfig = $this->getConfig();
         $myUtils  = oxUtils::getInstance();
 
@@ -1450,7 +1451,7 @@ class oxBase extends oxSuperCfg
 
 
         $sInsert .= $this->_getUpdateFields( false );
-        $blRet = (bool) $oDB->execute( $sInsert);
+        $blRet = (bool) $oDb->execute( $sInsert);
 
         $this->_rebuildCache();
 
@@ -1504,11 +1505,11 @@ class oxBase extends oxSuperCfg
                 return false;
             }
 
-            $iChkCnt = oxDb::getInstance()->getOne( $sCheck );
+            $iChkCnt = $oDb->getOne( $sCheck );
         } while ( ( $iChkCnt > 1 ) && $iMaxTryCnt-- );
 
         $sFieldName = $this->getViewName().'__'.$sMaxField;
-        $this->$sFieldName = new oxField( oxDb::getInstance()->getOne( $sMaxSelect ), oxField::T_RAW);//int value
+        $this->$sFieldName = new oxField( $oDb->getOne( $sMaxSelect ), oxField::T_RAW);//int value
 
         return ( $iChkCnt == 1 );
     }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 43377 2012-03-30 11:39:42Z linas.kukulskis $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 43695 2012-04-10 14:33:11Z linas.kukulskis $
  */
 
 /**
@@ -440,7 +440,7 @@ class oxArticleList extends oxList
         // #1970C - if any filters are used, we can not use cached category article count
         $iArticleCount = null;
         if ( $aSessionFilter) {
-            $iArticleCount = oxDb::getInstance()->getOne( $this->_getCategoryCountSelect( $sCatId, $aSessionFilter ) );
+            $iArticleCount = oxDb::getDb()->getOne( $this->_getCategoryCountSelect( $sCatId, $aSessionFilter ) );
         }
 
         if ($iLimit = (int) $iLimit) {
@@ -812,8 +812,12 @@ class oxArticleList extends oxList
         $this->selectString( $sSelect );
 
         // not active or not available products must not have button "tobasket"
+        $sNow = date('Y-m-d H:i:s');
         foreach ( $this as $oArticle ) {
-            if ( !$oArticle->oxarticles__oxactive->value ) {
+            if ( !$oArticle->oxarticles__oxactive->value  &&
+             (  $oArticle->oxarticles__oxactivefrom->value > $sNow ||
+                $oArticle->oxarticles__oxactiveto->value < $sNow
+             )) {
                 $oArticle->setBuyableState( false );
             }
         }
@@ -864,7 +868,7 @@ class oxArticleList extends oxList
 
         // fetching next update time
         $sQ = "select unix_timestamp( oxupdatepricetime ) from %s where oxupdatepricetime > 0 order by oxupdatepricetime asc";
-        $iTimeToUpdate = oxDb::getInstance()->getOne( sprintf( $sQ, "`oxarticles`" ) );
+        $iTimeToUpdate = $oDb->getOne( sprintf( $sQ, "`oxarticles`" ), false, false );
 
 
         // next day?
@@ -958,7 +962,7 @@ class oxArticleList extends oxList
      */
     protected function _createIdListFromSql( $sSql)
     {
-        $rs = oxDb::getInstance()->select( $sSql );
+        $rs = oxDb::getDb( oxDb::FETCH_MODE_ASSOC )->select( $sSql );
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
                 $rs->fields = array_change_key_case($rs->fields, CASE_LOWER);
@@ -1018,7 +1022,7 @@ class oxArticleList extends oxList
     protected function _getFilterSql( $sCatId, $aFilter )
     {
         $sArticleTable = getViewName( 'oxarticles' );
-        $aIds = oxDb::getInstance()->getAll( $this->_getFilterIdsSql( $sCatId, $aFilter ) );
+        $aIds = oxDb::getDb(oxDb::FETCH_MODE_ASSOC)->getAll( $this->_getFilterIdsSql( $sCatId, $aFilter ) );
         $sIds = '';
 
         if ( $aIds ) {

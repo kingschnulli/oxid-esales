@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 43350 2012-03-29 14:28:16Z linas.kukulskis $
+ * @version   SVN: $Id: oxuser.php 43753 2012-04-11 08:34:18Z linas.kukulskis $
  */
 
 /**
@@ -271,7 +271,7 @@ class oxUser extends oxBase
             $oDb = oxDb::getDb();
             $sViewName = getViewName( 'oxcountry', $iLang );
             $sQ = "select oxtitle from {$sViewName} where oxid = " . $oDb->quote( $sId ) . " ";
-            $oCountry = new oxField( oxDb::getInstance()->getOne( $sQ ), oxField::T_RAW);
+            $oCountry = new oxField( $oDb->getOne( $sQ ), oxField::T_RAW);
             if ( !$sCountryId ) {
                 $this->_oUserCountryTitle = $oCountry;
             }
@@ -293,7 +293,7 @@ class oxUser extends oxBase
     {
         $oDb = oxDb::getDb();
         $sQ = "select oxid from ".getviewName( "oxcountry" )." where oxactive = '1' and oxisoalpha2 = " . $oDb->quote( $sCountry ) . " ";
-        $sCountryId = oxDb::getInstance()->getOne( $sQ );
+        $sCountryId = $oDb->getOne( $sQ );
 
         return $sCountryId;
     }
@@ -575,29 +575,29 @@ class oxUser extends oxBase
         $blDeleted = parent::delete( $sOXID );
 
         if ( $blDeleted ) {
-            $oDB = oxDb::getDb();
-            $sOXIDQuoted = $oDB->quote($sOXID);
+            $oDb = oxDb::getDb();
+            $sOXIDQuoted = $oDb->quote($sOXID);
 
             // deleting stored payment, address, group dependencies, remarks info
-            $rs = $oDB->execute( "delete from oxaddress where oxaddress.oxuserid = {$sOXIDQuoted}" );
-            $rs = $oDB->execute( "delete from oxobject2group where oxobject2group.oxobjectid = {$sOXIDQuoted}" );
+            $rs = $oDb->execute( "delete from oxaddress where oxaddress.oxuserid = {$sOXIDQuoted}" );
+            $rs = $oDb->execute( "delete from oxobject2group where oxobject2group.oxobjectid = {$sOXIDQuoted}" );
 
             // deleting notice/wish lists
-            $rs = $oDB->execute( "delete oxuserbasketitems.* from oxuserbasketitems, oxuserbaskets where oxuserbasketitems.oxbasketid = oxuserbaskets.oxid and oxuserid = {$sOXIDQuoted}" );
-            $rs = $oDB->execute( "delete from oxuserbaskets where oxuserid = {$sOXIDQuoted}" );
+            $rs = $oDb->execute( "delete oxuserbasketitems.* from oxuserbasketitems, oxuserbaskets where oxuserbasketitems.oxbasketid = oxuserbaskets.oxid and oxuserid = {$sOXIDQuoted}" );
+            $rs = $oDb->execute( "delete from oxuserbaskets where oxuserid = {$sOXIDQuoted}" );
 
             // deleting newsletter subscription
-            $rs = $oDB->execute( "delete from oxnewssubscribed where oxuserid = {$sOXIDQuoted}" );
+            $rs = $oDb->execute( "delete from oxnewssubscribed where oxuserid = {$sOXIDQuoted}" );
 
             // delivery and delivery sets
-            $rs = $oDB->execute( "delete from oxobject2delivery where oxobjectid = {$sOXIDQuoted}");
+            $rs = $oDb->execute( "delete from oxobject2delivery where oxobjectid = {$sOXIDQuoted}");
 
             // discounts
-            $rs = $oDB->execute( "delete from oxobject2discount where oxobjectid = {$sOXIDQuoted}");
+            $rs = $oDb->execute( "delete from oxobject2discount where oxobjectid = {$sOXIDQuoted}");
 
 
             // and leaving all order related information
-            $rs = $oDB->execute( "delete from oxremark where oxparentid = {$sOXIDQuoted} and oxtype !='o'" );
+            $rs = $oDb->execute( "delete from oxremark where oxparentid = {$sOXIDQuoted} and oxtype !='o'" );
 
             $blDeleted = $rs->EOF;
         }
@@ -653,7 +653,7 @@ class oxUser extends oxBase
         }
 
         $blExists = false;
-        if ( ( $sOxid = oxDb::getInstance()->getOne( $sSelect ) ) ) {
+        if ( ( $sOxid = $oDb->getOne( $sSelect ) ) ) {
              // update - set oxid
             $this->setId( $sOxid );
             $blExists = true;
@@ -710,7 +710,7 @@ class oxUser extends oxBase
         if ( $this->getId() && $this->oxuser__oxregister->value > 1 ) {
             $oDb = oxDb::getDb();
             $sQ  = 'select count(*) from oxorder where oxuserid = '.$oDb->quote( $this->getId() ).' AND oxorderdate >= ' . $oDb->quote( $this->oxuser__oxregister->value) . ' and oxshopid = "'.$this->getConfig()->getShopId().'" ';
-            $iCnt = (int) oxDb::getInstance()->getOne( $sQ );
+            $iCnt = (int) $oDb->getOne( $sQ );
         }
 
         return $iCnt;
@@ -783,15 +783,15 @@ class oxUser extends oxBase
      */
     public function createUser()
     {
-        $oDB = oxDb::getDb();
+        $oDb = oxDb::getDb();
         $sShopID = $this->getConfig()->getShopId();
 
         // check if user exists AND there is no password - in this case we update otherwise we try to insert
-        $sSelect = "select oxid from oxuser where oxusername = " . $oDB->quote( $this->oxuser__oxusername->value ) . " and oxpassword = '' ";
+        $sSelect = "select oxid from oxuser where oxusername = " . $oDb->quote( $this->oxuser__oxusername->value ) . " and oxpassword = '' ";
         if ( !$this->_blMallUsers ) {
             $sSelect .= " and oxshopid = '{$sShopID}' ";
         }
-        $sOXID = oxDb::getInstance()->getOne( $sSelect );
+        $sOXID = $oDb->getOne( $sSelect, false, false );
 
         // user without password found - lets use
         if ( isset( $sOXID ) && $sOXID ) {
@@ -799,8 +799,8 @@ class oxUser extends oxBase
             $this->delete( $sOXID );
         } elseif ( $this->_blMallUsers ) {
             // must be sure if there is no dublicate user
-            $sQ = "select oxid from oxuser where oxusername = " . $oDB->quote( $this->oxuser__oxusername->value ) . " and oxusername != '' ";
-            if ( oxDb::getInstance()->getOne( $sQ ) ) {
+            $sQ = "select oxid from oxuser where oxusername = " . $oDb->quote( $this->oxuser__oxusername->value ) . " and oxusername != '' ";
+            if ( $oDb->getOne( $sQ, false, false ) ) {
                 $oEx = oxNew( 'oxUserException' );
                 $oLang = oxLang::getInstance();
                 $oEx->setMessage( sprintf( $oLang->translateString( 'EXCEPTION_USER_USEREXISTS', $oLang->getTplLanguage() ), $this->oxuser__oxusername->value ) );
@@ -811,8 +811,8 @@ class oxUser extends oxBase
         $this->oxuser__oxshopid = new oxField( $sShopID, oxField::T_RAW );
         if ( ( $blOK = $this->save() ) ) {
             // dropping/cleaning old delivery address/payment info
-            $oDB->execute( "delete from oxaddress where oxaddress.oxuserid = " . $oDB->quote( $this->oxuser__oxid->value ) . " " );
-            $oDB->execute( "update oxuserpayments set oxuserpayments.oxuserid = " . $oDB->quote( $this->oxuser__oxusername->value ) . " where oxuserpayments.oxuserid = " . $oDB->quote( $this->oxuser__oxid->value ) . " " );
+            $oDb->execute( "delete from oxaddress where oxaddress.oxuserid = " . $oDb->quote( $this->oxuser__oxid->value ) . " " );
+            $oDb->execute( "update oxuserpayments set oxuserpayments.oxuserid = " . $oDb->quote( $this->oxuser__oxusername->value ) . " where oxuserpayments.oxuserid = " . $oDb->quote( $this->oxuser__oxid->value ) . " " );
         } else {
             $oEx = oxNew( 'oxUserException' );
             $oEx->setMessage( 'EXCEPTION_USER_USERCREATIONFAILED' );
@@ -1332,8 +1332,7 @@ class oxUser extends oxBase
             $sSelect = $this->_getLoginQuery( $sUser, $sPassword, $sShopID, $this->isAdmin() );
 
             // load from DB
-            oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-            $aData = oxDb::getInstance()->getAll( $sSelect );
+            $aData = oxDb::getDb()->getAll( $sSelect );
             $sOXID = @$aData[0][0];
             if ( isset( $sOXID ) && $sOXID && !@$aData[0][1] ) {
 
@@ -1423,7 +1422,7 @@ class oxUser extends oxBase
         $myConfig = $this->getConfig();
 
         $blAdmin = $this->isAdmin() || $blForceAdmin;
-        $oDB = oxDb::getDb();
+        $oDb = oxDb::getDb();
 
         // first - checking session info
         $sUserID = $blAdmin ? oxSession::getVar( 'auth' ) : oxSession::getVar( 'usr' );
@@ -1437,10 +1436,9 @@ class oxUser extends oxBase
                 $sUser = $aData[0];
                 $sPWD  = @$aData[1];
 
-                $sSelect =  'select oxid, oxpassword, oxpasssalt from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$oDB->quote($sUser);
+                $sSelect =  'select oxid, oxpassword, oxpasssalt from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$oDb->quote($sUser);
 
-                oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-                $rs = oxDb::getInstance()->select( $sSelect );
+                $rs = $oDb->select( $sSelect );
                 if ( $rs != false && $rs->recordCount() > 0 ) {
                     while (!$rs->EOF) {
                         $sTest = crypt( $rs->fields[1], $rs->fields[2] );
@@ -1461,12 +1459,12 @@ class oxUser extends oxBase
         if ( $myConfig->getConfigParam( "bl_showFbConnect") && !$sUserID && !$blAdmin ) {
             $oFb = oxFb::getInstance();
             if ( $oFb->isConnected() && $oFb->getUser() ) {
-                $sUserSelect = "oxuser.oxfbid = " . $oDB->quote( $oFb->getUser() );
+                $sUserSelect = "oxuser.oxfbid = " . $oDb->quote( $oFb->getUser() );
                 $sShopSelect = "";
 
 
                 $sSelect =  "select oxid from oxuser where oxuser.oxactive = 1 and {$sUserSelect} {$sShopSelect} ";
-                $sUserID = oxDb::getInstance()->getOne( $sSelect );
+                $sUserID = $oDb->getOne( $sSelect );
             }
         }
 
@@ -1515,7 +1513,7 @@ class oxUser extends oxBase
 
         // maybe this is LDAP user but supplied email Address instead of LDAP login
         $oDb = oxDb::getDb();
-        $sLDAPKey = oxDb::getInstance()->getOne( "select oxldapkey from oxuser where oxuser.oxactive = 1 and oxuser.oxusername = ".$oDb->quote( $sUser )." $sShopSelect");
+        $sLDAPKey = $oDb->getOne( "select oxldapkey from oxuser where oxuser.oxactive = 1 and oxuser.oxusername = ".$oDb->quote( $sUser )." $sShopSelect");
         if ( isset( $sLDAPKey) && $sLDAPKey) {
             $sUser = $sLDAPKey;
         }
@@ -1529,7 +1527,7 @@ class oxUser extends oxBase
 
             // check if user is already in database
             $sSelect =  "select oxid from oxuser where oxuser.oxusername = ".$oDb->quote( $aData['OXUSERNAME'] )." $sShopSelect";
-            $sOXID = oxDb::getInstance()->getOne( $sSelect );
+            $sOXID = $oDb->getOne( $sSelect );
 
             if ( !isset( $sOXID ) || !$sOXID ) {
                 // we need to create a new user
@@ -1573,7 +1571,7 @@ class oxUser extends oxBase
         if ( !$this->oxuser__oxrights->value )
             return 'user';
 
-        $oDB = oxDb::getDb();
+        $oDb = oxDb::getDb();
         $myConfig    = $this->getConfig();
         $sAuthRights = null;
 
@@ -1581,14 +1579,14 @@ class oxUser extends oxBase
         $sAuthUserID = $this->isAdmin()?oxSession::getVar( 'auth' ):null;
         $sAuthUserID = $sAuthUserID?$sAuthUserID:oxSession::getVar( 'usr' );
         if ( $sAuthUserID ) {
-            $sAuthRights = oxDb::getInstance()->getOne( 'select oxrights from '.$this->getViewName().' where oxid='.$oDB->quote( $sAuthUserID ) );
+            $sAuthRights = $oDb->getOne( 'select oxrights from '.$this->getViewName().' where oxid='.$oDb->quote( $sAuthUserID ) );
         }
 
         //preventing user rights edit for non admin
         $aRights = array();
 
         // selecting current users rights ...
-        if ( $sCurrRights = oxDb::getInstance()->getOne( 'select oxrights from '.$this->getViewName().' where oxid='.$oDB->quote( $this->getId() ) ) ) {
+        if ( $sCurrRights = $oDb->getOne( 'select oxrights from '.$this->getViewName().' where oxid='.$oDb->quote( $this->getId() ) ) ) {
             $aRights[] = $sCurrRights;
         }
         $aRights[] = 'user';
@@ -1683,16 +1681,15 @@ class oxUser extends oxBase
     public function checkIfEmailExists( $sEmail )
     {
         $myConfig = $this->getConfig();
-        $oDB = oxDb::getDb();
+        $oDb = oxDb::getDb();
         $iShopId = $myConfig->getShopId();
         $blExists = false;
 
-        $sQ = 'select oxshopid, oxrights, oxpassword from oxuser where oxusername = '. $oDB->quote( $sEmail );
+        $sQ = 'select oxshopid, oxrights, oxpassword from oxuser where oxusername = '. $oDb->quote( $sEmail );
         if ( ( $sOxid = $this->getId() ) ) {
-            $sQ .= " and oxid <> ".$oDB->quote( $sOxid );
+            $sQ .= " and oxid <> ".$oDb->quote( $sOxid );
         }
-        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-        $oRs = oxDb::getInstance()->select( $sQ );
+        $oRs = $oDb->select( $sQ );
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
 
             if ( $this->_blMallUsers ) {
@@ -1775,7 +1772,7 @@ class oxUser extends oxBase
             $this->_iCntRecommLists = 0;
             $iShopId = $this->getConfig()->getShopId();
             $sSelect = 'select count(oxid) from oxrecommlists where oxuserid = ' . $oDb->quote( $sOx ) . ' and oxshopid ="'. $iShopId .'"';
-            $this->_iCntRecommLists = oxDb::getInstance()->getOne( $sSelect );
+            $this->_iCntRecommLists = $oDb->getOne( $sSelect );
         }
         return $this->_iCntRecommLists;
     }
@@ -2022,7 +2019,7 @@ class oxUser extends oxBase
     {
         $oDb = oxDb::getDb();
         $sQ = "select oxid from ".$this->getViewName()." where oxupdateexp >= ".time()." and MD5( CONCAT( oxid, oxshopid, oxupdatekey ) ) = ".$oDb->quote( $sUid );
-        if ( $sUserId = oxDb::getInstance()->getOne( $sQ ) ) {
+        if ( $sUserId = $oDb->getOne( $sQ ) ) {
             return $this->load( $sUserId );
         }
     }
@@ -2070,7 +2067,7 @@ class oxUser extends oxBase
     {
         $oDb = oxDb::getDb();
         $sQ = "select 1 from ".$this->getViewName()." where oxupdateexp >= ".time()." and MD5( CONCAT( oxid, oxshopid, oxupdatekey ) ) = ".$oDb->quote( $sKey );
-        return !( (bool) oxDb::getInstance()->getOne( $sQ ) );
+        return !( (bool) $oDb->getOne( $sQ ) );
     }
 
     /**
@@ -2098,7 +2095,7 @@ class oxUser extends oxBase
     public function encodePassword( $sPassword, $sSalt )
     {
         $oDb = oxDb::getDb();
-        return oxDb::getInstance()->getOne( "select MD5( CONCAT( ".$oDb->quote( $sPassword ).", UNHEX( '{$sSalt}' ) ) )" );
+        return $oDb->getOne( "select MD5( CONCAT( ".$oDb->quote( $sPassword ).", UNHEX( '{$sSalt}' ) ) )" );
     }
 
     /**
@@ -2110,7 +2107,7 @@ class oxUser extends oxBase
      */
     public function prepareSalt( $sSalt )
     {
-        return ( $sSalt ? oxDb::getInstance()->getOne( "select HEX( '{$sSalt}' )" ) : '' );
+        return ( $sSalt ? oxDb::getDb()->getOne( "select HEX( '{$sSalt}' )" ) : '' );
     }
 
     /**
@@ -2122,7 +2119,7 @@ class oxUser extends oxBase
      */
     public function decodeSalt( $sSaltHex )
     {
-        return ( $sSaltHex ? oxDb::getInstance()->getOne( "select UNHEX( '{$sSaltHex}' )" ) : '' );
+        return ( $sSaltHex ? oxDb::getDb()->getOne( "select UNHEX( '{$sSaltHex}' )" ) : '' );
     }
 
     /**
@@ -2231,7 +2228,7 @@ class oxUser extends oxBase
     public function getReviewUserHash( $sUserId )
     {
         $oDb = oxDb::getDb();
-        $sReviewUserHash = oxDb::getInstance()->getOne('select md5(concat("oxid", oxpassword, oxusername )) from oxuser where oxid = ' . $oDb->quote( $sUserId ) .'');
+        $sReviewUserHash = $oDb->getOne('select md5(concat("oxid", oxpassword, oxusername )) from oxuser where oxid = ' . $oDb->quote( $sUserId ) .'');
         return $sReviewUserHash;
     }
 
@@ -2245,7 +2242,7 @@ class oxUser extends oxBase
     public function getReviewUserId( $sReviewUserHash )
     {
         $oDb = oxDb::getDb();
-        $sUserId = oxDb::getInstance()->getOne('select oxid from oxuser where md5(concat("oxid", oxpassword, oxusername )) = ' . $oDb->quote( $sReviewUserHash ) .'');
+        $sUserId = $oDb->getOne('select oxid from oxuser where md5(concat("oxid", oxpassword, oxusername )) = ' . $oDb->quote( $sReviewUserHash ) .'');
         return $sUserId;
     }
 
@@ -2269,7 +2266,7 @@ class oxUser extends oxBase
         $oDb = oxDb::getDb();
         $sShopId = $this->getConfig()->getShopId();
         $sUserId = $oDb->quote( $this->getId() );
-        return (bool) oxDb::getInstance()->getOne( "select 1 from oxacceptedterms where oxuserid={$sUserId} and oxshopid='{$sShopId}'" );
+        return (bool) $oDb->getOne( "select 1 from oxacceptedterms where oxuserid={$sUserId} and oxshopid='{$sShopId}'" );
     }
 
     /**
@@ -2302,7 +2299,7 @@ class oxUser extends oxBase
         $oDb = oxDb::getDb();
         $iPoints = $this->getConfig()->getConfigParam( 'dPointsForRegistration' );
         // check if this invitation is still not accepted
-        $iPending = oxDb::getInstance()->getOne( "select count(oxuserid) from oxinvitations where oxuserid = ".$oDb->quote( $sUserId )." and md5(oxemail) = ".$oDb->quote( $sRecEmail )." and oxpending = 1 and oxaccepted = 0");
+        $iPending = $oDb->getOne( "select count(oxuserid) from oxinvitations where oxuserid = ".$oDb->quote( $sUserId )." and md5(oxemail) = ".$oDb->quote( $sRecEmail )." and oxpending = 1 and oxaccepted = 0", false, false);
         if ( $iPoints && $iPending ) {
             $this->oxuser__oxpoints = new oxField( $iPoints, oxField::T_RAW );
             if ( $blSet = $this->save() ) {
@@ -2388,12 +2385,13 @@ class oxUser extends oxBase
      */
     public function getIdByUserName( $sUserName )
     {
-        $sQ = "SELECT `oxid` FROM `oxuser` WHERE `oxusername` = ". oxDb::getDb()->quote( $sUserName );
+        $oDb = oxDb::getDb();
+        $sQ = "SELECT `oxid` FROM `oxuser` WHERE `oxusername` = ". $oDb->quote( $sUserName );
         if ( !$this->getConfig()->getConfigParam( 'blMallUsers' ) ) {
-            $sQ .= " AND `oxshopid` = ". oxDb::getDb()->quote( $this->getConfig()->getShopId() );
+            $sQ .= " AND `oxshopid` = ". $oDb->quote( $this->getConfig()->getShopId() );
         }
 
-        return oxDb::getInstance()->getOne( $sQ );
+        return $oDb->getOne( $sQ );
 
     }
 

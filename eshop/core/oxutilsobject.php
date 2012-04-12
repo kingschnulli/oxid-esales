@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobject.php 43298 2012-03-29 13:10:18Z vilma $
+ * @version   SVN: $Id: oxutilsobject.php 43757 2012-04-11 09:03:01Z linas.kukulskis $
  */
 
 /**
@@ -320,8 +320,7 @@ class oxUtilsObject extends oxSuperCfg
     protected function _getActiveModuleChain( $aClassChain )
     {
         $myConfig = $this->getConfig();
-        // Exclude disabled modules from chain unfortunatelly can not use oxmodule::getActiveModuleInfo()
-        // If you call oxNew in oxNew, you will get infinit recursion...
+
         $aDisabledModules = $myConfig->getConfigParam( 'aDisabledModules' );
         $aModulePaths     = $myConfig->getConfigParam( 'aModulePaths' );
         if (is_array( $aDisabledModules ) && count($aDisabledModules) > 0) {
@@ -350,30 +349,9 @@ class oxUtilsObject extends oxSuperCfg
      */
     protected function _disableModule( $sModule )
     {
-        $myConfig = $this->getConfig();
-        // Exclude disabled modules from chain unfortunatelly can not use oxmodule::deactivate()
-        // If you call oxNew in oxNew, you will get infinit recursion...
-        $aModulePaths     = $myConfig->getConfigParam( 'aModulePaths' );
-        $sModuleId = null;
-        if (is_array( $aModulePaths )) {
-            foreach ($aModulePaths as $sId => $sPath) {
-                if (strpos($sModule, $sPath."/") === 0 ) {
-                    $sModuleId = $sId;
-                }
-            }
-        }
-        if (!$sModuleId) {
-            $sModuleId = substr( $sModule, 0, strpos( $sModule, "/" ) );
-        }
-
-        $aDisabledModules = $this->getConfig()->getConfigParam('aDisabledModules');
-
-        if (!is_array($aDisabledModules)) {
-            $aDisabledModules = array();
-        }
-        $aModules = array_merge($aDisabledModules, array($sModuleId));
-        $myConfig->setConfigParam('aDisabledModules', $aModules);
-        $myConfig->saveShopConfVar('arr', 'aDisabledModules', $aModules);
+        $oModule = oxNew("oxModule");
+        $sModuleId = $oModule->getIdByPath($sModule);
+        $oModule->deactivate($sModuleId);
     }
 
     /**

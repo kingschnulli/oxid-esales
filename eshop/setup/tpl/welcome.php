@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   setup
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 25584 2010-02-03 12:11:40Z arvydas $
  */
@@ -27,7 +27,7 @@ require "_header.php"; ?>
 <form action="index.php" method="post">
 <table cellpadding="1" cellspacing="0">
     <tr>
-        <td style="padding-top: 5px;"><?php $this->getText('SELECT_COUNTRY_LANG'); ?>: </td>
+        <td style="padding-top: 5px;"><?php $this->getText('SELECT_SHOP_LOCATION'); ?>: </td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" height="29">
               <tr>
@@ -49,6 +49,9 @@ require "_header.php"; ?>
                         }
                         ?>
                     </select>
+                </td>
+                <td style="padding: 0px 5px;">
+                    <?php $this->getText('SELECT_SHOP_LOCATION_HINT'); ?>
                 </td>
                 <noscript>
                 <td>
@@ -90,6 +93,30 @@ require "_header.php"; ?>
                     </td>
                     <td style="padding: 0px 5px;">
                         <?php $this->getText('SELECT_DELIVERY_COUNTRY_HINT'); ?>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-top: 5px;"><?php $this->getText('SELECT_SHOP_LANG'); ?>: </td>
+        <td>
+            <table cellpadding="0" cellspacing="0" border="0" height="29">
+                <tr>
+                    <td>
+                        <select name="sShopLang" style="font-size: 11px;">
+                            <?php
+                            $aLanguages = $this->getViewParam( "aLanguages" );
+                            foreach ( $aLanguages as $sLangId => $sLangTitle ) {
+                                ?>
+                                <option value="<?php echo $sLangId; ?>" <?php if ( $this->getViewParam( "sShopLang" ) == $sLangId ) echo 'selected'; ?>><?php echo $sLangTitle; ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </td>
+                    <td style="padding: 0px 5px;">
+                        <?php $this->getText('SELECT_SHOP_LANG_HINT'); ?>
                     </td>
                 </tr>
             </table>

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpriceTest.php 35056 2011-05-03 07:53:56Z sarunas $
+ * @version   SVN: $Id: oxpriceTest.php 43498 2012-04-04 07:20:57Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -499,5 +499,39 @@ class Unit_Core_oxpriceTest extends OxidTestCase
     {
         $oPrice = new oxPrice(15);
         $this->assertEquals(15, $oPrice->getBruttoPrice());
+    }
+
+    /**
+     * Test netto price calculation then in brutto mode.
+     *
+     * @return null
+     */
+    public function testRecalculate_bruttomode()
+    {
+        $oPriceProxy = $this->getProxyClass('oxPrice');
+        $oPriceProxy->setNonPublicVar('_blNetPriceMode', false);
+        $oPriceProxy->setNonPublicVar('_dVat', 7);
+        $oPriceProxy->setNonPublicVar('_dBrutto', 41.5);
+
+        $oPriceProxy->UNITrecalculate();
+
+        $this->assertLessThanOrEqual(0.00001, abs($oPriceProxy->getNonPublicVar('_dNetto') - 38.785046728972));
+    }
+
+    /**
+     * Test brutto price calculation then in netto mode.
+     *
+     * @return null
+     */
+    public function testRecalculate_nettomode()
+    {
+        $oPriceProxy = $this->getProxyClass('oxPrice');
+        $oPriceProxy->setNonPublicVar('_blNetPriceMode', true);
+        $oPriceProxy->setNonPublicVar('_dVat', 7);
+        $oPriceProxy->setNonPublicVar('_dNetto', 38.785046728972);
+
+        $oPriceProxy->UNITrecalculate();
+
+        $this->assertLessThanOrEqual(0.00001, abs($oPriceProxy->getNonPublicVar('_dBrutto') - 41.5));
     }
 }

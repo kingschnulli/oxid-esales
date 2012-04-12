@@ -71,6 +71,7 @@ function smarty_block_oxifcontent( $params, $content, &$smarty, &$repeat)
                 }
             }
 
+            $blLoaded = false;
             if ( $oContent && $oContent->oxcontents__oxactive->value || $sIdent === "oxcredits" ) {
                 $smarty->assign($sObject, $oContent);
                 $blLoaded = true;

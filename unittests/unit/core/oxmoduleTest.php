@@ -484,13 +484,14 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
      */
     public function testDeactivate()
     {
-        $oConfig = $this->getMock( 'oxConfig', array('saveShopConfVar') );
+        $oConfig = $this->getMock( 'oxConfig', array('saveShopConfVar', 'setConfigParam') );
         $oConfig->expects( $this->once() )->method('saveShopConfVar')->with($this->equalTo("arr"), $this->equalTo("aDisabledModules"), $this->equalTo(array("testId1", "testId2")) );
+        $oConfig->expects( $this->once() )->method('setConfigParam')->with($this->equalTo("aDisabledModules"), $this->equalTo(array("testId1", "testId2")) );
 
         $oModule = $this->getMock( 'oxModule', array('getId', 'getDisabledModules', 'getConfig'), array(), "", false );
         $oModule->expects( $this->any() )->method('getId')->will( $this->returnValue( "testId2" ) );
         $oModule->expects( $this->once() )->method('getDisabledModules')->will( $this->returnValue( array("testId1") ) );
-        $oModule->expects( $this->once() )->method('getConfig')->will( $this->returnValue( $oConfig ) );
+        $oModule->expects( $this->any() )->method('getConfig')->will( $this->returnValue( $oConfig ) );
 
         $this->assertTrue( $oModule->deactivate() );
     }
@@ -833,13 +834,13 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
     }
 
     /**
-     * oxmodule::_addTplBlocks() test case
+     * oxmodule::_addTemplateBlocks() test case
      *
      * @return null
      */
-    public function testAddTplBlocks()
+    public function testAddTemplateBlocks()
     {
-        $oDb     = oxDb::getInstance();
+        $oDb     = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $oConfig = new oxConfig();
         $sShopId = $oConfig->getShopId();
 
@@ -850,41 +851,154 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
 
         $aModuleBlocks = array(
             //shop template path, block name, block filename, block possition
-            array("shopTpl"=>"page/checkout/basket.tpl", "blockName"=>"basket_btn_next_top", "blockTpl"=>"oepaypalexpresscheckout.tpl", "blockPos"=>"1"),
-            array("shopTpl"=>"page/checkout/order.tpl", "blockName"=>"basket_btn_next_bottom", "blockTpl"=>"oepaypalorder.tpl", "blockPos"=>"2"),
+            array("template"=>"page/checkout/basket.tpl", "block"=>"basket_btn_next_top", "file"=>"oepaypalexpresscheckout.tpl", "position"=>"1"),
+            array("template"=>"page/checkout/order.tpl", "block"=>"basket_btn_next_bottom", "file"=>"oepaypalorder.tpl", "position"=>"2"),
         );
 
         $oModule = $this->getMock( 'oxModule', array('getId') );
         $oModule->expects( $this->once() )->method( 'getId' )->will( $this->returnValue("testModuleId") );
 
-        $oModule->_addTplBlocks( $aModuleBlocks );
+        $oModule->_addTemplateBlocks( $aModuleBlocks );
 
         // checking result
         $aRes[] = array( "OXID"=>"_testId1", "OXACTIVE"=>"1", "OXSHOPID"=>$sShopId, "OXTEMPLATE"=>"page/checkout/basket.tpl", "OXBLOCKNAME"=>"basket_btn_next_top", "OXPOS"=>"1", "OXFILE"=>"oepaypalexpresscheckout.tpl", "OXMODULE"=>"testModuleId" ) ;
         $aRes[] = array( "OXID"=>"_testId2", "OXACTIVE"=>"1", "OXSHOPID"=>$sShopId, "OXTEMPLATE"=>"page/checkout/order.tpl", "OXBLOCKNAME"=>"basket_btn_next_bottom", "OXPOS"=>"2", "OXFILE"=>"oepaypalorder.tpl", "OXMODULE"=>"testModuleId" ) ;
 
-        $aBlocks = $oDb->getAll( "select * from oxtplblocks order by oxid" );
+        $aBlocks = oxDb::getDb( oxDb::FETCH_MODE_ASSOC )->getAll( "SELECT * FROM oxtplblocks WHERE oxid IN ('_testId1','_testId2') ORDER BY oxid" );
+
         $this->assertEquals( $aRes, $aBlocks );
     }
 
     /**
-     * oxmodule::_hasInstalledTplBlocks() test case
+     * oxmodule::_hasInstalledTemplateBlocks() test case
      *
      * @return null
      */
-    public function testHasInstalledTplBlocks()
+    public function testHasInstalledTemplateBlocks()
     {
         $sShopId = oxConfig::getInstance()->getShopId();
         $oDb     = oxDb::getDb();
 
-        $sSql = "INSERT INTO `oxtplblocks` (`OXID`, `OXACTIVE`, `OXSHOPID`, `OXTEMPLATE`, `OXBLOCKNAME`, `OXPOS`, `OXFILE`, `OXMODULE`)
-                    VALUES ('_testId', 1, '$sShopId', 'testTemplate.tpl', 'testBlockName', '1', 'testFile.tpl', 'testModuleId1')";
+        $sSql = "INSERT INTO `oxtplblocks` (`OXID`, `OXACTIVE`, `OXSHOPID`, `OXTEMPLATE`, `OXBLOCKNAME`, `OXPOS`, `OXFILE`, `OXMODULE`) ".
+                "VALUES ('_testId', 1, '$sShopId', 'testTemplate.tpl', 'testBlockName', '1', 'testFile.tpl', 'testModuleId1')";
 
         $oDb->execute( $sSql );
 
         $oModule = $this->getProxyClass('oxmodule');
 
-        $this->assertTrue( $oModule->_hasInstalledTplBlocks("testModuleId1") );
-        $this->assertFalse( $oModule->_hasInstalledTplBlocks("testModuleId2") );
+        $this->assertTrue( $oModule->_hasInstalledTemplateBlocks("testModuleId1") );
+        $this->assertFalse( $oModule->_hasInstalledTemplateBlocks("testModuleId2") );
     }
+
+    /**
+     * oxmodule::_addModuleFiles() test case
+     *
+     * @return null
+     */
+    public function testAddModuleFiles()
+    {
+        $oConfig   = new oxConfig();
+        $sShopId   = $oConfig->getShopId();
+        $sModuleId = 'testmodule';
+        $aModuleFiles = array(
+            "testfilea"=>"testmodule/core/testfilea.php",
+            "testfileb"=>"testmodule/core/testfileb.php"
+        );
+
+        $oModule = new oxmodule();
+        $oModule->_addModuleFiles( $aModuleFiles, $sModuleId);
+
+        $aConfigModuleFiles = $oConfig->getConfigParam('aModuleFiles');
+
+        $this->assertArrayHasKey($sModuleId, $aConfigModuleFiles);
+        $this->assertEquals( $aModuleFiles, $aConfigModuleFiles[$sModuleId] );
+    }
+
+    /**
+     * oxmodule::_addTemplateFiles() test case
+     *
+     * @return null
+     */
+    public function testAddTemplatesFiles()
+    {
+        $oConfig   = new oxConfig();
+        $sModuleId = 'testmodule';
+        $aModuleTemplates = array(
+            "testa.tpl"=>"testmodule/out/testa.tpl",
+            "testb.tpl"=>"testmodule/out/testb.tpl"
+        );
+
+        $oModule = new oxmodule();
+        $oModule->_addTemplateFiles( $aModuleTemplates, $sModuleId);
+
+        $aConfigModuleTemplates = $oConfig->getConfigParam('aModuleTemplates');
+
+        $this->assertArrayHasKey($sModuleId, $aConfigModuleTemplates);
+        $this->assertEquals( $aModuleTemplates, $aConfigModuleTemplates[$sModuleId] );
+    }
+
+    /**
+     * oxmodule::_addModuleSettings() test case
+     *
+     * @return null
+     */
+    public function testAddModuleSettings()
+    {
+        $oDb     = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oConfig = new oxConfig();
+        $sShopId = $oConfig->getShopId();
+
+        $oUtilsObject = $this->getMock( 'oxUtilsObject', array('generateUId') );
+        $oUtilsObject->expects( $this->at(0) )->method( 'generateUId' )->will( $this->returnValue('_testId1') );
+        $oUtilsObject->expects( $this->at(1) )->method( 'generateUId' )->will( $this->returnValue('_testId1') );
+        $oUtilsObject->expects( $this->at(2) )->method( 'generateUId' )->will( $this->returnValue('_testId2') );
+        $oUtilsObject->expects( $this->at(3) )->method( 'generateUId' )->will( $this->returnValue('_testId2') );
+        modInstances::addMod( 'oxUtilsObject', $oUtilsObject );
+
+        $sModuleId       = 'testmodule';
+        $aModuleSettings = array(
+            array('group' => 'test1',  'name' => 'test_var_1', 'type' => 'str', 'value' => 'A', 'position' => '1'),
+            array('group' => 'test2',  'name' => 'test_var_2', 'type' => 'str', 'value' => 'B', 'position' => '2'),
+        );
+
+        $oModule = $this->getMock( 'oxModule', array('getId') );
+        $oModule->expects( $this->once() )->method( 'getId' )->will( $this->returnValue($sModuleId) );
+
+        $oModule->_addModuleSettings( $aModuleSettings );
+
+        // checking result
+        $aRes[] = array( "OXID"=>"_testId1", "OXCFGMODULE"=>"module:".$sModuleId, "OXCFGVARNAME"=>"test_var_1", "OXGROUPING"=>"test1", "OXPOS"=>"1", "OXVARCONSTRAINT"=>"") ;
+        $aRes[] = array( "OXID"=>"_testId2", "OXCFGMODULE"=>"module:".$sModuleId, "OXCFGVARNAME"=>"test_var_2", "OXGROUPING"=>"test2", "OXPOS"=>"2", "OXVARCONSTRAINT"=>"") ;
+
+        $aSettings = oxDb::getDb(oxDb::FETCH_MODE_ASSOC)->getAll( "SELECT * FROM oxconfigdisplay WHERE oxcfgvarname IN ('test_var_1','test_var_2') ORDER BY oxid" );
+
+        $this->assertEquals( $aRes, $aSettings );
+    }
+
+    public function testGetIdByPath()
+    {
+        $aDisabledModules = array('test1');
+        $aModulePaths     = array("invoicepdf2" => "oe/invoicepdf2", "invoicepdf" => "oe/invoicepdf");
+        modConfig::getInstance()->setConfigParam( "aDisabledModules", $aDisabledModules );
+        modConfig::getInstance()->setConfigParam( "aModulePaths", $aModulePaths );
+        $sModule = "oe/invoicepdf2/myorder";
+
+        $oModule = $this->getProxyClass('oxmodule');
+        $oModule->getIdByPath( $sModule );
+        $this->assertEquals( 'invoicepdf2', $oModule->getIdByPath( $sModule ) );
+    }
+
+    public function testGetIdByPathUnknownPath()
+    {
+        $aDisabledModules = array('test1');
+        $aModulePaths     = array("invoicepdf2" => "oe/invoicepdf2");
+        modConfig::getInstance()->setConfigParam( "aDisabledModules", $aDisabledModules );
+        modConfig::getInstance()->setConfigParam( "aModulePaths", $aModulePaths );
+        $sModule = "invoicepdf/myorder";
+
+        $oModule = $this->getProxyClass('oxmodule');
+        $oModule->getIdByPath( $sModule );
+        $this->assertEquals( 'invoicepdf', $oModule->getIdByPath( $sModule ) );
+    }
+
 }

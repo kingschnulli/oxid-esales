@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactions.php 43382 2012-03-30 11:52:17Z linas.kukulskis $
+ * @version   SVN: $Id: oxactions.php 43590 2012-04-06 13:34:41Z linas.kukulskis $
  */
 
 /**
@@ -55,7 +55,7 @@ class oxActions extends oxI18n
     {
         $oDb = oxDb::getDb();
         $sQ = "select max(oxsort) from oxactions2article where oxactionid = ".$oDb->quote( $this->getId() )." and oxshopid = '".$this->getShopId()."'";
-        $iSort = ( (int) oxDb::getInstance()->getOne( $sQ ) ) + 1;
+        $iSort = ( (int) $oDb->getOne( $sQ ) ) + 1;
 
         $oNewGroup = oxNew( 'oxbase' );
         $oNewGroup->init( 'oxactions2article' );
@@ -210,7 +210,7 @@ class oxActions extends oxI18n
     public function getBannerArticle()
     {
         $oDb = oxDb::getDb();
-        $sArtId = oxDb::getInstance()->getOne(
+        $sArtId = $oDb->getOne(
             'select oxobjectid from oxobject2action '
           . 'where oxactionid='.$oDb->quote($this->getId())
           . ' and oxclass="oxarticle"'

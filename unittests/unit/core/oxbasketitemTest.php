@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitemTest.php 37635 2011-07-28 14:28:25Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasketitemTest.php 43667 2012-04-10 13:21:41Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1090,12 +1090,28 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
      */
     public function testSetLanguageId()
     {
-        $oBasketItem = new oxBasketItem();
-        $oBasketItem->setLanguageId( '13' );
-        $this->assertEquals( '13', $oBasketItem->getLanguageId() );
+        $oBasketItem = $this->getMock( 'oxbasketitem', array( '_setArticle' ) );
+        $oBasketItem->expects( $this->never() )->method( '_setArticle' );
+
+        $oBasketItem->setLanguageId( '17' );
+        $this->assertEquals( '17', $oBasketItem->getLanguageId() );
     }
 
+    /**
+     * Test change languade id value.
+     *
+     * @return null
+     */
+    public function testSetLanguageId_change()
+    {
+        $oBasketItem = $this->getMock( 'oxbasketitem', array( '_setArticle' ) );
+        $oBasketItem->setLanguageId( '17' );
+        $this->assertEquals( '17', $oBasketItem->getLanguageId() );
 
+        $oBasketItem->expects( $this->once() )->method( '_setArticle' );
+        $oBasketItem->setLanguageId( '15' );
+        $this->assertEquals( '15', $oBasketItem->getLanguageId() );
+    }
 
     /**
      * Testing set article and #M1141

@@ -30,8 +30,14 @@ require "_header.php"; ?>
         <td>
             <form action="index.php" id="langSelectionForm" method="post">
             <select name="setup_lang" onChange="document.getElementById('langSelectionForm').submit();" style="font-size: 11px;">
-                <option value="en">English</option>
-                <option value="de" <?php if ( $this->getViewParam( "sSetupLang" ) == 'de' ) echo 'selected'; ?>>Deutsch</option>
+            <?php
+            $aLanguages = $this->getViewParam( "aLanguages" );
+            foreach ( $aLanguages as $sLangId => $sLangTitle ) {
+                ?>
+                <option value="<?php echo $sLangId; ?>" <?php if ( $this->getViewParam( "sSetupLang" ) == $sLangId ) echo 'selected'; ?>><?php echo $sLangTitle; ?></option>
+                <?php
+            }
+            ?>
             </select>
             <noscript>
             <input type="submit" name="setup_lang_submit" value="<?php $this->getText('SELECT_SETUP_LANG_SUBMIT'); ?>" style="font-size: 11px;">

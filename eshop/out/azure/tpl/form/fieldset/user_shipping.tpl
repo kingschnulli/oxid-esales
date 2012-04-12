@@ -91,7 +91,7 @@
             </p>
           [{/if }]
         </li>
-
+        [{block name="form_user_shipping_country"}]
         <li [{if $aErrors.oxaddress__oxcountryid}]class="oxInValid"[{/if}]>
             <label [{if $oView->isFieldRequired(oxaddress__oxcountryid) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_COUNTRY2" }]</label>
               <select [{if $oView->isFieldRequired(oxaddress__oxcountryid) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if }] id="delCountrySelect" name="deladr[oxaddress__oxcountryid]">
@@ -126,6 +126,7 @@
                     selectedStateId=$delivadr->oxaddress__oxstateid->value
             }]
         </li>
+        [{/block}]
         <li [{if $aErrors.oxaddress__oxfon}]class="oxInValid"[{/if}]>
             <label [{if $oView->isFieldRequired(oxaddress__oxfon) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_SHIPPING_PHONE2" }]</label>
               <input [{if $oView->isFieldRequired(oxaddress__oxfon) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if }] type="text" size="37" maxlength="128" name="deladr[oxaddress__oxfon]" value="[{if isset( $deladr.oxaddress__oxfon ) }][{ $deladr.oxaddress__oxfon }][{else}][{ $delivadr->oxaddress__oxfon->value }][{/if }]">

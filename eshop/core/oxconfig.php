@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 43334 2012-03-29 13:47:10Z linas.kukulskis $
+ * @version   SVN: $Id: oxconfig.php 43715 2012-04-11 07:02:23Z linas.kukulskis $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -571,8 +571,7 @@ class oxConfig extends oxSuperCfg
             }
             $sQ .= ' and oxvarname in ( '.$sIn.' ) ';
         }
-        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-        $oRs = oxDb::getInstance()->select( $sQ );
+        $oRs = $oDb->select( $sQ );
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
             while ( !$oRs->EOF ) {
                 $sVarName = $oRs->fields[0];
@@ -1385,7 +1384,28 @@ class oxConfig extends oxSuperCfg
      */
     public function getTemplatePath( $sFile, $blAdmin )
     {
-        return $this->getDir( $sFile, $this->_sTemplateDir, $blAdmin );
+        $sTemplatePath = $this->getDir( $sFile, $this->_sTemplateDir, $blAdmin );
+
+        if (!$sTemplatePath) {
+            $sBasePath        = getShopBasePath();
+            $aModuleTemplates = $this->getConfigParam('aModuleTemplates');
+
+            $oModulelist = oxNew('oxmodulelist');
+            $aActiveModuleInfo = $oModulelist->getActiveModuleInfo();
+            if (is_array($aModuleTemplates) && is_array($aActiveModuleInfo)) {
+                foreach ($aModuleTemplates as $sModuleId => $aTemplates) {
+                    if (isset($aTemplates[$sFile]) && isset($aActiveModuleInfo[$sModuleId])) {
+                        $sPath = $aTemplates[$sFile];
+                        $sPath = $sBasePath. 'modules/'.  $sPath;
+                        if (is_file($sPath) && is_readable($sPath)) {
+                            $sTemplatePath =  $sPath;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $sTemplatePath;
     }
 
     /**
@@ -1804,8 +1824,9 @@ class oxConfig extends oxSuperCfg
         }
 
         $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+
         $sQ  = "select oxvartype, ".$this->getDecodeValueQuery()." as oxvarvalue from oxconfig where oxshopid = '{$sShopId}' and oxmodule = '{$sModule}' and oxvarname = ".$oDb->quote($sVarName);
-        $oRs = oxDb::getInstance()->select( $sQ );
+        $oRs = $oDb->select( $sQ );
 
         $sValue = null;
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
@@ -1862,7 +1883,7 @@ class oxConfig extends oxSuperCfg
         $blProductive = $this->getConfigParam( 'blProductive' );
         if ( !isset( $blProductive ) ) {
             $sQ = 'select oxproductive from oxshops where oxid = "'.$this->getShopId().'"';
-            $blProductive = ( bool ) oxDb::getInstance()->getOne( $sQ );
+            $blProductive = ( bool ) oxDb::getDb()->getOne( $sQ );
             $this->setConfigParam( 'blProductive', $blProductive );
         }
 

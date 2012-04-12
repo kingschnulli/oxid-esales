@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnews.php 41916 2012-01-31 13:26:57Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxnews.php 43511 2012-04-04 07:25:34Z linas.kukulskis $
  */
 
 /**
@@ -177,10 +177,8 @@ class oxNews extends oxI18n
     protected function _setFieldData( $sFieldName, $sValue, $iDataType = oxField::T_TEXT)
     {
         switch (strtolower($sFieldName)) {
-            case 'oxshortdesc':
             case 'oxlongdesc':
             case 'oxnews__oxlongdesc':
-            case 'oxnews__oxshortdesc':
                 $iDataType = oxField::T_RAW;
                 break;
         }

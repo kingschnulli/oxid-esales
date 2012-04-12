@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticleTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxorderarticleTest.php 43558 2012-04-05 12:50:10Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -227,11 +227,24 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
 
     public function testGetBasketPrice()
     {
-        $oOrderArticle = $this->getMock( "oxOrderArticle", array( "getPrice" ) );
+        $oOrderArticle = $this->getMock( "oxOrderArticle", array( "getPrice", "_getOrderArticle" ) );
         $oOrderArticle->expects( $this->once() )->method( 'getPrice' )->will( $this->returnValue( 'oPrice' ) );
+        $oOrderArticle->expects( $this->once() )->method( '_getOrderArticle' )->will( $this->returnValue( false ) );
 
         $this->assertEquals( 'oPrice', $oOrderArticle->getBasketPrice( null, null, null ) );
     }
+    public function testGetBasketPriceFromArticle()
+    {
+        $oArticle = $this->getMock( "oxOrderArticle", array( "getBasketPrice" ) );
+        $oArticle->expects( $this->once() )->method( 'getBasketPrice' )->will( $this->returnValue( 'oPrice' ) );
+
+        $oOrderArticle = $this->getMock( "oxOrderArticle", array( "getPrice", "_getOrderArticle" ) );
+        $oOrderArticle->expects( $this->never() )->method( 'getPrice' )->will( $this->returnValue( 'oPrice' ) );
+        $oOrderArticle->expects( $this->once() )->method( '_getOrderArticle' )->will( $this->returnValue( $oArticle ) );
+
+        $this->assertEquals( 'oPrice', $oOrderArticle->getBasketPrice( null, null, null ) );
+    }
+
 
     public function testSkipDiscounts()
     {

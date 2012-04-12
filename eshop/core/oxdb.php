@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdb.php 43410 2012-03-30 14:54:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxdb.php 43788 2012-04-11 15:28:19Z linas.kukulskis $
  */
 
 
@@ -35,13 +35,13 @@ class oxDb extends oxSuperCfg
      * Fetch mode - numeric
      * @var int
      */
-    const FETCH_MODE_NUM = 0;
+    const FETCH_MODE_NUM = ADODB_FETCH_NUM;
 
     /**
      * Fetch mode - associative
      * @var int
      */
-    const FETCH_MODE_ASSOC = 1;
+    const FETCH_MODE_ASSOC = ADODB_FETCH_ASSOC;
 
     /**
      * oxDb instance.
@@ -56,15 +56,6 @@ class oxDb extends oxSuperCfg
      * @var oxdb
      */
     protected static $_oDB = null;
-
-    /**
-     * fetch mode
-     *
-     * @var oxdb
-     */
-    protected $_iFetchMode = oxDb::FETCH_MODE_ASSOC;
-
-
 
 
     /**
@@ -248,6 +239,7 @@ class oxDb extends oxSuperCfg
         }
     }
 
+
     /**
      * Returns database instance object for given type
      *
@@ -257,29 +249,25 @@ class oxDb extends oxSuperCfg
      */
     protected function _getDbInstance( $iInstType = false )
     {
-        $myConfig = $this->getConfig();
+        $oConfig = $this->getConfig();
 
-        $sHost = $myConfig->getConfigParam( "dbHost" );
-        $sUser = $myConfig->getConfigParam( "dbUser" );
-        $sPwd  = $myConfig->getConfigParam( "dbPwd" );
-        $sName = $myConfig->getConfigParam( "dbName" );
-        $sType = $myConfig->getConfigParam( "dbType" );
-
+        $sHost = $oConfig->getConfigParam( "dbHost" );
+        $sUser = $oConfig->getConfigParam( "dbUser" );
+        $sPwd  = $oConfig->getConfigParam( "dbPwd" );
+        $sName = $oConfig->getConfigParam( "dbName" );
+        $sType = $oConfig->getConfigParam( "dbType" );
 
         $oDb = ADONewConnection( $sType, $this->_getModules() );
 
-        if ( !$oDb->connect( $sHost, $sUser, $sPwd, $sName ) ) {
-            // various actions on connection error..
-            $this->_onConnectionError( $oDb );
-        }
 
+            if ( !$oDb->connect( $sHost, $sUser, $sPwd, $sName ) ) {
+                $this->_onConnectionError( $oDb );
+            }
 
         $this->_setUp( $oDb );
 
         return $oDb;
     }
-
-
 
 
     /**
@@ -306,7 +294,10 @@ class oxDb extends oxSuperCfg
 
         if ( self::$_oDB === null ) {
 
-            global  $ADODB_SESSION_TBL,
+            $oInst = self::getInstance();
+            $myConfig = $oInst->getConfig();
+
+             global  $ADODB_SESSION_TBL,
                     $ADODB_SESSION_CONNECT,
                     $ADODB_SESSION_DRIVER,
                     $ADODB_SESSION_USER,
@@ -315,11 +306,7 @@ class oxDb extends oxSuperCfg
                     $ADODB_SESS_LIFE,
                     $ADODB_SESS_DEBUG;
 
-            //adding exception handler for SQL errors
-            $oInst = self::getInstance();
-            $myConfig = $oInst->getConfig();
-
-            // session related parameters. don't change.
+             // session related parameters. don't change.
 
             //Tomas
             //the default setting is 3000 * 60, but actually changing this will give no effect as now redefinition of this constant
@@ -334,10 +321,13 @@ class oxDb extends oxSuperCfg
             $ADODB_SESSION_CONNECT = $myConfig->getConfigParam( 'dbHost' );
             $ADODB_SESS_DEBUG      = false;
 
-            self::$_oDB = $oInst->_getDbInstance();
+            $oDb = oxNew( 'oxLegacyDb' );
+            $oDb->setConnection( $oInst->_getDbInstance() );
+
+            self::$_oDB = $oDb;
         }
 
-        self::$_oDB->setFetchMode( ($iFetchMode == oxDb::FETCH_MODE_ASSOC ) ? ADODB_FETCH_ASSOC : ADODB_FETCH_NUM );
+        self::$_oDB->setFetchMode( $iFetchMode );
 
         return self::$_oDB;
     }
@@ -382,6 +372,7 @@ class oxDb extends oxSuperCfg
     public function quoteArray( $aStrArray )
     {
         $oDb = self::getDb();
+
         foreach ( $aStrArray as $sKey => $sString ) {
             $aStrArray[$sKey] = $oDb->quote( $sString );
         }
@@ -633,6 +624,8 @@ class oxDb extends oxSuperCfg
     /**
      * Start mysql transaction
      *
+     * @deprecated in v4.6 2012-04-10; use oxlegacydb::startTransaction();
+     *
      * @return null
      */
     static public function startTransaction()
@@ -643,6 +636,8 @@ class oxDb extends oxSuperCfg
     /**
      * Commit mysql transaction
      *
+     * @deprecated in v4.6 2012-04-10; use oxlegacydb::commitTransaction();
+     *
      * @return null
      */
     static public function commitTransaction()
@@ -652,6 +647,8 @@ class oxDb extends oxSuperCfg
 
     /**
      * RollBack mysql transaction
+     *
+     * @deprecated in v4.6 2012-04-10; use oxlegacydb::rollbackTransaction();
      *
      * @return null
      */
@@ -665,6 +662,8 @@ class oxDb extends oxSuperCfg
      * Allowed values READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE
      *
      * @param string $sLevel level
+     *
+     * @deprecated in v4.6 2012-04-10; use oxlegacydb::setTransactionIsolationLevel()
      *
      * @return null
      */
@@ -951,7 +950,7 @@ class oxDb extends oxSuperCfg
      */
     protected function _getConnectionId()
     {
-        return self::getDb()->connectionId;
+        return self::getDb()->getDb()->connectionId;
     }
 
     /**
@@ -999,164 +998,4 @@ class oxDb extends oxSuperCfg
             $oShop->generateViews( $blMultishopInherit, $aMallInherit );
         }
     }
-
-    /**
-     * Return conection to db
-     *
-     * @return mixed
-     */
-    protected function _getDb()
-    {
-
-            $oDb = self::getDb( $this->getFetchMode() );
-
-        return $oDb;
-    }
-
-    /**
-     * Execute SELECT query, return result with aditional data
-     *
-     * @param string $sQuery query string
-     *
-     * @return mixed
-     */
-    public function select( $sQuery )
-    {
-        // getting db connection
-        $oDb = $this->_getDb();
-        // execute query
-        $oRs = $oDb->execute( $sQuery );
-
-        //restore default fetch mode
-        $this->setFetchMode();
-
-        return $oRs;
-    }
-
-    /**
-     * Execute query
-     *
-     * @param string $sQuery query string
-     *
-     * @return mixed
-     */
-    public function execute( $sQuery )
-    {
-        // getting db connection
-        $oDb = self::getDb( $this->getFetchMode() );
-
-        // execute query
-        $oRs = $oDb->execute( $sQuery );
-
-        //restore default fetch mode
-        $this->setFetchMode();
-
-        return $oRs;
-    }
-
-    /**
-     * Execute SELECT query, return only value
-     *
-     * @param string $sQuery query string
-     *
-     * @return mixed
-     */
-    public function getOne( $sQuery )
-    {
-        // getting db connection
-        $oDb = $this->_getDb();
-
-        // execute query
-        return $oDb->getOne( $sQuery );
-    }
-
-
-    /**
-     * Execute SELECT query, return array data
-     *
-     * @param string $sQuery query string
-     *
-     * @return mixed
-     */
-    public function getAll( $sQuery )
-    {
-        // getting db connection
-        $oDb = $this->_getDb();
-
-        // execute query
-        $aRs = $oDb->getAll( $sQuery );
-
-        $this->setFetchMode();
-
-        return $aRs;
-    }
-
-
-    /**
-     * Execute SELECT query return array of data
-     *
-     * @param string $sQuery query string
-     *
-     * @return mixed
-     */
-    public function getRow( $sQuery )
-    {
-        // getting db connection
-        $oDb = $this->_getDb();
-
-        // execute query
-        $aRs = $oDb->getRow( $sQuery );
-
-        $this->setFetchMode();
-
-        return $aRs;
-    }
-
-
-    /**
-     * Execute SELECT query with limit params
-     *
-     * @param string $sQuery  query string
-     * @param int    $iRows   rows
-     * @param int    $iOffset offset
-     *
-     * @return mixed
-     */
-    public function selectLimit( $sQuery, $iRows=-1, $iOffset=-1 )
-    {
-        // getting db connection
-        $oDb = $this->_getDb();
-
-        // execute query
-        $oRs = $oDb->SelectLimit( $sQuery, $iRows, $iOffset);
-
-        //restore default fetch mode
-        $this->setFetchMode();
-
-        return $oRs;
-
-    }
-
-    /**
-     * Set fetch mode
-     *
-     * @param int $iFetchMode fech mode
-     *
-     * @return null
-     */
-    public function setFetchMode( $iFetchMode = oxDb::FETCH_MODE_ASSOC )
-    {
-        $this->_iFetchMode = $iFetchMode;
-    }
-
-    /**
-     * Return fetch mode
-     *
-     * @return integer
-     */
-    public function getFetchMode()
-    {
-        return $this->_iFetchMode;
-    }
-
 }

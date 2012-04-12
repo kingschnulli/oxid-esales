@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43469 2012-04-03 13:56:16Z vilma $
+ * @version   SVN: $Id: lang.php 43759 2012-04-11 09:15:46Z vilma $
  */
 
 /*
@@ -528,7 +528,7 @@ $aLang = array(
 'ARTICLE_STOCK_ORDERINFO'                                  => 'Add. info in order confirmation mail.',
 'ARTICLE_STOCK_VPE'                                        => 'Packingunit',
 'ARTICLE_USERDEF_USERDEFRANGE'                             => 'User-defined Area - here you can add your own fields.',
-'ARTICLE_VARIANT_YOUWANTTODELETE'                          => 'Do you really want to delete this Variant ?',
+'ARTICLE_VARIANT_YOUWANTTODELETE'                          => 'Do you really want to delete this Variant?',
 'ARTICLE_VARIANT_EDIT'                                     => 'Edit',
 'ARTICLE_VARIANT_ARTSAVE'                                  => 'Save Selection',
 'ARTICLE_VARIANT_NEWVAR'                                   => 'New Variant',
@@ -957,8 +957,8 @@ $aLang = array(
 'NEWSLETTER_SEND_TITLE'                                    => 'OXID Newsletter',
 'NEWSLETTER_SEND_SEND1'                                    => 'Send',
 'NEWSLETTER_SEND_SEND2'                                    => 'of overall',
-'ORDER_ARTICLE_YOUWANTTODELETE'                            => 'Do you really want to delete this product ?',
-'ORDER_ARTICLE_YOUWANTTOSTORNO'                            => 'Do you really want to cancel this product ?',
+'ORDER_ARTICLE_YOUWANTTODELETE'                            => 'Do you really want to delete this product?',
+'ORDER_ARTICLE_YOUWANTTOSTORNO'                            => 'Do you really want to cancel this product?',
 'ORDER_ARTICLE_ENETTO'                                     => 'Net',
 'ORDER_ARTICLE_EBRUTTO'                                    => 'Gross',
 'ORDER_ARTICLE_MWST'                                       => 'VAT',
@@ -978,7 +978,7 @@ $aLang = array(
 'ORDER_DOWNLOADS_RESET'                                    => 'Reset',
 'ORDER_SEARCH_FIELD_ARTID'                                 => 'Product',
 'ORDER_SEARCH_FIELD_PAYMENT'                               => 'Payment',
-'ORDER_LIST_YOUWANTTOSTORNO'                               => 'Do you really want to cancel this order ?',
+'ORDER_LIST_YOUWANTTOSTORNO'                               => 'Do you really want to cancel this order?',
 'ORDER_LIST_FOLDER_ALL'                                    => 'all',
 'ORDER_LIST_ORDERTIME'                                     => 'Order Time',
 'ORDER_LIST_PAID'                                          => 'Payment Date',
@@ -988,7 +988,7 @@ $aLang = array(
 'ORDER_LIST_MENUSUBITEM'                                   => 'Orders',
 'ORDER_MAIN_IPADDRESS'                                     => 'IP Address',
 'ORDER_MAIN_BILLNUM'                                       => 'Invoice No.',
-'ORDER_MAIN_TRACKCODE'                                     => 'Shipment Tracking Code',
+'ORDER_MAIN_TRACKCODE'                                     => 'Tracking Code',
 'ORDER_MAIN_DISCOUNT'                                      => 'Discount',
 'ORDER_MAIN_PAIDON'                                        => 'Paid on',
 'ORDER_MAIN_USERVOUCHER'                                   => 'Used Coupon',
@@ -999,13 +999,13 @@ $aLang = array(
 'ORDER_MAIN_UPDATE_DELPAY'                                 => 'Update',
 'ORDER_MAIN_SEND_DOWNLOADS'                                => 'Ordered download links',
 'ORDER_MAIN_PAYMENT_INFORMATION'                           => "Payment Information",
-'ORDER_MAIN_SHIPPING_INFORMATION'                          => "[tr]Shipping Information",
+'ORDER_MAIN_SHIPPING_INFORMATION'                          => "Shipping Information",
 'ORDER_REMARK_REMARK'                                      => '[Remark]',
 'ORDER_REMARK_ORDER'                                       => '[Order]',
 'ORDER_REMARK_USER'                                        => '[Reg.]',
 'ORDER_REMARK_NEWS'                                        => '[News]',
-'ORDER_OVERVIEW_VATIDCHECKFAIL'                            => 'Vat id validation failed',
-'ORDER_OVERVIEW_VATID'                                     => 'Vat id:',
+'ORDER_OVERVIEW_VATIDCHECKFAIL'                            => 'VAT ID validation failed',
+'ORDER_OVERVIEW_VATID'                                     => 'VAT ID:',
 'ORDER_OVERVIEW_DELTYPE'                                   => 'Shipped with',
 'ORDER_OVERVIEW_LSBANKNAME'                                => 'Bank',
 'ORDER_OVERVIEW_LSBLZ'                                     => 'Bank code',
@@ -1278,8 +1278,8 @@ $aLang = array(
 'SHOP_CONFIG_DEFAULTVAT'                                   => 'Default VAT for all Products',
 'SHOP_CONFIG_DEFAULTLANGUAGE'                              => 'Default Language (0, 1, 2 ...) - 0 for German, 1 for English',
 'SHOP_CONFIG_EXCLUDENONMATERIALPRODUCTS'                   => "Don't consider intangible Products (e.g. Gift Certificates) in Shipping Costs Calculation",
-'SHOP_CONFIG_ENTERNETPRICE'                                => 'Enter Product prices as net Price (plus VAT)',
-'SHOP_CONFIG_INLANDCUSTOMERS'                              => 'Domestic Customers - Customers living in the <b>selected</b> Countries are assigned to the User Group "Domestic Customers". For multiple selections use STRG key.',
+'SHOP_CONFIG_ENTERNETPRICE'                                => 'Product and Gift Wrapping prices entered/displayed in Admin are Net Prices',
+'SHOP_CONFIG_INLANDCUSTOMERS'                              => 'Domestic Customers - Customers living in the <b>selected</b> Countries are assigned to the User Group "Domestic Customers". For multiple selections use CTRL key.',
 'SHOP_CONFIG_LARGECUSTOMERPRICE'                           => 'Purchase Price Threshold from which Users are assigned to User Group "Huge Turnover"',
 'SHOP_CONFIG_MAXGBENTRIESPERDAY'                           => 'Number of Guestbook Entries each User is allowed to enter per Day',
 'SHOP_CONFIG_MIDLLECUSTOMERPRICE'                          => 'Purchase Price Threshold from which Users are assigned to User Group "Medium Turnover"',
@@ -1361,7 +1361,7 @@ $aLang = array(
 'SHOP_SYSTEM_SEARCHENGINEURLS'                             => "Static URL's. Important for optimal Product search-engine recognition, but doesn't work on all web-servers.",
 'SHOP_SYSTEM_SHOWVARIANTREVIEWS'                           => 'Show Variant Ratings for "Parent" Product',
 'SHOP_SYSTEM_STOREIPS'                                     => 'Store User IP Addresses (check your local laws if legal)',
-'SHOP_SYSTEM_SHOP_LOCATION'                                => 'Shop location',
+'SHOP_SYSTEM_SHOP_LOCATION'                                => '[tr]Shop market',
 'SHOP_SYSTEM_UTILMODULE'                                   => 'Additional Utilitly Modules',
 'SHOP_SYSTEM_VARIANTSSELECTION'                            => 'Display Variants in Assignment Lists in eShop admin',
 'SHOP_SYSTEM_VARIANTPARENTBUYABLE'                         => '"Parent" Products can be purchased',
@@ -2081,6 +2081,7 @@ $aLang = array(
 'DELIVERY_RDFA_FEDERALEXPRESS'			                   => 'FedEx',
 'DELIVERY_RDFA_UPS'			                               => 'UPS',
 'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Show "Remember me" option in login box',
+'NEWSLETTER_SUBJECT'                                       => 'Subject',
 
 );
 

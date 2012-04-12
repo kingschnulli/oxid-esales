@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrecommlist.php 43309 2012-03-29 13:18:23Z linas.kukulskis $
+ * @version   SVN: $Id: oxrecommlist.php 43744 2012-04-11 07:55:41Z linas.kukulskis $
  */
 
 /**
@@ -104,7 +104,7 @@ class oxRecommList extends oxBase implements oxIUrl
         $iCnt = 0;
         $sSelect = $this->_getArticleSelect();
         if ( $sSelect ) {
-            $iCnt = oxDb::getInstance()->getOne( $sSelect );
+            $iCnt = oxDb::getDb()->getOne( $sSelect );
         }
         return $iCnt;
     }
@@ -177,7 +177,7 @@ class oxRecommList extends oxBase implements oxIUrl
 
         $oDb = oxDb::getDb();
         $sSelect = 'select oxdesc from oxobject2list where oxlistid = '.$oDb->quote( $this->getId() ).' and oxobjectid = '.$oDb->quote( $sOXID );
-        return oxDb::getInstance()->getOne( $sSelect );
+        return $oDb->getOne( $sSelect );
     }
 
     /**
@@ -209,7 +209,7 @@ class oxRecommList extends oxBase implements oxIUrl
         $blAdd = false;
         if ( $sOXID ) {
             $oDb = oxDb::getDb();
-            if ( !oxDb::getInstance()->getOne( "select oxid from oxobject2list where oxobjectid=".$oDb->quote( $sOXID )." and oxlistid=".$oDb->quote( $this->getId() )) ) {
+            if ( !$oDb->getOne( "select oxid from oxobject2list where oxobjectid=".$oDb->quote( $sOXID )." and oxlistid=".$oDb->quote( $this->getId() ), false, false) ) {
                 $sUid  = oxUtilsObject::getInstance()->generateUID();
                 $sQ    = "insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( '$sUid', ".$oDb->quote( $sOXID ).", ".$oDb->quote( $this->getId() ).", ".$oDb->quote( $sDesc )." )";
                 $blAdd = $oDb->execute( $sQ );
@@ -355,7 +355,7 @@ class oxRecommList extends oxBase implements oxIUrl
 
             $sPartial = substr( $sSelect, strpos( $sSelect, ' from ' ) );
             $sSelect  = "select count( distinct rl.oxid ) $sPartial ";
-            $iCnt = oxDb::getInstance()->getOne( $sSelect );
+            $iCnt = oxDb::getDb()->getOne( $sSelect );
         }
         return $iCnt;
     }

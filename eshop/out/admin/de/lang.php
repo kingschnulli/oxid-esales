@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43469 2012-04-03 13:56:16Z vilma $
+ * @version   SVN: $Id: lang.php 43759 2012-04-11 09:15:46Z vilma $
  */
 
 $sLangName  = 'Deutsch';
@@ -448,7 +448,7 @@ $aLang = array(
 'ARTICLE_MAIN_ALLOWCUST'                                   => 'Editieren erlauben',
 'ARTICLE_MAIN_EAN'                                         => 'EAN',
 'ARTICLE_MAIN_DISTEAN'                                     => 'Hersteller EAN',
-'ARTICLE_MAIN_MPN'                                         => 'Hersteller-Artikelnummer',
+'ARTICLE_MAIN_MPN'                                         => 'Hersteller-Artikelnummer (MPN)',
 'ARTICLE_MAIN_MANUFACTURERID'                              => 'Hersteller',
 'ARTICLE_OVERVIEW_ARTMADEON'                               => 'Art. erstellt am',
 'ARTICLE_OVERVIEW_LASTCHANGE'                              => 'Letzte Änderung am',
@@ -887,12 +887,12 @@ $aLang = array(
 'MODULE_EDITEXTENSION'                                     => 'Modulinformation der Erweiterung editieren',
 'MODULE_ENABLEACTIVATIONTEXT'                              => 'Die Erweiterung hat keine Metadata-Datei. Um die Erweiterung zu registrieren, muss einmalig eingetragen werden, welche Klassen deren Module erweitern (Beispiel: oxorder => myModule/myModuleOxorder).',
 'MODULE_ENTERMODULENAME'                                   => 'Name der Erweiterung',
-'MODULE_ENTERMODULEID'                                     => '[TR]Module ID',
+'MODULE_ENTERMODULEID'                                     => 'Modul-ID',
 'MODULE_ENTERMODULEEXTENDSCLASSES'                         => 'Klassen, die erweitert werden',
 'MODULE_STANDALONEFILE'                                    => 'Das Modul ist ein einzelne .php-Datei. Analog zu Erweiterungen sollte das Modul in einem Verzeichnis gespeichert sein!',
 'MODULE_EXTENSIONISDELETED'                                => 'Es gibt registrierte Erweiterungen im eShop, deren Verzeichnis nicht vorhanden ist.',
 'MODULE_DELETEEXTENSION'                                   => 'Möchten Sie alle Modulinformationen einschließlich Konfigurationseinstellungen und Blockinformationen für Templates löschen?',
-'LANGUAGE_ERRORGENERATEVIEWS'                              => "Bitte aktualisieren Sie die Datenbank-Views unter Service->Tools",
+'LANGUAGE_ERRORGENERATEVIEWS'                              => "Bitte aktualisieren Sie die Datenbank-Views unter Service -> Tools",
 'LANGUAGE_ACTIVE'                                          => 'Im Frontend aktiv',
 'LANGUAGE_LIST_MENUITEM'                                   => 'Stammdaten',
 'LANGUAGE_LIST_MENUSUBITEM'                                => 'Sprachen',
@@ -991,7 +991,7 @@ $aLang = array(
 'ORDER_LIST_MENUSUBITEM'                                   => 'Bestellungen',
 'ORDER_MAIN_IPADDRESS'                                     => 'IP-Adresse',
 'ORDER_MAIN_BILLNUM'                                       => 'Rechnungsnr.',
-'ORDER_MAIN_TRACKCODE'                                     => 'Lieferung Trackcode',
+'ORDER_MAIN_TRACKCODE'                                     => 'Tracking Code',
 'ORDER_MAIN_DISCOUNT'                                      => 'Rabatt',
 'ORDER_MAIN_PAIDON'                                        => 'Bezahlt am',
 'ORDER_MAIN_USERVOUCHER'                                   => 'Benutzter Gutschein',
@@ -1001,8 +1001,8 @@ $aLang = array(
 'ORDER_MAIN_DELTYPE'                                       => 'Versandart',
 'ORDER_MAIN_UPDATE_DELPAY'                                 => 'Aktualisieren',
 'ORDER_MAIN_SEND_DOWNLOADS'                                => 'Bestellte Downloadlinks',
-'ORDER_MAIN_PAYMENT_INFORMATION'                           => "Bezahlinformation",
-'ORDER_MAIN_SHIPPING_INFORMATION'                          => "[tr]Shipping information",
+'ORDER_MAIN_PAYMENT_INFORMATION'                           => "Bezahlinformationen",
+'ORDER_MAIN_SHIPPING_INFORMATION'                          => "Versandinformationen",
 'ORDER_REMARK_REMARK'                                      => '[Bem.]',
 'ORDER_REMARK_ORDER'                                       => '[Best.]',
 'ORDER_REMARK_USER'                                        => '[Reg.]',
@@ -1362,7 +1362,7 @@ $aLang = array(
 'SHOP_SYSTEM_ORDERDISNOREG'                                => 'Benutzer müssen sich registrieren, um bestellen zu können',
 'SHOP_SYSTEM_OTHERCOUNTRYORDER'                            => 'Bestellungen aus dem Ausland auch dann erlauben, wenn keine Versandkosten für das Land vorhanden sind',
 'SHOP_SYSTEM_SEARCHENGINEURLS'                             => 'Suchmaschinenfeste URLs verwenden. Dies ist wichtig für Google & Co., funktioniert jedoch nicht auf jedem Webserver',
-'SHOP_SYSTEM_SHOP_LOCATION'                                => 'Standort des eShops',
+'SHOP_SYSTEM_SHOP_LOCATION'                                => '[tr]Market des eShops',
 'SHOP_SYSTEM_SHOWVARIANTREVIEWS'                           => 'Varianten-Bewertungen beim "Vater"-Artikel anzeigen',
 'SHOP_SYSTEM_STOREIPS'                                     => 'IP-Adressen speichern. Die ist u.U. ein Verstoß gegen den Datenschutz.',
 'SHOP_SYSTEM_UTILMODULE'                                   => 'Zusätzliches Util-Modul',
@@ -2087,6 +2087,7 @@ $aLang = array(
 'DELIVERY_RDFA_FEDERALEXPRESS'			                   => 'FedEx',
 'DELIVERY_RDFA_UPS'			                               => 'UPS',
 'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Option "Passwort merken" beim Login anzeigen',
+'NEWSLETTER_SUBJECT'                                       => 'Betreff',
 
 );
 

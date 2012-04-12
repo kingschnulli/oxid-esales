@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: info.php 43015 2012-03-19 13:30:33Z mindaugas.rimgaila $
+ * @version   SVN: $Id: info.php 43785 2012-04-11 14:43:50Z rimvydas.paskevicius $
  * @deprecated
  */
 
@@ -157,5 +157,27 @@ class Info extends oxUBase
             $this->_oDelSetList->getList();
         }
         return $this->_oDelSetList;
+    }
+    
+    /**
+     * Returns content parsed through smarty 
+     * 
+     * @return string
+     */
+    public function getParsedContent()
+    {        
+        return oxUtilsView::getInstance()->parseThroughSmarty( $this->getContent()->oxcontents__oxcontent->value );        
+    }
+
+    /**
+     * Template title getter.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        $oContent = $this->getContent();
+        
+        return $oContent->oxcontents__oxtitle->value;
     }
 }

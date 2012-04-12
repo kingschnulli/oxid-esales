@@ -98,7 +98,7 @@
         </p>
           [{/if}]
     </li>
-
+    [{block name="form_user_billing_country"}]
     <li [{if $aErrors.oxuser__oxcountryid}]class="oxInValid"[{/if}]>
         <label [{if $oView->isFieldRequired(oxuser__oxcountryid) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_COUNTRY" }]</label>
           <select [{if $oView->isFieldRequired(oxuser__oxcountryid) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if}] id="invCountrySelect" name="invadr[oxuser__oxcountryid]">
@@ -131,6 +131,9 @@
                 selectedStateId=$oxcmp_user->oxuser__oxstateid->value
          }]
     </li>
+    [{/block}]
+
+
     <li [{if $aErrors.oxuser__oxfon}]class="oxInValid"[{/if}]>
         <label [{if $oView->isFieldRequired(oxuser__oxfon) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_PHONE" }]</label>
           <input [{if $oView->isFieldRequired(oxuser__oxfon) }]class="js-oxValidate js-oxValidate_notEmpty" [{/if}]type="text" size="37" maxlength="128" name="invadr[oxuser__oxfon]" value="[{if isset( $invadr.oxuser__oxfon ) }][{ $invadr.oxuser__oxfon }][{else }][{ $oxcmp_user->oxuser__oxfon->value }][{/if}]">
@@ -185,11 +188,11 @@
         <label class="innerLabel" for="oxDay">[{ oxmultilang ident="DAY_2" }]</label>
         <input id="oxDay" class='oxDay js-oxValidate' name='invadr[oxuser__oxbirthdate][day]' type="text" data-fieldsize="xsmall" maxlength="2" value="[{if $iBirthdayDay > 0 }][{$iBirthdayDay }][{/if}]" />
         [{oxscript include="js/widgets/oxinnerlabel.js" priority=10 }]
-        [{oxscript add="$( '#oxDay' ).oxInnerLabel();"}]
+        [{oxscript add="$( '#oxDay' ).oxInnerLabel({sReloadElement:'#userChangeAddress'});"}]
         <label class="innerLabel" for="oxYear">[{ oxmultilang ident="YEAR" }]</label>
         <input id="oxYear" class='oxYear js-oxValidate' name='invadr[oxuser__oxbirthdate][year]' type="text" data-fieldsize="small" maxlength="4" value="[{if $iBirthdayYear }][{$iBirthdayYear }][{/if}]" />
         [{oxscript include="js/widgets/oxinnerlabel.js" priority=10 }]
-        [{oxscript add="$( '#oxYear' ).oxInnerLabel();"}]
+        [{oxscript add="$( '#oxYear' ).oxInnerLabel({sReloadElement:'#userChangeAddress'});"}]
         <p class="oxValidateError">
             <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             <span class="js-oxError_incorrectDate">[{ oxmultilang ident="ERROR_MESSAGE_INCORRECT_DATE" }]</span>

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpaymentlist.php 43314 2012-03-29 13:32:58Z linas.kukulskis $
+ * @version   SVN: $Id: oxpaymentlist.php 43744 2012-04-11 07:55:41Z linas.kukulskis $
  */
 /**
  * Payment list manager.
@@ -203,14 +203,14 @@ class oxPaymentList extends oxList
      */
     public function loadRDFaPaymentList($dPrice = null)
     {
-        $oDb = oxDb::getDb();
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sTable = getViewName( 'oxpayments' );
         $sQ  = "select $sTable.*, oxobject2payment.oxobjectid from $sTable left join (select oxobject2payment.* from oxobject2payment where oxobject2payment.oxtype = 'rdfapayment') as oxobject2payment on oxobject2payment.oxpaymentid=$sTable.oxid ";
         $sQ .= "where $sTable.oxactive = 1 ";
         if ( $dPrice !== null ) {
             $sQ .= "and $sTable.oxfromamount <= ".$oDb->quote( $dPrice ) ." and $sTable.oxtoamount >= ".$oDb->quote( $dPrice );
         }
-        $rs = oxDb::getInstance()->select( $sQ );
+        $rs = $oDb->select( $sQ );
         if ($rs != false && $rs->recordCount() > 0) {
             $oSaved = clone $this->getBaseObject();
             while (!$rs->EOF) {

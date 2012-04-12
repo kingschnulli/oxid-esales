@@ -27,6 +27,14 @@
                     </td>
                   </tr>
                   <tr>
+                    <td class="edittext" width="60">
+                    [{ oxmultilang ident="NEWSLETTER_SUBJECT" }]
+                    </td>
+                    <td class="edittext">
+                    <input type="text" class="editinput" style="width:100%" size="120" maxlength="[{$edit->oxnewsletter__oxsubject->fldmax_length}]" name="editval[oxnewsletter__oxsubject]" value="[{$edit->oxnewsletter__oxsubject->value}]">                    
+                    </td>
+                  </tr>
+                  <tr>
                     <td class="edittext" style="width:60px" valign="top">
                     [{ oxmultilang ident="NEWSLETTER_MAIN_MODEL" }]
                     </td>

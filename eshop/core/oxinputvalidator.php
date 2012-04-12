@@ -20,7 +20,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxinputvalidator.php 43315 2012-03-29 13:34:09Z linas.kukulskis $
+ * @version   SVN: $Id: oxinputvalidator.php 43732 2012-04-11 07:39:52Z linas.kukulskis $
  */
 
 /**
@@ -449,7 +449,7 @@ class oxInputValidator extends oxSuperCfg
                               ( select oxactive from oxcountry where oxid = ".$oDb->quote( $sDelCtry )." ) ";
             }
 
-            if ( !oxDb::getInstance()->getOne( $sQ ) ) {
+            if ( !$oDb->getOne( $sQ ) ) {
                 $oEx = oxNew( 'oxUserException' );
                 $oEx->setMessage('EXCEPTION_INPUT_NOTALLFIELDS' );
 

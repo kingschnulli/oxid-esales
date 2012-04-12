@@ -105,13 +105,31 @@ if ( !function_exists( 'getLocation' ) ) {
      */
     function getLocation()
     {
-        $aCountries = array();
+        $aLocationCountries = array();
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             include getShopBasePath()."admin/shop_countries.php";
         } else {
             include getInstallPath()."admin/shop_countries.php";
         }
         return $aLocationCountries;
+    }
+}
+
+if ( !function_exists( 'getLanguages' ) ) {
+    /**
+     * Includes country list for setup
+     *
+     * @return null
+     */
+    function getLanguages()
+    {
+        $aLanguages = array();
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            include getShopBasePath()."admin/shop_countries.php";
+        } else {
+            include getInstallPath()."admin/shop_countries.php";
+        }
+        return $aLanguages;
     }
 }
 
@@ -588,6 +606,12 @@ class OxSetupSession extends oxSetupCore
                 $this->setSessionParam( 'country_lang', $sCountryLang );
             }
 
+            //storring shop language value settings to session
+            $sShopLang = $oUtils->getRequestVar( "sShopLang", "post" );
+            if ( isset( $sShopLang ) ) {
+                $this->setSessionParam( 'sShopLang', $sShopLang );
+            }
+
             //storring dyn pages settings to session
             $blUseDynPages = $oUtils->getRequestVar( "use_dynamic_pages", "post" );
             if ( isset( $blUseDynPages ) ) {
@@ -863,7 +887,7 @@ class OxSetupDb extends oxSetupCore
         $sLocationLang  = isset( $aParams["location_lang"] ) ? $aParams["location_lang"] : $oSession->getSessionParam( 'location_lang' );
         $blCheckForUpdates = isset( $aParams["check_for_updates"] ) ? $aParams["check_for_updates"] : $oSession->getSessionParam( 'check_for_updates' );
         $sCountryLang  = isset( $aParams["country_lang"] ) ? $aParams["country_lang"] : $oSession->getSessionParam( 'country_lang' );
-        $sAdminLang = isset( $aParams["setup_lang"] ) ? $aParams["setup_lang"] :  $oSession->getSessionParam('setup_lang');
+        $sShopLang  = isset( $aParams["sShopLang"] ) ? $aParams["sShopLang"] : $oSession->getSessionParam( 'sShopLang' );
         $sBaseShopId = $this->getInstance( "oxSetup" )->getShopId();
 
         $this->execSql( "update oxcountry set oxactive = '0'" );
@@ -903,7 +927,7 @@ class OxSetupDb extends oxSetupCore
             foreach ($aLanguageParams as $sKey => $aLang) {
                 $aLanguageParams[$sKey]["active"] = "0";
             }
-            $aLanguageParams[$sAdminLang]["active"] = "1";
+            $aLanguageParams[$sShopLang]["active"] = "1";
 
             $sValue = serialize( $aLanguageParams );
             $sID4 = $oUtils->generateUid();
@@ -1897,6 +1921,7 @@ class oxSetupController extends oxSetupCore
         $oView->setTitle( 'STEP_0_TITLE' );
         $oView->setViewParam( "blContinue", $blContinue );
         $oView->setViewParam( "aGroupModuleInfo", $aGroupModuleInfo );
+        $oView->setViewParam( "aLanguages", getLanguages() );
         $oView->setViewParam( "sSetupLang", $this->getInstance( "oxSetupSession" )->getSessionParam( 'setup_lang' ) );
         return "systemreq.php";
     }
@@ -1918,6 +1943,8 @@ class oxSetupController extends oxSetupCore
         $oView->setTitle( 'STEP_1_TITLE' );
         $oView->setViewParam( "aCountries", getCountryList() );
         $oView->setViewParam( "aLocations", getLocation() );
+        $oView->setViewParam( "aLanguages", getLanguages() );
+        $oView->setViewParam( "sShopLang", $oSession->getSessionParam( 'sShopLang' ) );
         $oView->setViewParam( "sSetupLang", $this->getInstance( "oxSetupLang" )->getSetupLang() );
         $oView->setViewParam( "sLocationLang", $oSession->getSessionParam('location_lang') );
         $oView->setViewParam( "sCountryLang", $oSession->getSessionParam('country_lang') );
@@ -2128,7 +2155,7 @@ class oxSetupController extends oxSetupCore
         }
 
         //swap database to english
-        if ( $oSession->getSessionParam('location_lang') != "de" ) {
+        if ( $oSession->getSessionParam('sShopLang') != "de" ) {
             try {
                 $oDb->queryFile( "$sqlDir/en.sql" );
             } catch ( Exception $oExcp ) {
@@ -2441,7 +2468,7 @@ class oxSetupAps extends oxSetupCore
         }
 
         //swap database to english
-        if ( $aParams["location_lang"] != "de" ) {
+        if ( $aParams["sShopLang"] != "de" ) {
             $oDb->queryFile( "en.sql" );
         }
 

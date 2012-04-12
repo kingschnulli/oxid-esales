@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: deliveryset_payment.inc.php 39304 2011-10-13 08:35:28Z linas.kukulskis $
+ * @version   SVN: $Id: deliveryset_payment.inc.php 43655 2012-04-10 12:24:21Z linas.kukulskis $
  */
 
 $aColumns = array( 'container1' => array(    // field , table,         visible, multilanguage, ident
@@ -107,7 +107,7 @@ class ajaxComponent extends ajaxListComponent
             $oDb = oxDb::getDb();
             foreach ( $aChosenSets as $sChosenSet) {
                 // check if we have this entry already in
-                $sID = $oDb->GetOne("select oxid from oxobject2payment where oxpaymentid = " . $oDb->quote( $sChosenSet ) . "  and oxobjectid = ".$oDb->quote( $soxId )." and oxtype = 'oxdelset'");
+                $sID = $oDb->getOne("select oxid from oxobject2payment where oxpaymentid = " . $oDb->quote( $sChosenSet ) . "  and oxobjectid = ".$oDb->quote( $soxId )." and oxtype = 'oxdelset'");
                 if ( !isset( $sID) || !$sID) {
                     $oObject = oxNew( 'oxbase' );
                     $oObject->init( 'oxobject2payment' );

@@ -219,6 +219,31 @@ class oxModule extends oxSuperCfg
     }
 
     /**
+     * Get module ID
+     *
+     * @param string $sModule extention full path
+     *
+     * @return string
+     */
+    public function getIdByPath($sModule)
+    {
+        $myConfig     = $this->getConfig();
+        $aModulePaths = $myConfig->getConfigParam( 'aModulePaths' );
+        $sModuleId    = null;
+        if (is_array( $aModulePaths )) {
+            foreach ($aModulePaths as $sId => $sPath) {
+                if (strpos($sModule, $sPath."/") === 0 ) {
+                    $sModuleId = $sId;
+                }
+            }
+        }
+        if (!$sModuleId) {
+            $sModuleId = substr( $sModule, 0, strpos( $sModule, "/" ) );
+        }
+        return $sModuleId;
+    }
+
+    /**
      * Get module info item. If second param is passed, will try
      * to get value according selected language.
      *
@@ -265,7 +290,7 @@ class oxModule extends oxSuperCfg
         $blActive = false;
         $sId = $this->getId();
         if (isset($sId)) {
-            if (isset($this->_aModule['extend']) && is_array($this->_aModule['extend'])) {
+            if ( is_array($this->_aModule['extend']) && !empty($this->_aModule['extend']) ) {
                 $aAddModules = $this->_aModule['extend'];
                 $aInstalledModules = $this->getAllModules();
                 $iClCount = count($aAddModules);
@@ -282,8 +307,15 @@ class oxModule extends oxSuperCfg
                 if ( $blActive && ( is_array($aDisabledModules) && in_array($sId, $aDisabledModules) ) ) {
                     $blActive = false;
                 }
+            } else {
+                //handling modules that does not extend any class
+                $aDisabledModules = $this->getDisabledModules();
+                if ( is_array($aDisabledModules) && !in_array($sId, $aDisabledModules) ) {
+                    $blActive = true;
+                }
             }
         }
+
         return $blActive;
     }
 
@@ -370,13 +402,25 @@ class oxModule extends oxSuperCfg
             }
 
             // checking if module has tpl blocks and they are installed
-            if ( !$this->_hasInstalledTplBlocks($sModuleId) ) {
+            if ( !$this->_hasInstalledTemplateBlocks($sModuleId) ) {
                 // installing module blocks
-                $this->_addTplBlocks( $this->getInfo("tplblocks") );
+                $this->_addTemplateBlocks( $this->getInfo("blocks") );
             } else {
                 //activate oxblocks
                 $this->_changeBlockStatus( $sModuleId, "1" );
             }
+
+            // Register new module templates
+            $this->_addModuleFiles($this->getInfo("files") );
+
+            // Register new module templates
+            $this->_addTemplateFiles($this->getInfo("templates") );
+
+            // Add module settings
+            $this->_addModuleSettings($this->getInfo("settings"));
+
+            //resets cache
+            $this->_resetCache();
 
             return true;
         }
@@ -386,11 +430,15 @@ class oxModule extends oxSuperCfg
     /**
      * Deactivate extension by adding disable module class information to disabled module array
      *
+     * @param string $sModuleId Module Id
+     *
      * @return bool
      */
-    public function deactivate()
+    public function deactivate($sModuleId = null)
     {
-        $sModuleId = $this->getId();
+        if (!isset($sModuleId)) {
+            $sModuleId = $this->getId();
+        }
         if (isset($sModuleId)) {
             $aDisabledModules = $this->getDisabledModules();
 
@@ -400,9 +448,13 @@ class oxModule extends oxSuperCfg
             $aModules = array_merge($aDisabledModules, array($sModuleId));
 
             $this->getConfig()->saveShopConfVar('arr', 'aDisabledModules', $aModules);
+            $this->getConfig()->setConfigParam('aDisabledModules', $aModules);
 
             //deactivate oxblocks too
-            $this->_changeBlockStatus( $this->getId() );
+            $this->_changeBlockStatus( $sModuleId );
+
+            //resets cache
+            $this->_resetCache();
 
             return true;
         }
@@ -420,9 +472,23 @@ class oxModule extends oxSuperCfg
     protected function _changeBlockStatus( $sModule, $iStatus = '0' )
     {
         $oDb = oxDb::getDb();
-        $oDb->execute("UPDATE oxtplblocks SET oxactive = '".(int) $iStatus."' where oxmodule =". $oDb->quote($sModule));
+        $sShopId   = $this->getConfig()->getShopId();
+        $oDb->execute("UPDATE oxtplblocks SET oxactive = '".(int) $iStatus."' WHERE oxmodule =". $oDb->quote($sModule)."AND oxshopid = '$sShopId'");
     }
 
+    /**
+     * Resets tamplate, language and menu xml cache
+     *
+     * @return null
+     */
+    protected function _resetCache()
+    {
+        $oUtils = oxUtils::getInstance();
+        $aTemplates = $this->getTemplates();
+        $oUtils->resetTemplateCache($aTemplates);
+        $oUtils->resetLanguageCache();
+        $oUtils->resetMenuCache();
+    }
     /**
      * Build module chains from nested array
      *
@@ -559,40 +625,69 @@ class oxModule extends oxSuperCfg
     }
 
     /**
-     * Checks if module has installed tpl blocks
+     * Get module template files
+     *
+     * @return array
+     */
+    public function getModuleTemplates()
+    {
+        return (array) $this->getConfig()->getConfigParam('aModuleTemplates');
+    }
+
+    /**
+     * Get module files
+     *
+     * @return array
+     */
+    public function getModuleFiles()
+    {
+        return (array) $this->getConfig()->getConfigParam('aModuleFiles');
+    }
+
+    /**
+     * Checks if module has installed template blocks
      *
      * @param string $sModuleId Module ID
      *
      * @return bool
      */
-    protected function _hasInstalledTplBlocks( $sModuleId )
+    protected function _hasInstalledTemplateBlocks( $sModuleId )
     {
         $sShopId   = $this->getConfig()->getShopId();
-        $blRes = oxDb::getInstance()->getOne( "select 1 from oxtplblocks where OXMODULE = '$sModuleId' and OXSHOPID = '$sShopId' limit 1 " );
-
+        $oDb = oxDb::getDb();
+        $blRes = $oDb->getOne( "SELECT 1 FROM oxtplblocks WHERE oxmodule = ".$oDb->quote($sModuleId)." AND oxshopid = '$sShopId' LIMIT 1" );
         return (bool) $blRes;
     }
 
     /**
      * Add module templates to database.
      *
-     * @param array $aModuleBlocks Module blocks array
+     * @param array  $aModuleBlocks Module blocks array
+     * @param string $sModuleId     Module id
      *
      * @return null
      */
-    protected function _addTplBlocks( $aModuleBlocks )
+    protected function _addTemplateBlocks( $aModuleBlocks, $sModuleId = null )
     {
-        $sShopId   = $this->getConfig()->getShopId();
-        $sModuleId = $this->getId();
-        $oDb       = oxDb::getDb();
+        if (is_null($sModuleId)) {
+            $sModuleId = $this->getId();
+        }
+
+        $sShopId = $this->getConfig()->getShopId();
+        $oDb     = oxDb::getDb();
 
         if ( is_array($aModuleBlocks) ) {
 
             foreach ( $aModuleBlocks as $aValue ) {
                 $sOxId = oxUtilsObject::getInstance()->generateUId();
 
+                $sTemplate = $aValue["template"];
+                $iPosition = $aValue["position"]?$aValue["position"]:1;
+                $sBlock    = $aValue["block"];
+                $sFile     = $aValue["file"];
+
                 $sSql = "INSERT INTO `oxtplblocks` (`OXID`, `OXACTIVE`, `OXSHOPID`, `OXTEMPLATE`, `OXBLOCKNAME`, `OXPOS`, `OXFILE`, `OXMODULE`)
-                         VALUES ('$sOxId', 1, '$sShopId', '{$aValue["shopTpl"]}', '{$aValue["blockName"]}', '{$aValue["blockPos"]}', '{$aValue["blockTpl"]}', '$sModuleId')";
+                         VALUES ('{$sOxId}', 1, '{$sShopId}', ".$oDb->quote($sTemplate).", ".$oDb->quote($sBlock).", ".$oDb->quote($iPosition).", ".$oDb->quote($sFile).", '{$sModuleId}')";
 
                 $oDb->execute( $sSql );
             }
@@ -600,7 +695,99 @@ class oxModule extends oxSuperCfg
     }
 
     /**
-     * Return tempate blocks for givrn template id.
+     * Add module tamplate files to config for smarty.
+     *
+     * @param array  $aModuleTemplates Module templates array
+     * @param string $sModuleId        Module id
+     *
+     * @return null
+     */
+    protected function _addTemplateFiles( $aModuleTemplates , $sModuleId = null)
+    {
+        if (is_null($sModuleId)) {
+            $sModuleId = $this->getId();
+        }
+
+        $oConfig    = $this->getConfig();
+        $aTemplates = $this->getModuleTemplates();
+        if ( is_array($aModuleTemplates) ) {
+            $aTemplates[$sModuleId] = $aModuleTemplates;
+        }
+
+        $oConfig->setConfigParam('aModuleTemplates', $aTemplates);
+        $oConfig->saveShopConfVar('aarr', 'aModuleTemplates', $aTemplates);
+    }
+
+    /**
+     * Add module files to config for autoload.
+     *
+     * @param array  $aModuleFiles Module files array
+     * @param string $sModuleId    Module id
+     *
+     * @return null
+     */
+    protected function _addModuleFiles( $aModuleFiles, $sModuleId = null)
+    {
+        if (is_null($sModuleId)) {
+            $sModuleId = $this->getId();
+        }
+
+        $oConfig = $this->getConfig();
+        $aFiles  = $this->getModuleFiles();
+        if ( is_array($aModuleFiles) ) {
+            $aFiles[$sModuleId] = $aModuleFiles;
+        }
+
+        $oConfig->setConfigParam('aModuleFiles', $aFiles);
+        $oConfig->saveShopConfVar('aarr', 'aModuleFiles', $aFiles);
+    }
+
+    /**
+     * Add module settings to database.
+     *
+     * @param array  $aModuleSettings Module settings array
+     * @param string $sModuleId       Module id
+     *
+     * @return null
+     */
+    protected function _addModuleSettings( $aModuleSettings, $sModuleId = null )
+    {
+        if (is_null($sModuleId)) {
+            $sModuleId = $this->getId();
+        }
+
+        $sShopId = $this->getConfig()->getShopId();
+        $oDb     = oxDb::getDb();
+
+        if ( is_array($aModuleSettings) ) {
+
+            foreach ( $aModuleSettings as $aValue ) {
+                $oConfig = $this->getConfig();
+                $sOxId = oxUtilsObject::getInstance()->generateUId();
+
+                $sModule     = 'module:'.$sModuleId;
+                $sName       = $aValue["name"];
+                $sType       = $aValue["type"];
+                $sValue      = is_null($oConfig->getConfigParam($sName))?$aValue["value"]:$oConfig->getConfigParam($sName);
+                $sGroup      = $aValue["group"];
+                $sConstrains = $aValue["constrains"]?$aValue["constrains"]:'';
+                $iPosition   = $aValue["position"]?$aValue["position"]:1;
+
+                $oConfig->setConfigParam($sName, $sValue);
+                $oConfig->saveShopConfVar($sType, $sName, $sValue, $sShopId, $sModule);
+
+                $sDeleteSql = "DELETE FROM `oxconfigdisplay` WHERE OXCFGMODULE=".$oDb->quote($sModule)." AND OXCFGVARNAME=".$oDb->quote($sName);
+                $sInsertSql = "INSERT INTO `oxconfigdisplay` (`OXID`, `OXCFGMODULE`, `OXCFGVARNAME`, `OXGROUPING`, `OXVARCONSTRAINT`, `OXPOS`) ".
+                              "VALUES ('{$sOxId}', ".$oDb->quote($sModule).", ".$oDb->quote($sName).", ".$oDb->quote($sGroup).", ".$oDb->quote($sConstrains).", ".$oDb->quote($iPosition).")";
+
+                $oDb->execute( $sDeleteSql );
+                $oDb->execute( $sInsertSql );
+            }
+        }
+    }
+
+    /**
+     * Return tempates affected by template blocks for given module id.
      *
      * @param string $sModuleId Module id
      *
@@ -617,15 +804,8 @@ class oxModule extends oxSuperCfg
         }
 
         $sShopId   = $this->getConfig()->getShopId();
-        $rs = oxDb::getInstance()->select("select OXTEMPLATE from oxtplblocks where OXMODULE = '$sModuleId' and OXSHOPID = '$sShopId'" );
+        $aTemplates = oxDb::getDb()->getAll("SELECT oxtemplate FROM oxtplblocks WHERE oxmodule = '$sModuleId' AND oxshopid = '$sShopId'" );
 
-        $aTemplates = array();
-        if ($rs != false && $rs->recordCount() > 0) {
-            while (!$rs->EOF) {
-                $aTemplates[] =  $rs->fields[0];
-                $rs->moveNext();
-            }
-        }
         return $aTemplates;
     }
 

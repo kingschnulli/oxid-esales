@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpicturehandler.php 41831 2012-01-27 15:32:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxpicturehandler.php 43698 2012-04-10 14:53:40Z mindaugas.rimgaila $
  */
 
 /**
@@ -72,47 +72,29 @@ class oxPictureHandler extends oxSuperCfg
         $myConfig   = $this->getConfig();
         $myUtilsPic = oxUtilsPic::getInstance();
         $oUtilsFile = oxUtilsFile::getInstance();
+        $blGeneratedImagesOnly = !$blDeleteMasterPicture;
 
         $sAbsDynImageDir = $myConfig->getPictureDir(false);
         $sMasterImage = basename( $oObject->{"oxarticles__oxpic".$iIndex}->value );
-
         if ( !$sMasterImage || $sMasterImage == "nopic.jpg" ) {
             return;
         }
 
+        $aPic = array("sField"    => "oxpic".$iIndex,
+                      "sDir"      => $oUtilsFile->getImageDirByType( "M".$iIndex, $blGeneratedImagesOnly ),
+                      "sFileName" => $sMasterImage);
 
-        if ( $blDeleteMasterPicture ) {
-            // master picture
-            $aPic = array("sField"    => "oxpic".$iIndex,
-                          "sDir"      => $oUtilsFile->getImageDirByType( "M".$iIndex ),
-                          "sFileName" => $sMasterImage);
-        } else {
-            // general picture
-            $aPic = array("sField"    => "oxpic".$iIndex,
-                          "sDir"      => $oUtilsFile->getImageDirByType( "P".$iIndex ),
-                          "sFileName" => $sMasterImage);
-        }
-
-        $blDeleted = $myUtilsPic->safePictureDelete( $aPic["sFileName"], $myConfig->getPictureDir(false) . $aPic["sDir"], "oxarticles", $aPic["sField"] );
-
+        $blDeleted = $myUtilsPic->safePictureDelete( $aPic["sFileName"], $sAbsDynImageDir . $aPic["sDir"], "oxarticles", $aPic["sField"] );
         if ( $blDeleted ) {
             $this->deleteZoomPicture( $oObject, $iIndex );
 
             $aDelPics = array();
-
-            if ( $blDeleteMasterPicture ) {
-                //deleting general picture
-                $aDelPics[] = array("sField"    => "oxpic".$iIndex,
-                                    "sDir"      => $oUtilsFile->getImageDirByType( "P".$iIndex ),
-                                    "sFileName" => $sMasterImage);
-            }
-
             if ( $iIndex == 1 ) {
                 // deleting generated main icon picture if custom main icon
                 // file name not equal with generated from master picture
                 if ( $this->getMainIconName( $sMasterImage ) != basename($oObject->oxarticles__oxicon->value) ) {
                     $aDelPics[] = array("sField"    => "oxpic1",
-                                        "sDir"      => $oUtilsFile->getImageDirByType( "ICO" ),
+                                        "sDir"      => $oUtilsFile->getImageDirByType( "ICO", $blGeneratedImagesOnly ),
                                         "sFileName" => $this->getMainIconName( $sMasterImage ));
                 }
 
@@ -120,12 +102,13 @@ class oxPictureHandler extends oxSuperCfg
                 // file name not equal with generated from master picture
                 if ( $this->getThumbName( $sMasterImage ) != basename($oObject->oxarticles__oxthumb->value) ) {
                     $aDelPics[] = array("sField"    => "oxpic1",
-                                        "sDir"      => $oUtilsFile->getImageDirByType( "TH" ),
+                                        "sDir"      => $oUtilsFile->getImageDirByType( "TH", $blGeneratedImagesOnly ),
                                         "sFileName" => $this->getThumbName( $sMasterImage ));
                 }
             }
+
             foreach ( $aDelPics as $aPic ) {
-                $myUtilsPic->safePictureDelete( $aPic["sFileName"], $myConfig->getPictureDir(false) . $aPic["sDir"], "oxarticles", $aPic["sField"] );
+                $myUtilsPic->safePictureDelete( $aPic["sFileName"], $sAbsDynImageDir . $aPic["sDir"], "oxarticles", $aPic["sField"] );
             }
         }
 

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 42854 2012-03-14 11:20:36Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsfile.php 43698 2012-04-10 14:53:40Z mindaugas.rimgaila $
  */
 
 /**
@@ -123,6 +123,14 @@ class oxUtilsFile extends oxSuperCfg
      * @var array
      */
     protected $_aAllowedFiles = array( 'gif', 'jpg', 'jpeg', 'png', 'pdf' );
+
+    /**
+     * Counts how many new files added.
+     *
+     * @var integer
+     */
+    protected $_iNewFilesCounter = 0;
+
     /**
      * Returns object instance
      *
@@ -159,6 +167,28 @@ class oxUtilsFile extends oxSuperCfg
         }
 
         $this->_iMaxZoomImgCount = $this->_iMaxPicImgCount;
+    }
+
+    /**
+     * Getter for param _iNewFilesCounter which counts how many new files added.
+     *
+     * @return integer
+     */
+    public function getNewFilesCounter()
+    {
+        return $this->_iNewFilesCounter;
+    }
+
+    /**
+     * Setter for param _iNewFilesCounter which counts how many new files added.
+     *
+     * @param integer $iNewFilesCounter New files count.
+     *
+     * @return void
+     */
+    protected function _setNewFilesCounter( $iNewFilesCounter )
+    {
+        $this->_iNewFilesCounter = (int) $iNewFilesCounter;
     }
 
     /**
@@ -433,7 +463,7 @@ class oxUtilsFile extends oxSuperCfg
             // folder where images will be processed
             $sTmpFolder = $oConfig->getConfigParam( "sCompileDir" );
 
-            $iNewImagesCounter = 0;
+            $iNewFilesCounter = 0;
             $aSource   = $aFiles['myfile']['tmp_name'];
             $aError    = $aFiles['myfile']['error'];
             $sErrorsDescription = '';
@@ -450,7 +480,7 @@ class oxUtilsFile extends oxSuperCfg
 
                 $sValue  = strtolower( $sValue );
                 $sImagePath = $this->_getImagePath( $sType );
-                
+
                 // Should translate error to user if file was uploaded
                 if ( UPLOAD_ERR_OK !== $iError && UPLOAD_ERR_NO_FILE !== $iError ) {
                     $sErrorsDescription = $this->translateError( $iError );
@@ -474,19 +504,18 @@ class oxUtilsFile extends oxSuperCfg
                         }
 
                         if ( $blMoved ) {
-                            // New image successfully add
-                            $iNewImagesCounter++;
+                            // New image successfully add.
+                            $iNewFilesCounter++;
                             // assign the name
                             if ( $oObject && isset( $oObject->$sKey ) ) {
                                 $oObject->{$sKey}->setValue( $sValue );
-                                
-                                // Return that no new image added
-                                $oObject->iNewImagesCounter = $iNewImagesCounter;
                             }
                         }
                     }
                 }
             }
+
+            $this->_setNewFilesCounter( $iNewFilesCounter );
         }
 
         return $oObject;
@@ -698,21 +727,28 @@ class oxUtilsFile extends oxSuperCfg
     /**
      * Returns image storage path
      *
-     * @param string $sType image type
+     * @param string $sType       image type
+     * @param bool   $blGenerated generated image dir.
      *
      * @return string
      */
-    public function getImageDirByType( $sType )
+    public function getImageDirByType( $sType, $blGenerated = false )
     {
         $sFolder = array_key_exists( $sType, $this->_aTypeToPath ) ? $this->_aTypeToPath[ $sType ] : '0';
-        return $this->normalizeDir( $sFolder );
+        $sDir = $this->normalizeDir( $sFolder );
+
+        if ($blGenerated === true) {
+            $sDir = str_replace('master/', 'generated/', $sDir);
+        }
+
+        return $sDir;
     }
-    
+
     /**
      * Translate php file upload errors to user readable format.
-     * 
+     *
      * @param integer $iError php file upload error number
-     * 
+     *
      * @return string
      */
     function translateError( $iError )
@@ -722,8 +758,8 @@ class oxUtilsFile extends oxSuperCfg
         if ( $iError > 0 && $iError < 9 && 5 !== $iError ) {
             $message = 'EXCEPTION_FILEUPLOADERROR_'.( (int) $iError );
         }
-        
-        return $message; 
+
+        return $message;
     }
 
     /**

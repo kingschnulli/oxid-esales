@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 43301 2012-03-29 13:12:40Z linas.kukulskis $
+ * @version   SVN: $Id: oxsession.php 43750 2012-04-11 08:20:17Z linas.kukulskis $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -625,10 +625,33 @@ class oxSession extends oxSuperCfg
             oxNew('oxbasketitem');
 
             $oBasket = ( $sBasket && ( $oBasket = unserialize( $sBasket ) ) ) ? $oBasket : oxNew( 'oxbasket' );
+            $this->_validateBasket($oBasket);
             $this->setBasket( $oBasket );
         }
 
         return $this->_oBasket;
+    }
+
+    /**
+     * Validate loaded from session basket content. Check for language change.
+     *
+     * @param oxBasket $oBasket Basket object loaded from session.
+     *
+     * @return null
+     */
+    protected function _validateBasket(oxBasket $oBasket)
+    {
+        $aCurrContent = $oBasket->getContents();
+        if (empty($aCurrContent)) {
+            return;
+        }
+
+        $iCurrLang = oxLang::getInstance()->getBaseLanguage();
+        foreach ($aCurrContent as $oContent) {
+            if ($oContent->getLanguageId() != $iCurrLang) {
+                $oContent->setLanguageId($iCurrLang);
+            }
+        }
     }
 
     /**
@@ -888,7 +911,7 @@ class oxSession extends oxSuperCfg
     {
         $oDb = oxDb::getDb();
         //matze changed sesskey to SessionID because structure of oxsession changed!!
-        $sSID = oxDb::getInstance()->getOne("select SessionID from oxsessions where SessionID = ".$oDb->quote( $this->getId() ));
+        $sSID = $oDb->getOne("select SessionID from oxsessions where SessionID = ".$oDb->quote( $this->getId() ));
 
         //2007-05-14
         //we check _blNewSession as well as this may be actually new session not written to db yet
@@ -1046,7 +1069,7 @@ class oxSession extends oxSuperCfg
             }
         }
 
-        return ( isset( $_SERVER['REQUEST_METHOD'] ) && $_SERVER['REQUEST_METHOD'] == 'POST');
+        return false;
     }
 
     /**

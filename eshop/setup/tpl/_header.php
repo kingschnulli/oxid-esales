@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   setup
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 25584 2010-02-03 12:11:40Z arvydas $
  */
@@ -43,13 +43,12 @@
     function update_dynpages_checkbox()
     {
         sValue = document.forms[0].location_lang.value;
-        if ( sValue == '' ) {
-           document.getElementById('use_dynamic_pages_ckbox').style.display = 'none';
-           document.getElementById('use_dynamic_pages_desc').style.display = 'none';
-
+        if ( sValue == 'de' ) {
+            document.getElementById('use_dynamic_pages_ckbox').style.display = '';
+            document.getElementById('use_dynamic_pages_desc').style.display = '';
         } else {
-           document.getElementById('use_dynamic_pages_ckbox').style.display = '';
-           document.getElementById('use_dynamic_pages_desc').style.display = '';
+            document.getElementById('use_dynamic_pages_ckbox').style.display = 'none';
+            document.getElementById('use_dynamic_pages_desc').style.display = 'none';
         }
     }
     /**

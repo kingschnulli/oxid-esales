@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsletter.php 40669 2011-12-19 08:20:25Z linas.kukulskis $
+ * @version   SVN: $Id: oxnewsletter.php 43480 2012-04-04 06:38:00Z vaidas.matulevicius $
  */
 
 /**
@@ -163,7 +163,6 @@ class oxNewsletter extends oxBase
 
         // add currency
         $this->_setUser( $sUserid );
-
         $this->_setParams( $blPerfLoadAktion );
 
         // restoring mode ..
@@ -171,7 +170,8 @@ class oxNewsletter extends oxBase
     }
 
     /**
-     * Creates oxemail object, calls mail sending function (oxEMail::sendNewsletterMail()),
+     * Creates oxemail object, calls mail sending function (oxEMail::sendNewsletterMail()
+     * (#2542 added subject field)),
      * returns true on success (if mailing function was unable to complete, sets emailing to
      * user failure status in DB).
      *
@@ -180,8 +180,8 @@ class oxNewsletter extends oxBase
     public function send()
     {
         $oxEMail = oxNew( 'oxemail' );
-        $blSend = $oxEMail->sendNewsletterMail( $this, $this->_oUser );
-        //print_r($oxEMail);
+        $blSend = $oxEMail->sendNewsletterMail( $this, $this->_oUser, $this->oxnewsletter__oxsubject->value );
+        
         // store failed info
         if ( !$blSend ) {
             $oDb = oxDb::getDb();
@@ -218,7 +218,7 @@ class oxNewsletter extends oxBase
         $oView->addTplParam( 'myuser', $this->_oUser );
 
         $this->_assignProducts( $oView, $blPerfLoadAktion );
-
+        
         $aInput[] = array( $this->getId().'html', $this->oxnewsletter__oxtemplate->value );
         $aInput[] = array( $this->getId().'plain', $this->oxnewsletter__oxplaintemplate->value );
         $aRes = oxUtilsView::getInstance()->parseThroughSmarty( $aInput, null, $oView, true );

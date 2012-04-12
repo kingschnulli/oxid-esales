@@ -19,11 +19,23 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 43057 2012-03-21 08:08:10Z linas.kukulskis $
+ * @version   SVN: $Id: contentTest.php 43774 2012-04-11 12:06:29Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
+
+/*
+ * Dummy class for getParsedContent function test.
+ * 
+ */
+class contentTest_oxUtilsView extends oxUtilsView
+{
+    public function parseThroughSmarty( $sDesc, $sOxid = null, $oActView = null, $blRecompile = false )
+    {
+        return $sDesc;
+    }
+}
 
 /**
  * Tests for content class
@@ -47,9 +59,10 @@ class Unit_Views_contentTest extends OxidTestCase
         $this->_oObj->oxcontents__oxshopid = new oxField($sShopId, oxField::T_RAW);
         $this->_oObj->oxcontents__oxloadid = new oxField('_testLoadId', oxField::T_RAW);
         $this->_oObj->oxcontents__oxcontent = new oxField("testcontentDE&, &, !@#$%^&*%$$&@'.,;p\"ss", oxField::T_RAW);
+        //$this->_oObj->oxcontents__oxcontent = new oxField('[{ $oxcmp_shop->oxshops__oxowneremail->value }]', oxField::T_RAW);
         $this->_oObj->oxcontents__oxcontent_1 = new oxField("testcontentENG&, &, !@#$%^&*%$$&@'.,;p\"ss", oxField::T_RAW);
         $this->_oObj->oxcontents__oxactive = new oxField('1', oxField::T_RAW);
-        $this->_oObj->oxcontents__oxactive_1 = new oxField('1', oxField::T_RAW);
+        $this->_oObj->oxcontents__oxactive_1 = new oxField('1', oxField::T_RAW);       
         $this->_oObj->save();
 
         $sOxid = $this->_oObj->getId();
@@ -69,6 +82,7 @@ class Unit_Views_contentTest extends OxidTestCase
         $this->cleanUpTable( 'oxdelivery' );
         $this->cleanUpTable( 'oxdel2delset' );
         parent::tearDown();
+        oxRemClassModule('contentTest_oxUtilsView');
     }
 
     /**
@@ -701,5 +715,22 @@ class Unit_Views_contentTest extends OxidTestCase
 
         $this->assertTrue( date('Y-m-d\TH:i:s', $startTime) <= $aResp['validfrom'] );
         $this->assertTrue( date('Y-m-d\TH:i:s', $endTime) <= $aResp['validthrough'] );
+    }
+    
+    /**
+     * Content::getParsedContent() Test case
+     *
+     * @return null
+     */
+    public function testGetParsedContent()
+    {   
+        oxAddClassModule('contentTest_oxUtilsView', 'oxUtilsView');
+
+        $this->_oObj->oxcontents__oxcontent = new oxField('[{ $oxcmp_shop->oxshops__oxowneremail->value }]', oxField::T_RAW);
+        $this->_oObj->save();
+        modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
+        $oContent = new content();
+
+        $this->assertEquals( $oContent->getContent()->oxcontents__oxcontent->value, $oContent->getParsedContent() );
     }
 }

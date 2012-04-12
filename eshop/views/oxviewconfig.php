@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 43403 2012-03-30 13:46:42Z vilma $
+ * @version   SVN: $Id: oxviewconfig.php 43687 2012-04-10 13:54:06Z rimvydas.paskevicius $
  */
 
 /**
@@ -360,6 +360,11 @@ class oxViewConfig extends oxSuperCfg
      */
     public function getSslSelfLink()
     {
+        if ( $this->isAdmin() ) {
+            // using getSelfLink() method in admin mode (#2745)
+            return $this->getSelfLink();
+        }
+        
         if ( ( $sValue = $this->getViewConfigParam( 'sslselflink' ) ) === null ) {
             $sValue = $this->getConfig()->getShopSecureHomeURL();
             $this->setViewConfigParam( 'sslselflink', $sValue );

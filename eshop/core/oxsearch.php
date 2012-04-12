@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsearch.php 43307 2012-03-29 13:16:53Z linas.kukulskis $l
+ * @version   SVN: $Id: oxsearch.php 43748 2012-04-11 08:08:11Z linas.kukulskis $l
  */
 
 /**
@@ -113,7 +113,7 @@ class oxSearch extends oxSuperCfg
             $sPartial = substr( $sSelect, strpos( $sSelect, ' from ' ) );
             $sSelect  = "select count( ".getViewName( 'oxarticles', $this->_iLanguage ).".oxid ) $sPartial ";
 
-            $iCnt = oxDb::getInstance()->getOne( $sSelect );
+            $iCnt = oxDb::getDb()->getOne( $sSelect );
         }
         return $iCnt;
     }
@@ -141,7 +141,7 @@ class oxSearch extends oxSuperCfg
 
             $sQ  = "select 1 from $sCatTable where $sCatTable.oxid = ".$oDb->quote( $sInitialSearchCat )." ";
             $sQ .= "and ".$oCategory->getSqlActiveSnippet();
-            if ( !oxDb::getInstance()->getOne( $sQ ) ) {
+            if ( !$oDb->getOne( $sQ ) ) {
                 return;
             }
         }
@@ -154,7 +154,7 @@ class oxSearch extends oxSuperCfg
 
             $sQ  = "select 1 from $sVndTable where $sVndTable.oxid = ".$oDb->quote( $sInitialSearchVendor )." ";
             $sQ .= "and ".$oVendor->getSqlActiveSnippet();
-            if ( !oxDb::getInstance()->getOne( $sQ ) ) {
+            if ( !$oDb->getOne( $sQ ) ) {
                 return;
             }
         }
@@ -167,7 +167,7 @@ class oxSearch extends oxSuperCfg
 
             $sQ  = "select 1 from $sManTable where $sManTable.oxid = ".$oDb->quote( $sInitialSearchManufacturer )." ";
             $sQ .= "and ".$oManufacturer->getSqlActiveSnippet();
-            if ( !oxDb::getInstance()->getOne( $sQ ) ) {
+            if ( !$oDb->getOne( $sQ ) ) {
                 return;
             }
         }
@@ -204,7 +204,7 @@ class oxSearch extends oxSuperCfg
             $sCatView = getViewName( 'oxcategories', $this->_iLanguage );
             $sInitialSearchCatQuoted = $oDb->quote( $sInitialSearchCat );
             $sSelectCat  = "select oxid from {$sCatView} where oxid = $sInitialSearchCatQuoted and (oxpricefrom != '0' or oxpriceto != 0)";
-            if ( oxDb::getInstance()->getOne($sSelectCat) ) {
+            if ( $oDb->getOne($sSelectCat) ) {
                 $sSelect = "select {$sSelectFields} from {$sArticleTable} $sDescJoin " .
                            "where {$sArticleTable}.oxid in ( select {$sArticleTable}.oxid as id from {$sArticleTable}, {$sO2CView} as oxobject2category, {$sCatView} as oxcategories " .
                            "where (oxobject2category.oxcatnid=$sInitialSearchCatQuoted and oxobject2category.oxobjectid={$sArticleTable}.oxid) or (oxcategories.oxid=$sInitialSearchCatQuoted and {$sArticleTable}.oxprice >= oxcategories.oxpricefrom and

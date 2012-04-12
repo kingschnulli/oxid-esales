@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 43132 2012-03-23 14:19:06Z vilma $
+ * @version   SVN: $Id: oxorderTest.php 43674 2012-04-10 13:24:00Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1345,8 +1345,8 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $oOrderArticle->setId( '_testOrderArticleId2' );
         $oOrderArticle->oxorderarticles__oxorderid = new oxField( $oOrder->getId() );
         $oOrderArticle->oxorderarticles__oxamount = new oxField( '1' );
-        $oOrderArticle->oxorderarticles__oxartid = new oxField( '1651' );
-        $oOrderArticle->oxorderarticles__oxartnum = new oxField( '1651' );
+        $oOrderArticle->oxorderarticles__oxartid = new oxField( 'test' );
+        $oOrderArticle->oxorderarticles__oxartnum = new oxField( 'test' );
         $oOrderArticle->oxorderarticles__oxtitle = new oxField( 'Beer homebrew kit CHEERS!' );
         $oOrderArticle->oxorderarticles__oxbrutprice = new oxField( 29 );
         $oOrderArticle->oxorderarticles__oxbprice = new oxField( 29 );

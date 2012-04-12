@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxreview.php 43308 2012-03-29 13:17:55Z linas.kukulskis $
+ * @version   SVN: $Id: oxreview.php 43746 2012-04-11 08:05:21Z linas.kukulskis $
  */
 
 /**
@@ -65,7 +65,7 @@ class oxReview extends oxBase
 
         if ( isset( $this->oxreviews__oxuserid ) && $this->oxreviews__oxuserid->value ) {
             $oDb = oxDb::getDb();
-            $this->oxuser__oxfname = new oxField( oxDb::getInstance()->getOne( "select oxfname from oxuser where oxid=".$oDb->quote( $this->oxreviews__oxuserid->value ) ));
+            $this->oxuser__oxfname = new oxField( $oDb->getOne( "select oxfname from oxuser where oxid=".$oDb->quote( $this->oxreviews__oxuserid->value ) ));
         }
 
         return $blRet;

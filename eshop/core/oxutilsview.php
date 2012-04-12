@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsview.php 43418 2012-04-02 05:08:24Z alfonsas $
+ * @version   SVN: $Id: oxutilsview.php 43766 2012-04-11 09:53:06Z linas.kukulskis $
  */
 
 /**
@@ -469,7 +469,7 @@ class oxUtilsView extends oxSuperCfg
             $sFile = $m[1];
         }
 
-        $oDb = oxDb::getDb();
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sFileParam = $oDb->quote($sFile);
         $sShpIdParam = $oDb->quote($oConfig->getShopId());
         $aRet = array();
@@ -480,7 +480,7 @@ class oxUtilsView extends oxSuperCfg
             $aIds = $this->_getActiveModuleInfo();
             if (count($aIds)) {
                 $sSql = "select COUNT(*) from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam and oxmodule in ( " . implode(", ", oxDb::getInstance()->quoteArray(array_keys($aIds)) ) . " ) ";
-                $rs = oxDb::getInstance()->getOne( $sSql );
+                $rs = $oDb->getOne( $sSql );
                 if ( $rs ) {
                     $this->_blIsTplBlocks = true;
                 }
@@ -491,7 +491,8 @@ class oxUtilsView extends oxSuperCfg
             $aIds = $this->_getActiveModuleInfo();
             if (count($aIds)) {
                 $sSql = "select * from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam and oxtemplate=$sFileParam and oxmodule in ( " . implode(", ", oxDb::getInstance()->quoteArray(array_keys($aIds)) ) . " ) order by oxpos asc";
-                $rs = oxDb::getInstance()->Select( $sSql );
+                $oDb->setFetchMode( oxDb::FETCH_MODE_ASSOC );
+                $rs = $oDb->select( $sSql );
 
                 if ($rs != false && $rs->recordCount() > 0) {
                     while (!$rs->EOF) {

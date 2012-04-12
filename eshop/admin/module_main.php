@@ -78,10 +78,6 @@ class Module_Main extends oxAdminDetails
         }
         try {
             $oModule->activate();
-            $aTemplates = $oModule->getTemplates();
-            $this->resetTemplateCache($aTemplates);
-            $this->resetLanguageCache();
-            $this->resetMenuCache();
         } catch (oxException $oEx) {
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
             $oEx->debugOut();
@@ -103,10 +99,6 @@ class Module_Main extends oxAdminDetails
         }
         try {
             $oModule->deactivate();
-            $aTemplates = $oModule->getTemplates();
-            $this->resetTemplateCache($aTemplates);
-            $this->resetLanguageCache();
-            $this->resetMenuCache();
         } catch (oxException $oEx) {
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
             $oEx->debugOut();

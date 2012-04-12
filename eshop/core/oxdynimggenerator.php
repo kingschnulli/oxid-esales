@@ -447,7 +447,7 @@ class oxDynImgGenerator
         if ( $iWidth && $iHeight && $sQuality ) {
 
             $oConfig = getConfig();
-            $oDb = oxDb::getDb();
+            $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
 
             // parameter names
             $sNames = '';
@@ -473,7 +473,7 @@ class oxDynImgGenerator
                 $sQ = "select oxshopid from oxconfig where oxvarname = 'sDefaultImageQuality' and
                        {$sDecodeField} = " . $oDb->quote( $sQuality );
 
-                $aShopIds = oxDb::getInstance()->getAll( $sQ );
+                $aShopIds = $oDb->getAll( $sQ );
 
                 // building query:
                 // shop id
@@ -499,7 +499,7 @@ class oxDynImgGenerator
                     $sQ = "select oxvartype, {$sDecodeField} as oxvarvalue from oxconfig
                            where oxvarname in ( {$sNames} ) and oxshopid in ( {$sShopIds} ) order by oxshopid";
 
-                    $aValues = oxDb::getInstance()->getAll( $sQ );
+                    $aValues = $oDb->getAll( $sQ );
                     foreach ( $aValues as $aValue ) {
                         $aConfValues = (array) $oConfig->decodeValue( $aValue["oxvartype"], $aValue["oxvarvalue"] );
                         foreach ( $aConfValues as $sValue ) {

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 43405 2012-03-30 14:18:28Z vilma $
+ * @version   SVN: $Id: oxviewconfigTest.php 43687 2012-04-10 13:54:06Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -683,6 +683,51 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
 
         $this->assertTrue( $oViewConfig->hasDemoKey() );
+    }
+
+
+    /**
+     * Testing getSelfLink()
+     */
+    public function testGetSelfLink()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getShopHomeURL" ) );
+        $oConfig->expects( $this->once() )->method( "getShopHomeURL" )->will( $this->returnValue( "testShopUrl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testShopUrl", $oViewConfig->getSelfLink() );
+    }
+
+    /**
+     * Testing getSslSelfLink()
+     */
+    public function testGetSslSelfLink()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getShopSecureHomeURL" ) );
+        $oConfig->expects( $this->once() )->method( "getShopSecureHomeURL" )->will( $this->returnValue( "testSecureShopUrl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testSecureShopUrl", $oViewConfig->getSslSelfLink() );
+    }
+
+    /**
+     * Testing getSslSelfLink() - admin mode
+     */
+    public function testGetSslSelfLink_adminMode()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getShopSecureHomeURL" ) );
+        $oConfig->expects( $this->never() )->method( "getShopSecureHomeURL" );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig', 'isAdmin', 'getSelfLink') );
+        $oViewConfig->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oViewConfig->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
+        $oViewConfig->expects( $this->once() )->method( "getSelfLink" )->will( $this->returnValue("testShopUrl") );
+
+        $this->assertEquals( "testShopUrl", $oViewConfig->getSslSelfLink() );
     }
 
 }

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitem.php 40167 2011-11-23 14:38:23Z ramunas.skarbalius $
+ * @version   SVN: $Id: oxbasketitem.php 43667 2012-04-10 13:21:41Z linas.kukulskis $
  */
 
 /**
@@ -974,7 +974,7 @@ class oxBasketItem extends oxSuperCfg
     }
 
     /**
-     * Set language Id
+     * Set language Id, reload basket content on language change.
      *
      * @param integer $iLanguageId language id
      *
@@ -982,6 +982,13 @@ class oxBasketItem extends oxSuperCfg
      */
     public function setLanguageId( $iLanguageId )
     {
+        $iOldLang = $this->_iLanguageId;
         $this->_iLanguageId = $iLanguageId;
+
+        // #0003777: reload content on language change
+        if ($iOldLang !== null && $iOldLang != $iLanguageId) {
+            $this->_sTitle = null;
+            $this->_setArticle($this->getProductId());
+        }
     }
 }

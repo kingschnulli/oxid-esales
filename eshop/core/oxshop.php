@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshop.php 43300 2012-03-29 13:11:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxshop.php 43750 2012-04-11 08:20:17Z linas.kukulskis $
  */
 
 /**
@@ -77,7 +77,7 @@ class oxShop extends oxI18n
      */
     public function generateViews( $blMultishopInheritCategories = false, $aMallInherit = null )
     {
-        $oDB        = oxDb::getDb();
+        $oDb        = oxDb::getDb();
         $aLanguages = oxLang::getInstance()->getLanguageIds();
 
         $aTables = $aMultilangTables = oxLang::getInstance()->getMultiLangTables();
@@ -96,7 +96,7 @@ class oxShop extends oxI18n
         }
 
         foreach ($aQ as $sQ) {
-            $oDB->execute( $sQ );
+            $oDb->execute( $sQ );
         }
     }
 

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfunctions.php 38280 2011-08-19 11:30:08Z linas.kukulskis $
+ * @version   SVN: $Id: oxfunctions.php 43640 2012-04-10 07:32:06Z alfonsas $
  */
 
 /**
@@ -87,6 +87,30 @@ function oxAutoload( $sClass )
             stopProfile("oxAutoload");
             include $sFilename;
             return;
+        }
+    }
+
+    // Files registered by modules
+    if ( is_array( $aModuleFiles = oxConfig::getInstance()->getConfigParam( 'aModuleFiles' ) ) ) {
+        $sBasePath   = getShopBasePath();
+        $oModulelist = oxNew('oxmodulelist');
+        $aActiveModuleInfo = $oModulelist->getActiveModuleInfo();
+        if (is_array($aActiveModuleInfo)) {
+            foreach ($aModuleFiles as $sModuleId => $aModules) {
+                if (isset($aModules[$sClass]) && isset($aActiveModuleInfo[$sModuleId])) {
+                    $sPath = $aModules[$sClass];
+                    $sFilename = $sBasePath. 'modules/'.  $sPath;
+                    if ( file_exists( $sFilename ) ) {
+                        if (!isset($aClassPaths[$sClass])) {
+                            $aClassPaths[$sClass] = $sFilename;
+                            oxUtils::getInstance()->toPhpFileCache("class_file_paths", $aClassPaths);
+                        }
+                        stopProfile("oxAutoload");
+                        include $sFilename;
+                        return;
+                    }
+                }
+            }
         }
     }
 

@@ -1,9 +1,9 @@
 [{capture append="oxidBlock_content"}]
     [{assign var="oContent" value=$oView->getContent()}]
     [{assign var="tpl" value=$oViewConf->getActTplName()}]
-    [{assign var="template_title" value=$oContent->oxcontents__oxtitle->value}]
-    <h1 class="pageHead">[{$oContent->oxcontents__oxtitle->value}]</h1>
-    [{oxeval var=$oContent->oxcontents__oxcontent}]
+    [{assign var="template_title" value=$oView->getTitle()}]
+    <h1 class="pageHead">[{$template_title}]</h1>
+    [{$oView->getParsedContent()}]
     [{insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 [{include file="layout/page.tpl" sidebar="Left"}]

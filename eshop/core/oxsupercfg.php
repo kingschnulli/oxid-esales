@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsupercfg.php 43296 2012-03-29 13:08:34Z linas.kukulskis $
+ * @version   SVN: $Id: oxsupercfg.php 43608 2012-04-06 14:34:48Z linas.kukulskis $
  */
 
 /**

@@ -279,7 +279,7 @@ class oxBasketReservation extends oxSuperCfg
     {
         $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $iStartTime = oxUtilsDate::getInstance()->getTime() - (int) $this->getConfig()->getConfigParam( 'iPsBasketReservationTimeout' );
-        $oRs = oxDb::getInstance()->select("select oxid from oxuserbaskets where oxtitle = 'reservations' and oxupdate <= $iStartTime limit $iLimit");
+        $oRs = $oDb->select("select oxid from oxuserbaskets where oxtitle = 'reservations' and oxupdate <= $iStartTime limit $iLimit", false, false);
         if ($oRs->EOF) {
             return;
         }
@@ -288,7 +288,7 @@ class oxBasketReservation extends oxSuperCfg
             $aFinished[] = $oDb->quote($oRs->fields['oxid']);
             $oRs->MoveNext();
         }
-        $oRs = oxDb::getInstance()->select("select oxartid, oxamount from oxuserbasketitems where oxbasketid in (".implode(",", $aFinished).")" );
+        $oRs = $oDb->select("select oxartid, oxamount from oxuserbasketitems where oxbasketid in (".implode(",", $aFinished).")", false, false );
         while (!$oRs->EOF) {
             $oArticle = oxNew('oxarticle');
             if ($oArticle->load($oRs->fields['oxartid'])) {

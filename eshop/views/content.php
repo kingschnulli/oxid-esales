@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: content.php 41920 2012-01-31 13:46:05Z vilma $
+ * @version   SVN: $Id: content.php 43762 2012-04-11 09:16:31Z vaidas.matulevicius $
  */
 
 /**
@@ -521,6 +521,16 @@ class Content extends oxUBase
         $oPriceValidity['validfrom'] = date('Y-m-d\TH:i:s', $iFrom)."Z";
         $oPriceValidity['validthrough'] = date('Y-m-d\TH:i:s', $iThrough)."Z";
         return $oPriceValidity;
+    }
+    
+    /**
+     * Returns content parsed through smarty 
+     * 
+     * @return string
+     */
+    public function getParsedContent()
+    {        
+        return oxUtilsView::getInstance()->parseThroughSmarty( $this->getContent()->oxcontents__oxcontent->value );        
     }
 
 }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloud.php 43295 2012-03-29 13:05:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxtagcloud.php 43752 2012-04-11 08:23:52Z linas.kukulskis $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -306,7 +306,7 @@ class oxTagCloud extends oxSuperCfg
      */
     public function getTags( $sArtId = null, $blExtended = false, $iLang = null )
     {
-        $oDb = oxDb::getDb();
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         if ($blExtended) {
             $iAmount = OXTAGCLOUD_EXTENDEDCOUNT;
         } else {
@@ -316,17 +316,23 @@ class oxTagCloud extends oxSuperCfg
         $sArtView  = getViewName( 'oxarticles', $iLang );
         $sViewName = getViewName( 'oxartextends', $iLang );
 
+        // check if article is still active
+        $oArticle   = oxNew( 'oxarticle' );
+        $oArticle->setLanguage( $iLang );
+        $sArtActive = $oArticle->getActiveCheckQuery(true);
+
+
         $sQ = "SELECT {$sViewName}.`oxtags` AS `oxtags`
             FROM {$sArtView} AS `oxarticles`
                 LEFT JOIN {$sViewName} ON `oxarticles`.`oxid` = {$sViewName}.`oxid`
-            WHERE `oxarticles`.`oxactive` = 1";
+            WHERE `oxarticles`.`oxactive` = 1 AND $sArtActive";
 
         if ( $sArtId ) {
             $sQ = "SELECT {$sViewName}.`oxtags` AS `oxtags` FROM {$sViewName} WHERE `oxid` = " . $oDb->quote( $sArtId );
             $iAmount = 0;
         }
 
-        $rs = oxDb::getInstance()->select( $sQ );
+        $rs = $oDb->select( $sQ );
         $aTags = array();
         while ( $rs && $rs->recordCount() && !$rs->EOF ) {
             $sTags = $this->trimTags( $rs->fields['oxtags'] );
@@ -360,7 +366,7 @@ class oxTagCloud extends oxSuperCfg
     protected function _sortTags( $aTags, $iLang = null )
     {
         if ( is_array( $aTags ) && count( $aTags ) ) {
-            $oDb = oxDb::getDb();
+            $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
             $sSubQ = '';
             foreach ( $aTags as $sKey => $sTag ) {
                 if ( $sSubQ ) {
@@ -376,7 +382,7 @@ class oxTagCloud extends oxSuperCfg
             $sQ = "select _oxtable._oxsort, _oxtable._oxval from ( {$sSubQ} ) as _oxtable order by _oxtable._oxsort desc";
 
             $aTags = array();
-            $oRs = oxDb::getInstance()->select( $sQ );
+            $oRs = $oDb->select( $sQ );
             while ( $oRs && $oRs->recordCount() && !$oRs->EOF ) {
                 if ( $oRs->fields['_oxval'] != 'ox_skip' ) {
                     $aTags[$oRs->fields['_oxsort']] = $oRs->fields['_oxval'];

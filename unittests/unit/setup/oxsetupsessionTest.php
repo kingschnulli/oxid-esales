@@ -54,17 +54,19 @@ class Unit_Setup_oxSetupSessionTest extends OxidTestCase
         $oUtils->expects( $this->at( 0 ) )->method( "getRequestVar" )->with( $this->equalTo( "sid" ) )->will( $this->returnValue( base64_encode( serialize( "test" ) ) ) );
         $oUtils->expects( $this->at( 1 ) )->method( "getRequestVar" )->with( $this->equalTo( "location_lang" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testLocationLang" ) );
         $oUtils->expects( $this->at( 2 ) )->method( "getRequestVar" )->with( $this->equalTo( "country_lang" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testCountryLang" ) );
-        $oUtils->expects( $this->at( 3 ) )->method( "getRequestVar" )->with( $this->equalTo( "use_dynamic_pages" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testUseDynamicPages" ) );
-        $oUtils->expects( $this->at( 4 ) )->method( "getRequestVar" )->with( $this->equalTo( "check_for_updates" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testCheckForUpdates" ) );
-        $oUtils->expects( $this->at( 5 ) )->method( "getRequestVar" )->with( $this->equalTo( "iEula" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testEula" ) );
+        $oUtils->expects( $this->at( 3 ) )->method( "getRequestVar" )->with( $this->equalTo( "sShopLang" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testShopLang" ) );
+        $oUtils->expects( $this->at( 4 ) )->method( "getRequestVar" )->with( $this->equalTo( "use_dynamic_pages" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testUseDynamicPages" ) );
+        $oUtils->expects( $this->at( 5 ) )->method( "getRequestVar" )->with( $this->equalTo( "check_for_updates" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testCheckForUpdates" ) );
+        $oUtils->expects( $this->at( 6 ) )->method( "getRequestVar" )->with( $this->equalTo( "iEula" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testEula" ) );
 
         $oSession = $this->getMock( "oxSetupSession", array( "getInstance", "setSessionParam" ) );
         $oSession->expects( $this->at( 0 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupUtils" ) )->will( $this->returnValue( $oUtils ) );
         $oSession->expects( $this->at( 1 ) )->method( "setSessionParam" )->with( $this->equalTo( "location_lang" ), $this->equalTo( "testLocationLang" )  );
         $oSession->expects( $this->at( 2 ) )->method( "setSessionParam" )->with( $this->equalTo( "country_lang" ), $this->equalTo( "testCountryLang" )  );
-        $oSession->expects( $this->at( 3 ) )->method( "setSessionParam" )->with( $this->equalTo( "use_dynamic_pages" ), $this->equalTo( "testUseDynamicPages" )  );
-        $oSession->expects( $this->at( 4 ) )->method( "setSessionParam" )->with( $this->equalTo( "check_for_updates" ), $this->equalTo( "testCheckForUpdates" )  );
-        $oSession->expects( $this->at( 5 ) )->method( "setSessionParam" )->with( $this->equalTo( "eula" ), $this->equalTo( "testEula" )  );
+        $oSession->expects( $this->at( 3 ) )->method( "setSessionParam" )->with( $this->equalTo( "sShopLang" ), $this->equalTo( "testShopLang" )  );
+        $oSession->expects( $this->at( 4 ) )->method( "setSessionParam" )->with( $this->equalTo( "use_dynamic_pages" ), $this->equalTo( "testUseDynamicPages" )  );
+        $oSession->expects( $this->at( 5 ) )->method( "setSessionParam" )->with( $this->equalTo( "check_for_updates" ), $this->equalTo( "testCheckForUpdates" )  );
+        $oSession->expects( $this->at( 6 ) )->method( "setSessionParam" )->with( $this->equalTo( "eula" ), $this->equalTo( "testEula" )  );
         $this->assertEquals( "test", $oSession->getSessionData() );
     }
 

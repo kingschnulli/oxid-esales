@@ -43,8 +43,7 @@ class oxCounter
 
         $sQ = "SELECT `oxcount` FROM `oxcounters` WHERE `oxident` = " . $oDb->quote( $sIdent ) . " FOR UPDATE";
 
-
-        if ( ( $iCnt = oxDb::getInstance()->getOne( $sQ, false ) ) === false ) {
+        if ( ( $iCnt = $oDb->getOne( $sQ, false, false ) ) === false ) {
             $sQ = "INSERT INTO `oxcounters` (`oxident`, `oxcount`) VALUES (?, '0')";
             $oDb->execute( $sQ, array( $sIdent ) );
         }
@@ -74,7 +73,7 @@ class oxCounter
 
         $sQ = "SELECT `oxcount` FROM `oxcounters` WHERE `oxident` = " . $oDb->quote( $sIdent ) . " FOR UPDATE";
 
-        if ( ( $iCnt = oxDb::getInstance()->getOne( $sQ, false ) ) === false ) {
+        if ( ( $iCnt = $oDb->getOne( $sQ, false, false ) ) === false ) {
             $sQ = "INSERT INTO `oxcounters` (`oxident`, `oxcount`) VALUES (?, ?)";
             $blResult = $oDb->execute( $sQ, array( $sIdent, $iCount ) );
         } else {

@@ -414,3 +414,41 @@ form fieldset {
     background: none;
 }
 
+.moduleDesc2 td {
+    color: #999;
+}
+
+dl.moduleDesc {
+    margin-bottom: 10px;
+    border: none;
+    padding-top: 15px;
+    clear: both;
+}
+
+/* Module description */
+dl.moduleDesc dt {
+    margin: 0;
+    float: left;
+    line-height: 18px;
+    width: 70px;
+    color: #aaa;
+    clear: left;
+}
+
+dl.moduleDesc dd {
+    float: left;
+    line-height: 18px;
+    color: #777;
+    clear: right;
+}
+
+dl.moduleDesc a {
+    color: #777;
+    text-decoration: none;
+    border-bottom: 1px dotted #999;
+}
+
+dl.moduleDesc a:hover {
+    color: #555;
+    text-decoration: none;
+}

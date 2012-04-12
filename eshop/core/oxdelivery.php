@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdelivery.php 43353 2012-03-29 14:44:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxdelivery.php 43721 2012-04-11 07:12:15Z linas.kukulskis $
  */
 
 /**
@@ -151,8 +151,7 @@ class oxDelivery extends oxI18n
 
         $oDb = oxDb::getDb();
         $sQ = "select oxobjectid from oxobject2delivery where oxdeliveryid=".$oDb->quote($this->getId())." and oxtype = 'oxarticles'";
-        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-        $aArtIds = oxDb::getInstance()->getAll( $sQ );
+        $aArtIds = $oDb->getAll( $sQ );
 
         //make single dimension array
         foreach ( $aArtIds as $aItem ) {
@@ -176,8 +175,7 @@ class oxDelivery extends oxI18n
 
         $oDb = oxDb::getDb();
         $sQ = "select oxobjectid from oxobject2delivery where oxdeliveryid=".$oDb->quote($this->getId())." and oxtype = 'oxcategories'";
-        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-        $aCatIds = oxDb::getInstance()->getAll( $sQ );
+        $aCatIds = $oDb->getAll( $sQ );
 
         //make single dimension array
         foreach ( $aCatIds AS $aItem ) {
@@ -233,7 +231,9 @@ class oxDelivery extends oxI18n
 
         // mark free shipping products
         if ( $oProduct->oxarticles__oxfreeshipping->value ) {
-            $this->_blFreeShipping = true;
+            if ($this->_blFreeShipping !== false) {
+                $this->_blFreeShipping = true;
+            }
         } else {
 
             $blExclNonMaterial = $this->getConfig()->getConfigParam( 'blExclNonMaterialFromDelivery' );
@@ -526,8 +526,9 @@ class oxDelivery extends oxI18n
      */
     public function getIdByName( $sTitle )
     {
-        $sQ = "SELECT `oxid` FROM `" . getViewName( 'oxdelivery' ) . "` WHERE  `oxtitle` = " . oxDb::getDb()->quote( $sTitle );
-        $sId = oxDb::getInstance()->getOne( $sQ );
+        $oDb = oxDb::getDb();
+        $sQ = "SELECT `oxid` FROM `" . getViewName( 'oxdelivery' ) . "` WHERE  `oxtitle` = " . $oDb->quote( $sTitle );
+        $sId = $oDb->getOne( $sQ );
 
         return $sId;
     }
@@ -543,8 +544,7 @@ class oxDelivery extends oxI18n
             $oDb = oxDb::getDb();
             $this->_aCountriesISO = array();
             $sSelect = 'select oxcountry.oxisoalpha2 from oxcountry left join oxobject2delivery on oxobject2delivery.oxobjectid = oxcountry.oxid where oxobject2delivery.oxdeliveryid='.$oDb->quote( $this->getId() ).' and oxobject2delivery.oxtype = "oxcountry" ';
-            oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-            $rs = oxDb::getInstance()->select( $sSelect );
+            $rs = $oDb->select( $sSelect );
             if ( $rs && $rs->recordCount()) {
                 while ( !$rs->EOF ) {
                     $this->_aCountriesISO[] = $rs->fields[0];

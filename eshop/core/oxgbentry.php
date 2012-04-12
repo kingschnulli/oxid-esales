@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxgbentry.php 43319 2012-03-29 13:36:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxgbentry.php 43729 2012-04-11 07:35:33Z linas.kukulskis $
  */
 
 /**
@@ -69,7 +69,7 @@ class oxGbEntry extends oxBase
 
         if ( isset( $this->oxgbentries__oxuserid ) && $this->oxgbentries__oxuserid->value ) {
             $oDb = oxDb::getDb();
-            $this->oxuser__oxfname = new oxField( oxDb::getInstance()->getOne( "select oxfname from oxuser where oxid=".$oDb->quote( $this->oxgbentries__oxuserid->value ) ));
+            $this->oxuser__oxfname = new oxField( $oDb->getOne( "select oxfname from oxuser where oxid=".$oDb->quote( $this->oxgbentries__oxuserid->value ) ));
         }
 
         return $blRet;
@@ -152,7 +152,7 @@ class oxGbEntry extends oxBase
         }
 
         // loading only if there is some data
-        $iRecCnt = (int) oxDb::getInstance()->getOne( $sSelect );
+        $iRecCnt = (int) $oDb->getOne( $sSelect );
         return $iRecCnt;
     }
 
@@ -175,7 +175,7 @@ class oxGbEntry extends oxBase
             $sSelect  = "select count(*) from oxgbentries ";
             $sSelect .= "where oxgbentries.oxuserid = " . $oDb->quote( $sUserId ) . " and oxgbentries.oxshopid = " . $oDb->quote( $sShopid ) . " ";
             $sSelect .= "and oxgbentries.oxcreate >= '$sToday 00:00:00' and oxgbentries.oxcreate <= '$sToday 23:59:59' ";
-            $iCnt = oxDb::getInstance()->getOne( $sSelect );
+            $iCnt = $oDb->getOne( $sSelect );
 
             $myConfig = $this->getConfig();
             if ( ( !$myConfig->getConfigParam( 'iMaxGBEntriesPerDay' ) ) || ( $iCnt < $myConfig->getConfigParam( 'iMaxGBEntriesPerDay' ) ) ) {

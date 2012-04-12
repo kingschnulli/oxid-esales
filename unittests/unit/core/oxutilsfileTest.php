@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfileTest.php 42800 2012-03-13 15:04:18Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsfileTest.php 43686 2012-04-10 13:37:29Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -529,16 +529,23 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
         );
     }
 
-    /**
-     * Tests oxUtilsFile::getMimeType() method
-     */
-    public function testGetMimeType()
+    public function testProcessFilesNewCounter()
     {
-        $this->markTestSkipped("Fixing build until tomorrow");
-        $this->assertEquals("plain/txt", oxUtilsFile::getInstance()->getMimeType("out/text.txt"));
-        $this->assertEquals("application/php", oxUtilsFile::getInstance()->getMimeType("out/index.php"));
-        $this->assertEquals("image/jpg", oxUtilsFile::getInstance()->getMimeType("out/pic.jpg"));
-        $this->assertEquals("mp3", oxUtilsFile::getInstance()->getMimeType("out/music.mp3"));
+        oxTestModules::addFunction( 'oxUtilspic', 'resizeImage', '{return true;}' );
+
+        $_FILES['myfile']['name']     = array( 'P1@oxarticles__oxpic1' => 'testname.gif', 'P1@oxarticles__oxpic2' => 'testname2.gif' );
+        $_FILES['myfile']['tmp_name'] = array( 'P1@oxarticles__oxpic1' => 'testimagesource', 'P1@oxarticles__oxpic2' => 'testimagesource2' );
+
+        $oConfig = $this->getMock( 'oxConfig', array( 'getPictureDir' ) );
+        $oConfig->expects( $this->any() )->method( 'getPictureDir' )->will( $this->returnValue( getTestsBasePath().'/unit/out/pictures' ) );
+
+        $oUtilsFile = $this->getMock( "oxUtilsFile", array( "_moveImage" ) );
+        $oUtilsFile->expects( $this->any() )->method( '_moveImage' )->will( $this->returnValue( true ) );
+
+        $oUtilsFile->setConfig( $oConfig );
+        $oUtilsFile->processFiles( new oxArticle() );
+        
+        $this->assertEquals( $oUtilsFile->getNewFilesCounter(), 2, "Check how much new files add.");
     }
 
     // 20070720-AS - End setup

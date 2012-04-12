@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlist.php 43326 2012-03-29 13:41:20Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscountlist.php 43602 2012-04-06 14:32:38Z linas.kukulskis $
  */
 
 /**
@@ -420,7 +420,7 @@ class oxDiscountList extends oxList
             $sViewName = getViewName( 'oxcategories' );
             $sQ = "select 1 from {$sViewName} where {$sViewName}.oxactive = 1 and {$sViewName}.oxskipdiscounts = '1' ";
 
-            $this->_hasSkipDiscountCategories = (bool) oxDb::getInstance()->getOne( $sQ );
+            $this->_hasSkipDiscountCategories = (bool) oxDb::getDb()->getOne( $sQ );
         }
         return $this->_hasSkipDiscountCategories;
     }

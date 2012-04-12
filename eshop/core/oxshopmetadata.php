@@ -79,7 +79,7 @@ class oxShopMetaData extends oxSuperCfg
         $iShopId = $this->_getShopFieldSetId((int) $iShopId);
 
         //this works for large numbers when $sShopNr is up to (inclusive) 128
-        $iRes = oxDb::getInstance()->getOne( "select 1 << ( $iShopId - 1 ) as shopbit" );
+        $iRes = oxDb::getDb()->getOne( "select 1 << ( $iShopId - 1 ) as shopbit" );
 
         //as php ints supports only 32 bits, we return string.
         return $iRes;
@@ -138,8 +138,7 @@ class oxShopMetaData extends oxSuperCfg
             //collects inherited shop set bit array up to uninherited parent.
             $aInheritedShops = array();
             $sQ = 'select oxid, oxparentid, oxisinherited from oxshops where oxid = "'.$sShopId.'" ';
-            oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-            $rs = oxDb::getInstance()->select( $sQ );
+            $rs = oxDb::getDb()->select( $sQ );
             if ( $rs && $rs->recordCount()> 0 && $rs->fields[0] ) {
                 $iOXID     = $rs->fields[0];
                 $sParentID = $rs->fields[1];
@@ -175,7 +174,7 @@ class oxShopMetaData extends oxSuperCfg
         $iShopBit = $this->getShopBit($iShopId);
         $sSelect  = "select ({$iShopBit} & {$sField}) as isIncluded from {$sTable} where oxid = ".$oDb->quote( $sOXID );
 
-        return (bool)  oxDb::getInstance()->getOne( $sSelect );
+        return (bool)  $oDb->getOne( $sSelect );
     }
 
     /**
@@ -194,7 +193,7 @@ class oxShopMetaData extends oxSuperCfg
         $iShopBit = $this->getShopBit($iShopId);
         $sSelect  = "select ({$iShopBit} & {$sField}) as isExcluded from {$sTable} where oxid = ".$oDb->quote( $sOXID );
 
-        return (bool)  oxDb::getInstance()->getOne( $sSelect );
+        return (bool)  $oDb->getOne( $sSelect );
     }
 
     /**
@@ -436,7 +435,7 @@ class oxShopMetaData extends oxSuperCfg
      */
     protected function _getMaxShopId()
     {
-        return oxDb::getInstance()->getOne( "select max(oxid) as maxid from oxshops" );
+        return oxDb::getDb()->getOne( "select max(oxid) as maxid from oxshops" );
     }
 
     /**
@@ -452,7 +451,7 @@ class oxShopMetaData extends oxSuperCfg
         $aFieldSets = array_fill(0, $this->_getShopFieldCount(), 0);
         foreach ( $aShopSetBits as $iShopSet => $aBits ) {
             //this works for large numbers when $sShopNr is up to (inclusive) 64
-            $iRes = oxDb::getInstance()->getOne( "select (".implode(" | ", $aBits).") as bitwiseOr" );
+            $iRes = oxDb::getDb()->getOne( "select (".implode(" | ", $aBits).") as bitwiseOr" );
             $aFieldSets[$iShopSet] = $iRes;
         }
 

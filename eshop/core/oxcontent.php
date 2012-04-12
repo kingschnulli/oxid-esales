@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcontent.php 43333 2012-03-29 13:45:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxcontent.php 43716 2012-04-11 07:03:13Z linas.kukulskis $
  */
 
 /**
@@ -213,7 +213,7 @@ class oxContent extends oxI18n implements oxIUrl
                 if ( $this->_sParentCatId === null ) {
                     $this->_sParentCatId = false;
                     $oDb = oxDb::getDb();
-                    $sParentId = oxDb::getInstance()->getOne( "select oxparentid from oxcategories where oxid = ".$oDb->quote( $this->oxcontents__oxcatid->value ) );
+                    $sParentId = $oDb->getOne( "select oxparentid from oxcategories where oxid = ".$oDb->quote( $this->oxcontents__oxcatid->value ) );
                     if ( $sParentId && 'oxrootid' != $sParentId ) {
                         $this->_sParentCatId = $sParentId;
                     }
@@ -328,8 +328,7 @@ class oxContent extends oxI18n implements oxIUrl
         // fetching column names
         $sColQ = "SHOW COLUMNS FROM oxcontents WHERE field LIKE  'oxcontent%'";
 
-        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-        $aCols = oxDb::getInstance()->getAll( $sColQ );
+        $aCols = oxDb::getDb()->getAll( $sColQ );
 
         // building subquery
         $sPattern = "IF ( %s != '', %s, %s ) ";

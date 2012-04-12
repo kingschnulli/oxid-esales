@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxnewsTest.php 43511 2012-04-04 07:25:34Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -309,7 +309,7 @@ class Unit_Core_oxnewsTest extends OxidTestCase
         $oObj->UNITsetFieldData("oxshortdeSc", "asd< as");
         $oObj->UNITsetFieldData("oxlongDesc", "asd< as");
         $this->assertEquals( 'asd&lt; as', $oObj->oxnews__oxid->value );
-        $this->assertEquals( 'asd< as', $oObj->oxnews__oxshortdesc->value );
+        $this->assertEquals( 'asd&lt; as', $oObj->oxnews__oxshortdesc->value );
         $this->assertEquals( 'asd< as', $oObj->oxnews__oxlongdesc->value );
     }
 

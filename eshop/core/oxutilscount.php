@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscount.php 43292 2012-03-29 13:02:23Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilscount.php 43756 2012-04-11 09:00:15Z linas.kukulskis $
  */
 
 /**
@@ -182,7 +182,7 @@ class oxUtilsCount extends oxSuperCfg
                        GROUP BY $sTable.oxid
                    ) AS ox2cat";
 
-        $aCache[$sCatId][$sActIdent] = oxDb::getInstance()->getOne( $sQ );
+        $aCache[$sCatId][$sActIdent] = $oDb->getOne( $sQ );
 
         $this->_setCatCache( $aCache );
         return $aCache[$sCatId][$sActIdent];
@@ -209,7 +209,7 @@ class oxUtilsCount extends oxSuperCfg
         $sSelect .= $dPriceFrom ? "and oxvarminprice  >= " . (double)$dPriceFrom . " " : " ";
         $sSelect .= "and {$sTable}.oxissearch = 1 and ".$oArticle->getSqlActiveSnippet();
 
-        $aCache[$sCatId][$sActIdent] = oxDb::getInstance()->getOne( $sSelect );
+        $aCache[$sCatId][$sActIdent] = oxDb::getDb()->getOne( $sSelect );
 
         $this->_setCatCache( $aCache );
         return $aCache[$sCatId][$sActIdent];
@@ -271,7 +271,7 @@ class oxUtilsCount extends oxSuperCfg
         //#3485
         $sQ = "select count($sArtTable.oxid) from $sArtTable where $sArtTable.oxparentid = '' and oxmanufacturerid = '$sMnfId' and ".$oArticle->getSqlActiveSnippet();
 
-        $iValue = oxDb::getInstance()->getOne( $sQ );
+        $iValue = oxDb::getDb()->getOne( $sQ );
 
         $aCache[$sMnfId][$sActIdent] = (int) $iValue;
 
@@ -318,8 +318,7 @@ class oxUtilsCount extends oxSuperCfg
             $sTable  = getViewName( 'oxcategories' );
             $sSelect = "select $sTable.oxid from $sTable where " . (double)$iPrice . " >= $sTable.oxpricefrom and " . (double)$iPrice . " <= $sTable.oxpriceto ";
 
-            oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-            $rs = oxDb::getInstance()->select( $sSelect );
+            $rs = oxDb::getDb()->select( $sSelect, false, false );
             if ( $rs != false && $rs->recordCount() > 0 ) {
                 while ( !$rs->EOF ) {
                     if ( isset( $aCatData[$rs->fields[0]] ) ) {
@@ -356,7 +355,7 @@ class oxUtilsCount extends oxSuperCfg
               "{$sArticleTable}.oxid = {$sViewName}.oxid where {$sArticleTable}.oxparentid = '' and {$sArticleTable}.oxissearch = 1 AND match ( {$sViewName}.oxtags ) ".
               "against( ".$oDb->quote( "\"".$sTag."\"" )." IN BOOLEAN MODE ) and {$sActiveSnippet}";
 
-        return oxDb::getInstance()->getOne( $sQ );
+        return $oDb->getOne( $sQ );
     }
 
     /**

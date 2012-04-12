@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 43378 2012-03-30 11:43:52Z linas.kukulskis $
+ * @version   SVN: $Id: oxorder.php 43742 2012-04-11 07:51:40Z linas.kukulskis $
  */
 
 /**
@@ -1369,13 +1369,13 @@ class oxOrder extends oxBase
         $this->_oOrderBasket->setCardMessage( $this->oxorder__oxcardtext->value );
 
         if ( $this->_blReloadDiscount ) {
-            $oDb = oxDb::getDb();
+            $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
             // disabling availability check
             $this->_oOrderBasket->setSkipVouchersChecking( true );
 
             // add previously used vouchers
             $sQ = 'select oxid from oxvouchers where oxorderid = '.$oDb->quote( $this->getId() );
-            $aVouchers = oxDb::getInstance()->getAll( $sQ );
+            $aVouchers = $oDb->getAll( $sQ );
             foreach ( $aVouchers as $aVoucher ) {
                 $this->_oOrderBasket->addVoucher( $aVoucher['oxid'] );
             }
@@ -1504,7 +1504,7 @@ class oxOrder extends oxBase
     public function getInvoiceNum()
     {
         $sQ = 'select max(oxorder.oxinvoicenr) from oxorder where oxorder.oxshopid = "'.$this->getConfig()->getShopId().'" ';
-        return ( ( int ) oxDb::getInstance()->getOne( $sQ, false ) + 1 );
+        return ( ( int ) oxDb::getDb()->getOne( $sQ, false ) + 1 );
     }
 
     /**
@@ -1515,7 +1515,7 @@ class oxOrder extends oxBase
     public function getNextBillNum()
     {
         $sQ = 'select max(cast(oxorder.oxbillnr as unsigned)) from oxorder where oxorder.oxshopid = "'.$this->getConfig()->getShopId().'" ';
-        return ( ( int ) oxDb::getInstance()->getOne( $sQ, false ) + 1 );
+        return ( ( int ) oxDb::getDb()->getOne( $sQ, false ) + 1 );
     }
 
     /**
@@ -1560,10 +1560,10 @@ class oxOrder extends oxBase
      */
     public function getVoucherNrList()
     {
-        $oDB = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $aVouchers = array();
-        $sSelect = "select oxvouchernr from oxvouchers where oxorderid = ".$oDB->quote( $this->oxorder__oxid->value );
-        $rs = oxDb::getInstance()->select( $sSelect );
+        $sSelect = "select oxvouchernr from oxvouchers where oxorderid = ".$oDb->quote( $this->oxorder__oxid->value );
+        $rs = $oDb->select( $sSelect );
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
                 $aVouchers[] = $rs->fields['oxvouchernr'];
@@ -1589,7 +1589,7 @@ class oxOrder extends oxBase
             $sSelect .= 'and oxorderdate like "'.date( 'Y-m-d').'%" ';
         }
 
-        return ( double ) oxDb::getInstance()->getOne( $sSelect );
+        return ( double ) oxDb::getDb()->getOne( $sSelect, false, false );
     }
 
     /**
@@ -1608,7 +1608,7 @@ class oxOrder extends oxBase
             $sSelect .= 'and oxorderdate like "'.date( 'Y-m-d').'%" ';
         }
 
-        return ( int ) oxDb::getInstance()->getOne( $sSelect );
+        return ( int ) oxDb::getDb()->getOne( $sSelect, false, false );
     }
 
 
@@ -1626,7 +1626,7 @@ class oxOrder extends oxBase
         }
 
         $oDb = oxDb::getDb();
-        if ( oxDb::getInstance()->getOne( 'select oxid from oxorder where oxid = '.$oDb->quote( $sOxId ) ) ) {
+        if ( $oDb->getOne( 'select oxid from oxorder where oxid = '.$oDb->quote( $sOxId ), false, false ) ) {
             return true;
         }
 
@@ -1767,7 +1767,7 @@ class oxOrder extends oxBase
     {
         $oDb = oxDb::getDb();
         $sQ = 'select oxorder.oxpaymenttype from oxorder where oxorder.oxshopid="'.$this->getConfig()->getShopId().'" and oxorder.oxuserid='.$oDb->quote( $sUserId ).' order by oxorder.oxorderdate desc ';
-        $sLastPaymentId = oxDb::getInstance()->getOne( $sQ );
+        $sLastPaymentId = $oDb->getOne( $sQ, false, false );
         return $sLastPaymentId;
     }
 
@@ -2074,7 +2074,7 @@ class oxOrder extends oxBase
         $sQ = "select 1 from {$sTable} where {$sTable}.oxid=".
         $oDb->quote( $oBasket->getShippingId() )." and ".$oDelSet->getSqlActiveSnippet();
 
-        if ( !oxDb::getInstance()->getOne( $sQ ) ) {
+        if ( !$oDb->getOne( $sQ, false, false ) ) {
             // throwing exception
             return self::ORDER_STATE_INVALIDDELIVERY;
         }
@@ -2098,8 +2098,7 @@ class oxOrder extends oxBase
         $sQ = "select 1 from {$sTable} where {$sTable}.oxid=".
         $oDb->quote( $oBasket->getPaymentId() )." and ".$oPayment->getSqlActiveSnippet();
 
-
-        if ( !oxDb::getInstance()->getOne( $sQ ) ) {
+        if ( !$oDb->getOne( $sQ, false, false ) ) {
             return self::ORDER_STATE_INVALIDPAYMENT;
         }
     }

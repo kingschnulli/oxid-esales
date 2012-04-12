@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrapping.php 43285 2012-03-29 12:47:22Z linas.kukulskis $
+ * @version   SVN: $Id: oxwrapping.php 43764 2012-04-11 09:22:12Z linas.kukulskis $
  */
 
 /**
@@ -167,8 +167,9 @@ class oxWrapping extends oxI18n
     public function getWrappingCount( $sWrapType )
     {
         $sWrappingViewName = getViewName( 'oxwrapping' );
-        $sQ = "select count(*) from $sWrappingViewName where $sWrappingViewName.oxactive = '1' and $sWrappingViewName.oxtype = " . oxDb::getDb()->quote( $sWrapType );
-        return (int) oxDb::getInstance()->getOne( $sQ );
+        $oDb = oxDb::getDb();
+        $sQ = "select count(*) from $sWrappingViewName where $sWrappingViewName.oxactive = '1' and $sWrappingViewName.oxtype = " . $oDb->quote( $sWrapType );
+        return (int) $oDb->getOne( $sQ );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerptype.php 43385 2012-03-30 11:58:58Z linas.kukulskis $
+ * @version   SVN: $Id: oxerptype.php 43708 2012-04-11 06:29:15Z linas.kukulskis $
  */
 
 /**
@@ -346,7 +346,7 @@ class oxERPType
         $oDb = oxDb::getDb();
         $sSql = "select oxshopid from ".$this->_sTableName." where oxid = " . $oDb->quote( $sId );
         try {
-            $iShopId = oxDb::getInstance()->getOne($sSql);
+            $iShopId = $oDb->getOne($sSql);
         } catch (Exception $e) {
             // no shopid was found
             return;
@@ -515,13 +515,13 @@ class oxERPType
             return null;
         }
 
-        $oDB = oxDb::getDb();
+        $oDb = oxDb::getDb();
 
         $aWhere = array();
         $blAllKeys = true;
         foreach ($this->getKeyFields() as $sKey) {
             if (array_key_exists($sKey, $aData)) {
-                $aWhere[] = $sKey.'='.$oDB->qstr($aData[$sKey]);
+                $aWhere[] = $sKey.'='.$oDb->qstr($aData[$sKey]);
             } else {
                 $blAllKeys = false;
             }
@@ -529,7 +529,7 @@ class oxERPType
 
         if ($blAllKeys) {
             $sSelect = 'SELECT OXID FROM '.$this->getTableName().' WHERE '.implode(' AND ', $aWhere);
-            return oxDb::getInstance()->getOne( $sSelect );
+            return $oDb->getOne( $sSelect );
         }
 
         return null;

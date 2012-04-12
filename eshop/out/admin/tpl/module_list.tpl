@@ -60,14 +60,14 @@ window.onload = function ()
     [{ if $listitem->getInfo('id') == $oxid }]
         [{assign var="zebra" value=listitem4 }]
     [{ /if}]
-    <td valign="top" class="[{$zebra}][{ if $listitem->getInfo('active')}] active[{/if}]" height="15">
+    <td valign="top" class="[{$zebra}][{ if $listitem->isActive()}] active[{/if}]" height="15">
         <div class="listitemfloating">
-            <a href="Javascript:top.oxid.admin.editThis('[{ $listitem->getInfo('id') }]');">&nbsp;</a></div></td>
+            <a href="Javascript:top.oxid.admin.editThis('[{ $listitem->getId() }]');">&nbsp;</a></div></td>
         </div>
     </td>
     <td valign="top" class="[{$zebra}]" height="15">
         <div class="listitemfloating">
-            <a href="Javascript:top.oxid.admin.editThis('[{ $listitem->getInfo('id') }]');" [{if $listitem->isFile() }]class="infoList"[{/if}]>[{ $listitem->getTitle() }]</a>
+            <a href="Javascript:top.oxid.admin.editThis('[{ $listitem->getId() }]');" [{if $listitem->isFile() }]class="infoList"[{/if}]>[{ $listitem->getTitle() }]</a>
         </div>
     </td>
 </tr>

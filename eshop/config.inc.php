@@ -171,10 +171,7 @@
      */
     $this->aUserComponentNames = null;
 
-    /**
-     * saves subshopid in session
-     */
-    $this->blDeprecatedSubshopsInSessions = false;
+
 
     /**
      * Default database conection character set
@@ -190,3 +187,5 @@
      * Instructs shop that price update is perfomed by cron (time based job sheduler)
      */
     $this->blUseCron = false;
+
+

@@ -21,6 +21,7 @@
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxdropdown.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxarticlebox.js"></script>
     <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxamountpriceselect.js"></script>
+    <script type="text/javascript" src="http://<?php echo $shopUrl ?>/out/azure/src/js/widgets/oxinnerlabel.js"></script>
 
     <!-- Your tests file goes here -->
     <script type="text/javascript" src="inputvalidatorTests.js"></script>
@@ -30,6 +31,7 @@
     <script type="text/javascript" src="ratingTests.js"></script>
     <script type="text/javascript" src="dropdownTests.js"></script>
     <script type="text/javascript" src="amountpriceselectTests.js"></script>
+    <script type="text/javascript" src="oxinnerlabelTests.js"></script>
 </head>
 <body>
     <h1 id="qunit-header">OXID eShop javascript tests</h1>

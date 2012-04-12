@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 42952 2012-03-16 14:43:25Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 43759 2012-04-11 09:15:46Z vilma $
  */
 
 /**
@@ -67,6 +67,8 @@ $aLang =  array(
 'HELP_SHOP_SYSTEM_ISERVERTIMESHIFT'           => 'The server the eShop is running on can be in a different time zone. With this setting the time shift can be adjusted: Enter the amount of hours that are to be added/subtracted from the server time, e. g. <kdb>+2</kdb> or <kdb>-2</kdb>',
 
 'HELP_SHOP_SYSTEM_INLINEIMGEMAIL'             => 'If the setting is checked, the pictures in e-mails are sent together with the e-mail. If the setting is unchecked, the pictures are downloaded by the e-mail program when the e-mail is opened.',
+
+'HELP_SHOP_SYSTEM_SHOP_LOCATION'              => '[tr]Please choose the Market place to which Shop is focused. According to it, additional eCommerce Services will be loaded from OXID server. Do not forget to enable option "Load additional Information from OXID server" in Core Settings -> Settings -> Administration',
 
 
 

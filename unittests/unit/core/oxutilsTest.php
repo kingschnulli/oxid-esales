@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 43422 2012-04-02 05:12:27Z alfonsas $
+ * @version   SVN: $Id: oxutilsTest.php 43628 2012-04-06 16:00:49Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -703,6 +703,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
         //Remove templates
         $this->assertNull( $oUtils->resetTemplateCache($aTemplates));
+
         $this->assertEquals( 0, count(glob("{$sTmpDir}/*{$sRemoveTemplate}.php")), "Filr removed ".$sRemoveTemplate );
         $this->assertEquals( 1, count(glob("{$sTmpDir}/*{$sLeaveTemplate}.php")), "File left ".$sLeaveTemplate );
     }
@@ -724,7 +725,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
             $this->assertEquals(array($sFile), $oUtils->getLangCache( $sFile));
         }
 
-        $this->assertNull( $oUtils->resetLanguageCache($aTemplates));
+        $this->assertNull( $oUtils->resetLanguageCache());
 
         foreach ($aFiles as $sFile) {
             $this->assertNull($oUtils->getLangCache( $sFile));
@@ -779,10 +780,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
         $e = null;
         try {
-            $oDb = $this->getMock( "oxDb", array( 'getOne') );
-            $oDb->expects( $this->any() )->method( 'getOne' )->will( $this->returnValue( 1 ) );
-            oxTestModules::addModuleObject( 'oxDb', $oDb );
-
+            modDB::getInstance()->addClassFunction('getOne', create_function('$sql', 'return 1;'));
             $mySession->setVar( "auth", "blafooUser");
             $this->assertEquals(true, oxUtils::getInstance()->checkAccessRights());
             modConfig::setParameter('fnc', 'chshp');

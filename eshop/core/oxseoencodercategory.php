@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodercategory.php 43304 2012-03-29 13:14:12Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencodercategory.php 43749 2012-04-11 08:16:16Z linas.kukulskis $
  */
 
 /**
@@ -247,8 +247,7 @@ class oxSeoEncoderCategory extends oxSeoEncoder
         // select it from table instead of using object carrying value
         // this is because this method is usually called inside update,
         // where object may already be carrying changed id
-        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-        $aCatInfo = oxDb::getInstance()->getAll("select oxrootid, oxleft, oxright from oxcategories where oxid = $sIdQuoted limit 1");
+        $aCatInfo = $oDb->getAll("select oxrootid, oxleft, oxright from oxcategories where oxid = $sIdQuoted limit 1");
         $sCatRootIdQuoted = $oDb->quote( $aCatInfo[0][0] );
 
         // update sub cats

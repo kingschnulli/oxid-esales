@@ -92,7 +92,7 @@ function ThisDate( sID)
                     <table style="border : 1px #A9A9A9; border-style : solid solid solid solid; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; padding-left: 5px; width: 600px;">
                         <tr>
                             <td class="edittext" colspan="3">
-                                [{ oxmultilang ident="PAYMENT_INFORMATION" }]
+                                [{ oxmultilang ident="ORDER_MAIN_PAYMENT_INFORMATION" }]
                             </td>
                         </tr>
                         <tr>
@@ -149,7 +149,7 @@ function ThisDate( sID)
                     <table style="border : 1px #A9A9A9; border-style : solid solid solid solid; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; padding-left: 5px; width: 600px;">
                         <tr>
                             <td class="edittext" colspan="3">
-                                [{ oxmultilang ident="SHIPMENT_INFORMATION" }]
+                                [{ oxmultilang ident="ORDER_MAIN_SHIPPING_INFORMATION" }]
                             </td>
                         </tr>
                         <tr>

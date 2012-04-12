@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptcha.php 43336 2012-03-29 13:48:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxcaptcha.php 43712 2012-04-11 06:51:26Z linas.kukulskis $
  */
 
 /**
@@ -92,9 +92,10 @@ class oxCaptcha extends oxSuperCfg
             $sHash = oxUtilsObject::getInstance()->generateUID();
             oxSession::setVar( "aCaptchaHash", array( $sHash => array( $sTextHash => $iTime ) ) );
         } else {
+            $oDb = oxDb::getDb();
             $sQ = "insert into oxcaptcha ( oxhash, oxtime ) values ( '{$sTextHash}', '{$iTime}' )";
-            oxDb::getDb()->execute( $sQ );
-            $sHash = oxDb::getInstance()->getOne( "select LAST_INSERT_ID()" );
+            $oDb->execute( $sQ );
+            $sHash = $oDb->getOne( "select LAST_INSERT_ID()", false, false );
         }
         return $sHash;
     }
@@ -173,7 +174,7 @@ class oxCaptcha extends oxSuperCfg
 
         $oDb = oxDb::getDb();
         $sQ  = "select 1 from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
-        if ( ( $blPass = (bool) oxDb::getInstance()->getOne( $sQ ) ) ) {
+        if ( ( $blPass = (bool) $oDb->getOne( $sQ, false, false ) ) ) {
             // cleanup
             $sQ = "delete from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
             $oDb->execute( $sQ );

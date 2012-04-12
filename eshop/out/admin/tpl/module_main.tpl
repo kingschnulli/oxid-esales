@@ -24,24 +24,32 @@
         <h1 style="color:#000;font-size:25px;">[{$oModule->getTitle()}]</h1>
         <p>[{$oModule->getDescription()}]</p>
         <hr>
-        <table cellspacing="" cellpadding="" border="0" style="color:#aaa;">
-            <tr>
-                <td><b>[{ oxmultilang ident="MODULE_VERSION" }]</b></td>
-                <td>[{$oModule->getInfo('version')|default:'-'}]</td>
-            </tr>
-            <tr>
-                <td><b>[{ oxmultilang ident="MODULE_AUTHOR" }]</b></td>
-                <td>[{$oModule->getInfo('author')|default:'-'}]</td>
-            </tr>
-            <tr>
-                <td><b>[{ oxmultilang ident="GENERAL_EMAIL" }]</b></td>
-                <td>[{$oModule->getInfo('email')|default:'-'}]</td>
-            </tr>
-            <tr>
-                <td><b>[{ oxmultilang ident="GENERAL_URL" }]</b></td>
-                <td>[{$oModule->getInfo('url')|default:'-'}]</td>
-            </tr>
-        </table>
+
+        <dl class="moduleDesc clear">
+            <dt>[{ oxmultilang ident="MODULE_VERSION" }]</dt>
+            <dd>[{$oModule->getInfo('version')|default:'-'}]</dd>
+
+            <dt>[{ oxmultilang ident="MODULE_AUTHOR" }]</dt>
+            <dd>[{$oModule->getInfo('author')|default:'-'}]</dd>
+
+            <dt>[{ oxmultilang ident="GENERAL_EMAIL" }]</dt>
+            <dd>
+                [{ if $oModule->getInfo('email') }]
+                    <a href="mailto:[{$oModule->getInfo('email')}]">[{$oModule->getInfo('email')}]</a>
+                [{else}]
+                    -
+                [{/if}]
+            </dd>
+
+            <dt>[{ oxmultilang ident="GENERAL_URL" }]</dt>
+            <dd>
+                [{ if $oModule->getInfo('url') }]
+                    <a href="[{$oModule->getInfo('url')}]" target="_blank">[{$oModule->getInfo('url')}]</a>
+                [{else}]
+                    -
+                [{/if}]
+            </dd>
+        </dl>
     </td>
 
     <td width="25" style="border-right: 1px solid #ddd;">
@@ -62,6 +70,7 @@
         </div>
         [{/if}]
         [{if !$_sError}]
+
         [{if $oModule->hasMetadata() || $oModule->isRegistered() }]
         <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">
             <div>
@@ -69,7 +78,7 @@
                 <input type="hidden" name="cl" value="module_main">
                 <input type="hidden" name="updatelist" value="1">
                 <input type="hidden" name="oxid" value="[{$oModule->getId()}]">
-                [{if $oModule->isExtended() || $oModule->isLegacy()}]
+                [{if $oModule->hasMetadata() || $oModule->isLegacy()}]
                     [{if $oModule->isActive()}]
                     <input type="hidden" name="fnc" value="deactivateModule">
                     <div align="center">

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 43395 2012-03-30 13:12:52Z linas.kukulskis $
+ * @version   SVN: $Id: oxsysrequirements.php 43629 2012-04-06 16:26:40Z linas.kukulskis $
  */
 
 /**
@@ -701,8 +701,7 @@ class oxSysRequirements
     public function checkMysqlVersion( $sVersion = null )
     {
         if ( $sVersion === null ) {
-            oxDb::getInstance( oxDb::FETCH_MODE_NUM );
-            $aRez = oxDb::getInstance()->getAll( "SHOW VARIABLES LIKE 'version'" );
+            $aRez = oxDb::getDb()->getAll( "SHOW VARIABLES LIKE 'version'" );
             foreach ( $aRez as $aRecord ) {
                 $sVersion = $aRecord[1];
                 break;
@@ -839,8 +838,7 @@ class oxSysRequirements
                    'and c.TABLE_SCHEMA = "'.$myConfig->getConfigParam( 'dbName' ).'" ' .
                    'and c.COLUMN_NAME in ("'.implode('", "', $this->_aColumns).'") ' . $this->_getAdditionalCheck() .
                    ' ORDER BY (t.TABLE_NAME = "oxarticles") DESC';
-        oxDb::getInstance()->setFetchMode( oxDb::FETCH_MODE_NUM );
-        $aRez = oxDb::getInstance()->getAll($sSelect);
+        $aRez = oxDb::getDb()->getAll($sSelect);
         foreach ( $aRez as $aRetTable ) {
             if ( !$sCollation ) {
                 $sCollation = $aRetTable[2];
@@ -1025,34 +1023,34 @@ class oxSysRequirements
      */
     public function getMissingTemplateBlocks()
     {
-        $oDb = oxDb::getDb();
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $aCache = array();
         $oConfig = $this->getConfig();
 
         $sShpIdParam = $oDb->quote($oConfig->getShopId());
         $sSql = "select * from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam";
-        //$rs = oxDb::getInstance()->select( $sSql );
-        $rs = oxDb::getInstance()->getAll( $sSql );
+        $rs = $oDb->execute($sSql);
+
 
         $aRet = array();
-        if ( count($rs) > 0 ) {
-            //while (!$rs->EOF) {
-            foreach ( $rs as $fields ) {
+        if ($rs != false && $rs->recordCount() > 0) {
+            while (!$rs->EOF) {
                 $blStatus = false;
-                if (isset($aCache[ $fields['OXTEMPLATE']]) && isset($aCache[$fields['OXTEMPLATE']][$fields['OXBLOCKNAME']])) {
-                    $blStatus = $aCache[$fields['OXTEMPLATE']][$fields['OXBLOCKNAME']];
+                if (isset($aCache[$rs->fields['OXTEMPLATE']]) && isset($aCache[$rs->fields['OXTEMPLATE']][$rs->fields['OXBLOCKNAME']])) {
+                    $blStatus = $aCache[$rs->fields['OXTEMPLATE']][$rs->fields['OXBLOCKNAME']];
                 } else {
-                    $blStatus = $this->_checkTemplateBlock($fields['OXTEMPLATE'], $fields['OXBLOCKNAME']);
-                    $aCache[$fields['OXTEMPLATE']][$fields['OXBLOCKNAME']] = $blStatus;
+                    $blStatus = $this->_checkTemplateBlock($rs->fields['OXTEMPLATE'], $rs->fields['OXBLOCKNAME']);
+                    $aCache[$rs->fields['OXTEMPLATE']][$rs->fields['OXBLOCKNAME']] = $blStatus;
                 }
 
                 if (!$blStatus) {
                     $aRet[] = array(
-                                'module'   => $fields['OXMODULE'],
-                                'block'    => $fields['OXBLOCKNAME'],
-                                'template' => $fields['OXTEMPLATE'],
+                                'module'   => $rs->fields['OXMODULE'],
+                                'block'    => $rs->fields['OXBLOCKNAME'],
+                                'template' => $rs->fields['OXTEMPLATE'],
                             );
                 }
+                $rs->moveNext();
             }
         }
 

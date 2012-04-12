@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 43386 2012-03-30 12:01:37Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticlelistTest.php 43613 2012-04-06 14:41:31Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -545,19 +545,25 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
             $sCatId = '8a142c3e60a535f16.78077188';
 
         $oTest = $this->getProxyClass('oxArticleList');
-
-        $oDb = $this->getMock( "oxDb", array( 'getAll') );
-        $oDb->expects( $this->once() )->method( 'getAll' )->will( $this->returnValue( array( 0 => array(1), 1 => array(2)) ) );
-        oxTestModules::addModuleObject( 'oxDb', $oDb );
-
-        $sRes = $oTest->UNITgetFilterSql( $sCatId, array( "8a142c3ee0edb75d4.80743302" => "Zeiger", "8a142c3e9cd961518.80299776" => "originell" ) );
+        $sRes = '';
+        modDB::getInstance()->addClassFunction('getAll', create_function('$s', '{throw new Exception($s);}'));
+        try {
+            $oTest->UNITgetFilterSql( $sCatId, array( "8a142c3ee0edb75d4.80743302" => "Zeiger", "8a142c3e9cd961518.80299776" => "originell" ) );
+        } catch (Exception $e) {
+            $sRes = $e->getMessage();
+        }
+        oxLang::getInstance()->setBaseLanguage(0);
+        modDB::getInstance()->cleanup();
 
         $sO2CView      = getViewName( 'oxobject2category' );
         $sO2AView      = getViewName( 'oxobject2attribute' );
-
-            $sExpt = "andoxv_oxarticles_de.oxid in( '1', '2' )";
-
-
+        $sExpt = "select oc.oxobjectid as oxobjectid, count(*)as cnt from
+            (SELECT * FROM $sO2CView WHERE $sO2CView.oxcatnid='$sCatId' GROUP BY $sO2CView.oxobjectid, $sO2CView.oxcatnid) as oc
+            INNER JOIN {$sO2AView} as oa ON(oa.oxobjectid=oc.oxobjectid)
+            WHERE (oa.oxattrid='8a142c3ee0edb75d4.80743302' and oa.oxvalue='Zeiger')
+                or (oa.oxattrid='8a142c3e9cd961518.80299776'andoa.oxvalue='originell')
+            GROUPBY oa.oxobjectid
+            HAVING cnt=2";
 
         $sExpt = str_replace( array( "\n", "\r", " ", "\t" ), "", $sExpt );
         $sRes  = str_replace( array( "\n", "\r", " ", "\t" ), "", $sRes );

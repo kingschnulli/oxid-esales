@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticle.php 43379 2012-03-30 11:44:34Z linas.kukulskis $
+ * @version   SVN: $Id: oxorderarticle.php 43743 2012-04-11 07:52:36Z linas.kukulskis $
  */
 
 /**
@@ -186,7 +186,7 @@ class oxOrderArticle extends oxBase implements oxIArticle
 
         // #1592A. must take real value
         $sQ = 'select oxstock from oxarticles where oxid = '.$oDb->quote( $this->oxorderarticles__oxartid->value );
-        $iStockCount  = ( float ) oxDb::getInstance()->getOne( $sQ );
+        $iStockCount  = ( float ) $oDb->getOne( $sQ, false, false );
 
         $iStockCount += $dAddAmount;
 
@@ -295,7 +295,7 @@ class oxOrderArticle extends oxBase implements oxIArticle
         $oDb = oxDb::getDb();
         $oArticle = oxNew( "oxarticle" );
         $sQ = "select oxparentid from " . $oArticle->getViewName() . " where oxid=" . $oDb->quote( $this->getProductId() );
-        $this->oxarticles__oxparentid = new oxField( oxDb::getInstance()->getOne( $sQ ) );
+        $this->oxarticles__oxparentid = new oxField( $oDb->getOne( $sQ ) );
         return $this->oxarticles__oxparentid->value;
     }
 
@@ -468,7 +468,12 @@ class oxOrderArticle extends oxBase implements oxIArticle
      */
     public function getBasketPrice( $dAmount, $aSelList, $oBasket )
     {
-        return $this->getPrice();
+        $oArticle = $this->_getOrderArticle();
+        if ( $oArticle ) {
+            return $oArticle->getBasketPrice( $dAmount, $aSelList, $oBasket );
+        } else {
+            return $this->getPrice();
+        }
     }
 
     /**
@@ -513,10 +518,11 @@ class oxOrderArticle extends oxBase implements oxIArticle
      *
      * @param double $dAmount article amount. Default is 1
      *
-     * @return double
+     * @return object
      */
     public function getBasePrice( $dAmount = 1 )
     {
+
         return $this->getPrice();
     }
 

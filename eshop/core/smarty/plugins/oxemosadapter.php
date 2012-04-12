@@ -34,7 +34,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  $Id: oxemosadapter.php 43384 2012-03-30 11:58:29Z linas.kukulskis $
+ *  $Id: oxemosadapter.php 43611 2012-04-06 14:35:55Z linas.kukulskis $
  */
 
 
@@ -239,14 +239,14 @@ class oxEmosAdapter extends oxSuperCfg
         $sCatPath = '';
         if ( $oCategory = $oArticle->getCategory() ) {
             $sTable = $oCategory->getViewName();
-            $oDb = oxDb::getDb();
+            $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
             $sQ = "select {$sTable}.oxtitle as oxtitle from {$sTable}
                        where {$sTable}.oxleft <= ".$oDb->quote( $oCategory->oxcategories__oxleft->value )." and
                              {$sTable}.oxright >= ".$oDb->quote( $oCategory->oxcategories__oxright->value )." and
                              {$sTable}.oxrootid = ".$oDb->quote( $oCategory->oxcategories__oxrootid->value )."
                        order by {$sTable}.oxleft";
 
-            $oRs = oxDb::getInstance()->select( $sQ );
+            $oRs = $oDb->execute( $sQ );
             if ( $oRs != false && $oRs->recordCount() > 0 ) {
                 while ( !$oRs->EOF ) {
                     if ( $sCatPath ) {
