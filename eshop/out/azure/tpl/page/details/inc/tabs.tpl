@@ -69,7 +69,7 @@
 
 [{block name="details_tabs_main"}]
     [{if $tabs}]
-        <div class="tabbedWidgetBox clear" style="min-height:50px;">
+        <div class="tabbedWidgetBox clear">
             <ul id="itemTabs" class="tabs clear">
                 [{foreach from=$tabs item="tab"}]
                     <li>[{$tab}]</li>
@@ -86,7 +86,7 @@
 
 [{block name="details_tabs_facebook"}]
     [{if $FBtabs}]
-        <div class="tabbedWidgetBox clear" style="min-height:50px;">
+        <div class="tabbedWidgetBox clear">
             <ul id="itemFbTabs" class="tabs clear">
                 [{foreach from=$FBtabs item="FBtab"}]
                     <li class="fbTab">[{$FBtab}]</li>

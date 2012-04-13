@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_countries.php 43759 2012-04-11 09:15:46Z vilma $
+ * @version   SVN: $Id: shop_countries.php 43825 2012-04-12 13:44:02Z vilma $
  */
 
 //shop location countries - used when loading dynamic content from oxid servers
@@ -32,15 +32,17 @@ $aLanguages = array (
 
 $aLocationCountries['en'] = array (
 
-'en'   => '[tr]Any other',
 'de'   => 'Germany, Austria, Switzerland',
+'fr'   => 'France',
+'en'   => '[tr]Any other',
 
 );
 
 $aLocationCountries['de'] = array (
 
-'en'   => '[tr]Any other',
 'de'   => 'Deutschland, &Ouml;sterreich, Schweiz',
+'fr'   => 'Frankreich',
+'en'   => '[tr]Any other',
 
 );
 

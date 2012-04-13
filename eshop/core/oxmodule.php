@@ -735,7 +735,7 @@ class oxModule extends oxSuperCfg
         $oConfig = $this->getConfig();
         $aFiles  = $this->getModuleFiles();
         if ( is_array($aModuleFiles) ) {
-            $aFiles[$sModuleId] = $aModuleFiles;
+            $aFiles[$sModuleId] = array_change_key_case($aModuleFiles, CASE_LOWER);
         }
 
         $oConfig->setConfigParam('aModuleFiles', $aFiles);
@@ -804,7 +804,7 @@ class oxModule extends oxSuperCfg
         }
 
         $sShopId   = $this->getConfig()->getShopId();
-        $aTemplates = oxDb::getDb()->getAll("SELECT oxtemplate FROM oxtplblocks WHERE oxmodule = '$sModuleId' AND oxshopid = '$sShopId'" );
+        $aTemplates = oxDb::getDb()->getCol("SELECT oxtemplate FROM oxtplblocks WHERE oxmodule = '$sModuleId' AND oxshopid = '$sShopId'" );
 
         return $aTemplates;
     }

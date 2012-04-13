@@ -284,6 +284,19 @@ class oxLegacyDb extends oxSuperCfg
     }
 
     /**
+     * return meta data
+     *
+     * @param string $sTable       Table name
+     * @param bool   $blNumIndexes Numeric indexes
+     *
+     * @return object
+     */
+    public function metaColumnNames( $sTable, $blNumIndexes=false )
+    {
+        return $this->getDb()->MetaColumnNames( $sTable, $numIndexes );
+    }
+
+    /**
      * Start mysql transaction
      *
      * @return null

@@ -103,13 +103,13 @@
                     [{block name="checkout_wrapping_comment"}]
                         <div class="wrappingComment">
                             <label>[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_GREETINGMESSAGE" }]</label>
-                            <textarea cols="102" style="background:#fff; z-index:99999;" rows="5" name="giftmessage" class="areabox">[{$oxcmp_basket->getCardMessage()}]</textarea>
+                            <textarea cols="102" rows="5" name="giftmessage" class="areabox">[{$oxcmp_basket->getCardMessage()}]</textarea>
                         </div>
                     [{/block}]
                 [{/if}]
                 [{block name="checkout_wrapping_submit"}]
                     <div class="submitForm clear">
-                        <button type="submit" style="white-space:nowrap;" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_BACKTOORDER" }]</button>
+                        <button type="submit" class="submitButton largeButton">[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_BACKTOORDER" }]</button>
                         <button class="textButton largeButton closePop">[{ oxmultilang ident="PAGE_CHECKOUT_WRAPPING_CANCEL" }]</button>
                     </div>
                 [{/block}]

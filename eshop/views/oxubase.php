@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 42814 2012-03-13 15:08:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 43811 2012-04-12 11:55:36Z linas.kukulskis $
  */
 
 /**
@@ -3265,9 +3265,6 @@ class oxUBase extends oxView
 
             // reading ..
             $this->_blFbWidgetsOn = (bool) $oUtils->getOxCookie( "fbwidgetson" );
-
-            // .. and setting back
-            $oUtils->setOxCookie( "fbwidgetson", $this->_blFbWidgetsOn ? 1 : 0 );
         }
         return $this->_blFbWidgetsOn;
     }

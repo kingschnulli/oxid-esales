@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43759 2012-04-11 09:15:46Z vilma $
+ * @version   SVN: $Id: lang.php 43825 2012-04-12 13:44:02Z vilma $
  */
 
 $aLang = array(
@@ -190,8 +190,9 @@ $aLang = array(
 'SETUP_CONFIG_PERMISSIONS'                      => "WICHTIG: Aus Sicherheitsgründen setzen Sie Ihre config.inc.php Datei auf read-only-Modus!",
 
 'SELECT_SETUP_LANG'                             => "[tr]Sprache für Installation",
-'SELECT_SHOP_LOCATION'                          => "[tr]Please choose your Market",
-'SELECT_SHOP_LOCATION_HINT'                     => "[tr]Please choose the Market place to which Shop is focused. According to it, additional eCommerce Services will be loaded from OXID server.",
+'SELECT_SHOP_LOCATION'                          => "[tr]Your market",
+'SELECT_PLEASE_CHOOSE'                          => "[tr]Please choose",
+'SELECT_SHOP_LOCATION_HINT'                     => "[tr]Please choose the Market place to which Shop is focused. According to it, additional eCommerce Services will be loaded from OXID server, if you allow that.",
 'SELECT_DELIVERY_COUNTRY'                       => "Haupt Lieferland",
 'SELECT_DELIVERY_COUNTRY_HINT'                  => "Aktivieren Sie weitere Lieferländer im Admin, falls benötigt",
 'SELECT_SHOP_LANG'                              => "[tr]Sprache für Shop",

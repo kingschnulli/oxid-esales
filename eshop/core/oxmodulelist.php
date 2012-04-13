@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmodulelist.php 43449 2012-04-02 15:14:22Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxmodulelist.php 43829 2012-04-12 14:39:28Z vilma $
  */
 
 /**
@@ -64,6 +64,7 @@ class oxModuleList extends oxSuperCfg
         $aModulePaths   = $this->getModulePaths();
 
         if ( !is_array($aModulePaths) || count($aModulePaths) < 1 ) {
+           // $aModulePaths = array();
             if ( is_array($aModules) && count($aModules) > 0 ) {
                 foreach ($aModules as $aModuleClasses) {
                     foreach ($aModuleClasses as $sModule) {
@@ -75,7 +76,7 @@ class oxModuleList extends oxSuperCfg
         }
 
         $aDisabledModules = $this->getDisabledModules();
-        if ( is_array($aDisabledModules) && count($aDisabledModules) > 0 ) {
+        if ( is_array($aDisabledModules) && count($aDisabledModules) > 0  && count($aModulePaths) > 0 ) {
             $aModulePaths = array_diff_key($aModulePaths, array_flip($aDisabledModules));
         }
         return $aModulePaths;
@@ -413,7 +414,7 @@ class oxModuleList extends oxSuperCfg
 
         return false;
     }
-    
+
     /**
      * Checks if module extends any shop class.
      *

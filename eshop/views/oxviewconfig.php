@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 43687 2012-04-10 13:54:06Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfig.php 43827 2012-04-12 14:26:20Z vilma $
  */
 
 /**
@@ -1246,10 +1246,14 @@ class oxViewConfig extends oxSuperCfg
         $sFile = $this->getConfig()->getModulesDir().$sModulePath.$sFile;
         if (file_exists($sFile) || is_dir($sFile)) {
             return $sFile;
+        } else {
+            $oEx = oxNew( "oxFileException", "Requested file not found for module $sModule ($sFile)" );
+            $oEx->debugOut();
+            if (!$this->getConfig()->getConfigParam( 'iDebug' )) {
+                return '';
+            }
+            throw $oEx;
         }
-        $oEx = oxNew( "oxFileException", "Requested file not found for module $sModule ($sFile)" );
-        $oEx->debugOut();
-        throw $oEx;
     }
 
     /**

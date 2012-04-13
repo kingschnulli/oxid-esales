@@ -1194,6 +1194,9 @@ h3.lightHead {
     margin-bottom: 20px;
 }
 
+.tabbedWidgetBox {
+    min-height:50px;
+}
 .widgetBoxBottomRound {
     margin-top: -1px;
 }
@@ -1203,6 +1206,8 @@ h3.lightHead {
     position: relative;
     margin-top: 0;
 }
+
+
 
 .widgetBox h4, .widgetBoxBottomRound h4 {
     color: #515353;
@@ -3012,6 +3017,7 @@ a.next {
     width: 646px;
     margin-bottom: 10px;
     background:#fff;
+    z-index: 99999;
 }
 
 .wrappingComment label {
@@ -4011,6 +4017,15 @@ span.verificationCode {
     width: 90px;
     padding-right: 5px;
     line-height: 18px;
+}
+
+.form .underInput {
+    padding: 5px 0px;
+    margin-left:140px;
+}
+
+.form .underInput.short {
+    margin-left:90px;
 }
 
 .form label.tooltip{

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43759 2012-04-11 09:15:46Z vilma $
+ * @version   SVN: $Id: lang.php 43816 2012-04-12 12:36:50Z juergen.busch $
  */
 
 /*
@@ -1087,7 +1087,7 @@ $aLang = array(
 'PAYMENT_LIST_MENUSUBITEM'                                 => 'Payment Methods',
 'PAYMENT_MAIN_ADDPRICE'                                    => 'Price Surcharge/Reduction',
 'PAYMENT_MAIN_ADDSUMRULES'                                 => 'Base of price <br>surcharge/reduction:',
-'PAYMENT_MAIN_ADDSUMRULES_ALLGOODS'                        => '1. Value of all goods in basket',
+'PAYMENT_MAIN_ADDSUMRULES_ALLGOODS'                        => '1. Value of all goods in cart',
 'PAYMENT_MAIN_ADDSUMRULES_DISCOUNTS'                       => '2. Discounts',
 'PAYMENT_MAIN_ADDSUMRULES_VOUCHERS'                        => '3. Vouchers',
 'PAYMENT_MAIN_ADDSUMRULES_SHIPCOSTS'                       => '4. Shipping costs',
@@ -1330,9 +1330,9 @@ $aLang = array(
 'SHOP_CONFIG_PSLOGIN'                                      => 'Private Sales Login',
 'SHOP_CONFIG_DISABLE'                                      => 'Disable',
 'SHOP_CONFIG_ENABLE'                                       => 'Enable',
-'SHOP_CONFIG_BASKETEXCLUDE'                                => 'Basket exclusion',
-'SHOP_CONFIG_BASKETRESERVATION'                            => 'Basket expiration',
-'SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'                     => 'Seconds basket expiration timeout',
+'SHOP_CONFIG_BASKETEXCLUDE'                                => 'Cart exclusion',
+'SHOP_CONFIG_BASKETRESERVATION'                            => 'Cart expiration',
+'SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'                     => 'Seconds cart expiration timeout',
 'SHOP_CONFIG_INVITATION'                                   => 'Invitation',
 'SHOP_CONFIG_POINTSFORINVITATION'                          => 'Credit points for inviting user',
 'SHOP_CONFIG_POINTSFORREGISTRATION'                        => 'Credit points for user registering after invitation',

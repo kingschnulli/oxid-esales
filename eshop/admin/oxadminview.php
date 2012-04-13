@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminview.php 43577 2012-04-06 11:08:37Z vilma $
+ * @version   SVN: $Id: oxadminview.php 43825 2012-04-12 13:44:02Z vilma $
  */
 
 /**
@@ -521,6 +521,8 @@ class oxAdminView extends oxView
                 switch ( $sCountryCode ) {
                     case 'de':
                         return 'germany';
+                    case 'fr':
+                        return 'france';
                     default:
                         return 'international';
                 }

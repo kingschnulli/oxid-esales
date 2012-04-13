@@ -117,7 +117,7 @@ class Module_Main extends oxAdminDetails
         $aLegacyModules = $this->getConfig()->getConfigParam( "aLegacyModules" );
 
         $aModuleInfo = explode( "\n", trim( oxConfig::getParameter("aExtendedClasses") ) );
-        $sModuleLegacyId = trim( oxConfig::getParameter("oxid") );
+        $sModuleLegacyId = trim( $this->getEditObjectId() );
         $sModuleId = trim( oxConfig::getParameter("moduleId") );
         $sModuleName = trim( oxConfig::getParameter("moduleName") );
 
@@ -135,8 +135,10 @@ class Module_Main extends oxAdminDetails
             }
         }
 
-        $this->_updateModuleConfigVars( $sModuleLegacyId, $sModuleId );
-
+        if ( $sModuleLegacyId != $sModuleId ) {
+            $this->_updateModuleConfigVars( $sModuleLegacyId, $sModuleId );
+            $this->setEditObjectId($sModuleId);
+        }
         if ( !empty( $aLegacyModules[$sModuleId]['extend'] ) ) {
             $this->getConfig()->saveShopConfVar( "aarr", "aLegacyModules", $aLegacyModules );
         }

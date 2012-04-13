@@ -10,14 +10,14 @@
             <input type="hidden" name="cl" value="[{ $oViewConf->getActiveClassName() }]">
             <label class="short">[{ oxmultilang ident="WIDGET_LOGINBOX_EMAIL_ADDRESS" }]</label>
             <input type="text" name="lgn_usr" class="textbox js-oxValidate js-oxValidate_notEmpty" data-fieldsize="pair-xsmall">
-            <p class="oxValidateError" style="padding: 5px 0 5px 90px;">
+            <p class="underInput short oxValidateError">
                 <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
         <li [{if $aErrors}]class="oxInValid"[{/if}]>
             <label class="short">[{ oxmultilang ident="WIDGET_LOGINBOX_PASSWORD" }]</label>
             <input type="password" name="lgn_pwd" class="js-oxValidate js-oxValidate_notEmpty textbox" data-fieldsize="pair-xsmall">
-            <p class="oxValidateError" style="padding: 5px 0 5px 90px;">
+            <p class="underInput short oxValidateError">
                 <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>

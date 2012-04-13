@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 43759 2012-04-11 09:15:46Z vilma $
+ * @version   SVN: $Id: help_lang.php 43808 2012-04-12 10:07:21Z juergen.busch $
  */
 
 /**
@@ -154,7 +154,7 @@ $aLang =  array(
                                                  'Sie Private Sales Communities mit geschlossenen Nutzergruppen.',
 
 'HELP_SHOP_CONFIG_BASKETEXCLUDE'              => 'Ermöglicht es, Produkte aus ausschließlich einer Wurzelkategorie in den Warenkorb zu legen. ' .
-                                                 'Beim Wechsel der Wurzelkatgorie wird der Konsument gezwungen den Warenkorb zu erwerben oder ihn zu verwerfen.',
+                                                 'Beim Wechsel der Wurzelkategorie wird der Konsument gezwungen den Warenkorb zu erwerben oder ihn zu verwerfen.',
 
 'HELP_SHOP_CONFIG_BASKETRESERVATION'          => 'Ist diese Option aktiviert, laufen Warenkörbe nach einer von Ihnen definierbaren Zeit ab.  <br><br>'.
                                                  'Darüber hinaus schaltet diese Option die Produktreservierung ein, mit der die Lagerbestände der Produkte zunächst reserviert ' .
@@ -163,7 +163,7 @@ $aLang =  array(
                                                  'Für Produkte aus gekauften Warenkörben wird der Lagerbestand endgültig reduziert.',
 
 
-'HELP_SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'   => 'Nach der eingstellten Anzahl von Sekunden ohne Änderung am Warenkorb, wird der Warenkorb automatisch geleert ' .
+'HELP_SHOP_CONFIG_BASKETRESERVATIONTIMEOUT'   => 'Nach der eingestellten Anzahl von Sekunden ohne Änderung am Warenkorb, wird der Warenkorb automatisch geleert ' .
                                                  'und die darin enthaltenen Produkte dem Lagerbestand wieder zugeführt.',
 
 'HELP_SHOP_CONFIG_INVITATION'                 => 'Mit Einladungen können Ihre Kunden weitere Freunde einladen sich zu registrieren und Bonuspunkte zu sammeln. ' .

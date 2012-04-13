@@ -257,6 +257,34 @@ class Unit_Core_oxLegacyDbTest extends OxidTestCase
         $oLegacyDb->qstr('value');
     }
 
+    /**
+     * Test case for oxLegacyDb::metaColumns();
+     */
+    public function testMetaColumns()
+    {
+        $oDbLib = $this->getMock( "dbLib", array( "MetaColumns" ) );
+        $oDbLib->expects( $this->once() )->method( 'MetaColumns' )->with( $this->equalTo( 'value' )  );
+
+        $oLegacyDb = $this->getMock( "oxLegacyDb", array( "getDb" ) );
+        $oLegacyDb->expects( $this->once() )->method( 'getDb' )->will( $this->returnValue( $oDbLib ) );
+
+        $oLegacyDb->metaColumns( 'value' );
+    }
+
+    /**
+     * Test case for oxLegacyDb::metaColumnNames();
+     */
+    public function testMetaColumnNames()
+    {
+        $oDbLib = $this->getMock( "dbLib", array( "MetaColumnNames" ) );
+        $oDbLib->expects( $this->once() )->method( 'MetaColumnNames' )->with( $this->equalTo( 'value' )  );
+
+        $oLegacyDb = $this->getMock( "oxLegacyDb", array( "getDb" ) );
+        $oLegacyDb->expects( $this->once() )->method( 'getDb' )->will( $this->returnValue( $oDbLib ) );
+
+        $oLegacyDb->metaColumnNames( 'value' );
+    }
+
      /**
      * Test case for oxLegacyDb::startTransaction();
      */

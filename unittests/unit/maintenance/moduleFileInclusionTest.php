@@ -38,19 +38,14 @@ class Unit_Maintenance_moduleFileInclusionTest extends OxidTestCase
      */
     public function testModuleInclusion()
     {
-        $oCfg = $this->getMock('oxConfig', array('getConfigParam'));
-        $oCfg->expects($this->at(0))->method('getConfigParam')->with($this->equalTo('aModules'))->will($this->returnValue(array('oxarticle'=>'testmod')));
-        $oCfg->expects($this->at(1))->method('getConfigParam')->with($this->equalTo('aDisabledModules'))->will($this->returnValue(array()));
-        $oCfg->expects($this->at(2))->method('getConfigParam')->with($this->equalTo('aModulePaths'))->will($this->returnValue(array()));
-        $oCfg->expects($this->at(3))->method('getConfigParam')->with($this->equalTo('sShopDir'))->will($this->returnValue(dirname(__FILE__)));
-
-        $oUO = $this->getMock('oxUtilsObject', array('getConfig'));
-        $oUO->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
-
-        modInstances::addMod('oxUtilsObject', $oUO);
-
         modConfig::getInstance()->setConfigParam('aModules', array('oxarticle'=>'testmod'));
 
         include_once dirname(__FILE__).'/modules/testmod.php';
+
+        $oTestMod = oxNew('testmod');
+        $this->assertEquals("Hi!", $oTestMod->sayHi());
+
+        $oTestArt = oxNew('oxarticle');
+        $this->assertEquals("Hi!", $oTestArt->sayHi());
     }
 }

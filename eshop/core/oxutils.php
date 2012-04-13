@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 43756 2012-04-11 09:00:15Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 43809 2012-04-12 11:53:23Z tomas $
  */
 
 /**
@@ -391,7 +391,7 @@ class oxUtils extends oxSuperCfg
     }
 
     /**
-     * Rounds the value to currency cents
+     * Rounds the value to currency cents. This method does NOT format the number.
      *
      * @param string $sVal the value that should be rounded
      * @param object $oCur Currenncy Object
