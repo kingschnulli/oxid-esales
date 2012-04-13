@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 37948 2011-08-04 10:33:14Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewTest.php 43803 2012-04-12 08:53:54Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -128,6 +128,17 @@ class Unit_Views_oxviewTest extends OxidTestCase
     {
         $oView = new oxView();
         $this->assertEquals( '', $oView->render() );
+    }
+
+    /**
+     * Test if oxView::getTemplateName() is called from oxView::render()
+     */
+    public function testRenderMock()
+    {
+        $oView = $this->getMock("oxview", array("getTemplateName"));
+        $oView->expects( $this->once() )->method("getTemplateName")->will( $this->returnValue("testTemplate.tpl") );
+        $sRes = $oView->render();
+        $this->assertEquals("testTemplate.tpl", $sRes);
     }
 
     /*
